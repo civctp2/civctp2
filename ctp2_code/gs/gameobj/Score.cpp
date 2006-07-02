@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -434,7 +434,7 @@ const MBCHAR *Score::GetPartialScoreItemized(SCORE_CATEGORY cat)
 	
 	
 
-	Difficulty *diff = pl->m_difficulty;
+//	Difficulty *diff = pl->m_difficulty;
 	sint32 count = GetPartialScoreCount(cat);
 	if(count<0)
 		count=0;

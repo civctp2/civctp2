@@ -251,7 +251,7 @@ public:
 	sint16 GetContinent() const { return m_continent_number; }
 	void SetContinent(sint16 val) { m_continent_number = val; }
 
-	sint32 GetNumImprovements();
+	sint32 GetNumImprovements() const;
 	TerrainImprovement AccessImprovement(sint32 index);
 
 	void Serialize(CivArchive &archive) ;
@@ -275,7 +275,7 @@ public:
 
 	
 
-	sint32 GetNumObjects();
+	sint32 GetNumObjects() const;
 	ID GetObject(sint32 index);
 
 #ifdef CELL_COLOR

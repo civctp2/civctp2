@@ -43,7 +43,7 @@ extern Player **g_player;
 
 bool Army::IsValid() const
 {
-	return g_theArmyPool->IsValid(m_id) == TRUE;
+	return g_theArmyPool->IsValid(m_id);
 }
 
 void Army::KillArmy()
@@ -77,9 +77,9 @@ void Army::RemoveAllReferences()
 
 void Army::FastKill()
 {
-	if(g_theArmyPool->IsValid(m_id)) {
-		sint32 r = g_theArmyPool->Del(*this);
-		Assert(r);
+	if (IsValid()) 
+    {
+		g_theArmyPool->Del(*this);
 	}
 }
 

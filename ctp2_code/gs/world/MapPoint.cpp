@@ -515,9 +515,9 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 
 		dy3 = (uPos.y - bottomPos.y) + dx3;
 
-		return min(min((dx1*dx1)+(dy1*dy1),
-					   (dx2*dx2)+(dy2*dy2)),
-				   (dx3*dx3)+(dy3*dy3));
+        return std::min(std::min((dx1*dx1)+(dy1*dy1),
+					             (dx2*dx2)+(dy2*dy2)),
+				                 (dx3*dx3)+(dy3*dy3));
 	} else {
 		return dx1*dx1 + dy1*dy1;
 	}

@@ -35,7 +35,7 @@
 
 #include "c3.h"
 #include "cellunitlist.h"
-#include "XY_Coordinates.h"
+
 #include "World.h"
 #include "player.h"
 #include "UnitRec.h"
@@ -47,14 +47,16 @@
 #include "SlicEngine.h"
 #include "Cell.h"
 #include "UnitDynArr.h"
-#include "UnitPool.h"
+// #include "UnitPool.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
 #include "MoveFlags.h"
 #include "wonderutil.h"
 #include "GameEventManager.h"
-#include "TerrainRecord.h"	// TerrainRecord
+#include "TerrainRecord.h"	    // TerrainRecord
 
+// Visibility cheat flags
+extern sint32 g_god;
 extern sint32 g_fog_toggle;
 
 sint32 CellUnitList::Insert(Unit id)
@@ -138,9 +140,9 @@ bool CellUnitList::CanEnter(const MapPoint &point) const
 //
 // Parameters : -
 //
-// Globals    : -
+// Globals	  : -
 //
-// Returns    : bool            : all units can move on land
+// Returns    : bool			: all units can move on land
 //
 // Remark(s)  : -
 //
@@ -333,35 +335,33 @@ bool CellUnitList::CanBeExpelled()
 }
 
 
-extern sint32 g_god;
-
 //----------------------------------------------------------------------------
 //
 // Name       : CellUnitList::GetTopVisibleUnitOfMoveType
 //
 // Description: Determine which unit of a stack to display.
 //
-// Parameters : looker              : the observing player
-//              moveType            : a bit set of movement types 
-//              isResyncReported    : invalid units do not have to be reported
+// Parameters : looker				: the observing player
+//              moveType			: a bit set of movement types 
+//				isResyncReported	: invalid units do not have to be reported
 //
-// Globals    : g_selected_item     : currently selected item on screen
-//              g_player            : players
-//              g_theWorld          : map information
-//              g_network           : network handler (for multiplayer)
-//              g_god               : when set, everything is visible
-//              g_fog_toggle        : when set, everything is visible
+// Globals    : g_selected_item		: currently selected item on screen
+//				g_player			: players
+//				g_theWorld			: map information
+//				g_network			: network handler (for multiplayer)
+//				g_god				: when set, everything is visible
+//				g_fog_toggle		: when set, everything is visible
 //
-// Returns    : bool                : some unit is visible
-//              maxi                : index of the unit to display
-//              isResyncReported    : updated when a (new) missing unit has
+// Returns    : bool				: some unit is visible
+//				maxi				: index of the unit to display
+//				isResyncReported	: updated when a (new) missing unit has
 //                                    triggered a resync request
 //
 // Remark(s)  : - When returning false, the value of maxi has not been updated.
 //              - Units in a city are only visible when awake or currently
 //                selected.
 //              - When there are multiple units in a stack, the top unit is 
-//                determined on either movement points (own unit) or 
+//				  determined on either movement points (own unit) or 
 //                "visibility class" + strength (enemy unit).
 //
 //----------------------------------------------------------------------------
@@ -577,7 +577,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 			
 			
 			Unit hc;
-			static MapPoint slpos;
+			MapPoint slpos;
 			GetPos(slpos);
 			
 
@@ -589,12 +589,10 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 			sint32 r = g_player[m_array[0].GetOwner()]->
 				GetSlaveCity(slpos, hc);
 			
-			Assert(hc.m_id != (0));
-			if(hc.m_id == (0))
+			Assert(r && (hc.m_id != (0)));
+			if (hc.m_id == (0))
 				break;
 
-			static MapPoint cpos;
-			hc.GetPos(cpos);
 			if(g_network.IsHost()) {
 				g_network.Block(hc.GetOwner());
 			}
@@ -830,8 +828,8 @@ CellUnitList::CellUnitList(const DynamicArray<Unit> &copyme)
 {
 	Assert(copyme.Num() < k_MAX_ARMY_SIZE);
 	if(copyme.Num() < k_MAX_ARMY_SIZE) {
-		memcpy(m_array, copyme.m_array, sizeof(Unit) * copyme.m_nElements);
-		m_nElements = copyme.m_nElements;
+		memcpy(m_array, copyme.m_array, sizeof(Unit) * copyme.Num());
+		m_nElements = copyme.Num();
 		UpdateMoveIntersection();
 	}
 }
@@ -928,7 +926,8 @@ void CellUnitList::UpdateMoveIntersection()
 		
 		
 		
-		if(g_theUnitPool->IsValid(m_array[i])) {
+		if (m_array[i].IsValid()) 
+        {
 			m_moveIntersection &= oldMoveBits;
 			if(!m_array[i].IsIgnoresZOC()) {
 				m_flags &= ~(k_CULF_IGNORES_ZOC);
@@ -968,30 +967,32 @@ void CellUnitList::ComputeStrength(double & attack,
 	int j;
 	const UnitRecord *rec;
 	
-	for(int i = 0; i < m_nElements; i++) {
-		if (!g_theUnitPool->IsValid(m_array[i]))
+	for (int i = 0; i < m_nElements; i++) 
+    {
+		if (!m_array[i].IsValid())
 			continue;
+
 		rec = m_array[i].GetDBRec();
 		firepower = static_cast<double>(rec->GetFirepower());
 		attack   += static_cast<double>(rec->GetAttack()
-		                              * m_array[i].GetHP()
-		                              * firepower);
+			* m_array[i].GetHP()
+			* firepower); 
 		defense  += static_cast<double>(m_array[i]->GetPositionDefense(Unit())
-		                              * m_array[i].GetHP()
-		                              * firepower);
+			* m_array[i].GetHP()
+			* firepower);
 		r         = static_cast<double>(rec->GetZBRangeAttack()
 		                              * firepower);
-		if ( r > 0.0 ) {
-			ranged +=  r;
-			ranged_unit_count++;
-		}
+        if ( r > 0.0 ) { 
+            ranged +=  r; 
+            ranged_unit_count++; 
+        } 
 		
 		
 		if (rec->GetCanBombardLand() ||
 			rec->GetCanBombardMountain()) {
 			land_bombard += static_cast<double>(rec->GetAttack()
 			                                  * m_array[i].GetHP()
-			                                  * firepower);
+				* firepower);
 		}
 		
 		if (rec->GetCanBombardWater()) {
@@ -1025,26 +1026,26 @@ void CellUnitList::ComputeStrength(double & attack,
 				                              * firepower);
 				r         = static_cast<double>(rec->GetZBRangeAttack()
 				                              * firepower);
-				if ( r > 0.0 ) {
-					ranged +=  r;
-					ranged_unit_count++;
+				if ( r > 0.0 ) { 
+					ranged +=  r; 
+					ranged_unit_count++; 
 				} 
 				
 				
 				if (rec->GetCanBombardLand() ||
 					rec->GetCanBombardMountain()) {
-					land_bombard += (double) (rec->GetAttack()
-						* hitpoints * firepower);
+					land_bombard += (double) (rec->GetAttack() 
+						* hitpoints	* firepower);
 				}
 				
 				if (rec->GetCanBombardWater()) {
-					water_bombard += (double) (rec->GetAttack()
-						* hitpoints * firepower);
+					water_bombard += (double) (rec->GetAttack() 
+						* hitpoints	* firepower);
 				}
 				
 				if (rec->GetCanBombardAir()) {
-					air_bombard += (double) (rec->GetAttack()
-						* hitpoints * firepower);
+					air_bombard += (double) (rec->GetAttack() 
+						* hitpoints	* firepower);
 				}
 			} 
 		}

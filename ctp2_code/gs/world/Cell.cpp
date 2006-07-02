@@ -130,30 +130,20 @@ Cell::Cell()
 
 Cell::~Cell()
 {
-	if(m_unit_army) {
-		delete m_unit_army;
-		m_unit_army = NULL;
-	}
-
-	if(m_objects) {
-		delete m_objects;
-		m_objects = NULL;
-	}
-
-	if(m_jabba) {
-		delete m_jabba;
-	}
+	delete m_unit_army;
+	delete m_objects;
+	delete m_jabba;
 	
-	m_playerLandArea[m_cellOwner+1]--;
+	m_playerLandArea[m_cellOwner+1]--;  // static!
 }
 
 
 void Cell::Serialize(CivArchive &archive)
-{
+	{
+	
+    CHECKSERIALIZE
 
-	CHECKSERIALIZE
-
-	m_search_count = 0;
+    m_search_count = 0; 
 	if (archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_cellOwner)+sizeof(m_cellOwner));
 	} else {
@@ -214,13 +204,12 @@ sint32 Cell::IsAnyUnitInCell() const
 
 
 sint32 Cell::InsertUnit(Unit id)
-
 {
 	if(!m_unit_army) {
 		m_unit_army = new CellUnitList;
 	}
-    sint32 r = m_unit_army->Insert(id); 
-    return r; 
+
+    return m_unit_army->Insert(id); 
 }
 
 
@@ -240,7 +229,7 @@ sint32 Cell::RemoveUnitReference(const Unit &u)
         return TRUE;
    } else {
 
-	   if(!g_theUnitPool->IsValid(u) || !u.IsBeingTransported()) {
+	   if(!u.IsValid() || !u.IsBeingTransported()) {
 		   
 		   
 		   Assert(FALSE);
@@ -615,7 +604,7 @@ sint32 Cell::GetScore() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	
-	sint32 score = rec->GetEnvBase()->GetScore();
+    sint32 score = rec->GetEnvBase()->GetScore();
 
 	if(HasCity() && rec->HasEnvCity()) {
 		score += rec->GetEnvCityPtr()->GetScore();
@@ -640,13 +629,14 @@ void Cell::SetColor(sint32 c)
 
 {
 	return;
-
+#if 0   // unreachable
 #ifdef _DEBUG
     m_color = c; 
     WhackScreen(); 
-#endif
+#endif // _DEBUG
+#endif // unreachable
 }
-#endif
+#endif // CELL_COLOR
 
 void Cell::AddTradeRoute(TradeRoute route)
 {
@@ -694,16 +684,17 @@ bool Cell::OwnsTradeRoute(const PLAYER_INDEX &owner) const
 
 	TradeRoute route;
 
-	sint32 i;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
-		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
-		   k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) 
-			{
-				route = m_objects->Access(i).m_id;
-				if (route.GetOwner() == owner ||
-					route.GetPayingFor() == owner)
-					return true;
-			}
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+    {
+		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
+		    k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE
+           ) 
+		{
+			route = m_objects->Access(i).m_id;
+			if (route.GetOwner() == owner ||
+				route.GetPayingFor() == owner)
+				return true;
+		}
 	}
 	return false;
 }
@@ -714,8 +705,8 @@ sint32 Cell::GetNumTradeRoutes() const
 		return 0;
 
 
-	sint32 i, c = 0;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
+	sint32 c = 0;
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE)
 			c++;
 	}
@@ -724,8 +715,6 @@ sint32 Cell::GetNumTradeRoutes() const
 
 TradeRoute Cell::GetTradeRoute(sint32 index) const
 {
-	static TradeRoute invalidRoute;
-
 	if (m_objects)
     {
 	    sint32 c = 0;
@@ -740,7 +729,7 @@ TradeRoute Cell::GetTradeRoute(sint32 index) const
 	    }
     }
 
-	return invalidRoute;
+	return TradeRoute();
 }
 
 void Cell::InsertImprovement(const TerrainImprovement &imp)
@@ -845,9 +834,7 @@ void Cell::Kill(void)
 
 sint32 Cell::GetNumUnits() const
 {
-	if(!m_unit_army)
-		return 0;
-	return m_unit_army->Num();
+    return m_unit_army ? m_unit_army->Num() : 0;
 }
 
 
@@ -922,14 +909,15 @@ void Cell::SetCityOwner(const Unit &c)
 }
 
 
-sint32 Cell::GetNumImprovements() 
+sint32 Cell::GetNumImprovements() const
 {
 	if(!(m_env & k_BIT_ENV_HAS_IMPROVEMENT))
 		return 0;
 
-	sint32 i, c = 0;
+	sint32 c = 0;
 
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+    {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
 			c++;
 	}
@@ -997,7 +985,7 @@ void Cell::CalcMovementType()
 		m_env |= (k_Unit_MovementType_Land_Bit << k_SHIFT_ENV_MOVEMENT_TYPE);
 	}
 
-	for(sint32 i = 0; i < m_objects->Num(); i++) {
+	for(sint32 i = 0; i < GetNumObjects(); i++) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) {
 			m_env |= (k_Unit_MovementType_Trade_Bit << k_SHIFT_ENV_MOVEMENT_TYPE);
 			break;
@@ -1011,19 +999,15 @@ void Cell::CalcMovementType()
 
 void Cell::ClearUnitsNStuff()
 {
-	
 #ifdef BATTLE_FLAGS
 	m_battleFlags = 0;
 #endif
 	
-	
-	SetOwner(-1);
-	if(m_unit_army)
-		delete m_unit_army;
+	SetOwner(PLAYER_UNASSIGNED);
+	delete m_unit_army;
 	m_unit_army = NULL;
 
-	sint32 i;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) != k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			m_objects->DelIndex(i);
 	}
@@ -1056,37 +1040,39 @@ void Cell::SetEnv(uint32 env)
 
 void Cell::CalcTerrainMoveCost()
 {
-	double tmp;
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	sint32 base;
 	bool gotMovement = rec->GetEnvBase()->GetMovement(base);
 	Assert(gotMovement);
-	tmp = base;
+	sint32 tmp = base;
 
 	sint32 m;
 	if(HasCity() && rec->HasEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
-		tmp = std::min(tmp, static_cast<double>(m));
+		tmp = std::min(tmp, m);
 	}
 
 	if(HasRiver() && rec->HasEnvRiver() && rec->GetEnvRiverPtr()->GetMovement(m)) {
-		tmp = std::min(tmp, static_cast<double>(m));
+		tmp = std::min(tmp, m);
 	}
 
-	sint32 i;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
-		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
-			const TerrainImprovementRecord *impRec = 
-				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
-			const TerrainImprovementRecord::Effect *effect;
-			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
-			sint32 cost;
-			if(effect && effect->GetMoveCost(cost)) {
-				tmp = std::min(tmp, static_cast<double>(cost));
-			}
-		}
-	}																					
+    for (sint32 i =  GetNumObjects() - 1 ; i >= 0; --i) 
+    {
+	    if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) 
+        {
+		    const TerrainImprovementRecord *impRec = 
+			    g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
+		    const TerrainImprovementRecord::Effect *effect = 
+                terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+
+		    sint32 cost;
+		    if (effect && effect->GetMoveCost(cost)) 
+            {
+			    tmp = std::min(tmp, cost);
+		    }
+	    }
+	}
 	
-	sint16 new_cost = (sint16 )tmp;
+	sint16 new_cost = static_cast<sint16>(tmp);
 	if (new_cost != m_move_cost)
 	{
 		g_theWorld->SetCapitolDistanceDirtyFlags(0xffffffff);
@@ -1123,32 +1109,32 @@ double Cell::CalcTerrainFreightCost()
 	// Modifications by special situations (city, river)
 	if (HasCity() && rec->HasEnvCity()) 
 	{
-		cost = min(cost, rec->GetEnvCityPtr()->GetFreight());
+        cost = std::min(cost, rec->GetEnvCityPtr()->GetFreight());
 	}
 	if (HasRiver() && rec->HasEnvRiver()) 
 	{
-		cost = min(cost, rec->GetEnvRiverPtr()->GetFreight());
+        cost = std::min(cost, rec->GetEnvRiverPtr()->GetFreight());
 	}
 
 	// Modifications by tile improvements (roads, etc.)
-	for (sint32 i = m_objects->Num() - 1; i >= 0; --i) 
-	{
-		ID const &	object	= m_objects->Access(i);
-		if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
-		{
-			TerrainImprovementRecord const *			impRec = 
-				g_theTerrainImprovementDB->Get(object.m_id & k_ID_KEY_MASK);
-			TerrainImprovementRecord::Effect const *	effect =
-				terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+    for (sint32 i = GetNumObjects() - 1; i >= 0; --i) 
+    {
+	    ID const &	object	= m_objects->Access(i);
+	    if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
+	    {
+		    TerrainImprovementRecord const *			impRec = 
+			    g_theTerrainImprovementDB->Get(object.m_id & k_ID_KEY_MASK);
+		    TerrainImprovementRecord::Effect const *	effect =
+			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
-			sint32	modifiedFreight;
-			if (effect && effect->GetFreight(modifiedFreight)) 
-			{
-				cost = min(cost, modifiedFreight);
-			}
-		}
-	}																					
-	
+		    sint32	modifiedFreight;
+		    if (effect && effect->GetFreight(modifiedFreight)) 
+		    {
+                cost = std::min(cost, modifiedFreight);
+		    }
+	    }
+    }																					
+
 	return static_cast<double>(cost);
 }
 
@@ -1157,9 +1143,9 @@ GoodyHut *Cell::GetGoodyHut()
 	return m_jabba;
 }
 
-sint32 Cell::GetNumObjects()
+sint32 Cell::GetNumObjects() const
 {
-	return m_objects->Num();
+    return m_objects ? m_objects->Num() : 0;
 }
 
 ID Cell::GetObject(sint32 index)
@@ -1179,7 +1165,7 @@ void Cell::InsertDBImprovement(sint32 type)
 	uint32 id = k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB | type;
 
 	sint32 i;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
+	for (i = m_objects->Num() - 1; i >= 0; i--) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
 			const TerrainImprovementRecord *oldRec = 
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
@@ -1209,11 +1195,8 @@ void Cell::InsertDBImprovement(sint32 type)
 
 void Cell::RemoveDBImprovement(sint32 type)
 {
-	if(!m_objects)
-		return;
-
-	sint32 i;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+    {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			m_objects->DelIndex(i);
 	}
@@ -1221,14 +1204,14 @@ void Cell::RemoveDBImprovement(sint32 type)
 
 sint32 Cell::GetNumDBImprovements() const
 {
-	if(!m_objects)
-		return 0;
+	sint32 c = 0;
 
-	sint32 i, c = 0;
-	for(i = m_objects->Num() - 1; i >= 0; i--) {
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+    {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			c++;
 	}
+
 	return c;
 }
 
@@ -1237,8 +1220,8 @@ sint32 Cell::GetDBImprovement(sint32 index) const
 	if(!m_objects)
 		return -1;
 
-	sint32 i, c = 0;
-	for(i = m_objects->Num() -1; i >= 0; i--) {
+	sint32 c = 0;
+	for (sint32 i = m_objects->Num() -1; i >= 0; i--) {
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
 			if(c == index) {
 				return m_objects->Access(i).m_id & k_ID_KEY_MASK;

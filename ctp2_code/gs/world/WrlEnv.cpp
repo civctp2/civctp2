@@ -762,7 +762,6 @@ BOOL World::IsContinentBiggerThan(uint32 size,
 	MapPoint neighbor;
 	BOOL firstcall = FALSE;
 	MapPoint pos;
-	Cell *thisCell = m_map[pnt.x][pnt.y];
 	
 	if(array == NULL) {
 		array = new uint8[m_size.y * m_size.x];
@@ -889,8 +888,7 @@ void World::CutImprovements(const MapPoint &point)
 		Assert(rec);
 		if(rec && rec->GetIntBorderRadius(intRad)) {
 			rec->GetSquaredBorderRadius(sqRad);
-			MapPoint ISuck = point;
-			terrainutil_RemoveBorders(ISuck, thisCell->GetOwner(), intRad, sqRad, Unit());
+			terrainutil_RemoveBorders(point, thisCell->GetOwner(), intRad, sqRad, Unit());
 		}
 		thisCell->RemoveDBImprovement(thisCell->GetDBImprovement(0));
 	}

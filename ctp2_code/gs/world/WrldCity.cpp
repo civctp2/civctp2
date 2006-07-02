@@ -87,6 +87,7 @@ void World::CityRadiusFunc(const MapPoint &pos)
 				   IsWater(pos)) {
 					m_tempIrrigation = TRUE;
 				} else if(GetCell(pos)->GetNumImprovements()) {
+#if 0   // useless code
 					sint32 i;
 					for(i = theCell->GetNumImprovements() - 1; i >= 0; i--) {
 						TERRAIN_IMPROVEMENT type = theCell->AccessImprovement(i).GetType();
@@ -97,6 +98,7 @@ void World::CityRadiusFunc(const MapPoint &pos)
 						
 						
 					}
+#endif
 				}
 			}
 				

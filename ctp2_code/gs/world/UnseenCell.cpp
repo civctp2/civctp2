@@ -41,7 +41,7 @@
 
 #include "c3.h"
 #include "UnseenCell.h"
-#include "XY_Coordinates.h"
+
 #include "World.h"
 #include "TileInfo.h"
 #include "Cell.h"
@@ -143,9 +143,10 @@ UnseenCell::UnseenCell(const MapPoint &point)
 	// Store the city that controlls this tile.
 	m_visibleCityOwner = g_theWorld->GetCell(point)->GetCityOwner().m_id;
 
-	if(cell->GetCity().m_id != (0)) {
-		Unit		city = cell->GetCity();
+	Unit    city = cell->GetCity();
 
+	if (city.IsValid()) 
+    {
 		m_citySize = (sint16)city.PopCount();
 		m_citySpriteIndex = (sint16)city.CD()->GetDesiredSpriteIndex();
 		const MBCHAR *name = city.GetName();
@@ -620,14 +621,10 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	
-	sint32 food = rec->GetEnvBase()->GetFood();
+	sint32 food = Terrain(rec).GetFood();
 
 	if(m_cityName != NULL && rec->HasEnvCity()) {
 		food += rec->GetEnvCityPtr()->GetFood();
-	}
-
-	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->HasEnvRiver()) {
-		food += rec->GetEnvRiverPtr()->GetFood();
 	}
 
 	sint32 good;
@@ -708,14 +705,10 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
 	
-	sint32 shield = rec->GetEnvBase()->GetShield();
+    sint32 shield = Terrain(rec).GetShield();
 
 	if(m_cityName != NULL && rec->HasEnvCity()) {
 		shield += rec->GetEnvCityPtr()->GetShield();
-	}
-
-	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->HasEnvRiver()) {
-		shield += rec->GetEnvRiverPtr()->GetShield();
 	}
 
 	sint32 good;
@@ -796,15 +789,10 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
-	
-	sint32 gold = rec->GetEnvBase()->GetGold();
+    sint32 gold = Terrain(rec).GetGold();
 
 	if(m_cityName != NULL && rec->HasEnvCity()) {
 		gold += rec->GetEnvCityPtr()->GetGold();
-	}
-
-	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->HasEnvRiver()) {
-		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 
 	sint32 good;
@@ -999,7 +987,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		}
 
 		
-		Cell* cell = g_theWorld->GetCell(m_point) ;
+//		Cell* cell = g_theWorld->GetCell(m_point) ;
 		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(m_point));
 
 		

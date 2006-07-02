@@ -3889,7 +3889,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 		}
 
 		
-		sint32 i, n = num;
+		sint32 i;
 		if(num > 0) {
 			sint32 count = 0;
 			sint32 which = g_rand->Next(num);
@@ -4988,18 +4988,18 @@ BOOL UnitData::AiGetCargoMovementPoints(double &min_move_points,
     if (m_cargo_list) { 
        
         
-       sint32 idx_cargo, num_cargo; 
-       num_cargo = m_cargo_list->Num(); 
+       sint32 num_cargo = m_cargo_list->Num(); 
        if (num_cargo < 1) { 
            return FALSE; 
        } 
-       double mp; 
-       for (idx_cargo=0; idx_cargo<num_cargo; idx_cargo++) { 
 
-           mp = m_cargo_list->Get(idx_cargo).GetMovementPoints();
-           if (mp < min_move_points) { 
-               min_move_points = mp; 
-           } 
+       for (sint32 idx_cargo=0; idx_cargo<num_cargo; idx_cargo++) 
+       { 
+           min_move_points = 
+               std::min(min_move_points, 
+                        m_cargo_list->Get(idx_cargo).GetMovementPoints()
+                       );
+            
            if (Flag(k_UDF_FIRST_MOVE)) { 
                first = FALSE; 
            }
@@ -5026,7 +5026,7 @@ void UnitData::SetIsInTransport(const Unit &transport)
 { 
 	SetFlag(k_UDF_IS_IN_TRANSPORT);
 	m_army.Del(Unit(m_id));
-	m_army.m_id = (0);
+	m_army      = Army();
 	m_transport = transport;
 	
 }
@@ -5039,7 +5039,7 @@ void UnitData::UnsetIsInTransport()
 		ClearFlag(k_UDF_BEACH_ASSAULT_LEGAL);
 	}
 	ClearFlag(k_UDF_IS_IN_TRANSPORT);
-	m_transport.m_id = (0);
+	m_transport = Unit();
 	
 }
 
@@ -5058,6 +5058,7 @@ void UnitData::SetOwner(PLAYER_INDEX newo)
 void UnitData::SetType(sint32 type)
 { 
 	m_type = type; 
+    /// @bug This is going to cause resynchs for MP
 	//ENQUEUE(); 
 }
 
@@ -5225,7 +5226,7 @@ void UnitData::NotifyAdvance(AdvanceType advance)
 
 sint32 UnitData::CreateOwnArmy()
 {
-	if(m_army.m_id != (0) && m_army.Num() < 2)
+	if (m_army.m_id != (0) && m_army.Num() < 2)
 		return 1;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
@@ -5414,12 +5415,11 @@ void UnitData::SetArmy(const Army &army)
 
 void UnitData::KillTransportedUnits()
 {
-	if(m_cargo_list) {
-		sint32 i;
-		for(i = m_cargo_list->Num() - 1; i >= 0; i--) {
+	if(m_cargo_list) 
+    {
+		for (sint32 i = m_cargo_list->Num() - 1; i >= 0; i--) 
+        {
 			m_cargo_list->Access(i).Kill(CAUSE_REMOVE_ARMY_TRANSPORT_DIED, -1);
-			
-			
 		}
 	}
 }
@@ -5449,137 +5449,87 @@ void UnitData::AddWonderHPBonus(sint32 amt)
 	m_hp += amt;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::CanExecuteNextTo
+//
+// Description: Test whether a unit can perform a function at a neighbouring
+//              position.
+//
+// Parameters : a_Position      The position where to perform the action
+//              a_HasFunction   The function (property) to perform
+//
+// Globals    : g_theConstDB
+//              g_theUnitDB
+//
+// Returns    : bool        It can be done
+//
+// Remark(s)  : Tested requirements:
+//              - The unit is next to the indicated position
+//              - The unit has sufficient move points to perform the function.
+//              - The unit type can perform the function.
+//
+//----------------------------------------------------------------------------
+bool UnitData::CanExecuteNextTo
+(
+    MapPoint const &            a_Position, 
+    UnitRecord::BoolAccessor    a_HasFunction
+) const
+{
+    return (g_theUnitDB->Get(m_type)->*a_HasFunction)()
+        && m_pos.IsNextTo(a_Position)
+        && (GetMovementPoints() >= g_theConstDB->SpecialActionMoveCost());
+}
+
 sint32 UnitData::CanPlantNuke(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetPlantNuke())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasPlantNuke);
 }
 
 sint32 UnitData::CanMakePark(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetCreateParks())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasCreateParks);
 }
 
 sint32 UnitData::CanUndergroundRailway(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetUndergroundRailway())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasUndergroundRailway);
 }
 
 // Returns true if this unit is next to pos and can convert a city there
 sint32 UnitData::CanConvert(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetConvertCities())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasConvertCities);
 }
-
 
 sint32 UnitData::CanEstablishEmbassy(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetEstablishEmbassy())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::GetEstablishEmbassy);
 }
 
 sint32 UnitData::CanCreateFranchise(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetCreateFranchise())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasCreateFranchise);
 }
 
 sint32 UnitData::CanAssasinateRuler(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetAssasinateRuler())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasAssasinateRuler);
 }
 
 sint32 UnitData::CanStealTechnology(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetStealTechnology())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasStealTechnology);
 }
 
 sint32 UnitData::CanInjoin(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetCanInjoin())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasCanInjoin);
 }
 
 sint32 UnitData::CanInciteRevolution(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetInciteRevolution())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasInciteRevolution);
 }
 
 //----------------------------------------------------------------------------
@@ -5600,28 +5550,14 @@ sint32 UnitData::CanInciteRevolution(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 sint32 UnitData::CanCauseUnhappiness(const MapPoint &pos) const 
 {
-	if (!g_theUnitDB->Get(m_type)->GetCauseUnhappiness())
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return CanExecuteNextTo(pos, &UnitRecord::HasCauseUnhappiness);
 }
 
 sint32 UnitData::CanExpel(const MapPoint &pos) const 
 {
-	if (g_theUnitDB->Get(m_type)->GetAttack() <= 0)
-		return false;
-
-	if (!m_pos.IsNextTo(pos))
-		return false;
-
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
-		return false;
-	return true;
+    return (g_theUnitDB->Get(m_type)->GetAttack() > 0.0)
+        && m_pos.IsNextTo(pos)
+        && (GetMovementPoints() >= g_theConstDB->SpecialActionMoveCost());
 }
 
 void UnitData::AddEndGameObject(sint32 type)
@@ -5740,7 +5676,8 @@ BOOL UnitData::CheckForRefuel()
 	}
 	
 	Unit c = g_theWorld->GetCity(m_pos);	
-	if (c.m_id != (0)) { 
+	if (c.IsValid()) 
+    { 
 		m_fuel = rec->GetMaxFuel();
 		m_movement_points = 0;
 		return TRUE;
@@ -5955,23 +5892,26 @@ const Unit &UnitData::GetTargetCity()
 
 bool UnitData::CanBeachAssaultRightNow()
 {
-	if(!m_transport.IsValid()) {
-		
-		return false;
-	}
+	if (m_transport.IsValid()) 
+    {
+        UnitRecord const *  transport = m_transport.GetDBRec();
 
-	if(g_theUnitDB->Get(m_type)->GetParatrooper()) {
-		if(m_transport.GetDBRec()->GetParatrooperTransport())
-			return true;
-		return false;
-	}
-
-	if(g_theUnitDB->Get(m_type)->GetCanBeachAssault()) {
-		if(m_transport.GetDBRec()->GetMovementTypeSea() ||
-		   m_transport.GetDBRec()->GetMovementTypeShallowWater())
-			return true;
-		return false;
-	}
+    	if (    g_theUnitDB->Get(m_type)->GetParatrooper() 
+             && transport->GetParatrooperTransport()
+           )
+        {
+            return true;
+        }
+        
+        if (    g_theUnitDB->Get(m_type)->GetCanBeachAssault()
+             && (   transport->GetMovementTypeSea() 
+                 || transport->GetMovementTypeShallowWater()
+                )
+           )
+        {
+            return true;
+        }
+    }
 
 	return false;
 }

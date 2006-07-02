@@ -118,8 +118,6 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		GetArmy().SetRemoveCause(cause);
 	}
 
-	sint32 r=TRUE;
-	
 	switch(cause) {
 		case CAUSE_REMOVE_ARMY_ATTACKED:
 		case CAUSE_REMOVE_ARMY_DIED_IN_ATTACK:
@@ -180,9 +178,10 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		AccessData()->KillVision();
 	}
 	
-	MapPoint pos;
+	MapPoint        pos;
 	GetPos(pos);
-	PLAYER_INDEX owner = GetOwner(); 
+	PLAYER_INDEX    owner   = GetOwner(); 
+	sint32          r       = TRUE;
 	
 	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader() && !IsTempSlaveUnit() &&
 		!IsBeingTransported() && !HasLeftMap()) {
@@ -402,15 +401,13 @@ sint32 Unit::GetType() const
 
 void Unit::GetPos(MapPoint &pos) const 
 {
-	UnitData const * ptr = g_theUnitPool->GetUnit(m_id);
-	ptr->GetPos(pos); 
+	g_theUnitPool->GetUnit(m_id)->GetPos(pos); 
 }
 
 MapPoint Unit::RetPos() const 
 {
-	UnitData const * ptr = g_theUnitPool->GetUnit(m_id);
 	MapPoint pos;
-	ptr->GetPos(pos);
+	GetPos(pos);
 	return pos;
 }
 
@@ -452,15 +449,12 @@ BOOL Unit::NearestFriendlyCity(MapPoint &p) const
 	MapPoint	unit_pos,
 				city_pos ;
 
-	sint32	i,
-			n ;
-
 	uint32	closest_distance = 0xFFFFFFFF;
 
 	GetPos(unit_pos);
 	p = unit_pos;
-	n = g_player[GetOwner()]->m_all_cities->Num();
-	for (i=0; i<n; i++)
+	sint32 const n = g_player[GetOwner()]->m_all_cities->Num();
+	for (sint32 i = 0; i < n; i++)
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
@@ -488,18 +482,16 @@ BOOL Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 	MapPoint    unit_pos,
 	            city_pos;
 
-	sint32      i,
-	            n;
-
-	
 	uint32	closest_distance = 0xFFFFFFFF;
 
 	
 	GetPos(unit_pos);
 	p = unit_pos;
-	n = g_player[GetOwner()]->m_all_cities->Num();
-	for (i=0; i<n; i++)	{
-		
+
+	sint32 const    n = g_player[GetOwner()]->m_all_cities->Num();
+
+	for (sint32 i = 0; i < n; i++)	
+    {
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 		
 		
@@ -510,7 +502,7 @@ BOOL Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 		if(numUnits + needRoom > k_MAX_ARMY_SIZE)
 			continue;
 
-		if(army && 
+		if (army.IsValid() && 
 		   (army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater())) {
 			if(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) && 
 			   !g_theWorld->IsWater(city_pos))
@@ -543,16 +535,13 @@ BOOL Unit::NearestFriendlyCity(Unit &c) const
 	MapPoint    unit_pos,
 	            city_pos;
 
-	sint32      i,
-	            n;
-
 	uint32	closest_distance = 0xFFFFFFFF;
 
-	c.m_id = (0);
+	c = Unit();
 	GetPos(unit_pos);
-	n = g_player[GetOwner()]->m_all_cities->Num();
-	for (i=0; i<n; i++)
-		{
+	sint32 const    n = g_player[GetOwner()]->m_all_cities->Num();
+	for (sint32 i = 0; i < n; i++)
+	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
 		
@@ -562,13 +551,13 @@ BOOL Unit::NearestFriendlyCity(Unit &c) const
 
 		
 		if (d<closest_distance)
-			{
+		{
 			
 			closest_distance = d;
 			c = g_player[GetOwner()]->m_all_cities->Get(i).m_id;
-			}
-
 		}
+
+	}
 
 	return closest_distance < 0xffffffff;
 }
@@ -636,10 +625,14 @@ sint32 Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed,
 {
 	bool left_map;
 	AccessData()->SetPos(p, revealed_unexplored, left_map); 
-	if(!left_map) {
+
+    if (left_map) 
+    {
+        return TRUE;
+    }
+    else
+    {
 		return g_theWorld->InsertUnit(p, *this, revealed); 
-	} else {
-		return TRUE;
 	}
 }
 
@@ -2456,11 +2449,13 @@ void Unit::UpdateZOCForRemoval()
 		
 		
 		BOOL updateZoc = TRUE;
-		if(cell->GetCity().m_id != 0 &&
-		   cell->GetCity().IsValid() &&
-		   cell->GetCity().GetOwner() == GetOwner()) {
+		if(cell->GetCity().IsValid() &&
+		   cell->GetCity().GetOwner() == GetOwner()) 
+        {
 			updateZoc = FALSE;
-		} else if(units && units->GetOwner() == GetOwner()) {
+		} 
+        else if(units && units->GetOwner() == GetOwner()) 
+        {
 			for(i = 0; i < units->Num(); i++) {
 				if(!units->Access(i).IsNoZoc()) {
 					updateZoc = FALSE;
@@ -2653,11 +2648,11 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanSlaveRaid())
 		order_valid = unit_rec->GetSlaveRaids(raid_data);
 	else if(order_rec->GetUnitPretest_CanEnslaveSettler())
-		order_valid = unit_rec->GetSettlerSlaveRaids();
+		order_valid = unit_rec->HasSettlerSlaveRaids();
 	else if(order_rec->GetUnitPretest_CanUndergroundRailway())
 		order_valid = unit_rec->GetUndergroundRailway(success_death_data);
 	else if(order_rec->GetUnitPretest_CanInciteUprising())
-		order_valid = unit_rec->GetSlaveUprising();
+		order_valid = unit_rec->HasSlaveUprising();
 	else if(order_rec->GetUnitPretest_CanBioTerror())
 		order_valid = unit_rec->GetBioTerror(chance_data);
 	else if(order_rec->GetUnitPretest_CanPlague())
@@ -2667,34 +2662,34 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanConvertCity())
 		order_valid = unit_rec->GetConvertCities(success_death_data);
 	else if(order_rec->GetUnitPretest_CanReformCity())
-		order_valid = unit_rec->GetCanReform();
+		order_valid = unit_rec->HasCanReform();
 	else if(order_rec->GetUnitPretest_CanSellIndulgences())
-		order_valid = unit_rec->GetIndulgenceSales();
+		order_valid = unit_rec->HasIndulgenceSales();
 //	else if(order_rec->GetUnitPretest_CanFaithHeal())
 //		order_valid = false;
 	else if(order_rec->GetUnitPretest_CanSoothsay())
-		order_valid = unit_rec->GetCanSoothsay();
+		order_valid = unit_rec->HasCanSoothsay();
 	else if(order_rec->GetUnitPretest_CanCreatePark())
-		order_valid = unit_rec->GetCreateParks();
+		order_valid = unit_rec->HasCreateParks();
 	else if(order_rec->GetUnitPretest_CanPillage())
 		order_valid = unit_rec->GetCanPillage();
 	else if(order_rec->GetUnitPretest_CanInjoin())
-		order_valid = unit_rec->GetCanInjoin();
+		order_valid = unit_rec->HasCanInjoin();
 	else if(order_rec->GetUnitPretest_CanInterceptTrade())
 		order_valid = unit_rec->GetCanPirate();
 	else if(order_rec->GetUnitPretest_CanAdvertise())
 		order_valid = unit_rec->GetAdvertise();
 	else if(order_rec->GetUnitPretest_CanNukeCity())
-		order_valid = unit_rec->GetNuclearAttack();
+		order_valid = unit_rec->HasNuclearAttack();
 	else if(order_rec->GetUnitPretest_CanTransport())
-		order_valid = unit_rec->GetCargoData();
+		order_valid = unit_rec->HasCargoData();
 	else if(order_rec->GetUnitPretest_CanBeTransported())
 		order_valid = unit_rec->GetSizeMedium() || 
 		              unit_rec->GetSizeSmall();
 	else if(order_rec->GetUnitPretest_CanLaunch())
-		order_valid = unit_rec->GetSpaceLaunch();
+		order_valid = unit_rec->HasSpaceLaunch();
 	else if(order_rec->GetUnitPretest_CanTarget())
-		order_valid = unit_rec->GetNuclearAttack();
+		order_valid = unit_rec->HasNuclearAttack();
 	else if(order_rec->GetUnitPretest_NoFuelThenCrash()
 	     && unit_rec->GetNoFuelThenCrash()
 	     &&!unit_rec->GetSingleUse())

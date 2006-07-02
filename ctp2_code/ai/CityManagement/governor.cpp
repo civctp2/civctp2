@@ -97,6 +97,7 @@
 // - Restored happiness calculation when testing slider settings.
 // - Cleaned up (double Get-calls, unused stuff, casts).
 // - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
+// - Allow spending all unused freight
 //
 //----------------------------------------------------------------------------
 
@@ -4698,17 +4699,21 @@ void Governor::ManageGoodsTradeRoutes()
 				
 				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) {
 
-					if(!g_player[op]) continue;
-					if(m_playerId != op && !player_ptr->HasContactWith(op)) continue;
 
+                    if (m_playerId != op)
+                    {
+    					if (!g_player[op]) 
+                            continue;
+
+	    				if (!player_ptr->HasContactWith(op)) 
+                            continue;
+
+					    if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) 
+						    continue;
 					
-					if(AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) 
-						continue;
-
-					
-					if(Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
-						continue;
-
+    					if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
+	    					continue;
+                    }
 					
 					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
@@ -4815,7 +4820,7 @@ void Governor::ManageGoodsTradeRoutes()
         ++route_iter
     )
 	{
-		if (route_iter->m_cost < unused_freight) 
+		if (route_iter->m_cost <= unused_freight) 
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
 				                   GEA_Int,         route_iter->m_resource,

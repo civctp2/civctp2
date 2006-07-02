@@ -36,6 +36,7 @@
 #ifndef __WORLD_H__
 #define __WORLD_H__
 
+class Terrain;
 class World; 
 
 enum WORLD_RADIUS_OP 
@@ -102,6 +103,22 @@ struct MapPointNode;
 
 template <class T> class DynamicArray; 
 typedef DynamicArray<sint32> DAsint32; 
+
+class Terrain
+{
+public:
+    Terrain(TerrainRecord const * a_Terrain)
+    :
+        m_Terrain   (a_Terrain)
+    { };
+
+    sint32 GetFood() const;
+    sint32 GetGold() const;
+    sint32 GetShield() const;
+
+private:
+    TerrainRecord const *   m_Terrain;
+};
 
 class World : public CityRadiusCallback { 
     sint32 m_isYwrap; 
@@ -396,17 +413,17 @@ public:
     sint32 CanEnter(const MapPoint &pos, const uint32 flag) const;
 
 	
-	inline sint32 World::EnvIsWater(const uint32 env) const
+	sint32 World::EnvIsWater(const uint32 env) const
 	{
 		return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER | k_BIT_MOVEMENT_TYPE_SHALLOW_WATER))) != 0; 
 	}
 
-	inline sint32 World::IsWater(const MapPoint &pos) const
+	sint32 World::IsWater(const MapPoint &pos) const
 	{ 
 		return EnvIsWater(GetCell(pos)->m_env);
 	}
 
-	inline sint32 World::IsWater(const sint32 x, const sint32 y) const 
+	sint32 World::IsWater(const sint32 x, const sint32 y) const 
 	{ 
 		return EnvIsWater(m_map[x][y]->m_env);
 	}
@@ -544,11 +561,11 @@ public:
     sint32 GetShieldsProduced(const MapPoint &pos) const;
     
     
-    void InsertImprovement(const TerrainImprovement &imp, MapPoint &point);
+    void InsertImprovement(const TerrainImprovement &imp, MapPoint const & point);
     void RemoveImprovement(const TerrainImprovement &imp, const MapPoint &point);
     
-    void InsertInstallation(Installation &inst, MapPoint &point);
-    void RemoveInstallation(Installation &inst, MapPoint &point);
+    void InsertInstallation(Installation &inst, MapPoint const & point);
+    void RemoveInstallation(Installation &inst, MapPoint const & point);
 	sint32 CountImprovements(const MapPoint & pos);
 
 	

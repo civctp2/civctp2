@@ -50,7 +50,7 @@ class VisibilityDurationArray;
 #include "Order.h"          // ORDER_RESULT
 #include "Player.h"         // k_MAX_PLAYERS
 #include "UnitActor.h"      // UnitActor
-
+#include "UnitRecord.h"
 
 class UnitList;
 class citydata; 
@@ -701,6 +701,14 @@ public:
 	const Unit &GetTargetCity();
 
 	bool CanBeachAssaultRightNow();
+
+private:
+    bool CanExecuteNextTo
+    (
+        MapPoint const &            a_Position, 
+        UnitRecord::BoolAccessor    a_Function
+    ) const;
+
 };
 
 uint32 UnitData_UnitData_GetVersion(void) ;

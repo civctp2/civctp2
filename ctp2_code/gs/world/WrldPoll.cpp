@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World pollution handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -791,9 +791,9 @@ void World::RegenerateRivers()
 #define k_BASE_HILL_HEIGHT 50
 #define k_BASE_MOUNTAIN_HEIGHT 100
 #define k_HEIGHT_RANGE 40
-#define k_GROUND_HEIGHT (k_BASE_GROUND_HEIGHT + (g_rand->Next(k_HEIGHT_RANGE) - ((k_HEIGHT_RANGE) / 2)))
-#define k_HILL_HEIGHT (k_BASE_HILL_HEIGHT + (g_rand->Next(k_HEIGHT_RANGE) - ((k_HEIGHT_RANGE) / 2)))
-#define k_MOUNTAIN_HEIGHT (k_BASE_MOUNTAIN_HEIGHT + (g_rand->Next(k_HEIGHT_RANGE) - ((k_HEIGHT_RANGE) / 2)))
+#define k_GROUND_HEIGHT static_cast<sint8>(k_BASE_GROUND_HEIGHT + (g_rand->Next(k_HEIGHT_RANGE) - ((k_HEIGHT_RANGE) / 2)))
+#define k_HILL_HEIGHT static_cast<sint8>(k_BASE_HILL_HEIGHT + (g_rand->Next(k_HEIGHT_RANGE) - ((k_HEIGHT_RANGE) / 2)))
+#define k_MOUNTAIN_HEIGHT static_cast<sint8>(k_BASE_MOUNTAIN_HEIGHT + (g_rand->Next(k_HEIGHT_RANGE) - ((k_HEIGHT_RANGE) / 2)))
 #define k_WATER_HEIGHT -50
 
 	
@@ -892,7 +892,7 @@ void World::RegenerateRivers()
 				map[y * m_size.x + x] = k_MOUNTAIN_HEIGHT;
 				wetmap[y * m_size.x + x] = 0;
 			}
-			wetmap[y * m_size.x + x] += g_rand->Next(10) - 5;
+			wetmap[y * m_size.x + x] += static_cast<sint8>(g_rand->Next(10) - 5);
 		}
 	}
 

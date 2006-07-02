@@ -1160,7 +1160,6 @@ bool BuildQueue::DoInsertChecks(sint32 cat, sint32 t, sint32 cost)
 
     case k_GAME_OBJ_TYPE_UNIT:
 		{
-			const UnitRecord* rec = g_theUnitDB->Get(t);
             if(!m_city.CanBuildUnit(t)) { 
 				return FALSE;
             }
@@ -1729,8 +1728,13 @@ void BuildQueue::MoveNodeDown(sint32 index)
 
 bool BuildQueue::IsItemInQueue(uint32 cat, sint32 type)
 {
-	PointerList<BuildNode>::Walker walk(m_list);
-	for(; walk.IsValid(); walk.Next()) {
+	for 
+    (
+        PointerList<BuildNode>::Walker walk(m_list); 
+        walk.IsValid(); 
+        walk.Next()
+    ) 
+    {
 		if(walk.GetObj()->m_category == cat &&
 		   walk.GetObj()->m_type == type)
 			return true;

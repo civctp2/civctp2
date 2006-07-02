@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of a list of Units in the same cell
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,31 +18,51 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
-//       1200 are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Microsoft C++ extensions marked for future GCC compiliation.
+// - Microsoft extensions removed.
 // - MovementTypeLand added, as suggested by NelsonAndBronte.
 // - Option added to report sync errors only once.
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
-#endif // _MSC_VER
+#endif
 
 #ifndef __CELL_UNIT_LIST_H__
 #define __CELL_UNIT_LIST_H__
+
+//----------------------------------------------------------------------------
+//
+// Library imports
+//
+//----------------------------------------------------------------------------
+
+// none
+
+//----------------------------------------------------------------------------
+//
+// Exported names
+//
+//----------------------------------------------------------------------------
+
+class CellUnitList;
+
+#define k_CULF_IGNORES_ZOC          0x01
+#define k_CULF_CANT_CAPTURE_CITY    0x02
+#define k_CULF_CAN_SPACE_LAUNCH     0x04
+#define k_CULF_CAN_SPACE_LAND       0x08
+#define k_CULF_IN_SPACE             0x10
+#define k_CULF_EXECUTED_THIS_TURN   0x80
+
+//----------------------------------------------------------------------------
+//
+// Project imports
+//
+//----------------------------------------------------------------------------
 
 #include "Unit.h"
 #include "gstypes.h"
@@ -51,14 +71,11 @@ template <class T> class DynamicArray;
 
 class CivArchive;
 
-#define k_CULF_IGNORES_ZOC 0x01
-#define k_CULF_CANT_CAPTURE_CITY 0x02
-#define k_CULF_CAN_SPACE_LAUNCH 0x04
-#define k_CULF_CAN_SPACE_LAND 0x08
-#define k_CULF_IN_SPACE       0x10
-
-
-#define k_CULF_EXECUTED_THIS_TURN 0x80
+//----------------------------------------------------------------------------
+//
+// Declarations
+//
+//----------------------------------------------------------------------------
 
 class CellUnitList
 {

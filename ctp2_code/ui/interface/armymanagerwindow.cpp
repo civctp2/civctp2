@@ -237,18 +237,19 @@ void ArmyManagerWindow::NotifySelection()
 		return;
 
 	Army a;
-	if(!g_selected_item->GetSelectedArmy(a)) {
-		s_armyWindow->m_pos = g_selected_item->GetCurSelectPos();
-		s_armyWindow->m_army.m_id = 0;
-		s_armyWindow->UpdateArmyName();
-		s_armyWindow->FillArmies();
-	} else {
-		s_armyWindow->m_army = a;
-		s_armyWindow->m_pos = a->RetPos();
-		s_armyWindow->UpdateArmyName();
-		s_armyWindow->FillArmies();
+	if (g_selected_item->GetSelectedArmy(a)) 
+    {
+		s_armyWindow->m_army        = a;
+		s_armyWindow->m_pos         = a->RetPos();
+	} 
+    else 
+    {
+		s_armyWindow->m_army.m_id   = 0;
+		s_armyWindow->m_pos         = g_selected_item->GetCurSelectPos();
 	}
 
+	s_armyWindow->UpdateArmyName();
+	s_armyWindow->FillArmies();
 	s_armyWindow->Update();
 }
 
@@ -684,7 +685,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	sint32 i;
 	CellUnitList units;
 
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
+	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
@@ -853,26 +854,22 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
-	bool enableRemoveButton=true;
-	bool enableRemoveAllButton=false;
-	sint8 i;
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	bool enableRemoveButton		= false;
+	bool enableRemoveAllButton	= false;
+	for (int i = 0; (i < k_MAX_ARMY_SIZE) && !enableRemoveButton; ++i) 
+	{		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "InArmyBox.Unit%d", i);		
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
-		if(s_armyWindow->m_inArmy[i].m_id)
+		enableRemoveButton = sw && sw->IsSelected();
+
+		if (s_armyWindow->m_inArmy[i].m_id)
 		{
 			enableRemoveAllButton=true;
 		}
-		if(sw && sw->IsSelected()) {
-			break;
-		}
 	}
-	if(i==k_MAX_ARMY_SIZE)
-	{
-		enableRemoveButton=false;
-	}
+
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.RemoveButton")))->Enable(enableRemoveButton);
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.RemoveAllButton")))->Enable(enableRemoveAllButton);
 }
@@ -887,42 +884,37 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 		}	
 	}
 
-	bool enableAddButton=true;
-	bool enableAddAllButton=false;
-	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
-	ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetSelectedItem();
-	uint8 i;
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {		
+	bool enableAddButton	= false;
+	bool enableAddAllButton	= false;
+//	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
+	for (int i = 0; (i < k_MAX_ARMY_SIZE) && ! enableAddButton; ++i) 
+	{		
 		MBCHAR switchName[k_MAX_NAME_LEN];
 		sprintf(switchName, "OutOfArmyBox.Unit%d", i);		
-		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
+		ctp2_Switch * sw = (ctp2_Switch *)aui_Ldl::GetObject(s_armyWindowBlock, switchName);
 		Assert(sw);
 		if(s_armyWindow->m_outOfArmy[i].m_id)
 		{
 			enableAddAllButton=true;
 		}
-		if(sw && sw->IsSelected()) {
-			break;
+		if (sw && sw->IsSelected()) 
+		{
+			enableAddButton = true;
 		}
 	}
-	if(i==k_MAX_ARMY_SIZE)
-	{
-		enableAddButton=false;
-	}
+
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.AddButton")))->Enable(enableAddButton);
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.AddAllButton")))->Enable(enableAddAllButton);
 }
 
 AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
 {
-	sint32 width,hpwidth,maxhp,curhp;
-	
-	if(s_armyWindow->m_inArmy[(int)cookie].IsValid())
+	if (s_armyWindow->m_inArmy[(int)cookie].IsValid())
 	{
-		maxhp=s_armyWindow->m_inArmy[(int)cookie].GetDBRec()->GetMaxHP();
-		curhp=s_armyWindow->m_inArmy[(int)cookie].GetHP();
-		width=rect.right-rect.left;
-		hpwidth=width * curhp / maxhp;
+		sint32 const maxhp		= s_armyWindow->m_inArmy[(int)cookie].GetDBRec()->GetMaxHP();
+		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_inArmy[(int)cookie].GetHP());
+		sint32 const width		= rect.right - rect.left;
+		sint32 const hpwidth	= width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
 							hpwidth > (width/4)?g_colorSet->GetColor(COLOR_YELLOW):
 							g_colorSet->GetColor(COLOR_RED));
@@ -936,14 +928,12 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 
 AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
 {
-	sint32 width,hpwidth,maxhp,curhp;
-	
-	if(s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
+	if (s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
 	{
-		maxhp=s_armyWindow->m_outOfArmy[(int)cookie].GetDBRec()->GetMaxHP();
-		curhp=s_armyWindow->m_outOfArmy[(int)cookie].GetHP();
-		width=rect.right-rect.left;
-		hpwidth=width * curhp / maxhp;
+		sint32 const maxhp		= s_armyWindow->m_outOfArmy[(int)cookie].GetDBRec()->GetMaxHP();
+		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_outOfArmy[(int)cookie].GetHP());
+		sint32 const width		= rect.right - rect.left;
+		sint32 const hpwidth	= width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
 							hpwidth > (width/4)?g_colorSet->GetColor(COLOR_YELLOW):
 							g_colorSet->GetColor(COLOR_RED));
@@ -961,11 +951,12 @@ STDEHANDLER(ArmyManagerArmyMoved)
 	if(!args->GetArmy(0, a))
 		return GEV_HD_Continue;
 
-	if(a.GetOwner() != g_selected_item->GetVisiblePlayer())
-		return GEV_HD_Continue;
+    if (a.GetOwner() == g_selected_item->GetVisiblePlayer())
+    {
+        ArmyManagerWindow::NotifySelection();
+    }
 
-	ArmyManagerWindow::NotifySelection();
-	return GEV_HD_Continue;
+    return GEV_HD_Continue;
 }
 
 void ArmyManagerWindow::InitializeEvents()

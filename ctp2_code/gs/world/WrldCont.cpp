@@ -127,7 +127,6 @@ void World::InitContinent()
 void World::GrowOceans() 
 { 
     MapPoint p;
-    sint32 found = FALSE; 
 
     for (p.x = 0; p.x <m_size.x; p.x++) { 
         for (p.y = 0; p.y <m_size.y; p.y++) {    
@@ -145,8 +144,6 @@ void World::GrowWater(MapPoint &start)
     MapPoint test_pos; 
     MapPoint center;
     MapPointNode *search_list = NULL, *finished_list=NULL;
-
-    BOOL revealed_bridge=FALSE;
 
 #ifdef _DEBUG
     sint32 finite_loop=0; 
@@ -258,7 +255,6 @@ sint32 g_test_it2;
 
 void World::ResetCanalsTunnels()
 {
-    sint32 z=0; 
     uint32 e; 
     Cell *c=NULL; 
     sint32 old_cont_val;
@@ -305,7 +301,6 @@ void World::ResetCanalsTunnels()
 void World::GrowContinents() 
 { 
     MapPoint p;
-    sint32 found = FALSE; 
 
     for (p.x = 0; p.x <m_size.x; p.x++) { 
         for (p.y = 0; p.y <m_size.y; p.y++) {             
@@ -340,7 +335,6 @@ void World::GrowLand(MapPoint &start)
     MapPoint test_pos; 
     MapPoint center; 
     MapPointNode *search_list = NULL, *finished_list=NULL;
-    BOOL revealed_bridge=FALSE;
 
 #ifdef _DEBUG
     sint32 finite_loop=0; 
@@ -704,10 +698,6 @@ BOOL World::IsGFComputed(const BOOL is_choke_land, MapPoint &pos)
 
 void World::Grassfire8(const BOOL is_choke_land, sint16 **tmp_map)
 { 
-    sint32 mx = m_size.x-1; 
-    sint32 my = m_size.y-1;
-
-    
     MapPoint pos; 
     for (pos.x=0; pos.x < m_size.x; pos.x++) { 
         for (pos.y=0; pos.y < m_size.y; pos.y++) { 

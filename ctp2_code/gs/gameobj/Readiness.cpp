@@ -139,9 +139,7 @@ double MilitaryReadiness::GetReadyHP(sint32 gov, READINESS_LEVEL level)
 
 void MilitaryReadiness::SupportUnit(const Unit &u, sint32 gov)
 {
-	double unitCost = GetSupportCost(u);
-
-	m_cost += unitCost;
+	m_cost += GetSupportCost(u);
 
 	g_network.Block(m_owner);
 	ENQUEUE();
@@ -165,10 +163,10 @@ void MilitaryReadiness::SupportUnitGold(const Unit &u, sint32 gov)
 double MilitaryReadiness::GetSupportCost(const Unit &u)
 {
 	if(u.GetIsProfessional())
-		return 0;
+		return 0.0;
 
 	if(u.GetNeedsNoSupport())
-		return 0;
+		return 0.0;
 
 	double unitCost;
 	if(u.GetDBRec()->GetIsSpecialForces()) {
@@ -220,8 +218,7 @@ void MilitaryReadiness::UnsupportUnit(const Unit &u, sint32 gov)
    if (m_ignore_unsupport) 
        return; 
 
-   double unitCost = GetSupportCost(u);
-   m_cost -= unitCost;
+   m_cost -= GetSupportCost(u);
 
    g_network.Block(m_owner);
    ENQUEUE();
@@ -231,14 +228,14 @@ void MilitaryReadiness::UnsupportUnit(const Unit &u, sint32 gov)
 void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies, 
               READINESS_LEVEL level, BOOL immediate)
 {
-	if(level == m_readinessLevel)
-		
+	if (level == m_readinessLevel)
 		return;
-    m_cost = 0; 
+
+    m_cost = 0.0; 
 
 	sint32 turns;
 
-	if(level < m_readinessLevel || immediate) {
+	if (level < m_readinessLevel || immediate) {
 		
 		turns = 1;
 		m_turnStarted = -1;
@@ -260,12 +257,12 @@ void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies,
 
 void MilitaryReadiness::RecalcCost()
 {
-	m_cost = 0;
+	m_cost = 0.0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-    int i, j, n, m; 
-    n = all_armies->Num(); 
+    int i, j; 
+    int const   n = all_armies->Num(); 
     for (i=0; i<n; i++) { 
-        m=all_armies->Access(i).Num(); 
+        int const m =all_armies->Access(i).Num(); 
         for (j=0; j<m; j++) { 
 			m_cost += GetSupportCost(all_armies->Access(i)[j]);
         }
@@ -285,15 +282,17 @@ sint32 MilitaryReadiness::TotalUnitGoldSupport()
 
 	m_costGold = 0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-	sint32 i, j, n, m; 
-	n = all_armies->Num(); 
-	for (i=0; i<n; i++) { 
-        	m=all_armies->Access(i).Num(); 
-        	for (j=0; j<m; j++) { 
-			m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
-        	}
-    	}	
-return m_costGold;
+	sint32 i, j; 
+	sint32 const n = all_armies->Num(); 
+	for (i=0; i<n; i++) 
+    { 
+    	sint32 const m = all_armies->Access(i).Num(); 
+    	for (j=0; j<m; j++) 
+        { 
+		    m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
+    	}
+    }	
+    return m_costGold;
 }
 
 
@@ -311,16 +310,16 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
         return; 
 
-    sint32 n_units = 0, n_prof_units;
-    sint32 i, j, n, m;
 
 
-    n = m_all_armies.Num(); 
+    sint32 n = m_all_armies.Num(); 
 
     if (n < 1) { 
         return; 
     } 
 
+    sint32 i, j, m;
+    sint32 n_units = 0;
     for (i=0; i<n; i++) { 
         n_units += m_all_armies[i].Num(); 
     }
@@ -330,7 +329,7 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 	UnitCost *prof_units = new UnitCost[n_units];
 
     n_units = 0;
-	n_prof_units = 0;
+	sint32 n_prof_units = 0;
     for (i=0; i<n; i++) { 
         m=m_all_armies[i].Num(); 
         for (j=0; j<m; j++) { 
@@ -469,33 +468,30 @@ void MilitaryReadiness::Serialize(CivArchive &archive)
         archive << m_cost; 
         archive << m_percent_last_turn; 
         archive << static_cast<sint32>(m_readinessLevel);
-        archive << m_ignore_unsupport; 
+        archive << static_cast<sint32>(m_ignore_unsupport); 
         archive << m_owner;
         archive << m_turnStarted;
-	    archive << m_costGold;    
-        // padding, to fill to an 8 byte boundary 
+	    archive << m_costGold; 
+        // unused padding, to fill to an 8 byte boundary 
         archive << static_cast<sint32>(0);  
     }
     else
     {
+        sint32  l_FourBytes;
+
         archive >> m_delta; 
         archive >> m_hp_modifier; 
         archive >> m_cost; 
         archive >> m_percent_last_turn;
-        {
-            sint32  l_FourBytes;
-            archive >> l_FourBytes;
-            m_readinessLevel = static_cast<READINESS_LEVEL>(l_FourBytes);
-        }
-        archive >> m_ignore_unsupport; 
+        archive >> l_FourBytes;
+        m_readinessLevel    = static_cast<READINESS_LEVEL>(l_FourBytes);
+        archive >> l_FourBytes;
+        m_ignore_unsupport  = static_cast<BOOL>(l_FourBytes); 
         archive >> m_owner;
         archive >> m_turnStarted;
 	    archive >> m_costGold;  
-        {
-            // padding, to fill to an 8 byte boundary 
-            sint32 l_FourBytes;
-            archive >> l_FourBytes;
-        }
+        // unused padding, to fill to an 8 byte boundary 
+        archive >> l_FourBytes;
     }
 }
 

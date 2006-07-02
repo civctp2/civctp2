@@ -403,7 +403,6 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	}
 	
 	sint8 *map = new sint8[m_size.y * m_size.x];
-	sint32 totalsize = m_size.y * m_size.x;
 	sint32 histogramarray[256];
 	sint32 *histogram = &histogramarray[128];
 	sint32 x, y;
@@ -1217,19 +1216,12 @@ void World::GenerateDeepWater()
 
 {  
 	sint32 i, j; 
-
-	
-	sint32 cur = -1;
-
 	MapPoint tmp; 
 	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k; 
-	BOOL find; 
-	sint32 radius = 2; 
-	sint32 delta = 1; 
-
-	sint32 cellWidth, cellHeight;
-	cellWidth = g_theConstDB->RiverCellWidth();
-	cellHeight = g_theConstDB->RiverCellHeight();
+	sint32 radius       = 2; 
+	sint32 delta        = 1; 
+	sint32 cellWidth    = g_theConstDB->RiverCellWidth();
+    sint32 cellHeight   = g_theConstDB->RiverCellHeight();
 
 	for(i = 0; i < cellWidth; i++) {
 		for(j = 0; j < cellHeight; j++) {
@@ -1246,9 +1238,9 @@ void World::GenerateDeepWater()
 
 	ClearScratch();
 
-	find = TRUE;
-	sint32 rcount = 0;  
-	sint32 x, y; 
+	BOOL    find = TRUE;
+	sint32  rcount = 0;  
+	sint32  x, y; 
 	BOOL hot; 
 	sint32 oldval;
 	MapPoint pos;
@@ -1832,15 +1824,12 @@ void World::FlattenCumScore(sint32 d, float **cum_score,
 
 
 uint16 myRGB(sint32 r,  sint32 g, sint32 b)
-
 { 
-    uint16 val = 0; 
-
-    val = (r & 0x1f) << 11; 
-    val |= (g & 0x1f) <<  5; 
-    val |= (b & 0x1f); 
-
-    return val; 
+    return static_cast<uint16> 
+            (   ((r & 0x1f) << 11)
+              | ((g & 0x1f) <<  5) 
+              | ((b & 0x1f))
+            ); 
 } 
 
 void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS], 
@@ -1849,26 +1838,24 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 							sint32 player_start_score[k_MAX_PLAYERS])
 
 {
-    float **raw_score, **cum_score; 
     sint32 x, y, i, j; 
     sint32 maxx, maxy; 
 
-    raw_score = new float*[m_size.x]; 
-    cum_score = new float*[m_size.x]; 
-
 	sint32 maxContinentSize = 0;
-	for(i = 0; i < m_land_size->Num(); i++) {
-		if(m_land_size->Access(i) > maxContinentSize) {
-			maxContinentSize = m_land_size->Access(i);
-		}
+	for(i = 0; i < m_land_size->Num(); i++) 
+    {
+        maxContinentSize = std::max(m_land_size->Access(i), maxContinentSize);
 	}
-	if(maxContinentSize < g_theConstDB->MinContinentStartSize()) {
+
+	if (maxContinentSize < g_theConstDB->MinContinentStartSize()) {
 		s_actualMinContinentStartSize = 2;
 	} else {
 		s_actualMinContinentStartSize = g_theConstDB->MinContinentStartSize();
 	}
 
-    
+    float ** raw_score = new float*[m_size.x]; 
+    float ** cum_score = new float*[m_size.x]; 
+
     for (x=0; x<m_size.x; x++) { 
         raw_score[x] = new float [m_size.y]; 
         cum_score[x] = new float [m_size.y]; 
@@ -1893,7 +1880,7 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
         }
     }
 
-	sint32 maxSize = max(m_size.x, m_size.y);
+    sint32 maxSize = std::max(m_size.x, m_size.y);
 	double const someNumber = 
 		sqrt(static_cast<double>(maxSize * maxSize) / 
 			 (2 * g_theProfileDB->GetNPlayers())
@@ -1905,7 +1892,7 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 	if(maxDistance < minDistance)
 		maxDistance = minDistance;
 
-    double third = min(m_size.x, m_size.y) * 0.33; 
+    double third = std::min(m_size.x, m_size.y) * 0.33; 
     if (third < minDistance) { 
         minDistance = (sint32)third; 
     } 
@@ -2468,93 +2455,80 @@ sint32 g_numGoods = 0;
 //----------------------------------------------------------------------------
 void World::Serialize(CivArchive &archive)
 {
-	sint32 w, h,
-	       x, y;
-
 #define WORLD_MAGIC 0x48A8A848
 
 	CHECKSERIALIZE
 
-	if (archive.IsStoring()) {
+	if (archive.IsStoring()) 
+    {
 		archive.PerformMagic(WORLD_MAGIC);
-		archive<<m_isXwrap;
-		archive<<m_isYwrap;
+		archive << m_isXwrap;
+		archive << m_isYwrap;
 		archive.PutSINT32(m_continents_are_numbered);
 		archive << m_water_continent_max;
 		archive << m_land_continent_max;
-
 		m_size.Serialize(archive) ;
-
 		
-		w = GetWidth() ;
-		h = GetHeight() ;
-
-		sint32			len = w*h;
-		for (sint32 i=0; i<len; i++) {
+		sint32 const    w   = GetWidth();
+		sint32 const    h   = GetHeight();
+		sint32 const	len = w * h;
+		for (sint32 i = 0; i < len; ++i) 
+        {
 			m_tileInfoStorage[i].Serialize(archive);
 		}
 
-		for (x=0; x<w; x++) {
-			for (y=0; y<h; y++) {
-				GetCell(x,y)->Serialize(archive) ;
+		for (sint32 x = 0; x < w; ++x) 
+        {
+			for (sint32 y = 0; y < h; ++y) 
+            {
+				GetCell(x, y)->Serialize(archive);
 			}
 		}
-		
-		
+	
 		archive << m_num_civ_starts;
 		archive.Store((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
 		archive << g_theResourceDB->NumRecords();
 		archive.Store((uint8*)m_goodValue, sizeof(double) * g_theResourceDB->NumRecords());
-
-	} else {
-		sint32  i,
-		        x, y,
-		        w, h;
-
-		MapPoint pos;
+	} 
+    else 
+    {
+		archive.TestMagic(WORLD_MAGIC);
 
 		FreeMap();
 
-		archive.TestMagic(WORLD_MAGIC);
-		archive>>m_isXwrap;
-		archive>>m_isYwrap;
+		archive >> m_isXwrap;
+		archive >> m_isYwrap;
 		m_continents_are_numbered = archive.GetSINT32();
 		archive >> m_water_continent_max;
 		archive >> m_land_continent_max;
 
 		m_size.Serialize(archive) ;
 
-
 		AllocateMap();
 
-		w = GetWidth();
-		h = GetHeight();
+		sint32 const    w   = GetWidth();
+		sint32 const    h   = GetHeight();
+		sint32 const    len = w * h;
 
-
-
-
-
-		sint32      len = w * h;
-		for (i=0; i<len; i++) {
+		for (sint32 i = 0; i < len; i++) 
+        {
 			m_tileInfoStorage[i].Serialize(archive);
 		}
 		
-		for (x=0; x<w; x++) {
-			for (y=0; y<h; y++) {
-				Cell		*theCell;
+		for (sint32 x = 0; x < w; ++x) 
+        {
+			for (sint32 y = 0; y < h; ++y) 
+            {
 				MapPoint	pos(x,y);
-
-				theCell = GetCell(x, y);
+				Cell *      theCell = GetCell(x, y);
 				theCell->Serialize(archive);
-				
 			}
 		}
 		
 		archive >> m_num_civ_starts;
 		archive.Load((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
-		g_numGoods;
 		archive >> g_numGoods;
 		if(g_numGoods == g_theResourceDB->NumRecords()){
 			m_goodValue = new double[g_numGoods];
@@ -2647,18 +2621,14 @@ void World::DisposeTileInfoStorage(void)
 
 TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
 {
-	TileInfo		*info;
-
-	Assert(m_tileInfoStorage != NULL);
-	if (m_tileInfoStorage == NULL) return NULL;
+	Assert(m_tileInfoStorage);
+	if (!m_tileInfoStorage)
+    {
+        return NULL;
+    }
 		
-	sint32			width = m_size.x;
-	sint32			height = m_size.y;
-	sint32			area = m_size.x * m_size.y;
-
-	info = &m_tileInfoStorage[pos.x + pos.y * width];
-
-	return info;
+	sint32 const    width = m_size.x;
+	return &m_tileInfoStorage[pos.x + pos.y * width];
 }
 
 void World::GenerateGoodyHuts()
@@ -2927,22 +2897,9 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 				sint32 lowx = 0x7fffffff, lowy = 0x7fffffff;
 				CHKCOORD(x, y);
 
-				sint32 curheight = map[y * m_size.x + x];
-				sint32 left;
-				if(y & 1) { 
-					left = x;
-					
-					
-					
-					
-				} else { 
-					left = x - 1;
-					
-					
-					
-					
-				}
-				for(xc = left; xc < left+2; xc++) {
+                sint32 left = (y & 1) ? x : x -1;
+
+                for(xc = left; xc < left+2; xc++) {
 					if(xc < 0 || xc >= m_size.x)
 						continue;
 					for(yc = y-1; yc < y + 2; yc+=2) {
@@ -3216,15 +3173,13 @@ void World::DeleteStartingPoint(sint32 index)
 
 BOOL World::ExportMap(MBCHAR *filename)
 {
-	FILE	*outfile;
-
 	Assert(filename);
 	if (!filename) return FALSE;
 
 	Assert(strlen(filename) > 0);
 	if (strlen(filename) <= 0) return FALSE;
 
-	outfile = fopen(filename, "wt");
+	FILE * outfile = fopen(filename, "wt");
 	Assert(outfile);
 	if (!outfile) return FALSE;
 
@@ -3268,24 +3223,19 @@ BOOL World::ExportMap(MBCHAR *filename)
 
 BOOL World::ImportMap(MBCHAR *filename)
 {
-	FILE *infile;
-
 	Assert(filename);
 	if (!filename) return FALSE;
 
 	Assert(strlen(filename) > 0);
 	if (strlen(filename) <= 0) return FALSE;
 
-	infile = fopen(filename, "rt");
+	FILE * infile = fopen(filename, "rt");
 	Assert(infile);
 	if (!infile) return FALSE;
 
-	MapPoint size;
 	sint32 width,height;
-
 	fscanf(infile, "%d,%d\n", &width, &height);
-	size.x = (sint16)width;
-	size.y = (sint16)height;
+	MapPoint size ((sint16)width, (sint16)height);
 
 	if (size != m_size) {
 		fclose(infile);
@@ -3305,12 +3255,9 @@ BOOL World::ImportMap(MBCHAR *filename)
 
 	for (y=0; y<m_size.y; y++) {
 		for (x=0; x<m_size.x; x++) {
-			MapPoint	pos;
-			Cell	*cell;
+			Cell	*   cell;
+			MapPoint	pos(x, y);
 		
-			pos.x = x;
-			pos.y = y;
-
 			BOOL hasHut;
 			BOOL hasRiver;
 			BOOL hasGood;
@@ -3663,7 +3610,6 @@ void World::WholePlayerLandArea(int *array) const
 {
 	memset(array,0,(k_MAX_PLAYERS+1)*sizeof(int));
 
-	sint32 area=0;
 	Cell* const pLastCell = &m_cellArray[m_size.x * m_size.y - 1];
 	Cell *pCurCell = &m_cellArray[0];
 

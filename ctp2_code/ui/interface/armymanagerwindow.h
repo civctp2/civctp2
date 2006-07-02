@@ -10,6 +10,7 @@ class ArmyManagerWindow;
 #include "Unit.h"
 #include "aui_Control.h"    // aui_Control
 #include "ctp2_inttypes.h"  // uint32
+#include "gstypes.h"        // k_MAX_ARMY_SIZE
 
 class ctp2_Window;
 class ctp2_ListItem;
@@ -18,12 +19,21 @@ class ctp2_Static;
 
 template <class T> class PointerList;
 
-class ArmyListNode {
-  public:
-	Army m_army;
+class ArmyListNode 
+{
+public:
+	ArmyListNode() 
+    : m_army    ()
+    { ; };
 
-	ArmyListNode(Army &a) { m_army = a; }
-	ArmyListNode() { m_army.m_id = 0; }
+	ArmyListNode(Army const & a) 
+    : m_army    (a) 
+    { ; };
+
+private:
+	Army m_army;
+    
+    friend class ArmyManagerWindow;
 };
 
 class ArmyManagerWindow {
@@ -79,8 +89,8 @@ class ArmyManagerWindow {
 	void AddSelectedUnits();
 	void RemoveSelectedUnits();
 
-	static void ArmyManagerWindow::InitializeEvents();
-	static void ArmyManagerWindow::CleanupEvents();
+	static void InitializeEvents();
+	static void CleanupEvents();
 };
 
 	
