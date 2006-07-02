@@ -5015,7 +5015,7 @@ ORDER_RESULT ArmyData::Pillage(bool test_ownership)
 	&& g_network.IsLocalPlayer(m_owner))
 	)
 		if(test_ownership 
-	//	&& !CanPillage(uindex) // Nonsense already tested
+		&& !CanPillage(uindex) // Nonsense already tested
 		&& VerifyAttack(UNIT_ORDER_PILLAGE_UNCONDITIONALLY, m_pos, cellOwner)
 		)
 			return ORDER_RESULT_ILLEGAL;

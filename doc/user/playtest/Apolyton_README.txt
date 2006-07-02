@@ -1,8 +1,14 @@
+#############################################################
+This Build Requires PLAYTEST 10-23-2005 to be installed first! 
+http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar 
+http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
+http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
+##############################################################
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION.
 This version of the Call To Power 2 executable developed at apolyton.net
 
 Contact the authors on the Apolyton forums at
-http://apolyton.net/forums/forumdisplay.php?s=&forumid=213
+http://apolyton.net/forums/showthread.php?s=&threadid=147969
 or at ctp2source@apolyton.net
 
 
@@ -33,8 +39,23 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
+#############################################################
+This Build Requires PLAYTEST 10-23-2005 to be installed first! 
+http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar 
+http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
+http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
+
+##############################################################
 Changelog:
-2006-06-09
+2006-07-02 (revision 602)
+Added: ExcludedbyWonder to buildings, units, wonders 
+Added: PrerequisiteWonder to buildings and units
+Fixed: CanBombard
+Fixed: CanCloak
+Added: NeedsFeatToBuild to Units
+Fixed: Access Unit Crash
+
+2006-06-09 (revision 587)
 Added: Capture City options: Occupy, Liberate(give to barbs), and Raze
 Fixed: ShowOnMap works A LOT better
 Fixed: Barbs are not affected by hostileterrain

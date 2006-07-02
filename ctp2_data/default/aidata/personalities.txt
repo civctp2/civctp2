@@ -65,12 +65,12 @@ PERSONALITY_KAHN {
   DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
   DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
+  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_LOW    Priority 800  }
+  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_LOW      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 200 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
 
   Exploration: Wide
   Expansion: Maximum
@@ -102,7 +102,7 @@ PERSONALITY_GHANDI {
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 800 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 200 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 200 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -119,7 +119,7 @@ PERSONALITY_GHANDI {
 
   CitiesOverLimit 0
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
 
   Exploration: Wide
   Expansion: Maximum
@@ -153,25 +153,25 @@ PERSONALITY_STALIN {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES   Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES   Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT  Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR    Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE   Priority 1100 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE    Priority 1000 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION   Priority 150  }
 
-  StartLowDefenceStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy  {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
+  StartLowDefenceStrategy   {  Strategy STRATEGY_DEFENSE_VERY_LOW      Priority 800  }
+  StartHighDefenceStrategy  {  Strategy STRATEGY_DEFENSE_HIGH   Priority 800  }
 
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
+  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_VERY_LOW      Priority 800  }
+  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_HIGH       Priority 800  }
+  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_HIGH   Priority 800  }
+  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_HIGH        Priority 800  }
+  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH     Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 200 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
 
   Exploration: Minimal
   Expansion: Average
@@ -202,7 +202,7 @@ PERSONALITY_CEASAR {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1500 }
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 700 }
 
   MaxIslandSize 100
@@ -219,8 +219,8 @@ PERSONALITY_CEASAR {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 1000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 1000 }
 
   Exploration: Medium
   Expansion: Maximum
@@ -252,7 +252,7 @@ PERSONALITY_DEGAULLE {
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 900 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 800 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 800 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -268,8 +268,8 @@ PERSONALITY_DEGAULLE {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 1000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
 
   Exploration: Medium
   Expansion: Average
@@ -302,7 +302,7 @@ PERSONALITY_MEDICI {
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR     Priority 1000 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 950  }
@@ -318,8 +318,8 @@ PERSONALITY_MEDICI {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 800 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 800 }
 
   Exploration: Wide
   Expansion: Average
@@ -351,8 +351,8 @@ PERSONALITY_TELLER {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT     Priority 1100 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR      Priority 1000 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -368,8 +368,8 @@ PERSONALITY_TELLER {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 700 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 800 }
 
   Exploration: Minimal
   Expansion: Average
@@ -403,8 +403,8 @@ PERSONALITY_STRANGELOVE {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE    Priority 1100 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -420,8 +420,8 @@ PERSONALITY_STRANGELOVE {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 200 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 1100 }
 
   Exploration: Medium
   Expansion: Average
@@ -453,8 +453,8 @@ PERSONALITY_CALLENBACH {
   AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 110 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 100 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE     Priority 110 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 100 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
@@ -470,8 +470,8 @@ PERSONALITY_CALLENBACH {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 800 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 800 }
 
   Exploration: Medium
   Expansion: Average
@@ -504,7 +504,7 @@ PERSONALITY_NADER {
   MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 110 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 2000 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR       Priority 2000 }
 
   MaxIslandSize 100
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
