@@ -131,31 +131,25 @@ tech_Memory< T >::~tech_Memory()
 template< class T >
 T *tech_Memory< T >::New( void )
 {
-	T *t = NULL;
-
-	if ( m_pLast )
+	if (m_pLast)
 	{
-		if ( !(t = UseFreeElement()) )
-		{
-			if ( m_pLast->pNext = new Block( m_blockSize ) )
-			{
-				m_pLast = m_pLast->pNext;
-
-				*(m_pLast->used) |= 1;
-				t = m_pLast->data;
-			}
-		}
+    	T * t = UseFreeElement();
+		
+        if (t)
+        {
+            return t;
+        }
+		
+	    m_pLast->pNext = new Block(m_blockSize);
+		m_pLast = m_pLast->pNext;
 	}
 	else
 	{
-		if ( m_pLast = m_pFirst = new Block( m_blockSize ) )
-		{
-			*(m_pLast->used) |= 1;
-			t = m_pLast->data;
-		}
+		m_pLast = m_pFirst = new Block(m_blockSize);
 	}
 
-	return t;
+	*(m_pLast->used) |= 1;
+	return m_pLast->data;
 }
 
 

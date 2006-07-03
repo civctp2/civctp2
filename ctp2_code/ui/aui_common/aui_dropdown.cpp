@@ -101,15 +101,7 @@ aui_DropDown::aui_DropDown(
 
 AUI_ERRCODE aui_DropDown::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -149,14 +141,13 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_STATICPANE );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_staticPane = new aui_Static(
 				&errcode,
@@ -174,7 +165,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_button = new aui_Button(
 				&errcode,
@@ -201,7 +192,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_listBoxWindow = new aui_Window(
 				&errcode,
@@ -221,7 +212,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-			if ( theLdl->GetLdl()->FindDataBlock( block ) )
+            if (aui_Ldl::GetLdl()->FindDataBlock(block))
 				m_listBox = new aui_ListBox(
 					&errcode,
 					aui_UniqueId(),
@@ -268,31 +259,15 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 aui_DropDown::~aui_DropDown()
 {
-	if ( m_listBoxWindow )
+	if (g_ui && m_listBoxWindow)
 	{
 		g_ui->RemoveWindow( m_listBoxWindow->Id() );
-
-		delete m_listBoxWindow;
-		m_listBoxWindow = NULL;
 	}
 
-	if ( m_listBox )
-	{
-		delete m_listBox;
-		m_listBox = NULL;
-	}
-
-	if ( m_button )
-	{
-		delete m_button;
-		m_button = NULL;
-	}
-
-	if ( m_staticPane )
-	{
-		delete m_staticPane;
-		m_staticPane = NULL;
-	}
+	delete m_listBoxWindow;
+    delete m_listBox;
+	delete m_button;
+	delete m_staticPane;
 }
 
 

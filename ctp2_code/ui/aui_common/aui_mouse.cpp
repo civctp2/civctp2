@@ -139,15 +139,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 
 	if ( ldlBlock )
 	{
-		aui_Ldl *theLdl = g_ui->GetLdl();
-
-		
-		BOOL valid = theLdl->IsValid( ldlBlock );
-		Assert( valid );
-		if ( !valid ) return AUI_ERRCODE_HACK;
-
-		
-		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -206,7 +198,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 		{
 			sprintf( temp, "%s.%s%d", ldlBlock, k_MOUSE_LDL_ANIM, i++ );
 
-			ldl_datablock *blk = theLdl->GetLdl()->FindDataBlock( temp );
+            ldl_datablock *blk = aui_Ldl::GetLdl()->FindDataBlock( temp );
 			if ( !blk ) break;
 
 			POINT indexes;
@@ -710,14 +702,14 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 		mouse->HandleAnim();
 
 		
-		AUI_ERRCODE err = mouse->GetInput();
+		(void) mouse->GetInput();
 
 		
 		mouse->ReactToInput();
 
 		
 			
-			mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
+		mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
 			
 	}
 
@@ -797,7 +789,7 @@ AUI_ERRCODE aui_Mouse::ReactToInput( void )
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
+	(*m_curCursor)->GetHotspot(hotspot);
 
 	POINT image =
 	{
@@ -1036,7 +1028,7 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 
 		
 		POINT hotspot;
-		(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
+		(*m_curCursor)->GetHotspot(hotspot);
 
 		POINT image = m_data.position;
 		image.x -= hotspot.x;
@@ -1204,7 +1196,7 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 
 		
 		POINT hotspot;
-		(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
+		(*m_curCursor)->GetHotspot(hotspot);
 
 		POINT image = m_data.position;
 		image.x -= hotspot.x;
@@ -1339,7 +1331,7 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundColorToPrimary(
 
 	
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
+	(*m_curCursor)->GetHotspot(hotspot);
 
 	POINT cursorLocation = m_data.position;
 	cursorLocation.x -= hotspot.x;
@@ -1473,7 +1465,7 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 
 	
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
+	(*m_curCursor)->GetHotspot(hotspot);
 
 	POINT cursorLocation = m_data.position;
 	cursorLocation.x -= hotspot.x;
@@ -1614,7 +1606,7 @@ AUI_ERRCODE aui_Mouse::Erase( void )
 	AUI_ERRCODE errcode;
 
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
+	(*m_curCursor)->GetHotspot(hotspot);
 
 	POINT image = m_data.position;
 	image.x -= hotspot.x;

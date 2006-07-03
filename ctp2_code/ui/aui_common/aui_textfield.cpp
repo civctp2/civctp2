@@ -75,15 +75,7 @@ aui_TextField::aui_TextField(
 
 AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -262,7 +254,7 @@ aui_TextField::~aui_TextField()
 
 sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 {
-	return GetWindowText( m_hwnd, text, min(m_maxFieldLen,maxCount) );
+    return GetWindowText(m_hwnd, text, std::min(m_maxFieldLen, maxCount));
 }
 
 

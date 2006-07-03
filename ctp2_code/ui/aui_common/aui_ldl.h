@@ -188,6 +188,7 @@ public:
 
 	
 	static sint32		GetIntDependent( MBCHAR *strPtr );
+    static ldl_datablock * FindDataBlock(MBCHAR * ldlBlock);
 
 protected:
 	static void			DeleteLdlObject( aui_LdlObject *ldlObject );

@@ -346,11 +346,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 		{
 			const sint32 pitch = surface->Pitch();
 
-			
 			uint8 *temp = new uint8[ pitch ];
-			Assert( temp != NULL );
-			if ( !temp ) return AUI_ERRCODE_MEMALLOCFAILED;
-
 			uint8 *top = (uint8 *)bits;
 			uint8 *bot = top + pitch * ( surface->Height() - 1 );
 			for ( sint32 i = surface->Height() / 2; i; i-- )
@@ -363,7 +359,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 				bot -= pitch;
 			}
 
-			delete[ pitch ] temp;
+			delete [] temp;
 
 			errcode = surface->Unlock( bits );
 			Assert( AUI_SUCCESS(errcode) );

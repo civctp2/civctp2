@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface tabgroup
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -82,15 +82,7 @@ aui_TabGroup::aui_TabGroup(
 
 AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -189,7 +181,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 	sint32 maxTabWidth = 0;
 	sint32 maxTabHeight = 0;
 	position = m_childList->GetHeadPosition();
-	for ( i = numTabs; i; i-- )
+	for (sint32 j = numTabs; j > 0; --j)
 	{
 		aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 		if ( tab->Width() > maxTabWidth ) maxTabWidth = tab->Width();
@@ -210,7 +202,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for ( i = numTabs; i; i-- )
+		for ( sint32 k = numTabs; k; k-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -245,7 +237,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for ( i = numTabs; i; i-- )
+		for ( sint32 i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -280,7 +272,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for ( i = numTabs; i; i-- )
+		for (sint32 i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -315,7 +307,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for ( i = numTabs; i; i-- )
+		for (sint32 i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 

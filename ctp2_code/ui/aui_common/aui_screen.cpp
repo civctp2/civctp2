@@ -112,7 +112,7 @@ AUI_ERRCODE aui_Screen::Hide( void )
 	}
 
 	
-	for ( i = m_tempWindowList->L(); i; i-- )
+	for (sint32 j = m_tempWindowList->L(); j; --j)
 	{
 		aui_Window *window = m_tempWindowList->RemoveTail();
 		g_ui->RemoveWindow( window->Id() );
@@ -166,7 +166,7 @@ AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 	}
 
 	position = m_tempWindowList->GetHeadPosition();
-	for ( i = m_tempWindowList->L(); i; i-- )
+	for ( sint32 j = m_tempWindowList->L(); j; j-- )
 	{
 		ListPos prevPos = position;
 		aui_Window *window = m_tempWindowList->GetNext( position );
@@ -195,7 +195,7 @@ aui_Window *aui_Screen::GetWindow( uint32 windowId )
 	}
 
 	position = m_tempWindowList->GetHeadPosition();
-	for ( i = m_tempWindowList->L(); i; i-- )
+	for ( sint32 j = m_tempWindowList->L(); j; j-- )
 	{
 		aui_Window *window = m_tempWindowList->GetNext( position );
 		if ( window->Id() == windowId ) return window;

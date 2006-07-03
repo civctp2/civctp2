@@ -29,17 +29,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "aui_ui.h"
-#include "aui_dimension.h"
-
 #include "aui_ldl.h"
 
-#include "avl.h"
-
+#include "aui_ui.h"
+#include "aui_dimension.h"
 #include "aui_uniqueid.h"
 
-
-
+#include "avl.h"
 
 #include "c3slider.h"
 #include "c3window.h"
@@ -116,7 +112,6 @@ aui_Ldl::aui_Ldl(
 {
 	*retval = InitCommon( ldlFilename );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -158,26 +153,12 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 
 aui_Ldl::~aui_Ldl()
 {
-	if ( m_ldl )
-	{
-		delete m_ldl;
-		m_ldl = NULL;
-	}
+	delete m_ldl;
+	delete m_objectListByObject;
+	delete m_objectListByString;
 
-	if (m_objectListByObject) {
-		delete m_objectListByObject;
-		m_objectListByObject = NULL;
-	}
-
-	if (m_objectListByString) {
-		delete m_objectListByString;
-		m_objectListByString = NULL;
-	}
-
-	
-
-	aui_LdlObject *curObject = m_objectList;
-	aui_LdlObject *nextObject;
+	aui_LdlObject * curObject = m_objectList;
+	aui_LdlObject * nextObject;
 
 	while (curObject) {
 		nextObject = curObject->next;
@@ -192,14 +173,14 @@ aui_Ldl::~aui_Ldl()
 
 BOOL aui_Ldl::IsValid( MBCHAR *ldlBlock )
 {
-	return m_ldl->FindDataBlock( ldlBlock ) != NULL;
-
+	return FindDataBlock(ldlBlock) != NULL;
 	
-	
+#if 0   // unreachable	
 	AUI_ERRCODE errcode = MakeSureBlockExists( ldlBlock );
 	if ( errcode != AUI_ERRCODE_OK ) return FALSE;
 
 	return TRUE;
+#endif
 }
 
 
@@ -399,9 +380,7 @@ void aui_Ldl::DeleteLdlObject( aui_LdlObject *ldlObject )
 {
 	if ( ldlObject )
 	{
-		if ( ldlObject->ldlBlock )
-			delete[ strlen( ldlObject->ldlBlock ) + 1 ] ldlObject->ldlBlock;
-
+		delete [] ldlObject->ldlBlock;
 		delete ldlObject;
 	}
 }
@@ -1117,8 +1096,6 @@ sint32 aui_Ldl::GetIntDependent( MBCHAR *strPtr )
 
 void aui_Ldl::ModifyAttributes( MBCHAR *ldlBlock, aui_Dimension *dimension )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
 	ldl_datablock *format = m_ldl->FindDataBlock( ldlBlock );
 	if ( format ) {
 		sint32 x      = dimension->HorizontalPositionData();
@@ -1175,4 +1152,9 @@ void aui_Ldl::ModifyAttributes( MBCHAR *ldlBlock, aui_Dimension *dimension )
 		}
 
 	}
+}
+
+ldl_datablock * aui_Ldl::FindDataBlock(MBCHAR * ldlBlock)
+{
+    return m_ldl ? m_ldl->FindDataBlock(ldlBlock) : NULL;
 }

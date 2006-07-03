@@ -99,21 +99,10 @@ aui_ImageBase::aui_ImageBase
 AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 	MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	AUI_IMAGEBASE_BLTFLAG imagebltflag = AUI_IMAGEBASE_BLTFLAG_COPY;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	if (block->GetAttributeType(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED  ) == ATTRIBUTE_TYPE_INT)
 	{
 		m_chromaRed		 =block->GetInt(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED);
@@ -133,8 +122,10 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 		m_chromaSpecified=true;
 	}
 
-	if (m_chromaSpecified)
-		imagebltflag = AUI_IMAGEBASE_BLTFLAG_CHROMAKEY;
+	AUI_IMAGEBASE_BLTFLAG imagebltflag = (m_chromaSpecified) 
+                                         ? AUI_IMAGEBASE_BLTFLAG_CHROMAKEY 
+                                         : AUI_IMAGEBASE_BLTFLAG_COPY;
+	
 
 	AUI_IMAGEBASE_BLTTYPE imageblttype = AUI_IMAGEBASE_BLTTYPE_COPY;
 	MBCHAR *type = block->GetString( k_AUI_IMAGEBASE_LDL_BLTTYPE );

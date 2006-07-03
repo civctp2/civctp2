@@ -78,15 +78,7 @@ aui_MovieButton::aui_MovieButton(
 
 AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -94,9 +86,7 @@ AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode = InitCommon(
 		block->GetString( k_AUI_MOVIEBUTTON_LDL_MOVIE ) );
 	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return errcode;
-
-	return AUI_ERRCODE_OK;
+	return errcode;
 }
 
 
@@ -210,13 +200,13 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 				m_movie->Play();
 			}
 
-			AUI_ERRCODE errcode = m_movie->Process();
+			(void) m_movie->Process();
 
-			if (m_movie) 
-				if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) {
-					if (m_ActionFunc)
-						m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-				}
+			if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) 
+            {
+				if (m_ActionFunc)
+					m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			}
 		}
 	}
 

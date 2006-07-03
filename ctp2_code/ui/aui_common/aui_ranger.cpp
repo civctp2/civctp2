@@ -90,15 +90,7 @@ aui_Ranger::aui_Ranger(
 
 AUI_ERRCODE aui_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -231,15 +223,10 @@ aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 										  const MBCHAR *autoLdlName,
 										  const MBCHAR *ldlName)
 {
-	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-	
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[k_AUI_LDL_MAXBLOCK + 1];
-
 	
-	aui_Button *arrowButton = NULL;
+	AUI_ERRCODE     errcode     = AUI_ERRCODE_OK;
+	aui_Button *    arrowButton = NULL;
 
 	
 	if(ldlBlock) {
@@ -258,7 +245,7 @@ aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 			sprintf(block, "%s.%s", ldlBlock, ldlName);
 
 			
-			if(theLdl->GetLdl()->FindDataBlock(block))
+            if (aui_Ldl::FindDataBlock(block))
 				arrowButton = new aui_Button(&errcode, aui_UniqueId(),
 				block, RangerButtonActionCallback, this);
 		}
@@ -277,21 +264,16 @@ aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 		AddChild(arrowButton);
 
 	
-	return(arrowButton);
+	return arrowButton;
 }
 
 
 AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
 {
+	static MBCHAR block[k_AUI_LDL_MAXBLOCK + 1];
 	
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
-	aui_Ldl *theLdl = g_ui->GetLdl();
-	static MBCHAR block[k_AUI_LDL_MAXBLOCK + 1];
-
-	
-	
 	if(ldlBlock) {
 		
 		m_rangeContainer = (aui_Control *)aui_Ldl::BuildHierarchyFromRoot(const_cast<MBCHAR*>(
@@ -303,7 +285,7 @@ AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
 		
 		if(!m_rangeContainer) {
 			sprintf(block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_DISPLAY);
-			if(theLdl->GetLdl()->FindDataBlock(block))
+            if (aui_Ldl::FindDataBlock(block))
 				m_rangeContainer = new aui_Static(&errcode,
 				aui_UniqueId(), block);
 		}
@@ -322,7 +304,7 @@ AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
 			sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
 			
-			if(theLdl->GetLdl()->FindDataBlock(block))
+            if (aui_Ldl::FindDataBlock(block))
 				m_thumb = new aui_Thumb(&errcode, aui_UniqueId(), block,
 				RangerThumbActionCallback, this);
 		}
@@ -392,48 +374,19 @@ AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
 	}
 
 	
-	return(errcode);
+	return errcode;
 }
 
 
 
 aui_Ranger::~aui_Ranger()
 {
-	if ( m_thumb )
-	{
-		delete m_thumb;
-		m_thumb = NULL;
-	}
-
-	if ( m_incXButton )
-	{
-		delete m_incXButton;
-		m_incXButton = NULL;
-	}
-
-	if ( m_incYButton )
-	{
-		delete m_incYButton;
-		m_incYButton = NULL;
-	}
-
-	if ( m_decXButton )
-	{
-		delete m_decXButton;
-		m_decXButton = NULL;
-	}
-
-	if ( m_decYButton )
-	{
-		delete m_decYButton;
-		m_decYButton = NULL;
-	}
-
-	if(m_rangeContainer)
-	{
-		delete m_rangeContainer;
-		m_rangeContainer = NULL;
-	}
+	delete m_thumb;
+	delete m_incXButton;
+	delete m_incYButton;
+	delete m_decXButton;
+	delete m_decYButton;
+	delete m_rangeContainer;
 }
 
 

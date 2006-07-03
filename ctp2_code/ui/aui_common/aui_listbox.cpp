@@ -108,15 +108,7 @@ aui_ListBox::aui_ListBox(
 
 AUI_ERRCODE aui_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -224,7 +216,6 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -240,7 +231,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_header = new aui_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -269,7 +260,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_verticalRanger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -299,7 +290,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_horizontalRanger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -343,58 +334,18 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 aui_ListBox::~aui_ListBox()
 {
-	if ( m_pane )
+	delete m_pane;
+	delete m_header;
+	delete m_verticalRanger;
+	delete m_horizontalRanger;
+	delete m_widthList;
+	delete m_selectedList;
+    delete m_selectedListLastTime;
+	delete m_visualSelectedList;
+	
+	if (m_dragDropWindow)
 	{
-		delete m_pane;
-		m_pane = NULL;
-	}
-
-	if ( m_header )
-	{
-		delete m_header;
-		m_header = NULL;
-	}
-
-	if ( m_verticalRanger )
-	{
-		delete m_verticalRanger;
-		m_verticalRanger = NULL;
-	}
-
-	if ( m_horizontalRanger )
-	{
-		delete m_horizontalRanger;
-		m_horizontalRanger = NULL;
-	}
-
-	if ( m_widthList )
-	{
-		delete m_widthList;
-		m_widthList = NULL;
-	}
-
-	if ( m_selectedList )
-	{
-		delete m_selectedList;
-		m_selectedList = NULL;
-	}
-
-	if ( m_selectedListLastTime )
-	{
-		delete m_selectedListLastTime;
-		m_selectedListLastTime = NULL;
-	}
-
-	if ( m_visualSelectedList )
-	{
-		delete m_visualSelectedList;
-		m_visualSelectedList = NULL;
-	}
-
-	if ( m_dragDropWindow )
-	{
-		DestroyDragDropWindow( m_dragDropWindow );
-		m_dragDropWindow = NULL;
+		DestroyDragDropWindow(m_dragDropWindow);
 	}
 }
 
@@ -657,7 +608,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	sint32 i;
+	sint32	i;
 	for ( i = m_selectedList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
@@ -927,9 +878,9 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 
 	ListPos position = m_widthList->GetTailPosition();
 	for(
-		i = m_widthList->L();
-		i && (width += m_widthList->GetPrev( position )) <= m_width;
-		i-- )
+		sint32 j = m_widthList->L();
+		j && (width += m_widthList->GetPrev( position )) <= m_width;
+		j-- )
 			count++;
 
 	sint32 columns = m_numColumns ? m_numColumns : m_widthList->L();
@@ -1343,7 +1294,7 @@ void aui_ListBox::WhatsChanged(
 
 	
 	position = m_selectedListLastTime->GetHeadPosition();
-	for ( i = m_selectedListLastTime->L(); i; i-- )
+	for ( sint32 j = m_selectedListLastTime->L(); j; j-- )
 	{
 		sint32 itemIndex = m_selectedListLastTime->GetNext( position );
 		if ( !m_selectedList->Find( itemIndex ) )
@@ -1786,11 +1737,11 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 					}
 					if (firstIndex != 999999 && firstIndex != itemIndex) {
 						if (firstIndex < itemIndex) {
-							for (i=firstIndex; i<itemIndex; i++) {
+							for (sint32 i=firstIndex; i<itemIndex; i++) {
 								m_visualSelectedList->AddTail(i);
 							}
 						} else {
-							for (i=itemIndex+1; i<firstIndex; i++) {
+							for (sint32 i=itemIndex+1; i<firstIndex; i++) {
 								m_visualSelectedList->AddTail(i);
 							}
 						}

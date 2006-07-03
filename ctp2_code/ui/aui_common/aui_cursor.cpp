@@ -75,7 +75,11 @@ AUI_ERRCODE aui_Cursor::GetHotspot( sint32 *x, sint32 *y )
 	return AUI_ERRCODE_OK;
 }
 
-
+void aui_Cursor::GetHotspot(POINT & a_Hotspot) const
+{
+    a_Hotspot.x = m_hotspot.x;
+    a_Hotspot.y = m_hotspot.y;
+}
 
 AUI_ERRCODE aui_Cursor::SetHotspot( sint32 x, sint32 y )
 {

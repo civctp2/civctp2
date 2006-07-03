@@ -29,12 +29,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_blitter.h"
 
+#include <algorithm>          // std::fill
 #include "aui_surface.h"
 #include "aui_dirtylist.h"
 #include "aui_pixel.h"
 
-#include "aui_blitter.h"
 
 
 
@@ -535,16 +536,8 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 					} while ( (srcBuf += srcDiff) != stopVertical );
 				}
 			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
+			else 
 			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else
-			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 			
@@ -1381,77 +1374,36 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 		
 
 		sint32 i;
-		sint32 j;
-		for ( i = 0; i < bevelThickness; i++ )
+		for (i = 0; i < bevelThickness; i++ )
 		{
-			for ( j = i; j; j-- )
-			{
-				
-				*destBuf++ = white;
-			}
+			std::fill(destBuf, destBuf + i, white);
+			std::fill(destBuf +i, stop, white);
+			std::fill(stop, stop + i, black);
 
-			do
-			{
-				
-				*destBuf++ = white;
-			} while ( destBuf != stop );
-
-			for ( j = i; j; j-- )
-			{
-				
-				*destBuf++ = black;
-			}
-
-			destBuf += destDiff;
-			stop += destPitch - 1;
+			destBuf	= stop + i + destDiff;
+			stop   += destPitch - 1;
 		}
 
 		
-		for ( i = skipHeight; i; i-- )
+		for (i = skipHeight; i > 0; --i )
 		{
-			for ( j = bevelThickness; j; j-- )
-			{
-				
-				*destBuf++ = white;
-			}
-
-			
-			destBuf += skipWidth;
-
-			for ( j = bevelThickness; j; j-- )
-			{
-				
-				*destBuf++ = black;
-			}
-
-			destBuf += destDiff;
+			std::fill(destBuf, destBuf + bevelThickness, white);
+			destBuf += bevelThickness + skipWidth;
+			std::fill(destBuf, destBuf + bevelThickness, black);
+			destBuf += bevelThickness + destDiff;
 		}
 
 		stop += destPitch * skipHeight + 1;
 
 		
-		for ( i = bevelThickness; i; i-- )
+		for (i = bevelThickness; i > 0; --i)
 		{
-			for ( j = i - 1; j; j-- )
-			{
-				
-				*destBuf++ = white;
-			}
+			std::fill(destBuf, destBuf + i, white);
+			std::fill(destBuf + i, stop, black);
+			std::fill(stop, stop + i, black);
 
-			do
-			{
-				
-				*destBuf++ = black;
-			} while ( destBuf != stop );
-
-			for ( j = i - 1; j; j-- )
-			{
-				
-				*destBuf++ = black;
-			}
-
-			destBuf += destDiff;
-			stop += destPitch + 1;
+			destBuf	= stop + i + destDiff;
+			stop   += destPitch + 1;
 		}
 		
 		if ( !wasDestLocked )
@@ -1601,7 +1553,7 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 
 			
 			for ( i = bevelThickness; i; i-- )
-			{
+			{ 
 				sint32 j;
 				for ( j = i - 1; j; j-- )
 				{
@@ -1996,7 +1948,7 @@ AUI_ERRCODE aui_Blitter::ColorStencilBlt(
 	RECT *destRect,
 	aui_Surface *stencilSurf,
 	RECT *stencilRect,
-	uint32 color,
+	COLORREF color,
 	uint32 flags )
 {
 	return ColorStencilBlt16(destSurf, destRect, stencilSurf, stencilRect, color, flags);
@@ -3106,7 +3058,7 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
-				aui_SpanList *curSpanList = srcSpanListArray;
+				aui_SpanList *			curSpanList		= srcSpanListArray;
 				const sint32 height = srcSurf->Height();
 				const aui_SpanList *stopSpanList = curSpanList + height;
 

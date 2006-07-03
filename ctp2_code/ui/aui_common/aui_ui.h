@@ -350,7 +350,7 @@ protected:
 
 	aui_Control		*m_virtualFocus;
 
-	uint32			m_dxver;		
+	DWORD			m_dxver;		
 									
 
 	BOOL			m_editMode;		

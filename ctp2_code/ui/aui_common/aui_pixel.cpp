@@ -38,22 +38,15 @@ uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
 
 uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPALETTE *hpal )
 {
-	uint16 valMain, valCompare = 0;
-	uint8 r, g, b;
-	uint8 color = 0;
-	sint32 diff = INT_MAX;
-	AUI_SURFACE_PIXELFORMAT pf = g_ui->PixelFormat();
-	PALETTEENTRY *pe;
+	uint8                   color       = 0;
+	sint32                  diff        = INT_MAX;
+	AUI_SURFACE_PIXELFORMAT pf          = g_ui->PixelFormat();
+	PALETTEENTRY *          pe          = new PALETTEENTRY[256];
+	uint16                  valMain     = GetPaletteEntries(*hpal, 0, 256, pe);
 
-	pe = new PALETTEENTRY[ 256 ];
-	Assert( pe != NULL );
-	if ( !pe ) return 0;
-	
-	
-	valMain = GetPaletteEntries( *hpal, 0, 256, pe );
-	Assert( valMain == 256 );
+    Assert( valMain == 256 );
 	if ( valMain != 256 ) {
-		delete[256] pe;
+		delete [] pe;
 		return 0;
 	}
 
@@ -62,11 +55,12 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPA
 	valMain |= ( green >> 3 ) << 5;
 	valMain |= ( blue >> 3 );
 
-	for ( uint8 i = 0; i < 256; i++ ) {
-		valCompare = 0;
-		b = pe[i].peBlue;
-		g = pe[i].peGreen;
-		r = pe[i].peRed;
+	for (uint8 i = 0; i < 256; i++ ) 
+    {
+		uint16  valCompare = 0;
+		uint8   b = pe[i].peBlue;
+		uint8   g = pe[i].peGreen;
+		uint8   r = pe[i].peRed;
 		
 		valCompare |= ( r >> 3 ) << 10;
 		valCompare |= ( g >> 3 ) << 5;
@@ -79,7 +73,7 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPA
 		}
 
 	}
-	delete[256] pe;
+	delete [] pe;
 	return color;
 
 }
@@ -501,7 +495,6 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 	if ( surface16->BitsPerPixel() != 16 ) return AUI_ERRCODE_INVALIDPARAM;
 
 	const sint32 destWidth = surface16->Width();
-	const sint32 destHeight = surface16->Height();
 	const sint32 destPitch = surface16->Pitch();
 
 	
@@ -586,7 +579,6 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 				rgbq[i].rgbBlue );
 
 	const sint32 destWidth = surface16->Width();
-	const sint32 destHeight = surface16->Height();
 	const sint32 destPitch = surface16->Pitch();
 
 	

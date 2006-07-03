@@ -268,7 +268,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	if ( !n ) return AUI_ERRCODE_HACK;
 
 	uint16 i;
-	for ( i = 0; i < n; i++ )
+	for (i = 0; i < n; i++ )
 	{
 		uint16 platform, encoding;
 		TT_Get_CharMap_ID( m_ttFace, i, &platform, &encoding );
@@ -542,7 +542,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 			ttMetrics.bbox.yMax / 64 );
 
 		gi->bearingX = (sint16)floor( (double)ttMetrics.bearingX / 64.0 + 0.5 );
-		gi->bearingY = -ttMetrics.bearingY / 64; 
+		gi->bearingY = static_cast<sint16>(-ttMetrics.bearingY / 64); 
 		gi->advance = (sint16)floor( (double)ttMetrics.advance / 64.0 + 0.5 );
 
 		uint32 nextOffset;

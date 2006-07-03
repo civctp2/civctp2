@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface dirty list (whatever this is)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -70,17 +70,8 @@ aui_DirtyList::~aui_DirtyList()
 {
 	Flush();
 
-	if ( m_rectMemory )
-	{
-		delete m_rectMemory;
-		m_rectMemory = NULL;
-	}
-
-	if ( m_spanListArray )
-	{
-		delete[ m_height ] m_spanListArray;
-		m_spanListArray = NULL;
-	}
+	delete m_rectMemory;
+	delete [] m_spanListArray;
 }
 
 

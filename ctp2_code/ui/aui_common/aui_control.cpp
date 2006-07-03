@@ -151,15 +151,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -215,7 +207,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	
 	static MBCHAR stblock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( stblock, "%s.%s", ldlBlock, k_AUI_CONTROL_LDL_STRINGTABLE );
-	ldl_datablock *ldlblock = theLdl->GetLdl()->FindDataBlock( stblock );
+    ldl_datablock *ldlblock = aui_Ldl::GetLdl()->FindDataBlock( stblock );
 	if ( ldlblock )
 	{
 		m_stringTable = new aui_StringTable( &errcode, stblock );
@@ -227,10 +219,14 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	
 	InitializeImageLayers(block);
 
-	if(block->GetAttributeType(k_AUI_CONTROL_CANFOCUS) != ATTRIBUTE_TYPE_INT)
-		m_focusIndex = -1;
-	else
+	if (block->GetAttributeType(k_AUI_CONTROL_CANFOCUS) == ATTRIBUTE_TYPE_INT)
+    {
 		m_focusIndex = block->GetInt(k_AUI_CONTROL_CANFOCUS);
+    }
+    else
+    {
+		m_focusIndex = -1;
+    }
 
 	return AUI_ERRCODE_OK;
 }
@@ -1437,8 +1433,10 @@ bool aui_Control::FillWidth(ldl_datablock *theBlock,
 				desiredWidth;
 		}
 
-		width = std::max(width,
-			m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
+		width = std::max<sint32>
+                (width,
+			     m_imageLayerList->GetSize(layerIndex, imageIndex)->right
+                );
 	}
 
 	
@@ -1613,7 +1611,7 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
 				desiredHeight;
 		}
 
-		height = std::max(height,
+		height = std::max<sint32>(height,
 			m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 	}
 
@@ -1705,7 +1703,7 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 
 		
 		numberOfColumns = std::max(numberOfColumns,
-			(imageEnd - imageStart + 1L));
+			(imageEnd - imageStart + 1));
 	}
 
 	
