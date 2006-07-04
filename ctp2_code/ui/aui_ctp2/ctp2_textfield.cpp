@@ -77,19 +77,10 @@ ctp2_TextField::ctp2_TextField(
 
 AUI_ERRCODE ctp2_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH, 
-				bevelType=0;
-	aui_Ldl		*theLdl = g_c3ui->GetLdl();
+	sint32		bevelWidth=k_CTP2_TEXTFIELD_DEFAULT_BEVELWIDTH;
 
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
 	if (block->GetAttributeType( k_CTP2_TEXTFIELD_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {

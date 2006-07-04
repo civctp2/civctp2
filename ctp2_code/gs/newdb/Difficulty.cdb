@@ -147,8 +147,8 @@ Difficulty{
 
 	Int					PollutionStartProductionLevel		aka	POLLUTION_START_PRODUCTION_LEVEL
 	Int					PollutionStartPopulationLevel		aka	POLLUTION_START_POPULATION_LEVEL
-	Int					PollutionProductionRatio			aka	POLLUTION_PRODUCTION_RATIO
-	Int					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
+	Float					PollutionProductionRatio			aka	POLLUTION_PRODUCTION_RATIO
+	Float					PollutionPopulationRatio			aka	POLLUTION_POPULATION_RATIO
 	Bit					NoAIProductionDeficit				# AI doesn't lose units due to production deficit
 	Bit					NoAIGoldDeficit						# AI cities don't go negative in gold
 	Bit					AICityDefenderBonus					# AI population adds to city defenses

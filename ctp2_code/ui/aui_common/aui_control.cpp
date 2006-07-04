@@ -1368,14 +1368,19 @@ aui_Control::FillSize aui_Control::WidthToFill(ldl_datablock *theBlock,
 		sprintf(stretchXAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_X, layerIndex, imageIndex);
 
 		
-		if(theBlock->GetAttributeType(stretchXAttributeString) &&
-			theBlock->GetBool(stretchXAttributeString)) {
+		if (theBlock->GetAttributeType(stretchXAttributeString) &&
+			theBlock->GetBool(stretchXAttributeString)
+           ) 
+        {
 			result.first++;
-		} else {
-			
-				result.second = std::max(0L,
-				result.second -
-				m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
+		} 
+        else 
+        {
+			result.second = std::max<sint32>
+                (0,
+				 result.second - 
+                    m_imageLayerList->GetSize(layerIndex, imageIndex)->right
+                );
 		}
 	}
 
@@ -1532,14 +1537,19 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 		sprintf(stretchYAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_Y, layerIndex, imageIndex);
 
 		
-		if(theBlock->GetAttributeType(stretchYAttributeString) &&
-			theBlock->GetBool(stretchYAttributeString)) {
+		if (theBlock->GetAttributeType(stretchYAttributeString) &&
+			theBlock->GetBool(stretchYAttributeString)
+           ) 
+        {
 			result.first++;
-		} else {
-			
-			result.second = std::max(0L,
-				result.second -
-				m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
+		} 
+        else 
+        {
+			result.second = std::max<sint32>
+                (0,
+				 result.second -
+				    m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom
+                );
 		}
 	}
 
@@ -1611,8 +1621,10 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
 				desiredHeight;
 		}
 
-		height = std::max<sint32>(height,
-			m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
+		height = std::max<sint32>
+                    (height,
+			         m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom
+                    );
 	}
 
 	
@@ -1702,12 +1714,13 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 			(rowIndices[rowIndex + 1] - 1) : (m_imagesPerLayer - 1);
 
 		
-		numberOfColumns = std::max(numberOfColumns,
-			(imageEnd - imageStart + 1));
+		numberOfColumns = std::max<sint32>(numberOfColumns,
+			                               (imageEnd - imageStart + 1)
+                                          );
 	}
 
 	
-	return(numberOfColumns);
+	return numberOfColumns;
 }
 
 

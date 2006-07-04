@@ -195,19 +195,9 @@ AUI_ERRCODE ColorIconSwitch::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 	MBCHAR		*name;
 
 	if (isLDL) {
-		aui_Ldl *theLdl = g_c3ui->GetLdl();
-
-		
-		BOOL valid = theLdl->IsValid( ldlBlock );
-		Assert( valid );
-		if ( !valid ) return AUI_ERRCODE_HACK;
-
-		
-		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-
-		
 
 		name = block->GetString( "picture" );
 		Assert( name != NULL );
@@ -222,12 +212,7 @@ AUI_ERRCODE ColorIconSwitch::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 
 ColorIconSwitch::~ColorIconSwitch()
 {
-	if (m_filename) {
-		delete[] m_filename;
-	}
-
-
-
+	delete [] m_filename;
 }
 
 

@@ -11,6 +11,7 @@
 
 
 #include "c3.h"
+#include "thermometer.h"
 
 #include "aui.h"
 #include "aui_window.h"
@@ -18,7 +19,6 @@
 #include "aui_ldl.h"
 #include "c3ui.h"
 
-#include "thermometer.h"
 
 #include "colorset.h"       // g_colorSet
 
@@ -60,29 +60,15 @@ Thermometer::Thermometer(
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 AUI_ERRCODE Thermometer::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	
-	sint32 percentFilled = 0;
-
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-	
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	percentFilled = block->GetInt( k_THERMOMETER_PERCENT_FILLED );
-
-	SetPercentFilled(percentFilled);
+	SetPercentFilled(block->GetInt(k_THERMOMETER_PERCENT_FILLED));
 
 	return AUI_ERRCODE_OK;
 }
@@ -160,6 +146,6 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void Thermometer::SetPercentFilled( sint32 percentFilled ) 
 {
-	percentFilled > 100 ? m_percentFilled = 100 : m_percentFilled = percentFilled;
+    m_percentFilled = std::min(100, percentFilled);
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 }

@@ -201,7 +201,6 @@ AUI_ERRCODE Pattern::Draw( aui_Surface *pDestSurf, RECT *pDestRect, RECT *pSrcRe
 {
 	if (!m_surface) return AUI_ERRCODE_OK;
 
-	RECT rect = { 0, 0, m_surface->Width(), m_surface->Height() };
 	return g_c3ui->TheBlitter()->TileBlt(
 		pDestSurf,
 		pDestRect,

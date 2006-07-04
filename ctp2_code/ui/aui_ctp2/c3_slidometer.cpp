@@ -94,7 +94,6 @@ c3_Slidometer::c3_Slidometer(
 
 	*retval = CreateThumb( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -147,31 +146,17 @@ c3_Slidometer::c3_Slidometer(
 
 	*retval = CreateThumb( NULL );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE c3_Slidometer::InitCommon( MBCHAR *ldlBlock )
 {
-	
-	sint32 percentFilled = 0;
-
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-	
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	percentFilled = block->GetInt( k_C3_SLIDOMETER_PERCENT_FILLED );
-
-	SetPercentFilled(percentFilled);
+	SetPercentFilled(block->GetInt(k_C3_SLIDOMETER_PERCENT_FILLED));
 
 	return InitCommon();
 }
@@ -189,8 +174,6 @@ AUI_ERRCODE c3_Slidometer::CreateThumb( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -198,7 +181,7 @@ AUI_ERRCODE c3_Slidometer::CreateThumb( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_thumb = new C3Thumb(
 				&errcode,
 				aui_UniqueId(),
@@ -326,6 +309,6 @@ AUI_ERRCODE c3_Slidometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void c3_Slidometer::SetPercentFilled( sint32 percentFilled ) 
 {
-	percentFilled > 100 ? m_percentFilled = 100 : m_percentFilled = percentFilled;
+    m_percentFilled = std::min<sint32>(100, percentFilled);
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 }

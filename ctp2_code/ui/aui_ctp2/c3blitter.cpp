@@ -47,12 +47,8 @@ unsigned which_blit=0;
 
 
 C3Blitter::C3Blitter() 
-{
-	if(CheckMMXTechnology())	
-		_Blt16To16Fast = &C3Blitter::Blt16To16Fast;
-	else
-		_Blt16To16Fast = &C3Blitter::Blt16To16Fast;
-};
+:	_Blt16To16Fast	(&C3Blitter::Blt16To16Fast)
+{ ; };
 
 
 AUI_ERRCODE C3Blitter::Blt16To16(
@@ -65,28 +61,28 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	if ((flags & k_AUI_BLITTER_FLAG_FAST)) 
 	{
 		
-#ifdef _TRY_ALL_BLITTERS
-	
-		switch(which_blit)
-		{
+#ifdef _TRY_ALL_BLITTERS	
+	  
+  	   	switch(which_blit)
+  	   	{
 			case 0:_Blt16To16Fast = &C3Blitter::Blt16To16Fast   ; break;
 			case 1:_Blt16To16Fast = &C3Blitter::Blt16To16FastFPU; break;
 			case 2:_Blt16To16Fast = &C3Blitter::Blt16To16FastMMX; break;
-		}
+  	   	}
 
-		which_blit ++;
-
+	   	which_blit ++;
+	 
 		if(which_blit>2)
-			which_blit = 0;
+		   which_blit = 0;
 		
-
+	   
 #endif
 		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
-	} else {
+	} else {	
 		if (g_useDDBlit)
 			return aui_DirectBlitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 		else
-			return aui_Blitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
+		   	return aui_Blitter::Blt16To16(destSurf, destRect, srcSurf, srcRect, flags);
 	}
 }
 

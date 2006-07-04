@@ -158,10 +158,8 @@ AUI_ERRCODE InfoBar::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 AUI_ERRCODE InfoBar::DrawText(aui_Surface *surface,
 							  sint32 x, sint32 y)
 {
-	
 	if(!surface) surface = m_surface;
 
-	RECT rect = { 0, 0, m_width, m_height };
 	primitives_DropText(surface, 15, 2, m_str, 0x0000, 1);
 	
 	Invalidate(); 

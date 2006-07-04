@@ -71,21 +71,11 @@ c3_Radio::c3_Radio(
 
 AUI_ERRCODE c3_Radio::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_RADIO_DEFAULT_BEVELWIDTH, 
-				bevelType=0;
-	aui_Ldl		*theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
+	sint32  bevelWidth  = k_C3_RADIO_DEFAULT_BEVELWIDTH; 
 	if (block->GetAttributeType( k_C3_RADIO_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_RADIO_LDL_BEVELWIDTH );
 	}

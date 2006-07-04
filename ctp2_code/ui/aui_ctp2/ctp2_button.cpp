@@ -57,23 +57,14 @@ AUI_ERRCODE ctp2_Button::InitCommonLdl(MBCHAR *ldlBlock, MBCHAR *ldlTemplate,
 									   sint32 x, sint32 y,
 									   sint32 width, sint32 height)
 {
-	
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
+    ldl_datablock * theBlock = aui_Ldl::FindDataBlock(ldlBlock);
 
-	
-	ldl_datablock *theBlock = NULL;
-
-	
-	if(theLdl->IsValid(ldlBlock)) {
-		theBlock = theLdl->GetLdl()->FindDataBlock(ldlBlock);
-	} else {
-		
-		if(theLdl->IsValid(ldlTemplate)) {
-			theBlock = theLdl->GetLdl()->FindDataBlock(ldlTemplate);
-		} else {
-			
-			return AUI_ERRCODE_HACK; 
-			                         
+    if (!theBlock)
+	{
+        theBlock = aui_Ldl::FindDataBlock(ldlTemplate);
+		if (!theBlock) 
+        {
+            return AUI_ERRCODE_HACK; 
 		}
 	}
 

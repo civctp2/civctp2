@@ -31,17 +31,17 @@ StaticPicture::StaticPicture(
 	uint32 id,
 	MBCHAR *ldlBlock,
 	MBCHAR *picture )
-	:
+:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Static( retval, id, ldlBlock )
+	aui_Static      (retval, id, ldlBlock),
+    m_picture       (NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommon( ldlBlock, picture );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -57,29 +57,21 @@ StaticPicture::StaticPicture(
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
-	aui_Static( retval, id, x, y, width, height )
+	aui_Static      (retval, id, x, y, width, height),
+    m_picture       (NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommon( picture );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -91,7 +83,7 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 	{
 		AUI_ERRCODE errcode = InitCommon( name );
 		Assert( AUI_SUCCESS(errcode) );
-		if ( !AUI_SUCCESS(errcode) ) return errcode;
+		return errcode;
 	}
 	
 	return AUI_ERRCODE_OK;
@@ -101,10 +93,11 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 
 AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
 {
-	AUI_ERRCODE errcode;
-
 	MBCHAR filename[_MAX_PATH];
-	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename)) {
+
+	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename)) 
+    {
+	    AUI_ERRCODE errcode;
 		m_picture = new Picture(&errcode, filename);
 	} else {
 		m_picture = NULL;
@@ -119,11 +112,7 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
 
 StaticPicture::~StaticPicture()
 {
-	if ( m_picture )
-	{
-		delete m_picture;
-		m_picture = NULL;
-	}
+	delete m_picture;
 }
 
 
@@ -154,21 +143,21 @@ AUI_ERRCODE StaticPicture::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void StaticPicture::SetPicture(MBCHAR *picture)
 {
-	AUI_ERRCODE errcode;
-
 	MBCHAR filename[_MAX_PATH];
-	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename)) {
-		if (m_picture) delete m_picture;
-
+	
+    delete m_picture;
+	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename)) 
+    {
+	    AUI_ERRCODE errcode;
 		m_picture = new Picture(&errcode, filename);
-	} else {
+	} 
+    else 
+    {
 		m_picture = NULL;
 	}
 
-
 	RECT rect = { 0, 0, m_width, m_height };
-	ToWindow( &rect );
-	m_window->AddDirtyRect( &rect );
-
+	ToWindow(&rect);
+	m_window->AddDirtyRect(&rect);
 }
 

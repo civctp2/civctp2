@@ -71,7 +71,6 @@ C3Scroller::C3Scroller(
 
 	*retval = CreateButtonsAndThumb();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -118,22 +117,13 @@ C3Scroller::C3Scroller(
 
 	*retval = CreateButtonsAndThumb();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE C3Scroller::InitCommon( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

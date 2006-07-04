@@ -138,17 +138,9 @@ ThroneControl::~ThroneControl()
 
 void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
 {
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return;
-
-	
-	ldl_datablock *datablock = theLdl->GetLdl()->FindDataBlock( ldlBlock );
-	Assert( datablock != NULL );
-	if ( !datablock ) return;
+    ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
+	Assert(datablock);
+	if (!datablock) return;
 
 	sint32 speed = datablock->GetInt( k_THRONE_LDL_BLENDSPEED );
 	SetBlendSpeed( speed );
@@ -161,27 +153,29 @@ void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
 	s_throneImage[5] = datablock->GetString( k_THRONE_LDL_RELIGIOUS );
 
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
 	{
+	    AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+
+	    MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 		sprintf( block, "%s.%s", ldlBlock, k_THRONE_LDL_MESSAGE );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) ) {
+        if (aui_Ldl::GetLdl()->FindDataBlock(block)) 
+        {
 			m_messageText = new c3_Static( &errcode, aui_UniqueId(), block );
 		}
 
 		for ( sint32 i = 0;i < k_THRONE_IMAGES;i++ ) {
 			sprintf( block, "%s.%s", ldlBlock, s_currentName[i] );
 
-			if ( theLdl->GetLdl()->FindDataBlock( block ) ) {
+            if (aui_Ldl::GetLdl()->FindDataBlock( block ) ) {
 				m_currentText[i] = new c3_Static( &errcode, aui_UniqueId(), block );
 			}
 
 			sprintf( block, "%s.%s", ldlBlock, s_upgradeName[i] );
 
-			if ( theLdl->GetLdl()->FindDataBlock( block ) ) {
+            if (aui_Ldl::GetLdl()->FindDataBlock( block ) ) {
 				m_upgradeText[i] = new c3_Static( &errcode, aui_UniqueId(), block );
 				m_upgradeText[i]->Hide();
 			}

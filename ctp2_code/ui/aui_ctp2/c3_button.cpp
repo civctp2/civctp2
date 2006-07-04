@@ -102,20 +102,10 @@ c3_Button::c3_Button(
 
 AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_BUTTON_DEFAULT_BEVELWIDTH, 
-				bevelType=0;
-	aui_Ldl		*theLdl = g_c3ui->GetLdl();
+	sint32		bevelWidth=k_C3_BUTTON_DEFAULT_BEVELWIDTH;
 
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
 	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
@@ -304,17 +294,8 @@ c3_EditButton::c3_EditButton(
 
 AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl		*theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	return InitCommon(
@@ -352,8 +333,6 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -361,7 +340,7 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_C3_EDITBUTTON_LDL_FIELD );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::FindDataBlock( block ) )
 			m_field = new C3TextField(
 				&errcode,
 				aui_UniqueId(),

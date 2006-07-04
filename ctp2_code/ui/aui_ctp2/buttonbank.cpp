@@ -376,7 +376,6 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 	sint32				i, count, countAll;
 	Unit				unit;
 	const UnitRecord	*unitRec;
-	BOOL				condition = FALSE;
 	MapPoint			pos;
 	double				success, death;
 	sint32				timer, amount;
@@ -519,18 +518,6 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 		if ( count == 1 && unitRec->GetCanCarry() ) {	
 			AddButton( ORDERMODE_CARGO );
 		}
-
-		BOOL canRailLaunch = FALSE;
-		
-		
-		Unit city = g_theWorld->GetCell(unit.RetPos())->GetCity();
-		if (city.m_id != (0)) {
-			
-			
-			
-			
-		}
-		
 	}
 
 	

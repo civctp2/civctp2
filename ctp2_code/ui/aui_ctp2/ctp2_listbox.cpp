@@ -156,8 +156,7 @@ ctp2_ListBox::~ctp2_ListBox()
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
-		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
+		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext(position);
 		delete item;
 	}
 	m_pane->ChildList()->DeleteAll();
@@ -167,22 +166,12 @@ ctp2_ListBox::~ctp2_ListBox()
 
 AUI_ERRCODE ctp2_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=0, bevelType=0;
-	aui_Ldl		*theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	bevelWidth = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELWIDTH );
-	bevelType = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELTYPE );
+	sint32 bevelWidth   = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELWIDTH );
+	sint32 bevelType    = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELTYPE );
 
 	return InitCommon(bevelWidth, bevelType);
 }
@@ -219,8 +208,6 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
 
-	
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -236,7 +223,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::FindDataBlock(block))
 			m_header = new c3_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -265,7 +252,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::FindDataBlock(block))
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -296,7 +283,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::FindDataBlock(block))
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -344,7 +331,6 @@ void ctp2_ListBox::Clear(void)
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		
 		RemoveItem(item->Id());
@@ -672,10 +658,8 @@ void ctp2_ListBox::MouseRDragAway( aui_MouseEvent *mouseData )
 
 AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
-	aui_Ldl		*theLdl = g_ui->GetLdl();
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( (MBCHAR *)ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *) ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	m_borderOffset.x = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);

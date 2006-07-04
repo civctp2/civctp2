@@ -125,7 +125,7 @@ void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action,
 		SingleListItem *item = (SingleListItem *) popup->m_list->GetSelectedItem();
 		if (!item) return;
 
-		sint32 cityIndex = item->GetValue();
+//      sint32 cityIndex = item->GetValue();
 
 		
 		
@@ -1317,9 +1317,9 @@ c3_UtilityAbortPopup::~c3_UtilityAbortPopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityAbortPopup::Cleanup( void )
+void c3_UtilityAbortPopup::Cleanup(void)
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
 
 	g_c3ui->RemoveWindow( m_window->Id() );
 
@@ -1333,14 +1333,10 @@ sint32 c3_UtilityAbortPopup::Cleanup( void )
 	m_window = NULL;
 
 #undef mycleanup
-	return 0;
 }
 
 void c3_UtilityAbortPopup::DisplayWindow( MBCHAR const *text, sint32 percentFilled )
 {
-	AUI_ERRCODE auiErr;
-
-	
 	if ( text ) {
 		UpdateData(text);
 	}
@@ -1350,22 +1346,19 @@ void c3_UtilityAbortPopup::DisplayWindow( MBCHAR const *text, sint32 percentFill
 	}
 	keypress_RegisterHandler(this);
 
-	auiErr = g_c3ui->AddWindow(m_window);
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow(m_window);
 	Assert( auiErr == AUI_ERRCODE_OK );
 }
 
 void c3_UtilityAbortPopup::RemoveWindow( void )
 {
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( m_window->Id() );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow( m_window->Id() );
 	Assert( auiErr == AUI_ERRCODE_OK );
 
 	keypress_RemoveHandler(this);
 
 	delete g_utilityAbort;
 	g_utilityAbort = NULL;
-
 }
 
 sint32 c3_UtilityAbortPopup::UpdateData( MBCHAR const *text )
@@ -1474,9 +1467,9 @@ c3_UtilityPlayerListPopup::~c3_UtilityPlayerListPopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityPlayerListPopup::Cleanup( void )
+void c3_UtilityPlayerListPopup::Cleanup( void )
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
 
 	g_c3ui->RemoveWindow( m_window->Id() );
 
@@ -1491,19 +1484,14 @@ sint32 c3_UtilityPlayerListPopup::Cleanup( void )
 	delete m_window;
 	m_window = NULL;
 
-	return 0 ;
-
 #undef mycleanup
 }
 
 void c3_UtilityPlayerListPopup::DisplayWindow( void )
 {
-	AUI_ERRCODE auiErr;
-
-	
 	UpdateData();
 
-	auiErr = g_c3ui->AddWindow(m_window);
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow(m_window);
 	Assert( auiErr == AUI_ERRCODE_OK );
 
 	keypress_RegisterHandler(this);
@@ -1511,10 +1499,8 @@ void c3_UtilityPlayerListPopup::DisplayWindow( void )
 
 void c3_UtilityPlayerListPopup::RemoveWindow( void )
 {
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( m_window->Id() );
-	Assert( auiErr == AUI_ERRCODE_OK );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(m_window->Id());
+	Assert(auiErr == AUI_ERRCODE_OK);
 
 	keypress_RemoveHandler(this);
 }
@@ -1526,24 +1512,27 @@ void c3_UtilityPlayerListPopup::kh_Close()
 
 sint32 c3_UtilityPlayerListPopup::UpdateData( void )
 {
+	MBCHAR ldlBlock[k_AUI_LDL_MAXBLOCK + 1];
+	strcpy(ldlBlock, "DoubleListItem");
+
 	MBCHAR strbuf[256];
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	AUI_ERRCODE		retval;
-
-	
-	strcpy(ldlBlock,"DoubleListItem");
-	DoubleListItem *item = NULL;
 
 	m_list->Clear();
 
-	
-	for ( sint32 i = 1 ; i < k_MAX_PLAYERS ; i++ )
+	for (sint32 i = 1 ; i < k_MAX_PLAYERS ; ++i)
 	{
-		if ( g_player[i] ) {
+		if (g_player[i]) 
+        {
 			strcpy(strbuf, g_player[i]->GetLeaderName());
-			item = new DoubleListItem(&retval, strbuf, i, g_network.GetStatusString(i), ldlBlock);
-			m_list->AddItem((c3_ListItem *)item);
+            m_list->AddItem(new DoubleListItem
+                                (&retval, 
+                                 strbuf, 
+                                 i, 
+                                 g_network.GetStatusString(i), 
+                                 ldlBlock
+                                )
+                           );
 		}
 	}
 
@@ -1568,12 +1557,13 @@ sint32 c3_UtilityPlayerListPopup::DisableButtons( void )
 	return 1;
 }
 
-void c3_UtilityPlayerListPopup::SetText( MBCHAR *s, sint32 index )
+void c3_UtilityPlayerListPopup::SetText(MBCHAR * s, sint32 index)
 {
-	DoubleListItem *item;
+	DoubleListItem * item = (DoubleListItem *) m_list->GetItemByIndex(index);
 
-	if ((item = (DoubleListItem *)m_list->GetItemByIndex(index))) {
-		(DoubleListItem *)item->SetSecondColumn( s );
+	if (item) 
+    {
+		item->SetSecondColumn(s);
 	}
 }
 

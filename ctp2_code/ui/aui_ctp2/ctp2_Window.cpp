@@ -175,14 +175,12 @@ void    ctp2_Window::ResetCurrentMouseState()
 
 AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-
 	ctp2_Static *background = (ctp2_Static *)aui_Ldl::GetObject((MBCHAR *)ldlBlock, "Background");
 	if(background) {
 		background->Enable(FALSE);
 	}
 
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock((MBCHAR *)ldlBlock);
+    ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *)ldlBlock);
 	if(block) {
 		MBCHAR *title = block->GetString("title");
 		if(title) {

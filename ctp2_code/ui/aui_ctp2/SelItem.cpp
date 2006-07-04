@@ -246,10 +246,7 @@ SelectedItem::SelectedItem(CivArchive &archive)
 
 SelectedItem::~SelectedItem()
 {
-	if(m_good_path) {
-		delete m_good_path;
-		m_good_path = NULL;
-	}
+	delete m_good_path;
 }
 
 void SelectedItem::Serialize(CivArchive &archive) 
@@ -441,8 +438,6 @@ void SelectedItem::NextItem()
 		default:
 			return;
 	}
-
-	sint32 tried = 1;
 }
 
 void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
@@ -452,7 +447,6 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 	if(!p)
 		return;
 
-	sint32 tried = 1;
 	sint32 numArmies = p->m_all_armies->Num();
 	sint32 i;
 	sint32 found = FALSE;
@@ -1312,24 +1306,18 @@ sint32 SelectedItem::GetTopUnit(const MapPoint &pos, Unit &top)
 void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 {
     MapPoint		army_pos; 
-
-    BOOL			is_transported = FALSE;
-
-    BOOL			i_died = FALSE;
-
-	BOOL			moved = FALSE;
-
     m_selected_army[player].GetPos(army_pos);
 
-	Path *goodPath = NULL;
-
 	AddWaypoint(pos);
-    m_is_pathing = FALSE;
+    m_is_pathing    = FALSE;
 
-	if(m_waypoints.Num() <= 0)
+	if (m_waypoints.Num() <= 0)
 		return;
 
 	Unit	unit;
+	BOOL			moved = FALSE;
+	Path *goodPath = NULL;
+
 	
 	sint32 acknowledgeSoundID = 0; 
 	sint32 cantMoveSoundID = 0;
@@ -1360,14 +1348,14 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 
 		if(goodPath) {
 
-			sint32 origCurPlayer = m_current_player;
 			m_selected_army[player].ClearOrders();
 			
 			
 			goodPath->JustSetStart(m_selected_army[player]->RetPos());
 
             if (GetAutoUnload()) {
-				goodPath->Start(m_selected_army[player]->RetPos());
+                MapPoint    test(m_selected_army[player]->RetPos());
+				goodPath->Start(test);
 
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveUnloadOrder,
 									   GEA_Army, m_selected_army[player],
@@ -1467,16 +1455,6 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 								 bool leftDrag, bool leftDrop)
 
 {
-	PLAYER_INDEX	player = GetVisiblePlayer();
-    Unit			top; 
-    BOOL			is_transported = FALSE;
-    BOOL			i_died = FALSE;
-    MapPoint		army_pos; 
-	
-	BOOL			leftClick = data->lbutton;
-	BOOL			rightClick = data->rbutton;
-
-
 	m_gotClickSinceLastAutoEnd = TRUE;
 
 	{
@@ -1504,8 +1482,8 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 		pos.GetNeighborPosition(SOUTH, south);
 		converted.Iso2Norm(pos);
 		southConverted.Iso2Norm(south);
-		sint32 tileX, tileY;
-		tileY = pos.y;
+		sint32 tileX;
+		sint32 tileY = pos.y;
 		maputils_MapX2TileX(pos.x, pos.y, &tileX);
 		
 		
@@ -1617,13 +1595,6 @@ sint32 SelectedItem::GetVisiblePlayer() const
 
 void SelectedItem::AddWaypoint(const MapPoint &pos)
 {
-	
-	PLAYER_INDEX player = GetVisiblePlayer();
-    Army a = m_selected_army[player];
-	uint32 movementFlags = a.GetMovementType();
-	static CellUnitList transports;
-
-	
     m_waypoints.Insert(pos);
 }
 
@@ -1685,11 +1656,8 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 			return;
 		}
 
-
-		if(m_good_path) {
-			delete m_good_path;
-			m_good_path = NULL;
-		}
+		delete m_good_path;
+		m_good_path = NULL;
 		m_bad_path.Clear();
 
 		sint32 r;
@@ -1728,10 +1696,8 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 	float partialCost;
 	cost = 0.0;
 	
-	if(m_good_path) {
-		delete m_good_path;
-		m_good_path = NULL;
-	}
+	delete m_good_path;
+	m_good_path = NULL;
 	
 	Army a = m_selected_army[player];
 	MapPoint start;
@@ -1776,11 +1742,7 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 	}
 	delete partialPath;
 	
-	if(start == m_waypoints[m_waypoints.Num() - 1]) {
-		isCircular = TRUE;
-	} else {
-		isCircular = FALSE;
-	}
+	isCircular = start == m_waypoints[m_waypoints.Num() - 1];
 
 	m_waypoints.Clear();
 }
@@ -1795,28 +1757,21 @@ void SelectedItem::ProcessUnitOrders()
 
 void SelectedItem::Settle()
 {
-	PLAYER_INDEX s_player; 
-	ID			s_item; 
-	SELECT_TYPE s_state; 
-	BOOL		isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
+	PLAYER_INDEX    s_player; 
+	ID			    s_item; 
+	SELECT_TYPE     s_state; 
+	bool		    isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
 
 	GetTopCurItem(s_player, s_item, s_state);
 	
-	switch(s_state) { 
-		case SELECT_TYPE_LOCAL_ARMY:
-			if(isMyTurn) {
-				g_gevManager->AddEvent(GEV_INSERT_Tail,
-									   GEV_SettleOrder,
-									   GEA_Army, (Army)s_item,
-									   GEA_End);
-			} else if(g_turn->SimultaneousMode()) {
-			}
-            break; 
-		default: 
-            break; 
+	if ((SELECT_TYPE_LOCAL_ARMY == s_state) && isMyTurn)
+    { 
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+							   GEV_SettleOrder,
+							   GEA_Army, s_item.m_id,
+							   GEA_End
+                              );
 	}
-
-
 }
 
 void SelectedItem::Entrench()
@@ -2477,7 +2432,8 @@ void SelectedItem::EnterMovePath(sint32 owner, Army &army,
 										*good_path, is_broken,
 										bad_path,
 										cost);
-	if(is_broken) {
+	if (!r || is_broken) 
+    {
 		delete good_path;
 		return;
 	}

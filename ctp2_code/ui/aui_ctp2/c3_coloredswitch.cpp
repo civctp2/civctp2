@@ -74,19 +74,10 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 
 AUI_ERRCODE c3_ColoredSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH, 
-				bevelType=0;
-	aui_Ldl		*theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
-	Assert( block != NULL );
-
+	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH;
+    
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+    Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
 	if (block->GetAttributeType( k_C3_COLOREDSWITCH_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {

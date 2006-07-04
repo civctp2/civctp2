@@ -196,7 +196,6 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 		patternFilename = m_pattern->GetFilename();
 
 	
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -212,7 +211,7 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_header = new aui_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -241,7 +240,7 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -272,7 +271,7 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -298,11 +297,10 @@ AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-	sint32 maxRangerSize = m_verticalRanger->Width();
-	if ( m_horizontalRanger->Height() > maxRangerSize )
-		maxRangerSize = m_horizontalRanger->Height();
+    sint32 maxRangerSize = 
+        std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
 
-	if ( maxRangerSize )
+    if (maxRangerSize)
 		SetRangerSize( maxRangerSize ); 
 	else
 		RepositionRangers();
@@ -348,13 +346,12 @@ AUI_ERRCODE TextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 AUI_ERRCODE TextBox::RepositionItems( void )
 {
-	sint32 minVertical = m_verticalRanger->GetValueY();
-	sint32 maxVertical = minVertical + m_itemsPerHeight;
-
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
-
 	Assert( m_pane );
 	if ( !m_pane ) return AUI_ERRCODE_INVALIDPARAM;
+
+	sint32 minVertical = m_verticalRanger->GetValueY();
+	sint32 maxVertical = 
+        std::min<sint32>(m_numRows, minVertical + m_itemsPerHeight);
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = 0; i < m_numRows; i++ )

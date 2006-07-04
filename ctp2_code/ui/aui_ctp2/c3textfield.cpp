@@ -45,7 +45,6 @@ C3TextField::C3TextField(
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -71,26 +70,16 @@ C3TextField::C3TextField(
 
 	*retval = InitCommon(k_C3_TEXTFIELD_DEFAULT_BEVELWIDTH);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 AUI_ERRCODE C3TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_TEXTFIELD_DEFAULT_BEVELWIDTH, 
-				bevelType=0;
-	aui_Ldl		*theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+	
+	sint32	bevelWidth = k_C3_TEXTFIELD_DEFAULT_BEVELWIDTH; 
 	
 	if (block->GetAttributeType( k_C3_TEXTFIELD_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_TEXTFIELD_LDL_BEVELWIDTH );

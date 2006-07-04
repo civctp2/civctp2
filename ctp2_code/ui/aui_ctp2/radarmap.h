@@ -84,7 +84,7 @@ public:
 	
 	
 	void		ClearMapOverlay(void);
-	void		SetMapOverlayCell(MapPoint &pos, COLOR color);
+	void		SetMapOverlayCell(MapPoint const & pos, COLOR color);
 
 	
 	void		CalculateMetrics(void);

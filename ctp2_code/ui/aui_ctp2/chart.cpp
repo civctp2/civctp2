@@ -89,14 +89,13 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 		m_leadsToButton[i] = NULL;
 	}
 
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_CHART_LDL_LEFTIMAGE );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_left = new ctp2_Static(
 				&errcode,
@@ -109,7 +108,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_CHART_LDL_RIGHTIMAGE );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 		{
 			m_right = new ctp2_Static(
 				&errcode,
@@ -122,7 +121,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_CHART_LDL_BUTTON );
 
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 		{
 			m_centerButton = new ctp2_Button(
 				&errcode,
@@ -190,7 +189,6 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	}
 
 	if ( !m_centerButton ) {
-		aui_BitmapFont *font;
 
 		m_centerButton = new ctp2_Button( 
 			&errcode, 
@@ -202,7 +200,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 		errcode = AddSubControl( m_centerButton );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_CONTROLFAILURE;
-		font = m_centerButton->GetTextFont();
+		aui_BitmapFont * font = m_centerButton->GetTextFont();
 		Assert(font);
 		font->SetPointSize(14);
 		m_centerButton->TextFlags() = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER;
@@ -282,33 +280,16 @@ Chart::~Chart()
 	sint32 i;
 
 	for ( i = 0;i < k_MAX_PREREQ;i++ ) {
-		if ( m_preReqButton[i]) {
-			delete m_preReqButton[i];
-			m_preReqButton[i] = NULL;
-		}
+		delete m_preReqButton[i];
 	}
 
 	for ( i = 0;i < k_MAX_LEADS_TO;i++ ) {
-		if ( m_leadsToButton[i]) {
-			delete m_leadsToButton[i];
-			m_leadsToButton[i] = NULL;
-		}
+		delete m_leadsToButton[i];
 	}
 
-	if ( m_centerButton ) {
-		delete m_centerButton;
-		m_centerButton = NULL;
-	}
-
-	if ( m_left ) {
-		delete m_left;
-		m_left = NULL;
-	}
-
-	if ( m_right ) {
-		delete m_right;
-		m_right = NULL;
-	}
+	delete m_centerButton;
+	delete m_left;
+	delete m_right;
 }
 
 
@@ -326,7 +307,7 @@ AUI_ERRCODE Chart::Show()
 		m_preReqButton[i]->Hide();
 	}
 
-		for ( i = m_numLeadsTo;i < k_MAX_LEADS_TO;i++ )
+	for ( i = m_numLeadsTo;i < k_MAX_LEADS_TO;i++ )
 	{
 		m_leadsToButton[i]->Hide();
 	}
@@ -511,8 +492,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	uint8 *adv = g_player[curPlayer]->m_advances->CanResearch();
-	sint32 numAdv = g_player[curPlayer]->m_advances->GetNum();
-
 	
 	for ( i = 0;i < m_numPreReq;i++ ) {
 		m_preReqIndex[i] = g_theAdvanceDB->Get(index)->GetPrerequisitesIndex(i);
@@ -642,10 +621,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_leadsToButton[i++]->Hide();
 	}
 
-	if ( adv ) {
-		delete adv;
-		adv = NULL;
-	}
+	delete adv;
 
 	ShouldDraw();
 

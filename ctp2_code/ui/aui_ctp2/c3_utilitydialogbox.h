@@ -288,7 +288,7 @@ public:
 
 public:
 	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
+	void Cleanup ( void );
 	sint32 UpdateData ( MBCHAR const *text );
 	sint32 UpdateMeter( sint32 percentFilled );
 
@@ -328,7 +328,7 @@ public:
 
 public:
 	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
+	void Cleanup ( void );
 	sint32 UpdateData ( void );
 
 	sint32 EnableButtons( void );
