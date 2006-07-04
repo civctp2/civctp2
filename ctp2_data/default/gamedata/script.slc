@@ -735,6 +735,7 @@ messagebox '38BuildingBuiltQueueEmpty' {
 }
 
 messagebox '38WonderBuilt' {
+	Show();
 	Text(ID_WONDER_BUILT);
 	Duration(1);
 	MessageType("IWONDER");
@@ -805,6 +806,7 @@ messagebox '45WonderAlmostFinished' {
 }
 
 messagebox '46WonderComplete' {
+	Show();
 	MessageType("IWONDER");
 	Text(ID_WONDER_COMPLETE_OWNER);
 	Duration(2);
@@ -1871,7 +1873,8 @@ messagebox '127CapitalCityCapturedVictim' {
 	MessageType("MILITARY");
 }
 
-alertbox  '128CivStartedWar' {
+messagebox  '128CivStartedWar' {
+	Show();
 	Text(ID_CIV_STARTED_WAR) ;
 	MessageType("MILITARY");
 }
@@ -2955,7 +2958,8 @@ alertBox '999ATTACKWARNING' {
 	}
 }
 
-alertbox  '999CivStartedWarWithUs' {
+messagebox  '999CivStartedWarWithUs' {
+	Show();
 	Text(ID_POPUP_DECLARE_WAR_ANNC) ;
 	MessageType("MILITARY");
 }

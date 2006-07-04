@@ -1144,7 +1144,13 @@ public:
 
 	sint32 CountCityHappiness(sint32 &rioting, sint32 &content, sint32 &happy);
 	sint32 CityHappinessIncrease() const;
-
+	sint32 CivHappinessIncrease() const;
+	sint32 CivProductionBonus() const;
+	sint32 CivFoodBonus() const;
+	sint32 CivCommerceBonus() const;
+	sint32 CivScienceBonus() const;
+	sint32 CivBoatBonus() const;
+	sint32 CivHpBonus() const;
 
 	sint16 GetCargoCapacity() const;
 

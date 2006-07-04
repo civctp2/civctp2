@@ -57,6 +57,8 @@
 // - Added MoveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006 by E
 // - Old settle terrain flags are ignored if new CanSettleOn terrain flags are 
 //   defined. (April 22nd 2006 Martin Gühmann)
+// - Added IncreaseBoatMovement and CivHP as a civ attribute (July 2, 2006 by E)
+// - Added Civ Attack Bonuses (July 2, 2006 by E)
 //
 //----------------------------------------------------------------------------
 
@@ -327,12 +329,12 @@ void UnitData::Create(const sint32 t,
 
 	m_owner = o;
 
-//EMOD add civ bonus
+//EMOD added civ bonus
 
+	sint32 civHPBonus = g_player[m_owner]->CivHpBonus();
 	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
- //   sint32 buildingHPBonus = buildingutil_GetIncreaseHP(m_city_data->GetEffectiveBuildings()); //EMOD 4-27-2006 m_city_data or cityData?
-//	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus + buildingHPBonus;
-		m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;
+//	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus;   //ORIGINAL
+	m_hp = g_theUnitDB->Get(t)->GetMaxHP() + wonderHPBonus + civHPBonus;
 	m_movement_points = g_theUnitDB->Get(t)->GetMaxMovePoints();
 
 	//PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
@@ -349,12 +351,11 @@ void UnitData::Create(const sint32 t,
 		if((amt = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_BOAT_MOVEMENT, m_owner)) > 0) {
 			m_movement_points += amt;
 		}
+//EMOD for Civ Bonus
+		if((amt = g_player[m_owner]->CivBoatBonus()) > 0) {
+			m_movement_points += amt;
+		}
 	}
-// EMOD Crashes because the first unit doesn't have a city 
-//	sint32 buildingHPBonus = 0;
-//	if((buildingHPBonus = buildingutil_GetIncreaseHP(m_city_data->GetEffectiveBuildings())) > 0) {
-//			m_hp += buildingHPBonus;
-//	}
 
 	if(rec->GetCanCarry()
 	&& rec->GetCargoDataPtr()
@@ -612,6 +613,12 @@ sint32 UnitData::ResetMovement()
 	}
 	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) &&
 	   ((amt = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_BOAT_MOVEMENT, m_owner)) > 0))
+	{
+		m_movement_points += amt;
+	}
+//EMOD for civ bonuses
+	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) &&
+	   ((amt = g_player[m_owner]->CivBoatBonus()) > 0))
 	{
 		m_movement_points += amt;
 	}
@@ -1416,8 +1423,21 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 	{
 		attack += baseattack * bonus;
 	}
-	
-	//end EMOD
+//EMOD Civ Bonuses July 2, 2006
+
+	if (defender.GetMovementTypeLand() && (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusLand(bonus))) 
+	{
+		attack += baseattack * bonus;
+	}
+	if (defender.GetMovementTypeAir() && (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusAir(bonus))) 
+	{
+		attack += baseattack * bonus;
+	}
+	if (defender.GetMovementTypeShallowWater() && (g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation())->GetOffenseBonusWater(bonus))) 
+	{
+		attack += baseattack * bonus;
+	}
+//end EMOD
 
 	return attack;
 }

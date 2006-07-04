@@ -152,6 +152,7 @@
 // - ExcludedbyBuilding and ExcludedbyWonder added to Units and buildings
 // - Added PrerequisiteWonder to Units and buildings
 // - Added NeedsFeatToBuild to Units
+// - Added Civ Bonuses to Food, Commerce, Production, Science
 //
 //----------------------------------------------------------------------------
 
@@ -1704,9 +1705,9 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 	}
 
 //EMOD Civilization bonuses
-	//gross_production += ceil(gross_production * g_player[m_owner]->GetCivilisation()->GetProductionPercent());
+//	gross_production += ceil(gross_production * g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation(), m_government_type)->GetProductionPercent());
 	
-	//gross_production += g_player[m_owner]->GetCivilisation()->GetProductionBonus();
+	gross_production += g_player[m_owner]->CivProductionBonus();
 
 //EMOD Citystyle bonuses
 	gross_production += ceil(gross_production * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetProductionPercent());
@@ -2890,7 +2891,7 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 
 	grossFood += ceil(grossFood * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetFoodPercent());
 
-	//grossFood += g_player[m_owner]->GetCivilisation()->GetBonusFood();
+	grossFood += g_player[m_owner]->CivFoodBonus();
 
 	grossFood += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusFood();
 
@@ -6834,6 +6835,9 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 	sci += sci * p;
 	sci = sci * g_player[m_home_city.GetOwner()]->GetKnowledgeCoef();
 	sci += sci * static_cast<double>(wonderutil_GetIncreaseKnowledgePercentage(g_player[m_home_city.GetOwner()]->GetBuiltWonders())) / 100.0;
+//Civilization Bonus
+	sci += g_player[m_home_city.GetOwner()]->CivScienceBonus();
+
 	
 	if(!considerOnlyFromTerrain
 	&& m_specialistDBIndex[POP_SCIENTIST] >= 0 
@@ -7955,16 +7959,18 @@ void CityData::FindGoodDistances()
 {
 	sint32 i;
 	sint32 goodsToFind = 0;
+	sint32 specialdistance = 0;		//EMOD
 	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
 		if(g_theWorld->GetGoodValue(i) <= g_theConstDB->GetMaxGoodValue()) {
 			goodsToFind++;
 		}
-//		Causes gold values to go incredibly high
-//		} else if(g_theResourceDB->Get(i)->GetIsBonusGood()) {		//EMOD for special goods
-//			m_distanceToGood[i] = g_theResourceDB->Get(i)->GetGold();
-//		} else {
-			m_distanceToGood[i] = 0;
-//		}
+//EMOD for special goods		
+		if(g_theResourceDB->Get(i)->GetIsBonusGood()) {		
+			specialdistance = g_theResourceDB->Get(i)->GetGold();
+		}
+//EMOD
+		m_distanceToGood[i] = 0 + specialdistance;
+
 	}
 
 //	g_theWorld->FindDistances(m_owner, m_home_city.RetPos(), goodsToFind,
@@ -8280,7 +8286,8 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 //EMOD these three EMODs moved inside the less than 0 to prevent multiplication of percent to zero values
 //EMOD Civilization and Citystyle bonuses
-		//gold += ceil(gold * g_player[m_owner]->GetCivilisation()->GetCommercePercent());
+//		gold += ceil(gross_production * g_theCivilisationDB->Get(g_player[m_owner]->m_civilisation->GetCivilisation(), m_government_type)->GetCommercePercent();
+	
         
 		gold += ceil(gold * g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetCommercePercent());
 
@@ -8316,7 +8323,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 	}
 //EMOD Civilization and Citystyle bonuses
-	//gold += g_player[m_owner]->GetCivilisation()->GetBonusGold();
+	gold += g_player[m_owner]->CivCommerceBonus();
 
 	gold += g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetBonusGold();
 
@@ -8365,7 +8372,6 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	double interest;
 	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
 		gold += static_cast<sint32>(g_player[m_owner]->m_gold->GetLevel() * interest);
-
 
 	//EMOD to assist AI
 	if(gold < 0){

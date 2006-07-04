@@ -83,6 +83,7 @@
 // - Added Installation SpawnsBarbarians by E 6.7.2006
 // - CanExportCityGood and CAnExportTileVAlue not operate on a radius if you 
 //   just want one square use IntBorderRadius 0
+// - Added Civ Bonuses for Science, Commerce, Production, Food, HP, Boats
 //
 //----------------------------------------------------------------------------
 
@@ -10633,6 +10634,42 @@ sint32 Player::CountCityHappiness(sint32 &rioting, sint32 &content, sint32 &happ
 sint32 Player::CityHappinessIncrease() const
 {
 	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetHappyInc();
+}
+
+sint32 Player::CivHappinessIncrease() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetHappyInc();
+
+}
+
+sint32 Player::CivProductionBonus() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetProductionBonus();
+}
+
+sint32 Player::CivFoodBonus() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetFoodBonus();
+}
+
+sint32 Player::CivCommerceBonus() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetCommerceBonus();
+}
+
+sint32 Player::CivScienceBonus() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetScienceBonus();
+}
+
+sint32 Player::CivBoatBonus() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetIncreaseBoatMovement();
+}
+
+sint32 Player::CivHpBonus() const
+{
+	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetIncreaseHp();
 }
 
 sint16 Player::GetCargoCapacity() const
