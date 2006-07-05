@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Gameplay options screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -303,9 +303,6 @@ AUI_ERRCODE gameplayoptions_Cleanup()
 }
 
 
-
-
-static
 void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	

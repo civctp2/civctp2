@@ -1,9 +1,9 @@
 
 
 #include "c3.h"
+#include "graphicsresscreen.h"
 
-#include "profileDB.h"
-
+#include "profileDB.h"      // g_theProfileDB
 #include "c3window.h"
 #include "c3_popupwindow.h"
 #include "ctp2_button.h"
@@ -14,24 +14,16 @@
 #include "c3ui.h"
 #include "aui_switch.h"
 #include "aui_uniqueid.h"
-
 #include "spnewgamewindow.h"
 #include "graphicsscreen.h"
-#include "graphicsresscreen.h"
-
 #include "keypress.h"
+#include "tiledmap.h"       // g_tiledMap;
+#include "civapp.h"
+#include "SpriteGroupList.h"
 
 extern C3UI					*g_c3ui;
-extern ProfileDB			*g_theProfileDB;
 extern sint32				g_isGridOn;
-
-#include "tiledmap.h"
-extern TiledMap				*g_tiledMap;
-
-#include "civapp.h"
 extern CivApp				*g_civApp;
-
-#include "SpriteGroupList.h"
 extern SpriteGroupList		*g_unitSpriteGroupList;
 
 static ctp2_Button	*s_resScreenButton;
@@ -118,15 +110,12 @@ static uint32 check[] =
 sint32	graphicsscreen_displayMyWindow()
 {
 	sint32 retval=0;
-	if(!s_graphicsWindow) { retval = graphicsscreen_Initialize(); }
+	if (!s_graphicsWindow) { retval = graphicsscreen_Initialize(); }
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->AddWindow(s_graphicsWindow);
+	AUI_ERRCODE auiErr  = g_c3ui->AddWindow(s_graphicsWindow);
 	Assert( auiErr == AUI_ERRCODE_OK );
 	keypress_RegisterHandler(s_graphicsWindow);
 
-	
 	s_unitAnimToggled = FALSE;
 
 	return retval;
@@ -135,9 +124,7 @@ sint32 graphicsscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( s_graphicsWindow->Id() );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow( s_graphicsWindow->Id() );
 	Assert( auiErr == AUI_ERRCODE_OK );
 	keypress_RemoveHandler(s_graphicsWindow);
 
@@ -148,15 +135,15 @@ sint32 graphicsscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE graphicsscreen_Initialize( void )
 {
-	AUI_ERRCODE errcode;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	s_gridToggled = FALSE;
 	s_cityInfluenceToggled = FALSE;
 	s_politicalBordersToggled = FALSE;
 
 
 	if ( s_graphicsWindow ) return AUI_ERRCODE_OK; 
+
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	strcpy(windowBlock, "GraphicsWindow");
 	s_graphicsWindow = new c3_PopupWindow(
@@ -167,7 +154,7 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false );
 	Assert( AUI_NEWOK(s_graphicsWindow, errcode) );
-	if ( !AUI_NEWOK(s_graphicsWindow, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_graphicsWindow, errcode) ) return errcode;
 
 	s_graphicsWindow->SetStronglyModal(TRUE);
 
@@ -238,41 +225,27 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 
 
-AUI_ERRCODE graphicsscreen_Cleanup()
+void graphicsscreen_Cleanup()
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+	if (g_c3ui && s_graphicsWindow)
+    {
+    	g_c3ui->RemoveWindow(s_graphicsWindow->Id());
+	    keypress_RemoveHandler(s_graphicsWindow);
+    }
 
-	if ( !s_graphicsWindow  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( s_graphicsWindow->Id() );
-	keypress_RemoveHandler(s_graphicsWindow);
-
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 	mycleanup(s_walk);
-
-
 	mycleanup(s_trade);
 	mycleanup(s_wonder);
-
-
 	mycleanup(s_cityInfluence);
 	mycleanup(s_grid);
-
 	mycleanup(s_politicalBorders);
 	mycleanup(s_tradeRoutes);
-	
-	
 	mycleanup(s_cityNames);
-
 	mycleanup(s_resScreenButton);
-
-	
 	mycleanup(s_unitSpeed);
 	mycleanup(s_unitSpeedN);
-
-	delete s_graphicsWindow;
-	s_graphicsWindow = NULL;
-
-	return AUI_ERRCODE_OK;
+	mycleanup(s_graphicsWindow);
 #undef mycleanup
 }
 
@@ -320,7 +293,7 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 
 	graphicsscreen_removeMyWindow(action);
 }
-static
+
 void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	

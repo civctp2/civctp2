@@ -113,7 +113,7 @@ namespace
 typedef	std::vector<aui_Radio *>    TribeSelector;
 
 TribeSelector   s_checkBox;
-sint32          s_skipIndex     = k_NUM_TRIBEBOXES;
+size_t          s_skipIndex     = k_NUM_TRIBEBOXES;
 sint32          s_tribeIndex    = INDEX_TRIBE_INVALID;
 
 //----------------------------------------------------------------------------
@@ -244,7 +244,7 @@ void spnewgametribescreen_setTribeIndex(
 	}
 
 	sint32 alpha = LexicographicIndex(index);
-    if (alpha > s_skipIndex)
+    if (alpha > static_cast<sint32>(s_skipIndex))
     {
         --alpha;
     }
@@ -346,7 +346,7 @@ void spnewgametribescreen_disableTribes( void )
 void spnewgametribescreen_disableTribe(sint32 tribe)
 {
 	sint32 alpha = LexicographicIndex(tribe);
-	if (alpha > s_skipIndex)
+	if (alpha > static_cast<sint32>(s_skipIndex))
 	{
 		--alpha;
 	}
@@ -362,7 +362,7 @@ void spnewgametribescreen_disableTribe(sint32 tribe)
 void spnewgametribescreen_enableTribe(sint32 tribe)
 {
 	sint32 alpha	= LexicographicIndex(tribe);
-	if (alpha > s_skipIndex)
+	if (alpha > static_cast<sint32>(s_skipIndex))
 	{
 		--alpha;
 	}

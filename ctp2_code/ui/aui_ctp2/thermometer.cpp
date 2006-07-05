@@ -146,6 +146,6 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void Thermometer::SetPercentFilled( sint32 percentFilled ) 
 {
-    m_percentFilled = std::min(100, percentFilled);
-	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
+    m_percentFilled = std::min<sint32>(100, percentFilled);
+    m_draw         |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 }

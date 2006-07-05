@@ -1308,38 +1308,20 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
         return 0;
 
 	m_selectedIndex = theMode;
-
-	
-	bool there_is_a_gameplay_panel = true;
-
-	
-	bool there_is_an_historical_panel = true;
-
-	
 	enum DATABASE real_database = theDatabase;
 	int real_index = theMode;
 
 	if (!g_greatLibrary || !g_greatLibrary->m_window) return 0;
 
-	
+#if 0   // unused	
 	sint32 videoWidth = 242;
 	sint32 videoHeight = 182;
 	sint32 videoX = 382;
 	sint32 videoY = 316;
-
-	
-	sint32 windowWidth = g_ScreenWidth;
-	sint32 windowHeight = g_ScreenHeight;
-	sint32 windowX = 0;
-	sint32 windowY = 0;
-
-	sint32 hidden;
-
+#endif
 	
 	SetCategoryName(theDatabase);
 
-	
-	
 	if(theDatabase == DATABASE_SEARCH) {
 		
 		theDatabase = g_greatLibrary->m_search_results[theMode].m_database;
@@ -1384,12 +1366,9 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 	case DATABASE_ADVANCES:
 		g_greatLibrary->m_window->SetTechMode(theMode, DATABASE_ADVANCES);
 		so.AddAdvance(theMode);
-
-		
 		m_techTree->Update( theMode );
-
-		hidden = m_techTree->IsHidden();
-		if ( hidden ) {
+		if (m_techTree->IsHidden()) 
+        {
 			m_techTree->Hide();
 		}
 
@@ -1434,7 +1413,9 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		
 		
 		
-		if ((m_history.size() != 0) && (m_history_position < m_history.size() - 1))
+		if ((m_history.size() != 0) && 
+			(m_history_position + 1 < static_cast<sint32>(m_history.size()))
+		   )
 		{
 			
 			
@@ -2180,7 +2161,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 		Search_Great_Library();
 
 		
-		for (index = 0; index < m_search_results.size(); index++)
+		for (index = 0; index < static_cast<sint32>(m_search_results.size()); index++)
 		{
 			
 			int real_index = m_search_results[index].m_item;
@@ -2540,12 +2521,12 @@ void GreatLibrary::Back()
 //----------------------------------------------------------------------------
 void GreatLibrary::Forward()
 {
-	if (m_history_position + 1 < m_history.size())
+	if (m_history_position + 1 < static_cast<sint32>(m_history.size()))
     {
     	m_history_position++;
 	
     	m_backButton->Enable(true);
-		m_forwardButton->Enable(m_history_position + 1 < m_history.size());
+		m_forwardButton->Enable(m_history_position + 1 < static_cast<sint32>(m_history.size()));
 
 	    enum DATABASE   next_database   = m_history[m_history_position].m_database;
 	    int             next_index      = m_history[m_history_position].m_item;

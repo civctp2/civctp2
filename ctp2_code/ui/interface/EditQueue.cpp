@@ -1311,7 +1311,7 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
 
 	if(checkRemoveList) {
 		sint32 type = info->m_type;
-		sint32 cat = info->m_category;
+		uint32 cat = info->m_category;
 		sint32 i;
 		for(i = checkRemoveList->NumItems() - 1; i >= 0; i--) {
 			ctp2_ListItem *item = (ctp2_ListItem *)checkRemoveList->GetItemByIndex(i);
@@ -1560,7 +1560,7 @@ void EditQueue::ShowSelectedInfo()
 
 	ctp2_ListBox *visList = s_editQueue->GetVisibleItemList();
 
-	uint32 category = -1;
+	uint32 category = 0xffffffffu;
 	sint32 type = -1;
 
 	ctp2_ListItem *item;
@@ -1664,7 +1664,7 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
 
-	sint32 saveMode = (sint32)cookie;
+//	sint32 saveMode = (sint32)cookie;
 
 	Assert(s_editQueue->m_itemsBox);
 	Assert(s_editQueue->m_loadBox);
@@ -2433,7 +2433,7 @@ void EditQueue::SaveButton(aui_Control *control, uint32 action, uint32 data, voi
 								SaveNameResponse);
 }
 
-bool EditQueue::IsItemInQueueList(sint32 cat, sint32 type)
+bool EditQueue::IsItemInQueueList(uint32 cat, sint32 type)
 {
 	sint32 i;
 	for(i = 0; i < m_queueList->NumItems(); i++) {

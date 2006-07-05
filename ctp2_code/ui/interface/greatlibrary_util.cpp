@@ -60,8 +60,10 @@ const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
 	char * lower_case_filename = new char[strlen(filename)+1];
 	strcpy(lower_case_filename, filename);
 	
-	for (int j = 0; j < strlen(lower_case_filename); j++)
+	for (size_t j = 0; j < strlen(lower_case_filename); ++j)
+	{
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
+	}
 	
 	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 	delete [] lower_case_filename;

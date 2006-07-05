@@ -27,7 +27,7 @@ public:
 };
 
 sint32 tileimptracker_Initialize();
-void tileimptracker_DisplayData(MapPoint &p, sint32 type);
-sint32 tileimptracker_Cleanup();
+void tileimptracker_DisplayData(MapPoint const & p, sint32 type);
+void tileimptracker_Cleanup();
 
 #endif

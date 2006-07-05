@@ -224,7 +224,7 @@ void RankingTab::CleanupGraph()
 	
 	if (m_infoGraphData)
 	{
-		for (size_t i = 0 ; i < m_infoYCount; ++i)
+		for (sint32 i = 0 ; i < m_infoYCount; ++i)
 		{
 			delete m_infoGraphData[i];
 		}

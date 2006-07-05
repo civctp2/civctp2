@@ -144,12 +144,10 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow
 	MessageResponseAction	*action = NULL;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	const MBCHAR	*text = NULL;
-	sint32			count = 0;
 	sint32			responseCount = 0;
 	SlicButton		*sButton = NULL;
 
 	
-	m_messageResponseButton = NULL;
 	m_messageResponseAction = NULL;
 
 	
@@ -340,7 +338,6 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	SlicButton		*sButton = NULL;
-	c3_Static		*item = NULL;
 	uint32			i = 0;
 	const MBCHAR	*text;
 	
@@ -400,9 +397,8 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 		
 		text = sButton->GetName();
 
-		MessageResponseListItem		*item;
-
-		item = new MessageResponseListItem(&errcode, (char *)text, i, buttonBlock);
+		MessageResponseListItem	* item = 
+            new MessageResponseListItem(&errcode, (char *)text, i, buttonBlock);
 
 		if ( item )
 			m_dropdown->AddItem((aui_Item *)item );
@@ -437,36 +433,9 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 MessageResponseDropdown::~MessageResponseDropdown() 
 {
-
-	if ( m_submitButton ) {
-		delete m_submitButton;
-		m_submitButton = NULL;
-	}
-
-	if ( m_action ) {
-		delete m_action;
-		m_action = NULL;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	if ( m_dropdown ) {
-		delete m_dropdown;
-		m_dropdown = NULL;
-	}
-
+	delete m_submitButton;
+	delete m_action;
+	delete m_dropdown;
 }
 
 

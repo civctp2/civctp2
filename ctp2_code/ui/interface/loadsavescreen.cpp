@@ -573,15 +573,16 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 							
 							BOOL foundOne = FALSE;
 							
-							for (i=0; i<k_MAX_PLAYERS; i++) {
-								MBCHAR		*civName;
-								MBCHAR		*dbString;
+							for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
+                            {
+								MBCHAR *    civName = s_tempSaveInfo->civList[i];
 								
-								civName = s_tempSaveInfo->civList[i];
-								if (strlen(civName) > 0) {
-									
-									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++) {
-										dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
+								if (strlen(civName) > 0) 
+                                {
+									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++) 
+                                    {
+										MBCHAR const *  dbString = 
+                                            g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
 										
 										if (!stricmp(dbString, civName)) {
 											
@@ -607,13 +608,12 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 								return;
 							}
 							
-						} else {
-							
-							
-							
-							
-							for (i=0; i<k_MAX_PLAYERS; i++) {
-								spnewgametribescreen_enableTribe((CIV_INDEX)s_tempSaveInfo->playerCivIndexList[i]);
+						} 
+                        else 
+                        {
+							for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
+                            {
+								spnewgametribescreen_enableTribe(s_tempSaveInfo->playerCivIndexList[i]);
 							}
 						}
 					}

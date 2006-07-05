@@ -378,13 +378,7 @@ int StatsWindow_Initialize( void )
 	if ( g_statsWindow ) return 0; 
 
 	
-	sint32 controlWidth = 99;
-	sint32 controlHeight = 20;
-	sint32 controlX = 293;
-	sint32 controlY = 4;
-
 	strcpy(windowBlock, "StatsWindow");
-
 	g_statsWindow = new StatsWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
 	Assert( AUI_NEWOK(g_statsWindow, errcode) );
 	if ( !AUI_NEWOK(g_statsWindow, errcode) ) return -1;

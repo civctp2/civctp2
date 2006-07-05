@@ -32,81 +32,54 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "hotseatlist.h"
 
-
+#include <algorithm>			// std::fill
 #include "aui.h"
 #include "aui_uniqueid.h"
-#include "c3ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_hypertextbox.h"
-
 #include "c3_static.h"
+#include "c3ui.h"
 #include "thermometer.h"
-
-
 #include "textbutton.h"
 #include "c3_button.h"
-
-
 #include "c3textfield.h"
-
-
 #include "c3listbox.h"
 #include "c3_listbox.h"
 #include "aui_listbox.h"
-
-
 #include "c3window.h"
 #include "c3windows.h"
 #include "c3_popupwindow.h"
 #include "c3_utilitydialogbox.h"
 #include "SelItem.h"
-
-
-
-
-#include "player.h"
+#include "player.h"					// g_player
 #include "UnitRec.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
 #include "citydata.h"
-#include "StrDB.h"
+#include "StrDB.h"					// g_theStringDB
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
-
 #include "UIUtils.h"
-
 #include "network.h"
-
 #include "keypress.h"
-
-#include "hotseatlist.h"
 #include "CivilisationRecord.h"
-
 #include "gameinit.h"
-
-#include "profileDB.h"
-
-
+#include "profileDB.h"				// g_theProfileDB
 #include "CivilisationPool.h"
-
-#include "civscenarios.h"
+#include "civscenarios.h"			// g_civScenarios
 #include "gamefile.h"
 
 extern C3UI			*g_c3ui;
-extern Player **g_player;
-extern StringDB *g_theStringDB;
 
 HotseatList *g_hotseatList = NULL;
-extern ProfileDB *g_theProfileDB;
 
-extern CivScenarios *g_civScenarios;
 
 
 
@@ -359,8 +332,6 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 	sint32 realCiv = curCiv;
 	curCiv = g_theCivilisationDB->m_indexToAlpha[curCiv];
 
-	sint32	oldCiv = curCiv;
-	
 	sint32	numEnabledCivs = hotseatlist_NumEnabled();
 
 	while(!found) {
@@ -620,15 +591,8 @@ BOOL		s_playerCivsLocked;
 
 void hotseatlist_ClearOptions(void)
 {
-	sint32 i;
-	for(i=0; i<k_MAX_PLAYERS; i++) {
-		s_hotseatCivList[i] = (CIV_INDEX)0;
-	}
-
-	for(i=0; i<CIV_INDEX_INVALID; i++) {
-		s_legalCivList[i] = FALSE;
-	}
-
+	std::fill(s_hotseatCivList, s_hotseatCivList + k_MAX_PLAYERS, (CIV_INDEX) 0);
+	std::fill(s_legalCivList, s_legalCivList + CIV_INDEX_INVALID, FALSE);
 	s_playerCivsLocked = FALSE;
 }
 
@@ -662,9 +626,7 @@ void hotseatlist_EnableAllCivs(void)
 
 void hotseatlist_DisableAllCivs(void)
 {
-	for (sint32 i=0; i<CIV_INDEX_INVALID; i++) {
-		s_legalCivList[i] = FALSE;
-	}
+	std::fill(s_legalCivList, s_legalCivList + CIV_INDEX_INVALID, FALSE);
 }
 
 

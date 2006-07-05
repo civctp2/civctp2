@@ -5,12 +5,17 @@
 
 
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
+
 #ifndef __MESSAGELIST_H__
 #define __MESSAGELIST_H__
 
-#include "tech_wllist.h"
+class MessageList;
+
+#include "player.h"         // PLAYER_INDEX
+#include "tech_wllist.h"    // tech_WLList
 
 class Message;
 class MessageIconWindow;
@@ -21,7 +26,6 @@ class MessageList
 {
 public:
 	MessageList( PLAYER_INDEX player );
-
 	virtual ~MessageList();
 
 	PLAYER_INDEX	GetPlayer( void ) { return m_player; }

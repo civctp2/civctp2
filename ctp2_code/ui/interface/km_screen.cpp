@@ -87,12 +87,16 @@ namespace
             Count               (count)
         { ; };
 
-
-        MBCHAR const * const    Name;
+        MBCHAR const *          Name;
         size_t const            Count;
+
+    private:
+        // Not used. Defined to prevent compiler warning.
+        TabDescriptor & TabDescriptor::operator = (TabDescriptor const &);
+
     };
 
-    TabDescriptor const TAB_INVALID             = TabDescriptor("", 0);
+    TabDescriptor const TAB_INVALID ("", 0);
 
     KEY_FUNCTION const  BASIC_FUNCTION[]        =
         {
@@ -111,8 +115,8 @@ namespace
 //          KEY_FUNCTION_ENDTURN,           // CTP2: "--" placeholder in km_screen.ldl				
         };
 
-    TabDescriptor const TAB_BASIC               = 
-        TabDescriptor("Basic", sizeof(BASIC_FUNCTION) / sizeof(BASIC_FUNCTION[0]));
+    TabDescriptor const TAB_BASIC 
+        ("Basic", sizeof(BASIC_FUNCTION) / sizeof(BASIC_FUNCTION[0]));
 
     KEY_FUNCTION const  UNIT_FUNCTION[]         =
         {
@@ -141,9 +145,8 @@ namespace
             KEY_FUNCTION_EXECUTE_ORDERS,
             KEY_FUNCTION_PROCESS_UNIT_ORDERS,
 };
-    TabDescriptor const TAB_UNIT                = 
-        TabDescriptor("Unit", sizeof(UNIT_FUNCTION) / sizeof(UNIT_FUNCTION[0]));
-
+    TabDescriptor const TAB_UNIT
+        ("Unit", sizeof(UNIT_FUNCTION) / sizeof(UNIT_FUNCTION[0]));
 
     KEY_FUNCTION const  SCREEN_FUNCTION[]       =
         {
@@ -177,8 +180,8 @@ namespace
             KEY_FUNCTION_YES,
             KEY_FUNCTION_NO,
         };
-    TabDescriptor const TAB_SCREEN              = 
-        TabDescriptor("Screen", sizeof(SCREEN_FUNCTION) / sizeof(SCREEN_FUNCTION[0]));
+    TabDescriptor const TAB_SCREEN
+        ("Screen", sizeof(SCREEN_FUNCTION) / sizeof(SCREEN_FUNCTION[0]));
 
     KEY_FUNCTION const  MAP_FUNCTION[]          =
         {
@@ -202,8 +205,8 @@ namespace
             KEY_FUNCTION_TOGGLE_SPACE,
 #endif
         };
-    TabDescriptor const TAB_MAP                 =
-        TabDescriptor("Map", sizeof(MAP_FUNCTION) / sizeof(MAP_FUNCTION[0]));
+    TabDescriptor const TAB_MAP
+        ("Map", sizeof(MAP_FUNCTION) / sizeof(MAP_FUNCTION[0]));
 
     KEY_FUNCTION const  GAME_FUNCTION[]         =
         {
@@ -223,17 +226,16 @@ namespace
             // Apolyton addition (Ahenobarb)
             KEY_FUNCTION_MUSIC_OPTIONS,
         };
-    TabDescriptor const TAB_GAME                =
-        TabDescriptor("Game", sizeof(GAME_FUNCTION) / sizeof(GAME_FUNCTION[0]));
+    TabDescriptor const TAB_GAME
+        ("Game", sizeof(GAME_FUNCTION) / sizeof(GAME_FUNCTION[0]));
 
-
-    TabDescriptor const TAB[KM_MAX] =
-{
-            TAB_BASIC,
-	        TAB_UNIT,
-	        TAB_SCREEN,
-	        TAB_MAP,
-	        TAB_GAME
+    TabDescriptor const * TAB[KM_MAX] =
+        {
+            &TAB_BASIC,
+            &TAB_UNIT,
+            &TAB_SCREEN,
+            &TAB_MAP,
+            &TAB_GAME
         };
 
 //----------------------------------------------------------------------------
@@ -291,27 +293,27 @@ void km_screen_loadKeyList(void)
         break;
 
 	case KM_BASIC:
-        functionCount   = TAB[s_selected].Count;
+        functionCount   = TAB[s_selected]->Count;
         functionList    = BASIC_FUNCTION;
 		break;
 
 	case KM_UNIT:
-        functionCount   = TAB[s_selected].Count;
+        functionCount   = TAB[s_selected]->Count;
         functionList    = UNIT_FUNCTION;
 		break;
 
 	case KM_SCREEN:
-        functionCount   = TAB[s_selected].Count;
+        functionCount   = TAB[s_selected]->Count;
         functionList    = SCREEN_FUNCTION;
         break;
 
 	case KM_MAP:
-        functionCount   = TAB[s_selected].Count;
+        functionCount   = TAB[s_selected]->Count;
         functionList    = MAP_FUNCTION;
 		break;
 
 	case KM_GAME:
-        functionCount   = TAB[s_selected].Count;
+        functionCount   = TAB[s_selected]->Count;
         functionList    = GAME_FUNCTION;
 		break;
 	}
@@ -320,7 +322,7 @@ void km_screen_loadKeyList(void)
 	s_keyList->Clear();
 	for (size_t i = 0; i < functionCount; ++i) 
     {
-        AUI_ERRCODE             errcode;
+        AUI_ERRCODE             errcode = AUI_ERRCODE_OK;
         KEY_FUNCTION const &    f       = functionList[i];
     	KeyListItem *           item    = 
             new KeyListItem(&errcode, f, theKeyMap->get_keycode(f), ldl);
@@ -405,7 +407,7 @@ AUI_ERRCODE km_screen_Initialize( void )
 	if(!AUI_NEWOK(s_groupStatic, errcode)) return errcode;
 
 	for ( i = KM_BASIC;i < KM_MAX;i++ ) {
-		sprintf(controlBlock, "%s.%s", groupBlock, TAB[i].Name);
+		sprintf(controlBlock, "%s.%s", groupBlock, TAB[i]->Name);
 		s_switch[i] = new ctp2_Button( &errcode, aui_UniqueId(), controlBlock, km_screen_switchPress );
 		Assert( AUI_NEWOK(s_switch[i], errcode) );
 		if ( !AUI_NEWOK(s_switch[i], errcode) ) return errcode;

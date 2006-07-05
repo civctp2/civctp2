@@ -743,7 +743,6 @@ void MessageWindow::BringBorderToTop()
 
 AUI_ERRCODE MessageWindow::AddBordersToUI()
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	
 
 
@@ -780,7 +779,6 @@ AUI_ERRCODE MessageWindow::AddBordersToUI()
 
 AUI_ERRCODE MessageWindow::RemoveBordersFromUI()
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 

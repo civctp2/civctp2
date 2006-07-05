@@ -623,20 +623,17 @@ BOOL LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 		info->numCivs = numCivs;
 
 		
-		for (i=0; i<k_MAX_PLAYERS; i++) {
-			CIV_INDEX		civ = (CIV_INDEX)0;
-			if (g_player[i]) {
-				civ = g_player[i]->GetCivilisation()->GetCivilisation();
-			}
-
-			info->playerCivIndexList[i] = civ;
+		for (sint32 j = 0; j < k_MAX_PLAYERS; ++j) 
+		{
+			info->playerCivIndexList[j] = 
+				(g_player[j]) 
+				? g_player[j]->GetCivilisation()->GetCivilisation() 
+				: (CIV_INDEX) 0;
 		}
 
-		
 		return TRUE;
 	}
 
-	
 	return FALSE;
 }
 
@@ -1289,7 +1286,7 @@ LSCivsListItem::~LSCivsListItem()
 
 sint32 LSCivsListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSCivsListItem *item = (LSCivsListItem *)item2;
+//	LSCivsListItem *item = (LSCivsListItem *)item2;
 
 	return 0;
 }
@@ -1350,7 +1347,7 @@ LSGamesListItem::~LSGamesListItem()
 
 sint32 LSGamesListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSGamesListItem *item = (LSGamesListItem *)item2;
+//	LSGamesListItem *item = (LSGamesListItem *)item2;
 
 	return 0;
 }

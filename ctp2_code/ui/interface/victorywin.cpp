@@ -382,19 +382,9 @@ sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	int i = 0;
-	int j = 0;
 
 	s_wonderIcons = new ctp2_Static *[k_VICWIN_WONDERICON_MAX];
     
-	
-	
-	
-	
-	sint32 xPos = 10;
-	sint32 yPos = 5;
-
-	sint32 wonderCount = 0;
-
 	sprintf( controlBlock, "%s", "TabGroup.Tab1.TabPanel.WonderList" );
 	s_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, controlBlock);
 

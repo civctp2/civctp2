@@ -17,14 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -38,9 +30,16 @@
 #ifndef HOTSEATLIST_H
 #define HOTSEATLIST_H
 
+class HotseatListItem;
+class HotseatList;
+
+#include "c3_button.h"          // c3_Button
+#include "c3_listbox.h"         // c3_ListBox
 #include "c3_listitem.h"
+#include "c3_popupwindow.h"     // c3_PopupWindow
 #include "aui_action.h"
 #include "keyboardhandler.h"
+#include "Player.h"             // PLAYER_INDEX
 
 typedef void (HotseatListCallback)(sint32 launch, 
 								   sint32 player, 

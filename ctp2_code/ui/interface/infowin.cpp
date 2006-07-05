@@ -686,33 +686,15 @@ void infowin_SetMinRoundForGraphs(sint32 minRound)
 
 sint32 infowin_LoadData( void )
 {
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-
-	
 	infowin_UpdateBigList();
-
-	
 	infowin_UpdateScoreList();
-
-	
 	infowin_UpdateWonderList();
-
-	
 	infowin_UpdateGraph(s_infoGraph, s_infoXCount, s_infoYCount, &s_infoGraphData);	
-
-	
 	infowin_UpdatePlayerList();
-
-	
 	infowin_UpdateCivData();
-
-	
 	infowin_UpdatePollutionGraph(s_pollutionGraph, s_pollutionXCount, s_pollutionYCount, &s_pollutionGraphData);	
-
-	
 	infowin_UpdatePollutionData();
 
-	
 	if (!infowin_LabReady()) s_labButton->Hide();
 
 	return 0;
@@ -784,36 +766,23 @@ sint32 infowin_UpdateCivData( void )
 
 sint32 infowin_UpdateBigList( void )
 {
+	if (!g_theTopTen) return 0;
+	g_theTopTen->CalculateBiggestCities();
+
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-	uint64 wonders = 0;
-	sint32 firstIndex = -1;
-	sint32 i;
 
-	Unit unit;
-
-	
-	if (!g_theTopTen) return 0;
-
-	g_theTopTen->CalculateBiggestCities();
-
-	
 	s_infoBigList->Clear();
 	strcpy(ldlBlock,"InfoBigListItem");
-	InfoBigListItem *bItem = NULL;
-
 	
-	for ( i = 0 ; i < 5 ; i++ )
+	for (sint32 i = 0 ; i < 5 ; i++ )
 	{
-		
-		unit = g_theTopTen->GetBiggestCity(i);
+		Unit unit = g_theTopTen->GetBiggestCity(i);
 		if ( g_theUnitPool->IsValid(unit) )
 		{
-			
-			bItem = new InfoBigListItem(&retval, &unit, i, ldlBlock); 
-			s_infoBigList->AddItem((c3_ListItem *)bItem);
+			c3_ListItem* bItem = new InfoBigListItem(&retval, &unit, i, ldlBlock); 
+			s_infoBigList->AddItem(bItem);
 		}
 	}
 
@@ -1704,7 +1673,6 @@ sint32 infowin_LabReady()
 		if(!p)
 			return FALSE;
 	}
-	EndGame *endGame = p->m_endGame;
 
 	
 //	for (sint32 i = 0; i < g_theEndGameDB->m_nRec; i++) 
@@ -1887,11 +1855,7 @@ void InfoBigListItem::Update(void)
 	CityData *cd = m_city.GetData()->GetCityData();
 	cd->GetPop(cityPop);
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-
-	
 	subItem = (c3_Static *)GetChildByIndex(0);
-
 	
 	MBCHAR name[ 80 + 1 ];
 	strncpy( name, m_name, 80 );
@@ -1917,7 +1881,6 @@ void InfoBigListItem::Update(void)
 
 	
 	uint64 wonders = cd->GetBuiltWonders();
-	sint32 obsolete = 0;
 	sint32 ageCount = g_theAgeDB->NumRecords();
 
 	
@@ -1972,11 +1935,6 @@ void InfoBigListItem::Update(void)
 
 sint32 InfoBigListItem::Compare(c3_ListItem *item2, uint32 column)
 {	
-	sint32 result = 0;
-
-
-	if (column < 0) return 0;
-
 	return 0;
 }
 

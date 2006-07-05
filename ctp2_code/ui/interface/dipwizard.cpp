@@ -2201,42 +2201,43 @@ void DipWizard::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiv
 
 bool DipWizard::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg)
 {
-	
-	
 	const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(threat);
 	Assert(rec);
 	if(!rec)
 		return false;
 
-	ai::Agreement agreement;
-	switch(rec->GetArg1()) {
-		case k_DiplomacyThreat_Arg1_HisCity_Bit:
-		case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-		{
-			Unit city(arg.cityId);
-			if(city.IsValid()) {
-				so.AddCity(Unit(arg.cityId));
-				return true;
-			} else {
-				return false;
-			}
-		}
-		case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-		{
-			so.AddPlayer(arg.playerId);
-			return true;
-		}
-		case k_DiplomacyThreat_Arg1_AgreementId_Bit:
-		{
-			agreement = AgreementMatrix::s_agreements.GetAgreement(m_viewRecipient, g_selected_item->GetVisiblePlayer(), (PROPOSAL_TYPE) arg.agreementId);
+	switch (rec->GetArg1()) 
+    {
+	case k_DiplomacyThreat_Arg1_HisCity_Bit:
+	case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
+	    {
+		    Unit city(arg.cityId);
+		    if (city.IsValid()) 
+            {
+			    so.AddCity(Unit(arg.cityId));
+			    return true;
+		    }
+            return false;
+	    }
+	case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
+	    {
+		    so.AddPlayer(arg.playerId);
+		    return true;
+	    }
+	case k_DiplomacyThreat_Arg1_AgreementId_Bit:
+	    {
+	        ai::Agreement agreement = 
+                AgreementMatrix::s_agreements.GetAgreement
+                    (m_viewRecipient, 
+                     g_selected_item->GetVisiblePlayer(), 
+                     static_cast<PROPOSAL_TYPE>(arg.agreementId)
+                    );
 			so.AddAgreement(agreement);
 			return true;
 		}
-		default:
-			return true;
+	default:
+		return true;
 	}
-	Assert(false); 
-	return false;
 }
 
 void DipWizard::PollutionOk(aui_Control *control, uint32 action, uint32 data, void *cookie)

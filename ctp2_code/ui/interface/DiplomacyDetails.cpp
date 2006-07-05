@@ -702,7 +702,6 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
-	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
 	sint32 p = (sint32)cookie;
@@ -728,7 +727,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 
 	
 	if(imageName) {
-		image = g_c3ui->LoadImage(imageName);
+	    aui_Image * image = g_c3ui->LoadImage(imageName);
 		if(image) {
 			
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
@@ -762,8 +761,6 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 												   RECT &rect,
 												   void *cookie)
 {
-	aui_Image *image = NULL;
-	MBCHAR *imageName = NULL;
 	sint32 p = (sint32)cookie;
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
@@ -788,6 +785,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 		InitImageTables();
 	}
 
+	MBCHAR *imageName = NULL;
 	if(relativeStrength < k_WEAK_STRENGTH) imageName = sm_strengthImages->GetString(0);
 	else if(relativeStrength < k_EQUAL_STRENGTH) imageName = sm_strengthImages->GetString(1);
 	else if(relativeStrength < k_STRONG_STRENGTH) imageName = sm_strengthImages->GetString(2);
@@ -795,7 +793,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 
 	
 	if(imageName) {
-		image = g_c3ui->LoadImage(imageName);
+	    aui_Image * image = g_c3ui->LoadImage(imageName);
 		if(image) {
 			
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
@@ -830,8 +828,6 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 											RECT &rect,
 											void *cookie)
 {
-	aui_Image *image = NULL;
-	MBCHAR *imageName = NULL;
 	sint32 p = (sint32)cookie;
 
 	
@@ -846,10 +842,10 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 	}
 
 	if(g_player[detailPlayer]->HasEmbassyWith(p)) {
-		imageName = sm_embassyImages->GetString(0);
-		if(imageName) {
+	    MBCHAR const * imageName = sm_embassyImages->GetString(0);
+		if (imageName) {
 			aui_Image *image = g_c3ui->LoadImage(imageName);
-			if(image) {
+			if (image) {
 				
 				rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
 				rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
@@ -874,9 +870,8 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 				g_c3ui->UnloadImage(image);
 			}
 		}
-	} else {
-		
 	}
+
 	return AUI_ERRCODE_OK;
 }
 

@@ -245,7 +245,7 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 
     // Added by Martin Gühmann, may not exist for mods 
 	sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerSpinner");
-    if (g_ui->GetLdl()->IsValid(controlBlock))
+    if (aui_Ldl::IsValid(controlBlock))
     {
 	    s_num_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
 		s_num_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_NumPlayerSpinner, NULL);
@@ -261,7 +261,7 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	}
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "MaxPlayerSpinner");
-    if (g_ui->GetLdl()->IsValid(controlBlock))
+    if (aui_Ldl::IsValid(controlBlock))
     {
         s_max_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
 		s_max_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_MaxPlayerSpinner, NULL);
@@ -277,7 +277,7 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	}
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerSpinner");
-    if (g_ui->GetLdl()->IsValid(controlBlock))
+    if (aui_Ldl::IsValid(controlBlock))
     {
 	    s_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock);
 		s_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_PlayerSpinner, NULL);

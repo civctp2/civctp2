@@ -40,6 +40,7 @@
 #include "aui_uniqueid.h"
 #include "c3window.h"
 #include "c3_static.h"
+#include "gstypes.h"            // TERRAIN_TYPES
 #include "primitives.h"
 #include "SelItem.h"
 #include "TerrImprovePool.h"
@@ -192,7 +193,7 @@ sint32 tileimptracker_Initialize()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void tileimptracker_DisplayData(MapPoint &p, sint32 type)
+void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 {
 	if(!g_tileImpTrackerWindow) {
 		tileimptracker_Initialize();
@@ -231,7 +232,7 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 		g_tileImpTrackerWindow->Move(x,y);
 
-		TERRAIN_TYPES terr = g_theWorld->GetTerrainType(p);
+//		TERRAIN_TYPES terr = g_theWorld->GetTerrainType(p);
 
 		sint32  mat, time,
 		        food, production,
@@ -247,7 +248,7 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 		if(rec->GetClassTerraform())
 		{
-			const TerrainRecord *oldT = g_theTerrainDB->Get(cell->GetTerrainType());
+//			const TerrainRecord *oldT = g_theTerrainDB->Get(cell->GetTerrainType());
 			sint32 t;
 			if(rec->GetTerraformTerrainIndex(t)) {
 				const TerrainRecord *newT = g_theTerrainDB->Get(t);
@@ -256,17 +257,13 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 				sint32 oldGold = cell->GetGoldProduced();
 				
 				sint32 newFood = newT->GetEnvBase()->GetFood();
-				if(cell->HasRiver() && newT->HasEnvRiver()) {
-					newFood += newT->GetEnvRiverPtr()->GetFood();
-				}
-				
 				sint32 newProd = newT->GetEnvBase()->GetShield();
-				if(cell->HasRiver() && newT->HasEnvRiver()) {
-					newProd += newT->GetEnvRiverPtr()->GetShield();
-				}
-				
 				sint32 newGold = newT->GetEnvBase()->GetGold();
-				if(cell->HasRiver() && newT->HasEnvRiver()) {
+
+				if (cell->HasRiver() && newT->HasEnvRiver()) 
+                {
+					newFood += newT->GetEnvRiverPtr()->GetFood();
+					newProd += newT->GetEnvRiverPtr()->GetShield();
 					newGold += newT->GetEnvRiverPtr()->GetGold();
 				}
 				
@@ -358,10 +355,9 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 	}
 }
 
-static void mycleanup(c3_Static **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(C3Window **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
+static void mycleanup(c3_Static * & mypointer)
+{ delete mypointer; mypointer = NULL; }
+
 
 //----------------------------------------------------------------------------
 //
@@ -380,36 +376,27 @@ static void mycleanup(C3Window **mypointer)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 tileimptracker_Cleanup()
+void tileimptracker_Cleanup()
 {
-	if(!g_tileImpTrackerWindow) return 1;
-	
-	g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
+	if (g_tileImpTrackerWindow && g_c3ui)
+    {
+    	g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
+    }
 
-	
-	
-	mycleanup(&s_trackerBackground);
-
-	mycleanup(&s_trackerTimeN);
-	mycleanup(&s_trackerTimeV);
-
-	mycleanup(&s_trackerMatN);
-	mycleanup(&s_trackerMatV);
-
-
-
-
-	mycleanup(&s_trackerFoodN);
-	mycleanup(&s_trackerFoodV);
-	mycleanup(&s_trackerProductionN);
-	mycleanup(&s_trackerProductionV);
-	mycleanup(&s_trackerGoldN);
-	mycleanup(&s_trackerGoldV);
+	mycleanup(s_trackerBackground);
+	mycleanup(s_trackerTimeN);
+	mycleanup(s_trackerTimeV);
+	mycleanup(s_trackerMatN);
+	mycleanup(s_trackerMatV);
+	mycleanup(s_trackerFoodN);
+	mycleanup(s_trackerFoodV);
+	mycleanup(s_trackerProductionN);
+	mycleanup(s_trackerProductionV);
+	mycleanup(s_trackerGoldN);
+	mycleanup(s_trackerGoldV);
 
 	delete g_tileImpTrackerWindow;
 	g_tileImpTrackerWindow = NULL;
-	
-	return 0;
 }
 
 //----------------------------------------------------------------------------

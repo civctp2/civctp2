@@ -942,7 +942,9 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 		percentComplete = 1.0;
 
 	RECT destRect = rect;
-	destRect.right = destRect.left + percentComplete * (destRect.right - destRect.left);
+	destRect.right = 
+        destRect.left + 
+        static_cast<LONG>(percentComplete * (destRect.right - destRect.left));
 
 	g_c3ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,255), 0);
 	return AUI_ERRCODE_OK;

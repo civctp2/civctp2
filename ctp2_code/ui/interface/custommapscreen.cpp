@@ -468,12 +468,13 @@ void custommapscreen_setValues(
 	sint32 richness =
 		(sint32)g_theConstDB->RichnessManygoods() * goodcount +
 		(sint32)g_theConstDB->RichnessFewgoods() * ( 10 - goodcount );
+#if 0   // Unused
 	sint32 riverCellWidth =
 		(sint32)g_theConstDB->RiverCellWidthManygoods() * goodcount +
 		(sint32)g_theConstDB->RiverCellWidthFewgoods() * ( 10 - goodcount );
 	sint32 riverCellHeight =
 		(sint32)g_theConstDB->RiverCellHeightManygoods() * goodcount +
 		(sint32)g_theConstDB->RiverCellHeightFewgoods() * ( 10 - goodcount );
-
+#endif
 	g_theProfileDB->SetPercentRichness( sint32(richness / 10) );
 }

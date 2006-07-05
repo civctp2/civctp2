@@ -64,11 +64,12 @@ static BevelLessWindow *s_controlPiece = NULL;
 
 int AncientWindows_PreInitialize(void)
 {
+return 0;
+#if 0 // CTP1?
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE	errcode;
 
-return 0;
 
 	sprintf(windowBlock, "%s", "LowerRight");
 
@@ -82,6 +83,7 @@ return 0;
 	if ( !AUI_NEWOK(s_imageLowerRight, errcode) ) return -1;
 
 	return 0;
+#endif
 }
 
 sint32 ancientwindows_GetControlPieceY( void )
@@ -106,54 +108,14 @@ BevelLessWindow		*s_controlPanelRightHat=NULL;
 
 int AncientWindows_Initialize( void )
 {
+return 0;
+
+#if 0 // CTP1?
 
 	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-
-
-	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-return 0;
-
-	
-	
-
-	
 	sprintf(windowBlock, "%s", "ControlPiece");
 	s_controlPiece = new BevelLessWindow(&errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_BACKGROUND );
 	Assert( AUI_NEWOK(s_controlPiece, errcode) );
@@ -346,6 +308,7 @@ return 0;
 
 
 	return 0;
+#endif
 }
 
 int AncientWindows_Cleanup( void )
@@ -363,7 +326,7 @@ int AncientWindows_Cleanup( void )
 
 return 0;
 
-
+#if 0 // CTP1?
 
 	g_c3ui->RemoveWindow( s_lowerRight->Id() );
 
@@ -440,4 +403,5 @@ return 0;
 
 
 	return 0;
+#endif
 }

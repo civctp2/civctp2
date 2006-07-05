@@ -202,56 +202,38 @@ sint32 helptile_Initialize( void )
 
 
 
-static void mycleanup(c3_Static **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(ctp2_Button **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(c3_ListBox **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(C3Window **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(TileControl **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(aui_StringTable **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
+template <typename T>
+static void mycleanup(T * & mypointer)
+{ delete mypointer; mypointer = NULL; }
 
-sint32 helptile_Cleanup( void )
+void helptile_Cleanup( void )
 {
-	if ( !g_helpTileWindow) return 1; 
-	
-	g_c3ui->RemoveWindow( g_helpTileWindow->Id() );
+	if (g_helpTileWindow && g_c3ui)
+    {
+	    g_c3ui->RemoveWindow(g_helpTileWindow->Id());
+    }
 
-
-	
-
-	
-	mycleanup(&s_tileFood);
-	mycleanup(&s_tileProd);
-	mycleanup(&s_tileGood);
-	mycleanup(&s_tileMove);
-	mycleanup(&s_tileSale);
-	mycleanup(&s_tileFoodV);
-	mycleanup(&s_tileProdV);
-	mycleanup(&s_tileGoodV);
-	mycleanup(&s_tileMoveV);
-	mycleanup(&s_tileSaleV);
-	mycleanup(&s_tileGold);
-	mycleanup(&s_tileGoldV);
-
-	mycleanup(&s_stringTable);
-
-	mycleanup(&s_tileImage);
-	mycleanup(&s_tileITop);
-	mycleanup(&s_tileIBottom);
-	mycleanup(&s_tileITL);
-	mycleanup(&s_tileITR);
-	mycleanup(&s_tileIBL);
-	mycleanup(&s_tileIBR);
-
-	delete g_helpTileWindow;
-	g_helpTileWindow = NULL;
-	
-	return 0;
+	mycleanup(s_tileFood);
+	mycleanup(s_tileProd);
+	mycleanup(s_tileGood);
+	mycleanup(s_tileMove);
+	mycleanup(s_tileSale);
+	mycleanup(s_tileFoodV);
+	mycleanup(s_tileProdV);
+	mycleanup(s_tileGoodV);
+	mycleanup(s_tileMoveV);
+	mycleanup(s_tileSaleV);
+	mycleanup(s_tileGold);
+	mycleanup(s_tileGoldV);
+	mycleanup(s_stringTable);
+	mycleanup(s_tileImage);
+	mycleanup(s_tileITop);
+	mycleanup(s_tileIBottom);
+	mycleanup(s_tileITL);
+	mycleanup(s_tileITR);
+	mycleanup(s_tileIBL);
+	mycleanup(s_tileIBR);
+    mycleanup(g_helpTileWindow);
 }
 
 
@@ -276,7 +258,6 @@ void helptile_displayData(const MapPoint &p)
 // Added by Martin Gühmann
 
 	UnseenCellCarton ucell;
-	BOOL hasUnseen = FALSE;
 	if(!g_tiledMap->GetLocalVision()->IsVisible(p) 
 	&& !g_fog_toggle 
 	&& !g_god 
@@ -372,15 +353,12 @@ void helptile_displayData(const MapPoint &p)
 
 void helptile_setPosition(const MapPoint& p)
 {
-
 	sint32 i,j;
 	maputils_WrapPoint(p.x,p.y,&j,&i);
 
-	
-	sint32 k,x,y;
-	k = maputils_TileX2MapX(j,i);
+	MapPoint pos (maputils_TileX2MapX(j,i), i);
 
-	MapPoint pos (k, i);
+	sint32 x,y;
 	maputils_MapXY2PixelXY(p.x,p.y,&x,&y);
 	g_helpTileWindow->Move(x,y);	
 }

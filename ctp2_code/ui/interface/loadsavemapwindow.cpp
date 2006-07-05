@@ -209,7 +209,7 @@ LoadSaveMapWindow::~LoadSaveMapWindow()
 {
 	CleanUpSaveMapInfo();
 
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
 
 	mycleanup(m_nameString);
 
@@ -248,23 +248,18 @@ void LoadSaveMapWindow::FillListOne(void)
 
 	m_listOne->Clear();
 
-	PointerList<GameMapInfo>::Walker *walker = new PointerList<GameMapInfo>::Walker(m_fileList);
+	PointerList<GameMapInfo>::Walker walker = PointerList<GameMapInfo>::Walker(m_fileList);
 
 	
-	while (walker->IsValid()) {
-		LSMGameMapsListItem *item = new LSMGameMapsListItem(
-			&errcode,
-			"LSMGameMapsListItem", 
-			walker->GetObj());
+	for ( ; walker.IsValid(); walker.Next()) 
+    {
+		LSMGameMapsListItem *item = new LSMGameMapsListItem
+            (&errcode, "LSMGameMapsListItem", walker.GetObj());
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
 
 		m_listOne->AddItem(item);
-
-		walker->Next();
 	}
-
-	delete walker;
 }
 
 
@@ -278,37 +273,23 @@ void LoadSaveMapWindow::FillListTwo(GameMapInfo *info)
 
 	m_listTwo->Clear();
 
-	switch ( m_type )
-	{
-	case LSMS_LOAD_GAMEMAP:
-		Ok()->Enable(FALSE);
-		break;
+	Ok()->Enable(LSMS_LOAD_GAMEMAP != m_type);
 
-	default:
-		Ok()->Enable(TRUE);
-		break;
-	}
-
-	SetSaveMapInfo(NULL);
+    SetSaveMapInfo(NULL);
 
 	if ( info )
 	{
-		PointerList<SaveMapInfo>::Walker *walker = new PointerList<SaveMapInfo>::Walker(info->files);
+		PointerList<SaveMapInfo>::Walker walker = PointerList<SaveMapInfo>::Walker(info->files);
 
-		while (walker->IsValid()) {
-			LSMSaveMapsListItem *item = new LSMSaveMapsListItem(
-				&errcode,
-				"LSMSaveMapsListItem",
-				walker->GetObj());
+		for ( ; walker.IsValid(); walker.Next()) 
+        {
+			LSMSaveMapsListItem *item = new LSMSaveMapsListItem
+                (&errcode, "LSMSaveMapsListItem", walker.GetObj());
 			Assert(errcode == AUI_ERRCODE_OK);
 			if (errcode != AUI_ERRCODE_OK) return;
 
 			m_listTwo->AddItem(item);
-
-			walker->Next();
 		}
-
-		delete walker;
 	}
 }
 
@@ -473,14 +454,11 @@ void LoadSaveMapWindow::CleanUpSaveMapInfo( void )
 
 void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 {
-	RadarMap	*radarMap;
-	AUI_ERRCODE	errcode;
-	sint32		width, height;
-
-	width = m_mapTabImage->Width();
-	height = m_mapTabImage->Height();
-
-	radarMap = new RadarMap(&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
+	AUI_ERRCODE	    errcode     = AUI_ERRCODE_OK;
+	sint32 const    width       = m_mapTabImage->Width();
+	sint32 const    height      = m_mapTabImage->Height();
+	RadarMap *      radarMap    = new RadarMap
+        (&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
 	if (!radarMap) return;
 
 	
@@ -493,17 +471,14 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	info->radarMapHeight = height;
 	info->radarMapData = new Pixel16[width*height];
 
-	sint32		i;
-	Pixel16		*buffer, *bufferDataPtr, *radarDataPtr;
-	sint32		pitch;
-
-	radarDataPtr = info->radarMapData;
+	Pixel16		*buffer, *bufferDataPtr;
+	Pixel16 *   radarDataPtr = info->radarMapData;
 
 	if (surf->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) return;
-	pitch = surf->Pitch();
+	sint32      pitch = surf->Pitch();
 
-	
-	for (i=0; i<height; i++) {
+	for (sint32 i = 0; i < height; i++) 
+    {
 		bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(radarDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 
@@ -567,11 +542,9 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 
 	aui_Surface		*surface = image->TheSurface();
 
-	sint32		i;
-	Pixel16		*buffer, *bufferDataPtr, *radarDataPtr;
-	sint32		pitch;
+	Pixel16		*buffer, *bufferDataPtr;
 
-	radarDataPtr = info->radarMapData;
+	Pixel16 *   radarDataPtr = info->radarMapData;
 
 	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) {
 		delete surface;
@@ -579,10 +552,10 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 		return;
 	}
 
-	pitch = surface->Pitch();
+	sint32 const    pitch = surface->Pitch();
 
-	
-	for (i=0; i<height; i++) {
+	for (sint32 i = 0; i < height; i++) 
+    {
 		bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
 
@@ -792,7 +765,9 @@ LSMGameMapsListItem::~LSMGameMapsListItem()
 
 sint32 LSMGameMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 {
+#if 0
 	LSMGameMapsListItem *item = (LSMGameMapsListItem *)item2;
+#endif
 
 	return 0;
 }
@@ -837,7 +812,9 @@ LSMSaveMapsListItem::~LSMSaveMapsListItem()
 
 sint32 LSMSaveMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 {
+#if 0
 	LSMSaveMapsListItem *item = (LSMSaveMapsListItem *)item2;
+#endif
 
 	return 0;
 }

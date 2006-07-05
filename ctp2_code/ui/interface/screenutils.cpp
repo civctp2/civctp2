@@ -423,11 +423,11 @@ sint32 open_OptionsScreen( sint32 fromWhichScreen )
 
 	sint32 err = optionsscreen_displayMyWindow( fromWhichScreen );
 	
-	return err;
-
 #ifdef _DEBUG
 	GET_ELAPSED_TIME( "Options Screen" );
 #endif // _DEBUG
+
+	return err;
 }
 
 sint32 close_OptionsScreen( void )
@@ -495,45 +495,18 @@ sint32 close_KeyMappingScreen( void )
 
 sint32 open_EndGame() 
 {
+#if 0   // CTP1?
 	if(g_e3Demo) return 0;
 
-	
-	
-	
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
-
-	
-	
-	
-	
-	
-	
-
-	
-	
-
-	
-	
-	
-
-	
-	return(0);
+#endif
+	return 0;
 }
 
 
 sint32 close_EndGame( void )
 {
-	
-	
-	
-	
-
-	
-	
-	
-
-	
-	return(0);
+	return 0;
 }
 
 sint32 open_TutorialWin( void )

@@ -43,61 +43,47 @@ Picture::Picture(
 
 AUI_ERRCODE Picture::MakeMipmap( void )
 {
-	
-	if ( m_surface->BitsPerPixel() != 16 ) return AUI_ERRCODE_INVALIDPARAM;
+	Assert(m_surface);
+	if (m_surface == NULL) return AUI_ERRCODE_INVALIDPARAM;
+	if (m_surface->BitsPerPixel() != 16) return AUI_ERRCODE_INVALIDPARAM;
 
-	BYTE *pDestBuffer;
-	BYTE *pSrcBuffer;
-
-	aui_Surface *pSrcSurf = m_surface;
-
-	Assert(pSrcSurf);
-	if (pSrcSurf==NULL) return AUI_ERRCODE_INVALIDPARAM;
-
-	sint32 errcode;
 
 	
 	aui_Surface *pMipmap = NULL;
 
-	
-	errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
+
+	aui_Surface *   pSrcSurf    = m_surface;
+	uint16 *        pSrcBuffer  = NULL;
+	sint32 errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
+
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-
-		
 		sint32 srcWidth = pSrcSurf->Width();
 		sint32 srcHeight = pSrcSurf->Height();
-		sint32 srcPitch = pSrcSurf->Pitch();
-
-		
-		uint16 *pSrcPixel;
-		uint16 *pDestPixel;
-
-		
 		sint32 mipWidth = srcWidth >> 1;
 		sint32 mipHeight = srcHeight >> 1;
 		sint32 mipBpp = 16;
-		sint32 mipSize = (mipWidth*mipHeight) << 1;
 
 		AUI_ERRCODE retcode;
 		pMipmap = new aui_DirectSurface(&retcode,mipWidth,mipHeight,mipBpp,g_c3ui->DD());
 		Assert(pMipmap);
-		if (pMipmap != NULL)
+		if (pMipmap)
 		{
-			
+	        uint16 *  pDestBuffer = NULL;
 			errcode = pMipmap->Lock(NULL, (LPVOID *)&pDestBuffer, 0);
+
 			if (errcode == AUI_ERRCODE_OK)
 			{
 
-				pSrcPixel = (uint16 *)pSrcBuffer;
-				pDestPixel = (uint16 *)pDestBuffer;
+				uint16 * pSrcPixel  = pSrcBuffer;
+				uint16 * pDestPixel = pDestBuffer;
 
-				for (sint32 i=0;i < mipHeight;i++)
+				for (sint32 i=0; i < mipHeight; i++)
 				{
-					pSrcPixel = (uint16 *)pSrcBuffer + (i<<1) * srcWidth;
+					pSrcPixel = pSrcBuffer + (i<<1) * srcWidth;
 					for (sint32 j=0;j < mipWidth;j++)
 					{
-						*pDestPixel++ = AveragePixels((uint16 *)pSrcPixel,srcWidth);
+						*pDestPixel++ = AveragePixels(pSrcPixel, srcWidth);
 						pSrcPixel += 2;
 					}
 				}
@@ -164,11 +150,7 @@ Pixel16 Picture::AveragePixels( uint16 *pBuffer, sint32 width )
 
 Picture::~Picture()
 {
-	if ( m_mipmap )
-	{
-		delete m_mipmap;
-		m_mipmap = NULL;
-	}
+	delete m_mipmap;
 }
 
 
@@ -237,22 +219,11 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 			errcode = pDestSurf->Lock(NULL, (LPVOID *)&pDestBuffer, 0);
 			if (errcode == AUI_ERRCODE_OK)
 			{
-
-				
 				sint32 srcWidth = pSrcSurf->Width();
 				sint32 srcHeight = pSrcSurf->Height();
-				sint32 srcPitch = pSrcSurf->Pitch();
-
 				sint32 mipWidth = pMipSurf->Width();
 				sint32 mipHeight = pMipSurf->Height();
-				sint32 mipPitch = pSrcSurf->Pitch();
-
-			
-			
 				sint32 destPitch = pDestSurf->Pitch();
-
-				
-			
 			
 				uint16 *pDestPixel;
 				sint32 inc = (destPitch >> 1) - width;

@@ -66,13 +66,10 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 {
 	if ( action != 0) return; 
 
-	Message *message;
-	MessageList *messagelist = NULL;
-	tech_WLList<MessageIconWindow *>	*windowlist = NULL;
+	Message *   message = m_iconWindow->GetMessage();
 	
-	if ( !(message = m_iconWindow->GetMessage( ))) return;
-
-	if(!g_theMessagePool->IsValid(*message)) return;
+	if (!message) return;
+	if (!g_theMessagePool->IsValid(*message)) return;
 
 	if ( data ) {
 		
@@ -95,11 +92,12 @@ void MessageOpenAction::Execute( aui_Control *control, uint32 action, uint32 dat
 	}
 
 	
-	MBCHAR *wavName = NULL;
-	if ( wavName = ( MBCHAR * ) message->AccessData()->GetMsgOpenSound() ) {
-		MBCHAR filename[ _MAX_PATH ]; 
-		g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
-		PlaySound( filename, NULL, SND_ASYNC | SND_FILENAME ); 
+	MBCHAR const *  wavName = message->AccessData()->GetMsgOpenSound();
+	if (wavName)  
+    {
+		MBCHAR filename[_MAX_PATH]; 
+		g_civPaths->FindFile(C3DIR_SOUNDS, wavName, filename);
+		PlaySound(filename, NULL, SND_ASYNC | SND_FILENAME); 
 	}
 }
 
@@ -273,7 +271,6 @@ void MessageListboxEyePointAction::Execute( aui_Control *control, uint32 action,
 {
 	if ( action != ( uint32 )AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	MapPoint pos;
 	Message *message;
 
 	if ( m_window ) 
@@ -289,10 +286,8 @@ void MessageListboxEyePointAction::Execute( aui_Control *control, uint32 action,
 	if(!g_theMessagePool->IsValid(*message))
 		return;
 
-	
+	MapPoint pos;
 	message->AccessData()->GetEyePointMapPosition( m_index, pos );
-
-	
 	g_radarMap->CenterMap( pos );
 
 	
@@ -306,15 +301,12 @@ void MessageListboxEyePointAction::Execute( aui_Control *control, uint32 action,
 
 void MessageResponseUIAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
-	Message *message = m_window->GetMessage();
-	Assert( message != NULL );
-	if ( message == NULL ) return;
-	
-	if(!g_theMessagePool->IsValid(*message))
-		return;
+	Message *   message = m_window->GetMessage();
 
-	
-	m_window->GetMessage()->AccessData()->GetButton( m_response )->Callback();
+    if (message && g_theMessagePool->IsValid(*message))
+    {
+    	m_window->GetMessage()->AccessData()->GetButton( m_response )->Callback();
+    }
 }
 
 
@@ -355,33 +347,22 @@ void MessageResponseSubmitAction::Execute( aui_Control *control, uint32 action, 
 {
 	if ( action != ( uint32 )AUI_LISTBOX_ACTION_SELECT ) return;
 
-	Message *message = m_window->GetMessage();
+	Message *   message = m_window->GetMessage();
 
-	sint32 index = ((aui_ListBox *)m_dropdown)->GetSelectedItemIndex();
-
-	if(!g_theMessagePool->IsValid(*m_window->GetMessage()))
-		return;
-
-	
-	m_window->GetMessage()->AccessData()->GetButton( index )->Callback();
-
+	if (message && g_theMessagePool->IsValid(*message))
+    {
+    	sint32 index = ((aui_ListBox *) m_dropdown)->GetSelectedItemIndex();
+	    message->AccessData()->GetButton(index)->Callback();
+    }
 }
 
 
 
 void MessageCleanupAction::Execute( aui_Control *control, uint32 action, uint32 data )
 {
-	MessageList *messagelist;
-	
 	messagewin_CleanupMessage( m_iconWindow );
-
-	messagelist = messagewin_GetPlayerMessageList( m_index );
-	
-	
+	MessageList *   messagelist = messagewin_GetPlayerMessageList(m_index);
 	messagelist->CheckVisibleMessages( );
-
-
-
 }
 
 

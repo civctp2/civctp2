@@ -530,13 +530,6 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 
 
 
-	sint32 myTotalStrength = 0;
-	sint32 hisTotalStrength = 0;
-
-	
-	
-
-	
 	DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayer());
 	
 	if(!sm_strengthImages) {
@@ -585,7 +578,6 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 											RECT &rect,
 											void *cookie)
 {
-	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
 	sint32 p = (sint32)cookie;
 
@@ -640,16 +632,12 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 											 RECT &rect,
 											 void *cookie)
 {
-	sint32 p = (sint32)cookie;
+	sint32 p    = (sint32) cookie;
 	sint32 visP = g_selected_item->GetVisiblePlayer();
-
-	sint32 x = 0;
-
-	sint32 ag;
 	sint32 slot;
-	sint32 embargo_slot = -1;
-	for(ag = 1; ag < PROPOSAL_MAX; ag++) {
 
+	for (sint32 ag = 1; ag < PROPOSAL_MAX; ++ag) 
+    {
 		const DiplomacyProposalRecord *rec = 
 			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
@@ -677,17 +665,17 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 		image->SetChromakey(255,0,255);
 		
 		
-		x = image->TheSurface()->Width() * slot;
+		sint32 x = image->TheSurface()->Width() * slot;
 		
 		g_c3ui->TheBlitter()->Blt(surface, rect.left + x, 
 			rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
 			image->TheSurface(),
 			&srcRect,
 			k_AUI_BLITTER_FLAG_CHROMAKEY);
-
+		
 		g_c3ui->UnloadImage(image);
 	}
-
+	
 	return AUI_ERRCODE_OK;
 }
 

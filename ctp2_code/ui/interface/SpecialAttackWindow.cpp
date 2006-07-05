@@ -85,22 +85,20 @@ sint32 specialAttackWindow_Initialize()
 	Assert(AUI_NEWOK(g_theSpecialAttackWindow, errcode));
 	if(!AUI_SUCCESS(errcode)) return -1;
 
-	aui_Ldl * theLdl = g_ui->GetLdl();
-
 	sprintf(controlBlock, "%s.%s", textBlock, "SpecialAttackCostN");
-    if (theLdl->IsValid(controlBlock))
+    if (aui_Ldl::IsValid(controlBlock))
     {
 	    s_saWindowCostN = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
     }
 
 	sprintf(controlBlock, "%s.%s", textBlock, "SpecialAttackCostV");
-    if (theLdl->IsValid(controlBlock))
+    if (aui_Ldl::IsValid(controlBlock))
     {
 	    s_saWindowCostV = new c3_Static( &errcode, aui_UniqueId(), controlBlock);
     }
 
 	sprintf(controlBlock, "%s.%s", textBlock, "Background");
-    if (theLdl->IsValid(controlBlock))
+    if (aui_Ldl::IsValid(controlBlock))
     {
 	    s_saWindowBackground = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
     }

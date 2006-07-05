@@ -768,7 +768,7 @@ SpriteEditWindow::BeginAnimation()
 	if (m_currentAnim==NULL)
 		return;
 
-	sint32	  speed				= g_theProfileDB->GetUnitSpeed();
+//	sint32	  speed				= g_theProfileDB->GetUnitSpeed();
 
 	
 	m_frame = 0;
@@ -803,30 +803,29 @@ void
 SpriteEditWindow::Animate()
 {
 	BOOL	animation_over=false;
-	sint32 	last_frame=m_frame,num_frames=0;
 
-	
-	if (m_currentAnim!=NULL)
+    if (m_currentAnim)
 	{
 		m_currentAnim->SetWeAreInDelay(FALSE);
 
 		m_actionObj->Process();
 		
-		sint32 animPos=m_actionObj->GetAnimPos();
+		sint32 animPos = m_actionObj->GetAnimPos();
 
 		m_frame = m_currentAnim->GetFrame(animPos);
 
-		num_frames = m_currentAnim->GetNumFrames();
+		sint32 num_frames = m_currentAnim->GetNumFrames();
 		
 		
-		if (animPos>=num_frames)
+		if (animPos >= num_frames)
 		{
 			animation_over = true;
 			m_frame = 0;
 		}
-		else
-			if (m_actionObj->Finished())
-				animation_over = true;
+		else if (m_actionObj->Finished())
+        {
+			animation_over = true;
+        }
 	}
 	else
 	{
@@ -862,13 +861,14 @@ SpriteEditWindow::DrawSprite( )
 			m_currentSprite->Draw((UNITACTION)m_animation,m_frame,m_drawX,m_drawY,m_facing,1.0,15,0,k_DRAWFLAGS_NORMAL,false,false);
 
 		
-		sint32 flagX, flagY;
-		maputils_MapXY2PixelXY(m_drawPoint.x, m_drawPoint.y, &flagX, &flagY);
+		POINT flag;
+		maputils_MapXY2PixelXY(m_drawPoint.x, m_drawPoint.y, flag);
 		
 		POINT *hPoint = m_currentSprite->GetShieldPoints((UNITACTION)m_animation);
-		if(hPoint) {
-			flagX += hPoint->x;
-			flagY += hPoint->y;
+		if (hPoint) 
+        {
+			flag.x += hPoint->x;
+			flag.y += hPoint->y;
 		}
 
 		MAPICON icon = MAPICON_HERALD;
@@ -882,7 +882,7 @@ SpriteEditWindow::DrawSprite( )
 		
 		Pixel16 blue = pixelutils_RGB(0,0,255);
 
-		g_tiledMap->DrawColorizedOverlayIntoMix(g_tiledMap->GetTileSet()->GetMapIconData(icon), flagX, flagY, blue);
+		g_tiledMap->DrawColorizedOverlayIntoMix(g_tiledMap->GetTileSet()->GetMapIconData(icon), flag.x, flag.y, blue);
 
 		g_tiledMap->AddDirtyRectToMix(rect);
 	}

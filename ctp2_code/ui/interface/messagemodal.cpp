@@ -306,23 +306,11 @@ AUI_ERRCODE MessageModal::CreateResponses( MBCHAR *ldlBlock )
 	MessageModalResponseAction	*action = NULL;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	const MBCHAR	*text = NULL;
-	sint32			count = 0;
 	sint32			responseCount = 0;
 	SlicButton		*sButton = NULL;
 
-	
-	m_messageModalResponseButton = NULL;
-	m_messageModalResponseAction = NULL;
-
-	
 	m_messageModalResponseButton = new tech_WLList<ctp2_Button *>;
-	Assert( m_messageModalResponseButton != NULL );
-	if ( m_messageModalResponseButton == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
-
-	
 	m_messageModalResponseAction = new tech_WLList<MessageModalResponseAction *>;
-	Assert( m_messageModalResponseAction != NULL );
-	if ( m_messageModalResponseAction == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	sint32 textlength = k_MODAL_BUTTON_DEFAULT_WIDTH;
 

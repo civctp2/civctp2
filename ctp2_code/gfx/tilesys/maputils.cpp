@@ -199,7 +199,6 @@ void maputils_MapXY2PixelXY(
 	sint32		tileWidth = k_TILE_PIXEL_WIDTH + 2;
 
 	sint32		tileHeight = k_TILE_PIXEL_HEIGHT;
-	double		scale = g_tiledMap->GetScale();
 	RECT		*mapViewRect = g_tiledMap->GetMapViewRect();
 
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
@@ -308,6 +307,20 @@ void maputils_MapXY2PixelXY(
 
 	*pixelX -= xoff;
 	*pixelY -= yoff;
+}
+
+void maputils_MapXY2PixelXY
+(
+    sint32  mapX,
+    sint32  mapY,
+    POINT & pixel
+)
+{
+    sint32  pixelX;
+    sint32  pixelY;
+    maputils_MapXY2PixelXY(mapX, mapY, &pixelX, &pixelY);
+    pixel.x = pixelX;
+    pixel.y = pixelY;
 }
 
 void maputils_MapXY2PixelXY(

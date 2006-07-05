@@ -1579,35 +1579,32 @@ bool DiplomacyWindow::AddProposalData(SlicObject &so, sint32 proposal, Diplomacy
 
 bool DiplomacyWindow::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg)
 {
-	
-	
 	const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(threat);
 	Assert(rec);
 	if(!rec)
 		return false;
 
-	switch(rec->GetArg1()) {
-		case k_DiplomacyThreat_Arg1_HisCity_Bit:
-		case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-		{
-			Unit city(arg.cityId);
-			if(city.IsValid()) {
-				so.AddCity(Unit(arg.cityId));
-				return true;
-			} else {
-				return false;
-			}
-		}
-		case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-		{
-			so.AddPlayer(arg.playerId);
+	switch(rec->GetArg1()) 
+    {
+	case k_DiplomacyThreat_Arg1_HisCity_Bit:
+	case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
+	{
+		Unit city(arg.cityId);
+		if(city.IsValid()) {
+			so.AddCity(Unit(arg.cityId));
 			return true;
+		} else {
+			return false;
 		}
-		default:
-			return true;
 	}
-	Assert(false); 
-	return false;
+	case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
+	{
+		so.AddPlayer(arg.playerId);
+		return true;
+	}
+	default:
+		return true;
+	}
 }
 
 void DiplomacyWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2858,7 +2855,7 @@ void DiplomacyWindow::RejectCounter(aui_Control *control, uint32 action, uint32 
 		response.senderId = s_dipWindow->m_viewResponseSender;
 		response.receiverId = s_dipWindow->m_viewResponseReceiver;
 
-		RESPONSE_TYPE typeRespondingTo = Diplomat::GetDiplomat(s_dipWindow->m_viewResponseReceiver).GetResponsePending(s_dipWindow->m_viewResponseSender).type;
+//		RESPONSE_TYPE typeRespondingTo = Diplomat::GetDiplomat(s_dipWindow->m_viewResponseReceiver).GetResponsePending(s_dipWindow->m_viewResponseSender).type;
 
 		
 		response.type = RESPONSE_REJECT;

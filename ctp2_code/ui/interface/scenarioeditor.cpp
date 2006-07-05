@@ -80,6 +80,7 @@
 //Added by Martin Gühmann to have the appropiate number 
 //on the city style tab 
 #include "CityStyleRecord.h"
+#include "DifficultyRecord.h"   // g_theDifficultyDB
 
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -147,7 +148,6 @@
 #include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"
-#include "DifficultyRecord.h"
 
 extern C3UI *g_c3ui;
 
@@ -2772,8 +2772,8 @@ void ScenarioEditor::SetupGlobalControls()
 
 	sint32 i;
 	ctp2_DropDown *dd;
-	ctp2_ListItem *item = NULL;
-	ctp2_Static *box = NULL;
+//	ctp2_ListItem *item = NULL;
+//	ctp2_Static *box = NULL;
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
 
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
@@ -3386,7 +3386,7 @@ void ScenarioEditor::RemoveGoods(aui_Control *control, uint32 action, uint32 dat
 
 	for(sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(sint32 y = 0; y < g_theWorld->GetYHeight(); y++) {
-			Cell *cell = g_theWorld->GetCell(x, y);
+//			Cell *cell = g_theWorld->GetCell(x, y);
 			g_theWorld->ClearGoods(x,y);		
 		}
 	}
