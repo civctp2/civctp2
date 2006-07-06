@@ -102,5 +102,6 @@ sint32 wonderutil_GetProductionCost(sint32 wonder);
 sint32 wonderutil_GetGaiaIndex();
 sint32 wonderutil_GetFobCityIndex();
 sint32 wonderutil_GetGoldPerBuildingAnywhere(const uint64 builtWonders); //EMOD
+sint32 wonderutil_GetEnablesPunativeAirstrikes(const uint64 builtWonders); //EMOD
 
 #endif

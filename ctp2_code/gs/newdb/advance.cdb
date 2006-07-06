@@ -53,6 +53,12 @@ Advance {
 	Bit AlienLife
 	Bit MagLev
 	Bit Tunnels
+	// added to enable advance bonuses
+	Int        BonusHappy        = 0         // Added by E when a city has or buying a good it gets a bonus
+	Int        BonusGold         = 0
+	Int        BonusFood         = 0
+	Int        BonusProduction   = 0
+	Int        BonusScience      = 0    
 	//added for future tech option
 	Bit(Float) ProductionPercent
 	Bit(Float) FoodPercent

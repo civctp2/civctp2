@@ -152,7 +152,11 @@
 // - ExcludedbyBuilding and ExcludedbyWonder added to Units and buildings
 // - Added PrerequisiteWonder to Units and buildings
 // - Added NeedsFeatToBuild to Units
-// - Added Civ Bonuses to Food, Commerce, Production, Science
+// - Added Civ Bonuses to Food, Commerce, Production, Science by E Jul 3 2006
+// - Added IsBonusGood to FindGoodDistances enabling non-map goods to be
+//   collected by E Jul 3 2006
+// - Added Advances bonus, now some advances san add science, food, Production, 
+//   or Gold once discovered by E July 5 2006
 //
 //----------------------------------------------------------------------------
 
@@ -1750,6 +1754,18 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 			}
 		}
 	}
+// EMOD - Advances can add bonuses JULY 5 2006
+	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+		if (g_player[m_owner]->HasAdvance(i))
+		{	
+			AdvanceRecord const * advdata = g_theAdvanceDB->Get(i);
+			if (advdata)
+			{
+				gross_production += g_theAdvanceDB->Get(i)->GetBonusProduction();
+			}
+		}
+	}
+
 
 // end EMOD
 
@@ -2932,7 +2948,18 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 			}
 		}
 	}
-
+// EMOD - Advances can add bonuses JULY 5 2006
+	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+		if (g_player[m_owner]->HasAdvance(i))
+		{	
+			AdvanceRecord const * advdata = g_theAdvanceDB->Get(i);
+			if (advdata)
+			{
+				grossFood += g_theAdvanceDB->Get(i)->GetBonusFood();
+			}
+		}
+	}
+//end EMOD
 	producedFood = ProcessFinalFood(foodLostToCrime, grossFood);
 
 }
@@ -6828,7 +6855,18 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 			}
 		}
 	}
-
+// EMOD - Advances can add bonuses JULY 5 2006
+	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+		if (g_player[m_owner]->HasAdvance(i))
+		{	
+			AdvanceRecord const * advdata = g_theAdvanceDB->Get(i);
+			if (advdata)
+			{
+				sci += g_theAdvanceDB->Get(i)->GetBonusScience();
+			}
+		}
+	}
+//end EMOD
 
 	double p;
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), p);
@@ -8340,6 +8378,18 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 			}
 		}
 	}
+// EMOD - Advances can add bonuses JULY 5 2006
+	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+		if (g_player[m_owner]->HasAdvance(i))
+		{	
+			AdvanceRecord const * advdata = g_theAdvanceDB->Get(i);
+			if (advdata)
+			{
+				gold += g_theAdvanceDB->Get(i)->GetBonusGold();
+			}
+		}
+	}
+//end EMOD
 
 //EMOD moved to the end to avoid commercepercent multiplying flags that are likely to be used in the negative
 

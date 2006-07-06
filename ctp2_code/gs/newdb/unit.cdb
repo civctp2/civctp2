@@ -627,6 +627,7 @@ Unit {
 	Bit CanHarvest					// Added by E to add Gold and Shields from terrain
 	Bit CantGroup 					// For future use to make solo moving units
 	Bit SpawnsBarbarians			// Entrenched unit spawns barbs in foreign territory
+	Bit CanSinkInSea				// to implement ConstDb Chance_lost_at_sea
 
 	Bit Leader						// Special "king" unit
 }

@@ -451,3 +451,8 @@ sint32 wonderutil_GetGoldPerBuildingAnywhere(const uint64 builtWonders)
 {
 	INT_WNDR(HasGoldPerBuildingAnywhere, GetGoldPerBuildingAnywhere);
 }
+
+sint32 wonderutil_GetEnablesPunativeAirstrikes(const uint64 builtWonders)
+{
+	BOOL_WNDR(GetEnablesPunativeAirstrikes);
+}

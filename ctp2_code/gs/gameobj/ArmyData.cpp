@@ -96,6 +96,8 @@
 // - Implemented SpawnBarbairans units (E 6-10-2006)
 // - Fixed CanCloak (25th 2006 Martin Gühmann)
 // - Repaired some crashes.
+// - Implemented EnablesPunativeAirstrikes Wonder flag
+// - Implemented ConstDB ChanceLostAtSea
 //
 //----------------------------------------------------------------------------
 
@@ -1687,6 +1689,24 @@ void ArmyData::BeginTurn()
 //	for(it.Start(); !it.End(); it.Next()) {
 //		if(g_theWorld->GetArmy(it.Pos()), owner != m_owner
 //			m_array[i].DeductHP(1);
+
+
+// Lost at sea random chance
+   sint32 chance; 
+   if(g_theConstDB->PercentLostAtSea() > 0);
+		chance = g_theConstDB->PercentLostAtSea();
+	//TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
+		for(sint32 u = 0; u < m_nElements; u++) {
+			const UnitRecord *urec = m_array[u].GetDBRec();
+			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea())) //g_theWorld->IsWater(m_pos) trec->)
+			{
+				if(g_rand->Next(100) < sint32(chance)) {
+					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			}
+		}
+	}
+//
+//
 
 //END EMOD
 
@@ -5513,20 +5533,15 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 
 //EMOD
 			
-			// Add wondercheck for EnablesPunativeAirstrikes
+// Add wondercheck for EnablesPunativeAirstrikes	5 JUL 2006
 ////////////////////////
-//		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-//			if(!g_player[c.GetOwner()]->m_builtWonders & ((uint64)1 << (uint64)i))
-//				continue;
-//
-//			if(wonderutil_Get(i)->GetEnablesPunativeAirstrikes()) {
-//				so->AddWonder(i);
-//				break;
-//			}
-//		}
-//////////////////////
+			bool Punstrike = true;
+			if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
+				Punstrike = false;
+			}
+//END EMOD
 
-			if(!m_array[i].GetDBRec()->GetSneakBombard()) {  //EMOD added by E for sneak bombarding
+			if(!m_array[i].GetDBRec()->GetSneakBombard() && !Punstrike) {  //EMOD added by E for sneak bombarding
 				Diplomat & defending_diplomat = Diplomat::GetDiplomat(c.GetOwner());
 				defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 			}
@@ -5666,19 +5681,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 				if(numAttacks == 1){
                     // Inform defender 
 
-					//EMOD
-					// add WonderCheck for EnablesPunativeAirstrikes
-////////////////////////
-//		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-//			if(!g_player[c.GetOwner()]->m_builtWonders & ((uint64)1 << (uint64)i))
-//				continue;
-//
-//			if(wonderutil_Get(i)->GetEnablesPunativeAirstrikes()) {
-//				so->AddWonder(i);
-//				break;
-//			}
-//		}
-//////////////////////
+
 
 
  
@@ -5714,7 +5717,15 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 //emod
     
 	PLAYER_INDEX  defense_owner; 
-    defense_owner = defender.GetOwner(); 	
+    defense_owner = defender.GetOwner(); 
+	//EMOD
+	// add WonderCheck for EnablesPunativeAirstrikes
+	bool Punstrike = true;
+	if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
+		Punstrike = false;
+	}
+	
+
 	bool AlltaSneakBombard = true;
 
     for (i = m_nElements - 1; i>= 0; i--) { 
@@ -5743,10 +5754,11 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 		}
 		
 	
-	if(!AlltaSneakBombard && !AllDefSneakAttack){
+	if(!AlltaSneakBombard && !AllDefSneakAttack && !Punstrike){
 		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 		defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 	} 
+
 //end EMOD
 
 
