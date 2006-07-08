@@ -68,7 +68,7 @@ PERSONALITY_KAHN {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_LOW    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_LOW      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 100
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 200 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
 
@@ -84,6 +84,7 @@ PERSONALITY_KAHN {
 
   ThreatFollowThrough 0.5
   Description PERSONALITY_KAHN_DESCRIPTION
+  CitiesOverLimit 1000
 }
 
 PERSONALITY_GHANDI {
@@ -117,9 +118,9 @@ PERSONALITY_GHANDI {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 10
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Wide
   Expansion: Maximum
@@ -134,6 +135,7 @@ PERSONALITY_GHANDI {
   ThreatFollowThrough 0.9
 
   Description PERSONALITY_GHANDI_DESCRIPTION
+  CitiesOverLimit 10
 }
 
 PERSONALITY_STALIN {
@@ -169,9 +171,9 @@ PERSONALITY_STALIN {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH     Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 200 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
+  CitiesOverLimit 20
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Minimal
   Expansion: Average
@@ -185,6 +187,7 @@ PERSONALITY_STALIN {
 
   ThreatFollowThrough 0.8
   Description PERSONALITY_STALIN_DESCRIPTION
+  CitiesOverLimit 20
 }
 
 PERSONALITY_CEASAR {
@@ -218,9 +221,9 @@ PERSONALITY_CEASAR {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 1000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 1000 }
+  CitiesOverLimit 10
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Medium
   Expansion: Maximum
@@ -268,8 +271,8 @@ PERSONALITY_DEGAULLE {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 1000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Medium
   Expansion: Average
@@ -317,9 +320,9 @@ PERSONALITY_MEDICI {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 800 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 800 }
+  CitiesOverLimit 5
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Wide
   Expansion: Average
@@ -368,8 +371,8 @@ PERSONALITY_TELLER {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 700 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 800 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Minimal
   Expansion: Average
@@ -420,8 +423,8 @@ PERSONALITY_STRANGELOVE {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 200 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 1100 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Medium
   Expansion: Average
@@ -469,9 +472,9 @@ PERSONALITY_CALLENBACH {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 800 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 800 }
+  CitiesOverLimit 20
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Medium
   Expansion: Average
@@ -486,6 +489,7 @@ PERSONALITY_CALLENBACH {
   ThreatFollowThrough 0.7
 
   Description PERSONALITY_CALLENBACH_DESCRIPTION
+  CitiesOverLimit 15
 }
 
 PERSONALITY_NADER {
@@ -520,8 +524,8 @@ PERSONALITY_NADER {
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
   CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 1000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 200 }
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
   Exploration: Medium
   Expansion: Average

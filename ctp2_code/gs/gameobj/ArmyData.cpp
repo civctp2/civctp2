@@ -98,6 +98,7 @@
 // - Repaired some crashes.
 // - Implemented EnablesPunativeAirstrikes Wonder flag
 // - Implemented ConstDB ChanceLostAtSea
+// - added difficulty to make ai immune to sinking
 //
 //----------------------------------------------------------------------------
 
@@ -1693,15 +1694,19 @@ void ArmyData::BeginTurn()
 
 // Lost at sea random chance
    sint32 chance; 
-   if(g_theConstDB->PercentLostAtSea() > 0);
+   if(g_theConstDB->PercentLostAtSea() > 0){
 		chance = g_theConstDB->PercentLostAtSea();
 	//TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 		for(sint32 u = 0; u < m_nElements; u++) {
 			const UnitRecord *urec = m_array[u].GetDBRec();
-			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea())) //g_theWorld->IsWater(m_pos) trec->)
+			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea()) && (m_owner > 0)) //g_theWorld->IsWater(m_pos) trec->)
 			{
+				if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking() && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+					continue;
+
 				if(g_rand->Next(100) < sint32(chance)) {
 					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+				}
 			}
 		}
 	}
@@ -5718,13 +5723,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
     
 	PLAYER_INDEX  defense_owner; 
     defense_owner = defender.GetOwner(); 
-	//EMOD
-	// add WonderCheck for EnablesPunativeAirstrikes
-	bool Punstrike = true;
-	if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
-		Punstrike = false;
-	}
-	
+
 
 	bool AlltaSneakBombard = true;
 
@@ -5739,7 +5738,13 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 				AlltaSneakBombard = false;
 		}
 
-
+	//EMOD
+	// add WonderCheck for EnablesPunativeAirstrikes
+	bool Punstrike = true;
+	if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
+		Punstrike = false;
+	}
+	
 
 	bool AllDefSneakAttack = true;
 	for(i = 0; i < defender.Num(); i++) { 

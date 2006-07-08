@@ -33,6 +33,7 @@
 // - Added GoodHappinessIncrease if a good give a happy bonus then if the city 
 //   is buying or collecting then it will add to that city's happiness (4-27-2006 by E)
 // - Aded SectarianHappiness modifier by E 5-24-2006
+// - added difficulty setting eliminating unhappiness for ai cities overlimit
 //
 //----------------------------------------------------------------------------
 
@@ -68,7 +69,8 @@
 
 #include "wonderutil.h"
 #include "FeatTracker.h"
-
+#include "DifficultyRecord.h"   //EMOD
+#include "GameSettings.h"
 
 
 
@@ -220,7 +222,7 @@ double Happy::CalcTooManyCities(Player *p)
 		if (!city->IsValid())
 			continue;
 		
-		city->GetPop(pop);
+		city->GetPop(pop); //So city size 0 does not count against threshold
 		if (pop < 1)
 			continue;
 
@@ -233,6 +235,9 @@ double Happy::CalcTooManyCities(Player *p)
 	double res;
 	if (num_cities <= t) {
 		res = 0.0;
+	//EMOD
+	} else if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() && p->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+		res = 0.0;				
 	} else {
 		res = -s * (num_cities - t);
 

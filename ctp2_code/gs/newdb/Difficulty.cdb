@@ -158,5 +158,6 @@ Difficulty{
 	Bit					RevoltInsurgents					# Revolting city creates barbarians
 	Record TerrainImprovement[]     BarbarianCamps			# Entrenched barbarians create an imp
 	Bit					BarbarianSpawnsBarbarian			# Entrenched barbs create more barbs
-
+	Bit					AINoSinking							# AI ships don't sink
+	Bit					AINoCityLimit						# AI not affected by city limit
 }

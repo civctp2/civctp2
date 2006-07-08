@@ -156,6 +156,7 @@ TerrainImprovement {
 	Bit CanExportGood                       // New Colony code (E)
 	Bit CanExportTileValueRadius
 	Record TerrainImprovement[]     PrerequisiteTileImp
+	Bit IsCanal								//FU
 
 	Record Icon Icon
 	#MDS 090800 not sure about this, trying to add 2 new fields...

@@ -31,6 +31,8 @@
 // - Restored backward compatibility with old personalities.txts 
 //   by Martin Gühmann
 // - Activated consideration of a defined nuclear strike strategy.
+// - added difficulty where AI ignores any citylimit because the flag causes 
+//   no unhappiness for ai
 //
 //----------------------------------------------------------------------------
 
@@ -57,6 +59,8 @@
 
 #include "GovernmentRecord.h"
 #include "wonderutil.h"
+#include "DifficultyRecord.h"   //EMOD
+#include "GameSettings.h"
 
 
 
@@ -876,6 +880,7 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 
 	if(g_player[playerId]->GetNumCities() > acceptedCityMaximum
 	&& diplomat.GetPersonality()->HasOverCityLimitStrategy()
+	&& !g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() //EMOD 
 	){
 		state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();
 		state.dbIndex = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();

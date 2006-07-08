@@ -29,6 +29,8 @@
 // - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
 // - Fixed GetPollutionProductionModifier (June 11nd 2005 Martin Gühmann)
 // - Fixed GetPollutionSizeModifier (June 11nd 2005 Martin Gühmann)
+// - Added checks for advances requiring goods, cultureonly, govt only
+// - Added EitherPreRequisite to allow flexible tech tree like civ4
 //
 //----------------------------------------------------------------------------
 
@@ -529,6 +531,44 @@ void Advances::ResetCanResearch(sint32 justGot)
 					if(rec->GetPrerequisitesIndex(prereq) == justGot)
 						justEnabled = TRUE;
 				}
+
+/////////////////EitherPrerequisite
+				for(sint32 either = 0; either < rec->GetNumEitherPrerequisites(); either++) {
+					if(rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either)) {
+						canResearch = FALSE;
+						continue;
+					}
+
+					if(rec->GetEitherPrerequisitesIndex(either) == justGot)
+						justEnabled = TRUE;
+					}
+////////////// PreReq govt techs (but how do you remove them?)
+				if(rec->GetNumGovernmentType() > 0) {
+					sint32 g;
+					bool found = false;
+					for(g = 0; g < rec->GetNumGovernmentType(); g++) {
+						if(rec->GetGovernmentTypeIndex(g) == g_player[m_owner]->GetGovernmentType()) {
+						justEnabled = TRUE;
+						break;
+						}
+					}
+					if(!found)
+						canResearch = FALSE;
+					}	
+////////////// CultureOnly Techs	
+
+				if(rec->GetNumCultureOnly() > 0) {
+					sint32 s;
+					bool found = false;
+					for(s = 0; s < rec->GetNumCultureOnly(); s++) {
+						if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+							justEnabled = TRUE;
+							break;
+						}
+					}
+					if(!found)
+						canResearch = FALSE;
+					}
 /////////////////EMOD for Advances requiring Goods
 				if(rec->GetNumNeedsCityGoodAnyCity()) {
 		
@@ -550,7 +590,7 @@ void Advances::ResetCanResearch(sint32 justGot)
 					if(!goodavail)
 						canResearch = FALSE;
 				}
-/////////////////EMOD for Advances requiring Goods
+//////////////////////END EMOD
 
 
 			}
