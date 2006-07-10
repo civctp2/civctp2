@@ -193,8 +193,8 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
         if (g_gevManager)
         {
 		    m_event = g_gevManager->GetEventIndex(pobj->m_event_name);
-		g_gevManager->AddCallback(m_event, m_priority, this);
-	}
+		    g_gevManager->AddCallback(m_event, m_priority, this);
+	    }
 	}
 
 	g_slicObjectArray[slicifIndex] = NULL;
@@ -203,17 +203,17 @@ SlicSegment::SlicSegment(sint32 slicifIndex)
 
     if (g_slicEngine)
     {
-	SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
+	    SlicSymbolData *sym = g_slicEngine->GetSymbol(m_id);
 		
 	    if (sym) 
         {
-		if((sym->GetType() == SLIC_SYM_ID) ||
+		    if((sym->GetType() == SLIC_SYM_ID) ||
 	    	   (sym->GetType() == SLIC_SYM_UFUNC)
               ) 
             {
-			sym->SetSegment(this);
-		}
-	}
+			    sym->SetSegment(this);
+		    }
+	    }
 	}
 
 	free(pobj);
@@ -337,8 +337,8 @@ void * SlicSegment::operator new(size_t)
 		seg->SetPoolIndex(index);
 	}
 
-		return seg;
-	}
+	return seg;
+}
 
 //----------------------------------------------------------------------------
 //
@@ -361,6 +361,14 @@ void SlicSegment::operator delete(void *ptr)
 	SlicSegment * seg = static_cast<SlicSegment *>(ptr);
 	if (seg)
 	{
+        if ((SLIC_OBJECT_HANDLEEVENT == seg->m_type) && 
+            (GEV_MAX != seg->m_event) &&
+            g_gevManager
+           )
+        {
+            g_gevManager->RemoveCallback(seg->m_event, seg);
+        }
+
 		int const poolIndex = seg->GetPoolIndex();
 		if ((poolIndex >= 0) && s_segmentPond)
 		{

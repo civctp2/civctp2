@@ -1223,8 +1223,8 @@ SFN_ERROR Slic_AtWarWith::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-	// Everyone is always at war with the barbarians.
-	m_result.m_int = g_player[player]->HasWarWith(foreigner);
+    m_result.m_int =    (player != foreigner) 
+                     && g_player[player]->HasWarWith(foreigner);
 
 	return SFN_ERROR_OK;
 }

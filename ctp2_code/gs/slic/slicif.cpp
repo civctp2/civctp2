@@ -624,15 +624,17 @@ void slicif_add_op(SOP op, ...)
 			s_argValuePushed = false;
 			s_argSymbol = NULL;
 			break;
+
 		case SOP_CALL:
 		case SOP_CALLR:
 			slicif_check_num_args();
-
 			s_parenLevel--;
-			
-			
-			name = va_arg(vl, char*);
-			if((symval = g_slicEngine->GetSymbol(name))) {
+
+			name    = va_arg(vl, char*);
+            symval  = g_slicEngine->GetSymbol(name);
+
+			if (symval) 
+            {
 				if(symval->GetType() != SLIC_SYM_FUNC &&
 				   symval->GetType() != SLIC_SYM_UFUNC) {
 					sprintf(errbuf, "%s is not a function", name);
@@ -645,7 +647,9 @@ void slicif_add_op(SOP op, ...)
 					sprintf(errbuf, "No function named %s", name);
 					yyerror(errbuf);
 				}
-				if(!(symval = g_slicEngine->GetSymbol(internalName))) {
+
+                symval = g_slicEngine->GetSymbol(internalName);
+				if (!symval) {
 					symval = g_slicEngine->GetOrMakeSymbol(internalName);
 					symval->SetType(SLIC_SYM_FUNC);
 				}
@@ -1839,14 +1843,12 @@ char *slicif_get_segment_name_copy()
 void slicif_add_parameter(SLIC_SYM type, char *name)
 {
 	char namebuf[1024];
-	SlicSymbolData *sym;
-
-	
 	slicif_get_local_name(namebuf, name);
 
-	if((sym = g_slicEngine->GetSymbol(namebuf))) {
-		
-		
+	SlicSymbolData * sym = g_slicEngine->GetSymbol(namebuf);
+
+	if (sym) 
+    {
 		char errbuf[1024];
 		sprintf(errbuf, "'%s' already has a local definition", name);
 		yyerror(errbuf);
@@ -1879,8 +1881,7 @@ void slicif_get_local_name(char *localName, char *name)
 
 void slicif_add_prototype(char *name)
 {
-	SlicSymbolData *sym;
-	sym = g_slicEngine->GetOrMakeSymbol(name);
+	SlicSymbolData * sym = g_slicEngine->GetOrMakeSymbol(name);
 	char errbuf[1024];
 	if(sym->GetType() != SLIC_SYM_UNDEFINED) {
 		sprintf(errbuf, "Symbol '%s' is already defined", name);
@@ -1929,17 +1930,11 @@ void slicif_start_for_body()
 
 void slicif_end_for()
 {
-	char *sptr;
-
-	
 	s_code_ptr -= 5;
-
 	
 	slicif_add_op(SOP_JMP, s_while_stack[s_while_level].increment);
 
-	
-	
-	sptr = (char *)(s_block_ptr[s_level] - 1);
+	char * sptr = (char *)(s_block_ptr[s_level] - 1);
 	*sptr = SOP_BNT;
 	sptr++;
 	*((int *)sptr) = (int)(s_code_ptr - s_code);

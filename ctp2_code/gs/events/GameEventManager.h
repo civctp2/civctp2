@@ -1,8 +1,58 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C/C++ header
+// Description  : Game event handler
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Enable logging when set.
+//
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __GAME_EVENT_MANAGER_H__
 #define __GAME_EVENT_MANAGER_H__
 
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+#include <list>
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
 class GameEventManager;
+
+#ifdef _DEBUG
+#define EVENTLOG(x) g_gevManager->Log x
+#else
+#define EVENTLOG(x)
+#endif
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
 #include "GameEventTypes.h"
 #include "GameEventDescription.h"
@@ -14,16 +64,21 @@ class GameEventHookCallback;
 class GameEventArgList;
 class GameEventHook;
 
+//----------------------------------------------------------------------------
+// General declarations
+//----------------------------------------------------------------------------
+
 void gameEventManager_Initialize();
 void gameEventManager_Cleanup();
 
-#ifdef _DEBUG
-#define EVENTLOG(x) g_gevManager->Log x
-#else
-#define EVENTLOG(x)
-#endif
+extern GameEventManager *   g_gevManager;
 
-class GameEventManager {
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+class GameEventManager 
+{
 public:
 	GameEventManager();
 	~GameEventManager();
@@ -54,7 +109,7 @@ public:
 							   GameEventHookCallback *cb);
 
 	
-	GAME_EVENT_ERR RemoveCallback(GAME_EVENT type, GameEventHookCallback *cb);
+	void RemoveCallback(GAME_EVENT type, GameEventHookCallback *cb);
 
 	
 	GAME_EVENT_ERR ActivateHook
@@ -112,11 +167,12 @@ private:
 	BOOL CheckArg(sint32 num, char got, char want);
 	BOOL VerifyArgs(GAME_EVENT type, va_list *vl);
 
-	
+	/// Unhandled events
 	PointerList<GameEvent> *m_eventList;
 
 #ifdef _DEBUG
-	PointerList<GameEvent> *m_eventHistory;
+    /// History of recently handled events
+    std::list<GameEvent*>   m_eventHistory;
 #endif
 
 	
@@ -136,7 +192,5 @@ private:
 
 	sint32 m_pauseCount;
 };
-
-extern GameEventManager *g_gevManager;
 
 #endif

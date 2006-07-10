@@ -77,7 +77,6 @@
 #include "MessagePool.h"			// g_theMessagePool
 #include "BldQue.h"
 #include "SlicRecord.h"
-#include "UnitPool.h"				// g_theUnitPool
 #include "tutorialwin.h"			// TutorialWin
 #include "pointerlist.h"
 #include "SimpleDynArr.h"
@@ -290,11 +289,7 @@ SlicEngine::~SlicEngine()
     {
 		if (m_records[i]) 
         {
-			SlicRecord * sr;
-			while (sr = m_records[i]->RemoveHead()) 
-            {
-				delete sr;
-			}
+			m_records[i]->DeleteAll();
 			delete m_records[i];
 		}
 	}
@@ -396,11 +391,7 @@ void SlicEngine::Serialize(CivArchive &archive)
         {
 		    if (m_records[i]) 
             {
-			    SlicRecord * sr;
-			    while (sr = m_records[i]->RemoveHead()) 
-                {
-				    delete sr;
-			    }
+			    m_records[i]->DeleteAll();
 			    delete m_records[i];
 			    m_records[i] = NULL;
 		    }
@@ -498,17 +489,17 @@ void SlicEngine::Execute(SlicObject *obj)
 		(!g_theCriticalMessagesPrefs || g_theCriticalMessagesPrefs->IsEnabled(obj->GetSegment()->GetName()))
        ) 
     {
-			obj->Execute();
-		}
+		obj->Execute();
+	}
 
-	if(m_atBreak)
+	if (m_atBreak)
     {
         // No action: keep context active to Continue later.
     }
     else
     {
-	PopContext();
-}
+	    PopContext();
+    }
 }
 
 void SlicEngine::AddBuiltinFunctions()
@@ -1049,8 +1040,6 @@ void SlicEngine::GetCurrentMessage(Message &message) const
 
 void SlicEngine::KillCurrentMessage()
 {
-	
-	
 	if(!g_theMessagePool->IsValid(*m_currentMessage))
 		return;
 	m_currentMessage->Kill();
@@ -1189,8 +1178,12 @@ bool SlicEngine::IsMessageClassDisabled(sint32 mclass) const
 
 void SlicEngine::ProcessUITriggers()
 {
-	SlicObject *obj;
-	while (obj = m_uiExecuteObjects->RemoveHead())
+	for 
+    (
+        SlicObject *    obj = m_uiExecuteObjects->RemoveHead();
+        obj;
+        obj = m_uiExecuteObjects->RemoveHead()
+    )
     {
 		Execute(obj);
 	}
@@ -1328,7 +1321,7 @@ void SlicEngine::RunUnitMovedTriggers(const Unit &u)
 			obj->AddUnit(u);
 			obj->AddCivilisation(u.GetOwner());
 			Execute(obj);
-			if(!g_theUnitPool->IsValid(u))
+			if(!u.IsValid())
 				return;
 		}
 		walk.Next();
@@ -1367,10 +1360,10 @@ void SlicEngine::RunUnitBuiltTriggers(const Unit &u, const Unit &city)
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_UNIT_BUILT]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if(!g_theUnitPool->IsValid(u)) {
+			if(!u.IsValid()) {
 				return;
 			}
-			if(!g_theUnitPool->IsValid(city)) {
+			if(!city.IsValid()) {
 				return;
 			}
 			SlicObject *obj = new SlicObject(walk.GetObj());
@@ -1399,25 +1392,25 @@ void SlicEngine::RunDiscoveryTriggers(AdvanceType adv, PLAYER_INDEX p)
 	
 void SlicEngine::RunContactTriggers(const Unit &unit1, const Unit &unit2)
 {
-	if(!g_theUnitPool->IsValid(unit1) ||
-	   !g_theUnitPool->IsValid(unit2) ||
-	   !g_player[unit1.GetOwner()] ||
-	   !g_player[unit2.GetOwner()]) {
-		return;
-	}
-
-	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_CONTACT]);
-	while(walk.IsValid()) {
-		if(walk.GetObj()->IsEnabled()) {
-			SlicObject *obj = new SlicObject(walk.GetObj());
-			obj->AddUnit(unit1);
-			obj->AddUnit(unit2);
-			obj->AddPlayer(unit1.GetOwner());
-			obj->AddPlayer(unit2.GetOwner());
-			Execute(obj);
-		}
-		walk.Next();
-	}
+	if (    unit1.IsValid() 
+         &&	unit2.IsValid()
+         && g_player[unit1.GetOwner()]
+         && g_player[unit2.GetOwner()]
+       ) 
+    {
+	    PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_CONTACT]);
+	    while(walk.IsValid()) {
+		    if(walk.GetObj()->IsEnabled()) {
+			    SlicObject *obj = new SlicObject(walk.GetObj());
+			    obj->AddUnit(unit1);
+			    obj->AddUnit(unit2);
+			    obj->AddPlayer(unit1.GetOwner());
+			    obj->AddPlayer(unit2.GetOwner());
+			    Execute(obj);
+		    }
+		    walk.Next();
+	    }
+    }
 }
 
 void SlicEngine::RunAttackTriggers(const Unit &unit1, const Unit &unit2)
@@ -1822,7 +1815,7 @@ void SlicEngine::RunUnitBeginTurnTriggers(const Unit &unit)
 			obj->AddCivilisation(*g_player[unit.GetOwner()]->m_civilisation);
 			obj->AddUnit(unit);
 			Execute(obj);
-			if(!g_theUnitPool->IsValid(unit))
+			if(!unit.IsValid())
 				return;
 			if(!g_player[unit.GetOwner()])
 				return;
@@ -2413,7 +2406,8 @@ void SlicEngine::RunTrigger(TRIGGER_LIST tlist, ...)
 						break;
 					case ST_UNIT:
 						u = va_arg(vl, Unit);
-						if(g_theUnitPool->IsValid(u)) {
+						if (u.IsValid()) 
+                        {
 							obj->AddUnit(u);
 						} else {
 							abort = TRUE;
@@ -2421,7 +2415,8 @@ void SlicEngine::RunTrigger(TRIGGER_LIST tlist, ...)
 						break;
 					case ST_CITY:
 						u = va_arg(vl, Unit);
-						if(g_theUnitPool->IsValid(u)) {
+						if (u.IsValid()) 
+                        {
 							obj->AddCity(u);
 						} else {
 							abort = TRUE;
@@ -2758,10 +2753,14 @@ void SlicEngine::Continue()
 	m_breakContext->Release();
     m_breakContext = NULL;
 
-	SlicObject *oldContext = NULL;
 	if (!m_atBreak) 
     {
-		while (oldContext = m_contextStack->RemoveTail()) 
+	    for 
+        (
+            SlicObject * oldContext = m_contextStack->RemoveTail();
+            oldContext;
+            oldContext = m_contextStack->RemoveTail()
+        ) 
         {
 			SetContext(oldContext);
 			oldContext->Continue();

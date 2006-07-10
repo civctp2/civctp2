@@ -466,8 +466,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			
 			
-			SlicSymbolData *structSym;
-			if(!(structSym = SlicStack::GetSymbol(type1, sval1))) {
+			SlicSymbolData * structSym = SlicStack::GetSymbol(type1, sval1);
+			if (!structSym) 
+            {
 				DPRINTF(k_DBG_SLIC, ("Couldn't find struct symbol in SOP_PUSHAM\n"));
 				stopped = TRUE;
 				break;
@@ -1067,8 +1068,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 
-			SlicSymbolData *structSym;
-			if(!(structSym = SlicStack::GetSymbol(type3, sval3))) {
+			SlicSymbolData *structSym = SlicStack::GetSymbol(type3, sval3);
+			if (!structSym) 
+            {
 				DPRINTF(k_DBG_SLIC, ("Couldn't find symbol for %s[%d]\n",
 									 arraySym->GetName(), Eval(type2, sval2)));
 				stopped = TRUE;
@@ -1490,9 +1492,7 @@ void SlicFrame::ClearMessageData()
 	m_messageData->m_sender = PLAYER_INDEX_INVALID;
 	m_messageData->m_msgType = 0;
 	m_messageData->m_cityList->Clear();
-	if(m_messageData->m_text) {
-		delete [] m_messageData->m_text;
-	}
+	delete [] m_messageData->m_text;
 	m_messageData->m_text = NULL;
 	m_messageData->m_request = ID();
 	m_messageData->m_timestamp = g_turn ? g_turn->GetYear() : 0;

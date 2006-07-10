@@ -386,7 +386,6 @@ UNIT_CANNON {
    VisionRange 2
    EnableAdvance ADVANCE_CANNON_MAKING
    ObsoleteAdvance ADVANCE_CYBERNETICS
-   #UpgradeTo UNIT_ARTILLERY
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -1772,10 +1771,7 @@ UNIT_HOPLITE {
    MaxMovePoints 100
    VisionRange 1
    EnableAdvance ADVANCE_BRONZE_WORKING
-   #ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_HOVER_INFANTRY
+   ObsoleteAdvance ADVANCE_GUNPOWDER
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -1885,8 +1881,6 @@ UNIT_INFANTRYMAN {
    VisionRange 2
    EnableAdvance ADVANCE_GUNPOWDER
    ObsoleteAdvance ADVANCE_ADV_INFANTRY_TACTICS
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2116,8 +2110,6 @@ UNIT_KNIGHT {
    EnableAdvance ADVANCE_FEUDALISM
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_TANK_WARFARE
-   UpgradeTo UNIT_CAVALRY
-   ObsoleteUnit UNIT_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2401,7 +2393,6 @@ UNIT_MACHINE_GUNNER {
    VisionRange 1
    EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_CHAOS_THEORY
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2456,7 +2447,6 @@ UNIT_MARINE {
    MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2632,7 +2622,6 @@ UNIT_MOUNTED_ARCHER {
    EnableAdvance ADVANCE_HORSE_RIDING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_TANK_WARFARE
-   UpgradeTo UNIT_CAVALRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2868,7 +2857,6 @@ UNIT_PARATROOPER {
    MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2926,8 +2914,6 @@ UNIT_PIKEMEN {
    VisionRange 1
    EnableAdvance ADVANCE_FEUDALISM
    ObsoleteAdvance ADVANCE_FASCISM
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3750,8 +3736,6 @@ UNIT_SWORDSMAN {
    VisionRange 1
    EnableAdvance ADVANCE_IRON_WORKING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4113,11 +4097,7 @@ UNIT_WARRIOR {
    MaxMovePoints 100
    VisionRange 2
    EnableAdvance ADVANCE_TOOLMAKING
-   #ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_SWORDSMAN
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_HOVER_INFANTRY
+   ObsoleteAdvance ADVANCE_GUNPOWDER
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0

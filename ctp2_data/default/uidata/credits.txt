@@ -638,12 +638,13 @@
 <font1>
 <font1>
 <font1>
-<font1>
-<font1>
 <font1>	
 <font1>	USES MILES SOUND SYSTEM.  
 <font1>	COPYRIGHT (C) 1991-2000 BY RAD GAME TOOLS, INC.
 <font1>
 <font1> Uses Freetype library
 <font1> Copyright 1996-1999 by David Turner, Robert Wilhelm, and Werner Lemberg
+<font1>
+<font1> Uses the zlib compression library
+<font1> Copyright (C) 1995-2005 Jean-loup Gailly and Mark Adler
 <end>		

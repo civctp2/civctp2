@@ -41,7 +41,7 @@
 namespace
 {
 //  Some value that is different from k_NORMAL_FILE (0) and k_TUTORIAL_FILE (1).
-    uint8 const k_GENERATED_BY_EXECUTABLE   = -1;
+    uint8 const k_GENERATED_BY_EXECUTABLE   = static_cast<uint8>(-1);
 }
 
 SlicNamedSymbol::SlicNamedSymbol(const char *name, SLIC_SYM type) :

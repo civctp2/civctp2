@@ -54,7 +54,6 @@ class GameEventHookCallback;
 
 #include "GameEventArgList.h"   // GameEventArgList
 #include "GameEventTypes.h"     // GAME_EVENT...
-#include "pointerlist.h"
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -110,7 +109,7 @@ public:
         GameEventArgList *  args, 
         sint32              startIndex, 
         sint32 &            resumeIndex
-    );
+    ) const;
 
 
 #if defined(_DEBUG)

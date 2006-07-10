@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Redesigned (replaced PointerList with std::list) to repair memory leaks.
+// - Made the order of callback execution more logical: adding at the end of 
+//   the sublist with the same priority.
 //
 //----------------------------------------------------------------------------
 
@@ -129,8 +131,8 @@ GameEventHook::~GameEventHook()
 // Returns    : -       : may throw std::bad_alloc when no more memory
 //
 // Remark(s)  : * The new (Node) pair will be inserted before the first Node 
-//                - if any - with higher or equal priority, so the list will 
-//                stay ordered when it was ordered when entering this function.
+//                - if any - with higher priority, so the list will stay 
+//                ordered when it was ordered when entering this function.
 //              * NULL-callbacks will not be entered in the list, so we don't
 //                have to check this later.
 //
@@ -152,7 +154,7 @@ void GameEventHook::AddCallback
 
         std::list<Node>::iterator   walk = m_callbacks.begin();
 
-        while ((walk != m_callbacks.end()) && (walk->m_priority < pri))
+        while ((walk != m_callbacks.end()) && (walk->m_priority <= pri))
         {
             ++walk;
         }
@@ -171,10 +173,11 @@ void GameEventHook::AddCallback
 //
 // Globals    : -
 //
-// Returns    : -       : should always succeed
+// Returns    : void    : should always succeed
 //
-// Remark(s)  : The priority is not passed as parameter, so this function will
-//              remove *all* callback occurrences in the list.
+// Remark(s)  : At the moment, this function is used only for cleaning up
+//              (unique) SlicSegment pool objects that are being destroyed,
+//              so we return immediately after deleting the first found.
 //
 //----------------------------------------------------------------------------
 void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
@@ -185,7 +188,8 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
     {
         if (walk->m_cb == cb)   
         {
-            walk == m_callbacks.erase(walk);
+            walk = m_callbacks.erase(walk);
+            return;
         }
         else
         {
@@ -218,18 +222,18 @@ GAME_EVENT_ERR GameEventHook::Activate
     GameEventArgList *  args, 
     sint32              startIndex, 
     sint32 &            resumeIndex
-)
+) const
 {
     resumeIndex = 0;
 
 	for 
     (
-        std::list<Node>::iterator   walk = m_callbacks.begin();
+        std::list<Node>::const_iterator walk = m_callbacks.begin();
         walk != m_callbacks.end();
         ++walk
     )
     {
-        Node &  runningNow  = *walk;
+        Node const &    runningNow  = *walk;
 #if defined(_DEBUG)
         char desc[1024];
 	    runningNow.m_cb->GetDescription(desc, 1024);
