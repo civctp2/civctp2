@@ -354,7 +354,7 @@ public:
 		return body;
 	}
 	
-	int GetSize(void) {
+	size_t GetSize(void) {
 		return size;
 	}
 	
@@ -388,10 +388,9 @@ public:
 		first = body;
 	}
 	
-	void Grow(SizeT s) {
-		size += s;
-		
-		assert(size <= nf_MAX_PACKETSIZE);
+	void Grow(size_t s) {
+		assert((size + s) <= nf_MAX_PACKETSIZE);
+        size = static_cast<SizeT>(size + s);
 	}
 	
 	template<typename type>
@@ -409,17 +408,16 @@ public:
 	}
 	
 	void Push(char *c) {
-		int s = strlen(c) + 1;
+		size_t const    s = strlen(c) + 1;
 		Grow(s);
 		strcpy(body + size - s, c);
 	}
 	
 	void Pop(char *c) {
-		int s = strlen(first) + 1;
-
+		size_t const    s = strlen(first) + 1;
+        
 		strcpy(c, first);
 		first += s;
-
 	}
 };
 

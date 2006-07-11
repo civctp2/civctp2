@@ -111,7 +111,6 @@ int adialup_is_active(void)
 	DWORD cConnections;
 	DWORD werr;
 	unsigned long rasconnLen;
-	int i;
 	HANDLE hlib;
 	pfnRasEnumConnections_t pfnRasEnumConnections = NULL;
 	pfnRasGetConnectStatus_t pfnRasGetConnectStatus = NULL;
@@ -147,7 +146,8 @@ int adialup_is_active(void)
 		return FALSE;
 	}
 
-	for (i=0; i<cConnections; i++) {
+	for (DWORD i = 0; i < cConnections; ++i) 
+	{
 		rasconnstatus.dwSize = sizeof(rasconnstatus);
 		werr = pfnRasGetConnectStatus( rasconnArray[i].hrasconn, &rasconnstatus); 
 		if (rasconnstatus.rasconnstate == RASCS_Connected) {
@@ -665,7 +665,6 @@ DWORD WINAPI NETFunc::ConnectThread(LPVOID t) {
 		return 1;
 #else
 		ExitThread(1);
-	return 0;
 #endif
 }
 
@@ -686,10 +685,11 @@ DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
 	while (!(*((bool *)r))){
 		Receive();
 	}
-#ifndef USE_SDL
+#ifdef USE_SDL
+    return 0;
+#else
 	ExitThread(0);
 #endif
-	return 0;
 }
 
 
@@ -1672,7 +1672,7 @@ NETFunc::Game::Game(Session *s): Session(*s) {
 }
 
 char NETFunc::Game::GetGroups(void) {
-	return (session.dwUser1 & nf_GROUPNUMBER);
+	return static_cast<char>(session.dwUser1 & nf_GROUPNUMBER);
 }
 
 void NETFunc::Game::Set(dp_session_t *s) {

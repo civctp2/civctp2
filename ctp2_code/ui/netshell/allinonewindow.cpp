@@ -37,7 +37,6 @@
 
 #include "c3.h"
 
-
 #include "aui_ldl.h"
 #include "aui_blitter.h"
 #include "aui_uniqueid.h"
@@ -1169,7 +1168,7 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	if ( !AUI_SUCCESS(errcode) ) return AUI_ERRCODE_HACK;
 
 	sint32 numStyles = st.GetNumStrings();
-	ctp2_Static *label = NULL;
+
 	for ( sint32 i = 0; i < numStyles; i++ )
 	{
 		ns_ListItem *item = new ns_ListItem(
@@ -1335,24 +1334,7 @@ AUI_ERRCODE AllinoneWindow::DrawThis(
 	sint32 x,
 	sint32 y )
 {
-	AUI_ERRCODE err = ns_Window::DrawThis( surface, x, y );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	(void) ns_Window::DrawThis( surface, x, y );
 	return AUI_ERRCODE_OK;
 }
 
@@ -1362,12 +1344,10 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 {
 	if ( m_createdExclusions )
 	{
-		aui_ListBox *listbox;
+		sint32			i;
+		aui_ListBox *	listbox = (aui_ListBox *)m_controls[CONTROL_UNITSLISTBOX];
 
-		listbox =
-			(aui_ListBox *)m_controls[ CONTROL_UNITSLISTBOX ];
-		sint32 i;
-		for ( i = listbox->NumItems(); i; i-- )
+		for (i = listbox->NumItems(); i; i-- )
 		{
 			aui_Item *item = listbox->GetItemByIndex( 0 );
 			listbox->RemoveItem( item->Id() );
@@ -3753,24 +3733,17 @@ void AllinoneWindow::UpdatePlayerSetup(void)
 {
 	m_shouldUpdatePlayer = true;
 
-	uint32 tickNow = GetTickCount();
+	g_playersetup.Update();
 
-	{
-		g_playersetup.Update();
+	ns_PlayerSetupListBox *l = (ns_PlayerSetupListBox *)
+		((ns_Window *)g_netshell->
+		 FindWindow( NetShell::WINDOW_PLAYERSELECT ))->
+		FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX );
 
-		ns_PlayerSetupListBox *l = (ns_PlayerSetupListBox *)
-			((ns_Window *)g_netshell->
-			 FindWindow( NetShell::WINDOW_PLAYERSELECT ))->
-			FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX );
+	if( l->FindItem( &g_playersetup ) )
+		l->ChangeItem( &g_playersetup );
 
-		if( l->FindItem( &g_playersetup ) )
-			l->ChangeItem( &g_playersetup );
-
-		m_shouldUpdatePlayer = false;
-	}
-
-	
-
+	m_shouldUpdatePlayer = false;
 }
 
 
@@ -4740,23 +4713,7 @@ void AllinoneWindow::RulesButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
-	
-
 	g_ui->AddWindow( g_rulesWindow );
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -4768,23 +4725,7 @@ void AllinoneWindow::ExclusionsButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
-	
-
 	g_ui->AddWindow( g_exclusionsWindow );
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -4823,25 +4764,7 @@ void AllinoneWindow::RulesOKButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
 	g_ui->RemoveWindow( g_rulesWindow->Id() );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -4853,25 +4776,7 @@ void AllinoneWindow::ExclusionsOKButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
 	g_ui->RemoveWindow( g_exclusionsWindow->Id() );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

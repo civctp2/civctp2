@@ -126,22 +126,12 @@ ns_CivListBox::ns_CivListBox(
 
 AUI_ERRCODE ns_CivListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=0, bevelType=0;
-	aui_Ldl		*theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	bevelWidth = block->GetInt( k_NS_CIVLISTBOX_LDL_BEVELWIDTH );
-	bevelType = block->GetInt( k_NS_CIVLISTBOX_LDL_BEVELTYPE );
+	sint32 bevelWidth   = block->GetInt(k_NS_CIVLISTBOX_LDL_BEVELWIDTH);
+	sint32 bevelType    = block->GetInt(k_NS_CIVLISTBOX_LDL_BEVELTYPE);
 
 	return InitCommon(bevelWidth, bevelType);
 }
@@ -174,8 +164,6 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
 
-	
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -191,7 +179,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_header = new ns_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -221,7 +209,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -252,7 +240,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-		if ( theLdl->GetLdl()->FindDataBlock( block ) )
+        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -278,9 +266,8 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-	sint32 maxRangerSize = m_verticalRanger->Width();
-	if ( m_horizontalRanger->Height() > maxRangerSize )
-		maxRangerSize = m_horizontalRanger->Height();
+	sint32 maxRangerSize = 
+        std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
 
 	if ( maxRangerSize )
 		SetRangerSize( maxRangerSize ); 
@@ -487,13 +474,9 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 
 ns_HPlayerListBox::~ns_HPlayerListBox()
 {
-	
-	
-	
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		delete item;
 	}

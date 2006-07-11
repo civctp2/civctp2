@@ -62,8 +62,8 @@
 #include "ctp2_Switch.h"
 #include "spnewgamewindow.h" 
 
-static DialogBoxWindow *s_dbw = NULL;
-static sint32 s_startedLeavingAt = 0;
+static DialogBoxWindow *	s_dbw				= NULL;
+static time_t				s_startedLeavingAt	= 0;
 
 LobbyWindow *g_lobbyWindow = NULL;
 
@@ -724,10 +724,9 @@ void LobbyWindow::PasswordScreenDone( MBCHAR *password )
 			if ( password )
 			{
 				strncpy( temp, password, dp_PASSWORDLEN );
-				for ( sint32 i = 0; i < strlen( temp ); i++ )
+				for (size_t i = 0; i < strlen(temp); ++i)
 				{
-					
-					temp[ i ] = tolower( temp[ i ] );
+					temp[i] = static_cast<MBCHAR>(tolower(temp[i]));
 				}
 			}
 

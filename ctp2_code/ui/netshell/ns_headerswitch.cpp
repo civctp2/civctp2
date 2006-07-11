@@ -86,34 +86,18 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = InitCommon( icon );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
+	*retval = InitCommon(icon);
 }
 
 
 
 AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return AUI_ERRCODE_HACK;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *icon = block->GetString( k_NS_HEADERSWITCH_LDL_ICON );
-
-	AUI_ERRCODE errcode = InitCommon( icon );
-	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return errcode;
-
-	return AUI_ERRCODE_OK;
+	return InitCommon(block->GetString(k_NS_HEADERSWITCH_LDL_ICON));
 }
 
 

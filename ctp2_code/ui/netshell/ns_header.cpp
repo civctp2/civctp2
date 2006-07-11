@@ -128,8 +128,6 @@ AUI_ERRCODE ns_Header::CreateSwitches( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
-	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -139,7 +137,7 @@ AUI_ERRCODE ns_Header::CreateSwitches( MBCHAR *ldlBlock )
 		{
 			sprintf( block, "%s.%s%d", ldlBlock, k_AUI_HEADER_LDL_SWITCH, i );
 
-			if ( !theLdl->GetLdl()->FindDataBlock( block ) )
+            if ( !aui_Ldl::GetLdl()->FindDataBlock( block ) )
 				break;
 
 			aui_Switch *theSwitch = new ns_HeaderSwitch(

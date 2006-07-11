@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer player edit window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -479,12 +479,15 @@ void PlayerEditWindow::OKButtonAction::Execute(
 	aui_Radio *radio = (aui_Radio *)sg->GetChild( sg->WhichIsSelected() );
 	if ( radio )
 	{
-		for ( sint32 i = 0; i < sg->ChildList()->L(); i++ )
-		if ( p->FindControl(
-			PlayerEditWindow::CONTROL_EXPERIENCE0CHECKBOX + i ) == radio )
+		for (size_t i = 0; i < sg->ChildList()->L(); ++i)
 		{
-			experience = i;
-			break;
+			if ( p->FindControl(
+					PlayerEditWindow::CONTROL_EXPERIENCE0CHECKBOX + i ) == radio 
+			   )
+			{
+				experience = i;
+				break;
+			}
 		}
 	}
 

@@ -245,14 +245,14 @@ void PlayerSelectWindow::Update(void)
 {
 	ns_PlayerSetupListBox *listbox = (ns_PlayerSetupListBox *)(FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX ));
 	ns_PlayerSetupItem *item = (ns_PlayerSetupItem *)listbox->GetSelectedItem();
-	c3_Button *b_ok = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_OKBUTTON ));
+//	c3_Button *b_ok = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_OKBUTTON ));
 	c3_Button *b_edit = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_EDITBUTTON ));
 	c3_Button *b_del = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_DELETEBUTTON ));
 
 	aui_TextField *tf = (aui_TextField *)FindControl
 		( PlayerSelectWindow::CONTROL_PLAYERNAMETEXTFIELD );
 
-			if(item) {
+	if (item) {
 		b_edit->Enable(TRUE);
 		b_del->Enable(TRUE);
 		tf->SetFieldText( item->GetNetShellObject()->GetNETFuncObject()->GetName() );
@@ -265,24 +265,20 @@ void PlayerSelectWindow::Update(void)
 
 AUI_ERRCODE PlayerSelectWindow::Idle( void )
 {
-	NETFunc::Message *m;
+	NETFunc::Message * m;
 
-	while(m = g_netfunc->GetMessage()) {
-		
+	while (m = g_netfunc->GetMessage()) 
+    {
 		g_netfunc->HandleMessage(m);
 
-		switch ( m->GetCode() )
+		if (dp_SESSIONLOST_PACKET_ID == m->GetCode())
 		{
-		case dp_SESSIONLOST_PACKET_ID:
-			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONLOST );
-			break;
-
-		default:
-			break;
+			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONLOST);
 		}
 
 		delete m;
 	}
+
 	return AUI_ERRCODE_OK;
 }
 
@@ -317,7 +313,6 @@ void PlayerSelectWindow::PlayerListBoxAction::Execute(
 
 AUI_ERRCODE PlayerSelectWindow::SetParent( aui_Region *region )
 {
-	PlayerEditWindow *p = (PlayerEditWindow *)g_netshell->FindWindow( NetShell::WINDOW_PLAYEREDIT );
 	AUI_ERRCODE r = ns_Window::SetParent( region );
 
 	if ( region ) {

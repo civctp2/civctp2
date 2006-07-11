@@ -213,13 +213,7 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	aui_Ldl *theLdl = g_ui->GetLdl();
-
-	
-	Assert( theLdl->IsValid( ldlBlock ) );
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

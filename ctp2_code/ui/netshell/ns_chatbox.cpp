@@ -177,27 +177,15 @@ AUI_ERRCODE ns_ChatBox::InitCommon()
 
 ns_ChatBox::~ns_ChatBox()
 {
-	aui_Action *action;
-
-	if ( m_inputField )
+	if (m_inputField)
 	{
-		if ((action = m_inputField->GetAction()))
-			delete action;
-		delete m_inputField;
-		m_inputField = NULL;
+		delete m_inputField->GetAction();
+        delete m_inputField;
 	}
-	if(m_textstyleSystem) {
-		delete m_textstyleSystem;
-		m_textstyleSystem = NULL;
-	}
-	if(m_textstyleChat) {
-		delete m_textstyleChat;
-		m_textstyleChat = NULL;
-	}
-	if(m_textstyleWhisper) {
-		delete m_textstyleWhisper;
-		m_textstyleWhisper = NULL;
-	}
+
+    delete m_textstyleSystem;
+	delete m_textstyleChat;
+	delete m_textstyleWhisper;
 }
 
 

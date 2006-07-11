@@ -513,7 +513,7 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 			strncpy( temp, password, dp_PASSWORDLEN );
 			for ( size_t i = 0; i < strlen( temp ); i++ )
 			{
-				temp[ i ] = tolower( temp[ i ] );
+				temp[i] = static_cast<MBCHAR>(tolower(temp[i]));
 			}
 		}
 
@@ -821,21 +821,21 @@ void StartSelectingWindow::NewButtonAction::Execute(
 
 		//Ages
 		s->SetStartAge(0);
-		s->SetEndAge(g_theAgeDB->NumRecords()-1);
+		s->SetEndAge(static_cast<char>(g_theAgeDB->NumRecords() - 1));
 		//World size and shape
 		s->SetMapSize(g_theProfileDB->GetMapSize());
 		s->SetWorldShape(g_theProfileDB->GetWorldShape());
 		//World types
-		s->SetWorldType1(g_theProfileDB->GetWetDry());
-		s->SetWorldType2(g_theProfileDB->GetWarmCold());
-		s->SetWorldType3(g_theProfileDB->GetOceanLand());
-		s->SetWorldType4(g_theProfileDB->GetIslandContinent());
-		s->SetWorldType5(g_theProfileDB->GetHomoDiverse());
-		s->SetWorldType6(g_theProfileDB->GetGoodCount());
+		s->SetWorldType1(static_cast<char>(g_theProfileDB->GetWetDry()));
+		s->SetWorldType2(static_cast<char>(g_theProfileDB->GetWarmCold()));
+		s->SetWorldType3(static_cast<char>(g_theProfileDB->GetOceanLand()));
+		s->SetWorldType4(static_cast<char>(g_theProfileDB->GetIslandContinent()));
+		s->SetWorldType5(static_cast<char>(g_theProfileDB->GetHomoDiverse()));
+		s->SetWorldType6(static_cast<char>(g_theProfileDB->GetGoodCount()));
 
 		//Level of difficuilties
-		s->SetDifficulty1(g_theProfileDB->GetDifficulty());
-		s->SetDifficulty2(g_theProfileDB->GetRiskLevel());
+		s->SetDifficulty1(static_cast<char>(g_theProfileDB->GetDifficulty()));
+		s->SetDifficulty2(static_cast<char>(g_theProfileDB->GetRiskLevel()));
 		listbox->InsertItem( s );
 		listbox->SelectItem(listbox->FindItem(s));
 
