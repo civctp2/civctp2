@@ -87,12 +87,14 @@ void ActorPath::CalcPosition(sint32 start, sint32 end, sint32 current, POINT *po
 	Assert(m_points != NULL && m_pos != NULL);
 	if (m_points == NULL || m_pos == NULL) return;
 
-	
-	
-	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_STARTPOS].x, m_pos[POINTSPOSTYPE_STARTPOS].y, 
-							&(m_points[POINTSPOSTYPE_STARTPOS].x), &(m_points[POINTSPOSTYPE_STARTPOS].y));
-	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_ENDPOS].x, m_pos[POINTSPOSTYPE_ENDPOS].y, 
-							&(m_points[POINTSPOSTYPE_ENDPOS].x), &(m_points[POINTSPOSTYPE_ENDPOS].y));
+	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_STARTPOS].x, 
+                           m_pos[POINTSPOSTYPE_STARTPOS].y, 
+						   m_points[POINTSPOSTYPE_STARTPOS]
+                          );
+	maputils_MapXY2PixelXY(m_pos[POINTSPOSTYPE_ENDPOS].x, 
+                           m_pos[POINTSPOSTYPE_ENDPOS].y,
+                           m_points[POINTSPOSTYPE_ENDPOS]
+                          );
 
 	double const rat = (double) current / (double)(end - start);
 

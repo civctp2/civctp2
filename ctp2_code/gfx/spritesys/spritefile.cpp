@@ -92,7 +92,7 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	uint32		normal_msizes[800];
 	uint32		compressed_ssizes[800];
 
-	size_t      frame_offset_pos = GetFilePos();
+	fpos_t      frame_offset_pos = GetFilePos();
 	
 	for (i=0; i<s->GetNumFrames(); i++) 
 	{
@@ -129,7 +129,7 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	
 	if(m_version>k_SPRITEFILE_VERSION1)
 	{
-	    size_t const    current_pos = GetFilePos();
+	    fpos_t const    current_pos = GetFilePos();
        
 	   SetFilePos(frame_offset_pos);
 	   WriteData((uint8 *)compressed_ssizes,s->GetNumFrames()*sizeof(uint32));
@@ -146,7 +146,7 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 
 void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 {
-	uint16 num_frames=s->GetNumFrames();
+	uint16      num_frames = static_cast<uint16>(s->GetNumFrames());
 
 	uint32		normal_ssizes[k_MAX_FACINGS][128];
 	uint32		normal_msizes[k_MAX_FACINGS][128];
@@ -164,7 +164,7 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
-		frame_offsets[j] = GetFilePos();
+		frame_offsets[j] = static_cast<size_t>(GetFilePos());
 
 		for (i=0; i<num_frames; i++)
 		{
@@ -216,7 +216,7 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 	
 	if(m_version>k_SPRITEFILE_VERSION1)
 	{
-        size_t const    current_pos = GetFilePos();
+        fpos_t const    current_pos = GetFilePos();
        
 	   for (j=0; j<k_NUM_FACINGS; j++) 
 	   {
@@ -1153,7 +1153,7 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 {
 	uint16		i;
 	uint32		offset[UNITACTION_MAX];
-	size_t const    start_of_offsets = GetFilePos();
+	fpos_t const    start_of_offsets = GetFilePos();
 	
 
 	for (i=0; i<UNITACTION_MAX; i++) 
@@ -1168,7 +1168,7 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 		{
 			WriteData((uint32)TRUE);
 			
-			offset[i] = GetFilePos();
+			offset[i] = static_cast<size_t>(GetFilePos());
 
 			
 			switch(sprite->GetType())
@@ -1221,9 +1221,9 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 SPRITEFILEERR 
 SpriteFile::Write_v20(UnitSpriteGroup *s)
 {
-	uint16		i;
-	int  		offset[ACTION_MAX+1];
-	size_t const    start_of_offsets = GetFilePos();
+	size_t			i;
+	int  			offset[ACTION_MAX+1];
+	fpos_t const    start_of_offsets = GetFilePos();
 
 	for (i=0; i<ACTION_MAX+1; i++) 
 		offset[i] = -1;	
@@ -1236,7 +1236,7 @@ SpriteFile::Write_v20(UnitSpriteGroup *s)
 
 		if (sprite) 
 		{
-			offset[i] = GetFilePos();
+			offset[i] = static_cast<size_t>(GetFilePos());
 	 
 			switch(sprite->GetType())
 			{
@@ -1255,7 +1255,7 @@ SpriteFile::Write_v20(UnitSpriteGroup *s)
 		} 
 	}
 	
-	offset[ACTION_MAX] = GetFilePos();
+	offset[ACTION_MAX] = static_cast<size_t>(GetFilePos());
 
 	
 	for (i=0; i<UNITACTION_MAX; i++) 
@@ -1281,14 +1281,11 @@ SPRITEFILEERR SpriteFile::Write(UnitSpriteGroup *s)
 	case	k_SPRITEFILE_VERSION1:
 	case	k_SPRITEFILE_VERSION2:
 			return Write_v20(s); 
-			break;
 
 	case	k_SPRITEFILE_VERSION0:
 	default:
 			return Write_v13(s);
 	}
-	
-	return SPRITEFILEERR_OK;
 }
 
 
@@ -1418,7 +1415,7 @@ SPRITEFILEERR SpriteFile::Write(GoodSpriteGroup *s)
 
 			WriteData((uint32)TRUE);
 
-			offset[i] = GetFilePos();
+			offset[i] = static_cast<size_t>(GetFilePos());
 
 			WriteSpriteData(sprite);
 			WriteAnimData(s->GetGroupAnim((GAME_ACTION)i));
@@ -1471,7 +1468,7 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
     }
     m_file = c3files_fopen(C3DIR_SPRITES, m_filename, "rb");
 
-	Assert(m_file != NULL);
+//	Assert(m_file != NULL);
 	if (m_file == NULL) return SPRITEFILEERR_NOOPEN;
 
 	uint32			data;
@@ -1816,8 +1813,6 @@ SpriteFile::ReadBasic(UnitSpriteGroup *s)
 	default:
 			return ReadBasic_v13(s);
 	}
-	
-	return SPRITEFILEERR_OK;
 }
 
 
@@ -1962,8 +1957,6 @@ SPRITEFILEERR SpriteFile::ReadFull(UnitSpriteGroup *s)
 	default:
 			return ReadFull_v13(s);
 	}
-	
-	return SPRITEFILEERR_OK;
 }
 
 
@@ -1972,20 +1965,11 @@ SPRITEFILEERR SpriteFile::ReadFull(UnitSpriteGroup *s)
 SPRITEFILEERR 
 SpriteFile::ReadIndexed_v13(UnitSpriteGroup *s,GAME_ACTION action)
 {
-	uint16	i;
-	uint32  offsets[ACTION_MAX+1];
-	uint32	data32;
-	uint16	data16;
-
-	
-
-	data32 = GetFilePos();
-
+	uint32		offsets[ACTION_MAX+1];
+	uint32		data32 = static_cast<uint32>(GetFilePos());
 	SetFilePos(offsets[action]-(action+1)*sizeof(uint32));
-
-	Sprite		*sprite;
-
 	ReadData((void *)&data32, sizeof(data32));
+	Sprite *	sprite = NULL;
 	
 	if (data32) 
 	{
@@ -2004,12 +1988,11 @@ SpriteFile::ReadIndexed_v13(UnitSpriteGroup *s,GAME_ACTION action)
 	}
 	
 
-	POINT		*thePoints;
-	POINT		pointBuffer[k_NUM_FACINGS];
-
-	
+	uint16	data16;
 	ReadData((void *)&data16, sizeof(uint16));
 
+	POINT		pointBuffer[k_NUM_FACINGS];
+	uint16	i;
 
 	for (i=0; i<k_NUM_FIREPOINTS; i++) 
 	{
@@ -2036,7 +2019,7 @@ SpriteFile::ReadIndexed_v13(UnitSpriteGroup *s,GAME_ACTION action)
 	for (i=0; i<UNITACTION_MAX; i++) 
 	{
 		ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
-		thePoints = s->GetShieldPoints((UNITACTION)i);
+		POINT *	thePoints = s->GetShieldPoints((UNITACTION)i);
 		memcpy(thePoints, pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
 	}
 
@@ -2055,7 +2038,6 @@ SpriteFile::ReadIndexed_v13(UnitSpriteGroup *s,GAME_ACTION action)
 SPRITEFILEERR 
 SpriteFile::ReadIndexed_v20(UnitSpriteGroup *s,GAME_ACTION action)
 {
-	uint16	i;
 	uint16	data16;
 	int     offsets[ACTION_MAX];
 
@@ -2085,8 +2067,10 @@ SpriteFile::ReadIndexed_v20(UnitSpriteGroup *s,GAME_ACTION action)
 	SetFilePos(offsets[ACTION_MAX]);
 
 	
-	for (i=0; i<UNITACTION_MAX; i++) 
+	for (size_t i = 0; i < UNITACTION_MAX; ++i) 
+	{
 		ReadData((void *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
+	}
 
 	ReadData((void *)&data16, sizeof(uint16));
 	s->SetHasDeath(data16);
@@ -2114,8 +2098,6 @@ SPRITEFILEERR SpriteFile::ReadIndexed(UnitSpriteGroup *s,GAME_ACTION action)
 	default:
 			return ReadFull_v13(s);
 	}
-	
-	return SPRITEFILEERR_OK;
 }
 
 
@@ -2401,7 +2383,7 @@ SPRITEFILEERR SpriteFile::ReadData(void *data, size_t bytes)
 	return SPRITEFILEERR_OK;
 }
 
-size_t SpriteFile::GetFilePos(void)
+fpos_t SpriteFile::GetFilePos(void)
 {	
 	fpos_t		pos;
 	sint32		err;
@@ -2410,13 +2392,13 @@ size_t SpriteFile::GetFilePos(void)
 	Assert(err == 0);
 
 #ifdef WIN32
-	return  pos;
+	return pos;
 #elif defined(LINUX)
 	return pos.__pos;
 #endif
 }
 
-void SpriteFile::SetFilePos(size_t pos)
+void SpriteFile::SetFilePos(fpos_t pos)
 {
 	fpos_t		filePos;
 	sint32		err;

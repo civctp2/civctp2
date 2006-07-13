@@ -51,7 +51,7 @@ BattleViewActor::BattleViewActor(SpriteState *ss, Unit id, sint32 unitType, cons
 {
 	uint32 spriteID;
 
-	GetIDAndType(owner, ss, id, unitType, (MapPoint)pos, &spriteID, &m_type);
+	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);
 	m_spriteID = (sint32)spriteID;
 
 	m_spriteState = ss;
@@ -90,7 +90,7 @@ void BattleViewActor::Initialize(void)
 	AddIdle();
 }
 
-void BattleViewActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, 
+void BattleViewActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint const & pos, 
 								uint32 *spriteID, GROUPTYPE *groupType)
 {
 	*spriteID = ss->GetIndex();

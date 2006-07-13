@@ -97,7 +97,7 @@ public:
 	virtual sint32	ParseFromTokens(Token *theToken);
 	virtual void	AllocateFrameArrays(size_t count);
 
-	virtual uint16	GetNumFrames(void) const    { return m_facedFrameCount; };
+	virtual size_t	GetNumFrames(void) const    { return m_facedFrameCount; };
 	virtual void	SetNumFrames(uint16 num)    { m_facedFrameCount = num; }
 
 protected:

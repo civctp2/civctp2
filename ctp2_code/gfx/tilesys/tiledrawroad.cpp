@@ -591,8 +591,6 @@ void TiledMap::DrawCityRoads(
 	)
 {
 	MapPoint newPos;
-	sint32 isConnectStraight = 0, isConnectDiagonal = 0;
-	sint32 neighborFlag = 0;
 	Pixel16	*data = NULL;
 
 	

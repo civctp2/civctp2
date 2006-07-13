@@ -459,14 +459,13 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Move");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
-			for(i=0; i<moveSprite->GetNumFrames(); i++) 
+			for (size_t k = 0; k < moveSprite->GetNumFrames(); ++k) 
 			{
+				if (!GetImageFileName(facedShadowNames[j][k],"%sGU%#.3dMS%d.%d", prefixStr,  id, j+1, k+moveSprite->GetFirstFrame()))
+					GetImageFileName(facedShadowNames[j][k] ,"%sGU%#.2dMS%d.%d", prefixStr,  id, j+1, k+moveSprite->GetFirstFrame());
 				
-				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dMS%d.%d", prefixStr,  id, j+1, i+moveSprite->GetFirstFrame()))
-					GetImageFileName(facedShadowNames[j][i] ,"%sGU%#.2dMS%d.%d", prefixStr,  id, j+1, i+moveSprite->GetFirstFrame());
-				
-				if (!GetImageFileName(facedImageNames[j][i], "%sGU%#.3dMA%d.%d", prefixStr, id,  j+1, i+moveSprite->GetFirstFrame()))
-					GetImageFileName(facedImageNames[j][i] , "%sGU%#.2dMA%d.%d", prefixStr, id,  j+1, i+moveSprite->GetFirstFrame());
+				if (!GetImageFileName(facedImageNames[j][k], "%sGU%#.3dMA%d.%d", prefixStr, id,  j+1, k+moveSprite->GetFirstFrame()))
+					GetImageFileName(facedImageNames[j][k] , "%sGU%#.2dMA%d.%d", prefixStr, id,  j+1, k+moveSprite->GetFirstFrame());
 			}
 		}
 
@@ -509,7 +508,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Attack");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
-			sint32 camera = j + 1;
+//			sint32 camera = j + 1;
 			for(i=0; i<attackSprite->GetNumFrames(); i++) 
 			{
 				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dAS%d.%d", prefixStr, id, j+1, i+attackSprite->GetFirstFrame()))
@@ -640,7 +639,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Work/A2");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
-			sint32 camera = j + 1;
+//			sint32 camera = j + 1;
 			for(i=0; i<workSprite->GetNumFrames(); i++) 
 			{
 				

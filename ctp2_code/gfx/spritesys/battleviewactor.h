@@ -40,7 +40,7 @@ public:
 
 	~BattleViewActor();
 
-	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, uint32 *spriteID, GROUPTYPE *groupType);
+	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint const &pos, uint32 *spriteID, GROUPTYPE *groupType);
 	
 	void			Initialize(void);
 

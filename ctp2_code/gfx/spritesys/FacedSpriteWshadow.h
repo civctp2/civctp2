@@ -114,10 +114,10 @@ public:
 	virtual sint32	ParseFromTokens(Token *theToken);
 	virtual void	AllocateFrameArrays(size_t count);
 
-	void			SetHasShadow(BOOL val) { m_hasShadow = val; }
+	void			SetHasShadow(BOOL val) { m_hasShadow = static_cast<uint16>(val); }
 	BOOL			GetHasShadow() { return m_hasShadow; }
 
-	virtual uint16	GetNumFrames(void) const    { return m_shadowFrameCount; };
+	virtual size_t	GetNumFrames(void) const    { return m_shadowFrameCount; };
 	virtual void	SetNumFrames(uint16 num)    { m_shadowFrameCount = num; }
 
 

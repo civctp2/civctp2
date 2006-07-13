@@ -62,7 +62,7 @@ enum WM {
 class WorkMap : public aui_Control, public PatternBase {
 public:
 
-	typedef BOOL (WorkMapDrawFunc)(aui_Surface *surf, MapPoint &pos, void *context);
+	typedef BOOL (WorkMapDrawFunc)(aui_Surface *surf, MapPoint const & pos, void *context);
 
 	
 	WorkMap(AUI_ERRCODE *retval, 

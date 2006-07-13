@@ -1406,9 +1406,7 @@ void TiledMap::PostProcessMap(BOOL regenTilenums)
 	Assert (g_theWorld != NULL);
 	if (g_theWorld == NULL) return;
 
-	MapPoint * size = g_theWorld->GetSize();
-
-	sint32		width = size->x;
+//	MapPoint * size = g_theWorld->GetSize();
 
 	TileInfo		*theTileInfo = NULL;
 
@@ -3792,11 +3790,11 @@ void TiledMap::DrawStartingLocations(aui_Surface *surf, sint32 layer)
 
 sint32 TiledMap::DrawCityRadius(const MapPoint &cpos, COLOR color, sint32 pop)
 {
-	Pixel16 pixelColor = g_colorSet->GetColor(color);
-	
-	if(g_theWorld->GetCell(cpos)->HasCity()) 
+	if (g_theWorld->GetCell(cpos)->HasCity()) 
 	{
 		return 0; // Following code not used
+#if 0
+	    Pixel16 pixelColor = g_colorSet->GetColor(color);
 		CityInfluenceIterator it(cpos, g_theWorld->GetCity(cpos).CD()->GetSizeIndex());
 
 		for(it.Start(); !it.End(); it.Next()) {
@@ -3832,6 +3830,7 @@ sint32 TiledMap::DrawCityRadius(const MapPoint &cpos, COLOR color, sint32 pop)
 			}
 
 		}
+#endif
 	} 
 	else 
 	{
@@ -4991,16 +4990,10 @@ sint32 TiledMap::RedrawBorders(
 			bool clip  
 			)
 {
-	MapPoint	pos;
-	sint32		fog = 0;
-
-	
 	maputils_WrapPoint(j,i,&j,&i);
 
-	
 	sint32 k = maputils_TileX2MapX(j,i);
 
-	
 	if (!TileIsVisible(k,i)) 
 		return 0;
 
@@ -5290,7 +5283,6 @@ inline Pixel16 TiledMap::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3,
 				r3, g3, b3,
 				r4, g4, b4;
 	short		r0, g0, b0;
-	sint32			c=0;
 
 	if (g_is565Format) {
 		r1 = (pixel1 & 0xF800) >> 11;
@@ -5593,24 +5585,13 @@ BOOL TiledMap::PointInMask(POINT hitPt)
 
 BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 {
-	sint32			width, height;
-	MapPoint		pos;
-	POINT			hitPt;
-	sint32			x, y;
-	sint16			maxX;
-	sint32			headroom = (sint32)((double)k_TILE_PIXEL_HEADROOM * m_scale);
-
-
-
-
-	width = GetZoomTilePixelWidth();
-	height = GetZoomTilePixelHeight();
-
-	x = point.x;
-	y = point.y;
+	sint32      width   = GetZoomTilePixelWidth();
+	sint32      height  = GetZoomTilePixelHeight();
+	sint32      x       = point.x;
+	sint32      y       = point.y;
 
 	
-	sint32 xoff,yoff;
+	sint32  xoff,yoff;
 	GetSmoothScrollOffsets(xoff,yoff);
   	x += xoff;
 	y += yoff;
@@ -5619,13 +5600,15 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 
 	if (!(m_mapViewRect.top & 1)) y -= GetZoomTileHeadroom();
 
-	pos.x = (sint16)(x / width + m_mapViewRect.left);
-	pos.y = (sint16)((y / height) + m_mapViewRect.top/2);
+	MapPoint		pos ((x / width) + m_mapViewRect.left, 
+                         (y / height) + m_mapViewRect.top/2
+                        );
  
+	POINT			hitPt;
  	hitPt.x = x % width;
 	hitPt.y = y % height;
 
-	maxX = static_cast<sint16>(m_mapBounds.right);
+	sint16			maxX = static_cast<sint16>(m_mapBounds.right);
 
 	if (!PointInMask(hitPt)) {
 		
@@ -5784,7 +5767,6 @@ void TiledMap::HandleCheat(MapPoint &pos)
 
 	if (g_placeGoodsMode || ScenarioEditor::PaintTerrainMode()) 
     {
-		TileInfo *  tileinfo    = g_theWorld->GetTileInfo(pos);
 		sint32      tileNum     = ScenarioEditor::PaintTerrainMode() 
                                   ? ScenarioEditor::PaintTerrain() 
                                   : 0;
@@ -6090,21 +6072,10 @@ void TiledMap::MouseDrag(aui_MouseEvent *data)
 
 void TiledMap::Click(aui_MouseEvent *data, BOOL doubleClick)
 {	
-	UnitActor		*actor=NULL;
 	MapPoint		pos;
-	Unit			top;
-	POINT			point;
-
-	point = data->position;
+	POINT			point = data->position;
 
 	if (MousePointToTilePos(point, pos)) {
-		
-		
-		
-		
-		
-		
-
 		
 		if (data->lbutton && !data->rbutton) {
 			
@@ -6405,15 +6376,13 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 	
 	unsigned short	*destPixel;
-	unsigned short  *srcPixel = (unsigned short *)data;
 
 	uint16		start	= (uint16)*data++;
 	uint16		end		= (uint16)*data++;
 	Pixel16		*table	= data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	register sint32 j;
-	register sint32 len,looplen;
+	sint32 len,looplen;
 
 	
 	sint32 xoff=x;
@@ -6424,7 +6393,7 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 	Pixel16		tag;
 
 	
-	for(j=start; j<=end; j++) 
+	for (sint32 j = start; j <= end; j++) 
 	{
 		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
 

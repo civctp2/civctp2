@@ -87,7 +87,7 @@ TileInfo::~TileInfo()
 TILEINDEX TileInfo::GetTileNum(void)
 {
 	return m_tileNum;
-
+#if 0 // Unreachable code
 	if (g_fog_toggle)
 		return m_tileNum;
 	if ( g_god ) {
@@ -110,6 +110,7 @@ TILEINDEX TileInfo::GetTileNum(void)
 			return m_tileNum;
 		}
 	}
+#endif
 }
 
 sint32 TileInfo::SetGoodActor(sint32 index, MapPoint pos)

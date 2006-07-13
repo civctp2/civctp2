@@ -147,11 +147,11 @@ public:
 	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
 						Pixel16 outlineColor, uint16 flags);
 
-	virtual uint16	GetNumFrames(void) const { return m_numFrames; };
+	virtual size_t	GetNumFrames(void) const { return m_numFrames; };
 	virtual void	SetNumFrames(uint16 num) { m_numFrames = num; }
 
 	sint32			GetCurrentFrame(void) { return m_currentFrame; };
-	void			SetCurrentFrame(sint16 cFrame) { m_currentFrame = cFrame; };
+	void			SetCurrentFrame(uint16 cFrame) { m_currentFrame = cFrame; };
 
 	Pixel16*		GetFrameData(uint16 frameNum);
 	Pixel16*		GetMiniFrameData(uint16 frameNum);

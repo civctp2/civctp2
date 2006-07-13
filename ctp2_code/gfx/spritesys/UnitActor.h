@@ -48,7 +48,16 @@ public:
 
 	~UnitActor();
 
-	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, sint32 *spriteID, GROUPTYPE *groupType);
+	void			GetIDAndType
+    (
+        sint32              owner, 
+        SpriteState *       ss, 
+        Unit                id, 
+        sint32              unitType, 
+        MapPoint const &    pos, 
+        sint32 *            spriteID, 
+        GROUPTYPE *         groupType
+    );
 
 	void			AddVision(void);
 	void			RemoveVision(void);

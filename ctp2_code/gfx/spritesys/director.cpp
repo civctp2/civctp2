@@ -35,17 +35,15 @@
 //
 //----------------------------------------------------------------------------
 
-
 #include "c3.h"
+#include "Director.h"
+
 #include "c3errors.h"
-
 #include "tech_wllist.h"
-
 #include "Globals.h"
 #include "player.h"
 #include "dynarr.h"
 #include "UnitPool.h"
-
 #include "pixelutils.h"
 #include "spriteutils.h"
 #include "tileutils.h"
@@ -143,16 +141,24 @@ BOOL					g_useHandler = FALSE;
 
 DQItem::DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler)
 :
-m_type(type),
-m_addedToSavedList(FALSE),
-m_owner(-1),
-m_action(action),
-m_handler(handler)
+    m_type              (type),
+    m_addedToSavedList  (FALSE),
+    m_owner             (PLAYER_UNASSIGNED),
+    m_round             (0),
+    m_action            (action),
+    m_handler           (handler),
+    m_sequence          (NULL)      
 {
-	m_sequence = g_director->NewSequence();
-	m_sequence->SetItem(this);
+    if (g_director)
+    {
+	    m_sequence = g_director->NewSequence();
+	    m_sequence->SetItem(this);
+    }
 
-	m_round = (uint16)g_turn->GetRound();
+    if (g_turn)
+    {
+	    m_round = static_cast<uint16>(g_turn->GetRound());
+    }
 }
 
 DQItem::~DQItem()
@@ -584,7 +590,7 @@ void Director::DumpItem(DQItem *item)
 
 		break;
 	case DQITEM_COPYVISION: {
-		DQActionCopyVision *action = (DQActionCopyVision *)item->m_action;
+//		DQActionCopyVision *action = (DQActionCopyVision *)item->m_action;
 		
 		DPRINTF(k_DBG_UI, ("Copy Vision from Gamestate\n"));
 	  }
@@ -604,13 +610,13 @@ void Director::DumpItem(DQItem *item)
 	  }
 		break;
 	case DQITEM_ENDTURN : {
-		DQActionEndTurn *action = (DQActionEndTurn *)item->m_action;
+//		DQActionEndTurn *action = (DQActionEndTurn *)item->m_action;
 		
 		DPRINTF(k_DBG_UI, ("End Turn from Gamestate\n"));
 	  }
 		break;
 	case DQITEM_BATTLE : {
-		DQActionBattle *action = (DQActionBattle *)item->m_action;
+//		DQActionBattle *action = (DQActionBattle *)item->m_action;
 		
 		DPRINTF(k_DBG_UI, ("Battle\n"));
 	  }
@@ -638,7 +644,7 @@ void Director::DumpItem(DQItem *item)
 	  }
 		break;
 	case DQITEM_MESSAGE : {
-		DQActionMessage *action = (DQActionMessage *)item->m_action;
+//		DQActionMessage *action = (DQActionMessage *)item->m_action;
 		
 		DPRINTF(k_DBG_UI, ("Message from Gamestate\n"));
 	  }
@@ -863,7 +869,7 @@ void Director::ActionFinished(Sequence *seq)
 	if (m_dispatchedItems->GetCount() > 0) {
 		item = m_dispatchedItems->RemoveHead();
 	} else {
-		sint32 NoDispatchedItem = 0;
+//		sint32 NoDispatchedItem = 0;
 
 
 		return;
@@ -891,7 +897,7 @@ void Director::ActionFinished(Sequence *seq)
 			
 			
 			
-			sint32 OutOfOrder_TooEarly = 0;
+//			sint32 OutOfOrder_TooEarly = 0;
 
 
 			m_lastSequenceID = seq->GetSequenceID();
@@ -901,7 +907,7 @@ void Director::ActionFinished(Sequence *seq)
 		} else {
 			
 			
-			sint32 OutOfOrder_SequenceSkipped = 0;
+//			sint32 OutOfOrder_SequenceSkipped = 0;
 
 
 			SetActionFinished(TRUE);
@@ -1791,7 +1797,7 @@ void Director::DrawActiveUnits(RECT *paintRect, sint32 layer)
 
 	pos = m_activeUnitList->GetHeadPosition();
 	numToProcess = m_activeUnitList->L();
-	uint32 visPlayerBit = (1 << g_selected_item->GetVisiblePlayer());
+//	uint32 visPlayerBit = (1 << g_selected_item->GetVisiblePlayer());
 	for (uint32 i=0; i<numToProcess; i++) 
 	{
 		actor = m_activeUnitList->GetNext(pos);
@@ -2027,8 +2033,18 @@ void Director::AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize,
 
 }
 
-void Director::AddMove(Unit &mover, MapPoint &oldPos, MapPoint &newPos, sint32 numRevealed, UnitActor **revealedActors,
-					   sint32 numRest, UnitActor **restOfStack, BOOL isTransported, sint32 soundID)
+void Director::AddMove
+(
+    Unit                mover, 
+    MapPoint const &    oldPos, 
+    MapPoint const &    newPos, 
+    sint32              numRevealed, 
+    UnitActor **        revealedActors,
+    sint32              numRest, 
+    UnitActor **        restOfStack, 
+    bool                isTransported, 
+    sint32              soundID
+)
 {
 	UnitActor		*actor = mover.GetActor();
 
@@ -2091,9 +2107,16 @@ void Director::AddMove(Unit &mover, MapPoint &oldPos, MapPoint &newPos, sint32 n
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddTeleport(Unit &top, MapPoint &oldPos, MapPoint &newPos, 
-							sint32 numRevealed, UnitActor **revealedActors,
-							sint32 arraySize, UnitActor **moveActors)
+void Director::AddTeleport
+(
+    Unit                top, 
+    MapPoint const &    oldPos, 
+    MapPoint const &    newPos, 
+	sint32              numRevealed, 
+    UnitActor **        revealedActors,
+	sint32              arraySize, 
+    UnitActor **        moveActors
+)
 {
 	DQActionMove		*action = new DQActionMove;
 	DQItem				*item	= new DQItem(DQITEM_TELEPORT, action, dh_teleport);
@@ -2155,13 +2178,13 @@ void Director::AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID)
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddCombatFlash(MapPoint &pos)
+void Director::AddCombatFlash(MapPoint const & pos)
 {
-	DQActionCombatFlash		*action = new DQActionCombatFlash;
-	DQItem				*item = new DQItem(DQITEM_COMBATFLASH, action, dh_combatflash);
-
+	DQActionCombatFlash	*   action  = new DQActionCombatFlash;
 	action->flash_pos = pos;
 
+    DQItem *                item    = 
+        new DQItem(DQITEM_COMBATFLASH, action, dh_combatflash);
 	m_itemQueue->AddTail(item);
 }
 
@@ -2350,17 +2373,17 @@ void Director::AddAttack(Unit attacker, Unit defender)
 		}
 }
 
-void Director::AddAttackPos(Unit attacker, MapPoint &pos)
+void Director::AddAttackPos(Unit attacker, MapPoint const & pos)
 {
-	DQActionAttackPos	*action = new DQActionAttackPos;
-	DQItem				*item = new DQItem(DQITEM_ATTACKPOS, action, dh_attackpos);
+	DQActionAttackPos *     action  = new DQActionAttackPos;
+	action->attackpos_attacker      = attacker.GetActor();
+	action->attackpos_attacker_pos  = attacker.RetPos();
+	action->attackpos_target_pos    = pos;
+	action->attackpos_soundID       = attacker.GetAttackSoundID();
+
+	DQItem *                item    = 
+        new DQItem(DQITEM_ATTACKPOS, action, dh_attackpos);
 	item->SetOwner(attacker.GetOwner());
-
-	action->attackpos_attacker = attacker.GetActor();
-	action->attackpos_attacker_pos = attacker.RetPos();
-	action->attackpos_target_pos = pos;
-	action->attackpos_soundID = attacker.GetAttackSoundID();
-
 	m_itemQueue->AddTail(item);
 
 	if (g_player[g_selected_item->GetVisiblePlayer()] &&
@@ -2778,16 +2801,15 @@ void Director::AddBattle(Battle *battle)
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddPlaySound(sint32 soundID, MapPoint &pos)
+void Director::AddPlaySound(sint32 soundID, MapPoint const & pos)
 {
 	if (soundID <= 0) return;
 
-	DQActionPlaySound	*action = new DQActionPlaySound;
-	DQItem			*item = new DQItem(DQITEM_PLAYSOUND, action, dh_playSound);
+	DQActionPlaySound * action  = new DQActionPlaySound;
+	action->playsound_soundID   = soundID;
+	action->playsound_pos       = pos;
 
-	action->playsound_soundID = soundID;
-	action->playsound_pos = pos;
-
+	DQItem *            item    = new DQItem(DQITEM_PLAYSOUND, action, dh_playSound);
 	m_itemQueue->AddTail(item);
 }
 
@@ -3253,7 +3275,7 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 {
 	DQActionMoveProjectile	*action = (DQActionMoveProjectile *)itemAction;
 
-	ProjectileActor		*projectile = action->move_projectile;
+//	ProjectileActor		*projectile = action->move_projectile;
 	EffectActor			*projectileEnd = action->end_projectile;
 	UnitActor			*shootingActor = action->pshooting_actor;
 	UnitActor			*targetActor = action->ptarget_actor;
@@ -3288,25 +3310,19 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 			else
 			{
 				actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
-				Assert(actionObj != NULL);
-				if (actionObj == NULL) {
-                    delete anim;
-					g_director->ActionFinished(seq);
-					return;
-				}
 			}
 		}
 		else
 		{
 			actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
-			Assert(actionObj != NULL);
-			if (actionObj == NULL) {
-                delete anim;
-				g_director->ActionFinished(seq);
-				return;
-			}
 		}
 
+		Assert(actionObj != NULL);
+		if (actionObj == NULL) {
+            delete anim;
+			g_director->ActionFinished(seq);
+			return;
+		}
 		actionObj->SetAnim(anim);
 		projectileEnd->AddAction(actionObj);
 		g_director->ActiveEffectAdd(projectileEnd);
@@ -3320,13 +3336,6 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
 	DQActionAttack	*action = (DQActionAttack *)itemAction;
 
-	
-	BOOL  defenderVisible=FALSE;
-	BOOL  attackerVisible=FALSE;
-	BOOL  battleVisible  =FALSE;
-	BOOL  playerInvolved =FALSE;
-
-	
 	UnitActor	*theAttacker = action->attacker;
 	UnitActor	*theDefender = action->defender;
 	
@@ -3336,25 +3345,18 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	if ((theAttacker == NULL)||(theDefender == NULL)) return;
 
-	BOOL defenderIsAttackable = !action->defender_IsCity;
-
-	Action *ActionObj = NULL;
-
-	
-	attackerVisible = g_director->TileIsVisibleToPlayer(action->attacker_Pos);
-	defenderVisible = g_director->TileIsVisibleToPlayer(action->defender_Pos);
+//	bool attackerVisible = g_director->TileIsVisibleToPlayer(action->attacker_Pos);
+	bool defenderVisible = g_director->TileIsVisibleToPlayer(action->defender_Pos);
 	
 	
-	playerInvolved  = (theDefender->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) ||
+	bool playerInvolved  = (theDefender->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) ||
 					  (theAttacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer());
 
 	
-	sint32 facingIndex;
 	POINT  AttackerPoints, DefenderPoints;
 
-	
-	maputils_MapXY2PixelXY(action->attacker_Pos.x, action->attacker_Pos.y, &(AttackerPoints.x), &(AttackerPoints.y));
-	maputils_MapXY2PixelXY(action->defender_Pos.x, action->defender_Pos.y, &(DefenderPoints.x), &(DefenderPoints.y));
+	maputils_MapXY2PixelXY(action->attacker_Pos.x, action->attacker_Pos.y, AttackerPoints);
+	maputils_MapXY2PixelXY(action->defender_Pos.x, action->defender_Pos.y, DefenderPoints);
 
 	
 	sint32  deltax=DefenderPoints.x-AttackerPoints.x;
@@ -3362,10 +3364,10 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 
 	
-	facingIndex=spriteutils_DeltaToFacing(deltax,deltay);
+	sint32 facingIndex=spriteutils_DeltaToFacing(deltax,deltay);
 
 	
-	ActionObj = new Action();
+	Action * ActionObj = new Action();
 
 	
 	Assert(ActionObj != NULL);
@@ -3401,7 +3403,7 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	}
 
 	
-	if (defenderIsAttackable) 
+	if (!action->defender_IsCity) 
 	{
 		
 	    facingIndex=spriteutils_DeltaToFacing(-deltax,-deltay);
@@ -3430,7 +3432,7 @@ void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		theDefender->ActionAttack(ActionObj,facingIndex);
 	
 		if(playerInvolved)
-		   defenderVisible = TRUE;
+		   defenderVisible = true;
 	 
 		
 		if(defenderVisible && (executeType == DHEXECUTE_NORMAL)) 
@@ -3479,8 +3481,14 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 	POINT  AttackerPoints, DefenderPoints;
 
 	
-	maputils_MapXY2PixelXY(action->attacker_Pos.x, action->attacker_Pos.y, &(AttackerPoints.x), &(AttackerPoints.y));
-	maputils_MapXY2PixelXY(action->defender_Pos.x, action->defender_Pos.y, &(DefenderPoints.x), &(DefenderPoints.y));
+	maputils_MapXY2PixelXY(action->attacker_Pos.x, 
+                           action->attacker_Pos.y, 
+                           AttackerPoints
+                          );
+	maputils_MapXY2PixelXY(action->defender_Pos.x, 
+                           action->defender_Pos.y, 
+                           DefenderPoints
+                          );
 
 	
 	sint32  deltax=DefenderPoints.x-AttackerPoints.x;
@@ -3594,32 +3602,14 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 
 void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
-	DQActionDeath	*action = (DQActionDeath *)itemAction;
+	DQActionDeath * action              = (DQActionDeath *)itemAction;
+	UnitActor *     theDead             = action->death_dead;
+	UnitActor *     theVictor           = action->death_victor;
+	Anim *          deathAnim           = NULL;
+	Anim *          victorAnim          = NULL;
+	sint32		    deathActionType     = UNITACTION_NONE; 
+	sint32          victorActionType    = UNITACTION_NONE;
 
-	
-	
-	
-	
-	
-	
-
-	UnitActor	*theDead = action->death_dead;
-	UnitActor	*theVictor = action->death_victor;
-	Anim		*deathAnim = NULL;
-	Anim		*victorAnim = NULL;
-	uint32		deathActionType = UNITACTION_NONE, 
-				victorActionType = UNITACTION_NONE;
-
-	
-	
-	
-
-	
-	
-	
-
-	
-	
 	if (theDead != NULL && !theDead->GetNeedsToDie())
 	{
 		theDead->SetNeedsToDie(TRUE);
@@ -3814,13 +3804,10 @@ void dh_morphUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	UnitActor		*theActor = action->morphing_actor;
 
 	Assert(theActor != NULL);
-	if (theActor == NULL) {
-		g_director->ActionFinished(seq);
-		return;
+	if (theActor) 
+    {
+    	theActor->ChangeType(action->ss, action->type, action->id, FALSE);	
 	}
-
-	
-	theActor->ChangeType(action->ss,  action->type,	action->id, FALSE);	
 
 	g_director->ActionFinished(seq);
 }
@@ -4045,7 +4032,7 @@ void dh_combatflash(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 void dh_copyVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
-	DQActionCopyVision	*action = (DQActionCopyVision *)itemAction;
+//	DQActionCopyVision	*action = (DQActionCopyVision *)itemAction;
 
 	g_tiledMap->CopyVision();
 	g_radarMap->Update();
@@ -4081,7 +4068,7 @@ void dh_selectUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 void dh_endTurn(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
-	DQActionEndTurn	*action = (DQActionEndTurn *)itemAction;
+//	DQActionEndTurn	*action = (DQActionEndTurn *)itemAction;
 
 	g_director->ActionFinished(seq);
 
@@ -4203,11 +4190,10 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 
 
-	Action *AttackerActionObj = NULL;
 	Action *AttackedActionObj = NULL;
 
 	
-	AttackerActionObj = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
+	Action * AttackerActionObj = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
 	Assert(AttackerActionObj != NULL);
 	if (AttackerActionObj == NULL) return;
 
@@ -4230,17 +4216,14 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		AttackedActionObj->SetEndMapPoint(action->faceoff_attacked_pos);
 	}
 
-	Anim	*AttackerAnim = NULL;
 	Anim	*AttackedAnim = NULL;
 
-	AttackerAnim = theAttacker->MakeFaceoff();
+	Anim * AttackerAnim = theAttacker->MakeFaceoff();
 	if (AttackerAnim == NULL) 
 	{
 		theAttacker->AddIdle(TRUE);
 		delete AttackerActionObj;
-
-		if (AttackedActionObj) 
-			delete AttackedActionObj;
+		delete AttackedActionObj;
 
 		return;
 	}
@@ -4268,10 +4251,13 @@ void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	
 	maputils_MapXY2PixelXY(action->faceoff_attacker_pos.x, 
-							action->faceoff_attacker_pos.y, 
-							&(AttackerPoints.x), &(AttackerPoints.y));
+						   action->faceoff_attacker_pos.y, 
+						   AttackerPoints
+                          );
 	maputils_MapXY2PixelXY(action->faceoff_attacked_pos.x, 
-							action->faceoff_attacked_pos.y, &(AttackedPoints.x), &(AttackedPoints.y));
+						   action->faceoff_attacked_pos.y, 
+                           AttackedPoints
+                          );
 
 	AttackerActionObj->SetFacing(spriteutils_DeltaToFacing(AttackedPoints.x - AttackerPoints.x,
 		AttackedPoints.y - AttackerPoints.y));
@@ -4470,10 +4456,14 @@ void dh_attackpos(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	POINT AttackerPoints, AttackedPoints;
 
 	
-	maputils_MapXY2PixelXY(action->attackpos_attacker_pos.x, action->attackpos_attacker_pos.y, 
-							&(AttackerPoints.x), &(AttackerPoints.y));
-	maputils_MapXY2PixelXY(action->attackpos_target_pos.x, action->attackpos_target_pos.y, 
-							&(AttackedPoints.x), &(AttackedPoints.y));
+	maputils_MapXY2PixelXY(action->attackpos_attacker_pos.x, 
+                           action->attackpos_attacker_pos.y, 
+						   AttackerPoints
+                          );
+	maputils_MapXY2PixelXY(action->attackpos_target_pos.x, 
+                           action->attackpos_target_pos.y, 
+						   AttackedPoints
+                          );
 
 	AttackerActionObj->SetFacing(spriteutils_DeltaToFacing(AttackedPoints.x - AttackerPoints.x,
 		AttackedPoints.y - AttackerPoints.y));

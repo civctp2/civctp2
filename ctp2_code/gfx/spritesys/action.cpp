@@ -103,9 +103,11 @@ void Action::Process(void)
 	STOMPCHECK();
 #endif
 
-	
-	
-	
+	if (!m_curAnim)
+    {
+        SetFinished(TRUE);
+        return;
+    }
 	
 	m_animPos = m_curAnim->GetNextPosition(m_animPos);
 	m_animDelayEnd = m_curAnim->GetDelayEnd();
@@ -186,7 +188,7 @@ void Action::SetAnim(Anim *anim)
 	STOMPCHECK();
 #endif
 
-	Assert(anim != NULL);
+//	Assert(anim != NULL);
 	if (anim == NULL) return;
 
 	anim->SetFinished(FALSE);

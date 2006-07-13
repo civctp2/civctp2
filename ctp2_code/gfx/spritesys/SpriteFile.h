@@ -199,8 +199,8 @@ public:
 
 	SPRITEFILEERR	ReadData(void *data, size_t bytes);
 
-	size_t			GetFilePos(void);
-	void			SetFilePos(size_t pos);
+	fpos_t			GetFilePos(void);
+	void			SetFilePos(fpos_t pos);
 
 protected:
 	unsigned	m_version;			

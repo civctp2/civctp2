@@ -1,54 +1,56 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handling of the action on the screen
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __DIRECTOR_H__
 #define __DIRECTOR_H__
 
-#include "aui.h"
-#include "aui_mouse.h"
-#include "Queue.h"
+//----------------------------------------------------------------------------
+//
+// Library imports
+//
+//----------------------------------------------------------------------------
 
-class Unit; 
-class TradeRoute; 
+// none
 
-#include "pointerlist.h"
-#include "directoractions.h"
-#include "gamesounds.h"
+//----------------------------------------------------------------------------
+//
+// Exported names
+//
+//----------------------------------------------------------------------------
 
-
-#define k_MAX_DIRECTOR_QUEUE_ITEMS		2000
-#define k_MAXFRAMERATE 20
-
-#define k_FIRSTACTOR 0
-#define k_NOPROJECTILE -1
-
-#define k_TRANSPORTREMOVEONLY -1
-#define k_TRANSPORTADDONLY -2
-
-#define k_TIME_LOG_SIZE				30			
-#define k_DEFAULT_FPS				10
-#define k_ELAPSED_CEILING			100			
-
-class UnitActor;
-class ProjectileActor;
-class EffectActor;
-class TradeActor;
-class aui_Surface;
-class Battle;
-enum SPECATTACK;
-
-template <class T> class tech_WLList;
+class Director;
+class DQItem;
+class Sequence;
 
 enum DQITEM_TYPE {
 	DQITEM_MOVE,
@@ -101,14 +103,56 @@ enum DHEXECUTE {
 	DHEXECUTE_MAX
 };
 
-class Sequence;
+enum SEQ_ACTOR {
+	SEQ_ACTOR_PRIMARY = 0,
+	SEQ_ACTOR_SECONDARY = 1,
+
+	SEQ_ACTOR_MAX
+};
+
+#define k_MAX_DIRECTOR_QUEUE_ITEMS		2000
+#define k_MAXFRAMERATE 20
+
+#define k_FIRSTACTOR 0
+#define k_NOPROJECTILE -1
+
+#define k_TRANSPORTREMOVEONLY -1
+#define k_TRANSPORTADDONLY -2
+
+#define k_TIME_LOG_SIZE				30			
+#define k_DEFAULT_FPS				10
+#define k_ELAPSED_CEILING			100			
+
+//----------------------------------------------------------------------------
+//
+// Project imports
+//
+//----------------------------------------------------------------------------
+
+#include "aui.h"
+#include "aui_mouse.h"
+#include "Queue.h"
+#include "pointerlist.h"
+#include "directoractions.h"
+#include "gamesounds.h"
+#include "Unit.h"               // Unit, SPECATTACK
+
+class TradeRoute; 
+class UnitActor;
+class ProjectileActor;
+class EffectActor;
+class TradeActor;
+class aui_Surface;
+class Battle;
+template <class T> class tech_WLList;
+
+//----------------------------------------------------------------------------
+//
+// Declarations
+//
+//----------------------------------------------------------------------------
 
 typedef void (DQHandler)(DQAction *action, Sequence *seq, DHEXECUTE executeType);
-
-
-
-
-
 
 
 
@@ -136,35 +180,23 @@ public:
 
 
 
-enum SEQ_ACTOR {
-	SEQ_ACTOR_PRIMARY = 0,
-	SEQ_ACTOR_SECONDARY = 1,
 
-	SEQ_ACTOR_MAX
-};
-
-class Sequence {
+class Sequence 
+{
 public:
-	Sequence() 
+	Sequence(sint32 seqID = 0) 
+    :
+        m_sequenceID    (seqID),
+        m_refCount      (0),
+        m_item          (NULL)
 	{ 
-		m_sequenceID = 0; 
-		m_refCount = 0; 
-		m_addedToActiveList[SEQ_ACTOR_PRIMARY] = FALSE;
-		m_addedToActiveList[SEQ_ACTOR_SECONDARY] = FALSE;
-	}
-
-	Sequence(sint32 seqID) 
-	{ 
-		m_sequenceID = seqID; 
-		m_refCount = 0; 
-		m_addedToActiveList[SEQ_ACTOR_PRIMARY] = FALSE;
-		m_addedToActiveList[SEQ_ACTOR_SECONDARY] = FALSE;
+		m_addedToActiveList[SEQ_ACTOR_PRIMARY]      = FALSE;
+		m_addedToActiveList[SEQ_ACTOR_SECONDARY]    = FALSE;
 	}
 
 	~Sequence() {}
 
 	sint32 GetSequenceID(void) { return m_sequenceID; }
-	void	SetSequenceID(sint32 seqID) { m_sequenceID = 0; }
 	void	AddRef(void) { m_refCount++; }
 	void	Release(void) { m_refCount--; }
 	sint32	GetRefCount(void) { return m_refCount; }
@@ -174,10 +206,11 @@ public:
 
 	void	SetAddedToActiveList(SEQ_ACTOR which, BOOL added) { m_addedToActiveList[which] = added; }
 	BOOL	GetAddedToActiveList(SEQ_ACTOR which) { return m_addedToActiveList[which]; }
+
 private:
 	sint32		m_sequenceID;
 	sint32		m_refCount;
-	DQItem		*m_item;
+	DQItem *    m_item;
 	BOOL		m_addedToActiveList[SEQ_ACTOR_MAX];
 };
 
@@ -226,14 +259,32 @@ public:
 	
 	void			AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported); 
 
-	void			AddMove(Unit &mover, MapPoint &oldPos, MapPoint &newPos, sint32 numRevealed, UnitActor **revealedActors, 
-						sint32 numRest, UnitActor **restOfStack, BOOL isTransported, sint32 soundID);
+    void AddMove
+    (
+        Unit                mover, 
+        MapPoint const &    oldPos, 
+        MapPoint const &    newPos, 
+        sint32              numRevealed, 
+        UnitActor **        revealedActors,
+        sint32              numRest, 
+        UnitActor **        restOfStack, 
+        bool                isTransported, 
+        sint32              soundID
+    );
 
-	void			AddTeleport(Unit &top, MapPoint &oldPos, MapPoint &newPos, 	sint32 numRevealed, UnitActor **revealedActors,
-							sint32 arraySize, UnitActor **moveActors);
+	void AddTeleport
+    (
+        Unit                top, 
+        MapPoint const &    oldPos, 
+        MapPoint const &    newPos, 	
+        sint32              numRevealed, 
+        UnitActor **        revealedActors,
+		sint32              arraySize, 
+        UnitActor **        moveActors
+    );
 
 	void			AddAttack(Unit attacker, Unit attacked);
-	void			AddAttackPos(Unit attacker, MapPoint &pos);
+	void			AddAttackPos(Unit attacker, MapPoint const & pos);
 	void			AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK attack);
 	void			AddWinnerLoser(Unit victor, Unit dead);
 	void			AddDeath(Unit dead);
@@ -250,13 +301,13 @@ public:
 	void			AddSetVisibility(UnitActor *actor, uint32 visibility);	
 	void			AddSetOwner(UnitActor *actor, sint32 owner);	
 	void			AddSetVisionRange(UnitActor *actor, double range);
-	void			AddCombatFlash(MapPoint &pos);
+	void			AddCombatFlash(MapPoint const & pos);
 	void			AddCopyVision(void);
 	void			AddCenterMap(const MapPoint &pos);
 	void			AddSelectUnit(uint32 flags);
 	void			AddEndTurn(void);
 	void			AddBattle(Battle *battle);
-	void			AddPlaySound(sint32 soundID, MapPoint &pos);
+	void			AddPlaySound(sint32 soundID, MapPoint const & pos);
 	void            AddGameSound(GAMESOUNDS sound);
 	void			AddPlayWonderMovie(sint32 which);
 	void			AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOOL previouslyLost);
@@ -370,9 +421,6 @@ public:
 };
 
 extern Director *g_director;
-
-
-
 
 DQHandler dh_move;
 DQHandler dh_teleport;

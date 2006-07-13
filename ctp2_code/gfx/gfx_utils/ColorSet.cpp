@@ -30,6 +30,7 @@
 //   original game or 74 like in the source code edition. If there are just
 //   58 the missing player colors are filled with the map colors at that 
 //   like in the original version. (Oct 22nd 2005 Martin Gühmann)
+// - Relaxed the above to allow more than 74 color entries in the future.
 //
 //----------------------------------------------------------------------------
  
@@ -46,9 +47,8 @@ extern sint32 g_is565Format;
 namespace
 {
 
-size_t const OLD_COLOR_NUMBER = 58;
-size_t const NEW_COLOR_NUMBER = 74;
-size_t const COLOR_DIFFERENCE = NEW_COLOR_NUMBER - OLD_COLOR_NUMBER;
+size_t const OLD_COLOR_NUMBER       = 58;
+size_t const NEW_COLOR_NUMBER_MIN   = 74;
 
 ColorSet     s_theUniqueColorSet;
 
@@ -195,10 +195,10 @@ void ColorSet::Import(uint32 fileNumber)
 
         sint32 fileColorCount = 0;
         theToken.GetNumber(fileColorCount); 
-        if(fileColorCount <= 0
-		||(fileColorCount != OLD_COLOR_NUMBER
-		&& fileColorCount != NEW_COLOR_NUMBER)
-		){ 
+        if (    (fileColorCount != static_cast<sint32>(OLD_COLOR_NUMBER))
+		     && (fileColorCount <  static_cast<sint32>(NEW_COLOR_NUMBER_MIN))
+           ) 
+		{ 
 	        throw std::exception("Illegal number of colors.");
         }
 
@@ -209,8 +209,11 @@ void ColorSet::Import(uint32 fileNumber)
             throw std::exception("Error before open brace."); 
         }
 
-        m_colors.resize(static_cast<size_t>(NEW_COLOR_NUMBER));
-        for (size_t i = 0; i < NEW_COLOR_NUMBER; ++i) 
+        size_t const    arraySize   = 
+            std::max(NEW_COLOR_NUMBER_MIN, static_cast<size_t>(fileColorCount));
+
+        m_colors.resize(arraySize);
+        for (size_t i = 0; i < static_cast<size_t>(fileColorCount); ++i) 
         {
 	        if (!token_ParseKeywordNext(&theToken, TOKEN_COLORSET_COLOR)) 
             {
@@ -225,22 +228,26 @@ void ColorSet::Import(uint32 fileNumber)
 	        Pixel16 const   rgb565  = static_cast<Pixel16>
                 (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3));
 
-            // When g_is565Format is true, pixeluitls_Conver565to555 is an
-            // identity operation.
-			if(fileColorCount == OLD_COLOR_NUMBER
-			&& COLOR_PLAYER18 == static_cast<COLOR>(i)
-			){
-				i = static_cast<size_t>(COLOR_TERRAIN_0);
+			if (   (static_cast<size_t>(fileColorCount) == OLD_COLOR_NUMBER)
+			    && (COLOR_PLAYER18 <= static_cast<COLOR>(i))
+			   )
+            {
+                // The playtest made itself incompatible by middle-insertion.
+                // The following index shift hack compensates for this.
+				size_t const    hackIndex   = 
+                    i + static_cast<size_t>(COLOR_TERRAIN_0)
+                      - static_cast<size_t>(COLOR_PLAYER18);
+                
+                m_colors[hackIndex] = pixelutils_Convert565to555(rgb565);
+                // And another hack: copy terrain colors to player colors?!
+                m_colors[i]         = m_colors[hackIndex];
 			}
-			if(fileColorCount == OLD_COLOR_NUMBER 
-			&& static_cast<COLOR>(i - COLOR_DIFFERENCE) < COLOR_TERRAIN_0
-			){
+            else
+            {
+                // When g_is565Format is true, pixeluitls_Conver565to555 is an
+                // identity operation.
 		        m_colors[i] = pixelutils_Convert565to555(rgb565);
-		        m_colors[i - COLOR_DIFFERENCE] = m_colors[i];
-			}
-			else{
-		        m_colors[i] = pixelutils_Convert565to555(rgb565);
-			}
+            }
         }
 
         if (!token_ParseAnCloseBraceNext(&theToken))

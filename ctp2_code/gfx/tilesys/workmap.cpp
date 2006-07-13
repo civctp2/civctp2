@@ -138,19 +138,11 @@ WorkMap::~WorkMap()
 
 void WorkMap::InitCommonLdl(MBCHAR *ldlBlock)
 {
-	sint32 scale = k_WORKMAP_DEFAULT_SCALE;
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-
-	
-	BOOL valid = theLdl->IsValid( ldlBlock );
-	Assert( valid );
-	if ( !valid ) return;
-
-	
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return;
 
+	sint32 scale = k_WORKMAP_DEFAULT_SCALE;
 	if (block->GetAttributeType( k_WORKMAP_LDL_SCALE ) == ATTRIBUTE_TYPE_INT) {
 		scale = block->GetInt( k_WORKMAP_LDL_SCALE );
 	}
@@ -401,8 +393,8 @@ sint32 WorkMap::DrawSurface(void)
 
 return 0;
 
-	
-	for (sint32 j =0;j < 3;j++) {
+#if 0   // Unreachable
+    for (sint32 j =0;j < 3;j++) {
 		pos.GetNeighborPosition(NORTHWEST, newpos);
 		pos = newpos;
 	}
@@ -419,11 +411,6 @@ return 0;
 	
 	sint32 nudge;
 	sint32 index = 0;
-	sint32 frame = 0;
-
-	
-
-
 
 	g_tiledMap->LockThisSurface(m_surface);
 
@@ -568,6 +555,7 @@ return 0;
 	g_tiledMap->SetScale( scale );
 
 	return TRUE;
+#endif
 }
 
 sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint32 yOff )
@@ -612,7 +600,6 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 	
 	sint32 nudge;
 	sint32 index = 0;
-	sint32 frame = 0;
 
 	g_tiledMap->LockThisSurface(pSurface);
 
@@ -642,11 +629,11 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 				DrawImprovements(pSurface, pos.y, i+x, x*48+nudge+xOff,y*12+yOff);
 
 
-			
-			sint32 mapX = maputils_TileX2MapX(i+x,pos.y);
+#if 0   // Useless local variable updates
+            sint32 mapX = maputils_TileX2MapX(i+x,pos.y);
 			MapPoint tempPos( mapX, pos.y);
 			Cell *cell = g_theWorld->GetCell(tempPos);
-			
+#endif			
 			index++;
 		}
 		if (y==2 || y==4) {
@@ -655,11 +642,11 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 			else
 				DrawImprovements(pSurface, pos.y, i+x, x*48+nudge+xOff,y*12+yOff);
 
-			
+#if 0   // Useless local variable updates			
 			sint32 mapX = maputils_TileX2MapX(i+x,pos.y);
 			MapPoint tempPos (mapX, pos.y);
 			Cell *cell = g_theWorld->GetCell(tempPos);
-			
+#endif			
 			index++;
 		}
 		pos = newpos;
@@ -674,7 +661,7 @@ sint32 WorkMap::DrawSpaceImprovements( aui_Surface *pSurface, sint32 xOff, sint3
 	return TRUE;
 }
 
-BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint const & pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	UnitActor	*actor;
@@ -720,7 +707,7 @@ BOOL WorkMap::DrawACity(aui_Surface *pSurface, MapPoint &pos, void *context)
 	return TRUE;
 }
 
-BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint const & pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	UnitActor	*actor;
@@ -767,7 +754,7 @@ BOOL WorkMap::DrawALandCity(aui_Surface *pSurface, MapPoint &pos, void *context)
 }
 
 
-BOOL WorkMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawAGood(aui_Surface *pSurface, MapPoint const &pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	GoodActor	*goodActor;
@@ -812,7 +799,7 @@ BOOL WorkMap::DrawAGood(aui_Surface *pSurface, MapPoint &pos, void *context)
 	return TRUE;
 }
 
-BOOL WorkMap::DrawATile(aui_Surface *pSurface, MapPoint &pos, void *context)
+BOOL WorkMap::DrawATile(aui_Surface *pSurface, MapPoint const & pos, void *context)
 {
 	WorkMap		*workMap = (WorkMap *)context;
 	sint32		x, y;
@@ -1067,26 +1054,9 @@ sint32 WorkMap::DrawImprovements(
 			sint32 y
 			)
 {
-	sint16		river = -1;
-
-	
-	maputils_WrapPoint(j,i,&j,&i);
-
-	
-	sint32 k = maputils_TileX2MapX(j,i);
-
-	MapPoint pos (k, i);
-	
-	
-	if ( !m_scale ) {
-		
-		g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
-
-	}
-	else {	
-		
-		g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
-	}
+	maputils_WrapPoint(j, i, &j, &i);
+	MapPoint    pos(maputils_TileX2MapX(j, i), i);
+	g_tiledMap->DrawImprovementsLayer(NULL, pos, x, y);
 	
 	return 0;
 }
@@ -1094,34 +1064,22 @@ sint32 WorkMap::DrawImprovements(
 
 void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit &unit)
 {
-	sint32 xoffset = (sint32)((k_TILE_PIXEL_WIDTH)/2);
-	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM);
-
 	Assert(unit.IsCity());
 	if (!unit.IsCity()) return;
 
-	y-= yoffset;
-	
-	CityData *cityData = unit.GetData()->GetCityData() ;
-	MBCHAR *name = (MBCHAR *)cityData->GetName() ;
+	sint32 const    yoffset     = y - k_TILE_PIXEL_HEADROOM;
+	CityData *      cityData    = unit.GetData()->GetCityData();
+	MBCHAR *        name        = cityData->GetName();
 
-	sint32 width, height;
-	RECT rect;
-
-	if (x >= 0 && y >= 0 && x < surface->Width() && y < surface->Height()) {
-
-		width = textutils_GetWidth(surface,name);
-		height = textutils_GetHeight(surface,name);
-		rect.left = x;
-		rect.top = y;
-		rect.right = x+width;
-		rect.bottom = y+height;;
-
+	if ((x >= 0) && (x < surface->Width()) && 
+        (yoffset >= 0) && (yoffset < surface->Height())
+       ) 
+    {
 		textutils_ColoredDropString(
 			surface,
 			name,
 			x,
-			y,
+			yoffset,
 			k_CITYNAME_PTSIZE,
 			(COLOR)(COLOR_PLAYER1+unit.GetOwner()),
 			(COLOR)(COLOR_BLACK),
@@ -1130,21 +1088,16 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	}
 
 	
-	sint32 pop = cityData->PopCount();
+	sint32 const pop = cityData->PopCount();
 	MBCHAR str[80];
 	sprintf(str,"%i",pop);
-	y+=yoffset;
 
-	width = textutils_GetWidth(surface,str);
-	height = textutils_GetHeight(surface,str);
-
-	sint32	popEdgeSize = (sint32)((double)k_POP_BOX_SIZE);
-	sint32 nudge = 0;
+    sint32  popEdgeSize = std::max<sint32>(k_POP_BOX_SIZE_MINIMUM, k_POP_BOX_SIZE);
+	sint32  nudge       = 0;
 	if (pop > 9)
 		nudge = 4;
 	if (pop > 99)
 		nudge = 2;
-	if (popEdgeSize < k_POP_BOX_SIZE_MINIMUM) popEdgeSize = k_POP_BOX_SIZE_MINIMUM;
 
 	RECT popRect = {x, 
 					 y, 
@@ -1413,12 +1366,8 @@ sint32 WorkMap::UpdateFromSurface(aui_Surface *destSurface, RECT *destRect)
 
 void WorkMap::Click(aui_MouseEvent *data)
 {	
-	UnitActor		*actor=NULL;
 	MapPoint		pos;
-	Unit			top;
-	POINT			point;
-
-	point = data->position;
+	POINT			point = data->position;
 
 	if (MousePointToTilePos(point, pos)) {
 		if (data->lbutton && !data->rbutton) {
@@ -1578,7 +1527,9 @@ void WorkMap::DrawHiliteMouseTile(aui_Surface *destSurf, RECT *destRect)
 
 void WorkMap::HandlePop( MapPoint point )
 {
-	
+/// @todo Find out what this function is supposed to do, because it is now
+///       only updating local variables.
+
 	MapPoint mp;
 
 	
@@ -1609,6 +1560,7 @@ void WorkMap::HandlePop( MapPoint point )
 
 	return;
 
+#if 0   // Unreachable
 	PLAYER_INDEX	player ;
 	ID	item ;
 	SELECT_TYPE	state ;
@@ -1619,6 +1571,7 @@ void WorkMap::HandlePop( MapPoint point )
 		return;
 	
 	Assert(m_unit != Unit());
+#endif
 }
 
 

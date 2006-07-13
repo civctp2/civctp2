@@ -262,8 +262,6 @@ void TiledMap::DrawLegalMove
 			return;
 	}
 	
-    sint32 const	owner				= sel_army.GetOwner();
-	
 	double			currMovementPoints;
     sel_army.CurMinMovementPoints(currMovementPoints); 
 	if (currMovementPoints < 1.0)
@@ -471,7 +469,7 @@ void TiledMap::DrawLegalMove
 	old_line_color	= lineColor; 
 
 	Path			badPath(g_selected_item->GetBadPath());
-	sint32			badPath_old_index	= badPath.GetNextIndex(); // ??? not used
+//	sint32			badPath_old_index	= badPath.GetNextIndex(); // ??? not used
 	badPath.Start(currPos);
 
 	if (TileIsVisible(prevPos.x, prevPos.y) && 
@@ -665,7 +663,7 @@ void TiledMap::DrawLegalMove
 			count -= cost;
 			if (isFirstMove)
 			{
-				count		= max(count, 0.0);
+                count		= std::max(count, 0.0);
 				isFirstMove = false;
 			}
 		}

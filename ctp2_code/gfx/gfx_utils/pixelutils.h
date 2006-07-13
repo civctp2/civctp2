@@ -101,30 +101,24 @@ inline Pixel16 pixelutils_Additive(Pixel16 pixel1, Pixel16 pixel2)
 
 	if (g_is565Format)
 	{
-		r = (short)((pixel1 & 0xF800) >> 11) ;
-		g = (short)((pixel1 & 0x07E0) >> 5) ;
-		b = (short)((pixel1 & 0x001F)) ;
+		r = ((pixel1 & 0xF800) >> 11) + sum;
+		g = ((pixel1 & 0x07E0) >> 5)  + (sum << 1);
+		b = ((pixel1 & 0x001F))       + sum;
 
-		r += sum;
 		if (r > 0x001F) r = 0x001F;
-		g += (sum << 1);
 		if (g > 0x003F) g = 0x003F;
-		b += sum;
 		if (b > 0x001F) b = 0x001F;
 
 		return static_cast<Pixel16>((r<<11) | (g<<5) | b);
 	}
 	else
 	{
-		r = (pixel1 & 0x7C00) >> 10;
-		g = (pixel1 & 0x03E0) >> 5;
-		b = (pixel1 & 0x001F);
+		r = ((pixel1 & 0x7C00) >> 10) + sum;
+		g = ((pixel1 & 0x03E0) >> 5)  + sum;
+		b = ((pixel1 & 0x001F))       + sum;
 
-		r += sum;
 		if (r > 0x001F) r = 0x001F;
-		g += sum;
 		if (g > 0x001F) g = 0x001F;
-		b += sum;
 		if (b > 0x001F) b = 0x001F;
 
 		return static_cast<Pixel16>((r<<10) | (g<<5) | b);
@@ -374,15 +368,12 @@ inline Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 {
 	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
 
-	r = (short)((pixel1 & 0xF800) >> 11) ;
-	g = (short)((pixel1 & 0x07E0) >> 5) ;
-	b = (short)((pixel1 & 0x001F)) ;
+	r = ((pixel1 & 0xF800) >> 11) + sum;
+	g = ((pixel1 & 0x07E0) >> 5)  + (sum << 1);
+	b = ((pixel1 & 0x001F))       + sum;
 
-	r += sum;
 	if (r > 0x001F) r = 0x001F;
-	g += (sum << 1);
 	if (g > 0x003F) g = 0x003F;
-	b += sum;
 	if (b > 0x001F) b = 0x001F;
 
 	return static_cast<Pixel16>((r<<11) | (g<<5) | b);
@@ -539,15 +530,12 @@ inline Pixel16 pixelutils_Additive_555(Pixel16 pixel1, Pixel16 pixel2)
 {
 	Pixel16				r, g, b, sum = (short)(pixel2 & 0x1F) ;
 
-	r = (pixel1 & 0x7C00) >> 10;
-	g = (pixel1 & 0x03E0) >> 5;
-	b = (pixel1 & 0x001F);
+	r = ((pixel1 & 0x7C00) >> 10) + sum;
+	g = ((pixel1 & 0x03E0) >> 5)  + sum;
+	b = ((pixel1 & 0x001F))       + sum;
 
-	r += sum;
 	if (r > 0x001F) r = 0x001F;
-	g += sum;
 	if (g > 0x001F) g = 0x001F;
-	b += sum;
 	if (b > 0x001F) b = 0x001F;
 
 	return static_cast<Pixel16>((r<<10) | (g<<5) | b);

@@ -311,11 +311,10 @@ Anim *GoodActor::CreateAnim(GOODACTION action)
 	{
 		
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
-		Assert(origAnim != NULL);
-		return NULL;
+//		Assert(origAnim != NULL);
 	}
 
-	return new Anim(*origAnim);
+    return origAnim ? new Anim(*origAnim) : NULL;
 }
 
 void GoodActor::DrawSelectionBrackets(void)

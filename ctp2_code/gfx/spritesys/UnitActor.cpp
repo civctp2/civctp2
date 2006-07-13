@@ -125,7 +125,7 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 
 	m_size = 0;
 	m_nextPop = 0;//PFT 29 mar 05, show # turns until city next grows a pop
-	GetIDAndType(owner, ss, id, unitType, (MapPoint)pos, &spriteID, &m_type);
+	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);
 	m_spriteID = (sint32)spriteID;
 
 	m_loadType = LOADTYPE_NONE;
@@ -298,14 +298,21 @@ void UnitActor::Initialize(void)
 	AddIdle();
 }
 
-void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, 
-								sint32 *spriteID, GROUPTYPE *groupType)
+void UnitActor::GetIDAndType
+(
+    sint32              owner, 
+    SpriteState *       ss, 
+    Unit                id, 
+    sint32              unitType, 
+    MapPoint const &    pos, 
+    sint32 *            spriteID, 
+    GROUPTYPE *         groupType
+)
 {
-	BOOL		isCity;
+	bool    isCity  = g_theUnitDB->Get(unitType)->GetHasPopAndCanBuild();
 
-	isCity = g_theUnitDB->Get(unitType)->GetHasPopAndCanBuild();
-
-	if (isCity) {
+	if (isCity) 
+    {
 		if (id.IsValid() && id.CD())
 		{
 			*spriteID = id.CD()->GetDesiredSpriteIndex();
@@ -320,7 +327,9 @@ void UnitActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unit
 		}
 
 		*groupType = GROUPTYPE_CITY;
-	} else {
+	} 
+    else 
+    {
 		*spriteID = ss->GetIndex();
 		*groupType = GROUPTYPE_UNIT;
 	}
@@ -491,7 +500,7 @@ void UnitActor::AddIdle(BOOL NoIdleJustDelay)
 	
 	if (anim == NULL) {
 		anim = CreateAnim(UNITACTION_MOVE);
-		Assert(anim != NULL);
+//		Assert(anim != NULL);
 	}
 
 
@@ -1059,7 +1068,7 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 			
 			
 			origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_MOVE);;
-			Assert(origAnim != NULL);
+//			Assert(origAnim != NULL);
 			if(origAnim == NULL)
 				return NULL;
 			else
@@ -1220,8 +1229,6 @@ void UnitActor::DrawFortified(BOOL fogged)
 
 void UnitActor::DrawFortifying(BOOL fogged)
 {
-	Pixel16			*fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34); // Not refferenced
-
 	sint32	x = m_x + (sint32)(double)(k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale()), 
 			y = m_y + (sint32)(double)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
@@ -1797,7 +1804,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
 				y2 += iconDim.y;
 				h += iconDim.y;
-				w = max(w, iconDim.x);
+                w = std::max<sint32>(w, iconDim.x);
 			}
 		}
 
@@ -1807,7 +1814,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
 				y2 += iconDim.y;
 				h += iconDim.y;
-				w = max(w, iconDim.x);
+                w = std::max<sint32>(w, iconDim.x);
 			}
 		}
 
@@ -1817,7 +1824,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_VETERAN);
 				y2 += iconDim.y;
 				h += iconDim.y;
-				w = max(w, iconDim.x);
+                w = std::max<sint32>(w, iconDim.x);
 			}
 		}			
 	}

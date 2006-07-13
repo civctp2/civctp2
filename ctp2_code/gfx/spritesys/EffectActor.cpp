@@ -94,10 +94,9 @@ EffectActor::~EffectActor()
 {
 	g_effectSpriteGroupList->ReleaseSprite(m_spriteState->GetIndex(), LOADTYPE_FULL);
 
-	if(m_spriteState) {
-		delete m_spriteState;
-		m_spriteState = NULL;
-	}
+    /// @todo Check moving m_spriteState delete to Actor
+	delete m_spriteState;
+	m_spriteState = NULL;
 
 	m_actionQueue.Deallocate();
 
@@ -105,10 +104,7 @@ EffectActor::~EffectActor()
 
 void EffectActor::ChangeType(SpriteState *ss, sint32 type,  Unit id)
 {
-	
-	if(m_spriteState)
-		delete m_spriteState;
-
+	delete m_spriteState;
 	m_spriteState = ss;
 
 	
@@ -265,13 +261,10 @@ void EffectActor::GetNextAction(BOOL isVisible)
 {
 	uint32 numItems = GetActionQueueNumItems();
 
-	if (m_curAction) {
+	delete m_curAction;
+	m_curAction = NULL;
 
-		delete m_curAction;
-		m_curAction = NULL;
-	}
-
-		Action *pendingAction = LookAtNextAction(); // Not used
+//	Action *pendingAction = LookAtNextAction(); // Not used
 		
 		
 	if (numItems > 0) 
@@ -356,14 +349,11 @@ Anim *EffectActor::CreateAnim(EFFECTACTION action)
 
 void EffectActor::Draw(void)
 {
-	uint16			flags;
-	Pixel16			color;
+	uint16			flags   = k_DRAWFLAGS_NORMAL;;
+	Pixel16			color   = 0x0000;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-	flags = k_DRAWFLAGS_NORMAL;
-	color = 0x0000;
-	
 	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset, 
 								m_shX+xoffset, m_shY+yoffset, m_facing, 
 								g_tiledMap->GetScale(), m_transparency, color, flags,
@@ -372,8 +362,8 @@ void EffectActor::Draw(void)
 
 void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 {
-	uint16			flags = k_DRAWFLAGS_NORMAL;
-	Pixel16			color=0;
+	uint16			flags   = k_DRAWFLAGS_NORMAL;
+	Pixel16			color   = 0;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
@@ -445,9 +435,9 @@ uint16 EffectActor::GetHeight(void)
 	Assert(m_effectSpriteGroup != NULL);
 	if (m_effectSpriteGroup == NULL) return 0;
 
-	Sprite	*theSprite;
+	Sprite *    theSprite = 
+        m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
 
-	theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
 	if (theSprite != NULL) {
 		return theSprite->GetHeight();
 	} else {

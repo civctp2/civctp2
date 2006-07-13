@@ -78,11 +78,14 @@ public:
 	uint16		*GetFrames(void) { return m_frames; }
 	uint16		GetPlaybackTime(void);
 	uint16		GetDelay(void) { return m_delay; }
-	void		AdjustDelay(uint32 val) { m_delay += (uint16)val ; }
+	void		AdjustDelay(uint32 val) 
+    { 
+        m_delay = static_cast<uint16>(m_delay + val); 
+    };
 
 	POINT		*GetDeltas(void) { return m_moveDeltas; }
 	uint16		*GetTransparencies(void) { return m_transparencies; }
-	void		SetType(uint16 type) { m_type = (ANIMTYPE)type; }
+	void		SetType(uint16 type) { m_type = type; }
 	void		SetNumFrames(uint16 frames) { m_numFrames = frames; }
 	void		SetPlaybackTime(uint16 time) { m_playbackTime = time; }
 	void		SetDelay(uint16 time) { m_delay = time; }
