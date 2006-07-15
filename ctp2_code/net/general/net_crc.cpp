@@ -28,6 +28,8 @@
 // - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin Gühmann)
 // - Added the risk database for sync check. (Aug 29th 2005 Martin Gühmann)
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +62,7 @@
 #include "DiplomacyThreatRecord.h"
 #include "EndGameObjectRecord.h"
 #include "FeatRecord.h"
-#include "gwdb.h"                      // Global warming database
+#include "GlobalWarmingRecord.h"
 #include "GoalRecord.h"
 #include "GovernmentRecord.h"
 #include "IconRecord.h"
@@ -68,7 +70,7 @@
 #include "OrderRecord.h"
 #include "UVDB.h"                      // Ozone database
 #include "PersonalityRecord.h"
-#include "PollutionDB.h"               // Old database
+#include "PollutionRecord.h"
 #include "PopRecord.h"
 #include "ResourceRecord.h"
 #include "RiskRecord.h"
@@ -93,9 +95,7 @@ extern StringDB                *g_theStringDB;
 extern ProfileDB               *g_theProfileDB;
 
 extern ConstDB                 *g_theConstDB;
-extern GlobalWarmingDatabase   *g_theGWDB;
 extern OzoneDatabase           *g_theUVDB;
-extern PollutionDatabase       *g_thePollutionDB;
 
 extern CivApp                  *g_civApp;
 
@@ -218,7 +218,7 @@ sint32 NetCRC::SerializeDBs()
 	CHECKDB(g_theDiplomacyThreatDB);   // 15
 	CHECKDB(g_theEndGameObjectDB);     // 16
 	CHECKDB(g_theFeatDB);              // 17
-	CHECKDB(g_theGWDB);                // 18
+	CHECKDB(g_theGlobalWarmingDB);     // 18
 	CHECKDB(g_theGoalDB);              // 19
 	CHECKDB(g_theGovernmentDB);        // 20
 	CHECKDB(g_theIconDB);              // 21

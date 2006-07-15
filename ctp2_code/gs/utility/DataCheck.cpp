@@ -28,6 +28,8 @@
 // - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin Gühmann)
 // - Added the risk database. (Aug 29th 2005 Martin Gühmann)
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -61,7 +63,7 @@
 #include "DiplomacyThreatRecord.h"
 #include "EndGameObjectRecord.h"
 #include "FeatRecord.h"
-#include "gwdb.h"                      // Global warming database
+#include "GlobalWarmingRecord.h"
 #include "GoalRecord.h"
 #include "GovernmentRecord.h"
 #include "IconRecord.h"
@@ -69,7 +71,7 @@
 #include "OrderRecord.h"
 #include "UVDB.h"                      // Ozone database
 #include "PersonalityRecord.h"
-#include "PollutionDB.h"               // Old database
+#include "PollutionRecord.h"
 #include "PopRecord.h"
 #include "ResourceRecord.h"
 #include "RiskRecord.h"
@@ -110,9 +112,7 @@ extern  RandomGenerator         *g_rand;
 extern  ProfileDB               *g_theProfileDB;
 extern  StringDB    *g_theStringDB ;
 extern  ConstDB                 *g_theConstDB ;
-extern  GlobalWarmingDatabase   *g_theGWDB ;
 extern  OzoneDatabase           *g_theUVDB ;
-extern  PollutionDatabase       *g_thePollutionDB;
 
 // The Pools
 extern  AgreementPool           *g_theAgreementPool;
@@ -352,7 +352,7 @@ void DataCheck::BeginTurn(void)
 	CHECK_DB(g_theDiplomacyThreatDB, CRC_TYPE_DIPLOMACY_THREAT_DB);
 	CHECK_DB(g_theEndGameObjectDB, CRC_TYPE_END_GAME_OBJECT_DB);
 	CHECK_DB(g_theFeatDB, CRC_TYPE_FEAT_DB);
-	CHECK_DB(g_theGWDB, CRC_TYPE_GLOBAL_WARMING_DB);
+	CHECK_DB(g_theGlobalWarmingDB, CRC_TYPE_GLOBAL_WARMING_DB);
 	CHECK_DB(g_theGoalDB, CRC_TYPE_GOAL_DB);
 	CHECK_DB(g_theGovernmentDB, CRC_TYPE_GOVERNMENT_DB);
 	CHECK_DB(g_theIconDB, CRC_TYPE_ICON_DB);

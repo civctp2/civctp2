@@ -76,6 +76,8 @@
 // - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
 // - If database records have no name a default name is generated. e.g.
 //   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
+// - Added new pollution database. (July 15th 2006 Martin Gühmann)
+// - Added new global warming database. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -830,4 +832,10 @@ template class CTPDatabase<RiskRecord>;
 
 #include "DifficultyRecord.h" // 37
 template class CTPDatabase<DifficultyRecord>;
+
+#include "PollutionRecord.h" // 38
+template class CTPDatabase<PollutionRecord>;
+
+#include "GlobalWarmingRecord.h" // 39
+template class CTPDatabase<GlobalWarmingRecord>;
 #endif // __TILETOOL__

@@ -36,7 +36,6 @@
 #include "player.h"
 #include "SelItem.h"
 #include "installationtree.h"
-#include "InstRec.h"
 #include "UnitData.h"
 #include "cellunitlist.h"
 #include "network.h"

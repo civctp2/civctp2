@@ -25,7 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Removed the old endgame, risk and installation databases. (Aug 29th 2005 Martin Gühmann)
+// - Removed old endgame, risk and installation databases. (Aug 29th 2005 Martin Gühmann)
+// - Removed old pollution and global warming databases. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -288,11 +289,6 @@ template <class T> void Database<T>::Serialize(CivArchive &archive)
 	}
 }
 
-#include "GWRecord.h"
-#include "UVRecord.h"
-#include "pollutionrecord.h"
 #include "MapRecord.h"
 
-template  class Database<GWRecord>;
-template  class Database<PollutionRecord>;
 template  class Database<MapRecord>;

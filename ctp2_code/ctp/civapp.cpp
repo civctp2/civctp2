@@ -89,6 +89,8 @@
 // - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin Gühmann)
 // - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin Gühmann)
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -111,7 +113,7 @@
 #include "DB.h"
 #include "StrDB.h"
 #include "AdvanceRecord.h"
-#include "gwdb.h"
+#include "GlobalWarmingRecord.h"
 #include "UVDB.h"
 #include "BuildingRecord.h"
 #include "thronedb.h"
@@ -211,7 +213,6 @@
 #include "RiskRecord.h"
 #include "moviedb.h"
 #include "filenamedb.h"
-#include "PollutionDB.h"
 #include "Exclusions.h"
 #include "MapDB.h"
 #include "tutorialwin.h"
@@ -274,6 +275,7 @@ int g_gameWatchID = -1;
 #include "PersonalityRecord.h"
 #include "CivilisationRecord.h"
 #include "DifficultyRecord.h"
+#include "PollutionRecord.h"
 
 #include "UnitDynArr.h"
 
@@ -333,9 +335,7 @@ extern RandomGenerator          *g_rand;
 
 
 extern ConceptDB                *g_theConceptDB;
-extern GlobalWarmingDatabase    *g_theGWDB;
 extern OzoneDatabase            *g_theUVDB;
-extern PollutionDatabase        *g_thePollutionDB;
 extern ConstDB                  *g_theConstDB; 
 extern ThroneDB                 *g_theThroneDB;
 
@@ -774,6 +774,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	g_theCitySizeDB = new CTPDatabase<CitySizeRecord>;
 	g_thePopDB = new CTPDatabase<PopRecord>;
 	g_theBuildingDB = new CTPDatabase<BuildingRecord>;
+	g_thePollutionDB = new CTPDatabase<PollutionRecord>;
 	g_theCivilisationDB = new CTPDatabase<CivilisationRecord>;
 	g_theWonderDB = new CTPDatabase<WonderRecord>;
 	g_theWonderMovieDB = new CTPDatabase<WonderMovieRecord>;
@@ -782,6 +783,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	g_theFeatDB = new CTPDatabase<FeatRecord>;
 	g_theEndGameObjectDB = new CTPDatabase<EndGameObjectRecord>;
 	g_theRiskDB = new CTPDatabase<RiskRecord>;
+	g_theGlobalWarmingDB = new CTPDatabase<GlobalWarmingRecord>;
 
 	g_theStringDB = new StringDB();
 	Assert(g_theStringDB); 
@@ -976,36 +978,23 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 220 );
 
-	if (&archive)
-		g_thePollutionDB = new PollutionDatabase(archive);
-	else
-	{
-		g_thePollutionDB = new PollutionDatabase();
-		if (!g_thePollutionDB->Initialise(g_pollution_filename, C3DIR_GAMEDATA))
-		{
-			ExitGame();
-			return (FALSE);
+	if(g_thePollutionDB) {
+		if(!g_thePollutionDB->Parse(C3DIR_GAMEDATA, g_pollution_filename)) {
+			return FALSE; 
 		}
-	
 	}
 
 	Assert(g_thePollutionDB);
 
 	g_theProgressWindow->StartCountingTo( 230 );
 
-	if (&archive)
-		g_theGWDB = new GlobalWarmingDatabase(archive);
-	else
-	{
-		g_theGWDB = new GlobalWarmingDatabase();
-		if (!g_theGWDB->Initialise(g_global_warming_filename, C3DIR_GAMEDATA))
-		{
-			ExitGame();
-			return (FALSE);
+	if(g_theGlobalWarmingDB) {
+		if(!g_theGlobalWarmingDB->Parse(C3DIR_GAMEDATA, g_global_warming_filename)) {
+			return FALSE; 
 		}
 	}
 
-	Assert(g_theGWDB);
+	Assert(g_theGlobalWarmingDB);
 
 	g_theProgressWindow->StartCountingTo( 240 );
 
@@ -1246,6 +1235,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	if(!g_theCitySizeDB->ResolveReferences()) return FALSE;
 	if(!g_thePopDB->ResolveReferences()) return FALSE;
 	if(!g_theBuildingDB->ResolveReferences()) return FALSE;
+	if(!g_thePollutionDB->ResolveReferences()) return FALSE;
 	if(!g_theCityStyleDB->ResolveReferences()) return FALSE;
 	if(!g_theAgeCityStyleDB->ResolveReferences()) return FALSE;
 
@@ -1270,6 +1260,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	if(!g_theEndGameObjectDB->ResolveReferences()) return FALSE;
 	if(!g_theRiskDB->ResolveReferences()) return FALSE;
 	if(!g_theDifficultyDB->ResolveReferences()) return FALSE;
+	if(!g_theGlobalWarmingDB->ResolveReferences()) return FALSE;
 
 	g_theProgressWindow->StartCountingTo( 510 );
 
@@ -1667,8 +1658,8 @@ sint32 CivApp::CleanupAppDB(void)
 	delete g_theUVDB;
 	g_theUVDB = NULL;
 
-	delete g_theGWDB;
-	g_theGWDB = NULL;
+	delete g_theGlobalWarmingDB;
+	g_theGlobalWarmingDB = NULL;
 
 	delete g_theBuildingDB;
 	g_theBuildingDB = NULL;

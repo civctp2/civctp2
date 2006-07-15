@@ -1,9 +1,10 @@
 #############################################################
-This Build Requires PLAYTEST 10-23-2005 to be installed first! 
+This Build Requires PLAYTEST 10-23-2005 to be installed first!
 http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar 
 http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
 http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
 ##############################################################
+
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION.
 This version of the Call To Power 2 executable developed at apolyton.net
 
@@ -40,13 +41,14 @@ are described briefly below, and in more detail in ChangeLog.txt
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 #############################################################
-This Build Requires PLAYTEST 10-23-2005 to be installed first! 
-http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar 
+This Build Requires PLAYTEST 10-23-2005 to be installed first!
+http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar
 http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
 http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
-
 ##############################################################
+
 Changelog:
+
 2006-07-02 (revision 602)
 Added: ExcludedbyWonder to buildings, units, wonders 
 Added: PrerequisiteWonder to buildings and units
@@ -159,34 +161,48 @@ Added: gold bonus to AI so they dont have to be hurt by negative values. If a
   they dont get hurt by new gold modifiers
 
 2006-03-11
-Added: GoodyHutExcluded flag for Units. Units with this flag shouldn't appear 
+Added: GoodyHutExcluded flag for Units. Units with this flag should not appear 
   from a goody hut.
 Added: Enablesgood in terraineffect - allows for different goods for same imp 
   on different terrains
 
 2006-03-02
-Added: EnablesVeterans flag for buildings. Now if a city has a flag with this 
-  building your units start as veterans (like civ3)
-Added: PopCostsToBuild flag. Add an integer here in unitstxt and units can cost
-  one or more population points. I havent instituted a disband city warning yet 
-  though
+Added:    New database flags for modders:
+- BuildingDB:
+   EnablesVeterans      Building makes city to build veteran units only.
+- UnitDB:
+   PopCostsToBuild      Unit costs a city the given amount of population points.
+                        A city disband warning is still missing.
 
 2006-03-01
-Added:  GoldPerUnit - like my previous GoldPerCity flag but its just the flag 
-  value times the number of units (like Civ3). I stuck it to the palace to 
-  represent unit costs. Value seen in City Management (not national)
-Added: GoldPerUnitReadiness - same as above but added the readiness impact. 
-  Value seen in City Management (not national)
-Added:  Need Number of buildings to Build - like the feat it can now be a flag 
-  for building a building (especially with OnePerCiv) or a wonder.
-Added: Citystyle Bonuses to Gold, Food, and production by either a bonus 
-  (just a solid integer) or by a percentage. 
-Added: Increase Borders to AddImprovement. Buildings can now do city radius!
-Added: multipleattack flag but not fully implemented (you can move after 
-  attacking or bombarding but not attack again)
-Added: TotalBuildingUpkeep: building upkeep also has a negative impact by being 
-  affected by your readiness and is deducted from the city gold (I can remove 
-  this if too much hate for it but it makes gold and readiness more significant)
+Added:    Building upkeep is now affected by readiness.
+Added:    New database flags for modders:
+- BuildingDB:
+   GoldPerUnit          Building adds ammount of gold per unit to civilization.
+   GoldPerUnitReadiness Building adds gold with readiness impact per unit.
+   BuildingFeat         Building needs other building in percent of cities.
+   SquaredBorderRadius  Building increases city radius like a fort.
+   IntBorderRadius      Building increases city radius like a fort.
+- UnitDB:
+   MultipleAttacks      Unit can attack more than once per turn (unfinished).
+- CityStyleDB:
+   ProductionPercent    CityStyle gives a percentage production bonus.
+   FoodPercent          CityStyle gives a percentage food bonus.
+   CommercePercent      CityStyle gives a percentage gold bonus.
+   SciencePercent       CityStyle gives a percentage science bonus.
+   BonusGold            CityStyle gives a gold bonus.
+   BonusFood            CityStyle gives a food bonus.
+   BonusProduction      CityStyle gives a production bonus.
+   BonusScience         CityStyle gives a science bonus.
+- AgeCityStyleDB:
+   ProductionPercent    AgeCityStyle gives a percentage production bonus.
+   FoodPercent          AgeCityStyle gives a percentage food bonus.
+   CommercePercent      AgeCityStyle gives a percentage gold bonus.
+   SciencePercent       AgeCityStyle gives a percentage science bonus.
+   BonusGold            AgeCityStyle gives a gold bonus.
+   BonusFood            AgeCityStyle gives a food bonus.
+   BonusProduction      AgeCityStyle gives a production bonus.
+   BonusScience         AgeCityStyle gives a science bonus.
 
 2006-02-15
 Fixed:    Mistake in tileset.cpp which prevented loading of tile file

@@ -36,6 +36,8 @@
 //   direct members of the record class (Support for DiffDB). (Sep 15th 2005 Martin Gühmann)
 // - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
 // - Fixed subsubstruct generation so that it can be used in DiffDB.txt. (April 29th 2006 Martin Gühmann)
+// - Added ParseNum so that a certain number of entries can be parsed if 
+//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,6 +60,7 @@ MemberClass::MemberClass(char *name)
 {
 	strcpy(m_name, name);
 	m_numBits = 0;
+	m_parseNum = 0;
 }
 
 MemberClass::~MemberClass()
@@ -76,13 +79,12 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
 
-//Added by Martin Gühmann to allow struct members to have default values
-	if ((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&  
-	    (maxSize <= 0)
-       ) 
-    {                         
-		switch(type) 
-        {
+	//Added by Martin Gühmann to allow struct members to have default values
+	if(!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
+	&&   maxSize <= 0
+	){
+		switch(type)
+		{
 		default:
 			break;
 
@@ -95,16 +97,16 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 			dat->m_required = true;
 			break;
 		}
-	} 
-    else 
-    {
+	}
+	else
+	{
 		dat->SetValue(nameInfo->v);
 	}
 
 	m_datumList.AddTail(dat);
 
 	if (dat->m_type == DATUM_BIT) 
-    {
+	{
 		dat->m_bitNum = m_numBits;
 		m_numBits++;
 	}
@@ -121,7 +123,7 @@ void MemberClass::AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 m
 	Datum *dat = new Datum(nameInfo->name, DATUM_BIT_PAIR);
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
-// Added by Martin Gühmann for adding default values
+	// Added by Martin Gühmann for adding default values
 	if((nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
 	|| (maxSize > 0)
 	){
@@ -195,19 +197,19 @@ void MemberClass::ExportBits(FILE *outfile)
 void MemberClass::ExportData(FILE *outfile)
 {
 	for (sint32 flag = 0; flag < FlagCount(); ++flag) 
-    {
+	{
 		fprintf(outfile, "        uint32            m_flags%d;\n", flag);
 	}
 
 	for 
-    (
-        PointerList<Datum>::Walker walk(&m_datumList);
-	    walk.IsValid();
-        walk.Next()
-    ) 
-    {
+	(
+		PointerList<Datum>::Walker walk(&m_datumList);
+		walk.IsValid();
+		walk.Next()
+	)
+	{
 		if (walk.GetObj()->m_type != DATUM_BIT) 
-        {
+		{
 			walk.GetObj()->ExportVariable(outfile, 1);
 		}
 	}
@@ -216,54 +218,83 @@ void MemberClass::ExportData(FILE *outfile)
 void MemberClass::ExportMethods(FILE *outfile)
 {
 	PointerList<Datum>::Walker walk(&m_datumList);
-    bool const  l_HasItems  = walk.IsValid();
+	bool const  l_HasItems  = walk.IsValid();
 
-    // Constructors
-	fprintf(outfile, "        %s();\n", m_name);
-	fprintf(outfile, "        %s(CivArchive & archive){ Serialize(archive); };\n", m_name);
-    /// @todo Check copy constructor
-    // Destructor
-	fprintf(outfile, "        ~%s();\n", m_name);
-    // Assignment
-    if (l_HasItems)
-    {
-	    fprintf(outfile, "        %s const & operator = (%s const & rval);\n", m_name, m_name);
-    }
-    else
-    {
-        // No action: use compiler provided default
-    }
+	// Constructors
+	fprintf(outfile,     "        %s();\n", m_name);
+	fprintf(outfile,     "        %s(CivArchive & archive){ Serialize(archive); };\n", m_name);
+	/// @todo Check copy constructor
+	// Destructor
+	fprintf(outfile,     "        ~%s();\n", m_name);
+	// Assignment
+	if (l_HasItems)
+	{
+		fprintf(outfile, "        %s const & operator = (%s const & rval);\n", m_name, m_name);
+	}
+	else
+	{
+		// No action: use compiler provided default
+	}
 
-    // Equality
-	fprintf(outfile, "        bool operator == (%s const & rval) {\n", m_name);
+	// Equality
+	fprintf(outfile,     "        bool operator == (%s const & rval) {\n", m_name);
 	bool record_element_found = false;
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
-    {
+	{
 		if (walk.GetObj()->m_type == DATUM_RECORD) 
-        {
+		{
 			fprintf(outfile, "          if (m_%s != rval.m_%s)\n",
 					walk.GetObj()->m_name, walk.GetObj()->m_name);
 			fprintf(outfile, "             return false;\n"); 
 			record_element_found = true;
 		}
 	}
-	fprintf(outfile, "          return %s;\n", record_element_found ? "true" : "false");
-	fprintf(outfile, "        }\n\n");
+	fprintf(outfile,     "          return %s;\n", record_element_found ? "true" : "false");
+	fprintf(outfile,     "        }\n\n");
 
-    // Specials	
-	fprintf(outfile, "        void Serialize(CivArchive &archive);\n");
-	fprintf(outfile, "        sint32 Parse(DBLexer *lex);\n");
-	fprintf(outfile, "        sint32 ParseSequential(DBLexer *lex);\n");
-	fprintf(outfile, "        sint32 ParseFullySequential(DBLexer *lex);\n");
-	fprintf(outfile, "        static sint32 ParseInArray(DBLexer *lex, %s **array, sint32 *numElements);\n", m_name);
-	fprintf(outfile, "        static sint32 ParseInArray(DBLexer *lex, %s *array, sint32 *numElements, sint32 maxSize);\n", m_name);
-	fprintf(outfile, "        static sint32 ParseInArraySequential(DBLexer *lex, %s **array, sint32 *numElements);\n", m_name);
-	fprintf(outfile, "        static sint32 ParseInArraySequential(DBLexer *lex, %s *array, sint32 *numElements, sint32 maxSize);\n", m_name);
-	fprintf(outfile, "        void ResolveDBReferences();\n\n");
+	walk.SetList(&m_datumList);
+	bool canParseSequentially = true;
+	for 
+	(
+		walk.SetList(&m_datumList); 
+		walk.IsValid() && canParseSequentially; 
+		walk.Next() 
+	)
+	{
+		switch(walk.GetObj()->m_type) {
+			case DATUM_INT:
+			case DATUM_FLOAT:
+			case DATUM_STRING:
+			case DATUM_FILE:
+			case DATUM_RECORD:
+				break;
+			default:
+				canParseSequentially = false;
+				break;
+		}
+	}
+
+	// Specials
+	fprintf(outfile,     "        void Serialize(CivArchive &archive);\n");
+	fprintf(outfile,     "        sint32 Parse(DBLexer *lex);\n");
+	if(canParseSequentially) {
+		fprintf(outfile, "        sint32 ParseSequential(DBLexer *lex);\n");
+		fprintf(outfile, "        sint32 ParseFullySequential(DBLexer *lex);\n");
+	}
+	if(m_parseNum > 0){
+		fprintf(outfile, "        sint32 ParseNum(DBLexer *lex);\n");
+	}
+	fprintf(outfile,     "        static sint32 ParseInArray(DBLexer *lex, %s **array, sint32 *numElements);\n", m_name);
+	fprintf(outfile,     "        static sint32 ParseInArray(DBLexer *lex, %s *array, sint32 *numElements, sint32 maxSize);\n", m_name);
+	if(canParseSequentially) {
+		fprintf(outfile, "        static sint32 ParseInArraySequential(DBLexer *lex, %s **array, sint32 *numElements);\n", m_name);
+		fprintf(outfile, "        static sint32 ParseInArraySequential(DBLexer *lex, %s *array, sint32 *numElements, sint32 maxSize);\n", m_name);
+	}
+	fprintf(outfile,     "        void ResolveDBReferences();\n\n");
 
 	
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
-    {
+	{
 		walk.GetObj()->ExportAccessor(outfile, 1, m_name);
 	}
 }
@@ -371,7 +402,7 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
 	}
 
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
-    {
+	{
 		walk.GetObj()->ExportSerializationLoading(outfile);
 	}
 
@@ -408,7 +439,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 		fprintf(outfile, "#define %-40s ((k_Token_Custom_Base) + %d)\n", nicename, numTokens);
 		numTokens++;
 	}
-    for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
+	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
 	{
 		Datum *dat = walk.GetObj();
 		if(dat->m_akaName){
@@ -422,13 +453,13 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 
 	walk.SetList(&m_datumList);
 	bool canParseSequentially = true;
-    for 
-    (
-        walk.SetList(&m_datumList); 
-        walk.IsValid() && canParseSequentially; 
-        walk.Next() 
-    )
-    {
+	for 
+	(
+		walk.SetList(&m_datumList); 
+		walk.IsValid() && canParseSequentially; 
+		walk.Next() 
+	)
+	{
 		switch(walk.GetObj()->m_type) {
 			case DATUM_INT:
 			case DATUM_FLOAT:
@@ -446,7 +477,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 		fprintf(outfile, "sint32 %sRecord::%s::ParseSequential(DBLexer *lex)\n", recordName, m_name);
 		fprintf(outfile, "{\n");
 		
-        for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
+		for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
 		{
 			Datum *dat = walk.GetObj();
 			switch(dat->m_type) {
@@ -481,7 +512,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 			}
 		}
 		fprintf(outfile, "    return 1;\n");
-		fprintf(outfile, "}\n");
+		fprintf(outfile, "}\n\n");
 
 		fprintf(outfile, "sint32 %sRecord::%s::ParseFullySequential(DBLexer *lex)\n", recordName, m_name);
 		fprintf(outfile, "{\n");
@@ -524,7 +555,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 			}
 		}
 		fprintf(outfile, "    return 1;\n");
-		fprintf(outfile, "}\n");
+		fprintf(outfile, "}\n\n");
 	
 	}
 
@@ -537,6 +568,11 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	fprintf(outfile, "    if(tok != k_Token_OpenBrace) {\n");
 	if(canParseSequentially) {
 		fprintf(outfile, "        if(ParseSequential(lex)) {\n");
+		fprintf(outfile, "            return 1;\n");
+		fprintf(outfile, "        }\n");
+	}
+	if(m_parseNum > 0){
+		fprintf(outfile, "        if(ParseNum(lex)) {\n");
 		fprintf(outfile, "            return 1;\n");
 		fprintf(outfile, "        }\n");
 	}
@@ -583,7 +619,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	fprintf(outfile, "    (*array)[*numElements].Parse(lex);\n");
 	fprintf(outfile, "    *numElements += 1;\n");
 	fprintf(outfile, "    return 1;\n");
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 
 	
 	fprintf(outfile, "sint32 %sRecord::%s::ParseInArray(DBLexer *lex, %s *array, sint32 *numElements, sint32 maxSize)\n", 
@@ -595,7 +631,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	fprintf(outfile, "    array[*numElements].Parse(lex);\n");
 	fprintf(outfile, "    *numElements += 1;\n");
 	fprintf(outfile, "    return 1;\n");
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 
 	if(canParseSequentially) {
 		fprintf(outfile, "sint32 %sRecord::%s::ParseInArraySequential(DBLexer *lex, %s **array, sint32 *numElements)\n", 
@@ -613,7 +649,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 		fprintf(outfile, "    (*array)[*numElements].ParseFullySequential(lex);\n");
 		fprintf(outfile, "    *numElements += 1;\n");
 		fprintf(outfile, "    return 1;\n");
-		fprintf(outfile, "}\n");
+		fprintf(outfile, "}\n\n");
 
 	
 		fprintf(outfile, "sint32 %sRecord::%s::ParseInArraySequential(DBLexer *lex, %s *array, sint32 *numElements, sint32 maxSize)\n", 
@@ -625,7 +661,35 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 		fprintf(outfile, "    array[*numElements].ParseFullySequential(lex);\n");
 		fprintf(outfile, "    *numElements += 1;\n");
 		fprintf(outfile, "    return 1;\n");
-		fprintf(outfile, "}\n");
+		fprintf(outfile, "}\n\n");
+	}
+
+	if(m_parseNum > 0){
+		fprintf(outfile, "sint32 %sRecord::%s::ParseNum(DBLexer *lex)\n", recordName, m_name);
+		fprintf(outfile, "{\n");
+		fprintf(outfile, "    bool done = false;\n");
+		fprintf(outfile, "    sint32 tok;\n");
+
+		fprintf(outfile, "    lex->SetTokens(s_%s_%s_Tokens, k_Token_%s_%s_Max);\n", recordName, m_name, recordName, m_name);
+		fprintf(outfile, "    for(sint32 i = 0; i < %i; ++i) {\n", m_parseNum);
+		fprintf(outfile, "        tok = lex->GetToken();\n");
+		fprintf(outfile, "        switch(tok) {\n");
+
+		ExportTokenCases(outfile, recordName);
+
+		fprintf(outfile, "            default:\n");
+
+		ExportDefaultToken(outfile, recordName);
+
+		fprintf(outfile, "        }\n");
+		fprintf(outfile, "    }\n");
+		fprintf(outfile, "    lex->RestoreTokens();\n");
+		fprintf(outfile, "\n");
+		fprintf(outfile, "    if(done)\n");
+		fprintf(outfile, "        return 0;\n");
+		fprintf(outfile, "\n");
+		fprintf(outfile, "    return 1;\n");
+		fprintf(outfile, "}\n\n");
 	}
 
 	ExportResolver(outfile, recordName);
@@ -634,12 +698,12 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 {
 	for 
-    (
-	    PointerList<Datum>::Walker walk(&m_datumList);
-	    walk.IsValid();
-        walk.Next()
-    ) 
-    {
+	(
+		PointerList<Datum>::Walker walk(&m_datumList);
+		walk.IsValid();
+		walk.Next()
+	)
+	{
 		Datum *dat = walk.GetObj();
 		fprintf(outfile,         "            case k_Token_%s_%s_%s:\n", recordName, m_name, dat->m_name);
 		if(dat->m_akaName){
@@ -796,8 +860,9 @@ void MemberClass::ExportDefaultToken(FILE *outfile, char *recordName)
 				Assert(0);
 				break;
 		}
-		fprintf(outfile, "                    done = true; break;\n");
-		fprintf(outfile, "                }\n");
+		fprintf(outfile,         "                    DBERROR((\"Unknown token\"));\n");
+		fprintf(outfile,         "                    done = true; break;\n");
+		fprintf(outfile,         "                }\n");
 	} else if(dat->m_maxSize > 0) {
 		
 		switch(dat->m_type) {
@@ -839,11 +904,13 @@ void MemberClass::ExportDefaultToken(FILE *outfile, char *recordName)
 		switch(dat->m_type) {
 			case DATUM_INT:
 				fprintf(outfile, "                if(!lex->GetInt(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_STRINGID:
 				fprintf(outfile, "                if(!lex->GetStringId(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
@@ -858,27 +925,32 @@ void MemberClass::ExportDefaultToken(FILE *outfile, char *recordName)
 				break;
 			case DATUM_FLOAT:
 				fprintf(outfile, "                if(!lex->GetFloat(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_STRING:
 			case DATUM_FILE:
 				fprintf(outfile, "                if(!lex->GetFile(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_RECORD:
 				fprintf(outfile, "                if(!g_the%sDB->GetCurrentRecordFromLexer(lex, m_%s)) {\n", dat->m_subType, dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_STRUCT:
 				fprintf(outfile, "                if(!m_%s.ParseFullySequential(lex)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_BIT_GROUP:
 				fprintf(outfile, "                if(!Parse%sBit(lex)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
 				break;
@@ -887,7 +959,7 @@ void MemberClass::ExportDefaultToken(FILE *outfile, char *recordName)
 				break;
 		}
 	}
-	fprintf(outfile,         "                break;\n");
+	fprintf(outfile,             "                break;\n");
 }
 
 void MemberClass::ExportOtherRecordIncludes(FILE *outfile)
@@ -968,17 +1040,17 @@ void MemberClass::ExportResolver(FILE *outfile, const char *recordName)
 	fprintf(outfile, "void %sRecord::%s::ResolveDBReferences()\n", recordName, m_name);
 	fprintf(outfile, "{\n");
 	for 
-    (
-        PointerList<Datum>::Walker walk(&m_datumList);
-	    walk.IsValid();
-        walk.Next()
-    ) 
-    {
+	(
+		PointerList<Datum>::Walker walk(&m_datumList);
+		walk.IsValid();
+		walk.Next()
+	) 
+	{
 		Datum *dat = walk.GetObj();
 		if(dat->m_type == DATUM_RECORD ||
 		   dat->m_type == DATUM_STRUCT) {
 			dat->ExportResolver(outfile);
 		}
 	}
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 }

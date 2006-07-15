@@ -59,6 +59,9 @@
 // - Made value of int databases accessable. (Sep 16th 2005 Martin Gühman)
 // - If database records have no name a default name is generated. e.g.
 //   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
+// - Added ParseNum so that a certain number of entries can be parsed if 
+//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
+// - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -247,6 +250,19 @@ void RecordDescription::ExportDataCode(FILE *outfile)
     {
 		walk.GetObj()->ExportDataCode(outfile, m_name);
 	}
+}
+
+void RecordDescription::SetParseNum(sint32 parseNum)
+{
+	if(m_addingToMemberClass) {
+		
+		Assert(m_memberClasses.GetTail());
+		if(m_memberClasses.GetTail()) {
+			m_memberClasses.GetTail()->SetParseNum(parseNum);
+		}
+		return;
+	}
+	m_parseNum = parseNum;
 }
 
 void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
@@ -949,9 +965,9 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "                result = 1;\n");
 		fprintf(outfile, "                break;\n");
 		fprintf(outfile, "            default:\n");
-		fprintf(outfile, "                DBERROR((\"Unknown token\"));\n");
-		fprintf(outfile, "                done = true;\n");
-		fprintf(outfile, "                break;\n");
+
+		ExportDefaultToken(outfile);
+
 		fprintf(outfile, "        }\n");
 		fprintf(outfile, "    }\n");
 		fprintf(outfile, "    CheckRequiredFields(lex);\n");
@@ -1015,7 +1031,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 	
 	ExportDataParsers(outfile);
 }
-		
+
 void RecordDescription::ExportTokenCases(FILE *outfile)
 {
 	for 
@@ -1153,8 +1169,148 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 					break;
 			}
 		}
-		fprintf(outfile,         "                break;\n");
+		fprintf(outfile,             "                break;\n");
 	}
+}
+
+void RecordDescription::ExportDefaultToken(FILE *outfile)
+{
+	PointerList<Datum>::Walker walk(&m_datumList);
+	Datum *dat = walk.GetObj();
+	if(dat->m_maxSize == k_MAX_SIZE_VARIABLE) {
+			
+		switch(dat->m_type) {
+			case DATUM_INT:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, &m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
+				break;
+			case DATUM_STRINGID:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
+				break;
+			case DATUM_FLOAT:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, &m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
+				break;
+			case DATUM_STRING:
+			case DATUM_FILE:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, &m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
+				break;
+			case DATUM_RECORD:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, &m_%s, &m_num%s)) {\n", dat->m_subType, dat->m_name, dat->m_name);
+				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, &m_%s, &m_num%s)) {\n", m_name, dat->m_subType, dat->m_name, dat->m_name);
+				break;
+			default:
+				Assert(0);
+				break;
+		}
+		fprintf(outfile,         "                    DBERROR((\"Unknown token\"));\n");
+		fprintf(outfile,         "                    done = true; break;\n");
+		fprintf(outfile,         "                }\n");
+	} else if(dat->m_maxSize > 0) {
+
+		switch(dat->m_type) {
+			case DATUM_INT:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+						dat->m_name, dat->m_name, dat->m_name);
+				break;
+			case DATUM_STRINGID:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
+						dat->m_name, dat->m_name, dat->m_name);
+				break;
+			case DATUM_FLOAT:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, (double *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+						dat->m_name, dat->m_name, dat->m_name);
+				break;
+			case DATUM_STRING:
+			case DATUM_FILE:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!CTPRecord::ParseFileInArray(lex, (char **)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+						dat->m_name, dat->m_name, dat->m_name);
+				break;
+			case DATUM_RECORD:
+				fprintf(outfile, "                Assert(false)\n");
+				fprintf(outfile, "                if(!g_the%sDB->ParseRecordInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+						dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
+				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "                if(!%sRecord::%s::ParseInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n", 
+						m_name, dat->m_subType, dat->m_name, dat->m_name, dat->m_name);
+				break;
+			default:
+				Assert(0);
+				break;
+		}
+		fprintf(outfile,         "                    DBERROR((\"Unknown token\"));\n");
+		fprintf(outfile,         "                    done = true; break;\n");
+		fprintf(outfile,         "                }\n");
+	} else if(dat->m_maxSize < 0) {
+		switch(dat->m_type) {
+			case DATUM_INT:
+				fprintf(outfile, "                if(!lex->GetInt(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			case DATUM_STRINGID:
+				fprintf(outfile, "                if(!lex->GetStringId(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			case DATUM_BIT:
+				fprintf(outfile, "                m_flags%d |= k_%s_%s_Bit;\n", dat->m_bitNum / 32,
+						m_name, dat->m_name);
+				break;
+			case DATUM_BIT_PAIR:
+				fprintf(outfile, "                m_flags%d |= k_%s_%s_Bit;\n", dat->m_bitNum / 32,
+						m_name, dat->m_name);
+				dat->ExportBitPairDirectParse(outfile, m_name);
+				break;
+			case DATUM_FLOAT:
+				fprintf(outfile, "                if(!lex->GetFloat(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			case DATUM_STRING:
+			case DATUM_FILE:
+				fprintf(outfile, "                if(!lex->GetFile(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			case DATUM_RECORD:
+				fprintf(outfile, "                if(!g_the%sDB->GetCurrentRecordFromLexer(lex, m_%s)) {\n", dat->m_subType, dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			case DATUM_STRUCT:
+				fprintf(outfile, "                if(!m_%s.Parse(lex)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			case DATUM_BIT_GROUP:
+				fprintf(outfile, "                if(!Parse%sBit(lex)) {\n", dat->m_name);
+				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
+				fprintf(outfile, "                    done = true; break;\n");
+				fprintf(outfile, "                }\n");
+				break;
+			default:
+				Assert(0);
+				break;
+		}
+	}
+	fprintf(outfile,             "                break;\n");
 }
 
 void RecordDescription::ExportMemberClassParsers(FILE *outfile)

@@ -36,6 +36,8 @@
 //   values so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Portability improved (ctplinuxfan).
+// - Added method to determine the number of entries that should be parsed
+//   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -457,17 +459,24 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 {
 	Assert(g_record);
 	while(list) {
-// Added by Martin Gühmann
+		// Added by Martin Gühmann
 		g_record->AddBitPair(list, size->minSize, size->maxSize, pairtype);
 		struct namelist *next = list->next;
 		free(list);
 		list = next;
 	}
-}		
+}
 
 void db_add_grouped_bits(char *groupName, struct namelist *list)
 {
 	Assert(g_record);
 
 	g_record->AddGroupedBits(groupName, list);
+}
+
+void db_add_parse_num(sint32 parseNum)
+{
+	Assert(g_record);
+
+	g_record->SetParseNum(parseNum);
 }

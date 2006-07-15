@@ -51,6 +51,8 @@
 // - Added slic civilisation database support.
 // - Added slic risk database support. (Sep 15th 2005 Martin Gühmann)
 // - Added City Capture options by E 6.09.2006
+// - Added database slic access of difficulty, pollution and global warming
+//   databases. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -129,6 +131,9 @@
 #include "WonderMovieRecord.h"
 #include "CivilisationRecord.h"
 #include "RiskRecord.h"
+#include "DifficultyRecord.h"
+#include "PollutionRecord.h"
+#include "GlobalWarmingRecord.h"
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
 #include "GameEventManager.h"
@@ -2984,6 +2989,21 @@ void SlicEngine::AddDatabases()
 																  g_RiskRecord_Accessors,
 																  g_Risk_Tokens,
 																  k_Num_RiskRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<DifficultyRecord, 
+									DifficultyRecordAccessorInfo>("DifficultyDB", g_theDifficultyDB,
+																  g_DifficultyRecord_Accessors,
+																  g_Difficulty_Tokens,
+																  k_Num_DifficultyRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<PollutionRecord, 
+									PollutionRecordAccessorInfo>("PollutionDB", g_thePollutionDB,
+																  g_PollutionRecord_Accessors,
+																  g_Pollution_Tokens,
+																  k_Num_PollutionRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<GlobalWarmingRecord, 
+									GlobalWarmingRecordAccessorInfo>("GlobalWarmingDB", g_theGlobalWarmingDB,
+																	  g_GlobalWarmingRecord_Accessors,
+																	  g_GlobalWarming_Tokens,
+																	  k_Num_GlobalWarmingRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)

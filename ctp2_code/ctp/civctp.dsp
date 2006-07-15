@@ -217,7 +217,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                                   exist                                                   R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                   copy                                                   C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                   R:\ctp2_project\ctp2_code\ctp\                                                  	rem                           if                                                   exist                                                   R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                   copy                                                   C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                   R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                                       exist                                                       R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                       copy                                                       C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                       R:\ctp2_project\ctp2_code\ctp\                                                      	rem                               if                                                       exist                                                       R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                       copy                                                       C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                       R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -1111,22 +1111,6 @@ SOURCE=..\gs\database\FilenameDB.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\database\GWDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\GWDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\GWRecord.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\GWRecord.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\gs\database\highscoredb.cpp
 # End Source File
 # Begin Source File
@@ -1168,26 +1152,6 @@ SOURCE=..\gs\database\PlayListDB.cpp
 # Begin Source File
 
 SOURCE=..\gs\database\PlayListDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\PollutionDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\PollutionDB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\PollutionRecord.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\PollutionRecord.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\PollutionToken.h
 # End Source File
 # Begin Source File
 
@@ -5135,6 +5099,129 @@ SOURCE=..\gs\newdb\FeatRecord.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\gs\newdb\GlobalWarming.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__GLOBA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\GlobalWarming.cdb
+
+"$(ProjDir)\..\gs\newdb\GlobalWarmingRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\GlobalWarmingRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\GlobalWarmingRecord.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\gs\newdb\government.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
@@ -5544,6 +5631,129 @@ SOURCE=..\gs\newdb\OrderRecord.cpp
 # Begin Source File
 
 SOURCE=..\gs\newdb\OrderRecord.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\Pollution.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__POLLU="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Pollution.cdb
+
+"$(ProjDir)\..\gs\newdb\PollutionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\PollutionRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\PollutionRecord.h
 # End Source File
 # Begin Source File
 

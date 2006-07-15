@@ -1154,7 +1154,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 				fprintf(outfile, "                m_%s[index_%s] = rval.m_%s[obj_index];\n", 
 				                        m_name, m_name, m_name
 				       );
-				fprintf(outfile, "                }\n");
+				fprintf(outfile, "            }\n");
 				fprintf(outfile, "    }\n");
 			}
 

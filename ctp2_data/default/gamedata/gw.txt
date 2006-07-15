@@ -1,25 +1,51 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The global warming database text file
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Converted to the new database format. The old format can still be parsed.
+#   (July 15th 2006 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
 GLOBAL_WARMING_TRIGGER
-	{
-	POLLUTION_NEXT_TO_OCEAN			25
-	POLLUTION_NEIGHBOUR_BONUS		5
-	POLLUTION_MAX_BONUS			15
-	POLLUTION_TILE_DESERT			25		POLLUTION_TILE_TO_PLAINS
-	POLLUTION_TILE_FOREST			25		POLLUTION_TILE_TO_JUNGLE
-	POLLUTION_TILE_FOREST			5		POLLUTION_TILE_TO_PLAINS
-	POLLUTION_TILE_GLACIER			50		POLLUTION_TILE_TO_TUNDRA
-	POLLUTION_TILE_GRASSLAND		25		POLLUTION_TILE_TO_FOREST
-	POLLUTION_TILE_GRASSLAND		5		POLLUTION_TILE_TO_DESERT
-	POLLUTION_TILE_HILL			25		POLLUTION_TILE_TO_FOREST
-	POLLUTION_TILE_JUNGLE			20		POLLUTION_TILE_TO_SWAMP
-	POLLUTION_TILE_JUNGLE			10		POLLUTION_TILE_TO_DESERT
-	POLLUTION_TILE_MOUNTAIN			0		POLLUTION_TILE_TO_MOUNTAIN
-	POLLUTION_TILE_BROWN_HILL		0		POLLUTION_TILE_TO_BROWN_HILL
-	POLLUTION_TILE_BROWN_MOUNTAIN		0		POLLUTION_TILE_TO_BROWN_MOUNTAIN
-	POLLUTION_TILE_WHITE_HILL		0		POLLUTION_TILE_TO_WHITE_HILL
-	POLLUTION_TILE_WHITE_MOUNTAIN		0		POLLUTION_TILE_TO_WHITE_MOUNTAIN
-	POLLUTION_TILE_PLAINS			25		POLLUTION_TILE_TO_GRASSLAND
-	POLLUTION_TILE_PLAINS			5		POLLUTION_TILE_TO_DESERT
-	POLLUTION_TILE_SWAMP			25		POLLUTION_TILE_TO_OCEAN
-	POLLUTION_TILE_SWAMP			5		POLLUTION_TILE_TO_JUNGLE
-	POLLUTION_TILE_TUNDRA			25		POLLUTION_TILE_TO_PLAINS
-	}
+{
+	PollutionNextToOcean    25
+	PollutionNeighbourBonus  5
+	PollutionMaxBonus       15
+
+	ChangeTypeProbability { FromType TERRAIN_DESERT            ToType TERRAIN_PLAINS            Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_FOREST            ToType TERRAIN_JUNGLE            Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_FOREST            ToType TERRAIN_PLAINS            Probability  5 }
+	ChangeTypeProbability { FromType TERRAIN_GLACIER           ToType TERRAIN_TUNDRA            Probability 50 }
+	ChangeTypeProbability { FromType TERRAIN_GRASSLAND         ToType TERRAIN_FOREST            Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_GRASSLAND         ToType TERRAIN_DESERT            Probability  5 }
+	ChangeTypeProbability { FromType TERRAIN_HILL              ToType TERRAIN_FOREST            Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_JUNGLE            ToType TERRAIN_SWAMP             Probability 20 }
+	ChangeTypeProbability { FromType TERRAIN_JUNGLE            ToType TERRAIN_DESERT            Probability 10 }
+	ChangeTypeProbability { FromType TERRAIN_MOUNTAIN          ToType TERRAIN_MOUNTAIN          Probability  0 }
+	ChangeTypeProbability { FromType TERRAIN_BROWN_HILL        ToType TERRAIN_BROWN_HILL        Probability  0 }
+	ChangeTypeProbability { FromType TERRAIN_BROWN_MOUNTAIN    ToType TERRAIN_BROWN_MOUNTAIN    Probability  0 }
+	ChangeTypeProbability { FromType TERRAIN_WHITE_HILL        ToType TERRAIN_WHITE_HILL        Probability  0 }
+	ChangeTypeProbability { FromType TERRAIN_WHITE_MOUNTAIN    ToType TERRAIN_WHITE_MOUNTAIN    Probability  0 }
+	ChangeTypeProbability { FromType TERRAIN_PLAINS            ToType TERRAIN_GRASSLAND         Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_PLAINS            ToType TERRAIN_DESERT            Probability  5 }
+	ChangeTypeProbability { FromType TERRAIN_SWAMP             ToType TERRAIN_WATER_BEACH       Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_SWAMP             ToType TERRAIN_JUNGLE            Probability  5 }
+	ChangeTypeProbability { FromType TERRAIN_TUNDRA            ToType TERRAIN_PLAINS            Probability 25 }
+}

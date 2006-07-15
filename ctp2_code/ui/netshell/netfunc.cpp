@@ -658,13 +658,19 @@ DWORD WINAPI NETFunc::ConnectThread(LPVOID t) {
 #ifdef USE_SDL
 		return 0;
 #else
+	{
 		ExitThread(0);
+		return 0; // NETFunc::ConnectThread must return a value
+	}
 #endif
 	else
 #ifdef USE_SDL
 		return 1;
 #else
+	{
 		ExitThread(1);
+		return 1; // NETFunc::ConnectThread must return a value
+	}
 #endif
 }
 
@@ -689,6 +695,7 @@ DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
     return 0;
 #else
 	ExitThread(0);
+	return 0;  // NETFunc::ReConnectThread must return a value
 #endif
 }
 

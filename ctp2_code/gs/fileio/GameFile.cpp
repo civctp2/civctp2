@@ -31,7 +31,9 @@
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
 // - Removed old sprite state databases. (Aug 29th 2005 Martin Gühmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Removed old difficulty database. (April 29th 2006 Martin Gühmann)
+// - Removed old pollution database. (July 15th 2006 Martin Gühmann)
+// - Removed old gobal warming database. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +62,6 @@
 #include "TradePool.h"
 #include "TradeOfferPool.h"
 #include "SelItem.h"
-#include "gwdb.h"
 #include "UVDB.h"
 #include "CivilisationRecord.h"
 #include "pollution.h"
@@ -97,7 +98,6 @@
 #include "Wormhole.h"
 #include "WonderTracker.h"
 #include "AchievementTracker.h"
-#include "PollutionDB.h"
 #include "TradeBids.h"
 #include "Exclusions.h"
 
@@ -207,8 +207,6 @@ extern  ThroneDB                    *g_theThroneDB;
 extern  RandomGenerator             *g_rand;
 extern  TurnCount                   *g_turn; 
 extern  SelectedItem                *g_selected_item; 
-extern  PollutionDatabase           *g_thePollutionDB;
-extern  GlobalWarmingDatabase       *g_theGWDB;
 extern  OzoneDatabase               *g_theUVDB;
 extern  Pollution                   *g_thePollution;
 extern  TopTen                      *g_theTopTen;
@@ -399,11 +397,11 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 270 );
 
-	g_thePollutionDB->Serialize(archive);
+//	g_thePollutionDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 280 );
 
-	g_theGWDB->Serialize(archive);
+//	g_theGWDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo( 290 );
 

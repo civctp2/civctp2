@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Replaced old GlobalWarming database by new one. (July 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -36,7 +37,7 @@
 #include "Cell.h"
 #include "StrDB.h"
 #include "TerrainRecord.h"
-#include "gwdb.h"
+#include "GlobalWarmingRecord.h"
 #include "UVDB.h"
 #include "RandGen.h"
 #include "citydata.h"
@@ -51,7 +52,6 @@
 #include "net_info.h"
 #include "AICause.h"
 #include "installationtree.h"
-#include "PollutionDB.h"
 #include "radarmap.h"
 #include "cellunitlist.h"
 
@@ -66,8 +66,6 @@
 
 #include "terrainutil.h"
 
-extern	PollutionDatabase	*g_thePollutionDB ;
-extern	GlobalWarmingDatabase	*g_theGWDB ;
 extern	OzoneDatabase	*g_theUVDB ;
 extern	RadarMap	*g_radarMap;
 
@@ -110,7 +108,7 @@ extern	RadarMap	*g_radarMap;
 
 
 void World::RaiseWaters(void)
-{
+	{
 	Cell	*c ;
 
 	sint32	x, y;
@@ -120,11 +118,11 @@ void World::RaiseWaters(void)
 
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
-		{
+			{
 			c = GetCell(x, y) ;
 			if (c->GetScratch()<0 && !(c->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER))
 				FloodCell(x, y, c) ;
-		}
+			}
 
 	MapPoint cp(0,0), n;
 	for(cp.x = 0; cp.x < m_size.x; cp.x++) {
@@ -152,49 +150,49 @@ void World::RaiseWaters(void)
 			}
 		}
 	}
-}
+	}
 
 
 
 void World::FloodCell(sint32 x, sint32 y, Cell *c)
-{
+	{
 	Assert(c) ;
 
 	FloodEverythingInCell(x, y, c) ;
 	ConvertToShallowWater(x, y, c) ;
-}
+	}
 
 
 void World::FloodEverythingInCell(sint32 x, sint32 y, Cell *c)
-{
+	{
 	FloodArmies(c) ;
 	FloodCity(c) ;
 	FloodGoodyHut(c) ;
 	FloodImprovements(x, y, c) ;
-}
+	}
 
 
 void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 {
 	MapPoint    pos    (x, y);
-	Cell *      cell    = GetCell(x, y);
+	Cell *cell = GetCell(x, y);
 	
 	if (cell->GetNumDBImprovements() > 0 || cell->GetNumImprovements() > 0)
-	{
-		g_theWorld->CutImprovements(pos);
-		if (g_network.IsHost())
 		{
+		g_theWorld->CutImprovements(pos);
+		if(g_network.IsHost())
+			{
 			g_network.Enqueue(c, pos.x, pos.y) ;
-		}
+			}
 
 		DynamicArray<Installation> instArray;
 		g_theInstallationTree->GetAt(pos, instArray) ;
 		instArray.KillList() ;
-	}
-
+		}
+		
 	if (GetCell(pos)->GetNumImprovements()) 
     {
-		Cell * cell = GetCell(pos);
+		Cell *cell = GetCell(pos);
 		for(sint32 i = cell->GetNumImprovements() - 1; i >= 0; i--)
 			cell->AccessImprovement(i).Kill();
 	}
@@ -203,46 +201,46 @@ void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 void World::FloodGoodyHut(Cell *c)
 {
 #if 0
-	delete c->m_jabba;
-	c->m_jabba = NULL;
+		delete c->m_jabba ;
+		c->m_jabba = NULL ;
 #endif
 }
 
 
-void World::FloodCity(Cell * c)
-{
+void World::FloodCity(Cell *c)
+	{
 	Unit	u   = c->GetCity();
 
 	if (u.IsValid())
-	{
+		{
 		SlicObject *so = new SlicObject("04CitiesKilledByCalamity");
 		so->AddCity(u);
 		so->AddRecipient(u.GetOwner());
 		g_slicEngine->Execute(so);
 
 		u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);									
-	}
-}
-
-
-
-void World::FloodArmies(Cell * c)
-{
-	Assert(c);
-
-	for (sint32 i = c->GetNumUnits() - 1; i >= 0; i--)
-	{
-        Unit u  = c->AccessUnit(i);
-		if (u.IsValid() && !u.GetMovementTypeSea())
-		{
-			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);
 		}
 	}
-}
+
+
+
+void World::FloodArmies(Cell *c)
+	{
+	Assert(c) ;
+
+	for (sint32 i = c->GetNumUnits() - 1; i >= 0; i--)
+		{
+        Unit u  = c->AccessUnit(i);
+		if (u.IsValid() && !u.GetMovementTypeSea())
+			{
+			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1) ;
+			}
+		}
+	}
 
 
 void World::ConvertToShallowWater(sint32 x, sint32 y, Cell *c)
-{
+	{
 	Assert(c) ;
 
 	c->m_terrain_type = (sint8)TERRAIN_WATER_SHALLOW ;
@@ -252,7 +250,7 @@ void World::ConvertToShallowWater(sint32 x, sint32 y, Cell *c)
 	c->m_env &= ~k_MASK_ENV_RIV_CUR ;
 	c->m_env &= ~k_MASK_ENV_CANAL_TUNNEL ;
 	Assert(IsWater(x,y)) ;
-}
+	}
 
 
 void World::ConvertToBeach(sint32 x, sint32 y, Cell *c)
@@ -334,7 +332,7 @@ void World::MakeBeaches()
 
 
 void World::RemoveBeaches()
-{
+	{
 	sint32	x, y;
 
 	Cell	*c ;
@@ -385,10 +383,13 @@ void World::GWPhase(const sint32 phase)
 {
 	Cell	*c ;
 
-	sint32	x, y;
+	sint32 x;
+	sint32 y;
 
-	TERRAIN_TYPES	newtype,										
-					terrain ;										
+	sint32 newtype;
+	sint32 terrain;
+
+	const GlobalWarmingRecord* gwrec = GetGlobalWarmingDBRec();
 
 	double	baseProbability = 0.0;										
 	
@@ -398,43 +399,42 @@ void World::GWPhase(const sint32 phase)
 	for (y=0; y<h; y++) {
 		for (x=0; x<w; x++) {
 			c = GetCell(x, y) ;
+			terrain = sint32(c->m_terrain_type);
 			if(phase == 0) {
-				if(c->m_terrain_type == TERRAIN_SWAMP) {
+				if(g_theTerrainDB->Get(terrain)->GetInternalTypeSwamp()) {
 					
 					ConvertToShallowWater(x, y, c);
 				}
-			} else {
+			}
+			else {
 				if (!IsWater(x,y)) {
-					terrain = TERRAIN_TYPES(c->m_terrain_type) ;
-					Assert(terrain != TERRAIN_WATER_SHALLOW) ;
+					Assert(!g_theTerrainDB->Get(terrain)->GetMovementTypeShallowWater());
 					if (IsNextToWater(x, y) && !IsMountain(x, y))
-						baseProbability = g_theGWDB->NextToWaterBonus() ;
+						baseProbability = gwrec->GetPollutionNextToOcean();
 					
-					newtype = g_theGWDB->Change(baseProbability, TERRAIN_TYPES(terrain)) ;
-					BOOL wasLand = IsLand(x,y) || IsMountain(x,y);
+					newtype = ChangeType(baseProbability, terrain);
+					bool wasLand = IsLand(x,y) || IsMountain(x,y);
 
-					if (newtype == TERRAIN_WATER_SHALLOW) {
+					if(g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater()) {
 						c->m_search_count = -3 ;
-						
-					} else {						
-						if(g_theTerrainDB->Get(newtype)->GetMovementTypeSea() &&
-						   !g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater()) {
+					}
+					else {
+						if(g_theTerrainDB->Get(newtype)->GetMovementTypeSea()
+						&&!g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater()
+						){
 						    c->m_search_count = -3;
-							newtype = TERRAIN_WATER_SHALLOW;
+							newtype = GetTerrainChangeType(&TerrainRecord::GetMovementTypeShallowWater);
 						}
 						
 						c->m_terrain_type = (sint8)newtype ;
 						if(terrain != newtype) {
-							if(newtype == TERRAIN_WATER_SHALLOW) {
+							if(g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater()) {
 								if(wasLand) {
 									FloodEverythingInCell(x, y, c);
 								}
 							}
 						}
-							
 					}
-					
-					
 				}
 			}
 		}
@@ -442,15 +442,12 @@ void World::GWPhase(const sint32 phase)
 
 	if(phase != 0) {
 		
-
-		
 		for(x = 0; x < m_size.x; x++) {
 			for(y = 0; y < m_size.y; y++) {
 				if(IsLand(x,y) && !IsMountain(x,y) &&
 				   IsNextToWaterNotDiagonals(x,y)) {
 					if(g_rand->Next(100) < sint32(g_theConstDB->GetFloodChangesCoastToWaterChance() * 100.0)) {
 						GetCell(x,y)->m_search_count = -3;
-						
 					}
 				}
 			}
@@ -472,7 +469,7 @@ void World::GWPhase(const sint32 phase)
 
 
 void World::GlobalWarming(const sint32 phase)
-{
+	{
 	if(g_network.IsHost()) {
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_GLOBAL_WARMING, phase));
@@ -523,13 +520,12 @@ void World::GlobalWarming(const sint32 phase)
 	g_radarMap->Update();
 	g_radarMap->ShouldDraw();
     
-	
 	sint32 i;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if (g_player[i])
         {
-		    g_player[i]->m_vision->ClearUnseen();
-        }
+		g_player[i]->m_vision->ClearUnseen();
+	}
 	}
 
 	
@@ -552,17 +548,17 @@ void World::GlobalWarming(const sint32 phase)
     NumberContinents();
 	SetAllMoveCost();
 	ClearScratch();	
-}
+	}
 
 
 void World::InformPlayersOfFloodingCatastrophe(void)
-{
-	for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 	{
+	for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
+		{
 		if (g_player[i] && !g_player[i]->IsDead())
         {
-			g_player[i]->IndicateTerrainPolluted();
-        }
+			g_player[i]->IndicateTerrainPolluted() ;
+		}
 	}
 }
 
@@ -577,7 +573,7 @@ void World::InformPlayersOfFloodingCatastrophe(void)
 
 
 void World::FloodRivers(void)
-{
+	{
 	static	sint32	offset_pass1[4][2] = { { -1, +1 }, { -1, 0 }, { -1, -1 }, { 0, -1 } },
 					offset_pass2[4][2] = { { +1, -1 }, { +1, 0 }, {+1, +1 }, { 0, +1 } } ;
 
@@ -695,7 +691,7 @@ void World::OzoneDepletion(void)
     MapPoint pos; 
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
-		{
+			{
 			c = GetCell(x, y) ;
 
 			
@@ -706,14 +702,12 @@ void World::OzoneDepletion(void)
 			Assert(m<=k_NUM_MERIDIANS) ;
 			double flip_prob = g_theUVDB->GetProb(m) ;
 			if ((c->GetCanDie()) && (g_rand->NextF() < flip_prob))
-			{
+				{
 
                 
                 pos.Set(x, y); 
 
 
-
-            
 				c->Kill() ;
 				ClearGoods(x, y) ;
 				CutImprovements(pos);
@@ -722,9 +716,9 @@ void World::OzoneDepletion(void)
 				
 				
 				
-			}
+				}
 
-		}
+			}
 
 
 	MakeBeaches() ;
@@ -733,7 +727,7 @@ void World::OzoneDepletion(void)
 	g_tiledMap->Refresh() ;
 	g_radarMap->Update();
 	g_radarMap->ShouldDraw();
-}
+	}
 
 void World::RegenerateRivers()
 {
@@ -852,4 +846,168 @@ void World::RegenerateRivers()
 	NewGenerateRivers(map, wetmap);
 	delete [] map;
 	delete [] wetmap;
+}
+
+const GlobalWarmingRecord* World::GetGlobalWarmingDBRec() const{
+	// Can be improvemed (more records, diff dependent)
+	return g_theGlobalWarmingDB->Get(0);
+}
+
+sint32 World::ChangeType(const double baseProb, const sint32 terrain) const
+{
+	sint32 newTerrainType = terrain;
+	double probability = g_rand->NextF();
+	double lastChance = 999.0f;
+	sint32 i;
+
+	const GlobalWarmingRecord* gwrec = GetGlobalWarmingDBRec();
+
+	for(i = 0; i < gwrec->GetNumChangeTypeProbability(); i++)
+	{
+		const GlobalWarmingRecord::ChangeTypeProbability* ctprec = gwrec->GetChangeTypeProbability(i);
+		sint32 fromType = -1;
+		if(ctprec->GetFromTypeIndex(fromType)){
+			if(terrain == fromType){
+				double chanceProb = 0.0;
+				ctprec->GetProbability(chanceProb);
+				if(chanceProb < lastChance
+				&& probability < (chanceProb + baseProb)
+				){
+					lastChance = chanceProb;
+					sint32 toType = -1;
+					ctprec->GetToTypeIndex(toType);
+					newTerrainType = toType;
+				}
+			}
+		}
+		// Ugly but needed for backwards compatibility with MedPack2
+		else{
+
+			sint32 fromType;
+			double chanceProb;
+			if(     ctprec->GetPOLLUTION_TILE_BROWN_HILL()     > -1.0){
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownHill);
+				chanceProb = ctprec->GetPOLLUTION_TILE_BROWN_HILL();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_BROWN_MOUNTAIN() > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownMountain);
+				chanceProb = ctprec->GetPOLLUTION_TILE_BROWN_MOUNTAIN();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_DESERT()         > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeDesert);
+				chanceProb = ctprec->GetPOLLUTION_TILE_DESERT();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_FOREST()         > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeForest);
+				chanceProb = ctprec->GetPOLLUTION_TILE_FOREST();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_GLACIER()        > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeGlacier);
+				chanceProb = ctprec->GetPOLLUTION_TILE_GLACIER();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_GRASSLAND()      > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeGrassland);
+				chanceProb = ctprec->GetPOLLUTION_TILE_GRASSLAND();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_HILL()           > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeHill);
+				chanceProb = ctprec->GetPOLLUTION_TILE_HILL();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_JUNGLE()         > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeJungle);
+				chanceProb = ctprec->GetPOLLUTION_TILE_JUNGLE();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_MOUNTAIN()       > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeMountain);
+				chanceProb = ctprec->GetPOLLUTION_TILE_MOUNTAIN();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_PLAINS()         > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypePlains);
+				chanceProb = ctprec->GetPOLLUTION_TILE_PLAINS();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_SWAMP()          > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeSwamp);
+				chanceProb = ctprec->GetPOLLUTION_TILE_SWAMP();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_TUNDRA()         > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeTundra);
+				chanceProb = ctprec->GetPOLLUTION_TILE_TUNDRA();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_WHITE_HILL()     > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteHill);
+				chanceProb = ctprec->GetPOLLUTION_TILE_WHITE_HILL();
+			}
+			else if(ctprec->GetPOLLUTION_TILE_WHITE_MOUNTAIN() > -1.0){
+				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteMountain);
+				chanceProb = ctprec->GetPOLLUTION_TILE_WHITE_MOUNTAIN();
+			}
+
+			if(terrain == fromType){
+				if(chanceProb < lastChance
+				&& probability < (chanceProb + baseProb)
+				){
+					lastChance = chanceProb;
+					newTerrainType = GetTerrainChangeToType(ctprec);
+				}
+			}
+		}
+	}
+
+	return newTerrainType;
+}
+
+sint32 World::GetTerrainChangeType(bool (TerrainRecord::*terrainFunc)() const) const
+{
+	for(sint32 i = 0; i < g_theTerrainDB->NumRecords(); ++i){
+		if((g_theTerrainDB->Get(i)->*terrainFunc)()){
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+sint32 World::GetTerrainChangeToType(const GlobalWarmingRecord::ChangeTypeProbability* ctprec) const
+{
+	if(     ctprec->GetPOLLUTION_TILE_TO_BROWN_HILL()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownHill);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_BROWN_MOUNTAIN()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownMountain);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_DESERT()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeDesert);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_FOREST()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeForest);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_GRASSLAND()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeGrassland);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_JUNGLE()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeJungle);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_MOUNTAIN()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeMountain);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_OCEAN()){
+		return GetTerrainChangeType(&TerrainRecord::GetMovementTypeShallowWater);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_PLAINS()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypePlains);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_SWAMP()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeSwamp);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_TUNDRA()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeTundra);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_WHITE_HILL()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteHill);
+	}
+	else if(ctprec->GetPOLLUTION_TILE_TO_WHITE_MOUNTAIN()){
+		return GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteMountain);
+	}
+
+	return -1;
 }

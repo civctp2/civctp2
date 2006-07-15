@@ -47,6 +47,8 @@
  *
  * Compiler flags
  *
+ * - None
+ *
  *----------------------------------------------------------------------------
  */
 #include "ctp2_config.h"
@@ -82,7 +84,7 @@ int g_generateRequirementWarnings = 0;
 }
 
 %token INT FLOAT RECORD STRUCT BIT BITS EXCLUSIVEBITS NAME NUMBER STRING STRINGID
-%token FILENAME FLOATVALUE STRINGVALUE RANGE AKA
+%token FILENAME FLOATVALUE STRINGVALUE RANGE AKA PARSENUM
 
 %%
 databases: records { s_done = 1; }
@@ -107,6 +109,7 @@ data: data datum
 datum:   structdescription
 	   | bits
 	   | exclusivebits
+	   | PARSENUM NUMBER        { db_add_parse_num($2.val); }
 	   | BIT size names         { db_add_bits  ($3.list, &$2.size); }
 	   | BIT '(' bitpairtype ')' size names { db_add_bit_pair($6.list, &$5.size, &$3.pairtype); }
 	   | INT size names         { db_add_ints  ($3.list, &$2.size); }

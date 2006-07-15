@@ -42,7 +42,6 @@
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +59,6 @@
 #include "AdvanceRecord.h"
 
 #include "TerrainRecord.h"
-#include "gwdb.h"
 #include "UVDB.h"
 
 #include "BuildingRecord.h"
@@ -131,7 +129,6 @@
 #include "Exclusions.h"
 
 #include "network.h"
-#include "PollutionDB.h"
 
 #include "debugmemory.h"
 #include "TradeBids.h"
@@ -186,8 +183,6 @@ extern Director *g_director;
 
 StringDB                    *g_theStringDB=NULL;
 ConceptDB                   *g_theConceptDB = NULL;
-PollutionDatabase           *g_thePollutionDB=NULL;
-GlobalWarmingDatabase       *g_theGWDB=NULL;
 OzoneDatabase               *g_theUVDB=NULL;
 ConstDB                     *g_theConstDB=NULL;
 ThroneDB                    *g_theThroneDB = NULL;

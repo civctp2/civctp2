@@ -50,6 +50,7 @@ class aui_Region;
 template <class T> class PointerList;
 
 #include "citydata.h"
+#include "gstypes.h"
 
 class InventoryItemInfo {
   public:

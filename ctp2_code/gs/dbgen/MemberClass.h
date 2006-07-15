@@ -28,6 +28,8 @@
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
+// - Added ParseNum so that a certain number of entries can be parsed if 
+//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -67,14 +69,16 @@ public:
 	void ExportDataCode(FILE *outfile, char *recordName);
 	void ExportResolver(FILE *outfile, const char *recordName);
 
-    sint32          FlagCount() const   { return (m_numBits + 31) / 32; };
+	sint32          FlagCount() const   { return (m_numBits + 31) / 32; };
 	const char *    GetName() const     { return m_name; };
+	void SetParseNum(sint32 parseNum){ m_parseNum = parseNum; };
 
 private:
 	char m_name[k_MAX_RECORD_NAME];
 	PointerList<Datum> m_datumList;
 
 	sint32 m_numBits;
+	sint32 m_parseNum;
 };
 
 #endif

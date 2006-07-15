@@ -34,6 +34,9 @@
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
+// - Added ParseNum so that a certain number of entries can be parsed if 
+//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
+// - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -82,14 +85,16 @@ public:
 	void ExportParser(FILE *outfile);
 	void ExportMerger(FILE *outfile);
 	void ExportTokenCases(FILE *outfile);
+	void ExportDefaultToken(FILE *outfile);
 	void ExportDataParsers(FILE *outfile);
 	void ExportDataCode(FILE *outfile);
 	void ExportMemberClassParsers(FILE *outfile);
 	void ExportOtherRecordIncludes(FILE *outfile);
 	void ExportMemberClassDataCode(FILE *outfile);
 	void ExportResolver(FILE *outfile);
+	void SetParseNum(sint32 parseNum);
 
-    sint32  FlagCount() const   { return (m_numBits + 31) / 32; };
+	sint32  FlagCount() const   { return (m_numBits + 31) / 32; };
 
 private:
 	char                        m_name[k_MAX_RECORD_NAME];
@@ -99,6 +104,8 @@ private:
 	sint32                      m_numBits;
 	bool                        m_addingToMemberClass;
 	DATUM_TYPE                  m_baseType;
+
+	sint32                      m_parseNum; // Unimplemented
 };
 
 #endif

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : part of the World class implementation
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +27,7 @@
 //
 // - Added second World::GetGood method, usefull if you already have a Cell
 //   pointer. - May 18th 2005 Martin Gühmann
+// - Moved some stuff from the old global earming database. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -66,6 +68,7 @@ enum MAP_GENERATOR
 #include "gstypes.h"
 #include "Cell.h"
 #include "MoveFlags.h"
+#include "GlobalWarmingRecord.h"
 
 class MapPoint;
 class CivArchive ;
@@ -708,7 +711,10 @@ public:
 	void SmartSetOneCell(const MapPoint &pos, sint32 terr);
 
 	double GetGoodValue(sint32 good);
-
+	const GlobalWarmingRecord* GetGlobalWarmingDBRec() const;
+	sint32 ChangeType(const double baseProb, const sint32 terrain) const;
+	sint32 GetTerrainChangeType(bool (TerrainRecord::*terrainFunc)() const) const;
+	sint32 GetTerrainChangeToType(const GlobalWarmingRecord::ChangeTypeProbability* ctprec) const;
 #ifdef _DEBUG
 	void WholePlayerLandArea(int *array) const;
 #endif
