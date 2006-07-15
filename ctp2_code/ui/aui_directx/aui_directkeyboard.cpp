@@ -118,7 +118,7 @@ AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 	
 	for ( sint32 numInputs = 1; numInputs; numInputs-- )
 	{
-		uint32 numElements = 1;
+		DWORD   numElements = 1;
 		static DIDEVICEOBJECTDATA od[ 1 ];
 		DIDEVICEOBJECTDATA *ptrOd = od;
 

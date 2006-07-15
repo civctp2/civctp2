@@ -54,22 +54,31 @@ BOOL IsValidUser( char *szListFile )
 	shroud_t *sfile;			// Used to read the shrouded user list.
 	user_t ValidUser;			// A user from the shrouded user list.
 
-	if ( (file = fopen( szListFile, "rb" )) )
+    file = fopen( szListFile, "rb" );
+	if (file)
 	{
 		/* Get the BITMAPINFOHEADER. */
 		fread( &bfh, sizeof( bfh ), 1, file );
 		fclose( file );
 
-		if ( (sfile = shroud_readopen( szListFile )) )
+        sfile = shroud_readopen(szListFile);
+		if (sfile)
 		{
 			/* Seek to where the user list is. */
 			shroud_seek( sfile, bfh.bfSize, SEEK_SET );
 
 			/* Loop until we find one or reach the end. */
-			while( !bFoundUser && shroud_read( sfile, (char *)&ValidUser, sizeof(user_t) ) == sizeof(user_t) )
-			if ( strcmp( verify_user.szUsername, ValidUser.szUsername ) == 0
-			&&   strcmp( verify_user.szPassword, ValidUser.szPassword ) == 0 )
-				bFoundUser = TRUE;
+			while (!bFoundUser && 
+                   shroud_read(sfile, 
+                               (unsigned char *) &ValidUser, 
+                               sizeof(user_t) 
+                              ) == sizeof(user_t) 
+                  )
+            {
+			    if ( strcmp( verify_user.szUsername, ValidUser.szUsername ) == 0
+			    &&   strcmp( verify_user.szPassword, ValidUser.szPassword ) == 0 )
+				    bFoundUser = TRUE;
+            }
 
 			shroud_close( sfile );
 		}
@@ -91,7 +100,8 @@ BOOL GetInfoFromFingerprint( char *szFingerprintFile )
 	size_t offset;					// Each byte will be in a non-adjacent place.
 	int i;							// Loop index.
 
-	if ( (sfile = shroud_readopen( szFingerprintFile )) )
+	sfile = shroud_readopen(szFingerprintFile);
+    if (sfile)
 	{
 		/* Assume we'll have success. */
 		bGotFingerprint = TRUE;
@@ -102,21 +112,39 @@ BOOL GetInfoFromFingerprint( char *szFingerprintFile )
 		/* Get the hidden shrouded username. */
 		for ( i = 0; bGotFingerprint && i <= MAX_USERNAME; i++ )
 		{
-			if ( shroud_seek( sfile, offset, SEEK_CUR ) != 0
-			||   shroud_read( sfile, verify_user.szUsername + i, 1 ) != 1 )
+			if ( shroud_seek(sfile, offset, SEEK_CUR ) != 0
+			||   shroud_read
+                    (sfile, 
+                     (unsigned char *) verify_user.szUsername + i, 
+                     1 
+                    ) != 1 
+               )
+            {
 				bGotFingerprint = FALSE;
+            }
 			else
+            {
 				offset = (size_t)verify_user.szUsername[ i ];
+            }
 		}
 
 		/* Get the hidden shrouded password. */
 		for ( i = 0; bGotFingerprint && i <= MAX_PASSWORD; i++ )
 		{
 			if ( shroud_seek( sfile, offset, SEEK_CUR ) != 0
-			||   shroud_read( sfile, verify_user.szPassword + i, 1 ) != 1 )
+			||   shroud_read
+                    (sfile, 
+                     (unsigned char *) verify_user.szPassword + i, 
+                     1 
+                    ) != 1 
+               )
+            {
 				bGotFingerprint = FALSE;
+            }
 			else
+            {
 				offset = (size_t)verify_user.szPassword[ i ];
+            }
 		}
 
 		shroud_close( sfile );

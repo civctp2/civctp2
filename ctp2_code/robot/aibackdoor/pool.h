@@ -1,26 +1,59 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : General pool handling
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __Pool_h__
 #define __Pool_h__
 
+//----------------------------------------------------------------------------
+// Library imports
+//----------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------
+// Exported names
+//----------------------------------------------------------------------------
+
+template <class DATA_TYPE> class Pool;
+
+//----------------------------------------------------------------------------
+// Project imports
+//----------------------------------------------------------------------------
+
 #include "list_array.h"
 
-#define INITIAL_CHUNK_LIST_SIZE (30)
+//----------------------------------------------------------------------------
+// General declarations
+//----------------------------------------------------------------------------
 
+int const   ELEMENT_OCCUPIED            = -1;
+int const   INITIAL_CHUNK_LIST_SIZE     = 30;
 
-
-
-
-
-
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 template <class DATA_TYPE>
 class Pool
@@ -59,7 +92,7 @@ protected:
 template <class DATA_TYPE>
 bool Pool<DATA_TYPE>::Prepare_New_Chunk()
 {
-	if (chunks.size() == max_chunks) 
+	if (static_cast<int>(chunks.size()) == max_chunks) 
     {
         return false;
     }
@@ -71,9 +104,9 @@ bool Pool<DATA_TYPE>::Prepare_New_Chunk()
 	    
 	    size_t const    first_new_element   = (chunks.size() - 1) * chunk_size;
 
-        for (size_t i = first_new_element; i < first_new_element + chunk_size; i++)
+        for (size_t i = first_new_element + 1; i <= first_new_element + chunk_size; ++i)
 	    {
-		    next_free_element_list.Append_Data(i+1);
+		    next_free_element_list.Append_Data(i);
 	    } 
 
 	    return true;
@@ -131,7 +164,7 @@ DATA_TYPE * Pool<DATA_TYPE>::Get_Next_Pointer(int & which_element_is_it)
 	DATA_TYPE * the_chunk           = chunks.Return_Data_By_Number(which_chunk);
 	
 	next_element = next_free_element_list.Return_Data_By_Number(next_element);
-	next_free_element_list.Set_Data(-1, which_element_is_it);
+	next_free_element_list.Set_Data(ELEMENT_OCCUPIED, which_element_is_it);
 
 	return &(the_chunk[element_in_chunk]);
 }
@@ -143,13 +176,17 @@ void Pool<DATA_TYPE>::Release_Pointer
 	int ptr_to_free
 ) 
 {
-	_ASSERTE(next_free_element_list.Return_Data_By_Number(ptr_to_free) == -1);
+	if (ELEMENT_OCCUPIED == next_free_element_list.Return_Data_By_Number
+                                (ptr_to_free)
+       )
+    {
+	    next_free_element_list.Set_Data(next_element, ptr_to_free);
+	    next_element = ptr_to_free;
 
-	next_free_element_list.Set_Data(next_element, ptr_to_free);
-	next_element = ptr_to_free;
-
-    Assert(count > 0);
-    --count;
+        Assert(count > 0);
+        --count;
+    }
+    // else No action: equivalent of delete NULL;
 }
 
 #endif // __Pool_h__

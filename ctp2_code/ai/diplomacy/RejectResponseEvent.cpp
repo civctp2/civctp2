@@ -51,7 +51,7 @@ STDEHANDLER(NoThreat_RejectResponseEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	if (1) {
 		Response response;
@@ -94,7 +94,7 @@ STDEHANDLER(ThreatenAlliedInvasion_RejectResponseEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & sender_proposal = 
 		sender_diplomat.GetMyLastNewProposal(receiver);

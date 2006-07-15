@@ -5,8 +5,9 @@
 #ifndef ROBO_INIT_H
 #define ROBO_INIT_H 1
 
+#include "civarchive.h"
 
-extern BOOL roboinit_Initalize(CivArchive &a);
+extern void roboinit_Initalize(CivArchive &a);
 extern void roboinit_Cleanup();
 
 #endif

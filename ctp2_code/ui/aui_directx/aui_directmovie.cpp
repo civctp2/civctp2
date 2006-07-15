@@ -32,14 +32,13 @@
 
 #include "aui_directmovie.h"
 
-#include "CivPaths.h"
-#include "soundmanager.h"
+#include "CivPaths.h"			// g_civPaths
+#include "RefTime.h"			// UNITS, MILLISECONDS
+#include "soundmanager.h"		// g_soundManager
 
 
 
-extern CivPaths *g_civPaths;
 extern C3UI		*g_c3ui;
-extern SoundManager *g_soundManager;
 
 aui_DirectMovie::aui_DirectMovie(
 	AUI_ERRCODE *retval,
@@ -199,7 +198,7 @@ AUI_ERRCODE aui_DirectMovie::Open(
 		
 		STREAM_TIME streamTime = 0;
 		hr = m_ddStream->GetTimePerFrame( &streamTime );
-		m_timePerFrame = uint32(streamTime / ( UNITS / MILLISECONDS ));
+		m_timePerFrame = static_cast<uint32>(streamTime / ( UNITS / MILLISECONDS ));
 
 		
 		hr = m_ddStream->CreateSample(
@@ -358,7 +357,7 @@ AUI_ERRCODE aui_DirectMovie::Play( void )
 				HRESULT hr = m_mmStream->GetDuration(&st);
 				Assert(!FAILED(hr));
 				if (!FAILED(hr)) {
-					uint32 ms = uint32((double)st / ( (double)UNITS / (double)MILLISECONDS ));
+					uint32 ms = static_cast<uint32>((double)st / ( (double)UNITS / (double)MILLISECONDS ));
 					m_endOfMovieTickCount = GetTickCount() + ms;
 				}
 			}
@@ -387,7 +386,7 @@ AUI_ERRCODE aui_DirectMovie::Play( void )
 				HRESULT hr = m_mmStream->GetDuration(&st);
 				Assert(!FAILED(hr));
 				if (!FAILED(hr)) {
-					uint32 ms = uint32((double)st / ( (double)UNITS / (double)MILLISECONDS ));
+					uint32 ms = static_cast<uint32>((double)st / ( (double)UNITS / (double)MILLISECONDS ));
 					m_endOfMovieTickCount = GetTickCount() + ms;
 				}
 			}

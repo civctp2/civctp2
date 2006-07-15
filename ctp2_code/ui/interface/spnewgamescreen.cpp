@@ -669,7 +669,7 @@ spnewgamescreen_genocidePress(aui_Control *control, uint32 action, uint32 data, 
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetGenocideRule( state ? FALSE : TRUE );
 	}
@@ -679,7 +679,7 @@ spnewgamescreen_tradePress(aui_Control *control, uint32 action, uint32 data, voi
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetTradeRule( state ? FALSE : TRUE );
 	}
@@ -689,7 +689,7 @@ spnewgamescreen_combatPress(aui_Control *control, uint32 action, uint32 data, vo
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetSimpleCombatRule( state ? FALSE : TRUE );
 	}
@@ -699,7 +699,7 @@ spnewgamescreen_pollutionPress(aui_Control *control, uint32 action, uint32 data,
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetPollutionRule( state ? FALSE : TRUE );
 	}

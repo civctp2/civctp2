@@ -377,7 +377,7 @@ void CombatField::Move()
 {
 	
 	sint32 x, y, y2;
-	sint32 frontCount = CountColumn(k_FRONT_COL);
+//	sint32 frontCount = CountColumn(k_FRONT_COL);
 	for(x = 1; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			if(!m_field[x][y].IsActive())

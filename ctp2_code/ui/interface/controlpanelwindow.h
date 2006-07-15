@@ -230,7 +230,7 @@ public:
 	void    BuildList(sint32 index);
 	
 	
-	void    SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit());
+	void    SetStack(Army const & selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit());
 	void    BuildUnitList();
 	void    BuildUnitListBox();
 	void    BuildCityList(const MapPoint &pos);
@@ -281,7 +281,7 @@ public:
 	
 	void    InitMessageTab();
 	void    AddMessage(Message &message,bool initializing=false);
-	void    SetMessageRead(Message &message);
+	void    SetMessageRead(Message const & message);
 	void    RemoveMessage(Message &message);
 	void    PopulateMessageList(PLAYER_INDEX player);
 

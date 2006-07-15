@@ -67,7 +67,7 @@ STDEHANDLER(ThreatenAttackCity_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
+//	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & response = receiver_diplomat.GetMyLastResponse(sender);
 
 	
@@ -233,8 +233,8 @@ STDEHANDLER(PayForGiveCity_CounterResponseEvent)
 	sint32 at_risk_value_percent = 
 		MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(receiver,sender);
 
-	sint32 at_risk_value = (sint32) ((double)at_risk_value_percent / 100.0) *
-		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
+//	sint32 at_risk_value = (sint32) ((double)at_risk_value_percent / 100.0) *
+//		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
 
 	sint32 accept_priority = 
 		sender_diplomat.GetAcceptPriority(receiver, response.counter.second_type);
@@ -605,7 +605,7 @@ STDEHANDLER(ReciprocateAction_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
+//	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	

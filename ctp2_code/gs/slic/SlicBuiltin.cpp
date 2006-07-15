@@ -235,8 +235,7 @@ class UnitSymbol_Type : public SlicStructMemberData {
 
 	BOOL GetIntValue(sint32 &value) const {
 		Unit unit;
-		BOOL res = m_parent->GetDataSymbol()->GetUnit(unit);
-		if(unit.IsValid()) 
+		if (m_parent->GetDataSymbol()->GetUnit(unit))
         {
 			value = unit.GetType();
 			return TRUE;
@@ -251,9 +250,8 @@ class UnitSymbol_HP : public SlicStructMemberData {
 
 	BOOL GetIntValue(sint32 &value) const {
 		Unit unit;
-		BOOL res = m_parent->GetDataSymbol()->GetUnit(unit);
-		Assert(res);
-		if(unit.IsValid()) {
+		if (m_parent->GetDataSymbol()->GetUnit(unit))
+        {
 			value = (sint32)unit.GetHP();
 			return TRUE;
 		} else {
@@ -267,8 +265,7 @@ class UnitSymbol_Valid : public SlicStructMemberData {
 
 	BOOL GetIntValue(sint32 &value) const {
 		Unit unit;
-		BOOL res = m_parent->GetDataSymbol()->GetUnit(unit);
-		value = unit.IsValid();
+		value = m_parent->GetDataSymbol()->GetUnit(unit);
 		return TRUE;
 	}
 };
@@ -289,8 +286,8 @@ class UnitSymbol_Name : public SlicStructMemberData {
 
 	StringId GetStringId() const {
 		Unit u;
-		BOOL res = m_parent->GetDataSymbol()->GetUnit(u);
-		if(u.IsValid()) {
+		if (m_parent->GetDataSymbol()->GetUnit(u))
+	    {
 			return u.GetDBRec()->GetName();
 		}
 		return -1;
@@ -518,8 +515,7 @@ class CitySymbol_Valid : public SlicStructMemberData {
 
 	BOOL GetIntValue(sint32 &value) const {
 		Unit city;
-		BOOL res = m_parent->GetDataSymbol()->GetCity(city);
-		value = city.IsValid();
+		value = m_parent->GetDataSymbol()->GetCity(city);
 		return TRUE;
 	}
 };
@@ -772,19 +768,20 @@ class PlayerSymbol_Researching : public SlicStructMemberData {
 		return FALSE;
 	}
 	StringId GetStringId() const {
-		sint32 pl;
-		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
-		if(pl>= 0 && pl<k_MAX_PLAYERS && g_player[pl] != NULL) {
-			return g_theAdvanceDB->Get(g_player[pl]->m_advances->GetResearching())->GetName();
+		PLAYER_INDEX pl = PLAYER_UNASSIGNED;
+		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl])
+        {
+			return g_theAdvanceDB->Get
+                (g_player[pl]->m_advances->GetResearching())->GetName();
 		}
 		return -1;
 	}
 	// Added by Martin Gühmann to allow to access the database index
 	// of the current research project.
 	BOOL GetIntValue(sint32 &value) const {
-		sint32 pl;
-		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
-		if(pl>= 0 && pl<k_MAX_PLAYERS && g_player[pl] != NULL) {
+		PLAYER_INDEX pl = PLAYER_UNASSIGNED;
+		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl])
+        {
 			value = g_player[pl]->m_advances->GetResearching();
 			return TRUE;
 		}
@@ -849,9 +846,9 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 	// Added by Martin Gühmann to allow to access the index of 
 	// the current military readiness level.
 	BOOL GetIntValue(sint32 &value) const {
-		sint32 pl;
-		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
-		if(pl>= 0 && pl<k_MAX_PLAYERS && g_player[pl] != NULL) {
+		PLAYER_INDEX    pl   = PLAYER_UNASSIGNED;
+		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl]) 
+        {
 			value = g_player[pl]->GetReadinessLevel();
 			return TRUE;
 		}
@@ -864,12 +861,9 @@ class PlayerSymbol_MilitaryState : public SlicStructMemberData {
 class PlayerSymbol_LeaderPersonality : public SlicStructMemberData {
 	DEF_MAKECOPY(PlayerSymbol_LeaderPersonality);
 	BOOL GetText(MBCHAR *text, sint32 maxLen) const {
-		sint32 pl;
-		BOOL res = m_parent->GetDataSymbol()->GetPlayer(pl);
-		Assert(res);
-		if(pl>=0 && pl<k_MAX_PLAYERS && g_player[pl]!=NULL) 
+		PLAYER_INDEX    pl = PLAYER_UNASSIGNED;
+		if (m_parent->GetDataSymbol()->GetPlayer(pl) && g_player[pl]) 
 		{
-			
 			StringId description = Diplomat::GetDiplomat(pl).GetPersonality()->GetDescription();
 			if (description != -1)
 				strncpy(text, g_theStringDB->GetNameStr(description) , maxLen);

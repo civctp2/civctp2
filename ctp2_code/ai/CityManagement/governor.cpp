@@ -432,7 +432,7 @@ sint32 Governor::ComputeBestGovernment() const
 		return rec->GetIndex();
 	}
 
-	return -1;
+	return CTPRecord::INDEX_INVALID;
 }
 
 
@@ -830,11 +830,7 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	                           happiness_test,
 	                           prod, gold, food);
 
-	if(!found)
-		return true;
-
-	changed = (sliders_setting != orig_sliders_setting);
-	return changed;
+	return !found || (sliders_setting != orig_sliders_setting);
 }
 
 //----------------------------------------------------------------------------
@@ -1535,17 +1531,16 @@ void Governor::ComputeRoadPriorities()
 
 void Governor::PlaceTileImprovements()
 {
-	Player *player_ptr;
+	Player *                player_ptr  = g_player[m_playerId];
+	Assert(player_ptr);
+	StrategyRecord const &  strategy    = 
+        Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	CityData *city;
 	Unit unit;
 	Cell *cell;
 	TiGoal ti_goal;
 	MapPoint pos;
 
-	Assert(g_player[m_playerId]);
-	player_ptr = g_player[m_playerId];
-
-	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	
 	s_tiQueue.clear();
@@ -2010,8 +2005,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 	const TerrainImprovementRecord *rec;
 	const TerrainImprovementRecord::Effect *effect;
 
-	Cell *cell;
-	cell = g_theWorld->GetCell(pos);
+	Cell *  cell    = g_theWorld->GetCell(pos);
 
 	
 	food_imp = -1;
@@ -2020,7 +2014,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 
 	
 	Unit city = cell->GetCity();
-	if (city.m_id != 0x0)
+	if (!city.IsValid())
 		return;
 	
 	
@@ -2156,7 +2150,7 @@ void Governor::GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_i
 
 	Cell *  cell    = g_theWorld->GetCell(pos);
 	Unit    city    = cell->GetCity();
-	if (city.m_id != 0x0)
+	if (!city.IsValid())
 		return;
 
 	const TerrainRecord *fromRec = g_theTerrainDB->Get(cell->GetTerrain());
@@ -3922,7 +3916,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			cat = k_GAME_OBJ_TYPE_UNIT;
 
 			
-			if(type > -1)
+			if (type >= 0)
 			{
 				Assert(city->CanBuildUnit(type));
 				break;
@@ -3934,7 +3928,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			type = GetNeededGarrisonUnitType(city, list_num);
 			cat = k_GAME_OBJ_TYPE_UNIT;
 
-			if(type > -1)
+			if (type >= 0)
 			{
 				Assert(city->CanBuildUnit(type));
 				break;
@@ -3946,7 +3940,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			type = GetNeededBuildingType(city, elem->GetBuildingBuildListPtr());
 			cat = k_GAME_OBJ_TYPE_IMPROVEMENT;
 
-			if(type > -1 && city->CanBuildBuilding(type))
+			if (type >= 0 && city->CanBuildBuilding(type))
 				break;
 
 		}
@@ -3956,7 +3950,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			type = GetNeededWonderType(city, elem->GetWonderBuildListPtr());
 			cat = k_GAME_OBJ_TYPE_WONDER;
 
-			if(type > -1 && city->CanBuildWonder(type))
+			if(type >= 0 && city->CanBuildWonder(type))
 				break;
 
 		}
@@ -3965,7 +3959,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			type = GetNeededFreightType(list_num);
 			cat = k_GAME_OBJ_TYPE_UNIT;
 
-			if (type > -1)
+			if (type >= 0)
 				break;
 
 		}
@@ -3982,7 +3976,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 		{
 			if ( city->CanBuildCapitalization() )
 			{
-				type = 1;
+				type = 1;   // ???
 				cat = k_GAME_OBJ_TYPE_CAPITALIZATION;
 				break;
 			}
@@ -4000,10 +3994,6 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 		cat = k_GAME_OBJ_TYPE_UNIT;
 		type = m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType;
 	}
-#ifdef _DEBUG
-	bool RICHARD_WANTS_TO_SEE_THIS_ASSERT = (type > -1);
-	Assert(RICHARD_WANTS_TO_SEE_THIS_ASSERT);
-#endif
 }
 
 
@@ -4125,14 +4115,14 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 {
 	Assert(g_player[m_playerId]);
 
-	BUILD_UNIT_LIST max_list = BUILD_UNIT_LIST_MAX;
-	sint32 max_production = 0;
-	sint32 turns_to_build = 9999;
-	sint32 needed_production;
-	sint32 type = -1; 
-	sint32 cont;
-	double build_transport_production_level;
-	double build_settler_production_level;
+	BUILD_UNIT_LIST max_list                = BUILD_UNIT_LIST_MAX;
+	sint32          max_production          = 0;
+	sint32          turns_to_build          = 9999;
+	sint32          needed_production;
+    sint32          type                    = CTPRecord::INDEX_INVALID; 
+	sint32          cont;
+	double          build_transport_production_level;
+	double          build_settler_production_level;
 
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
@@ -4247,9 +4237,9 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		} 
 	}	
 
-	UnitRecord const *	unit	= GetDBUnitRec(type);
+    UnitRecord const *	unit	= (type < 0) ? NULL : GetDBUnitRec(type);
 	DPRINTF(k_DBG_GAMESTATE, ("Selected unit type: %s\n", unit ? unit->GetNameText() : "none"));
-				DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
+	DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
 
 	return type;
 }
@@ -4336,7 +4326,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 	if ( city->GetGarrisonComplete() && 
 		 city->GetGarrisonOtherCities() == FALSE)
-		return -1;
+        return CTPRecord::INDEX_INVALID;
 
 	BUILD_UNIT_LIST max_list = BUILD_UNIT_LIST_MAX;
 	sint32 max_production = 0;
@@ -4388,7 +4378,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 		}
 
 	
-	sint32 type = -1; 
+    sint32 type = CTPRecord::INDEX_INVALID; 
 
 	if (max_list != BUILD_UNIT_LIST_MAX )
 		{
@@ -4424,7 +4414,7 @@ sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuild
 				return building_type;
 		}
 
-	return (-1);
+    return CTPRecord::INDEX_INVALID;
 }
 
 
@@ -4447,7 +4437,7 @@ sint32 Governor::GetNeededWonderType(const CityData *city, const WonderBuildList
 				return wonder_type;
 		}
 
-	return (-1);
+	return CTPRecord::INDEX_INVALID;
 }
 
 
@@ -4489,7 +4479,7 @@ sint32 Governor::ComputeBestUnitType(const UnitBuildListRecord *build_list_rec, 
 		}
 
 	
-	return -1;
+	return CTPRecord::INDEX_INVALID;
 }
 
 
@@ -4600,7 +4590,7 @@ StringId Governor::GetTacticalAdvice(SlicContext & sc) const
 	for (sint32 i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
-		Assert( g_theUnitPool->IsValid(city) );
+		Assert( city.IsValid() );
 		Assert( city->GetCityData() != NULL );
 
 		g_theWorld->GetArmy(city.RetPos(), garrison);

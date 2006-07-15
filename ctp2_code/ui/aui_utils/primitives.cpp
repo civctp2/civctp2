@@ -118,22 +118,13 @@ PRIMITIVES_ERRCODE primitives_FrameRect16(
 	}
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
-	sint32 surfPitch = pSurface->Pitch();
+	sint32      surfPitch = pSurface->Pitch();
 
-	
-	uint16 *pDest;
-	sint32 width, height;
-	sint32 inc1,inc2;
-
-	
-	width = right - left;
-	height = bottom - top;
-
-	pDest = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
-	inc1 = (surfPitch >> 1) - width;
-	inc2 = width - 1;
+	sint32      width   = right - left;
+	sint32      height  = bottom - top;
+	uint16 *    pDest   = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	sint32      inc1    = (surfPitch >> 1) - width;
+	sint32      inc2    = width - 1;
 
 	sint32 i;
 	for (i=width;i;i--)
@@ -150,7 +141,7 @@ PRIMITIVES_ERRCODE primitives_FrameRect16(
 
 	pDest += inc1;
 
-	for (i=width;i;i--)
+	for (sint32 k = width; k > 0; --k)
 		*pDest++ = color;
 
 	
@@ -195,8 +186,8 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 	Assert(dRect.top <= dRect.bottom);
 	if ((dRect.left >= dRect.right) || (dRect.top >= dRect.bottom)) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 width = ceil(dRect.right) - ceil(dRect.left);
-	sint32 height = ceil(dRect.bottom) - ceil(dRect.top);
+	sint32 width = static_cast<sint32>(ceil(dRect.right) - ceil(dRect.left));
+	sint32 height = static_cast<sint32>(ceil(dRect.bottom) - ceil(dRect.top));
 	if ((width == 0) || (height == 0))
 		return PRIMITIVES_ERRCODE_OK;
 
@@ -228,8 +219,8 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 
 	
 
-	sint32 dst_y0 = ceil(dRect.top);
-	sint32 dst_x0 = ceil(dRect.left);
+	sint32 dst_y0 = static_cast<sint32>(ceil(dRect.top));
+	sint32 dst_x0 = static_cast<sint32>(ceil(dRect.left));
 	uint16 *pDstPixel = pDstBase + dst_y0 * drow + dst_x0;
 
 	double src_dy = (sRect.bottom - sRect.top)/(dRect.bottom - dRect.top);
@@ -266,14 +257,14 @@ PRIMITIVES_ERRCODE primitives_Scale16(
 					double red = f0 * RED565(c0) + f1 * RED565(c1) + f2 * RED565(c2) + f3 * RED565(c3);
 					double green = f0 * GREEN565(c0) + f1 * GREEN565(c1) + f2 * GREEN565(c2) + f3 * GREEN565(c3);
 					double blue = f0 * BLUE565(c0) + f1 * BLUE565(c1) + f2 * BLUE565(c2) + f3 * BLUE565(c3);
-					pDstPixel[i] = ((sint32 )red) + (((sint32 )green)<<5) + (((sint32 )blue)<<11);
+					pDstPixel[i] = ((uint16)red) + (((uint16)green)<<5) + (((uint16)blue)<<11);
 				} 
 				else 
 				{
 					double red = f0 * RED555(c0) + f1 * RED555(c1) + f2 * RED555(c2) + f3 * RED555(c3);
 					double green = f0 * GREEN555(c0) + f1 * GREEN555(c1) + f2 * GREEN555(c2) + f3 * GREEN555(c3);
 					double blue = f0 * BLUE555(c0) + f1 * BLUE555(c1) + f2 * BLUE555(c2) + f3 * BLUE555(c3);
-					pDstPixel[i] = ((sint32 )red) + (((sint32 )green)<<5) + (((sint32 )blue)<<10);
+					pDstPixel[i] = ((uint16)red) + (((uint16)green)<<5) + (((uint16)blue)<<10);
 				}
 			}
 			src_x += src_dx;
@@ -339,18 +330,12 @@ PRIMITIVES_ERRCODE primitives_PaintRect16(
 	}
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
-	uint16 *pDestPixel;
-
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	for (sint32 j=height;j;j--)
@@ -413,14 +398,10 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 	}
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
 	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
@@ -437,7 +418,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -465,7 +446,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
 		
-		for (j = level;j;j--)
+		for (sint32 k = level; k; --k)
 		{
 			for (sint32 i=tempWidth;i;i--)
 			{
@@ -501,7 +482,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 
 		
 		temp = right - 1;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((temp-i) << 1));
 
@@ -554,7 +535,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelRect16(
 		
 		sint32 temp = top+1;
 		sint32 i;
-		for ( i = 0;i < level;i++)
+		for (i = 0;i < level;i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -648,13 +629,10 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
 
 	
 	sint32 width = right - left;
@@ -672,7 +650,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -720,7 +698,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		
 		sint32 temp = top+1;
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -739,7 +717,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		
 		temp = right - 1;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((temp-i) << 1));
 
@@ -795,7 +773,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 		
 		sint32 temp = top+1;
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -814,7 +792,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 
 		
 		temp = right - 1;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((temp-i) << 1));
 
@@ -875,19 +853,11 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
-	
-
-	uint16 *pDestPixel;
-
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height) 
 	{
 		if (level > (height >> 1))
@@ -899,7 +869,7 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -946,7 +916,7 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 		
 		sint32 temp = top+1;
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (temp+i) * surfPitch + ((left+i) << 1));
 
@@ -965,7 +935,7 @@ PRIMITIVES_ERRCODE primitives_FrameThickRect16(
 
 		
 		temp = right - 1;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((temp-i) << 1));
 
@@ -1025,13 +995,8 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
-	sint32 surfPitch = pSurface->Pitch();
-
-	uint16 *pDest;
-
-	pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+	sint32      surfPitch   = pSurface->Pitch();
+	uint16 *    pDest       = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
 	*pDest = color;
 
 	if (absdx >= absdy)	
@@ -1781,7 +1746,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	SetTextColor(hdc, dropTextColor);
 
 	sint32 i;
-	for (i=0;i < numStrings;i++)
+	for (i = 0; i < numStrings; i++)
 	{
 
 		TextOut(hdc,x+1,y+1,pString[i],strlen(pString[i]));
@@ -1792,7 +1757,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	y = saveY;
 
 	
-	for (i=0;i < numStrings;i++)
+	for (i = 0; i < numStrings; i++)
 	{
 		TextOut(hdc,x,y,pString[i],strlen(pString[i]));
 		y += tm.tmHeight + tm.tmExternalLeading;
@@ -1851,18 +1816,13 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
 	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
-
 	
 	if (width > height)
 	{
@@ -1875,15 +1835,13 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
 	sint32 tempHeight = height-1;
 	sint32 tempInc = inc;
 
-	tempInc = inc;
-	tempWidth = width-1;
 	pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
 	if (flag)
@@ -1905,7 +1863,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -1922,7 +1880,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 		tempHeight = height-1;
 
 		
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
 
@@ -1955,7 +1913,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -1972,7 +1930,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelPane16(
 		tempHeight = height-1;
 
 		
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
 
@@ -2030,20 +1988,15 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
 	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
-	if (width > height)
+    if (width > height)
 	{
 		if (level > (height >> 1))
 			level = height >> 1;
@@ -2054,7 +2007,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -2081,7 +2034,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2094,7 +2047,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 		}
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -2125,7 +2078,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2138,7 +2091,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabSelected16(
 		}
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -2194,19 +2147,15 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
 
 	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
 
-	
 	if (width > height)
 	{
 		if (level > (height >> 1))
@@ -2218,7 +2167,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -2244,7 +2193,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2260,7 +2209,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 		tempHeight = height-1;
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -2292,7 +2241,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2308,7 +2257,7 @@ PRIMITIVES_ERRCODE primitives_OldBevelTabDeselected16(
 		tempHeight = height-1;
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -2356,28 +2305,21 @@ PRIMITIVES_ERRCODE primitives_OldBevelLeftPiece16(
 	Assert(level >= 0);
 	if (level <= 0) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 width;
-	sint32 inc;
-
 	uint8 *pSurfBase;
 
 	sint32 errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
 
-	width = xEnd-xStart;
+	sint32 width = xEnd-xStart;
 
-	pDestPixel = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
-	inc = (surfPitch >> 1) - (width-1);
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
+	sint32 inc = (surfPitch >> 1) - (width-1);
 
 	sint32 tempWidth = width;
 	sint32 tempInc = inc;
@@ -2445,31 +2387,22 @@ PRIMITIVES_ERRCODE primitives_OldBevelRightPiece16(
 	Assert(level >= 0);
 	if (level <= 0) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 width;
-	sint32 inc;
-
 	uint8 *pSurfBase;
 
 	sint32 errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
 
-	width = xEnd-xStart;
-
-	pDestPixel = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
-	inc = (surfPitch >> 1) - (width);
-
-	sint32 tempWidth = width-1;
-	sint32 tempInc = inc;
+	sint32      width       = xEnd-xStart;
+	uint16 *    pDestPixel  = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
+	sint32      inc         = (surfPitch >> 1) - (width);
+	sint32      tempWidth   = width-1;
+	sint32      tempInc     = inc;
 
 	if (flag)
 	{
@@ -2546,18 +2479,13 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
-	sint32 surfPitch = pSurface->Pitch();
+    sint32 surfPitch = pSurface->Pitch();
 
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
 	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
-
 	
 	if (width > height)
 	{
@@ -2570,15 +2498,13 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
 	sint32 tempHeight = height-1;
 	sint32 tempInc = inc;
 
-	tempInc = inc;
-	tempWidth = width-1;
 	pDestPixel = (uint16 *)(pSurfBase + (bottom-1) * surfPitch + ((right-1) << 1));
 
 	if ( a == AUI_TABGROUP_ALIGNMENT_TOP )
@@ -2603,7 +2529,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2621,7 +2547,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 		tempHeight = height-1;
 
 		
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
 
@@ -2656,7 +2582,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2674,7 +2600,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 		tempHeight = height-1;
 
 		
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i) * surfPitch + ((right-1-i) << 1));
 
@@ -2745,18 +2671,12 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
-
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
 
-	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
-
 	
 	if (width > height)
 	{
@@ -2769,7 +2689,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -2799,7 +2719,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2813,7 +2733,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 		}
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -2846,7 +2766,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i = 0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2860,7 +2780,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 		}
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -2929,18 +2849,12 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
-
 	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
 	
 	sint32 width = right - left;
 	sint32 height = bottom - top;
-
 	
 	if (width > height)
 	{
@@ -2953,7 +2867,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			level = width >> 1;
 	}
 
-	pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
+	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
 	sint32 tempWidth = width-1;
@@ -2982,7 +2896,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -2999,7 +2913,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 		tempHeight = height-1;
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -3033,7 +2947,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 		tempInc = (surfPitch >> 1) - 1;
 
 		sint32 i;
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((left+i) << 1));
 
@@ -3050,7 +2964,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 		tempHeight = height-1;
 
 		
-		for (i=0;i < level;i++)
+		for (i = 0; i < level; i++)
 		{
 			pDestPixel = (uint16 *)(pSurfBase + (top+i+1) * surfPitch + ((right-1-i) << 1));
 
@@ -3134,9 +3048,6 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	Assert(level >= 0);
 	if (level <= 0) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 width;
-	sint32 inc;
-
 	uint8 *pSurfBase;
 
 	sint32 errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
@@ -3144,21 +3055,14 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
-	sint32 surfPitch = pSurface->Pitch();
+	sint32      surfPitch   = pSurface->Pitch();
+	sint32      width       = xEnd-xStart;
+	uint16 *    pDestPixel  = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
+	sint32      inc         = (surfPitch >> 1) - (width-1);
+	sint32      tempWidth   = width;
+	sint32      tempInc     = inc;
 
-	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
-	width = xEnd-xStart;
-
-	pDestPixel = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
-	inc = (surfPitch >> 1) - (width-1);
-
-	sint32 tempWidth = width;
-	sint32 tempInc = inc;
 
 	if ( a == AUI_TABGROUP_ALIGNMENT_TOP )
 	{
@@ -3262,32 +3166,20 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	Assert(level >= 0);
 	if (level <= 0) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	sint32 width;
-	sint32 inc;
-
 	uint8 *pSurfBase;
-
 	sint32 errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
-	sint32 surfPitch = pSurface->Pitch();
+	sint32      surfPitch   = pSurface->Pitch();
+	sint32      width       = xEnd-xStart;
+	uint16 *    pDestPixel  = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
+	sint32      inc         = (surfPitch >> 1) - (width);
+	sint32      tempWidth   = width-1;
+	sint32      tempInc     = inc;
 
-	
 	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
-	width = xEnd-xStart;
-
-	pDestPixel = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
-	inc = (surfPitch >> 1) - (width);
-
-	sint32 tempWidth = width-1;
-	sint32 tempInc = inc;
-
 	if ( a == AUI_TABGROUP_ALIGNMENT_TOP )
 	{
 	if (flag)
@@ -3442,32 +3334,26 @@ PRIMITIVES_ERRCODE primitives_DrawFrame16(
 
 void primitives_HackTileDraw(aui_Surface *pSurface)
 {
-	FILE		*file;
 	uint16		len;
-	Pixel16		*data, *dataPtr;;
 	sint32		x, y;
 	sint32		startX, endX;
 	uint32		accumTable[k_TILE_PIXEL_HEIGHT][3];
-
-	file = fopen("gtfb000.bin", "rb");
+	FILE *      file = fopen("gtfb000.bin", "rb");
 	fread((void *)&accumTable, 1, sizeof(uint32)*3*k_TILE_PIXEL_HEIGHT, file);
 	fread((void *)&len, 1, sizeof(uint16), file);
-	data = new Pixel16[len/2];
+
+	Pixel16 *   data = new Pixel16[len/2];
 	fread((void *)data, 1, len, file);
 	fclose(file);
 
-	dataPtr = data;
+	Pixel16 *   dataPtr = data;
 
 	uint8 *pSurfBase;
 
-	sint32 errcode;
-
-	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+	sint32 errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	
@@ -3549,13 +3435,10 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 
 		uint8 *pSurfBase;
 
-		sint32 errcode;
-		errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+		sint32 errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 		if ( errcode != AUI_ERRCODE_OK ) return;
 
 		
-		sint32 surfWidth = pSurface->Width();
-		sint32 surfHeight = pSurface->Height();
 		sint32 surfPitch = pSurface->Pitch();
 
 		
@@ -3601,9 +3484,8 @@ void primitives_HackStencilDraw(aui_Surface *pSurface)
 		errcode = pSurface->Unlock((LPVOID)pSurfBase);
 
 	}
-	uint16 tmp;
 
-	tmp = from;
+	uint16 tmp = from;
 	from = to;
 	to = tmp;
 
@@ -3642,23 +3524,7 @@ double Pmax = 1.0;
 
 void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color)
 {
-	sint32		Bvar,
-				Bainc,
-				Bdinc;
-	double		Pmid,
-				Pnow,
-				Painc,
-				Pdinc,
-				Poinc;
-	uint8		*mid_addr,
-				*now_addr;
-	sint32		addr_ainc,
-				addr_dinc,
-				addr_oinc;
-	sint32		dx,
-				dy,
-				dir;
-	double		slope;
+	uint8		*now_addr;
 
 	Assert(pSurface);
 	if (pSurface==NULL) return;
@@ -3668,12 +3534,9 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 
 	uint8		*pSurfBase;
 
-	sint32 errcode;
-	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+	sint32 errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	if (x1 > x2) {
@@ -3681,10 +3544,10 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 		SWAPVARS(y1, y2);
 	}
 
-	dx = x2 - x1;
-	dy = y2 - y1;
+	sint32 dx   = x2 - x1;
+	sint32 dy   = y2 - y1;
+	sint32 dir  = 0;
 
-	dir = 0;
 	if (dy < 0) {
 		dir |= DIR_NEGY;
 		dy = -dy;
@@ -3694,23 +3557,23 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 		SWAPVARS(dx, dy)
 	}
 
-	mid_addr = PIXADDR(x1, y1);
+	uint8 * mid_addr = PIXADDR(x1, y1);
 
-	addr_ainc = adj_pixinc_y[dir] * surfPitch + adj_pixinc_x[dir] * 2;
-	addr_dinc = diag_pixinc_y[dir] * surfPitch + diag_pixinc_x[dir] * 2;
-	addr_oinc = orth_pixinc_y[dir] * surfPitch + orth_pixinc_x[dir] * 2;
+	sint32 addr_ainc = adj_pixinc_y[dir] * surfPitch + adj_pixinc_x[dir] * 2;
+	sint32 addr_dinc = diag_pixinc_y[dir] * surfPitch + diag_pixinc_x[dir] * 2;
+	sint32 addr_oinc = orth_pixinc_y[dir] * surfPitch + orth_pixinc_x[dir] * 2;
 
-	slope = (double)dy / (double)dx;
+	double slope = (double)dy / (double)dx;
 
-	Poinc = SQRTFUNC(slope);
-	Painc = slope * Poinc;
-	Pdinc = Painc - Poinc;
-	
-	Pmid = 0;
+	double Poinc = SQRTFUNC(slope);
+	double Painc = slope * Poinc;
+	double Pdinc = Painc - Poinc;
+	double Pmid = 0;
+    double Pnow;
 
-	Bainc = dy * 2;
-	Bdinc = (dy-dx) * 2;
-	Bvar = Bainc - dx;
+	sint32 Bainc = dy * 2;
+	sint32 Bdinc = (dy-dx) * 2;
+	sint32 Bvar = Bainc - dx;
 
 	do {
 
@@ -3750,23 +3613,7 @@ void primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32
 
 void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color, sint32 length)
 {
-	sint32		Bvar,
-				Bainc,
-				Bdinc;
-	double		Pmid,
-				Pnow,
-				Painc,
-				Pdinc,
-				Poinc;
-	uint8		*mid_addr,
-				*now_addr;
-	sint32		addr_ainc,
-				addr_dinc,
-				addr_oinc;
-	sint32		dx,
-				dy,
-				dir;
-	double		slope;
+	uint8		*now_addr;
 
 	Assert(pSurface);
 	if (pSurface==NULL) return;
@@ -3776,12 +3623,9 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 
 	uint8		*pSurfBase;
 
-	sint32 errcode;
-	errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+	sint32 errcode = pSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 	if ( errcode != AUI_ERRCODE_OK ) return;
 
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	if (x1 > x2) {
@@ -3789,10 +3633,9 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 		SWAPVARS(y1, y2);
 	}
 
-	dx = x2 - x1;
-	dy = y2 - y1;
-
-	dir = 0;
+	sint32  dx  = x2 - x1;
+	sint32  dy  = y2 - y1;
+    sint32  dir = 0;
 	if (dy < 0) {
 		dir |= DIR_NEGY;
 		dy = -dy;
@@ -3802,23 +3645,23 @@ void primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, 
 		SWAPVARS(dx, dy)
 	}
 
-	mid_addr = PIXADDR(x1, y1);
+	uint8 * mid_addr = PIXADDR(x1, y1);
 
-	addr_ainc = adj_pixinc_y[dir] * surfPitch + adj_pixinc_x[dir] * 2;
-	addr_dinc = diag_pixinc_y[dir] * surfPitch + diag_pixinc_x[dir] * 2;
-	addr_oinc = orth_pixinc_y[dir] * surfPitch + orth_pixinc_x[dir] * 2;
+	sint32 addr_ainc = adj_pixinc_y[dir] * surfPitch + adj_pixinc_x[dir] * 2;
+	sint32 addr_dinc = diag_pixinc_y[dir] * surfPitch + diag_pixinc_x[dir] * 2;
+	sint32 addr_oinc = orth_pixinc_y[dir] * surfPitch + orth_pixinc_x[dir] * 2;
 
-	slope = (double)dy / (double)dx;
+	double slope = (double)dy / (double)dx;
 
-	Poinc = SQRTFUNC(slope);
-	Painc = slope * Poinc;
-	Pdinc = Painc - Poinc;
-	
-	Pmid = 0;
+	double Poinc = SQRTFUNC(slope);
+	double Painc = slope * Poinc;
+	double Pdinc = Painc - Poinc;
+	double Pmid = 0;
+    double Pnow;
 
-	Bainc = dy * 2;
-	Bdinc = (dy-dx) * 2;
-	Bvar = Bainc - dx;
+	sint32 Bainc = dy * 2;
+	sint32 Bdinc = (dy-dx) * 2;
+	sint32 Bvar = Bainc - dx;
 
 	sint32 draw = length;
 	sint32 skip = 0;
@@ -3934,20 +3777,13 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 	}
 
 	
-	sint32 oldSurfWidth = pOldSurface->Width();
-	sint32 oldSurfHeight = pOldSurface->Height();
 	sint32 oldSurfPitch = pOldSurface->Pitch();
 
-	sint32 newSurfWidth = pNewSurface->Width();
-	sint32 newSurfHeight = pNewSurface->Height();
 	sint32 newSurfPitch = pNewSurface->Pitch();
 
-	sint32 dstSurfWidth = pDstSurface->Width();
-	sint32 dstSurfHeight = pDstSurface->Height();
 	sint32 dstSurfPitch = pDstSurface->Pitch();
 
 	
-	uint16 *pDestPixel;
 	uint16 *pOldSrc = (uint16 *)pOldBase;
 	uint16 *pNewSrc = (uint16 *)pNewBase;
 
@@ -3955,7 +3791,7 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 	sint32 width = pDstRect->right - pDstRect->left;
 	sint32 height = pDstRect->bottom - pDstRect->top;
 
-	pDestPixel = (uint16 *)(pDstBase + pDstRect->top * dstSurfPitch + (pDstRect->left << 1));
+	uint16 * pDestPixel = (uint16 *)(pDstBase + pDstRect->top * dstSurfPitch + (pDstRect->left << 1));
 	sint32 dstInc = (dstSurfPitch >> 1) - width;
 
 	
@@ -4020,13 +3856,10 @@ void primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten )
 	sint32 surfPitch = pSurface->Pitch();
 
 	
-	uint16 *pDestPixel;
-
-	
 	sint32 width = surfWidth;
 	sint32 height = surfHeight;
 
-	pDestPixel = (uint16 *)(pBase);
+	uint16 * pDestPixel = (uint16 *)(pBase);
 	sint32 inc = (surfPitch >> 1) - width;
 
 	Pixel16 color;
@@ -4072,8 +3905,6 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 	}
 
 	
-	sint32 surfWidth = pSurface->Width();
-	sint32 surfHeight = pSurface->Height();
 	sint32 surfPitch = pSurface->Pitch();
 
 	

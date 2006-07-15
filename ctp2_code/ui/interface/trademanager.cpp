@@ -226,8 +226,8 @@ AUI_ERRCODE TradeManager::Display()
 			}
 		}
 
-		ctp2_Tab *tab = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
-		ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
+//		ctp2_Tab *tab = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
+//		ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
 		
 		
 		
@@ -257,7 +257,7 @@ AUI_ERRCODE TradeManager::Hide()
 
 void TradeManager::SetMode(TRADE_MANAGER_MODE mode)
 {
-	MBCHAR *tradeBlock="TradeManager:TradeTabs";
+//	MBCHAR *tradeBlock="TradeManager:TradeTabs";
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
 	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
@@ -775,7 +775,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 	if(!s_tradeManager) return;
 	bool breakInstead = sint32(cookie) != 0;
 		
-	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
+//	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
 	if(!breakInstead) {
 		Assert(s_tradeManager->m_createList);
 		if(!s_tradeManager->m_createList) return;

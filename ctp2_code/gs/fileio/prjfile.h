@@ -49,7 +49,7 @@ private:
     long m_num_entries;
 
     int mergeEntries(PFEntry *newList, int newCount);
-    PFEntry *findRecord(char *rname);
+    PFEntry *findRecord(char const * rname) const;
 
     int readDOSdir(long path, PFEntry *table);
     int verify_ZFS_header(ZFS_FHEADER *header);
@@ -60,11 +60,11 @@ private:
     int addPath_ZFS(char *path);
     int addPath_ZMS(char *path);
 
-    void *getData_DOS(PFEntry *entry, long *size, C3DIR dir = C3DIR_DIRECT);
-    void *getData_ZFS(PFEntry *entry, long *size);
-    void *getData_ZMS(PFEntry *entry, long *size);
-    void *getData_ZMS(PFEntry *entry, long *size, 
-                      HANDLE *hFileMap, long *offset);
+    void *getData_DOS(PFEntry *entry, size_t & size, C3DIR dir = C3DIR_DIRECT);
+    void *getData_ZFS(PFEntry *entry, size_t & size);
+    void *getData_ZMS(PFEntry *entry, size_t & size);
+    void *getData_ZMS(PFEntry *entry, size_t & size, 
+                      HANDLE *hFileMap, size_t & offset);
 
     char m_error_string[256];
 
@@ -76,20 +76,30 @@ public:
     int addPath(char *path, int use_filemapping = 0);
 
     
-    void *getData(char *rname, long *size, C3DIR dir = C3DIR_DIRECT);
+    void * getData(char const * rname, size_t & size, C3DIR dir = C3DIR_DIRECT);
+    /// For backwards compatibility: remove when all callers have been replaced.
+    void * getData(char const * rname, sint32 * size, C3DIR dir = C3DIR_DIRECT)
+    {
+        size_t  l_Size      = (size) ? static_cast<size_t>(*size) : 0;
+        void *  l_Result    = getData(rname, l_Size, dir);
+        
+        if (size) 
+        {
+            *size = static_cast<sint32>(l_Size);
+        }
+        return l_Result;
+    };
 
-    
-    
-    void *getData(char *rname, long *size, HANDLE *hFileMap, long *offset);
+    void * getData(char const * rname, size_t & size, HANDLE * hFileMap, size_t & offset);
 
     
     void freeData(void *);
 
     
-    int exists(char *fname);
+    bool exists(char const * fname) const;
 
     
-    char *getError() { return m_error_string; } 
+    char const * getError() const { return m_error_string; } 
 };
 
 

@@ -36,8 +36,8 @@
 //
 // - Modified GetSettleTargets so that no settle targets are found that cannot
 //   be settled, because the player does not has any units for the tile in
-//   question. (May 20th 2006 Martin Gühmann)
-//
+//   question. (May 20th 2006 Martin GÃ¼hmann)
+// 
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -124,8 +124,8 @@ void SettleMap::Cleanup()
 
 void SettleMap::Initialize()
 {
-	sint32 x_size = g_theWorld->GetWidth();
-	sint32 y_size = g_theWorld->GetHeight();
+	size_t const    x_size  = g_theWorld->GetWidth();
+	size_t const    y_size  = g_theWorld->GetHeight();
 	MapPoint rc_pos;
 	MapPoint xy_pos;
 
@@ -133,10 +133,9 @@ void SettleMap::Initialize()
 	m_settleValues.Resize(x_size, y_size, 1); 
 	m_invalidCells.Resize(x_size, y_size, 0);
 
-	
-	for (rc_pos.x=0; rc_pos.x < x_size; rc_pos.x++)
+	for (rc_pos.x = 0; static_cast<size_t>(rc_pos.x) < x_size; rc_pos.x++)
 	{
-		for (rc_pos.y=0; rc_pos.y < y_size; rc_pos.y++)
+		for (rc_pos.y = 0; static_cast<size_t>(rc_pos.y) < y_size; rc_pos.y++)
 		{
 			xy_pos.rc2xy(rc_pos, *g_theWorld->GetSize());
 	        
@@ -144,13 +143,13 @@ void SettleMap::Initialize()
 
 			if ( ( g_theWorld->IsYwrap() ||
 				   ( (xy_pos.y >= k_minimum_settle_city_size) &&
-				     (xy_pos.y <= (y_size - k_minimum_settle_city_size))
+				     (xy_pos.y + k_minimum_settle_city_size <= y_size)
                    )
                  ) 
                  &&
                  (  g_theWorld->IsXwrap() ||
 					( (xy_pos.x >= k_minimum_settle_city_size) &&
-					  (xy_pos.x <= ((x_size * 2) - k_minimum_settle_city_size)) 
+					  (xy_pos.x + k_minimum_settle_city_size <= (x_size * 2)) 
                     )
                  )
                )
@@ -192,7 +191,7 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	for (settleIt.Start(); !settleIt.End(); settleIt.Next()) 
 	{
 		pos = settleIt.Pos();
-		sint32 const new_value = ComputeSettleValue(pos) * 0.5;
+		double const new_value = ComputeSettleValue(pos) * 0.5;
 		m_settleValues.SetGridValue(pos, new_value);
 	}
 	
@@ -304,7 +303,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		}
 
 		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
-			continue;
+			continue;	
 
 #ifdef _DEBUG
 		if (g_graphicsOptions->IsCellTextOn()) {
@@ -319,11 +318,10 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 
 	delete settleTerrainTypes;
 
-	Assert(!targets.empty());
-	if (targets.empty())
-	{
-		return;
-	}
+    if (targets.empty())
+    {
+        return;
+    }
 
 	targets.sort(std::greater<SettleTarget>());
 
@@ -377,11 +375,11 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			}
 
 			if (tmp_iter == iter)
-			{
+            {
 				++iter;
-			}
+            }
 			else 
-			{
+            {
 				iter = targets.erase(iter);
 				continue;
 			}

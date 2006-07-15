@@ -70,7 +70,7 @@ STDEHANDLER(NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & newProposal = sender_diplomat.GetMyLastNewProposal(receiver);
 
@@ -412,7 +412,7 @@ STDEHANDLER(MakePeace_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -620,7 +620,7 @@ STDEHANDLER(ReducePollution_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -704,7 +704,7 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -725,8 +725,9 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	uint32 receiver_pollution = g_player[receiver]->GetPollutionLevel();
-	sint32 promised_pollution = agreement.proposal.first_arg.pollution;;
-	sint32 half_promised_pollution = promised_pollution / 2;
+	uint32 promised_pollution = 
+        static_cast<uint32>(std::max<sint32>(0, agreement.proposal.first_arg.pollution));
+	uint32 half_promised_pollution = promised_pollution / 2;
 	double pollution_ratio = (double) receiver_pollution / promised_pollution;
 
 	sint32 turns_since_start = NewTurnCount::GetCurrentRound() - agreement.start;
@@ -754,7 +755,7 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 			return GEV_HD_Continue;
 	}
 
-	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
+//	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
 
 	NewProposal new_proposal;
 	
@@ -905,7 +906,7 @@ STDEHANDLER(ResearchPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -995,7 +996,7 @@ STDEHANDLER(MilitaryPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_MILITARY_PACT))
@@ -1071,7 +1072,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_POLLUTION_PACT))
@@ -1184,7 +1185,7 @@ STDEHANDLER(Alliance_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_ALLIANCE))
@@ -1365,7 +1366,7 @@ STDEHANDLER(StopPiracy_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 
 	
@@ -2074,10 +2075,8 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 
 	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_ANGRY;
-	sint32 gold = 0;
 
-	
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	

@@ -1007,7 +1007,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 	g_controlPanel->SetStack(Army(), NULL); // empty function
 
-	if(!g_theUnitPool->IsValid(u))
+	if(!u.IsValid())
 		return;
 
     if (u.IsCity()) {

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Message data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -182,7 +182,7 @@ class MessageData : public GAMEOBJ
 
 
 
-		void SetMsgText(MBCHAR *s) ;
+		void SetMsgText(MBCHAR const * s);
 
 		const MBCHAR *GetMsgCaption() const { return m_caption; }
 		void SetMsgCaption(const MBCHAR *caption);

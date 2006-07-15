@@ -178,7 +178,7 @@ void FaultGenerator::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 		lenCoeff = 1.0;
 	}
 
-	sint32 length = sint32(min(double(outwidth), double(outheight)) * lenCoeff);
+    sint32 length = static_cast<sint32>(std::min(outwidth, outheight) * lenCoeff);
 #define PI 3.1415926535
 #define ANGLERANGE (((PI / 4.0) * 2.0) - (PI / 4.0))
 

@@ -24,10 +24,14 @@ public:
 	aui_SoundFormat() {}
 	virtual ~aui_SoundFormat() {};
 
-	virtual AUI_ERRCODE LoadSoundData(
-		MBCHAR *filename,
+	virtual AUI_ERRCODE LoadSoundData
+    (
+		MBCHAR const * filename,
 		uint8 **wavdata,
-		uint32 *size ) { return AUI_ERRCODE_OK; }
+		size_t * size 
+    ) 
+    { return AUI_ERRCODE_OK; }
+
 	virtual void ReleaseSoundData();
 protected:
 	uint8 *m_data;
@@ -41,10 +45,12 @@ public:
 	aui_WavSoundFormat() {};
 	virtual ~aui_WavSoundFormat() {};
 
-	virtual AUI_ERRCODE LoadSoundData(
-		MBCHAR *filename,
+	virtual AUI_ERRCODE LoadSoundData
+    (
+		MBCHAR const * filename,
 		uint8 **wavdata,
-		uint32 *size) ;
+		size_t * size
+    );
 
 protected:
 	void TrimWavHeader( uint8 **wavdata, uint32 *size );

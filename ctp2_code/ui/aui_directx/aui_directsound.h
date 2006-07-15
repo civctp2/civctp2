@@ -39,7 +39,7 @@ public:
 	virtual AUI_ERRCODE Unload ( void );
 	virtual void Play( void );
 	virtual void Stop( void );
-	void GetStatus( uint32 *dwStatus );
+	void GetStatus( DWORD * dwStatus );
 	void SetPlayFlag( int flag );
 
 protected:

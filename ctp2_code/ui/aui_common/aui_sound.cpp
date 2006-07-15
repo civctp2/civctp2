@@ -95,10 +95,12 @@ AUI_ERRCODE aui_Sound::Unload( void )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_WavSoundFormat::LoadSoundData(
-	MBCHAR *filename,
-	uint8 **wavdata,
-	uint32 *size)
+AUI_ERRCODE aui_WavSoundFormat::LoadSoundData
+(
+	MBCHAR const *  filename,
+	uint8 **        wavdata,
+	size_t *        size
+)
 {
 	m_data = (uint8 *)g_ui->TheMemMap()->GetFileBits( filename, size );
 	*wavdata = m_data;
@@ -119,7 +121,7 @@ void aui_SoundFormat::ReleaseSoundData() {
 
 
 
-void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, uint32 *size)
+void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, size_t *size)
 {
 	int i;
 	uint8 *data; 

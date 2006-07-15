@@ -1,48 +1,24 @@
 #include "c3.h"
+#include "RoboInit.h"
 
 #include "UnitAstar.h"
 
-#include "DataCheck.h"
-#include "RoboInit.h"
+UnitAstar * g_theUnitAstar  = NULL; 
 
-#include "ctpai.h"
-#include "Diplomat.h"
-#include "mapanalysis.h"
-#include "AgreementMatrix.h"
-
-UnitAstar *g_theUnitAstar; 
-
-BOOL roboinit_Initalize(CivArchive &a)
-
+void roboinit_Initalize(CivArchive &a)
 { 
 	Astar_Init();
+
+    delete g_theUnitAstar;
     g_theUnitAstar = new UnitAstar; 
-    return TRUE;
 } 
 
 void roboinit_Cleanup()
-
 { 
-	
-	CtpAi::Cleanup();
-
-	
-	
-	
-
-	
-	MapAnalysis::GetMapAnalysis().Resize(0, 0, 0, 1);
-
-	
-	AgreementMatrix::s_agreements.Resize(0);
+    delete g_theUnitAstar; 
+    g_theUnitAstar = NULL;
 
 	Astar_Cleanup();
-
-    if (g_theUnitAstar) { 
-        delete g_theUnitAstar; 
-        g_theUnitAstar = NULL; 
-    }
-
 }
 
 

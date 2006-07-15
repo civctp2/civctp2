@@ -786,7 +786,7 @@ AUI_ERRCODE aui_Mouse::SetHotspot( sint32 x, sint32 y, sint32 index )
 
 AUI_ERRCODE aui_Mouse::ReactToInput( void )
 {
-	if ( IsHidden() ) return AUI_ERRCODE_OK;
+	if ( IsHidden() || (!*m_curCursor)) return AUI_ERRCODE_OK;
 
 	POINT hotspot;
 	(*m_curCursor)->GetHotspot(hotspot);

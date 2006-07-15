@@ -314,11 +314,7 @@ DipWizard::~DipWizard()
 		m_percentRequestWindow = NULL;
 	}
 	
-	
-	if(m_curMenu) {
-		delete m_curMenu;
-		m_curMenu = NULL;
-	}
+	delete m_curMenu;
 }
 
 AUI_ERRCODE DipWizard::Initialize()

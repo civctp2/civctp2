@@ -7,13 +7,14 @@
 
 
 #include "c3.h"
+#include "MessageData.h"
+
 #include "c3errors.h"
 
 #include "Civilisation.h"
 #include "Globals.h"
 #include "player.h"
 #include "Unit.h"
-#include "MessageData.h"
 #include "message.h"
 #include "TurnCnt.h"
 #include "UnitDynArr.h"
@@ -28,7 +29,6 @@
 #include "SlicButton.h"
 #include "SlicEyePoint.h"
 #include "AdvanceRecord.h"
-#include "UnitPool.h"
 #include "pointerlist.h"
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
@@ -64,143 +64,181 @@ extern MessageModal *g_modalMessage;
 
 
 
-MessageData::MessageData(CivArchive &archive) : GAMEOBJ(0)
+MessageData::MessageData(CivArchive &archive) 
+: 
+    GAMEOBJ                 (0),
+	m_owner                 (PLAYER_INDEX_INVALID),									
+	m_sender                (PLAYER_INDEX_INVALID),
+    m_isRead                (false),
+	m_msgType               (0),
+	m_msgSelectedType       (1),
+    m_timestamp             (0),      
+	m_advance               (-1),
+    m_advanceSet            (false),
+	m_expiration            (0x10000000),
+	m_isHelpBox             (false),
+	m_isAlertBox            (false),
+	m_isInstant             (false),
+	m_class                 (-1),
+	m_closeDisabled         (false),
+	m_isDiplomaticResponse  (false),
+	m_useDirector           (false),
+	m_text                  (NULL),	
+	m_cityList              (new UnitDynamicArray),
+	m_request               (DiplomaticRequest()),
+	m_tradeOffer            (),
+    m_buttonList            (new PointerList<SlicButton>),
+    m_eyePoints             (new PointerList<SlicEyePoint>),
+    m_window                (NULL),
+    m_slicSegment           (NULL),
+    m_title                 (NULL)
 {
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
+    std::fill(m_caption, m_caption + k_MAX_MSG_LEN, (MBCHAR) 0);	
 
-    m_advance = -1; 
-    m_cityList = new UnitDynamicArray ;
-	m_buttonList = new PointerList<SlicButton>;
-	m_eyePoints = new PointerList<SlicEyePoint>;
-	m_window = NULL;  
-	m_slicSegment = NULL; 
-    Serialize(archive) ; 
+    Serialize(archive); 
 }
 
-MessageData::MessageData(const ID id) : GAMEOBJ(id.m_id)
-	{
-	
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
-
-    m_advance = -1; 
-	m_owner = PLAYER_INDEX_INVALID ;
-	m_sender = PLAYER_INDEX_INVALID ;
-	m_msgType = 0;
-	m_msgSelectedType = 1;
-	m_isRead = FALSE;
-	m_cityList = new UnitDynamicArray ;
-	m_text = NULL ;
-	m_request = DiplomaticRequest() ;
-	if (g_turn)
-		m_timestamp = g_turn->GetYear() ;
-	else
-		m_timestamp = 0;
-	m_buttonList = new PointerList<SlicButton>;
-	m_eyePoints = new PointerList<SlicEyePoint>;
-	m_advanceSet = FALSE;
-	m_expiration = 0x10000000;  
-	m_window = NULL;  
-	m_isHelpBox = FALSE;
-	m_isAlertBox = FALSE;
-	m_isInstant = FALSE;
-	m_slicSegment = NULL;
-	m_class = -1;
-	m_title = NULL;
-	m_closeDisabled = FALSE;
-	m_isDiplomaticResponse = FALSE;
-	m_useDirector = FALSE;
-	}
-
-
-
-
-
-
-
-
-
-
-MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX sender, const MESSAGE_TYPE type, MBCHAR *s) : GAMEOBJ(id.m_id)
-	{
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
-
-	m_owner = owner ;
-	m_sender = sender ;
-	m_msgType = type ;
-	m_msgSelectedType = type; 
-	m_cityList = new UnitDynamicArray ;
-	m_text = new char[strlen(s) + 1];
-	strcpy(m_text, s) ;
-	m_request = DiplomaticRequest() ;
-	m_timestamp = g_turn->GetYear() ;
-	m_advanceSet = FALSE;
-	m_window = NULL;  
-	m_isHelpBox = FALSE;
-    m_advance = -1; 
-	m_isInstant = FALSE;
-	m_slicSegment = NULL;
-	m_class = -1;
-	m_title = NULL;
-	m_buttonList = new PointerList<SlicButton>;
-	m_eyePoints = new PointerList<SlicEyePoint>;
-	m_isAlertBox = FALSE;
-	m_closeDisabled = FALSE;
-	m_isDiplomaticResponse = FALSE;
-	m_useDirector = FALSE;
-	}
-
-
-MessageData::MessageData(const ID id, MessageData *copy) : GAMEOBJ(id.m_id)
+MessageData::MessageData(const ID id) 
+: 
+    GAMEOBJ                 (id.m_id),
+	m_owner                 (PLAYER_INDEX_INVALID),									
+	m_sender                (PLAYER_INDEX_INVALID),
+    m_isRead                (false),
+	m_msgType               (0),
+	m_msgSelectedType       (1),
+    m_timestamp             (0),      
+	m_advance               (-1),
+    m_advanceSet            (false),
+	m_expiration            (0x10000000),
+	m_isHelpBox             (false),
+	m_isAlertBox            (false),
+	m_isInstant             (false),
+	m_class                 (-1),
+	m_closeDisabled         (false),
+	m_isDiplomaticResponse  (false),
+	m_useDirector           (false),
+	m_text                  (NULL),	
+	m_cityList              (new UnitDynamicArray),
+	m_request               (DiplomaticRequest()),
+	m_tradeOffer            (),
+    m_buttonList            (new PointerList<SlicButton>),
+    m_eyePoints             (new PointerList<SlicEyePoint>),
+    m_window                (NULL),
+    m_slicSegment           (NULL),
+    m_title                 (NULL)
 {
-    m_advance = -1; 
-    sint32 i; 
-    for (i=0; i<k_MAX_MSG_LEN; i++) { 
-        m_caption[i] = 0; 
-    } 
+    std::fill(m_caption, m_caption + k_MAX_MSG_LEN, (MBCHAR) 0);	
+
+	if (g_turn)
+    {
+		m_timestamp = g_turn->GetYear();
+    }
+}
 
 
-	m_window = NULL;	
+
+
+
+
+
+
+
+
+MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX sender, const MESSAGE_TYPE type, MBCHAR *s)
+: 
+    GAMEOBJ                 (id.m_id),
+	m_owner                 (owner),									
+	m_sender                (sender),
+    m_isRead                (false),
+	m_msgType               (type),
+	m_msgSelectedType       (type),
+    m_timestamp             (0),      
+	m_advance               (-1),
+    m_advanceSet            (false),
+	m_expiration            (0x10000000),
+	m_isHelpBox             (false),
+	m_isAlertBox            (false),
+	m_isInstant             (false),
+	m_class                 (-1),
+	m_closeDisabled         (false),
+	m_isDiplomaticResponse  (false),
+	m_useDirector           (false),
+	m_text                  (NULL),	
+	m_cityList              (new UnitDynamicArray),
+	m_request               (DiplomaticRequest()),
+	m_tradeOffer            (),
+    m_buttonList            (new PointerList<SlicButton>),
+    m_eyePoints             (new PointerList<SlicEyePoint>),
+    m_window                (NULL),
+    m_slicSegment           (NULL),
+    m_title                 (NULL)
+{
+    std::fill(m_caption, m_caption + k_MAX_MSG_LEN, (MBCHAR) 0);
+
+	m_text = new char[strlen(s) + 1];
+	strcpy(m_text, s);
+
+    if (g_turn)
+    {
+	    m_timestamp = g_turn->GetYear();
+    }
+}
+
+/// @todo Replace with standard copy constructor	
+MessageData::MessageData(const ID id, MessageData *copy) 
+: 
+    GAMEOBJ                 (id.m_id),
+	m_owner                 (PLAYER_INDEX_INVALID),									
+	m_sender                (PLAYER_INDEX_INVALID),
+    m_isRead                (false),
+	m_msgType               (0),
+	m_msgSelectedType       (1),
+    m_timestamp             (0),      
+	m_advance               (-1),
+    m_advanceSet            (false),
+	m_expiration            (0x10000000),
+	m_isHelpBox             (false),
+	m_isAlertBox            (false),
+	m_isInstant             (false),
+	m_class                 (-1),
+	m_closeDisabled         (false),
+	m_isDiplomaticResponse  (false),
+	m_useDirector           (false),
+	m_text                  (NULL),	
+	m_cityList              (new UnitDynamicArray),
+	m_request               (DiplomaticRequest()),
+	m_tradeOffer            (),
+    m_buttonList            (new PointerList<SlicButton>),
+    m_eyePoints             (new PointerList<SlicEyePoint>),
+    m_window                (NULL),
+    m_slicSegment           (NULL),
+    m_title                 (NULL)
+{
+    std::fill(m_caption, m_caption + k_MAX_MSG_LEN, (MBCHAR) 0);
 						
-
-	
-	
-	
-	
-	
-	
-	
-
+    Assert(copy);
+    // Extremely dangerous code: overwrite the block up to (excluding) m_text
 	memcpy(this, copy, (uint8*)&m_text - (uint8*)this);
-	m_id = id;
-	m_cityList = new UnitDynamicArray;
-	for(i = 0; i < copy->m_cityList->Num(); i++) {
+
+    m_id = id;
+
+    for(sint32 i = 0; i < copy->m_cityList->Num(); i++) {
 		m_cityList->Insert(copy->m_cityList->Access(i));
 	}
 	m_request = copy->m_request;
 
-	m_buttonList = new PointerList<SlicButton>;
 	PointerList<SlicButton>::Walker bwalk(copy->m_buttonList);
-	while(bwalk.IsValid()) {
+	for ( ; bwalk.IsValid(); bwalk.Next()) 
+    {
 		m_buttonList->AddTail(new SlicButton(bwalk.GetObj()));
 		m_buttonList->GetTail()->SetMessage(Message(m_id));
-		bwalk.Next();
 	}
 		
-	m_eyePoints = new PointerList<SlicEyePoint>;
 	PointerList<SlicEyePoint>::Walker ewalk(copy->m_eyePoints);
-	while(ewalk.IsValid()) {
+	for ( ; ewalk.IsValid(); ewalk.Next()) 
+    {
 		m_eyePoints->AddTail(new SlicEyePoint(ewalk.GetObj()));
 		m_eyePoints->GetTail()->SetMessage(Message(m_id));
-		ewalk.Next();
 	}
 
 	m_advanceSet = copy->m_advanceSet;
@@ -208,13 +246,12 @@ MessageData::MessageData(const ID id, MessageData *copy) : GAMEOBJ(id.m_id)
 	if(copy->m_text) {
 		m_text = new char[strlen(copy->m_text) + 1];
 		strcpy(m_text, copy->m_text);
-	} else {
-		m_text = NULL;
 	}
+
+    // Most of these have been set through the memcpy already
 	m_msgType = copy->m_msgType;
 	m_msgSelectedType = copy->m_msgSelectedType;
 	m_isRead = copy->m_isRead;
-
 	m_isHelpBox = copy->m_isHelpBox;
 	m_isInstant = copy->m_isInstant;
 	m_isAlertBox = copy->m_isAlertBox;
@@ -230,8 +267,6 @@ MessageData::MessageData(const ID id, MessageData *copy) : GAMEOBJ(id.m_id)
 	if(copy->m_title) {
 		m_title = new MBCHAR[strlen(copy->m_title) + 1];
 		strcpy(m_title, copy->m_title);
-	} else {
-		m_title = NULL;
 	}
 
 	m_tradeOffer = copy->m_tradeOffer;
@@ -243,40 +278,40 @@ extern PointerList<SlicButton> s_deletedButtons;
 
 MessageData::~MessageData()
 {
-	if(m_cityList)
-		delete m_cityList;
+	delete m_cityList;
 	
-	if(m_buttonList) {
+	if (m_buttonList) 
+    {
+#ifdef _BAD_BUTTON
 		SlicButton *butt;
 		while(butt = m_buttonList->RemoveHead()) {
-#ifdef _BAD_BUTTON
 			memset(butt, 0xbe, sizeof(SlicButton));
 			s_deletedButtons.AddTail(butt);
-#else
-			delete butt;
-#endif
 		}
+#else
+        m_buttonList->DeleteAll();
+#endif
 		delete m_buttonList;
 	}
 
-	if(m_eyePoints) {
-		SlicEyePoint *ep;
-		while(ep = m_eyePoints->RemoveHead())
-			delete ep;
+	if (m_eyePoints) 
+    {
+        m_eyePoints->DeleteAll();
 		delete m_eyePoints;
 	}
 
-	if(m_window) {
+	if (m_window) 
+    {
 		KillMessageWindow();
 	}
 
-	if(m_advanceSet)
+	if (m_advanceSet)
+    {
 		g_player[m_owner]->StartResearching(m_advance);
+    }
 
-	if(m_text)
-		delete [] m_text;
-	if(m_title)
-		delete [] m_title;
+	delete [] m_text;
+	delete [] m_title;
 }
 
 
@@ -289,16 +324,12 @@ MessageData::~MessageData()
 
 
 
-void MessageData::SetMsgText(MBCHAR *s)
-	{
-	if(m_text) 
-		{
-		delete [] m_text;
-		}
-
+void MessageData::SetMsgText(MBCHAR const * s)
+{
+	delete [] m_text;
 	m_text = new char[strlen(s) + 1];
-	strcpy(m_text, s) ;
-	}
+	strcpy(m_text, s);
+}
 
 
 
@@ -1256,18 +1287,15 @@ void MessageData::EyePointCallback(sint32 index)
 {
 	SlicEyePoint *ep = GetEyePoint(index);
 	Assert(ep);
-	if(!ep)
-		return;
-	ep->Callback();
+	if (ep)
+    {
+    	ep->Callback();
+    }
 }
 
 void MessageData::EyeDropdownCallback(sint32 index)
 {
-	SlicEyePoint *ep = GetEyePoint(index);
-	Assert(ep);
-	if(!ep)
-		return;
-	ep->Callback();
+	EyePointCallback(index);
 }
 
 void MessageData::KillMessageWindow( void )
@@ -1372,17 +1400,18 @@ void MessageData::ToString(MBCHAR *s)
 
 void MessageData::SetTitle(MBCHAR *title) 
 {
-	if(m_title) {
-		delete [] m_title;
-	}
+	delete [] m_title;
 	m_title = new MBCHAR[strlen(title) + 1];
 	strcpy(m_title, title);
 }
 
 void MessageData::NotifySlicReload()
 {
-	while(m_buttonList->GetHead())
+	while (m_buttonList->GetHead())
+    {
 		m_buttonList->RemoveHead();
+    }
+
 	if(m_lesser) {
 		((MessageData *)m_lesser)->NotifySlicReload();
 	}

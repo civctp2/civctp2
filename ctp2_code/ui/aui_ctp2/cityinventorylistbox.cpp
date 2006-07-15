@@ -212,7 +212,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theUnitDB->Get(i)->m_name));
-				sint32 j = aui_UniqueId();
+				sint32 j = aui_UniqueId();  /// @todo Find out which i should be j
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -242,7 +242,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name));
-				sint32 j = aui_UniqueId();
+				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -272,7 +272,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
-				sint32 j = aui_UniqueId();
+				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -357,20 +357,17 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 
 void CityInventoryListBox::CutBuilding( const Unit &unit)
 {
-	StaticTextItem *text;
-	text = (StaticTextItem *)GetSelectedItem();
-	sint32 category = text->GetCategory();
-	sint32 id = text->GetId();
-	uint64 improvements = 0;
-	uint64 wonders = 0;
+	StaticTextItem *    text            = (StaticTextItem *)GetSelectedItem();
+	sint32              category        = text->GetCategory();
+	sint32              id              = text->GetId();
 
 	if (category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-		improvements = unit.GetData()->GetCityData()->GetImprovements();
-		improvements ^= ((uint64)1 << (uint64)id);
+	    uint64  improvements    = unit.GetData()->GetCityData()->GetImprovements()
+		                          ^ ((uint64)1 << (uint64)id);
 		unit.GetData()->GetCityData()->SetImprovements(improvements);
 	}
 	else if (category == k_GAME_OBJ_TYPE_WONDER) {
-		wonders = unit.GetData()->GetCityData()->GetBuiltWonders();
+		uint64  wonders = unit.GetData()->GetCityData()->GetBuiltWonders();
 		wonders ^= ((uint64)1 << (uint64)id);
 		unit.GetData()->GetCityData()->SetWonders(wonders);
 	}

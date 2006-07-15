@@ -15,12 +15,16 @@
 #ifndef GAMEINIT_H
 #define GAMEINIT_H 1
 
-class CivArchive ;
+struct HotseatPlayerSetup;
+
+#include "civarchive.h"
+#include "ctp2_inttypes.h"
+#include "MapPoint.h"
 
 sint32 gameinit_InitializeGameFiles(void);
 sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive);
-sint32 gameinit_CleanupMessages(void);
-sint32 gameinit_Cleanup(void);
+void   gameinit_CleanupMessages(void);
+void   gameinit_Cleanup(void);
 sint32 gameinit_ResetForNetwork();
 sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight);
 

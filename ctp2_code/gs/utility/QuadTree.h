@@ -435,7 +435,7 @@ QuadTreeNode<T>::GetAt(const MapPoint &point, T &obj)
 		
 		
 		sint32 i = 0;
-		for(i = 0; i < m_array.m_nElements; i++) {
+		for(i = 0; i < m_array.Num(); i++) {
 			if(m_tree->GetPos(m_array[i]) == point) {
 				obj = m_array[i];
 				return TRUE;
@@ -550,7 +550,7 @@ QuadTreeNode<T>::RemoveAt(const MapPoint &point, T &removedObj)
 		removedObj = m_array[0];
 
 		sint32 i;
-		for(i = m_array.m_nElements - 1; i >= 0; i--) {
+		for(i = m_array.Num() - 1; i >= 0; i--) {
 			m_array.DelIndex(i);
 		}
 

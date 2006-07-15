@@ -224,7 +224,7 @@ STDEHANDLER(MakeFriend_NextDStateEvent)
 	
 	const PersonalityRecord * personality = diplomat.GetPersonality();
 
-	ai::Regard regard = diplomat.GetEffectiveRegard(foreignerId);
+//	ai::Regard regard = diplomat.GetEffectiveRegard(foreignerId);
 
 	
 	bool personality_match = (personality->GetConquestPassive() &&

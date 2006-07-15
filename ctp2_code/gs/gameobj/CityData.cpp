@@ -7220,9 +7220,7 @@ sint32 CityData::GetGoodCountInRadius(sint32 good)
 
 sint32 CityData::SubtractAccumulatedFood(sint32 amount)
 {
-	m_accumulated_food -= amount;
-	if(m_accumulated_food < 0)
-		m_accumulated_food = 0;
+    m_accumulated_food = std::max<sint32>(m_accumulated_food - amount, 0);
 	return m_accumulated_food;
 }
 
@@ -8095,13 +8093,18 @@ sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
 	const AgeCityStyleRecord::SizeSprite *spr = NULL;
 	const AgeCityStyleRecord::SizeSprite *lastTypeSpr = NULL;
 
-	for(i = 0; i < ageStyleRec->GetNumSprites(); i++) {
-		if(spr = ageStyleRec->GetSprites(i)) {
+	for(i = 0; i < ageStyleRec->GetNumSprites(); i++) 
+    {
+        spr = ageStyleRec->GetSprites(i);
+		if (spr) 
+        {
 			if((isLand && spr->GetType() == 0) ||
-			   (!isLand && spr->GetType() != 0)) {
+			   (!isLand && spr->GetType() != 0)) 
+            {
 				lastTypeSpr = spr;
 				if(spr->GetMinSize() <= m_population &&
-				   spr->GetMaxSize() >= m_population) {
+				   spr->GetMaxSize() >= m_population) 
+                {
 					return spr->GetSprite();
 				}
 			}

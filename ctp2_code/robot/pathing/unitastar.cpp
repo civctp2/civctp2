@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A* algorithm for units
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // _DEBUG
 //
 // PRINT_COSTS
@@ -741,8 +741,6 @@ sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
                       const float pc, const MapPoint &dest) 
 
 { 
-
-    BOOL is_ortho = FALSE; 
     AstarPoint *d = point; 
     BOOL is_zoc=FALSE; 
     ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER; 
@@ -1229,7 +1227,6 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
                    cutoff, nodes_opened); 
                if (r) { 
                    StraightLine(vision_edge, dest, bad_path);
-                   return TRUE; 
                } else if (no_bad_path) {  
                    return FALSE; 
                } else { 
@@ -1650,9 +1647,6 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
 
     ClearMem(); 
     return r; 
-
-    ClearMem(); 
-    return FALSE;
 }
 
 
@@ -1730,8 +1724,7 @@ BOOL UnitAstar::VerifyMem() const
 }
 BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian)
 {
-
-	Cell* c = g_theWorld->GetCell(myPos);
+//	Cell* c = g_theWorld->GetCell(myPos);
     Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
     ai::Regard baseRegard = NEUTRAL_REGARD;
 

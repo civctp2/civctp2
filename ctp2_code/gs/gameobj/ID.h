@@ -62,10 +62,10 @@ class ID {
 public:
 	uint32 m_id; 
 	
-	ID () { m_id = 0; };
 	ID (sint32 val) { m_id = val; }; 
-	ID (uint32 val) { m_id = val; }; 
-	
+	ID (uint32 val = 0) { m_id = val; }; 
+    ID (const ID & i) { m_id = i.m_id; };
+
 	void Castrate() { } 
 	void DelPointers() {} 
 	
@@ -114,7 +114,7 @@ public:
 		return m_id >= val.m_id; 
 	};
 
-	ID & operator= (const ID &val) { 
+	ID & operator = (const ID &val) { 
         m_id = val.m_id;
         return *this; };
 

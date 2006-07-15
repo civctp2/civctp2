@@ -334,8 +334,7 @@ AUI_ERRCODE BattleViewWindow::InitCommonLdl(MBCHAR *ldlBlock)
 
 	sprintf(buttonBlock, "%s.%s", ldlBlock, "BattleViewArea");
 
-	aui_Ldl *theLdl = g_c3ui->GetLdl();
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( buttonBlock );
+    ldl_datablock *block = aui_Ldl::GetLdl()->FindDataBlock( buttonBlock );
 	Assert(block);
 	if (!block) return AUI_ERRCODE_OK;
 
@@ -367,7 +366,6 @@ AUI_ERRCODE BattleViewWindow::InitCommonLdl(MBCHAR *ldlBlock)
 
 void BattleViewWindow::SetupBattle(Battle *battle)
 {
-	
 	if(!m_battleView)
 		return;
 	if(!battle)
@@ -375,44 +373,33 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	if(!g_theCurrentBattle)
 		return;
 
-	
-	
-	
-	if(g_theCurrentBattle->GetAttacker() ==
-		g_selected_item->GetVisiblePlayer() 
-	   && !g_network.IsActive()) {
-		
+	if (g_theCurrentBattle->GetAttacker() ==
+		    g_selected_item->GetVisiblePlayer() 
+	    && !g_network.IsActive()
+       ) 
+    {
 		m_retreatButton->Show();
 		m_retreatButton->Enable(true);
-	} else {	
+	} 
+    else 
+    {	
 		m_retreatButton->Hide();
 	}
 
-	
-	AUI_ERRCODE	errcode;
-
-	
 	RECT battleRect = m_battleViewRect;
 	OffsetRect(&battleRect, -battleRect.left, -battleRect.top);
 
-	
 	m_battleView->Initialize(&battleRect);
-
-	
 	m_battleView->SetBattle(battle);
-
-	
-	double bonus;
-	MBCHAR s[k_MAX_NAME_LEN];
 
 	
 	sint32	terrainType = battle->GetTerrainType();
 	sint32  attackerTerrain = battle->GetAttackersTerrainType();
 
 	
+	AUI_ERRCODE	errcode = AUI_ERRCODE_OK;
 	aui_StringTable	*table = new aui_StringTable(&errcode, "BattleViewTerrainTable");
 	Assert(errcode == AUI_ERRCODE_OK);
-	Assert(table);
 	MBCHAR *imageName = NULL;
 
 	const TerrainRecord *defTerrRec = g_theTerrainDB->Get(terrainType);
@@ -432,11 +419,11 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	if(image)
 		m_battleView->SetBackgroundImage(image);
 
-	
 	delete table;
 
 	
-	bonus = battle->GetTerrainBonus();
+	double bonus = battle->GetTerrainBonus();
+	MBCHAR s[k_MAX_NAME_LEN];
 	sprintf(s, "+%d%%", (sint32)(bonus * 100.0));
 	m_terrainBonusValue->SetText(s);
 
@@ -453,15 +440,10 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 		
 		aui_Image *cityImage = g_c3ui->LoadImage(useSplit ? "UPBO006.tga" : cityTable->GetString(terrainType));
 		m_battleView->SetCityImage(cityImage);
-		
-
-		
 		delete cityTable;
 
 		
 		m_cityName->SetText(battle->GetCityName());
-
-		
 		m_cityName->Show();
 		
 	} else {

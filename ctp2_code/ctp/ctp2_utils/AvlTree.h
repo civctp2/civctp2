@@ -284,7 +284,7 @@ private:
 public:
       
    AvlTree() : myRoot(NULL) {};
-   ~AvlTree() { if (myRoot)  delete myRoot; }
+   ~AvlTree() { delete myRoot; }
 
       
    void
@@ -318,19 +318,6 @@ public:
    }
 };
 
-
-
-   
-inline static int
-MIN(int a, int b) {
-   return  (a < b) ? a : b;
-}
-
-   
-inline static int
-MAX(int a, int b) {
-   return  (a > b) ? a : b;
-}
 
    
 enum balance_t { LEFT_HEAVY = -1, BALANCED = 0, RIGHT_HEAVY = 1 };
@@ -414,8 +401,8 @@ AvlNode<KeyType>::RotateTwice(AvlNode<KeyType> * & root, dir_t dir)
    root->mySubtree[otherDir] = oldOtherDirSubtree;
 
       
-   root->mySubtree[LEFT]->myBal  = -MAX(root->myBal, 0);
-   root->mySubtree[RIGHT]->myBal = -MIN(root->myBal, 0);
+   root->mySubtree[LEFT]->myBal  = - std::max<short>(root->myBal, 0);
+   root->mySubtree[RIGHT]->myBal = - std::min<short>(root->myBal, 0);
    root->myBal = 0;
 
       

@@ -832,7 +832,7 @@ Army UnitControlPanel::GetSelectedArmy()
 	
   	if(selectionType == SELECT_TYPE_LOCAL_ARMY) {
 		
-		return(Army(id));
+		return id;
 	}
 
 	if(selectionType == SELECT_TYPE_LOCAL_CITY) {
@@ -1108,7 +1108,7 @@ void UnitControlPanel::OrderButtonActionCallback(aui_Control *control,
 void UnitControlPanel::Activated()
 {
 	
-	m_lastSelectedArmy.m_id = -1;
+	m_lastSelectedArmy.m_id = 0;
 
 	Army a;
 	if(g_selected_item->GetSelectedArmy(a))

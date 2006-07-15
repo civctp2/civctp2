@@ -216,7 +216,7 @@ public:
 	sint16 GetSpecialAttackers(const PLAYER_INDEX playerId) const;
 
 	
-	sint16 AverageSettledContinentSize(const PLAYER_INDEX playerId) const;
+	sint32 AverageSettledContinentSize(const PLAYER_INDEX playerId) const;
 
 	
 	sint16 GetTotalPopulation(const PLAYER_INDEX playerId = -1) const;

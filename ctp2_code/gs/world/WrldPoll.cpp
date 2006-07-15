@@ -29,10 +29,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Globals.h"
-
-#include "XY_Coordinates.h"
 #include "World.h"
+
+#include "Globals.h"
+#include "XY_Coordinates.h"
 #include "Cell.h"
 #include "StrDB.h"
 #include "TerrainRecord.h"
@@ -110,24 +110,22 @@ extern	RadarMap	*g_radarMap;
 
 
 void World::RaiseWaters(void)
-	{
+{
 	Cell	*c ;
 
-	sint32	x, y,
-			w, h ;
+	sint32	x, y;
 
-	w = GetWidth() ;
-	h = GetHeight() ;
+	sint32 const    w = GetWidth();
+	sint32 const    h = GetHeight();
+
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
-			{
+		{
 			c = GetCell(x, y) ;
 			if (c->GetScratch()<0 && !(c->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER))
 				FloodCell(x, y, c) ;
+		}
 
-			}
-
-	
 	MapPoint cp(0,0), n;
 	for(cp.x = 0; cp.x < m_size.x; cp.x++) {
 		for(cp.y = 0; cp.y < m_size.y; cp.y++) {
@@ -154,57 +152,50 @@ void World::RaiseWaters(void)
 			}
 		}
 	}
-	}
+}
 
 
 
 void World::FloodCell(sint32 x, sint32 y, Cell *c)
-	{
-	
+{
 	Assert(c) ;
 
 	FloodEverythingInCell(x, y, c) ;
 	ConvertToShallowWater(x, y, c) ;
-	}
+}
 
 
 void World::FloodEverythingInCell(sint32 x, sint32 y, Cell *c)
-	{
+{
 	FloodArmies(c) ;
 	FloodCity(c) ;
 	FloodGoodyHut(c) ;
 	FloodImprovements(x, y, c) ;
-	}
+}
 
 
 void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 {
-	MapPoint pos ;
-
-	
-	pos.x = sint16(x) ;
-	pos.y = (sint16)y ;
-	Cell *cell = GetCell(x, y);
-	
+	MapPoint    pos    (x, y);
+	Cell *      cell    = GetCell(x, y);
 	
 	if (cell->GetNumDBImprovements() > 0 || cell->GetNumImprovements() > 0)
-		{
+	{
 		g_theWorld->CutImprovements(pos);
-		if(g_network.IsHost())
-			{
+		if (g_network.IsHost())
+		{
 			g_network.Enqueue(c, pos.x, pos.y) ;
-			}
+		}
 
-		static DynamicArray<Installation> instArray ;
-		instArray.Clear() ;
+		DynamicArray<Installation> instArray;
 		g_theInstallationTree->GetAt(pos, instArray) ;
 		instArray.KillList() ;
-		}
-	if(GetCell(pos)->GetNumImprovements()) {
-		
-		sint32 i;
-		Cell *cell = GetCell(pos);
-		for(i = cell->GetNumImprovements() - 1; i >= 0; i--)
+	}
+
+	if (GetCell(pos)->GetNumImprovements()) 
+    {
+		Cell * cell = GetCell(pos);
+		for(sint32 i = cell->GetNumImprovements() - 1; i >= 0; i--)
 			cell->AccessImprovement(i).Kill();
 	}
 }
@@ -212,78 +203,46 @@ void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 void World::FloodGoodyHut(Cell *c)
 {
 #if 0
-	
-	
-	if(c->m_jabba)
-	{
-		
-		delete c->m_jabba ;
-		c->m_jabba = NULL ;
-	}
+	delete c->m_jabba;
+	c->m_jabba = NULL;
 #endif
 }
 
 
-void World::FloodCity(Cell *c)
+void World::FloodCity(Cell * c)
+{
+	Unit	u   = c->GetCity();
+
+	if (u.IsValid())
 	{
-	Unit	u ;
-
-	
-	if (c->GetCity().m_id != (0))
-		{
-		
-		u = c->GetCity() ;
-		
-		
-		
-
 		SlicObject *so = new SlicObject("04CitiesKilledByCalamity");
 		so->AddCity(u);
 		so->AddRecipient(u.GetOwner());
 		g_slicEngine->Execute(so);
 
-		
-		
-		
 		u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);									
-		}
-
 	}
+}
 
 
 
-void World::FloodArmies(Cell *c)
+void World::FloodArmies(Cell * c)
+{
+	Assert(c);
+
+	for (sint32 i = c->GetNumUnits() - 1; i >= 0; i--)
 	{
-	sint32	n,
-			i ;
-
-	Unit	u ;
-
-	
-	Assert(c) ;
-
-	
-	n = c->GetNumUnits() ;
-	
-	for (i=n-1; i>=0; i--)
+        Unit u  = c->AccessUnit(i);
+		if (u.IsValid() && !u.GetMovementTypeSea())
 		{
-		
-		if (!(c->AccessUnit(i).GetMovementTypeSea()))
-			{
-			
-			u = c->AccessUnit(i) ;
-			
-			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1) ;
-			}
-
+			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);
 		}
-
 	}
+}
 
 
 void World::ConvertToShallowWater(sint32 x, sint32 y, Cell *c)
-	{
-	
+{
 	Assert(c) ;
 
 	c->m_terrain_type = (sint8)TERRAIN_WATER_SHALLOW ;
@@ -293,12 +252,11 @@ void World::ConvertToShallowWater(sint32 x, sint32 y, Cell *c)
 	c->m_env &= ~k_MASK_ENV_RIV_CUR ;
 	c->m_env &= ~k_MASK_ENV_CANAL_TUNNEL ;
 	Assert(IsWater(x,y)) ;
-	}
+}
 
 
 void World::ConvertToBeach(sint32 x, sint32 y, Cell *c)
 {
-	
 	Assert(c) ;
 
 	c->m_terrain_type = (sint8)TERRAIN_WATER_BEACH ;
@@ -323,11 +281,10 @@ void World::MakeBeaches()
 {
 	Cell	*c ;
 
-	sint32	x, y,
-			w, h ;
+	sint32	x, y;
 
-	w = GetWidth() ;
-	h = GetHeight() ;
+	sint32 const    w = GetWidth();
+	sint32 const    h = GetHeight();
 
 	
 	for (y=0; y<h; y++) {
@@ -377,14 +334,14 @@ void World::MakeBeaches()
 
 
 void World::RemoveBeaches()
-	{
-	sint32	x, y,
-			w, h ;
+{
+	sint32	x, y;
 
 	Cell	*c ;
 	
-	w = GetWidth() ;
-	h = GetHeight() ;
+	sint32 const    w = GetWidth();
+	sint32 const    h = GetHeight();
+
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
 			{
@@ -428,16 +385,16 @@ void World::GWPhase(const sint32 phase)
 {
 	Cell	*c ;
 
-	sint32	x, y,
-			w, h ;
+	sint32	x, y;
 
 	TERRAIN_TYPES	newtype,										
 					terrain ;										
 
 	double	baseProbability = 0.0;										
 	
-	w = GetWidth() ;
-	h = GetHeight() ;
+	sint32 const    w = GetWidth();
+	sint32 const    h = GetHeight();
+
 	for (y=0; y<h; y++) {
 		for (x=0; x<w; x++) {
 			c = GetCell(x, y) ;
@@ -515,10 +472,7 @@ void World::GWPhase(const sint32 phase)
 
 
 void World::GlobalWarming(const sint32 phase)
-	{
-	MapPoint	pos,
-				n ;
-
+{
 	if(g_network.IsHost()) {
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_GLOBAL_WARMING, phase));
@@ -531,9 +485,11 @@ void World::GlobalWarming(const sint32 phase)
 	MakeBeaches() ;
 	RegenerateRivers();
 	MakeBeaches() ;
-	sint32 p;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		if(g_player[p]) {
+
+    for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
+    {
+		if (g_player[p]) 
+        {
 			g_player[p]->RemoveEmptyCities(CAUSE_REMOVE_ARMY_FLOOD);
 		}
 	}
@@ -548,7 +504,7 @@ void World::GlobalWarming(const sint32 phase)
 				if(!theCell->UnitArmy()->CanEnter(pos))
 					theCell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_FLOOD, -1);
 			}
-			if(theCell->GetCity().m_id != 0) {
+			if (theCell->GetCity().IsValid()) {
 				if((IsWater(pos) || IsShallowWater(pos))) {
 					if(!theCell->GetCity().GetMovementTypeSea()) {
 						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
@@ -570,8 +526,10 @@ void World::GlobalWarming(const sint32 phase)
 	
 	sint32 i;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(!g_player[i]) continue;
-		g_player[i]->m_vision->ClearUnseen();
+		if (g_player[i])
+        {
+		    g_player[i]->m_vision->ClearUnseen();
+        }
 	}
 
 	
@@ -594,21 +552,19 @@ void World::GlobalWarming(const sint32 phase)
     NumberContinents();
 	SetAllMoveCost();
 	ClearScratch();	
-	}
+}
 
 
 void World::InformPlayersOfFloodingCatastrophe(void)
+{
+	for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 	{
-	sint32	i ;
-
-	for (i=0;i<k_MAX_PLAYERS; i++)
-		{
 		if (g_player[i] && !g_player[i]->IsDead())
-			g_player[i]->IndicateTerrainPolluted() ;
-		
-		}
-
+        {
+			g_player[i]->IndicateTerrainPolluted();
+        }
 	}
+}
 
 
 
@@ -621,16 +577,15 @@ void World::InformPlayersOfFloodingCatastrophe(void)
 
 
 void World::FloodRivers(void)
-	{
+{
 	static	sint32	offset_pass1[4][2] = { { -1, +1 }, { -1, 0 }, { -1, -1 }, { 0, -1 } },
 					offset_pass2[4][2] = { { +1, -1 }, { +1, 0 }, {+1, +1 }, { 0, +1 } } ;
 
 	sint32	o,
-			x, y,
-			w, h ;
+			x, y;
 
-	h = GetHeight() ;
-	w = GetWidth() ;
+	sint32 const    h = GetHeight();
+	sint32 const    w = GetWidth();
 	
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
@@ -717,14 +672,12 @@ void World::OzoneDepletion(void)
 	{
 	sint32	i,
 			m,														
-			x, y,
-			w, h ;
+			x, y;
 
 	Cell	*c ;
 	
-	sint32	phase = 0 ;		
-
 	if(g_network.IsHost()) {
+        sint32  phase   = 0;
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_OZONE_DEPLETION,
 									  phase));
@@ -737,12 +690,12 @@ void World::OzoneDepletion(void)
 	}
 
 	RemoveBeaches() ;
-	w = GetWidth() ;
-	h = GetHeight() ;
+	sint32 const    w = GetWidth();
+	sint32 const    h = GetHeight();
     MapPoint pos; 
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
-			{
+		{
 			c = GetCell(x, y) ;
 
 			
@@ -753,7 +706,7 @@ void World::OzoneDepletion(void)
 			Assert(m<=k_NUM_MERIDIANS) ;
 			double flip_prob = g_theUVDB->GetProb(m) ;
 			if ((c->GetCanDie()) && (g_rand->NextF() < flip_prob))
-				{
+			{
 
                 
                 pos.Set(x, y); 
@@ -769,9 +722,9 @@ void World::OzoneDepletion(void)
 				
 				
 				
-				}
-
 			}
+
+		}
 
 
 	MakeBeaches() ;
@@ -780,7 +733,7 @@ void World::OzoneDepletion(void)
 	g_tiledMap->Refresh() ;
 	g_radarMap->Update();
 	g_radarMap->ShouldDraw();
-	}
+}
 
 void World::RegenerateRivers()
 {

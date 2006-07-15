@@ -1459,30 +1459,30 @@ void ShowDiplomacyCommand::Execute(sint32 argc, char **argv) {
 }
 
 
-void NextStateCommand::Execute(sint32 argc, char **argv) {
+void NextStateCommand::Execute(sint32 argc, char **argv) 
+{
+	sint32 playerId     = PLAYER_INDEX_VANDALS;
 
-	sint32 playerId;
-	sint32 foreignerId;
-	if(argc >= 2 ) {
+	if (argc >= 2) 
+    {
 		playerId = atoi(argv[1]);
-
-		
 		Diplomat::GetDiplomat(playerId).NextStrategicState();
 	}
 
-	if(argc == 3 ) {
-		foreignerId = atoi(argv[2]);
-		Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);		
+	if (argc == 3) 
+    {
+		Diplomat::GetDiplomat(playerId).NextDiplomaticState(atoi(argv[2]));		
 	}
-	else {
-		
-		for(foreignerId=0; foreignerId < k_MAX_PLAYERS; foreignerId++) {
-			
+	else 
+    {
+		for (sint32 foreignerId = 0; foreignerId < k_MAX_PLAYERS; ++foreignerId) 
+        {
 			if (foreignerId != playerId)
+            {
 				Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);
+            }
 		}
 	}
-
 }
 
 void SetPersonalityCommand::Execute(sint32 argc, char **argv) {
@@ -2272,17 +2272,13 @@ void FliLogCommand::Execute(sint32 argc, char **argv)
 }
 
 void ReloadFliCommand::Execute (sint32 argc, char **argv)
-
 { 
+#if 0   /// @todo Find out what this code was supposed to do
     Assert(argc == 2) 
     if (argc != 2) return; 
 
     PLAYER_INDEX p = atoi (argv[1]); 
-    
-    
-    
-    
-    
+#endif    
 }
 
 void RobotMessagesCommand::Execute(sint32 argc, char **argv)
@@ -2911,12 +2907,14 @@ void HearGossipCommand::Execute(sint32 argc, char **argv)
 	BOOL DontUseThisCommandItSucks = FALSE;
 	Assert(DontUseThisCommandItSucks);
 	return;
+#if 0   // Unreachable
 	Assert(argc == 2);
 	if(argc != 2)
 		return;
 
 	g_player[g_selected_item->GetVisiblePlayer()]->m_all_units->Access(0).AccessData()->HearGossip(
 		g_player[atoi(argv[1])]->m_all_units->Access(0));
+#endif
 }
 
 void BombardCommand::Execute(sint32 argc, char **argv)
@@ -3196,7 +3194,9 @@ void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
 
+#if 0   // Unused
 	sint32 vplayer = g_selected_item->GetVisiblePlayer();
+#endif
 
 	Cell *cell = g_theWorld->GetCell(point);
 	
@@ -3618,14 +3618,14 @@ void DumpFZRegardCommand::Execute(sint32 argc, char **argv)
 
 void SetFZRegardCommand::Execute(sint32 argc, char **argv) 
 { 
+#if 0   /// @todo Find out what this code is supposed to do
     Assert(argc == 4)
     if (argc != 4) return; 
 
     sint32 me = atoi(argv[1]); 
     sint32 him = atoi(argv[2]); 
     sint32 r = atoi(argv[3]); 
-
-    
+#endif
 }
 
 void TotalWarCommand::Execute(sint32 argc, char **argv)
@@ -5708,22 +5708,11 @@ void LoadAIPCommand::Execute(sint32 argc, char **argv)
 
 void WhoAmICommand::Execute(sint32 argc, char **argv)
 { 
+#if 0   /// @todo Find out what this was supposed to do
     Assert(argc==1)
 
 	char *aipName = NULL;
-	
-        
-        
-
-       
-		
-        
-        
-        
-         
-        
-       
-	
+#endif	
 }
 
 void LogAICommand::Execute(sint32 argc, char **argv)
@@ -6410,13 +6399,15 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				char buf[1024];
 				sprintf(buf, "    %2d %4d ", i, j);
 				CityData* cityData = cityList->Get(j).GetData()->GetCityData();
-				sint32 rc;
-				for(sint32 r = 0; r < g_theResourceDB->NumRecords(); r++) {
+				for(sint32 r = 0; r < g_theResourceDB->NumRecords(); r++) 
+                {
+                     
 #ifdef CTP1_TRADE
-					if((rc = cityData->GetResourceCount(r)) > 0) 
+				    sint32 const rc = cityData->GetResourceCount(r);
 #else
-					if(rc = (*cityData->GetCollectingResources())[r] > 0)
+					sint32 const rc = (*cityData->GetCollectingResources())[r];
 #endif
+                    if (rc > 0)
 					{
 						char rbuf[80];
 						sprintf(rbuf, "%d:%d ", r, rc);

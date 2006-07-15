@@ -1145,8 +1145,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 {
 	g_debugWindow->SetDebugMask(k_DBG_AI); 
 
-	uint32 seed; 
-	
 	g_theProfileDB->SetNPlayers(3); // What's this?
 	
 	sint32 nPlayers = g_theProfileDB->GetNPlayers();
@@ -1164,10 +1162,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	
 	
-	seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
-
+	uint32 seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
 	srand(seed);
-
 	g_rand = new RandomGenerator(seed); 
 
 
@@ -1185,15 +1181,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	g_theGameSettings = new GameSettings();
 
 	SPLASH_STRING("Initializing the Map...");
-
-	BOOL loadEverything = TRUE;
-	if( 
-	
-	
-	
-		(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS))	{		
-		loadEverything = FALSE;
-	}
 
 	custommapscreen_setValues(g_theProfileDB->GetWetDry(),
 	                          g_theProfileDB->GetWarmCold(),
@@ -1269,12 +1256,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	SPLASH_STRING("Initializing SLIC Engine...");
 
-	if (g_slicEngine) {
-		delete g_slicEngine;
-	}
-
+	delete g_slicEngine;
 	g_slicEngine = new SlicEngine();
-	
 	if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE)) 
 		g_slicEngine->Link();
 	else
@@ -1309,24 +1292,13 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	Assert(g_theAgreementPool) ;
 
 	
-	
-	if (g_theMessagePool) 
-	{
-		delete g_theMessagePool;
-		g_theMessagePool = NULL;
-	}
-
+	delete g_theMessagePool;
 	g_theMessagePool = new MessagePool() ;
 	Assert(g_theMessagePool) ;
 
 	
-	if (g_theCriticalMessagesPrefs) 
-	{
-		delete g_theCriticalMessagesPrefs;
-		g_theCriticalMessagesPrefs = NULL;
-	}
-
-	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs() ;
+	delete g_theCriticalMessagesPrefs;
+	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs();
 	Assert(g_theCriticalMessagesPrefs) ;
 
 	g_theInstallationPool = new InstallationPool();
@@ -1349,11 +1321,11 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	SPLASH_STRING("Setting Up Players...");
 
 	g_player = new Player*[k_MAX_PLAYERS];
-	g_deadPlayer = new PointerList<Player>;
-	for (i=0; i<k_MAX_PLAYERS; i++) 
-		g_player[i] = NULL; 
-
 	Assert(g_player);
+    std::fill(g_player, g_player + k_MAX_PLAYERS, (Player *) NULL);
+
+	g_deadPlayer = new PointerList<Player>;
+
 
 	sint32 diff = g_theProfileDB->GetDifficulty();
 
@@ -1390,35 +1362,21 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 									 PLAYER_TYPE_ROBOT, 
 									 CIV_INDEX_RANDOM, 
 									 GENDER_RANDOM);
-			s_networkSettlers[i] = 1;
 		}
 		else
 		{
 			g_player[i] = new Player(PLAYER_INDEX(i), diff, PLAYER_TYPE_HUMAN, CIV_INDEX_RANDOM, GENDER_RANDOM);
-			s_networkSettlers[i] = 1;
 		}
+		s_networkSettlers[i] = 1;
 	}
 
-
-	for(; i<k_MAX_PLAYERS; i++)
-		g_player[i]= NULL;
-
-
-
-
-
 #ifdef _DEBUG
-	if (g_theProfileDB->IsDiplomacyLogOn()) {
+	if (g_theProfileDB->IsDiplomacyLogOn()) 
+    {
 		g_theDiplomacyLog = new Diplomacy_Log;
 	}
-#endif
 
-
-
-
-
-#ifdef _DEBUG
-	verifyYwrap();
+    verifyYwrap();
 #endif
 
 
@@ -1428,37 +1386,23 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	SPLASH_STRING("Creating AI Interface's...");
 
-	BOOL createRobotInterface = TRUE;
-
-	if(createRobotInterface) 
+	if (g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch()) 
 	{
-		if(g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch() ) 
-		{
-			
-			
-			
-			
-			PLAYER_INDEX ai_players[k_MAX_PLAYERS]; 
+		PLAYER_INDEX ai_players[k_MAX_PLAYERS]; 
+		sint32 next = 0;
 		
-			
-			sint32 next = 0;
+		for (i=0; i< k_MAX_PLAYERS; i++) 
+			if(g_player[i] && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
+				ai_players[next++] = PLAYER_INDEX(i);
 		
-			for (i=0; i< k_MAX_PLAYERS; i++) 
-				if(g_player[i] && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
-					ai_players[next++] = PLAYER_INDEX(i);
-		
-			
-			
-
-			if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch()) 
-				g_theProfileDB->SetAI(TRUE);
-		} 
-		else 
-		{
-			for(i = 0; i < k_MAX_PLAYERS; i++) 
-				if(g_player[i])
-					g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
-		}
+		if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch()) 
+			g_theProfileDB->SetAI(TRUE);
+	} 
+	else 
+	{
+		for(i = 0; i < k_MAX_PLAYERS; i++) 
+			if(g_player[i])
+				g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
 	}
 
 	g_theTradeOfferPool->ReRegisterOffers();
@@ -1621,9 +1565,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_rand = new RandomGenerator(archive); 
 	} else { 
 #ifdef _DEBUG
-	FILE *fin; 
-
-	fin = fopen ("dbgseed.txt", "r"); 
+	FILE * fin = fopen ("dbgseed.txt", "r"); 
 
 	if (fin) { 
 		fscanf (fin, "%d", &seed); 
@@ -1667,14 +1609,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	SPLASH_STRING("Initializing the Map...");
 
-	BOOL loadEverything = TRUE;
-	if( 
-	
-	
-	
-		(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)){
-		loadEverything = FALSE;
-	}
+	bool loadEverything = 
+        !g_isScenario || (g_startInfoType == STARTINFOTYPE_NOLOCS);
 
 	if (&archive) { 
 		g_theWorld = new World(archive) ;
@@ -1724,8 +1660,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			}
 		}
 
-		Assert(nPlayers<=32);
-		if (32 < nPlayers) { 
+		Assert(nPlayers <= k_MAX_PLAYERS);
+		if (k_MAX_PLAYERS < nPlayers) { 
 			exit(0); 
 		} 
 		g_theProfileDB->SetNPlayers(nPlayers);
@@ -1836,10 +1772,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	SPLASH_STRING("Initializing SLIC Engine...");
 
-	if (g_slicEngine) {
-		delete g_slicEngine;
-	}
-
+	delete g_slicEngine;
 	if(&archive) {
 		g_slicEngine = new SlicEngine(archive);
 		g_slicEngine->PostSerialize();
@@ -1871,9 +1804,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			g_theProfileDB->SetTutorialAdvice(FALSE);
 		}
 	}
-	Assert(g_slicEngine) ;
-
-
 
 
 
@@ -1917,11 +1847,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	
 	
-	if (g_theMessagePool) {
-		delete g_theMessagePool;
-		g_theMessagePool = NULL;
-	}
-
+	delete g_theMessagePool;
 	if (&archive && loadEverything)
 		g_theMessagePool = new MessagePool(archive) ;
 	else
@@ -1930,11 +1856,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	Assert(g_theMessagePool) ;
 
 	
-	if (g_theCriticalMessagesPrefs) 
-	{
-		delete g_theCriticalMessagesPrefs;
-		g_theCriticalMessagesPrefs = NULL;
-	}
+	delete g_theCriticalMessagesPrefs;
 	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs() ;
 	Assert(g_theCriticalMessagesPrefs) ;
 
@@ -1980,8 +1902,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 
 	if(&archive) {
-		if(g_exclusions)
-			delete g_exclusions;
+		delete g_exclusions;
 		g_exclusions = new Exclusions(archive);
 	} else {
 		
@@ -2023,11 +1944,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	sint32 i, j;
 	g_player = new Player*[k_MAX_PLAYERS];
+    std::fill(g_player, g_player + k_MAX_PLAYERS, (Player *) NULL);
 	g_deadPlayer = new PointerList<Player>;
-	for (i=0; i<k_MAX_PLAYERS; i++) {
-		g_player[i] = NULL; 
-	}
-	Assert(g_player);
 
 	sint32 playerAlive;
 	sint32 diff = g_theGameSettings->GetDifficulty();
@@ -2312,10 +2230,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		} // for
 
 
-		for (; i<k_MAX_PLAYERS; i++) {
-			g_player[i]= NULL;
-		}
-
 		if(g_network.IsLaunchHost() && g_network.TeamsEnabled()) {
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
 				if(g_player[i]) {
@@ -2342,17 +2256,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 
 #ifdef _DEBUG
-	if (g_theProfileDB->IsDiplomacyLogOn()) {
+	if (g_theProfileDB->IsDiplomacyLogOn()) 
+    {
 		g_theDiplomacyLog = new Diplomacy_Log;
 	}
-#endif
 
-
-
-
-
-#ifdef _DEBUG
-	verifyYwrap();
+    verifyYwrap();
 #endif
 
 
@@ -2364,6 +2273,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	
 	SPLASH_STRING("Initializing A-star Pathing...");
 	roboinit_Initalize(archive); 
+    CtpAi::Cleanup();
 
 	if (&archive && loadEverything) 
 	{
@@ -2460,13 +2370,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		numPlaced = gameinit_PlaceInitalUnits(g_theProfileDB->GetNPlayers(), g_player_start_list);
 #endif
 		if(numPlaced < g_theProfileDB->GetNPlayers() - 1) { 
-			for(sint32 n = numPlaced; n < k_MAX_PLAYERS; n++) {
-				if(g_player[n]) {
-					
-					
-					delete g_player[n];
-					g_player[n] = NULL;
-				}
+			for(sint32 n = numPlaced; n < k_MAX_PLAYERS; n++) 
+            {
+				delete g_player[n];
+				g_player[n] = NULL;
 			}
 		}
 	} else if(
@@ -2777,23 +2684,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 
 
-sint32 gameinit_CleanupMessages(void)
+void gameinit_CleanupMessages(void)
 {
-	if(!g_player)
-		return 0;
-
-	sint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i]) {
-			g_player[i]->m_messages->KillList();
+	if (g_player)
+    {
+    	for(size_t i = 0; i < k_MAX_PLAYERS; i++) 
+        {
+		    if (g_player[i]) 
+            {
+			    g_player[i]->m_messages->KillList();
+            }
 		}
 	}
-	return 0;
 }
 
-sint32 gameinit_Cleanup(void) 
+void gameinit_Cleanup(void) 
 {
-#define CHECKDELETE(x)  if(x) { delete x; x = NULL; }
+#define CHECKDELETE(x)  { delete x; x = NULL; }
 	
 
 
@@ -2801,18 +2708,17 @@ sint32 gameinit_Cleanup(void)
 	CHECKDELETE(g_theMessagePool);
 	CHECKDELETE(g_theCriticalMessagesPrefs);
 
-	if (g_player) {
-		sint32 i;
-	
-		for (i=0; i<k_MAX_PLAYERS; i++) {
-			if(g_player[i]) {
-				delete g_player[i];
-			}
+	if (g_player) 
+    {
+		for (size_t i = 0; i < k_MAX_PLAYERS; i++) 
+        {
+			delete g_player[i];
 		}
 
 		delete [] g_player;
 		g_player = NULL;
-		if(g_deadPlayer) {
+		if (g_deadPlayer) 
+        {
 			g_deadPlayer->DeleteAll();
 			delete g_deadPlayer;
 			g_deadPlayer = NULL;
@@ -2860,47 +2766,44 @@ sint32 gameinit_Cleanup(void)
 	Astar_Cleanup();
 
 	CHECKDELETE(g_rand);
-	return 0;
 }
 
 sint32 gameinit_ResetForNetwork()
 {
-	CHECKDELETE(g_theInstallationPool);
+	delete g_theInstallationPool;
 	g_theInstallationPool = new InstallationPool;
 
-	CHECKDELETE(g_theAgreementPool);
+	delete g_theAgreementPool;
 	g_theAgreementPool = new AgreementPool;
 
-	CHECKDELETE(g_theCivilisationPool);
+	delete g_theCivilisationPool;
 	g_theCivilisationPool = new CivilisationPool;
 
-	CHECKDELETE(g_theDiplomaticRequestPool);
+	delete g_theDiplomaticRequestPool;
 	g_theDiplomaticRequestPool = new DiplomaticRequestPool;
 
-	CHECKDELETE(g_theTerrainImprovementPool);
+	delete g_theTerrainImprovementPool;
 	g_theTerrainImprovementPool = new TerrainImprovementPool;
 
-	CHECKDELETE(g_theTradePool);
+	delete g_theTradePool;
 	g_theTradePool = new TradePool;
 
-	CHECKDELETE(g_theUnitPool);
+	delete g_theUnitPool;
 	g_theUnitPool = new UnitPool;
 
-	CHECKDELETE(g_theTradePool); 
+	delete g_theTradePool; 
 	g_theTradePool = new TradePool;
 
-	CHECKDELETE(g_theTradeOfferPool); 
+	delete g_theTradeOfferPool; 
 	g_theTradeOfferPool = new TradeOfferPool;
 
-	CHECKDELETE(g_theArmyPool);
+	delete g_theArmyPool;
 	g_theArmyPool = new ArmyPool;
 
-	
-	CHECKDELETE(g_theOrderPond);
+    delete g_theOrderPond;
 	g_theOrderPond = new Pool<Order>(INITIAL_CHUNK_LIST_SIZE);
 
-
-	CHECKDELETE(g_theUnseenPond);
+    delete g_theUnseenPond;
 	g_theUnseenPond = new Pool<UnseenCell>(INITIAL_CHUNK_LIST_SIZE);
 
 	return 0;
@@ -2960,16 +2863,12 @@ void gameinit_ResetMapSize()
 	
 	g_background->Draw();
 	
-	if(g_theUnitTree)
-		delete g_theUnitTree;
-	
+	delete g_theUnitTree;
 	g_theUnitTree = new QuadTree<Unit>(sint16(g_theWorld->GetXWidth()), 
 	                                   sint16(g_theWorld->GetYHeight()), 
 	                                   g_theWorld->IsYwrap());
 
-	if(g_theInstallationTree)
-		delete g_theInstallationTree;
-
+	delete g_theInstallationTree;
 	g_theInstallationTree = new InstallationQuadTree((sint16)g_theWorld->GetXWidth(),
 	                                                 (sint16)g_theWorld->GetYHeight(),
 	                                                 g_theWorld->IsYwrap());

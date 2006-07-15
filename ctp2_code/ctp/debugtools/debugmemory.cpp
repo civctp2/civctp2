@@ -44,8 +44,9 @@
 
 #ifdef _DEBUG
 
+#include "debugmemory.h"	// own declarations
+
 #include "log.h"
-#include "debugmemory.h"
 #include "debugcallstack.h"
 #include "debugassert.h"
 #include "breakpoint.h"
@@ -985,7 +986,7 @@ MemPtr DebugMemory_GuardedBlockAlloc (
 	ASSERT_CLASS (LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
 
 	
-	ASSERT_INDIRECT (module_name, module_line, size > 0);
+	ASSERT_INDIRECT (module_name, module_line, size >= 0);
 
 	
 	total_size = size + sizeof (AllocHeader) + sizeof (AllocBuffer) + sizeof (AllocBuffer);

@@ -117,34 +117,30 @@ STDEHANDLER(DesireGold_MotivationEvent)
 {
 	static StringId adviceId = -1;
 	if (adviceId < 0)
-		{
-			char motivation_name[] = "MOTIVATION_DESIRE_GOLD_ADVICE";
-			BOOL found = 
-				g_theStringDB->GetStringID(motivation_name, adviceId);
-			Assert(found);
-		}
+	{
+		char motivation_name[] = "MOTIVATION_DESIRE_GOLD_ADVICE";
+		BOOL found = 
+			g_theStringDB->GetStringID(motivation_name, adviceId);
+		Assert(found);
+	}
 
 	PLAYER_INDEX playerId;
-
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
-	const Scheduler & scheduler = Scheduler::GetScheduler(playerId);
-	Motivation motivation;
 
-	
-	Assert(g_player[playerId]);
 	sint32 rank = g_player[playerId]->GetRank(STRENGTH_CAT_GOLD);
-	sint32 priority;
-
 	sint32 needed_reserves = g_player[playerId]->m_gold->GetIncome() * 2;
 	bool low_reserves = (needed_reserves < g_player[playerId]->GetGold());
 	bool capitalist_personality = (diplomat.GetPersonality()->GetDiscoveryEconomic());
 
-	if ( rank < 75 || low_reserves || capitalist_personality) {
+	if ( rank < 75 || low_reserves || capitalist_personality) 
+    {
+	    sint32 priority;
 		diplomat.GetCurrentStrategy().GetDesireGold(priority);
+
+	    Motivation motivation;
 		motivation.priority = (sint16) priority;
 		motivation.type = MOTIVATION_DESIRE_GOLD;
 		motivation.arg.gold = needed_reserves;
@@ -287,7 +283,6 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	Motivation motivation;
 	
-	sint8 friends = diplomat.GetFriendCount();
 	sint32 friend_power = diplomat.GetFriendPower();
 	sint32 our_power = MapAnalysis::GetMapAnalysis().TotalThreat(playerId);
 	sint32 enemy_threat = diplomat.GetEnemyThreat();
@@ -416,8 +411,6 @@ STDEHANDLER(FearPollution_MotivationEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
 	sint32 next_disaster = g_thePollution->GetRoundsToNextDisaster();
-	bool fear_pollution = false;
-	
 	
 	if (diplomat.GetPersonality()->GetDiscoveryEcotopian() &&
 		next_disaster > 200)

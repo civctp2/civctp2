@@ -73,6 +73,12 @@ extern	TiledMap			*g_tiledMap ;
 extern SelectedItem			*g_selected_item;
 extern Pool<UnseenCell>     *g_theUnseenPond;
 
+namespace
+{
+    sint16 const    TERRAIN_UNKNOWN     = -1;
+    sint16 const    MOVECOST_UNKNOWN    = 0x7fff;
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnseenCell::UnseenCell
@@ -286,46 +292,35 @@ UnseenCell::UnseenCell(const MapPoint &point)
 //
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell()
-{
-	m_tileInfo = NULL;
-
-	m_flags = 0;
-
-
-
-
-
-
-
-
-
-
-
-
-	m_bioInfectedOwner = 0;
-	m_nanoInfectedOwner = 0;
-	m_convertedOwner = 0;
-	m_franchiseOwner = 0;
-	m_injoinedOwner = 0;
-	m_happinessAttackOwner = 0;
-
-	m_slaveBits = 0;
-
-	m_cell_owner = -1;
-	// Added by Martin Gühmann
-	m_visibleCityOwner = 0;
-
-	m_actor = NULL;
+:
+	m_env                           (0),
+	m_terrain_type                  (TERRAIN_UNKNOWN),
+	m_move_cost                     (MOVECOST_UNKNOWN),
+	m_flags                         (0x0000),
+	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
+	m_nanoInfectedOwner             (0x00),
+	m_convertedOwner                (0x00),
+	m_franchiseOwner                (0x00),
+	m_injoinedOwner                 (0x00),
+	m_happinessAttackOwner          (0x00),
+	m_citySize                      (0),
+	m_cityOwner                     (0),
+	m_citySpriteIndex               (0),
+	m_cell_owner                    (PLAYER_UNASSIGNED),
+	m_slaveBits                     (0x0000),
 #ifdef BATTLE_FLAGS
-	m_battleFlags = 0;
+	m_battleFlags                   (0),
 #endif
-	m_citySize = 0;
-	m_cityOwner = 0;
-	m_cityName = NULL;
-	m_citySpriteIndex = 0;
-
-	m_installations = new PointerList<UnseenInstallationInfo>;
-	m_improvements = new PointerList<UnseenImprovementInfo>;
+	m_tileInfo                      (NULL),
+	m_point                         (),
+	m_installations                 (new PointerList<UnseenInstallationInfo>),
+	m_improvements                  (new PointerList<UnseenImprovementInfo>),
+	m_cityName                      (NULL),
+	m_actor                         (NULL),
+	m_poolIndex                     (-1),
+	// Contains the ID of the city that owns the tile.
+	m_visibleCityOwner              (0)
+{
 }
 
 //----------------------------------------------------------------------------
@@ -425,41 +420,32 @@ UnseenCell::UnseenCell(CivArchive &archive)
 //----------------------------------------------------------------------------
 UnseenCell::~UnseenCell()
 {
-	if (m_actor) {
+	if (m_actor) 
+    {
 		m_actor->m_refCount--;
-		if(m_actor->m_refCount <= 0) {
-			
-			
-			
+
+		if (m_actor->m_refCount <= 0) 
+        {
 			g_director->ActiveUnitRemove(m_actor);
-
 			delete m_actor;
-			m_actor = NULL;
 		}
-		m_actor = NULL;
 	}
 
-    if(m_tileInfo) {
-		delete m_tileInfo;
-		m_tileInfo = NULL;
-	}
+	delete m_tileInfo;
 
-	if(m_installations) {
+	if (m_installations) 
+    {
 		m_installations->DeleteAll();
 		delete m_installations;
-		m_installations = NULL;
 	}
 
-	if(m_improvements) {
+	if (m_improvements) 
+    {
 		m_improvements->DeleteAll();
 		delete m_improvements;
-		m_improvements = NULL;
 	}
 
-	if(m_cityName) {
-		delete [] m_cityName;
-		m_cityName = NULL;
-	}
+	delete [] m_cityName;
 }
 
 #if 0
@@ -657,28 +643,28 @@ sint32 UnseenCell::GetFoodProduced() const
 {
 	sint32 food = GetFoodFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker *walker = 
-			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+	PointerList<UnseenImprovementInfo>::Walker walker = 
+			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
-	while(walker->IsValid()){
-		sint32 type		= walker->GetObj()->m_type;
-		sint32 percent	= walker->GetObj()->m_percentComplete;
+	for ( ; walker.IsValid(); walker.Next())
+    {
+		sint32 percent	= walker.GetObj()->m_percentComplete;
 		if(percent < 100){
 			break;
 		}
 
+		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect *effect;
-		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		const TerrainImprovementRecord::Effect * effect = 
+            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+
 		sint32 bonus;
-		if(effect && effect->GetBonusFood(bonus)) {
+		if (effect && effect->GetBonusFood(bonus)) 
+        {
 			food += bonus;
 		}
-		walker->Next();
 	}
-	
-	delete walker;
 
     return food; 
 }
@@ -741,29 +727,28 @@ sint32 UnseenCell::GetShieldsProduced() const
 {
 	sint32 shield = GetShieldsFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker *walker = 
-			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+	PointerList<UnseenImprovementInfo>::Walker walker = 
+			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
-	while(walker->IsValid()){
-		sint32 type		= walker->GetObj()->m_type;
-		sint32 percent	= walker->GetObj()->m_percentComplete;
+	for ( ; walker.IsValid(); walker.Next())
+    {
+		sint32 percent	= walker.GetObj()->m_percentComplete;
 		if(percent < 100){
 			break;
 		}
 
+		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect *effect;
-		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		const TerrainImprovementRecord::Effect * effect = 
+            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
-		if(effect && effect->GetBonusProduction(bonus)) {
+		if(effect && effect->GetBonusProduction(bonus)) 
+        {
 			shield += bonus;
 		}
-		walker->Next();
 	}
 
-	delete walker;
-																					
     return shield; 
 }
 
@@ -825,28 +810,26 @@ sint32 UnseenCell::GetGoldProduced() const
 {
 	sint32 gold = GetGoldFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker *walker = 
-			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+	PointerList<UnseenImprovementInfo>::Walker walker = 
+			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
-	while(walker->IsValid()){
-		sint32 type		= walker->GetObj()->m_type;
-		sint32 percent	= walker->GetObj()->m_percentComplete;
-		if(percent < 100){
+	for ( ; walker.IsValid(); walker.Next())
+    {
+		sint32 percent	= walker.GetObj()->m_percentComplete;
+		if (percent < 100){
 			break;
 		}
 
+		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect *effect;
-		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		const TerrainImprovementRecord::Effect * effect = 
+            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
 		if(effect && effect->GetBonusGold(bonus)) {
 			gold += bonus;
 		}
-		walker->Next();
 	}
-
-	delete walker;
 
     return gold; 
 }

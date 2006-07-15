@@ -273,11 +273,13 @@ void ScienceManagementDialog::UpdateScience()
 	m_scienceTotalValue->SetText(buffer);
 
 	
-	long textLength = 0;
-	MBCHAR *description = static_cast<MBCHAR *>(
-		g_GreatLibPF->getData(
-		const_cast<char*>(currentAdvanceRecord->GetIcon()->GetVari()),
-		&textLength));
+	size_t      textLength  = 0;
+	MBCHAR *    description = reinterpret_cast<MBCHAR *>
+        (g_GreatLibPF->getData
+            (currentAdvanceRecord->GetIcon()->GetVari(),
+		     textLength
+            )
+        );
 
 	
 	

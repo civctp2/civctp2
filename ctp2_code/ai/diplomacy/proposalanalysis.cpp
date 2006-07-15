@@ -760,7 +760,7 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 	bool piracy = (MapAnalysis::GetMapAnalysis().GetPiracyIncomeByPlayer(foreignerId, playerId) > 0);
 
 	
-	bool border_incursion = (diplomat.GetBorderIncursionBy(foreignerId));
+//	bool border_incursion = (diplomat.GetBorderIncursionBy(foreignerId));
 
 	
 	bool untrustworthy = (diplomat.GetTrust(foreignerId) < NEUTRAL_REGARD);

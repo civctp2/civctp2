@@ -587,8 +587,8 @@ void CauseAndEffectTab::UpdateCommerceValues()
 	}
 
 	
-	sint32 subTotal = totalCommerceCrime + totalCommerceWages +
-		totalCommerceBuildingUpkeep;
+//	sint32 subTotal = totalCommerceCrime + totalCommerceWages +
+//		totalCommerceBuildingUpkeep;
 
 	
 	totalCommerceSavings += player->CalcWonderGold();

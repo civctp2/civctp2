@@ -575,11 +575,10 @@ aui_Region *aui_Region::GetChildByIndex(sint32 index)
 	Assert(m_childList != NULL);
 	if (!m_childList) return NULL;
 
-	Assert( index >= 0 && index < (sint32)m_childList->L() );
-	if ( index < 0 || index >= (sint32)m_childList->L() )
+	if (index < 0 || static_cast<size_t>(index) >= m_childList->L())
 		return NULL;
 
-	ListPos position = m_childList->FindIndex( index );
+	ListPos position = m_childList->FindIndex(index);
 	if ( !position ) return NULL;
 
 	return (aui_Region *)m_childList->GetAt( position );
@@ -590,10 +589,7 @@ aui_Region *aui_Region::GetChildByIndex(sint32 index)
 
 sint32 aui_Region::NumChildren(void)
 {
-	Assert(m_childList != NULL);
-	if (m_childList == NULL) return 0;
-
-	return m_childList->L();
+    return m_childList ? m_childList->L() : 0;
 }
 
 

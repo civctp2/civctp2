@@ -59,6 +59,7 @@
 #include "c3.h"
 #include "controlpanelwindow.h"
 
+#include <algorithm>                    // std::fill
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_stringtable.h"
@@ -68,7 +69,9 @@
 #include "aui_ranger.h"
 
 #include "pattern.h"
+#include "pointerlist.h"
 #include "primitives.h"
+
 #include "pixelutils.h"
 #include "maputils.h"
 #include "terrainutil.h"
@@ -135,7 +138,6 @@
 #include "AdvanceRecord.h"
 #include "advanceutil.h"
 #include "ArmyData.h"
-#include "ArmyPool.h"                   // g_theArmyPool
 #include "cellunitlist.h"
 #include "Cell.h"
 #include "World.h"                      // g_theWorld
@@ -148,7 +150,6 @@
 #include "colorset.h"                   // g_colorSet
 #include "primitives.h"
 
-#include "controlpanelwindow.h"
 #include "trademanager.h"
 
 #include "MainControlPanel.h"
@@ -170,8 +171,6 @@
 #include "c3_utilitydialogbox.h"
 #include "NationalManagementDialog.h"
 #include "MessageBoxDialog.h"
-
-#include "Unit.h"
 
 #include "tileimptracker.h"
 
@@ -1242,12 +1241,7 @@ ControlPanelWindow::~ControlPanelWindow()
 		m_mainMenuBar = NULL;
 	}
 
-	if(m_contextMenu) {
-		delete m_contextMenu;
-		m_contextMenu = NULL;
-	}
-
-	
+	delete m_contextMenu;
 }
 
 
@@ -1783,7 +1777,7 @@ ControlPanelWindow::BeginOrderDelivery(OrderRecord *rec)
 
 	Army army = UnitPanelGetCurrent();
 
-	if (!g_theArmyPool->IsValid(army))
+	if (!army.IsValid())
 		return;
 
 	ArmyData *data=army.AccessData();
@@ -1904,7 +1898,7 @@ ControlPanelWindow::OrderDeliveryUpdate()
 
 	Army army = UnitPanelGetCurrent();
 
-	if(!g_theArmyPool->IsValid(army))
+	if (!army.IsValid())
 		ClearTargetingMode();
 	
 	if(m_targetingMode==CP_TARGETING_MODE_OFF)
@@ -2035,48 +2029,10 @@ ControlPanelWindow::TileImpUpdate()
 void	
 ControlPanelWindow::TerraFormUpdate()
 {
-	
 	if ((m_currentTerrainRec==NULL)||(g_selected_item==NULL))
 		return;
 	
-	sint32 player_id =g_selected_item->GetVisiblePlayer();
-
-
-
-		ClearTargetingMode();
-		return;
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	ClearTargetingMode();
 }
 
 
@@ -2161,8 +2117,9 @@ ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 					}
 				}
 			}
-				
-			army->PerformOrderHere(m_currentOrder, &g_selected_item->GetBadPath());
+			
+            Path    badPath = g_selected_item->GetBadPath();
+			army->PerformOrderHere(m_currentOrder, &badPath);
 			handled = true;
 		}
 		else if (g_selected_item->GetGoodPath()->GetMovesRemaining() > 0 ) {
@@ -2252,30 +2209,10 @@ ControlPanelWindow::TileImpClick(const MapPoint &pos)
 bool 
 ControlPanelWindow::TerraFormClick(const MapPoint &pos)
 {
-	
 	if ((m_currentTerrainRec==NULL)||(g_selected_item==NULL))
 	{
 		ClearTargetingMode();
-		return true;
 	}
-
-	sint32 player=g_selected_item->GetVisiblePlayer();
-
-	
-
-
-
-	
-
-
-
-	
-
-
-
-
-
-
 
 	return true;
 }
@@ -2524,7 +2461,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	m_messageList->RangerMoved();
 }
 
-void ControlPanelWindow::SetMessageRead(Message &msg)
+void ControlPanelWindow::SetMessageRead(Message const & msg)
 {
 	sint32 n;
 	for(n = 0; n < m_messageList->NumItems(); n++) {
@@ -2741,13 +2678,8 @@ ControlPanelWindow::CreateTileImpBanks()
 			m_tileImpPanes[i]->Hide();
 	}
 
-	
-	for(i=0;i<CP_MAX_TILEIMPBUTTONS;i++)
-	{
-		m_tileImpButtons[i]=NULL;
-		m_terraFormButtons[i]=NULL;
-	}
-	
+	std::fill(m_tileImpButtons, m_tileImpButtons + CP_MAX_TILEIMPBUTTONS, (ctp2_Button *) NULL);
+	std::fill(m_terraFormButtons, m_terraFormButtons + CP_MAX_TILEIMPBUTTONS, (ctp2_Button *) NULL);
 	
 	sint32		index;
 	MBCHAR		button_id[256];
@@ -2770,10 +2702,10 @@ ControlPanelWindow::CreateTileImpBanks()
 
 	};
 	sint32 panel;
-	for(panel = 0; panel < 4; panel++) { 
-		for(column = 0; column < 4; column++) {
-			for(row = 1; row < 4; row++) {
-				sprintf(button_id,"ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.%s.b%d%d",panels[panel],column+1,row);
+	for(panel = 0; panel < CP_TILEIMP_MAX; panel++) { 
+		for(column = 0; column < CP_TILEIMP_COLS; column++) {
+			for(row = 0; row < CP_TILEIMP_ROWS; row++) {
+				sprintf(button_id,"ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.%s.b%d%d",panels[panel],column+1,row+1);
 
 				a_button=(ctp2_Button*)aui_Ldl::GetObject(button_id);
 				Assert(a_button);
@@ -3087,7 +3019,7 @@ ControlPanelWindow::BuildUnitList ()
 
 	Army army=UnitPanelGetCurrent(); 
 
-	if (!g_theArmyPool->IsValid(army)) {
+	if (!army.IsValid()) {
 		MapPoint pos = g_selected_item->GetCurSelectPos();
 		Cell *cell = g_theWorld->GetCell(pos);
 		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer()) {
@@ -3101,28 +3033,25 @@ ControlPanelWindow::BuildUnitList ()
 				return;
 			}
 
-			if(top.m_id != 0) {
-				army = top.GetArmy();
-			}
+			army = top.GetArmy();
 		}
-		if (!g_theArmyPool->IsValid(army)) {
+
+		if (!army.IsValid()) 
+        {
 			return;
 		}
 	}
 
    	if (army.Num())
 	{
-		const OrderRecord *rec;
-		ArmyData *data;
-
 		m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_ARMY_MANAGEMENT"), NULL, (void *)k_UNIT_CONTEXT_ARMY_MANAGER);
 		if(army->NumOrders() > 0) {
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_CLEAR_ORDERS"), NULL, (void *)k_UNIT_CONTEXT_CLEAR_ORDERS);
 		}
 
-		data = army.AccessData();
-
-		Cell *cell = g_theWorld->GetCell(data->RetPos());
+		ArmyData *  data = army.AccessData();
+        Assert(data);
+		Cell *      cell = g_theWorld->GetCell(data->RetPos());
 		if(cell->GetNumUnits() != data->Num()) {
 			
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_GROUP_ALL"), NULL, (void *)k_UNIT_CONTEXT_GROUP_ALL);
@@ -3144,9 +3073,9 @@ ControlPanelWindow::BuildUnitList ()
 
    		for (i=0;i<g_theOrderDB->NumRecords();i++)
    		{
-   			rec=g_theOrderDB->Get(i);
+		    OrderRecord const * rec = g_theOrderDB->Get(i);
    		
-			if ((rec==NULL)||(data==NULL))
+			if (rec==NULL)
 				continue;
 
 			
@@ -3180,7 +3109,7 @@ ControlPanelWindow::BuildUnitListBox ()
 
 	Army army=UnitPanelGetCurrent(); 
 
-	if (!g_theArmyPool->IsValid(army))
+	if (!army.IsValid())
 		return;
 
    	if (army.Num())
@@ -3262,9 +3191,6 @@ ControlPanelWindow::BuildCityList (const MapPoint &pos)
 
 
 }
-
-#include "pointerlist.h"
-
 
 void
 ControlPanelWindow::BuildList (sint32 index)
@@ -3523,8 +3449,8 @@ ControlPanelWindow::PollUNITStatus()
 void	
 ControlPanelWindow::PollTILEIMPStatus()
 {
-	
-	if ((g_selected_item==NULL)||(g_player==NULL))
+#if 0   /// @todo Find out what this code was supposed to do
+    if ((g_selected_item==NULL)||(g_player==NULL))
 		return;
 	
 	sint32 p_index = g_selected_item->GetVisiblePlayer();
@@ -3536,9 +3462,7 @@ ControlPanelWindow::PollTILEIMPStatus()
 
 	
 	sint32		pw=current->GetMaterialsStored();
-
-	
-
+#endif
 }
 
 
@@ -3585,27 +3509,17 @@ ControlPanelWindow::HappinessRedisplay(aui_Surface *surface,RECT &rect,void *coo
 Unit 
 ControlPanelWindow::CityPanelGetCurrent()
 {
-	
-	Unit city;
+    Unit    city;
 
-	if (m_mainDropDown==NULL)
-		return city;
+    if (m_mainDropDown)
+    {
+	    Player * current = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
-	sint32 p_index = g_selected_item->GetVisiblePlayer();
-
-	Player *current=g_player[p_index];
-
-	if (current==NULL)
-		return city;
-
-	
-	if (!g_player[g_selected_item->GetVisiblePlayer()] ||
-		!g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
-		return city;
-	
-	
-	city = g_player[g_selected_item->GetVisiblePlayer()]->GetCityFromIndex(m_mainDropDown->GetSelectedItem());
+	    if (current && current->GetNumCities())
+        {
+	        city = current->GetCityFromIndex(m_mainDropDown->GetSelectedItem());
+        }
+    }
 	
 	return city;
 }
@@ -3614,7 +3528,7 @@ void
 ControlPanelWindow::CityPanelRebuild()
 {
 	return;
-	
+#if 0   // Unreachable	
 	if (m_mainDropDown==NULL)
 		return;
 
@@ -3663,10 +3577,7 @@ ControlPanelWindow::CityPanelRebuild()
 		
 		m_mainDropDown->AddItem(item);
 	}
-
-	
-  	
-
+#endif
 }
 
 
@@ -3772,12 +3683,12 @@ void
 ControlPanelWindow::UnitPanelRedisplay()
 {
 	return;
-
+#if 0   // Unreachable
 	Army army=UnitPanelGetCurrent();
 
 	Unit unit;
 	
-	if (g_theArmyPool->IsValid(army))
+	if (army.IsValid())
 		unit=army[0];
 
 	std::string   name("None");
@@ -3845,6 +3756,7 @@ ControlPanelWindow::UnitPanelRedisplay()
 		aui_Ldl::GetObject(
 		"ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel"
 		))->ShouldDraw();
+#endif
 }
 
 		
@@ -4022,7 +3934,7 @@ ControlPanelWindow::ToggleTerraforming()
 
 
 void	
-ControlPanelWindow::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit)
+ControlPanelWindow::SetStack(Army const &selectedArmy, CellUnitList *fullArmy, Unit singleUnit)
 {
 
 }

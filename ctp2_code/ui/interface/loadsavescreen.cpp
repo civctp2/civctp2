@@ -658,7 +658,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", directoryPath, saveInfo->fileName);
+	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
 
 	
 	
@@ -796,15 +796,11 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	
 	if (g_isScenario || (saveInfo->scenarioName && *saveInfo->scenarioName))
 	{
-		if (g_pTurnLengthOverride)
-		{
-			
-			delete [] g_pTurnLengthOverride;
-			g_pTurnLengthOverride = NULL;
-		}
+		delete [] g_pTurnLengthOverride;
+		g_pTurnLengthOverride = NULL;
 		
 		MBCHAR overridePath[_MAX_PATH];
-		sprintf(overridePath, "%s\\%s", g_civPaths->GetCurScenarioPath(), "turnlength.txt");
+		sprintf(overridePath, "%s%s%s", g_civPaths->GetCurScenarioPath(), FILE_SEP, "turnlength.txt");
 
 		g_useCustomYear = false;
 
@@ -851,11 +847,8 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	else
 	{
 		g_useCustomYear = false;
-		if (g_pTurnLengthOverride)
-		{
-			delete [] g_pTurnLengthOverride;
-			g_pTurnLengthOverride = NULL;
-		}
+		delete [] g_pTurnLengthOverride;
+		g_pTurnLengthOverride = NULL;
 	}
 }
 

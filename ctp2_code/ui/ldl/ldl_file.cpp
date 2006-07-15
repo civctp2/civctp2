@@ -38,7 +38,7 @@ ldl::~ldl( void )
 
 BOOL ldl::ReadData(const char *fname )
 {
-	ldlif_parse(strrchr(fname, '\\') + 1);
+	ldlif_parse(strrchr(fname, FILE_SEPC) + 1);
 
 	return TRUE;
 	

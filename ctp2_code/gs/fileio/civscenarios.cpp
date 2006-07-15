@@ -226,15 +226,14 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 
 void CivScenarios::LoadData(void)
 {
-	MBCHAR			*lpFileName = NULL;
-	MBCHAR			path[_MAX_PATH],
-				rootPath[_MAX_PATH];
+	MBCHAR			    path[_MAX_PATH];
+    MBCHAR              rootPath[_MAX_PATH];
 #ifdef WIN32
 	WIN32_FIND_DATA		fileData;
-	HANDLE			lpFileList;
+	HANDLE			    lpFileList;
 	struct _stat		tmpstat;
 #else
-	struct stat		tmpstat;
+	struct stat		    tmpstat;
 #endif
 	 sint32			i;
 	

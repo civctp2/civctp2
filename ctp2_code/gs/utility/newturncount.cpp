@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Turn count handler
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -451,7 +451,7 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 				if (buildingutil_HaveFoodVat(unit->GetImprovements(), tmp))
 					continue;
 				CityData *city = unit->GetData()->GetCityData();
-				double fudge = (double)(g_theConstDB->StarvationWarningFudgeFactor()) / 100.0;
+//				double fudge = (double)(g_theConstDB->StarvationWarningFudgeFactor()) / 100.0;
 				if ((city->GetProducedFood() < city->GetConsumedFood()) &&
 					(city->GetStarvationTurns() == 0)) {
 					SlicObject *so = new SlicObject("23IACityWillStarve") ;

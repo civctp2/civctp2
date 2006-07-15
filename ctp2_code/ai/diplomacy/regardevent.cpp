@@ -41,8 +41,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 #include "RegardEvent.h"
+
 #include "AgreementMatrix.h"
 #include "ctpai.h"
 #include "mapanalysis.h"
@@ -95,9 +95,6 @@ STDEHANDLER(KillUnitRegardEvent)
 		cause != CAUSE_REMOVE_ARMY_ATTACKED)
 		return GEV_HD_Continue;
 
-	sint32 cost;
-
-	
 	if (u.Flag(k_UDF_IS_IN_TRANSPORT))
 	{
 		return GEV_HD_Continue;
@@ -108,17 +105,21 @@ STDEHANDLER(KillUnitRegardEvent)
 	CellUnitList army;
 	g_theWorld->GetArmy(u.RetPos(), army);
 	bool not_at_war = (AgreementMatrix::s_agreements.TurnsAtWar(killer, u.GetOwner()) < 1);
-	if (u.GetDBRec()->GetCivilian() == true) {
+
+	if (u.GetDBRec()->GetCivilian()) 
+    {
+    	sint32 cost;
+
 		if (not_at_war
 		&& army.Num() == 1
 		&& diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost(cost)
 		&& g_theWorld->GetCell(u.RetPos())->GetCity().m_id == 0x0
 		){
 			g_theStringDB->GetStringID("REGARD_EVENT_ATTACKED_CIVILIANS", strId);
-			diplomat.LogRegardEvent(killer,
-			                        cost,
-			                        REGARD_EVENT_MILITARY_SAFETY,
-			                        strId);
+			diplomat.LogRegardEvent( killer,
+				cost,
+				REGARD_EVENT_MILITARY_SAFETY,	
+				strId);
 
 			sint32 trust_cost;
 			if (diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost(trust_cost))
@@ -643,8 +644,7 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	//EMOD - Outcommented to encourage Human use of slavers.
-	//city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
@@ -694,11 +694,11 @@ STDEHANDLER(EmbargoRegardEvent)
 		{
 			StringId strId;
 			g_theStringDB->GetStringID("REGARD_EVENT_EMBARGO_TRADE", strId);
-			diplomat.LogRegardEvent(foreignerId,
-			                        regard_cost,
-			                        REGARD_EVENT_GOLD,
-			                        strId,
-			                        1);
+			diplomat.LogRegardEvent(foreignerId, 
+				regard_cost, 
+				REGARD_EVENT_GOLD, 
+				strId,
+				1); 
 		}
 	}
 

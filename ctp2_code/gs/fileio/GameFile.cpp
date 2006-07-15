@@ -239,39 +239,32 @@ MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
 
 void GameFile::RestoreGame(const MBCHAR *filename)
 {
-	GameFile *game;
-
-	game = new GameFile;
+	GameFile * game = new GameFile;
 	game->Restore(filename);
-
 	delete game;
 }
 
 
 void GameFile::RestoreScenarioGame(MBCHAR *name)
 {
-	GameFile *game;
-
-	game = new GameFile;
+	GameFile * game = new GameFile;
 	game->Restore(name);
 	delete game;
 }
 
 void GameFile::SaveGame(const MBCHAR *filename, SaveInfo *info)
 {
-	GameFile *game;
-
-	game = new GameFile;
+	GameFile * game = new GameFile;
 	game->Save(filename, info);
-	
 	delete game;
 }
 
 
 
 GameFile::GameFile(void)
+:
+    m_ds        (NULL)
 {
-
 }
 
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Scenario selection window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -198,7 +198,7 @@ void ScenarioWindow::FillListWithScenarioPacks(ctp2_ListBox *available,bool hide
 {
 	int					i=0;
 	ScenarioPack		*scenPack;
-	MBCHAR				*ldlBlock = "ScenarioPackListItem";
+//	MBCHAR				*ldlBlock = "ScenarioPackListItem";
 	MBCHAR checkFile[_MAX_PATH];
 	struct _stat fileStatus;
 

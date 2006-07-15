@@ -69,7 +69,7 @@ extern sint32		g_is565Format;
 
 namespace
 {
-    uint8 const     DIRECTION_INVALID   = -1;
+    uint8 const     DIRECTION_INVALID   = static_cast<uint8>(-1);   // 255
 
     char const      TILESETFILE_555[]   = "gtset555.til";
     char const      TILESETFILE_565[]   = "gtset565.til";

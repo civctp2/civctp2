@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer unit packet handling.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -57,11 +57,12 @@ extern SelectedItem *g_selected_item;
 extern Director *g_director;
 
 
-NetUnit::NetUnit(UnitData* unit, Unit useActor) : 
-	m_unitData(unit) 
+NetUnit::NetUnit(UnitData * unit, Unit useActor) 
+: 
+    Packetizer      (),
+	m_unitData      (unit), 
+	m_actorId       (useActor)
 {
-	m_unitId = 0;
-	m_actorId = useActor;
 }
 
 
@@ -163,7 +164,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 		if(oldowner != m_unitData->m_owner) {
 			DPRINTF(k_DBG_NET, ("Resetting unit %lx (type %d) from owner %d to %d\n",
-								uid, m_unitData->m_type,
+								uid.m_id, m_unitData->m_type,
 								oldowner, m_unitData->m_owner));
 			if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
 				DPRINTF(k_DBG_NET, ("But it's a city and I'm going to assert and ignore it.\n"));
@@ -201,19 +202,26 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		g_theUnitPool->HackSetKey(((uint32)uid & k_ID_KEY_MASK) + 1);
 
-		sint32 trans_t = g_theUnitDB->Get(unitType)->HasTransType();
-		if(m_actorId.m_id != (0)) {
+		sint32 trans_t = 0;
+        (void) g_theUnitDB->Get(unitType)->GetTransType(trans_t);
+		if (m_actorId.m_id != 0) 
+        {
 			m_unitData = new UnitData(unitType, trans_t, uid, unitOwner,
 									  unitPos, Unit(),
 									  m_actorId.AccessData()->m_actor);
 			m_actorId.AccessData()->m_actor = NULL;
-		} else {
-			if(!(flags & k_UDF_TEMP_SLAVE_UNIT)) {
-				m_unitData = new UnitData(unitType, trans_t,
-										  uid, unitOwner, unitPos, Unit());
-			} else {
+		} 
+        else 
+        {
+			if(flags & k_UDF_TEMP_SLAVE_UNIT) 
+            {
 				m_unitData = new UnitData(unitType, trans_t,
 										  uid, unitOwner, unitPos);
+            }
+            else
+            {
+				m_unitData = new UnitData(unitType, trans_t,
+										  uid, unitOwner, unitPos, Unit());
 			}
 		}
 		
@@ -439,7 +447,6 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange(),
 											revealed_unexplored);
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
-	Cell *theCell = g_theWorld->GetCell(ud->m_pos);
 	
 	
 	sint32 numRevealed = revealed.Num();

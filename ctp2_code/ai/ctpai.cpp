@@ -174,7 +174,7 @@ STDEHANDLER(CtpAi_CaptureCityEvent)
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
-	if(args->GetPlayer(0, newOwner))
+	if(!args->GetPlayer(0, newOwner))
 		return GEV_HD_Continue;
 
 	if(!args->GetInt(0, cause))
@@ -1107,17 +1107,8 @@ void CtpAi::Initialize()
 		Player *player_ptr = g_player[player];
 		if(player_ptr == NULL) continue;
 
-		
-		Scheduler::GetScheduler(player).Initialize();
-
-		
 		Diplomat::GetDiplomat(player).Initialize();
-
-		
-		
 		Diplomat::GetDiplomat(player).InitStrategicState();
-
-		
 		Governor::GetGovernor(player).Resize( (sint16) g_theWorld->GetWidth(),
 											  (sint16) g_theWorld->GetHeight(),
 											  1 );
@@ -1306,7 +1297,6 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 		Resize();
     }
 
-	Scheduler::GetScheduler(newPlayerId).Initialize();
 	Diplomat::GetDiplomat(newPlayerId).Initialize();
 	Diplomat::GetDiplomat(newPlayerId).InitStrategicState();
 
@@ -2651,6 +2641,9 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 			sint32 foreignerId;
 			for (foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 			{
+                if (foreignerId == player)
+                    continue;
+
 				const ai::Agreement	& agreement = 
 					AgreementMatrix::s_agreements.GetAgreement(player, foreignerId, PROPOSAL_OFFER_STOP_RESEARCH);
 				

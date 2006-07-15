@@ -642,7 +642,7 @@ DWORD CDVDPlayer::GetStatusText(AM_DVD_RENDERSTATUS *pStatus,
     }
     
     DWORD dwLength = (lpszBuff - achBuffer) * sizeof(*lpszBuff) ;
-    dwLength = min(dwLength, dwMaxText) ;
+    dwLength = std::min(dwLength, dwMaxText);
     lstrcpyn(lpszStatusText, achBuffer, dwLength) ;
     
     return dwLength ;

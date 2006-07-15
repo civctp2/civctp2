@@ -653,12 +653,8 @@ CivApp::~CivApp()
 
 sint32 CivApp::InitializeAppUI(void)
 {
-	AUI_ERRCODE errcode;
-
-	
 	NETFunc::GameType = GAMEID;
-	
-	NETFunc::DllPath = "dll\\net";
+	sprintf(NETFunc::DllPath, "dll%snet", FILE_SEP);
 
 	
 	extern BOOL g_useIntroMovie;
@@ -677,7 +673,7 @@ sint32 CivApp::InitializeAppUI(void)
 			g_soundManager->StartMusic();
 		}
 
-		errcode = initialplayscreen_Initialize();
+		AUI_ERRCODE errcode = initialplayscreen_Initialize();
 		Assert(errcode == AUI_ERRCODE_OK);
 
 		if(!g_no_shell && !g_launchScenario)
@@ -744,7 +740,6 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 		g_theProgressWindow,
 		"InitProgressWindow",
 		520 );
-	DBLexer *lex = NULL;
 
 	g_theUnitDB = new CTPDatabase<UnitRecord>;
 	g_theDifficultyDB = new CTPDatabase<DifficultyRecord>;
@@ -802,7 +797,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	Assert(g_theSoundDB);
 	if (g_theSoundDB) {
-		lex = new DBLexer(C3DIR_GAMEDATA, g_sounddb_filename);
+		DBLexer * lex = new DBLexer(C3DIR_GAMEDATA, g_sounddb_filename);
 		if (!g_theSoundDB->Parse(lex))
 			return FALSE;
 		delete lex;
@@ -2104,7 +2099,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		delete g_theMessagePool;
 		g_theMessagePool = new MessagePool();
 
-		delete g_slicEngine;
+        delete g_slicEngine;
 		g_slicEngine = new SlicEngine();
 		if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE)) {
 			g_slicEngine->Link();
@@ -3249,13 +3244,12 @@ sint32 CivApp::EndGame(void)
 		CleanupGame(false); 
 		StartMessageSystem();
 	}
-	AUI_ERRCODE errcode;
 
 	extern bool g_e3Demo;
 	if(g_e3Demo)
 		ExitGame();
 
-	errcode = initialplayscreen_Initialize();
+	AUI_ERRCODE errcode = initialplayscreen_Initialize();
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	initialplayscreen_displayMyWindow();
@@ -3276,17 +3270,16 @@ sint32 CivApp::LoadSavedGame(MBCHAR *name)
 	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
 
 	char filepath[_MAX_PATH]={0};
-	FILE *fin=NULL;
 	strcpy(filepath, name);
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
-	fin = fopen(filepath, "r");
+	FILE * fin = fopen(filepath, "r");
 	if (fin == NULL) {
 		c3errors_ErrorDialog("Load save game", "Could not open %s", name);
 		return 0;
 	} 
-	fclose (fin);
+	fclose(fin);
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
@@ -3338,15 +3331,14 @@ sint32 CivApp::LoadSavedGameMap(MBCHAR *name)
 	
 	
 	char filepath[_MAX_PATH]={0};
-	FILE *fin=NULL; 
 	strcpy(filepath, name);
 
-	fin = fopen(filepath, "r"); 
+	FILE * fin = fopen(filepath, "r"); 
 	if (fin == NULL) { 
 		c3errors_ErrorDialog("Load save game map", "Could not open %s", name);
 		return 0; 
 	} 
-	fclose (fin); 
+	fclose(fin); 
 	
 	GameMapFile::RestoreGameMap(name);
 
@@ -3459,43 +3451,29 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	if ((g_network.IsActive() && !g_network.IsHost()) || g_network.IsNetworkLaunch())
 		return;
 
-	MBCHAR			filename[_MAX_PATH];
 	MBCHAR			path[_MAX_PATH];
 	MBCHAR			fullpath[_MAX_PATH];
 	
+
+    MBCHAR const *  autosaveItem    = (isQuickSave) ? "AUTOSAVE_NAME" : "QUICKSAVE_NAME";
+    MBCHAR const *  autosaveName    = g_theStringDB->GetNameStr(autosaveItem);
+
+	
 	MBCHAR			leaderName[k_MAX_NAME_LEN];
-	const MBCHAR	*autosaveName;
-
-	C3SAVEDIR		dir;
-
-	
-	
-	if(!isQuickSave) {
-		autosaveName = g_theStringDB->GetNameStr("AUTOSAVE_NAME");
-	} else {
-		autosaveName = g_theStringDB->GetNameStr("QUICKSAVE_NAME");
-	}
-
-	
 	strcpy(leaderName, g_theProfileDB->GetLeaderName());
 	leaderName[6] = '\0';
 	c3files_StripSpaces(leaderName);
 
-	
+	MBCHAR			filename[_MAX_PATH];
 	sprintf(filename, "%s-%s", autosaveName, leaderName);
 
-	
-	if (g_network.IsActive()) {
-		dir = C3SAVEDIR_MP;
-	} else {
-		dir = C3SAVEDIR_GAME;
-	}
+    C3SAVEDIR       dir = (g_network.IsActive()) ? C3SAVEDIR_MP : C3SAVEDIR_GAME;
 
 	
 	g_civPaths->GetSavePath(dir, path);
 
 	
-	sprintf(fullpath, "%s\\%s", path, leaderName);
+	sprintf(fullpath, "%s%s%s", path, FILE_SEP, leaderName);
 
 	
 	if (!c3files_PathIsValid(fullpath)) {
@@ -3505,8 +3483,7 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 		}
 	}
 
-	
-	strcat(fullpath, "\\");
+	strcat(fullpath, FILE_SEP);
 	strcat(fullpath, filename);
 
 	GameFile	*file = new GameFile();
@@ -3549,7 +3526,9 @@ void CivApp::PostLoadSaveGameAction(MBCHAR *name)
 
 void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 {
-	if(g_network.IsActive()) {
+    /// @todo Check g_network.IsHost? See AutoSave. Otherwise, the dir assignment
+    ///       becomes constant.
+	if (g_network.IsActive()) {
 		
 		return;
 	}
@@ -3559,13 +3538,10 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	MBCHAR			fullpath[_MAX_PATH];
 	
 	MBCHAR			leaderName[k_MAX_NAME_LEN];
-	const MBCHAR	*autosaveName;
-
-	C3SAVEDIR		dir;
 
 	
 	
-	autosaveName = g_theStringDB->GetNameStr("QUICKSAVE_NAME");
+	MBCHAR const *  autosaveName = g_theStringDB->GetNameStr("QUICKSAVE_NAME");
 
 	
 	strcpy(leaderName, g_theProfileDB->GetLeaderName());
@@ -3575,18 +3551,14 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	
 	sprintf(filename, "%s-%s", autosaveName, leaderName);
 
-	
-	if (g_network.IsActive()) {
-		dir = C3SAVEDIR_MP;
-	} else {
-		dir = C3SAVEDIR_GAME;
-	}
+
+    C3SAVEDIR       dir = (g_network.IsActive()) ? C3SAVEDIR_MP : C3SAVEDIR_GAME;
 
 	
 	g_civPaths->GetSavePath(dir, path);
 
 	
-	sprintf(fullpath, "%s\\%s", path, leaderName);
+	sprintf(fullpath, "%s%s%s", path, FILE_SEP, leaderName);
 
 	
 	if (!c3files_PathIsValid(fullpath)) {
@@ -3597,15 +3569,15 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	}
 
 	
-	strcat(fullpath, "\\");
+	strcat(fullpath, FILE_SEP);
 	strcat(fullpath, filename);
 
 	FILE *f = fopen(fullpath, "r");
-	if(!f)
-		return;
-	fclose(f);
-
-	PostLoadSaveGameAction(fullpath);
+	if (f)
+    {
+	    fclose(f);
+        PostLoadSaveGameAction(fullpath);
+    }
 }
 
 
@@ -3700,20 +3672,21 @@ void LoadScenarioGameAction::Execute(aui_Control *control, uint32 action, uint32
 
 int InitializeGreatLibrary()
 {
-    MBCHAR path[_MAX_PATH];
-    int i=0;
-
+    delete g_GreatLibPF;
     g_GreatLibPF = new ProjectFile();
 
+    MBCHAR path[_MAX_PATH];
+    int i=0;
     while(g_civPaths->FindPath(C3DIR_GL, i++, path)) {
         if (path[0]) {
             g_GreatLibPF->addPath(path);
-            strcat(path, "\\gl.zfs");
+            strcat(path, FILE_SEP);
+            strcat(path, "gl.zfs");
             g_GreatLibPF->addPath(path);
         }
     }
 
-    return(TRUE);
+    return TRUE;
 }
 
 int InitializeSoundPF()
@@ -3726,7 +3699,8 @@ int InitializeSoundPF()
     while(g_civPaths->FindPath(C3DIR_SOUNDS, i++, path)) {
         if (path[0]) {
             g_SoundPF->addPath(path);
-            strcat(path, "\\sound.zfs");
+            strcat(path, FILE_SEP);
+            strcat(path, "sound.zfs");
             g_SoundPF->addPath(path);
         }
     }
@@ -3737,23 +3711,24 @@ int InitializeSoundPF()
 
 int InitializeImageMaps()
 {
-    MBCHAR path[_MAX_PATH];
-    int i=0;
-    char *patname;
-    char *picname;
-
+    char * patname;
+    char * picname;
 	if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) {
-        patname = "\\pat555.zfs";
-        picname = "\\pic555.zfs";
+        patname = "pat555.zfs";
+        picname = "pic555.zfs";
     } else {
-        patname = "\\pat565.zfs";
-        picname = "\\pic565.zfs";
+        patname = "pat565.zfs";
+        picname = "pic565.zfs";
     }
 
+    delete g_ImageMapPF;
     g_ImageMapPF = new ProjectFile();
 
+    MBCHAR path[_MAX_PATH];
+    int i=0;
     while(g_civPaths->FindPath(C3DIR_PATTERNS, i++, path)) {
         if (path[0]) {
+            strcat(path, FILE_SEP);
             strcat(path, patname);
             g_ImageMapPF->addPath(path, TRUE);
         }
@@ -3762,10 +3737,11 @@ int InitializeImageMaps()
 	i=0;
     while(g_civPaths->FindPath(C3DIR_PICTURES, i++, path)) {
         if (path[0]) {
+            strcat(path, FILE_SEP);
             strcat(path, picname);
             g_ImageMapPF->addPath(path, TRUE);
         }
     }
 
-    return(TRUE);
+    return TRUE;
 }

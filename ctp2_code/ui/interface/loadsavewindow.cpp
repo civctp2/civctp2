@@ -310,45 +310,35 @@ LoadSaveWindow::~LoadSaveWindow()
 
 void LoadSaveWindow::FillListOne(void)
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-
 	if (!m_fileList) return;
-
-	if(m_listOne)
-		m_listOne->Clear();  
-
 	if (m_fileList->GetCount() <= 0) return;
+    if (!m_listOne) return;
 
-	if (m_listOne == NULL) return;
+    m_listOne->Clear();  
 
-	PointerList<GameInfo>::Walker *walker = new PointerList<GameInfo>::Walker(m_fileList);
-
-	
-	while (walker->IsValid()) {
-		LSGamesListItem *item = new LSGamesListItem(
-			&errcode,
-			"LSGamesListItem", 
-			walker->GetObj());
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+    for 
+    (
+	    PointerList<GameInfo>::Walker walker = PointerList<GameInfo>::Walker(m_fileList);
+        walker.IsValid();
+        walker.Next()
+    ) 
+    {
+		LSGamesListItem *item = 
+            new LSGamesListItem(&errcode, "LSGamesListItem", walker.GetObj());
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
 
 		m_listOne->AddItem(item);
-
-		walker->Next();
 	}
-
-	delete walker;
-
 }
 
 
 
 void LoadSaveWindow::FillListTwo(GameInfo *info)
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-
 	Assert(m_listTwo);
-	if (m_listTwo == NULL) return;
+	if (!m_listTwo) return;
 
 	m_listTwo->Clear();
 
@@ -370,47 +360,41 @@ void LoadSaveWindow::FillListTwo(GameInfo *info)
 
 	if ( info )
 	{
-		PointerList<SaveInfo>::Walker *walker = new PointerList<SaveInfo>::Walker(info->files);
-
-		while (walker->IsValid()) {
-			LSSavesListItem *item = new LSSavesListItem(
-				&errcode,
-				"LSSavesListItem",
-				walker->GetObj());
+    	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+        for
+        (
+		    PointerList<SaveInfo>::Walker walker = PointerList<SaveInfo>::Walker(info->files);
+            walker.IsValid();
+            walker.Next()
+        )
+        {
+			LSSavesListItem *   item = 
+                new LSSavesListItem(&errcode, "LSSavesListItem", walker.GetObj());
 			Assert(errcode == AUI_ERRCODE_OK);
 			if (errcode != AUI_ERRCODE_OK) return;
 
 			m_listTwo->AddItem(item);
-
-			walker->Next();
 		}
-
-		delete walker;
 	}
-
-
-
-
-
-
 }
 
 
 
 void LoadSaveWindow::FillCivList(SaveInfo *info)
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-
 	Assert(m_civsList);
-	if (m_civsList == NULL) return;
+	if (!m_civsList) return;
 
 	m_civsList->Clear();
 
-	if ( info )
+	if (info)
 	{
-		for (sint32 i=0; i<info->numCivs; i++) {
-			LSCivsListItem *item = new LSCivsListItem(&errcode, "LSCivsListItem", 
-					info->civList[i]);
+	    AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+
+		for (sint32 i=0; i < info->numCivs; i++) 
+        {
+			LSCivsListItem *item = 
+                new LSCivsListItem(&errcode, "LSCivsListItem", info->civList[i]);
 			Assert(errcode == AUI_ERRCODE_OK);
 			if (errcode != AUI_ERRCODE_OK) return;
 
@@ -423,76 +407,56 @@ void LoadSaveWindow::FillCivList(SaveInfo *info)
 void LoadSaveWindow::SelectCurrentGame(void)
 {
 	if (!m_listOne) return;
+	if (m_listOne->NumItems() <= 0) return;
 
 	MBCHAR		currentGame[k_MAX_NAME_LEN] = {0};
-
 	GetGameName(currentGame);
 
-	sint32				foundItem = -1;
 	LSGamesListItem		*item;
 	GameInfo			*info;
 
-	if (m_listOne->NumItems() <= 0) {
-		return;
-	}
-
-	for (sint32 i=0; i<m_listOne->NumItems(); i++) {
+	for (sint32 i=0; i<m_listOne->NumItems(); i++) 
+    {
 		item = (LSGamesListItem *)m_listOne->GetItemByIndex(i);
 		if (!item) continue;
 
 		info = item->GetGameInfo();
 		if (!info) continue;
 
-		if (!strcmp(info->name, currentGame)) {
-			foundItem = i;
-			break;
+		if (!strcmp(info->name, currentGame)) 
+        {
+			m_listOne->SelectItem(i);
+			return;
 		}
 	}
-
-	if (foundItem == -1) {
-		foundItem = 0;
-	} else {
-		m_listOne->SelectItem(foundItem);
-	}
-
 }
 
 
 void LoadSaveWindow::SelectCurrentSave(void)
 {
 	if (!m_listTwo) return;
+	if (m_listTwo->NumItems() <= 0) return;
 
 	MBCHAR		saveName[_MAX_PATH] = {0};
 	GetSaveName(saveName);
 
-	sint32				foundItem = -1;
 	LSSavesListItem		*item;
 	SaveInfo			*info;
 
-	if (m_listTwo->NumItems() <= 0) {
-		return;
-	}
-
-	for (sint32 i=0; i<m_listTwo->NumItems(); i++) {
+	for (sint32 i=0; i<m_listTwo->NumItems(); i++) 
+    {
 		item = (LSSavesListItem *)m_listTwo->GetItemByIndex(i);
 		if (!item) continue;
 
 		info = item->GetSaveInfo();
 		if (!info) continue;
 
-		if (!strcmp(info->fileName, saveName)) {
-			foundItem = i;
-			break;
+		if (!strcmp(info->fileName, saveName)) 
+        {
+			m_listTwo->SelectItem(i);
+			return;
 		}
 	}
-
-	if (foundItem == -1) {
-		foundItem = 0;
-	} else {
-		m_listTwo->SelectItem(foundItem);
-	}
-
-
 }
 
 
@@ -640,17 +604,11 @@ BOOL LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 
 void LoadSaveWindow::CleanUpSaveInfo( void )
 {
-	if ( m_saveInfoToSave )
-	{
-		delete m_saveInfoToSave;
-		m_saveInfoToSave = NULL;
-	}
+	delete m_saveInfoToSave;
+	m_saveInfoToSave = NULL;
 
-	if ( m_saveInfoRemember )
-	{
-		delete m_saveInfoRemember;
-		m_saveInfoRemember = NULL;
-	}
+    delete m_saveInfoRemember;
+	m_saveInfoRemember = NULL;
 
 	m_saveInfo = NULL;
 	m_gameInfo = NULL;
@@ -663,17 +621,12 @@ void LoadSaveWindow::CleanUpSaveInfo( void )
 
 void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 {
-	double		**graphData;
-	sint32		xCount, yCount;
-	LineGraph	*myGraph;
 	AUI_ERRCODE	errcode;
-	sint32		width, height;
 
-	width = m_powerTabImage->Width();
-	height = m_powerTabImage->Height();
+	sint32 const    width   = m_powerTabImage->Width();
+	sint32 const    height  = m_powerTabImage->Height();
 
-	
-	myGraph = new LineGraph(&errcode, aui_UniqueId(), 0, 0, width, height);
+	LineGraph *     myGraph = new LineGraph(&errcode, aui_UniqueId(), 0, 0, width, height);
 	if (!myGraph) return;
 
 	myGraph->EnableYLabel(FALSE);
@@ -681,16 +634,17 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 	myGraph->EnablePrecision(FALSE);
 
 	
-	graphData = NULL;
+	double **       graphData = NULL;
+	sint32		xCount, yCount;
 	if (infowin_UpdateGraph(myGraph, xCount, yCount, &graphData)) return;
 
 	
 	aui_DirectSurface	*surf = myGraph->GetGraphSurface();
 
 	if (info->powerGraphWidth > 0 && 
-		info->powerGraphHeight > 0 && 
-		info->powerGraphData != NULL) {
-		delete[] info->powerGraphData;
+		info->powerGraphHeight > 0) 
+    {
+		delete [] info->powerGraphData;
 	}
 
 	info->powerGraphWidth = width;
@@ -720,11 +674,11 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 
 	
 	if (graphData) {
-		for (i=0; i<yCount; i++) {
-			if (graphData[i])
-				delete[] graphData[i];
+		for (i=0; i<yCount; i++) 
+        {
+			delete [] graphData[i];
 		}
-		delete[] graphData;
+		delete [] graphData;
 	}
 }
 
@@ -732,44 +686,36 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 
 void LoadSaveWindow::GetRadarMap(SaveInfo *info)
 {
-	RadarMap	*radarMap;
 	AUI_ERRCODE	errcode;
-	sint32		width, height;
+	sint32 const    width = m_powerTabImage->Width();
+	sint32 const    height = m_powerTabImage->Height();
 
-	width = m_powerTabImage->Width();
-	height = m_powerTabImage->Height();
-
-	radarMap = new RadarMap(&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
+	RadarMap *  radarMap = new RadarMap(&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
 	if (!radarMap) return;
 
-	
 	aui_DirectSurface	*surf = (aui_DirectSurface *)radarMap->GetMapSurface();
 
 	radarMap->RenderMap(surf);	
 
 	if (info->radarMapWidth > 0 && 
-		info->radarMapHeight > 0 && 
-		info->radarMapData != NULL) {
-		delete[] info->radarMapData;
+		info->radarMapHeight > 0) 
+    {
+		delete [] info->radarMapData;
 	}
 
-	
 	info->radarMapWidth = width;
 	info->radarMapHeight = height;
 	info->radarMapData = new Pixel16[width*height];
 
-	sint32		i;
-	Pixel16		*buffer, *bufferDataPtr, *radarDataPtr;
-	sint32		pitch;
+	Pixel16 *   radarDataPtr = info->radarMapData;
 
-	radarDataPtr = info->radarMapData;
-
+    Pixel16 *   buffer;
 	if (surf->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) return;
-	pitch = surf->Pitch();
+	sint32      pitch = surf->Pitch();
 
-	
-	for (i=0; i<height; i++) {
-		bufferDataPtr = buffer + i * (pitch/2);
+	for (sint32 i = 0; i < height; i++) 
+    {
+		Pixel16 * bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(radarDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 
 		
@@ -830,13 +776,9 @@ void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 
 	
 
-	aui_Surface		*surface = image->TheSurface();
+	aui_Surface	*   surface = image->TheSurface();
+	Pixel16 *       buffer;
 
-	sint32		i;
-	Pixel16		*buffer, *bufferDataPtr, *radarDataPtr;
-	sint32		pitch;
-
-	radarDataPtr = info->powerGraphData;
 
 	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) {
 		delete surface;
@@ -844,11 +786,12 @@ void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 		return;
 	}
 
-	pitch = surface->Pitch();
+	Pixel16 *   radarDataPtr = info->powerGraphData;
+	sint32      pitch = surface->Pitch();
 
-	
-	for (i=0; i<height; i++) {
-		bufferDataPtr = buffer + i * (pitch/2);
+	for (sint32 i = 0; i < height; i++) 
+    {
+		Pixel16 * bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
 
 
@@ -908,25 +851,21 @@ void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 
 	
 
-	aui_Surface		*surface = image->TheSurface();
+	aui_Surface	*   surface = image->TheSurface();
 
-	sint32		i;
-	Pixel16		*buffer, *bufferDataPtr, *radarDataPtr;
-	sint32		pitch;
-
-	radarDataPtr = info->radarMapData;
-
+	Pixel16	*       buffer;
 	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) {
 		delete surface;
 		delete image;
 		return;
 	}
 
-	pitch = surface->Pitch();
+	Pixel16 *   radarDataPtr = info->radarMapData;
+	sint32      pitch = surface->Pitch();
 
 	
-	for (i=0; i<height; i++) {
-		bufferDataPtr = buffer + i * (pitch/2);
+	for (sint32 i=0; i<height; i++) {
+		Pixel16 * bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
 
 
@@ -1037,16 +976,8 @@ BOOL LoadSaveWindow::GetNote(MBCHAR *note)
 void LoadSaveWindow::SetGameInfo(GameInfo *info) 
 { 
 	m_gameInfo = info; 
-
-	if (info != NULL) {
-		SetGameName(info->name);
-		FillListTwo(info);
-	}
-	else
-	{
-		SetGameName("");
-		FillListTwo(NULL);
-	}
+    SetGameName(info ? info->name : "");
+	FillListTwo(info);
 }
 
 
@@ -1125,31 +1056,19 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 	
 	if (g_useCustomYear && g_pTurnLengthOverride)
 	{
-		uint32 round = NewTurnCount::GetCurrentRound();
-		if (round > g_turnLengthOverrideSize)
-		{
-			round = g_turnLengthOverrideSize;
-		}
-
-		strcpy(theYear,g_pTurnLengthOverride[round].text);
+        uint32 const    round = 
+            std::min<uint32>(NewTurnCount::GetCurrentRound(), g_turnLengthOverrideSize);
+		strcpy(theYear, g_pTurnLengthOverride[round].text);
 	}
 	else
 	{
-		
-		sint32	year = g_turn->GetYear();
-		sint32	yearStringIndex;
 		AUI_ERRCODE			errcode;
-		aui_StringTable		*table;
-
-		table = new aui_StringTable( &errcode, "YearStrings" );
+		aui_StringTable	*   table = new aui_StringTable(&errcode, "YearStrings");
 		Assert(table);
 		if (!table) return;
 
-		if (year < 0) {
-			yearStringIndex = 0;
-		} else {
-			yearStringIndex = 1;
-		}
+		sint32 const    year            = g_turn->GetYear();
+        sint32 const    yearStringIndex = (year < 0) ? 0 : 1;
 		sprintf(theYear, "%ld%s", abs(year), table->GetString(yearStringIndex));
 		delete table;
 	}
@@ -1394,18 +1313,19 @@ LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo
 		m_itemText->SetText(name);
 
 		
-		if (info->isScenario) {
-			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
-		} else {
-			if (info->startInfoType != STARTINFOTYPE_NONE) {
-				m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_BLUE));
-			}
-		}
-
-		
-		if (strstr(name, g_theStringDB->GetNameStr("AUTOSAVE_NAME"))) {
+		if (strstr(name, g_theStringDB->GetNameStr("AUTOSAVE_NAME"))) 
+        {
 			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
 		}
+		else if (info->isScenario) 
+        {
+			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
+		} 
+        else if (info->startInfoType != STARTINFOTYPE_NONE) 
+        {
+			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_BLUE));
+		}
+        // else No action: Keep default color
 
 		
 		m_itemIcon->AddChild(m_itemText);

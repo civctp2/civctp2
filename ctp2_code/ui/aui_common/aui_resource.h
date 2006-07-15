@@ -143,16 +143,12 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 	if ( !AUI_NEWOK(resource,errcode) ) return;
 
 	errcode = resource->Load();
-	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) )
+	if (!AUI_SUCCESS(errcode))
 	{
-		delete resource;
 		// Temporary patch to prevent access to invalid memory
+		delete resource;
 		resource = NULL;
-		return;
 	}
-	
-	
 }
 
 

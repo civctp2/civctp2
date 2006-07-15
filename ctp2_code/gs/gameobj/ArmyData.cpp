@@ -1693,11 +1693,12 @@ void ArmyData::BeginTurn()
 
 
 // Lost at sea random chance
-   sint32 chance; 
-   if(g_theConstDB->PercentLostAtSea() > 0){
-		chance = g_theConstDB->PercentLostAtSea();
+   sint32 chance = g_theConstDB->PercentLostAtSea();
+   if (chance > 0)
+   {
 	//TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
-		for(sint32 u = 0; u < m_nElements; u++) {
+		for(sint32 u = 0; u < m_nElements; u++) 
+        {
 			const UnitRecord *urec = m_array[u].GetDBRec();
 			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea()) && (m_owner > 0)) //g_theWorld->IsWater(m_pos) trec->)
 			{
@@ -1706,7 +1707,7 @@ void ArmyData::BeginTurn()
 
 				if(g_rand->Next(100) < sint32(chance)) {
 					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-				}
+                }
 			}
 		}
 	}
@@ -5723,7 +5724,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
     
 	PLAYER_INDEX  defense_owner; 
     defense_owner = defender.GetOwner(); 
-
+	
 
 	bool AlltaSneakBombard = true;
 
@@ -5744,7 +5745,7 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 	if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
 		Punstrike = false;
 	}
-	
+
 
 	bool AllDefSneakAttack = true;
 	for(i = 0; i < defender.Num(); i++) { 
@@ -6741,9 +6742,9 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 //---------------------------------------------------------------------------- 					
 bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 {
-	MapPoint newPos, oldPos;
-	oldPos = m_pos;
+	MapPoint oldPos = m_pos;
 
+    MapPoint newPos;
 	sint32 r = oldPos.GetNeighborPosition(d, newPos);
 
 	if(!r)
@@ -6905,7 +6906,7 @@ BOOL ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
 {
 	static CellUnitList transports;
 	
-	if(g_theWorld->GetCity(newPos).m_id == 0 && CanMoveIntoTransport(newPos, transports)) {
+	if(g_theWorld->GetCity(newPos).IsValid() && CanMoveIntoTransport(newPos, transports)) {
 		m_didMove = MoveIntoTransport(newPos, transports);
 		return m_didMove;
 	} else {
@@ -6959,8 +6960,6 @@ BOOL ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
 //----------------------------------------------------------------------------
 bool ArmyData::FinishAttack(Order *order)
 {
-	sint32 i;
-	
 	bool res = MoveIntoForeigner(order->m_point);
 	if(!res)
 		return true;
@@ -6968,7 +6967,8 @@ bool ArmyData::FinishAttack(Order *order)
 	if(m_nElements <= 0)
 		return true;
 
-	for(i = 0; i < m_nElements; i++) {
+	for (sint32 i = 0; i < m_nElements; i++) 
+    {
 		if(!m_array[i].GetDBRec()->GetMovementTypeAir()) {
 			m_array[i].SetMovementPoints(0.0);
 		}
@@ -7416,7 +7416,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 	Army me(m_id);
 	bool doneRemoving = false;
 
-	if(cell->GetCity().m_id != 0) {
+	if(cell->GetCity().IsValid()) {
 		doneRemoving = true;
 	} else {
 		for(i = cell->UnitArmy()->Num() - 1; i >= 0; i--) {
@@ -10343,19 +10343,17 @@ ORDER_TEST ArmyData::CargoTestOrderHere(const OrderRecord * order_rec, const Map
 //----------------------------------------------------------------------------
 bool ArmyData::TargetValidForOrder(const OrderRecord * order_rec, const MapPoint &pos)
 {
-	Unit target_city;
-	CellUnitList target_army;
 	bool target_valid = false;
 
-	target_city = g_theWorld->GetCity(pos);
-	g_theWorld->GetArmy(pos,target_army);
-
+	Unit target_city = g_theWorld->GetCity(pos);
 	if (order_rec->GetTargetPretestEnemyCity() ||
 		order_rec->GetTargetPretestOwnCity())
 	{
-		target_valid = (target_city.m_id != 0);
+		target_valid = (target_city.IsValid());
 	}
 
+	CellUnitList target_army;
+	g_theWorld->GetArmy(pos, target_army);
 	if (order_rec->GetTargetPretestEnemyArmy())
 	{
 		target_valid |= (target_army.Num() > 0);
@@ -10382,10 +10380,10 @@ bool ArmyData::TargetValidForOrder(const OrderRecord * order_rec, const MapPoint
 		break;
 	case k_Order_TargetPretest_AdjacentPosition_Bit:
 	case k_Order_TargetPretest_MovePosition_Bit:
-		target_valid |= true;
+		target_valid = true;
 		break;
 	case k_Order_TargetPretest_AttackPosition_Bit:
-		target_valid |= ((target_city.m_id != 0) || (target_army.Num() > 0));
+		target_valid |= ((target_city.IsValid()) || (target_army.Num() > 0));
 		break;
 	};
 	return target_valid;

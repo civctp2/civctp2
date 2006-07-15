@@ -1774,7 +1774,6 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	sint32 width = destRect.right - destRect.left;
 	CityData *cd = s_cityWindow->m_cityData;
 
-	const CitySizeRecord *rec = g_theCitySizeDB->Get(cd->GetSizeIndex());
 	double overcrowding = cd->GetOvercrowdingCoefficient();
 	if(overcrowding < 0)
 		overcrowding = 0;
@@ -2099,11 +2098,12 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		if(strrchr(statText, '.') &&
 		   (!(stricmp(strrchr(statText, '.'), ".txt")))) {
 			
-			MBCHAR *fileText;
-			sint32 size;
-			fileText = (MBCHAR *)g_GreatLibPF->getData((char *)statText, &size, C3DIR_GL);
+			size_t      size = 0;
+			MBCHAR *    fileText = reinterpret_cast<MBCHAR *>
+                (g_GreatLibPF->getData(statText, size, C3DIR_GL));
 			
-			if(fileText != NULL) {
+			if (fileText) 
+            {
 				allocatedText = new MBCHAR[size + 1];
 				memcpy(allocatedText, fileText, size * sizeof(MBCHAR));
 				allocatedText[size] = 0;
@@ -2280,8 +2280,8 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 	sint32 numIcons = (abs(amount) + (k_NUM_POINTS_PER_ICON - 1)) / k_NUM_POINTS_PER_ICON;
 	if(numIcons <= 0)
 		numIcons = 1;
-	sint32 x = 0;
-	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
+
+    sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
 
@@ -2322,8 +2322,8 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 	sint32 numIcons = (abs(amount) + (k_NUM_POINTS_PER_ICON - 1)) / k_NUM_POINTS_PER_ICON;
 	if(numIcons <= 0)
 		numIcons = 1;
-	sint32 x = 0;
-	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
+
+    sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
 

@@ -14,12 +14,15 @@
 #define SHOW_MESSAGE_OFFSET_ABSOLUTE 0
 #define SHOW_MESSAGE_OFFSET_RELATIVE 1
 
-#define BOUNCE_IT		g_theProfileDB->IsBounceMessage()
+#include "player.h"     // PLAYER_INDEX
 
+class Message;
 class MessageList;
 class MessageWindow;
-class MessageModal;
 class MessageIconWindow;
+
+#define BOUNCE_IT		g_theProfileDB->IsBounceMessage()
+
 
 
 AUI_ERRCODE messagewin_InitializeMessages( void );
@@ -34,8 +37,8 @@ int messagewin_FastKillWindow(MessageWindow *window);
 int messagewin_CleanupMessage( MessageIconWindow *iconWindow );
 int messagewin_CleanupMessage( MessageWindow *window );
 int messagewin_CleanupMessage( MessageIconWindow *iconWindow, MessageWindow *window );
-int messagewin_PurgeMessages( void );
-int messagewin_Cleanup( void );
+void messagewin_PurgeMessages(void);
+void messagewin_Cleanup(void);
 
 void messagewin_BeginTurn( PLAYER_INDEX index );
 void messagewin_EndTurn( PLAYER_INDEX index );

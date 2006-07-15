@@ -27,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -253,7 +253,7 @@ private:
 	friend class Walker;
 };
 
-template <class T> inline void PointerList<T>::AddTail(T *obj)
+template <class T> void PointerList<T>::AddTail(T *obj)
 {
 	PointerListNode* node = new PointerListNode(obj);
 	if(m_tail) {
@@ -265,7 +265,7 @@ template <class T> inline void PointerList<T>::AddTail(T *obj)
 	m_count++;
 }
 
-template <class T> inline void PointerList<T>::AddHead(T *obj)
+template <class T> void PointerList<T>::AddHead(T *obj)
 {
 	PointerListNode* node = new PointerListNode(obj);
 	if(m_head) {
@@ -277,7 +277,7 @@ template <class T> inline void PointerList<T>::AddHead(T *obj)
 	m_count++;
 }
 
-template <class T> inline T* PointerList<T>::RemoveHead()
+template <class T> T* PointerList<T>::RemoveHead()
 {
 	if(!m_head)
 		return NULL;
@@ -300,21 +300,21 @@ template <class T> inline T* PointerList<T>::RemoveHead()
 	return obj;
 }
 
-template <class T> inline T* PointerList<T>::GetHead()
+template <class T> T* PointerList<T>::GetHead()
 {
 	if(!m_head)
 		return NULL;
 	return m_head->m_obj;
 }
 
-template <class T> inline T* PointerList<T>::GetTail()
+template <class T> T* PointerList<T>::GetTail()
 {
 	if(!m_tail)
 		return NULL;
 	return m_tail->m_obj;
 }
 
-template <class T> inline T* PointerList<T>::RemoveTail()
+template <class T> T* PointerList<T>::RemoveTail()
 {
 	if(!m_tail)
 		return NULL;
@@ -337,7 +337,7 @@ template <class T> inline T* PointerList<T>::RemoveTail()
 	return obj;
 }
 
-template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
+template <class T> void PointerList<T>::Remove(PointerListNode* node)
 {
     if (!node)
         return;
@@ -383,7 +383,7 @@ template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 }
 
 
-template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
+template <class T> void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
 {
 	if (node) 
     {
@@ -407,7 +407,7 @@ template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T
 	} 
 }
 
-template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
+template <class T> void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
 {
     if (node)
     {
@@ -433,12 +433,14 @@ template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *nod
 	
 template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
 {
-	PointerListNode *search = m_head;
-	while(search) {
-		if(search->m_obj == obj)
+	for (PointerListNode * search = m_head; search; search = search->m_next)
+    {
+		if (search->m_obj == obj)
+        {
 			return search;
-		search = search->m_next;
+        }
 	}
+
 	return NULL;
 }
 

@@ -63,10 +63,9 @@ public:
 	const ArmyData *GetData() const;
 	ArmyData *AccessData() const;
 
-	Army() : ID() {}
-	Army(sint32 val) : ID(val) {}
-	Army(uint32 val) : ID(val) {}
-	Army(ID i) : ID(i.m_id) {}
+    Army(sint32 val) : ID(val) {}
+	Army(uint32 val = 0) : ID(val) {}
+    Army(ID const & i) : ID(i) {}
 
 	ArmyData *operator -> () const { return AccessData(); }
 

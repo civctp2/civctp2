@@ -13,7 +13,7 @@
 #if defined(__cplusplus)
 class ldl_datablock;
 
-ldl_datablock *ldlif_find_block(char *name);
+ldl_datablock *ldlif_find_block(char const * name);
 void ldlif_add_block_to_tree(ldl_datablock *block);
 void ldlif_remove_block_from_tree(ldl_datablock *block);
 
