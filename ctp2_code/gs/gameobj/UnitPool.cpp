@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The unit pool
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -78,7 +78,7 @@ Unit UnitPool::Create (
 	Assert(owner < PLAYER_INDEX_INVALID); 
 
 	sint32 trans_t = 0;
-	g_theUnitDB->Get(t, owner)->GetTransType(trans_t);
+	g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetTransType(trans_t);
 	ptr = new UnitData(t, trans_t, id, owner, pos, hc, actor); 
 
 	Assert(ptr);
@@ -87,7 +87,7 @@ Unit UnitPool::Create (
 	
 	static char unitName[256];
 	strcpy(unitName, g_theStringDB->GetNameStr(g_theUnitDB->Get(t)->GetName()));
-	int unitCost = g_theUnitDB->Get(t, owner)->GetShieldCost();
+	sint32 unitCost = g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetShieldCost();
 
 	char *aipName = NULL;
 
@@ -111,7 +111,7 @@ Unit UnitPool::Create (
 	Assert(owner < PLAYER_INDEX_INVALID);
 	
 	sint32 trans_t = 0;
-	g_theUnitDB->Get(t, owner)->GetTransType(trans_t);
+	g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetTransType(trans_t);
 	ptr = new UnitData(t, trans_t, id, owner, actor_pos);
 
 	Assert(ptr);
