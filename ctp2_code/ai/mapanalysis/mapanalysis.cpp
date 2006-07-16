@@ -56,7 +56,6 @@
 
 #include "Scheduler.h"
 #include <vector>
-using namespace std;
 
 
 MapGrid < sint32 >::MapGridArray MapGrid < sint32 >::s_scratch;

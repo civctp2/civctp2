@@ -28,15 +28,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "ctpagent.h"
 
 #include "gfx_options.h"
-
-#include "ctpagent.h"
 #include "robotastar2.h"
-
-#include "ArmyPool.h"
-#include "World.h"
+#include "World.h"          // g_theWorld
 #include "Cell.h"
 #include "Unit.h"
 #include "Army.h"
@@ -46,77 +42,56 @@
 #include "Order.h"
 #include "GameEventUser.h"
 #include "CTPDatabase.h"
-#include "OrderRecord.h"
+#include "OrderRecord.h"    // g_theOrderDB
 #include "GoalRecord.h"
 #include "UnitRecord.h"
 #include "mapanalysis.h"
 #include "ctpaidebug.h"
 #include "ctpai.h"
 
-using namespace std;
-
-extern CTPDatabase<OrderRecord> *g_theOrderDB;
-extern ArmyPool		*g_theArmyPool;
-extern World		*g_theWorld;
 extern MapPoint g_mp_size;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 CTPAgent::CTPAgent()
+:
+    Agent           (),
+    m_army          (),
+    m_playerId      (PLAYER_UNASSIGNED),
+    m_targetOrder   (OrderRecord::INDEX_INVALID),
+	m_targetPos     ()
 {
-    Init();
 }
 
 
-CTPAgent::CTPAgent(const CTPAgent &agent)
+CTPAgent::CTPAgent(CTPAgent const & a_Original)
+:
+    Agent           (a_Original),
+    m_army          (a_Original.m_army),
+    m_playerId      (a_Original.m_playerId),
+    m_targetOrder   (a_Original.m_targetOrder),
+	m_targetPos     (a_Original.m_targetPos)
 {
-    *this = agent;
 }
 
 
 CTPAgent::~CTPAgent()
 {
-    
+    // No action: nothing to delete   
 }
 
 
-
-void CTPAgent::Init()
+CTPAgent & CTPAgent::operator = (CTPAgent const & a_Original)
 {
-    
-    Agent::Init();
-    
-    
-    m_army = Army(); 
+    if (this != &a_Original)
+    {
+        Agent::operator = (a_Original);
+        m_army          = a_Original.m_army,
+        m_playerId      = a_Original.m_playerId;
+        m_targetOrder   = a_Original.m_targetOrder;
+	    m_targetPos     = a_Original.m_targetPos;
+    }
 
-	
-	m_squad_class = SQUAD_CLASS_DEFAULT;
-}
-
-
-CTPAgent & CTPAgent::operator= (const CTPAgent & agent)
-{
-    
-    Agent::operator=(agent);
-    
-    
-    
-    
-
-    
-    m_army = agent.m_army;
-   
     return *this;
 }
 
@@ -132,7 +107,7 @@ void CTPAgent::Set_Army(const Army & army)
     m_army = army;
 
     
-    Assert(g_theArmyPool->IsValid(army));
+    Assert(army.IsValid());
 
 #ifdef _DEBUG_SCHEDULER
 	Assert(army->m_theAgent == NULL);
@@ -149,33 +124,27 @@ PLAYER_INDEX CTPAgent::Get_Player_Number() const
 
 void CTPAgent::Set_Player_Number(const PLAYER_INDEX & player_num)
 {
-    m_playerId = player_num;
+    m_playerId = static_cast<sint16>(player_num);
 }
 
 
 bool CTPAgent::Get_Is_Dead() const
 {
-    
-    if (!g_theArmyPool->IsValid(m_army))
+    if (!m_army.IsValid())
         return true;
 
 #ifdef _DEBUG_SCHEDULER
 	Assert(m_army->m_theAgent == this);
 #endif // _DEBUG_SCHEDULER
 
-    
-    if (m_army->GetOwner() != m_playerId)
-        return true;
-
-    return false;
+    return m_army->GetOwner() != m_playerId;
 }
 
 
 SQUAD_CLASS CTPAgent::Compute_Squad_Class() 
 {
-
 	if (Get_Is_Dead())
-		return 0x0;
+		return SQUAD_CLASS_DEFAULT;
 
 	bool isspecial; 
 	bool isstealth;
@@ -201,7 +170,7 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 		haszoc,
 		canbombard);
 
-	m_squad_class = 0x0;
+	m_squad_class = SQUAD_CLASS_DEFAULT;
 	
 	
 	m_squad_class |= k_Goal_SquadClass_CanExplore_Bit;
@@ -246,24 +215,13 @@ bool CTPAgent::IsArmyPosFilled() const
 
 bool CTPAgent::CanMove() const
 {
-	
-	if (m_army->GetFirstMoveThisTurn())
-		return true;
-
-	return false; 
+    return m_army.IsValid() && m_army->GetFirstMoveThisTurn();
 }
-
 
 
 MapPoint CTPAgent::Get_Pos() const
 {
-	static MapPoint pos(0,0);
-
-    
-    if (!g_theArmyPool->IsValid(m_army))
-        return pos;
-
-	return m_army->RetPos();
+    return m_army.IsValid() ? m_army->RetPos() : MapPoint();
 }
 
 
@@ -279,7 +237,7 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 	sint32 ranged_count;
 	
 
-    Assert( g_theArmyPool->IsValid(m_army) );
+    Assert(m_army.IsValid());
 
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);
@@ -296,11 +254,11 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 	m_squad_strength.Set_Agent_Count(m_army.Num());
 	m_squad_strength.Set_Attack( attack_strength );
 	m_squad_strength.Set_Defense( defense_strength );
-	m_squad_strength.Set_Defenders( defense_count );
+	m_squad_strength.Set_Defenders(static_cast<sint16>(defense_count));
 	m_squad_strength.Set_Ranged( ranged_strength );
-	m_squad_strength.Set_Ranged_Units( ranged_count );
+	m_squad_strength.Set_Ranged_Units(static_cast<sint16>(ranged_count));
 	m_squad_strength.Set_Value( total_value );
-	m_squad_strength.Set_Transport( empty_slots );
+	m_squad_strength.Set_Transport(static_cast<sint16>(empty_slots));
 
 	return m_squad_strength;
 }
@@ -312,12 +270,7 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 
 void CTPAgent::Log_Debug_Info(const int & log) const
 {
-    
-    int row = 0;
-	int column = 0;
-   
-    
-    if(!g_theArmyPool->IsValid(m_army))
+    if (!m_army.IsValid())
     {
         AI_DPRINTF(log, m_playerId, -1, m_army.m_id, ("   Object Destroyed"));
         return;
@@ -348,13 +301,9 @@ void CTPAgent::Log_Debug_Info(const int & log) const
 
 bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path ) 
 {
-
 	MapPoint start_pos;
     m_army->GetPos(start_pos); 
 
-    float total_cost; 
-    
-    
     if ( start_pos == dest_pos)
 	{ 
         found_path.Clear();
@@ -363,6 +312,7 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
         return true; 
     }
 
+    float total_cost; 
 	double move_points;
 	m_army->MinMovementPoints(move_points); 
 
@@ -376,15 +326,15 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
 										   dest_pos,
 										   check_dest,
 										   cont,
-										   trans_max_r,
+										   static_cast<float>(trans_max_r),
 										   found_path,      
 										   total_cost ))	
-		{
-			Assert(0 < found_path.Num()); 
-			
-			found_path.Start(start_pos);
-			return true; 
-		} 
+	{
+		Assert(0 < found_path.Num()); 
+		
+		found_path.Start(start_pos);
+		return true; 
+	} 
 
     return false; 
 }
@@ -396,12 +346,6 @@ bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bo
 	MapPoint start_pos;
     army->GetPos(start_pos); 
 
-    float total_cost; 
-	double trans_max_r = 0.8;
-	bool tmp_check_dest = check_dest;
-	RobotAstar2::PathType path_type;
-	uint32 move_union;
-    
     
     if ( start_pos == target_pos)
 	{ 
@@ -413,6 +357,12 @@ bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bo
 
 	sint32 cont = g_theWorld->GetContinent(target_pos);
 	
+    float total_cost; 
+	double trans_max_r = 0.8;
+	bool tmp_check_dest = check_dest;
+	RobotAstar2::PathType path_type;
+	uint32 move_union;
+    
 	
 	
 
@@ -422,7 +372,8 @@ bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bo
 			
 			uint32 move_intersection1 = army->GetMovementType();
 			uint32 move_intersection2 = army->GetCargoMovementType();
-			uint32 move_union = move_intersection1 | move_intersection2; 
+			
+            move_union = move_intersection1 | move_intersection2; 
 			
 			
 			tmp_check_dest = false;
@@ -443,7 +394,7 @@ bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bo
 										   target_pos,
 										   tmp_check_dest,
 										   cont,
-										   trans_max_r,
+										   static_cast<float>(trans_max_r),
 										   found_path,     
 										   total_cost ))   
 		{
@@ -459,12 +410,10 @@ bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bo
 
 sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 {
-    sint32 rounds = 0;
     double move_point_cost = 0.0; 
 	double min_move;
 
 	cells = 0;
-
 	
     if (Get_Pos() == pos) 
         return 0; 
@@ -474,10 +423,10 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 	{
 	   ///Improvement of rounds evaluation (based on minimum cost point between
 	   ///start and destination mappoints. - Calvitix
-		Cell * myCell = g_theWorld->GetCell(pos);
-		sint32 movement = myCell->GetMoveCost();
-		myCell = g_theWorld->GetCell(Get_Pos());
-		movement = std::min((long)movement,(long)myCell->GetMoveCost());
+		Cell *          myCell      = g_theWorld->GetCell(pos);
+        Cell *          otherCell   = g_theWorld->GetCell(Get_Pos());
+		sint32 const    movement    = 
+            static_cast<sint32>(std::min(myCell->GetMoveCost(), otherCell->GetMoveCost()));
 
 		//To DO : instead of 100.0, compute the min of terraint cost (with implementation)
 		move_point_cost = movement * sqrt(static_cast<double>(cells)); //original : 100.0
@@ -723,7 +672,8 @@ void CTPAgent::MoveIntoTransport()
 }
 
 
-std::vector<sint32, dbgallocator<sint32> > CTPAgent::s_orderDBToEventMap;
+std::vector<sint32> CTPAgent::s_orderDBToEventMap;
+
 void CTPAgent::AssociateEventsWithOrdersDB()
 {
 	
@@ -746,106 +696,82 @@ void CTPAgent::AssociateEventsWithOrdersDB()
 
 sint32 CTPAgent::DisbandObsoleteUnits()
 {
-	Unit city_unit;
-	CityData *city;
-	MapPoint pos;
+    sint32 unit_count = m_army.IsValid() ? m_army.Num() : 0;
 
-	
-	if (!g_theArmyPool->IsValid(Get_Army()))
-	{
-		
-		
-		return 0;
-	}
-
-	sint32 unit_count = Get_Army().Num();
-
-	Assert(g_player[m_playerId]);
-	Player *player_ptr = g_player[m_playerId];
-
-	
 	if (unit_count <= 0)
 		return 0;
 
+	if (!Get_Can_Be_Executed())
+		return 0;
 	
-	if (Get_Can_Be_Executed() == false)
+	if (!Get_Army()->IsObsolete())
 		return 0;
 
-	
-	if (Get_Army()->IsObsolete() == false)
+	if (Get_Army()->CanSettle())
 		return 0;
 
-	
-	if (Get_Army()->CanSettle() == TRUE)
-		return 0;
+	Assert(g_player[m_playerId]);
+	Player *    player_ptr  = g_player[m_playerId];
+	MapPoint    pos         = Get_Pos();
+	sint32      power       = 
+        MapAnalysis::GetMapAnalysis().GetPower(m_playerId, pos);
+	sint32      threat      = 
+        MapAnalysis::GetMapAnalysis().GetThreat(m_playerId, pos);
 
-	
-	pos = Get_Pos();
-	sint32 power = MapAnalysis::GetMapAnalysis().GetPower(m_playerId, pos);
-	sint32 threat = MapAnalysis::GetMapAnalysis().GetThreat(m_playerId, pos);
 	if ( (power > 0) && ((threat/(double)power) > 1.0))
 		return 0;
 
 	
-	city_unit = g_theWorld->GetCity(pos);
+	Unit        city_unit   = g_theWorld->GetCity(pos);
 
-	
 	if (city_unit.m_id == 0)
-		{
-			
-			MapPoint nearest_city_pos;
-			sint32 nearest_distance = g_mp_size.x + g_mp_size.y; 
-			sint32 distance;
-			bool found = false;
+	{
+		MapPoint nearest_city_pos;
+		sint32 nearest_distance = g_mp_size.x + g_mp_size.y; 
+		sint32 distance;
+		bool found = false;
 
-			UnitDynamicArray *city_list = player_ptr->GetAllCitiesList();
-			for (sint16 i = 0; i < city_list->Num(); i++)
-				{
-					city_unit = city_list->Access(i);
-					distance = MapPoint::GetSquaredDistance(city_unit.RetPos(), pos);
-					if (distance < nearest_distance)
-						{
-							nearest_city_pos = city_unit.RetPos();
-							nearest_distance = distance;
-							found = true;
-						}
-				}
+		UnitDynamicArray *city_list = player_ptr->GetAllCitiesList();
+		for (sint16 i = 0; i < city_list->Num(); i++)
+			{
+				city_unit = city_list->Access(i);
+				distance = MapPoint::GetSquaredDistance(city_unit.RetPos(), pos);
+				if (distance < nearest_distance)
+					{
+						nearest_city_pos = city_unit.RetPos();
+						nearest_distance = distance;
+						found = true;
+					}
+			}
 
-			Path found_path;
-			if (found && FindPath(Get_Army(), nearest_city_pos, true, found_path))
-				{
-					const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
+		Path found_path;
+		if (found && FindPath(Get_Army(), nearest_city_pos, true, found_path))
+			{
+				const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 
-					
-					
-					Get_Army()->PerformOrderHere(order_rec, (Path *) &found_path);
-					Set_Can_Be_Executed(false);
-					Set_Target_Order(order_rec->GetIndex());
-					Set_Target_Pos(found_path.GetEnd());
+				
+				
+				Get_Army()->PerformOrderHere(order_rec, &found_path);
+				Set_Can_Be_Executed(false);
+				Set_Target_Order(order_rec->GetIndex());
+				Set_Target_Pos(found_path.GetEnd());
 #ifdef _DEBUG
-					g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
+				g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
 #endif
-				}
-			return 0;
-		}
-	else 
-		{
-			
-			city = city_unit.GetCityData();
-			Assert(city);
-		}
+			}
+		return 0;
+	}
 
-	sint32 min_garrison = city->GetNeededGarrison();
+    CityData *  city    = city_unit.GetCityData();
+    Assert(city);
 
 	CellUnitList city_units;
 	g_theWorld->GetArmy(pos, city_units); 
 	sint32 remaining_defenders = city_units.Num() - unit_count;
 
-	
-	if (remaining_defenders < min_garrison)
+	if (remaining_defenders < city->GetNeededGarrison())
 		return 0;
 
-	
 	const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 	if (order_rec)
 		Get_Army()->PerformOrder(order_rec);

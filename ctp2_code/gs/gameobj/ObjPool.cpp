@@ -31,6 +31,7 @@
 #include "c3.h"
 #include "ObjPool.h"
 
+#include <algorithm>        // std::fill
 #include "civarchive.h"
 
 #define k_OBJPOOL_VERSION_MAJOR		0								

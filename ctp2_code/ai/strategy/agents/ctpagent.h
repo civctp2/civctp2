@@ -9,22 +9,23 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __CTP_AGENT_H__
 #define __CTP_AGENT_H__ 1
 
 #include <vector>
 
-#include "scheduler_types.h"
-#include "agent.h"
-
-
-#include "c3debugstl.h"
-#include "Army.h"
-#include "Path.h"
-
-
 class CTPAgent;
-typedef CTPAgent* CTPAgent_ptr;
+typedef CTPAgent *  CTPAgent_ptr;
+
+#include "agent.h"              // Agent
+#include "Army.h"               // Army
+#include "MapPoint.h"           // MapPoint
+#include "Path.h"
+#include "player.h"             // PLAYER_INDEX
+#include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
+
+
 
 class CTPAgent : public Agent { 
 
@@ -41,7 +42,7 @@ public:
 	
 	
 
-	static std::vector<sint32, dbgallocator<sint32> > s_orderDBToEventMap;
+	static std::vector<sint32> s_orderDBToEventMap;
 	static void AssociateEventsWithOrdersDB();
 
   	
@@ -62,10 +63,6 @@ public:
 	
   	
   	virtual ~CTPAgent();
-
-	
-	
-	virtual void Init();
 
 	
 	virtual CTPAgent & operator= (const CTPAgent & agent);

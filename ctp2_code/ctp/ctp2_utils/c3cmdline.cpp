@@ -2435,16 +2435,12 @@ void ZBCommand::Execute(sint32 argc, char **argv)
 
 void ShowPopCommand::Execute(sint32 argc, char **argv)
 {
-#ifdef _DEBUG
-	g_tiledMap->m_showPopHack = TRUE;
-#endif
+    // Didn't do anything
 }
 
 void HidePopCommand::Execute(sint32 argc, char **argv)
 {
-#ifdef _DEBUG
-	g_tiledMap->m_showPopHack = FALSE;
-#endif
+    // Didn't do anything
 }
 
 void AddPopCommand::Execute(sint32 argc, char **argv)

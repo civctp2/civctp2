@@ -138,8 +138,6 @@ extern CTPDatabase<GoalRecord> *g_theGoalDB;
 extern ArmyPool		*g_theArmyPool;
 extern World		*g_theWorld;
 
-using namespace std;
-
 PLAYER_INDEX CtpAi::s_maxPlayers = 0;
 
 const OrderRecord * CtpAi::sm_unloadOrderRec = NULL;
@@ -2702,8 +2700,8 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 {
 	
-	list< pair<sint32, Unit> > rush_buy_list;
-	pair<sint32, Unit> rush_buy;
+    std::list< std::pair<sint32, Unit> > rush_buy_list;
+    std::pair<sint32, Unit> rush_buy;
 
 	Player *player_ptr = g_player[player];
 	Assert(player_ptr != NULL);
@@ -2765,7 +2763,7 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 	
 	sint32 rush_buy_cost;
-	list< pair<sint32, Unit> >::iterator iter;
+    std::list< std::pair<sint32, Unit> >::iterator iter;
 	for (iter = rush_buy_list.begin(); iter != rush_buy_list.end(); iter++)
 	{
 		city = iter->second;

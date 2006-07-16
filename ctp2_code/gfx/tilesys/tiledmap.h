@@ -195,7 +195,7 @@ public:
 	
 	
 	
-	inline void		GetMapMetrics(sint32 *width,sint32 *height) const
+	void            GetMapMetrics(sint32 *width,sint32 *height) const
 	{
 		*width = g_theWorld->GetWidth();
 		*height = g_theWorld->GetHeight();
@@ -203,7 +203,7 @@ public:
 
 	
 	
-	inline sint32   GetMapWidth() const
+	sint32          GetMapWidth() const
 	{
 		return g_theWorld->GetWidth();
 	}
@@ -269,8 +269,8 @@ public:
 	
 	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
-	inline	bool	IsScrolling(){ return m_isScrolling;};
-	inline	void	SetScrolling(bool scroll){ m_isScrolling=scroll;};
+	bool	        IsScrolling() const { return m_isScrolling;};
+	void	        SetScrolling(bool scroll){ m_isScrolling=scroll;};
 	void			ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf);
 	BOOL			ScrollMap(sint32 deltaX, sint32 deltaY);
 	BOOL			ScrollMapSmooth(sint32 deltaX, sint32 deltaY);
@@ -359,7 +359,7 @@ public:
 	void			DrawTileBorderScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
 	
 	
-	inline Pixel16	average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
+	Pixel16	    average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
 
 
 	void			DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
@@ -367,7 +367,7 @@ public:
 	void			ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1, Pixel16 *pix2, 
 							sint32 pos, Pixel16 destPixel, short transparency, Pixel16 outlineColor, 
 							sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	inline sint32	ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha);
+	sint32	    ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha);
 
 
 	void		Blt(aui_Surface *surf);
@@ -379,8 +379,6 @@ public:
 
 	double		GetScale(void) { return m_scale; }
 	void		SetScale(double s) { m_scale = s; }
-
-	void		InitLUT(void);
 
 	TileInfo   *GetTileInfo(const MapPoint &pos);
 	RECT		*GetMapViewRect(void) { return &m_mapViewRect; }
@@ -556,12 +554,6 @@ protected:
 	BOOL			m_nextPlayer; 
 
 	PLAYER_INDEX    m_oldPlayer;
-
-#ifdef _DEBUG
-public:
-	BOOL			m_showPopHack;
-#endif
-
 	aui_BitmapFont	*m_font;
 	MBCHAR			m_fortifyString[4];
 

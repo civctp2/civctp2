@@ -196,9 +196,6 @@ void maputils_MapXY2PixelXY(
 	RECT		splitViewRectL, splitViewRectR, splitViewRectT, splitViewRectB;
 	POINT		tempPos;
 
-	sint32		tileWidth = k_TILE_PIXEL_WIDTH + 2;
-
-	sint32		tileHeight = k_TILE_PIXEL_HEIGHT;
 	RECT		*mapViewRect = g_tiledMap->GetMapViewRect();
 
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
@@ -337,8 +334,6 @@ void maputils_MapXY2PixelXY(
 	POINT		tempPos;
 
 	sint32		tileWidth = k_TILE_PIXEL_WIDTH + 2;
-
-	sint32		tileHeight = k_TILE_PIXEL_HEIGHT;
 	double		scale = g_tiledMap->GetScale();
 
 

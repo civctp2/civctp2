@@ -21,39 +21,13 @@ class Agent;
 
 
 
-class Agent { 
-
+class Agent 
+{ 
 public:
-	
-	
-	
-	
-	
-
-  	
-  	
-    
-	
-  	
-
-	
-	
-	
-
-  	
 	Agent();
-
-	
 	Agent(const Agent &agent);
-	
-  	
   	virtual ~Agent();
 
-	
-	
-	virtual void Init();
-
-	
 	virtual Agent& operator= (const Agent &agent);
 
 	
@@ -78,13 +52,13 @@ public:
     void Set_Squad_Class(const SQUAD_CLASS & squad_class);
 
 	
-	virtual SQUAD_CLASS Compute_Squad_Class() = 0;
+    virtual SQUAD_CLASS Compute_Squad_Class() { return m_squad_class; } ;
 
 	
     virtual const Squad_Strength & Get_Squad_Strength() const;
 
 	
-	virtual const Squad_Strength & Compute_Squad_Strength() = 0;
+    virtual const Squad_Strength & Compute_Squad_Strength() { return m_squad_strength; } ;
 
 	
 	virtual void Set_Can_Be_Executed(const bool &can_be_executed);
@@ -103,7 +77,7 @@ public:
     
 
 	
-    virtual void Log_Debug_Info(const int & log) const = 0;
+    virtual void Log_Debug_Info(const int & log) {};
 
 protected:
 

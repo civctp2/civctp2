@@ -28,8 +28,6 @@
 #include "SlicObject.h"
 #include "SlicEngine.h"
 
-using namespace std;
-
 #include "Diplomat.h"
 
 

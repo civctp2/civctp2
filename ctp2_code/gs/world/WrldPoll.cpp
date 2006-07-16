@@ -866,86 +866,92 @@ sint32 World::ChangeType(const double baseProb, const sint32 terrain) const
 	{
 		const GlobalWarmingRecord::ChangeTypeProbability* ctprec = gwrec->GetChangeTypeProbability(i);
 		sint32 fromType = -1;
-		if(ctprec->GetFromTypeIndex(fromType)){
-			if(terrain == fromType){
+
+		if (ctprec->GetFromTypeIndex(fromType))
+        {
+			if (terrain == fromType)
+            {
 				double chanceProb = 0.0;
 				ctprec->GetProbability(chanceProb);
-				if(chanceProb < lastChance
-				&& probability < (chanceProb + baseProb)
-				){
-					lastChance = chanceProb;
-					sint32 toType = -1;
-					ctprec->GetToTypeIndex(toType);
-					newTerrainType = toType;
+
+				if (   chanceProb < lastChance
+				    && probability < (chanceProb + baseProb)
+				   )
+                {
+					lastChance      = chanceProb;
+					newTerrainType  = -1;
+					ctprec->GetToTypeIndex(newTerrainType);
 				}
 			}
 		}
-		// Ugly but needed for backwards compatibility with MedPack2
-		else{
+		else
+        {
+		    // Ugly but needed for backwards compatibility with MedPack2
+			double chanceProb = 0.0;
 
-			sint32 fromType;
-			double chanceProb;
 			if(     ctprec->GetPOLLUTION_TILE_BROWN_HILL()     > -1.0){
 				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownHill);
 				chanceProb = ctprec->GetPOLLUTION_TILE_BROWN_HILL();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_BROWN_MOUNTAIN() > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownMountain);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeBrownMountain);
 				chanceProb = ctprec->GetPOLLUTION_TILE_BROWN_MOUNTAIN();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_DESERT()         > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeDesert);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeDesert);
 				chanceProb = ctprec->GetPOLLUTION_TILE_DESERT();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_FOREST()         > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeForest);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeForest);
 				chanceProb = ctprec->GetPOLLUTION_TILE_FOREST();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_GLACIER()        > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeGlacier);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeGlacier);
 				chanceProb = ctprec->GetPOLLUTION_TILE_GLACIER();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_GRASSLAND()      > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeGrassland);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeGrassland);
 				chanceProb = ctprec->GetPOLLUTION_TILE_GRASSLAND();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_HILL()           > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeHill);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeHill);
 				chanceProb = ctprec->GetPOLLUTION_TILE_HILL();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_JUNGLE()         > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeJungle);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeJungle);
 				chanceProb = ctprec->GetPOLLUTION_TILE_JUNGLE();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_MOUNTAIN()       > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeMountain);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeMountain);
 				chanceProb = ctprec->GetPOLLUTION_TILE_MOUNTAIN();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_PLAINS()         > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypePlains);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypePlains);
 				chanceProb = ctprec->GetPOLLUTION_TILE_PLAINS();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_SWAMP()          > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeSwamp);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeSwamp);
 				chanceProb = ctprec->GetPOLLUTION_TILE_SWAMP();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_TUNDRA()         > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeTundra);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeTundra);
 				chanceProb = ctprec->GetPOLLUTION_TILE_TUNDRA();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_WHITE_HILL()     > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteHill);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteHill);
 				chanceProb = ctprec->GetPOLLUTION_TILE_WHITE_HILL();
 			}
 			else if(ctprec->GetPOLLUTION_TILE_WHITE_MOUNTAIN() > -1.0){
-				sint32 fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteMountain);
+				fromType = GetTerrainChangeType(&TerrainRecord::GetInternalTypeWhiteMountain);
 				chanceProb = ctprec->GetPOLLUTION_TILE_WHITE_MOUNTAIN();
 			}
 
-			if(terrain == fromType){
-				if(chanceProb < lastChance
-				&& probability < (chanceProb + baseProb)
-				){
+			if (terrain == fromType)
+            {
+				if (chanceProb < lastChance
+				    && probability < (chanceProb + baseProb)
+				   )
+                {
 					lastChance = chanceProb;
 					newTerrainType = GetTerrainChangeToType(ctprec);
 				}

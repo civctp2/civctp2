@@ -51,7 +51,6 @@
 #include "MaterialPool.h"
 #include "mapanalysis.h"
 
-using namespace std ;
 
 
 uint64 GaiaController::sm_endgameImprovements = 0x0;
@@ -1057,7 +1056,7 @@ void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) c
 		{
 			if (terrainutil_CanPlayerBuildAt(rec, m_playerId, pos))
 			{
-				candidates.push_back(pair<sint32,MapPoint>(-1,pos));
+                candidates.push_back(std::pair<sint32,MapPoint>(-1,pos));
 			}
 		}
 }
@@ -1128,7 +1127,7 @@ void GaiaController::ComputeTowerPositions()
 			}
 
 		
-		candidates.sort(std::greater<pair<sint32, MapPoint> >());
+        candidates.sort(std::greater<std::pair<sint32, MapPoint> >());
 
 		
 	    pos =  candidates.front().second;
