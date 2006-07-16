@@ -4024,13 +4024,13 @@ void Network::SetDynamicJoin(BOOL on)
 	}
 }
 
-void Network::ChunkList(uint16 id, PointerList<Packetizer> *list)
+void Network::ChunkList(uint16 id, PointerList<Packetizer> * a_List)
 {
-	Assert(list);
-	if(!list)
+	Assert(a_List);
+	if(!a_List)
 		return;
 
-	sint32 mapBufSize = list->GetCount() * 258 + 16384;
+	sint32 mapBufSize = a_List->GetCount() * 258 + 16384;
 	uint8 *mapBuf = new uint8[mapBufSize];
 	
 	mapBuf[0] = k_CHUNK_HEAD;
@@ -4038,9 +4038,9 @@ void Network::ChunkList(uint16 id, PointerList<Packetizer> *list)
 	sint32 size = 2;
 
 	
-	while(list->GetHead()) {
+	while(a_List->GetHead()) {
 		uint16 len = 0;
-		Packetizer *packet = list->RemoveHead();
+		Packetizer *packet = a_List->RemoveHead();
 		packet->Packetize(&mapBuf[size + 2], len);
 		Assert(len < 16384); 
 		                   

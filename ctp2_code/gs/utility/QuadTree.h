@@ -63,7 +63,7 @@ public:
 				 sint16 width, sint16 height); 
 	QuadTreeNode(QuadTree<T>* tree,
 				 QuadTreeNode<T>* parent, 
-				 DynamicArray<T> &list, 
+				 DynamicArray<T> & a_List, 
 				 sint16 x, sint16 y, 
 				 sint16 width, sint16 height);
 
@@ -71,10 +71,10 @@ public:
 
 	QUADRANT FindQuadrant(const MapPoint &pos) const;
 	QuadTreeNode<T> *AddLeaf(QUADRANT quad, T obj);
-	QuadTreeNode<T> *AddLeaf(QUADRANT quad, DynamicArray<T> &list);
+	QuadTreeNode<T> *AddLeaf(QUADRANT quad, DynamicArray<T> & a_List);
 
 	
-	void AddList(DynamicArray<T> &list);
+	void AddList(DynamicArray<T> & a_List);
 	void AddObject(T obj);
 
 	void RemoveObject(T obj);
@@ -181,7 +181,7 @@ QuadTreeNode<T>::QuadTreeNode(QuadTree<T> *tree,
 template <class T>
 QuadTreeNode<T>::QuadTreeNode(QuadTree<T> *tree,
 							  QuadTreeNode<T>* parent, 
-							  DynamicArray<T> &list, 
+							  DynamicArray<T> & a_List, 
 							  sint16 x, sint16 y, 
 							  sint16 width, sint16 height)
 	: 
@@ -195,7 +195,7 @@ QuadTreeNode<T>::QuadTreeNode(QuadTree<T> *tree,
 	  m_isLeaf(TRUE),
 	  m_tree(tree)
 {
-	m_array.Concat(list);
+	m_array.Concat(a_List);
 }
 
 template <class T>
@@ -252,7 +252,7 @@ QuadTreeNode<T>::AddLeaf(QUADRANT quad, T obj)
 }
 
 template <class T> QuadTreeNode<T>*
-QuadTreeNode<T>::AddLeaf(QUADRANT quad, DynamicArray<T> &list)
+QuadTreeNode<T>::AddLeaf(QUADRANT quad, DynamicArray<T> &a_List)
 {
 	sint16 neww = ((m_width / 2) == 0) ? 1 : (m_width / 2);
 	sint16 newh = ((m_height / 2) == 0) ? 1 : (m_height / 2);
@@ -260,20 +260,20 @@ QuadTreeNode<T>::AddLeaf(QUADRANT quad, DynamicArray<T> &list)
 	switch(quad) {
 		case QUADRANT_NE:
 			return m_ne = new QuadTreeNode<T>(m_tree,
-											  this, list, QCX, m_y, 
+											  this, a_List, QCX, m_y, 
 											  neww + ((m_width%2) ? 1 : 0), newh);
 		case QUADRANT_SE:
 			return m_se = new QuadTreeNode<T>(m_tree,
-											  this, list, QCX, QCY, 
+											  this, a_List, QCX, QCY, 
 											  neww + ((m_width%2) ? 1 : 0), 
 											  newh + ((m_height%2) ? 1 : 0));
 		case QUADRANT_SW:
 			return m_sw = new QuadTreeNode<T>(m_tree,
-											  this, list, m_x, QCY, neww, 
+											  this, a_List, m_x, QCY, neww, 
 											  newh + ((m_height%2) ? 1 : 0));
 		case QUADRANT_NW:
 			return m_nw = new QuadTreeNode<T>(m_tree,
-											  this, list, m_x, m_y, neww, newh);
+											  this, a_List, m_x, m_y, neww, newh);
 	}
 	Assert(FALSE);
 	return NULL;
@@ -281,11 +281,11 @@ QuadTreeNode<T>::AddLeaf(QUADRANT quad, DynamicArray<T> &list)
 
 
 template <class T> void
-QuadTreeNode<T>::AddList(DynamicArray<T> &list)
+QuadTreeNode<T>::AddList(DynamicArray<T> & a_List)
 {
-	Assert(list.Num() > 0);
+	Assert(a_List.Num() > 0);
 	MapPoint pos;
-	pos = m_tree->GetPos(list[0]);
+	pos = m_tree->GetPos(a_List[0]);
 	QUADRANT newQuad = FindQuadrant(pos);
 	QuadTreeNode<T> *newNode;
 	
@@ -299,15 +299,15 @@ QuadTreeNode<T>::AddList(DynamicArray<T> &list)
 		
 		
 		if(pos.x == oldPos.x && pos.y == oldPos.y) {
-			m_array.Concat(list);
+			m_array.Concat(a_List);
 		} else {
 			QUADRANT oldQuad = FindQuadrant(oldPos);
 			if(oldQuad != newQuad) {
-				AddLeaf(newQuad, list);
+				AddLeaf(newQuad, a_List);
 				AddLeaf(oldQuad, m_array);
 				m_array.Clear();
 			} else {
-				newNode = AddLeaf(newQuad, list);
+				newNode = AddLeaf(newQuad, a_List);
 				newNode->AddList(m_array);
 				m_array.Clear();
 				m_isLeaf = FALSE;
@@ -316,20 +316,20 @@ QuadTreeNode<T>::AddList(DynamicArray<T> &list)
 	} else {
 		switch(newQuad) {
 			case QUADRANT_NE:
-				if(!m_ne) AddLeaf(newQuad, list);
-				else m_ne->AddList(list);
+				if(!m_ne) AddLeaf(newQuad, a_List);
+				else m_ne->AddList(a_List);
 				break;
 			case QUADRANT_SE:
-				if(!m_se) AddLeaf(newQuad, list);
-				else m_se->AddList(list);
+				if(!m_se) AddLeaf(newQuad, a_List);
+				else m_se->AddList(a_List);
 				break;
 			case QUADRANT_SW:
-				if(!m_sw) AddLeaf(newQuad, list);
-				else m_sw->AddList(list);
+				if(!m_sw) AddLeaf(newQuad, a_List);
+				else m_sw->AddList(a_List);
 				break;
 			case QUADRANT_NW:
-				if(!m_nw) AddLeaf(newQuad, list);
-				else m_nw->AddList(list);
+				if(!m_nw) AddLeaf(newQuad, a_List);
+				else m_nw->AddList(a_List);
 				break;
 		}
 	}

@@ -1948,7 +1948,7 @@ void ScenarioEditor::AddRightList(aui_Control *control, uint32 action, uint32 da
 	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);
 }
 
-void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
+void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint32 userData)
 {
 	ctp2_ListItem *item = (ctp2_ListItem*)aui_Ldl::BuildHierarchyFromRoot("ScenAddStuffItem");
 	Assert(item);
@@ -1962,7 +1962,7 @@ void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 u
 	
 	textBox->SetText(text);
 	item->SetUserData((void *)userData);
-	list->AddItem(item);
+	a_List->AddItem(item);
 }
 
 			

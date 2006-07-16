@@ -1110,11 +1110,8 @@ void EditQueue::UpdateButtons()
 }
 
 
-void EditQueue::SetQueueList(ctp2_ListBox *list)
+void EditQueue::SetQueueList(ctp2_ListBox *)
 {
-	
-
-
 }
 
 
@@ -2252,11 +2249,12 @@ void EditQueue::DeleteQueryCallback(bool response, void *data)
 	s_editQueue->UpdateFileLists();
 }
 
-void EditQueue::SelectChoiceList(ctp2_ListBox *list)
+void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
 {
-	list->Show();
+	a_List->Show();
 
-	if(list != m_buildingList) {
+	if (a_List != m_buildingList) 
+    {
 		m_buildingList->Hide();
 		m_buildingList->DeselectItem(m_buildingList->GetSelectedItem());
 		m_buildingsButton->SetToggleState(false);
@@ -2264,7 +2262,8 @@ void EditQueue::SelectChoiceList(ctp2_ListBox *list)
 		m_buildingsButton->SetToggleState(true);
 	}
 
-	if(list != m_unitList) {
+	if (a_List != m_unitList) 
+    {
 		m_unitList->Hide();
 		m_unitList->DeselectItem(m_unitList->GetSelectedItem());
 		m_unitsButton->SetToggleState(false);
@@ -2272,7 +2271,8 @@ void EditQueue::SelectChoiceList(ctp2_ListBox *list)
 		m_unitsButton->SetToggleState(true);
 	}
 
-	if(list != m_wonderList) {
+	if (a_List != m_wonderList) 
+    {
 		m_wonderList->Hide();
 		m_wonderList->DeselectItem(m_wonderList->GetSelectedItem());
 		m_wondersButton->SetToggleState(false);
@@ -2281,7 +2281,6 @@ void EditQueue::SelectChoiceList(ctp2_ListBox *list)
 	}
 
 	ShowSelectedInfo();
-
 	UpdateButtons();
 }
 

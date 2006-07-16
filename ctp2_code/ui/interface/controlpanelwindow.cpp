@@ -494,9 +494,9 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 		return;
 	}
  
-	ctp2_ListBox *	list = reinterpret_cast<ctp2_ListBox *>(control);
-	ctp2_ListItem *	item = static_cast<ctp2_ListItem *>
-                                (list ? list->GetSelectedItem() : 0);
+	ctp2_ListBox *	l_List  = reinterpret_cast<ctp2_ListBox *>(control);
+	ctp2_ListItem *	item    = static_cast<ctp2_ListItem *>
+                                (l_List ? l_List->GetSelectedItem() : NULL);
 	
 	if (item)
 	{
@@ -524,7 +524,7 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 			tabLabel->ShouldDraw(TRUE);
 		}
 
-		list->DeselectItem((aui_Item *)item);
+		l_List->DeselectItem((aui_Item *)item);
 	}
 }
 
