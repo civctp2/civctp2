@@ -49,6 +49,23 @@ http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
 
 Changelog:
 
+2006-07-15 (Revision 619)
+Added: AINoCityLimit difficulty option
+Added: EnablesPunativeAirstrikes wonder flag, lets you bomb without declaring war
+Fixed: CanSinkInSea for units uses the constDB chance value
+Added: AINoSinking so AI ships don't sink
+Added: Advances can add Production, Food, Science, Gold bonuses
+Added: IsBonusGood to resources so goods not on map can be enabled by buildings or tileimps
+Added: Civilization Bonuses Production, Food, Science, Gold, IncreaseHP, offense land seas, air and boat movement
+Fixed: When AIs go to war its now a pop-up
+Added: AutoExpireTreatyBase to userprofiletext to set the turns when treaties expire
+Fixed: Crash when you started more than 11 players
+Added: new gw.txt for new global warming format
+Added: EitherPrerequisite to Advances to enable a fluid tech tree like Civ4
+Added: PrerequisiteTileImp to terrain improvements, now you can specify that an imp must have been built first before you can build the other imp on it.
+
+
+
 2006-07-02 (revision 602)
 Added: ExcludedbyWonder to buildings, units, wonders 
 Added: PrerequisiteWonder to buildings and units

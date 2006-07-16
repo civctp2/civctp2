@@ -2265,7 +2265,7 @@ sint32 Player::CalcTotalBuildingUpkeep()
 	for(i = 0; i < n; i++) {
 		Unit *c = &(m_all_cities->Access(i));
 		bu += buildingutil_GetTotalUpkeep(c->GetImprovements(),
-		                                  wonderLevel);
+		                                  wonderLevel, m_owner);
 
 //    EMOD    	add new readiness modifier for buildings here?
  		bu *= GetSupportModifier();

@@ -45,7 +45,7 @@
 #include "ErrMsg.h"
 #include "Unit.h"
 #include "civarchive.h"
-
+#include "GovernmentRecord.h"
 #include "WonderTracker.h"
 #include "WonderRecord.h"
 #include "player.h"
@@ -100,7 +100,7 @@ sint32 buildingutil_GetProductionCost(const sint32 building_type)
 }
 
 sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
-										   sint32 wonderLevel)
+										   sint32 wonderLevel, sint32 owner)
 {
     //sint32 owner = 0;
 	sint32 upkeep = 0;
@@ -109,11 +109,12 @@ sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
 			if(g_theBuildingDB->Get(i)->GetUpkeep() > wonderLevel) {
 				upkeep += g_theBuildingDB->Get(i)->GetUpkeep();
 
-//EMOD added new Upkeep calculations (3-13-2006) out commented because AI wouldnt do science????
-//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnitWagesReadiness * g_player[m_owner]->GetNumUnits() * g_player[owner]->m_readiness->GetSupportModifier(g_player[owner]->GetGovernmentType()) * g_player[owner]->GetWagesPerPerson();
-//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerCity * g_player[m_owner]->GetNumCities();
-//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerCitySq * g_player[owner]->GetNumCities() *  g_player[owner]->GetNumCities();
-//				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnit * g_player[owner]->GetNumUnits();
+//EMOD added new Upkeep calculations (3-13-2006) restored 12-JULY-2006
+				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnitWagesReadiness * g_player[owner]->GetNumUnits() * g_player[owner]->m_readiness->GetSupportModifier(g_player[owner]->GetGovernmentType()) * g_player[owner]->GetWagesPerPerson();
+				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerCity * g_player[owner]->GetNumCities() * g_theGovernmentDB->Get(g_player[owner]->GetGovernmentType())->GetTooManyCitiesThreshold();
+				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerCitySq * g_player[owner]->GetNumCities() *  g_player[owner]->GetNumCities();
+				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnit * g_player[owner]->GetNumUnits();
+				upkeep += g_theBuildingDB->Get(i)->GetUpkeepPerUnitSupport * g_player[owner]->m_readiness->TotalUnitGoldSupport() * g_player[owner]->GetWagesPerPerson() * g_player[owner]->m_readiness->GetSupportModifier(g_player[owner]->GetGovernmentType());
 //end EMOD
 			}
 		}
@@ -125,6 +126,7 @@ sint32 buildingutil_GetBlgUpkeep(const sint32 building_type)
 {
     return g_theBuildingDB->Get(building_type)->GetUpkeep();
 }
+
 
 sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements, 
 												sint32 wonderLevel)

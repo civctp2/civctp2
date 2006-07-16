@@ -1188,6 +1188,7 @@ sint32 Advances::GetProjectedScience() const
 	sint32 projTradeBeforeCrime, projWages;
 	sint32 totalUpkeep = 0;
 	sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
+	//sint32 owner = g_player[m_owner]; //EMOD for modified GetTotalUpkeep
 
 	for(i = g_player[m_owner]->m_all_cities->Num() - 1; i >= 0; i--) {
 		Unit city = g_player[m_owner]->m_all_cities->Access(i);
@@ -1198,7 +1199,7 @@ sint32 Advances::GetProjectedScience() const
 		totalTrade += projNetGold;
 		totalGrossGold += projGrossGold;
 
-		totalUpkeep += buildingutil_GetTotalUpkeep(city.GetData()->GetCityData()->GetImprovements(), wonderLevel);
+		totalUpkeep += buildingutil_GetTotalUpkeep(city.GetData()->GetCityData()->GetImprovements(), wonderLevel, m_owner);
 		totalPopScience += projPopScience;
 	}
 

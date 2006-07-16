@@ -8,4 +8,6 @@ Pop {
 	Int Food = 0
 	Int Production = 0
 	Int Commerce = 0
+	Int Culture = 0
+	Int Defense = 0
 }

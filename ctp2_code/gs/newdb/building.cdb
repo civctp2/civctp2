@@ -61,7 +61,7 @@ Building {
 	Record Government[]         ExcludedByGovernmentType // Destroyed if not of this government
 	Record Wonder[]				PrerequisiteWonder		 // Added by E to limit units to cities with certain wonders
 	Record Wonder[]				ExcludedByWonder		 // to prevent some units being built
-
+	Bit(Int)					NeedsPopCountToBuild        // FU added by E
 
 	Record Resource[]           RequiresGood             // Added by E -- having a bldg gives a city a good
 	Record Resource[]           ProducesGood             // Added by E -- having a bldg gives a city a good
@@ -85,6 +85,8 @@ Building {
 	Bit(Int)   UpkeepPerUnitWagesReadiness // FU added by E 
 	Bit(Int)   UpkeepPerCity               // FU added by E 
 	Bit(Int)   UpkeepPerCitySq             // FU added by E
+	Bit(Int)   NewPopLimit					// FU added by E
+	Bit(Int)   UpkeepPerUnitSupport
 
 	# flags
 	Bit        Capitol

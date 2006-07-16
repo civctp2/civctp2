@@ -11,5 +11,22 @@ DiplomacyThreat {
 	}
 
 	StringID Details
-		
+
+	# Check before displaying proposal in list
+	Bit Disabled
+	Bit HasAlly
+	Bit HasBorderIncursion
+	Bit IsPirating
+	Bit HasEmbassy
+	Bit HasHotwar
+	Bit NoHotwar
+	Bit HasPeaceTreaty
+	Bit HasAlliance
+	Bit HasNuclearWeapons
+	Bit HasBioWeapons
+	Bit HasNanoWeapons
+	Bit HasEmbargo
+	Bit HasMilitaryAgreement
+	Bit HasPollutionAgreement
+	Bit HasPollution		
 }

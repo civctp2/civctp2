@@ -653,7 +653,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		return false;
 
 	if(cell->GetOwner() == -1) {
-		if(rec->HasIntBorderRadius()) {
+		if(rec->HasIntBorderRadius()) {  //Add has unit IsWorker?
 			if(!g_player[pl]->IsVisible(pos)) {
 				
 				return false;
@@ -668,7 +668,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		bool const haveAlliance	= 
 			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
 		if(cell->GetOwner() > 0 && haveAlliance) {
-			if(rec->GetClassRoad() ||
+			if(rec->GetClassRoad() ||               //Why only build roads in allied territory?
 				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
 				
 				
@@ -742,28 +742,39 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		}
 
 // EMOD for contiguous irrigation
-		if(rec->GetNeedsIrrigation()) {
-			RadiusIterator it(pos, 2);
-			for(it.Start(); !it.End(); it.Next()) {
-				Cell *icell = g_theWorld->GetCell(it.Pos());
-				for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
-					sint32 imp = icell->GetDBImprovement(ti);
-					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-					if((!g_theWorld->IsRiver(it.Pos())) && (!trec->GetNeedsIrrigation())){  
-						return false;
-					}
-				}
-			}
-		}
+//		if(rec->GetNeedsIrrigation()) {
+//			bool haswater = false;
+//			RadiusIterator it(pos, 1);
+//			for(it.Start(); !it.End(); it.Next()) {
+//				Cell *icell = g_theWorld->GetCell(it.Pos());
+//				for(sint32 ti = 0; ti < icell->GetNumDBImprovements(); ti++) {
+//					sint32 ti;
+//					sint32 imp = icell->GetDBImprovement(ti);
+//					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+//				
+//				if(g_theWorld->IsRiver(it.Pos()) || !trec->GetNeedsIrrigation()){  
+//						haswater = true;
+//						break;
+//					}
+//				}
+//			}
+//			if(!haswater)
+//				return false;
+//		}
 
 //for PrerequisiteTileImp
-		if(rec->GetNumPrerequisiteTileImp()) {
-			for(sint32 ti = 0; ti < rec->GetNumPrerequisiteTileImp(); ti++) {
-				if(!cell->GetDBImprovement(ti)) {
-					return false;
+		if(rec->GetNumPrerequisiteTileImp() > 0) {
+			bool hasCorrectImp = false;
+			for(i = 0; i < rec->GetNumPrerequisiteTileImp(); i++) {
+				if(rec->GetPrerequisiteTileImpIndex(i) == cell->GetDBImprovement(i)) {
+						hasCorrectImp = true;
+						break;
 				}
 			}
+			if(!hasCorrectImp)
+				return false;
 		}
+
 	// End EMOD
 	}
 	return true;

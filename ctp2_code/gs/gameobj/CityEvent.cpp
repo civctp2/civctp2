@@ -336,11 +336,23 @@ STDEHANDLER(MakePopEvent)
 	if(!args->GetPlayer(0, origPlayer))
 		origPlayer = -1;
 
+// EMOD to ADD City population caps 
+//	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetCityPopCap() {
+//	sint32 PopCap = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetCityPopCap()
+//	sint32 PopCapIncrease = buildingutil_GetIncreasesPopCap(city.CD->GetEffectiveBuildings());
+//			PopCap += PopCapIncrease;				
+//		if cd.Popcount() < PopCap {
+//			city.CD()->ChangePopulation(1);
+//		}
+//	} else {
+
 	city.CD()->ChangePopulation(1);
 	if (origPlayer >= 0) {
 		city.CD()->AddSlaveBit(origPlayer);
 		city.CD()->ChangeSpecialists(POP_SLAVE, 1);
 	}
+
+
 	return GEV_HD_Continue;
 }
 

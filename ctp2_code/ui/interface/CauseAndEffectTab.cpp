@@ -566,7 +566,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		
 		sint32 commerceBuildingUpkeep = buildingutil_GetTotalUpkeep(
 			cityData->GetImprovements(),
-			wonderutil_GetDecreaseMaintenance(player->m_builtWonders));
+			wonderutil_GetDecreaseMaintenance(player->m_builtWonders), player->GetOwner());
 
 		
 		

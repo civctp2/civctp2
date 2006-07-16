@@ -40,8 +40,8 @@
 void buildingutil_Initialize();
 sint32 buildingutil_GetProductionCost(const sint32 building_type);
 sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
-										   sint32 wonderLevel);
-sint32 buildingutil_GetBlgUpkeep(const sint32 building_type);
+										   sint32 wonderLevel, sint32 owner);
+sint32 buildingutil_GetBlgUpkeep(const sint32 building_type, sint32 owner);
 sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements, 
 												sint32 wonderLevel);
 sint32 buildingutil_GetDesignatesCapitol(const uint64 built_improvements);

@@ -3602,7 +3602,7 @@ sint32 CityData::GetSupportBuildingsCost() const
 {
 	sint32 wonderLevel = wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
 	
-	return buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel);
+	return buildingutil_GetTotalUpkeep(m_built_improvements, wonderLevel, m_owner);
 }
 
 //----------------------------------------------------------------------------
@@ -4343,31 +4343,18 @@ void CityData::AddWonder(sint32 type)
 			if(point == it.Pos())
 				continue;
 
-			//for some reason when i combined them like below it wouldn't build in water
-			// this one still only allows wonder in one spot
-			if(SpotFound.IsValid()) {
+			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos()) 
+			){
 				SpotFound = it.Pos();
 			}
-
-			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-				SpotFound = it.Pos();
-			}
-
-			if(ocell->GetNumDBImprovements() > ncell->GetNumDBImprovements()) { 
-				SpotFound = it.Pos();
-			}
-			if(ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain()) {
+			
+				if ((!SpotFound.IsValid())
+				|| ((ncell->GetNumDBImprovements() > ocell->GetNumDBImprovements())  
+				&& (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) 
+				){
 					SpotFound = it.Pos(); 
-			}
-
-			// this one still only allows wonder in one spot			
-//			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
-//				if((SpotFound.IsValid())
-//				|| (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())
-//				){
-//					SpotFound = it.Pos();
-//				}
-//			}
+				}
+			//}
 		}
 		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
@@ -6316,6 +6303,15 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			return FALSE;
 	}
 
+	// added by E - some buildings can only be built once city reaches certain size
+	sint32 pop;
+	if(rec->GetNeedsPopCountToBuild(pop)) {
+		if(PopCount() < pop) {
+			return FALSE;
+		}
+	}
+
+///END CONDITIONS
 	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex());
 }
 
@@ -7656,6 +7652,40 @@ void CityData::FindBestSpecialists()
 
 		if(!g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
 			continue;
+//		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSpecialistCap() {
+////////////////////////SCIENTISTS
+//			sint32 EnabledScientists = buildingutil_GetEnablesScientists(GetEffectiveBuildings());
+//			scientists += EnabledScientists;
+//			if (ScientistCount() => scientists){
+//				continue;
+
+////////////////////////MERCHANTS
+//			sint32 EnabledMerchants = buildingutil_GetEnablesMerchants(GetEffectiveBuildings());
+//			Merchants += EnabledMerchants;
+//			if (MerchantCount() => Merchants){
+//				continue;
+
+////////////////////////ENTERTAINERS
+//			sint32 EnabledEntertainers = buildingutil_GetEnablesEntertainers(GetEffectiveBuildings());
+//			Entertainers += EnabledEntertainers;
+//			if (EntertainerCount() => Entertainers){
+//			continue;
+
+///////////////////////LABORERS		
+//			sint32 EnabledLaborer = buildingutil_GetEnablesLaborers(GetEffectiveBuildings());
+//			Laborers += EnabledLaborers;
+//			if (LaborerCount() => Laborers){
+//				continue;
+
+///////////////////////FARMERS		
+//			sint32 EnabledFarmers = buildingutil_GetEnablesLaborers(GetEffectiveBuildings());
+//			Farmers += EnabledFarmers;
+//			if (FarmerCount() => Farmers){
+//				continue;
+///////////////////////
+//	}
+//////////////////////
+
 
 		if( rec->GetScience() > 0 &&
 			rec->GetScience() > maxValue[POP_SCIENTIST]) {

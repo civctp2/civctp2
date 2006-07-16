@@ -2978,10 +2978,13 @@ ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 
 
 void
-ControlPanelWindow::AppendItem(ctp2_ListBox *list,MBCHAR *string)
+ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, MBCHAR *string)
+//void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint32 userData)
+//void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
+
 {
 	
-	if ((list==NULL)||(string==NULL))
+	if ((a_List==NULL)||(string==NULL))
 		return;
 
 	
@@ -3005,7 +3008,7 @@ ControlPanelWindow::AppendItem(ctp2_ListBox *list,MBCHAR *string)
 	staticThing->SetText(string);
 
 	
-	list->AddItem(item);
+	a_List->AddItem(item);
 }
 
 
