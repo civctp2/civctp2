@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of impact of units on the world
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -48,7 +51,7 @@
 
 extern QuadTree<Unit> *g_theUnitTree;
 
-extern BOOL player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
+extern bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
 extern UnitPool *g_theUnitPool;
 
 
@@ -163,7 +166,7 @@ BOOL World::IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos,
     if (n < 1) 
         return FALSE; 
 
-    if (player_isEnemy(owner, a->GetOwner()) == FALSE) 
+    if (!player_isEnemy(owner, a->GetOwner()))
         return FALSE; 
 
 	if(is_check_only_visible && !a->IsVisible(owner)) {

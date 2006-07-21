@@ -1023,7 +1023,7 @@ Unit Player::CreateUnitNoPosition(const sint32 t,
 Unit Player::CreateUnit(const sint32 t, 
                         const MapPoint &pos, 
                         const Unit hc,
-                        BOOL tempUnit, 
+                        bool tempUnit, 
                         CAUSE_NEW_ARMY cause)
 {
 
@@ -1144,7 +1144,7 @@ Unit Player::CreateUnit(const sint32 t,
 void Player::CreateUnitSoon(sint32 t,
 							const MapPoint &point,
 							const Unit hc,
-							BOOL tempUnit,
+							bool tempUnit,
 							CAUSE_NEW_ARMY cause)
 {
 	CreateUnitRequest * req = new CreateUnitRequest(t,
@@ -1176,11 +1176,11 @@ void Player::InsertArmy(const MapPoint &point, const Unit &home_city,
 	sint32 i, n = army.Num();
 	static UnitDynamicArray revealed;
 	revealed.Clear();
-	BOOL revealed_unexplored; 
+	bool revealed_unexplored; 
 
 	for(i = 0; i < n; i++) {
 		army[i].Place(point, home_city);
-		sint32 r = army[i].SetPosition(point, revealed, revealed_unexplored);
+		bool r = army[i].SetPosition(point, revealed, revealed_unexplored);
 		Assert(r);
 		InsertUnitReference(army[i], cause);
 	}
@@ -1308,7 +1308,7 @@ Army Player::GetNewArmy(CAUSE_NEW_ARMY cause)
 
 void Player::AddArmy(const Army &army,
 					 const CAUSE_NEW_ARMY cause,
-					 BOOL fromNetwork,
+					 bool fromNetwork,
 					 const Unit &whereBuilt)
 {
 	if(m_all_armies->IsPresent(army)) {
@@ -1336,7 +1336,7 @@ void Player::AddArmy(const Army &army,
 }
 
 void Player::RemoveArmy(const Army &army, CAUSE_REMOVE_ARMY cause,
-						PLAYER_INDEX killedBy, BOOL fromNetwork)
+						PLAYER_INDEX killedBy, bool fromNetwork)
 {
 	g_selected_item->RegisterRemovedArmy(m_owner, army);
 	
@@ -1372,7 +1372,7 @@ sint32 Player::FindArmyIndex(const Army &army) const
 		if(m_all_armies->Access(i).m_id == army.m_id)
 			return i;
 	}
-	Assert(FALSE);
+	Assert(false);
 	return -1;
 }
 
@@ -1382,7 +1382,7 @@ sint32 Player::FindCityIndex(const Unit &find) const
 	  if(m_all_cities->Access(i) == find)
 		  return i;
 	}
-	Assert(FALSE);
+	Assert(false);
 	return 0;
 }
 
@@ -1663,8 +1663,7 @@ Unit Player::CreateCity(
 	return u; 
 }
 
-BOOL Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
-
+bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 {
 	m_all_cities->Insert(u);
 
@@ -1678,12 +1677,9 @@ BOOL Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 	u.GetPos(pos);
 
 
-	BOOL we_made_the_first_capitol = FALSE;
 	if(m_first_city) {
-		m_all_cities->Access(0).AccessData()->GetCityData()->SetCapitol(TRUE);
-		*m_capitol = m_all_cities->Access(0);
+		SetCapitol(m_all_cities->Access(0));
 		m_first_city = FALSE;
-		we_made_the_first_capitol = TRUE;
 	}
 
 
@@ -1692,25 +1688,6 @@ BOOL Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 
 	}
 
-
-
-	if (we_made_the_first_capitol) {
-		sint32 idx_cap = 0;
-		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(g_theBuildingDB->Get(i)->GetCapitol()) {
-				idx_cap = i;
-				break;
-			}
-		}
-
-		g_player[m_owner]->RegisterCreateBuilding(u, idx_cap);
-		g_player[m_owner]->RegisterNewCapitolBuilding(u);
-	}
-
-
-
-
-
 	if (m_playerType != PLAYER_TYPE_ROBOT)
 	{
 		MainControlPanel::UpdateCityList();
@@ -1718,18 +1695,11 @@ BOOL Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 
 	m_maxCityCount = MAX(m_maxCityCount, m_all_cities->Num());
 
-	return TRUE;
+	return true;
 }
 
-BOOL Player::RefreshAIArmyReference(const Army &the_army)
-{
-	bool StopCallingThisFuckingFunction = false;
-	Assert(StopCallingThisFuckingFunction);
-
-	return TRUE;
-}
-
-BOOL Player::RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARMY cause, sint32 &killedBy)
+// Does nothing
+bool Player::RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARMY cause, sint32 &killedBy)
 {
 #if 0   /// @todo Find out what this is supposed to achieve
 	sint32 unit_type = killme.GetType();
@@ -1761,11 +1731,11 @@ BOOL Player::RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARM
 	}
 #endif
 
-	return TRUE;
+	return true;
 }
 
 
-BOOL Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CITY cause, sint32 &killedBy)
+bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CITY cause, sint32 &killedBy)
 {
 	sint32 i;
 	sint32 n = m_all_cities->Num();
@@ -1781,7 +1751,7 @@ BOOL Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 	}
 
 	if (killme_index < 0) {
-		return FALSE; 
+		return false;
 	}
 
 	if (*m_capitol == killme) { 
@@ -1804,11 +1774,11 @@ BOOL Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 
 	MainControlPanel::UpdateCityList();
 
-	return TRUE;
+	return true;
 }
 
-
-BOOL Player::RegisterCityAttack(const Unit &c, const PLAYER_INDEX &his_owner, 
+// Does nothing
+bool Player::RegisterCityAttack(const Unit &c, const PLAYER_INDEX &his_owner, 
                                 const Unit &his_unit, UNIT_ORDER_TYPE attack_type)
 {
 #if 0   // Useless code
@@ -1823,7 +1793,7 @@ BOOL Player::RegisterCityAttack(const Unit &c, const PLAYER_INDEX &his_owner,
 		
 	}
 #endif
-	return TRUE;
+	return true;
 }
 
 
@@ -2090,27 +2060,41 @@ void Player::BeginTurnProduction()
 				m_gold->AddGold(bpe);
 			}
 
-			CityInfluenceIterator it(inst.RetPos(), rec->HasIntBorderRadius());
-			for(it.Start(); !it.End(); it.Next()) {
-				Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-			
-				if (rec->GetCanExportTileValue()) {
-					m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
-					m_gold->AddGold(radiuscell->GetGoldProduced());
-				}
+			if(rec->HasIntBorderRadius()){
+				sint32 radius;
+				rec->GetIntBorderRadius(radius);
+				CityInfluenceIterator it(inst.RetPos(), radius);
+				for(it.Start(); !it.End(); it.Next()) {
+					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
 
-				sint32 good;
-				if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(it.Pos(), good))){
-					for (sint32 c=0; c < n; c++) {
-						CityData *cd = m_all_cities->Access(c).CD();
-						if(!cd->IsLocalResource (good)) {
-							cd->AddGoodToCity(good);
-							break;
+					if (rec->GetCanExportTileValue()) {
+						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
+						m_gold->AddGold(radiuscell->GetGoldProduced());
+					}
+
+					sint32 good;
+					if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(it.Pos(), good))){
+						for (sint32 c=0; c < n; c++) {
+							CityData *cd = m_all_cities->Access(c).CD();
+							if(!cd->IsLocalResource (good)) {
+								cd->AddGoodToCity(good);
+								break;
+							}
 						}
 					}
 				}
-			}
 
+				// EMOD if intborderradius is 0 then can we get rid of 
+				// the top code to gove colonies an optional radius?
+				if (rec->GetCanExportTileValueRadius()) {
+					RadiusIterator it(inst.RetPos(), radius);
+					for(it.Start(); !it.End(); it.Next()) {
+						Cell *radiuscell = g_theWorld->GetCell(it.Pos());
+						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
+						m_gold->AddGold(radiuscell->GetGoldProduced());
+					}
+				}
+			}
 		}
 	}
 
@@ -2904,7 +2888,7 @@ void Player::EndTurnPollution(void)
 }
 
 
-void Player::ProcessUnitOrders(BOOL currentOnly)
+void Player::ProcessUnitOrders(bool currentOnly)
 {
 
 
@@ -2938,7 +2922,7 @@ sint32 Player::GetAverageHappiness()
 	return totalHappiness;
 }
 
-void Player::RegisterProfessionalChange(BOOL on, Unit &u)
+void Player::RegisterProfessionalChange(bool on, Unit &u)
 {
 	if (on) {
 		m_readiness->UnsupportUnit(u, m_government_type);
@@ -2993,8 +2977,8 @@ void Player::DelTailPathOrder(sint32 index)
 	m_all_armies->Access(index).ClearOrders();
 }
 
-sint32 Player::GetNearestCity(const MapPoint &pos, Unit &nearest, 
-							  double &distance, BOOL butNotThisOne, const sint32 continent)
+bool Player::GetNearestCity(const MapPoint &pos, Unit &nearest, 
+							  double &distance, bool butNotThisOne, const sint32 continent)
 {
     sint32 j, n;
     MapPoint cpos, diff; 
@@ -3006,7 +2990,7 @@ sint32 Player::GetNearestCity(const MapPoint &pos, Unit &nearest,
        nearest = g_theWorld->GetCity(pos);
        if (nearest.GetOwner() == m_owner) { 
            distance = 0; 
-           return TRUE; 
+           return true; 
        } 
     }
 
@@ -3047,7 +3031,7 @@ sint32 Player::GetNearestCity(const MapPoint &pos, Unit &nearest,
     return nearest.m_id != (0);
 }
 
-sint32 Player::GetSlaveCity(const MapPoint &pos, Unit &city)
+bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 {
 	MapPoint cpos;
 	sint32 d;
@@ -3078,20 +3062,20 @@ sint32 Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 		}
 	}
 	if(city.m_id != (0))
-		return TRUE;
+		return true;
 
 	
 	double distance;
 	return GetNearestCity(pos, city, distance);
 }
 
-BOOL Player::GetNearestFort(const MapPoint &src, MapPoint &dest)
+bool Player::GetNearestFort(const MapPoint &src, MapPoint &dest)
 {
 	sint32 i;
 	MapPoint chkpos, diff;
 	double d;
 	double mindist = 1000000;
-	BOOL foundOne = FALSE;
+	bool foundOne = false;
 
 	for(i = 0; i < m_allInstallations->Num(); i++) {
 		chkpos = m_allInstallations->Access(i).RetPos();
@@ -3101,20 +3085,20 @@ BOOL Player::GetNearestFort(const MapPoint &src, MapPoint &dest)
 			if(d < mindist) {
 				mindist = d;
 				dest = chkpos;
-				foundOne = TRUE;
+				foundOne = true;
 			}
 		}
 	}
 	return foundOne;
 }
 
-BOOL Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint32 continent)
+bool Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint32 continent)
 {
 	sint32 i;
 	MapPoint chkpos, diff;
 	double d;
 	double mindist = -1.0;
-	BOOL foundOne = FALSE;
+	bool foundOne = false;
 	sint32 cont;
 
 	for(i = 0; i < m_allInstallations->Num(); i++) {
@@ -3133,7 +3117,7 @@ BOOL Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint3
 			if(mindist == -1.0 || d < mindist) {
 				mindist = d;
 				dest = chkpos;
-				foundOne = TRUE;
+				foundOne = true;
 			}
 		}
 	}
@@ -3141,103 +3125,78 @@ BOOL Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint3
 	return foundOne;
 }
 
-sint32 Player::Settle(Army &settle_army)
+bool Player::Settle(Army &settle_army)
 {
-    if (m_all_armies->Num() < 1) {
+	if (m_all_armies->Num() < 1) {
 		DPRINTF(k_DBG_GAMESTATE, ("No armies?!\n"));
-        return FALSE; 
+		return false;
 	}
 
-
-
-	
-	
-	
-
-    sint32 n = settle_army.Num(); 
-    Assert(0<n);
+	sint32 n = settle_army.Num(); 
+	Assert(0<n);
 
 	MapPoint pos;
-	sint32 curID;
 	
-    sint32 searching = TRUE;
-    sint32 i;
-
-    for (i=0; i<n; i++) { 
-
-        curID = settle_army[i].m_id; 
-        
+	bool searching = true;
+	sint32 i;
+	for(i = 0; i < n; i++)
+	{
 //		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 //		BOOL isVisible = settle_army[0].GetVisibility() & (1 << visiblePlayer);
  		
 		settle_army.GetPos(pos);
 
-    if (g_theWorld->HasCity(pos)) { 
-		DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
+		if (g_theWorld->HasCity(pos))
+		{
+			DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
 
-//    EMOD  here for adding settler to a city?
-		Unit c = g_theWorld->GetCity(pos);
-		c.CD()->ChangePopulation(1);
-		settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
-		// This called ALL player Units to be killed!
-//		for(i = m_all_units->Num() - 1; i >= 0; i--) {
-//		m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());  
-//		}	
-//   EMOD
-        return TRUE; 
-	}
+			// EMOD  here for adding settler to a city?
+			Unit c = g_theWorld->GetCity(pos);
+			c.CD()->ChangePopulation(1);
+			settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
+			// This called ALL player Units to be killed!
+//			for(i = m_all_units->Num() - 1; i >= 0; i--) {
+//			m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());  
+			// EMOD
+			return true;
+		}
 
-
-
-
-        if (settle_army[i].Settle()) { 
-            searching = FALSE;
+		if (settle_army[i].Settle()) { 
+			searching = false;
 
 #ifdef MOVED_TO_SOUNDEVENT_CPP
-			if (g_soundManager) {
-				if (visiblePlayer == m_owner ||	isVisible) {
+			if (g_soundManager)
+			{
+				if (visiblePlayer == m_owner ||	isVisible)
+				{
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
 											gamesounds_GetGameSoundID(GAMESOUNDS_SETTLE_CITY),
 											pos.x,
 											pos.y);
 				}
 			}
-
 #endif
 
 #ifdef MOVED_TO_INTERFACEEVENT_CPP
 			sint32 city_idx = m_all_cities->Num()-1;
-			if (0 <= city_idx) { 
-				
-				
-				if (m_owner == g_selected_item->GetVisiblePlayer()) {
+			if (0 <= city_idx)
+			{
+				if (m_owner == g_selected_item->GetVisiblePlayer())
+				{
 					c3_utilitydialogbox_NameCity(m_all_cities->Access(city_idx));
 				}
-
-				
-				
 			}
 #endif
-
-            break;
-        }
-    }
-
-    if (searching) {
-
-
-
-
-        return FALSE; 
+			break;
+		}
 	}
 
+	if (searching)
+	{
+		return false;
+	}
 
-
-
-		                                         
-		
-
-	return TRUE;
+	return true;
 }
 
 
@@ -3317,7 +3276,7 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 			
 			break;
 		default:
-			Assert(FALSE);
+			Assert(false);
 			return TradeRoute();
 	}
 #ifdef CTP1_TRADE
@@ -3838,11 +3797,10 @@ void Player::BuildImprovement(sint32 type, Unit city)
 	city.BuildImprovement(type);
 }
 
-BOOL Player::ChangeCurrentlyBuildingItem(Unit city, sint32 category, sint32 item_type)
+bool Player::ChangeCurrentlyBuildingItem(Unit city, sint32 category, sint32 item_type)
 {
 	Assert(city.GetOwner() == m_owner);
 
-   
 	return city.ChangeCurrentlyBuildingItem(category, item_type);
 }
 
@@ -4194,29 +4152,29 @@ void Player::OwnExploredArea()
 	}
 }
 
-BOOL Player::IsExplored(const MapPoint &pos) const 
+bool Player::IsExplored(const MapPoint &pos) const 
 {
 	return m_vision->IsExplored(pos);
 }
 
-BOOL Player::IsVisible(const MapPoint &pos) const 
+bool Player::IsVisible(const MapPoint &pos) const 
 {
 	return m_vision->IsVisible(pos);
 }
 
-BOOL Player::IsExplored(sint32 x, sint32 y) const 
+bool Player::IsExplored(sint32 x, sint32 y) const 
 {
 	MapPoint pnt(x,y);
 	return m_vision->IsExplored(pnt);
 }
 
-BOOL Player::IsVisible(sint32 x, sint32 y) const 
+bool Player::IsVisible(sint32 x, sint32 y) const 
 {
 	MapPoint pnt(x,y);
 	return m_vision->IsVisible(pnt);
 }
 
-BOOL Player::GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell)
+bool Player::GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell)
 { 
 	return m_vision->GetLastSeen(point, ucell);
 }
@@ -4261,7 +4219,7 @@ uint32 Player::GetAverageEventPollution(void)
 
 void Player::AttemptRevolt(void)
 {
-	BOOL	*revolution ;											
+	bool	*revolution;
 
 	sint32	i, j,
 			cityNum,
@@ -4280,8 +4238,8 @@ void Player::AttemptRevolt(void)
     if (cityNum < 1) 
         return; 
 
-	revolution = new BOOL[cityNum] ;
-	memset(revolution, FALSE, sizeof(BOOL) * cityNum) ;
+	revolution = new bool[cityNum] ;
+	memset(revolution, false, sizeof(bool) * cityNum) ;
 
 	
 	for (i=0; i<cityNum; i++)
@@ -4293,7 +4251,7 @@ void Player::AttemptRevolt(void)
 			{
 			if (cityData->ShouldRevolt(0))							
 				{
-				revolution[i] = TRUE ;
+				revolution[i] = true;
 
 				
 				for (j=0; j<cityNum; j++)
@@ -4307,18 +4265,12 @@ void Player::AttemptRevolt(void)
 						if (inciteBonus >= 0)						
 							{
 							if (cityData->ShouldRevolt(inciteBonus))
-								revolution[i] = TRUE ;
-
+								revolution[i] = true;
 							}
-
 						}
-
 					}
-
 				}
-
 			}
-
 		}
 
 	for (i=cityNum - 1; i>= 0; i--)
@@ -4619,7 +4571,7 @@ void Player::GiveMap(PLAYER_INDEX recipient)
 
 
 
-BOOL Player::IsPollutionReduced(void)
+bool Player::IsPollutionReduced(void)
 {
 
 #define k_DIPLOMATIC_REDUCE_POLLUTION_THRESHOLD		10
@@ -4628,10 +4580,10 @@ BOOL Player::IsPollutionReduced(void)
 		{
 		DPRINTF(k_DBG_INFO, ("Player %d pollution is above threshold\n", m_owner));
 
-		return (FALSE);
+		return false;
 		}
 
-	return (TRUE) ;
+	return true;
 }
 
 
@@ -4645,18 +4597,18 @@ BOOL Player::IsPollutionReduced(void)
 
 
 
-BOOL Player::IsViolatingPeace(PLAYER_INDEX player)
+bool Player::IsViolatingPeace(PLAYER_INDEX player)
 {
 	if (mask_alliance & (0x01 << player))
 	{
 		DPRINTF(k_DBG_INFO, ("Player %d is violating Player %d\n", m_owner, player)) ;
 
-		return (TRUE) ;
+		return true;
 	}
 
 	DPRINTF(k_DBG_INFO, ("Player %d is not violating Player %d\n", m_owner, player)) ;
 
-	return (FALSE) ;
+	return false;
 }
 
 
@@ -4746,12 +4698,11 @@ Agreement Player::FindAgreement(const PLAYER_INDEX otherParty) const
 
 
 
-
-BOOL Player::FulfillCaptureCityAgreement(Unit city)
+// Removed return statement at the beginning
+// Code is now executed but might be buggy
+// Cause for the return statement unknown
+bool Player::FulfillCaptureCityAgreement(Unit city)
 {
-
-return TRUE;
-#if 0   // CTP1?
 	AgreementDynamicArray	killList ;
 
 	sint32	i,
@@ -4799,7 +4750,7 @@ return TRUE;
 		else
 		{
 			
-			Assert(FALSE) ;
+			Assert(false);
 		}
 
 
@@ -4814,95 +4765,10 @@ return TRUE;
 	{
 	    killList.KillList() ;		
 
-		return (TRUE) ;												
+		return true;
 	}
-
-	return (FALSE) ;
-#endif
+	return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Agreement Player::MakeEndPollutionPact(PLAYER_INDEX player)
 {
@@ -4915,19 +4781,6 @@ Agreement Player::MakeEndPollutionPact(PLAYER_INDEX player)
 
 	return a;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Agreement Player::MakeLeaveOurLands(PLAYER_INDEX player)
 {
@@ -5039,213 +4892,7 @@ Agreement Player::MakeCaptureCityPact(PLAYER_INDEX player, Unit &city)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-BOOL Player::WillViolatePact(PLAYER_INDEX otherParty)
+bool Player::WillViolatePact(PLAYER_INDEX otherParty)
 	{
 	sint32	i,
 			agreedNum ;
@@ -5260,14 +4907,14 @@ BOOL Player::WillViolatePact(PLAYER_INDEX otherParty)
 				{
 				DPRINTF(k_DBG_INFO, ("Player #%d will violate pact with Player #%d\n", m_owner, otherParty)) ;
 
-				return (TRUE) ;
+				return true;
 				}
 
 		}
 
 	DPRINTF(k_DBG_INFO, ("Player %d has no pacts with Player %d\n", m_owner, otherParty)) ;
 
-	return (FALSE) ;
+	return false;
 	}
 
 
@@ -5283,19 +4930,19 @@ BOOL Player::WillViolatePact(PLAYER_INDEX otherParty)
 
 
 
-BOOL Player::WillViolateCeaseFire(PLAYER_INDEX other_player)
+bool Player::WillViolateCeaseFire(PLAYER_INDEX other_player)
 {
 	if (FindAgreement(AGREEMENT_TYPE_CEASE_FIRE, other_player) == Agreement())
 	{
 		DPRINTF(k_DBG_INFO, ("Player #%d does not have a cease fire agreement with Player #%d\n", m_owner, other_player)) ;
-		return FALSE;
+		return false;
 	}
 
 	DPRINTF(k_DBG_INFO, ("Player %d is violating cease fire agreement of Player %d\n", m_owner, other_player)) ;
-	return TRUE;
+	return true;
 }
 
-BOOL Player::HaveNoPiracyAgreement(PLAYER_INDEX other_player)
+bool Player::HaveNoPiracyAgreement(PLAYER_INDEX other_player)
 {
 	return FindAgreement(AGREEMENT_TYPE_NO_PIRACY, other_player) != Agreement();
 }
@@ -5433,7 +5080,7 @@ void Player::MakeCeaseFire(PLAYER_INDEX other_player)
 
 
 
-void Player::BreakCeaseFire(PLAYER_INDEX other_player, BOOL sendMessages)
+void Player::BreakCeaseFire(PLAYER_INDEX other_player, bool sendMessages)
 {
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BREAK_CEASE_FIRE,
@@ -5499,7 +5146,7 @@ void Player::BeginTurnAgreements()
 		} else if(ag.GetRecipient() == m_owner) {
 			ag.BeginTurnRecipient();
 		} else {
-			Assert(FALSE);
+			Assert(false);
 		}
 
 		
@@ -6151,233 +5798,6 @@ void Player::RequestOfferPactEndPollution(const PLAYER_INDEX recipient)
 	g_slicEngine->Execute(so) ;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void Player::RequestExchangeAdvance(const PLAYER_INDEX recipient, AdvanceType &advance, AdvanceType &desired_advance)
 	{
 	
@@ -6525,7 +5945,6 @@ void Player::DumpRequests(void)
 
 DiplomaticRequest Player::RequestIndexToRequest(sint32 requestIndex)
 	{
-	
 	return (m_requests->Get(requestIndex)) ;
 	}
 
@@ -6541,7 +5960,7 @@ DiplomaticRequest Player::RequestIndexToRequest(sint32 requestIndex)
 
 
 
-void Player::DiplomaticMute(PLAYER_INDEX player, BOOL enable)
+void Player::DiplomaticMute(PLAYER_INDEX player, bool enable)
 	{
 	Assert((player>=0) && (player<k_MAX_PLAYERS)) ;
 	if ((player<=0) || (player>k_MAX_PLAYERS))
@@ -6570,10 +5989,10 @@ void Player::DiplomaticMute(PLAYER_INDEX player, BOOL enable)
 
 
 
-
-BOOL Player::IsMuted(PLAYER_INDEX player)
+// Unused
+bool Player::IsMuted(PLAYER_INDEX player)
 	{
-	return (m_diplomatic_mute & (1<<player)) ;
+	return static_cast<bool>(m_diplomatic_mute & (1<<player)) ;
 	}
 
 
@@ -6588,7 +6007,7 @@ BOOL Player::IsMuted(PLAYER_INDEX player)
 
 
 
-BOOL Player::IsViolatingBorders(PLAYER_INDEX player)
+bool Player::IsViolatingBorders(PLAYER_INDEX player)
 	{
 	PLAYER_INDEX	o ;
 
@@ -6606,14 +6025,14 @@ BOOL Player::IsViolatingBorders(PLAYER_INDEX player)
 			{
 			DPRINTF(k_DBG_INFO, ("Player %d is violating the borders of Player %d\n", m_owner, player)) ;
 
-			return (TRUE) ;											
+			return true;
 			}
 
 		}
 
 	DPRINTF(k_DBG_INFO, ("Player %d is not violating the borders of Player %d\n", m_owner, player)) ;
 
-	return (FALSE) ;												
+	return false;
 	}
 
 
@@ -6631,13 +6050,13 @@ BOOL Player::IsViolatingBorders(PLAYER_INDEX player)
 
 
 
-BOOL Player::GiveGold(const PLAYER_INDEX other_player, const Gold &amount)
+bool Player::GiveGold(const PLAYER_INDEX other_player, const Gold &amount)
 	{
 	if (!m_gold->GiveGold(amount))
 		{
 		DPRINTF(k_DBG_GAMESTATE, ("Player %d does not have enough to give %d gold to Player %d\n", m_owner, amount.GetLevel(), other_player)) ;
 
-		return (FALSE) ;
+		return false;
 		}
 
     Assert(0 <= other_player); 
@@ -6646,7 +6065,7 @@ BOOL Player::GiveGold(const PLAYER_INDEX other_player, const Gold &amount)
 	g_player[other_player]->m_gold->AddGold(amount) ;
 	DPRINTF(k_DBG_GAMESTATE, ("Player %d gave %d gold to Player %d\n", m_owner, amount.GetLevel(), other_player)) ;
 
-	return (TRUE) ;
+	return true;
 	}
 
 
@@ -6668,7 +6087,6 @@ void Player::BequeathGold(const Gold &amount)
 	{
 	m_gold->AddGold(amount) ;
 	DPRINTF(k_DBG_GAMESTATE, ("Player has been given %d gold\n", amount.GetLevel())) ;
-
 	}
 
 
@@ -6687,7 +6105,7 @@ void Player::BequeathGold(const Gold &amount)
 
 void Player::GiveCity(const PLAYER_INDEX player, const sint32 c)
 {
-	Assert(FALSE);
+	Assert(false);
 #if 0
 	Unit	u = m_all_cities->Get(c).m_id ;
 
@@ -6699,11 +6117,11 @@ void Player::GiveCity(const PLAYER_INDEX player, const sint32 c)
 	MapPoint oldPos;
 	u.GetPos(oldPos);
 
-	GetNearestCity(oldPos, city, dist, TRUE);
+	GetNearestCity(oldPos, city, dist, true);
 	city.GetPos(newPos);
 
-    BOOL revealed_foreign_units; 
-    BOOL revealed_unexplored; 
+    bool revealed_foreign_units; 
+    bool revealed_unexplored; 
 
 
 	cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored) ;
@@ -6754,13 +6172,13 @@ void Player::GiveCity(const PLAYER_INDEX recipient, Unit city)
 		}
 	}  else {
 		c.GetPos(newPos);
-		BOOL revealed_foreign_units; 
-		BOOL revealed_unexplored;
+		bool revealed_foreign_units;
+		bool revealed_unexplored;
 
 		cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored, recipient) ;
 	}
 
-	city.ResetCityOwner(recipient, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY) ;
+	city.ResetCityOwner(recipient, false, CAUSE_REMOVE_CITY_DIPLOMACY) ;
 
 }
 
@@ -6845,12 +6263,12 @@ void Player::AddMessage(Message &msg)
 #ifdef _DEBUG
 		   || g_robotMessages
 #endif
-			) 
-			{
-				if(msg.UseDirector() && 
-				   ((!g_currentMessageWindow) ||
-					(!g_currentMessageWindow->GetMessage()) ||
-					(!g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())))) {
+		){
+			if(msg.UseDirector()
+			&&(!g_currentMessageWindow
+			|| !g_currentMessageWindow->GetMessage()
+			|| !g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage()))
+			){
 					g_director->AddMessage(msg);
 				} else if(msg.IsAlertBox()) {
 					if(!messagewin_IsModalMessageDisplayed()) {
@@ -6858,21 +6276,21 @@ void Player::AddMessage(Message &msg)
 					}
 				} else {
 					messagewin_CreateMessage( msg );
-					if(msg.IsInstantMessage() &&
+				if(msg.IsInstantMessage()
 						// JJB added this to prevent instant messages showing
 						// out of turn in hotseat games.
 						// With the existing behaviour they would show immediately
 						// which would often mean that they show on the wrong players
 						// turn.
-						 g_selected_item->GetVisiblePlayer() == m_owner &&
-					   ((!g_currentMessageWindow) ||
-					    (!g_currentMessageWindow->GetMessage()) ||
-					    (!g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())))) {
+				&& g_selected_item->GetVisiblePlayer() == m_owner
+				&&(!g_currentMessageWindow
+				|| !g_currentMessageWindow->GetMessage()
+				|| !g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage()))
+				){
 						msg.Show();
 					}
 				}
 			}
-
 		}
 	}
 
@@ -7059,18 +6477,17 @@ void Player::DumpAllies(void)
 	}
 
 
-sint32 Player::GetCityIndex(const Unit &c, sint32 &idx)
-
+bool Player::GetCityIndex(const Unit &c, sint32 &idx)
 {
     sint32 n; 
 
     n = m_all_cities->Num(); 
     for (idx=0; idx<n; idx++) { 
         if (m_all_cities->Get(idx) == c) { 
-            return TRUE;
+            return true;
         } 
     } 
-    return FALSE; 
+    return false;
 }
 
 Unit Player::GetCityFromIndex(sint32 unit_idx)
@@ -7078,8 +6495,7 @@ Unit Player::GetCityFromIndex(sint32 unit_idx)
 	return m_all_cities->Get(unit_idx).m_id; 
 }
 
-sint32 Player::GetArmyIndex(const Unit &u, sint32 &idx)
-
+bool Player::GetArmyIndex(const Unit &u, sint32 &idx)
 {
     sint32 n, m, j; 
 
@@ -7088,11 +6504,11 @@ sint32 Player::GetArmyIndex(const Unit &u, sint32 &idx)
         m = m_all_armies->Access(idx).Num(); 
         for (j=0; j<m; j++) { 
             if (m_all_armies->Access(idx)[j] == u) { 
-                return TRUE;
+                return true;
             }
         }
     } 
-    return FALSE; 
+    return false;
         
 }
 
@@ -7108,7 +6524,6 @@ void Player::AdjustEventPollution(const sint32 amount)
 	{
     if (g_theGameSettings->GetPollution())
 		m_event_pollution[0] += amount ;
-
 	}
 
 
@@ -7132,57 +6547,55 @@ void Player::BeginTurnPollution(void)
 }
 
 void Player::GetArmyPos(sint32 index, MapPoint &army_pos)
-
 {
     m_all_armies->Access(index).GetPos(army_pos); 
 }
 
 
-BOOL Player::CanCreateImprovement(sint32 type,
+bool Player::CanCreateImprovement(sint32 type,
 								  const MapPoint &point, sint32 extraData, 
-								  const BOOL check_materials, ERR_BUILD_INST &err)
-
+								  const bool check_materials, ERR_BUILD_INST &err)
 {
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
 	Cell *cell = g_theWorld->GetCell(point);
 	
 	Assert(rec != NULL);
 	if(!rec)
-		return FALSE;
+		return false;
 
 	sint32 i;
 	for(i = 0; i < cell->GetNumDBImprovements(); i++) {
 		if(cell->GetDBImprovement(i) == type) {
 			
-			return FALSE;
+			return false;
 		}
 	}
 
 	for(i = 0; i < cell->GetNumImprovements(); i++) {
 		if(cell->AccessImprovement(i).GetType() == type) {
 			
-			return FALSE;
+			return false;
 		}
 	}
 
 	if(!terrainutil_CanPlayerBuildAt(rec, m_owner, point)) {
-		return FALSE;
+		return false;
 	}	
 
 	if(!rec->GetClassTerraform()) {
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, point);
 		if(!effect)
-			return FALSE;
+			return false;
 	}
 
 	
 	if(check_materials) {		
 		if(m_materialPool->GetMaterials() < terrainutil_GetProductionCost(rec->GetIndex(), point, 0)) {
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 TerrainImprovement Player::CreateImprovement(sint32 dbIndex,
@@ -7365,7 +6778,7 @@ sint32 Player::GetReadinessCost() const
 } 
 
 
-void Player::SetReadinessLevel(READINESS_LEVEL level, BOOL immediate)
+void Player::SetReadinessLevel(READINESS_LEVEL level, bool immediate)
 {
 	m_readiness->SetLevel(m_government_type, *m_all_armies, level, immediate);
 	if(g_network.IsClient()) {
@@ -7640,7 +7053,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		
 }
 
-void Player::RemoveWonder(sint32 which, BOOL destroyed)
+void Player::RemoveWonder(sint32 which, bool destroyed)
 {
 	m_builtWonders &= ~((uint64)1 << which);
 
@@ -7777,11 +7190,11 @@ sint32 Player::GetMaxCityCount() const
 
 
 // Unused
+
 double Player::GetPollutionSizeModifier(void) const
 {
-	return (m_advances->GetPollutionSizeModifier());
+	return m_advances->GetPollutionSizeModifier();
 }
-
 
 
 
@@ -7794,15 +7207,17 @@ double Player::GetPollutionSizeModifier(void) const
 
 
 // Unused
+
+
 double Player::GetPollutionProductionModifier(void) const
 {
-	return (m_advances->GetPollutionProductionModifier());
+	return m_advances->GetPollutionProductionModifier();
 }
 
 	
-BOOL Player::HasAdvance(AdvanceType adv) const
+bool Player::HasAdvance(AdvanceType adv) const
 { 
-	if (!m_advances) return FALSE;
+	if (!m_advances) return false;
 
 	return m_advances->HasAdvance(adv); 
 }
@@ -8190,13 +7605,15 @@ void Player::SetCapitol(const Unit &c)
 	if (m_capitol->m_id != (0)) {
 		m_capitol->DestroyCapitol(); 
 	} 
+	c.GetCityData()->SetCapitol();
+	g_theWorld->SetCapitolDistanceDirtyFlags(1<<m_owner);
 	*m_capitol = c; 
 }
 
-sint32 Player::GetCapitolPos(MapPoint &pos) const
+bool Player::GetCapitolPos(MapPoint &pos) const
 { 
     if (m_capitol->m_id == (0)) { 
-		return FALSE; 
+		return false;
 	} else { 
 		if(!g_network.IsActive() || g_network.ReadyToStart()) {
 			Assert(g_theUnitPool->IsValid(*m_capitol));
@@ -8205,10 +7622,10 @@ sint32 Player::GetCapitolPos(MapPoint &pos) const
 			if(!g_network.IsActive() || g_network.ReadyToStart()) {
 				m_capitol->m_id = (0);
 			}
-            return FALSE;
+			return false;
         }
         m_capitol->GetPos(pos); 
-		return TRUE; 
+		return true;
 	} 
 }
 
@@ -8217,21 +7634,21 @@ Unit Player::CityIndexToUnit(sint32 index)
 	return m_all_cities->Get(index); 
 }
 
-BOOL Player::SetGovernmentType(sint32 type)
+bool Player::SetGovernmentType(sint32 type)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Player %d set gov to %d\n", m_owner, type));
 	if(type == m_government_type)
 		
-		return FALSE;
+		return false;
 
 	Assert(type >= 0 && type < g_theGovernmentDB->NumRecords());
 	if(type < 0 || type > g_theGovernmentDB->NumRecords())
-		return FALSE;
+		return false;
 
     sint32 sci_id = g_theGovernmentDB->Get(type)->GetEnableAdvanceIndex();
     if (!HasAdvance(sci_id)) { 
         
-        return FALSE; 
+        return false;
     } 
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
@@ -8247,7 +7664,7 @@ BOOL Player::SetGovernmentType(sint32 type)
 		if(m_change_government_turn <= GetCurRound()) {
 			return ActuallySetGovernment(type);
 		}
-		return TRUE;
+		return true;
 	} else if(!m_changed_government_this_turn) {
 		m_set_government_type = type;
 		sint32 turns = g_rand->Next(g_theConstDB->MaxGovernmentChangeTurns()) + 1;
@@ -8258,10 +7675,10 @@ BOOL Player::SetGovernmentType(sint32 type)
 	}
 }
 
-BOOL Player::ActuallySetGovernment(sint32 type)
+bool Player::ActuallySetGovernment(sint32 type)
 {
 	if(m_government_type == type) {
-		return TRUE;
+		return true;
 	}
 
 	SlicObject *so;
@@ -8301,7 +7718,7 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 
 	m_government_type = type;
 
-	BOOL unit_disbanded = FALSE;
+	bool unit_disbanded = false;
 	for(i = m_all_units->Num() - 1; i >= 0; i--) {
 		const UnitRecord *rec = m_all_units->Access(i).GetDBRec();
 		if(rec->GetNumGovernmentType() < 1)
@@ -8317,7 +7734,7 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 		}
 		if(!found) {
 			m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE, -1);
-			unit_disbanded = TRUE;
+			unit_disbanded = true;
 		}
 	}
 
@@ -8344,10 +7761,6 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 	SetWagesLevel((sint32)GetWagesExpectation());
 	SetRationsLevel((sint32)GetRationsExpectation());
     
-     
-	 
-    
-
 	double s;
 
 	if(m_government_type == 0) {
@@ -8370,12 +7783,12 @@ BOOL Player::ActuallySetGovernment(sint32 type)
 
 	g_slicEngine->RunGovernmentChangedTriggers(m_owner);
 
-	return TRUE;
+	return true;
 }
 
 void Player::GroupArmy(Army &army)
 {
-	Assert(FALSE);
+	Assert(false);
 	
 }
 
@@ -8453,25 +7866,18 @@ void Player::CloseEmbassy(sint32 player)
 
 
 
-BOOL Player::HasEmbassyWith(sint32 player)
+bool Player::HasEmbassyWith(sint32 player)
 {
-
-	
-	
-	
 	if(!g_player[player])
-		return FALSE;
+		return false;
 
-	
-	
-	
 	if(wonderutil_GetCloseEmbassies(g_player[player]->m_builtWonders))
-		return FALSE;
+		return false;
 
 	
 	
 	if(wonderutil_GetEmbassiesEverywhereEvenAtWar(m_builtWonders))
-		return TRUE;
+		return true;
 
 	
 	if(wonderutil_GetEmbassy(m_builtWonders, g_player[player]->m_builtWonders)) {
@@ -8479,7 +7885,7 @@ BOOL Player::HasEmbassyWith(sint32 player)
 		
 		
 		if (!AgreementMatrix::s_agreements.HasAgreement(player, m_owner, PROPOSAL_TREATY_DECLARE_WAR)) {
-			return TRUE;
+			return true;
 		}
 
 	}
@@ -8596,14 +8002,13 @@ uint32 Player_Player_GetVersion(void)
 	}
 
 
-BOOL player_isAlly(PLAYER_INDEX me, PLAYER_INDEX him)
+bool player_isAlly(PLAYER_INDEX me, PLAYER_INDEX him)
 {
-    return (g_player[me]->GetMaskAlliance() &  (0x01 << him)); 
+	return (g_player[me]->GetMaskAlliance() &  (0x01 << him)) != 0;
 }
 
-BOOL player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him)
+bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him)
 {
-    
 	return !AgreementMatrix::s_agreements.HasAgreement(me, him, PROPOSAL_TREATY_ALLIANCE);
 }
 
@@ -8619,11 +8024,11 @@ sint32 Player::GetCheapestMilitaryUnit()
 	sint32 cheapcost = 0x7fffffff;
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
 		const UnitRecord *rec = g_theUnitDB->Get(i);
-		BOOL isObsolete = FALSE;
+		bool isObsolete = false;
 		sint32 o;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(HasAdvance(rec->GetObsoleteAdvanceIndex(o))) {
-				isObsolete = TRUE;
+				isObsolete = true;
 				break;
 			}
 		}
@@ -8641,7 +8046,7 @@ sint32 Player::GetCheapestMilitaryUnit()
 }
 
 
-MBCHAR *Player::GenerateDescriptionString(int is_winner)
+MBCHAR *Player::GenerateDescriptionString(bool is_winner)
 {
     char const * ptag = NULL;
 	sint32 curScore = infowin_GetCivScore(m_owner);
@@ -8677,7 +8082,7 @@ MBCHAR *Player::GetDescriptionString()
         return(m_descrip_string);
     } else {
         
-        return(GenerateDescriptionString(TRUE));
+        return(GenerateDescriptionString(true));
     }
 }
 
@@ -8698,11 +8103,11 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		case GAME_OVER_WON_CONQUERED_WORLD:
 		case GAME_OVER_WON_SCENARIO:
 		case GAME_OVER_WON_OUT_OF_TIME:
-            GenerateDescriptionString(TRUE);
+            GenerateDescriptionString(true);
 			m_hasWonTheGame = TRUE;
 			break;
 		case GAME_OVER_WON_DIPLOMACY:
-            GenerateDescriptionString(TRUE);
+            GenerateDescriptionString(true);
 			m_hasWonTheGame = TRUE;
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
 				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
@@ -8721,7 +8126,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		
 		case GAME_OVER_WON_SCIENCE:
 			if (!g_network.IsActive()) { 
-				GenerateDescriptionString(TRUE);
+				GenerateDescriptionString(true);
 				m_hasWonTheGame = TRUE;
 				for(i = 1; i < k_MAX_PLAYERS; i++) {
 					if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
@@ -8742,7 +8147,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		case GAME_OVER_LOST_CONQUERED:
 		case GAME_OVER_LOST_INEPT:
 		case GAME_OVER_LOST_SCENARIO:
-            GenerateDescriptionString(FALSE);
+            GenerateDescriptionString(false);
 			StartDeath(reason, data);
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
 				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
@@ -8766,7 +8171,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		case GAME_OVER_LOST_OUT_OF_TIME:
 		case GAME_OVER_LOST_SCIENCE:
 		case GAME_OVER_LOST_DIPLOMACY:
-            GenerateDescriptionString(FALSE);
+            GenerateDescriptionString(false);
 			m_hasLostTheGame = TRUE;
 			break;
 
@@ -8807,15 +8212,15 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 	}
 }
 
-BOOL Player::CheckPlayerDead()
+bool Player::CheckPlayerDead()
 {
 	if(g_isCheatModeOn || ScenarioEditor::IsShown())
-		return FALSE;
+		return false;
 
 	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num () < 1)) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 extern sint32 g_noai_stop_player;
@@ -9094,7 +8499,8 @@ void Player::BeginTurnMonopoly(void)  //EMOD add back in but grant a feat?
 		{
 		
 		resourceCount = 0;	
-		for (j=0; j<cities; j++) {
+		for (j=0; j<cities; j++)
+		{
 			resourceCount += m_all_cities->Access(j).AccessData()->GetCityData()->GetResourceCount(i) ;
 
 			if (resourceCount > g_theConstDB->GetMonopolyThreshold())
@@ -9117,10 +8523,10 @@ void Player::BeginTurnMonopoly(void)  //EMOD add back in but grant a feat?
 	}
 
 
-BOOL Player::ContinentShared() const
+bool Player::ContinentShared() const
 {
 	if(m_capitol->m_id == (0))
-		return FALSE;
+		return false;
 	MapPoint capitolPos;
 	m_capitol->GetPos(capitolPos);
 
@@ -9159,7 +8565,7 @@ sint32 Player::GetNumTradeRoutes() const
 	return routes;
 }
 
-BOOL Player::HasSameGoodAsTraded() const
+bool Player::HasSameGoodAsTraded() const
 {
 #ifdef CTP1_TRADE
 	sint32 i, j, k;
@@ -9174,13 +8580,13 @@ BOOL Player::HasSameGoodAsTraded() const
 				if(localResources.GetResourceCount(k) > 0 &&
 				   tradeResources.GetResourceCount(k) > 0) {
 					*m_slic_special_city = m_all_cities->Access(j);
-					return TRUE;
+					return true;
 				}
 			}
 		}
 	}
 #endif
-	return FALSE;
+	return false;
 }
 
 
@@ -9457,7 +8863,7 @@ sint32 Player::GetCurRound() const
 	return m_current_round;
 }
 
-BOOL Player::IsTurnOver() const
+bool Player::IsTurnOver() const
 {
 	return m_is_turn_over;
 }
@@ -9528,7 +8934,7 @@ void Player::BuildDiplomaticSlicMessage(DiplomaticRequest &r)
 		case REQUEST_TYPE_DEMAND_NO_PIRACY:
 			break;
 		default:
-			Assert(FALSE);
+			Assert(false);
 			break;
 	}
 	g_slicEngine->Execute(so);
@@ -9752,73 +9158,45 @@ void Player::ContactMade(PLAYER_INDEX with)
 
 
 
-BOOL Player::HasContactWith(PLAYER_INDEX pl)
+bool Player::HasContactWith(PLAYER_INDEX pl)
 {
 	Assert(pl >= 0);
 	Assert(pl < k_MAX_PLAYERS);
 	
-	
-	
 	if(pl < 0 || pl >= k_MAX_PLAYERS)
-		return FALSE;
+		return false;
 
-	
-	
-	
 	if(!g_player[pl])
-		return FALSE;
+		return false;
 
-	
-	
 	if(g_player[pl] && g_player[pl]->IsDead())
-		return FALSE;
+		return false;
 
-    
+	if(pl == m_owner)
+		return true;
+
+	if(HasEmbassyWith(pl))
+		return true;
 	
-	if(pl == m_owner) {
-		return TRUE;
+	return ((m_contactedPlayers & (1 << pl)) != 0)
+	    && ((g_player[pl]->m_contactedPlayers & (1 << m_owner)) != 0);
 	}
 
 	
-	
-	
-	
-	
-	if(HasEmbassyWith(pl)) {
-		return TRUE;
-	}
-
-	
-	
-	
-	return ((m_contactedPlayers & (1 << pl)) != 0) &&
-		((g_player[pl]->m_contactedPlayers & (1 << m_owner)) != 0);
-}
-
-
-BOOL Player::HasSeen(PLAYER_INDEX pl)
+bool Player::HasSeen(PLAYER_INDEX pl)
 {
 	Assert(pl >= 0);
 	Assert(pl < k_MAX_PLAYERS);
+
 	if(pl < 0 || pl >= k_MAX_PLAYERS)
-		return FALSE;
+		return false;
 
 	if(!g_player[pl])
-		return FALSE;
+		return false;
 
-	if(pl == m_owner) {
-		return TRUE;
-	}
+	if(pl == m_owner)
+		return true;
 
-	
-	
-
-	
-	
-		
-		
-	
-	
 	return (m_contactedPlayers & (1 << pl)) != 0;
 }
 	
@@ -9828,15 +9206,13 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
     sint32 player_idx; 
     SlicObject *so;
 
-    
     for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
         const WonderRecord *wrec = wonderutil_Get(i);
 
-        
-        BOOL is_obsolete = FALSE;
+		bool is_obsolete = false;
         for(o = 0; o < wrec->GetNumObsoleteAdvance(); o++) {
             if(wrec->GetObsoleteAdvanceIndex(o) == advance) {
-                is_obsolete = TRUE;
+				is_obsolete = true;
             }
         }
         if (!is_obsolete)
@@ -9880,16 +9256,9 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
             g_player[wowner]->ReconsiderCostOfTrade();
         }
 		
-        if(wrec->HasReduceReadinessCost()) {
+		if(wrec->HasReduceReadinessCost()) {
             g_player[wowner]->m_readiness->RecalcCost();
         }
-
-		
-        
-        
-		
-        
-        
 
 		if(wrec->GetGlobalRadar()) {
 			g_player[wowner]->m_hasGlobalRadar = FALSE;
@@ -9900,7 +9269,6 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
 			}
 		}
 
-        
         if (GetCurRound() > 1) {
 
             if(g_network.IsHost() && !g_network.IsLocalPlayer(wowner)) {
@@ -9921,13 +9289,15 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
 void Player::SetHasAdvance(AdvanceType advance)
 {
 	sint32 i;
-    BOOL im_the_first = TRUE;
+	bool im_the_first = true;
 
-    
 	for(i=1; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i] && (!g_player[i]->m_isDead) && (i != m_owner) &&
-           (g_player[i]->HasAdvance(advance))) {
-            im_the_first = FALSE;
+		if(g_player[i] 
+		&& !g_player[i]->m_isDead
+		&& i != m_owner
+		&& g_player[i]->HasAdvance(advance)
+		){
+			im_the_first = false;
             break;
         }
 	}
@@ -9959,17 +9329,19 @@ void Player::SetHasAdvance(AdvanceType advance)
 	
 	const AdvanceRecord *advRec = g_theAdvanceDB->Get(advance);
 
-    
-    if (im_the_first && !ScenarioEditor::IsGivingAdvances()) {
-        CheckWonderObsoletions(advance);
+	if (im_the_first && !ScenarioEditor::IsGivingAdvances()) {
+		CheckWonderObsoletions(advance);
 
 		sint32 feat;
-		if(!g_network.IsNetworkLaunch() && g_player[g_selected_item->GetCurPlayer()] && advRec->GetTriggerFeatIndex(feat)) {
+		if(!g_network.IsNetworkLaunch() 
+		&& g_player[g_selected_item->GetCurPlayer()]
+		&& advRec->GetTriggerFeatIndex(feat)
+		){
 			if(!g_network.IsActive() || g_network.ReadyToStart()) {
 				g_featTracker->AddFeat(feat, m_owner);
 			}
 		}
-    }
+	}
 
 	
 	for(i = 0; i < m_all_cities->Num(); i++) {
@@ -9979,7 +9351,6 @@ void Player::SetHasAdvance(AdvanceType advance)
 	if (g_controlPanel!=NULL && m_owner == g_selected_item->GetVisiblePlayer())
 		g_controlPanel->TileImpPanelRedisplay();
 
-    
 	sint32 player_idx; 
 	sint32 city_idx, city_num; 
 	for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) { 
@@ -9998,8 +9369,6 @@ void Player::SetHasAdvance(AdvanceType advance)
 			if(!g_network.IsClient() || g_network.ReadyToStart()) {
 				SpecialDiscoveryNotices(advance);
 				GovernmentDiscoveryNotices(advance);
-				
-				
 			}
 		}
 
@@ -10036,7 +9405,6 @@ void Player::SetHasAdvance(AdvanceType advance)
 	}
 
 	if(advRec->GetAgeIndex() > m_age) {
-		
 		
 		sint32 count = 0;
 		for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
@@ -10168,7 +9536,7 @@ BOOL Player::CanBuildCapitalization() const { return m_can_build_capitalization;
 // Globals    : g_player:     The list of players
 //              g_theUnitDB:  The unit database
 //              g_slicEngine: The slic engine
-//              G_TheWonderTracker: The list of wonders
+//              g_TheWonderTracker: The list of wonders
 //
 // Returns    : Whether the player can build the unit specified by type.
 //
@@ -10177,29 +9545,29 @@ BOOL Player::CanBuildCapitalization() const { return m_can_build_capitalization;
 //              citystyle.
 //
 //-----------------------------------------------------------------------------
-BOOL Player::CanBuildUnit(const sint32 type) const
+bool Player::CanBuildUnit(const sint32 type) const
 {
 	const UnitRecord *rec = g_theUnitDB->Get(type);
 
 	Assert(rec);
 	if(rec == NULL)
-		return FALSE;
+		return false;
 
 	if (!HasAdvance(rec->GetEnableAdvanceIndex()))
-		return FALSE;
+		return false;
 
 	sint32 o;
 	for(o = rec->GetNumObsoleteAdvance() - 1; o >= 0; o--) {
 		if(HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-			return FALSE;
+			return false;
 	}
 
 	if(g_exclusions->IsUnitExcluded(type))
-		return FALSE;
+		return false;
 
 	if(rec->GetCantBuild()) {
 		
-		return FALSE;
+		return false;
 	}
 
 	if(rec->GetNumGovernmentType() > 0) {
@@ -10212,10 +9580,10 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
-// Added by E - Compares Unit CultureOnly to the Player's CityStyle
+	// Added by E - Compares Unit CultureOnly to the Player's CityStyle
 	if(rec->GetNumCultureOnly() > 0) {
 		sint32 s;
 		bool found = false;
@@ -10226,24 +9594,24 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
-// Added by E - Compares Unit CivilisationOnly to the Player's Civilisation	5-11-2006
+	// Added by E - Compares Unit CivilisationOnly to the Player's Civilisation	5-11-2006
 	if(rec->GetNumCivilisationOnly() > 0) {
 		sint32 c;
 		bool found = false;
 		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
-			if(rec->GetCivilisationOnlyIndex(c) == g_player[m_owner]->m_civilisation->GetCivilisation()) {
+			if(rec->GetCivilisationOnlyIndex(c) == m_civilisation->GetCivilisation()) {
 				found = true;
 				break;
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
-// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006	
+	// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006	
 	if(rec->GetNumNeedsFeatToBuild() > 0) {
 		sint32 f;
 		bool found = false;
@@ -10254,56 +9622,58 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 	
-// Added by E - checks if capitol for buying or colecting a good and makes availble in all cities, not optimized
-
+	// Added by E - checks if capitol for buying or colecting
+	// a good and makes availble in all cities, not optimized
 	if(rec->GetNumNeedsCityGoodCapitol()) {
 		
 		sint32 i, g, n = m_all_cities->Num();
 		for(g = 0; g < rec->GetNumNeedsCityGoodCapitol(); g++) {
 			for(i = 0; i < n; i++) {
-				if(m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodCapitolIndex(g)))
-			return FALSE;
+				if(m_all_cities->Access(i)->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodCapitolIndex(g)))
+				return false;
 			}
 		}
 	}
 
 
-	// Added by E - checks all cities for buying or collecting a good and makes availble in all cities, but its either/or not AND
+	// Added by E - checks all cities for buying or collecting
+	// a good and makes availble in all cities, but its 
+	// either/or not AND
 	if(rec->GetNumNeedsCityGoodAnyCity()) {
 		
 		sint32 i, g;
 		bool goodavail = false;
 
-			for(i = 0; i < m_all_cities->Num(); i++) {
-				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
-					if(m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
-						goodavail = true;
-						break;
-					}
-				}
-					if(goodavail){
+		for(i = 0; i < m_all_cities->Num(); i++) {
+			for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+				if(m_all_cities->Access(i)->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+					goodavail = true;
 					break;
-					}
+				}
 			}
-			if(!goodavail)
-			return FALSE;
+			if(goodavail){
+				break;
+			}
+		}
+		if(!goodavail)
+			return false;
 	}
 
-// end resources
+	// End resources
 	
 
 	if(rec->HasNuclearAttack() &&
 	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders())) {
-		return FALSE;
+		return false;
 	}
 
 	if(rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids() ||
 	   rec->HasSlaveUprising()) {
 		if(wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders())) {
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -10311,7 +9681,7 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 		sint32 i, n = m_all_units->Num();
 		for(i = 0; i < n; i++) {
 			if(m_all_units->Access(i).GetDBRec()->GetNoSlaves())
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -10320,23 +9690,22 @@ BOOL Player::CanBuildUnit(const sint32 type) const
 		sint32 i, n = m_all_cities->Num();
 		for(i = 0; i < n; i++) {
 			if(m_all_cities->Access(i).CountSlaves() > 0)
-				return FALSE;
+				return false;
 		}
 
-		n = g_player[m_owner]->m_all_units->Num();
+		n = m_all_units->Num();
 		for(i = 0; i < n; i++) {
 			if(m_all_units->Access(i).GetDBRec()->HasSlaveRaids())
-				return FALSE;
+				return false;
 		}
 	}
 
 	if(rec->HasCreateParks() && 
 	   !wonderutil_GetParkRangersEnabled(g_theWonderTracker->GetBuiltWonders())) {
-		return FALSE;
+		return false;
 	}
 
-	
-	return TRUE;
+	return true;
 }
 
 void Player::RemoveEmptyCities(CAUSE_REMOVE_ARMY cause)
@@ -10382,7 +9751,7 @@ sint32 Player::GetLastAttacked(PLAYER_INDEX player)
 	return m_last_attacked[player];
 }
 
-BOOL Player::CanStillSendRequestsTo(PLAYER_INDEX otherPlayer)
+bool Player::CanStillSendRequestsTo(PLAYER_INDEX otherPlayer)
 {
 	return m_sent_requests_this_turn[otherPlayer] < g_theConstDB->MaxRequestsPerPlayerPerTurn();
 }
@@ -10430,7 +9799,6 @@ void Player::RecoveredProbe(const Unit &city)
 	so->AddRecipient(m_owner);
 	
 	g_slicEngine->Execute(so);
-	
 }
 
 void Player::RecreateMessageIcons()
@@ -10585,7 +9953,7 @@ void Player::ResetVision()
 		MapPoint pos;
 		Installation inst = m_allInstallations->Access(j);
 		if(!g_theInstallationPool->IsValid(inst.m_id)) {
-			Assert(FALSE);
+			Assert(false);
 			continue;
 		}
 		
@@ -10708,12 +10076,10 @@ void Player::EnterNewAge(sint32 age)
 	for(i = 0; i < m_all_cities->Num(); i++) {
 		m_all_cities->Access(i).CD()->UpdateSprite();
 	}
-	if(!g_network.IsNetworkLaunch() && g_player[g_selected_item->GetCurPlayer()]) {
+	if(!g_network.IsNetworkLaunch()) {
 		g_eventTracker->AddEvent(EVENT_TYPE_AGES,m_owner,NewTurnCount::GetCurrentRound(),age);
 	}
 }
-
-//Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
 //
@@ -10785,7 +10151,7 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 			}
 			break;
 		default:
-			Assert(FALSE);
+			Assert(false);
 			return 2;
 	}
 
@@ -10862,5 +10228,4 @@ void Player::SetPlayerType(PLAYER_TYPE pt)
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_DETACH_ROBOT, m_owner));
 		}
 	}
-
 }

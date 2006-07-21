@@ -310,18 +310,18 @@ private:
 
 	RADIUS_OP m_cityRadiusOp;
 	UnitDynamicArray *m_killList;
-	sint32 m_radiusNewOwner;
-	sint32 m_tilecount, m_whichtile;
+	sint32    m_radiusNewOwner;
+	sint32    m_tilecount, m_whichtile;
 	SlicObject *m_tempGoodAdder;
-	sint32 m_tempGood, m_tempGoodCount;
-	BOOL m_sentInefficientMessageAlready;
+	sint32    m_tempGood, m_tempGoodCount;
+	bool      m_sentInefficientMessageAlready;
 	
 	
 
 	
 	
 #ifdef _DEBUG
-	BOOL m_ignore_happiness; 
+	bool m_ignore_happiness; 
 #endif
 
 	friend class NetPop;
@@ -399,11 +399,11 @@ public:
 	void ShieldSupportTroops();
 	void AddShieldsToBuilding();
 
-	void SetMaterialContribution(BOOL on) { m_contribute_materials = on;}
-	BOOL GetMaterialContribution() const { return m_contribute_materials;}
+	void SetMaterialContribution(bool on) { m_contribute_materials = on;}
+	bool GetMaterialContribution() const { return m_contribute_materials;}
 
-	void SetMilitaryContribution(BOOL on) { m_contribute_military = on; }
-	BOOL GetMilitaryContribution() { return m_contribute_military; }
+	void SetMilitaryContribution(bool on) { m_contribute_military = on; }
+	bool GetMilitaryContribution() { return m_contribute_military; }
 
 	
 	void IncrementBuildQueue();
@@ -423,13 +423,13 @@ public:
 	double ProcessFinalFood(double &foodLossToCrime, double &grossFood) const;
 #endif
 	void   EatFood();
-	int    FoodSupportTroops();
+	bool   FoodSupportTroops();
 
 	sint32 GetBuildingOvercrowdingBonus();
 	sint32 GetBuildingMaxPopIncrease();
 	void   CalculateGrowthRate();
 	double CalculateGrossGrowthRate(double &overcrowdingCoeff, double &baseRate, sint32 bonusFood = 0);
-	sint32 GrowOrStarve();
+	bool   GrowOrStarve();
 	double GetFoodRequired() const;
 	double GetFoodRequired(sint32 popCount) const;
 	double GetFoodRequiredPerCitizen() const;
@@ -447,16 +447,16 @@ public:
 	                  sint32 &n, DynamicArray<TerrainValue> &val);
 	void GetOpenTerrainValuesRow(sint32 len, MapPoint &pos, sint32 &n, DynamicArray<TerrainValue> &val);
 	void GetOpenTerrainValues(const MapPoint &center, sint32 &n, DynamicArray<TerrainValue> &val);
-	BOOL CityCanHavePopAt(MapPoint &pos) const;
+	bool CityCanHavePopAt(MapPoint &pos) const;
 
 	void UpdateSprite(void);
 	
-	BOOL IsWatchful() const;
+	bool IsWatchful() const;
 	void SetWatchful();
 	void ModifySpecialAttackChance(UNIT_ORDER_TYPE attack, double &chance);
 
 	void RemoveOneSlave(PLAYER_INDEX p);
-	BOOL AdjustedBestTile(const double foodCoef, const double productionCoef, const double resourceCoef, MapPoint &bestPos);
+	bool AdjustedBestTile(const double foodCoef, const double productionCoef, const double resourceCoef, MapPoint &bestPos);
 
 #if !defined(NEW_RESOURCE_PROCESS)
 	void CollectOtherTrade(const bool projectedOnly, bool changeResources = true); // changeResources check must be implemented
@@ -465,7 +465,7 @@ public:
 	sint32 SupportBuildings(bool projectedOnly);
 	sint32 GetSupportBuildingsCost() const;
 
-	void AddTradeRoute(TradeRoute &route, BOOL fromNetwork);
+	void AddTradeRoute(TradeRoute &route, bool fromNetwork);
 	void DelTradeRoute(TradeRoute route);
 	sint32 IsUsedInTradeRoute(const MapPoint &qpos);
 	sint32 CalculateTradeRoutes(bool projectedOnly);
@@ -504,11 +504,11 @@ public:
 
 	void ImprovementHealUnitsInCity() const;
 	void ImprovementRefuelUnitsInCity() const;
-	sint32 ImprovementCanRefuel(const Unit &u) const;
+	bool ImprovementCanRefuel(const Unit &u) const;
 	void AddRawMaterials(sint32 amount);
 	sint32 GetRawMaterials() const;
 	void UseRawMaterials(sint32 amt);
-	BOOL IsConnected(MapPoint &point, uint8* array = NULL, sint32 w = 0, sint32 h = 0);
+	bool IsConnected(MapPoint &point, uint8* array = NULL, sint32 w = 0, sint32 h = 0);
 
 
 
@@ -524,7 +524,7 @@ public:
 	void InitBeginTurnVariables();
 	void DoTurnCounters();
 	void TryToBuild();
-	sint32 BeginTurn(); 
+	bool BeginTurn(); 
 	void EndTurn();
 
 	sint32 GetNumPop() const; 
@@ -534,18 +534,18 @@ public:
 
 
 
-	BOOL BuildUnit(sint32 type);
-	BOOL BuildImprovement(sint32 type);
-	BOOL BuildWonder(sint32 type);
-	BOOL BuildEndGame(sint32 type);
+	bool BuildUnit(sint32 type);
+	bool BuildImprovement(sint32 type);
+	bool BuildWonder(sint32 type);
+	bool BuildEndGame(sint32 type);
 
 	void AddWonder(sint32 type);
-	BOOL ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type);
+	bool ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type);
 
 	uint64 GetBuiltWonders() const { return m_builtWonders; }
 
 	void DestroyCapitol(); 
-	void SetCapitol(const BOOL delay_registration);
+	void SetCapitol();
 	void DestroyImprovement(sint32 type);
 	void NewGovernment(sint32 government_type);
 
@@ -556,10 +556,10 @@ public:
 
 	void NoRevoltCountdown();
 
-	BOOL ShouldRevolt(const sint32 inciteBonus);
-	void Revolt(sint32 &playerToJoin, BOOL causeIsExternal = FALSE);
-	void TeleportUnits(const MapPoint &pos,  BOOL &revealed_foreign_units, 
-	                         BOOL &revealed_unexplored, sint32 foreigner);
+	bool ShouldRevolt(const sint32 inciteBonus);
+	void Revolt(sint32 &playerToJoin, bool causeIsExternal = false);
+	void TeleportUnits(const MapPoint &pos,  bool &revealed_foreign_units, 
+	                         bool &revealed_unexplored, sint32 foreigner);
 	void StopTradingWith(const PLAYER_INDEX bannedRecipient);
 	Happy *GetHappy(void) { return (m_happy); }
 	
@@ -579,9 +579,9 @@ public:
 		foodCrime = (sint32)(m_food_lost_to_crime);
 	}
 
-	BOOL GetIsRioting(void) const { return m_is_rioting; }
+	bool GetIsRioting(void) const { return m_is_rioting; }
 
-	void CalcHappiness(sint32 &virtualGoldSpent, BOOL isFirstPass);
+	void CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass);
 	void CheckRiot();
 	double GetHappiness() const;
 	double GetHappySize() const;
@@ -598,7 +598,7 @@ public:
 	double GetHappyImprovement() const;
 	double GetHappyWonders() const;
 	double GetHappyCrime() const;
-	BOOL IsCelebratingHappiness(void) const;
+	bool IsCelebratingHappiness(void) const;
 
 	double GetImprovementCrimeMod() const;
 	sint32 GetImprovementPeaceMod() const;
@@ -611,19 +611,19 @@ public:
 	void CityRadiusFunc(const MapPoint &pos);
 	void GetNuked(UnitDynamicArray &killList);
 
-	BOOL SafeFromNukes() const;
+	bool SafeFromNukes() const;
 
-	BOOL HasAirport() const;
+	bool HasAirport() const;
 	void UseAirport();
 	sint32 AirportLastUsed() const;
-	BOOL HasCityWalls() const;
-	BOOL HasForceField() const;
+	bool HasCityWalls() const;
+	bool HasForceField() const;
 
-	BOOL HasBeenSpiedUpon() const;
+	bool HasBeenSpiedUpon() const;
 	void SetSpiedUpon();
 
 	void CityNullifyWalls();
-	BOOL IsCapitol() const;
+	bool IsCapitol() const;
 
 	void MakeFranchise(sint32 player);
 	sint32 GetFranchiseOwner() const { return m_franchise_owner;}
@@ -631,7 +631,7 @@ public:
 	void SetFranchiseTurnsRemaining(sint32 turns);
 
 #ifdef _DEBUG
-	void SetIgnoreHappiness(BOOL v) { m_ignore_happiness = v; }
+	void SetIgnoreHappiness(bool v) { m_ignore_happiness = v; }
 #endif
 
 
@@ -642,21 +642,21 @@ public:
 	void Plague(sint32 player);
 	void BioInfect( sint32 player );
 	void NanoInfect( sint32 player );
-	BOOL IsBioImmune() const;
-	BOOL IsNanoImmune() const;
+	bool IsBioImmune() const;
+	bool IsNanoImmune() const;
 	void SpreadBioTerror();
 	void SpreadNanoTerror();
 
-	BOOL IsNanoInfected() const { return m_nanoInfectionTurns > 0; }
-	BOOL IsBioInfected() const { return m_bioInfectionTurns > 0; }
-	BOOL IsFranchised() const { return m_franchise_owner >= 0; }
-	BOOL IsConverted() const { return m_convertedTo >= 0; }
+	bool IsNanoInfected() const { return m_nanoInfectionTurns > 0; }
+	bool IsBioInfected() const { return m_bioInfectionTurns > 0; }
+	bool IsFranchised() const { return m_franchise_owner >= 0; }
+	bool IsConverted() const { return m_convertedTo >= 0; }
 	sint32 GetConvertedTo(void) const { return (m_convertedTo) ; }
 	sint32 GetConvertedGold(void) const { return (m_convertedGold) ; }
 
 	void ConvertTo(sint32 player, CONVERTED_BY by);
 	double TheologicalModifier() const;
-	void Unconvert(BOOL makeUnhappy = TRUE);
+	void Unconvert(bool makeUnhappy = true);
 	sint32 IsConvertedTo() const { return m_convertedTo; }
 
 	bool HasResource(sint32 resource) const;
@@ -682,13 +682,13 @@ public:
 	bool IsSellingResourceTo(sint32 resource, Unit & destination) const;
 
 	sint32 GetOvertimeCost();
-	BOOL BuyFront();
-	BOOL AlreadyBoughtFront() { return m_buyFront; }
+	bool BuyFront();
+	bool AlreadyBoughtFront() { return m_buyFront; }
 	void RemoveFront();
 	void BuildWhat() const;
 	sint32 HowMuchLonger() const;
 	sint32 HowMuchLonger( sint32 productionRemaining ) const;
-	void SellBuilding(sint32 which, BOOL byChoice = TRUE);
+	void SellBuilding(sint32 which, bool byChoice = true);
 	sint32 SellingBuilding() { return m_sellBuilding; }
 
 	double GetMovementCost() const;
@@ -716,21 +716,20 @@ public:
 	void IndicateTerrainImprovementBuilt(void) { m_terrainImprovementWasBuilt=TRUE ; }
 	BOOL WasTerrainImprovementBuilt(void) const { return (m_terrainImprovementWasBuilt) ; }
 	void IndicateHappinessAttacked(void) { m_happinessAttacked = TRUE ; }
-	BOOL WasHappinessAttacked(void) const;
+	bool WasHappinessAttacked(void) const;
 	void IndicateTerrainPolluted(void) { m_terrainWasPolluted = TRUE ; }
 	BOOL WasTerrainPolluted(void) const { return (m_terrainWasPolluted) ; }
 	sint32 GetScience(void) const { return (m_science) ; }
 	sint32 GetScienceFromCommerce(void) const;
-	BOOL CanBuildUnit(sint32 type) const;
-	BOOL CanBuildBuilding(sint32 type) const;
+	bool CanBuildUnit(sint32 type) const;
+	bool CanBuildBuilding(sint32 type) const;
 
-	BOOL CanBuildWonder(sint32 type) const;
-	void RemoveWonderFromQueue(sint32 type);
+	bool CanBuildWonder(sint32 type) const;
 	void Injoin(sint32 player);
-	BOOL IsInjoined() const;
+	bool IsInjoined() const;
 	sint32 InjoinedBy() const { return m_injoinedBy; }
 
-	BOOL HaveImprovement(const sint32 type) const;
+	bool HaveImprovement(const sint32 type) const;
 
 	void RecalculateResources();
 	sint32 CountTradeWith(PLAYER_INDEX player) const;
@@ -745,7 +744,7 @@ public:
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit &dest);
+	bool SendSlaveTo(Unit &dest);
 	void SetFullHappinessTurns(sint32 turns);
 
 	sint32 GetHappinessFromPops();
@@ -762,11 +761,11 @@ public:
 	void InsertCapitalization();
 	void InsertInfrastructure();
 	void BuildCapitalization();
-	BOOL CanBuildCapitalization() const;
+	bool CanBuildCapitalization() const;
 	void BuildInfrastructure();
-	BOOL CanBuildInfrastructure() const;
-	BOOL IsBuildingCapitalization() { return m_buildCapitalization; }
-	BOOL IsBuildingInfrastructure() { return m_buildInfrastructure; }
+	bool CanBuildInfrastructure() const;
+	bool IsBuildingCapitalization() { return m_buildCapitalization; }
+	bool IsBuildingInfrastructure() { return m_buildInfrastructure; }
 	void StopInfrastructureCapitalization();
 	void EliminateNukes();
 
@@ -774,7 +773,7 @@ public:
 
 	void RemoveEndGameObjects();
 
-	BOOL NeedToDoUprising() const;
+	bool NeedToDoUprising() const;
 	void CheckForSlaveUprising();
 
 	void Disband();
@@ -791,8 +790,8 @@ public:
 	sint32 GetNanoInfectedBy( void ) const { return m_nanoInfectedBy; }
 	sint32 GetProductionLostToFranchise( void ) const { return m_productionLostToFranchise; }
 
-	void SetProbeRecoveredHere(BOOL recovered);
-	BOOL GetProbeRecoveredHere() { return (BOOL)m_probeRecoveredHere; }
+	void SetProbeRecoveredHere(bool recovered){ m_probeRecoveredHere = (uint8)recovered; }
+	bool GetProbeRecoveredHere() { return (bool)m_probeRecoveredHere; }
 
 	bool HasSleepingUnits() const;
 
@@ -802,7 +801,7 @@ public:
 	sint32 CityGrowthCoefficient();
 	void DestroyWonder(sint32 which);
 
-	BOOL CapturedThisTurn() const { return m_capturedThisTurn; }
+	bool CapturedThisTurn() const { return m_capturedThisTurn; }
 	void SetSentInefficientMessage() { m_sentInefficientMessageAlready = TRUE; }
 
 	void BuildFront();
@@ -846,7 +845,7 @@ public:
 	void FindBestSpecialists();
 
 	
-	BOOL GetUseGovernor() const;
+	bool GetUseGovernor() const;
 	void SetUseGovernor(const bool &value);
 
 	sint32 GetBuildListSequenceIndex() const;

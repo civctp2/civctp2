@@ -1976,7 +1976,7 @@ void UnitData::BeginTurnCity(const Unit &me, UnitDynamicArray &dead)
 {
     Assert(m_city_data); 
 
-    if (m_city_data->BeginTurn() == FALSE) {
+    if (!m_city_data->BeginTurn()) {
         dead.Insert(me); 
     }
 }
@@ -4871,7 +4871,7 @@ void UnitData::RemoveWonderFromQueue(sint32 type)
 	Assert(m_city_data);
 	if(!m_city_data)
 		return;
-	m_city_data->RemoveWonderFromQueue(type);
+//	m_city_data->RemoveWonderFromQueue(type);
 }
 
 void UnitData::RemoveFront()

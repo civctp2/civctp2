@@ -2012,12 +2012,9 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 	prod_imp = -1;
 	gold_imp = -1;
 
-	
-	Unit city = cell->GetCity();
-	if (!city.IsValid())
+	if (cell->HasCity()) // Do not find improvements for city tiles
 		return;
-	
-	
+
 	sint32 max_bonus_food = 0;
 	sint32 max_bonus_prod = 0;
 	sint32 max_bonus_gold = 0;
@@ -2149,8 +2146,7 @@ void Governor::GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_i
 
 
 	Cell *  cell    = g_theWorld->GetCell(pos);
-	Unit    city    = cell->GetCity();
-	if (!city.IsValid())
+	if (cell->HasCity()) // Do not terraform city tiles
 		return;
 
 	const TerrainRecord *fromRec = g_theTerrainDB->Get(cell->GetTerrain());

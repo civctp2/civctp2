@@ -125,7 +125,7 @@
 // - Added ObsoleteUnit so units can be obsolete by the availability of other units by E 3-31-2006
 // - Added UpgradeTo so units can be obsolete by the availability of unit they upgrade to by E 3-31-2006
 // - CantTrade flag for Goods now works by E 4-26-2006 (outcomment to allow for CanCollectGood)
-// - CanCollectGood BOOL added by E to check goods for
+// - CanCollectGood bool added by E to check goods for
 //   CantTrade or Available and Vanish Advances 4-27-2006
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Made AI deficit gold spending depending on the dificulty settings. (April 29th 2006 Martin Gühmann)
@@ -690,7 +690,7 @@ void CityData::Serialize(CivArchive &archive)
 //
 // Globals    : g_theWorld
 //
-// Returns    : TRUE if center_point is in water terrain and doesn't have a tunnel
+// Returns    : true if center_point is in water terrain and doesn't have a tunnel
 //
 // Remark(s)  : -
 //
@@ -747,7 +747,7 @@ void CityData::Initialize(sint32 settlerType)
 	FindBestSpecialists();
 
 	sint32 martialLaw;
-	m_happy->CalcHappiness(*this, FALSE, martialLaw, TRUE);
+	m_happy->CalcHappiness(*this, false, martialLaw, true);
 
 	const UnitRecord * settlerRec   = NULL;
 	sint32 numPops = 1;
@@ -816,7 +816,7 @@ void CityData::Initialize(sint32 settlerType)
 	                                k_MASK_ENV_INSTALLATION));
 	SetRoad();
 	if (NeedsCanalTunnel(center_point)) {
-		g_theWorld->SetCanalTunnel(center_point, TRUE);
+		g_theWorld->SetCanalTunnel(center_point, true);
 	}
 	
 	if (g_theWorld->IsWater(center_point)) {
@@ -1063,7 +1063,7 @@ void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
     {
 		if (wonders & 1) 
         {
-			g_player[m_owner]->RemoveWonder(i, TRUE);
+			g_player[m_owner]->RemoveWonder(i, true);
 		}
 		wonders >>= 1;
 	}
@@ -1126,7 +1126,7 @@ void CityData::AddShields(sint32 s)
 //
 // Globals    : g_slicEngine	
 //
-// Returns    : BOOL TRUE if the city should revolt, i.e.,
+// Returns    : bool true if the city should revolt, i.e.,
 //              m_happiness < g_theConstDB->GetRevolutionLevel()+incite_bonus
 //
 // Remark(s)  : A city will not revolt
@@ -1136,21 +1136,21 @@ void CityData::AddShields(sint32 s)
 //              Otherwise, the revolt risk is determined by the happiness.
 //
 //----------------------------------------------------------------------------
-BOOL CityData::ShouldRevolt(const sint32 inciteBonus)
+bool CityData::ShouldRevolt(const sint32 inciteBonus)
 {
 	
 	
 	if(g_slicEngine->GetTutorialActive() &&
 	   m_owner == g_slicEngine->GetTutorialPlayer()) {
-		return FALSE;
+		return false;
 	}
 
 	if(m_home_city.Flag(k_UDF_CANT_RIOT_OR_REVOLT))
-		return FALSE;
+		return false;
 
 	// Modified by kaan to address bug # 12
 	if (m_min_turns_revolt != 0) 
-		return FALSE;
+		return false;
 
 	return m_happy->ShouldRevolt(inciteBonus);
 }
@@ -1186,17 +1186,17 @@ void CityData::NoRevoltCountdown()
 // Description: Make a city revolt
 //
 // Parameters : sint32 &playerToJoin    : The city's new owner
-//              BOOL causeIsExternal    :
+//              bool causeIsExternal    :
 //              
 // Globals    : -
 //
 // Returns    : -
 //
-// Remark(s)  : - causeIsExternal defaults to FALSE in citydata.h
+// Remark(s)  : - causeIsExternal defaults to false in citydata.h
 //			  : - Sometimes a city constantly revolts needs fixing
 //
 //----------------------------------------------------------------------------
-void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
+void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 {
 	sint32 i,
 	       n;
@@ -1285,7 +1285,7 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 		g_network.Unblock(m_owner);
 	}
 	
-	m_home_city.ResetCityOwner(newowner, FALSE, CAUSE_REMOVE_CITY_HAPPINESS_REVOLT);
+	m_home_city.ResetCityOwner(newowner, false, CAUSE_REMOVE_CITY_HAPPINESS_REVOLT);
 	m_build_queue.Clear();
 
 #if 0
@@ -1356,8 +1356,8 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 // Description: 
 //
 // Parameters : MapPoint &pos                 : destination
-//              BOOL &revealed_foreign_units  : zeroed out
-//              BOOL &revealed_unexplored     : zeroed out
+//              bool &revealed_foreign_units  : zeroed out
+//              bool &revealed_unexplored     : zeroed out
 //              sint32 foreigner              : recipient
 //              
 // Globals    : g_theWorld
@@ -1368,8 +1368,8 @@ void CityData::Revolt(sint32 &playerToJoin, BOOL causeIsExternal)
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units, 
-                             BOOL &revealed_unexplored, sint32 foreigner)
+void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, 
+                             bool &revealed_unexplored, sint32 foreigner)
 {
 	
 	sint32 i;
@@ -1412,8 +1412,8 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 	g_theWorld->GetCell(city_pos)->GetArmy(units);
 	n = units.Num();
 
-	revealed_foreign_units = FALSE;
-	revealed_unexplored = FALSE;
+	revealed_foreign_units = false;
+	revealed_unexplored = false;
 	UnitDynamicArray revealed;
 	DynamicArray<Army> moveArmies;
 
@@ -1430,7 +1430,7 @@ void CityData::TeleportUnits(const MapPoint &pos, BOOL &revealed_foreign_units,
 
 
 		if (0 < revealed.Num()) {
-			revealed_foreign_units = TRUE;
+			revealed_foreign_units = true;
 		}
 	}
 	for(i = 0; i < n; i++) {
@@ -3211,12 +3211,12 @@ double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &bas
 //
 // Globals    : g_gevManager
 //
-// Returns    : sint32 (TRUE or FALSE) TRUE if the city is either starving or changes pop size
+// Returns    : bool: true if the city is either starving or changes pop size
 //
 // Remark(s)  :
 //
 //----------------------------------------------------------------------------
-sint32 CityData::GrowOrStarve()
+bool CityData::GrowOrStarve()
 {
 	CalculateGrowthRate();
 
@@ -3241,7 +3241,7 @@ sint32 CityData::GrowOrStarve()
 
 				m_starvation_turns--;
 				UpdateSprite();
-				return TRUE;
+				return true;
 			} 
 			else m_partialPopulation -= k_PEOPLE_PER_POPULATION;
 
@@ -3254,7 +3254,7 @@ sint32 CityData::GrowOrStarve()
 			                       GEA_End);
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
 			UpdateSprite();
-			return TRUE;
+			return true;
 		} else if(m_partialPopulation < 0) {
 			//PFT 05 apr 05: slaves starve first
 			if(SlaveCount() > 0 )
@@ -3266,7 +3266,7 @@ sint32 CityData::GrowOrStarve()
 			
 			m_partialPopulation += k_PEOPLE_PER_POPULATION;
 			UpdateSprite();
-			return TRUE;
+			return true;
 		}
 	} else {
 		m_partialPopulation += sint32(m_growth_rate);
@@ -3280,16 +3280,16 @@ sint32 CityData::GrowOrStarve()
 			
 			m_partialPopulation -= k_PEOPLE_PER_POPULATION;
 			UpdateSprite();
-			return TRUE;
+			return true;
 		}
 	}
 	UpdateSprite();
-	return FALSE;
+	return false;
 }
 
-int CityData::FoodSupportTroops()
+bool CityData::FoodSupportTroops()
 {
-	return FALSE;
+	return false;
 }
 
 //----------------------------------------------------------------------------
@@ -3338,12 +3338,12 @@ void CityData::AddTradeResource(ROUTE_TYPE type, sint32 resource)
 			m_buyingResources.AddResource(resource);
 			break;
 		case ROUTE_TYPE_FOOD:
-			Assert(FALSE); 
+			Assert(false); 
 			
 			
 			break;
 		default:
-			Assert(FALSE);
+			Assert(false);
 			break;
 	}
 }
@@ -3412,13 +3412,13 @@ sint32 CityData::CalculateTradeRoutes(bool projectedOnly)
 				break;
 			}
 			default:
-				Assert(FALSE);
+				Assert(false);
 				break;
 		}
 	}
 	// incoming goods:
 	n = m_tradeDestinationList.Num();
-	BOOL killRoute;
+	bool killRoute;
 	m_buyingResources.Clear();
 	for(i = 0; i < n; i++) {
 		TradeRoute route = m_tradeDestinationList[i];
@@ -3429,12 +3429,12 @@ sint32 CityData::CalculateTradeRoutes(bool projectedOnly)
 			continue;
 		}
 
-		killRoute = FALSE;
+		killRoute = false;
 		if(!projectedOnly) {
 			if(route.GetOwner() != m_owner) {
 				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn()) {
 					deadRoutes.Insert(route);
-					killRoute = TRUE;
+					killRoute = true;
 				} else {
 					g_player[m_owner]->SubGold(route.GetGoldInReturn());
 					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn());
@@ -3550,7 +3550,7 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 			    if (cheapBuilding < 0)
 				    break;
 
-			    SellBuilding(cheapBuilding, FALSE);
+			    SellBuilding(cheapBuilding, false);
 			    SlicObject * so = new SlicObject("029NoMaint");
 			    so->AddRecipient(GetOwner());
 			    so->AddCity(m_home_city);
@@ -3715,7 +3715,7 @@ sint32 CityData::GetWagesNeeded()
 // Description: Add a trade route to this city's m_tradeSourceList or tradeDestinationList
 //
 // Parameters : TradeRoute &route       : the trade route
-//            : BOOL       fromNetwork  :
+//            : bool       fromNetwork  :
 //
 // Globals    : -
 //
@@ -3729,7 +3729,7 @@ sint32 CityData::GetWagesNeeded()
 //                };
 //
 //----------------------------------------------------------------------------
-void CityData::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
+void CityData::AddTradeRoute(TradeRoute &route, bool fromNetwork)
 {
 	Assert((route.GetSource() == m_home_city) ||
 		   (route.GetDestination() == m_home_city));
@@ -3777,7 +3777,6 @@ void CityData::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
 // Description: Delete a trade route from this city's m_tradeSourceList or tradeDestinationList
 //
 // Parameters : TradeRoute &route       : the trade route
-//            : BOOL       fromNetwork  :
 //
 // Globals    : -
 //
@@ -3850,7 +3849,7 @@ void CityData::CheatBuildFirstItem()
 	m_home_city.GetPos(pos); 
 
 	m_shieldstore += m_build_queue.GetProductionRemaining(m_shieldstore);
-	if(m_build_queue.BuildFront(m_shieldstore, this, pos, m_built_improvements, m_builtWonders, FALSE)) {
+	if(m_build_queue.BuildFront(m_shieldstore, this, pos, m_built_improvements, m_builtWonders, false)) {
 		m_shieldstore_at_begin_turn = m_shieldstore;
 	}
 }
@@ -3940,12 +3939,12 @@ void CityData::TryToBuild()
 //
 // Globals    : 
 //
-// Returns    : sint32 (TRUE or FALSE)
+// Returns    : bool
 //
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-sint32 CityData::BeginTurn()
+bool CityData::BeginTurn()
 {
 	InitBeginTurnVariables();
 	DoTurnCounters(); // Decrement various turn counters, e.g., m_franchiseTurnsRemaining
@@ -3995,7 +3994,7 @@ sint32 CityData::BeginTurn()
 			so->AddCity(m_home_city);
 			g_slicEngine->Execute(so);
 
-			return FALSE; 
+			return false; 
 		}
 	}
 	
@@ -4107,7 +4106,7 @@ sint32 CityData::BeginTurn()
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 
-	return TRUE;
+	return true;
 }
 
 void CityData::EndTurn()
@@ -4131,18 +4130,11 @@ void CityData::EndTurn()
 	m_build_queue.EndTurn();
 }
 
-void CityData::CalcHappiness(sint32 &virtualGoldSpent, BOOL isFirstPass)
+void CityData::CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass)
 
 {
-	/* ???
-	if(isFirstPass) {
-		sint32 wage = sint32(g_player[m_owner]->GetWagesPerPerson());
-		int n;
-		n = PopCount();
-	}*/
-
 	sint32 delta_martial_law;
-	m_happy->CalcHappiness(*this, FALSE, delta_martial_law, isFirstPass);
+	m_happy->CalcHappiness(*this, false, delta_martial_law, isFirstPass);
 }
 
 void CityData::CheckRiot()
@@ -4190,11 +4182,11 @@ void CityData::CheckRiot()
 	}
 }
 
-BOOL CityData::BuildUnit(sint32 type)
+bool CityData::BuildUnit(sint32 type)
 {
 	
 	if(!CanBuildUnit(type))
-		return FALSE;
+		return false;
 
 	m_buildInfrastructure = FALSE;
 	m_buildCapitalization = FALSE;
@@ -4211,7 +4203,7 @@ BOOL CityData::BuildUnit(sint32 type)
 	const UnitRecord* rec = g_theUnitDB->Get(type, g_player[m_owner]->GetGovernmentType());
 	Assert(rec);
 	if(rec == NULL)
-		return FALSE;
+		return false;
 
 	if(g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex())) {
 		DPRINTF(k_DBG_GAMESTATE, ("City: Building %s\n", 
@@ -4222,15 +4214,15 @@ BOOL CityData::BuildUnit(sint32 type)
 		DPRINTF(k_DBG_GAMESTATE, ("City: Can't build %s until %s is discovered\n",
 		                          g_theStringDB->GetNameStr(rec->m_name),
 		                          g_theAdvanceDB->GetNameStr(rec->GetEnableAdvanceIndex())));
-		return FALSE; 
+		return false;
 	}
 }
 
-BOOL CityData::BuildImprovement(sint32 type)
+bool CityData::BuildImprovement(sint32 type)
 {
 	Assert(CanBuildBuilding(type));
 	if(!CanBuildBuilding(type))
-		return FALSE;
+		return false;
 
 	m_buildInfrastructure = FALSE;
 	m_buildCapitalization = FALSE;
@@ -4248,7 +4240,7 @@ BOOL CityData::BuildImprovement(sint32 type)
 	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
 	Assert(rec);
 	if(rec == NULL)
-		return FALSE;
+		return false;
 
 	if(g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex())) {
 		DPRINTF(k_DBG_GAMESTATE, ("City: Building improvement %s\n",
@@ -4259,11 +4251,11 @@ BOOL CityData::BuildImprovement(sint32 type)
 		DPRINTF(k_DBG_GAMESTATE, ("City: Can't build %s until %s is discovered\n",
 		                          g_theStringDB->GetNameStr(rec->GetName()),
 		                          g_theAdvanceDB->GetNameStr(rec->GetEnableAdvanceIndex())));
-		return FALSE; 
+		return false;
 	}
 }
 
-BOOL CityData::BuildWonder(sint32 type)
+bool CityData::BuildWonder(sint32 type)
 {
 	Assert(CanBuildWonder(type));
 	if(!CanBuildWonder(type))
@@ -4277,7 +4269,7 @@ BOOL CityData::BuildWonder(sint32 type)
 
 		_RPT0(_CRT_WARN, error_msg);
 #endif
-		return FALSE;
+		return false;
 	}
 
 	m_buildInfrastructure = FALSE;
@@ -4296,7 +4288,7 @@ BOOL CityData::BuildWonder(sint32 type)
 	const WonderRecord* rec = wonderutil_Get(type);
 	Assert(rec);
 	if(rec == NULL)
-		return FALSE;
+		return false;
 
 	DPRINTF(k_DBG_GAMESTATE, ("City %lx: building wonder %s\n", (uint32)m_home_city,
 	                          g_theStringDB->GetNameStr(rec->m_name)));
@@ -4304,7 +4296,7 @@ BOOL CityData::BuildWonder(sint32 type)
 	if(g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex())) {
 		return m_build_queue.InsertTail(k_GAME_OBJ_TYPE_WONDER, type, rec->GetProductionCost());
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
@@ -4371,14 +4363,14 @@ void CityData::AddWonder(sint32 type)
 //place wonder improvement on foundTile
 
 
-//EMOD - FU 4-1-2006 visible tileimps, but it builds them all around the radius i.e. GreatWall builds Great walls
+		// EMOD - FU 4-1-2006 visible tileimps, but it builds 
+		// them all around the radius i.e. GreatWall builds Great walls
 //		for(s = 0; s < rec->GetNumShowOnMapRadius(); s++) { 
 //			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
 //			if(!terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())) {
 //					g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapRadiusIndex(s), it.Pos(), 0);
 //			}
 //		}
-	
 //	}
 
 
@@ -4391,7 +4383,7 @@ void CityData::AddWonder(sint32 type)
 //	}
 }
 
-BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
+bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 {
 	m_buildInfrastructure = FALSE;
 	m_buildCapitalization = FALSE;
@@ -4425,18 +4417,18 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		Assert(urec);
 
 		if(!urec)
-			return FALSE;
+			return false;
 
 		Assert(CanBuildUnit(item_type));
 		if(!CanBuildUnit(item_type)) {
-			return FALSE;
+			return false;
 		}
 		
 		if(g_player[m_owner]->HasAdvance(urec->GetEnableAdvanceIndex())) {
 			cost = urec->GetShieldCost();
 			m_build_queue.ReplaceHead(k_GAME_OBJ_TYPE_UNIT, item_type, cost);
 		} else {
-			return FALSE;
+			return false;
 		}
 		break; 
 	case k_GAME_OBJ_TYPE_WONDER:
@@ -4444,13 +4436,13 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		Assert(wrec);
 
 		if(!CanBuildWonder(item_type))
-			return FALSE;
+			return false;
 
 		if(g_player[m_owner]->HasAdvance(wrec->GetEnableAdvanceIndex())) {
 			cost = wrec->GetProductionCost();
 			m_build_queue.ReplaceHead(k_GAME_OBJ_TYPE_WONDER, item_type, cost);
 		} else {
-			return FALSE;
+			return false;
 		}
 		break; 
 
@@ -4472,7 +4464,7 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 			cost = irec->GetProductionCost();
 			m_build_queue.ReplaceHead(k_GAME_OBJ_TYPE_IMPROVEMENT, item_type, cost);
 		} else {
-			return FALSE; 
+			return false;
 		}
 		break; 
 
@@ -4480,17 +4472,17 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		if(CanBuildCapitalization()) {
 			BuildCapitalization();
 			m_shieldstore = 0;
-			return TRUE;
+			return true;
 		} else {
-			return FALSE;
+			return false;
 		}
 	case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
 		if(CanBuildInfrastructure()) {
 			BuildInfrastructure();
 			m_shieldstore = 0;
-			return TRUE;
+			return true;
 		} else {
-			return FALSE;
+			return false;
 		}
 	default:
 		Assert(0);
@@ -4500,9 +4492,9 @@ BOOL CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	if(category == m_build_category_at_begin_turn) {
 		m_shieldstore = m_shieldstore_at_begin_turn;
 	} else {
-		m_shieldstore = int(double(m_shieldstore_at_begin_turn) * g_theConstDB->GetChangeCurrentlyBuildingItemPenalty()); 
+		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * g_theConstDB->GetChangeCurrentlyBuildingItemPenalty());
 	}
-	return TRUE;
+	return true;
 }
 
 void CityData::DestroyCapitol()
@@ -4535,7 +4527,7 @@ void CityData::DestroyImprovement(sint32 imp)
 
 	m_build_queue.RemoveIllegalItems();
 
-	g_player[m_owner]->RegisterLostBuilding(m_home_city, imp);
+//	g_player[m_owner]->RegisterLostBuilding(m_home_city, imp); Maybe worth for reimplementation
 
 
 
@@ -4544,14 +4536,13 @@ void CityData::DestroyImprovement(sint32 imp)
 
 void CityData::NewGovernment(sint32 government_type)
 {
-	m_build_queue.RemoveIllegalItems(TRUE);
+	m_build_queue.RemoveIllegalItems(true);
 
 	if (government_type == g_player[m_owner]->m_government_type)
 		return;
 
 	// Recalculation of resources?
 
-	g_player[m_owner]->RegisterNewGovernment(m_home_city, government_type);
 }
 
 
@@ -4623,9 +4614,9 @@ void CityData::ImprovementRefuelUnitsInCity() const
 #endif
 }
 
-sint32 CityData::ImprovementCanRefuel(const Unit &u) const 
+bool CityData::ImprovementCanRefuel(const Unit &u) const 
 {
-	return TRUE;
+	return true;
 }
 
 void CityData::AddHappyTimer(sint32 turns, double adjust,
@@ -4759,7 +4750,7 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 			}
 			break;
 		default:
-			Assert(FALSE);
+			Assert(false);
 			break;
 	}
 }
@@ -4829,23 +4820,23 @@ void CityData::GetNuked(UnitDynamicArray &killList)
 	g_thePollution->AddNukePollution(cpos);
 }
 
-BOOL CityData::SafeFromNukes() const
+bool CityData::SafeFromNukes() const
 {
 	return buildingutil_GetProtectFromNukes(GetEffectiveBuildings());
 }
 
 // called by TiledMap::DrawCityNames
-BOOL CityData::HasAirport() const
+bool CityData::HasAirport() const
 {
 	return buildingutil_GetAirport(GetEffectiveBuildings());
 }
 
-BOOL CityData::HasCityWalls() const
+bool CityData::HasCityWalls() const
 {
 	return buildingutil_GetCityWalls(GetEffectiveBuildings());
 }
 
-BOOL CityData::HasForceField() const
+bool CityData::HasForceField() const
 {
 	return buildingutil_GetForceField(GetEffectiveBuildings());
 }
@@ -4860,7 +4851,7 @@ sint32 CityData::AirportLastUsed() const
 	return m_airportLastUsed;
 }
 
-BOOL CityData::HasBeenSpiedUpon() const
+bool CityData::HasBeenSpiedUpon() const
 {
 	return m_spied_upon != 0;
 }
@@ -4876,48 +4867,29 @@ void CityData::CityNullifyWalls()
 	m_walls_nullified = TRUE;
 }
 
-BOOL CityData::IsCapitol() const
+bool CityData::IsCapitol() const
 {
 	return buildingutil_GetDesignatesCapitol(GetEffectiveBuildings());
 }
 
-void CityData::SetCapitol(const BOOL delay_registration)  
+void CityData::SetCapitol()
 {
 	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetCapitol()) {
 			
 			m_built_improvements |= ((uint64)1 << i);
 
-			if (!delay_registration) { 
-				g_player[m_owner]->RegisterCreateBuilding(m_home_city, i);
-				g_player[m_owner]->RegisterNewCapitolBuilding(m_home_city);
-			}
 			return;
 		}
 	}
 }
 
 //  Added by E to add religions?
-//BOOL CityData::IsHolyCity() const
+//bool CityData::IsHolyCity() const
 //{
 //	return Wonderutil_GetDesignatesHolyCity(g_player[m_owner]->m_builtWonders);
 //  }
-
-//void CityData::SetCapitol(const BOOL delay_registration)
-//{
-//	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-//		if(g_theWonderDB->Get(i, g_player[m_owner]->GetReligionType())->GetHolyCity()) {
-//			
-//			m_builtWonders |= ((uint64)1 << i);
-//
-//			if (!delay_registration) { 
-//				g_player[m_owner]->RegisterCreateBuilding(m_home_city, i);
-//				g_player[m_owner]->RegisterNewCapitolBuilding(m_home_city);
-//			}
-//			return;
-//		}
-//	}
-//}
+// Holy city stuff: I should delete it after modification of SetCapitol
 //	if (IsHolyCity) { //(isWatchful)
 //		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon()); //MAPICON_WATCHFUL
 //		Assert(cityIcon); 
@@ -4931,7 +4903,7 @@ void CityData::SetCapitol(const BOOL delay_registration)
 
 //		iconRect.left += iconDim.x;
 //		iconRect.right += iconDim.x;
-//	}
+
 
 void CityData::MakeFranchise(sint32 player)
 {
@@ -4953,7 +4925,7 @@ void CityData::SetFranchiseTurnsRemaining(sint32 turns)
 	}
 }
 
-BOOL CityData::IsWatchful() const
+bool CityData::IsWatchful() const
 {
 	return (m_watchfulTurns > 0);
 }
@@ -5050,7 +5022,7 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 		Assert(u.m_id != (0));
 		if(u.m_id != 0) {
 			u.SetPosAndNothingElse(cpos);
-			u.SetTempSlaveUnit(TRUE);
+			u.SetTempSlaveUnit(true);
 		}
 	}
 	
@@ -5154,7 +5126,7 @@ void CityData::CleanupUprising(Army &sa)
 				sa.DelIndex(i);
 			else {
 				bool revealed;
-				sa[i].SetTempSlaveUnit(FALSE);
+				sa[i].SetTempSlaveUnit(false);
 				sa[i].SetPosAndNothingElse(m_home_city.RetPos());
 				sa[i].AddUnitVision(revealed);
 				
@@ -5175,7 +5147,7 @@ void CityData::CleanupUprising(Army &sa)
 		
 		ChangeSpecialists(POP_SLAVE, -SlaveCount());
 
-		m_home_city.ResetCityOwner(si, FALSE, CAUSE_REMOVE_CITY_SLAVE_UPRISING);
+		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING);
 	}
 
 }
@@ -5273,19 +5245,19 @@ void CityData::SpreadNanoTerror()
 	}
 }
 
-BOOL CityData::IsBioImmune() const
+bool CityData::IsBioImmune() const
 {
 	return wonderutil_GetProtectFromBiologicalWarfare(g_player[m_owner]->m_builtWonders);
 }
 
-BOOL CityData::IsNanoImmune() const
+bool CityData::IsNanoImmune() const
 {
 	return wonderutil_GetProtectFromBiologicalWarfare(g_player[m_owner]->m_builtWonders);
 }
 
 bool CityData::IsProtectedFromConversion()
 {
-	return wonderutil_PreventConversion(g_player[m_owner]->m_builtWonders) == TRUE;
+	return wonderutil_PreventConversion(g_player[m_owner]->m_builtWonders);
 }
 
 void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
@@ -5302,7 +5274,7 @@ double CityData::TheologicalModifier() const
 	return buildingutil_GetPreventConversion(GetEffectiveBuildings());
 }
 
-void CityData::Unconvert(BOOL makeUnhappy)
+void CityData::Unconvert(bool makeUnhappy)
 {
 	if(m_convertedTo < 0)
 		return; 
@@ -5538,14 +5510,14 @@ sint32 CityData::GetOvertimeCost()
 	return c;
 }
 
-BOOL CityData::BuyFront()
+bool CityData::BuyFront()
 {
 	if(!m_build_queue.GetHead())
-		return FALSE;
+		return false;
 
 	// * Can't rush buy capitalization/infrastructure
 	if(m_buildInfrastructure || m_buildCapitalization)
-		return FALSE;
+		return false;
 
 	//cant rush wonders? 
 	//g_theWonderTracker->SetBuildingWonder(m_wonderStarted, m_owner)
@@ -5553,7 +5525,7 @@ BOOL CityData::BuyFront()
 
 	if(m_shieldstore >= m_build_queue.GetFrontCost()) {
 		
-		return TRUE;
+		return true;
 	}
 
 	if(g_network.IsClient()) {
@@ -5563,7 +5535,7 @@ BOOL CityData::BuyFront()
 
 	if(!m_paidForBuyFront) {
 		if(!PayForBuyFront())
-			return FALSE;
+			return false;
 	}
 
 	
@@ -5571,7 +5543,7 @@ BOOL CityData::BuyFront()
 
 	m_paidForBuyFront = false;
 
-	return TRUE;
+	return true;
 }
 
 void CityData::RemoveFront()
@@ -5695,7 +5667,7 @@ sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 	return turns_remaining;
 }
 
-void CityData::SellBuilding(sint32 which, BOOL byChoice)
+void CityData::SellBuilding(sint32 which, bool byChoice)
 {
 
 
@@ -5733,8 +5705,8 @@ void CityData::SellBuilding(sint32 which, BOOL byChoice)
 			m_net_gold += gold;
 		m_built_improvements &= ~((uint64)1 << uint64(which));
 
-		g_player[m_owner]->RegisterLostBuilding(m_home_city, which);
-		m_build_queue.RemoveIllegalItems(TRUE);
+//		g_player[m_owner]->RegisterLostBuilding(m_home_city, which); Maybe worth of reimplementation
+		m_build_queue.RemoveIllegalItems(true);
 		if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)which))) {
 			Assert(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id);
 			if(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id) {
@@ -5856,15 +5828,15 @@ sint32 CityData::GetCombatUnits() const
 //              has all of the goods in its radius or is buying the good from trade.
 //
 //----------------------------------------------------------------------------
-BOOL CityData::CanBuildUnit(sint32 type) const
+bool CityData::CanBuildUnit(sint32 type) const
 {
 	// Added by Martin Gühmann
 	if(!g_player[m_owner]->CanBuildUnit(type))
-		return FALSE;
+		return false;
 
 	const UnitRecord *rec = g_theUnitDB->Get(type, g_player[m_owner]->GetGovernmentType());
 	if(!rec)
-		return FALSE;
+		return false;
 
 	MapPoint pos;
 	m_home_city.GetPos(pos);
@@ -5875,7 +5847,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		sint32 newunit;
 		for(newunit = 0; newunit < rec->GetNumObsoleteUnit(); newunit++) {
 			if(CanBuildUnit(rec->GetObsoleteUnitIndex(newunit)))
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -5885,7 +5857,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		for(newunit = 0; newunit < rec->GetNumUpgradeTo(); newunit++) {
 			if(CanBuildUnit(rec->GetUpgradeToIndex(newunit)))
 			//if(g_player[m_owner]->CanBuildUnit(rec->GetUpgradeToIndex(newunit)) //because of resources cities maybe different
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -5895,7 +5867,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
 			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
 			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -5905,7 +5877,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		for(sint32 o = 0; o < rec->GetNumExcludedByBuilding(); o++) {
 			sint32 b = rec->GetExcludedByBuildingIndex(o);
 			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -5915,7 +5887,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		for(o = 0; o < rec->GetNumPrerequisiteWonder(); o++) {
 			sint32 b = rec->GetPrerequisiteWonderIndex(o);
 			if(!(GetBuiltWonders() & (uint64(1) << (uint64)b)))
-				return FALSE;
+				return false;
 		}
 	}
 	
@@ -5926,7 +5898,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
 			sint32 b = rec->GetExcludedByWonderIndex(ew);
 			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -5941,7 +5913,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Start Resources section - more to add later 
@@ -5957,7 +5929,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares Unit NeedsCityGoodAll to the resources collected
@@ -5966,7 +5938,7 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
 			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -5982,41 +5954,41 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
-	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, TRUE, m_home_city.m_id, rec->GetIndex()))
-		return FALSE;
+	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, true, m_home_city.m_id, rec->GetIndex()))
+		return false;
 
 	if(!rec->GetMovementTypeLand() && !rec->GetMovementTypeTrade() && !rec->GetIsTrader()) {
 		if(g_theWorld->IsWater(pos.x, pos.y) && rec->GetSeaCityCanBuild()) {
 			
 			
-			return TRUE;
+			return true;
 		}
 		
 		if((g_theWorld->IsLand(pos.x, pos.y) || 
 			g_theWorld->IsMountain(pos.x, pos.y)) &&
 			rec->GetLandCityCanBuild()) {
 			
-			return TRUE;
+			return true;
 		}
 		
 		
 		if(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) {
 			if(g_theWorld->IsNextToWater(pos.x, pos.y)) {
-				return TRUE;
+				return true;
 			}
 			
-			return FALSE;
+			return false;
 		}
 		else if(rec->GetMovementTypeAir()) {
-			return TRUE;
+			return true;
 		}
-		return FALSE;
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 //----------------------------------------------------------------------------
@@ -6049,52 +6021,52 @@ BOOL CityData::CanBuildUnit(sint32 type) const
 //              - Added Buildingfeat checks if any civ has built num or percent of buildings
 //
 //----------------------------------------------------------------------------
-BOOL CityData::CanBuildBuilding(sint32 type) const
+bool CityData::CanBuildBuilding(sint32 type) const
 {
 	if(g_exclusions->IsBuildingExcluded(type))
-		return FALSE;
+		return false;
 
 	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
 	
 	
 	Assert(rec != NULL);
 	if (!rec) 
-		return FALSE;
+		return false;
 
 	if(!g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()) && rec->GetEnableAdvanceIndex() >= 0) {
-		return FALSE;
+		return false;
 	}
 
 	sint32 o;
 	for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 		if(g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-			return FALSE;
+			return false;
 	}
 	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
 	if(g_theWorld->IsWater(pos)) {
 		if(rec->GetCantBuildInSea())
-			return FALSE;
+			return false;
 	} else {
 		if(rec->GetCantBuildOnLand())
-			return FALSE;
+			return false;
 	}
 	
 	
 	if (rec->GetCoastalBuilding()) {
 		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
-			return FALSE;
+			return false;
 	}
 
 	if(m_built_improvements & uint64((uint64)1 << (uint64)type)) {
 		
-		return FALSE;
+		return false;
 	}
 
 	if((rec->GetNuclearPlant() &&
 	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders()))) {
-		return FALSE;
+		return false;
 	}
 
 	
@@ -6102,7 +6074,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
 			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
 			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -6113,7 +6085,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		for(e = 0; e < rec->GetNumExcludedByBuilding(); e++) {
 			sint32 b = rec->GetExcludedByBuildingIndex(e);
 			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -6123,7 +6095,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		for(o = 0; o < rec->GetNumPrerequisiteWonder(); o++) {
 			sint32 b = rec->GetPrerequisiteWonderIndex(o);
 			if(!(GetBuiltWonders() & (uint64(1) << (uint64)b)))
-				return FALSE;
+				return false;
 		}
 	}
 	// EMOD this wonder is prevented by other wonders 
@@ -6133,7 +6105,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
 			sint32 b = rec->GetExcludedByWonderIndex(ew);
 			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
-				return FALSE;
+				return false;
 			}
 		}
 	}	
@@ -6145,7 +6117,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
         {
 			Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
 			if(aCity.CD()->HaveImprovement(type)) {
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -6182,7 +6154,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 				}
 			}
 			if(!enoughNum && !enoughPercent)
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -6198,7 +6170,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares Building CityStyle to the CityStyle of the City
@@ -6212,7 +6184,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares Building CultureOnly to the Player's CityStyle
@@ -6226,7 +6198,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
@@ -6240,7 +6212,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Start Resources section - more to add later 
@@ -6255,7 +6227,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares Building NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
@@ -6263,7 +6235,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
 			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -6284,7 +6256,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 					}
 			}
 			if(!goodavail)
-			return FALSE;
+			return false;
 	}
 
 	//End Resources Code
@@ -6300,19 +6272,19 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// added by E - some buildings can only be built once city reaches certain size
 	sint32 pop;
 	if(rec->GetNeedsPopCountToBuild(pop)) {
 		if(PopCount() < pop) {
-			return FALSE;
+			return false;
 		}
 	}
 
 ///END CONDITIONS
-	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex());
+	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, true, m_home_city.m_id, rec->GetIndex());
 }
 
 //----------------------------------------------------------------------------
@@ -6346,7 +6318,7 @@ BOOL CityData::CanBuildBuilding(sint32 type) const
 //              - Added Buildingfeat checks if any civ has built num or percent of buildings
 //
 //----------------------------------------------------------------------------
-BOOL CityData::CanBuildWonder(sint32 type) const
+bool CityData::CanBuildWonder(sint32 type) const
 {
 
 	// Added Wonder database 
@@ -6354,17 +6326,17 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 	//	const WonderRecord *rec = g_theWonderDB->Get(wonder);
 	
 	if(g_exclusions->IsWonderExcluded(type))
-		return FALSE;
+		return false;
 
 	//out commented to allow more flexibility on wonder building options
 	if(!wonderutil_IsAvailable(type, m_owner))
-		return FALSE;
+		return false;
 
 // took data from wonderutil_IsAvailable to keep same checks but allow some flexibility
 
 //	if(rec->GetOnePerCiv == 0) {  //added as a new check to allow regular wonders to be OnePerCiv
 //		if(g_theWonderTracker->HasWonderBeenBuilt(type)) {
-//			return FALSE;
+//			return false;
 //		}
 //	}
 //
@@ -6372,27 +6344,30 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 //	if(rec->GetOnePerCiv()) {
 //		for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
 //			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings() & ((uint64)1 << (uint64)type))){ 
-//				return FALSE;
+//				return false;
 //			}
 //		}
 //	}
 
 //	if(rec->GetEnableAdvanceIndex() >= 0 && 
 //	   !g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
-//		return FALSE;
+//		return false;
 
 	
 //	if(wonderutil_IsObsolete(type))
-//		return FALSE;
+//		return false;
 	
 //	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
-//		return FALSE;
+//		return false;
 //	}
 // emd EMOD
 
-////////////////////////////////////////////////
-//EMOD TODO: count up the number of wonders in a city and compare it to the difficultydb wondercitylimit and add to a buildingflag additional wonder to city and a govt modifier?
-/////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+// EMOD TODO: count up the number of wonders in a city and 
+// compare it to the difficultydb wondercitylimit and add 
+// to a buildingflag additional wonder to city and a govt 
+// modifier?
+////////////////////////////////////////////////////////////
 	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
@@ -6403,7 +6378,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
 			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
 			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
-				return FALSE;
+				return false;
 		}
 	}
 	
@@ -6414,7 +6389,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		for(e = 0; e < rec->GetNumExcludedByBuilding(); e++) {
 			sint32 b = rec->GetExcludedByBuildingIndex(e);
 			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -6427,7 +6402,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			sint32 b = rec->GetExcludedByWonderIndex(ew);
 			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
 			//if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -6444,13 +6419,13 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// EMOD - Added Coastal Buildings to wonders 
 	if (rec->GetCoastalBuilding()) {
 		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
-			return FALSE;
+			return false;
 	}
 
 	// EMOD from feats but needs a number of builds to build, goes with wonders 2-24-2006
@@ -6470,15 +6445,15 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 
 			if(bf->GetNum(num)) {
 				if(numCities >= num) {
-					return TRUE;
+					return true;
 				}
-				return FALSE;
+				return false;
 			} else if(bf->GetPercentCities(percent)) {
 				sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
 				if(havePercent >= percent) {
-					return TRUE;
+					return true;
 				}
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -6495,7 +6470,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares Wonder CultureOnly to the Player's CityStyle
@@ -6509,7 +6484,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
@@ -6523,7 +6498,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	if(rec->GetNumNeedsCityGoodAnyCity()) {
@@ -6543,7 +6518,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 					}
 			}
 			if(!goodavail)
-			return FALSE;
+			return false;
 	}
 
 	// Start Resources section - more to add later 
@@ -6558,7 +6533,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
 	// Added by E - Compares Wonder NeedsCityGoodAll to the resources collected or bought by the city, must be all listed
@@ -6566,7 +6541,7 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
 			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
-				return FALSE;
+				return false;
 		}
 	}
 
@@ -6582,19 +6557,10 @@ BOOL CityData::CanBuildWonder(sint32 type) const
 			}
 		}
 		if(!found)
-			return FALSE;
+			return false;
 	}
 
-	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type);
-}
-
-// no longer used
-void CityData::RemoveWonderFromQueue(sint32 type)
-{
-	BOOL OopsSomethingUsesThisFunctionIGuess = FALSE;
-	Assert(OopsSomethingUsesThisFunctionIGuess);
-
-	m_build_queue.RemoveObjectsOfType(k_GAME_OBJ_TYPE_WONDER, type, CAUSE_REMOVE_BUILD_ITEM_ILLEGAL);
+	return g_slicEngine->CallMod(mod_CanCityBuildWonder, true, m_home_city.m_id, type);
 }
 
 void CityData::Injoin(sint32 player)
@@ -6603,21 +6569,17 @@ void CityData::Injoin(sint32 player)
 	m_injoinedBy = player;
 }
 
-BOOL CityData::IsInjoined() const
+bool CityData::IsInjoined() const
 {
 	return m_isInjoined;
 }
 
 
-BOOL CityData::HaveImprovement(const sint32 type) const
+bool CityData::HaveImprovement(const sint32 type) const
 {
 	return (GetImprovements() & (uint64(1) << type)) != 0;
 }
 
-/*sint32 CityData::GetPreferedPopType() const
-{
-	return 0;
-}*/
 
 void CityData::ResetConquestDistress(double new_distress) { m_happy->ResetConquestDistress(new_distress); } 
 double CityData::GetHappiness() const { return m_happy->GetHappiness(); }
@@ -6635,12 +6597,12 @@ double CityData::GetHappyPopEntertainment() const { return m_happy->GetPopEntert
 double CityData::GetHappyImprovement() const { return m_happy->GetImprovement(); }
 double CityData::GetHappyWonders() const { return m_happy->GetWonders(); }
 double CityData::GetHappyCrime() const { return m_happy->GetCrime(); }  
-BOOL CityData::IsCelebratingHappiness(void) const { 	return (m_happy->IsVeryHappy()) ; }
+bool CityData::IsCelebratingHappiness(void) const { return (m_happy->IsVeryHappy()); }
 
-BOOL CityData::WasHappinessAttacked(void) const
+bool CityData::WasHappinessAttacked(void) const
 {
 	if(m_happinessAttacked)
-		return TRUE;
+		return true;
 
 	double val;
 	StringID name;
@@ -6684,14 +6646,14 @@ void CityData::NotifyAdvance(AdvanceType advance)
 
 			for(o = 0; o < irec->GetNumObsoleteAdvance(); o++) {
 				if(irec->GetObsoleteAdvanceIndex(o) == advance) {
-					SellBuilding(i, FALSE);
+					SellBuilding(i, false);
 					break;
 				}
 			}
 		}
 	}
 
-	m_build_queue.RemoveIllegalItems(TRUE);
+	m_build_queue.RemoveIllegalItems(true);
 	FindBestSpecialists();
 }
 
@@ -6700,7 +6662,7 @@ void CityData::ContributeScience(double incomePercent,
                                  double &addscience,
                                  double &subgold)
 {
-	Assert(FALSE);
+	Assert(false);
 
 	double goldToConsider = m_net_gold * incomePercent;
 	Player *p = g_player[m_owner];
@@ -6757,9 +6719,10 @@ void CityData::AddEndGameObject(sint32 type)
 	Assert(wtf);
 }
 
-BOOL CityData::SendSlaveTo(Unit &dest)
+// Worth to be implemented
+bool CityData::SendSlaveTo(Unit &dest)
 {
-	return FALSE;
+	return false;
 }
 
 
@@ -6921,7 +6884,7 @@ void CityData::FinishBuilding()
 	                            pos, 
 	                            m_built_improvements, 
 	                            m_builtWonders, 
-	                            TRUE)) {
+	                            true)) {
 		m_shieldstore_at_begin_turn = 0;
 		m_shieldstore = 0;
 		if(PopCount() < 1) {
@@ -6949,8 +6912,8 @@ void CityData::DestroyRandomBuilding()
 		sint32 which = g_rand->Next(count);
 		
 		m_built_improvements &= ~((uint64)1 << uint64(buildings[which]));
-		g_player[m_owner]->RegisterLostBuilding(m_home_city, buildings[which]);
-		m_build_queue.RemoveIllegalItems(TRUE);
+//		g_player[m_owner]->RegisterLostBuilding(m_home_city, buildings[which]); //  Maybe worth of reimplementation
+		m_build_queue.RemoveIllegalItems(true);
 	}
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 }
@@ -6967,7 +6930,7 @@ void CityData::AddConversionUnhappiness(sint32 who)
 	}
 }
 
-BOOL CityData::CanBuildInfrastructure() const
+bool CityData::CanBuildInfrastructure() const
 {
 	return g_player[m_owner]->CanBuildInfrastructure();
 }
@@ -7015,7 +6978,7 @@ void CityData::BuildInfrastructure()
 	
 }
 
-BOOL CityData::CanBuildCapitalization() const
+bool CityData::CanBuildCapitalization() const
 {
 	return g_player[m_owner]->CanBuildCapitalization();
 }
@@ -7116,7 +7079,7 @@ void CityData::CheckForSlaveUprising()
 	}
 }
 
-BOOL CityData::NeedToDoUprising() const
+bool CityData::NeedToDoUprising() const
 { 
 	return m_doUprising != UPRISING_CAUSE_NONE; 
 }
@@ -7158,7 +7121,7 @@ void CityData::Disband()
 	Assert(settler >= 0);
 	if(settler >= 0) {
 		Unit s = g_player[m_owner]->CreateUnit(settler, pos,
-		                                       m_home_city, FALSE,
+		                                       m_home_city, false,
 		                                       CAUSE_NEW_ARMY_DISBANDED_CITY);
 		if(g_theUnitPool->IsValid(s)) {
 			s.ClearFlag(k_UDF_FIRST_MOVE);
@@ -7220,10 +7183,6 @@ sint32 CityData::SubtractAccumulatedFood(sint32 amount)
 	return m_accumulated_food;
 }
 
-void CityData::SetProbeRecoveredHere(BOOL recovered)
-{
-	m_probeRecoveredHere = (uint8)recovered;
-}
 
 
 
@@ -7250,8 +7209,10 @@ bool CityData::HasSleepingUnits(void) const
 
 sint32 CityData::CityGrowthCoefficient()
 {
-	return sint32(g_theConstDB->CityGrowthCoefficient() * 
-	              m_home_city.GetDBRec()->GetCityGrowthCoefficient());
+	double value = 0.0;
+	m_home_city.GetDBRec()->GetCityGrowthCoefficient(value);
+
+	return static_cast<sint32>(g_theConstDB->CityGrowthCoefficient() * value);
 }
 
 void CityData::DestroyWonder(sint32 which)
@@ -7259,7 +7220,7 @@ void CityData::DestroyWonder(sint32 which)
 	
 	
 	m_builtWonders &= ~((uint64)1 << (uint64)which);
-	g_player[m_owner]->RemoveWonder(which, TRUE);
+	g_player[m_owner]->RemoveWonder(which, true);
 
 	
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_WonderRemoved,
@@ -7275,7 +7236,7 @@ void CityData::BuildFront()
 	MapPoint pos = m_home_city.RetPos();
 
 	m_shieldstore_at_begin_turn = m_shieldstore;
-	if(m_build_queue.BuildFront(m_shieldstore, this, pos, m_built_improvements, m_builtWonders, FALSE)) {
+	if(m_build_queue.BuildFront(m_shieldstore, this, pos, m_built_improvements, m_builtWonders, false)) {
 		m_shieldstore_at_begin_turn = m_shieldstore;
 	}
 	if(!m_build_queue.GetHead()) {
@@ -7720,7 +7681,7 @@ void CityData::FindBestSpecialists()
 }
 
 
-BOOL CityData::GetUseGovernor() const
+bool CityData::GetUseGovernor() const
 {
 	return m_useGovernor || (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT);
 }
@@ -7844,7 +7805,7 @@ void CityData::InsertBuildItem(sint32 index, uint32 category, sint32 type)
 			case k_GAME_OBJ_TYPE_CAPITALIZATION: InsertCapitalization(); return;
 			case k_GAME_OBJ_TYPE_INFRASTRUCTURE: InsertInfrastructure(); return;
 			default:
-				Assert(FALSE);
+				Assert(false);
 				return;
 		}
 	}
@@ -7917,11 +7878,9 @@ void CityData::AddImprovement(sint32 type)
 
 	SetImprovements(m_built_improvements | ((uint64)1 << (uint64)type));
 	IndicateImprovementBuilt();
-	g_player[m_owner]->RegisterCreateBuilding(m_home_city, type);
 
 	if (buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)type)) {
 		g_player[m_owner]->SetCapitol(m_home_city); 
-		g_player[m_owner]->RegisterNewCapitolBuilding(m_home_city);
 	}
 
 	sint32 intRad;
@@ -7935,7 +7894,7 @@ void CityData::AddImprovement(sint32 type)
 //	sint32 unit;
 //	for(unit = 0; unit < rec->GetNumCreatesUnit(); unit++) {
 //		if (rec->GetCreatesUnitIndex(unit) > 0) {
-//			g_player[m_owner]->CreateUnit(rec->GetCreatesUnitIndex(unit), point, m_home_city, FALSE, CAUSE_NEW_ARMY);
+//			g_player[m_owner]->CreateUnit(rec->GetCreatesUnitIndex(unit), point, m_home_city, false, CAUSE_NEW_ARMY);
 //		}
 //	}
 
@@ -8263,8 +8222,8 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, b
 //
 // Description: Calculate this city's m_net_gold and maybe transfer it to the owner's gold reserve.
 //
-// Parameters : BOOL projectedOnly     : if FALSE then actually transfer gold
-//            : BOOL changeResources   : if TRUE (default) then redo trade routes, else just calculate gold
+// Parameters : bool projectedOnly     : if false then actually transfer gold
+//            : bool changeResources   : if true (default) then redo trade routes, else just calculate gold
 //
 // Globals    : g_player:            List of players
 //
@@ -8525,7 +8484,7 @@ void CityData::CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &conv
 				convertedGold = static_cast<sint32>(gold * g_theConstDB->ClericConversionFactor());
 			}
 		} else {
-			Assert(FALSE);
+			Assert(false);
 		}
 		if(convertedGold < 1)
 			convertedGold = 1;
@@ -8984,7 +8943,7 @@ double CityData::ConversionLoss(double gold) const
 				convertedGold = gold * g_theConstDB->ClericConversionFactor();
 			}
 		} else {
-			Assert(FALSE);
+			Assert(false);
 		}
 		if(convertedGold < 1)
 			convertedGold = 1;
@@ -9668,7 +9627,7 @@ bool CityData::CanCollectGood(sint32 good) const
 	}
 
 	if(!g_player[m_owner]->HasAdvance(rec->GetAvailableAdvanceIndex()) 
-	&& rec->GetAvailableAdvanceIndex() >= 0) { // HasAdvance returns TRUE if the passed parameter is negative
+	&& rec->GetAvailableAdvanceIndex() >= 0) { // HasAdvance returns true if the passed parameter is negative
 		return false;
 	}
 
