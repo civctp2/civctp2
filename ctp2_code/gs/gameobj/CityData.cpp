@@ -8476,9 +8476,7 @@ void CityData::CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &conv
 		if(m_convertedBy == CONVERTED_BY_CLERIC) {
 			convertedGold = static_cast<sint32>(gold * g_theConstDB->ClericConversionFactor());
 		} else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST) {
-			sint32 doubleTelevangelists;
-			buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings(), doubleTelevangelists);
-			if(doubleTelevangelists) {
+			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings())) {
 				convertedGold = static_cast<sint32>(gold * g_theConstDB->TelevangelistConversionFactor());
 			} else {
 				convertedGold = static_cast<sint32>(gold * g_theConstDB->ClericConversionFactor());
@@ -8935,9 +8933,7 @@ double CityData::ConversionLoss(double gold) const
 		if(m_convertedBy == CONVERTED_BY_CLERIC) {
 			convertedGold = gold * g_theConstDB->ClericConversionFactor();
 		} else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST) {
-			sint32 doubleTelevangelists;
-			buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings(), doubleTelevangelists);
-			if(doubleTelevangelists) {
+			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings())) {
 				convertedGold = gold * g_theConstDB->TelevangelistConversionFactor();
 			} else {
 				convertedGold = gold * g_theConstDB->ClericConversionFactor();

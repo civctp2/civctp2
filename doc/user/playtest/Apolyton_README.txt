@@ -57,28 +57,26 @@ Added: AINoSinking so AI ships don't sink
 Added: Advances can add Production, Food, Science, Gold bonuses
 Added: IsBonusGood to resources so goods not on map can be enabled by buildings or tileimps
 Added: Civilization Bonuses Production, Food, Science, Gold, IncreaseHP, offense land seas, air and boat movement
-Fixed: When AIs go to war its now a pop-up
+Changed: When AIs go to war its now a pop-up
 Added: AutoExpireTreatyBase to userprofiletext to set the turns when treaties expire
 Fixed: Crash when you started more than 11 players
-Added: new gw.txt for new global warming format
+Added: New gw.txt for new global warming format
 Added: EitherPrerequisite to Advances to enable a fluid tech tree like Civ4
 Added: PrerequisiteTileImp to terrain improvements, now you can specify that an imp must have been built first before you can build the other imp on it.
 
-
-
-2006-07-02 (revision 602)
-Added: ExcludedbyWonder to buildings, units, wonders 
+2006-07-02 (Revision 602)
+Added: ExcludedByWonder to buildings, units, wonders 
 Added: PrerequisiteWonder to buildings and units
 Fixed: CanBombard
 Fixed: CanCloak
 Added: NeedsFeatToBuild to Units
 Fixed: Access Unit Crash
 
-2006-06-09 (revision 587)
-Added: Capture City options: Occupy, Liberate(give to barbs), and Raze
+2006-06-09 (Revision 587)
+Added: Capture City options: Occupy, Liberate(give to barbs), and Raze (needs to be improved)
 Fixed: ShowOnMap works A LOT better
-Fixed: Barbs are not affected by hostileterrain
-Added: TreasuryInterest flag, bldgs with this flag give you gold equal to a percentage of your treasury
+Fixed: Barbarians are not affected by hostileterrain
+Added: TreasuryInterest flag, buildings with this flag give you gold equal to a percentage of your treasury
 
 2006-06-07
 Added: CanExportGood allows for a tileimp with the colony flag and a IntBorderRadius to send a good in its radius to another city
@@ -130,18 +128,27 @@ Added: AddsASlave to goods. Now if you are collecting a good with this flag it w
 Added: OnePerCiv to Wonders. But still needs work.
 
 2006-05-03
-Added: UpgradeTo flag now implemented. With enough gold you can upgrade units by sleeping them in your city
-Added: flags for the difficulty dependent AI gold deficit (NoAIGoldDeficit) and units over production cheats (NoAIProductionDeficit).
+Added:    New database flags for modders:
+- UnitDB:
+   UpgradeTo            Unit can be upgraded to given unit with enough gold.
+                        Upgrade is done by putting the unit to sleep in a city.
+                        Note an own upgrade order is still missing.
+- DifficuiltyDB:
+   NoAIGoldDeficit      AI does not pay for gold deficits. (Optional AI cheat)
+   NoAIProductionDeficit AI does not pay for prod. deficits. (Opt. AI cheat)
 
 2006-04-29
-Added: TargetsCivilians where a unit that bombs a city hits civilians not units.
-Added: PrecisionStrike where a unit that bombs a city hits buildings not units.
-Added: MultipleAttack flag units with this flag can attack as amny times as they have move points
-Added: AvailableAdvance for goods, now you can specifyan advance required in order for a city to collect (it will still be on the map though)
-Added: VanishAdvance for goods, now you can specify an advance that stops a city from collecting a good
-Added: CantTrade a good can never be collected, just a bonus (like an oasis)
-Added: HappyInc flag for goods, now goods that are traded can add happiness to a city 
- 
+Added:    New database flags for modders:
+- UnitDB:
+   TargetsCivilians     Unit bombard civilians instead of other units.
+   PrecisionStrike      Unit bombards buildings instead of other units.
+   MultipleAttack       Unit can attack repeatedly per turn with enough MPs.
+- RessourceDB:
+   AvailableAdvance     Good needs a specific advance to be collected by a city.
+   VanishAdvance        Good cannot be collected with this advance owned.
+   CantTrade            Good cannot be traded. It acts like a bonus.
+   HappyInc             Good increases city happiness if it is traded.
+
 2006-04-14
 Added: CanCaptureTile check in pillage. Units with this flag capture nemy tiles
   instead of pillaging them
@@ -150,8 +157,7 @@ Added: CanBeGifted to units and now a human player can gift units to players
 Added: DeniedToEnemy, tileimps that have a movecost wont count with this flag 
   for players you are at war with
 Added: Sea pirates! barbarians may have navies
-Added: If the terrain score equals 0 than the AI won't try to settle there (hopefully)
-Fixed: Bug that disbanded all units when you tried to add settler to city 
+Fixed: Bug that disbanded all units when you tried to add a settler to city 
 Fixed: Goodyhut crash caused by having more units than advances
 
 2006-04-01
@@ -167,28 +173,29 @@ Added: GoldHunger units can now have a variable gold cost
 Added: BorderRadius for wonders so wonders can increase border radius
 
 2006-03-22
-Added: production bonus to AI, they dont run production deficits
 Added: GoodyHutExcluded flag (just in case) for advances
-Added: messages for verifyattack and move into enemy. If you move into an enemy 
-  or attack WIHOUT declaring war you will get a popup, but the popup doesnt let 
+Added: Messages for verifyattack and move into enemy. If you move into an enemy 
+  or attack without declaring war you will get a popup, but the popup doesnt let 
   you declare war (yet) you have to do that through the diplomacy screen.
-Added: newupkeep flags,although not necessary (may remove)
-Added: gold bonus to AI so they dont have to be hurt by negative values. If a 
+Added: Newupkeep flags,although not necessary (may remove)
+Added: Gold bonus to AI so they dont have to be hurt by negative values. If a 
   cities gold is less than zero for an AI it is automatically set to zero so 
   they dont get hurt by new gold modifiers
 
 2006-03-11
-Added: GoodyHutExcluded flag for Units. Units with this flag should not appear 
-  from a goody hut.
-Added: Enablesgood in terraineffect - allows for different goods for same imp 
-  on different terrains
+Added:    New database flags for modders:
+- UnitDB:
+   GoodyHutExcluded     Unit cannot be gained from a goody hut.
+- TerrainImprovementDB:
+   TerrainEffect
+      EnablesGood       Tileimp on a certain terrain gives a good.
 
 2006-03-02
 Added:    New database flags for modders:
 - BuildingDB:
    EnablesVeterans      Building makes city to build veteran units only.
 - UnitDB:
-   PopCostsToBuild      Unit costs a city the given amount of population points.
+   PopCostsToBuild      Unit costs a city these number of population points.
                         A city disband warning is still missing.
 
 2006-03-01

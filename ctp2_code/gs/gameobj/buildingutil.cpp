@@ -91,17 +91,18 @@ void buildingutil_Initialize()
 
 sint32 buildingutil_GetProductionCost(const sint32 building_type)
 {
-    const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
+	const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
 	Assert(rec);
 	if(rec == NULL)
 		return 0;
 
-    return rec->GetProductionCost();
+	return rec->GetProductionCost();
 }
 
 sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
 										   sint32 wonderLevel, sint32 owner)
 {
+	//sint32 owner = 0;
 	sint32 upkeep = 0;
 	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(built_improvements & shiftbit(i)) {
@@ -121,12 +122,12 @@ sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
 			}
 		}
 	}
-		return upkeep;
+	return upkeep;
 }
 
 sint32 buildingutil_GetBlgUpkeep(const sint32 building_type)
 {
-    return g_theBuildingDB->Get(building_type)->GetUpkeep();
+	return g_theBuildingDB->Get(building_type)->GetUpkeep();
 }
 
 
@@ -141,7 +142,7 @@ sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements,
 			if(g_theBuildingDB->Get(i)->GetUpkeep() > wonderLevel && g_theBuildingDB->Get(i)->GetUpkeep() < lowcost) {
 				lowcost = g_theBuildingDB->Get(i)->GetUpkeep();
 				low = i;
-// EMOD add new upkeep calucations?
+				// EMOD add new upkeep calucations?
 
 			}
 		}
@@ -149,21 +150,19 @@ sint32 buildingutil_GetCheapestBuilding(const uint64 built_improvements,
 	return low;
 }
 
-sint32 buildingutil_GetDesignatesCapitol(const uint64 built_improvements)
-
+bool buildingutil_GetDesignatesCapitol(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetCapitol) {
-		return TRUE;
+		return true;
 	}
-    return FALSE;  
+	return false;
 }
 
 void buildingutil_GetDefendersBonus(const uint64 built_improvements, 
      double &bonus)
-
 {
-    bonus = 0.0;
-    FOREACH_BUILT(GetDefendersPercent) {
+	bonus = 0.0;
+	FOREACH_BUILT(HasDefendersPercent) {
 		double b;
 		rec->GetDefendersPercent(b);
 		bonus += b;
@@ -172,7 +171,6 @@ void buildingutil_GetDefendersBonus(const uint64 built_improvements,
 
 void buildingutil_GetHappinessIncrement(const uint64 built_improvements, 
      sint32 &bonus, sint32 owner)
-
 {
 
 
@@ -183,8 +181,8 @@ void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
 			g_player[owner]->m_builtWonders)) / 100.0;
 	}
 
-    bonus = 0;
-	FOREACH_BUILT(GetHappyInc) {
+	bonus = 0;
+	FOREACH_BUILT(HasHappyInc) {
 		sint32 inc;
 		rec->GetHappyInc(inc);
 		if(rec->GetIsReligious())
@@ -198,32 +196,30 @@ void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
 	}
 }
 
-void buildingutil_GetDoubleTelevangelism(uint64 built_improvements, sint32 &is_dbl_tel)
-
+bool buildingutil_GetDoubleTelevangelism(uint64 built_improvements)
 {
-    is_dbl_tel = FALSE; 
 	FOREACH_BUILT(GetDoubleTelevangelists) {
-		is_dbl_tel = TRUE; 
-		return;
+		return true;
 	}
+
+	return false;
 }
 
 
-sint32 buildingutil_GetNoUnhappyPeople(const uint64 built_improvements)
-
+bool buildingutil_GetNoUnhappyPeople(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetNoUnhappyPeople) {
-		return TRUE;
+		return true;
 	}
 
-    return FALSE; 
+	return false;
 }
 
 
 double buildingutil_GetLowerCrime(const uint64 built_improvements)
 {
 	double crimeMod = 0.0;
-	FOREACH_BUILT(GetLowerCrime) {
+	FOREACH_BUILT(HasLowerCrime) {
 		double lc;
 		rec->GetLowerCrime(lc);
 		crimeMod += lc;
@@ -234,7 +230,7 @@ double buildingutil_GetLowerCrime(const uint64 built_improvements)
 double buildingutil_GetPreventConversion(const uint64 built_improvements)
 {
 	double theoMod = 0.0;
-	FOREACH_BUILT(GetPreventConversion) {
+	FOREACH_BUILT(HasPreventConversion) {
 		double mod;
 		rec->GetPreventConversion(mod);
 		theoMod += mod;
@@ -245,7 +241,7 @@ double buildingutil_GetPreventConversion(const uint64 built_improvements)
 double buildingutil_GetPreventSlavery(const uint64 built_improvements)
 {
 	double best = 0;
-	FOREACH_BUILT(GetPreventSlavery) {
+	FOREACH_BUILT(HasPreventSlavery) {
 		double cur;
 		if(rec->GetPreventSlavery(cur) && cur > best)
 			best = cur;
@@ -257,7 +253,7 @@ double buildingutil_GetLowerPeaceMovement(const uint64 built_improvements)
 {
 	double peaceMod = 0;
 
-	FOREACH_BUILT(GetLowerPeaceMovement) {
+	FOREACH_BUILT(HasLowerPeaceMovement) {
 		double mod;
 		rec->GetLowerPeaceMovement(mod);
 		peaceMod += mod;
@@ -268,7 +264,7 @@ double buildingutil_GetLowerPeaceMovement(const uint64 built_improvements)
 sint32 buildingutil_GetGoldPerCitizen(const uint64 built_improvements)
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetGoldPerCitizen) {
+	FOREACH_BUILT(HasGoldPerCitizen) {
 		sint32 mod;
 		rec->GetGoldPerCitizen(mod);
 		goldMod += mod;
@@ -279,7 +275,7 @@ sint32 buildingutil_GetGoldPerCitizen(const uint64 built_improvements)
 sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetGoldPerCity) {
+	FOREACH_BUILT(HasGoldPerCity) {
 		sint32 mod;
 		rec->GetGoldPerCity(mod);
 		goldMod += mod;
@@ -290,7 +286,7 @@ sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements) // EMOD
 sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetGoldPerUnit) {
+	FOREACH_BUILT(HasGoldPerUnit) {
 		sint32 mod;
 		rec->GetGoldPerUnit(mod);
 		goldMod += mod;
@@ -301,7 +297,7 @@ sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements) // EMOD
 sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetGoldPerUnitReadiness) {
+	FOREACH_BUILT(HasGoldPerUnitReadiness) {
 		sint32 mod;
 		rec->GetGoldPerUnitReadiness(mod);
 		goldMod += mod;
@@ -312,7 +308,7 @@ sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements) // 
 sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetGoldPerUnitSupport) {
+	FOREACH_BUILT(HasGoldPerUnitSupport) {
 		sint32 mod;
 		rec->GetGoldPerUnitSupport(mod);
 		goldMod += mod;
@@ -323,7 +319,7 @@ sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements) // EM
 sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetUpkeepPerCity) {
+	FOREACH_BUILT(HasUpkeepPerCity) {
 		sint32 mod;
 		rec->GetUpkeepPerCity(mod);
 		goldMod += mod;
@@ -334,7 +330,7 @@ sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements) // EMOD
 sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetUpkeepPerUnit) {
+	FOREACH_BUILT(HasUpkeepPerUnit) {
 		sint32 mod;
 		rec->GetUpkeepPerUnit(mod);
 		goldMod += mod;
@@ -345,7 +341,7 @@ sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements) // EMOD
 sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements) // EMOD
 {
 	sint32 goldMod = 0;
-	FOREACH_BUILT(GetUpkeepPerUnitWagesReadiness) {
+	FOREACH_BUILT(HasUpkeepPerUnitWagesReadiness) {
 		sint32 mod;
 		rec->GetUpkeepPerUnitWagesReadiness(mod);
 		goldMod += mod;
@@ -353,18 +349,18 @@ sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvemen
 	return goldMod;
 }
 
-BOOL buildingutil_GetProtectFromNukes(const uint64 built_improvements)
+bool buildingutil_GetProtectFromNukes(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetProtectFromNukes) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 double buildingutil_GetProtectFromBioAgents(const uint64 built_improvements)
 {
 	double best = 0;
-	FOREACH_BUILT(GetProtectFromBioAgents) {
+	FOREACH_BUILT(HasProtectFromBioAgents) {
 		double cur;
 		if(rec->GetProtectFromBioAgents(cur) && cur > best)
 			best = cur;
@@ -375,7 +371,7 @@ double buildingutil_GetProtectFromBioAgents(const uint64 built_improvements)
 double buildingutil_GetProtectFromNanoVirus(const uint64 built_improvements)
 {
 	double best = 0;
-	FOREACH_BUILT(GetProtectFromNanoVirus) {
+	FOREACH_BUILT(HasProtectFromNanoVirus) {
 		double cur;
 		if(rec->GetProtectFromNanoVirus(cur) && cur > best)
 			best = cur;
@@ -383,21 +379,21 @@ double buildingutil_GetProtectFromNanoVirus(const uint64 built_improvements)
 	return best;
 }
 
-BOOL buildingutil_GetTelevision(const uint64 built_improvements)
+bool buildingutil_GetTelevision(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetTelevision) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
-BOOL buildingutil_GetCityWalls(const uint64 built_improvements)
+bool buildingutil_GetCityWalls(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetCityWalls) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 double buildingutil_GetCityWallsDefense(const uint64 built_improvements)
@@ -413,22 +409,22 @@ double buildingutil_GetCityWallsDefense(const uint64 built_improvements)
 	return val;
 }
 
-BOOL buildingutil_GetAirport(const uint64 built_improvements)
+bool buildingutil_GetAirport(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetAirport) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL buildingutil_HaveFoodVat(const uint64 built_improvements, 
-									  double &food_to_pollution_coef)
+bool buildingutil_HaveFoodVat(const uint64 built_improvements, 
+                                    double &food_to_pollution_coef)
 {
-	BOOL atLeastOne = FALSE;
+	bool atLeastOne = false;
 	food_to_pollution_coef = 0;
 
-	FOREACH_BUILT(GetFoodVat) {
-		atLeastOne = TRUE;
+	FOREACH_BUILT(HasFoodVat) {
+		atLeastOne = true;
 		double coef;
 		rec->GetFoodVat(coef);
 		food_to_pollution_coef += coef;
@@ -436,42 +432,42 @@ BOOL buildingutil_HaveFoodVat(const uint64 built_improvements,
 	return atLeastOne;
 }
 
-BOOL buildingutil_NoRushBuyPenalty(const uint64 built_improvements)
+bool buildingutil_NoRushBuyPenalty(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetNoRushBuyPenalty) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL buildingutil_IsCathedral(const uint64 built_improvements)
+bool buildingutil_IsCathedral(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetCathedral) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL buildingutil_IsBrokerage(const uint64 built_improvements)
+bool buildingutil_IsBrokerage(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetBrokerage) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL buildingutil_IsNuclearPlant(const uint64 built_improvements)
+bool buildingutil_IsNuclearPlant(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetNuclearPlant) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 double buildingutil_GetIncreaseSciencePerPop(const uint64 built_improvements)
 {
 	double sci = 0;
-	FOREACH_BUILT(GetSciencePerPop) {
+	FOREACH_BUILT(HasSciencePerPop) {
 		double s;
 		rec->GetSciencePerPop(s);
 		sci += s;
@@ -480,19 +476,19 @@ double buildingutil_GetIncreaseSciencePerPop(const uint64 built_improvements)
 }
 
 
-BOOL buildingutil_GetForceField(const uint64 built_improvements)
+bool buildingutil_GetForceField(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetForceField) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL buildingutil_GetProductionPercent(const uint64 built_improvements,
-									   double &percent)
+bool buildingutil_GetProductionPercent(const uint64 built_improvements,
+                                       double &percent)
 {
 	percent = 0;
-	FOREACH_BUILT(GetProductionPercent) {
+	FOREACH_BUILT(HasProductionPercent) {
 		double p;
 		rec->GetProductionPercent(p);
 		percent += p;
@@ -500,11 +496,11 @@ BOOL buildingutil_GetProductionPercent(const uint64 built_improvements,
 	return percent > 0;
 }
 
-BOOL buildingutil_GetFoodPercent(const uint64 built_improvements,
-									   double &percent)
+bool buildingutil_GetFoodPercent(const uint64 built_improvements,
+                                 double &percent)
 {
 	percent = 0;
-	FOREACH_BUILT(GetFoodPercent) {
+	FOREACH_BUILT(HasFoodPercent) {
 		double p;
 		rec->GetFoodPercent(p);
 		percent += p;
@@ -512,8 +508,8 @@ BOOL buildingutil_GetFoodPercent(const uint64 built_improvements,
 	return percent > 0;
 }
 
-BOOL buildingutil_GetCommercePercent(const uint64 built_improvements,
-									   double &percent, sint32 owner)
+bool buildingutil_GetCommercePercent(const uint64 built_improvements,
+                                     double &percent, sint32 owner)
 {
 	double wonderBrokerageIncrease = 0;
 	if(g_player[owner]) {
@@ -522,7 +518,7 @@ BOOL buildingutil_GetCommercePercent(const uint64 built_improvements,
 	}
 
 	percent = 0;
-	FOREACH_BUILT(GetCommercePercent) {
+	FOREACH_BUILT(HasCommercePercent) {
 		double p;
 		rec->GetCommercePercent(p);
 
@@ -535,14 +531,13 @@ BOOL buildingutil_GetCommercePercent(const uint64 built_improvements,
 	return percent > 0;
 }
 
-
 //EMOD for Gold treasury interest for Central Banking
-BOOL buildingutil_GetTreasuryInterest(const uint64 built_improvements,
-									   double &percent, sint32 owner)
+bool buildingutil_GetTreasuryInterest(const uint64 built_improvements,
+                                      double &percent, sint32 owner)
 {
 
 	percent = 0;
-	FOREACH_BUILT(GetTreasuryInterest) {
+	FOREACH_BUILT(HasTreasuryInterest) {
 		double p;
 		rec->GetTreasuryInterest(p);
 
@@ -551,11 +546,11 @@ BOOL buildingutil_GetTreasuryInterest(const uint64 built_improvements,
 	return percent > 0;
 }
 
-BOOL buildingutil_GetSciencePercent(const uint64 built_improvements,
-									   double &percent)
+bool buildingutil_GetSciencePercent(const uint64 built_improvements,
+                                    double &percent)
 {
 	percent = 0;
-	FOREACH_BUILT(GetSciencePercent) {
+	FOREACH_BUILT(HasSciencePercent) {
 		double p;
 		rec->GetSciencePercent(p);
 		percent += p;
@@ -563,11 +558,11 @@ BOOL buildingutil_GetSciencePercent(const uint64 built_improvements,
 	return percent > 0;
 }
 
-BOOL buildingutil_GetRaiseOvercrowdingLevel(const uint64 built_improvements,
-											sint32 &level)
+bool buildingutil_GetRaiseOvercrowdingLevel(const uint64 built_improvements,
+                                            sint32 &level)
 {
 	level = 0;
-	FOREACH_BUILT(GetRaiseOvercrowdingLevel) {
+	FOREACH_BUILT(HasRaiseOvercrowdingLevel) {
 		sint32 l;
 		rec->GetRaiseOvercrowdingLevel(l);
 		level += l;
@@ -576,11 +571,11 @@ BOOL buildingutil_GetRaiseOvercrowdingLevel(const uint64 built_improvements,
 	return level > 0;
 }
 
-BOOL buildingutil_GetRaiseMaxPopulation(const uint64 built_improvements,
-										sint32 &level)
+bool buildingutil_GetRaiseMaxPopulation(const uint64 built_improvements,
+                                        sint32 &level)
 {
 	level = 0;
-	FOREACH_BUILT(GetRaiseMaxPopulation) {
+	FOREACH_BUILT(HasRaiseMaxPopulation) {
 		sint32 l;
 		rec->GetRaiseMaxPopulation(l);
 		level += l;
@@ -591,7 +586,7 @@ BOOL buildingutil_GetRaiseMaxPopulation(const uint64 built_improvements,
 sint32 buildingutil_GetStarvationProtection(const uint64 built_improvements)
 {
 	sint32 amt = 0;
-	FOREACH_BUILT(GetStarvationProtection) {
+	FOREACH_BUILT(HasStarvationProtection) {
 		sint32 l;
 		rec->GetStarvationProtection(l);
 		amt += l;
@@ -602,7 +597,7 @@ sint32 buildingutil_GetStarvationProtection(const uint64 built_improvements)
 double buildingutil_GetOffenseBonusLand(const uint64 built_improvements)
 {
 	double best = 0;
-	FOREACH_BUILT(GetOffenseBonusLand) {
+	FOREACH_BUILT(HasOffenseBonusLand) {
 		double cur;
 		if(rec->GetOffenseBonusLand(cur) && cur > best)
 			best = cur;
@@ -613,12 +608,9 @@ double buildingutil_GetOffenseBonusLand(const uint64 built_improvements)
 double buildingutil_GetOffenseBonusWater(const uint64 built_improvements)
 {
 	double best = 0;
-	FOREACH_BUILT(GetOffenseBonusWater) {
+	FOREACH_BUILT(HasOffenseBonusWater) {
 		double cur;
 		if(rec->GetOffenseBonusWater(cur) && cur > best)
-	//	Original code:
-	//	if(rec->GetOffenseBonusLand(cur) && cur > best)
-	//	Fix by NelsonAndBronte on 04-11-2003
 			best = cur;
 	}
 	return best;
@@ -627,49 +619,44 @@ double buildingutil_GetOffenseBonusWater(const uint64 built_improvements)
 double buildingutil_GetOffenseBonusAir(const uint64 built_improvements)
 {
 	double best = 0;
-	FOREACH_BUILT(GetOffenseBonusAir) {
-//	Original code:
-//	FOREACH_BUILT(GetOffenseBonusWater) {
+	FOREACH_BUILT(HasOffenseBonusAir) {
 		double cur;
 		if(rec->GetOffenseBonusAir(cur) && cur > best)
-	//	Original code:
-	//	if(rec->GetOffenseBonusLand(cur) && cur > best)
-	//	Fix by NelsonAndBronte on 04-11-2003
 			best = cur;
 	}
 	return best;
 }
 
-BOOL buildingutil_IsObsolete(sint32 building_type)
+bool buildingutil_IsObsolete(sint32 building_type)
 {
 	const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
 	sint32 nObsolete = rec->GetNumObsoleteAdvance();
 	if(nObsolete <= 0)
-		return FALSE;
+		return false;
 
 	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
 
 		for(sint32 o = 0; o < nObsolete; o++) {
 			if(g_player[p]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-				return TRUE;
+				return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
-BOOL buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvements)
+bool buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvements)
 {
 	FOREACH_BUILT(GetEmbassiesEverywhereEvenAtWar) {
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements)
 {
 	sint32 amt = 0;
-	FOREACH_BUILT(GetIncreaseHP) {
+	FOREACH_BUILT(HasIncreaseHP) {
 		sint32 hp;
 		rec->GetIncreaseHP(hp);
 		amt += hp;

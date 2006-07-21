@@ -2251,7 +2251,7 @@ sint32 Player::CalcTotalBuildingUpkeep()
 		bu += buildingutil_GetTotalUpkeep(c->GetImprovements(),
 		                                  wonderLevel, m_owner);
 
-//    EMOD    	add new readiness modifier for buildings here?
+		// EMOD add new readiness modifier for buildings here?
  		bu *= GetSupportModifier();
 
 	}		 
