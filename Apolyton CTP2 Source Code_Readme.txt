@@ -28,7 +28,7 @@ CTP2_EULA.doc                            <- End User Licensing Agreement
 Information:
 ============
 
-This is revision 422 of the Apolyton Call to Power II source code based on the released source code of Call to Power II, without the patch. It has been stripped of comments, but is otherwise complete as far as Activision code goes. It was originally built using Microsoft Visual Studio 6.0. In the mean time the Apolyton code was modified so that works with the .NET compiler as well.  
+This is the Apolyton version of Call to Power II source code based on the released source code of Call to Power II, without the patch. It has been stripped of comments, but is otherwise complete as far as Activision code goes. It was originally built using Microsoft Visual Studio 6.0. In the mean time the Apolyton code was modified so that works with the .NET compiler as well.  
 
 Beware that not everything you need to build the game is here!
 

@@ -231,17 +231,6 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 	        ind, m_name, wordIndex, recordName, m_name
 	       );
 
-	if(!m_hasValue){
-	/// @todo Remove the parameterless Get-function after modifiying the code to
-	///       use the correct function.
-#if defined(_MSC_VER) && (_MSC_VER >= 1400)
-	fprintf(outfile, "__declspec(deprecated(\"Use Has%s or add parameter\"))\n", m_name);
-#endif
-	fprintf(outfile, "%sbool Get%s() const { return Has%s(); }\n", 
-	        ind, m_name, m_name
-	       );
-	}
-
 	switch (m_bitPairDatum->m_type) 
 	{
 	default:

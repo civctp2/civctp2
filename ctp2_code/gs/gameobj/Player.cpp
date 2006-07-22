@@ -10037,6 +10037,7 @@ sint32 Player::CivBoatBonus() const
 
 sint32 Player::CivHpBonus() const
 {
+	// Replace this with GetCivDBRec
 	return g_theCivilisationDB->Get(m_civilisation->GetCivilisation(), m_government_type)->GetIncreaseHp();
 }
 
