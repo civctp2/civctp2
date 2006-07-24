@@ -469,50 +469,70 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : CivPaths::FindPath
+//
+// Description: Get the next possible lookup path
+//
+// Parameters : dir		type of path to lookup (not really used)
+//              num     "index" of path to lookup
+//
+// Returns    : bool    there may be more paths to lookup
+//              path    filled with a found path (set to "" when not found)
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 
-BOOL CivPaths::FindPath(C3DIR dir, int num, MBCHAR *path)
+bool CivPaths::FindPath(C3DIR dir, int num, MBCHAR * path)
 {
-	MBCHAR          tempPath[_MAX_PATH];
-	
 	Assert(path != NULL);
 	Assert(dir < C3DIR_MAX);
 	
 	path[0] = 0;
 	
-	if (dir == C3DIR_DIRECT) {
-		return(FALSE);
+	if (dir == C3DIR_DIRECT) 
+	{
+		return false;
 	}
 	
-	switch (num) {
-	case 0: {
-		if (m_curScenarioPath) {
+	MBCHAR          tempPath[_MAX_PATH];
+	tempPath[0] = 0;
+
+	switch (num) 
+	{
+	case 0: 
+		if (m_curScenarioPath) 
+		{
 			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
 				m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
 		}
-		return(TRUE);
-			}
-	case 1: {
-		if (m_curScenarioPath) {
-			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
-				m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
-		}
-		return(TRUE);
-			}
+		break;
 		
-	case 2: {
-		if (m_curScenarioPath) {
+	case 1:
+		if (m_curScenarioPath) 
+		{
+			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
+				m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
+		}
+		break;
+		
+	case 2: 
+		if (m_curScenarioPath) 
+		{
 			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP,
 				m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
 		}
-		return(TRUE);
-			}
-	case 3: {
-		if (m_curScenarioPath) {
+		break;
+		
+	case 3:
+		if (m_curScenarioPath) 
+		{
 			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP,
 				m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
 		}
-		return(TRUE);
-			}
+		break;
 		
     default:
         {
@@ -544,15 +564,22 @@ BOOL CivPaths::FindPath(C3DIR dir, int num, MBCHAR *path)
 			                m_dataPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir]);
                     break;
 	            case 6:
-		            sprintf(tempPath, "%s%s%s%s%s%s%s", m_cdPath, FILE_SEP,
+					if (m_cdPath && m_cdPath[0])
+					{
+						sprintf(tempPath, "%s%s%s%s%s%s%s", m_cdPath, FILE_SEP,
 			                m_dataPath, FILE_SEP, m_localizedPath, FILE_SEP, m_assetPaths[dir]);
+					}
                     break;
 	            case 7: 
-		            sprintf(tempPath, "%s%s%s%s%s%s%s", m_cdPath, FILE_SEP,
+					if (m_cdPath && m_cdPath[0])
+					{
+						sprintf(tempPath, "%s%s%s%s%s%s%s", m_cdPath, FILE_SEP,
 			                m_dataPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir]);
+					}
                     break;
+
                 default:
-                    return FALSE;
+                    return false;
                 } // switch
             }
 
@@ -560,10 +587,10 @@ BOOL CivPaths::FindPath(C3DIR dir, int num, MBCHAR *path)
             {
 		        path[0] = 0;
             }
-
-            return TRUE;
         } // scope default
     } // switch
+
+    return true;
 }
 
 

@@ -15,8 +15,6 @@ public:
 	CivApp();
 	~CivApp();
 
-	
-	sint32		InitializeAppUI(void);
 	sint32		InitializeAppDB(CivArchive &archive);
 	sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
 	sint32		QuickInit(HINSTANCE hInstance, int iCmdShow);
@@ -99,7 +97,10 @@ public:
 
 	BOOL		IsInBackground(void) { return m_inBackground; }
 	void		SetInBackground(BOOL in) { m_inBackground = in; }
+
 private:
+	void 		InitializeAppUI(void);
+
 	BOOL		m_appLoaded;
 	BOOL		m_dbLoaded;
 	BOOL		m_gameLoaded;

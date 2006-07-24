@@ -129,7 +129,7 @@ public:
 	
 	
 	
-    BOOL        FindPath(C3DIR dir, int num, MBCHAR *path);
+    bool        FindPath(C3DIR dir, int num, MBCHAR *path);
 
 	
 	MBCHAR *    GetSavePathString(void) const { return m_savePath; }

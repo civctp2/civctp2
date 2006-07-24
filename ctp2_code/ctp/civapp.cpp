@@ -651,12 +651,12 @@ CivApp::~CivApp()
 
 
 
-sint32 CivApp::InitializeAppUI(void)
+void CivApp::InitializeAppUI(void)
 {
-	NETFunc::GameType = GAMEID;
-	sprintf(NETFunc::DllPath, "dll%snet", FILE_SEP);
+	// Set CTP2 specific data for the Anet library (multiplayer only)
+	NETFunc::GameType	= GAMEID;				// CTP2 game id for Anet
+	NETFunc::DllPath	= "dll" FILE_SEP "net";	// Anet DLLs are in dll\net (relative to executable)
 
-	
 	extern BOOL g_useIntroMovie;
 	extern BOOL g_no_shell;
 	extern BOOL g_launchScenario;
@@ -665,9 +665,11 @@ sint32 CivApp::InitializeAppUI(void)
 	{
   		intromoviewin_Initialize();
     	intromoviewin_DisplayIntroMovie();
-	} else {
-
-		if (g_soundManager) {
+	} 
+	else 
+	{
+		if (g_soundManager) 
+		{
 			g_soundManager->EnableMusic();
 			g_soundManager->PickNextTrack();
 			g_soundManager->StartMusic();
@@ -679,7 +681,6 @@ sint32 CivApp::InitializeAppUI(void)
 		if(!g_no_shell && !g_launchScenario)
 			initialplayscreen_displayMyWindow();
 	}
-	return 0;
 }
 
 #ifdef _DEBUG
@@ -799,10 +800,9 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	Assert(g_theSoundDB);
 	if (g_theSoundDB) {
-		DBLexer * lex = new DBLexer(C3DIR_GAMEDATA, g_sounddb_filename);
-		if (!g_theSoundDB->Parse(lex))
+		DBLexer lex	(C3DIR_GAMEDATA, g_sounddb_filename);
+		if (!g_theSoundDB->Parse(&lex))
 			return FALSE;
-		delete lex;
 	}
 
 	g_theProgressWindow->StartCountingTo( 20 );

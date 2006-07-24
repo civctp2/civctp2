@@ -240,7 +240,7 @@ void gslog_LogPlayerStats(sint32 player)
 		
 		sint32 commerceBuildingUpkeep = buildingutil_GetTotalUpkeep(
 			cityData->GetImprovements(),
-			wonderutil_GetDecreaseMaintenance(pl->m_builtWonders, cityData->GetOwner())); //EMOD added owner
+			wonderutil_GetDecreaseMaintenance(pl->m_builtWonders), cityData->GetOwner()); //EMOD added owner
 
 		
 		
