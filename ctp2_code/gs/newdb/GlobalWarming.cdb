@@ -19,10 +19,14 @@
 #  Modifications from the original Activision code:
 #
 #  - Created file (July 8th 2006 Martin Gühmann)
+#  - Fixed backwards compatibility. (July 29th 2006 Martin Gühmann)
 #
 #-----------------------------------------------------------------------------
 
 GlobalWarming {
+
+    Struct ChangeTypeProbability[] ChangeTypeProbability # This must be first for backwards compatibility
+
     Int PollutionNextToOcean     aka POLLUTION_NEXT_TO_OCEAN
     Int PollutionNeighbourBonus  aka POLLUTION_NEIGHBOUR_BONUS
     Int PollutionMaxBonus        aka POLLUTION_MAX_BONUS
@@ -63,6 +67,4 @@ GlobalWarming {
         Bit(Record Terrain) ToType
         Bit(Float)          Probability
     }
-
-    Struct ChangeTypeProbability[] ChangeTypeProbability
 }
