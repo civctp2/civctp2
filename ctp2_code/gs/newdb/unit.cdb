@@ -105,38 +105,39 @@ Unit {
 	Record Building[] ExcludedByBuilding    //to prevent some units being built
 	Record Government[] GovernmentsModified
 	Record Terrain[] CanSettleOn			// Added by E restricts settling to certain terrains
-	Record Unit[]     UpgradeTo				// FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
-	Record Unit[]     ObsoleteUnit			// Added by E
+	Record Unit[]     UpgradeTo				// Upgrade Paths, cost based on difference ShieldCost x Gold?
+	Record Unit[]     ObsoleteUnit			// If unit is available then this unit cant be built
 	Record CityStyle[] CultureOnly			// Added by E -- can only build units if civ has certain citystyle
 	Record CityStyle[] CityStyleOnly		// Added by E--can only build units at cities with certain citystyle 
 	Record Civilisation[] CivilisationOnly	// Added by E -- can only build units if player is a specific civ
-	Record TerrainImprovement[]     SettleImprovement // future use - for units to make specific imps like forts
+	Record TerrainImprovement[]     SettleImprovement // entrenching units make specific imps like forts
 	Record Resource[] NeedsCityGood         // Must have good in radius of city or buying resource to build 
-	Record Resource[] NeedsCityGoodAll		// A city must have all resource to build unit
-	Record Resource[] NeedsCityGoodCapitol	// Implemented by E
-	Record Resource[] NeedsCityGoodAnyCity	// Implemented by E
-	Record Feat[] NeedsFeatToBuild			// Implemented by E
+	Record Resource[] NeedsCityGoodAll		// A city must have all resources listed to build unit
+	Record Resource[] NeedsCityGoodCapitol	// not implemented
+	Record Resource[] NeedsCityGoodAnyCity	// must have a good in any city to build
+	Record Feat[] NeedsFeatToBuild			// Feat must have occured for unit to be built
 	Record Wonder[] PrerequisiteWonder		// Added by E to limit units to cities with certain wonders
 	Record Wonder[] ExcludedByWonder		// to prevent some units being built
 
 
-	Bit(Int) MoveBonus						// FU - Instead of specifying an imp why not define the movecost here? by E
+	Bit(Int) MoveBonus						// Instead of specifying an imp why not define the movecost here? by E
+	Bit(Int) PWMoveCost						// FU - Deducts PW when unit moves
 	Bit(Int) MerchantGold					// FU - to allow a unit to grant gold in other territory
 	Bit      IsGreatBuilder					// FU - completes building 
 	Bit      IsGreatArtist					// FU - one day I may add culture / influence 
 
 	Record TerrainImprovement[]     AllTerrainAsImprovement // future use - like AllTerrainRoads
-	Record Unit [] ObsoleteByUnit 			// FU intead of avdance for later upgrade
+	Record Unit [] ObsoleteByUnit 			// Intead of advance for later upgrade
     Bit NonLethalBombard					// lessen bombard strengthen like old civ3
 	Bit CanBombardTiles						// allows bombarding of tile improvements
 	Bit CollateralTileDamage				// if a defender is on a tile then improvements cut too
-    Bit PrecisionStrike						// FU when bombing city only destroys buildings
-    Bit TargetsCivilians					// FU when bombing city only kills a pop
-    Bit ImmuneToHostileTerrain				// FU protects units from terrain that deducts HP
+    Bit PrecisionStrike						// When bombing city only destroys buildings
+    Bit TargetsCivilians					// When bombing city only kills a pop
+    Bit ImmuneToHostileTerrain				// Protects units from terrain that deducts HP
 
 	Bit CanRebase							// FU to rebase CantMove units
-	Bit MultipleAttacks						// FU
-	Bit CanBeGifted							// FU
+	Bit MultipleAttacks						// Can attack more than once in a turn (Civ3 - blitz)
+	Bit CanBeGifted							// Disbanding unit gives it to the friendly player
 
 	Bits Size {
 		Small,

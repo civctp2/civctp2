@@ -84,6 +84,9 @@
 // - CanExportCityGood and CAnExportTileVAlue not operate on a radius if you 
 //   just want one square use IntBorderRadius 0
 // - Added Civ Bonuses for Science, Commerce, Production, Food, HP, Boats
+// - Added to CalcWonderGold the difficulty settings of GoldPerUnitSupport 
+//   and GoldPerCity so they don't have to be tied to the palace
+// - added FranchiseProduction to BeginTurnProduction
 //
 //----------------------------------------------------------------------------
 
@@ -1977,8 +1980,63 @@ void Player::BeginTurnProduction()
 		m_total_production += delta;
 	}
 
+// EMOD New Version 5-16-2006; moved 8-2-2006 to allow for FranchiseProduction
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			
+			sint32 bpe;
+			if (rec->GetBonusProductionExport(bpe)) {
+				m_materialPool->AddMaterials(bpe);		//i.e. allows oil to give PW
+			}
 
-	
+			sint32 bge;
+			if (rec->GetBonusGoldExport(bge)) {
+				m_gold->AddGold(bpe);					// i.e. allows for colonies to generate gold
+			}
+
+			sint32 bfp;
+			if (rec->GetFranchiseProduction(bfp)) {	
+				m_productionFromFranchises += bfp;		//i.e. allows oil to pay for military
+			}
+
+			if(rec->HasIntBorderRadius()){
+				sint32 radius;
+				rec->GetIntBorderRadius(radius);
+				CityInfluenceIterator it(inst.RetPos(), radius);
+				for(it.Start(); !it.End(); it.Next()) {
+					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
+
+					if (rec->GetCanExportTileValue()) {
+						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
+						m_gold->AddGold(radiuscell->GetGoldProduced());
+					}
+
+					sint32 good;
+					if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(it.Pos(), good))){
+						for (sint32 c=0; c < n; c++) {
+							CityData *cd = m_all_cities->Access(c).CD();
+							if(!cd->IsLocalResource (good)) {
+								cd->AddGoodToCity(good);		//adds good to city but randomly changes each turn?
+								break;
+							}
+						}
+					}
+				}
+
+				if (rec->GetCanExportTileValueRadius()) {
+					RadiusIterator it(inst.RetPos(), radius);
+					for(it.Start(); !it.End(); it.Next()) {
+						Cell *radiuscell = g_theWorld->GetCell(it.Pos());
+						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());		//addsPW
+						m_gold->AddGold(radiuscell->GetGoldProduced());						//addsGold
+					}
+				}
+			}
+		}
+	}
+//////////////////END EMOD	
 	
 	
 	
@@ -2039,63 +2097,6 @@ void Player::BeginTurnProduction()
 
 	if(materialsFromFranchise > 0) {
 		m_materialPool->AddMaterials(materialsFromFranchise);
-	}
-
-
-
-	// EMOD New Version 5-16-2006
-	if ((0 < m_allInstallations->Num()) && (0 < n)) {
-		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
-			Installation inst = m_allInstallations->Access(b);
-			const TerrainImprovementRecord *rec = inst.GetDBRec();
-//			Cell *instcell = g_theWorld->GetCell(inst.RetPos());
-			
-			sint32 bpe;
-			if (rec->GetBonusProductionExport(bpe)) {
-				m_materialPool->AddMaterials(bpe);
-			}
-
-			sint32 bge;
-			if (rec->GetBonusGoldExport(bge)) {
-				m_gold->AddGold(bpe);
-			}
-
-			if(rec->HasIntBorderRadius()){
-				sint32 radius;
-				rec->GetIntBorderRadius(radius);
-				CityInfluenceIterator it(inst.RetPos(), radius);
-				for(it.Start(); !it.End(); it.Next()) {
-					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-
-					if (rec->GetCanExportTileValue()) {
-						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
-						m_gold->AddGold(radiuscell->GetGoldProduced());
-					}
-
-					sint32 good;
-					if ((rec->GetCanExportGood()) && (g_theWorld->GetGood(it.Pos(), good))){
-						for (sint32 c=0; c < n; c++) {
-							CityData *cd = m_all_cities->Access(c).CD();
-							if(!cd->IsLocalResource (good)) {
-								cd->AddGoodToCity(good);
-								break;
-							}
-						}
-					}
-				}
-
-				// EMOD if intborderradius is 0 then can we get rid of 
-				// the top code to gove colonies an optional radius?
-				if (rec->GetCanExportTileValueRadius()) {
-					RadiusIterator it(inst.RetPos(), radius);
-					for(it.Start(); !it.End(); it.Next()) {
-						Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
-						m_gold->AddGold(radiuscell->GetGoldProduced());
-					}
-				}
-			}
-		}
 	}
 
 	// End EMOD
@@ -2327,6 +2328,21 @@ sint32 Player::CalcWonderGold()
 		}
 	}
 	//end EMOD
+
+//EMOD to make unit maintenance and city maintenance a difficulty option instead of a building option
+	sint32 goldPerUnitSupport;
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport)
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
+			totalWonderGold +=static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+	}
+
+	sint32 goldPerCity;
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerCity(goldPerCity)
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
+			totalWonderGold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+	
+	}
+//EMOD 
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;

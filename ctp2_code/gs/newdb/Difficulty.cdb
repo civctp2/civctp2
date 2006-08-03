@@ -160,4 +160,9 @@ Difficulty{
 	Bit					BarbarianSpawnsBarbarian			# Entrenched barbs create more barbs
 	Bit					AINoSinking							# AI ships don't sink
 	Bit					AINoCityLimit						# AI not affected by city limit
+	Bit(Int)			GoldPerUnitSupport
+	Bit(Int)			GoldPerCity
+	Bit					AINoShieldHunger
+	Bit					AINoGoldHunger
+	Bit					AIFreeUpgrade
 }

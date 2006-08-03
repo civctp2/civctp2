@@ -602,6 +602,12 @@ public:
 
     static void Cleanup(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
 
+	//EMOD
+//	void ArmyData::UpgradeNoGold();
+//	void ArmyData::Upgrade();
+//	bool ArmyData::CanUpgradeNoGold(const sint32 i);
+//	bool ArmyData::CanUpgrade(const sint32 i);
+
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;

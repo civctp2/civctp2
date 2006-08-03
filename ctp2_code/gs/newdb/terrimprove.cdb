@@ -176,6 +176,7 @@ TerrainImprovement {
 	Bit(Int) BonusFoodExport                // FU
 	Bit(Int) BonusProductionExport          // FU
 	Bit(Int) BonusGoldExport                // FU
+	Bit(Int) FranchiseProduction			//exports production value as a franchise to pay mil costs 
 	Bit NeedsIrrigation                     // FU Can only be build on rivers or adjacent to rivers or other tileimps with flag IsWaterSupply
 
 	Bit GLHidden

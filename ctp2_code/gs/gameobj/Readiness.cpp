@@ -179,6 +179,11 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 			g_player[m_owner]->GetBuiltWonders()) / 100.0);
 
 	unitCost *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
+//EMOD for AI
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoShieldHunger()
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+			unitCost -= unitCost;
+	}
 
 	return unitCost;
 }
@@ -209,6 +214,13 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 
 		unitCostGold *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
 	}
+
+	//EMOD for AI
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger()
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+			unitCostGold -= unitCostGold;
+	}
+
 	return static_cast<sint32>(unitCostGold);
 }
 

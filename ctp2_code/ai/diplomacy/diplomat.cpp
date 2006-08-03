@@ -3613,7 +3613,10 @@ sint32 Diplomat::GetNewProposalPriority(const PLAYER_INDEX foreignerId,
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
 
-	
+//
+	if (elem == NULL)
+		return -1;
+//	
 	const DiplomacyProposalRecord * rec = elem->GetProposal();
 	if (InvalidNewProposal(foreignerId, rec))
 		return -1;
@@ -3622,7 +3625,6 @@ sint32 Diplomat::GetNewProposalPriority(const PLAYER_INDEX foreignerId,
 	(void) elem->GetSendPriority(priority);
 	return priority;
 }
-
 
 sint32 Diplomat::GetAcceptPriority(const PLAYER_INDEX foreignerId, 
 						 const PROPOSAL_TYPE proposalType ) const

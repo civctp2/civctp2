@@ -99,6 +99,9 @@
 // - Implemented EnablesPunativeAirstrikes Wonder flag
 // - Implemented ConstDB ChanceLostAtSea
 // - added difficulty to make ai immune to sinking
+// - added slic message for ship sinking
+// - added CanUpgrade. Upgrade, CanUpgradeNoGold, and UpgradeNoGold methods.
+// - added UpgradeUnit to Begin Turn
 //
 //----------------------------------------------------------------------------
 
@@ -1696,22 +1699,61 @@ void ArmyData::BeginTurn()
    sint32 chance = g_theConstDB->PercentLostAtSea();
    if (chance > 0)
    {
-	//TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 		for(sint32 u = 0; u < m_nElements; u++) 
         {
 			const UnitRecord *urec = m_array[u].GetDBRec();
-			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea()) && (m_owner > 0)) //g_theWorld->IsWater(m_pos) trec->)
+			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea()) && (m_owner > 0)) 
 			{
 				if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking() && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
 					continue;
 
 				if(g_rand->Next(100) < sint32(chance)) {
 					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+					SlicObject *so = new SlicObject("999LostAtSea");
+						so->AddRecipient(m_owner);
+						so->AddUnit(m_array[i]);
                 }
 			}
 		}
 	}
 //
+
+   	for(i = 0; i < m_nElements; i++) {
+		const UnitRecord *rec = m_array[i].GetDBRec();
+		sint32 s;
+		Unit city = g_theWorld->GetCity(m_pos);
+		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade()
+			&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+		{
+			if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
+				for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+					sint32 newunit = rec->GetUpgradeToIndex(s);
+					if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s))){
+						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+						g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+					}
+				}
+			}
+			//end upgrade no gold
+		} else if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+			if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
+				for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+					sint32 oldshield = rec->GetShieldCost();
+					sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
+					sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+					sint32 goldcost = (newshield - oldshield) * rushmod;
+					sint32 newunit = rec->GetUpgradeToIndex(s);
+					if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
+						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+						g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+						g_player[m_owner]->m_gold->SubGold(goldcost);
+					} 
+				}
+			}
+			//end upgrade
+		}
+	}
+
 //
 
 //END EMOD
@@ -7556,6 +7598,7 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 			ta = m_array[0];
 		}
 
+
 		
 		bool AlltaSneakAttack = true;
 		sint32 i;
@@ -7582,6 +7625,18 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 
 		}
 	
+		//  add PWMoveCost
+//		sint32 PWFuel;
+//		sint32 PWFuelNeg;
+//		for (sint32 i = m_nElements - 1; i>= 0; i--) { 
+//			if (m_array[0].GetDBRec->GetPWMoveCost(PWFuel)) {
+//				if ((g_player[m_owner]->m_materialPool->GetMaterials() >= PWFuel) && (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)) 
+//					PWFuelNeg = PWFuel * -1;
+//					g_player[m_owner]->m_materialPool->AddMaterials(PWFuelNeg);
+//				}
+//			}
+//		}
+//		end EMOD
 		if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
 	
 			CtpAi::HandleMoveFailure(Army(m_id), pos); 
@@ -8913,9 +8968,10 @@ void ArmyData::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to
 
 
 
-bool ArmyData::CanMove() 
+bool ArmyData::CanMove()     //Not used?
 {
 	sint32 i;
+//	BOOL PWMove = TRUE;
 	BOOL noneMoved = TRUE;
 	BOOL allOverSpecialCost = TRUE;
 	for(i = 0; i < m_nElements; i++) {
@@ -8926,7 +8982,17 @@ bool ArmyData::CanMove()
 			noneMoved = FALSE;
 		if(!m_array[i].CanPerformSpecialAction())
 			allOverSpecialCost = FALSE;
+	//  add PWMoveCost
+//		sint32 PWFuel;
+//		if (m_array[i].GetDBRec->GetPWMoveCost(PWFuel)) {
+//			if ((g_player[m_owner]->m_materialPool->GetMaterials() >= PWFuel) && (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)) 
+//				PWMove = FALSE;
+//		}
 	}
+//	if(PWMove) {
+//		return true;
+//	}
+
 	if(noneMoved) {
 		
 		return true;
@@ -10913,3 +10979,92 @@ void ArmyData::DecrementDontKillCount()
 		}			
 	}
 }
+
+
+//bool ArmyData::CanUpgrade(sint32 i)
+//{
+
+//	sint32 s;
+//	Unit city = g_theWorld->GetCity(m_pos);
+//	const UnitRecord *rec = m_array[i].GetDBRec();
+//	if(rec->GetNumUpgradeTo() > 0){ 
+//		if(city.IsValid() || terrainutil_HasUpgrader(m_pos)) { //added tileimps that upgrade 5-30-2006
+		//if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
+//			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+//				sint32 oldshield = rec->GetShieldCost();
+//				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
+//				sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+//				sint32 goldcost = (newshield - oldshield) * rushmod;
+//				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
+//					return true;
+//				}
+//			}
+//		}
+//	}
+//	return false;
+//}
+
+//void ArmyData::Upgrade()
+//{
+
+//	sint32 s;
+//	sint32 i;
+//	Unit city = g_theWorld->GetCity(m_pos);
+//	const UnitRecord *rec = m_array[i].GetDBRec();
+//	for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+//		sint32 oldshield = rec->GetShieldCost();
+//		sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
+//		sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+//		sint32 goldcost = (newshield - oldshield) * rushmod;
+//		sint32 newunit = rec->GetUpgradeToIndex(s);
+//		if (CanUpgrade(i)){
+//			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//			g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+//			g_player[m_owner]->m_gold->SubGold(goldcost);
+//			SlicObject *so = new SlicObject("999UnitUpgraded");
+  //              so->AddRecipient(m_owner);
+//                so->AddUnit(m_array[i]);
+//		}
+//	}
+//}
+
+//bool ArmyData::CanUpgradeNoGold(const sint32 i)
+//{
+
+//	sint32 s;
+//	Unit city = g_theWorld->GetCity(m_pos);
+//
+//	const UnitRecord *rec = m_array[i].GetDBRec();
+//		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
+//			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+//				//sint32 oldshield = rec->GetShieldCost();
+				//sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
+				//sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+				//sint32 goldcost = (newshield - oldshield) * rushmod;
+//				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s))){
+//					return true;
+//				}
+//			}
+//		}
+//	}
+//	return false;
+//}
+
+//void ArmyData::UpgradeNoGold()
+//{
+//	sint32 s;
+//	Unit city = g_theWorld->GetCity(m_pos);
+//	const UnitRecord *rec = m_array[i].GetDBRec();
+	//const UnitRecord *rec = g_theUnitDB->Get(t);
+//	for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
+		//sint32 oldshield = rec->GetShieldCost();
+		//sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
+		//sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
+		//sint32 goldcost = (newshield - oldshield) * rushmod;
+//		sint32 newunit = rec->GetUpgradeToIndex(s);
+//		if (CanUpgrade(i)){
+//			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+//			g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+//		}
+//	}
+//}

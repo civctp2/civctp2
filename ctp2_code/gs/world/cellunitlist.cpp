@@ -706,6 +706,15 @@ bool CellUnitList::IsMovePointsEnough(const double cost) const
         if (mp < cost) { 
             return false; 
         }
+
+		//EMOD
+//		sint32 PWFuel;
+//		if (m_array[i].GetDBRec->GetPWMoveCost(PWFuel)) {
+//			if ((g_player[m_owner]->m_materialPool->GetMaterials() <= PWFuel) && (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)) 
+//				return false;
+//			}
+//		}
+//END EMOD
     }
 #endif
 
