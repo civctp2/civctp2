@@ -249,9 +249,9 @@ public:
 	void			ProcessImmediately(DQItem *item);
 
 	void			CatchUp(void);
-	BOOL			CaughtUp(void);
+	bool			CaughtUp(void);
 
-	BOOL			TileIsVisibleToPlayer(MapPoint &pos);
+	bool			TileIsVisibleToPlayer(MapPoint &pos);
 
 	
 	bool			IsProcessing();

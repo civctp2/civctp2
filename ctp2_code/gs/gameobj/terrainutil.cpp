@@ -38,7 +38,8 @@
 // - terrainutil_CanPlayerSpecialBuildAt added by E 4-1-2006
 // - Added outcommented terrainutil_HasUpgrader, terrainutil_CanBeCaptured, 
 //   terrainutil_HasColony by E (4-25-2006) fo future use
-// - implemented above and added HasMinefield by e 5-30-2006
+// - implemented above and added HasMinefield by E 5-30-2006
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -401,7 +402,7 @@ void terrainutil_DoVision(const MapPoint &point)
 			continue;
 
 		if(ls <= myrsq && !(ud->GetRealVisibility() & (1 << cell->GetOwner()))) {
-			if(g_theUnitDB->Get(ud->GetType())->GetVisionClass() &
+			if(ud->GetDBRec()->GetVisionClass() &
 			   g_theTerrainImprovementDB->Get(type)->GetCanSee()) {
 				if(cell->GetOwner() >= 0) {
 					ud->SetVisible((PLAYER_INDEX)cell->GetOwner());

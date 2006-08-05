@@ -225,9 +225,10 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 	char const *    ind         = (indent) ? "        " : "    ";
 	int const       wordIndex   = m_bitNum / 32;    // sint32 as base type
 
-	// Renamed parameterless Get-function to prevent confusion with the 
+	// Renamed parameterless Get-functions to prevent confusion with the 
 	// function that has a parameter.
-	fprintf(outfile, "%sbool Has%s() const { return m_flags%d & k_%s_%s_Bit; }\n", 
+	// Should be extended to all parameterless Get-functions
+	fprintf(outfile, "%sbool Has%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n", 
 	        ind, m_name, wordIndex, recordName, m_name
 	       );
 
@@ -248,7 +249,7 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 			fprintf(outfile, "%s    {\n", ind);
 			fprintf(outfile, "%s        value = m_%s;\n", ind, m_bitPairDatum->m_name);
 			fprintf(outfile, "%s    }\n", ind);
-			fprintf(outfile, "%s    return m_flags%d & k_%s_%s_Bit;\n", ind, wordIndex, recordName, m_name);
+			fprintf(outfile, "%s    return (m_flags%d & k_%s_%s_Bit) != 0;\n", ind, wordIndex, recordName, m_name);
 			fprintf(outfile, "%s}\n", ind);
 		}
 		else{
@@ -262,7 +263,7 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 		fprintf(outfile, "%s    index = (m_flags%d & k_%s_%s_Bit) ? m_%s : -1;\n", 
 		        ind, wordIndex, recordName, m_name, m_bitPairDatum->m_name
 		       );
-		fprintf(outfile, "%s    return m_flags%d & k_%s_%s_Bit;\n", 
+		fprintf(outfile, "%s    return (m_flags%d & k_%s_%s_Bit) != 0;\n", 
 		        ind, wordIndex, recordName, m_name
 		       );
 		fprintf(outfile, "%s}\n", ind);
@@ -282,7 +283,7 @@ void Datum::ExportBitPairAccessorProto(FILE *outfile, sint32 indent, char *recor
 		fprintf(outfile, "%s{\n", ind);
 		fprintf(outfile, "%s    ptr = (m_flags%d & k_%s_%s_Bit) ? &m_%s : NULL;\n", 
 		        ind, wordIndex, recordName, m_name, m_bitPairDatum->m_name);
-		fprintf(outfile, "%s    return m_flags%d & k_%s_%s_Bit;\n", 
+		fprintf(outfile, "%s    return (m_flags%d & k_%s_%s_Bit) != 0;\n", 
 		        ind, wordIndex, recordName, m_name
 		       );
 		fprintf(outfile, "%s}\n", ind);
@@ -321,7 +322,7 @@ void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 			break;
 
 		case DATUM_BIT:
-			fprintf(outfile, "%sbool Get%s() const { return m_flags%d & k_%s_%s_Bit; }\n",
+			fprintf(outfile, "%sbool Get%s() const { return (m_flags%d & k_%s_%s_Bit) != 0; }\n",
 					ind, m_name, wordIndex, recordName, m_name);
 			break;
 		
@@ -339,7 +340,7 @@ void Datum::ExportAccessor(FILE *outfile, sint32 indent, char *recordName)
 				fprintf(outfile, "%suint32           Get%s() const { return m_%s; }\n", ind, m_name, m_name);
 				for (struct namelist * node = m_groupList; node; node = node->next)
 				{
-					fprintf(outfile, "%sbool             Get%s%s() const { return m_%s & k_%s_%s_%s_Bit; }\n",
+					fprintf(outfile, "%sbool             Get%s%s() const { return (m_%s & k_%s_%s_%s_Bit) != 0; }\n",
 					        ind, m_name, node->name, m_name, recordName, m_name, node->name
 					       );
 				}

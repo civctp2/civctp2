@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Installation data
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "c3math.h"
@@ -168,7 +189,7 @@ void InstallationData::DoVision()
 	sint32 un = unitArray.Num();
 	for(i = 0; i < un; i++) {
 		UnitData *ud = unitArray[i].AccessData();
-		double hisr = g_theUnitDB->Get(ud->GetType())->GetVisionRange() + 0.5;
+		double hisr = ud->GetDBRec()->GetVisionRange() + 0.5;
 		sint32 hisrsq = sint32(hisr*hisr);
 		sint32 ls = UnitData::GetDistance(Installation(m_id),
 										  ud, sint32(maxVisionRange));
@@ -180,7 +201,7 @@ void InstallationData::DoVision()
 		}
 
 		if(ls <= myrsq && !(ud->GetRealVisibility() & (1 << m_owner))) {
-			if(g_theUnitDB->Get(ud->GetType())->GetVisionClass() &
+			if(ud->GetDBRec()->GetVisionClass() &
 			   g_theTerrainImprovementDB->Get(m_type)->GetCanSee()) {
 				if(m_owner >= 0) {
 					ud->SetVisible((PLAYER_INDEX)m_owner);
@@ -244,11 +265,11 @@ void InstallationData::CheckVision(sint32 owner)
 			if(ls > maxrsq)
 				continue;
 
-			double hisr = g_theUnitDB->Get(ud->GetType())->GetVisionRange()+0.5;
+			double hisr = ud->GetDBRec()->GetVisionRange()+0.5;
 			sint32 hisrsq = sint32(hisr*hisr);
 			if(ls <= hisrsq) {
 				if(g_theTerrainImprovementDB->Get(m_type)->GetCanSee() &
-				   g_theUnitDB->Get(ud->GetType())->GetCanSee()) {
+				   ud->GetDBRec()->GetCanSee()) {
 					canBeSeen = TRUE;
 					break;
 				}

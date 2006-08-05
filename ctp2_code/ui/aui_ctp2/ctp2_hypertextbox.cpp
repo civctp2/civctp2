@@ -87,10 +87,9 @@ size_t const	MAX_SIZE_IDENTIFIER	= 255;
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 bool IsIdentifierBegin(MBCHAR a_Char)
 {
-	return isalnum(a_Char);
+	return isalnum(a_Char) != 0;
 }
 
 //----------------------------------------------------------------------------
@@ -108,7 +107,6 @@ bool IsIdentifierBegin(MBCHAR a_Char)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 bool IsNotInIdentifier(MBCHAR a_Char)
 {
 	return ('_' != a_Char) && !isalnum(a_Char);
@@ -135,7 +133,6 @@ bool IsNotInIdentifier(MBCHAR a_Char)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void ctp2_HyperTextBox::FormatText
 (
 	MBCHAR const *	a_Text,

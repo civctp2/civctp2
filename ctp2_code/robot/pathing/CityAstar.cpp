@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A-star pathfinding for City
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -192,6 +192,6 @@ bool CityAstar::FindRoadPath
 
 	sint32  nodes_opened    = 0;
 
-	return FindPath(start, dest, new_path, total_cost, FALSE, NODE_VISIT_COUNT_LIMIT, nodes_opened);
+	return FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
 }
 

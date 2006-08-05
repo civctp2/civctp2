@@ -321,7 +321,7 @@ sint32 Unit::GetFoodHunger() const
 const UnitRecord * Unit::GetDBRec(void) const
 {
 	return GetData()->GetDBRec();
-    }
+}
 
 const UnitData * Unit::GetData() const
 {
@@ -593,8 +593,7 @@ double Unit::GetMaxMovePoints() const
 
 double Unit::GetMovementPoints() const
 {
-	const UnitData *ud=GetData();
-	return ud->GetMovementPoints(); 
+	return GetData()->GetMovementPoints(); 
 }
 
 void Unit::SetMovementPoints(double m)

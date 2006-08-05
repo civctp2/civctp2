@@ -4394,7 +4394,7 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 		sint32 unit_type;
 		for (unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
 		{
-			const UnitRecord *unit_rec = g_theUnitDB->Get(unit_type);
+			const UnitRecord *unit_rec = g_theUnitDB->Get(unit_type, g_player[m_playerId]->GetGovernmentType());
 			if (unit_rec->GetEnableAdvance() &&
 				unit_rec->GetEnableAdvance()->GetIndex() == next_key_adv)
 				break;
@@ -5171,7 +5171,7 @@ uint32 Diplomat::GetIncursionPermission() const
 
 bool Diplomat::IncursionPermission(const PLAYER_INDEX foreignerId) const
 {
-	return m_incursionPermission & (1 << foreignerId);
+	return (m_incursionPermission & (1 << foreignerId)) != 0;
 }
 
 

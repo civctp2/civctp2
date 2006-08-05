@@ -71,195 +71,154 @@ TERRAIN_TYPES World::GetTerrainType(const MapPoint &pos) const
 #if 0
 
 
-sint32 World::EnvIsWater(const uint32 env) const
+bool World::EnvIsWater(const uint32 env) const
 {
 	return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER | k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)) != 0; 
 }
 
-sint32 World::IsWater(const MapPoint &pos) const
-
-{ 
+bool World::IsWater(const MapPoint &pos) const
+{
 	return EnvIsWater(GetCell(pos)->m_env);
 }
 
-sint32 World::IsWater(const sint32 x, const sint32 y) const 
-
-{ 
+bool World::IsWater(const sint32 x, const sint32 y) const 
+{
 	return EnvIsWater(m_map[x][y]->m_env);
 }
 #endif
 
-
-sint32 World::EnvIsShallowWater(const uint32 env) const
+bool World::EnvIsShallowWater(const uint32 env) const
 {
-	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & (k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)) != 0; 
+	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & (k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)) != 0;
 }
 
-sint32 World::IsShallowWater(const MapPoint &pos) const
-
-{ 
+bool World::IsShallowWater(const MapPoint &pos) const
+{
 	return EnvIsWater(GetCell(pos)->m_env);
 }
 
-sint32 World::IsShallowWater(const sint32 x, const sint32 y) const 
-
-{ 
-	
-	return ((m_map[x][y]->m_env & k_MASK_ENV_MOVEMENT_TYPE) & (k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)) != 0; 
-}
-
-
-BOOL World::IsSupplyingTrade(const MapPoint &pos) const
+bool World::IsShallowWater(const sint32 x, const sint32 y) const 
 {
-	return (GetCell(pos)->GetNumTradeRoutes() > 0) ;
+	return ((m_map[x][y]->m_env & k_MASK_ENV_MOVEMENT_TYPE) & (k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)) != 0;
 }
 
+bool World::IsSupplyingTrade(const MapPoint &pos) const
+{
+	return (GetCell(pos)->GetNumTradeRoutes() > 0);
+}
 
 sint32 World::IsCurrent(const MapPoint &pos) 
-
 {
-	if (IsWater(pos)) { 
-		return GetCell(pos)->m_env & k_MASK_ENV_RIV_CUR; 
-	} else { 
+	if (IsWater(pos)) {
+		return GetCell(pos)->m_env & k_MASK_ENV_RIV_CUR;
+	} else {
+		return FALSE;
+	}
+}
+
+sint32 World::IsCurrent(const sint32 x, const sint32 y)
+{
+	if (IsWater(x, y)) {
+		return m_map[x][y]->m_env & k_MASK_ENV_RIV_CUR;
+	} else {
 		return FALSE; 
-	} 
+	}
 }
 
-sint32 World::IsCurrent(const sint32 x, const sint32 y) 
-
+bool World::EnvIsLand(const uint32 env) const
 {
-	if (IsWater(x, y)) { 
-		return m_map[x][y]->m_env & k_MASK_ENV_RIV_CUR; 
-	} else { 
-		return FALSE; 
-	} 
+	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & k_BIT_MOVEMENT_TYPE_LAND) != 0;
 }
 
-sint32 World::EnvIsLand(const uint32 env) const
-{
-	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & k_BIT_MOVEMENT_TYPE_LAND) != 0; 
-}
-
-sint32 World::IsLand(const MapPoint &pos) const
-
+bool World::IsLand(const MapPoint &pos) const
 {
 	return EnvIsLand(GetCell(pos)->m_env);
-
 }
 
-sint32 World::IsLand(const sint32 x, const sint32 y) const
-
-{ 
+bool World::IsLand(const sint32 x, const sint32 y) const
+{
 	Assert (m_isYwrap ? (-k_MAP_WRAPAROUND < y) : 0 <= y); 
 	Assert (m_isYwrap ? (y < (m_size.y + k_MAP_WRAPAROUND)) : y < m_size.y); 
 	
 	return EnvIsLand(m_map[x][y]->m_env);
-
 }
 
-sint32 World::EnvIsSpace(const uint32 env) const
+bool World::EnvIsSpace(const uint32 env) const
 {
-	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & k_BIT_MOVEMENT_TYPE_SPACE) != 0; 
+	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & k_BIT_MOVEMENT_TYPE_SPACE) != 0;
 }
 
-sint32 World::IsSpace(const MapPoint &pos) const
-
-{ 
+bool World::IsSpace(const MapPoint &pos) const
+{
 	return EnvIsSpace(GetCell(pos)->m_env);
-
-
 }
 
-sint32 World::IsSpace(const sint32 x, const sint32 y) const
-
-{ 
+bool World::IsSpace(const sint32 x, const sint32 y) const
+{
 	Assert(0<= x); 
 	Assert(x<m_size.x); 
 	Assert (0 <= y); 
 	Assert(y < m_size.y); 
 
 	return EnvIsSpace(m_map[x][y]->m_env);
-
 }
 
 
-sint32 World::EnvIsRiver(const uint32 env) const
+bool World::EnvIsRiver(const uint32 env) const
 {
-	return env & k_MASK_ENV_RIV_CUR; 
+	return (env & k_MASK_ENV_RIV_CUR) != 0;
 }
 
-sint32 World::IsRiver(const sint32 x, const sint32 y) const
-
+bool World::IsRiver(const sint32 x, const sint32 y) const
 {
-	
-	
 	return EnvIsRiver(m_map[x][y]->m_env);
-
-	
-	
-	
 }
 
 
-sint32 World::IsRiver(const MapPoint &pos) const
-
+bool World::IsRiver(const MapPoint &pos) const
 {
-	
-	
 	return EnvIsRiver(GetCell(pos)->m_env);
-
-	
-	
-	
 }
 
 void World::SetCurrent(const MapPoint &pos)
-
 {
 	Assert(IsWater(pos));
-    
+
 	GetCell(pos)->m_env |= k_BIT_ENV_RIV_CUR; 
 }
 
 
 
 void World::SetCurrent(const sint32 x, const sint32 y)
-
 {
 	Assert(IsWater(x, y));
-    
+
 	m_map[x][y]->m_env |= k_BIT_ENV_RIV_CUR; 
 }
 
 void World::SetRiver(const MapPoint &pos)
-
 {
-	
-
 	GetCell(pos)->m_env |= k_BIT_ENV_RIV_CUR; 
 	Cell *thisCell = m_map[pos.x][pos.y];
 	thisCell->CalcTerrainMoveCost();
 }
 
 void World::UnsetRiver(const sint32 x, const sint32 y)
-
 {
-
-    
 	m_map[x][y]->m_env &= ~k_BIT_ENV_RIV_CUR; 
 	Cell *thisCell = m_map[x][y];
 	thisCell->CalcTerrainMoveCost();
 }
 
 sint32 World::IsGood(const MapPoint &pos) const 
-{  
-    return IsGood(pos.x, pos.y); 
+{
+	return IsGood(pos.x, pos.y); 
 }
 
 
 sint32 World::IsGood(const sint32 x, const sint32 y) const 
-{  
-	sint32 i; 
+{
+	sint32 i;
 	return GetCell(x, y)->GetGoodsIndex(i); 
 	
 }
@@ -282,7 +241,7 @@ sint32 World::IsGood(const sint32 x, const sint32 y) const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-BOOL World::GetGood(const MapPoint &pos, sint32 &good) const
+bool World::GetGood(const MapPoint &pos, sint32 &good) const
 {
 
 	sint32 i;
@@ -290,9 +249,9 @@ BOOL World::GetGood(const MapPoint &pos, sint32 &good) const
 
 	if (c->GetGoodsIndex(i)) {
 		good= g_theTerrainDB->Get(c->m_terrain_type)->GetResourcesIndex(i);
-		return TRUE;
+		return true;
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
@@ -314,16 +273,15 @@ BOOL World::GetGood(const MapPoint &pos, sint32 &good) const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-BOOL World::GetGood(const Cell *c, sint32 &good) const
+bool World::GetGood(const Cell *c, sint32 &good) const
 {
-
 	sint32 i;
 
 	if (c->GetGoodsIndex(i)) {
-		good= g_theTerrainDB->Get(c->m_terrain_type)->GetResourcesIndex(i);
-		return TRUE;
+		good = g_theTerrainDB->Get(c->m_terrain_type)->GetResourcesIndex(i);
+		return true;
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
@@ -349,7 +307,7 @@ BOOL World::GetGood(const Cell *c, sint32 &good) const
 
 void World::ClearGoods(const sint32 x, const sint32 y)
 {
-	m_map[x][y]->m_env &= ~k_MASK_ENV_GOOD ;
+	m_map[x][y]->m_env &= ~k_MASK_ENV_GOOD;
 }
 
 
@@ -412,14 +370,15 @@ void World::SetRandomGood(const sint32 x, const sint32 y)
 
 GoodyHut *World::GetGoodyHut(const MapPoint & pos)
 {
-    Cell *c = GetCell(pos);
+	Cell *c = GetCell(pos);
 	
 	return c->GetGoodyHut();
 }
 
-sint32 World::EnvIsHill(const uint32 env) const
+
+bool World::EnvIsHill(const uint32 env) const
 {
-	return ((env & k_MASK_ENV_MOVEMENT_TYPE) == k_BIT_MOVEMENT_TYPE_MOUNTAIN) ; 
+	return (env & k_MASK_ENV_MOVEMENT_TYPE) == k_BIT_MOVEMENT_TYPE_MOUNTAIN;
 }
 
 
@@ -433,8 +392,8 @@ sint32 World::EnvIsHill(const uint32 env) const
 
 
 
-sint32 World::IsHill(const sint32 x, const sint32 y) const 
-{ 
+bool World::IsHill(const sint32 x, const sint32 y) const 
+{
 	return EnvIsHill(m_map[x][y]->m_env);
 
 }
@@ -451,7 +410,7 @@ sint32 World::IsHill(const sint32 x, const sint32 y) const
 
 
 
-sint32 World::IsHill(const MapPoint &pos) const
+bool World::IsHill(const MapPoint &pos) const
 {
 	return EnvIsHill(GetCell(pos)->m_env);
 
@@ -469,27 +428,23 @@ sint32 World::IsHill(const MapPoint &pos) const
 
 
 
-sint32 World::EnvIsMountain(const uint32 env) const
+bool World::EnvIsMountain(const uint32 env) const
 {
 	return ((env & k_MASK_ENV_MOVEMENT_TYPE) & k_BIT_MOVEMENT_TYPE_MOUNTAIN) != 0; 
 }
 
-sint32 World::IsMountain(const sint32 x, const sint32 y) const 
-{ 
+bool World::IsMountain(const sint32 x, const sint32 y) const 
+{
 	return EnvIsMountain(m_map[x][y]->m_env);
-
 }
 
-sint32 World::IsMountain(const MapPoint &pos) const
-
-{ 
+bool World::IsMountain(const MapPoint &pos) const
+{
 	return EnvIsMountain(GetCell(pos)->m_env);
-
 }
 
 void World::SetMovementType (const sint32 x, const sint32 y, const sint32 t) 
-
-{ 
+{
 	
 	Assert(0 <= y); 
 	Assert(y < m_size.y); 
@@ -497,33 +452,29 @@ void World::SetMovementType (const sint32 x, const sint32 y, const sint32 t)
 	m_map[x][y]->m_env = (m_map[x][y]->m_env & ~k_MASK_ENV_MOVEMENT_TYPE) | (t << k_SHIFT_ENV_MOVEMENT_TYPE); 
 }
 
-uint32 World::GetMovementType(const MapPoint &pos) 
-
-{ 
+uint32 World::GetMovementType(const MapPoint &pos)
+{
 	return GetCell(pos)->m_env & k_MASK_ENV_MOVEMENT_TYPE; 
-} 
+}
+
 
 double World::GetMoveCost(const MapPoint &pos) const 
-
-{ 
-	return GetCell(pos)->m_move_cost; 
+{
+	return GetCell(pos)->GetMoveCost();
 }
 
 
 sint32 World::GetEnvFlags(const MapPoint &pos) const
-
 {
 	return GetCell(pos)->m_env; 
 }
 
 sint32 World::IsCity(const MapPoint &pos) const
-
 {
-	return GetCell(pos)->GetCity().m_id != (0);
+	return GetCell(pos)->HasCity();
 }
 
 sint32 World::IsCanal(const MapPoint &pos) const 
-
 {
 	if (IsLand(pos)) { 
 		return GetCell(pos)->m_env & k_MASK_ENV_CANAL_TUNNEL; 
@@ -534,7 +485,7 @@ sint32 World::IsCanal(const MapPoint &pos) const
 
 sint32 World::EnvIsTunnel(const uint32 env) const 
 {
-	return env & k_MASK_ENV_CANAL_TUNNEL;	
+	return env & k_MASK_ENV_CANAL_TUNNEL;
 }
 
 sint32 World::IsTunnel(const MapPoint &pos) const 
@@ -542,7 +493,7 @@ sint32 World::IsTunnel(const MapPoint &pos) const
 	if (IsWater(pos)) { 
 		return EnvIsTunnel(GetCell(pos)->m_env);
 	} else { 
-		return FALSE; 
+		return FALSE;
 	} 
 } 
 
@@ -576,7 +527,7 @@ sint32 World::IsIrrigation(const sint32 i, const MapPoint &pos) const
 
 sint32 World::EnvIsMine(const sint32 i, const uint32 env) const
 {
-	return uint32(env & k_MASK_ENV_MINE) == uint32((i+1) << k_SHIFT_ENV_MINE); 
+	return uint32(env & k_MASK_ENV_MINE) == uint32((i+1) << k_SHIFT_ENV_MINE);
 }
 
 sint32 World::IsMine(const sint32 i, const MapPoint &pos) const
@@ -588,10 +539,11 @@ sint32 World::IsMine(const sint32 i, const MapPoint &pos) const
 	
 }
 
-BOOL World::IsInstallation(const MapPoint &pos) const
+bool World::IsInstallation(const MapPoint &pos) const
 {
 	return (GetCell(pos)->m_env & k_BIT_ENV_INSTALLATION) != 0;
 }
+
 #ifdef _DEBUG
 #ifdef CELL_COLOR
 
@@ -713,7 +665,7 @@ BOOL World::IsOnOrNextToOwner(const MapPoint &pos, sint32 owner)
 	return FALSE;
 }
 
-BOOL World::IsContinentSharedWithOthers(const MapPoint &pnt, 
+bool World::IsContinentSharedWithOthers(const MapPoint &pnt, 
 										sint32 owner, 
 										uint8* array) const
 {

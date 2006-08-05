@@ -188,7 +188,7 @@ public:
 	~Cell();
 
 	sint32 IsAnyUnitInCell() const;
-	sint32 InsertUnit(const Unit id);
+	bool InsertUnit(const Unit id);
 	sint32 RemoveUnitReference(const Unit &id);
 
 

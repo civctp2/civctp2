@@ -1202,9 +1202,9 @@ void Director::CatchUp(void)
 
 
 
-BOOL Director::CaughtUp(void)
+bool Director::CaughtUp(void)
 {
-	if (!m_itemQueue) return TRUE;
+	if (!m_itemQueue) return true;
 
 	return (m_itemQueue->GetCount() == 0);
 }
@@ -1212,19 +1212,19 @@ BOOL Director::CaughtUp(void)
 
 
 
-BOOL Director::TileIsVisibleToPlayer(MapPoint &pos)
+bool Director::TileIsVisibleToPlayer(MapPoint &pos)
 {
 #ifdef _DEBUG
-	if (g_doingFastRounds) return FALSE;
-	if (g_god) return TRUE;
-	if (g_fog_toggle) return TRUE;
-	if(!g_tiledMap) return FALSE;
+	if (g_doingFastRounds) return false;
+	if (g_god) return true;
+	if (g_fog_toggle) return true;
+	if(!g_tiledMap) return false;
 
 
 
 	return g_tiledMap->GetLocalVision()->IsVisible(pos);
 #else
-	if (g_god) return TRUE;
+	if (g_god) return true;
 	return g_tiledMap->GetLocalVision()->IsVisible(pos);
 #endif
 }

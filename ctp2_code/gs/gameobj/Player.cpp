@@ -87,6 +87,7 @@
 // - Added to CalcWonderGold the difficulty settings of GoldPerUnitSupport 
 //   and GoldPerCity so they don't have to be tied to the palace
 // - added FranchiseProduction to BeginTurnProduction
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1030,7 +1031,7 @@ Unit Player::CreateUnit(const sint32 t,
                         CAUSE_NEW_ARMY cause)
 {
 
-	const UnitRecord *rec = g_theUnitDB->Get(t);
+	const UnitRecord *rec = g_theUnitDB->Get(t, m_government_type);
 
 	if(!rec)
 		return Unit();
@@ -1060,7 +1061,7 @@ Unit Player::CreateUnit(const sint32 t,
 			return Unit();
 		}
 
-		sint32 pointsNeeded = g_theUnitDB->Get(t)->GetPowerPoints();
+		sint32 pointsNeeded = g_theUnitDB->Get(t, m_government_type)->GetPowerPoints();
 		if(pointsNeeded > m_powerPoints) {
 			
 			return Unit();
@@ -1121,7 +1122,7 @@ Unit Player::CreateUnit(const sint32 t,
 
 	if(rec->GetIsTrader()) {
 		m_traderUnits->Insert(u);
-		AddTransportPoints((sint32)g_theUnitDB->Get(t)->GetMaxMovePoints());
+		AddTransportPoints((sint32)g_theUnitDB->Get(t, m_government_type)->GetMaxMovePoints());
 
 		return u;
 	} else {
@@ -1451,7 +1452,7 @@ sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY 
 	}
 
 	if(m_traderUnits->Del(kill_me)) {
-		RemoveTransportPoints((sint32)g_theUnitDB->Get(kill_me.GetType())->GetMaxMovePoints());
+		RemoveTransportPoints(static_cast<sint32>(kill_me.GetDBRec()->GetMaxMovePoints()));
 		r = TRUE;
 	}
 
@@ -1464,7 +1465,6 @@ sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY 
 
 void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos, 
    const DEATH_EFFECT_MORALE mtype)
-
 {
 	Unit aCity;
 	double dist;
@@ -1564,7 +1564,7 @@ Unit Player::CreateCity(
 			return Unit();
 		}
 
-		sint32 pointsNeeded = g_theUnitDB->Get(t)->GetPowerPoints();
+		sint32 pointsNeeded = g_theUnitDB->Get(t, m_government_type)->GetPowerPoints();
 		if(pointsNeeded > m_powerPoints) {
 			
 			return Unit();
@@ -1597,7 +1597,7 @@ Unit Player::CreateCity(
 		g_network.AddCreatedCity(m_owner, u);
 	}
 
-	sint32 r = g_theWorld->InsertCity(pos, u);
+	bool r = g_theWorld->InsertCity(pos, u);
 	Assert(r); 
 
 	
@@ -1985,29 +1985,29 @@ void Player::BeginTurnProduction()
 		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 			Installation inst = m_allInstallations->Access(b);
 			const TerrainImprovementRecord *rec = inst.GetDBRec();
-			
+
 			sint32 bpe;
 			if (rec->GetBonusProductionExport(bpe)) {
 				m_materialPool->AddMaterials(bpe);		//i.e. allows oil to give PW
 			}
-
+	
 			sint32 bge;
 			if (rec->GetBonusGoldExport(bge)) {
 				m_gold->AddGold(bpe);					// i.e. allows for colonies to generate gold
 			}
-
+	
 			sint32 bfp;
 			if (rec->GetFranchiseProduction(bfp)) {	
 				m_productionFromFranchises += bfp;		//i.e. allows oil to pay for military
 			}
-
+	
 			if(rec->HasIntBorderRadius()){
 				sint32 radius;
 				rec->GetIntBorderRadius(radius);
 				CityInfluenceIterator it(inst.RetPos(), radius);
 				for(it.Start(); !it.End(); it.Next()) {
 					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-
+	
 					if (rec->GetCanExportTileValue()) {
 						m_materialPool->AddMaterials(radiuscell->GetShieldsProduced());
 						m_gold->AddGold(radiuscell->GetGoldProduced());
@@ -2955,9 +2955,9 @@ sint32 Player::GetTotalUnitCost()
 
 	unit_num = m_all_units->Num();
 	sint32 cost = 0;
-	UnitRecord *rec=NULL;
+	const UnitRecord *rec=NULL;
 	for (unit_idx=0; unit_idx<unit_num; unit_idx++) {
-		rec = g_theUnitDB->Access(m_all_units->Access(unit_idx).GetType());
+		rec = m_all_units->Access(unit_idx).GetDBRec();
 		Assert(rec);
 
 		if (rec->GetHasPopAndCanBuild()) continue;
@@ -3750,7 +3750,7 @@ void Player::RejectTradeBid(const Unit &fromCity, sint32 resource, const Unit &t
 void Player::AddTrader(Unit uid)
 {
 	m_traderUnits->Insert(uid);
-	AddTransportPoints((sint32)g_theUnitDB->Get(uid.GetType())->GetMaxMovePoints());
+	AddTransportPoints(static_cast<sint32>(uid.GetDBRec()->GetMaxMovePoints()));
 }
 
 void Player::GamestateDebug()
@@ -3775,8 +3775,8 @@ void Player::BuildUnit(sint32 type, Unit city)
 	if(city.GetOwner() != m_owner)
 		return;
 
-	Assert(!g_theUnitDB->Get(type)->GetCantBuild());
-	if(g_theUnitDB->Get(type)->GetCantBuild())
+	Assert(!g_theUnitDB->Get(type, m_government_type)->GetCantBuild());
+	if(g_theUnitDB->Get(type, m_government_type)->GetCantBuild())
 		return;
 
 #if 0
@@ -3999,7 +3999,7 @@ void Player::ObsoleteNotices(AdvanceType advance)
     
     so = new SlicObject("114UnitObsoleteCivwide");
     for (i=0; i < g_theUnitDB->NumRecords(); i++) {
-        rec = g_theUnitDB->Get(i);
+        rec = g_theUnitDB->Get(i, m_government_type);
         for(j = 0; j < rec->GetNumObsoleteAdvance(); j++) {
             if (rec->GetObsoleteAdvanceIndex(j) == advance) {
                 so->AddAction(g_theStringDB->GetNameStr(rec->m_name));
@@ -5119,7 +5119,7 @@ void Player::BreakCeaseFire(PLAYER_INDEX other_player, bool sendMessages)
 		m_broken_alliances_and_cease_fires++;
 
 		if(sendMessages) {
-			sendMessages = FALSE;
+			sendMessages = false;
 			SlicObject *so = new SlicObject("108YouBrokeCeaseFire");
 			so->AddRecipient(m_owner);
 			so->AddCivilisation(other_player);
@@ -6008,7 +6008,7 @@ void Player::DiplomaticMute(PLAYER_INDEX player, bool enable)
 // Unused
 bool Player::IsMuted(PLAYER_INDEX player)
 	{
-	return static_cast<bool>(m_diplomatic_mute & (1<<player)) ;
+	return (m_diplomatic_mute & (1<<player)) != 0;
 	}
 
 
@@ -8039,7 +8039,7 @@ sint32 Player::GetCheapestMilitaryUnit()
 	sint32 cheapindex = -1;
 	sint32 cheapcost = 0x7fffffff;
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
-		const UnitRecord *rec = g_theUnitDB->Get(i);
+		const UnitRecord *rec = g_theUnitDB->Get(i, m_government_type);
 		bool isObsolete = false;
 		sint32 o;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
@@ -8881,7 +8881,7 @@ sint32 Player::GetCurRound() const
 
 bool Player::IsTurnOver() const
 {
-	return m_is_turn_over;
+	return m_is_turn_over != FALSE;
 }
 
 void Player::BuildDiplomaticSlicMessage(DiplomaticRequest &r)
@@ -9537,8 +9537,8 @@ void Player::MakeConvertedCitiesUnhappy(sint32 convertedTo)
 	}
 }
 
-BOOL Player::CanBuildInfrastructure() const { return m_can_build_infrastructure; }
-BOOL Player::CanBuildCapitalization() const { return m_can_build_capitalization; }
+bool Player::CanBuildInfrastructure() const { return m_can_build_infrastructure != FALSE; }
+bool Player::CanBuildCapitalization() const { return m_can_build_capitalization != FALSE; }
 
 //----------------------------------------------------------------------------
 //
@@ -9563,7 +9563,7 @@ BOOL Player::CanBuildCapitalization() const { return m_can_build_capitalization;
 //-----------------------------------------------------------------------------
 bool Player::CanBuildUnit(const sint32 type) const
 {
-	const UnitRecord *rec = g_theUnitDB->Get(type);
+	const UnitRecord *rec = g_theUnitDB->Get(type, m_government_type);
 
 	Assert(rec);
 	if(rec == NULL)
@@ -10140,13 +10140,13 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 			
 			return 2;
 		case DATABASE_UNITS:
-			advance = g_theUnitDB->Get(index)->GetEnableAdvanceIndex();
+			advance = g_theUnitDB->Get(index, m_government_type)->GetEnableAdvanceIndex();
 			break;
 		case DATABASE_BUILDINGS:
-			advance = g_theBuildingDB->Get(index)->GetEnableAdvanceIndex();
+			advance = g_theBuildingDB->Get(index, m_government_type)->GetEnableAdvanceIndex();
 			break;
 		case DATABASE_WONDERS:
-			advance = g_theWonderDB->Get(index)->GetEnableAdvanceIndex();
+			advance = g_theWonderDB->Get(index, m_government_type)->GetEnableAdvanceIndex();
 			break;
 		case DATABASE_ADVANCES:
 			advance = index; 
@@ -10155,7 +10155,7 @@ sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 			advance = g_theGovernmentDB->Get(index)->GetEnableAdvanceIndex();
 			break;
 		case DATABASE_TILE_IMPROVEMENTS:
-			advance = g_theTerrainImprovementDB->Get(index)->GetTerrainEffect(0)->GetEnableAdvanceIndex();
+			advance = g_theTerrainImprovementDB->Get(index, m_government_type)->GetTerrainEffect(0)->GetEnableAdvanceIndex();
 			tmpCosts = m_advances->GetCost(advance);
 			for(i = 1; i < g_theTerrainImprovementDB->Get(index)->GetNumTerrainEffect(); i++){
 				tmpAdvance = g_theTerrainImprovementDB->Get(index)->GetTerrainEffect(i)->GetEnableAdvanceIndex();

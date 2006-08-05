@@ -106,7 +106,7 @@ private:
     MapPoint                   m_pos;                  // Used and serialized
     CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
     PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
-    BOOL                       m_hasBeenAdded;         // Used and serialized (uint8)
+    bool                       m_hasBeenAdded;         // Used and serialized (uint8)
     bool                       m_isPirating;           // Used and serialized (uint8)
     MBCHAR                    *m_name;                 // Used and serialized
     sint32                     m_reentryTurn;          // Used
@@ -116,18 +116,10 @@ private:
     uint8                      m_debugStringColor;     // Unused
 
 
-    PointerList<KillRecord>   *m_killMeSoon;
-    Army                       m_debarked;             // Unused
-
-    BOOL                       m_isTransported;        // Unused
-    BOOL                       m_revealedForeignUnits; // Unused
-    BOOL                       m_revealedUnexplored;   // Unused
-    BOOL                       m_zocViolation;         // Unused
-    BOOL                       m_didBattle;            // Unused
-    BOOL                       m_didMove;              // Can be replaced by local variable
+    PointerList<KillRecord>   *m_killMeSoon;           // Used
 
     uint8                      m_dontKillCount;        // Used and serialized
-    BOOL                       m_needToKill;           // Used and serialized (uint8)
+    bool                       m_needToKill;           // Used and serialized (uint8)
 
 
     MBCHAR                    *m_debugString;          // Unused
@@ -444,7 +436,7 @@ public:
 
     void CheckLoadSleepingCargoFromCity(Order *order);
     bool Move(WORLD_DIRECTION, Order *order);
-    BOOL FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order);
+    bool FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order);
     bool FinishAttack(Order *order);
     bool CheckSpecialUnitMove(const MapPoint &pos);
     bool MoveIntoForeigner(const MapPoint &pos);

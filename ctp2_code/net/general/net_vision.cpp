@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -102,12 +103,12 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 		bottom = vision->m_height;
 
 	for (sint32 y = m_row; y < bottom; ++y) 
-    {
+	{
 		bitPos = 0;
 		ptr = &buf[size] + ((y - m_row) * ((w+7) / 8));
 		*ptr = 0;
 		for (sint32 x = 0; x < vision->m_width; ++x) 
-        {
+		{
 			uint16 vis = vision->m_array[x][y];
 			if(vis & 0x8000) {
 				*ptr |= 1 << bitPos;
@@ -129,7 +130,7 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NetFeatTracker::Unpacketize
+// Name       : NetVision::Unpacketize
 //
 // Description: Retrieve the data from a received application data packet.
 //
@@ -160,14 +161,14 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	Vision *        vision  = g_player[m_owner]->m_vision;
 	sint32          w       = vision->m_width;
 	sint32 const    bottom  = 
-        std::min<sint32>(m_row + m_numRows, vision->m_height);
+	    std::min<sint32>(m_row + m_numRows, vision->m_height);
 
 	for (sint32 y = m_row; y < bottom; ++y) 
-    {
+	{
 		bitPos = 0;
 		ptr = &buf[pos] + ((y - m_row) * ((w+7) / 8));
 		for (sint32 x = 0; x < vision->m_width; ++x) 
-        {
+		{
 			if(*ptr & (1 << bitPos)) {
 				vision->m_array[x][y] |= 0x8000;
 			} else {
@@ -190,7 +191,7 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NetVision::NetVision
+// Name       : NetUnseenCell::NetUnseenCell
 //
 // Description: Constructor
 //
@@ -410,7 +411,7 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		PULLSHORT(dbIndex);
 
 		
-		double		visionRange = g_theUnitDB->Get(dbIndex)->GetVisionRange();
+		double		visionRange = g_theUnitDB->Get(dbIndex, g_player[m_owner]->GetGovernmentType())->GetVisionRange();
 
 		
 		

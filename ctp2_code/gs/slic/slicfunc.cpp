@@ -56,6 +56,7 @@
 // - AOM facilitation: set player[0] to the recipient when undefined.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Removed the old endgame database. (Aug 29th 2005 Martin Gühmann)
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3319,7 +3320,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-	const UnitRecord *rec = g_theUnitDB->Get(type);
+	const UnitRecord *rec = g_theUnitDB->Get(type, g_player[owner]->GetGovernmentType());
 // Added by Martin Gühmann
 // Check if the function was called with a valid unit type.
 	if(!rec) return SFN_ERROR_UNKNOWN_UNIT_TYPE;
@@ -3520,7 +3521,7 @@ SFN_ERROR Slic_AddPops::Call(SlicArgList *args)
 	
 	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
-	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);
+	cd->GetHappy()->CalcHappiness(*cd, false, delta_martial_law, true);
 
 	return SFN_ERROR_OK;
 }
@@ -3621,7 +3622,7 @@ SFN_ERROR Slic_CreateCity::Call(SlicArgList *args)
 	cpos = legalPoints[g_rand->Next(legalPoints.Num())];
 	const UnitRecord *rec;
 	for(i = 0; i < g_theUnitDB->NumRecords() - 1; i++) {
-		rec = g_theUnitDB->Get(i);
+		rec = g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType());
 		if(!rec->GetHasPopAndCanBuild())
 			continue;
 		if((g_theWorld->IsLand(cpos) || g_theWorld->IsMountain(cpos)) && 
@@ -3722,7 +3723,7 @@ SFN_ERROR Slic_CreateCoastalCity::Call(SlicArgList *args)
 	cpos = legalPoints[g_rand->Next(legalPoints.Num())];
 	const UnitRecord *rec;
 	for(i = 0; i < g_theUnitDB->NumRecords() - 1; i++) {
-		rec = g_theUnitDB->Get(i);
+		rec = g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType());
 		if(!rec->GetHasPopAndCanBuild())
 			continue;
 		if((g_theWorld->IsLand(cpos) || g_theWorld->IsMountain(cpos)) && 
@@ -5848,7 +5849,7 @@ SFN_ERROR Slic_BlankScreen::Call(SlicArgList *args)
 	if(!args->GetInt(0, blank))
 		return SFN_ERROR_TYPE_ARGS;
 
-	g_slicEngine->BlankScreen(blank);
+	g_slicEngine->BlankScreen(blank != 0);
 	if(!blank && g_selected_item) {
 		g_selected_item->KeyboardSelectFirstUnit();
 		if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY &&
@@ -7131,7 +7132,7 @@ SFN_ERROR Slic_CargoCapacity::Call(SlicArgList *args)
 //
 // Globals    : g_theUnitDB
 //
-// Returns    : SFN_ERROR		: execution result
+// Returns    : SFN_ERROR        : execution result
 //
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
@@ -7145,8 +7146,8 @@ SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
 
-	if (g_theUnitDB->Get(unit.GetType())->GetCargoDataPtr()){
-		m_result.m_int = g_theUnitDB->Get(unit.GetType())->GetCargoDataPtr()->GetMaxCargo();
+	if (unit.GetDBRec()->GetCargoDataPtr()){
+		m_result.m_int = unit.GetDBRec()->GetCargoDataPtr()->GetMaxCargo();
 	}
 	else{
 		m_result.m_int = 0;
@@ -7165,7 +7166,7 @@ SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
 //
 // Parameters : SlicArg 0: unit
 //
-// Globals    : g_theUnitDB
+// Globals    : -
 //
 // Returns    : SFN_ERROR		: execution result
 //
@@ -7198,7 +7199,7 @@ SFN_ERROR Slic_CargoSize::Call(SlicArgList *args)
 //              SlicArg 1: int
 //              SlicArg 2: unit
 //
-// Globals    : g_theUnitDB
+// Globals    : -
 //
 // Returns    : SFN_ERROR		: execution result
 //

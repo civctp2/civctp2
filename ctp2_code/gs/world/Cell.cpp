@@ -203,13 +203,13 @@ sint32 Cell::IsAnyUnitInCell() const
 }
 
 
-sint32 Cell::InsertUnit(Unit id)
+bool Cell::InsertUnit(Unit id)
 {
 	if(!m_unit_army) {
 		m_unit_army = new CellUnitList;
 	}
 
-    return m_unit_army->Insert(id); 
+	return m_unit_army->Insert(id); 
 }
 
 

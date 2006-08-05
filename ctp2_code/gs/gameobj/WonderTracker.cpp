@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Wonder Tracker
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -85,7 +85,7 @@ void WonderTracker::Serialize(CivArchive &archive)
 	}
 }
 
-BOOL WonderTracker::HasWonderBeenBuilt(sint32 which)
+bool WonderTracker::HasWonderBeenBuilt(sint32 which)
 {
 	return (m_builtWonders & ((uint64)1 << (uint64)which)) != 0;
 }
@@ -121,7 +121,7 @@ void WonderTracker::SetBuiltWonders(uint64 built)
 	m_builtWonders = built;
 }
 
-BOOL WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
+bool WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
 {
 	sint32 p;
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
@@ -132,11 +132,11 @@ BOOL WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
 			if(g_player[p]->m_all_cities->Access(c).GetData()->GetCityData()->GetBuiltWonders() & ((uint64)1 << which)) {
 
 				city = g_player[p]->m_all_cities->Access(c);
-				return TRUE;
+				return true;
 			}
 		}
 	}
-	return FALSE;
+	return false;
 }
 void WonderTracker::SetBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
@@ -152,9 +152,9 @@ void WonderTracker::ClearBuildingWonder(sint32 which, PLAYER_INDEX who)
 }
 
 
-BOOL WonderTracker::IsBuildingWonder(sint32 which, PLAYER_INDEX who)
+bool WonderTracker::IsBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
-	return ((m_buildingWonders[who] & ((uint64)1 << (uint64)which)) != 0);
+	return (m_buildingWonders[who] & ((uint64)1 << (uint64)which)) != 0;
 }
 
 

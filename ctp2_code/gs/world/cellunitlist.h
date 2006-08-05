@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -93,7 +95,7 @@ public:
 	CellUnitList(const DynamicArray<Unit> &copyme);
 	void Serialize(CivArchive &archive);
 
-	virtual sint32 Insert(Unit id);
+	virtual bool Insert(Unit id);
 	sint32 Del(const Unit &delme);
 	sint32 DelIndex(const sint32 index);
 
@@ -125,7 +127,7 @@ public:
 
 	const sint32 Num() const { if(!this) return 0; else return m_nElements; }
 	void KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
-	sint32 IsPresent(const Unit &u);
+	bool IsPresent(const Unit &u);
 
 	bool CanEnter(const MapPoint &pos) const;
 	bool HasWormholeProbe() const;

@@ -73,16 +73,15 @@ extern UnitPool *g_theUnitPool;
 
 
 
-sint32 World::InsertUnit (const MapPoint &pos, Unit &id, 
+bool World::InsertUnit (const MapPoint &pos, Unit &id, 
 						  UnitDynamicArray &revealedUnits)
-
-{ 
+{
 	Assert(!id.IsCity());
 	g_theUnitTree->Insert(id);
 	id.DoVision(revealedUnits);
 	if(id.IsCity()) {
 		GetCell(pos)->SetCity(id);
-		return TRUE;
+		return true;
 	} else {
 		return GetCell(pos)->InsertUnit(id);
 	}

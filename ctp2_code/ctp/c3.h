@@ -62,7 +62,7 @@
 #pragma warning(disable:4100)   // (Level 4)   'identifier' : unreferenced formal parameter
 #pragma warning(disable:4127)   // (Level 4)   conditional expression is constant
 #pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
-#pragma warning(disable:4800)   // (Level 3)   'type' : forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning(   1   :4800)   // (Level 3)   'type' : forcing value to bool 'true' or 'false' (performance warning)
 
 #pragma warning(disable:4511)   // (Level 3)   'class' : copy constructor could not be generated
 #pragma warning(disable:4512)   // (Level 4)   'class' : assignment operator could not be generated

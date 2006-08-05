@@ -343,22 +343,15 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_pos                   (),
     m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
-    m_hasBeenAdded          (FALSE),
+    m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
     m_reentryTurn           (-1),
     m_reentryPos            (),
     m_debugStringColor      (0),
     m_killMeSoon            (new PointerList<KillRecord>),
-    m_debarked              (),
-    m_isTransported         (FALSE),
-    m_revealedForeignUnits  (FALSE),
-    m_revealedUnexplored    (FALSE),
-    m_zocViolation          (FALSE),
-    m_didBattle             (FALSE),
-    m_didMove               (FALSE),
     m_dontKillCount         (0),
-    m_needToKill            (FALSE),
+    m_needToKill            (false),
     m_debugString           (NULL)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
@@ -375,22 +368,15 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_pos                   (),
     m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
-    m_hasBeenAdded          (FALSE),
+    m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
     m_reentryTurn           (-1),
     m_reentryPos            (),
     m_debugStringColor      (0),
     m_killMeSoon            (new PointerList<KillRecord>),
-    m_debarked              (),
-    m_isTransported         (FALSE),
-    m_revealedForeignUnits  (FALSE),
-    m_revealedUnexplored    (FALSE),
-    m_zocViolation          (FALSE),
-    m_didBattle             (FALSE),
-    m_didMove               (FALSE),
     m_dontKillCount         (0),
-    m_needToKill            (FALSE),
+    m_needToKill            (false),
     m_debugString           (NULL)
 {
     for(sint32 i = 0; i < units.Num(); ++i)
@@ -408,22 +394,15 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_pos                   (),
     m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
-    m_hasBeenAdded          (FALSE),
+    m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
     m_reentryTurn           (-1),
     m_reentryPos            (),
     m_debugStringColor      (0),
     m_killMeSoon            (new PointerList<KillRecord>),
-    m_debarked              (),
-    m_isTransported         (FALSE),
-    m_revealedForeignUnits  (FALSE),
-    m_revealedUnexplored    (FALSE),
-    m_zocViolation          (FALSE),
-    m_didBattle             (FALSE),
-    m_didMove               (FALSE),
     m_dontKillCount         (0),
-    m_needToKill            (FALSE),
+    m_needToKill            (false),
     m_debugString           (NULL)
 {
     Insert(u);
@@ -438,22 +417,15 @@ ArmyData::ArmyData(const Army &army)
     m_pos                   (),
     m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
-    m_hasBeenAdded          (FALSE),
+    m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
     m_reentryTurn           (-1),
     m_reentryPos            (),
     m_debugStringColor      (0),
     m_killMeSoon            (new PointerList<KillRecord>),
-    m_debarked              (),
-    m_isTransported         (FALSE),
-    m_revealedForeignUnits  (FALSE),
-    m_revealedUnexplored    (FALSE),
-    m_zocViolation          (FALSE),
-    m_didBattle             (FALSE),
-    m_didMove               (FALSE),
     m_dontKillCount         (0),
-    m_needToKill            (FALSE),
+    m_needToKill            (false),
     m_debugString           (NULL)
 {
 }
@@ -467,22 +439,15 @@ ArmyData::ArmyData(CivArchive &archive)
     m_pos                   (),
     m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
-    m_hasBeenAdded          (FALSE),
+    m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
     m_reentryTurn           (-1),
     m_reentryPos            (),
     m_debugStringColor      (0),
     m_killMeSoon            (new PointerList<KillRecord>),
-    m_debarked              (),
-    m_isTransported         (FALSE),
-    m_revealedForeignUnits  (FALSE),
-    m_revealedUnexplored    (FALSE),
-    m_zocViolation          (FALSE),
-    m_didBattle             (FALSE),
-    m_didMove               (FALSE),
     m_dontKillCount         (0),
-    m_needToKill            (FALSE),
+    m_needToKill            (false),
     m_debugString           (NULL)
 {
     Serialize(archive);
@@ -556,10 +521,10 @@ void ArmyData::Serialize(CivArchive &archive)
         archive >> m_owner;
         archive >> m_killer;
         m_removeCause = (CAUSE_REMOVE_ARMY)archive.GetSINT32();
-        m_dontKillCount = (BOOL)archive.GetUINT8();
-        m_needToKill = (BOOL)archive.GetUINT8();
-        m_hasBeenAdded = (BOOL)archive.GetUINT8();
-        m_isPirating = archive.GetUINT8() != 0;
+        m_dontKillCount = archive.GetUINT8();
+        m_needToKill    = archive.GetUINT8() != 0;
+        m_hasBeenAdded  = archive.GetUINT8() != 0;
+        m_isPirating    = archive.GetUINT8() != 0;
 
         archive >> ocount;
         for(i = 0; i < ocount; i++) {
@@ -6944,24 +6909,23 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 	return false;
 }
 
-BOOL ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
+bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
 {
 	static CellUnitList transports;
 	
 	if(g_theWorld->GetCity(newPos).IsValid() && CanMoveIntoTransport(newPos, transports)) {
-		m_didMove = MoveIntoTransport(newPos, transports);
-		return m_didMove;
+		return MoveIntoTransport(newPos, transports);
 	} else {
-		m_didMove = MoveIntoCell(newPos, order->m_order, d);
+		bool didMove = MoveIntoCell(newPos, order->m_order, d);
 
-		if(m_didMove) {
+		if(didMove) {
 			sint32 i;
 			for(i = 0; i < m_nElements; i++) {
 				g_slicEngine->RunUnitMovedTriggers(m_array[i]);
 			}
 		}
 
-		if(m_didMove) {
+		if(didMove) {
 			sint32 i;
 			for(i = m_nElements - 1; i >= 0; i--) {
 				uint32 moveType = m_array[i].GetMovementType();
@@ -6981,7 +6945,7 @@ BOOL ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
 			}
 		}
 
-		return m_didMove;
+		return didMove;
 	}
 }
 
@@ -7585,8 +7549,6 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 			}
 		}
 
-		m_zocViolation = zocViolation;
-
 		if(alliedCity) {
 			
 			Unit city = g_theWorld->GetCity(pos);
@@ -8102,8 +8064,6 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 	g_director->AddMove(top_src, m_pos, directorDoesntLikeConsts, numRevealed, revealedActors,
 							numRest, restOfStack, TRUE, top_src.GetMoveSoundID());
 
-    m_isTransported = TRUE;
-
 	UpdateZOCForRemoval();
 
 	if(m_dontKillCount) {
@@ -8273,7 +8233,7 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					CheckWasEnemyVisible(to_pt);
 
 				    
-				    BOOL inserted = FALSE;
+				    bool inserted = false;
 				    for(sint32 j = 0; j < m_nElements && !inserted; j++) {
 					    inserted = m_array[j].InsertCargo(debark[i]);
 						if(inserted) {
@@ -8340,12 +8300,7 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 											   GEA_Unit, debark[i].m_id,
 											   GEA_End);
 					}
-				}
-				
-				
-				
-				m_debarked = debark;
-				
+				}				
 			}
 
             if(m_pos != to_pt) {
@@ -8461,7 +8416,6 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 	}	
 	m_dontKillCount++;
 
-	m_didBattle = TRUE;
 	sint32 i;
 
 	for(i = 0; i < m_nElements; i++) {
@@ -8721,7 +8675,6 @@ bool ArmyData::ExecuteTeleportOrder(Order *order)
 		m_array[i].UpdateZOCForInsertion();
 	}
 
-	m_revealedForeignUnits = revealedUnits.Num() > 0;
 	MoveActors(order->m_point, revealedUnits, true);
 	m_pos = order->m_point;
 
@@ -8781,7 +8734,7 @@ void ArmyData::GetAdvanceFromCityAssault(const Unit &c,
 
 void ArmyData::IndicateAdded()
 {
-	m_hasBeenAdded = TRUE;
+	m_hasBeenAdded = true;
 }
 
 PLAYER_INDEX ArmyData::GetKiller() const
@@ -9541,8 +9494,8 @@ void ArmyData::GetCurrentHP
 bool ArmyData::IsWounded() const
 {
 	sint32 nb;
-	sint32  unittypes[MAX_UNIT_COUNT];
-	sint32  unithp[MAX_UNIT_COUNT];
+	sint32 unittypes[MAX_UNIT_COUNT];
+	sint32 unithp[MAX_UNIT_COUNT];
 	sint32 totalcurrentHP = 0;
 	sint32 totalHP = 0;
 
@@ -9552,7 +9505,7 @@ bool ArmyData::IsWounded() const
 		totalcurrentHP += unithp[i];
 		totalHP+= g_theUnitDB->Get(unittypes[i], g_player[GetOwner()]->GetGovernmentType())->GetMaxHP();
 	}
-	return (totalcurrentHP < totalHP/2); 
+	return (totalcurrentHP < totalHP/2);
 	//criterion can be changed, but seems relevant. Even if support isn't
 	//determined as full, it will be wise not to attack with a unit that has 
 	//half than its normal HPs.
@@ -9567,32 +9520,32 @@ bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 
 	
 	if (cell->GetCity().IsValid()) 
-    {
-		return (cell->GetCity().GetVisibility() & (1 << m_owner));
+	{
+		return (cell->GetCity().GetVisibility() & (1 << m_owner)) != 0;
 	}
 
 	CellUnitList *defender = cell->UnitArmy();
-    if (defender)
-    {
-	    for (i = 0; i < defender->Num(); i++) 
-        {
-		    if (defender->Access(i).GetVisibility() & (1 << m_owner))
-            {
-			    return true;
-		    }
-        }
+	if (defender)
+	{
+		for (i = 0; i < defender->Num(); i++) 
+		{
+			if (defender->Access(i).GetVisibility() & (1 << m_owner))
+			{
+				return true;
+			}
+		}
 
-	    if (!justCheck) 
-        {
-		    for (i = 0; i < defender->Num(); i++) 
-            {
-			    defender->Access(i).SetVisible(m_owner);
-		    }
-        }
+		if (!justCheck) 
+		{
+			for (i = 0; i < defender->Num(); i++) 
+			{
+				defender->Access(i).SetVisible(m_owner);
+			}
+		}
 	}
 	
 	if (!justCheck && (m_owner == g_selected_item->GetVisiblePlayer())) 
-    {
+	{
 		g_selected_item->ForceDirectorSelect(Army(m_id));
 	}
 

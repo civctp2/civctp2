@@ -176,7 +176,7 @@ public:
 	sint32 GetTutorialPlayer() const { return m_tutorialPlayer; }
 	void SetTutorialPlayer(sint32 tut) { m_tutorialPlayer = tut; }
 	void SetTutorialActive(BOOL on);
-	bool GetTutorialActive() const { return m_tutorialActive; }
+	bool GetTutorialActive() const { return m_tutorialActive != FALSE; }
 
 	void AddTrigger(SlicSegment *trigger, TRIGGER_LIST which);
 

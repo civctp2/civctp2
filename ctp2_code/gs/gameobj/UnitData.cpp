@@ -1310,11 +1310,11 @@ bool UnitData::CanCounterBombard(CellUnitList &defender) const
 // Description: Check how many times this unit can actively defend against a
 //              passing army.
 //
-// Parameters : attacker	: the army (list of units) to defend against
+// Parameters : attacker    : the army (list of units) to defend against
 //
 // Globals    : -
 //
-// Returns    : sint32		: number of active defense strikes that can be
+// Returns    : sint32      : number of active defense strikes that can be
 //                            executed by this unit.
 //
 // Remark(s)  : The movement types of attacker and defender have to match to 
@@ -1327,11 +1327,11 @@ bool UnitData::CanActivelyDefend(CellUnitList &attacker) const
 	if(rec->GetActiveDefenseRange() <= 0)
 		return false;
 
-	bool const	movesMatch	=
-		(attacker.IsAtLeastOneMoveLand()     && rec->GetDefendLand())	||
-		(attacker.IsAtLeastOneMoveWater()    && rec->GetDefendWater())	||
-		(attacker.IsAtLeastOneMoveAir()      && rec->GetDefendAir())	||
-		(attacker.IsAtLeastOneMoveSpace()    && rec->GetDefendSpace())	||
+	bool const  movesMatch  =
+		(attacker.IsAtLeastOneMoveLand()     && rec->GetDefendLand())   ||
+		(attacker.IsAtLeastOneMoveWater()    && rec->GetDefendWater())  ||
+		(attacker.IsAtLeastOneMoveAir()      && rec->GetDefendAir())    ||
+		(attacker.IsAtLeastOneMoveSpace()    && rec->GetDefendSpace())  ||
 		(attacker.IsAtLeastOneMoveMountain() && rec->GetDefendMountain());
 
 	if(movesMatch) {
@@ -1342,7 +1342,7 @@ bool UnitData::CanActivelyDefend(CellUnitList &attacker) const
 				if(m_cargo_list->Access(i).GetDBRec()->GetEnableCarrierDefenses())
 					numEnablers++;
 			}
-			return numEnablers;
+			return numEnablers > 0;
 		}
 		return true;
 	}

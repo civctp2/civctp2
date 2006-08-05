@@ -285,7 +285,7 @@ SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE l
 
 
 
-BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
+bool SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 {
 	SPRITELISTERR err;
 
@@ -293,9 +293,10 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 	Assert(index < k_MAX_SPRITES);
 
 	if (index < 0 || index >= k_MAX_SPRITES)
-		return SPRITELISTERR_NOTFOUND;
+		return true; // Old behaviour
 
-	if (m_spriteList[index] == NULL) return SPRITELISTERR_NOTFOUND;
+	if (m_spriteList[index] == NULL)
+		return true; // Old behaviour
 
 	LOADTYPE	groupLoadType = m_spriteList[index]->GetLoadType();
 
@@ -321,7 +322,7 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 	
 	if (basicRefs == 0 && fullRefs == 0) {
 		PurgeSprite(index);
-		return TRUE;
+		return true;
 	}
 
 	
@@ -340,7 +341,7 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 			
 			
 		}
-		return FALSE;
+		return false;
 	}
 
 	
@@ -348,7 +349,7 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 		
 	}
 
-	return FALSE;
+	return false;
 }
 
 

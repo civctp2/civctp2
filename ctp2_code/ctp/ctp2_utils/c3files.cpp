@@ -290,7 +290,7 @@ bool c3files_PathIsValid(MBCHAR *path)
 bool c3files_CreateDirectory(MBCHAR *path)
 {
 #if defined(WIN32)
-	return CreateDirectory(path, NULL);
+	return CreateDirectory(path, NULL) != FALSE; // BOOL to bool conversion
 #else
 	mode_t mask = 0777;
 	return mkdir(path, mask);

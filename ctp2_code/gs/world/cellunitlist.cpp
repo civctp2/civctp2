@@ -47,7 +47,6 @@
 #include "SlicEngine.h"
 #include "Cell.h"
 #include "UnitDynArr.h"
-// #include "UnitPool.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
 #include "MoveFlags.h"
@@ -59,16 +58,16 @@
 extern sint32 g_god;
 extern sint32 g_fog_toggle;
 
-sint32 CellUnitList::Insert(Unit id)
+bool CellUnitList::Insert(Unit id)
 {
 	Assert(m_nElements < k_MAX_ARMY_SIZE);
 	if(m_nElements < k_MAX_ARMY_SIZE) {
 		m_array[m_nElements].m_id = id.m_id;
 		m_nElements++;
 		UpdateMoveIntersection();
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 bool CellUnitList::CanEnter(const MapPoint &point) const
@@ -284,11 +283,11 @@ bool CellUnitList::IsEnemy(PLAYER_INDEX owner) const
 		return false;
 	}
 
-    uint32 a, b;
-    a = ~(g_player[m_array[0].GetOwner()]->GetMaskAlliance()); 
-    b = (0x00000001 << owner); 
-    
-    return a & b;
+	uint32 a, b;
+	a = ~(g_player[m_array[0].GetOwner()]->GetMaskAlliance()); 
+	b = (0x00000001 << owner); 
+
+	return (a & b) != 0;
 }
 
 bool CellUnitList::IsEnemy( Unit defender) const
@@ -885,14 +884,14 @@ void CellUnitList::KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 	}
 }
 
-sint32 CellUnitList::IsPresent(const Unit &u)
+bool CellUnitList::IsPresent(const Unit &u)
 {
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		if(m_array[i].m_id == u.m_id)
-			return 1;
+			return true;
 	}
-	return 0;
+	return false;
 }
 
 void CellUnitList::UpdateMoveIntersection()

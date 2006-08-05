@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star pathfinding for Units
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,12 +18,15 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added avoidList Param
 // - Added methods to check room for army and danger along path
+//
 //----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
@@ -113,7 +117,7 @@ public:
 
     sint32 InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
         const float pc, const MapPoint &dest);
-	BOOL CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian);
+	bool CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian);
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost, 
         BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
@@ -176,7 +180,7 @@ public:
 						const MapPoint &pos,
 						const uint32 &m_move_intersection);
     void ClearMem(); 
-    BOOL VerifyMem() const; 
+    bool VerifyMem() const; 
 };
 
 #endif

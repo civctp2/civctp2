@@ -49,10 +49,8 @@ extern SoundManager     *g_soundManager;
 BattleViewActor::BattleViewActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner)
 : Actor(ss)
 {
-	uint32 spriteID;
-
-	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);
-	m_spriteID = (sint32)spriteID;
+	m_type = GROUPTYPE_UNIT;
+	m_spriteID = static_cast<uint32>(ss->GetIndex());
 
 	m_spriteState = ss;
 	m_unitDBIndex = unitType;
@@ -88,13 +86,6 @@ void BattleViewActor::Initialize(void)
 	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 
 	AddIdle();
-}
-
-void BattleViewActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint const & pos, 
-								uint32 *spriteID, GROUPTYPE *groupType)
-{
-	*spriteID = ss->GetIndex();
-	*groupType = GROUPTYPE_UNIT;
 }
 
 BattleViewActor::~BattleViewActor()

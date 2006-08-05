@@ -309,7 +309,7 @@ void UnitActor::GetIDAndType
     GROUPTYPE *         groupType
 )
 {
-	bool    isCity  = g_theUnitDB->Get(unitType)->GetHasPopAndCanBuild();
+	bool    isCity  = g_theUnitDB->Get(unitType, g_player[owner]->GetGovernmentType())->GetHasPopAndCanBuild();
 
 	if (isCity) 
     {

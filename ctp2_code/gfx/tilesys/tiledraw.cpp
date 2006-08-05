@@ -4336,7 +4336,7 @@ void TiledMap::DrawWater(void)
 void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 {
 	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEADROOM*m_scale)/2;
-	BOOL		fog;
+	bool		fog;
 	uint32		slaveBits = 0;
 
 	sint32 surfWidth = surf->Width();
@@ -4356,10 +4356,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 			
 			Unit unit;
 			
-			if (m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos))
-				fog = TRUE;
-			else 
-				fog = FALSE;
+			fog = m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
 
 
 			if(m_localVision->IsExplored(pos) || g_fog_toggle || g_god) {
@@ -4803,7 +4800,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, BOOL fog, RECT &popRect,
+void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner,

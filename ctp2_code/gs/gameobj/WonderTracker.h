@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Wonder Tracker
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -54,15 +54,15 @@ public:
 
 	uint64 GetBuiltWonders() const { return m_builtWonders; }
 
-	BOOL HasWonderBeenBuilt(sint32 which);
+	bool HasWonderBeenBuilt(sint32 which);
 	PLAYER_INDEX WhoOwnsWonder(sint32 which);
 	void AddBuilt(sint32 which);
 	void SetBuiltWonders(uint64 built);
-	BOOL GetCityWithWonder(sint32 which, Unit &city);
+	bool GetCityWithWonder(sint32 which, Unit &city);
 
 	void SetBuildingWonder(sint32 which, PLAYER_INDEX who);
 	void ClearBuildingWonder(sint32 which, PLAYER_INDEX who);
-	BOOL IsBuildingWonder(sint32 which, PLAYER_INDEX who);
+	bool IsBuildingWonder(sint32 which, PLAYER_INDEX who);
 
 	
 	void RecomputeIsBuilding(const PLAYER_INDEX who);

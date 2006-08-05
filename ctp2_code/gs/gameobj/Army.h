@@ -114,9 +114,9 @@ public:
 	bool CanSettle() const;
 
 	bool IsOccupiedByForeigner(const MapPoint &pos);
-	sint32 IsEnemy(PLAYER_INDEX owner) const;
-	sint32 IsEnemy(Unit defender) const;
-	sint32 IsEnemy(Army &defender) const;
+	bool IsEnemy(PLAYER_INDEX owner) const;
+	bool IsEnemy(Unit defender) const;
+	bool IsEnemy(Army &defender) const;
 
 
 	double GetHPModifier(); 

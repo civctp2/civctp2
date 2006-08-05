@@ -251,9 +251,9 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	XY_Coords.Init(m_size.y, m_size.x);
 
 	A_star_heuristic = new A_Star_Heuristic_Cost
-							(m_size.y, 
-							 m_size.x, 
-							 m_isYwrap, 
+							(m_size.y,
+							 m_size.x,
+							 m_isYwrap,
 							 m_isXwrap
 							);
 }
@@ -313,7 +313,7 @@ void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
 	m_size.x = sx;
 	m_size.y = sy;
     g_mp_size = m_size; 
-	BOOL yWrapOk = sy % sx == 0;
+	bool yWrapOk = sy % sx == 0;
 	m_isYwrap = yWrapOk ? yWrap : FALSE;
 	m_isXwrap = xWrap;
 	AllocateMap();
@@ -786,8 +786,8 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	delete [] wetmap;
 	delete [] temperatureMap;
 
-    GenerateGoodyHuts();
-    GenerateGoods(); 
+	GenerateGoodyHuts();
+	GenerateGoods(); 
 }
 
 

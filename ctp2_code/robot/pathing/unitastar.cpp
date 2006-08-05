@@ -37,6 +37,7 @@
 // - Disabled Calvitix check for danger. If an army encounter something on
 //   its way the goal should be reconsidered. - Feb. 21st 2005 Martin Gühmann
 // - Updated for wrap correction.
+// - Made Government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -386,7 +387,7 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 	m_army->GetPos(start);
 	if (pos != start && pos != m_dest)
 	{
-		if (CheckIsDangerForPos(pos,m_army->IsCivilian()))
+		if (CheckIsDangerForPos(pos, m_army->IsCivilian()))
 		{
 			if (cost < 1) cost = 1;
 			cost *= k_MOVE_ISDANGER_COST; 
@@ -892,7 +893,7 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
     for (i=0; i<nUnits; i++) {         
         move_intersection &= army[i].GetMovementType();
 
-        rec = g_theUnitDB->Get(army[i].GetType());
+        rec = army[i].GetDBRec();
         if (!rec->HasSpaceLaunch()) { 
             m_can_space_launch = FALSE; 
         }
@@ -921,7 +922,7 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
     if (m_can_space_land) { 
         for (i=0; i<nUnits; i++) {  
             
-            if (g_theUnitDB->Get(army[i].GetType())->GetCargoPod()) { 
+            if (army[i].GetDBRec()->GetCargoPod()) { 
 
                 
                 
@@ -1702,35 +1703,35 @@ void UnitAstar::ClearMem()
 }
 
 
-BOOL UnitAstar::VerifyMem() const
+bool UnitAstar::VerifyMem() const
 {
-    if (m_move_union == 0xcdcdcdcd) return FALSE;
-    if (m_move_intersection == 0xcdcdcdcd) return FALSE; 
-    if (m_max_dir == 0xcdcdcdcd) return FALSE;
-    if (m_mask_alliance == 0xcdcdcdcd) return FALSE;
-    if (m_dest.x == 0xcdcdcdcd) return FALSE; 
-    if (m_dest.y == 0xcdcdcdcd) return FALSE; 
-    if (m_start.x == 0xcdcdcdcd) return FALSE; 
-    if (m_start.y == 0xcdcdcdcd) return FALSE; 
-    if (m_owner == 0xcdcdcdcd) return FALSE; 
-    if (m_nUnits == 0xcdcdcdcd) return FALSE;
-    if (m_army.m_id == 0xcdcdcdcd) return FALSE;    
-    if (m_army_minmax_move == -99999999) return FALSE;
-    if (m_can_space_launch == 0xcdcdcdcd) return FALSE; 
-    if (m_can_space_land == 0xcdcdcdcd) return FALSE; 
-	if (m_can_be_cargo_podded == 0xcdcdcdcd) return FALSE;
+    if (m_move_union          == 0xcdcdcdcd)    return false;
+    if (m_move_intersection   == 0xcdcdcdcd)    return false;
+    if (m_max_dir             == 0xcdcdcdcd)    return false;
+    if (m_mask_alliance       == 0xcdcdcdcd)    return false;
+    if (m_dest.x              == 0xcdcdcdcd)    return false;
+    if (m_dest.y              == 0xcdcdcdcd)    return false;
+    if (m_start.x             == 0xcdcdcdcd)    return false;
+    if (m_start.y             == 0xcdcdcdcd)    return false;
+    if (m_owner               == 0xcdcdcdcd)    return false;
+    if (m_nUnits              == 0xcdcdcdcd)    return false;
+    if (m_army.m_id           == 0xcdcdcdcd)    return false;
+    if (m_army_minmax_move    == -99999999)     return false;
+    if (m_can_space_launch    == 0xcdcdcdcd)    return false;
+    if (m_can_space_land      == 0xcdcdcdcd)    return false;
+    if (m_can_be_cargo_podded == 0xcdcdcdcd)    return false;
 
-    return TRUE; 
+    return true;
 }
-BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian)
+
+bool UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian)
 {
-//	Cell* c = g_theWorld->GetCell(myPos);
-    Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
-    ai::Regard baseRegard = NEUTRAL_REGARD;
+	Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
+	ai::Regard baseRegard = NEUTRAL_REGARD;
 
 	PLAYER_INDEX owner;
 
-	sint32 i; 
+	sint32 i;
 	MapPoint neighbor;
 	MapPoint start;
 	CellUnitList *the_army=NULL;
@@ -1738,31 +1739,31 @@ BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilia
 	m_army->GetPos(start);
 
 
-	for (i=0; i <= SOUTH; i++) 
-	{ 		   
-	   if (!myPos.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
+	for (i=0; i <= SOUTH; i++)
+	{
+		if (!myPos.GetNeighborPosition(WORLD_DIRECTION(i), neighbor)) continue;
 
-	   if (neighbor == start || neighbor == m_dest)
-	   { 
-		   continue;
-	   } 
+		if (neighbor == start || neighbor == m_dest)
+		{
+			continue;
+		}
 		
-	   //Check for hostile army
-	   the_army = g_theWorld->GetArmyPtr(neighbor);
-	   the_city = g_theWorld->GetCity(neighbor);
-	   if (the_army || the_city.IsValid()) 
-	   {
-		    if (the_army) owner = the_army->GetOwner();
-		    else owner = the_city.GetOwner();
+		//Check for hostile army
+		the_army = g_theWorld->GetArmyPtr(neighbor);
+		the_city = g_theWorld->GetCity(neighbor);
+		if (the_army || the_city.IsValid()) 
+		{
+			if (the_army) owner = the_army->GetOwner();
+			else owner = the_city.GetOwner();
 
-            if (m_owner != owner)
-	   {
+			if (m_owner != owner)
+			{
 				baseRegard = diplomat.GetBaseRegard(owner);
 				sint32 turnsatwar = AgreementMatrix::s_agreements.TurnsAtWar(m_owner, owner);
-    		    if (baseRegard <= NEUTRAL_REGARD || turnsatwar >= 0)
-			{
-					if (the_city.IsValid()) //TO DO : Add conditions (in danger only if the_army not civilian
+				if (baseRegard <= NEUTRAL_REGARD || turnsatwar >= 0)
 				{
+					if (the_city.IsValid()) //TO DO : Add conditions (in danger only if the_army not civilian
+					{
 					/*	DPRINTF(k_DBG_MAPANALYSIS, 
 						("\t Danger for Pos (%3d,%3d) : City (%3d,%3d)\n",
 						myPos.x,
@@ -1770,26 +1771,26 @@ BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilia
 						neighbor.x,
 						neighbor.y));*/
 						return true;
-				}
+					}
 				
 					if (the_army->Num() > g_theWorld->GetArmyPtr(start)->Num() || IsCivilian)
-				{
+					{
 					/*	DPRINTF(k_DBG_MAPANALYSIS, 
 						("\t Danger for Pos (%3d,%3d) : Bigger Army at (%3d,%3d)\n",
 						myPos.x,
 						myPos.y,
 						neighbor.x,
 						neighbor.y));
-						return true;					*/
+						return true;*/
+					}
+ 				}
 			}
- 		}
-		   } 
-	   }
+		}
 	}
-    /*DPRINTF(k_DBG_MAPANALYSIS, 
-    ("\t No Danger for Pos (%3d,%3d)\n",
+	/*DPRINTF(k_DBG_MAPANALYSIS, 
+	("\t No Danger for Pos (%3d,%3d)\n",
 	myPos.x,
-    myPos.y));*/
+	myPos.y));*/
 	return false;
 }
 

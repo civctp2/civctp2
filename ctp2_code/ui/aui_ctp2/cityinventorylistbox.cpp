@@ -1,12 +1,34 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Old CTP1 main controll panel city inventory list box
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// _DEBUG
+// Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made government modified for units work here even if the class is not 
+//   used. (July 29th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -188,7 +210,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	MBCHAR str[80];
 	StaticTextItem *item;
 	AUI_ERRCODE errcode;
-	BOOL isObsolete;
+	bool isObsolete;
 	sint32 o;
 
 	m_buildMode = 1;
@@ -200,22 +222,22 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	}
 
 	for(i = 0; i < n; i++) {
-		const UnitRecord *rec = g_theUnitDB->Get(i);
+		const UnitRecord *rec = g_theUnitDB->Get(i, p->GetGovernmentType());
 		enable = rec->GetEnableAdvanceIndex();
-		isObsolete = FALSE;
+		isObsolete = false;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o))) {
-				isObsolete = TRUE;
+				isObsolete = true;
 			}
 		}
 		if(isObsolete)
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
-			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theUnitDB->Get(i)->m_name));
-				sint32 j = aui_UniqueId();  /// @todo Find out which i should be j
+			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
+				sint32 j = aui_UniqueId();  /// @todo Find out which i should be j: @answer the first one, but the class is not used anyway.
 				item = new StaticTextItem(
 					&errcode,
-					i,
+					j,
 					5, 0, 100, 15,
 					str,
 					0,
@@ -231,21 +253,21 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	
 	n = g_theBuildingDB->NumRecords();
 	for(i = 0; i < n; i++) {
-		const BuildingRecord *rec = g_theBuildingDB->Get(i);
+		const BuildingRecord *rec = g_theBuildingDB->Get(i, p->GetGovernmentType());
 		enable = rec->GetEnableAdvanceIndex();
-		isObsolete = FALSE;
+		isObsolete = false;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-				isObsolete = TRUE;
+				isObsolete = true;
 		}
 		if(isObsolete)
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
-			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name));
-				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j
+			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
+				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j: @answer the first one, but the class is not used anyway.
 				item = new StaticTextItem(
 					&errcode,
-					i,
+					j,
 					5, 0, 100, 15,
 					str,
 					0,
@@ -263,19 +285,19 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	for(i = 0; i < n; i++) {
 		const WonderRecord *rec = wonderutil_Get(i);
 		enable = rec->GetEnableAdvanceIndex();
-		isObsolete = FALSE;
+		isObsolete = false;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-				isObsolete = TRUE;
+				isObsolete = true;
 		}
 		if(isObsolete)
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
-				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j
+				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j: @answer the first one, but the class is not used anyway.
 				item = new StaticTextItem(
 					&errcode,
-					i,
+					j,
 					5, 0, 100, 15,
 					str,
 					0,
@@ -329,16 +351,16 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 	else if (bn) {
 
 
-
+		sint32 govType   = g_player[unit.GetOwner()]->GetGovernmentType();
 		sint32 completed = bq->GetPercentCompleted(unit.GetData()->GetCityData()->GetStoredCityProduction());
 
 		if (bn->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theBuildingDB->Get(bn->m_type)->m_name));
+			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theBuildingDB->Get(bn->m_type, govType)->m_name));
 
 
 		}
 		else if (bn->m_category == k_GAME_OBJ_TYPE_UNIT) {
-			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type)->m_name));
+			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type, govType)->m_name));
 
 
 		}

@@ -428,7 +428,7 @@ public:
 									sint32 flags = k_OVERLAY_FLAG_NORMAL);
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
-	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, BOOL fog, RECT &popRect,
+	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, bool fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted, 
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,

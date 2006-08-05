@@ -212,7 +212,7 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 
 #define k_MAX_BARBARIAN_TRIES 400
 
-//PIRATES?
+
 sint32 Barbarians::ChooseSeaUnitType()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());

@@ -525,8 +525,8 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 	return m_crime;
 }
  
-double Happy::CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
-                               BOOL isFirstPass)
+double Happy::CalcTimedChanges(CityData &cd, Player *p, bool projectedOnly,
+                               bool isFirstPass)
 {
 	if (isFirstPass && !projectedOnly) 
 	{
@@ -605,9 +605,9 @@ void Happy::CountAffectivePop(CityData &cd)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void Happy::CalcHappiness(CityData &cd, BOOL projectedOnly, 
+void Happy::CalcHappiness(CityData &cd, bool projectedOnly, 
                           sint32 &delta_martial_law, 
-                          BOOL isFirstPass)
+                          bool isFirstPass)
 {
 	
 	Player *p = g_player[cd.m_owner]; 
@@ -927,12 +927,9 @@ void HappyTimer::Serialize(CivArchive &archive)
 
 
 
-sint32 Happy::ShouldRevolt(const sint32 incite_bonus) const
+bool Happy::ShouldRevolt(const sint32 incite_bonus) const
 {
-	if (m_happiness<(g_theConstDB->GetRevolutionLevel()+incite_bonus))
-		return (TRUE) ;
-
-	return (FALSE) ;
+	return m_happiness < (g_theConstDB->GetRevolutionLevel() + incite_bonus);
 }
 
 
@@ -948,10 +945,10 @@ sint32 Happy::ShouldRevolt(const sint32 incite_bonus) const
 
 
 
-BOOL Happy::IsVeryHappy(void) const
-	{
-	return (m_happiness >= g_theConstDB->GetVeryHappyThreshold()) ;
-	}
+bool Happy::IsVeryHappy(void) const
+{
+	return m_happiness >= g_theConstDB->GetVeryHappyThreshold();
+}
 
 
 
@@ -965,9 +962,9 @@ BOOL Happy::IsVeryHappy(void) const
 
 
 void Happy::ForceRevolt(void)
-	{
+{
 	m_happiness = g_theConstDB->GetRevolutionLevel()-10 ;
-	}
+}
 
 
 void Happy::SetFullHappinessTurns(sint32 turns)
@@ -991,9 +988,9 @@ void Happy::SetFullHappinessTurns(sint32 turns)
 
 
 uint32 Happy_Happy_GetVersion(void)
-	{
+{
 	return (k_HAPPY_VERSION_MAJOR<<16 | k_HAPPY_VERSION_MINOR) ;
-	}
+}
 
 void Happy::SaveTracker()
 {

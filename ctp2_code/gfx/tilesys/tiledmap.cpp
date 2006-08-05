@@ -42,6 +42,7 @@
 // - The good sprite index is now retrieved from the resource database 
 //   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -5863,11 +5864,15 @@ void TiledMap::HandleCheat(MapPoint &pos)
 		
 		sint32 unitNum = ScenarioEditor::PlaceUnitsMode() ? ScenarioEditor::UnitIndex() : g_unitNum;
 
+		Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+		if (!p) return;
+		sint32 govType = p->GetGovernmentType();
+
 		if(ScenarioEditor::PlaceCityMode()) {
 			sint32 ui;
 			for(ui = 0; ui < g_theUnitDB->NumRecords(); ui++) {
-				if(g_theUnitDB->Get(ui)->GetHasPopAndCanBuild() &&
-				   g_theUnitDB->Get(ui)->GetMovementTypeLand()) {
+				if(g_theUnitDB->Get(ui, govType)->GetHasPopAndCanBuild() &&
+				   g_theUnitDB->Get(ui, govType)->GetMovementTypeLand()) {
 					unitNum = ui;
 					break;
 				}
@@ -5889,24 +5894,16 @@ void TiledMap::HandleCheat(MapPoint &pos)
 			}
 		} else 
 		if (unitNum != -1) {
-			if (g_theWorld->CanEnter(pos, g_theUnitDB->Get(unitNum)->GetMovementType()) ||
-				g_theUnitDB->Get(unitNum)->GetHasPopAndCanBuild() ||
-				g_theUnitDB->Get(unitNum)->GetIsTrader()) {
-				
-				
-				
-				
-				
-				Player *p = g_player[g_selected_item->GetVisiblePlayer()];
-				if (!p) return;
-	
+			if (g_theWorld->CanEnter(pos, g_theUnitDB->Get(unitNum, govType)->GetMovementType()) ||
+				g_theUnitDB->Get(unitNum, govType)->GetHasPopAndCanBuild() ||
+				g_theUnitDB->Get(unitNum, govType)->GetIsTrader()) {	
 
-				if(g_theUnitDB->Get(unitNum)->GetHasPopAndCanBuild()) {
+				if(g_theUnitDB->Get(unitNum, govType)->GetHasPopAndCanBuild()) {
 					if(g_theWorld->IsWater(pos) || g_theWorld->IsShallowWater(pos)) {
 						sint32 i;
 						for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
-							if(g_theUnitDB->Get(i)->GetHasPopAndCanBuild() &&
-								g_theUnitDB->Get(i)->GetMovementTypeSea()) {
+							if(g_theUnitDB->Get(i, govType)->GetHasPopAndCanBuild() &&
+								g_theUnitDB->Get(i, govType)->GetMovementTypeSea()) {
 								unitNum = i;
 								break;
 							}
@@ -5930,55 +5927,6 @@ void TiledMap::HandleCheat(MapPoint &pos)
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

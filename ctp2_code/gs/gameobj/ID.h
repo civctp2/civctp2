@@ -82,16 +82,16 @@ public:
 	uint32  operator| (const ID &val) const { return m_id | val.m_id; };
 	
  
-	sint32 operator== (const ID &val) const { return m_id == val.m_id; };
+	bool operator== (const ID &val) const { return m_id == val.m_id; };
 	
    
-	sint32 operator!= (const ID &val) const { return m_id != val.m_id; };
+	bool operator!= (const ID &val) const { return m_id != val.m_id; };
 	
 
-	sint32 operator&& (const ID &val) const { return m_id && val.m_id; };
+	bool operator&& (const ID &val) const { return m_id && val.m_id; };
 	
   
-	sint32 operator|| (const ID &val) const { return m_id || val.m_id; };
+	bool operator|| (const ID &val) const { return m_id || val.m_id; };
 	
 
 	bool operator < (const ID & val) const 

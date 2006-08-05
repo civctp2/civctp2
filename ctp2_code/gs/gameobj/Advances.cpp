@@ -192,16 +192,16 @@ void Advances::SetOwner(PLAYER_INDEX o)
 	m_owner = o; 
 }
 
-uint8
+bool
 Advances::HasAdvance(sint32 index) const
 {
 	if (index >= m_size)
-		return FALSE;
+		return false;
 
 	if(index < 0)
-		return TRUE;
+		return true;
 
-	return m_hasAdvance[index];
+	return m_hasAdvance[index] != 0;
 }
 
 void Advances::UpdateCitySprites(BOOL forceUpdate)

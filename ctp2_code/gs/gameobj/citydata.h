@@ -186,7 +186,7 @@ private:
 
 	sint32 m_productionLostToFranchise;
 
-	uint8 m_probeRecoveredHere;
+	bool m_probeRecoveredHere;
 
 	sint16 m_lastCelebrationMsg;
 	uint8 m_alreadySoldABuilding;
@@ -400,10 +400,10 @@ public:
 	void AddShieldsToBuilding();
 
 	void SetMaterialContribution(bool on) { m_contribute_materials = on;}
-	bool GetMaterialContribution() const { return m_contribute_materials;}
+	bool GetMaterialContribution() const { return m_contribute_materials != FALSE;}
 
 	void SetMilitaryContribution(bool on) { m_contribute_military = on; }
-	bool GetMilitaryContribution() { return m_contribute_military; }
+	bool GetMilitaryContribution() { return m_contribute_military != FALSE; }
 
 	
 	void IncrementBuildQueue();
@@ -579,7 +579,7 @@ public:
 		foodCrime = (sint32)(m_food_lost_to_crime);
 	}
 
-	bool GetIsRioting(void) const { return m_is_rioting; }
+	bool GetIsRioting(void) const { return m_is_rioting != FALSE; }
 
 	void CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass);
 	void CheckRiot();
@@ -764,8 +764,8 @@ public:
 	bool CanBuildCapitalization() const;
 	void BuildInfrastructure();
 	bool CanBuildInfrastructure() const;
-	bool IsBuildingCapitalization() { return m_buildCapitalization; }
-	bool IsBuildingInfrastructure() { return m_buildInfrastructure; }
+	bool IsBuildingCapitalization() { return m_buildCapitalization != FALSE; }
+	bool IsBuildingInfrastructure() { return m_buildInfrastructure != FALSE; }
 	void StopInfrastructureCapitalization();
 	void EliminateNukes();
 
@@ -790,8 +790,8 @@ public:
 	sint32 GetNanoInfectedBy( void ) const { return m_nanoInfectedBy; }
 	sint32 GetProductionLostToFranchise( void ) const { return m_productionLostToFranchise; }
 
-	void SetProbeRecoveredHere(bool recovered){ m_probeRecoveredHere = (uint8)recovered; }
-	bool GetProbeRecoveredHere() { return (bool)m_probeRecoveredHere; }
+	void SetProbeRecoveredHere(bool recovered){ m_probeRecoveredHere = recovered; }
+	bool GetProbeRecoveredHere() { return m_probeRecoveredHere; }
 
 	bool HasSleepingUnits() const;
 
@@ -801,8 +801,8 @@ public:
 	sint32 CityGrowthCoefficient();
 	void DestroyWonder(sint32 which);
 
-	bool CapturedThisTurn() const { return m_capturedThisTurn; }
-	void SetSentInefficientMessage() { m_sentInefficientMessageAlready = TRUE; }
+	bool CapturedThisTurn() const { return m_capturedThisTurn != FALSE; }
+	void SetSentInefficientMessage() { m_sentInefficientMessageAlready = true; }
 
 	void BuildFront();
 

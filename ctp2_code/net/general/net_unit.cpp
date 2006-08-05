@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,15 +57,45 @@ extern SelectedItem *g_selected_item;
 extern Director *g_director;
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetUnit::NetUnit
+//
+// Description: Constructor
+//
+// Parameters : UnitData * unit:  Unit data to send through the network
+//              Unit useActor:    According unit actor
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 NetUnit::NetUnit(UnitData * unit, Unit useActor) 
-: 
+:
     Packetizer      (),
-	m_unitData      (unit), 
-	m_actorId       (useActor)
+    m_unitData      (unit),
+    m_actorId       (useActor)
 {
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : NetUnit::Packetize
+//
+// Description: Generate an application data packet to transmit.
+//
+// Parameters : buf         : buffer to store the message
+//
+// Globals    : -
+//
+// Returns    : size        : number of bytes stored in buf
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetUnit::Packetize(uint8* buf, uint16& size)
 {
 	size = 0;
@@ -79,6 +109,23 @@ void NetUnit::Packetize(uint8* buf, uint16& size)
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : NetUnit::Unpacketize
+//
+// Description: Retrieve the data from a received application data packet.
+//
+// Parameters : id          : Sender identification?
+//              buf         : Buffer with received message
+//              size        : Length of received message (in bytes)
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	uint16 packid;
@@ -166,7 +213,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Resetting unit %lx (type %d) from owner %d to %d\n",
 								uid.m_id, m_unitData->m_type,
 								oldowner, m_unitData->m_owner));
-			if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
+			if(m_unitData->GetDBRec()->GetHasPopAndCanBuild()) {
 				DPRINTF(k_DBG_NET, ("But it's a city and I'm going to assert and ignore it.\n"));
 				BOOL ahaSoItDoesHappen = FALSE;
 				Assert(ahaSoItDoesHappen);
@@ -203,7 +250,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		g_theUnitPool->HackSetKey(((uint32)uid & k_ID_KEY_MASK) + 1);
 
 		sint32 trans_t = 0;
-        (void) g_theUnitDB->Get(unitType)->GetTransType(trans_t);
+        (void) g_theUnitDB->Get(unitType, g_player[unitOwner]->GetGovernmentType())->GetTransType(trans_t);
 		if (m_actorId.m_id != 0) 
         {
 			m_unitData = new UnitData(unitType, trans_t, uid, unitOwner,
@@ -241,7 +288,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 #endif
 
-		if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
+		if(m_unitData->GetDBRec()->GetHasPopAndCanBuild()) {
 			m_unitData->GetCityData()->NetworkInitialize();
 
 			g_player[m_unitData->m_owner]->AddCityReferenceToPlayer(
@@ -256,7 +303,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			CtpAi::AddOwnerGoalsForCity(uid, uid.GetOwner());
 			
-		} else if(g_theUnitDB->Get(m_unitData->m_type)->GetIsTrader()) {
+		} else if(m_unitData->GetDBRec()->GetIsTrader()) {
 			g_player[m_unitData->m_owner]->AddTrader(uid);
 		} else {
 			UnitDynamicArray revealed;

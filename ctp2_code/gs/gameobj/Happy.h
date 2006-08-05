@@ -139,7 +139,7 @@ class Happy
 
 		void DecayConquestDistress(); 
 
-		sint32 ShouldRevolt(const sint32 incite_bonus) const ;
+		bool ShouldRevolt(const sint32 incite_bonus) const ;
 		double CalcBase(Player *p);
 		double CalcSize(CityData &cd, Player *p);
 		double CalcTooManyCities(Player *p); 
@@ -164,13 +164,13 @@ class Happy
 		double CalcPopEntertain(CityData &cd, Player *p);
 		double CalcImprovementContentment(CityData &cd, Player *p);
 		double CalcWonders(CityData &cd, Player *p);
-		double CalcTimedChanges(CityData &cd, Player *p, BOOL projectedOnly,
-		                        BOOL isFirstPass);
+		double CalcTimedChanges(CityData &cd, Player *p, bool projectedOnly,
+		                        bool isFirstPass);
 		double CalcStarvation(CityData &cd, Player *p);
 		
-		void CalcHappiness(CityData &cd, BOOL projectedOnly,
+		void CalcHappiness(CityData &cd, bool projectedOnly,
 		                   sint32 &delta_martial_law,
-		                   BOOL isFirstPass);
+		                   bool isFirstPass);
 
 		double CalcCrime(CityData &cd, Player *p);
 
@@ -202,7 +202,7 @@ class Happy
 		double GetWonders() const { return m_wonders; }
 		double GetCrime() const { return m_crime; }  
 		double GetTooManyCities() const { return m_too_many_cities; }
-		BOOL IsVeryHappy(void) const ;
+		bool IsVeryHappy(void) const ;
 
 		void ResetCrime(CityData *cd, double target_happiness);
 		double GetGreedyPopHappiness(CityData &cd);

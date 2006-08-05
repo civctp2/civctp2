@@ -142,7 +142,7 @@ void GoodActor::DumpFullLoad(void)
 	if (!m_goodSpriteGroup) return;
 	if (m_loadType != LOADTYPE_FULL) return;
 
-	BOOL purged = g_goodSpriteGroupList->ReleaseSprite(m_index, LOADTYPE_FULL);
+	bool purged = g_goodSpriteGroupList->ReleaseSprite(m_index, LOADTYPE_FULL);
 
 	if (purged) {
 		m_goodSpriteGroup = NULL;

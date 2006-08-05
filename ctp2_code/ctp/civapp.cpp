@@ -3446,7 +3446,7 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	MBCHAR			fullpath[_MAX_PATH];
 	
 
-    MBCHAR const *  autosaveItem    = (isQuickSave) ? "AUTOSAVE_NAME" : "QUICKSAVE_NAME";
+    MBCHAR const *  autosaveItem    = (isQuickSave) ? "QUICKSAVE_NAME" : "AUTOSAVE_NAME";
     MBCHAR const *  autosaveName    = g_theStringDB->GetNameStr(autosaveItem);
 
 	

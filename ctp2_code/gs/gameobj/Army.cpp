@@ -231,17 +231,17 @@ bool Army::IsOccupiedByForeigner(const MapPoint &pos)
 	return AccessData()->IsOccupiedByForeigner(pos);
 }
 
-sint32 Army::IsEnemy(PLAYER_INDEX owner) const
+bool Army::IsEnemy(PLAYER_INDEX owner) const
 {
 	return GetData()->IsEnemy(owner);
 }
 
-sint32 Army::IsEnemy(Unit defender) const
+bool Army::IsEnemy(Unit defender) const
 {
 	return GetData()->IsEnemy(defender);
 }
 
-sint32 Army::IsEnemy(Army &defender) const
+bool Army::IsEnemy(Army &defender) const
 {
 	return GetData()->IsEnemy(defender.GetOwner());
 }

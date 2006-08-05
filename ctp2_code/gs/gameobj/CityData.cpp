@@ -6571,7 +6571,7 @@ void CityData::Injoin(sint32 player)
 
 bool CityData::IsInjoined() const
 {
-	return m_isInjoined;
+	return m_isInjoined != 0;
 }
 
 

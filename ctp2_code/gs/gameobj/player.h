@@ -901,11 +901,11 @@ public:
 	sint32 GetProductionFromFranchises();
 	void   AddProductionFromFranchise(sint32 amt);
 
-	void IndicateTerrainPolluted(void) { m_terrainPollution = TRUE ; }
-	bool WasTerrainPolluted(void) const { return (m_terrainPollution) ; }
+	void IndicateTerrainPolluted(void) { m_terrainPollution = TRUE; }
+	bool WasTerrainPolluted(void) const { return m_terrainPollution != FALSE; }
 
 	bool CheckPlayerDead();
-	bool IsDead(void) const { return (m_isDead) ; }
+	bool IsDead(void) const { return m_isDead != FALSE; }
 	void StartDeath(GAME_OVER reason, sint32 data);
 	static void RemoveDeadPlayers();
 	static Player *GetDeadPlayer(sint32 index);
@@ -966,7 +966,7 @@ public:
 
 	void RegisterAttack(PLAYER_INDEX against);
 
-	bool GetDeepOceanVisible(void) const { return m_deepOceanVisible; }
+	bool GetDeepOceanVisible(void) const { return m_deepOceanVisible != FALSE; }
 	void SetDeepOceanVisible(BOOL visible) { m_deepOceanVisible = visible; }
 
 	void ContactMade(PLAYER_INDEX with);
@@ -984,8 +984,8 @@ public:
 
 	void MakeConvertedCitiesUnhappy(sint32 convertedTo);
 
-	BOOL CanBuildInfrastructure() const;
-	BOOL CanBuildCapitalization() const;
+	bool CanBuildInfrastructure() const;
+	bool CanBuildCapitalization() const;
 	bool CanBuildUnit(const sint32 type) const;
 
 	void RemoveEmptyCities(CAUSE_REMOVE_ARMY);
@@ -993,10 +993,10 @@ public:
 	void SetLastSalePrice(sint32 good, sint32 price);
 	sint32 GetLastAttacked(PLAYER_INDEX player);
 
-	bool CanUseTerraTab( void ) const { return m_can_use_terra_tab; }
-	bool CanUseSpaceTab( void ) const { return m_can_use_space_tab; }
-	bool CanUseSeaTab( void ) const { return m_can_use_sea_tab; }
-	bool CanUseSpaceButton( void ) const { return m_can_use_space_button; }
+	bool CanUseTerraTab( void ) const { return m_can_use_terra_tab != FALSE; }
+	bool CanUseSpaceTab( void ) const { return m_can_use_space_tab != FALSE; }
+	bool CanUseSeaTab( void ) const { return m_can_use_sea_tab != FALSE; }
+	bool CanUseSpaceButton( void ) const { return m_can_use_space_button != FALSE; }
 
 	bool CanStillSendRequestsTo(PLAYER_INDEX otherPlayer);
 	void IncrementSentRequests(PLAYER_INDEX otherPlayer);

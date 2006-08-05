@@ -115,7 +115,7 @@ public:
 
 	
 	void UpdateCitySprites(BOOL forceUpdate);
-	uint8 HasAdvance(sint32 index) const;
+	bool HasAdvance(sint32 index) const;
 	void SetHasAdvance(AdvanceType advance);
 
 	void GrantAdvance();
