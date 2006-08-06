@@ -184,6 +184,8 @@ TerrainImprovement {
 	# Display level (0 = ground level = under roads, > 0 = on top of roads)
 	Int DisplayLevel = 0
 	# Pillage prevention
-	Bit CantPillage                         // FU Tileimp cannot be pillaged (E)
+	Bit CantPillage                         // Tileimp cannot be pillaged (E)
 	Bit SpawnsBarbarians                    // Spawns Barbarians
+	Bit CanBuildAlly						// can be built in ally territory
+	Bit CanBuildWasteland					// can be nuilt in unclaimed land, to connect cities
 }

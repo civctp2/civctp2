@@ -40,6 +40,7 @@
 //   terrainutil_HasColony by E (4-25-2006) fo future use
 // - implemented above and added HasMinefield by E 5-30-2006
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - added CanBuildAlly and CanBuildWasteland checks
 //
 //----------------------------------------------------------------------------
 
@@ -659,6 +660,10 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 				
 				return false;
 			}
+		} else if(rec->GetCanBuildWasteland()) {  //Allows palyer to connect cities
+			if(!g_player[pl]->IsVisible(pos)) {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -670,7 +675,9 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
 		if(cell->GetOwner() > 0 && haveAlliance) {
 			if(rec->GetClassRoad() ||               //Why only build roads in allied territory?
-				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
+				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))
+				|| rec->GetCanBuildAlly()	//added for other ally improving
+				){
 				
 				
 			} else {

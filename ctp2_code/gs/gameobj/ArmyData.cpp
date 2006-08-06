@@ -102,6 +102,7 @@
 // - added slic message for ship sinking
 // - added CanUpgrade. Upgrade, CanUpgradeNoGold, and UpgradeNoGold methods.
 // - added UpgradeUnit to Begin Turn
+// - added a retrun true for AI in verifyattack (for testing)
 //
 //----------------------------------------------------------------------------
 
@@ -7348,6 +7349,11 @@ bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
     //  them being able to do anything about it - as long as you are not at war. 
     //  The AI can not use an alertbox to confirm an attack! 
     //  Maybe better to just return true here, at let the AI attack.
+
+	else if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
+	{ //8-05-2006 test above
+		return true;
+	}
 
         // EMOD - Added Civ2 style Dove Party that prevents war
 		// if you have ParliamentaryVoteChance govt
