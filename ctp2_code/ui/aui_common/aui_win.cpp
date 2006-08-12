@@ -404,26 +404,16 @@ void aui_Win::WinMouseLDrag( aui_MouseEvent *mouseData )
 {
 	if ( GetMouseOwnership() == this )
 	{
-		POINT local =
-		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
-		POINT screen =
-		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-		
-		
-
-		
-		
-
-		WPARAM wParam = MK_LBUTTON;
+		POINT   local   =
+		    { mouseData->position.x - m_x, mouseData->position.y - m_y };
+        WPARAM  wParam  = MK_LBUTTON;
 		if ( mouseData->rbutton ) wParam |= MK_RBUTTON;
 
-		
-		SendMessage(
-			m_hwnd,
-			WM_MOUSEMOVE,
-			wParam,
-			local.x + ( local.y << 16 ) );
+		SendMessage(m_hwnd,
+			        WM_MOUSEMOVE,
+			        wParam,
+			        local.x + ( local.y << 16 ) 
+                   );
 
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
@@ -469,23 +459,16 @@ void aui_Win::WinMouseRDrag( aui_MouseEvent *mouseData )
 {
 	if ( GetMouseOwnership() == this )
 	{
-		POINT local =
-		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
-		POINT screen =
-		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-		
-		
-
-		WPARAM wParam = MK_RBUTTON;
+		POINT   local   =
+		    { mouseData->position.x - m_x, mouseData->position.y - m_y };
+		WPARAM wParam   = MK_RBUTTON;
 		if ( mouseData->lbutton ) wParam |= MK_LBUTTON;
 
-		
-		SendMessage(
-			m_hwnd,
-			WM_MOUSEMOVE,
-			wParam,
-			local.x + ( local.y << 16 ) );
+		SendMessage(m_hwnd,
+			        WM_MOUSEMOVE,
+			        wParam,
+			        local.x + ( local.y << 16 ) 
+                   );
 
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSERDRAGOVER;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )

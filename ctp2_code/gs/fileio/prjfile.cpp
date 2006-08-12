@@ -1,5 +1,6 @@
 
 #include "c3.h"
+#include "prjfile.h"
 
 #include <windows.h>
 
@@ -9,7 +10,6 @@
 #include <search.h>
 #include <ctype.h>
 
-#include "prjfile.h"
 #include "CivPaths.h"
 
 extern CivPaths *g_civPaths;
@@ -104,45 +104,41 @@ void unmapFile(void *ptr, HANDLE mhandle, HANDLE fhandle)
 }
 
 ProjectFile::ProjectFile()
+:
+    m_num_paths         (0),
+    m_entries           (NULL),
+    m_num_entries       (0),
+    m_Reported          ()
 {
     m_error_string[0] = 0;
-
     memset(m_paths, 0, sizeof(PFPath) * MAX_PRJFILE_PATHS);
-    m_num_paths = 0;
-
-    m_entries = NULL;
-    m_num_entries = 0;
 }
 
 
 ProjectFile::~ProjectFile()
 {
-    int i;
-
-	m_num_paths = 0;
-
-    if (m_entries) {
+    if (m_entries) 
+    {
         free(m_entries);
-        m_entries = NULL;
-        m_num_entries = 0;
     }
 
-    for(i=0; i<MAX_PRJFILE_PATHS; i++) {
-        switch(m_paths[i].type) {
-          case PRJFILE_PATH_NULL:
-          case PRJFILE_PATH_DOS: {
-              break;
-          }
-          case PRJFILE_PATH_ZFS: {
-              fclose(m_paths[i].zfs_fp);
-              break;
-          }
-          case PRJFILE_PATH_ZMS: {
-              unmapFile(m_paths[i].zms_start, 
-                        m_paths[i].zms_hm,
-                        m_paths[i].zms_hf);
-              break;
-          }
+    for (size_t i = 0; i < MAX_PRJFILE_PATHS; i++) 
+    {
+        switch(m_paths[i].type) 
+        {
+        default:
+            break;
+
+        case PRJFILE_PATH_ZFS: 
+            fclose(m_paths[i].zfs_fp);
+            break;
+
+        case PRJFILE_PATH_ZMS: 
+            unmapFile(m_paths[i].zms_start, 
+                      m_paths[i].zms_hm,
+                      m_paths[i].zms_hf
+                     );
+            break;
         }
     }
 }
@@ -604,4 +600,14 @@ int ProjectFile::addPath(char *path, int use_filemapping)
 
     
     return(addPath_DOS(path));
+}
+
+bool ProjectFile::IsReported(char const * a_FileName) const
+{
+    return m_Reported.find(std::string(a_FileName)) != m_Reported.end();
+}
+
+void ProjectFile::MarkReported(char const * a_FileName)
+{
+    m_Reported.insert(std::string(a_FileName));
 }

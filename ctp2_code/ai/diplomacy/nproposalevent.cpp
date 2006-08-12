@@ -1435,7 +1435,7 @@ STDEHANDLER(BegForGold_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-	Diplomat & sender_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 
 	bool allied = 
 		AgreementMatrix::s_agreements.HasAgreement(sender,receiver,PROPOSAL_TREATY_MILITARY_PACT) ||
@@ -1457,51 +1457,26 @@ STDEHANDLER(BegForGold_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	
-	sint32 gold = 0;
-
-	
-	gold = 5 * g_player[sender]->m_gold->GetIncome();
-
-	
-	gold = ProposalAnalysis::RoundGold(gold);
+	sint32 gold = ProposalAnalysis::RoundGold(5 * g_player[sender]->m_gold->GetIncome());
 
 	if (gold <= 0)
 		return GEV_HD_Continue;
 	
 	NewProposal new_proposal;
-
 	
+	new_proposal.priority               = static_cast<sint16>
+        (sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_GIVE_GOLD));
+	new_proposal.detail.first_type      = PROPOSAL_REQUEST_GIVE_GOLD;	
+	new_proposal.detail.first_arg.gold  = gold; 
+    new_proposal.detail.tone            = 
+        (allied) ? DIPLOMATIC_TONE_KIND : DIPLOMATIC_TONE_MEEK;	   
+	new_proposal.receiverId             = receiver;
+	new_proposal.senderId               = sender;
 	
-	sint32 priority =
-		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_GIVE_GOLD);
-	
-	
-	new_proposal.priority = static_cast<sint16>(priority);
-	
-	
-	new_proposal.detail.first_type = PROPOSAL_REQUEST_GIVE_GOLD;	
-	new_proposal.detail.first_arg.gold = gold; 
-
-	if (allied)
-		
-		new_proposal.detail.tone = DIPLOMATIC_TONE_KIND;	   
-	else
-		
-		new_proposal.detail.tone = DIPLOMATIC_TONE_MEEK;	   
-	
-	new_proposal.receiverId = receiver;
-	new_proposal.senderId = sender;
-	
-	
-	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 50 ) )
+	if (!sender_diplomat.GetNewProposalTimeout(new_proposal, 50))
 	{
-		
-		return GEV_HD_Continue;
+	    sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
 	}
-	
-	
-	sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
-	
 	
 	return GEV_HD_Continue;
 }
@@ -1561,13 +1536,7 @@ STDEHANDLER(BlackmailGold_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	
-	sint32 gold = 0;
-
-	
-	gold = (2 * g_player[sender]->m_gold->GetIncome());
-
-	
-	gold = ProposalAnalysis::RoundGold(gold);
+	sint32 gold = ProposalAnalysis::RoundGold(2 * g_player[sender]->m_gold->GetIncome());
 
 	
 	

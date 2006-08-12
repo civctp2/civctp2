@@ -1321,10 +1321,14 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_INFO_CODE_DETACH_ROBOT:
 		{
 			DPRINTF(k_DBG_NET, ("Player %d is a non-robot\n", m_data));
-			if(g_player[m_data]) {
-				if(m_data == g_network.GetPlayerIndex()) {
+			if (g_player[m_data]) 
+            {
+				if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex()) 
+                {
 					g_player[m_data]->m_playerType = PLAYER_TYPE_HUMAN;
-				} else {
+				} 
+                else 
+                {
 					g_player[m_data]->m_playerType = PLAYER_TYPE_NETWORK;
 				}
 			}
@@ -1697,8 +1701,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.SetSensitiveUIBlocked(false);
 			}
 			MainControlPanel::SelectedCity();
-			if(m_data == g_network.GetPlayerIndex()) {
-				
+			if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex()) 
+            {
 				network_VerifyGameData();
 			}
 			break;
@@ -1746,14 +1750,17 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_INFO_CODE_REMOTE_UNGROUP:
 		{
-			
 			DPRINTF(k_DBG_NET, ("Server says ungrouping of Army %lx done (owner=%d)\n", m_data, m_data2));
 
-			Army army(m_data);
-			if(m_data2 == g_selected_item->GetVisiblePlayer()) {
-				if(army.IsValid()) {
+			if (static_cast<PLAYER_INDEX>(m_data2) == g_selected_item->GetVisiblePlayer()) 
+            {
+			    Army army(m_data);
+				if (army.IsValid()) 
+                {
 					ArmyManagerWindow::NotifyRemoteGroupComplete(army);
-				} else {
+				} 
+                else 
+                {
 					ArmyManagerWindow::NotifySelection();
 				}
 			}

@@ -51,6 +51,7 @@
 // - Added option to allow end turn if the game runs in the background,
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 // - Made automatic treaty ending an option.
+// - Made city capture options an option.
 //
 //----------------------------------------------------------------------------
 
@@ -324,16 +325,28 @@ private:
     double m_homogenous;
     sint32 m_richness;
 
-    sint32 m_closeEyepoint;        // Close message box when clicking the eyepoint.
-    sint32 m_colorSet;             // The # to use when opening colors#.txt.
-    sint32 m_showExpensive;        // Show cost and effects of expensive actions.
-    sint32 m_showOrderUnion;       // Show order button when any unit is capable.
-    sint32 m_recentAtTop;          // Add the most recent messages at the top.
-    MBCHAR m_ruleSets[MAX_PATH];   // Data directory "include" path
-    sint32 m_cityClick;            // Opens/selects a city instead of an army.
-    sint32 m_endTurnWithEmptyBuildQueues; // End turn even if there are empty build queues (human player only)
-    sint32 m_runInBackground;      // Allow the application to run in the background with autoturn
-    sint32 m_autoExpireTreatyTurn; // Automatically expiry treaties after a number of turns
+    /// Close message box when clicking the eyepoint.
+    sint32 m_closeEyepoint;        
+    /// The # to use when opening colors#.txt.
+    sint32 m_colorSet;             
+    /// Show cost and effects of expensive actions.
+    sint32 m_showExpensive;        
+    /// Show order button when any unit is capable.
+    sint32 m_showOrderUnion;       
+    /// Add the most recent messages at the top.
+    sint32 m_recentAtTop;          
+    /// Data directory "include" path(s)
+    MBCHAR m_ruleSets[MAX_PATH];   
+    /// Opens/selects a city instead of an army.
+    sint32 m_cityClick;            
+    /// End turn even if there are empty build queues (human player only)
+    sint32 m_endTurnWithEmptyBuildQueues; 
+    /// Allow the application to run in the background with autoturn
+    sint32 m_runInBackground;      
+    /// Automatically expiry treaties after a number of turns
+    sint32 m_autoExpireTreatyTurn; 
+    /// Enable city capture options pop-up
+    sint32 m_cityCaptureOptions;    
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;

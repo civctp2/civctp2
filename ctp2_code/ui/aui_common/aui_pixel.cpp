@@ -15,6 +15,19 @@
 
 #include "aui_pixel.h"
 
+namespace
+{
+    uint16 ColorCode555(uint8 red, uint8 green, uint8 blue)
+    {
+        return ((red >> 3) << 10) | ((green >> 3) << 5) | (blue >> 3);
+    }
+
+    uint16 ColorCode565(uint8 red, uint8 green, uint8 blue)
+    {
+        return ((red >> 3) << 11) | ((green >> 3) << 6) | (blue >> 3);
+    }
+
+}
 
 
 sint32 aui_Pixel::m_lastRand = 0;
@@ -25,54 +38,38 @@ double **aui_Pixel::m_edge = NULL;
 uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
 {
 	if ( g_ui->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
-		return
-			( ( red >> 3 ) << 10 )
-		|	( ( green >> 3 ) << 5 )
-		|	( blue >> 3 );
+    {
+		return ColorCode555(red, green, blue);
+    }
 	else 
-		return
-			( ( red >> 3 ) << 11 )
-		|	( ( green >> 3 ) << 6 )
-		|	( blue >> 3 );
+    {
+		return ColorCode565(red, green, blue);
+    }
 }
 
-uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPALETTE *hpal )
+uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPALETTE *hpal)
 {
-	uint8                   color       = 0;
-	sint32                  diff        = INT_MAX;
-	AUI_SURFACE_PIXELFORMAT pf          = g_ui->PixelFormat();
-	PALETTEENTRY *          pe          = new PALETTEENTRY[256];
-	uint16                  valMain     = GetPaletteEntries(*hpal, 0, 256, pe);
+	PALETTEENTRY *  pe              = new PALETTEENTRY[256];
+	size_t const    paletteCount    = 
+        static_cast<size_t>(GetPaletteEntries(*hpal, 0, 256, pe));
+    Assert(paletteCount == 256);
 
-    Assert( valMain == 256 );
-	if ( valMain != 256 ) {
-		delete [] pe;
-		return 0;
-	}
+	uint16          valMain         = ColorCode555(red, green, blue);
+	uint8           color           = 0;
+	sint32          diff            = INT_MAX;
 
-	valMain = 0;
-	valMain |= ( red >> 3 ) << 10;
-	valMain |= ( green >> 3 ) << 5;
-	valMain |= ( blue >> 3 );
-
-	for (uint8 i = 0; i < 256; i++ ) 
+	for (size_t i = 0; i < paletteCount; ++i) 
     {
-		uint16  valCompare = 0;
-		uint8   b = pe[i].peBlue;
-		uint8   g = pe[i].peGreen;
-		uint8   r = pe[i].peRed;
+		uint16  valCompare = ColorCode555(pe[i].peRed, pe[i].peGreen, pe[i].peBlue);
 		
-		valCompare |= ( r >> 3 ) << 10;
-		valCompare |= ( g >> 3 ) << 5;
-		valCompare |= ( b >> 3 );
-
-		if ( abs ( valCompare - valMain ) < diff ) {
-			color = i;
-			diff = abs( valCompare - valMain );
-			if ( diff == 0 ) break;
+		if (abs(valCompare - valMain) < diff ) 
+        {
+			color   = i;
+			diff    = abs( valCompare - valMain );
+			if (diff == 0) break;
 		}
-
 	}
+
 	delete [] pe;
 	return color;
 
@@ -80,32 +77,21 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPA
 
 uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGBQUAD *rgbq )
 {
-	uint16 valMain, valCompare;
-	uint8 r, g, b;
-	uint8 color = 0;
-	sint32 diff = INT_MAX;
-	AUI_SURFACE_PIXELFORMAT pf = g_ui->PixelFormat();
+	uint8   color   = 0;
+	sint32  diff    = INT_MAX;
+	uint16  valMain = ColorCode555(red, green, blue);
 
-	valMain |= ( red >> 3 ) << 10;
-	valMain |= ( green >> 3 ) << 5;
-	valMain |= ( blue >> 3 );
+	for (uint8 i = 0; i < 256; i++) 
+    {
+		uint16  valCompare = ColorCode555(rgbq[i].rgbRed, rgbq[i].rgbGreen, rgbq[i].rgbBlue);
 
-	for ( uint8 i = 0; i < 256; i++ ) {
-		valCompare = 0;
-		b = rgbq[i].rgbBlue;
-		g = rgbq[i].rgbGreen;
-		r = rgbq[i].rgbRed;
-		
-		valCompare |= ( r >> 3 ) << 10;
-		valCompare |= ( g >> 3 ) << 5;
-		valCompare |= ( b >> 3 );
+		if (abs(valCompare - valMain) < diff) 
+        {
+			color   = i;
+			diff    = abs(valCompare - valMain);
 
-		if ( abs ( valCompare - valMain ) < diff ) {
-			color = i;
-			diff = abs( valCompare - valMain );
-			if ( diff == 0 ) break;
+			if (diff == 0) break;
 		}
-
 	}
 	
 	return color;
@@ -121,67 +107,48 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 							 uint32 skipg, 
 							 uint32 skipb)
 {
-    uint32 col;
-    uint32 row;
-	uint32 limitcol;
-	sint32 err;
-    uint32 fr, fg, fb;
-    sint32 sr, sg, sb;
-    sint32 tr, tg, tb;
-    uint8 *fp;
-    uint16 *tp;
-    sint32 fs_direction;
-	sint32 *thisrerr, *thisgerr, *thisberr;
-	sint32 *nextrerr, *nextgerr, *nextberr;
-	sint32 *temperr;
-
-    
     m_edge = MakeEdge(buf24, cols, rows);
 
-	
-    thisrerr = new sint32[ cols + 2 ];
-	thisgerr = new sint32[ cols + 2 ];
-    thisberr = new sint32[ cols + 2 ];
-    nextrerr = new sint32[ cols + 2 ];
-    nextgerr = new sint32[ cols + 2 ];
-    nextberr = new sint32[ cols + 2 ];
+    sint32 *    thisrerr = new sint32[ cols + 2 ];
+	sint32 *    thisgerr = new sint32[ cols + 2 ];
+    sint32 *    thisberr = new sint32[ cols + 2 ];
+    sint32 *    nextrerr = new sint32[ cols + 2 ];
+    sint32 *    nextgerr = new sint32[ cols + 2 ];
+    sint32 *    nextberr = new sint32[ cols + 2 ];
 
 	if (!thisrerr || !thisgerr || !thisberr || 
-		!nextrerr || !nextgerr || !nextberr) {
-		if (thisrerr)
-			delete thisrerr;
-		if (thisgerr)
-			delete thisgerr;
-		if (thisberr)
-			delete thisberr;
-		if (nextrerr)
-			delete nextrerr;
-		if (nextgerr)
-			delete nextgerr;
-		if (nextberr)
-			delete nextberr;
+		!nextrerr || !nextgerr || !nextberr) 
+    {
+		delete thisrerr;
+		delete thisgerr;
+		delete thisberr;
+		delete nextrerr;
+		delete nextgerr;
+		delete nextberr;
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
     SeedRandom(GetTickCount());
+
+    uint32 col;
 	for ( col = 0; col < cols + 2; ++col ) {
 	    thisrerr[col] = ScaleRandom();
 	    thisgerr[col] = ScaleRandom();
 	    thisberr[col] = ScaleRandom();
 	    
     }
-	fs_direction = 1;
+	sint32      fs_direction = 1;
 
 
+	uint32 limitcol;
+	sint32 err;
+    sint32 sr, sg, sb;
+    sint32 tr, tg, tb;
+    uint8 *fp;
+    uint16 *tp;
+	sint32 *temperr;
 
-
-
-
-
-
-
-
-    for ( row = 0; row < rows; ++row ) {
+    for (uint32 row = 0; row < rows; ++row ) {
         memset(nextrerr, 0, (cols+2) * sizeof(sint32));
         memset(nextgerr, 0, (cols+2) * sizeof(sint32));
         memset(nextberr, 0, (cols+2) * sizeof(sint32));
@@ -192,14 +159,15 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
             tp = buf16 + (row*cols);
 	    } else {
             col = cols - 1;
-            limitcol = -1;
+            limitcol = static_cast<uint32>(-1);
             fp = buf24 + (3*row*cols) + (3*col);
             tp = buf16 + (row*cols) + col;
 	    }
+
         do {
-            fb = fp[0];
-            fg = fp[1];
-            fr = fp[2];
+            uint32 fb = fp[0];
+            uint32 fg = fp[1];
+            uint32 fr = fp[2];
 
 
 
@@ -307,24 +275,24 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 
 sint32 aui_Pixel::Shift(sint32 x, sint32 add_noise, sint32 col, sint32 row)
 {
-    sint32 r;
-    double rscale;
-    if (add_noise) {
-        
-        r = Random() * Random();
+    sint32 noise = 0;
+    if (add_noise) 
+    {
+        double rscale = std::max<double>(1.0, 2.0 - (50.0 * m_edge[row][col]));
+
+        noise = Random() * Random();
         if (Random() > (RAND_MAX / 2)) 
-            r = -r;
-        rscale = 2.0 - (50.0 * m_edge[row][col]);
-        if (rscale < 1.0)
-            rscale = 1.0;
-        r /= (sint32)((double)(RAND_MAX * RAND_MAX) / rscale);
-        x = ((x+4) >> 3) + r;
-    } else {
-        x = ((x+4) >> 3);
+        {
+            noise = -noise;
+        }
+        noise /= (sint32)((double)(RAND_MAX * RAND_MAX) / rscale);
     }
+    x = ((x+4) >> 3) + noise;
+
     if      (x < 0)   x = 0;
     else if (x > 31)  x = 31;
-    return(x);
+
+    return x;
 }
 
 
@@ -335,70 +303,57 @@ sint32 aui_Pixel::ScaleRandom()
 }
 double **aui_Pixel::Alloc2D(sint32 width, sint32 height)
 {
-   double *d1, **d2;
-   sint32 y;
-   
-
-   d2 = (double **) new double *[height];
+   double ** d2 = (double **) new double *[height];
    if (d2 == NULL)
-       return(NULL);
+       return NULL;
 
-
-   d1 = (double *) new double[width*height];
+   double * d1 = (double *) new double[width*height];
    if (d1 == NULL)
-       return(NULL);
+   {
+       delete [] d2;
+       return NULL;
+   }
        
-   for (y=0; y<height; y++) {
+   for (sint32 y = 0; y < height; y++) 
+   {
        d2[y] = d1 + y*width;
    }
 
-   return(d2);
+   return d2;
 }
 
 void aui_Pixel::Free2D(double **d)
 {
-	delete d[0];
-	delete d;
-    
-
-
+	delete [] d[0];  // d1 in Alloc2D
+	delete [] d;     // d2 in Alloc2D
 }
 
 double **aui_Pixel::ImageToDouble(uint8 *image24, sint32 width, sint32 height)
 {
-    double **data;
-    sint32 i, j;
-    uint8 *p;
-    double val;
-
-
-    data = Alloc2D(width, height);
+    double ** data = Alloc2D(width, height);
     if (data == NULL)
-        return(NULL);
+        return NULL;
 
-    p = image24;
-    for(j = 0; j < height; j++) {
-        for(i = 0; i < width; i++) {
-            val  = 0.212671 * *p++;
+    uint8 * p = image24;
+    for (sint32 j = 0; j < height; j++) {
+        for (sint32 i = 0; i < width; i++) 
+        {
+            double val  = 0.212671 * *p++;
             val += 0.715160 * *p++;
             val += 0.072169 * *p++;
             data[j][i] = val / 255.0;
         }
     }
-    return(data);
+    return data;
 }
 
 void aui_Pixel::DoubleToImage(double **fimage, sint8 *image24, 
                     sint32 width, sint32 height)
 {
-    sint32 i, j;
-    sint8 *p;
-    sint8 val;
-
-    p = image24;
-    for(j = 0; j < height; j++) {
-        for(i = 0; i < width; i++) {
-            val = (sint8)((fimage[j][i] * 255.0) + 0.5);
+    sint8 * p = image24;
+    for (sint32 j = 0; j < height; j++) {
+        for (sint32 i = 0; i < width; i++) {
+            sint8 val = (sint8)((fimage[j][i] * 255.0) + 0.5);
             *p++ = val;
             *p++ = val;
             *p++ = val;
@@ -437,15 +392,12 @@ void aui_Pixel::Gradient(double **in_image, double **out_image,
 
 double **aui_Pixel::MakeEdge(uint8 *image, sint32 width, sint32 height)
 {
-    double **fimage;
-    double **gimage;
-
-    fimage = ImageToDouble(image, width, height);
-    gimage = Alloc2D(width, height);
+    double ** fimage = ImageToDouble(image, width, height);
+    double ** gimage = Alloc2D(width, height);
     Gradient(fimage, gimage, width, height);
 
     Free2D(fimage);
-    return(gimage);
+    return gimage;
 }
 
 void aui_Pixel::SeedRandom(uint32 seed)
@@ -466,15 +418,11 @@ void aui_Pixel::SeedRandom(uint32 seed)
 
 sint32 aui_Pixel::Random()
 {
-	uint32 j;
-
-	
-
-	j = (m_lastRand / (RAND_MAX / VECTOR_SIZE)) % VECTOR_SIZE;
+	uint32 j = (m_lastRand / (RAND_MAX / VECTOR_SIZE)) % VECTOR_SIZE;
 
 	m_lastRand = m_randRector[j];
 	m_randRector[j] = rand();
-	return(m_lastRand);
+	return m_lastRand;
 }
 
 
@@ -486,8 +434,6 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 	uint32 srcHeight,
 	uint32 srcPitch )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-
 	Assert( surface16 != NULL );
 	if ( !surface16 ) return AUI_ERRCODE_INVALIDPARAM;
 
@@ -505,18 +451,18 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 	uint8 *stopHorizontal = buf24 + 3 * srcWidth; 
 	const uint8 *stopVertical = buf24 + srcPitch * srcHeight;
 
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)surface16->Buffer();
-	if ( !(wasDestLocked = destBuf != NULL) )
-	if ( surface16->Lock(
-		NULL, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
-	{
-		destBuf = NULL;
-		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
-	}
+	AUI_ERRCODE retcode         = AUI_ERRCODE_OK;
+	uint16 *    destBuf         = (uint16 *)surface16->Buffer();
+	bool        wasDestLocked   = (destBuf != NULL);
+	if (!wasDestLocked)
+    {
+	    if (surface16->Lock(NULL, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK)
+	    {
+		    destBuf = NULL;
+		    retcode = AUI_ERRCODE_SURFACELOCKFAILED;
+	    }
+    }
 
-	
 	if ( destBuf )
 	{
 		
@@ -560,8 +506,6 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 	uint32 srcPitch,
 	RGBQUAD *rgbq )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-
 	Assert( surface16 != NULL );
 	if ( !surface16 ) return AUI_ERRCODE_INVALIDPARAM;
 
@@ -589,16 +533,17 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 	uint8 *stopHorizontal = buf8 + srcWidth; 
 	const uint8 *stopVertical = buf8 + srcPitch * srcHeight;
 
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)surface16->Buffer();
-	if ( !(wasDestLocked = destBuf != NULL) )
-	if ( surface16->Lock(
-		NULL, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
-	{
-		destBuf = NULL;
-		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
-	}
+	AUI_ERRCODE retcode         = AUI_ERRCODE_OK;
+	uint16 *    destBuf         = (uint16 *)surface16->Buffer();
+	bool        wasDestLocked   = (destBuf != NULL);
+	if (!wasDestLocked)
+    {
+	    if (surface16->Lock(NULL, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK)
+	    {
+		    destBuf = NULL;
+		    retcode = AUI_ERRCODE_SURFACELOCKFAILED;
+	    }
+    }
 
 	
 	if ( destBuf )

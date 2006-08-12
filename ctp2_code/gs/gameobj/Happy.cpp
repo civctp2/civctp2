@@ -461,9 +461,6 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 
 double Happy::CalcPopEntertain(CityData &cd, Player *p)
 {
-
-	sint32 n = cd.m_population;
-
 	double increaseSpecialists = double(wonderutil_GetIncreaseSpecialists(p->m_builtWonders));
 	
 	m_pop_ent = cd.GetHappinessFromPops(); 

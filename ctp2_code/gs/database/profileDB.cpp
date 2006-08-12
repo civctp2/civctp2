@@ -207,6 +207,7 @@ ProfileDB::ProfileDB()
     m_endTurnWithEmptyBuildQueues       (FALSE),
     m_runInBackground                   (FALSE),
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
+    m_cityCaptureOptions                (FALSE),
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
 {
@@ -368,6 +369,7 @@ ProfileDB::ProfileDB()
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL, false);
 	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL, false);
     Var("AutoExpireTreatyBase", PV_NUM, &m_autoExpireTreatyTurn, NULL, false);
+    Var("CityCaptureOptions", PV_BOOL, &m_cityCaptureOptions, NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)

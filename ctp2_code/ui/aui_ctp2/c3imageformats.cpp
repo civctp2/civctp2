@@ -187,8 +187,14 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
     size_t  size    = 0;
     void *  buffer  = g_ImageMapPF ? g_ImageMapPF->getData(rname, size) : NULL;
 
-    if (buffer == NULL) {
-		c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", filename);
+    if (buffer == NULL) 
+    {
+        if (g_ImageMapPF && !g_ImageMapPF->IsReported(filename))
+        {
+		    c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", filename);
+            g_ImageMapPF->MarkReported(filename);
+        }
+
         return AUI_ERRCODE_LOADFAILED;
     }
     

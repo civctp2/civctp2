@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World continent handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -453,7 +453,7 @@ sint32 World::GetWaterContinentSize(sint32 cont_num)const
 
 void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land) const
 {
-	BOOL GET_CONTINENT_RETURNED_INCONTINENT_VALUE = FALSE;
+	static bool REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT  = false;
 	is_land = !IsWater(pos); 
 	
 	
@@ -464,8 +464,8 @@ void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land
 
 	if (cont_number < 0)
 	{
-		
-		Assert(GET_CONTINENT_RETURNED_INCONTINENT_VALUE);
+		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
+        REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
         is_land = FALSE; 
         cont_number = 0; 
 	}
@@ -473,7 +473,8 @@ void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land
 	if (!is_land && cont_number >= LAND_CONTINENT_START)
 	{
 		
-		Assert(GET_CONTINENT_RETURNED_INCONTINENT_VALUE);
+		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
+        REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
         is_land = FALSE; 
         cont_number = 0; 
 	}

@@ -1,6 +1,8 @@
 #ifndef PRJFILE_H
 #define PRJFILE_H
 
+#include <set>
+#include <string>
 
 #include "c3files.h"
 
@@ -40,42 +42,14 @@ struct PFEntry {
     long path;
 };
 
-class ProjectFile {
-private:
-    PFPath m_paths[MAX_PRJFILE_PATHS];
-    long m_num_paths;
-
-    PFEntry *m_entries;
-    long m_num_entries;
-
-    int mergeEntries(PFEntry *newList, int newCount);
-    PFEntry *findRecord(char const * rname) const;
-
-    int readDOSdir(long path, PFEntry *table);
-    int verify_ZFS_header(ZFS_FHEADER *header);
-    void read_ZFS_dtable(int pathnum, ZFS_DTABLE *dtable,
-                         PFEntry **tlp, long *rcount);
-
-    int addPath_DOS(char *path);
-    int addPath_ZFS(char *path);
-    int addPath_ZMS(char *path);
-
-    void *getData_DOS(PFEntry *entry, size_t & size, C3DIR dir = C3DIR_DIRECT);
-    void *getData_ZFS(PFEntry *entry, size_t & size);
-    void *getData_ZMS(PFEntry *entry, size_t & size);
-    void *getData_ZMS(PFEntry *entry, size_t & size, 
-                      HANDLE *hFileMap, size_t & offset);
-
-    char m_error_string[256];
-
+class ProjectFile 
+{
 public:
     ProjectFile();
     ~ProjectFile();
 
-    
     int addPath(char *path, int use_filemapping = 0);
 
-    
     void * getData(char const * rname, size_t & size, C3DIR dir = C3DIR_DIRECT);
     /// For backwards compatibility: remove when all callers have been replaced.
     void * getData(char const * rname, sint32 * size, C3DIR dir = C3DIR_DIRECT)
@@ -99,7 +73,41 @@ public:
     bool exists(char const * fname) const;
 
     
-    char const * getError() const { return m_error_string; } 
+    char const * getError() const { return m_error_string; }
+
+    bool    IsReported(char const * a_FileName) const;
+    void    MarkReported(char const * a_FileName);
+
+private:
+    int mergeEntries(PFEntry *newList, int newCount);
+    PFEntry *findRecord(char const * rname) const;
+
+    int readDOSdir(long path, PFEntry *table);
+    int verify_ZFS_header(ZFS_FHEADER *header);
+    void read_ZFS_dtable(int pathnum, ZFS_DTABLE *dtable,
+                         PFEntry **tlp, long *rcount);
+
+    int addPath_DOS(char *path);
+    int addPath_ZFS(char *path);
+    int addPath_ZMS(char *path);
+
+    void *getData_DOS(PFEntry *entry, size_t & size, C3DIR dir = C3DIR_DIRECT);
+    void *getData_ZFS(PFEntry *entry, size_t & size);
+    void *getData_ZMS(PFEntry *entry, size_t & size);
+    void *getData_ZMS(PFEntry *entry, size_t & size, 
+                      HANDLE *hFileMap, size_t & offset);
+
+    PFPath m_paths[MAX_PRJFILE_PATHS];
+    long m_num_paths;
+
+    PFEntry *m_entries;
+    long m_num_entries;
+
+    char m_error_string[256];
+
+    /// List of items that have been reported, to avoid annoying multiple pop-ups.
+    std::set<std::string>   m_Reported;
+
 };
 
 

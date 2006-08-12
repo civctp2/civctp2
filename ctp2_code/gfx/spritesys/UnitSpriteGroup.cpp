@@ -542,13 +542,12 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		{
 			printf(" [Idle");
 		  
-			for(i=0; i<idleSprite->GetNumFrames(); i++) 
+			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n) 
 			{
-				
-				if (!GetImageFileName(imageNames[i] ,"%sGU%#.3dIA%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame()))
-					GetImageFileName (imageNames[i] ,"%sGU%#.2dIA%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame());
-				if (!GetImageFileName(shadowNames[i],"%sGU%#.3dIS%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame()))
-					GetImageFileName (shadowNames[i],"%sGU%#.2dIS%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame());
+				if (!GetImageFileName(imageNames[n] ,"%sGU%#.3dIA%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame()))
+					GetImageFileName (imageNames[n] ,"%sGU%#.2dIA%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame());
+				if (!GetImageFileName(shadowNames[n],"%sGU%#.3dIS%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame()))
+					GetImageFileName (shadowNames[n],"%sGU%#.2dIS%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame());
 			}
 		} 
 		else 
@@ -557,10 +556,10 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 			{
 				printf(" [City");
 
-				for(i=0; i<idleSprite->GetNumFrames(); i++) 
+				for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n) 
 				{
-					GetImageFileName(shadowNames[i], "%sGC%#.3dS.%d", prefixStr, id,i+idleSprite->GetFirstFrame());
-					GetImageFileName(imageNames[i] , "%sGC%#.3dA.%d", prefixStr, id,i+idleSprite->GetFirstFrame());
+					GetImageFileName(shadowNames[n], "%sGC%#.3dS.%d", prefixStr, id, n + idleSprite->GetFirstFrame());
+					GetImageFileName(imageNames[n] , "%sGC%#.3dA.%d", prefixStr, id, n + idleSprite->GetFirstFrame());
 				}
 			} 
 			else 
@@ -601,13 +600,12 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		victorySprite->ParseFromTokens(theToken);
 
 		printf(" [Victory");
-		for(i=0; i<victorySprite->GetNumFrames(); i++) 
+		for(size_t n = 0; n < victorySprite->GetNumFrames(); ++n) 
 		{			
-			
-			if (!GetImageFileName(shadowNames[i],"%sGU%#.3dVS%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame()))
-				GetImageFileName (shadowNames[i],"%sGU%#.2dVS%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame());
-			if (!GetImageFileName(imageNames[i], "%sGU%#.3dVA%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame()))
-				GetImageFileName (imageNames[i], "%sGU%#.2dVA%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame());
+			if (!GetImageFileName(shadowNames[n],"%sGU%#.3dVS%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame()))
+				GetImageFileName (shadowNames[n],"%sGU%#.2dVS%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame());
+			if (!GetImageFileName(imageNames[n], "%sGU%#.3dVA%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame()))
+				GetImageFileName (imageNames[n], "%sGU%#.2dVA%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame());
 		}
 
 		victorySprite->Import(victorySprite->GetNumFrames(), imageNames, shadowNames);
@@ -639,14 +637,12 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Work/A2");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
-//			sint32 camera = j + 1;
-			for(i=0; i<workSprite->GetNumFrames(); i++) 
+			for(size_t n = 0; n < workSprite->GetNumFrames(); ++n) 
 			{
-				
-				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dWS%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame()))
-					GetImageFileName (facedShadowNames[j][i],"%sGU%#.2dWS%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame());
-				if (!GetImageFileName(facedImageNames[j][i] ,"%sGU%#.3dWA%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame()))
-					GetImageFileName (facedImageNames[j][i] ,"%sGU%#.2dWA%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame());
+				if (!GetImageFileName(facedShadowNames[j][n],"%sGU%#.3dWS%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame()))
+					GetImageFileName (facedShadowNames[j][n],"%sGU%#.2dWS%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame());
+				if (!GetImageFileName(facedImageNames[j][n] ,"%sGU%#.3dWA%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame()))
+					GetImageFileName (facedImageNames[j][n] ,"%sGU%#.2dWA%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame());
 			}
 		}
 

@@ -183,7 +183,7 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	MBCHAR			*imageNames[k_MAX_NAMES];
 	MBCHAR			*shadowNames[k_MAX_NAMES];
 
-	sint32			i;
+	size_t			i;
 
 	char			prefixStr[80];
 

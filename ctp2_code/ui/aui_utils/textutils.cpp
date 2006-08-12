@@ -276,6 +276,7 @@ RECT textutils_CenterText(
 
 	return bounds;
 
+#if 0   // unreachable
 	sint32 boundsWidth = bounds.right - bounds.left;
 	sint32 boundsHeight = bounds.bottom - bounds.top;
 	sint32 destWidth = pDestRect->right - pDestRect->left;
@@ -299,6 +300,7 @@ RECT textutils_CenterText(
 	center.bottom = pDestRect->bottom - yOffset;
 
 	return center;
+#endif
 }
 
 

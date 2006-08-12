@@ -104,44 +104,44 @@ static cmp_t CompareByString(aui_LdlObject *obj1, aui_LdlObject *obj2)
 }
 
 
-aui_Ldl::aui_Ldl(
-	AUI_ERRCODE *retval,
-	MBCHAR const *ldlFilename )
-	:
+aui_Ldl::aui_Ldl
+(
+	AUI_ERRCODE *   retval,
+	MBCHAR const *  ldlFilename 
+)
+:
 	aui_Base()
 {
-	*retval = InitCommon( ldlFilename );
-	Assert( AUI_SUCCESS(*retval) );
+	*retval = InitCommon(ldlFilename);
 }
 
 
 
-AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
+AUI_ERRCODE aui_Ldl::InitCommon(MBCHAR const *ldlFilename)
 {
-	if ( !m_objectListByObject && !m_objectListByString)
+	Assert(ldlFilename != NULL);
+	if (!ldlFilename) return AUI_ERRCODE_INVALIDPARAM;
+
+	if (!m_objectListByObject)
 	{
-		
 		m_objectListByObject = new AvlTree<aui_LdlObject *>;
 		Assert( m_objectListByObject != NULL );
 		if ( !m_objectListByObject ) return AUI_ERRCODE_MEMALLOCFAILED;
+    }
 
-		
+    if (!m_objectListByString)	
+    {
 		m_objectListByString = new AvlTree<aui_LdlObject *>;
 		Assert( m_objectListByString != NULL );
 		if ( !m_objectListByString ) return AUI_ERRCODE_MEMALLOCFAILED;
 	}
 
-	Assert( ldlFilename != NULL );
-	if ( !ldlFilename ) return AUI_ERRCODE_INVALIDPARAM;
-
-	
 	MBCHAR outDir[ MAX_PATH + 1 ];
 	GetCurrentDirectory( MAX_PATH, outDir );
-
-	strcat(outDir, "\\ldl_out");
+	strcat(outDir, FILE_SEP "ldl_out");
 
     delete m_ldl;
-	m_ldl = new ldl( ldlFilename, outDir );
+	m_ldl = new ldl(ldlFilename, outDir);
 	Assert( m_ldl != NULL );
 	if ( !m_ldl ) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -154,22 +154,22 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 
 aui_Ldl::~aui_Ldl()
 {
-#if 0
-	delete m_ldl;
-	delete m_objectListByObject;
-	delete m_objectListByString;
+    if (0 == --m_ldlRefCount)
+    {
+    	delete m_ldl;
+        m_ldl = NULL;
+	    delete m_objectListByObject;
+        m_objectListByObject = NULL;
+	    delete m_objectListByString;
+        m_objectListByString = NULL;
 
-	aui_LdlObject * curObject = m_objectList;
-	aui_LdlObject * nextObject;
-
-	while (curObject) {
-		nextObject = curObject->next;
-		
-		DeleteLdlObject(curObject);
-		
-		curObject = nextObject;
-	}
-#endif
+        aui_LdlObject * nextObject  = NULL;
+	    for (aui_LdlObject * curObject = m_objectList; curObject; curObject = nextObject)
+	    {
+		    nextObject = curObject->next;
+		    DeleteLdlObject(curObject);
+	    }
+    }
 }
 
 
@@ -307,73 +307,74 @@ AUI_ERRCODE aui_Ldl::Associate( void *object, MBCHAR *ldlBlock )
 
 	Comparable<aui_LdlObject *> *objByObject = new Comparable<aui_LdlObject *>(ldlObject, CompareByObject);
 	if(m_objectListByObject->Insert(objByObject))
-		
 		delete objByObject;
 	
 	Comparable<aui_LdlObject *> *objByString = new Comparable<aui_LdlObject *>(ldlObject, CompareByString);
 	if(m_objectListByString->Insert(objByString))
-		
 		delete objByString;
 	
-	AppendLdlObject(ldlObject);
-
-	return AUI_ERRCODE_OK;
+	return AppendLdlObject(ldlObject);
 }
 
 
 AUI_ERRCODE aui_Ldl::AppendLdlObject(aui_LdlObject *object)
 {
-	if (object == NULL) 
+	if (NULL == object) 
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	if (m_objectList == NULL) {
-		object->next = NULL;
-		object->prev = NULL;
+	object->next    = NULL;
+	object->prev    = m_objectListTail;
 
-		m_objectList = object;
-
-		m_objectListTail = object;
-	} else {
-		object->next = NULL;
-		object->prev = m_objectListTail;
+	if (m_objectListTail) 
+    {
 		m_objectListTail->next = object;
-		m_objectListTail = object;
-	}
+    }
+    else
+    {
+		m_objectList = object;
+	} 
+
+	m_objectListTail = object;
 
 	return AUI_ERRCODE_OK;
 }
 
 
 
-AUI_ERRCODE aui_Ldl::RemoveLdlObject(aui_LdlObject *object)
+AUI_ERRCODE aui_Ldl::RemoveLdlObject(aui_LdlObject * object)
 {
-	if (m_objectList == NULL) 
-		return AUI_ERRCODE_INVALIDPARAM;
+    if (NULL == object)
+        return AUI_ERRCODE_INVALIDPARAM;
 
-	
-	if (m_objectList == object) {
-		
-		m_objectList = object->next;
-		if (object->next) {
-			object->next->prev = NULL;
-		}
+	if (m_objectList == object) 
+    {
+        // Object at begin
+        m_objectList = object->next;
 
-		
-		if (m_objectListTail == object) {
-			m_objectListTail = NULL;
+		if (m_objectList) 
+        {
+			m_objectList->prev  = NULL;
 		}
-		return AUI_ERRCODE_OK;
-	} else
-	
-	if (m_objectListTail == object) {
-		
-		m_objectListTail = object->prev;
-		object->prev->next = NULL;
-	} else {
-		object->prev->next = object->next;
-		object->next->prev = object->prev;
+        else
+        {
+			m_objectListTail    = NULL;
+		}
+	} 
+    else if (m_objectListTail == object)
+    {
+        // Object at end
+        m_objectListTail        = object->prev;
+	    m_objectListTail->next  = object->next;
+    } 
+    else 
+    {
+        // Object in between
+	    object->prev->next = object->next;
+	    object->next->prev = object->prev;
 	}
 
+    object->next    = NULL;
+    object->prev    = NULL;
 	return AUI_ERRCODE_OK;
 }
 
@@ -1068,7 +1069,7 @@ sint32 aui_Ldl::GetIntDependent( MBCHAR *strPtr )
 	sint32 width = g_ui->Width();
 	sint32 height = g_ui->Height();
 
-	while ( 1 )
+	for ( ; strPtr; ++strPtr)
 	{
 		sint32 w, h, value;
 		if ( sscanf( strPtr, "%dx%d?%d", &w, &h, &value ) != 3 )
@@ -1077,8 +1078,7 @@ sint32 aui_Ldl::GetIntDependent( MBCHAR *strPtr )
 
 		if ( w == width && h == height ) return value;
 
-		if ( !(strPtr = strchr( strPtr, ':' )) ) break;
-		strPtr++;
+        strPtr = strchr(strPtr, ':');
 	}
 
 	return 0;

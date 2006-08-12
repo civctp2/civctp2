@@ -12,6 +12,7 @@
 
 
 #include "c3.h"
+#include "c3spinner.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -27,7 +28,6 @@
 
 #include "primitives.h"
 
-#include "c3spinner.h"
 
 
 extern C3UI *g_c3ui;
@@ -71,7 +71,6 @@ C3Spinner::C3Spinner(
 
 	*retval = CreateButtons();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -132,14 +131,15 @@ C3Spinner::C3Spinner(
 
 	*retval = CreateButtons();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 {
-	if ((m_isVertical = isVertical))
+    m_isVertical = isVertical;
+
+	if (m_isVertical)
 		m_valX = m_minX = m_maxX = m_incX = m_pageX = 0;
 	else
 		m_valY = m_minY = m_maxY = m_incY = m_pageY = 0;
@@ -151,30 +151,26 @@ AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 
 AUI_ERRCODE C3Spinner::CreateButtons( void )
 {
-	aui_Button *button1;
-	aui_Button *button2;
-
 	AUI_ERRCODE errcode;
 
 	if ( m_isVertical )
 	{
-		button1 = m_incYButton = new TextButton( &errcode,
+		m_incYButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "v", RangerButtonActionCallback, this );
-		button2 = m_decYButton = new TextButton( &errcode,
+	    AddChild(m_incYButton);
+		m_decYButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "^", RangerButtonActionCallback, this );
+	    AddChild(m_decYButton);
 	}
 	else
 	{
-		button1 = m_incXButton = new TextButton( &errcode,
+		m_incXButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), ">", RangerButtonActionCallback, this );
-		button2 = m_decXButton = new TextButton( &errcode,
+	    AddChild(m_incXButton);
+		m_decXButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "<", RangerButtonActionCallback, this );
+	    AddChild(m_decXButton);
 	}
-
-	
-	AddChild( button1 );
-	AddChild( button2 );
-
 	
 	RepositionButtons();
 

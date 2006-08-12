@@ -83,8 +83,6 @@ STDEHANDLER(CaptureCityEvent)
 	Unit city;
 	sint32 newOwner;
 	sint32 cause;
-	MapPoint pos;
-	sint32 originalOwner;
 
 	if(!args->GetCity(0, city)) 
 		return GEV_HD_Continue;
@@ -95,50 +93,61 @@ STDEHANDLER(CaptureCityEvent)
 	if(!args->GetInt(0, cause)) 
 		return GEV_HD_Continue;
 
-	originalOwner = city.GetOwner();
-	city.GetPos(pos);
+	sint32 const    originalOwner   = city.GetOwner();
+	MapPoint        pos;
+    city.GetPos(pos);
 
-	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY)cause);
+	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY) cause);
 	
-	if(city.GetData()->GetCityData()->PopCount() < 1) {
-		
+	if (city.GetData()->GetCityData()->PopCount() < 1) 
+    {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillCity,
 			GEA_City, city,
 			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED, 
 			GEA_Player, newOwner, 
 			GEA_End);
-	} else {
-		if(city.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+	} 
+    else if (city.IsValid())
+    {
+		if (city.GetOwner() == g_selected_item->GetVisiblePlayer()) 
+        {
 			g_director->AddCenterMap(pos);
 		}
 		
-		if(newOwner == g_selected_item->GetVisiblePlayer())
+		if (newOwner == g_selected_item->GetVisiblePlayer())
+        {
 			g_selected_item->SetSelectCity(city);
-
+        }
 		
-		if (city.AccessData()->CountSlaves() > 0) {
+		if (city.AccessData()->CountSlaves() > 0) 
+        {
 			SlicObject *	so = new SlicObject("20IAFreeSlaves");
 			so->AddRecipient(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
 		}
 
-//		if(newOwner > 0 && originalOwner > 0 && city.IsValid()) {
-//			SlicObject *	so = new SlicObject("911CityNewOwner");
-//			so->AddRecipient(originalOwner);
-//			so->AddPlayer(originalOwner);
-//			so->AddPlayer(newOwner);
-//			so->AddCity(city);
-//			g_slicEngine->Execute(so);
-//		}		
+        if (g_theProfileDB->GetValueByName("CityCaptureOptions"))
+        {
 //EMOD Capture city options
-		if(newOwner > 0 && city.IsValid()) {
-			SlicObject *	so = new SlicObject("999CITYCAPTUREOPTIONS");
-			so->AddRecipient(newOwner);
-			so->AddCity(city);
-			g_slicEngine->Execute(so);
-		}		
+            /// @todo Check impact: this could be considered a human cheat.
+            ///       The AI is unable to select raze (when over the city cap).
+		    SlicObject *	so = new SlicObject("999CITYCAPTUREOPTIONS");
+		    so->AddRecipient(newOwner);
+		    so->AddCity(city);
+		    g_slicEngine->Execute(so);
 //END EMOD
+        }
+        else
+        {
+            SlicObject *	so = new SlicObject("911CityNewOwner");
+            so->AddRecipient(originalOwner);
+            so->AddPlayer(originalOwner);
+            so->AddPlayer(newOwner);
+            so->AddCity(city);
+            g_slicEngine->Execute(so);
+        }
+
 		if(g_rand->Next(100) < 
 		   g_theConstDB->CaptureCityAdvanceChance() * 100) {
 //Added by Martin Gühmann to allow city advance gaining from
