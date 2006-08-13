@@ -117,7 +117,7 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 
 void SettleMap::Cleanup()
 {
-    m_settleValues.Clear();
+    m_settleValues.Cleanup();
     m_invalidCells.Resize(0, 0, false);
 }
 

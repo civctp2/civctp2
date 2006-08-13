@@ -242,6 +242,9 @@ public:
 	
 	double GetScienceHandicapRatio(const PLAYER_INDEX playerId) const;
 
+
+	void Cleanup();
+
 private:
 	static MapAnalysis s_mapAnalysis;
 

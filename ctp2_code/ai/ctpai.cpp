@@ -1080,9 +1080,11 @@ void CtpAi::InitializeEvents()
 void CtpAi::Cleanup()
 {
 	SettleMap::s_settleMap.Cleanup();
-    Scheduler::CleanupAll();
+	Scheduler::CleanupAll();
 	Governor::Cleanup();
 	Diplomat::CleanupAll();
+	MapAnalysis::GetMapAnalysis().Cleanup(); // Just removes leak reports, actually no real leaks
+	std::vector<sint32>().swap(CTPAgent::s_orderDBToEventMap); // Just removes leak reports, actually no real leaks
 }
 
 

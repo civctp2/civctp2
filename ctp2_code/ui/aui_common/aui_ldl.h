@@ -109,7 +109,7 @@ public:
 	
 	static BOOL			IsValid( MBCHAR *ldlBlock );
 
-	static ldl			*GetLdl( void ) { return m_ldl; }
+	static ldl			*GetLdl( void ) { return s_ldl; }
 
 	
 	static AUI_ERRCODE	Associate( void *object, MBCHAR *ldlBlock );
@@ -199,16 +199,16 @@ protected:
 	static AUI_ERRCODE	AppendLdlObject(aui_LdlObject *object);
 	static AUI_ERRCODE	RemoveLdlObject(aui_LdlObject *object);
 
-	static ldl			*m_ldl;
+	static ldl			*s_ldl;
 
 
-	static aui_LdlObject				*m_objectList;
-	static aui_LdlObject				*m_objectListTail;
+	static aui_LdlObject				*s_objectList;
+	static aui_LdlObject				*s_objectListTail;
 
-	static AvlTree<aui_LdlObject *>		*m_objectListByObject;
-	static AvlTree<aui_LdlObject *>		*m_objectListByString;
+	static AvlTree<aui_LdlObject *>		*s_objectListByObject;
+	static AvlTree<aui_LdlObject *>		*s_objectListByString;
 
-	static sint32						m_ldlRefCount;
+	static sint32						s_ldlRefCount;
 };
 
 

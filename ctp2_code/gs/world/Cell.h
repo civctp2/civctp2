@@ -187,7 +187,7 @@ public:
 	Cell();
 	~Cell();
 
-	sint32 IsAnyUnitInCell() const;
+	bool IsAnyUnitInCell() const;
 	bool InsertUnit(const Unit id);
 	sint32 RemoveUnitReference(const Unit &id);
 
@@ -215,7 +215,7 @@ public:
 	sint32 GetMineIndex() const;
 	sint32 GetRivCurIndex() const;
 	sint32 GetCanalTunnelIndex() const;
-	BOOL GetCanDie(void) const ;
+	bool GetCanDie(void) const ;
 
 	void SetIrrigation(sint32 level);
 	void SetMine(sint32 level);
@@ -240,14 +240,14 @@ public:
 	
 	void SetEnvFast(uint32 env) { m_env = env; }
 
-	BOOL CanEnter(const uint32 flag) const;
+	bool CanEnter(const uint32 flag) const;
 
 	void SetTerrain(sint32 terrain);
 	sint32 GetTerrain() { return (sint32)m_terrain_type; }
 	void SetMoveCost(double cost) { m_move_cost = (sint16)cost; }
 	double GetMoveCost() const { return double(m_move_cost); }
 
-	BOOL GetIsChokePoint() const { return BOOL(m_gf); }
+	bool GetIsChokePoint() const { return m_gf != 0; }
 	sint16 GetContinent() const { return m_continent_number; }
 	void SetContinent(sint16 val) { m_continent_number = val; }
 
@@ -258,7 +258,7 @@ public:
 
 
 
-	sint32 IsDead(void) const;
+	bool IsDead(void) const;
 	void Kill(void) ;
 
 	sint32 GetScratch(void) const { return (m_search_count) ; }
@@ -293,7 +293,7 @@ public:
 
 #ifdef BATTLE_FLAGS
 	void AddBattleFlag(sint32 player);
-	BOOL DecayBattleFlag();
+	bool DecayBattleFlag();
 	uint16 GetBattleFlags() { return m_battleFlags; }
 	uint16 GetBattleVictor() { return ((m_battleFlags >> k_BATTLE_FLAG_VICTOR_SHIFT) & 0xFF) ; }
 	uint16 GetBattleDecay() { return (m_battleFlags & 0xFF) ; }
@@ -321,8 +321,8 @@ public:
 	double GetTerrainDefenseBonus();
 
 
-	BOOL HasWormhole() const;
-	void SetWormhole(BOOL on);
+	bool HasWormhole() const;
+	void SetWormhole(bool on);
 
 	void ClearUnitsNStuff();
 #ifdef CELL_COLOR
@@ -335,8 +335,8 @@ public:
 	void CalcTerrainMoveCost();
 	void CalcMovementType();
 
-//Added by Martin Gühmann
 	double CalcTerrainFreightCost();
+	sint32 GetBaseMoveCosts();
 	
 	
 	

@@ -249,6 +249,7 @@ void Diplomat::CleanupAll()
 	}
 
 	s_theDiplomats.clear();
+	DiplomatVector().swap(s_theDiplomats);
 }
 
 

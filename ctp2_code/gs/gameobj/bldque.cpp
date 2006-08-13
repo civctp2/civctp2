@@ -1152,43 +1152,43 @@ void BuildQueue::ReplaceHead(sint32 cat, sint32 t, sint32 cost)
 bool BuildQueue::DoInsertChecks(sint32 cat, sint32 t, sint32 cost)
 {
 	switch(cat) 
-    {
+	{
 		
 	default:
-        // No insert checks
+		// No insert checks
 		break;
 
-    case k_GAME_OBJ_TYPE_UNIT:
+	case k_GAME_OBJ_TYPE_UNIT:
 		{
-            if(!m_city.CanBuildUnit(t)) { 
-				return FALSE;
-            }
+			if(!m_city.CanBuildUnit(t)) { 
+				return false;
+			}
 		}
 		break;
 
-    case k_GAME_OBJ_TYPE_WONDER :
+	case k_GAME_OBJ_TYPE_WONDER :
 		{
 			PointerList<BuildNode>::Walker walk(m_list);
 			while(walk.IsValid()) {
 				if(walk.GetObj()->m_category == k_GAME_OBJ_TYPE_WONDER &&
 				   walk.GetObj()->m_type == t) {
-					return FALSE;
+					return false;
 				}
 				walk.Next();
 			}
 		}
 		break;
 		
-    case k_GAME_OBJ_TYPE_IMPROVEMENT:
+	case k_GAME_OBJ_TYPE_IMPROVEMENT:
 		{
 			if(!m_city.CanBuildBuilding(t))
-				return FALSE;
+				return false;
 
 			PointerList<BuildNode>::Walker walk(m_list);
 			while(walk.IsValid()) {
 				if(walk.GetObj()->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT &&
 				   walk.GetObj()->m_type == t) {
-					return FALSE;
+					return false;
 				}
 				walk.Next();
 			}
@@ -1196,31 +1196,30 @@ bool BuildQueue::DoInsertChecks(sint32 cat, sint32 t, sint32 cost)
 		break;
 	}
 
-	return TRUE;
+	return true;
 }
 
 bool BuildQueue::InsertTail(sint32 cat, sint32 t, sint32 cost)
-
 {
 	if (!DoInsertChecks(cat, t, cost))
-		return FALSE;
+		return false;
 
-    if (m_list->GetCount() == 0) 
-    {
+	if (m_list->GetCount() == 0) 
+	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if ((visiblePlayer == m_owner) && g_soundManager)
-        {			
+		{
 			g_soundManager->AddSound(SOUNDTYPE_VOICE, (uint32)0, 
 									gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_STARTED),
 									0,
 									0);
 		}
-        
-        HandleProductionStart();
+
+		HandleProductionStart();
 	}
 
-    RawInsertTail(cat, t, cost);
-    return TRUE; 
+	RawInsertTail(cat, t, cost);
+	return true;
 }
 
 
@@ -1228,8 +1227,8 @@ bool BuildQueue::InsertTail(sint32 cat, sint32 t, sint32 cost)
 
 void BuildQueue::ResetOwner(const sint32 new_owner)
 {
-    Clear(); 
-    m_owner = new_owner; 
+	Clear();
+	m_owner = new_owner;
 }
 
 double BuildQueue::GetTypeCoeff() const

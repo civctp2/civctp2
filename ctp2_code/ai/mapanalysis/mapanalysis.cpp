@@ -1327,6 +1327,10 @@ MapAnalysis::MapAnalysis()
 
 MapAnalysis::~MapAnalysis()
 {
+	Cleanup();
+}
+
+void MapAnalysis::Cleanup(){
     MapGridVector().swap(m_threatGrid);
     MapGridVector().swap(m_valueGrid);
     MapGridVector().swap(m_tradeAtRiskGrid);

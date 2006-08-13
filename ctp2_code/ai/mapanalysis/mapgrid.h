@@ -1,14 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : The map grid
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -30,7 +48,7 @@
 
 template<class _Ty>
 class MapGrid {
-public:	
+public:
 	
 	typedef std::valarray< _Ty > MapGridArray;
 	
@@ -108,6 +126,12 @@ public:
 		m_minValue = 9999; 
 		m_valuesCount = 0;
 		m_totalValue = 0.0;
+	}
+
+	void Cleanup()
+	{
+		Clear();
+		m_values.resize(0);
 	}
 		
 	

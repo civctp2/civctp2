@@ -514,7 +514,16 @@ AUI_ERRCODE ScenarioEditor::Initialize()
 AUI_ERRCODE ScenarioEditor::Cleanup()
 {
 	if(s_scenarioEditor) {
-		Hide();
+
+		// Only execute the necessary stuff from ScenarioEditor::Hide
+		if(s_scenarioEditor->m_addStuffWindow) {
+			g_c3ui->RemoveWindow(s_scenarioEditor->m_addStuffWindow->Id());
+		}
+
+		if(s_scenarioEditor->m_window){
+			g_c3ui->RemoveWindow(s_scenarioEditor->m_window->Id());
+		}
+		//
 
 		delete s_scenarioEditor;
 		s_scenarioEditor = NULL;

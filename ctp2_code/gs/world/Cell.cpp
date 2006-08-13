@@ -196,8 +196,7 @@ void Cell::Serialize(CivArchive &archive)
 	}
 }
 
-sint32 Cell::IsAnyUnitInCell() const
-
+bool Cell::IsAnyUnitInCell() const
 { 
 	return m_unit_army != NULL;
 }
@@ -258,7 +257,7 @@ sint32 Cell::GetGoodsIndex(sint32 &val) const
     }
 }
 
-BOOL Cell::CanEnter(const uint32 flag) const
+bool Cell::CanEnter(const uint32 flag) const
 {
 	return ((m_env & k_MASK_ENV_MOVEMENT_TYPE) & (flag << k_SHIFT_ENV_MOVEMENT_TYPE)) != 0;
 #if 0
@@ -291,7 +290,7 @@ BOOL Cell::CanEnter(const uint32 flag) const
 #endif
 }
 
-BOOL Cell::GetCanDie(void) const 
+bool Cell::GetCanDie(void) const 
 {
 	
 	return (m_env & k_BIT_MOVEMENT_TYPE_LAND) != 0;
@@ -957,12 +956,12 @@ void Cell::DeleteGoodyHut()
 	m_jabba = NULL;
 }
 
-BOOL Cell::HasWormhole() const
+bool Cell::HasWormhole() const
 {
 	return (m_env & k_BIT_ENV_HAS_WORMHOLE) != 0;
 }
 
-void Cell::SetWormhole(BOOL on)
+void Cell::SetWormhole(bool on)
 {
 	if(on)
 		m_env |= k_BIT_ENV_HAS_WORMHOLE;
@@ -1033,43 +1032,49 @@ void Cell::SetGF(const sint16 v)
 }
 
 void Cell::SetEnv(uint32 env)
-{ 
-	m_env = env; 
+{
+	m_env = env;
 	CalcTerrainMoveCost();
+}
+
+sint32 Cell::GetBaseMoveCosts()
+{
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
+	sint32 base = 0;
+	bool gotMovement = rec->GetEnvBase()->GetMovement(base);
+	Assert(gotMovement);
+
+	sint32 m;
+	if(HasCity() && rec->HasEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
+		base = std::min(base, m);
+	}
+
+	if(HasRiver() && rec->HasEnvRiver() && rec->GetEnvRiverPtr()->GetMovement(m)) {
+		base = std::min(base, m);
+	}
+
+	return base;
 }
 
 void Cell::CalcTerrainMoveCost()
 {
-	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
-	sint32 base;
-	bool gotMovement = rec->GetEnvBase()->GetMovement(base);
-	Assert(gotMovement);
-	sint32 tmp = base;
+	sint32 tmp = GetBaseMoveCosts();
 
-	sint32 m;
-	if(HasCity() && rec->HasEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
-		tmp = std::min(tmp, m);
-	}
-
-	if(HasRiver() && rec->HasEnvRiver() && rec->GetEnvRiverPtr()->GetMovement(m)) {
-		tmp = std::min(tmp, m);
-	}
-
-    for (sint32 i =  GetNumObjects() - 1 ; i >= 0; --i) 
-    {
-	    if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) 
-        {
-		    const TerrainImprovementRecord *impRec = 
+	for (sint32 i =  GetNumObjects() - 1 ; i >= 0; --i) 
+	{
+		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) 
+		{
+			const TerrainImprovementRecord *impRec = 
 			    g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
-		    const TerrainImprovementRecord::Effect *effect = 
-                terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+			const TerrainImprovementRecord::Effect *effect = 
+			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
-		    sint32 cost;
-		    if (effect && effect->GetMoveCost(cost)) 
-            {
-			    tmp = std::min(tmp, cost);
-		    }
-	    }
+			sint32 cost;
+			if (effect && effect->GetMoveCost(cost)) 
+			{
+				tmp = std::min(tmp, cost);
+			}
+		}
 	}
 	
 	sint16 new_cost = static_cast<sint16>(tmp);
@@ -1080,8 +1085,6 @@ void Cell::CalcTerrainMoveCost()
 	}
 	Assert(m_move_cost > 0);
 }
-
-//Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
 //
@@ -1099,7 +1102,6 @@ void Cell::CalcTerrainMoveCost()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 double Cell::CalcTerrainFreightCost()
 {
 	// Base terrain cost
@@ -1109,32 +1111,31 @@ double Cell::CalcTerrainFreightCost()
 	// Modifications by special situations (city, river)
 	if (HasCity() && rec->HasEnvCity()) 
 	{
-        cost = std::min(cost, rec->GetEnvCityPtr()->GetFreight());
+		cost = std::min(cost, rec->GetEnvCityPtr()->GetFreight());
 	}
 	if (HasRiver() && rec->HasEnvRiver()) 
 	{
-        cost = std::min(cost, rec->GetEnvRiverPtr()->GetFreight());
+		cost = std::min(cost, rec->GetEnvRiverPtr()->GetFreight());
 	}
 
 	// Modifications by tile improvements (roads, etc.)
-    for (sint32 i = GetNumObjects() - 1; i >= 0; --i) 
-    {
-	    ID const &	object	= m_objects->Access(i);
-	    if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
-	    {
-		    TerrainImprovementRecord const *			impRec = 
+	for (sint32 i = GetNumObjects() - 1; i >= 0; --i) 
+	{
+		ID const &	object	= m_objects->Access(i);
+		if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
+			{
+			TerrainImprovementRecord const *			impRec = 
 			    g_theTerrainImprovementDB->Get(object.m_id & k_ID_KEY_MASK);
-		    TerrainImprovementRecord::Effect const *	effect =
+			TerrainImprovementRecord::Effect const *	effect =
 			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
-		    sint32	modifiedFreight;
-		    if (effect && effect->GetFreight(modifiedFreight)) 
-		    {
-                cost = std::min(cost, modifiedFreight);
-		    }
-	    }
-    }																					
-
+			sint32	modifiedFreight;
+			if (effect && effect->GetFreight(modifiedFreight)) 
+			{
+				cost = std::min(cost, modifiedFreight);
+			}
+		}
+	}
 	return static_cast<double>(cost);
 }
 
@@ -1145,7 +1146,7 @@ GoodyHut *Cell::GetGoodyHut()
 
 sint32 Cell::GetNumObjects() const
 {
-    return m_objects ? m_objects->Num() : 0;
+	return m_objects ? m_objects->Num() : 0;
 }
 
 ID Cell::GetObject(sint32 index)
@@ -1232,7 +1233,7 @@ sint32 Cell::GetDBImprovement(sint32 index) const
 	return -1;
 }
 
-sint32 Cell::IsDead() const
+bool Cell::IsDead() const
 { 
 	return ((m_terrain_type == TERRAIN_DEAD)) ; 
 }
