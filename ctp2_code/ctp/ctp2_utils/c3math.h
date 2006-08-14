@@ -46,10 +46,7 @@
 
 #define ABS(x) (((x) > 0) ? (x) : -(x))
 #define SGN(x) (((x) >= 0) ? 1 : -1)
-
-// #define MAX(x,y) (((x) < (y)) ? (y) : (x))
-// #define MIN(x,y) (((x) < (y)) ? (x) : (y))
-#define MAX(x, y)	std::min(x, y)
+#define MAX(x, y) std::max(x, y)
 #define MIN(x, y) std::min(x, y)
 
 

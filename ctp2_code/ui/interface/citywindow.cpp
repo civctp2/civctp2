@@ -60,8 +60,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3math.h"
 #include "citywindow.h"
+
 #include "ctp2_Window.h"
 #include "citydata.h"
 #include "aui_uniqueid.h"
@@ -132,6 +132,7 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "network.h"
 
 #include "aicause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
+#include <algorithm>    // std::fill
 #include "ArmyPool.h"	// g_armyPool
 
 extern C3UI                         *g_c3ui;
@@ -145,7 +146,40 @@ static sint32 s_isBuilding = 1;
 static sint32 s_isWonder = 1;
 
 CityWindow::CityWindow(AUI_ERRCODE *err)
+:
+	m_window                (NULL),
+	m_statsWindow           (NULL),
+	m_cityData              (NULL),
+	m_cities                (NULL),
+	m_updating              (false),
+    m_queueList             (NULL),
+    m_inventoryList         (NULL),
+	m_happinessList         (NULL),
+    m_pollutionList         (NULL),
+	m_rushBuyButton         (NULL),
+	m_sellButton            (NULL),
+    m_happyIcon             (g_c3ui->LoadImage("upic10.tga")),
+    m_unhappyIcon           (g_c3ui->LoadImage("updi43.tga")),
+    m_growthBar             (NULL),
+	m_happinessBar          (NULL),
+	m_growthDelta           (NULL),
+	m_happinessValue        (NULL),
+	m_buildProgressBar      (NULL),
+	m_globalBox             (NULL),
+	m_globalFood            (NULL),
+    m_globalProduction      (NULL),
+    m_globalTrade           (NULL),
+    m_globalScience         (NULL),
+    m_globalPopulation      (NULL),
+	m_activateButton        (NULL),
+	m_disbandButton         (NULL)
 {
+    std::fill(m_popSpinners, m_popSpinners + POP_MAX, (ctp2_Spinner *) NULL);
+    std::fill(m_resVal, m_resVal + CW_RES_MAX, (ctp2_Static *) NULL);
+    std::fill(m_tabPanels, m_tabPanels + CW_PANEL_MAX, (ctp2_Static *) NULL);
+    std::fill(m_unitId, m_unitId + k_MAX_ARMY_SIZE, 0);
+    std::fill(m_unitButtons, m_unitButtons + k_MAX_ARMY_SIZE, (ctp2_Button *) NULL);
+
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_cityWindowBlock);
 	Assert(m_window);
 	if(!m_window) {
@@ -164,20 +198,11 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_window->AddDockedWindow(m_statsWindow);
 	m_statsWindow->SetDock(m_window);
 
-	m_cityData = NULL;
-	m_cities = NULL;
-
-	m_updating = false;
-
 	MBCHAR buttonBlock[k_AUI_LDL_MAXBLOCK + 1];
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CloseButton");
 	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::Close, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
-
-
-
-
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CityList.Next");
 	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::NextCity, NULL);
@@ -186,10 +211,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CityList.Previous");
 	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::PreviousCity, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
-
-
-
-
 
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Toggle", CityWindow::GovernorToggle, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
@@ -353,7 +374,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 			sprintf(buf, "Tabs.Units.TabPanel.UnitButtons.b%c%c.IconBorder.Button", char(x + '0'), char(y + '0'));
 			m_unitButtons[unitButton] = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, buf);
 			Assert(m_unitButtons[unitButton]);			
-			m_unitId[unitButton] = 0;
 			if(m_unitButtons[unitButton]) {
 				m_unitButtons[unitButton]->Enable(FALSE);
 				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)unitButton);
@@ -368,13 +388,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	m_disbandButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Units.TabPanel.UnitButtons.DisbandButton");
 	m_disbandButton->SetActionFuncAndCookie(DisbandUnitCallback, NULL);
-
-
-
-
-
-	m_happyIcon = g_c3ui->LoadImage("upic10.tga");
-	m_unhappyIcon = g_c3ui->LoadImage("updi43.tga");
 }
 
 
@@ -2178,90 +2191,74 @@ void CityWindow::FillHappinessList()
 	Assert(ht);
 	if(!ht) return;
 
-	sint32 numUnhappies = 0, numHappies = 0;
 
 	cw_HappyData  happies[HAPPY_REASON_MAX];
 
 	ctp2_Static *happinessLabel = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Statistics.TabPanel.HappinessTotalLabel");
-	if(happinessLabel) {
+	if (happinessLabel) 
+    {
+		const char *    format = g_theStringDB->GetNameStr("str_code_CityWinTotalHappinessFormat");
+        if (!format)
+        {
+            format  = "%d";
+        }
+
 		char buf[k_MAX_NAME_LEN];
-		const char *format = g_theStringDB->GetNameStr("str_code_CityWinTotalHappinessFormat");
-		if(format) {
-			sprintf(buf, format, (sint32)m_cityData->GetHappiness());
-		} else {
-			sprintf(buf, "%d", (sint32)m_cityData->GetHappiness());
-		}
+		sprintf(buf, format, (sint32)m_cityData->GetHappiness());
 	}
 
 	sint32 i;
-	for(i = 0; i < HAPPY_REASON_MAX; i++) {
-		double amount;
-		StringId name;
+	sint32 numHappies = 0;
+	for (i = 0; i < HAPPY_REASON_MAX; i++) 
+    {
+		double      amount;
+		StringId    name;
 		ht->GetHappiness((HAPPY_REASON)i, amount, name);
-		if(amount < 0.1 && amount > -0.1)
-			continue;
-
 		
+        if (amount < 0.1 && amount > -0.1)
+			continue;
 
 		happies[numHappies].reason = (HAPPY_REASON)i;
 		happies[numHappies].amount = amount;
 		happies[numHappies].name = name;
 		numHappies++;
-
-
-
-
-
-
-
-
 	}
 
-	Assert(numUnhappies == 0);
-
-	
 	qsort((void *)happies, numHappies, sizeof(cw_HappyData), cw_compareHappyValues);
 	
-
 	m_happinessList->Clear();
-
-	for(i = 0; i < MAX(numHappies, numUnhappies); i++) {
+    for (i = 0; i < numHappies; i++) 
+    {
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_HappyListItem");
 		Assert(item);
 		if(!item) break;
 
-		ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
-#if 0
-		if(i < numUnhappies) {
-			ctp2_Static *unhappyReason = (ctp2_Static *)box->GetChildByIndex(0);
-			unhappyReason->SetText(g_theStringDB->GetNameStr(unhappies[i].name));
+		ctp2_Static *   box         = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static *   happyReason = (ctp2_Static *)box->GetChildByIndex(1);
+		happyReason->SetText(g_theStringDB->GetNameStr(happies[i].name));
 
-			ctp2_Static *unhappyAmount = (ctp2_Static *)box->GetChildByIndex(0);
-			unhappyAmount->SetDrawCallbackAndCookie(DrawUnhappyIcons, (void *)(sint32)unhappies[i].amount, false);
+		if (happies[i].amount > 0) 
+        {
+		    ctp2_Static *   happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
+			happyAmount->SetDrawCallbackAndCookie
+                (DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
+		} 
+        else 
+        {
+			ctp2_Static *   unhappyAmount = (ctp2_Static *)box->GetChildByIndex(0);
+			unhappyAmount->SetDrawCallbackAndCookie
+                (DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
 		}
-#endif
 
-		if(i < numHappies) {
-			ctp2_Static *happyReason = (ctp2_Static *)box->GetChildByIndex(1);
-			happyReason->SetText(g_theStringDB->GetNameStr(happies[i].name));
-
-			ctp2_Static *happyAmount;
-			if(happies[i].amount > 0) {
-				happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
-				happyAmount->SetDrawCallbackAndCookie(DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
-			} else {
-				happyAmount = (ctp2_Static *)box->GetChildByIndex(0);
-				happyAmount->SetDrawCallbackAndCookie(DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
-			}
-
-			char buf[20];
-			sprintf(buf, "%c%d", char(happies[i].amount > 0 ? '+' : ' '), (sint32)happies[i].amount);
-			ctp2_Static *numeric = (ctp2_Static *)box->GetChildByIndex(3);
-			if(numeric) {
-				numeric->SetText(buf);
-			}
+		char buf[20];
+		sprintf(buf, "%c%d", char(happies[i].amount > 0 ? '+' : ' '), (sint32)happies[i].amount);
+		ctp2_Static *numeric = (ctp2_Static *)box->GetChildByIndex(3);
+		if (numeric) 
+        {
+			numeric->SetText(buf);
 		}
-		m_happinessList->AddItem(item);
+
+        m_happinessList->AddItem(item);
 	}
 }
 
