@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Robot initialization and cleanup
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -48,10 +48,6 @@ void roboinit_Initalize(CivArchive &a)
 
 void roboinit_Cleanup()
 {
-	CtpAi::Cleanup();
-	AgreementMatrix::s_agreements.~AgreementMatrix();
-	MapAnalysis::GetMapAnalysis().Resize(0, 0, 0, 1);
-
     delete g_theUnitAstar; 
     g_theUnitAstar = NULL;
 

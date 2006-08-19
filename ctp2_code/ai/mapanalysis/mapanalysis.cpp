@@ -1361,4 +1361,6 @@ void MapAnalysis::Cleanup(){
     DoubleVector().swap(m_goldHandicapRatio);
     DoubleVector().swap(m_scienceHandicapRatio);
     Uint32Vector().swap(m_movementTypeUnion);
+    m_cityOnContinent.Cleanup();
+    m_armyOnContinent.Cleanup();
 }

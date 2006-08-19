@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main Ai File
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,6 +18,8 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,6 +30,7 @@
 //   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
 // - force garrison units to ungroup.
 // - BombardNearbyEnemies before ending turn (during ExecuteOpportunityActions) PFT
+//
 //----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
@@ -51,6 +55,7 @@ public:
 
 	
 	static void Cleanup();
+	static void CleanupEvents();
 
 	
 	static void InitializeEvents();

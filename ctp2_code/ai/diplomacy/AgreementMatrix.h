@@ -18,6 +18,8 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -147,6 +149,7 @@ public:
 	}
 
 	void ClearAgreementsInvolving(const PLAYER_INDEX playerId);
+	static void Cleanup();
 
 private:
 	AgreementVector m_agreements;

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Goal handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,10 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// _DEBUG
+// _DEBUG_SCHEDULER
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,6 +29,7 @@
 // - Added an isStealth parameter in CharacterizeArmy method - Calvitix
 // - Changed the rounds calculation method (not based on default mouvement cost (100),
 //   but based on the minimum cost between start and destination points) - Calvitix
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -585,7 +590,7 @@ void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_
 	Assert(order_type < g_theOrderDB->NumRecords());
 
 	
-	sint32 game_event = s_orderDBToEventMap[order_type];
+	sint32 game_event = ArmyData::OrderToEvent(order_type);
 
 	
 	sint32 range = 0;
@@ -670,29 +675,6 @@ void CTPAgent::MoveIntoTransport()
 	
 	Set_Can_Be_Executed(false);
 }
-
-
-std::vector<sint32> CTPAgent::s_orderDBToEventMap;
-
-void CTPAgent::AssociateEventsWithOrdersDB()
-{
-	
-	const char *event_name;
-	s_orderDBToEventMap.resize(g_theOrderDB->NumRecords());
-	for (int order_index = 0; order_index < g_theOrderDB->NumRecords(); order_index++)
-	{
-		event_name = g_theOrderDB->Get(order_index)->GetEventName();
-		if (strlen(event_name) > 0)
-			s_orderDBToEventMap[order_index] = g_gevManager->GetEventIndex(event_name);
-		else
-		{
-			s_orderDBToEventMap[order_index] = -1;
-			DPRINTF(k_DBG_SCHEDULER, ("AssociateEventsWithOrdersDB: Event %s not found\n",
-				event_name));
-		}
-	}
-}
-
 
 sint32 CTPAgent::DisbandObsoleteUnits()
 {

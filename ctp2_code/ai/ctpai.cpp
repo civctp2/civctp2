@@ -1007,7 +1007,7 @@ void CtpAi::InitializeEvents()
 	DiplomaticStateEventCallbacks::AddCallbacks();
 	
 	
-	CTPAgent::AssociateEventsWithOrdersDB();
+	ArmyData::AssociateEventsWithOrdersDB();
 	
 	
 	
@@ -1074,7 +1074,10 @@ void CtpAi::InitializeEvents()
 
 }
 
-
+void CtpAi::CleanupEvents()
+{
+	ArmyData::DisassociateEventsFromOrdersDB();
+}
 
 
 void CtpAi::Cleanup()
@@ -1084,7 +1087,7 @@ void CtpAi::Cleanup()
 	Governor::Cleanup();
 	Diplomat::CleanupAll();
 	MapAnalysis::GetMapAnalysis().Cleanup(); // Just removes leak reports, actually no real leaks
-	std::vector<sint32>().swap(CTPAgent::s_orderDBToEventMap); // Just removes leak reports, actually no real leaks
+	AgreementMatrix::Cleanup();              // Just removes leak reports, actually no real leaks
 }
 
 

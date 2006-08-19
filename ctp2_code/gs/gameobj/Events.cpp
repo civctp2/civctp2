@@ -136,4 +136,6 @@ void events_Cleanup()
 	ArmyManagerWindow::CleanupEvents();
 	TradeManager::CleanupEvents();
 	UnitManager::CleanupEvents();
+
+	CtpAi::CleanupEvents();
 }

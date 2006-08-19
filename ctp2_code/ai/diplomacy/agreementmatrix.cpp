@@ -454,3 +454,8 @@ void AgreementMatrix::ClearAgreementsInvolving(const PLAYER_INDEX playerId)
 			m_agreements[i] = s_badAgreement;
 	}
 }
+
+void AgreementMatrix::Cleanup()
+{
+	AgreementVector().swap(s_agreements.m_agreements);
+}

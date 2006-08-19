@@ -590,25 +590,20 @@ public:
 
     bool HasVeterans() const;
 
-
-
-    static void Cleanup(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
-
 	//EMOD
 //	void ArmyData::UpgradeNoGold();
 //	void ArmyData::Upgrade();
 //	bool ArmyData::CanUpgradeNoGold(const sint32 i);
 //	bool ArmyData::CanUpgrade(const sint32 i);
 
+    static void DisassociateEventsFromOrdersDB(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
+    static void AssociateEventsWithOrdersDB();
+	static sint32 OrderToEvent(sint32 order) { return s_orderDBToEventMap[order]; };
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;
 
-
     static sint32 *s_orderDBToEventMap;
-
-
-    static void AssociateEventsWithOrdersDB();
 };
 
 #endif

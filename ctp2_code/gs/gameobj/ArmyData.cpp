@@ -9195,7 +9195,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 	ORDER_RESULT result;
 
 	const OrderRecord *order_rec = g_theOrderDB->Get(odb);
-	// Iif not enough gold, just do failure special effects and return	
+	// If not enough gold, just do failure special effects and return	
 	if(order_rec && order_rec->GetGold() > 0) {
 		if(g_player[m_owner]->m_gold->GetLevel() < order_rec->GetGold()) {
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
@@ -10616,10 +10616,10 @@ void ArmyData::AssociateEventsWithOrdersDB()
 	
 	s_orderDBToEventMap = new sint32 [g_theOrderDB->NumRecords()];
 	
-	for (int order_index = 0; order_index < g_theOrderDB->NumRecords(); order_index++)
+	for(sint32 order_index = 0; order_index < g_theOrderDB->NumRecords(); order_index++)
 	{
 		event_name = g_theOrderDB->Get(order_index)->GetEventName();
-		if (strlen(event_name) > 0)
+		if(strlen(event_name) > 0)
 			s_orderDBToEventMap[order_index] = g_gevManager->GetEventIndex(event_name);
 		else
 		{

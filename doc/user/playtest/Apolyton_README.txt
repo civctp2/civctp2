@@ -1,6 +1,6 @@
 #############################################################
 This Build Requires PLAYTEST 10-23-2005 to be installed first!
-http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar 
+http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar
 http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
 http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
 ##############################################################
@@ -50,82 +50,133 @@ http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
 Changelog:
 
 2006-07-15 (Revision 619)
-Added: AINoCityLimit difficulty option
-Added: EnablesPunativeAirstrikes wonder flag, lets you bomb without declaring war
-Fixed: CanSinkInSea for units uses the constDB chance value
-Added: AINoSinking so AI ships don't sink
-Added: Advances can add Production, Food, Science, Gold bonuses
-Added: IsBonusGood to resources so goods not on map can be enabled by buildings or tileimps
-Added: Civilization Bonuses Production, Food, Science, Gold, IncreaseHP, offense land seas, air and boat movement
-Changed: When AIs go to war its now a pop-up
-Added: AutoExpireTreatyBase to userprofiletext to set the turns when treaties expire
-Fixed: Crash when you started more than 11 players
-Added: New gw.txt for new global warming format
-Added: EitherPrerequisite to Advances to enable a fluid tech tree like Civ4
-Added: PrerequisiteTileImp to terrain improvements, now you can specify that an imp must have been built first before you can build the other imp on it.
+Fixed:    Units can now sink by using the ConstDB chance value.
+Changed:  AIs war declaration messages have now pop-up status. (Pretty anoying)
+Added:    AutoExpireTreatyBase to userprofile.txt to set the turns when treaties
+          expire. Actually this is a cheat but necessary as long expiration is 
+          hard encoded.
+Fixed:    Crash in games with more players than governments is the GovernmentDB.
+Changed:  gw.txt has a new alternative format.
+Added:    New database flags for modders:
+- DifficultyDB:
+   AINoCityLimit        Difficulty does not punish AI for city limit violation.
+   AINoSinking          Difficulty makes AI ships unsinkably.
+- ResourceDB:
+   IsBonusGood          Good that not present in city radius can be enabled by
+                        tileimp or building.
+- AdvanceDB:
+   EitherPrerequisite   Advance just needs one of the prerequisites to be 
+                        researched. This allows a fluid tech tree like Civ4.
+- TerrainImprovementDB:
+   PrerequisiteTileImp  TerrainImprovement needs another T.Imp. to be built.
+- WonderDB:
+   EnablesPunativeAirstrikes Wonder allows bombardment without war declaration.
+- CivilisationDB:
+   A bunch of flags that E did not mention.
+- AdvanceDB
+   A bunch of flags that E did not mention.
 
 2006-07-02 (Revision 602)
-Added: ExcludedByWonder to buildings, units, wonders 
-Added: PrerequisiteWonder to buildings and units
-Fixed: CanBombard
-Fixed: CanCloak
-Added: NeedsFeatToBuild to Units
-Fixed: Access Unit Crash
+Fixed:    CanBombard
+Fixed:    CanCloak
+Fixed:    Crash concerning access units.
+Added:    New database flags for modders:
+- WonderDB:
+   ExcludedByWonder     Wonder cannot be built with this wonder.
+- BuildingDB:
+   ExcludedByWonder     Building cannot be built with this wonder.
+   NeedsFeatToBuild     Building needs a certain feat to be built.
+- UnitDB:
+   ExcludedByWonder     Unit cannot be built with this wonder.
+   PrerequisiteWonder   Unit needs a certain wonder to be built.
+   NeedsFeatToBuild     Unit needs a certain feat to be built.
 
 2006-06-09 (Revision 587)
-Added: Capture City options: Occupy, Liberate(give to barbs), and Raze (needs to be improved)
-Fixed: ShowOnMap works A LOT better
-Fixed: Barbarians are not affected by hostileterrain
-Added: TreasuryInterest flag, buildings with this flag give you gold equal to a percentage of your treasury
+Added:    Capture City options: Occupy, Liberate(give to barbs), and Raze 
+          (needs to be improved and should be more similar to those of 
+          ApolytonPack)
+Fixed:    Barbarians are not affected by hostile terrain
+Added:    New database flags for modders:
+ - BuildingDB:
+   TreasuryInterest     Building gives a percentage of treasury of their 
+                        civivilisation to their civilisation.
 
 2006-06-07
-Added: CanExportGood allows for a tileimp with the colony flag and a IntBorderRadius to send a good in its radius to another city
-Changed: CanExportTileValue now works as a radius if you want only one radius IntBorderRadius should be 0
-Changed: Difficulty flag BarbarainCamps now requires a tileimp
-Added: BarbarianCities is now the difficulty flag for barbarian cities
-Added: Difficulty flag BarabariansSpawnBarbarians they spawn more barbs if they entrench
-Added: Tileimp flag SpawnBarbarians for barbcamps
+Changed:  CanExportTileValue now works as a radius if you want only one radius
+          IntBorderRadius should be 0
+Added:    New database flags for modders:
+- TerrainImprovementDB:
+   CanExportGood        TerrainImprovement that is a colony can export good in
+                        its radius to a another city.
+   SpawnBarbarians      TerrainImprovement spawns Barbarian units.
+- DifficultyDB:
+   BarbarainCamps       Difficulty's Barbarian camp TerrainImprovement.
+   BarbarianCities      Difficulty allows Barbarian cities. (What a nonsense E ;))
+   BarabariansSpawnBarbarians Difficulty makes Barbarian units to spawn more 
+                              Barbarian units.
 
 2006-05-27
-Added: HasGulags flag to govt. Each turn a citizen is turned to a slave in this govt
-Added: IsCapitalist flag to govt. Each turn a citizen is turned to a merchant in this govt
-Added: IsTechnocracy flag to govt. Each turn a citizen is turned to a scientist in this govt
-Added: IsAgraraian flag to govt. Each turn a citizen is turned to a farmer in this govt
-Added: HasMindlessTelevision flag to govt. Each turn a citizen is turned toa entertainer in this govt
-Added: CantSell to buildings
-Added: ExcludedbyBuilding if you have any bldgs in the list you cant build this building
-Added: Reform City destroys a building if you have a building that conflicts with settlebuilding of the reforming unit
-Added: GoldPerBuildingAnywhere to wonders (uses with BuildingAnywhere), works like GoldPerTelevision but you can 
-specify which building to collect from (multiplied by population)
-Added: IncreaseHP addeed to buildings. Gives a bonus HP only when building is first built
-Fixed: IsXenophobia changed to IsXenophobic
+Cahnged:  Reform City destroys a building if you have a building that conflicts
+          with settlebuilding of the reforming unit
+Added:    New database flags for modders:
+- BuildingDB:
+   IncreaseHP           Building gives extra hitpoints on first built.
+   CantSell             Building cannot be sold.
+   ExcludedByBuilding   Building cannot be built if this building is present.
+- WonderDB:
+   GoldPerBuildingAnywhere Wonder gives gold per specified building multiplied 
+                           by population.
+- GovernmentDB:
+   HasGulags            Government enslaves each turn a citizen.
+   IsCapitalist         Government turns per turn a citizien into a merchant.
+   IsTechnocracy        Government turns per turn a citizien into a scientist.
+   IsAgraraian          Government turns per turn a citizien into a farmer.
+  HasMindlessTelevision Government turns per turn a citizien into an enter.ner.
+   IsXenophobic         Government reduces population of foreign cities by one 
+                        each turn.
 
 2006-05-24
-Fixed: Removed War from slave attacks now just regardcost
-Fixed: There is now no pop-up when you attack a barbarian
-Added: HostileTerrainCost to terrain. deducts this int from your unit's hp when in hostile terrain.
-Added: ImmuneToHostileTerrain to units, they wont get deduction (nor if it has a fort)
-Added: SettleImprovement to entenched units. (they need the PW to finish it)
-Fixed: pillage non-owned improvement bug.
-Fixed: there is now no pop-up for pillaging. you should know it.
-Fixed: Bomber movement now works like before.
-Added: a unit with SettleBuilding builds that building in in enemy city when the city is converted (for religion spreading)
-Added: Not fully tested by SectarianHappiness Int to DiffDB. Should suffer happiness if citystyles or govts are differnt than the founders
-Added: IsXenophobia to governments. If you have a govt wit this flag then city's of a different city style will lose 1 pop per turn
-Added: Barbariancamps to DiffDB. If a barb entrenches this flag wil have them create a city
+Changed:  Removed War from slave attacks now just regardcost (Must be modified)
+Fixed:    No more war popups for attacking Babarian units.
+Fixed:    Pillage of tile improvements in unowned territory.
+Fixed:    Bomber movement now works like before.
+Added:    New database flags for modders:
+- UnitDB:
+   HostileTerrainCost   Unit losess hitpoint in hostile terrain.
+   ImmuneToHostileTerrain Unit is immune to costs of hostile terrain.
+   SettleImprovement    Unit finishes with enough PW tileimps when entrenched.
+   SettleBuilding       Unit builds building in a foreign city on conversion.
+- DifficultyDB:
+   Barbariancamps       Diff. makes an entrenching Barb. unit to create a city.
+   SectarianHappiness   Difficulty reduces city happiness in conquered cities.
 
 2006-05-16
-Added: Tileimps with colony and  BonusProductionExport, BonusGoldExport, CanExportTileValue flags can add shields outside player radius.
-Fixed: OnePerCiv now works for buildings
-Added: CanHarvest to units that also CanEntrench. Adds the terrain gold to your treasury
+Added:    Tileimps with colony and BonusProductionExport, BonusGoldExport, 
+          CanExportTileValue flags can add shields outside player radius.
+Added:    New database flags for modders:
+- UnitDB:
+   CanHarvest           Unit that can entrench adds terrain gold to treasury.
 
 2006-05-13
-Added: AICityDefenderBonus to difficulty database, it adds population size to city defense.
-Added: NeedsFeatToBuild to Units, Buildings, and Wonders. Needs more testing.
-Added: CivilisationOnly to Units, Buildings, and Wonders.
-Added: NeedsCityGoodAnyCity to Advances. Now you can specify that you have to have a good somewhere to research. 
-Added: AddsASlave to goods. Now if you are collecting a good with this flag it wil add a slave to your city.
-Added: OnePerCiv to Wonders. But still needs work.
+Added:    New database flags for modders:
+- DifficultyDB:
+   AICityDefenderBonus  Difficulty gives AI cities a adefence population bonus.
+- UnitDB:
+   NeedsFeatToBuild     Unit need a certain feat to be built.
+   CivilisationOnly     Unit can only built by given civilisation.
+- BuildingDB:
+   NeedsFeatToBuild     Building need a certain feat to be built.
+   CivilisationOnly     Building can only built by given civilisation.
+- WonderDB:
+   NeedsFeatToBuild     Wonder need a certain feat to be built.
+   CivilisationOnly     Wonder can only built by given civilisation.
+   OnePerCiv            Wonder can be build in every civ once.
+- AdvanceDB:
+   NeedsCityGoodAnyCity Advance needs a good in any city to be researched.
+- ResourceDB:
+   AddsASlave           Good collected in a city adds each turn a slave to this
+                        city. Actually it is a stupid idea, because soon your
+                        city is full of slaves.
 
 2006-05-03
 Added:    New database flags for modders:
@@ -140,8 +191,8 @@ Added:    New database flags for modders:
 2006-04-29
 Added:    New database flags for modders:
 - UnitDB:
-   TargetsCivilians     Unit bombard civilians instead of other units.
-   PrecisionStrike      Unit bombards buildings instead of other units.
+   TargetsCivilians     Unit bombard civilians instead other units.
+   PrecisionStrike      Unit bombards buildings instead other units.
    MultipleAttack       Unit can attack repeatedly per turn with enough MPs.
 - RessourceDB:
    AvailableAdvance     Good needs a specific advance to be collected by a city.
@@ -150,37 +201,37 @@ Added:    New database flags for modders:
    HappyInc             Good increases city happiness if it is traded.
 
 2006-04-14
-Added: CanCaptureTile check in pillage. Units with this flag capture nemy tiles
-  instead of pillaging them
-Added: CanBeGifted to units and now a human player can gift units to players 
-  not at war with and you get regard bonus based on attack divided by 5
-Added: DeniedToEnemy, tileimps that have a movecost wont count with this flag 
-  for players you are at war with
-Added: Sea pirates! barbarians may have navies
-Fixed: Bug that disbanded all units when you tried to add a settler to city 
-Fixed: Goodyhut crash caused by having more units than advances
+Added:    Pirates, unlike in Civ2 only boats with attack, no transports.
+Fixed:    Disbanding a settler in a city does not disband all other units there.
+Fixed:    Goodyhut crash occuring if UnitDB is bigger than AdvanceDB.
+Added:    New database flags for modders:
+- UnitDB:
+   CanCaptureTile       Unit captures an enemy tile instead of pillaging it. (Should be seperated)
+   CanBeGifted          Unit can be gifted to a non-enemy player. A diplomatic
+                        regard bonus is awarded. It is based on attack devided
+                        by five. (The five should go to ConstDB or DiffDB or 
+                        CivilisationDB, etc.)
+- TerrainImprovementDB:
+   DeniedToEnemy        TerrainImprovement does not give move boni to enemies.
 
 2006-04-01
-Added: ShowOnMap now you can specify a certain tileimp to be built is a wonder 
-  or building is built
-Added: ObsoleteUnit flag; units can be obsolete by other units availability not 
-  just techs
-Added: MoveBonus flag for units; now you can specify how much points a unit 
-  will lose when it moves. MoveBonus 33 is like Civ2's AllTerrainAsRoads. Note 
-  going to different cost imps might not be possible if you lack move points.
-Added: GoldPerUnitSupport Units have a GoldHunger impact on cost
-Added: GoldHunger units can now have a variable gold cost
-Added: BorderRadius for wonders so wonders can increase border radius
+Added:    New database flags for modders:
+- UnitDB:
+   ObsoleteUnit         Unit it is obsolete by another unit instead by a tech.
+   MoveBonus            Unit specific move costs for all kind of terrain 
+                        including roads. (Has to be fixed)
+   GoldHunger           Unit needs this amount of gold per turn as support.
+   GoldPerUnitSupport   Should be the same as above. (No idea what the difference is)
+- WonderDB:
+   BorderRadius         Wonder increases the border radius of the civ's cities
 
 2006-03-22
-Added: GoodyHutExcluded flag (just in case) for advances
-Added: Messages for verifyattack and move into enemy. If you move into an enemy 
-  or attack without declaring war you will get a popup, but the popup doesnt let 
-  you declare war (yet) you have to do that through the diplomacy screen.
-Added: Newupkeep flags,although not necessary (may remove)
-Added: Gold bonus to AI so they dont have to be hurt by negative values. If a 
-  cities gold is less than zero for an AI it is automatically set to zero so 
-  they dont get hurt by new gold modifiers
+Added:    Accidental move into an enemy or city causes a popup message for war 
+          declaration confirmation. For now war must be declared from the 
+          diplomacy screen. (To be fixed)
+Added:    New database flags for modders:
+- AdvanceDB:
+   GoodyHutExcluded     Advance cannot be obtained froma goody hut.
 
 2006-03-11
 Added:    New database flags for modders:
@@ -731,8 +782,6 @@ Fixed: \ctp2_data\english\gamedata\add_str.txt updated to align with 1.11
 
 2003-11-12
 Fixed: English ldl_str.txt corrected to the correct description for Neptune world.
-Fixed: Do not cause an Assert failure - in the debug version - when slaves revolt and 
-  capture a city.
 Fixed: Replaced Shield references with Food ones in the food functions.
 Fixed: Removed an AI mental block which prevented it from placing gold improvements on 
   forest tiles. Unfortunately, this is not a very general solution: it will not work for 
@@ -792,11 +841,11 @@ Added: A user interface option: Enables you to view cost and effect of all known
   (Well has to be added, if the game does not do it automaticly.)
   There is no in-game screen to modify this setting (not yet).
 Fixed: AI-AI-Diplomacy actually happen now.
-Added: Two new flags for the terrainDB to allow modders to customize the graphics for 
+Added: Two new flags for the TerrainDB to allow modders to customize the graphics for 
   goody huts, this modification allows the modder to define for each terrain a 
   different hut graphic, for example you could have glacier like style huts for icy 
   terrains or a dessert or oasis like ruin/hut for desserts and so on. The new flags 
-  in the terrainDB are optional if both of these flags are missing or just one of them 
+  in the TerrainDB are optional if both of these flags are missing or just one of them 
   a default image is used, like it is in the original CTP2. The terrain.txt here is a 
   modified version, I replaced some of the ruins graphics with another graphic that is 
   part of the tile file already. This terrain.txt is meant as a base for disscussion, 

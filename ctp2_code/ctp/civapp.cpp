@@ -1831,7 +1831,6 @@ sint32 CivApp::CleanupApp(void)
 		CleanupAppDB();
 		CivPaths_CleanupCivPaths();
 		SlicSegment::Cleanup();
-		ArmyData::Cleanup();
 
 // COM needed for DirectX Moviestuff
 #ifdef WIN32	
@@ -2683,10 +2682,6 @@ sint32 CivApp::CleanupGame(bool keepScenInfo)
 
 	
 	ProcessUI(target_milliseconds, used_milliseconds); 
-
-	
-	roboinit_Cleanup();
-
 	
 	gameinit_Cleanup();
 
@@ -2694,9 +2689,6 @@ sint32 CivApp::CleanupGame(bool keepScenInfo)
 
 	
 	gameEventManager_Cleanup();
-
-	
-
 
 	
 	sprite_Cleanup();

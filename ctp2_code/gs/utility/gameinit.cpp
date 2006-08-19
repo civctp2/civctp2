@@ -2761,6 +2761,8 @@ void gameinit_Cleanup(void)
 	Astar_Cleanup();
 
 	CHECKDELETE(g_rand);
+	roboinit_Cleanup();
+	CtpAi::Cleanup();
 }
 
 sint32 gameinit_ResetForNetwork()
