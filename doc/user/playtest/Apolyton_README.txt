@@ -1,15 +1,8 @@
-#############################################################
-This Build Requires PLAYTEST 10-23-2005 to be installed first!
-http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar
-http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
-http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
-##############################################################
-
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION.
 This version of the Call To Power 2 executable developed at apolyton.net
 
 Contact the authors on the Apolyton forums at
-http://apolyton.net/forums/showthread.php?s=&threadid=147969
+http://apolyton.net/forums/forumdisplay.php?s=&forumid=213
 or at ctp2source@apolyton.net
 
 
@@ -20,34 +13,52 @@ install of CTP2. It should also be no problem to install over a patched
 version of CTP2, or over a previous playtest version.
 
 In theory this version is now compatible with most of the mods, but special
-actions may be required to make them work properly.  Please visit the
+actions may be required to make them work properly. Please visit the
 thread mentioned below and post queries if you desire further information.
 
 Installation instructions:
-unzip into your CTP2 dir and play.  If you get warnings about overwriting
-existing files then you have unzipped to the correct location.
+Unzip into your CTP2 directory and play. If you get warnings about 
+overwriting existing files then you have unzipped to the correct location.
 It might be wise, if you have the space available, to make a copy of
-your CTP dir and unzip this into the copy, so that you can preserve an
+your CTP2 directory and unzip this into the copy, so that you can preserve an
 unchanged copy for playing mods, etc.
 
 Please report any problems, bugs, crashes, etc. in the following threads:
 http://apolyton.net/forums/showthread.php?s=&threadid=147969
 
-Latest Source Code files at: http://ctp2.darkdust.net/
+For further reading here are the previous playtest threads:
+http://apolyton.net/forums/showthread.php?threadid=103817
+http://apolyton.net/forums/showthread.php?threadid=115144
+http://apolyton.net/forums/showthread.php?threadid=127059
+
+
+Latest Source Code files van be found at: http://ctp2.darkdust.net/
 
 Playtesting would be most useful if it tests the most recent changes, which
 are described briefly below, and in more detail in ChangeLog.txt
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
-#############################################################
-This Build Requires PLAYTEST 10-23-2005 to be installed first!
-http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.1of3.rar
-http://apolyton.net/upload/view.php?file=10554_2005.09.12.CTP2.Playtest.2of3.rar
-http://apolyton.net/upload/view.php?file=10554_2005.10.23.CTP2.Playtest.3of3.rar
-##############################################################
 
-Changelog:
+Brief Changelog:
+
+2006-08-26 (Revision 632)
+Fixed:    Missing wonder started messages
+Fixed:    Broken city happiness display
+Fixed:    Autosave - Quicksave permutation
+Added:    New database flags for modders:
+- DifficuiltyDB
+   AIFreeUpgrade        Difficulty allows the AI to upgrade its units for free.
+   AINoShieldHunger     Difficulty maintains AI armies without shields.
+   AINoGoldHunger       Difficulty maintains AI armies without gold.
+   GoldPerUnitSupport   Difficulty adds this * GoldHunger * wages * readiness per unit.
+   GoldPerCity          Difficulty adds this * cities * CityLimit
+- TerrainImprovementDB
+   CanBuildWasteland    TerrainImprovement can be built in unowned territory.
+   CanBuildAlly         TerrainImprovement can be built in terrotory of your 
+                        allys. No idea what the sense behind this is, because 
+                        you can build you TerrainImprovements in the territory
+                        of your allys anyway.
 
 2006-07-15 (Revision 619)
 Fixed:    Units can now sink by using the ConstDB chance value.
