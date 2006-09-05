@@ -29,12 +29,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
-#include "player.h"
-#include "c3math.h"
-
 #include "CounterResponseEvent.h"
+
+#include <algorithm>    // std::max
+#include "player.h"
+
 
 #include "Events.h"
 #include "GameEventUser.h"
@@ -525,7 +524,7 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 	sint32 sender_trade_total = map_analysis.GetTotalTrade(sender);
 	sint32 receiver_piracy = map_analysis.GetPiracyIncomeByPlayer(receiver,sender);
 	sint32 sender_piracy = map_analysis.GetPiracyIncomeByPlayer(sender, receiver);
-	sint32 sender_result_value = MAX(sender_result.science, sender_result.gold);
+    sint32 sender_result_value = std::max<sint32>(sender_result.science, sender_result.gold);
 
 	sint32 accept_priority = 
 		sender_diplomat.GetAcceptPriority(receiver, receiver_response.counter.second_type);

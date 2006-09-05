@@ -29,22 +29,17 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "c3math.h"
-
-#include "ProposalAnalysis.h"
-
 #include "ProposalResponseEvent.h"
 
+#include <algorithm>            // std::max, std::min
+#include "ProposalAnalysis.h"
 #include "Events.h"
 #include "GameEventUser.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "StrDB.h"
 #include "GameEventManager.h"
-
 #include "aicause.h"
-
 #include "Diplomat.h"
 #include "mapanalysis.h"
 #include "AgreementMatrix.h"
@@ -991,7 +986,7 @@ STDEHANDLER(CeasefireForGold_ProposalResponseEvent)
 
 	
 	sint32 extort_gold = 
-		MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
+        std::min(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
 
 	
 	if (sender_proposal.detail.first_arg.gold > extort_gold)
@@ -1409,8 +1404,9 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 	}
 
 	DIPLOMATIC_STRENGTH sender_strength = 
-		MAX(g_player[sender]->GetRelativeStrength(foreigner),
-			g_player[sender]->GetRelativeStrength(receiver));
+        std::max(g_player[sender]->GetRelativeStrength(foreigner),
+			     g_player[sender]->GetRelativeStrength(receiver)
+                );
 
 	
 	if (sender_strength > DIPLOMATIC_STRENGTH_VERY_STRONG)

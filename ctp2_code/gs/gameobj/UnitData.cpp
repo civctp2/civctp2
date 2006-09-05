@@ -69,6 +69,7 @@
 #include "c3.h"
 #include "UnitData.h"
 
+#include <algorithm>        // std::max
 #include "ConstDB.h"
 #include "StrDB.h"
 #include "WonderRecord.h"
@@ -98,7 +99,6 @@
 #include "net_info.h"
 #include "net_unit.h"
 
-#include "c3math.h"
 #include "Vision.h"
 #include "CivilisationPool.h"
 #include "SelItem.h"
@@ -2490,10 +2490,8 @@ void UnitData::Serialize(CivArchive &archive)
 		m_text[0] = 0;
 #endif
 		
-		if (m_cargo_list)
-			delete m_cargo_list;
-
 		archive>>tmp;
+		delete m_cargo_list;
 		if (tmp)
 		{
 			m_cargo_list = new UnitDynamicArray();
@@ -2503,22 +2501,11 @@ void UnitData::Serialize(CivArchive &archive)
 			m_cargo_list=NULL;
 
 		
-		if (m_city_data)
-			delete m_city_data;
-
 		archive>>tmp ;
-		if (tmp)
-			m_city_data = new CityData(archive);
-		else
-			m_city_data = NULL ;
+		delete m_city_data;
+        m_city_data = (tmp) ? new CityData(archive) : NULL;
 
-		
-		if (m_actor)
-		{
-			delete m_actor;
-			m_actor = NULL;
-		}
-
+        delete m_actor;
 		m_actor = new UnitActor(archive);
 
 		m_sprite_state = m_actor->GetSpriteState();
@@ -2532,42 +2519,21 @@ void UnitData::Serialize(CivArchive &archive)
 
 		uint32 hasOld;
 
-		
-		if (m_lesser)
-		{
-			delete m_lesser;
-			m_lesser = NULL;
-		}
-
-		
-		if (m_greater)
-		{
-			delete m_greater;
-			m_greater = NULL;
-		}
+		archive >> hasOld;
+		delete m_lesser;
+        m_lesser = (hasOld) ? new UnitData(archive) : NULL;
 
 		archive >> hasOld;
-		if (hasOld) {
-			m_lesser = new UnitData(archive);
-		} else {
-			m_lesser = NULL;
-		}
-
-		archive >> hasOld;
-		if (hasOld) {
-			m_greater = new UnitData(archive);
-		} else {
-			m_greater = NULL;
-		}
-
+		delete m_greater;
+        m_greater = (hasOld) ? new UnitData(archive) : NULL;
 	}
 }
 
 
 uint32 UnitData_UnitData_GetVersion(void)
-	{
-	return (k_UNITDATA_VERSION_MAJOR<<16 | k_UNITDATA_VERSION_MINOR) ;
-	}
+{
+	return (k_UNITDATA_VERSION_MAJOR<<16 | k_UNITDATA_VERSION_MINOR);
+}
 
 void UnitData::GetConsumptionStats(sint32 &foodConsumed) const 
 {
@@ -2676,14 +2642,14 @@ bool UnitData::CanInterceptTrade() const
 ORDER_RESULT UnitData::InterceptTrade()
 {
 	Cell* cell = g_theWorld->GetCell(m_pos);
-	sint32 i;
-	sint32 numPirated = 0;
-
 	Assert(cell);
 	if(!cell) return ORDER_RESULT_ILLEGAL;
 
 	
 	
+	sint32 i;
+	sint32 numPirated = 0;
+
 	for(i = cell->GetNumTradeRoutes() - 1; i >= 0; i--) 
 	{
 		TradeRoute route = cell->GetTradeRoute(i);
@@ -2937,7 +2903,7 @@ void UnitData::DoVision(UnitDynamicArray &revealedUnits)
 	
 	DynamicArray<Installation> instArray;
 
-	maxVisionRange = MAX(terrainutil_GetMaxVisionRange(),(GetVisionRange()));
+    maxVisionRange = std::max(terrainutil_GetMaxVisionRange(), GetVisionRange());
 	maxrsq = (sint32)((maxVisionRange + 0.5) * (maxVisionRange + 0.5));
 	topleft = m_pos;
 	topleft.x -= sint16(maxVisionRange);
@@ -3075,7 +3041,7 @@ void UnitData::UndoVision()
 	
 	DynamicArray<Installation> instArray;
 
-	maxVisionRange = MAX(terrainutil_GetMaxVisionRange(), (GetVisionRange()));
+    maxVisionRange = std::max(terrainutil_GetMaxVisionRange(), (GetVisionRange()));
 	maxrsq = (sint32)((maxVisionRange + 0.5) * (maxVisionRange + 0.5));
 	topleft = m_pos;
 	topleft.x -= sint16((GetVisionRange()));

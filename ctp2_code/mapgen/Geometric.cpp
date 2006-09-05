@@ -4,17 +4,15 @@
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
-#if !defined(USE_COM_REPLACEMENT)
+#if defined(WIN32)
 #include "c3.h"
-#else
-#include <algorithm>
+#endif
 
 #if defined(HAVE_STRING_H)
 #include <string.h>
 #endif
 
-using std::max;
-#endif
+#include <algorithm>
 #include "Geometric.h"
 #include "FaultGen.h"
 #include <stdlib.h>

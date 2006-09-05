@@ -12,11 +12,9 @@
 
 #if defined(WIN32)
 #include "c3.h"
-#else
-#include <algorithm>
-using std::min;
 #endif
 
+#include <algorithm>
 #include "FaultGen.h"
 #include <stdlib.h>
 #include "IC3Rand.h"

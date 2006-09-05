@@ -1,7 +1,8 @@
 #include "c3.h"
-#include "c3math.h"
-#include "pixelutils.h"
 #include "arproces.h"
+
+#include <algorithm>        // std::min, std::max
+#include "pixelutils.h"
 
 #define MINSAMPLEVAL		0
 #define MAXSAMPLEVAL		255
@@ -203,7 +204,7 @@ void GenHistogram(Pixel32 *image, unsigned Width, unsigned Height, unsigned Col,
 
 
 
-			Histogram[MAX(r, MAX(g, b))] += 1;
+            Histogram[std::max(r, std::max(g, b))] += 1;
 
 
 		}
@@ -286,30 +287,38 @@ void AdjImageBrightness(Pixel32 *image, short BrightnessFactor,
 
 void RGBtoHSV( double r, double g, double b, double *h, double *s, double *v )
 {
-	double min, max, delta;
+    double const    maximum = std::max(r, std::max(g, b));
 
-	min = MIN( r, MIN(g, b) );
-	max = MAX( r, MAX(g, b) );
-	
-	*v = max;				
-	delta = max - min;
-	if( max != 0 )
-		*s = delta / max;		
-	else {
-		
-		*s = 0;
-		*h = -1;
-		return;
-	}
-	if( r == max )
+	*v = maximum;				
+	if (0.0 == maximum)
+    {
+        *s = 0.0;
+        *h = -1.0;
+        return;
+    }
+
+    double const    minimum = std::min(r, std::min(g, b));
+    double const    delta   = maximum - minimum;
+	*s = delta / maximum;	
+
+	if (r == maximum)
+    {
 		*h = ( g - b ) / delta;		
-	else if( g == max )
-		*h = 2 + ( b - r ) / delta;	
+    }
+	else if (g == maximum)
+    {
+		*h = 2.0 + ( b - r ) / delta;	
+    }
 	else
-		*h = 4 + ( r - g ) / delta;	
-	*h *= 60;				
-	if( *h < 0 )
-		*h += 360;
+    {
+		*h = 4.0 + ( r - g ) / delta;	
+    }
+	*h *= 60.0;				
+	
+    if (*h < 0.0)
+    {
+		*h += 360.0;
+    }
 }
 void HSVtoRGB(double h, double s, double v, double *r, double *g, double *b)
 {

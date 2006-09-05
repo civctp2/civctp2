@@ -51,8 +51,8 @@
 #include "c3.h"
 #include "Diplomat.h"
 
+#include <algorithm>            // std::min
 #include "c3errors.h"
-#include "c3math.h"
 #include "MoveFlags.h"
 #include "MapPoint.h"
 #include "player.h"
@@ -95,7 +95,6 @@
 #include "CivilisationRecord.h"
 #include "Civilisation.h"
 #include "TurnCnt.h"            // g_turn
-#include <algorithm>
 #include "AgreementMatrix.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
@@ -1756,7 +1755,7 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 	case PROPOSAL_OFFER_GIVE_GOLD:
 		
-		gold = MIN(proposal_arg.gold, g_player[sender]->m_gold->GetLevel());
+        gold = std::min(proposal_arg.gold, g_player[sender]->m_gold->GetLevel());
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SubGold,
@@ -1771,7 +1770,7 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 	case PROPOSAL_REQUEST_GIVE_GOLD:
 		
-		gold = MIN(proposal_arg.gold, g_player[receiver]->m_gold->GetLevel());
+		gold = std::min(proposal_arg.gold, g_player[receiver]->m_gold->GetLevel());
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SubGold,

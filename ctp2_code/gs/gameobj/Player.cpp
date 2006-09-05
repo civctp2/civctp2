@@ -94,10 +94,10 @@
 #include "c3.h"
 #include "player.h"
 
+#include <algorithm>    // std::max
 #include "c3debug.h"
 #include "Globals.h"
 #include "c3errors.h"
-#include "c3math.h"
 
 #include "Army.h"
 #include "cellunitlist.h"
@@ -1696,7 +1696,7 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 		MainControlPanel::UpdateCityList();
 	}
 
-	m_maxCityCount = MAX(m_maxCityCount, m_all_cities->Num());
+    m_maxCityCount = std::max(m_maxCityCount, m_all_cities->Num());
 
 	return true;
 }
@@ -4277,7 +4277,8 @@ void Player::AttemptRevolt(void)
 						u = m_all_cities->Get(j) ;
 						u.GetPos(neighbourPos) ;
 						cityData = u.GetData()->GetCityData() ;
-						inciteBonus = g_theConstDB->GetRevoltInfluenceDistance() - MAX(abs(cityPos.x - neighbourPos.x), abs(cityPos.y - neighbourPos.y)) ;
+                        inciteBonus = g_theConstDB->GetRevoltInfluenceDistance() - 
+                                        std::max(abs(cityPos.x - neighbourPos.x), abs(cityPos.y - neighbourPos.y));
 						if (inciteBonus >= 0)						
 							{
 							if (cityData->ShouldRevolt(inciteBonus))

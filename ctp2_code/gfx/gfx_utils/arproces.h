@@ -1,3 +1,13 @@
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
+#ifndef ARPROCES_H__
+#define ARPROCES_H__
+
+#include "ctp2_inttypes.h"  // sint32, uint32
+#include "pixeltypes.h"     // Pixel32
+
 sint32 RealConvolution(Pixel32 *InImage,
 							   uint32 Col, uint32 Row,
 							   uint32 Width, uint32 Height,
@@ -18,3 +28,5 @@ void hsv_to_rgb(double h, double s, double v, double *r, double *g, double *b);
 void AdjustSV(Pixel32 *image, uint32 width, uint32 height, double deltaS, double deltaV);
 
 void BlendWithGray(Pixel32 *image, uint32 width, uint32 height, Pixel16 grayR, Pixel16 grayG, Pixel16 grayB);
+
+#endif

@@ -28,6 +28,8 @@
 #include "c3.h"
 #include "boundingrect.h"
 
+#include <algorithm>        // std::max, std::min
+
 void BoundingRect::Initialize(const MapPoint & xy_center,
 const sint16 radius,
 const MapPoint & map_size,

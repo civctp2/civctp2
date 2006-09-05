@@ -31,6 +31,7 @@
 #include "c3.h"
 #include "NProposalEvent.h"
 
+#include <algorithm>            // std::max, std::min
 #include "Events.h"
 #include "GameEventUser.h"
 #include "Unit.h"
@@ -46,7 +47,6 @@
 #include "SelItem.h"			// g_selected_item
 #include "ctpai.h"
 #include "ProposalAnalysis.h"
-#include "c3math.h"
 #include "UnitData.h"
 #include "UnitPool.h"			// g_theUnitPool
 #include "network.h"
@@ -549,7 +549,7 @@ STDEHANDLER(CeaseFire_NewProposalEvent)
 		new_proposal.detail.tone = DIPLOMATIC_TONE_MEEK;
 
 		sint32 max_can_pay_gold = 
-		MIN(g_player[receiver]->m_gold->GetIncome() * 2, g_player[sender]->GetGold());
+            std::min(g_player[receiver]->m_gold->GetIncome() * 2, g_player[sender]->GetGold());
 
 		
 		max_can_pay_gold = ProposalAnalysis::RoundGold(max_can_pay_gold);
@@ -1944,7 +1944,7 @@ STDEHANDLER(RequestTribute_NewProposalEvent)
 		
 		type = PROPOSAL_REQUEST_GIVE_GOLD;
 		tone = DIPLOMATIC_TONE_ANGRY;
-		gold = MIN(at_risk_value, sender_income);
+        gold = std::min(at_risk_value, sender_income);
 	}
 	
 	else if ((MOTIVATION_TYPE) motivation_type == MOTIVATION_DESIRE_ENLIST_FRIEND)
@@ -1971,8 +1971,8 @@ STDEHANDLER(RequestTribute_NewProposalEvent)
 
 		type = PROPOSAL_OFFER_GIVE_GOLD;
 		tone = DIPLOMATIC_TONE_EQUAL;
-		gold = MAX(receiver_income / 2, 100);
-		gold = MIN(gold, sender_savings);
+        gold = std::max(receiver_income / 2, 100);
+        gold = std::min(gold, sender_savings);
 	}
 	else
 		
