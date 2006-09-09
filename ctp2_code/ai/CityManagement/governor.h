@@ -79,6 +79,7 @@ class Governor;
 #include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
 #include "SlicContext.h"    // SlicContext
 #include "StrategyRecord.h" // StrategyRecord
+#include "citydata.h"       // NEW_RESOURCE_PROCESS
 
 class CityData;
 class BuildingBuildListRecord;

@@ -656,32 +656,13 @@ void CauseAndEffectTab::SetHappinessIcon(ctp2_Static *control,
 
 void CauseAndEffectTab::UpdateCities()
 {
-	
 	UnitDynamicArray *cityList =
 		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
-	for(int cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
-		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
+	for(sint32 i = 0; i < cityList->Num(); i++)
+	{
+		CityData *cityData = (*cityList)[i].GetData()->GetCityData();
 
-		
-		static sint32 gold = 0;
-		
-		cityData->CollectResources();
-#if defined(NEW_RESOURCE_PROCESS)
-		cityData->ProcessResources();
-		cityData->CalculateResources();
-		cityData->CalcPollution();
-		cityData->DoSupport(true);
-#else
-		cityData->ProcessProduction(true);
-		cityData->DoSupport(true);
-		cityData->SplitScience(true);
-		cityData->ProcessFood();
-		cityData->CollectOtherTrade(true, false);
-#endif
-		cityData->CalcHappiness(gold, false);
-		cityData->EatFood();
-		cityData->CalculateGrowthRate();
+		cityData->ProcessAllResources();
 	}
 }
 

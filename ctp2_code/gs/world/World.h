@@ -203,8 +203,8 @@ public:
     void AllocateMap();
     void Reset(sint16 x, sint16 y, BOOL yWrap, BOOL xWrap);
     
-    inline sint32 IsYwrap() const { return m_isYwrap; } 
-    inline sint32 IsXwrap() const { return m_isXwrap; } 
+    inline bool IsYwrap() const { return m_isYwrap != 0; } 
+    inline bool IsXwrap() const { return m_isXwrap != 0; } 
 
 	
 	void SetXWrap(bool on) {m_isXwrap = on;};

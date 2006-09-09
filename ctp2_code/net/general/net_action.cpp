@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -582,7 +582,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Player %d setting readiness to %d\n",
 								index, m_data[0]));
 			if(g_player[index]) {
-				g_player[index]->SetReadinessLevel((READINESS_LEVEL)m_data[0], m_data[1]);
+				g_player[index]->SetReadinessLevel((READINESS_LEVEL)m_data[0], m_data[1] != 0);
 			}
 			
 			
@@ -1759,7 +1759,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Assert(index == (sint32)m_data[0]);
 			if(index == (sint32)m_data[0]) {
 				if(g_player[index]) {
-					g_player[index]->BreakCeaseFire(m_data[1], m_data[2]);
+					g_player[index]->BreakCeaseFire(m_data[1], m_data[2] != 0);
 				}
 			}
 			break;

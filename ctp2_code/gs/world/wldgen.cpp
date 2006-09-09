@@ -253,8 +253,8 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	A_star_heuristic = new A_Star_Heuristic_Cost
 							(m_size.y,
 							 m_size.x,
-							 m_isYwrap,
-							 m_isXwrap
+							 IsYwrap(),
+							 IsXwrap()
 							);
 }
 

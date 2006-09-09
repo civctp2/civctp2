@@ -975,19 +975,21 @@ public:
 	double GetMaxProcessGold() const { return m_max_processed_terrain_gold - m_grossGoldCrimeLoss - m_grossGoldConversionLoss;}
 	double GetMaxProcessScie() const { return m_max_processed_terrain_scie - m_grossScieCrimeLoss; }
 	void GetSpecialistsEffect(sint32 ring, double &farmersEff, double &laborersEff, double &merchantsEff, double &scientistsEff) const;
-	double GetFarmersEffect(sint32 ring){ return m_farmersEff[ring];}
-	double GetLaborersEffect(sint32 ring){ return m_laborersEff[ring];}
-	double GetMerchantsEffect(sint32 ring){ return m_merchantsEff[ring];}
-	double GetScientistsEffect(sint32 ring){ return m_scientistsEff[ring];}
+	double GetFarmersEffect(sint32 ring) const { return m_farmersEff[ring];}
+	double GetLaborersEffect(sint32 ring) const { return m_laborersEff[ring];}
+	double GetMerchantsEffect(sint32 ring) const { return m_merchantsEff[ring];}
+	double GetScientistsEffect(sint32 ring) const { return m_scientistsEff[ring];}
 
 #endif
 
 	sint32 StyleHappinessIncr() const;
-	sint32 GoodHappinessIncr() const; //EMOD 4-27-2006
-	bool CanCollectGood(sint32 good) const; //EMOD 4-27-2006 
+	sint32 GoodHappinessIncr() const;              //EMOD 4-27-2006
+	bool CanCollectGood(sint32 good) const;        //EMOD 4-27-2006 
 	bool IsBuildingOperational(sint32 type) const; //EMOD 5-15-2006
-	sint32 SectarianHappiness() const; //EMOD 5-24-2006
-//	sint32 AddGoodToCity (sint32 good) const; //EMOD 5-31-2006
+	sint32 SectarianHappiness() const;             //EMOD 5-24-2006
+//	sint32 AddGoodToCity (sint32 good) const;      //EMOD 5-31-2006
+
+	void ProcessAllResources();
 
 private:
 	bool    IsBankrupting(void) const;

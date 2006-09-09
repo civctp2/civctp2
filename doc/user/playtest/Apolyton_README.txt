@@ -42,6 +42,13 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
+2006-09-09 (Revision 634)
+Fixed:    AI slider handling
+Added:    For modders: STRATEGY_TOO_MANY_CITIES and STRATEGY_NO_REVOLUTON are
+          loaded automaticly if present in startegies.txt and not present in
+          personalities.txt. This way modders have less work if they want to
+          make the AI respect the city limit.
+
 2006-08-26 (Revision 632)
 Fixed:    Missing wonder started messages
 Fixed:    Broken city happiness display
@@ -351,7 +358,7 @@ Added:    New database flags for modders:
    NeedsCityGood        Wonder can only be built with this good in the city.
    EnablesGood          Wonder gives a certain good.
 
-2005-10-23
+2005-10-23 (Revision 477)
 Fixed:    Misc crashes
 Fixed:    Broken/incorrect links in the great library
 Fixed:    Topic display bug in great library

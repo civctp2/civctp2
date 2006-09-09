@@ -1261,7 +1261,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Break cease fires between %d and %d\n",
 								m_data, m_data2));
 			if(g_player[m_data]) {
-				g_player[m_data]->BreakCeaseFire(m_data2, m_data3);
+				g_player[m_data]->BreakCeaseFire(m_data2, m_data3 != 0);
 			}
 			break;
 			

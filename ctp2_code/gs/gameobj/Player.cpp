@@ -1980,7 +1980,7 @@ void Player::BeginTurnProduction()
 		m_total_production += delta;
 	}
 
-// EMOD New Version 5-16-2006; moved 8-2-2006 to allow for FranchiseProduction
+    // EMOD New Version 5-16-2006; moved 8-2-2006 to allow for FranchiseProduction
 	if ((0 < m_allInstallations->Num()) && (0 < n)) {
 		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 			Installation inst = m_allInstallations->Access(b);
@@ -1988,7 +1988,7 @@ void Player::BeginTurnProduction()
 
 			sint32 bpe;
 			if (rec->GetBonusProductionExport(bpe)) {
-				m_materialPool->AddMaterials(bpe);		//i.e. allows oil to give PW
+				m_materialPool->AddMaterials(bpe);		// i.e. allows oil to give PW
 			}
 	
 			sint32 bge;
@@ -1998,7 +1998,7 @@ void Player::BeginTurnProduction()
 	
 			sint32 bfp;
 			if (rec->GetFranchiseProduction(bfp)) {	
-				m_productionFromFranchises += bfp;		//i.e. allows oil to pay for military
+				m_productionFromFranchises += bfp;		// i.e. allows oil to pay for military
 			}
 	
 			if(rec->HasIntBorderRadius()){
@@ -2018,7 +2018,7 @@ void Player::BeginTurnProduction()
 						for (sint32 c=0; c < n; c++) {
 							CityData *cd = m_all_cities->Access(c).CD();
 							if(!cd->IsLocalResource (good)) {
-								cd->AddGoodToCity(good);		//adds good to city but randomly changes each turn?
+								cd->AddGoodToCity(good);		// Adds good to city but randomly changes each turn?
 								break;
 							}
 						}
@@ -2036,7 +2036,7 @@ void Player::BeginTurnProduction()
 			}
 		}
 	}
-//////////////////END EMOD	
+    //////////////////END EMOD	
 	
 	
 	

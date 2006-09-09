@@ -587,26 +587,7 @@ void CityWindow::SetCity(CityData *city)
 
 void CityWindow::Project(CityData *cityData)
 {
-	sint32 gold;
-
-	
-	cityData->CollectResources();
-#if defined(NEW_RESOURCE_PROCESS)
-	cityData->ProcessResources();
-	cityData->CalculateResources();
-	cityData->CalcPollution();
-	cityData->DoSupport(true);
-#else
-	cityData->ProcessProduction(true);
-	cityData->DoSupport(true);
-	cityData->SplitScience(true);
-	cityData->CollectOtherTrade(true, false);
-	cityData->ProcessFood();
-	cityData->CalcPollution();
-#endif
-	cityData->CalcHappiness(gold, false);
-	cityData->EatFood();
-	cityData->CalculateGrowthRate();
+	cityData->ProcessAllResources();
 
 	// To update turn count to next pop on the map.
 	cityData->UpdateSprite();

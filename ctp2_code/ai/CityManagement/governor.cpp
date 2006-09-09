@@ -662,28 +662,12 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
 		AssignPopulation(city);
-		// Force happiness recalculation as crime losses depend on happiness.
-		city->CalcHappiness(gold, FALSE);
-#if defined(NEW_RESOURCE_PROCESS)
-		city->ProcessResources();
-		city->CalculateResources();
-		city->CalcPollution();
-		city->DoSupport(true);
-#else
-		city->CollectResources();
-		city->ProcessProduction(true);
-		city->DoSupport(true); // Deduct wages and building costs
-		city->SplitScience(true); // Deduct science costs
-		city->CollectOtherTrade(true, false);
-		city->ProcessFood();
-		city->CalcPollution();
-#endif
 
-		// Production has an effect on pollution and polltion has an effect on happiness
-		// Of course better would be only one recalculation
-		city->CalcHappiness(gold, FALSE);
-		city->EatFood();
-		city->CalculateGrowthRate();
+		// Force happiness recalculation as crime losses depend on happiness.
+		city->CalcHappiness(gold, false);
+
+		city->ProcessAllResources();
+
 		new_happiness = city->GetHappiness();
 		delta_happiness = new_happiness - old_happiness;
 		total_delta_happiness += delta_happiness; // Total delta is nonsense, half over the limit other half under the limit and we are in plus.
@@ -1149,26 +1133,9 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Right direction but more debug work is needed.
 		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-		city->CalcHappiness(gold, FALSE);
-        /// @todo Handle riot and revolt risk. Too many AI cities are revolting.
+		city->CalcHappiness(gold, false);
 
-#if defined(NEW_RESOURCE_PROCESS)
-		city->ProcessResources();
-		city->CalculateResources();
-		city->CalcPollution();
-		city->DoSupport(true);
-#else
-		city->CollectResources();
-		city->ProcessProduction(true);
-		city->DoSupport(true); // Deduct wages and building costs
-		city->SplitScience(true); // Deduct science costs
-		city->CollectOtherTrade(true, false);
-		city->ProcessFood();
-		city->CalcPollution();
-#endif
-		city->CalcHappiness(gold, FALSE);
-		city->EatFood();
-		city->CalculateGrowthRate();
+		city->ProcessAllResources();
 
 		new_happiness = city->GetHappiness();
 		if(new_happiness < min_happiness
@@ -1192,7 +1159,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		}
 	}
 
-	
+	DPRINTF(k_DBG_GAMESTATE, ("HappinessTest: %i\n", happiness_test));
 	total_production += player_ptr->GetProductionFromFranchises();
 	if(total_production < player_ptr->GetReadinessCost())
 	{
@@ -1330,7 +1297,6 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	SlidersSetting gold_sliders_setting;
 	SlidersSetting food_sliders_setting;
 
-
 	while( !ProdSliderReachedMin(sliders_setting)
 	||     !GoldSliderReachedMin(sliders_setting)
 	||     !FoodSliderReachedMin(sliders_setting)
@@ -1369,6 +1335,8 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			valueFood = -1;
 		}
 
+		// If all values are good and the people are 
+		// happy enough, we are happy, too.
 		if(value >= valueProd
 		&& value >= valueGold
 		&& value >= valueFood
@@ -1401,8 +1369,9 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			sliders_setting = food_sliders_setting;
 		}
 		else{
+			// the values aren't satisfying we have to select one other setting.
 			// Real equal need a better solution
-/*			if(valueProd >= value
+			if(valueProd >= value
 			&& valueProd >= valueGold
 			&& valueProd >= valueFood
 			){
@@ -1421,10 +1390,23 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			&&      valueFood >= valueGold
 			){
 				sliders_setting = food_sliders_setting;
-			}*/
-			break;
+			}
+			else{
+				if(!FoodSliderReachedMin(sliders_setting)){
+					sliders_setting = food_sliders_setting;
+				}
+				else if(!ProdSliderReachedMin(sliders_setting)){
+					sliders_setting = prod_sliders_setting;
+				}
+				else if(!GoldSliderReachedMin(sliders_setting)){
+					sliders_setting = gold_sliders_setting;
+				}
+				else{
+					Assert(false);
+					break;
+				}
+			}
 		}
-
 	}
 }
 

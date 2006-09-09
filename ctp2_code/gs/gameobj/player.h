@@ -540,7 +540,7 @@ public:
 	void MakeNoPiracyPact(PLAYER_INDEX other_player) ;
 	void MakeCeaseFire(PLAYER_INDEX treatyAlly) ;
 	void MakeShortCeaseFire(PLAYER_INDEX treatyAlly, AGREEMENT_TYPE agreement, PLAYER_INDEX thirdParty = PLAYER_UNASSIGNED);
-	void BreakCeaseFire(PLAYER_INDEX treatyBreaker, bool sendMessage) ;
+	void BreakCeaseFire(PLAYER_INDEX other_player, bool sendMessage) ;
 	void BreakAllTreaties(PLAYER_INDEX with);
 
 	void BeginTurnAgreements();

@@ -863,10 +863,11 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 //
 //----------------------------------------------------------------------------
 STDEHANDLER(CheckCityLimit_NextSStateEvent)
-{
-	PLAYER_INDEX playerId;
+{	
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit())
+		return GEV_HD_Continue;
 
-	
+	PLAYER_INDEX playerId;
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -874,23 +875,38 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 	AiState state;
 
 	const GovernmentRecord *government = 
-	g_theGovernmentDB->Get(g_player[playerId]->GetGovernmentType());
+	      g_theGovernmentDB->Get(g_player[playerId]->GetGovernmentType());
 
-	int acceptedCityMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
+	sint32 acceptedCityMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
 
-	if(g_player[playerId]->GetNumCities() > acceptedCityMaximum
-	&& diplomat.GetPersonality()->HasOverCityLimitStrategy()
-	&& !g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() //EMOD 
-	){
-		state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();
-		state.dbIndex = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();
-		diplomat.ConsiderStrategicState(state);
-		if(wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)
-		&& diplomat.GetPersonality()->HasNoRevolutionStrategy()
-		){
-			state.priority = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetPriority();
-			state.dbIndex = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetStrategyIndex();
+	if(g_player[playerId]->GetNumCities() > acceptedCityMaximum)
+	{
+		if(diplomat.GetPersonality()->HasOverCityLimitStrategy())
+		{
+			state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();
+			state.dbIndex  = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();
 			diplomat.ConsiderStrategicState(state);
+		
+			if(wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)
+			&& diplomat.GetPersonality()->HasNoRevolutionStrategy()
+			){
+				state.priority = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetPriority();
+				state.dbIndex  = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetStrategyIndex();
+				diplomat.ConsiderStrategicState(state);
+			}
+		}
+		else
+		{
+			if(g_theStrategyDB->GetNamedItem("STRATEGY_TOO_MANY_CITIES", state.dbIndex))
+			{
+				state.priority = 2000;
+				diplomat.ConsiderStrategicState(state);
+			}
+			if(g_theStrategyDB->GetNamedItem("STRATEGY_NO_REVOLUTON", state.dbIndex))
+			{
+				state.priority = 2000;
+				diplomat.ConsiderStrategicState(state);
+			}
 		}
 	}
 

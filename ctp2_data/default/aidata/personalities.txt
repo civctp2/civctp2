@@ -39,11 +39,13 @@
 PERSONALITY_KAHN {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
 
+  // Priorities should be lower than those used in slic code, otherwise these 
+  // strategies here get precedence over those in the slic code.
   FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
   BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
   SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
 
-  LastStartTurn 75
+  LastStartTurn 75 // Last turn the following strategy is used.
   StartStrategy            {  Strategy STRATEGY_AGRESSIVE_START   Priority 200  }
 
   NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
@@ -55,7 +57,7 @@ PERSONALITY_KAHN {
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
-  MaxIslandSize 100
+  MaxIslandSize 100 // Maximum tiles an island has so that the following startegy is used.
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
@@ -68,9 +70,11 @@ PERSONALITY_KAHN {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
+  CitiesOverLimit 0 // Additional cities the AI can build, default value 0.
+  // Priorities here must be higher than everything before otherwise the AI ruins
+  // its empire by to many cities.
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 } // Applied if AI is over city limit
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 } // Applied if AI has the wonder that gives revolted cities.
 
   Exploration: Wide
   Expansion: Maximum
