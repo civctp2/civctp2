@@ -69,6 +69,24 @@ public:
 	AUI_ERRCODE InitCommon(sint32 bevelWidth, sint32 bevelType );
 	AUI_ERRCODE CreateRangersAndHeader( MBCHAR *ldlBlock = NULL );
 	
+/// Clear the user data.
+/// \remarks Does not clear the list itself.
+    template <typename T> 
+    void ClearUserData(void)
+    {
+        for (int i = 0; i < this->NumItems(); ++i)
+        {
+            ctp2_ListItem * item = static_cast<ctp2_ListItem *>(this->GetItemByIndex(i));
+            if (item)
+            {
+                 T * info = static_cast<T *>(item->GetUserData());
+                 delete info;
+                 item->SetUserData(NULL);
+            }
+        } // for
+    }
+
+
 	void Clear(void);
 
 	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );

@@ -31,10 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "UnitControlPanel.h"
-
 
 #include "ArmyData.h"
 #include "ArmyPool.h"
@@ -117,9 +114,10 @@ m_armySelectionIcon(static_cast<ctp2_Button*>(
 m_transportSelectionDisplay(static_cast<ctp2_Static *>(
 	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect"))),
 m_transportSelectionIcon(static_cast<ctp2_Button *>(
-	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Icon")))
+	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Icon"))),
+	m_cellUnitList      (),
+    m_cellArmyList      ()
 {
-	
 	Assert(m_unitDisplayGroup);
 	Assert(m_unitListPreviousButton);
 	Assert(m_unitListLabel);
@@ -447,80 +445,69 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 
 void UnitControlPanel::UpdateMultipleSelectionDisplay()
 {
-	
-	if(!g_selected_item)
+	if (!g_selected_item)
 		return;
 
-	
-	static CellUnitList cellUnitList[2];
-	static DynamicArray<Army> cellArmyList[2];
-	static sint32 curUnitList = 0;
-	sint32 lastUnitList = curUnitList ^ 1;
+	CellUnitList        newUnitList;
+    g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(newUnitList);
 
-	g_theWorld->GetCell(
-		g_selected_item->GetCurSelectPos())->GetArmy(
-		cellUnitList[curUnitList]);
-
-	sint32 i;
-	cellArmyList[curUnitList].Clear();
-	for(i = 0; i < cellUnitList[curUnitList].Num(); i++) {
-		cellArmyList[curUnitList].Insert(cellUnitList[curUnitList][i].GetArmy());
+    std::vector<Army>   newArmyList;
+	for (sint32 i = 0; i < newUnitList.Num(); ++i) 
+    {
+		newArmyList.push_back(newUnitList[i].GetArmy());
 	}
 
-	
-	
-	
-	
-	
-
-	
 	bool changed = false;
 
-	if(cellUnitList[curUnitList].Num() == cellUnitList[lastUnitList].Num()) {
-		for(sint32 i = 0; i < cellUnitList[curUnitList].Num(); i++) {
-			if(cellUnitList[curUnitList][i].m_id != cellUnitList[lastUnitList][i].m_id ||
-			   cellArmyList[curUnitList][i].m_id != cellArmyList[lastUnitList][i].m_id) {
+	if (static_cast<size_t>(newUnitList.Num()) == m_cellUnitList.size()) 
+    {
+		for (sint32 i = 0; i < newUnitList.Num(); ++i) 
+        {
+			if (newUnitList[i].m_id != m_cellUnitList[i].m_id ||
+			    newArmyList[i].m_id != m_cellArmyList[i].m_id
+               ) 
+            {
 				changed = true;
 				break;
 			}
 		}
-	} else {
+	} 
+    else 
+    {
 		changed = true;
 	}
 
 
-	if(!changed) {
-		curUnitList ^= 1;
+	if (!changed) 
+    {
 		return;
 	}
 
-	
 	sint32 multiIndex = 0;
 	sint32 unitIndex = 0;
 
 	
-	while(multiIndex < NUMBER_OF_MULTIPLE_SELECTION_BUTTONS) {
-		
-		if(unitIndex < cellUnitList[curUnitList].Num()) {
-			
-			Unit &unit = cellUnitList[curUnitList][unitIndex++];
-			Army army = unit.GetArmy();
+	while (multiIndex < NUMBER_OF_MULTIPLE_SELECTION_BUTTONS) 
+    {
+		if (unitIndex < newUnitList.Num()) 
+        {
+			Unit &  unit    = newUnitList[unitIndex++];
+			Army    army    = unit.GetArmy();
 
-			
-			
-			bool armyAlreadyShown = false;
-			for(sint32 testIndex = unitIndex - 2; testIndex >= 0; testIndex--) {
-				if(cellUnitList[curUnitList][testIndex].GetArmy().m_id == army.m_id)
+			bool    armyAlreadyShown = false;
+			for (sint32 testIndex = unitIndex - 2; testIndex >= 0; testIndex--) 
+            {
+				if (newUnitList[testIndex].GetArmy().m_id == army.m_id)
+                {
 					armyAlreadyShown = true;
+                }
 			}
 
-			
-			if(!armyAlreadyShown) {
-				
-				m_multiPair[multiIndex].first = this;
-				m_multiPair[multiIndex].second = army.m_id;
+			if (!armyAlreadyShown) 
+            {
+				m_multiPair[multiIndex].first   = this;
+				m_multiPair[multiIndex].second  = army.m_id;
 
-				
 				m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(
 					MultiButtonActionCallback, &m_multiPair[multiIndex]);
 				if(army.IsValid() && army.Num() == 1) {
@@ -543,7 +530,9 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				}
 				multiIndex++;
 			}
-		} else {	
+		} 
+        else 
+        {	
 			m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(NULL, NULL);
 			m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
 			if(!m_multipleSelectionButton[multiIndex]->IsDisabled())
@@ -554,10 +543,14 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 		}
 	}
 
-	
 	m_unitListLabel->SetText("");
-
-	curUnitList ^= 1;
+    
+    m_cellArmyList.swap(newArmyList);
+    m_cellUnitList.clear();
+	for (sint32 unitIndex = 0; unitIndex < newUnitList.Num(); ++unitIndex)
+    {
+        m_cellUnitList.push_back(newUnitList[unitIndex]);
+    }
 }
 
 

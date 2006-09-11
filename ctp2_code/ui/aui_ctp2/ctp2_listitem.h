@@ -1,10 +1,16 @@
-
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __CTP2_LISTITEM_H__
 #define __CTP2_LISTITEM_H__
 
-#include "aui_item.h"
-#include "patternbase.h"
+class ctp2_ListItem;
+
+#include "aui_item.h"       // aui_Item
+#include "auitypes.h"       // AUI_ERRCODE
+#include "ctp2_inttypes.h"  // sint32
+#include "patternbase.h"    // PatternBase
 
 class aui_Surface;
 
@@ -15,13 +21,11 @@ public:
 											 ctp2_ListItem *item2,
 											 sint32 column);
 
-	void *m_userData;
-	CTP2ItemCompareCallback *m_compareCallback;
+	void *                      m_userData;
+	CTP2ItemCompareCallback *   m_compareCallback;
 
 	
 	ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
-
-	
 	virtual ~ctp2_ListItem();
 
 	
@@ -54,14 +58,13 @@ public:
 	void SetCompareCallback(CTP2ItemCompareCallback *cb) { m_compareCallback = cb; }
 
 protected:
-	
-	
-	
-	
-	
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
-
-	ctp2_ListItem() : aui_Item() {}
+	ctp2_ListItem() 
+    : 
+        aui_Item            (), 
+        PatternBase         (),
+        m_userData          (NULL),
+        m_compareCallback   (NULL)
+    { ; };
 
 };
 

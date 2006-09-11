@@ -25,7 +25,8 @@ extern C3UI						*g_c3ui;
 
 
 
-c3_FancyWindow::c3_FancyWindow(
+c3_FancyWindow::c3_FancyWindow
+(
 	AUI_ERRCODE *retval,
 	uint32 id,
 	MBCHAR *ldlBlock,
@@ -34,8 +35,13 @@ c3_FancyWindow::c3_FancyWindow(
 	MBCHAR *ldlTitle,
 	AUI_WINDOW_TYPE type,
 	bool bevel,
-	void (*exitCallBack)( aui_Control *, uint32, uint32, void *))
-	: C3Window(retval, id, ldlBlock, bpp, type, bevel)
+	void (*exitCallBack)( aui_Control *, uint32, uint32, void *)
+)
+: 
+    C3Window    (retval, id, ldlBlock, bpp, type, bevel),
+	m_title     (NULL),
+	m_cancel    (NULL),
+	m_ok        (NULL)
 {
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
@@ -69,10 +75,6 @@ c3_FancyWindow::c3_FancyWindow(
 			m_border[i]->Offset(m_x,m_y);
 		}
 	}
-
-	m_title = NULL;
-	m_cancel = NULL;
-	m_ok = NULL;
 
 	
 	if ( ldlTitle ) {
@@ -111,29 +113,13 @@ c3_FancyWindow::c3_FancyWindow(
 
 c3_FancyWindow::~c3_FancyWindow()
 {
-	
-	
-
-
-
-
-
-
-
-	if ( m_title ) {
-		delete m_title;
-		m_title = NULL;
-	}
-
-	if ( m_cancel ) {
-		delete m_cancel;
-		m_cancel = NULL;
-	}
-
-	if ( m_ok ) {
-		delete m_ok;
-		m_ok = NULL;
-	}
+    for (size_t i = 0; i < k_NUM_C3_FANCYBORDERS; ++i)
+    {
+        delete m_border[i];
+    }
+	delete m_title;
+	delete m_cancel;
+	delete m_ok;
 }
 
 
@@ -216,18 +202,11 @@ AUI_ERRCODE c3_FancyWindow::RemoveBordersFromUI()
 
 AUI_ERRCODE	c3_FancyWindow::Resize( sint32 width, sint32 height )
 {
-	C3Window::Resize(width,height);
+	C3Window::Resize(width, height);
 	
-	sint32 dw = width - m_originalDimensions.x,
-			dh = height - m_originalDimensions.y;
-
-	
-	
-	
-	
-	sint32 lx =0, cx = dw/2, rx = dw,
-			ty = 0, cy = dh/2, by = dh;
-	
+	sint32 lx = 0;
+    sint32 rx = width - m_originalDimensions.x;
+	sint32 ty = 0;
 	
 #if 0
 	m_border[C3_FANCYBORDER_TL]->Offset(lx,ty);
@@ -244,7 +223,8 @@ AUI_ERRCODE	c3_FancyWindow::Resize( sint32 width, sint32 height )
 	}
 #endif
 	
-	m_originalDimensions.x = width; m_originalDimensions.y = height;
+	m_originalDimensions.x = width; 
+    m_originalDimensions.y = height;
 
 	return AUI_ERRCODE_OK;
 }
