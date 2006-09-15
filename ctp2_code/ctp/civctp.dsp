@@ -868,6 +868,10 @@ SOURCE=..\gfx\spritesys\Director.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\gfx\spritesys\DirectorActions.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\gfx\spritesys\DirectorActions.h
 # End Source File
 # Begin Source File

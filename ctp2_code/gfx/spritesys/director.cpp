@@ -32,112 +32,74 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Outcommented some unreachable code. (Sep 9th 2005 Martin Gühmann)
 // - Fixed memory leaks.
+// - Removed some unused items
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Director.h"
 
-#include "c3errors.h"
-#include "tech_wllist.h"
-#include "Globals.h"
-#include "player.h"
-#include "dynarr.h"
-#include "UnitPool.h"
-#include "pixelutils.h"
-#include "spriteutils.h"
-#include "tileutils.h"
-#include "primitives.h"
-#include "colorset.h"
-
-#include "SelItem.h"
-
-#include "SpriteState.h"
-#include "Actor.h"
-#include "Unit.h"
-
-#include "radarmap.h"
-#include "director.h"
-#include "UnitActor.h"
-
-#include "EffectActor.h"
-#include "TradeActor.h"
 #include "Action.h"
+#include "Actor.h"
+#include <algorithm>                // std::fill
 #include "Anim.h"
-#include "maputils.h"
-#include "tiledmap.h"
-
-#include "battleviewwindow.h"
-#include "network.h"
-#include "soundmanager.h"
-#include "network.h"
-#include "debugmemory.h"
-#include "TurnCnt.h"
-#include "c3ui.h"
-
-#include "wondermoviewin.h"
-#include "victorymoviewin.h"
-#include "messagewin.h"
-
+#include "Army.h"
 #include "background.h"
 #include "backgroundwin.h"
-
-#include "screenutils.h"
-#include "sci_advancescreen.h"
-#include "UnitRecord.h"
-#include "GameEventManager.h"
-#include "gamesounds.h"
-#include "network.h"
-#include "net_info.h"
-#include "UnitDynArr.h"
-#include "SpriteRecord.h"
-
-#include "cursormanager.h"
-
-#include "citydata.h" //PFT 29 mar 05, show # turns until city next grows a pop
-#include "UnitData.h" // "
-
-#include "SpriteGroupList.h"
-extern SpriteGroupList		*g_unitSpriteGroupList;
-
-extern Director			*g_director;
-extern double			g_ave_frame_rate;
-extern double			g_ave_frame_time;
-extern RadarMap			*g_radarMap;
-extern TiledMap			*g_tiledMap;
-extern UnitPool			*g_theUnitPool;
-extern Background		*g_background;
-extern SelectedItem		*g_selected_item;
-extern SoundManager		*g_soundManager;
-
-extern sint32			g_fog_toggle;
-extern sint32			g_god;
-extern TurnCount		*g_turn;
-extern C3UI				*g_c3ui;
-extern BattleViewWindow	*g_battleViewWindow;
-extern Player			**g_player;
-
-#include "profileDB.h"
-extern ProfileDB		*g_theProfileDB;
-
-#include "ArmyPool.h"
-extern ArmyPool			*g_theArmyPool;
-
+#include "battleviewwindow.h"       // g_battleViewWindow
+#include "c3errors.h"
+#include "c3ui.h"
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "World.h"
-extern World			*g_theWorld;
-
+#include "citydata.h"
+#include "colorset.h"
+#include "cursormanager.h"
+#include "debugmemory.h"
+#include "dynarr.h"
+#include "EffectActor.h"
+#include "GameEventManager.h"
+#include "gamesounds.h"
+#include "Globals.h"
+#include "maputils.h"
 #include "MessagePool.h"
-extern MessagePool		*g_theMessagePool;
+#include "messagewin.h"
+#include "net_info.h"
+#include "network.h"
+#include "pixelutils.h"
+#include "player.h"                 // g_player
+#include "primitives.h"
+#include "profileDB.h"              // g_theProfileDB
+#include "radarmap.h"               // g_radarMap
+#include "sci_advancescreen.h"
+#include "screenutils.h"
+#include "SelItem.h"                // g_selected_item
+#include "soundmanager.h"           // g_soundManager
+#include "SpriteGroupList.h"
+#include "SpriteRecord.h"
+#include "SpriteState.h"
+#include "spriteutils.h"
+#include "tech_wllist.h"
+#include "tiledmap.h"               // g_tiledMap
+#include "tileutils.h"
+#include "TradeActor.h"
+#include "TurnCnt.h"                // g_turn
+#include "Unit.h"
+#include "UnitActor.h"
+#include "UnitData.h"
+#include "UnitDynArr.h"
+#include "UnitRecord.h"
+#include "victorymoviewin.h"
+#include "wondermoviewin.h"
+#include "World.h"                  // g_theWorld
+
+extern SpriteGroupList *    g_unitSpriteGroupList;
+extern Background *         g_background;
+extern C3UI	*               g_c3ui;
+extern MessagePool *        g_theMessagePool;
 
 #ifdef _DEBUG
-extern BOOL				g_doingFastRounds;
+extern BOOL				    g_doingFastRounds;
 #endif
-
-
-BOOL					g_zoomedBattlefieldOn = FALSE;
-BOOL					g_useHandler = FALSE;
 
 DQItem::DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler)
 :
@@ -172,45 +134,31 @@ DQItem::~DQItem()
 #define k_MAX_SAVED_SEQUENCES				1000
 
 Director::Director(void)
+:
+    m_activeUnitList            (new tech_WLList<UnitActor *>),
+    m_activeEffectList          (new tech_WLList<EffectActor *>),
+    m_tradeActorList            (new tech_WLList<TradeActor *>), 
+    m_nextPlayer                (FALSE), 
+    m_masterCurTime             (0),			
+    m_lastTickCount             (0),
+    m_timeLogIndex              (0),
+    m_averageElapsed            (0),
+    m_averageFPS                (k_DEFAULT_FPS),
+    m_actionFinished            (TRUE),			
+    m_paused                    (FALSE),
+    m_processingActiveUnits     (FALSE),
+    m_processingActiveEffects   (FALSE),
+    m_curSequenceID             (0),
+    m_lastSequenceID            (0),
+    m_dispatchedItems           (new PointerList<DQItem>),
+    m_savedItems                (new PointerList<DQItem>),
+    m_itemQueue                 (new PointerList<DQItem>),
+	m_itemWalker                (new PointerList<DQItem>::Walker),
+    m_holdSchedulerSequence     (NULL),
+    m_pendingGameActions        (0),
+    m_endTurnRequested          (false)
 {
-	m_activeUnitList = new tech_WLList<UnitActor *>;
-
-	m_activeEffectList = new tech_WLList<EffectActor *>;
-	m_tradeActorList = new tech_WLList<TradeActor *>;
-
-	
-	m_masterCurTime = 0;
-
-	
-
-	m_nextPlayer = FALSE;
-	m_paused = FALSE;
-
-	m_lastTickCount = 0;
-	m_timeLogIndex = 0;
-	m_averageElapsed = 0;
-	m_averageFPS = k_DEFAULT_FPS;
-
-	m_processingActiveUnits = FALSE;
-	m_processingActiveEffects = FALSE;
-
-	m_itemQueue = new PointerList<DQItem>;
-
-
-	m_dispatchedItems = new PointerList<DQItem>;
-	
-	m_curSequenceID = 0;
-	m_lastSequenceID = 0;
-	
-
-	m_savedItems = new PointerList<DQItem>;
-
-	m_itemWalker = new PointerList<DQItem>::Walker;
-
-	m_actionFinished = TRUE;
-	m_holdSchedulerSequence = NULL;
-	m_pendingGameActions = 0;
-	m_endTurnRequested = false;
+    std::fill(m_timeLog, m_timeLog + k_TIME_LOG_SIZE, 0);
 }
 
 
@@ -407,7 +355,6 @@ void Director::DumpItem(DQItem *item)
 		DPRINTF(k_DBG_UI, ("  ptarget_actor      :%#.8lx\n", action->ptarget_actor));
 		DPRINTF(k_DBG_UI, ("  pmove_oldPos       :%d,%d\n", action->pmove_oldPos.x, action->pmove_oldPos.y));
 		DPRINTF(k_DBG_UI, ("  pmove_newPos       :%d,%d\n", action->pmove_newPos.x, action->pmove_newPos.y));
-		DPRINTF(k_DBG_UI, ("  move_projectile    :%#.8lx\n", action->move_projectile));
 		DPRINTF(k_DBG_UI, ("  end_projectile     :%#.8lx\n", action->end_projectile));
 		DPRINTF(k_DBG_UI, ("  projectile_path    :%d\n", action->projectile_path));
 	  }
@@ -722,9 +669,8 @@ void Director::DumpInfo(void)
 	DPRINTF(k_DBG_UI, (" Active Units:\n"));		
 	DPRINTF(k_DBG_UI, (" Count:%d\n", m_activeUnitList->L()));		
 	DPRINTF(k_DBG_UI, (" ------------------\n"));		
-	ListPos		pos;
 	UnitActor	*actor;
-	pos = m_activeUnitList->GetHeadPosition();
+	ListPos		pos = m_activeUnitList->GetHeadPosition();
 	for (i=0; i<(sint32)m_activeUnitList->L(); i++) {
 		actor = m_activeUnitList->GetNext(pos);
 		actor->DumpActor();
@@ -780,12 +726,12 @@ void Director::DumpInfo(void)
 
 void Director::HandleNextAction(void)
 {
-	DQItem			*item;
-	static DQItem	*lastItem;
-
 	if (m_paused) return;
 
 	
+	DQItem			*item;
+	static DQItem	*lastItem;
+
 	
 	while (m_itemQueue->GetCount() > 0 && GetActionFinished()) {
 		
@@ -953,7 +899,37 @@ void Director::HandleFinishedItem(DQItem *item)
 		removeSecondaryFromActiveList = seq->GetAddedToActiveList(SEQ_ACTOR_SECONDARY);
 	}
 
-	switch (item->m_type) {
+    switch (item->m_type) 
+    {
+    default:
+//  case DQITEM_ADDVISION:
+//  case DQITEM_ATTACK:
+//  case DQITEM_BATTLE:
+//  case DQITEM_CENTERMAP:
+//  case DQITEM_COMBATFLASH:
+//  case DQITEM_COPYVISION:
+//  case DQITEM_ENDTURN:
+//  case DQITEM_FACEOFF:
+//  case DQITEM_FASTKILL:
+//  case DQITEM_HIDE:
+//  case DQITEM_MESSAGE:
+//  case DQITEM_MORPH:
+//  case DQITEM_MOVEPROJECTILE:
+//  case DQITEM_PLAYSOUND:
+//  case DQITEM_PLAYVICTORYMOVIE:
+//  case DQITEM_PLAYWONDERMOVIE:
+//  case DQITEM_REMOVEVISION:
+//  case DQITEM_SPECEFFECT:
+//  case DQITEM_SELECTUNIT:
+//  case DQITEM_SETOWNER:
+//  case DQITEM_SETVISIBILITY:
+//  case DQITEM_SETVISIONRANGE:
+//  case DQITEM_SHOW:
+//  case DQITEM_TELEPORT:
+//  case DQITEM_TERMINATE_FACEOFF:
+        // Does not contain actions that have to be removed
+        break;
+
 	case DQITEM_MOVE: {
 		DQActionMove	*action = (DQActionMove *)item->m_action;
 			if (removePrimaryFromActiveList)
@@ -964,10 +940,6 @@ void Director::HandleFinishedItem(DQItem *item)
 						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->move_actor->GetUnitID());
 				}
 		}
-		break;
-	case DQITEM_MOVEPROJECTILE:
-		break;
-	case DQITEM_SPECEFFECT:
 		break;
 	case DQITEM_ATTACKPOS:
 		{
@@ -980,8 +952,6 @@ void Director::HandleFinishedItem(DQItem *item)
 					g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->attackpos_attacker->GetUnitID());
 			}
 		}
-		break;
-	case DQITEM_ATTACK:
 		break;
 	case DQITEM_SPECATTACK: 
 		{
@@ -1023,12 +993,6 @@ void Director::HandleFinishedItem(DQItem *item)
 		}
 		}
 		break;
-	case DQITEM_MORPH:
-		break;
-	case DQITEM_HIDE:
-		break;
-	case DQITEM_SHOW:
-		break;
 	case DQITEM_WORK: {
 		DQActionWork	*action = (DQActionWork *)item->m_action;
 			if (removePrimaryFromActiveList)
@@ -1038,44 +1002,6 @@ void Director::HandleFinishedItem(DQItem *item)
 						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->working_actor->GetUnitID());
 				}
 		}
-		break;
-	case DQITEM_FASTKILL:
-		break;
-	case DQITEM_ADDVISION:
-		break;
-	case DQITEM_REMOVEVISION:
-		break;
-	case DQITEM_SETOWNER:
-		break;
-	case DQITEM_SETVISIBILITY:
-		break;
-	case DQITEM_SETVISIONRANGE:
-		break;
-	case DQITEM_COMBATFLASH:
-		break;
-	case DQITEM_TELEPORT:
-		break;
-	case DQITEM_COPYVISION:
-		break;
-	case DQITEM_CENTERMAP:
-		break;
-	case DQITEM_SELECTUNIT:
-		break;
-	case DQITEM_ENDTURN:
-		break;
-	case DQITEM_BATTLE:
-		break;
-	case DQITEM_PLAYSOUND:
-		break;
-	case DQITEM_PLAYWONDERMOVIE:
-		break;
-	case DQITEM_PLAYVICTORYMOVIE:
-		break;
-	case DQITEM_MESSAGE:
-		break;
-	case DQITEM_FACEOFF:
-		break;
-	case DQITEM_TERMINATE_FACEOFF:
 		break;
 	}
 
@@ -1129,10 +1055,10 @@ void Director::CatchUp(void)
 {
 	
 	
-	ListPos pos, actorPos;
-	UnitActor *actor;
+    ListPos     actorPos;
+    UnitActor * actor;
 
-	pos = m_activeUnitList->GetHeadPosition();
+    ListPos     pos = m_activeUnitList->GetHeadPosition();
 
 	if (pos) {
 		do {
@@ -1214,19 +1140,11 @@ bool Director::CaughtUp(void)
 
 bool Director::TileIsVisibleToPlayer(MapPoint &pos)
 {
-#ifdef _DEBUG
-	if (g_doingFastRounds) return false;
-	if (g_god) return true;
-	if (g_fog_toggle) return true;
-	if(!g_tiledMap) return false;
-
-
-
-	return g_tiledMap->GetLocalVision()->IsVisible(pos);
-#else
-	if (g_god) return true;
-	return g_tiledMap->GetLocalVision()->IsVisible(pos);
+#if defined(_DEBUG)
+    if (g_doingFastRounds) return false;
 #endif
+
+    return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
 }
 
 
@@ -2146,7 +2064,6 @@ void Director::AddProjectileAttack(Unit shooting, Unit target, SpriteState *proj
 	DQItem					*item = new DQItem(DQITEM_MOVEPROJECTILE, action, dh_projectileMove);
 	item->SetOwner(shooting.GetOwner());
 
-    ProjectileActor *projectile = NULL;
     EffectActor *projectileEnd = new EffectActor(projectileEnd_state, target.RetPos());
 
 
@@ -2154,7 +2071,6 @@ void Director::AddProjectileAttack(Unit shooting, Unit target, SpriteState *proj
 
 	action->pshooting_actor = shooting.GetActor();
 	action->ptarget_actor = target.GetActor();
-	action->move_projectile = projectile;
 	action->end_projectile = projectileEnd;
 	action->projectile_path = projectile_Path;
 	action->pmove_oldPos = shooting.RetPos();
@@ -2321,8 +2237,6 @@ void Director::AddAttack(Unit attacker, Unit defender)
 
 	action->defender_IsCity = FALSE;
 
-	static Army army;
-
 	if (attacker != Unit()) 
 	{
 		attackerActor = attacker.GetActor();
@@ -2333,8 +2247,9 @@ void Director::AddAttack(Unit attacker, Unit defender)
 
 		attackerActor->SetHealthPercent(attacker.GetHP() / attacker.GetDBRec()->GetMaxHP());
 
-		army = attacker.GetArmy();
-		if (g_theArmyPool->IsValid(army)) {
+		Army army = attacker.GetArmy();
+		if (army.IsValid()) 
+        {
 			attackerActor->SetTempStackSize(army.Num());
 		}
 	}
@@ -2360,17 +2275,20 @@ void Director::AddAttack(Unit attacker, Unit defender)
 
 	m_itemQueue->AddTail(item);
 
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacker.RetPos()))
+    Player *    visiblePlayer   = g_player[g_selected_item->GetVisiblePlayer()];
+	if (visiblePlayer && visiblePlayer->IsVisible(attacker.RetPos()))
+    {
 		if (attacker.m_id != 0) {
 			AddCombatFlash(attacker.RetPos());
 		}
+    }
 
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(defender.RetPos()))
+	if (visiblePlayer && visiblePlayer->IsVisible(defender.RetPos()))
+    {
 		if (defender.m_id != 0) {
 			AddCombatFlash(defender.RetPos());
 		}
+    }
 }
 
 void Director::AddAttackPos(Unit attacker, MapPoint const & pos)
@@ -3005,13 +2923,7 @@ void Director::AddBeginScheduler(sint32 player)
 
 BOOL Director::TileWillBeCompletelyVisible(sint32 x, sint32 y)
 {
-	
-	
-	
-	
-	RECT tempViewRect;
-
-	tempViewRect = *g_tiledMap->GetMapViewRect();
+	RECT tempViewRect = *g_tiledMap->GetMapViewRect();
 
 	m_itemWalker->SetList(m_itemQueue);
 	while (m_itemWalker->IsValid()) {
@@ -3275,7 +3187,6 @@ void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 {
 	DQActionMoveProjectile	*action = (DQActionMoveProjectile *)itemAction;
 
-//	ProjectileActor		*projectile = action->move_projectile;
 	EffectActor			*projectileEnd = action->end_projectile;
 	UnitActor			*shootingActor = action->pshooting_actor;
 	UnitActor			*targetActor = action->ptarget_actor;
@@ -3819,8 +3730,7 @@ void dh_hide(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(action);
 	if (!action) return;
 
-	UnitActor		*actor;
-	actor = action->hiding_actor;
+	UnitActor * actor = action->hiding_actor;
 
 	Assert(actor);
 	if (!actor) return;
@@ -3838,8 +3748,7 @@ void dh_show(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(action);
 	if (!action) return;
 
-	UnitActor		*actor;
-	actor = action->hiding_actor;
+	UnitActor * actor = action->hiding_actor;
 
 	Assert(actor);
 	if (!actor) return;
@@ -3858,8 +3767,7 @@ void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	Assert(action);
 	if (!action) return;
 
-	UnitActor *actor;
-	actor = action->working_actor;
+	UnitActor * actor = action->working_actor;
 
 	Assert(actor);
 	if (!actor) return;
@@ -4534,11 +4442,11 @@ void dh_beginScheduler(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 
 	
 #ifdef _DEBUG
-	static bool first = true;
-	if (first) {
-		int a;
-		Assert(a=(action->player == g_selected_item->GetCurPlayer()));
-		if (!a) first=false;
+	static bool isCurrentPlayerOk = true; // static, to report the error only once
+	if (isCurrentPlayerOk)
+    {
+		isCurrentPlayerOk = action->player == g_selected_item->GetCurPlayer();
+		Assert(isCurrentPlayerOk);
 	}
 #endif
 
