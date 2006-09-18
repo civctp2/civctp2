@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Debug memory handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -1372,28 +1372,22 @@ MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *
 
 
 
-void DebugMemoryHeap_GuardedClose    (const char *file, int line, MemoryHeap heap)
+void DebugMemoryHeap_GuardedClose
+(
+    const char *    /* file */ ,
+    int             /* line */ ,
+    MemoryHeap      heap
+)
 {
-	BOOL ok;
+	ASSERT_CLASS(LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
 
-	
-	ASSERT_CLASS (LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
-
-	
 	heap->is_open = false;
 
-	
 	if (heap->total_outstanding == 0)
 	{
-		ok = HeapDestroy (heap->handle);
+		BOOL ok = HeapDestroy (heap->handle);
 		ASSERT_CLASS (LOG_MEMORY_FAIL, ok);
 	}
-
-	
-
-
-	
-
 }
 
 
@@ -1440,16 +1434,16 @@ int Debug_GuardedValidate (const char *file, int line, void *p)
 
 
 
-int Debug_GuardedValidateHeap (const char *file, int line, MemoryHeap *heap)
+int Debug_GuardedValidateHeap
+(
+    const char *    file, 
+    int             line, 
+    MemoryHeap *    /* heap */
+)
 {
-  AllocHeader *header;
   MemPtr mem;
-  int ok;
-
-  ok = 1;
-
-  
-  header = debug_memory->default_heap->first_memory_block;
+  int ok                = 1;
+  AllocHeader * header  = debug_memory->default_heap->first_memory_block;
 
   
   while (header) {
@@ -1461,7 +1455,7 @@ int Debug_GuardedValidateHeap (const char *file, int line, MemoryHeap *heap)
   }
 
 
-  return (ok);
+  return ok;
 }
 
 

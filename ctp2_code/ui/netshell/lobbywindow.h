@@ -100,7 +100,7 @@ protected:
 
 	aui_StringTable *m_PPStrings;
 
-	bool wait;
+	bool m_wait;
 	
 
 	aui_Action *m_dbActionArray[ 1 ]; 

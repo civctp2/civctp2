@@ -278,7 +278,7 @@ void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, dp_char_t *name,
 
 
 void
-ActivNetIO::PlayerReady(dpid_t id, char_t *name, sint32 flags)
+ActivNetIO::PlayerReady(dpid_t id, dp_char_t * name, sint32 flags)
 {
 	
 	m_pid = id;

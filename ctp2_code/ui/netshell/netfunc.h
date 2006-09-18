@@ -1,3 +1,7 @@
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __NETFUNC_H__
 #define __NETFUNC_H__
 
@@ -9,9 +13,21 @@
 #include <stdarg.h>
 #include <string.h>
 #include <list>
+
 #ifdef USE_SDL
 #include <SDL.h>
 #include <SDL_thread.h>
+#endif
+
+#if defined(WIN32)
+#include <windows.h>
+#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type __stdcall
+#define NETFUNC_CONNECT_RESULT          DWORD WINAPI
+#define NETFUNC_CONNECT_PARAMETER       LPVOID
+#else
+#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
+#define NETFUNC_CONNECT_RESULT          int
+#define NETFUNC_CONNECT_PARAMETER       void *
 #endif
 
 class NETFunc {
@@ -135,93 +151,88 @@ template<class T>
 class List:public std::list<T *> {
 friend class NETFunc;
 public:
-#if defined(_MSC_VER)
-	iterator Find(T *t) {
-		iterator i = end();
-#else
-	typename NETFunc::List<T>::iterator Find(T *t) {
-		typename NETFunc::List<T>::iterator i = this->end();
-#endif
-		if(this->size())
-		for(i = this->begin(); i != this->end(); i++)
-			if(t->Equals(*i))
-				break;
-		return i;
+	typename NETFunc::List<T>::iterator Find(T *t) 
+    {
+		for (typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); ++i)
+        {
+			if (t->Equals(*i))
+            {
+				return i;
+            }
+        }
+
+		return this->end();
 	}
 	
-	void Clr(void) {
-#if defined(_MSC_VER)
-		for(iterator i = begin(); i != end(); i++)
-#else
-		for(typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); i++)
-#endif
+	void Clr(void) 
+    {
+		for (typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); ++i)
+        {
 			delete *i;
+        }
+
 		this->clear();
 	}
 	
-	T *Add(T *t) {
-#if defined(_MSC_VER)
-		iterator i = Find(t);
-#else
+	T *Add(T *t) 
+    {
 		typename NETFunc::List<T>::iterator i = Find(t);
-#endif
-		if(i == this->end()) {
+
+        if (i == this->end()) 
+        {
 			push_back(t);
 			return t;
-		} else {
+		} 
+        else 
+        {
 			memcpy(*i, t, sizeof(T));
 			delete t;
 			return *i;
 		}
 	}
 	
-	void Del(T *t) {
-#if defined(_MSC_VER)
-		iterator i = Find(t);
-#else
+	void Del(T *t) 
+    {
 		typename NETFunc::List<T>::iterator i = Find(t);
-#endif
 
-		if(i != this->end()) {
+		if (i != this->end()) 
+        {
 			delete *i;
 			erase(i);
 		}
 	}
 	
-	T *Chg(T *t) {
-#if defined(_MSC_VER)
-		iterator i = Find(t);
-#else
+	T *Chg(T *t) 
+    {
 		typename NETFunc::List<T>::iterator i = Find(t);
-#endif
 
-		if(i != this->end()) {
-			memcpy(*i, t, sizeof(T));
-			return *i;
-		} else {
+		if (i == this->end()) 
+        {
 			T *n = new T(*t);
 			push_back(n);
 			return n;
 		}
+        else 
+        {
+			memcpy(*i, t, sizeof(T));
+			return *i;
+		} 
 	}
 	
-	virtual ~List(void) {
-#if defined(_MSC_VER)
-		for(iterator i = begin(); i != end(); i++)
-#else
-		for(typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); i++)
-#endif
-			delete *i;
+	virtual ~List(void) 
+    {
+        this->Clr();
 	}
 	
-	List(List<T> *l) {
-		if(l)
-#if defined(_MSC_VER)
-			for(iterator i = l->begin(); i != l->end(); i++)
-#else
-			for(typename NETFunc::List<T>::iterator i = l->begin(); i != l->end(); i++)
-#endif
+	List(List<T> *l) 
+    {
+		if (l)
+        {
+			for (typename NETFunc::List<T>::iterator i = l->begin(); i != l->end(); ++i)
+            {
 				Add(new T(**i));
+            }
+        }
 	}
 	
 	List(void) {
@@ -620,22 +631,8 @@ friend class PortList;
 
 
 
-
-#ifdef USE_SDL
-static int ConnectThread(void *t);
-static int ReConnectThread(void *r);
-#else
-static DWORD WINAPI ConnectThread(LPVOID t);
-static DWORD WINAPI ReConnectThread(LPVOID r);
-#endif
-
-
-
-
-
-
-
-
+static NETFUNC_CONNECT_RESULT ConnectThread(NETFUNC_CONNECT_PARAMETER);
+static NETFUNC_CONNECT_RESULT ReConnectThread(NETFUNC_CONNECT_PARAMETER);
 
 
 
@@ -780,12 +777,8 @@ friend class NullModem;
 class TransportList:public List<Transport> {
 	KeyStruct key;
 
-#ifdef WIN32
-static void __stdcall
-#else
-static void
-#endif
-	CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
+	static NETFUNC_CALLBACK_RESULT(void) 
+    CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
 public:
 	
 	TransportList(void);
@@ -1527,18 +1520,10 @@ void Execute(void);
 
 STATUS Close(void);
 
-#ifdef WIN32
-static int __stdcall
-#else
-static int
-#endif
+static NETFUNC_CALLBACK_RESULT(int)
 SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *context);
 
-#ifdef WIN32
-static void __stdcall
-#else
-static void
-#endif
+static NETFUNC_CALLBACK_RESULT(void)
 PlayerCallBack(dpid_t id, dp_char_t *n, long flags, void *context);
 
 

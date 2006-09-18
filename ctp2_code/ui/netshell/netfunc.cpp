@@ -19,11 +19,16 @@
 //
 // _DEBUG
 // Generate debug information.
+// USE_SDL
+// Use SDL API calls
+// WIN32
+// Use MS Windows32 API calls
 // 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - Added SDL support.
 // - Replaced typename T in specialized template member function by the 
 //   the type for that the function is specialized, by Martin Gühmann.
 // - Display the main thread function name in the debugger.
@@ -31,11 +36,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "netfunc.h"
 
 #if defined(_DEBUG)
-#include "debug.h"      // SetThreadName
+#include "debug.h"      	// Os::SetThreadName
 #endif
-#include "netfunc.h"
 
 #ifdef USE_SDL
 #include <SDL.h>
@@ -46,22 +51,36 @@
 #include <ras.h>
 #endif
 
+namespace
+{
+    char const  COUNT_MAX   = 255u;
+}
+
+/// Operating system dependent wrapper functions
+namespace Os
+{
+    /// Stop the current thread
+    /// \param a_Code Code to return to the environment (OS/debugger)
+    inline int ExitThread(int a_Code)
+    {
+#if defined(WIN32)
+        ::ExitThread(static_cast<DWORD>(a_Code));
+        UNREACHABLE_RETURN(a_Code);
+#else
+        return a_Code;
+#endif
+    }
+} // namespace Os
 
 
 int adialup_autodial_enabled(void)
 {
 #ifdef WIN32
 	HKEY hKey;
-	unsigned long werr;
-	int enableAutodial;
-	unsigned long len;
-
-	
-
-	
-	werr = RegOpenKeyEx(HKEY_CURRENT_USER, 
+	unsigned long werr = RegOpenKeyEx(HKEY_CURRENT_USER, 
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
 			0, KEY_EXECUTE, &hKey);
+
 	if (werr != ERROR_SUCCESS) {
 		DPRINT(("autodial_enabled: RegOpenKeyEx(%s) fails, rCode:%d\n",
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
@@ -69,8 +88,8 @@ int adialup_autodial_enabled(void)
 		return FALSE;
 	}
 	
-	enableAutodial = FALSE;
-	len = sizeof(enableAutodial); 
+	int enableAutodial = FALSE;
+	unsigned long len = sizeof(enableAutodial); 
 	werr = RegQueryValueEx(hKey,
 			"EnableAutodial",
 			NULL, NULL, (unsigned char *)&enableAutodial, &len);
@@ -106,24 +125,16 @@ typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
 int adialup_is_active(void)
 {
 #ifdef WIN32
-	RASCONNSTATUS rasconnstatus;
-	RASCONN rasconnArray[adialup_MAXCONNS];
-	DWORD cConnections;
-	DWORD werr;
-	unsigned long rasconnLen;
-	HANDLE hlib;
-	pfnRasEnumConnections_t pfnRasEnumConnections = NULL;
-	pfnRasGetConnectStatus_t pfnRasGetConnectStatus = NULL;
-
-	hlib = LoadLibrary("rasapi32.dll");
-
+	HANDLE hlib = LoadLibrary("rasapi32.dll");
 	if (NULL == hlib) {
 		DPRINT(("adialup_is_active: can't load library rasapi32.dll\n"));
 		return FALSE;
 	}
 
-	pfnRasEnumConnections = (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
-	pfnRasGetConnectStatus = (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
+	pfnRasEnumConnections_t pfnRasEnumConnections = 
+        (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
+	pfnRasGetConnectStatus_t pfnRasGetConnectStatus = 
+        (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
 
 	if (!pfnRasEnumConnections || !pfnRasGetConnectStatus) {
 		DPRINT(("adialup_is_active: can't get fns from library rasapi32.dll\n"));
@@ -131,10 +142,11 @@ int adialup_is_active(void)
 		return FALSE;
 	}
 
+	RASCONN rasconnArray[adialup_MAXCONNS];
 	rasconnArray[0].dwSize = sizeof(rasconnArray[0]);
-	rasconnLen = sizeof(rasconnArray);
-	cConnections = adialup_MAXCONNS;
-	werr = pfnRasEnumConnections( rasconnArray, &rasconnLen,  &cConnections); 
+	unsigned long rasconnLen = sizeof(rasconnArray);
+	DWORD cConnections = adialup_MAXCONNS;
+	DWORD werr = pfnRasEnumConnections( rasconnArray, &rasconnLen,  &cConnections); 
 	if (werr) {
 		DPRINT(("adialup_is_active: RasEnumConnections fails, err %d\n", werr));
 		FreeLibrary((HINSTANCE)hlib);
@@ -146,6 +158,7 @@ int adialup_is_active(void)
 		return FALSE;
 	}
 
+	RASCONNSTATUS rasconnstatus;
 	for (DWORD i = 0; i < cConnections; ++i) 
 	{
 		rasconnstatus.dwSize = sizeof(rasconnstatus);
@@ -182,19 +195,17 @@ int adialup_willdial(void)
 
 
 void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
-	char *next, *arg;
 	va_list al;
-	char str[]="% ";
-
 	va_start(al, msg);
 	strcpy(mix, msg);
 
+	char * arg = va_arg(al, char *);
+	char str[] = "% ";
 
-	arg = va_arg(al, char *);
 	for(int i = 1; i <= c; i++) {
 		str[1] = '0' + i;
 
-		next = strstr(mix, str);
+		char * next = strstr(mix, str);
 		if(next) {
 			char *tmp = strdup(next + strlen(str));
 			strcpy(next + strlen(arg), tmp);
@@ -211,18 +222,17 @@ void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 
 
 char *NETFunc::StringDup(char *s) {
-	if(s)
-		return strcpy(new char[strlen(s) + 1], s);
-	else
-		return 0;
+    return (s) ? strcpy(new char[strlen(s) + 1], s) : NULL;
 }
 
 
 
-NETFunc::Timer::Timer(void) {
-	start = 0;
-	finish = 0;
-	done = false;
+NETFunc::Timer::Timer(void) 
+:
+    start   (0),
+    finish  (0),
+    done    (false)
+{
 }
 
 void NETFunc::Timer::Start(int d) {
@@ -231,14 +241,9 @@ void NETFunc::Timer::Start(int d) {
 	done = false;
 }
 
-bool NETFunc::Timer::Finished(void) {
-	if(done)
-		return true;
-	if(GetTickCount() < finish) {
-		done = false;
-		return false;
-	} else
-		return true;
+bool NETFunc::Timer::Finished(void) 
+{
+    return done || (GetTickCount() >= finish);
 }
 
 
@@ -365,7 +370,7 @@ NETFunc::Keys::Keys(void) {
 }
 
 void NETFunc::Keys::NextKey(void) {
-	if(curkey.buf[curkey.len-1] == (char) 255)
+	if(curkey.buf[curkey.len-1] == COUNT_MAX)
 		curkey.len++;
 	curkey.buf[curkey.len-1]++;
 }
@@ -423,9 +428,7 @@ NETFunc::STATUS NETFunc::EnumSessions(bool b) {
 	NETFunc::STATUS s = dpRequestObjectDeltas(dp, b, &key.buf[0], key.len) == dp_RES_OK ? OK : ERR;
 
 	key.buf[0] = dp_KEY_PLAYER_LATENCIES;
-	s = dpRequestObjectDeltas(dp, 1, &key.buf[0], key.len) == dp_RES_OK ? s : ERR;
-
-	return s;
+	return dpRequestObjectDeltas(dp, 1, &key.buf[0], key.len) == dp_RES_OK ? s : ERR;
 }
 
 
@@ -623,16 +626,18 @@ char *NETFunc::Port::GetInit(void) {
 
 
 
-NETFunc::PortList::PortList(Transport *t) {
-	
-	commPortName_t portName[10];
-	int portCount;
-	int i;
-	dp_result_t err;
-	err = dpEnumPorts(&t->transport , portName, 10, &portCount);
-	if(err == dp_RES_OK)
-		for(i = 0; i < portCount; i++)
-			push_back(new Port(&portName[i], 0, ""));
+NETFunc::PortList::PortList(Transport *t) 
+{
+    commPortName_t portName[10];
+    int portCount;
+    dp_result_t err = dpEnumPorts(&t->transport , portName, 10, &portCount);
+    if (err == dp_RES_OK)
+    {
+        for (int i = 0; i < portCount; i++)
+        {
+            push_back(new Port(&portName[i], 0, ""));
+        }
+    }
 }
 
 NETFunc::PortList::PortList(void) {
@@ -642,61 +647,29 @@ NETFunc::PortList::~PortList(void) {
 }
 
 
-#ifdef USE_SDL
-int NETFunc::ConnectThread(void * t) {
-#else
-DWORD WINAPI NETFunc::ConnectThread(LPVOID t) {
-#endif // USE_SDL
+NETFUNC_CONNECT_RESULT NETFunc::ConnectThread(NETFUNC_CONNECT_PARAMETER t) 
+{
 #if defined(_DEBUG)
-#ifndef USE_SDL
-	SetThreadName("NETFunc::ConnectThread");
+    Os::SetThreadName("NETFunc::ConnectThread");
 #endif
-#endif
-
-	result = dpCreate(&dp, ((TransportSetup *)t)->GetTransport(), ((TransportSetup *)t)->GetParams(), 0);
-	if (result == dp_RES_OK)
-#ifdef USE_SDL
-		return 0;
-#else
-	{
-		ExitThread(0);
-		return 0; // NETFunc::ConnectThread must return a value
-	}
-#endif
-	else
-#ifdef USE_SDL
-		return 1;
-#else
-	{
-		ExitThread(1);
-		return 1; // NETFunc::ConnectThread must return a value
-	}
-#endif
+    result = dpCreate(&dp, ((TransportSetup *)t)->GetTransport(), ((TransportSetup *)t)->GetParams(), 0);
+    return Os::ExitThread((dp_RES_OK == result) ? 0 : 1);
 }
 
 
-#ifdef USE_SDL
-int NETFunc::ReConnectThread(void *r) {
-#else
-DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
-#endif
+NETFUNC_CONNECT_RESULT NETFunc::ReConnectThread(NETFUNC_CONNECT_PARAMETER r) 
+{
 #if defined(_DEBUG)
-#ifndef USE_SDL
-	SetThreadName("NETFunc::ReconnectThread");
+    Os::SetThreadName("NETFunc::ReconnectThread");
 #endif
-#endif
-
-	*((bool *)r) = false;
-	dpSetActiveThread(dp);
-	while (!(*((bool *)r))){
+    *((bool *)r) = false;
+    dpSetActiveThread(dp);
+    while (!(*((bool *)r)))
+    {
 		Receive();
-	}
-#ifdef USE_SDL
-    return 0;
-#else
-	ExitThread(0);
-	return 0;  // NETFunc::ReConnectThread must return a value
-#endif
+    }
+
+    return Os::ExitThread(0);
 }
 
 
@@ -856,15 +829,11 @@ NETFunc::TransportList::TransportList(void) {
 NETFunc::TransportList::~TransportList(void) {
 }
 
-#ifdef _MSC_VER
-void __stdcall
-#else
-void
-#endif
+NETFUNC_CALLBACK_RESULT(void)
 NETFunc::TransportList::CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context) {
 	if (comm_DRIVER_IS_VISIBLE & d->capabilities) {
 		KeyStruct *k = (KeyStruct *)&((TransportList *)context)->key;
-		if(k->buf[k->len-1] == (char) 255)
+		if(k->buf[k->len-1] == COUNT_MAX)
 			k->len++;
 		else
 			k->buf[k->len-1]++;
@@ -2836,10 +2805,8 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 #else
 	threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&reconnected, 0, &threadId);
 #endif
-	if(!threadHandle)
-		return ERR;
 
-	return OK;
+	return (threadHandle) ? OK : ERR;
 }
 
 void NETFunc::ReConnect(void) {
@@ -3352,11 +3319,7 @@ void NETFunc::Execute(void) {
 	}
 }
 
-#ifdef _MSC_VER
-int __stdcall
-#else
-int
-#endif
+NETFUNC_CALLBACK_RESULT(int)
 NETFunc::SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *context) {
 	
 	if(s) {
@@ -3388,11 +3351,7 @@ NETFunc::SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *cont
 	return 0;
 }
 
-#ifdef _MSC_VER
-void __stdcall
-#else
-void
-#endif
+NETFUNC_CALLBACK_RESULT(void)
 NETFunc::PlayerCallBack(dpid_t id, dp_char_t *n, long flags, void *context) {
 	
 	if(n) {

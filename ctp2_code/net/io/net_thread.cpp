@@ -33,13 +33,13 @@
 
 #include "c3.h"
 #include "net_thread.h"
+
 #include "net_types.h"
 #include "net_util.h"
 #include "SimpleDynArr.h"
 #include "zlib.h"
-
 #if defined(_DEBUG)
-#include "debug.h"  // SetThreadName
+#include "debug.h"  // Os::SetThreadName
 #endif
 
 TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,
@@ -82,15 +82,8 @@ TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf,sint32 len,
 
 TPacketData::~TPacketData()
 {
-	if(m_actualBuf) {
-		delete [] m_actualBuf;
-		m_buf = NULL;
-	}
-
-	if(m_buf) {
-		delete [] m_buf;
-	}
-
+	delete [] m_actualBuf;
+	delete [] m_buf;
 }
 
 void TPacketData::Append(uint8 *buf, sint32 len)
@@ -213,7 +206,7 @@ void NetThread::Run()
 	TPacketData *packet;
 
 #if defined(_DEBUG)
-	SetThreadName("NetThread::Run");
+	Os::SetThreadName("NetThread::Run");
 #endif
 
 	while(!m_exit) {
@@ -566,7 +559,9 @@ TPacketData *NetThread::FindSplitStart(uint16 from)
 void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 {
 	Lock();
+#if 0
 	TPacketData *currentTail = m_incoming->GetTail();
+#endif
 	if(buf[0] == k_SPLIT_PACKET_HEAD && m_incoming->GetCount() > 0) {
 		
 		TPacketData *splitStart = FindSplitStart((uint16)from);

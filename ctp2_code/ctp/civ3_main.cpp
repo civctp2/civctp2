@@ -185,7 +185,7 @@
 #endif
 
 #if defined(_DEBUG)
-#include "debug.h"
+#include "debug.h"          // Os::SetThreadName
 #include "SlicSegment.h"    // SlicSegment::Cleanup
 #endif // _DEBUG 
 
@@ -921,6 +921,7 @@ sint32 sharedsurface_Initialize( void )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	return errcode; // Return ends code here needs to be considered if g_sharedSurface is really needed
 
+#if 0
 	Assert( g_sharedSurface == NULL );
 	if ( !g_sharedSurface )
 	{
@@ -943,6 +944,7 @@ sint32 sharedsurface_Initialize( void )
 	}
 
 	return errcode;
+#endif
 }
 
 void sharedsurface_Cleanup( void )
@@ -1688,7 +1690,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #if defined(WIN32) || defined(_WINDOWS)
 
 #if defined(_DEBUG)
-	SetThreadName("WinMain");
+	Os::SetThreadName("WinMain");
 #endif // _DEBUG
 
 	// Make sure old versions of DDHELP.EXE won't keep files open
