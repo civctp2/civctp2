@@ -53,7 +53,7 @@ public:
     );
 
 protected:
-	void TrimWavHeader( uint8 **wavdata, uint32 *size );
+	void TrimWavHeader( uint8 **wavdata, size_t *size );
 };
 
 

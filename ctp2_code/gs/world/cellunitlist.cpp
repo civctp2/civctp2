@@ -314,7 +314,7 @@ bool CellUnitList::CanAtLeastOneCaptureCity() const
 	return false;
 }
 
-bool CellUnitList::IsVisible(sint32 player) const
+bool CellUnitList::IsVisible(PLAYER_INDEX player) const
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetVisibility() & (1 << player))

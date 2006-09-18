@@ -1750,7 +1750,7 @@ bool BuildQueue::IsItemInQueue(uint32 cat, sint32 type)
         walk.Next()
     ) 
     {
-		if(walk.GetObj()->m_category == cat &&
+		if(walk.GetObj()->m_category == static_cast<sint32>(cat) &&
 		   walk.GetObj()->m_type == type)
 			return true;
 	}

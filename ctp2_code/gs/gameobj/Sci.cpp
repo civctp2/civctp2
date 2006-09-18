@@ -68,7 +68,7 @@ sint32 Science::ComputeScienceFromResearchPacts(const sint32 playerId)
 }
 
 
-sint32 Science::ComputeScienceFromResearchPact(const sint32 playerId, const PLAYER_INDEX foreignerId)
+sint32 Science::ComputeScienceFromResearchPact(const sint32 playerId, const sint32 foreignerId)
 {
 	Assert(g_player[foreignerId] != NULL);
 	if (g_player[foreignerId] == NULL)

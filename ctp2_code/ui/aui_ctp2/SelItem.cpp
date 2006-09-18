@@ -771,7 +771,7 @@ void SelectedItem::SetAutoCenter(const BOOL on)
 	g_theProfileDB->SetAutoCenter(on);
 }
 
-void SelectedItem::SetCurPlayer(sint32 p)
+void SelectedItem::SetCurPlayer(PLAYER_INDEX p)
 { 
 	sint32 visPlayer = GetVisiblePlayer();
 	Assert(m_next_player[p] != PLAYER_INDEX_INVALID); 

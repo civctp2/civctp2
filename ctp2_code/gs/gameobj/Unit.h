@@ -252,7 +252,7 @@ class aui_Surface;
 class Unit : public ID 
 {
 private:
-	void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, sint32 killedBy);
+	void RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 
 public:
 	Unit () : ID() { return; } ;
@@ -608,7 +608,7 @@ public:
 #endif
 
 
-	void MakeCitizen(sint32 pi, const MapPoint &pos, sint32 origOwner = -1);
+	void MakeCitizen(PopDBIndex pi, const MapPoint &pos, sint32 origOwner = -1);
 	
 	sint32 PopCount() const;
 	sint32 CountSlaves() const;

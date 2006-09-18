@@ -29,14 +29,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Globals.h"
-
 #include "UnitPool.h"
 
+#include "civarchive.h"
+#include "Globals.h"
+#include "gstypes.h"
 #include "UnitRec.h"
 #include "UnitData.h"
-
-#include "civarchive.h"
 #include "StrDB.h"
 
 

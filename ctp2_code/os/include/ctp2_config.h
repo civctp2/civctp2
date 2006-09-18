@@ -13,5 +13,13 @@
 #error "Unsupported build environment."
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER < 1400)
+// MSVC7 has no knowledge about functions that do not return, 
+// and will report missing return statements.
+#define UNREACHABLE_RETURN(x) return(x)
+#else
+#define UNREACHABLE_RETURN(x)
+#endif
+
 #endif
 
