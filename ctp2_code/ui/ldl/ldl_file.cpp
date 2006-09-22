@@ -45,7 +45,7 @@ BOOL ldl::ReadData(const char *fname )
 }
 
 
-ldl_datablock *ldl::FindDataBlock( char *szName, ldl_datablock *dbParent )
+ldl_datablock *ldl::FindDataBlock(const char *szName, ldl_datablock *dbParent )
 {
 	return ldlif_find_block(szName);
 }

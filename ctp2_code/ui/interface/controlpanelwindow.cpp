@@ -107,7 +107,7 @@
 #include "debugwindow.h"
 
 #include "c3cmdline.h"
-#include "SelItem.h"
+#include "SelItem.h"                    // g_selected_item
 #include "player.h"                     // g_player
 #include "c3window.h"
 #include "ctp2_Window.h"
@@ -1083,12 +1083,18 @@ void EspionageMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 item
 	
 	switch (itemIndex)
 	{
-		case CP_MENU_ITEM_0:
-			CityEspionage::Display();
-			break;
+	case CP_MENU_ITEM_0:
+        {
+            Unit    city;
+            if (g_selected_item->GetSelectedCity(city))
+            {
+                CityEspionage::Display(city);
+            }
+        }
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 }
 

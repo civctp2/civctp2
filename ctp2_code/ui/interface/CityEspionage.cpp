@@ -2,8 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : The city espionage scree
-// Id           : $Id:$
+// Description  : The city espionage screen
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,295 +25,305 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Improved cleanup and structure.
 //
 //----------------------------------------------------------------------------
+//
+/// \file   CityEspionage.cpp
+/// \brief  City espionage screen display (definitions)
 
 #include "c3.h"
 #include "cityespionage.h"
 
 #include "aui_ldl.h"
-#include "aui_uniqueid.h"
-
-#include "ctp2_Window.h"
-#include "ctp2_Menu.h"
+#include "BuildingRecord.h"     // g_theBuildingDB
+#include "c3ui.h"               // C3UI
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "CityData.h"
+#include "citywindow.h"         // InventoryItemInfo
 #include "ctp2_button.h"
-#include "ctp2_Static.h"
-#include "ctp2_dropdown.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
-#include "ctp2_Tab.h"
-#include "ctp2_TabButton.h"
-#include "ctp2_TabGroup.h"
-#include "ctp2_spinner.h"
-
-#include "c3ui.h"
-
-#include "diplomacywindow.h"
-#include "diplomacyutil.h"
-#include "Diplomat.h"
-
-#include "SelItem.h"
-
-#include "StrDB.h"
-#include "DiplomacyProposalRecord.h"
-#include "DiplomacyThreatRecord.h"
-
-#include "AdvanceRecord.h"
-#include "Unit.h"
-#include "SlicObject.h"
-#include "stringutils.h"
-
-#include "player.h"
-#include "Civilisation.h"
-#include "UnitDynArr.h"
-
-#include "GameEventUser.h"
-#include "Events.h"
-#include "BuildingRecord.h"
-#include "UnitData.h"
-#include "citywindow.h"
-#include "wonderrecord.h"
-#include "cellunitlist.h"
-#include "World.h"
-#include "Cell.h"
-#include "unitrecord.h"
+#include "ctp2_Static.h"
+#include "ctp2_Window.h"
+#include "gstypes.h"            // k_MAX_ARMY_SIZE
 #include "iconrecord.h"
+#include "SlicObject.h"
+#include "StrDB.h"              // g_theStringDB
+#include "stringutils.h"
+#include "Unit.h"
+#include "unitrecord.h"
+#include "wonderrecord.h"       // g_theWonderDB
+#include "World.h"              // g_theWorld
 
-static CityEspionage *s_CityEspionage;
-static MBCHAR *s_CityEspionageBlock = "CityEspionage";
+extern C3UI *   g_c3ui;
 
-extern C3UI *g_c3ui;
-ctp2_Button	*CityEspionage::m_cancelButton = NULL;
-
-CityEspionage::CityEspionage(AUI_ERRCODE *err)
+namespace
 {
-	*err = AUI_ERRCODE_OK;
-	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_CityEspionageBlock);
-	Assert(m_window);
-	if(!m_window) {
-		*err = AUI_ERRCODE_INVALIDPARAM;
-		return;
-	}
+    /// City espionage data and window (singleton)
+    CityEspionage * s_CityEspionage     = NULL;
+    
+    /// Block name for lookup of elements and layout from the ldl-file
+    MBCHAR const *  LDL_BLOCK           = "CityEspionage";
 
-	m_cancelButton = (ctp2_Button *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CancelButton");
-	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, NULL);
+    /// Set label text - after substitution of variables
+    /// \param      a_Label     Name of label text to set
+    /// \param      a_Text      Name of text item to set (may contain variables)
+    /// \param      a_Context   Context, containing variable substitution values
+    void SetLabelText
+    (
+        MBCHAR const *      a_Label, 
+        MBCHAR const *      a_Text, 
+        SlicObject &        a_Context
+    )
+    {
+        ctp2_Static * st = static_cast<ctp2_Static *>
+                                (aui_Ldl::GetObject(LDL_BLOCK, a_Label));
 
+        if (st)
+        {
+            MBCHAR parsedText[k_MAX_NAME_LEN];
+            parsedText[0] = 0;
+            stringutils_Interpret(g_theStringDB->GetNameStr(a_Text), 
+                                  a_Context, 
+                                  parsedText, 
+                                  k_MAX_NAME_LEN
+                                 );
+            st->SetText(parsedText);
+        }
+    }
+
+}
+
+
+CityEspionage::CityEspionage()
+:
+    m_window        (NULL),
+    m_cancelButton  (NULL),
+    m_inventoryList (NULL)
+{
+    m_window = static_cast<ctp2_Window *>
+            (aui_Ldl::BuildHierarchyFromRoot(LDL_BLOCK));
+
+    if (m_window)
+    {
+        m_cancelButton  = static_cast<ctp2_Button *>
+            (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.CancelButton"));
+        if (m_cancelButton) 
+        {
+            m_cancelButton->SetActionFuncAndCookie(CancelCallback, this);
+        }
+
+        m_inventoryList = static_cast<ctp2_ListBox *>
+            (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.InventoryList"));
+    }
 }
 
 CityEspionage::~CityEspionage()
 {
-	if(m_window) {
-		aui_Ldl::DeleteHierarchyFromRoot(s_CityEspionageBlock);
+    HideWindow();
+
+    if (m_inventoryList)
+    {
+        m_inventoryList->ClearUserData<InventoryItemInfo>();
+        m_inventoryList->Clear();
+    }
+
+	for (size_t unitIndex = 0; unitIndex < k_MAX_ARMY_SIZE; ++unitIndex) 
+    {
+		MBCHAR  block [k_MAX_NAME_LEN];
+		sprintf(block, "DialogBackground.FortifiedUnitsBox.Unit%i", unitIndex);
+
+		ctp2_Static * unitPicture  = static_cast<ctp2_Static *>
+                                        (aui_Ldl::GetObject(LDL_BLOCK, block));
+		if (unitPicture) 
+		{
+            unitPicture->ExchangeImage(0, 0, NULL);
+		}
 	}
+
+    aui_Ldl::DeleteHierarchyFromRoot(LDL_BLOCK);
 }
 
-AUI_ERRCODE CityEspionage::Initialize()
+/// Release all data of the singleton.
+/// \remarks Can be used as ::UiCleanupCallback 
+void CityEspionage::Cleanup()
 {
-	
-	if(s_CityEspionage)
-		return AUI_ERRCODE_OK;
-
-	
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
-	s_CityEspionage = new CityEspionage(&err);
-
-	Assert(err == AUI_ERRCODE_OK);
-
-	return err;
+    delete s_CityEspionage;
+    s_CityEspionage = NULL;
 }
 
-AUI_ERRCODE CityEspionage::Cleanup()
+/// Display espionage intelligence of a city
+/// \param  a_City  The city that has been investigated
+/// \remarks Creates or reuses the singleton s_CityEspionage.
+void CityEspionage::Display(Unit a_City)
 {
-	if(s_CityEspionage) {
-		Hide();
+	if (!s_CityEspionage)
+    {
+        s_CityEspionage = new CityEspionage();
+        g_c3ui->RegisterCleanup(&CityEspionage::Cleanup);
+    }
 
-		delete s_CityEspionage;
-		s_CityEspionage = NULL;
-	}
-	return AUI_ERRCODE_OK;
+    s_CityEspionage->DisplayWindow(a_City);
 }
 
-AUI_ERRCODE CityEspionage::Display(Unit *c)
+/// Display espionage intelligence of a city
+/// \param  a_City  The city that has been investigated
+void CityEspionage::DisplayWindow(Unit a_City)
 {
-	if(!s_CityEspionage)
-		Initialize();
-
-	Assert(s_CityEspionage);
-	if(!s_CityEspionage) {
-		return AUI_ERRCODE_HACK;
-	}
-	
-
-	AUI_ERRCODE err = AUI_ERRCODE_INVALIDPARAM;
-
-	Assert(s_CityEspionage->m_window);
-	if(s_CityEspionage->m_window) {
-		err = g_c3ui->AddWindow(s_CityEspionage->m_window);
+	if (m_window) 
+    {
+		AUI_ERRCODE err = g_c3ui->AddWindow(m_window);
 		Assert(err == AUI_ERRCODE_OK);
-		if(err == AUI_ERRCODE_OK) {
-			err = s_CityEspionage->m_window->Show();
+
+		if (err == AUI_ERRCODE_OK) 
+        {
+			err = m_window->Show();
 		}
 
-	
-		ctp2_Static *st;
+	    if (!a_City.IsValid())
+        {
+            return;
+        }
+
 		SlicObject so;
-		Unit city;
-		if(c==NULL)
-		{
-			if(!g_selected_item->GetSelectedCity(city)) 
-			{
-				return err;
-			}
-		}
-		else
-		{
-			city=*c;
-		}
-		so.AddPlayer(city.GetOwner());
-		so.AddCity(city);
+		so.AddPlayer(a_City.GetOwner());
+		so.AddCity(a_City);
 
-		MBCHAR interp[k_MAX_NAME_LEN];
+		SetLabelText("DialogBackground.CityLabel",          "str_ldl_Espionage_City_Label",         so);
+		SetLabelText("DialogBackground.PopulationLabel",    "str_ldl_Espionage_Population_Label",   so);
+		SetLabelText("DialogBackground.HapinessLabel",      "str_ldl_Espionage_Happiness_Label",    so);
+		SetLabelText("DialogBackground.Building",           "str_ldl_Espionage_Building_Label",     so);
+		SetLabelText("DialogBackground.CompleteIn",         "str_ldl_Espionage_CompleteIn_Label",   so);
+		SetLabelText("DialogBackground.CityIncome",         "str_ldl_Espionage_CityIncome_Label",   so);
+		SetLabelText("DialogBackground.GoldFromTrade",      "str_ldl_Espionage_GoldInTrade_Label",  so);
 
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_City_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CityLabel");
-		st->SetText(interp);
-
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_Population_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.PopulationLabel");
-		st->SetText(interp);
-
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_Happiness_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.HapinessLabel");
-		st->SetText(interp);
-
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_Building_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.Building");
-		st->SetText(interp);
-
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_CompleteIn_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CompleteIn");
-		st->SetText(interp);
-
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_CityIncome_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CityIncome");
-		st->SetText(interp);
-
-		
-		interp[0] = 0;
-		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_GoldInTrade_Label"), so, interp);
-		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.GoldFromTrade");
-		st->SetText(interp);
-
-		
-		ctp2_ListBox *m_inventoryList = (ctp2_ListBox *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.InventoryList");
 		Assert(m_inventoryList);
-		if(m_inventoryList) {
-			
-			m_inventoryList->Clear();
+		if (m_inventoryList) 
+        {
+            m_inventoryList->ClearUserData<InventoryItemInfo>();
+            m_inventoryList->Clear();
+            m_inventoryList->BuildListStart();
 
-			
-			sint32 i;
-			for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-				if(city->GetImprovements() & ((uint64)1 << (uint64)i)) {
-					ctp2_ListItem *item;
-					item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem");
-					Assert(item);
-					if(item) {
+            CityData const *    cityData    = a_City.GetCityData();
 
-						
-						item->SetText(g_theBuildingDB->Get(i)->GetNameText());
-						InventoryItemInfo *info = new InventoryItemInfo(true, i);
-						item->SetUserData(info);
-						m_inventoryList->AddItem(item);
+            for (sint32 buildIndex = 0; buildIndex < g_theBuildingDB->NumRecords(); ++buildIndex)
+            {
+				if (cityData->HaveImprovement(buildIndex)) 
+                {
+					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
+                        (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
+
+                    if (item) 
+                    {
+						item->SetText(g_theBuildingDB->Get(buildIndex)->GetNameText());
+						item->SetUserData(new InventoryItemInfo(true, buildIndex));
 					}
+
+					m_inventoryList->AddItem(item);
 				}
 			}
 
 			
-			for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-				if(city->GetCityData()->GetBuiltWonders() & ((uint64)1 << (uint64)i)) {
-					ctp2_ListItem *item;
-					item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem");
-					Assert(item);
-					if(item) {
+			for (sint32 wonderIndex = 0; wonderIndex < g_theWonderDB->NumRecords(); ++wonderIndex) 
+            {
+				if (cityData->GetBuiltWonders() & ((uint64) 1 << (uint64) wonderIndex)) 
+                {
+					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
+                        (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
 
-						
-						item->SetText(g_theWonderDB->Get(i)->GetNameText());
-						InventoryItemInfo *info = new InventoryItemInfo(false, i);
-						item->SetUserData(info);
-						m_inventoryList->AddItem(item);
+                    if (item) 
+                    {
+						item->SetText(g_theWonderDB->Get(wonderIndex)->GetNameText());
+						item->SetUserData(new InventoryItemInfo(false, wonderIndex));
 					}
+					
+                    m_inventoryList->AddItem(item);
 				}
-			}
+            }
+
+            m_inventoryList->BuildListEnd();
 
 			MapPoint pos;
+			a_City.GetPos(pos);
+			Cell * cell = g_theWorld->GetCell(pos);
+
 			CellUnitList cellUnitList;
-			city.GetPos(pos);
-			Cell *cell = g_theWorld->GetCell(pos);
 			cell->GetArmy(cellUnitList);
 
 			
-			sint32 multiIndex = 0;
 			sint32 unitIndex = 0;
 
 			
-			while(multiIndex < 12) {
-				sprintf(interp,"DialogBackground.FortifiedUnitsBox.Unit%i",multiIndex);
-				st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, interp);
+			for (sint32 multiIndex = 0; multiIndex < k_MAX_ARMY_SIZE; ++multiIndex) 
+            {
+                MBCHAR interp[k_MAX_NAME_LEN];
+				sprintf(interp, "DialogBackground.FortifiedUnitsBox.Unit%i", multiIndex);
+				ctp2_Static * st = (ctp2_Static *) aui_Ldl::GetObject(LDL_BLOCK, interp);
 				
-				if(unitIndex < cellUnitList.Num()) 
-				{
-					
-					Unit &unit = cellUnitList[unitIndex++];
-					
-					if(st->IsDisabled())
-						st->Enable(true);
+                if (st)
+                {
+				    if (unitIndex < cellUnitList.Num()) 
+				    {
+					    Unit &  unit = cellUnitList[unitIndex++];
+    					
+					    if (st->IsDisabled())
+                        {
+						    st->Enable(true);
+                        }
 
-					st->ExchangeImage(0, 0,	unit.GetDBRec()->GetDefaultIcon()->GetIcon());
-				}
-				else
-				{	
-					if(!st->IsDisabled())
-						st->Enable(false);
-					st->ExchangeImage(0, 0, NULL);
-				}
-				multiIndex++;
+					    st->ExchangeImage(0, 0,	unit.GetDBRec()->GetDefaultIcon()->GetIcon());
+				    }
+				    else
+				    {	
+					    if (!st->IsDisabled())
+                        {
+						    st->Enable(false);
+                        }
+
+					    st->ExchangeImage(0, 0, NULL);
+				    }
+                }
 			}
 		}
 	}
-
-	return err;
 }
 
-AUI_ERRCODE CityEspionage::Hide()
+/// Hide the espionage intelligence of a city
+void CityEspionage::HideWindow()
 {
-	if(!s_CityEspionage)
-		return AUI_ERRCODE_OK;
+    if (m_window)
+    {  
+        m_window->Hide();
 
-	Assert(s_CityEspionage->m_window);
-	if(!s_CityEspionage->m_window)
-		return AUI_ERRCODE_INVALIDPARAM;
-
-	s_CityEspionage->m_window->Hide();
-	return g_c3ui->RemoveWindow(s_CityEspionage->m_window->Id());
+        if (g_c3ui)
+        {
+            g_c3ui->RemoveWindow(m_window->Id());
+        }
+    }
 }
 
-void CityEspionage::CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+/// Handle the cancel button
+/// \param  control Not used 
+/// \param  action  Action to perform
+/// \param  data    Not used
+/// \param  cookie  Not used, except for consistency testing in the debug version.
+/// \remarks Can be used as aui_Control::ControlActionCallback
+void CityEspionage::CancelCallback
+(
+    aui_Control *   control, 
+    uint32          action, 
+    uint32          data, 
+    void *          cookie
+)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+    if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	Hide();
+    Assert(s_CityEspionage == static_cast<CityEspionage const *>(cookie));
+    if (s_CityEspionage)
+    {  
+        s_CityEspionage->HideWindow();
+    }
 }
 

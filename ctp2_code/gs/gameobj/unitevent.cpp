@@ -153,7 +153,7 @@ STDEHANDLER(InvestigationEvent)
 	
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
-	CityEspionage::Display(&c);
+	CityEspionage::Display(c);
 	return GEV_HD_Continue;
 }
 	

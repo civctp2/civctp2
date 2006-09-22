@@ -120,8 +120,8 @@ public:
 	static void			*GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock);
 	
 	
-	static AUI_ERRCODE	SetupHeirarchyFromRoot( MBCHAR *rootBlock );
-	static AUI_ERRCODE	SetupHeirarchyFromLeaf( MBCHAR *leafBlock, aui_Region *object );
+	static AUI_ERRCODE	SetupHeirarchyFromRoot(MBCHAR const * rootBlock);
+	static AUI_ERRCODE	SetupHeirarchyFromLeaf(MBCHAR *leafBlock, aui_Region *object );
 
 	
 	
@@ -129,7 +129,7 @@ public:
 	
 	
 	
-	static aui_Region	*BuildHierarchyFromRoot(MBCHAR *rootBlock);
+	static aui_Region * BuildHierarchyFromRoot(MBCHAR const * rootBlock);
 
 	
 	
@@ -151,7 +151,7 @@ public:
 	
 	
 	
-	static AUI_ERRCODE	DeleteHierarchyFromRoot(MBCHAR *rootBlock);
+	static AUI_ERRCODE	DeleteHierarchyFromRoot(MBCHAR const * rootBlock);
 
 	
 	

@@ -166,10 +166,10 @@ aui_Ldl::~aui_Ldl()
         aui_LdlObject * nextObject  = NULL;
 	    for (aui_LdlObject * curObject = s_objectList; curObject; curObject = nextObject)
 	    {
-		nextObject = curObject->next;
-		DeleteLdlObject(curObject);
-	}
-}
+		    nextObject = curObject->next;
+		    DeleteLdlObject(curObject);
+	    }
+    }
 }
 
 
@@ -322,7 +322,7 @@ AUI_ERRCODE aui_Ldl::AppendLdlObject(aui_LdlObject *object)
 	if (NULL == object) 
 		return AUI_ERRCODE_INVALIDPARAM;
 
-		object->next = NULL;
+	object->next = NULL;
 	object->prev    = s_objectListTail;
 
 	if (s_objectListTail) 
@@ -334,7 +334,7 @@ AUI_ERRCODE aui_Ldl::AppendLdlObject(aui_LdlObject *object)
 		s_objectList = object;
 	} 
 
-		s_objectListTail = object;
+	s_objectListTail = object;
 
 	return AUI_ERRCODE_OK;
 }
@@ -516,7 +516,7 @@ void *aui_Ldl::GetObject( const MBCHAR *ldlBlock )
 		aui_LdlObject *obj = myKey->Key();
 		Assert(obj);
 		if (obj) {
-			return (void *)obj->object;
+			return obj->object;
 		}
 	}
 
@@ -541,7 +541,7 @@ void *aui_Ldl::GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock)
 
 
 
-AUI_ERRCODE aui_Ldl::SetupHeirarchyFromRoot( MBCHAR *rootBlock )
+AUI_ERRCODE aui_Ldl::SetupHeirarchyFromRoot(MBCHAR const * rootBlock )
 {
 	
 	if ( !s_objectListByString ) return AUI_ERRCODE_INVALIDPARAM;
@@ -644,7 +644,7 @@ AUI_ERRCODE aui_Ldl::SetupHeirarchyFromLeaf( MBCHAR *leafBlock, aui_Region *obje
 
 
 
-aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR *rootBlock)
+aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR const * rootBlock)
 {
 	
 	Assert(s_objectListByObject);
@@ -674,11 +674,11 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR *rootBlock)
 	BOOL			isAtomic = dataBlock->GetBool(k_AUI_LDL_ATOMIC);
 
 	
-	aui_Region		*myRegion;
 
 	char fullname[256];
 	dataBlock->GetFullName(fullname);
 
+	aui_Region		*myRegion;
 	AUI_ERRCODE		err = BuildObjectFromType(objTypeString, fullname, &myRegion);
 	Assert(err == AUI_ERRCODE_OK);
 	if (err != AUI_ERRCODE_OK) 
@@ -726,20 +726,19 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR *rootBlock)
 
 AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *region)
 {
-	ldl_datablock *dataBlock;
-
-	
-	Assert(s_objectListByObject && s_objectListByString);
-	if ( !s_objectListByObject || !s_objectListByString )
+	Assert(s_objectListByObject && s_objectListByString && parent);
+	if ( !s_objectListByObject || !s_objectListByString || !parent)
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	
-
-	PointerList<ldl_datablock> *childList = parent->GetChildList();
-	PointerList<ldl_datablock>::Walker walk(childList);
-	while(walk.IsValid()) {
-		dataBlock = walk.GetObj();
-
+	PointerList<ldl_datablock> *    childList = parent->GetChildList();
+	for
+    (
+	    PointerList<ldl_datablock>::Walker walk(childList);
+        walk.IsValid();
+        walk.Next()
+    ) 
+    {
+	    ldl_datablock * dataBlock = walk.GetObj();
 		Assert(dataBlock);
 		if (dataBlock == NULL) 
 			return AUI_ERRCODE_INVALIDPARAM;
@@ -756,12 +755,12 @@ AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *r
 		BOOL			isAtomic = dataBlock->GetBool(k_AUI_LDL_ATOMIC);
 		
 		
-		aui_Region		*myRegion;
-		AUI_ERRCODE		err;
 		
 		char fullname[256];
 		dataBlock->GetFullName(fullname);
-		err = BuildObjectFromType(objTypeString, fullname, &myRegion);
+
+		aui_Region *    myRegion;
+		AUI_ERRCODE		err = BuildObjectFromType(objTypeString, fullname, &myRegion);
 		Assert(err == AUI_ERRCODE_OK);
 		if (err != AUI_ERRCODE_OK) 
 			return AUI_ERRCODE_INVALIDPARAM;
@@ -777,9 +776,8 @@ AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *r
 		}
 
 		region->AddChild(myRegion);
-
-		walk.Next();
 	}
+
 	return AUI_ERRCODE_OK;
 }
 
@@ -915,7 +913,7 @@ AUI_ERRCODE aui_Ldl::BuildObjectFromType(MBCHAR *typeString,
 
 
 
-AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(MBCHAR *rootBlock)
+AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(MBCHAR const * rootBlock)
 {
 	
 	Assert(s_objectListByObject);

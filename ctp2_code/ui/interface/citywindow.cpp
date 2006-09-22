@@ -425,7 +425,7 @@ CityWindow::~CityWindow()
 
 	if (m_inventoryList)	// container + reference
 	{
-		ClearInventoryUserData();
+		m_inventoryList->ClearUserData<InventoryItemInfo>();
 		m_inventoryList->Clear();
 	}
 
@@ -435,7 +435,7 @@ CityWindow::~CityWindow()
 	}
 
 	ctp2_DropDown *	const	dropdown	= 
-		reinterpret_cast<ctp2_DropDown *>
+		static_cast<ctp2_DropDown *>
 			(aui_Ldl::GetObject(s_cityWindowBlock, "GovernorBox.Pulldown"));
 	if (dropdown)			// container + reference
 	{
@@ -850,15 +850,13 @@ void CityWindow::UpdateBuildTabs()
 	lb = m_inventoryList;
 	Assert(lb);
 	if(lb) {
-		ClearInventoryUserData();
+		lb->ClearUserData<InventoryItemInfo>();
 		lb->Clear();
-
 		
 		sint32 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 			if(m_cityData->GetImprovements() & ((uint64)1 << (uint64)i)) {
-				ctp2_ListItem *item;
-				item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_InventoryListItem");
+				ctp2_ListItem * item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_InventoryListItem");
 				Assert(item);
 				if(item) {
 					ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
@@ -880,8 +878,7 @@ void CityWindow::UpdateBuildTabs()
 		
 		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
 			if(m_cityData->GetBuiltWonders() & ((uint64)1 << (uint64)i)) {
-				ctp2_ListItem *item;
-				item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_InventoryListItem");
+				ctp2_ListItem * item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_InventoryListItem");
 				Assert(item);
 				if(item) {
 					ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
@@ -1319,42 +1316,6 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 
 	s_cityWindow->Update();
 }
-
-//----------------------------------------------------------------------------
-//
-// Name       : CityWindow::ClearInventoryUserData
-//
-// Description: Clear the user data of the inventory list.
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : Does not clear the list itself.
-//
-//----------------------------------------------------------------------------
-void CityWindow::ClearInventoryUserData()
-{
-	Assert(m_inventoryList);
-	if (m_inventoryList)
-	{
-		for (int i = 0; i < m_inventoryList->NumItems(); ++i)
-		{
-			ctp2_ListItem * const	item	= 
-				static_cast<ctp2_ListItem *>(m_inventoryList->GetItemByIndex(i));
-			if (item)
-			{
-				InventoryItemInfo	* info	= 
-					reinterpret_cast<InventoryItemInfo *>(item->GetUserData());
-				delete info;
-				item->SetUserData(NULL);
-			}
-		} // for
-	}
-}
-
 
 void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {

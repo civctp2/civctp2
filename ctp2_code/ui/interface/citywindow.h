@@ -126,8 +126,6 @@ class CityWindow {
 	static AUI_ERRCODE Display(CityData *city);
 	static AUI_ERRCODE Hide();
 	
-	void ClearInventoryUserData();
-
 	static void CopyCitiesBack();
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
