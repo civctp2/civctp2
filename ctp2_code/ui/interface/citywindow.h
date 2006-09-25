@@ -30,8 +30,20 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef CITY_WINDOW_H__
 #define CITY_WINDOW_H__
+
+class CityWindow;
+class InventoryItemInfo;
+
+#include "auitypes.h"           // AUI_ERRCODE
+#include "citydata.h"
+#include "ctp2_inttypes.h"      // sint32, uint32
+#include "gstypes.h"
 
 class ctp2_Window;
 class CityData;
@@ -49,8 +61,6 @@ class aui_Region;
 
 template <class T> class PointerList;
 
-#include "citydata.h"
-#include "gstypes.h"
 
 class InventoryItemInfo {
   public:

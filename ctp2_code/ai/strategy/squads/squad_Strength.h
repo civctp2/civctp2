@@ -15,9 +15,9 @@
 
 class Squad_Strength;
 
-#include "MapPoint.h"            // MapPoint
+#include "ctp2_inttypes.h"      // sintN
+#include "MapPoint.h"           // MapPoint
 #include "scheduler_types.h"
-// sint16, sint32
 
 class Squad_Strength 
 { 
@@ -36,15 +36,7 @@ public:
 	  m_air_bombard_str  (0.0)
     { ; }; 
 
-	
-    Squad_Strength(const Squad_Strength &squad_strength); 
-
-  	
-    virtual ~Squad_Strength() { ; }; 
-
-
-	Squad_Strength& operator= (const Squad_Strength &squad_strength);
-
+	// Use compiler generated copy constructor, destructor, and assignment operator.
 	
 	bool operator> (const Squad_Strength &squad_strength) const;
 

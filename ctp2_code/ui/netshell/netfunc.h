@@ -151,9 +151,9 @@ template<class T>
 class List:public std::list<T *> {
 friend class NETFunc;
 public:
-	typename NETFunc::List<T>::iterator Find(T *t) 
+	typename List<T>::iterator Find(T *t) 
     {
-		for (typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); ++i)
+		for (typename List<T>::iterator i = this->begin(); i != this->end(); ++i)
         {
 			if (t->Equals(*i))
             {
@@ -166,7 +166,7 @@ public:
 	
 	void Clr(void) 
     {
-		for (typename NETFunc::List<T>::iterator i = this->begin(); i != this->end(); ++i)
+		for (typename List<T>::iterator i = this->begin(); i != this->end(); ++i)
         {
 			delete *i;
         }
@@ -176,7 +176,7 @@ public:
 	
 	T *Add(T *t) 
     {
-		typename NETFunc::List<T>::iterator i = Find(t);
+		typename List<T>::iterator i = Find(t);
 
         if (i == this->end()) 
         {
@@ -193,7 +193,7 @@ public:
 	
 	void Del(T *t) 
     {
-		typename NETFunc::List<T>::iterator i = Find(t);
+		typename List<T>::iterator i = Find(t);
 
 		if (i != this->end()) 
         {
@@ -204,7 +204,7 @@ public:
 	
 	T *Chg(T *t) 
     {
-		typename NETFunc::List<T>::iterator i = Find(t);
+		typename List<T>::iterator i = Find(t);
 
 		if (i == this->end()) 
         {
@@ -228,7 +228,7 @@ public:
     {
 		if (l)
         {
-			for (typename NETFunc::List<T>::iterator i = l->begin(); i != l->end(); ++i)
+			for (typename List<T>::iterator i = l->begin(); i != l->end(); ++i)
             {
 				Add(new T(**i));
             }

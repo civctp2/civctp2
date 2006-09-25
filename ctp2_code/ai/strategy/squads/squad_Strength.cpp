@@ -34,44 +34,8 @@
 
 #include "agent.h"
 #include "cellunitlist.h"
-#include "World.h"
 #include "UnitRecord.h"
-#include "debugassert.h"
-
-Squad_Strength::Squad_Strength(const Squad_Strength &squad_strength)
-{
-	*this = squad_strength;
-}
-
-Squad_Strength & Squad_Strength::operator= (const Squad_Strength &squad_strength)
-{
-	
-    m_agent_count = squad_strength.m_agent_count;  
-
-	
-    m_attack_str = squad_strength.m_attack_str;
-
-	
-    m_defense_str = squad_strength.m_defense_str;
-
-	m_ranged_str = squad_strength.m_ranged_str;
-
-	
-	m_value = squad_strength.m_value;
-
-	
-	m_transport = squad_strength.m_transport;
-
-	m_defenders = squad_strength.m_defenders;
-
-    m_ranged = squad_strength.m_ranged; 
-
-	m_land_bombard_str = squad_strength.m_land_bombard_str;
-	m_water_bombard_str = squad_strength.m_water_bombard_str;
-	m_air_bombard_str = squad_strength.m_air_bombard_str;
-
-    return *this;
-}
+#include "World.h"
 
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
@@ -88,15 +52,15 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
     // Equal transport strength: test the battle strength
 
     // Attack difference
-    sint16 const attack_cpr = (m_attack_str - squad_strength.m_attack_str);
+    double const attack_cpr = (m_attack_str - squad_strength.m_attack_str);
     // Defense difference
-    sint16 const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+    double const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
     // ranged difference
-    sint16 const ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
+    double const ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
     // value difference
-    sint16 const value_cpr = (m_value - squad_strength.m_value);
+    double const value_cpr  = (m_value - squad_strength.m_value);
 
-    sint16 const battle_cpr = attack_cpr	+ defense_cpr + ranged_cpr + value_cpr;
+    double const battle_cpr = attack_cpr	+ defense_cpr + ranged_cpr + value_cpr;
     if (battle_cpr > 0)
     {
         return true;

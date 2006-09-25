@@ -36,13 +36,12 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
 #ifndef __STRING_DB_H__
 #define __STRING_DB_H__ 1
-
 
 //----------------------------------------------------------------------------
 // Library dependencies

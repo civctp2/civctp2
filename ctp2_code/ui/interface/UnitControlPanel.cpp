@@ -547,9 +547,9 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
     
     m_cellArmyList.swap(newArmyList);
     m_cellUnitList.clear();
-	for (sint32 unitIndex = 0; unitIndex < newUnitList.Num(); ++unitIndex)
+	for (sint32 newUnitIndex = 0; newUnitIndex < newUnitList.Num(); ++newUnitIndex)
     {
-        m_cellUnitList.push_back(newUnitList[unitIndex]);
+        m_cellUnitList.push_back(newUnitList[newUnitIndex]);
     }
 }
 
