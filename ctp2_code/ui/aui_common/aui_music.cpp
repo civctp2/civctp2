@@ -166,113 +166,85 @@ aui_Redbook::Init()
 AUI_MUSIC_ERRCODE
 aui_Redbook::Close()
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	
-	retval = Stop();
-	retval = CDDone();
+	(void) Stop();
 
-	return retval;
+	return CDDone();
 }
 
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Pause()
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
 	MCI_GENERIC_PARMS mciPauseParms;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_PAUSE, 0, (DWORD)&mciPauseParms );
-	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-	return retval;
+	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_PAUSE, 0, (DWORD)&mciPauseParms );
+	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Resume()
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
 	MCI_GENERIC_PARMS mciResumeParms;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_RESUME, 0, (DWORD)&mciResumeParms );
-	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-	return retval;
-
+	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_RESUME, 0, (DWORD)&mciResumeParms );
+	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
 }
 
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Stop()
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
 	MCI_GENERIC_PARMS mciStopParms;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_STOP, 0, (DWORD)&mciStopParms );
-	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-	return retval;
+	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_STOP, 0, (DWORD)&mciStopParms );
+	return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Play( sint32 itrack )
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
-	int playFlags = MCI_FROM;
-	MCI_PLAY_PARMS mciPlayParms;
-
-	
 	if( (itrack < m_first_track) || (itrack > m_last_track) )
 		return AUI_MUSIC_ERRCODE_INVALID_TRACKNUMBER;
 
+	int playFlags = MCI_FROM;
+	MCI_PLAY_PARMS mciPlayParms;
 	mciPlayParms.dwFrom = (ULONG)itrack;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, playFlags, (DWORD)&mciPlayParms );
+	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, playFlags, (DWORD)&mciPlayParms );
 	if( mci_retval == MMSYSERR_NOERROR)
 		m_ctrack = itrack;
 
-	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-	return retval;
+	return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::Play()
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
 	MCI_PLAY_PARMS mciPlayParms;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_PLAY, 0, (DWORD)&mciPlayParms ); 
-	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-	return retval;
+	sint32 mci_retval = mciSendCommand(m_cd_device_id, MCI_PLAY, 0, (DWORD)&mciPlayParms); 
+	return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
 
 AUI_MUSIC_ERRCODE
 aui_Redbook::SetVolume( uint8 volume )
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
-	DWORD CDvolume = 0;
-	m_volume = std::min(volume, (unsigned char) 0xff);
+	m_volume = volume;
 	
-	CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );	
+	if (m_aux_cdrom_id == -1)
+	{
+		return AUI_MUSIC_AUXCDROMID_INVALID;
+	}
+
+	DWORD CDvolume = (DWORD)( ( ( m_volume + 1 ) << 8 ) - 1 );	
 	CDvolume |= ( CDvolume << 16 );								
 
-	if( m_aux_cdrom_id != -1 )
-	{
-		mci_retval = auxSetVolume( m_aux_cdrom_id, CDvolume );
-		retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-	}
-	else
-	{
-		retval = AUI_MUSIC_AUXCDROMID_INVALID;
-	}
-
-	return retval;
+    sint32 mci_retval = auxSetVolume(m_aux_cdrom_id, CDvolume);
+    return mci_retval ? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
 
@@ -280,22 +252,14 @@ aui_Redbook::SetVolume( uint8 volume )
 sint32
 aui_Redbook::CDInitVolume()
 {
-	int     HowManyAuxDevices;
-   BOOL    FoundCDRom = FALSE;
-   int     i;
-   AUXCAPS AuxDeviceCapabilities;
-   int     CDRomID = -1;
+    int     CDRomID = -1;
+	int     HowManyAuxDevices = auxGetNumDevs();
 
-   
-   
-   
-	
-	
-	HowManyAuxDevices = auxGetNumDevs();
-
-	
-	if(HowManyAuxDevices > 0)
+	if (HowManyAuxDevices > 0)
 	{
+        BOOL    FoundCDRom = FALSE;
+        int     i;
+        AUXCAPS AuxDeviceCapabilities;
 		
 		for( i=0; (i<HowManyAuxDevices) && (FoundCDRom == FALSE); i++ )
 		{
@@ -348,16 +312,10 @@ aui_Redbook::CDInitVolume()
 AUI_MUSIC_ERRCODE
 aui_Redbook::GetCDIndex()
 {
-	LPSTR driveMap;
-	LPSTR driveName;
-	
-	
-	
-	driveMap = (LPSTR)calloc(105, sizeof(char));	
-
+	LPSTR   driveMap    = (LPSTR) calloc(105, sizeof(char));	
 	GetLogicalDriveStrings(105, driveMap);
 
-	driveName = driveMap;
+	LPSTR   driveName   = driveMap;
 	m_cd_drive_index = 0;
 
 	while ( *driveName )
@@ -384,15 +342,12 @@ aui_Redbook::GetCDIndex()
 AUI_MUSIC_ERRCODE
 aui_Redbook::CDDone()
 {
-	AUI_MUSIC_ERRCODE retval = AUI_MUSIC_ERRCODE_OK;
-	sint32 mci_retval = 0;
 	MCI_GENERIC_PARMS mciCloseParms;
 
-	mci_retval = mciSendCommand( m_cd_device_id, MCI_CLOSE, 0, (DWORD)(&mciCloseParms) );
+	sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_CLOSE, 0, (DWORD)(&mciCloseParms) );
 	m_cd_device_id = -1;
 
-	retval = mci_retval? AUI_MUSIC_ERRCODE_MCIERR:AUI_MUSIC_ERRCODE_OK;
-  	return retval;
+	return mci_retval? AUI_MUSIC_ERRCODE_MCIERR : AUI_MUSIC_ERRCODE_OK;
 }
 
 
@@ -400,38 +355,39 @@ aui_Redbook::CDDone()
 AUI_MUSIC_CODE
 aui_Redbook::Status()
 {
-	sint32 mci_retval = 0;
-	MCI_STATUS_PARMS mciStatusParms;
+    if (m_cd_ok)
+    {
+        MCI_STATUS_PARMS mciStatusParms;
+        mciStatusParms.dwItem = MCI_STATUS_MODE;
 
-	if (m_cd_ok)
-	{
-		mciStatusParms.dwItem = MCI_STATUS_MODE;
-		mci_retval = mciSendCommand( m_cd_device_id, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&mciStatusParms );
-	   if( mci_retval )
-	   {
-			CDDone();
-			m_cd_ok = 0;
-	      return( AUI_MUSIC_CODE_UNKNOWN );
-	   }
+        sint32 mci_retval = mciSendCommand( m_cd_device_id, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&mciStatusParms );
 
-	   switch ( mciStatusParms.dwReturn )
-		{
-			case MCI_MODE_PAUSE:		
-				return( AUI_MUSIC_CODE_PAUSE ); 
-			case MCI_MODE_PLAY:			
-				return( AUI_MUSIC_CODE_PLAY );
-			case MCI_MODE_STOP:			
-				return( AUI_MUSIC_CODE_STOP );
-			case MCI_MODE_OPEN:			
-				return( AUI_MUSIC_CODE_EMPTY );
+        if (mci_retval)
+        {
+	        CDDone();
+	        m_cd_ok = 0;
+        }
+        else
+        {
+            switch (mciStatusParms.dwReturn)
+            {
+            default:					
+//          case MCI_MODE_RECORD:
+//          case MCI_MODE_SEEK:
+//          case MCI_MODE_NOT_READY:
+	            break;
 
-			case MCI_MODE_RECORD:
-			case MCI_MODE_SEEK:
-			case MCI_MODE_NOT_READY:
-			default:					
-				return( AUI_MUSIC_CODE_UNKNOWN );
-		}
-	}
-	else
-		return( AUI_MUSIC_CODE_UNKNOWN );
+            case MCI_MODE_PAUSE:		
+	            return AUI_MUSIC_CODE_PAUSE; 
+            case MCI_MODE_PLAY:			
+	            return AUI_MUSIC_CODE_PLAY;
+            case MCI_MODE_STOP:			
+	            return AUI_MUSIC_CODE_STOP;
+            case MCI_MODE_OPEN:			
+	            return AUI_MUSIC_CODE_EMPTY;
+            }
+        }
+    }
+    
+    return AUI_MUSIC_CODE_UNKNOWN;
 }

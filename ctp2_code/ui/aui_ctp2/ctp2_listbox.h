@@ -34,22 +34,38 @@
 #ifndef __CTP2_LISTBOX__
 #define __CTP2_LISTBOX__
 
-#include "patternbase.h"
-#include "aui_listbox.h"
+class ctp2_Listbox;
 
 #define k_CTP2_LISTBOX_LDL_BEVELWIDTH		"bevelwidth"
 #define k_CTP2_LISTBOX_LDL_BEVELTYPE		"beveltype"
 #define k_CTP2_LISTBOX_LDL_BORDER_WIDTH     "borderwidth"
 #define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT    "borderheight"
 
-class aui_Surface;
-class ctp2_ListItem;
-class ctp2_MenuButton;
+#include "aui_control.h"    // ControlActionCallback
+#include "aui_listbox.h"    // aui_ListBox
+#include "auitypes.h"       // AUI_ERRCODE
+#include "c3types.h"        // MBCHAR
+#include "ctp2_inttypes.h"  // sint32, uint32
+#include "patternbase.h"    // PatternBase
+#include "windows.h"        // BOOL, POINT
+
+struct  aui_MouseEvent;
+class   aui_Surface;
+class   ctp2_ListItem;
+class   ctp2_MenuButton;
 
 class ctp2_ListBox : public aui_ListBox, public PatternBase 
 {
 public:
-	ctp2_ListBox() : aui_ListBox() {}
+    ctp2_ListBox() 
+    : 
+        aui_ListBox     (),
+        m_bevelWidth    (0),
+        m_bevelType     (0),
+        m_menuButton    (NULL)
+        // m_borderOffset
+    {};
+
 	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, MBCHAR *ldlBlock, 
 							ControlActionCallback *ActionFunc=NULL, void *cookie=NULL );
 	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, 
@@ -72,7 +88,7 @@ public:
 /// Clear the user data.
 /// \remarks Does not clear the list itself.
     template <typename T> 
-    void ClearUserData(void)
+    void ClearUserData(VOID_PARAMETER_FOR_TEMPLATE(T))
     {
         for (int i = 0; i < this->NumItems(); ++i)
         {

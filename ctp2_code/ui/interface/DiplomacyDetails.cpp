@@ -284,15 +284,16 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(!item) break;
 
-					ctp2_Static *child = NULL;
 					MBCHAR buf[k_MAX_NAME_LEN];
 					Civilisation civ = *g_player[p]->m_civilisation;
 
-					
-					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL)) {
+					ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL);
+					if (child) 
+                    {
 						child->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
 						child->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
+
 					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL)) {
 						civ->GetCountryName(buf);
 						child->SetText(buf);
@@ -424,8 +425,9 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 						}
 
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipDetWondersItem");
-						ctp2_Static *child = NULL;
-						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
+						ctp2_Static * child = (ctp2_Static *) item->GetChildByIndex(0);
+						if (child) 
+                        {
 							child->SetText(g_player[detailPlayer]->m_all_cities->Get(a)->GetCityData()->GetName());
 						}
 
@@ -453,8 +455,9 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 							continue;
 						}
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ForAdvancesItem");
-						ctp2_Static *child = NULL;
-						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
+						ctp2_Static * child = (ctp2_Static *) item->GetChildByIndex(0);
+						if (child) 
+                        {
 							child->SetText(g_theAdvanceDB->Get(a)->GetNameText());
 						}
 
@@ -482,8 +485,9 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 						}
 
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("YourAdvancesItem");
-						ctp2_Static *child = NULL;
-						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
+						ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(0);
+						if (child) 
+                        {
 							child->SetText(g_theAdvanceDB->Get(a)->GetNameText());
 						}
 
@@ -580,8 +584,9 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(item)
 					{
-						ctp2_Static *child = NULL;
-						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
+						ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(0);
+						if (child) 
+                        {
 							child->SetText(needEmbassy);
 						}
 						sm_list->AddItem( item );
@@ -599,8 +604,9 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(item) 
 					{
-						ctp2_Static *child = NULL;
-						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
+						ctp2_Static * child = (ctp2_Static *) item->GetChildByIndex(0);
+						if (child) 
+                        {
 							child->SetText(needEmbassy);
 						}
 						sm_list->AddItem( item );

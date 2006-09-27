@@ -88,13 +88,6 @@ public:
 	aui_Action() : aui_Base() { ; };
 	virtual ~aui_Action(void) { ; };
 
-#if 1	// TODO: remove when no longer referenced
-	typedef void (ActionCallback)(
-		aui_Control *control,
-		uint32 action,
-		uint32 data );
-#endif
-
 	virtual void	Execute
 	(
 		aui_Control	*	control,

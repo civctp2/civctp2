@@ -124,17 +124,19 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 		InflateRect(&iconRect, -4, -3);
 
 
-		for (j=0; j<3; j++) {
-			sint32 index = i*3+j;
+		for (j=0; j<3; j++) 
+        {
+			sint32 const index = i*3+j;
 
-			m_unitRect[i*3+j] = iconRect;
+			m_unitRect[index] = iconRect;
 
-			UnitTabButton	*button;
-			BobButtonAction	*buttonAction;
 
 			
-			button = new UnitTabButton(&errcode, aui_UniqueId(), iconRect.left, iconRect.top, 
-						(iconRect.right-iconRect.left), (iconRect.bottom-iconRect.top), "upba0119.tga" );
+			UnitTabButton * button = new UnitTabButton
+                (&errcode, aui_UniqueId(), iconRect.left, iconRect.top, 
+				 (iconRect.right-iconRect.left), (iconRect.bottom-iconRect.top), 
+                 "upba0119.tga" 
+                );
 
 			Assert(button);
 			if (!button) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -144,7 +146,7 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 			
 
 
-			buttonAction = new BobButtonAction(this);
+			BobButtonAction	*   buttonAction = new BobButtonAction(this);
 			Assert(buttonAction);
 			if (!buttonAction) continue;
 
@@ -159,9 +161,9 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 
 
 
-			m_unitControls[i*3+j] = button;
+			m_unitControls[index] = button;
 			
-			m_unitRectColors[i*3+j] = COLOR_BLACK;
+			m_unitRectColors[index] = COLOR_BLACK;
 
 			OffsetRect(&iconRect, cellWidth, 0);
 		}

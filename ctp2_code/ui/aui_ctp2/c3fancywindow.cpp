@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 fancy window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -207,7 +207,7 @@ AUI_ERRCODE	C3FancyWindow::Resize( sint32 width, sint32 height )
 	
 	
 	sint32 lx =0, cx = dw/2, rx = dw,
-			ty = 0, cy = dh/2, by = dh;
+			ty = 0, by = dh;
 	
 	
 #if 0
