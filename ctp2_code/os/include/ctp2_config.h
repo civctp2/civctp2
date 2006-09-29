@@ -33,5 +33,16 @@
 #define VOID_PARAMETER_FOR_TEMPLATE(a_Type) void
 #endif
 
+/// \def ZERO_POINTER_FOR_TEMPLATE(a_Type)
+/// Mark a template function as expecting no arguments when called.
+/// Compiler workaround for MSVC6, which incorrectly requires template functions 
+/// to use the template argument (type) in function arguments or return value.
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+#define ZERO_POINTER_FOR_TEMPLATE(a_Type) static_cast<a_Type*>(0)
+#else
+#define ZERO_POINTER_FOR_TEMPLATE(a_Type) void
+#endif
+
+
 #endif // __os_include_ctp2_config_h__
 

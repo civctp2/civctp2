@@ -27,7 +27,7 @@
 // - Added quit button to the hotseat interturn pop-up.
 // - Re-implemented messagebox '001TreatyToExpire' to warn when dip agreements
 //   are about to expire. See Diplomat::NextDiplomaticState. 
-// - Add 999ATTACKWARNING that notifies the human that war may be started
+// - Add 999AttackWarning that notifies the human that war may be started
 // - Added 999CITYCAPTUREOPTIONs allows player to raze, liberate, or occupy a city
 // - Changed 128CivStartedWar from messagebox to alertbox
 // - Added but not implented 999CivStartedWarWithUs using an unused string
@@ -824,7 +824,7 @@ messagebox '48WorldPollutionSpaceLaunch' {
 		space_launch_count = 0;
 		MessageType("POLLUTION");
 		Text(ID_WORLD_POLLUTION_SPACE_LAUNCH) ;
-        } else {
+	} else {
 		space_launch_count = space_launch_count + 1;
 		Abort();
 	}
@@ -1007,7 +1007,7 @@ messagebox '90AcceptTradeOffer' {
 	Button(ID_BUTTON_YES) {
 		AcceptTradeOffer(1);
 		Kill();
-}
+	}
 
 	Button(ID_BUTTON_NO) {
 		DontAcceptTradeOffer(1);
@@ -1627,7 +1627,7 @@ MessageClass(420);
 //
 // re-implemented, PFT: 
 messagebox '001TreatyToExpire' {
-    Show();
+	Show();
 	Text(ID_TREATY_TO_EXPIRE) ;
 	MessageType("ANTIDIPLOMATIC");
 }
@@ -2915,7 +2915,7 @@ messagebox '911ImminentFlood' {
 }
 
 alertBox '999CITYCAPTUREOPTIONS' {
-MessageClass(420);
+	MessageClass(420);
 	Text(ID_CAPTURED_CITY_OPTIONS);
 
 	//Button(ID_BUTTON_PLUNDER) {
@@ -2940,7 +2940,7 @@ MessageClass(420);
 	}
 }
 
-alertBox '999ATTACKWARNING' {
+alertBox '999AttackWarning' {
 	Text(ID_ATTACK_WARNING);
 
 	MessageType("DIPLOMATIC");
@@ -2952,13 +2952,14 @@ alertBox '999ATTACKWARNING' {
 	}
 
 	Button(ID_BUTTON_YES) {
-		DeclareWar(g.player, player[0]);
+		// TODO check whether this is still an unprovoked act of war.
+		DeclareWar(unit[0].owner, player[0]);
 		AddOrder(unit[0], location[0]);
 		Kill();
 	}
 }
 
-messagebox  '999CivStartedWarWithUs' {
+messagebox '999CivStartedWarWithUs' {
 	Show();
 	Text(ID_POPUP_DECLARE_WAR_ANNC) ;
 	MessageType("MILITARY");

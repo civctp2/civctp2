@@ -232,8 +232,8 @@ namespace
 //
 // Description: Slic object for something happening at a city
 //
-// Parameters : what			: what happened (messagebox identifier)
-//				city			: where it happened
+// Parameters : what            : what happened (messagebox identifier)
+//              city            : where it happened
 //
 //----------------------------------------------------------------------------
 class CityReport : public SlicObject
@@ -258,8 +258,8 @@ public:
 // Description: Slic object for something a player did
 //
 // Parameters : what			: what happened (messagebox identifier)
-//				actor			: the unit that did it
-//				city			: where it happened
+//              actor           : the unit that did it
+//              city            : where it happened
 //
 //----------------------------------------------------------------------------
 class AggressorReport : public SlicObject
@@ -286,8 +286,8 @@ public:
 // Description: Slic object for something that was done to a player
 //
 // Parameters : what			: what happened (messagebox identifier)
-//				actor			: the unit that did it
-//				city			: where it happened
+//              actor           : the unit that did it
+//              city            : where it happened
 //
 //----------------------------------------------------------------------------
 class VictimReport : public CityReport
@@ -2097,10 +2097,10 @@ ORDER_RESULT ArmyData::AssassinateRuler(const MapPoint &point)
 // Parameters : MapPoint
 //
 // Globals    : g_theWorld
-//				
-// Returns    : Unit			: a city
 //
-// Remark(s)  :	-
+// Returns    : Unit            : a city
+//
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 Unit ArmyData::GetAdjacentCity(const MapPoint &point) const
@@ -2129,10 +2129,10 @@ Unit ArmyData::GetAdjacentCity(const MapPoint &point) const
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : sint32
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 sint32 ArmyData::GetCost()
@@ -2156,10 +2156,10 @@ sint32 ArmyData::GetCost()
 //              sint32 &uindex
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanFranchise(double &chance, sint32 &uindex) const
@@ -2189,11 +2189,11 @@ bool ArmyData::CanFranchise(double &chance, sint32 &uindex) const
 //            : g_gevManager
 //            : g_slicEngine
 //            : g_rand
-//            : g_player	            : player array
-//				
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+//            : g_player                : player array
 //
-// Remark(s)  :	-
+// Returns    : ORDER_RESULT            : Attempt success/failure indication
+//
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
@@ -2257,10 +2257,10 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 // Parameters : sint32 &index
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanSue(sint32 &index) const
@@ -2285,10 +2285,10 @@ bool ArmyData::CanSue(sint32 &index) const
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanSue() const
@@ -2311,10 +2311,10 @@ bool ArmyData::CanSue() const
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 bool ArmyData::CanBeSued() const
@@ -2337,8 +2337,8 @@ bool ArmyData::CanBeSued() const
 // Globals    : g_theWorld
 //            : g_gevManager
 //            : g_slicEngine
-//				
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+//
+// Returns    : ORDER_RESULT            : attempt success/failure indication
 //
 // Remark(s)  : Calls SueFranchise if the unit is a franchise
 //
@@ -2400,10 +2400,10 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 // Globals    : g_theWorld
 //            : g_gevManager
 //            : g_slicEngine
-//				
-// Returns    : ORDER_RESULT			: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Returns    : ORDER_RESULT            : attempt success/failure indication
+//
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
@@ -2463,10 +2463,10 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 // Globals    : g_theWorld
 //            : g_gevManager
 //            : g_player	            : player array 
-//				
-// Returns    : ORDER_RESULT			: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Returns    : ORDER_RESULT            : attempt success/failure indication
+//
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::Expel(const MapPoint &point)
@@ -2585,10 +2585,10 @@ bool ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt,
 //
 // Globals    : g_slicEngine
 //            : g_network
-//				
-// Returns    : ORDER_RESULT	: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Returns    : ORDER_RESULT    : attempt success/failure indication
+//
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt) const
@@ -2619,10 +2619,10 @@ bool ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt) c
 // Globals    : g_slicEngine
 //            : g_network
 //            : g_theUnitDB     : The unit database
-//				
+//
 // Returns    : ORDER_RESULT	: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, 
@@ -2726,10 +2726,10 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 //              sint32 &uindex
 //
 // Globals    : g_player	     : player array 
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
@@ -2763,11 +2763,11 @@ bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 //
 // Parameters : double &chance, 
 //              double &escape_chance,
-// Globals    : g_player	            : player array 
-//				
+// Globals    : g_player                : player array 
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
@@ -2798,10 +2798,10 @@ bool ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
 //
 // Globals    : g_slicEngine
 //            : g_gevManager
-//				
-// Returns    : ORDER_RESULT	: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Returns    : ORDER_RESULT    : attempt success/failure indication
+//
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::PlantNuke(const MapPoint &point)
@@ -2883,10 +2883,10 @@ ORDER_RESULT ArmyData::PlantNuke(const MapPoint &point)
 // Parameters : MapPoint p  :
 //
 // Globals    : g_theWorld
-//				
+//
 // Returns    : -
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 void ArmyData::SetPositionAndFixActors(const MapPoint &p)
@@ -2915,11 +2915,11 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 //            : MapPoint npos                   : the army's new position
 //            : UnitDynamicArray &revealedUnits : an array of units that were revealed by the move
 //
-// Globals    : g_director				        : display manager
-//				
+// Globals    : g_director                      : display manager
+//
 // Returns    : -
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray &revealedUnits)
@@ -2976,10 +2976,10 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray 
 //              sint32 &uindex
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 bool ArmyData::CanSlaveRaid(double &success, double &death, 
@@ -3014,10 +3014,10 @@ bool ArmyData::CanSlaveRaid(double &success, double &death,
 //              sint32 &timer
 //              sint32 &amount
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	This is used in determining what buttons to show in the control panel window.
+// Remark(s)  : This is used in determining what buttons to show in the control panel window.
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanSlaveRaid(double &success, double &death, 
@@ -3052,10 +3052,10 @@ bool ArmyData::CanSlaveRaid(double &success, double &death,
 //            : g_gevManager
 //            : g_player        : Player array [see Player::InitPlayer for
 //                                initialized player data]
-//				
+//
 // Returns    : ORDER_RESULT    : Attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
@@ -3187,32 +3187,32 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 //              in depending on whether the target is a city or settler.
 //
 // Parameters : const MapPoint &point   : the target location for the raid 
-//				double &success         : Database chance of success 
-//				double &death           : Database chance of death in attempt 
-//				sint32 &timer           : Database timer number
-//				sint32 &amount          : Database amount of unhappiness to cause
-//				sint32 &uindex          : CellUnitList index of raiding unit
+//              double &success         : Database chance of success 
+//              double &death           : Database chance of death in attempt 
+//              sint32 &timer           : Database timer number
+//              sint32 &amount          : Database amount of unhappiness to cause
+//              sint32 &uindex          : CellUnitList index of raiding unit
 //              bool &target_is_city    : true if target_is_city, false if target is settler
-//				Unit &target_city       : the target city, if it exists
-//				Unit &home_city         : destination city for slave
+//              Unit &target_city       : the target city, if it exists
+//              Unit &home_city         : destination city for slave
 //
 // Globals    : g_theWorld
 //            : g_player	            : player array [see Player::InitPlayer for initialized player data]
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::IsSlaveRaidPossible(const MapPoint &point,
-								   double &success, 
-								   double &death, 
-								   sint32 &timer, 
-								   sint32 &amount,
-								   sint32 &uindex, 
+                                   double &success, 
+                                   double &death, 
+                                   sint32 &timer, 
+                                   sint32 &amount,
+                                   sint32 &uindex, 
                                    bool &target_is_city,
-								   Unit &target_city, 
-								   Unit &home_city)
+                                   Unit &target_city, 
+                                   Unit &home_city)
 {
     target_city.m_id = 0; 
     home_city.m_id = 0; 
@@ -3282,10 +3282,10 @@ bool ArmyData::IsSlaveRaidPossible(const MapPoint &point,
 // Parameters : sint32 &uindex          : CellUnitList index of raiding unit
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanEnslaveSettler(sint32 &uindex) const
@@ -3314,10 +3314,10 @@ bool ArmyData::CanEnslaveSettler(sint32 &uindex) const
 //            : g_theWorld
 //            : g_gevManager
 //            : g_slicEngine
-//				
+//
 // Returns    : ORDER_RESULT	: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex, 
@@ -4020,10 +4020,10 @@ ORDER_RESULT ArmyData::NanoInfect(const MapPoint &point)
 //              double &best_death_chance
 //              sint32 &best_uindex
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanConvertCity(double &best_chance, double &best_death_chance, 
@@ -4102,10 +4102,10 @@ bool ArmyData::AbleToConvertTarget(const MapPoint &point, sint32 &uindex)
 // Parameters : MapPoint &point
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanConvertCity(const MapPoint &point) const
@@ -4135,10 +4135,10 @@ bool ArmyData::CanConvertCity(const MapPoint &point) const
 //            : g_gevManager
 //            : g_slicEngine
 //            : g_theWonderDB
-//				
+//
 // Returns    : ORDER_RESULT	: attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
@@ -5172,10 +5172,10 @@ ORDER_RESULT ArmyData::Injoin(const MapPoint &point)
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	k_UDF_FIRST_MOVE is reset every turn by GEV_ResetAllMovement(GEA_Player). 
+// Remark(s)  : k_UDF_FIRST_MOVE is reset every turn by GEV_ResetAllMovement(GEA_Player). 
 //              This is the flag that ensures that units can make one move.
 //
 //----------------------------------------------------------------------------
@@ -5220,10 +5220,10 @@ bool ArmyData::CanNukeCity() const
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 void ArmyData::CurMinMovementPoints(double &cur) const
@@ -5251,10 +5251,10 @@ void ArmyData::CurMinMovementPoints(double &cur) const
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 void ArmyData::MinMovementPoints(double &cur) const
@@ -5282,10 +5282,10 @@ void ArmyData::MinMovementPoints(double &cur) const
 // Parameters : CellUnitList & units  : the list of units on the defending cell
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanBombardTargetType(const CellUnitList & units) const
@@ -5313,7 +5313,7 @@ bool ArmyData::CanBombardTargetType(const CellUnitList & units) const
 //            : sint32 & max_rge : the max of the bombard ranges of this army's units
 //
 // Globals    : -
-//				
+//
 // Returns    : bool true if this army contains at least one unit which can bombard.
 //
 // Remark(s)  : Used to allow bombarding from a distance.
@@ -5353,7 +5353,7 @@ bool ArmyData::GetBombardRange(sint32 & min_rge, sint32 & max_rge)
 // Parameters : MapPoint & point
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : Called by CtpAi::BombardAdjacentEnemies 
@@ -5407,10 +5407,10 @@ bool ArmyData::CanBombard(const MapPoint &point) const
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanBombard() const
@@ -5439,7 +5439,7 @@ bool ArmyData::CanBombard() const
 //
 // Globals    : g_player            : Player array [see Player::InitPlayer for 
 //                                    initialized player data]
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : true means that the bombarding unit has tried to destroy a 
@@ -5574,15 +5574,15 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 //
 // Parameters : MapPoint
 //
-// Globals    : g_director				: display manager
-//				g_network				: multiplayer manager
-//				g_player				: list of active players
-//				g_selectedItem			: selected unit or city
-//				g_theWorld				: the map
-//				
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Globals    : g_director              : display manager
+//              g_network               : multiplayer manager
+//              g_player                : list of active players
+//              g_selectedItem          : selected unit or city
+//              g_theWorld              : the map
 //
-// Remark(s)  :	No special effects. 
+// Returns    : ORDER_RESULT            : attempt success/failure indication
+//
+// Remark(s)  : No special effects. 
 //
 //
 //----------------------------------------------------------------------------
@@ -5867,15 +5867,15 @@ bool ArmyData::CanInterceptTrade(uint32 &uindex) const
 //
 // Parameters : -
 //
-// Globals    : g_director				: display manager
-//				g_network				: multiplayer manager
-//				g_player				: list of active players
-//				g_selectedItem			: selected unit or city
-//				g_theSoundDB			: sound database
-//				g_theSpecialEffectDB	: special effect database
-//				g_theWorld				: the map
-//				
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Globals    : g_director              : display manager
+//              g_network               : multiplayer manager
+//              g_player                : list of active players
+//              g_selectedItem          : selected unit or city
+//              g_theSoundDB            : sound database
+//              g_theSpecialEffectDB    : special effect database
+//              g_theWorld              : the map
+//
+// Returns    : ORDER_RESULT            : attempt success/failure indication
 //
 // Remark(s)  : -
 //
@@ -5953,10 +5953,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : sint32
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 sint32 ArmyData::NumOrders() const
@@ -5973,10 +5973,10 @@ sint32 ArmyData::NumOrders() const
 // Parameters : sint32 index
 //
 // Globals    : -
-//				
+//
 // Returns    : Order
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 const Order *ArmyData::GetOrder(sint32 index) const
@@ -6026,8 +6026,8 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order)
 //              sint32 argument         :
 //
 // Globals    : g_useOrderQueues
-//     		  : g_player	            : player array 
-//				
+//            : g_player                : player array 
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -6059,8 +6059,8 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 //              MapPoint &point         :
 //              sint32 argument         :
 //
-// Globals    : g_player            	: player array 
-//				
+// Globals    : g_player                : player array 
+//
 // Returns    : -
 //
 // Remark(s)  : used when expelling units
@@ -6091,10 +6091,10 @@ void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 //              sint32 argument         :
 //              GAME_EVENT passedEvent  :
 //
-// Globals    : g_network		        : 
+// Globals    : g_network               :
 //            : g_selected_item         :
-//            : g_player	            : player array [see Player::InitPlayer for initialized player data]
-//				
+//            : g_player                : player array [see Player::InitPlayer for initialized player data]
+//
 // Returns    : -
 //
 // Remark(s)  : the m_orders list is what gets deleted when you call ArmyData::ClearOrders()
@@ -6224,10 +6224,10 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 // Parameters : -
 //
 // Globals    : g_network
-//				
+//
 // Returns    : -
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 void ArmyData::ClearOrders()
@@ -6262,10 +6262,10 @@ void ArmyData::ClearOrders()
 //            : g_player	         : player array
 //            : g_selected_item
 //            : g_network
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 bool ArmyData::ExecuteOrders(bool propagate)
@@ -6525,10 +6525,10 @@ bool ArmyData::ExecuteOrders(bool propagate)
 //              MapPoint &pos  
 //
 // Globals    : g_theStringDB
-//				
+//
 // Returns    : -
 //
-// Remark(s)  :	Only defined for UNIT_ORDER_STEAL_TECHNOLOGY, but not called for it.
+// Remark(s)  : Only defined for UNIT_ORDER_STEAL_TECHNOLOGY, but not called for it.
 //              All other calls do nothing. Probably did more originally, there are lots of dud calls.
 //
 //--------------------------------------------------------------------------------------------------------- 
@@ -6579,10 +6579,10 @@ void ArmyData::ForgetPatrol()
 // Parameters : Order *order
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
-// Remark(s)  :	Called by ExecuteOrders (whose switch defines the move orders).
+// Remark(s)  : Called by ExecuteOrders (whose switch defines the move orders).
 //              If this returns FALSE then completed_order = FALSE in the above switch.
 //
 //----------------------------------------------------------------------------
@@ -6689,9 +6689,9 @@ bool ArmyData::IsOccupiedByForeigner(const MapPoint &pos)
 //
 // Parameters : Order *order            : why?
 //
-// Globals    : g_player	            : player array 
-//				g_theWorld				: the map
-//				
+// Globals    : g_player                : player array 
+//              g_theWorld              : the map
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -6742,7 +6742,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 //              Order *order       :
 //
 // Globals    : g_player	: player array 
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : Actually, not used. Must be left over from CTP1
@@ -6959,7 +6959,7 @@ bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
 // Parameters : Order *order       :
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : -
@@ -6994,7 +6994,7 @@ bool ArmyData::FinishAttack(Order *order)
 // Parameters : MapPoint &pos       :
 //
 // Globals    : g_player	        : player array
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  :	Deals with Nuke attacks.
@@ -7156,7 +7156,7 @@ bool ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
 // Parameters : MapPoint &point 
 //
 // Globals    : g_player	: player array
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : Added check for at war instead of other agreements
@@ -7315,7 +7315,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 //
 // Globals    : g_player	: player array
 //            : g_network
-//				
+//
 // Returns    : bool
 //
 // Remarks    : 
@@ -7324,50 +7324,49 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 							sint32 defense_owner)
 {
-	if (g_player[m_owner]->HasWarWith(defense_owner)) 
-    {
-        return true;
-    }
-
-    // Modified to catch accidental attacks
-	SlicObject *so;
-	if (    g_network.IsActive() 
-         && g_network.TeamsEnabled() 
-         && (g_player[m_owner]->m_networkGroup == 
-                g_player[defense_owner]->m_networkGroup
-            ) 
-       )
-    {
-		so = new SlicObject("110aCantAttackTeammates");
-	}
-	else if(!IsEnemy(defense_owner)) 
-    {
-		so = new SlicObject("110CantAttackAllies");
-	}
-    /// @todo Check the following branches for negative impact on the AI.
-    //  With this code in place, you can wander around in AI territory, without 
-    //  them being able to do anything about it - as long as you are not at war. 
-    //  The AI can not use an alertbox to confirm an attack! 
-    //  Maybe better to just return true here, at let the AI attack.
-
-	else if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
-	{ //8-05-2006 test above
+	if (g_player[m_owner]->HasWarWith(defense_owner))
+	{
 		return true;
 	}
 
-        // EMOD - Added Civ2 style Dove Party that prevents war
-		// if you have ParliamentaryVoteChance govt
+	// Modified to catch accidental attacks
+	SlicObject *so;
+	if (    g_network.IsActive()
+	     && g_network.TeamsEnabled()
+	     && (g_player[m_owner]->m_networkGroup ==
+	            g_player[defense_owner]->m_networkGroup
+	        )
+	   )
+	{
+		so = new SlicObject("110aCantAttackTeammates");
+	}
+	else if(!IsEnemy(defense_owner)) 
+	{
+		so = new SlicObject("110CantAttackAllies");
+	}
+	/// @todo Check the following branches for negative impact on the AI.
+	//  With this code in place, you can wander around in AI territory, without 
+	//  them being able to do anything about it - as long as you are not at war. 
+	//  The AI can not use an alertbox to confirm an attack! 
+	//  Maybe better to just return true here, at let the AI attack.
+
+	// EMOD - Added Civ2 style Dove Party that prevents war
+	// if you have ParliamentaryVoteChance govt
 	else if (g_rand->Next(100) < 
-             g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)
-                ->GetParliamentaryVoteChance()
-            ) 
-    {
+	         g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)
+	            ->GetParliamentaryVoteChance()
+	        )
+	{
 		so = new SlicObject("Civ2Doves");
 	}
-	else 
-    {
-		so = new SlicObject("999ATTACKWARNING");
-    }
+	else if (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+	{
+		so = new SlicObject("999AttackWarning");
+	}
+	else
+	{
+		return true;
+	}
 
 	so->AddRecipient(m_owner);
 	so->AddCivilisation(defense_owner);
@@ -7377,19 +7376,19 @@ bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 	g_slicEngine->Execute(so);
 	g_selected_item->ForceDirectorSelect(Army(m_id));
 	
-    return false;
+	return false;
 }
 
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::ExertsZOC
 //
-// Description: Returns TRUE if some unit in this army exerts a zone of control 
+// Description: Returns true if some unit in this army exerts a zone of control 
 //
 // Parameters : - 
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : -
@@ -7415,7 +7414,7 @@ bool ArmyData::ExertsZOC() const
 //            : WORLD_DIRECTION d 
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -7530,10 +7529,10 @@ void ArmyData::RevealZOCUnits(const MapPoint &pos)
 //            : WORLD_DIRECTION d
 //
 // Globals    : g_player	            : player array
-//				g_selectedItem			: selected unit or city
-//				g_theWorld				: the map
+//              g_selectedItem          : selected unit or city
+//              g_theWorld              : the map
 //              g_gevManager
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : if true, inserts GEV_MoveUnits
@@ -7721,13 +7720,13 @@ void ArmyData::MoveActors(const MapPoint &pos,
 //
 // Parameters : MapPoint &pos
 //
-// Globals    : g_network				: multiplayer manager
-//				g_selectedItem			: selected unit or city
-//				g_gevManager			: 
-//				g_radarMap          	: 
-//				g_theWorld				: the map
+// Globals    : g_network               : multiplayer manager
+//              g_selectedItem          : selected unit or city
+//              g_gevManager            : 
+//              g_radarMap              : 
+//              g_theWorld              : the map
 //              g_player	            : player array
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -7830,10 +7829,10 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 //
 // Parameters : -
 //
-// Globals    : g_network				: multiplayer manager
-//				g_tiledMap	            : 
-//				g_theWorld				: the map
-//				
+// Globals    : g_network               : multiplayer manager
+//              g_tiledMap              : 
+//              g_theWorld              : the map
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -7875,7 +7874,7 @@ void ArmyData::CheckTerrainEvents()
 //              CellUnitList &transports
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : May involve ungrouping the army.
@@ -7899,7 +7898,7 @@ bool ArmyData::CanMoveIntoTransport(const MapPoint &pos,
 // Parameters : CellUnitList &transports
 //
 // Globals    : -
-//				
+//
 // Returns    : sint32
 //
 // Remark(s)  : May involve ungrouping the army.
@@ -7941,7 +7940,7 @@ sint32 ArmyData::NumUnitsCanMoveIntoThisTransport(const CellUnitList &transports
 // Parameters : CellUnitList &transports
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : May involve ungrouping the army.
@@ -7982,7 +7981,7 @@ bool ArmyData::CanMoveIntoThisTransport(const CellUnitList &transports) const
 //              CellUnitList &transports
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : -
@@ -8093,7 +8092,7 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 // Parameters : Order *order 
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -8120,7 +8119,7 @@ void ArmyData::DoBoardTransport(Order *order)
 //              BOOL & used_vision 
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : -
@@ -8149,7 +8148,7 @@ bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoi
 // Parameters : Order *order
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : -
@@ -8340,12 +8339,12 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 // Parameters : MapPoint &pos
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : - Attempted MoveBonus here, but it appears this is only for terrain
-//				Unit data is for Units 
-//				- Added Denied to enemy check 4-11-2006
+//                Unit data is for Units 
+//              - Added Denied to enemy check 4-11-2006
 //
 //----------------------------------------------------------------------------
 void ArmyData::DeductMoveCost(const MapPoint &pos)
@@ -8855,7 +8854,7 @@ void ArmyData::Disband()
 // Parameters : -
 //
 // Globals    : -
-//				
+//
 // Returns    : sint32 
 //
 // Remark(s)  : -
@@ -8892,7 +8891,7 @@ sint32 ArmyData::GetMinFuel()
 //                                   before running out of fuel.
 //
 // Globals    : -
-//				
+//
 // Returns    : - 
 //
 // Remark(s)  : -
@@ -9156,7 +9155,7 @@ bool ArmyData::CanInvestigateCity( double &chance, double &eliteChance) const
 //              BOOL &keepGoing    :
 //
 // Globals    : 
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : called by ExecuteOrders, this is effectively a sub-switch.
@@ -9718,14 +9717,14 @@ Path *ArmyData::RemovePathedOrder()
 //
 // Parameters : bool & isspecial     : true if each unit is either not standard vision or has no attack
 //              bool & isstealth,    : true if all units are stealth  
-//				sint32 & maxattack   : attack value of strongest attacking unit 
-//				sint32 & maxdefense  : defense value of strongest defending unit
-//				bool & cancapture    : true if some unit can capture cities
-//				bool & haszoc        : true if some unit has a zone of control
-//				bool & canbombard    : true if some unit can bombard
+//              sint32 & maxattack   : attack value of strongest attacking unit 
+//              sint32 & maxdefense  : defense value of strongest defending unit
+//              bool & cancapture    : true if some unit can capture cities
+//              bool & haszoc        : true if some unit has a zone of control
+//              bool & canbombard    : true if some unit can bombard
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -9783,7 +9782,7 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 // Parameters : - 
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : -
@@ -9806,15 +9805,15 @@ bool ArmyData::IsCivilian() const
 // Description: Get data for army and fill in given parameters.
 //
 // Parameters : sint32 & hitpoints        :sum of units hitpoints
-//				sint32 & defense_count    :how many defenders (Defense>0)
-//			    sint32 & ranged_count     :how many ranged (ZBRangeAttack>0)
-//				sint32 & attack_strength  :sum of units Attack * hitpoints * fire_power
-//				sint32 & defense_strength :sum of units Defense * hitpoints * fire_power
-//				sint32 & ranged_strength  :sum of units ZBRangeAttack * hitpoints * fire_power
-//				sint32 & total_value      :sum of units ShieldCost
+//              sint32 & defense_count    :how many defenders (Defense>0)
+//              sint32 & ranged_count     :how many ranged (ZBRangeAttack>0)
+//              sint32 & attack_strength  :sum of units Attack * hitpoints * fire_power
+//              sint32 & defense_strength :sum of units Defense * hitpoints * fire_power
+//              sint32 & ranged_strength  :sum of units ZBRangeAttack * hitpoints * fire_power
+//              sint32 & total_value      :sum of units ShieldCost
 //
 // Globals    : -
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : includes units in transports
@@ -9899,7 +9898,7 @@ void ArmyData::GetArmyStrength( sint32 & hitpoints,
 // Parameters : MapPoint &point 
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : special actions are typically performed by IsSpecialForces units (plus pirating and bombarding) 
@@ -9924,9 +9923,9 @@ bool ArmyData::CanPerformSpecialAction() const
 //
 // Parameters : -
 //
-// Globals    : g_network		: multiplayer manager
-//				g_gevManager		
-//				
+// Globals    : g_network       : multiplayer manager
+//              g_gevManager
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -9971,7 +9970,7 @@ void ArmyData::IncrementOrderPath()
 // Parameters : MapPoint &dest
 //
 // Globals    : -
-//				
+//
 // Returns    : bool
 //
 // Remark(s)  : - 
@@ -10044,8 +10043,8 @@ bool ArmyData::GetNextPathPoint(MapPoint & next_pos) const
 //
 // Globals    : -
 //
-// Returns    : bool		: all units in the army are capable of 
-//							  performing the order.
+// Returns    : bool        : all units in the army are capable of 
+//                            performing the order.
 //
 // Remark(s)  : In contrast to mathematical logic, an army without units is
 //              incapable of doing anything.
@@ -10092,8 +10091,8 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 //
 // Globals    : g_player	: player (capabilities)
 //
-// Returns    : bool		: at least one unit in the army is capable of 
-//							  performing the order.
+// Returns    : bool        : at least one unit in the army is capable of 
+//                            performing the order.
 //
 // Remark(s)  : -
 //
@@ -10133,8 +10132,8 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 //
 // Globals    : g_player	: player array [see Player::InitPlayer for initialized player data]
 //
-// Returns    : bool		: true if the unit is capable of 
-//							  performing the order.
+// Returns    : bool        : true if the unit is capable of 
+//                            performing the order.
 //
 // Remark(s)  : - 
 //
@@ -10278,10 +10277,10 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 //               are capable of executing an order at a location.
 //
 //  Parameters : const OrderRecord * order_rec : the order 
-//				 const MapPoint & pos          : the location
+//               const MapPoint & pos          : the location
 //
 //  Globals    : g_player	  : player array 
-//				
+//
 //  Returns    : ORDER_TEST   : legality result
 //
 //  Remark(s)  : -
@@ -10355,10 +10354,10 @@ ORDER_TEST ArmyData::CargoTestOrderHere(const OrderRecord * order_rec, const Map
 //  Description: test if whatever is at a target position passes an order's TargetPretest
 //
 //  Parameters : const OrderRecord * order_rec, 
-//				 const MapPoint & pos,
+//               const MapPoint & pos,
 //
 //  Globals    : g_theWorld		
-//				
+//
 //  Returns    : bool   : true if whatever is at MapPoint &pos passes OrderRecord * order_rec's TargetPretest
 //
 //  Remark(s)  : - 
@@ -10445,7 +10444,7 @@ void ArmyData::PerformOrder(const OrderRecord * order_rec)
 //              Path * path             : a path starting from m_pos
 //
 // Globals    : g_gevManager
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : actually perform the order
@@ -10601,7 +10600,7 @@ DPRINTF(k_DBG_FILE, ("army %lx, cur_move_pts=%f, move_pos=<%d,%d>\n",m_id,cur_mo
 //
 // Globals    : g_gevManager
 //            : g_theOrderDB
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : s_orderDBToEventMap[order_index] returns the event name you find in
@@ -10735,7 +10734,7 @@ bool ArmyData::PlayerCanSee(const PLAYER_INDEX playerId) const
 // Parameters : a_HasProperty   Property determining function
 //
 // Globals    : -
-//				
+//
 // Returns    : size_t          The number of units having the property
 //
 // Remark(s)  : -

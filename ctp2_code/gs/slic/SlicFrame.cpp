@@ -597,9 +597,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			if(Eval(type1, sval1) == 0) {
 
-//Added by Martin Gühmann
-//It is a problem of slic code and not of the ctp2.exe,
-//the slicer has to solve the problem.
+				//Added by Martin Gühmann
+				//It is a problem of slic code and not of the ctp2.exe,
+				//the slicer has to solve the problem.
 				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 					c3errors_ErrorDialog("Slic", "In object %s: Division by 0.", m_segment->GetName());
 				}
@@ -1161,7 +1161,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			m_stack->Push(SS_TYPE_INT, sval1);
 			break;
 
-//Added by Martin Gühmann for database support
+		//Added by Martin Gühmann for database support
 		case SOP_DBNAME:
 		{
 			conduit     = GetDatabase(codePtr);
@@ -1496,6 +1496,12 @@ void SlicFrame::ClearMessageData()
 	m_messageData->m_text = NULL;
 	m_messageData->m_request = ID();
 	m_messageData->m_timestamp = g_turn ? g_turn->GetYear() : 0;
+}
+
+void SlicFrame::DeleteMessageData()
+{
+	delete m_messageData;
+	m_messageData = NULL;
 }
 
 void SlicFrame::SetMessageData(MessageData *data)

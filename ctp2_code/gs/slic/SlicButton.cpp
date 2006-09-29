@@ -1,4 +1,33 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic message box buttons
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _BAD_BUTTON
+// - Tracts a list of deleted buttons.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Cleaned SlicButton::Callback method. (Sep. 24th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicButton.h"
@@ -17,30 +46,31 @@ PointerList<SlicButton> s_deletedButtons;
 #endif
 
 SlicButton::SlicButton(StringId name, SlicSegment *segment,
-					   sint32 codeOffset, SlicObject *context)
+                       sint32 codeOffset, SlicObject *context)
+:   m_name         (name),
+    m_codeOffset   (codeOffset),
+    m_message      (new Message()),
+    m_context      (context),
+    m_segment      (segment),
+    m_segmentName  (NULL)
 {
-	m_name = name;
 	if(m_name >= 0) {
 		m_isCloseEvent = FALSE;
 	} else {
 		m_isCloseEvent = TRUE;
 	}
-	m_segment = segment;
-	m_codeOffset = codeOffset;
-	m_context = context;
 	m_context->AddRef();
-	m_segmentName = NULL;
-	m_message = new Message();
 }
 
 SlicButton::SlicButton(SlicButton *copy)
+:   m_name         (copy->m_name),
+    m_isCloseEvent (copy->m_isCloseEvent),
+    m_codeOffset   (copy->m_codeOffset),
+    m_message      (new Message(*copy->m_message)),
+    m_context      (copy->m_context),
+    m_segment      (copy->m_segment)
 {
-	m_name = copy->m_name;
-	m_segment = copy->m_segment;
-	m_codeOffset = copy->m_codeOffset;
-	m_context = copy->m_context;
 	m_context->AddRef();
-	m_message = new Message(*copy->m_message);
 
 	if(copy->m_segmentName) {
 		m_segmentName = new char[strlen(copy->m_segmentName) + 1];
@@ -48,8 +78,6 @@ SlicButton::SlicButton(SlicButton *copy)
 	} else {
 		m_segmentName = NULL;
 	}
-
-	m_isCloseEvent = copy->m_isCloseEvent;
 }
 
 SlicButton::SlicButton(CivArchive &archive)
@@ -114,48 +142,36 @@ void SlicButton::Callback()
 		delete [] m_segmentName;
 		m_segmentName = NULL;
 	}
-
-	SlicObject *myContext = m_context;
 	
-	if(myContext) {
-		myContext->AddRef();
-	}
 #ifdef _DEBUG
 	if(m_name >= 0) {
 		Assert(GetName());
 		if(!GetName()) {
-			if(myContext)
-				myContext->Release();
 			return;
 		}
 		DPRINTF(k_DBG_SLIC, ("Button %s clicked\n", GetName()));
 	}
 #endif
 
-	SlicFrame *frame = new SlicFrame(m_segment);
-	
 	Message oldmessage;
 
-	SlicObject *oldContext = g_slicEngine->GetContext();
 	g_slicEngine->GetCurrentMessage(oldmessage);
 
-	g_slicEngine->SetContext(m_context);
+	g_slicEngine->PushContext(m_context);
 	g_slicEngine->SetCurrentMessage(*m_message);
 
-	
-	
-	frame->RunAt(m_codeOffset);
+	if(m_context->GetFrame()){
+		m_context->GetFrame()->RunAt(m_codeOffset);
+	}
+	else{
+		Assert(false);
+		SlicFrame *frame = new SlicFrame(m_segment);
+		frame->RunAt(m_codeOffset);
+		delete frame;
+	}
 
 	g_slicEngine->SetCurrentMessage(oldmessage);
-	g_slicEngine->SetContext(oldContext);
-
-	
-	delete frame;
-	
-	
-	if(myContext)
-		myContext->Release();
-
+	g_slicEngine->PopContext();
 }
 
 const MBCHAR *SlicButton::GetName() const

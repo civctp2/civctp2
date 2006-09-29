@@ -23,6 +23,10 @@ It might be wise, if you have the space available, to make a copy of
 your CTP2 directory and unzip this into the copy, so that you can preserve an
 unchanged copy for playing mods, etc.
 
+Once installation is complete you can start a new game or continue a game from
+a previous version. All you need to do is once you are in game to open the chat
+window by typing the apostrophe key (') and enter: /reloadslic
+
 Please report any problems, bugs, crashes, etc. in the following threads:
 http://apolyton.net/forums/showthread.php?s=&threadid=147969
 
@@ -32,7 +36,7 @@ http://apolyton.net/forums/showthread.php?threadid=115144
 http://apolyton.net/forums/showthread.php?threadid=127059
 
 
-Latest Source Code files van be found at: http://ctp2.darkdust.net/
+Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
 Playtesting would be most useful if it tests the most recent changes, which
 are described briefly below, and in more detail in ChangeLog.txt
@@ -63,9 +67,9 @@ Added:    New database flags for modders:
 - TerrainImprovementDB
    CanBuildWasteland    TerrainImprovement can be built in unowned territory.
    CanBuildAlly         TerrainImprovement can be built in terrotory of your 
-                        allys. No idea what the sense behind this is, because 
-                        you can build you TerrainImprovements in the territory
-                        of your allys anyway.
+                        allys. TerrainImprovements with move cost reduction do
+                        not need this flag, because they can be built in ally
+                        territory anyway.
 
 2006-07-15 (Revision 619)
 Fixed:    Units can now sink by using the ConstDB chance value.

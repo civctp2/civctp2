@@ -390,7 +390,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_disbandButton->SetActionFuncAndCookie(DisbandUnitCallback, NULL);
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityWindow::~CityWindow
@@ -425,7 +424,7 @@ CityWindow::~CityWindow()
 
 	if (m_inventoryList)	// container + reference
 	{
-		m_inventoryList->ClearUserData<InventoryItemInfo>();
+		m_inventoryList->ClearUserData(ZERO_POINTER_FOR_TEMPLATE(InventoryItemInfo));
 		m_inventoryList->Clear();
 	}
 
@@ -850,7 +849,7 @@ void CityWindow::UpdateBuildTabs()
 	lb = m_inventoryList;
 	Assert(lb);
 	if(lb) {
-		lb->ClearUserData<InventoryItemInfo>();
+		lb->ClearUserData(ZERO_POINTER_FOR_TEMPLATE(InventoryItemInfo));
 		lb->Clear();
 		
 		sint32 i;

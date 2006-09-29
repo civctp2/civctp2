@@ -249,11 +249,11 @@ str_ldl_FindMeButton "Localiser !"
 str_ldl_FindX "X"
 str_ldl_FindY "Y"
 str_ldl_FindPosLabel "Position :"
-str_ldl_CityManager "Gestionnaire de ville"
+str_ldl_CityManager "Gest. de ville"
 
 # Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
 NETWORK_CURRENT_PLAYER "Joueur actuel "
-str_tbl_ldl_Open_City_Management "Gestionnaire de ville"
+str_tbl_ldl_Open_City_Management "Gest. de ville"
 str_tbl_ldl_Open_Build_Queue "Gest. de construction"
 str_tbl_ldl_Open_Trade_Summary "Bilan commercial"
 str_tbl_ldl_Open_Dip_Wizard "Nouvelle proposition"

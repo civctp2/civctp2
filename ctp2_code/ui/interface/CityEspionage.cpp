@@ -126,7 +126,7 @@ CityEspionage::~CityEspionage()
 
     if (m_inventoryList)
     {
-        m_inventoryList->ClearUserData<InventoryItemInfo>();
+        m_inventoryList->ClearUserData(ZERO_POINTER_FOR_TEMPLATE(InventoryItemInfo));
         m_inventoryList->Clear();
     }
 
@@ -202,7 +202,7 @@ void CityEspionage::DisplayWindow(Unit a_City)
 		Assert(m_inventoryList);
 		if (m_inventoryList) 
         {
-            m_inventoryList->ClearUserData<InventoryItemInfo>();
+            m_inventoryList->ClearUserData(ZERO_POINTER_FOR_TEMPLATE(InventoryItemInfo));
             m_inventoryList->Clear();
             m_inventoryList->BuildListStart();
 

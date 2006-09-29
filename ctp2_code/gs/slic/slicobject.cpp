@@ -1,4 +1,34 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic objects
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _BAD_BUTTON
+// - Tracts a list of deleted buttons.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - The finish method just deletes the MessageData from the asscicated 
+//   SlicFrame as the SlicFrame may be used later. (Sep. 24th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "SlicObject.h"
@@ -324,10 +354,12 @@ void SlicObject::Execute()
 
 //----------------------------------------------------------------------------
 //
-// Name       : Finish
+// Name       : SlicObject::Finish
 //
-// Description: Displays any messagebox defined by this SlicObject
-//              and then deletes the associated SlicFrame
+// Description: Displays any messagebox defined by this SlicObject and then 
+//              deletes the original MessageData from the associated SlicFrame.
+//              The SlicFrame is not deleted as it may be used for error 
+//              messages later.
 //
 // Parameters : -
 //
@@ -345,7 +377,7 @@ void SlicObject::Execute()
 //              out of the for loop.
 //
 //----------------------------------------------------------------------------
-void SlicObject::Finish() 
+void SlicObject::Finish()
 {
 	if(m_segment->GetType() == SLIC_OBJECT_MESSAGEBOX) {
 		
@@ -451,8 +483,7 @@ void SlicObject::Finish()
 			}
 		}
 	}
-	delete m_frame;
-	m_frame = NULL;
+	m_frame->DeleteMessageData();
 }
 
 #ifdef _DEBUG

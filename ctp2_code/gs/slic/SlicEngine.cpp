@@ -53,6 +53,8 @@
 // - Added City Capture options by E 6.09.2006
 // - Added database slic access of difficulty, pollution and global warming
 //   databases. (July 15th 2006 Martin Gühmann)
+// - PopContext refills the builtins when it restores the old context so
+//   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2687,18 +2689,18 @@ void SlicEngine::AddSymbol(SlicNamedSymbol *sym)
 
 void SlicEngine::SetContext(SlicObject *obj)
 {
-    if (m_context)
-    {
-        m_context->Release();
-    }
+	if (m_context)
+	{
+		m_context->Release();
+	}
 
 	m_context = obj;
-	
-    if (obj)
-    {
-        obj->AddRef();
+
+	if (obj)
+	{
+		obj->AddRef();
 		obj->FillBuiltins();
-    }
+	}
 }
 
 SlicStructDescription *SlicEngine::GetStructDescription(SLIC_SYM which)
@@ -2787,26 +2789,33 @@ bool SlicEngine::BreakRequested()
 
 void SlicEngine::PushContext(SlicObject * obj)
 {
-	if (m_context) 
-    {
+	if (m_context)
+	{
 		m_contextStack->AddTail(m_context);
 	}
-    
-    m_context = obj;
-    if (obj)
-    {
-        obj->AddRef();
+
+	m_context = obj;
+
+	if (obj)
+	{
+		obj->AddRef();
 		obj->FillBuiltins();
-    }
+	}
 }
 
 void SlicEngine::PopContext()
 {
-    if (m_context)
-    {
-        m_context->Release();
-    }
+	if (m_context)
+	{
+		m_context->Release();
+	}
+
 	m_context = m_contextStack->RemoveTail();
+
+	if(m_context){
+		// TODO check whether builtins filling is superflous.
+		m_context->FillBuiltins(); // Builtins were overwritten in PushContext
+	}
 }
 
 void SlicEngine::AddDatabases()
@@ -3105,7 +3114,7 @@ sint32 SlicEngine::CallMod(MOD_FUNC modFunc, sint32 def, ...)
 	SlicObject *obj;
 	mf->GetSegment()->Call(slicArgs, obj);
 
-    slicArgs->ReleaseSymbols();
+	slicArgs->ReleaseSymbols();
 	delete slicArgs;
 
 	sint32 result = obj->GetResult();
