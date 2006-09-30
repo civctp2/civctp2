@@ -490,7 +490,7 @@ CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR
 	
 	g_civPaths->GetScenarioRootPath(rootPath);
 
-	sprintf(path, "%s%s%s", rootPath, dirName);
+	sprintf(path, "%s%s%s", rootPath, FILE_SEP, dirName);
 #ifdef WIN32
 	if(!_stat(path, &tmpstat)) {
 #else

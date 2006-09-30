@@ -424,7 +424,7 @@ CityWindow::~CityWindow()
 
 	if (m_inventoryList)	// container + reference
 	{
-		m_inventoryList->ClearUserData(ZERO_POINTER_FOR_TEMPLATE(InventoryItemInfo));
+		m_inventoryList->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
 		m_inventoryList->Clear();
 	}
 
@@ -849,7 +849,7 @@ void CityWindow::UpdateBuildTabs()
 	lb = m_inventoryList;
 	Assert(lb);
 	if(lb) {
-		lb->ClearUserData(ZERO_POINTER_FOR_TEMPLATE(InventoryItemInfo));
+		lb->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
 		lb->Clear();
 		
 		sint32 i;
