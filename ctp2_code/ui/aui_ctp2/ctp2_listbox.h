@@ -87,7 +87,7 @@ public:
 	
 /// Clear the user data.
 /// \remarks Does not clear the list itself.
-    template <class T> 
+    template <typename T> 
     void ClearUserData(VOID_PARAMETER_FOR_TEMPLATE(T))
     {
         for (int i = 0; i < this->NumItems(); ++i)

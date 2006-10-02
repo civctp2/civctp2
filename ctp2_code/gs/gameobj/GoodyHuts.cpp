@@ -368,7 +368,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 		case GOODY_UNIT:
 		{
 			Advances const *    advances     = g_player[owner]->m_advances;
-			sint32 *            possible     = new sint32[g_theUnitDB->NumRecords()]; //EMOD changed from AdvancesDB recomended by Fromafar 4-12-2006
+			sint32 *            possible     = new sint32[g_theUnitDB->NumRecords()];
 			size_t              nextPossible = 0;
 			sint32 const        maxNovelty   = risk.GetMaxUnitAdvanceLeap();
 
@@ -388,27 +388,21 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 					continue;   // excluded (MP, mod)
 				if (rec->GetNumGovernmentType() > 0) 
 					continue;   // government specific?
-/////////////////ORIGINAL
-				if (advances->GetMinPrerequisites
-				        (rec->GetEnableAdvanceIndex(), maxNovelty) 
-				    <= maxNovelty
-				  )
+
+                sint32 const    need = rec->GetEnableAdvanceIndex();
+                if (need >= g_theAdvanceDB->NumRecords())
+                    continue;   // invalid database input
+
+                if (    (need < 0) // no EnablingAdvance defined for this unit
+                     || (advances->GetMinPrerequisites(need, maxNovelty) <= maxNovelty)
+				   )
 				{
 					possible[nextPossible++] = i;
 				}
 				// else : too advanced
-///////////////////////
-//EMOD
-//				sint32 p;
-//				for(p = 0; p < k_MAX_PLAYERS; p++) {
-//					if(g_player[p] && g_player[p]->m_advances->HasAdvance(rec->GetEnableAdvanceIndex())){
-//						m_value = i;
-//					}
-//				}
-//EMOD
 			}
-////////////////ORIGINAL
-			if (nextPossible) 
+
+            if (nextPossible) 
 			{
 				m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
 			}
@@ -519,8 +513,8 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 		case GOODY_ADVANCE:
 			so = new SlicObject("79DiscoveredRemnantsOfAncientCivilisation") ;
 			DPRINTF(k_DBG_GAMESTATE, ("You find advance %d\n", m_value));
-				//remove this and use advances->m_researching ??? EMOD
-			g_player[owner]->m_advances->GiveAdvance(m_value, CAUSE_SCI_GOODY);
+
+            g_player[owner]->m_advances->GiveAdvance(m_value, CAUSE_SCI_GOODY);
 			so->AddRecipient(owner);
 			so->AddAdvance(m_value);
 			g_slicEngine->Execute(so);

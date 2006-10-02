@@ -4623,14 +4623,14 @@ SOURCE=..\gs\newdb\DiplomacyThreatRecord.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\newdb\dipproposal.cdb
+SOURCE=..\gs\newdb\DiplomacyProposal.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4642,7 +4642,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4654,7 +4654,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4666,7 +4666,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4678,7 +4678,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4690,7 +4690,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4702,7 +4702,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4714,7 +4714,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4726,7 +4726,7 @@ InputPath=..\gs\newdb\dipproposal.cdb
 USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipproposal.cdb
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4738,14 +4738,14 @@ InputPath=..\gs\newdb\dipproposal.cdb
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\newdb\dipthreat.cdb
+SOURCE=..\gs\newdb\DiplomacyThreat.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4757,7 +4757,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4769,7 +4769,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4781,7 +4781,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4793,7 +4793,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4805,7 +4805,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4817,7 +4817,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4829,7 +4829,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -4841,7 +4841,7 @@ InputPath=..\gs\newdb\dipthreat.cdb
 USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\dipthreat.cdb
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
 
 "$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6174,14 +6174,14 @@ SOURCE=..\gs\newdb\TerrainRecord.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\gs\newdb\terrimprove.cdb
+SOURCE=..\gs\newdb\TerrainImprovement.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6193,7 +6193,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6205,7 +6205,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6217,7 +6217,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6229,7 +6229,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6241,7 +6241,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6253,7 +6253,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6265,7 +6265,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
@@ -6277,7 +6277,7 @@ InputPath=..\gs\newdb\terrimprove.cdb
 USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
 # Begin Custom Build
 ProjDir=.
-InputPath=..\gs\newdb\terrimprove.cdb
+InputPath=..\gs\newdb\TerrainImprovement.cdb
 
 "$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)

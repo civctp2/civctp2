@@ -40,7 +40,7 @@
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
 #define CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(a_Type) (static_cast<a_Type*>(0))
 #else
-#define CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(a_Type) <a_Type>(void)
+#define CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(a_Type) <a_Type>()
 #endif
 
 
