@@ -45,6 +45,16 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2006-10-05 (rev647)
+Added Science Tile Imps with BonusScience (+Int) tileimp can add science
+Added Happy Tile imps. with HappyInc (+int) a tileimp can add happiness
+Fixed error in revolt that called a civ joining your civ a new civ
+Added BarbarianChance from Risk.txt to make BarbarianSpawnBarbarian better
+Added BarbarianChance from Risk.txt to make BarbarianCamps better
+Added Militia DiffDB AIMilitiaUnit (flag) gives AI the cheapest unit at begin turn if city is empty
+Added Militia code for buildings (CreatesMiltiaUnit flag) for human and AI but you must have the building
+Added ActualBuildingEverywhere for wonders this flag will actually create the building in cities that don't alreadyhave said building
+Added not implemented flags for vary citythreshold for govt based on mapsize
 
 2006-09-09 (Revision 634)
 Fixed:    AI slider handling

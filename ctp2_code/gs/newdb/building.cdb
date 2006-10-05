@@ -73,6 +73,8 @@ Building {
 	Bit(Float)                  TreasuryInterest         // FU
 	Bit                         CantSell                 // Some Buildings Cant Be Sold
 	Bit(Int)					DisbandsCitySettlerNum	 //
+	Bit							CreatesMiltiaUnit		 //EMOD for militia code 10-05-2006
+	Record Building[]			ActualBuildingEverywhere //FU
 
 
 	Int ProductionCost

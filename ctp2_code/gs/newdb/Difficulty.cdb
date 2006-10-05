@@ -160,9 +160,15 @@ Difficulty{
 	Bit					BarbarianSpawnsBarbarian			# Entrenched barbs create more barbs
 	Bit					AINoSinking							# AI ships don't sink
 	Bit					AINoCityLimit						# AI not affected by city limit
-	Bit(Int)			GoldPerUnitSupport
-	Bit(Int)			GoldPerCity
-	Bit					AINoShieldHunger
-	Bit					AINoGoldHunger
-	Bit					AIFreeUpgrade
+	Bit(Int)			GoldPerUnitSupport					# all pay thins int times unit support calculation
+	Bit(Int)			GoldPerCity							# everyone pays gold amount per city
+	Bit					AINoShieldHunger					# AI doesn't pay shield hunger (gets lots of units)
+	Bit					AINoGoldHunger						# AI doesnt pay unit gold hunger
+	Bit					AIFreeUpgrade						# AI doesn't pay goldfor upgrades
+	Bit					AIMilitiaUnit						#If city is empty at turn start AI gets cheapest unit
+
+	Bit(Int)			SmallMapExtraCities
+	Bit(Int)			MediumMapExtraCities
+	Bit(Int)			LargeMapExtraCities
+	Bit(Int)			GiganticMapExtraCities
 }

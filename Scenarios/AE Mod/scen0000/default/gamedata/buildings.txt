@@ -1,0 +1,734 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : Text
+#  Description  : Buildings (city improvements)
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - IMPROVE_ARENA and IMPROVE_AQUADUCT EnableAdvance matched with entry in 
+#    the great library.
+# 
+################################################################################
+
+IMPROVE_ACADEMY {
+   DefaultIcon ICON_IMPROVE_ACADEMY
+   Description DESCRIPTION_IMPROVE_ACADEMY
+   EnableAdvance ADVANCE_PHILOSOPHY
+   ProductionCost 540
+   EnablesGood TERRAIN_FOREST_GOOD_THREE
+   Upkeep 5
+   SciencePercent 0.1
+}
+
+############################################################
+
+IMPROVE_AIRPORT {
+   DefaultIcon ICON_IMPROVE_AIRPORT
+   Description DESCRIPTION_IMPROVE_AIRPORT
+   EnableAdvance ADVANCE_AERODYNAMICS
+
+   PrerequisiteBuilding IMPROVE_BANK
+   PrerequisiteBuilding IMPROVE_BAZAAR
+
+   ProductionCost 3000
+   Upkeep 100
+   CommercePercent 0.2
+   Airport
+   CantBuildInSea
+}
+
+############################################################
+
+IMPROVE_ANTI_BALLISTIC_MISSILES {
+   DefaultIcon ICON_IMPROVE_ANTI_BALLISTIC_MISSILES
+   Description DESCRIPTION_IMPROVE_ANTI_BALLISTIC_MISSILES
+   EnableAdvance ADVANCE_GLOBAL_COMMUNICATIONS
+   ProductionCost 5000
+   Upkeep 75
+   ProtectFromNukes
+}
+
+############################################################
+
+IMPROVE_AQUA_FILTER {
+   DefaultIcon ICON_IMPROVE_AQUA_FILTER
+   Description DESCRIPTION_IMPROVE_AQUA_FILTER
+   EnableAdvance ADVANCE_NANO_MACHINES
+
+   PrerequisiteBuilding IMPROVE_AQUEDUCT
+   PrerequisiteBuilding IMPROVE_ARCOLOGIES
+
+   ProductionCost 8000
+   Upkeep 90
+   RaiseOvercrowdingLevel 6
+   RaiseMaxPopulation 14
+}
+
+############################################################
+
+IMPROVE_AQUEDUCT {
+   DefaultIcon ICON_IMPROVE_AQUEDUCT
+   Description DESCRIPTION_IMPROVE_AQUEDUCT
+   EnableAdvance ADVANCE_MASONRY
+   ProductionCost 875
+   Upkeep 40
+   RaiseOvercrowdingLevel 6
+   RaiseMaxPopulation 14
+}
+
+############################################################
+
+IMPROVE_ARCOLOGIES {
+   DefaultIcon ICON_IMPROVE_ARCOLOGIES
+   Description DESCRIPTION_IMPROVE_ARCOLOGIES
+   EnableAdvance ADVANCE_ARCOLOGIES
+
+   PrerequisiteBuilding IMPROVE_AQUEDUCT
+
+   ProductionCost 5000
+   Upkeep 160
+   RaiseOvercrowdingLevel 8
+   RaiseMaxPopulation 14
+}
+
+############################################################
+
+IMPROVE_ARENA {
+   DefaultIcon ICON_IMPROVE_ARENA
+   Description DESCRIPTION_IMPROVE_ARENA
+   EnableAdvance ADVANCE_CONCRETE
+   ProductionCost 675
+   Upkeep 40
+   HappyInc 2
+}
+
+############################################################
+
+IMPROVE_BALLISTA_TOWERS {
+   DefaultIcon ICON_IMPROVE_BALLISTA_TOWERS
+   Description DESCRIPTION_IMPROVE_BALLISTA_TOWERS
+   EnableAdvance ADVANCE_BALLISTICS
+   ProductionCost 525
+   Upkeep 20
+   CantBuildInSea
+   OffenseBonusLand 20
+}
+
+############################################################
+
+IMPROVE_BANK {
+   DefaultIcon ICON_IMPROVE_BANK
+   Description DESCRIPTION_IMPROVE_BANK
+   EnableAdvance ADVANCE_BANKING
+
+   PrerequisiteBuilding IMPROVE_BAZAAR
+
+   ProductionCost 1225
+   Upkeep 40
+   CommercePercent 0.15
+}
+
+############################################################
+
+IMPROVE_BASCILICA {
+   DefaultIcon ICON_IMPROVE_BASCILICA
+   Description DESCRIPTION_IMPROVE_BASCILICA
+   EnableAdvance ADVANCE_THEOLOGY
+
+   PrerequisiteBuilding IMPROVE_SHRINE
+
+   ProductionCost 1450
+   Upkeep 40
+   HappyInc 3
+   IsReligious
+   Cathedral
+}
+
+############################################################
+
+IMPROVE_BATTLEMENTS {
+   DefaultIcon ICON_IMPROVE_BATTLEMENTS
+   Description DESCRIPTION_IMPROVE_BATTLEMENTS
+   EnableAdvance ADVANCE_NAVAL_TACTICS
+   ProductionCost 1800
+   Upkeep 50
+   CoastalBuilding
+   OffenseBonusWater 25
+}
+
+############################################################
+
+IMPROVE_BAZAAR {
+   DefaultIcon ICON_IMPROVE_BAZAAR
+   Description DESCRIPTION_IMPROVE_BAZAAR
+   EnableAdvance ADVANCE_TRADE
+   ProductionCost 525
+   Upkeep 10
+   CommercePercent 0.1
+}
+
+############################################################
+
+IMPROVE_BEHAVIORAL_MOD_CENTER {
+   DefaultIcon ICON_IMPROVE_BEHAVIORAL_MOD_CENTER
+   Description DESCRIPTION_IMPROVE_BEHAVIORAL_MOD_CENTER
+   EnableAdvance ADVANCE_NEURAL_REPROGRAMMING
+
+   PrerequisiteBuilding IMPROVE_CORRECTIONAL_FACILITY
+   PrerequisiteBuilding IMPROVE_COURTHOUSE
+
+   ProductionCost 4500
+   Upkeep 180
+   LowerCrime -0.3
+}
+
+############################################################
+
+IMPROVE_BODY_EXCHANGE {
+   DefaultIcon ICON_IMPROVE_BODY_EXCHANGE
+   Description DESCRIPTION_IMPROVE_BODY_EXCHANGE
+   EnableAdvance ADVANCE_LIFE_EXTENSION
+
+   PrerequisiteBuilding IMPROVE_DRUG_STORE
+   PrerequisiteBuilding IMPROVE_HOSPITAL
+   PrerequisiteBuilding IMPROVE_INCUBATION_CENTER
+
+   ProductionCost 7500
+   Upkeep 150
+   RaiseOvercrowdingLevel 12
+}
+
+############################################################
+
+IMPROVE_BROKERAGE {
+   DefaultIcon ICON_IMPROVE_BROKERAGE
+   Description DESCRIPTION_IMPROVE_BROKERAGE
+   EnableAdvance ADVANCE_ECONOMICS
+
+   PrerequisiteBuilding IMPROVE_BANK
+   PrerequisiteBuilding IMPROVE_BAZAAR
+
+   ProductionCost 1600
+   Upkeep 40
+   CommercePercent 0.2
+   Brokerage
+}
+
+############################################################
+
+IMPROVE_CAPITOL {
+   DefaultIcon ICON_IMPROVE_CAPITOL
+   Description DESCRIPTION_IMPROVE_CAPITOL
+   EnableAdvance ADVANCE_FEUDALISM
+   ProductionCost 550
+   Upkeep 0
+   Capitol
+   HappyInc 1
+}
+
+############################################################
+
+IMPROVE_CITY_WALLS {
+   DefaultIcon ICON_IMPROVE_CITY_WALLS
+   Description DESCRIPTION_IMPROVE_CITY_WALLS
+   EnableAdvance ADVANCE_STONE_WORKING
+   ProductionCost 450
+   Upkeep 20
+   DefendersPercent 15
+   PreventConversion 0.5
+   PreventSlavery 0.5
+   CityWalls
+   CantBuildInSea
+}
+
+############################################################
+
+IMPROVE_COMPUTER_CENTER {
+   DefaultIcon ICON_IMPROVE_COMPUTER_CENTER
+   Description DESCRIPTION_IMPROVE_COMPUTER_CENTER
+   EnableAdvance ADVANCE_COMPUTER
+
+   PrerequisiteBuilding IMPROVE_ACADEMY
+   PrerequisiteBuilding IMPROVE_PUBLISHING_HOUSE
+   PrerequisiteBuilding IMPROVE_UNIVERSITY
+
+   ProductionCost 2400
+   Upkeep 60
+   SciencePercent 0.2
+}
+
+############################################################
+
+IMPROVE_CORNUCOPIC_VAT {
+   DefaultIcon ICON_IMPROVE_CORNUCOPIC_VAT
+   Description DESCRIPTION_IMPROVE_CORNUCOPIC_VAT
+   EnableAdvance ADVANCE_GENETIC_TAILORING
+
+   PrerequisiteBuilding IMPROVE_FOOD_SILO
+   PrerequisiteBuilding IMPROVE_GRANARY
+
+   ProductionCost 3500
+   Upkeep 150
+   FoodVat 1
+}
+
+############################################################
+
+IMPROVE_CORRECTIONAL_FACILITY {
+   DefaultIcon ICON_IMPROVE_CORRECTIONAL_FACILITY
+   Description DESCRIPTION_IMPROVE_CORRECTIONAL_FACILITY
+   EnableAdvance ADVANCE_CRIMINAL_CODE
+
+   PrerequisiteBuilding IMPROVE_COURTHOUSE
+
+   ProductionCost 1400
+   Upkeep 50
+   LowerCrime -0.2
+}
+
+############################################################
+
+IMPROVE_COURTHOUSE {
+   DefaultIcon ICON_IMPROVE_COURTHOUSE
+   Description DESCRIPTION_IMPROVE_COURTHOUSE
+   EnableAdvance ADVANCE_JURISPRUDENCE
+   ProductionCost 330
+   Upkeep 10
+   SquaredBorderRadius	 13
+   IntBorderRadius	 3
+   LowerCrime -0.1
+}
+
+############################################################
+
+IMPROVE_DRUG_STORE {
+   DefaultIcon ICON_IMPROVE_DRUG_STORE
+   Description DESCRIPTION_IMPROVE_DRUG_STORE
+   EnableAdvance ADVANCE_PHARMACEUTICALS
+   ProductionCost 1400
+   Upkeep 50
+   RaiseOvercrowdingLevel 4
+}
+
+############################################################
+
+IMPROVE_E_BANK {
+   DefaultIcon ICON_IMPROVE_E_BANK
+   Description DESCRIPTION_IMPROVE_E_BANK
+   EnableAdvance ADVANCE_DIGITAL_ENCRYPTION
+
+   PrerequisiteBuilding IMPROVE_BANK
+   PrerequisiteBuilding IMPROVE_BAZAAR
+   PrerequisiteBuilding IMPROVE_BROKERAGE
+
+   ProductionCost 4000
+   Upkeep 120
+   CommercePercent 0.25
+}
+
+############################################################
+
+IMPROVE_ECO_TRANSIT {
+   DefaultIcon ICON_IMPROVE_ECO_TRANSIT
+   Description DESCRIPTION_IMPROVE_ECO_TRANSIT
+   EnableAdvance ADVANCE_FUEL_CELLS
+
+   PrerequisiteBuilding IMPROVE_PUBLIC_TRANSPORTATION
+
+   ProductionCost 3500
+   Upkeep 100
+   PopulationPollutionPercent -0.5
+}
+
+############################################################
+
+IMPROVE_FACTORY {
+   DefaultIcon ICON_IMPROVE_FACTORY
+   Description DESCRIPTION_IMPROVE_FACTORY
+   EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+   ProductionCost 2025
+   Upkeep 80
+   ProductionPercent 0.15
+   AllowGrunts
+}
+
+############################################################
+
+IMPROVE_FLAK_TOWERS {
+   DefaultIcon ICON_IMPROVE_FLAK_TOWERS
+   Description DESCRIPTION_IMPROVE_FLAK_TOWERS
+   EnableAdvance ADVANCE_RADAR
+   ProductionCost 2500
+   Upkeep 80
+   OffenseBonusAir 40
+}
+
+############################################################
+
+IMPROVE_FOOD_SILO {
+   DefaultIcon ICON_IMPROVE_FOOD_SILO
+   Description DESCRIPTION_IMPROVE_FOOD_SILO
+   EnableAdvance ADVANCE_RAILROAD
+
+   PrerequisiteBuilding IMPROVE_GRANARY
+
+   ProductionCost 1200
+   Upkeep 40
+   FoodPercent 0.15
+   StarvationProtection 5
+}
+
+############################################################
+
+IMPROVE_FORCEFIELD {
+   DefaultIcon ICON_IMPROVE_FORCEFIELD
+   Description DESCRIPTION_IMPROVE_FORCEFIELD
+   EnableAdvance ADVANCE_UNIFIED_PHYSICS
+
+   PrerequisiteBuilding IMPROVE_CITY_WALLS
+
+   ProductionCost 10000
+   Upkeep 200
+   DefendersPercent 80
+   ForceField
+}
+
+############################################################
+
+IMPROVE_FUSION_PLANT {
+   DefaultIcon ICON_IMPROVE_FUSION_PLANT
+   Description DESCRIPTION_IMPROVE_FUSION_PLANT
+   EnableAdvance ADVANCE_FUSION
+
+   PrerequisiteBuilding IMPROVE_NUCLEAR_PLANT
+   PrerequisiteBuilding IMPROVE_OIL_REFINERY
+
+   ProductionCost 10000
+   Upkeep 200
+   ProductionPercent 0.25
+}
+
+############################################################
+
+IMPROVE_GAIA_COMPUTER {
+   DefaultIcon ICON_IMPROVE_GAIA_COMPUTER
+   Description DESCRIPTION_IMPROVE_GAIA_COMPUTER
+   EnableAdvance ADVANCE_GAIA_CONTROLLER
+   ProductionCost 7500
+   Upkeep 250
+}
+
+############################################################
+
+IMPROVE_GRANARY {
+   DefaultIcon ICON_IMPROVE_GRANARY
+   Description DESCRIPTION_IMPROVE_GRANARY
+   EnableAdvance ADVANCE_AGRICULTURE
+   ProductionCost 300
+   Upkeep 10
+   FoodPercent 0.1
+   StarvationProtection 2
+}
+
+############################################################
+
+IMPROVE_HOSPITAL {
+   DefaultIcon ICON_IMPROVE_HOSPITAL
+   Description DESCRIPTION_IMPROVE_HOSPITAL
+   EnableAdvance ADVANCE_MEDICINE
+
+   PrerequisiteBuilding IMPROVE_DRUG_STORE
+
+   ProductionCost 2375
+   Upkeep 80
+   RaiseOvercrowdingLevel 8
+}
+
+############################################################
+
+IMPROVE_INCUBATION_CENTER {
+   DefaultIcon ICON_IMPROVE_INCUBATION_CENTER
+   Description DESCRIPTION_IMPROVE_INCUBATION_CENTER
+   EnableAdvance ADVANCE_HUMAN_CLONING
+
+   PrerequisiteBuilding IMPROVE_DRUG_STORE
+   PrerequisiteBuilding IMPROVE_HOSPITAL
+
+   ProductionCost 5500
+   Upkeep 150
+   RaiseOvercrowdingLevel 12
+}
+
+############################################################
+
+IMPROVE_MATTER_DECOMPILER {
+   DefaultIcon ICON_IMPROVE_MATTER_DECOMPILER
+   Description DESCRIPTION_IMPROVE_MATTER_DECOMPILER
+   EnableAdvance ADVANCE_ECOTOPIA
+
+   PrerequisiteBuilding IMPROVE_RECYCLING_PLANT
+
+   ProductionCost 4500
+   Upkeep 150
+   ProductionPollutionPercent -0.5
+}
+
+############################################################
+
+IMPROVE_MICRO_DEFENSE {
+   DefaultIcon ICON_IMPROVE_MICRO_DEFENSE
+   Description DESCRIPTION_IMPROVE_MICRO_DEFENSE
+   EnableAdvance ADVANCE_NANO_WARFARE
+   ProductionCost 8500
+   Upkeep 180
+   ProtectFromBioAgents 0.5
+   ProtectFromNanoVirus 0.5
+}
+
+############################################################
+
+IMPROVE_MILL {
+   DefaultIcon ICON_IMPROVE_MILL
+   Description DESCRIPTION_IMPROVE_MILL
+   EnableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+   ProductionCost 1125
+   Upkeep 40
+   ProductionPercent 0.1
+}
+
+############################################################
+
+IMPROVE_MOVIE_PALACE {
+   DefaultIcon ICON_IMPROVE_MOVIE_PALACE
+   Description DESCRIPTION_IMPROVE_MOVIE_PALACE
+   EnableAdvance ADVANCE_ELECTRICITY
+
+   PrerequisiteBuilding IMPROVE_ARENA
+
+   ProductionCost 1500
+   Upkeep 50
+   LowerPeaceMovement -0.2
+   Television
+}
+
+############################################################
+
+IMPROVE_NANITE_FACTORY {
+   DefaultIcon ICON_IMPROVE_NANITE_FACTORY
+   Description DESCRIPTION_IMPROVE_NANITE_FACTORY
+   EnableAdvance ADVANCE_NANO_ASSEMBLY
+
+   PrerequisiteBuilding IMPROVE_FACTORY
+   PrerequisiteBuilding IMPROVE_ROBOTIC_PLANT
+
+   ProductionCost 8000
+   Upkeep 180
+   ProductionPercent 0.25
+}
+
+############################################################
+
+IMPROVE_NUCLEAR_PLANT {
+   DefaultIcon ICON_IMPROVE_NUCLEAR_PLANT
+   Description DESCRIPTION_IMPROVE_NUCLEAR_PLANT
+   EnableAdvance ADVANCE_NUCLEAR_POWER
+
+   PrerequisiteBuilding IMPROVE_OIL_REFINERY
+
+   ProductionCost 4500
+   Upkeep 120
+   ProductionPercent 0.2
+   NuclearPlant
+}
+
+############################################################
+
+IMPROVE_OIL_REFINERY {
+   DefaultIcon ICON_IMPROVE_OIL_REFINERY
+   Description DESCRIPTION_IMPROVE_OIL_REFINERY
+   EnableAdvance ADVANCE_OIL_REFINING
+   ProductionCost 3500
+   NeedsCityGood TERRAIN_DESERT_GOOD_TWO
+   Upkeep 80
+   ProductionPercent 0.15
+}
+
+############################################################
+
+IMPROVE_ORBITAL_LABORATORY {
+   DefaultIcon ICON_IMPROVE_ORBITAL_LABORATORY
+   Description DESCRIPTION_IMPROVE_ORBITAL_LABORATORY
+   EnableAdvance ADVANCE_SPACE_FLIGHT
+
+   PrerequisiteBuilding IMPROVE_ACADEMY
+   PrerequisiteBuilding IMPROVE_COMPUTER_CENTER
+   PrerequisiteBuilding IMPROVE_PUBLISHING_HOUSE
+   PrerequisiteBuilding IMPROVE_UNIVERSITY
+
+   ProductionCost 3000
+   Upkeep 100
+   SciencePercent 0.3
+}
+
+############################################################
+
+IMPROVE_POWER_SATELLITE {
+   DefaultIcon ICON_IMPROVE_POWER_SATELLITE
+   Description DESCRIPTION_IMPROVE_POWER_SATELLITE
+   EnableAdvance ADVANCE_GAIA_CONTROLLER
+   ProductionCost 3500
+   Upkeep 100
+}
+
+############################################################
+
+IMPROVE_PUBLIC_TRANSPORTATION {
+   DefaultIcon ICON_IMPROVE_PUBLIC_TRANSPORTATION
+   Description DESCRIPTION_IMPROVE_PUBLIC_TRANSPORTATION
+   EnableAdvance ADVANCE_MASS_TRANSIT
+   ProductionCost 2400
+   Upkeep 60
+   PopulationPollutionPercent -0.3
+}
+
+############################################################
+
+IMPROVE_PUBLISHING_HOUSE {
+   DefaultIcon ICON_IMPROVE_PUBLISHING_HOUSE
+   Description DESCRIPTION_IMPROVE_PUBLISHING_HOUSE
+   EnableAdvance ADVANCE_PRINTING_PRESS
+
+   PrerequisiteBuilding IMPROVE_ACADEMY
+   PrerequisiteBuilding IMPROVE_UNIVERSITY
+
+   ProductionCost 1375
+   Upkeep 30
+   SciencePercent 0.15
+}
+
+############################################################
+
+IMPROVE_RECYCLING_PLANT {
+   DefaultIcon ICON_IMPROVE_RECYCLING_PLANT
+   Description DESCRIPTION_IMPROVE_RECYCLING_PLANT
+   EnableAdvance ADVANCE_CONSERVATION
+   ProductionCost 3000
+   Upkeep 80
+   ProductionPollutionPercent -0.3
+}
+
+############################################################
+
+IMPROVE_ROBOTIC_PLANT {
+   DefaultIcon ICON_IMPROVE_ROBOTIC_PLANT
+   Description DESCRIPTION_IMPROVE_ROBOTIC_PLANT
+   EnableAdvance ADVANCE_ROBOTICS
+
+   PrerequisiteBuilding IMPROVE_FACTORY
+
+   ProductionCost 5500
+   Upkeep 150
+   ProductionPercent 0.2
+}
+
+############################################################
+
+IMPROVE_SECURITY_MONITOR {
+   DefaultIcon ICON_IMPROVE_SECURITY_MONITOR
+   Description DESCRIPTION_IMPROVE_SECURITY_MONITOR
+   EnableAdvance ADVANCE_AI_SURVEILLANCE
+
+   PrerequisiteBuilding IMPROVE_CORRECTIONAL_FACILITY
+   PrerequisiteBuilding IMPROVE_COURTHOUSE
+
+   ProductionCost 4000
+   Upkeep 120
+   HappyInc -3
+   LowerCrime -0.3
+}
+
+############################################################
+
+IMPROVE_SHRINE {
+   DefaultIcon ICON_IMPROVE_SHRINE
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_RELIGION
+   ProductionCost 270
+   Upkeep 10
+   HappyInc 1
+   IsReligious
+   Cathedral
+}
+
+############################################################
+
+IMPROVE_TELEVISION {
+   DefaultIcon ICON_IMPROVE_TELEVISION
+   Description DESCRIPTION_IMPROVE_TELEVISION
+   EnableAdvance ADVANCE_MASS_MEDIA
+
+   PrerequisiteBuilding IMPROVE_BANK
+   PrerequisiteBuilding IMPROVE_BAZAAR
+
+   ProductionCost 2500
+   Upkeep 5
+   HappyInc 10
+   DoubleTelevangelists
+   GoldPerCitizen 5
+   Television
+}
+
+############################################################
+
+IMPROVE_THEATER {
+   DefaultIcon ICON_IMPROVE_THEATER
+   Description DESCRIPTION_IMPROVE_THEATER
+   EnableAdvance ADVANCE_DRAMA
+   ProductionCost 495
+   Upkeep 10
+   HappyInc 2
+}
+
+############################################################
+
+IMPROVE_UNIVERSITY {
+   DefaultIcon ICON_IMPROVE_UNIVERSITY
+   Description DESCRIPTION_IMPROVE_UNIVERSITY
+   EnableAdvance ADVANCE_CLASSICAL_EDUCATION
+
+   PrerequisiteBuilding IMPROVE_ACADEMY
+
+   ProductionCost 1350
+   Upkeep 30
+   SciencePercent 0.15
+}
+
+############################################################
+
+IMPROVE_VR_AMUSEMENT_PARK {
+   DefaultIcon ICON_IMPROVE_VR_AMUSEMENT_PARK
+   Description DESCRIPTION_IMPROVE_VR_AMUSEMENT_PARK
+   EnableAdvance ADVANCE_NEURAL_INTERFACE
+
+   PrerequisiteBuilding IMPROVE_ARENA
+   PrerequisiteBuilding IMPROVE_MOVIE_PALACE
+
+   ProductionCost 3500
+   Upkeep 100
+   HappyInc 5
+}
+
+############################################################
+

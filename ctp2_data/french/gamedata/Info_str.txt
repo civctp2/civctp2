@@ -461,4 +461,6 @@ NANO_TERROR_FAILED_AGRESSOR		"Vos tentatives pour sauver la Terre ont avorté. Vo
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Malgré tous vos efforts, l'ennemi s'est aperçu de votre ruse. La ville que vous avez pris pour cible est immunisée contre les nano-attaques."
 
 #New Messages#
-CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
+CAPTURED_CITY_OPTIONS			"{city[0].name} est tombée entre nos mains ! La cité est à notre merci, quels sont vos ordres ? "
+LOST_AT_SEA				"Notre {unit[0].name} s'est  abîmé(e) en mer ! Souvenez-vous que certaines unités peuvent couler avec leur cargaison !"
+UNIT_UPGRADED				"Notre unité {unit[0].name} a été entraînée et transformée en {unit[1].name} ! "

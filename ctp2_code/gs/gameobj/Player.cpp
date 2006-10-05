@@ -6846,6 +6846,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 	DPRINTF(k_DBG_GAMESTATE, ("Player %d built wonder %d\n", m_owner, wonder));
 	m_builtWonders |= ((uint64)1 << wonder);
 	
+	const WonderRecord *wrec = g_theWonderDB->Get(wonder);
 
 	sint32 polluters;
 	if (wonderutil_Get(wonder)->GetPollutersToParks(polluters)) {
@@ -7062,12 +7063,22 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		}
 	}
 
-	const WonderRecord *wrec = g_theWonderDB->Get(wonder);
+
 	sint32 buildingIndex;
 	if(wrec->GetBuildingEverywhereIndex(buildingIndex)) {
 		m_wonderBuildings |= ((uint64)1 << buildingIndex);
 	}
-		
+//EMOD to actually create the wonder building
+
+	sint32 abuildingIndex;
+	if(wrec->GetActualBuildingEverywhereIndex(abuildingIndex)) {
+		for(i = 0; i < m_all_cities->Num(); i++) {
+			if (!m_all_cities->Access(i).GetData()->GetCityData()->HaveImprovement(abuildingIndex)) {
+				m_all_cities->Access(i).GetData()->GetCityData()->AddImprovement(abuildingIndex);
+			}
+		}
+	}
+//end EMOD	
 }
 
 void Player::RemoveWonder(sint32 which, bool destroyed)

@@ -1,0 +1,1317 @@
+TERRAIN_FOREST {
+   TilesetIndex 22
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+
+   Icon ICON_TERRAIN_FORESTS
+   InternalType: Forest
+   CanDie
+
+   AddAdvance ADVANCE_CONSERVATION
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_TOOLMAKING
+   TransformRemove {
+      Time 3
+      Materials 200
+   }
+
+   EnvBase {
+      Score 70
+      Food 5
+      Shield 15
+      Gold 5
+      Defense 0.5
+      Movement 200
+      Freight 180
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_FOREST_GOOD_ONE
+   Resources TERRAIN_FOREST_GOOD_TWO
+   Resources TERRAIN_FOREST_GOOD_THREE
+   Resources TERRAIN_FOREST_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_PLAINS {
+   TilesetIndex 1
+   HutTilesetIndexA 150
+   HutTilesetIndexB 160
+   Icon ICON_TERRAIN_PLAINS
+   InternalType: Plains
+   CanDie
+
+   AddAdvance ADVANCE_TOOLMAKING
+   TransformAdd {
+      Time 5
+      Materials 200
+   }
+
+   RemoveAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+   TransformRemove {
+      Time 1
+      Materials 50
+   }
+
+   EnvBase {
+      Score 80
+      Food 10
+      Shield 10
+      Gold 5
+      Defense 0
+      Movement 100
+      Freight 90
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 40
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_PLAINS_GOOD_ONE
+   Resources TERRAIN_PLAINS_GOOD_TWO
+   Resources       TERRAIN_PLAINS_GOOD_THREE
+   Resources       TERRAIN_PLAINS_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Land
+}
+
+############################################################
+
+TERRAIN_TUNDRA {
+   TilesetIndex 2
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_TUNDRA
+   InternalType: Tundra
+   CanDie
+   HostileTerrainCost 2
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_ADVANCED_COMPOSITES
+   TransformRemove {
+      Time 5
+      Materials 400
+   }
+
+   EnvBase {
+      Score 0
+      Food 5
+      Shield 5
+      Gold 0
+      Defense 0
+      Movement 200
+      Freight 90
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_TUNDRA_GOOD_ONE
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_GLACIER {
+   TilesetIndex 3
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_GLACIERS
+   InternalType: Glacier
+   HostileTerrainCost 3
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_GAIA_THEORY
+   TransformRemove {
+      Time 10
+      Materials 1000
+   }
+
+   EnvBase {
+      Score 0
+      Food 0
+      Shield 0
+      Gold 0
+      Defense 0
+      Movement 300
+      Freight 450
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_GRASSLAND {
+   TilesetIndex 4
+   HutTilesetIndexA 150
+   HutTilesetIndexB 160
+   Icon ICON_TERRAIN_GRASSLANDS
+   InternalType: Grassland
+   CanDie
+
+   AddAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+   TransformAdd {
+      Time 5
+      Materials 400
+   }
+
+   RemoveAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+   TransformRemove {
+      Time 1
+      Materials 20
+   }
+
+   EnvBase {
+      Score 80
+      Food 15
+      Shield 5
+      Gold 5
+      Defense 0
+      Movement 100
+      Freight 90
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 40
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_GRASSLAND_GOOD_TWO
+   Resources TERRAIN_GRASSLAND_GOOD_ONE
+   Resources TERRAIN_GRASSLAND_GOOD_HORSE	
+   Resources TERRAIN_GRASSLAND_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Land
+}
+
+############################################################
+
+TERRAIN_DESERT {
+   TilesetIndex 5
+   HutTilesetIndexA 160
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_DESERTS
+   InternalType: Desert
+   CanDie
+   HostileTerrainCost 1
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+   TransformRemove {
+      Time 7
+      Materials 800
+   }
+
+   EnvBase {
+      Score 40
+      Food 0
+      Shield 10
+      Gold 5
+      Defense 0
+      Movement 200
+      Freight 90
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_DESERT_GOOD_ONE
+   Resources TERRAIN_DESERT_GOOD_TWO
+   Resources       TERRAIN_DESERT_GOOD_THREE
+   Resources       TERRAIN_DESERT_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Land
+}
+
+############################################################
+
+TERRAIN_SWAMP {
+   TilesetIndex 6
+   HutTilesetIndexA 150
+   HutTilesetIndexB 160
+   Icon ICON_TERRAIN_SWAMPS
+   InternalType: Swamp
+   CanDie
+   HostileTerrainCost 1
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+   TransformRemove {
+      Time 5
+      Materials 800
+   }
+
+   EnvBase {
+      Score 40
+      Food 5
+      Shield 5
+      Gold 5
+      Defense 0.5
+      Movement 300
+      Freight 270
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_SWAMP_GOOD_ONE
+   Resources TERRAIN_SWAMP_GOOD_TWO
+   Resources TERRAIN_SWAMP_GOOD_THREE
+   Resources TERRAIN_SWAMP_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_JUNGLE {
+   TilesetIndex 7
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_JUNGLES
+   InternalType: Jungle
+   CanDie
+   HostileTerrainCost 2
+
+   AddAdvance ADVANCE_CONSERVATION
+   TransformAdd {
+      Time 5
+      Materials 1600
+   }
+
+   RemoveAdvance ADVANCE_TOOLMAKING
+   TransformRemove {
+      Time 3
+      Materials 400
+   }
+
+   EnvBase {
+      Score 70
+      Food 10
+      Shield 10
+      Gold 5
+      Defense 0.5
+      Movement 300
+      Freight 540
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_JUNGLE_GOOD_TWO
+   Resources TERRAIN_JUNGLE_GOOD_ONE
+   Resources TERRAIN_JUNGLE_GOOD_FOUR
+   Resources TERRAIN_JUNGLE_GOOD_THREE
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_MOUNTAIN {
+   TilesetIndex 8
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_MOUNTAIN
+   InternalType: Mountain
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_FUSION
+   TransformRemove {
+      Time 10
+      Materials 2000
+   }
+
+   EnvBase {
+      Score 60
+      Food 0
+      Shield 15
+      Gold 5
+      Defense 2
+      Movement 400
+      Freight 540
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_MOUNTAIN_GOOD_ONE
+   Resources TERRAIN_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_MOUNTAIN_GOOD_THREE
+   Resources TERRAIN_MOUNTAIN_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_HILL {
+   TilesetIndex 9
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_HILLS
+   InternalType: Hill
+   CanDie
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_EXPLOSIVES
+   TransformRemove {
+      Time 10
+      Materials 1000
+   }
+
+   EnvBase {
+      Score 70
+      Food 5
+      Shield 10
+      Gold 5
+      Defense 1
+      Movement 200
+      Freight 180
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_HILL_GOOD_TWO
+   Resources TERRAIN_HILL_GOOD_ONE
+   Resources TERRAIN_HILL_GOOD_FOUR
+   Resources TERRAIN_HILL_GOOD_THREE
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_WATER_SHALLOW {
+   TilesetIndex 10
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_SHALLOW_WATER
+   InternalType: WaterShallow
+
+   EnvBase {
+      Score 60
+      Food 10
+      Shield 5
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+
+   MovementType: Air
+   MovementType: ShallowWater
+}
+
+############################################################
+
+TERRAIN_WATER_DEEP {
+   TilesetIndex 11
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_DEEP_WATER
+   InternalType: WaterDeep
+
+   EnvBase {
+      Score 50
+      Food 10
+      Shield 5
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_DEEP_GOOD_TWO
+   Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_THREE
+
+   MovementType: Air
+   MovementType: Sea
+}
+
+############################################################
+
+TERRAIN_WATER_VOLCANO {
+   TilesetIndex 12
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_VOLCANO
+   InternalType: WaterVolcano
+   HostileTerrainCost 5
+
+   EnvBase {
+      Score 90
+      Food 10
+      Shield 20
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_WHITE_HILL_GOOD_ONE
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Sea
+}
+
+############################################################
+
+TERRAIN_WATER_BEACH {
+   TilesetIndex 13
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_BEACH
+   InternalType: WaterBeach
+
+   EnvBase {
+      Score 90
+      Food 10
+      Shield 5
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 100
+      Freight 33
+   }
+
+   Resources TERRAIN_WATER_BEACH_GOOD_ONE
+   Resources TERRAIN_WATER_BEACH_GOOD_TWO
+   Resources TERRAIN_WATER_BEACH_GOOD_THREE
+
+   MovementType: Air
+   MovementType: ShallowWater
+}
+
+############################################################
+
+TERRAIN_WATER_SHELF {
+   TilesetIndex 14
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_CONTINENTAL_SHELF
+   InternalType: WaterShelf
+
+   EnvBase {
+      Score 70
+      Food 10
+      Shield 5
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Sea
+}
+
+############################################################
+
+TERRAIN_WATER_TRENCH {
+   TilesetIndex 15
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_TRENCH
+   InternalType: WaterTrench
+   GLHidden
+
+   EnvBase {
+      Score 70
+      Food 5
+      Shield 10
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_DEEP_GOOD_TWO
+   Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_THREE
+
+   MovementType: Air
+   MovementType: Sea
+}
+
+############################################################
+
+TERRAIN_WATER_RIFT {
+   TilesetIndex 16
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_RIFT
+   InternalType: WaterRift
+
+   EnvBase {
+      Score 90
+      Food 5
+      Shield 20
+      Gold 5
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_DEEP_GOOD_TWO
+   Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_THREE
+
+   MovementType: Air
+   MovementType: Sea
+}
+
+############################################################
+
+TERRAIN_DEAD {
+   TilesetIndex 17
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_DEAD
+   InternalType: Dead
+
+   RemoveAdvance ADVANCE_CONSERVATION
+   TransformRemove {
+      Time 5
+      Materials 500
+   }
+
+   EnvBase {
+      Score 0
+      Food 0
+      Shield 0
+      Gold 0
+      Defense 0
+      Movement 200
+      Freight 200
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   MovementType: Air
+   MovementType: Land
+}
+
+############################################################
+
+TERRAIN_BROWN_HILL {
+   TilesetIndex 18
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_BHILLS
+   InternalType: BrownHill
+   CanDie
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_EXPLOSIVES
+   TransformRemove {
+      Time 10
+      Materials 1000
+   }
+
+   EnvBase {
+      Score 50
+      Food 0
+      Shield 10
+      Gold 5
+      Defense 1
+      Movement 300
+      Freight 180
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_BROWN_HILL_GOOD_ONE
+   Resources TERRAIN_BROWN_HILL_GOOD_TWO
+   Resources TERRAIN_DESERT_GOOD_ONE
+   Resources TERRAIN_DESERT_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_BROWN_MOUNTAIN {
+   TilesetIndex 19
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_BMOUNTAIN
+   InternalType: BrownMountain
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_FUSION
+   TransformRemove {
+      Time 10
+      Materials 2000
+   }
+
+   EnvBase {
+      Score 60
+      Food 0
+      Shield 15
+      Gold 5
+      Defense 2
+      Movement 400
+      Freight 540
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_BROWN_MOUNTAIN_GOOD_ONE
+   Resources TERRAIN_BROWN_MOUNTAIN_GOOD_TWO
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_WHITE_HILL {
+   TilesetIndex 20
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_WHILLS
+   InternalType: WhiteHill
+   CanDie
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_EXPLOSIVES
+   TransformRemove {
+      Time 10
+      Materials 1000
+   }
+
+   EnvBase {
+      Score 50
+      Food 0
+      Shield 10
+      Gold 5
+      Defense 1
+      Movement 300
+      Freight 180
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_WHITE_HILL_GOOD_ONE
+   Resources TERRAIN_WHITE_HILL_GOOD_TWO
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_WHITE_MOUNTAIN {
+   TilesetIndex 21
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_WMOUNTAIN
+   InternalType: WhiteMountain
+
+   AddAdvance ADVANCE_SUBNEURAL_ADS
+   TransformAdd {
+      Time 5
+      Materials 800
+   }
+
+   RemoveAdvance ADVANCE_FUSION
+   TransformRemove {
+      Time 10
+      Materials 2000
+   }
+
+   EnvBase {
+      Score 60
+      Food 0
+      Shield 15
+      Gold 5
+      Defense 2
+      Movement 400
+      Freight 540
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 0
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE
+   Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Mountain
+}
+
+############################################################
+
+TERRAIN_WATER_KELP {
+   TilesetIndex 23
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_KELP_BED
+   InternalType: WaterKelp
+   HostileTerrainCost 2
+
+   EnvBase {
+      Score 80
+      Food 15
+      Shield 5
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 50
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: ShallowWater
+}
+
+############################################################
+
+TERRAIN_WATER_REEF {
+   TilesetIndex 24
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_CORAL_REEF
+   InternalType: WaterReef
+   HostileTerrainCost 1
+
+   EnvBase {
+      Score 80
+      Food 10
+      Shield 10
+      Gold 10
+      Defense 0
+      Movement 100
+      Freight 110
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Food 10
+      Shield 15
+      Gold 15
+   }
+
+   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
+   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
+   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
+
+   MovementType: Air
+   MovementType: Sea
+   MovementType: ShallowWater
+}
+
+############################################################
+
+TERRAIN_SPECIAL1 {
+   TilesetIndex 25
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_GRASSLANDS
+   InternalType: Special
+   CanDie
+   GLHidden
+
+   EnvBase {
+      Score 80
+      Food 15
+      Shield 5
+      Gold 5
+      Defense 0
+      Movement 100
+      Freight 90
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 5
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   MovementType: Air
+   MovementType: Land
+}
+
+############################################################
+
+TERRAIN_SPECIAL2 {
+   TilesetIndex 26
+   HutTilesetIndexA 150
+   HutTilesetIndexB 151
+   Icon ICON_TERRAIN_DESERTS
+   InternalType: Special
+   CanDie
+   GLHidden
+
+   EnvBase {
+      Score 10
+      Food 0
+      Shield 0
+      Gold 5
+      Defense 0
+      Movement 200
+      Freight 90
+      DeadFood 0
+      DeadShield 0
+      DeadGold 0
+   }
+
+   EnvCity {
+      Score 0
+      Food 10
+      Shield 15
+      Gold 15
+      Movement 50
+      Freight 500
+   }
+
+   EnvRiver {
+      Score 30
+      Food 5
+      Shield 5
+      Gold 5
+      Movement 50
+      Freight 70
+   }
+
+   MovementType: Air
+   MovementType: Land
+}
+
+############################################################
+

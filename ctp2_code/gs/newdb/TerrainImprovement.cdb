@@ -137,6 +137,8 @@ TerrainImprovement {
 		Record Resource[] EnablesGood       // Having a TI gives a city a good
 		Bit(Int) GoldHunger                 // FU
 		Bit(Int) GoldCost                   // FU
+		Int BonusScience = 0               // Tileimps can give a city science points
+		Int HappyInc = 0                   // allows tileimps to add (or subtract) happiness
 		Int ProductionTime
 		Int TilesetIndex
 	}

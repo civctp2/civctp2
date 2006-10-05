@@ -199,6 +199,7 @@ extern Pollution *g_thePollution;
 #include "MaterialPool.h"  //EMOD
 #include "BuildingRecord.h" //EMOD
 #include "Barbarians.h" //EMOD
+#include "RiskRecord.h"  //add fro barb code
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -1512,8 +1513,9 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
 //----------------------------------------------------------------------------
 void ArmyData::BeginTurn()
 {
-
 //EMOD to add Harvesting Units 5-15-2006
+
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
@@ -1563,41 +1565,46 @@ void ArmyData::BeginTurn()
 	}
 
 	// EMOD Barbarian Camps
-	// This should be risk level depending
+	// This should be risk level depending  //EMOD added Risk 10-05-2006
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
 	{
-		for(i = 0; i < m_nElements; i++) {
-//			Cell *cell = g_theWorld->GetCell(m_pos);
-			const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty());
-			//sint32 j;
-			//sint32 newimp = drec->GetBarbarianCampsIndex(j);
-			if(m_array[i].IsEntrenched()
-			&& drec->GetNumBarbarianCamps()
-			&& m_owner == PLAYER_INDEX_VANDALS
-			){
-				for(sint32 j = 0; j < drec->GetNumBarbarianCamps(); j++) {
-					sint32 newimp = drec->GetBarbarianCampsIndex(j);
-					g_player[m_owner]->CreateSpecialImprovement(newimp, m_pos, 0);
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+			for(i = 0; i < m_nElements; i++) {
+//				Cell *cell = g_theWorld->GetCell(m_pos);
+				const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty());
+				//sint32 j;
+				//sint32 newimp = drec->GetBarbarianCampsIndex(j);
+				if(m_array[i].IsEntrenched()
+				&& drec->GetNumBarbarianCamps()
+				&& m_owner == PLAYER_INDEX_VANDALS
+				){
+					for(sint32 j = 0; j < drec->GetNumBarbarianCamps(); j++) {
+						g_player[m_owner]->CreateSpecialImprovement(drec->GetBarbarianCampsIndex(j), m_pos, 0);
+					}
 				}
 			}
 		}
 	}
 //Barbarian leader spawn
-	// This should be risk level depending
+	// This should be risk level depending ADDED EMOD 10-05-2006
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
 	{
-		for(i = 0; i < m_nElements; i++) {
-//			Cell *cell = g_theWorld->GetCell(m_pos);
+		//Cell *cell = g_theWorld->GetCell(m_pos);
+		//if cell->GetNumUnits() < 2;  //limits spawn amounts?
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+			for(i = 0; i < m_nElements; i++) {
 //			const UnitRecord *rec = m_array[i].GetDBRec();
-			if(m_array[i].IsEntrenched()
-			&& m_owner == PLAYER_INDEX_VANDALS
-			){
+				if(m_array[i].IsEntrenched()
+				&& m_owner == PLAYER_INDEX_VANDALS
+				){
 				Barbarians::AddBarbarians(m_pos, -1, FALSE);
+				}
 			}
 		}
 	}
 	// END EMOD barb camps
-	// This should be risk level depending
+	// This should be risk level depending  //this was for special forces to raise Guerrillas
+	//if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 	for(i = 0; i < m_nElements; i++) {
 		Cell *cell = g_theWorld->GetCell(m_pos);
 		sint32 CellOwner = cell->GetOwner();

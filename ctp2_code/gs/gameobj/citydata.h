@@ -988,6 +988,7 @@ public:
 	bool IsBuildingOperational(sint32 type) const; //EMOD 5-15-2006
 	sint32 SectarianHappiness() const;             //EMOD 5-24-2006
 //	sint32 AddGoodToCity (sint32 good) const;      //EMOD 5-31-2006
+	sint32 TileImpHappinessIncr() const;		   //EMOD 10-05-2006
 
 	void ProcessAllResources();
 

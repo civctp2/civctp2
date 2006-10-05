@@ -617,6 +617,7 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 	m_happiness += cd.StyleHappinessIncr();
 	m_happiness += cd.GoodHappinessIncr();		//EMOD 4-27-2006 to allow for luxury goods
 	m_happiness += cd.SectarianHappiness();		//EMOD 5-26-2006 affects of religious and ethnic violence
+	m_happiness += cd.TileImpHappinessIncr();	//EMOD 8-29-2006 tileimps can give happiness
 
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return;

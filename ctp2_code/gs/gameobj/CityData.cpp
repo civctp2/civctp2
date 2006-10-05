@@ -1263,6 +1263,8 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 			g_network.Unblock(orgowner);
 		}
 
+//there is an errorhere because when it joins your city it calls them a new civ.
+/* Original code
 		SlicObject *so = new SlicObject("010NewCiv");
 		so->AddAllRecipients();
 		so->AddCivilisation(orgowner);
@@ -1278,6 +1280,23 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 			so->AddCity(m_home_city);
 			g_slicEngine->Execute(so) ;
 		}
+*/
+		if (joined_egalatarians) {
+			SlicObject *so = new SlicObject("011CityJoinedYourCiv");
+			so->AddRecipient(newowner);
+			so->AddCivilisation(orgowner);
+			so->AddCivilisation(newowner);
+			so->AddCity(m_home_city);
+			g_slicEngine->Execute(so) ;
+		} else {
+			SlicObject *so = new SlicObject("010NewCiv");
+			so->AddAllRecipients();
+			so->AddCivilisation(orgowner);
+			so->AddCivilisation(newowner);
+			so->AddCity(m_home_city);
+			g_slicEngine->Execute(so) ;
+		}
+//end E fix 9-6-2006  need to fix script.slc and info.txt though //need to make it more generic
 
 	}
 
@@ -4092,6 +4111,31 @@ bool CityData::BeginTurn()
 			}
 		}
 	}
+	//EMOD Militia code diffdb and building
+	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+	Cell *dcell = g_theWorld->GetCell(m_home_city.RetPos());
+	sint32 numDefenders = dcell->GetNumUnits();
+	MapPoint cpos;
+	m_home_city.GetPos(cpos);
+
+	if(numDefenders <= 0) {  
+		//if DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
+		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit())
+			&& (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)){
+				g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
+		}
+
+		//if city has a buiding that gives it a militia then if empty creates cheapest unit could be human exploit though.
+		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+			if(m_built_improvements & ((uint64)1 << b)){
+				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+				if (HaveImprovement(b) && rec->GetCreatesMiltiaUnit()){
+					g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
+				}
+			}
+		}
+	}
+
 	//END EMOD
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
@@ -6812,6 +6856,20 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 			if (advdata)
 			{
 				sci += g_theAdvanceDB->Get(i)->GetBonusScience();
+			}
+		}
+	}
+//EMOD - tileimps can add science Oct 3, 2006
+	MapPoint cityPos = m_home_city.RetPos();
+	CityInfluenceIterator it(cityPos, m_sizeIndex);
+	for(it.Start(); !it.End(); it.Next()) {
+		Cell *cell = g_theWorld->GetCell(it.Pos());
+		for(sint32 g = 0; g < cell->GetNumDBImprovements(); g++){
+			sint32 imp = cell->GetDBImprovement(g);
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
+			if (effect->GetBonusScience() > 0){
+				sci += effect->GetBonusScience();
 			}
 		}
 	}
@@ -9838,6 +9896,50 @@ void CityData::ProcessAllResources()
 	EatFood();
 	CalculateGrowthRate();
 }
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::TileImpHappinessIncr
+//
+// Description: Returns how much the tileimps in the city radius increase the
+//              city's happiness
+//
+// Parameters : -
+//
+// Globals    : g_theResourceDB: The resource database
+//
+// Returns    : sint32 the increasement of happiness of all tileimps in the 
+//              city radius
+//
+// Remark(s)  : Maybe this should only be the happiness increase of the tileimp 
+//              with maximum increase.
+//
+//----------------------------------------------------------------------------
+sint32 CityData::TileImpHappinessIncr() const
+{
+
+	sint32 totalHappinessInc = 0;
+	MapPoint cityPos = m_home_city.RetPos();
+
+	CityInfluenceIterator it(cityPos, m_sizeIndex);
+	for(it.Start(); !it.End(); it.Next()) {
+		Cell *cell = g_theWorld->GetCell(it.Pos());
+		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++){
+			sint32 timp = cell->GetDBImprovement(t);
+			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
+			if (effect)
+            {
+				if (effect->GetHappyInc() > 0){
+					totalHappinessInc += effect->GetHappyInc();
+			}
+		}
+	}
+	}
+	return totalHappinessInc;
+
+}
+
 
 //from TiledMap::DrawCityIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, BOOL fog, RECT &popRect, >>>>
 //CityData::AddCityIcon (file)
