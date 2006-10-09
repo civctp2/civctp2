@@ -1,76 +1,8 @@
 # 11
 
-//
-// How strategies were hardencoded in the ctp2.exe, note
-// non ambigious startegies are not listed here.
-//
-// Expansion: Maximum or Exploration: Wide 
-//  ==> STRATEGY_AGRESSIVE_START else STRATEGY_CAREFUL_START
-// (Discovery: Military or Discovery: Scientist) and
-// Trustworthiness: Chaotic and Alignment: Evil
-//  ==> STRATEGY_LAUNCH_NUKES else no launch nukes startegy
-// Expansion: Minimum   ==> STRATEGY_SETTLE_COMPACT
-// Expansion: Average   ==> STRATEGY_SETTLE_COMPACT
-// Expansion: Maximum   ==> STRATEGY_SETTLE_LARGE
-// Exploration: Minimal ==> STRATEGY_EXPLORE_NEAR
-// Exploration: Medium  ==> STRATEGY_EXPLORE_FAR
-// Exploration: Wide    ==> STRATEGY_EXPLORE_WIDE
-//
-// Defense startegies for Exploration: Minimal or Conquest: Agressive:
-// none:      STRATEGY_DEFENSE_NONE
-// very low:  STRATEGY_DEFENSE_NONE
-// low:       STRATEGY_DEFENSE_VERY_LOW
-// medium:    STRATEGY_DEFENSE_LOW
-// high:      STRATEGY_DEFENSE_MEDIUM
-// very high: STRATEGY_DEFENSE_HIGH
-//
-// for all other personalities:
-// none:      STRATEGY_DEFENSE_NONE
-// very low:  STRATEGY_DEFENSE_VERY_LOW
-// low:       STRATEGY_DEFENSE_LOW
-// medium:    STRATEGY_DEFENSE_MEDIUM
-// high:      STRATEGY_DEFENSE_HIGH
-// very high: STRATEGY_DEFENSE_VERY_HIGH
-//
-
 // Note: first personality is always used for the barbarians and should never be used
 // for normal AI's because it effects what strategies they use.
 PERSONALITY_KAHN {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_AGRESSIVE_START   Priority 200  }
-
-  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Wide
   Expansion: Maximum
   Discovery: Military
@@ -86,40 +18,6 @@ PERSONALITY_KAHN {
 }
 
 PERSONALITY_GHANDI {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Minimal
   Expansion: Minimum
   Discovery: Military
@@ -136,42 +34,6 @@ PERSONALITY_GHANDI {
 }
 
 PERSONALITY_STALIN {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy      {  Strategy STRATEGY_ATTACK          Priority 250  }
-  BuildupStrengthStrategy {  Strategy STRATEGY_DEFEND          Priority 75   }
-  SeigeCitiesStrategy     {  Strategy STRATEGY_SEIGE           Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START   Priority 200  }
-
-  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES    Priority 150  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES   Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES   Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES   Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES   Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT  Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR    Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION   Priority 150  }
-
-  StartLowDefenceStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy  {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Minimal
   Expansion: Average
   Discovery: Military
@@ -187,40 +49,6 @@ PERSONALITY_STALIN {
 }
 
 PERSONALITY_CEASAR {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_AGRESSIVE_START   Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Medium
   Expansion: Maximum
   Discovery: Military
@@ -236,40 +64,6 @@ PERSONALITY_CEASAR {
 }
 
 PERSONALITY_DEGAULLE {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Medium
   Expansion: Average
   Discovery: Military
@@ -286,48 +80,6 @@ PERSONALITY_DEGAULLE {
 }
 
 PERSONALITY_MEDICI {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
-  Exploration: Wide
-  Expansion: Average
-  Discovery: Economic
-  Conquest: Neutral
-  Trustworthiness: Neutral
-  Alignment: Neutral
-
-
   Exploration: Minimal
   Expansion: Minimum
   Discovery: Military
@@ -344,40 +96,6 @@ PERSONALITY_MEDICI {
 }
 
 PERSONALITY_TELLER {
-  DefaultStrategy STRATEGY_SCIENTIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Minimal
   Expansion: Average
   Discovery: Scientist
@@ -394,42 +112,6 @@ PERSONALITY_TELLER {
 }
 
 PERSONALITY_STRANGELOVE {
-  DefaultStrategy STRATEGY_SCIENTIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Medium
   Expansion: Average
   Discovery: Scientist
@@ -446,41 +128,6 @@ PERSONALITY_STRANGELOVE {
 }
 
 PERSONALITY_CALLENBACH {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Medium
   Expansion: Average
   Discovery: Military
@@ -497,40 +144,6 @@ PERSONALITY_CALLENBACH {
 }
 
 PERSONALITY_ALEXANDER1 {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Minimal
   Expansion: Minimum
   Discovery: Military
@@ -547,40 +160,6 @@ PERSONALITY_ALEXANDER1 {
 }
 
 PERSONALITY_ALEXANDER2 {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Minimal
   Expansion: Minimum
   Discovery: Military
@@ -597,41 +176,6 @@ PERSONALITY_ALEXANDER2 {
 }
 
 PERSONALITY_ALEXANDER3 {
-  DefaultStrategy STRATEGY_MILITARIST_DEFAULT
-
-  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
-  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
-  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
-
-  LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
-
-  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
-
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_FAR       Priority 1000 }
-
-  MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
-
-  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-
-  DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  DefenceLowStrategy       {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
-  DefenceMediumStrategy    {  Strategy STRATEGY_DEFENSE_LOW       Priority 800  }
-  DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
-  DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
-
-  CitiesOverLimit 0
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
-
   Exploration: Medium
   Expansion: Average
   Discovery: Military
