@@ -21,43 +21,40 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replaced non-standard sizeof(enum) occurrences.
+// - Replaced non-standard sizeof(enum) occurrences
+// - Corrected invalid index in LoadAdvances
+// - Repaired memory leaks
 //
 //----------------------------------------------------------------------------
+//
+/// \file   gs/utility/MapFile.cpp
+/// \brief  Map file handling (definitions)
 
 #include "c3.h"
 #include "MapFile.h"
-#include "World.h"
-#include "Cell.h"
-#include "UnitRecord.h"
-#include "TerrainImprovementRecord.h"
-#include "civarchive.h"
-#include "UnitData.h"
-#include "CTPDatabase.h"
-#include "cellunitlist.h"
-#include "player.h"
+
+#include "AdvanceRecord.h"              // g_theAdvanceDB
+#include <algorithm>
 #include "AICause.h"
-#include "unitutil.h"
-#include "TerrImprove.h"
-#include "director.h"
-#include "Vision.h"
-#include "QuadTree.h"
-#include "Vision.h"
-#include "AdvanceRecord.h"
-#include "profileDB.h"
-
-
-#include "net_util.h"
-
-#include "tiledmap.h"
-
-
-
-#include "GoodyHuts.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "civarchive.h"
 #include "Civilisation.h"
-#include "MessageBoxDialog.h"
-
-extern QuadTree<Unit>              *g_theUnitTree;
+#include "CTPDatabase.h"
+#include "dbtypes.h"                    // k_MAX_NAME_LEN
+#include "director.h"                   // g_director
+#include "MessageBoxDialog.h"           // MessageBoxDialog
+#include "net_util.h"                   // PULL/PUSH macros
+#include "player.h"                     // g_player 
+#include "profileDB.h"
+#include "TerrainImprovementRecord.h"
+#include "TerrImprove.h"
+#include "tiledmap.h"
+#include "UnitData.h"
+#include "UnitRecord.h"
+#include "unitutil.h"
+#include "Vision.h"
+#include "World.h"                      // g_theWorld
 
 #define k_TERRAIN_HEADER 'TERR'
 #define k_TERRAIN_ENV_HEADER 'TENV'
@@ -73,21 +70,70 @@ extern QuadTree<Unit>              *g_theUnitTree;
 #define k_HUTS_HEADER 'HUTS'
 #define k_CIVS_HEADER 'CIVS'
 
+namespace
+{
+size_t const    k_MAPFILE_NAME_LEN  = 32;
+size_t const    k_CIVS_BLOCK_LENGTH = 
+    k_MAX_PLAYERS * (sizeof(uint32) + k_MAPFILE_NAME_LEN);
 
-const uint32 k_MAPFILE_NAME_LEN = 32;
+class MapFileCityData 
+{
+public:
+    explicit MapFileCityData(Unit city)
+    :
+        m_size              (city.PopCount()),
+        m_improvements      (city.GetImprovements()),
+        m_wonders           (city.GetData()->GetCityData()->GetBuiltWonders()),
+        m_owner             (static_cast<uint8>(city.GetOwner()))
+    {
+		strncpy(m_name, city.GetName(), k_MAPFILE_NAME_LEN); 
+    }
 
-const uint32 k_CIVS_BLOCK_LENGTH = k_MAX_PLAYERS * (sizeof(uint32) + k_MAPFILE_NAME_LEN); 
+	void Serialize(CivArchive &archive) 
+    {
+		uint32 len;
 
+		if (archive.IsStoring()) 
+        {
+			archive << m_size;
+			archive << m_improvements;
+			archive << m_wonders;
+			archive << m_owner;
+			
+			len = strlen(m_name) + 1;
+			archive << len;
+			archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
+		} 
+        else 
+        {
+			archive >> m_size;
+			archive >> m_improvements;
+			archive >> m_wonders;
+			archive >> m_owner;
+			
+			archive >> len;
+			archive.Load((uint8*)m_name, len * sizeof(MBCHAR));
+		}
+	}
 
-bool MapFileChunk::Save(FILE *outfile)
+private:
+	sint32  m_size;
+	uint64  m_improvements;
+	uint64  m_wonders;
+	uint8   m_owner;
+	MBCHAR  m_name[k_MAX_NAME_LEN];
+};
+
+} // namespace
+
+bool MapFile::Chunk::Save(FILE * outfile)
 {
 	bool res = true;
-	if(fwrite((uint8*)&m_id, 1, sizeof(m_id), outfile) != sizeof(m_id))
+	if (fwrite((uint8*)&m_id, 1, sizeof(m_id), outfile) != sizeof(m_id))
 		res = false;
 	fflush(outfile);
 
-	sint32 size = m_size;
-	if(fwrite((uint8*)&size, 1, sizeof(size), outfile) != sizeof(size))
+	if (fwrite((uint8*)&m_size, 1, sizeof(m_size), outfile) != sizeof(m_size))
 		res = false;
 	fflush(outfile);
 
@@ -95,19 +141,19 @@ bool MapFileChunk::Save(FILE *outfile)
 }
 
 MapFile::MapFile()
+:
+    m_chunk                 (),
+    m_unitTypeMap           (NULL),
+    m_improvementTypeMap    (NULL),
+    m_advanceTypeMap        (NULL)
 {
-	m_unitTypeMap = NULL;
-	m_improvementTypeMap = NULL;
 }
 
 MapFile::~MapFile()
 {
-	if(m_unitTypeMap) {
-		delete [] m_unitTypeMap;
-	}
-
-	if(m_improvementTypeMap)
-		delete [] m_improvementTypeMap;
+    delete [] m_unitTypeMap;
+    delete [] m_improvementTypeMap;
+    delete [] m_advanceTypeMap; 
 }
 
 bool MapFile::Load(const MBCHAR *filename)
@@ -155,52 +201,55 @@ bool MapFile::SaveMap(FILE *outfile)
 
 bool MapFile::SaveTerrain(FILE *outfile)
 {
-	m_chunk.m_size = g_theWorld->GetXWidth() * g_theWorld->GetYHeight() + sizeof(sint16) * 2;
-	m_chunk.m_id = k_TERRAIN_HEADER;
+    Assert(g_theWorld);
+    size_t const  xSize = g_theWorld->GetXWidth();
+    size_t const  ySize = g_theWorld->GetYHeight();
 
-	uint8 *terrain = new uint8[m_chunk.m_size];
-	uint8 *tptr = terrain;
-	sint16 x, y;
-	for(y = 0; y < g_theWorld->GetYHeight(); y++) {
-		for(x = 0; x < g_theWorld->GetXWidth(); x++) {
-			*tptr = (uint8)g_theWorld->GetCell(x, y)->GetTerrain();
-			tptr++;
-		}
-	}
+    m_chunk.m_size      = (xSize * ySize) + sizeof(uint16) * 2;
+    m_chunk.m_id        = k_TERRAIN_HEADER;
 
+    uint8 * terrain     = new uint8[xSize * ySize];
+    uint8 * tptr        = terrain;
+    for (size_t y = 0; y < ySize; ++y) 
+    {
+        for (size_t x = 0; x < xSize; ++x) 
+        {
+            *tptr++ = static_cast<uint8>(g_theWorld->GetCell(x, y)->GetTerrain());
+        }
+    }
 
-	if(!m_chunk.Save(outfile)) {
+    if (!m_chunk.Save(outfile)) 
+    {
+		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
 		delete [] terrain;
-		
-		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
 		return false;
-	}
+    }
 
-	x = (sint16)g_theWorld->GetXWidth();
-	if(fwrite(&x, sizeof(x), 1, outfile) != 1)
-	{
-		
+    uint16 value        = static_cast<uint16>(xSize);
+    if (fwrite(&value, sizeof(value), 1, outfile) != 1)
+    {
 		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
-		return false;
-	}
-
-	y = (sint16)g_theWorld->GetYHeight();
-	if(fwrite(&y, sizeof(y), 1, outfile) != 1)
-	{
-		
-		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
-		return false;
-	}
-
-	if(fwrite(terrain, 1, x * y, outfile) != (uint32)x * y) {
 		delete [] terrain;
-		
-		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
 		return false;
-	}
+    }
 
-	delete [] terrain;
-	return true;
+    value = static_cast<uint16>(ySize);
+    if (fwrite(&value, sizeof(value), 1, outfile) != 1)
+    {
+		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
+		delete [] terrain;
+		return false;
+    }
+
+    if (fwrite(terrain, 1, xSize * ySize, outfile) != xSize * ySize) 
+    {
+		MessageBoxDialog::Information("Error saving terrain.","ErrSaveTerrain");
+		delete [] terrain;
+		return false;
+    }
+
+    delete [] terrain;
+    return true;
 }
 
 bool MapFile::SaveTerrainEnv(FILE *outfile)
@@ -219,8 +268,8 @@ bool MapFile::SaveTerrainEnv(FILE *outfile)
 	}
 
 
-	if(!m_chunk.Save(outfile)) {
-		
+    if (!m_chunk.Save(outfile)) 
+    {
 		MessageBoxDialog::Information("Error saving terrain env.","ErrSaveTerrainEnv");
 		delete [] env;
 		return false;
@@ -229,23 +278,22 @@ bool MapFile::SaveTerrainEnv(FILE *outfile)
 	x = (sint16)g_theWorld->GetXWidth();
 	if(fwrite(&x, sizeof(x), 1, outfile) != 1)
 	{
-		
 		MessageBoxDialog::Information("Error saving terrain env.","ErrSaveTerrainEnv");
+		delete [] env;
 		return false;
 	}
 
 	y = (sint16)g_theWorld->GetYHeight();
 	if(fwrite(&y, sizeof(y), 1, outfile) != 1)
 	{
-		
 		MessageBoxDialog::Information("Error saving terrain env.","ErrSaveTerrainEnv");
+		delete [] env;
 		return false;
 	}
 
-	if(fwrite(env, 1, x * y * sizeof(uint32), outfile) != (uint32)((x * y) * sizeof(uint32))) {
-		
+	if(fwrite(env, 1, x * y * sizeof(uint32), outfile) != (uint32)((x * y) * sizeof(uint32))) 
+    {
 		MessageBoxDialog::Information("Error saving terrain env.","ErrSaveTerrainEnv");
-
 		delete [] env;
 		return false;
 	}
@@ -265,22 +313,11 @@ bool MapFile::SaveCities(FILE *outfile)
 	for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 		for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 			Cell *cell = g_theWorld->GetCell(x, y);
-			if(cell->HasCity()) {
-				MapFileCityData cd;
-				Unit city = cell->GetCity();
-
+			if (cell->HasCity()) 
+            {
 				archive << x;
 				archive << y;
-
-				cd.m_size = city.PopCount();
-				cd.m_improvements = city.GetImprovements();
-				cd.m_wonders = city.GetData()->GetCityData()->GetBuiltWonders();
-				cd.m_owner = (uint8)city.GetOwner();
-				
-				
-				MBCHAR *pCityName = (MBCHAR *)city.GetName();
-
-				strncpy(cd.m_name, pCityName, k_MAPFILE_NAME_LEN); 
+				MapFileCityData cd  = MapFileCityData(cell->GetCity());
 				cd.Serialize(archive);
 				cityCount++;
 			}
@@ -438,10 +475,10 @@ bool MapFile::SaveImprovements(FILE *outfile)
 
 bool MapFile::SaveVision(FILE *outfile)
 {
-	uint8 p;
 	m_chunk.m_size = (g_theWorld->GetXWidth() * g_theWorld->GetYHeight() * sizeof(uint16)) + sizeof(sint16) * 2 + sizeof(sint8);
 	m_chunk.m_id = k_VISION_HEADER;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
+	for (uint8 p = 0; p < k_MAX_PLAYERS; p++) 
+    {
 		if(!g_player[p]) continue;
 
 		if(!m_chunk.Save(outfile))
@@ -491,54 +528,51 @@ bool MapFile::SaveVision(FILE *outfile)
 
 bool MapFile::SaveAdvances(FILE *outfile)
 {
-	if(!SaveDBNames(outfile, k_ADVANCE_TYPES_HEADER, g_theAdvanceDB))
-	{
-		
-		MessageBoxDialog::Information("Error saving advances.","ErrSaveAdvances");
-		return false;
-	}
+    if (!SaveDBNames(outfile, k_ADVANCE_TYPES_HEADER, g_theAdvanceDB))
+    {
+        MessageBoxDialog::Information("Error saving advances.","ErrSaveAdvances");
+        return false;
+    }
 	
-	uint8 p;
-	m_chunk.m_size = sizeof(uint8) + sizeof(uint16) + g_theAdvanceDB->NumRecords();
-	m_chunk.m_id = k_PLAYER_ADVANCES_HEADER;
+    m_chunk.m_size = sizeof(uint8) + sizeof(uint16) + g_theAdvanceDB->NumRecords();
+    m_chunk.m_id = k_PLAYER_ADVANCES_HEADER;
 
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		if(!g_player[p]) continue;
+    uint16 na = static_cast<uint16>(g_theAdvanceDB->NumRecords());
 
-		if(!m_chunk.Save(outfile))
+    for (uint8 p = 0; p < k_MAX_PLAYERS; p++) 
+    {
+		if (!g_player[p]) continue;
+
+		if (!m_chunk.Save(outfile))
 		{
-			
 			MessageBoxDialog::Information("Error saving advances.","ErrSaveAdvances");
 			return false;
 		}
 
-		if(fwrite(&p, sizeof(uint8), 1, outfile) != 1)
+		if (fwrite(&p, sizeof(uint8), 1, outfile) != 1)
 		{
-			
 			MessageBoxDialog::Information("Error saving advances.","ErrSaveAdvances");
 			return false;
 		}
 
-		sint16 na = (sint16)g_theAdvanceDB->NumRecords();
 
-		if(fwrite(&na, sizeof(uint16), 1, outfile) != 1)
+		if (fwrite(&na, sizeof(uint16), 1, outfile) != 1)
 		{
-			
 			MessageBoxDialog::Information("Error saving advances.","ErrSaveAdvances");
 			return false;
 		}
 
-		sint32 a;
-		for(a = 0; a < na; a++) {
+            for (sint32 a = 0; a < static_cast<sint32>(na); a++) 
+            {
 			uint8 hasAdv = g_player[p]->HasAdvance(a);
-			if(fwrite(&hasAdv, sizeof(uint8), 1, outfile) != 1)
+			if (fwrite(&hasAdv, sizeof(uint8), 1, outfile) != 1)
 			{
-				
 				MessageBoxDialog::Information("Error saving advances.","ErrSaveAdvances");
 				return false;
 			}
 		}
 	}
+
 	return true;
 }
 
@@ -552,54 +586,43 @@ bool MapFile::SaveHuts(FILE *outfile)
 	uint8 *terrain = new uint8[m_chunk.m_size];
 	uint8 *tptr = terrain;
 	sint16 x, y;
-	GoodyHut *pHut;
 	MapPoint mappoint;
 	uint8 zero = 0;
 	uint8 one = 1;
-	for(y = 0; y < g_theWorld->GetYHeight(); y++) {
-		for(x = 0; x < g_theWorld->GetXWidth(); x++) {
+	for (y = 0; y < g_theWorld->GetYHeight(); y++) 
+    {
+		for (x = 0; x < g_theWorld->GetXWidth(); x++) 
+        {
 			mappoint.Set(x,y);
-			
-			pHut = g_theWorld->GetGoodyHut(mappoint);
-			if (pHut)
-			{
-				*tptr = one;
-			}
-			else
-			{
-				*tptr = zero;
-			}
-			tptr++;
+            *tptr++ = g_theWorld->GetGoodyHut(mappoint) ? one : zero;
 		}
 	}
 
 	if(!m_chunk.Save(outfile)) {
-		delete [] terrain;
-		
 		MessageBoxDialog::Information("Error saving huts.","ErrSaveHuts");
+		delete [] terrain;
 		return false;
 	}
 
 	x = (sint16)g_theWorld->GetXWidth();
 	if(fwrite(&x, sizeof(x), 1, outfile) != 1)
 	{
-		
 		MessageBoxDialog::Information("Error saving huts.","ErrSaveHuts");
+		delete [] terrain;
 		return false;
 	}
 
 	y = (sint16)g_theWorld->GetYHeight();
 	if(fwrite(&y, sizeof(y), 1, outfile) != 1)
 	{
-		
 		MessageBoxDialog::Information("Error saving huts.","ErrSaveHuts");
+		delete [] terrain;
 		return false;
 	}
 
 	if(fwrite(terrain, 1, x * y, outfile) != (uint32)x * y) {
-		delete [] terrain;
-		
 		MessageBoxDialog::Information("Error saving huts.","ErrSaveHuts");
+		delete [] terrain;
 		return false;
 	}
 
@@ -634,15 +657,13 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 		ptr += sizeof(uint32);
 		
 		size_t length;
-		MBCHAR *pName;
 		if (g_player[i])
 		{
-			pName = g_player[i]->GetLeaderName();
+			MBCHAR const * pName = g_player[i]->GetLeaderName();
 			length = strlen(pName);
-			for (int j = 0; j < (int)length; j++)
+			for (size_t j = 0; j < length; j++)
 			{
-				*ptr = pName[j];
-				ptr++;
+				*ptr++ = pName[j];
 			}
 		}
 		else
@@ -652,28 +673,24 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 
 		
 		
-		for(uint32 j = 0; j < (k_MAPFILE_NAME_LEN - (int)length); j++)
+		for(uint32 j = 0; j < (k_MAPFILE_NAME_LEN - length); j++)
 		{
-			*ptr = (uint8)0;
-			ptr++;
+			*ptr++ = (uint8)0;
 		}
 	}
 
 
 
 	if (!m_chunk.Save(outfile)) {
-		delete [] civs;
-		
 		MessageBoxDialog::Information("Error saving civilizations.","ErrSaveCivs");
+		delete [] civs;
 		return false;
 	}
 
 	if (fwrite(civs, 1, k_CIVS_BLOCK_LENGTH, outfile) != k_CIVS_BLOCK_LENGTH)
 	{
-		delete [] civs;
-		
 		MessageBoxDialog::Information("Error saving civilizations.","ErrSaveCivs");
-
+		delete [] civs;
 		return false;
 	}
 
@@ -688,10 +705,8 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 
 bool MapFile::LoadMap(FILE *infile)
 {
-	uint8 *buf = NULL;
-	sint32 bufSize = 0;
-
-	while(!feof(infile)) {
+    while (!feof(infile)) 
+    {
 		uint32 chunkId;
 		sint32 chunkSize;
 		sint32 r = fread(&chunkId, 1, sizeof(chunkId), infile);
@@ -701,22 +716,15 @@ bool MapFile::LoadMap(FILE *infile)
 		r = fread(&chunkSize, 1, sizeof(chunkSize), infile);
 		if(r != sizeof(chunkSize))
 		{
-			
 			MessageBoxDialog::Information("Error loading map: can't read chunksize.","ErrLoadMapChunk");
 			return false;
 		}
 
-		if(bufSize < chunkSize) {
-			if(buf) {
-				delete [] buf; 
-			}
-			buf = new uint8[chunkSize];
-			bufSize = chunkSize;
-		}
-
+		uint8 * buf = new uint8[chunkSize];
+#define LoadMapStop()	{ delete [] buf; return false; }
 
 		r = fread(buf, 1, chunkSize, infile);
-		if(r != chunkSize)
+		if (r != chunkSize)
 		{
 			
 			if (feof(infile))
@@ -728,28 +736,31 @@ bool MapFile::LoadMap(FILE *infile)
 				MessageBoxDialog::Information("Error loading mapfile. File error occurred.","ErrLoadMapFileError");
 			}
 
-			return false;
+ 			LoadMapStop();
 		}
 
 		switch(chunkId) {
-			case k_TERRAIN_HEADER:           if(!LoadTerrain(buf, chunkSize)) return false; break;				
-			case k_TERRAIN_ENV_HEADER:       if(!LoadTerrainEnv(buf, chunkSize)) return false; break;
-			case k_UNITS_HEADER:             if(!LoadUnits(buf, chunkSize)) return false; break;
-			case k_UNIT_TYPES_HEADER:        if(!LoadUnitTypes(buf, chunkSize)) return false; break;
-			case k_NEW_CITIES_HEADER:        if(!LoadCities(buf, chunkSize)) return false; break;
-			case k_CITIES_HEADER:            if(!LoadOldCities(buf, chunkSize)) return false; break;
-			case k_IMPROVEMENT_TYPES_HEADER: if(!LoadImprovementTypes(buf, chunkSize)) return false; break;
-			case k_IMPROVEMENTS_HEADER:      if(!LoadImprovements(buf, chunkSize)) return false; break;
-			case k_VISION_HEADER:            if(!LoadVision(buf, chunkSize)) return false; break;
-			case k_ADVANCE_TYPES_HEADER:     if(!LoadAdvanceNames(buf, chunkSize)) return false; break;
-			case k_PLAYER_ADVANCES_HEADER:   if(!LoadAdvances(buf, chunkSize)) return false; break;
+			case k_TERRAIN_HEADER:           if(!LoadTerrain(buf, chunkSize)) LoadMapStop(); break;				
+			case k_TERRAIN_ENV_HEADER:       if(!LoadTerrainEnv(buf, chunkSize)) LoadMapStop(); break;
+			case k_UNITS_HEADER:             if(!LoadUnits(buf, chunkSize)) LoadMapStop(); break;
+			case k_UNIT_TYPES_HEADER:        if(!LoadUnitTypes(buf, chunkSize)) LoadMapStop(); break;
+			case k_NEW_CITIES_HEADER:        if(!LoadCities(buf, chunkSize)) LoadMapStop(); break;
+			case k_CITIES_HEADER:            if(!LoadOldCities(buf, chunkSize)) LoadMapStop(); break;
+			case k_IMPROVEMENT_TYPES_HEADER: if(!LoadImprovementTypes(buf, chunkSize)) LoadMapStop(); break;
+			case k_IMPROVEMENTS_HEADER:      if(!LoadImprovements(buf, chunkSize)) LoadMapStop(); break;
+			case k_VISION_HEADER:            if(!LoadVision(buf, chunkSize)) LoadMapStop(); break;
+			case k_ADVANCE_TYPES_HEADER:     if(!LoadAdvanceNames(buf, chunkSize)) LoadMapStop(); break;
+			case k_PLAYER_ADVANCES_HEADER:   if(!LoadAdvances(buf, chunkSize)) LoadMapStop(); break;
 			
-			case k_HUTS_HEADER:				 if(!LoadHuts(buf, chunkSize)) return false; break;
-			case k_CIVS_HEADER:			     if(!LoadCivilizations(buf, chunkSize)) return false; break;
+			case k_HUTS_HEADER:				 if(!LoadHuts(buf, chunkSize)) LoadMapStop(); break;
+			case k_CIVS_HEADER:			     if(!LoadCivilizations(buf, chunkSize)) LoadMapStop(); break;
 			default:
 				Assert("Unknown chunk type" == 0);
 				break;
 		}
+
+		delete [] buf;
+#undef LoadMapStop
 	}
 
 	return true;
@@ -899,30 +910,30 @@ bool MapFile::LoadUnits(uint8 *buf, sint32 size)
 
 bool MapFile::LoadUnitTypes(uint8 *buf, sint32 size)
 {
-	sint32 numTypes;
-	sint32 pos = 0;
+    sint32 pos = 0;
 
-	PULLLONG(numTypes);
-	m_unitTypeMap = new sint32[numTypes];
+    sint32 numTypes;
+    PULLLONG(numTypes);
+    delete [] m_unitTypeMap;
+    m_unitTypeMap = new sint32[numTypes];
+    std::fill(m_unitTypeMap, m_unitTypeMap + numTypes, CTPRecord::INDEX_INVALID);
 
-	sint32 i;
-	char dbName[k_MAX_NAME_LEN];
-
-	for(i = 0; i < numTypes; i++) {
-		PULLSTRING(dbName);
-		sint32 strId;
-		if(!g_theStringDB->GetStringID(dbName, strId)) {
-			DPRINTF(k_DBG_GAMESTATE, ("WARNING: Unit %s does not exist in string DB\n", dbName));
-			m_unitTypeMap[i] = -1;
-		} else {
-			if(!g_theUnitDB->GetNamedItem(strId, m_unitTypeMap[i])) {
-				DPRINTF(k_DBG_GAMESTATE, ("WARNING: Unit %s does not exist\n", dbName));
-				m_unitTypeMap[i] = -1;
-			}
-		}
-	}
+    char dbName[k_MAX_NAME_LEN];
+    for (sint32 i = 0; i < numTypes; i++) 
+    {
+        PULLSTRING(dbName);
+        sint32 strId;
+        if (!g_theStringDB->GetStringID(dbName, strId)) 
+        {
+            DPRINTF(k_DBG_GAMESTATE, ("WARNING: Unit %s does not exist in string DB\n", dbName));
+        } 
+        else if (!g_theUnitDB->GetNamedItem(strId, m_unitTypeMap[i])) 
+        {
+            DPRINTF(k_DBG_GAMESTATE, ("WARNING: Unit %s does not exist\n", dbName));
+        }
+    }
 		
-	return true;
+    return true;
 }
 
 bool MapFile::LoadCities(uint8 *buf, sint32 size)
@@ -1066,23 +1077,25 @@ bool MapFile::LoadImprovements(uint8 *buf, sint32 size)
 
 bool MapFile::LoadImprovementTypes(uint8 *buf, sint32 size)
 {
-	sint32 numTypes;
-	sint32 pos = 0;
-	PULLLONG(numTypes);
-	
-	m_improvementTypeMap = new sint32[numTypes];
-	sint32 i;
-	char dbName[k_MAX_NAME_LEN];
+    sint32 pos = 0;
+    
+    sint32 numTypes;
+    PULLLONG(numTypes);
+    delete [] m_improvementTypeMap;
+    m_improvementTypeMap = new sint32[numTypes];
+    std::fill(m_improvementTypeMap, m_improvementTypeMap + numTypes, CTPRecord::INDEX_INVALID);
 
-	for(i = 0; i < numTypes; i++) {
-		PULLSTRING(dbName);
-		if(!g_theTerrainImprovementDB->GetNamedItem(dbName, m_improvementTypeMap[i])) {
-			DPRINTF(k_DBG_GAMESTATE, ("WARNING: Improvement %s does not exist\n", dbName));
-			m_improvementTypeMap[i] = -1;
-		}
-	}
+    char dbName[k_MAX_NAME_LEN];
+    for (sint32 i = 0; i < numTypes; i++) 
+    {
+        PULLSTRING(dbName);
+        if(!g_theTerrainImprovementDB->GetNamedItem(dbName, m_improvementTypeMap[i])) 
+        {
+            DPRINTF(k_DBG_GAMESTATE, ("WARNING: Improvement %s does not exist\n", dbName));
+        }
+    }
 		
-	return true;
+    return true;
 }
 
 bool MapFile::LoadVision(uint8 *buf, sint32 size)
@@ -1116,54 +1129,67 @@ bool MapFile::LoadVision(uint8 *buf, sint32 size)
 
 bool MapFile::LoadAdvanceNames(uint8 *buf, sint32 size)
 {
-	sint32 numTypes;
-	sint32 pos = 0;
-	PULLLONG(numTypes);
+    sint32 pos = 0; // Used in PULL macros
 
-	m_advanceTypeMap = new sint32[numTypes];
+    sint32 numTypes;
+    PULLLONG(numTypes);
 
-	sint32 i;
-	char dbName[k_MAX_NAME_LEN];
-	for(i = 0; i < numTypes; i++) {
-		PULLSTRING(dbName);
-		sint32 strId;
-		if(!g_theStringDB->GetStringID(dbName, strId)) {
-			DPRINTF(k_DBG_GAMESTATE, ("WARNING: Advance %s does not exist in string db\n", dbName));
-			m_advanceTypeMap[i] = -1;
-		} else {
-			if(!g_theAdvanceDB->GetNamedItem(strId, m_advanceTypeMap[i])) {
-				DPRINTF(k_DBG_GAMESTATE, ("WARNING: Advance %s does not exist\n", dbName));
-				m_advanceTypeMap[i] = -1;
-			}
-		}
-	}
-	return true;
+    delete [] m_advanceTypeMap;
+    m_advanceTypeMap = new sint32[numTypes];
+    std::fill(m_advanceTypeMap, m_advanceTypeMap + numTypes, CTPRecord::INDEX_INVALID);
+
+    char dbName[k_MAX_NAME_LEN];
+    for (sint32 i = 0; i < numTypes; i++) 
+    {
+        PULLSTRING(dbName);
+        
+        sint32 strId;
+        if (!g_theStringDB->GetStringID(dbName, strId)) 
+        {
+            DPRINTF(k_DBG_GAMESTATE, ("WARNING: Advance %s does not exist in string db\n", dbName));
+        } 
+        else if (!g_theAdvanceDB->GetNamedItem(strId, m_advanceTypeMap[i])) 
+        {
+            DPRINTF(k_DBG_GAMESTATE, ("WARNING: Advance %s does not exist\n", dbName));
+        }
+    }
+    
+    return true;
 }
 
-bool MapFile::LoadAdvances(uint8 *buf, sint32 sizE)
+/// Load advances of a single player
+/// @param buf Input stream from file
+/// @param a_Size Size of input stream
+bool MapFile::LoadAdvances(uint8 * buf, sint32 a_Size)
 {
-	sint32 na;
-	sint32 pos = 0;
-	uint8 p;
+    sint32 pos = 0; // Used in PULL macros
 
-	PULLBYTE(p);
+    uint8 p;
+    PULLBYTE(p);
+            
+    Assert(g_player[p]);
+    if (!g_player[p])
+        return true;
 
-	if(!g_player[p])
-		return true;
+    Assert(!g_player[p]->m_disableChooseResearch);
+    g_player[p]->m_disableChooseResearch = TRUE;
 
-	PULLSHORT(na);
-	sint32 i;
-	g_player[p]->m_disableChooseResearch = TRUE;
-	for(i = 0; i < na; i++) {
-		uint8 hasAdv;
-		PULLBYTE(hasAdv);
-		if(hasAdv && m_advanceTypeMap[hasAdv] >= 0) {
-			g_player[p]->m_advances->SetHasAdvance(m_advanceTypeMap[i]);
-		}		
-	}
-	g_player[p]->m_disableChooseResearch = FALSE;
+    uint16 na;
+    PULLSHORT(na);
+    for (size_t i = 0; i < na; ++i) 
+    {
+        uint8 hasAdv;
+        PULLBYTE(hasAdv);
+        if (hasAdv && (m_advanceTypeMap[i] >= 0)) 
+        {
+            g_player[p]->m_advances->SetHasAdvance(m_advanceTypeMap[i]);
+        }		
+    }
+    
+    g_player[p]->m_disableChooseResearch = FALSE;
 
-	return true;
+    Assert(pos <= a_Size);
+    return true;
 }
 
 

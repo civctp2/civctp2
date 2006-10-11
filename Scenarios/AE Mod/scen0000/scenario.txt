@@ -1,2 +1,2 @@
-Alexander the Great
-12/6/00 - This scenario is intended for higher end systems (P2/266 or greater).
+AE Mod
+This scenario is intended for higher end players, who can accept that the AI has to cheat to be able to put up a fight.

@@ -37,10 +37,11 @@
 #define __DISPLAY_H__
 
 #if defined(WIN32)
-#include <windows.h>
+#include <windows.h>    // BOOL, LPSTR, GUID, HMONITOR, RECT, etc.
+#include <ddraw.h>      // LPDDSURFACEDESC, etc.
 #else
 #include "windows.h"
-#endif
+#endif // WIN32
 
 struct DisplayDevice {
 	LPSTR		szName;
