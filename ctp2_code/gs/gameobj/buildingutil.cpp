@@ -95,7 +95,18 @@ sint32 buildingutil_GetProductionCost(const sint32 building_type)
 	Assert(rec);
 	if(rec == NULL)
 		return 0;
+	
+	/*EMOD ProductionCostPopModifier  not needed here
 
+	sin32 cost = 0;
+
+	if rec->ProductionCostPopModifier() {
+		cost = rec->GetProductionCost() * ??citydata get popcount
+
+	else {
+		cost = rec->GetProductionCost();
+
+	return cost; */
 	return rec->GetProductionCost();
 }
 

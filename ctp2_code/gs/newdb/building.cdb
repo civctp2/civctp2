@@ -61,7 +61,7 @@ Building {
 	Record Government[]         ExcludedByGovernmentType // Destroyed if not of this government
 	Record Wonder[]				PrerequisiteWonder		 // Added by E to limit units to cities with certain wonders
 	Record Wonder[]				ExcludedByWonder		 // to prevent some units being built
-	Bit(Int)					NeedsPopCountToBuild        // FU added by E
+	Bit(Int)					NeedsPopCountToBuild     // added by E
 
 	Record Resource[]           RequiresGood             // Added by E -- having a bldg gives a city a good
 	Record Resource[]           ProducesGood             // Added by E -- having a bldg gives a city a good
@@ -89,6 +89,7 @@ Building {
 	Bit(Int)   UpkeepPerCitySq             // FU added by E
 	Bit(Int)   NewPopLimit					// FU added by E
 	Bit(Int)   UpkeepPerUnitSupport
+	Bit        ProductionCostPopModifier   //added by E multiples productioncost to the population size. Its harder to modernize an old, crowded city
 
 	# flags
 	Bit        Capitol
@@ -131,8 +132,8 @@ Building {
 
 	Bit        CoastalBuilding            // DW - Added to fix bug #895
 	Bit        OnePerCiv                  // EMOD implement 2-14-2006
-	Bit(Int)   IncreaseHP                 // FU - EMOD
-	Bit        EnablesVeterans            // FU - EMOD 
+	Bit(Int)   IncreaseHP                 // EMOD - increase HP of all current units
+	Bit        EnablesVeterans            // EMOD - makes units veterans 
 
 	Struct BuildingFeat {                 // From feats implemented by E 2-24-2006
 		Record Building Building

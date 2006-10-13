@@ -226,7 +226,19 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 					Assert(FALSE);
 					continue;
 				}
-				cost = g_theBuildingDB->Get(type)->GetProductionCost();
+				//ProductionCostPopModifier m_city.CD()->PopCount()
+				//EMOD ProductionCostPopModifier  10-10-2006
+
+				sint32 bcost;
+
+				if(g_theBuildingDB->Get(type)->GetProductionCostPopModifier()) {
+					bcost = g_theBuildingDB->Get(type)->GetProductionCost() * m_city.CD()->PopCount();
+				} else {
+					bcost = g_theBuildingDB->Get(type)->GetProductionCost();
+				}				 
+				cost = bcost;
+				//end EMOD 10-10-2006
+				//cost = g_theBuildingDB->Get(type)->GetProductionCost(); //original
 				break;
 			case 'W':
 				category = k_GAME_OBJ_TYPE_WONDER;
@@ -234,6 +246,7 @@ sint32 BuildQueue::Load(const MBCHAR *file)
 					Assert(FALSE);
 					continue;
 				}
+
 				cost = g_theWonderDB->Get(type)->GetProductionCost();
 				break;
 			case '#':
@@ -1588,7 +1601,20 @@ sint32 BuildQueue::GetCost(sint32 cat, sint32 t)
 		case k_GAME_OBJ_TYPE_WONDER :
 			return wonderutil_Get(t)->GetProductionCost();
 		case k_GAME_OBJ_TYPE_IMPROVEMENT:
-			return g_theBuildingDB->Get(t)->GetProductionCost();
+			//ProductionCostPopModifier m_city.CD()->PopCount()
+			//EMOD ProductionCostPopModifier  10-10-2006
+
+				sint32 bcost;
+
+				if (g_theBuildingDB->Get(t)->GetProductionCostPopModifier()) {
+					bcost = g_theBuildingDB->Get(t)->GetProductionCost() * m_city.CD()->PopCount();
+
+				} else {
+					bcost = g_theBuildingDB->Get(t)->GetProductionCost();
+				}
+
+				return bcost;
+			//return g_theBuildingDB->Get(t)->GetProductionCost();
 		case k_GAME_OBJ_TYPE_ENDGAME_OBJECT:
 //			return g_theEndGameDB->Get(t)->GetCost();
 		default:

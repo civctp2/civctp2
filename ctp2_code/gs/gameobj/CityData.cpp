@@ -157,6 +157,8 @@
 //   collected by E Jul 3 2006
 // - Added Advances bonus, now some advances san add science, food, Production, 
 //   or Gold once discovered by E July 5 2006
+// - NeedsPopCountToBuild was added awhile ago it limits some buildings to only
+//   being available once a certian population is reached. by E
 //
 //----------------------------------------------------------------------------
 
@@ -4271,20 +4273,33 @@ bool CityData::BuildImprovement(sint32 type)
 		g_network.Unblock(m_owner);
 	}
 
-	const BuildingRecord* rec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
-	Assert(rec);
-	if(rec == NULL)
+	const BuildingRecord* irec = g_theBuildingDB->Get(type, g_player[m_owner]->GetGovernmentType());
+	Assert(irec);
+	if(irec == NULL)
 		return false;
 
-	if(g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex())) {
+	if(g_player[m_owner]->HasAdvance(irec->GetEnableAdvanceIndex())) {
 		DPRINTF(k_DBG_GAMESTATE, ("City: Building improvement %s\n",
-		                          g_theStringDB->GetNameStr(rec->GetName())));
-		sint32 cost = rec->GetProductionCost();
+		                          g_theStringDB->GetNameStr(irec->GetName())));
+
+		//ProductionCostPopModifier m_city.CD()->PopCount()
+			//EMOD ProductionCostPopModifier  10-10-2006
+
+				sint32 cost = 0;
+
+				if (irec->GetProductionCostPopModifier()) {
+					cost = irec->GetProductionCost() * PopCount();
+
+				} else {
+					cost = irec->GetProductionCost();
+				}
+
+		//sint32 cost = irec->GetProductionCost(); //original
 		return m_build_queue.InsertTail(k_GAME_OBJ_TYPE_IMPROVEMENT, type, cost);
 	} else {
 		DPRINTF(k_DBG_GAMESTATE, ("City: Can't build %s until %s is discovered\n",
-		                          g_theStringDB->GetNameStr(rec->GetName()),
-		                          g_theAdvanceDB->GetNameStr(rec->GetEnableAdvanceIndex())));
+		                          g_theStringDB->GetNameStr(irec->GetName()),
+		                          g_theAdvanceDB->GetNameStr(irec->GetEnableAdvanceIndex())));
 		return false;
 	}
 }
@@ -4495,7 +4510,17 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		}
 
 		if(CanBuildBuilding(item_type)) {
-			cost = irec->GetProductionCost();
+			//ProductionCostPopModifier m_city.CD()->PopCount()
+			//EMOD ProductionCostPopModifier  10-10-2006
+			sint32 bcost = 0;
+			if (irec->GetProductionCostPopModifier()) {
+				bcost = irec->GetProductionCost() * PopCount();
+			} else {
+				bcost = irec->GetProductionCost();
+			}				 
+			cost = bcost;  //end EMOD
+					
+			//cost = irec->GetProductionCost(); //original
 			m_build_queue.ReplaceHead(k_GAME_OBJ_TYPE_IMPROVEMENT, item_type, cost);
 		} else {
 			return false;
@@ -6312,7 +6337,7 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	// added by E - some buildings can only be built once city reaches certain size
 	sint32 pop;
 	if(rec->GetNeedsPopCountToBuild(pop)) {
-		if(PopCount() < pop) {
+		if(PopCount() > pop) {
 			return false;
 		}
 	}

@@ -533,25 +533,35 @@ void Advances::ResetCanResearch(sint32 justGot)
 				}
 
 /////////////////EitherPrerequisite
-				for(sint32 either = 0; either < rec->GetNumEitherPrerequisites(); either++) {
-					if(rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either)) {
-						canResearch = FALSE;
-						continue;
+				if(rec->GetNumEitherPrerequisites() > 0) {
+					bool found = false;
+					for(sint32 either = 0; either < rec->GetNumEitherPrerequisites(); either++) {
+						if(rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either)) {
+							found = TRUE; //fixed to found
+							break;
+						}
 					}
 
 					if(rec->GetEitherPrerequisitesIndex(either) == justGot)
 						justEnabled = TRUE;
-					}
+					
+					if(!found)
+						canResearch = FALSE;
+				}
 ////////////// PreReq govt techs (but how do you remove them?)
 				if(rec->GetNumGovernmentType() > 0) {
 					sint32 g;
 					bool found = false;
 					for(g = 0; g < rec->GetNumGovernmentType(); g++) {
 						if(rec->GetGovernmentTypeIndex(g) == g_player[m_owner]->GetGovernmentType()) {
-						justEnabled = TRUE;
+						found = TRUE; //fixed to found
 						break;
 						}
 					}
+					if(found){
+						justEnabled = TRUE;
+					}
+					
 					if(!found)
 						canResearch = FALSE;
 					}	
@@ -562,10 +572,14 @@ void Advances::ResetCanResearch(sint32 justGot)
 					bool found = false;
 					for(s = 0; s < rec->GetNumCultureOnly(); s++) {
 						if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-							justEnabled = TRUE;
+							found = TRUE; //fixed to found
 							break;
 						}
 					}
+					if(found){
+						justEnabled = TRUE;
+					}
+					
 					if(!found)
 						canResearch = FALSE;
 					}
@@ -583,9 +597,9 @@ void Advances::ResetCanResearch(sint32 justGot)
 								break;
 							}
 						}
-						if(goodavail){
-							justEnabled = TRUE;
-						}
+					}  //moved goodavail out of for loop
+					if(goodavail){
+						justEnabled = TRUE;
 					}
 					if(!goodavail)
 						canResearch = FALSE;
