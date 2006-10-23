@@ -1,27 +1,24 @@
 
 
 #include "c3.h"
+#include "QuickSlic.h"
+
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "SlicSegment.h"
-#include "QuickSlic.h"
 
 
 
 
 
-void QuickSlic(char *id, sint32 recipient, BOOL one_shot)
+void QuickSlic(char const * id, sint32 recipient)
 {
-    
-    if (one_shot) {
-        if(!g_slicEngine->GetSegment(id))
-            return;
-        if(g_slicEngine->GetSegment(id)->HasBeenShown(recipient)) {
-            return;
-        }
+    if (g_slicEngine->GetSegment(id) &&
+        !g_slicEngine->GetSegment(id)->HasBeenShown(recipient)
+       ) 
+    {
+        SlicObject * so = new SlicObject(id);
+        so->AddRecipient(recipient);
+        g_slicEngine->Execute(so);
     }
-
-    SlicObject *so = new SlicObject(id);
-    so->AddRecipient(recipient);
-    g_slicEngine->Execute(so);
 }

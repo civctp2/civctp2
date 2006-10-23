@@ -238,7 +238,7 @@ void Advances::UpdateCitySprites(BOOL forceUpdate)
                 for(i = 1; i < k_MAX_PLAYERS; i++) {
                     if (g_player[i] && (i != m_owner) &&
                         (!g_player[i]->m_isDead)) {
-                        if (0  >= m_age)
+                        if (0 >= m_age)
                             break;
                     }
                 }
@@ -306,7 +306,7 @@ void Advances::SetHasAdvance(AdvanceType advance)
     if (strcmp(g_theStringDB->GetIdStr(g_theAdvanceDB->Get(advance)->m_name),
                "ADVANCE_AERODYNAMICS") == 0) 
     {
-        QuickSlic("42IAAirportTip", m_owner, TRUE);
+        QuickSlic("42IAAirportTip", m_owner);
     }
 
 	UpdateCitySprites(FALSE);
@@ -534,17 +534,21 @@ void Advances::ResetCanResearch(sint32 justGot)
 
 /////////////////EitherPrerequisite
 				if(rec->GetNumEitherPrerequisites() > 0) {
-					bool found = false;
-					for(sint32 either = 0; either < rec->GetNumEitherPrerequisites(); either++) {
-						if(rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either)) {
-							found = TRUE; //fixed to found
+					bool    found   = false;
+
+                    for (sint32 either = 0; either < rec->GetNumEitherPrerequisites(); either++) 
+                    {
+						if (rec->GetIndex() == rec->GetEitherPrerequisitesIndex(either)) 
+                        {
+							found = true;
+					        if (rec->GetEitherPrerequisitesIndex(either) == justGot)
+                            {
+						        justEnabled = TRUE;
+                            }
 							break;
 						}
 					}
 
-					if(rec->GetEitherPrerequisitesIndex(either) == justGot)
-						justEnabled = TRUE;
-					
 					if(!found)
 						canResearch = FALSE;
 				}
@@ -1073,10 +1077,8 @@ Advances::Serialize(CivArchive& archive)
 	} else {
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_discovered)+sizeof(m_discovered));
 
-		if(m_hasAdvance != NULL) {
-			delete [] m_hasAdvance;
-		}
         Assert(m_size);
+        delete [] m_hasAdvance;
 		m_hasAdvance = new uint8[m_size];
 		archive.Load((uint8*)m_hasAdvance, m_size * sizeof(uint8));
 		archive.Load((uint8*)m_canResearch, m_size * sizeof(uint8));
@@ -1098,9 +1100,9 @@ Advances::Serialize(CivArchive& archive)
 
 
 uint32 Advances_Advances_GetVersion(void)
-	{
+{
 	return (k_ADVANCES_VERSION_MAJOR<<16 | k_ADVANCES_VERSION_MINOR) ;
-	}
+}
 
 //----------------------------------------------------------------------------
 //
@@ -1161,7 +1163,7 @@ sint32 Advances::GetMinPrerequisites(sint32 adv) const
 
 sint32 Advances::GetProjectedScience() const
 {
-	UnitDynamicArray *cities = g_player[m_owner]->m_all_cities;
+	UnitDynamicArray *  cities  = g_player[m_owner]->m_all_cities;
 	sint32 s = 0, i;
 	for(i = 0; i < cities->Num(); i++) {
 		
@@ -1246,12 +1248,13 @@ sint32 Advances::TurnsToNextAdvance(AdvanceType adv) const
 		adv = m_researching;
 
 	sint32 totalScience = GetProjectedScience();
+    if (0 == totalScience)
+    {
+        return -1;
+    }
+
 	sint32 scienceNeeded = GetCost(adv) - g_player[m_owner]->m_science->GetLevel();
-
-	if(!totalScience)
-		return -1;
-
-	return scienceNeeded / totalScience;
+    return scienceNeeded / totalScience;
 }
 
 void Advances::SetResearching(AdvanceType adv)

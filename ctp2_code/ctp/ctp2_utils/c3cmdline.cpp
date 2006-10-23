@@ -6356,7 +6356,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
     sint32 arsize =  sizeof(commands)/sizeof(CommandRecord);
 
 	if(m_displayHelp) {
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
+		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
 							(MBCHAR*)"command <required_param> [optional_param]",
 							0,0);
 		sint32 i;
@@ -6367,7 +6367,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 			++i
 		) 
 		{
-			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
+			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)commands[i].m_helptext, 0, 0);
 
 
@@ -6379,11 +6379,11 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		{
 			
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
-			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
+			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)buf, 0, 0);
 		}
 	} else if(m_displayCityResources) {
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
+		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
 						   (MBCHAR*)"player city resources",
 						   0, 0);
 		l = 0;
@@ -6410,7 +6410,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 						strcat(buf, rbuf);
 					}
 				}
-				primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + l * k_TEXT_SPACING,
+				primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + l * k_TEXT_SPACING,
 									(MBCHAR*)buf, 0, 0);
 				l++;
 			}
@@ -6457,7 +6457,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				sprintf(buf2, " to city %d", tradeOffers->Get(j).GetToCity());
 
 				strcat(buf, buf2);
-				primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+				primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 				l++;
 			}
@@ -6467,17 +6467,17 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		
 		l=0;
 		sprintf (buf, "EXE total bytes: %d", DebugMemory_GetTotalFromEXE());       
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, 
+		primitives_DrawText(surf, k_LEFT_EDGE, 
 			k_TOP_EDGE + l * k_TEXT_SPACING, (MBCHAR *)buf, 0, 0);
 		
 		l++;
 		sprintf (buf, "DLL total bytes: %d", DebugMemory_GetTotalFromDLL());
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 		
 		l++;
 		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
-		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 #else
 #ifdef _DEBUG

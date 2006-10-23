@@ -35,41 +35,29 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SelItem.h"
-#include "Unit.h"
+#include "SelItem.h"    // SelItemClick.h does not exist
+
 #include "Army.h"
+#include "armymanagerwindow.h"
+#include "aui.h"
+#include "aui_mouse.h"
+#include "aui_uniqueid.h"
+#include "Cell.h"
+#include "citywindow.h"
+#include "controlpanelwindow.h"
+#include "GameEventManager.h"
+#include "gfx_options.h"
+#include "helptile.h"
+#include "Path.h"
+#include "player.h"
 #include "profileDB.h"
 #include "QuickSlic.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "GameEventManager.h"
-#include "Path.h"
-#include "World.h"
+#include "Unit.h"
 #include "UnitData.h"
-
 #include "UnitRecord.h"
-
-#include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_mouse.h"
-#include "Cell.h"
-#include "controlpanelwindow.h"
-#include "armymanagerwindow.h"
-#include "citywindow.h"
-
-#include "helptile.h"
-#include "player.h"
-
-
-
-#include "gfx_options.h"
-
-
-
-
-
-
-
+#include "World.h"
 
 void SelectedItem::SetupClickFunctions()
 {
@@ -1363,35 +1351,45 @@ void SelectedItem::SendGoodClick(const MapPoint &pos, const aui_MouseEvent *data
 
 void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	MapPoint army_pos;
 	sint32 player = GetVisiblePlayer();
-
 	
+	MapPoint army_pos;
 	m_selected_army[player].GetPos(army_pos);
 	
-	if(army_pos == pos && 
-	   GetClickedThing(pos, true) == SELECT_TYPE_LOCAL_ARMY) {
+	if (army_pos == pos && 
+	    GetClickedThing(pos, true) == SELECT_TYPE_LOCAL_ARMY
+       ) 
+    {
 
-	} else {
-		Unit *unit = &((m_selected_army[player])[0]);
+	} 
+    else 
+    {
+		Unit unit = m_selected_army[player][0];
+
 		if (m_good_path &&
-			(unit->GetDBRec()->GetCanCarry()) &&
-			(unit->GetNumCarried() > 0)) {
-			
-								
-								
-			if ((unit->GetDBRec()->GetCargoPod()) &&
-				(g_theWorld->IsWater(pos)) &&
-				(unit->GetData()->CargoHasLandUnits())) {
-				QuickSlic("15IALandInOcean", player, TRUE);
+			unit.GetDBRec()->GetCanCarry() &&
+			(unit.GetNumCarried() > 0)
+           ) 
+        {
+            // Ask user confirmations about special situations when moving a 
+            // non-empty cargo unit
+
+			if (unit.GetDBRec()->GetCargoPod() &&
+				unit.GetData()->CargoHasLandUnits() &&
+				g_theWorld->IsWater(pos)
+               ) 
+            {
+                // Dropping land units in a sea square could be lethal
+				QuickSlic("15IALandInOcean", player);
 				return;
 			}
-			
-								
-								
-			if ((unit->GetMovementTypeSea() || unit->GetMovementTypeShallowWater()) &&
-				(g_theWorld->IsLand(pos))) {
-				SlicObject *so = new SlicObject("14IAAutoUnload");
+
+            if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
+				g_theWorld->IsLand(pos)
+               ) 
+            {
+                // Reaching a shore: unload units?
+				SlicObject * so = new SlicObject("14IAAutoUnload");
 				so->AddLocation(pos);
 				so->AddCivilisation(player);
 				so->AddRecipient(player);
@@ -1399,6 +1397,7 @@ void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data
 				return;
 			}
 		}
+
 		EnterArmyMove(player, pos);
 	}
 }
@@ -1517,16 +1516,18 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 		
 		m_is_pathing = FALSE;
 
-		if(army_pos != pos) {
-			Unit *unit = &((m_selected_army[player])[0]);
+		if (army_pos != pos) 
+        {
+			Unit unit = m_selected_army[player][0];
 			if (m_good_path &&
-				(unit->GetDBRec()->GetCanCarry()) &&
-				(unit->GetNumCarried() > 0)) {
-
-				
-				
-				if ((unit->GetMovementTypeSea() || unit->GetMovementTypeShallowWater()) &&
-					(g_theWorld->IsLand(pos))) {
+				(unit.GetDBRec()->GetCanCarry()) &&
+				(unit.GetNumCarried() > 0)
+               ) 
+            {
+				if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
+					(g_theWorld->IsLand(pos))
+                   ) 
+                {
 					SlicObject *so = new SlicObject("14IAAutoUnload");
 					so->AddLocation(pos);
 					so->AddCivilisation(player);

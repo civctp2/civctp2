@@ -72,17 +72,8 @@ template <class T> Queue<T>::Queue(const sint32 size)
 }
 
 template <class T> Queue<T>::~Queue()
-
 {
-    if(m_queue) { 
-       delete[] m_queue;    
-       m_queue = NULL;
-    }
-
-    m_queue=NULL;
-	m_queueHead = 0;
-	m_queueTail = 0;
-	m_numItems = 0;
+    delete [] m_queue;    
 }
 
 template <class T> void Queue<T>::Allocate(const sint32 size)

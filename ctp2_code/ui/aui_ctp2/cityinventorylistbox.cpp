@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Old CTP1 main controll panel city inventory list box
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -234,7 +234,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
-				sint32 j = aui_UniqueId();  /// @todo Find out which i should be j: @answer the first one, but the class is not used anyway.
+				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
 					j,
@@ -264,7 +264,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
-				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j: @answer the first one, but the class is not used anyway.
+				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
 					j,
@@ -294,7 +294,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
 			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
-				sint32 j = aui_UniqueId(); /// @todo Find out which i should be j: @answer the first one, but the class is not used anyway.
+				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
 					j,

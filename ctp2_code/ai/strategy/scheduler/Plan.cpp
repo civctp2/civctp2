@@ -71,6 +71,9 @@
 // - Deferred some derefences until used (hopefully preventing crashes).
 //
 //----------------------------------------------------------------------------
+//
+/// @todo Check what happens when the m_the_goal or m_the_squad references 
+///       become invalid through delete.
 
 #include "c3.h"
 #include "Plan.h"
@@ -86,7 +89,6 @@
 #include "Scheduler.h"
 #include "squad_strength.h"
 #include "ctpaidebug.h"
-#include "ArmyPool.h"
 
 #include "GoalRecord.h"
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
@@ -107,11 +109,13 @@ extern CTPDatabase<GoalRecord> *g_theGoalDB;
 //
 //----------------------------------------------------------------------------
 Plan::Plan()
-:   m_matching_value    (Goal::BAD_UTILITY),
+:   
+    m_matching_value    (Goal::BAD_UTILITY),
     m_the_squad         (NULL),
     m_the_goal          (NULL),
     m_matches           ()
-{ ; }
+{ 
+}
 
 //----------------------------------------------------------------------------
 //
@@ -119,7 +123,7 @@ Plan::Plan()
 //
 // Description: Copy constructor
 //
-// Parameters : plan    : the object to copy the data from
+// Parameters : a_Original  : the object to copy the data from
 //
 // Globals    : -
 //
@@ -128,9 +132,13 @@ Plan::Plan()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-Plan::Plan(Plan const & plan)
+Plan::Plan(Plan const & a_Original)
+:   
+    m_matching_value    (a_Original.m_matching_value),
+    m_the_squad         (a_Original.m_the_squad),
+    m_the_goal          (a_Original.m_the_goal),
+    m_matches           (a_Original.m_matches)
 {
-	*this = plan;
 }
 
 //----------------------------------------------------------------------------
@@ -148,15 +156,18 @@ Plan::Plan(Plan const & plan)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-Plan & Plan::operator = (Plan const & plan)
+Plan & Plan::operator = (Plan const & a_Original)
 {
-	m_the_goal          = NULL;     // temporary, until set in Set_Goal
-    Set_Squad(plan.m_the_squad);    // sets m_the_squad, uses m_the_goal
-	Set_Goal(plan.m_the_goal);	    // sets m_the_goal, uses m_the_squad
-	m_matching_value    = plan.m_matching_value;
-	m_matches           = plan.m_matches;
-	
-	return *this;
+    if (this != &a_Original)
+    {
+        m_the_goal          = NULL;         // temporary, until set in Set_Goal
+        Set_Squad(a_Original.m_the_squad);  // sets m_the_squad, uses m_the_goal
+        Set_Goal(a_Original.m_the_goal);    // sets m_the_goal, uses m_the_squad
+        m_matching_value    = a_Original.m_matching_value;
+        m_matches           = a_Original.m_matches;
+    }    	
+
+    return *this;
 }
 
 //----------------------------------------------------------------------------
@@ -177,6 +188,8 @@ Plan & Plan::operator = (Plan const & plan)
 Plan::~Plan()
 { 
     Agent_Match_List().swap(m_matches);
+    // m_the_goal not deleted   : reference only
+    // m_the_squad not deleted  : reference only
 } 
 
 //----------------------------------------------------------------------------
@@ -608,7 +621,7 @@ void Plan::Move_All_Agents(Squad_ptr new_squad)
 #ifdef _DEBUG
 			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) (*(match_iter->goal_index));
 
-			if (!g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
+			if (!ctpagent_ptr->Get_Army().IsValid())
 			{
 				bool SHOW_RICHARD_THIS_ASSERT_082900 = false;
 				Assert(SHOW_RICHARD_THIS_ASSERT_082900);

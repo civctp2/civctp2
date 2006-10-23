@@ -1716,13 +1716,17 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
         uint32 movetype = a.GetMovementType();
         if ((movetype & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
             !(movetype & k_BIT_MOVEMENT_TYPE_WATER) &&
-            g_theWorld->IsShallowWater(m_waypoints[0])) {
-            QuickSlic("36IATriremeDeepwaterTip", player, TRUE);
+            g_theWorld->IsShallowWater(m_waypoints[0])
+           ) 
+        {
+            QuickSlic("36IATriremeDeepwaterTip", player);
         }
         if ((movetype & k_BIT_MOVEMENT_TYPE_LAND) &&
             !(movetype & k_BIT_MOVEMENT_TYPE_MOUNTAIN) &&
-            g_theWorld->IsMountain(m_waypoints[0])) {
-            QuickSlic("35IANomountainUnitTip", player, TRUE);
+            g_theWorld->IsMountain(m_waypoints[0])
+           ) 
+        {
+            QuickSlic("35IANomountainUnitTip", player);
         }            
     }
 

@@ -63,13 +63,14 @@
 //   spy. (June 4th 2006 Martin Gühmann)
 // - Added IncreaseBoatMovement and CivHP as a civ attribute (July 2, 2006 by E)
 // - Added Civ Attack Bonuses (July 2, 2006 by E)
+// - Repaired memory leaks
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "UnitData.h"
 
-#include <algorithm>        // std::max
+#include <algorithm>                    // std::max
 #include "ConstDB.h"
 #include "StrDB.h"
 #include "WonderRecord.h"
@@ -86,7 +87,8 @@
 #include "UnitActor.h"
 #include "player.h"
 #include "RandGen.h"
-#include "QuadTree.h"
+#include "QuadTree.h"                   // g_theUnitTree
+
 #include "installationtree.h"
 #include "installation.h"
 
@@ -123,11 +125,10 @@
 
 #include "ArmyPool.h"
 #include "TradeOfferPool.h"
-#include "soundmanager.h"
+#include "soundmanager.h"               // g_soundManager
 #include "gamesounds.h"
 #include "TerrainRecord.h"
 
-#include "UnitPool.h"
 #include "AdvanceRecord.h"
 
 #include "TradeBids.h"
@@ -168,13 +169,8 @@
 
 #ifdef _DEBUG
 #include "aui.h"
-#include "controlpanelwindow.h"
-extern ControlPanelWindow   *g_controlPanel;
+#include "controlpanelwindow.h"         // g_controlPanel
 #endif
-
-extern QuadTree<Unit>       *g_theUnitTree;
-
-extern SoundManager         *g_soundManager;
 
 extern bool UnitCanCarry(sint32 dest, sint32 src, sint32 government);
 
@@ -578,14 +574,9 @@ bool UnitData::IsImmobile()const {
 	return false;
 }
 
-bool UnitData::CantGroup()const {
-
-	const UnitRecord *rec = GetDBRec();
-
-	if (rec->GetCantGroup())
-		return true;
-
-	return false;
+bool UnitData::CantGroup()const 
+{
+    return GetDBRec()->GetCantGroup();
 }
 
 //----------------------------------------------------------------------------
@@ -783,12 +774,7 @@ sint32 UnitData::GetWagesNeeded() const
 	// EMOD - Add something like unit wages? each unit 
 	// has a citizen wage but can be multiplied?
 
-	Assert(m_city_data);
-	if(m_city_data) {
-		return m_city_data->GetWagesNeeded();
-	} else {
-		return 0;
-	}
+    return m_city_data ? m_city_data->GetWagesNeeded() : 0;
 }
 
 //----------------------------------------------------------------------------
@@ -878,11 +864,7 @@ sint32 UnitData::GetCargoCapacity() const
 //----------------------------------------------------------------------------
 sint32 UnitData::GetNumCarried() const
 {
-	if(m_cargo_list) {
-		return m_cargo_list->Num();
-	} else {
-		return 0;
-	}
+    return m_cargo_list ? m_cargo_list->Num() : 0;
 }
 
 //----------------------------------------------------------------------------
@@ -1296,11 +1278,7 @@ bool UnitData::CanBombard(CellUnitList &defender) const
 
 bool UnitData::CanCounterBombard(CellUnitList &defender) const 
 {
-	if (GetDBRec()->GetCanCounterBombard()) { 
-      return CanBombard(defender); 
-   } else { 
-		return false;
-   }
+    return GetDBRec()->GetCanCounterBombard() && CanBombard(defender); 
 }
 
 //----------------------------------------------------------------------------
@@ -1595,12 +1573,11 @@ bool UnitData::CanBombardType(const Unit & defender) const
 bool UnitData::Bombard(CellUnitList &defender, bool isCounterBombardment) 
 { 
 	const UnitRecord *rec = GetDBRec();
-	sint32 i, j, r; 
+	sint32 i, j; 
 
 	Assert(0 < defender.Num()); 
-	r = g_rand->Next(defender.Num()); 
 
-	for (i=r, j=0; 
+	for (i = g_rand->Next(defender.Num()), j=0; 
 		 j < defender.Num(); 
 		 i = ((i + 1) % defender.Num()), j++) { 
 
@@ -2039,7 +2016,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
                               sint32 is_conquest, const CAUSE_REMOVE_CITY cause)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("ResetCityOwner: %lx, new: %d, old: %d, conq: %d, cause: %d\n",
-							  me.m_id, newo, g_theUnitPool->IsValid(me) ? me.GetOwner() : -1, is_conquest, cause));
+							  me.m_id, newo, me.IsValid() ? me.GetOwner() : -1, is_conquest, cause));
 	PLAYER_INDEX	player ;
 
 	CityWindow::NotifyCityCaptured(me);
@@ -2198,10 +2175,11 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
                               CAUSE_REMOVE_ARMY rem_cause)
 {
 	
-	if(m_cargo_list) {
-		sint32 i;
-		for(i = m_cargo_list->Num() - 1; i >= 0; i--) {
-			if(g_theUnitPool->IsValid(m_cargo_list->Access(i))) {
+	if (m_cargo_list) 
+    {
+		for (sint32 i = m_cargo_list->Num() - 1; i >= 0; i--) {
+			if (m_cargo_list->Access(i).IsValid()) 
+            {
 				m_cargo_list->Access(i).Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 			}
 		}
@@ -2704,10 +2682,10 @@ ORDER_RESULT UnitData::InterceptTrade()
 		fromCity = route.GetSource();
 		toCity = route.GetDestination();
 
-		if(!g_theUnitPool->IsValid(fromCity))
+		if(!fromCity.IsValid())
 			fromCity.m_id = (0);
 
-		if(!g_theUnitPool->IsValid(toCity))
+		if(!toCity.IsValid())
 			toCity.m_id = (0);
 
 		if(!sourceOwnerCaught && fromCity.m_id != (0) &&
@@ -3083,10 +3061,7 @@ sint32 UnitData::GetDistance(UnitData* unit1, UnitData* unit2,
 sint32 UnitData::GetDistance(const Installation &inst, UnitData* unit2,
 							 sint32 wrapRange)
 {
-	MapPoint iPos;
-
-	inst.GetPos(iPos);
-	return GetDistance(unit2, iPos, wrapRange);
+    return GetDistance(unit2, inst.RetPos(), wrapRange);
 }
 
 
@@ -3482,7 +3457,7 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 		def += cityData->GetDefendersBonus();
 
 		double wallval,walldef;
-		if(cityData->HasCityWalls() && g_theUnitPool->IsValid(attacker))
+		if (cityData->HasCityWalls() && attacker.IsValid())
 		{
 			wallval=g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner());
 			if(wallval)
@@ -3822,169 +3797,133 @@ ORDER_RESULT UnitData::InvestigateCity(Unit c)
 	return ORDER_RESULT_SUCCEEDED;
 }
 
+/// Execute an attempt to steal a technology from a city
+/// \param c            The city to steal from
+/// \param whichAdvance Index of specific technology to steal (< 0 meaning random)
+/// \return  The result of the attempt
 ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 {
-	SlicObject	*so ;
-
-	
-
-
-
-
-
 	MapPoint pos;
 	c.GetPos(pos);
-
 	m_army.InformAI(UNIT_ORDER_STEAL_TECHNOLOGY, pos);
-	if(StoppedBySpies(c)) {
+
+	if (StoppedBySpies(c)) 
+    {
 		return ORDER_RESULT_FAILED;
 	}
 
-	sint32 num;
-	uint8 *canSteal = g_player[m_owner]->m_advances->CanAskFor(g_player[c.GetOwner()]->m_advances,
-															  num);
-	double randChance, specChance, deathChance;
-	bool r;
-	const UnitRecord::StealTechnologyData *data;
-	r = GetDBRec()->GetStealTechnology(data);
-	randChance = data->GetRandomChance();
-	specChance = data->GetSpecificChance();
-	deathChance = data->GetDeathChance();
+	const UnitRecord::StealTechnologyData * data;
+	bool r = GetDBRec()->GetStealTechnology(data);
 	Assert(r);
-	if(!r)
+	if (!r)
+    {
 		return ORDER_RESULT_ILLEGAL;
+    }
 
-	
-	
-	if(whichAdvance < 0) {
-		if(Flag(k_UDF_IS_VET)) {
-			randChance += g_theConstDB->EliteSpyBonus();
-		}
+    double          successRate = 
+        (whichAdvance < 0) ? data->GetRandomChance() : data->GetSpecificChance();
 
-		c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, randChance);
-		c.SetWatchful();
+	if (Flag(k_UDF_IS_VET)) 
+    {
+		successRate += g_theConstDB->EliteSpyBonus();
+	}
+	c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, successRate);
+	c.SetWatchful();
 
-		if(g_rand->Next(100) >= sint32(randChance * 100.0)) {
-			so = new SlicObject("10bStealTechnologyFailed") ;
-			so->AddRecipient(c.GetOwner()) ;
-			so->AddCivilisation(m_owner) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so) ;
+    ORDER_RESULT    orderResult = 
+        (g_rand->Next(100) < static_cast<sint32>(successRate * 100.0))
+        ? ORDER_RESULT_SUCCEEDED
+        : ORDER_RESULT_FAILED;
 
-			so = new SlicObject("11bStealTechnologyFailed") ;
-			so->AddRecipient(m_owner) ;
-			so->AddCivilisation(c.GetOwner()) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so) ;
-			Unit me(m_id);
+	if ((ORDER_RESULT_SUCCEEDED == orderResult) && (whichAdvance < 0)) 
+    {
+        // Steal random advance
+	    sint32  num;
+	    uint8 * canSteal    = g_player[m_owner]->m_advances->CanAskFor
+                                (g_player[c.GetOwner()]->m_advances, num);
+	    if (num > 0) 
+        {
+		    sint32 count = 0;
+		    sint32 which = g_rand->Next(num);
+		    for (sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++) 
+            {
+			    if (canSteal[i]) 
+                {
+				    if (which == count) 
+                    {
+                        whichAdvance = i;
+					    break;
+				    }
+				    count++;
+			    }
+		    }
 
-			if(g_rand->Next(100) < sint32(deathChance * 100.0))
-				me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+	    } 
+        else 
+        {
+            // Nothing worthwhile found
+            orderResult = ORDER_RESULT_SUCCEEDED_INCOMPLETE;
+	    }
 
-			goto failed;
-		}
+        delete [] canSteal;
+	} 
 
-		
-		sint32 i;
-		if(num > 0) {
-			sint32 count = 0;
-			sint32 which = g_rand->Next(num);
+    SlicObject	*   so;
+    if (ORDER_RESULT_SUCCEEDED == orderResult)
+    {
+        g_player[m_owner]->m_advances->GiveAdvance(whichAdvance, CAUSE_SCI_COMBAT);
 
-			for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
-				if(canSteal[i]) {
-					if(which == count) {
-						g_player[m_owner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
-						break;
-					}
-					count++;
-				}
-			}
-			Assert(i < g_theAdvanceDB->NumRecords());
-			
-			so = new SlicObject("11bStoleTechnology") ;
-			so->AddRecipient(m_owner) ;
-			so->AddCivilisation(c.GetOwner()) ;
-			so->AddAdvance(i) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so);
-
-			so = new SlicObject("186StealTechnologyVictim");
-			so->AddRecipient(c.GetOwner()) ;
-			so->AddCivilisation(m_owner) ;
-			so->AddAdvance(i) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so);
-		} else {
-			so = new SlicObject("11bNothingToSteal") ;
-			so->AddRecipient(m_owner) ;
-			so->AddCivilisation(c.GetOwner()) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so) ;
-		}
-		
-	} else {
-		if(Flag(k_UDF_IS_VET)) {
-			specChance += g_theConstDB->EliteSpyBonus();
-		}
-
-		c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, specChance);
-		c.SetWatchful();
-
-		if(g_rand->Next(100) > sint32(specChance * 100.0)) {
-			
-			so = new SlicObject("10bStealTechnologyFailed") ;
-			so->AddRecipient(c.GetOwner()) ;
-			so->AddCivilisation(m_owner) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so) ;
-
-			so = new SlicObject("11bStealTechnologyFailed") ;
-			so->AddRecipient(m_owner) ;
-			so->AddCivilisation(c.GetOwner()) ;
-			so->AddCity(c) ;
-			so->AddUnitRecord(m_type);
-			g_slicEngine->Execute(so) ;
-			Unit me(m_id);
-			if(g_rand->Next(100) < sint32(deathChance * 100.0))
-				me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
-			
-			goto failed;
-		}
-		
-		
-		g_player[m_owner]->m_advances->GiveAdvance(whichAdvance, CAUSE_SCI_COMBAT);
-		
-		so = new SlicObject("11bStoleTechnology") ;
-		so->AddRecipient(m_owner) ;
-		so->AddCivilisation(c.GetOwner()) ;
-		so->AddAdvance(whichAdvance) ;
-		so->AddCity(c) ;
-		so->AddUnitRecord(m_type);
-		g_slicEngine->Execute(so) ;
-
-		so = new SlicObject("186StealTechnologyVictim");
-		so->AddRecipient(c.GetOwner()) ;
-		so->AddCivilisation(m_owner) ;
-		so->AddAdvance(whichAdvance) ;
-		so->AddCity(c) ;
+		so = new SlicObject("11bStoleTechnology");
+		so->AddRecipient(m_owner);
+		so->AddCivilisation(c.GetOwner());
+		so->AddAdvance(whichAdvance);
+		so->AddCity(c);
 		so->AddUnitRecord(m_type);
 		g_slicEngine->Execute(so);
-	}
 
-	
-	ActionSuccessful(SPECATTACK_STEALTECH, c);
-	return ORDER_RESULT_SUCCEEDED;
+		so = new SlicObject("186StealTechnologyVictim");
+		so->AddRecipient(c.GetOwner());
+		so->AddCivilisation(m_owner);
+		so->AddAdvance(whichAdvance);
+		so->AddCity(c);
+		so->AddUnitRecord(m_type);
+		g_slicEngine->Execute(so);
 
-failed:
-	
+	    ActionSuccessful(SPECATTACK_STEALTECH, c);
+    }
+    else if (ORDER_RESULT_FAILED == orderResult)
+    {
+	    so = new SlicObject("10bStealTechnologyFailed") ;
+	    so->AddRecipient(c.GetOwner());
+	    so->AddCivilisation(m_owner);
+	    so->AddCity(c);
+	    so->AddUnitRecord(m_type);
+	    g_slicEngine->Execute(so);
 
-	return ORDER_RESULT_FAILED;
+	    so = new SlicObject("11bStealTechnologyFailed");
+	    so->AddRecipient(m_owner);
+	    so->AddCivilisation(c.GetOwner());
+	    so->AddCity(c);
+	    so->AddUnitRecord(m_type);
+	    g_slicEngine->Execute(so);
+
+        if (g_rand->Next(100) < sint32(data->GetDeathChance() * 100.0))
+        {
+            Unit me(m_id);
+            me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+        }
+    }
+    else
+    {
+	    so = new SlicObject("11bNothingToSteal");
+	    so->AddRecipient(m_owner);
+	    so->AddCivilisation(c.GetOwner());
+	    so->AddCity(c);
+	    so->AddUnitRecord(m_type);
+	    g_slicEngine->Execute(so);
+    }
+
+    return orderResult;
 }
 
 //----------------------------------------------------------------------------
@@ -4250,15 +4189,13 @@ void UnitData::HearGossip(Unit c)
                     break;
                 }                    
             }
+
+            delete [] canSteal;
             break;
         }
 
 		case 2:
-			if(0) {
-				
-				
-				
-			} else {
+			{
 				sint32 i, n = g_player[oplayer]->m_all_armies->Num();
 				for(i = 0; i < n; i++) {
 					cost = g_player[oplayer]->m_all_armies->Access(i).GetCost();
