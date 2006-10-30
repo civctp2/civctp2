@@ -505,32 +505,32 @@ bool CivPaths::FindPath(C3DIR dir, int num, MBCHAR * path)
 	case 0: 
 		if (m_curScenarioPath) 
 		{
-			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
-				m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
+			sprintf(path, "%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
+				m_localizedPath, FILE_SEP, m_assetPaths[dir]);
 		}
 		break;
 		
 	case 1:
 		if (m_curScenarioPath) 
 		{
-			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
-				m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
+			sprintf(path, "%s%s%s%s%s", m_curScenarioPath, FILE_SEP,
+				m_defaultPath, FILE_SEP, m_assetPaths[dir]);
 		}
 		break;
 		
 	case 2: 
 		if (m_curScenarioPath) 
 		{
-			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP,
-				m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
+			sprintf(path, "%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP,
+				m_localizedPath, FILE_SEP, m_assetPaths[dir]);
 		}
 		break;
 		
 	case 3:
 		if (m_curScenarioPath) 
 		{
-			sprintf(path, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP,
-				m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, "");
+			sprintf(path, "%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP,
+				m_defaultPath, FILE_SEP, m_assetPaths[dir]);
 		}
 		break;
 		

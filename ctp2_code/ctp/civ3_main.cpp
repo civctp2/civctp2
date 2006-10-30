@@ -1720,14 +1720,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 void main_DisplayPatchDisclaimer()
 {
-	MBCHAR		*message;
-	sint32		filesize = 0;
-
-	FILE *f = fopen("disclaimer.txt", "rb");
-
+	FILE *  f = fopen("disclaimer.txt", "rb");
 	if (!f)
 		goto Error;
 
+	sint32		filesize = 0;
 	if (fseek(f, 0, SEEK_END) == 0) {
 		filesize = ftell(f);
 	} else {
@@ -1736,7 +1733,7 @@ void main_DisplayPatchDisclaimer()
  	
 	fclose(f);
 
-	message = new MBCHAR[filesize+1];
+	MBCHAR * message = new MBCHAR[filesize+1];
 	memset(message, 0, filesize+1);
 
 	f = fopen("disclaimer.txt", "rb");
@@ -1764,12 +1761,10 @@ int CivMain
 	char *	    szCmdLine   // argv
 )
 {
-	MSG			msg;
     void *      hInstance   = NULL;
 #else	// __GNUC__
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-	MSG			msg;
 
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
 	if (hwnd) {
@@ -1927,7 +1922,9 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
 
-	
+	MSG			msg;
+	msg.wParam  = 0;
+
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();

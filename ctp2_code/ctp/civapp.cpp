@@ -95,227 +95,188 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "civ3_main.h"
+#include "civapp.h"
 
-
-#include "splash.h"
-#include "debugmemory.h"
-
-
-#include "CivPaths.h"
-#include "Unit.h"
-#include "message.h"
-#include "gameinit.h"
-#include "RandGen.h"
-#include "keymap.h"
-#include "keypress.h"
-#include "TurnCnt.h"
-#include "DB.h"
-#include "StrDB.h"
+#include "AdvanceBranchRecord.h"
+#include "AdvanceListRecord.h"
 #include "AdvanceRecord.h"
-#include "GlobalWarmingRecord.h"
-#include "UVDB.h"
-#include "BuildingRecord.h"
-#include "thronedb.h"
-#include "conceptdb.h"
-
-#include "WonderRecord.h"
-#include "WonderMovieRecord.h"
-#include "profileDB.h"
-#include "civarchive.h"
-#include "gamefile.h"
-#include "ConstDB.h"
-#include "SlicEngine.h"
-#include "player.h"
 #include "Advances.h"
-#include "MessagePool.h"
-#include "PlayListDB.h"
-
-#include "civscenarios.h"
-
-
-#include "RoboInit.h"
-#include "ctpai.h"
-
-
-#include "progresswindow.h"
-#include "netshell.h"
-#include "netshell_game.h"
-#include "c3ui.h"
+#include "advanceutil.h"
+#include "AgeCityStyleRecord.h"
+#include "AgeRecord.h"
+#include <algorithm>	                // std::find
+#include "ancientwindows.h"
+#include "appstrings.h"
+#include "ArmyData.h"                   // ArmyData::Cleanup
+#include "armymanagerwindow.h"
+#include "AttractWindow.h"
 #include "aui_blitter.h"
-#include "c3window.h"
-#include "c3_static.h"
-#include "c3_checkbox.h"
 #include "background.h"
-#include "grabitem.h"
+#include "backgroundwin.h"
+#include "battleview.h"
+#include "bevellesswindow.h"
+#include "BuildingBuildListRecord.h"
+#include "BuildingRecord.h"
+#include "buildingutil.h"
+#include "BuildListSequenceRecord.h"
+#include "c3_button.h"
+#include "c3_checkbox.h"
 #include "c3_dropdown.h"
 #include "c3_listbox.h"
-#include "c3_button.h"
 #include "c3_listitem.h"
-#include "bevellesswindow.h"
-#include "spnewgamewindow.h"
-#include "spnewgametribescreen.h"
+#include "c3_static.h"
+#include "c3ui.h"
+#include "c3window.h"
 #include "c3windows.h"
-#include "statswindow.h"
-#include "backgroundwin.h"
-#include "helptile.h"
-#include "messagewin.h"
+#include "chatbox.h"
+#include "CitySizeRecord.h"
+#include "CityStyleRecord.h"
+#include "citywindow.h"
+#include "civ3_main.h"
+#include "civarchive.h"
+#include "CivilisationRecord.h"
+#include "CivPaths.h"
+#include "civscenarios.h"
+#include "conceptdb.h"
+#include "ConstDB.h"
 #include "controlpanelwindow.h"
-#include "MainControlPanel.h"
-
-#include "statuswindow.h"
-#include "radarwindow.h"
-#include "ancientwindows.h"
+#include "ctpai.h"
+#include "ctp_finger.h"
+#include "cursormanager.h"
+#include "DB.h"
+#include "DBLexer.h"
+#include "debugmemory.h"
+#include "DifficultyRecord.h"
+#include "DiplomacyDetails.h"
+#include "DiplomacyProposalRecord.h"
+#include "DiplomacyRecord.h"
+#include "DiplomacyThreatRecord.h"
+#include "diplomacyutil.h"
+#include "diplomacywindow.h"
+#include "dipwizard.h"
+#include "display.h"
+#include "DomesticManagementDialog.h"
+#include "EditQueue.h"
+#include "EndGameObjectRecord.h"
+#include "EndgameWindow.h"
+#include "Events.h"
+#include "Exclusions.h"
+#include "FeatRecord.h"
+#include "filenamedb.h"
+#include "GameEventManager.h"
+#include "gamefile.h"
+#include "gameinit.h"
+#include "gameplayoptions.h"
+#include "gamesounds.h"
+#include "gfx_options.h"
+#include "GlobalWarmingRecord.h"
+#include "GoalRecord.h"
+#include "GovernmentRecord.h"
+#include "grabitem.h"
+#include "graphicsresscreen.h"          // graphicsresscreen_Cleanup
+#include "graphicsscreen.h"
 #include "greatlibrarywindow.h"
-#include "scenariowindow.h"
-
-#include "musicscreen.h"
-#include <algorithm>	// std::find
-
+#include "helptile.h"
+#include "IconRecord.h"
+#include "ImprovementListRecord.h"
+#include "InfoBar.h"
+#include "infowin.h"
+#include "infowindow.h"                 // Info Window cleanup
 #include "initialplaywindow.h"
+#include "intelligencewindow.h"
+#include "IntroMovieWin.h"
+#include "keymap.h"
+#include "keypress.h"
+#include "km_screen.h"
+#include "loadsavewindow.h"
+#include "MainControlPanel.h"
+#include "MapDB.h"
+#include "message.h"
+#include "MessagePool.h"
+#include "messagewin.h"
+#include "moviedb.h"
+#include "musicscreen.h"
+#include "NationalManagementDialog.h"
+#include "netconsole.h"
+#include "netshell.h"
+#include "netshell_game.h"
+#include "network.h"
 #include "optionswindow.h"
 #include "optionwarningscreen.h"
-#include "gameplayoptions.h"
-#include "graphicsscreen.h"
-#include "soundscreen.h"
-#include "radarmap.h"
-#include "tiledmap.h"
-#include "workwin.h"
-#include "cursormanager.h"
-#include "gamesounds.h"
-#include "soundmanager.h"
-#include "civapp.h"
-#include "chatbox.h"
-#include "battleview.h"
-#include "screenutils.h"
-#include "sci_advancescreen.h"
-#include "infowin.h"
-#include "sciencewin.h"
-#include "trademanager.h"
-#include "intelligencewindow.h"
-#include "NationalManagementDialog.h"
-#include "ScienceManagementDialog.h"
-
-
-
-#include "DomesticManagementDialog.h"
-#include "dipwizard.h"
-#include "DiplomacyDetails.h"
-#include "loadsavewindow.h"
-
-
-
-
-#include "spriteeditor.h"
-
-#include "network.h"
+#include "OrderRecord.h"
+#include "PersonalityRecord.h"
+#include "player.h"
+#include "PlayListDB.h"
+#include "PollutionRecord.h"
+#include "PopRecord.h"
 #include "profileDB.h"
+#include "ProfileEdit.h"
+#include "progresswindow.h"
+#include "radarmap.h"
+#include "radarwindow.h"
+#include "RandGen.h"
+#include "ResourceRecord.h"
 #include "RiskRecord.h"
-#include "moviedb.h"
-#include "filenamedb.h"
-#include "Exclusions.h"
-#include "MapDB.h"
+#include "RoboInit.h"
+#include "scenariowindow.h"
+#include "sci_advancescreen.h"
+#include "ScienceManagementDialog.h"
+#include "sciencevictorydialog.h"       // Gaia controller window cleanup
+#include "sciencewin.h"
+#include "screenmanager.h"
+#include "screenutils.h"
+#include "SelItem.h"                    // g_selected_item
+#include "SlicEngine.h"
+#include "SlicSegment.h"                // SlicSegment::Cleanup
+#include "soundmanager.h"
+#include "SoundRecord.h"
+#include "soundscreen.h"
+#include "SpecialAttackInfoRecord.h"
+#include "SpecialEffectRecord.h"
+#include "scenarioeditor.h"
+#include "splash.h"
+#include "spnewgametribescreen.h"
+#include "spnewgamewindow.h"
+#include "spriteeditor.h"
+#include "SpriteRecord.h"
+#include "statswindow.h"
+#include "statuswindow.h"
+#include "StrategyRecord.h"
+#include "StrDB.h"
+#include "thronedb.h"
+#include "TerrainImprovementRecord.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "tiledmap.h"
+#include "trademanager.h"
+#include "TurnCnt.h"
 #include "tutorialwin.h"
-#include "km_screen.h"
-
-#include "ctp_finger.h"
-#include "AttractWindow.h"
-#include "IntroMovieWin.h"
-#include "EndgameWindow.h"
-
-#include "appstrings.h"
+#include "Unit.h"
+#include "UnitBuildListRecord.h"
+#include "UnitDynArr.h"
+#include "unitmanager.h"
+#include "UnitRecord.h"
+#include "unitutil.h"
+#include "UVDB.h"
 #include "victorywin.h"
-
-#include "GameEventManager.h"
-
-#include "Events.h"
+#include "WonderBuildListRecord.h"
+#include "WonderRecord.h"
+#include "WonderMovieRecord.h"
+#include "workwin.h"
 
 
 #ifndef _NO_GAME_WATCH
-
-
 #include "GameWatch.h"
 #include "GWCiv.h"
 
 int g_gameWatchID = -1;
 #endif 
 
-#include "DBLexer.h"
-#include "GovernmentRecord.h"
-#include "SpriteRecord.h"
-#include "SoundRecord.h"
-#include "SpecialEffectRecord.h"
-#include "SpecialAttackInfoRecord.h"
-#include "IconRecord.h"
-#include "AdvanceBranchRecord.h"
-#include "AgeRecord.h"
-#include "TerrainRecord.h"
-#include "TerrainImprovementRecord.h"
-#include "UnitRecord.h"
-#include "OrderRecord.h"
-#include "CitySizeRecord.h"
-#include "PopRecord.h"
-#include "FeatRecord.h"
-#include "EndGameObjectRecord.h"
-#include "CityStyleRecord.h"
-#include "AgeCityStyleRecord.h"
-
-
-#include "GoalRecord.h"
-#include "UnitBuildListRecord.h"
-#include "WonderBuildListRecord.h"
-#include "BuildingBuildListRecord.h"
-#include "ImprovementListRecord.h"
-#include "StrategyRecord.h"
-#include "BuildListSequenceRecord.h"
-#include "DiplomacyRecord.h"
-#include "DiplomacyProposalRecord.h"
-#include "DiplomacyThreatRecord.h"
-#include "AdvanceListRecord.h"
-#include "PersonalityRecord.h"
-#include "CivilisationRecord.h"
-#include "DifficultyRecord.h"
-#include "PollutionRecord.h"
-
-#include "UnitDynArr.h"
-
-#include "unitutil.h"
-#include "advanceutil.h"
-
-#include "netconsole.h"
-
-#include "ResourceRecord.h"
-
-#include "InfoBar.h"
-
-#include "display.h"
-
-
-#include "gfx_options.h"
-
-#include "diplomacyutil.h"
-
-#include "scenarioeditor.h"
-#include "diplomacywindow.h"
-#include "armymanagerwindow.h"
-#include "citywindow.h"
-#include "terrainutil.h"
-#include "buildingutil.h"
-
-#include "unitmanager.h"
-#include "EditQueue.h"
-#include "ProfileEdit.h"
-#include "SlicSegment.h"            // SlicSegment::Cleanup
-#include "infowindow.h"             // Info Window cleanup
-#include "sciencevictorydialog.h"   // Gaja controller window cleanup
-#include "ArmyData.h"               // ArmyData::Cleanup
-#include "graphicsresscreen.h"      // graphicsresscreen_Cleanup
 
 #ifdef LINUX
 #include <time.h>
 #endif
 
-#include "screenmanager.h"
 extern ScreenManager *g_screenManager;
 
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
@@ -459,11 +420,6 @@ extern sint32               g_scenarioUsePlayerNumber;
 extern GameSettings         *g_theGameSettings;
 
 
-
-
-#include "SelItem.h"
-extern SelectedItem         *g_selected_item;
-
 #include "tutorialwin.h"
 extern TutorialWin          *g_tutorialWin;
 
@@ -471,9 +427,9 @@ extern TutorialWin          *g_tutorialWin;
 ProjectFile *g_GreatLibPF = NULL;
 ProjectFile *g_ImageMapPF = NULL;
 ProjectFile *g_SoundPF = NULL;
-int InitializeGreatLibrary();
-int InitializeSoundPF();
-int InitializeImageMaps();
+void InitializeGreatLibrary();
+void InitializeSoundPF();
+void InitializeImageMaps();
 
 #include "director.h"
 extern Director				*g_director;
@@ -496,8 +452,64 @@ bool    g_tempLeakCheck = false;
 namespace
 {
 #if defined(_DEBUG)
-size_t  g_allocatedAtStart;
+size_t  g_allocatedAtStart  = 0;
 #endif
+
+/// Add search directories to a project file
+/// @param  a_ProjectFile   Project file to add to
+/// @param  a_Type          Type of search items
+/// @param  a_PackFileName  Name of a packed (.zfs) file to add to the lookup
+/// @remarks Both the directories (for individual files) and the packed files in
+///          the directories are added to the search items.
+void AddSearchDirectories
+(
+    ProjectFile *   a_ProjectFile,
+    C3DIR const &   a_Type,
+    MBCHAR const *  a_PackFileName
+)
+{
+    MBCHAR          path[_MAX_PATH];
+
+    for (int i = 0; g_civPaths->FindPath(a_Type, i++, path); ) 
+    {
+        if (path[0]) 
+        {
+            // The directory, for looking up "loose" files
+            a_ProjectFile->addPath(path);
+
+            // A predefined packed file in the directory
+            strcat(path, FILE_SEP);
+            strcat(path, a_PackFileName);
+            a_ProjectFile->addPath(path);
+        }
+    }
+}
+
+/// Add search "pack files" to a project file
+/// @param  a_ProjectFile   Project file to add to
+/// @param  a_Type          Type of search path
+/// @param  a_PackFileName  Name of a packed (.zfs) file to add to the lookup
+/// @remarks Only the packed files are added to the search items.
+void AddSearchPacks
+(
+    ProjectFile *   a_ProjectFile,
+    C3DIR const &   a_Type,
+    MBCHAR const *  a_PackFileName
+)
+{
+    MBCHAR          path[_MAX_PATH];
+
+    for (int i = 0; g_civPaths->FindPath(a_Type, i++, path); ) 
+    {
+        if (path[0]) 
+        {
+            // A predefined packed file in the directory
+            strcat(path, FILE_SEP);
+            strcat(path, a_PackFileName);
+            a_ProjectFile->addPath(path, TRUE);
+        }
+    }
+}
 
 //----------------------------------------------------------------------------
 //
@@ -1442,11 +1454,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	
 	CursorManager::Initialize();
 
-	success = InitializeImageMaps();
-	if (!success) {
-		c3errors_FatalDialog("CivApp", "Unable to Init the image maps project file.");
-		return -1;
-	}
+	InitializeImageMaps();
 
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
@@ -1482,19 +1490,11 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	g_theProgressWindow->StartCountingTo( 550 );
 
-	success = InitializeGreatLibrary();
-	if (!success) {
-		c3errors_FatalDialog("CivApp", "Unable to Init the Great Library.");
-		return -1;
-	}
+	InitializeGreatLibrary();
 
 	g_theProgressWindow->StartCountingTo( 560 );
 
-	success = InitializeSoundPF();
-	if (!success) {
-		c3errors_FatalDialog("CivApp", "Unable to Init the audio project file.");
-		return -1;
-	}
+	InitializeSoundPF();
 
 	g_theProgressWindow->StartCountingTo( 570 );
 
@@ -1610,7 +1610,7 @@ sint32 CivApp::CleanupAppUI(void)
     delete g_c3ui;
     g_c3ui = NULL;
 
-#if !defined(__AUI_USE_SDL__)
+#if defined(_DEBUG) && !defined(__AUI_USE_SDL__)
 	sint32 const cleanBaseRefCount = aui_Base::GetBaseRefCount();
 	Assert(0 == cleanBaseRefCount);
 #endif
@@ -2018,15 +2018,15 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 540 );
 
-	if (m_dbLoaded && g_theProfileDB->IsScenario()) {
-		
+	if (m_dbLoaded && g_theProfileDB->IsScenario()) 
+    {
 		CleanupAppDB();
-
-		
 		InitializeAppDB((*(CivArchive *)(NULL)));
+        InitializeGreatLibrary();
+        InitializeImageMaps();
+        InitializeSoundPF();
 
-		
-		greatlibrary_Cleanup();
+        greatlibrary_Cleanup();
 		GreatLibrary::Initialize_Great_Library_Data();
 	}
 	
@@ -3384,14 +3384,9 @@ sint32 CivApp::RestartGameSameMap(void)
 
 sint32 CivApp::QuitToSPShell(void)
 {
-	if (m_gameLoaded) {
+	if (m_gameLoaded) 
+      {
 		CleanupGame(false);
-
-
-#ifdef _DEBUG_MEMORY
-
-
-#endif
 		StartMessageSystem();
 	}
 
@@ -3653,78 +3648,33 @@ void LoadScenarioGameAction::Execute(aui_Control *control, uint32 action, uint32
 
 
 
-int InitializeGreatLibrary()
+void InitializeGreatLibrary()
 {
     delete g_GreatLibPF;
     g_GreatLibPF = new ProjectFile();
-
-    MBCHAR path[_MAX_PATH];
-    int i=0;
-    while(g_civPaths->FindPath(C3DIR_GL, i++, path)) {
-        if (path[0]) {
-            g_GreatLibPF->addPath(path);
-            strcat(path, FILE_SEP);
-            strcat(path, "gl.zfs");
-            g_GreatLibPF->addPath(path);
-        }
-    }
-
-    return TRUE;
+    AddSearchDirectories(g_GreatLibPF, C3DIR_GL, "gl.zfs");
 }
 
-int InitializeSoundPF()
+void InitializeSoundPF()
 {
-    MBCHAR path[_MAX_PATH];
-    int i=0;
-
+    delete g_SoundPF;
     g_SoundPF = new ProjectFile();
-
-    while(g_civPaths->FindPath(C3DIR_SOUNDS, i++, path)) {
-        if (path[0]) {
-            g_SoundPF->addPath(path);
-            strcat(path, FILE_SEP);
-            strcat(path, "sound.zfs");
-            g_SoundPF->addPath(path);
-        }
-    }
-
-    return(TRUE);
+    AddSearchDirectories(g_SoundPF, C3DIR_SOUNDS, "sound.zfs");
 }
 
-
-int InitializeImageMaps()
+void InitializeImageMaps()
 {
-    char * patname;
-    char * picname;
-	if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) {
-        patname = "pat555.zfs";
-        picname = "pic555.zfs";
-    } else {
-        patname = "pat565.zfs";
-        picname = "pic565.zfs";
-    }
-
     delete g_ImageMapPF;
     g_ImageMapPF = new ProjectFile();
 
-    MBCHAR path[_MAX_PATH];
-    int i=0;
-    while(g_civPaths->FindPath(C3DIR_PATTERNS, i++, path)) {
-        if (path[0]) {
-            strcat(path, FILE_SEP);
-            strcat(path, patname);
-            g_ImageMapPF->addPath(path, TRUE);
-        }
+    if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) 
+    {
+        AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat555.zfs");
+        AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic555.zfs");
+    } 
+    else 
+    {
+        AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat565.zfs");
+        AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic565.zfs");
     }
-
-	i=0;
-    while(g_civPaths->FindPath(C3DIR_PICTURES, i++, path)) {
-        if (path[0]) {
-            strcat(path, FILE_SEP);
-            strcat(path, picname);
-            g_ImageMapPF->addPath(path, TRUE);
-        }
-    }
-
-    return TRUE;
 }

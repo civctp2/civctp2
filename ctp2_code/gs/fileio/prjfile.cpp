@@ -60,7 +60,6 @@ int PFEntry_compare(const void *a, const void *b)
 
 void *mapFile(char *path, long *size, HANDLE *mhandle, HANDLE *fhandle)
 {
-    void *ptr;
 
     *fhandle = CreateFile(path,
                           GENERIC_READ,
@@ -86,14 +85,14 @@ void *mapFile(char *path, long *size, HANDLE *mhandle, HANDLE *fhandle)
         return(NULL);
     }
 
-    ptr = MapViewOfFile(*mhandle, FILE_MAP_READ, 0, 0, 0);
-    if (ptr == NULL) {
+    void *  ptr = MapViewOfFile(*mhandle, FILE_MAP_READ, 0, 0, 0);
+    if (ptr == NULL) 
+    {
         CloseHandle(*mhandle);
         CloseHandle(*fhandle);
-        return(NULL);
     }
 
-    return(ptr);
+    return ptr;
 }
 
 void unmapFile(void *ptr, HANDLE mhandle, HANDLE fhandle)
@@ -189,13 +188,10 @@ void *ProjectFile::getData_DOS(PFEntry *entry, size_t & size, C3DIR dir)
 {
     char tempstr[256];
 
-	if (dir != C3DIR_DIRECT) {
-		if (!g_civPaths->FindFile(dir, entry->rname, tempstr)) {
-			sprintf(tempstr, "%s\\%s", m_paths[entry->path].dos_path, entry->rname);
-		}
-	} else {
-		sprintf(tempstr, "%s\\%s", m_paths[entry->path].dos_path, entry->rname);
-    }
+	if ((dir == C3DIR_DIRECT) || !g_civPaths->FindFile(dir, entry->rname, tempstr)) 
+    {
+		sprintf(tempstr, "%s%s%s", m_paths[entry->path].dos_path, FILE_SEP, entry->rname);
+	}
 
     FILE *fp = fopen(tempstr, "rb");
 
@@ -341,18 +337,17 @@ void ProjectFile::freeData(void *ptr)
 int ProjectFile::readDOSdir(long path, PFEntry *table)
 {
     char tmp[256];
+    sprintf(tmp, "%s%s*.*", m_paths[path].dos_path, FILE_SEP);
+
     WIN32_FIND_DATA dirent;
-    HANDLE dirhandle;
-    int count=0;
-
-    sprintf(tmp, "%s\\*.*", m_paths[path].dos_path);
-
-    dirhandle = FindFirstFile(tmp, &dirent);
-    if (dirhandle == INVALID_HANDLE_VALUE) {
+    HANDLE          dirhandle = FindFirstFile(tmp, &dirent);
+    if (dirhandle == INVALID_HANDLE_VALUE) 
+    {
         sprintf(m_error_string, "Couldn't find \"%s\"", tmp);
         return(0);
     }
         
+    int count = 0;
     do {
         if (dirent.cFileName[0] == '.')
             continue;
@@ -425,13 +420,13 @@ int ProjectFile::verify_ZFS_header(ZFS_FHEADER *header)
 void ProjectFile::read_ZFS_dtable(int pathnum, ZFS_DTABLE *dtable,
                                  PFEntry **tlp, long *rcount)
 {
-    int i;
-
-    
-    for (i=0; 
-         (i<MAX_ENTRIES_PER_TABLE) && (dtable->rentry[i].rname[0]); 
-         i++) {
-        
+    for 
+    (
+        int i = 0; 
+        (i<MAX_ENTRIES_PER_TABLE) && (dtable->rentry[i].rname[0]); 
+        i++
+    ) 
+    {
         if (!(dtable->rentry[i].flags & ZFSFLAG_DELETED)) {
             ZFS_RENTRY *rentry = dtable->rentry + i;
             if (!exists(rentry->rname)) {
@@ -448,28 +443,26 @@ void ProjectFile::read_ZFS_dtable(int pathnum, ZFS_DTABLE *dtable,
 
 int ProjectFile::addPath_ZFS(char *path)
 {
-    FILE *fp;
-    int count;
-    int pathnum = m_num_paths;
-    ZFS_FHEADER header;
-    ZFS_DTABLE dtable;
-
-    fp = fopen(path, "rb");
+    FILE * fp = fopen(path, "rb");
 	if (fp == NULL) {
 		sprintf(m_error_string, "Could not open file \"%s\"", path);
 		return(0);
 	}
     setvbuf(fp, NULL, _IONBF, 0);
 
-    m_paths[pathnum].type = PRJFILE_PATH_ZFS;
+    int pathnum = m_num_paths;
+
+    m_paths[pathnum].type   = PRJFILE_PATH_ZFS;
     strcpy(m_paths[pathnum].dos_path, path);
+    m_paths[pathnum].zfs_fp = fp;
+
     m_num_paths++;
 
-    m_paths[pathnum].zfs_fp = fp;
 
 	
  	fseek(fp, 0, SEEK_SET);
 
+    ZFS_FHEADER header;
 	if (fread(&header, sizeof(ZFS_FHEADER), 1, fp) < 1) {	
 		sprintf(m_error_string, "Could not read header of file \"%s\"", path);
 		return(0);
@@ -481,17 +474,17 @@ int ProjectFile::addPath_ZFS(char *path)
 		return(0);
 	}
     
-    count = header.num_rentries;
+    int count = header.num_rentries;
     PFEntry *tmpList = (PFEntry *)malloc(sizeof(PFEntry) * count);
     if (tmpList == NULL) {
         sprintf(m_error_string, "Couldn't add \"%s\", not enough memory", path);
         return(0);
     }
-    PFEntry *tlp = tmpList;
 
-    
-    long dhead = header.dtable_head;
-    long rcount = 0;
+    PFEntry *   tlp     = tmpList;
+    long        dhead   = header.dtable_head;
+    ZFS_DTABLE  dtable;
+    long        rcount  = 0;
     do {
         fseek(fp, dhead, SEEK_SET);
 
