@@ -121,7 +121,6 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	delete [] m_indexToAlpha;
 	delete [] m_alphaToIndex;
 
-
     for 
     (
         std::vector<T *>::iterator p = m_modifiedRecords.begin();
@@ -220,37 +219,33 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 	}
 }
 
-template <class T> T *CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
+/// Access a specific entry of the database
+/// \param  index       Database index
+/// \param  govIndex    Government index
+/// \remarks When \a govIndex is not found in the government specific overrides,
+///          the generic entry is returned.
+template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 {
-	sint32 const    numberGovernmentRecords = 
-		g_theGovernmentDB ? g_theGovernmentDB->NumRecords() : 0;
+    // Check validity of index
+    T * nonSpecific = Access(index);    
+    if (!nonSpecific) return NULL;
 
-	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	Assert(govIndex >= 0);
-	Assert(govIndex < numberGovernmentRecords);
-	
-	if((index < 0) || (index >= m_numRecords) || (govIndex < 0) || (govIndex >= numberGovernmentRecords))
-		return NULL;
-
-	T *     result  = m_records[index]; // generic value (default)
-
-	// Check for govermnent spefic overrides
-	PointerList<GovernmentModifiedRecordNode>::Walker   walk = 
-	    PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
-
-	for (bool found = false; walk.IsValid() && (!found); walk.Next()) 
+	// Check for any government specific overrides
+	for 
+    (
+	    PointerList<GovernmentModifiedRecordNode>::Walker   walk = 
+	        PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
+        walk.IsValid(); 
+        walk.Next()
+    ) 
 	{
-		sint32 const    thisIndex = walk.GetObj()->m_governmentModified;
-		
-		if (thisIndex == govIndex)
+		if (govIndex == walk.GetObj()->m_governmentModified)
 		{
-			result  = m_modifiedRecords[walk.GetObj()->m_modifiedRecord];
-			found   = true;
+			return m_modifiedRecords[walk.GetObj()->m_modifiedRecord];
 		}
 	}
 
-	return result;
+	return nonSpecific; 
 }
 
 
@@ -466,10 +461,8 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 
 template <class T> sint32 CTPDatabase<T>::Parse(const C3DIR & c3dir, const char *filename)
 {
-	DBLexer *       lex     = new DBLexer(c3dir, filename);
-	sint32 const    result  = Parse(lex);
-	delete lex;
-	return result;
+	DBLexer lex = DBLexer(c3dir, filename);
+	return Parse(&lex);
 }
 
 template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 &index)

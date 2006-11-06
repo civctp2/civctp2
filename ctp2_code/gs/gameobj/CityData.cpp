@@ -172,7 +172,7 @@
 #include "Agreement.h"
 #include "AgreementTypes.h"
 #include "AICause.h"
-#include <algorithm>                    // std::min
+#include <algorithm>                    // std::max, std::min
 #include "ArmyData.h"
 #include "ArmyPool.h"
 #include "Barbarians.h"
@@ -6893,7 +6893,8 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 			sint32 imp = cell->GetDBImprovement(g);
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
-			if (effect->GetBonusScience() > 0){
+			if (effect)
+            {
 				sci += effect->GetBonusScience();
 			}
 		}
@@ -6922,13 +6923,7 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 
 sint32 CityData::GetNumPop() const
 {
-	sint32 n = PopCount();
-
-	if (n < 1) {
-		return 1;
-	} else {
-		return n;
-	}
+    return std::max<sint32>(PopCount(), 1);
 }
 
 //how many trade routes come into this city

@@ -98,71 +98,72 @@
 // - Cleaned up (double Get-calls, unused stuff, casts).
 // - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
 // - Allow spending all unused freight
+// - Improved handling when no suitable item of a category is available
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"                 // Pre-compiled header
 #include "governor.h"           // Own declarations: consistency check
 
-#include "Diplomat.h"
-#include "player.h"
-#include "Path.h"
-#include "installationtree.h"
-#include "UnitRecord.h"
-#include "cellunitlist.h"
+#include "AdvanceRecord.h"
+#include "AgreementMatrix.h"
+#include <algorithm>
 #include "ArmyData.h"
-#include "citydata.h"
-#include "UnitData.h"
-#include "UnitPool.h"
-#include "Globals.h"
-#include "World.h"
-#include "BuildListSequenceRecord.h"
-#include "UnitBuildListRecord.h"
-#include "WonderBuildListRecord.h"
 #include "BuildingBuildListRecord.h"
 #include "BuildingRecord.h"
-#include "terrainutil.h"
-#include "CityInfluenceIterator.h"
-#include "Cell.h"
+#include "BuildListSequenceRecord.h"
 #include "c3math.h"
-#include "Events.h"
-#include "GameEventUser.h"
-#include "WonderRecord.h"
-#include "StrategyRecord.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "CityAstar.h"
+#include "citydata.h"
+#include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
-#include "PopRecord.h"
 #include "ConstDB.h"
+#include "ctpai.h"
+#include "ctpgoal.h"
+#include "Diplomat.h"
+#include "Events.h"
+#include "gaiacontroller.h"
+#include "GameEventUser.h"
+#include "Globals.h"
+#include "GoalRecord.h"
 #include "GovernmentRecord.h"
-#include "AdvanceRecord.h"
+#include "gstypes.h"                    // TERRAIN_TYPES
+#include "installationtree.h"
+#include "mapanalysis.h"
+#include "net_action.h"
+#include "network.h"
+#include "Path.h"
+#include "player.h"
+#include "PopRecord.h"
+#include "profileai.h"
 #include "ResourceRecord.h"
-#include "Unit.h"
-#include "tradeutil.h"
-#include "TradeRouteData.h"
+#include "Scheduler.h"
+#include "StrategyRecord.h"
 #include "StrDB.h"
 #include "Strengths.h"
 #include "stringutils.h"
-#include "GoalRecord.h"
-#include "gaiacontroller.h"
-#include "AgreementMatrix.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "TradeRouteData.h"
+#include "tradeutil.h"
+#include "Unit.h"
+#include "UnitBuildListRecord.h"
+#include "UnitRecord.h"
+#include "UnitData.h"
+#include "unitutil.h"
+#include "WonderBuildListRecord.h"
+#include "WonderRecord.h"
 #include "WonderTracker.h"
-#include "ctpai.h"
-#include "CityAstar.h"
-extern CityAstar g_city_astar;
-#include "gstypes.h"                    // TERRAIN_TYPES
-#include "profileai.h"
-#include <algorithm>
-#include "Scheduler.h"
-#include "ctpgoal.h"
-#include "mapanalysis.h"
-#include "network.h"
-#include "net_action.h"
-#include "TerrainRecord.h" // Use terrain database
-#include "unitutil.h" // Use unit utilities
+#include "World.h"
 
-extern MapPoint g_mp_size;
+extern CityAstar    g_city_astar;
+extern MapPoint     g_mp_size;
 
 namespace
 {
+    sint32 const            MAX_DISTANCE                = 0x7fffffff;
     Governor const          UniqueInvalidGovernor       = Governor(PLAYER_UNASSIGNED);
 }
 
@@ -1445,56 +1446,43 @@ void Governor::AddRoadPriority(Path & path, const double & priority_delta)
 
 void Governor::ComputeRoadPriorities()
 {
-	Assert(g_player[m_playerId]);
-	Player *player_ptr = g_player[m_playerId];
-	sint32 num_cities = player_ptr->m_all_cities->Num();
-
-	Unit city_unit;
-	Unit neighbor_unit;
-	sint32 neighbor_dist;
-	sint32 min_dist;
-	sint32 threat_rank;
+    Player *            player_ptr  = g_player[m_playerId];
+    Assert(player_ptr);
+    UnitDynamicArray *  cityList    = player_ptr->GetAllCitiesList();
+    sint32 const        num_cities  = cityList ? cityList->Num() : 0;
 
 	for (sint32 city_index = 0; city_index < num_cities; city_index++)
 	{
-		city_unit = player_ptr->m_all_cities->Get(city_index);
-
+		Unit    city_unit   = cityList->Get(city_index);
 
 		if (!city_unit.CD()->GetUseGovernor())
 			continue;
 
-		threat_rank = 
+		sint32  threat_rank = 
 			static_cast<sint32>(MapAnalysis::GetMapAnalysis().GetThreatRank(city_unit.CD()));
-		min_dist = g_mp_size.x * g_mp_size.y; 
-		Unit min_neighbor_unit;
+		Unit    min_neighbor_unit;
+		sint32  min_dist    = MAX_DISTANCE;
 
-			
 		for (sint32 neighbor_index = 0; neighbor_index < num_cities; neighbor_index++)
 		{
-			neighbor_unit = player_ptr->m_all_cities->Get(neighbor_index);
+                  if (neighbor_index == city_index)
+                      continue;
+                  
+			Unit         neighbor_unit = cityList->Get(neighbor_index);
+			sint32 const neighbor_dist = MapPoint::GetSquaredDistance(neighbor_unit.RetPos(), city_unit.RetPos());
 
-				
-			if (neighbor_unit.m_id == city_unit.m_id)
-				continue;
-				
-			neighbor_dist = MapPoint::GetSquaredDistance(neighbor_unit.RetPos(), city_unit.RetPos());
-			if (neighbor_dist < (min_dist * min_dist))  // TODO: check, doesn't look right: min_dist already stored as squared?
+			if (neighbor_dist < min_dist)
 			{
 				min_dist            = neighbor_dist;
 				min_neighbor_unit   = neighbor_unit;
 			}
 		} 
 
-			
 		if (min_neighbor_unit == Unit())
 			continue;
 
-			
-			
-			
-
-		float total_cost = 0.0;
-		Path found_path;
+		float   total_cost = 0.0;
+		Path    found_path;
 			
 		if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
 			m_playerId,
@@ -1502,9 +1490,6 @@ void Governor::ComputeRoadPriorities()
 			total_cost ))
 		{
 			Assert(0 < found_path.Num());
-
-				
-				
 			AddRoadPriority(found_path, threat_rank);
 		}
 	} 
@@ -1529,17 +1514,7 @@ void Governor::PlaceTileImprovements()
 
 	
 	sint32 reserve_pw=0;
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
-		strategy.GetPublicWorksReserve(reserve_pw);
+	strategy.GetPublicWorksReserve(reserve_pw);
 
 	
 	ComputeRoadPriorities();
@@ -1698,9 +1673,8 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
         )
         {
 			rec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(pos)->GetDBImprovement(i));
-			effect = terrainutil_GetTerrainEffect(rec, pos);
 
-			Assert(effect);
+			effect = terrainutil_GetTerrainEffect(rec, pos);
 			if (effect)
             {
 				shouldTerraform =  !effect->HasBonusFood()
@@ -1930,32 +1904,31 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 //----------------------------------------------------------------------------
 sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 {
-	Cell *cell = g_theWorld->GetCell(pos);
-	sint32 old_move_cost = static_cast<sint32>(cell->GetMoveCost());
-	
-	Unit city = cell->GetCity();
-	if (city.m_id != 0x0)
-		return -1;
+    Cell * cell = g_theWorld->GetCell(pos);
+    if (cell->HasCity())
+    {
+        return -1;
+    }
 
-	const TerrainImprovementRecord *terr_imp_rec = 
+    TerrainImprovementRecord const * terr_imp_rec = 
 		terrainutil_GetBestRoad(m_playerId, pos);
-	if (terr_imp_rec == NULL)
+    if (terr_imp_rec == NULL)
 		return -1;
 
-	
-	Player *player_ptr = g_player[m_playerId];
-	ERR_BUILD_INST err;
-	if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, 0, FALSE, err))
-		return -1;
+    Player *player_ptr = g_player[m_playerId];
+    ERR_BUILD_INST err;
+    if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, 0, FALSE, err))
+        return -1;
 
-	
-	const TerrainImprovementRecord::Effect *effect;
-	effect = terrainutil_GetTerrainEffect(terr_imp_rec, pos);
-	sint32 cost;
-	if(effect && effect->GetMoveCost(cost) && cost >= old_move_cost)
+    sint32 const old_move_cost = static_cast<sint32>(cell->GetMoveCost());
+    TerrainImprovementRecord::Effect const * effect = 
+        terrainutil_GetTerrainEffect(terr_imp_rec, pos);
+
+    sint32 cost;
+    if (effect && effect->GetMoveCost(cost) && cost >= old_move_cost)
 		return -1;
 	
-	return terr_imp_rec->GetIndex();
+    return terr_imp_rec->GetIndex();
 }
 
 
@@ -1982,20 +1955,18 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 //----------------------------------------------------------------------------
 void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const
 {
-	sint32 type;
-	sint32 tmp_bonus;
-	const TerrainImprovementRecord *rec;
-	const TerrainImprovementRecord::Effect *effect;
-
-	Cell *  cell    = g_theWorld->GetCell(pos);
-
-	
 	food_imp = -1;
 	prod_imp = -1;
 	gold_imp = -1;
 
+	Cell *  cell    = g_theWorld->GetCell(pos);
 	if (cell->HasCity()) // Do not find improvements for city tiles
 		return;
+
+	sint32 type;
+	sint32 tmp_bonus;
+	const TerrainImprovementRecord *rec;
+	const TerrainImprovementRecord::Effect *effect;
 
 	sint32 max_bonus_food = 0;
 	sint32 max_bonus_prod = 0;
@@ -2114,6 +2085,10 @@ void Governor::GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_i
 	prod_imp = -1;
 	gold_imp = -1;
 
+	Cell *  cell    = g_theWorld->GetCell(pos);
+	if (cell->HasCity()) // Do not terraform city tiles
+		return;
+
 	sint32 food_ter = -1;
 	sint32 prod_ter = -1;
 	sint32 gold_ter = -1;
@@ -2126,10 +2101,6 @@ void Governor::GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_i
 	double tmp_bonus_prod;
 	double tmp_bonus_gold;
 
-
-	Cell *  cell    = g_theWorld->GetCell(pos);
-	if (cell->HasCity()) // Do not terraform city tiles
-		return;
 
 	const TerrainRecord *fromRec = g_theTerrainDB->Get(cell->GetTerrain());
 	const TerrainRecord *toRec;
@@ -3352,12 +3323,10 @@ void Governor::ComputeDesiredUnits()
 		{
 			unit = army.Get(unit_index);
 
-			
-			if (!g_theUnitPool->IsValid(unit))
-				continue;
-
-			
-			m_currentUnitCount[unit.GetType()]++;
+			if (unit.IsValid())
+            {
+    			m_currentUnitCount[unit.GetType()]++;
+            }
 		}
 	} 
 	
@@ -3366,18 +3335,19 @@ void Governor::ComputeDesiredUnits()
 	{
 		unit = player_ptr->m_all_cities->Get(city_index);
 
-		
-		if (!g_theUnitPool->IsValid(unit))
-			continue;
-
-		Assert(unit->GetCityData());
-		Assert(unit->GetCityData()->GetBuildQueue());
-		if( unit->GetCityData()->GetBuildQueue()->GetHead() &&
-			(unit->GetCityData()->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT) )
-		{
-			
-			m_currentUnitCount[unit->GetCityData()->GetBuildQueue()->GetHead()->m_type]++;
-		}
+		if (unit.IsValid())
+        {
+            BuildQueue * buildQueue = 
+                unit->GetCityData() ? unit->GetCityData()->GetBuildQueue() : NULL;
+		    Assert(buildQueue);
+		    if (    buildQueue 
+                 && buildQueue->GetHead() 
+                 && (k_GAME_OBJ_TYPE_UNIT == buildQueue->GetHead()->m_category)
+               ) 
+		    {
+			    m_currentUnitCount[buildQueue->GetHead()->m_type]++;
+		    }
+        }
 	} 
 
 	m_maximumUnitShieldCost = 0;
@@ -3621,33 +3591,27 @@ void Governor::ComputeDesiredUnits()
 
 			unit = player_ptr->m_all_cities->Get(city_index);
 
-			
-			if (!g_theUnitPool->IsValid(unit))
+			if (!unit.IsValid())
 				continue;
 
 			unit->GetPos(pos);
 			units_ptr = g_theWorld->GetArmyPtr(pos);
 			for (sint32 unit_index = 0; unit_index < units_ptr->Num(); unit_index++)
-				{
-					
-					if (!g_theUnitPool->IsValid(units_ptr->Get(unit_index)))
-						continue;
+			{
+			    Unit    armyUnit    = units_ptr->Get(unit_index);
 
-					
-					if ( units_ptr->Get(unit_index)->GetType() == 
-						 m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_bestType )
+                if (armyUnit.IsValid())
+                {
+					if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_bestType)
 						desired_offense--;
 
-					
-					if ( units_ptr->Get(unit_index)->GetType() == 
-						 m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType )
+					if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType)
 						desired_defense--;
 
-					
-					if ( units_ptr->Get(unit_index)->GetType() == 
-						 m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_bestType )
+					if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_bestType)
 						desired_ranged--;
-				}
+                }
+			}
 
 			
 			Assert(unit->GetCityData());
@@ -3691,79 +3655,75 @@ void Governor::ComputeDesiredUnits()
 
 void Governor::FillEmptyBuildQueues()
 {
-	Assert(g_player[m_playerId]);
-	if (g_player[m_playerId] == NULL)
+    Player *    player  = g_player[m_playerId];
+	Assert(player);
+	if (player == NULL)
 		return;
 
-	
 	ComputeDesiredUnits();
-
 	
-	
-	if(g_network.IsActive() && !g_network.IsLocalPlayer(m_playerId))
+	if (g_network.IsActive() && !g_network.IsLocalPlayer(m_playerId))
 		return;
 
 	bool first_turn_of_war = Diplomat::GetDiplomat(m_playerId).FirstTurnOfWar();
 
+	UnitDynamicArray *  city_list = player->GetAllCitiesList();
 	
-	UnitDynamicArray *city_list = g_player[m_playerId]->GetAllCitiesList();
-	sint32 cat,type;
-
-	
-	sint32 list_num = BUILD_UNIT_LIST_MAX;
-
 	for (sint32 i = 0; i < city_list->Num(); i++)
 	{
-		
-		if (!g_theUnitPool->IsValid(city_list->Access(i)))
+		Unit        cityUnit    = city_list->Access(i);
+        if (!cityUnit.IsValid())
 			continue;
 
-		CityData *city = city_list->Access(i)->GetCityData();
+		CityData *  city        = cityUnit->GetCityData();
 
-		
 		if (city->GetBuildQueue()->GetLen() > 0)
 		{
-			
-			
-			if (!first_turn_of_war || (g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT))
-				continue;
-			else 
+			if (first_turn_of_war && (PLAYER_TYPE_ROBOT == g_player[m_playerId]->GetPlayerType()))
+            {
+                // Reconsider AI production at the start of a war
 				city->GetBuildQueue()->Clear();
+            }
+			else 
+            {
+                // Keep using the current build queue
+				continue;
+            }
 		}
 
-		
+		sint32  cat         = 0;
+        sint32  type        = CTPRecord::INDEX_INVALID;
+	    sint32  list_num    = BUILD_UNIT_LIST_MAX;
 		ComputeNextBuildItem(city, cat, type, list_num);
 
-		
-		if (!city->GetUseGovernor())
+        if (!city->GetUseGovernor() || (CTPRecord::INDEX_INVALID == type))
 			continue;
 
-		
-		BOOL insert_ok = false;
+		bool insert_ok = false;
 		switch (cat) 
-			{ 
-			case k_GAME_OBJ_TYPE_UNIT:
-				insert_ok = city->BuildUnit(type);
-				if (insert_ok && list_num < BUILD_UNIT_LIST_MAX)
-					m_buildUnitList[list_num].m_desiredCount--;
-				break;
-			case k_GAME_OBJ_TYPE_WONDER:
-				insert_ok = city->BuildWonder(type);
-				break;
-			case k_GAME_OBJ_TYPE_IMPROVEMENT:
-				insert_ok = city->BuildImprovement(type);
-				break; 
-			case k_GAME_OBJ_TYPE_CAPITALIZATION:
-				insert_ok = true;
-//				city->InsertCapitalization(); // How is Capitalization removed?
-				city->BuildCapitalization();
-				break;
-			case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-				insert_ok = true;
-//				city->InsertInfrastructure(); // How is Infrastructure removed?
-				city->BuildInfrastructure();
-				break;
-			}
+		{ 
+		case k_GAME_OBJ_TYPE_UNIT:
+			insert_ok = city->BuildUnit(type);
+			if (insert_ok && list_num < BUILD_UNIT_LIST_MAX)
+				m_buildUnitList[list_num].m_desiredCount--;
+			break;
+		case k_GAME_OBJ_TYPE_WONDER:
+			insert_ok = city->BuildWonder(type);
+			break;
+		case k_GAME_OBJ_TYPE_IMPROVEMENT:
+			insert_ok = city->BuildImprovement(type);
+			break; 
+		case k_GAME_OBJ_TYPE_CAPITALIZATION:
+			insert_ok = true;
+//			city->InsertCapitalization(); // How is Capitalization removed?
+			city->BuildCapitalization();
+			break;
+		case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
+			insert_ok = true;
+//			city->InsertInfrastructure(); // How is Infrastructure removed?
+			city->BuildInfrastructure();
+			break;
+		}
 		Assert(insert_ok);
 	}
 }
@@ -4472,6 +4432,8 @@ sint32 Governor::ComputeBestMilitaryReadiness() const
 	sint32 new_level = 0;
 	(void) strategy.GetReadinessLevel(new_level);
 
+#if 0
+// Probably intended to test whether the economy is able to support the military budget.
 	Assert(g_player[m_playerId]);
 	Player * player_ptr = g_player[m_playerId];
 
@@ -4488,7 +4450,9 @@ sint32 Governor::ComputeBestMilitaryReadiness() const
 	if(total_production
 	&& player_ptr->GetReadinessCost() > (max_support_cost * total_production)
 	){
+// Spending too much. However, like in real life, this fact is completely ignored.
 	}
+#endif
 
 	return new_level;
 }

@@ -54,10 +54,12 @@
 // - Removed .NET warnings. - April 23rd 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Display non-growth as "---"
+// - Repaired crashes when zooming out
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "tiledmap.h"               // tiledraw.h does not exist
 
 #include "aui.h"
 #include "aui_directsurface.h"
@@ -74,7 +76,6 @@
 #include "Unit.h"
 #include "TerrImprove.h"
 #include "TerrImproveData.h"
-#include "tiledmap.h"
 #include "TileInfo.h"
 #include "tileset.h"
 #include "BaseTile.h"
@@ -116,32 +117,82 @@ namespace
 {   
     // Do not display digits when the number of turns till next pop is too large
     int const  THRESHOLD_SLOW_GROWTH    = 100;      // limit to 2 digits
+    /// Text to display when no valid number can be calculated
     char const TEXT_NONE []             = "---";
 
     // Simple shorthand functions
     Pixel16 GetColor(COLOR const & a_ColorName, bool a_IsFogged = false)
     {
-        if (a_IsFogged)
-        {
-            return g_colorSet->GetDarkColor(a_ColorName);
-        }
-        else
-        {
-            return g_colorSet->GetColor(a_ColorName);
-        }
+        return (a_IsFogged) ? g_colorSet->GetDarkColor(a_ColorName)
+                            : g_colorSet->GetColor(a_ColorName);
     }
 
     COLORREF GetColorRef(COLOR const & a_ColorName, bool a_IsFogged = false)
     {
-        if (a_IsFogged)
-        {
-            return g_colorSet->GetDarkColorRef(a_ColorName);
-        }
-        else
-        {
-            return g_colorSet->GetColorRef(a_ColorName);
-        }
+        return (a_IsFogged) ? g_colorSet->GetDarkColorRef(a_ColorName)
+                            : g_colorSet->GetColorRef(a_ColorName);
     }
+
+    Pixel16 GetPlayerColor(sint32 a_Player, bool a_IsFogged = false)
+    {
+        return (a_IsFogged) ? g_colorSet->GetDarkPlayerColor(a_Player)
+                            : g_colorSet->GetPlayerColor(a_Player);
+    }
+
+    int     StartPixel(int a_Position)
+    {
+        return (a_Position < k_TILE_PIXEL_HEADROOM) 
+               ? 2 * ((k_TILE_PIXEL_HEADROOM - 1) - a_Position)
+               : 2 * (a_Position - k_TILE_PIXEL_HEADROOM);
+    }
+
+    /// Manager class to acquire and release a surface lock.
+    /// Using a RAII pattern to release the lock when leaving scope.
+    class SurfaceLock
+    {
+    public:
+        /// \param  a_Surface The surface to acquire a lock for.
+        /// \remarks When \a a_Surface is NULL, no lock will be acquired.
+        SurfaceLock(aui_Surface * a_Surface)
+        :   
+            m_Base      (NULL),
+            m_Surface   (a_Surface)
+        {
+	        if (a_Surface)
+            {
+	            AUI_ERRCODE result = a_Surface->Lock(NULL, &m_Base, 0);
+                Assert(AUI_ERRCODE_OK == result);
+                if (AUI_ERRCODE_OK != result)
+                {
+                    m_Base = NULL;
+                }
+            }
+        };
+
+        ~SurfaceLock()
+        {
+            if (m_Surface && m_Base)
+            {
+#if defined(_DEBUG)
+                AUI_ERRCODE result  = m_Surface->Unlock(m_Base);
+                Assert(AUI_ERRCODE_OK == result);
+#else
+	            (void) m_Surface->Unlock(m_Base);
+#endif
+            }
+        };
+
+        /// The acquired surface lock (NULL when invalid)
+        uint8 * Base() const    { return static_cast<uint8 *>(m_Base); };
+        /// A valid lock has been acquired
+        bool    IsValid() const { return NULL != m_Base; };
+
+    private:
+        /// The acquired surface lock (NULL when invalid)
+        LPVOID          m_Base;
+        /// The surface to lock
+        aui_Surface *   m_Surface;
+    };
 }
 
 #ifdef _DEBUG
@@ -214,34 +265,26 @@ void  TiledMap::RectMetricNewLoop()
 
 bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip)
 {
-	
-	
-	
-	uint32				env;
-	Cell				*cell = NULL;
-	BOOL				isAirfield,
-						isListeningPost,
-						isRadar,
-						isHealUnits,
-						isFort;
-	Pixel16				*data = NULL;
-	BOOL				hasHut;
+	bool        drewSomething           = false;
 
-
-	bool drewSomething = false;
-
-	if(!m_localVision->IsExplored(pos)) 
+	if (!m_localVision || !m_localVision->IsExplored(pos)) 
 		return drewSomething;
 
-	if(!ReadyToDraw()) 
+	if (!ReadyToDraw()) 
 		return drewSomething;
 
-	
-	bool	  fog                   = 
-          m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
-
-	bool    visiblePlayerOwnsThis = 
+	bool	    fog                     = !m_localVision->IsVisible(pos);
+	bool        visiblePlayerOwnsThis   = 
 	    (g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos)); 
+	uint32		env                     = 0x00000000;
+	Cell *      cell                    = NULL;
+	bool		isAirfield              = false;
+    bool		isListeningPost         = false;
+    bool        isRadar                 = false;
+    bool        isHealUnits             = false;
+    bool        isFort                  = false;
+	Pixel16	 *  data                    = NULL;
+	bool		hasHut                  = false;
 
 	std::vector<Pixel16 *>	drawOnTop;	// things above road level
 
@@ -259,7 +302,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		isHealUnits		= ucell.m_unseenCell->IsHealUnits();
 		isFort			= ucell.m_unseenCell->IsFort();
 		hasHut			= ucell.m_unseenCell->HasHut();
-
 	} 
 	else 
 	{
@@ -270,40 +312,31 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		{
 			env = cell->GetEnv();
 
-			sint32 i,numImprovements=cell->GetNumDBImprovements();
-			sint32 index,impType;
-	 		const TerrainImprovementRecord *rec;
-			const TerrainImprovementRecord::Effect *effect;
-		
+			sint32 numImprovements = cell->GetNumDBImprovements();
 			
-			for(i=0;i<numImprovements;i++)
+			for (sint32 i = 0; i < numImprovements; i++)
 			{
-				impType = cell->GetDBImprovement(i);
-				rec     = g_theTerrainImprovementDB->Get(impType);
+				sint32  impType = cell->GetDBImprovement(i);
+				TerrainImprovementRecord const * 
+                        rec     = g_theTerrainImprovementDB->Get(impType);
 			
-				
-				
 				if (rec==NULL)
 					continue;
 
-				if(rec->GetClassRoad() || rec->GetClassOceanRoad()) {
-					
+				if (rec->GetClassRoad() || rec->GetClassOceanRoad()) 
+                {
 					continue;
 				}
 
-				effect  = terrainutil_GetTerrainEffect(rec, pos);
-			
-				
-				
+                TerrainImprovementRecord::Effect const *
+                        effect  = terrainutil_GetTerrainEffect(rec, pos);
+
 				if (effect==NULL)
 					continue;
-
 				
-				index   = effect->GetTilesetIndex();
+				sint32  index   = effect->GetTilesetIndex();
 
-				
 				data    = m_tileSet->GetImprovementData((uint16)index);
-				
 				
 				if (rec->GetDisplayLevel() > 0)
 				{
@@ -313,7 +346,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				else
 				{
 					DrawAnImprovement(surface, data, x, y, fog);
-                              drewSomething = true;
+                    drewSomething = true;
 				}
 			}
 		}
@@ -360,9 +393,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 	if (hasHut) 
 	{
-		
-		
-		
 		// Modified by Martin Gühmann to allow modders to customize the graphics of ruins/huts.
 		sint32 const			terrain = 
 			(cell) ? cell->GetTerrain() : ucell.m_unseenCell->GetTerrainType();
@@ -404,13 +434,16 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		
 		PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
 
-		PointerList<UnseenImprovementInfo>::Walker *walker = 
-			new PointerList<UnseenImprovementInfo>::Walker(improvements);
-
-		while (walker->IsValid()) 
+		for
+        (
+            PointerList<UnseenImprovementInfo>::Walker walker = 
+                PointerList<UnseenImprovementInfo>::Walker(improvements);
+            walker.IsValid();
+            walker.Next()
+        ) 
 		{
-			sint32 type		= walker->GetObj()->m_type;
-			sint32 percent	= walker->GetObj()->m_percentComplete;
+			sint32 type		= walker.GetObj()->m_type;
+			sint32 percent	= walker.GetObj()->m_percentComplete;
 			uint16 index;
 
 
@@ -426,11 +459,10 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else{
 
 		 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
-				const TerrainImprovementRecord::Effect *effect = 0;
-				if(rec!=NULL)
-					effect = terrainutil_GetTerrainEffect(rec, pos);
+				const TerrainImprovementRecord::Effect *
+                    effect = (rec) ? terrainutil_GetTerrainEffect(rec, pos) : NULL;
 
-				if(rec!=NULL && effect!=NULL){
+				if (rec!=NULL && effect!=NULL){
 					if(!rec->GetClassRoad() && !rec->GetClassOceanRoad()){
 						data = m_tileSet->GetImprovementData(static_cast<uint16>(effect->GetTilesetIndex()));
 						DrawAnImprovement(surface,data,x,y,fog);
@@ -442,11 +474,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				}
 			}
 			drewSomething = true;
-
-			walker->Next();
 		}
-		
-		delete walker;
 	}
 
     // Put the special items on top
@@ -457,8 +485,8 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		++p
 	)
 	{
-            DrawAnImprovement(surface, *p, x, y, fog);
-            drewSomething = true;
+        DrawAnImprovement(surface, *p, x, y, fog);
+        drewSomething = true;
 	}
 
 	return drewSomething;
@@ -652,32 +680,27 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
+	if (x < 0) return;
+	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
+	if (y < 0) return;
+
 	sint32 width = GetZoomTilePixelWidth();
 	sint32 height = GetZoomTilePixelHeight();
 
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-
-	if (x < 0) return;
 	if (x >= surf->Width()-width) return;
-	if (y < 0) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
 
-	uint8		*pSurfBase;
-	sint32 errcode = surf->Lock(NULL, (LPVOID *)&pSurfBase, 0);
-	if ( errcode != AUI_ERRCODE_OK ) return;
+    SurfaceLock lock        = SurfaceLock(surf);
+	if (!lock.IsValid()) return;
 
-	
-	sint32 surfPitch = surf->Pitch();
-
-	
-	uint16 *pDestPixel;
+	uint8 *     pSurfBase   = lock.Base();
+	sint32      surfPitch   = surf->Pitch();
 
 	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
 	sint32 den = height;
 	sint32 tot = num;
-
 	sint32 row = 0;
 
     extern BOOL g_killMode;
@@ -695,7 +718,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 		}
 		tot += num;
 
-		pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
+		Pixel16 * pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
 		*pDestPixel++ = selectColorPixel;
 		*pDestPixel = selectColorPixel;
 
@@ -710,9 +733,6 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 
 	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
 	if (g_curSelectColor > COLOR_SELECT_2) g_curSelectColor = COLOR_SELECT_0;
-	
-	errcode = surf->Unlock((LPVOID)pSurfBase);
-	Assert(errcode == AUI_ERRCODE_OK);
 }
 
 void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color)
@@ -720,24 +740,22 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
+	if (x < 0) return;
+	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
+	if (y < 0) return;
+
 	sint32 width = GetZoomTilePixelWidth();
 	sint32 height = GetZoomTilePixelHeight();
 
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-
-	if (x < 0) return;
 	if (x >= surf->Width()-width) return;
-	if (y < 0) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
 
-	uint8		*surfBase = g_screenManager->GetSurfBase();
-	sint32	 surfPitch = g_screenManager->GetSurfPitch();
+	uint8 * surfBase    = g_screenManager->GetSurfBase();
+	sint32	surfPitch   = g_screenManager->GetSurfPitch();
 
 	
-	uint16 *pDestPixel;
-
 	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
 	sint32 den = height;
 	sint32 tot = num;
@@ -745,7 +763,7 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 	sint32 row = 0;
 	Pixel16		selectColorPixel = GetColor(color);
 
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i<k_TILE_GRID_HEIGHT;) 
+	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;) 
 	{
 #if 0
 		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
@@ -761,7 +779,7 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 		}
 		tot += num;
 
-		pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1));
+		Pixel16 * pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1));
 		*pDestPixel = selectColorPixel;
 		pDestPixel += (end-start);
 		*pDestPixel = selectColorPixel;
@@ -775,32 +793,26 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapView
 {
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, mapViewRect);
+	x += destRect->left;
+	if (x < 0) return;
+
+	y += destRect->top + (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
+	if (y < 0) return;
 
 	sint32 width = GetZoomTilePixelWidth();
 	sint32 height = GetZoomTilePixelHeight();
 
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-
-	x += destRect->left;
-	y += destRect->top;
-
-	if (x < 0) return;
-	if (x >= surf->Width()-width) return;
-	if (y < 0) return;
+    if (x >= surf->Width()-width) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
 
-	uint8		*pSurfBase;
-	sint32		errcode = surf->Lock(NULL, (LPVOID *)&pSurfBase, 0);
-	if ( errcode != AUI_ERRCODE_OK ) return;
+    SurfaceLock lock    = SurfaceLock(surf);
+    if (!lock.IsValid()) return;
 
+	uint8 * pSurfBase   = lock.Base();
+	sint32  surfPitch   = surf->Pitch();
 	
-	sint32 surfPitch = surf->Pitch();
-
-	
-	uint16 *pDestPixel;
-
 	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
 	sint32 den = height;
 	sint32 tot = num;
@@ -824,7 +836,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapView
 		}
 		tot += num;
 
-		pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
+		Pixel16 * pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
 		*pDestPixel = selectColorPixel;
 		pDestPixel += (end-start);
 		*pDestPixel = selectColorPixel;
@@ -832,11 +844,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapView
 		row++;
 	}
 	
-	errcode = surf->Unlock((LPVOID)pSurfBase);
-	Assert(errcode == AUI_ERRCODE_OK);
-
 	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
-	
 	if (g_curSelectColor > COLOR_SELECT_3) 
 		g_curSelectColor = COLOR_SELECT_0;
 }
@@ -847,23 +855,20 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
+	if (x < 0) return;
+	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
+	if (y < 0) return;
+
 	sint32 width = GetZoomTilePixelWidth();
 	sint32 height = GetZoomTilePixelHeight();
 
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-
-	if (x < 0) return;
 	if (x >= surf->Width()-width) return;
-	if (y < 0) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
 
 	uint8	* surfBase = g_screenManager->GetSurfBase();
 	sint32  surfPitch = g_screenManager->GetSurfPitch();
-
-	
-	uint16 *pDestPixel;
 
 	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
 	sint32 den = height;
@@ -907,7 +912,7 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 			continue;
 		}
 
-		pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1));
+		Pixel16 * pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1));
 		if(west) {
 			*pDestPixel = selectColorPixel;
 			*(pDestPixel + 1) = selectColorPixel;
@@ -929,14 +934,14 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
+	if (x < 0) return;
+	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
+	if (y < 0) return;
+
 	sint32 width = GetZoomTilePixelWidth();  // changing here got rid of the border
 	sint32 height = GetZoomTilePixelHeight();
 
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-
-	if (x < 0) return;
 	if (x >= surf->Width()-width) return;
-	if (y < 0) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
@@ -944,10 +949,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 	uint8	* surfBase = m_surfBase; 
 	sint32  surfPitch = m_surfPitch; 
 
-	
-	uint16 *pDestPixel;
-
-	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
+    sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
 	sint32 den = height;
 	sint32 tot = num;
 
@@ -994,7 +996,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 			continue;
 		}
 
-		pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1)); //EMOD change here
+		Pixel16 * pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1)); //EMOD change here
 		if(west) {
 			*pDestPixel = selectColorPixel;
 			*(pDestPixel + 1) = selectColorPixel;
@@ -1049,35 +1051,29 @@ sint32 TiledMap::QuickBlackBackGround(aui_Surface *surface)
 
 sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y) //EMOD this is for unexplored? could add bracket like icons that make it more like civ3
 {
+	if (x < 0) return 0;
+	y+=k_TILE_PIXEL_HEADROOM;
+	if (y < 0) return 0;
 
-	if (!surface) surface = m_surface;
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return 0;
+    }
+	if (x >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
+	if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 	uint8	*surfBase = m_surfBase;
 	sint32 surfPitch = m_surfPitch;
 
-	unsigned short	*destPixel;
+	for (sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) 
+    {
+		sint32  startX      = StartPixel(j);
+		sint32  endX        = k_TILE_PIXEL_WIDTH - startX;
+		unsigned short *    
+                destPixel   = (unsigned short *)(surfBase + ((y + j) * surfPitch) + ((x+startX) * 2));
 
-	y+=k_TILE_PIXEL_HEADROOM;
-
-	if (x < 0) return 0;
-	if (x >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-	if (y < 0) return 0;
-	if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
-
-	sint32 startX, endX;
-
-	
-	for(sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) {
-		if (j<=23) {
-			startX = (23-j)*2;
-		} else {
-			startX = (j-24)*2;
-		}
-		endX = k_TILE_PIXEL_WIDTH - startX;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + ((x+startX) * 2));
-
-		for (sint32 i=startX; i<endX; i++) {
+		for (sint32 i = startX; i < endX; i++) {
 			*destPixel++ = 0x0000;
 		}
 	}
@@ -1093,38 +1089,29 @@ sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y) //EMOD 
 
 sint32 TiledMap::DrawDitheredTile(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color)
 {
-	if (!surface) surface = m_surface;
+    if (x < 0) return 0;
+	y+=k_TILE_PIXEL_HEADROOM;
+    if (y < 0) return 0;
+
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return 0;
+    }
+    if (x >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
+    if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 	uint8	* surfBase = m_surfBase;
 	sint32 surfPitch = m_surfPitch;
 
-	unsigned short	*destPixel;
-
-	y+=k_TILE_PIXEL_HEADROOM;
-
-
-if (x < 0) return 0;
-if (x >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-if (y < 0) return 0;
-if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
-
-	sint32 startX, endX;
-	sint32 offset = 0;
-
-	
-	for(sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) {
-		if (j<=23) {
-			startX = (23-j)*2;
-		} else {
-			startX = (j-24)*2;
-		}
-		endX = k_TILE_PIXEL_WIDTH - startX;
-		if (j & 0x01)
-			offset = 1;
-		else
-			offset = 0;
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + ((x+startX) * 2));
-		destPixel+=offset;
+	for(sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) 
+    {
+		sint32  startX      = StartPixel(j);
+		sint32  endX        = k_TILE_PIXEL_WIDTH - startX;
+		sint32  offset      = j & 0x01; 
+		unsigned short * 
+    		destPixel       = (unsigned short *)(surfBase + ((y + j) * surfPitch) + ((x+startX) * 2));
+		destPixel += offset;
 		for (sint32 i=startX; i<endX; i+=2) {
 				*destPixel = color;
 				destPixel+=2;
@@ -1142,139 +1129,88 @@ if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 void TiledMap::DrawDitheredTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color)
 {
-	sint32		startX, endX;
-	uint8		*pSurfBase;
-	AUI_ERRCODE	errcode;
-
-	BOOL		wasUnlocked = FALSE;
-
-	sint32 surfWidth;
-	sint32 surfHeight;
-	sint32 surfPitch;
-
-	if (!surface) {
-		surface = m_surface;
-
-		pSurfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
-	} else {
-
-		errcode = surface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if (errcode != AUI_ERRCODE_OK) return;
-
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-
-		wasUnlocked = TRUE;
-	}
-
-
+    if (x < 0) return;
 	y+=(sint32)((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	
+    if (y < 0) return;
 
-if (x < 0) goto Exit;
-if (x >= surface->Width() - destWidth) goto Exit;
-if (y < 0) goto Exit;
-if (y >= surface->Height() - destHeight) goto Exit;
+	uint8 * pSurfBase;
+	sint32  surfWidth;
+	sint32  surfHeight;
+	sint32  surfPitch;
 
-	
-	uint16 *pDestPixel;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
+	if (!surface)
+    {
+		surface     = m_surface;
+		pSurfBase   = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+	} 
+    else if (lock.IsValid())
+    {
+        pSurfBase   = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	}
+    else
+    {
+        return;
+    }
 
-	vaccum = destHeight*2 - k_TILE_PIXEL_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
+    if (!surface ||
+        (x >= surface->Width() - destWidth) ||
+        (y >= surface->Height() - destHeight)
+       )
+    {
+        return;
+    }
 
-	vpos1 = 0;
-	vpos2 = (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
+	sint32  vaccum      = destHeight*2 - k_TILE_PIXEL_HEIGHT;
+	sint32  vincx       = destHeight*2;
+	sint32  vincxy      = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
+	sint32  vpos2       = (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
+	sint32  vdestpos    = y;
+	sint32  vend        = k_TILE_PIXEL_HEIGHT - 1;
 
-	vdestpos = y;
-	vend = k_TILE_PIXEL_HEIGHT - 1;
-
-	
-	while ( vpos1 < vend) {
-		sint32 offset = 0;
-		if (vpos1 & 0x01)
-			offset = 1;
-
-		if (vaccum < 0) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
+		if (vaccum < 0) 
+        {
 			vaccum += vincx;
+		} 
+        else 
+        {
+		    sint32  offset      = vpos1 & 0x01;
+	        sint32  startX      = StartPixel(vpos1);
+            sint32  endX        = k_TILE_PIXEL_WIDTH - startX;
+			sint32  haccum      = destWidth * 2 - k_TILE_PIXEL_WIDTH;
+			sint32  hincx       = destWidth * 2;
+			sint32  hincxy      = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
+			sint32  hdestpos    = x + (sint32)((double)startX * m_scale);
 
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-		} else {
-			
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-
-			haccum = destWidth * 2 - k_TILE_PIXEL_WIDTH;
-			hincx = destWidth * 2;
-			hincxy = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
-			
-			hpos = 0;
-			hend = k_TILE_PIXEL_WIDTH - 1;
-
-			
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-
-			hdestpos = x + (sint32)((double)startX * m_scale);
-
-			hpos = startX;
-			hend = endX;
-
-			while (hpos < hend) {
+			for (sint32 hpos = startX; hpos < endX; hpos +=2) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					pDestPixel = (Pixel16 *)(pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
+					Pixel16 * pDestPixel = (Pixel16 *)
+                        (pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 					pDestPixel += offset;
 					*pDestPixel = color;
 
 					hdestpos+=2;
 				}
-				hpos+=2;
 			}
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
-	}
 
-Exit:
-
-	if (wasUnlocked) {
-		
-		errcode = surface->Unlock((LPVOID)pSurfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
+        vpos2++;
 	}
 }
 
@@ -1286,15 +1222,18 @@ Exit:
 
 sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint32 xpos, sint32 ypos, Pixel16 color, sint32 blend)
 {
-	if (!surface) surface = m_surface;
+    if (xpos < 0) return 0;
+    ypos+=k_TILE_PIXEL_HEADROOM;
+    if (ypos < 0) return 0;
 
-ypos+=k_TILE_PIXEL_HEADROOM;
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return 0;
+    }
 
-
-if (xpos < 0) return 0;
-if (xpos >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-if (ypos < 0) return 0;
-if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
+    if (xpos >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
+    if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 	TileInfo * tileInfo = GetTileInfo(pos);
 	Assert(tileInfo);
@@ -1321,105 +1260,83 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 	Pixel16 * t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
 	Pixel16 * t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 	
-	BaseTile * transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
-	
-	Pixel16     *transData, *transDataPtr;
-	if(transitionBuffer) {
-		transData = transitionBuffer->GetTileData();
-		transDataPtr = transData;
-	} else {
-		transData = NULL;
-		transDataPtr = NULL;
-	}
-
-	Pixel16 * dataPtr = data;
-	uint8 *pSurfBase = m_surfBase;
-	sint32 surfPitch = m_surfPitch;
-
-
-
-
-
-
-
-
-
-
-
+	BaseTile *  transitionBuffer    = 
+        m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
+	Pixel16 *   transData           = 
+        (transitionBuffer) ? transitionBuffer->GetTileData() : NULL;
+    Pixel16 *   transDataPtr        = transData;
+	Pixel16 *   dataPtr             = data;
+	uint8 *     pSurfBase           = m_surfBase;
+	sint32      surfPitch           = m_surfPitch;
 
 	
 	Pixel16 srcPixel, transPixel = 0;
-	uint16 *pDestPixel;
-	sint32		x;
-	sint32		startX, endX;
 
 
-		for (sint32 y=0; y<k_TILE_PIXEL_HEIGHT; y++) {
-			if (y<=23) {
-				startX = (23-y)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (y-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
+	for (sint32 y = 0; y < k_TILE_PIXEL_HEIGHT; y++) 
+    {
+		sint32  startX  = StartPixel(y);
+		sint32  endX    = k_TILE_PIXEL_WIDTH - startX;
 
-			for (x = startX; x<endX; x++) {
-				srcPixel = *dataPtr++;
-				if(transDataPtr)
-					transPixel = *transDataPtr++;
+		for (sint32 x = startX; x < endX; x++) 
+        {
+			srcPixel = *dataPtr++;
+			if(transDataPtr)
+				transPixel = *transDataPtr++;
 
-				switch (srcPixel) {
-				case 0x0000 : 
-					{
-						if (t0) {
-							srcPixel = *t0++;
-						} else if(transDataPtr) {
-							srcPixel = transPixel;
-						} else {
-							srcPixel = 0xF800;
-						}
+			switch (srcPixel) {
+			case 0x0000 : 
+				{
+					if (t0) {
+						srcPixel = *t0++;
+					} else if(transDataPtr) {
+						srcPixel = transPixel;
+					} else {
+						srcPixel = 0xF800;
 					}
-					break;
-				case 0x0001 : 
-					{
-						if (t1) {
-							srcPixel = *t1++;
-						} else if(transDataPtr) {
-							srcPixel = transPixel;
-						} else {
-							srcPixel = 0x07E0;
-						}
-					}
-					break;
-				case 0x0002 : 
-					{
-						if (t2) {
-							srcPixel = *t2++;
-						} else if(transDataPtr) {
-							srcPixel = transPixel;
-						} else {
-							srcPixel = 0x001F; 
-						}
-					}
-					break;
-				case 0x0003 : 
-					{
-						if (t3) {
-							srcPixel = *t3++;
-						} else if(transDataPtr) {
-							srcPixel = transPixel;
-						} else {
-							srcPixel = 0xF81F;
-						}
-					}
-					break;
 				}
-				pDestPixel = (Pixel16 *)(pSurfBase + ((y+ypos) * surfPitch) + ((x+xpos) << 1));
-
-
-				*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
+				break;
+			case 0x0001 : 
+				{
+					if (t1) {
+						srcPixel = *t1++;
+					} else if(transDataPtr) {
+						srcPixel = transPixel;
+					} else {
+						srcPixel = 0x07E0;
+					}
+				}
+				break;
+			case 0x0002 : 
+				{
+					if (t2) {
+						srcPixel = *t2++;
+					} else if(transDataPtr) {
+						srcPixel = transPixel;
+					} else {
+						srcPixel = 0x001F; 
+					}
+				}
+				break;
+			case 0x0003 : 
+				{
+					if (t3) {
+						srcPixel = *t3++;
+					} else if(transDataPtr) {
+						srcPixel = transPixel;
+					} else {
+						srcPixel = 0xF81F;
+					}
+				}
+				break;
 			}
+			Pixel16 * pDestPixel = (Pixel16 *)
+                (pSurfBase + ((y+ypos) * surfPitch) + ((x+xpos) << 1));
+
+
+			*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
 		}
+	}
 
 	return 0;
 }
@@ -1432,145 +1349,97 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color,sint32 blend)
 {
-	uint16		len;
-	Pixel16		*dataPtr;
-	sint32		startX, endX;
-	uint32		accumTable[k_TILE_PIXEL_HEIGHT][3];
-	TileInfo	*tileInfo;
-	BaseTile	*baseTile, *transitionBuffer;
-	uint16		index;
-	uint8		*pSurfBase;
-	BOOL		wasUnlocked = FALSE;
-	AUI_ERRCODE	errcode;
-	Pixel16 *transData, *transDataPtr;
-
-	sint32 surfWidth;
-	sint32 surfHeight;
-	sint32 surfPitch;
-
-	if (!surface) {
-		surface = m_surface;
-
-		pSurfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
-	} else {
-
-		errcode = surface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if (errcode != AUI_ERRCODE_OK) return;
-
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-
-		wasUnlocked = TRUE;
-	}
-
+	if (x < 0) return;
 	y+=(sint32)((double)k_TILE_PIXEL_HEADROOM * m_scale);
+    if (y < 0) return;
 
-	if ((x < 0) || 
-		(x >= surface->Width() - destWidth) || 
-		(y < 0) || 
-		(y >= surface->Height() - destHeight)) {
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)pSurfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	uint8 * pSurfBase;
+	sint32  surfWidth;
+	sint32  surfHeight;
+	sint32  surfPitch;
+
+    SurfaceLock lock    = SurfaceLock(surface);
+
+	if (!surface)
+    {
+		surface     = m_surface;
+		pSurfBase   = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+	} 
+    else if (lock.IsValid())
+    {
+        pSurfBase   = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	}
+    else
+    {
+        return;
+    }
+
+	if (!surface ||
+        (x >= surface->Width() - destWidth) || 
+		(y >= surface->Height() - destHeight)
+       ) 
+    {
 		return;
 	}
 
-	
-	tileInfo = GetTileInfo(pos);
+	TileInfo *  tileInfo    = GetTileInfo(pos);
 	Assert(tileInfo != NULL);
-	if (tileInfo == NULL) {
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)pSurfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	if (tileInfo == NULL) 
+    {
 		return;
 	}
 
-	
-	index = tileInfo->GetTileNum();
-
-	
-	baseTile = m_tileSet->GetBaseTile(index);
-	if (baseTile == NULL) {
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)pSurfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	uint16      index       = tileInfo->GetTileNum();
+    BaseTile *	baseTile    = m_tileSet->GetBaseTile(index);
+	if (baseTile == NULL)
+    {
 		return;
 	}
 
-	
-	Pixel16 *data = baseTile->GetTileData();
+	Pixel16 *   data = baseTile->GetTileData();
 
-	Pixel16	*t0, *t1, *t2, *t3;
-
-	sint32 tilesetIndex = g_theTerrainDB->Get(tileInfo->GetTerrainType())->GetTilesetIndex();
-
+	sint32      tilesetIndex = 
+        g_theTerrainDB->Get(tileInfo->GetTerrainType())->GetTilesetIndex();
 	
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 
-	t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
-	t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
-	t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
-	t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
+	Pixel16 *   t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
+	Pixel16 *   t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
+	Pixel16 *   t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
+	Pixel16 *   t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 
-	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
-	if(transitionBuffer) {
-		transData = transitionBuffer->GetTileData();
-		transDataPtr = transData;
-	} else {
-		transData = NULL;
-		transDataPtr = NULL;
-	}
-
-	dataPtr = data;
-
+	BaseTile *  transitionBuffer    = 
+        m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
+	Pixel16 *   transData           = 
+        (transitionBuffer) ? transitionBuffer->GetTileData() : NULL;
+    Pixel16 *   transDataPtr        = transData;
+	Pixel16	*   dataPtr             = data;
 	
 	Pixel16 srcPixel, transPixel = 0;
-	uint16 *pDestPixel;
 
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
+	sint32  vaccum      = destHeight*2 - k_TILE_PIXEL_HEIGHT;
+	sint32  vincx       = destHeight*2;
+	sint32  vincxy      = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
+	sint32  vpos2       = (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
+	sint32  vdestpos    = y;
+	sint32  vend        = k_TILE_PIXEL_HEIGHT - 1;
 
-	sint32 vstart;
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
+		sint32  startX  = StartPixel(vpos1);
+        sint32  endX    = k_TILE_PIXEL_WIDTH - startX;
 
-	vaccum = destHeight*2 - k_TILE_PIXEL_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = k_TILE_PIXEL_HEIGHT - 1;
-
-	
-	while ( vpos1 < vend) {
-		if (vaccum < 0) {
+		if (vaccum < 0) 
+        {
 			vaccum += vincx;
 
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-
-			for (sint32 i=startX; i<endX; i++) {
+            for (sint32 i=startX; i<endX; i++) {
 				srcPixel = *dataPtr++;
 				if(transDataPtr)
 					transPixel = *transDataPtr++;
@@ -1594,39 +1463,16 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 					break;
 				}
 			}
-		} else {
-			
+		} 
+        else 
+        {
+			sint32  haccum      = destWidth * 2 - k_TILE_PIXEL_WIDTH;
+			sint32  hincx       = destWidth * 2;
+			sint32  hincxy      = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
+			sint32  hdestpos    = x + (sint32)((double)startX * m_scale);
 
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-
-			haccum = destWidth * 2 - k_TILE_PIXEL_WIDTH;
-			hincx = destWidth * 2;
-			hincxy = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
-			
-			hpos = 0;
-			hend = k_TILE_PIXEL_WIDTH - 1;
-
-			
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-
-			hdestpos = x + (sint32)((double)startX * m_scale);
-
-			hpos = startX;
-			hend = endX;
-
-			while (hpos < hend) {
+			for (sint32 hpos = startX; hpos < endX; ++hpos) 
+            {
 				srcPixel = *dataPtr++;
 				if(transDataPtr)
 					transPixel = *transDataPtr++;
@@ -1658,103 +1504,71 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 				} else {
 					haccum += hincxy;
 
-					pDestPixel = (Pixel16 *)(pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
+					Pixel16 * pDestPixel = (Pixel16 *)
+                        (pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 
 					*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
 		vpos2++;
 	}
-
-	if (wasUnlocked) {
-		
-		errcode = surface->Unlock((LPVOID)pSurfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-	}
-
-	len;
-	vstart;
-	accumTable;
 }
 
 sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 										Pixel16 color, sint32 blend, sint32 flags)
 {
-	uint8			*surfBase;
-	BOOL			wasUnlocked = FALSE;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
-	if (data == NULL) return 0;
+	uint8 * surfBase;
+	sint32  surfWidth;
+	sint32  surfHeight;
+	sint32  surfPitch;
 
+    SurfaceLock lock    = SurfaceLock(surface);
 
-
-	sint32 surfWidth;
-	sint32 surfHeight;
-	sint32 surfPitch;
-
-	sint32 errcode;
-
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACELOCKFAILED;
-
-		
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-
-		wasUnlocked = TRUE;
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface)
+    {
+		surface     = m_surface;
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+	} 
+    else if (lock.IsValid())
+    {
+        surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
 	}
+    else
+    {
+        return AUI_ERRCODE_SURFACELOCKFAILED;
+    }
 
-
-if (x < 0) return 0;
-if (y < 0) return 0;
-if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
-if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	unsigned short	*destPixel;
+    if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
+    if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
 	uint16		start = (uint16)*data++;
 	uint16		end = (uint16)*data++;
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	
-	for(sint32 j=start; j<end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
+	for (sint32 j=start; j<end; j++) 
+    {
 		if ((sint16)table[j-start] == -1) continue;
 
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+	    unsigned short *    destPixel = (unsigned short *)
+            (surfBase + ((y + j) * surfPitch) + (x * 2));
 
-		rowData = dataStart + table[j-start];
+		Pixel16 *   rowData = dataStart + table[j-start];
+		Pixel16		tag;
 		
 		do {
 			tag = *rowData++;
@@ -1795,13 +1609,6 @@ if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 		} while ((tag & 0xF000) == 0);
 	}
 
-	if (wasUnlocked) {
-		
-		errcode = surface->Unlock((LPVOID *)surfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-	}
-
 	return 0;
 }
 
@@ -1809,127 +1616,95 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 										sint32 destWidth, sint32 destHeight, Pixel16 color, sint32 blend,
 										sint32 flags)
 {
-	uint8		*surfBase;
-	BOOL		wasUnlocked = FALSE;
-	AUI_ERRCODE	errcode;
+	if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
+	uint8 *     surfBase;
+	sint32      surfWidth;
+	sint32      surfHeight;
+	sint32      surfPitch;
 
-	sint32 surfWidth;
-	sint32 surfHeight;
-	sint32 surfPitch;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-	if (!surface) {
-		surface = m_surface;
-
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
-	} else {
-
-		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if (errcode != AUI_ERRCODE_OK) return;
-
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-
-		wasUnlocked = TRUE;
+	if (!surface)
+    {
+		surface     = m_surface;
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+	} 
+    else if (lock.IsValid())
+    {
+        surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
 	}
+    else
+    {
+        return;
+    }
 
-	if ((x < 0) ||
-		(y < 0) ||
-		(x >= surface->Width() - destWidth) ||
-		(y >= surface->Height() - destHeight)) {
-
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)surfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	if (!surface ||
+        (x >= surface->Width() - destWidth) ||
+		(y >= surface->Height() - destHeight)
+       ) 
+    {
 		return;
 	}
 
-	
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
 
 	surfBase += (surfPitch * y + x * 2);
 
+	uint16		vstart      = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - vstart + 1);
+	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32      vincx       = destHeight*2;
+	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+    sint32      vdestpos    = y;
+	sint32      vend        = (end+1) - 1;
 	
-	Pixel16			*destPixel;
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
-
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
-		} else {
-			
-			Pixel16		*rowData1, *rowData2;
-			Pixel16		pixel1, pixel2, pixel3, pixel4;
-			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
+		} 
+        else 
+        {
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData1    = 
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+			Pixel16 *   rowData2    =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
 
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
-
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32      haccum      = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32      hincx       = destWidth*2;
+			sint32      hincxy      = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32      hdestpos    = x;
+			sint32      hend        = k_TILE_GRID_WIDTH-1;
 			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
-			
+			Pixel16		pixel1, pixel2, pixel3, pixel4;
+			Pixel16		pixel;
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, flags);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
+					Pixel16	*   destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 		
 					
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, flags);
@@ -1950,58 +1725,42 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
-	}
 
-	if (wasUnlocked) {
-		
-		errcode = surface->Unlock(surfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
+        vpos2++;
 	}
 }
 
 sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pixel16 color, sint32 blend)
 {
+	if (!data || (x < 0) || (y < 0)) return 0;
 
-	if (data == NULL) return 0;
+	sint32      surfWidth   = g_screenManager->GetSurfWidth();
+	sint32      surfHeight  = g_screenManager->GetSurfHeight();
 
-	
-	sint32  surfWidth   = g_screenManager->GetSurfWidth();
-	sint32  surfHeight  = g_screenManager->GetSurfHeight();
-	sint32  surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 * surfBase    = g_screenManager->GetSurfBase();
-
-	
-	if (x < 0) return 0;
-	if (y < 0) return 0;
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	
-	unsigned short	*destPixel;
+	sint32      surfPitch   = g_screenManager->GetSurfPitch();
+	uint8 *     surfBase    = g_screenManager->GetSurfBase();
+	uint16		start       = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - start + 1);
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
-
-	
-	for(sint32 j=start; j<end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
+	for (sint32 j = start; j < end; j++) 
+    {
 		if ((sint16)table[j-start] == -1) continue;
 
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+    	unsigned short *    destPixel   = (unsigned short *)
+            (surfBase + ((y + j) * surfPitch) + (x * 2));
 
-		rowData = dataStart + table[j-start];
+		Pixel16 *   rowData = dataStart + table[j-start];
+		Pixel16		tag;
 		
 		do {
 			tag = *rowData++;
@@ -2038,102 +1797,64 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 
 void TiledMap::DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight, Pixel16 color, sint32 blend)
 {
-	uint8		*surfBase;
+	if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
+	sint32      surfWidth   = g_screenManager->GetSurfWidth();
+	sint32      surfHeight  = g_screenManager->GetSurfHeight();
 
-	
-	Pixel16		emptyRow[2];
-	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
-
-	
-	sint32 surfWidth = g_screenManager->GetSurfWidth();
-	sint32 surfHeight = g_screenManager->GetSurfHeight();
-	sint32 surfPitch = g_screenManager->GetSurfPitch();
-	surfBase = g_screenManager->GetSurfBase();
-
-	
-	if (x < 0) return;
-	if (y < 0) return;
 	if (x >= surfWidth - destWidth) return;
 	if (y >= surfHeight - destHeight) return;
 
-	surfBase += (surfPitch * y + x * 2);
+	sint32      surfPitch   = g_screenManager->GetSurfPitch();
+	uint8 *     surfBase    = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
+	uint16		vstart      = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - vstart + 1);
+	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32      vincx       = destHeight*2;
+	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32      vdestpos    = y;
+	sint32      vend        = (end+1) - 1;
 
-	
-	Pixel16			*destPixel;
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
+	Pixel16		emptyRow[2];
+	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
 
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
-			Pixel16		*rowData1, *rowData2;
-			Pixel16		pixel1, pixel2, pixel3, pixel4;
-			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
+			Pixel16 *   rowData1    =
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData2    =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
+			sint32      haccum      = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32      hincx       = destWidth*2;
+			sint32      hincxy      = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32      hdestpos    = x;
+			sint32      hend        = k_TILE_GRID_WIDTH-1;
 
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
-
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
-			
+			Pixel16		pixel1, pixel2, pixel3, pixel4;
+			Pixel16		pixel;
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
-		
-					
+					Pixel16 * destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
+							
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, 0);
 
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
@@ -2152,52 +1873,43 @@ void TiledMap::DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
+
+        vpos2++;
 	}
 }
 sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, BOOL fogged)
 {
-	if (data == NULL) return 0;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
-	sint32  surfWidth   = g_screenManager->GetSurfWidth();
-	sint32  surfHeight  = g_screenManager->GetSurfHeight();
-	sint32  surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 * surfBase    = g_screenManager->GetSurfBase();
+	sint32      surfWidth   = g_screenManager->GetSurfWidth();
+	sint32      surfHeight  = g_screenManager->GetSurfHeight();
 
-	
-	if (x < 0) return 0;
-	if (y < 0) return 0;
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
+	sint32      surfPitch   = g_screenManager->GetSurfPitch();
+	uint8 *     surfBase    = g_screenManager->GetSurfBase();
+	uint16		start       = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - start + 1);
 	
-	unsigned short	*destPixel;
-
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
-	sint32		hpos;
-
-	
-	for(sint32 j=start; j<end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
+	for (sint32 j = start; j < end; j++) 
+    {
 		if ((sint16)table[j-start] == -1) continue;
 
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+		unsigned short *    destPixel = 
+            (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
 
-		rowData = dataStart + table[j-start];
-	
-		hpos = 0;
+		Pixel16 *   rowData = dataStart + table[j-start];
+		sint32      hpos    = 0;
+		Pixel16		tag;
+
 		do {
 			tag = *rowData++;
 
@@ -2246,94 +1958,59 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 												sint32 destWidth, sint32 destHeight, 
 												BOOL fogged)
 {
-	uint8		*surfBase;
+	if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
-
+    sint32      surfWidth   = g_screenManager->GetSurfWidth();
+	sint32      surfHeight  = g_screenManager->GetSurfHeight();
 	
-	Pixel16		emptyRow[2];
-	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
-
-	
-	sint32 surfWidth = g_screenManager->GetSurfWidth();
-	sint32 surfHeight = g_screenManager->GetSurfHeight();
-	sint32 surfPitch = g_screenManager->GetSurfPitch();
-	surfBase = g_screenManager->GetSurfBase();
-
-	
-	if (x < 0) return;
-	if (y < 0) return;
 	if (x >= surfWidth - destWidth) return;
 	if (y >= surfHeight - destHeight) return;
 
-	surfBase += (surfPitch * y + x * 2);
-
+	sint32      surfPitch   = g_screenManager->GetSurfPitch();
+	uint8 *     surfBase    = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
+	uint16		vstart      = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - vstart + 1);
+	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32      vincx       = destHeight*2;
+	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32      vdestpos    = y;
+	sint32      vend        = (end+1) - 1;
 	
-	Pixel16			*destPixel;
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
+	Pixel16		emptyRow[2];
+	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
+	Pixel16	*   destPixel;
 
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
 			
-			Pixel16		*rowData1, *rowData2;
-			Pixel16		pixel1, pixel2, pixel3, pixel4;
-			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
+			Pixel16 *   rowData1    =
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData2    =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
+			sint32      haccum      = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32      hincx       = destWidth*2;
+			sint32      hincxy      = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32      hdestpos    = x;
+			sint32      hend        = k_TILE_GRID_WIDTH-1;
 
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
+			Pixel16		pixel1, pixel2, pixel3, pixel4;
+			Pixel16		pixel;
 
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
-			
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
@@ -2363,62 +2040,44 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
+
+        vpos2++;
 	}
 }
 sint32 TiledMap::DrawDitheredOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color)
 {
-	uint8			*surfBase;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
-	if (data == NULL) return 0;
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return 0;
+    }
 
-	if (!surface) surface = m_surface;
+    if (x >= surface->Width() - k_TILE_GRID_WIDTH) return 0;
+    if (y >= surface->Height() - k_TILE_GRID_HEIGHT) return 0;
 
+	uint8 *     surfBase    = m_surfBase;
+	sint32      surfPitch   = m_surfPitch;
+	uint16		start       = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - start + 1);
 
-if (x < 0) return 0;
-if (y < 0) return 0;
-if (x >= surface->Width() - k_TILE_GRID_WIDTH) return 0;
-if (y >= surface->Height() - k_TILE_GRID_HEIGHT) return 0;
-
-	surfBase = m_surfBase;
-	sint32 surfPitch = m_surfPitch;
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	unsigned short	*destPixel;
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
-
-	
-	for(sint32 j=start; j<end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
+	for (sint32 j = start; j < end; j++) 
+    {
 		if ((sint16)table[j-start] == -1) continue;
 
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
-		rowData = dataStart + table[j-start];
+		unsigned short * destPixel  = 
+            (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+		Pixel16 *       rowData     = dataStart + table[j-start];
 		
+		Pixel16		tag;
 		do {
 			tag = *rowData++;
 
@@ -2455,122 +2114,76 @@ if (y >= surface->Height() - k_TILE_GRID_HEIGHT) return 0;
 		} while ((tag & 0xF000) == 0);
 	}
 
-
-
-
-
-
-
 	return 0;
 }
 
 void TiledMap::DrawDitheredOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight, Pixel16 color)
 {
-	uint8		*surfBase;
+	if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return;
+    }
 
-	if (!surface) surface = m_surface;
-
-
-if (x < 0) return;
-if (y < 0) return;
-if (x >= surface->Width() - destWidth) return;
-if (y >= surface->Height() - destHeight) return;
-
+    if (x >= surface->Width() - destWidth) return;
+    if (y >= surface->Height() - destHeight) return;
 	
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
 
-	surfBase = m_surfBase;
-	sint32 surfPitch = m_surfPitch;
-
-	surfBase += (y * surfPitch + x * 2);
-
-
+	sint32      surfPitch   = m_surfPitch;
+	uint8 *     surfBase    = m_surfBase + (y * surfPitch + x * 2);
+	uint16		vstart      = (uint16)*data++;
+	uint16	    end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - vstart + 1);
 	
-	Pixel16			*destPixel;
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
+	sint32  vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32  vincx       = destHeight*2;
+	sint32  vincxy      = (destHeight - k_TILE_GRID_HEIGHT) * 2 ;
+	sint32  vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+    sint32  vdestpos    = y;
+	sint32  vend        = (end+1) - 1;
 
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-
-
-
-
-
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight - k_TILE_GRID_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
-			Pixel16		*rowData1, *rowData2;
-			Pixel16		pixel1, pixel2, pixel3, pixel4;
-			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
-
 			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData1    = 
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData2    =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
 
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
+			sint32  haccum      = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32  hincx       = destWidth*2;
+			sint32  hincxy      = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32  hdestpos    = x;
+			sint32  hend        = k_TILE_GRID_WIDTH-1;
 
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
+			Pixel16		pixel1, pixel2, pixel3, pixel4;
+			Pixel16		pixel;
 
-			
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
-			sint32 offset;
-			if (vpos1 & 0x01)
-				offset = 1;
-			else
-				offset = 0;
+			sint32  offset      = vpos1 & 0x01;
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
+					Pixel16 * destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 					destPixel += offset;
 					
 					
@@ -2593,21 +2206,13 @@ if (y >= surface->Height() - destHeight) return;
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
 		vpos2++;
 	}
-
-
-
-
-
-
 }
 
 
@@ -2618,52 +2223,27 @@ if (y >= surface->Height() - destHeight) return;
 
 sint32 TiledMap::DrawTileBorder(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color)
 {
-	uint8			*surfBase;
-
-	if (!surface) surface = m_surface;
-
-	surfBase = m_surfBase;
-	sint32 surfPitch = m_surfPitch;
-
-	
-	unsigned short	*destPixel;
-
+    if (x < 0) return 0;
 	y+=k_TILE_PIXEL_HEADROOM;
+    if (y < 0) return 0;
 
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return 0;
+    }
+    if (x > surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
+    if (y > surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
-if (x < 0) return 0;
-if (x > surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-if (y < 0) return 0;
-if (y > surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
-
-	sint32 startX, endX;
-
-	
-	for(sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) {
-		if (j<=23) {
-			startX = (23-j)*2;////not for border pixels
-		} else {
-			startX = (j-24)*2; //not for border pixels
-		}
-		endX = k_TILE_PIXEL_WIDTH - startX;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + ((x+startX) * 2));
+	for (sint32 j = 0; j < k_TILE_PIXEL_HEIGHT; j++) 
+    {
+		sint32              startX      = StartPixel(j);
+	    unsigned short *    destPixel   = 
+            (unsigned short *)(m_surfBase + ((y + j) * m_surfPitch) + ((x+startX) * 2));
 
 		*destPixel++ = color;
 		*destPixel = color;
-
-
-
-
-
-
 	}
-
-
-
-
-
-
 
 	return 0;
 }
@@ -2676,74 +2256,48 @@ if (y > surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 void TiledMap::DrawTileBorderScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color)
 {
-	sint32		startX, endX;
-
-	if (!surface) surface = m_surface;
-
+    if (x < 0) return;
 	y+=(sint32)((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	
+    if (y < 0) return;
 
-if (x < 0) return;
-if (x >= surface->Width() - destWidth) return;
-if (y < 0) return;
-if (y >= surface->Height() - destHeight) return;
+	if (!surface)
+    {
+        surface = m_surface;
+        if (!surface) return;
+    }
+
+    if (x >= surface->Width() - destWidth) return;
+    if (y >= surface->Height() - destHeight) return;
 
 	uint8 * pSurfBase   = m_surfBase;
 	sint32  surfPitch   = m_surfPitch;
 	sint32	vaccum      = destHeight*2 - k_TILE_PIXEL_HEIGHT;;
 	sint32	vincx       = destHeight*2;
     sint32  vincxy      = (destHeight - k_TILE_PIXEL_HEIGHT) * 2;
-	sint32	vpos1       = 0;
     sint32  vpos2       = 
         (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
 	sint32	vdestpos    = y;
 	sint32	vend        = k_TILE_PIXEL_HEIGHT - 1;
 
 	uint16 *pDestPixel;
-	while ( vpos1 < vend) {
 
-		if (vaccum < 0) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
+		if (vaccum < 0) 
+        {
 			vaccum += vincx;
+		} 
+        else 
+        {
+            sint32  startX      = StartPixel(vpos1);
+            sint32  endX        = k_TILE_PIXEL_WIDTH - startX;
+			sint32  haccum      = destWidth * 2 - k_TILE_PIXEL_WIDTH;
+			sint32  hincx       = destWidth * 2;
+			sint32  hincxy      = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
+			sint32  hdestpos    = x + (sint32)((double)startX * m_scale);
 
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-		} else {
-			
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-
-			haccum = destWidth * 2 - k_TILE_PIXEL_WIDTH;
-			hincx = destWidth * 2;
-			hincxy = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
-			
-			hpos = 0;
-			hend = k_TILE_PIXEL_WIDTH - 1;
-
-			
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-
-			hdestpos = x + (sint32)((double)startX * m_scale);
-
-			hpos = startX;
-			hend = endX;
-
-			while (hpos < hend) {
+			for (sint32 hpos = startX; hpos < endX; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
@@ -2751,35 +2305,35 @@ if (y >= surface->Height() - destHeight) return;
 
 					pDestPixel = (Pixel16 *)(pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 					if (hpos == startX || hpos == startX+1 ||
-						hpos == hend-2 || hpos == hend-1)
+						hpos == endX-2 || hpos == endX-1)
 						*pDestPixel = color;
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
+
+        vpos2++;
 	}
 }
 
 void TiledMap::DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)
 {
-	if (!surface) surface = m_surface;
-
-
+    if (x < 0) return;
 	y+=GetZoomTileHeadroom();
+    if (y < 0) return;
 
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return;
+    }
 
-if (x < 0) return;
-if (x >= surface->Width() - destWidth) return;
-if (y < 0) return;
-if (y >= surface->Height() - destHeight) return;
+    if (x >= surface->Width() - destWidth) return;
+    if (y >= surface->Height() - destHeight) return;
 
-	
 	TileInfo *  tileInfo = GetTileInfo(pos);
 	Assert(tileInfo != NULL);
 	if (tileInfo == NULL) return;
@@ -2788,67 +2342,37 @@ if (y >= surface->Height() - destHeight) return;
 	BaseTile *  baseTile = m_tileSet->GetBaseTile(index);
 	if (baseTile == NULL) return;
 
-	
-
-
-	Pixel16 *data = baseTile->GetTileData();
-
-	Pixel16	*t0, *t1, *t2, *t3;
-
-	t0 = m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(0), 0);
-	t1 = m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(1), 1);
-	t2 = m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(2), 2);
-	t3 = m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(3), 3);
-	
+	Pixel16 *   data        = baseTile->GetTileData();
+	Pixel16 *   t0          = 
+        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(0), 0);
+	Pixel16 *   t1          = 
+        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(1), 1);
+	Pixel16 *   t2          = 
+        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(2), 2);
+	Pixel16 *   t3          = 
+        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(3), 3);
 	Pixel16 *   dataPtr     = data;
 	uint8 *     pSurfBase   = m_surfBase;
 	sint32      surfPitch   = m_surfPitch;
 
+	sint32      vaccum      = destHeight*2 - k_TILE_PIXEL_HEIGHT;
+	sint32      vincx       = destHeight*2;
+	sint32      vincxy      = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
+	sint32      vpos2       = 
+        (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
+	sint32      vdestpos    = y;
+	sint32      vend        = k_TILE_PIXEL_HEIGHT - 1;
 
+	Pixel16     srcPixel;
 
+    for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
+        sint32  startX  = StartPixel(vpos1);
+        sint32  endX    = k_TILE_PIXEL_WIDTH - startX;
 
-
-
-
-
-
-
-
-
-	
-	Pixel16 srcPixel;
-	uint16 *pDestPixel;
-
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - k_TILE_PIXEL_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = k_TILE_PIXEL_HEIGHT - 1;
-
-	sint32		startX, endX;
-
-    while ( vpos1 < vend) {
-		if (vaccum < 0) {
+		if (vaccum < 0) 
+        {
 			vaccum += vincx;
-
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
 
 			for (sint32 i=startX; i<endX; i++) {
 				srcPixel = *dataPtr++;
@@ -2863,38 +2387,16 @@ if (y >= surface->Height() - destHeight) return;
 					break;
 				}
 			}
-		} else {
-			
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
+		} 
+        else 
+        {
+    		sint32  haccum      = destWidth * 2 - k_TILE_PIXEL_WIDTH;
+			sint32  hincx       = destWidth * 2;
+			sint32  hincxy      = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
+			sint32  hdestpos    = x + (sint32)((double)startX * m_scale);
 
-			
-
-			haccum = destWidth * 2 - k_TILE_PIXEL_WIDTH;
-			hincx = destWidth * 2;
-			hincxy = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
-			
-			hpos = 0;
-			hend = k_TILE_PIXEL_WIDTH - 1;
-
-			
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-
-			hdestpos = x + (sint32)((double)startX * m_scale);
-
-			hpos = startX;
-			hend = endX;
-
-			while (hpos < hend) {
+			for (sint32 hpos = startX; hpos < endX; ++hpos) 
+            {
 				srcPixel = *dataPtr++;
 				switch (srcPixel) {
 				case 0x0000 : 
@@ -2922,19 +2424,18 @@ if (y >= surface->Height() - destHeight) return;
 
 
 
-					pDestPixel = (Pixel16 *)(pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
+					Pixel16 * pDestPixel = (Pixel16 *)
+                        (pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 
 					*pDestPixel = 0x0000;
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
 		vpos2++;
 	}
 
@@ -2951,74 +2452,61 @@ if (y >= surface->Height() - destHeight) return;
 
 sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 flags)
 {
-	uint8			*surfBase;
-	sint32			surfWidth;
-	sint32			surfHeight;
-	sint32			surfPitch;
-	sint32			errcode;
+	if (!data) return 0;
 
-	if (data == NULL) return 0;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACELOCKFAILED;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-		
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-
-	if (x < 0) {
-		if (surface) {
-			
-			errcode = surface->Unlock((LPVOID *)surfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-		}
+	if ((x < 0) || (y < 0))
+    {
+        /// @todo Check whether the destructor is activated and/or
+        ///       return 0 would be more appropriate.
+        ///       Maybe better test this at the start.
+        ///       Note: still using the surfBase of the unlocked surface
+        Assert(false);
+		lock = SurfaceLock(NULL);
 	}
 
-	if (y < 0) {
-		if (surface) {
-			
-			errcode = surface->Unlock((LPVOID *)surfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-		}
-	}
+	uint16		start       = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - start + 1);
 
-
-
-
-	
-	unsigned short	*destPixel;
-
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
-
-	sint32 j;
 	sint32 len;
-
 	
-	for(j=start; j<=end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
-
+	for (sint32 j = start; j <= end; j++) 
+    {
 		if ((y+j) >= surfHeight) continue;
 		if ((sint16)table[j-start] == -1) continue;
 
-		rowData = dataStart + table[j-start];
+        unsigned short *    destPixel   =
+		    (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+
+		Pixel16	*   rowData = dataStart + table[j-start];
+		Pixel16		tag;
 		do {
 			tag = *rowData++;
 
@@ -3057,13 +2545,6 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 		} while ((tag & 0xF000) == 0);
 	}
 
-	if (surface) {
-		
-		errcode = surface->Unlock((LPVOID *)surfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-	}
-
 	return 0;
 }
 
@@ -3074,71 +2555,58 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color)
 {
-	uint8			*surfBase;
-	sint32			surfWidth;
-	sint32			surfHeight;
-	sint32			surfPitch;
-	sint32			errcode;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
-	if (data == NULL) return 0;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACELOCKFAILED;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-		
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	if (!surfBase) return 0;
-
-	
-	
-	
-	if (x < 0 || 
-		x >= (surfWidth - k_TILE_GRID_WIDTH) ||
-		y < 0 || 
-		y >= (surfHeight - k_TILE_GRID_HEIGHT)) {
-		if (surface) {
-			
-			errcode = surface->Unlock((LPVOID *)surfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-		}
-
+	if (x >= (surfWidth - k_TILE_GRID_WIDTH) ||
+		y >= (surfHeight - k_TILE_GRID_HEIGHT)
+       ) 
+    {
 		return 0;
 	}
 	
-	
-	unsigned short	*destPixel;
+	uint16		start       = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - start + 1);
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
-
-	sint32 j;
 	sint32 len;
-
 	
-	for(j=start; j<=end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
-
+	for (sint32 j = start; j <= end; j++) 
+    {
 		if ((y+j) >= surfHeight) continue;
 		if ((sint16)table[j-start] == -1) continue;
 
-		rowData = dataStart + table[j-start];
+		unsigned short *    destPixel = 
+            (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+		Pixel16 *           rowData     = dataStart + table[j-start];
+		Pixel16		tag;
+
 		do {
 			tag = *rowData++;
 
@@ -3168,13 +2636,6 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		} while ((tag & 0xF000) == 0);
 	}
 
-	if (surface) {
-		
-		errcode = surface->Unlock((LPVOID *)surfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-	}
-
 	return 0;
 }
 
@@ -3183,131 +2644,92 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 								 sint32 destWidth, sint32 destHeight, Pixel16 color)
 {
-	uint8			*surfBase = NULL, *origBase = NULL;
-	AUI_ERRCODE		errcode;
+	if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	sint32	surfWidth, surfHeight, surfPitch;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&origBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return;
-
-		
-		surfBase = origBase;
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return;
 	}
 
-	if (!surfBase) return;
-
-	
-	
-	
-	if ((x < 0) ||
-		(y < 0) || 
-		(x >= (surfWidth - destWidth)) || 
-		(y >= (surfHeight - destHeight))) {
-		if (surface) {
-			
-			errcode = surface->Unlock((LPVOID *)origBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return;
-		}
-
+	if ((x >= (surfWidth - destWidth)) || 
+		(y >= (surfHeight - destHeight))
+       ) 
+    {
 		return;
 	}
 
-	
-	Pixel16		emptyRow[2];
-	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
-
 	surfBase += (y * surfPitch + x * 2);
 
+	uint16		vstart      = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - vstart + 1);
+	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32      vincx       = destHeight*2;
+	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32      vdestpos    = y;
+	sint32      vend        = (end+1) - 1;
+
+	Pixel16		emptyRow[2];
+	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
 	
-	Pixel16			*destPixel;
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
-
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
-
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			Pixel16		*rowData1, *rowData2;
+			Pixel16	*   rowData1    =
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData2    =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
+			sint32      haccum      = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32      hincx       = destWidth*2;
+			sint32      hincxy      = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32      hdestpos    = x;
+			sint32      hend        = k_TILE_GRID_WIDTH-1;
+
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
 			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
-
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
-
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
 			
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
+					Pixel16 * destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 		
-					
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, 0);
 
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
@@ -3324,21 +2746,13 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
-	}
 
-	if (surface) {
-		
-		errcode = surface->Unlock((LPVOID *)origBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return;
+        vpos2++;
 	}
 }
 
@@ -3348,77 +2762,58 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 
 
-sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surf, sint32 x, sint32 y, Pixel16 color)
+sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint32 x, sint32 y, Pixel16 color)
 {
-	uint8			*surfBase;
-	sint32			surfWidth;
-	sint32			surfHeight;
-	sint32			surfPitch;
-	AUI_ERRCODE		errcode;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
-	if (data == NULL) return 0;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	if (surf) {
-		errcode = surf->Lock(NULL, (LPVOID *)&surfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACELOCKFAILED;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-		
-		surfWidth = surf->Width();
-		surfHeight = surf->Height();
-		surfPitch = surf->Pitch();
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	if (!surfBase) return 0;
-
-	
-	
-	
-	if ((x < 0) ||
-		(y < 0)) {
-
-
-
-
-
-		if (surf) {
-			
-			errcode = surf	->Unlock((LPVOID *)surfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return 0;
-		}
-
+	if (!surfBase) 
+    {
 		return 0;
 	}
-
-	
-	unsigned short	*destPixel;
 
 	uint16		start = (uint16)*data++;
 	uint16		end = (uint16)*data++;
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	sint32 j;
 	sint32 len;
-
 	
-	for(j=start; j<=end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
+	for (sint32 j = start; j <= end; j++) 
+    {
 		if ((y+j) >= surfHeight) continue;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
-
 		if ((sint16)table[j-start] == -1) continue;
 
-		rowData = dataStart + table[j-start];
+		unsigned short *    destPixel = 
+            (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+		Pixel16	*           rowData     = dataStart + table[j-start];
+		Pixel16		tag;
+
 		do {
 			tag = *rowData++;
 
@@ -3458,13 +2853,6 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surf, sint32 x
 		} while ((tag & 0xF000) == 0);
 	}
 
-	
-	if (surf) {
-		errcode = surf->Unlock((LPVOID *)surfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-	}
-
 	return 0;
 }
 
@@ -3475,43 +2863,33 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surf, sint32 x
 
 sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pixel16 color)
 {
-	if (data == NULL) return 0;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
 	uint8 * surfBase    = g_screenManager->GetSurfBase();
 	if (!surfBase) return 0;
 
-	if (x < 0) return 0;
-	if (y < 0) return 0;
-
-
-
 	sint32 surfHeight = g_screenManager->GetSurfHeight();
 	sint32 surfPitch = g_screenManager->GetSurfPitch();
-
-
-
-	
-	unsigned short	*destPixel;
 
 	uint16		start = (uint16)*data++;
 	uint16		end = (uint16)*data++;
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
-	sint32 j;
+
 	sint32 len;
-
 	
-	for(j=start; j<=end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
+	for (sint32 j = start; j <= end; j++) 
+    {
 		if ((y+j) >= surfHeight) continue;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
-
 		if ((sint16)table[j-start] == -1) continue;
 
-		rowData = dataStart + table[j-start];
+		unsigned short *    destPixel   = 
+            (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
+
+		Pixel16 *           rowData     = dataStart + table[j-start];
+
+		Pixel16		tag;
+
 		do {
 			tag = *rowData++;
 
@@ -3560,133 +2938,103 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 								 sint32 destWidth, sint32 destHeight, sint32 flags)
 {
-	uint8			*surfBase = NULL, *origBase = NULL;
-	AUI_ERRCODE		errcode;
-	sint32			surfWidth, surfHeight, surfPitch;
-	BOOL			wasUnlocked = FALSE;
+    if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&origBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-		wasUnlocked = TRUE;
-		
-		surfBase = origBase;
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-	} else {
-		surface = m_surface;
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+        surface     = m_surface;
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return;
 	}
 
-	
-	if ((x < 0) || (y < 0) || (x >= surface->Width() - destWidth) || (y >= surface->Height() - destHeight))
+	if (!surface || !surfBase) 
+    {
+		return;
+	}
+
+	if ((x >= surface->Width() - destWidth) || 
+        (y >= surface->Height() - destHeight)
+       )
 	{
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock(origBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+        /// @todo Check whether the destructor is activated and/or
+        ///       return would be more appropriate.
+        ///       Note: still using the surfBase of the unlocked surface
+        Assert(false);
+        lock = SurfaceLock(NULL);
 	}
-
-
-
-
-	
-	Pixel16		emptyRow[2];
-	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
-
-
-
-
-
-
-
 
 	surfBase += (y * surfPitch + x * 2);
 
-	
-	Pixel16			*destPixel;
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
+	uint16      vstart      = (uint16)*data++;
+	uint16		end         = (uint16)*data++;
+	Pixel16	*   table       = data;
+	Pixel16	*   dataStart   = table + (end - vstart + 1);
+	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32      vincx       = destHeight*2;
+	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32      vdestpos    = y;
+	sint32      vend        = (end+1) - 1;
 
-	Pixel16			*dataStart = table + (end - vstart + 1);
+	Pixel16		emptyRow[2];
+	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
 
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
 			
 
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			Pixel16		*rowData1, *rowData2;
+			Pixel16 *   rowData1 =
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData2 =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
+
+			sint32  haccum      = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32  hincx       = destWidth*2;
+			sint32  hincxy      = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32  hdestpos    = x;
+			sint32  hend        = k_TILE_GRID_WIDTH-1;
+			
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
 			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
-
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
-
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
-			
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, flags);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
-		
+					Pixel16 * destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 					
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, flags);
 
@@ -3703,20 +3051,12 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
 		vpos2++;
-	}
-
-	if (wasUnlocked) {
-		
-		errcode = surface->Unlock(origBase);
-		Assert(errcode == AUI_ERRCODE_OK);
 	}
 }
 
@@ -3728,99 +3068,73 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 void TiledMap::DrawScaledOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 												 sint32 destWidth, sint32 destHeight)
 {
-	if (data == NULL) return;
+	if (!data || (x < 0) || (y < 0)) return;
 
 	sint32  surfWidth   = g_screenManager->GetSurfWidth();
 	sint32  surfHeight  = g_screenManager->GetSurfHeight();
-	sint32  surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 * surfBase    = g_screenManager->GetSurfBase();
 
-	if ((x < 0) || (y < 0) || (x >= surfWidth - destWidth) || (y >= surfHeight - destHeight))
+	if ((x >= surfWidth - destWidth) || (y >= surfHeight - destHeight))
 	{
 		return;
 	}
+
+	sint32  surfPitch   = g_screenManager->GetSurfPitch();
 
 	
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
 
-	surfBase += (y * surfPitch + x * 2);
+	uint8 * surfBase    = g_screenManager->GetSurfBase() + (y * surfPitch + x * 2);
 
-	
-	Pixel16			*destPixel;
 	uint16			vstart = (uint16)*data++;
 	uint16			end = (uint16)*data++;
 	Pixel16			*table = data;
-
 	Pixel16			*dataStart = table + (end - vstart + 1);
 
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
+	sint32  vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32  vincx       = destHeight*2;
+	sint32  vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32  vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32  vdestpos    = y;
+	sint32  vend        = (end+1) - 1;
 
-	vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-
-	vend = (end+1) - 1;
-
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
-
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			Pixel16		*rowData1, *rowData2;
+			Pixel16	*   rowData1    =
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+            Pixel16 *   rowData2    =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
+
+			sint32  haccum = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32  hincx = destWidth*2;
+			sint32  hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			
+			sint32  hdestpos = x;
+			sint32  hend = k_TILE_GRID_WIDTH-1;
+
+			
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
 			Pixel16		pixel;
 
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
-
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
-
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
-			
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
-		
+					Pixel16 * destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 					
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, 0);
 
@@ -3837,13 +3151,11 @@ void TiledMap::DrawScaledOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y,
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
 		vpos2++;
 	}
 }
@@ -3890,48 +3202,34 @@ void TiledMap::SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint3
 
 void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sint32 xpos, sint32 ypos)
 {
-
-	Pixel16		*dataPtr;
-	sint32		x, y;
-	sint32		startX, endX;
-
-	TileInfo	*tileInfo;
-	BaseTile	*baseTile, *transitionBuffer;
-	uint16		index;
-	Pixel16     *transData, *transDataPtr;
-	static Pixel16 defaultPixel[4] = {0xf800, 0x07e0, 0x001f, 0xf81f};
-
-	if (!surface) surface = m_surface;
-
+	if (xpos < 0) return;
 	ypos+=k_TILE_PIXEL_HEADROOM;
+	if (ypos < 0) return;
 
-    
-	if (xpos < 0) 
-		return;
-	if (xpos > surface->Width() - k_TILE_PIXEL_WIDTH) 
-		return;
-	if (ypos < 0) 
-		return;
-	if (ypos > surface->Height() - k_TILE_PIXEL_HEIGHT) 
-		return;
+	if (!surface) 
+    {
+        surface = m_surface;
+        if (!surface) return;
+    }
 
-	tileInfo = GetTileInfo(pos);
+	if ((xpos > surface->Width() - k_TILE_PIXEL_WIDTH) ||
+		(ypos > surface->Height() - k_TILE_PIXEL_HEIGHT) 
+       )
+    {
+		return;
+    }
 
+	TileInfo *  tileInfo    = GetTileInfo(pos);
 	Assert(tileInfo != NULL);
 	if (tileInfo == NULL) 
 		return;
 
-	index = tileInfo->GetTileNum();
-
-	baseTile = m_tileSet->GetBaseTile(index);
+	uint16      index       = tileInfo->GetTileNum();
+	BaseTile*   baseTile    = m_tileSet->GetBaseTile(index);
 	if (baseTile == NULL) 
 		return;
 
-
-
-	Pixel16 *data = baseTile->GetTileData();
-
-	Pixel16	*tileData[4];
+    Pixel16 *   data        = baseTile->GetTileData();
 
 	sint32 tilesetIndex = g_theTerrainDB->Get(tileInfo->GetTerrainType())->GetTilesetIndex();
 
@@ -3942,38 +3240,33 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 	Assert(tilesetIndex == ((sint32) tilesetIndex_short));
 #endif
 
+	static Pixel16 defaultPixel[4] = {0xf800, 0x07e0, 0x001f, 0xf81f};
+
+	Pixel16	*   tileData[4];
 	tileData[0] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
 	tileData[1] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
 	tileData[2] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
 	tileData[3] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 	
-	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
-	if(transitionBuffer) {
-		transData = transitionBuffer->GetTileData();
-		transDataPtr = transData;
-	} else {
-		transData = NULL;
-		transDataPtr = NULL;
-	}
+	BaseTile *  transitionBuffer = 
+        m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
+	Pixel16 *   transData       = 
+        (transitionBuffer) ? transitionBuffer->GetTileData() : NULL;
+	Pixel16 *   transDataPtr    = transData;
 
-	dataPtr = data;
-
-	uint8 * pSurfBase   = m_surfBase;
-	sint32  surfPitch   = m_surfPitch;
+	Pixel16 *   dataPtr         = data;
+	uint8 *     pSurfBase       = m_surfBase;
+	sint32      surfPitch       = m_surfPitch;
 
 	Pixel16 srcPixel;
 
 	uint16 *pDestPixel = (Pixel16 *)(pSurfBase + ypos * surfPitch + 2 * xpos);
 
 	{
-		for (y=0; y<k_TILE_PIXEL_HEIGHT; y++) {
-			if (y<=23) {
-				startX = (23-y)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (y-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
+		for (sint32 y = 0; y < k_TILE_PIXEL_HEIGHT; y++) 
+        {
+			sint32  startX  = StartPixel(y);
+			sint32  endX    = k_TILE_PIXEL_WIDTH - startX;
 
 			if (transDataPtr)
 			{
@@ -4046,7 +3339,7 @@ L1:
 			}
 			else
 			{
-				for (x = startX; x<endX; x++) 
+				for (sint32 x = startX; x<endX; x++) 
 				{
 					srcPixel = *dataPtr++;
 					if (srcPixel < 4)
@@ -4077,144 +3370,94 @@ L1:
 
 void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)
 {
+    if (x < 0) return;
+    y+=GetZoomTileHeadroom();
+    if (y < 0) return;
 
-	Pixel16		*dataPtr;
-	sint32		startX, endX;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	TileInfo	*tileInfo;
-	BaseTile	*baseTile, *transitionBuffer;
-	uint16		index;
-	uint8		*pSurfBase;
-	BOOL		wasUnlocked = FALSE;
-	AUI_ERRCODE	errcode;
-	Pixel16 *transData, *transDataPtr;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-	sint32 surfWidth;
-	sint32 surfHeight;
-	sint32 surfPitch;
-
-	if (!surface) {
-		surface = m_surface;
-
-		pSurfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
-	} else {
-
-		errcode = surface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if (errcode != AUI_ERRCODE_OK) return;
-
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-
-		wasUnlocked = TRUE;
+	if (!surface) 
+    {
+        surface     = m_surface;
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return;
 	}
 
-	y+=GetZoomTileHeadroom();
-
-	if ((x < 0) ||
-		(x > surface->Width() - destWidth) ||
-		(y < 0) ||
-		(y >= surface->Height() - destHeight)) {
-
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)pSurfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	if (!surface ||
+        (x > surface->Width() - destWidth) ||
+		(y >= surface->Height() - destHeight)
+       ) 
+    {
 		return;
 	}
 
-	
-	tileInfo = GetTileInfo(pos);
+	TileInfo *  tileInfo = GetTileInfo(pos);
 	Assert(tileInfo != NULL);
-	if (tileInfo == NULL) {
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)pSurfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	if (tileInfo == NULL) 
+    {
 		return;
 	}
 
-	
-	index = tileInfo->GetTileNum();
-
-	
-	baseTile = m_tileSet->GetBaseTile(index);
-	if (baseTile == NULL) {
-		if (wasUnlocked) {
-			
-			errcode = surface->Unlock((LPVOID)pSurfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-		}
+	uint16      index = tileInfo->GetTileNum();
+	BaseTile *  baseTile = m_tileSet->GetBaseTile(index);
+	if (baseTile == NULL) 
+    {
 		return;
 	}
 
-	
 	Pixel16 *data = baseTile->GetTileData();
 
-	Pixel16	*t0, *t1, *t2, *t3;
-
 	sint32 tilesetIndex = g_theTerrainDB->Get(tileInfo->GetTerrainType())->GetTilesetIndex();
-
-	
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 
-	t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
-	t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
-	t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
-	t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
+	Pixel16 * t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
+	Pixel16 * t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
+	Pixel16 * t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
+	Pixel16 * t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
 	
-	transitionBuffer = m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
-	if(transitionBuffer) {
-		transData = transitionBuffer->GetTileData();
-		transDataPtr = transData;
-	} else {
-		transData = NULL;
-		transDataPtr = NULL;
-	}
-
-	dataPtr = data;
-
+	BaseTile *  transitionBuffer    = 
+        m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
+	Pixel16 *   transData           =
+        (transitionBuffer) ? transitionBuffer->GetTileData() : NULL;
+	Pixel16 *   transDataPtr        = transData;
+    Pixel16 *   dataPtr             = data;
 	
 	Pixel16 srcPixel, transPixel = 0;
-	uint16 *pDestPixel;
 
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
+	sint32 vaccum   = destHeight*2 - k_TILE_PIXEL_HEIGHT;
+	sint32 vincx    = destHeight*2;
+	sint32 vincxy   = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
+	sint32 vpos2    = 
+        (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
+	sint32 vdestpos = y;
+	sint32 vend     = k_TILE_PIXEL_HEIGHT - 1;
 
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
+		sint32  startX  = StartPixel(vpos1);
+        sint32  endX    = k_TILE_PIXEL_WIDTH - startX;
 
-
-	vaccum = destHeight*2 - k_TILE_PIXEL_HEIGHT;
-	vincx = destHeight*2;
-	vincxy = (destHeight - k_TILE_PIXEL_HEIGHT) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)(k_TILE_PIXEL_HEIGHT - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = k_TILE_PIXEL_HEIGHT - 1;
-
-	
-	while ( vpos1 < vend) {
 		if (vaccum < 0) {
 			vaccum += vincx;
 
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
 
 			for (sint32 i=startX; i<endX; i++) {
 				srcPixel = *dataPtr++;
@@ -4238,36 +3481,15 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 					break;
 				}
 			}
-		} else {
-			
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-
-			haccum = destWidth * 2 - k_TILE_PIXEL_WIDTH;
-			hincx = destWidth * 2;
-			hincxy = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
-			
-			hpos = 0;
-			hend = k_TILE_PIXEL_WIDTH - 1;
-
-			
-			if (vpos1<=23) {
-				startX = (23-vpos1)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			} else {
-				startX = (vpos1-24)*2;
-				endX = k_TILE_PIXEL_WIDTH - startX;
-			}
-
-			hdestpos = x + (sint32)((double)startX * m_scale);
-
-			hpos = startX;
-			hend = endX;
+		} 
+        else 
+        {
+			sint32 haccum   = destWidth * 2 - k_TILE_PIXEL_WIDTH;
+			sint32 hincx    = destWidth * 2;
+			sint32 hincxy   = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
+			sint32 hdestpos = x + (sint32)((double)startX * m_scale);
+			sint32 hpos     = startX;
+			sint32 hend     = endX;
 
 			while (hpos < hend) {
 				srcPixel = *dataPtr++;
@@ -4302,7 +3524,8 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 				} else {
 					haccum += hincxy;
 
-					pDestPixel = (Pixel16 *)(pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
+					Pixel16 * pDestPixel = (Pixel16 *)
+                        (surfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 					*pDestPixel = srcPixel;
 
 					hdestpos++;
@@ -4313,16 +3536,9 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
-		vpos2++;
-	}
 
-	if (wasUnlocked) {
-		
-		errcode = surface->Unlock((LPVOID)pSurfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
+        vpos2++;
 	}
-
 }
 
 #define k_MAX_WATER_DISPLACEMENTS		14
@@ -4484,15 +3700,10 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							width = m_font->GetStringWidth(name);
 							height = m_font->GetMaxHeight();
 
-							Pixel16			pixelColor;
-                            //get the proper colors for the city's owner
-							if (fog) {
-								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
-							} else {
-								pixelColor = g_colorSet->GetPlayerColor(owner);
-							}
-							COLORREF color = GetColorRef(g_colorSet->ComputePlayerColor(owner), fog);
-							//define rect's screen co-ordinates
+                            // get the proper colors for the city's owner
+							Pixel16	const pixelColor = GetPlayerColor(owner, fog);
+
+                            //define rect's screen co-ordinates
 							rect.left = x;
 							rect.top = y;
 							rect.right = x+width;
@@ -4567,13 +3778,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							RECT popRect = {0, 0, width+4, height+4};
                             //add the top left co-ordinates
 							OffsetRect(&popRect, boxRect.left, y);
-
-							//get the proper color for the city's owner
-							if (fog) {
-								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
-							} else {
-								pixelColor = g_colorSet->GetPlayerColor(owner);
-							}
 
 							//copy popRect to the working surface clipRect
 							clipRect = popRect;
@@ -4669,13 +3873,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								RECT popRectn = {0, 0, width+4, height+4};
                                 //add the top left co-ordinates
 								OffsetRect(&popRectn, x, y);
-
-								//get the proper color for the city's owner
-								if (fog) {
-									pixelColor = g_colorSet->GetDarkPlayerColor(owner);
-								} else {
-									pixelColor = g_colorSet->GetPlayerColor(owner);
-								}
 
 								//copy popRectn to the working surface clipRect
 								clipRect = popRectn;
@@ -4810,31 +4007,19 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 {
 	TileSet	*   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-	Pixel16     color       = (fog) 
-                              ? g_colorSet->GetDarkPlayerColor(owner)
-                              : g_colorSet->GetPlayerColor(owner);
-
     RECT		iconRect;
-	iconRect.left = popRect.right + 3;
-	iconRect.right = iconRect.left + iconDim.x + 1;
-	iconRect.top = popRect.top;
+	iconRect.left   = popRect.right + 3;
+	iconRect.right  = iconRect.left + iconDim.x + 1;
+	iconRect.top    = popRect.top;
 	iconRect.bottom = iconRect.top + iconDim.y + 1;
 
-
-
-
-
-
-
-	
-	
 	if (iconRect.left < 0 || iconRect.top < 0 || 
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
 
-	
-	Pixel16 *cityIcon;
+	Pixel16     color       = GetPlayerColor(owner, fog);
+	Pixel16 *   cityIcon;
 
 	if (isBioInfected) {
 		cityIcon = tileSet->GetMapIconData(MAPICON_BIODISEASE);
@@ -4887,11 +4072,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		cityIcon = tileSet->GetMapIconData(MAPICON_CONVERSION);
 		Assert(cityIcon); if (!cityIcon) return;
 
-		if (fog)
-			color = g_colorSet->GetDarkPlayerColor(convertedOwner);
-		else
-			color = g_colorSet->GetPlayerColor(convertedOwner);
-
+		color = GetPlayerColor(convertedOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 
@@ -4909,10 +4090,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		cityIcon = tileSet->GetMapIconData(MAPICON_FRANCHISE);
 		Assert(cityIcon); 
 		if (!cityIcon) return;
-		if (fog)
-			color = g_colorSet->GetDarkPlayerColor(franchiseOwner);
-		else
-			color = g_colorSet->GetPlayerColor(franchiseOwner);
+		color = GetPlayerColor(franchiseOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 
@@ -4966,11 +4144,8 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 			iconDim = tileSet->GetMapIconDimensions(MAPICON_SLAVE);
 			Assert(cityIcon);
 			if (!cityIcon) return;
-			if (fog)
-				color = g_colorSet->GetDarkPlayerColor(i);
-			else
-				color = g_colorSet->GetPlayerColor(i);
 
+            color = GetPlayerColor(i, fog);
 			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
 			AddDirtyRectToMix(iconRect);
@@ -5036,78 +4211,60 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 
 sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color, sint32 blendValue)
 {
-	uint8			*surfBase;
-	sint32			surfWidth;
-	sint32			surfHeight;
-	sint32			surfPitch;
-	sint32			errcode;
+    if (!data || (x < 0) || (y < 0)) return 0;
 
-	if (data == NULL) return 0;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACELOCKFAILED;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-		
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
-
-	
-	
 	
 	if (!surfBase) return 0;
 
-	
-	
-	
-	if (x < 0 || 
-		x >= (surfWidth - k_TILE_GRID_WIDTH) ||
-		y < 0 || 
-		y >= (surfHeight - k_TILE_GRID_HEIGHT)) {
-		if (surface) {
-			
-			errcode = surface->Unlock((LPVOID *)surfBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-		}
-
+	if (x >= (surfWidth - k_TILE_GRID_WIDTH) ||
+		y >= (surfHeight - k_TILE_GRID_HEIGHT)
+       ) 
+    {
 		return 0;
 	}
 	
-
-
-
-
-	
-	unsigned short	*destPixel;
-
 	uint16		start = (uint16)*data++;
 	uint16		end = (uint16)*data++;
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	sint32 j;
 	sint32 len;
 
-	
-	for(j=start; j<=end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
-
-		destPixel = (unsigned short *)(surfBase + ((y + j) * surfPitch) + (x * 2));
-
+	for (sint32 j = start; j <= end; j++) 
+    {
 		if ((y+j) >= surfHeight) continue;
 		if ((sint16)table[j-start] == -1) continue;
 
-		rowData = dataStart + table[j-start];
+		unsigned short * destPixel = (unsigned short *)
+            (surfBase + ((y + j) * surfPitch) + (x * 2));
+
+		Pixel16 *   rowData = dataStart + table[j-start];
+		Pixel16		tag;
 		do {
 			tag = *rowData++;
 
@@ -5137,13 +4294,6 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		} while ((tag & 0xF000) == 0);
 	}
 
-	if (surface) {
-		
-		errcode = surface->Unlock((LPVOID *)surfBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
-	}
-
 	return 0;
 }
 
@@ -5152,38 +4302,44 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
 								 sint32 destWidth, sint32 destHeight, Pixel16 color, sint32 blendValue)
 {
-	uint8			*surfBase = NULL, *origBase = NULL;
-	AUI_ERRCODE		errcode;
+    if (!data || (x < 0) || (y < 0)) return;
 
-	if (data == NULL) return;
+	uint8 * surfBase;
+	sint32	surfWidth;
+	sint32	surfHeight;
+	sint32	surfPitch;
 
-	sint32	surfWidth, surfHeight, surfPitch;
+    SurfaceLock lock    = SurfaceLock(surface);
 
-	if (surface) {
-		errcode = surface->Lock(NULL, (LPVOID *)&origBase, 0);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return;
-
-		
-		surfBase = origBase;
-		surfWidth = surface->Width();
-		surfHeight = surface->Height();
-		surfPitch = surface->Pitch();
-	} else {
-		surfBase = m_surfBase;
-		surfWidth = m_surfWidth;
-		surfHeight = m_surfHeight;
-		surfPitch = m_surfPitch;
+	if (!surface) 
+    {
+		surfBase    = m_surfBase;
+		surfWidth   = m_surfWidth;
+		surfHeight  = m_surfHeight;
+		surfPitch   = m_surfPitch;
+    }
+    else if (lock.IsValid())
+    {
+		surfBase    = lock.Base();
+		surfWidth   = surface->Width();
+		surfHeight  = surface->Height();
+		surfPitch   = surface->Pitch();
+	} 
+    else 
+    {
+        return;
 	}
-
-
-	if ((x < 0) ||(y < 0) || (x >= surface->Width() - destWidth) || (y >= surface->Height() - destHeight)) {
-		if (surface) {
-			
-			errcode = surface->Unlock((LPVOID *)origBase);
-			Assert(errcode == AUI_ERRCODE_OK);
-			if ( errcode != AUI_ERRCODE_OK ) return;
-		}
+	
+	if (!surface ||
+        (x >= surface->Width() - destWidth) || 
+        (y >= surface->Height() - destHeight)
+       ) 
+    {
+        /// @todo Check whether the destructor is activated and/or
+        ///       return would be more appropriate.
+        ///       Note: still using the surfBase of the unlocked surface
+        Assert(false);
+        lock = SurfaceLock(NULL);
 	}
 
 	
@@ -5192,8 +4348,6 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 	surfBase += (y * surfPitch + x * 2);
 
-	
-	Pixel16			*destPixel;
 	uint16			vstart = (uint16)*data++;
 	uint16			end = (uint16)*data++;
 	Pixel16			*table = data;
@@ -5203,60 +4357,44 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 	sint32 vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
 	sint32 vincx = destHeight*2;
 	sint32 vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-	sint32 vpos1 = 0;
 	sint32 vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
 	sint32 vdestpos = y;
 	sint32 vend = (end+1) - 1;
 
-	
-	while ( vpos1 < vend) {
+	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1) 
+    {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
-
 			if ((sint16)table[vpos1-vstart] == -1 || (sint16)table[vpos2-vstart] == -1) {
-				vpos1++;
 				vpos2++;
 				continue;
 			}
 
-			Pixel16		*rowData1, *rowData2;
+			Pixel16	*   rowData1 =
+                (vpos1 < vstart) ? emptyRow : dataStart + table[vpos1-vstart];
+			Pixel16 *   rowData2 =
+                (vpos2 < vstart) ? emptyRow : dataStart + table[vpos2-vstart];
+
+			sint32  haccum  = destWidth*2 - k_TILE_GRID_WIDTH;
+			sint32  hincx   = destWidth*2;
+			sint32  hincxy  = (destWidth-k_TILE_GRID_WIDTH) * 2;
+			sint32  hdestpos = x;
+			sint32  hend    = k_TILE_GRID_WIDTH-1;
+			
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
 			Pixel16		pixel;
-
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
-
-			
-			if (vpos1 < vstart) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1-vstart];
-
-			if (vpos2 < vstart) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2-vstart];
-
-			haccum = destWidth*2 - k_TILE_GRID_WIDTH;
-			hincx = destWidth*2;
-			hincxy = (destWidth-k_TILE_GRID_WIDTH) * 2;
-			
-			hpos = 0;
-			hdestpos = x;
-			hend = k_TILE_GRID_WIDTH-1;
-
-			
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
-			while (hpos < hend) {
+			for (sint32 hpos = 0; hpos < hend; ++hpos) 
+            {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
-		
+					Pixel16 * destPixel = (Pixel16 *)
+                        (surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 					
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, 0);
 
@@ -5274,21 +4412,12 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 					hdestpos++;
 				}
-				hpos++;
 			}
 
 			vaccum += vincxy;
 			vdestpos++;
 		} 
-		vpos1++;
 		vpos2++;
-	}
-
-	if (surface) {
-		
-		errcode = surface->Unlock((LPVOID *)origBase);
-		Assert(errcode == AUI_ERRCODE_OK);
-		if ( errcode != AUI_ERRCODE_OK ) return;
 	}
 }
 
@@ -5321,13 +4450,10 @@ TiledMap::DrawTerrainOverlay(aui_Surface *surf)
 	if (m_overlayRec==NULL)
 		return;
 
-	const TerrainImprovementRecord::Effect *effect = NULL;
-   
-	if(!m_overlayRec->GetClassTerraform()) {
-		effect  = terrainutil_GetTerrainEffect(m_overlayRec, m_overlayPos);
-	} else {
-		effect = m_overlayRec->GetTerrainEffect(0);
-	}
+	const TerrainImprovementRecord::Effect * effect = 
+        (m_overlayRec->GetClassTerraform()) 
+        ? m_overlayRec->GetTerrainEffect(0)
+        : terrainutil_GetTerrainEffect(m_overlayRec, m_overlayPos);
 
 	if (effect==NULL)
 		return;
@@ -5342,14 +4468,12 @@ TiledMap::DrawTerrainOverlay(aui_Surface *surf)
 		return;
 
 	sint32 x,y;
+	maputils_MapXY2PixelXY(m_overlayPos.x,m_overlayPos.y,&x,&y);
+
 	
 	sint32	destWidth  = k_TILE_PIXEL_WIDTH;  
 	sint32	destHeight = k_TILE_GRID_HEIGHT;
 
-	
-	maputils_MapXY2PixelXY(m_overlayPos.x,m_overlayPos.y,&x,&y);
-
-	
 	if (GetZoomLevel() == k_ZOOM_NORMAL) 
 		DrawBlendedOverlayIntoMix(data,x, y, m_overlayColor, k_FOW_BLEND_VALUE);
 	else
@@ -5424,23 +4548,20 @@ uint32 TiledMap::GetVisibleCityOwner(MapPoint &pos)
 void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 {
 	sint32 myOwner = GetVisibleCellOwner(pos);
+	if (myOwner < 0)
+		return;
+
+	Player *visP = g_player[g_selected_item->GetVisiblePlayer()];
+	if (visP == NULL)
+		return;
+
 	sint32 neighborOwner;
 	uint32 myCityOwner = GetVisibleCityOwner(pos);
 	uint32 neighborCityOwner;
-
-	if(myOwner < 0)
-		return;
-
 	Pixel16 color = g_colorSet->GetPlayerColor(myOwner);
 	Pixel16 white = GetColor(COLOR_WHITE);
 
 	if(!surface) surface = m_surface;
-
-	Player *visP = g_player[g_selected_item->GetVisiblePlayer()];
-
-	
-	if (visP == NULL)
-		return;
 
 	Unit myCity(myCityOwner);
 	UnitData *myCityData = myCity.IsValid() ? myCity.AccessData() : NULL;
