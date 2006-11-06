@@ -58,6 +58,7 @@
 #include "c3.h"             // Pre-compiled header
 #include "civ3_main.h"      // Own declarations: consistency check
 
+#include <algorithm>        // std::fill
 #include "aui.h"
 #include "pixelutils.h"
 #include "colorset.h"
@@ -192,6 +193,7 @@
 #define k_LDLName                   "civ3.ldl"
 #define k_LDL640Name                "civ3_640.ldl"
 #define k_CursorName                "cursor2.tif"
+#define k_DisclaimerName            "disclaimer.txt"
 
 #define k_SHARED_SURFACE_WIDTH      1024
 #define k_SHARED_SURFACE_HEIGHT     768
@@ -972,21 +974,15 @@ int sprite_Update(aui_Surface *surf)
 	return 0;
 }
 
-int sprite_Cleanup(void)
+void sprite_Cleanup(void)
 {
 	spritegrouplist_Cleanup();
 
-	if (g_director) {
-		delete g_director;
-		g_director = NULL;
-	}
+	delete g_director;
+	g_director = NULL;
 
-	if (g_screenManager) {
-		delete g_screenManager;
-		g_screenManager = NULL;
-	}
-
-	return 0;
+    delete g_screenManager;
+	g_screenManager = NULL;
 }
 
 
@@ -1028,16 +1024,10 @@ int tile_Initialize(BOOL isRestoring)
 	return 0;
 }
 
-int tile_Cleanup(void)
+void tile_Cleanup(void)
 {
-    
-
-    if (g_tiledMap) 
-        delete g_tiledMap; 
-
+    delete g_tiledMap; 
 	g_tiledMap = NULL;
-
-	return 0;
 }
 
 int radar_Initialize(void)
@@ -1720,38 +1710,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 void main_DisplayPatchDisclaimer()
 {
-	FILE *  f = fopen("disclaimer.txt", "rb");
-	if (!f)
-		goto Error;
+    bool    isDisclaimerShown   = false;
+	FILE *  f                   = fopen(k_DisclaimerName, "rb");
 
-	sint32		filesize = 0;
-	if (fseek(f, 0, SEEK_END) == 0) {
-		filesize = ftell(f);
-	} else {
-		goto Error;
-	}
- 	
-	fclose(f);
+    if (f && (0 == fseek(f, 0, SEEK_END))) 
+    {
+	    long const  positionEnd = ftell(f);
 
-	MBCHAR * message = new MBCHAR[filesize+1];
-	memset(message, 0, filesize+1);
+        // Reposition at begin
+        fclose(f);
+        f = fopen(k_DisclaimerName, "rb");
 
-	f = fopen("disclaimer.txt", "rb");
-	if (!f) 
-		goto Error;
+        if (f && (positionEnd > 0)) 
+        {
+            size_t const    filesize    = static_cast<size_t>(positionEnd);
+            MBCHAR *        message     = new MBCHAR[filesize+1];
+	        size_t const    readCount   = c3files_fread
+                                            (message, sizeof(MBCHAR), filesize, f);
+            message[readCount]  = 0;
+            MessageBox(NULL, message, "Call to Power", MB_OK | MB_ICONEXCLAMATION);
+            isDisclaimerShown   = true;
+        }
+    } 
 
-	c3files_fread( message, 1, filesize, f );
+    if (f)
+    {
+        fclose(f);
+    }
 
-	fclose(f);
-
-	MessageBox(NULL, message, "Call to Power", MB_OK | MB_ICONEXCLAMATION);
-
-	return;
-
-Error:
-	c3errors_FatalDialog(appstrings_GetString(APPSTR_INITIALIZE),
-							appstrings_GetString(APPSTR_CANTFINDFILE));
-
+    if (!isDisclaimerShown)
+    {
+	    c3errors_FatalDialog(appstrings_GetString(APPSTR_INITIALIZE),
+		    				 appstrings_GetString(APPSTR_CANTFINDFILE)
+                            );
+    }
 }
 
 #if defined(__GNUC__)
