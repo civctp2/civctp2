@@ -62,6 +62,7 @@ Building {
 	Record Wonder[]				PrerequisiteWonder		 // Added by E to limit units to cities with certain wonders
 	Record Wonder[]				ExcludedByWonder		 // to prevent some units being built
 	Bit(Int)					NeedsPopCountToBuild     // added by E
+	Bit(Int)					PopCountBuildLimit		// added by E
 
 	Record Resource[]           RequiresGood             // Added by E -- having a bldg gives a city a good
 	Record Resource[]           ProducesGood             // Added by E -- having a bldg gives a city a good

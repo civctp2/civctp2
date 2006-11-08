@@ -155,10 +155,14 @@
 // - Added Civ Bonuses to Food, Commerce, Production, Science by E Jul 3 2006
 // - Added IsBonusGood to FindGoodDistances enabling non-map goods to be
 //   collected by E Jul 3 2006
-// - Added Advances bonus, now some advances san add science, food, Production, 
+// - Added Advances bonus, now some advances can add science, food, Production, 
 //   or Gold once discovered by E July 5 2006
+// - Added Miltia code; DiffDB gives AI cheapest unit if city is empty
+// - Implemented Militia Building flag creates militia at start of turn if city is empty.
 // - NeedsPopCountToBuild was added awhile ago it limits some buildings to only
 //   being available once a certian population is reached. by E
+// - Added RevoltInsurgents diffDB to beginturn. If a city is rioting then there
+//   is a chance that the riot will spawn barbarians
 //
 //----------------------------------------------------------------------------
 
@@ -216,6 +220,7 @@
 #include "RandGen.h"                    // g_rand
 #include "Readiness.h"
 #include "ResourceRecord.h"
+#include "RiskRecord.h"  //add for barb code
 #include "scenarioeditor.h"
 #include "Score.h"
 #include "SelItem.h"                    // g_selected_item
@@ -1362,7 +1367,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 	}
 
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()) {
-		Barbarians::AddBarbarians(city_pos, m_owner, TRUE);
+		Barbarians::AddBarbarians(city_pos, m_owner, FALSE);
 	}
 
 	// Modified by kaan to address bug # 12
@@ -4137,6 +4142,37 @@ bool CityData::BeginTurn()
 			}
 		}
 	}
+    //EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	if((m_is_rioting) &&
+	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents())
+	  ){ 
+		sint32 chance = 0;
+		sint32 barbchance = risk->GetBarbarianChance();
+		sint32 NotFounder = 0;
+		sint32 NotCityStyle = 0;
+
+		// if the city has a diffferent culture more likely to have insurgents
+		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+			NotCityStyle = barbchance * 2;
+		}
+		// if the revolting city is because of an occupation more likely to revolt
+		if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
+			NotFounder = barbchance * 2;
+		}
+
+		//TODO: technology modifier from the founder that increases insurgents
+		//TODO: technology modifier that allows for more suppression
+		//TODO: govt modifier that allows for more suppression
+		chance += barbchance;
+		chance += NotFounder
+		chance += NotCityStyle;
+
+
+		if(g_rand->Next(10000) < chance * 10000) {
+			Barbarians::AddBarbarians(cpos, m_owner, FALSE);
+		}
+	}
 
 	//END EMOD
 
@@ -6337,7 +6373,14 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	// added by E - some buildings can only be built once city reaches certain size
 	sint32 pop;
 	if(rec->GetNeedsPopCountToBuild(pop)) {
-		if(PopCount() > pop) {
+		if(PopCount() <= pop) {
+			return false;
+		}
+	}
+
+	sint32 pop2;
+	if(rec->GetPopCountBuildLimit(pop2)) {
+		if(PopCount() >= pop2) {
 			return false;
 		}
 	}

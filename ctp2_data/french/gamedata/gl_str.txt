@@ -276,6 +276,7 @@ UNIT_DREADNAUGHT				"Invulnérable"
 UNIT_CITY					"Ville"
 UNIT_OCEAN_CITY					"Colonie marine"
 UNIT_SPACE_CITY					"Colonie spatiale"
+UNIT_LONGBOWMAN					"Archer médiéval"
 
 
 #### governs STRINGS ####

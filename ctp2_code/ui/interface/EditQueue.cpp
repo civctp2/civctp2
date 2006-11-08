@@ -121,7 +121,9 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsButton");
 	m_buildingsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingsButton");
 	m_wondersButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WondersButton");
-
+	//EMOD to have button that has all units buildings, and wobders in the build box instead of sort
+	//m_AllButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AllButton");
+	
 	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.UnitsButton", EditQueue::ToggleUnits, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 	

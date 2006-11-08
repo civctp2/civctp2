@@ -103,6 +103,11 @@ Order {
   Bit UnitPretest_CanTarget
   Bit UnitPretest_NoFuelThenCrash
   Bit UnitPretest_CanParadrop
+//
+  Bit UnitPretest_CanAirlift
+  Bit UnitPretest_CanRebase
+  Bit UnitPretest_CanUpgrade
+//  
   Bit UnitPretest_Invalid
 
   Bit(Int) Range

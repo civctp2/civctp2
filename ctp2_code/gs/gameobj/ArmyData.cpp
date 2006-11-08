@@ -102,8 +102,8 @@
 // - added slic message for ship sinking
 // - added CanUpgrade. Upgrade, CanUpgradeNoGold, and UpgradeNoGold methods.
 // - added UpgradeUnit to Begin Turn
-// - added a retrun true for AI in verifyattack (for testing)
-// - added rebase units to executemoveorder
+// - added a return true for AI in verifyattack (for testing)
+// - added random number for beginturn barbarian code
 //
 //----------------------------------------------------------------------------
 
@@ -200,7 +200,7 @@ extern Pollution *g_thePollution;
 #include "MaterialPool.h"  //EMOD
 #include "BuildingRecord.h" //EMOD
 #include "Barbarians.h" //EMOD
-#include "RiskRecord.h"  //add fro barb code
+#include "RiskRecord.h"  //add for barb code
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -1521,6 +1521,8 @@ void ArmyData::BeginTurn()
 ///       Move stuff to UnitData, when it only concerns units, not armies.
 ///       Efficiency note: do not compute cell/terrain stuff inside the loop - all 
 ///       units of the army are supposed to be at the same location. 
+
+
     
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
@@ -1553,23 +1555,27 @@ void ArmyData::BeginTurn()
 	}
 
 	// EMOD Barbarian Cities
-	// This should be risk level depending
+	// This should be risk level depending //EMOD added Risk 10-25-2006
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCities())
 		{
-		for(i = 0; i < m_nElements; i++) {
-			if(m_array[i].IsEntrenched()
-			&&!g_theWorld->GetCity(m_pos)
-			&& m_owner == PLAYER_INDEX_VANDALS
-			){
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateCity,
-				   GEA_Player, PLAYER_INDEX_VANDALS,
-				   GEA_MapPoint, m_pos,
-				   GEA_Int, CAUSE_NEW_CITY_GOODY_HUT,
-				   GEA_Int, -1,
-				   GEA_End);
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+			for(i = 0; i < m_nElements; i++) {
+				if(m_array[i].IsEntrenched()
+				&&!g_theWorld->GetCity(m_pos)
+				&& m_owner == PLAYER_INDEX_VANDALS
+				){
+					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateCity,
+						GEA_Player, PLAYER_INDEX_VANDALS,
+						GEA_MapPoint, m_pos,
+						GEA_Int, CAUSE_NEW_CITY_GOODY_HUT,
+						GEA_Int, -1,
+						GEA_End);
+				}
 			}
 		}
 	}
+
+	PLAYER_INDEX meat = PLAYER_TYPE_HUMAN;
 
 	// EMOD Barbarian Camps
 	// This should be risk level depending  //EMOD added Risk 10-05-2006
@@ -1604,7 +1610,7 @@ void ArmyData::BeginTurn()
 				if(m_array[i].IsEntrenched()
 				&& m_owner == PLAYER_INDEX_VANDALS
 				){
-				Barbarians::AddBarbarians(m_pos, -1, FALSE);
+				Barbarians::AddBarbarians(m_pos, meat, FALSE);
 				}
 			}
 		}
@@ -1620,7 +1626,7 @@ void ArmyData::BeginTurn()
 		&& urec->GetSpawnsBarbarians()
 		&& CellOwner != m_owner
 		){ //Added to allow units settle improvements
-			Barbarians::AddBarbarians(m_pos, -1, FALSE);
+			Barbarians::AddBarbarians(m_pos, meat, FALSE);
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
 	}
@@ -6598,7 +6604,9 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 ///      does not execute the move.
 ///      Outcommented, because I do not understand what this code is supposed to
 ///      do at this point anyway.
-#if 0 // EMOD - Rebasing of units, especially aircraft
+/* // EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
+city to another city anywhere in the world and costing that unit 1 move.
+      
 		UnitDynamicArray revealedUnits;
 		bool revealedUnexplored = false;
 		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
@@ -6613,7 +6621,7 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 			}
 		}
 
-#endif //end EMOD
+*/ //end EMOD
 		
 		if(order->m_path->IsEndDir() ||
 			(order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))) {
@@ -6795,62 +6803,12 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 						return false;
 					}
 
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				} else {
 					g_selected_item->ForceDirectorSelect(Army(m_id));
 					return false;
 				}
 			}
 			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			if(order->m_order == UNIT_ORDER_MOVE) {
 				
 				
@@ -6918,7 +6876,7 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 	return false;
 }
 
-bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order)
+bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order) //used?
 {
 	static CellUnitList transports;
 	
@@ -7759,7 +7717,24 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		}
 
 		anyVisible = anyVisible || (m_array[i].GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
+ // EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
+//city to another city anywhere in the world and costing that unit 1 move.
+      
+		//UnitDynamicArray revealedUnits;
+		//bool revealedUnexplored = false;
+		//for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
+			if(m_array[i].GetDBRec()->GetCanRebase()){
+				if (!IsOccupiedByForeigner(pos)){
+					if (g_theWorld->HasCity(pos) || terrainutil_HasAirfield(pos)) {  //add unit later?
+ 						m_array[i].SetPosition(pos, revealedUnits, revealedUnexplored);
+						//return true;
+					}
+				}
+				//return false;
+			}
+		//}
 
+ //end EMOD
 		if(g_theWorld->GetCell(pos)->GetNumUnits() >= k_MAX_ARMY_SIZE) {
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i],
