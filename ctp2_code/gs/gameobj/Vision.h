@@ -26,16 +26,35 @@
 // - Corrected strange vision behaviour at the top row.
 //
 //----------------------------------------------------------------------------
+//
+/// \file   Vision.h
+/// \brief  Handling of tile visibility (declarations)
 
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef _VISION_H_
-#define _VISION_H_
+#ifndef VISION_H_
+#define VISION_H_
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// None
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class Vision;
 
 #define k_EXPLORED_BIT 0x8000
 #define k_VISIBLE_REFERENCE_MASK (~(k_EXPLORED_BIT))
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
 #include "MapPoint.h"
 
@@ -45,16 +64,21 @@ class UnseenCellCarton;
 template <class T> class DynamicArray;
 class UnseenCell;
 
-enum CIRCLE_OP {
-	CIRCLE_OP_ADD,
-	CIRCLE_OP_SUBTRACT,
-	CIRCLE_OP_ADD_RADAR,
-	CIRCLE_OP_MERGE
-};
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 class Vision
 {
 private:
+    /// Operation to perform
+    enum CIRCLE_OP 
+    {
+	    CIRCLE_OP_ADD,          ///< add to normal vision
+	    CIRCLE_OP_SUBTRACT,     ///< remove from normal vision
+	    CIRCLE_OP_ADD_RADAR,    ///< add to radar vision
+	    CIRCLE_OP_MERGE         ///< merge 2 visions
+    };
 	
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
@@ -66,7 +90,7 @@ private:
 	sint16 m_height;
 	sint32 m_owner;
 	sint16 m_xyConversion;   // Unused
-	BOOL   m_isYwrap;        // Unused
+	BOOL   m_isYwrap;
 	BOOL   m_amOnScreen;
 	
 //----------------------------------------------------------------------------
@@ -98,10 +122,6 @@ private:
 	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
 						DynamicArray<MapPoint> *removeadd);
 
-#if 0
-	void RasterFill(sint32 xc, sint32 yc, sint32 x, sint32 y,
-			   CIRCLE_OP op);
-#endif
 
 public:
 	Vision(sint32 owner, bool amOnScreen = false);

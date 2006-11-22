@@ -1,23 +1,12 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "TerrImprove.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "TerrImprovePool.h"
-#include "dynarr.h"
-#include "player.h"
 
-#include "network.h"
-#include "net_info.h"
-#include "SelItem.h"
+#include "net_info.h"             // NetInfo
+#include "network.h"              // g_network
+#include "player.h"               // g_player
+#include "SelItem.h"              // g_selected_item
+#include "TerrImprovePool.h"      // g_theTerrainImprovementPool
+#include "World.h"                // g_theWorld
 
 void TerrainImprovement::KillImprovement()
 {
@@ -41,12 +30,6 @@ void TerrainImprovement::RemoveAllReferences()
 	g_theTerrainImprovementPool->Del(*this);
 }
 
-//const TerrainImprovementRecord *TerrainImprovement::GetDBRec() const //added by E to access imps 3-1-2006
-//{
-//	return g_theTerrainImprovementDB->Get(GetData()->GetType());
-//}
-
-
 const TerrainImprovementData *TerrainImprovement::GetData() const
 {
 	return g_theTerrainImprovementPool->GetTerrainImprovement(*this);
@@ -64,5 +47,5 @@ void TerrainImprovement::AddTurn()
 
 bool TerrainImprovement::IsValid()
 {
-	return g_theTerrainImprovementPool->IsValid(*this) == TRUE;
+	return g_theTerrainImprovementPool->IsValid(*this);
 }

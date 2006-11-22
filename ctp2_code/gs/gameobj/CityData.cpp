@@ -4165,7 +4165,7 @@ bool CityData::BeginTurn()
 		//TODO: technology modifier that allows for more suppression
 		//TODO: govt modifier that allows for more suppression
 		chance += barbchance;
-		chance += NotFounder
+		chance += NotFounder;
 		chance += NotCityStyle;
 
 
