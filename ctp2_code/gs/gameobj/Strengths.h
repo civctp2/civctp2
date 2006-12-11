@@ -47,13 +47,13 @@ public:
 	void Serialize(CivArchive &archive);
 
 	void Calculate();
-	sint32 GetStrength(STRENGTH_CAT category);
-	sint32 GetTurnStrength(STRENGTH_CAT category, sint32 turn);
+	sint32 GetStrength(STRENGTH_CAT category) const;
+	sint32 GetTurnStrength(STRENGTH_CAT category, sint32 turn) const;
 
-	sint32 GetTotalUnitCost();
-	sint32 GetTotalBuildingCost();
-	sint32 GetTotalWonderCost();
-	sint32 GetTotalProduction();
+	sint32 GetTotalUnitCost() const;
+	sint32 GetTotalBuildingCost() const;
+	sint32 GetTotalWonderCost() const;
+	sint32 GetTotalProduction() const;
 };
 
 #endif

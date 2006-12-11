@@ -6687,13 +6687,10 @@ bool ArmyData::IsOccupiedByForeigner(const MapPoint &pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	if(cell->GetNumUnits() < 1)
+	if (cell->GetNumUnits() < 1)
 		return false;
 
-	if(cell->UnitArmy()->GetOwner() != m_owner)
-		return true;
-
-	return false;
+	return cell->UnitArmy()->GetOwner() != m_owner;
 }
 
 //----------------------------------------------------------------------------
@@ -7136,9 +7133,15 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	if(defender.Num() <= 0)
 		return false;
 
-	PLAYER_INDEX defense_owner = defender.GetOwner();
+	PLAYER_INDEX    defense_owner   = defender.GetOwner();
+	PLAYER_INDEX    attack_owner    = GetOwner();
 
-	PLAYER_INDEX   attack_owner = GetOwner(); 
+    if (defense_owner == attack_owner)
+    {
+        // No use attacking own troops
+        return false;
+    }
+
 	if (    g_player[attack_owner]->HasWarWith(defense_owner)
 	     && CanFight(defender)
 	   )

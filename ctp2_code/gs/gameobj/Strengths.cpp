@@ -138,14 +138,14 @@ void Strengths::Calculate()
 	}
 }
 
-sint32 Strengths::GetStrength(STRENGTH_CAT category)
+sint32 Strengths::GetStrength(STRENGTH_CAT category) const
 {
 	return m_strengthRecords[category].Num() 
 		   ? m_strengthRecords[category].GetLast()
 		   : 0;
 }
 
-sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) 
+sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
 {
 	if (!m_strengthRecords[category].Num()) return 0;
 	
@@ -158,7 +158,7 @@ sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn)
 	return m_strengthRecords[category][turn];
 }
 
-sint32 Strengths::GetTotalUnitCost()
+sint32 Strengths::GetTotalUnitCost() const
 {
 	sint32 i;
 	sint32 c = 0;
@@ -169,7 +169,7 @@ sint32 Strengths::GetTotalUnitCost()
 	return c;
 }
 
-sint32 Strengths::GetTotalBuildingCost()
+sint32 Strengths::GetTotalBuildingCost() const
 {
 	sint32 i, j;
 	sint32 c = 0;
@@ -185,7 +185,7 @@ sint32 Strengths::GetTotalBuildingCost()
 	return c;
 }
 
-sint32 Strengths::GetTotalWonderCost()
+sint32 Strengths::GetTotalWonderCost() const
 {
 	sint32 i;
 	sint32 c = 0;
@@ -197,7 +197,7 @@ sint32 Strengths::GetTotalWonderCost()
 	return c;
 }
 
-sint32 Strengths::GetTotalProduction()
+sint32 Strengths::GetTotalProduction() const
 {
 	sint32 i;
 	sint32 c = 0;

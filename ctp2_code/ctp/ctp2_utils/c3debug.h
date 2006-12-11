@@ -32,8 +32,8 @@
 #pragma once
 #endif
 
-#ifndef __C3DEBUG_H__
-#define __C3DEBUG_H__
+#ifndef C3DEBUG_H__
+#define C3DEBUG_H__
 
 #include "c3.h"	
 #undef Assert	
@@ -89,8 +89,8 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DEBUG_OWNER_ZBS           7
 
 int		c3debug_InitDebugLog();
-int		c3debug_dprintf(char* format, ...);
-int		c3debug_dprintfPrefix(int mask, char* file, int line);
+int		c3debug_dprintf(char const * format, ...);
+int		c3debug_dprintfPrefix(int mask, char const * file, int line);
 void	c3debug_SetDebugMask(int mask, int set);
 #if defined(WIN32)
 char	*c3debug_StackTrace(void);
@@ -99,7 +99,7 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 #endif
 void	c3debug_ExceptionExecute(CivExceptionFunction function);
 
-void	c3debug_Assert(char *s, char *file, int line);
+void	c3debug_Assert(char const * s, char const * file, int line);
 
 #ifdef _DEBUG
 	#define DPRINTF(mask, x) { c3debug_dprintfPrefix(mask, __FILE__, __LINE__); c3debug_dprintf x;}

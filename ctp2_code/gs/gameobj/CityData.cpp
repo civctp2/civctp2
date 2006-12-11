@@ -9663,7 +9663,11 @@ void CityData::GetSpecialistsEffect(sint32 ring, double &farmersEff, double &lab
 //----------------------------------------------------------------------------
 sint32 CityData::StyleHappinessIncr() const
 {
-	return g_theCityStyleDB->Get(m_cityStyle, g_player[m_owner]->GetGovernmentType())->GetHappyInc();
+    CityStyleRecord const * style   = 
+        g_theCityStyleDB->Get(m_cityStyle, 
+                              g_player[m_owner]->GetGovernmentType()
+                             );
+    return (style) ? style->GetHappyInc() : 0;
 }
 
 //----------------------------------------------------------------------------
@@ -9686,11 +9690,10 @@ sint32 CityData::StyleHappinessIncr() const
 //----------------------------------------------------------------------------
 sint32 CityData::GoodHappinessIncr() const
 {
-	sint32 i;
 	sint32 totalHappinessInc = 0;
-	for(i = 0; i < g_theResourceDB->NumRecords(); ++i)
+	for (sint32 i = 0; i < g_theResourceDB->NumRecords(); ++i)
 	{
-		if(HasNeededGood(i))
+		if (HasNeededGood(i))
 		{
 			totalHappinessInc += g_theResourceDB->Get(i)->GetHappyInc();
 		}
