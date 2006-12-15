@@ -631,7 +631,7 @@ void Vision::Serialize(CivArchive &archive)
 	} 
     else 
     {
-        for (int x = 0; x < m_width; x++) 
+        for (sint16 x = 0; x < m_width; x++) 
         {
             delete [] m_array[x];
         }
@@ -642,10 +642,10 @@ void Vision::Serialize(CivArchive &archive)
         archive.LoadChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
 
         m_array         = new uint16*[m_width];
-        for (int x = 0; x < m_width; x++) 
+        for (sint16 y = 0; y < m_width; y++) 
         {
-            m_array[x] = new uint16[m_height];
-            archive.Load((uint8 *)m_array[x], sizeof(m_array[0][0]) * m_height) ;
+            m_array[y] = new uint16[m_height];
+            archive.Load((uint8 *)m_array[y], sizeof(m_array[0][0]) * m_height) ;
         }
 
 	    m_unseenCells   = new UnseenCellQuadTree(m_width, m_height, m_isYwrap);
