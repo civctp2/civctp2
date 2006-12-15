@@ -11,88 +11,67 @@
 
 
 #include "c3.h"
+#include "workeractor.h"
 
 #include "aui.h"
 #include "pixelutils.h"
+#include "SelItem.h"                // g_selected_item
 #include "tileutils.h"
-
 #include "Unit.h"
-#include "dynarr.h"
-
-#include "SelItem.h"
 
 #include "FacedSprite.h"
 #include "UnitSpriteGroup.h"
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "tiledmap.h"
+#include "tiledmap.h"               // g_tiledMap
 #include "Anim.h"
-#include "workeractor.h"
 
 
 #include "ActorPath.h"
 #include "Action.h"
-#include "director.h"
+#include "director.h"               // g_director
 #include "maputils.h"
 
 extern SpriteGroupList	*g_unitSpriteGroupList;
-extern TiledMap			*g_tiledMap;
-extern Director			*g_director;
-extern SelectedItem		*g_selected_item;
 
-WorkerActor::WorkerActor(sint32 index, const MapPoint &pos)
+namespace
 {
-	Initialize(index, pos);
+    /// Default transparency value
+    /// @todo Move to better location
+    uint16 const        TRANSPARENCY_DEFAULT    = 15;
 }
 
 WorkerActor::WorkerActor(sint32 index, const MapPoint &pos, sint32 x, sint32 y)
+:
+    Actor               (),
+	m_facing            (0),
+	m_frame             (0),
+	m_transparency      (TRANSPARENCY_DEFAULT),
+	m_index             (index),
+    m_pos               (pos),
+    m_unitSpriteGroup   (NULL),
+    m_curAction         (NULL),
+    m_curUnitAction     (),
+    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE)
 {
-	Initialize(index, pos);
-	m_x = x;
-	m_y = y;
-}
+	SetPos(x, y);
 
-WorkerActor::WorkerActor(WorkerActor *copy)
-{
-	*this = *copy;
-	m_actionQueue.CopyQueue();
-}
+	Assert(g_unitSpriteGroupList);
+    if (g_unitSpriteGroupList)
+    {
+        m_unitSpriteGroup = (UnitSpriteGroup *) 
+            g_unitSpriteGroupList->GetSprite(index, GROUPTYPE_UNIT, LOADTYPE_FULL,(GAME_ACTION)0);
+    }
 
+    AddIdle();
+}
 
 WorkerActor::~WorkerActor()
 {
-	
-	if (m_unitSpriteGroup != NULL) m_unitSpriteGroup = NULL;
+    delete m_curAction;
 }
 
-void WorkerActor::Initialize(sint32 index, const MapPoint &pos)
-{
-	GROUPTYPE		type;
-
-	m_curAction = NULL;
-	m_animPos = 0;
-
-	type = GROUPTYPE_UNIT;
-
-	Assert(g_unitSpriteGroupList);
-
-	m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite(index, type, LOADTYPE_FULL,(GAME_ACTION)0);
-
-	AddIdle();
-	m_pos = pos;
-
-	m_x = 0;
-	m_y = 0;
-
-	m_facing = 0;
-	m_frame = 0;
-
-	m_index = index;
-
-	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
-	
-}
 
 void WorkerActor::AddIdle(void)
 {
@@ -134,36 +113,36 @@ void WorkerActor::Process(void)
 		
 		m_transparency = m_curAction->GetTransparency();
 
-		POINT curPt;
 
 		
-		if (m_curAction->GetPath() != NULL) {
-			
-			curPt = m_curAction->GetPosition();
-
-
+		if (m_curAction->GetPath()) 
+        {
+		    (void) m_curAction->GetPosition();
 		}
-		
+
 		m_facing = m_curAction->GetFacing();
 	}
 }
 
 void WorkerActor::GetNextAction(void)
 {
-	if (m_curAction) {
-		delete m_curAction;
-		m_curAction = NULL;
-	}
+	delete m_curAction;
+	m_curAction = NULL;
 
-	if (m_actionQueue.GetNumItems() > 0) {
+	if (m_actionQueue.GetNumItems() > 0) 
+    {
 		m_actionQueue.Dequeue(m_curAction);
-		if (m_curAction) {
-			m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
-		} else {
+		if (m_curAction) 
+        {
+			m_curUnitAction = (UNITACTION) m_curAction->GetActionType();
+		} 
+        else 
+        {
 			Assert(FALSE);
 		}
-	} else {
-		
+	} 
+    else 
+    {
 		AddIdle();
 	}
 }
@@ -184,10 +163,10 @@ void WorkerActor::AddAction(Action *actionObj)
 	if (m_curAction)
     {
         if (!m_curAction->GetAnim() || 
-       	(m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) 
-       )
+       	    (m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) 
+           )
         {
-		m_curAction->SetFinished(TRUE);
+		    m_curAction->SetFinished(TRUE);
         }
     }
 }
@@ -212,72 +191,47 @@ Anim *WorkerActor::CreateAnim(UNITACTION action)
 
 void WorkerActor::Draw(void)
 {
-
-
-	Unit			selectedGood;
-
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;
 		
-
-
 	m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
 							1, m_transparency, color, flags, NULL, NULL);
 }
 
 void WorkerActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
 {
-
-
-	Unit			selectedGood;
-
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;
 		
-
-
 	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, sint32(x+(k_ACTOR_CENTER_OFFSET_X*scale)), sint32(y+(k_ACTOR_CENTER_OFFSET_Y*scale)), m_facing, 
 							scale, m_transparency, color, flags, NULL, NULL);
 }
 
-void WorkerActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)
+void WorkerActor::DrawText(sint32 x, sint32 y, MBCHAR const * unitText)
 {
 	m_unitSpriteGroup->DrawText(x, y, unitText);
 }
 
-BOOL WorkerActor::IsAnimating(void)
+bool WorkerActor::IsAnimating(void) const
 {
-	
-	return FALSE;
+	return false;
 }
 
-uint16 WorkerActor::GetWidth(void)
+uint16 WorkerActor::GetWidth(void) const
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite	*theSprite;
-
-	theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
-	if (theSprite != NULL) {
-		return theSprite->GetWidth();
-	} else {
-		return 0;
-	}
+	Sprite *    theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
+    return (theSprite) ? theSprite->GetWidth() : 0;
 }
 
-uint16 WorkerActor::GetHeight(void)
+uint16 WorkerActor::GetHeight(void) const
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite	*theSprite;
-
-	theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
-	if (theSprite != NULL) {
-		return theSprite->GetHeight();
-	} else {
-		return 0;
-	}
+	Sprite *    theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
+    return (theSprite) ? theSprite->GetHeight() : 0;
 }
 

@@ -30,60 +30,56 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "SpriteState.h"
-#include "SpriteGroupList.h"
-#include "tiledmap.h"
 #include "battleviewactor.h"
-#include "UnitPool.h"
-#include "primitives.h"
 
-#include "soundmanager.h"
+#include "aui_surface.h"
 #include "colorset.h"
+#include "primitives.h"
+#include "soundmanager.h"       // g_soundManager
+#include "SpriteGroupList.h"
+#include "SpriteState.h"
+#include "tiledmap.h"           // g_tiledMap
 
-extern SpriteGroupList  *g_unitSpriteGroupList;
-extern TiledMap         *g_tiledMap;
-extern UnitPool         *g_theUnitPool;
-extern SoundManager     *g_soundManager;
+extern SpriteGroupList *        g_unitSpriteGroupList;
 
-BattleViewActor::BattleViewActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner)
-: Actor(ss)
+BattleViewActor::BattleViewActor
+(
+    SpriteState *       ss, 
+    Unit                id, 
+    sint32              unitType, 
+    const MapPoint &    pos, 
+    sint32              owner
+)
+: 
+    Actor               (ss),
+	m_pos               (pos),
+	m_unitID            (id),
+	m_unitDBIndex       (unitType),
+	m_playerNum         (owner),
+    m_unitSpriteGroup   (NULL),
+	m_facing            (k_DEFAULTSPRITEFACING),
+	m_frame             (0),
+	m_transparency      (15),
+	m_curAction         (NULL),
+	m_curUnitAction     (UNITACTION_NONE),
+    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
+	m_type              (GROUPTYPE_UNIT),
+	m_spriteID          (0),
+    m_hitPoints         (0.0),
+    m_hitPointsMax      (0.0),
+	m_isFortified       (false)
 {
-	m_type = GROUPTYPE_UNIT;
-	m_spriteID = static_cast<uint32>(ss->GetIndex());
+    if (ss)
+    {
+        m_spriteID = static_cast<uint32>(ss->GetIndex());
+    }
 
-	m_spriteState = ss;
-	m_unitDBIndex = unitType;
-	m_playerNum = owner;
-	m_unitID = id;
-	m_pos = pos;
-
-	Initialize();
-	
-	m_facing = k_DEFAULTSPRITEFACING;
-}
-
-void BattleViewActor::Initialize(void)
-{
-	
-	m_curAction = NULL;
-	m_animPos = 0;
-
-	m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_FULL,(GAME_ACTION)0);
-
-	m_x = 0;
-	m_y = 0;
-
-	m_frame = 0;
-
-	m_transparency = 15;
-
-	m_hitPoints = 0;
-	m_hitPointsMax = 0;
-
-	m_isFortified = FALSE;
-
-	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
+    if (g_unitSpriteGroupList)
+    {
+	    m_unitSpriteGroup = 
+            (UnitSpriteGroup *) g_unitSpriteGroupList->GetSprite
+                (m_spriteID, m_type, LOADTYPE_FULL, (GAME_ACTION) 0);
+    }
 
 	AddIdle();
 }
@@ -92,21 +88,14 @@ BattleViewActor::~BattleViewActor()
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Deleting actor at %lx, unit=%lx\n", this, m_unitID.m_id));
 
+    DumpAllActions();
 	
-	DumpAllActions();
-
-	
-	if (m_unitSpriteGroup != NULL) {
+	if (m_unitSpriteGroup && g_unitSpriteGroupList) 
+    {
 		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
 	}
 
-	m_actionQueue.Deallocate();
-
-	
-
-
-	
-	if (m_curAction) delete m_curAction;
+	delete m_curAction;
 }
 
 
@@ -250,9 +239,9 @@ void BattleViewActor::AddAction(Action *actionObj)
 	
 	
 	
-	if(g_theUnitPool->IsValid(GetUnitID())) 
+	if (m_unitID.IsValid()) 
 	{
-		m_playerNum = GetUnitID().GetOwner();
+		m_playerNum = m_unitID.GetOwner();
 	}
 
 	
@@ -340,15 +329,9 @@ Anim *BattleViewActor::MakeFakeDeath(void)
 
 void BattleViewActor::Draw(BOOL fogged)
 {
-	uint16			flags;
-	Pixel16			color;
-	Unit			top;
+	uint16			flags           = k_DRAWFLAGS_NORMAL;
+	Pixel16			color           = 0x0000;
 	BOOL			directionAttack = FALSE;
-	
-	flags = k_DRAWFLAGS_NORMAL;
-	color = 0x0000;
-
-	
 	
 	if (m_transparency < 15) {
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
@@ -357,7 +340,7 @@ void BattleViewActor::Draw(BOOL fogged)
 	if (fogged)
 		flags |= k_BIT_DRAWFLAGS_FOGGED;
 
-	if(m_curAction == NULL)
+	if (m_curAction == NULL)
 	{
 		
 		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
@@ -372,8 +355,8 @@ void BattleViewActor::Draw(BOOL fogged)
 
 void BattleViewActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 {
-	uint16			flags = k_DRAWFLAGS_NORMAL;
-	Pixel16			color=0;
+	uint16			flags           = k_DRAWFLAGS_NORMAL;
+	Pixel16			color           = 0x0000;
 	BOOL			directionAttack = FALSE;
 
 	if (m_transparency < 15) {
@@ -502,14 +485,14 @@ void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 	primitives_PaintRect16(surf, &leftRect, color);
 }
 
-uint16 BattleViewActor::GetWidth(void)
+uint16 BattleViewActor::GetWidth(void) const
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite	*theSprite;
+	Sprite * theSprite = 
+        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
 
-	theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
 	if (theSprite != NULL) 
 	{
 		return theSprite->GetWidth();
@@ -527,14 +510,14 @@ uint16 BattleViewActor::GetWidth(void)
 	}
 }
 
-uint16 BattleViewActor::GetHeight(void)
+uint16 BattleViewActor::GetHeight(void) const
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite	*theSprite;
+	Sprite * theSprite = 
+        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) m_curUnitAction);
 
-	theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
 	if (theSprite != NULL) 
 	{
 		return theSprite->GetHeight();
@@ -552,7 +535,7 @@ uint16 BattleViewActor::GetHeight(void)
 	}
 }
 
-void BattleViewActor::GetBoundingRect(RECT *rect)
+void BattleViewActor::GetBoundingRect(RECT *rect) const
 {
 	Assert(rect != NULL);
 	if (rect == NULL) return;

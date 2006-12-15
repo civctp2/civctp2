@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "EffectActor.h"
 
 #include "aui.h"
 #include "pixelutils.h"
@@ -41,7 +42,6 @@
 #include "SpriteGroupList.h"
 #include "tiledmap.h"
 #include "Anim.h"
-#include "EffectActor.h"
 #include "Action.h"
 #include "director.h"
 #include "colorset.h"
@@ -53,53 +53,50 @@ extern SpriteGroupList	*g_effectSpriteGroupList;
 extern TiledMap			*g_tiledMap;
 extern Director			*g_director;
 
-EffectActor::EffectActor(SpriteState *ss, const MapPoint &pos)
-: Actor(ss)
+EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
+: 
+    Actor                       (ss),
+    m_pos                       (pos),
+    m_savePos                   (),
+    m_shX                       (0), 
+    m_shY                       (0), 
+    m_effectSpriteGroup         (NULL),
+    m_facing                    (0),
+    m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
+    m_frame                     (0),
+//    m_transparency;
+    m_curAction                 (NULL),
+    m_curEffectAction           (EFFECTACTION_NONE),
+    m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
+//    m_playerNum;
+    m_effectVisibility          (0), 
+//    m_effectSaveVisibility; 
+    m_dieAtTick                 (0),
+//    m_directionalAttack; 
+    m_needsToDie                (false), 
+    m_killNow                   (false), 
+    m_generateDeath             (false),
+    m_bVisSpecial               (false) 
 {
-	GROUPTYPE		type;
-
-	
-	m_effectVisibility = 0;
-	m_bVisSpecial = FALSE;
-	m_spriteState = ss;
-	m_curEffectAction = EFFECTACTION_NONE;
-	m_curAction = NULL;
-	m_animPos = 0;
-	m_needsToDie = FALSE;
-	m_dieAtTick = 0;
-	m_killNow = FALSE;
-	m_generateDeath = FALSE;
-
-	type = GROUPTYPE_EFFECT;
-
-	m_effectSpriteGroup = (EffectSpriteGroup *)g_effectSpriteGroupList->GetSprite(ss->GetIndex(), type, LOADTYPE_FULL,(GAME_ACTION)0);
-
-	m_pos = pos;
-	
-	m_savePos.x = m_savePos.y = 0;
-
-	m_shX = m_x = 0;
-	m_shY = m_y = 0;
-
-	m_facing = 0;
-	m_frame = 0;
-	m_lastMoveFacing = k_DEFAULTSPRITEFACING;
-
-	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
-
+    if (ss && g_effectSpriteGroupList)
+    {
+	    m_effectSpriteGroup = (EffectSpriteGroup *)
+            g_effectSpriteGroupList->GetSprite
+                (ss->GetIndex(), GROUPTYPE_EFFECT, LOADTYPE_FULL,(GAME_ACTION) 0);
+    }
 }
 
 
 EffectActor::~EffectActor()
 {
-	g_effectSpriteGroupList->ReleaseSprite(m_spriteState->GetIndex(), LOADTYPE_FULL);
+    if (g_effectSpriteGroupList && m_spriteState)
+    {
+	    g_effectSpriteGroupList->ReleaseSprite(m_spriteState->GetIndex(), LOADTYPE_FULL);
+    }
 
     /// @todo Check moving m_spriteState delete to Actor
 	delete m_spriteState;
 	m_spriteState = NULL;
-
-	m_actionQueue.Deallocate();
-
 }
 
 void EffectActor::ChangeType(SpriteState *ss, sint32 type,  Unit id)

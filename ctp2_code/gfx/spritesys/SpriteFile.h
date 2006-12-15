@@ -29,12 +29,10 @@
 #pragma once
 #endif
 
-#include "c3.h"
-#include "Action.h"
+#ifndef SPRITEFILE_H__
+#define SPRITEFILE_H__
 
-
-#ifndef __SPRITEFILE_H__
-#define __SPRITEFILE_H__
+class SpriteFile;
 
 #define k_SPRITEFILE_TAG            0x53505246 //'SPRF'
 #define k_SPRITEFILE_VERSION0		0x00010003 
@@ -109,12 +107,14 @@ typedef struct
 
 #define k_SPRITEFILE_HEADER_SIZE	(sizeof(uint32) + sizeof(uint32) + sizeof(uint32))
 
+#include "c3.h"
+#include "Action.h"
+
 class Sprite;
 class FacedSprite;
 class FacedSpriteWshadow;
 class SpriteGroup;
 class UnitSpriteGroup;
-class ProjectileSpriteGroup;
 class EffectSpriteGroup;
 class GoodSpriteGroup;
 class CitySpriteGroup;
@@ -138,7 +138,6 @@ public:
 	SPRITEFILEERR	Write(FacedSpriteWshadow *s, Anim *anim);
 	SPRITEFILEERR	Write(SpriteGroup *s, Anim *anim);
 	SPRITEFILEERR	Write(UnitSpriteGroup *s);
-	SPRITEFILEERR	Write(ProjectileSpriteGroup *s);
 	SPRITEFILEERR	Write(EffectSpriteGroup *s);
 	SPRITEFILEERR	Write(GoodSpriteGroup *s);
 	SPRITEFILEERR	Write(CitySpriteGroup *s, Anim *anim);
@@ -184,7 +183,6 @@ public:
 	SPRITEFILEERR	ReadIndexed(UnitSpriteGroup *s,GAME_ACTION index);
 	SPRITEFILEERR	ReadIndexed(GoodSpriteGroup *s,GAME_ACTION index);
 	
-	SPRITEFILEERR	Read(ProjectileSpriteGroup *s);
 	SPRITEFILEERR	Read(EffectSpriteGroup *s);
 
 

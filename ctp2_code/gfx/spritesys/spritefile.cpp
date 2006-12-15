@@ -1701,10 +1701,10 @@ SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
 	}
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+	s->SetHasDeath(0 != data16);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	s->SetHasDirectional(0 != data16);
 
 	return SPRITEFILEERR_OK;
 }
@@ -1791,10 +1791,10 @@ SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
 
 	
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+	s->SetHasDeath(0 != data16);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	s->SetHasDirectional(0 != data16);
 
 	return SPRITEFILEERR_OK;
 }
@@ -1887,10 +1887,10 @@ SPRITEFILEERR SpriteFile::ReadFull_v13(UnitSpriteGroup *s)
 	}
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+	s->SetHasDeath(0 != data16);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	s->SetHasDirectional(0 != data16);
 
 	return SPRITEFILEERR_OK;
 }
@@ -1933,10 +1933,10 @@ SPRITEFILEERR SpriteFile::ReadFull_v20(UnitSpriteGroup *s)
 		ReadData((void *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+	s->SetHasDeath(0 != data16);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	s->SetHasDirectional(0 != data16);
 
 	return SPRITEFILEERR_OK;
 }
@@ -2024,10 +2024,10 @@ SpriteFile::ReadIndexed_v13(UnitSpriteGroup *s,GAME_ACTION action)
 	}
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+	s->SetHasDeath(0 != data16);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	s->SetHasDirectional(0 != data16);
 
 	return SPRITEFILEERR_OK;
 }
@@ -2073,10 +2073,10 @@ SpriteFile::ReadIndexed_v20(UnitSpriteGroup *s,GAME_ACTION action)
 	}
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+	s->SetHasDeath(0 != data16);
 
 	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	s->SetHasDirectional(0 != data16);
 
 	return SPRITEFILEERR_OK;
 }

@@ -49,6 +49,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "UnitActor.h"
 
 #include "aui_bitmapfont.h"
 
@@ -59,7 +60,6 @@
 #include "SpriteState.h"
 #include "SpriteGroupList.h"
 #include "tiledmap.h"
-#include "UnitActor.h"
 #include "director.h"
 #include "colorset.h"
 #include "UnitPool.h"
@@ -115,41 +115,78 @@ namespace
 
 UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner, BOOL isUnseenCellActor,
 					 double visionRange, sint32 citySprite)
-:   Actor   (ss)
+:   
+    Actor                       (ss),
+	m_refCount                  (1),
+    m_pos                       (pos),
+	m_savePos                   (),
+    m_unitID                    (id),
+    m_unitDBIndex               (unitType),
+    m_playerNum                 (owner),
+    m_nextPop                   (0),
+    m_unitSpriteGroup           (NULL),
+    m_loadType                  (LOADTYPE_NONE),
+    m_facing                    (k_DEFAULTSPRITEFACING),
+    m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
+    m_frame                     (0),
+//	uint16				m_transparency;
+    m_curAction                 (NULL),
+    m_curUnitAction             (UNITACTION_NONE),
+    m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
+//	RECT				m_heraldRect;
+	m_unitVisibility            (0),
+    m_unitSaveVisibility        (0),
+    m_directionalAttack         (false),
+    m_needsToDie                (false),
+    m_needsToVictor             (false),
+    m_killNow                   (false),
+	m_unitVisionRange           (visionRange),	
+    m_newUnitVisionRange        (0.0),
+    m_numRevealedActors         (0),
+    m_revealedActors            (NULL),
+    m_numSavedRevealedActors    (0),
+    m_savedRevealedActors       (NULL),
+    m_bVisSpecial               (false),
+    m_moveActors                (NULL),
+    m_numOActors                (0),
+    m_hidden                    (false),
+    m_hiddenUnderStack          (false),
+    m_isTransported             (false),
+//	sint32				m_holdingCurAnimPos[UNITACTION_MAX]; 
+//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX]; 
+//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX]; 
+//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX]; 
+//	sint32				m_holdingCurAnimSpecialDelayProcess; 
+    m_size                      (0),
+    m_isUnseenCellActor         (isUnseenCellActor),
+//	GROUPTYPE			m_type;								
+//	sint32				m_spriteID;							
+    m_isFortified               (false),
+    m_isFortifying              (false),
+    m_hasCityWalls              (false),
+    m_hasForceField             (false),
+//	uint32				m_shieldFlashOnTime;
+//	uint32				m_shieldFlashOffTime;
+//	sint32				m_activeListRef;
+//	double				m_healthPercent;	
+    m_tempStackSize             (0)
+#ifdef _ACTOR_DRAW_OPTIMIZATION
+//	sint32				m_oldFacing;
+//	BOOL				m_oldIsFortified;
+//	BOOL				m_oldIsFortifying;
+//	BOOL				m_oldHasCityWalls;
+//	BOOL				m_oldHasForceField;
+//	BOOL				m_oldDrawShield;
+//	BOOL				m_oldDrawSelectionBrackets;
+//	uint16				m_oldFlags;
+#endif
 {	
 	sint32 spriteID;
-
-	m_unitVisionRange = visionRange;
-	m_unitVisibility = NULL;
-	m_unitSaveVisibility = NULL;
-
-	m_size = 0;
-	m_nextPop = 0;//PFT 29 mar 05, show # turns until city next grows a pop
 	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);
-	m_spriteID = (sint32)spriteID;
-
-	m_loadType = LOADTYPE_NONE;
-
-	
-	
-	if(m_spriteID < 1)
-		m_spriteID = citySprite;
+    m_spriteID = (spriteID < 1) ? citySprite : spriteID;
 	Assert(m_spriteID >= 1);
 
-	m_spriteState = ss;
-	m_unitDBIndex = unitType;
-	m_playerNum = owner;
-	m_unitID = id;
-	m_pos = pos;
-	m_isUnseenCellActor = isUnseenCellActor;
-
 	Initialize();
-
-	
-	m_facing = k_DEFAULTSPRITEFACING;
-	m_lastMoveFacing = k_DEFAULTSPRITEFACING;
-
-	m_refCount = 1;
 }
 
 
@@ -358,9 +395,6 @@ UnitActor::~UnitActor()
 
 	delete [] m_savedRevealedActors;
 	delete [] m_revealedActors;
-
-	m_actionQueue.Deallocate();
-
 	delete m_spriteState;
 }
 
@@ -837,9 +871,6 @@ Action *UnitActor::WillDie(void)
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-	sint32		numItems = GetActionQueueNumItems();
-	sint32		i;
-	Action		*action;
 	sint32		type;
 
 	if (m_curAction != NULL) {
@@ -853,10 +884,15 @@ Action *UnitActor::WillDie(void)
 			}
 		}
 	}
-	
-	for (i=0; i<numItems; i++) {
+
+	size_t  numItems = GetActionQueueNumItems();
+
+	for (size_t i = 0; i < numItems; ++i) 
+    {
+    	Action * action = NULL;
 		m_actionQueue.GetQueueItem(i, action);
-		if (action) {
+		if (action) 
+        {
 			type = action->m_actionType;
 			if (type == UNITACTION_VICTORY) {
 				if (HasDeath())
@@ -876,9 +912,6 @@ Action *UnitActor::WillMorph(void)
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-	sint32		numItems = GetActionQueueNumItems();
-	sint32		i;
-	Action		*action;
 	sint32		type;
 
 	if (m_curAction != NULL) {
@@ -888,7 +921,10 @@ Action *UnitActor::WillMorph(void)
 		}
 	}
 	
-	for (i=0; i<numItems; i++) {
+	size_t numItems = GetActionQueueNumItems();
+	for (size_t i = 0; i < numItems; ++i) 
+    {
+        Action * action = NULL;
 		m_actionQueue.GetQueueItem(i, action);
 		if (action) {
 			if (action->m_actionType == UNITACTION_MORPH) {
@@ -2551,8 +2587,6 @@ UnitActor::TerminateLoopingSound(uint32 sound_type)
 #ifdef _DEBUG
 void UnitActor::DumpActor(void)
 {
-	sint32 i;
-
 	DPRINTF(k_DBG_UI, ("Actor %#.8lx\n", this));
 	DPRINTF(k_DBG_UI, ("  m_unitID           :%#.8lx\n", m_unitID));
 	DPRINTF(k_DBG_UI, ("  m_unitDBIndex      :%d\n", m_unitDBIndex));
@@ -2575,10 +2609,11 @@ void UnitActor::DumpActor(void)
 
 	DPRINTF(k_DBG_UI, ("  m_actionQueue         :%d\n", m_actionQueue.GetNumItems()));
 	if (m_actionQueue.GetNumItems() > 0) {
-		Action		*action;
-		for (i=0; i<m_actionQueue.GetNumItems(); i++) {
+		for (size_t i = 0; i < m_actionQueue.GetNumItems(); i++) 
+        {
+		    Action * action = NULL;
 			m_actionQueue.GetQueueItem(i, action);
-			DPRINTF(k_DBG_UI, ("  m_actionQueue Item      :%d\n", i));
+			DPRINTF(k_DBG_UI, ("  m_actionQueue Item      :%u\n", i));
 
 			if (action) {
 				DPRINTF(k_DBG_UI, ("  action.m_actionType     :%ld\n", action->m_actionType));

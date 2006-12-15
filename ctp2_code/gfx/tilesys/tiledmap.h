@@ -230,7 +230,7 @@ public:
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
 	void			ProcessLayerSprites(RECT *processRect, sint32 layer);
-	void			PaintGoodActor(GoodActor *actor, BOOL fog = FALSE);
+	void			PaintGoodActor(GoodActor *actor, bool fog = false);
 
 	
 	void			ProcessUnit(Unit unit);

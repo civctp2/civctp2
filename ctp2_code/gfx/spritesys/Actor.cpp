@@ -28,44 +28,27 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SpriteState.h"
-#include "Anim.h"
-#include "Unit.h"
 #include "Actor.h"
-#include "soundmanager.h"
-
-
-
-extern SoundManager		*g_soundManager;
 
 
 Actor::Actor(SpriteState * ss)
 :
 #if defined(_ACTOR_DRAW_OPTIMIZATION)
-	m_paintTwice    (0),
-	m_oldOffsetX    (-1),
+    m_paintTwice    (0),
+    m_oldOffsetX    (-1),
     m_oldOffsetY    (-1),
-	m_oldFrame      (-1),
+    m_oldFrame      (-1),
 #endif
-	m_isactive      (false),
-	m_x             (0),
+    m_isactive      (false),
+    m_x             (0),
     m_y             (0),
     m_spriteState   (ss),
-    m_morphing      (FALSE),
+    m_morphing      (false),
     m_animPos       (0)
-{ ; }
+{ }
 
 Actor::~Actor(void)
-{
-}
-
-void Actor::SetAnim(Anim *a)
-{
-}
-
-void Actor::Process(void)
-{	
-}
+{ }
 
 
 
