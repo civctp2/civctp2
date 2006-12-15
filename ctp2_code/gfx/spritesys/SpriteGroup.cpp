@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Common sprite handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,82 +26,69 @@
 //
 // - Moved common SpriteGroup member handling to SpriteGroup.
 // - Fixed memory leaks.
+// - Corrected DeallocateStorage (was deleting the wrong member).
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "pixelutils.h"
-
-#include "Sprite.h"
 #include "SpriteGroup.h"
+
+#include <algorithm>    // std::fill
+#include "pixelutils.h"
+#include "Sprite.h"
 #include "Token.h"
 
 SpriteGroup::SpriteGroup(GROUPTYPE type)
+:	
+    m_type              (type),
+    m_width             (0),
+    m_height            (0),
+    m_usageRefCount     (0),			
+    m_fullLoadRefCount  (0),			
+    m_loadType          (LOADTYPE_NONE),
+    m_hasDeath          (false),
+    m_hasDirectional    (false)
 {
-	m_type = type;
-
-	m_usageRefCount = 0;
-	m_fullLoadRefCount = 0;
-
-	
-	m_width = 0;
-    m_height= 0;
-	
-	m_usageRefCount=0;			
-	m_fullLoadRefCount=0;		
-
-	m_loadType=LOADTYPE_NONE;
-
-	for(int i=0;i<ACTION_MAX;i++)
-	{
-	  m_sprites[i]=NULL;
-	  m_anims  [i]=NULL;
-	}
-
-	m_hasDeath=FALSE;
-	m_hasDirectional=FALSE;
-
-
+    std::fill(m_sprites, m_sprites + ACTION_MAX, (Sprite *) NULL);
+    std::fill(m_anims, m_anims + ACTION_MAX, (Anim *) NULL);
 }
 
 SpriteGroup::~SpriteGroup()
 {
-	for (int i = 0; i < ACTION_MAX; ++i) 
-	{
-		delete m_anims[i];
-		delete m_sprites[i];
-	}
+    for (int i = 0; i < ACTION_MAX; ++i) 
+    {
+        delete m_anims[i];
+        delete m_sprites[i];
+    }
 }
 
 
 
-sint32 SpriteGroup::GetNumFrames(GAME_ACTION action)
+size_t SpriteGroup::GetNumFrames(GAME_ACTION action) const
 {
-	if((action<0)||(action>=ACTION_MAX))
-	   return 0;
+	if ((action < 0) || (action >= ACTION_MAX))
+	    return 0;
 
-	if (m_sprites[action] != NULL)
-		return m_sprites[action]->GetNumFrames();
-
-	return 0;
+    return m_sprites[action] ? m_sprites[action]->GetNumFrames() : 0;
 }
 
 
 void SpriteGroup::DeallocateStorage(void)
 {
-	for(sint32 i = ACTION_0; i < ACTION_MAX; i++){
-		delete m_anims[i];
-		m_anims[i] = NULL;
-	}
+    for (int i = ACTION_0; i < ACTION_MAX; i++)
+    {
+        delete m_sprites[i];
+        m_sprites[i] = NULL;
+    }
 }
 
 void SpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for(sint32 i = ACTION_0; i < ACTION_MAX; i++){
-		delete m_anims[i];
-		m_anims[i] = NULL;
-	}
+    for (int i = ACTION_0; i < ACTION_MAX; i++)
+    {
+        delete m_anims[i];
+        m_anims[i] = NULL;
+    }
 }
 
 void SpriteGroup::Draw(	 sint32 drawX, 
@@ -117,7 +104,7 @@ void SpriteGroup::Draw(	 sint32 drawX,
 
 void SpriteGroup::DrawText(sint32 x, 
 						   sint32 y, 
-						   char *s)
+						   MBCHAR const * s)
 {
 }
 
@@ -147,14 +134,9 @@ void SpriteGroup::ReleaseFullLoad(void)
 void SpriteGroup::ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES main_token,TOKEN_TYPES sub_token,BOOL sub_value)
 {
 	extern TokenData	g_allTokens[];
-	Sprite             *sprite;
-	Anim               *anim;
-
 	fprintf(file,"\t%s", g_allTokens[main_token].keyword);
 	
-	sprite = GetGroupSprite(action);
-	anim   = GetGroupAnim(action);
-	
+    Sprite *    sprite  = GetGroupSprite(action);
 	if (sprite!=NULL) 
 	{	
 		fprintf(file, "\t1\n");
@@ -164,7 +146,7 @@ void SpriteGroup::ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES ma
 
 		sprite->Export(file);
 
-	 	
+        Anim *  anim    = GetGroupAnim(action);
 		if(anim!=NULL)
 		   anim->Export(file);
 	} 

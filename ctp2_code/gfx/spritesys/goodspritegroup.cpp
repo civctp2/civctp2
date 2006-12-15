@@ -31,39 +31,24 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
+#include "GoodSpriteGroup.h"
 
+#include "c3errors.h"
+#include <memory>         // std::auto_ptr
 #include "tiffutils.h"
 #include "pixelutils.h"
-
-#include "aui_directsurface.h"
 #include "primitives.h"
-
-#include "GoodSpriteGroup.h"
 #include "FacedSprite.h"
 #include "Sprite.h"
 #include "screenmanager.h"
-
 #include "CivPaths.h"
 #include "c3files.h"
-
 #include "SpriteFile.h"
 #include "Anim.h"
-
 #include "Token.h"
 
 extern CivPaths *g_civPaths;
 extern ScreenManager *g_screenManager;
-
-GoodSpriteGroup::GoodSpriteGroup(GROUPTYPE type)
-:
-SpriteGroup(type)
-{
-}
-
-GoodSpriteGroup::~GoodSpriteGroup()
-{
-}
 
 void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
@@ -73,8 +58,12 @@ void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32
 
 	if (m_sprites[action] == NULL) return;
 
-	if (frame >= m_sprites[action]->GetNumFrames())
+	if ((frame < 0) || 
+        (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
+       )
+    {
 		frame = 0;
+    }
 
 	m_sprites[action]->SetCurrentFrame((uint16)frame);
 	m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
@@ -96,55 +85,39 @@ POINT GoodSpriteGroup::GetHotPoint(GOODACTION action)
 {
 	POINT nullPoint = {0,0};
 
-	if (m_sprites[action] != NULL) {
-			return m_sprites[action]->GetHotPoint();
-	}
-
-	return nullPoint;	
+	return m_sprites[action] ? m_sprites[action]->GetHotPoint() : nullPoint;
 }
 
 
-#define kBenchIterations		10000
-
-void GoodSpriteGroup::RunBenchmark(aui_Surface *surf)
+void GoodSpriteGroup::LoadBasic(MBCHAR const * filename)
 {
-	exit(0);
-}
+	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
-
-void GoodSpriteGroup::LoadBasic(MBCHAR *filename)
-{
-	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
-
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadBasic(this);
 		file->CloseRead();
 		m_loadType = LOADTYPE_BASIC;
 	}
-
-	delete file;
 }
 
-void GoodSpriteGroup::LoadFull(MBCHAR *filename)
+void GoodSpriteGroup::LoadFull(MBCHAR const * filename)
 {
-	SpriteFile		*file = new SpriteFile(filename);
-	SPRITEFILETYPE	type;
+	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
+	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadFull(this);
 		file->CloseRead();
 		m_loadType = LOADTYPE_FULL;
 	}
-
-	delete file;
 }
 
-void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
+void GoodSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode)
 {
-	SpriteFile *file = new SpriteFile(filename);
+	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	if (SPRITEFILEERR_OK == 
 			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
@@ -153,31 +126,29 @@ void GoodSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 		file->Write(this);
 		file->CloseWrite();
 	}
-
-	delete file;
 }
 
 void GoodSpriteGroup::DeallocateStorage(void)
 {
-	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
-	{
+    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+    {
 	    delete m_sprites[i];
-		m_sprites[i] = NULL;
-	}
+        m_sprites[i] = NULL;
+    }
 }
 
 void GoodSpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for (sint32 i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
-	{
-		delete m_anims[i];
-		m_anims[i] = NULL;
-	}
+    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++) 
+    {
+        delete m_anims[i];
+        m_anims[i] = NULL;
+    }
 }
 
-void GoodSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
+void GoodSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 {
-	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x, y, (MBCHAR *)s, 0, 0);
+	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, 0, 0);
 }
 
 sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
@@ -201,14 +172,15 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 	printf("Good Processing '%s'\n", scriptName);
 
-	MBCHAR			*imageNames[k_MAX_NAMES];
-	MBCHAR			*shadowNames[k_MAX_NAMES];
-	sint32			i;
+	MBCHAR *    imageNames[k_MAX_NAMES];
+	MBCHAR *    shadowNames[k_MAX_NAMES];
+	size_t		i;
 
-	for (i=0; i<k_MAX_NAMES; i++) {
-		imageNames[i] = (char *)malloc(k_MAX_NAME_LENGTH);
-		shadowNames[i] = (char *)malloc(k_MAX_NAME_LENGTH);
-	}
+    for (i = 0; i < k_MAX_NAMES; i++) 
+    {
+        imageNames[i] =  new MBCHAR[k_MAX_NAME_LENGTH];
+        shadowNames[i] = new MBCHAR[k_MAX_NAME_LENGTH];
+    }
 
 	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
@@ -233,11 +205,13 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		}
 
 		idleSprite->Import(idleSprite->GetNumFrames(), imageNames, shadowNames);
+		delete m_sprites[GOODACTION_IDLE];
 		m_sprites[GOODACTION_IDLE] = idleSprite;
 		printf("]\n");
 
 		Anim *idleAnim = new Anim;
 		idleAnim->ParseFromTokens(theToken);
+		delete m_anims[GOODACTION_IDLE];
 		m_anims[GOODACTION_IDLE] = idleAnim;
 	}
 
@@ -245,15 +219,16 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 	delete theToken;
 
-	for (i=0; i<k_MAX_NAMES; i++) {
-		free(imageNames[i]);
-		free(shadowNames[i]);
-	}
+    for (i = 0; i < k_MAX_NAMES; i++) 
+    {
+        delete [] imageNames[i];
+        delete [] shadowNames[i];
+    }
 
 	return TRUE;
 }
 
-void GoodSpriteGroup::ExportScript(MBCHAR *name)
+void GoodSpriteGroup::ExportScript(MBCHAR const * name)
 {
 	extern TokenData	g_allTokens[];
 
@@ -265,10 +240,8 @@ void GoodSpriteGroup::ExportScript(MBCHAR *name)
 
 	char timebuf[100];
 	time_t ltime;
-	struct tm *now;
-
 	time(&ltime);
-	now = localtime(&ltime);
+	struct tm * now = localtime(&ltime);
 	strftime(timebuf, 100, "%I:%M%p %m/%d/%Y", now);
 
 	fprintf(file, "#\n");

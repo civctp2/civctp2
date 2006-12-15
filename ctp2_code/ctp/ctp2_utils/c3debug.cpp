@@ -104,7 +104,7 @@ int c3debug_InitDebugLog()
 		
 		MBCHAR fileName[256];
 		do {
-			sprintf(fileName, "logs%s%s", FILE_SEPC, fileData.cFileName);
+			sprintf(fileName, "logs%s%s", FILE_SEP, fileData.cFileName);
 			DeleteFile(fileName);
 		} while(FindNextFile(lpFileList,&fileData));
 

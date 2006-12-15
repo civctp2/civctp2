@@ -1,18 +1,17 @@
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
-#ifndef __SIMPLEDYNARR_H__
-#define __SIMPLEDYNARR_H__
+
+#ifndef SIMPLEDYNARR_H__
+#define SIMPLEDYNARR_H__
+
+template <class T> class SimpleDynamicArray;
 
 #include "civarchive.h"
+#include "ctp2_inttypes.h"  // sint32
 
-template <class T> class SimpleDynamicArray {
-private:
-	T *m_array;
-	sint32 m_nElements;
-	sint32 m_arraySize;
-
-	void Grow();
+template <class T> class SimpleDynamicArray 
+{
 public:
 	SimpleDynamicArray();
 	~SimpleDynamicArray();
@@ -20,14 +19,19 @@ public:
 
 	void Insert(const T &val);
 	T &Access(const sint32 i) {
-		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert((0 <= i) && (i < m_nElements));
 		return m_array[i];
 	}
 
-	T &operator [] (const sint32 i) {
-		Assert(0 <= i);
-		Assert(i < m_nElements);
+	T & operator [] (const sint32 i) 
+    {
+		Assert((0 <= i) && (i < m_nElements));
+		return m_array[i];
+	}
+
+	T const & operator [] (const sint32 i) const
+    {
+		Assert((0 <= i) && (i < m_nElements));
 		return m_array[i];
 	}
 
@@ -40,30 +44,45 @@ public:
 	void Clear() { m_nElements = 0; }
 
 	void DelIndex(sint32 i);
-	BOOL IsPresent(T chk);
+	bool IsPresent(T const & chk) const;
 
-	const T *GetArray() { return m_array; }
+#if 0
+	const T * GetArray() const { return m_array; }
+#endif
+
+private:
+    /// Stored data items
+    T *     m_array;
+    /// Number of stored data items
+    sint32  m_nElements;
+    /// Allocated size for storage.
+    /// Always larger than 0 and at least \a m_nElements.
+    sint32  m_arraySize;
+
+    /// Increase allocated size for storage
+    void Grow();
 };
 
 template <class T> SimpleDynamicArray<T>::SimpleDynamicArray()
+:
+    m_array        (new T[1]),
+    m_nElements    (0),
+    m_arraySize    (1)
 {
-	m_array = new T[1];
-	m_nElements = 0;
-	m_arraySize = 1;
 }
 
 template <class T> SimpleDynamicArray<T>::~SimpleDynamicArray()
 {
-	delete [] m_array;
+    delete [] m_array;
 }
 
 template <class T> void SimpleDynamicArray<T>::Grow()
 {
-	T *oldarray = m_array;
-	m_array = new T[m_arraySize * 2];
-	memcpy(m_array, oldarray, m_arraySize*sizeof(T));
-	m_arraySize *= 2;
-	delete [] oldarray;
+    T * oldarray = m_array;
+    m_array = new T[m_arraySize * 2];
+    memcpy(m_array, oldarray, m_arraySize * sizeof(T));
+    m_arraySize *= 2;
+    delete [] oldarray;
 }
 
 template <class T> void SimpleDynamicArray<T>::Insert(const T &val)
@@ -76,11 +95,9 @@ template <class T> void SimpleDynamicArray<T>::Insert(const T &val)
 
 template <class T> void SimpleDynamicArray<T>::DelIndex(sint32 i)
 {
-	Assert(i >= 0);
-	Assert(i < m_nElements);
-	
-	memmove(&m_array[i], &m_array[i+1], m_nElements - i - 1);
-	m_nElements--;
+    Assert((0 <= i) && (i < m_nElements));
+    memmove(&m_array[i], &m_array[i+1], m_nElements - i - 1);
+    m_nElements--;
 }
 
 
@@ -88,7 +105,7 @@ template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
 		archive << m_nElements;
-		archive << m_arraySize;
+		archive << m_arraySize; // Not very useful to store this
         if (0 < m_nElements) { 
     		archive.Store((uint8*)m_array, m_nElements * sizeof(T));
         }
@@ -96,23 +113,23 @@ template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 		archive >> m_nElements;
 		archive >> m_arraySize;
 
-		
-		if (m_array)
-			delete [] m_array;
+		delete [] m_array;
+		m_array = new T[m_arraySize]; /// @todo Try std::max(1, m_nElements)
 
-		m_array = new T[m_arraySize];
         if (0 < m_nElements) { 
     		archive.Load((uint8*)m_array, m_nElements * sizeof(T));
         }
 	}
 }
 
-template <class T> BOOL SimpleDynamicArray<T>::IsPresent(T chk)
+template <class T> bool SimpleDynamicArray<T>::IsPresent(T const & chk) const
 {
-	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i] == chk)
-			return TRUE;
+	for (int i = 0; i < m_nElements; i++) 
+    {
+		if (m_array[i] == chk)
+			return true;
 	}
-	return FALSE;
+	
+    return false;
 }
 #endif

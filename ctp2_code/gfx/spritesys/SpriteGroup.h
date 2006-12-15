@@ -31,14 +31,23 @@
 #ifdef HAVE_PRAGMA_ONCE 
 #pragma once
 #endif
-#ifndef __SPRITEGROUP_H__
-#define __SPRITEGROUP_H__
 
-#include "Action.h"
-#include "FacedSprite.h"
-#include "Token.h"
+#ifndef SPRITEGROUP_H__
+#define SPRITEGROUP_H__
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+#include "windows.h"          // BOOL, FILE
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 #define k_NUM_FIREPOINTS		8
+
+class SpriteGroup;
 
 enum GROUPTYPE 
 {
@@ -64,21 +73,34 @@ enum LOADTYPE {
 	LOADTYPE_MAX
 };
 
-class Sprite;
-class aui_Surface;
-class aui_DirectSurface;
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
+#include "Action.h"
+#include "ctp2_inttypes.h"	// sint32, uint16
+#include "FacedSprite.h"
+#include "Token.h"
+
+class Anim;
+class aui_Surface;
+class Sprite;
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+ 
 class SpriteGroup 
 {
 public:
 	SpriteGroup(GROUPTYPE type);
 	virtual ~SpriteGroup();
 
-	virtual void	LoadBasic   (char *filename){};
-	virtual void	LoadFull    (char *filename){};
-	virtual void	LoadIndexed (char *filename,GAME_ACTION action){};
+	virtual void	LoadBasic   (MBCHAR const * filename) {};
+	virtual void	LoadFull    (MBCHAR const * filename) {};
+	virtual void	LoadIndexed (MBCHAR const * filename, GAME_ACTION action) {};
 
-	virtual void	Save(char *filename,unsigned version_id,unsigned compression_mode){};
+	virtual void	Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode){};
 	virtual sint32	Parse(uint16 id,GROUPTYPE group){ return FALSE;};
 
 	virtual void	DeallocateStorage(void);
@@ -86,7 +108,7 @@ public:
 
 	virtual void	Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
 					  uint16 transparency, Pixel16 outlineColor, uint16 flags);
-	virtual void	DrawText(sint32 x, sint32 y, char *s);
+	virtual void	DrawText(sint32 x, sint32 y, MBCHAR const * s);
 
 	virtual void	AddRef(void);
 	virtual void	Release(void);
@@ -94,34 +116,34 @@ public:
 	virtual void	AddFullLoadRef(void);
 	virtual void	ReleaseFullLoad(void);
 
-	sint32			GetRefCount(void) { return m_usageRefCount; }
-	sint32			GetFullLoadRefCount(void) { return m_fullLoadRefCount; }
+	sint32			GetRefCount(void) const { return m_usageRefCount; }
+	sint32			GetFullLoadRefCount(void) const { return m_fullLoadRefCount; }
 
-	GROUPTYPE		GetType(void) { return m_type; }
+	GROUPTYPE		GetType(void) const { return m_type; }
 
-	LOADTYPE		GetLoadType(void) { return m_loadType; }
+	LOADTYPE		GetLoadType(void) const { return m_loadType; }
 	void			SetLoadType(LOADTYPE type) { m_loadType = type; }
 
 	
-	Sprite			*GetGroupSprite(GAME_ACTION action) { return m_sprites[action]; }
+	Sprite *        GetGroupSprite(GAME_ACTION action) const { return m_sprites[action]; }
 	void			SetGroupSprite (GAME_ACTION action, Sprite *sprite) { m_sprites[action] = sprite; }
 
-	Anim			*GetGroupAnim(uint32 action) { return m_anims[action]; }
+	Anim *          GetGroupAnim(uint32 action) const { return m_anims[action]; }
 	void			SetGroupAnim (GAME_ACTION action, Anim *anim) { m_anims[action] = anim; }
 
-	Anim			*GetAnim(GAME_ACTION action) { return m_anims[action]; }
+	Anim *          GetAnim(GAME_ACTION action) const { return m_anims[action]; }
 
-	sint32			GetWidth(void) { return m_width; };
-	sint32			GetHeight(void) { return m_height; };
+	sint32			GetWidth(void) const { return m_width; };
+	sint32			GetHeight(void) const { return m_height; };
 
-	sint32			GetNumFrames(GAME_ACTION action);
+	size_t			GetNumFrames(GAME_ACTION action) const;
     virtual void   	ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES main_token,TOKEN_TYPES sub_token,BOOL sub_value=FALSE);
 
-	BOOL			HasDirectional(void) { return m_hasDirectional; }
-	void			SetHasDirectional(BOOL val) { m_hasDirectional = val; }
+	bool			HasDirectional(void) const { return m_hasDirectional; }
+	void			SetHasDirectional(bool val) { m_hasDirectional = val; }
  
-	BOOL			HasDeath(void) { return m_hasDeath; }
-	void			SetHasDeath(BOOL val) { m_hasDeath = val; }
+	bool			HasDeath(void) const { return m_hasDeath; }
+	void			SetHasDeath(bool val) { m_hasDeath = val; }
 
   
   
@@ -141,11 +163,8 @@ protected:
 	Sprite			*m_sprites[ACTION_MAX];
 	Anim			*m_anims  [ACTION_MAX];
 
-	BOOL			m_hasDeath;
-	BOOL			m_hasDirectional;
-
-  
-  
+	bool			m_hasDeath;
+	bool			m_hasDirectional;
 };
 
 

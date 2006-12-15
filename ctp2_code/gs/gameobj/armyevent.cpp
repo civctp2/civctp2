@@ -1125,30 +1125,11 @@ STDEHANDLER(MoveUnitsEvent)
 		if (!(incursion_permission & (0x1 << army_owner)) &&
 			!new_cell_diplomat.GetBorderIncursionBy(army_owner))
 		{
-			bool is_threat = (a->HasCargo() == TRUE);
-			if (!is_threat)	
-			{
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-
-				
-				is_threat = (!a->IsCivilian());
-			}
-
-			
-			is_threat &= (a->PlayerCanSee(new_cell_owner));
+			bool is_threat = (a->HasCargo() || !a->IsCivilian()) && 
+                             a->PlayerCanSee(new_cell_owner);
 
 			if (is_threat)
 			{
-				
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BorderIncursion,
 					GEA_Player, new_cell_owner,
 					GEA_Player, army_owner,
@@ -1353,29 +1334,32 @@ STDEHANDLER(ExpelUnitsEvent)
 
 STDEHANDLER(EnslaveSettlerEvent)
 {
-	Army a;
-	Unit slaver, settler;
+	Army    a;
+	Unit    slaver;
+    Unit    settler;
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, slaver)) return GEV_HD_Continue;
 	if(!args->GetUnit(1, settler)) return GEV_HD_Continue;
 
-	sint32 settlerowner = settler.GetOwner();
+	PLAYER_INDEX    settlerOwner    = settler.GetOwner();
+    PLAYER_INDEX    slaverOwner     = slaver.GetOwner();
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
-						   GEA_Unit, settler,
-						   GEA_Int, CAUSE_REMOVE_ARMY_ENSLAVED,
-						   GEA_Player, slaver.GetOwner(),
+						   GEA_Unit,    settler,
+						   GEA_Int,     CAUSE_REMOVE_ARMY_ENSLAVED,
+						   GEA_Player,  slaverOwner,
 						   GEA_End);
-	Unit home_city;
-	sint32 r = g_player[slaver->GetOwner()]->GetSlaveCity(slaver.RetPos(), home_city);
-	MapPoint cpos;
-	home_city.GetPos(cpos);
 
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
-						   GEA_City, home_city.m_id,
-						   GEA_Player, settlerowner,
-						   GEA_End);
-	
+	Unit home_city;
+	if (g_player[slaverOwner]->GetSlaveCity(slaver.RetPos(), home_city))
+    {
+	    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
+						       GEA_City,    home_city.m_id,
+						       GEA_Player,  settlerOwner,
+						       GEA_End);
+    }
+    // else No action: the slaver does not have any cities
 
 	return GEV_HD_Continue;
 }
@@ -1412,8 +1396,6 @@ STDEHANDLER(SetUnloadMovementEvent)
 
 STDEHANDLER(ArmyBeginTurnExecuteEvent)
 {
-//	g_director->DecrementPendingGameActions();
-
 	Army a;
 	if (args->GetArmy(0, a))
     {

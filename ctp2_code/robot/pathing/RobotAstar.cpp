@@ -173,14 +173,28 @@ sint32 g_robot_path_count;
 #include "TurnCnt.h"
 
 extern TurnCount  *g_turn;
-BOOL RobotAstar::FindPath(RobotPathEval *cb, uint32 army_id,                          
-    PATH_ARMY_TYPE pat, uint32 army_type, MapPointData *start, MapPointData *dest, 
-    sint32 *bufSize, MapPointData ** buffer, sint32 *nPoints, float *total_cost, 
-    BOOL made_up_can_space_launch,  BOOL made_up_can_space_land, 
-    BOOL check_rail_launcher, BOOL pretty_path, sint32 cutoff, sint32 &nodes_opened,
-	BOOL check_dest, const BOOL no_straight_lines, const BOOL check_units_in_cell)
-
-
+STDMETHODIMP_(BOOL) RobotAstar::FindPath
+(
+    RobotPathEval * cb, 
+    uint32          army_id,                          
+    PATH_ARMY_TYPE  pat, 
+    uint32          army_type, 
+    MapPointData *  start, 
+    MapPointData *  dest, 
+    sint32 *        bufSize, 
+    MapPointData ** buffer, 
+    sint32 *        nPoints, 
+    float *         total_cost, 
+    BOOL            made_up_can_space_launch,  
+    BOOL            made_up_can_space_land, 
+    BOOL            check_rail_launcher, 
+    BOOL            pretty_path, 
+    sint32          cutoff, 
+    sint32 &        nodes_opened,
+    BOOL            check_dest, 
+    BOOL            no_straight_lines, 
+    const BOOL      check_units_in_cell
+)
 { 
     BOOL is_unknown_id;
 

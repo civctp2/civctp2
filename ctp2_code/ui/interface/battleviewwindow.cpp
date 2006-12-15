@@ -1,6 +1,7 @@
 
 
 #include "c3.h"
+#include "battleviewwindow.h"
 
 #include "aui_control.h"
 #include "ctp2_Static.h"
@@ -11,33 +12,23 @@
 #include "aui_ldl.h"
 #include "aui_stringtable.h"
 #include "aui_blitter.h"
-
 #include "pixelutils.h"
 #include "primitives.h"
 #include "tileset.h"
 #include "tiledmap.h"
-
-#include "battleviewwindow.h"
 #include "battleviewactor.h"
 #include "battleview.h"
 #include "battle.h"
-
-#include "World.h"
-
-#include "director.h"
-
+#include "World.h"                  // g_theWorld
+#include "director.h"               // g_director
 #include "CTP2Combat.h"
 #include "GameEventManager.h"
 #include "SelItem.h"
-
 #include "network.h"
 #include "TerrainRecord.h"
-
 #include "soundmanager.h"
 
 extern C3UI		*g_c3ui;
-extern World	*g_theWorld;
-extern Director	*g_director;
 extern sint32	g_modalWindow;
 
 BattleViewWindow			*g_battleViewWindow = NULL;
@@ -49,9 +40,7 @@ void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, u
 	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( g_battleViewWindow->Id() );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(g_battleViewWindow->Id());
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return;
 
@@ -138,17 +127,43 @@ void BattleViewWindow::Cleanup(void)
 
 
 
-BattleViewWindow::BattleViewWindow(	AUI_ERRCODE *retval,
-									uint32 id,
-									MBCHAR *ldlBlock,
-									sint32 bpp,
-									AUI_WINDOW_TYPE type)
-
-	:
-	C3Window(retval, id, ldlBlock, bpp, type)
+BattleViewWindow::BattleViewWindow
+(
+    AUI_ERRCODE *   retval,
+	uint32          id,
+    MBCHAR *        ldlBlock,
+    sint32          bpp,
+    AUI_WINDOW_TYPE type
+)
+:
+	C3Window                (retval, id, ldlBlock, bpp, type),
+	m_battleView            (NULL),
+//	RECT					m_battleViewRect;
+	m_topBorder             (NULL),
+    m_leftBorder            (NULL),
+    m_rightBorder           (NULL),
+    m_bottomBorder          (NULL),
+    m_exitButton            (NULL),
+    m_retreatButton         (NULL),
+    m_titleText             (NULL),
+    m_attackersText         (NULL),
+    m_attackersName         (NULL),
+    m_attackersFlag         (NULL),
+    m_defendersText         (NULL),
+    m_defendersName         (NULL),
+    m_defendersFlag         (NULL),
+    m_terrainBonusText      (NULL),
+    m_terrainBonusValue     (NULL),
+    m_cityBonusText         (NULL),
+    m_cityBonusValue        (NULL),
+    m_cityName              (NULL),
+    m_fortBonusText         (NULL),
+    m_fortBonusValue        (NULL),
+    m_fortBonusImage        (NULL),
+    m_fortifiedBonusText    (NULL),
+    m_fortifiedBonusValue   (NULL),
+    m_sequence              (NULL)
 {
-	m_sequence = NULL;
-
 	InitCommonLdl(ldlBlock);
 }
 
@@ -156,68 +171,36 @@ BattleViewWindow::BattleViewWindow(	AUI_ERRCODE *retval,
 
 BattleViewWindow::~BattleViewWindow()
 {
-	if (m_battleView)
-		delete m_battleView;
-
-	if (m_topBorder)
-		delete m_topBorder;
-	if (m_leftBorder)
-		delete m_leftBorder;
-	if (m_rightBorder)
-		delete m_rightBorder;
-	if (m_bottomBorder)
-		delete m_bottomBorder;
-
-	if (m_exitButton)
-		delete m_exitButton;
-	if(m_retreatButton)
-		delete m_retreatButton;
-	if (m_titleText)
-		delete m_titleText;
-
-	if (m_attackersText)
-		delete m_attackersText;
-	if (m_attackersName)
-		delete m_attackersName;
-	if (m_attackersFlag)
-		delete m_attackersFlag;
-
-	if (m_defendersText)
-		delete m_defendersText;
-	if (m_defendersName)
-		delete m_defendersName;
-	if (m_defendersFlag)
-		delete m_defendersFlag;
-
-	if (m_terrainBonusText)
-		delete m_terrainBonusText;
-	if (m_terrainBonusValue)
-		delete m_terrainBonusValue;
-
-	if (m_cityBonusText)
-		delete m_cityBonusText;
-	if (m_cityBonusValue)
-		delete m_cityBonusValue;
-	
-	
-	if (m_cityName)
-		delete m_cityName;
-
-	if (m_fortBonusText)
-		delete m_fortBonusText;
-	if (m_fortBonusValue)
-		delete m_fortBonusValue;
-	if (m_fortBonusImage)
-		delete m_fortBonusImage;
-
-	if (m_fortifiedBonusText)
-		delete m_fortifiedBonusText;
-	if (m_fortifiedBonusValue)
-		delete m_fortifiedBonusValue;
+	delete m_battleView;
+	delete m_topBorder;
+	delete m_leftBorder;
+	delete m_rightBorder;
+	delete m_bottomBorder;
+	delete m_exitButton;
+	delete m_retreatButton;
+	delete m_titleText;
+	delete m_attackersText;
+	delete m_attackersName;
+	delete m_attackersFlag;
+	delete m_defendersText;
+	delete m_defendersName;
+	delete m_defendersFlag;
+	delete m_terrainBonusText;
+	delete m_terrainBonusValue;
+	delete m_cityBonusText;
+	delete m_cityBonusValue;
+	delete m_cityName;
+	delete m_fortBonusText;
+	delete m_fortBonusValue;
+	delete m_fortBonusImage;
+	delete m_fortifiedBonusText;
+	delete m_fortifiedBonusValue;
 
 	Assert(this == g_battleViewWindow);
-	if(this == g_battleViewWindow)
+	if (this == g_battleViewWindow)
+    {
 		g_battleViewWindow = NULL;
+    }
 }
 
 
@@ -389,7 +372,7 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	RECT battleRect = m_battleViewRect;
 	OffsetRect(&battleRect, -battleRect.left, -battleRect.top);
 
-	m_battleView->Initialize(&battleRect);
+	m_battleView->Initialize(battleRect);
 	m_battleView->SetBattle(battle);
 
 	
