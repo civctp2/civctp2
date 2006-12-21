@@ -277,6 +277,15 @@ UNIT_OCEAN_CITY					"Colonia marina"
 UNIT_SPACE_CITY					"Colonia spaziale"
 
 UNIT_Z_FREIGHT_TRANSPORT			"Trasporto merci"
+UNIT_ELEPHANT_WARRIOR				"Elephant Warrior"
+UNIT_SCOUT					"Scout"
+UNIT_LEGION					"Legion"
+UNIT_GUERRILLA					"Guerrilla"
+UNIT_SWORDSMAN					"Swordsman"
+UNIT_PIRATE_SHIP				"Pirate Ship"
+UNIT_TRADER					"Trader"
+UNIT_LONGBOWMAN 				"Longbowman"
+
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarchia"

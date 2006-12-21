@@ -10,7 +10,27 @@ enum RULE {
 	RULE_POLLUTION,
 	RULE_TRADE,
 	RULE_INVULNERABLE_TRADE,
-	RULE_LINE_OF_SIGHT
+	RULE_LINE_OF_SIGHT,
+//emod new rules
+	RULE_CaptureCity,
+	RULE_NoAIProductionDeficit,		
+	RULE_NoAIGoldDeficit,					
+	RULE_AICityDefenderBonus,					
+	RULE_BarbarianCities,					
+	RULE_SectarianHappiness,
+	RULE_RevoltCasualties,					
+	RULE_RevoltInsurgents,					
+	RULE_BarbarianCamps,			
+	RULE_BarbarianSpawnsBarbarian,			
+	RULE_AINoSinking,							
+	RULE_AINoCityLimit,						
+	RULE_GoldPerUnitSupport,
+	RULE_GoldPerCity,							
+	RULE_AINoShieldHunger,					
+	RULE_AINoGoldHunger,						
+	RULE_AIFreeUpgrade,						
+	RULE_AIMilitiaUnit,
+	RULE_DebugAI
 };
 
 sint32 spnewgamerulesscreen_displayMyWindow();

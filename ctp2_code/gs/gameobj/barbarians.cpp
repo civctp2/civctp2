@@ -31,6 +31,8 @@
 // - Added Pirate generation. (April 14th 2006 E)
 // - Game does not try to generate barbarian units of invalid type anymore
 //   if there is no valid unit type available. (April 29th 2006 Martin Gühmann)
+// - Added but not implemented AddInsurgent Code it maynot be necessary
+// - Added but outcommented Barbarian Special Forces difficulty code
 //
 //----------------------------------------------------------------------------
 
@@ -344,7 +346,145 @@ BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 
 //end EMOD
 
+/*sint32 Barbarians::ChooseInsurgentUnitType()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	sint32 num_best_units = risk->GetBarbarianUnitRankMin();
+	BestUnit *best = new BestUnit[num_best_units];
+	sint32 i, j, k;
+	sint32 count = 0;
 
+	for(i = 0; i < num_best_units; i++) {
+		best[i].index = -1;
+		best[i].attack = -1;
+	}
+
+	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+		const UnitRecord *rec = g_theUnitDB->Get(i);
+		if(rec->GetCantBuild())  //removed because guerrillas may be obsolete for major powers
+			continue;
+
+		if(!rec->GetIsGuerrilla())
+			continue;
+		
+		if(!rec->GetMovementTypeLand())
+			continue;
+		
+		if(rec->GetAttack() < 1)
+			continue;
+
+		if(g_exclusions && g_exclusions->IsUnitExcluded(i))
+			continue;
+		if(rec->GetNoBarbarian())
+			continue;
+	
+		
+		
+
+		if(SomeoneCanHave(rec)) {  //Someone can have is an enable advance check
+			for(j = 0; j < num_best_units; j++) {
+				if(rec->GetAttack() > best[j].attack) {
+					for(k = num_best_units - 1; k >= j+1; k--) {
+						best[k] = best[k-1];
+					}
+					best[j].index = i;
+					best[j].attack = (sint32)rec->GetAttack();
+					count++;
+					break;
+				}
+			}
+		}
+	}
+
+	sint32 ret = -1;
+	if(count > 0){
+		if(count > num_best_units)
+			count = num_best_units;
+
+		sint32 rankMax;
+		if(risk->GetBarbarianUnitRankMax() >= count) {
+			rankMax = count - 1;
+		} else {
+			rankMax = risk->GetBarbarianUnitRankMax();
+		}
+		sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
+		if(whichbest >= count)
+			whichbest = count - 1;
+
+		ret = best[whichbest].index;
+	}
+	delete [] best;
+	return ret;
+}
+
+//EMOD to add special guerrilla barbarians; because guerrillas may go obsolete for normal players.  Eventually add this to insurgent code in citydata. but is it needed?
+BOOL Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,  
+							   BOOL fromGoodyHut)
+{
+	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
+		return FALSE;
+
+
+	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
+	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
+		return FALSE;
+	}
+
+	sint32 unitIndex = Barbarians::ChooseUnitType();
+
+	if(unitIndex < 0) return FALSE;
+
+	sint32 d;
+	MapPoint neighbor;
+	BOOL tried[NOWHERE];
+	sint32 triedCount = 0;
+
+	sint32 maxBarbarians;
+	if(fromGoodyHut) {
+		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetHutMaxBarbarians() - 1) + 1;
+	} else {
+		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians() - 1) + 1;
+	}
+
+	sint32 count = 0;
+	for(d = sint32(NORTH); d < sint32(NOWHERE); d++) {
+		tried[d] = FALSE;
+	}
+
+	for(count = 0; count < maxBarbarians && triedCount < 8;) {
+		sint32 use = g_rand->Next(NOWHERE);
+		while(tried[use]) {
+			use++;
+			if(use >= NOWHERE)
+				use = NORTH;
+		}
+	
+		tried[use] = TRUE;
+		triedCount++;
+		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
+			if(g_theWorld->IsLand(neighbor) &&
+			   !g_theWorld->IsCity(neighbor)) {
+				count++;
+				Unit u = g_player[PLAYER_INDEX_VANDALS]->CreateUnit(unitIndex,
+														   neighbor,
+														   Unit(),
+														   FALSE,
+														   CAUSE_NEW_ARMY_INITIAL);
+				if(u.m_id == 0)
+					count--;
+			}
+		}
+	}
+	return count != 0;
+}
+
+
+BOOL Barbarians::AddFreeTraders(const MapPoint &point, PLAYER_INDEX meat,  
+							   BOOL fromGoodyHut)   //code for a random free trade unit that acts as a corporation?
+
+
+
+//end EMOD*/
 
 void Barbarians::BeginYear()
 {
@@ -356,7 +496,7 @@ void Barbarians::BeginYear()
 		MapPoint point;
 		sint32 tries;
 		sint32 p;
-
+// this is for standard attack units
 		for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
 			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
@@ -397,6 +537,33 @@ void Barbarians::BeginYear()
 		if(ptries < k_MAX_BARBARIAN_TRIES) {
 			AddPirates(point, -1, FALSE);
 		}
+/*  EMOD Barbarian Special Forces code
+		sint32 sftries;
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpecialForces())
+	  { 
+		for(sftries = 0; sftries < k_MAX_BARBARIAN_TRIES; ptries++) {
+			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
+			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
+			
+			if (!g_theWorld->IsLand(point)) {
+				continue;
+			}
+			
+			for(p = 1; p < k_MAX_PLAYERS; p++) {
+				if(g_player[p] && g_player[p]->IsVisible(point))
+					break;
+			}
+			if(p >= k_MAX_PLAYERS) {
+				break;
+			}
+		}
+		if(ptries < k_MAX_BARBARIAN_TRIES) {
+			AddSFBarbarians(point, -1, FALSE);
+		}
+//end SF-Barbarian
+ Add insurgent code here or keep in CityData?
+
+*/
 //end EMOD
 		
 	}

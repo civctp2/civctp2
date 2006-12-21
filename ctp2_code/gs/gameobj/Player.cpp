@@ -1759,6 +1759,7 @@ bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 
 	if (*m_capitol == killme) { 
 		m_capitol->m_id = (0); 
+		//cicil war code here??
 	}
 
 	m_all_cities->DelIndex(killme_index); 

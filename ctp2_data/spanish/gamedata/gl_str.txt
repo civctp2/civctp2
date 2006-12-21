@@ -276,7 +276,14 @@ UNIT_DREADNAUGHT				"Aniquilador"
 UNIT_CITY					"Ciudad"
 UNIT_OCEAN_CITY					"Colonia submarina"
 UNIT_SPACE_CITY					"Colonia espacial"
-
+UNIT_ELEPHANT_WARRIOR				"Elephant Warrior"
+UNIT_SCOUT					"Scout"
+UNIT_LEGION					"Legion"
+UNIT_GUERRILLA					"Guerrilla"
+UNIT_SWORDSMAN					"Swordsman"
+UNIT_PIRATE_SHIP				"Pirate Ship"
+UNIT_TRADER					"Trader"
+UNIT_LONGBOWMAN 				"Longbowman"
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarquía"

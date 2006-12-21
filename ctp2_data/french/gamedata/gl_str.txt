@@ -277,7 +277,13 @@ UNIT_CITY					"Ville"
 UNIT_OCEAN_CITY					"Colonie marine"
 UNIT_SPACE_CITY					"Colonie spatiale"
 UNIT_LONGBOWMAN					"Archer médiéval"
-
+UNIT_ELEPHANT_WARRIOR				"Elephant Warrior"
+UNIT_SCOUT					"Scout"
+UNIT_LEGION					"Legion"
+UNIT_GUERRILLA					"Guerrilla"
+UNIT_SWORDSMAN					"Swordsman"
+UNIT_PIRATE_SHIP				"Pirate Ship"
+UNIT_TRADER					"Trader"
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarchie"

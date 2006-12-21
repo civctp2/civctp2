@@ -176,7 +176,7 @@ public:
 	BOOL IsDynamic( void ) const
 		{ return m_attributes & k_WINDOW_ATTRIBUTE_DYNAMIC; }
 
-	uint32 SetTransparent( BOOL transparent, BOOL transparentControls = FALSE );
+	uint32 SetTransparent( BOOL transparent, BOOL transparentControls = TRUE );  //FALSE );
 	uint32 SetTranslucent( BOOL translucent, BOOL translucentControls = FALSE );
 	uint32 SetStronglyModal( BOOL stronglyModal );
 	uint32 SetWeaklyModal( BOOL weaklyModal );

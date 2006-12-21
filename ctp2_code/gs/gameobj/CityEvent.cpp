@@ -75,12 +75,13 @@
 #include "gaiacontroller.h"
 
 #include "AdvanceRecord.h"
+#include "Happy.h" //EMOD
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
 STDEHANDLER(CaptureCityEvent)
 {
-	Unit city;
+	Unit city; 
 	sint32 newOwner;
 	sint32 cause;
 
@@ -97,7 +98,17 @@ STDEHANDLER(CaptureCityEvent)
 	MapPoint        pos;
     city.GetPos(pos);
 
-	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY) cause);
+	//EMOD capitol stuff is in army event shouldn't it go here?
+		if (city.CD()->IsCapitol()) {
+			sint32 sep = (g_player[originalOwner]->m_all_cities->Num()) / 2;
+			for (sint32 j = 0; j < sep; ++j) {
+				Unit revcity = g_player[originalOwner]->m_all_cities->Get(j) ;
+				CityData	*revcityData = revcity.AccessData()->GetCityData() ;
+				revcityData->GetHappy()->ForceRevolt() ;
+			}
+		}
+
+	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY) cause); //this is where capitol is destroyed. unitdata::resetcityowner
 	
 	if (city.GetData()->GetCityData()->PopCount() < 1) 
     {
@@ -127,7 +138,9 @@ STDEHANDLER(CaptureCityEvent)
 			g_slicEngine->Execute(so);
 		}
 
-        if (g_theProfileDB->GetValueByName("CityCaptureOptions"))
+
+        //if (g_theProfileDB->GetValueByName("CityCaptureOptions"))
+		if (g_theProfileDB->IsCityCaptureOn())
         {
 //EMOD Capture city options
             /// @todo Check impact: this could be considered a human cheat.

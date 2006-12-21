@@ -63,6 +63,8 @@ GameSettings::GameSettings()
 	}
 	m_alienEndGame = g_theProfileDB->IsAlienEndGameOn();
 	m_pollution = g_theProfileDB->IsPollutionRule();
+//EMod new rules
+	m_cityCaptureOptions = g_theProfileDB->IsCityCaptureOn();
 	m_keepScore = TRUE;
 
 	m_startingAge = g_network.GetStartingAge();
@@ -105,18 +107,6 @@ void GameSettings::Serialize(CivArchive &archive)
 
 void GameSettings::SetAlienEndGameWon(sint32 player)
 {
-
-
-	
-
-
-	
-
-
-
-
-
-
 
 }
 

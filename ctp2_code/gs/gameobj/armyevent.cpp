@@ -65,6 +65,13 @@
 #include "soundmanager.h"
 #include "Diplomat.h"
 #include "CriticalMessagesPrefs.h"
+#include "Barbarians.h" //EMOD
+#include "RiskRecord.h"  //add for barb code
+#include "GameSettings.h" //EMOD
+#include "GovernmentRecord.h"   //EMOD to access government data
+#include "DifficultyRecord.h"   //EMOD
+#include "CivilisationPool.h"
+#include "Happy.h"
 
 extern ArmyPool		*g_theArmyPool;
 
@@ -121,14 +128,40 @@ STDEHANDLER(ArmyVictoryMoveOrderEvent)
 
 STDEHANDLER(ArmyMovePathOrderEvent)
 {
-	Army a;
+	Army army; //changed from a to army for consistency
 	MapPoint p;
 
-	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
+	if(!args->GetArmy(0, army)) return GEV_HD_Continue;
 	if(!args->GetPos(0, p)) return GEV_HD_Continue;
+/*EMOD add rebase here? just set pos as p?
 
+	bool rebase = false;
+	for(i = 0; i < army.Num(); i++) {
+		if(army.AccessData()->m_array[i].GetDBRec()->GetCanRebase()) {
+			rebase = true;
+		}
+	}
+					
+	if (rebase) {  ///fix
+			if(army.AccessData()->IsOccupiedByForeigner(p)) {
+			if (g_theWorld->HasCity(p) || terrainutil_HasAirfield(p)) {  //add unit later?
+
+				
+					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+							   GEV_FinishMove,
+							   GEA_Army, army,
+							   GEA_Direction, dir,
+							   GEA_MapPoint, newPos,
+							   GEA_Int, order,
+							   GEA_End);
+
+		
+
+		return GEV_HD_Continue;
+
+end EMOD	*/
 	
-	g_selected_item->EnterMovePath(a.GetOwner(), a, a->RetPos(), p);
+	g_selected_item->EnterMovePath(army.GetOwner(), army, army->RetPos(), p);
 	return GEV_HD_Continue;
 }
 
@@ -684,6 +717,29 @@ STDEHANDLER(ArmyMoveEvent)
 	army.AccessData()->CheckLoadSleepingCargoFromCity(NULL);
 
 	if(army.AccessData()->IsMovePointsEnough(newPos)) {
+/*EMOD for rebasing? this just moves it to newpos maybe do pathing order? or move to? and then set newpos as endpos?
+		if (order == UNIT_ORDER_MOVE_TO
+
+// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
+//city to another city anywhere in the world and costing that unit 1 move.
+      
+		UnitDynamicArray revealedUnits;
+		bool revealedUnexplored = false;
+		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
+			if(!m_array[i].GetDBRec()->GetCanRebase()){
+				if (!IsOccupiedByForeigner(order->m_point)){
+					if (g_theWorld->HasCity(order->m_point) || terrainutil_HasAirfield(order->m_point)) {  //add unit later?
+ 						m_array[i].SetPosition(order->m_point, revealedUnits, revealedUnexplored);
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+
+ 
+
+*/ //end EMOD
 		if(army.AccessData()->IsOccupiedByForeigner(newPos)) {
 			
 			CellUnitList *defender = g_theWorld->GetCell(newPos)->UnitArmy();
@@ -967,6 +1023,9 @@ STDEHANDLER(AftermathEvent)
 	g_theWorld->GetArmy(pos, defender);
 
 	if(c.m_id != (0)) {
+		//add civil war here?  no because its in MoveEvent? Why?  EMOD
+
+		//end EMOD
 		if(g_rand->Next(100) < g_theConstDB->AssaultDestroyBuildingChance() * 100) {
 			c.DestroyRandomBuilding();
 		}
@@ -976,6 +1035,40 @@ STDEHANDLER(AftermathEvent)
 				c.CD()->ChangePopulation(-1);
 			}
 		}
+
+		//add insurgency here?
+		const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
+		){ 
+			sint32 chance = 0;
+			sint32 barbchance = risk->GetBarbarianChance();
+			sint32 NotFounder = 0;
+			sint32 NotCityStyle = 0;
+
+			// if the city has a diffferent culture more likely to have insurgents
+			if(c.CD()->GetCityStyle() != g_player[attack_owner]->GetCivilisation()->GetCityStyle()) {
+				NotCityStyle = barbchance * 2;
+			}
+		// if the revolting city is because of an occupation more likely to revolt
+			if(g_player[defense_owner]->GetGovernmentType() == g_player[attack_owner]->GetGovernmentType()) {
+				NotFounder = barbchance * 2;
+			}
+
+		//TODO: technology modifier from the founder that increases insurgents
+		//TODO: technology modifier that allows for more suppression
+		//TODO: govt modifier that allows for more suppression
+				chance += barbchance;
+				chance += NotFounder;
+				chance += NotCityStyle;
+
+			if(g_rand->Next(10000) < chance * 10000) {
+				Barbarians::AddBarbarians(pos, attack_owner, FALSE);
+			}
+		}
+		//end partisians //make it a tech? enablesguerrillas?
+
+
+//end emod
 	}
 
 	
@@ -1194,6 +1287,8 @@ STDEHANDLER(MoveUnitsEvent)
 						
 
 						if (c.IsCapitol()) {
+							//civil war code didnt work here either  EMOD
+
 							SlicObject *so = new SlicObject("127CapitalCityCapturedVictim");
 							so->AddRecipient(originalOwner);
 							so->AddCity(c);

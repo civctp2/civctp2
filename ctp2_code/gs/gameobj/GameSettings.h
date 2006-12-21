@@ -13,6 +13,7 @@ private:
 	sint32 m_risk;
 	BOOL m_alienEndGame;
 	BOOL m_keepScore;
+	BOOL m_cityCaptureOptions;
 
 	sint32 m_startingAge, m_endingAge; 
 	

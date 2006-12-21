@@ -208,6 +208,28 @@ ProfileDB::ProfileDB()
     m_runInBackground                   (FALSE),
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
     m_cityCaptureOptions                (FALSE),
+	/*
+Add new game settings to profile DB.
+
+    m_NoAIProductionDeficit				(FALSE),		
+    m_NoAIGoldDeficit					(FALSE),						
+    m_AICityDefenderBonus				(FALSE),					
+    m_BarbarianCities					(FALSE),					
+    m_SectarianHappiness				(FALSE),
+    m_RevoltCasualties					(FALSE),					
+    m_RevoltInsurgents					(FALSE),					
+    m_BarbarianCamps 					(FALSE),			
+    m_BarbarianSpawnsBarbarian			(FALSE),			
+    m_AINoSinking						(FALSE),							
+    m_AINoCityLimit						(FALSE),						
+    m_GoldPerUnitSupport				(FALSE),
+    m_GoldPerCity						(FALSE),							
+    m_AINoShieldHunger					(FALSE),					
+    m_AINoGoldHunger					(FALSE),						
+    m_AIFreeUpgrade						(FALSE),					
+    m_AIMilitiaUnit						(FALSE),
+
+*/
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
 {
@@ -369,7 +391,32 @@ ProfileDB::ProfileDB()
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL, false);
 	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL, false);
     Var("AutoExpireTreatyBase", PV_NUM, &m_autoExpireTreatyTurn, NULL, false);
-    Var("CityCaptureOptions", PV_BOOL, &m_cityCaptureOptions, NULL, false);
+	    Var("CityCaptureOptions", PV_BOOL, &m_cityCaptureOptions, NULL);
+    //Var("CityCaptureOptions", PV_BOOL, &m_cityCaptureOptions, NULL, false);
+/*
+Add new game settings to profile DB.
+
+    Var("NoAIProductionDeficit", PV_BOOL, &m_NoAIProductionDeficit, NULL, false);		
+    Var("NoAIGoldDeficit", PV_BOOL, &m_NoAIGoldDeficit, NULL, false);						
+    Var("AICityDefenderBonus", PV_BOOL, &m_AICityDefenderBonus, NULL, false);					
+    Var("BarbarianCities", PV_BOOL, &m_BarbarianCities, NULL, false);					
+    Var("SectarianHappiness", PV_BOOL, &m_SectarianHappiness, NULL, false);
+    Var("RevoltCasualties", PV_BOOL, &m_RevoltCasualties, NULL, false);					
+    Var("RevoltInsurgents", PV_BOOL, &m_RevoltInsurgents, NULL, false);					
+    Var("BarbarianCamps", PV_BOOL, &m_BarbarianCamps, NULL, false);			
+    Var("BarbarianSpawnsBarbarian", PV_BOOL, &m_BarbarianSpawnsBarbarian, NULL, false);			
+    Var("AINoSinking", PV_BOOL, &m_AINoSinking, NULL, false);							
+    Var("AINoCityLimit", PV_BOOL, &m_AINoCityLimit, NULL, false);						
+    Var("GoldPerUnitSupport", PV_BOOL, &m_GoldPerUnitSupport, NULL, false);
+    Var("GoldPerCity", PV_BOOL, &m_GoldPerCity, NULL, false);							
+    Var("AINoShieldHunger", PV_BOOL, &m_AINoShieldHunger, NULL, false);					
+    Var("AINoGoldHunger", PV_BOOL, &m_AINoGoldHunger, NULL, false);						
+    Var("AIFreeUpgrade", PV_BOOL, &m_AIFreeUpgrade, NULL, false);						
+    Var("AIMilitiaUnit", PV_BOOL, &m_AIMilitiaUnit, NULL, false);
+
+*/
+
+
 }
 
 void ProfileDB::DefaultSettings(void)

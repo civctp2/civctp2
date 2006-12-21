@@ -89,7 +89,10 @@ class DipWizard
 
 	static ctp2_ListBox *m_propList[DIP_WIZ_PROP_TAB_MAX];
 	static ctp2_ListBox *m_exchList[DIP_WIZ_PROP_TAB_MAX];
-	static ctp2_ListBox *m_threatList;
+	/* EMOD
+	static ctp2_ListBox *m_propList;
+	static ctp2_ListBox *m_exchList; */
+	static ctp2_ListBox *m_threatList; 
 	static ctp2_Button *m_counterOrThreatenButton;
 	static ctp2_Button *m_rejectButton, *m_acceptButton;
 	static ctp2_Button *m_intelButton;

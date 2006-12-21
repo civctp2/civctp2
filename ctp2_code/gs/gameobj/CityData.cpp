@@ -1359,16 +1359,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
             
         }
 	}
-	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
 
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()) {
-		sint32 casualties = (PopCount() / 3) * -1;
-		ChangePopulation(casualties);
-	}
-
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()) {
-		Barbarians::AddBarbarians(city_pos, m_owner, FALSE);
-	}
 
 	// Modified by kaan to address bug # 12
 	// Prevent city from revolting twice in the same turn.
@@ -4173,6 +4164,17 @@ bool CityData::BeginTurn()
 			Barbarians::AddBarbarians(cpos, m_owner, FALSE);
 		}
 	}
+
+	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
+
+	if((m_is_rioting) &&
+		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
+		&& (PopCount() > 1)
+		){
+			sint32 casualties = (PopCount() / 3) * -1;
+			ChangePopulation(casualties);
+	}
+
 
 	//END EMOD
 
