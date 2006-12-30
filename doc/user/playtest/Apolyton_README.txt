@@ -23,12 +23,13 @@ It might be wise, if you have the space available, to make a copy of
 your CTP2 directory and unzip this into the copy, so that you can preserve an
 unchanged copy for playing mods, etc.
 
-Once installation is complete you can start a new game or continue a game from
-a previous version. All you need to do is once you are in game to open the chat
-window by typing the apostrophe key (') and enter: /reloadslic
+After installation you can start a new game or continue a game from
+a previous version. All you need to do - after loading your save game - is to
+open the chat window by typing the apostrophe key (') and enter: /reloadslic
+You have to do this procedure once per save game.
 
-Please report any problems, bugs, crashes, etc. in the following threads:
-http://apolyton.net/forums/showthread.php?s=&threadid=147969
+Please report any problems, bugs, crashes, etc. in the following thread:
+http://apolyton.net/forums/showthread.php?threadid=147969
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?threadid=103817
@@ -39,22 +40,27 @@ http://apolyton.net/forums/showthread.php?threadid=127059
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
 Playtesting would be most useful if it tests the most recent changes, which
-are described briefly below, and in more detail in ChangeLog.txt
+are described briefly below, and in more detail in ChangeLog.txt (note havily outdated)
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2006-10-05 (rev647)
-Added Science Tile Imps with BonusScience (+Int) tileimp can add science
-Added Happy Tile imps. with HappyInc (+int) a tileimp can add happiness
-Fixed error in revolt that called a civ joining your civ a new civ
-Added BarbarianChance from Risk.txt to make BarbarianSpawnBarbarian better
-Added BarbarianChance from Risk.txt to make BarbarianCamps better
-Added Militia DiffDB AIMilitiaUnit (flag) gives AI the cheapest unit at begin turn if city is empty
-Added Militia code for buildings (CreatesMiltiaUnit flag) for human and AI but you must have the building
-Added ActualBuildingEverywhere for wonders this flag will actually create the building in cities that don't alreadyhave said building
-Added not implemented flags for vary citythreshold for govt based on mapsize
+
+2006-10-05 (Revision 647)
+Fixed:    No new civ message if the city in questions joins another civ.
+Added:    New database flags for modders:
+- TerrainImprovementDB
+   BonusScience         TerrainImprovement gives bonus science to its city.
+   HappyInc             TerraubImprovement increases happiness of its city.
+- WonderDB
+   ActualBuildingEverywhere Wonder creates this building everywhere.
+- BuildingDB
+   CreatesMiltiaUnit    Building creates militia unit.
+- DifficultyDB
+   AIMilitiaUnit        Difficulty creates militia units in empty AI cities.
+   RevoltInsurgents     Difficulty creates Barbarians around rioting cities in
+                         dependence on RiskDB BabarianChance.
 
 2006-09-09 (Revision 634)
 Fixed:    AI slider handling
@@ -143,7 +149,7 @@ Added:    New database flags for modders:
    SpawnBarbarians      TerrainImprovement spawns Barbarian units.
 - DifficultyDB:
    BarbarainCamps       Difficulty's Barbarian camp TerrainImprovement.
-   BarbarianCities      Difficulty allows Barbarian cities. (What a nonsense E ;))
+   BarbarianCities      Difficulty allows Barbarian cities.
    BarabariansSpawnBarbarians Difficulty makes Barbarian units to spawn more 
                               Barbarian units.
 

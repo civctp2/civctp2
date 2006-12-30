@@ -18,7 +18,8 @@
 #
 #  Modifications from the original Activision code:
 #
-# - Added customized ruin hut graphics possibility. (Martin Gühmann)
+#  - Added customized ruin hut graphics possibility. (Martin Gühmann)
+#  - Added CanUpgrade flag for terrain dependent upgrading (Dec 24th 2006 Martin Gühmann)
 #
 #-----------------------------------------------------------------------------
 
@@ -55,6 +56,7 @@ Resource {
 	Bit AddsASlave							//New flag that adds a slave to a city for each turn
 
 	Bit GLHidden
+	Bit CanUpgrade
 }
 	
 Terrain {
@@ -85,7 +87,8 @@ Terrain {
 		Float Defense
 		Int DeadFood
 		Int DeadShield
-	} 
+		Bit CanUpgrade
+	}
 
 	Struct Modifiers EnvBase
 	Bit(Struct Modifiers) EnvCity

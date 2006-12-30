@@ -26,6 +26,7 @@
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added army debug text to the army manager window. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -65,6 +66,8 @@
 #include "Events.h"
 #include "primitives.h"
 #include "colorset.h"           // g_colorSet
+#include "gfx_options.h"        // g_graphicsOptions
+#include "tiledmap.h"           // g_tiledMap->ColorMagnitudeToRGB()
 
 #include "network.h"
 
@@ -374,6 +377,32 @@ void ArmyManagerWindow::Update()
 	}
 
 	UpdateArmyName();
+
+	ctp2_Static *armyTextlabel = (ctp2_Static *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmyTextLabel");
+	if(armyTextlabel){
+		if(g_graphicsOptions
+		&& g_graphicsOptions->IsArmyTextOn()
+		&& m_army.IsValid()
+		){
+			armyTextlabel->SetText(m_army->GetDebugString());
+
+			sint32		r,g,b;
+			uint8		col = m_army.GetData()->GetDebugStringColor();
+
+			g_tiledMap->ColorMagnitudeToRGB(col, &r, &g, &b);
+
+			COLORREF	fgColor = RGB(r, g, b);
+			COLORREF	bgColor = RGB(0,0,0);
+		
+			armyTextlabel->SetTextColor(fgColor);
+			armyTextlabel->SetTextShadow(true);
+			armyTextlabel->SetTextShadowColor(fgColor);
+		}
+		else{
+			armyTextlabel->SetText("");
+		}
+		armyTextlabel->ShouldDraw(true);
+	}
 
 	updating = false;
 }

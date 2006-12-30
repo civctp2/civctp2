@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Heuristic cost for the A* pathing algorithm
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -22,7 +23,6 @@
 // Modifications from the original Activision code:
 //
 // - X-wrap added, structure cleaned up 
-// - 
 //
 //----------------------------------------------------------------------------
 
