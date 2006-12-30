@@ -27,6 +27,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Updated friend declarations.
+// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 

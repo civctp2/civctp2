@@ -30,6 +30,7 @@
 // - Repaired crashes when the emissary photo is missing.
 // - Added female leader images. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - removed new diplo attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
@@ -161,9 +162,6 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 		return;
 	}
 
-	//m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? attempt #3  crash
-	//m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? attempt #7 but add chromakey?  crash
-
 	sint32 i;
 	for(i = 0; i < DIP_WIZ_STAGE_MAX; i++) {
 		MBCHAR stageName[k_MAX_NAME_LEN];
@@ -255,7 +253,6 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	
 
 	m_window->SetStronglyModal(TRUE);
-	//m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? adding it just caused a crash
 
 	m_recipient = -1;
 	m_tone = -1;
@@ -333,8 +330,6 @@ AUI_ERRCODE DipWizard::Initialize()
 
 	Assert(err == AUI_ERRCODE_OK);
 
-	//s_dipWizard->m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? attempt #5 CRASH
-
 	return err;
 }
 
@@ -359,7 +354,6 @@ AUI_ERRCODE DipWizard::Display()
 		return AUI_ERRCODE_HACK;
 	}
 	
-	//s_dipWizard->m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? attempt #6 CRASH
 
 	if(g_network.IsActive() && g_player[g_selected_item->GetVisiblePlayer()] &&
 	   g_player[g_selected_item->GetVisiblePlayer()]->m_playerType == PLAYER_TYPE_ROBOT) {
@@ -378,7 +372,6 @@ AUI_ERRCODE DipWizard::Display()
 			err = s_dipWizard->m_window->Show();
 		}
 
-		//s_dipWizard->m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? attempt #2 CRASH
 		m_recipient = -1; 
 		SetStage(0);
 
@@ -395,8 +388,6 @@ AUI_ERRCODE DipWizard::Display()
 		
 		
 	}
-
-	//s_dipWizard->m_window->SetTransparent(TRUE);	//EMOD  does this make it transparent? attempt #4 CRASH
 
 	return err;
 }

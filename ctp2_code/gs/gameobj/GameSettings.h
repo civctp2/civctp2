@@ -1,3 +1,5 @@
+
+// - removed new rules attempt - E 12.27.2006
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -13,7 +15,6 @@ private:
 	sint32 m_risk;
 	BOOL m_alienEndGame;
 	BOOL m_keepScore;
-	BOOL m_cityCaptureOptions;
 
 	sint32 m_startingAge, m_endingAge; 
 	

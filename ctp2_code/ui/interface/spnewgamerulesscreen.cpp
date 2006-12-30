@@ -26,6 +26,7 @@
 //
 // - Memory leaks repaired.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@
 extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;
 
-#define k_NUM_RULESBOXES	3 //2  //EMOD - 22 if new game settings added
+#define k_NUM_RULESBOXES	2
 
 static c3_PopupWindow	*s_spNewGameRulesScreen	= NULL;
 
@@ -64,7 +65,6 @@ static aui_Switch **	s_checkBox	= NULL;
 static MBCHAR	checknames[k_NUM_RULESBOXES][50] = {
 	"RuleOne",
 	"RuleTwo",
-	"Rule22", //emod adding city capture options, first try at adding new rules using profiledb
 };
 
 
@@ -146,30 +146,8 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 
 	s_checkBox[ 0 ]->SetState( g_theProfileDB->IsGenocideRule() );
 	s_checkBox[ 1 ]->SetState( g_theProfileDB->IsPollutionRule() );
-	s_checkBox[ 2 ]->SetState( g_theProfileDB->IsCityCaptureOn() ); //may have to make new bool in profiledb
 
-/*  add new game settings here
-	s_checkBox[ 3 ]->SetState( g_theProfileDB->IsGenocideRule() );
-	s_checkBox[ 4 ]->SetState( g_theProfileDB->IsPollutionRule() );
-	s_checkBox[ 5 ]->SetState( g_theProfileDB->GetValueByName("NoAIProductionDeficit") );		
-	s_checkBox[ 6 ]->SetState( g_theProfileDB->GetValueByName("NoAIGoldDeficit") );						
-	s_checkBox[ 7 ]->SetState( g_theProfileDB->GetValueByName("AICityDefenderBonus") );					
-	s_checkBox[ 8 ]->SetState( g_theProfileDB->GetValueByName("BarbarianCities") );					
-	s_checkBox[ 9 ]->SetState( g_theProfileDB->GetValueByName("SectarianHappiness") );
-	s_checkBox[ 10 ]->SetState( g_theProfileDB->GetValueByName("RevoltCasualties") );					
-	s_checkBox[ 11 ]->SetState( g_theProfileDB->GetValueByName("RevoltInsurgents") );					
-	s_checkBox[ 12 ]->SetState( g_theProfileDB->GetValueByName("BarbarianCamps") );			
-	s_checkBox[ 13 ]->SetState( g_theProfileDB->GetValueByName("BarbarianSpawnsBarbarian") );			
-	s_checkBox[ 14 ]->SetState( g_theProfileDB->GetValueByName("AINoSinking") );							
-	s_checkBox[ 15 ]->SetState( g_theProfileDB->GetValueByName("AINoCityLimit") );						
-	s_checkBox[ 16 ]->SetState( g_theProfileDB->GetValueByName("GoldPerUnitSupport") );
-	s_checkBox[ 17 ]->SetState( g_theProfileDB->GetValueByName("GoldPerCity") );							
-	s_checkBox[ 18 ]->SetState( g_theProfileDB->GetValueByName("AINoShieldHunger") );					
-	s_checkBox[ 19 ]->SetState( g_theProfileDB->GetValueByName("AINoGoldHunger") );						
-	s_checkBox[ 20 ]->SetState( g_theProfileDB->GetValueByName("AIFreeUpgrade") );						
-	s_checkBox[ 21 ]->SetState( g_theProfileDB->GetValueByName("AIMilitiaUnit") );
 
-*/
 
 
 
@@ -267,30 +245,7 @@ void spnewgamerulesscreen_switchPress(aui_Control *control, uint32 action, uint3
 				case RULE_POLLUTION:
 					g_theProfileDB->SetPollutionRule( s_checkBox[i]->IsOn() );
 					break;
-				case RULE_CaptureCity:
-					g_theProfileDB->SetCityCapture( !s_checkBox[i]->IsOn() );
-					//s_cityInfluenceToggled = TRUE;  this is from graphicscreen but here there is no toggle...
-					break;
-/*  new rules switch
-				case 	RULE_NoAIProductionDeficit		
-				case 	RULE_NoAIGoldDeficit						
-				case 	RULE_AICityDefenderBonus					
-				case 	RULE_BarbarianCities					
-				case 	RULE_SectarianHappiness
-				case 	RULE_RevoltCasualties					
-				case 	RULE_RevoltInsurgents					
-				case 	RULE_BarbarianCamps			
-				case 	RULE_BarbarianSpawnsBarbarian			
-				case 	RULE_AINoSinking							
-				case 	RULE_AINoCityLimit						
-				case 	RULE_GoldPerUnitSupport
-				case 	RULE_GoldPerCity							
-				case 	RULE_AINoShieldHunger					
-				case 	RULE_AINoGoldHunger						
-				case 	RULE_AIFreeUpgrade						
-				case 	RULE_AIMilitiaUnit
-				case 	RULE_DebugAI
-*/
+
 
 
 

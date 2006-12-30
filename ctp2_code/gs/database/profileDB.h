@@ -23,6 +23,7 @@
 //
 // _DEBUG
 // - Allow the usage of "cheat age" for an excellerated start when set.
+// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 //
@@ -347,25 +348,7 @@ private:
     sint32 m_autoExpireTreatyTurn; 
     /// Enable city capture options pop-up
     sint32 m_cityCaptureOptions;    
-/* new gamesettings
-    sint32 m_NoAIProductionDeficit;		
-    sint32 m_NoAIGoldDeficit;						
-    sint32 m_AICityDefenderBonus;					
-    sint32 m_BarbarianCities;					
-	sint32 m_SectarianHappiness;
-    sint32 m_RevoltCasualties;					
-    sint32 m_RevoltInsurgents;					
-    sint32 m_BarbarianCamps;			
-    sint32 m_BarbarianSpawnsBarbarian;			
-    sint32 m_AINoSinking;							
-    sint32 m_AINoCityLimit;						
-    sint32 m_GoldPerUnitSupport;
-    sint32 m_GoldPerCity;							
-    sint32 m_AINoShieldHunger;					
-    sint32 m_AINoGoldHunger;						
-    sint32 m_AIFreeUpgrade;					
-    sint32 m_AIMilitiaUnit;
-*/
+
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
     BOOL m_dontSave;
@@ -533,29 +516,9 @@ public:
     void SetDisplayFilter(BOOL on) { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on) { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on) { m_displayTerrain = on;}
-//EMOD new rules
-	void SetCityCapture(BOOL on)   { m_cityCaptureOptions  = on; }
-/*
-NoAIProductionDeficit    m_NoAIProductionDeficit				
- NoAIGoldDeficit   m_NoAIGoldDeficit											
- AICityDefenderBonus	   m_AICityDefenderBonus								
- BarbarianCities   m_BarbarianCities									
-SectarianHappiness    m_SectarianHappiness			
-RevoltCasualties    m_RevoltCasualties									
- RevoltInsurgents   m_RevoltInsurgents										
-BarbarianCamps    m_BarbarianCamps 							
-BarbarianSpawnsBarbarian    m_BarbarianSpawnsBarbarian					
- AINoSinking   m_AINoSinking													
- AINoCityLimit   m_AINoCityLimit											
- GoldPerUnitSupport   m_GoldPerUnitSupport				
-GoldPerCity    m_GoldPerCity													
-AINoShieldHunger    m_AINoShieldHunger									
-AINoGoldHunger    m_AINoGoldHunger											
-AINoGoldHunger    m_AIFreeUpgrade											
-AIMilitiaUnit    m_AIMilitiaUnit						
-								
-	
-*/
+
+
+
     sint32		GetNPlayers() const				{ return m_nPlayers; }
 
     MAPSIZE		GetMapSize() const				{ return m_mapSize; }
@@ -773,30 +736,6 @@ AIMilitiaUnit    m_AIMilitiaUnit
     double PercentContinent() { return m_continent; }
     double PercentHomogenous() { return m_homogenous; }
     sint32 PercentRichness() { return m_richness; }
-//EMOD new Rules
-	BOOL   IsCityCaptureOn() const { return m_cityCaptureOptions; }
-/*
-NoAIProductionDeficit    m_NoAIProductionDeficit				
- NoAIGoldDeficit   m_NoAIGoldDeficit											
- AICityDefenderBonus	   m_AICityDefenderBonus								
- BarbarianCities   m_BarbarianCities									
-SectarianHappiness    m_SectarianHappiness			
-RevoltCasualties    m_RevoltCasualties									
- RevoltInsurgents   m_RevoltInsurgents										
-BarbarianCamps    m_BarbarianCamps 							
-BarbarianSpawnsBarbarian    m_BarbarianSpawnsBarbarian					
- AINoSinking   m_AINoSinking													
- AINoCityLimit   m_AINoCityLimit											
- GoldPerUnitSupport   m_GoldPerUnitSupport				
-GoldPerCity    m_GoldPerCity													
-AINoShieldHunger    m_AINoShieldHunger									
-AINoGoldHunger    m_AINoGoldHunger											
-AINoGoldHunger    m_AIFreeUpgrade											
-AIMilitiaUnit    m_AIMilitiaUnit						
-								
-	
-*/
-
 };
 
 extern ProfileDB *g_theProfileDB;

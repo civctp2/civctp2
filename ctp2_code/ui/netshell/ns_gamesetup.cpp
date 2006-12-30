@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
+// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 

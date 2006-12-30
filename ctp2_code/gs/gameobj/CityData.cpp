@@ -10009,42 +10009,5 @@ sint32 CityData::TileImpHappinessIncr() const
 }
 
 
-//from TiledMap::DrawCityIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, BOOL fog, RECT &popRect, >>>>
-//CityData::AddCityIcon (file)
-//	RECT		iconRect;
-//	TileSet		*tileSet = GetTileSet();
-//	sint32		xoffset = (sint32)((k_TILE_PIXEL_WIDTH*m_scale)/2);
-//	sint32		yoffset = (sint32)(k_TILE_PIXEL_HEADROOM*m_scale);
-//	POINT iconDim = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-//	Pixel16 color;
-	
-//	if (fog)
-//		color = g_colorSet->GetDarkPlayerColor(owner);
-//	else
-//		color = g_colorSet->GetPlayerColor(owner);
 
-//	iconRect.left = popRect.right + 3;
-//	iconRect.right = iconRect.left + iconDim.x + 1;
-//	iconRect.top = popRect.top;
-//	iconRect.bottom = iconRect.top + iconDim.y + 1;
-	
-//	if (iconRect.left < 0 || iconRect.top < 0 || 
-//		iconRect.right >= surf->Width() ||
-//		iconRect.bottom >= surf->Height())
-//		return;
-//	Pixel16 *cityIcon;
 
-//	if (isWatchful) {
-//		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon()); //MAPICON_WATCHFUL
-//		Assert(cityIcon); 
-//		if (!cityIcon) return;
-//		cityIcon = tileSet->GetMapIconData(wrec->ReligionIcon());
-//		iconDim = tileSet->GetMapIconDimensions(wrec->ReligionIcon());
-
-//		color = GetColor(COLOR_YELLOW, fog);
-//		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-//		AddDirtyRectToMix(iconRect);
-
-//		iconRect.left += iconDim.x;
-//		iconRect.right += iconDim.x;
-//	}

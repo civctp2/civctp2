@@ -139,8 +139,8 @@ STDEHANDLER(CaptureCityEvent)
 		}
 
 
-        //if (g_theProfileDB->GetValueByName("CityCaptureOptions"))
-		if (g_theProfileDB->IsCityCaptureOn())
+        if (g_theProfileDB->GetValueByName("CityCaptureOptions"))
+//		if (g_theProfileDB->IsCityCaptureOn())
         {
 //EMOD Capture city options
             /// @todo Check impact: this could be considered a human cheat.

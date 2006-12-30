@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Use the difficulty and barbarian risk as selected by the user.
+// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
@@ -63,8 +64,6 @@ GameSettings::GameSettings()
 	}
 	m_alienEndGame = g_theProfileDB->IsAlienEndGameOn();
 	m_pollution = g_theProfileDB->IsPollutionRule();
-//EMod new rules
-	m_cityCaptureOptions = g_theProfileDB->IsCityCaptureOn();
 	m_keepScore = TRUE;
 
 	m_startingAge = g_network.GetStartingAge();
@@ -107,6 +106,18 @@ void GameSettings::Serialize(CivArchive &archive)
 
 void GameSettings::SetAlienEndGameWon(sint32 player)
 {
+
+
+	
+
+
+	
+
+
+
+
+
+
 
 }
 

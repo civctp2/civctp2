@@ -39,6 +39,9 @@
 //   in comparision to unexplored territory. - Oct. 6th 2004 Martin Gühmann
 // - Initialised roadCostsPercent, so it will have a proper value when not 
 //   set in the strategy.
+// - removed bool fix attempt; - E 12.27.2006 note: MArtin G reports that
+//   fixing this defect made the AI act "weird" even though the bool in ln198 
+//   causes an error.
 //
 //----------------------------------------------------------------------------
 
@@ -192,6 +195,6 @@ bool CityAstar::FindRoadPath
 
 	sint32  nodes_opened    = 0;
 
-	return FindPath(start, dest, new_path, total_cost, FALSE, NODE_VISIT_COUNT_LIMIT, nodes_opened);
+	return FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
 }
 
