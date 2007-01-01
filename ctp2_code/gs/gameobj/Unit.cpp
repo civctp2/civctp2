@@ -39,6 +39,7 @@
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Added GetAllTerrainAsImp by E 2-24-2006
 // - Corrected pollution handling.
+// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -85,6 +86,9 @@
 #include "unitutil.h"
 #include "ctpai.h"
 #include "gamefile.h"
+#include "TerrainRecord.h"
+#include "SlicObject.h"
+#include "GovernmentRecord.h"
 
 extern Pollution *  g_thePollution;
 
@@ -423,16 +427,25 @@ sint32 Unit::IsIgnoresZOC() const
 	return GetDBRec()->GetIgnoreZOC();
 }
 
-
-
-
-
-
-
-
-
-
-
+bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
+{
+	uint32 distance = 0xffffffff;
+/*	MapPoint center;
+	GetPos(center);
+	CircleIterator it(center, searchRadius, GetVisionRange());
+	for(it.Start(); !it.End(); it.Next()) {
+		if(!g_player[GetOwner()]->IsExplored(it.Pos())
+		&& MapPoint::GetSquaredDistance(center, it.Pos()) < distance
+		&& GetArmy()->CanEnter(it.Pos())
+		&& g_theWorld->IsOnSameContinent(it.Pos(), center)
+		){
+			distance = MapPoint::GetSquaredDistance(center, it.Pos());
+			pos = it.Pos();
+		}
+	}
+*/
+	return distance < 0xffffffff;
+}
 
 bool Unit::NearestFriendlyCity(MapPoint &p) const
 {
@@ -2533,3 +2546,58 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 
 	return order_valid;
 }
+
+void Unit::Sink(sint32 chance)
+{
+	const UnitRecord *urec = GetDBRec();
+	const TerrainRecord * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(RetPos()));
+	if(urec->GetCanSinkInSea()
+	&& trec->GetMovementTypeSea()
+	){
+		if(g_rand->Next(100) < chance)
+		{
+			// Maybe something else than CAUSE_REMOVE_ARMY_DISBANDED
+			// or it least call it diferently
+			KillUnit(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			SlicObject *so = new SlicObject("999LostAtSea");
+			so->AddRecipient(GetOwner());
+			so->AddUnit(*this);
+		}
+	}
+}
+
+sint32 Unit::GetBestUpgradeUnitType() const
+{
+	sint32 bestUnit = -1;
+	const UnitRecord *rec = GetDBRec();
+	
+	if(rec->GetNumUpgradeTo() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumUpgradeTo(); ++i)
+		{
+			sint32 currentType = rec->GetUpgradeToIndex(i);
+			if(g_player[GetOwner()]->CanBuildUnit(currentType)
+		//	&& i is better than best unit
+			){
+				// For now just return the first builtable unit
+				return currentType;
+		//		bestUnit = currentType;
+			}
+		}
+	}
+
+	return bestUnit;
+}
+
+sint32 Unit::GetUpgradeCosts(sint32 upgradeType) const
+{
+	const UnitRecord *rec = GetDBRec();
+
+	sint32 govType   = g_player[GetOwner()]->m_government_type;
+	sint32 oldshield = rec->GetShieldCost();
+	sint32 newshield = g_theUnitDB->Get(upgradeType, govType)->GetShieldCost();
+	double rushmod   = g_theGovernmentDB->Get(govType)->GetUnitRushModifier();
+
+	return static_cast<sint32>((newshield - oldshield) * rushmod);
+}
+

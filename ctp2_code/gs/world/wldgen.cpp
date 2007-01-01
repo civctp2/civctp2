@@ -1781,7 +1781,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
                 max = cum_score[chk.x][chk.y]; 
                 maxx = chk.x; 
                 maxy = chk.y; 
-                searching = FALSE; 
+                searching = FALSE;
             } 
         }
     }

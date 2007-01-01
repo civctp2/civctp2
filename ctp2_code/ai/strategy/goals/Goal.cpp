@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : the Goal motherclass
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,6 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -79,7 +82,6 @@ Goal::Goal()
     m_match_references              (),
     m_agents                        (),
     m_playerId                      (-1)
-    // m_pos    not filled?
 {
 }
 
@@ -152,23 +154,19 @@ void Goal::Set_Player_Index(const PLAYER_INDEX & playerId)
 	m_playerId = playerId;
 }
 
-
 PLAYER_INDEX Goal::Get_Player_Index() const
 {
 	return m_playerId;
 }
-
-
-
 
 bool Goal::Is_Satisfied() const
 {
 	if (m_agents.size() == 0)
 		return false;
 
-	
-// limitation of army size : cannot form a group with more
-// armies than the max (without that limitation, it can disturb the goals with RallyFirst() - Calvitix
+	// Limitation of army size: Cannot form a group with more
+	// armies than the max (without that limitation, it can 
+	// disturb the goals with RallyFirst() - Calvitix
     if (m_current_attacking_strength.Get_Agent_Count() == k_MAX_ARMY_SIZE)
         return true;
 
@@ -178,20 +176,15 @@ bool Goal::Is_Satisfied() const
 	return true;
 }
 
-
-
-
 bool Goal::Is_Goal_Undercommitted() const
 {
 	return (!Is_Satisfied() && m_agents.size() > 0);
 }
 
-
 sint16 Goal::Get_Agent_Count() const
 {
     return m_agents.size();
 }
-
 
 bool Goal::Is_Single_Squad() const
 {
@@ -234,9 +227,6 @@ bool Goal::Is_Single_Squad() const
 	}
 	return true;
 }
-
-
-
 
 bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter)
 {
@@ -602,24 +592,15 @@ bool Goal::Satisfied_By(const Squad_Strength & army_strength) const
 	
 	if ( army_strength.Get_Transport() > 0)
 	{
-		
 		if ( needed_strength.Get_Transport() > 0)
-		  return true;
-
-		
-
-		
-		
-		
-		
-		
+			return true;
 	}
 
 	
 	//Check if the army has too much units to fit in one tile - Calvitix
 	if (m_current_attacking_strength.Get_Agent_Count() + 
 		army_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
-	return false;
+		return false;
 	
 	
 

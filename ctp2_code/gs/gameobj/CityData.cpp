@@ -930,7 +930,7 @@ CityData::CityData(CivArchive &archive)
 {
 	m_happy = new Happy;
 
-	m_sentInefficientMessageAlready = FALSE;
+	m_sentInefficientMessageAlready = false;
 	Serialize(archive) ;
 }
 
@@ -1215,11 +1215,11 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 	MapPoint     city_pos,
 	             new_city;
 
-	BOOL         joined_egalatarians = FALSE;
+	bool         joined_egalatarians = false;
 
 	g_player[m_owner]->m_score->AddRevolution();
 
-	m_home_city.GetPos(city_pos) ;
+	m_home_city.GetPos(city_pos);
 	
 	if(!causeIsExternal && g_network.IsActive()) {
 		g_network.Block(m_owner);
@@ -1242,7 +1242,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 					if(newowner == m_owner) {
 						newowner = PLAYER_UNASSIGNED;
 					} else {
-						joined_egalatarians = TRUE;
+						joined_egalatarians = true;
 					}
 					break;
 				}
@@ -1270,41 +1270,23 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 			g_network.Unblock(orgowner);
 		}
 
-//there is an errorhere because when it joins your city it calls them a new civ.
-/* Original code
-		SlicObject *so = new SlicObject("010NewCiv");
-		so->AddAllRecipients();
-		so->AddCivilisation(orgowner);
-		so->AddCivilisation(newowner);
-		so->AddCity(m_home_city);
-		g_slicEngine->Execute(so) ;
-
-		if (joined_egalatarians) {
-			so = new SlicObject("011CityJoinedYourCiv");
-			so->AddRecipient(newowner);
-			so->AddCivilisation(orgowner);
-			so->AddCivilisation(newowner);
-			so->AddCity(m_home_city);
-			g_slicEngine->Execute(so) ;
-		}
-*/
-		if (joined_egalatarians) {
+		// Need to fix script.slc and info.txt though 
+		// Need to make it more generic - E 9-6-2006
+		if(joined_egalatarians) {
 			SlicObject *so = new SlicObject("011CityJoinedYourCiv");
 			so->AddRecipient(newowner);
 			so->AddCivilisation(orgowner);
 			so->AddCivilisation(newowner);
 			so->AddCity(m_home_city);
-			g_slicEngine->Execute(so) ;
+			g_slicEngine->Execute(so);
 		} else {
 			SlicObject *so = new SlicObject("010NewCiv");
 			so->AddAllRecipients();
 			so->AddCivilisation(orgowner);
 			so->AddCivilisation(newowner);
 			so->AddCity(m_home_city);
-			g_slicEngine->Execute(so) ;
+			g_slicEngine->Execute(so);
 		}
-//end E fix 9-6-2006  need to fix script.slc and info.txt though //need to make it more generic
-
 	}
 
 	if(!causeIsExternal && g_network.IsActive()) {
@@ -1330,36 +1312,44 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 
 
 	SpecialAttackInfoRecord const * specRec = 
-        unitutil_GetSpecialAttack(SPECATTACK_REVOLUTION);
+	    unitutil_GetSpecialAttack(SPECATTACK_REVOLUTION);
 
 	if (specRec) 
-    {
-    	sint32 const soundID = specRec->GetSoundIDIndex();
+	{
+		sint32 const soundID = specRec->GetSoundIDIndex();
 
-        if (soundID >= 0)
-        {
-		    sint32 const spriteID = specRec->GetSpriteID()->GetValue();
+		if (soundID >= 0)
+		{
+			sint32 const spriteID = specRec->GetSpriteID()->GetValue();
 
-            if (spriteID >= 0)
-            {
-                g_director->AddSpecialAttack
-                    (m_home_city.GetActor()->GetUnitID(), m_home_city, SPECATTACK_REVOLUTION);
-            }
-            else
-            {
-			    sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
-			    if ((visiblePlayer == m_owner) || 
+			if (spriteID >= 0)
+			{
+				g_director->AddSpecialAttack
+				    (m_home_city.GetActor()->GetUnitID(), m_home_city, SPECATTACK_REVOLUTION);
+			}
+			else
+			{
+				sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
+				if ((visiblePlayer == m_owner) || 
 				    (m_home_city.GetVisibility() & (1 << visiblePlayer))
-                   ) 
-                {
-    				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, 
-				                             m_home_city.RetPos().x, m_home_city.RetPos().y);
-	    		}
-            }
-            
-        }
+				   )
+				{
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, 
+					                         m_home_city.RetPos().x, m_home_city.RetPos().y);
+				}
+			}
+		}
 	}
 
+	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()) {
+		sint32 casualties = (PopCount() / 3) * -1;
+		ChangePopulation(casualties);
+	}
+
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()) {
+		Barbarians::AddBarbarians(city_pos, m_owner, false);
+	}
 
 	// Modified by kaan to address bug # 12
 	// Prevent city from revolting twice in the same turn.
@@ -4018,8 +4008,11 @@ bool CityData::BeginTurn()
 		g_player[m_owner]->m_score->AddCelebration(); // Could use something more interesting here 
 	}
 
-	if (!m_build_queue.GetHead() && !m_buildCapitalization && !m_buildInfrastructure && !m_sentInefficientMessageAlready)
-	{
+	if(!m_build_queue.GetHead()
+	&& !m_buildCapitalization
+	&& !m_buildInfrastructure
+	&& !m_sentInefficientMessageAlready
+	){
 		SlicObject *so = new SlicObject("37CityQueueIsEmpty");
 		so->AddCity(m_home_city);
 		so->AddCivilisation(m_owner);
@@ -4027,7 +4020,7 @@ bool CityData::BeginTurn()
 		g_slicEngine->Execute(so);
 		g_slicEngine->RunWastingWorkTriggers(m_home_city);
 	}
-	m_sentInefficientMessageAlready = FALSE;
+	m_sentInefficientMessageAlready = false;
 
 	CheckForSlaveUprising(); // Check that there's enough military units to guard the slaves.
 	// Does the city have a TerrainImprovement in it's radius? Used for pillage goal.
@@ -4109,64 +4102,70 @@ bool CityData::BeginTurn()
 			}
 		}
 	}
-	//EMOD Militia code diffdb and building
-	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
-	Cell *dcell = g_theWorld->GetCell(m_home_city.RetPos());
-	sint32 numDefenders = dcell->GetNumUnits();
-	MapPoint cpos;
-	m_home_city.GetPos(cpos);
 
-	if(numDefenders <= 0) {  
-		//if DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
-		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit())
-			&& (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)){
+	//EMOD Militia code diffdb and building
+	MapPoint cpos = m_home_city.RetPos();
+
+	if(g_theWorld->GetCell(cpos)->GetNumUnits() <= 0)
+	{
+		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+	
+		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
+		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
+		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT
+		){
 				g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
 		}
 
-		//if city has a buiding that gives it a militia then if empty creates cheapest unit could be human exploit though.
-		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-			if(m_built_improvements & ((uint64)1 << b)){
+		// If city has a buiding that gives it a militia then if 
+		// empty creates cheapest unit could be human exploit though.
+		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
+		{
+			if(m_built_improvements & ((uint64)1 << b))
+			{
 				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-				if (HaveImprovement(b) && rec->GetCreatesMiltiaUnit()){
+				
+				if(HaveImprovement(b)
+				&& rec->GetCreatesMiltiaUnit()
+				){
 					g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
 				}
 			}
 		}
 	}
-    //EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
+
+	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	if((m_is_rioting) &&
-	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents())
-	  ){ 
-		sint32 chance = 0;
-		sint32 barbchance = risk->GetBarbarianChance();
-		sint32 NotFounder = 0;
-		sint32 NotCityStyle = 0;
+	if(m_is_rioting
+	&& g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
+	){
+		double barbchance   = risk->GetBarbarianChance();
+		double notFounder   = 0.0;
+		double notCityStyle = 0.0;
 
-		// if the city has a diffferent culture more likely to have insurgents
+		// If the city has a diffferent culture more likely to have insurgents
 		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-			NotCityStyle = barbchance * 2;
+			notCityStyle = barbchance * 2.0;
 		}
-		// if the revolting city is because of an occupation more likely to revolt
+		// If the revolting city is because of an occupation more likely to revolt
 		if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
-			NotFounder = barbchance * 2;
+			notFounder = barbchance * 2.0;
 		}
 
-		//TODO: technology modifier from the founder that increases insurgents
-		//TODO: technology modifier that allows for more suppression
-		//TODO: govt modifier that allows for more suppression
-		chance += barbchance;
-		chance += NotFounder;
-		chance += NotCityStyle;
+		//TODO: Technology modifier from the founder that increases insurgents
+		//TODO: Technology modifier that allows for more suppression
+		//TODO: Govt modifier that allows for more suppression
+		barbchance += notFounder;
+		barbchance += notCityStyle;
 
 
-		if(g_rand->Next(10000) < chance * 10000) {
-			Barbarians::AddBarbarians(cpos, m_owner, FALSE);
+		if(g_rand->Next(10000) < static_cast<sint32>(barbchance * 10000.0)) {
+			// Add some Barbarians nearby cpos.
+			Barbarians::AddBarbarians(cpos, m_owner, false);
 		}
 	}
 
 	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
-
 	if((m_is_rioting) &&
 		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
 		&& (PopCount() > 1)
@@ -4174,7 +4173,6 @@ bool CityData::BeginTurn()
 			sint32 casualties = (PopCount() / 3) * -1;
 			ChangePopulation(casualties);
 	}
-
 
 	//END EMOD
 
@@ -9997,7 +9995,7 @@ sint32 CityData::TileImpHappinessIncr() const
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
 			if (effect)
-            {
+			{
 				if (effect->GetHappyInc() > 0){
 					totalHappinessInc += effect->GetHappyInc();
 			}
@@ -10007,7 +10005,3 @@ sint32 CityData::TileImpHappinessIncr() const
 	return totalHappinessInc;
 
 }
-
-
-
-

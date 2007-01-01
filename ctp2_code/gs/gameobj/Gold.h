@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Gold
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -94,7 +95,7 @@ public:
     void ClearIncome(); 
     void AddIncome(const sint32 delta); 
     void SubIncome(const sint32 delta); 
-    sint32  GetIncome() const { return m_income_this_turn; } 
+    sint32 GetIncome() const { return m_income_this_turn; } 
 	sint32 DeltaThisTurn() const
 	{
 		// Do not count the rushbuy costs (incidental & under full control of

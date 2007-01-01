@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Everything about a terrain cell
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +28,7 @@
 // - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
 //   with a hypothetical terrain type argument to check whether there is a 
 //   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
+// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -338,7 +340,7 @@ public:
 	double CalcTerrainFreightCost();
 	sint32 GetBaseMoveCosts();
 	
-	
+	bool IsUnitUpgradePosition(sint32 unitOwner) const;
 	
 	
 	

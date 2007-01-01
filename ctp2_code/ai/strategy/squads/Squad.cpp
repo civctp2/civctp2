@@ -1,14 +1,35 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Squad 
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG		
+// - Generate debug version when set.
+// 
+// _DEBUG_SCHEDULER
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -387,7 +408,6 @@ Agent_List::const_iterator Squad::Remove_Agent(const Agent_List::const_iterator 
 
 SQUAD_CLASS Squad::Compute_Squad_Class()
 {
-	
 	Agent_List::iterator agent_iter;
 	
 

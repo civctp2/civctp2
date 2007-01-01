@@ -30,6 +30,8 @@
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Total fuel, total move points and total hp calculation moved into their own
+//   methods. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -702,6 +704,9 @@ public:
 
 	bool CanBeachAssaultRightNow();
 	const UnitRecord * GetDBRec(void) const;
+	sint32 CalculateTotalHP() const;
+	sint32 CalculateTotalFuel() const;
+	double CalculateTotalMovePoints() const;
 
 
 private:
@@ -713,6 +718,6 @@ private:
 
 };
 
-uint32 UnitData_UnitData_GetVersion(void) ;
+uint32 UnitData_UnitData_GetVersion(void);
 #endif
 

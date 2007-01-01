@@ -64,6 +64,10 @@
 // - Added IncreaseBoatMovement and CivHP as a civ attribute (July 2, 2006 by E)
 // - Added Civ Attack Bonuses (July 2, 2006 by E)
 // - Repaired memory leaks
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Total fuel, total move points and total hp calculation moved into their own
+//   methods. (Dec 24th 2006 Martin Gühmann)
+// - Completed SetType() method. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -328,35 +332,16 @@ void UnitData::Create(const sint32 t,
 
 	m_owner = o;
 
-	const UnitRecord *rec = GetDBRec();
 
-	//EMOD added civ bonus
-
-	sint32 civHPBonus = g_player[m_owner]->CivHpBonus();
-	sint32 wonderHPBonus = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
-	m_hp = rec->GetMaxHP() + wonderHPBonus + civHPBonus;
-	m_movement_points = rec->GetMaxMovePoints();
+	m_hp              = CalculateTotalHP();
+	m_fuel            = CalculateTotalFuel(); 
+	m_movement_points = CalculateTotalMovePoints();
 
 	// PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
 	if( !IsImmobile() )
 		SetFlag(k_UDF_FIRST_MOVE);
 
-	m_fuel = rec->GetMaxFuel(); 
-
-	sint32 amt;
-	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())) {
-		if((amt = wonderutil_GetIncreaseBoatMovement(g_player[m_owner]->m_builtWonders)) > 0) {
-			m_movement_points += amt;
-		}
-		if((amt = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_BOAT_MOVEMENT, m_owner)) > 0) {
-			m_movement_points += amt;
-		}
-		// EMOD for Civ Bonus
-		if((amt = g_player[m_owner]->CivBoatBonus()) > 0) {
-			m_movement_points += amt;
-		}
-	}
-
+	const UnitRecord *rec = GetDBRec();
 	if(rec->GetCanCarry()
 	&& rec->GetCargoDataPtr()
 	&&(0 < rec->GetCargoDataPtr()->GetMaxCargo())
@@ -366,16 +351,9 @@ void UnitData::Create(const sint32 t,
 		m_cargo_list = NULL; 
 	}
 
-	if (rec->GetHasPopAndCanBuild())
+	if(rec->GetHasPopAndCanBuild())
 	{
 		m_city_data = new CityData(m_owner, i, m_pos);
-
-//		// EMOD
-//		sint32 buildingHPBonus = 0;
-//		if((buildingHPBonus = buildingutil_GetIncreaseHP(m_city_data->GetEffectiveBuildings())) > 0) {
-//			m_hp += buildingHPBonus;
-//		}
-
 	}
 	else
 		m_city_data = NULL;
@@ -4983,9 +4961,44 @@ void UnitData::SetOwner(PLAYER_INDEX newo)
 
 void UnitData::SetType(sint32 type)
 { 
+	DPRINTF(k_DBG_GAMESTATE, ("Update unit 0x%lx From type %d to type %d @ (%d,%d), turn=%d\n", m_id, m_type, type, m_pos.x, m_pos.y, g_player[m_owner]->m_current_round));
+
 	m_type = type; 
-    /// @bug This is going to cause resynchs for MP
-	//ENQUEUE(); 
+
+	m_hp              = CalculateTotalHP();
+	m_fuel            = CalculateTotalFuel(); 
+	m_movement_points = CalculateTotalMovePoints();
+
+	ClearFlag(k_UDF_FIRST_MOVE); // Clear flag: Upgraded unit maybe mobile
+	if(!IsImmobile())
+		SetFlag(k_UDF_FIRST_MOVE);
+
+	const UnitRecord *rec = GetDBRec();
+	if(m_cargo_list)
+	{
+		if(rec->GetCanCarry()
+		&& rec->GetCargoDataPtr()
+		&&(m_cargo_list->Num() < rec->GetCargoDataPtr()->GetMaxCargo())
+		){
+			Unit* tmp;
+			m_cargo_list->ResizeCreate(rec->GetCargoDataPtr()->GetMaxCargo(), tmp);
+		} 
+	//	else
+	//	{
+	//		Do nothing: Upgraded transporters may have a lower cargo capacity but for
+	//		now this is ignored
+	//	}
+	}
+
+	// Some more stuff has to be done like we have in CreateUnit
+	m_sprite_state->SetIndex(rec->GetDefaultSprite()->GetValue());
+	m_actor->ChangeType(m_sprite_state, m_type, Unit(m_id), true);
+
+	// Maybe more stuff has to be done.
+
+	// Synchronize MP
+	ENQUEUE();
+
 }
 
 
@@ -5020,7 +5033,7 @@ void UnitData::SetFirstMoveThisTurn(sint32 fm)
 		ClearFlag(k_UDF_FIRST_MOVE);
 }
 
-// not used
+// Not used
 void UnitData::SetFuel(sint32 fuel)
 {
 	m_fuel = fuel;
@@ -5839,6 +5852,53 @@ bool UnitData::CanBeachAssaultRightNow()
     }
 
 	return false;
+}
+
+sint32 UnitData::CalculateTotalHP() const
+{
+	const UnitRecord* rec = GetDBRec();
+	sint32 civHPBonus     = g_player[m_owner]->CivHpBonus();
+	sint32 wonderHPBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
+
+	return rec->GetMaxHP() + wonderHPBonus + civHPBonus;
+}
+
+sint32 UnitData::CalculateTotalFuel() const
+{
+	const UnitRecord* rec = GetDBRec();
+
+	// Add some more stuff
+	return rec->GetMaxFuel();
+}
+
+double UnitData::CalculateTotalMovePoints() const
+{
+	const UnitRecord* rec = GetDBRec();
+
+	double movePoints = rec->GetMaxMovePoints();
+
+	if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()))
+	{
+		double amt = static_cast<double>(wonderutil_GetIncreaseBoatMovement(g_player[m_owner]->m_builtWonders));
+		if(amt > 0.0)
+		{
+			movePoints += amt;
+		}
+
+		amt = static_cast<double>(g_featTracker->GetAdditiveEffect(FEAT_EFFECT_BOAT_MOVEMENT, m_owner));
+		if(amt > 0.0)
+		{
+			movePoints += amt;
+		}
+
+		// EMOD for Civ Bonus
+		amt = static_cast<double>(g_player[m_owner]->CivBoatBonus());
+		if(amt > 0.0) {
+			movePoints += amt;
+		}
+	}
+	
+	return movePoints;
 }
 
 const UnitRecord * UnitData::GetDBRec(void) const

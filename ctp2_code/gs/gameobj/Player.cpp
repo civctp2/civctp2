@@ -1759,7 +1759,6 @@ bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 
 	if (*m_capitol == killme) { 
 		m_capitol->m_id = (0); 
-		//cicil war code here??
 	}
 
 	m_all_cities->DelIndex(killme_index); 
@@ -10258,4 +10257,13 @@ void Player::SetPlayerType(PLAYER_TYPE pt)
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_DETACH_ROBOT, m_owner));
 		}
 	}
+}
+
+bool Player::HasFreeUnitUpgrades() const
+{
+	return g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade()
+	    && IsRobot();
+//	    || HasFreeUpgradeWonder like Civ2's Leonardo's workshop
+//	    || FreeUpgradeFeat
+//	    || Whatever
 }

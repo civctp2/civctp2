@@ -165,10 +165,10 @@ Difficulty{
 	Bit					AINoShieldHunger					# AI doesn't pay shield hunger (gets lots of units)
 	Bit					AINoGoldHunger						# AI doesnt pay unit gold hunger
 	Bit					AIFreeUpgrade						# AI doesn't pay goldfor upgrades
-	Bit					AIMilitiaUnit						#If city is empty at turn start AI gets cheapest unit
+	Bit					AIMilitiaUnit						# If city is empty at turn start AI gets cheapest unit
 
-	Bit(Int)			SmallMapExtraCities
-	Bit(Int)			MediumMapExtraCities
-	Bit(Int)			LargeMapExtraCities
-	Bit(Int)			GiganticMapExtraCities
+	# Bit(Int)			SmallMapExtraCities                 # This goes into a future map.cdb
+	# Bit(Int)			MediumMapExtraCities
+	# Bit(Int)			LargeMapExtraCities
+	# Bit(Int)			GiganticMapExtraCities
 }

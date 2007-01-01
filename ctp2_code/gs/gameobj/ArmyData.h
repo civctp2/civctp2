@@ -31,6 +31,8 @@
 // - Moved UnitValidForOrder to Unit.h to be able to access the Unit
 //   properties. - April 24th 2005 Martin Gühmann
 // - Added Cleanup. (Sep. 25th 2005 Martin Gühmann)
+// - Moved the upgrade stuff into its own methods, however more work is needed.
+//   (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -589,7 +591,9 @@ public:
 
 
     bool HasVeterans() const;
+	bool NearestUnexplored(MapPoint &pos) const;
 
+	void Upgrade();
 	//EMOD
 //	void ArmyData::UpgradeNoGold();
 //	void ArmyData::Upgrade();

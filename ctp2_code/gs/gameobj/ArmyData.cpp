@@ -98,12 +98,14 @@
 // - Repaired some crashes.
 // - Implemented EnablesPunativeAirstrikes Wonder flag
 // - Implemented ConstDB ChanceLostAtSea
-// - added difficulty to make ai immune to sinking
-// - added slic message for ship sinking
-// - added CanUpgrade. Upgrade, CanUpgradeNoGold, and UpgradeNoGold methods.
-// - added UpgradeUnit to Begin Turn
-// - added a return true for AI in verifyattack (for testing)
-// - added random number for beginturn barbarian code
+// - Added difficulty to make ai immune to sinking
+// - Added slic message for ship sinking
+// - Added CanUpgrade. Upgrade, CanUpgradeNoGold, and UpgradeNoGold methods.
+// - Added UpgradeUnit to Begin Turn
+// - Added a return true for AI in verifyattack (for testing)
+// - Added random number for beginturn barbarian code
+// - Moved the upgrade stuff into its own methods, however more work is needed.
+//   (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -948,42 +950,12 @@ bool ArmyData::IsAsleep() const
 // Put this army on sentinal duty or upgrade it.
 void ArmyData::Sleep()
 {
-//	Cell *cell = g_theWorld->GetCell(m_pos);
-//	sint32 CellOwner = cell->GetOwner();
+	Upgrade(); // Has to be moved so that it is executed by its own event
 
-    sint32 i;
-	sint32 s;
-
-	Unit city = g_theWorld->GetCity(m_pos);
-	for(i = m_nElements - 1; i >= 0; i--) {
-		// The upgrade stuff has to go into its own method
-		const UnitRecord *rec = m_array[i].GetDBRec();
-		// Actually E, I don't want to see here unfinished code.
-		// Unless you leave it here for the next months.
-		//if((rec->GetNumUpgradeTo() > 0) && ((city.m_id != 0) || (terrainutil_HasUpgrader(m_pos)))) { //added tileimps that upgrade 5-30-2006
-		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
-			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-				sint32 oldshield = rec->GetShieldCost();
-				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
-				sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-				sint32 goldcost = (newshield - oldshield) * rushmod;
-				sint32 newunit = rec->GetUpgradeToIndex(s);
-				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
-					//m_array[i].SetType(newunit);
-						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-					g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-					g_player[m_owner]->m_gold->SubGold(goldcost);
-					} else {
-						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
-                            GEA_Unit, m_array[i],
-                            GEA_End);
-					}
-				}
-		} else {
+	for(sint32 i = m_nElements - 1; i >= 0; i--) {
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
                                GEA_Unit, m_array[i],
                                GEA_End);
-		}
     }
 }
 
@@ -1522,8 +1494,6 @@ void ArmyData::BeginTurn()
 ///       Efficiency note: do not compute cell/terrain stuff inside the loop - all 
 ///       units of the army are supposed to be at the same location. 
 
-
-    
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
 	sint32 i;
@@ -1536,7 +1506,6 @@ void ArmyData::BeginTurn()
 			g_player[m_owner]->m_materialPool->AddMaterials(shields);
 		}
 	}
-
 
 	for(i = 0; i < m_nElements; i++) {
 		const UnitRecord *urec = m_array[i].GetDBRec();
@@ -1557,7 +1526,7 @@ void ArmyData::BeginTurn()
 	// EMOD Barbarian Cities
 	// This should be risk level depending //EMOD added Risk 10-25-2006
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCities())
-		{
+	{
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 			for(i = 0; i < m_nElements; i++) {
 				if(m_array[i].IsEntrenched()
@@ -1598,7 +1567,7 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-//Barbarian leader spawn
+	//Barbarian leader spawn
 	// This should be risk level depending ADDED EMOD 10-05-2006
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
 	{
@@ -1606,7 +1575,7 @@ void ArmyData::BeginTurn()
 		//if cell->GetNumUnits() < 2;  //limits spawn amounts?
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 			for(i = 0; i < m_nElements; i++) {
-//			const UnitRecord *rec = m_array[i].GetDBRec();
+//				const UnitRecord *rec = m_array[i].GetDBRec();
 				if(m_array[i].IsEntrenched()
 				&& m_owner == PLAYER_INDEX_VANDALS
 				){
@@ -1615,6 +1584,7 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
+
 	// END EMOD barb camps
 	// This should be risk level depending  //this was for special forces to raise Guerrillas
 	//if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
@@ -1653,23 +1623,23 @@ void ArmyData::BeginTurn()
 		}
 	}
 
-//EMOD If tile has tileimp that is a minefield then deduct HP
+	//EMOD If tile has tileimp that is a minefield then deduct HP
 	if(terrainutil_HasMinefield(m_pos)  
 	){
 		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
 		double hpcost2;
 		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){
-		const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
-		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
-		for(sint32 u = 0; u < m_nElements; u++) {
-//			const UnitRecord *urec = m_array[u].GetDBRec();
+			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
+			for(sint32 u = 0; u < m_nElements; u++) {
+//				const UnitRecord *urec = m_array[u].GetDBRec();
 				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir()) { //EMOD
 					m_array[u].DeductHP(hpcost2); // This should go into the MoveUnits event
+				}
+				if(m_array[u].GetHP() < 0.999){
+					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+				}
 			}
-			if(m_array[u].GetHP() < 0.999){
-				m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			}
-		}
 		}
 	}
 
@@ -1681,66 +1651,20 @@ void ArmyData::BeginTurn()
 //			m_array[i].DeductHP(1);
 
 
-// Lost at sea random chance
-   sint32 chance = g_theConstDB->PercentLostAtSea();
-   if (chance > 0)
-   {
-		for(sint32 u = 0; u < m_nElements; u++) 
-        {
-			const UnitRecord *urec = m_array[u].GetDBRec();
-			if((urec->GetCanSinkInSea()) && (trec->GetMovementTypeSea()) && (m_owner > 0)) 
-			{
-				if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking() && g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
-					continue;
-
-				if(g_rand->Next(100) < sint32(chance)) {
-					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-					SlicObject *so = new SlicObject("999LostAtSea");
-						so->AddRecipient(m_owner);
-						so->AddUnit(m_array[i]);
-                }
-			}
-		}
-	}
-//
-
-   	for(i = 0; i < m_nElements; i++) {
-		const UnitRecord *rec = m_array[i].GetDBRec();
-		sint32 s;
-		Unit city = g_theWorld->GetCity(m_pos);
-		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade()
-			&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+	// Lost at sea random chance
+	// Maybe move this code into an event
+	sint32 chance = g_theConstDB->PercentLostAtSea();
+	if( chance > 0
+	&&(!g_player[m_owner]->IsRobot()
+	|| !g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking())
+	){
+		for(i = 0; i < m_nElements; i++) 
 		{
-			if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
-				for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-					sint32 newunit = rec->GetUpgradeToIndex(s);
-					if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s))){
-						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-						g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-					}
-				}
-			}
-			//end upgrade no gold
-		} else if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-			if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
-				for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-					sint32 oldshield = rec->GetShieldCost();
-					sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
-					sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-					sint32 goldcost = (newshield - oldshield) * rushmod;
-					sint32 newunit = rec->GetUpgradeToIndex(s);
-					if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
-						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-						g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-						g_player[m_owner]->m_gold->SubGold(goldcost);
-					} 
-				}
-			}
-			//end upgrade
+			m_array[i].Sink(chance);
 		}
 	}
 
-//
+	Upgrade();
 
 //END EMOD
 
@@ -10006,7 +9930,7 @@ bool ArmyData::GetNextPathPoint(MapPoint & next_pos) const
 	if ((order) &&
 		(order->m_order == UNIT_ORDER_MOVE) &&
 		(order->m_path) && 
-		(order->m_path->IsEndDir() == FALSE))
+		(!order->m_path->IsEndDir()))
 	{
 		order->m_path->GetCurrentPoint(next_pos);
 		return true;
@@ -10920,6 +10844,58 @@ void ArmyData::DecrementDontKillCount()
 	}
 }
 
+bool ArmyData::NearestUnexplored(MapPoint &pos) const
+{
+	sint32 visionRange = 0;
+	sint32 index = 0;
+
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i]->GetVisionRange() > visionRange)
+		{
+			visionRange = m_array[i]->GetVisionRange();
+			index = i;
+		}
+	}
+
+	sint32 searchRadius = visionRange + 7; // Should be exposed
+	return m_array[index].NearestUnexplored(searchRadius, pos);
+}
+
+void ArmyData::Upgrade()
+{
+	// Should be moved to an event
+	if(g_player[m_owner]->HasFreeUnitUpgrades()
+//	|| Position allows free upgrades
+	){
+		for(sint32 i = 0; i < m_nElements; ++i)
+		{
+			sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
+			if(upgradeType > -1)
+			{
+				m_array[i].SetType(upgradeType);
+			}
+		}
+	}
+	else{
+		if(g_theWorld->GetCell(m_pos)->IsUnitUpgradePosition(m_owner)){
+			for(sint32 i = 0; i < m_nElements; ++i)
+			{
+				sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
+				if(upgradeType > -1)
+				{
+					sint32 upgradeCost = m_array[i].GetUpgradeCosts(upgradeType);
+
+					if(g_player[m_owner]->m_gold->GetLevel() > upgradeCost)
+					{
+						m_array[i].SetType(upgradeType);
+						g_player[m_owner]->m_gold->SubGold(upgradeCost);
+					}
+				}
+			}
+		}
+	}
+}
 
 //bool ArmyData::CanUpgrade(sint32 i)
 //{

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : the Goal motherclass header
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -59,12 +60,14 @@ public:
     const static Utility MAX_UTILITY;
 
 
+protected:
+	// Only part of derived classes
     Goal();
 
 
     Goal(const Goal & goal);
 
-
+public:
     virtual ~Goal();
 
 
@@ -207,9 +210,6 @@ protected:
 
 
     PLAYER_INDEX m_playerId;
-
-
-    std::pair < sint16, sint16 > m_pos;
 
 
 private:

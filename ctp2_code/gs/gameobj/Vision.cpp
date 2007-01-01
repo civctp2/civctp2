@@ -580,10 +580,11 @@ void Vision::AddUnseen(const MapPoint &point)
 										  m_owner, g_network.PackedPos(point)));
 		}
 
-		UnseenCellCarton unseen(new UnseenCell(point));
+		UnseenCellCarton unseen(new UnseenCell(point)); // Memory leak?
 		m_unseenCells->Insert(unseen);
 	}
 }
+
 void Vision::Copy(const Vision *copy)
 {
 	Assert(m_width == copy->m_width && m_height == copy->m_height);

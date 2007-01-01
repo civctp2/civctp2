@@ -56,6 +56,7 @@
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added checks and Asserts to try to prevent crashes.
+// - Improved AI debug goal report. (Jan 2nd 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -122,8 +123,11 @@ bool CTPGoal::operator == (const CTPGoal & rval) const
 }
 
 
-// TODO: find out what this operator if used for. The relation between this 
+// TODO: find out what this operator is used for. The relation between this 
 // definition and the one in Goal is completely unclear.
+//
+// A: Probably none. However objects of type Goal are just instantiated
+//    by objects of CTPGoal as base objects.
 bool CTPGoal::operator < (const CTPGoal & rval) const
 {
 	return (m_playerId < rval.m_playerId)           &&
@@ -278,7 +282,6 @@ const MapPoint & CTPGoal::Get_Target_Pos() const
 	}
 	else if (m_target_city != ID())
 	{
-		
 		if (m_target_city.IsValid())
 		{
 			m_target_city.GetPos(pos);
@@ -1372,8 +1375,9 @@ bool CTPGoal::Get_Totally_Complete() const
 				
 				regard_checked = true;
 			}
-// If the goal is not executed by stealth units, forbid to execute it if their is no 
-// incursion permission	(depending on alignement) - Calvitix
+			// If the goal is not executed by stealth units, forbid to 
+			// execute it if there is no incursion permission 
+			// (depending on alignement) - Calvitix
 			if ((!diplomat.IncursionPermission(target_owner) &&
 				(diplomat.GetPersonality()->GetAlignmentGood() ||
 				 diplomat.GetPersonality()->GetAlignmentNeutral()))
@@ -2028,26 +2032,26 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 							    const SUB_TASK_TYPE sub_task, 
 							    const MapPoint &dest_pos,
 								const Path &found_path)
-{ 
-    bool did_move = false; 
+{
+	bool did_move = false; 
 
 	
 	Unit city = g_theWorld->GetCity( first_army->Get_Pos() );
-	if (city.m_id != 0)
+	if(city.m_id != 0)
 	{
 		sint8 new_garrison;
 		double new_garrison_strength;
 		if (NeededForGarrison(first_army, dest_pos, new_garrison, new_garrison_strength))
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, first_army->Get_Army().m_id,
-            ("GOAL %x (%d): FollowPathToTask::Can not send army needed for garrison to destination (x=%d,y=%d):\n", this,
-            m_goal_type, dest_pos.x, dest_pos.y));
+				("GOAL %x (%d): FollowPathToTask::Can not send army needed for garrison to destination (x=%d,y=%d):\n", this,
+				m_goal_type, dest_pos.x, dest_pos.y));
 			first_army->Log_Debug_Info(k_DBG_SCHEDULER);
-            uint8 magnitude = 220;
-            g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), "GARRISON", magnitude);
+			uint8 magnitude = 220;
+			g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), "GARRISON", magnitude);
 			return false;
 		}
-		else 
+		else
 		{
 			
 			city->GetCityData()->SetCurrentGarrison(new_garrison);
@@ -2091,48 +2095,49 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 	}
 
 	
-	if ( test == ORDER_TEST_OK || 
-		 test == ORDER_TEST_NO_MOVEMENT )
-	{
+	if(test == ORDER_TEST_OK
+	|| test == ORDER_TEST_NO_MOVEMENT
+	){
 
-    //I want to see armytext even in optimized test version - Calvitix
-	Utility val = Compute_Matching_Value(first_army);
-	uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
-	g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), goal_rec->GetNameText(), magnitude);
-    const MapPoint & my_target_loc = dest_pos;
-    const char * myText = goal_rec->GetNameText();
-    MBCHAR * myString = new MBCHAR[strlen(myText) + 40];
-    MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
-    memset(goalString, 0, strlen(myText) + 20);
-    memset(myString, 0, strlen(myText) + 40);
-    for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
-    {
-        goalString[myComp] = myText[myComp + 5];
-    }
-    switch (m_sub_task)
-    {
+		//I want to see armytext even in optimized test version - Calvitix
+		Utility val = Compute_Matching_Value(first_army);
+		uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), goal_rec->GetNameText(), magnitude);
+		const MapPoint & my_target_loc = dest_pos;
+		const char * myText = goal_rec->GetNameText();
+		MBCHAR * myString = new MBCHAR[strlen(myText) + 40];
+		MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
+		memset(goalString, 0, strlen(myText) + 20);
+		memset(myString, 0, strlen(myText) + 40);
+		for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+		{
+			goalString[myComp] = myText[myComp + 5];
+		}
+		switch (m_sub_task)
+		{
 
 	
-        case SUB_TASK_RALLY:
-            sprintf(myString, "Group to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
-            break;
-        case SUB_TASK_TRANSPORT_TO_BOARD:
-            sprintf(myString, "Transp. to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
-            break;
-        case SUB_TASK_CARGO_TO_BOARD:
-            sprintf(myString, "Cargo. to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
-            break;
-        case SUB_TASK_AIRLIFT:
-            sprintf(myString, "Airlift to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
-            break;
-		case SUB_TASK_GOAL:
-		default :
-            sprintf(myString, "%s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
-            break;
-    }
-    g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), myString, magnitude);
-    delete[] myString;
-    delete[] goalString;
+			case SUB_TASK_RALLY:
+				sprintf(myString, "Group to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				break;
+			case SUB_TASK_TRANSPORT_TO_BOARD:
+				sprintf(myString, "Transp. to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				break;
+			case SUB_TASK_CARGO_TO_BOARD:
+				sprintf(myString, "Cargo. to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				break;
+			case SUB_TASK_AIRLIFT:
+				sprintf(myString, "Airlift to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				break;
+			case SUB_TASK_GOAL:
+			default :
+				sprintf(myString, "%s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				break;
+		}
+
+		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), myString, magnitude);
+		delete[] myString;
+		delete[] goalString;
 
 		if (first_army->Get_Can_Be_Executed() == true)
 		{
@@ -2148,21 +2153,19 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		return true;
 	}
 	else
-    {
+	{
 
 		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), "NULL", 0);
 
-	if ( test != ORDER_TEST_OK && test == ORDER_TEST_NO_MOVEMENT )
+		if(test != ORDER_TEST_OK && test == ORDER_TEST_NO_MOVEMENT)
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, first_army->Get_Army().m_id,
-            ("GOAL %x (%d): FollowPathToTask:: failed TestOrderHere( %s, (%d,%d))\n", this, m_goal_type,
+				("GOAL %x (%d): FollowPathToTask:: failed TestOrderHere( %s, (%d,%d))\n", this, m_goal_type,
 				order_rec->GetNameText(),dest_pos.x,dest_pos.y));
 		}
 
-		
 		return false;
 	}
-
 
 	return true;
 }
@@ -2303,9 +2306,9 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 		break;
 		
-    case SUB_TASK_CARGO_TO_BOARD:
+	case SUB_TASK_CARGO_TO_BOARD:
 		
-        dest_pos = the_transport->Get_Pos();
+		dest_pos = the_transport->Get_Pos();
 		start_pos = the_army->Get_Pos();
 		
 		
@@ -2396,17 +2399,15 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_pos, const SUB_TASK_TYPE & sub_task)
 {
-
 	const OrderRecord * unload_order_rec = CtpAi::GetUnloadOrder();
 	const OrderRecord * space_launch_order_rec = CtpAi::GetSpaceLaunchOrder();
 
-	
 	if (the_army->Get_Army()->CheckValidDestination(goal_pos))
 		return true; 
 
 	Path found_path;
 
-    MapPoint start_pos; 
+	MapPoint start_pos; 
 	MapPoint dest_pos;
 	sint32 dest_cont; 
 	BOOL dest_is_land;
@@ -2431,7 +2432,7 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 	else
 		check_dest = true;
 
-    bool found = false;
+	bool found = false;
 
 	start_pos = the_army->Get_Pos();
 
@@ -2464,7 +2465,7 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 		{
 
 			found = CTPAgent::FindPath(the_army->Get_Army(), nearest_city.RetPos(), true, found_path); 
-            if (found) Set_Sub_Task(SUB_TASK_AIRLIFT);
+			if (found) Set_Sub_Task(SUB_TASK_AIRLIFT);
 			
 			if (start_pos == nearest_city.RetPos())
 			{
@@ -2488,86 +2489,86 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 		}
 	}
 	else if ( the_army->Get_Army()->HasCargo() && 
-		!the_army->Get_Army()->GetMovementTypeAir())
+	         !the_army->Get_Army()->GetMovementTypeAir())
 	{
-		
 		move_intersection = 
 			the_army->Get_Army()->GetMovementType() | the_army->Get_Army()->GetCargoMovementType();
 		
 		
 		found = the_army->FindPathToBoard(move_intersection, goal_pos, false, found_path);
-            if (found) Set_Sub_Task(SUB_TASK_TRANSPORT_TO_BOARD);
+		if (found) Set_Sub_Task(SUB_TASK_TRANSPORT_TO_BOARD);
 	}
 	else
 	{
-		
 		if (!waiting_for_buddies)
 		{
-			
 			found = CTPAgent::FindPath(the_army->Get_Army(),goal_pos, check_dest, found_path); 
 		}
 	}
 
-    switch (sub_task) { 
-    case SUB_TASK_GOAL: 
-		if (!found)
+	switch (sub_task) { 
+		case SUB_TASK_GOAL:
+			if (!found)
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
+				           ("GOAL %x (%s): GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_GOAL):",
+				            this, g_theGoalDB->Get(m_goal_type)->GetNameText(), goal_pos.x, goal_pos.y));
+				the_army->Log_Debug_Info(k_DBG_SCHEDULER);
+				uint8 magnitude = 220;
+				MBCHAR * myString = new MBCHAR[256];
+				sprintf(myString, "NO PATH to (%d,%d) - %s", goal_pos.x, goal_pos.y, g_theGoalDB->Get(m_goal_type)->GetNameText());
+				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
+			
+				delete[] myString;
+			}
+
+			break;
+
+		case SUB_TASK_RALLY: 
+
+			if (waiting_for_buddies)
+			{
+				Utility val = Compute_Matching_Value(the_army);
+				uint8 magnitude = (uint8)(((5000000 - val) * 255.0) / 5000000);
+				MBCHAR * myString = new MBCHAR[40];
+				sprintf(myString, "Waiting GROUP to GO (%d,%d)", goal_pos.x, goal_pos.y);
+				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
+				delete[] myString;
+
+				return true;
+			}
+
+			if (!found)
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
+				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_RALLY):",
+				           this, m_goal_type, goal_pos.x, goal_pos.y));
+				the_army->Log_Debug_Info(k_DBG_SCHEDULER);
+				uint8 magnitude = 220;
+				MBCHAR * myString = new MBCHAR[40];
+				sprintf(myString, "NO PATH (GROUP)(%d,%d)", goal_pos.x, goal_pos.y);
+				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
+				delete[] myString;
+			}
+
+			break;
+
+		default:
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-                    ("GOAL %x (%d): GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_GOAL):",
-                    this, m_goal_type, goal_pos.x, goal_pos.y));
-			the_army->Log_Debug_Info(k_DBG_SCHEDULER);
-                    uint8 magnitude = 220;
-                    MBCHAR * myString = new MBCHAR[40];
-                    sprintf(myString, "NO PATH to (%d,%d) - %d", goal_pos.x, goal_pos.y,m_goal_type);
-                    g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
-                    delete[] myString;
-
+			if (!found)
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
+				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_TRANSPORT:",
+				           this, m_goal_type, goal_pos.x, goal_pos.y));
+				           the_army->Log_Debug_Info(k_DBG_SCHEDULER);
+				uint8 magnitude = 220;
+				MBCHAR * myString = new MBCHAR[40];
+				sprintf(myString, "NO PATH (TRANSP.)(%d,%d)", goal_pos.x, goal_pos.y);
+				g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
+				delete[] myString;
+			}
 		}
-
-		break;
-
-	case SUB_TASK_RALLY: 
-		
-		
-
-		
-		if (waiting_for_buddies)
-		{
-                    Utility val = Compute_Matching_Value(the_army);
-                    uint8 magnitude = (uint8)(((5000000 - val) * 255.0) / 5000000);
-                    MBCHAR * myString = new MBCHAR[40];
-                    sprintf(myString, "Waiting GROUP to GO (%d,%d)", goal_pos.x, goal_pos.y);
-                    g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
-                    delete[] myString;
-			return true;
-		}
-
-		
-		if (!found)
-		{
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-                    ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_RALLY):",
-                    this, m_goal_type, goal_pos.x, goal_pos.y));
-			the_army->Log_Debug_Info(k_DBG_SCHEDULER);
-                    uint8 magnitude = 220;
-                    g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), "NO PATH (GROUP)", magnitude);
-		}
-
-		break;
-
-    default:
-                {
-                    if (!found)
-                    {
-                        AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-                        ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_TRANSPORT:",
-                        this, m_goal_type, goal_pos.x, goal_pos.y));
-                        the_army->Log_Debug_Info(k_DBG_SCHEDULER);
-                        uint8 magnitude = 220;
-                        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), "NO PATH (TRANSP.)", magnitude);
-                    }
-                }
-    } 
+	}
 
 	bool move_success = false;
 	if ( found )

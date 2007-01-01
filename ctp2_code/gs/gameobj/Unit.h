@@ -36,6 +36,7 @@
 // - Removed some unsused method to removed some unused in methods in
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -282,6 +283,7 @@ public:
 	sint32 GetType() const;
 	
 	const MBCHAR * GetName() const;
+	bool NearestUnexplored(sint32 searchRadius, MapPoint &pos) const;
 	bool NearestFriendlyCity(MapPoint &c) const;
 	bool NearestFriendlyCity(Unit &u) const;
 	bool NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoomFor,
@@ -782,9 +784,12 @@ public:
 	bool NeedsRefueling() const;
 	bool UnitValidForOrder(const OrderRecord * order_rec) const;
 
-	void SetType(const sint32 type);  //EMOD
+	void SetType(const sint32 type);
+	void Sink(sint32 chance);
+	sint32 GetBestUpgradeUnitType() const;
+	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 };
 
-uint32 Unit_Unit_GetVersion(void) ;
+uint32 Unit_Unit_GetVersion(void);
 
 #endif

@@ -729,6 +729,9 @@ public:
 
 	PLAYER_TYPE GetPlayerType() { return m_playerType; };
 
+	bool IsRobot  () const { return m_playerType == PLAYER_TYPE_ROBOT;   }
+	bool IsHuman  () const { return m_playerType == PLAYER_TYPE_HUMAN;   }
+	bool IsNetwork() const { return m_playerType == PLAYER_TYPE_NETWORK; }
 
 	static bool IsThisPlayerARobot(const sint32 &p)
 	{
@@ -1037,11 +1040,11 @@ public:
 
 	void EnterNewAge(sint32 age);
 
-	//Added by Martin Gühmann
 	sint32 SetResearchGoal(enum DATABASE db, sint32 item);
 
 	void StartResearchingAdvanceForGoal(sint32 goal);
 	bool RecursivelyStartResearching(sint32 advance);
+	bool HasFreeUnitUpgrades() const;
 
 };
 

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : declarations for the scheduler_types class
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// None
+// - None
 //
 //----------------------------------------------------------------------------
 //

@@ -1457,9 +1457,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	}
 	else
 	{
-		
-// update : Place Tile Improvement every turn instead of every 5 turns (Calvitix)
-	// Tile improment placement round now a constant
 		if (round % PERIOD_COMPUTE_TILE_IMPROVEMENTS == 0)
 		{
 			t1 = GetTickCount();
@@ -1959,7 +1956,6 @@ void CtpAi::HandleMoveFailure(const Army & army, const MapPoint & pos)
 
 void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 {
-	
 	Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();	
@@ -1969,49 +1965,58 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 	CTPGoal_ptr goal_ptr;
 
-//Added by Martin Gühmann explore resolution is now constant
+	//Added by Martin Gühmann explore resolution is now constant
     sint16 explore_res = EXPLORE_RESOLUTION;
 	GOAL_TYPE goal_type;
 	const StrategyRecord::GoalElement *goal_element_ptr;
 	sint16 goal_element;
 	for (goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+	{
+		goal_element_ptr = strategy.GetGoalElement(goal_element);
+		goal_type = goal_element_ptr->GetGoalIndex();
+
+		Assert(goal_type >= 0);
+
+		if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeUnexplored() )
+			continue;
+
+		// Add goals every turn (and not just when there isn't 
+		// anymore (if one goal remain and isn't satisfied,
+		// it can freeze all the goals of this type) - Calvitix
+		if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
+			continue;
+	
+		if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
+			continue;
+			
+		MapPoint pos;
+		for ( pos.x = 0; pos.x <  g_theWorld->GetWidth(); pos.x += explore_res)
 		{
-			goal_element_ptr = strategy.GetGoalElement(goal_element);
-			goal_type = goal_element_ptr->GetGoalIndex();
+			for (pos.y = 0; pos.y <  g_theWorld->GetHeight(); pos.y += explore_res)
+			{
+				// The idia of this is to set explore goals at the frontier 
+				// to the unknown, unfortunately this isn't so simple.
+			//	if(pos.HasUnexploredNeighbor(playerId))
+			//	{
+			//	}
 
-			
-			Assert(goal_type >= 0);
+				if (player_ptr->IsExplored(pos))
+					continue;
 
-			
-			if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeUnexplored() )
-				continue;
+				// Something better has to be found than just selecting some 
+				// points on the map for exploration targets.
+				// After completion of one exploration goal a human player
+				// explores the a map point nearby the old exploration target,
+				// in most cases a neighbour tile.
+				goal_ptr = new CTPGoal();
+				goal_ptr->Set_Type( goal_type );
+				goal_ptr->Set_Player_Index( playerId );
+				goal_ptr->Set_Target_Pos( pos );
 
-//Add goals every turn (and not just when there isn't anymore (if one goal remain and isn't satisfied,
-// it can freeze all the goals of this type) - Calvitix
-			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
-				continue;
-			
-			
-			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
-				continue;
-			
-			MapPoint pos;
-			for ( pos.x = 0; pos.x <  g_theWorld->GetWidth(); pos.x += explore_res) 
-				{
-					for (pos.y = 0; pos.y <  g_theWorld->GetHeight(); pos.y += explore_res) 
-						{
-							
-							if ( player_ptr->IsExplored(pos) == TRUE)
-								continue;
-							goal_ptr = new CTPGoal();
-							goal_ptr->Set_Type( goal_type );
-							goal_ptr->Set_Player_Index( playerId );
-							goal_ptr->Set_Target_Pos( pos );
-
-							scheduler.Add_New_Goal( goal_ptr );
-						} 
-				} 
+				scheduler.Add_New_Goal( goal_ptr );
+			} 
 		} 
+	} 
 }
 
 
@@ -2520,11 +2525,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 		GEA_Int, FALSE, 
 		GEA_End);
 	
-#ifdef _DEBUG
-	uint8 magnitude = 255;
-	g_graphicsOptions->AddTextToArmy(army, "Refuel", magnitude);
-#endif
-	
+	g_graphicsOptions->AddTextToArmy(army, "Refuel", 255);	
 }
 
 
@@ -2547,7 +2548,7 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if ( !g_theArmyPool->IsValid(army) )
 			continue;
 
-		//first get max bombard rge
+		//first get max bombard range
 		sint32 min_rge, max_rge = 0;
         army->GetBombardRange(min_rge, max_rge);
 
@@ -2791,7 +2792,6 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 void CtpAi::SellRandomBuildings(const Unit & city, const double chance)
 {
-
 	uint64 buildings = city.GetCityData()->GetEffectiveBuildings();
 	for (sint32 which = 0; which < 64; which++)
 	{
@@ -2811,21 +2811,20 @@ void CtpAi::SellRandomBuildings(const Unit & city, const double chance)
 //PFT 12 apr 05, replaces BombardAdjacentEnemies to accomodate bombarding from range
 void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 {
-    if (!army->CanBombard())
+	if (!army->CanBombard())
 		return;
 
-    if (!army->CanPerformSpecialAction())
+	if (!army->CanPerformSpecialAction())
 		return;
 
-    PLAYER_INDEX playerId = army->GetOwner();
+	PLAYER_INDEX playerId = army->GetOwner();
 
-    for (sint32 foreigner = 1; foreigner < CtpAi::s_maxPlayers; foreigner++) 
+	// Bombard all including barbs
+	for(sint32 foreigner = 0; foreigner < CtpAi::s_maxPlayers; foreigner++) 
 	{
-		if (g_player[foreigner] 
-			&& AgreementMatrix::s_agreements.HasAgreement(playerId, 
-														  foreigner, 
-														  PROPOSAL_TREATY_DECLARE_WAR))
-		{  //try to bombard one of his armies or cities within max range      
+		if(playerId != foreigner
+		&& g_player[playerId]->HasWarWith(foreigner)
+		){  //try to bombard one of his armies or cities within max range
 
 			Player *foreigner_ptr = g_player[foreigner];
 			Assert(foreigner_ptr);

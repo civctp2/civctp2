@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Everything about a terrain cell
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -37,6 +38,7 @@
 //   - April 13th 2005 Martin Gühmann
 // - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
 // - Prevented crash with multiple instances of an improvement that is deleted.
+// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -519,8 +521,7 @@ sint32 Cell::GetGoldFromTerrain(sint8 terrainType) const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(terrainType);
 
-	
-    sint32 gold = rec->GetEnvBase()->GetGold();
+	sint32 gold = rec->GetEnvBase()->GetGold();
 
 	if(HasCity() && rec->HasEnvCity()) {
 		gold += rec->GetEnvCityPtr()->GetGold();
@@ -593,9 +594,9 @@ sint32 Cell::GetGoldProduced() const
 				gold += bonus;
 			}
 		}
-	}																					
-																					
-    return gold; 
+	}
+
+	return gold; 
 }
 
 sint32 Cell::GetScore() const 
@@ -821,14 +822,14 @@ double Cell::GetTerrainDefenseBonus()
 
 
 uint32 Cell_CELL_GetVersion(void)
-	{
+{
 	return (k_CELL_VERSION_MAJOR<<16 | k_CELL_VERSION_MINOR) ;
-	}
+}
 
 void Cell::Kill(void)
-	{
+{
 	m_terrain_type = (sint8)TERRAIN_DEAD ;
-	}
+}
 
 
 sint32 Cell::GetNumUnits() const
@@ -916,7 +917,7 @@ sint32 Cell::GetNumImprovements() const
 	sint32 c = 0;
 
 	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
-    {
+	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
 			c++;
 	}
@@ -938,7 +939,7 @@ TerrainImprovement Cell::AccessImprovement(sint32 index)
 		}
 	}
 
-	Assert(FALSE);
+	Assert(false);
 	return TerrainImprovement();
 }
 
@@ -1197,7 +1198,7 @@ void Cell::InsertDBImprovement(sint32 type)
 void Cell::RemoveDBImprovement(sint32 type)
 {
 	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
-    {
+	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			m_objects->DelIndex(i);
 	}
@@ -1208,7 +1209,7 @@ sint32 Cell::GetNumDBImprovements() const
 	sint32 c = 0;
 
 	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
-    {
+	{
 		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 			c++;
 	}
@@ -1234,6 +1235,47 @@ sint32 Cell::GetDBImprovement(sint32 index) const
 }
 
 bool Cell::IsDead() const
-{ 
-	return ((m_terrain_type == TERRAIN_DEAD)) ; 
+{
+	return (m_terrain_type == TERRAIN_DEAD);
+}
+
+bool Cell::IsUnitUpgradePosition(sint32 unitOwner) const
+{
+	// For now just stick to the city approach
+	return HasCity();
+
+	/*
+	// ToDo improve efficency
+	// Add an owner check
+	// -> Also a check for figureing out if on unowned terrain can be upgraded
+	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
+
+	bool canUpgrade = rec->GetEnvBase()->GetCanUpgrade();
+
+	if(HasCity() && rec->HasEnvCity()) {
+		canUpgrade |= rec->GetEnvCityPtr()->GetCanUpgrade();
+	}
+
+	if(HasRiver() && rec->HasEnvRiver()) {
+		canUpgrade |= rec->GetEnvRiverPtr()->GetCanUpgrade();
+	}
+
+	sint32 good;
+	if(g_theWorld->GetGood(this, good)) {
+		canUpgrade |= g_theResourceDB->Get(good)->GetCanUpgrade();
+	}
+
+	size_t const	count	= m_objects ? m_objects->Num() : 0;
+	for (size_t i = 0; i < count; ++i)
+	{
+		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
+			const TerrainImprovementRecord *impRec = 
+				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
+
+			canUpgrade |= impRec->GetCanUpgrade();
+		}
+	}
+
+	return canUpgrade;
+	*/
 }

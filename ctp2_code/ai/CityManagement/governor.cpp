@@ -1160,7 +1160,6 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		}
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("HappinessTest: %i\n", happiness_test));
 	total_production += player_ptr->GetProductionFromFranchises();
 	if(total_production < player_ptr->GetReadinessCost())
 	{

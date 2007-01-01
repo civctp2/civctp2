@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Squad strength object 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,6 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -87,18 +90,18 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 
 Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 {
-	m_agent_count += add_me.m_agent_count;
-	m_attack_str += add_me.m_attack_str;
-	m_defense_str += add_me.m_defense_str;
-	m_ranged_str += add_me.m_ranged_str;
-	m_value += add_me.m_value;
-	m_transport += add_me.m_transport;
-	m_defenders += add_me.m_defenders;
-    m_ranged += add_me.m_ranged; 
+	m_agent_count       += add_me.m_agent_count;
+	m_attack_str        += add_me.m_attack_str;
+	m_defense_str       += add_me.m_defense_str;
+	m_ranged_str        += add_me.m_ranged_str;
+	m_value             += add_me.m_value;
+	m_transport         += add_me.m_transport;
+	m_defenders         += add_me.m_defenders;
+    m_ranged            += add_me.m_ranged; 
 
-	m_land_bombard_str += add_me.m_land_bombard_str;
+	m_land_bombard_str  += add_me.m_land_bombard_str;
 	m_water_bombard_str += add_me.m_water_bombard_str;
-	m_air_bombard_str += add_me.m_air_bombard_str;
+	m_air_bombard_str   += add_me.m_air_bombard_str;
 
     return *this;
 } 
@@ -106,17 +109,17 @@ Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 
 Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 {
-	m_agent_count -= remove_me.m_agent_count;
-	m_attack_str -= remove_me.m_attack_str;
-	m_defense_str -= remove_me.m_defense_str;
-	m_ranged_str -= remove_me.m_ranged_str;
-	m_value -= remove_me.m_value;
-	m_transport -= remove_me.m_transport;
-	m_defenders -= remove_me.m_defenders;
-    m_ranged -= remove_me.m_ranged; 
-	m_land_bombard_str -= remove_me.m_land_bombard_str;
+	m_agent_count       -= remove_me.m_agent_count;
+	m_attack_str        -= remove_me.m_attack_str;
+	m_defense_str       -= remove_me.m_defense_str;
+	m_ranged_str        -= remove_me.m_ranged_str;
+	m_value             -= remove_me.m_value;
+	m_transport         -= remove_me.m_transport;
+	m_defenders         -= remove_me.m_defenders;
+    m_ranged            -= remove_me.m_ranged; 
+	m_land_bombard_str  -= remove_me.m_land_bombard_str;
 	m_water_bombard_str -= remove_me.m_water_bombard_str;
-	m_air_bombard_str -= remove_me.m_air_bombard_str;
+	m_air_bombard_str   -= remove_me.m_air_bombard_str;
 
     return *this;
 }
