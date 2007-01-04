@@ -1226,7 +1226,7 @@ StringId Governor::GetSlidersAdvice() const
 	GetSliders(current_sliders_setting);
 
 	
-	if(ComputeMinimumSliders(new_sliders_setting) == false)
+	if(!ComputeMinimumSliders(new_sliders_setting))
 	{
 		found = Governor::GetGovernor(m_playerId).ComputeBestSliders(new_sliders_setting);
 

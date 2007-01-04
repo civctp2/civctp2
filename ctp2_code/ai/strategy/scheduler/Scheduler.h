@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Scheduler
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -71,12 +72,6 @@ class Scheduler
 
 public:
 
-  	
-	
-	
-	
-  	
-
 #ifdef _DEBUG
 	#define dbga dbgallocator
 	
@@ -94,17 +89,6 @@ public:
 #else
 	typedef std::vector<Scheduler, dbgallocator<Scheduler> > Scheduler_Vector;
 #endif
-	
-
-
-
-
-
-
-
-
-
-
 
 #else
 	
@@ -540,11 +524,11 @@ private:
 
 	
 	
-    static int m_contactCachedPlayer;	
+    static sint32 m_contactCachedPlayer;	
 	static uint32 m_contactCache;		
-	static int m_neutralRegardCachedPlayer;	
+	static sint32 m_neutralRegardCachedPlayer;	
 	static uint32 m_neutralRegardCache;
-	static int m_allyRegardCachedPlayer;
+	static sint32 m_allyRegardCachedPlayer;
 	static uint32 m_allyRegardCache;
 };
 
