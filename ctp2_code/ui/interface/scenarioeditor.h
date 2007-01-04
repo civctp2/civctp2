@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ source
+// File type    : C++ header
 // Description  : Scenario editor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,10 +24,11 @@
 //
 // Modifications from the original Activision code:
 //
-// -Added a private static variable and the accoriding access function
-//  to allow newly created cities to have the size displayed in the 
-//  city pop spinner, by Martin Gühmann.
-// -Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+// - Added a private static variable and the accoriding access function
+//   to allow newly created cities to have the size displayed in the 
+//   city pop spinner, by Martin Gühmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+// - Added a callback function for civ city style spinner. (Jan 4th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -214,6 +215,7 @@ class ScenarioEditor {
 	static void Exit(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 	static void CivAddAdvances(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CivCityStyleSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CivAddRemovePlayer(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CivModeSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	void SetCivSwitches();

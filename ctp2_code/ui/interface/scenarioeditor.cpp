@@ -49,6 +49,7 @@
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -282,7 +283,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
 
-			//Added by Martin Gühmann to amke sure that the Scenario Editor 
+			//Added by Martin Gühmann to make sure that the Scenario Editor 
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
@@ -315,6 +316,31 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.City.AddWonders", CityAddWonders, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "CivControls.AddAdvances", CivAddAdvances, NULL);
+	
+	spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivControls.CityStyleSpinner");
+	if(spin)
+	{
+		spin->SetMinimum(0, 0);
+		spin->SetMaximum(g_theCityStyleDB->NumRecords()-1, 0);
+		spin->SetDispalyValue(false);
+
+		sint32 style = g_player[g_selected_item->GetPlayerOnScreen()]->GetCivilisation()->GetCityStyle();
+		style = (style >= 0 && style < g_theCityStyleDB->NumRecords()) ? style : 0;
+
+		spin->SetValue(style, 0);
+		spin->SetSpinnerCallback(CivCityStyleSpinner, NULL);
+		
+		const CityStyleRecord* rec = g_theCityStyleDB->Get(style);
+
+		spin->SetText(rec->GetNameText());
+		spin->SetDisplay();
+
+		aui_TipWindow* tipWindow = (aui_TipWindow *)spin->GetTipWindow();
+		if(tipWindow)
+		{
+			tipWindow->SetTipText(const_cast<char*>(rec->GetNameText()));
+		}
+	}
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment", SetGovernment, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.PlayerSelect", LimitPlayerChoice, NULL);
@@ -1705,6 +1731,27 @@ void ScenarioEditor::CivAddAdvances(aui_Control *control, uint32 action, uint32 
 	}
 }
 
+
+void ScenarioEditor::CivCityStyleSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
+
+	ctp2_Spinner *spinner = (ctp2_Spinner *)control;
+
+	const CityStyleRecord* rec = g_theCityStyleDB->Get(spinner->GetValueX());
+
+	if(rec){
+		g_player[g_selected_item->GetVisiblePlayer()]->GetCivilisation()->AccessData()->SetCityStyle(spinner->GetValueX());
+		spinner->SetText(rec->GetNameText());
+
+		aui_TipWindow* tipWindow = (aui_TipWindow *)spinner->GetTipWindow();
+		if(tipWindow)
+		{
+			tipWindow->SetTipText(const_cast<char*>(rec->GetNameText()));
+		}
+	}
+}
+
 void ScenarioEditor::CivAddRemovePlayer(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
@@ -2223,6 +2270,12 @@ void ScenarioEditor::NotifyPlayerChange()
 		Assert(tf);
 		if(tf) {
 			tf->SetFieldText(g_player[player]->m_civilisation->GetLeaderName());
+		}
+
+		ctp2_Spinner* spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivControls.CityStyleSpinner");
+		if(spin)
+		{
+			spin->SetValue(g_player[player]->GetCivilisation()->GetCityStyle(), 0);
 		}
 
 		

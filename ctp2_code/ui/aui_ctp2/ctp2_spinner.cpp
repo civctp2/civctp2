@@ -1,15 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Call to Power 2 user interface spinner
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Allowed optional text display instead of a number (May 21th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -41,11 +58,13 @@ ctp2_Spinner::ctp2_Spinner(
 	uint32 id,
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	void *cookie,
+	bool displayValue )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Ranger(retval, id, ldlBlock)
+	aui_Ranger(retval, id, ldlBlock),
+	m_displayValue(displayValue)
 {
 	m_spinnerActionFunc = ActionFunc;
 	m_spinnerCookie = cookie;
@@ -74,10 +93,17 @@ void ctp2_Spinner::ActionCallback(aui_Control *control, uint32 state, uint32 dat
 
 void ctp2_Spinner::SetDisplay()
 {
-	static char s[20];
-	sprintf(s, "%d",
-		((m_orientation == AUI_RANGER_ORIENTATION_VERTICAL) ?
-		GetValueY() : GetValueX()));
+	if(m_displayValue)
+	{
+		static char s[20];
+		sprintf(s, "%d",
+			((m_orientation == AUI_RANGER_ORIENTATION_VERTICAL) ?
+			GetValueY() : GetValueX()));
 
-	m_rangeContainer->SetText(s);
+		m_rangeContainer->SetText(s);
+	}
+	else
+	{
+		m_rangeContainer->SetText(GetText());
+	}
 }
