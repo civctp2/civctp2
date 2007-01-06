@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Scheduler
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -189,7 +189,7 @@ public:
 	
 	
 
-  	
+
 	Scheduler();
 
 
@@ -197,8 +197,8 @@ public:
 	Scheduler(const Scheduler &scheduler);
 
 
-  	
-  	virtual ~Scheduler();
+
+	virtual ~Scheduler();
 
 	
 	Scheduler& operator= (const Scheduler &scheduler);
@@ -393,23 +393,23 @@ protected:
 	
 	bool Add_New_Match_For_Goal_And_Squad
 	(
-	 const Sorted_Goal_Iter & goal_iter,	   
-	 const Squad_List::iterator & squad_iter,          
-	 Plan_List::iterator & plan_iter		           
+	 const Goal_ptr & goal_ptr,
+	 const Squad_List::iterator & squad_iter,
+	 Plan_List::iterator & plan_iter
 	);
 
 	
 	
 	sint32 Add_New_Matches_For_Goal
 	(
-	 const Sorted_Goal_Iter & goal_iter	
+	 const Goal_ptr & goal_iter
 	);
 
 	
 	
 	sint32 Add_New_Matches_For_Squad
 	(
-	 const Squad_List::iterator & squad_iter		
+	 const Squad_List::iterator & squad_iter
 	);
 
     
@@ -441,12 +441,10 @@ protected:
 	 const Goal_ptr & goal_ptr 
 	);
 
-	
-	
 	bool Add_Transport_Matches_For_Goal
 	(
-	 const Sorted_Goal_Iter & goal_iter,	   
-	 Plan_List::iterator & plan_iter           
+	 const Goal_ptr & goal_ptr,
+	 Plan_List::iterator & plan_iter
 	);
 
 	
@@ -457,13 +455,6 @@ protected:
 
 private:
 
-	
-	
-	
-	
-	
-
-    
     static char s_debug_str[MAX_DEBUG_STR];
 
 	static Scheduler_Vector s_theSchedulers;
@@ -524,17 +515,12 @@ private:
 
 	
 	
-    static sint32 m_contactCachedPlayer;	
-	static uint32 m_contactCache;		
-	static sint32 m_neutralRegardCachedPlayer;	
+    static sint32 m_contactCachedPlayer;
+	static uint32 m_contactCache;
+	static sint32 m_neutralRegardCachedPlayer;
 	static uint32 m_neutralRegardCache;
 	static sint32 m_allyRegardCachedPlayer;
 	static uint32 m_allyRegardCache;
 };
 
-
-
-
-
-
-#endif 
+#endif

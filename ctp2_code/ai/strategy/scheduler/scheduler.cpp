@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Scheduler for AI goals
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -567,11 +567,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 	Squad_ptr squad_ptr;
 	Plan_List::iterator plan_iter;
 	Plan_List::iterator tmp_plan_iter;
-	GOAL_TYPE goal_type;
 	Sorted_Goal_Iter goal_ptr_iter;
-	bool match_added; 
-
-	sint32 agent_count;
+	bool match_added;
 
 #if 0
 	// This does nothing but waste time. AreAllGoalsSatisfied is never used.
@@ -596,8 +593,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 		if (m_committed_agents >= m_total_agents)
 			break;
 
-		agent_count = plan_iter->Commit_Agents();
-		m_committed_agents += agent_count;
+		m_committed_agents += plan_iter->Commit_Agents();
 
 		goal_ptr  = plan_iter->Get_Goal();
 		squad_ptr = plan_iter->Get_Squad();
@@ -688,14 +684,14 @@ void Scheduler::Match_Resources(const bool move_armies)
 					}
 				}
 				else{
-#endif
+#endif // _NEW_EXPLORATION_STUFF
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
 						("\t\tGOAL_COMPLETE (goal: %x squad: %x) -- Removing matches for goal.\n",
 						goal_ptr, squad_ptr));
 					Remove_Matches_For_Goal(goal_ptr);
 #if defined(_NEW_EXPLORATION_STUFF)
 				}
-#endif
+#endif // _NEW_EXPLORATION_STUFF
 			}
 			else
 			{
@@ -711,31 +707,17 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 			tmp_plan_iter = plan_iter;
 			tmp_plan_iter++;
-		
-			goal_type = goal_ptr->Get_Goal_Type();
-			goal_ptr_iter = m_goals_of_type[goal_type].begin();
-			while((goal_ptr_iter != m_pruned_goals_of_type[goal_type] &&
-				   goal_ptr_iter != m_goals_of_type[goal_type].end())
-			){
-				if(goal_ptr_iter->second == goal_ptr)
-					break;
 
-				goal_ptr_iter++;
-			}
-
-			Assert(goal_ptr_iter != m_pruned_goals_of_type[goal_type]);
-			Assert(goal_ptr_iter != m_goals_of_type[goal_type].end());
-
-			match_added = Add_Transport_Matches_For_Goal(goal_ptr_iter, tmp_plan_iter);
+			match_added = Add_Transport_Matches_For_Goal(goal_ptr, tmp_plan_iter);
 
 			if(!match_added)
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, 
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
 					("\t\t **NO transports found. Failing.\n"));
 			}
 			else
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, 
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
 					("\t\t Transports found.\n"));
 
 				plan_iter++;
@@ -745,7 +727,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		case GOAL_FAILED:
 
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, 
+			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
 				("\t\tGOAL_FAILED (goal: %x squad: %x)\n", goal_ptr, squad_ptr));
 
 			Rollback_Matches_For_Goal(plan_iter->Get_Goal());
@@ -1236,7 +1218,7 @@ bool Scheduler::Prune_Goals()
 			{
 				if (goal_ptr->Get_Match_References().size() == 0)
 				{
-					Add_New_Matches_For_Goal(goal_ptr_iter);
+					Add_New_Matches_For_Goal(goal_ptr);
 				}
 
 				m_pruned_goals_count[goal_type]++;
@@ -1333,17 +1315,17 @@ bool Scheduler::Prune_Goals()
 /////////////////////////////////////////////////////////////////////////////
 bool Scheduler::Add_New_Match_For_Goal_And_Squad
 ( 
- const Sorted_Goal_Iter & goal_iter,		   
- const Squad_List::iterator & squad_iter,	   
- Plan_List::iterator & plan_iter		       
+ const Goal_ptr & goal_ptr,
+ const Squad_List::iterator & squad_iter,
+ Plan_List::iterator & plan_iter
 ) 
 {
 	Plan the_match;
 
 	the_match.Set_Squad(*squad_iter);
-	the_match.Set_Goal(goal_iter->second);
+	the_match.Set_Goal(goal_ptr);
 
-	Assert(!goal_iter->second->Get_Invalid())
+	Assert(!goal_ptr->Get_Invalid())
 	Assert((*squad_iter)->Get_Num_Agents() > 0)
 
 	Utility matching_value = the_match.Compute_Matching_Value();
@@ -1355,12 +1337,12 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 			   plan_iter++;
 
 		plan_iter = m_matches.insert(plan_iter, the_match);
-		goal_iter->second->Add_Match_Reference(plan_iter);
+		goal_ptr->Add_Match_Reference(plan_iter);
 		(*squad_iter)->Add_Match_Reference(plan_iter);
 
 	/*	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_iter->second->Get_Goal_Type(), -1, 
 			("\tAdded match for goal: %x squad: %x  value = %d\n",
-			 goal_iter->second,
+			 goal_ptr,
 			 (*squad_iter),
 			 matching_value));
 
@@ -1372,7 +1354,7 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 
 	/*	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_iter->second->Get_Goal_Type(), -1, 
         ("\tMatch for goal: %x (%d) squad: %x has BAD_UTILITY.\n",
-			 goal_iter->second,
+			 goal_ptr,
         goal_iter->second->Get_Goal_Type(),
 			 (*squad_iter)));
 	*/ 
@@ -1396,19 +1378,19 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 ///////////////////////////////////////////////////////////////////////////////////////////////
 sint32 Scheduler::Add_New_Matches_For_Goal
 (
- const Sorted_Goal_Iter & goal_iter			
+ const Goal_ptr & goal_ptr
 )
 {
 	Squad_Class_List::iterator squad_class_iter;
 	Squad_List::iterator squad_iter;
 	sint32 count = 0;
 
-	if (goal_iter->second->Get_Invalid())
+	if (goal_ptr->Get_Invalid())
 		return 0;
 
 	Plan_List::iterator plan_iter;
 
-	GOAL_TYPE type = goal_iter->second->Get_Goal_Type();
+	GOAL_TYPE type = goal_ptr->Get_Goal_Type();
     SQUAD_CLASS goal_squad_class = 
 			  g_theGoalDB->Get(type)->GetSquadClass();
 
@@ -1420,8 +1402,8 @@ sint32 Scheduler::Add_New_Matches_For_Goal
 			continue;
 
 		plan_iter = m_matches.end();
-		if(Add_New_Match_For_Goal_And_Squad(goal_iter, 
-		                                    squad_iter, 
+		if(Add_New_Match_For_Goal_And_Squad(goal_ptr,
+		                                    squad_iter,
 		                                    plan_iter))
 		{
 			count++;
@@ -1440,7 +1422,7 @@ sint32 Scheduler::Add_New_Matches_For_Goal
 //////////////////////////////////////////////////////////////////////////////////////////////
 sint32 Scheduler::Add_New_Matches_For_Squad
 (
- const Squad_List::iterator & squad_iter		
+ const Squad_List::iterator & squad_iter
 )
 {
 	Goal_Type_List::iterator goal_type_iter;
@@ -1471,14 +1453,14 @@ sint32 Scheduler::Add_New_Matches_For_Squad
 				continue;
 
 			plan_iter = m_matches.end();
-			if(Add_New_Match_For_Goal_And_Squad(goal_iter, 
+			if(Add_New_Match_For_Goal_And_Squad(goal_iter->second,
 			                                    squad_iter,
 			                                    plan_iter))
 				count++;
 			else
 				break;
-		} 
-	} 
+		}
+	}
 	
 	return count;
 }
@@ -1638,9 +1620,10 @@ sint32 Scheduler::Rollback_Matches_For_Goal
 
 	if(goal->Get_Raw_Priority() > m_maxUndercommittedPriority)
 	{
-		m_neededSquadStrength       = needed_strength;
 		m_maxUndercommittedPriority	= goal->Get_Raw_Priority();
 	}
+
+	m_neededSquadStrength.Set_To_The_Maximum(needed_strength);
 	
 	sint32 count = 0;
 
@@ -1688,13 +1671,13 @@ Squad_ptr Scheduler::Form_Squad_From_Goal
 
 bool Scheduler::Add_Transport_Matches_For_Goal
 (
-    const Sorted_Goal_Iter & goal_iter,	   
-    Plan_List::iterator & plan_iter		           
+    const Goal_ptr & goal_ptr,
+    Plan_List::iterator & plan_iter
 )
 {
 	Squad_List::iterator squad_iter;
 
-    std::list<Plan_List::iterator> & matches_to_goal = goal_iter->second->Get_Match_References();
+    std::list<Plan_List::iterator> & matches_to_goal = goal_ptr->Get_Match_References();
     std::list<Plan_List::iterator>::iterator matches_to_goal_iter;
 
 	for(matches_to_goal_iter  = matches_to_goal.begin(); 
@@ -1725,7 +1708,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			  k_Goal_SquadClass_CanTransport_Bit )
 			  continue;
 
-		match_added = false;
+		bool hasMatch = false;
 
 		for(matches_to_goal_iter  = matches_to_goal.begin(); 
 		    matches_to_goal_iter != matches_to_goal.end(); 
@@ -1733,17 +1716,18 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		){
 			if(*squad_iter == (*matches_to_goal_iter)->Get_Squad())
 			{
+				hasMatch = true;
 				match_added = true;
 				break;
 			}
 		}
 
-		if (match_added)
+		if (hasMatch)
 			continue;
 
 		match_added |= Add_New_Match_For_Goal_And_Squad(
-			goal_iter, 
-			squad_iter, 
+			goal_ptr,
+			squad_iter,
 			plan_iter);
 	} 
 

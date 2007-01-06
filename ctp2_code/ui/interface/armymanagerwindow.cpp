@@ -383,6 +383,7 @@ void ArmyManagerWindow::Update()
 		if(g_graphicsOptions
 		&& g_graphicsOptions->IsArmyTextOn()
 		&& m_army.IsValid()
+		&& m_army->GetDebugString()
 		){
 			armyTextlabel->SetText(m_army->GetDebugString());
 

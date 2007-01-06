@@ -653,18 +653,5 @@ void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
 
 RankingTab::~RankingTab(void)
 {
-	
-
-
-
-
-
-
-
 	CleanupGraph();
-
-
-
-
-
 }

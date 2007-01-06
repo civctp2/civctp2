@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Squad strength object 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -279,10 +279,10 @@ void Squad_Strength::Set_Ranged_Units(const sint16 & units)
 
 
 void Squad_Strength::Set_Force_Matching( const double attack_ratio,
-										const double defense_ratio,
-										const double ranged_ratio,
-										const double bombard_ratio,
-										const double value_ratio )
+                                         const double defense_ratio,
+                                         const double ranged_ratio,
+                                         const double bombard_ratio,
+                                         const double value_ratio )
 {
 	m_attack_str *= attack_ratio;
 	m_defense_str *= defense_ratio;
@@ -291,4 +291,19 @@ void Squad_Strength::Set_Force_Matching( const double attack_ratio,
 	m_water_bombard_str *= bombard_ratio;
 	m_air_bombard_str *= bombard_ratio;
 	m_value *= value_ratio;
+}
+
+void Squad_Strength::Set_To_The_Maximum(Squad_Strength otherStrength)
+{
+	m_agent_count       = std::max(m_agent_count      , otherStrength.m_agent_count      );
+	m_air_bombard_str   = std::max(m_air_bombard_str  , otherStrength.m_air_bombard_str  );
+	m_attack_str        = std::max(m_attack_str       , otherStrength.m_attack_str       );
+	m_defenders         = std::max(m_defenders        , otherStrength.m_defenders        );
+	m_defense_str       = std::max(m_defense_str      , otherStrength.m_defense_str      );
+	m_land_bombard_str  = std::max(m_land_bombard_str , otherStrength.m_land_bombard_str );
+	m_ranged            = std::max(m_ranged           , otherStrength.m_ranged           );
+	m_ranged_str        = std::max(m_ranged_str       , otherStrength.m_ranged_str       );
+	m_transport         = std::max(m_transport        , otherStrength.m_transport        );
+	m_value             = std::max(m_value            , otherStrength.m_value            );
+	m_water_bombard_str = std::max(m_water_bombard_str, otherStrength.m_water_bombard_str);
 }

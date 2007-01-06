@@ -109,6 +109,7 @@ public:
 							 const double ranged_ratio,
 							 const double bombard_ratio,
 							 const double value_ratio );
+	void Set_To_The_Maximum(Squad_Strength);
 
 protected:
 
