@@ -93,7 +93,7 @@ public:
 	
 	
 	
-	inline sint32 AstarPoint::operator<(const AstarPoint &rhs) const
+	inline sint32 operator<(const AstarPoint &rhs) const
 	{ 
 		if (m_total_cost < rhs.m_total_cost) {
 			return TRUE;

@@ -274,7 +274,7 @@ public:
 
 
 
-	sint32 GreatLibrary::ClearHistory( void );
+	sint32 ClearHistory( void );
 	sint32 HandleSetGoal( void );
 
 	MBCHAR const *  GetItemName(int database, int item) const;      // lexicographic index

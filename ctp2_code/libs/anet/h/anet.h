@@ -219,15 +219,15 @@ typedef dp_char_t char_t;	/* for the moment - will go away */
 #define DP_ALIAS(type,name1,name2) union { type name1 PACK; type name2 PACK; }
 #define DP_ALIAS3(type,name1,name2,name3) union { type name1 PACK; type name2 PACK; type name3 PACK; }
 #else
-#define DP_ALIAS(type,name1,name2) type name1 PACK
-#define DP_ALIAS3(type,name1,name2,name3) type name1 PACK
+#define DP_ALIAS(type,name1,name2) type name1
+#define DP_ALIAS3(type,name1,name2,name3) type name1
 #endif
 
 typedef struct {
 
 	DP_ALIAS(char, dummy, dwSize);	/* used to be hMaster; now in dp_t */
-	dp_uint8_t adrMaster[dp_MAX_ADR_LEN] PACK;	/*  Address needed to establish comm layer connection. */
-	dpid_t		masterPseudoplayer PACK;
+	dp_uint8_t adrMaster[dp_MAX_ADR_LEN];	/*  Address needed to establish comm layer connection. */
+	dpid_t		masterPseudoplayer;
 	/*  Only allow connections to sessions with the same sessionType. */
 	DP_ALIAS3(dp_species_t, sessionType, guidSession, guidApplication);
 	/*  Random number chosen by library when creating a session. */
@@ -239,14 +239,14 @@ typedef struct {
 	DP_ALIAS(dp_int16_t,	flags, dwFlags);
 	/* char_t		sessionName[dp_SNAMELEN]; */
 	DP_ALIAS3(dp_char_t, sessionName[dp_SNAMELEN], szSessionName[dp_SNAMELEN], lpszSessionNameA[dp_SNAMELEN]);
-	dp_char_t	szUserField[dp_USERFIELDLEN] PACK;	/*  Availible for user data. */
-	dp_char_t	szPassword[dp_PASSWORDLEN] PACK;		/*  Not supported yet. */
-	dp_int32_t	dwReserved1 PACK;
-	dp_int32_t	dwUser1 PACK;						/*  Availible for user data. */
+	dp_char_t	szUserField[dp_USERFIELDLEN];	/*  Availible for user data. */
+	dp_char_t	szPassword[dp_PASSWORDLEN];		/*  Not supported yet. */
+	dp_int32_t	dwReserved1;
+	dp_int32_t	dwUser1;						/*  Availible for user data. */
 #ifdef dp_ANET2
-	dp_uchar_t	reserved2[dp_MAX_ADR_LEN+2] PACK;
+	dp_uchar_t	reserved2[dp_MAX_ADR_LEN+2];
 #endif
-} dp_session_t;	/* 83 bytes + 2 byte header */
+} PACK dp_session_t;	/* 83 bytes + 2 byte header */
 
 /* dp_session_t are used both internally and as packets on the wire. */
 
@@ -259,21 +259,21 @@ typedef struct {
 #endif
 
 typedef struct {
-	DP_ALIAS(dpid_t, id, dpId) PACK;
-	dp_karma_t	karma PACK;
-	dp_uint8_t	adr[dp_MAX_ADR_LEN] PACK;
-	char		name[dp_PNAMELEN] PACK;
+	DP_ALIAS(dpid_t, id, dpId);
+	dp_karma_t	karma;
+	dp_uint8_t	adr[dp_MAX_ADR_LEN];
+	char		name[dp_PNAMELEN];
 #ifdef dp_ANET2
 	dp_uint8_t bloblen;
 	dp_uint8_t blob[dp_MAX_PLAYERBLOB_LEN];	/* game-specific info */
 #endif
-} dp_playerId_t;
+} PACK dp_playerId_t;
 
 /* Structure to describe version info. */
 typedef struct {
-	dp_uint16_t major PACK;
-	dp_uint16_t minor PACK;
-} dp_version_t;
+	dp_uint16_t major;
+	dp_uint16_t minor;
+} PACK dp_version_t;
 
 /* Structure to describe an installed game.
    Get them from dpEnumApp() and use in demo/utils/launchapp.c's launchapp().
@@ -337,10 +337,10 @@ typedef struct dp_groupId_s dp_user_delGroup_packet_t;
 /*  Returned by dpReceive whenever it notices a new player in a group. */
 #define dp_USER_ADDPLAYERTOGROUP_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'5')
 typedef struct {
-	dpid_t		dpIdGroup PACK;
-	dpid_t		dpIdPlayer PACK;
-	dp_karma_t	sessionKarma PACK;		/* group only valid within this session */
-} dp_addPlayerToGroup_packet_t;
+	dpid_t		dpIdGroup;
+	dpid_t		dpIdPlayer;
+	dp_karma_t	sessionKarma;		/* group only valid within this session */
+} PACK dp_addPlayerToGroup_packet_t;
 
 /*  Notification that a player has left a group. */
 /*  Returned by dpReceive whenever it notices that a player has vanished. */
@@ -351,22 +351,22 @@ typedef dp_addPlayerToGroup_packet_t dp_delPlayerFromGroup_packet_t;
 #define dp_USER_HOST_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'7')
 
 typedef struct dp_groupId_s {
-	dpid_t		id PACK;				/* msgs to id reach all members */
-	dp_karma_t	karma PACK;				/* used to verify group identity */
-	dp_char_t		name[dp_PNAMELEN] PACK;	/* name of group */
-	dp_karma_t	sessionKarma PACK;		/* group only valid within this session */
-} dp_groupId_t;
+	dpid_t		id;			/* msgs to id reach all members */
+	dp_karma_t	karma;			/* used to verify group identity */
+	dp_char_t	name[dp_PNAMELEN]; 	/* name of group */
+	dp_karma_t	sessionKarma;		/* group only valid within this session */
+} PACK dp_groupId_t;
 
 /*-------------------------------------------------------------------------
  Packet carrying a variable change.
 -------------------------------------------------------------------------*/
 #define dp_USER_PLAYERDATA_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'8')
 typedef struct {
-	size_t len PACK;			/* let them be huge */
-	dpid_t id PACK;
-	dp_uint16_t key PACK;
-	void *data PACK;			/* only sent on local machine, ptrs ok */
-} dp_user_playerData_packet_t;
+	size_t len;			/* let them be huge */
+	dpid_t id;
+	dp_uint16_t key;
+	void *data;			/* only sent on local machine, ptrs ok */
+} PACK dp_user_playerData_packet_t;
 
 /*-------------------------------------------------------------------------
  Packet informing of the loss of a session.
@@ -379,9 +379,9 @@ typedef dp_session_t dp_sessionLost_packet_t;
 -------------------------------------------------------------------------*/
 #define dp_SESSIONRESULT_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'0')
 typedef struct {
-	dp_result_t reason PACK;
-	dp_session_t sess PACK;
-} dp_sessionResult_packet_t;
+	dp_result_t reason;
+	dp_session_t sess;
+} PACK dp_sessionResult_packet_t;
 
 /****************** Low-level comm definitions ***************************/
 
@@ -391,13 +391,13 @@ typedef struct {
 #define comm_DRIVER_NAMELEN			32
 
 typedef struct {
-	char signature[comm_DRIVER_SIGLEN] PACK;
-	size_t recordLen PACK;				/* sizeof(comm_driverInfo_t) */
-	char name[comm_DRIVER_NAMELEN] PACK;/* Name to present to user */
-	dp_int16_t version PACK;					/* Major, minor rev. in high, low byte */
-	dp_int16_t capabilities PACK;			/* What driver can do/wants to do */
-	dp_int16_t needs PACK;					/* What fields in commInitReq_t to fill in */
-} comm_driverInfo_t;
+	char signature[comm_DRIVER_SIGLEN];
+	size_t recordLen;				/* sizeof(comm_driverInfo_t) */
+	char name[comm_DRIVER_NAMELEN];/* Name to present to user */
+	dp_int16_t version;					/* Major, minor rev. in high, low byte */
+	dp_int16_t capabilities;			/* What driver can do/wants to do */
+	dp_int16_t needs;					/* What fields in commInitReq_t to fill in */
+} PACK comm_driverInfo_t;
 
 /* Special value for commInitReq_t.portnum */
 #define comm_PORT_ANY	(0)			/* let NOS pick a port number */
@@ -429,18 +429,18 @@ typedef struct {
 #define comm_INIT_DIALING_METHOD_TONE  1
 
 typedef struct {			/* Request (filled in by caller) */
-	size_t reqLen PACK;			/* Sizeof(commInitReq_t) */
-	long sessionId PACK;		/* Random number chosen at initial startup */
-	long portnum PACK;
-	long baud PACK;
-	long baseadr PACK;          /* ignored by Windows */
-	long hwirq PACK;            /* ignored by Windows */
-	long swint PACK;            /* ignored by Windows */
-	char *phonenum PACK;
-	char *modeministr PACK;
-	long flags PACK;			/* controls whether to dial and/or test */
-	long dialing_method PACK;	/* parameter to HMSetDialingMethod */
-} commInitReq_t;
+	size_t reqLen;			/* Sizeof(commInitReq_t) */
+	long sessionId;		/* Random number chosen at initial startup */
+	long portnum;
+	long baud;
+	long baseadr;          /* ignored by Windows */
+	long hwirq;            /* ignored by Windows */
+	long swint;            /* ignored by Windows */
+	char *phonenum;
+	char *modeministr;
+	long flags;			/* controls whether to dial and/or test */
+	long dialing_method;	/* parameter to HMSetDialingMethod */
+} PACK commInitReq_t;
 
 typedef struct {
 	int portnum;			/* Value for commInitReq->portnum (e.g. 0) */
@@ -491,20 +491,20 @@ typedef struct dp_serverInfo_s {
  * Strings of wchar_t are Unicode.  These strings are always nul-terminated.
  */
 typedef struct {
-	dp_uid_t uid PACK;
-	wchar_t uname[dp_USER_NAME_LEN] PACK;
-	wchar_t url[dp_USER_URL_LEN] PACK;
-	wchar_t description[dp_USER_DESCRIPTION_LEN] PACK;
-} dp_userInfo_t;
+	dp_uid_t uid;
+	wchar_t uname[dp_USER_NAME_LEN];
+	wchar_t url[dp_USER_URL_LEN];
+	wchar_t description[dp_USER_DESCRIPTION_LEN];
+} PACK dp_userInfo_t;
 
 /* A record describing a user's cumulative scores in one kind of game.  
  * Can't be completely declared in C; some manual unpacking required.
  */
 typedef struct {
-	dp_int16_t nScoreTypes PACK;
-	short scoreIds[1 /* nScoreTypes */] PACK;	/* variable length */
-	long scores[1 /* nScoreTypes */ ] PACK;		/* variable length */
-} dp_scoreInfo_t;
+	dp_int16_t nScoreTypes;
+	short scoreIds[1 /* nScoreTypes */];	/* variable length */
+	long scores[1 /* nScoreTypes */ ];		/* variable length */
+} PACK dp_scoreInfo_t;
 
 /* The kinds of objects that can be monitored with dpRequestObjectDeltas(). */
 typedef union {
@@ -531,27 +531,27 @@ typedef union {
 #define dp_OBJECTDELTA_FLAG_INOPENSESS 2	/* player in session hosted or joined by this machine */
 #define dp_OBJECTDELTA_FLAG_ISHOST 4	/* player is master of session */
 typedef struct {
-	short pktloss PACK;		/* player deltas include a loss in percent */
-	short latency PACK;     /* player deltas include a latency in ms */
+	short pktloss;		/* player deltas include a loss in percent */
+	short latency;     /* player deltas include a latency in ms */
 	
-	long flags PACK;		/* one or more of dp_OBJECTDELTA_FLAG_* */
+	long flags;		/* one or more of dp_OBJECTDELTA_FLAG_* */
 
 	/* If an object is being created, status = dp_RES_CREATED.
 	 * If an object is being changed, status = dp_RES_CHANGED.
 	 * If an object is being deleted, status = dp_RES_DELETED.
 	 */
-	dp_result_t status PACK;
+	dp_result_t status;
 
 	/* For players,  key is {dp_KEY_PLAYERS, reserved bytes... }
 	 * For sessions, key is {dp_KEY_SESSIONS, reserved bytes...}
 	 * For servers,  key is {dp_KEY_SERVERPINGS, reserved bytes...}
 	 */
-	short keylen PACK;
-	char key[dp_KEY_MAXLEN] PACK;/* long key of context for following data */
+	short keylen;
+	char key[dp_KEY_MAXLEN];/* long key of context for following data */
 
 	/* Subkey is reserved. */
-	short subkeylen PACK;
-	char subkey[dp_KEY_MAXLEN] PACK;
+	short subkeylen;
+	char subkey[dp_KEY_MAXLEN];
 
 	/* For players,  data is dp_playerId_t
 	 * For sessions, data is dp_session_t
@@ -560,7 +560,7 @@ typedef struct {
 	 */
 	dp_object_t data;
 	/* nothing may go here; data is variable length */
-} dp_objectDelta_packet_t;
+} PACK dp_objectDelta_packet_t;
 
 /*-------------------------------------------------------------------------
  Packet sent by system to indicate success or failure of attempt to log

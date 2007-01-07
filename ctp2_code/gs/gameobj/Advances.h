@@ -129,7 +129,7 @@ public:
 	AdvanceType GetResearching() const { return m_researching; }
 	void SetResearching(AdvanceType adv);
 
-	sint32 Advances::GetCostOfWhatHeKnows() const { return m_total_cost; }	
+	sint32 GetCostOfWhatHeKnows() const { return m_total_cost; }	
 
 	sint32 GetCost() const;
 	sint32 GetCost(const AdvanceType adv) const;

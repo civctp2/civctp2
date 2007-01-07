@@ -44,40 +44,40 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* A challenge presented to a user, created by tca_challenge_generate().
  */
 typedef struct {
-	unsigned char challenge[tca_LEN_CHALLENGE] PACK;
-} tca_challenge_t;
+	unsigned char challenge[tca_LEN_CHALLENGE];
+} PACK tca_challenge_t;
 
 /* A response from a user, created by tca_response_generate().
  */
 typedef struct {
-	unsigned char response[tca_LEN_RESPONSE] PACK;
-	char unamelen PACK;
-	short uname[tcapw_LEN_USERNAME /*unamelen*/] PACK;    /* VARIABLE LENGTH USERNAME */ 
-} tca_response_t;
+	unsigned char response[tca_LEN_RESPONSE];
+	char unamelen;
+	short uname[tcapw_LEN_USERNAME /*unamelen*/];    /* VARIABLE LENGTH USERNAME */ 
+} PACK tca_response_t;
 
 /* A password or email change request from a user, created by
  * tca_pwchange_generate().
  */
 typedef struct {
-	unsigned char pwchange[tca_LEN_PWCHANGE] PACK;
-	unsigned long int flags PACK;    /* | of tcapw_entry_FLAGS_* set by user */
-	unsigned char emaillen PACK;
-	char email[tcapw_MAXLEN_EMAIL] PACK;
-} tca_pwchange_t;
+	unsigned char pwchange[tca_LEN_PWCHANGE];
+	unsigned long int flags;    /* | of tcapw_entry_FLAGS_* set by user */
+	unsigned char emaillen;
+	char email[tcapw_MAXLEN_EMAIL];
+} PACK tca_pwchange_t;
 
 /* A create new user request from a user, created by tca_newuser_generate().
  */
 typedef struct {
-	unsigned char newuser[tca_LEN_NEWUSER] PACK;
-	unsigned long int flags PACK;    /* | of tcapw_entry_FLAGS_* set by user */
-	unsigned char unamelen PACK;
-	unsigned char emaillen PACK;
+	unsigned char newuser[tca_LEN_NEWUSER];
+	unsigned long int flags;    /* | of tcapw_entry_FLAGS_* set by user */
+	unsigned char unamelen;
+	unsigned char emaillen;
 	char storage[tcapw_LEN_USERNAME*sizeof(short) + tcapw_MAXLEN_EMAIL];
 	/* VARIABLE LENGTH USERNAME AND EMAIL EMBEDDED IN storage:
-	 * short uname[unamelen] PACK;
-	 * char email[emaillen] PACK;
+	 * short uname[unamelen];
+	 * char email[emaillen];
 	 */
-} tca_newuser_t;
+} PACK tca_newuser_t;
 
 #include "dpunpack.h"
 

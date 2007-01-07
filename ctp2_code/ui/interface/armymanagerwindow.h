@@ -74,8 +74,8 @@ class ArmyManagerWindow {
 	void AddSelectedUnits();
 	void RemoveSelectedUnits();
 
-	static void ArmyManagerWindow::InitializeEvents();
-	static void ArmyManagerWindow::CleanupEvents();
+	static void InitializeEvents();
+	static void CleanupEvents();
 };
 
 	

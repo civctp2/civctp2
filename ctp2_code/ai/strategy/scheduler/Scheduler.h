@@ -313,7 +313,7 @@ public:
 	
 	
 	
-	void Scheduler::Match_Resources(const bool move_armies);
+	void Match_Resources(const bool move_armies);
 
 	
 	
@@ -444,7 +444,7 @@ protected:
 
 	
 	
-	sint32 Scheduler::Rollback_Matches_For_Goal
+	sint32 Rollback_Matches_For_Goal
 	(
 	 const Goal_ptr & goal_ptr 
 	);
@@ -452,7 +452,7 @@ protected:
 	
 	
 	
-	Squad_ptr Scheduler::Form_Squad_From_Goal
+	Squad_ptr Form_Squad_From_Goal
 	(
 	 const Goal_ptr & goal_ptr 
 	);

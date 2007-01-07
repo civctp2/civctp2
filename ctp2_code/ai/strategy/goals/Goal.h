@@ -105,7 +105,7 @@ public:
     bool Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter);
 
 
-    const Agent_List & Goal::Get_Agent_List() const;
+    const Agent_List & Get_Agent_List() const;
 
 
     Agent_ptr Rollback_Agent(Agent_List::const_iterator & agent_iter);

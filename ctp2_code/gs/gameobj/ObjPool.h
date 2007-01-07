@@ -133,7 +133,7 @@ public:
 	
 	
 	
-	inline sint32 ObjPool::IsValid(const ID &id) const 
+	inline sint32 IsValid(const ID &id) const 
 	{
 		uint32 val; 
 
@@ -143,7 +143,7 @@ public:
 		return GameObj_Valid(m_table[val], id.m_id); 
 	}
 
-	inline sint32 ObjPool::IsValid(const uint32 id) const
+	inline sint32 IsValid(const uint32 id) const
 	{	
 		uint32 val;
 		if(!IsValidKey(id, val))

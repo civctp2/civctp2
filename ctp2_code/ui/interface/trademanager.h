@@ -86,11 +86,11 @@ class TradeManager
 
 	static sint32 CompareCreateItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 	static sint32 CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
-	static AUI_ERRCODE TradeManager::DrawNationColumn(ctp2_Static *control,
+	static AUI_ERRCODE DrawNationColumn(ctp2_Static *control,
 													  aui_Surface *surface,
 													  RECT &rect,
 													  void *cookie);
-	static AUI_ERRCODE TradeManager::DrawPiracyColumn(ctp2_Static *control,
+	static AUI_ERRCODE DrawPiracyColumn(ctp2_Static *control,
 													  aui_Surface *surface,
 													  RECT &rect,
 													  void *cookie);

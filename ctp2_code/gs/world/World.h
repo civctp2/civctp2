@@ -390,17 +390,17 @@ public:
     sint32 CanEnter(const MapPoint &pos, const uint32 flag) const;
 
 	
-	inline sint32 World::EnvIsWater(const uint32 env) const
+	inline sint32 EnvIsWater(const uint32 env) const
 	{
 		return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER | k_BIT_MOVEMENT_TYPE_SHALLOW_WATER))) != 0; 
 	}
 
-	inline sint32 World::IsWater(const MapPoint &pos) const
+	inline sint32 IsWater(const MapPoint &pos) const
 	{ 
 		return EnvIsWater(GetCell(pos)->m_env);
 	}
 
-	inline sint32 World::IsWater(const sint32 x, const sint32 y) const 
+	inline sint32 IsWater(const sint32 x, const sint32 y) const 
 	{ 
 		return EnvIsWater(m_map[x][y]->m_env);
 	}

@@ -709,9 +709,9 @@ static dp_result_t dpSendErrorPacket(
 	dp_result_t failure_reason)
 {
 	struct {
-		dp_packetType_t   tag PACK;
- 		dp_error_packet_t body PACK;
-	} pkt;
+		dp_packetType_t   tag;
+ 		dp_error_packet_t body;
+	} PACK pkt;
 
 	dp_assertValid(dp);
 	pkt.tag = dp_ERROR_PACKET_ID;
@@ -735,9 +735,9 @@ static void dpSendSessionLostPacket(dp_t *dp)
 	/* Send our client a message */
 	playerHdl_t h = PLAYER_ME;
 	struct {
-		dp_packetType_t			tag PACK;
-		dp_sessionLost_packet_t	body PACK;
-	} pkt;
+		dp_packetType_t			tag;
+		dp_sessionLost_packet_t	body;
+	} PACK pkt;
 
 	dp_assertValid(dp);
 	memset(&pkt.body, 0, sizeof(pkt.body));	/* in case get fails */
@@ -1515,9 +1515,9 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
 	}
 	if (status == dp_RES_CREATED) {
 		struct {
-			dp_packetType_t   tag PACK;
-			dp_user_addPlayer_packet_t body PACK;
-		} pkt;
+			dp_packetType_t   tag;
+			dp_user_addPlayer_packet_t body;
+		} PACK pkt;
 
 		/*DPRINT(("dp_player_notify: player added, sending message...\n"));*/
 
@@ -1532,9 +1532,9 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
 
 	} else if (status == dp_RES_DELETED) {
 		struct {
-			dp_packetType_t   tag PACK;
-			dp_delPlayer_packet_t body PACK;
-		} pkt;
+			dp_packetType_t   tag;
+			dp_delPlayer_packet_t body;
+		} PACK pkt;
 		DPRINT(("dp_player_notify: player deleted, sending message...\n"));
 
 		pkt.tag = dp_USER_DELPLAYER_PACKET_ID;
@@ -1622,9 +1622,9 @@ dp_playervars_cb(
 			key2a(subkey, 2), id));
 
 	{	struct {
-			dp_packetType_t tag PACK;
-			dp_user_playerData_packet_t body PACK;
-		} pkt;
+			dp_packetType_t tag;
+			dp_user_playerData_packet_t body;
+		} PACK pkt;
 		pkt.tag = dp_USER_PLAYERDATA_PACKET_ID;
 		pkt.body.len = sent;
 		pkt.body.id = id;
@@ -2265,9 +2265,9 @@ dp_groups_cb(
 	gbuf.sessionKarma = dp->sess_karma;
 	if (status == dp_RES_CREATED) {
 		struct {
-			dp_packetType_t tag PACK;
-			dp_user_addGroup_packet_t body PACK;
-		} pkt;
+			dp_packetType_t tag;
+			dp_user_addGroup_packet_t body;
+		} PACK pkt;
 		pkt.tag = dp_USER_ADDGROUP_PACKET_ID;
 		pkt.body = gbuf;
 		err = dpio_put_reliable(dp->dpio, &me, 1, &pkt, sizeof(pkt.tag)+sizeof(pkt.body), NULL);
@@ -2276,9 +2276,9 @@ dp_groups_cb(
 		}
 	} else if (status == dp_RES_DELETED) {
 		struct {
-			dp_packetType_t tag PACK;
-			dp_user_delGroup_packet_t body PACK;
-		} pkt;
+			dp_packetType_t tag;
+			dp_user_delGroup_packet_t body;
+		} PACK pkt;
 		pkt.tag = dp_USER_DELGROUP_PACKET_ID;
 		pkt.body = gbuf;
 		err = dpio_put_reliable(dp->dpio, &me, 1, &pkt, sizeof(pkt.tag)+sizeof(pkt.body), NULL);
@@ -2368,9 +2368,9 @@ dp_group_players_cb(
 	gbuf.sessionKarma = dp->sess_karma;
 	if (status == dp_RES_CREATED) {
 		struct {
-			dp_packetType_t tag PACK;
-			dp_addPlayerToGroup_packet_t body PACK;
-		} pkt;
+			dp_packetType_t tag;
+			dp_addPlayerToGroup_packet_t body;
+		} PACK pkt;
 		pkt.tag = dp_USER_ADDPLAYERTOGROUP_PACKET_ID;
 		pkt.body = gbuf;
 		err = dpio_put_reliable(dp->dpio, &me, 1, &pkt, sizeof(pkt.tag)+sizeof(pkt.body), NULL);
@@ -2379,9 +2379,9 @@ dp_group_players_cb(
 		}
 	} else if (status == dp_RES_DELETED) {
 		struct {
-			dp_packetType_t tag PACK;
-			dp_delPlayerFromGroup_packet_t body PACK;
-		} pkt;
+			dp_packetType_t tag;
+			dp_delPlayerFromGroup_packet_t body;
+		} PACK pkt;
 		pkt.tag = dp_USER_DELPLAYERFROMGROUP_PACKET_ID;
 		pkt.body = gbuf;
 		err = dpio_put_reliable(dp->dpio, &me, 1, &pkt, sizeof(pkt.tag)+sizeof(pkt.body), NULL);
@@ -5292,9 +5292,9 @@ dpHandleJoinSession(
 static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, int joining)
 {
 	struct {
-		dp_packetType_t				tag		PACK;
-		dp_indirect_join_packet_t	body	PACK;
-	} pkt;
+		dp_packetType_t				tag;
+		dp_indirect_join_packet_t	body;
+	} PACK pkt;
 	dp_result_t res;
 	int	len;
 
@@ -5338,9 +5338,9 @@ static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, int joini
 static dp_result_t dpSendJoinSession(dp_t *dp, dp_karma_t joinKarma, dp_session_t *session, dp_species_t select_sessionType, short select_flags, short select_mask, playerHdl_t h)
 {
 	struct {
-		dp_packetType_t   tag PACK;
-		dp_join_packet_t body PACK;
-	} pkt;
+		dp_packetType_t   tag;
+		dp_join_packet_t body;
+	} PACK pkt;
 	int bodylen;
 
 	precondition(dp != NULL);
@@ -5560,9 +5560,9 @@ static dp_result_t dpSendLeaveSession
  (dp_t *dp, dp_karma_t joinKarma, dp_karma_t sessionKarma, playerHdl_t h)
 {
 	struct {
-		dp_packetType_t   tag PACK;
-		dp_join_packet_t body PACK;
-	} pkt;
+		dp_packetType_t   tag;
+		dp_join_packet_t body;
+	} PACK pkt;
 
 	dp_assertValid(dp);
 	memset(&pkt, 0, sizeof(pkt));
@@ -8589,9 +8589,9 @@ dpHandleVote(
 static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
 {
 	struct {
-		dp_packetType_t   tag PACK;
-		char body[2] PACK;
-	} pkt;
+		dp_packetType_t   tag;
+		char body[2];
+	} PACK pkt;
 
 	dp_result_t		err = 0;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
@@ -8656,8 +8656,8 @@ static void dp_election_peer_deleted(dp_t *dp, playerHdl_t h)
 static dp_result_t dpSendVictory(dp_t *dp)
 {
 	struct {
-		dp_packetType_t   tag PACK;
-	} pkt;
+		dp_packetType_t   tag;
+	} PACK pkt;
 
 	dp_result_t		err;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
@@ -9144,9 +9144,9 @@ static void dpPollPing(dp_t *dp)
 		}
 	} else if ((long)(dp->now - dp->ping.next_send_time) > 0) {
 		struct {
-			dp_packetType_t tag PACK;
-			dp_ping_packet_t pingbuf PACK;
-		} pkt;
+			dp_packetType_t tag;
+			dp_ping_packet_t pingbuf;
+		} PACK pkt;
 		DPRINT(("dpPollPing: sending ping to dest %d\n", dp->ping_dest));
 		pkt.pingbuf.karma = dp->ping.karma;
 		dp->ping.sent_at[dp->ping.n_sent] = dp->now;
@@ -9375,7 +9375,7 @@ static dp_result_t dp_receive(
 	size_t			pktlen;
 	int				get_flags;
 	struct dpReceivePkt_s {
-		dp_packetType_t tag PACK;
+		dp_packetType_t tag;
 		union {
 			dp_session_packet_t body1;
 			dp_join_packet_t join;
@@ -9391,8 +9391,8 @@ static dp_result_t dp_receive(
 			dp_indirect_join_packet_t indirectJoin;
 			tserv_packet_t tservpkt;
 			dp_account_packet_t	account;
-		} body PACK;
-	} *pkt = (struct dpReceivePkt_s *)buffer;
+		} body;
+	} PACK *pkt = (struct dpReceivePkt_s *)buffer;
 
 
 	/* If our host record was deleted, or if the master's handle
@@ -9851,9 +9851,9 @@ static dp_result_t dp_receive(
 			 *
 			 */
 			struct {
-				dp_packetType_t				tag PACK;
-				dp_request_open_packet_t	body PACK;
-			} pkt;
+				dp_packetType_t				tag;
+				dp_request_open_packet_t	body;
+			} PACK pkt;
 			int len;
 
 			DPRINT(("dpReceive: Could not send credentials from h:%x to h:%x, err:%d\n", pktsrc, host, err));
@@ -10415,8 +10415,8 @@ DP_API dp_result_t dpCreateGroup(
 	dp_result_t err;
 	dpid_t groupId;
 	struct {
-		char_t name[dp_PNAMELEN] PACK;
-	} gbuf;
+		char_t name[dp_PNAMELEN];
+	} PACK gbuf;
 	char subkey[dptab_KEY_MAXLEN];
 	int subkeylen;
 	size_t glen;

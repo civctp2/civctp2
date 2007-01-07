@@ -1045,7 +1045,7 @@ public:
 	sint32 GetTileFood(uint32 city_id, MapPoint &pos, BOOL &is_unknown_id) ;
 	sint32 GetTileProduction(uint32 city_id, MapPoint &pos, BOOL &is_unknown_id) ;
 	sint32 GetTileResource(uint32 city_id, MapPoint &pos, BOOL &is_unknown_id) ;
-	sint32 Player::GetAllTileValue(uint32 city_id, BOOL &is_unknown_id, 
+	sint32 GetAllTileValue(uint32 city_id, BOOL &is_unknown_id, 
 	                               sint32 num_tile, TileUtility *open_tile[k_NUM_CITY_TILES]);
 	BOOL IsPopAllowed(uint32 city_id, uint32 popType, BOOL &is_unknown_id) ;
 	void GetCityScience(uint32 city_id, sint32 &science, BOOL &is_unknown_id) ;
