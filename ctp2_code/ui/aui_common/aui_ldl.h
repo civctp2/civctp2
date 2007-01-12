@@ -171,13 +171,13 @@ public:
 	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *ldlBlock, 
 												aui_Control::ControlActionCallback *actionFunc,
 												void *cookie = NULL);
-	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *parentBlock, MBCHAR *regionBlock,
-												aui_Control::ControlActionCallback *actionFunc,
-												void *cookie = NULL);
-
-	
-	
-	
+	static AUI_ERRCODE  SetActionFuncAndCookie
+    (
+        MBCHAR const *                          parentBlock, 
+        MBCHAR const *                          regionBlock,
+		aui_Control::ControlActionCallback *    actionFunc,
+		void *                                  cookie          = NULL
+    );
 	
 	
 	static AUI_ERRCODE	DetachHierarchy(aui_Region *root);

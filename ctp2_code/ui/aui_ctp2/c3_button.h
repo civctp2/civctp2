@@ -7,14 +7,16 @@
 
 
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef C3_BUTTON_H__
+#define C3_BUTTON_H__
 
-#ifndef __C3_BUTTON_H__
-#define __C3_BUTTON_H__
+class c3_Button;
+class c3_EditButton;
 
-#include "patternbase.h"
-#include "aui_action.h"
-#include "aui_button.h"
 
 #define k_C3_BUTTON_DEFAULT_BEVELWIDTH		2
 #define k_C3_BUTTON_LDL_BEVELWIDTH			"bevelwidth"
@@ -28,6 +30,10 @@
 #define k_C3_EDITBUTTON_DEFAULTMIN			0
 #define k_C3_EDITBUTTON_DEFAULTMAX			100
 
+#include "patternbase.h"
+#include "aui_action.h"
+#include "aui_button.h"
+
 class aui_Surface;
 class C3TextField;
 
@@ -35,7 +41,6 @@ class C3TextField;
 class c3_Button : public aui_Button, public PatternBase
 {
 public:
-	
 	c3_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -55,19 +60,25 @@ public:
 	virtual ~c3_Button() {}
 
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };
-protected:
-	c3_Button() : aui_Button() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( sint32 bevelWidth  );
 
-public:
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 
+protected:
+	c3_Button() 
+    : 
+        aui_Button      (), 
+        PatternBase     (),
+        m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
+        m_bevelType     (0)
+    {};
+
+	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+
 private:
-	sint32	m_bevelWidth;
+	uint32	m_bevelWidth;
 	uint32	m_bevelType;
 };
 
@@ -76,7 +87,6 @@ private:
 class c3_EditButton : public c3_Button
 {
 public:
-	
 	c3_EditButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -95,13 +105,6 @@ public:
 		void *cookie = NULL );
 	virtual ~c3_EditButton();
 
-protected:
-	c3_EditButton() : c3_Button() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( sint32 val, sint32 min, sint32 max );
-	AUI_ERRCODE CreateFieldAndActions( MBCHAR *ldlBlock = NULL );
-
-public:
 	sint32		GetValue( void ) const { return m_val; }
 	sint32		GetMinimum( void ) const { return m_min; }
 	sint32		GetMaximum( void ) const { return m_max; }
@@ -113,6 +116,20 @@ public:
 	void DoCallback( void );
 
 protected:
+	c3_EditButton() 
+    : 
+        c3_Button       (),
+	    m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
+	    m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
+	    m_max           (k_C3_EDITBUTTON_DEFAULTMAX),
+        m_field         (NULL),
+        m_origAction    (NULL),
+	    m_origCallback  (NULL)
+    {};
+
+	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+
+private:
 	sint32 m_val;
 	sint32 m_min;
 	sint32 m_max;
@@ -124,7 +141,9 @@ protected:
 		aui_Action *m_origAction;
 		void *m_origCookie;
 	};
-	ControlActionCallback *m_origCallback;
+	ControlActionCallback * m_origCallback;
+
+	AUI_ERRCODE CreateFieldAndActions( MBCHAR *ldlBlock = NULL );
 };
 
 

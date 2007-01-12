@@ -30,10 +30,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "aui_imagebase.h"
-
 
 #include "aui_blitter.h"
 #include "aui_ldl.h"
@@ -41,7 +38,7 @@
 #include "aui_ui.h"
 
 
-MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =
+MBCHAR const *  aui_ImageBase::m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST] =
 {
 	"image",
 	"activeimage",
@@ -152,14 +149,9 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 			}
 	}
 
-	
-	BOOL setImages = TRUE;
-	sint32 numStateImageGroups = FindNumStateImageGroupsFromLdl( block );
-	if ( !numStateImageGroups )
-	{
-		setImages = FALSE;
-		numStateImageGroups = 1;
-	}
+	sint32  numStateImageGroups = FindNumStateImageGroupsFromLdl( block );
+    bool    setImages           = numStateImageGroups > 0;
+    numStateImageGroups = std::max<sint32>(numStateImageGroups, 1);
 
 	m_centerImage = block->GetBool(k_AUI_IMAGEBASE_LDL_CENTERIMAGE) != FALSE;
 
@@ -254,7 +246,9 @@ aui_ImageBase::~aui_ImageBase()
 	if (m_stateImageNames) 
     {
 		for (int index = 0; index < m_numberOfStateImageNames; index++)
-			if(m_stateImageNames[index]) delete m_stateImageNames[index];
+        {
+			delete m_stateImageNames[index];
+        }
 
 		delete [] m_stateImageNames;
 	}
@@ -328,13 +322,13 @@ AUI_IMAGEBASE_BLTFLAG aui_ImageBase::SetImageBltFlag(
 
 
 
-aui_Image *aui_ImageBase::SetImage(
-	MBCHAR *image,
-	sint32 state,
-	AUI_IMAGEBASE_SUBSTATE substate )
+aui_Image *aui_ImageBase::SetImage
+(
+	MBCHAR const *          image,
+	sint32                  state,
+	AUI_IMAGEBASE_SUBSTATE  substate 
+)
 {
-	
-	
 	Assert(state >= 0 && state < m_numStateImageGroups);
 	if (state < 0 || state >= m_numStateImageGroups)
 		return NULL;
@@ -348,25 +342,16 @@ aui_Image *aui_ImageBase::SetImage(
 
 	aui_Image *prevImage = GetImage( state, substate );
 
-	if ( image )
+	if (image)
 	{
-		
-		if(m_loadOnDemand) {
-			
+		if (m_loadOnDemand) 
+        {
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
-			
 			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
 
-			
-			if(m_stateImageNames[index]) {
-				delete m_stateImageNames[index];
-			}
-
-			
+			delete m_stateImageNames[index];
 			m_stateImageNames[index] = strdup(image);
-
-			
 			m_stateImageGroups[ state ][ substate ] = NULL;
 		} 
 		else 
@@ -384,22 +369,17 @@ aui_Image *aui_ImageBase::SetImage(
 
 		}
 	}
-	else {
-		
-		if(m_loadOnDemand) {
-			
+	else 
+    {
+		if (m_loadOnDemand) 
+        {
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
-			
 			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
-
 			
-			if(m_stateImageNames[index]) {
-				delete m_stateImageNames[index];
-				m_stateImageNames[index] = NULL;
-			}
+			delete m_stateImageNames[index];
+			m_stateImageNames[index] = NULL;
 		}
-		
 		
 		m_stateImageGroups[ state ][ substate ] = NULL;
 	}

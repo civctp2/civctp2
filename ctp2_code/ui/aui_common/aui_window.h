@@ -31,20 +31,14 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef __AUI_WINDOW_H__
-#define __AUI_WINDOW_H__
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef AUI_WINDOW_H
+#define AUI_WINDOW_H
 
-#include "aui_region.h"
-#include "aui_dirtylist.h"
-#include "aui_mouse.h"
-#include "pointerlist.h"
-
-//class aui_UI;
-class aui_Mouse;
-class aui_Control;
-class aui_Surface;
-struct aui_Stencil;
+class aui_Window;
 
 enum AUI_WINDOW_TYPE
 {
@@ -58,9 +52,6 @@ enum AUI_WINDOW_TYPE
 	AUI_WINDOW_TYPE_LAST
 };
 
-
-
-
 #define k_WINDOW_ATTRIBUTE_HIDDEN			k_REGION_ATTRIBUTE_HIDDEN
 #define k_WINDOW_ATTRIBUTE_DISABLED			k_REGION_ATTRIBUTE_DISABLED
 #define k_WINDOW_ATTRIBUTE_DRAGDROP			k_REGION_ATTRIBUTE_DRAGDROP
@@ -72,11 +63,20 @@ enum AUI_WINDOW_TYPE
 #define k_WINDOW_ATTRIBUTE_DYNAMIC 	   	   	0x00000100
 
 
+#include "aui_region.h"
+#include "aui_dirtylist.h"
+#include "aui_mouse.h"
+#include "pointerlist.h"
+
+//class aui_UI;
+class aui_Mouse;
+class aui_Control;
+class aui_Surface;
+struct aui_Stencil;
 
 class aui_Window : public aui_Region
 {
 public:
-	
 	aui_Window(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -255,21 +255,6 @@ protected:
 	aui_Control *m_focusControl;
 	tech_WLList<aui_Region *> *m_focusList;
 
-#if defined(_MSC_VER) && 0
-	virtual MouseEventCallback PostChildrenCallback;
-
-	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-	virtual MouseEventCallback MouseLDragInside;
-	virtual MouseEventCallback MouseLDragOutside;
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLGrabOutside;
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-#else
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);	
@@ -279,7 +264,6 @@ protected:
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
-#endif
 };
 
 

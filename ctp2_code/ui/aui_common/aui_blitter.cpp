@@ -31,7 +31,7 @@
 #include "c3.h"
 #include "aui_blitter.h"
 
-#include <algorithm>          // std::fill
+#include <algorithm>          // std::fill, std::max, std::min
 #include "aui_surface.h"
 #include "aui_dirtylist.h"
 #include "aui_pixel.h"
@@ -108,23 +108,11 @@ AUI_ERRCODE aui_Blitter::Blt(
 		desty + clippedSrcRect.bottom - clippedSrcRect.top
 	};
 
-	sint32 leftClip;
-	if ( (leftClip = destRect.left) > 0 )
-		leftClip = 0;
+    sint32 leftClip     = std::min<sint32>(destRect.left, 0);
+    sint32 topClip      = std::min<sint32>(destRect.top, 0);
+    sint32 rightClip    = std::max<sint32>(destRect.right - destSurf->Width(), 0);
+    sint32 bottomClip   = std::max<sint32>(destRect.bottom - destSurf->Height(), 0);
 
-	sint32 topClip;
-	if ( (topClip  = destRect.top) > 0 )
-		topClip = 0;
-
-	sint32 rightClip;
-	if ( (rightClip = destRect.right - destSurf->Width()) < 0 )
-		rightClip = 0;
-
-	sint32 bottomClip;
-	if ( (bottomClip = destRect.bottom - destSurf->Height()) < 0 )
-		bottomClip = 0;
-
-	
 	destRect.left -= leftClip;
 	destRect.top -= topClip;
 	destRect.right -= rightClip;
@@ -187,10 +175,10 @@ AUI_ERRCODE aui_Blitter::Blt8To8(
 	const sint32 destPitch = destSurf->Pitch();
 	const sint32 srcPitch = srcSurf->Pitch();
 			
-	
-	BOOL wasDestLocked;
-	uint8 *destBuf = destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	uint8 * destBuf         = destSurf->Buffer();
+    bool    wasDestLocked   = destBuf != NULL;
+
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -198,20 +186,16 @@ AUI_ERRCODE aui_Blitter::Blt8To8(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
 	
 	if ( destBuf )
 	{
-		
-		uint8 *origDestBuf = destBuf;
-
-		
-		BOOL wasSrcLocked;
-		uint8 *srcBuf = srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		uint8 * origDestBuf     = destBuf;
+		uint8 * srcBuf          = srcSurf->Buffer();
+		bool    wasSrcLocked    = srcBuf != NULL;
+		if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -219,7 +203,6 @@ AUI_ERRCODE aui_Blitter::Blt8To8(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
@@ -284,22 +267,8 @@ AUI_ERRCODE aui_Blitter::Blt8To8(
 					destBuf += destDiff;
 				} while ( (srcBuf += srcDiff) != stopVertical );
 			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
 			else
 			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 			
@@ -340,10 +309,10 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 	const sint32 destPitch = destSurf->Pitch() / 2;
 	const sint32 srcPitch = srcSurf->Pitch() / 2;
 			
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	uint16 *    destBuf         = (uint16 *)destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
+
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -351,20 +320,16 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
-		uint16 *origDestBuf = destBuf;
+		uint16 *    origDestBuf     = destBuf;
+		uint16 *    srcBuf          = (uint16 *)srcSurf->Buffer();
+        bool        wasSrcLocked    = srcBuf != NULL;
 
-		
-		BOOL wasSrcLocked;
-		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -372,11 +337,9 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
-		
 		if ( srcBuf )
 		{
 			
@@ -571,7 +534,6 @@ AUI_ERRCODE aui_Blitter::Blt24To24(
 	RECT *srcRect,
 	uint32 flags )
 {
-	
 	Assert( FALSE );
 	return AUI_ERRCODE_INVALIDPARAM;
 }
@@ -675,18 +637,21 @@ AUI_ERRCODE aui_Blitter::TileBlt(
 		return AUI_ERRCODE_OK;
 
 	
-	sint32 destWidth;
-	sint32 srcWidth;
-	if ( (destWidth = clippedDestRect.right - clippedDestRect.left)
-	<    (srcWidth = clippedSrcRect.right - clippedSrcRect.left) )
-		clippedSrcRect.right = clippedSrcRect.left + (srcWidth = destWidth);
+	sint32 destWidth    = clippedDestRect.right - clippedDestRect.left;
+	sint32 srcWidth     = clippedSrcRect.right - clippedSrcRect.left;
+	if (destWidth < srcWidth)
+    {
+        srcWidth                = destWidth;
+		clippedSrcRect.right    = clippedSrcRect.left + destWidth;
+    }
 
-	sint32 destHeight;
-	sint32 srcHeight;
-	if ( (destHeight = clippedDestRect.bottom - clippedDestRect.top)
-	<    (srcHeight = clippedSrcRect.bottom - clippedSrcRect.top) )
-		clippedSrcRect.bottom = clippedSrcRect.top + (srcHeight = destHeight);
-
+	sint32 destHeight   = clippedDestRect.bottom - clippedDestRect.top;
+	sint32 srcHeight    = clippedSrcRect.bottom - clippedSrcRect.top;
+	if (destHeight < srcHeight)
+    {
+        srcHeight               = destHeight;
+		clippedSrcRect.bottom   = clippedSrcRect.top + destHeight;
+    }
 	
 	anchorx = Mod(anchorx,srcWidth);
 	anchory = Mod(anchory,srcHeight);
@@ -745,10 +710,9 @@ AUI_ERRCODE aui_Blitter::TileBlt8To8(
 	const sint32 destPitch = destSurf->Pitch();
 	const sint32 srcPitch = srcSurf->Pitch();
 			
-	
-	BOOL wasDestLocked;
-	uint8 *destBuf = destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	uint8 * destBuf         = destSurf->Buffer();
+    bool    wasDestLocked   = destBuf != NULL;
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -756,20 +720,15 @@ AUI_ERRCODE aui_Blitter::TileBlt8To8(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
-		uint8 *origDestBuf = destBuf;
-
-		
-		BOOL wasSrcLocked;
-		uint8 *srcBuf = srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		uint8 * origDestBuf     = destBuf;
+		uint8 * srcBuf          = srcSurf->Buffer();
+        bool    wasSrcLocked    = srcBuf != NULL;
+		if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -777,14 +736,12 @@ AUI_ERRCODE aui_Blitter::TileBlt8To8(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
 		
 		if ( srcBuf )
 		{
-			
 			uint8 *origSrcBuf = srcBuf;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
@@ -898,22 +855,8 @@ AUI_ERRCODE aui_Blitter::TileBlt8To8(
 					stopSrcHorizontal = srcBuf + srcScanWidth;
 				} while ( !done );
 			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
 			else
 			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
@@ -956,10 +899,10 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 	const sint32 destPitch = destSurf->Pitch() / 2;
 	const sint32 srcPitch = srcSurf->Pitch() / 2;
 			
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	uint16 *    destBuf         = (uint16 *)destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
+
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -967,20 +910,16 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
+		uint16 *    origDestBuf     = destBuf;
+		uint16 *    srcBuf          = (uint16 *)srcSurf->Buffer();
+        bool        wasSrcLocked    = srcBuf != NULL;
 		
-		uint16 *origDestBuf = destBuf;
-
-		
-		BOOL wasSrcLocked;
-		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+        if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -988,14 +927,11 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
-		
 		if ( srcBuf )
 		{
-			
 			uint16 *origSrcBuf = srcBuf;
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
@@ -1114,22 +1050,8 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 					stopSrcHorizontal = srcBuf + srcScanWidth;
 				} while ( !done );
 			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
 			else
 			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
@@ -1165,7 +1087,6 @@ AUI_ERRCODE aui_Blitter::TileBlt24To24(
 	sint32 anchory,
 	uint32 flags )
 {
-	
 	Assert( FALSE );
 	return AUI_ERRCODE_INVALIDPARAM;
 }
@@ -1304,28 +1225,25 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
-	BOOL wasDestLocked;
-	uint8 *destBuf = destSurf->Buffer();
-	if ( !(wasDestLocked = destBuf != NULL) )
-	if ( destSurf->Lock( destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
-	{
-		destBuf = NULL;
-		
-		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
-	}
+	uint8 * destBuf         = destSurf->Buffer();
+    bool    wasDestLocked   = destBuf != NULL;
 
-	
+	if (!wasDestLocked)
+    {
+	    if ( destSurf->Lock( destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
+	    {
+		    destBuf = NULL;
+		    retcode = AUI_ERRCODE_SURFACELOCKFAILED;
+	    }
+    }
+
 	if ( destBuf )
 	{
 		
 		uint8 *origDestBuf = destBuf;
 
-		
 		const sint32 destPitch = destSurf->Pitch();
 
-		
-		
 		destBuf = destSurf->Buffer() +
 			bevelRect->top * destPitch + bevelRect->left;
 
@@ -1432,21 +1350,20 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( !(wasDestLocked = destBuf != NULL) )
-	if ( destSurf->Lock( destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
-	{
-		destBuf = NULL;
-		
-		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
-	}
+	uint16 *    destBuf         = (uint16 *) destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
+	if ( !wasDestLocked)
+    {
+	    if ( destSurf->Lock( destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
+	    {
+		    destBuf = NULL;
+			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
+	    }
+    }
 
 	
 	if ( destBuf )
 	{
-		
 		uint16 *origDestBuf = destBuf;
 
 		
@@ -1679,7 +1596,6 @@ AUI_ERRCODE aui_Blitter::BevelBlt24(
 	sint32 lighty,
 	uint32 flags )
 {
-	
 	Assert( FALSE );
 	return AUI_ERRCODE_INVALIDPARAM;
 }
@@ -1812,13 +1728,11 @@ AUI_ERRCODE aui_Blitter::ColorBlt8(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
-	const sint32 destPitch = destSurf->Pitch();
+	const sint32 destPitch      = destSurf->Pitch();
+	uint8 *     destBuf         = destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
 
-	
-	BOOL wasDestLocked;
-	uint8 *destBuf = destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -1826,14 +1740,11 @@ AUI_ERRCODE aui_Blitter::ColorBlt8(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
 		uint8 *origDestBuf = destBuf;
 
 		
@@ -1872,13 +1783,11 @@ AUI_ERRCODE aui_Blitter::ColorBlt16(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
-	const sint32 destPitch = destSurf->Pitch() / 2;
+	const sint32 destPitch      = destSurf->Pitch() / 2;
+	uint16 *    destBuf         = (uint16 *)destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
 
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -1886,14 +1795,11 @@ AUI_ERRCODE aui_Blitter::ColorBlt16(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
 		uint16 *origDestBuf = destBuf;
 
 		
@@ -1976,13 +1882,11 @@ AUI_ERRCODE aui_Blitter::ColorStencilBlt16(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
 	const sint32 destPitch = destSurf->Pitch() / 2;
+	uint16 *    destBuf         = (uint16 *)destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
 
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -1990,14 +1894,14 @@ AUI_ERRCODE aui_Blitter::ColorStencilBlt16(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
 	const sint32 stencilPitch = stencilSurf->Pitch() / 2;
-	BOOL wasStencilLocked;
-	uint16 *stencilBuf = (uint16 *)stencilSurf->Buffer();
-	if(wasStencilLocked = stencilBuf != NULL)
+	uint16 *    stencilBuf          = (uint16 *)stencilSurf->Buffer();
+    bool        wasStencilLocked    = stencilBuf != NULL;
+
+	if (wasStencilLocked)
 	{
 		stencilBuf += stencilRect->top * stencilPitch + stencilRect->left;
 	}
@@ -2008,10 +1912,8 @@ AUI_ERRCODE aui_Blitter::ColorStencilBlt16(
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf && stencilBuf)
 	{
-		
 		uint16 *origDestBuf = destBuf;
 		uint16 *origStencilBuf = stencilBuf;
 
@@ -2093,13 +1995,11 @@ AUI_ERRCODE aui_Blitter::StencilBlt16(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
-	const sint32 destPitch = destSurf->Pitch() / 2;
+	const sint32 destPitch      = destSurf->Pitch() / 2;
+	uint16 *    destBuf         = (uint16 *) destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
 
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -2107,14 +2007,14 @@ AUI_ERRCODE aui_Blitter::StencilBlt16(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	const sint32 stencilPitch = stencilSurf->Pitch() / 2;
-	BOOL wasStencilLocked;
-	uint16 *stencilBuf = (uint16 *)stencilSurf->Buffer();
-	if(wasStencilLocked = stencilBuf != NULL)
+	const sint32 stencilPitch       = stencilSurf->Pitch() / 2;
+	uint16 *    stencilBuf          = (uint16 *) stencilSurf->Buffer();
+    bool        wasStencilLocked    = stencilBuf != NULL;
+
+	if (wasStencilLocked)
 	{
 		stencilBuf += stencilRect->top * stencilPitch + stencilRect->left;
 	}
@@ -2126,9 +2026,10 @@ AUI_ERRCODE aui_Blitter::StencilBlt16(
 	}
 
 	const sint32 sourcePitch = sourceSurf->Pitch() / 2;
-	BOOL wasSourceLocked;
-	uint16 *sourceBuf = (uint16 *)sourceSurf->Buffer();
-	if(wasSourceLocked = sourceBuf != NULL)
+	uint16 *    sourceBuf       = (uint16 *)sourceSurf->Buffer();
+    bool        wasSourceLocked = sourceBuf != NULL;
+
+	if (wasSourceLocked)
 	{
 		sourceBuf += sourceRect->top * sourcePitch + sourceRect->left;
 	}
@@ -2139,10 +2040,8 @@ AUI_ERRCODE aui_Blitter::StencilBlt16(
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf && stencilBuf && sourceBuf)
 	{
-		
 		uint16 *origDestBuf = destBuf;
 		uint16 *origStencilBuf = stencilBuf;
 		uint16 *origSourceBuf = sourceBuf;
@@ -2263,22 +2162,19 @@ static spanIndex CreateStencilRow(uint16 *src, sint32 width, aui_StencilSpan *sp
 
 aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 {
-	sint32 height = pSurface->Height();
-	sint32 width = pSurface->Width();
-	sint32 srow = pSurface->Pitch() >> 1;
-	uint16 *pSrcBase;
-	bool wasUnlocked = FALSE;
+	sint32      height      = pSurface->Height();
+	sint32      width       = pSurface->Width();
+	sint32      srow        = pSurface->Pitch() >> 1;
+	uint16 *    pSrcBase    = (uint16 *) pSurface->Buffer();
+	bool        wasUnlocked = pSrcBase == NULL;
 
-	if (pSurface->Buffer() == NULL) 
+	if (wasUnlocked) 
 	{
 		AUI_ERRCODE errcode = pSurface->Lock(NULL,(LPVOID *)&pSrcBase,0);
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) 
 			return NULL;
-		wasUnlocked = TRUE;
 	} 
-	else
-		pSrcBase = (uint16 *)pSurface->Buffer();
 
 	
 	sint32 i;
@@ -2309,7 +2205,6 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 
 	if (wasUnlocked) 
 	{
-		
 		AUI_ERRCODE errcode = pSurface->Unlock((LPVOID)pSrcBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 	}
@@ -2383,13 +2278,14 @@ AUI_ERRCODE aui_Blitter::StencilMixBlt16(
 
 #define MIX_BLT_LOCK(check, pitch, lockBuf, buf, surf, rect) \
 	sint32 pitch = 0; \
-    BOOL check = TRUE; \
+    bool check = true; \
     uint16 *buf = NULL; \
 	if (surf != NULL) \
 	{ \
 		buf = (uint16 *)surf->Buffer();\
 		pitch = surf->Pitch() / 2; \
-		if (check = (buf != NULL)) { \
+        check = buf != NULL; \
+		if (check) { \
 			buf += rect->top * pitch + rect->left; \
 		} else if (surf->Lock(rect, (LPVOID *)&buf, 0) != AUI_ERRCODE_OK) { \
 			buf = NULL; \
@@ -2597,10 +2493,10 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 	const sint32 destPitch = destSurf->Pitch();
 	const sint32 srcPitch = srcSurf->Pitch();
 			
-	
-	BOOL wasDestLocked;
-	uint8 *destBuf = destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	uint8 * destBuf         = destSurf->Buffer();
+    bool    wasDestLocked   = destBuf != NULL;
+
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -2608,20 +2504,16 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
-		uint8 *origDestBuf = destBuf;
+		uint8 * origDestBuf     = destBuf;
+		uint8 * srcBuf          = srcSurf->Buffer();
+        bool    wasSrcLocked    = srcBuf != NULL;
 
-		
-		BOOL wasSrcLocked;
-		uint8 *srcBuf = srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+        if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -2629,14 +2521,11 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
-		
 		if ( srcBuf )
 		{
-			
 			uint8 *origSrcBuf = srcBuf;
 
 			
@@ -2710,22 +2599,8 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 
 				} while ( (destBuf += destDiff) != stopVertical );
 			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
 			else
 			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
@@ -2762,14 +2637,13 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	AUI_ERRCODE errcode;
 
-	
 	const sint32 destPitch = destSurf->Pitch() / 2;
 	const sint32 srcPitch = srcSurf->Pitch() / 2;
 			
-	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ( wasDestLocked = destBuf != NULL )
+	uint16 *    destBuf         = (uint16 *) destSurf->Buffer();
+    bool        wasDestLocked   = destBuf != NULL;
+
+	if (wasDestLocked)
 	{
 		destBuf += destRect->top * destPitch + destRect->left;
 	}
@@ -2777,20 +2651,16 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
-		uint16 *origDestBuf = destBuf;
+		uint16 *    origDestBuf     = destBuf;
+		uint16 *    srcBuf          = (uint16 *) srcSurf->Buffer();
+		bool        wasSrcLocked    = srcBuf != NULL;
 
-		
-		BOOL wasSrcLocked;
-		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ( wasSrcLocked = srcBuf != NULL )
+		if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -2798,14 +2668,11 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
-		
 		if ( srcBuf )
 		{
-			
 			uint16 *origSrcBuf = srcBuf;
 
 			
@@ -2888,22 +2755,8 @@ AUI_ERRCODE aui_Blitter::StretchBlt16To16(
 
 				} while ( (destBuf += destDiff) != stopVertical );
 			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
 			else
 			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
@@ -2985,10 +2838,6 @@ AUI_ERRCODE aui_Blitter::SpanBlt(
 
 	switch ( bytesPerPixel )
 	{
-	case 1:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
  	case 2:
  		return SpanBlt16To16(
  			destSurf,
@@ -3030,14 +2879,11 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 		NULL, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
 		destBuf = NULL;
-		
 		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	
 	if ( destBuf )
 	{
-		
 		uint16 *origDestBuf = destBuf;
 
 		
@@ -3046,7 +2892,6 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 			NULL, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
 		{
 			srcBuf = NULL;
-			
 			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 		}
 
@@ -3058,9 +2903,8 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
-				aui_SpanList *			curSpanList		= srcSpanListArray;
-				const sint32 height = srcSurf->Height();
-				const aui_SpanList *stopSpanList = curSpanList + height;
+				aui_SpanList *          curSpanList  = srcSpanListArray;
+				const aui_SpanList *    stopSpanList = curSpanList + srcSurf->Height();
 
 				do
 				{
@@ -3086,35 +2930,8 @@ AUI_ERRCODE aui_Blitter::SpanBlt16To16(
 
 				} while ( ++curSpanList != stopSpanList );
 			}
-			else if ( (flags & k_AUI_BLITTER_FLAG_CHROMAKEY)
-					  && (flags & k_AUI_BLITTER_FLAG_BLEND) )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
-				
-				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
 			else
 			{
-				
-				
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 			

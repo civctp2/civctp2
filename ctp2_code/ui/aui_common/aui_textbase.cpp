@@ -473,9 +473,8 @@ uint32 aui_TextBase::FindNextWordBreak(
 	uint32 totalLength = 0;	
 	sint32 totalSize = 0;	
 
-	MBCHAR *token;
 	MBCHAR *word = text;
-	while ( token = FindNextToken( word, " \t\n", 1 ) )
+	while (MBCHAR * token = FindNextToken( word, " \t\n", 1 ) )
 	{
 		SIZE wordSize = { 0, 0 };				
 		sint32 wordLength = token - word + 1;	

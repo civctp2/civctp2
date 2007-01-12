@@ -1079,8 +1079,11 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 			return AUI_ERRCODE_OK;
 
 		case '\b': 
-			if ((gi = GetGlyphInfo( ' ' )))
+            gi = GetGlyphInfo(' ');
+			if (gi)
+            {
 				penPos->x -= gi->advance;
+            }
 			break;
 
 		case '\t': 

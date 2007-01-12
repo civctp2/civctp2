@@ -53,7 +53,6 @@ aui_Ranger::aui_Ranger(
 
 	*retval = CreateButtonsAndThumb( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -83,7 +82,6 @@ aui_Ranger::aui_Ranger(
 
 	*retval = CreateButtonsAndThumb();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

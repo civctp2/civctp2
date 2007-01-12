@@ -29,23 +29,22 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_window.h"
 
 #ifdef __AUI_USE_DIRECTX__
 #include "aui_directui.h"
 #include "aui_directsurface.h"
-#else
-#include "aui_ui.h"
-#include "aui_surface.h"
 #endif 
 
-#include "aui_uniqueid.h"
-#include "aui_control.h"
 #include "aui_blitter.h"
+#include "aui_control.h"
 #include "aui_rectangle.h"
+#include "aui_surface.h"
+#include "aui_ui.h"
+#include "aui_uniqueid.h"
+#include "c3ui.h"           // C3UI
 
-#include "aui_window.h"
-
-
+extern C3UI *   g_c3ui;
 
 uint32 aui_Window::m_windowClassId = aui_UniqueId();
 
@@ -65,7 +64,6 @@ aui_Window::aui_Window(
 
 	*retval = InitCommon( bpp, type );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -87,7 +85,6 @@ aui_Window::aui_Window(
 
 	*retval = InitCommon( bpp, type );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -167,13 +164,18 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 
 aui_Window::~aui_Window()
 {
-		delete m_surface;
-		delete m_dirtyList;
-	delete m_grabRegion;	
-		free(m_stencil);
-	delete m_focusControl;
-		delete m_focusList;
-	}
+    delete m_surface;
+    delete m_dirtyList;
+    delete m_grabRegion;	
+    free(m_stencil);
+    delete m_focusControl;
+    delete m_focusList;
+
+    if (g_c3ui)
+    {
+        g_c3ui->RemoveWindow(Id());
+    }
+}
 
 
 AUI_ERRCODE aui_Window::Move( sint32 x, sint32 y )
@@ -200,8 +202,7 @@ AUI_ERRCODE aui_Window::Move( sint32 x, sint32 y )
 
 AUI_ERRCODE aui_Window::MoveOG( void )
 {
-	AUI_ERRCODE errcode = Move( m_ogX, m_ogY );
-	return errcode;
+	return Move(m_ogX, m_ogY);
 }
 
 AUI_ERRCODE aui_Window::Offset( sint32 dx, sint32 dy )
@@ -358,22 +359,19 @@ AUI_ERRCODE aui_Window::HideThis( void )
 
 void aui_Window::MakeSureSurfaceIsValid( void )
 {
-	
-	if ( !m_surface )
+	if (!m_surface)
 	{
 		CreateSurface();
-
 	}
 }
 
 
 void aui_Window::DeleteSurfaceIfDynamic( void )
 {
-	if ( IsDynamic() && m_surface )
+	if (IsDynamic())
 	{
 		delete m_surface;
 		m_surface = NULL;
-
 	}
 }
 
@@ -581,12 +579,10 @@ uint32 aui_Window::SetDynamic( BOOL dynamic )
 	if ( dynamic )
 	{
 		m_attributes |= k_WINDOW_ATTRIBUTE_DYNAMIC;
-		if ( m_surface && IsHidden() )
+		if (IsHidden())
 		{
 			delete m_surface;
 			m_surface = NULL;
-
-
 		}
 	}
 	else

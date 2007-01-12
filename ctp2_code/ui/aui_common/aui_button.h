@@ -56,7 +56,6 @@ enum AUI_BUTTON_ACTION
 class aui_Button : public aui_Control
 {
 public:
-	
 	aui_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -72,14 +71,7 @@ public:
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
-	virtual ~aui_Button() {}
 
-protected:
-	aui_Button() : aui_Control() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( void );
-	
-public:
 	virtual AUI_ERRCODE ResetThis( void );
 
 	
@@ -91,8 +83,15 @@ public:
 		sint32 y = 0 );
 
 protected:
-	BOOL	m_isRepeating;	
-	sint32	m_repeatCount;	
+	aui_Button() 
+    : 
+        aui_Control     (),
+        m_isRepeating   (false),
+        m_repeatCount   (0)
+    {};
+
+	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	
 							
 	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
 	
@@ -104,6 +103,12 @@ protected:
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
+
+	BOOL	m_isRepeating;	
+	sint32	m_repeatCount;	
+
+private:
+	AUI_ERRCODE InitCommon( void );
 };
 
 

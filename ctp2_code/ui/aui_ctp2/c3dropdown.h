@@ -40,7 +40,7 @@ public:
 		sint32 windowSize = 0,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
-	C3DropDown::C3DropDown(
+	C3DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		MBCHAR *ldlBlock,

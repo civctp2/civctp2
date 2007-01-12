@@ -29,18 +29,12 @@ ctp2_MenuButton::ctp2_MenuButton(AUI_ERRCODE *retval,
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 ctp2_MenuButton::~ctp2_MenuButton()
 {
-	
-	
-	
-	
 	delete m_menu;
-	m_menu = NULL;
 }
 
 void ctp2_MenuButton::MouseLGrabInside( aui_MouseEvent *mouseData )

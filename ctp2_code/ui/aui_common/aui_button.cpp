@@ -28,17 +28,18 @@ aui_Button::aui_Button(
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
-	:
+:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_Control     (retval, id, ldlBlock, ActionFunc, cookie),
+    m_isRepeating   (false),
+    m_repeatCount   (0)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -52,17 +53,18 @@ aui_Button::aui_Button(
 	sint32 height,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
-	:
+:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_Control     (retval, id, x, y, width, height, ActionFunc, cookie),
+    m_isRepeating   (false),
+    m_repeatCount   (0)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -74,7 +76,7 @@ AUI_ERRCODE aui_Button::InitCommonLdl( MBCHAR *ldlBlock )
 
 
 
-AUI_ERRCODE aui_Button::InitCommon( void )
+AUI_ERRCODE aui_Button::InitCommon(void)
 {
 	m_isRepeating = FALSE;
 	m_repeatCount = 0;

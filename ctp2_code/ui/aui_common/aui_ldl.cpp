@@ -1021,18 +1021,19 @@ AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie(MBCHAR *ldlBlock,
 }
 
 
-AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie(MBCHAR *parentBlock, MBCHAR *regionBlock,
-											aui_Control::ControlActionCallback *actionFunc,
-											void *cookie)
+AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
+(
+    MBCHAR const *                          parentBlock, 
+    MBCHAR const *                          regionBlock,
+	aui_Control::ControlActionCallback *    actionFunc,
+	void *                                  cookie
+)
 {
-	MBCHAR		ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-	Assert(parentBlock != NULL);
-	Assert(regionBlock != NULL);
-
+	Assert(parentBlock && regionBlock);
 	if (parentBlock == NULL || regionBlock == NULL) 
 		return AUI_ERRCODE_INVALIDPARAM;
 	
+	MBCHAR		ldlBlock[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf(ldlBlock, "%s.%s", parentBlock, regionBlock);
 
 	return SetActionFuncAndCookie(ldlBlock, actionFunc, cookie);

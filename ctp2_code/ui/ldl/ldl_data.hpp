@@ -93,7 +93,7 @@ class ldl_datablock {
 public:
 
 	// get the full ldl path name
-	BOOL ContstructFullName( char *szName, ldl_datablock *dbParent, char *result );
+	bool ContstructFullName( char *szName, ldl_datablock *dbParent, char *result );
 
 	// returns a pointer to the attribute for the given name, error only if bMustExist = TRUE
 	ldl_attribute *GetAttribute(const char *szName);
@@ -105,18 +105,18 @@ public:
 	int GetAttributeType(const char *szName);
 	
 	// function used for templates -only-
-	BOOL AttributeNameTaken(char *szName);
+	bool AttributeNameTaken(char *szName);
 	void SetValue(char *name, int value);
 
 /* ------ functions found in ldl_data_info.cpp ------ */
 	// used to return datablock values.
-	int GetInt(const char *szName = "int");
-	double GetDouble(const char *szName = "double");
-	int GetBool(const char *szName = "bool");
+	int     GetInt(const char *szName = "int");
+	double  GetDouble(const char *szName = "double");
+	bool    GetBool(const char *szName = "bool");
 //	RECT GetRect(const char *x1 = "rect_x1", const char *y1 = "rect_y1",
 //				 const char *x2 = "rect_x2", const char *y2 = "rect_y2");
 //	POINT GetPoint(const char *x1 = "point_x", const char *y1 = "point_y");
-	char *GetString(const char *szName);
+	char *  GetString(const char *szName);
 };
 
 

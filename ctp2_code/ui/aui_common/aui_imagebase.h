@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
@@ -29,19 +27,14 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __AUI_IMAGEBASE_H__
-#define __AUI_IMAGEBASE_H__
+#ifndef AUI_IMAGEBASE_H__
+#define AUI_IMAGEBASE_H__
 
-
-class aui_Image;
-class aui_Surface;
-class ldl_datablock;
-
-
+class aui_ImageBase;
 
 #define k_AUI_IMAGEBASE_LDL_BLTTYPE				"imageblttype"
 #define k_AUI_IMAGEBASE_LDL_COPY				"copy"
@@ -97,8 +90,14 @@ enum AUI_IMAGEBASE_SUBSTATE
 	AUI_IMAGEBASE_SUBSTATE_STATEDISABLED,
 	AUI_IMAGEBASE_SUBSTATE_LAST
 };
-typedef aui_Image *aui_StateImageGroup[ AUI_IMAGEBASE_SUBSTATE_LAST ];
 
+
+
+class aui_Image;
+class aui_Surface;
+class ldl_datablock;
+
+typedef aui_Image * aui_StateImageGroup[ AUI_IMAGEBASE_SUBSTATE_LAST ];
 
 
 class aui_ImageBase
@@ -136,13 +135,14 @@ public:
 	
 	AUI_IMAGEBASE_BLTTYPE SetImageBltType( AUI_IMAGEBASE_BLTTYPE imageblttype );
 	AUI_IMAGEBASE_BLTFLAG SetImageBltFlag( AUI_IMAGEBASE_BLTFLAG imagebltflag );
-	aui_Image *SetImage(
-		MBCHAR *image,
-		sint32 state = 0,
-		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE );
-
+	aui_Image * SetImage
+    (
+		MBCHAR const *          image,
+		sint32                  state       = 0,
+		AUI_IMAGEBASE_SUBSTATE  substate    = AUI_IMAGEBASE_SUBSTATE_STATE 
+    );
 	
-	bool IsLoadOnDemand() { return(m_loadOnDemand); }
+	bool IsLoadOnDemand() const { return m_loadOnDemand; }
 
 protected:
 	
@@ -157,14 +157,14 @@ protected:
 											
 
 	
-	aui_Image	*LoadTheImage( MBCHAR *name );
+	aui_Image * LoadTheImage(MBCHAR const * name);
 
 	sint32					m_numStateImageGroups;
 	aui_StateImageGroup		*m_stateImageGroups; 
 		
 		
 
-	static MBCHAR *m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ];
+	static MBCHAR const *   m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST];
 
 	
 	bool m_loadOnDemand;

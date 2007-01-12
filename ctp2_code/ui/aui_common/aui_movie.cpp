@@ -151,9 +151,10 @@ AUI_ERRCODE aui_Movie::Unload( void )
 
 aui_Surface *aui_Movie::SetDestSurface( aui_Surface *surface )
 {
-	aui_Surface *prevSurface = m_surface;
+	aui_Surface *   prevSurface = m_surface;
+    m_surface   = surface;
 
-	if ((m_surface = surface))
+	if (m_surface)
 	{
 		RECT surfRect =
 		{
@@ -474,9 +475,9 @@ AUI_ERRCODE aui_Movie::Stop( void )
 
 
 
-AUI_ERRCODE aui_Movie::Pause( void )
+AUI_ERRCODE aui_Movie::Pause(void)
 {
-	if ( m_isPlaying && !m_isPaused )
+	if (m_isPlaying)
 	{
 		m_isPaused = TRUE;
 	}
@@ -486,9 +487,9 @@ AUI_ERRCODE aui_Movie::Pause( void )
 
 
 
-AUI_ERRCODE aui_Movie::Resume( void )
+AUI_ERRCODE aui_Movie::Resume(void)
 {
-	if ( m_isPlaying && m_isPaused )
+	if (m_isPlaying)
 	{
 		m_isPaused = FALSE;
 	}

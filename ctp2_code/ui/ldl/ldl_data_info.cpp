@@ -42,7 +42,7 @@ double ldl_datablock::GetDouble( const char *szName )
 		if(atr->GetType() == ATTRIBUTE_TYPE_DOUBLE)
 			return ((ldl_attributeValue<double> *)atr)->GetValue();
 	}
-	return 0;
+	return 0.0;
 }
 
 char *ldl_datablock::GetString( const char *szName )
@@ -57,14 +57,14 @@ char *ldl_datablock::GetString( const char *szName )
 	return NULL;
 }
 
-int ldl_datablock::GetBool( const char *szName )
+bool ldl_datablock::GetBool( const char *szName )
 {
-	ldl_attribute *atr = GetAttribute(szName);
+	ldl_attribute * atr = GetAttribute(szName);
 
-	if(atr) {
-		if(atr->GetType() == ATTRIBUTE_TYPE_BOOL)
-			return ((ldl_attributeValue<bool> *)atr)->GetValue();
+	if (atr && (atr->GetType() == ATTRIBUTE_TYPE_BOOL))
+    {
+		return ((ldl_attributeValue<bool> *)atr)->GetValue();
 	}
 
-	return 0;
+	return false;
 }
