@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer server select window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -71,7 +71,6 @@ ServerSelectWindow::ServerSelectWindow(
 
 	*retval = CreateControls();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -92,16 +91,9 @@ AUI_ERRCODE ServerSelectWindow::InitCommon( void )
 
 AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-
-	
-	aui_Control *control;
-
-	control = new c3_Static(
-		&errcode,
-		aui_UniqueId(),
-		"serverselectwindow.titlestatictext" );
+	AUI_ERRCODE     errcode = AUI_ERRCODE_OK;
+	aui_Control *   control = new c3_Static
+        (&errcode, aui_UniqueId(), "serverselectwindow.titlestatictext");
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_TITLESTATICTEXT ] = control;
@@ -165,9 +157,9 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 	return AUI_ERRCODE_OK;
 }
 
-ServerSelectWindow::~ServerSelectWindow() {
+ServerSelectWindow::~ServerSelectWindow() 
+{
 	delete m_dbActionArray[ 0 ];
-	m_dbActionArray[ 0 ] = NULL;
 }
 
 void ServerSelectWindow::Update( bool wait )
@@ -205,14 +197,11 @@ void ServerSelectWindow::Update( bool wait )
 }
 
 AUI_ERRCODE ServerSelectWindow::Idle( void )
-{	NETFunc::Message *m;
-	dp_objectDelta_packet_t *p;
-	
-	if(g_netfunc) {
-		while(m = g_netfunc->GetMessage()) {
-			
-			
-			
+{	
+	if (g_netfunc) 
+    {
+        while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+        {
 			g_netfunc->HandleMessage(m);
 
 			switch ( m->GetCode() )
@@ -222,13 +211,19 @@ AUI_ERRCODE ServerSelectWindow::Idle( void )
 				break;
 
 			case dp_OBJECTDELTA_PACKET_ID:
-				p = (dp_objectDelta_packet_t *)m->GetBody();
-				if(	p->key[0] == dp_KEY_SERVERPINGS 
-					&& (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)
-					&& p->data.serv.loss_percent != 100 && s_dbw) {
-					DialogBoxWindow::PopDown( s_dbw );
-					s_dbw = NULL;
-				}
+                {
+            	    dp_objectDelta_packet_t *   p = 
+                        (dp_objectDelta_packet_t *) m->GetBody();
+
+				    if (p->key[0] == dp_KEY_SERVERPINGS 
+					    && (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)
+					    && p->data.serv.loss_percent != 100 && s_dbw
+                       ) 
+                    {
+					    DialogBoxWindow::PopDown(s_dbw);
+					    s_dbw = NULL;
+				    }
+                }
 				break;
 			default:
 				break;

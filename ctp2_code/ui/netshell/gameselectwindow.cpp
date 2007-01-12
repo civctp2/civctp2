@@ -102,7 +102,6 @@ GameSelectWindow::GameSelectWindow(
 
 	*retval = CreateControls();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -287,26 +286,18 @@ void GameSelectWindow::Update(void)
 
 AUI_ERRCODE GameSelectWindow::Idle( void )
 {	
-	NETFunc::Message *m;
-	
-	while((m = g_netfunc->GetMessage())) {
-		
-		
-		
+	while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+    {
 		g_netfunc->HandleMessage(m);
 
-		switch ( m->GetCode() )
+		if (dp_SESSIONLOST_PACKET_ID == m->GetCode())
 		{
-		case dp_SESSIONLOST_PACKET_ID:
-			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONLOST );
-			break;
-
-		default:
-			break;
+			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONLOST);
 		}
 
 		delete m;
 	}
+
 	return AUI_ERRCODE_OK;
 }
 
@@ -719,26 +710,18 @@ StartSelectingWindow::~StartSelectingWindow()
 
 AUI_ERRCODE StartSelectingWindow::Idle( void )
 {	
-	NETFunc::Message *m;
-	
-	while((m = g_netfunc->GetMessage())) {
-		
-		
-		
+	while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+    {
 		g_netfunc->HandleMessage(m);
 
-		switch ( m->GetCode() )
+		if (dp_SESSIONLOST_PACKET_ID == m->GetCode())
 		{
-		case dp_SESSIONLOST_PACKET_ID:
-			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONLOST );
-			break;
-
-		default:
-			break;
+			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONLOST);
 		}
 
 		delete m;
 	}
+
 	return AUI_ERRCODE_OK;
 }
 

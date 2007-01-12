@@ -277,29 +277,20 @@ void ConnectionSelectWindow::Update(void)
 
 AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 {	
-	NETFunc::Message *m;
-	
-	while(m = g_netfunc->GetMessage()) {
-		
-		
-		
+    while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+    {
 		g_netfunc->HandleMessage(m);
 
-		switch ( m->GetCode() )
+        if (NETFunc::Message::NETWORKERR == m->GetCode())
 		{
-		case NETFunc::Message::NETWORKERR:
-			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONERR );
-			break;
-
-		default:
-			break;
+			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONERR);
 		}
 
 		delete m;
 	}
 
-	if(g_netfunc->GetStatus() == NETFunc::READY) {
-		
+	if (g_netfunc->GetStatus() == NETFunc::READY) 
+    {
 		g_netshell->GotoScreen( NetShell::SCREEN_PLAYERSELECT );
 	}
 
