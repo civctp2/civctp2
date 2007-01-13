@@ -77,9 +77,9 @@ void aui_ImageList::aui_ImageListInfo::Load()
 
 aui_ImageList::aui_ImageList(sint32 numStates, sint32 numImages,
 							 bool loadOnDemand) :
+m_loadOnDemand(loadOnDemand),
 m_numStates(numStates),
-m_numImages(numImages),
-m_loadOnDemand(loadOnDemand)
+m_numImages(numImages)
 {
 	
 	Assert(m_numStates);

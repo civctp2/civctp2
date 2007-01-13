@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface hyper text base elements
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -63,7 +44,15 @@ aui_HyperTextBase::aui_HyperTextBase(
 
 AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -71,8 +60,9 @@ AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 		block->GetString( k_AUI_HYPERTEXTBASE_LDL_TEXT ),
 		block->GetInt( k_AUI_HYPERTEXTBASE_LDL_MAXLEN ) );
 	Assert( AUI_SUCCESS(errcode) );
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	return errcode;
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -140,12 +130,18 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 
 aui_HyperTextBase::~aui_HyperTextBase()
 {
-	delete[] m_hyperText;
+	if ( m_hyperText )
+	{
+		delete[ m_hyperMaxLen + 1 ] m_hyperText;
+		m_hyperText = NULL;
+	}
 
-	if (m_hyperStaticList)
+	if ( m_hyperStaticList )
 	{
 		RemoveHyperStatics();
+
 		delete m_hyperStaticList;
+		m_hyperStaticList = NULL;
 	}
 }
 
@@ -192,6 +188,7 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 {
 	if ( !hyperText )
 	{
+		
 		RemoveHyperStatics();
 		hyperText = m_hyperText;
 	}
@@ -199,6 +196,7 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 	sint32 len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
+	
 	aui_Static *hs = CreateHyperStatic(
 		hyperText,
 		len,
@@ -217,21 +215,18 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 	m_hyperStaticList->AddTail( hs );
 
 	if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
-    {
-		delete m_hyperStaticList->RemoveHead();
-    }
+		DestroyHyperStatic( m_hyperStaticList->RemoveHead() );
 
 	return AUI_ERRCODE_OK;
 }
 
 
 
-void aui_HyperTextBase::RemoveHyperStatics(void)
+void aui_HyperTextBase::RemoveHyperStatics( void )
 {
-	for (sint32 i = m_hyperStaticList->L(); i; --i)
-    {
-		delete m_hyperStaticList->RemoveTail();
-    }
+	ListPos position = m_hyperStaticList->GetHeadPosition();
+	for ( sint32 i = m_hyperStaticList->L(); i; i-- )
+		DestroyHyperStatic( m_hyperStaticList->RemoveTail() );
 }
 
 
@@ -250,7 +245,7 @@ aui_Static *aui_HyperTextBase::CreateHyperStatic(
 	uint32 flags )
 {
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	aui_Static *hs = new aui_Static(
 		&errcode,
 		0,
@@ -286,6 +281,17 @@ aui_Static *aui_HyperTextBase::CreateHyperStatic(
 
 	return hs;
 }
+
+
+
+void aui_HyperTextBase::DestroyHyperStatic( aui_Static *hs )
+{
+	Assert( hs != NULL );
+	if ( !hs ) return;
+
+	delete hs;
+}
+
 
 
 AUI_ERRCODE aui_HyperTextBase::DrawThisHyperText(

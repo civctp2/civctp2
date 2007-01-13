@@ -21,9 +21,6 @@
 // _DEBUG
 // - Generate debug version.
 //
-// _DEBUGTOOLS
-// - Provides debug tools (leak reporter, asserts, ...)
-//
 // _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only).
 //
@@ -41,9 +38,6 @@
 // - Standardised min/max usage.
 // - Prevented useless warnings.
 // - Moved DirectX API-Version to use into "ctp2_config.h"
-// - Added struct for automatic debug tool initialization and
-//   cleanup so that it is the first respective the last thing 
-//   that is done in the program. (Oct 3rd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -56,19 +50,18 @@
 
 #include "ctp2_config.h"
 #include "c3types.h"
+#include "ctp2_enums.h"
 
 #if defined(_MSC_VER)
 
-#pragma warning(disable:4100)   // (Level 4)   'identifier' : unreferenced formal parameter
-#pragma warning(disable:4127)   // (Level 4)   conditional expression is constant
-#pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
-#pragma warning(   1   :4800)   // (Level 3)   'type' : forcing value to bool 'true' or 'false' (performance warning)
+#if defined(_TEST) || !defined(_DEBUG)
+#pragma warning( disable : 4056 )
+#endif
 
-#pragma warning(disable:4511)   // (Level 3)   'class' : copy constructor could not be generated
-#pragma warning(disable:4512)   // (Level 4)   'class' : assignment operator could not be generated
+#pragma warning(disable:4786)	// identifier length over 255 (with templates)
+#pragma warning(disable:4800)	// BOOL to bool conversion
 
-#pragma warning( error :4700)   // (Level 1&4) uninitialized local variable 'name' used
-#pragma warning( error :4804)   // (Level 1)   'operation' : unsafe use of type 'bool' in operation
+#pragma warning( error : 4700 )
 #endif	// _MSC_VER
 
 #include <limits.h>

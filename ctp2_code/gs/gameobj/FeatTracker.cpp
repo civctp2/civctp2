@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Feat tracking
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,17 +16,13 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
 // - Propagate feat accomplishments.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added HasFeat to check if a feat has been achieved by E 5-11-2006
 //
 //----------------------------------------------------------------------------
 
@@ -234,20 +229,20 @@ void FeatTracker::AddFeatToEffectLists(Feat *feat)
 {
 	const FeatRecord *rec = g_theFeatDB->Get(feat->GetType());
 
-	CHECK_FEAT_LIST(HasEffectBoatMovement,                FEAT_EFFECT_BOAT_MOVEMENT);
-	CHECK_FEAT_LIST(HasEffectCityDefenseBonus,		    FEAT_EFFECT_CITY_DEFENSE_BONUS);
-	CHECK_FEAT_LIST(HasEffectReduceCityWalls,		        FEAT_EFFECT_REDUCE_CITY_WALLS);
-	CHECK_FEAT_LIST(HasEffectIncreaseCityVision,	        FEAT_EFFECT_INCREASE_CITY_VISION);
-	CHECK_FEAT_LIST(HasEffectIncreaseProduction,	        FEAT_EFFECT_INCREASE_PRODUCTION);
-	CHECK_FEAT_LIST(HasEffectIncreaseCommerce,		    FEAT_EFFECT_INCREASE_COMMERCE);
-	CHECK_FEAT_LIST(HasEffectIncreaseHappiness,   FEAT_EFFECT_INCREASE_HAPPINESS);
-	CHECK_FEAT_LIST(HasEffectEliminateDistancePenalty,    FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
-	CHECK_FEAT_LIST(HasEffectIncreaseBoatVision,	        FEAT_EFFECT_INCREASE_BOAT_VISION);
-	CHECK_FEAT_LIST(HasEffectIncreaseScience,		        FEAT_EFFECT_INCREASE_SCIENCE);
+	CHECK_FEAT_LIST(GetEffectBoatMovement,                FEAT_EFFECT_BOAT_MOVEMENT);
+	CHECK_FEAT_LIST(GetEffectCityDefenseBonus,		    FEAT_EFFECT_CITY_DEFENSE_BONUS);
+	CHECK_FEAT_LIST(GetEffectReduceCityWalls,		        FEAT_EFFECT_REDUCE_CITY_WALLS);
+	CHECK_FEAT_LIST(GetEffectIncreaseCityVision,	        FEAT_EFFECT_INCREASE_CITY_VISION);
+	CHECK_FEAT_LIST(GetEffectIncreaseProduction,	        FEAT_EFFECT_INCREASE_PRODUCTION);
+	CHECK_FEAT_LIST(GetEffectIncreaseCommerce,		    FEAT_EFFECT_INCREASE_COMMERCE);
+	CHECK_FEAT_LIST(GetEffectIncreaseHappiness,   FEAT_EFFECT_INCREASE_HAPPINESS);
+	CHECK_FEAT_LIST(GetEffectEliminateDistancePenalty,    FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
+	CHECK_FEAT_LIST(GetEffectIncreaseBoatVision,	        FEAT_EFFECT_INCREASE_BOAT_VISION);
+	CHECK_FEAT_LIST(GetEffectIncreaseScience,		        FEAT_EFFECT_INCREASE_SCIENCE);
 	CHECK_FEAT_LIST(GetEffectGiveMaps,				    FEAT_EFFECT_GIVE_MAPS);
-	CHECK_FEAT_LIST(HasEffectIncreaseHitPoints,	        FEAT_EFFECT_INCREASE_HIT_POINTS);
-	CHECK_FEAT_LIST(HasEffectScriptedTurn,			    FEAT_EFFECT_SCRIPTED_TURN);
-	CHECK_FEAT_LIST(HasEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
+	CHECK_FEAT_LIST(GetEffectIncreaseHitPoints,	        FEAT_EFFECT_INCREASE_HIT_POINTS);
+	CHECK_FEAT_LIST(GetEffectScriptedTurn,			    FEAT_EFFECT_SCRIPTED_TURN);
+	CHECK_FEAT_LIST(GetEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
 }
 
 #define REMOVE_FROM_FEAT_LIST(func, eff) \
@@ -262,20 +257,20 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 {
 	const FeatRecord *rec = g_theFeatDB->Get(feat->GetType());
 
-	REMOVE_FROM_FEAT_LIST(HasEffectBoatMovement,                FEAT_EFFECT_BOAT_MOVEMENT);
-	REMOVE_FROM_FEAT_LIST(HasEffectCityDefenseBonus,		    FEAT_EFFECT_CITY_DEFENSE_BONUS);
-	REMOVE_FROM_FEAT_LIST(HasEffectReduceCityWalls,		        FEAT_EFFECT_REDUCE_CITY_WALLS);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseCityVision,	        FEAT_EFFECT_INCREASE_CITY_VISION);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseProduction,	        FEAT_EFFECT_INCREASE_PRODUCTION);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseCommerce,		    FEAT_EFFECT_INCREASE_COMMERCE);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseHappiness,   FEAT_EFFECT_INCREASE_HAPPINESS);
-	REMOVE_FROM_FEAT_LIST(HasEffectEliminateDistancePenalty,    FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseBoatVision,	        FEAT_EFFECT_INCREASE_BOAT_VISION);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseScience,		        FEAT_EFFECT_INCREASE_SCIENCE);
+	REMOVE_FROM_FEAT_LIST(GetEffectBoatMovement,                FEAT_EFFECT_BOAT_MOVEMENT);
+	REMOVE_FROM_FEAT_LIST(GetEffectCityDefenseBonus,		    FEAT_EFFECT_CITY_DEFENSE_BONUS);
+	REMOVE_FROM_FEAT_LIST(GetEffectReduceCityWalls,		        FEAT_EFFECT_REDUCE_CITY_WALLS);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseCityVision,	        FEAT_EFFECT_INCREASE_CITY_VISION);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseProduction,	        FEAT_EFFECT_INCREASE_PRODUCTION);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseCommerce,		    FEAT_EFFECT_INCREASE_COMMERCE);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseHappiness,   FEAT_EFFECT_INCREASE_HAPPINESS);
+	REMOVE_FROM_FEAT_LIST(GetEffectEliminateDistancePenalty,    FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseBoatVision,	        FEAT_EFFECT_INCREASE_BOAT_VISION);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseScience,		        FEAT_EFFECT_INCREASE_SCIENCE);
 	REMOVE_FROM_FEAT_LIST(GetEffectGiveMaps,				    FEAT_EFFECT_GIVE_MAPS);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseHitPoints,	        FEAT_EFFECT_INCREASE_HIT_POINTS);
-	REMOVE_FROM_FEAT_LIST(HasEffectScriptedTurn,			    FEAT_EFFECT_SCRIPTED_TURN);
-	REMOVE_FROM_FEAT_LIST(HasEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
+	REMOVE_FROM_FEAT_LIST(GetEffectIncreaseHitPoints,	        FEAT_EFFECT_INCREASE_HIT_POINTS);
+	REMOVE_FROM_FEAT_LIST(GetEffectScriptedTurn,			    FEAT_EFFECT_SCRIPTED_TURN);
+	REMOVE_FROM_FEAT_LIST(GetEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
 }
 
 //----------------------------------------------------------------------------
@@ -297,6 +292,7 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 //              indicate that the feat has been accomplished right now.
 //
 //----------------------------------------------------------------------------
+
 void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 {
 	const FeatRecord *rec = g_theFeatDB->Get(type);
@@ -392,7 +388,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 		return 0;
 
 	sint32 result = 0;
-	sint32 sub = 0;
+	sint32 sub;
 	PointerList<Feat>::Walker walk(m_effectList[effect]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->GetPlayer() == player) {
@@ -419,7 +415,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 			if(getTotal)
 				result += sub;
 			else
-                result = std::max(sub, result);
+				result = max(sub, result);
 		}
 		walk.Next();
 	}
@@ -523,10 +519,12 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 	sint32 featIndex;
 	if(g_theFeatDB->GetNamedItem("FEAT_CONQUERED_BY_FORCE", featIndex)) 
 	{
-		sint32 minCityCount = 0;
-		if(g_theFeatDB->Get(featIndex)->GetMinimumSizeOfCiv(minCityCount))
+		
+		sint32 minCityCount;
+		if(g_theFeatDB->Get(featIndex)->GetMinimumSizeOfCiv())
 		{
-			if (g_player[defeated]->GetMaxCityCount() >= minCityCount)
+			g_theFeatDB->Get(featIndex)->GetMinimumSizeOfCiv(minCityCount);
+			if(g_player[defeated]->GetMaxCityCount() >= minCityCount)
 			{
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AccomplishFeat,
 									   GEA_Int, featIndex,
@@ -541,18 +539,6 @@ void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
 		Assert(unknown_feat);
 		return;
 	}
-}
-
-
-//EMOD added to check if a player achieved a feat 5-11-2006
-bool FeatTracker::HasFeat(sint32 type) const
-{
-//
-//	const FeatRecord *rec = g_theFeatDB->Get(type);
-//	Assert(rec);
-//	if(!rec) return;
-	
-	return m_achieved[type]; 
 }
 
 //----------------------------------------------------------------------------

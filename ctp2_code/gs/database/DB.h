@@ -17,11 +17,9 @@
 #ifndef __DB_H__
 #define __DB_H__
 
-template <class T> class Database;
+typedef sint32 StringId;
 
-#include "ctp2_inttypes.h"  // sint32
-#include "CivArchive.h"     // CivArchive
-#include "dbtypes.h"        // StringId
+class CivArchive ;
 
 template <class T> class Database { 
 
@@ -79,5 +77,22 @@ public:
 
 	void Serialize(CivArchive &archive) ;
 };
+
+#if 0
+
+template  class Database<UnitRecord>; 
+template  class Database<WonderRecord>; 
+template  class Database<ImproveRecord>; 
+template  class Database<GWRecord>;
+template  class Database<PollutionRecord>;
+template  class Database<CivilisationRecord>;
+template  class Database<GovernmentRecord>; 
+template  class Database<TerrainRecord>; 
+template  class Database<InstallationRecord>;
+#endif
+
+#else
+
+template <class T> class Database;
 
 #endif 

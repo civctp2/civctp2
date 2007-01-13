@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Listbox for network game setup
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,15 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -106,7 +102,7 @@ template<class T,class NetShellT>
 void ns_ListBox<T,NetShellT>::Insert( T *object )
 {
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	ns_Item<T,NetShellT> *item = new ns_Item<T,NetShellT>(
 		&errcode,
 		aui_UniqueId(),
@@ -196,9 +192,9 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -213,7 +209,13 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	Assert( theLdl->IsValid( ldlBlock ) );
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -300,7 +302,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 		for ( sint32 i = 1; i < numProperties; i++ )
 		{
 			
-			AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+			AUI_ERRCODE errcode;
 			ns_Item<T,NetShellT> *childItem = new ns_Item<T,NetShellT>(
 				&errcode,
 				aui_UniqueId(),
@@ -314,7 +316,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 			item->AddChild( childItem );
 
 			NetShellT *netShellObject = item->GetNetShellObject();
-			if ( netShellObject->type( i ) == ns_Accessor<NetShellT>::INT )
+			if ( netShellObject->type( i ) == ns_Accessor<T>::INT )
 			{
 				childItem->TextFlags() =
 					k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |

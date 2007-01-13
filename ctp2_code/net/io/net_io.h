@@ -1,10 +1,15 @@
+
+
+
+
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef _NETIO_H_
 #define _NETIO_H_
 
-#include "net_types.h"
+enum NET_ERR;
 
 class NetIOResponse
 {

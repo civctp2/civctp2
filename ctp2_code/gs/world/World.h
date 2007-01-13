@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : part of the World class implementation
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,38 +26,13 @@
 //
 // - Added second World::GetGood method, usefull if you already have a Cell
 //   pointer. - May 18th 2005 Martin Gühmann
-// - Moved some stuff from the old global earming database. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 #ifndef __WORLD_H__
 #define __WORLD_H__
-
-class Terrain;
-class World; 
-
-enum WORLD_RADIUS_OP 
-{
-	WORLD_RADIUS_OP_SET_RADIUS,
-	WORLD_RADIUS_OP_IRRIGATION_CHECK,
-	WORLD_RADIUS_OP_CITY_SEARCH,
-};
-
-enum MAP_GENERATOR 
-{
-	MAP_GENERATOR_ORIGINAL,
-	MAP_GENERATOR_PLUGIN
-};
-
-#define GROUND_Z 0
-#define SPACE_Z 1
-
-#define k_WORLD_VERSION_MAJOR	0
-#define k_WORLD_VERSION_MINOR	0
 
 #include "MapPoint.h"
 #include "CityRadius.h"
@@ -68,7 +42,6 @@ enum MAP_GENERATOR
 #include "gstypes.h"
 #include "Cell.h"
 #include "MoveFlags.h"
-#include "GlobalWarmingRecord.h"
 
 class MapPoint;
 class CivArchive ;
@@ -82,6 +55,7 @@ class CellUnitList;
 class Army;
 class A_Star_Heuristic_Cost;
 class TerrainRecord;
+enum WORLD_DIRECTION;
 
 typedef Cell * CellPtr; 
 typedef CellPtr * CellYarray;
@@ -93,43 +67,47 @@ typedef bool (FindDistanceCellCallback) (const MapPoint &pos, Cell *cell, void *
 template <class T> class PQueue;
 struct DistItem;
 
-#ifndef USE_COM_REPLACEMENT
 interface IMapGenerator;
-#else
-#include "IMapGen.h"
-#include <ltdl.h>
-#endif
+#define k_WORLD_VERSION_MAJOR	0									
+#define k_WORLD_VERSION_MINOR	0									
 
+enum WORLD_RADIUS_OP {
+	WORLD_RADIUS_OP_SET_RADIUS,
+	WORLD_RADIUS_OP_IRRIGATION_CHECK,
+	WORLD_RADIUS_OP_CITY_SEARCH,
+};
 
+enum MAP_GENERATOR {
+	MAP_GENERATOR_ORIGINAL,
+		MAP_GENERATOR_PLUGIN
+};
+
+#define GROUND_Z 0
+#define SPACE_Z 1
 struct MapPointNode;
 
 
 template <class T> class DynamicArray; 
 typedef DynamicArray<sint32> DAsint32; 
 
-class Terrain
-{
-public:
-    Terrain(TerrainRecord const * a_Terrain)
-    :
-        m_Terrain   (a_Terrain)
-    { };
-
-    sint32 GetFood() const;
-    sint32 GetGold() const;
-    sint32 GetShield() const;
-
-private:
-    TerrainRecord const *   m_Terrain;
-};
-
 class World : public CityRadiusCallback { 
+    
+    
+    
     sint32 m_isYwrap; 
     sint32 m_isXwrap;					
     BOOL m_continents_are_numbered; 
 
     MAP_GENERATOR m_mapGenerator;
 
+
+
+    
+    
+    
+    
+    
+    
     MapPoint m_size;
     CellXarray	m_map; 
     
@@ -143,7 +121,7 @@ class World : public CityRadiusCallback {
     Cell		*m_cellArray;
     CellYarray	*m_tmpx;
     
-    sint32			m_player_start_list[8][2];
+    sint32			m_player_start_list[8][2];								
     TileInfo		*m_tileInfoStorage;
     double          *m_goodValue;
 
@@ -162,11 +140,7 @@ class World : public CityRadiusCallback {
     sint32			m_insertCityOwner; 
     WORLD_RADIUS_OP m_radiusOp;
     BOOL            m_tempIrrigation;
-#ifndef USE_COM_REPLACEMENT
-    HINSTANCE       m_current_plugin;
-#else
-    lt_dlhandle     m_current_plugin;
-#endif
+    HINSTANCE       m_current_plugin; 
 	BOOL            m_isInsideRadius;
 	uint32          m_ignoreCity;
 	sint32          m_cityOwnerCheck;
@@ -179,7 +153,7 @@ class World : public CityRadiusCallback {
 	
 	
 	uint32			m_capitolDistanceDirtyFlags;  
-												
+													
 
     
     
@@ -197,14 +171,14 @@ public:
     World(CivArchive &archive, BOOL fromMapFile = FALSE);
     void CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 						sint32 player_start_score[k_MAX_PLAYERS]);
-    virtual ~World();
+    ~World();
     
     void FreeMap();
     void AllocateMap();
     void Reset(sint16 x, sint16 y, BOOL yWrap, BOOL xWrap);
     
-    inline bool IsYwrap() const { return m_isYwrap != 0; } 
-    inline bool IsXwrap() const { return m_isXwrap != 0; } 
+    inline sint32 IsYwrap() const { return m_isYwrap; } 
+    inline sint32 IsXwrap() const { return m_isXwrap; } 
 
 	
 	void SetXWrap(bool on) {m_isXwrap = on;};
@@ -231,7 +205,7 @@ public:
         Assert(0 <= p.y);  Assert(p.y < m_size.y); 
         
         return m_map[p.x][p.y]; 
-    };
+    };     
     
     Cell * AccessCell(const sint32 x, const sint32 y)  { 
         Assert(0 <= x);  Assert(x < m_size.x); 
@@ -250,11 +224,11 @@ public:
     void FillBox (const MapPoint r, const sint32 radius, sint32 c, sint32 &landCount);
     sint32 IsNearCon(MapPoint r, const sint32 radius,  const sint32 conCount);
     void GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS]); 
-//    void GenerateContinents(const sint32 tot); 
-//    void GenerateIslands(const sint32 tot);
-//    void GenerateHumidity();
-//    void GenerateHills(); 
-//    void GenerateSpace();
+    void GenerateContinents(const sint32 tot); 
+    void GenerateIslands(const sint32 tot);
+    void GenerateHumidity();
+    void GenerateHills(); 
+    void GenerateSpace();
     
     sint32 IsInTheOcean (const MapPoint r, sint32 cr);
     void CalcRmap(sint32 ** m, sint32 rmapRadius, sint32 rmapCycle, 
@@ -289,8 +263,10 @@ public:
     void GenerateDeepWater();
     void NewGenerateDeepWater();
 
-    BOOL GetAdjacentLand(MapPoint const & pos, MapPoint & land) const;
-    BOOL GetAdjacentOcean(MapPoint const & pos, sint32 & water_cont) const;
+    BOOL GetAdjacentLand(MapPoint &pos, MapPoint &land);
+
+	
+	BOOL GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const;
     
     void GenerateTrenches();
     void GenerateVolcano();
@@ -405,8 +381,8 @@ public:
     
     sint32 IsGood(const MapPoint &pos) const;
     sint32 IsGood(const sint32 x, const sint32 y) const;
-    bool GetGood(const MapPoint &pos, sint32 &good) const;
-    bool GetGood(const Cell *c, sint32 &good) const;
+    BOOL GetGood(const MapPoint &pos, sint32 &good) const;
+    BOOL GetGood(const Cell *c, sint32 &good) const;
     void SetGood(const sint32 x, const sint32 y, const sint32 g);
     void SetRandomGood(const sint32 x, const sint32 y);
     void ClearGoods(const sint32 x, const sint32 y) ;
@@ -415,88 +391,107 @@ public:
     
     sint32 CanEnter(const MapPoint &pos, const uint32 flag) const;
 
-	// @ToDo make this stuff dependent on TerrainDB or figure out whether this is already TerrainDB dependent
-	bool World::EnvIsWater(const uint32 env) const
+	
+	inline sint32 World::EnvIsWater(const uint32 env) const
 	{
-		return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER | k_BIT_MOVEMENT_TYPE_SHALLOW_WATER))) != 0;
+		return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER | k_BIT_MOVEMENT_TYPE_SHALLOW_WATER))) != 0; 
 	}
 
-	bool World::IsWater(const MapPoint &pos) const
-	{
+	inline sint32 World::IsWater(const MapPoint &pos) const
+	{ 
 		return EnvIsWater(GetCell(pos)->m_env);
 	}
 
-	bool World::IsWater(const sint32 x, const sint32 y) const 
+	inline sint32 World::IsWater(const sint32 x, const sint32 y) const 
 	{ 
 		return EnvIsWater(m_map[x][y]->m_env);
 	}
-
-	bool EnvIsShallowWater(const uint32 env) const;
-	bool IsShallowWater(const MapPoint &pos) const;
-	bool IsShallowWater(const sint32 x, const sint32 y) const;
-
-	bool EnvIsLand(const uint32 env) const;
-	bool IsLand(const MapPoint &pos) const;
-	bool IsLand(const sint32 i, const sint32 j) const;
-
-	bool EnvIsSpace(const uint32 env) const;
-	bool IsSpace(const MapPoint &pos) const;
-	bool IsSpace(const sint32 i, const sint32 j) const;
-
-	bool EnvIsMountain(const uint32 env) const;
-	bool IsMountain(const sint32 x, const sint32 y) const;
-	bool IsMountain(const MapPoint &pos) const;
-
-	bool EnvIsHill(const uint32 env) const;
-	bool IsHill(const MapPoint &pos) const ;
-	bool IsHill(const sint32 x, const sint32 y) const ;
-
-	sint32 IsNextToScratch(const sint32 prev, const sint32 i, const sint32 j);
-	void CalcDistToWater(sint32 &maxd);
-	sint32 IsCurrent(const MapPoint &pos); 
-	sint32 IsCurrent(const sint32 x, const sint32 y); 
-
-	bool EnvIsRiver(const uint32 env) const;
-	bool IsRiver(const MapPoint &pos) const;
-	bool IsRiver(const sint32 x, const sint32 y) const;
-
-	void SetCurrent(const MapPoint &pos);
-	void SetCurrent(const sint32 x, const sint32 y);
-	void SetRiver(const MapPoint &pos); 
-	void UnsetRiver(const sint32 x, const sint32 y);
-
-	BOOL CanBeIrrigated(const MapPoint &pos);
-
+   
+    sint32 EnvIsShallowWater(const uint32 env) const;
+    sint32 IsShallowWater(const MapPoint &pos) const;
+    sint32 IsShallowWater(const sint32 x, const sint32 y) const;
+    
+    sint32 EnvIsLand(const uint32 env) const;
+    sint32 IsLand(const MapPoint &pos) const;
+    sint32 IsLand(const sint32 i, const sint32 j) const;
+    
+    sint32 EnvIsSpace(const uint32 env) const;
+    sint32 IsSpace(const MapPoint &pos) const;
+    sint32 IsSpace(const sint32 i, const sint32 j) const;
+    
+    sint32 EnvIsMountain(const uint32 env) const;
+    sint32 IsMountain(const sint32 x, const sint32 y) const;
+    sint32 IsMountain(const MapPoint &pos) const;
+    
+    sint32 EnvIsHill(const uint32 env) const;
+    sint32 IsHill(const MapPoint &pos) const ;
+    sint32 IsHill(const sint32 x, const sint32 y) const ;
+    
+    sint32 IsNextToScratch(const sint32 prev, const sint32 i, const sint32 j);
+    void CalcDistToWater(sint32 &maxd);
+    sint32 IsCurrent(const MapPoint &pos); 
+    sint32 IsCurrent(const sint32 x, const sint32 y); 
+    
+    sint32 EnvIsRiver(const uint32 env) const;
+    sint32 IsRiver(const MapPoint &pos) const;
+    sint32 IsRiver(const sint32 x, const sint32 y) const;
+    
+    void SetCurrent(const MapPoint &pos);
+    void SetCurrent(const sint32 x, const sint32 y);
+    void SetRiver(const MapPoint &pos); 
+    void UnsetRiver(const sint32 x, const sint32 y);
+    
+    BOOL CanBeIrrigated(const MapPoint &pos);
+    
+	
 	const TerrainRecord *GetTerrain(const MapPoint &pos);
-
-	sint32 IsCity(const MapPoint &pos) const; 
-
+    
+    
+    
+    sint32 IsCity(const MapPoint &pos) const; 
+	
+    
+    
+    
     sint32 IsCanal(const MapPoint &pos) const;
     sint32 EnvIsTunnel(const uint32 env) const ;
     sint32 IsTunnel(const MapPoint &pos) const;
     void SetCanalTunnel(MapPoint &pos, sint32 level);
 
-	sint32 EnvIsRoad(const sint32 i, const uint32 env) const;	
-	sint32 IsRoad(const sint32 i, const MapPoint &pos) const ;
+	
+    
+    
+    
+    sint32 EnvIsRoad(const sint32 i, const uint32 env) const;	
+    sint32 IsRoad(const sint32 i, const MapPoint &pos) const ;
 	sint32 IsAnyRoad(const MapPoint &pos) const;
-
-	sint32 EnvIsIrrigation(const sint32 i, const uint32 env) const; 
-	sint32 IsIrrigation(const sint32 i, const MapPoint &pos) const ; 
-
-	sint32 EnvIsMine(const sint32 i, const uint32 env) const; 
-	sint32 IsMine(const sint32 i, const MapPoint &pos) const; 
-
-	bool IsInstallation(const MapPoint &pos) const;
-
-	double CalcTerrainFreightCost(const MapPoint &pos);
-
-	bool HasCity(const MapPoint &pos) const; 
-	bool IsSupplyingTrade(const MapPoint &pos) const ;
-
+	
+    
+    
+    
+    sint32 EnvIsIrrigation(const sint32 i, const uint32 env) const; 
+    sint32 IsIrrigation(const sint32 i, const MapPoint &pos) const ; 
+	
+    
+    
+    
+    sint32 EnvIsMine(const sint32 i, const uint32 env) const; 
+    sint32 IsMine(const sint32 i, const MapPoint &pos) const; 
+	
+    
+    
+    BOOL IsInstallation(const MapPoint &pos) const;
+    
+    
+    double CalcTerrainFreightCost(const MapPoint &pos);
+    
+    sint32 HasCity(const MapPoint &pos) const; 
+    BOOL IsSupplyingTrade(const MapPoint &pos) const ;
+    
     BOOL IsConnectedToCity(const MapPoint &pos, sint32 owner, uint8* array = NULL) const;
 	BOOL IsOnOrNextToOwner(const MapPoint &pos, sint32 owner);
 
-    bool IsContinentSharedWithOthers(const MapPoint &pnt, 
+    BOOL IsContinentSharedWithOthers(const MapPoint &pnt, 
         sint32 owner, 
         uint8* array) const;
     BOOL IsContinentBiggerThan(uint32 size,
@@ -510,7 +505,7 @@ public:
     
     
     
-    bool InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray &revealedUnits);
+    sint32 InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray &revealedUnits);
     
     sint32 RemoveUnitReference(const MapPoint &pos, const Unit &id);
     
@@ -534,7 +529,7 @@ public:
     
     
     void CityRadiusFunc(const MapPoint &pos);
-    bool InsertCity(const MapPoint &pos, Unit u); 
+    sint32 InsertCity(const MapPoint &pos, Unit u); 
     void MoveUnitToCitySlot(Unit newCity, const MapPoint &pos);
     Unit GetCity(const MapPoint &pos);
     
@@ -545,11 +540,11 @@ public:
     sint32 GetShieldsProduced(const MapPoint &pos) const;
     
     
-    void InsertImprovement(const TerrainImprovement &imp, MapPoint const & point);
-    void RemoveImprovement(const TerrainImprovement &imp, const MapPoint &point);
+    void InsertImprovement(const TerrainImprovement &imp, MapPoint &point);
+    void RemoveImprovement(const TerrainImprovement &imp, MapPoint &point);
     
-    void InsertInstallation(Installation &inst, MapPoint const & point);
-    void RemoveInstallation(Installation &inst, MapPoint const & point);
+    void InsertInstallation(Installation &inst, MapPoint &point);
+    void RemoveInstallation(Installation &inst, MapPoint &point);
 	sint32 CountImprovements(const MapPoint & pos);
 
 	
@@ -692,11 +687,12 @@ public:
 	void SmartSetOneCell(const MapPoint &pos, sint32 terr);
 
 	double GetGoodValue(sint32 good);
-	const GlobalWarmingRecord* GetGlobalWarmingDBRec() const;
-	sint32 ChangeType(const double baseProb, const sint32 terrain) const;
-	sint32 GetTerrainChangeType(bool (TerrainRecord::*terrainFunc)() const) const;
-	sint32 GetTerrainChangeToType(const GlobalWarmingRecord::ChangeTypeProbability* ctprec) const;
+
 #ifdef _DEBUG
+	
+	
+	
+	
 	void WholePlayerLandArea(int *array) const;
 #endif
 
@@ -705,6 +701,8 @@ public:
 extern World *g_theWorld;
 
 uint32 World_World_GetVersion(void) ;
+#else 
 
-#endif
+class World; 
 
+#endif 

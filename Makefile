@@ -72,13 +72,8 @@ playtest:
 	cp -uv ctp2_code/ctp/dll/map/*.dll $(PLAYTEST)/ctp2_program/ctp/dll/map/
 	cp -uv ctp2_code/ctp/anet* $(PLAYTEST)/ctp2_program/ctp/
 	cp -uv ctp2_code/ctp/ctp2.* $(PLAYTEST)/ctp2_program/ctp/
-	cp -uv ctp2_code/ctp/zlib1.dll $(PLAYTEST)/ctp2_program/ctp/
-	cp -uv ctp2_code/ctp/jpeg62.dll $(PLAYTEST)/ctp2_program/ctp/
-	cp -uv ctp2_code/ctp/libtiff3.dll $(PLAYTEST)/ctp2_program/ctp/
 	#cp -uv ctp2_code/ctp/appstr.txt $(PLAYTEST)/ctp2_program/ctp/
 	cp -uv doc/user/playtest/*.txt $(PLAYTEST)/
-	mkdir -p $(PLAYTEST)/doc
-	cp -uv doc/user/manual/user_manual.pdf $(PLAYTEST)/doc
 	svn export ctp2_data $(PLAYTEST)/ctp2_data --force
 	svn export Scenarios $(PLAYTEST)/Scenarios --force
 

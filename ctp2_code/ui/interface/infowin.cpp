@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Old CTP1 info window, seems that most parts aren't used.
-// Id           : $Id$
+// Description  : 
 //
 //----------------------------------------------------------------------------
 //
@@ -18,171 +17,216 @@
 //
 // Compiler flags
 // 
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Do not trigger disaster warnings when there is no pollution at all.
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "infowin.h"
+
 
 #include "aui.h"
-#include "aui_stringtable.h"
-#include "aui_textfield.h"
 #include "aui_uniqueid.h"
+#include "c3ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_ranger.h"
-#include "c3_button.h"
-#include "c3_dropdown.h"
-#include "c3_listbox.h"
-#include "c3_static.h"
-#include "c3ui.h"
-#include "c3windows.h"
-#include "colorset.h"               // g_colorSet
-#include "controlpanelwindow.h"     // g_controlPanel
-#include "controlsheet.h"
-#include "infowindow.h"
-#include "pixelutils.h"
-#include "player.h"                 // g_player
-#include "radarmap.h"
 #include "screenutils.h"
+
+
+#include "textbutton.h"
+#include "c3_button.h"
+
+
+#include "c3_static.h"
 #include "staticpicture.h"
 #include "textbox.h"
-#include "textbutton.h"
+#include "c3_listbox.h"
+#include "controlsheet.h"
+#include "aui_textfield.h"
+#include "c3_dropdown.h"
 #include "thermometer.h"
+#include "aui_stringtable.h"
+
+
+#include "workmap.h"
+
+
+#include "pixelutils.h"
+#include "radarmap.h"
+
+
+#include "colorset.h"
+#include "c3windows.h"
+#include "infowin.h"
+#include "infowindow.h"
+#include "controlpanelwindow.h"
+
+
+
+
+#include "player.h"
+#include "UnitRec.h"
+#include "XY_Coordinates.h"
+#include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "UnitRec.h"
-#include "World.h"                  // g_theWorld
-#include "workmap.h"
-#include "StrDB.h"                  // g_theStringDB
-#include "ConstDB.h"                // g_theConstDB
+#include "citydata.h"
+#include "StrDB.h"
+#include "ConstDB.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "Advances.h"
 #include "TopTen.h"
 #include "AgeRecord.h"
 #include "Score.h"
-#include "DifficultyRecord.h"
+#include "DiffDB.h"
 #include "Diffcly.h"
-#include "profileDB.h"              // g_theProfileDB
+#include "profileDB.h"
 #include "pollution.h"
 #include "EndGame.h"
+#include "EndGameDB.h"
 #include "WonderTracker.h"
+
+
 #include "Civilisation.h"
-#include "CivilisationPool.h"       // g_theCivilisationPool;
-#include "CivPaths.h"               // g_civPaths
-#include "SelItem.h"                // g_selected_item
+#include "CivilisationData.h"
+#include "CivilisationDB.h"
+#include "CivilisationPool.h"
+
+
+
+#include "CivPaths.h"
+#include "SelItem.h"
 #include "BldQue.h"
 #include "ObjPool.h"
 #include "Cell.h"
 #include "c3files.h"
 #include "pointerlist.h"
 #include "linegraph.h"
-#include "TurnCnt.h"                // g_turn
+#include "TurnCnt.h"
 #include "Strengths.h"
-#include "UnitPool.h"               // g_theUnitPool
+#include "UnitPool.h"
+
 #include "keypress.h"
+
 #include "wonderutil.h"
+
 #include "EventTracker.h"
+
 #include "GameSettings.h"
 
 
-extern sint32                   g_ScreenWidth;
-extern sint32                   g_ScreenHeight;
-extern C3UI                     *g_c3ui;
-extern TopTen                   *g_theTopTen;
+extern sint32		g_ScreenWidth;
+extern sint32		g_ScreenHeight;
+extern C3UI			*g_c3ui;
+extern CivPaths		*g_civPaths;
+extern ColorSet		*g_colorSet;
+extern World		*g_theWorld;
+extern TopTen		*g_theTopTen;
+extern DifficultyDB	*g_theDifficultyDB;
+
+extern Player					**g_player;
 extern PointerList<Player>      *g_deadPlayer;
-extern sint32                   g_modalWindow;
-extern WorkMap                  *g_workMap;
-extern Pollution                *g_thePollution; 
+extern SelectedItem				*g_selected_item; 
+extern StringDB					*g_theStringDB;
+extern ControlPanelWindow		*g_controlPanel;
+extern UnitPool					*g_theUnitPool;
+
+extern sint32					g_modalWindow;
+extern WorkMap					*g_workMap;
+extern ConstDB					*g_theConstDB;
+extern TurnCount				*g_turn; 
+
+extern aui_Surface				*g_sharedSurface;
+extern ProfileDB                *g_theProfileDB;
+extern Pollution				*g_thePollution; 
 
 
+#include "CivilisationPool.h"
+extern CivilisationPool			*g_theCivilisationPool;
 
-#define k_INFORADAR_WIDTH       202
-#define k_INFORADAR_HEIGHT      151
-
-
-ctp2_Window                     *g_infoWindow = NULL;
-
-
-static c3_Button                *s_exitButton;
-
-static sint32                   s_infoSetting;
-static sint32                   s_infoDataSetting;
-
-static aui_StringTable          *s_stringTable;
+#define k_INFORADAR_WIDTH		202
+#define k_INFORADAR_HEIGHT		151
 
 
-static sint32                   s_infoXCount;
-static sint32                   s_infoYCount;
-static double                   **s_infoGraphData;
+ctp2_Window			*g_infoWindow = NULL;
 
 
-static sint32                   s_pollutionXCount;
-static sint32                   s_pollutionYCount;
-static double                   **s_pollutionGraphData;
+static c3_Button	*s_exitButton;
+
+static sint32		s_infoSetting;
+static sint32		s_infoDataSetting;
+
+static aui_StringTable	*s_stringTable;
 
 
-static c3_Static                *s_civNameLabel;
-static c3_Static                *s_turnsLabel;
-static c3_Static                *s_foundedLabel;
-static c3_Static                *s_pollutionLabel;
-
-static c3_Static                *s_civNameBox;
-static c3_Static                *s_turnsBox;
-static c3_Static                *s_foundedBox;
-static c3_Static                *s_pollutionBox;
-
-static c3_Static                *s_titleBox;
-
-static c3_ListBox               *s_infoBigList;
-static c3_ListBox               *s_infoWonderList;
-static c3_ListBox               *s_infoPlayerList;
-static c3_ListBox               *s_infoScoreList;
-static c3_ListBox               *s_pollutionList;
-
-static LineGraph                *s_infoGraph;
-static LineGraph                *s_pollutionGraph;
-
-static Thermometer              *s_pollutionTherm;
-
-static c3_Button                *s_returnButton;
-static c3_Button                *s_bigButton;
-static c3_Button                *s_wonderButton;
-static c3_Button                *s_strengthButton;
-static c3_Button                *s_scoreButton;
-static c3_Button                *s_pollutionButton;
-
-static c3_Button                *s_eventsInfoButton[17];
-static c3_Button                *s_eventsInfoButtonLeft,*s_eventsInfoButtonRight;
-static sint32                   s_currentWonderDisplay;
-
-static c3_Button                *s_labButton;
-static c3_Button                *s_throneButton;
-
-static RadarMap                 *s_infoRadar;
+static sint32		s_infoXCount;
+static sint32		s_infoYCount;
+static double		**s_infoGraphData;
 
 
-static c3_Static                *s_bottomRightBox;
-static c3_Static                *s_bottomRightImage;
+static sint32		s_pollutionXCount;
+static sint32		s_pollutionYCount;
+static double		**s_pollutionGraphData;
 
 
-static sint32                   s_minRound = 0;
+static c3_Static		*s_civNameLabel;
+static c3_Static		*s_turnsLabel;
+static c3_Static		*s_foundedLabel;
+static c3_Static		*s_pollutionLabel;
+
+static c3_Static		*s_civNameBox;
+static c3_Static		*s_turnsBox;
+static c3_Static		*s_foundedBox;
+static c3_Static		*s_pollutionBox;
+
+static c3_Static		*s_titleBox;
+
+static c3_ListBox		*s_infoBigList;
+static c3_ListBox		*s_infoWonderList;
+static c3_ListBox		*s_infoPlayerList;
+static c3_ListBox		*s_infoScoreList;
+static c3_ListBox		*s_pollutionList;
+
+static LineGraph		*s_infoGraph;
+static LineGraph		*s_pollutionGraph;
+
+static Thermometer		*s_pollutionTherm;
+
+static c3_Button		*s_returnButton;
+static c3_Button		*s_bigButton;
+static c3_Button		*s_wonderButton;
+static c3_Button		*s_strengthButton;
+static c3_Button		*s_scoreButton;
+static c3_Button		*s_pollutionButton;
+
+static c3_Button		*s_eventsInfoButton[17];
+static c3_Button		*s_eventsInfoButtonLeft,*s_eventsInfoButtonRight;
+static sint32			s_currentWonderDisplay;
+
+static c3_Button		*s_labButton;
+static c3_Button		*s_throneButton;
+
+static RadarMap			*s_infoRadar;
+
+
+static c3_Static		*s_bottomRightBox;
+static c3_Static		*s_bottomRightImage;
+
+
+static sint32			s_minRound = 0;
 
 
 void InfoCleanupAction::Execute(aui_Control *control,
 									uint32 action,
 									uint32 data )
 {
+	
 	infowin_Cleanup();
 }
 
@@ -439,17 +483,62 @@ sint32 infowin_Initialize( void )
 
 }
 
-void infowin_Cleanup(void)
+sint32 infowin_Cleanup( void )
 {
+	return 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
-void infowin_Cleanup_Controls(void)
+sint32 infowin_Cleanup_Controls( void )
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
+#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
 	mycleanup( s_titleBox );
 	mycleanup( s_bottomRightBox );
 	mycleanup( s_bottomRightImage );
+
 	mycleanup( s_civNameBox );
 	mycleanup( s_turnsBox );
 	mycleanup( s_foundedBox );
@@ -459,48 +548,57 @@ void infowin_Cleanup_Controls(void)
 	mycleanup( s_foundedLabel );
 	mycleanup( s_pollutionLabel );
 	mycleanup( s_pollutionTherm );
+
 	mycleanup( s_infoPlayerList );
 	mycleanup( s_infoBigList );
 	mycleanup( s_infoScoreList );
 	mycleanup( s_infoWonderList );
 	mycleanup( s_pollutionList );
+
 	mycleanup( s_infoGraph );
 	mycleanup( s_pollutionGraph );
 
+	
 	if (s_infoGraphData)
 	{
 		for( sint32 i = 0 ; i < s_infoYCount ; i++ )
 		{
 			delete s_infoGraphData[i];
+			s_infoGraphData[i] = NULL;
 		}
-		delete [] s_infoGraphData;
+		delete s_infoGraphData;
 		s_infoGraphData = NULL;
 	}
 
+	
 	if (s_pollutionGraphData)
 	{
 		for( sint32 i = 0 ; i < s_pollutionYCount ; i++ )
 		{
 			delete s_pollutionGraphData[i];
+			s_pollutionGraphData[i] = NULL;
 		}
-		delete [] s_pollutionGraphData;
+		delete s_pollutionGraphData;
 		s_pollutionGraphData = NULL;
 	}
 
-	mycleanup(s_bigButton);
-	mycleanup(s_wonderButton);
-	mycleanup(s_strengthButton);
-	mycleanup(s_scoreButton);
-	mycleanup(s_labButton);
-	mycleanup(s_throneButton);
-	mycleanup(s_pollutionButton);
-    mycleanup(s_stringTable);
+
+	mycleanup( s_bigButton );
+	mycleanup( s_wonderButton );
+	mycleanup( s_strengthButton );
+	mycleanup( s_scoreButton );
+	mycleanup( s_labButton );
+	mycleanup( s_throneButton );
+	mycleanup( s_pollutionButton );
+
+	return 0;
+
 #undef mycleanup
 }
 
 sint32 infowin_Init_Controls( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE		errcode;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			controlSubBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -686,15 +784,33 @@ void infowin_SetMinRoundForGraphs(sint32 minRound)
 
 sint32 infowin_LoadData( void )
 {
+	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
+
+	
 	infowin_UpdateBigList();
+
+	
 	infowin_UpdateScoreList();
+
+	
 	infowin_UpdateWonderList();
+
+	
 	infowin_UpdateGraph(s_infoGraph, s_infoXCount, s_infoYCount, &s_infoGraphData);	
+
+	
 	infowin_UpdatePlayerList();
+
+	
 	infowin_UpdateCivData();
+
+	
 	infowin_UpdatePollutionGraph(s_pollutionGraph, s_pollutionXCount, s_pollutionYCount, &s_pollutionGraphData);	
+
+	
 	infowin_UpdatePollutionData();
 
+	
 	if (!infowin_LabReady()) s_labButton->Hide();
 
 	return 0;
@@ -728,10 +844,10 @@ sint32 infowin_UpdateCivData( void )
 		sint32 turnFounded = unit->GetData()->GetCityData()->GetTurnFounded();
 
 		
-		const char *yearStr = diffutil_GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
+		const char *yearStr = g_theDifficultyDB->GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
 
 #if 0
-		sint32 yearFounded = diffutil_GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
+		sint32 yearFounded = g_theDifficultyDB->GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
 
 		
 		if (yearFounded > 0)
@@ -766,23 +882,36 @@ sint32 infowin_UpdateCivData( void )
 
 sint32 infowin_UpdateBigList( void )
 {
-	if (!g_theTopTen) return 0;
-	g_theTopTen->CalculateBiggestCities();
-
 	AUI_ERRCODE	retval;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
+	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
+	uint64 wonders = 0;
+	sint32 firstIndex = -1;
+	sint32 i;
 
+	Unit unit;
+
+	
+	if (!g_theTopTen) return 0;
+
+	g_theTopTen->CalculateBiggestCities();
+
+	
 	s_infoBigList->Clear();
 	strcpy(ldlBlock,"InfoBigListItem");
+	InfoBigListItem *bItem = NULL;
+
 	
-	for (sint32 i = 0 ; i < 5 ; i++ )
+	for ( i = 0 ; i < 5 ; i++ )
 	{
-		Unit unit = g_theTopTen->GetBiggestCity(i);
+		
+		unit = g_theTopTen->GetBiggestCity(i);
 		if ( g_theUnitPool->IsValid(unit) )
 		{
-			c3_ListItem* bItem = new InfoBigListItem(&retval, &unit, i, ldlBlock); 
-			s_infoBigList->AddItem(bItem);
+			
+			bItem = new InfoBigListItem(&retval, &unit, i, ldlBlock); 
+			s_infoBigList->AddItem((c3_ListItem *)bItem);
 		}
 	}
 
@@ -994,7 +1123,7 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	
 	
 	BOOL dumpStrings = FALSE;
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE		errcode;
 
 	if (!s_stringTable) {
 		s_stringTable = new aui_StringTable( &errcode, "InfoStrings" );
@@ -1043,7 +1172,7 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	
 	if (!infoXCount) 
 	{
-		delete [] color;
+		delete color;
 		
 		infoGraph->RenderGraph();
 		return 0;
@@ -1142,8 +1271,12 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	infoGraph->RenderGraph();
 
 	
-	delete [] color;
+	delete color;
 
+	
+	
+	
+	
 	if (dumpStrings) {
 		delete s_stringTable;
 		s_stringTable = NULL;
@@ -1398,7 +1531,7 @@ sint32 infowin_UpdatePollutionData( void )
 		sprintf(strbuf, "%d", turnsLeft);
 		double const	val0 = g_thePollution->GetGlobalPollutionLevel();
 		double const	val1 = g_thePollution->GetNextTrigger();
-		percent = static_cast<sint32>(100.0 * (val0 / val1));
+		percent	= 100 * (val0 / val1);
 	}
 
 	s_pollutionBox->SetText(strbuf);
@@ -1673,14 +1806,15 @@ sint32 infowin_LabReady()
 		if(!p)
 			return FALSE;
 	}
+	EndGame *endGame = p->m_endGame;
 
 	
-//	for (sint32 i = 0; i < g_theEndGameDB->m_nRec; i++) 
-//	{
+	for (sint32 i = 0; i < g_theEndGameDB->m_nRec; i++) 
+	{
 		
 		
 		
-//	}
+	}
 
 	return FALSE;
 }
@@ -1713,9 +1847,9 @@ sint32 infowin_GetWonderCityName( sint32 index, MBCHAR *name)
 
 InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -1855,7 +1989,11 @@ void InfoBigListItem::Update(void)
 	CityData *cd = m_city.GetData()->GetCityData();
 	cd->GetPop(cityPop);
 
+	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
+
+	
 	subItem = (c3_Static *)GetChildByIndex(0);
+
 	
 	MBCHAR name[ 80 + 1 ];
 	strncpy( name, m_name, 80 );
@@ -1881,6 +2019,7 @@ void InfoBigListItem::Update(void)
 
 	
 	uint64 wonders = cd->GetBuiltWonders();
+	sint32 obsolete = 0;
 	sint32 ageCount = g_theAgeDB->NumRecords();
 
 	
@@ -1935,6 +2074,11 @@ void InfoBigListItem::Update(void)
 
 sint32 InfoBigListItem::Compare(c3_ListItem *item2, uint32 column)
 {	
+	sint32 result = 0;
+
+
+	if (column < 0) return 0;
+
 	return 0;
 }
 
@@ -1943,9 +2087,9 @@ sint32 InfoBigListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2048,9 +2192,9 @@ sint32 InfoWonderListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2135,9 +2279,9 @@ sint32 InfoScoreListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -2200,9 +2344,9 @@ sint32 InfoScoreLabelListItem::Compare(c3_ListItem *item2, uint32 column)
 
 InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,69 +16,92 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired, cleanup in destructor.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "hotseatlist.h"
 
-#include <algorithm>			// std::fill
+
 #include "aui.h"
 #include "aui_uniqueid.h"
+#include "c3ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_hypertextbox.h"
+
 #include "c3_static.h"
-#include "c3ui.h"
 #include "thermometer.h"
+
+
 #include "textbutton.h"
 #include "c3_button.h"
+
+
 #include "c3textfield.h"
+
+
 #include "c3listbox.h"
 #include "c3_listbox.h"
 #include "aui_listbox.h"
+
+
 #include "c3window.h"
 #include "c3windows.h"
 #include "c3_popupwindow.h"
 #include "c3_utilitydialogbox.h"
 #include "SelItem.h"
-#include "player.h"					// g_player
+
+
+
+
+#include "player.h"
 #include "UnitRec.h"
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
 #include "citydata.h"
-#include "StrDB.h"					// g_theStringDB
+#include "StrDB.h"
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "TerrainRecord.h"
+
 #include "UIUtils.h"
+
 #include "network.h"
+
 #include "keypress.h"
-#include "CivilisationRecord.h"
+
+#include "hotseatlist.h"
+#include "CivilisationDB.h"
+
 #include "gameinit.h"
-#include "profileDB.h"				// g_theProfileDB
+
+#include "profileDB.h"
+
+
 #include "CivilisationPool.h"
-#include "civscenarios.h"			// g_civScenarios
+
+#include "civscenarios.h"
 #include "gamefile.h"
 
 extern C3UI			*g_c3ui;
+extern Player **g_player;
+extern StringDB *g_theStringDB;
+extern CivilisationDatabase *g_theCivilisationDB;
 
 HotseatList *g_hotseatList = NULL;
+extern ProfileDB *g_theProfileDB;
 
+extern CivScenarios *g_civScenarios;
 
 
 
@@ -135,7 +157,7 @@ void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint3
 
 HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -167,7 +189,7 @@ HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 
 sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -332,12 +354,14 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 	sint32 realCiv = curCiv;
 	curCiv = g_theCivilisationDB->m_indexToAlpha[curCiv];
 
+	sint32	oldCiv = curCiv;
+	
 	sint32	numEnabledCivs = hotseatlist_NumEnabled();
 
 	while(!found) {
 		do {
 			curCiv++;
-			if(curCiv >= g_theCivilisationDB->NumRecords())
+			if(curCiv >= g_theCivilisationDB->m_nRec)
 				curCiv = 0;
 		} while(g_theCivilisationDB->m_alphaToIndex[curCiv] == 0); 
 
@@ -390,9 +414,9 @@ HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
 								 sint32 civ, BOOL isHuman, MBCHAR *email,
 								 MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	m_index = index;
 
@@ -494,7 +518,7 @@ void HotseatListItem::Update(void)
 
 	
 	subButton = (c3_Button *)GetChildByIndex(0);
-	subButton->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(m_civ)->GetSingularCivName()));
+	subButton->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(m_civ)->m_singular_name));
 
 	
 	if (hotseatlist_PlayerCivsLocked()) {
@@ -591,8 +615,14 @@ BOOL		s_playerCivsLocked;
 
 void hotseatlist_ClearOptions(void)
 {
-	std::fill(s_hotseatCivList, s_hotseatCivList + k_MAX_PLAYERS, (CIV_INDEX) 0);
-	std::fill(s_legalCivList, s_legalCivList + CIV_INDEX_INVALID, FALSE);
+	for(sint32 i=0; i<k_MAX_PLAYERS; i++) {
+		s_hotseatCivList[i] = (CIV_INDEX)0;
+	}
+
+	for (i=0; i<CIV_INDEX_INVALID; i++) {
+		s_legalCivList[i] = FALSE;
+	}
+
 	s_playerCivsLocked = FALSE;
 }
 
@@ -626,7 +656,9 @@ void hotseatlist_EnableAllCivs(void)
 
 void hotseatlist_DisableAllCivs(void)
 {
-	std::fill(s_legalCivList, s_legalCivList + CIV_INDEX_INVALID, FALSE);
+	for (sint32 i=0; i<CIV_INDEX_INVALID; i++) {
+		s_legalCivList[i] = FALSE;
+	}
 }
 
 

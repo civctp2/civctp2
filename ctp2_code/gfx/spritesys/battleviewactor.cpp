@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Battle view actor handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,95 +16,139 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevented NULL-dereferencing crash.
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "battleviewactor.h"
 
+#include "aui.h"
 #include "aui_surface.h"
-#include "colorset.h"
-#include "primitives.h"
-#include "soundmanager.h"       // g_soundManager
-#include "SpriteGroupList.h"
+
+#include "TileInfo.h"
+
+#include "Unit.h"	
+#include "UnitData.h"
+#include "screenmanager.h"
+
+#include "FacedSprite.h"
+#include "UnitSpriteGroup.h"
 #include "SpriteState.h"
-#include "tiledmap.h"           // g_tiledMap
+#include "Actor.h"
+#include "SpriteGroupList.h"
+#include "tiledmap.h"
+#include "tileset.h"
+#include "Anim.h"
+#include "battleviewactor.h"
+#include "ActorPath.h"
+#include "Action.h"
 
-extern SpriteGroupList *        g_unitSpriteGroupList;
+#include "director.h"
+#include "UnitPool.h"
+#include "SpriteStateDB.h"
+#include "primitives.h"
 
-BattleViewActor::BattleViewActor
-(
-    SpriteState *       ss, 
-    Unit                id, 
-    sint32              unitType, 
-    const MapPoint &    pos, 
-    sint32              owner
-)
-: 
-    Actor               (ss),
-	m_pos               (pos),
-	m_unitID            (id),
-	m_unitDBIndex       (unitType),
-	m_playerNum         (owner),
-    m_unitSpriteGroup   (NULL),
-	m_facing            (k_DEFAULTSPRITEFACING),
-	m_frame             (0),
-	m_transparency      (15),
-	m_curAction         (NULL),
-	m_curUnitAction     (UNITACTION_NONE),
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-	m_type              (GROUPTYPE_UNIT),
-	m_spriteID          (0),
-    m_hitPoints         (0.0),
-    m_hitPointsMax      (0.0),
-	m_isFortified       (false)
+#include "soundmanager.h"
+#include "colorset.h"
+
+extern SpriteGroupList	*g_unitSpriteGroupList;
+extern TiledMap			*g_tiledMap;
+extern Director			*g_director;
+extern UnitPool         *g_theUnitPool;
+extern World			*g_theWorld;
+extern ScreenManager	*g_screenManager;
+extern SpriteStateDB	*g_theCitySpriteStateDB;
+extern SoundManager		*g_soundManager;
+extern ColorSet			*g_colorSet;
+
+BattleViewActor::BattleViewActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, sint32 owner)
+: Actor(ss)
+{	
+	uint32 spriteID;
+
+	GetIDAndType(owner, ss, id, unitType, (MapPoint)pos, &spriteID, &m_type);
+	m_spriteID = (sint32)spriteID;
+
+	m_spriteState = ss;
+	m_unitDBIndex = unitType;
+	m_playerNum = owner;
+	m_unitID = id;
+	m_pos = pos;
+
+	Initialize();
+	
+	m_facing = k_DEFAULTSPRITEFACING;
+}
+
+void BattleViewActor::Initialize(void)
 {
-    if (ss)
-    {
-        m_spriteID = static_cast<uint32>(ss->GetIndex());
-    }
+	
+	m_curAction = NULL;
+	m_animPos = 0;
 
-    if (g_unitSpriteGroupList)
-    {
-	    m_unitSpriteGroup = 
-            (UnitSpriteGroup *) g_unitSpriteGroupList->GetSprite
-                (m_spriteID, m_type, LOADTYPE_FULL, (GAME_ACTION) 0);
-    }
+	m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_FULL,(GAME_ACTION)0);
+
+	m_x = 0;
+	m_y = 0;
+
+	m_frame = 0;
+
+	m_transparency = 15;
+
+	m_hitPoints = 0;
+	m_hitPointsMax = 0;
+
+	m_isFortified = FALSE;
+
+	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 
 	AddIdle();
+}
+
+void BattleViewActor::GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, 
+								uint32 *spriteID, GROUPTYPE *groupType)
+{
+	*spriteID = ss->GetIndex();
+	*groupType = GROUPTYPE_UNIT;
 }
 
 BattleViewActor::~BattleViewActor()
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Deleting actor at %lx, unit=%lx\n", this, m_unitID.m_id));
 
-    DumpAllActions();
 	
-	if (m_unitSpriteGroup && g_unitSpriteGroupList) 
-    {
+	DumpAllActions();
+
+	
+	if (m_unitSpriteGroup != NULL) {
 		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
 	}
 
-	delete m_curAction;
+	m_actionQueue.Deallocate();
+
+	
+
+
+	
+	if (m_curAction) delete m_curAction;
 }
 
 
 void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 {
-	Anim * anim = CreateAnim(UNITACTION_IDLE);
+	Anim		*anim;
 
+	anim = GetAnim(UNITACTION_IDLE);
+
+	
 	if (anim == NULL) 
 	{
-		anim = CreateAnim(UNITACTION_MOVE);
+		anim = GetAnim(UNITACTION_MOVE);
 		Assert(anim != NULL);
 	}
 
@@ -239,9 +282,9 @@ void BattleViewActor::AddAction(Action *actionObj)
 	
 	
 	
-	if (m_unitID.IsValid()) 
+	if(g_theUnitPool->IsValid(GetUnitID())) 
 	{
-		m_playerNum = m_unitID.GetOwner();
+		m_playerNum = GetUnitID().GetOwner();
 	}
 
 	
@@ -252,7 +295,7 @@ void BattleViewActor::AddAction(Action *actionObj)
 
 }
 
-Anim *BattleViewActor::CreateAnim(UNITACTION action)
+Anim *BattleViewActor::GetAnim(UNITACTION action)
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return NULL;
@@ -278,7 +321,9 @@ Anim *BattleViewActor::CreateAnim(UNITACTION action)
 		}
 	}
 
-	Anim * anim = new Anim(*origAnim);
+	Anim	*anim = new Anim();
+	*anim = *origAnim;
+	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
 
 	if(action == UNITACTION_IDLE)
 	{
@@ -329,9 +374,15 @@ Anim *BattleViewActor::MakeFakeDeath(void)
 
 void BattleViewActor::Draw(BOOL fogged)
 {
-	uint16			flags           = k_DRAWFLAGS_NORMAL;
-	Pixel16			color           = 0x0000;
+	uint16			flags;
+	Pixel16			color;
+	Unit			top;
 	BOOL			directionAttack = FALSE;
+	
+	flags = k_DRAWFLAGS_NORMAL;
+	color = 0x0000;
+
+	
 	
 	if (m_transparency < 15) {
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
@@ -340,7 +391,7 @@ void BattleViewActor::Draw(BOOL fogged)
 	if (fogged)
 		flags |= k_BIT_DRAWFLAGS_FOGGED;
 
-	if (m_curAction == NULL)
+	if(m_curAction == NULL)
 	{
 		
 		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
@@ -355,8 +406,8 @@ void BattleViewActor::Draw(BOOL fogged)
 
 void BattleViewActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 {
-	uint16			flags           = k_DRAWFLAGS_NORMAL;
-	Pixel16			color           = 0x0000;
+	uint16			flags = k_DRAWFLAGS_NORMAL;
+	Pixel16			color=0;
 	BOOL			directionAttack = FALSE;
 
 	if (m_transparency < 15) {
@@ -485,14 +536,14 @@ void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 	primitives_PaintRect16(surf, &leftRect, color);
 }
 
-uint16 BattleViewActor::GetWidth(void) const
+uint16 BattleViewActor::GetWidth(void)
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite * theSprite = 
-        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
+	Sprite	*theSprite;
 
+	theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
 	if (theSprite != NULL) 
 	{
 		return theSprite->GetWidth();
@@ -510,14 +561,14 @@ uint16 BattleViewActor::GetWidth(void) const
 	}
 }
 
-uint16 BattleViewActor::GetHeight(void) const
+uint16 BattleViewActor::GetHeight(void)
 {
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return 0;
 
-	Sprite * theSprite = 
-        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) m_curUnitAction);
+	Sprite	*theSprite;
 
+	theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
 	if (theSprite != NULL) 
 	{
 		return theSprite->GetHeight();
@@ -535,7 +586,7 @@ uint16 BattleViewActor::GetHeight(void) const
 	}
 }
 
-void BattleViewActor::GetBoundingRect(RECT *rect) const
+void BattleViewActor::GetBoundingRect(RECT *rect)
 {
 	Assert(rect != NULL);
 	if (rect == NULL) return;

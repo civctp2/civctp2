@@ -6,11 +6,10 @@
 
 
 #include "c3.h"
-#include "messagelist.h"
 
 
-#include "SelItem.h"        // g_selected_item
-#include "profileDB.h"      // g_theProfileDB
+#include "SelItem.h"
+#include "profileDB.h"
 
 
 #include "aui.h"
@@ -38,20 +37,25 @@
 #include "messagewindow.h"
 #include "messageactions.h"
 #include "messagewin.h"
+#include "messagelist.h"
 
 
 extern C3UI				*g_c3ui;
+extern SelectedItem		*g_selected_item;
+extern ProfileDB		*g_theProfileDB;
 extern uint16			g_messageReadPositionY;
 extern uint8			g_messageMaxVisible;
 extern uint8			g_messageIconHeight;
 extern uint8			g_messageIconSpacing;
 
-MessageList::MessageList(PLAYER_INDEX player)
-:
-	m_player    (player),
-	m_iconList  (new tech_WLList<MessageIconWindow *>),
-	m_offset    (0)
+MessageList::MessageList( PLAYER_INDEX player )
 {
+	m_player = player;
+
+	m_iconList = new tech_WLList<MessageIconWindow *>;
+	Assert( m_iconList != NULL );
+
+	m_offset = 0;
 }
 
 MessageList::~MessageList( )
@@ -81,6 +85,7 @@ MessageList::~MessageList( )
 
 	m_iconList->DeleteAll( );
 	delete m_iconList;
+	m_iconList = NULL;
 }
 
 
@@ -129,16 +134,17 @@ AUI_ERRCODE MessageList::CreateMessage( Message data )
 
 void MessageList::HideVisibleWindows( void )
 {
+	MessageIconWindow	*iconWindow = NULL;
+	MessageWindow		*window = NULL;
+	
 	if ( !m_iconList ) return;
 
 	ListPos position = m_iconList->GetHeadPosition();
 
-	for ( uint32 count = m_iconList->L(); count; count-- ) 
-    {
-		MessageIconWindow * iconWindow = m_iconList->GetNext( position );
-		if (iconWindow) 
-        {
-			MessageWindow * window = iconWindow->GetWindow();
+	for ( uint32 count = m_iconList->L(); count; count-- ) {
+		iconWindow = m_iconList->GetNext( position );
+		if (iconWindow) {
+			window = iconWindow->GetWindow();
 
 			iconWindow->SetCurrentIconButton( NULL );
 
@@ -161,7 +167,7 @@ void MessageList::CheckVisibleMessages( void )
 
 
 return;
-#if 0   // CTP1?
+
 	uint32 minCount = m_offset;
 	uint32 maxCount = ( m_offset + g_messageMaxVisible );
 	uint32 count = 0;
@@ -214,7 +220,7 @@ return;
 	else  
 		messagewin_LessMessagesIcon( FALSE );
 
-#endif
+
 
 }
 

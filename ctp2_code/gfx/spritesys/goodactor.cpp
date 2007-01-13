@@ -1,100 +1,57 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Good actor
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _ACTOR_DRAW_OPTIMIZATION
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
-#include "GoodActor.h"
 
 #include "aui.h"
 #include "pixelutils.h"
 #include "tileutils.h"
 
 #include "Unit.h"
+#include "dynarr.h"
 
-#include "SelItem.h"                // g_selected_item
+#include "SelItem.h"
 
 #include "FacedSprite.h"
 #include "GoodSpriteGroup.h"
 #include "SpriteState.h"
 #include "Actor.h"
 #include "SpriteGroupList.h"
-#include "tiledmap.h"               // g_tiledMap
+#include "tiledmap.h"
 #include "Anim.h"
+#include "GoodActor.h"
+
 
 #include "ActorPath.h"
 #include "Action.h"
-#include "director.h"               // g_director
+#include "director.h"
 #include "maputils.h"
 #include "civarchive.h"
 
-extern SpriteGroupList	*   g_goodSpriteGroupList;
-
-namespace
-{
-    /// Default transparency value
-    /// @todo Move to better location
-    uint16 const        TRANSPARENCY_DEFAULT    = 15;
-}
+extern SpriteGroupList	*g_goodSpriteGroupList;
+extern TiledMap			*g_tiledMap;
+extern Director			*g_director;
+extern SelectedItem		*g_selected_item;
 
 GoodActor::GoodActor(sint32 index, const MapPoint &pos)
-:
-    Actor               (),
-    m_facing            (0),
-    m_frame             (0),
-    m_transparency      (TRANSPARENCY_DEFAULT),
-    m_index             (index),
-	m_pos               (pos),
-    m_goodSpriteGroup   (NULL),
-    m_curAction         (NULL),
-    m_curGoodAction     (GOODACTION_IDLE),     
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-    m_loadType          (LOADTYPE_BASIC)
 {
-	Assert(g_goodSpriteGroupList);
-    if (g_goodSpriteGroupList)
-    {
-	    m_goodSpriteGroup = (GoodSpriteGroup *)
-            g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
-    }
-
-	AddIdle();
+	Initialize(index, pos);
 }
 
-/// @todo Replace with proper copy constructor
 GoodActor::GoodActor(GoodActor *copy)
 {
 	*this = *copy;
 
-    if (m_curAction)
-    {
-	    m_curAction = new Action(m_curAction);
-    }
+	m_curAction = new Action(m_curAction);
 
 	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, GetLoadType(),(GAME_ACTION)0);
 
@@ -103,58 +60,62 @@ GoodActor::GoodActor(GoodActor *copy)
 
 
 GoodActor::GoodActor(CivArchive &archive)
-:
-    Actor               (),
-    m_facing            (0),
-    m_frame             (0),
-    m_transparency      (TRANSPARENCY_DEFAULT),
-    m_index             (0),
-	m_pos               (),
-    m_goodSpriteGroup   (NULL),
-    m_curAction         (NULL),
-    m_curGoodAction     (GOODACTION_IDLE),     
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-    m_loadType          (LOADTYPE_BASIC)
 {
 	Serialize(archive);
-
-	Assert(g_goodSpriteGroupList);
-    if (g_goodSpriteGroupList)
-    {
-	    m_goodSpriteGroup = (GoodSpriteGroup *)
-            g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
-    }
-
-	AddIdle();
 }
 
 GoodActor::~GoodActor()
 {
-    delete m_curAction;
+	DumpAllActions();
 
-	while (m_actionQueue.GetNumItems() > 0) 
-    {
-        Action *    action  = NULL;
-		m_actionQueue.Dequeue(action);
-		delete action;
-	}
+	g_goodSpriteGroupList->ReleaseSprite(m_index, GetLoadType());
 
-    if (g_goodSpriteGroupList && m_goodSpriteGroup)
-    {
-	    g_goodSpriteGroupList->ReleaseSprite(m_index, GetLoadType());
-    }
+	m_actionQueue.Deallocate();
+}
 
+void GoodActor::Initialize(sint32 index, const MapPoint &pos)
+{
+	GROUPTYPE		type;
+
+	m_curAction = NULL;
+	m_animPos = 0;
+
+	type = GROUPTYPE_GOOD;
+
+	m_loadType = LOADTYPE_BASIC;
+
+	Assert(g_goodSpriteGroupList);
+
+	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(index, type, GetLoadType(),(GAME_ACTION)0);
+
+	AddIdle();
+
+	m_pos = pos;
+
+	m_x = 0;
+	m_y = 0;
+
+	m_facing = 0;
+	m_frame = 0;
+
+	m_index = index;
+
+	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
+	
 }
 
 void GoodActor::FullLoad(void)
-{ // Doesn't seem to do much
+{
 	if (!m_goodSpriteGroup) return;
 	if (m_loadType == LOADTYPE_FULL) return;
 
 	SpriteGroup *group = g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, LOADTYPE_FULL,(GAME_ACTION)0);
-	Assert(group == m_goodSpriteGroup);
 	
 	m_loadType = LOADTYPE_FULL;
+
+	
+	Assert(group == m_goodSpriteGroup);
+
 	m_frame = 0;
 }
 
@@ -163,7 +124,7 @@ void GoodActor::DumpFullLoad(void)
 	if (!m_goodSpriteGroup) return;
 	if (m_loadType != LOADTYPE_FULL) return;
 
-	bool purged = g_goodSpriteGroupList->ReleaseSprite(m_index, LOADTYPE_FULL);
+	BOOL purged = g_goodSpriteGroupList->ReleaseSprite(m_index, LOADTYPE_FULL);
 
 	if (purged) {
 		m_goodSpriteGroup = NULL;
@@ -178,41 +139,49 @@ void GoodActor::DumpFullLoad(void)
 void GoodActor::PositionActor(MapPoint &pos)
 {
 	sint32 pixelX, pixelY;
+
 	maputils_MapXY2PixelXY(pos.x, pos.y, &pixelX, &pixelY);
-    Actor::SetPos(pixelX, pixelY);
+
+	
+
+	
+
+
+	SetX(pixelX);
+	SetY(pixelY);
+
 	SetPos(pos);
 }
 
 void GoodActor::AddIdle(void)
 {
+	
 	if (m_curAction) return;
 
 	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_ANIMEND);
 
-	Anim * anim = CreateAnim(GOODACTION_IDLE);
-	if (anim) 
-    {
-	    m_curAction->SetAnim(anim);
-	    m_curAction->SetDelay(0);
-	    m_curGoodAction = GOODACTION_IDLE;
-    }
+	Anim	*anim = GetAnim(GOODACTION_IDLE);
+	if (!anim) return;
+
+	m_curAction->SetAnim(anim);
+	m_curAction->SetDelay(0);
+
+	m_curGoodAction = GOODACTION_IDLE;
 }
 
 void GoodActor::Process(void)
 {
+	
+
 	sint32		tickCount = GetTickCount();
 
-	if (m_curAction) 
-    {
+	if (m_curAction) {
 		m_curAction->Process();
 
 		
-		if (m_curAction->Finished()) 
-        {
+		if (m_curAction->Finished()) {
 			if (m_curAction->GetDelay() > 0 &&
-				tickCount > m_curAction->GetDelay()
-               ) 
-            {
+				tickCount > m_curAction->GetDelay()) {
 				MapPoint  end;
 				m_curAction->GetEndMapPoint(end);
 				if (end.x != 0 || end.y != 0) {
@@ -230,11 +199,12 @@ void GoodActor::Process(void)
 		}
 	}
 
-	if (m_curAction) 
-    {
+	if (m_curAction != NULL) {
 		sint32 x, y;
+
 		maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
-        Actor::SetPos(x, y);
+		m_x = x;
+		m_y = y;
 
 		
 		m_frame = m_curAction->GetSpriteFrame();
@@ -242,9 +212,14 @@ void GoodActor::Process(void)
 		
 		m_transparency = m_curAction->GetTransparency();
 
-		if (m_curAction->GetPath()) 
-        {
-            Actor::SetPos(m_curAction->GetPosition());
+		POINT curPt;
+
+		
+		if (m_curAction->GetPath() != NULL) {
+			
+			curPt = m_curAction->GetPosition();
+			m_x = curPt.x;
+			m_y = curPt.y;
 		}
 		
 		m_facing = m_curAction->GetFacing();
@@ -253,8 +228,10 @@ void GoodActor::Process(void)
 
 void GoodActor::GetNextAction(void)
 {
-	delete m_curAction;
-	m_curAction = NULL;
+	if (m_curAction) {
+		delete m_curAction;
+		m_curAction = NULL;
+	}
 
 	if (m_actionQueue.GetNumItems() > 0) {
 		m_actionQueue.Dequeue(m_curAction);
@@ -288,7 +265,25 @@ void GoodActor::AddAction(Action *actionObj)
 	}
 }
 
-Anim *GoodActor::CreateAnim(GOODACTION action)
+void GoodActor::DumpAllActions(void)
+{
+	if (m_curAction) {
+		delete m_curAction;
+		m_curAction = NULL;
+	}
+
+	Action *action;
+	while (m_actionQueue.GetNumItems() > 0) {
+		m_actionQueue.Dequeue(action);
+		if (action) {
+			delete action;
+		}
+	}
+
+}
+
+
+Anim *GoodActor::GetAnim(GOODACTION action)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return NULL;
@@ -297,10 +292,18 @@ Anim *GoodActor::CreateAnim(GOODACTION action)
 	Anim	*origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)action);
 	if (origAnim == NULL) 
 	{
+		
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
+		Assert(origAnim != NULL);
+		return NULL;
 	}
 
-    return origAnim ? new Anim(*origAnim) : NULL;
+	Anim	*anim = new Anim();
+	*anim = *origAnim;
+	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
+
+	return anim;
+
 }
 
 void GoodActor::DrawSelectionBrackets(void)
@@ -344,7 +347,7 @@ void GoodActor::DrawSelectionBrackets(void)
 	g_tiledMap->DrawColorizedOverlayIntoMix(botLeft, rect.left, rect.bottom);
 }
 
-bool GoodActor::Draw(bool fogged)
+BOOL GoodActor::Draw(BOOL fogged)
 {
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;
@@ -365,11 +368,12 @@ bool GoodActor::Draw(bool fogged)
 	if ( ( m_frame == m_oldFrame ) && 
 		( m_x+xoffset == m_oldOffsetX ) && ( m_y+yoffset == m_oldOffsetY ) )
 	{
-		if (m_paintTwice < 2)
+		if ( m_paintTwice > 1 )
 		{
-		    m_paintTwice++;
+			return ( FALSE );
 		}
-		return false;
+		m_paintTwice ++;
+		return FALSE;
 	}
 
 	m_paintTwice = 0;
@@ -391,7 +395,7 @@ bool GoodActor::Draw(bool fogged)
 		}
 	}
 
-	return true;
+	return TRUE;
 }
 
 void GoodActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
@@ -407,12 +411,12 @@ void GoodActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
 							m_transparency, color, flags);
 }
 
-void GoodActor::DrawText(sint32 x, sint32 y, MBCHAR const * goodText)
+void GoodActor::DrawText(sint32 x, sint32 y, MBCHAR *goodText)
 {
 	m_goodSpriteGroup->DrawText(x, y, goodText);
 }
 
-POINT GoodActor::GetHotpoint(void) const
+POINT GoodActor::GetHotpoint(void)
 {
 	POINT pt = {0,0};
 
@@ -422,30 +426,43 @@ POINT GoodActor::GetHotpoint(void) const
 	return m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)GOODACTION_IDLE)->GetHotPoint();
 }
 
-bool GoodActor::IsAnimating(void) const
+BOOL GoodActor::IsAnimating(void)
 {
-	return false;
+	
+	return FALSE;
 }
 
-uint16 GoodActor::GetWidth(void) const
-{
-	Assert(m_goodSpriteGroup != NULL);
-	if (m_goodSpriteGroup == NULL) return 0;
-
-	Sprite	*   theSprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
-    return (theSprite) ? theSprite->GetWidth() : 0;
-}
-
-uint16 GoodActor::GetHeight(void) const
+uint16 GoodActor::GetWidth(void)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return 0;
 
-	Sprite *    theSprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
-    return (theSprite) ? theSprite->GetHeight() : 0;
+	Sprite	*theSprite;
+
+	theSprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
+	if (theSprite != NULL) {
+		return theSprite->GetWidth();
+	} else {
+		return 0;
+	}
 }
 
-void GoodActor::GetBoundingRect(RECT *rect) const
+uint16 GoodActor::GetHeight(void)
+{
+	Assert(m_goodSpriteGroup != NULL);
+	if (m_goodSpriteGroup == NULL) return 0;
+
+	Sprite	*theSprite;
+
+	theSprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
+	if (theSprite != NULL) {
+		return theSprite->GetHeight();
+	} else {
+		return 0;
+	}
+}
+
+void GoodActor::GetBoundingRect(RECT *rect)
 {
 	Assert(rect != NULL);
 	if (rect == NULL) return;
@@ -467,14 +484,14 @@ void GoodActor::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
 
-	if (archive.IsStoring()) 
-    {
+	if(archive.IsStoring()) {
 		archive << m_index;
 		m_pos.Serialize(archive);
-	} 
-    else 
-    {
+	} else {
 		archive >> m_index;
 		m_pos.Serialize(archive);
+
+		
+		Initialize(m_index, m_pos);
 	}
 }

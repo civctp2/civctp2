@@ -25,7 +25,7 @@ class LDLString {
 		delete [] m_name;
 	}
 
-	char * GetName() const { return m_name; }
+	char *GetName() const { return m_name; }
 };
 
 StringHash<LDLString> *s_ldlStringHash = NULL;
@@ -41,7 +41,7 @@ void ldlif_report_error(char *text)
 	c3errors_ErrorDialog("LDL", text);
 }
 
-ldl_datablock *ldlif_find_block(char const * name)
+ldl_datablock *ldlif_find_block(char *name)
 {
 	Comparable<ldl_datablock *> *myKey;
 	ldl_datablock dummy(aui_UI::CalculateHash(name));
@@ -54,7 +54,7 @@ ldl_datablock *ldlif_find_block(char const * name)
 
 int ldlif_find_file(const char *filename, char *fullpath)
 {
-	if(!g_civPaths->FindFile(C3DIR_LAYOUT, filename, fullpath))
+	if(!g_civPaths->FindFile(C3DIR_LAYOUT, (char *)filename, fullpath))
 		return 0;
 	return 1;
 }

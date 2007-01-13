@@ -76,9 +76,16 @@ public:
 protected:
 	
 	aui_Control *m_dragDropItem;
+
+	
 	aui_Region *m_launchPad;
 
+
+#if defined(_MSC_VER)	
+	virtual MouseEventCallback MouseLDropOutside;
+#else
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
+#endif
 };
 
 

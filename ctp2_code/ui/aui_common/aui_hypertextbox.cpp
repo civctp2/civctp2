@@ -19,6 +19,9 @@
 
 #include "aui_hypertextbox.h"
 
+#pragma optimize ("", off)
+
+
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -26,9 +29,9 @@ aui_HyperTextBox::aui_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_HyperTextBase( retval, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -55,9 +58,9 @@ aui_HyperTextBox::aui_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_HyperTextBase( retval, NULL, 0 )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -76,7 +79,15 @@ aui_HyperTextBox::aui_HyperTextBox(
 
 AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -124,6 +135,8 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
+	
+	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -131,7 +144,7 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_ranger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -165,7 +178,11 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 
 aui_HyperTextBox::~aui_HyperTextBox()
 {
-	delete m_ranger;
+	if ( m_ranger )
+	{
+		delete m_ranger;
+		m_ranger = NULL;
+	}
 }
 
 
@@ -233,7 +250,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 			case 'c':
 			{
-				unsigned int r, g, b;
+				uint8 r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperColorOld = m_hyperColor;
 				m_hyperColor = RGB(r,g,b);
@@ -254,7 +271,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 			case 'h':
 			{
-				unsigned int r, g, b;
+				uint32 r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperShadowColor = RGB(r,g,b);
 			}
@@ -400,9 +417,9 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				}
 
 				
-				if (m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS)
+				if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
 				{
-					delete m_hyperStaticList->RemoveHead();
+					DestroyHyperStatic( m_hyperStaticList->RemoveHead() );
 
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
@@ -544,3 +561,4 @@ void HyperTextBoxRangerActionCallback(
 	}
 }
 
+#pragma optimize ("", on)

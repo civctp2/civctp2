@@ -15,7 +15,7 @@
 
 #include "network.h"
 #include "civarchive.h"
-#include "Globals.h"
+#include "globals.h"
 
 
 
@@ -202,8 +202,8 @@ void MessagePool::DoNetwork(MessageData *newData)
 {
 	
 	return;
-#if 0   // Unreachable
-    if(g_network.IsClient()) {
+
+	if(g_network.IsClient()) {
 		Assert(newData->GetSender() == g_network.GetPlayerIndex() ||
 			   newData->GetSender() == PLAYER_INDEX_INVALID);
 		if(newData->GetSender() == g_network.GetPlayerIndex() ||
@@ -220,7 +220,6 @@ void MessagePool::DoNetwork(MessageData *newData)
 			g_network.Unblock(newData->GetSender());
 		}
 	}
-#endif
 }
 
 void MessagePool::NotifySlicReload()

@@ -1,40 +1,21 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Squad 
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _DEBUG		
-// - Generate debug version when set.
-// 
-// _DEBUG_SCHEDULER
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma warning(disable: 4786)
 
 #include "c3.h"
 
-#include "Squad.h"
-#include "agent.h"
+#include "squad.h"
+#include "Agent.h"
 #include "ctpagent.h"
 #include "Plan.h"
 
@@ -377,7 +358,7 @@ Agent_List::const_iterator Squad::Remove_Agent(const Agent_List::const_iterator 
 
 		
 		Scheduler::GetScheduler(playerId).Validate();
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
         
         delete the_agent;
@@ -385,7 +366,7 @@ Agent_List::const_iterator Squad::Remove_Agent(const Agent_List::const_iterator 
 #ifdef _DEBUG_SCHEDULER
 		
 		Scheduler::GetScheduler(playerId).Validate();
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
     }
     
@@ -408,6 +389,7 @@ Agent_List::const_iterator Squad::Remove_Agent(const Agent_List::const_iterator 
 
 SQUAD_CLASS Squad::Compute_Squad_Class()
 {
+	
 	Agent_List::iterator agent_iter;
 	
 

@@ -56,12 +56,12 @@ class tech_WLList
 {
 public:
 	
-	tech_WLList( size_t blockSize = k_TECH_WLLIST_DEFAULT_BLOCKSIZE );
+	tech_WLList( unsigned long blockSize = k_TECH_WLLIST_DEFAULT_BLOCKSIZE );
 	virtual ~tech_WLList();
 
 	
-	size_t  L( void ) const { return m_length; }
-	bool    IsEmpty( void ) const { return m_length == 0; }
+	unsigned long L( void ) const { return m_length; }
+	int IsEmpty( void ) const { return m_length == 0; }
 
 	
 	T &GetHead( void ) { return m_pHead->element; }
@@ -74,7 +74,7 @@ public:
 	T RemoveTail( void );
 
 	
-	size_t RemoveDuplicates( void );
+	unsigned long RemoveDuplicates( void );
 
 	
 	ListPos AddHead( const T &newElement );
@@ -110,9 +110,9 @@ public:
 	
 	ListPos Find( const T &searchElement, ListPos startAt = (ListPos)0 ) const;
 		
-	ListPos FindIndex( size_t index ) const;
+	ListPos FindIndex( unsigned long index ) const;
 		
-	T GetAtIndex( size_t index ) const;
+	T GetAtIndex( unsigned long index ) const;
 		
 
 protected:
@@ -129,7 +129,7 @@ protected:
 	
 	void DeleteLink( Link *&pLink );
 
-	size_t m_length;		
+	unsigned long m_length;		
 	Link *m_pHead;				
 	Link *m_pTail;				
 
@@ -144,7 +144,7 @@ protected:
 
 
 template< class T >
-tech_WLList< T >::tech_WLList( size_t blockSize )
+tech_WLList< T >::tech_WLList( unsigned long blockSize )
 	:
 	m_length( 0 ),
 	m_pHead( 0 ),
@@ -158,7 +158,14 @@ tech_WLList< T >::tech_WLList( size_t blockSize )
 template< class T >
 tech_WLList< T >::~tech_WLList()
 {
-	delete m_memory;
+	if ( m_memory )
+	{
+		delete m_memory;
+		m_memory = 0;
+	}
+
+	m_length = 0;
+	m_pHead = m_pTail = 0;
 }
 
 
@@ -337,17 +344,13 @@ void tech_WLList< T >::AddTail( const tech_WLList &NewList )
 template< class T >
 T tech_WLList< T >::RemoveHead( void )
 {
-	Link *  pOldLink    = m_pHead;
-	T       theElement  = pOldLink->element;
-    m_pHead = pOldLink->pNext;
-	if (m_pHead)
-    {
-		m_pHead->pPrev = NULL;
-    }
+	Link *pOldLink = m_pHead;
+	T theElement = pOldLink->element;
+
+	if ( (m_pHead = pOldLink->pNext) )
+		m_pHead->pPrev = 0;
 	else
-    {
-		m_pTail = NULL;
-    }
+		m_pTail = 0;
 
 	DeleteLink( pOldLink );
 
@@ -358,18 +361,13 @@ T tech_WLList< T >::RemoveHead( void )
 template< class T >
 T tech_WLList< T >::RemoveTail( void )
 {
-	Link *  pOldLink    = m_pTail;
-	T       theElement  = pOldLink->element;
+	Link *pOldLink = m_pTail;
+	T theElement = pOldLink->element;
 
-    m_pTail = m_pTail->pPrev;
-	if (m_pTail)
-    {
-		m_pTail->pNext = NULL;
-    }
+	if ( (m_pTail = pOldLink->pPrev) )
+		m_pTail->pNext = 0;
 	else
-    {
-		m_pHead = NULL;
-    }
+		m_pHead = 0;
 
 	DeleteLink( pOldLink );
 
@@ -429,29 +427,19 @@ void tech_WLList< T >::DeleteAt( ListPos position )
 
 	if ( pOldLink == m_pHead )
 	{
-        m_pHead = pOldLink->pNext;
-		if (m_pHead)
-        {
+		if ( m_pHead = pOldLink->pNext )
 			m_pHead->pPrev = NULL;
-        }
 	}
 	else
-    {
 		pOldLink->pPrev->pNext = pOldLink->pNext;
-    }
 
 	if ( pOldLink == m_pTail )
 	{
-        m_pTail = pOldLink->pPrev;
-		if (m_pTail)
-        {
+		if ( m_pTail = pOldLink->pPrev )
 			m_pTail->pNext = NULL;
-        }
-    }
+	}
 	else
-    {
 		pOldLink->pNext->pPrev = pOldLink->pPrev;
-    }
 
 	DeleteLink( pOldLink );
 }
@@ -473,7 +461,7 @@ void tech_WLList< T >::DeleteAll( void )
 
 
 template< class T >
-ListPos tech_WLList< T >::FindIndex( size_t index ) const
+ListPos tech_WLList< T >::FindIndex( unsigned long index ) const
 {
 	if ( index >= m_length )
 		return (ListPos)0;
@@ -487,7 +475,7 @@ ListPos tech_WLList< T >::FindIndex( size_t index ) const
 
 
 template< class T >
-T tech_WLList< T >::GetAtIndex( size_t index ) const
+T tech_WLList< T >::GetAtIndex( unsigned long index ) const
 {
 	
 
@@ -517,23 +505,23 @@ ListPos tech_WLList< T >::Find( const T &searchElement, ListPos startAt ) const
 
 
 template< class T >
-size_t tech_WLList< T >::RemoveDuplicates( void )
+unsigned long tech_WLList< T >::RemoveDuplicates( void )
 {
-	size_t numDupsFound = 0; 
+	unsigned long numDupsFound = 0; 
 
 	
 	ListPos outerPosition = m_pHead;
 
 
 
-	for (size_t i = m_length; i; i-- )	
+	for ( sint32 i = m_length - 1; i >= 0; i-- )	
 													
 	{
 		T element = GetNext( outerPosition );
 
 		
 		ListPos innerPosition = outerPosition;
-		for (size_t j = i - 1; j; j-- )
+		for ( sint32 j = i; j; j-- )
 		{
 			ListPos position = innerPosition;
 

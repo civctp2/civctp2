@@ -16,60 +16,48 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-// Generate extra debug output
 // 
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Microsoft specifics marked.
 // - Safeguard FindLevel against infinite recursion.
-// - Speeded up goody hut advance and unit selection.
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
 #ifndef _ADVANCES_H_
 #define _ADVANCES_H_
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
+typedef sint32 AdvanceType;
+class CivArchive;
+class AdvanceRecord;
 
-// #include <>      
+typedef sint32 PLAYER_INDEX;
 
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
+#if defined(_MSC_VER)
+enum CAUSE_SCI;
+#else
+#include "AICause.h"	// CAUSE_SCI
+#endif
 
-class           Advances;
-typedef sint32  AdvanceType;
+#define k_ADVANCES_VERSION_MAJOR	0								
+#define k_ADVANCES_VERSION_MINOR	0								
 
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
-
-#include "AdvanceRecord.h"  // AdvanceRecord
-#include "AICause.h"	    // CAUSE_SCI
-#include "civarchive.h"     // CivArchive
-#include "ctp2_inttypes.h"  // uint8, uint16, sint32
-#include "player.h"         // PLAYER_INDEX
-
-//----------------------------------------------------------------------------
-// Declarations
-//----------------------------------------------------------------------------
-
-uint32 Advances_Advances_GetVersion(void);
-
-
-class Advances 
-{
-
+class Advances {
 private:
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
@@ -82,7 +70,7 @@ private:
 	sint32 m_size;
 	AdvanceType m_researching;
 
-	sint32	m_age;
+	sint32	m_age;	
 
 	sint32 m_theLastAdvanceEnabledThisManyAdvances; 
 	
@@ -103,60 +91,63 @@ private:
 	friend class NetResearch;
 
 public:
-	Advances(size_t a_Count);
-    Advances(Advances const & a_Original);
-	virtual ~Advances();
-
-    Advances & operator = (Advances const & a_Original);
+	
+	Advances(sint32 num);
+	Advances();
+	~Advances();
 
 	void SetOwner(PLAYER_INDEX o);
+	void Copy(Advances *oldCiv);
 
-	sint32 GetNum() const { return m_size; }
+	sint32 GetNum() { return m_size; }
 
 	
 	void UpdateCitySprites(BOOL forceUpdate);
-	bool HasAdvance(sint32 index) const;
+	uint8 HasAdvance(sint32 index);
 	void SetHasAdvance(AdvanceType advance);
 
-	void GrantAdvance();
+	void GrantAdvance();  
 	void GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient = FALSE);
 	void GiveAdvancePlusPrerequisites(AdvanceType adv);
 	void TakeAdvance(AdvanceType adv);
 	void InitialAdvance(AdvanceType adv); 
-	double GetPollutionSizeModifier(void) const;
-	double GetPollutionProductionModifier(void) const;
+	sint32 GetPollutionSizeModifier(void) const ;
+	sint32 GetPollutionProductionModifier(void) const ;
 
-	AdvanceType GetResearching() const { return m_researching; }
+	AdvanceType GetResearching() { return m_researching; }
 	void SetResearching(AdvanceType adv);
 
-	sint32 GetCostOfWhatHeKnows() const { return m_total_cost; }	
+	sint32 Advances::GetCostOfWhatHeKnows() { return m_total_cost; }	
 
-	sint32 GetCost() const;
-	sint32 GetCost(const AdvanceType adv) const;
+	sint32 GetCost();
+	sint32 GetCost(const AdvanceType adv);
 
 	
-	uint8* CanResearch() const;
-	BOOL CanResearch(sint32 advance) const;
+	uint8* CanResearch();
+	BOOL CanResearch(sint32 advance);
 	void ResetCanResearch(sint32 justGot);
-	uint8* CanAskFor(Advances* otherCivAdvances, sint32 &num) const;
-	uint8* CanOffer(Advances* otherCivAdvances, sint32 &num) const;
+	uint8* CanAskFor(Advances* otherCivAdvances, sint32 &num);
+	uint8* CanOffer(Advances* otherCivAdvances, sint32 &num);
 
 	sint32 GetDiscovered() const { return m_discovered; }
 
 	sint32 GetMinPrerequisites(sint32 adv) const;
-	sint32 GetMinPrerequisites(sint32 adv, sint32 limit) const;
 	sint32 FindLevel(AdvanceRecord const * const rec, sint32 const fromLevel = 0) const;
-	
+
 #ifdef _DEBUG
 	void DebugDumpTree();
 #endif
 
-	sint32 GetProjectedScience() const;
-	sint32 TurnsToNextAdvance(AdvanceType adv = -1) const;
+	sint32 GetProjectedScience();
+	sint32 TurnsToNextAdvance(AdvanceType adv = -1);
 
 	void AddAlienLifeAdvance();
 
+	
 	void Serialize(CivArchive &archive);
 };
 
+uint32 Advances_Advances_GetVersion(void) ;
+#else
+class Advances;
 #endif

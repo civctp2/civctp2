@@ -13,7 +13,7 @@
 #include "player.h"
 #include "dynarr.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "gamefile.h"
 
 extern Player **g_player;
@@ -111,11 +111,11 @@ TradeOffer TradeOfferPool::GetTradeOffer(sint32 index)
 {
 	Assert(index >= 0 && index < m_all_offers->Num());
 	if(index < 0 || index >= m_all_offers->Num()) {
-		return TradeOffer();
+		return TradeOffer(0);
 	}
 	Assert(m_all_offers);
 	if(!m_all_offers)
-		return TradeOffer();
+		return TradeOffer(0);
 
 	return m_all_offers->Access(index);
 }

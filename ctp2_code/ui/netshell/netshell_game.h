@@ -17,6 +17,15 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,11 +38,31 @@
 #ifndef __NETSHELL_GAME_H__
 #define __NETSHELL_GAME_H__
 
-// Should match the value in anet.inf
-#define GAMEID 1504	
 
 #include "aui_action.h"
 
-AUI_ACTION_BASIC(DestroyInitialPlayScreenAction);
+
+// Should match the value in anet.inf
+#define GAMEID 1504	
+
+
+class DestroyInitialPlayScreenAction : public aui_Action
+{
+public:
+	DestroyInitialPlayScreenAction() {}
+	virtual ~DestroyInitialPlayScreenAction() {}
+
+#if defined(_MSC_VER)	
+	virtual ActionCallback Execute;
+#else
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
+#endif
+};
+
 
 #endif 

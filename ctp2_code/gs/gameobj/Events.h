@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __EVENTS_H__
 #define __EVENTS_H__
 

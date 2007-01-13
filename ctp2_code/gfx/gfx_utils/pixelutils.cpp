@@ -15,16 +15,18 @@
 #include "c3.h"
 
 #include "pixelutils.h"
-#ifdef WIN32
-#include <windows.h>
-#else
-#include "windows.h"
-#endif
 
 short		gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
 Pixel16		gRGBTable[RGB_VALUES];
 
 extern sint32 g_is565Format;
+
+#ifndef TRUE
+	#define TRUE (0==0)
+#endif
+#ifndef FALSE
+	#define FALSE (0==1)
+#endif
 
 void pixelutils_Initialize(void)
 {

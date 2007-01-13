@@ -1,32 +1,4 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Victory movie window
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 
@@ -74,7 +46,7 @@ static GAME_OVER		s_result;
 
 void victorymoviewin_Initialize(Sequence *seq)
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE		errcode;
 
 	if (g_victoryMovieWindow == NULL) {
 		g_victoryMovieWindow = new VictoryMovieWindow(&errcode, aui_UniqueId(), "VictoryMovieWindow", 16);
@@ -202,7 +174,7 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 
 	
 
-	sint32 type = 0;
+	sint32 type;
 	switch (s_result) {
 	case GAME_OVER_LOST_OUT_OF_TIME :
 	case GAME_OVER_LOST_CONQUERED :

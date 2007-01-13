@@ -1,6 +1,6 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
+
 #ifndef __BFS_H__
 #define __BFS_H__ 1
 
@@ -29,4 +29,4 @@ public:
 
 }; 
 
-#endif // __BFS_H__
+#endif __BFS_H__

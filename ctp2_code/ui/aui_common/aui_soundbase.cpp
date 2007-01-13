@@ -50,7 +50,15 @@ aui_SoundBase::aui_SoundBase( MBCHAR **soundNames )
 
 AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -60,7 +68,9 @@ AUI_ERRCODE aui_SoundBase::InitCommonLdl( MBCHAR *ldlBlock )
 
 	AUI_ERRCODE errcode = InitCommon( soundNames );
 	Assert( AUI_SUCCESS(errcode) );
-	return errcode;
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
+
+	return AUI_ERRCODE_OK;
 }
 
 

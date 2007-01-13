@@ -9,25 +9,24 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __DIRECTVIDEO_H__
 #define __DIRECTVIDEO_H__
+
+
+#include "mmstream.h"
+#include "amstream.h"
+#include "ddstream.h"
+
+#include "aui_directui.h"
+#include "aui_window.h"
 
 enum DVFLAGS {
 	DVFLAGS_ONPRIMARY,
 	DVFLAGS_FULLSCREEN,
 	DVFLAGS_INWINDOW
 };
-
-#ifdef __AUI_USE_DIRECTX__
-#include <mmstream.h>
-#include <amstream.h>
-#include <ddstream.h>
-
-#include "aui_directui.h"
-#include "aui_window.h"
 
 class DirectVideo
 {
@@ -79,6 +78,6 @@ private:
 	uint32						m_timePerFrame;
 	uint32						m_lastFrameTime;
 };
-#endif // __AUI_USE_DIRECTX__
+
 
 #endif

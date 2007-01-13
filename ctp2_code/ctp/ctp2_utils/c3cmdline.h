@@ -15,10 +15,9 @@
 #ifndef _C3CMDLINE_H_
 #define _C3CMDLINE_H_
 
-class Command;
-class CommandLine;
-
 class aui_Surface; 
+
+class Command;
 
 struct CommandRecord
 {
@@ -340,7 +339,7 @@ COMMAND(SetGovernorPwReserveCommand);
 
 COMMAND(ToggleCellText);
 COMMAND(ToggleArmyText);
-COMMAND(ToggleArmyName);
+
 
 COMMAND(ArmyClumps);
 
@@ -412,6 +411,7 @@ private:
 };
 
 extern CommandLine g_commandLine;
-
+#else
+class CommandLine;
 #endif
 #endif

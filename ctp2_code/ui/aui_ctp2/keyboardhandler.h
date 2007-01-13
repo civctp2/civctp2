@@ -8,10 +8,7 @@
 
 
 class KeyboardHandler {
-public:
-	KeyboardHandler() {}
-	virtual ~KeyboardHandler() {}
-
+ public:
 	virtual void kh_Close() {}  
 	virtual void kh_Select() {} 
 	virtual void kh_Next() {}   

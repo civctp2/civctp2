@@ -1,32 +1,4 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The message turning on/off screen
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 
@@ -83,6 +55,7 @@ static aui_StringTable		*s_messageString	= NULL,
 static void optionwarningscreen_setMyWarning(uint32);
 
 
+
 sint32	optionwarningscreen_displayMyWindow(uint32 warning)
 {
 	sint32 retval=0;
@@ -111,12 +84,14 @@ sint32 optionwarningscreen_removeMyWindow(uint32 action)
 	return 1;
 }
 
+
+
 AUI_ERRCODE optionwarningscreen_Initialize( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_optionwarningscreenWindow ) return AUI_ERRCODE_OK;
+	if ( s_optionwarningscreenWindow ) return AUI_ERRCODE_OK; 
 
 	strcpy(windowBlock, "OptionWarningWindow");
 	s_optionwarningscreenWindow = new c3_PopupWindow(
@@ -153,11 +128,13 @@ AUI_ERRCODE optionwarningscreen_Initialize( void )
 	return AUI_ERRCODE_OK;
 }
 
+
+
 AUI_ERRCODE optionwarningscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_optionwarningscreenWindow  ) return AUI_ERRCODE_OK;
+	if ( !s_optionwarningscreenWindow  ) return AUI_ERRCODE_OK; 
 
 	g_c3ui->RemoveWindow( s_optionwarningscreenWindow->Id() );
 	keypress_RemoveHandler(&s_warningKeyboardHandler);
@@ -181,6 +158,9 @@ AUI_ERRCODE optionwarningscreen_Cleanup()
 
 #undef mycleanup
 }
+
+
+
 
 void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -233,6 +213,7 @@ void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 d
 	};
 }
 
+
 void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -250,11 +231,32 @@ void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 d
 		loadsavescreen_displayMyWindow(LSS_SAVE_GAME);
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 void optionwarningscreen_nevermindPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	optionwarningscreen_removeMyWindow(action);
 }
+
+
 
 static
 void optionwarningscreen_setMyWarning(uint32 warning)

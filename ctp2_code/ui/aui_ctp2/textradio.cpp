@@ -19,11 +19,12 @@
 #include "aui_window.h"
 
 #include "primitives.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 
 #include "textradio.h"
 
 
+extern ColorSet		*g_colorSet;
 
 
 
@@ -34,10 +35,10 @@ TextRadio::TextRadio(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
 	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie),
-	PatternBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
+	PatternBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ImageBase( ldlBlock )
 {
 }
 
@@ -56,10 +57,10 @@ TextRadio::TextRadio(
 	void *cookie,
 	BOOL selected )
 	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( text ),
 	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, selected ),
-	PatternBase( pattern )
+	aui_TextBase( text ),
+	PatternBase( pattern ),
+	aui_ImageBase( (sint32)0 )
 {
 }
 

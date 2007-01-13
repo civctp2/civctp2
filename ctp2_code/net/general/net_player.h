@@ -1,14 +1,20 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef _NET_PLAYER_H_
 #define _NET_PLAYER_H_
 
-class NetPlayer;
-class NetAddPlayer;
-
-#include "net_packet.h"     // Packetizer
 class Player;
+
+#include "net_packet.h"
 
 class NetPlayer : public Packetizer
 {
@@ -38,4 +44,6 @@ private:
 	char *m_name;
 };
 
+#else
+class NetPlayer;
 #endif

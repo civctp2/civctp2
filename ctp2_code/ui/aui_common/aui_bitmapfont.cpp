@@ -1,51 +1,24 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface bitmap font
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _JAPANESE
-// - Add provisions for handling SJIS characters.
-//
-// _MBCS
-// _UNICODE
-//
-// _DEBUG
-// - Generate debug version when set.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-//  fixed for japanese by t.s. 2003.12
-//
-//  fix
-//      AUI_ERRCODE aui_BitmapFont::RenderLine
-//      aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
-//      AUI_ERRCODE aui_BitmapFont::DrawString
-//      BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
-//
-//  add
-//      aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+/*
+	fixed for japanese by t.s. 2003.12
+
+	fix
+		AUI_ERRCODE aui_BitmapFont::RenderLine
+		aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
+		AUI_ERRCODE aui_BitmapFont::DrawString
+		BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
+
+	add
+		aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
+*/
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -69,7 +42,7 @@ TT_Engine aui_BitmapFont::m_ttEngine = { NULL };
 
 aui_BitmapFont::aui_BitmapFont(
 	AUI_ERRCODE *retval,
-	MBCHAR const *descriptor )
+	MBCHAR *descriptor )
 	:
 	aui_Base()
 {
@@ -116,7 +89,7 @@ void aui_BitmapFont::DescriptorToAttributes(
 
 
 
-AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
+AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
 {
 	AUI_ERRCODE errcode = SetFilename( descriptor );
 	Assert( AUI_SUCCESS(errcode) );
@@ -222,7 +195,7 @@ aui_BitmapFont::~aui_BitmapFont()
 
 
 
-AUI_ERRCODE aui_BitmapFont::SetFilename( MBCHAR const * descriptor )
+AUI_ERRCODE aui_BitmapFont::SetFilename( MBCHAR *descriptor )
 {
 	memset( m_descriptor, '\0', sizeof( m_descriptor ) );
 
@@ -267,8 +240,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	Assert( n != 0 );
 	if ( !n ) return AUI_ERRCODE_HACK;
 
-	uint16 i;
-	for (i = 0; i < n; i++ )
+	for ( uint16 i = 0; i < n; i++ )
 	{
 		uint16 platform, encoding;
 		TT_Get_CharMap_ID( m_ttFace, i, &platform, &encoding );
@@ -477,7 +449,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 {
 	if ( !IsCached( c ) )
 	{
-		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+		AUI_ERRCODE errcode;
 
 		GlyphInfo *gi = m_glyphs + (sint32)uint8(c); 
 
@@ -542,7 +514,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 			ttMetrics.bbox.yMax / 64 );
 
 		gi->bearingX = (sint16)floor( (double)ttMetrics.bearingX / 64.0 + 0.5 );
-		gi->bearingY = static_cast<sint16>(-ttMetrics.bearingY / 64); 
+		gi->bearingY = -ttMetrics.bearingY / 64; 
 		gi->advance = (sint16)floor( (double)ttMetrics.advance / 64.0 + 0.5 );
 
 		uint32 nextOffset;
@@ -1054,7 +1026,7 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 
 	
 	const MBCHAR *lastBreakPtr = NULL;
-	sint32 lastBreakPos = 0;
+	sint32 lastBreakPos;
 
 	if ( wrap && !midWordBreaksOnly )
 	{
@@ -1079,11 +1051,8 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 			return AUI_ERRCODE_OK;
 
 		case '\b': 
-            gi = GetGlyphInfo(' ');
-			if (gi)
-            {
+			if ( gi = GetGlyphInfo( ' ' ) )
 				penPos->x -= gi->advance;
-            }
 			break;
 
 		case '\t': 

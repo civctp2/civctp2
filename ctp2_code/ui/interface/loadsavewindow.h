@@ -1,7 +1,7 @@
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
+
 #ifndef LOADSAVEWINDOW_FLAG
 #define LOADSAVEWINDOW_FLAG
 
@@ -26,7 +26,7 @@ sint32 loadsavescreen_displayMyWindow(uint32 type);
 sint32 loadsavescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback
 									   *callback = NULL );
-void loadsavescreen_Cleanup(void);
+AUI_ERRCODE loadsavescreen_Cleanup();
 
 void loadsavescreen_SaveGame(MBCHAR *usePath = NULL, MBCHAR *useName = NULL);
 
@@ -251,7 +251,10 @@ private:
 };
 
 
-AUI_ACTION_BASIC(LSCleanupAction);
+class LSCleanupAction : public aui_Action
+{
+	virtual ActionCallback Execute;
+};
 
 extern LoadSaveWindow				*g_loadsaveWindow;
 

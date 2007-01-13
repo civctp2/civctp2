@@ -59,7 +59,7 @@ sint32 Science::ComputeScienceFromResearchPacts(const sint32 playerId)
 	sint32 total_pact_science = 0;
 	for (PLAYER_INDEX foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		if ((foreignerId != playerId) && g_player[foreignerId])
+		if (g_player[foreignerId])
 		{
 			total_pact_science += ComputeScienceFromResearchPact(playerId, foreignerId);
 		}
@@ -68,7 +68,7 @@ sint32 Science::ComputeScienceFromResearchPacts(const sint32 playerId)
 }
 
 
-sint32 Science::ComputeScienceFromResearchPact(const sint32 playerId, const sint32 foreignerId)
+sint32 Science::ComputeScienceFromResearchPact(const sint32 playerId, const PLAYER_INDEX foreignerId)
 {
 	Assert(g_player[foreignerId] != NULL);
 	if (g_player[foreignerId] == NULL)
@@ -92,7 +92,7 @@ sint32 Science::ComputeScienceFromResearchPact(const sint32 playerId, const sint
 			research_pact_science += city.CD()->GetScience();
 		}
 		
-		research_pact_science = research_pact_science * 105 / 100;
+		research_pact_science = (research_pact_science * 1.05);
 	}
 	return research_pact_science;
 }

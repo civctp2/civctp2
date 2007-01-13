@@ -1,28 +1,3 @@
-################################################################################
-#
-#  Project      : Call To Power 2
-#  File type    : LDL layout description 
-#  Description  : Main ldl file
-#  Id           : $Id$
-# 
-################################################################################
-# 
-#  Disclaimer
-# 
-#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
-#  This material has been developed at apolyton.net by the Apolyton CtP2 
-#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
-################################################################################
-# 
-#  Modifications from the original Activision code:
-# 
-# - Added a optimize specialists button.
-# - Added a national manager button. - July 24th 2005 Martin Gühmann
-# 
-################################################################################
-
 #######################################
 # File: citywindow.ldl
 # Last Access: Tue Apr 04 12:50:44 2000
@@ -453,14 +428,6 @@ CityWindow:CTP2_DIALOG_WINDOW {
 		int focusindex 2
 	}
 
-	NationalManagerButton:CTP2_POSITION_22_BUTTON {
-		string	text	"str_ldl_NatlManager"
-
-		# Tooltip
-		string	statustext	"STATUSBAR_SHORTCUTPAD_NATLSCR_BUTTON"
-		int focusindex 3
-	}
-
 #	OptimizeSpecialistButton:CTP2_POSITION_22_BUTTON {
 #		string	text	"str_ldl_OptimizeSpecialists"
 #
@@ -474,7 +441,8 @@ CityWindow:CTP2_DIALOG_WINDOW {
 
 		# Tooltip
 		string	statustext	"STATUSBAR_CITYMAN_MAIN_SHOWSTATSWIN_BUTTON"
-		int focusindex 4
+		int focusindex 3
+#		int focusindex 4
 	}
 
 ################################################################################

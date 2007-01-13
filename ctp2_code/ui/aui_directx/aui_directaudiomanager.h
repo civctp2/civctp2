@@ -118,7 +118,7 @@ protected:
 
 	BOOL CreateDSInterface( HWND hwnd );
 	BOOL CreatePrimaryBuffer( void );
-	BOOL SetDSoundRate(DWORD newRate);
+	BOOL SetDSoundRate( ULONG newRate );
 	BOOL InitDS( HWND hwnd );
 };
 

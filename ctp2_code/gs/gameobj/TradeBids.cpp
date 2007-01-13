@@ -1,31 +1,4 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Trade bit handling
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made the Unit argments of AddBit method const. June 18th 2005 Martin Gühmann
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 #include "TradeBids.h"
@@ -88,18 +61,18 @@ void TradeBids::Serialize(CivArchive &archive)
 }
 
 uint32 TradeBids::AddBid(sint32 owner,
-                         const Unit &fromCity,
-                         sint32 resource,
-                         const Unit &toCity,
-                         sint32 price)
+						 Unit &fromCity,
+						 sint32 resource,
+						 Unit &toCity,
+						 sint32 price)
 {
 	uint32 id = (owner << 24) | (m_nextId[owner]++);
 	m_table[owner]->AddTail(new Bid(id,
-	                                owner,
-	                                fromCity,
-	                                resource,
-	                                toCity,
-	                                price));
+									owner,
+									fromCity,
+									resource,
+									toCity,
+									price));
 	return id;
 }
 

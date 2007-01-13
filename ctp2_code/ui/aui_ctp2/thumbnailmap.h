@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
 // BATTLE_FLAGS
 // ?
 //
@@ -29,18 +32,29 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
 #ifndef __THUMBNAILMAP_H__
 #define __THUMBNAILMAP_H__
 
-struct  CityInfo;
-class   ThumbnailMap;
+#include "patternbase.h"
+#include "aui_control.h"
+#include "colorset.h"
 
-enum    C3_THUMBNAIL_ACTION 
-{
+#include "Unit.h"
+#include "dynarr.h"
+
+#define k_THUMBNAIL_CITY_BLINK_RATE		1000
+
+
+typedef BOOL (CityFilterProc)(Unit city);
+
+
+
+
+enum C3_THUMBNAIL_ACTION {
 	C3_THUMBNAIL_ACTION_NULL,
 	C3_THUMBNAIL_ACTION_SELECTEDCITY,
 	C3_THUMBNAIL_ACTION_SELECTEDROUTE,
@@ -49,21 +63,10 @@ enum    C3_THUMBNAIL_ACTION
 };
 
 
-#define k_THUMBNAIL_CITY_BLINK_RATE		1000
 
-#include "patternbase.h"
-#include "aui_control.h"
-#include "colorset.h"				// COLOR
 
-#include "Unit.h"
-#include "dynarr.h"
+enum COLOR;
 class CivArchive;
-class aui_Surface;
-class MapPoint;
-class TradeRoute;
-
-typedef BOOL (CityFilterProc)(Unit city);
-
 struct CityInfo {
 	Unit		city;
 	RECT		cityRect;
@@ -75,6 +78,11 @@ struct CityInfo {
 	virtual void Castrate() {}
     virtual void DelPointers() {}
 };
+
+
+class aui_Surface;
+class MapPoint;
+class TradeRoute;
 
 class ThumbnailMap : public aui_Control, public PatternBase
 {
@@ -144,10 +152,17 @@ public:
 	
 	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback	MouseLGrabInside;
+	virtual MouseEventCallback	MouseRGrabInside;
+	virtual MouseEventCallback	MouseNoChange;
+	virtual MouseEventCallback	MouseMoveInside;
+#else
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
     virtual void	MouseNoChange(aui_MouseEvent * data);
     virtual void	MouseMoveInside(aui_MouseEvent * data);
+#endif
 
 	virtual AUI_ERRCODE			Idle( void );
 
@@ -157,6 +172,7 @@ private:
 	aui_Surface						*m_mapSurface;		
 	MapPoint						*m_mapSize;
 	COLOR							*m_mapOverlay;		
+	MapPoint						m_clickedCell;		
 
 	sint32							m_centerX,			
 									m_centerY;

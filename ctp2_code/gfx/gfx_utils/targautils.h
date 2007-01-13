@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
+
 #ifndef __TARGAUTILS_H__
 #define __TARGAUTILS_H__
 

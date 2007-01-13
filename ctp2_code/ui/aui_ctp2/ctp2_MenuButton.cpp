@@ -16,25 +16,31 @@ ctp2_MenuButton::ctp2_MenuButton(AUI_ERRCODE *retval,
 								 MBCHAR *ldlBlock,
 								 ControlActionCallback *ActionFunc,
 								 void *cookie)
-	:
+	: 	
+	c3_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	c3_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	m_menu(NULL),
-	m_rightNeighbor(NULL),
-	m_leftNeighbor(NULL)
+	m_leftNeighbor(NULL),
+	m_rightNeighbor(NULL)
 {	
 	Assert(AUI_SUCCESS(*retval));
 	if(!AUI_SUCCESS(*retval)) return;
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 ctp2_MenuButton::~ctp2_MenuButton()
 {
+	
+	
+	
+	
 	delete m_menu;
+	m_menu = NULL;
 }
 
 void ctp2_MenuButton::MouseLGrabInside( aui_MouseEvent *mouseData )

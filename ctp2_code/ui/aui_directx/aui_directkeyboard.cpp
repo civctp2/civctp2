@@ -46,10 +46,12 @@ extern C3UI		*g_c3ui;
 extern CivApp	*g_civApp;
 
 
-aui_DirectKeyboard::aui_DirectKeyboard(AUI_ERRCODE *retval)
-:
-	aui_Keyboard(),
-	aui_DirectInput(retval, FALSE)
+aui_DirectKeyboard::aui_DirectKeyboard(
+	AUI_ERRCODE *retval )
+	:
+	aui_Keyboard( retval ),
+	aui_Input( retval ),
+	aui_DirectInput( retval, FALSE )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -118,7 +120,7 @@ AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 	
 	for ( sint32 numInputs = 1; numInputs; numInputs-- )
 	{
-		DWORD   numElements = 1;
+		uint32 numElements = 1;
 		static DIDEVICEOBJECTDATA od[ 1 ];
 		DIDEVICEOBJECTDATA *ptrOd = od;
 

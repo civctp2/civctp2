@@ -76,9 +76,8 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 
     strcpy(m_soundFilename, fname);
 
-    size_t      l_dataSize = 0;    
-    m_dataptr   = g_SoundPF->getData(m_soundFilename, l_dataSize);
-    m_datasize  = static_cast<sint32>(l_dataSize);
+    
+    m_dataptr = g_SoundPF->getData(m_soundFilename, &m_datasize);
 
 #if !defined(USE_SDL)
 	m_hAudio = AIL_quick_load_mem(m_dataptr, m_datasize);

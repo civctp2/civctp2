@@ -1,36 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface mouse handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _DEBUG
-// - Generate debug version when set.
-//
-// __AUI_USE_DIRECTX__
-// SEIZUREBLIT
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -69,8 +46,11 @@ aui_Mouse::aui_Mouse(
 	AUI_ERRCODE *retval,
 	MBCHAR *ldlBlock )
 	:
-	aui_Input()
+	aui_Input( retval )
 {
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
+
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -139,7 +119,15 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 
 	if ( ldlBlock )
 	{
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+		aui_Ldl *theLdl = g_ui->GetLdl();
+
+		
+		BOOL valid = theLdl->IsValid( ldlBlock );
+		Assert( valid );
+		if ( !valid ) return AUI_ERRCODE_HACK;
+
+		
+		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -198,7 +186,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( MBCHAR *ldlBlock )
 		{
 			sprintf( temp, "%s.%s%d", ldlBlock, k_MOUSE_LDL_ANIM, i++ );
 
-            ldl_datablock *blk = aui_Ldl::GetLdl()->FindDataBlock( temp );
+			ldl_datablock *blk = theLdl->GetLdl()->FindDataBlock( temp );
 			if ( !blk ) break;
 
 			POINT indexes;
@@ -379,6 +367,8 @@ void aui_Mouse::SetAnim( sint32 anim )
 	SetAnimIndexes(anim, anim);
 
 
+
+
 }
 
 
@@ -494,6 +484,7 @@ AUI_ERRCODE aui_Mouse::CreatePrivateBuffers( void )
 
 
 
+
 void aui_Mouse::DestroyPrivateBuffers( void )
 {
 	if ( m_privateMix )
@@ -514,6 +505,7 @@ void aui_Mouse::DestroyPrivateBuffers( void )
 		m_prevPickup = NULL;
 	}
 }
+
 
 
 
@@ -573,6 +565,8 @@ AUI_ERRCODE aui_Mouse::End( void )
 
 	return AUI_ERRCODE_OK;
 }
+
+
 
 
 
@@ -639,10 +633,7 @@ AUI_ERRCODE aui_Mouse::Resume( void )
 	if ( ResumeThread( m_thread ) != 0xffffffff )
 	{
 		
-		if (!IsAcquired()) 
-        {
-            Acquire();
-        }
+		if ( !m_acquired ) Acquire();
 
 		
 		SetEvent( m_resumeEvent );
@@ -702,14 +693,14 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 		mouse->HandleAnim();
 
 		
-		(void) mouse->GetInput();
+		AUI_ERRCODE err = mouse->GetInput();
 
 		
 		mouse->ReactToInput();
 
 		
 			
-		mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
+			mouse->ManipulateInputs( mouse->GetLatestMouseEvent(), TRUE );
 			
 	}
 
@@ -786,10 +777,10 @@ AUI_ERRCODE aui_Mouse::SetHotspot( sint32 x, sint32 y, sint32 index )
 
 AUI_ERRCODE aui_Mouse::ReactToInput( void )
 {
-	if ( IsHidden() || (!*m_curCursor)) return AUI_ERRCODE_OK;
+	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot(hotspot);
+	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
 
 	POINT image =
 	{
@@ -1028,7 +1019,7 @@ AUI_ERRCODE	aui_Mouse::BltWindowToPrimary( aui_Window *window )
 
 		
 		POINT hotspot;
-		(*m_curCursor)->GetHotspot(hotspot);
+		(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
 
 		POINT image = m_data.position;
 		image.x -= hotspot.x;
@@ -1152,7 +1143,7 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 		g_ui->GetDirtyRectInfoList();
 
 	uint32 blitFlags;
-	LPVOID primaryBuf = NULL;
+	LPVOID primaryBuf;
 
 	
 	
@@ -1196,7 +1187,7 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 
 		
 		POINT hotspot;
-		(*m_curCursor)->GetHotspot(hotspot);
+		(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
 
 		POINT image = m_data.position;
 		image.x -= hotspot.x;
@@ -1257,6 +1248,9 @@ AUI_ERRCODE	aui_Mouse::BltDirtyRectInfoToPrimary( void )
 			retcode = AUI_ERRCODE_BLTFAILED;
 			break;
 		}
+
+
+
 
 
 
@@ -1331,7 +1325,7 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundColorToPrimary(
 
 	
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot(hotspot);
+	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
 
 	POINT cursorLocation = m_data.position;
 	cursorLocation.x -= hotspot.x;
@@ -1465,7 +1459,7 @@ AUI_ERRCODE	aui_Mouse::BltBackgroundImageToPrimary(
 
 	
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot(hotspot);
+	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
 
 	POINT cursorLocation = m_data.position;
 	cursorLocation.x -= hotspot.x;
@@ -1606,7 +1600,7 @@ AUI_ERRCODE aui_Mouse::Erase( void )
 	AUI_ERRCODE errcode;
 
 	POINT hotspot;
-	(*m_curCursor)->GetHotspot(hotspot);
+	(*m_curCursor)->GetHotspot( &hotspot.x, &hotspot.y );
 
 	POINT image = m_data.position;
 	image.x -= hotspot.x;

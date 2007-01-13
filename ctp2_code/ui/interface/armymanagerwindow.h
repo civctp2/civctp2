@@ -2,38 +2,23 @@
 #ifndef ARMY_MANAGER_WINDOW_H__
 #define ARMY_MANAGER_WINDOW_H__
 
-class ArmyListNode;
-class ArmyManagerWindow;
-
-#include "MapPoint.h"
-#include "Army.h"
-#include "Unit.h"
-#include "aui_Control.h"    // aui_Control
-#include "ctp2_inttypes.h"  // uint32
-#include "gstypes.h"        // k_MAX_ARMY_SIZE
-
 class ctp2_Window;
 class ctp2_ListItem;
 class ctp2_ListBox;
 class ctp2_Static;
 
+#include "MapPoint.h"
+#include "Army.h"
+#include "Unit.h"
+
 template <class T> class PointerList;
 
-class ArmyListNode 
-{
-public:
-	ArmyListNode() 
-    : m_army    ()
-    { ; };
-
-	ArmyListNode(Army const & a) 
-    : m_army    (a) 
-    { ; };
-
-private:
+class ArmyListNode {
+  public:
 	Army m_army;
-    
-    friend class ArmyManagerWindow;
+
+	ArmyListNode(Army &a) { m_army = a; }
+	ArmyListNode() { m_army.m_id = 0; }
 };
 
 class ArmyManagerWindow {
@@ -89,8 +74,8 @@ class ArmyManagerWindow {
 	void AddSelectedUnits();
 	void RemoveSelectedUnits();
 
-	static void InitializeEvents();
-	static void CleanupEvents();
+	static void ArmyManagerWindow::InitializeEvents();
+	static void ArmyManagerWindow::CleanupEvents();
 };
 
 	

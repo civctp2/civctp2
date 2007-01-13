@@ -1,33 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : 
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-// _DEBUG
-// - Generate debug version when set.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made sure that this file compiles without GetProductionStats in Unit, 
-//   UnitData and CityData. - Aug 6th 2005 Martin Gühmann
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "globals.h"
@@ -1694,59 +1674,56 @@ STDMETHODIMP_ (sint32) C3Player::GetCityPopulation (sint32 player, uint32 city_i
 STDMETHODIMP_ (sint32) C3Player::GetCityProduction (sint32 player, uint32 city_id,
                                                     BOOL *is_unknown_id)
 {
-	Unit city;
-	Assert(g_player[player]);
-	g_player[player]->AiGetCity(*is_unknown_id, city_id, city);
+    Unit city;
+    Assert(g_player[player]);
+    g_player[player]->AiGetCity(*is_unknown_id, city_id, city);
 
-	if (*is_unknown_id) {
-		Assert(0); 
-		return 0; 
-	}
+    if (*is_unknown_id) { 
+        Assert(0); 
+        return 0; 
+    } 
 
-//	sint32 s, t, f;
-//	city.GetProductionStats(s, t, f);
-//	return s;
-	return city.GetStoredCityProduction();
+    sint32 s, t, f; 
+    city.GetProductionStats(s, t, f);
+    return s;
 }
 
 
 STDMETHODIMP_ (sint32) C3Player::GetCityFood (sint32 player, uint32 city_id,
                                               BOOL *is_unknown_id)
 {
-	Unit city;
-	Assert(g_player[player]);
-	g_player[player]->AiGetCity(*is_unknown_id, city_id, city);
+    Unit city;
+    Assert(g_player[player]);
+    g_player[player]->AiGetCity(*is_unknown_id, city_id, city);
 
-	
-	if (*is_unknown_id) {
-		Assert(0);
-		return 0;
-	}
+    
+    if (*is_unknown_id) { 
+        Assert(0); 
+        return 0; 
+    } 
 
-//	sint32 s, t, f;
-//	city.GetProductionStats(s, t, f);
-//	return f;
-	return city.GetStoredCityFood();
+    sint32 s, t, f; 
+    city.GetProductionStats(s, t, f);
+    return f;
 
 }
 
 STDMETHODIMP_ (sint32) C3Player::GetCityGold (sint32 player, uint32 city_id,
                                               BOOL *is_unknown_id)
 {
-	Unit city;
-	Assert(g_player[player]);
-	g_player[player]->AiGetCity(*is_unknown_id, city_id, city);
+    Unit city;
+    Assert(g_player[player]);
+    g_player[player]->AiGetCity(*is_unknown_id, city_id, city);
 
-	
-	if (*is_unknown_id) {
-		Assert(0);
-		return 0;
-	} 
+    
+    if (*is_unknown_id) { 
+        Assert(0); 
+        return 0; 
+    } 
 
-//	sint32 s, t, f; 
-//	city.GetProductionStats(s, t, f);
-//	return t;
-	return city.GetNetCityGold();
+    sint32 s, t, f; 
+    city.GetProductionStats(s, t, f);
+    return t;
 
 }
 

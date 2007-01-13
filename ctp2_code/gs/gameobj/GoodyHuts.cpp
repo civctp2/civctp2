@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Goody hut handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,43 +17,36 @@
 //
 // Compiler flags
 // 
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Update the display (rush buy buttons) when receiving gold.
-// - Speeded up goody hut advance and unit selection.
-// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
-// - GoodyHutExcluded added to unit radomizer to prevent some units from appearing
-//   by E 8-MAR-2006
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "GoodyHuts.h"
 
-#include "c3math.h"         // AsPercentage
+#include "GoodyHuts.h"
 #include "player.h"
 #include "RandGen.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "ConstDB.h"
 #include "Unit.h"
 #include "civarchive.h"
 #include "Advances.h"
-#include "CivPaths.h"       // g_civPaths
+#include "CivPaths.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "UnitDynArr.h"
 #include "UnitData.h"
-#include "soundmanager.h"   // g_soundManager
+#include "soundmanager.h"
 #include "gamesounds.h"
 #include "network.h"
 #include "tiledmap.h"
 #include "Barbarians.h"
-#include "profileDB.h"      // g_theProfileDB
-#include "RiskRecord.h"
+#include "profileDB.h"
+#include "RiskDB.h"
 #include "AdvanceRecord.h"
 #include "SelItem.h"
 #include "GameSettings.h"
@@ -67,361 +59,139 @@
 extern Player **g_player;
 extern RandomGenerator *g_rand;
 extern ConstDB *g_theConstDB;
+extern CivPaths *g_civPaths; 
 extern TiledMap		*g_tiledMap;
+extern ProfileDB *g_theProfileDB;
 
 extern SelectedItem	*g_selected_item;
-
-namespace
-{
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyRiskData
-//
-// Description: Helper class to store risk settings for the goody computation.
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-    class   GoodyRiskData
-    {
-    public:
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyRiskData::GoodyRiskData
-//
-// Description: Constructor
-//
-// Parameters : settings    : game settings
-//              risks       : risk database
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-        GoodyRiskData
-        (
-            GameSettings const *        settings,
-            CTPDatabase<RiskRecord> *   risks
-        )
-        {
-	        sint32 const    gameRiskLevel   = 
-                std::min<sint32>(settings->GetRisk(), risks->NumRecords() - 1);
-            m_risk                  = risks->Get(gameRiskLevel);
-            Assert(m_risk);
-
-            m_BarbarianThreshold    = 
-                AsPercentage(m_risk->GetHutChanceBarbarian());
-            m_GoldThreshold         = m_BarbarianThreshold +
-                AsPercentage(m_risk->GetHutChanceGold());
-            m_AdvanceThreshold      = m_GoldThreshold +
-                AsPercentage(m_risk->GetHutChanceAdvance());
-            m_UnitThreshold         = m_AdvanceThreshold +
-                AsPercentage(m_risk->GetHutChanceUnit());
-            m_CityThreshold         = m_UnitThreshold +
-                AsPercentage(m_risk->GetHutChanceCity());
-            m_SettlerThreshold      = m_CityThreshold +
-                AsPercentage(m_risk->GetHutChanceSettler());
-        };
-
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyRiskData::Select
-//
-// Description: Generate a goody type from a random value
-//
-// Parameters : randomValue     
-//
-// Globals    : -
-//
-// Returns    : GOODY       : generated type of goody 
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-        GOODY   Select(sint32 randomValue) const
-        {
-            if (randomValue < m_BarbarianThreshold)
-            {
-                return GOODY_BARBARIANS;
-            }
-            else if (randomValue < m_GoldThreshold)
-            {
-                return GOODY_GOLD;
-            }
-            else if (randomValue < m_AdvanceThreshold)
-            {
-                return GOODY_ADVANCE;
-            }
-            else if (randomValue < m_UnitThreshold)
-            {
-                return GOODY_UNIT;
-            }
-            else if (randomValue < m_CityThreshold)
-            {
-                return GOODY_CITY;
-            }
-            else if (randomValue < m_SettlerThreshold)
-            {
-                return GOODY_SETTLER;
-            }
-
-            return GOODY_BOGUS;
-        };
-
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyRiskData::GoldAmount
-//
-// Description: Generate an amount of gold from a random value
-//
-// Parameters : randomValue     
-//
-// Globals    : -
-//
-// Returns    : sint32      : generated amount of gold
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-        sint32  GoldAmount(sint32 randomValue) const
-        {
-            return m_risk->GetHutMinGold() +
-                   (((m_risk->GetHutMaxGold() - m_risk->GetHutMinGold()) * randomValue) / 
-                        k_VALUE_RANGE
-                   );        
-        }
-
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyRiskData::GetMaxAdvanceLeap
-//
-// Description: Get the number of prerequisites that may be skipped when
-//              selecting a new advance.
-//
-// Parameters : -    
-//
-// Globals    : -
-//
-// Returns    : sint32      : number of prerequisites that may be skipped
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-        sint32  GetMaxAdvanceLeap(void) const
-        {
-            return m_risk->GetHutMaxAdvancePrerequisites();
-        }
-
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyRiskData::GetMaxUnitAdvanceLeap
-//
-// Description: Get the number of prerequisites that may be skipped when
-//              selecting a new unit.
-//
-// Parameters : -    
-//
-// Globals    : -
-//
-// Returns    : sint32      : number of prerequisites that may be skipped
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-        sint32  GetMaxUnitAdvanceLeap(void) const
-        {
-            return m_risk->GetHutMaxUnitPrerequisites();
-        }
-
-    private:
-        RiskRecord const *  m_risk;
-        int                 m_BarbarianThreshold;       
-        int                 m_GoldThreshold;
-        int                 m_AdvanceThreshold;
-        int                 m_UnitThreshold;
-        int                 m_CityThreshold;
-        int                 m_SettlerThreshold;
-    };
-
-} // namespace
+extern SoundManager *g_soundManager;
+extern RiskDatabase *g_theRiskDB;
 
 GoodyHut::GoodyHut()
-{   
-    m_typeValue = g_rand->Next(100); 
-	m_value     = g_rand->Next(k_VALUE_RANGE);
-}
-
-GoodyHut::GoodyHut(uint32 type, uint32 value)
 {
-    m_typeValue = type;
-    m_value     = value;
+	
+	
+	m_typeValue = g_rand->Next(100); 
+	m_value = g_rand->Next(k_VALUE_RANGE);
 }
 
 GoodyHut::GoodyHut(CivArchive &archive)
 {
-	Serialize(archive); // sets m_typeValue and m_value
+	Serialize(archive);
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : GoodyHut::ChooseType
-//
-// Description: Generate a goody type for a player
-//
-// Parameters : owner       : the player     
-//
-// Globals    : g_theGameSettings
-//              g_theRiskDB
-//              g_player
-//              g_theAdvanceDB
-//              g_theUnitDB
-//
-// Returns    : GOODY       : generated type of goody 
-//
-// Remark(s)  : When no proper goody can be generated, GOODY_BOGUS is returned.
-//              The barbarian player gets this result always.
-//              Assumption: the owner is alive (g_player[owner] is non-NULL).
-//
-//----------------------------------------------------------------------------
-GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
+GOODY GoodyHut::ChooseType(sint32 owner)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Choose ruin type for typeValue %d\n", m_typeValue));
-
-	if (owner == PLAYER_INDEX_VANDALS)
-	{
+	if(owner == PLAYER_INDEX_VANDALS) {
+		
 		return GOODY_BOGUS;
 	}
 
-	GoodyRiskData   risk    = GoodyRiskData(g_theGameSettings, g_theRiskDB);
-	GOODY           result  = risk.Select(m_typeValue);
+	uint32 accum = 0;
+	sint32 riskLevel = g_theGameSettings->GetRisk();
+	while(riskLevel >= g_theRiskDB->m_nRec) {
+		riskLevel--;
+	}
+	const RiskRecord *risk = g_theRiskDB->Get(riskLevel);
 
-	switch (result)
-	{
-		default:
-			// No special actions
-			break;
+	accum += (uint32)ceil(risk->m_barbarianHutChance * 100);
+	if(m_typeValue < accum) {
+		return GOODY_BARBARIANS;
+	}
+	accum += (uint32)ceil(risk->m_goldChance * 100);
+	if(m_typeValue < accum) {
+		m_value = (((risk->m_maxGold - risk->m_minGold) * m_value) / k_VALUE_RANGE) + risk->m_minGold;
+		return GOODY_GOLD;
+	}
 
-		case GOODY_ADVANCE:
-		{
-			Advances const *    advances     = g_player[owner]->m_advances;
-			AdvanceType *       possible     = 
-			    new AdvanceType[g_theAdvanceDB->NumRecords()];
-			size_t              nextPossible = 0;
-			sint32 const        maxNovelty   = risk.GetMaxAdvanceLeap();
+	accum += (uint32)ceil(risk->m_advanceChance * 100);
+	if(m_typeValue < accum) {
+		sint32 *possible; 
+		possible = new sint32[g_theAdvanceDB->NumRecords()];
+		sint32 nextPossible = 0;
+		sint32 i;
+		sint32 legalCount = 0;
+		sint32 prereq;
 
-			for(AdvanceType i = 0; i < g_theAdvanceDB->NumRecords(); ++i)
-			{
-				if(advances->HasAdvance(i)) 
-					continue;   // known
-
-				if(g_theAdvanceDB->Get(i)->GetGoodyHutExcluded())
-					continue;   // EMOD new flag to prevent some unts from appearing
-
-				if(g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0
-				&& g_theAdvanceDB->Get(i)->GetPrerequisitesIndex(0) == i)
-					continue;   // undiscoverable
-
-				//remove this and use advances->m_researching ??? EMOD
-
-				if (advances->GetMinPrerequisites(i, maxNovelty) <= maxNovelty)
-				{
-					possible[nextPossible++] = i;
-				}
-				// else: too advanced
+		for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+			if(g_player[owner]->HasAdvance(i)) {
+				continue;
+			}
+			if((g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0) &&
+			   (g_theAdvanceDB->Get(i)->GetPrerequisitesIndex(0) == i)) {
+				continue;
 			}
 
-			if (nextPossible) 
-			{
-				m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
+			prereq = g_player[owner]->m_advances->GetMinPrerequisites(i);
+			if(prereq <= risk->m_maxAdvancePrerequisites) {
+				possible[nextPossible++] = i;
 			}
-			else
-			{
-				result  = GOODY_BOGUS;
-			}
-
+		}
+		if(!nextPossible) {
 			delete [] possible;
+			return GOODY_BOGUS;
 		}
-		break;
 
-		case GOODY_GOLD:
-			m_value = risk.GoldAmount(m_value);
-			break;
+		m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
+		delete [] possible;
+		return GOODY_ADVANCE;
+	}
 
-		case GOODY_SETTLER:
-		{
-			for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i) 
-			{
-				if (g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType())->GetSettleLand()) 
-				{
-					m_value = i;
-					return GOODY_UNIT;
-				}
+	accum += (uint32)ceil(risk->m_unitChance * 100);
+	if(m_typeValue < accum) {
+		sint32 *possible;
+		possible = new sint32[g_theAdvanceDB->NumRecords()];
+		sint32 nextPossible = 0;
+		sint32 i;
+		sint32 legalCount = 0;
+
+		for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+			const UnitRecord *rec = g_theUnitDB->Get(i);
+			if(!rec->GetMovementTypeLand())
+				continue;
+			if(rec->GetAttack() < 1)
+				continue;
+			if(rec->GetHasPopAndCanBuild())
+				continue;
+			if(g_exclusions->IsUnitExcluded(i))
+				continue;
+			if(rec->GetNumGovernmentType() > 0)
+				continue;
+
+			if(g_player[owner]->m_advances->GetMinPrerequisites(rec->GetEnableAdvanceIndex()) <= risk->m_maxUnitPrerequisites) {
+				possible[nextPossible++] = i;
 			}
-
-			result = GOODY_BOGUS;
 		}
-		break;
-
-		case GOODY_UNIT:
-		{
-			Advances const *    advances     = g_player[owner]->m_advances;
-			sint32 *            possible     = new sint32[g_theUnitDB->NumRecords()];
-			size_t              nextPossible = 0;
-			sint32 const        maxNovelty   = risk.GetMaxUnitAdvanceLeap();
-
-			for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i) 
-			{
-				UnitRecord const * rec = g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType());
-
-				if (!rec->GetMovementTypeLand())
-					continue;   // would die immediately here
-				if (rec->GetAttack() < 1)               
-					continue;   // defenseless?
-				if (rec->GetGoodyHutExcluded())
-					continue;   // EMOD new flag to prevent some unts from appearing
-				if (rec->GetHasPopAndCanBuild())
-					continue;   // settler, handled separately
-				if (g_exclusions->IsUnitExcluded(i))    
-					continue;   // excluded (MP, mod)
-				if (rec->GetNumGovernmentType() > 0) 
-					continue;   // government specific?
-
-                sint32 const    need = rec->GetEnableAdvanceIndex();
-                if (need >= g_theAdvanceDB->NumRecords())
-                    continue;   // invalid database input
-
-                if (    (need < 0) // no EnablingAdvance defined for this unit
-                     || (advances->GetMinPrerequisites(need, maxNovelty) <= maxNovelty)
-				   )
-				{
-					possible[nextPossible++] = i;
-				}
-				// else : too advanced
-			}
-
-            if (nextPossible) 
-			{
-				m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
-			}
-			else
-			{
-				result  = GOODY_BOGUS;
-			}
-
+		if(!nextPossible) {
 			delete [] possible;
-
+			return GOODY_BOGUS;
 		}
-		break;
+		m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
+		delete [] possible;
+		return GOODY_UNIT;
+	}
 
-	} // switch
+	accum += (uint32)ceil(risk->m_cityChance * 100);
+	if(m_typeValue < accum) {
+		return GOODY_CITY;
+	}
 
-	return result;
+	accum += (uint32)ceil(risk->m_settlerChance * 100);
+	if(m_typeValue < accum) {
+		sint32 i;
+		for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+			if(g_theUnitDB->Get(i)->GetSettleLand()) {
+				m_value = i;
+				return GOODY_UNIT;
+			}
+		}
+		return GOODY_BOGUS;
+	}
+	return GOODY_BOGUS;
 }
 
-void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
+void GoodyHut::OpenGoody(sint32 owner, const MapPoint &point)
 {
 	SlicObject *so ;
 	
@@ -432,8 +202,8 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			so->AddRecipient(owner) ;
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("No soup for you!\n"));
-
-
+            
+			
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
@@ -513,8 +283,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 		case GOODY_ADVANCE:
 			so = new SlicObject("79DiscoveredRemnantsOfAncientCivilisation") ;
 			DPRINTF(k_DBG_GAMESTATE, ("You find advance %d\n", m_value));
-
-            g_player[owner]->m_advances->GiveAdvance(m_value, CAUSE_SCI_GOODY);
+			g_player[owner]->m_advances->GiveAdvance(m_value, CAUSE_SCI_GOODY);
 			so->AddRecipient(owner);
 			so->AddAdvance(m_value);
 			g_slicEngine->Execute(so);
@@ -531,7 +300,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			break;
 		case GOODY_UNIT:
 		{
-			if (g_theUnitDB->Get(m_value, g_player[owner]->GetGovernmentType())->GetSettle())
+			if (g_theUnitDB->Get(m_value)->GetSettle())
 				so = new SlicObject("81NomadsHaveJoinedYourCivilisation") ;
 			else
 				so = new SlicObject("82MercenariesHaveJoinedYourCivilisation") ;
@@ -541,7 +310,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			DPRINTF(k_DBG_GAMESTATE, ("You get unit %d\n", m_value));
 			Unit u = g_player[owner]->CreateUnit(m_value,
 												 point,
-												 Unit(),
+												 Unit(0),
 												 FALSE,
 												 CAUSE_NEW_ARMY_GOODY_HUT);
 
@@ -605,7 +374,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 
 void GoodyHut::Serialize(CivArchive &archive)
 {
-	CHECKSERIALIZE
+    CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_value, ((uint8 *)&m_typeValue)+sizeof(m_typeValue));

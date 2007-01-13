@@ -23,65 +23,13 @@
 //
 // - Addion by Martin Gühmann: Two more world shape options, 
 //   flat world and Uranus world
-// - Improved import structure and compatibility.
 //
 //----------------------------------------------------------------------------
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 #ifndef SPNEWGAMEWINDOW_FLAG
 #define SPNEWGAMEWINDOW_FLAG
-
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-// #include <>      
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class SPDropDownListItem;
-class SPNewGameWindow;
-class SPProfileBox; 
-class SPRulesBox;
-class SPWorldBox;
-class TwoChoiceButton;
-
-enum SP_NEWGAME_STR 
-{
-	SP_NEWGAME_STR_CHIEFTAIN,
-	SP_NEWGAME_STR_WARLORD,
-	SP_NEWGAME_STR_PRINCE,
-	SP_NEWGAME_STR_KING,
-	SP_NEWGAME_STR_EMPEROR,
-	SP_NEWGAME_STR_DEITY,
-
-	SP_NEWGAME_STR_SMALL,
-	SP_NEWGAME_STR_MEDIUM,
-	SP_NEWGAME_STR_LARGE,
-	SP_NEWGAME_STR_VERYLARGE,
-
-	SP_NEWGAME_STR_RANDOMMAP,
-	SP_NEWGAME_STR_CUSTOMMAP,
-
-	SP_NEWGAME_STR_EARTH,
-	SP_NEWGAME_STR_DOUGHNUT,
-	SP_NEWGAME_STR_FLAT,
-	SP_NEWGAME_STR_URANUS,
-
-	SP_NEWGAME_STR_DEFAULT,
-	SP_NEWGAME_STR_CUSTOM,
-
-	SP_NEWGAME_STR_MAX
-};
-
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
 
 #include "c3window.h"
 #include "c3_dropdown.h"
@@ -107,9 +55,36 @@ class aui_StringTable;
 
 #include "ctp2_button.h"
 
-//----------------------------------------------------------------------------
-// Declarations
-//----------------------------------------------------------------------------
+enum SP_NEWGAME_STR {
+	SP_NEWGAME_STR_CHIEFTAIN,
+	SP_NEWGAME_STR_WARLORD,
+	SP_NEWGAME_STR_PRINCE,
+	SP_NEWGAME_STR_KING,
+	SP_NEWGAME_STR_EMPEROR,
+	SP_NEWGAME_STR_DEITY,
+
+	SP_NEWGAME_STR_SMALL,
+	SP_NEWGAME_STR_MEDIUM,
+	SP_NEWGAME_STR_LARGE,
+	SP_NEWGAME_STR_VERYLARGE,
+
+	SP_NEWGAME_STR_RANDOMMAP,
+	SP_NEWGAME_STR_CUSTOMMAP,
+
+	SP_NEWGAME_STR_EARTH,
+	SP_NEWGAME_STR_DOUGHNUT,
+	//Added by Martin Gühmann
+	SP_NEWGAME_STR_URANUS,
+	SP_NEWGAME_STR_FLAT,
+
+	SP_NEWGAME_STR_DEFAULT,
+	SP_NEWGAME_STR_CUSTOM,
+
+	SP_NEWGAME_STR_MAX
+};
+
+
+
 
 sint32 spnewgamescreen_displayMyWindow();
 sint32 spnewgamescreen_removeMyWindow(uint32 action);
@@ -244,11 +219,11 @@ public:
 		sint32 x,
 		sint32 y );
 	uint32 GetMapSize() { return m_mapSize->GetListBox()->GetSelectedItemIndex(); };
-	uint32 GetWorldType() { return m_worldType->GetListBox()->GetSelectedItemIndex(); };
-	uint32 GetWorldShape() { return m_worldShape->GetListBox()->GetSelectedItemIndex(); };
-	uint32 GetDifficulty() { return m_difficulty->GetListBox()->GetSelectedItemIndex(); };
-	uint32 GetRiskLevel() { return m_riskLevel->GetListBox()->GetSelectedItemIndex(); };
-	uint32 GetNumOpponents() { return m_opponent->GetListBox()->GetSelectedItemIndex()+3; };
+	uint32 GetWorldType() { return m_mapSize->GetListBox()->GetSelectedItemIndex(); };
+	uint32 GetWorldShape() { return m_mapSize->GetListBox()->GetSelectedItemIndex(); };
+	uint32 GetDifficulty() { return m_mapSize->GetListBox()->GetSelectedItemIndex(); };
+	uint32 GetRiskLevel() { return m_mapSize->GetListBox()->GetSelectedItemIndex(); };
+	uint32 GetNumOpponents() { return m_mapSize->GetListBox()->GetSelectedItemIndex()+3; };
 
 private:
 	c3_DropDown		*m_mapSize,

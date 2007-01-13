@@ -1,51 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The SettleMap
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _DEBUG
-// - Generate debug version when set.
-//
-// _SLOW_BUT_SAFE
-// - Define 2 other symbols (PROJECTED_CHECK_START and PROJECTED_CHECK_END) 
-//   when set. But the defined symbols are never used, so this doesn't do
-//   anything at all. This makes preprocessing and compilation slower, but
-//   should be safe.
-//
-// USE_LOGGING
-// - Enable logging when set, even when not building a debug version. 
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Modified GetSettleTargets so that no settle targets are found that cannot
-//   be settled, because the player does not has any units for the tile in
-//   question. (May 20th 2006 Martin Gühmann)
-// 
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
-#include "settlemap.h"
 
 
 #include "gfx_options.h"
-#include "World.h"		            // g_theWorld
+
+#include "settlemap.h"
+#include "World.h"
+extern World *g_theWorld;
 #include "citydata.h"
 
 #include "CityInfluenceIterator.h"
@@ -58,13 +32,7 @@
 #include "Diplomat.h"
 
 #include "boundingrect.h"
-#include "TerrainRecord.h"
-#include "UnitRecord.h"
 
-namespace
-{
-    double const    VALUE_NEAR_EDGE_OF_WORLD    = -1.0;
-}
 
 SettleMap SettleMap::s_settleMap;
 
@@ -73,42 +41,46 @@ MapGrid<double>::MapGridArray MapGrid<double>::s_scratch;
 
 
 SettleMap::SettleMap()
-:
-    m_settleValues	(),
-    m_invalidCells	()
 {
+	
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : SettleMap::ComputeSettleValue
-//
-// Description: Calculates a settling score for the given position, which is 
-//              independent of unit abilities to settle at a certain location.
-//              The settle score is the sum of scores of tiles in a radius of
-//              two tiles around the given position.
-//
-// Parameters : const MapPoint & pos: The position for that the settle
-//                                    score should be computed.
-//
-// Globals    : g_theWorld: The game world
-//
-// Returns    : double:     The settle score for the given map position
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
+
 double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 {
+	RadiusIterator it(pos, k_minimum_settle_city_size, k_minimum_settle_city_size * k_minimum_settle_city_size);
+	
+	
+	
+	
+	
+	
 	sint32 score = 0;
-	RadiusIterator it(pos, k_minimum_settle_city_size);
 
-	for (it.Start(); !it.End(); it.Next()) 
-	{
-		const Cell * cell = g_theWorld->GetCell(it.Pos());
-		score += cell->GetScore();
-	}
+	
+	for(it.Start(); !it.End(); it.Next()) 
+		{
+			const Cell * cell = g_theWorld->GetCell(it.Pos());
+			
+			
+			
 
+			
+			
+			
+			
+			score += cell->GetScore();
+		}
+
+	
+	
+	
+	
+	
+	
+	
+
+	
 	return score;
 }
 
@@ -117,49 +89,59 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 
 void SettleMap::Cleanup()
 {
-    m_settleValues.Cleanup();
-    m_invalidCells.Resize(0, 0, false);
+	
+	m_settleValues.Clear();
+
+	
+	
+	m_invalidCells.Resize(0, 0, false);
 }
 
 
 void SettleMap::Initialize()
 {
-	size_t const    x_size  = g_theWorld->GetWidth();
-	size_t const    y_size  = g_theWorld->GetHeight();
-	MapPoint rc_pos;
-	MapPoint xy_pos;
-
+	sint32 x_size = g_theWorld->GetWidth();
+	sint32 y_size = g_theWorld->GetHeight();
+	MapPoint rc_pos(0,0);
+	MapPoint xy_pos(0,0);
+	double value;
 	m_settleValues.Clear();
-	m_settleValues.Resize(x_size, y_size, 1); 
-	m_invalidCells.Resize(x_size, y_size, 0);
 
-	for (rc_pos.x = 0; static_cast<size_t>(rc_pos.x) < x_size; rc_pos.x++)
-	{
-		for (rc_pos.y = 0; static_cast<size_t>(rc_pos.y) < y_size; rc_pos.y++)
+	
+	m_settleValues.Resize( x_size, y_size, 1 ); 
+
+	
+	m_invalidCells.Resize( x_size, y_size, 0 );
+
+	
+	for (rc_pos.x=0; rc_pos.x < x_size; rc_pos.x++)
 		{
-			xy_pos.rc2xy(rc_pos, *g_theWorld->GetSize());
-	        
-            double value    = VALUE_NEAR_EDGE_OF_WORLD;
-
-			if ( ( g_theWorld->IsYwrap() ||
-				   ( (xy_pos.y >= k_minimum_settle_city_size) &&
-				     (xy_pos.y + k_minimum_settle_city_size <= y_size)
-                   )
-                 ) 
-                 &&
-                 (  g_theWorld->IsXwrap() ||
-					( (xy_pos.x >= k_minimum_settle_city_size) &&
-					  (xy_pos.x + k_minimum_settle_city_size <= (x_size * 2)) 
-                    )
-                 )
-               )
-			{
-				value = ComputeSettleValue(rc_pos);
-			}
-
-			m_settleValues.AddValue(rc_pos, value);
+			for (rc_pos.y=0; rc_pos.y < y_size; rc_pos.y++)
+				{
+					
+					xy_pos.rc2xy(rc_pos, *g_theWorld->GetSize());
+					if ( (g_theWorld->IsYwrap() == FALSE ) &&
+						 ( xy_pos.y < k_minimum_settle_city_size ||
+						   xy_pos.y > (y_size - k_minimum_settle_city_size) ))
+						{
+							
+							value = -1;
+						}
+					else if ((g_theWorld->IsXwrap() == FALSE) &&
+							 ( xy_pos.x < k_minimum_settle_city_size ||
+							   xy_pos.x > ((x_size * 2) - k_minimum_settle_city_size) ))
+						{
+							
+							value = -1;
+						}
+					else
+						{
+							
+							value = ComputeSettleValue(rc_pos);
+						}
+					m_settleValues.AddValue(rc_pos, value);
+				} 
 		} 
-	} 
 }
 
 
@@ -168,38 +150,50 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 	
 	MapPoint pos = city.RetPos();
 	CityData *citydata = city.GetCityData();
-	Assert(citydata);
 	PLAYER_INDEX playerId = city.GetOwner();
+	Assert(citydata);
 
 	
-	sint32 radius = g_theCitySizeDB->Get(citydata->GetSizeIndex())->GetIntRadius();
+	sint16 radius = (sint16) g_theCitySizeDB->Get(citydata->GetSizeIndex())->GetIntRadius();
+
+	
 	radius += radius + 1;
 	
-	RadiusIterator it(pos, radius);
-	for (it.Start(); !it.End(); it.Next()) 
-	{
-		pos = it.Pos();
-		m_invalidCells.Set(pos.x, pos.y, TRUE);
-	}
+	
+	RadiusIterator it(pos, 0);
+	it.Init(pos, radius, radius*radius);
+
+	
+	for(it.Start(); !it.End(); it.Next()) 
+		{
+			pos = it.Pos();
+			m_invalidCells.Set(pos.x, pos.y, TRUE);
+		}
 
 	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 	sint32 min_settle_distance = 0;
 	strategy.GetMinSettleDistance(min_settle_distance);
 
-	RadiusIterator settleIt(pos, min_settle_distance);
-	for (settleIt.Start(); !settleIt.End(); settleIt.Next()) 
-	{
-		pos = settleIt.Pos();
-		double const new_value = ComputeSettleValue(pos) * 0.5;
-		m_settleValues.SetGridValue(pos, new_value);
-	}
+	it.Init(pos, min_settle_distance, min_settle_distance*min_settle_distance);
+	
+	sint32 new_value;
+	for(it.Start(); !it.End(); it.Next()) 
+		{
+			
+			pos = it.Pos();
+			
+			new_value = ComputeSettleValue(pos) * 0.5;
+			m_settleValues.SetGridValue(pos, new_value);
+		}
+
 	
 	MapAnalysis::GetMapAnalysis().UpdateBoundingRectangle(city);
 }
 
 
 void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId, 
+								 const bool & settle_water,
 								 SettleMap::SettleTargetList & targets) const
 {
 	
@@ -207,122 +201,140 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	BoundingRect rect =	
 		MapAnalysis::GetMapAnalysis().GetBoundingRectangle(playerId);
 
-	if (!rect.IsValid())
+	
+	if (rect.IsValid() == false)
 		return;
 
+	
+	
+
+	
 	rect.Expand( 10 );
 
 	MapPoint xy_pos(0,0);
 	MapPoint rc_pos(0,0);
 	SettleTarget settle_target;
 
+	
+	
+	
+	
+	
+
+	
+	
 	sint16 rows = rect.GetMaxRows();
 	sint16 cols = rect.GetMaxCols();
+	
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	sint32 settle_threshold = 0;
-	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
-
-	Player *player_ptr = g_player[playerId];
-	Assert(player_ptr);
-	if(!player_ptr)
-		return;
-
-	sint32 numTerrain = g_theTerrainDB->NumRecords();
-	bool* settleTerrainTypes = new bool[numTerrain];
-	std::fill(settleTerrainTypes, settleTerrainTypes + numTerrain, false);
-
-	bool noSettleUnits = true;
-	Unit unit;
-	sint32 i;
-
-	Assert(player_ptr->m_all_units);
-	for(i = 0; i < player_ptr->m_all_units->Num(); ++i){
-		unit = player_ptr->m_all_units->Access(i);
-		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
-		
-		Assert(rec);
-		if(!rec) continue;
-
-		if(rec->GetNumCanSettleOn() > 0){
-			for(sint32 j = 0; j < rec->GetNumCanSettleOn(); ++j){
-				settleTerrainTypes[rec->GetCanSettleOnIndex(j)] = true;
-				noSettleUnits = false;
-			}
-		}
-		else{
-			for(sint32 j = 0; j < numTerrain; ++j){
-				const TerrainRecord* trec = g_theTerrainDB->Get(j);
-				if(trec->GetMovementTypeLand()                                        && rec->GetSettleLand()
-				|| trec->GetMovementTypeMountain()                                    && rec->GetSettleMountain()
-				||(trec->GetMovementTypeSea() || trec->GetMovementTypeShallowWater()) && rec->GetSettleWater()
-				|| trec->GetMovementTypeSpace()                                       && rec->GetSettleSpace()
-				){
-					settleTerrainTypes[j] = true;
-					noSettleUnits = false;
-				}
-			}
-		}
-	}
-
-	if(noSettleUnits){
-		delete settleTerrainTypes;
-		return;
-	}
-
-	for(i = 0; rect.Get(i, xy_pos, rows, cols); i++)
+	if (Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore())
 	{
-		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
+		Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
+	}
 
-		settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
-		settle_target.m_pos = rc_pos;
-
-#ifdef _DEBUG
-		if (g_graphicsOptions->IsCellTextOn()) {
-			char buf[16];
-			sprintf(buf,"*%4.0f*",settle_target.m_value );
-			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
-		}
-#endif _DEBUG
-
-
-		if (!CanSettlePos(rc_pos))
-			continue;
-
-		if (settle_target.m_value <= settle_threshold)
+	for (sint32 i = 0; rect.Get(i, xy_pos, rows, cols); i++)
 		{
+			
+
+			
+			rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
+
+			settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
+			settle_target.m_pos = rc_pos;
 
 #ifdef _DEBUG
 			if (g_graphicsOptions->IsCellTextOn()) {
 				char buf[16];
-				sprintf(buf,"(%4.0f)",settle_target.m_value );
+				sprintf(buf,"*%4.0f*",settle_target.m_value );
 				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 			}
 #endif _DEBUG
 
-			continue;
-		}
+			
+			if ( CanSettlePos(rc_pos) == false)
+				continue;
 
-		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
-			continue;	
+			if ( settle_target.m_value <= settle_threshold)
+			{
 
 #ifdef _DEBUG
-		if (g_graphicsOptions->IsCellTextOn()) {
-			char buf[16];
-			sprintf(buf,"%4.0f",settle_target.m_value );
-			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
-		}
+				if (g_graphicsOptions->IsCellTextOn()) {
+					char buf[16];
+					sprintf(buf,"(%4.0f)",settle_target.m_value );
+					g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+				}
 #endif _DEBUG
 
-		targets.push_back(settle_target);
-	}
+				continue;
+			}
 
-	delete settleTerrainTypes;
+			
+			if ( (settle_water == false) &&
+				 (g_theWorld->IsWater(rc_pos) == TRUE) )
+				continue;
 
-    if (targets.empty())
-    {
-        return;
-    }
+#ifdef _DEBUG
+			if (g_graphicsOptions->IsCellTextOn()) {
+				char buf[16];
+				sprintf(buf,"%4.0f",settle_target.m_value );
+				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+			}
+#endif _DEBUG
 
+			targets.push_back(settle_target);
+		}
+	
 	targets.sort(std::greater<SettleTarget>());
 
 	
@@ -338,88 +350,113 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 	sint32 min_settle_distance = 0;
-	(void) strategy.GetMinSettleDistance(min_settle_distance);
+	strategy.GetMinSettleDistance(min_settle_distance);
 
 	
-	SettleMap::SettleTargetList::iterator iter  = targets.begin();
+	SettleMap::SettleTargetList::iterator iter;
 	SettleMap::SettleTargetList::iterator tmp_iter;
+	iter = targets.begin();
+	settle_target = *iter;
+	iter++;
 
-	settle_target = *iter;  // non-emptyness verified before
-	++iter;
-
-	while (iter != targets.end())
-	{
-		g_theWorld->GetContinent(iter->m_pos, cont, is_land);
+	
+	while( iter != targets.end() )
+		{
+			
+			g_theWorld->GetContinent(iter->m_pos, cont, is_land);
 
 #ifdef _DEBUG
-                  if (is_land) {Assert(cont < max_land_cont);}
-                  else {Assert(cont < max_water_cont);}
+                      if (is_land) {Assert(cont < max_land_cont);}
+                      else {Assert(cont < max_water_cont);}
 #endif _DEBUG
-		Assert(cont >= 0);
+			Assert(cont >= 0);
 
-		if ((is_land && (land_continent_count[cont] >= k_targets_per_continent)) ||  
-			(!is_land && (water_continent_count[cont] >= k_targets_per_continent)))
-		{
-			iter = targets.erase(iter);
-		}
-		else
-		{
-			for (tmp_iter = targets.begin(); tmp_iter != iter; ++tmp_iter)
-			{
-               if (MapPoint::GetSquaredDistance(iter->m_pos, tmp_iter->m_pos) <
-                   (min_settle_distance * min_settle_distance) 
-                  )
-			   {
-				   break;
-			   }
-			}
-
-			if (tmp_iter == iter)
-            {
-				++iter;
-            }
-			else 
-            {
-				iter = targets.erase(iter);
-				continue;
-			}
-
-			if (is_land)
-			{
-				if (land_continent_count[cont] == 0)
+			if ((is_land == TRUE && 
+				 (land_continent_count[cont] >= k_targets_per_continent)) ||  
+				(is_land == FALSE && 
+				 (water_continent_count[cont] >= k_targets_per_continent)))
 				{
-					iter->m_value += 2;
+					
+					iter = targets.erase(iter);
 				}
-				land_continent_count[cont]++;
-			}
 			else
-			{
-				if (water_continent_count[cont] == 0)
 				{
-					iter->m_value += 2;
-				}
-				water_continent_count[cont]++;
-			}
-		}
-	}
+					
+					tmp_iter = targets.begin();
+					while (tmp_iter != iter)
+					{
+                       
+                       if (MapPoint::GetSquaredDistance(iter->m_pos, tmp_iter->m_pos) <
+                           (min_settle_distance * min_settle_distance) )
+					   {
+						   break;
+					   }
+					   tmp_iter++;
+					}
 
+					
+					if (tmp_iter == iter)
+						iter++;
+					else {
+						
+						iter = targets.erase(iter);
+						continue;
+					}
+
+					
+					if (is_land)
+						{
+							if (land_continent_count[cont] == 0)
+							{
+								
+								iter->m_value += 2;
+							}
+							land_continent_count[cont]++;
+						}
+					else
+						{
+							if (water_continent_count[cont] == 0)
+							{
+								
+								iter->m_value += 2;
+							}
+							water_continent_count[cont]++;
+						}
+				}
+		}
+
+	
 	targets.sort(std::greater<SettleTarget>());
+
+	
 }
+
 
 
 bool SettleMap::CanSettlePos(const MapPoint & rc_pos) const
 {
-    return !m_invalidCells.Get(rc_pos.x, rc_pos.y);
+	bool can_settle = true;
+	
+	
+	
+	
+	
+	
+	if (m_invalidCells.Get(rc_pos.x, rc_pos.y) != FALSE)
+		can_settle = false;
+
+	return can_settle;
 }
 
 
 void SettleMap::SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle)
 {
-    m_invalidCells.Set(rc_pos.x, rc_pos.y, !can_settle);
+	m_invalidCells.Set(rc_pos.x, rc_pos.y, (can_settle?FALSE:TRUE));
 }
+
 
 
 double SettleMap::GetValue(const MapPoint &rc_pos) const
 {
-    return m_settleValues.GetGridValue(rc_pos);
+	return m_settleValues.GetGridValue(rc_pos);
 }

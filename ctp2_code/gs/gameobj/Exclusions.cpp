@@ -80,7 +80,7 @@ void Exclusions::Serialize(CivArchive &archive)
 		if(m_numUnits != g_theUnitDB->NumRecords()) {
 			sint32 *newUnits = new sint32[g_theUnitDB->NumRecords()];
 			memset(newUnits, 0, g_theUnitDB->NumRecords() * sizeof(sint32));
-            memcpy(newUnits, m_units, std::min(m_numUnits, g_theUnitDB->NumRecords()) * sizeof(sint32));
+			memcpy(newUnits, m_units, min(m_numUnits, g_theUnitDB->NumRecords()) * sizeof(sint32));
 			delete [] m_units;
 			m_units = newUnits;
 			m_numUnits = g_theUnitDB->NumRecords();
@@ -88,7 +88,7 @@ void Exclusions::Serialize(CivArchive &archive)
 		if(m_numBuildings != g_theBuildingDB->NumRecords()) {
 			sint32 *newBuildings = new sint32[g_theBuildingDB->NumRecords()];
 			memset(newBuildings, 0, g_theBuildingDB->NumRecords() * sizeof(sint32));
-            memcpy(newBuildings, m_buildings, std::min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
+			memcpy(newBuildings, m_buildings, min(m_numBuildings, g_theBuildingDB->NumRecords()) * sizeof(sint32));
 			delete [] m_buildings;
 			m_buildings = newBuildings;
 			m_numBuildings = g_theBuildingDB->NumRecords();
@@ -96,7 +96,7 @@ void Exclusions::Serialize(CivArchive &archive)
 		if(m_numWonders != g_theWonderDB->NumRecords()) {
 			sint32 *newWonders = new sint32[g_theWonderDB->NumRecords()];
 			memset(newWonders, 0, g_theWonderDB->NumRecords() * sizeof(sint32));
-            memcpy(newWonders, m_wonders, std::min(m_numWonders, g_theWonderDB->NumRecords()) * sizeof(sint32));
+			memcpy(newWonders, m_wonders, min(m_numWonders, g_theWonderDB->NumRecords()) * sizeof(sint32));
 			delete [] m_wonders;
 			m_wonders = newWonders;
 			m_numWonders = g_theWonderDB->NumRecords();

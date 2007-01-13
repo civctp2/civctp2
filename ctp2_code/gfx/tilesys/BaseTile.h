@@ -9,9 +9,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE 
+ 
 #pragma once
-#endif
 #ifndef __BASETILE_H__
 #define __BASETILE_H__
 

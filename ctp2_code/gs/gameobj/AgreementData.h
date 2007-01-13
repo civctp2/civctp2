@@ -1,6 +1,15 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
+
 #ifndef __AGREEMENTDATA_H__
 #define __AGREEMENTDATA_H__
 

@@ -283,6 +283,24 @@ protected:
 	sint32		m_slideDx;
 	sint32		m_slideDy;
 
+#if defined(_MSC_VER)	
+	virtual MouseEventCallback PostChildrenCallback;
+
+	
+	virtual MouseEventCallback MouseMoveOver;
+	virtual MouseEventCallback MouseMoveInside;
+
+	
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+
+	
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseLDropOutside;
+	virtual MouseEventCallback MouseRGrabInside;
+	virtual MouseEventCallback MouseRDropInside;
+#else
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
 	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
@@ -296,6 +314,7 @@ protected:
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
+#endif
 };
 
 

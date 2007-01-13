@@ -33,6 +33,8 @@
 
 
 extern C3UI			*g_c3ui;
+extern ColorSet		*g_colorSet;
+
 
 TextTable::TextTable(
 	AUI_ERRCODE *retval,

@@ -1,9 +1,9 @@
 #ifndef __AUI_JOYSTICK_H__
 #define __AUI_JOYSTICK_H__
 
-#include <algorithm>
+#include "aui_base.h"
+#include "aui_input.h"
 
-class aui_Joystick;
 
 enum AUI_JOYSTICK_CONTROL
 {
@@ -38,36 +38,39 @@ struct aui_JoystickEvent
 	uint32   key;
 	BOOL		down;	
 	uint32	time;	
-
-	aui_JoystickEvent()
-	:
-		lX	(0),
-		lY	(0),
-		lZ	(0),
-		key	(0),
-		down	(false),
-		time	(0)
-	{
-		std::fill(POV, POV + 4, 0);
-		std::fill(buttons, buttons + 32, 0);
-	}
 };
 
 
-#include "aui_base.h"
-#include "aui_input.h"
+
+
+
+
+
+
+
 
 
 class aui_Joystick : public aui_Base, public virtual aui_Input
 {
 public:
-	aui_Joystick();
+	
+	aui_Joystick(
+		AUI_ERRCODE *retval );
 	virtual ~aui_Joystick();
+
+protected:
+	aui_Joystick() {}
+	AUI_ERRCODE	InitCommon( void );
+
+public:
+	
 
 	aui_JoystickEvent	*GetLatestJoystickEvent( void ) { return &m_data; }
 
 protected:
 	aui_JoystickEvent m_data;	
+
+		
 };
 
 #endif 

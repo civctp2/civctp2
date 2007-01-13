@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : General declarations
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,11 +16,11 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER
+// _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only).
 //
 // __GNUC__
@@ -29,10 +28,6 @@
 //
 // USE_LOGGING
 // - Enable logging facilities - even when not using the debug build.
-//
-// _BFR_
-// - Force CD checking when set (build final release).
-// - If not defined it enables some more loogs.
 //
 //----------------------------------------------------------------------------
 //
@@ -45,24 +40,18 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed refferences to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
-// - Removed refferences to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
-// - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"             // Pre-compiled header
-#include "civ3_main.h"      // Own declarations: consistency check
+#include "c3.h"
 
-#include <algorithm>        // std::fill
 #include "aui.h"
 #include "pixelutils.h"
 #include "colorset.h"
 #include "civapp.h"
+
+#include "civ3_main.h"
+
 
 #include "c3ui.h"
 #include "c3blitter.h"
@@ -114,6 +103,7 @@
 #include "DB.h"
 #include "BuildingRecord.h"
 #include "TerrainRecord.h"
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "gameinit.h"
 #include "TradePool.h"
@@ -122,6 +112,7 @@
 #include "player.h"
 #include "UnitPool.h"
 #include "profileDB.h"
+#include "CivilisationDB.h"
 #include "TurnCnt.h"
 #include "ConstDB.h"
 
@@ -135,6 +126,7 @@
 #include "Sprite.h"
 #include "UnitSpriteGroup.h"
 #include "tiledmap.h"
+#include "SpriteStateDB.h"
 #include "SpriteGroupList.h"
 #include "director.h"
 
@@ -177,109 +169,127 @@
 #include <SDL_mixer.h>
 #endif
 
-#include "civscenarios.h"   // g_civScenarios
+
+#include "civscenarios.h"
+extern CivScenarios		*g_civScenarios;
+
 #include "ctpregistry.h"
-#include "sliccmd.h"        // sliccmd_clear_symbols
+#include "sliccmd.h"    // sliccmd_clear_symbols
 
 #ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL (WM_MOUSELAST+1)
+#define WM_MOUSEWHEEL (WM_MOUSELAST+1)  
 #endif
-
-#if defined(_DEBUG)
-#include "debug.h"          // Os::SetThreadName
-#include "SlicSegment.h"    // SlicSegment::Cleanup
-#endif // _DEBUG 
-
-#define k_LDLName                   "civ3.ldl"
-#define k_LDL640Name                "civ3_640.ldl"
-#define k_CursorName                "cursor2.tif"
-#define k_DisclaimerName            "disclaimer.txt"
-
-#define k_SHARED_SURFACE_WIDTH      1024
-#define k_SHARED_SURFACE_HEIGHT     768
-#define k_SHARED_SURFACE_BPP        16
-
-
-#define k_SMOOTH_PIX_SEC_PER_SEC    8.0f
-#define k_SMOOTH_MIN_VELOCITY       4.0f
-#define k_SMOOTH_MAX_VELOCITY       (k_TILE_PIXEL_HEIGHT>>1)
-#define k_SMOOTH_START_TIME         (int)(1000.0f*(float)sqrt(k_SMOOTH_MIN_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
-#define k_SMOOTH_SLOW_TIME          (int)(500.0f*(float)sqrt(k_SMOOTH_MAX_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
-
-extern sint32                       g_splash_cur; 
-extern sint32                       g_splash_old; 
-extern char                         g_splash_buf[100]; 
-
-
-HWND                                gHwnd;
-HINSTANCE                           gHInstance;
-BOOL                                gDone = FALSE;
-LPCSTR                              gszMainWindowClass = "CTP II";
-LPCSTR                              gszMainWindowName = "CTP II";
-sint32                              g_ScreenWidth = 0;
-sint32                              g_ScreenHeight = 0;
-
-
-C3UI                                *g_c3ui = NULL;
-StatusWindow                        *g_statusWindow = NULL;
-extern DebugWindow                  *g_debugWindow;
-aui_Surface                         *g_sharedSurface = NULL;
-
-BOOL                                g_smoothScroll = FALSE;
-
-
-
-RECT                                g_backgroundViewport = { 0, 0, 0, 0 };
-sint32                              g_is565Format = TRUE;
-sint32                              g_modalWindow = 0;
-
-BOOL                                g_helpMode = TRUE;
 
 #ifdef _DEBUG
-extern sint32                       g_debugOwner;
-extern Player                       **g_player;
-extern BOOL                         g_toggleAdvances ;
-extern SelectedItem                 *g_selected_item; 
+#include "debug.h"
+#endif
+
+#define k_LDLName				"civ3.ldl"
+#define k_LDL640Name			"civ3_640.ldl"
+#define k_CursorName			"cursor2.tif"
+
+#define k_SHARED_SURFACE_WIDTH	1024
+#define k_SHARED_SURFACE_HEIGHT	768
+#define k_SHARED_SURFACE_BPP	16
+
+
+#define k_SMOOTH_PIX_SEC_PER_SEC	8.0f
+#define k_SMOOTH_MIN_VELOCITY		4.0f			
+#define k_SMOOTH_MAX_VELOCITY		(k_TILE_PIXEL_HEIGHT>>1) 			
+#define k_SMOOTH_START_TIME			(int)(1000.0f*(float)sqrt(k_SMOOTH_MIN_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
+#define k_SMOOTH_SLOW_TIME			(int)(500.0f*(float)sqrt(k_SMOOTH_MAX_VELOCITY*2.0f/k_SMOOTH_PIX_SEC_PER_SEC))
+
+extern sint32 g_splash_cur; 
+extern sint32 g_splash_old; 
+extern char g_splash_buf[100]; 
+
+
+HWND			gHwnd;
+HINSTANCE		gHInstance;
+BOOL			gDone = FALSE;
+LPCSTR			gszMainWindowClass = "CTP II";
+LPCSTR			gszMainWindowName = "CTP II";
+sint32			g_ScreenWidth = 0;
+sint32			g_ScreenHeight = 0;
+
+
+C3UI				*g_c3ui = NULL;
+StatusWindow		*g_statusWindow = NULL;
+extern DebugWindow	*g_debugWindow;
+aui_Surface			*g_sharedSurface = NULL;
+
+BOOL			g_smoothScroll = FALSE;
+
+
+
+RECT			g_backgroundViewport = { 0, 0, 0, 0 };
+sint32			g_is565Format = TRUE;
+sint32			g_modalWindow = 0;
+
+BOOL			g_helpMode = TRUE;
+
+#ifdef _DEBUG
+extern sint32 g_debugOwner;
+extern Player** g_player;
+extern BOOL		g_toggleAdvances ;
+extern SelectedItem *g_selected_item; 
 #endif
 
 
-extern StringDB                     *g_theStringDB;
-extern ConstDB                      *g_theConstDB;
-extern World                        *g_theWorld;
-extern UnitPool                     *g_theUnitPool;
-extern Pollution                    *g_thePollution;
-extern sint32                       g_is_rand_test;
-extern void                         ai_rand_test();
-extern ProfileDB                    *g_theProfileDB;
-extern TurnCount                    *g_turn;
+extern StringDB						*g_theStringDB; 
+extern Database <GovernmentRecord>	*g_theGovernmentDB; 
+extern CivilisationDatabase			*g_theCivilisationDB ;
+extern ConstDB						*g_theConstDB; 
+extern World						*g_theWorld; 
+extern UnitPool						*g_theUnitPool; 
+extern Pollution					*g_thePollution;
+extern sint32					    g_is_rand_test; 
+extern void ai_rand_test(); 
+extern ProfileDB *g_theProfileDB; 
+extern TurnCount *g_turn;
 
 
-static uint32                       s_scrollcurtick =0;
-static uint32                       s_scrolllasttick=0;
-static sint32                       s_scrolltime =k_SMOOTH_START_TIME;
-static uint32                       s_accelTickStart = 0;
-
-extern CivPaths                     *g_civPaths;
-extern C3Window                     *g_turnWindow;
-extern StatsWindow                  *g_statsWindow;
-extern ControlPanelWindow           *g_controlPanel;
-
-sint32                              g_terrainPollution;
+static uint32   s_scrollcurtick	=0;
+static uint32   s_scrolllasttick=0;
+static sint32   s_scrolltime	=k_SMOOTH_START_TIME;
+static uint32   s_accelTickStart = 0;
 
 
-Director                            *g_director;
-double                              g_ave_frame_rate = 10.0;
-double                              g_ave_frame_time = 200.0;
-ScreenManager                       *g_screenManager = NULL;
+extern CivPaths				*g_civPaths;
 
 
-TiledMap                            *g_tiledMap = NULL;
+extern ColorSet				*g_colorSet;
 
 
-RadarMap                            *g_radarMap = NULL;
 
 
-CivApp                              *g_civApp = NULL;
+
+extern C3Window		*g_turnWindow;
+extern StatsWindow			*g_statsWindow;
+extern ControlPanelWindow	*g_controlPanel;
+
+sint32	g_terrainPollution ;
+
+
+SpriteStateDB               *g_theSpriteStateDB;
+
+
+SpriteStateDB				*g_theGoodsSpriteStateDB;
+SpriteStateDB				*g_theCitySpriteStateDB;
+
+Director					*g_director;
+double						g_ave_frame_rate = 10.0;
+double						g_ave_frame_time = 200.0;
+ScreenManager				*g_screenManager = NULL;
+
+
+TiledMap					*g_tiledMap = NULL;
+
+
+RadarMap					*g_radarMap = NULL;
+
+
+CivApp						*g_civApp = NULL;
 
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
@@ -293,7 +303,12 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 Network g_network;
 
+
+DrawHandler background_draw_handler;
+
+
 extern Background			*g_background;
+
 extern Splash				*g_splash;
 
 BOOL g_letUIProcess = FALSE;
@@ -316,7 +331,7 @@ BOOL g_use_profile_process = FALSE;
 BOOL g_createDirectDrawOnSecondary = FALSE;
 
 sint32		g_god;
-DWORD		g_dxver = 0;
+uint32		g_dxver = 0;
 
 
 bool g_e3Demo = false;
@@ -328,7 +343,7 @@ bool g_autoAltTab = false;
 
 int ui_Initialize(void)
 {
-	AUI_ERRCODE auiErr = AUI_ERRCODE_OK;
+	AUI_ERRCODE auiErr;
 
 	char s[_MAX_PATH+1];
 
@@ -365,8 +380,7 @@ int ui_Initialize(void)
 	}
 
 	
-	ColorSet::Initialize();
-    g_c3ui->RegisterCleanup(&ColorSet::Cleanup);
+	g_colorSet->Initialize();
 
 	SPLASH_STRING("Initializing Paths...");
 
@@ -460,7 +474,7 @@ int ui_Initialize(void)
 
 	
 	while ( ShowCursor( FALSE ) >= 0 )
-	;
+		;
 
 	return AUI_ERRCODE_OK;
 }
@@ -527,40 +541,48 @@ compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
 	bool retval = true;
 
 	
-	float real_time=(float)time/(1000.0f);
+	float	real_time=(float)time/(1000.0f);
+
+		
+	float t=k_SMOOTH_START_TIME;
 
 	
-	real_time *= real_time;
+	real_time*=real_time;
 
-	float velocity = real_time * 0.5f * k_SMOOTH_PIX_SEC_PER_SEC;
+	float velocity=real_time*0.5f*k_SMOOTH_PIX_SEC_PER_SEC;
 
 	
-	if (velocity < k_SMOOTH_MIN_VELOCITY)
-		velocity = k_SMOOTH_MIN_VELOCITY;
+   	if (velocity<k_SMOOTH_MIN_VELOCITY)
+		velocity=k_SMOOTH_MIN_VELOCITY;
 
 	
 	deltaX *= (sint32)velocity;
 	deltaY *= (sint32)velocity;
 
 	
-	sint32 signx = (deltaX < 0 ? -1 : 1);
-	sint32 signy = (deltaY < 0 ? -1 : 1);
+	sint32 signx=(deltaX<0?-1:1);
+	sint32 signy=(deltaY<0?-1:1);	
 
-	if (abs(deltaX) > k_SMOOTH_MAX_VELOCITY)
+	sint32 w=k_TILE_PIXEL_WIDTH;			
+	sint32 h=k_TILE_PIXEL_HEIGHT;			
+
+	
+	
+	if (abs(deltaX)>k_SMOOTH_MAX_VELOCITY)
 	{
-		deltaX = k_SMOOTH_MAX_VELOCITY * signx;
-		retval = false;
+		deltaX 	= k_SMOOTH_MAX_VELOCITY*signx;
+		retval	= false;
 	}
 	
 	if (abs(deltaY)>k_SMOOTH_MAX_VELOCITY)
 	{
-		deltaY = k_SMOOTH_MAX_VELOCITY * signy;
-		retval = false;
+		deltaY	= k_SMOOTH_MAX_VELOCITY*signy;
+		retval	= false;
 	}
 
-
-	deltaX &= 0xFFFFFFFE;
-	deltaY &= 0xFFFFFFFE;
+	
+  	deltaX &= 0xFFFFFFFE;
+  	deltaY &= 0xFFFFFFFE;
 
 	return retval;
 }
@@ -574,7 +596,7 @@ BOOL ui_CheckForScroll(void)
 	static BOOL isMouseScrolling = FALSE;
 
 	
-//	const int k_MAX_SMOOTH_SCROLL = 64;
+	const int k_MAX_SMOOTH_SCROLL = 64;
 	const int k_TICKS_PER_ACCELERATION = 50;
 
 	sint32		hscroll = g_tiledMap->GetZoomTilePixelWidth();
@@ -594,7 +616,7 @@ BOOL ui_CheckForScroll(void)
 	
 	g_tiledMap->SetScrolling(false);
 
-	s_scrolllasttick = s_scrollcurtick;
+	s_scrolllasttick = s_scrollcurtick;	
 	s_scrollcurtick	 = GetTickCount();
 
 	tickDelta = s_scrollcurtick-s_scrolllasttick;
@@ -605,7 +627,7 @@ BOOL ui_CheckForScroll(void)
 	sint32 x = g_c3ui->TheMouse()->X();
 	sint32 y = g_c3ui->TheMouse()->Y();
 
-	sint32	deltaX = 0,
+	sint32	deltaX = 0, 
 			deltaY = 0;
 
 	static sint32	lastdeltaX = 0; 
@@ -629,22 +651,22 @@ BOOL ui_CheckForScroll(void)
 	{
 		switch (g_civApp->GetKeyboardScrollingKey()) 
 		{
-			case AUI_KEYBOARD_KEY_UPARROW:
+			case DIK_UPARROW:
 					deltaX = 0;
 					deltaY = -1;
 					scrolled = TRUE;
 				break;
-			case AUI_KEYBOARD_KEY_LEFTARROW:
+			case DIK_LEFTARROW:
 					deltaX = -1;
 					deltaY = 0;
 					scrolled = TRUE;
 				break;
-			case AUI_KEYBOARD_KEY_RIGHTARROW:
+			case DIK_RIGHTARROW:
 					deltaX = 1;
 					deltaY = 0;
 					scrolled = TRUE;
 				break;
-			case AUI_KEYBOARD_KEY_DOWNARROW:
+			case DIK_DOWNARROW:
 					deltaX = 0;
 					deltaY = 1;
 					scrolled = TRUE;
@@ -669,8 +691,8 @@ BOOL ui_CheckForScroll(void)
 			lastdeltaY = deltaY;
 
 			
-
-
+	   		
+	   		
 
 			
 			
@@ -684,7 +706,8 @@ BOOL ui_CheckForScroll(void)
 
 
 			g_tiledMap->SetScrolling(true);
-			g_tiledMap->ScrollMap(deltaX, deltaY);
+		   
+	  		g_tiledMap->ScrollMap(deltaX, deltaY);
 
 			return true;
 		}
@@ -921,9 +944,8 @@ sint32 sharedsurface_Initialize( void )
 {
 	
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	return errcode; // Return ends code here needs to be considered if g_sharedSurface is really needed
+	return errcode;
 
-#if 0
 	Assert( g_sharedSurface == NULL );
 	if ( !g_sharedSurface )
 	{
@@ -946,13 +968,19 @@ sint32 sharedsurface_Initialize( void )
 	}
 
 	return errcode;
-#endif
 }
 
-void sharedsurface_Cleanup( void )
+sint32 sharedsurface_Cleanup( void )
 {
+	Assert( !g_sharedSurface );
+	return TRUE;
+
+	if ( !g_sharedSurface ) return FALSE;
+
 	delete g_sharedSurface;
 	g_sharedSurface = NULL;
+
+	return TRUE;
 }
 
 int sprite_Initialize(void)
@@ -974,15 +1002,21 @@ int sprite_Update(aui_Surface *surf)
 	return 0;
 }
 
-void sprite_Cleanup(void)
+int sprite_Cleanup(void)
 {
 	spritegrouplist_Cleanup();
 
-	delete g_director;
-	g_director = NULL;
+	if (g_director) {
+		delete g_director;
+		g_director = NULL;
+	}
 
-    delete g_screenManager;
-	g_screenManager = NULL;
+	if (g_screenManager) {
+		delete g_screenManager;
+		g_screenManager = NULL;
+	}
+
+	return 0;
 }
 
 
@@ -1024,10 +1058,16 @@ int tile_Initialize(BOOL isRestoring)
 	return 0;
 }
 
-void tile_Cleanup(void)
+int tile_Cleanup(void)
 {
-    delete g_tiledMap; 
+    
+
+    if (g_tiledMap) 
+        delete g_tiledMap; 
+
 	g_tiledMap = NULL;
+
+	return 0;
 }
 
 int radar_Initialize(void)
@@ -1040,14 +1080,106 @@ int radar_Initialize(void)
 int main_RestoreGame(const MBCHAR *filename)
 {
 
-	return g_civApp->LoadSavedGame((MBCHAR *)filename);
+	g_civApp->LoadSavedGame((MBCHAR *)filename);
 
+return 0;
+
+    char filepath[_MAX_PATH]={0}; 
+    FILE *fin=NULL; 
+    g_civPaths->GetSavePath(C3SAVEDIR_GAME, filepath) ;				
+	strcat(filepath, filename) ;									
+    fin = fopen(filepath, "r"); 
+    if (fin == NULL) { 
+        c3errors_ErrorDialog("Load save game", "Could not open %s", filename);
+        return 0; 
+    } 
+    fclose (fin); 
+
+	
+	g_network.Cleanup() ;											
+
+	radarwindow_Cleanup();
+	tile_Cleanup() ;
+	gameinit_Cleanup() ;											
+
+	messagewin_PurgeMessages();
+	workwin_Cleanup();
+	sprite_Cleanup() ;
+	
+	
+	
+
+	sprite_Initialize() ;
+	GameFile::RestoreGame(filename) ;
+	tile_Initialize(TRUE) ;
+	radar_Initialize() ;
+
+	
+	g_tiledMap->InvalidateMap();
+
+	return (0) ;
 }
 
 
 int main_Restart()
 {
-	return g_civApp->RestartGame();
+	g_civApp->RestartGame();
+
+return 0;
+
+	
+
+
+	
+	g_network.Cleanup();
+	
+	
+
+	radarwindow_Cleanup();
+
+	
+	tile_Cleanup();
+	
+	
+	gameinit_Cleanup();
+	
+	
+
+	messagewin_PurgeMessages();
+	workwin_Cleanup();
+	
+	
+	sprite_Cleanup();
+	
+	
+
+
+
+	
+	sprite_Initialize();
+
+	
+	
+	gameinit_Initialize(-1, -1, (*(CivArchive *)(NULL)));
+
+	
+	tile_Initialize(FALSE);
+
+
+	
+	
+
+
+    
+    roboinit_Initalize(*(CivArchive *)(NULL)); 
+
+	
+	radar_Initialize();
+
+
+	g_tiledMap->InvalidateMap();
+
+	return 0;
 }
 
 static HWND s_taskBar;
@@ -1108,7 +1240,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 
 
 void ParseCommandLine(PSTR szCmdLine)
-{
+{ 
 #ifndef _BFR_
 	if(stricmp(szCmdLine, "crash.txt") == 0) {
 		FILE *txt = fopen("crashmap.txt", "w");
@@ -1121,7 +1253,7 @@ void ParseCommandLine(PSTR szCmdLine)
     
     char *archive_file; 
     archive_file = strstr(szCmdLine, "-l");
-    if (NULL == archive_file) {
+    if (NULL == archive_file) { 
         g_cmdline_load = FALSE; 
     } else { 
         g_cmdline_load = TRUE; 
@@ -1209,7 +1341,7 @@ void ParseCommandLine(PSTR szCmdLine)
     } else if (NULL != strstr(szCmdLine, "age5")) { 
         g_cheat_age = 5; 
     }
-#endif // _DEBUG
+#endif _DEBUG
 
 	if (g_noAssertDialogs) {
 		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
@@ -1236,11 +1368,11 @@ DWORD main_GetRemainingSwapSpace(void)
 
 	if( main_filehelper_GetOS() != VER_PLATFORM_WIN32_NT )
 		dwRet += ms.dwAvailPhys;
-	
+
 	return dwRet;
-		}
-		
-	
+}
+
+
 BOOL main_VerifyRAMToRun(void)
 {
 	DWORD space = main_GetRemainingSwapSpace();
@@ -1369,8 +1501,8 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 																osv.dwBuildNumber,
 																osv.szCSDVersion);
 		
-		DWORD   cNameSize = MAX_COMPUTERNAME_LENGTH+1;
-		MBCHAR  cName[MAX_COMPUTERNAME_LENGTH+1];
+		uint32 cNameSize = MAX_COMPUTERNAME_LENGTH+1;
+		MBCHAR cName[MAX_COMPUTERNAME_LENGTH+1];
 
 		if (GetComputerName((LPTSTR)cName, &cNameSize))
 			fprintf(outFile, "> Computer Name: %s\n", cName);
@@ -1419,29 +1551,29 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 	MBCHAR * s;
 	
 	switch (pException->ExceptionRecord->ExceptionCode) 
-	{
-	case EXCEPTION_ACCESS_VIOLATION:        s = "Access Violation";                break;
-	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:   s = "Array Bounds Exceeded";           break;
-	case EXCEPTION_BREAKPOINT:              s = "Breakpoint";                      break;
-	case EXCEPTION_DATATYPE_MISALIGNMENT:   s = "Datatype Misalignment";           break;
-	case EXCEPTION_FLT_DENORMAL_OPERAND:    s = "Floating Point Denormal Operand"; break;
-	case EXCEPTION_FLT_DIVIDE_BY_ZERO:      s = "Floating Point Divide by Zero";   break;
-	case EXCEPTION_FLT_INEXACT_RESULT:      s = "Floating Point Inexact Result";   break;
-	case EXCEPTION_FLT_INVALID_OPERATION:   s = "Floating Point Invalid Operation";break;
-	case EXCEPTION_FLT_OVERFLOW:            s = "Floating Point Overflow";         break;
-	case EXCEPTION_FLT_STACK_CHECK:         s = "Floating Point Stack Check";      break;
-	case EXCEPTION_FLT_UNDERFLOW:           s = "Floating Point Underflow";        break;
-	case EXCEPTION_GUARD_PAGE:              s = "Guard Page";                      break;
-	case EXCEPTION_ILLEGAL_INSTRUCTION:     s = "Illegal Instruction";             break;
-	case EXCEPTION_IN_PAGE_ERROR:           s = "In-page Error";                   break;
-	case EXCEPTION_INT_DIVIDE_BY_ZERO:      s = "Integer Divide By Zero";          break;
-	case EXCEPTION_INT_OVERFLOW:            s = "Integer Overflow";                break;
-	case EXCEPTION_INVALID_DISPOSITION:     s = "Invalid Disposition";             break;
-	case EXCEPTION_NONCONTINUABLE_EXCEPTION:s = "Non-Continuable Exception";       break;
-	case EXCEPTION_PRIV_INSTRUCTION:        s = "Privileged Instruction";          break;
-	case EXCEPTION_SINGLE_STEP:             s = "Single Step";                     break;
-	case EXCEPTION_STACK_OVERFLOW:          s = "Stack Overflow";                  break;
-	default:                                s = "Unknown";                         break;
+    {
+	case EXCEPTION_ACCESS_VIOLATION:		s = "Access Violation";		break;
+	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:	s = "Array Bounds Exceeded"; break;
+	case EXCEPTION_BREAKPOINT:				s = "Breakpoint"; break;
+	case EXCEPTION_DATATYPE_MISALIGNMENT:	s = "Datatype Misalignment"; break;
+	case EXCEPTION_FLT_DENORMAL_OPERAND:	s = "Floating Point Denormal Operand"; break;
+	case EXCEPTION_FLT_DIVIDE_BY_ZERO:		s = "Floating Point Divide by Zero"; break;
+	case EXCEPTION_FLT_INEXACT_RESULT:		s = "Floating Point Inexact Result"; break;
+	case EXCEPTION_FLT_INVALID_OPERATION:	s = "Floating Point Invalid Operation"; break;
+	case EXCEPTION_FLT_OVERFLOW:			s = "Floating Point Overflow"; break;
+	case EXCEPTION_FLT_STACK_CHECK:			s = "Floating Point Stack Check"; break;
+	case EXCEPTION_FLT_UNDERFLOW:			s = "Floating Point Underflow"; break;
+	case EXCEPTION_GUARD_PAGE:				s = "Guard Page"; break;
+	case EXCEPTION_ILLEGAL_INSTRUCTION:		s = "Illegal Instruction"; break;
+	case EXCEPTION_IN_PAGE_ERROR:			s = "In-page Error"; break;
+	case EXCEPTION_INT_DIVIDE_BY_ZERO:		s = "Integer Divide By Zero"; break;
+	case EXCEPTION_INT_OVERFLOW:			s = "Integer Overflow"; break;
+	case EXCEPTION_INVALID_DISPOSITION:		s = "Invalid Disposition"; break;
+	case EXCEPTION_NONCONTINUABLE_EXCEPTION:s = "Non-Continuable Exception"; break;
+	case EXCEPTION_PRIV_INSTRUCTION:		s = "Privileged Instruction"; break;
+	case EXCEPTION_SINGLE_STEP:				s = "Single Step"; break;
+	case EXCEPTION_STACK_OVERFLOW:			s = "Stack Overflow"; break;
+	default:                        		s = "Unknown"; break;
 	}
 
 	DPRINTF(k_DBG_FIX, ("Exception: '%s' thrown.\n", s));
@@ -1453,7 +1585,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 #else // _DEBUG
 
 #ifdef _BFR_
-	if (g_logCrashes) 
+    if (g_logCrashes) 
 #endif
 	{
 		FILE *crashLog = fopen("logs\\crash.txt", "w");
@@ -1465,7 +1597,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 		}
 		fclose(crashLog);
 	}
-
+				
 	return EXCEPTION_EXECUTE_HANDLER;
 
 #endif // _DEBUG
@@ -1543,17 +1675,13 @@ void main_InitializeLogs(void)
 	time_t		ltime;
 	struct tm	*now;
 
-	
+
 	
 	
 	time(&ltime);
 	now = localtime(&ltime);
 
-#if defined(_DEBUG) && defined(_DEBUGTOOLS)
-	Debug_Open();
-#endif
-
-    g_splash_old = GetTickCount();
+    g_splash_old = GetTickCount(); 
 
 	strftime(timebuf, 100, "Log started at %I:%M%p %m/%d/%Y", now);
 
@@ -1619,8 +1747,8 @@ void main_InitializeLogs(void)
 															osv.dwBuildNumber,
 															osv.szCSDVersion));
 	
-	DWORD   cNameSize = MAX_COMPUTERNAME_LENGTH+1;
-	MBCHAR  cName[MAX_COMPUTERNAME_LENGTH+1];
+	uint32 cNameSize = MAX_COMPUTERNAME_LENGTH+1;
+	MBCHAR cName[MAX_COMPUTERNAME_LENGTH+1];
 
 	if (GetComputerName((LPTSTR)cName, &cNameSize))
 	{
@@ -1652,6 +1780,10 @@ void main_InitializeLogs(void)
 	DPRINTF(k_DBG_FIX, ("**  Direct X Version: 0x%x\n", g_dxver));
 	DPRINTF(k_DBG_FIX, ("**    Cur ScreenSize: %d x %d\n", g_ScreenWidth, g_ScreenHeight));
 
+#ifdef _DEBUGTOOLS
+	
+	Debug_Open();
+#endif
 }
 
 
@@ -1661,44 +1793,44 @@ void main_InitializeLogs(void)
 
 int main(int argc, char **argv)
 {
-	int const   r = CivMain(argc, argv);
+    int const   r = CivMain(argc, argv);
 
-	if (r < 0) 
-	{
-		DoFinalCleanup(r);
-	}
+    if (r < 0) 
+    {
+        DoFinalCleanup(r);
+    }
 
-	return 0;
+    return 0;
 }
 
 #else // __GNUC__
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-	// This stuff will have to be moved into a new int main(int argc, char **argv)
-	// once graphics are also ported to SDL
+    // This stuff will have to be moved into a new int main(int argc, char **argv)
+    // once graphics are also ported to SDL
 #if defined(WIN32) || defined(_WINDOWS)
 
 #if defined(_DEBUG)
-	Os::SetThreadName("WinMain");
-#endif // _DEBUG
+	SetThreadName("WinMain");
+#endif	// _DEBUG
 
-	// Make sure old versions of DDHELP.EXE won't keep files open
-	HINSTANCE handle = LoadLibrary("DDRAW.DLL");
-	if (0 != handle) {
-		FreeLibrary(handle);
-		handle = 0;
-	}
+    // Make sure old versions of DDHELP.EXE won't keep files open
+    HINSTANCE handle = LoadLibrary("DDRAW.DLL");
+    if (0 != handle) {
+        FreeLibrary(handle);
+        handle = 0;
+    }
 #endif // WIN32 || _WINDOWS
 
-	atexit(AtExitProc);
+   	atexit(AtExitProc);
 
 	__try 
-	{
+    {
 		return CivMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
 	} 
 	__except (main_CivExceptionHandler(GetExceptionInformation()))
-	{
+    {
 		DoFinalCleanup();
 	}
 
@@ -1710,40 +1842,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 void main_DisplayPatchDisclaimer()
 {
-    bool    isDisclaimerShown   = false;
-	FILE *  f                   = fopen(k_DisclaimerName, "rb");
+	MBCHAR		*message;
+	sint32		filesize = 0;
 
-    if (f && (0 == fseek(f, 0, SEEK_END))) 
-    {
-	    long const  positionEnd = ftell(f);
+	FILE *f = fopen("disclaimer.txt", "rb");
 
-        // Reposition at begin
-        fclose(f);
-        f = fopen(k_DisclaimerName, "rb");
+	if (!f)
+		goto Error;
 
-        if (f && (positionEnd > 0)) 
-        {
-            size_t const    filesize    = static_cast<size_t>(positionEnd);
-            MBCHAR *        message     = new MBCHAR[filesize+1];
-	        size_t const    readCount   = c3files_fread
-                                            (message, sizeof(MBCHAR), filesize, f);
-            message[readCount]  = 0;
-            MessageBox(NULL, message, "Call to Power", MB_OK | MB_ICONEXCLAMATION);
-            isDisclaimerShown   = true;
-        }
-    } 
+	if (fseek(f, 0, SEEK_END) == 0) {
+		filesize = ftell(f);
+	} else {
+		goto Error;
+	}
+ 	
+	fclose(f);
 
-    if (f)
-    {
-        fclose(f);
-    }
+	message = new MBCHAR[filesize+1];
+	memset(message, 0, filesize+1);
 
-    if (!isDisclaimerShown)
-    {
-	    c3errors_FatalDialog(appstrings_GetString(APPSTR_INITIALIZE),
-		    				 appstrings_GetString(APPSTR_CANTFINDFILE)
-                            );
-    }
+	f = fopen("disclaimer.txt", "rb");
+	if (!f) 
+		goto Error;
+
+	c3files_fread( message, 1, filesize, f );
+
+	fclose(f);
+
+	MessageBox(NULL, message, "Call to Power", MB_OK | MB_ICONEXCLAMATION);
+
+	return;
+
+Error:
+	c3errors_FatalDialog(appstrings_GetString(APPSTR_INITIALIZE),
+							appstrings_GetString(APPSTR_CANTFINDFILE));
+
 }
 
 #if defined(__GNUC__)
@@ -1753,10 +1886,12 @@ int CivMain
 	char *	    szCmdLine   // argv
 )
 {
+	MSG			msg;
     void *      hInstance   = NULL;
 #else	// __GNUC__
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+	MSG			msg;
 
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
 	if (hwnd) {
@@ -1773,7 +1908,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	char exepath[_MAX_PATH];
 	char launchcommand[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-				
+		
 		
 		
 		
@@ -1812,7 +1947,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	
 	appstrings_Initialize();
-	
+
 	
 	
 	
@@ -1826,7 +1961,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	if (!main_CheckDirectX()) {
 
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
-		                     appstrings_GetString(APPSTR_NEEDDIRECTX));
+								appstrings_GetString(APPSTR_NEEDDIRECTX));
 	}
 
 	
@@ -1855,8 +1990,8 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	g_civApp = new CivApp();
 
 	
-	if (g_cmdline_load) {
-		g_civApp->InitializeApp(hInstance, iCmdShow);
+    if (g_cmdline_load) {
+        g_civApp->InitializeApp(hInstance, iCmdShow);
 
 		ScenarioPack	*pack;
 		Scenario		*scen;
@@ -1867,7 +2002,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			
 			
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-			
+
 			
 			g_theProfileDB->SetIsScenario(TRUE);
 
@@ -1896,7 +2031,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			
 			
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-			
+
 			
 			g_theProfileDB->SetIsScenario(TRUE);
 
@@ -1914,14 +2049,12 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
 
-	MSG			msg;
-	msg.wParam  = 0;
-
+	
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();
 
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
+		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) 
 		{
 			if (WM_QUIT == msg.message)
 			{
@@ -1947,47 +2080,48 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 void DoFinalCleanup(int)
 {
 	if (!g_exclusiveMode)
-	{
+    {
 		main_RestoreTaskBar();
-	}
+    }
 
-	if (g_civApp)
-	{
-		g_civApp->QuitGame();
-		delete g_civApp;
-		g_civApp = NULL;
-	}
+    if (g_civApp)
+    {
+	    g_civApp->QuitGame();
 
-	sliccmd_clear_symbols();
-    SlicSegment::Cleanup();
-	appstrings_Cleanup();
+    	delete g_civApp;
+        g_civApp = NULL;
+    }
 
-#if defined(_DEBUGTOOLS)
+    sliccmd_clear_symbols();
+
+#ifdef _DEBUGTOOLS
 	Debug_Close();
 #endif
+
+	appstrings_Cleanup();
 }
 
-#else // _DEBUG
+#else   // _DEBUG
 
 void DoFinalCleanup(int exitCode)
 {
-	static bool s_cleaningUpTheApp = false;
+    static bool s_cleaningUpTheApp  = false;
 
-	if (g_c3ui)
-	{
+    if (g_c3ui)
+    {
 		g_c3ui->DestroyDirectScreen();
-	}
+    }
 
 	ShowWindow(gHwnd, SW_HIDE);
 
-	if (!s_cleaningUpTheApp)
-	{
+	if (!s_cleaningUpTheApp) 
+    {
 		s_cleaningUpTheApp = true;
 
-		if (g_civApp)
-		{
+        if (g_civApp)
+        {
 			g_civApp->CleanupApp();
-		}
+        }
 	}
 
 	exit(exitCode);
@@ -1999,8 +2133,8 @@ void DoFinalCleanup(int exitCode)
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-	AUI_ERRCODE errcode;
-	
+	AUI_ERRCODE		errcode;
+
 	
 	
 	if ( !gDone )
@@ -2013,9 +2147,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	static int swallowNextChar = 0;
 
 	switch (iMsg) {
-	case WM_CHAR:
-
-
+	case WM_CHAR :
+	    
+        
 		if(!swallowNextChar)
 			ui_HandleKeypress(wParam, lParam);
 		swallowNextChar = FALSE;
@@ -2169,36 +2303,43 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-	}
+}
 
-void DisplayFrame (aui_Surface *surf)
+#ifdef _DEBUG
+#include "DataCheck.h"
+extern DataCheck *g_dataCheck; 
+#endif
 
-{
-	static double fr_decay = 0.85;
-	g_ave_frame_rate = 10.0;
-	g_ave_frame_time = 200.0;
-	static sint32 is_init = 1;
-	static sint32 g_old_last_tick;
-	sint32 new_tick;
-	char str[80];
 
-	if (is_init) {
-		g_old_last_tick;
-		is_init = 0;
-	}
+
+void DisplayFrame (aui_Surface *surf) 
+
+{ 
+    static double fr_decay = 0.85; 
+    g_ave_frame_rate = 10.0; 
+    g_ave_frame_time = 200.0; 
+    static sint32 is_init = 1; 
+    static sint32 g_old_last_tick; 
+    sint32 new_tick; 
+    char str[80]; 
+
+    if (is_init) { 
+        g_old_last_tick; 
+        is_init = 0; 
+    }
 
     new_tick = GetTickCount(); 
 
-	double d = double (new_tick - g_old_last_tick);
-	g_old_last_tick = new_tick;
-	if (d < 1) 
-		return; 
+    double d = double (new_tick - g_old_last_tick); 
+    g_old_last_tick = new_tick;
+    if (d < 1) 
+        return; 
 
-	g_ave_frame_time = fr_decay * g_ave_frame_time + (1-fr_decay) * (d);
-	g_ave_frame_rate = fr_decay * g_ave_frame_rate + (1-fr_decay) * (1000.0/d);
+    g_ave_frame_time = fr_decay * g_ave_frame_time + (1-fr_decay) * (d);
+    g_ave_frame_rate = fr_decay * g_ave_frame_rate + (1-fr_decay) * (1000.0/d); 
 
-	sprintf (str, "ave frame rate %4.2f/sec - ave frame time %5.1fms", g_ave_frame_rate, g_ave_frame_time);
-	primitives_DrawText((aui_DirectSurface *)surf, 100, 100, (MBCHAR *)str, 1, 0);
+    sprintf (str, "ave frame rate %4.2f/sec - ave frame time %5.1fms", g_ave_frame_rate, g_ave_frame_time); 
+    primitives_DrawText((aui_DirectSurface *)surf, 100, 100, (MBCHAR *)str, 1, 0);
 
 }
 

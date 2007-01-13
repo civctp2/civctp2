@@ -15,7 +15,11 @@
 #ifndef __TILESET_H__
 #define __TILESET_H__
 
-class TileSet;
+typedef uint16		TILEINDEX;
+
+
+#include "gstypes.h"
+
 
 #define k_TILE_SKIP_PIXEL			0x0000
 #define k_TILE_COPY_RUN_ID			0x0C
@@ -161,10 +165,6 @@ enum MAPICON {
 	MAPICON_MAX
 };
 
-#include "gstypes.h"
-#include "pixeltypes.h"     // Pixel16
-
-
 class BaseTile;
 
 class TileSet
@@ -251,13 +251,8 @@ private:
 	BOOL			m_quick;
 	BOOL			m_mapped;
 
-#ifdef WIN32
 	HANDLE			m_fileHandle;
 	HANDLE			m_mappedFileHandle;
-#else
-	int			m_fd;
-	size_t			m_MMapSize;
-#endif
 };
 
 

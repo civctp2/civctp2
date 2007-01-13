@@ -99,10 +99,10 @@ sint32 initialplayscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-    if (g_c3ui && s_initplayWindow)
-    {
-	    (void) g_c3ui->RemoveWindow(s_initplayWindow->Id());
-    }
+	AUI_ERRCODE auiErr;
+
+	auiErr = g_c3ui->RemoveWindow( s_initplayWindow->Id() );
+	Assert( auiErr == AUI_ERRCODE_OK );
 
 	return 1;
 }
@@ -111,20 +111,24 @@ sint32 initialplayscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE initialplayscreen_Initialize( void )
 {
+	AUI_ERRCODE errcode;
+
 	if ( s_initplayWindow ) 
 		return AUI_ERRCODE_OK; 
 
+	
 	s_initplayWindow = (C3Window *)aui_Ldl::BuildHierarchyFromRoot(s_initplayWindowLDLBlock);
 	Assert (s_initplayWindow != NULL);
 	if (s_initplayWindow == NULL) 
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	AUI_ERRCODE errcode = 
-        aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SpriteTestButton", 
-										spritetest_spPress, NULL);
+	
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SpriteTestButton", 
+											spritetest_spPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 #ifndef _DEBUG
+	AUI_ERRCODE *retval=0;
 	ctp2_Button *spriteTest = (ctp2_Button *)aui_Ldl::GetObject(s_initplayWindowLDLBlock, "SpriteTestButton");
  	spriteTest->Hide();
 #endif
@@ -150,11 +154,12 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 											initialplayscreen_creditsPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	if (aui_Ldl::GetObject(s_initplayWindowLDLBlock, "NewGameButton"))
+
+	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "NewGameButton", 
+											initialplayscreen_newgamePress, NULL);
+	if (errcode == AUI_ERRCODE_OK)
     {
-	    // Assume Apolyton initial screen layout
-	    (void) aui_Ldl::SetActionFuncAndCookie
-            (s_initplayWindowLDLBlock, "NewGameButton", initialplayscreen_newgamePress, NULL);
+	    // Apolyton initial screen layout
 	    (void) aui_Ldl::SetActionFuncAndCookie
             (s_initplayWindowLDLBlock, "LoadGameButton", initialplayscreen_loadgamePress, NULL);
 	    (void) aui_Ldl::SetActionFuncAndCookie
@@ -167,6 +172,7 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
         // Original game layout compatibility handler (sort of)
         (void) aui_Ldl::SetActionFuncAndCookie
             (s_initplayWindowLDLBlock, "SPButton", initialplayscreen_newgamePress, NULL);
+
     }
 
 	// Display executable date of last modification as version
@@ -177,7 +183,6 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 #if defined(_MSC_VER)
 		MBCHAR		exePath[MAX_PATH];
 		DWORD const	exePathSize	= GetModuleFileName(NULL, exePath, MAX_PATH);
-        Assert(exePathSize < MAX_PATH);
 		HANDLE		fileHandle	= CreateFile(exePath, 
 											 GENERIC_READ,
 			                                 FILE_SHARE_READ, 
@@ -381,5 +386,8 @@ void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 
 
 C3Window *GetInitialPlayScreen()
 {
-	return s_initplayWindow;
+	if (s_initplayWindow)
+		return s_initplayWindow;
+
+	return NULL;
 }

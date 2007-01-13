@@ -17,6 +17,8 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -27,7 +29,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -62,7 +64,7 @@ enum WM {
 class WorkMap : public aui_Control, public PatternBase {
 public:
 
-	typedef BOOL (WorkMapDrawFunc)(aui_Surface *surf, MapPoint const & pos, void *context);
+	typedef BOOL (WorkMapDrawFunc)(aui_Surface *surf, MapPoint &pos, void *context);
 
 	
 	WorkMap(AUI_ERRCODE *retval, 
@@ -167,7 +169,7 @@ public:
 	void		SetNumWorkers(sint32 num) { m_numWorkers = num; }
 
 protected:		
-	aui_Surface *m_surface;
+	aui_DirectSurface *m_surface;
 
 	Unit		m_unit;
 
@@ -199,9 +201,16 @@ protected:
 	MapPoint	m_topLeftPos;	
 
 	// Event handlers
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseMoveInside;
+	virtual MouseEventCallback MouseMoveAway;
+#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
+#endif
+
 };
 
 #endif

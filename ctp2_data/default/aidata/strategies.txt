@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : Text file
 // Description  : The AI startegy's data
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -45,8 +44,6 @@
 //   that there are now civs building Abolitionists.
 // - Increased priority for the refuel goal as it is now available for 
 //   units only that needs refueling. - April 30th 2005 Martin Gühmann
-// - Used the values of ApolytonPack-GoodMod for RoadUtilityBonus,
-//   ImproveProductionBonus and ImproveGrowthBonus. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -107,23 +104,20 @@ STRATEGY_DEFAULT {
     // GOVERNMENT SETTING
     //
 
-    // GOVERNMENT_VIRTUAL_DEMOCRACY best government in the group (city limit 60)
-    Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-    Government  GOVERNMENT_ECOTOPIA
-    // GOVERNMENT_TECHNOCRACY best government in the group (city limit 45)
     Government  GOVERNMENT_TECHNOCRACY
     Government  GOVERNMENT_CORPORATE_REPUBLIC
-    // GOVERNMENT_FASCISM best government in the group (city limit 35)
     Government  GOVERNMENT_FASCISM
-    Government  GOVERNMENT_DEMOCRACY
-    Government  GOVERNMENT_COMMUNISM
-    // GOVERNMENT_MONARCHY best government in the group (city limit 20)
     Government  GOVERNMENT_MONARCHY
-    Government  GOVERNMENT_REPUBLIC
-    Government  GOVERNMENT_THEOCRACY
-    // First government (city limit 10)
     Government  GOVERNMENT_TYRANNY
 
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA 
+    // Government  GOVERNMENT_VIRTUAL_DEMOCRACY
+    // Government  GOVERNMENT_DEMOCRACY
+    // Government  GOVERNMENT_COMMUNISM 
+    // Government  GOVERNMENT_REPUBLIC
+    // Government  GOVERNMENT_THEOCRACY 
+	
     //
     //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
     //
@@ -183,13 +177,13 @@ STRATEGY_DEFAULT {
     FixPollutionThreshold  2000
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  300
-
+    RoadUtilityBonus  200
+      
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -515,23 +509,20 @@ STRATEGY_BARBARIAN {
     // must inherit from default
     Inherit STRATEGY_DEFAULT
 
-	// Good for war
-	// GOVERNMENT_VIRTUAL_DEMOCRACY best government in the group (city limit 60)
-	Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-	Government  GOVERNMENT_ECOTOPIA
-	// GOVERNMENT_TECHNOCRACY best government in the group (city limit 45)
+	// good for war
 	Government  GOVERNMENT_TECHNOCRACY
 	Government  GOVERNMENT_CORPORATE_REPUBLIC
-	// GOVERNMENT_FASCISM best government in the group (city limit 35)
 	Government  GOVERNMENT_FASCISM
-	Government  GOVERNMENT_DEMOCRACY
 	Government  GOVERNMENT_COMMUNISM
-	// GOVERNMENT_MONARCHY best government in the group (city limit 20)
 	Government  GOVERNMENT_MONARCHY
-	Government  GOVERNMENT_REPUBLIC
-	Government  GOVERNMENT_THEOCRACY
-	// First government (city limit 10)
-	Government  GOVERNMENT_TYRANNY
+    	Government  GOVERNMENT_TYRANNY
+	
+	// other governments
+	// Government  GOVERNMENT_ECOTOPIA
+	// Government  GOVERNMENT_VIRTUAL_DEMOCRACY
+	// Government  GOVERNMENT_DEMOCRACY
+	// Government  GOVERNMENT_THEOCRACY
+	// Government  GOVERNMENT_REPUBLIC
 	
 	// percent of gold to put into science
 	SciencePercent 20
@@ -1110,23 +1101,20 @@ STRATEGY_SCIENTIST_DEFAULT {
     // GOVERNMENT SETTING
     //
 
-    // GOVERNMENT_VIRTUAL_DEMOCRACY best government in the group (city limit 60)
-    Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-    Government  GOVERNMENT_ECOTOPIA
-    // GOVERNMENT_CORPORATE_REPUBLIC best government in the group (city limit 45)
-    Government  GOVERNMENT_CORPORATE_REPUBLIC
-    Government  GOVERNMENT_TECHNOCRACY
-    // GOVERNMENT_DEMOCRACY best government in the group (city limit 35)
+    Government  GOVERNMENT_VIRTUAL_DEMOCRACY 
     Government  GOVERNMENT_DEMOCRACY
-    Government  GOVERNMENT_COMMUNISM
-    Government  GOVERNMENT_FASCISM
-    // GOVERNMENT_REPUBLIC best government in the group (city limit 20)
     Government  GOVERNMENT_REPUBLIC
-    Government  GOVERNMENT_MONARCHY
-    Government  GOVERNMENT_THEOCRACY
-    // First government (city limit 10)
     Government  GOVERNMENT_TYRANNY
 
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA
+    // Government  GOVERNMENT_TECHNOCRACY
+    // Government  GOVERNMENT_CORPORATE_REPUBLIC 
+    // Government  GOVERNMENT_COMMUNISM
+    // Government  GOVERNMENT_FASCISM
+    // Government  GOVERNMENT_THEOCRACY
+    // Government  GOVERNMENT_MONARCHY
+	
     //
     //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
     //
@@ -1186,13 +1174,13 @@ STRATEGY_SCIENTIST_DEFAULT {
     FixPollutionThreshold  2000
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  300
-
+    RoadUtilityBonus  200
+      
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -1575,23 +1563,20 @@ STRATEGY_MILITARIST_DEFAULT {
     //
 
     // good for war
-    // GOVERNMENT_VIRTUAL_DEMOCRACY best government in the group (city limit 60)
-    Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-    Government  GOVERNMENT_ECOTOPIA
-    // GOVERNMENT_TECHNOCRACY best government in the group (city limit 45)
     Government  GOVERNMENT_TECHNOCRACY
     Government  GOVERNMENT_CORPORATE_REPUBLIC
-    // GOVERNMENT_FASCISM best government in the group (city limit 35)
     Government  GOVERNMENT_FASCISM
     Government  GOVERNMENT_COMMUNISM
-    Government  GOVERNMENT_DEMOCRACY
-    // GOVERNMENT_MONARCHY best government in the group (city limit 20)
     Government  GOVERNMENT_MONARCHY
-    Government  GOVERNMENT_REPUBLIC
-    Government  GOVERNMENT_THEOCRACY
-    // First government (city limit 10)
     Government  GOVERNMENT_TYRANNY
 
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA
+    // Government  GOVERNMENT_VIRTUAL_DEMOCRACY
+    // Government  GOVERNMENT_DEMOCRACY
+    // Government  GOVERNMENT_THEOCRACY
+    // Government  GOVERNMENT_REPUBLIC
+	
     //
     //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
     //
@@ -1651,13 +1636,13 @@ STRATEGY_MILITARIST_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  350
-
+    RoadUtilityBonus  250
+      
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2039,21 +2024,10 @@ STRATEGY_ECONOMIC_DEFAULT {
     //
 
     // good for war
-    // GOVERNMENT_VIRTUAL_DEMOCRACY best government in the group (city limit 60)
-    Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-    Government  GOVERNMENT_ECOTOPIA
-    // GOVERNMENT_CORPORATE_REPUBLIC best government in the group (city limit 45)
+    Government  GOVERNMENT_VIRTUAL_DEMOCRACY 
     Government  GOVERNMENT_CORPORATE_REPUBLIC
-    Government  GOVERNMENT_TECHNOCRACY
-    // GOVERNMENT_DEMOCRACY best government in the group (city limit 35)
     Government  GOVERNMENT_DEMOCRACY
-    Government  GOVERNMENT_FASCISM
-    Government  GOVERNMENT_COMMUNISM
-    // GOVERNMENT_THEOCRACY best government in the group (city limit 20)
-    Government  GOVERNMENT_THEOCRACY
-    Government  GOVERNMENT_REPUBLIC
-    Government  GOVERNMENT_MONARCHY
-    // First government (city limit 10)
+    Government  GOVERNMENT_THEOCRACY 
     Government  GOVERNMENT_TYRANNY
 
     // other governments
@@ -2123,13 +2097,13 @@ STRATEGY_ECONOMIC_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  300
-
+    RoadUtilityBonus  200
+      
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2510,23 +2484,20 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     // GOVERNMENT SETTING
     //
 
-    // GOVERNMENT_ECOTOPIA best government in the group (city limit 60)
-    Government  GOVERNMENT_ECOTOPIA
-    Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-    // GOVERNMENT_CORPORATE_REPUBLIC best government in the group (city limit 45)
-    Government  GOVERNMENT_CORPORATE_REPUBLIC
-    Government  GOVERNMENT_TECHNOCRACY
-    // GOVERNMENT_DEMOCRACY best government in the group (city limit 20)
-    Government  GOVERNMENT_DEMOCRACY
-    Government  GOVERNMENT_FASCISM
-    Government  GOVERNMENT_COMMUNISM
-    // GOVERNMENT_THEOCRACY best government in the group (city limit 20)
-    Government  GOVERNMENT_THEOCRACY
-    Government  GOVERNMENT_REPUBLIC
-    Government  GOVERNMENT_MONARCHY
-    // First government (city limit 10)
-    Government  GOVERNMENT_TYRANNY
+    Government GOVERNMENT_ECOTOPIA
+    Government GOVERNMENT_VIRTUAL_DEMOCRACY
+    Government GOVERNMENT_DEMOCRACY
+    Government GOVERNMENT_THEOCRACY
+    Government GOVERNMENT_TYRANNY
 
+    // other governments
+    // Government GOVERNMENT_TECHNOCRACY
+    // Government GOVERNMENT_CORPORATE_REPUBLIC
+    // Government GOVERNMENT_COMMUNISM
+    // Government GOVERNMENT_FASCISM
+    // Government GOVERNMENT_REPUBLIC
+    // Government GOVERNMENT_MONARCHY
+	
     //
     //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
     //
@@ -2586,13 +2557,13 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  300
-
+    RoadUtilityBonus  200
+      
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2973,23 +2944,19 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     // GOVERNMENT SETTING
     //
 
-    // GOVERNMENT_VIRTUAL_DEMOCRACY best government in the group (city limit 60)
     Government  GOVERNMENT_VIRTUAL_DEMOCRACY
-    Government  GOVERNMENT_ECOTOPIA
-    // GOVERNMENT_CORPORATE_REPUBLIC best government in the group (city limit 45)
     Government  GOVERNMENT_CORPORATE_REPUBLIC
-    Government  GOVERNMENT_TECHNOCRACY
-    // GOVERNMENT_DEMOCRACY best government in the group (city limit 20)
     Government  GOVERNMENT_DEMOCRACY
-    Government  GOVERNMENT_FASCISM
-    Government  GOVERNMENT_COMMUNISM
-    // GOVERNMENT_REPUBLIC best government in the group (city limit 20)
     Government  GOVERNMENT_REPUBLIC
-    Government  GOVERNMENT_MONARCHY
-    Government  GOVERNMENT_THEOCRACY
-    // First government (city limit 10)
     Government  GOVERNMENT_TYRANNY
 
+    // Government  GOVERNMENT_ECOTOPIA 
+    // Government  GOVERNMENT_TECHNOCRACY
+    // Government  GOVERNMENT_FASCISM
+    // Government  GOVERNMENT_THEOCRACY 
+    // Government  GOVERNMENT_COMMUNISM 
+    // Government  GOVERNMENT_MONARCHY
+	
     //
     //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
     //
@@ -3049,13 +3016,13 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     FixPollutionThreshold  200
 
     // bonus for building road tile improvements
-    RoadUtilityBonus  300
-
+    RoadUtilityBonus  200
+      
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75

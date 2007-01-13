@@ -19,7 +19,6 @@
 #include "aui_window.h"
 #include "aui_blitter.h"
 #include "aui_uniqueid.h"
-#include "aui_ui.h"
 
 #include "c3_static.h"
 #include "c3_listitem.h"
@@ -187,9 +186,9 @@ ns_Item<T,NetShellT>::ns_Item(
 	MBCHAR *ldlBlock,
 	T *object )
 	:
+	aui_Item( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Item( retval, id, ldlBlock )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

@@ -16,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// -None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,9 +25,8 @@
 //   size a ring one city. - Oct. 6th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __UNIT_UTIL_H__
 #define __UNIT_UTIL_H__
 
@@ -55,7 +52,8 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 
 void unitutil_ExecuteMadLaunch(Unit & unit);
 
+#if !defined(ACTIVSION_ORIGINAL)
 sint32 unitutil_GetSmallCityMaxSize();
-sint32 unitutil_GetMaxRadius();
+#endif
 
 #endif

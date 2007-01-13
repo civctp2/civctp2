@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : AI startegy control
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,22 +16,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Exposed strategies to personalities.txt by Martin Gühmann.
+// - Exposed startegies to personalities.txt by Martin Gühmann.
 // - Fixed advice string for BuildupStrength and SeigeCities 
 //   strategies by Martin Gühmann.
 // - Added over city limit strategy by Martin Gühmann.
-// - Restored backward compatibility with old personalities.txts 
+// - Restored backward compartibility with old personalities.txts 
 //   by Martin Gühmann
-// - Activated consideration of a defined nuclear strike strategy.
-// - added difficulty where AI ignores any citylimit because the flag causes 
-//   no unhappiness for ai
 //
 //----------------------------------------------------------------------------
 
@@ -59,8 +53,6 @@
 
 #include "GovernmentRecord.h"
 #include "wonderutil.h"
-#include "DifficultyRecord.h"   //EMOD
-#include "GameSettings.h"
 
 
 
@@ -217,7 +209,7 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 
 		if (invaded) {
 
-			if(diplomat.GetPersonality()->HasFullAttackStrategy()){
+			if(diplomat.GetPersonality()->GetFullAttackStrategy()){
 				state.priority = diplomat.GetPersonality()->GetFullAttackStrategyPtr()->GetPriority();
 				state.dbIndex = diplomat.GetPersonality()->GetFullAttackStrategyPtr()->GetStrategyIndex();
 			}
@@ -280,7 +272,7 @@ STDEHANDLER(BuildupStrength_NextSStateEvent)
 	if ( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_DEFENSE ) < 0.50)
 		return GEV_HD_Continue;
 
-	if(diplomat.GetPersonality()->HasBuildupStrengthStrategy()){
+	if(diplomat.GetPersonality()->GetBuildupStrengthStrategy()){
 		state.priority = diplomat.GetPersonality()->GetBuildupStrengthStrategyPtr()->GetPriority();		   
 		state.dbIndex = diplomat.GetPersonality()->GetBuildupStrengthStrategyPtr()->GetStrategyIndex();
 	}
@@ -349,7 +341,7 @@ STDEHANDLER(SeigeCities_NextSStateEvent)
 	{
 		AiState state;
 
-		if(diplomat.GetPersonality()->HasSeigeCitiesStrategy()){
+		if(diplomat.GetPersonality()->GetSeigeCitiesStrategy()){
 			state.priority = diplomat.GetPersonality()->GetSeigeCitiesStrategyPtr()->GetPriority();
 			state.dbIndex = diplomat.GetPersonality()->GetSeigeCitiesStrategyPtr()->GetStrategyIndex();
 		}
@@ -398,7 +390,7 @@ STDEHANDLER(OpeningGambit_NextSStateEvent)
 		return GEV_HD_Continue;
 
 	AiState state;
-	if(diplomat.GetPersonality()->HasStartStrategy()){
+	if(diplomat.GetPersonality()->GetStartStrategy()){
 		state.priority = diplomat.GetPersonality()->GetStartStrategyPtr()->GetPriority();
 		state.dbIndex = diplomat.GetPersonality()->GetStartStrategyPtr()->GetStrategyIndex();
 	}
@@ -444,14 +436,27 @@ STDEHANDLER(NuclearStrike_NextSStateEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
+	AiState state;
 
-	if (diplomat.GetPersonality()->HasNuclearStrikeStrategy())
-    {
-    	AiState state;
-		state.priority  = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetPriority();
-		state.dbIndex   = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetStrategyIndex();
-    	diplomat.ConsiderStrategicState(state);
-    }
+#if defined(ACTIVISION_DEFAULT)
+	if ((diplomat.GetPersonality()->GetDiscoveryMilitary() ||
+		 diplomat.GetPersonality()->GetDiscoveryScientist()) &&
+		(diplomat.GetPersonality()->GetTrustworthinessChaotic() &&
+		 diplomat.GetPersonality()->GetAlignmentEvil()))
+	{
+		state.priority = 150;		   
+		g_theStrategyDB->GetNamedItem("STRATEGY_LAUNCH_NUKES", state.dbIndex);
+		
+
+		
+		diplomat.ConsiderStrategicState(state);
+	}
+#else
+	if(diplomat.GetPersonality()->GetNuclearStrikeStrategy()){
+		state.priority = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetPriority();
+		state.dbIndex = diplomat.GetPersonality()->GetNuclearStrikeStrategyPtr()->GetStrategyIndex();
+	}
+#endif
 
 	return GEV_HD_Continue;
 }
@@ -501,10 +506,10 @@ STDEHANDLER(NuclearReadiness_NextSStateEvent)
 			}
 		}
 
-		if(diplomat.GetPersonality()->HasMaximumNukesStrategy()
-		&& diplomat.GetPersonality()->HasAverageNukesStrategy()
-		&& diplomat.GetPersonality()->HasLowNukesStrategy()
-		&& diplomat.GetPersonality()->HasMinimumNukesStrategy()){
+		if(diplomat.GetPersonality()->GetMaximumNukesStrategy()
+		&& diplomat.GetPersonality()->GetAverageNukesStrategy()
+		&& diplomat.GetPersonality()->GetLowNukesStrategy()
+		&& diplomat.GetPersonality()->GetMinimumNukesStrategy()){
 			if(max_nukes > 75){
 				state.priority = diplomat.GetPersonality()->GetMaximumNukesStrategyPtr()->GetPriority();		   
 				state.dbIndex = diplomat.GetPersonality()->GetMaximumNukesStrategyPtr()->GetStrategyIndex();
@@ -582,7 +587,7 @@ STDEHANDLER(SetExpansion_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
-	if(diplomat.GetPersonality()->HasExpansionStrategy()){
+	if(diplomat.GetPersonality()->GetExpansionStrategy()){
 		state.priority = diplomat.GetPersonality()->GetExpansionStrategyPtr()->GetPriority();		   
 		state.dbIndex = diplomat.GetPersonality()->GetExpansionStrategyPtr()->GetStrategyIndex();
 	}
@@ -630,7 +635,7 @@ STDEHANDLER(SetExploration_NextSStateEvent)
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 	AiState state;
 
-	if(diplomat.GetPersonality()->HasExplorationStrategy()){
+	if(diplomat.GetPersonality()->GetExplorationStrategy()){
 		state.priority = diplomat.GetPersonality()->GetExplorationStrategyPtr()->GetPriority();		   
 		state.dbIndex = diplomat.GetPersonality()->GetExplorationStrategyPtr()->GetStrategyIndex();
 	}
@@ -678,12 +683,12 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
+	AiState state;
 
 	sint32 avg_cont_size = MapAnalysis::GetMapAnalysis().AverageSettledContinentSize(playerId);
 
 	if(avg_cont_size < diplomat.GetPersonality()->GetMaxIslandSize() && avg_cont_size > 0){
-	    AiState state;
-		if(diplomat.GetPersonality()->HasIslandNationStrategy()){
+		if(diplomat.GetPersonality()->GetIslandNationStrategy()){
 			state.priority = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetPriority();		   
 			state.dbIndex = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetStrategyIndex();
 		}
@@ -716,29 +721,33 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 STDEHANDLER(DefenseLevel_NextSStateEvent)
 {
 	PLAYER_INDEX playerId;
+
+	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
+	
 	diplomat.ClearEffectiveRegardCache();
 
 	AiState state;
 
 	
-	sint32 max_threat = MapAnalysis::GetMapAnalysis().GetMaxThreat(playerId);
+	sint16 max_threat = MapAnalysis::GetMapAnalysis().GetMaxThreat(playerId);
 
 #define MAXIMUM_DEFENSE_LEVEL	50000
 #define HIGH_DEFENSE_LEVEL		25000
 #define MEDIUM_DEFENSE_LEVEL	10000
 #define LOW_DEFENSE_LEVEL		5000
 #define MINIMUM_DEFENSE_LEVEL	1000
+	Player *player_ptr = g_player[playerId];
 
-	if(diplomat.GetPersonality()->HasDefenceVeryHighStrategy()
-	&& diplomat.GetPersonality()->HasDefenceHighStrategy()
-	&& diplomat.GetPersonality()->HasDefenceMediumStrategy()
-	&& diplomat.GetPersonality()->HasDefenceLowStrategy()
-	&& diplomat.GetPersonality()->HasDefenceVeryLowStrategy()
-	&& diplomat.GetPersonality()->HasDefenceNoneStrategy()
+	if(diplomat.GetPersonality()->GetDefenceVeryHighStrategy()
+	&& diplomat.GetPersonality()->GetDefenceHighStrategy()
+	&& diplomat.GetPersonality()->GetDefenceMediumStrategy()
+	&& diplomat.GetPersonality()->GetDefenceLowStrategy()
+	&& diplomat.GetPersonality()->GetDefenceVeryLowStrategy()
+	&& diplomat.GetPersonality()->GetDefenceNoneStrategy()
 	){
 		if(NewTurnCount::GetCurrentRound() < diplomat.GetPersonality()->GetLastStartTurn()){
 			if(max_threat > MEDIUM_DEFENSE_LEVEL){
@@ -863,11 +872,10 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 //
 //----------------------------------------------------------------------------
 STDEHANDLER(CheckCityLimit_NextSStateEvent)
-{	
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit())
-		return GEV_HD_Continue;
-
+{
 	PLAYER_INDEX playerId;
+
+	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
@@ -875,38 +883,22 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 	AiState state;
 
 	const GovernmentRecord *government = 
-	      g_theGovernmentDB->Get(g_player[playerId]->GetGovernmentType());
+	g_theGovernmentDB->Get(g_player[playerId]->GetGovernmentType());
 
-	sint32 acceptedCityMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
+	int acceptedCityMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
 
-	if(g_player[playerId]->GetNumCities() > acceptedCityMaximum)
-	{
-		if(diplomat.GetPersonality()->HasOverCityLimitStrategy())
-		{
-			state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();
-			state.dbIndex  = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();
+	if(g_player[playerId]->GetNumCities() > acceptedCityMaximum
+	&& diplomat.GetPersonality()->GetOverCityLimitStrategy()
+	){
+		state.priority = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetPriority();
+		state.dbIndex = diplomat.GetPersonality()->GetOverCityLimitStrategyPtr()->GetStrategyIndex();
+		diplomat.ConsiderStrategicState(state);
+		if(wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)
+		&& diplomat.GetPersonality()->GetNoRevolutionStrategy()
+		){
+			state.priority = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetPriority();
+			state.dbIndex = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetStrategyIndex();
 			diplomat.ConsiderStrategicState(state);
-		
-			if(wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)
-			&& diplomat.GetPersonality()->HasNoRevolutionStrategy()
-			){
-				state.priority = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetPriority();
-				state.dbIndex  = diplomat.GetPersonality()->GetNoRevolutionStrategyPtr()->GetStrategyIndex();
-				diplomat.ConsiderStrategicState(state);
-			}
-		}
-		else
-		{
-			if(g_theStrategyDB->GetNamedItem("STRATEGY_TOO_MANY_CITIES", state.dbIndex))
-			{
-				state.priority = 2000;
-				diplomat.ConsiderStrategicState(state);
-			}
-			if(g_theStrategyDB->GetNamedItem("STRATEGY_NO_REVOLUTON", state.dbIndex))
-			{
-				state.priority = 2000;
-				diplomat.ConsiderStrategicState(state);
-			}
 		}
 	}
 

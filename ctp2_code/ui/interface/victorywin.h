@@ -9,9 +9,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __VICTORYWIN_H__
 #define __VICTORYWIN_H__
 
@@ -33,7 +32,7 @@ class ctp2_Button;
 #define k_VICWIN_WONDER_ROW_MAX	5
 #define k_VICWIN_WONDER_COL_MAX	7
 
-#define k_VICWIN_WONDERICON_MAX (k_VICWIN_WONDER_ROW_MAX * k_VICWIN_WONDER_COL_MAX)
+#define k_VICWIN_WONDERICON_MAX 35
 
 
 enum {
@@ -147,16 +146,21 @@ public:
 	HighScoreDB		*m_highScoreDB;
 
 public:
-	sint32  Initialize ( MBCHAR *windowBlock );
-	void    Cleanup(void);
-	sint32  UpdateData ( void );
+	sint32 Initialize ( MBCHAR *windowBlock );
+	sint32 Cleanup ( void );
+	sint32 UpdateData ( void );
 
-	void    RemoveWindow( void );
-	void    DisplayWindow( void );
+	void RemoveWindow( void );
+	void DisplayWindow( void );
 	c3_PopupWindow *GetWindow() { return m_window; }
 };
 
-AUI_ACTION_BASIC(CloseVictoryWindowAction);
+class CloseVictoryWindowAction : public aui_Action
+{
+public:
+	virtual ActionCallback Execute;
+};
+
 
 sint32 victorywin_AddWonders( MBCHAR* windowBlock );
 sint32 victorywin_Initialize( sint32 type = 0 );
@@ -164,7 +168,7 @@ sint32 victorywin_Init_Controls( MBCHAR* windowBlock );
 sint32 victorywin_Init_TabGroups( MBCHAR* windowBlock );
 
 sint32 victorywin_DisplayWindow( sint32 type = 0 );
-void   victorywin_Cleanup( void );
+sint32 victorywin_Cleanup( void );
 sint32 victorywin_UpdateData( sint32 type );
 sint32 victorywin_RemoveWindow( void );
 
@@ -179,6 +183,6 @@ sint32 victorywin_LoadWonderData( void );
 
 
 sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult );
-bool   victorywin_IsOnScreen();
+sint32 victorywin_IsOnScreen();
 
 #endif

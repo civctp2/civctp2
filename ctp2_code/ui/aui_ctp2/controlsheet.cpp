@@ -16,10 +16,10 @@ ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	: 
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
-	PatternBase(ldlBlock, NULL)
+	PatternBase(ldlBlock, NULL),
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_ImageBase( ldlBlock )
 {
 	m_border = TRUE;
 
@@ -37,10 +37,10 @@ ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase(NULL),
 	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
-	PatternBase(pattern)
+	PatternBase(pattern),
+	aui_TextBase(NULL),
+	aui_ImageBase( (sint32)0 )
 {
 	m_border = TRUE;
 

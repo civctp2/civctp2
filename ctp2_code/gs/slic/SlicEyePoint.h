@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __SLIC_EYE_POINT_H__
 #define __SLIC_EYE_POINT_H__
 

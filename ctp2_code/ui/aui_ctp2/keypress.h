@@ -15,9 +15,9 @@
 #ifndef KEYPRESS_H
 #define KEYPRESS_H 1
 
-#include "keymap.h"
  
 class KeyboardHandler;
+enum KEY_FUNCTION;
 
 extern void init_keymap();
 extern void init_defaultKeymap();

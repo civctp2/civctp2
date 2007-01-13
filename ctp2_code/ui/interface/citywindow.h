@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : City window
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,24 +25,11 @@
 //
 // - Added OptimizeSpecialists function for specialists optimisation option.
 //   - April 7th 2005 Martin Gühmann
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
-
 #ifndef CITY_WINDOW_H__
 #define CITY_WINDOW_H__
-
-class CityWindow;
-class InventoryItemInfo;
-
-#include "auitypes.h"           // AUI_ERRCODE
-#include "citydata.h"
-#include "ctp2_inttypes.h"      // sint32, uint32
-#include "gstypes.h"
 
 class ctp2_Window;
 class CityData;
@@ -61,6 +47,7 @@ class aui_Region;
 
 template <class T> class PointerList;
 
+#include "citydata.h"
 
 class InventoryItemInfo {
   public:
@@ -136,6 +123,8 @@ class CityWindow {
 	static AUI_ERRCODE Display(CityData *city);
 	static AUI_ERRCODE Hide();
 	
+	void ClearInventoryUserData();
+
 	static void CopyCitiesBack();
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -148,7 +137,6 @@ class CityWindow {
 	static void GovernorPriority(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ToggleQueueInventory(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie);

@@ -15,9 +15,9 @@
 
 c3_ListItem::c3_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	:
+	aui_Item( retval, aui_UniqueId(), ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Item( retval, aui_UniqueId(), ldlBlock),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -54,9 +54,9 @@ sint32 c3_ListItem::Compare(c3_ListItem *item2, uint32 column)
 
 SingleListItem::SingleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

@@ -1,37 +1,6 @@
-/*----------------------------------------------------------------------------
- *
- * Project      : Call To Power 2
- * File type    : C++ header
- * Description  : Database code generator
- * Id           : $Id$
- *
- *----------------------------------------------------------------------------
- *
- * Disclaimer
- *
- * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
- *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
- * Source Code Project. Contact the authors at ctp2source@apolyton.net.
- *
- *----------------------------------------------------------------------------
- *
- * Compiler flags
- *
- * - None
- *
- *----------------------------------------------------------------------------
- *
- * Modifications from the original Activision code:
- *
- * - Added akaName and defaultName to the structs namelist and namevalueflags
- *   for support of the old database format. (Aug 26th 2005 Martin Gühmann)
- * - Added method to determine the number of entries that should be parsed
- *   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
- *
- *----------------------------------------------------------------------------
+/**
+ * $Id$
  */
-
 #ifndef __CTPDB_H__
 #define __CTPDB_H__
 
@@ -63,8 +32,6 @@ union dbvalue {
 
 struct namelist {
 	char *name;
-	char *akaName;
-	char *defaultName;
 	uint8 flags;
 	union dbvalue v;
 	struct namelist *next;
@@ -86,8 +53,6 @@ struct bitpairtype {
 
 struct namevalueflags {
 	char *name;
-	char *akaName;
-	char *defaultName;
 	uint8 flags;
 	union dbvalue v;
 };
@@ -117,7 +82,6 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 void db_add_grouped_bits(char *groupName, struct namelist *list);
 
 void db_set_output_dir(char *dir);
-void db_add_parse_num(sint32 parseNum);
 
 #if defined(__cplusplus)
 }

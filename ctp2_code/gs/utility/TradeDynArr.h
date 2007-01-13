@@ -7,9 +7,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef _TRADEDYNARR_H_
 #define _TRADEDYNARR_H_
 

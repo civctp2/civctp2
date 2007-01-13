@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit & city sprite handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,10 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// __MAKESPR__
-// - Probably supposed to generate the sprite make tool.
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,14 +26,12 @@
 // - Moved common SpriteGroup member handling to SpriteGroup.
 // - Removed Assert to make mod battles less tedious to debug.
 // - Cleaned up some superfluous tests.
-// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"                 // Pre-compiled header
 #include "UnitSpriteGroup.h"    // Own declarations: consistency check
 
-#include <memory>               // std::auto_ptr
 #include "tiffutils.h"
 #include "pixelutils.h"
 
@@ -54,41 +48,45 @@
 #include "SpriteFile.h"
 #include "Anim.h"
 
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 
 #include "Token.h"
 
 extern ScreenManager	*g_screenManager;
+extern ColorSet			*g_colorSet;
 
 UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
-:	
-    SpriteGroup         (type),
-	m_numFirePointsWork (0)
+:	SpriteGroup(type),
+	m_numFirePointsWork(0)
 {
 	POINT const	thePoint	= {24, 24};
 	POINT const	emptyPoint	= {0, 0};
 
-	for (int j = 0; j < k_NUM_FACINGS; j++) 
+	for (sint32 j = 0; j < k_NUM_FACINGS; j++) 
 	{
 		m_moveOffsets[j]			= emptyPoint;
 
-		for (int i = 0; i < UNITACTION_MAX; i++) 
+		for (sint32 i = 0; i < UNITACTION_MAX; i++) 
 		{
 			m_shieldPoints[i][j]	= thePoint;
 		}
 
-		for (int k = 0; k < k_NUM_FIREPOINTS; k++)
+		for (sint32 k = 0; k < k_NUM_FIREPOINTS; k++)
 		{
 			m_firePointsWork[k][j]	= emptyPoint;
 		}
 	}
 }
 
+UnitSpriteGroup::~UnitSpriteGroup()
+{
+}
+
 void UnitSpriteGroup::DeallocateStorage(void)
 {
-	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++) 
+	for (int i=UNITACTION_MOVE; i<UNITACTION_MAX; i++) 
 	{
-		delete m_sprites[i];
+	    delete m_sprites[i];
 		m_sprites[i] = NULL;
 	}
 }
@@ -102,10 +100,13 @@ void UnitSpriteGroup::DeallocateStorage(void)
 
 void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 {
-	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++) 
+	for (sint32 i = UNITACTION_MOVE + 1; i < UNITACTION_MAX; i++) 
 	{
-		delete m_anims[i];
-		m_anims[i] = NULL;
+		if (i != UNITACTION_IDLE) 
+		{
+			delete m_anims[i];
+			m_anims[i] = NULL;
+		}
 	}
 }
 
@@ -155,9 +156,7 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 
 	if (m_sprites[action])
     {
-    	if ((frame < 0) || 
-            (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
-           ) 
+    	if (frame >= m_sprites[action]->GetNumFrames()) 
         {
 		    frame = 0;
 	    }
@@ -240,9 +239,7 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 		}
 	}
 
-    if (m_sprites[action] && 
-        (frame < static_cast<sint32>(m_sprites[action]->GetNumFrames()))
-       )
+    if (m_sprites[action] && (frame < m_sprites[action]->GetNumFrames()))
     {
     	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
 	
@@ -253,11 +250,114 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 	}
 }
 
+#define kBenchIterations		10000
 
-void UnitSpriteGroup::LoadBasic(MBCHAR const * filename)
+void UnitSpriteGroup::RunBenchmark(aui_Surface *surf)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	exit(0);
+}
+
+
+void UnitSpriteGroup::LoadBasic(MBCHAR *filename)
+{
+	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
@@ -265,15 +365,16 @@ void UnitSpriteGroup::LoadBasic(MBCHAR const * filename)
 		file->CloseRead();
 		m_loadType = LOADTYPE_BASIC;
 	}
+
+	delete file;
 }
 
 
 
 
-void UnitSpriteGroup::LoadIndexed(MBCHAR const * filename, GAME_ACTION index)
+void UnitSpriteGroup::LoadIndexed(MBCHAR *filename,GAME_ACTION index)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
-
+	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
@@ -281,14 +382,15 @@ void UnitSpriteGroup::LoadIndexed(MBCHAR const * filename, GAME_ACTION index)
 		file->CloseRead();
 		m_loadType = LOADTYPE_FULL;
 	}
+
+	delete file;
 }
 
 
 
-void UnitSpriteGroup::LoadFull(MBCHAR const * filename)
+void UnitSpriteGroup::LoadFull(MBCHAR *filename)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
-
+	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
@@ -296,12 +398,13 @@ void UnitSpriteGroup::LoadFull(MBCHAR const * filename)
 		file->CloseRead();
 		m_loadType = LOADTYPE_FULL;
 	}
+
+	delete file;
 }
 
-void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode)
+void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
-
+	SpriteFile *file = new SpriteFile(filename);
 	if (SPRITEFILEERR_OK == 
 			file->Create(SPRITEFILETYPE_UNIT, version_id, compression_mode)
 	   )
@@ -309,6 +412,8 @@ void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 		file->Write(this);
 		file->CloseWrite();
 	}
+
+	delete file;
 }
  
 
@@ -322,11 +427,11 @@ void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 
 
 
-void UnitSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
+void UnitSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
 {
 #ifndef __MAKESPR__
-	primitives_DrawText(g_screenManager->GetSurface(), x+1, y+1, s, g_colorSet->GetColorRef(COLOR_BLACK), 1);
-	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
+	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x+1, y+1, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_BLACK), 1);
+	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x, y, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
 #endif
 }
 
@@ -341,7 +446,7 @@ void UnitSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 
 
 bool			
-UnitSpriteGroup::GetImageFileName(MBCHAR * name, char *format,...)
+UnitSpriteGroup::GetImageFileName(char *name,char *format,...)
 {
    	va_list          v_args;
 	char			 fname[512];
@@ -372,9 +477,9 @@ UnitSpriteGroup::GetImageFileName(MBCHAR * name, char *format,...)
 	return false;
 }
 
-/// @todo Repair major memory leaks when returning FALSE
 sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 {
+	Token			*theToken=NULL; 
 	MBCHAR			scriptName[k_MAX_NAME_LENGTH];
 
 	MBCHAR			*facedImageNames[k_NUM_FACINGS][k_MAX_NAMES];
@@ -383,8 +488,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 	MBCHAR			*imageNames[k_MAX_NAMES];
 	MBCHAR			*shadowNames[k_MAX_NAMES];
 
-	size_t			i;
-    size_t          j;
+	sint32			i,j;
 
 	char			prefixStr[80];
 
@@ -393,34 +497,35 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 	{
 		for (i=0; i<k_MAX_NAMES; i++) 
 		{
-			facedImageNames[j][i] =  new MBCHAR[2 * k_MAX_NAME_LENGTH];
-			facedShadowNames[j][i] = new MBCHAR[2 * k_MAX_NAME_LENGTH];
+			facedImageNames[j][i] = (char *)malloc(k_MAX_NAME_LENGTH<<1);
+			facedShadowNames[j][i] = (char *)malloc(k_MAX_NAME_LENGTH<<1);
 		}
 	}
 
 	for (i=0; i<k_MAX_NAMES; i++) 
 	{
-		imageNames[i] =  new MBCHAR[2 * k_MAX_NAME_LENGTH];
-		shadowNames[i] = new MBCHAR[2 * k_MAX_NAME_LENGTH];
+		imageNames[i] = (char *)malloc(k_MAX_NAME_LENGTH<<1);
+		shadowNames[i] = (char *)malloc(k_MAX_NAME_LENGTH<<1);
 	}
 
-	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
+	sprintf(prefixStr, ".\\%d\\", id);
 
 	if (type == GROUPTYPE_UNIT)
 	{
-		sprintf(scriptName, "GU%.3d.txt", id);
+		sprintf(scriptName, "GU%#.3d.txt", id);
 
 		
 		if (!c3files_PathIsValid(scriptName))
-			sprintf(scriptName, "GU%.2d.txt", id);
+			sprintf(scriptName, "GU%#.2d.txt", id);
 	}
 	else 
-		sprintf(scriptName, "GC%.3d.txt", id);
+		sprintf(scriptName, "GC%#.3d.txt", id);
 
 	printf("Processing '%s'\n", scriptName);
 
-	Token	* theToken = new Token(scriptName, C3DIR_SPRITES); 
+	theToken = new Token(scriptName, C3DIR_SPRITES); 
 	Assert(theToken); 
+	
 	if (!theToken) return FALSE; 
 	
 	sint32 tmp; 
@@ -450,27 +555,27 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Move");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
-			for (size_t k = 0; k < moveSprite->GetNumFrames(); ++k) 
+			for(i=0; i<moveSprite->GetNumFrames(); i++) 
 			{
-				if (!GetImageFileName(facedShadowNames[j][k],"%sGU%#.3dMS%d.%d", prefixStr,  id, j+1, k+moveSprite->GetFirstFrame()))
-					GetImageFileName(facedShadowNames[j][k] ,"%sGU%#.2dMS%d.%d", prefixStr,  id, j+1, k+moveSprite->GetFirstFrame());
 				
-				if (!GetImageFileName(facedImageNames[j][k], "%sGU%#.3dMA%d.%d", prefixStr, id,  j+1, k+moveSprite->GetFirstFrame()))
-					GetImageFileName(facedImageNames[j][k] , "%sGU%#.2dMA%d.%d", prefixStr, id,  j+1, k+moveSprite->GetFirstFrame());
+				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dMS%d.%d", prefixStr,  id, j+1, i+moveSprite->GetFirstFrame()))
+					GetImageFileName(facedShadowNames[j][i] ,"%sGU%#.2dMS%d.%d", prefixStr,  id, j+1, i+moveSprite->GetFirstFrame());
+				
+				if (!GetImageFileName(facedImageNames[j][i], "%sGU%#.3dMA%d.%d", prefixStr, id,  j+1, i+moveSprite->GetFirstFrame()))
+					GetImageFileName(facedImageNames[j][i] , "%sGU%#.2dMA%d.%d", prefixStr, id,  j+1, i+moveSprite->GetFirstFrame());
 			}
 		}
 
 		
 		moveSprite->Import(moveSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
-		delete m_sprites[UNITACTION_MOVE];
-		m_sprites[UNITACTION_MOVE] = moveSprite;
+		
+		m_sprites[UNITACTION_MOVE] = (Sprite *)moveSprite;
 		printf("]\n");
 
 		Anim *moveAnim = new Anim;
 
 		moveAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_MOVE];
 		m_anims[UNITACTION_MOVE] = moveAnim;
 	}
 
@@ -500,6 +605,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Attack");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
+			sint32 camera = j + 1;
 			for(i=0; i<attackSprite->GetNumFrames(); i++) 
 			{
 				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dAS%d.%d", prefixStr, id, j+1, i+attackSprite->GetFirstFrame()))
@@ -513,14 +619,13 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		
 		attackSprite->Import(attackSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
-		delete m_sprites[UNITACTION_ATTACK];
-		m_sprites[UNITACTION_ATTACK] = attackSprite;
+		
+		m_sprites[UNITACTION_ATTACK] = (Sprite *)attackSprite;
 		printf("]\n");
 
 		Anim *attackAnim = new Anim;
 
 		attackAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_ATTACK];
 		m_anims[UNITACTION_ATTACK] = attackAnim;
 	}
 
@@ -534,38 +639,40 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		{
 			printf(" [Idle");
 		  
-			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n) 
+			for(i=0; i<idleSprite->GetNumFrames(); i++) 
 			{
-				if (!GetImageFileName(imageNames[n] ,"%sGU%#.3dIA%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame()))
-					GetImageFileName (imageNames[n] ,"%sGU%#.2dIA%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame());
-				if (!GetImageFileName(shadowNames[n],"%sGU%#.3dIS%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame()))
-					GetImageFileName (shadowNames[n],"%sGU%#.2dIS%d.%d", prefixStr, id, 4, n + idleSprite->GetFirstFrame());
-			}
-		} 
-		else if (type == GROUPTYPE_CITY) 
-		{
-			printf(" [City");
-
-			for (size_t n = 0; n < idleSprite->GetNumFrames(); ++n) 
-			{
-				GetImageFileName(shadowNames[n], "%sGC%#.3dS.%d", prefixStr, id, n + idleSprite->GetFirstFrame());
-				GetImageFileName(imageNames[n] , "%sGC%#.3dA.%d", prefixStr, id, n + idleSprite->GetFirstFrame());
+				
+				if (!GetImageFileName(imageNames[i] ,"%sGU%#.3dIA%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame()))
+					GetImageFileName (imageNames[i] ,"%sGU%#.2dIA%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame());
+				if (!GetImageFileName(shadowNames[i],"%sGU%#.3dIS%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame()))
+					GetImageFileName (shadowNames[i],"%sGU%#.2dIS%d.%d", prefixStr, id,  4,i+idleSprite->GetFirstFrame());
 			}
 		} 
 		else 
 		{
-			Assert(FALSE);
+			if (type == GROUPTYPE_CITY) 
+			{
+				printf(" [City");
+
+				for(i=0; i<idleSprite->GetNumFrames(); i++) 
+				{
+					GetImageFileName(shadowNames[i], "%sGC%#.3dS.%d", prefixStr, id,i+idleSprite->GetFirstFrame());
+					GetImageFileName(imageNames[i] , "%sGC%#.3dA.%d", prefixStr, id,i+idleSprite->GetFirstFrame());
+				}
+			} 
+			else 
+			{
+				Assert(FALSE);
+			}
 		}
 
 		idleSprite->Import(idleSprite->GetNumFrames(), imageNames, shadowNames);
-		delete m_sprites[UNITACTION_IDLE];
 		m_sprites[UNITACTION_IDLE] = idleSprite;
 		printf("]\n");
 
 		Anim *idleAnim = new Anim;
 
 		idleAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_IDLE];
 		m_anims[UNITACTION_IDLE] = idleAnim;
 	}
 
@@ -583,28 +690,30 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		Sprite *victorySprite = new Sprite;
 
 		if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_IS_DEATH, tmp)) return FALSE;
-		SetHasDeath(0 != tmp);
+		if (tmp) 
+			m_hasDeath = TRUE;
+		else 
+			m_hasDeath = FALSE;
 
 		victorySprite->ParseFromTokens(theToken);
 
 		printf(" [Victory");
-		for(size_t n = 0; n < victorySprite->GetNumFrames(); ++n) 
+		for(i=0; i<victorySprite->GetNumFrames(); i++) 
 		{			
-			if (!GetImageFileName(shadowNames[n],"%sGU%#.3dVS%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame()))
-				GetImageFileName (shadowNames[n],"%sGU%#.2dVS%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame());
-			if (!GetImageFileName(imageNames[n], "%sGU%#.3dVA%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame()))
-				GetImageFileName (imageNames[n], "%sGU%#.2dVA%d.%d", prefixStr, id, 4, n + victorySprite->GetFirstFrame());
+			
+			if (!GetImageFileName(shadowNames[i],"%sGU%#.3dVS%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame()))
+				GetImageFileName (shadowNames[i],"%sGU%#.2dVS%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame());
+			if (!GetImageFileName(imageNames[i], "%sGU%#.3dVA%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame()))
+				GetImageFileName (imageNames[i], "%sGU%#.2dVA%d.%d", prefixStr, id,  4,i+victorySprite->GetFirstFrame());
 		}
 
 		victorySprite->Import(victorySprite->GetNumFrames(), imageNames, shadowNames);
-		delete m_sprites[UNITACTION_VICTORY];
 		m_sprites[UNITACTION_VICTORY] = victorySprite;
 		printf("]\n");
 
 		Anim *victoryAnim = new Anim;
 
 		victoryAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_VICTORY];
 		m_anims[UNITACTION_VICTORY] = victoryAnim;
 	}
 
@@ -627,12 +736,14 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		printf(" [Work/A2");
 		for (j=0; j<k_NUM_FACINGS; j++) 
 		{
-			for(size_t n = 0; n < workSprite->GetNumFrames(); ++n) 
+			sint32 camera = j + 1;
+			for(i=0; i<workSprite->GetNumFrames(); i++) 
 			{
-				if (!GetImageFileName(facedShadowNames[j][n],"%sGU%#.3dWS%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame()))
-					GetImageFileName (facedShadowNames[j][n],"%sGU%#.2dWS%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame());
-				if (!GetImageFileName(facedImageNames[j][n] ,"%sGU%#.3dWA%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame()))
-					GetImageFileName (facedImageNames[j][n] ,"%sGU%#.2dWA%d.%d", prefixStr, id, j+1, n+workSprite->GetFirstFrame());
+				
+				if (!GetImageFileName(facedShadowNames[j][i],"%sGU%#.3dWS%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame()))
+					GetImageFileName (facedShadowNames[j][i],"%sGU%#.2dWS%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame());
+				if (!GetImageFileName(facedImageNames[j][i] ,"%sGU%#.3dWA%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame()))
+					GetImageFileName (facedImageNames[j][i] ,"%sGU%#.2dWA%d.%d", prefixStr, id, j+1, i+workSprite->GetFirstFrame());
 			}
 		}
 
@@ -640,13 +751,12 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		
 		workSprite->Import(workSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
-		delete m_sprites[UNITACTION_WORK];
-		m_sprites[UNITACTION_WORK] = workSprite;
+		
+		m_sprites[UNITACTION_WORK] = (Sprite *)workSprite;
 		printf("]\n");
 
 		Anim *workAnim = new Anim;
 		workAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_WORK];
 		m_anims[UNITACTION_WORK] = workAnim;
 	}
 
@@ -735,19 +845,17 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 	delete theToken;
 
-	for (j=0; j<k_NUM_FACINGS; j++) 
-    {
+	for (j=0; j<k_NUM_FACINGS; j++) {
 		for (i=0; i<k_MAX_NAMES; i++) 
 		{
-			delete [] facedImageNames[j][i];
-			delete [] facedShadowNames[j][i];
+			free(facedImageNames[j][i]);
+			free(facedShadowNames[j][i]);
 		}
 	}
 
-	for (i = 0; i < k_MAX_NAMES; i++) 
-    {
-		delete [] imageNames[i];
-		delete [] shadowNames[i];
+	for (i=0; i<k_MAX_NAMES; i++) {
+		free(imageNames[i]);
+		free(shadowNames[i]);
 	}
 
 	return TRUE;
@@ -800,12 +908,13 @@ UnitSpriteGroup::SetHotPoint(UNITACTION action, sint32 facing,POINT pt)
 
 
 
-void UnitSpriteGroup::ExportScript(MBCHAR const * name)
+void UnitSpriteGroup::ExportScript(MBCHAR *name)
 {
+	FILE				*file;
 	sint32				i;
 	extern TokenData	g_allTokens[];
 	
-	FILE * file = fopen(name, "w");
+	file = fopen(name, "w");
 	if (!file) {
 		c3errors_ErrorDialog("Sprite Export", "Could not open '%s' for writing.", name);
 		return;

@@ -25,6 +25,7 @@
 
 #include "colorset.h"
 
+extern ColorSet	*g_colorSet;
 extern C3UI		*g_c3ui;
 
 

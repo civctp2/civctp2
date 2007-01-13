@@ -1,32 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer unit packet handling.
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "network.h"
@@ -47,7 +26,7 @@
 
 #include "Cell.h"
 
-#include "AICause.h"
+#include "aicause.h"
 #include "ctpai.h"
 
 extern UnitPool* g_theUnitPool;
@@ -57,45 +36,14 @@ extern SelectedItem *g_selected_item;
 extern Director *g_director;
 
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetUnit::NetUnit
-//
-// Description: Constructor
-//
-// Parameters : UnitData * unit:  Unit data to send through the network
-//              Unit useActor:    According unit actor
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-NetUnit::NetUnit(UnitData * unit, Unit useActor) 
-:
-    Packetizer      (),
-    m_unitData      (unit),
-    m_actorId       (useActor)
+NetUnit::NetUnit(UnitData* unit, Unit useActor) : 
+	m_unitData(unit) 
 {
+	m_unitId = 0;
+	m_actorId = useActor;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetUnit::Packetize
-//
-// Description: Generate an application data packet to transmit.
-//
-// Parameters : buf         : buffer to store the message
-//
-// Globals    : -
-//
-// Returns    : size        : number of bytes stored in buf
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
+
 void NetUnit::Packetize(uint8* buf, uint16& size)
 {
 	size = 0;
@@ -109,23 +57,6 @@ void NetUnit::Packetize(uint8* buf, uint16& size)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetUnit::Unpacketize
-//
-// Description: Retrieve the data from a received application data packet.
-//
-// Parameters : id          : Sender identification?
-//              buf         : Buffer with received message
-//              size        : Length of received message (in bytes)
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	uint16 packid;
@@ -151,7 +82,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		UnpacketizeUnit(&buf[pos], unitSize, m_unitData);
 		pos += unitSize;
-		bool revealed_unexplored;
+		BOOL revealed_unexplored;
 
 		if(pnt != m_unitData->m_pos) {
 			UnitDynamicArray revealed;
@@ -159,13 +90,13 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Net: Unit %lx moved to %d,%d via unit packet\n",
 								m_unitData->m_id, newPos.x, newPos.y));
 			m_unitData->m_pos = pnt;
-			bool addVision = false;
+			BOOL addVision = FALSE;
 			if(!(oldFlags & k_UDF_TEMP_SLAVE_UNIT)) {
 				g_theWorld->RemoveUnitReference(pnt, m_unitData->m_id);
 				addVision = (m_unitData->m_flags & k_UDF_VISION_ADDED) != 0;
 				m_unitData->RemoveUnitVision();
 			} else if(!(m_unitData->m_flags & k_UDF_TEMP_SLAVE_UNIT)) {
-				addVision = true;
+				addVision = TRUE;
 			}
 			m_unitData->m_pos = newPos;
 
@@ -211,15 +142,15 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 		if(oldowner != m_unitData->m_owner) {
 			DPRINTF(k_DBG_NET, ("Resetting unit %lx (type %d) from owner %d to %d\n",
-								uid.m_id, m_unitData->m_type,
+								uid, m_unitData->m_type,
 								oldowner, m_unitData->m_owner));
-			if(m_unitData->GetDBRec()->GetHasPopAndCanBuild()) {
+			if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
 				DPRINTF(k_DBG_NET, ("But it's a city and I'm going to assert and ignore it.\n"));
 				BOOL ahaSoItDoesHappen = FALSE;
 				Assert(ahaSoItDoesHappen);
 			} else {
 				g_player[oldowner]->RemoveUnitReference(uid, CAUSE_REMOVE_ARMY_UNKNOWN, m_unitData->m_owner);
-				g_player[m_unitData->m_owner]->InsertUnitReference(uid, CAUSE_NEW_ARMY_UNKNOWN, Unit());
+				g_player[m_unitData->m_owner]->InsertUnitReference(uid, CAUSE_NEW_ARMY_UNKNOWN, Unit(0));
 			}
 		}
 
@@ -249,26 +180,19 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		g_theUnitPool->HackSetKey(((uint32)uid & k_ID_KEY_MASK) + 1);
 
-		sint32 trans_t = 0;
-        (void) g_theUnitDB->Get(unitType, g_player[unitOwner]->GetGovernmentType())->GetTransType(trans_t);
-		if (m_actorId.m_id != 0) 
-        {
+		sint32 trans_t = g_theUnitDB->Get(unitType)->GetTransType();
+		if(m_actorId.m_id != (0)) {
 			m_unitData = new UnitData(unitType, trans_t, uid, unitOwner,
-									  unitPos, Unit(),
+									  unitPos, Unit(0),
 									  m_actorId.AccessData()->m_actor);
 			m_actorId.AccessData()->m_actor = NULL;
-		} 
-        else 
-        {
-			if(flags & k_UDF_TEMP_SLAVE_UNIT) 
-            {
+		} else {
+			if(!(flags & k_UDF_TEMP_SLAVE_UNIT)) {
+				m_unitData = new UnitData(unitType, trans_t,
+										  uid, unitOwner, unitPos, Unit(0));
+			} else {
 				m_unitData = new UnitData(unitType, trans_t,
 										  uid, unitOwner, unitPos);
-            }
-            else
-            {
-				m_unitData = new UnitData(unitType, trans_t,
-										  uid, unitOwner, unitPos, Unit());
 			}
 		}
 		
@@ -288,7 +212,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 #endif
 
-		if(m_unitData->GetDBRec()->GetHasPopAndCanBuild()) {
+		if(g_theUnitDB->Get(m_unitData->m_type)->GetHasPopAndCanBuild()) {
 			m_unitData->GetCityData()->NetworkInitialize();
 
 			g_player[m_unitData->m_owner]->AddCityReferenceToPlayer(
@@ -303,7 +227,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			CtpAi::AddOwnerGoalsForCity(uid, uid.GetOwner());
 			
-		} else if(m_unitData->GetDBRec()->GetIsTrader()) {
+		} else if(g_theUnitDB->Get(m_unitData->m_type)->GetIsTrader()) {
 			g_player[m_unitData->m_owner]->AddTrader(uid);
 		} else {
 			UnitDynamicArray revealed;
@@ -312,10 +236,9 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			} else if(!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) {
 				g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
 			}
-			if (!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) 
-            {
-				g_player[m_unitData->m_owner]->InsertUnitReference
-                    (uid, CAUSE_NEW_ARMY_NETWORK, Unit());
+			if(!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) {
+				g_player[m_unitData->m_owner]->InsertUnitReference(
+																   uid, CAUSE_NEW_ARMY_NETWORK, Unit(0));
 			}
 		}
 	}
@@ -490,10 +413,11 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_theWorld->RemoveUnitReference(ud->m_pos, u);
 	g_player[ud->GetOwner()]->RemoveUnitVision(ud->m_pos, ud->GetVisionRange());
 	ud->m_pos = m_point;
-	bool revealed_unexplored;
+	BOOL revealed_unexplored;
 	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange(),
 											revealed_unexplored);
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
+	Cell *theCell = g_theWorld->GetCell(ud->m_pos);
 	
 	
 	sint32 numRevealed = revealed.Num();

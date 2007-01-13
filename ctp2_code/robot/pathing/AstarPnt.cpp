@@ -45,7 +45,7 @@ sint32  AstarPoint::Identical(const AstarPoint &rhs) const
 
 void AstarPoint::Clear()
 {
-    m_flags = (uint32) 0xcdcd;
+    m_flags = uint8(0xcdcd);
     m_parent = (AstarPoint *) 0xcdcdcdcd; 
     m_next = (AstarPoint *)0xcdcdcdcd; 
 	m_pos.x = (sint16)(0xcdcd); 

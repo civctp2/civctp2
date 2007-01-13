@@ -35,6 +35,8 @@
 
 extern C3UI			*g_c3ui;
 extern CivPaths		*g_civPaths;
+extern ColorSet		*g_colorSet;
+
 
 ColorIconButton::ColorIconButton(
 	AUI_ERRCODE *retval,
@@ -48,9 +50,10 @@ ColorIconButton::ColorIconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH),
+	c3_Button( retval, id, x, y, width, height, pattern, ActionFunc, cookie ),
+
 	aui_TextBase(NULL),
-	c3_Button( retval, id, x, y, width, height, pattern, ActionFunc, cookie )
+	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH)
 {
 	m_shrinkToFit = FALSE;
 	m_filename = NULL;
@@ -67,9 +70,10 @@ ColorIconButton::ColorIconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
+	c3_Button( retval, id, ldlBlock, ActionFunc, cookie ),
+
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_Button( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_ImageBase( ldlBlock )
 {
 	m_shrinkToFit = FALSE;
 	m_filename = NULL;
@@ -172,7 +176,15 @@ AUI_ERRCODE ColorIconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 	MBCHAR		*name;
 
 	if (isLDL) {
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+		aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+		
+		BOOL valid = theLdl->IsValid( ldlBlock );
+		Assert( valid );
+		if ( !valid ) return AUI_ERRCODE_HACK;
+
+		
+		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -189,7 +201,12 @@ AUI_ERRCODE ColorIconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 
 ColorIconButton::~ColorIconButton()
 {
-	delete [] m_filename;
+	if (m_filename) {
+		delete[] m_filename;
+	}
+
+
+
 }
 
 

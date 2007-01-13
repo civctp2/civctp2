@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface dropdown menu
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -51,9 +32,9 @@ aui_DropDown::aui_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -81,9 +62,9 @@ aui_DropDown::aui_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -101,7 +82,15 @@ aui_DropDown::aui_DropDown(
 
 AUI_ERRCODE aui_DropDown::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -139,15 +128,16 @@ AUI_ERRCODE aui_DropDown::InitCommon( sint32 buttonSize, sint32 windowSize )
 
 AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
+	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_STATICPANE );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 		{
 			m_staticPane = new aui_Static(
 				&errcode,
@@ -165,7 +155,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 		{
 			m_button = new aui_Button(
 				&errcode,
@@ -192,7 +182,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 		{
 			m_listBoxWindow = new aui_Window(
 				&errcode,
@@ -212,7 +202,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-            if (aui_Ldl::GetLdl()->FindDataBlock(block))
+			if ( theLdl->GetLdl()->FindDataBlock( block ) )
 				m_listBox = new aui_ListBox(
 					&errcode,
 					aui_UniqueId(),
@@ -259,15 +249,31 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 aui_DropDown::~aui_DropDown()
 {
-	if (g_ui && m_listBoxWindow)
+	if ( m_listBoxWindow )
 	{
 		g_ui->RemoveWindow( m_listBoxWindow->Id() );
+
+		delete m_listBoxWindow;
+		m_listBoxWindow = NULL;
 	}
 
-	delete m_listBoxWindow;
-    delete m_listBox;
-	delete m_button;
-	delete m_staticPane;
+	if ( m_listBox )
+	{
+		delete m_listBox;
+		m_listBox = NULL;
+	}
+
+	if ( m_button )
+	{
+		delete m_button;
+		m_button = NULL;
+	}
+
+	if ( m_staticPane )
+	{
+		delete m_staticPane;
+		m_staticPane = NULL;
+	}
 }
 
 
@@ -615,6 +621,26 @@ void aui_DropDown::MouseLGrabOutside( aui_MouseEvent *mouseData )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

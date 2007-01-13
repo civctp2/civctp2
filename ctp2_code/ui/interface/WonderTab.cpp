@@ -1,69 +1,76 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The wonder tab of the info window.
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
-#include "WonderTab.h"
 
 #include "aui_ldl.h"
-#include "aui_stringtable.h"
-#include "aui_uniqueid.h"
-#include "citydata.h"
-#include "Civilisation.h"
-#include "colorset.h"           // g_colorSet
-#include "c3_button.h"
-#include "c3ui.h"
+#include "ctp2_Window.h"
 #include "ctp2_button.h"
+#include "c3ui.h"
+#include "ctp2_Static.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
-#include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "Diffcly.h"
-#include "EventTracker.h"
-#include "GameSettings.h"
-#include "IconRecord.h"
+
+
+#include "StrDB.h"
+
+
+#include "WonderTab.h"
+
+
 #include "linegraph.h"
-#include "player.h"
-#include "profileDB.h"
+
+
+#include "aui_uniqueid.h"
+
+
+#include "aui_stringtable.h"
+
+
+#include "colorset.h"
+
+
 #include "rankingtab.h"
-#include "StrDB.h"              // g_theStringDB
-#include "Unit.h"
+
+#include "EventTracker.h"
+
 #include "WonderRecord.h"
+#include "IconRecord.h"
+#include "DiffDB.h"
+#include "profileDB.h"
+
+
+
+#include "c3_button.h"
+
+#include "Unit.h"
+#include "citydata.h"
+#include "player.h"
+#include "Civilisation.h"
+
 #include "WonderTracker.h"
 
+#include "colorset.h"
 
-extern C3UI                     *g_c3ui;
+#include "GameSettings.h"
 
-static sint32                   s_currentWonderDisplay;
-static c3_Button                *s_eventsInfoButton[17];
+extern C3UI *g_c3ui;
+extern StringDB *g_theStringDB;
 
+static sint32			s_currentWonderDisplay;
+static c3_Button		*s_eventsInfoButton[17];
+
+extern DifficultyDB *g_theDifficultyDB;
 extern PointerList<Player>      *g_deadPlayer;
+extern ColorSet *g_colorSet;
 
 
 WonderTab::WonderTab(ctp2_Window *parent) :
@@ -137,7 +144,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 			st = (ctp2_Static *)box->GetChildByIndex(2);
 			Assert(st);
 			if(st) {
-				const char *year = diffutil_GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turn);
+				const char *year = g_theDifficultyDB->GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turn);
 				if(year) {
 					st->SetText(year);
 				} else {

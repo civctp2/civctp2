@@ -1,56 +1,30 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Sprite
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added separate counters in Sprite-derived classes to prevent crashes.
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
+#include "pixelutils.h"
 
-// #include <>
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class Sprite;
-
-enum SPRITETYPE 
-{
+enum SPRITETYPE {
 	SPRITETYPE_NORMAL,
 	SPRITETYPE_FACED,
 	SPRITETYPE_FACEDWSHADOW,
 
-	SPRITETYPE_MAX          // dummy last entry, used as counter
+	SPRITETYPE_MAX
 };
 
 #define k_SPRITE_BASEFACING 0 
@@ -66,26 +40,24 @@ enum SPRITETYPE
 #define k_BIT_DRAWFLAGS_DESATURATED		0x00000080
 
 
+
 #define k_BIT_DRAWFLAGS_SPECIAL1	    (k_BIT_DRAWFLAGS_TRANSPARENCY |	\
 										 k_BIT_DRAWFLAGS_FOGGED		  |	\
 										 k_BIT_DRAWFLAGS_DESATURATED  )
 
-#define k_DRAWFLAGS_NORMAL		        k_BIT_DRAWFLAGS_FEATHERING
 
 
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
 
-#include "pixelutils.h"
+
+
+
+#define k_DRAWFLAGS_NORMAL		(k_BIT_DRAWFLAGS_FEATHERING)
 
 class aui_Surface;
 class Token;
+class Sprite;
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
- 
+
 typedef  void (Sprite::*_SPRITE_DRAWLOW1)(Pixel16 *frame, 
 										  sint32 drawX, sint32 drawY, 
 										  sint32 width, sint32 height,
@@ -102,8 +74,10 @@ typedef  void (Sprite::*_SPRITE_DRAWLOW2)(Pixel16 *frame,
 										  uint16 flags,
 										  BOOL reversed);
 
+
 class Sprite 
 {
+
 public:
 	Sprite();
 	virtual ~Sprite();
@@ -123,8 +97,8 @@ public:
 	void			UnlockSurface(void);
 	void			SetSurface(void);
 
-	uint16			GetType(void) { return static_cast<uint16>(m_type); }
-	void			SetType(uint16 type) { m_type = static_cast<SPRITETYPE>(type); }
+	uint16			GetType(void) { return m_type; }
+	void			SetType(uint16 type) { m_type = (SPRITETYPE)type; }
 
 	uint16			GetWidth(void) { return m_width; }
 	uint16			GetHeight(void) { return m_height; }
@@ -147,11 +121,11 @@ public:
 	virtual BOOL	HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double m_scale, sint16 transparency, 
 						Pixel16 outlineColor, uint16 flags);
 
-	virtual size_t	GetNumFrames(void) const { return m_numFrames; };
-	virtual void	SetNumFrames(uint16 num) { m_numFrames = num; }
+	uint16			GetNumFrames(void) { return m_numFrames; };
+	void			SetNumFrames(uint16 num) { m_numFrames = num; }
 
 	sint32			GetCurrentFrame(void) { return m_currentFrame; };
-	void			SetCurrentFrame(uint16 cFrame) { m_currentFrame = cFrame; };
+	void			SetCurrentFrame(sint16 cFrame) { m_currentFrame = cFrame; };
 
 	Pixel16*		GetFrameData(uint16 frameNum);
 	Pixel16*		GetMiniFrameData(uint16 frameNum);
@@ -162,8 +136,11 @@ public:
 	void			SetFrameData(uint16 frameNum, Pixel16 *data);
 	void			SetMiniFrameData(uint16 frameNum, Pixel16 *data);
 
-	virtual sint32	ParseFromTokens(Token *theToken);
-	virtual void	AllocateFrameArrays(size_t count);
+	sint32			ParseFromTokens(Token *theToken);
+
+	void			AllocateFrameArrays(void);
+	void			AllocateFrameArraysBasic(void);
+
 	
 	void			InitializeDrawLow();
 
@@ -239,7 +216,7 @@ protected:
 	
 	
 	
-	void Sprite::__Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
+	inline void Sprite::__Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
 		{
@@ -253,7 +230,7 @@ protected:
 	
 	
 	
-	void Sprite::__Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
+	inline void Sprite::__Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
 		{

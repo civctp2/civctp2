@@ -53,7 +53,7 @@ AUI_ERRCODE StatusWindow::DrawCommand(char* str)
 {
 	if ( IsHidden() ) Show();
 	RECT rect = { 0, 0, m_width, m_height };
-	primitives_DropText(m_surface, 15, 5, str, 0x0000, 1);
+	primitives_DropText((aui_DirectSurface*)m_surface, 15, 5, str, 0x0000, 1);
 	m_dirtyList->AddRect(&rect);
 	return AUI_ERRCODE_OK;
 }

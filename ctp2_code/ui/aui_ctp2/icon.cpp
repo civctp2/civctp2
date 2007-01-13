@@ -26,7 +26,7 @@
 extern C3UI		*g_c3ui;
 
 Icon::Icon(	AUI_ERRCODE *retval,
-			MBCHAR const * szFileName)
+			MBCHAR *szFileName)
 :
 aui_Image(retval, szFileName)
 {
@@ -76,7 +76,12 @@ AUI_ERRCODE Icon::Draw( aui_Surface *pDestSurf,	RECT *pDestRect, uint32 color )
 		errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
 		if (errcode == AUI_ERRCODE_OK)
 		{
+
+			
+			sint32 surfWidth = pDestSurf->Width();
+			sint32 surfHeight = pDestSurf->Height();
 			sint32 surfPitch = pDestSurf->Pitch();
+
 			sint32 srcWidth = pSrcSurf->Width();
 			sint32 srcHeight = pSrcSurf->Height();
 			sint32 srcPitch = pSrcSurf->Pitch();

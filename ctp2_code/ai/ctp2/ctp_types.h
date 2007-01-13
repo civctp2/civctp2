@@ -9,9 +9,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __CTP_TYPES_H__
 #define __CTP_TYPES_H__
 
@@ -31,7 +30,7 @@ typedef unsigned __int64	uint64;
 typedef char				MBCHAR;
 
 
-#error "Do not use this"
+
 
 extern sint32 g_turn;
 extern sint32 g_numPlayers;

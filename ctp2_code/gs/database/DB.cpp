@@ -1,34 +1,14 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The old database template class. (Should be replaced)
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Removed old endgame, risk and installation databases. (Aug 29th 2005 Martin Gühmann)
-// - Removed old pollution and global warming databases. (July 15th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -41,9 +21,9 @@ extern StringDB *g_theStringDB;
 
 template <class T> Database<T>::Database()
 
-{
-	m_nRec = m_max_nRec = 0;
-	m_rec = NULL; 
+{ 
+    m_nRec = m_max_nRec = 0; 
+    m_rec = NULL; 
 	m_indexToAlpha = NULL;
 	m_alphaToIndex = NULL;
 }
@@ -51,25 +31,25 @@ template <class T> Database<T>::Database()
 
 template <class T> Database<T>::Database(CivArchive &archive)
 	{
-	m_nRec=m_max_nRec=0;
-	m_rec=NULL;
+	m_nRec=m_max_nRec=0 ;
+	m_rec=NULL ;
 	m_indexToAlpha = NULL;
 	m_alphaToIndex = NULL;
-	Serialize(archive);
+	Serialize(archive) ;
 	}
 
 template <class T> Database<T>::~Database()
 
 {
-	delete [] m_rec;
-	delete [] m_indexToAlpha;
-	delete [] m_alphaToIndex;
+    delete [] m_rec; 
+    delete [] m_indexToAlpha; 
+    delete [] m_alphaToIndex; 
 }
 
 template <class T> void  Database<T>::SetSize(const sint32 n)
 
-{
-	Assert (0 < n); 
+{ 
+    Assert (0 < n); 
 	T*oldrec = NULL;
 	sint32 *oldalpha = NULL;
 	sint32 *oldindex = NULL;
@@ -82,15 +62,15 @@ template <class T> void  Database<T>::SetSize(const sint32 n)
 		Assert( m_alphaToIndex != NULL );
 		oldindex = m_alphaToIndex;
 	}
-	m_max_nRec = n;
-	m_rec = new T[n]; 
-	m_indexToAlpha = new sint32[n]; 
-	m_alphaToIndex = new sint32[n]; 
+    m_max_nRec = n;
+    m_rec = new T[n]; 
+    m_indexToAlpha = new sint32[n]; 
+    m_alphaToIndex = new sint32[n]; 
 	memset(m_indexToAlpha, 0, sizeof(sint32) * n);
 	memset(m_alphaToIndex, 0, sizeof(sint32) * n);
-	Assert(m_rec); 
-	Assert(m_indexToAlpha); 
-	Assert(m_alphaToIndex); 
+    Assert(m_rec); 
+    Assert(m_indexToAlpha); 
+    Assert(m_alphaToIndex); 
 	if(oldrec) {
 		if(oldmax < m_max_nRec)
 		{
@@ -108,58 +88,60 @@ template <class T> void  Database<T>::SetSize(const sint32 n)
 
 	
 	if (oldrec)
-		delete [] oldrec;
+		delete [] oldrec; 
 	if (oldalpha)
-		delete [] oldalpha;
+		delete [] oldalpha; 
 	if (oldindex)
-		delete [] oldindex;
-}
+		delete [] oldindex; 
+} 
 
 template <class T> void  Database<T>::SetSizeAll(const sint32 n)
 
-{
-	Assert (0 < n);
-	m_max_nRec = n;
-	m_rec = new T[n];
-	m_indexToAlpha = new sint32[n];
-	m_alphaToIndex = new sint32[n];
+{ 
+    Assert (0 < n); 
+    m_max_nRec = n;
+    m_rec = new T[n]; 
+    m_indexToAlpha = new sint32[n]; 
+    m_alphaToIndex = new sint32[n]; 
 	memset(m_indexToAlpha, 0, sizeof(sint32) * n);
 	memset(m_alphaToIndex, 0, sizeof(sint32) * n);
-	m_nRec = n;
-	Assert(m_rec);
-	Assert(m_indexToAlpha);
-	Assert(m_alphaToIndex);
-}
+    m_nRec = n; 
+    Assert(m_rec); 
+    Assert(m_indexToAlpha); 
+    Assert(m_alphaToIndex); 
+} 
 
-template <class T> const T* Database<T>::Get(const sint32 i) const
+template <class T> const T* Database<T>::Get(const sint32 i) const 
 
-{
-	Assert(0<=i);
-	Assert(i<m_nRec);
+{ 
+    Assert(0<=i); 
+    Assert(i<m_nRec); 
 	if(i < 0 || i >= m_nRec)
 		return NULL;
-	return &(m_rec[i]);
+    return &(m_rec[i]); 
 }
 
-template <class T> T* Database<T>::Access(const sint32 i)
+template <class T> T* Database<T>::Access(const sint32 i) 
 
-{
-	Assert(0<=i);
-	Assert(i<m_nRec);
-	return &(m_rec[i]);
+{ 
+    Assert(0<=i); 
+    Assert(i<m_nRec); 
+    return &(m_rec[i]); 
 }
 
 
-template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
+template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i) 
 
-{
-	Assert (m_nRec < m_max_nRec);
+{ 
+    Assert (m_nRec < m_max_nRec); 
+    
+    m_rec[m_nRec].SetName(sid); 
+
 	
-	m_rec[m_nRec].SetName(sid);
+	
 	{
 		const MBCHAR *str = g_theStringDB->GetNameStr( sid );
-		sint32 a;
-		for (a = 0; a < m_nRec; ++a )
+		for ( sint32 a = 0; a < m_nRec; ++a )
 		{
 			if ( _stricoll( str, g_theStringDB->GetNameStr(
 				m_rec[ m_alphaToIndex[ a ] ].GetName() ) ) < 0 )
@@ -184,61 +166,61 @@ template <class T> void Database<T>::AddRec(const StringId sid, sint32 &i)
 		m_indexToAlpha[ m_nRec ] = a;
 	}
 
-	i = m_nRec;
-	m_nRec++;
+    i = m_nRec; 
+    m_nRec++; 
 }
 
 
 template <class T> void Database<T>::SetEnabling (const sint32 i, const sint32 e)
 
 {
-	Assert(0 <= i);
-	Assert(i < m_nRec);
-
-	m_rec[i].SetEnabling(e);
+    Assert(0 <= i); 
+    Assert(i < m_nRec); 
+    
+    m_rec[i].SetEnabling(e); 
 }
 
 template <class T> sint32 Database<T>::GetEnabling (const sint32 i) const
 {
-	Assert(0 <= i);
-	Assert(i < m_nRec);
-
-	return m_rec[i].GetEnabling();
+	Assert(0 <= i); 
+    Assert(i < m_nRec); 
+ 
+    return m_rec[i].GetEnabling(); 
 }
 
 template <class T> sint32 Database<T>::GetObsolete (const sint32 i, sint32 index) const
 {
-	 Assert(0 <= i);
-	 Assert(i < m_nRec);
-
-	 return m_rec[i].GetObsolete(index);
+     Assert(0 <= i); 
+     Assert(i < m_nRec); 
+ 
+     return m_rec[i].GetObsolete(index); 
 }
 
 template <class T> void Database<T>::SetObsolete (const sint32 i, const sint32 o, sint32 index)
 
 {
-	Assert(0 <= i);
-	Assert(i < m_nRec);
-
-	m_rec[i].SetObsolete(o, index);
+    Assert(0 <= i); 
+    Assert(i < m_nRec); 
+    
+    m_rec[i].SetObsolete(o, index); 
 }
 
 template <class T> sint32 Database<T>::GetNamedItem (const StringId id, sint32 &index) const
 
 {
-	sint32 i;
-
-	for (i=0; i<m_nRec; i++) {
-		if (m_rec[i].m_name == id) {
-			index = i;
-			return TRUE;
-		}
-	}
-	return FALSE;
+    sint32 i; 
+    
+    for (i=0; i<m_nRec; i++) { 
+        if (m_rec[i].m_name == id) { 
+            index = i; 
+            return TRUE; 
+        } 
+    } 
+    return FALSE; 
 }
 
 
-template <class T> sint32 Database<T>::GetNamedItemID
+template <class T> sint32 Database<T>::GetNamedItemID 
 (
 	sint32 index,
 	StringId &id
@@ -247,10 +229,10 @@ template <class T> sint32 Database<T>::GetNamedItemID
 {
 	if ((index < 0) || (index >= m_nRec))
 		return FALSE;
+    
+    id = m_rec[index].m_name;
 
-	id = m_rec[index].m_name;
-
-	return TRUE; 
+    return TRUE; 
 }
 
 
@@ -266,14 +248,14 @@ template <class T> sint32 Database<T>::GetNamedItemID
 
 template <class T> void Database<T>::Serialize(CivArchive &archive)
 {
-	int i;
+	int	i ;
 
 	if (archive.IsStoring()) {
-		archive<<m_nRec;
-		archive<<m_max_nRec;
+		archive<<m_nRec ;
+		archive<<m_max_nRec ;
 		for (i=0; i<m_nRec; i++)
 		{
-			m_rec[i].Serialize(archive);
+			m_rec[i].Serialize(archive) ;
 			
 			
 			
@@ -289,6 +271,19 @@ template <class T> void Database<T>::Serialize(CivArchive &archive)
 	}
 }
 
+#include "GWRecord.h"
+#include "UVRecord.h"
+#include "InstRec.h"
+#include "CivilisationRec.h"
+#include "RiskRecord.h"
+#include "EndGameRecord.h"
+#include "pollutionrecord.h"
 #include "MapRecord.h"
 
+template  class Database<GWRecord>;
+template  class Database<PollutionRecord>;
+template  class Database<CivilisationRecord>;
+template  class Database<InstallationRecord>;
+template  class Database<RiskRecord>;
+template  class Database<EndGameRecord>;
 template  class Database<MapRecord>;

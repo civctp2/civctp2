@@ -28,6 +28,7 @@
 
 #define k_STATICTEXTBOX_LDL_BEVEL "bevel"
 
+extern ColorSet	*g_colorSet;
 extern C3UI		*g_c3ui;
 
 
@@ -43,9 +44,9 @@ StaticTextBox::StaticTextBox(
 	uint32 size,
 	sint32 bevel)
 :
-	aui_ImageBase( (sint32)0 ),
+	aui_Static( retval, id, x, y, width, height ),
 	aui_TextBase( text, maxLength ),
-	aui_Static( retval, id, x, y, width, height )
+	aui_ImageBase( (sint32)0 )
 {
 	
 
@@ -60,11 +61,19 @@ StaticTextBox::StaticTextBox(
 	uint32 id,
 	MBCHAR *ldlBlock)
 	:
-	aui_ImageBase(ldlBlock),
+	aui_Static(retval, id, ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Static(retval, id, ldlBlock)
+	aui_ImageBase(ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
 

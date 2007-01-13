@@ -7,9 +7,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef _BMH_END_GAME_WINDOW_H_
 #define _BMH_END_GAME_WINDOW_H_
 

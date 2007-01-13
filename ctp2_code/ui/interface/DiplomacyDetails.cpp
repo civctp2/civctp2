@@ -1,32 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Handling diplomacy details about other players.
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "DiplomacyDetails.h"
@@ -81,35 +52,36 @@
 
 #include "mapanalysis.h"
 #include "intelligencewindow.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 #include "aui_blitter.h"
 #include "aui_stringtable.h"
 #include "AgreementMatrix.h"
 
 #include "ctp2_hypertextbox.h"
 
-static DiplomacyDetails     *s_DiplomacyDetails;
-static MBCHAR               *s_DiplomacyDetailsBlock = "DiplomacyDetails";
+static DiplomacyDetails *s_DiplomacyDetails;
+static MBCHAR *s_DiplomacyDetailsBlock = "DiplomacyDetails";
 
-#define k_INT_FLAG_COL      0
-#define k_INT_NATION_COL    1
-#define k_INT_REGARD_COL    2
-#define k_INT_STRENGTH_COL  3
-#define k_INT_EMBASSY_COL   4
-#define k_INT_TREATIES_COL  5
+#define k_INT_FLAG_COL		0
+#define k_INT_NATION_COL	1		
+#define k_INT_REGARD_COL	2		
+#define k_INT_STRENGTH_COL	3		
+#define k_INT_EMBASSY_COL	4		
+#define k_INT_TREATIES_COL	5		
 
-#define k_WEAK_STRENGTH   -50
-#define k_EQUAL_STRENGTH    0
-#define k_STRONG_STRENGTH  50
+#define k_WEAK_STRENGTH -50
+#define k_EQUAL_STRENGTH 0
+#define k_STRONG_STRENGTH 50
 
-extern C3UI                 *g_c3ui;
+extern C3UI *g_c3ui;
+ctp2_Button	*DiplomacyDetails::m_cancelButton = NULL;
 
-ctp2_Button                 *DiplomacyDetails::m_cancelButton = NULL;
-ctp2_ListBox                *DiplomacyDetails::sm_list = NULL;
-aui_StringTable             *DiplomacyDetails::sm_strengthImages = NULL;
-aui_StringTable             *DiplomacyDetails::sm_embassyImages = NULL;
+ctp2_ListBox *DiplomacyDetails::sm_list = NULL;
+extern ColorSet *g_colorSet;
+aui_StringTable *DiplomacyDetails::sm_strengthImages = NULL;
+aui_StringTable *DiplomacyDetails::sm_embassyImages = NULL;
 
-sint32                      DiplomacyDetails::detailPlayer;
+sint32 DiplomacyDetails::detailPlayer;
 
 DiplomacyDetails::DiplomacyDetails(AUI_ERRCODE *err)
 {
@@ -149,7 +121,7 @@ AUI_ERRCODE DiplomacyDetails::Initialize()
 		return AUI_ERRCODE_OK;
 
 	
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	s_DiplomacyDetails = new DiplomacyDetails(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -284,16 +256,15 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(!item) break;
 
+					ctp2_Static *child = NULL;
 					MBCHAR buf[k_MAX_NAME_LEN];
 					Civilisation civ = *g_player[p]->m_civilisation;
 
-					ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL);
-					if (child) 
-                    {
+					
+					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL)) {
 						child->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
 						child->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
-
 					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL)) {
 						civ->GetCountryName(buf);
 						child->SetText(buf);
@@ -338,7 +309,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					item->SetUserData((void*)p);
 					sm_list->AddItem(item);
 				}
-			}
+			}		
 
 
 
@@ -425,9 +396,8 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 						}
 
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipDetWondersItem");
-						ctp2_Static * child = (ctp2_Static *) item->GetChildByIndex(0);
-						if (child) 
-                        {
+						ctp2_Static *child = NULL;
+						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
 							child->SetText(g_player[detailPlayer]->m_all_cities->Get(a)->GetCityData()->GetName());
 						}
 
@@ -455,9 +425,8 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 							continue;
 						}
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ForAdvancesItem");
-						ctp2_Static * child = (ctp2_Static *) item->GetChildByIndex(0);
-						if (child) 
-                        {
+						ctp2_Static *child = NULL;
+						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
 							child->SetText(g_theAdvanceDB->Get(a)->GetNameText());
 						}
 
@@ -485,9 +454,8 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 						}
 
 						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("YourAdvancesItem");
-						ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(0);
-						if (child) 
-                        {
+						ctp2_Static *child = NULL;
+						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
 							child->SetText(g_theAdvanceDB->Get(a)->GetNameText());
 						}
 
@@ -502,7 +470,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_EmpireSize"));
 				
 				if(strchr(interp, '{'))
-					*strchr(interp,'{')=0;
+					*strchr(interp,'{')=0;	
 				strcat(interp,needEmbassy);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.EmpireSizeLabel");
 				st->SetText(interp);
@@ -511,7 +479,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				interp[0] = 0;
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_Population"));
 				if(strchr(interp, '%'))
-					*strchr(interp,'%')=0;
+					*strchr(interp,'%')=0;	
 				strcat(interp,needEmbassy);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.PopulationLabel");
 				st->SetText(interp);
@@ -520,7 +488,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				interp[0] = 0;
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_Capital"));
 				if(strchr(interp, '{'))
-					*strchr(interp,'{')=0;
+					*strchr(interp,'{')=0;	
 				strcat(interp,needEmbassy);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.CapitalLabel");
 				st->SetText(interp);
@@ -529,7 +497,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				interp[0] = 0;
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_LargestCity"));
 				if(strchr(interp, '{'))
-					*strchr(interp,'{')=0;
+					*strchr(interp,'{')=0;	
 				strcat(interp,needEmbassy);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.LargestCityLabel");
 				st->SetText(interp);
@@ -538,7 +506,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				interp[0] = 0;
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_MilitaryState"));
 				if(strchr(interp, '{'))
-					*strchr(interp,'{')=0;
+					*strchr(interp,'{')=0;	
 				strcat(interp,needEmbassy);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.MilStateLabel");
 				st->SetText(interp);
@@ -547,7 +515,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				interp[0] = 0;
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_GovType"));
 				if(strchr(interp, '{'))
-					*strchr(interp,'{')=0;
+					*strchr(interp,'{')=0; 
 				strcat(interp,needEmbassy);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.GovTypeLabel");
 				st->SetText(interp);
@@ -556,7 +524,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				interp[0] = 0;
 				strcpy(interp,g_theStringDB->GetNameStr("str_ldl_DipDetails_NowResearching"));
 				if(strchr(interp, '{'))
-					*strchr(interp,'{')=0;
+					*strchr(interp,'{')=0;	
 
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab3.TabPanel.NowResearchLabel");
 				st->SetText(interp);
@@ -584,9 +552,8 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(item)
 					{
-						ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(0);
-						if (child) 
-                        {
+						ctp2_Static *child = NULL;
+						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
 							child->SetText(needEmbassy);
 						}
 						sm_list->AddItem( item );
@@ -604,9 +571,8 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(item) 
 					{
-						ctp2_Static * child = (ctp2_Static *) item->GetChildByIndex(0);
-						if (child) 
-                        {
+						ctp2_Static *child = NULL;
+						if(child = (ctp2_Static *)item->GetChildByIndex(0)) {
 							child->SetText(needEmbassy);
 						}
 						sm_list->AddItem( item );
@@ -708,6 +674,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
+	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
 	sint32 p = (sint32)cookie;
@@ -733,7 +700,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 
 	
 	if(imageName) {
-	    aui_Image * image = g_c3ui->LoadImage(imageName);
+		image = g_c3ui->LoadImage(imageName);
 		if(image) {
 			
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
@@ -767,6 +734,8 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 												   RECT &rect,
 												   void *cookie)
 {
+	aui_Image *image = NULL;
+	MBCHAR *imageName = NULL;
 	sint32 p = (sint32)cookie;
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
@@ -791,15 +760,14 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 		InitImageTables();
 	}
 
-	MBCHAR *imageName = NULL;
 	if(relativeStrength < k_WEAK_STRENGTH) imageName = sm_strengthImages->GetString(0);
 	else if(relativeStrength < k_EQUAL_STRENGTH) imageName = sm_strengthImages->GetString(1);
 	else if(relativeStrength < k_STRONG_STRENGTH) imageName = sm_strengthImages->GetString(2);
 	else imageName = sm_strengthImages->GetString(3);
-
+											   
 	
 	if(imageName) {
-	    aui_Image * image = g_c3ui->LoadImage(imageName);
+		image = g_c3ui->LoadImage(imageName);
 		if(image) {
 			
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
@@ -834,6 +802,8 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 											RECT &rect,
 											void *cookie)
 {
+	aui_Image *image = NULL;
+	MBCHAR *imageName = NULL;
 	sint32 p = (sint32)cookie;
 
 	
@@ -848,10 +818,10 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 	}
 
 	if(g_player[detailPlayer]->HasEmbassyWith(p)) {
-	    MBCHAR const * imageName = sm_embassyImages->GetString(0);
-		if (imageName) {
+		imageName = sm_embassyImages->GetString(0);
+		if(imageName) {
 			aui_Image *image = g_c3ui->LoadImage(imageName);
-			if (image) {
+			if(image) {
 				
 				rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);
 				rect.top += ((rect.bottom - rect.top) / 2) - (image->TheSurface()->Height() / 2);
@@ -876,8 +846,9 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 				g_c3ui->UnloadImage(image);
 			}
 		}
+	} else {
+		
 	}
-
 	return AUI_ERRCODE_OK;
 }
 
@@ -889,7 +860,19 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 	sint32 p = (sint32)cookie;
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 
+	
+
+
+
+
+
+
+
 	sint32 x = 0;
+
+	
+	
+	
 
 	sint32 ag;
 	sint32 slot;
@@ -903,11 +886,16 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 		const DiplomacyProposalRecord *rec = 
 			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
-		if (!rec->GetImageSlot(slot))
+		if (!rec->GetImageSlot())
 			continue;
 
+		rec->GetImageSlot(slot);
+
+		
+		
 		if (p == visP)
 		{
+			
 			if (slot > 4)
 				continue;
 		}
@@ -942,8 +930,19 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
 									  &srcRect,
 									  k_AUI_BLITTER_FLAG_CHROMAKEY);
 
+			
+			
+
 			g_c3ui->UnloadImage(image);
 		}
+
+		
+		
+		
+		
+		
+		
+		
 	}
 	return AUI_ERRCODE_OK;
 }

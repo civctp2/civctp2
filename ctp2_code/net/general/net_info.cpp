@@ -3,8 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : net_info is used to propagate misc information from host to 
-//                player(s).
-// Id           : $Id$
+//				  player(s).
 //
 //----------------------------------------------------------------------------
 //
@@ -18,9 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-//  - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -61,7 +58,7 @@
 #include "QuadTree.h"
 #include "Vision.h"
 #include "TaxRate.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Sci.h"
 #include "message.h"
 #include "MessagePool.h"
@@ -96,11 +93,13 @@ extern C3UI					*g_c3ui;
 #include "radarmap.h"
 #include "radarwindow.h"
 #include "director.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "CivPaths.h"
 #include "installationpool.h"
 #include "soundmanager.h"
 #include "gamesounds.h"
+#include "aicause.h"
+
 #include "HappyTracker.h"
 #include "WonderTracker.h"
 #include "AchievementTracker.h"
@@ -110,7 +109,7 @@ extern C3UI					*g_c3ui;
 #include "SlicObject.h"
 #include "TradePool.h"
 
-#include "Globals.h"
+#include "globals.h"
 
 #include "wonderutil.h"
 
@@ -304,7 +303,7 @@ NetInfo::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'I';
 	buf[1] = 'I';
-	putshort(&buf[2], static_cast<sint16>(m_type));
+	putshort(&buf[2], m_type);
 	size = 4;
 	if(m_args[m_type] > 0) {
 		putlong(&buf[4], m_data); size += 4;
@@ -1222,9 +1221,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				TradeOffer offer(m_data2);
 				Assert(g_theTradeOfferPool->IsValid(offer));
 				if(g_theTradeOfferPool->IsValid(offer)) {
-					Unit unit1(m_data3);
-					Unit unit2(m_data4);
-					g_player[m_data]->AcceptTradeOffer(offer, unit1, unit2);
+					g_player[m_data]->AcceptTradeOffer(offer, Unit(m_data3),
+													   Unit(m_data4));
 				}
 			}
 			break;
@@ -1261,7 +1259,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Break cease fires between %d and %d\n",
 								m_data, m_data2));
 			if(g_player[m_data]) {
-				g_player[m_data]->BreakCeaseFire(m_data2, m_data3 != 0);
+				g_player[m_data]->BreakCeaseFire(m_data2, m_data3);
 			}
 			break;
 			
@@ -1290,6 +1288,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				wonderutil_AddBuilt(m_data);
 				if(g_player[cd->GetOwner()]) {
 					g_player[cd->GetOwner()]->AddWonder(m_data, city);
+					g_player[cd->GetOwner()]->RegisterCreateWonder(city, m_data);
 				}
 				cd->GetBuildQueue()->SendMsgWonderComplete(cd, m_data);
 			}
@@ -1321,14 +1320,10 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_INFO_CODE_DETACH_ROBOT:
 		{
 			DPRINTF(k_DBG_NET, ("Player %d is a non-robot\n", m_data));
-			if (g_player[m_data]) 
-            {
-				if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex()) 
-                {
+			if(g_player[m_data]) {
+				if(m_data == g_network.GetPlayerIndex()) {
 					g_player[m_data]->m_playerType = PLAYER_TYPE_HUMAN;
-				} 
-                else 
-                {
+				} else {
 					g_player[m_data]->m_playerType = PLAYER_TYPE_NETWORK;
 				}
 			}
@@ -1394,7 +1389,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					g_network.RequestResync(RESYNC_BAD_PLAYER);
 					break;
 				}
-				bool revealed;
+				BOOL revealed;
 				unit.SetTempSlaveUnit(FALSE);
 				unit.AddUnitVision(revealed);
 				MapPoint pos;
@@ -1406,7 +1401,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_theWorld->InsertUnit(pos, unit, revealedUnits);
 				g_player[unit.GetOwner()]->InsertUnitReference(unit,
 															   CAUSE_NEW_ARMY_UPRISING,
-															   Unit());
+															   Unit(0));
 			}
 			break;
 		}
@@ -1701,8 +1696,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.SetSensitiveUIBlocked(false);
 			}
 			MainControlPanel::SelectedCity();
-			if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex()) 
-            {
+			if(m_data == g_network.GetPlayerIndex()) {
+				
 				network_VerifyGameData();
 			}
 			break;
@@ -1738,8 +1733,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 
 			Army army(m_data);
-			Unit unit(m_data2);
-			army->GroupUnit(unit);
+			army->GroupUnit(Unit(m_data2));
 
 			if(army.GetOwner() == g_selected_item->GetVisiblePlayer()) {
 				
@@ -1750,17 +1744,14 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 		case NET_INFO_CODE_REMOTE_UNGROUP:
 		{
+			
 			DPRINTF(k_DBG_NET, ("Server says ungrouping of Army %lx done (owner=%d)\n", m_data, m_data2));
 
-			if (static_cast<PLAYER_INDEX>(m_data2) == g_selected_item->GetVisiblePlayer()) 
-            {
-			    Army army(m_data);
-				if (army.IsValid()) 
-                {
+			Army army(m_data);
+			if(m_data2 == g_selected_item->GetVisiblePlayer()) {
+				if(army.IsValid()) {
 					ArmyManagerWindow::NotifyRemoteGroupComplete(army);
-				} 
-                else 
-                {
+				} else {
 					ArmyManagerWindow::NotifySelection();
 				}
 			}

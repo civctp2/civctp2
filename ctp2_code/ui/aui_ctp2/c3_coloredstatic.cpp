@@ -7,7 +7,7 @@
 #include "aui_window.h"
 
 #include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 #include "c3_coloredstatic.h"
 #include "patternbase.h"
 #include "pattern.h"
@@ -15,6 +15,7 @@
 #include "primitives.h"
 
 extern aui_UI		*g_ui;
+extern ColorSet		*g_colorSet;
 
 
 c3_ColoredStatic::c3_ColoredStatic(
@@ -22,9 +23,9 @@ c3_ColoredStatic::c3_ColoredStatic(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
+	c3_Static( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	c3_Static( retval, id, ldlBlock )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -49,9 +50,9 @@ c3_ColoredStatic::c3_ColoredStatic(
 	uint32 bevelWidth,
 	uint32 bevelType)
 	:
+	c3_Static( retval, id, x, y, width, height, pattern, text, maxLength, bevelWidth, bevelType),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( text, maxLength ),
-	c3_Static( retval, id, x, y, width, height, pattern, text, maxLength, bevelWidth, bevelType)
+	aui_TextBase( text, maxLength )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

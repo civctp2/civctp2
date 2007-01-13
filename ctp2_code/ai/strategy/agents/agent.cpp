@@ -13,9 +13,11 @@
 
 
 #include "c3.h"
-#include "agent.h"
+
+#include "Agent.h"
 
 
+#include "debugassert.h"
 
 
 
@@ -23,45 +25,45 @@
 
 
 Agent::Agent()
-:	
-	m_squad_class       (SQUAD_CLASS_DEFAULT),
-    m_agent_type        (-1), 
-	m_is_used           (false),
-	m_squad_strength    (0),
-    m_can_be_executed   (true),
-    m_detached          (false)
 {
+	Init();
 }
 
 
-Agent::Agent(Agent const & a_Original)
-:	
-    m_squad_class       (a_Original.m_squad_class),
-    m_agent_type        (a_Original.m_agent_type), 
-	m_is_used           (a_Original.m_is_used),
-	m_squad_strength    (a_Original.m_squad_strength),
-    m_can_be_executed   (a_Original.m_can_be_executed),
-    m_detached          (a_Original.m_detached)
+Agent::Agent(const Agent &agent)
 {
+	*this = agent;
 }
 
 Agent::~Agent()
 {
-    // No action: nothing to delete
+	
 }
 
 
-Agent & Agent::operator = (Agent const & a_Original)
+
+void Agent::Init()
 {
-    if (this != &a_Original)
-    {
-        m_squad_class       = a_Original.m_squad_class;
-	    m_agent_type        = a_Original.m_agent_type;
-    	m_is_used           = a_Original.m_is_used;
-	    m_squad_strength    = a_Original.m_squad_strength;
-        m_can_be_executed   = a_Original.m_can_be_executed;
-        m_detached          = a_Original.m_detached;
-    }
+	
+	m_agent_type = -1; 
+
+	
+	m_is_used = false;
+	m_can_be_executed = true;
+	m_detached = false;
+}
+
+
+Agent & Agent::operator= (const Agent &agent)
+{
+	
+	m_agent_type = agent.m_agent_type;
+
+	
+	m_is_used = agent.m_is_used;
+
+	
+	m_squad_strength = agent.m_squad_strength;
 
     return *this;
 }
@@ -93,6 +95,7 @@ void Agent::Set_Is_Used(const bool & is_used)
 
 bool Agent::Get_Is_Dead() const
 {
+	
     return false;
 }
 

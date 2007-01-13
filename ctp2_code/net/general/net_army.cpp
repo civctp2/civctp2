@@ -1,7 +1,7 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 #include "net_army.h"
 #include "network.h"
 #include "net_util.h"

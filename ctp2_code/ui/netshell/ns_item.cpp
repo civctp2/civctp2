@@ -23,9 +23,9 @@ ns_ListItem::ns_ListItem(
 	const MBCHAR *name,
 	MBCHAR *ldlBlock )
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -63,9 +63,9 @@ ns_HPlayerItem::ns_HPlayerItem(
 	BOOL isAI,
 	MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

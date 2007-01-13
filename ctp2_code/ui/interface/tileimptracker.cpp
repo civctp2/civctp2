@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile improvement handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,85 +16,70 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added option to show info for tile improvements that are too expensive
 //   and made it modifiable in-game.
-// - Added a construction time line to the tileimp tracker window. (Aug 14th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "tileimptracker.h"
 
 #include "aui.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
 #include "aui_uniqueid.h"
+
+#include "tileimptracker.h"
 #include "c3window.h"
 #include "c3_static.h"
-#include "gstypes.h"            // TERRAIN_TYPES
+
 #include "primitives.h"
+
 #include "SelItem.h"
 #include "TerrImprovePool.h"
 #include "player.h"
 #include "maputils.h"
 #include "World.h"
 #include "Cell.h"
-#include "colorset.h"           // g_colorSet
-#include "profileDB.h"          // g_theProfileDB
+#include "colorset.h"
 #include "terrainutil.h"
 #include "TerrainRecord.h"
 
-extern C3UI             *g_c3ui;
+extern C3UI *g_c3ui;
+extern ColorSet *g_colorSet;
+
+#include "profileDB.h"	// g_theProfileDB
 
 namespace
 {
-    COLOR               s_trackerBorderColor    = COLOR_GREEN;
+	COLOR				s_trackerBorderColor	= COLOR_GREEN;
 }
 
-TileimpTrackerWindow    *g_tileImpTrackerWindow = NULL;
-static c3_Static        *s_trackerTimeN         = NULL;
-static c3_Static        *s_trackerTimeV         = NULL;
-static c3_Static        *s_trackerMatN          = NULL;
-static c3_Static        *s_trackerMatV          = NULL;
-static c3_Static        *s_trackerAdvN          = NULL;
-static c3_Static        *s_trackerAdvV          = NULL;
-static c3_Static        *s_trackerFoodN         = NULL;
-static c3_Static        *s_trackerFoodV         = NULL;
-static c3_Static        *s_trackerProductionN   = NULL;
-static c3_Static        *s_trackerProductionV   = NULL;
-static c3_Static        *s_trackerGoldN         = NULL;
-static c3_Static        *s_trackerGoldV         = NULL;
+TileimpTrackerWindow	*g_tileImpTrackerWindow	= NULL;
+static c3_Static		*s_trackerTimeN			= NULL;
+static c3_Static		*s_trackerTimeV			= NULL;
+static c3_Static		*s_trackerMatN			= NULL;
+static c3_Static		*s_trackerMatV			= NULL;
+static c3_Static		*s_trackerAdvN			= NULL;
+static c3_Static		*s_trackerAdvV			= NULL;
+static c3_Static		*s_trackerFoodN			= NULL;
+static c3_Static		*s_trackerFoodV			= NULL;
+static c3_Static		*s_trackerProductionN	= NULL;
+static c3_Static		*s_trackerProductionV	= NULL;
+static c3_Static		*s_trackerGoldN			= NULL;
+static c3_Static		*s_trackerGoldV			= NULL;
 static c3_Static        *s_trackerBackground    = NULL;
 
 static sint32 s_tileImprovementNum = -1;
 
-//----------------------------------------------------------------------------
-//
-// Name       : tileimptracker_Initialize
-//
-// Description: Initializes the tileimp tracker window.
-//
-// Parameters : -
-//
-// Globals    : g_tileImpTrackerWindow: The tile improvement tracker window
-//
-// Returns    : 0 if initalization was successfull, -1 otherwise.
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 sint32 tileimptracker_Initialize()
 {
-	MBCHAR          textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR          controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -104,16 +88,6 @@ sint32 tileimptracker_Initialize()
 	Assert( AUI_NEWOK(g_tileImpTrackerWindow, errcode) );
 	if( !AUI_SUCCESS(errcode) ) return -1;
 	
-
-	sprintf( controlBlock, "%s.%s", textBlock, "TimeN");
-	s_trackerTimeN = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
-	Assert( AUI_NEWOK(s_trackerTimeN, errcode) );
-	if( !AUI_SUCCESS(errcode) ) return -1;
-
-	sprintf( controlBlock, "%s.%s", textBlock, "TimeV");
-	s_trackerTimeV = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
-	Assert( AUI_NEWOK(s_trackerTimeV, errcode) );
-	if( !AUI_SUCCESS(errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", textBlock, "MatN");
 	s_trackerMatN = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
@@ -168,32 +142,10 @@ sint32 tileimptracker_Initialize()
 	return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : tileimptracker_DisplayData
-//
-// Description: Displays the food, production and gold boni at the given 
-//              position that the given tileimp generates. In addition it 
-//              displays the needed time for construction and the PW costs.
-//
-// Parameters : MapPoint &p: Position at that the given tileimp should be
-//              contructed.
-//              sint32 type: The type of the tileimp in question.
-//
-// Globals    : g_selected_item:           The currently selected item
-//              g_theWorld:                The game world
-//              g_theTerrainImprovementDB: The tile improvement database
-//              g_theTerrainDB:            The terrain database
-//              g_theProfileDB:            The player's profile
-//              g_tileImpTrackerWindow:    The tile improvement tracker window
-//              g_c3ui:                    The civilization 3 graphical user interface
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
+
+
+
+void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 {
 	if(!g_tileImpTrackerWindow) {
 		tileimptracker_Initialize();
@@ -205,6 +157,11 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 	MBCHAR		mytext[256];
 	sint32		x, y;
 	sint32		visPlayer = g_selected_item->GetVisiblePlayer();
+
+	
+	
+    
+	
 
 	s_tileImprovementNum = type;
 	if (s_tileImprovementNum < 0) {
@@ -232,13 +189,13 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 		g_tileImpTrackerWindow->Move(x,y);
 
-//		TERRAIN_TYPES terr = g_theWorld->GetTerrainType(p);
+		TERRAIN_TYPES terr = g_theWorld->GetTerrainType(p);
 
-		sint32  mat, time,
-		        food, production,
-		        gold;
+		sint32	mat, time, 
+				food, production,
+				gold;
 
-		sint32 extraData = 0;
+		sint32 extraData;	
 
 		time = terrainutil_GetProductionTime(s_tileImprovementNum, p, 0);
 		mat = terrainutil_GetProductionCost(s_tileImprovementNum, p, 0);
@@ -248,7 +205,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 		if(rec->GetClassTerraform())
 		{
-//			const TerrainRecord *oldT = g_theTerrainDB->Get(cell->GetTerrainType());
+			const TerrainRecord *oldT = g_theTerrainDB->Get(cell->GetTerrainType());
 			sint32 t;
 			if(rec->GetTerraformTerrainIndex(t)) {
 				const TerrainRecord *newT = g_theTerrainDB->Get(t);
@@ -257,13 +214,17 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 				sint32 oldGold = cell->GetGoldProduced();
 				
 				sint32 newFood = newT->GetEnvBase()->GetFood();
-				sint32 newProd = newT->GetEnvBase()->GetShield();
-				sint32 newGold = newT->GetEnvBase()->GetGold();
-
-				if (cell->HasRiver() && newT->HasEnvRiver()) 
-                {
+				if(cell->HasRiver() && newT->GetEnvRiver()) {
 					newFood += newT->GetEnvRiverPtr()->GetFood();
+				}
+				
+				sint32 newProd = newT->GetEnvBase()->GetShield();
+				if(cell->HasRiver() && newT->GetEnvRiver()) {
 					newProd += newT->GetEnvRiverPtr()->GetShield();
+				}
+				
+				sint32 newGold = newT->GetEnvBase()->GetGold();
+				if(cell->HasRiver() && newT->GetEnvRiver()) {
 					newGold += newT->GetEnvRiverPtr()->GetGold();
 				}
 				
@@ -276,8 +237,8 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 				production = 0;
 				gold = 0;
 			}
-		}
-		else
+		} 
+		else 
 		{
 			
 
@@ -295,6 +256,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 			
 			
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(g_theTerrainImprovementDB->Get(s_tileImprovementNum), p);
+																							 
 			
 			sint32 dFood = 0;
 			if(eff) eff->GetBonusFood(dFood);
@@ -312,8 +274,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		}
 
 
-		sprintf(mytext,"%d", (sint32)time);
-		s_trackerTimeV->SetText(mytext);
+
 		sprintf(mytext,"%d", (sint32)mat);
 		s_trackerMatV->SetText(mytext);
 
@@ -355,74 +316,50 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 	}
 }
 
-static void mycleanup(c3_Static * & mypointer)
-{ delete mypointer; mypointer = NULL; }
+static void mycleanup(c3_Static **mypointer)
+{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
+static void mycleanup(C3Window **mypointer)
+{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
 
-
-//----------------------------------------------------------------------------
-//
-// Name       : tileimptracker_Cleanup
-//
-// Description: Cleans up the memory that was occupied by the tileimp
-//              tracker window.
-//
-// Parameters : -
-//
-// Globals    : g_tileImpTrackerWindow:    The tile improvement tracker window
-//              g_c3ui:                    The civilization 3 graphical user interface
-//
-// Returns    : 1 if there is nothing to cleanup, otherwise 0.
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-void tileimptracker_Cleanup()
+sint32 tileimptracker_Cleanup()
 {
-	if (g_tileImpTrackerWindow && g_c3ui)
-    {
-    	g_c3ui->RemoveWindow(g_tileImpTrackerWindow->Id());
-    }
+	if ( !g_tileImpTrackerWindow) return 1; 
+	
+	g_c3ui->RemoveWindow( g_tileImpTrackerWindow->Id() );
 
-	mycleanup(s_trackerBackground);
-	mycleanup(s_trackerTimeN);
-	mycleanup(s_trackerTimeV);
-	mycleanup(s_trackerMatN);
-	mycleanup(s_trackerMatV);
-	mycleanup(s_trackerFoodN);
-	mycleanup(s_trackerFoodV);
-	mycleanup(s_trackerProductionN);
-	mycleanup(s_trackerProductionV);
-	mycleanup(s_trackerGoldN);
-	mycleanup(s_trackerGoldV);
+	
+	
+	mycleanup(&s_trackerBackground);
+
+
+
+
+	mycleanup(&s_trackerMatN);
+	mycleanup(&s_trackerMatV);
+
+
+
+
+	mycleanup(&s_trackerFoodN);
+	mycleanup(&s_trackerFoodV);
+	mycleanup(&s_trackerProductionN);
+	mycleanup(&s_trackerProductionV);
+	mycleanup(&s_trackerGoldN);
+	mycleanup(&s_trackerGoldV);
 
 	delete g_tileImpTrackerWindow;
 	g_tileImpTrackerWindow = NULL;
+	
+	return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : TileimpTrackerWindow::DrawThis
-//
-// Description: Draws the tileimp tracker window
-//
-// Parameters : aui_Surface *surface: The surface to draw on
-//              sint32 x:             The x coordinate
-//              sint32 y:             The y coordinate
-//
-// Globals    : g_colorSet: The color set
-//
-// Returns    : Returns always AUI_ERRCODE_OK.
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-AUI_ERRCODE TileimpTrackerWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
+AUI_ERRCODE TileimpTrackerWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y)
 {
-	if(!surface) surface = m_surface;
+	if ( !surface ) surface = m_surface;
 
 	RECT rect = { 0, 0, m_width, m_height };
 	
-	primitives_PaintRect16(surface, &rect, 0x0000);
+	primitives_PaintRect16( surface, &rect, 0x0000 );
 	
 	C3Window::DrawThis(surface,x,y);
 

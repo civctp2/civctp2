@@ -1,77 +1,81 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The object pool
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Corrected return types
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
-#include "GameObj.h"
-
 #include "c3errors.h"
+
+#include "GameObj.h"
 #include "civarchive.h"
 
-GAMEOBJ::GAMEOBJ(uint32 i) 
-:
-    m_id            (i),
-    m_lesser        (NULL),
-    m_greater       (NULL),
-    m_isFromPool    (FALSE)
+   
+
+
+
+
+
+
+
+GAMEOBJ::GAMEOBJ (const uint32 i) 
+
 { 
+   m_id = i; 
+   m_lesser = NULL; 
+   m_greater = NULL; 
+   m_isFromPool = FALSE;
 }
 
 GAMEOBJ::~GAMEOBJ()
 {
-	delete m_lesser;
-	delete m_greater;
+	if(m_lesser)
+		delete m_lesser;
+	
+	if(m_greater)
+		delete m_greater;
 }
 
 void GAMEOBJ::operator delete(void *ptr)
 {
 	GAMEOBJ *obj = (GAMEOBJ *)ptr;
 	if(!obj->m_isFromPool)
-		::delete obj;
+		::delete ptr;
 }
 
 void GAMEOBJ::operator delete(void *ptr, size_t size)
 {
 	GAMEOBJ *obj = (GAMEOBJ *)ptr;
 	if(!obj->m_isFromPool)
-		::delete obj;
+		::delete ptr;
 }
 
 void GAMEOBJ::operator delete[] (void *ptr, size_t size)
 {
-	::delete[] ((GAMEOBJ*)ptr);
+	::delete[] (ptr);
 }
+
+
+
+
+
+
+
 
 GameObj * GameObj_Access(
     GameObj *p,   
-    uint32 id) 
+    const uint32 id) 
+
 {
+	
+	
+	
 	
 #ifdef _DEBUG
    if (p == NULL) { 
@@ -101,8 +105,19 @@ GameObj * GameObj_Access(
  	return p; 
 }
 
-const GameObj * GameObj_Get(GameObj *p, uint32 id) 
+
+
+
+
+
+
+
+const GameObj * GameObj_Get(GameObj *p, const uint32 id) 
 {
+	
+	
+	
+	
 	
 #ifdef _DEBUG
 	if (p == NULL) { 
@@ -114,6 +129,7 @@ const GameObj * GameObj_Get(GameObj *p, uint32 id)
 	
 	while (id != p->m_id)
 	{
+
 	   if (id < p->m_id) p = p->m_lesser;
 	   else p = p->m_greater;
 #ifdef _DEBUG
@@ -151,25 +167,21 @@ const GameObj * GameObj_Get(GameObj *p, uint32 id)
 
 
 
-bool GameObj_Valid(GameObj * p, uint32 id) 
+const sint32 GameObj_Valid(GameObj *p, const uint32 id) 
 {
-    for (GameObj * l_p = p; l_p; )
-    {
-		if (id == l_p->m_id) 
-        {
-            return true;
-        }
-        else if (id < l_p->m_id) 
-        {
-			l_p = l_p->m_lesser;
+	
+	
+ 	while (p!=NULL)
+	{
+		if (id==p->m_id) return TRUE;
+		if (id < p->m_id) {
+			p = p->m_lesser;
 		}
-		else  
-        {
-			l_p = l_p->m_greater;
+		else  {
+			p = p->m_greater;
 		}
 	}
-
-	return false;	
+	return FALSE;	
 }
 
 
@@ -182,6 +194,7 @@ bool GameObj_Valid(GameObj * p, uint32 id)
 void GameObj_Insert(
    GameObj **p,  
    GameObj *ins) 
+
 {
    if (*p == NULL) { 
       *p = ins; 
@@ -206,16 +219,18 @@ void GameObj_Insert(
 
 
 
-void GameObj_Delete(GameObj **p, uint32 id)
+sint32 GameObj_Delete(GameObj **p, const uint32 id)
+
 {
    if (*p == NULL) {       
 	   DPRINTF(k_DBG_GAMESTATE, ("No such object %lx\n", id));
       c3errors_FatalDialog ("GameObj.cpp", "No such id %d", id); 
+      return FALSE; 
    } else {
       if (id < (*p)->m_id) {       
-         GameObj_Delete(&((*p)->m_lesser), id); 
+         return GameObj_Delete(&((*p)->m_lesser), id); 
       } else if ((*p)->m_id < id) { 
-         GameObj_Delete(&((*p)->m_greater), id); 
+         return GameObj_Delete(&((*p)->m_greater), id); 
       } else { 
 
          GameObj *tmp = *p; 
@@ -230,12 +245,29 @@ void GameObj_Delete(GameObj **p, uint32 id)
 		 tmp->m_greater = NULL;
 		 tmp->m_lesser = NULL;
          delete tmp; 
+         return TRUE;
       }
    }
 }
 
+
+
+
+
+
+
+
+
+
+
+
 void GameObj::Serialize(CivArchive &archive)
 {
+	
+	
+
+
+
 	if (archive.IsStoring()) {
 		archive << m_id;		
 	} else {
@@ -243,7 +275,20 @@ void GameObj::Serialize(CivArchive &archive)
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 uint32 GameObj_GameObj_GetVersion(void)
-{
+	{
 	return (k_GAMEOBJ_VERSION_MAJOR<<16 | k_GAMEOBJ_VERSION_MINOR) ;
-}
+	}

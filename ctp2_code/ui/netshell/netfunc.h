@@ -1,34 +1,17 @@
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
-
 #ifndef __NETFUNC_H__
 #define __NETFUNC_H__
 
 #include "anet.h"
-#include <locale>
-#include <iterator>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <list>
 
-#ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
-#endif
 
-#if defined(WIN32)
-#include <windows.h>
-#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type __stdcall
-#define NETFUNC_CONNECT_RESULT          DWORD WINAPI
-#define NETFUNC_CONNECT_PARAMETER       LPVOID
-#else
-#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
-#define NETFUNC_CONNECT_RESULT          int
-#define NETFUNC_CONNECT_PARAMETER       void *
-#endif
+
+
+
 
 class NETFunc {
 public:
@@ -111,9 +94,9 @@ struct KeyStruct {
 
 
 class Keys {
-friend class NETFunc;
+friend NETFunc;
 protected:
-	KeyStruct curkey;
+	KeyStruct key;
 public:
 	
 	Keys(void);
@@ -123,7 +106,7 @@ public:
 
 
 class Key {
-friend class NETFunc;
+friend NETFunc;
 protected:
 	KeyStruct key;
 public:
@@ -149,90 +132,65 @@ public:
 
 template<class T>
 class List:public std::list<T *> {
-friend class NETFunc;
+friend NETFunc;
 public:
-	typename List<T>::iterator Find(T *t) 
-    {
-		for (typename List<T>::iterator i = this->begin(); i != this->end(); ++i)
-        {
-			if (t->Equals(*i))
-            {
-				return i;
-            }
-        }
-
-		return this->end();
+	
+	iterator Find(T *t) {
+		iterator i = end();
+		if(size())
+		for(i = begin(); i != end(); i++)
+			if(t->Equals(*i))
+				break;
+		return i;
 	}
 	
-	void Clr(void) 
-    {
-		for (typename List<T>::iterator i = this->begin(); i != this->end(); ++i)
-        {
+	void Clr(void) {
+		for(iterator i = begin(); i != end(); i++)
 			delete *i;
-        }
-
-		this->clear();
+		clear();
 	}
 	
-	T *Add(T *t) 
-    {
-		typename List<T>::iterator i = Find(t);
-
-        if (i == this->end()) 
-        {
+	T *Add(T *t) {
+		iterator i = Find(t);
+		if(i == end()) {
 			push_back(t);
 			return t;
-		} 
-        else 
-        {
+		} else {
 			memcpy(*i, t, sizeof(T));
 			delete t;
 			return *i;
 		}
 	}
 	
-	void Del(T *t) 
-    {
-		typename List<T>::iterator i = Find(t);
-
-		if (i != this->end()) 
-        {
+	void Del(T *t) {
+		iterator i = Find(t);
+		if(i != end()) {
 			delete *i;
 			erase(i);
 		}
 	}
 	
-	T *Chg(T *t) 
-    {
-		typename List<T>::iterator i = Find(t);
-
-		if (i == this->end()) 
-        {
+	T *Chg(T *t) {
+		iterator i = Find(t);
+		if(i != end()) {
+			memcpy(*i, t, sizeof(T));
+			return *i;
+		} else {
 			T *n = new T(*t);
 			push_back(n);
 			return n;
 		}
-        else 
-        {
-			memcpy(*i, t, sizeof(T));
-			return *i;
-		} 
 	}
 	
-	virtual ~List(void) 
-    {
-        this->Clr();
+	virtual ~List(void) {
+		for(iterator i = begin(); i != end(); i++)
+			delete *i;
 	}
 	
-	List(List<T> *l) 
-    {
-		if (l)
-        {
-			for (typename List<T>::iterator i = l->begin(); i != l->end(); ++i)
-            {
+	List(List<T> *l) {
+		if(l)
+			for(iterator i = l->begin(); i != l->end(); i++)
 				Add(new T(**i));
-            }
-        }
 	}
 	
 	List(void) {
@@ -245,7 +203,7 @@ class Messages;
 
 
 class Message:public Key {
-friend class NETFunc;
+friend NETFunc;
 	char *body;
 	dpid_t sender;
 	size_t size;
@@ -297,7 +255,7 @@ public:
 		UNLAUNCH			= dppt_MAKE(nf_PACKET_INITIALBYTE, 29)
 	};
 	
-	typedef sint16 CODE;
+	typedef __int16 CODE;
 
 	
 	Message(CODE c, void *p, size_t s);
@@ -309,7 +267,7 @@ public:
 	
 	Message(void *p, size_t s, dpid_t id, bool b = true);
 	
-	virtual ~Message(void);
+	~Message(void);
 	
 	CODE GetCode(void);
 	
@@ -323,7 +281,7 @@ public:
 	
 	dpid_t GetSender(void);
 };
-friend class Message;
+friend Message;
 
 
 
@@ -365,7 +323,7 @@ public:
 		return body;
 	}
 	
-	size_t GetSize(void) {
+	int GetSize(void) {
 		return size;
 	}
 	
@@ -399,9 +357,10 @@ public:
 		first = body;
 	}
 	
-	void Grow(size_t s) {
-		assert((size + s) <= nf_MAX_PACKETSIZE);
-        size = static_cast<SizeT>(size + s);
+	void Grow(SizeT s) {
+		size += s;
+		
+		assert(size <= nf_MAX_PACKETSIZE);
 	}
 	
 	template<typename type>
@@ -419,16 +378,17 @@ public:
 	}
 	
 	void Push(char *c) {
-		size_t const    s = strlen(c) + 1;
+		int s = strlen(c) + 1;
 		Grow(s);
 		strcpy(body + size - s, c);
 	}
 	
 	void Pop(char *c) {
-		size_t const    s = strlen(first) + 1;
-        
+		int s = strlen(first) + 1;
+
 		strcpy(c, first);
 		first += s;
+
 	}
 };
 
@@ -485,9 +445,9 @@ public:
 	}
 	
 	void SetKey(KeyStruct *k) {
-		if(!this->empty()) {
+		if(!empty()) {
 			Destroy();
-			this->Clr();
+			Clr();
 		}
 		if(key.buf[0] == dp_KEY_PLAYERS) {
 			if(k) {
@@ -538,7 +498,7 @@ public:
 	
 	Server(dp_object_t *o, KeyStruct *k, long f);
 	
-	virtual ~Server(void);
+	~Server(void);
 	
 	char *GetName(void);
 	
@@ -562,7 +522,7 @@ public:
 	
 	Contact(void);
 	
-	virtual ~Contact(void);
+	~Contact(void);
 	
 	char *GetName(void);
 	
@@ -599,7 +559,7 @@ public:
 	
 	Port(void);
 	
-	virtual ~Port(void);
+	~Port(void);
 	
 	commPortName_t *GetPort(void);
 	
@@ -627,18 +587,34 @@ public:
 };
 
 PortList portList;
-friend class PortList;
+friend PortList;
 
 
 
-static NETFUNC_CONNECT_RESULT ConnectThread(NETFUNC_CONNECT_PARAMETER);
-static NETFUNC_CONNECT_RESULT ReConnectThread(NETFUNC_CONNECT_PARAMETER);
+
+
+static DWORD WINAPI ConnectThread(LPVOID t);
+
+
+
+
+
+static DWORD WINAPI ReConnectThread(LPVOID r);
+
+
+
+
+
+
+
+
+
 
 
 
 
 class Transport:public Key {
-friend class PortList;
+friend PortList;
 protected:
 	dp_transport_t		transport;
 	comm_driverInfo_t	description;
@@ -706,7 +682,7 @@ public:
 	commInitReq_t		*GetParams(void);	
 };
 static TransportSetup *transport;
-friend class TransportSetup;
+friend TransportSetup;
 
 
 
@@ -725,7 +701,7 @@ public:
 	
 	TYPE GetType(void);
 };
-friend class Internet;
+friend Internet;
 
 
 
@@ -738,7 +714,7 @@ public:
 	
 	TYPE GetType(void);
 };
-friend class IPX;
+friend IPX;
 
 
 
@@ -755,7 +731,7 @@ public:
 	
 	TYPE GetType(void);
 };
-friend class Modem;
+friend Modem;
 
 
 
@@ -770,15 +746,15 @@ public:
 	
 	TYPE GetType(void);
 };
-friend class NullModem;
+friend NullModem;
 
 
 
 class TransportList:public List<Transport> {
 	KeyStruct key;
 
-	static NETFUNC_CALLBACK_RESULT(void) 
-    CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
+static void __stdcall
+	CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
 public:
 	
 	TransportList(void);
@@ -786,7 +762,7 @@ public:
 	~TransportList(void);
 };
 TransportList transportList;
-friend class TransportList;
+friend TransportList;
 
 
 
@@ -798,7 +774,7 @@ friend class TransportList;
 
 
 class AIPlayer:public Key, public Packet {
-friend class NETFunc;
+friend NETFunc;
 protected:
 	char	name[dp_PNAMELEN];
 	unsigned char group;
@@ -826,7 +802,7 @@ public:
 	
 	STATUS Load(FILE *f);
 };
-friend class AIPlayer;
+friend AIPlayer;
 
 
 
@@ -843,7 +819,7 @@ public:
 	bool Handle(dp_t *p, Message *m, dpid_t from = dp_ID_BROADCAST);
 };
 AIPlayers *aiPlayers;
-friend class AIPlayers;
+friend AIPlayers;
 
 class Players;
 
@@ -851,8 +827,8 @@ class Players;
 
 
 class Player:public Key {
-friend class NETFunc;
-friend class Players;
+friend NETFunc;
+friend Players;
 #define nf_GROUPMASTER	0x40
 #define nf_READYLAUNCH	0x20
 #define nf_GROUPNUMBER	0x1f
@@ -873,7 +849,7 @@ public:
 	
 	void Set(dp_playerId_t *p);
 	
-	virtual ~Player(void);
+	~Player(void);
 	
 	dpid_t GetId(void);
 	
@@ -901,7 +877,7 @@ public:
 	
 	bool IsReadyToLaunch(void);
 };
-friend class Player;
+friend Player;
 static Player player;
 static dp_uid_t userId;
 
@@ -923,12 +899,12 @@ public:
 	bool Handle(Message *m);
 };
 Players players;
-friend class Players;
+friend Players;
 
 
 
 class PlayerStat:public Key, public Packet {
-friend class NETFunc;
+friend NETFunc;
 protected:
 	char	name[dp_PNAMELEN];
 	unsigned char group;
@@ -968,7 +944,7 @@ public:
 	
 	STATUS Update(dp_t *p, bool r = false);
 };
-friend class PlayerStat;
+friend PlayerStat;
 
 
 
@@ -987,7 +963,7 @@ public:
 	bool Handle(dp_t *p, Message *m, dpid_t from = dp_ID_BROADCAST);
 };
 PlayerStats *playerStats;
-friend class PlayerStats;
+friend PlayerStats;
 
 
 
@@ -1001,7 +977,7 @@ friend class PlayerStats;
 
 
 class PlayerSetup:public Player, public Packet {
-friend class NETFunc;
+friend NETFunc;
 #define nf_PLAYERDESCLEN 128
 private:
 	char description[nf_PLAYERDESCLEN];
@@ -1044,7 +1020,7 @@ public:
 	
 	void SetReadyToLaunch(bool b);
 };
-friend class PlayerSetup;
+friend PlayerSetup;
 
 
 
@@ -1060,10 +1036,10 @@ friend class PlayerSetup;
 class Game;
 class Lobby;
 class Session:public Key {
-friend class NETFunc;
-friend class ListHandler<Game>;
-friend class ListHandler<Lobby>;
-friend class ListHandler<Session>;
+friend NETFunc;
+friend ListHandler<Game>;
+friend ListHandler<Lobby>;
+friend ListHandler<Session>;
 protected:
 	dp_session_t session;
 	long flags;
@@ -1100,12 +1076,12 @@ public:
 	bool IsCurrentSession(void);
 };
 static Session session;
-friend class Session;
+friend Session;
 
 
 
 class Game:public Session {
-friend class NETFunc;
+friend NETFunc;
 #define nf_LAUNCHED 0x40
 #define nf_SYNCLAUNCH 0x20
 protected:
@@ -1130,12 +1106,12 @@ public:
 	
 	void SetHostile(bool h);
 };
-friend class Game;
+friend Game;
 
 
 
 class Lobby:public Session {
-friend class NETFunc;
+friend NETFunc;
 bool bad;
 public:
 	
@@ -1148,7 +1124,7 @@ public:
 	bool IsBad(void);
 };
 static Lobby lobby;
-friend class Lobby;
+friend Lobby;
 
 
 
@@ -1181,7 +1157,7 @@ class PlayerList {
 
 
 class GameSetup:public Game, public Packet {
-friend class NETFunc;
+friend NETFunc;
 #define nf_GAMEDESCLEN 128
 	char	description[nf_GAMEDESCLEN];
 	
@@ -1236,7 +1212,7 @@ public:
 	
 	STATUS Update(bool b = false);
 };
-friend class GameSetup;
+friend GameSetup;
 
 
 
@@ -1444,13 +1420,11 @@ public:
 
 
 private:
-#ifdef USE_SDL
-	SDL_Thread *threadHandle;
-	Uint32 threadId;
-#else
+	
 	HANDLE threadHandle;
+	
 	DWORD threadId;
-#endif
+	
 	static long cancelDial;
 	
 	dp_appParam_t appParam;
@@ -1520,10 +1494,12 @@ void Execute(void);
 
 STATUS Close(void);
 
-static NETFUNC_CALLBACK_RESULT(int)
+
+static int __stdcall
 SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *context);
 
-static NETFUNC_CALLBACK_RESULT(void)
+
+static void __stdcall
 PlayerCallBack(dpid_t id, dp_char_t *n, long flags, void *context);
 
 
@@ -1537,7 +1513,7 @@ public:
 	void Reset(void);
 };
 Lobbies lobbies;
-friend class Lobbies;
+friend Lobbies;
 
 
 
@@ -1548,7 +1524,7 @@ public:
 	bool Check(Key *s);
 };
 static Hostiles hostiles;
-friend class Hostiles;
+friend Hostiles;
 
 
 
@@ -1559,7 +1535,7 @@ public:
 	bool Check(Key *p);
 };
 static Mutes mutes;
-friend class Mutes;
+friend Mutes;
 };
 
 #endif 

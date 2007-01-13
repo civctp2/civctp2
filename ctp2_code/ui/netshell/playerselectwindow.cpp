@@ -1,34 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer player select window
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
+
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
@@ -36,12 +18,16 @@
 #include "aui_screen.h"
 #include "aui_button.h"
 
+
 #include "c3_button.h"
 #include "c3_static.h"
 #include "c3textfield.h"
 
+
 #include "netshell.h"
 #include "ns_customlistbox.h"
+
+
 
 
 #include "playerselectwindow.h"
@@ -49,7 +35,10 @@
 #include "playereditwindow.h"
 #include "passwordscreen.h"
 
+
 #include "spnewgamewindow.h" 
+
+
 
 PlayerSelectWindow::PlayerSelectWindow(
 	AUI_ERRCODE *retval )
@@ -74,6 +63,7 @@ PlayerSelectWindow::PlayerSelectWindow(
 }
 
 
+
 AUI_ERRCODE PlayerSelectWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -85,13 +75,23 @@ AUI_ERRCODE PlayerSelectWindow::InitCommon( void )
 }
 
 
+
 AUI_ERRCODE PlayerSelectWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 
 	
+
 	aui_Control *control;
+
+
+
+
+
+
+
+
 
 	control = new c3_Static(
 		&errcode,
@@ -133,6 +133,10 @@ AUI_ERRCODE PlayerSelectWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_PLAYERNAMESTATICTEXT ] = control;
 
+
+
+
+
 	control = spNew_ctp2_Button(&errcode,
 		"playerselectwindow",
 		"newbutton", NULL);
@@ -140,12 +144,20 @@ AUI_ERRCODE PlayerSelectWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_NEWBUTTON ] = control;
 
+
+
+
+
 	control = spNew_ctp2_Button(&errcode,
 		"playerselectwindow",
 		"editbutton", NULL);
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_EDITBUTTON ] = control;
+
+
+
+
 
 	control = spNew_ctp2_Button(&errcode,
 		"playerselectwindow",
@@ -173,11 +185,18 @@ AUI_ERRCODE PlayerSelectWindow::CreateControls( void )
 
 
 	
+
 	aui_Ldl::SetupHeirarchyFromRoot( "playerselectwindow" );
 
 
 	
+
 	aui_Action *action;
+
+
+
+
+
 
 	action = new PlayerNameTextFieldAction;
 	Assert( action != NULL );
@@ -215,13 +234,16 @@ AUI_ERRCODE PlayerSelectWindow::CreateControls( void )
 	m_controls[ CONTROL_PLAYERNAMELISTBOX ]->SetAction( action );
 
 	
-		((aui_ListBox *)m_controls[ CONTROL_PLAYERNAMELISTBOX ])->
+
+	
+	((aui_ListBox *)m_controls[ CONTROL_PLAYERNAMELISTBOX ])->
 		SetForceSelect( TRUE );
 
 	Update();
 
 	return AUI_ERRCODE_OK;
 }
+
 
 nf_PlayerSetup *PlayerSelectWindow::GetPlayerSetup(NETFunc::Player *player) {
 	ns_PlayerSetupListBox *l = (ns_PlayerSetupListBox *)(FindControl( PlayerSelectWindow ::CONTROL_PLAYERNAMELISTBOX ));
@@ -241,44 +263,59 @@ nf_PlayerSetup *PlayerSelectWindow::GetPlayerSetup(NETFunc::Player *player) {
 	return s;
 }
 
+
 void PlayerSelectWindow::Update(void)
 {
 	ns_PlayerSetupListBox *listbox = (ns_PlayerSetupListBox *)(FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX ));
 	ns_PlayerSetupItem *item = (ns_PlayerSetupItem *)listbox->GetSelectedItem();
-//	c3_Button *b_ok = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_OKBUTTON ));
+	c3_Button *b_ok = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_OKBUTTON ));
 	c3_Button *b_edit = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_EDITBUTTON ));
 	c3_Button *b_del = (c3_Button *)(FindControl( PlayerSelectWindow::CONTROL_DELETEBUTTON ));
 
 	aui_TextField *tf = (aui_TextField *)FindControl
 		( PlayerSelectWindow::CONTROL_PLAYERNAMETEXTFIELD );
 
-	if (item) {
+	
+	
+	if(item) {
+
 		b_edit->Enable(TRUE);
 		b_del->Enable(TRUE);
 		tf->SetFieldText( item->GetNetShellObject()->GetNETFuncObject()->GetName() );
 	} else {
+
 		b_edit->Enable(FALSE);
 		b_del->Enable(FALSE);
 		tf->SetFieldText( "" );
 	}
 }
 
+
 AUI_ERRCODE PlayerSelectWindow::Idle( void )
 {
-	while (NETFunc::Message * m = g_netfunc->GetMessage()) 
-    {
+	NETFunc::Message *m;
+	
+	while(m = g_netfunc->GetMessage()) {
+		
+		
+		
 		g_netfunc->HandleMessage(m);
 
-		if (dp_SESSIONLOST_PACKET_ID == m->GetCode())
+		switch ( m->GetCode() )
 		{
-			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONLOST);
+		case dp_SESSIONLOST_PACKET_ID:
+			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONLOST );
+			break;
+
+		default:
+			break;
 		}
 
 		delete m;
 	}
-
 	return AUI_ERRCODE_OK;
 }
+
 
 void PlayerSelectWindow::PlayerListBoxAction::Execute(
 	aui_Control *control,
@@ -309,18 +346,32 @@ void PlayerSelectWindow::PlayerListBoxAction::Execute(
 	}
 }
 
+
 AUI_ERRCODE PlayerSelectWindow::SetParent( aui_Region *region )
 {
+	PlayerEditWindow *p = (PlayerEditWindow *)g_netshell->FindWindow( NetShell::WINDOW_PLAYEREDIT );
 	AUI_ERRCODE r = ns_Window::SetParent( region );
 
 	if ( region ) {
+
+
+
+
+
+
+
+
+
 
 		
 		m_controls[ CONTROL_PLAYERNAMETEXTFIELD ]->SetKeyboardFocus();
 	}
 
+
+
 	return r;
 }
+
 
 void PlayerSelectWindow::NewButtonAction::Execute(
 	aui_Control *control,
@@ -339,7 +390,9 @@ void PlayerSelectWindow::NewButtonAction::Execute(
 	p->SetPlayerSetup(NULL);
 	p->SetMode(p->EDIT);
 	g_netshell->GetCurrentScreen()->AddWindow(p, TRUE);
+
 }
+
 
 
 void PlayerSelectWindow::EditButtonAction::Execute(
@@ -358,8 +411,10 @@ void PlayerSelectWindow::EditButtonAction::Execute(
 		p->SetPlayerSetup(item->GetNetShellObject()->GetNETFuncObject());
 		p->SetMode(p->EDIT);
 		g_netshell->GetCurrentScreen()->AddWindow(p, TRUE);
+
 	}
 }
+
 
 
 void PlayerSelectWindow::DeleteButtonAction::Execute(
@@ -380,6 +435,7 @@ void PlayerSelectWindow::DeleteButtonAction::Execute(
 }
 
 
+
 void PlayerSelectWindow::OKButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -394,6 +450,7 @@ void PlayerSelectWindow::OKButtonAction::Execute(
 	aui_TextField *tf = (aui_TextField *)w->FindControl(
 		PlayerSelectWindow::CONTROL_PLAYERNAMETEXTFIELD );
 
+	
 	MBCHAR name[ dp_PNAMELEN + 1 ];
 	memset( name, 0, sizeof( name ) );
 	tf->GetFieldText( name, dp_PNAMELEN );
@@ -403,8 +460,7 @@ void PlayerSelectWindow::OKButtonAction::Execute(
 	{
 		
 		ListPos pos = listbox->GetPane()->ChildList()->GetHeadPosition();
-		sint32 i;
-		for ( i = 0; i < listbox->NumItems(); i++ )
+		for ( sint32 i = 0; i < listbox->NumItems(); i++ )
 		{
 			ns_PlayerSetupItem *item = (ns_PlayerSetupItem *)
 				listbox->GetPane()->ChildList()->GetNext( pos );
@@ -466,6 +522,7 @@ void PlayerSelectWindow::OKButtonAction::Execute(
 }
 
 
+
 void PlayerSelectWindow::PlayerNameTextFieldAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -479,6 +536,7 @@ void PlayerSelectWindow::PlayerNameTextFieldAction::Execute(
 	aui_Control *ctrl = w->FindControl( w->CONTROL_OKBUTTON );
 	ctrl->GetAction()->Execute( ctrl, AUI_BUTTON_ACTION_EXECUTE, 0 );
 }
+
 
 
 void PlayerSelectWindow::CancelButtonAction::Execute(

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star pathfinding for Units
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,21 +17,15 @@
 //
 // Compiler flags
 //
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added avoidList Param
 // - Added methods to check room for army and danger along path
-//
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
-#endif
-
 #ifndef __UNIT_ASTAR__
 #define __UNIT_ASTAR__ 1
 
@@ -117,7 +110,7 @@ public:
 
     sint32 InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
         const float pc, const MapPoint &dest);
-	bool CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian);
+	BOOL CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian);
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost, 
         BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
@@ -158,8 +151,8 @@ public:
                            float &total_cost, BOOL no_bad_path, 
                            const sint32 cutoff, sint32 &nodes_opened);
 
-    sint32 FindPath(Army &army, MapPoint const & start,
-		  const PLAYER_INDEX owner, MapPoint const & dest, Path &new_path, 
+    sint32 FindPath(Army &army, MapPoint &start,
+		  const PLAYER_INDEX owner, MapPoint &dest, Path &new_path, 
           sint32 &is_broken_path, Path &bad_path,  
          float &total_cost);
 
@@ -180,7 +173,7 @@ public:
 						const MapPoint &pos,
 						const uint32 &m_move_intersection);
     void ClearMem(); 
-    bool VerifyMem() const; 
+    BOOL VerifyMem() const; 
 };
 
 #endif

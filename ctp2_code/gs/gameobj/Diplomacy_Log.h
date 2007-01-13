@@ -1,14 +1,13 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
+
 #ifndef __DIPLOMACY_LOG_H__
 #define __DIPLOMACY_LOG_H__ 1
 
-class Diplomacy_Log;
-
-#include "AgreementTypes.h"
-#include "player.h"
-#include "DiplomaticTypes.h"
+enum AGREEMENT_TYPE;
+enum UNIT_ORDER_TYPE; 
+enum REQUEST_TYPE;
+enum ATTITUDE_TYPE; 
 class MapPoint; 
 
 
@@ -60,4 +59,4 @@ public:
 
 };
 
-#endif // __DIPLOMACY_LOG_H__
+#endif __DIPLOMACY_LOG_H__

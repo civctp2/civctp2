@@ -1,7 +1,7 @@
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
+
 #ifndef __C3_UPDATEACTION_H__
 #define __C3_UPDATEACTION_H__
 
@@ -10,23 +10,17 @@
 class c3_UpdateAction;
 
 
+
 class c3_UpdateAction : public aui_Action
 {
 public:
-	c3_UpdateAction()
-    :   aui_Action  ()
-    { ; };
+	c3_UpdateAction();
 
-	virtual ~c3_UpdateAction(void);
+	virtual ~c3_UpdateAction();
 
-	virtual void	Execute
-	(
-		aui_Control	*	control,
-		uint32			action,
-		uint32			data
-	);
+	virtual c3_UpdateAction *CopyMe(void);
 
-	virtual c3_UpdateAction * CopyMe(void);
+	virtual ActionCallback Execute;
 };
 
 

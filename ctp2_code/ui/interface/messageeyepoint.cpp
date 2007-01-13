@@ -58,9 +58,9 @@ extern uint8		g_messageEyeGreatPadding;
 
 MessageEyePointListItem::MessageEyePointListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
 	:
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -263,6 +263,7 @@ MessageEyePointDropdown::MessageEyePointDropdown(
 {
 	*retval = InitCommon( ldlBlock, window );
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -274,6 +275,7 @@ MessageEyePointDropdown::MessageEyePointDropdown(
 {
 	*retval = InitCommon( ldlBlock, window );
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -282,6 +284,7 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	c3_Static		*item = NULL;
 	const MBCHAR	*text = NULL;
 	uint32			i = 0;
 
@@ -319,12 +322,14 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 	
 	i = 0;
 	sint32 textlength = g_messageEyeDropWidth;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
+	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
 		
 
 		aui_BitmapFont *font = m_button->GetTextFont();
 		Assert(font);
-        textlength = std::max(textlength, font->GetStringWidth(text));
+		sint32 length = font->GetStringWidth(text);
+
+		if ( length > textlength ) textlength = length;
 	}
 
 	
@@ -348,10 +353,11 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
 	i = 0;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
+	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
 		
-		MessageEyePointListItem	* item = 
-            new MessageEyePointListItem(&errcode, (char *)text, i, buttonBlock);
+		MessageEyePointListItem		*item;
+
+		item = new MessageEyePointListItem(&errcode, (char *)text, i, buttonBlock);
 
 		if ( item )
 			m_dropdown->AddItem((aui_Item *)item );
@@ -375,6 +381,7 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal 
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	c3_Static		*item = NULL;
 	const MBCHAR	*text = NULL;
 	uint32			i = 0;
 
@@ -412,12 +419,14 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal 
 	
 	i = 0;
 	sint32 textlength = g_messageEyeDropWidth;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
+	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
 		
 
 		aui_BitmapFont *font = m_button->GetTextFont();
 		Assert(font);
-        textlength = std::max(textlength, font->GetStringWidth(text));
+		sint32 length = font->GetStringWidth(text);
+
+		if ( length > textlength ) textlength = length;
 	}
 
 	
@@ -441,10 +450,11 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal 
 
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
 	i = 0;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
+	while ( text = window->GetMessage()->AccessData()->GetEyePointName( i++ )) {
 		
-		MessageEyePointListItem	* item = 
-            new MessageEyePointListItem(&errcode, (char *)text, i, buttonBlock);
+		MessageEyePointListItem		*item;
+
+		item = new MessageEyePointListItem(&errcode, (char *)text, i, buttonBlock);
 
 		if ( item )
 			m_dropdown->AddItem((aui_Item *)item );
@@ -466,10 +476,29 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal 
 
 MessageEyePointDropdown::~MessageEyePointDropdown() 
 {
-	delete m_button;
-	delete m_action;
-	delete m_dropaction;
-	delete m_dropdown;
+	if ( m_button )
+	{
+		delete m_button;
+		m_button = NULL;
+	}
+	
+	if ( m_action )
+	{
+		delete m_action;
+		m_action = NULL;
+	}
+	
+	if ( m_dropaction )
+	{
+		delete m_dropaction;
+		m_dropaction = NULL;
+	}
+
+	if ( m_dropdown ) {
+		delete m_dropdown;
+		m_dropdown = NULL;
+	}
+
 }
 
 

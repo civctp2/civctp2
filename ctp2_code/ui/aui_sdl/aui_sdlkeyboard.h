@@ -1,7 +1,7 @@
 #ifndef __aui_sdl__aui_sdlkeyboard_h__
 #define __aui_sdl__aui_sdlkeyboard_h__ 1
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 

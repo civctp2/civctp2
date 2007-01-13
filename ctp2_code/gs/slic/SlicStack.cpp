@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic stack handling
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -45,13 +42,14 @@ SlicStack::SlicStack()
 
 SlicStack::~SlicStack()
 {
-	delete [] m_stack;
+	if(m_stack) {
+		delete [] m_stack;
+	}
 }
 
 void SlicStack::Push(SS_TYPE type, SlicStackValue value)
 {
-	if (static_cast<size_t>(m_sptr) + sizeof(SlicStackValue) + 1 > m_stackSize) 
-    {
+	if(m_sptr + sint32(sizeof(SlicStackValue)) + 1 > m_stackSize) {
 		uint8* newStack = new uint8[m_stackSize * 2];
 		memcpy(newStack, m_stack, m_stackSize);
 		delete [] m_stack;
@@ -59,7 +57,7 @@ void SlicStack::Push(SS_TYPE type, SlicStackValue value)
 		m_stackSize *= 2;
 	}
 
-	m_stack[m_sptr++] = static_cast<uint8>(type);
+	m_stack[m_sptr++] = uint8(type);
 	*((SlicStackValue *)&m_stack[m_sptr]) = value;
 	m_sptr += sizeof(SlicStackValue);
 }
@@ -67,8 +65,7 @@ void SlicStack::Push(SS_TYPE type, SlicStackValue value)
 sint32 SlicStack::Pop(SS_TYPE &type, SlicStackValue &value)
 {
 	Assert(m_sptr >= (1 + sizeof(SlicStackValue)));
-	if (static_cast<size_t>(m_sptr) < 1 + sizeof(SlicStackValue)) 
-    {
+	if(m_sptr < 1 + sizeof(SlicStackValue)) {
 		return -1;
 	}
 

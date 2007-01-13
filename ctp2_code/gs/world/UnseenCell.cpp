@@ -38,57 +38,40 @@
 // - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-//
-/// \file   UnseenCell.cpp
-/// \brief  Handling of tiles that are not currently visible (definitions)
 
 #include "c3.h"
 #include "UnseenCell.h"
-
-#include "Cell.h"
-#include "citydata.h"
-#include "civarchive.h"
-#include "director.h"           // g_director
-#include "dynarr.h"
-#include "installationtree.h"
-#include "pointerlist.h"
-#include "QuadTree.h"
-#include "ResourceRecord.h"
-#include "SelItem.h"            // g_selected_item
-#include "SpriteState.h"
-#include "TerrainImprovementRecord.h"
-#include "TerrainRecord.h"
-#include "terrainutil.h"
-#include "TerrImprove.h"
-#include "tiledmap.h"           // g_tiledMap
+#include "XY_Coordinates.h"
+#include "World.h"
 #include "TileInfo.h"
+#include "Cell.h"
+#include "civarchive.h"
+#include "tiledmap.h"
+#include "pointerlist.h"
+#include "TerrImprove.h"
+#include "dynarr.h"
+#include "QuadTree.h"
+#include "installationtree.h"
 #include "UnitActor.h"
+#include "SelItem.h"
+#include "pool.h"
+#include "director.h"
+#include "SpriteState.h"
 #include "UnitData.h"
-#include "World.h"              // g_theWorld
+#include "citydata.h"
+#include "terrainutil.h"
+#include "TerrImprovePool.h"
 
-namespace
-{
-    sint16 const    TERRAIN_UNKNOWN     = -1;
-    sint16 const    MOVECOST_UNKNOWN    = 0x7fff;
+// Added by Martin Gühmann to support unseen terrain stat calculation
+#include "TerrainRecord.h"
+#include "TerrainImprovementRecord.h"
+#include "ResourceRecord.h"
 
-    /// Release an actor
-    /// \param      a_Actor  actor to release
-    /// \remarks    The actor is reference counted
-    /// \todo       Move to UnitActor
-    void ReleaseActor(UnitActor * & a_Actor)
-    {
-        if (a_Actor)
-        {
-		    if (--a_Actor->m_refCount <= 0) 
-            {
-			    g_director->ActiveUnitRemove(a_Actor);
-			    delete a_Actor;
-		    }
-
-            a_Actor = NULL;
-	    }
-    }
-}
+extern Director				*g_director;
+extern World				*g_theWorld;
+extern	TiledMap			*g_tiledMap ;
+extern SelectedItem			*g_selected_item;
+extern Pool<UnseenCell>     *g_theUnseenPond;
 
 //----------------------------------------------------------------------------
 //
@@ -105,160 +88,185 @@ namespace
 // Remark(s)  : The constructor to use normally.
 //
 //----------------------------------------------------------------------------
-UnseenCell::UnseenCell(const MapPoint & point)
-:
-	m_env                           (0),
-	m_terrain_type                  (TERRAIN_UNKNOWN),
-	m_move_cost                     (MOVECOST_UNKNOWN),
-	m_flags                         (0x0000),
-	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
-	m_nanoInfectedOwner             (0x00),
-	m_convertedOwner                (0x00),
-	m_franchiseOwner                (0x00),
-	m_injoinedOwner                 (0x00),
-	m_happinessAttackOwner          (0x00),
-	m_citySize                      (0),
-	m_cityOwner                     (0),
-	m_citySpriteIndex               (0),
-	m_cell_owner                    (PLAYER_UNASSIGNED),
-	m_slaveBits                     (0x0000),
-#ifdef BATTLE_FLAGS
-	m_battleFlags                   (0),
-#endif
-	m_tileInfo                      (NULL),
-	m_point                         (point),
-	m_installations                 (new PointerList<UnseenInstallationInfo>),
-	m_improvements                  (new PointerList<UnseenImprovementInfo>),
-	m_cityName                      (NULL),
-	m_actor                         (NULL),
-	m_poolIndex                     (-1),
-	m_visibleCityOwner              (0)
+UnseenCell::UnseenCell(const MapPoint &point)
 {
-    if (g_theWorld->GetTileInfo(point))
-    {
-        m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(point));
-    }
+	Cell* cell = g_theWorld->GetCell(point);
 
-    Cell * cell = g_theWorld->GetCell(point);
-    if (cell)
-    {
-	    m_env = cell->GetEnv();
-	    m_move_cost = sint16(cell->GetMoveCost());
-	    m_terrain_type = (sint8)TERRAIN_TYPES(cell->GetTerrain());
+	m_point = point;
+	m_env = cell->GetEnv();
+	m_move_cost = sint16(cell->GetMoveCost());
+	m_terrain_type = (sint8)TERRAIN_TYPES(cell->GetTerrain());
 #ifdef BATTLE_FLAGS
-	    m_battleFlags = cell->GetBattleFlags();
+	m_battleFlags = cell->GetBattleFlags();
 #endif
 
-	    sint32 i;
+	if(g_theWorld->GetTileInfo(point))
+		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(point));
+	else
+		m_tileInfo = NULL;
+
+	m_installations = new PointerList<UnseenInstallationInfo>;
+	m_improvements = new PointerList<UnseenImprovementInfo>;
+
+	sint32 i;
 // Added by Martin Gühmann
 
-	    // Same as well information about existing
-	    // tile improvments, except roadlike ones,
-	    // so that this information is available
-	    // later as well.
-	    // And in order not to break anythink use the existing
-	    // list for unfinished tile improvements.
-	    for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-		    sint32 imp = cell->GetDBImprovement(i);
-		    m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
-	    }
-	    for(i = 0; i < cell->GetNumImprovements(); i++) {
-		    TerrainImprovement imp = cell->AccessImprovement(i);
-		    if (imp.IsValid()) 
-            {
-			    m_improvements->AddTail(new UnseenImprovementInfo(imp.GetType(),
-															      imp.PercentComplete()));
-		    }
-	    }
+	// Same as well information about existing
+	// tile improvments, except roadlike ones,
+	// so that this information is available
+	// later as well.
+	// And in order not to break anythink use the existing
+	// list for unfinished tile improvements.
+	const TerrainImprovementRecord *rec;
+	for(i = 0; i < cell->GetNumDBImprovements(); i++) {
+		sint32 imp = cell->GetDBImprovement(i);
+		rec = g_theTerrainImprovementDB->Get(imp);
+		m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
+	}
+	for(i = 0; i < cell->GetNumImprovements(); i++) {
+		TerrainImprovement imp = cell->AccessImprovement(i);
+		if(g_theTerrainImprovementPool->IsValid(imp)) {
+			m_improvements->AddTail(new UnseenImprovementInfo(imp.GetType(),
+															  imp.PercentComplete()));
+		}
+	}
 
-	    DynamicArray<Installation> instArray;
-	    g_theInstallationTree->GetAt(point, instArray);
-	    for(i = 0; i < instArray.Num(); i++) {
-		    m_installations->AddTail(new UnseenInstallationInfo(instArray[i].GetType(),
-														       instArray[i].GetVisibility()));
-	    }
-    	
-	    m_cell_owner = (sint8) cell->GetOwner();
+	DynamicArray<Installation> instArray;
+	g_theInstallationTree->GetAt(point, instArray);
+	for(i = 0; i < instArray.Num(); i++) {
+		m_installations->AddTail(new UnseenInstallationInfo(instArray[i].GetType(),
+														   instArray[i].GetVisibility()));
+	}
+	
+	m_cell_owner = (sint8) cell->GetOwner();
 // Added by Martin Gühmann
-	    // Store the city that controlls this tile.
-	    m_visibleCityOwner = cell->GetCityOwner().m_id;
+	// Store the city that controlls this tile.
+	m_visibleCityOwner = g_theWorld->GetCell(point)->GetCityOwner().m_id;
 
-	    Unit    city = cell->GetCity();
+	if(cell->GetCity().m_id != (0)) {
+		Unit		city = cell->GetCity();
 
-	    if (city.IsValid()) 
-        {
-		    m_citySize = (sint16)city.PopCount();
-		    m_citySpriteIndex = (sint16)city.CD()->GetDesiredSpriteIndex();
-		    const MBCHAR *name = city.GetName();
-		    m_cityName = new MBCHAR[strlen(name) + 1];
-		    strcpy(m_cityName, name);
+		m_citySize = (sint16)city.PopCount();
+		m_citySpriteIndex = (sint16)city.CD()->GetDesiredSpriteIndex();
+		const MBCHAR *name = city.GetName();
+		m_cityName = new MBCHAR[strlen(name) + 1];
+		strcpy(m_cityName, name);
 		
 // Added by Martin Gühmann
-		    m_cityOwner = static_cast<sint16>(city.GetCityData()->GetOwner());
+		m_cityOwner = static_cast<sint16>(city.GetCityData()->GetOwner());
 
-		    CityData *cityData = city.GetData()->GetCityData();
+		CityData *cityData = city.GetData()->GetCityData();
 
-		    UnitActor *actor = city.GetActor();
+		UnitActor *actor = city.GetActor();
 
-    		
-    		
-    		
-    		
-		    if (actor) {
-    			
-			    SpriteState *newSS = new SpriteState(city.GetSpriteState()->GetIndex());
+		
+		
+		
+		
+		if (actor) {
+			
+			SpriteState *newSS = new SpriteState(city.GetSpriteState()->GetIndex());
 
-			    UnitActor *newActor = new UnitActor(newSS, 
-												    city, 
-												    city.GetType(), 
-												    point, 
-												    city.GetOwner(),
-												    TRUE,
-												    city.GetVisionRange(),
-												    city.CD()->GetDesiredSpriteIndex());
+			UnitActor *newActor = new UnitActor(newSS, 
+												city, 
+												city.GetType(), 
+												point, 
+												city.GetOwner(),
+												TRUE,
+												city.GetVisionRange(),
+												city.CD()->GetDesiredSpriteIndex());
 
-			    newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
-										    | actor->GetUnitVisibility());
-			    newActor->SetPos(point);
-    			
-			    newActor->SetIsFortified(actor->IsFortified());
-			    newActor->SetIsFortifying(actor->IsFortifying());
-			    newActor->SetHasCityWalls(actor->HasCityWalls());
-			    newActor->SetHasForceField(actor->HasForceField());
+			newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
+										| actor->GetUnitVisibility());
+			newActor->SetPos(point);
+			
+			newActor->SetIsFortified(actor->IsFortified());
+			newActor->SetIsFortifying(actor->IsFortifying());
+			newActor->SetHasCityWalls(actor->HasCityWalls());
+			newActor->SetHasForceField(actor->HasForceField());
 
-			    newActor->SetSize(m_citySize);
-    			
-			    newActor->ChangeImage(newSS, city.GetType(), city);
+			newActor->SetSize(m_citySize);
+			
+			newActor->ChangeImage(newSS, city.GetType(), city);
 
-			    newActor->AddIdle();
-			    newActor->GetNextAction();
+			newActor->AddIdle();
+			newActor->GetNextAction();
 
-			    m_actor = newActor;
-            } // actor
+			m_actor = newActor;
 
-		    SetIsBioInfected(cityData->IsBioInfected());
-		    SetIsNanoInfected(cityData->IsNanoInfected());
-		    SetIsConverted(cityData->IsConverted());
-		    SetIsFranchised(cityData->IsFranchised());
-		    SetIsInjoined(cityData->IsInjoined());
-		    SetWasHappinessAttacked(cityData->WasHappinessAttacked());
-		    SetIsRioting(cityData->GetIsRioting());
-		    SetHasAirport(cityData->HasAirport());
-		    SetHasSleepingUnits(cityData->HasSleepingUnits());
-		    SetIsWatchful(cityData->IsWatchful());
 
-		    m_bioInfectedOwner = (sint8)cityData->GetOwner();
-		    m_nanoInfectedOwner = (sint8)cityData->GetOwner();
-		    m_convertedOwner = (sint8)cityData->IsConvertedTo();
-		    m_franchiseOwner = (sint8)cityData->GetFranchiseOwner();
-		    m_injoinedOwner = (sint8)cityData->GetOwner();
-		    m_happinessAttackOwner = (sint8)cityData->GetOwner();
-		    m_slaveBits = cityData->GetSlaveBits();
+		}
 
-        } // city.IsValid
-    } // cell
+		SetIsBioInfected(cityData->IsBioInfected());
+		SetIsNanoInfected(cityData->IsNanoInfected());
+		SetIsConverted(cityData->IsConverted());
+		SetIsFranchised(cityData->IsFranchised());
+		SetIsInjoined(cityData->IsInjoined());
+		SetWasHappinessAttacked(cityData->WasHappinessAttacked());
+		SetIsRioting(cityData->GetIsRioting());
+		SetHasAirport(cityData->HasAirport());
+		SetHasSleepingUnits(cityData->HasSleepingUnits());
+		SetIsWatchful(cityData->IsWatchful());
+
+
+
+
+
+
+
+
+
+		m_bioInfectedOwner = (sint8)cityData->GetOwner();
+		m_nanoInfectedOwner = (sint8)cityData->GetOwner();
+		m_convertedOwner = (sint8)cityData->IsConvertedTo();
+		m_franchiseOwner = (sint8)cityData->GetFranchiseOwner();
+		m_injoinedOwner = (sint8)cityData->GetOwner();
+		m_happinessAttackOwner = (sint8)cityData->GetOwner();
+
+		
+		m_slaveBits = cityData->GetSlaveBits();
+
+
+
+
+
+
+
+	} else {
+		m_citySize = 0;
+		m_cityName = NULL;
+		m_cityOwner = 0;
+		m_actor = NULL;
+		m_citySpriteIndex = 0;
+
+		m_flags = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+		m_bioInfectedOwner = 0;
+		m_nanoInfectedOwner = 0;
+		m_convertedOwner = 0;
+		m_franchiseOwner = 0;
+		m_injoinedOwner = 0;
+		m_happinessAttackOwner = 0;
+
+		m_slaveBits = 0;
+
+	}
+
 	
-    SetHasHut(NULL != g_theWorld->GetGoodyHut(point));
+	GoodyHut *hut = g_theWorld->GetGoodyHut((MapPoint)point);
+
+	SetHasHut(hut != NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -277,34 +285,46 @@ UnseenCell::UnseenCell(const MapPoint & point)
 //
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell()
-:
-	m_env                           (0),
-	m_terrain_type                  (TERRAIN_UNKNOWN),
-	m_move_cost                     (MOVECOST_UNKNOWN),
-	m_flags                         (0x0000),
-	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
-	m_nanoInfectedOwner             (0x00),
-	m_convertedOwner                (0x00),
-	m_franchiseOwner                (0x00),
-	m_injoinedOwner                 (0x00),
-	m_happinessAttackOwner          (0x00),
-	m_citySize                      (0),
-	m_cityOwner                     (0),
-	m_citySpriteIndex               (0),
-	m_cell_owner                    (PLAYER_UNASSIGNED),
-	m_slaveBits                     (0x0000),
-#ifdef BATTLE_FLAGS
-	m_battleFlags                   (0),
-#endif
-	m_tileInfo                      (NULL),
-	m_point                         (),
-	m_installations                 (new PointerList<UnseenInstallationInfo>),
-	m_improvements                  (new PointerList<UnseenImprovementInfo>),
-	m_cityName                      (NULL),
-	m_actor                         (NULL),
-	m_poolIndex                     (-1),
-	m_visibleCityOwner              (0)
 {
+	m_tileInfo = NULL;
+
+	m_flags = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+	m_bioInfectedOwner = 0;
+	m_nanoInfectedOwner = 0;
+	m_convertedOwner = 0;
+	m_franchiseOwner = 0;
+	m_injoinedOwner = 0;
+	m_happinessAttackOwner = 0;
+
+	m_slaveBits = 0;
+
+	m_cell_owner = -1;
+	// Added by Martin Gühmann
+	m_visibleCityOwner = 0;
+
+	m_actor = NULL;
+#ifdef BATTLE_FLAGS
+	m_battleFlags = 0;
+#endif
+	m_citySize = 0;
+	m_cityOwner = 0;
+	m_cityName = NULL;
+	m_citySpriteIndex = 0;
+
+	m_installations = new PointerList<UnseenInstallationInfo>;
+	m_improvements = new PointerList<UnseenImprovementInfo>;
 }
 
 //----------------------------------------------------------------------------
@@ -377,34 +397,13 @@ UnseenCell::UnseenCell(UnseenCell *old)
 //
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell(CivArchive &archive)
-:
-	m_env                           (0),
-	m_terrain_type                  (TERRAIN_UNKNOWN),
-	m_move_cost                     (MOVECOST_UNKNOWN),
-	m_flags                         (0x0000),
-	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
-	m_nanoInfectedOwner             (0x00),
-	m_convertedOwner                (0x00),
-	m_franchiseOwner                (0x00),
-	m_injoinedOwner                 (0x00),
-	m_happinessAttackOwner          (0x00),
-	m_citySize                      (0),
-	m_cityOwner                     (0),
-	m_citySpriteIndex               (0),
-	m_cell_owner                    (PLAYER_UNASSIGNED),
-	m_slaveBits                     (0x0000),
-#ifdef BATTLE_FLAGS
-	m_battleFlags                   (0),
-#endif
-	m_tileInfo                      (NULL),
-	m_point                         (),
-	m_installations                 (NULL),
-	m_improvements                  (NULL),
-	m_cityName                      (NULL),
-	m_actor                         (NULL),
-	m_poolIndex                     (-1),
-	m_visibleCityOwner              (0)
 {
+	m_installations = NULL;
+	m_improvements = NULL;
+	m_cityName = NULL;
+	m_tileInfo = NULL;
+	m_actor = NULL;
+
 	Serialize(archive);
 }
 
@@ -425,24 +424,69 @@ UnseenCell::UnseenCell(CivArchive &archive)
 //----------------------------------------------------------------------------
 UnseenCell::~UnseenCell()
 {
-    ReleaseActor(m_actor);
+	if (m_actor) {
+		m_actor->m_refCount--;
+		if(m_actor->m_refCount <= 0) {
+			
+			
+			
+			g_director->ActiveUnitRemove(m_actor);
 
-    delete m_tileInfo;
+			delete m_actor;
+			m_actor = NULL;
+		}
+		m_actor = NULL;
+	}
 
-	if (m_installations) 
-    {
+    if(m_tileInfo) {
+		delete m_tileInfo;
+		m_tileInfo = NULL;
+	}
+
+	if(m_installations) {
 		m_installations->DeleteAll();
 		delete m_installations;
+		m_installations = NULL;
 	}
 
-	if (m_improvements) 
-    {
+	if(m_improvements) {
 		m_improvements->DeleteAll();
 		delete m_improvements;
+		m_improvements = NULL;
 	}
 
-	delete [] m_cityName;
+	if(m_cityName) {
+		delete [] m_cityName;
+		m_cityName = NULL;
+	}
 }
+
+#if 0
+void *UnseenCell::operator new(size_t size)
+{
+	Assert(g_theUnseenPond);
+	if(g_theUnseenPond) {
+		int index;
+		UnseenCell *ucell = g_theUnseenPond->Get_Next_Pointer(index);
+		ucell->m_poolIndex = index;
+		return ucell;
+	} else {
+		UnseenCell *ucell = ::new UnseenCell;
+		ucell->m_poolIndex = -1;
+		return ucell;
+	}
+}
+
+void UnseenCell::operator delete(void *ptr)
+{
+	UnseenCell *ucell = (UnseenCell *)ptr;
+	if(ucell->m_poolIndex >= 0) {
+		g_theUnseenPond->Release_Pointer(ucell->m_poolIndex);
+	} else {
+		::delete(ptr);
+	}
+}
+#endif
 
 //----------------------------------------------------------------------------
 //
@@ -457,10 +501,11 @@ UnseenCell::~UnseenCell()
 // Returns    : sint32: 1 if location has an airfield, 0 otherwise.
 //
 // Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be.
+//              should be. Return type should be bool. But does not seem
+//              to be used.
 //
 //----------------------------------------------------------------------------
-bool UnseenCell::IsAirfield(void) const
+sint32 UnseenCell::IsAirfield(void)
 {
 	return terrainutil_HasAirfield(m_point);
 }
@@ -475,13 +520,14 @@ bool UnseenCell::IsAirfield(void) const
 //
 // Globals    : -
 //
-// Returns    : bool: location has a listening post
+// Returns    : sint32: 1 if location has a listening post, 0 otherwise.
 //
 // Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be. 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
 //
 //----------------------------------------------------------------------------
-bool UnseenCell::IsListeningPost(void) const
+sint32 UnseenCell::IsListeningPost(void)
 {
 	return terrainutil_HasListeningPost(m_point);
 }
@@ -496,13 +542,14 @@ bool UnseenCell::IsListeningPost(void) const
 //
 // Globals    : -
 //
-// Returns    : bool: location has a fort
+// Returns    : sint32: 1 if location has a fort, 0 otherwise.
 //
 // Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be.
+//              should be. Return type should be bool. But does not seem
+//              to be used.
 //
 //----------------------------------------------------------------------------
-bool UnseenCell::IsFort(void) const
+sint32 UnseenCell::IsFort(void)
 {
 	return terrainutil_HasFort(m_point);
 }
@@ -517,13 +564,14 @@ bool UnseenCell::IsFort(void) const
 //
 // Globals    : -
 //
-// Returns    : bool: location has a radar
+// Returns    : sint32: 1 if location has a radar, 0 otherwise.
 //
 // Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be.
+//              should be. Return type should be bool. But does not seem
+//              to be used.
 //
 //----------------------------------------------------------------------------
-bool UnseenCell::IsRadar(void) const
+sint32 UnseenCell::IsRadar(void)
 {
 	return terrainutil_HasRadar(m_point);
 }
@@ -538,13 +586,14 @@ bool UnseenCell::IsRadar(void) const
 //
 // Globals    : -
 //
-// Returns    : bool: location can heal units
+// Returns    : sint32: 1 if location can heal units, 0 otherwise.
 //
 // Remark(s)  : Does not seem to depend on hidden tile information as it 
-//              should be. 
+//              should be. Return type should be bool. But does not seem
+//              to be used.
 //
 //----------------------------------------------------------------------------
-bool UnseenCell::IsHealUnits(void) const
+sint32 UnseenCell::IsHealUnits(void)
 {
 	return terrainutil_HasFort(m_point);
 }
@@ -571,10 +620,14 @@ sint32 UnseenCell::GetFoodFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	
-	sint32 food = Terrain(rec).GetFood();
+	sint32 food = rec->GetEnvBase()->GetFood();
 
-	if(m_cityName != NULL && rec->HasEnvCity()) {
+	if(m_cityName != NULL && rec->GetEnvCity()) {
 		food += rec->GetEnvCityPtr()->GetFood();
+	}
+
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+		food += rec->GetEnvRiverPtr()->GetFood();
 	}
 
 	sint32 good;
@@ -607,28 +660,28 @@ sint32 UnseenCell::GetFoodProduced() const
 {
 	sint32 food = GetFoodFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker walker = 
-			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+	PointerList<UnseenImprovementInfo>::Walker *walker = 
+			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
-	for ( ; walker.IsValid(); walker.Next())
-    {
-		sint32 percent	= walker.GetObj()->m_percentComplete;
+	while(walker->IsValid()){
+		sint32 type		= walker->GetObj()->m_type;
+		sint32 percent	= walker->GetObj()->m_percentComplete;
 		if(percent < 100){
 			break;
 		}
 
-		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect * effect = 
-            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
-
+		const TerrainImprovementRecord::Effect *effect;
+		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
-		if (effect && effect->GetBonusFood(bonus)) 
-        {
+		if(effect && effect->GetBonusFood(bonus)) {
 			food += bonus;
 		}
+		walker->Next();
 	}
+	
+	delete walker;
 
     return food; 
 }
@@ -655,10 +708,14 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
 	
-    sint32 shield = Terrain(rec).GetShield();
+    sint32 shield = rec->GetEnvBase()->GetShield();
 
-	if(m_cityName != NULL && rec->HasEnvCity()) {
+	if(m_cityName != NULL && rec->GetEnvCity()) {
 		shield += rec->GetEnvCityPtr()->GetShield();
+	}
+
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+		shield += rec->GetEnvRiverPtr()->GetShield();
 	}
 
 	sint32 good;
@@ -691,28 +748,29 @@ sint32 UnseenCell::GetShieldsProduced() const
 {
 	sint32 shield = GetShieldsFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker walker = 
-			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+	PointerList<UnseenImprovementInfo>::Walker *walker = 
+			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
-	for ( ; walker.IsValid(); walker.Next())
-    {
-		sint32 percent	= walker.GetObj()->m_percentComplete;
+	while(walker->IsValid()){
+		sint32 type		= walker->GetObj()->m_type;
+		sint32 percent	= walker->GetObj()->m_percentComplete;
 		if(percent < 100){
 			break;
 		}
 
-		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect * effect = 
-            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		const TerrainImprovementRecord::Effect *effect;
+		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
-		if(effect && effect->GetBonusProduction(bonus)) 
-        {
+		if(effect && effect->GetBonusProduction(bonus)) {
 			shield += bonus;
 		}
+		walker->Next();
 	}
 
+	delete walker;
+																					
     return shield; 
 }
 
@@ -738,10 +796,15 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
-    sint32 gold = Terrain(rec).GetGold();
+	
+    sint32 gold = rec->GetEnvBase()->GetGold();
 
-	if(m_cityName != NULL && rec->HasEnvCity()) {
+	if(m_cityName != NULL && rec->GetEnvCity()) {
 		gold += rec->GetEnvCityPtr()->GetGold();
+	}
+
+	if(g_theWorld->GetCell(m_point)->HasRiver() && rec->GetEnvRiver()) {
+		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 
 	sint32 good;
@@ -774,26 +837,28 @@ sint32 UnseenCell::GetGoldProduced() const
 {
 	sint32 gold = GetGoldFromTerrain();
 
-	PointerList<UnseenImprovementInfo>::Walker walker = 
-			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
+	PointerList<UnseenImprovementInfo>::Walker *walker = 
+			new PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
-	for ( ; walker.IsValid(); walker.Next())
-    {
-		sint32 percent	= walker.GetObj()->m_percentComplete;
-		if (percent < 100){
+	while(walker->IsValid()){
+		sint32 type		= walker->GetObj()->m_type;
+		sint32 percent	= walker->GetObj()->m_percentComplete;
+		if(percent < 100){
 			break;
 		}
 
-		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
-		const TerrainImprovementRecord::Effect * effect = 
-            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		const TerrainImprovementRecord::Effect *effect;
+		effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
 		if(effect && effect->GetBonusGold(bonus)) {
 			gold += bonus;
 		}
+		walker->Next();
 	}
+
+	delete walker;
 
     return gold; 
 }
@@ -816,7 +881,7 @@ sint32 UnseenCell::GetGoldProduced() const
 //----------------------------------------------------------------------------
 void UnseenCell::Serialize(CivArchive &archive)
 {
-	sint32 l;
+	sint32 l,i;
 	if(archive.IsStoring()) {
 		m_point.Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
@@ -825,7 +890,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 // Added by Martin Gühmann
 			// A dirty workaround in order not to change the save game format.
 			// UnseenInstallationInfo is now abused to store m_visibleCityOwner
-			// as visibility member. As both are of type uint32 it is not a 
+			// as visibility memeber. As both are of type uint32 it is not a 
 			// problem. Its type is marked as -1. At least this doesn't interfere
 			// with anything else, as the installation data is just stored in
 			// this class but it isn't aceessed. Maybe a mistake or a left
@@ -850,44 +915,54 @@ void UnseenCell::Serialize(CivArchive &archive)
 
 
 
-		if (m_cityName) 
-        {
+		if(!m_cityName) {
+			l = 0;
+			archive << l;
+		} else {
 			l = strlen(m_cityName) + 1;
 			archive << l;
 			archive.Store((uint8*)m_cityName, (strlen(m_cityName) + 1) * sizeof(MBCHAR));
 		}
-        else
-        {
-			l = 0;
-			archive << l;
-		} 
 
 		archive << (sint32)(m_actor != NULL);
 		if (m_actor) {
 			m_actor->Serialize(archive);
 		}
 		m_tileInfo->Serialize(archive);
-	} 
-    else 
-    {
-		m_point.Serialize(archive);
+	} else {
+		m_point.Serialize(archive) ;
 		archive.LoadChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
 
-		if (m_installations) 
-        {
+		
+		
+		if(m_installations) {
 			m_installations->DeleteAll();
+			delete m_installations;
+			m_installations = NULL;
 		}
-        else
-        {
-            m_installations = new PointerList<UnseenInstallationInfo>;
-        }
 
+		if(m_improvements) {
+			m_improvements->DeleteAll();
+			delete m_improvements;
+			m_improvements = NULL;
+		}
+		if(m_cityName) {
+			delete [] m_cityName;
+			m_cityName = NULL;
+		}
+		if(m_tileInfo) {
+			delete m_tileInfo;
+			m_tileInfo = NULL;
+		}
+
+
+
+        m_installations = new PointerList<UnseenInstallationInfo>;
 		archive >> l;
 
 // Added by Martin Gühmann
 		UnseenInstallationInfo* tmpUII;
-		bool    vCityOwnerNotSet = true;
-        sint32  i;
+		bool vCityOwnerNotSet = true;
 		for(i = 0; i < l; i++) {
 			tmpUII = new UnseenInstallationInfo(archive);
 
@@ -905,46 +980,57 @@ void UnseenCell::Serialize(CivArchive &archive)
 		// Backwards compartibility: If this UnseenCell didn't have an m_visibleCityOwner
 		if(vCityOwnerNotSet) m_visibleCityOwner = g_theWorld->GetCell(m_point)->GetCityOwner().m_id;
 
-        if (m_improvements) 
-        {
-			m_improvements->DeleteAll();
-		}
-        else
-        {
-		    m_improvements = new PointerList<UnseenImprovementInfo>;
-        }
+		
 
+		m_improvements = new PointerList<UnseenImprovementInfo>;
 		archive >> l;
 		for(i = 0; i < l; i++) {
 			m_improvements->AddTail(new UnseenImprovementInfo(archive));
 		}
 		
-		delete [] m_cityName;
+
+
 		archive >> l;
-		if (l > 0) 
-        {
+		if(l > 0) {
 			m_cityName = new MBCHAR[l];
 			archive.Load((uint8*)m_cityName, l * sizeof(MBCHAR));
-		} 
-        else 
-        {
+		} else {
 			m_cityName = NULL;
 		}
 
+		
+		Cell* cell = g_theWorld->GetCell(m_point) ;
+		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(m_point));
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		sint32 hasActor;
 		archive >> hasActor;
-
-		ReleaseActor(m_actor);
-		if (hasActor) 
-        {
+		if (hasActor) {
 			m_actor = new UnitActor(archive);
-        }
-
-		delete m_tileInfo;
-		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(m_point));
+        } else { 
+            m_actor = NULL; 
+        } 
 		Assert(m_tileInfo); 
 		m_tileInfo->Serialize(archive);
 	}
+
 }
 
 //----------------------------------------------------------------------------

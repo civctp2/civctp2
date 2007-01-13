@@ -13,7 +13,7 @@
 #if defined(__cplusplus)
 class ldl_datablock;
 
-ldl_datablock *ldlif_find_block(char const * name);
+ldl_datablock *ldlif_find_block(char *name);
 void ldlif_add_block_to_tree(ldl_datablock *block);
 void ldlif_remove_block_from_tree(ldl_datablock *block);
 
@@ -30,7 +30,7 @@ int ldlif_find_file(const char *filename, char *buf);
 char *ldlif_getnameptr(const char *name);
 char *ldlif_getstringptr(const char *text);
 
-int ldlif_parse(const char *filename);
+int ldlif_parse(char *filename);
 
 void ldlif_add_name(void **newnames, char *name, void *oldnames);
 void ldlif_start_block(void *names);

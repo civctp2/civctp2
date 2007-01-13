@@ -23,13 +23,12 @@
 //
 // - Sound added by Martin Gühmann
 // - Crash fixed when there is no sound defined (for mod).
-// - Moved network handling from TerrainImprovementData constructor to prevent 
-//   reporting the temporary when completing the tile improvement.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "TerrImprovePool.h"
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "TerrainRecord.h"
@@ -38,13 +37,12 @@
 #include "tiledmap.h"
 #include "player.h"
 #include "Vision.h"
-#include "Globals.h"
+#include "globals.h"
 #include "terrainutil.h"
 #include "TerrainImprovementRecord.h"
 #include "SoundRecord.h"
 #include "soundmanager.h"
 #include "SelItem.h"
-#include "Network.h"                    // g_network
 
 TerrainImprovementPool::TerrainImprovementPool() 
 	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
@@ -82,13 +80,10 @@ TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
 //
 //----------------------------------------------------------------------------
 TerrainImprovement
-TerrainImprovementPool::Create
-(
-    sint32 owner,
-	MapPoint const & point,
-	sint32 type,
-	sint32 extraData
-)
+TerrainImprovementPool::Create(sint32 owner,
+							   MapPoint &point,
+							   sint32 type,
+							   sint32 extraData)
 {
 	TerrainImprovementRecord const *	dbTerrainImprovement	= 
 		g_theTerrainImprovementDB->Get(type);
@@ -100,7 +95,7 @@ TerrainImprovementPool::Create
        )
 	{
 		// Invalid or inapplicable improvement 
-		return TerrainImprovement();
+		return TerrainImprovement(0);
 	}
 
 	// Obscure the improvement for all but the owner
@@ -120,12 +115,6 @@ TerrainImprovementPool::Create
 	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT));
 	TerrainImprovementData *	newData = 
 		new TerrainImprovementData(newImprovement, owner, point, type, extraData);
-
-    if (g_network.IsActive() && g_network.IsHost()) 
-    {
-        g_network.Enqueue(newData); 
-    }
-
 	Insert(newData);
 	g_theWorld->InsertImprovement(newImprovement, point);
 	g_tiledMap->RedrawTile(&point);
@@ -180,7 +169,6 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 	}
 }
 
-//not implemented??? E 4-7-2006
 BOOL TerrainImprovementPool::HasImprovement(const MapPoint &point,
 											TERRAIN_IMPROVEMENT type,
 											sint32 extraData)

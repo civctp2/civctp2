@@ -25,10 +25,11 @@
 // 
 //----------------------------------------------------------------------------
 
+
 #include "c3.h"
+
 #include "boundingrect.h"
 
-#include <algorithm>        // std::max, std::min
 
 void BoundingRect::Initialize(const MapPoint & xy_center,
 const sint16 radius,
@@ -170,21 +171,21 @@ bool BoundingRect::Add(const BoundingRect & add_rect)
 
 	if (m_xWrapOk)
 	{
-        is_add_rect_ul_xWrapOk= ((std::min(m_upperLeft.x,add_rect.m_upperLeft.x)+m_mapSize.x-std::max(m_upperLeft.x,add_rect.m_upperLeft.x))
-            < (std::max(m_upperLeft.x,add_rect.m_upperLeft.x)-std::min(m_upperLeft.x,add_rect.m_upperLeft.x)));
+		is_add_rect_ul_xWrapOk= ((min(m_upperLeft.x,add_rect.m_upperLeft.x)+m_mapSize.x-max(m_upperLeft.x,add_rect.m_upperLeft.x))
+			< (max(m_upperLeft.x,add_rect.m_upperLeft.x)-min(m_upperLeft.x,add_rect.m_upperLeft.x)));
 
-        is_add_rect_lr_xWrapOk= ((std::min(m_lowerRight.x,add_rect.m_lowerRight.x)+m_mapSize.x-std::max(m_lowerRight.x,add_rect.m_lowerRight.x))
-            < (std::max(m_lowerRight.x,add_rect.m_lowerRight.x)-std::min(m_lowerRight.x,add_rect.m_lowerRight.x)));
+		is_add_rect_lr_xWrapOk= ((min(m_lowerRight.x,add_rect.m_lowerRight.x)+m_mapSize.x-max(m_lowerRight.x,add_rect.m_lowerRight.x))
+			< (max(m_lowerRight.x,add_rect.m_lowerRight.x)-min(m_lowerRight.x,add_rect.m_lowerRight.x)));
 	
 	}
 
 	if (m_yWrapOk)
 	{
-        is_add_rect_ul_yWrapOk= ((std::min(m_upperLeft.y,add_rect.m_upperLeft.y)+m_mapSize.y-std::max(m_upperLeft.y,add_rect.m_upperLeft.y))
-            < (std::max(m_upperLeft.y,add_rect.m_upperLeft.y)-std::min(m_upperLeft.y,add_rect.m_upperLeft.y)));
+		is_add_rect_ul_yWrapOk= ((min(m_upperLeft.y,add_rect.m_upperLeft.y)+m_mapSize.y-max(m_upperLeft.y,add_rect.m_upperLeft.y))
+			< (max(m_upperLeft.y,add_rect.m_upperLeft.y)-min(m_upperLeft.y,add_rect.m_upperLeft.y)));
 
-        is_add_rect_lr_yWrapOk= ((std::min(m_lowerRight.y,add_rect.m_lowerRight.y)+m_mapSize.y-std::max(m_lowerRight.y,add_rect.m_lowerRight.y))
-            < (std::max(m_lowerRight.y,add_rect.m_lowerRight.y)-std::min(m_lowerRight.y,add_rect.m_lowerRight.y)));
+		is_add_rect_lr_yWrapOk= ((min(m_lowerRight.y,add_rect.m_lowerRight.y)+m_mapSize.y-max(m_lowerRight.y,add_rect.m_lowerRight.y))
+			< (max(m_lowerRight.y,add_rect.m_lowerRight.y)-min(m_lowerRight.y,add_rect.m_lowerRight.y)));
 	
 	}
 

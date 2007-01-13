@@ -1,34 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Wonderutil game object
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - wonderutil_IsObsolete now has two new checks GovernmentType and 
-//   ObsoleteGovernmentType switching from or two these obsoletes your wonder (E 5-27-2006)
-// - wonderutil_GetGoldPerBuildingAnywhere (E 5-27-2006)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "c3errors.h"
@@ -50,21 +27,21 @@
 
 #include "GameSettings.h"
 
-#define shiftbit(i) uint64(uint64(0x01) << uint64(i))
+#define shiftbit(i) uint64(uint64(0x01) << uint64(i))		
 #define FOREACH_WNDR(func) \
 uint64 forEachBuilt = builtWonders & (shiftbit(g_theWonderDB->NumRecords())-1); \
 for(sint32 wndr=0;forEachBuilt>0;wndr++,forEachBuilt>>=1) \
 	if((forEachBuilt&1) && \
 	g_theWonderDB->Get(wndr)->func() && !wonderutil_IsObsolete(wndr)) 
 
-#define BOOL_WNDR(flag) FOREACH_WNDR(flag) { return true; } return false;
-#define INT_WNDR(func, getfunc)\
+#define BOOL_WNDR(flag) FOREACH_WNDR(flag) { return TRUE; } return FALSE;
+#define INT_WNDR(func) \
     sint32 amt = 0;\
     FOREACH_WNDR(func) {\
-        sint32 add;\
-        g_theWonderDB->Get(wndr)->getfunc(add);\
+        sint32 add; \
+	    g_theWonderDB->Get(wndr)->func (add);\
         amt += add;\
-    }\
+	}\
     return amt;
 
 const WonderRecord *wonderutil_Get(sint32 wonder)
@@ -82,7 +59,7 @@ const WonderRecord *wonderutil_Get(sint32 wonder)
 
 
 
-bool wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders)
+BOOL wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders)
 {
 
 	
@@ -100,249 +77,249 @@ bool wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders)
 	BOOL_WNDR(GetEmbassiesEverywhere);
 }
 
-bool wonderutil_GetCloseEmbassies(const uint64 builtWonders)
+BOOL wonderutil_GetCloseEmbassies(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetCloseEmbassies);
 }
 
-bool wonderutil_GetReformCities(const uint64 builtWonders)
+BOOL wonderutil_GetReformCities(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetReformCities);
 }
 
-bool wonderutil_GetFreeSlaves(const uint64 builtWonders)
+BOOL wonderutil_GetFreeSlaves(const uint64 builtWonders)
 {
-	BOOL_WNDR(GetFreeSlaves);
+    BOOL_WNDR(GetFreeSlaves);
 }
 
-bool wonderutil_GetGlobalRadar(const uint64 builtWonders)
+BOOL wonderutil_GetGlobalRadar(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetGlobalRadar);
 }
 
-bool wonderutil_GetSpiesEverywhere(const uint64 builtWonders)
+BOOL wonderutil_GetSpiesEverywhere(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetSpiesEverywhere);
 }
 
-bool wonderutil_GetProtectFromBiologicalWarfare(const uint64 builtWonders)
+BOOL wonderutil_GetProtectFromBiologicalWarfare(const uint64 builtWonders)
 {
-	BOOL_WNDR(GetProtectFromBiologicalWarfare);
+    BOOL_WNDR(GetProtectFromBiologicalWarfare);
 }
 
-bool wonderutil_GetParkRangersEnabled(const uint64 builtWonders)
+BOOL wonderutil_GetParkRangersEnabled(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetEnableParkRangers);
 }
 
-bool wonderutil_GetAllCitizensContent(const uint64 builtWonders)
+BOOL wonderutil_GetAllCitizensContent(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetAllCitizensContent);
 }
 
-bool wonderutil_GetNukesEliminated(const uint64 builtWonders)
+BOOL wonderutil_GetNukesEliminated(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetEliminateNukes);
 }
 
 sint32 wonderutil_GetReadinessCostReduction(const uint64 builtWonders)
 {
-	INT_WNDR(HasReduceReadinessCost, GetReduceReadinessCost);
+	INT_WNDR(GetReduceReadinessCost);
 }
 
 sint32 wonderutil_GetDecreaseCrimePercentage(const uint64 builtWonders)
 {
-	INT_WNDR(HasDecCrimePercent, GetDecCrimePercent);
+	INT_WNDR(GetDecCrimePercent);
 }
 
 sint32 wonderutil_GetIncreaseKnowledgePercentage(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncKnowledgePercent, GetIncKnowledgePercent);
+	INT_WNDR(GetIncKnowledgePercent);
 }
 
 sint32 wonderutil_GetDecreaseEmpireSize(const uint64 builtWonders)
 {
-	INT_WNDR(HasDecEmpireSize, GetDecEmpireSize);
+	INT_WNDR(GetDecEmpireSize);
 }
 
 sint32 wonderutil_GetIncreaseHappinessEmpire(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncHappinessEmpire, GetIncHappinessEmpire);
+	INT_WNDR(GetIncHappinessEmpire);
 }
 
 sint32 wonderutil_GetIncreaseConvertedCitiesFeePercentage(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncConvertedCitiesFeePercent, GetIncConvertedCitiesFeePercent);
+	INT_WNDR(GetIncConvertedCitiesFeePercent);
 }
 
 sint32 wonderutil_GetGoldPerWaterTradeRoute(const uint64 builtWonders)
 {
-	INT_WNDR(HasGoldPerWaterTradeRoute, GetGoldPerWaterTradeRoute);
+	INT_WNDR(GetGoldPerWaterTradeRoute);
 }
 
 sint32 wonderutil_GetGoldPerTelevision(const uint64 builtWonders)
 {
-	INT_WNDR(HasGoldPerTelevision, GetGoldPerTelevision);
+	INT_WNDR(GetGoldPerTelevision);
 }
 
 sint32 wonderutil_GetGoldPerInternationalTradeRoute(const uint64 builtWonders)
 {
-	INT_WNDR(HasGoldPerInternationalTradeRoute, GetGoldPerInternationalTradeRoute);
+	INT_WNDR(GetGoldPerInternationalTradeRoute);
 }
 
 sint32 wonderutil_GetBonusGold(const uint64 builtWonders)
 {
-	INT_WNDR(HasBonusGold, GetBonusGold);
+	INT_WNDR(GetBonusGold);
 }
 
 sint32 wonderutil_GetPollutersToParks(const uint64 builtWonders)
 {
-	INT_WNDR(HasPollutersToParks, GetPollutersToParks);
+	INT_WNDR(GetPollutersToParks);
 }
 
 sint32 wonderutil_GetReduceWorldPollution(const uint64 builtWonders)
 {
-	INT_WNDR(HasReduceWorldPollution, GetReduceWorldPollution);
+	INT_WNDR(GetReduceWorldPollution);
 }
 
-bool wonderutil_GetAllBoatsDeepWater(const uint64 builtWonders)
+BOOL wonderutil_GetAllBoatsDeepWater(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetAllBoatsDeepWater);
 }
 
 sint32 wonderutil_GetIncreaseBoatMovement(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseBoatMovement, GetIncreaseBoatMovement);
+	INT_WNDR(GetIncreaseBoatMovement);
 }
 
-bool wonderutil_GetFreeTradeRoutes(const uint64 builtWonders)
+BOOL wonderutil_GetFreeTradeRoutes(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetFreeTradeRoutes);
 }
 
 sint32 wonderutil_GetDecreaseMaintenance(const uint64 builtWonders)
 {
-	INT_WNDR(HasDecreaseMaintenance, GetDecreaseMaintenance);
+	INT_WNDR(GetDecreaseMaintenance);
 }
 
 sint32 wonderutil_GetRandomAdvanceChance(const uint64 builtWonders)
 {
-	INT_WNDR(HasRandomAdvanceChance, GetRandomAdvanceChance);
+	INT_WNDR(GetRandomAdvanceChance);
 }
 
 sint32 wonderutil_GetIncreaseHP(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseHp, GetIncreaseHp);
+	INT_WNDR(GetIncreaseHp);
 }
 
 sint32 wonderutil_GetMultiplyTradeRoutes(const uint64 builtWonders)
 {
-	INT_WNDR(HasMultiplyTradeRoutes, GetMultiplyTradeRoutes);
+	INT_WNDR(GetMultiplyTradeRoutes);
 }
 
-bool wonderutil_GetForcefieldEverywhere(const uint64 builtWonders)
+BOOL wonderutil_GetForcefieldEverywhere(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetForcefieldEverywhere);
 }
 
-bool wonderutil_GetRevoltingCitiesJoinPlayer(const uint64 builtWonders)
+BOOL wonderutil_GetRevoltingCitiesJoinPlayer(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetRevoltingCitiesJoinPlayer);
 }
 
-bool wonderutil_GetNoPollutionUnhappiness(const uint64 builtWonders)
+BOOL wonderutil_GetNoPollutionUnhappiness(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetNoPollutionUnhappiness);
 }
 
-bool wonderutil_GetEmbassiesEverywhereEvenAtWar(const uint64 builtWonders)
+BOOL wonderutil_GetEmbassiesEverywhereEvenAtWar(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetEmbassiesEverywhereEvenAtWar);
 }
 
-bool wonderutil_PreventConversion(const uint64 builtWonders)
+BOOL wonderutil_PreventConversion(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetPreventConversion);
 }
 
-bool wonderutil_GetProtectFromBarbarians(uint64 builtWonders)
+BOOL wonderutil_GetProtectFromBarbarians(uint64 builtWonders)
 {
 	BOOL_WNDR(GetProtectFromBarbarians);
 }
 
-bool wonderutil_GetStartGaiaController(uint64 builtWonders)
+BOOL wonderutil_GetStartGaiaController(uint64 builtWonders)
 {
 	BOOL_WNDR(GetStartGaiaController);
 }
 
 sint32 wonderutil_GetIncreaseScientists(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseScientists, GetIncreaseScientists);
+	INT_WNDR(GetIncreaseScientists);
 }
 
 sint32 wonderutil_GetOtherCivRandomAdvanceChance(const uint64 builtWonders)
 {
-	INT_WNDR(HasOtherCivRandomAdvanceChance, GetOtherCivRandomAdvanceChance);
+	INT_WNDR(GetOtherCivRandomAdvanceChance);
 }
 
 sint32 wonderutil_GetIncreaseProduction(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseProduction, GetIncreaseProduction);
+	INT_WNDR(GetIncreaseProduction);
 }
 
 sint32 wonderutil_GetIncreaseFoodAllCities(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseFoodAllCities, GetIncreaseFoodAllCities);
+	INT_WNDR(GetIncreaseFoodAllCities);
 }
 
 sint32 wonderutil_GetTemporaryFullHappiness(const uint64 builtWonders)
 {
-	INT_WNDR(HasTemporaryFullHappiness, GetTemporaryFullHappiness);
+	INT_WNDR(GetTemporaryFullHappiness);
 }
 
 sint32 wonderutil_GetIncreaseSpecialists(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseSpecialists, GetIncreaseSpecialists);
+	INT_WNDR(GetIncreaseSpecialists);
 }
 
 sint32 wonderutil_GetIncreaseBrokerages(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseBrokerages, GetIncreaseBrokerages);
+	INT_WNDR(GetIncreaseBrokerages);
 }
 
 sint32 wonderutil_GetIncreaseCathedrals(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseCathedrals, GetIncreaseCathedrals);
+	INT_WNDR(GetIncreaseCathedrals);
 }
 
 sint32 wonderutil_GetIncreaseRegard(const uint64 builtWonders)
 {
-	INT_WNDR(HasIncreaseRegard, GetIncreaseRegard);
+	INT_WNDR(GetIncreaseRegard);
 }
 
-bool wonderutil_IsAvailable(sint32 wonder, sint32 player)
-{
+BOOL wonderutil_IsAvailable(sint32 wonder, sint32 player)
+{	
 	if(g_theWonderTracker->HasWonderBeenBuilt(wonder)) {
-		return false;
+		return FALSE;
 	}
 
 	const WonderRecord *rec = g_theWonderDB->Get(wonder);
 	
 	if(rec->GetEnableAdvanceIndex() >= 0 && 
 	   !g_player[player]->HasAdvance(rec->GetEnableAdvanceIndex()))
-		return false;
+		return FALSE;
 
 	
 	if(wonderutil_IsObsolete(wonder))
-		return false;
+		return FALSE;
 
 	
 	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
-		return false;
+		return FALSE;
 	}
 
 	
-	return true;
+	return TRUE;
 }
 
 
@@ -372,7 +349,7 @@ void wonderutil_AddBuilt(sint32 wonder)
 	g_theWonderTracker->AddBuilt(wonder);
 }
 
-bool wonderutil_IsBuilt(sint32 wonder)
+BOOL wonderutil_IsBuilt(sint32 wonder)
 {
 	return g_theWonderTracker->HasWonderBeenBuilt(wonder);
 }
@@ -381,55 +358,34 @@ bool wonderutil_IsBuilt(sint32 wonder)
 
 
 
-bool wonderutil_IsObsolete(sint32 wonder)
+BOOL wonderutil_IsObsolete(sint32 wonder)
 {
-
-	sint32 m_owner = wonderutil_GetOwner(wonder);
 	const WonderRecord *rec = g_theWonderDB->Get(wonder);
 	sint32 nObsolete = rec->GetNumObsoleteAdvance();
 	if(nObsolete <= 0)
-		return false;
+		return FALSE;
 
 	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
 
 		for(sint32 o = 0; o < nObsolete; o++) {
 			if(g_player[p]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-				return true;
+				return TRUE;
 		}
 	}
-
-	sint32 i;
-	// EMOD if you change from the govt that allows for 
-	// the wonder to be built you make it obsolete
-	for(i = 0; i < rec->GetNumGovernmentType(); i++) {
-		if(rec->GetGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
-			return true;
-		}
-	}
-
-	// EMOD if you switch to this govt it will obsolete 
-	// the wonder 9ie communism for religious wonders)
-	for(i = 0; i < rec->GetNumObsoleteGovernmentType(); i++) {
-		if(rec->GetObsoleteGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
-			return true;
-		}
-	}
-
-	return false;
+	return FALSE;
 }
 
 sint32 wonderutil_GetProductionCost(sint32 wonder)
 {
-	const WonderRecord *rec = g_theWonderDB->Get(wonder);
+    const WonderRecord *rec = g_theWonderDB->Get(wonder);
 
-	return rec->GetProductionCost();
+    return rec->GetProductionCost();
 }
 
 sint32 wonderutil_GetGaiaIndex()
 {
-	sint32 i;
-	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
+	for(sint32 i = 0; i < g_theWonderDB->NumRecords(); i++) {
 		if(g_theWonderDB->Get(i)->GetStartGaiaController())
 			return i;
 	}
@@ -438,21 +394,10 @@ sint32 wonderutil_GetGaiaIndex()
 
 sint32 wonderutil_GetFobCityIndex()
 {
-	sint32 i;
-	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
+	for(sint32 i = 0; i < g_theWonderDB->NumRecords(); i++) {
 		if(g_theWonderDB->Get(i)->GetCloseEmbassies()) 
 			return i;
 	}
 	return i;
 }
 
-//EMOD
-sint32 wonderutil_GetGoldPerBuildingAnywhere(const uint64 builtWonders)
-{
-	INT_WNDR(HasGoldPerBuildingAnywhere, GetGoldPerBuildingAnywhere);
-}
-
-sint32 wonderutil_GetEnablesPunativeAirstrikes(const uint64 builtWonders)
-{
-	BOOL_WNDR(GetEnablesPunativeAirstrikes);
-}

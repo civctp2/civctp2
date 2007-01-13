@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit manager
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,15 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Enable selection of transported units from the tactical info tab.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,6 +79,8 @@ static MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
 bool UnitManager::sm_statsTabVisible = true;
 
 extern C3UI *g_c3ui;
+
+extern ColorSet *g_colorSet;
 
 #define k_UNITMAN_STATS 0
 #define k_UNITMAN_TACTICAL 1
@@ -204,7 +202,7 @@ AUI_ERRCODE UnitManager::Initialize()
 		return AUI_ERRCODE_OK;
 	}
 
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	s_unitManager = new UnitManager(&err);
 	Assert(err == AUI_ERRCODE_OK);
 

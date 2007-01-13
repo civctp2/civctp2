@@ -23,13 +23,15 @@ class ldl_datablock;
 
 class ldl {
 public:
-	ldl(const char *szName, const char *szOutputDir = NULL, BOOL bUseInternalMemmap = TRUE );
+	ldl(char *szName, char *szOutputDir = NULL, BOOL bUseInternalMemmap = TRUE );
 	~ldl();
 
 	// read an ldl file and new the data associated with it
-	BOOL ReadData(const char *fname = NULL);
+	int ReadData(char *fname = NULL);
 
-	ldl_datablock *FindDataBlock(const char *szName, ldl_datablock *dbParent = NULL );
+	ldl_datablock *FindDataBlock( char *szName, ldl_datablock *dbParent = NULL );
+	// compatibility
+	ldl_datablock *FindDataBlock( char *szName, BOOL value ) { return FindDataBlock( szName ); }
 
 	BOOL WriteData();
 };

@@ -1,29 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Slic eyepoint message
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - AOM facilitation: set player[0] to the recipient.
-//
-//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -63,7 +37,7 @@ SlicEyePoint::SlicEyePoint(const MapPoint &point, const MBCHAR *name,
 	} else {
 		m_name = NULL;
 	}
-	m_message = new Message();
+	m_message = new Message(0);
 	m_data = data;
 	m_type = type;
 	m_unit = unit;
@@ -105,7 +79,7 @@ SlicEyePoint::~SlicEyePoint()
 
 SlicEyePoint::SlicEyePoint(CivArchive &archive)
 {
-	m_message = new Message();
+	m_message = new Message(0);
 	Serialize(archive);
 }
 
@@ -179,12 +153,10 @@ Message SlicEyePoint::GetMessage() const
 
 void SlicEyePoint::Callback()
 {
-	SlicObject * obj = NULL;
-	if (m_segment) 
-    {
+	SlicObject *obj = NULL;
+	if(m_segment) {
 		obj = new SlicObject(m_segment);
 		obj->AddRecipient(m_recipient);
-        obj->AddPlayer(m_recipient);
 	}
 
 	switch(m_type) {
@@ -208,8 +180,8 @@ void SlicEyePoint::Callback()
 			g_tiledMap->InvalidateMap();
 			break;
 		case EYE_POINT_TYPE_ADVANCE:
-			Assert(*m_message != Message());
-			if(*m_message != Message()) {
+			Assert(*m_message != Message(0));
+			if(*m_message != Message(0)) {
 				m_message->SetSelectedAdvance(m_data);				
 			}
 			if(obj)

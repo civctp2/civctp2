@@ -26,7 +26,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "thumbnailmap.h"
 
 #include "aui.h"
 #include "aui_directsurface.h"
@@ -34,22 +33,33 @@
 #include "aui_window.h"
 #include "aui_ldl.h"
 #include "aui_action.h"
+
 #include "c3ui.h"
-#include "player.h"             // g_player
+
+#include "player.h"
 #include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld
+#include "World.h"
 #include "Cell.h"
 #include "UnseenCell.h"
 #include "citydata.h"
 #include "Unit.h"
 #include "UnitData.h"
+
 #include "pixelutils.h"
-#include "colorset.h"           // g_colorSet
-#include "SelItem.h"            // g_selected_item
-#include "tiledmap.h"           // g_tiledMap
+#include "colorset.h"
+#include "SelItem.h"
+#include "tiledmap.h"
+
 #include "primitives.h"
 
+#include "thumbnailmap.h"
+
 extern C3UI				*g_c3ui;
+extern TiledMap			*g_tiledMap;
+extern Player			**g_player;
+extern SelectedItem		*g_selected_item;
+extern ColorSet			*g_colorSet;
+extern World			*g_theWorld;
 
 
 ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
@@ -57,10 +67,9 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-:
+	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
-		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -76,10 +85,9 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:
+	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
-		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	
@@ -87,16 +95,31 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 
 ThumbnailMap::~ThumbnailMap()
 {
-	delete m_mapSurface;
-	delete m_cityList;
+	if (m_mapSurface)
+		delete m_mapSurface;
+
+	if ( m_cityList ) {
+		delete m_cityList;
+		m_cityList = NULL;
+	}
 }
 
 
 void ThumbnailMap::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
+
+
 
 	InitCommon();
 }
@@ -104,6 +127,9 @@ void ThumbnailMap::InitCommonLdl(MBCHAR *ldlBlock)
 
 void ThumbnailMap::InitCommon(void)
 {
+	AUI_ERRCODE			errcode;
+
+	
 	m_mapSurface = NULL;
 	m_mapSize = NULL;
 
@@ -111,7 +137,7 @@ void ThumbnailMap::InitCommon(void)
 	m_tilePixelHeight = 0.0;
 
 	m_selectedRoute = NULL;
-	m_selectedCity = Unit();
+	m_selectedCity = NULL;
 
 	m_displayUnits = TRUE;
 	m_displayLandOwnership = TRUE;
@@ -132,7 +158,6 @@ void ThumbnailMap::InitCommon(void)
 	m_cityFilterProc = NULL;
 
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_mapSurface = new aui_DirectSurface(&errcode, m_width, m_height, 16, g_c3ui->DD());
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
@@ -150,11 +175,15 @@ void ThumbnailMap::InitCommon(void)
 
 void ThumbnailMap::BuildCityList(void)
 {
-	delete m_cityList;
+	sint32		p, i;
+
+	if (m_cityList) {
+		delete m_cityList;
+	}
+
 	m_cityList = new DynamicArray<CityInfo>();
 
-	for (size_t p = 0; p < k_MAX_PLAYERS; p++) 
-    {
+	for (p=0; p<k_MAX_PLAYERS; p++) {
 		Player	*player = g_player[p];
 		if (player == NULL) continue;
 
@@ -165,19 +194,19 @@ void ThumbnailMap::BuildCityList(void)
 		CityInfo	info;
 		RECT		cityRect;
 		POINT		pt;
+		MapPoint	pos;
 
-		for (sint32 i = 0; i<cities->Num(); i++) 
-        {
-			Unit city = cities->Access(i);
+		for (i=0; i<cities->Num(); i++) {
+			Unit city;
+
+			city = cities->Access(i);
 
 			if (m_cityFilterProc) {
 				if (!(*m_cityFilterProc)(city)) continue;
 			}
 
 			info.city = cities->Access(i);
-			
-			MapPoint cityPos = info.city.RetPos();
-			pt = MapToPixel(&cityPos);
+			pt = MapToPixel(&info.city.RetPos()); 
 			
 			SetRect(&cityRect, pt.x, pt.y, (sint32)(pt.x + m_tilePixelWidth), (sint32)(pt.y + m_tilePixelHeight));
 			OffsetRect(&cityRect, (sint32)(m_tilePixelWidth/2), (sint32)(m_tilePixelHeight/2));
@@ -204,19 +233,21 @@ void ThumbnailMap::SetCityBlink(Unit city, BOOL blink, COLOR blinkColor)
 {
 	if (!m_cityList) return;
 
-    CityInfo info;  /// @todo Check whether this should be CityInfo &,
-                    ///       otherwise we are only modifying a local variable
+	BOOL found = FALSE;
+	CityInfo info;
 
-	for (sint32 i = 0; i < m_cityList->Num(); i++) 
-    {
+	for (sint32 i=0; i<m_cityList->Num(); i++) {
 		info = m_cityList->Access(i);
-		if (info.city == city) 
-        {
-	        info.cityBlink      = blink;
-	        info.cityBlinkColor = blinkColor;
-			return;
+		if (info.city == city) {
+			found = TRUE;
+			break;
 		}
 	}
+
+	if (!found) return;
+
+	info.cityBlink = blink;
+	info.cityBlinkColor = blinkColor;
 }
 
 
@@ -245,10 +276,15 @@ void ThumbnailMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
 
 AUI_ERRCODE	ThumbnailMap::Resize( sint32 width, sint32 height )
 {
-	AUI_ERRCODE	errcode = aui_Region::Resize(width, height);
+	AUI_ERRCODE		errcode;
+
+	errcode = aui_Region::Resize(width, height);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	delete m_mapSurface;
+	if (m_mapSurface)
+		delete m_mapSurface;
+
+	
 	m_mapSurface = new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
@@ -265,12 +301,16 @@ void ThumbnailMap::CalculateMetrics(void)
 {
     Assert(g_theWorld); 
 	m_mapSize = g_theWorld->GetSize();
+	double		mapRatio;
+	double		controlRatio;
 
     Assert(0 < m_mapSize->x); 
     Assert(0 < m_mapSize->y); 
 
-	double  mapRatio        = (double)(m_mapSize->x * 2) / (double)m_mapSize->y;
-	double	controlRatio    = (double)m_width / (double)m_height;
+	
+
+	mapRatio = (double)(m_mapSize->x * 2) / (double)m_mapSize->y;
+	controlRatio = (double)m_width / (double)m_height;
 
 	if (mapRatio > controlRatio) {
 		
@@ -400,25 +440,28 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 
 void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 {
+	sint32		i;
+	Pixel16		color;
+	POINT		p1, p2;
+	MapPoint	pt;
 	Pixel16		blackColor = g_colorSet->GetColor(COLOR_BLACK);
 
 	const DynamicArray<MapPoint> *path = route->GetPath();
 	
-	Pixel16		color;
+	
 	if (route == m_selectedRoute) 
 		color = g_colorSet->GetColor(COLOR_SELECT_1);
 	else 
 		color = (Pixel16)route->GetColor();
 
 	
-	MapPoint    pt = path->Get(0);
-	POINT       p1 = MapToPixel(&pt);
+	pt = path->Get(0);
+	p1 = MapToPixel(&pt);
 	p1.x += (sint32)(m_tilePixelWidth/2);
 	p1.y += (sint32)(m_tilePixelHeight/2);
 	if (p1.x <= 0) p1.x = 1;
 	if (p1.y <= 0) p1.y = 1;
 
-	POINT		p2;
 	if (m_displayDirectRoutes) {
 		pt = path->Get(path->Num() - 1);
 		p2 = MapToPixel(&pt);
@@ -428,7 +471,7 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 		primitives_DrawAALine16(surf, p1.x, p1.y, p2.x, p2.y, blackColor);
 		primitives_DrawAALine16(surf, p1.x-1, p1.y-1, p2.x-1, p2.y-1, color);
 	} else {
-		for (sint32 i = 1; i < path->Num(); i++) {
+		for (i = 1; i < path->Num(); i++) {
 			pt = path->Get(i);
 			p2 = MapToPixel(&pt);
 			p2.x += (sint32)(m_tilePixelWidth/2);
@@ -450,6 +493,8 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 
 void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 {
+	sint32		i, j;
+
 	Player	*player = g_player[g_selected_item->GetVisiblePlayer()];
 	Assert(player != NULL);
 	if (player == NULL) return;
@@ -458,12 +503,12 @@ void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 	Assert(cities != NULL);
 	if (cities == NULL) return;
 
-	for (sint32 i=0; i<cities->Num(); i++) {
+	for (i=0; i<cities->Num(); i++) {
 		CityData			*cityData = cities->Get(i).GetData()->GetCityData();
 		TradeDynamicArray	*source = cityData->GetTradeSourceList();
 
 		
-		for (sint32 j=0; j<source->Num(); j++) {
+		for (j=0; j<source->Num(); j++) {
 			TradeRoute route = source->Access(j);
 
 			RenderTradeRoute(surf, &route);
@@ -479,6 +524,8 @@ void ThumbnailMap::RenderUnitMovement(aui_Surface *surf)
 
 void ThumbnailMap::UpdateCities(aui_Surface *surf, sint32 x, sint32 y)
 {
+	sint32		i;
+
 	Assert(m_cityList);
 	if (!m_cityList) return;
 
@@ -486,7 +533,7 @@ void ThumbnailMap::UpdateCities(aui_Surface *surf, sint32 x, sint32 y)
 	RECT			rect;
 	Pixel16			color;
 
-	for (sint32 i=0; i<m_cityList->Num(); i++) {
+	for (i=0; i<m_cityList->Num(); i++) {
 		info = m_cityList->Access(i);
 		
 		rect = info.cityRect;
@@ -508,6 +555,10 @@ void ThumbnailMap::UpdateCities(aui_Surface *surf, sint32 x, sint32 y)
 		}
 		primitives_PaintRect16(surf, &rect, color);
 		primitives_BevelRect16(surf, &rect, 2, 0, 16, 16);
+
+		
+		if (m_displayCityNames) {
+		}
 	}
 }
 
@@ -568,32 +619,43 @@ void ThumbnailMap::MouseLGrabInside(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
 
+	BOOL		doRender = FALSE;
+	sint32		i;
+
 	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
 	SetWhichSeesMouse(this);
 
 	Assert(g_tiledMap != NULL);
 	if (g_tiledMap == NULL) return;
 
+	
 	data->position.x -= X();
 	data->position.y -= Y();
 
+	
 	CityInfo	info;
-	for (sint32 i=0; i<m_cityList->Num(); i++) 
-    {
+	for (i=0; i<m_cityList->Num(); i++) {
 		info = m_cityList->Access(i);
-		if (PtInRect(&info.cityRect, data->position)) 
-        {
+		if (PtInRect(&info.cityRect, data->position)) {
+			
 			m_selectedCity = info.city;
 
+			
 			if ( m_ActionFunc )
 				m_ActionFunc( this, C3_THUMBNAIL_ACTION_SELECTEDCITY, 0, m_cookie );
 			else if ( m_action )
 				m_action->Execute( this, C3_THUMBNAIL_ACTION_SELECTEDCITY, 0 );
 
-		    RenderMap(m_mapSurface);
+			doRender = TRUE;
 			break;
 		}
 	}
+
+	
+
+
+	if (doRender)
+		RenderMap(m_mapSurface);
 }
 
 

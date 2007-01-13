@@ -44,45 +44,58 @@ extern double			g_ave_frame_time;
 
 
 Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, BOOL specialDelayProcess)
-:
-    m_actionType                (actionType),
-    m_endCondition              (endCondition),
-	m_curAnim                   (NULL),
-	m_curPath                   (NULL),
-	m_maxActionCounter          (0),
-	m_curActionCounter          (0),
-	m_animPos                   (startAnimPos), 
-	m_animDelayEnd              (0),
-	m_animElapsed               (0),
-	m_animLastFrameTime         (0),
-	m_delay                     (0), 
-	m_itIsTimeToAct             (FALSE), 
-	m_finished                  (FALSE), 
-	m_loopAnimFinished          (FALSE), 
-	m_specialDelayProcess       (specialDelayProcess), 
-    m_startMapPoint             (),
-	m_endMapPoint               (),
-	m_facing                    (k_DEFAULTSPRITEFACING),
-	m_sound_effect_id           (-1), 
-	m_unitsVisibility           (0), 
-	m_unitVisionRange           (0), 
-	m_numRevealedActors         (0),
-	m_revealedActors            (NULL),
-	m_moveActors                (NULL), 
-	m_numOActors                (0), 
-    m_specialUnitEffectsAction  (), 
-    m_sequence                  (NULL)
-{ ; }
+{
+	m_actionType = actionType;
+	m_sound_effect_id = -1;	
+	m_curAnim = NULL;
+	m_curPath = NULL;
+	m_finished = FALSE;
+	m_loopAnimFinished = FALSE;
+	m_endCondition = endCondition;
+	m_maxActionCounter = 0;
+	m_curActionCounter = 0;
+	m_animPos = startAnimPos;
+	m_animDelayEnd = 0;
 
+	m_endMapPoint.x = 0;
+	m_endMapPoint.y = 0;
+	m_startMapPoint = m_endMapPoint;
+	m_itIsTimeToAct = FALSE;
+
+	m_facing = k_DEFAULTSPRITEFACING;
+
+	m_specialDelayProcess = specialDelayProcess;
+
+	m_numRevealedActors = 0;
+	m_revealedActors = NULL; 
+	m_moveActors = NULL; 
+	m_numOActors = 0;
+	m_unitsVisibility = 0;
+	m_unitVisionRange = 0;
+
+	m_delay = 0;
+
+	m_sequence = NULL;
+}
 
 Action::Action(Action *copyme)
 {
 	*this = *copyme;
 
+	
+	
+	
+	
+	
+
 	if (copyme->GetAnim()) {
-		m_curAnim = new Anim(*copyme->GetAnim());
+		m_curAnim = new Anim;
+		*m_curAnim = *copyme->GetAnim();
+
+		m_curAnim->SetSpecialCopyDelete(ANIMXEROX_COPY);
 	}
 
+	
 	m_curPath = NULL;
 	m_moveActors = NULL;
 	m_revealedActors = NULL;
@@ -91,10 +104,26 @@ Action::Action(Action *copyme)
 
 Action::~Action(void)
 {
-	delete m_curPath;
-	delete m_curAnim;
-	delete[] m_moveActors;
-	delete[] m_revealedActors;
+	if (m_curPath != NULL) 
+		delete m_curPath;
+
+	if(m_curAnim)
+		delete m_curAnim;
+
+	if(m_moveActors) {
+		
+		delete[] m_moveActors;
+	}
+
+	if(m_revealedActors) {
+		
+		delete[] m_revealedActors;
+	}
+
+	
+	
+	
+	
 }
 
 void Action::Process(void)
@@ -103,11 +132,9 @@ void Action::Process(void)
 	STOMPCHECK();
 #endif
 
-	if (!m_curAnim)
-    {
-        SetFinished(TRUE);
-        return;
-    }
+	
+	
+	
 	
 	m_animPos = m_curAnim->GetNextPosition(m_animPos);
 	m_animDelayEnd = m_curAnim->GetDelayEnd();
@@ -188,7 +215,7 @@ void Action::SetAnim(Anim *anim)
 	STOMPCHECK();
 #endif
 
-//	Assert(anim != NULL);
+	Assert(anim != NULL);
 	if (anim == NULL) return;
 
 	anim->SetFinished(FALSE);
@@ -270,19 +297,23 @@ uint16 Action::GetSpriteFrame(void)
 	return frame;
 }
 
-sint32 Action::GetFacing(void) 
+sint32 Action::GetFacing(void)
 {
 #ifndef _TEST
 	STOMPCHECK();
 #endif
 
-	if (m_curPath) 
-    {
-		m_facing = m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter);
-	} 
-    // else: No action: keep current facing
+	uint16 facing;
 
-	return m_facing;
+	
+	if (m_curPath != NULL) {
+		m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter, &facing);
+		m_facing = facing;
+
+	} else {
+		facing = (uint16)m_facing;
+	}
+	return (sint32)facing;
 }
 
 uint16 Action::GetTransparency(void)

@@ -57,13 +57,28 @@ public:
 	};
 
 protected:
-    AUI_ACTION_BASIC(PlayerNameTextFieldAction);
-	AUI_ACTION_BASIC(NewButtonAction);
-    AUI_ACTION_BASIC(EditButtonAction);
-    AUI_ACTION_BASIC(DeleteButtonAction);
-    AUI_ACTION_BASIC(OKButtonAction);
-    AUI_ACTION_BASIC(CancelButtonAction);
-    AUI_ACTION_BASIC(PlayerListBoxAction);
+	
+
+	class PlayerNameTextFieldAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class NewButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class EditButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class DeleteButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class OKButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class CancelButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class PlayerListBoxAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
 };
 
 

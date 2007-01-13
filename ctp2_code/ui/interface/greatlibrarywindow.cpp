@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The window of the Great Libary
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,15 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired in LoadText by Martin Gühmann.
-// - Added variable and requirement retriever methods. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -96,6 +92,7 @@
 
 const int GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK = 999;
 
+extern ColorSet						*g_colorSet;
 extern CivPaths						*g_civPaths;
 extern sint32						g_ScreenWidth;
 extern sint32						g_ScreenHeight;
@@ -297,8 +294,10 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //              nothing.
 //
 //----------------------------------------------------------------------------
+
 sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, SlicObject &so)
 {
+    char *text;
 
 
     if (textbox == NULL)
@@ -311,11 +310,11 @@ sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, 
 	strcpy(lower_case_filename, filename);
 
 	
-	for (size_t j = 0; j < strlen(lower_case_filename); j++)
+	for (int j = 0; j < strlen(lower_case_filename); j++)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
 
 	
-    char * text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
+	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
 
 	delete [] lower_case_filename;
 
@@ -428,10 +427,10 @@ void GreatLibraryWindow::PlayTechMovie ( void )
 
 sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 {
-	m_mode      = theMode;
-	m_database  = theDatabase;
+	m_mode = theMode;
+	m_database = theDatabase;
 
-	const IconRecord *  iconRec = NULL;
+	const IconRecord *iconRec = NULL;
 
 	
 	switch ( theDatabase ) {
@@ -456,14 +455,23 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 		break;
 
 	case DATABASE_ADVANCES:
-		iconRec = g_theAdvanceDB->Get(theMode)->GetIcon();
-		break;
+	{
+		const IconRecord *rec = g_theAdvanceDB->Get(theMode)->GetIcon();
 
+		sprintf( m_still_file, rec->GetIcon());
+		sprintf( m_movie_file, rec->GetMovie());
+		sprintf( m_gameplay_file, rec->GetGameplay());
+		sprintf( m_history_file, rec->GetHistorical());
+		sprintf( m_requirement_file, rec->GetPrereq());
+		sprintf( m_variable_file, rec->GetVari());
+
+		break;
+	}
 	case DATABASE_TERRAIN:
-		theMode = g_theTerrainDB->m_alphaToIndex[ theMode ];
+	{
 		iconRec = g_theTerrainDB->Get(theMode)->GetIcon();
 		break;
-
+	}
 	case DATABASE_CONCEPTS:
 		iconRec = g_theIconDB->Get(g_theConceptDB->GetConceptInfo(theMode)->m_iconDBIndex);
 		break;
@@ -501,7 +509,7 @@ char * GreatLibraryWindow::GetIconRecText
 ( 
 	int database, 
 	int item,
-	uint8 historical
+	bool historical
 )
 {
 	char * the_text = NULL;
@@ -563,53 +571,28 @@ char * GreatLibraryWindow::GetIconRecText
 		
 		char * lower_case_filename;
 
-		switch(historical){
-			case 0:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetGameplay())+1];
+		
+		if (historical)
+		{
+			lower_case_filename = new char[strlen(iconRec->GetHistorical())+1];
 
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetGameplay());
-
-				break;
-			}
-			case 1:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetHistorical())+1];
-
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetHistorical());
-
-				break;
-			}
-			case 2:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetPrereq())+1];
-
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetPrereq());
-
-				break;
-			}
-			case 3:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetVari())+1];
-
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetVari());
-				break;
-			}
-			default:
-				lower_case_filename = NULL;
-				Assert(false);
-				break;
+			if (lower_case_filename)
+				strcpy(lower_case_filename, iconRec->GetHistorical());
 		}
+		else
+		{
+			lower_case_filename = new char[strlen(iconRec->GetGameplay())+1];
+
+			if (lower_case_filename)
+				strcpy(lower_case_filename, iconRec->GetGameplay());
+		}
+
 		
 		if (!lower_case_filename)
 			return NULL;
 
 		
-		for (size_t j = 0; j < strlen(lower_case_filename); j++)
+		for (int j = 0; j < strlen(lower_case_filename); j++)
 			lower_case_filename[j] = tolower(lower_case_filename[j]);
 
 		
@@ -624,23 +607,16 @@ char * GreatLibraryWindow::GetIconRecText
 }
 
 
-char * GreatLibraryWindow::GetGameplayText( int database, int item )
-{
-	return GetIconRecText( database, item, 0 );
-}
 
 char * GreatLibraryWindow::GetHistoricalText( int database, int item )
 {
-	return GetIconRecText( database, item, 1 );
+	return GetIconRecText( database, item, true );
 }
 
-char * GreatLibraryWindow::GetRequirementsText( int database, int item )
-{
-	return GetIconRecText( database, item, 2 );
-}
 
-char * GreatLibraryWindow::GetVariablesText( int database, int item )
+
+char * GreatLibraryWindow::GetGameplayText( int database, int item )
 {
-	return GetIconRecText( database, item, 3 );
+	return GetIconRecText( database, item, false );
 }
 

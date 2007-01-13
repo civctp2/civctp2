@@ -110,7 +110,7 @@ class ctp2_Menu {
 	void SetCallback(CTP2MenuCallback *callback);
 
 	
-	static void WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, void *cookie, bool &passEventOn);
+	static void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, void *cookie, bool &passEventOn);
 
 	
 	void	Clear();

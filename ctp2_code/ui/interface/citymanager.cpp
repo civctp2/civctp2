@@ -22,9 +22,8 @@ static CityManagerWindow *s_cityManagerWindow = NULL;
 
 void CityManagerWindow::Open()
 {
-	if (!s_cityManagerWindow) 
-    {
-	    AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
+	if(!s_cityManagerWindow) {
 		s_cityManagerWindow = new CityManagerWindow(&err,
 													aui_UniqueId(),
 													"CITY_MANAGER_WINDOW");
@@ -38,17 +37,12 @@ void CityManagerWindow::Open()
 
 void CityManagerWindow::Cleanup()
 {
-	if (s_cityManagerWindow) 
-    {
+	if(s_cityManagerWindow) {
 		s_cityManagerWindow->Hide();
-        if (g_c3ui)
-        {
-		    g_c3ui->RemoveWindow(s_cityManagerWindow->Id());
-        }
+		g_c3ui->RemoveWindow(s_cityManagerWindow->Id());
+		delete s_cityManagerWindow;
+		s_cityManagerWindow = NULL;
 	}
-
-    delete s_cityManagerWindow;
-	s_cityManagerWindow = NULL;
 }
 
 CityManagerWindow::CityManagerWindow(AUI_ERRCODE *retval,
@@ -94,15 +88,21 @@ void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32
 
 AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    if (!aui_Ldl::IsValid(ldlBlock)) 
-    {
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+	ldl_datablock *theBlock = NULL;
+
+	if(theLdl->IsValid(ldlBlock)) {
+		theBlock = theLdl->GetLdl()->FindDataBlock(ldlBlock);
+	} else {
 		return AUI_ERRCODE_HACK;
 	}
 
 	MBCHAR controlBlock[k_AUI_LDL_MAXBLOCK + 1];
-	sprintf(controlBlock, "%s.%s", ldlBlock, "OK_BUTTON");
-
 	AUI_ERRCODE ret;
+
+
+
+	sprintf(controlBlock, "%s.%s", ldlBlock, "OK_BUTTON");
 	m_ok = new ctp2_Button(&ret, aui_UniqueId(), controlBlock,
 						   "CTP2_BUTTON_TEXT_RIGHT_LARGE",
 						   386, 414,

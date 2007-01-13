@@ -83,6 +83,17 @@ public:
 protected:
 	aui_Control		*m_pane;
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+
+	
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseLDropOutside {}
+
+	virtual MouseEventCallback MouseRGrabInside;
+#else
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
 
@@ -91,6 +102,7 @@ protected:
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData) {};
 
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+#endif
 };
 
 

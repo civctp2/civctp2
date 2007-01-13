@@ -1,6 +1,14 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef _MATERIAL_POOL_H_
 #define _MATERIAL_POOL_H_
 

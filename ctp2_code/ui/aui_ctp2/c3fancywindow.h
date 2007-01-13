@@ -72,10 +72,19 @@ public:
 	void MakeDraggable( BOOL draggable );
 
 protected:
+
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLDragAway;
+#else
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseLDragAway(aui_MouseEvent * data);
+#endif
 
 private:
+	
+	
+	
 	C3Window *m_border[k_NUM_BORDERS];
 	
 	POINT	m_offset[k_NUM_BORDERS];

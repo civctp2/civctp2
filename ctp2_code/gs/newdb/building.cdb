@@ -3,110 +3,55 @@
 #  Project      : Call To Power 2
 #  File type    : dbgen input
 #  Description  : Building type descriptor
-#  Id           : $Id:$
-#
-#-----------------------------------------------------------------------------
-#
+# 
+# ----------------------------------------------------------------------------
+# 
 #  Disclaimer
 # 
 #  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-#
+# 
 #  This material has been developed at apolyton.net by the Apolyton CtP2 
 #  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-#
+# 
 #-----------------------------------------------------------------------------
-#
+# 
 #  Modifications from the original Activision code:
-#
-#  - CultureOnly          : Building can only be built if city's citystyle is matched (E)
-#  - CityStyleOnly        : Building can only be built in cities with the city style in the list (E)
-#  - GovernmentType       : Building can only be built with the right government (E)
-#  - NeedsCityGood :      : Building requires a good to be built (E)
-#  - NeedsCityGoodAll     : Building requires all goods in the list to be built (E)
-#  - NeedsCityGoodAnyCity : Building requires good owned in any city of the empire (E)
-#  - EnablesGood          : Building gives good to city (E)
-#  - OnePerCiv            : Just one building allowed per civ works like Small Wonders - (E 2-14-2006)
-#  - GoldPerCity          : Gold cost per number of cities (E)
-#  - GoldPerUnit          : adds this (E)
-#  - GoldPerUnitReadiness : adds amount times number of units times readiness modifier (E)
-#  - SquaredBorderRadius  : increases city radius (E 2-28-2006)
-#  - IntBorderRadius      : Increases city radius (E 2-28-2006)
-#  - CivilisationOnly     : Building can only be built in the given civilisations (E)
-#  - NeedsFeatToBuild     : Building can only be built with the right feat (E)
-#  - TreasuryInterest     : Based on stored gold
-#  - ExcludedByWonder	  : Prevents bldgs being built in cities with wonder
-#  - PrerequisiteWonder   : Needs bldgs in city to be built
-#
+# 
+#  - CultureOnly //added by E -- can only build buildings if civ has certain citystyle
+#  - CityStyleOnly //added by E--can only build buildings at cities with certain citystyle 
+#  - GovernmentType //added by E --- a copy of unit Government type code
+#  - OnePerCiv //FU; For "smallwonders"
+# 
 #-----------------------------------------------------------------------------
-
 Building {
 	# stuff every building has
-	Record Icon                 DefaultIcon
-	StringId                    Description
-	Record Advance              EnableAdvance
-	Record Advance[0..5]        ObsoleteAdvance
-	Record Building[]           PrerequisiteBuilding
-	Record Government[]         GovernmentsModified
-	Record CityStyle[]          CultureOnly              // Added by E -- can only build buildings if civ has certain citystyle
-	Record CityStyle[]          CityStyleOnly            // Added by E--can only build buildings at cities with certain citystyle 
-	Record Government[]         GovernmentType           // Added by E --- a copy of unit Government type code
-	Record Resource[]           NeedsCityGood            // By E must have good in radius of city or buying resource to build 
-	Record Resource[]           NeedsCityGoodAll         // By E a city must have all resource to build building
-	Record Resource[]           NeedsCityGoodAnyCity     // Implemented by E
-	Record Resource[]           EnablesGood              // Added by E -- having a bldg gives a city a good
-	Record Civilisation[]       CivilisationOnly 
-	Record Feat[]               NeedsFeatToBuild         // Implemented by E
-	Record Building[]           ConflictsWithBuilding    // FU for SectarianHappiness
-	Record Building[]           ExcludedByBuilding       // CantBuild if have this building
-	Record Government[]         ExcludedByGovernmentType // Destroyed if not of this government
-	Record Wonder[]             PrerequisiteWonder       // Added by E to limit units to cities with certain wonders
-	Record Wonder[]             ExcludedByWonder         // To prevent some units being built
-	Bit(Int)                    NeedsPopCountToBuild     // Added by E
-	Bit(Int)                    PopCountBuildLimit       // Added by E
-
-	Record Resource[]           RequiresGood             // Added by E -- having a bldg gives a city a good
-	Record Resource[]           ProducesGood             // Added by E -- having a bldg gives a city a good
-	Bit(Int)                    SquaredBorderRadius      // FU added by E
-	Bit(Int)                    IntBorderRadius          // FU added by E
-	Record TerrainImprovement[] ShowOnMap                // FU
-	Record TerrainImprovement[] ShowOnMapRadius          // FU
-
-    Bit(Float)                  TreasuryInterest         // FU
-    Bit                         CantSell                 // Some Buildings Cant Be Sold
-    Bit(Int)                    DisbandsCitySettlerNum   //
-    Bit                         CreatesMiltiaUnit        // EMOD for militia code 10-05-2006
-    Record Building[]           ActualBuildingEverywhere // FU
-
-
+	Record Icon DefaultIcon
+	StringId Description
+	Record Advance EnableAdvance
+	Record Advance[0..5] ObsoleteAdvance
+	Record Building[] PrerequisiteBuilding
+	Record Government[] GovernmentsModified
+	Record CityStyle[] CultureOnly //added by E -- can only build buildings if civ has certain citystyle
+	Record CityStyle[] CityStyleOnly //added by E--can only build buildings at cities with certain citystyle 
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
 	Int ProductionCost
 	Int Upkeep
-	Bit(Int)   GoldPerCity                 // Add/subtract gold based on player's number of cities by E
-	Bit(Int)   GoldPerUnit                 // Add/subtract gold based on player's number of units by E 
-	Bit(Int)   GoldPerUnitSupport          // coefficient applied to gold hunger, readiness, and govt coefficient
-	Bit(Int)   GoldPerUnitReadiness        // Add/subtract gold based on player's number of units multiplied by readiness level by E
-	Bit(Int)   UpkeepPerUnit               // FU added by E 
-	Bit(Int)   UpkeepPerUnitWagesReadiness // FU added by E 
-	Bit(Int)   UpkeepPerCity               // FU added by E 
-	Bit(Int)   UpkeepPerCitySq             // FU added by E
-	Bit(Int)   NewPopLimit                 // FU added by E
-	Bit(Int)   UpkeepPerUnitSupport
-	Bit        ProductionCostPopModifier   //added by E multiples productioncost to the population size. Its harder to modernize an old, crowded city
 
-	# flags
-	Bit        Capitol
-	Bit(Float) DefendersPercent
-	Bit(Int)   HappyInc
-	Bit        DoubleTelevangelists
-	Bit(Float) ProductionPercent
+    # flags 
+    Bit        Capitol
+    Bit(Float) DefendersPercent
+    Bit(Int)   HappyInc
+    Bit        DoubleTelevangelists
+    Bit(Float) ProductionPercent
 	Bit(Float) FoodPercent
 	Bit(Float) CommercePercent
 	Bit(Float) SciencePercent
-	Bit(Int)   IncreaseBaseOvercrowding
+    Bit(Int)   IncreaseBaseOvercrowding
 	Bit(Int)   IncreaseMaxPopulation
 	Bit(Float) FoodVat
-	Bit        Airport
-	Bit        NoUnhappyPeople
-	Bit        NoRushBuyPenalty
+    Bit        Airport
+    Bit        NoUnhappyPeople
+    Bit        NoRushBuyPenalty
 	Bit(Float) LowerCrime
 	Bit(Float) PreventConversion
 	Bit(Float) PreventSlavery
@@ -129,20 +74,8 @@ Building {
 	Bit(Int)   RaiseOvercrowdingLevel
 	Bit(Int)   RaiseMaxPopulation
 	Bit(Int)   StarvationProtection
-	Bit        EmbassiesEverywhereEvenAtWar
-
-	Bit        CoastalBuilding            // DW - Added to fix bug #895
-	Bit        OnePerCiv                  // EMOD implement 2-14-2006
-	Bit(Int)   IncreaseHP                 // EMOD - increase HP of all current units
-	Bit        EnablesVeterans            // EMOD - makes units veterans 
-
-	Struct BuildingFeat {                 // From feats implemented by E 2-24-2006
-		Record Building Building
-		Bit(Int) Num
-		Bit(Int) PercentCities
-	}
-
-	Bit(struct BuildingFeat) BuildingFeat // From feats implemented by E 2-24-2006
+	Bit        CoastalBuilding				//DW - Added to fix bug #895
+      Bit        OnePerCiv
 
 	Bit(Float) OffenseBonusLand
 	Bit(Float) OffenseBonusWater

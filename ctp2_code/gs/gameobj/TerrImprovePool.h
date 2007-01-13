@@ -7,9 +7,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef _TERRIMPROVEPOOL_H_
 #define _TERRIMPROVEPOOL_H_
 
@@ -37,7 +36,7 @@ public:
 	}
 
 	TerrainImprovement Create(sint32 owner,
-							  MapPoint const & pnt,
+							  MapPoint &pnt,
 							  sint32 type,
 							  sint32 extraData);
 	void Remove(TerrainImprovement id);

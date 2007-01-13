@@ -1,10 +1,11 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
 #pragma once
-#endif
 #ifndef __SOURCE_LIST_H__
 #define __SOURCE_LIST_H__
-
-#ifdef CTP2_ENABLE_SLICDEBUG
 
 #include "c3_listitem.h"
 #include "aui_action.h"
@@ -58,7 +59,7 @@ class SourceList : public KeyboardHandler
 {
 public:
 	SourceList(SourceListCallback *callback = NULL, MBCHAR *ldlBlock = NULL);
-	virtual ~SourceList();
+	~SourceList();
 
 	c3_PopupWindow *m_window;
 	c3_ListBox     *m_list;
@@ -75,7 +76,7 @@ public:
 
 public:
 	sint32 Initialize(MBCHAR *ldlBlock);
-	void   Cleanup();
+	sint32 Cleanup();
 	sint32 UpdateData();
 
 	void RemoveWindow();
@@ -96,7 +97,4 @@ void sourcelist_Remove();
 void sourcelist_RegisterBreak(SlicSegment *segment, sint32 offset);
 
 extern SourceList *g_sourceList;
-#endif // CTP2_ENABLE_SLICDEBUG
-
 #endif
-

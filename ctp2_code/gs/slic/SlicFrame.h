@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Slic frame handling
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -94,7 +91,6 @@ public:
 	BOOL Step();
 
 	void ClearMessageData();
-	void DeleteMessageData();
 	MessageData *GetMessageData() { return m_messageData; }
 	void SetMessageData(MessageData *data);
 

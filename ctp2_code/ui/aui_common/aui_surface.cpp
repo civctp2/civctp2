@@ -35,11 +35,7 @@
 
 
 sint32 aui_Surface::m_surfaceRefCount = 0;
-#ifdef USE_SDL
-SDL_mutex *		aui_Surface::m_cs = 0;
-#else
 CRITICAL_SECTION	aui_Surface::m_cs;
-#endif
 uint32 aui_Surface::m_surfaceClassId = aui_UniqueId();
 
 extern sint32 g_is565Format;
@@ -70,7 +66,6 @@ aui_Surface::aui_Surface(
 	
 	if ( !(m_saveBuffer = buffer) )
 	{
-#ifndef __AUI_USE_SDL__
 		HDC hdc = ::GetDC( g_ui->TheHWND() );
 
 		
@@ -91,13 +86,13 @@ aui_Surface::aui_Surface(
 		
 		RECT rect = { 0, 0, m_width, m_height };
 		FillRect( m_hdc, &rect, (HBRUSH)GetStockObject( BLACK_BRUSH ) );
-#endif
+
 		
 		m_saveBuffer = (uint8 *)(new uint32[ m_size >> 2 ]);
 		Assert( m_saveBuffer != NULL );
 
 		
-		if ((m_allocated = (BOOL) (NULL != m_saveBuffer)))
+		if ( m_allocated = (BOOL)m_saveBuffer )
 			memset( m_saveBuffer, 0x00, m_size );
 		else
 		{
@@ -115,12 +110,10 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 	m_chromaKey = 0x00000000, 
 	m_isPrimary = isPrimary,
 	m_buffer = NULL,
-#ifdef __AUI_USE_DIRECTX__
 	m_hdc = NULL,
 	m_dcIsGot = FALSE,
 	m_hbitmap = NULL,
 	m_holdbitmap = NULL,
-#endif // __AUI_USE_DIRECTX__
 	m_saveBuffer = NULL,
 	m_allocated = FALSE,
 	m_locksRemain = k_SURFACE_MAXLOCK;
@@ -133,18 +126,11 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 	m_Bpp = m_bpp >> 3;
 	m_bytewidth = m_width * m_Bpp;
 
-#ifdef USE_SDL
-	if (!m_cs)
-	{
-		m_cs = SDL_CreateMutex();
-#else
+	
 	if ( !m_surfaceRefCount++ )
 	{
-
 		InitializeCriticalSection(&m_cs);
-#endif
 	}
-
 
 	
 
@@ -165,28 +151,21 @@ aui_Surface::~aui_Surface()
 {
 	if ( m_allocated )
 	{
-#ifndef __AUI_USE_SDL__
 		SelectObject( m_hdc, m_holdbitmap );
 		DeleteObject( m_hbitmap );
 		DeleteObject( m_hdc );
 		m_hdc = NULL;
 		m_hbitmap = NULL;
 		m_holdbitmap = NULL;
-#endif
 
-		delete[] m_saveBuffer;
+		delete[ m_size >> 2 ] m_saveBuffer;
 		m_saveBuffer = m_buffer = NULL;
 		m_allocated = FALSE;
 	}
 
 	if ( !--m_surfaceRefCount )
 	{
-#ifdef USE_SDL
-		SDL_DestroyMutex(m_cs);
-		m_cs = 0;
-#else
 		DeleteCriticalSection(&m_cs);
-#endif
 	}
 }
 
@@ -286,7 +265,7 @@ AUI_ERRCODE aui_Surface::Unlock( LPVOID buffer )
 }
 
 
-#ifdef __AUI_USE_DIRECTX__
+
 AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -335,6 +314,7 @@ AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
 }
 
 
+
 AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -377,31 +357,8 @@ AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
 
 	return errcode;
 }
-#endif // __AUI_USE_DIRECTX__
 
-AUI_ERRCODE aui_Surface::Blank(const uint32 &color)
-{
-	return AUI_ERRCODE_BLTFAILED;
-}
 
-AUI_ERRCODE aui_Surface::BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue)
-{
-	switch ( m_pixelFormat )
-	{
-	case AUI_SURFACE_PIXELFORMAT_555:
-		return Blank( ((red & 0xF8) << 7) |
-		              ((green & 0xF8) << 2) |
-		              ((blue & 0xF8) >> 3));
-	case AUI_SURFACE_PIXELFORMAT_565:
-		return Blank( ((red & 0xF8) << 8) |
-		              ((green & 0xF8) << 3) |
-		              ((blue & 0xF8) >> 3));
-	default:
-		Assert( FALSE );
-		break;
-	}
-	return AUI_ERRCODE_BLTFAILED;
-}
 
 
 inline BOOL aui_Surface::IsLocked( RECT *rect )
@@ -432,11 +389,7 @@ inline BOOL aui_Surface::IsLocked( LPVOID buffer )
 AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-#ifdef USE_SDL
-	SDL_mutexP(m_cs);
-#else
 	EnterCriticalSection(&m_cs);
-#endif
 
 	switch ( op )
 	{
@@ -522,11 +475,7 @@ AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SUR
 		break;
 	}
 
-#ifdef USE_SDL
-	SDL_mutexV(m_cs);
-#else
 	LeaveCriticalSection(&m_cs);
-#endif
 
 	return errcode;
 }

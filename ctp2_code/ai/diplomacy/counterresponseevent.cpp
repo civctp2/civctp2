@@ -29,11 +29,12 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "CounterResponseEvent.h"
 
-#include <algorithm>    // std::max
+
 #include "player.h"
+#include "c3math.h"
 
+#include "CounterResponseEvent.h"
 
 #include "Events.h"
 #include "GameEventUser.h"
@@ -66,7 +67,7 @@ STDEHANDLER(ThreatenAttackCity_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-//	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
+	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & response = receiver_diplomat.GetMyLastResponse(sender);
 
 	
@@ -92,8 +93,8 @@ STDEHANDLER(ThreatenAttackCity_CounterResponseEvent)
 
 	Response threat_response;
 
-	threat_response.priority = static_cast<sint16>
-		(sender_diplomat.GetRejectPriority(receiver, response.counter.second_type));
+	threat_response.priority =	sender_diplomat.
+		GetRejectPriority( receiver, response.counter.second_type );
 
 	
 	threat_response.type = RESPONSE_THREATEN;				
@@ -232,8 +233,8 @@ STDEHANDLER(PayForGiveCity_CounterResponseEvent)
 	sint32 at_risk_value_percent = 
 		MapAnalysis::GetMapAnalysis().AtRiskCitiesValue(receiver,sender);
 
-//	sint32 at_risk_value = (sint32) ((double)at_risk_value_percent / 100.0) *
-//		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
+	sint32 at_risk_value = (sint32) ((double)at_risk_value_percent / 100.0) *
+		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
 
 	sint32 accept_priority = 
 		sender_diplomat.GetAcceptPriority(receiver, response.counter.second_type);
@@ -524,7 +525,7 @@ STDEHANDLER(ActionForValue_CounterResponseEvent)
 	sint32 sender_trade_total = map_analysis.GetTotalTrade(sender);
 	sint32 receiver_piracy = map_analysis.GetPiracyIncomeByPlayer(receiver,sender);
 	sint32 sender_piracy = map_analysis.GetPiracyIncomeByPlayer(sender, receiver);
-    sint32 sender_result_value = std::max<sint32>(sender_result.science, sender_result.gold);
+	sint32 sender_result_value = MAX(sender_result.science, sender_result.gold);
 
 	sint32 accept_priority = 
 		sender_diplomat.GetAcceptPriority(receiver, receiver_response.counter.second_type);
@@ -604,7 +605,7 @@ STDEHANDLER(ReciprocateAction_CounterResponseEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
-//	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
+	const NewProposal & sender_proposal = sender_diplomat.GetMyLastNewProposal(receiver);
 	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	
@@ -706,7 +707,7 @@ STDEHANDLER(ReciprocateAction_CounterResponseEvent)
 	
 	Response counter_response;
 	
-	counter_response.priority = static_cast<sint16>(accept_priority);
+	counter_response.priority = accept_priority;
 	counter_response.type = RESPONSE_ACCEPT; 
 	counter_response.counter.tone = DIPLOMATIC_TONE_EQUAL;	
 	counter_response.senderId = sender;

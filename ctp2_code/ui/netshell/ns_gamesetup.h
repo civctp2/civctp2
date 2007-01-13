@@ -191,35 +191,35 @@ public:
 	}
 
 	char GetUnit( int i ) const
-	{ return static_cast<char>(m_excludedUnits[ i >> 3 ] & ( 1 << ( (uint32)i % 8 ) )); }
+	{ return m_excludedUnits[ i >> 3 ] & ( 1 << ( (uint32)i % 8 ) ); }
 	void SetUnit( char unit, int i )
 	{ unit ?
 		m_excludedUnits[ i >> 3 ] |= ( 1 << ( (uint32)i % 8 ) ) :
 		m_excludedUnits[ i >> 3 ] &= ~( 1 << ( (uint32)i % 8 ) ); }
 
-	int  GetNumAvailUnits( void ) const { return m_numAvailUnits; }
+	char GetNumAvailUnits( void ) const { return m_numAvailUnits; }
 	void SetNumAvailUnits( int numAvailUnits )
 	{ m_numAvailUnits = numAvailUnits; }
 
 	char GetImprovement( int i ) const
-	{ return static_cast<char>(m_excludedImprovements[ i >> 3 ] & ( 1 << ( (uint32)i % 8 ) )); }
+	{ return m_excludedImprovements[ i >> 3 ] & ( 1 << ( (uint32)i % 8 ) ); }
 	void SetImprovement( char improvement, int i )
 	{ improvement ?
 		m_excludedImprovements[ i >> 3 ] |= ( 1 << ( (uint32)i % 8 ) ) :
 		m_excludedImprovements[ i >> 3 ] &= ~( 1 << ( (uint32)i % 8 ) ); }
 
-	int  GetNumAvailImprovements( void ) const {return m_numAvailImprovements; }
+	char GetNumAvailImprovements( void ) const {return m_numAvailImprovements; }
 	void SetNumAvailImprovements( int numAvailImprovements )
 	{ m_numAvailImprovements = numAvailImprovements; }
 
 	char GetWonder( int i ) const
-	{ return static_cast<char>(m_excludedWonders[ i >> 3 ] & ( 1 << ( (uint32)i % 8 ) )); }
+	{ return m_excludedWonders[ i >> 3 ] & ( 1 << ( (uint32)i % 8 ) ); }
 	void SetWonder( char wonder, int i )
 	{ wonder ?
 		m_excludedWonders[ i >> 3 ] |= ( 1 << ( (uint32)i % 8 ) ) :
 		m_excludedWonders[ i >> 3 ] &= ~( 1 << ( (uint32)i % 8 ) ); }
 
-	int  GetNumAvailWonders( void ) const { return m_numAvailWonders; }
+	char GetNumAvailWonders( void ) const { return m_numAvailWonders; }
 	void SetNumAvailWonders( int numAvailWonders )
 	{ m_numAvailWonders = numAvailWonders; }
 

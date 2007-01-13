@@ -30,10 +30,7 @@
 
 
 #include "aui_base.h"
-#ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
-#endif
+
 
 enum AUI_SURFACE_PIXELFORMAT
 {
@@ -46,13 +43,24 @@ enum AUI_SURFACE_PIXELFORMAT
 	AUI_SURFACE_PIXELFORMAT_LAST
 };
 
+
+
+
 struct aui_SurfaceSubset
 {
 	LPVOID	buffer;
 	RECT	rect;
 };
 
+
+
+
+
+
+
 #define k_SURFACE_MAXLOCK 4
+
+
 
 enum AUI_SURFACE_LOCKOP
 {
@@ -62,6 +70,9 @@ enum AUI_SURFACE_LOCKOP
 	AUI_SURFACE_LOCKOP_REMOVE,
 	AUI_SURFACE_LOCKOP_LAST
 };
+
+
+
 
 class aui_Surface : public aui_Base
 {
@@ -86,6 +97,7 @@ public:
 	{	
 		return classId == m_surfaceClassId;
 	}
+
 	
 	sint32 Width( void ) const { return m_width; }
 	sint32 Height( void ) const { return m_height; }
@@ -108,31 +120,20 @@ public:
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
-#ifndef USE_SDL
+	
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
-#endif
 
-#ifdef USE_SDL
-	SDL_mutex *LPCS( void ) const { return m_cs; };
-#else
 	LPCRITICAL_SECTION LPCS( void ) const { return &m_cs; };
-#endif
 	
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
-
-	virtual AUI_ERRCODE BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue);
-	virtual AUI_ERRCODE Blank(const uint32 &color);
 
 	static uint32 m_surfaceClassId;
 
 protected:
 	static sint32 m_surfaceRefCount;
-#ifdef USE_SDL
-	static SDL_mutex *m_cs;
-#else
 	static	CRITICAL_SECTION	m_cs;
-#endif
+	
 	AUI_ERRCODE ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op );
 
 	sint32	m_width;		
@@ -143,6 +144,8 @@ protected:
 	sint32	m_pitch;		
 	sint32	m_size;			
 	uint8	*m_buffer;		
+
+	
 	
 	HDC		m_hdc;			
 	BOOL	m_dcIsGot;		

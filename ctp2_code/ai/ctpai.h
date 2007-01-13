@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main Ai File
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,8 +17,6 @@
 //
 // Compiler flags
 //
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,18 +27,13 @@
 //   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
 // - force garrison units to ungroup.
 // - BombardNearbyEnemies before ending turn (during ExecuteOpportunityActions) PFT
-//
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __CTP_AI_H__
 #define __CTP_AI_H__
 
-class CtpAi;
-
-#include "Player.h" // PLAYER_INDEX
 class Army;
 class MapPoint;
 class Unit;
@@ -55,7 +47,6 @@ public:
 
 	
 	static void Cleanup();
-	static void CleanupEvents();
 
 	
 	static void InitializeEvents();
@@ -168,4 +159,4 @@ private:
 	static sint32 sm_endgameWorldUnionIndex;
 };
 
-#endif // __CTP_AI_H__
+#endif __CTP_AI_H__

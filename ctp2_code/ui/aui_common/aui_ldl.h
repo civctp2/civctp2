@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Activision User Interface - ldl handling
+// File type    : C++ header file
+// Description  : 
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,17 +17,13 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
-
 #ifndef __AUI_LDL_H__
 #define __AUI_LDL_H__
 
@@ -98,18 +94,18 @@ public:
 	
 	aui_Ldl(
 		AUI_ERRCODE *retval,
-		MBCHAR const * ldlFilename );
+		MBCHAR *ldlFilename );
 	virtual ~aui_Ldl();
 
 protected:
 	aui_Ldl() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR const * ldlFilename );
+	AUI_ERRCODE InitCommon( MBCHAR *ldlFilename );
 
 public:
 	
 	static BOOL			IsValid( MBCHAR *ldlBlock );
 
-	static ldl			*GetLdl( void ) { return s_ldl; }
+	static ldl			*GetLdl( void ) { return m_ldl; }
 
 	
 	static AUI_ERRCODE	Associate( void *object, MBCHAR *ldlBlock );
@@ -120,8 +116,8 @@ public:
 	static void			*GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock);
 	
 	
-	static AUI_ERRCODE	SetupHeirarchyFromRoot(MBCHAR const * rootBlock);
-	static AUI_ERRCODE	SetupHeirarchyFromLeaf(MBCHAR *leafBlock, aui_Region *object );
+	static AUI_ERRCODE	SetupHeirarchyFromRoot( MBCHAR *rootBlock );
+	static AUI_ERRCODE	SetupHeirarchyFromLeaf( MBCHAR *leafBlock, aui_Region *object );
 
 	
 	
@@ -129,14 +125,14 @@ public:
 	
 	
 	
-	static aui_Region * BuildHierarchyFromRoot(MBCHAR const * rootBlock);
+	static aui_Region	*BuildHierarchyFromRoot(MBCHAR *rootBlock);
 
 	
 	
 	
 	
 	
-	static AUI_ERRCODE	BuildHierarchyFromLeaf(ldl_datablock *dataBlock, aui_Region *region);
+	static AUI_ERRCODE	BuildHierarchyFromLeaf(ldl_datablock *dataBlock);
 	
 	
 	
@@ -151,7 +147,7 @@ public:
 	
 	
 	
-	static AUI_ERRCODE	DeleteHierarchyFromRoot(MBCHAR const * rootBlock);
+	static AUI_ERRCODE	DeleteHierarchyFromRoot(MBCHAR *rootBlock);
 
 	
 	
@@ -171,13 +167,13 @@ public:
 	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *ldlBlock, 
 												aui_Control::ControlActionCallback *actionFunc,
 												void *cookie = NULL);
-	static AUI_ERRCODE  SetActionFuncAndCookie
-    (
-        MBCHAR const *                          parentBlock, 
-        MBCHAR const *                          regionBlock,
-		aui_Control::ControlActionCallback *    actionFunc,
-		void *                                  cookie          = NULL
-    );
+	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *parentBlock, MBCHAR *regionBlock,
+												aui_Control::ControlActionCallback *actionFunc,
+												void *cookie = NULL);
+
+	
+	
+	
 	
 	
 	static AUI_ERRCODE	DetachHierarchy(aui_Region *root);
@@ -188,7 +184,6 @@ public:
 
 	
 	static sint32		GetIntDependent( MBCHAR *strPtr );
-    static ldl_datablock * FindDataBlock(MBCHAR * ldlBlock);
 
 protected:
 	static void			DeleteLdlObject( aui_LdlObject *ldlObject );
@@ -199,16 +194,16 @@ protected:
 	static AUI_ERRCODE	AppendLdlObject(aui_LdlObject *object);
 	static AUI_ERRCODE	RemoveLdlObject(aui_LdlObject *object);
 
-	static ldl			*s_ldl;
+	static ldl			*m_ldl;
 
 
-	static aui_LdlObject				*s_objectList;
-	static aui_LdlObject				*s_objectListTail;
+	static aui_LdlObject				*m_objectList;
+	static aui_LdlObject				*m_objectListTail;
 
-	static AvlTree<aui_LdlObject *>		*s_objectListByObject;
-	static AvlTree<aui_LdlObject *>		*s_objectListByString;
+	static AvlTree<aui_LdlObject *>		*m_objectListByObject;
+	static AvlTree<aui_LdlObject *>		*m_objectListByString;
 
-	static sint32						s_ldlRefCount;
+	static sint32						m_ldlRefCount;
 };
 
 

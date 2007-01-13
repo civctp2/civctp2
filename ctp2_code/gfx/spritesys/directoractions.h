@@ -1,124 +1,30 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Director queue actions
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Removed references to (undefined) ProjectileActor class.
-// - Repaired memory leak (implemented DQActionMoveProjectile destructor)
-//
-//----------------------------------------------------------------------------
-//
-/// \file   DirectorActions.h
-/// \brief  Action types for processing by the director
-
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
-
 #ifndef __DIRECTORACTIONS_H__
 #define __DIRECTORACTIONS_H__
 
-//----------------------------------------------------------------------------
-//
-// Library imports
-//
-//----------------------------------------------------------------------------
-
-// none
-
-//----------------------------------------------------------------------------
-//
-// Exported names
-//
-//----------------------------------------------------------------------------
-
-class DQAction;
-class DQActionMove;
-class DQActionMoveProjectile;
-class DQActionSpecialEffect;
-class DQActionAttack;
-class DQActionAttackPos;
-class DQActionDeath;
-class DQActionMorph;
-class DQActionHideShow;
-class DQActionWork;
-class DQActionFastKill;
-class DQActionVision;
-class DQActionSetOwner;
-class DQActionSetVisibility;
-class DQActionSetVisionRange;
-class DQActionCombatFlash;
-class DQActionCopyVision;
-class DQActionCenterMap;
-class DQActionUnitSelection;
-class DQActionEndTurn;
-class DQActionBattle;
-class DQActionPlaySound;
-class DQActionPlayWonderMovie;
-class DQActionPlayVictoryMovie;
-class DQActionMessage;
-class DQActionFaceoff;
-class DQActionTerminateFaceOff;
-class DQActionTerminateSound;
-class DQActionInvokeThroneRoom;
-class DQActionInvokeResearchAdvance;
-class DQActionBeginScheduler;
-
-//----------------------------------------------------------------------------
-//
-// Project imports
-//
-//----------------------------------------------------------------------------
-
-#include "GameOver.h"
-#include "MapPoint.h"
-#include "message.h"
-#include "Unit.h"
-
 class UnitActor;
+class ProjectileActor;
 class EffectActor;
 class TradeActor;
 class aui_Surface;
 class Battle;
+enum GAME_OVER;
 class SpriteState;
 
-//----------------------------------------------------------------------------
-//
-// Declarations
-//
-//----------------------------------------------------------------------------
+#include "message.h"
+#include "Unit.h"
+#include "MapPoint.h"
 
 class DQAction {
 public:
 	DQAction() {}
-	virtual ~DQAction() {}
+	~DQAction() {}
 };
 
 class DQActionMove : public DQAction
 {
 public:
 	DQActionMove() {}
+	~DQActionMove() {}
 
 	UnitActor					*move_actor;
 	MapPoint					move_oldPos;
@@ -133,13 +39,14 @@ public:
 class DQActionMoveProjectile : public DQAction
 {
 public:
-	DQActionMoveProjectile();
-	~DQActionMoveProjectile();
+	DQActionMoveProjectile() {}
+	~DQActionMoveProjectile() {}
 
 	UnitActor					*pshooting_actor;
 	UnitActor					*ptarget_actor;
 	MapPoint					pmove_oldPos;
 	MapPoint					pmove_newPos;
+	ProjectileActor				*move_projectile;
 	EffectActor					*end_projectile;
 	sint32						projectile_path;
 };
@@ -148,6 +55,7 @@ class DQActionSpecialEffect : public DQAction
 {
 public:
 	DQActionSpecialEffect() {}
+	~DQActionSpecialEffect() {}
 
 	MapPoint					speceffect_pos;
 	sint32						speceffect_spriteID;
@@ -158,6 +66,7 @@ class DQActionAttack : public DQAction
 {
 public:
 	DQActionAttack() {}
+	~DQActionAttack() {}
 
 	UnitActor					*attacker;
 	UnitActor					*defender;
@@ -173,6 +82,7 @@ class DQActionAttackPos : public DQAction
 {
 public:
 	DQActionAttackPos() {}
+	~DQActionAttackPos() {}
 
 	UnitActor					*attackpos_attacker;
 	MapPoint					attackpos_attacker_pos;
@@ -201,6 +111,7 @@ class DQActionDeath : public DQAction
 {
 public:
 	DQActionDeath() {}
+	~DQActionDeath() {}
 
 	UnitActor					*death_dead;
 	UnitActor					*death_victor;
@@ -216,6 +127,7 @@ class DQActionMorph : public DQAction
 {
 public:
 	DQActionMorph() {}
+	~DQActionMorph() {}
 
 	UnitActor					*morphing_actor;
 	SpriteState					*ss;
@@ -227,6 +139,7 @@ class DQActionHideShow : public DQAction
 {
 public:
 	DQActionHideShow() {}
+	~DQActionHideShow() {}
 
 	UnitActor					*hiding_actor;
 	MapPoint					hiding_pos;
@@ -236,6 +149,7 @@ class DQActionWork : public DQAction
 {
 public:
 	DQActionWork() {}
+	~DQActionWork() {}
 
 	UnitActor					*working_actor;
 	MapPoint					working_pos;
@@ -247,6 +161,7 @@ class DQActionFastKill : public DQAction
 {
 public:
 	DQActionFastKill() {}
+	~DQActionFastKill() {}
 
 	UnitActor					*dead;
 };
@@ -255,6 +170,7 @@ class DQActionVision : public DQAction
 {
 public:
 	DQActionVision() {}
+	~DQActionVision() {}
 
 	MapPoint					vision_pos;
 	double						vision_range;
@@ -264,6 +180,7 @@ class DQActionSetOwner : public DQAction
 {
 public:
 	DQActionSetOwner() {}
+	~DQActionSetOwner() {}
 
 	UnitActor					*setowner_actor;
 	sint32						owner;
@@ -273,6 +190,7 @@ class DQActionSetVisibility : public DQAction
 {
 public:
 	DQActionSetVisibility() {}
+	~DQActionSetVisibility() {}
 
 	UnitActor					*setvisibility_actor;
 	uint32						visibilityFlag;
@@ -282,6 +200,7 @@ class DQActionSetVisionRange : public DQAction
 {
 public:
 	DQActionSetVisionRange() {}
+	~DQActionSetVisionRange() {}
 
 	UnitActor					*setvisionrange_actor;
 	double						range;
@@ -291,6 +210,7 @@ class DQActionCombatFlash : public DQAction
 {
 public:
 	DQActionCombatFlash() {}
+	~DQActionCombatFlash() {}
 
 	MapPoint					flash_pos;
 };

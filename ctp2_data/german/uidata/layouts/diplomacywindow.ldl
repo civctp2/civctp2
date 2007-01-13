@@ -316,7 +316,6 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 # Group of all tab panels and their tabs in the Diplomacy window.
 ################################################################################
 	DiplomacyTabs:CTP2_STATIC_BASE {
-#	DiplomacyTabs:CTP2_2TAB_DIALOG_WINDOW {
 		int xpix 36
 		int ypix 29
 		int widthpix 500

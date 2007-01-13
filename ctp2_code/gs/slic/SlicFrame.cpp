@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Slic code interpreter
-// Id           : $Id$
+// Description  : As far as known handels slic code execution
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -35,11 +32,6 @@
 // - Added '**' operator handling
 // - Added bitwise operator handling
 // - Repaired memory leaks.
-// - Repaired crash with invalid input.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added database array access. (Sep 16th 2005 Martin Gühmann)
-// - Repaired crashes with game saved with original Activision executable. 
-// - Standardized code. (May 29th 2006 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +46,7 @@
 #include "SlicEngine.h"
 #include "SlicSymbol.h"
 #include "MessageData.h"
-#include "TurnCnt.h"            // g_turn
+#include "TurnCnt.h"
 #include "UnitDynArr.h"
 #include "SlicObject.h"
 #include "SlicButton.h"
@@ -71,42 +63,8 @@
 #include "SlicDBConduit.h"
 #include <math.h>
 
-extern "C" FILE *debuglog;
-
-
-namespace
-{
-    SlicDBInterface * GetDatabase(unsigned char * & instructionPointer)
-    {
-        SlicDBInterface *   namedDatabase = 
-            g_slicEngine->GetDBConduit(reinterpret_cast<char *>(instructionPointer));
-
-        if (namedDatabase)
-        {
-		    // Skip the name string 	
-            for ( ; *instructionPointer++; )
-            { 
-                // No action: just skip 
-            }
-
-            return namedDatabase;
-        }
-        else
-        {
-            // Compatibility mode: DB is stored by index with the Activision 1.1 patch
-            int     dbIndex     = *(reinterpret_cast<int *>(instructionPointer));
-            instructionPointer += sizeof(int);
-
-            switch (dbIndex)
-            {
-            default:    return NULL;
-            case 0:     return g_slicEngine->GetDBConduit("UnitDB");
-            // Probably 1, etc. are other databases. TODO: confirm and add here.
-            }
-        }
-    }
-
-} // namespace
+extern "C" extern FILE *debuglog;
+extern TurnCount *g_turn;
 
 SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset)
 { 
@@ -156,27 +114,35 @@ SlicFrame::~SlicFrame()
 	delete m_messageData;
 
 	if (m_resultObject)
-	{
+    {
 		m_resultObject->Release();
-	}
+    }
 }
 
 BOOL SlicFrame::ArrayLookup(SS_TYPE arrayType, SlicStackValue array,
 							SS_TYPE indexType, SlicStackValue indexValue,
 							SS_TYPE &retType, SlicStackValue &retValue)
 {
-	SlicSymbolData * arraySym = SlicStack::GetSymbol(arrayType, array);
+	SlicSymbolData *arraySym;
+	sint32 index;
 
-	if (arraySym) 
-    {
-	    sint32 index = Eval(indexType, indexValue);
-	    return arraySym->ArrayLookup(index, retType, retValue);
-    }
-    else
-    {
+	if(!(arraySym = SlicStack::GetSymbol(arrayType, array))) {
+		
 		c3errors_ErrorDialog("Slic", "Array is not a variable");
 		return FALSE;
 	}
+
+	
+	if(!arraySym) {
+		
+		return FALSE;
+	}
+
+	
+	index = Eval(indexType, indexValue);
+	
+	
+	return arraySym->ArrayLookup(index, retType, retValue);
 }
 
 
@@ -354,9 +320,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 {
 	unsigned char* codePtr = &m_segment->m_code[m_offset];
 	unsigned char* origCodePtr = &m_segment->m_code[m_offset];
-#if defined(SLIC_DOUBLES)
 	double dval;
-#endif
+
 	
 	sint32 ival, ival2; 
 
@@ -376,34 +341,31 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 	switch(op) {
 		case SOP_PUSHI:
-			sval1.m_int = *(reinterpret_cast<sint32 *>(codePtr));
+			ival = *((sint32*)codePtr);
 			codePtr += sizeof(sint32);
+
+			sval1.m_int = ival;
 			m_stack->Push(SS_TYPE_INT, sval1);
-			break;
 
+			break;
 		case SOP_PUSHD:
-#if defined(SLIC_DOUBLES)
 			dval = *((double*)codePtr);
-            // Probably some handling missing here. Now, we just skip some bytes.
-#endif
 			codePtr += sizeof(sint32);
 			break;
-
 		case SOP_PUSHV:
-			ival = *((sint32 *)codePtr);
+			ival = *((sint32*)codePtr);
 			codePtr += sizeof(int);
-			sval1.m_sym = g_slicEngine->GetSymbol(ival);
-			if (sval1.m_sym) 
-            {
-                m_stack->Push(SS_TYPE_SYM, sval1);
-            }
-            else
-            {
+			symval = g_slicEngine->GetSymbol(ival);
+			if(!symval) {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
 				stopped = TRUE;
+				break;
 			}
-			break;
 
+			sval1.m_sym = symval;		
+			m_stack->Push(SS_TYPE_SYM, sval1);
+
+			break;
 		case SOP_PUSHM:
 		{
 			ival = *((sint32*)codePtr);
@@ -466,9 +428,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			}
 			
 			
-			SlicSymbolData * structSym = SlicStack::GetSymbol(type1, sval1);
-			if (!structSym) 
-            {
+			SlicSymbolData *structSym;
+			if(!(structSym = SlicStack::GetSymbol(type1, sval1))) {
 				DPRINTF(k_DBG_SLIC, ("Couldn't find struct symbol in SOP_PUSHAM\n"));
 				stopped = TRUE;
 				break;
@@ -555,8 +516,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			sp = m_stack->Pop(type2, sval2);
 			Assert(sp >= 0);
-			sval3.m_int = static_cast<int>
-				(pow(static_cast<double>(Eval(type2, sval2)), Eval(type1, sval1)));
+			sval3.m_int = (int)pow(Eval(type2, sval2), Eval(type1, sval1));
 			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 		// Bitwise operators:
@@ -597,9 +557,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			Assert(sp >= 0);
 			if(Eval(type1, sval1) == 0) {
 
-				//Added by Martin Gühmann
-				//It is a problem of slic code and not of the ctp2.exe,
-				//the slicer has to solve the problem.
+//Added by Martin Gühmann
+//It is a problem of slic code and not of the ctp2.exe,
+//the slicer has to solve the problem.
 				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 					c3errors_ErrorDialog("Slic", "In object %s: Division by 0.", m_segment->GetName());
 				}
@@ -810,10 +770,6 @@ BOOL SlicFrame::DoInstruction(SOP op)
 					    if (g_slicEngine->AtBreak()) 
                         {
                             Assert(!m_resultObject); // need stack when failing?
-                            if (m_resultObject)
-                            {
-                                m_resultObject->Release();
-                            }
 						    m_resultObject  = obj;
 					    } 
                         else 
@@ -902,8 +858,9 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			codePtr += sizeof(sint32); 
 			break;
 		case SOP_JMP:
-			m_offset    = *(reinterpret_cast<sint32 *>(codePtr));
-			calcOffset  = FALSE;
+			ival = *((sint32 *)codePtr);
+			m_offset = ival;
+			calcOffset = FALSE;
 			break;
 		case SOP_BNT:
 			ival = *((sint32 *)codePtr);
@@ -955,7 +912,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			break;
 		case SOP_ASSN:
 			ival = *((sint32*)codePtr);
-			codePtr += sizeof(sint32);
+			codePtr += sizeof(int);
 
 			symval = g_slicEngine->GetSymbol(ival);
 			if(!symval) {
@@ -972,7 +929,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 		case SOP_ASSNA:
 			
 			ival = *((sint32 *)codePtr);
-			codePtr += sizeof(sint32);
+			codePtr += sizeof(int);
 			symval = g_slicEngine->GetSymbol(ival);
 			if(!symval) {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d in array assignment", ival));
@@ -1068,9 +1025,8 @@ BOOL SlicFrame::DoInstruction(SOP op)
 				break;
 			}
 
-			SlicSymbolData *structSym = SlicStack::GetSymbol(type3, sval3);
-			if (!structSym) 
-            {
+			SlicSymbolData *structSym;
+			if(!(structSym = SlicStack::GetSymbol(type3, sval3))) {
 				DPRINTF(k_DBG_SLIC, ("Couldn't find symbol for %s[%d]\n",
 									 arraySym->GetName(), Eval(type2, sval2)));
 				stopped = TRUE;
@@ -1155,295 +1111,173 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			if(symval) {
 				sval1.m_int = symval->GetArray()->GetSize();
 			}
-			else{
-				sval1.m_int = 0;
-			}
 			m_stack->Push(SS_TYPE_INT, sval1);
 			break;
 
-		//Added by Martin Gühmann for database support
+//Added by Martin Gühmann for database support
 		case SOP_DBNAME:
 		{
-			conduit     = GetDatabase(codePtr);
-			ival        = *((sint32 *)codePtr);
-			codePtr    += sizeof(sint32);
-			symval      = g_slicEngine->GetSymbol(ival);
-
-			if (conduit && symval) 
-            {
-			    sval1.m_sym = symval;
-			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
-			
-			    if ((sval3.m_int >= 0) && sval3.m_int < conduit->GetNumRecords())
-                {	
-                    // No action: value is OK
-			    }
-			    else
-                {
-				    sval3.m_int = -1;
-                }
-                
-                m_stack->Push(SS_TYPE_INT, sval3);
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
 			}
-            else
-            {
+			codePtr += sizeof(char);
+			Assert(conduit);
+
+			ival = *((sint32*)codePtr);
+			codePtr += sizeof(int);
+			symval = g_slicEngine->GetSymbol(ival);
+			if(!symval) {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
 				stopped = TRUE;
+				break;
+			}
+			sval1.m_sym = symval;
+			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
+			
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				sval3.m_int = -1;
+				m_stack->Push(SS_TYPE_INT, sval3);
 			}
 			break;
 		}
 		case SOP_DBNAMEREF:
 		{
-			conduit     = GetDatabase(codePtr);
-			ival        = *((sint32 *)codePtr);
-			codePtr    += sizeof(sint32);
-			symval      = g_slicEngine->GetSymbol(ival);
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+			Assert(conduit);
 
-			if (conduit && symval) 
-            {
-                //Get the member:
-                name = reinterpret_cast<char *>(codePtr);
-                Assert(name);
-                for ( ; *codePtr++; )
-                {
-	                // No action: just skip
-                }
-
-                sval1.m_sym = symval;
-                sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
-
-                if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
-	                sval3.m_int = conduit->GetValue(sval3.m_int, name);
-	                m_stack->Push(SS_TYPE_INT, sval3);
-                }
-                else{
-	                if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-		                c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
-	                }
-	                sval3.m_int = 0;
-	                m_stack->Push(SS_TYPE_INT, sval3);
-                }
-            }
-            else
-            {
+			ival = *((sint32*)codePtr);
+			codePtr += sizeof(int);
+			symval = g_slicEngine->GetSymbol(ival);
+			if(!symval) {
 				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
 				stopped = TRUE;
-            }
-			break;
-		}
-		case SOP_DBNAMEARRAY:
-		{
-			conduit     = GetDatabase(codePtr);
-			ival        = *((int*)codePtr);
-			codePtr    += sizeof(int);
-			symval      = g_slicEngine->GetSymbol(ival);
-
-			if (conduit && symval) 
-            {
-			    //Get the member:
-			    name    = reinterpret_cast<char *>(codePtr);
-			    Assert(name);
-			    for ( ; *codePtr++ ; )
-                {
-				    // No action: just skip
-			    }
-
-			    sval1.m_sym = symval;
-			    sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
-
-			    sp = m_stack->Pop(type2, sval2);
-			    Assert(sp >= 0);
-
-			    sval2.m_int = Eval(type2, sval2);
-
-			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
-				    sval3.m_int = conduit->GetValue(sval3.m_int, name, sval2.m_int);
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-			    else{
-				    if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-					    c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
-				    }
-				    sval3.m_int = 0;
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-            }
-            else
-            {
-				DPRINTF(k_DBG_SLIC, ("Bad mojo, NULL symbol %d\n", ival));
-				stopped = TRUE;
+				break;
 			}
 
-			break;
-		}
-		case SOP_DBNAMECONSTARRAY:
-		{
-			conduit     = GetDatabase(codePtr);
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 
-            if (conduit)
-            {
-			    sval3.m_int = *((sint32 *)codePtr);
-			    codePtr    += sizeof(sint32);
-			    //Get the member:
-			    name = reinterpret_cast<char *>(codePtr);
-			    Assert(name);
-			    for ( ; *codePtr++; )
-                {
-				    // No action: just skip
-			    }
+			sval1.m_sym = symval;
+			sval3.m_int = Eval(SS_TYPE_SYM, sval1);		
 
-			    sp = m_stack->Pop(type2, sval2);
-			    Assert(sp >= 0);
-
-			    sval2.m_int = Eval(type2, sval2);
-
-
-			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
-				    sval3.m_int = conduit->GetValue(sval3.m_int, name, sval2.m_int);
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-			    else{
-				    if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-					    c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
-				    }
-				    sval3.m_int = 0;
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-            }
-            else
-            {
-				DPRINTF(k_DBG_SLIC, ("Bad mojo, incorrect database symbol\n"));
-				stopped = TRUE;
-            }
-
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval3.m_int, name);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval3.m_int, conduit->GetName());
+				}
+				sval3.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
 			break;
 		}
 		case SOP_DB:
 		{
-			conduit = GetDatabase(codePtr);
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+			Assert(conduit);
 
-			if (conduit)
-            {
-			    sp = m_stack->Pop(type1, sval1);
-			    Assert(sp >= 0);
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
 
-			    sval3.m_int = Eval(type1, sval1);
+			sval3.m_int = Eval(type1, sval1);
 
-			    if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-			    else{
-				    sval3.m_int = -1;
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-            }
-            else
-            {
-				DPRINTF(k_DBG_SLIC, ("Bad mojo, incorrect database symbol\n"));
-				stopped = TRUE;
-            }
+			if(sval3.m_int > -1 && sval3.m_int < conduit->GetNumRecords()){		
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				sval3.m_int = -1;
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
 
 			break;
 		}
 		case SOP_DBREF:
 		{
-			conduit = GetDatabase(codePtr);
+			int i;
+			//Get the database:
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
+			Assert(conduit);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 
-			if (conduit)
-            {
-			    //Get the member:
-			    name = reinterpret_cast<char *>(codePtr);
-			    Assert(name);
-			    for ( ; *codePtr++ ; )
-                {
-				    // No action: just skip
-			    }
+			//Get the member:
+			name = (char*)codePtr;
+			Assert(name);
+			for(i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
 
-			    sp = m_stack->Pop(type1, sval1);
-			    Assert(sp >= 0);
+			sp = m_stack->Pop(type1, sval1);
+			Assert(sp >= 0);
 
-			    sval2.m_int = Eval(type1, sval1);
+			sval2.m_int = Eval(type1, sval1);
 
-			    if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
-				    sval3.m_int = conduit->GetValue(sval2.m_int, name);
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-			    else{
-				    if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-					    c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
-				    }
-				    sval2.m_int = 0;
-				    m_stack->Push(SS_TYPE_INT, sval2);
-			    }
-            }
-            else
-            {
-				DPRINTF(k_DBG_SLIC, ("Bad mojo, incorrect database symbol\n"));
-				stopped = TRUE;
-            }
-
+			if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
+				sval3.m_int = conduit->GetValue(sval2.m_int, name);
+				m_stack->Push(SS_TYPE_INT, sval3);
+			}
+			else{
+				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
+					c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
+				}
+				sval2.m_int = 0;
+				m_stack->Push(SS_TYPE_INT, sval2);
+			}
 			break;
 		}
 		case SOP_DBARRAY:
-		{
-			conduit = GetDatabase(codePtr);
-
-			if (conduit)
-            {
-			    //Get the member:
-			    name = reinterpret_cast<char *>(codePtr);
-			    Assert(name);
-			    for ( ; *codePtr++; )
-                {
-				    // Just skip
-			    }
-
-			    sp = m_stack->Pop(type1, sval1);
-			    Assert(sp >= 0);
-
-			    sval1.m_int = Eval(type1, sval1);
-
-			    sp = m_stack->Pop(type2, sval2);
-			    Assert(sp >= 0);
-
-			    sval2.m_int = Eval(type2, sval2);
-
-			    if(sval2.m_int > -1 && sval2.m_int < conduit->GetNumRecords()){		
-				    sval3.m_int = conduit->GetValue(sval2.m_int, name, sval1.m_int);
-				    m_stack->Push(SS_TYPE_INT, sval3);
-			    }
-			    else{
-				    if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
-					    c3errors_ErrorDialog("Slic", "In object %s no entry found with index %i in %s.", m_segment->GetName(), sval2.m_int, conduit->GetName());
-				    }
-				    sval2.m_int = 0;
-				    m_stack->Push(SS_TYPE_INT, sval2);
-			    }
-            }
-            else
-            {
-				DPRINTF(k_DBG_SLIC, ("Bad mojo, incorrect database symbol\n"));
-				stopped = TRUE;
-            }
-            
 			break;
-		}
 		case SOP_DBSIZE:
 		{
 			//Added by Martin Gühmann to figure out via 
 			//slic how many records the database contains
 			//Get the database:
-			conduit = GetDatabase(codePtr);
+			conduit = g_slicEngine->GetDBConduit((char*)codePtr);
 			Assert(conduit);
-			if (conduit)
-            {
+			for(int i = 0; *((char*)codePtr) != '\0'; ++i){
+				codePtr += sizeof(char);
+			}
+			codePtr += sizeof(char);
+
+			if(conduit){
 				sval3.m_int = conduit->GetNumRecords();
+				m_stack->Push(SS_TYPE_INT, sval3);
 			}
-			else
-            {
-				sval3.m_int = 0;
+			else{
+				sval3.m_int = -1;
+				m_stack->Push(SS_TYPE_INT, sval3);
 			}
-			m_stack->Push(SS_TYPE_INT, sval3);
 			break;
 		}
 
@@ -1485,23 +1319,22 @@ BOOL SlicFrame::RunAt(sint32 startOffset)
 void SlicFrame::ClearMessageData()
 {
 	if(!m_messageData) {
-		m_messageData = new MessageData(ID());
+		m_messageData = new MessageData(ID(0));
 	}
 
 	m_messageData->m_owner = PLAYER_INDEX_INVALID;
 	m_messageData->m_sender = PLAYER_INDEX_INVALID;
 	m_messageData->m_msgType = 0;
 	m_messageData->m_cityList->Clear();
-	delete [] m_messageData->m_text;
+	if(m_messageData->m_text) {
+		delete [] m_messageData->m_text;
+	}
 	m_messageData->m_text = NULL;
-	m_messageData->m_request = ID();
-	m_messageData->m_timestamp = g_turn ? g_turn->GetYear() : 0;
-}
-
-void SlicFrame::DeleteMessageData()
-{
-	delete m_messageData;
-	m_messageData = NULL;
+	m_messageData->m_request = ID(0);
+	if (g_turn)
+		m_messageData->m_timestamp = g_turn->GetYear();
+	else
+		m_messageData->m_timestamp = 0;
 }
 
 void SlicFrame::SetMessageData(MessageData *data)

@@ -1,6 +1,4 @@
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
 
 #ifndef __SLIC_BUTTON_H__
 #define __SLIC_BUTTON_H__

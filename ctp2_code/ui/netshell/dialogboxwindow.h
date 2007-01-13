@@ -22,14 +22,26 @@ class aui_Button;
 
 class DialogBoxWindow : public ns_Window
 {
+
 public: 
+	
 	DialogBoxWindow(
 		AUI_ERRCODE *retval,
 		MBCHAR *ldlBlock,
 		aui_Action **actions );
 
+public:
 	virtual ~DialogBoxWindow();
 
+protected:
+	DialogBoxWindow() : ns_Window() {}
+	AUI_ERRCODE	InitCommon( void );
+	AUI_ERRCODE CreateControls(
+		MBCHAR *ldlBlock,
+		aui_Action **actions );
+
+public:
+	
 	static DialogBoxWindow *PopUp(
 		MBCHAR *ldlBlock,
 		aui_Action **actions );
@@ -67,38 +79,19 @@ public:
 	aui_Button *GetButton( sint32 i ) const { return m_buttons[ i ]; }
 
 protected:
-	DialogBoxWindow() 
-	:	ns_Window		(),
-	   	m_numButtons	(0),
-		m_buttons		(NULL)
-	{ ; };
-
-	AUI_ERRCODE	InitCommon( void );
-	AUI_ERRCODE CreateControls(
-		MBCHAR *ldlBlock,
-		aui_Action **actions );
-
 	sint32		m_numButtons;
 	aui_Button	**m_buttons; 
+
+	
 
 	class SafeDeleteAction : public aui_Action
 	{
 	public:
-		SafeDeleteAction(DialogBoxWindow * dbw ) 
-        :   aui_Action  (),
-            m_dbw       (dbw) 
-        { ; };
-		virtual ~SafeDeleteAction(void) { ; };
-
-	    virtual void	Execute
-	    (
-		    aui_Control	*	control,
-		    uint32			action,
-		    uint32			data
-	    );
-
+		SafeDeleteAction( DialogBoxWindow *dbw ) : m_dbw( dbw ) {}
+		virtual ~SafeDeleteAction() {}
+		virtual ActionCallback Execute;
 	protected:
-		DialogBoxWindow *   m_dbw;
+		DialogBoxWindow *m_dbw;
 	};
 };
 

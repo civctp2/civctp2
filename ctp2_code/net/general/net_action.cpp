@@ -2,8 +2,6 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +15,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,63 +24,75 @@
 //   the city to another player (bug #26)
 //
 //----------------------------------------------------------------------------
-
 #include "c3.h"
-#include "net_action.h"
 
 #include "Cell.h"
 
 #include "network.h"
+#include "net_action.h"
 #include "net_util.h"
 #include "net_info.h"
 #include "net_rand.h"
 #include "net_terrain.h"
 #include "net_traderoute.h"
 #include "net_unit.h"
-#include "World.h"                      // g_theWorld
-#include "player.h"                     // g_player
-#include "SelItem.h"                    // g_selected_item
+
+#include "XY_Coordinates.h"
+#include "World.h"
+#include "player.h"
+#include "SelItem.h"
 #include "TradeOffer.h"
 #include "Readiness.h"
 #include "installation.h"
 #include "TerrImprove.h"
 #include "installationpool.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "DiplomaticRequest.h"
 #include "DiplomaticRequestPool.h"
 #include "message.h"
 #include "MessagePool.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "TurnCnt.h"                    // g_turn
-#include "AICause.h"
+#include "TurnCnt.h"
+#include "aicause.h"
 #include "Advances.h"
 #include "MaterialPool.h"
 #include "TerrImprovePool.h"
 #include "net_playerdata.h"
-#include "UnitPool.h"                   // g_theUnitPool
-#include "Order.h"
+#include "UnitPool.h"
+#include "order.h"
 #include "ArmyPool.h"
-#include "tiledmap.h"                   // g_tiledMap
-#include "radarmap.h"                   // g_radarMap
+#include "tiledmap.h"
+#include "radarmap.h"
 #include "ArmyData.h"
-#include "TradeOfferPool.h"             // g_theTradeOfferPool
+#include "TradeOfferPool.h"
 #include "Agreement.h"
-#include "AgreementPool.h"              // g_theAgreementPool
+#include "AgreementPool.h"
 #include "AdvanceRecord.h"
 #include "TradePool.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "newturncount.h"
+
 #include "GameEventManager.h"
 #include "director.h"
 #include "Diplomat.h"
+
 #include "battleviewwindow.h"
 #include "c3ui.h"
 #include "aui_button.h"
-#include "gstypes.h"                    // TERRAIN_TYPES
 
 extern C3UI *g_c3ui;
+
+extern SelectedItem *g_selected_item; 
+extern World* g_theWorld;
+extern Player		**g_player; 
+extern TurnCount *g_turn;
+extern UnitPool *g_theUnitPool;
+extern TiledMap *g_tiledMap;
+extern RadarMap	*g_radarMap;
+extern TradeOfferPool *g_theTradeOfferPool;
+extern AgreementPool *g_theAgreementPool;
 
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
@@ -281,9 +289,8 @@ const uint32 NetAction::m_args[NET_ACTION_NULL] = {
 };
 
 
-NetAction::NetAction(NET_ACTION action, ...)
-:
-	m_action    (action)
+NetAction::NetAction(NET_ACTION action, ...) :
+	m_action(action)
 {
 	va_list vl;
 	uint32 i;
@@ -309,13 +316,12 @@ NetAction::NetAction(NET_ACTION action, ...)
 }
 
 NetAction::NetAction()
-:
-    m_action    (NET_ACTION_NULL)
 {
 }
 
 
-void NetAction::Packetize(uint8* buf, uint16& size)
+void
+NetAction::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'A';
 	buf[1] = 'A';
@@ -406,6 +412,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				break;
 			}
 
+			PLAYER_INDEX owner = unit.GetOwner();
 			if(g_selected_item->GetCurPlayer() == index) {
 				g_network.Bookmark(id);
 				unit.Settle();
@@ -429,8 +436,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_BUILD:
 			DPRINTF(k_DBG_NET, ("Server: Building unit type %d at city %d\n", m_data[0], m_data[1]));
 			if(g_player[index]) {
-				Unit unit = Unit(m_data[1]);
-				g_player[index]->BuildUnit(m_data[0], unit);
+				g_player[index]->BuildUnit(m_data[0], Unit(m_data[1]));
 			}
 			break;
 		case NET_ACTION_TAX_RATES:
@@ -449,10 +455,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_BUILD_IMP:
 			DPRINTF(k_DBG_NET, ("Server: Building improvement %d at city %d\n",
 								m_data[0], m_data[1]));
-			if(g_player[index]) {
-				Unit unit(m_data[1]);
-				g_player[index]->BuildImprovement(m_data[0], unit);
-			}
+			if(g_player[index])
+				g_player[index]->BuildImprovement(m_data[0], Unit(m_data[1]));
 			break;
 		case NET_ACTION_CREATE_TRADE_ROUTE:
 		{
@@ -472,7 +476,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 						m_data[5],
 						m_data[6]);
 				g_network.Unblock(index);
-				Assert(route.IsValid());
+				Assert(route != TradeRoute(0));
 			}
 
 			if((uint32)route != m_data[4]) {
@@ -482,8 +486,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_theTradePool->IsValid(otherRoute))
 					g_network.QueuePacket(id, new NetTradeRoute(otherRoute.AccessData(), true));
 
-				if (route.IsValid()) 
-                {
+				if(route != TradeRoute(0)) {
 					g_network.QueuePacket(id, new NetTradeRoute(route.AccessData(), true));
 				}
 			} else {
@@ -582,7 +585,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server: Player %d setting readiness to %d\n",
 								index, m_data[0]));
 			if(g_player[index]) {
-				g_player[index]->SetReadinessLevel((READINESS_LEVEL)m_data[0], m_data[1] != 0);
+				g_player[index]->SetReadinessLevel((READINESS_LEVEL)m_data[0], m_data[1]);
 			}
 			
 			
@@ -881,7 +884,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_theUnitPool->IsValid(u)) {
 					u.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);
 					if(oi && oi->m_moveCost > 0) {
-						bool out_of_fuel;
+						BOOL out_of_fuel;
 						u.DeductMoveCost(oi->m_moveCost, out_of_fuel);
 					}
 					u.ClearFlag(k_UDF_FIRST_MOVE);
@@ -1251,8 +1254,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_CHANGE_BUILD:
 		{
 			if(g_player[index]) {
-				Unit unit(m_data[0]);
-				g_player[index]->ChangeCurrentlyBuildingItem(unit, m_data[1], m_data[2]);
+				g_player[index]->ChangeCurrentlyBuildingItem(Unit(m_data[0]), m_data[1], m_data[2]);
 			}
 			break;
 		}
@@ -1560,8 +1562,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.QueuePacket(id, new NetInfo(NET_INFO_CODE_ACK_OBJECT,
 													  m_data[0]));
 			} else {
-				c3errors_ErrorDialog("NET TESTING", "NAK: Army 0x%lx should be 0x%lx",
-					m_data[0], pd->m_createdArmies[0].m_id);
+				c3errors_ErrorDialog("NET TESTING", "NAK: Army 0x%lx should be 0x%lx", m_data[0], pd->m_createdArmies[0]);
 				g_network.QueuePacket(id,
 									  new NetInfo(NET_INFO_CODE_NAK_OBJECT,
 												  m_data[0], (uint32)pd->m_createdArmies[0]));
@@ -1707,11 +1708,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d takes trade offer %lx\n", index, m_data[0]));
 			TradeOffer offer(m_data[0]);
 			if(g_theTradeOfferPool->IsValid(offer)) {
-				if(g_player[index]) {
-					Unit unit1(m_data[1]);
-					Unit unit2(m_data[2]);
-					g_player[index]->AcceptTradeOffer(offer, unit1, unit2);
-				}
+				if(g_player[index])
+					g_player[index]->AcceptTradeOffer(offer, Unit(m_data[1]), Unit(m_data[2]));
 			}
 			break;
 		}
@@ -1759,7 +1757,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Assert(index == (sint32)m_data[0]);
 			if(index == (sint32)m_data[0]) {
 				if(g_player[index]) {
-					g_player[index]->BreakCeaseFire(m_data[1], m_data[2] != 0);
+					g_player[index]->BreakCeaseFire(m_data[1], m_data[2]);
 				}
 			}
 			break;

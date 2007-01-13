@@ -17,6 +17,14 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -28,7 +36,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -81,25 +89,35 @@ public:
 		void *cookie = NULL );
 	virtual ~ctp2_HyperTextBox();
 
-	void RemoveHyperLinks(void);
-
-	virtual AUI_ERRCODE DrawThis(
-		aui_Surface *surface = NULL,
-		sint32 x = 0,
-		sint32 y = 0 );
-	
-	ctp2_HyperLink *GetSelectedHyperLink( void ) { return m_selectedHyperLink; }
-
 protected:
 	ctp2_HyperTextBox() : aui_HyperTextBox() {}
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE CreateRanger( MBCHAR *ldlBlock = NULL );
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseLDropOutside;
+	virtual MouseEventCallback MouseLGrabInside;
+#else
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+#endif
 
+public:
+	void RemoveHyperLinks( void );
+	static void DestroyHyperLink( ctp2_HyperLink *hl );
+
+	virtual AUI_ERRCODE DrawThis(
+		aui_Surface *surface = NULL,
+		sint32 x = 0,
+		sint32 y = 0 );
+
+	
+	ctp2_HyperLink *GetSelectedHyperLink( void ) { return m_selectedHyperLink; }
+
+protected:
 	virtual AUI_ERRCODE AddHyperStatics( const MBCHAR *hyperText );
 
 	tech_WLList<ctp2_HyperLink *>	*m_hyperLinkList;	

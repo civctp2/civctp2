@@ -48,7 +48,15 @@ PatternBase::PatternBase( MBCHAR *pattern )
 
 AUI_ERRCODE PatternBase::InitCommonLdl( MBCHAR *ldlBlock, MBCHAR *pattern )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

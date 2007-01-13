@@ -374,12 +374,12 @@ SciAdvanceScreen {
 
 	# Size.
 	int	widthpix	449
-	int	heightpix	552 #352
+	int	heightpix	352
 
 	Background:CTP2_STANDARD_DIALOG_PATTERN {	
 		# Size.
 		int	widthpix	449
-		int	heightpix	552 #352
+		int	heightpix	352
 
 
 		# Title.
@@ -402,7 +402,7 @@ SciAdvanceScreen {
 			int	xpix	33
 			int	ypix	165
 			int	widthpix	160
-			int	heightpix	314 #114
+			int	heightpix	114
 			bool 	alwaysranger FALSE
 
 			# Thumb control should be at least 6 high.
@@ -412,7 +412,7 @@ SciAdvanceScreen {
 		# Accept change and return to previous screen.
 		GoalButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int	xpix	33
-			int	ypix	508 #307
+			int	ypix	307
 			int	heightpix	20
 			int	widthpix	160
 			string	text	"str_ldl_ASP_GOAL"	
@@ -421,7 +421,7 @@ SciAdvanceScreen {
 		# Accept change and return to previous screen.
 		BackButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int	xpix	342
-			int	ypix	508 #308
+			int	ypix	308
 			int	heightpix	20
 			int	widthpix	71
 			string	text	"str_ldl_CAPS_OK"	
@@ -430,7 +430,7 @@ SciAdvanceScreen {
 		# Cancel change.
 		CancelButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int	xpix	258
-			int	ypix	508 #308
+			int	ypix	308
 			int	heightpix	20
 			int	widthpix	71
 			string	text	"str_ldl_CAPS_CANCEL"
@@ -457,7 +457,7 @@ SciAdvanceScreen {
 		# Label for turns until advance complete.
 		TurnsLabel:CTP2_STANDARD_FONT {
 			int	xpix	205
-			int	ypix	482 #282
+			int	ypix	282
 			int	widthpix	156
 			int	heightpix	14
 			string	text	"str_ldl_TURNS_TO_ADVANCE_COLON"
@@ -466,7 +466,7 @@ SciAdvanceScreen {
 		# Turns until advance complete.
 		TurnsBox:CTP2_GENERIC_TEXT_DISPLAY_14 {
 			int	xpix	355
-			int	ypix	482 #282
+			int	ypix	282
 			int	widthpix	40
 		}
 
@@ -495,7 +495,7 @@ SciAdvanceScreen {
 			int	xpix	210
 			int	ypix	170
 			int	widthpix	186
-			int	heightpix	304 #104
+			int	heightpix	104
 #			string	pattern	"uptg10.tga"
 		}
 	}

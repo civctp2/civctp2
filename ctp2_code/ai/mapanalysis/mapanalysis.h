@@ -28,38 +28,41 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
 #ifndef __MAP_ANALYSIS_H__
 #define __MAP_ANALYSIS_H__
-
-#include <vector>
-
-class MapAnalysis;
-
 
 #include "mapgrid.h"
 #include "citydata.h"
 #include "boundingrect.h"
 #include "bit_table.h"
+#include <vector>
 
+#ifdef _DEBUG
+	typedef std::vector<MapGrid<sint32>, dbgallocator< MapGrid<sint32> > > MapGridVector;
+	typedef std::vector<BoundingRect, dbgallocator<BoundingRect> > BoundingRectVector;
+	typedef std::vector<sint32, dbgallocator<sint32> > Sint32Vector;
+	typedef std::vector<sint16, dbgallocator<sint16> > Sint16Vector;
+	typedef std::vector<uint32, dbgallocator<sint16> > Uint32Vector;
+	typedef std::vector<MapPoint, dbgallocator<MapPoint> > MapPointVector;
+	typedef std::vector<double, dbgallocator<double> > DoubleVector;
+#else
+	typedef std::vector<MapGrid<sint32> > MapGridVector;
+	typedef std::vector<BoundingRect> BoundingRectVector;
+	typedef std::vector<sint32> Sint32Vector;
+	typedef std::vector<sint16> Sint16Vector;
+	typedef std::vector<uint32> Uint32Vector;
+	typedef std::vector<MapPoint> MapPointVector;
+	typedef std::vector<double> DoubleVector;
+#endif
 
 class MapAnalysis {
 
 public:
 
-    typedef std::vector<MapGrid<sint32> > MapGridVector;
-    typedef std::vector<BoundingRect> BoundingRectVector;
-    typedef std::vector<sint32> Sint32Vector;
-    typedef std::vector<sint16> Sint16Vector;
-    typedef std::vector<uint32> Uint32Vector;
-    typedef std::vector<MapPoint> MapPointVector;
-    typedef std::vector<double> DoubleVector;
 	
 	static MapAnalysis & GetMapAnalysis();
 
-    virtual ~MapAnalysis();
 	
 	void Resize( const PLAYER_INDEX & maxPlayerId,
 				 const sint16 & xSize, 
@@ -216,7 +219,7 @@ public:
 	sint16 GetSpecialAttackers(const PLAYER_INDEX playerId) const;
 
 	
-	sint32 AverageSettledContinentSize(const PLAYER_INDEX playerId) const;
+	sint16 AverageSettledContinentSize(const PLAYER_INDEX playerId) const;
 
 	
 	sint16 GetTotalPopulation(const PLAYER_INDEX playerId = -1) const;
@@ -241,9 +244,6 @@ public:
 
 	
 	double GetScienceHandicapRatio(const PLAYER_INDEX playerId) const;
-
-
-	void Cleanup();
 
 private:
 	static MapAnalysis s_mapAnalysis;
@@ -335,4 +335,4 @@ private:
 	DoubleVector m_scienceHandicapRatio;
 };
 
-#endif // __MAP_ANALYSIS_H__
+#endif __MAP_ANALYSIS_H__

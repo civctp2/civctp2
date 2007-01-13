@@ -110,20 +110,11 @@ private:
 
 class RemoveBattleViewAction : public aui_Action
 {
-public:
-	RemoveBattleViewAction(bool kill) 
-    :   aui_Action      (),
-        m_killBattle    (kill)
-    { ; };
+  public:
+	RemoveBattleViewAction(bool kill) { m_killBattle = kill; }
+	virtual ActionCallback Execute;
 
-	virtual void	Execute
-	(
-		aui_Control	*	control,
-		uint32			action,
-		uint32			data
-	);
-
-private:
+  private:
 	bool m_killBattle;
 };
 

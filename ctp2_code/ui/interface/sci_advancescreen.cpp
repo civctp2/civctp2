@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Window to select next advance to research
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,23 +16,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
 // - Start the "change to"-list with the current research selected.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "sci_advancescreen.h"
-
 #include "aui_uniqueid.h"
 #include "c3window.h"
 #include "ctp2_button.h"
@@ -59,6 +52,7 @@
 
 #include "spnewgamewindow.h"
 #include "sciencewin.h"
+#include "sci_advancescreen.h"
 
 #include "keypress.h"
 #include "keyboardhandler.h"
@@ -92,6 +86,9 @@ extern ScienceWin	*g_scienceWin;
 #include "gamesounds.h"
 extern SoundManager	*g_soundManager;
 
+extern ColorSet	*g_colorSet;
+
+
 static C3Window		*s_sci_advanceScreen	= NULL;
 
 static ctp2_Button	*s_back				= NULL;
@@ -114,6 +111,7 @@ static ctp2_HyperTextBox	*s_message		= NULL;
 
 static aui_StringTable	*s_advanceString = NULL;
 
+static sint32 s_from;
 static sint32 s_oldResearching = -1;
 
 static Sequence		*s_screenSequence = NULL;
@@ -244,9 +242,10 @@ sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequ
 		
 		
 		sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CHEER_CASTLE);
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID);
+		g_soundManager->AddSound(SOUNDTYPE_SFX, NULL, soundID);
 	}
 
+	s_from = from;
 	if(from != k_SCI_INCLUDE_CANCEL) {
 			g_soundManager->AddGameSound(GAMESOUNDS_ADVANCE);
 	}
@@ -295,7 +294,7 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -383,35 +382,38 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 
 
 
-void sci_advancescreen_Cleanup(void)
+AUI_ERRCODE sci_advancescreen_Cleanup()
 {
-	if (s_sci_advanceScreen && g_c3ui)
-    {
-	    g_c3ui->RemoveWindow(s_sci_advanceScreen->Id());
-    }
+#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
+	if ( !s_sci_advanceScreen  ) return AUI_ERRCODE_OK; 
+
+	g_c3ui->RemoveWindow( s_sci_advanceScreen->Id() );
 	keypress_RemoveHandler(&s_keyboardHandler);
 
-#define mycleanup(mypointer)    { delete mypointer; mypointer = NULL; }
 	mycleanup(s_name);
 	mycleanup(s_back);
 	mycleanup(s_cancel);
 	mycleanup(s_goal);
 	mycleanup(s_advanceList);
-	mycleanup(s_changeLabel);
-	mycleanup(s_changeBox);
-	mycleanup(s_turnsLabel);
-	mycleanup(s_turnsBox);
-	mycleanup(s_goaltext);
-	mycleanup(s_background);
-	mycleanup(s_glStats);
-	mycleanup(s_message);
-	mycleanup(s_advanceString);
-	mycleanup(s_sci_advanceScreen);
-#undef mycleanup
 
-    delete [] s_scienceGoalTree;
-    s_scienceGoalTree = NULL;
+	mycleanup( s_changeLabel );
+	mycleanup( s_changeBox );
+	mycleanup( s_turnsLabel );
+	mycleanup( s_turnsBox );
+	mycleanup( s_goaltext );
+	mycleanup( s_background );
+	mycleanup( s_glStats );
+	mycleanup( s_message );
+
+	mycleanup( s_advanceString );
+
+	delete s_sci_advanceScreen;
+	s_sci_advanceScreen = NULL;
+
+	return AUI_ERRCODE_OK;
+
+#undef mycleanup
 }
 
 
@@ -510,6 +512,7 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 sint32 sci_advancescreen_loadList( void ) 
 {
 

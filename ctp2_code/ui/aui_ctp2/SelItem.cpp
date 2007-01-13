@@ -4,7 +4,6 @@
 // File type    : C++ source
 // File name    : ui\aui_ctp2\SetItem.cpp
 // Description  : Handles stuff about selected items.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -30,12 +29,6 @@
 //   correct stop player is set.
 // - #01 Standardization of city selection and focus handling  
 //   (L. Hirth 6/2004)
-// - Entrenching units are treated like Entrenched units. (Oct 16th 2005 Martin Gühmann)
-// - Added select city instead of army option. (Oct 16th 2005 Martin Gühmann)
-// - Added option to avoid an end turn if there are cities with empty build 
-//   queues. (Oct. 22nd 2005 Martin Gühmann) Doesn't really work.
-// - Added option to allow end turn if the game runs in the background,
-//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -138,6 +131,9 @@
 
 extern ControlPanelWindow	*g_controlPanel;
 extern WorkWindow				*g_workWindow;
+
+extern ColorSet					*g_colorSet;
+
 extern UnitAstar				*g_theUnitAstar; 
 extern Pollution				*g_thePollution ;
 
@@ -246,7 +242,10 @@ SelectedItem::SelectedItem(CivArchive &archive)
 
 SelectedItem::~SelectedItem()
 {
-	delete m_good_path;
+	if(m_good_path) {
+		delete m_good_path;
+		m_good_path = NULL;
+	}
 }
 
 void SelectedItem::Serialize(CivArchive &archive) 
@@ -331,12 +330,12 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
     switch (s_state) { 
     case SELECT_TYPE_NONE: 
     case SELECT_TYPE_REMOTE_ARMY:
-		s_item = ID();
+		s_item = 0;
 		break;
     case SELECT_TYPE_REMOTE_CITY:
 		s_item = m_selected_city[s_player];
 		s_player = m_remote_owner[s_player];
-		Assert(s_item != ID());
+		Assert(s_item != ID(0));
         break; 
     case SELECT_TYPE_LOCAL_ARMY:
     case SELECT_TYPE_LOCAL_ARMY_UNLOADING:
@@ -347,7 +346,7 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 				
 				
 				
-				s_item = ID();
+				s_item = ID(0);
 				s_state = SELECT_TYPE_NONE;
 			} else {
 				s_item = m_selected_army[s_player];
@@ -357,18 +356,18 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 			
 			Assert(FALSE);
 			s_state = SELECT_TYPE_NONE;
-			s_item = ID();
+			s_item = ID(0);
 		}
 		break;
     case SELECT_TYPE_LOCAL_CITY: 
 		s_item =  m_selected_city[s_player];
-		Assert(s_item.m_id != 0); 
+		Assert(s_item.m_id != (0)); 
 		break; 
     case SELECT_TYPE_TRADE_ROUTE: 
-        s_item = ID(); 
+        s_item = 0; 
         break;
 	case SELECT_TYPE_GOOD:
-		s_item = ID();
+		s_item = 0;
 		break;
     default:
         Assert(0);
@@ -438,6 +437,8 @@ void SelectedItem::NextItem()
 		default:
 			return;
 	}
+
+	sint32 tried = 1;
 }
 
 void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
@@ -447,6 +448,7 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 	if(!p)
 		return;
 
+	sint32 tried = 1;
 	sint32 numArmies = p->m_all_armies->Num();
 	sint32 i;
 	sint32 found = FALSE;
@@ -571,7 +573,7 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 				}
 				if(selectArmy.NumOrders() > 0) {
 					
-//					g_director->IncrementPendingGameActions();
+					g_director->IncrementPendingGameActions();
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 										   GEA_Army, selectArmy,
 										   GEA_End);
@@ -633,7 +635,8 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		return;
 	}
 
-	if(g_theProfileDB->IsAutoTurnCycle() && !g_network.IsActive()) {
+	if(
+	   g_theProfileDB->IsAutoTurnCycle() && !g_network.IsActive()) {
 		sint32 i;
 		BOOL endTurn = TRUE;
 
@@ -655,10 +658,10 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		if(endTurn) {
 			for(i = p->m_all_cities->Num() - 1; i >= 0; i--) {
 				Unit city = p->m_all_cities->Access(i);
-				if(city.GetData()->GetCityData()->GetBuildQueue()->GetHead() == NULL
-				&&!city.GetData()->GetCityData()->IsBuildingInfrastructure() 
-				&&!city.GetData()->GetCityData()->IsBuildingCapitalization()
-				){
+				if(city.GetData()->GetCityData()->
+				   GetBuildQueue()->GetHead() == NULL &&
+				   !city.GetData()->GetCityData()->IsBuildingInfrastructure() &&
+				   !city.GetData()->GetCityData()->IsBuildingCapitalization()) {
 					SetSelectCity(p->m_all_cities->Access(i));
 					if(IsAutoCenterOn()) {
 						MapPoint pos;
@@ -668,15 +671,6 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 						}
 					}
 					endTurn = FALSE;
-					// TODO: Figure out why this doesn't work. 
-					// Hint MaybeAutoEndTurn, well that's obvious, but for now ...
-					// But apart from that this code doesn't seem to do the 
-					// desired effect on the auto end turn code, either.
-					if(!g_theProfileDB->GetValueByName("EndTurnWithEmptyBuildQueues")
-					&& g_player[GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_HUMAN
-					){
-						return;
-					}
 					break;
 				}
 			}
@@ -684,11 +678,10 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 
 		
 		
-		if(endTurn
-		&& g_c3ui->TopWindowIsNonBackground()
-		&& !g_theProfileDB->GetValueByName("RunInBackground")
-		){
-			endTurn = FALSE;
+		if(endTurn) {
+			if(g_c3ui->TopWindowIsNonBackground()) {
+				endTurn = FALSE;
+			}
 		}
 			
 		
@@ -771,7 +764,7 @@ void SelectedItem::SetAutoCenter(const BOOL on)
 	g_theProfileDB->SetAutoCenter(on);
 }
 
-void SelectedItem::SetCurPlayer(PLAYER_INDEX p)
+void SelectedItem::SetCurPlayer(sint32 p)
 { 
 	sint32 visPlayer = GetVisiblePlayer();
 	Assert(m_next_player[p] != PLAYER_INDEX_INVALID); 
@@ -971,14 +964,17 @@ void SelectedItem::Refresh()
 				if (GetTopUnit(pos, top)) {
 					SetSelectUnit(top);
 				} else {
-					SetSelectUnit(Unit());
+					SetSelectUnit(Unit(0));
 				}
-			}
-			else {
+			} 
+#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+			  else {
 				m_ignoreCitySelect = TRUE;
 
 				m_ignoreCitySelect = FALSE;
 			}
+#endif
+
 		}
 	}
 
@@ -987,7 +983,14 @@ void SelectedItem::Refresh()
 void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 {
-	SetSelectUnit(u, all, isDoubleClick);
+	
+#if defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+	if(!m_ignoreCitySelect) {
+		SetSelectUnit(u, all, isDoubleClick);
+	}
+#else
+    SetSelectUnit(u, all, isDoubleClick);
+#endif
 }
 
 void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
@@ -1001,17 +1004,20 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
     BOOL didSelect = FALSE;
 
+    sint32 n;
+    
     m_auto_unload = FALSE;
 
 	m_waypoints.Clear();
 
-	g_controlPanel->SetStack(Army(), NULL); // empty function
+	g_controlPanel->SetStack(Army(0), NULL); // empty function
 
-	if(!u.IsValid())
+	if(!g_theUnitPool->IsValid(u))
 		return;
 
-    if (u.IsCity()) {
-
+    if (u.IsCity()) { 
+        n = g_player[o]->m_all_cities->Num(); 
+        
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_CITY;
 		} else {
@@ -1019,14 +1025,15 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		}
 
 		m_selected_city[o] = u;
-		MapPoint	    pos;
-		CellUnitList	army;
+		MapPoint	pos;
+		static CellUnitList	army;
+		army.Clear();
 
 		u.GetPos(pos);
 		m_select_pos[o] = pos;
 		g_theWorld->GetCell(pos)->GetArmy(army);
 		
-		g_controlPanel->SetStack(Army(), &army);
+		g_controlPanel->SetStack(Army(0), &army);
 
 		didSelect = TRUE;
 
@@ -1041,7 +1048,8 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			}
 		}
 	} else { 
-
+        n = g_player[o]->m_all_armies->Num(); 
+        
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_ARMY;
 		} else {
@@ -1074,12 +1082,10 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			}
 			if(selectedCombatUnits) {
 				for(i = 0; i < army->Num(); i++) {
-					if(army->Access(i).GetAttack() > 0
-					&& army->Access(i).GetArmy() != m_selected_army[o]
-					&&!army->Access(i).IsAsleep()
-					&&!army->Access(i).IsEntrenched()
-					&&!army->Access(i).IsEntrenching()
-					){
+					if(army->Access(i).GetAttack() > 0 &&
+					   army->Access(i).GetArmy() != m_selected_army[o] &&
+					   !army->Access(i).IsAsleep() &&
+					   !army->Access(i).IsEntrenched()) {
 						m_selected_army[o].AddOrders(UNIT_ORDER_GROUP_UNIT, NULL, pos, (uint32)army->Access(i));
 					}
 				}
@@ -1105,12 +1111,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 	
 	if (g_controlPanel) {
+		Unit top = u;
+
 		
 		if (u.GetOwner() == o) {
 
 
 
-			if (u.IsCity()) {
+			if (top.IsCity()) {
 				MainControlPanel::SelectedCity();
 
 			} else {
@@ -1216,12 +1224,12 @@ void SelectedItem::Deselect(PLAYER_INDEX player)
 	if(GetSelectedCity(c))
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityDeselected, GEA_City, c, GEA_End);
 	
-	// #01 Standardization of city selection and focus handling  
+#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
 	if (g_controlPanel) {
 		m_ignoreCitySelect = TRUE;
 		m_ignoreCitySelect = FALSE;
 	}
-
+#endif
 	m_select_state[player] = SELECT_TYPE_NONE;
 
 	if(m_good_path) {
@@ -1249,16 +1257,7 @@ sint32 SelectedItem::GetTopUnitOrCity(const MapPoint &pos, Unit &top)
 {
 	BOOL	unitIsThere = FALSE;
 
-	if(g_theProfileDB->GetValueByName("CityClick")
-	&& g_theWorld->IsCity(pos)
-	){
-		top = g_theWorld->GetCity(pos);
-		unitIsThere = TRUE;
-	}
-	else{
-		unitIsThere = g_theWorld->GetTopVisibleUnit(pos, top);
-	}
-
+	unitIsThere = g_theWorld->GetTopVisibleUnit(pos, top);
 	if (!unitIsThere) {
 		Cell *cell = g_theWorld->GetCell(pos);
 		if (cell->GetCity().m_id != 0) {
@@ -1268,9 +1267,7 @@ sint32 SelectedItem::GetTopUnitOrCity(const MapPoint &pos, Unit &top)
 		if (cell->GetNumUnits() > 0) {
 			sint32 i;
 			for(i = 0; i < cell->GetNumUnits(); i++) {
-				if(!cell->AccessUnit(i).IsEntrenched()
-				&& !cell->AccessUnit(i).IsEntrenching()
-				){
+				if(!cell->AccessUnit(i).IsEntrenched()) {
 					top = cell->AccessUnit(i);
 					unitIsThere = TRUE;
 					break;
@@ -1292,7 +1289,7 @@ sint32 SelectedItem::GetTopUnit(const MapPoint &pos, Unit &top)
 		Cell *cell = g_theWorld->GetCell(pos);
 		for (sint32 i=0; i< cell->GetNumUnits(); i++) {
 			u = cell->AccessUnit(i);
-			if (!u.IsCity() && !u.IsEntrenched() && !u.IsEntrenching()) {
+			if (!u.IsCity() && !u.IsEntrenched()) {
 				top = u;
 				unitIsThere = TRUE;
 				break;
@@ -1306,18 +1303,24 @@ sint32 SelectedItem::GetTopUnit(const MapPoint &pos, Unit &top)
 void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 {
     MapPoint		army_pos; 
+
+    BOOL			is_transported = FALSE;
+
+    BOOL			i_died = FALSE;
+
+	BOOL			moved = FALSE;
+
     m_selected_army[player].GetPos(army_pos);
 
-	AddWaypoint(pos);
-    m_is_pathing    = FALSE;
+	Path *goodPath = NULL;
 
-	if (m_waypoints.Num() <= 0)
+	AddWaypoint(pos);
+    m_is_pathing = FALSE;
+
+	if(m_waypoints.Num() <= 0)
 		return;
 
 	Unit	unit;
-	BOOL			moved = FALSE;
-	Path *goodPath = NULL;
-
 	
 	sint32 acknowledgeSoundID = 0; 
 	sint32 cantMoveSoundID = 0;
@@ -1348,14 +1351,14 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 
 		if(goodPath) {
 
+			sint32 origCurPlayer = m_current_player;
 			m_selected_army[player].ClearOrders();
 			
 			
 			goodPath->JustSetStart(m_selected_army[player]->RetPos());
 
             if (GetAutoUnload()) {
-                MapPoint    test(m_selected_army[player]->RetPos());
-				goodPath->Start(test);
+				goodPath->Start(m_selected_army[player]->RetPos());
 
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveUnloadOrder,
 									   GEA_Army, m_selected_army[player],
@@ -1455,6 +1458,16 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 								 bool leftDrag, bool leftDrop)
 
 {
+	PLAYER_INDEX	player = GetVisiblePlayer();
+    Unit			top; 
+    BOOL			is_transported = FALSE;
+    BOOL			i_died = FALSE;
+    MapPoint		army_pos; 
+	
+	BOOL			leftClick = data->lbutton;
+	BOOL			rightClick = data->rbutton;
+
+
 	m_gotClickSinceLastAutoEnd = TRUE;
 
 	{
@@ -1482,8 +1495,8 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 		pos.GetNeighborPosition(SOUTH, south);
 		converted.Iso2Norm(pos);
 		southConverted.Iso2Norm(south);
-		sint32 tileX;
-		sint32 tileY = pos.y;
+		sint32 tileX, tileY;
+		tileY = pos.y;
 		maputils_MapX2TileX(pos.x, pos.y, &tileX);
 		
 		
@@ -1547,8 +1560,8 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 			
 			cell->GetTradeRoute(i).AddSelectedWayPoint(pos);
 
-			TradeRoute tradeRouteItem = cell->GetTradeRoute(i);
-			g_grabbedItem->SetGrabbedItem(&tradeRouteItem);
+			
+			g_grabbedItem->SetGrabbedItem(&cell->GetTradeRoute(i));
 
 			
 			cell->GetTradeRoute(i).ClearSelectedCellData(cell->GetTradeRoute(i));
@@ -1595,6 +1608,13 @@ sint32 SelectedItem::GetVisiblePlayer() const
 
 void SelectedItem::AddWaypoint(const MapPoint &pos)
 {
+	
+	PLAYER_INDEX player = GetVisiblePlayer();
+    Army a = m_selected_army[player];
+	uint32 movementFlags = a.GetMovementType();
+	static CellUnitList transports;
+
+	
     m_waypoints.Insert(pos);
 }
 
@@ -1656,8 +1676,11 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 			return;
 		}
 
-		delete m_good_path;
-		m_good_path = NULL;
+
+		if(m_good_path) {
+			delete m_good_path;
+			m_good_path = NULL;
+		}
 		m_bad_path.Clear();
 
 		sint32 r;
@@ -1672,11 +1695,11 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 					units.Insert(a[0].GetData()->GetCargoList()->Access(i));
 				}
 			}
-			bool zocViolation;
-			bool alliedCity;
+			BOOL zocViolation;
+			BOOL alliedCity;
 			if(units.Num() > 0 && units.CanMoveIntoCell(dest,
 														zocViolation,
-														false,
+														FALSE,
 														alliedCity)) {
 				if(!m_good_path)
 					m_good_path = new Path;
@@ -1696,8 +1719,10 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 	float partialCost;
 	cost = 0.0;
 	
-	delete m_good_path;
-	m_good_path = NULL;
+	if(m_good_path) {
+		delete m_good_path;
+		m_good_path = NULL;
+	}
 	
 	Army a = m_selected_army[player];
 	MapPoint start;
@@ -1716,17 +1741,13 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
         uint32 movetype = a.GetMovementType();
         if ((movetype & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
             !(movetype & k_BIT_MOVEMENT_TYPE_WATER) &&
-            g_theWorld->IsShallowWater(m_waypoints[0])
-           ) 
-        {
-            QuickSlic("36IATriremeDeepwaterTip", player);
+            g_theWorld->IsShallowWater(m_waypoints[0])) {
+            QuickSlic("36IATriremeDeepwaterTip", player, TRUE);
         }
         if ((movetype & k_BIT_MOVEMENT_TYPE_LAND) &&
             !(movetype & k_BIT_MOVEMENT_TYPE_MOUNTAIN) &&
-            g_theWorld->IsMountain(m_waypoints[0])
-           ) 
-        {
-            QuickSlic("35IANomountainUnitTip", player);
+            g_theWorld->IsMountain(m_waypoints[0])) {
+            QuickSlic("35IANomountainUnitTip", player, TRUE);
         }            
     }
 
@@ -1746,7 +1767,11 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 	}
 	delete partialPath;
 	
-	isCircular = start == m_waypoints[m_waypoints.Num() - 1];
+	if(start == m_waypoints[m_waypoints.Num() - 1]) {
+		isCircular = TRUE;
+	} else {
+		isCircular = FALSE;
+	}
 
 	m_waypoints.Clear();
 }
@@ -1761,21 +1786,28 @@ void SelectedItem::ProcessUnitOrders()
 
 void SelectedItem::Settle()
 {
-	PLAYER_INDEX    s_player; 
-	ID			    s_item; 
-	SELECT_TYPE     s_state; 
-	bool		    isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
+	PLAYER_INDEX s_player; 
+	ID			s_item; 
+	SELECT_TYPE s_state; 
+	BOOL		isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
 
 	GetTopCurItem(s_player, s_item, s_state);
 	
-	if ((SELECT_TYPE_LOCAL_ARMY == s_state) && isMyTurn)
-    { 
-		g_gevManager->AddEvent(GEV_INSERT_Tail,
-							   GEV_SettleOrder,
-							   GEA_Army, s_item.m_id,
-							   GEA_End
-                              );
+	switch(s_state) { 
+		case SELECT_TYPE_LOCAL_ARMY:
+			if(isMyTurn) {
+				g_gevManager->AddEvent(GEV_INSERT_Tail,
+									   GEV_SettleOrder,
+									   GEA_Army, (Army)s_item,
+									   GEA_End);
+			} else if(g_turn->SimultaneousMode()) {
+			}
+            break; 
+		default: 
+            break; 
 	}
+
+
 }
 
 void SelectedItem::Entrench()
@@ -2158,7 +2190,7 @@ void SelectedItem::EnslaveSettler(const MapPoint &point)
         double success, death;
         sint32 timer, amount;
 	    sint32 uindex;
-        bool target_is_city;
+        BOOL target_is_city;
         Unit target_city;
         Unit home_city;
 
@@ -2426,7 +2458,7 @@ void SelectedItem::Goto(MapPoint &dest)
 }
 
 void SelectedItem::EnterMovePath(sint32 owner, Army &army,
-								 MapPoint const & src, MapPoint const & dest)
+								 MapPoint &src, MapPoint &dest)
 {
 	Path *good_path = new Path, bad_path;
 	sint32 is_broken;
@@ -2436,8 +2468,7 @@ void SelectedItem::EnterMovePath(sint32 owner, Army &army,
 										*good_path, is_broken,
 										bad_path,
 										cost);
-	if (!r || is_broken) 
-    {
+	if(is_broken) {
 		delete good_path;
 		return;
 	}
@@ -2603,7 +2634,7 @@ void SelectedItem::DirectorUnitSelection(uint32 flags)
 	}
 }
 
-void SelectedItem::ForceDirectorSelect(const Army &army)
+void SelectedItem::ForceDirectorSelect(Army &army)
 {
 	if(g_theArmyPool->IsValid(army) &&
 	   army.GetOwner() == GetVisiblePlayer()) {

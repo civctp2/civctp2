@@ -3,7 +3,6 @@
  * Project      : Call To Power 2
  * File type    : C/C++ header
  * Description  : SLIC interpreter functions
- * Id           : $Id:$
  *
  *----------------------------------------------------------------------------
  *
@@ -18,8 +17,6 @@
  *
  * Compiler flags
  *
- * __cplusplus
- *
  *----------------------------------------------------------------------------
  *
  * Modifications from the original Activision code:
@@ -32,7 +29,6 @@
  *   modelled slicif_find_db_index but without error message if this 
  *   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
  * - Added bitwise operators
- * - Added database array access. (Sep 16th 2005 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -131,9 +127,6 @@ typedef enum {
 	SOP_BOR,
 	SOP_BXOR,
 	SOP_BNOT,
-//Added by Martin Gühmann for database array support
-	SOP_DBNAMEARRAY,
-	SOP_DBNAMECONSTARRAY,
 
 	SOP_NOP 
 } SOP;
@@ -284,8 +277,6 @@ int slicif_is_valid_string(char *s);
 
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname);
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
-int slicif_find_db_array_value(void *dbptr, const char *recname, const char *valname, int val);
-int slicif_find_db_array_value_by_index(void *dbptr, int index, const char *valname, int val);
 
 /* Added by Martin Gühmann */
 int slicif_is_name(void *dbptr, const char *name);

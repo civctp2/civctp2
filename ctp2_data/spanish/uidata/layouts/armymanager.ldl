@@ -40,16 +40,16 @@ ArmyManager:CTP2_TITLE_WINDOW {
 	int	heightpix	225
 	string title "str_ldl_ArmyManagement"
 	ArmiesLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
-		int	xpix		20
-		int	ypix		25
+		int	xpix	20
+		int	ypix	25
 		int	widthpix	80
-		string	pattern		"uptg20e.tga"
-		string	text		"str_ldl_Armies"
+		string pattern "uptg20e.tga"
+		string	text	"str_ldl_Armies"
 		int	heightpix	20
 	}
 	ArmiesList:CTP2_LISTBOX {
-		int	xpix		23
-		int	ypix		50
+		int	xpix	23
+		int	ypix	50
 		int	heightpix	124
 		int	widthpix	66
 		rangery {
@@ -61,20 +61,12 @@ ArmyManager:CTP2_TITLE_WINDOW {
 #		int	fontcolorgreen	2
 #		int	fontcolorblue	2
 #		int	fontsize	8
-#		int	xpix		139
-#		int	ypix		30
+#		int	xpix	139
+#		int	ypix	30
 #		int	widthpix	116
-#		string	text		"str_ldl_ArmyCount"
+#		string	text	"str_ldl_ArmyCount"
 #		int	heightpix	20
 #	}
-	ArmyTextLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
-		int	xpix		130
-		int	ypix		190
-		string	text		""
-		string	just		"left"
-		int	widthpix	97
-		int	heightpix	24
-	}
 	ArmyName:CTP2_TEXT_FIELD {
 		int xpix 120
 		int ypix 28

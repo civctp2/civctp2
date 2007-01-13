@@ -21,7 +21,11 @@
 
 #include "aui_base.h"
 #include "tech_wllist.h"
-#include "aui_surface.h"
+
+
+class aui_Surface;
+
+
 
 
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT		0x00000001 
@@ -51,7 +55,7 @@ public:
 	
 	aui_BitmapFont(
 		AUI_ERRCODE *retval,
-		MBCHAR const * descriptor = NULL );
+		MBCHAR *descriptor = NULL );
 	virtual ~aui_BitmapFont();
 
 	
@@ -70,7 +74,7 @@ public:
 
 protected:
 	aui_BitmapFont() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR const *descriptor );
+	AUI_ERRCODE InitCommon( MBCHAR *descriptor );
 
 public:
 	AUI_ERRCODE Load( void );
@@ -83,7 +87,7 @@ public:
 
 	
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_descriptor; }
-	AUI_ERRCODE	SetFilename( MBCHAR const * descriptor );
+	AUI_ERRCODE	SetFilename( MBCHAR *descriptor );
 
 	
 	MBCHAR		*GetTTFFile( void ) const { return (MBCHAR *)m_ttffile; }

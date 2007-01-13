@@ -1,61 +1,36 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : A-star AI pathing algorithm
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
-#include "robotastar2.h"
-
 #include "c3math.h"
 #include "c3errors.h"
 #include "globals.h"
 
 
 
+#include "robotastar2.h"
 
 #include "dynarr.h"
 #include "Path.h"
 #include "UnitAstar.h"
 
-#include "World.h"          // g_theWorld
+#include "XY_Coordinates.h"
+#include "World.h"
 #include "dynarr.h"
 #include "player.h"
 #include "RandGen.h"
 #include "UnitRec.h"
+#include "RobotAstar.h"
 #include "civarchive.h"
 #include "UnitRecord.h"
 #include "ArmyData.h"
 #include "Cell.h"
 #include "Diplomat.h"
-#include "profileDB.h"      // g_theProfileDB
+#include "DiffDB.h"
+#include "profileDB.h"
 
+extern  ProfileDB *g_theProfileDB; 
+extern World *g_theWorld; 
 
-uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
 
 RobotAstar2 RobotAstar2::s_aiPathing;
   
@@ -196,7 +171,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	const BOOL check_units_in_cell = TRUE;
     sint32 is_broken_path = FALSE; 
 	const BOOL pretty_path = FALSE;
-	Path bad_path;
+	static Path bad_path;
 
     m_pathType = pathType; 
 	m_transDestCont = trans_dest_cont;
@@ -222,7 +197,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	if (isspecial && maxattack == 0 && !haszoc)
 	{
 		
-		m_incursionPermission = INCURSION_PERMISSION_ALL;
+		m_incursionPermission = ~(0x0);
 	}
 	else
 	{
@@ -257,7 +232,11 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 		return FALSE; 
 	}  
 	
-	return !is_broken_path;
+	if (is_broken_path) { 
+		return FALSE; 
+	} 
+	
+    return TRUE; 
 }
 
 
@@ -270,11 +249,14 @@ sint32 RobotAstar2::EntryCost( const MapPoint &prev,
 							   BOOL &is_zoc, 
 							   ASTAR_ENTRY_TYPE &entry )
 {
-	BOOL r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
+	BOOL r = TRUE;
+	r = UnitAstar::EntryCost(prev, pos, cost, static_cast<BOOL>(is_zoc), entry); 
 
-	if (r)  
-    { 
-	    switch (m_pathType) 
+	if (r == FALSE)  { 
+		return FALSE; 
+	} 
+
+	switch (m_pathType) 
 		{
 		case PATH_TYPE_TRANSPORT:
 			r = TransportPathCallback(r, prev, pos, is_zoc, cost, entry);
@@ -284,15 +266,13 @@ sint32 RobotAstar2::EntryCost( const MapPoint &prev,
 			break;
 		}
 
-        if (cost < 1.0)
-        { 
-            cost = 1.0; 
-        }
-        else if ((k_ASTAR_BIG <= cost) && (entry != ASTAR_RETRY_DIRECTION)) 
-        { 
-		    return FALSE;
-	    }
-    }
+    if (cost < 1.0) 
+        cost = 1.0; 
+
+	if (((r == FALSE) || (k_ASTAR_BIG <= cost)) && 
+		(entry != ASTAR_RETRY_DIRECTION)) { 
+		return FALSE;
+	}
 
     return r; 
 }      

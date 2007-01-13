@@ -30,9 +30,9 @@ aui_Switch::aui_Switch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	m_drawFunc			= NULL;
 	m_drawCookie		= NULL;
@@ -60,9 +60,9 @@ aui_Switch::aui_Switch(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( numStates ),
-	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_TextBase( NULL )
 {
 	m_drawFunc			= NULL;
 	m_drawCookie		= NULL;
@@ -80,7 +80,15 @@ aui_Switch::aui_Switch(
 
 AUI_ERRCODE aui_Switch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -89,7 +97,9 @@ AUI_ERRCODE aui_Switch::InitCommonLdl( MBCHAR *ldlBlock )
 
 	AUI_ERRCODE errcode = InitCommon( state, numStates );
 	Assert( AUI_SUCCESS(errcode) );
-	return errcode;
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
+
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -109,7 +119,7 @@ sint32 aui_Switch::SetState( sint32 state )
 	sint32 prevState = m_state;
 
 	
-	if ((m_state = state))
+	if ( m_state = state )
 	{
 		
 		

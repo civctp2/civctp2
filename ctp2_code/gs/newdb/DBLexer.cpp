@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database lexer (tokenizer/scanner)
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,17 +17,12 @@
 //
 // Compiler flags
 //
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
 // - Prevented files staying open.
-// - Fixed PeekAhead method so that the real next token is returned.
-//   (Sept 3rd 2005 Martin Gühmann)
-// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -161,11 +155,6 @@ void DBLexer::RestoreTokens()
 	}
 }
 
-sint32 DBLexer::GetCurrentToken()
-{
-	return m_currentToken;
-}
-
 sint32 DBLexer::GetToken()
 {
 	if (m_atEnd)
@@ -179,7 +168,7 @@ sint32 DBLexer::GetToken()
 	m_whichTokenText++;
 	m_whichTokenText %= k_TOKEN_HISTORY_SIZE;
 	
-	m_currentToken = m_nextToken;	
+	sint32 tok = m_nextToken;	
 
 	
 	m_nextToken = dbllex();
@@ -198,30 +187,23 @@ sint32 DBLexer::GetToken()
 
 	m_atEnd = (TOKEN_UNDEFINED == m_nextToken);
 
-	if(m_currentToken == k_Token_Name){
-		DBToken *dbtok = m_tokenHash->Access(m_tokenText[m_whichTokenText]);
-		if(dbtok){
-			m_currentToken = dbtok->GetValue();
+	DBToken *dbtok;
+
+	if(tok == k_Token_Name) {
+		if(dbtok = m_tokenHash->Access(m_tokenText[m_whichTokenText])) {
+			return dbtok->GetValue();
+		} else {
+			return k_Token_Name;
 		}
+	} else {
+		return tok;
 	}
-	return m_currentToken;
 }
 
 sint32 DBLexer::PeekAhead()
 {
-	if(m_nextToken == k_Token_Name){
-		sint32 nextTokenText = (m_whichTokenText + 1) % k_TOKEN_HISTORY_SIZE;
-		DBToken *dbtok = m_tokenHash->Access(m_tokenText[nextTokenText]);
-		if(dbtok){
-			return dbtok->GetValue();
-		}
-		else{
-			return k_Token_Name;
-		}
-	}
-	else{
-		return m_nextToken;
-	}
+	
+	return m_nextToken;
 }
 
 const char *DBLexer::GetTokenText()
@@ -240,30 +222,9 @@ bool DBLexer::GetIntAssignment(sint32 &value)
 	return true;
 }
 
-bool DBLexer::GetInt(sint32 &value)
-{
-	sint32 tok = GetCurrentToken();
-	if(tok != k_Token_Int) {
-		return false;
-	}
-
-	value = atoi(GetTokenText());
-	return true;
-}
-
 bool DBLexer::GetFloatAssignment(double &value)
 {
 	sint32 tok = GetToken();
-	if(tok == k_Token_Float || tok == k_Token_Int) {
-		value = atof(GetTokenText());
-		return true;
-	}
-	return false;
-}
-
-bool DBLexer::GetFloat(double &value)
-{
-	sint32 tok = GetCurrentToken();
 	if(tok == k_Token_Float || tok == k_Token_Int) {
 		value = atof(GetTokenText());
 		return true;
@@ -280,30 +241,9 @@ bool DBLexer::GetStringIdAssignment(sint32 &strId)
 	return g_theStringDB->GetStringID(GetTokenText(), strId) != 0;
 }
 
-bool DBLexer::GetStringId(sint32 &strId)
-{
-	sint32 tok = GetCurrentToken();
-	if(tok != k_Token_Name)
-		return false;
-
-	return g_theStringDB->GetStringID(GetTokenText(), strId) != 0;
-}
-
 bool DBLexer::GetFileAssignment(char *&filename)
 {
 	sint32 tok = GetToken();
-	if(tok != k_Token_String)
-		return false;
-
-	delete [] filename;
-	filename = new char[strlen(m_tokenText[m_whichTokenText]) + 1];
-	strcpy(filename, m_tokenText[m_whichTokenText]);
-	return true;
-}
-
-bool DBLexer::GetFile(char *&filename)
-{
-	sint32 tok = GetCurrentToken();
 	if(tok != k_Token_String)
 		return false;
 

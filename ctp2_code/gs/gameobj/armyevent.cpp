@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Army event handlers
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,34 +16,31 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Do not generate an Assert popup when slaves revolt and take over a city.
-// - Do not generate an Assert popup when an army is destroyed in an attack.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "ArmyEvent.h"
 
 #include "Events.h"
+#include "ArmyEvent.h"
 #include "GameEventUser.h"
 #include "Army.h"
-#include "Order.h"
+#include "order.h"
 #include "ArmyData.h"
-#include "MapPoint.h"
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "UnitData.h"
 #include "ArmyData.h"
 #include "WonderRecord.h"
 #include "player.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "ConstDB.h"
 #include "RandGen.h"
 #include "UnitPool.h"
@@ -65,13 +61,6 @@
 #include "soundmanager.h"
 #include "Diplomat.h"
 #include "CriticalMessagesPrefs.h"
-#include "Barbarians.h" //EMOD
-#include "RiskRecord.h"  //add for barb code
-#include "GameSettings.h" //EMOD
-#include "GovernmentRecord.h"   //EMOD to access government data
-#include "DifficultyRecord.h"   //EMOD
-#include "CivilisationPool.h"
-#include "Happy.h"
 
 extern ArmyPool		*g_theArmyPool;
 
@@ -114,7 +103,7 @@ STDEHANDLER(ArmyVictoryMoveOrderEvent)
 {
 	Army a;
 
-//	g_director->DecrementPendingGameActions();
+	g_director->DecrementPendingGameActions();
 
 	MapPoint newPos;
 
@@ -128,40 +117,14 @@ STDEHANDLER(ArmyVictoryMoveOrderEvent)
 
 STDEHANDLER(ArmyMovePathOrderEvent)
 {
-	Army army; //changed from a to army for consistency
+	Army a;
 	MapPoint p;
 
-	if(!args->GetArmy(0, army)) return GEV_HD_Continue;
+	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, p)) return GEV_HD_Continue;
-/*EMOD add rebase here? just set pos as p?
 
-	bool rebase = false;
-	for(i = 0; i < army.Num(); i++) {
-		if(army.AccessData()->m_array[i].GetDBRec()->GetCanRebase()) {
-			rebase = true;
-		}
-	}
-					
-	if (rebase) {  ///fix
-			if(army.AccessData()->IsOccupiedByForeigner(p)) {
-			if (g_theWorld->HasCity(p) || terrainutil_HasAirfield(p)) {  //add unit later?
-
-				
-					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-							   GEV_FinishMove,
-							   GEA_Army, army,
-							   GEA_Direction, dir,
-							   GEA_MapPoint, newPos,
-							   GEA_Int, order,
-							   GEA_End);
-
-		
-
-		return GEV_HD_Continue;
-
-end EMOD	*/
 	
-	g_selected_item->EnterMovePath(army.GetOwner(), army, army->RetPos(), p);
+	g_selected_item->EnterMovePath(a.GetOwner(), a, a->RetPos(), p);
 	return GEV_HD_Continue;
 }
 
@@ -173,11 +136,9 @@ STDEHANDLER(ArmyUnloadOrderEvent)
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
 	UNIT_ORDER_TYPE ord = UNIT_ORDER_UNLOAD; 
-	if (a.GetOwner() == g_selected_item->GetVisiblePlayer()) 
-    {
-		CellUnitList cargoToUnload;
-		if (MainControlPanel::GetSelectedCargo(cargoToUnload)) 
-        {
+	if(a.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+		static CellUnitList cargoToUnload;
+		if(MainControlPanel::GetSelectedCargo(cargoToUnload)) {
 			ord = UNIT_ORDER_UNLOAD_SELECTED_STACK;
 		}
 	}
@@ -717,29 +678,6 @@ STDEHANDLER(ArmyMoveEvent)
 	army.AccessData()->CheckLoadSleepingCargoFromCity(NULL);
 
 	if(army.AccessData()->IsMovePointsEnough(newPos)) {
-/*EMOD for rebasing? this just moves it to newpos maybe do pathing order? or move to? and then set newpos as endpos?
-		if (order == UNIT_ORDER_MOVE_TO
-
-// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
-//city to another city anywhere in the world and costing that unit 1 move.
-      
-		UnitDynamicArray revealedUnits;
-		bool revealedUnexplored = false;
-		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
-			if(!m_array[i].GetDBRec()->GetCanRebase()){
-				if (!IsOccupiedByForeigner(order->m_point)){
-					if (g_theWorld->HasCity(order->m_point) || terrainutil_HasAirfield(order->m_point)) {  //add unit later?
- 						m_array[i].SetPosition(order->m_point, revealedUnits, revealedUnexplored);
-						return true;
-					}
-				}
-				return false;
-			}
-		}
-
- 
-
-*/ //end EMOD
 		if(army.AccessData()->IsOccupiedByForeigner(newPos)) {
 			
 			CellUnitList *defender = g_theWorld->GetCell(newPos)->UnitArmy();
@@ -839,27 +777,32 @@ STDEHANDLER(ArmyMoveEvent)
 
 STDEHANDLER(ClearOrdersEvent)
 {
+	GameEventArgument *armyArg = args->GetArg(GEA_Army, 0);
+	
 	Army army;
-	if (args->GetArmy(0, army))
-    {
-		army.ClearOrders();
-    }
+	if(!args->GetArmy(0, army))
+		return GEV_HD_Continue;
 
+	army.ClearOrders();
 	return GEV_HD_Continue;
 }
 
 STDEHANDLER(FinishAttackEvent)
 {
-	Army        a;
-	MapPoint    pos;
-	if (    args->GetArmy(0, a)     // May return false when the whole army
-                                    // has been destroyed during the attack.
-         && args->GetPos(0, pos)
-       ) 
-	{
-    	a.AddOrders(UNIT_ORDER_FINISH_ATTACK, NULL, pos, 0);
-    }
 
+	Army a;
+	MapPoint pos;
+
+	if(!args->GetArmy(0, a)) 
+	{
+		
+		Assert( g_theArmyPool->IsValid(a) );
+		return GEV_HD_Continue;
+	}
+	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
+
+	
+	a.AccessData()->AddOrders(UNIT_ORDER_FINISH_ATTACK, NULL, pos, 0);
 	return GEV_HD_Continue;
 }
 
@@ -887,14 +830,14 @@ STDEHANDLER(FinishMoveEvent)
 	if(!orderArg || !orderArg->GetInt((sint32&)order))
 		return GEV_HD_Continue;
 
-	if (!g_theArmyPool->IsValid(army))
+	
+	static CellUnitList transports;
+	
+	
+	if ( g_theArmyPool->IsValid(army) == FALSE )
 		return GEV_HD_Continue;
 
-	CellUnitList transports;
-	if (g_theWorld->GetCity(pos).m_id == 0 && 
-        army.AccessData()->CanMoveIntoTransport(pos, transports)
-       ) 
-    {
+	if(g_theWorld->GetCity(pos).m_id == 0 && army.AccessData()->CanMoveIntoTransport(pos, transports)) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 							   GEV_MoveIntoTransport,
 							   GEA_Army, army,
@@ -903,12 +846,10 @@ STDEHANDLER(FinishMoveEvent)
 
 		
 		return GEV_HD_Continue;
-	} 
-    else 
-    {
-		bool const  didMove = army.AccessData()->MoveIntoCell(pos, order, dir);
+	} else {
+		BOOL didMove = army.AccessData()->MoveIntoCell(pos, order, dir);
 
-		if (didMove) {
+		if(didMove) {
 			sint32 i;
 			for(i = army.Num() - 1; i >= 0; i--) {
 				uint32 moveType = army[i].GetMovementType();
@@ -945,12 +886,14 @@ STDEHANDLER(MoveIntoTransportEvent)
 
 	if(!args->GetArmy(0, a)) 
 	{
+		
 		Assert( g_theArmyPool->IsValid(a) );
 		return GEV_HD_Continue;
 	}
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
-	CellUnitList transports;
+	static CellUnitList transports;
+	transports.Clear();
 	
 	if(a.AccessData()->CanMoveIntoTransport(pos, transports)) {
 		a.AccessData()->MoveIntoTransport(pos, transports);
@@ -971,14 +914,14 @@ STDEHANDLER(BattleEvent)
 	if(!args->GetPos(0, pos))
 		return GEV_HD_Continue;
 
-	CellUnitList defender;
+	static CellUnitList defender;
+	defender.Clear();
 	g_theWorld->GetArmy(pos, defender);
 
-	bool const  i_died = !army.AccessData()->Fight(defender);
-	if (!i_died) 
-	{
-		for (sint32 k = 0; k < army.Num(); k++) {
-			bool out_of_fuel;
+	BOOL i_died = !army.AccessData()->Fight(defender);
+	if (!i_died) { 
+		for(sint32 k = 0; k < army.Num(); k++) {
+			BOOL out_of_fuel;
 			army[k].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(),
 								   out_of_fuel);
 		}
@@ -999,12 +942,14 @@ STDEHANDLER(AftermathEvent)
 	if(!args->GetInt(0, fromARealBattle)) return GEV_HD_Continue;
 
 	Assert(!fromARealBattle || g_theCurrentBattle);
-	if (g_theCurrentBattle) {
+	if(g_theCurrentBattle) {
 		delete g_theCurrentBattle;
 		g_theCurrentBattle = NULL;
 	}
 
+	
 	args->GetArmy(0, army);
+
 
 	if(!args->GetPos(0, pos))
 		return GEV_HD_Continue;
@@ -1018,14 +963,14 @@ STDEHANDLER(AftermathEvent)
 	if(!args->GetPlayer(1, defense_owner))
 		return GEV_HD_Continue;
 
-	Unit            c(g_theWorld->GetCell(pos)->GetCity().m_id);
-	CellUnitList    defender;
+	Unit c;
+	
+	c.m_id = g_theWorld->GetCell(pos)->GetCity().m_id;
+	static CellUnitList defender;
+	defender.Clear();
 	g_theWorld->GetArmy(pos, defender);
 
 	if(c.m_id != (0)) {
-		//add civil war here?  no because its in MoveEvent? Why?  EMOD
-
-		//end EMOD
 		if(g_rand->Next(100) < g_theConstDB->AssaultDestroyBuildingChance() * 100) {
 			c.DestroyRandomBuilding();
 		}
@@ -1035,40 +980,6 @@ STDEHANDLER(AftermathEvent)
 				c.CD()->ChangePopulation(-1);
 			}
 		}
-
-		//add insurgency here?
-		const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
-		){ 
-			sint32 chance = 0;
-			sint32 barbchance = risk->GetBarbarianChance();
-			sint32 NotFounder = 0;
-			sint32 NotCityStyle = 0;
-
-			// if the city has a diffferent culture more likely to have insurgents
-			if(c.CD()->GetCityStyle() != g_player[attack_owner]->GetCivilisation()->GetCityStyle()) {
-				NotCityStyle = barbchance * 2;
-			}
-		// if the revolting city is because of an occupation more likely to revolt
-			if(g_player[defense_owner]->GetGovernmentType() == g_player[attack_owner]->GetGovernmentType()) {
-				NotFounder = barbchance * 2;
-			}
-
-		//TODO: technology modifier from the founder that increases insurgents
-		//TODO: technology modifier that allows for more suppression
-		//TODO: govt modifier that allows for more suppression
-				chance += barbchance;
-				chance += NotFounder;
-				chance += NotCityStyle;
-
-			if(g_rand->Next(10000) < chance * 10000) {
-				Barbarians::AddBarbarians(pos, attack_owner, FALSE);
-			}
-		}
-		//end partisians //make it a tech? enablesguerrillas?
-
-
-//end emod
 	}
 
 	
@@ -1137,7 +1048,11 @@ STDEHANDLER(AftermathEvent)
 			army[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);
 			army[i].SetFlag(k_UDF_FIRST_MOVE);
 		}
-//		g_director->IncrementPendingGameActions();
+		// The above piece of code doesn't do anything, except for filling 2 
+		// unused variables and triggering an Assert popup when slaves revolt
+		// and win the ensuing battle. The slave army does not move in from a 
+		// neighbouring tile, but starts the fight from within the city.
+		g_director->IncrementPendingGameActions();
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_VictoryMoveOrder,
 							   GEA_Army, army,
 							   GEA_MapPoint, pos,
@@ -1201,7 +1116,7 @@ STDEHANDLER(MoveUnitsEvent)
 
 	a->MoveUnits(to);
 
-//	sint32 old_cell_owner = g_theWorld->GetCell(from)->GetOwner();
+	sint32 old_cell_owner = g_theWorld->GetCell(from)->GetOwner();
 	sint32 new_cell_owner = g_theWorld->GetCell(to)->GetOwner();
 	sint32 army_owner = a->GetOwner();
 
@@ -1218,11 +1133,30 @@ STDEHANDLER(MoveUnitsEvent)
 		if (!(incursion_permission & (0x1 << army_owner)) &&
 			!new_cell_diplomat.GetBorderIncursionBy(army_owner))
 		{
-			bool is_threat = (a->HasCargo() || !a->IsCivilian()) && 
-                             a->PlayerCanSee(new_cell_owner);
+			bool is_threat = (a->HasCargo() == TRUE);
+			if (!is_threat)	
+			{
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+				
+				is_threat = (!a->IsCivilian());
+			}
+
+			
+			is_threat &= (a->PlayerCanSee(new_cell_owner));
 
 			if (is_threat)
 			{
+				
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BorderIncursion,
 					GEA_Player, new_cell_owner,
 					GEA_Player, army_owner,
@@ -1287,8 +1221,6 @@ STDEHANDLER(MoveUnitsEvent)
 						
 
 						if (c.IsCapitol()) {
-							//civil war code didnt work here either  EMOD
-
 							SlicObject *so = new SlicObject("127CapitalCityCapturedVictim");
 							so->AddRecipient(originalOwner);
 							so->AddCity(c);
@@ -1429,32 +1361,29 @@ STDEHANDLER(ExpelUnitsEvent)
 
 STDEHANDLER(EnslaveSettlerEvent)
 {
-	Army    a;
-	Unit    slaver;
-    Unit    settler;
-
+	Army a;
+	Unit slaver, settler;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, slaver)) return GEV_HD_Continue;
 	if(!args->GetUnit(1, settler)) return GEV_HD_Continue;
 
-	PLAYER_INDEX    settlerOwner    = settler.GetOwner();
-    PLAYER_INDEX    slaverOwner     = slaver.GetOwner();
+	sint32 settlerowner = settler.GetOwner();
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
-						   GEA_Unit,    settler,
-						   GEA_Int,     CAUSE_REMOVE_ARMY_ENSLAVED,
-						   GEA_Player,  slaverOwner,
+						   GEA_Unit, settler,
+						   GEA_Int, CAUSE_REMOVE_ARMY_ENSLAVED,
+						   GEA_Player, slaver.GetOwner(),
 						   GEA_End);
-
 	Unit home_city;
-	if (g_player[slaverOwner]->GetSlaveCity(slaver.RetPos(), home_city))
-    {
-	    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
-						       GEA_City,    home_city.m_id,
-						       GEA_Player,  settlerOwner,
-						       GEA_End);
-    }
-    // else No action: the slaver does not have any cities
+	sint32 r = g_player[slaver->GetOwner()]->GetSlaveCity(slaver.RetPos(), home_city);
+	MapPoint cpos;
+	home_city.GetPos(cpos);
+
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
+						   GEA_City, home_city.m_id,
+						   GEA_Player, settlerowner,
+						   GEA_End);
+	
 
 	return GEV_HD_Continue;
 }
@@ -1492,11 +1421,12 @@ STDEHANDLER(SetUnloadMovementEvent)
 STDEHANDLER(ArmyBeginTurnExecuteEvent)
 {
 	Army a;
-	if (args->GetArmy(0, a))
-    {
-    	a->ExecuteOrders();
-    }
 
+	g_director->DecrementPendingGameActions();
+
+	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
+
+	a->ExecuteOrders();
 	return GEV_HD_Continue;
 }
 

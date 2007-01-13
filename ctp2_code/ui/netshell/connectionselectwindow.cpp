@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer connection type select window
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -96,7 +77,7 @@ AUI_ERRCODE ConnectionSelectWindow::InitCommon( void )
 
 AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 
 	
@@ -277,20 +258,29 @@ void ConnectionSelectWindow::Update(void)
 
 AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 {	
-    while (NETFunc::Message * m = g_netfunc->GetMessage()) 
-    {
+	NETFunc::Message *m;
+	
+	while(m = g_netfunc->GetMessage()) {
+		
+		
+		
 		g_netfunc->HandleMessage(m);
 
-        if (NETFunc::Message::NETWORKERR == m->GetCode())
+		switch ( m->GetCode() )
 		{
-			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONERR);
+		case NETFunc::Message::NETWORKERR:
+			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONERR );
+			break;
+
+		default:
+			break;
 		}
 
 		delete m;
 	}
 
-	if (g_netfunc->GetStatus() == NETFunc::READY) 
-    {
+	if(g_netfunc->GetStatus() == NETFunc::READY) {
+		
 		g_netshell->GotoScreen( NetShell::SCREEN_PLAYERSELECT );
 	}
 
@@ -366,7 +356,7 @@ void ConnectionSelectWindow::OKButtonAction::Execute(
 		else
 		{
 			NETFunc::STATUS status = g_netfunc->SetTransport(t);
-			if ( status != NETFunc::OK )
+			if ( status != NETFunc::STATUS::OK )
 			{
 				passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_NODIALUP );
 			} else if(t->GetType() == NETFunc::Transport::INTERNET) {

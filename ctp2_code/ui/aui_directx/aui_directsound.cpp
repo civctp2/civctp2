@@ -24,7 +24,7 @@
 
 aui_DirectSound::aui_DirectSound(
 	AUI_ERRCODE *retval,
-	MBCHAR const *filename )
+	MBCHAR *filename )
 	:
 	aui_Sound( retval, filename )
 {

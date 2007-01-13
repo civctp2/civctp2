@@ -27,7 +27,6 @@ GraphicsOptions::GraphicsOptions()
 {
 	m_armyTextOn = false;
 	m_cellTextOn = false;
-	m_armyNameOn = false;
 
 	m_cellAVL = new AvlTree<CellText *>;
 }
@@ -59,53 +58,9 @@ void GraphicsOptions::Cleanup(void)
 	g_graphicsOptions = NULL;
 }
 
-// ArmyName added by E
-void GraphicsOptions::ArmyNameOn(void)
-{
-	m_armyNameOn = true;
-}
-
-void GraphicsOptions::ArmyNameOff(void)
-{
-	m_armyNameOn = false;
-}
-
-//bool GraphicsOptions::AddNameToArmy(const Army &army, const MBCHAR *name, const uint8 &colorMagnitude) 
-//{
-	
-//	if (!g_theArmyPool->IsValid(army)) 
-//		return FALSE;
-
-//	ResetArmyName(army);
-
-//	if (name == NULL)
-//		return FALSE;
-
-//	MBCHAR *myString = new MBCHAR [strlen(name) + 1];
-//	memset(myString, 0, strlen(name) + 1);
-//	strcpy(myString, name);
-
-//	army.AccessData()->SetName(myString);
-//	army.AccessData()->SetDebugStringColor(colorMagnitude);
-
-//	return TRUE;
-//}
 
 
-//void GraphicsOptions::ResetArmyName(const Army &army)
-//{
-	
-//	if (!g_theArmyPool->IsValid(army)) 
-//		return;
 
-	
-	
-//	MBCHAR *string = army.GetData()->GetName();
-//	if (string != NULL) {
-//		delete string;
-//		army.AccessData()->SetName(NULL);
-//	}
-//}
 
 void GraphicsOptions::ArmyTextOn(void)
 {

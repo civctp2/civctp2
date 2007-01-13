@@ -76,10 +76,14 @@ public:
 	};
 
 protected:
-	Mode    mode;
+	Mode mode;
 	
-    AUI_ACTION_BASIC(OKButtonAction);
-    AUI_ACTION_BASIC(CancelButtonAction);
+
+	class OKButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class CancelButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
 };
 
 

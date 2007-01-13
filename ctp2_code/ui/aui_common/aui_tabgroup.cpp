@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface tabgroup
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Standardized code (May 21th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -42,9 +23,9 @@ aui_TabGroup::aui_TabGroup(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
+	aui_SwitchGroup( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_SwitchGroup( retval, id, ldlBlock )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -66,9 +47,9 @@ aui_TabGroup::aui_TabGroup(
 	sint32 paneOffsetX,
 	sint32 paneOffsetY )
 	:
+	aui_SwitchGroup( retval, id, x, y, 0, 0 ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_SwitchGroup( retval, id, x, y, 0, 0 )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -82,7 +63,15 @@ aui_TabGroup::aui_TabGroup(
 
 AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -167,8 +156,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 	sint32 maxPaneWidth = 0;
 	sint32 maxPaneHeight = 0;
 	ListPos position = m_childList->GetHeadPosition();
-	sint32 i;
-	for (i = numTabs; i; i-- )
+	for ( sint32 i = numTabs; i; i-- )
 	{
 		aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 		if ( tab->GetPane()->Width() > maxPaneWidth )
@@ -181,7 +169,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 	sint32 maxTabWidth = 0;
 	sint32 maxTabHeight = 0;
 	position = m_childList->GetHeadPosition();
-	for (sint32 j = numTabs; j > 0; --j)
+	for ( i = numTabs; i; i-- )
 	{
 		aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 		if ( tab->Width() > maxTabWidth ) maxTabWidth = tab->Width();
@@ -202,7 +190,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for ( sint32 k = numTabs; k; k-- )
+		for ( i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -237,7 +225,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for ( sint32 i = numTabs; i; i-- )
+		for ( i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -272,7 +260,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for (sint32 i = numTabs; i; i-- )
+		for ( i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -307,7 +295,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 
 		
 		position = m_childList->GetHeadPosition();
-		for (sint32 i = numTabs; i; i-- )
+		for ( i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 

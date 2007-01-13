@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,7 +29,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -57,13 +60,20 @@ public:
 
 	void SetCurrentIconButton( MessageIconButton *button );
 
+private:
+	static MessageIconButton	*m_currentButton;
+
 protected:
+
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseRGrabInside;
+	virtual MouseEventCallback MouseRDropInside;
+	virtual MouseEventCallback MouseRDropOutside;
+#else
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
     virtual void	MouseRDropInside(aui_MouseEvent * data);
     virtual void	MouseRDropOutside(aui_MouseEvent * data);
-
-private:
-	static MessageIconButton	*m_currentButton;
+#endif
 
 };
 

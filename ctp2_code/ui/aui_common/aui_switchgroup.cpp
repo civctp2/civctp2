@@ -22,9 +22,9 @@ aui_SwitchGroup::aui_SwitchGroup(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
+	aui_Control( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -44,9 +44,9 @@ aui_SwitchGroup::aui_SwitchGroup(
 	sint32 width,
 	sint32 height )
 	:
+	aui_Control( retval, id, x, y, width, height ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

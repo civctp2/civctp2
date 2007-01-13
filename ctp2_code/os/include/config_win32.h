@@ -13,11 +13,6 @@
 #pragma once
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-// MSVC6 does not allow static const initialisation in class
-#define HAVE_STATIC_CONST_INIT_DECL_BUG     1
-#endif
-
 #ifndef DIRECTDRAW_VERSION
 #define   DIRECTDRAW_VERSION 0x0700
 #endif // DIRECTDRAW_VERSION
@@ -113,8 +108,6 @@
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
  *    `char[]'. */
 /* #undef YYTEXT_POINTER */
-
-#define CTP2_ENABLE_SLICDEBUG 1
 
 #endif
 

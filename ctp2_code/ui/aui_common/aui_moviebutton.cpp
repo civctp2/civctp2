@@ -31,9 +31,9 @@ aui_MovieButton::aui_MovieButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Button( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	m_flags = 0;
 	m_fullScreen = false;
@@ -59,9 +59,9 @@ aui_MovieButton::aui_MovieButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_TextBase( NULL )
 {
 	m_flags = 0;
 	m_fullScreen = false;
@@ -78,7 +78,15 @@ aui_MovieButton::aui_MovieButton(
 
 AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -86,7 +94,9 @@ AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode = InitCommon(
 		block->GetString( k_AUI_MOVIEBUTTON_LDL_MOVIE ) );
 	Assert( AUI_SUCCESS(errcode) );
-	return errcode;
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
+
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -123,7 +133,9 @@ aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 
 	if ( movie )
 	{
-		m_movie = g_ui->LoadMovie(movie);
+		MBCHAR stupidNonConstFilename[1024];
+		strcpy(stupidNonConstFilename, movie);
+		m_movie = g_ui->LoadMovie( stupidNonConstFilename );
 		Assert( m_movie != NULL );
 		if ( !m_movie )
 		{
@@ -200,13 +212,13 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 				m_movie->Play();
 			}
 
-			(void) m_movie->Process();
+			AUI_ERRCODE errcode = m_movie->Process();
 
-			if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) 
-            {
-				if (m_ActionFunc)
-					m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-			}
+			if (m_movie) 
+				if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) {
+					if (m_ActionFunc)
+						m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+				}
 		}
 	}
 

@@ -17,22 +17,21 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
+// - Import structure changed to compile with Mingw
 // - Event handlers declared in a notation that is more standard C++.
-// - Structure changed to support compilers other than MSVC6.
-// - Added AUI_ACTION_BASIC macro.
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
-
 #ifndef __AUI_ACTION_H__
 #define __AUI_ACTION_H__
+
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -47,30 +46,6 @@
 class aui_Action;
 
 //----------------------------------------------------------------------------
-//
-// Name       : AUI_ACTION_BASIC
-//
-// Description: Class generation macro to define an aui_Action derived class
-//              that only overrides the Execute action.
-//
-// Parameters : ClassName   : name of the derived class
-//
-// Remark(s)  : MACRO
-//
-//----------------------------------------------------------------------------
-#define AUI_ACTION_BASIC(ClassName)     \
-class ClassName : public aui_Action     \
-{                                       \
-public:                                 \
-	virtual void	Execute             \
-	(                                   \
-		aui_Control	*	control,        \
-		uint32			action,         \
-		uint32			data            \
-	);                                  \
-}
-
-//----------------------------------------------------------------------------
 // Project imports
 //----------------------------------------------------------------------------
 
@@ -82,21 +57,30 @@ public:                                 \
 // Class declarations
 //----------------------------------------------------------------------------
 
+
+
 class aui_Action : public aui_Base
 {
 public:
-	aui_Action() : aui_Base() { ; };
-	virtual ~aui_Action(void) { ; };
+	typedef void (ActionCallback)(
+		aui_Control *control,
+		uint32 action,
+		uint32 data );
 
+	
+	aui_Action() {}
+	virtual ~aui_Action() {}
+
+#if defined(_MSC_VER)	
+	virtual ActionCallback Execute {}
+#else
 	virtual void	Execute
 	(
 		aui_Control	*	control,
 		uint32			action,
 		uint32			data
-	) 
-    {
-        // Default: do nothing at all.
-    };
+	) {};
+#endif
 };
 
 

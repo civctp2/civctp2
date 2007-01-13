@@ -33,7 +33,7 @@
 #include "UnitRecord.h"
 #include "UnitData.h"
 #include "GameEventManager.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "RandGen.h"
 
 #include "battleevent.h"
@@ -377,7 +377,7 @@ void CombatField::Move()
 {
 	
 	sint32 x, y, y2;
-//	sint32 frontCount = CountColumn(k_FRONT_COL);
+	sint32 frontCount = CountColumn(k_FRONT_COL);
 	for(x = 1; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			if(!m_field[x][y].IsActive())
@@ -908,10 +908,10 @@ void CombatField::FillFrom(CellUnitList &units)
 CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 					   CellUnitList &attackers,
 					   CellUnitList &defenders) :
-	m_attackers(w, h, true),
-	m_defenders(w, h, false),
 	m_width(w),
 	m_height(h),
+	m_attackers(w, h, true),
+	m_defenders(w, h, false),
 	m_retreated(false),
 	m_retreating(false),
 	m_noAttacksPossible(false),
@@ -1069,8 +1069,8 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 		att->m_alreadyAttacked = true;
 	}
 
-	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
-	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
+	char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
+	char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
 	
 	double hitChance = att->GetRangedAttack() /
@@ -1172,8 +1172,8 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 		att->m_alreadyAttacked = true;
 	}
 
-	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
-	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
+	char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
+	char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
 	
 	double hitChance = att->m_unit->GetOffense(def->m_unit) /

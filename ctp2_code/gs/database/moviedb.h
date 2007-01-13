@@ -1,6 +1,6 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
+
 #ifndef __MOVIE_DB_H__
 #define __MOVIE_DB_H__ 1
 

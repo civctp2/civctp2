@@ -25,47 +25,43 @@
 // - Repaired memory leak.
 //
 //----------------------------------------------------------------------------
-//
-/// \file   TileInfo.cpp
-/// \brief  Tile information (definitions)
  
 #include "c3.h"
-#include "TileInfo.h"
-
-#include <algorithm>        // std::fill
-#include "civarchive.h"
-#include "GoodActor.h"
-#include "profileDB.h"      // g_theProfileDB
-
-#if 0   // referenced from unreachable code only
-
 #include "pixelutils.h"
-#include "player.h"         // g_player
-#include "SelItem.h"        // g_selected_item
+#include "tileutils.h"
+#include "TileInfo.h"
+#include "GoodActor.h"
+#include "civarchive.h"
+#include "player.h"
+#include "SelItem.h"
 #include "TerrainRecord.h"
 #include "terrainutil.h"
-#include "tileutils.h"
+
+extern Player			**g_player;
+extern SelectedItem		*g_selected_item;
+
+#include "profileDB.h"
+extern ProfileDB		*g_theProfileDB;
 
 extern sint32			g_fog_toggle;
 extern sint32			g_god;
 
 #define k_OCEAN_BEFORE_OCEANOGRAPHY_BASE_TILE			10
 
-#endif   // referenced from unreachable code only
-
 TileInfo::TileInfo()
-:
-    m_riverPiece    (-1),
-    m_megaInfo      (0),
-    m_terrainType   (0),
-    m_transform     (rand() % 256),
-    m_tileNum       (0),
-    m_goodActor     (NULL)
 {
-    std::fill(m_transitions, m_transitions + k_NUM_TRANSITIONS, 0);
+	m_goodActor = NULL;
+	m_riverPiece = -1;
+	m_tileNum = 0;
+	m_terrainType = 0;
+	m_transitions[0] = 0;
+	m_transitions[1] = 0;
+	m_transitions[2] = 0;
+	m_transitions[3] = 0;
+	m_megaInfo = 0;
+	m_transform = rand() % 256;
 }
 
-/// @todo Replace with proper copy constructor. This will crash when copy is NULL.
 TileInfo::TileInfo(TileInfo *copy)
 {
 	*this = *copy;
@@ -78,13 +74,7 @@ TileInfo::TileInfo(TileInfo *copy)
 }
 
 TileInfo::TileInfo(CivArchive &archive)
-:   
-    m_riverPiece    (-1),
-    m_megaInfo      (0),
-    m_terrainType   (0),
-    m_transform     (0),
-    m_tileNum       (0),
-    m_goodActor     (NULL)
+:   m_goodActor (NULL)
 {
 	Serialize(archive);
 }
@@ -97,7 +87,7 @@ TileInfo::~TileInfo()
 TILEINDEX TileInfo::GetTileNum(void)
 {
 	return m_tileNum;
-#if 0   // Unreachable code
+
 	if (g_fog_toggle)
 		return m_tileNum;
 	if ( g_god ) {
@@ -120,10 +110,9 @@ TILEINDEX TileInfo::GetTileNum(void)
 			return m_tileNum;
 		}
 	}
-#endif  // unreachable code
 }
 
-void TileInfo::SetGoodActor(sint32 index, MapPoint const & pos)
+sint32 TileInfo::SetGoodActor(sint32 index, MapPoint pos)
 {
     delete m_goodActor;
 	m_goodActor = new GoodActor(index, pos);
@@ -132,6 +121,8 @@ void TileInfo::SetGoodActor(sint32 index, MapPoint const & pos)
 	{
 		m_goodActor->FullLoad();
 	}
+
+	return TRUE;
 }
 
 void TileInfo::DeleteGoodActor(void)
@@ -174,6 +165,9 @@ void TileInfo::Serialize(CivArchive &archive)
 		archive >> hasGoodActor;
 
         delete m_goodActor;
-        m_goodActor = (hasGoodActor) ? new GoodActor(archive) : NULL;
+		if(hasGoodActor)
+			m_goodActor = new GoodActor(archive);
+		else
+			m_goodActor = NULL;
 	}
 }

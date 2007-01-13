@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Army interface
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,8 +16,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
 //
-// - None
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -31,19 +37,14 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #ifndef __ARMY_H__
 #define __ARMY_H__ 1
 
-class Army;
-
-#include "AICause.h"
 #include "ID.h"
-#include "Player.h"
-#include "Unit.h"
 
 class CivArchive;
 class Path;
@@ -51,11 +52,13 @@ class ArmyData;
 class Unit;
 class CellUnitList;
 class UnitActor;
+enum UNIT_ORDER_TYPE;
+typedef sint32 PLAYER_INDEX;
 class MapPoint;
+enum CAUSE_REMOVE_ARMY;
 class Order;
 
-size_t const	MAX_UNIT_COUNT	= 100;   // TODO: check k_MAX_ARMY_SIZE
-
+size_t const	MAX_UNIT_COUNT	= 100;	// TODO: check k_MAX_ARMY_SIZE
 
 class Army : public ID
 { 
@@ -63,9 +66,16 @@ public:
 	const ArmyData *GetData() const;
 	ArmyData *AccessData() const;
 
-    Army(sint32 val) : ID(val) {}
-	Army(uint32 val = 0) : ID(val) {}
-    Army(ID const & i) : ID(i) {}
+
+	
+
+
+	Army() : ID() {}
+	Army(sint32 val) : ID(val) {}
+	Army(uint32 val) : ID(val) {}
+	Army(ID i) : ID(i.m_id) {}
+	Army(const int val) : ID(val) {}
+	Army(const unsigned int val) : ID(val) {}
 
 	ArmyData *operator -> () const { return AccessData(); }
 
@@ -84,11 +94,11 @@ public:
 	sint32 Del(const Unit &unit);
 	sint32 DelIndex(sint32 i);
 	const Unit &Get(sint32 i) const;
-	bool IsPresent(Unit &u);
+	BOOL IsPresent(Unit &u);
 	
 
 
-	bool Insert(const Unit &id); 
+	BOOL Insert(const Unit &id); 
 
 	PLAYER_INDEX GetOwner() const;
 	void SetOwner(PLAYER_INDEX p);
@@ -97,39 +107,39 @@ public:
 	void SortByAttack();
 	void SortByDefense();
 
-	uint32 GetMovementType() const; 
-	bool   CanEnter(const MapPoint &point) const;
+    uint32 GetMovementType() const; 
+	BOOL   CanEnter(const MapPoint &point) const;
 
-	bool IsAtLeastOneMoveLand() const;
-	bool IsAtLeastOneMoveWater() const;
-	bool IsAtLeastOneMoveShallowWater() const;
-	bool IsAtLeastOneMoveAir() const;
-	bool IsAtLeastOneMoveMountain() const;
-	bool GetMovementTypeAir() const; 
-	bool IsMovePointsEnough(double cost);
+	BOOL IsAtLeastOneMoveLand() const;
+	BOOL IsAtLeastOneMoveWater() const;
+    BOOL IsAtLeastOneMoveShallowWater() const;
+	BOOL IsAtLeastOneMoveAir() const;
+	BOOL IsAtLeastOneMoveMountain() const;
+    BOOL GetMovementTypeAir() const; 
+	BOOL IsMovePointsEnough(double cost);
 
-	bool IsIgnoresZOC() const;
+    BOOL IsIgnoresZOC() const;
 
-	bool CanSettle(const MapPoint &pos) const;
-	bool CanSettle() const;
+    BOOL CanSettle(const MapPoint &pos) const;
+    BOOL CanSettle() const;
 
-	bool IsOccupiedByForeigner(const MapPoint &pos);
-	bool IsEnemy(PLAYER_INDEX owner) const;
-	bool IsEnemy(Unit defender) const;
-	bool IsEnemy(Army &defender) const;
+	BOOL IsOccupiedByForeigner(const MapPoint &pos);
+	sint32 IsEnemy(PLAYER_INDEX owner) const;
+	sint32 IsEnemy(Unit defender) const;
+	sint32 IsEnemy(Army &defender) const;
 
 
-	double GetHPModifier(); 
+    double GetHPModifier(); 
 
-	bool IsAsleep() const;
-	bool IsEntrenched() const;
-	bool IsEntrenching() const;
-	bool CanEntrench();
-	bool CanPatrol() const;
-	bool IsPatrolling() const;
-	void SetPatrolling(bool p);
+	BOOL IsAsleep() const;
+	BOOL IsEntrenched() const;
+	BOOL IsEntrenching() const;
+	BOOL CanEntrench();
+	BOOL CanPatrol() const;
+	BOOL IsPatrolling() const;
+	void SetPatrolling(BOOL p);
 
-	void GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis);
+    void GetActors(sint32 &n, UnitActor **moveActor, UnitActor *butnotthis);
 
 	bool GetTopVisibleUnitOfMoveType
 	(
@@ -142,105 +152,105 @@ public:
 	(
 		PLAYER_INDEX const	looker
 	) const;
-	void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
+    void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 
 
-	bool IsArmyPosFilled(const MapPoint &pos) const;
-	void ResolveArmyPosConflicts();
+    BOOL IsArmyPosFilled(const MapPoint &pos) const;
+    void ResolveArmyPosConflicts();
 
 	void BeginTurn();
-	bool CanFight(CellUnitList &defender);
+	BOOL CanFight(CellUnitList &defender);
 
-	bool IsVisible(sint32 player);
+	BOOL IsVisible(sint32 player);
 
 	sint32 GetCost();
 
-	bool CanFranchise(double &chance, sint32 &uindex);
+	BOOL CanFranchise(double &chance, sint32 &uindex);
 
-	bool CanSue(sint32 &uindex);
-	bool CanSue();
-	bool CanBeSued();
-	bool CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount,
+	BOOL CanSue(sint32 &uindex);
+	BOOL CanSue();
+	BOOL CanBeSued();
+	BOOL CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount,
 							 sint32 &uindex);
-	bool CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount);
-	bool CanPlantNuke(double &chance, double &escape_chance,
+	BOOL CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount);
+	BOOL CanPlantNuke(double &chance, double &escape_chance,
 					  sint32 &uindex);
-	bool CanPlantNuke(double &chance, double &escape_chance);
-	bool CanSlaveRaid(double &success, double &death, 
+	BOOL CanPlantNuke(double &chance, double &escape_chance);
+	BOOL CanSlaveRaid(double &success, double &death, 
 					  sint32 &timer, sint32 &amount,
 					  sint32 &uindex);
-	bool CanSlaveRaid(double &success, double &death, 
+	BOOL CanSlaveRaid(double &success, double &death, 
 					  sint32 &timer, sint32 &amount);
-    bool IsSlaveRaidPossible(const MapPoint &point, 
+    BOOL IsSlaveRaidPossible(const MapPoint &point, 
 							 double &success, double &death, sint32 &timer, sint32 &amount,
-							 sint32 &uindex, bool &target_is_city, Unit &target_city, Unit &home_city);
+							 sint32 &uindex, BOOL &target_is_city, Unit &target_city, Unit &home_city);
 
-	bool CanEnslaveSettler(sint32 &uindex);
-	bool CanUndergroundRailway(double &success, double &death,
+	BOOL CanEnslaveSettler(sint32 &uindex);
+	BOOL CanUndergroundRailway(double &success, double &death,
 							   sint32 &uindex);
-	bool CanUndergroundRailway(double &success, double &death);
-	bool CanInciteUprising(sint32 &uindex);
+	BOOL CanUndergroundRailway(double &success, double &death);
+	BOOL CanInciteUprising(sint32 &uindex);
 	
-	bool CanEstablishEmbassy(sint32 &uindex);
-	bool CanEstablishEmbassy();
+	BOOL CanEstablishEmbassy(sint32 &uindex);
+	BOOL CanEstablishEmbassy();
 
-	bool CanBioInfect(double &chance, sint32 &uindex);
-	bool CanBioInfect(double &chance);
-	bool CanNanoInfect(double &chance, sint32 &uindex);
-	bool CanNanoInfect(double &chance);
+	BOOL CanBioInfect(double &chance, sint32 &uindex);
+	BOOL CanBioInfect(double &chance);
+	BOOL CanNanoInfect(double &chance, sint32 &uindex);
+	BOOL CanNanoInfect(double &chance);
 
-	bool CanConvertCity(double &chance, double &deathChance, sint32 &uindex);
-	bool CanConvertCity(double &chance, double &deathChance);
-	bool CanConvertCity(const MapPoint &point);
+	BOOL CanConvertCity(double &chance, double &deathChance, sint32 &uindex);
+	BOOL CanConvertCity(double &chance, double &deathChance);
+	BOOL CanConvertCity(const MapPoint &point);
 
 	
-	bool CanThrowParty(sint32 &uindex);
-	bool CanThrowParty();
+	BOOL CanThrowParty(sint32 &uindex);
+	BOOL CanThrowParty();
 	
-	bool CanReformCity(sint32 &uindex, const MapPoint &point);
-	bool CanReformCity();
+	BOOL CanReformCity(sint32 &uindex, const MapPoint &point);
+	BOOL CanReformCity();
 
-	bool CanSellIndulgences(sint32 &uindex);
-	bool CanSellIndulgences();
-	bool CanSoothsay(sint32 &uindex);
-	bool CanSoothsay();
+	BOOL CanSellIndulgences(sint32 &uindex);
+	BOOL CanSellIndulgences();
+	BOOL CanSoothsay(sint32 &uindex);
+	BOOL CanSoothsay();
 
-	bool AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToUndergroundRailwayTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToConvertTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToEstablishEmbassyTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToCreateFranchiseTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToAssasinateRulerTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToStealTechnologyTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToInjoinTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToInciteRevolutionTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToCauseUnhappinessTarget(const MapPoint &point, sint32 &uindex);
-	bool AbleToExpelTarget(const MapPoint &point, sint32 &uindex);
-	bool CanExpel();
+	BOOL AbleToPlantNukeTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToMakeParkTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToUndergroundRailwayTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToConvertTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToEstablishEmbassyTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToCreateFranchiseTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToAssasinateRulerTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToStealTechnologyTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToInjoinTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToInciteRevolutionTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToCauseUnhappinessTarget(const MapPoint &point, sint32 &uindex);
+	BOOL AbleToExpelTarget(const MapPoint &point, sint32 &uindex);
+	BOOL CanExpel();
 
-	bool CanCreatePark(sint32 &uindex);
-	bool CanCreatePark();
+	BOOL CanCreatePark(sint32 &uindex);
+	BOOL CanCreatePark();
 
-	bool CanPillage(uint32 &uindex) const;
-	bool CanPillage() const;
+	BOOL CanPillage(uint32 &uindex) const;
+	BOOL CanPillage() const;
 
-	bool CanInjoin(sint32 &uindex);
-	bool CanInjoin();
+	BOOL CanInjoin(sint32 &uindex);
+	BOOL CanInjoin();
 
-	bool GetFirstMoveThisTurn() const;
-	bool CanBeAirlifted(const MapPoint &dest,
-						bool &isSourceCity, bool &isDestCity);
+	BOOL GetFirstMoveThisTurn() const;
+	BOOL CanBeAirlifted(const MapPoint &dest,
+						BOOL &isSourceCity, BOOL &isDestCity);
 
-	bool HasLeftMap() const;
+	BOOL HasLeftMap() const;
 	
-	void CurMinMovementPoints(double &cur) const; 
-	void MinMovementPoints(double &cur) const; 
+    void CurMinMovementPoints(double &cur) const; 
+    void MinMovementPoints(double &cur) const; 
 	
 
-	bool CanBombard(const MapPoint &point);
-	bool CanBombard();
-	bool CanInterceptTrade(uint32 &uindex) const;
+	BOOL CanBombard(const MapPoint &point);
+	BOOL CanBombard();
+	BOOL CanInterceptTrade(uint32 &uindex) const;
 
 	void Fight(CellUnitList &defender);
 
@@ -265,11 +275,11 @@ public:
 	void ResumePatrol();
 	void ForgetPatrol();
 
-	bool CanMoveIntoCell(const MapPoint &pos, bool &zocViolation);
-	bool CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports);
+    BOOL CanMoveIntoCell(const MapPoint &pos, BOOL &zocViolation);
+	BOOL CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports);
 	sint32 NumUnitsCanMoveIntoThisTransport(const Army &transports);
-	bool CanMoveIntoThisTransport(CellUnitList &transports);
-	bool CanMoveIntoThisTransport(const Army &transports);
+	BOOL CanMoveIntoThisTransport(CellUnitList &transports);
+	BOOL CanMoveIntoThisTransport(const Army &transports);
 
 	void IndicateAdded() const;
 	PLAYER_INDEX GetKiller() const;
@@ -279,27 +289,27 @@ public:
 
 	sint32 GetMinFuel() const;
 
-	void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const ;
+    void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const ;
 
-	bool CanMove() const;
+	BOOL CanMove() const;
 	
-	bool CanAdvertise() const;
+	BOOL CanAdvertise() const;
 
 	
-	bool CanBeachAssault();
-	bool CanHearGossip();
-	bool CanSlaveUprising();
-	bool CanInciteRevolution( double &chance, double &eliteChance );
-	bool CanCloak();
-	bool CanCreateFranchise( double &chance );
-	bool CanAssasinateRuler( double &chance, double &eliteChance );
-	bool CanStealTechnology( double &randChance, double &chance );
-	bool CanInvestigateCity( double &chance, double &eliteChance );
+	BOOL CanBeachAssault();
+	BOOL CanHearGossip();
+	BOOL CanSlaveUprising();
+	BOOL CanInciteRevolution( double &chance, double &eliteChance );
+	BOOL CanCloak();
+	BOOL CanCreateFranchise( double &chance );
+	BOOL CanAssasinateRuler( double &chance, double &eliteChance );
+	BOOL CanStealTechnology( double &randChance, double &chance );
+	BOOL CanInvestigateCity( double &chance, double &eliteChance );
 
 	void SetTurnOver();
-	bool TurnOver() const;
+	BOOL TurnOver() const;
 
-	bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & use_vision);
+    BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision);
 
 	void GetCurrentHP
 	(
@@ -312,11 +322,11 @@ public:
 	bool IsCivilian(void) const;
 	bool IsWounded(void) const;
 
-	bool ExecutedThisTurn() const;
-	void InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos);
+	BOOL ExecutedThisTurn() const;
+    void InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos);
 
-	static bool GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
-	static bool GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
-};
+	static BOOL GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
+	static BOOL GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
+}; 
 
 #endif

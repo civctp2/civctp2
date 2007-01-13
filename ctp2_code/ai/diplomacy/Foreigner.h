@@ -7,22 +7,21 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __FOREIGNER_H__
 #define __FOREIGNER_H__
+
+
+
+#pragma warning(disable: 4786)
 
 
 #include <list>
 #include <deque>
 
-struct  RegardEvent;
-class   Foreigner;
+#include "c3debugstl.h"
 
-#include "CivArchive.h"
-#include "ctp2_inttypes.h"
-#include "dbtypes.h"
 #include "diplomattypes.h"
 #include "DiplomacyRecord.h"
 #include "MapPoint.h"
@@ -46,16 +45,32 @@ struct RegardEvent {
 	sint16 duration;    
 };
 
-typedef std::list<RegardEvent> RegardEventList;
-typedef std::deque<NegotiationEvent> NegotiationEventList;
-typedef std::list<ai::Agreement> AgreementList;
-typedef AgreementList::iterator AgreementListIter;
+#ifdef _DEBUG
+	
+	typedef std::list<RegardEvent, dbgallocator<RegardEvent> > RegardEventList;
+	typedef std::deque<NegotiationEvent, dbgallocator<NegotiationEvent> > NegotiationEventList;
+	typedef std::list<ai::Agreement, dbgallocator<ai::Agreement> > AgreementList;
+	typedef AgreementList::iterator AgreementListIter;
+#else
+	
+	typedef std::list<RegardEvent> RegardEventList;
+	typedef std::deque<NegotiationEvent> NegotiationEventList;
+	typedef std::list<ai::Agreement> AgreementList;
+	typedef AgreementList::iterator AgreementListIter;
+#endif
 
-class Foreigner 
-{
+class Foreigner {
+
 public:
+
+	
+	
+	
+
+	
 	Foreigner();
 
+	
 	void Initialize();
 
 	
@@ -72,7 +87,7 @@ public:
 	
 
 	
-	ai::Regard GetEffectiveRegard() const;
+	const ai::Regard & GetEffectiveRegard() const;
 
 	
 	const ai::Regard & GetPublicRegard(const REGARD_EVENT_TYPE &type = REGARD_EVENT_ALL ) const;
@@ -140,6 +155,7 @@ public:
 	void SetMyLastNewProposal(const NewProposal & newProposal);
 
 	
+	bool m_hasInitiative;
 
 	
 	
@@ -186,19 +202,19 @@ public:
 	void SetHotwarAttack(const sint16 last_hot_war_attack);
 
 	
-	sint32 GetLastHotwarAttack() const;
+	sint16 GetLastHotwarAttack() const;
 
 	
 	void SetColdwarAttack(const sint16 last_cold_war_attack);
 
 	
-	sint32 GetLastColdwarAttack() const;
+	sint16 GetLastColdwarAttack() const;
 
 	
 	void SetGreetingTurn();
 
 	
-	sint32 GetTurnsSinceGreeting() const;
+	sint16 GetTurnsSinceGreeting() const;
 
 	
 	bool GetEmbargo() const;
@@ -212,10 +228,12 @@ public:
 	
 	void LogDebugStatus(const DiplomacyRecord & diplomacy) const;
 
-public:    
-    bool m_hasInitiative;
-
+protected:
+	
 private:
+
+	
+	
 	ai::Regard m_regard[REGARD_EVENT_ALL];  
 	ai::Regard m_regardTotal;			  
 	StringId m_bestRegardExplain;	  
@@ -250,6 +268,40 @@ private:
 	sint16 m_greetingTurn;		
 	bool m_embargo;				
 
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
-#endif // __FOREIGNER_H__
+#endif __FOREIGNER_H__

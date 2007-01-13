@@ -25,7 +25,7 @@ class SlicStack {
 private:
 	sint32 m_sptr;
 	uint8 *m_stack;
-	uint32 m_stackSize;
+	sint32 m_stackSize;
 
 public:
 	SlicStack();

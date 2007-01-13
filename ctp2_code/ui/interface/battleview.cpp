@@ -1,136 +1,184 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The battleview
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Removed reference to outdated special effect database. (Aug 26th 2005 Martin Gühmann)
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
-#include "battleview.h"
-
-#include <algorithm>
+#include "aui_uniqueid.h"
 #include "aui_directsurface.h"
+#include "aui_control.h"
+#include "aui_ldl.h"
 #include "aui_blitter.h"
+#include "aui_stringtable.h"
+
 #include "c3ui.h"
+#include "c3_button.h"
+#include "c3window.h"
+#include "c3fancywindow.h"
+#include "c3_static.h"
+#include "c3_icon.h"
+
+#include "pointerlist.h"
+
+#include "pixelutils.h"
+#include "primitives.h"
+#include "colorset.h"
+
+#include "XY_Coordinates.h"
+#include "Army.h"
+#include "World.h"
+#include "ConstDB.h"
+
+
+
+#include "Cell.h"
+#include "cellunitlist.h"
+
+#include "Anim.h"
+#include "Action.h"
+#include "tileset.h"
+
+#include "gamesounds.h"
+#include "soundmanager.h"
+
+#include "player.h"
+
+#include "SpriteState.h"
+#include "SpriteStateDB.h"
+
+#include "EffectActor.h"
+#include "AgeRecord.h"
+
 #include "battleviewactor.h"
+#include "battleview.h"
 #include "battle.h"
+#include "battleviewwindow.h"
 #include "battleevent.h"
+
+#include "director.h"
+
+#include "tileset.h"
+#include "AgeRecord.h"
 #include "GameEventManager.h"
+
 #include "CTP2Combat.h"
 
 extern C3UI					*g_c3ui;
+extern ColorSet				*g_colorSet;
+extern SoundManager			*g_soundManager;
+extern World				*g_theWorld;
+extern ConstDB				*g_theConstDB;
 
-namespace
-{
-    /// @todo Move to BattleEvent
-    bool IsAfterAttack(BattleEvent const & a_Event)
-    {
-        BATTLE_EVENT_TYPE type  = a_Event.GetType();
-	    return (type == BATTLE_EVENT_TYPE_PLACEMENT)  ||
-			   (type == BATTLE_EVENT_TYPE_EXPLODE)    ||
-			   (type == BATTLE_EVENT_TYPE_DEATH);
-    };
-}
+
+extern Player				**g_player;
+extern SpriteStateDB		*g_theSpecialEffectDB;
+extern Director				*g_director;
+extern sint32				g_modalWindow;
+
+extern BattleViewWindow		*g_battleViewWindow;
 
 BattleView::BattleView()
-:
-	m_battle                    (NULL),
-//  m_battleViewRect
-	m_battleSurface             (NULL),
-	m_backgroundImage           (NULL),
-	m_cityImage                 (NULL),
-	m_numAttackers              (0),
-	m_numDefenders              (0),
-	m_eventQueue                (NULL),
-	m_activeEvents              (new PointerList<BattleEvent>),
-    m_walker                    (new PointerList<BattleEvent>::Walker),
-	m_activeEvent               (NULL),
-	m_cityBonus                 (0.0),
-	m_terrainBonus              (0.0),
-	m_fortBonus                 (0.0),
-	m_fortifiedBonus            (0.0)
 {
-    std::fill(m_attackers, m_attackers + k_MAX_UNITS_PER_SIDE, 
-              (BattleViewActor *) NULL
-             );
-    std::fill(m_defenders, m_defenders + k_MAX_UNITS_PER_SIDE,
-              (BattleViewActor *) NULL
-              );
+	sint32		i;
+
+	for (i=0; i<k_MAX_UNITS_PER_SIDE; i++) {
+		m_attackers[i] = NULL;
+		m_defenders[i] = NULL;
+	}
+
+	
+	m_battle = NULL;
+
+	m_eventQueue = NULL;
+
+	m_activeEvent = NULL;
+
+	m_activeEvents = new PointerList<BattleEvent>;
+
+	m_walker = new PointerList<BattleEvent>::Walker;
+
+	m_battleSurface = NULL;
+	m_backgroundImage = NULL;
+	m_cityImage = NULL;
 }
 
 
 
 BattleView::~BattleView()
 {
-	m_walker->SetList(m_eventQueue);
-	while (m_walker->IsValid()) 
-    {
-		delete m_walker->Remove();
+	sint32		i;
+
+	for (i=0; i<k_MAX_UNITS_PER_SIDE; i++) {
+		if (m_attackers[i] != NULL) {
+			delete m_attackers[i];
+			m_attackers[i] = NULL;
+		}
+
+		if (m_defenders[i] != NULL) {
+			delete m_defenders[i];
+			m_defenders[i] = NULL;
+		}
 	}
+
+	BattleEvent	*event;
+
+	
+	if (m_eventQueue)
+	{
+		m_walker->SetList(m_eventQueue);
+		while (m_walker->IsValid()) {
+			event = m_walker->GetObj();
+			Assert(event);
+			if (event) {
+				m_walker->Remove();
+				delete event;
+			} else {
+				m_walker->Next();
+			}
+		}
+		delete m_eventQueue;
+	}
+
 	
 	m_walker->SetList(m_activeEvents);
-	while (m_walker->IsValid()) 
-    {
-		delete m_walker->Remove();
+	while (m_walker->IsValid()) {
+		event = m_walker->GetObj();
+		Assert(event);
+		if (event) {
+			m_walker->Remove();
+			delete event;
+		} else {
+			m_walker->Next();
+		}
+	}
+	delete m_activeEvents;
+
+	if (m_activeEvent)
+		delete m_activeEvent;
+
+	if (m_battleSurface) {
+		delete m_battleSurface;
 	}
 
-    if (g_c3ui)
-    {
-        if (m_backgroundImage)
-		    g_c3ui->UnloadImage(m_backgroundImage);
+	if (m_backgroundImage)
+		g_c3ui->UnloadImage(m_backgroundImage);
 
-	    if (m_cityImage)
-		    g_c3ui->UnloadImage(m_cityImage);
-    }
+	if(m_cityImage)
+		g_c3ui->UnloadImage(m_cityImage);
 
-	delete m_eventQueue;
-    delete m_activeEvents;
-	delete m_activeEvent;
-	delete m_battleSurface;
-	delete m_walker;
-
-	for (int i = 0; i < k_MAX_UNITS_PER_SIDE; i++) 
-    {
-		delete m_attackers[i];
-		delete m_defenders[i];
-	}
+	if (m_walker)
+		delete m_walker;
 }
 
 
-void BattleView::Initialize(RECT const & battleViewRect)
+void BattleView::Initialize(RECT *battleViewRect)
 {
-	AUI_ERRCODE	errcode;
-	sint32      width   = battleViewRect.right - battleViewRect.left;
-	sint32      height  = battleViewRect.bottom - battleViewRect.top;
+	AUI_ERRCODE		errcode;
+	
+	
+	sint32 width = battleViewRect->right - battleViewRect->left;
+	sint32 height = battleViewRect->bottom - battleViewRect->top;
 
-	m_battleViewRect    = battleViewRect;
-    delete m_battleSurface;
-	m_battleSurface     = 
-        new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
+	m_battleViewRect = *battleViewRect;
+
+	m_battleSurface = new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
 	Assert(m_battleSurface);
 }
 
@@ -293,7 +341,7 @@ int battleview_DefenderSort( const void *arg1, const void *arg2 )
 		return -1;
 	}
 
-#if 0
+#if 0	
 	
 
 	if (sa1->y < sa2->y) {
@@ -476,22 +524,32 @@ void BattleView::Process(void)
 		m_eventQueue->GetHeadNode();
 
 	
-	while (eventNode) 
-    {
-		BattleEvent *       event           = eventNode->GetObj();
+	while(eventNode) {
+		
+		BattleEvent *event = eventNode->GetObj();
 		Assert(event);
-		BattleViewActor *   actor           = event->GetActor();
-		bool                addEvent        = true;
-        bool                isAfterAttack   = IsAfterAttack(*event);
-		PointerList<BattleEvent>::PointerListNode *
-                            activeNode  = m_activeEvents->GetHeadNode();
+		BattleViewActor *actor = event->GetActor();
 
-		while (activeNode) 
-        {
-            if (isAfterAttack &&
-				(activeNode->GetObj()->GetType() == BATTLE_EVENT_TYPE_ATTACK)
-               ) 
-            {
+		
+		
+		bool afterAttackEvent =
+			(event->GetType() == BATTLE_EVENT_TYPE_PLACEMENT) ||
+			(event->GetType() == BATTLE_EVENT_TYPE_EXPLODE) ||
+			(event->GetType() == BATTLE_EVENT_TYPE_DEATH);
+
+		
+		bool addEvent = true;
+
+		
+		PointerList<BattleEvent>::PointerListNode *activeNode =
+			m_activeEvents->GetHeadNode();
+
+		
+		while(activeNode) {
+			
+			
+			if(afterAttackEvent &&
+				(activeNode->GetObj()->GetType() == BATTLE_EVENT_TYPE_ATTACK)) {
 				addEvent = false;
 				break;
 			}
@@ -545,26 +603,40 @@ void BattleView::Process(void)
 
 		
 		
-		while (m_walker->IsValid()) 
-        {
-			BattleEvent *   event = m_walker->GetObj();
+		while (m_walker->IsValid()) {
+			
+			BattleEvent *event = m_walker->GetObj();
 			Assert(event);
+
+			
 			event->Process();
 
-			if (event->IsFinished()) 
-            {
-				m_walker->Remove();
-				delete event;
+			
+			if (event->IsFinished()) {
 				
-				if (!IsProcessing() && (!g_theCurrentBattle || !g_theCurrentBattle->IsDone()))
-                {
+				
+				m_walker->Remove();
+
+				
+				if(event->GetType() == BATTLE_EVENT_TYPE_DEATH) {
+					RemoveDeadActorsFromEvents(event);
+				}
+
+				delete event;
+
+				
+				
+				
+				if(!IsProcessing() && (!g_theCurrentBattle || !g_theCurrentBattle->IsDone()))
 					g_gevManager->GotUserInput();	
-                }
-			} 
-            else	
-            {
+													
+													
+			} else	
 				m_walker->Next();
-            }
 		}
 	}
+}
+
+void BattleView::RemoveDeadActorsFromEvents(BattleEvent *deathEvent)
+{
 }

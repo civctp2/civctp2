@@ -1,83 +1,36 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Battle view actor handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Removed GetIDAndTypeMethod
-//
-//----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
-
 #ifndef __BATTLEVIEWACTOR_H__
 #define __BATTLEVIEWACTOR_H__
 
-//----------------------------------------------------------------------------
-//
-// Library imports
-//
-//----------------------------------------------------------------------------
-
-// none
-
-//----------------------------------------------------------------------------
-//
-// Exported names
-//
-//----------------------------------------------------------------------------
-
-class BattleViewActor;
-
-//----------------------------------------------------------------------------
-//
-// Project imports
-//
-//----------------------------------------------------------------------------
-
-#include "Actor.h"            // Actor
-#include "Anim.h"             // Anim
-#include "ctp2_inttypes.h"    // sint32, uint32
+#include "Actor.h"
+#include "UnitSpriteGroup.h"
 #include "pixelutils.h"
-#include "Queue.h"            // Queue
-#include "Unit.h"
-#include "UnitSpriteGroup.h"  // UnitSpriteGroup
-#include "World.h"            // MapPoint
+#include "Queue.h"
+#include "XY_Coordinates.h"
+#include "World.h"
+#include "tech_wllist.h"
+#include "Anim.h"
 
-class Action;
-class aui_Surface;
-class SpriteGroup;
 class SpriteState;
-
-// BOOL, GROUPTYPE, UNITACTION
-
-//----------------------------------------------------------------------------
-//
-// Declarations
-//
-//----------------------------------------------------------------------------
+class SpriteGroup;
+class ProjectileActor;
+class EffectActor;
+class aui_Surface;
+class ActorPath;
+class Action;
+class CivArchive;
 
 class BattleViewActor : public Actor
 {
@@ -87,19 +40,20 @@ public:
 
 	~BattleViewActor();
 
+	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, uint32 *spriteID, GROUPTYPE *groupType);
+	
+	void			Initialize(void);
 
+	
 	virtual void	Process(void);
 	void			DumpAllActions(void);
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(BOOL isVisible = TRUE);
 	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
 
-	Anim *          CreateAnim(UNITACTION action);
+	Anim			*GetAnim(UNITACTION action);
 	
-	bool			HasThisAnim(UNITACTION action) const
-    { 
-        return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action); 
-    };
+	BOOL			HasThisAnim(UNITACTION action) { if (!m_unitSpriteGroup) return FALSE; return (m_unitSpriteGroup->GetAnim((GAME_ACTION)action) != NULL); }
 	Anim			*MakeFakeDeath(void);
 
 	
@@ -108,59 +62,37 @@ public:
 
 	void			DrawHealthBar(aui_Surface *surf);
 
-	MapPoint		GetPos(void) const 
-    { 
-        return m_pos; 
-    };
+	MapPoint		GetPos(void) { return m_pos; }
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) const
-    {
-        x = Actor::GetX(); 
-        y = Actor::GetY(); 
-    }; 
-	void			SetPixelPos(sint32 x, sint32 y) 
-    { 
-        Actor::SetPos(x, y); 
-    };
+    void            GetPixelPos(sint32 &x, sint32 &y) { x = m_x; y = m_y; } 
+	void			SetPixelPos(sint32 x, sint32 y) { m_x = x; m_y = y; }
 
 	sint32			GetFacing(void) const { return m_facing; }
 	void			SetFacing(sint32 facing) { m_facing = facing; }
 
-	uint16			GetWidth(void) const;
-	uint16			GetHeight(void) const;
-	Unit			GetUnitID(void) const
-    { 
-        return m_unitID; 
-    };
+	uint16			GetWidth(void);
+	uint16			GetHeight(void);
+	Unit			GetUnitID(void) { return m_unitID; }
 
-	Action			*GetCurAction(void) const { return m_curAction; }
+	Action			*GetCurAction(void) { return m_curAction; }
 
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
 	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
-	uint32			GetActionQueueNumItems(void) const
-    { 
-        return m_actionQueue.GetNumItems(); 
-    }
+	uint32			GetActionQueueNumItems(void) { return m_actionQueue.GetNumItems(); }
 
-	bool			HasDeath(void) const 
-    { 
-        return m_unitSpriteGroup->HasDeath(); 
-    };
-	bool			HasDirectional(void) const
-    { 
-        return m_unitSpriteGroup->HasDirectional(); 
-    };
+	BOOL			HasDeath(void) { return m_unitSpriteGroup->HasDeath(); }
+	BOOL			HasDirectional(void) { return m_unitSpriteGroup->HasDirectional(); }
 
-	void			GetBoundingRect(RECT *rect) const;
+	void			GetBoundingRect(RECT *rect);
 
-	double			GetHitPoints(void) const { return m_hitPoints; }
-	double			GetHitPointsMax(void) const{ return m_hitPointsMax; }
+	double			GetHitPoints(void) { return m_hitPoints; }
+	double			GetHitPointsMax(void) { return m_hitPointsMax; }
 	void			SetHitPoints(double points) { m_hitPoints = points; }
 	void			SetHitPointsMax(double points) { m_hitPointsMax = points; }
 
 
-	void			SetFortified(bool fortified) { m_isFortified = fortified; }
-	bool			GetFortified(void) const { return m_isFortified; }
+	void			SetFortified(BOOL fortified) { m_isFortified = fortified; }
+	BOOL			GetFortified(void) { return m_isFortified; }
 
 protected:
 	MapPoint			m_pos;
@@ -183,7 +115,7 @@ protected:
 	double				m_hitPoints;
 	double				m_hitPointsMax;
 
-	bool				m_isFortified;
+	BOOL				m_isFortified;
 };
 
 

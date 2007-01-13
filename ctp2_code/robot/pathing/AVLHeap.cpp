@@ -107,8 +107,11 @@ void AVLHeap::MassDelete(const sint32 isunit)
 
 
 void AVLHeap::InitNewBlock() 
+
 {
-	uint32 i; 
+
+	sint32 i; 
+
 
 	AstarPoint *tmp = new AstarPoint[AVLHEAP_SIZE]; 
 
@@ -125,7 +128,7 @@ void AVLHeap::Validate()
 
 { 
     AstarPoint *o, *p, *s, *test; 
-    uint32 i; 
+    sint32 i; 
     BOOL searching; 
 
     

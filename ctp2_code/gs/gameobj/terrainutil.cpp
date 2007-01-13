@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Terrain utilities
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,8 +17,7 @@
 //
 // Compiler flags
 //
-// __TILETOOL__
-// - Probably supposed to generate the tool for creating the *.til files.
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -35,12 +33,6 @@
 //   flag so a tile improvement can only be built on a tile with a 
 //   certain good on it - (E 2005/03/12)
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
-// - terrainutil_CanPlayerSpecialBuildAt added by E 4-1-2006
-// - Added outcommented terrainutil_HasUpgrader, terrainutil_CanBeCaptured, 
-//   terrainutil_HasColony by E (4-25-2006) fo future use
-// - implemented above and added HasMinefield by E 5-30-2006
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-// - added CanBuildAlly and CanBuildWasteland checks
 //
 //----------------------------------------------------------------------------
 
@@ -244,23 +236,26 @@ const TerrainImprovementRecord::Effect *terrainutil_GetTerrainEffect(const Terra
 const TerrainImprovementRecord::Effect *terrainutil_GetTerrainEffect(const TerrainImprovementRecord *rec,
 																	 sint32 terrainType)
 {
-	for (sint32 i = 0; i < rec->GetNumTerrainEffect(); ++i) 
-    {
-		const TerrainImprovementRecord::Effect * effect = rec->GetTerrainEffect(i);
+	
+	sint32 i, j;
 
-        if (effect)
-        {
-		    for (sint32 j = 0; j < effect->GetNumTerrain(); ++j) 
-            {
-			    if (effect->GetTerrainIndex(j) == terrainType) 
-                {
-				    return effect;
-                }
+	for(i = 0; i < rec->GetNumTerrainEffect(); i++) {
+		const TerrainImprovementRecord::Effect *effect = rec->GetTerrainEffect(i);
+
+		for(j = 0; j < effect->GetNumTerrain(); j++) {
+			if(effect->GetTerrainIndex(j) == terrainType) {
+				return effect;
 			}
 		}
 	}
 
-	return rec->GetEffectPtr();
+	
+	const TerrainImprovementRecord::Effect *effect;
+	if(rec->GetEffect(effect)) {
+		return effect;
+	} else {
+		return NULL;
+	}
 }
 
 const TerrainRecord::TransformData *terrainutil_GetTransformData(sint32 terrain, bool add)
@@ -335,22 +330,7 @@ sint32 terrainutil_GetProductionCost(sint32 impType, const MapPoint &pos, sint32
 	return effect->GetProductionCost();
 }
 
-sint32 terrainutil_GetBonusProductionExport(sint32 impType, const MapPoint &pos, sint32 extraData) //EMOD
-{
-	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(impType);
-	Assert(rec);
-	if(!rec)
-		return -1;
 
-	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-
-	if(!effect)
-		return -1;
-
-	sint32 value;
-	effect->GetBonusProductionExport(value);
-	return value;
-}
 
 void terrainutil_DoVision(const MapPoint &point)
 {
@@ -379,7 +359,7 @@ void terrainutil_DoVision(const MapPoint &point)
 	sint32 myrsq = sint32((myVisionRange+0.5)*(myVisionRange+0.5));
 
 	
-	bool revealedUnexplored = false;
+	BOOL revealedUnexplored = FALSE;
 	if(cell->GetOwner() >= 0) {
 		g_player[cell->GetOwner()]->AddUnitVision(point, myVisionRange, revealedUnexplored);
 
@@ -403,7 +383,7 @@ void terrainutil_DoVision(const MapPoint &point)
 			continue;
 
 		if(ls <= myrsq && !(ud->GetRealVisibility() & (1 << cell->GetOwner()))) {
-			if(ud->GetDBRec()->GetVisionClass() &
+			if(g_theUnitDB->Get(ud->GetType())->GetVisionClass() &
 			   g_theTerrainImprovementDB->Get(type)->GetCanSee()) {
 				if(cell->GetOwner() >= 0) {
 					ud->SetVisible((PLAYER_INDEX)cell->GetOwner());
@@ -463,7 +443,6 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 	}
 	return false;
 }
-
 bool terrainutil_PlayerHasAdvancesFor(const TerrainImprovementRecord *rec, sint32 pl)
 {
 	
@@ -538,35 +517,8 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 		}
 		if(!found)
 			return false;
-//	} else {
-//  See Use of ELSE below for how effect is implemented 
-//	Added by E - Compares Improvement's CultureOnly to the Player's CityStyle for terrain effects
-//		for(sint32 b = 0; b < g_theTerrainDB->NumRecords(); b++) {
-//		const TerrainImprovementRecord::Effect *eff;
-//		sint32 t;
-//		bool found = false;
-//		eff = terrainutil_GetTerrainEffect(rec, b);
-//			if(eff) {
-			//	if(eff->GetNumCultureOnly() > 0) {
-//					for(t = 0; t < eff->GetNumCultureOnly(); t++) {
-//						if(eff->GetCultureOnlyIndex(t) == g_player[pl]->GetCivilisation()->GetCityStyle()) {
-//							found = true;
-//							break;
-//						}
-//					}
-//			//	}
-//			}
-//		if(!found)
-//			return false;
-//		}		
 	}
 
-
-
-
-
-
-	
 	if(terrainutil_PlayerHasAdvancesFor(rec, pl)) {
 		
 		if(!checkMaterials)
@@ -655,13 +607,9 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		return false;
 
 	if(cell->GetOwner() == -1) {
-		if(rec->HasIntBorderRadius()) {  //Add has unit IsWorker?
+		if(rec->GetIntBorderRadius()) {
 			if(!g_player[pl]->IsVisible(pos)) {
 				
-				return false;
-			}
-		} else if(rec->GetCanBuildWasteland()) {  //Allows palyer to connect cities
-			if(!g_player[pl]->IsVisible(pos)) {
 				return false;
 			}
 		} else {
@@ -674,10 +622,8 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		bool const haveAlliance	= 
 			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
 		if(cell->GetOwner() > 0 && haveAlliance) {
-			if(rec->GetClassRoad() ||               //Why only build roads in allied territory?
-				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))
-				|| rec->GetCanBuildAlly()	//added for other ally improving
-				){
+			if(rec->GetClassRoad() ||
+				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
 				
 				
 			} else {
@@ -726,123 +672,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 			}
 		}
 
-		//EMOD Improvement can only be built on a tile with a certain good on it
-		if(rec->GetNumIsRestrictedToGood() <= 0) {
-			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
-				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
-					return false;
-				}
-			}
-		}
-		else {
-			sint32 good;
-			if (g_theWorld->GetGood(pos, good)) {
-				bool hasCorrectGood = false;
-				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
-					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
-						hasCorrectGood = true;
-						break;
-					}
-				}
-				if(!hasCorrectGood)
-				return false;
-			}
-		}
-
-// EMOD for contiguous irrigation
-//		if(rec->GetNeedsIrrigation()) {
-//			bool haswater = false;
-//			RadiusIterator it(pos, 1);
-//			for(it.Start(); !it.End(); it.Next()) {
-//				Cell *icell = g_theWorld->GetCell(it.Pos());
-//				for(sint32 ti = 0; ti < icell->GetNumDBImprovements(); ti++) {
-//					sint32 ti;
-//					sint32 imp = icell->GetDBImprovement(ti);
-//					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-//				
-//				if(g_theWorld->IsRiver(it.Pos()) || !trec->GetNeedsIrrigation()){  
-//						haswater = true;
-//						break;
-//					}
-//				}
-//			}
-//			if(!haswater)
-//				return false;
-//		}
-
-//for PrerequisiteTileImp
-		if(rec->GetNumPrerequisiteTileImp() > 0) {
-			bool hasCorrectImp = false;
-			for(i = 0; i < rec->GetNumPrerequisiteTileImp(); i++) {
-				if(rec->GetPrerequisiteTileImpIndex(i) == cell->GetDBImprovement(i)) {
-						hasCorrectImp = true;
-						break;
-				}
-			}
-			if(!hasCorrectImp)
-				return false;
-		}
-
-	// End EMOD
-	}
-	return true;
-}
-
-bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, sint32 pl, const MapPoint &pos)
-{
-	sint32 i;
-
-	Assert(rec != NULL);
-	if(rec == NULL)
-		return false;
-
-	Assert(pl >= 0);
-	Assert(pl < k_MAX_PLAYERS);
-	if(pl < 0 || pl >= k_MAX_PLAYERS)
-		return false;
-
-	Assert(g_player[pl]);
-	if(!g_player[pl])
-		return false;
-
-	Cell *cell = g_theWorld->GetCell(pos);
-	Assert(cell);
-	if(!cell)
-		return false;
-
-//	if(cell->GetOwner() == -1) {
-//		if(rec->GetIntBorderRadius()) {
-//			if(!g_player[pl]->IsVisible(pos)) {
-				
-//				return false;
-//			}
-//		} else {
-//			return false;
-//		}
-//	}
-
-	if(cell->GetOwner() >= 0 && cell->GetOwner() != pl)
-	{
-		bool const haveAlliance	= 
-			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
-		if(cell->GetOwner() > 0 && haveAlliance) {
-			if(rec->GetClassRoad() ||
-				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
-				
-				
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-
-
-	if(g_theWorld->GetCity(pos).IsValid())
-		return false;
-
-
+//added by E. Improvement can only be built on a tile with a certain good on it		
 		if(rec->GetNumIsRestrictedToGood () == 0) {
 			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
 				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
@@ -861,8 +691,7 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 				return false;
 			}
 		}
-
-	
+	}
 	return true;
 }
 
@@ -893,98 +722,6 @@ void terrainutil_GetDefenseBonus(const MapPoint & pos, double & terrain_bonus, d
 			}
 		}
 	}
-}
-
-bool terrainutil_HasUpgrader(const MapPoint & pos)
-{
-	Cell *cell = g_theWorld->GetCell(pos);
-
-	
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-
-		
-		sint32 imp = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-
-		Assert(rec);
-		if(rec) {
-			
-			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-			
-			if(eff && eff->GetCanUpgrade())
-				return true;
-		}
-	}
-	return false;
-}
-
-bool terrainutil_CanBeCaptured(const MapPoint & pos)
-{
-	Cell *cell = g_theWorld->GetCell(pos);
-
-	
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-
-		
-		sint32 imp = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-
-		Assert(rec);
-		if(rec) {
-			
-			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-			
-			if(eff && eff->GetCanBeCaptured())
-				return true;
-		}
-	}
-	return false;
-}
-
-bool terrainutil_HasColony(const MapPoint & pos)
-{
-	Cell *cell = g_theWorld->GetCell(pos);
-
-	
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-
-		
-		sint32 imp = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-
-		Assert(rec);
-		if(rec) {
-			
-			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-			
-			if(eff && eff->GetColony())
-				return true;
-		}
-	}
-	return false;
-}
-
-bool terrainutil_HasMinefield(const MapPoint & pos)
-{
-	Cell *cell = g_theWorld->GetCell(pos);
-
-	
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
-
-		
-		sint32 imp = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
-
-		Assert(rec);
-		if(rec) {
-			
-			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
-			
-			if(eff && eff->HasMinefield())
-				return true;
-		}
-	}
-	return false;
 }
 
 bool terrainutil_HasAirfield(const MapPoint & pos)
@@ -1049,7 +786,7 @@ bool terrainutil_HasFort(const MapPoint & pos)
 			
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
 			
-			if((eff && eff->HasDefenseBonus()) || (eff && eff->GetFort()))  //EMOD to have just a fort flag
+			if(eff && eff->GetDefenseBonus())
 				return true;
 		}
 	}
@@ -1108,7 +845,7 @@ bool terrainutil_IsInstallation(const sint32 type)
 	
 	Assert(rec);
 	if(rec) {
-		if(rec->HasIntBorderRadius())
+		if(rec->GetIntBorderRadius())
 			return true;
 
 		
@@ -1118,9 +855,8 @@ bool terrainutil_IsInstallation(const sint32 type)
 			Assert(effect);
 			if(effect) {
 				if (effect->GetAirport() ||
-					effect->HasDefenseBonus() ||
+					effect->GetDefenseBonus() ||
 					effect->GetRadar() ||
-					effect->GetColony() ||  //EMOD
 					effect->GetListeningPost() ||
 					effect->GetEndgame())
 					return true;
@@ -1149,8 +885,9 @@ double terrainutil_GetMaxVisionRange()
 							rec->GetTerrainEffect(j);
 						
 						Assert(effect);
-						if (effect && effect->GetVisionRange(range))
+						if(effect && effect->GetVisionRange())
 						{
+							effect->GetVisionRange(range);
 							if (range > max_vision_range)
 								max_vision_range = range;
 						}
@@ -1167,15 +904,15 @@ double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint &pos)
 
 	sint32 range = 0;
 	Assert(rec);
-	if (rec) 
-	{
+	if(rec) {
+		
 		const TerrainImprovementRecord::Effect *eff = 
 			terrainutil_GetTerrainEffect(rec, pos);
 		Assert(eff);
-		if (eff)
-		{
-			(void) eff->GetVisionRange(range);
-		}
+		if(eff && eff->GetVisionRange())
+			{
+				eff->GetVisionRange(range);
+			}
 	}
 	return range;
 }
@@ -1229,7 +966,7 @@ bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp)
 	return enables;
 }
 
-bool terrainutil_GetSomethingOwnsCell(MapPoint const & pos, sint32 owner, Unit ignoreCity)
+bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreCity)
 {
 	
 	sint32 i;
@@ -1258,7 +995,7 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint const & pos, sint32 owner, Unit i
 	return false;
 }
 
-void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit ignoreCity)
+void terrainutil_RemoveBorders(MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity)
 {
 	
 	
@@ -1440,8 +1177,7 @@ sint32 terrainutil_GetTerraformGrasslandImprovement()
 sint32 terrainutil_GetEndgameTileImpIndex()
 {
 	const TerrainImprovementRecord *me; 
-	sint32 i;
-	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+	for(sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
 		me = g_theTerrainImprovementDB->Get(i);
 		if(me->GetEffectPtr()->GetEndgame())
 			return i;

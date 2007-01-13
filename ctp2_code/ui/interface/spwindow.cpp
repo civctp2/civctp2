@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player screen
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,17 +16,37 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Removed the content of this file completely since it's no longer needed
 //   (JJB)
-// - Removed the last includes. (Aug 21st 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
+	
 #include "c3.h"
+
+#include "aui.h"
+#include "aui_ldl.h"
+#include "aui_surface.h"
+#include "aui_uniqueid.h"
+#include "aui_imagebase.h"
+#include "aui_textbase.h"
+#include "aui_textfield.h"
+#include "aui_stringtable.h"
+#include "c3ui.h"
+#include "c3window.h"
+#include "ctp2_button.h"
+#include "ctp2_button.h"
+#include "c3_static.h"
+#include "c3_listitem.h"
+#include "c3_dropdown.h"
+#include "StrDB.h"
+#include "CivilisationDB.h"
+#include "CivilisationPool.h"
+
+#include "spnewgamewindow.h" 
+#include "spwindow.h"
+

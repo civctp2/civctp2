@@ -34,9 +34,9 @@ MessageIconButton::MessageIconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
+	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Button( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_ImageBase( ldlBlock )
 {
 }
 

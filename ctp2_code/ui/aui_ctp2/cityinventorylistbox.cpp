@@ -1,34 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Old CTP1 main controll panel city inventory list box
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-// _DEBUG
-// Generate debug version when set.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made government modified for units work here even if the class is not 
-//   used. (July 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -72,10 +50,10 @@ CityInventoryListBox::CityInventoryListBox(AUI_ERRCODE *retval,
 			MBCHAR *ldlBlock,
 			ControlActionCallback *ActionFunc,
 			void *cookie )
-	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	C3ListBox(retval, id, ldlBlock, ActionFunc, cookie)
+		:
+		C3ListBox(retval, id, ldlBlock, ActionFunc, cookie),
+		aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_ImageBase( ldlBlock )
 {
 	InitCommon(ldlBlock);
 }
@@ -90,9 +68,9 @@ CityInventoryListBox::CityInventoryListBox (
 		MBCHAR *pattern,
 		ControlActionCallback *ActionFunc,
 		void *cookie):
-	aui_ImageBase( (sint32)0 ),
+	C3ListBox(retval, id, x, y, width, height, pattern, ActionFunc, cookie),
 	aui_TextBase(NULL),
-	C3ListBox(retval, id, x, y, width, height, pattern, ActionFunc, cookie)
+	aui_ImageBase( (sint32)0 )
 {
 	InitCommon(NULL);
 }
@@ -133,10 +111,11 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 				
 				item = new StaticTextItem(
 					&errcode,
+
 					i,
 					5, 0, 100, 15,
 					str,
-					0,
+					NULL,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_IMPROVEMENT);
@@ -160,7 +139,7 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 
 					5, 0, 100, 15,
 					str,
-					0,
+					NULL,
 					8,
 					j,
 					k_GAME_OBJ_TYPE_WONDER);
@@ -210,7 +189,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	MBCHAR str[80];
 	StaticTextItem *item;
 	AUI_ERRCODE errcode;
-	bool isObsolete;
+	BOOL isObsolete;
 	sint32 o;
 
 	m_buildMode = 1;
@@ -222,25 +201,27 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	}
 
 	for(i = 0; i < n; i++) {
-		const UnitRecord *rec = g_theUnitDB->Get(i, p->GetGovernmentType());
+		const UnitRecord *rec = g_theUnitDB->Get(i);
 		enable = rec->GetEnableAdvanceIndex();
-		isObsolete = false;
+		isObsolete = FALSE;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o))) {
-				isObsolete = true;
+				isObsolete = TRUE;
 			}
 		}
 		if(isObsolete)
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
-			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
+			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theUnitDB->Get(i)->m_name));
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
-					j,
+
+					i,
+
 					5, 0, 100, 15,
 					str,
-					0,
+					NULL,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_UNIT,
@@ -253,24 +234,26 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	
 	n = g_theBuildingDB->NumRecords();
 	for(i = 0; i < n; i++) {
-		const BuildingRecord *rec = g_theBuildingDB->Get(i, p->GetGovernmentType());
+		const BuildingRecord *rec = g_theBuildingDB->Get(i);
 		enable = rec->GetEnableAdvanceIndex();
-		isObsolete = false;
+		isObsolete = FALSE;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-				isObsolete = true;
+				isObsolete = TRUE;
 		}
 		if(isObsolete)
 			continue;
 		if((p->m_advances->HasAdvance(enable) || (enable < 0))) {
-			sprintf(str, "%s",g_theStringDB->GetNameStr(rec->m_name));
+			sprintf(str, "%s",g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name));
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
-					j,
+
+					i,
+
 					5, 0, 100, 15,
 					str,
-					0,
+					NULL,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_IMPROVEMENT,
@@ -285,10 +268,10 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 	for(i = 0; i < n; i++) {
 		const WonderRecord *rec = wonderutil_Get(i);
 		enable = rec->GetEnableAdvanceIndex();
-		isObsolete = false;
+		isObsolete = FALSE;
 		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
 			if(p->m_advances->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-				isObsolete = true;
+				isObsolete = TRUE;
 		}
 		if(isObsolete)
 			continue;
@@ -297,10 +280,12 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 				sint32 j = aui_UniqueId();
 				item = new StaticTextItem(
 					&errcode,
-					j,
+
+					i,
+
 					5, 0, 100, 15,
 					str,
-					0,
+					NULL,
 					8,
 					i,
 					k_GAME_OBJ_TYPE_WONDER,
@@ -333,7 +318,7 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 			}
 
 		}
-		FillInventoryBox(Unit());   // clear
+		FillInventoryBox(NULL);
 		FillInventoryBox(unit);
 		bq = unit.GetData()->GetCityData()->GetBuildQueue();
 		bn = bq->GetHead();
@@ -351,16 +336,16 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 	else if (bn) {
 
 
-		sint32 govType   = g_player[unit.GetOwner()]->GetGovernmentType();
+
 		sint32 completed = bq->GetPercentCompleted(unit.GetData()->GetCityData()->GetStoredCityProduction());
 
 		if (bn->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theBuildingDB->Get(bn->m_type, govType)->m_name));
+			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theBuildingDB->Get(bn->m_type)->m_name));
 
 
 		}
 		else if (bn->m_category == k_GAME_OBJ_TYPE_UNIT) {
-			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type, govType)->m_name));
+			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type)->m_name));
 
 
 		}
@@ -379,17 +364,20 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 
 void CityInventoryListBox::CutBuilding( const Unit &unit)
 {
-	StaticTextItem *    text            = (StaticTextItem *)GetSelectedItem();
-	sint32              category        = text->GetCategory();
-	sint32              id              = text->GetId();
+	StaticTextItem *text;
+	text = (StaticTextItem *)GetSelectedItem();
+	sint32 category = text->GetCategory();
+	sint32 id = text->GetId();
+	uint64 improvements = 0;
+	uint64 wonders = 0;
 
 	if (category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-	    uint64  improvements    = unit.GetData()->GetCityData()->GetImprovements()
-		                          ^ ((uint64)1 << (uint64)id);
+		improvements = unit.GetData()->GetCityData()->GetImprovements();
+		improvements ^= ((uint64)1 << (uint64)id);
 		unit.GetData()->GetCityData()->SetImprovements(improvements);
 	}
 	else if (category == k_GAME_OBJ_TYPE_WONDER) {
-		uint64  wonders = unit.GetData()->GetCityData()->GetBuiltWonders();
+		wonders = unit.GetData()->GetCityData()->GetBuiltWonders();
 		wonders ^= ((uint64)1 << (uint64)id);
 		unit.GetData()->GetCityData()->SetWonders(wonders);
 	}

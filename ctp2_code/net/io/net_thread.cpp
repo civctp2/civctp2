@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network receiver thread
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,19 +26,18 @@
 //
 // - Repaired memory leaks.
 // - Display the main thread function name in the debugger.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "net_thread.h"
-
 #include "net_types.h"
 #include "net_util.h"
 #include "SimpleDynArr.h"
 #include "zlib.h"
+
 #if defined(_DEBUG)
-#include "debug.h"  // Os::SetThreadName
+#include "debug.h"  // SetThreadName
 #endif
 
 TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,
@@ -82,8 +80,15 @@ TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf,sint32 len,
 
 TPacketData::~TPacketData()
 {
-	delete [] m_actualBuf;
-	delete [] m_buf;
+	if(m_actualBuf) {
+		delete [] m_actualBuf;
+		m_buf = NULL;
+	}
+
+	if(m_buf) {
+		delete [] m_buf;
+	}
+
 }
 
 void TPacketData::Append(uint8 *buf, sint32 len)
@@ -206,7 +211,7 @@ void NetThread::Run()
 	TPacketData *packet;
 
 #if defined(_DEBUG)
-	Os::SetThreadName("NetThread::Run");
+	SetThreadName("NetThread::Run");
 #endif
 
 	while(!m_exit) {
@@ -350,7 +355,7 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 {
 	Lock();
 
-	sint32 i, idx = 0;
+	sint32 i, idx;
 	for(i = 0; i < k_MAX_NETWORK_PLAYERS; i++) {
 		if(m_ids[i] == id) {
 			idx = i;
@@ -406,8 +411,8 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 
 NET_ERR NetThread::SendCompressed(uint16 id, sint32 flags, uint8 *buf, sint32 len)
 {
-	uLongf  cbufsize = (uLongf)(((double)len * 1.01) + 12.5);
-	uint8 * cbuf    = new uint8[cbufsize + 5];
+	uint32 cbufsize = (uint32)(((double)len * 1.01) + 12.5);
+	uint8 *cbuf = new uint8[cbufsize + 5];
 
 	cbuf[0] = k_COMPRESSED_PACKET;
 	int err;
@@ -475,7 +480,7 @@ NET_ERR NetThread::Idle()
 			}
 		} else {
 			if(packet->m_buf[0] == k_COMPRESSED_PACKET) {
-				uLongf uSize = getlong(&packet->m_buf[1]);
+				uint32 uSize = getlong(&packet->m_buf[1]);
 
 				uint8 *uBuf = new uint8[uSize];
 				int err;
@@ -559,9 +564,7 @@ TPacketData *NetThread::FindSplitStart(uint16 from)
 void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 {
 	Lock();
-#if 0
 	TPacketData *currentTail = m_incoming->GetTail();
-#endif
 	if(buf[0] == k_SPLIT_PACKET_HEAD && m_incoming->GetCount() > 0) {
 		
 		TPacketData *splitStart = FindSplitStart((uint16)from);

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Statistics window
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,20 +16,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "statswindow.h"
+
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -56,10 +52,14 @@
 #include "c3windows.h"
 
 
-#include "tiledmap.h"                   // g_tiledMap
-#include "colorset.h"                   // g_colorSet
-#include "SelItem.h"                    // g_selected_item
-#include "player.h"                     // g_player
+#include "tiledmap.h"
+
+#include "statswindow.h"
+
+#include "colorset.h"
+
+#include "SelItem.h"
+#include "player.h"
 #include "UnitDynArr.h"
 
 #include "screenutils.h"
@@ -76,10 +76,22 @@
 #include "MessageBoxDialog.h"
 
 
-extern sint32       g_ScreenWidth;
-extern sint32       g_ScreenHeight;
+extern sint32 g_ScreenWidth;
+extern sint32 g_ScreenHeight;
+
+
 extern C3UI			*g_c3ui;
-extern C3Window		*g_toolbar;
+extern TiledMap 	*g_tiledMap;
+
+extern C3Window			*g_toolbar;
+
+extern SelectedItem		*g_selected_item;
+extern Player			**g_player;
+extern ColorSet			*g_colorSet;
+
+extern sint32	g_screenWidth;
+extern sint32	g_screenHeight;
+
 extern C3Window		*g_turnWindow;
 
 
@@ -370,7 +382,7 @@ void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 
 int StatsWindow_Initialize( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32		i;
@@ -378,7 +390,13 @@ int StatsWindow_Initialize( void )
 	if ( g_statsWindow ) return 0; 
 
 	
+	sint32 controlWidth = 99;
+	sint32 controlHeight = 20;
+	sint32 controlX = 293;
+	sint32 controlY = 4;
+
 	strcpy(windowBlock, "StatsWindow");
+
 	g_statsWindow = new StatsWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
 	Assert( AUI_NEWOK(g_statsWindow, errcode) );
 	if ( !AUI_NEWOK(g_statsWindow, errcode) ) return -1;

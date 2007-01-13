@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : the Goal motherclass
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,33 +17,35 @@
 //
 // Compiler flags
 //
-// - None
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Consider a goal with max armies engaged as satisfied - the limitation of 
-//   army size : we cannot form a group with more armies than the max (can 
-//   disturb the goals with RallyFirst() - Calvitix
-// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will 
-//   be changed on wounded case) - Calvitix
-// - Linux support modifications + cleanup.
-//
+// - Consider a goal with max armies engaged as satisfied - the limitation of army size : 
+//     we cannot form a group with more armies than the max (can disturb the goals with RallyFirst() - Calvitix
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
 //----------------------------------------------------------------------------
 
 
 #include "c3.h"
 
-#include "Goal.h"
+#include "goal.h"
 using namespace std;
 
 
 const Utility Goal::BAD_UTILITY = -99999999; 
 const Utility Goal::MAX_UTILITY = 99999999; 
 
-#include "squad_Strength.h"
-#include "agent.h"
+#include "squad_strength.h"
+#include "Agent.h"
 #include "ArmyPool.h"
 #include "debugassert.h"
 
@@ -56,7 +57,7 @@ const Utility Goal::MAX_UTILITY = 99999999;
 #include "ctpagent.h"
 #include "ArmyData.h"
 #include "ctpgoal.h"
-#endif //_DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 
 
@@ -71,18 +72,9 @@ const Utility Goal::MAX_UTILITY = 99999999;
 
 
 Goal::Goal()
-:
-    m_goal_type                     (GOAL_TYPE_NULL),
-    m_raw_priority                  (BAD_UTILITY),
-    m_removal_time                  (DONT_REMOVE),
-    m_is_invalid                    (false),
-    m_execute_incrementally         (false),
-    m_current_needed_strength       (),
-    m_current_attacking_strength    (),
-    m_match_references              (),
-    m_agents                        (),
-    m_playerId                      (-1)
 {
+    
+	Init();
 }
 
 
@@ -143,6 +135,44 @@ bool Goal::operator< (const Goal &goal) const
 }
 
 
+void Goal::Init()
+{
+	
+    m_goal_type = GOAL_TYPE_NULL; 
+
+    
+    m_playerId = -1; 
+
+    
+    m_raw_priority = BAD_UTILITY;	
+
+	
+	m_removal_time = DONT_REMOVE;	
+
+    
+	m_is_invalid = false;				
+
+	
+	m_execute_incrementally = false;
+
+	
+    
+	
+
+	
+    m_current_needed_strength.Init();
+
+	
+	m_current_attacking_strength.Init();
+
+    
+    m_match_references.clear();
+
+	
+	m_agents.clear();
+}
+
+
 GOAL_TYPE Goal::Get_Goal_Type() const
 {
 	return m_goal_type;
@@ -154,19 +184,23 @@ void Goal::Set_Player_Index(const PLAYER_INDEX & playerId)
 	m_playerId = playerId;
 }
 
+
 PLAYER_INDEX Goal::Get_Player_Index() const
 {
 	return m_playerId;
 }
+
+
+
 
 bool Goal::Is_Satisfied() const
 {
 	if (m_agents.size() == 0)
 		return false;
 
-	// Limitation of army size: Cannot form a group with more
-	// armies than the max (without that limitation, it can 
-	// disturb the goals with RallyFirst() - Calvitix
+	
+// limitation of army size : cannot form a group with more
+// armies than the max (without that limitation, it can disturb the goals with RallyFirst() - Calvitix
     if (m_current_attacking_strength.Get_Agent_Count() == k_MAX_ARMY_SIZE)
         return true;
 
@@ -176,15 +210,20 @@ bool Goal::Is_Satisfied() const
 	return true;
 }
 
+
+
+
 bool Goal::Is_Goal_Undercommitted() const
 {
 	return (!Is_Satisfied() && m_agents.size() > 0);
 }
 
+
 sint16 Goal::Get_Agent_Count() const
 {
     return m_agents.size();
 }
+
 
 bool Goal::Is_Single_Squad() const
 {
@@ -228,6 +267,9 @@ bool Goal::Is_Single_Squad() const
 	return true;
 }
 
+
+
+
 bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter)
 {
 	
@@ -252,7 +294,7 @@ bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & ag
 			
 			Assert(0);
 		}
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 		return true;
 	}
@@ -281,7 +323,7 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
 	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
 		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 	
 
@@ -323,7 +365,7 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 		
 		Assert(0);
 	}
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 	return agent_ptr;
 }
@@ -509,14 +551,14 @@ bool Goal::Validate() const
 			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr)(*agent_iter);
 			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theAgent == ctpagent_ptr);
 			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theGoal != NULL);
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 			
 			Assert(0);
 		}
 	}
 
-#endif // _DEBUG
+#endif _DEBUG
     
     return true;
 } 
@@ -540,7 +582,7 @@ void Goal::Add_Match_Reference(const Plan_List::iterator &plan_iter)
 #ifdef _DEBUG_SCHEDULER
 		
 		Validate();
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 }
 
@@ -554,7 +596,7 @@ void Goal::Remove_Match_Reference(const Plan_List::iterator &plan_iter)
 
 		
 		Validate();
-#endif // _DEBUG_SCHEDULER
+#endif _DEBUG_SCHEDULER
 
 }
 
@@ -592,15 +634,24 @@ bool Goal::Satisfied_By(const Squad_Strength & army_strength) const
 	
 	if ( army_strength.Get_Transport() > 0)
 	{
+		
 		if ( needed_strength.Get_Transport() > 0)
-			return true;
+		  return true;
+
+		
+
+		
+		
+		
+		
+		
 	}
 
 	
 	//Check if the army has too much units to fit in one tile - Calvitix
 	if (m_current_attacking_strength.Get_Agent_Count() + 
 		army_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
-		return false;
+	return false;
 	
 	
 
@@ -643,7 +694,9 @@ bool Goal::Needs_Transport() const
 	Squad_Strength needed_strength = m_current_needed_strength;
 	needed_strength -= m_current_attacking_strength;
 	
-	return needed_strength.Get_Transport() > 0;
+	if (needed_strength.Get_Transport() > 0)
+		return true;
+	return false;
 }
 
 

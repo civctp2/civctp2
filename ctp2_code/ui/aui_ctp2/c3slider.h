@@ -71,6 +71,13 @@ public:
 		void *cookie = NULL );
 	virtual ~C3Slider() {}
 
+protected:
+	C3Slider() : aui_Ranger() {}
+	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon( void );
+	AUI_ERRCODE CreateThumb( MBCHAR *ldlBlock );
+
+public:
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -79,14 +86,13 @@ public:
 	BOOL	IsVertical( void ) const
 	{ return m_orientation == AUI_RANGER_ORIENTATION_VERTICAL; }
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseRGrabInside;
+#else
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+#endif
 
 protected:
-	C3Slider() : aui_Ranger() {}
-	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateThumb( MBCHAR *ldlBlock );
-
 	sint32 m_ticks;
 };
 

@@ -13,7 +13,13 @@ void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, 
 sint32 scorewarn_Initialize(void);
 sint32 scorewarn_Cleanup(void);
 
-AUI_ACTION_BASIC(DisclaimerCloseAction);
+
+
+class DisclaimerCloseAction : public aui_Action
+{
+public:
+	virtual ActionCallback Execute;
+};
 
 void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback);

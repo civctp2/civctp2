@@ -29,9 +29,9 @@ aui_TextBox::aui_TextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_ListBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_ListBox( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -54,9 +54,9 @@ aui_TextBox::aui_TextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_ListBox( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL, k_AUI_TEXTBOX_MAXTEXT * k_AUI_TEXTBOX_MAXITEMS ),
-	aui_ListBox( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_TextBase( NULL, k_AUI_TEXTBOX_MAXTEXT * k_AUI_TEXTBOX_MAXITEMS )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

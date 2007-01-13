@@ -140,6 +140,7 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	MCI_STATUS_PARMS msp;
 	MCI_SET_PARMS mp;
 	DWORD i;
+	BOOL bAllTracksOK = TRUE;
 	long totalLen_ms;
 	int iRet;
 
@@ -295,7 +296,7 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 		int iRet;
 
 		
-		szDrive[0] = static_cast<char>(iDrive + 'A');
+		szDrive[0] = iDrive + 'A';
 		szDrive[1] = ':';
 		szDrive[2] = '\\';
 		szDrive[3] = 0;

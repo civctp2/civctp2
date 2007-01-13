@@ -33,7 +33,6 @@
 
 
 #include "aui_control.h"
-#include "aui_keyboard.h"
 
 
 class aui_Surface;
@@ -56,6 +55,7 @@ enum AUI_BUTTON_ACTION
 class aui_Button : public aui_Control
 {
 public:
+	
 	aui_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -71,7 +71,14 @@ public:
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
+	virtual ~aui_Button() {}
 
+protected:
+	aui_Button() : aui_Control() {}
+	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon( void );
+	
+public:
 	virtual AUI_ERRCODE ResetThis( void );
 
 	
@@ -83,17 +90,26 @@ public:
 		sint32 y = 0 );
 
 protected:
-	aui_Button() 
-    : 
-        aui_Control     (),
-        m_isRepeating   (false),
-        m_repeatCount   (0)
-    {};
-
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	
+	BOOL	m_isRepeating;	
+	sint32	m_repeatCount;	
 							
-	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
+#if defined(_MSC_VER)	
+	virtual KeyboardEventCallback KeyboardCallback;
+
+	virtual MouseEventCallback PostChildrenCallback;
+
+	
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+
+	
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseLDropOutside;
+
+	virtual MouseEventCallback MouseRDropInside;
+#else
+	virtual void	KeyboardCallback(aui_KeyBoardEvent * keyboardData);
 	
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
@@ -103,12 +119,7 @@ protected:
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-
-	BOOL	m_isRepeating;	
-	sint32	m_repeatCount;	
-
-private:
-	AUI_ERRCODE InitCommon( void );
+#endif
 };
 
 

@@ -26,13 +26,15 @@
 
 #include "primitives.h"
 
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 #include "textutils.h"
 
 #include "texttab.h"
 
-#include "SlicEngine.h"         // g_slicEngine
+#include "SlicEngine.h"
 
+extern ColorSet		*g_colorSet;
+extern SlicEngine	*g_slicEngine;
 extern C3UI			*g_c3ui;
 
 
@@ -43,10 +45,10 @@ TextTab::TextTab(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
 	aui_Tab( retval, id, ldlBlock, ActionFunc, cookie),
-	PatternBase( ldlBlock, (MBCHAR *)NULL )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
+	PatternBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ImageBase( ldlBlock )
 {
 	
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
@@ -72,10 +74,10 @@ TextTab::TextTab(
 	void *cookie,
 	BOOL selected )
 	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( text ),
 	aui_Tab( retval, id, x, y, width, height, paneWidth, paneHeight, ActionFunc, cookie, selected ),
-	PatternBase( pattern )
+	aui_TextBase( text ),
+	PatternBase( pattern ),
+	aui_ImageBase( (sint32)0 )
 {
 	
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE

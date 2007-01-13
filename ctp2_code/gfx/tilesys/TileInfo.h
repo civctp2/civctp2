@@ -27,28 +27,12 @@
 //   - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-//
-/// \file   TileInfo.h
-/// \brief  Tile information (declarations)
 
-#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
-#endif
+#ifndef __TILEINFO_H__
+#define __TILEINFO_H__
 
-#ifndef TILEINFO_H__
-#define TILEINFO_H__
-
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-// None
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class TileInfo;
+#include "MapPoint.h"
 
 #define k_NUM_TRANSITIONS	4
 
@@ -57,24 +41,12 @@ class TileInfo;
 #define k_SHIFT_MEGA_NEXT	0
 #define k_SHIFT_MEGA_LAST	4
 
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
-
-#include "ctp2_inttypes.h"
-#include "MapPoint.h"
+typedef uint16 TILEINDEX;
 
 class GoodActor;
 class CivArchive;
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
-
-typedef uint16 TILEINDEX;
-
-class TileInfo 
-{
+class TileInfo {
 public:
 	TileInfo();
 	TileInfo(TileInfo *copy);
@@ -94,9 +66,9 @@ public:
 	sint16 GetRiverPiece(void) const { return m_riverPiece; }
 	void SetRiverPiece(sint16 river) { m_riverPiece = static_cast<sint8>(river); }
 
-	void SetGoodActor(sint32 index, MapPoint const & pos);
-	GoodActor * GetGoodActor(void) const {return m_goodActor;}
-	bool HasGoodActor(void) const { return m_goodActor != NULL; }
+	sint32 SetGoodActor(sint32 index, MapPoint pos);
+	GoodActor *GetGoodActor(void) {return m_goodActor;}
+	sint32 HasGoodActor(void) {return (m_goodActor != NULL);}
 	void DeleteGoodActor(void);
 
 	void SetTransition(uint16 transNum, uint16 index) { m_transitions[transNum] = (sint8)index; }
@@ -104,7 +76,7 @@ public:
 
 	sint32 GetNextMega(void) { return static_cast<sint32>((m_megaInfo & k_MASK_MEGA_NEXT) >> k_SHIFT_MEGA_NEXT); }
 	sint32 GetLastMega(void) { return static_cast<sint32>((m_megaInfo & k_MASK_MEGA_LAST) >> k_SHIFT_MEGA_LAST); }
-	bool IsMega(void) const { return m_megaInfo != 0; }
+	BOOL IsMega(void) { return (BOOL)(m_megaInfo != 0); }
 	void SetNextMega(sint32 dir) { m_megaInfo = static_cast<sint8>((m_megaInfo & k_MASK_MEGA_NEXT) | ((dir << k_SHIFT_MEGA_NEXT) & k_MASK_MEGA_NEXT));}
 	void SetLastMega(sint32 dir) { m_megaInfo = static_cast<sint8>((m_megaInfo & k_MASK_MEGA_LAST) | ((dir << k_SHIFT_MEGA_LAST) & k_MASK_MEGA_LAST));}
 

@@ -17,19 +17,13 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _MSC_VER
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - None
 //
 //----------------------------------------------------------------------------
-
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
 #endif
@@ -49,8 +43,8 @@ private:
 #endif
 
 	sint16 AverageVals(sint8 *map, sint32 x, sint32 y,
-	                   sint32 xstride, sint32 ystride,
-	                   sint32 width);
+					   sint32 xstride, sint32 ystride,
+					   sint32 width);
 public:
 	PlasmaGenerator2() { m_refCount = 0; }
 

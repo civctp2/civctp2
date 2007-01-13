@@ -10,7 +10,7 @@
 
 
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 #include "player.h"
 #include "Unit.h"
 #include "MessageData.h"

@@ -16,41 +16,42 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"
-#include "directvideo.h"
 
+#include "c3.h"
 #include "aui.h"
+
+#include "c3errors.h"
+
 #include "aui_directui.h"
 #include "aui_window.h"
 #include "aui_directsurface.h"
-#include "c3errors.h"
-#include "errors.h"
+
+#include "directvideo.h"
+
 #include "RefTime.h"
 
-
 DirectVideo::DirectVideo()
-:
-	m_isPlaying                 (false),
-	m_isOpen                    (false),
-	m_isFinished                (false),
-	m_isPaused                  (false),
-	m_isModal                   (false),
-	m_mmStream                  (NULL),
-	m_dd                        (NULL),
-	m_primaryVidStream          (NULL),
-	m_ddStream                  (NULL),
-	m_primarySurface            (NULL),
-	m_streamSurface             (NULL),
-	m_streamSample              (NULL),
-	m_flags                     (0),
-	m_window                    (NULL),
-    m_timePerFrame              (0),
-	m_lastFrameTime             (0)
 {
-	RECT emptyRect  = {0,0,0,0};
+	RECT emptyRect = {0,0,0,0};
 
-	m_surfaceRect   = emptyRect;
-	m_destRect      = emptyRect;
+	m_mmStream = NULL;
+	m_dd = NULL;
+	m_primaryVidStream = NULL;
+	m_ddStream = NULL;
+	m_primarySurface = NULL;
+	m_streamSurface = NULL;
+	m_streamSample = NULL;
+	m_surfaceRect = emptyRect;
+	m_destRect = emptyRect;
+	m_flags = 0;
+	m_timePerFrame = 0;
+	m_lastFrameTime = 0;
+	
+	m_isPlaying = FALSE;
+	m_isPaused = FALSE;
+	m_isModal = FALSE;
+	m_isFinished = FALSE;
+	m_isOpen = FALSE;
 }
 
 DirectVideo::~DirectVideo()
@@ -112,6 +113,8 @@ HRESULT DirectVideo::Initialize(aui_DirectUI *ui, aui_Window *window, BOOL modal
 
 	return 0;
 }
+
+#include "errors.h"
 
 HRESULT	DirectVideo::OpenStream(MBCHAR *name)
 {
@@ -211,11 +214,18 @@ Exit:
 
 HRESULT	DirectVideo::PlayAll(void)
 {
-	HRESULT hr = m_mmStream->SetState(STREAMSTATE_RUN);
+	HRESULT		hr;
+
+	
+	if (m_flags == DVFLAGS_FULLSCREEN) {
+	}
+
+	
+    hr = m_mmStream->SetState(STREAMSTATE_RUN);
 	if (FAILED(hr)) return hr;
 
 	
-	m_isFinished = false;
+	m_isFinished = FALSE;
 
 	
     while (true) {
@@ -246,13 +256,16 @@ HRESULT	DirectVideo::PlayOne(void)
 	hr = m_mmStream->SetState(STREAMSTATE_RUN);
 	if (FAILED(hr)) return hr;
 
-	m_isPlaying = true;
+	if (!m_isPlaying)
+		m_isPlaying = TRUE;
 
 	if (m_lastFrameTime == 0) m_lastFrameTime = GetTickCount();
-//	sint32 iterations = (GetTickCount() - m_lastFrameTime)/m_timePerFrame + 2;
+	sint32 iterations = (GetTickCount() - m_lastFrameTime)/m_timePerFrame + 2;
 	
 
-	sint32	r = m_streamSample->Update(SSUPDATE_CONTINUOUS, NULL, NULL, 0);
+	sint32	r;
+
+		r = m_streamSample->Update(SSUPDATE_CONTINUOUS, NULL, NULL, 0);
 
 
 	r = m_streamSample->CompletionStatus(COMPSTAT_WAIT, 0);
@@ -313,9 +326,12 @@ HRESULT	DirectVideo::CloseStream(void)
 
 HRESULT DirectVideo::Process(void)
 {
-	if (m_flags == DVFLAGS_INWINDOW) 
-    {
-        return (m_isModal) ? PlayAll() : PlayOne();
+	if (m_flags == DVFLAGS_INWINDOW) {
+		if (!m_isModal) {
+			return PlayOne();
+		} else {
+			return PlayAll();
+		}
 	}
 
 	return 0;
@@ -323,13 +339,14 @@ HRESULT DirectVideo::Process(void)
 
 void DirectVideo::Pause(void)
 {
-	if (m_isPlaying) 
-    {
-		m_isPaused = true;
+	HRESULT hr;
 
-		if (m_mmStream) 
-        {
-	        HRESULT hr = m_mmStream->SetState(STREAMSTATE_STOP);
+	if (m_isPlaying) {
+		
+		m_isPaused = TRUE;
+
+		if (m_mmStream != NULL) {
+			hr = m_mmStream->SetState(STREAMSTATE_STOP);
 			if (FAILED(hr)) return;
 		}
 	}
@@ -337,15 +354,16 @@ void DirectVideo::Pause(void)
 
 void DirectVideo::Resume(void)
 {
-	if (m_isPaused) 
-    {
-		if (m_mmStream) 
-        {
-			HRESULT hr = m_mmStream->SetState(STREAMSTATE_RUN);
+	HRESULT hr;
+
+	if (m_isPaused) {
+		
+		if (m_mmStream != NULL) {
+			hr = m_mmStream->SetState(STREAMSTATE_RUN);
 			if (FAILED(hr)) return;
 		}
 
-		m_isPaused = false;
+		m_isPaused = FALSE;
 	}
 }
 

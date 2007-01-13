@@ -1,32 +1,4 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer password screen
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 #include "c3window.h"
@@ -45,12 +17,20 @@
 
 #include "passwordscreen.h"
 
-#include "spnewgamewindow.h"
+#include "spnewgamewindow.h" 
+
 
 extern C3UI			*g_c3ui;
 
 
+
+
+
+
+
+
 static ns_Window *s_passwordScreen	= NULL;
+
 
 static c3_Static	*s_askStatic			= NULL;
 static c3_Static	*s_joinStatic			= NULL;
@@ -60,21 +40,32 @@ static aui_Radio	*s_noRadio				= NULL;
 static c3_Static	*s_inputStatic			= NULL;
 static C3TextField	*s_inputTextField		= NULL;
 
+
 static aui_Button	*s_okButton				= NULL;
+
 
 static c3_Static	*s_denyStatic			= NULL;
 
+
 static c3_Static	*s_fullStatic			= NULL;
+
 
 static c3_Static	*s_nolobbyStatic		= NULL;
 
+
 static c3_Static	*s_connectionlostStatic	= NULL;
+
 
 static c3_Static	*s_nodialupStatic		= NULL;
 
+
 static c3_Static	*s_connectionerrStatic	= NULL;
 
+
 static c3_Static    *s_scenarionotfoundStatic = NULL;
+
+
+
 
 sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 {
@@ -294,15 +285,24 @@ sint32 passwordscreen_removeMyWindow( void )
 	return 1;
 }
 
+
+
 AUI_ERRCODE passwordscreen_Initialize( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_passwordScreen ) return AUI_ERRCODE_OK;
+	if ( s_passwordScreen ) return AUI_ERRCODE_OK; 
+
 	strcpy(windowBlock, "passwordscreen");
 
+
+
+
+
+	
+	
 	s_passwordScreen = new ns_Window(
 		&errcode,
 		aui_UniqueId(),
@@ -311,6 +311,11 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING);
 	Assert( AUI_NEWOK(s_passwordScreen, errcode) );
 	if ( !AUI_NEWOK(s_passwordScreen, errcode) ) errcode;
+
+	
+	
+	
+
 
 	s_okButton = spNew_ctp2_Button(
 				&errcode,
@@ -446,11 +451,13 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 }
 
 
+
 AUI_ERRCODE passwordscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_passwordScreen  ) return AUI_ERRCODE_OK;
+	if ( !s_passwordScreen  ) return AUI_ERRCODE_OK; 
+
 	g_c3ui->RemoveWindow( s_passwordScreen->Id() );
 
 	mycleanup( s_askStatic );
@@ -476,6 +483,7 @@ AUI_ERRCODE passwordscreen_Cleanup()
 
 #undef mycleanup
 }
+
 
 
 void PasswordScreenCallback(

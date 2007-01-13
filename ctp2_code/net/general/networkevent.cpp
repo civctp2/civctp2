@@ -193,7 +193,6 @@ STDEHANDLER(NetEndAIClientTurnEvent)
 STDEHANDLER(NetCreatedWonderEvent)
 {
 	return GEV_HD_Continue; 
-#if 0   // Unreachable: CtP1 code?
 	if(!g_network.IsHost()) return GEV_HD_Continue;
 
 	Unit city;
@@ -207,7 +206,6 @@ STDEHANDLER(NetCreatedWonderEvent)
 	g_network.Unblock(city.GetOwner());
 
 	return GEV_HD_Continue;
-#endif
 }
 
 	

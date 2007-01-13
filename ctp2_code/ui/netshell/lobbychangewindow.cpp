@@ -1,51 +1,38 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer lobby window
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
+
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_static.h"
 #include "aui_button.h"
 
+
 #include "c3_button.h"
 #include "c3_static.h"
 #include "c3textfield.h"
 
+
 #include "netshell.h"
 #include "ns_customlistbox.h"
 
+
 #include "passwordscreen.h"
+
 
 #include "lobbychangewindow.h"
 #include "lobbywindow.h"
+
 
 LobbyChangeWindow::LobbyChangeWindow(
 	AUI_ERRCODE *retval )
@@ -70,6 +57,7 @@ LobbyChangeWindow::LobbyChangeWindow(
 }
 
 
+
 AUI_ERRCODE LobbyChangeWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -81,12 +69,14 @@ AUI_ERRCODE LobbyChangeWindow::InitCommon( void )
 }
 
 
+
 AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 
 	
+
 	aui_Control *control;
 
 	control = new c3_Static(
@@ -112,6 +102,14 @@ AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_CURRENTLOBBYTEXTFIELD ] = control;
+
+
+
+
+
+
+
+
 
 	control = new ns_LobbyListBox(
 		&errcode,
@@ -139,10 +137,12 @@ AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 
 
 	
+
 	aui_Ldl::SetupHeirarchyFromRoot( "lobbychangewindow" );
 
 
 	
+
 	aui_Action *action;
 
 	action = new OKButtonAction;
@@ -161,6 +161,7 @@ AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 	m_controls[ CONTROL_LOBBIESLISTBOX ]->SetAction( action );
 
 	
+
 	
 	aui_Header *hdr = ((aui_ListBox *)m_controls[ CONTROL_LOBBIESLISTBOX ])
 		->GetHeader();
@@ -177,6 +178,7 @@ AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 	return AUI_ERRCODE_OK;
 }
 
+
 void LobbyChangeWindow::Update(void)
 {
 	ns_LobbyListBox *listbox = (ns_LobbyListBox *)(FindControl( LobbyChangeWindow::CONTROL_LOBBIESLISTBOX ));
@@ -187,6 +189,7 @@ void LobbyChangeWindow::Update(void)
 	else
 		b->Enable(FALSE);
 }
+
 
 AUI_ERRCODE LobbyChangeWindow::Idle( void )
 {
@@ -212,6 +215,7 @@ AUI_ERRCODE LobbyChangeWindow::Idle( void )
 	}
 	return AUI_ERRCODE_OK;
 }
+
 
 void LobbyChangeWindow::LobbyListBoxAction::Execute(
 	aui_Control *control,
@@ -242,6 +246,7 @@ void LobbyChangeWindow::LobbyListBoxAction::Execute(
 	}
 }
 
+
 AUI_ERRCODE LobbyChangeWindow::SetParent( aui_Region *region )
 {
 	if(region)
@@ -251,6 +256,7 @@ AUI_ERRCODE LobbyChangeWindow::SetParent( aui_Region *region )
 
 	return ns_Window::SetParent( region );
 }
+
 
 void LobbyChangeWindow::OKButtonAction::Execute(
 	aui_Control *control,
@@ -273,6 +279,7 @@ void LobbyChangeWindow::OKButtonAction::Execute(
 		g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 	}
 }
+
 
 
 void LobbyChangeWindow::CancelButtonAction::Execute(

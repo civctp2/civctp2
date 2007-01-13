@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __SLIC_ARRAY_H__
 #define __SLIC_ARRAY_H__
 
@@ -17,7 +16,7 @@ private:
 	SLIC_SYM m_varType; 
 	SlicStackValue *m_array;
 	sint32 m_arraySize;
-	uint32 m_allocatedSize;
+	sint32 m_allocatedSize;
 	SlicStructDescription *m_structTemplate;
 	bool m_sizeIsFixed;
 

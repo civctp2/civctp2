@@ -44,9 +44,10 @@
 #include "profileDB.h"
 #include "c3math.h"		// AsPercentage
 
-static bool s_initialized		= false;
-static bool s_dip_initialized	= false;
-static int	s_populationHack[k_MAX_PLAYERS];
+static s_initialized = 0;
+static s_dip_initialized = 0;
+
+static s_populationHack[k_MAX_PLAYERS];
 
 void gslog_print(char *fmt, ...)
 {
@@ -55,15 +56,16 @@ void gslog_print(char *fmt, ...)
 		return;
 
 	FILE *f;
-	if (s_initialized) 
-	{
-		f = fopen("logs\\gslog.txt", "a");
-	}
-	else
-	{
+	if(!s_initialized) {
+		
 		f = fopen("logs\\gslog.txt", "w");
-		s_initialized = true;
-		std::fill(s_populationHack, s_populationHack + k_MAX_PLAYERS, 0);
+		s_initialized = 1;
+		sint32 i;
+		for(i = 0; i < k_MAX_PLAYERS; i++) {
+			s_populationHack[i] = 0;
+		}
+	} else {
+		f = fopen("logs\\gslog.txt", "a");
 	}
 	
 	char buf[k_MAX_NAME_LEN];
@@ -88,14 +90,12 @@ void gslog_dipprint(char *fmt, ...)
 		return;
 
 	FILE *f;
-	if (s_dip_initialized) 
-	{
-		f = fopen("logs\\diplog.txt", "a");
-	} 
-	else 
-	{
+	if(!s_dip_initialized) {
+		
 		f = fopen("logs\\diplog.txt", "w");
-		s_dip_initialized = true;
+		s_dip_initialized = 1;
+	} else {
+		f = fopen("logs\\diplog.txt", "a");
 	}
 	
 	char buf[k_MAX_NAME_LEN];
@@ -117,13 +117,12 @@ void gslog_LogPlayerStats(sint32 player)
 	if(!g_theProfileDB->GetEnableLogs())
 		return;
 
-	Player *pl = g_player[player];
-
-	if (!pl) return;
+	if(!g_player[player]) return;
 
 	
+	Player *pl = g_player[player];
 
-	gslog_print("[Player %d] [Turn %d]\n", player, pl->m_current_round);
+	gslog_print("[Player %d] [Turn %d]\n", player, g_player[player]->m_current_round);
 
 	
 	
@@ -240,7 +239,7 @@ void gslog_LogPlayerStats(sint32 player)
 		
 		sint32 commerceBuildingUpkeep = buildingutil_GetTotalUpkeep(
 			cityData->GetImprovements(),
-			wonderutil_GetDecreaseMaintenance(pl->m_builtWonders), cityData->GetOwner()); //EMOD added owner
+			wonderutil_GetDecreaseMaintenance(pl->m_builtWonders));
 
 		
 		

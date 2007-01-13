@@ -85,28 +85,27 @@ ldl_datablock::~ldl_datablock()
 
 char *ldl_datablock::GetFullName(char *output)
 {
-	if (m_parent) 
-    {
+	
+	if(m_parent) {
 		m_parent->GetFullName(output);
 		strcat(output, ".");
 		strcat(output, m_name);
-	} 
-    else 
-    {
+		return output;
+	} else {
 		strcpy(output, m_name);
+		return output;
 	}
-
-	return output;
 }
 
-bool ldl_datablock::ContstructFullName( 
+BOOL ldl_datablock::ContstructFullName( 
 		char *szName, 
 		ldl_datablock *dbParent, 
 		char *result )
 {
 	GetFullName(result);
+
 	
-	return true;
+	return TRUE;
 }
 
 
@@ -180,7 +179,7 @@ void ldl_datablock::Dump(sint32 indent) {
 	ldlif_log("}\n");
 }
 
-bool ldl_datablock::AttributeNameTaken(char *szName)
+BOOL ldl_datablock::AttributeNameTaken(char *szName)
 {
 	return GetAttribute(szName) != NULL;
 }

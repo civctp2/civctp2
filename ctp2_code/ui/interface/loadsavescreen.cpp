@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Load/save screen
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,16 +17,11 @@
 //
 // Compiler flags
 // 
-// you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
-// - Updated tribe index check.
-// - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -95,7 +89,9 @@ extern ProfileDB			*g_theProfileDB;
 extern StringDB				*g_theStringDB;
 
 
-#include "CivilisationRecord.h"
+#include "CivilisationDB.h"
+extern CivilisationDatabase	*g_theCivilisationDB;
+
 
 extern sint32				g_scenarioUsePlayerNumber;
 
@@ -175,7 +171,7 @@ sint32 loadsavescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_loadsaveWindow ) return AUI_ERRCODE_OK; 
@@ -224,19 +220,17 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 
 
 
-void loadsavescreen_Cleanup()
+AUI_ERRCODE loadsavescreen_Cleanup()
 {
-	if (g_loadsaveWindow)
-    {
-        if (g_c3ui)
-        {
+	if ( !g_loadsaveWindow  ) return AUI_ERRCODE_OK; 
+
 	g_c3ui->RemoveWindow( g_loadsaveWindow->Id() );
-        }
 	keypress_RemoveHandler(g_loadsaveWindow);
 
 	delete g_loadsaveWindow;
 	g_loadsaveWindow = NULL;
-}
+
+	return AUI_ERRCODE_OK;
 }
 
 void loadsavescreen_PostCleanupAction(void)
@@ -349,10 +343,8 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 
 	CIV_INDEX	tribeIndex = (CIV_INDEX)spnewgametribescreen_getTribeIndex();
 
-	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
-    {
-		tribeIndex = CIV_INDEX_CIV_1;
-    }
+	if (tribeIndex == -1)
+		tribeIndex = (CIV_INDEX)1;
 
 	g_theProfileDB->SetCivIndex(tribeIndex);
 	
@@ -387,14 +379,14 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
  			
 			BOOL foundOne = FALSE;
 
- 			for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
+ 			for (i=0; i<k_MAX_PLAYERS; i++) {
  				MBCHAR		*civName;
  				MBCHAR		*dbString;
 
  				civName = s_tempSaveInfo->civList[i];
-				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(tribeIndex)->GetPluralCivName());
+				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName(tribeIndex));
  				if (strlen(civName) > 0) {
- 					if (!stricmp(dbString, civName)) {
+ 					if (!_stricoll(dbString, civName)) {
  						
  						g_scenarioUsePlayerNumber = i;
 						foundOne = TRUE;
@@ -529,7 +521,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
 				
 				spnewgametribescreen_enableTribes();
-				spnewgametribescreen_setTribeIndex(1 + rand() % (g_theCivilisationDB->NumRecords() - 1));
+				spnewgametribescreen_setTribeIndex(1 + rand() % (g_theCivilisationDB->m_nRec - 1));
 			} else {
 				if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS) {
 					
@@ -557,8 +549,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 						
 						
 						BOOL noCivsInList = TRUE;
-						sint32 i;
-						for (i=0; i<k_MAX_PLAYERS; i++) {
+						for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
 							if (s_tempSaveInfo->playerCivIndexList[i] > 0) {
 								noCivsInList = FALSE;
 								break;
@@ -573,18 +564,17 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 							
 							BOOL foundOne = FALSE;
 							
-							for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
-                            {
-								MBCHAR *    civName = s_tempSaveInfo->civList[i];
+							for (i=0; i<k_MAX_PLAYERS; i++) {
+								MBCHAR		*civName;
+								MBCHAR		*dbString;
 								
-								if (strlen(civName) > 0) 
-                                {
-									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++) 
-                                    {
-										MBCHAR const *  dbString = 
-                                            g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
+								civName = s_tempSaveInfo->civList[i];
+								if (strlen(civName) > 0) {
+									
+									for (sint32 j=0; j<g_theCivilisationDB->GetNumRec(); j++) {
+										dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName((CIV_INDEX)j));
 										
-										if (!stricmp(dbString, civName)) {
+										if (!_stricoll(dbString, civName)) {
 											
 											spnewgametribescreen_enableTribe((CIV_INDEX)j);
 											foundOne = TRUE;
@@ -608,12 +598,13 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 								return;
 							}
 							
-						} 
-                        else 
-                        {
-							for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
-                            {
-								spnewgametribescreen_enableTribe(s_tempSaveInfo->playerCivIndexList[i]);
+						} else {
+							
+							
+							
+							
+							for (i=0; i<k_MAX_PLAYERS; i++) {
+								spnewgametribescreen_enableTribe((CIV_INDEX)s_tempSaveInfo->playerCivIndexList[i]);
 							}
 						}
 					}
@@ -658,7 +649,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
+	sprintf(path, "%s\\%s", directoryPath, saveInfo->fileName);
 
 	
 	
@@ -796,11 +787,15 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	
 	if (g_isScenario || (saveInfo->scenarioName && *saveInfo->scenarioName))
 	{
-		delete [] g_pTurnLengthOverride;
-		g_pTurnLengthOverride = NULL;
+		if (g_pTurnLengthOverride)
+		{
+			
+			delete [] g_pTurnLengthOverride;
+			g_pTurnLengthOverride = NULL;
+		}
 		
 		MBCHAR overridePath[_MAX_PATH];
-		sprintf(overridePath, "%s%s%s", g_civPaths->GetCurScenarioPath(), FILE_SEP, "turnlength.txt");
+		sprintf(overridePath, "%s\\%s", g_civPaths->GetCurScenarioPath(), "turnlength.txt");
 
 		g_useCustomYear = false;
 
@@ -847,8 +842,11 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 	else
 	{
 		g_useCustomYear = false;
-		delete [] g_pTurnLengthOverride;
-		g_pTurnLengthOverride = NULL;
+		if (g_pTurnLengthOverride)
+		{
+			delete [] g_pTurnLengthOverride;
+			g_pTurnLengthOverride = NULL;
+		}
 	}
 }
 
@@ -966,8 +964,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 
 	
 	sint32 j = 0;
-	uint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++)
+	for ( sint32 i = 0; i < k_MAX_PLAYERS; i++ )
 	{
 		if ( g_player[ i ] )
 		{
@@ -1252,8 +1249,7 @@ void loadsavescreen_SaveSCENGame(void)
 			TribeSlot ts;
 
 			// These fields don't matter for the savedtribeslots.
-			ts.isAI = 0;
-			ts.key  = 0;
+			ts.isAI = ts.key = 0;
 
 			// This is the only important field.
 			// +1 because netshell treats zero as "none" w/ barbarians == 1.
@@ -1509,7 +1505,7 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 	// If another list item was previously selected, make sure to dump its
 	// extended info
 	tech_WLList<sint32> *lastList = list->GetSelectedListLastTime();
-	for (uint32 i=0; i<lastList->L(); i++) {
+	for (sint32 i=0; i<lastList->L(); i++) {
 		sint32 index = lastList->GetAtIndex(i);
 		LSSavesListItem *oldItem = (LSSavesListItem *)list->GetItemByIndex(index);
 		if (oldItem != NULL) {

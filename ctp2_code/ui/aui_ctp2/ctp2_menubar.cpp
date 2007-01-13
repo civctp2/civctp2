@@ -58,28 +58,21 @@ void DefaultCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 
 class OpenMenuAction : public aui_Action
 {
-public:
-	OpenMenuAction(ctp2_Menu * menu) 
-    :   aui_Action  (),
-        m_menu      (menu) 
-    { ; };
+  public:
+	OpenMenuAction(ctp2_Menu *menu) : m_menu(menu) {}
+	virtual ActionCallback Execute;
 
-	virtual void	Execute
-	(
-		aui_Control	*	control,
-		uint32			action,
-		uint32			data
-	)
-    {   
-        if (m_menu)
-        {
-	        m_menu->Open();
-        }
-    };
-
-protected:
-	ctp2_Menu *     m_menu;
+  protected:
+	ctp2_Menu *m_menu;
 };
+
+void OpenMenuAction::Execute(
+	aui_Control *control,
+	uint32 action,
+	uint32 data )
+{
+	m_menu->Open();
+}
 
 
 static void ButtonCallback	(aui_Control *control, uint32 action, uint32 data, void *cookie)

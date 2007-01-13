@@ -18,6 +18,12 @@
 //
 // Compiler flags
 // 
+// _BFR
+// - Generate final release when set (forces CD check).
+//
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,12 +33,21 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
 #ifndef __ID_H__
 #define __ID_H__ 1
+
+#if defined(_MSC_VER)
+
+class CivArchive;
+
+#define k_ID_VERSION_MAJOR	0										
+#define k_ID_VERSION_MINOR	0										
+
+#else	// _MSC_VER
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -51,23 +66,36 @@ class	ID;
 // Project imports
 //----------------------------------------------------------------------------
 
+#include "c3.h"					// General declarations
 #include "civarchive.h"			// CivArchive
-#include "ctp2_inttypes.h"      // sint32, uint32
 
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------
 
+#endif	// _MSC_VER
+
+
 class ID { 
 public:
 	uint32 m_id; 
 	
+	ID () { m_id = 0; };
 	ID (sint32 val) { m_id = val; }; 
-	ID (uint32 val = 0) { m_id = val; }; 
-    ID (const ID & i) { m_id = i.m_id; };
-
+	ID (uint32 val) { m_id = val; }; 
+#if defined(WIN32)
+	ID (const int val) {
+		Assert (0 <= val); 
+		m_id = unsigned int (val); }; 
+	
+	ID (const unsigned int val) {
+		m_id = val; }; 
+#endif
+	
 	void Castrate() { } 
 	void DelPointers() {} 
+	
+	
 	
 	operator int() const  { return m_id; }; 
 	operator unsigned int() const  { return m_id; }; 
@@ -82,17 +110,31 @@ public:
 	uint32  operator| (const ID &val) const { return m_id | val.m_id; };
 	
  
-	bool operator== (const ID &val) const { return m_id == val.m_id; };
+	sint32 operator== (const ID &val) const { return m_id == val.m_id; };
 	
    
-	bool operator!= (const ID &val) const { return m_id != val.m_id; };
+	sint32 operator!= (const ID &val) const { return m_id != val.m_id; };
 	
 
-	bool operator&& (const ID &val) const { return m_id && val.m_id; };
+	sint32 operator&& (const ID &val) const { return m_id && val.m_id; };
 	
   
-	bool operator|| (const ID &val) const { return m_id || val.m_id; };
+	sint32 operator|| (const ID &val) const { return m_id || val.m_id; };
 	
+
+#if defined(_MSC_VER) 
+
+	operator< (const ID &val) const { return m_id < val.m_id; };
+	
+
+	operator<= (const ID &val) const { return m_id <= val.m_id; };
+	
+
+	operator> (const ID &val) const { return m_id > val.m_id; };
+	
+	operator>= (const ID &val) const { return m_id >= val.m_id; };
+
+#else	// _MSC_VER
 
 	bool operator < (const ID & val) const 
 	{ 
@@ -114,7 +156,10 @@ public:
 		return m_id >= val.m_id; 
 	};
 
-	ID & operator = (const ID &val) { 
+#endif	// _MSC_VER
+  
+
+	ID & operator= (const ID &val) { 
         m_id = val.m_id;
         return *this; };
 

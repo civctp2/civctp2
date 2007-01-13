@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __SCIENCE_H__
 #define __SCIENCE_H__ 1
 

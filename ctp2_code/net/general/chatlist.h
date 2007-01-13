@@ -11,7 +11,7 @@ class ChatText
   public:
 	MBCHAR *m_text;
 	sint32 m_sender;
-	time_t m_timeAdded;
+	sint32 m_timeAdded;
 
 	ChatText(sint32 sender, const char *text) {
 		m_text = new MBCHAR[strlen(text) + 1];

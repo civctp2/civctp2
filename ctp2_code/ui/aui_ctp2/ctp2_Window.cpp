@@ -121,29 +121,21 @@ AUI_ERRCODE ctp2_Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 class WeaklyModalCloseAction : public aui_Action
 {
-public:
-	WeaklyModalCloseAction(ctp2_Window *win) 
-    :   aui_Action  (),
-        m_window    (win)
-    { ; };
+  public:
+	WeaklyModalCloseAction(ctp2_Window *win) : m_window(win) {}
+	virtual ActionCallback Execute;
 
-	virtual void	Execute
-	(
-		aui_Control	*	control,
-		uint32			action,
-		uint32			data
-	)
-    {
-        if (g_ui && m_window)
-        {
-	        g_ui->RemoveWindow(m_window->Id());
-        }
-    }
-
-protected:
-	ctp2_Window *   m_window;
+  protected:
+	ctp2_Window *m_window;
 };
 
+void WeaklyModalCloseAction::Execute(
+	aui_Control *control,
+	uint32 action,
+	uint32 data )
+{
+	g_ui->RemoveWindow(m_window->Id());
+}
 
 void ctp2_Window::MouseLGrabOutside( aui_MouseEvent *mouseData )
 {
@@ -175,12 +167,14 @@ void    ctp2_Window::ResetCurrentMouseState()
 
 AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
 	ctp2_Static *background = (ctp2_Static *)aui_Ldl::GetObject((MBCHAR *)ldlBlock, "Background");
 	if(background) {
 		background->Enable(FALSE);
 	}
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *)ldlBlock);
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock((MBCHAR *)ldlBlock);
 	if(block) {
 		MBCHAR *title = block->GetString("title");
 		if(title) {

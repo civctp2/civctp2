@@ -6,9 +6,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef _NET_RAND_H_
 #define _NET_RAND_H_
 

@@ -20,16 +20,19 @@ aui_DirectJoystick::aui_DirectJoystick(
 	uint32 lMin,
 	uint32 lMax)
 	:
-	aui_Joystick	(),
-	aui_Input		(),
-	aui_DirectInput	(retval, FALSE),
-	m_lpDI2Joystick	(NULL),
-	m_lMin		(lMin),
-	m_lMax		(lMax)
+	aui_Joystick( retval ),
+	aui_Input( retval ),
+	aui_DirectInput( retval, FALSE ),
+	m_lpDI2Joystick( NULL ),
+	m_lMin( lMin ),
+	m_lMax( lMax )
 {
+	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = CreateDirectJoystick();
+
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -81,8 +84,11 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 	{
 		DIJOYSTATE js;
 		static DIDEVICEOBJECTDATA od[ 1 ];
+		DIDEVICEOBJECTDATA *ptrOd = od;
+		HRESULT hr;
 
-        HRESULT hr = m_lpDI2Joystick->Poll();
+		
+		hr = m_lpDI2Joystick->Poll();
 
 		
 		hr = m_lpdid->GetDeviceState(
@@ -116,8 +122,9 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 
 		
 		
-		uint32 key = AUI_JOYSTICK_X_AXIS;
+		uint32 key;
 
+		key = AUI_JOYSTICK_X_AXIS;
 		if ( ( abs(js.lX - m_data.lX) > (int ( m_lMax / 2 ) )) )
 		{
 			m_data.key = key;
@@ -197,7 +204,9 @@ BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID da
 {
 	DIPROPRANGE				diprg; 
 	LPDIRECTINPUTDEVICE		lpTempJoystick;
-	aui_DirectJoystick *    joy = (aui_DirectJoystick *) data;
+	aui_DirectJoystick *joy = NULL;
+
+	joy = (aui_DirectJoystick *)data;
 	
 	if( DI_OK != (joy->DI())->CreateDevice( lpDeviceInst->guidInstance, &lpTempJoystick, NULL ) )
 		return( DIENUM_CONTINUE );

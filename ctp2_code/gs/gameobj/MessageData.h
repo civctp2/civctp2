@@ -1,32 +1,9 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Message data
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// HAVE_PRAGMA_ONCE
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made GetMessageWindow const. (Oct 16th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -182,7 +159,7 @@ class MessageData : public GAMEOBJ
 
 
 
-		void SetMsgText(MBCHAR const * s);
+		void SetMsgText(MBCHAR *s) ;
 
 		const MBCHAR *GetMsgCaption() const { return m_caption; }
 		void SetMsgCaption(const MBCHAR *caption);
@@ -203,7 +180,7 @@ class MessageData : public GAMEOBJ
 		
 		
 		void SetMessageWindow( MessageWindow *window ) { m_window = window; }
-		MessageWindow *GetMessageWindow( void ) const { return m_window; }
+		MessageWindow *GetMessageWindow( void ) { return m_window; }
 		void KillMessageWindow( void );
 	
 		

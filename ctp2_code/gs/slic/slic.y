@@ -3,7 +3,6 @@
  * Project      : Call To Power 2
  * File type    : Yacc input file.
  * Description  : Slic syntax parser
- * Id           : $Id:$
  *
  *----------------------------------------------------------------------------
  *
@@ -22,8 +21,7 @@
  *   - Slic database access                                                                            
  *   - Slic database size access
  * - Exponentiation operator '**' added.
- * - Bitwise operators ('&', '|', '^', '~') added.
- * - Added database array access. (Sep 16th 2005 Martin Gühmann)
+ * - Bitwise and '&' operator added.
  * 
  *----------------------------------------------------------------------------
  */
@@ -52,6 +50,16 @@
  * Set when generating the debug version.
  *
  *----------------------------------------------------------------------------
+ *
+ * Modifications from the original Activision code:
+ *
+ * - Addtion by Martin Gühmann to allow:
+ *   - Slic database access
+ *   - Slic database size access
+ * - Exponetiation operator '**' added.
+ * - Bitwise operators added
+ *
+ *----------------------------------------------------------------------------
  */
 
 #include <stdio.h>
@@ -60,9 +68,7 @@
 #include "slicif.h"
 
 /* Avoid silly warnings */
-#ifdef _MSC_VER
 #pragma warning( disable : 4013 )
-#endif
 #define lint
 
 void yyerror(char* err);
@@ -175,7 +181,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed HelpBox %s\n", $2);
+		fprintf(debuglog, "Parsed AlertBox %s\n", $2);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -425,20 +431,8 @@ expression:
 		        slicif_add_op(SOP_PUSHI, slicif_find_db_value($1.dbptr, $3.name, $6.name));
 	        }
         }
-	|   DBREF '(' NAME ')' REF NAME '[' expression ']'
-	    { 
-            if (slicif_is_name($1.dbptr, $3.name) < 0)
-			{
-		        slicif_add_op(SOP_DBNAMEARRAY, $1.dbptr, $3.name, $6.name);
-	        }
-	        else
-			{
-				slicif_add_op(SOP_DBNAMECONSTARRAY, $1.dbptr, slicif_find_db_index($1.dbptr, $3.name), $6.name);
-	        }
-        }
 	|   DBREF '(' expression ')' { slicif_add_op(SOP_DB, $1.dbptr); }
 	|   DBREF '(' expression ')' REF NAME { slicif_add_op(SOP_DBREF, $1.dbptr, $6.name); }
-	|   DBREF '(' expression ')' REF NAME '[' expression ']' { slicif_add_op(SOP_DBARRAY, $1.dbptr, $6.name); }
 	|   DBREF '(' ')' {	slicif_add_op(SOP_DBSIZE, $1.dbptr); }
 /*	|   NAME '[' expression ']' REF NAME { slicif_add_op(SOP_PUSHAM, $1.name, $6.name); }*/
 	;

@@ -1,32 +1,14 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : City layer
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui.h"
@@ -57,8 +39,8 @@ extern ScreenManager	*g_screenManager;
 void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir,
 							uint16 route, uint16 outline)
 {
-	sint32		x1 = 0, y1 = 0,
-				x2 = 0, y2 = 0;
+	sint32		x1, y1,
+				x2, y2;
 
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x1, &y1);
 

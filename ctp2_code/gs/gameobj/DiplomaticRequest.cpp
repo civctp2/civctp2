@@ -18,11 +18,11 @@
 #include "DiplomaticRequestPool.h"
 #include "network.h"
 #include "net_info.h"
-#include "AICause.h"
+#include "aicause.h"
 
-extern	Player	**g_player ;
+	extern	Player	**g_player ;
 
-extern	DiplomaticRequestPool	*g_theDiplomaticRequestPool ;
+	extern	DiplomaticRequestPool	*g_theDiplomaticRequestPool ;
 
 
 

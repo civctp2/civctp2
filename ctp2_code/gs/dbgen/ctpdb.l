@@ -15,18 +15,16 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 string      \"[^\"]*\"
 
 %%
-int           { return INT; }
-float         { return FLOAT; }
-record        { return RECORD; }
-struct        { return STRUCT; }
-bit           { return BIT; }
+int			  { return INT; }
+float		  { return FLOAT; }
+record		  { return RECORD; }
+struct		  { return STRUCT; }
+bit			  { return BIT; }
 bits          { return BITS; }
 exclusivebits { return EXCLUSIVEBITS; }
 file          { return FILENAME; }
 string        { return STRING; }
 stringid      { return STRINGID; }
-aka           { return AKA; }
-parsenum      { return PARSENUM; }
 
 {name}        {
 			      yylval.name = (char*)strdup(yytext);
@@ -46,9 +44,9 @@ parsenum      { return PARSENUM; }
 				  yylval.val = atoi(yytext);
 				  return NUMBER;
 			  }
-\.\.          { return RANGE; }
+\.\.          { return RANGE; }					
 #.*\n         { g_line_number++; }
-\/\/.*\n      { g_line_number++; }
+\/\/.*\n	  { g_line_number++; }
 [ \t]         {}
 \n            { g_line_number++; }
 \r            {}

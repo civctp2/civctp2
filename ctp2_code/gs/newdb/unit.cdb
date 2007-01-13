@@ -3,61 +3,39 @@
 #  Project      : Call To Power 2
 #  File type    : dbgen input
 #  Description  : Unit type descriptor
-#  Id           : $Id:$
-#
+# 
 # ----------------------------------------------------------------------------
-#
+# 
 #  Disclaimer
-#
+# 
 #  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-#
+# 
 #  This material has been developed at apolyton.net by the Apolyton CtP2 
 #  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-#
+# 
 #-----------------------------------------------------------------------------
-#
+# 
 #  Modifications from the original Activision code:
-#
+# 
 #  - Government specific options added (Martin Gühmann).
 #  - Leader option added.
-#  - NoBarbarian             : Added by tombom
-#  - CantGroup               : For future use to make solo moving units
-#  - CanSettleOn             : Added by E restricts settling to certain
-#                              terrains
-#  - UpgradeTo               : FutureUse to create Upgrade Paths, cost based
-#                              on difference ShieldCost x Gold?
-#  - CultureOnly             : Added by E -- can only build units if civ has
-#                              certain citystyle
-#  - CityStyleOnly           : Added by E -- can only build units at cities
-#                              with certain citystyle 
-#  - SettleImprovement       : Future use - for units to make specific imps
-#                              like forts
-#  - HiddenNationality       : Future use for Civ3 like trait maybe same as
-#                              Cloak?
-#  - IsWorker                : Future use -- with TerrImp flag NeedsWorker to
-#                              limit certain imps or Civ3-like mods
-#  - PopCostsToBuild         : Added for future use to deduct more than one
-#                              pop for units
-#  - CanCaptureTile          : For FutureUse to change ownership of tile
-#  - GoldHunger              : Add for future possibility of gold cost per
-#                              turn per unit
-#  - CantGroup               : For future use to make solo moving units
-#  - IsPeaceKeeper           : FutureUse have higher regard cost if attacked
-#                              and ignore territory
-#  - NeedsCityGood           : Added by E to implement strategic resources
-#  - PrerequisiteBuilding    : Added by E to limit units to cities with 
-#                              certain buildings
-#  - NeedsCityGoodAll        : FU attempt to implement strategic resources
-#  - AllTerrainAsImprovement : Future use - like AllTerrainRoads
-#  - ObsoleteByUnit          : FU instead of avdance for later upgrade
-#  - NonLethalBombard        : Lessen bombard strengthen like old civ3
-#  - CanBombardTiles         : Allows bombarding of tile improvements
-#  - CollateralTileDamage    : If a defender is on a tile then improvements cut
-#                              too
-#  - GoodyHutExcluded        : Prevents Some Units from appearing
-#  - ExcludedByWonder		 : Prevents Units being built in cities with wonder
-#  - PrerequisiteWonder      : Needs Wonder in city to be built
-#
+#  - NoBarbarian // added by tombom
+#  - CantGroup // for future use to make solo moving units
+#  - CanSettleOn //added by E restricts settling to certain terrains
+#  - UpgradeTo //FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
+#  - CultureOnly //added by E -- can only build units if civ has certain citystyle
+#  - CityStyleOnly //added by E -- can only build units at cities with certain citystyle 
+#  - SettleImprovement // future use - for units to make specific imps like forts
+#  - HiddenNationality //future use for Civ3 like trait maybe same as Cloak?
+#  - IsWorker //future use -- with TerrImp flag NeedsWorker to limit certain imps or Civ3-like mods
+#  - PopCostsToBuild  //added for future use to deduct more than one pop for units
+#  - CanCaptureTile //For FutureUse to change ownership of tile
+#  - GoldHunger // Add for future possibility of gold cost per turn per unit
+#  - CantGroup // for future use to make solo moving units
+#  - IsPeaceKeeper // FutureUse have higher regard cost if attacked and ignore territory
+#  - NeedsCityGood // FU attempt to implement strategic resources   
+#  - PrerequisiteBuilding  // Added by E to limit units to cities with certain buildings
+# 
 #-----------------------------------------------------------------------------
 
 Sprite : Int
@@ -95,50 +73,21 @@ Unit {
 		LargeWater,
 
 		SmallSpace,
-		MedSpace,
+		MedSpace,  
 		LargeSpace
 	}
 
-	Record Advance              EnableAdvance
+	Record Advance             EnableAdvance
 	Record Advance[0..5]        ObsoleteAdvance
 	Record Building[] PrerequisiteBuilding  // Added by E to limit units to cities with certain buildings
-	Record Building[] ExcludedByBuilding    //to prevent some units being built
 	Record Government[] GovernmentsModified
-	Record Terrain[] CanSettleOn			// Added by E restricts settling to certain terrains
-	Record Unit[]     UpgradeTo				// Upgrade Paths, cost based on difference ShieldCost x Gold?
-	Record Unit[]     ObsoleteUnit			// If unit is available then this unit cant be built
-	Record CityStyle[] CultureOnly			// Added by E -- can only build units if civ has certain citystyle
-	Record CityStyle[] CityStyleOnly		// Added by E--can only build units at cities with certain citystyle 
-	Record Civilisation[] CivilisationOnly	// Added by E -- can only build units if player is a specific civ
-	Record TerrainImprovement[]     SettleImprovement // entrenching units make specific imps like forts
-	Record Resource[] NeedsCityGood         // Must have good in radius of city or buying resource to build 
-	Record Resource[] NeedsCityGoodAll		// A city must have all resources listed to build unit
-	Record Resource[] NeedsCityGoodCapitol	// not implemented
-	Record Resource[] NeedsCityGoodAnyCity	// must have a good in any city to build
-	Record Feat[] NeedsFeatToBuild			// Feat must have occured for unit to be built
-	Record Wonder[] PrerequisiteWonder		// Added by E to limit units to cities with certain wonders
-	Record Wonder[] ExcludedByWonder		// to prevent some units being built
-
-
-	Bit(Int) MoveBonus						// Instead of specifying an imp why not define the movecost here? by E
-	Bit(Int) PWMoveCost						// FU - Deducts PW when unit moves
-	Bit(Int) MerchantGold					// FU - to allow a unit to grant gold in other territory
-	Bit      IsGreatBuilder					// FU - completes building 
-	Bit      IsGreatArtist					// FU - one day I may add culture / influence 
-
-	Record TerrainImprovement[]     AllTerrainAsImprovement // future use - like AllTerrainRoads
-	Record Unit [] ObsoleteByUnit 			// Intead of advance for later upgrade
-    Bit NonLethalBombard					// lessen bombard strengthen like old civ3
-	Bit CanBombardTiles						// allows bombarding of tile improvements
-	Bit CollateralTileDamage				// if a defender is on a tile then improvements cut too
-    Bit PrecisionStrike						// When bombing city only destroys buildings
-    Bit TargetsCivilians					// When bombing city only kills a pop
-    Bit ImmuneToHostileTerrain				// Protects units from terrain that deducts HP
-
-	Bit CanRebase							// FU to rebase CantMove units
-	Bit MultipleAttacks						// Can attack more than once in a turn (Civ3 - blitz)
-	Bit CanBeGifted							// Disbanding unit gives it to the friendly player
-
+	Record Terrain[] CanSettleOn //added by E restricts settling to certain terrains
+	Record Unit      UpgradeTo //FutureUse to create Upgrade Paths, cost based on difference ShieldCost x Gold?
+	Record CityStyle[] CultureOnly //added by E -- can only build units if civ has certain citystyle
+	Record CityStyle[] CityStyleOnly //added by E--can only build units at cities with certain citystyle 
+	Record TerrainImprovement     SettleImprovement // future use - for units to make specific imps like forts
+      Record Resource NeedsCityGood // FU - must have good in radius of city to build 
+      
 	Bits Size {
 		Small,
 		Medium,
@@ -173,7 +122,7 @@ Unit {
 
 	Bit CanCounterBombard
 
-	Bit CanLiftOff
+	Bit CanLiftOff					
 
 	Bits Settle { 
 		Land,
@@ -204,77 +153,50 @@ Unit {
 
 
 	Bits Defend {
-		Land, Air, Water, Space, Mountain	//
+		Land, Air, Water, Space, Mountain
 	}
 
 	Bit(Float) DefendAgainstSpies
-	Bit CanBeExpelled
-	Bit CanBeSued
-	Bit AttackFromSpaceship
-	Bit CantBeAttacked
-	Bit CargoPod
-	Bit IsFoot							// Added by E for additional battle modifiers Dec-7-2005	
-	Bit IsMounted	
-	Bit IsSiege  						// Added by E for additional battle modifiers Dec-7-2005
-	Bit IsWheeled 						// Added by E for additional battle modifiers Dec-7-2005
-	Bit IsMechanized 					// Added by E for additional battle modifiers Dec-7-2005
-	Bit IsHelicopter 					// Added by E for additional battle modifiers Dec-7-2005
+	Bit CanBeExpelled		
+	Bit CanBeSued		
+	Bit AttackFromSpaceship	
+	Bit CantBeAttacked		
+	Bit CargoPod			
+	Bit IsMounted				
+	Bit IgnoreCityWalls		
 	Bit IsSubmarine			
-	Bit IgnoreCityWalls	
 
-	Bit NoLandAttack
-	Bit NoSeaAttack
-	Bit NoAirAttack
-	Bit NoSpaceAttack
-	Bit NoUnderwaterAttack
+	Bit NoLandAttack			
+	Bit NoSeaAttack			
+	Bit NoAirAttack			
+	Bit NoSpaceAttack		
+	Bit NoUnderwaterAttack	
 	Bit NoMountainAttack
 	Bit NoShallowWaterAttack
 
-	Bit Paratrooper
-	Bit AssistedDrops
-	Bit BonusAgainstFoot 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstMounted
-	Bit BonusAgainstSiege 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstWheeled 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstMechanized 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstHelicopter 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit BonusAgainstGuerrilla 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit BonusAgainstSpecialForces 		// Added by E for additional battle modifiers Dec-13-2005
-	Bit BonusAgainstSubmarine 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit SingleUse
-	Bit BonusAirDefense
+	Bit Paratrooper			
+	Bit AssistedDrops			
+	Bit BonusAgainstMounted	
+	Bit SingleUse				
+	Bit BonusAirDefense		
 
-	Bit WoodenShip
-	Bit AttackFootBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackMountedBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackSiegeBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackWheeledBonus 				// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackMechanizedBonus			// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackHelicopterBonus 			// Added by E for additional battle modifiers Dec-7-2005
-	Bit AttackSpecialForcesBonus		// Added by E for additional battle modifiers Dec-13-2005
-	Bit AttackCivilianBonus 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit AttackGuerrillaBonus 			// Added by E for additional battle modifiers Dec-13-2005
-	Bit AttackWoodenShipBonus
-	Bit HasAttackCityBonus	
-	Bit HasAttackBonusSubmarine
+	Bit WoodenShip			
+	Bit AttackWoodenShipBonus	
+	Bit HasAttackCityBonus		
+	Bit HasAttackBonusSubmarine	
 
-	Bit(Int) ReplaceWithCargoModule
-	Bit VisibileAttacking
+	Bit(Int) ReplaceWithCargoModule	
+	Bit VisibileAttacking		
 
 	Bit(struct SoundAndEffect) NuclearAttack
 
-	Bit CanSue
-	Bit IsStealthy
-	Bit SeeSurfaceFromSpace
+	Bit CanSue				
+	Bit IsStealthy			
+	Bit SeeSurfaceFromSpace	
 
-	Bit EstablishEmbassy
-	Bit ThrowParty
-	Bit HearGossip
-
-##	Struct AttackAgeBonus {
-##		Record Age Age
-##		Bit Bonus
-##	}
+	Bit EstablishEmbassy		
+	Bit ThrowParty			
+	Bit HearGossip			
 
 	Struct StealTechnologyData {
 		Float RandomChance
@@ -293,7 +215,7 @@ Unit {
 		Record SpecialEffect Effect
 	}
 
-	Bit(struct InciteRevolutionData) InciteRevolution
+	Bit(struct InciteRevolutionData) InciteRevolution		
 
 	Struct AssasinateRulerData {
 		Float Chance
@@ -309,7 +231,7 @@ Unit {
 	}
 
 	Bit(Struct InvestigateReadinessData) InvestigateReadiness	
-	Bit NullifyCityWalls
+	Bit NullifyCityWalls		
 
 	struct ChanceEffect {
 		Float Chance
@@ -346,30 +268,27 @@ Unit {
 		Record Sound Sound
 		Record SpecialEffect Effect
 	}
-	Bit(struct SoundAndEffect) SettlerSlaveRaids
+	Bit(struct SoundAndEffect) SettlerSlaveRaids	
 
 	Bit(struct SoundAndEffect) SlaveUprising
 
 	Bit(struct SuccessDeathEffect) UndergroundRailway	
 	Bit VictoryEnslavement	
 
-	Bit DefuseLandMines
-	Bit DefuseSeaMines
-	Bit DefuseXrayMines
+	Bit DefuseLandMines		
+	Bit DefuseSeaMines		
+	Bit DefuseXrayMines		
 
-	Bit(struct SoundAndEffect) IndulgenceSales
-	Bit(struct SuccessDeathEffect) ConvertCities
-	Bit BuildXrayMines
+	Bit(struct SoundAndEffect) IndulgenceSales		
+	Bit(struct SuccessDeathEffect) ConvertCities			
+	Bit BuildXrayMines		
 
-	Bit BuildWonder
+	Bit BuildWonder			
 	Record Government[] GovernmentType
-	Bit NoSlaves
-	Bit CreateRift
+	Bit NoSlaves				
+	Bit CreateRift			
 	Bit CanCloak
-	Bit HiddenNationality 						// future use for Civ3 like trait maybe same as Cloak?				
-	Bit SneakAttack 							// Can attack without war declared
-	Bit SneakPillage 							// Can Pillage without war declared
-	Bit SneakBombard 							// Can Bombard without war declared
+	Bit HiddenNationality //future use for Civ3 like trait maybe same as Cloak?				
 	Bit ParatrooperTransport
 	Bit CantBuild
 
@@ -393,10 +312,9 @@ Unit {
 	Bit LandCityCanBuild
 	Bit SeaCityCanBuild
 	Bit SpaceCityCanBuild
-	Bit IsSpecialForces				// EMOD
-    Bit IsPeaceKeeper				// EMOD
-	Bit IsGuerrilla  				// EMOD
-	Bit IsWorker 					// Future use -- with TerrImp flag NeedsWorker to limit certain imps or Civ3-like mods
+	Bit IsSpecialForces
+      Bit IsPeaceKeeper
+	Bit IsWorker //future use -- with TerrImp flag NeedsWorker to limit certain imps or Civ3-like mods
 	Bit NotAffectedByLandMines
 	Bit InternalReserved
 
@@ -405,8 +323,8 @@ Unit {
 	Bit EnableCarrierDefenses
 	Bit ActiveDefenseOnlyWhenCarryingEnablers
 	Bit BuildingRemovesAPop
-	Bit(Int) PopCostsToBuild				// Added for future use to deduct more than one pop for units
-	Bit Explodes
+	Bit(Int) PopCostsToBuild  //added for future use to deduct more than one pop for units
+	Bit Explodes				
 	Bit Advertise
 	Bit CanRustle
 	Bit OnlyBuildOne
@@ -416,8 +334,7 @@ Unit {
 	Bit(struct SoundAndEffect) CanReform
 	Bit CanPillage
 	Bit CanPirate
-	Bit CanCaptureTile						// change ownership of tile
-	Int ReducesDefensesBonus = 0			// FU
+	Bit CanCaptureTile //For FutureUse to change ownership of tile
 
 	#uint32 visibility_classes;
 	Bits VisionClass {
@@ -507,7 +424,7 @@ Unit {
 
     Int ShieldHunger
     Int FoodHunger
-    Int GoldHunger = 0					// Add for future possibility of gold cost per turn per unit
+    Bit(Int) GoldHunger // Add for future possibility of gold cost per turn per unit
     Record Sprite DefaultSprite
 
 	
@@ -519,16 +436,6 @@ Unit {
 	Bit(Float) WoodenShipBonus
 	Bit(Float) AttackCityBonus
 	Bit(Float) AttackBonusSubmarine
-	Bit(Float) FootBonus				// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) SiegeBonus				// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) WheeledBonus				// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) MechanizedBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) HelicopterBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) SpecialForcesBonus		// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) CivilianBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) GuerrillaBonus			// added by E for additional battle modifiers Dec-31-2005
-	Bit(Float) AgainstMountedBonus
-	Bit(Float) AirDefenseBonus
 
 	Bit(Int) CargoModule
 
@@ -610,25 +517,21 @@ Unit {
 	}
 
 	Record Icon DefaultIcon
-	Bit NoIndex
+	Bit NoIndex			
 	Bit (int) CheatIndex
 	StringId Description
-	Bit (StringId) Advice
-	StringId Category
+    Bit (StringId) Advice
+    StringId Category
 
 	Bit GLHidden
 
-	Bit CantMove
+    Bit CantMove
+    Bit CantGroup // for future use to make solo moving units
 
-	// set this flag for units that non-evil AI's should not attack
-	Bit Civilian
+    // set this flag for units that non-evil AI's should not attack
+    Bit Civilian
 
-	Bit NoBarbarian 				// Added by tombom
-	Bit GoodyHutExcluded			// Prevents Some Units from appearing by E
-	Bit CanHarvest					// Added by E to add Gold and Shields from terrain
-	Bit CantGroup 					// For future use to make solo moving units
-	Bit SpawnsBarbarians			// Entrenched unit spawns barbs in foreign territory
-	Bit CanSinkInSea				// to implement ConstDb Chance_lost_at_sea
+    Bit NoBarbarian // added by tombom
 
-	Bit Leader						// Special "king" unit
+    Bit Leader	// Special "king" unit
 }

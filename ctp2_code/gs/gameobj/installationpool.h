@@ -1,6 +1,14 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef _INSTALLATIONPOOL_H_
 #define _INSTALLATIONPOOL_H_
 

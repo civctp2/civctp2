@@ -6,14 +6,10 @@
 
 
 
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
 
+#pragma once
 #ifndef __DIPLOMACY_DATA_H__
 #define __DIPLOMACY_DATA_H__
-
-class TradeOfferData;
 
 #include "Unit.h"
 #include "GameObj.h"

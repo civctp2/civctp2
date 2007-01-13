@@ -16,16 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _MSC_VER
-// - Seems that this should be removed
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Variable scope corrected
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,43 +44,56 @@ public:
 protected:
 	struct Block
 	{
-		Block(size_t blockSize)
-		:
-			pNext       (0),
-            usedSize    (blockSize / k_TECH_MEMORY_BITSPERDWORD),
-            used        (0),
-			dataSize    (blockSize),
-            data        (0)
+		Block(size_t blockSize )
+			:
+			pNext( 0 ),
+			dataSize( blockSize )
 		{
-			size_t const remainder  = dataSize % k_TECH_MEMORY_BITSPERDWORD;
 			
-            if (remainder) 
-            {
-                ++usedSize;
-            }
+			usedSize = dataSize / k_TECH_MEMORY_BITSPERDWORD;
+			size_t remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
+			if ( remainder ) usedSize++;
 
-			used = new unsigned[usedSize];
-			memset( used, 0, usedSize * sizeof( unsigned ) );
-			
-			if (remainder)
-            {
-				used[usedSize - 1] = ~((1 << remainder) - 1);
+			if ( used = new unsigned[ usedSize ] )
+			{
+				
+				memset( used, 0, usedSize * sizeof( unsigned ) );
+
+				
+				if ( remainder )
+					used[ usedSize - 1 ] = ~( ( 1 << remainder ) - 1 );
 			}
 			
-			data = new T[dataSize];
-		};
-
+			data = new T[ dataSize ];
+		}
 		virtual ~Block()
 		{
-            delete [] used;
-            delete [] data;
-		};
+			if ( used )
+			{
+#if defined(_MSC_VER) && 0
+				delete[ usedSize ] used;
+#else
+            delete[] used;
+#endif
+				used = 0;
+			}
 
-		Block *     pNext;			
-		size_t      usedSize; 
-		unsigned *  used;			
-		size_t      dataSize; 
-		T *         data;				
+			if ( data )
+			{
+#if defined(_MSC_VER)
+				delete[ dataSize ] data;
+#else
+            delete[] data;
+#endif
+				data = 0;
+			}
+		}
+
+		Block *pNext;			
+		size_t usedSize; 
+		unsigned *used;			
+		size_t dataSize; 
+		T *data;				
 	};
 
 	
@@ -131,25 +140,31 @@ tech_Memory< T >::~tech_Memory()
 template< class T >
 T *tech_Memory< T >::New( void )
 {
-	if (m_pLast)
+	T *t;
+
+	if ( m_pLast )
 	{
-    	T * t = UseFreeElement();
-		
-        if (t)
-        {
-            return t;
-        }
-		
-	    m_pLast->pNext = new Block(m_blockSize);
-		m_pLast = m_pLast->pNext;
+		if ( !(t = UseFreeElement()) )
+		{
+			if ( m_pLast->pNext = new Block( m_blockSize ) )
+			{
+				m_pLast = m_pLast->pNext;
+
+				*(m_pLast->used) |= 1;
+				t = m_pLast->data;
+			}
+		}
 	}
 	else
 	{
-		m_pLast = m_pFirst = new Block(m_blockSize);
+		if ( m_pLast = m_pFirst = new Block( m_blockSize ) )
+		{
+			*(m_pLast->used) |= 1;
+			t = m_pLast->data;
+		}
 	}
 
-	*(m_pLast->used) |= 1;
-	return m_pLast->data;
+	return t;
 }
 
 
@@ -208,7 +223,7 @@ void tech_Memory< T >::UnuseElement( T *t )
 	if ( !t ) return;
 
 	
-	size_t offset = 0;
+	size_t offset;
 	Block *			pBlock = m_pFirst;
 	for ( ; pBlock ; pBlock = pBlock->pNext )
 	{

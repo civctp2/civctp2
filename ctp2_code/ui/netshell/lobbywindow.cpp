@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Lobby window for multiplayer games.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,21 +16,18 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
 // - Memory leak report prevented.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "lobbywindow.h"
+
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
@@ -52,6 +48,7 @@
 #include "c3textfield.h"
 
 
+#include "lobbywindow.h"
 #include "playereditwindow.h"
 #include "playerselectwindow.h"
 #include "allinonewindow.h"
@@ -61,8 +58,8 @@
 #include "ctp2_Switch.h"
 #include "spnewgamewindow.h" 
 
-static DialogBoxWindow *	s_dbw				= NULL;
-static time_t				s_startedLeavingAt	= 0;
+static DialogBoxWindow *s_dbw = NULL;
+static sint32 s_startedLeavingAt = 0;
 
 LobbyWindow *g_lobbyWindow = NULL;
 
@@ -92,6 +89,7 @@ LobbyWindow::LobbyWindow(
 
 	*retval = CreateControls();
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -103,10 +101,10 @@ AUI_ERRCODE LobbyWindow::InitCommon( void )
 	m_messageLobbyEnter = new ns_String("strings.system.lobbyenter");
 	s_startedLeavingAt = 0;
 
-	m_wait = false;
+	wait = false;
 
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	m_PPStrings = new aui_StringTable(
 		&errcode,
 		"strings.ppt" );
@@ -130,7 +128,7 @@ AUI_ERRCODE LobbyWindow::InitCommon( void )
 
 AUI_ERRCODE LobbyWindow::CreateControls( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 
 	
@@ -442,14 +440,18 @@ void LobbyWindow::Update(BOOL init)
 			FindControl( LobbyWindow ::CONTROL_CURRENTSERVERTEXTFIELD );
 		text->SetText("");
 
-		m_wait = true;
+		wait = true;
 	}
 }
 
 
 AUI_ERRCODE LobbyWindow::Idle( void )
 {
-	if(m_wait) {
+	NETFunc::Message *m;
+	bool n = true;
+	NETFunc::KeyStruct lobbyKey;
+	bool joinedLobby = false;
+	if(wait) {
 		
 
 		if ( !s_dbw )
@@ -462,57 +464,62 @@ AUI_ERRCODE LobbyWindow::Idle( void )
 			((aui_Control *)((ns_ChatBox *)FindControl( CONTROL_CHATBOX ))->
 				GetInputField())->ReleaseKeyboardFocus();
 
-		m_wait = false;
+		wait = false;
 	}
 	
-	bool                joinedLobby = false;
-	NETFunc::KeyStruct  lobbyKey;
-	NETFunc::Message *  m           = g_netfunc->GetMessage(); 
-    while (m)
-    {
-		g_netfunc->HandleMessage(m);
+	while(n) {
 		
-		switch (m->GetCode())
-		{
-		default:
-//      case NETFunc::Message::GAMESESSION:
-			break;
+		if(m = g_netfunc->GetMessage()) {
+			
+			
+			g_netfunc->HandleMessage(m);
+			
 
-		case dp_SESSIONLOST_PACKET_ID:
-			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONLOST );
-			break;
 
-        case NETFunc::Message::ENTERLOBBY:
-			memcpy(&lobbyKey, (NETFunc::KeyStruct *)(m->GetBody()), sizeof(NETFunc::KeyStruct));
-			joinedLobby = true;
-            break;
+			switch ( m->GetCode() )
+			{
+			case dp_SESSIONLOST_PACKET_ID:
+				passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_CONNECTIONLOST );
+				break;
 
-        case NETFunc::Message::NETWORKERR:
-			passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_NOLOBBY );
-			s_startedLeavingAt = 0;
-            break;
+			default:
+				break;
+			}
 
-        case NETFunc::Message::PLAYERPACKET:
-            {
-			    ns_PlayerListBox *l = (ns_PlayerListBox *)(FindControl( LobbyWindow::CONTROL_PLAYERSLISTBOX ));
-			    ns_PlayerItem *item = (ns_PlayerItem *)(l->GetSelectedItem());
-			    if(item) {
-				    NETFunc::Player *player = item->GetNetShellObject()->GetNETFuncObject();
-				    PlayerEditWindow *p = (PlayerEditWindow *)g_netshell->FindWindow( NetShell::WINDOW_PLAYEREDIT );
-				    *(NETFunc::PlayerSetup *)&g_rplayersetup = NETFunc::PlayerSetup(player);
-				    g_rplayersetup.Packet::Set(m->GetBodySize(), m->GetBody());
-				    p->SetPlayerSetup(&g_rplayersetup);
-				    p->SetMode(p->VIEW);
-				    g_netshell->GetCurrentScreen()->AddWindow(p, TRUE);
-			    }
-            }
-            break;
-		}
+			
+			if ( m->GetCode() == NETFunc::Message::NETWORKERR )
+			{
+				
+				passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE_NOLOBBY );
+				s_startedLeavingAt = 0;
+			}
+			else if(m->GetCode() == NETFunc::Message::GAMESESSION)
+			{
 
-		delete m;
-        m = g_netfunc->GetMessage();
+
+			}
+			else if(m->GetCode() == NETFunc::Message::ENTERLOBBY) {
+				
+				
+				memcpy(&lobbyKey, (NETFunc::KeyStruct *)(m->GetBody()), sizeof(NETFunc::KeyStruct));
+				joinedLobby = true;
+			} else if(m->GetCode() == NETFunc::Message::PLAYERPACKET) {
+				ns_PlayerListBox *l = (ns_PlayerListBox *)(FindControl( LobbyWindow::CONTROL_PLAYERSLISTBOX ));
+				ns_PlayerItem *item = (ns_PlayerItem *)(l->GetSelectedItem());
+				if(item) {
+					NETFunc::Player *player = item->GetNetShellObject()->GetNETFuncObject();
+					PlayerEditWindow *p = (PlayerEditWindow *)g_netshell->FindWindow( NetShell::WINDOW_PLAYEREDIT );
+					*(NETFunc::PlayerSetup *)&g_rplayersetup = NETFunc::PlayerSetup(player);
+					g_rplayersetup.Packet::Set(m->GetBodySize(), m->GetBody());
+					p->SetPlayerSetup(&g_rplayersetup);
+					p->SetMode(p->VIEW);
+					g_netshell->GetCurrentScreen()->AddWindow(p, TRUE);
+				}
+			}
+			delete m;
+		} else
+			n = false;
 	}
-
 	if(joinedLobby && g_netfunc->GetStatus() == NETFunc::OK) {
 		g_netfunc->PushChatMessage(m_messageLobbyEnter->GetString());
 		
@@ -713,9 +720,10 @@ void LobbyWindow::PasswordScreenDone( MBCHAR *password )
 			if ( password )
 			{
 				strncpy( temp, password, dp_PASSWORDLEN );
-				for (size_t i = 0; i < strlen(temp); ++i)
+				for ( sint32 i = 0; i < strlen( temp ); i++ )
 				{
-					temp[i] = static_cast<MBCHAR>(tolower(temp[i]));
+					
+					temp[ i ] = tolower( temp[ i ] );
 				}
 			}
 
@@ -772,6 +780,7 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 
 	tech_WLList<sint32>	justSelectedList;
 	tech_WLList<sint32> justDeselectedList;
+	sint32 index;
 
 	listbox->WhatsChanged(justSelectedList,justDeselectedList);
 	LobbyWindow *w = (LobbyWindow *)listbox->GetParent();
@@ -783,36 +792,39 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 	aui_Switch *ms = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_MUTESWITCH));
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	sint32 i;
-	for (i = justDeselectedList.L(); i; i--) 
-    {
-		ns_PlayerItem *     item    = 
-            (ns_PlayerItem *) listbox->GetItemByIndex(justDeselectedList.GetNext(position));
-		NETFunc::Player *   player  = item->GetNetShellObject()->GetNETFuncObject();
-		if (chatbox->GetPlayer() && player->Equals(chatbox->GetPlayer())) 
-        {
+	for ( sint32 i = justDeselectedList.L(); i; i-- ) {
+		index = justDeselectedList.GetNext( position );
+		ns_PlayerItem *item = (ns_PlayerItem *)listbox->GetItemByIndex(index);
+		NETFunc::Player *player = item->GetNetShellObject()->GetNETFuncObject();
+		if(chatbox->GetPlayer() && player->Equals(chatbox->GetPlayer())) {
 			chatbox->SetPlayer(0);
 		}
 	}
 
 	position = justSelectedList.GetHeadPosition();
-	for (i = justSelectedList.L(); i; i--) 
-    {
-		ns_PlayerItem *     item    = 
-            (ns_PlayerItem *) listbox->GetItemByIndex(justSelectedList.GetNext(position));
-		NETFunc::Player *   player  = item->GetNetShellObject()->GetNETFuncObject();
+	for ( i = justSelectedList.L(); i; i-- ) {
+		index = justSelectedList.GetNext( position );
+		ns_PlayerItem *item = (ns_PlayerItem *)listbox->GetItemByIndex(index);
+		NETFunc::Player *player = item->GetNetShellObject()->GetNETFuncObject();
+		chatbox->SetPlayer(player);
 
-        chatbox->SetPlayer(player);
-        ms->SetState(player->IsMuted() ? 1 : 0);
+		if(player->IsMuted()) {
+
+			ms->SetState(1);
+		} else {
+
+			ms->SetState(0);
+		}
 	}
 
 	justSelectedList.DeleteAll();
 	justDeselectedList.DeleteAll();
 
+	aui_Switch *s;
 	if(!chatbox->GetPlayer() || chatbox->GetPlayer()->IsMe()) {
 
 
-		aui_Switch * s = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_WHISPERSWITCH));	
+		s = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_WHISPERSWITCH));	
 		s->SetState( k_PP_PUBLIC );
 		ms->SetState(0);
 	}
@@ -878,7 +890,8 @@ void LobbyWindow::WhisperSwitchAction::Execute(
 	ns_ChatBox *chatbox = (ns_ChatBox *)(w->FindControl(LobbyWindow::CONTROL_CHATBOX));
 
 	aui_Switch *s = (aui_Switch *)control;
-	switch (s->GetState())
+	sint32 state = s->GetState();
+	switch ( state )
 	{
 	case k_PP_PUBLIC:
 		chatbox->SetWhisper(false);
@@ -923,26 +936,18 @@ void LobbyWindow::MuteSwitchAction::Execute(
 
 	switch ( action )
 	{
-	default:
-		break;
-
 	case AUI_SWITCH_ACTION_ON:
-        if (p && !p->IsMe()) 
-        {
-            g_netfunc->Mute(p, true);
-        } 
-        else
-        {
-            aui_Switch * s = (aui_Switch *) w->FindControl(LobbyWindow::CONTROL_MUTESWITCH);
-            s->SetState(0);
-        }
-        break;
-
+		if(!p || p->IsMe()) {
+			aui_Switch *s = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_MUTESWITCH));	
+			s->SetState(0);
+		} else
+			g_netfunc->Mute(p, true);
+		break;
 	case AUI_SWITCH_ACTION_OFF:
-		if (p)
-        {
+		if(p)
 			g_netfunc->Mute(p, false);
-        }
+		break;
+	default:
 		break;
 	}
 }

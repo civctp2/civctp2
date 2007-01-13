@@ -4,7 +4,6 @@
 // File type    : C++ source
 // Description  : Dialog for altering map properties
 //                (dry/wet, ocean/land, etc.)
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,9 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,7 +26,6 @@
 //   could cause problems in the new interface (Its removal could also cause
 //   problems, but I'm not sure what it did, so I don't know...)
 //   (JJB)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -161,7 +157,7 @@ sint32 custommapscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -229,7 +225,7 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 
 AUI_ERRCODE custommapscreen_Cleanup()
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
 	if ( !s_customMapWindow  ) return AUI_ERRCODE_OK; 
 
@@ -268,10 +264,11 @@ AUI_ERRCODE custommapscreen_Cleanup()
 
 
 
-AUI_ACTION_BASIC(SetupMapEditorAction);
-
-void SetupMapEditorAction::Execute(aui_Control *, uint32, uint32)
-{ ; }
+class SetupMapEditorAction : public aui_Action
+{ public: virtual ActionCallback Execute; };
+void SetupMapEditorAction::Execute( aui_Control *a, uint32 b, uint32 c )
+{
+}
 
 void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -468,13 +465,12 @@ void custommapscreen_setValues(
 	sint32 richness =
 		(sint32)g_theConstDB->RichnessManygoods() * goodcount +
 		(sint32)g_theConstDB->RichnessFewgoods() * ( 10 - goodcount );
-#if 0   // Unused
 	sint32 riverCellWidth =
 		(sint32)g_theConstDB->RiverCellWidthManygoods() * goodcount +
 		(sint32)g_theConstDB->RiverCellWidthFewgoods() * ( 10 - goodcount );
 	sint32 riverCellHeight =
 		(sint32)g_theConstDB->RiverCellHeightManygoods() * goodcount +
 		(sint32)g_theConstDB->RiverCellHeightFewgoods() * ( 10 - goodcount );
-#endif
+
 	g_theProfileDB->SetPercentRichness( sint32(richness / 10) );
 }

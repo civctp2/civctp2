@@ -22,32 +22,8 @@
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
-// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
-
-/*  TODO: Change these difficulty settings to Gamesetup options
-	Bit					NoAIProductionDeficit				# AI doesn't lose units due to production deficit
-	Bit					NoAIGoldDeficit						# AI cities don't go negative in gold
-	Bit					AICityDefenderBonus					# AI population adds to city defenses
-	Bit					BarbarianCities						# Entrenched barbarians create a city
-	Bit(Int)			SectarianHappiness					# Conflicting religious, citystyles and city govts cause unhappiness
-	Bit					RevoltCasualties					# Revolting city loses 1/3 of population
-	Bit					RevoltInsurgents					# Revolting city creates barbarians
-	Record TerrainImprovement[]     BarbarianCamps			# Entrenched barbarians create an imp
-	Bit					BarbarianSpawnsBarbarian			# Entrenched barbs create more barbs
-	Bit					AINoSinking							# AI ships don't sink
-	Bit					AINoCityLimit						# AI not affected by city limit
-	Bit(Int)			GoldPerUnitSupport					# all pay thins int times unit support calculation
-	Bit(Int)			GoldPerCity							# everyone pays gold amount per city
-	Bit					AINoShieldHunger					# AI doesn't pay shield hunger (gets lots of units)
-	Bit					AINoGoldHunger						# AI doesnt pay unit gold hunger
-	Bit					AIFreeUpgrade						# AI doesn't pay goldfor upgrades
-	Bit					AIMilitiaUnit						#If city is empty at turn start AI gets cheapest unit
-
-  ADD -----> OCC One City Change option -> if enable human cant build unit type IsSettler.
-*/
-
 
 #include "c3.h"
 
@@ -160,8 +136,7 @@ void nf_GameSetup::Pack()
 	Push( m_difficulty1 );
 	Push( m_difficulty2 );
 
-	sint32 i;
-	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Push( m_tribeSlots[ i ] );
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Push( m_savedTribeSlots[ i ] );
@@ -221,8 +196,7 @@ void nf_GameSetup::Unpack()
 	Pop( m_difficulty1 );
 	Pop( m_difficulty2 );
 
-	sint32 i;
-	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Pop( m_tribeSlots[ i ] );
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		Pop( m_savedTribeSlots[ i ] );

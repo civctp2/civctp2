@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Scheduler
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,8 +17,13 @@
 //
 // Compiler flags
 // 
-// _MSC_VER
+// _MSC_VER		
 // - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -33,10 +37,14 @@
 #define __SCHEDULER_H__
 
 
+#if defined(_MSC_VER)
+#pragma warning(disable: 4786)
+#endif
+
 #include "Plan.h"
 
 #include "scheduler_types.h"
-#include "squad_Strength.h"
+#include "squad_strength.h"
 #include "StrategyRecord.h"
 
 
@@ -72,6 +80,12 @@ class Scheduler
 
 public:
 
+  	
+	
+	
+	
+  	
+
 #ifdef _DEBUG
 	#define dbga dbgallocator
 	
@@ -89,6 +103,17 @@ public:
 #else
 	typedef std::vector<Scheduler, dbgallocator<Scheduler> > Scheduler_Vector;
 #endif
+	
+
+
+
+
+
+
+
+
+
+
 
 #else
 	
@@ -155,7 +180,7 @@ public:
 	static void ValidateAll();
 
 	
-	static void CleanupAll(void);
+	
 	
 	
 	
@@ -189,7 +214,7 @@ public:
 	
 	
 
-
+  	
 	Scheduler();
 
 
@@ -197,8 +222,8 @@ public:
 	Scheduler(const Scheduler &scheduler);
 
 
-
-	virtual ~Scheduler();
+  	
+  	virtual ~Scheduler();
 
 	
 	Scheduler& operator= (const Scheduler &scheduler);
@@ -393,23 +418,23 @@ protected:
 	
 	bool Add_New_Match_For_Goal_And_Squad
 	(
-	 const Goal_ptr & goal_ptr,
-	 const Squad_List::iterator & squad_iter,
-	 Plan_List::iterator & plan_iter
+	 const Sorted_Goal_Iter & goal_iter,	   
+	 const Squad_List::iterator & squad_iter,          
+	 Plan_List::iterator & plan_iter		           
 	);
 
 	
 	
 	sint32 Add_New_Matches_For_Goal
 	(
-	 const Goal_ptr & goal_iter
+	 const Sorted_Goal_Iter & goal_iter	
 	);
 
 	
 	
 	sint32 Add_New_Matches_For_Squad
 	(
-	 const Squad_List::iterator & squad_iter
+	 const Squad_List::iterator & squad_iter		
 	);
 
     
@@ -441,10 +466,12 @@ protected:
 	 const Goal_ptr & goal_ptr 
 	);
 
+	
+	
 	bool Add_Transport_Matches_For_Goal
 	(
-	 const Goal_ptr & goal_ptr,
-	 Plan_List::iterator & plan_iter
+	 const Sorted_Goal_Iter & goal_iter,	   
+	 Plan_List::iterator & plan_iter           
 	);
 
 	
@@ -455,6 +482,13 @@ protected:
 
 private:
 
+	
+	
+	
+	
+	
+
+    
     static char s_debug_str[MAX_DEBUG_STR];
 
 	static Scheduler_Vector s_theSchedulers;
@@ -515,12 +549,17 @@ private:
 
 	
 	
-    static sint32 m_contactCachedPlayer;
-	static uint32 m_contactCache;
-	static sint32 m_neutralRegardCachedPlayer;
+    static int m_contactCachedPlayer;	
+	static uint32 m_contactCache;		
+	static int m_neutralRegardCachedPlayer;	
 	static uint32 m_neutralRegardCache;
-	static sint32 m_allyRegardCachedPlayer;
+	static int m_allyRegardCachedPlayer;
 	static uint32 m_allyRegardCache;
 };
 
-#endif
+
+
+
+
+
+#endif 

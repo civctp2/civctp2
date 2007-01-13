@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __GAME_EVENT_ARG_LIST_H__
 #define __GAME_EVENT_ARG_LIST_H__
 
@@ -22,7 +21,8 @@ class CivArchive;
 
 class GameEventArgList {
 public:
-	GameEventArgList(va_list * vl = NULL);
+	GameEventArgList(va_list *vl);
+	GameEventArgList();
 	GameEventArgList(CivArchive &archive);
 	~GameEventArgList();
 	void Serialize(CivArchive &archive);

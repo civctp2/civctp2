@@ -17,9 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -34,26 +32,19 @@
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged 
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
-// - Added ParseNum so that a certain number of entries can be parsed if 
-//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
-// - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #ifndef __RECORD_DESCRIPTION_H__
 #define __RECORD_DESCRIPTION_H__
 
-#include <stdio.h>          // FILE
+#define k_MAX_RECORD_NAME 256
+#define k_MAX_STRING 256
 
-#define k_MAX_RECORD_NAME   256
-#define k_MAX_STRING        256
-class   RecordDescription;
+#include "pointerlist.h"
 
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "ctpdb.h"          // DATUM_TYPE, namelist, etc. 
-#include "Datum.h"          // Datum
-#include "MemberClass.h"    // MemberClass
-#include "pointerlist.h"    // PointerList
+#include "Datum.h"
+#include "MemberClass.h"
 
 class RecordDescription
 {
@@ -67,6 +58,7 @@ public:
 				  char *subType = NULL);
 	void AddGroupedBits(char *name, struct namelist *list);
 
+// Removed by Martin Gühmann
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
 
 	void StartMemberClass(char *name);
@@ -85,27 +77,29 @@ public:
 	void ExportParser(FILE *outfile);
 	void ExportMerger(FILE *outfile);
 	void ExportTokenCases(FILE *outfile);
-	void ExportDefaultToken(FILE *outfile);
 	void ExportDataParsers(FILE *outfile);
 	void ExportDataCode(FILE *outfile);
 	void ExportMemberClassParsers(FILE *outfile);
 	void ExportOtherRecordIncludes(FILE *outfile);
 	void ExportMemberClassDataCode(FILE *outfile);
 	void ExportResolver(FILE *outfile);
-	void SetParseNum(sint32 parseNum);
 
-	sint32  FlagCount() const   { return (m_numBits + 31) / 32; };
+#if 0
+	void ExportDBHeader(FILE *outfile);
+	
+	void ExportDBCode(FILE *outfile);
+#endif
 
 private:
-	char                        m_name[k_MAX_RECORD_NAME];
-	PointerList<Datum>          m_datumList;
-	PointerList<MemberClass>    m_memberClasses;
-	bool                        m_hasGovernmentsModified;
-	sint32                      m_numBits;
-	bool                        m_addingToMemberClass;
-	DATUM_TYPE                  m_baseType;
+	char m_name[k_MAX_RECORD_NAME];
+	PointerList<Datum> m_datumList;
+	PointerList<MemberClass> m_memberClasses;
 
-	sint32                      m_parseNum; // Unimplemented
+	bool m_hasGovernmentsModified;
+
+	sint32 m_numBits;
+	bool m_addingToMemberClass;
+	DATUM_TYPE m_baseType;
 };
 
 #endif

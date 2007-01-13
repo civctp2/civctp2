@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,16 +28,18 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(_MSC_VER) && (_MSC_VER > 1000) 
 #pragma once
 #endif
 
-#ifndef SPRITEFILE_H__
-#define SPRITEFILE_H__
+#include "c3.h"
+#include "Action.h"
 
-class SpriteFile;
 
-#define k_SPRITEFILE_TAG            0x53505246 //'SPRF'
+#ifndef __SPRITEFILE_H__
+#define __SPRITEFILE_H__
+
+#define k_SPRITEFILE_TAG			'SPRF'
 #define k_SPRITEFILE_VERSION0		0x00010003 
 #define k_SPRITEFILE_VERSION1		0x00020000 
 #define k_SPRITEFILE_VERSION2		0x00020001 
@@ -107,14 +112,12 @@ typedef struct
 
 #define k_SPRITEFILE_HEADER_SIZE	(sizeof(uint32) + sizeof(uint32) + sizeof(uint32))
 
-#include "c3.h"
-#include "Action.h"
-
 class Sprite;
 class FacedSprite;
 class FacedSpriteWshadow;
 class SpriteGroup;
 class UnitSpriteGroup;
+class ProjectileSpriteGroup;
 class EffectSpriteGroup;
 class GoodSpriteGroup;
 class CitySpriteGroup;
@@ -138,6 +141,7 @@ public:
 	SPRITEFILEERR	Write(FacedSpriteWshadow *s, Anim *anim);
 	SPRITEFILEERR	Write(SpriteGroup *s, Anim *anim);
 	SPRITEFILEERR	Write(UnitSpriteGroup *s);
+	SPRITEFILEERR	Write(ProjectileSpriteGroup *s);
 	SPRITEFILEERR	Write(EffectSpriteGroup *s);
 	SPRITEFILEERR	Write(GoodSpriteGroup *s);
 	SPRITEFILEERR	Write(CitySpriteGroup *s, Anim *anim);
@@ -183,6 +187,7 @@ public:
 	SPRITEFILEERR	ReadIndexed(UnitSpriteGroup *s,GAME_ACTION index);
 	SPRITEFILEERR	ReadIndexed(GoodSpriteGroup *s,GAME_ACTION index);
 	
+	SPRITEFILEERR	Read(ProjectileSpriteGroup *s);
 	SPRITEFILEERR	Read(EffectSpriteGroup *s);
 
 
@@ -197,8 +202,8 @@ public:
 
 	SPRITEFILEERR	ReadData(void *data, size_t bytes);
 
-	fpos_t			GetFilePos(void);
-	void			SetFilePos(fpos_t pos);
+	sint32			GetFilePos(void);
+	void			SetFilePos(sint32 pos);
 
 protected:
 	unsigned	m_version;			
@@ -219,16 +224,16 @@ protected:
 	SPRITEFILEERR	Write_v20(UnitSpriteGroup *s);
 
 	
-	uint8 *CompressData  (void *Data, size_t &DataLen);
-	uint8 *DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen);
+	void *CompressData  (void *Data,unsigned &DataLen);
+	void *DeCompressData(void *Data,unsigned CompressedLen,unsigned ActualLen);
 	
 	
-	uint8 *CompressData_Default  (void *Data, size_t &DataLen);
-	uint8 *DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen);
+	void *CompressData_Default  (void *Data,unsigned &DataLen);
+	void *DeCompressData_Default(void *Data,unsigned CompressedLen,unsigned ActualLen);
 
 	
-	uint8 *CompressData_LZW1  (void *Data, size_t &DataLen);
-	uint8 *DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen);
+	void *CompressData_LZW1  (void *Data,unsigned &DataLen);
+	void *DeCompressData_LZW1(void *Data,unsigned CompressedLen,unsigned ActualLen);
 
 private:
 	FILE *      m_file;

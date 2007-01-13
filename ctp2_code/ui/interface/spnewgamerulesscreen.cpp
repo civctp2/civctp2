@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game rules screen
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,16 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
@@ -104,7 +99,7 @@ sint32 spnewgamerulesscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;

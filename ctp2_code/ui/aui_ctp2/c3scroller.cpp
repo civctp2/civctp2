@@ -12,7 +12,6 @@
 
 
 #include "c3.h"
-#include "c3scroller.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -25,26 +24,26 @@
 #include "c3_button.h"
 #include "aui_ranger.h"
 #include "pattern.h"
+
 #include "primitives.h"
 
-extern C3UI *   g_c3ui;
+#include "c3scroller.h"
+
+
+extern C3UI *g_c3ui;
 
 
 
-C3Scroller::C3Scroller
-(
+C3Scroller::C3Scroller(
 	AUI_ERRCODE *retval,
 	uint32 id,
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie 
-)
-:
-	aui_ImageBase( ldlBlock ),
+	void *cookie )
+	:
+	aui_Ranger(),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-    aui_Ranger      (),
-    PatternBase     (),
-    m_isVertical    (false)
+	aui_ImageBase( ldlBlock )
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -66,45 +65,32 @@ C3Scroller::C3Scroller
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
-	Assert( block != NULL );
-	if (!block)
-    {
-        *retval = AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-        return;
-    }
-
-	m_isVertical = block->GetBool("vertical");
-    
-	*retval = InitCommon();
+	*retval = InitCommon( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = CreateButtonsAndThumb();
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
-C3Scroller::C3Scroller
-(
+C3Scroller::C3Scroller(
 	AUI_ERRCODE *retval,
 	uint32 id,
 	sint32 x,
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	bool isVertical,
+	BOOL isVertical,
 	MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie 
-)
-:
-	aui_ImageBase( (sint32)0 ),
+	void *cookie )
+	:
+	aui_Ranger(),
 	aui_TextBase( NULL ),
-    aui_Ranger      (),
-    PatternBase     (),
-    m_isVertical    (isVertical)
+	aui_ImageBase( (sint32)0 )
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -126,29 +112,45 @@ C3Scroller::C3Scroller
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = InitCommon();
+	*retval = InitCommon( isVertical );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = CreateButtonsAndThumb();
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
-
-
-
-AUI_ERRCODE C3Scroller::InitCommon()
+AUI_ERRCODE C3Scroller::InitCommon( MBCHAR *ldlBlock )
 {
-	if (m_isVertical)
-    {
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+	Assert( block != NULL );
+	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+
+	
+	InitCommon( block->GetBool( "vertical" ) );
+
+	return AUI_ERRCODE_OK;
+}
+
+
+
+AUI_ERRCODE C3Scroller::InitCommon( BOOL isVertical )
+{
+	if ( m_isVertical = isVertical )
 		m_valX = m_minX = m_maxX = m_incX = m_pageX = 0;
-    }
 	else
-    {
 		m_valY = m_minY = m_maxY = m_incY = m_pageY = 0;
-    }
 
 	return AUI_ERRCODE_OK;
 }

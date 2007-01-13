@@ -33,14 +33,14 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Radio(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
 		cookie ),
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -68,8 +68,6 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_ImageBase( numStates ),
-	aui_TextBase( text ),
 	aui_Radio(
 		retval,
 		id,
@@ -81,23 +79,41 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 		cookie,
 		state,
 		numStates ),
+	aui_ImageBase( numStates ),
+	aui_TextBase( text ),
 	PatternBase( pattern )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = InitCommon(icon);
+	*retval = InitCommon( icon );
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	return InitCommon(block->GetString(k_NS_HEADERSWITCH_LDL_ICON));
+	MBCHAR *icon = block->GetString( k_NS_HEADERSWITCH_LDL_ICON );
+
+	AUI_ERRCODE errcode = InitCommon( icon );
+	Assert( AUI_SUCCESS(errcode) );
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
+
+	return AUI_ERRCODE_OK;
 }
 
 

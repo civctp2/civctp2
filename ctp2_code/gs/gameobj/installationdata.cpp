@@ -1,32 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Installation data
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "c3math.h"
@@ -134,6 +113,17 @@ void InstallationData::DoVision()
 	sint32 maxrsq = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 	sint32 myrsq = sint32((myVisionRange+0.5)*(myVisionRange+0.5));
 
+	
+	
+	
+		
+	
+	
+	
+	
+	
+
+	
 	if(m_owner >= 0) {
 		m_visibility = 1 << m_owner;
 	} else {
@@ -144,12 +134,11 @@ void InstallationData::DoVision()
 	DynamicArray<Installation> instArray;
 
 	g_theInstallationTree->SearchRect(instArray, topleft,
-									  static_cast<sint16>(maxVisionRange) * 2 + 1,
-									  static_cast<sint16>(maxVisionRange) * 2 + 1,
+									  sint32(maxVisionRange) * 2 + 1,
+									  sint32(maxVisionRange) * 2 + 1,
 									  m_owner >= 0 ? ~(1 << m_owner) : 0xffffffff);
 	sint32 in = instArray.Num();
-	sint32 i;
-	for(i = 0; i < in; i++) {
+	for(sint32 i = 0; i < in; i++) {
 		InstallationData *oinst = instArray[i].AccessData();
 		double hisr = terrainutil_GetVisionRange(oinst->m_type, oinst->GetLocation()) + 0.5;
 		sint32 hisrsq = sint32(hisr * hisr);
@@ -183,13 +172,13 @@ void InstallationData::DoVision()
 	DynamicArray<Unit> unitArray;
 
 	g_theUnitTree->SearchRect(unitArray, topleft,
-							  static_cast<sint16>(maxVisionRange) * 2 + 1,
-							  static_cast<sint16>(maxVisionRange) * 2 + 1,
+							  sint32(maxVisionRange) * 2 + 1,
+							  sint32(maxVisionRange) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 un = unitArray.Num();
 	for(i = 0; i < un; i++) {
 		UnitData *ud = unitArray[i].AccessData();
-		double hisr = ud->GetDBRec()->GetVisionRange() + 0.5;
+		double hisr = g_theUnitDB->Get(ud->GetType())->GetVisionRange() + 0.5;
 		sint32 hisrsq = sint32(hisr*hisr);
 		sint32 ls = UnitData::GetDistance(Installation(m_id),
 										  ud, sint32(maxVisionRange));
@@ -201,7 +190,7 @@ void InstallationData::DoVision()
 		}
 
 		if(ls <= myrsq && !(ud->GetRealVisibility() & (1 << m_owner))) {
-			if(ud->GetDBRec()->GetVisionClass() &
+			if(g_theUnitDB->Get(ud->GetType())->GetVisionClass() &
 			   g_theTerrainImprovementDB->Get(m_type)->GetCanSee()) {
 				if(m_owner >= 0) {
 					ud->SetVisible((PLAYER_INDEX)m_owner);
@@ -223,13 +212,12 @@ void InstallationData::CheckVision(sint32 owner)
 	DynamicArray<Installation> instArray;
 
 	g_theInstallationTree->SearchRect(instArray, topleft,
-									  static_cast<sint16>(maxVisionRange) * 2 + 1,
-									  static_cast<sint16>(maxVisionRange) * 2 + 1,
+									  sint32(maxVisionRange) * 2 + 1,
+									  sint32(maxVisionRange) * 2 + 1,
 									  1 << owner);
 	sint32 in = instArray.Num();
 	BOOL canBeSeen = FALSE;
-	sint32 i;
-	for(i = 0; i < in; i++) {
+	for(sint32 i = 0; i < in; i++) {
 		InstallationData *oinst = instArray[i].AccessData();
 		sint32 ls = GetDistance(this, oinst, sint32(maxVisionRange));
 		if(ls > maxrsq)
@@ -254,8 +242,8 @@ void InstallationData::CheckVision(sint32 owner)
 		topleft.x -= sint16(maxVisionRange);
 		DynamicArray<Unit> unitArray;
 		g_theUnitTree->SearchRect(unitArray, topleft,
-								  static_cast<sint16>(maxVisionRange) * 2 + 1,
-								  static_cast<sint16>(maxVisionRange) * 2 + 1,
+								  sint32(maxVisionRange) * 2 + 1,
+								  sint32(maxVisionRange) * 2 + 1,
 								  1 << owner);
 		sint32 un = unitArray.Num();
 		for(i = 0; i < un; i++) {
@@ -265,11 +253,11 @@ void InstallationData::CheckVision(sint32 owner)
 			if(ls > maxrsq)
 				continue;
 
-			double hisr = ud->GetDBRec()->GetVisionRange()+0.5;
+			double hisr = g_theUnitDB->Get(ud->GetType())->GetVisionRange()+0.5;
 			sint32 hisrsq = sint32(hisr*hisr);
 			if(ls <= hisrsq) {
 				if(g_theTerrainImprovementDB->Get(m_type)->GetCanSee() &
-				   ud->GetDBRec()->GetCanSee()) {
+				   g_theUnitDB->Get(ud->GetType())->GetCanSee()) {
 					canBeSeen = TRUE;
 					break;
 				}

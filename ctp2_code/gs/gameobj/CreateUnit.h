@@ -1,33 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C/C++ header
-// Description  : Unit Creation
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
-
 #ifndef __CREATE_UNIT_H__
 #define __CREATE_UNIT_H__
 
@@ -41,7 +11,7 @@ public:
 	CreateUnitRequest(sint32 t,
 					  const MapPoint &point,
 					  const Unit hc,
-					  bool temp,
+					  BOOL temp,
 					  CAUSE_NEW_ARMY cause) :
 		m_type(t),
 		m_point(point),
@@ -54,7 +24,7 @@ public:
 	sint32 m_type;
 	MapPoint m_point;
 	Unit m_homeCity;
-	bool m_tempUnit;
+	BOOL m_tempUnit;
 	CAUSE_NEW_ARMY m_cause;
 };
 

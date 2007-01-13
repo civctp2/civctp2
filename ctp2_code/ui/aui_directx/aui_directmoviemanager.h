@@ -28,17 +28,17 @@ public:
 	aui_DirectMovieManager( BOOL init = FALSE, BOOL initDirect = TRUE );
 	virtual ~aui_DirectMovieManager();
 
-	virtual aui_Movie	*Load( MBCHAR const *filename, C3DIR dir = C3DIR_DIRECT )
+	virtual aui_Movie	*Load( MBCHAR *filename, C3DIR dir = C3DIR_DIRECT )
 	{ return m_directMovieResource->Load( filename, dir ); }
 
 	virtual AUI_ERRCODE Unload( aui_Movie *movie )
 	{ return m_directMovieResource->Unload( (aui_DirectMovie *)movie ); }
-	virtual AUI_ERRCODE Unload( MBCHAR const *movie )
+	virtual AUI_ERRCODE Unload( MBCHAR *movie )
 	{ return m_directMovieResource->Unload( movie ); }
 
-	virtual AUI_ERRCODE AddSearchPath( MBCHAR const * path )
+	virtual AUI_ERRCODE AddSearchPath( MBCHAR *path )
 	{ return m_directMovieResource->AddSearchPath( path ); }
-	virtual AUI_ERRCODE RemoveSearchPath( MBCHAR const * path )
+	virtual AUI_ERRCODE RemoveSearchPath( MBCHAR *path )
 	{ return m_directMovieResource->RemoveSearchPath( path ); }
 
 	aui_Resource<aui_DirectMovie> *DirectMovieResource( void ) const

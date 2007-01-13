@@ -1,7 +1,5 @@
 #import "Strings.txt"	# Strings: This file
 
-DoNotImportDefaults	# Do not import the default strings the text files are updated.
-
 import "add_str.txt"	# Addon: String additions should temporarily reside here. Strings should be moved from here to where they belong. This file should be gone by the time we CR.
 import "civ_str.txt"	# Civ City Ruler Names
 import "dip_str.txt"	# Diplomacy:

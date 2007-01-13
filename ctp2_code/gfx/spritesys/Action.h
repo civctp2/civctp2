@@ -82,7 +82,7 @@ public:
 	Action(sint32 actionType=0, ACTIONEND endCondition=ACTIONEND_PATHEND, sint32 startAnimPos = 0, BOOL specialDelayProcess = FALSE);
 	Action(Action *copyme);
 
-	virtual ~Action(void);
+	~Action(void);
 
 	sint32			GetActionType(void) { return (m_actionType > 0 ) ? m_actionType : 0; }
 	void			SetActionType(sint32 action) { m_actionType=action;};

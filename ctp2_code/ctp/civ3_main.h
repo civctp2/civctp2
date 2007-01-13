@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,7 +30,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -49,14 +52,14 @@ int ui_Process(void);
 BOOL ui_CheckForScroll(void);
 
 sint32 sharedsurface_Initialize( void );
-void   sharedsurface_Cleanup( void );
+sint32 sharedsurface_Cleanup( void );
 
 int sprite_Initialize(void);
 int sprite_Update(aui_Surface *surf);
-void sprite_Cleanup(void);
+int sprite_Cleanup(void);
 
 int tile_Initialize(BOOL isRestoring);
-void tile_Cleanup(void);
+int tile_Cleanup(void);
 
 int WINAPI main_filehelper_GetOS(void);
 DWORD main_GetRemainingSwapSpace(void);

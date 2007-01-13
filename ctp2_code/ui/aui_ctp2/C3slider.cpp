@@ -1,32 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The civilization 3 slider
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -68,9 +51,9 @@ C3Slider::C3Slider(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
+	aui_Ranger(),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Ranger()
+	aui_ImageBase( ldlBlock )
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -116,9 +99,9 @@ C3Slider::C3Slider(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( (sint32)0 ),
+	aui_Ranger(),
 	aui_TextBase( NULL ),
-	aui_Ranger()
+	aui_ImageBase( (sint32)0 )
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -157,7 +140,15 @@ C3Slider::C3Slider(
 
 AUI_ERRCODE C3Slider::InitCommon( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -177,8 +168,10 @@ AUI_ERRCODE C3Slider::InitCommon( void )
 
 AUI_ERRCODE C3Slider::CreateThumb( MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
+	
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -186,7 +179,7 @@ AUI_ERRCODE C3Slider::CreateThumb( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_thumb = new C3Thumb(
 				&errcode,
 				aui_UniqueId(),

@@ -19,11 +19,12 @@ ns_Spinner::ns_Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Ranger( retval, id, ldlBlock, ActionFunc, cookie ),
-	PatternBase( ldlBlock, NULL )
+	PatternBase( ldlBlock, NULL ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_ImageBase( ldlBlock )
 {
+	
 }
 
 
@@ -40,12 +41,12 @@ ns_Spinner::ns_Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
 	aui_Ranger( retval, id, x, y, width, height,
 			   AUI_RANGER_TYPE_SPINNER, orientation,
 				ActionFunc, cookie),
-	PatternBase( pattern )
+	PatternBase( pattern ),
+	aui_TextBase( NULL ),
+	aui_ImageBase( (sint32)0 )
 {
 }
 

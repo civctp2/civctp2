@@ -1,34 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer server select window
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
+
 
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
@@ -36,11 +18,15 @@
 #include "aui_button.h"
 #include "aui_textfield.h"
 
+
 #include "c3_button.h"
 #include "c3_static.h"
 
+
 #include "netshell.h"
 #include "ns_customlistbox.h"
+
+
 
 
 #include "serverselectwindow.h"
@@ -51,6 +37,7 @@
 static DialogBoxWindow *s_dbw = NULL;
 
 MBCHAR g_serverName[ 100 + 1 ] = "";
+
 
 ServerSelectWindow::ServerSelectWindow(
 	AUI_ERRCODE *retval )
@@ -71,7 +58,9 @@ ServerSelectWindow::ServerSelectWindow(
 
 	*retval = CreateControls();
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
+
 
 
 AUI_ERRCODE ServerSelectWindow::InitCommon( void )
@@ -89,14 +78,39 @@ AUI_ERRCODE ServerSelectWindow::InitCommon( void )
 }
 
 
+
 AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 {
-	AUI_ERRCODE     errcode = AUI_ERRCODE_OK;
-	aui_Control *   control = new c3_Static
-        (&errcode, aui_UniqueId(), "serverselectwindow.titlestatictext");
+	AUI_ERRCODE errcode;
+
+
+	
+
+	aui_Control *control;
+
+
+
+
+
+
+
+
+
+	control = new c3_Static(
+		&errcode,
+		aui_UniqueId(),
+		"serverselectwindow.titlestatictext" );
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_TITLESTATICTEXT ] = control;
+
+
+
+
+
+
+
+
 
 	control = new ns_ServerListBox(
 		&errcode,
@@ -124,11 +138,18 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 
 
 	
+
 	aui_Ldl::SetupHeirarchyFromRoot( "serverselectwindow" );
 
 
 	
+
 	aui_Action *action;
+
+
+
+
+
 
 	action = new OKButtonAction;
 	Assert( action != NULL );
@@ -147,6 +168,14 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 
 	
 
+
+
+
+
+
+
+
+
 	
 	((aui_ListBox *)m_controls[ CONTROL_SELECTSERVERLISTBOX ])->
 		SetForceSelect( TRUE );
@@ -157,10 +186,12 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 	return AUI_ERRCODE_OK;
 }
 
-ServerSelectWindow::~ServerSelectWindow() 
-{
+
+ServerSelectWindow::~ServerSelectWindow() {
 	delete m_dbActionArray[ 0 ];
+	m_dbActionArray[ 0 ] = NULL;
 }
+
 
 void ServerSelectWindow::Update( bool wait )
 {
@@ -196,12 +227,16 @@ void ServerSelectWindow::Update( bool wait )
 	}
 }
 
+
 AUI_ERRCODE ServerSelectWindow::Idle( void )
-{	
-	if (g_netfunc) 
-    {
-        while (NETFunc::Message * m = g_netfunc->GetMessage()) 
-        {
+{	NETFunc::Message *m;
+	dp_objectDelta_packet_t *p;
+	
+	if(g_netfunc) {
+		while(m = g_netfunc->GetMessage()) {
+			
+			
+			
 			g_netfunc->HandleMessage(m);
 
 			switch ( m->GetCode() )
@@ -211,19 +246,13 @@ AUI_ERRCODE ServerSelectWindow::Idle( void )
 				break;
 
 			case dp_OBJECTDELTA_PACKET_ID:
-                {
-            	    dp_objectDelta_packet_t *   p = 
-                        (dp_objectDelta_packet_t *) m->GetBody();
-
-				    if (p->key[0] == dp_KEY_SERVERPINGS 
-					    && (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)
-					    && p->data.serv.loss_percent != 100 && s_dbw
-                       ) 
-                    {
-					    DialogBoxWindow::PopDown(s_dbw);
-					    s_dbw = NULL;
-				    }
-                }
+				p = (dp_objectDelta_packet_t *)m->GetBody();
+				if(	p->key[0] == dp_KEY_SERVERPINGS 
+					&& (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)
+					&& p->data.serv.loss_percent != 100 && s_dbw) {
+					DialogBoxWindow::PopDown( s_dbw );
+					s_dbw = NULL;
+				}
 				break;
 			default:
 				break;
@@ -238,6 +267,7 @@ AUI_ERRCODE ServerSelectWindow::Idle( void )
 
 	return AUI_ERRCODE_OK;
 }
+
 
 void ServerSelectWindow::ServerListBoxAction::Execute(
 	aui_Control *control,
@@ -269,6 +299,7 @@ void ServerSelectWindow::ServerListBoxAction::Execute(
 	}
 }
 
+
 void ServerSelectWindow::OKButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -297,6 +328,7 @@ void ServerSelectWindow::OKButtonAction::Execute(
 }
 
 
+
 void ServerSelectWindow::CancelButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -308,7 +340,9 @@ void ServerSelectWindow::CancelButtonAction::Execute(
 	strncpy( g_serverName, "", 100 );
 
 	g_netfunc->Disconnect();
+
 }
+
 
 void ServerSelectWindow::DialogBoxPopDownAction::Execute(
 	aui_Control *control,

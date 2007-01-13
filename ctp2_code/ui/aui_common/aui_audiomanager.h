@@ -33,20 +33,20 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	virtual aui_Sound	*Load( const MBCHAR *filename )
+	virtual aui_Sound	*Load( MBCHAR *filename )
 		{ return NULL; }
 
 	virtual AUI_ERRCODE Unload( aui_Sound *sound )
 		{ return AUI_ERRCODE_OK; }
-	virtual AUI_ERRCODE Unload( const MBCHAR *sound )
+	virtual AUI_ERRCODE Unload( MBCHAR *sound )
 		{ return AUI_ERRCODE_OK; }
 
-	virtual AUI_ERRCODE	AddSearchPath( const MBCHAR *path )
+	virtual AUI_ERRCODE	AddSearchPath( MBCHAR *path )
 		{ return AUI_ERRCODE_OK; }
-	virtual AUI_ERRCODE	RemoveSearchPath( const MBCHAR *path )
+	virtual AUI_ERRCODE	RemoveSearchPath( MBCHAR *path )
 		{ return AUI_ERRCODE_OK; }
 
-	virtual AUI_ERRCODE PlaySound( const MBCHAR *name )
+	virtual AUI_ERRCODE PlaySound( MBCHAR *name )
 		{ return AUI_ERRCODE_OK; }
 
 	BOOL UsingAudio( void ) const { return m_useAudio; }

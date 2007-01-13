@@ -1,6 +1,14 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef _TRADEOFFERPOOL_H_
 #define _TRADEOFFERPOOL_H_
 

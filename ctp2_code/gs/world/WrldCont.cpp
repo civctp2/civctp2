@@ -1,33 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : World continent handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
-
 #include "c3.h"
 
 #include "XY_Coordinates.h"
@@ -127,6 +97,7 @@ void World::InitContinent()
 void World::GrowOceans() 
 { 
     MapPoint p;
+    sint32 found = FALSE; 
 
     for (p.x = 0; p.x <m_size.x; p.x++) { 
         for (p.y = 0; p.y <m_size.y; p.y++) {    
@@ -144,6 +115,8 @@ void World::GrowWater(MapPoint &start)
     MapPoint test_pos; 
     MapPoint center;
     MapPointNode *search_list = NULL, *finished_list=NULL;
+
+    BOOL revealed_bridge=FALSE;
 
 #ifdef _DEBUG
     sint32 finite_loop=0; 
@@ -255,6 +228,7 @@ sint32 g_test_it2;
 
 void World::ResetCanalsTunnels()
 {
+    sint32 z=0; 
     uint32 e; 
     Cell *c=NULL; 
     sint32 old_cont_val;
@@ -301,6 +275,7 @@ void World::ResetCanalsTunnels()
 void World::GrowContinents() 
 { 
     MapPoint p;
+    sint32 found = FALSE; 
 
     for (p.x = 0; p.x <m_size.x; p.x++) { 
         for (p.y = 0; p.y <m_size.y; p.y++) {             
@@ -335,6 +310,7 @@ void World::GrowLand(MapPoint &start)
     MapPoint test_pos; 
     MapPoint center; 
     MapPointNode *search_list = NULL, *finished_list=NULL;
+    BOOL revealed_bridge=FALSE;
 
 #ifdef _DEBUG
     sint32 finite_loop=0; 
@@ -453,7 +429,7 @@ sint32 World::GetWaterContinentSize(sint32 cont_num)const
 
 void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land) const
 {
-	static bool REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT  = false;
+	BOOL GET_CONTINENT_RETURNED_INCONTINENT_VALUE = FALSE;
 	is_land = !IsWater(pos); 
 	
 	
@@ -464,8 +440,8 @@ void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land
 
 	if (cont_number < 0)
 	{
-		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
-        REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
+		
+		Assert(GET_CONTINENT_RETURNED_INCONTINENT_VALUE);
         is_land = FALSE; 
         cont_number = 0; 
 	}
@@ -473,8 +449,7 @@ void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land
 	if (!is_land && cont_number >= LAND_CONTINENT_START)
 	{
 		
-		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
-        REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
+		Assert(GET_CONTINENT_RETURNED_INCONTINENT_VALUE);
         is_land = FALSE; 
         cont_number = 0; 
 	}
@@ -699,6 +674,10 @@ BOOL World::IsGFComputed(const BOOL is_choke_land, MapPoint &pos)
 
 void World::Grassfire8(const BOOL is_choke_land, sint16 **tmp_map)
 { 
+    sint32 mx = m_size.x-1; 
+    sint32 my = m_size.y-1;
+
+    
     MapPoint pos; 
     for (pos.x=0; pos.x < m_size.x; pos.x++) { 
         for (pos.y=0; pos.y < m_size.y; pos.y++) { 
@@ -711,7 +690,7 @@ void World::Grassfire8(const BOOL is_choke_land, sint16 **tmp_map)
     } 
 
     
-    sint16 v, mv = 0; // Reconsider!
+    sint16 v, mv;
     MapPoint w; 
     for (pos.x=0; pos.x < m_size.x; pos.x++) { 
         for (pos.y=0; pos.y < m_size.y; pos.y++) { 
@@ -794,8 +773,8 @@ void World::ClipGF(sint16 **tmp_map)
     sint16 curr, v;
     sint16 threshold_min = 1; 
     sint16 threshold_max = 1; 
-    sint32 count = 0; 
-    BOOL going_up = FALSE;
+    sint32 count; 
+    BOOL going_up;
     
     
      for (pos.x=0; pos.x<m_size.x; pos.x++) { 

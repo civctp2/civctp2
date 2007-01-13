@@ -1,61 +1,60 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The ranking tab of the info window
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// OLD_GRAPHS
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Redesigned constructor, fixed possible crash. (June 5th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+//ranking.cpp
+
+//Pollution power graph added by Martin Gühmann on November the 2nd
+
+
+
+
+
+
 
 #include "c3.h"
-#include "rankingtab.h"
 
 #include "aui_ldl.h"
-#include "aui_stringtable.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
-#include "CivilisationPool.h"
-#include "colorset.h"           // g_colorSet
+#include "ctp2_Window.h"
 #include "ctp2_button.h"
-#include "ctp2_dropdown.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
+#include "c3ui.h"
+#include "ctp2_dropdown.h"
 #include "ctp2_Static.h"
-#include "ctp2_Window.h"
-#include "gstypes.h"
-#include "infowin.h"
+#include "ctp2_listbox.h"
+
+
+#include "StrDB.h"
+
+
+#include "rankingtab.h"
+
+
 #include "linegraph.h"
+
+
+#include "aui_uniqueid.h"
+
+
 #include "player.h"
-#include "StrDB.h"              // g_theStringDB
+
+
+#include "aui_stringtable.h"
+
+
+#include "colorset.h"
+
+
+#include "infowin.h"
+#include "TurnCnt.h"
+#include "gstypes.h"
 #include "Strengths.h"
-#include "TurnCnt.h"            // g_turn
+#include "CivilisationPool.h"
 
 
 extern C3UI *g_c3ui;
+extern StringDB *g_theStringDB;
 extern PointerList<Player>      *g_deadPlayer;
+extern TurnCount				*g_turn; 
+extern ColorSet		*g_colorSet;
 
 static aui_StringTable	*s_stringTable;
 
@@ -68,30 +67,37 @@ RankingTab * RankingTab::s_current_ranking_tab = NULL;
 
 
 
-RankingTab::RankingTab(ctp2_Window *parent)
-:   m_line_graph         (true), // Has to be set again
-    m_infoGraph          (static_cast<LineGraph *>(aui_Ldl::GetObject(
-                          "InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
-    m_infoGraphData      (NULL),
-    m_infoYCount         (0),
-    m_info_window        (parent),
-    m_rankingDropDown    (static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
-                          "InfoDialog.TabGroup.Tab3.TabPanel.RankSelect.Pulldown"))),
-    m_lineOrZeroSumButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
-                          "InfoDialog.TabGroup.Tab3.TabPanel.LineOrZeroSum"))),
-    m_infoPlayerList     (static_cast<ctp2_ListBox *>(aui_Ldl::GetObject(
-                          "InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList")))
-//  m_rankingMilitary    (0), // Initialized seperately
-//  m_rankingEconomic    (0), // Initialized seperately
-//  m_rankingScientific  (0), // Initialized seperately
-//  m_rankingPollution   (0), // Initialized seperately
-//  m_rankingOverall     (0), // Initialized seperately
+RankingTab::RankingTab(ctp2_Window *parent) :
+	m_rankingDropDown(static_cast<ctp2_DropDown*>(aui_Ldl::GetObject(
+		"InfoDialog.TabGroup.Tab3.TabPanel.RankSelect.Pulldown"))),
+	m_lineOrZeroSumButton(static_cast<ctp2_Button*>(
+		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab3.TabPanel.LineOrZeroSum"))),
+	m_infoPlayerList(static_cast<ctp2_ListBox *>(
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoPlayerList"))),
+	m_infoGraph(static_cast<LineGraph *>(
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph")))
 {
 
+	
+	m_info_window = parent;
+
+	m_infoGraphData = NULL;
+
+	
+	
+	
+
+	
 	Assert(m_rankingDropDown);
+
+	
 	m_rankingDropDown->SetActionFuncAndCookie(SelectRankingActionCallback, m_info_window);
+
+	
 	m_rankingDropDown->Clear();
 
+
+	
 	uint32 counter = 0;
 	Add_Dropdown_Category("str_ldl_RANKING_MILITARY");
 	m_rankingMilitary = counter++;
@@ -99,31 +105,74 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	m_rankingEconomic = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_SCIENTIFIC");
 	m_rankingScientific = counter++;
+	//Added by Martin Gühmann
+	//str_ldl_RANKING_POLLUTION is already part of the ldl_str.txt
 	Add_Dropdown_Category("str_ldl_RANKING_POLLUTION");
 	m_rankingPollution = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_OVERALL");
 	m_rankingOverall = counter++;
 
+	
 	m_rankingDropDown->SetSelectedItem(m_rankingOverall);
 
+
+	
+	
+	
+
+	
 	Assert(m_lineOrZeroSumButton);
 
+	
 	SetLineGraph( true );
 
+	
 	m_lineOrZeroSumButton->SetActionFuncAndCookie(LineOrZeroSumButtonActionCallback, parent);
+
+	
 	m_lineOrZeroSumButton->Show();
 
+
+	
+	
+	
+
+
+	
+
+
+
 	Assert( m_infoGraph );
+
+	
 	m_infoGraph->Show();
+
+	
 	m_infoGraph->EnableYNumber(FALSE);
 	m_infoGraph->EnablePrecision(FALSE);
 
+
+	
+	
+	
 	Assert( m_infoPlayerList );
+
+	
 	m_infoPlayerList->GetHeader()->Enable( FALSE );
 
+
+	
+	
+	
+	
 	s_current_ranking_tab = this;
 
+
+	
+	
+	
 	LoadData();
+
 }
 
 
@@ -175,7 +224,7 @@ void RankingTab::SetLineGraph( bool line_graph )
 		
 		m_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_LINE_BUTTON"));
 
-	}
+	} 
 }
 
 
@@ -224,13 +273,13 @@ void RankingTab::CleanupGraph()
 	
 	if (m_infoGraphData)
 	{
-		for (sint32 i = 0 ; i < m_infoYCount; ++i)
+		for( sint32 i = 0 ; i < m_infoYCount ; i++ )
 		{
 			delete m_infoGraphData[i];
+			m_infoGraphData[i] = NULL;
 		}
-		delete [] m_infoGraphData;
+		delete m_infoGraphData;
 		m_infoGraphData = NULL;
-		m_infoYCount    = 0;
 	}
 }
 
@@ -247,6 +296,7 @@ void RankingTab::UpdateGraph()
 		category = kRankingEconomic;
 	else if (category == m_rankingScientific)
 		category = kRankingScientific;
+	//Added by Martin Gühmann
 	else if (category == m_rankingPollution)
 		category = kRankingPollution;
 
@@ -282,7 +332,7 @@ sint32 SetupRankingGraph(
 	
 	
 	BOOL dumpStrings = FALSE;
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE		errcode;
 
 	if (!s_stringTable) {
 		s_stringTable = new aui_StringTable( &errcode, "InfoStrings" );
@@ -333,7 +383,7 @@ sint32 SetupRankingGraph(
 	
 	if (!infoXCount) 
 	{
-		delete [] color;
+		delete color;
 		
 		pInfoGraph->RenderGraph();
 		return infoYCount;
@@ -398,6 +448,7 @@ sint32 SetupRankingGraph(
 				{
 					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_KNOWLEDGE, round);
 				}
+				//Added by Martin Gühmann
 				else if (category == kRankingPollution)
 				{
 					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_POLLUTION, round);
@@ -495,7 +546,7 @@ sint32 SetupRankingGraph(
 	
 	pInfoGraph->RenderGraph();
 	
-	delete [] color;
+	delete color;
 
 	
 	
@@ -653,5 +704,18 @@ void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
 
 RankingTab::~RankingTab(void)
 {
+	
+
+
+
+
+
+
+
 	CleanupGraph();
+
+
+
+
+
 }

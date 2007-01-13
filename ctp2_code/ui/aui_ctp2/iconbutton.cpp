@@ -12,7 +12,6 @@
 
 
 #include "c3.h"
-#include "iconbutton.h"
 
 #include "aui.h"
 #include "pattern.h"
@@ -22,12 +21,20 @@
 #include "aui_ldl.h"
 
 #include "pixelutils.h"
-#include "colorset.h"       // g_colorSet
-#include "CivPaths.h"       // g_civPaths
+#include "colorset.h"
+
+#include "CivPaths.h"
+
+
 #include "primitives.h"
 
+#include "iconbutton.h"
+
 #include "c3ui.h"
+
 extern C3UI			*g_c3ui;
+extern CivPaths		*g_civPaths;
+extern ColorSet		*g_colorSet;
 
 
 IconButton::IconButton(
@@ -43,11 +50,11 @@ IconButton::IconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase(NULL),
 	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	PatternBase( pattern ),
-	m_color(color )
+	m_color(color ),
+	aui_TextBase(NULL),
+	aui_ImageBase( (sint32)0 )
 {
 	InitCommon(icon);
 
@@ -60,10 +67,10 @@ IconButton::IconButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
-	PatternBase( ldlBlock, (MBCHAR *)NULL )
+	PatternBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_ImageBase( ldlBlock )
 {
 	InitCommon(ldlBlock, TRUE);
 
@@ -75,7 +82,15 @@ AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 	MBCHAR		*name;
 
 	if (isLDL) {
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+		aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+		
+		BOOL valid = theLdl->IsValid( ldlBlock );
+		Assert( valid );
+		if ( !valid ) return AUI_ERRCODE_HACK;
+
+		
+		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -100,7 +115,9 @@ AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 
 IconButton::~IconButton()
 {
-	delete [] m_filename;
+	if (m_filename) {
+		delete[] m_filename;
+	}
 }
 
 

@@ -1,57 +1,48 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Robot initialization and cleanup
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Cleaned up code.
-//
-//----------------------------------------------------------------------------
-
 #include "c3.h"
-#include "RoboInit.h"
 
 #include "UnitAstar.h"
-#include "CtpAi.h"
-#include "AgreementMatrix.h"
+
+#include "DataCheck.h"
+#include "RoboInit.h"
+
+#include "ctpai.h"
+#include "Diplomat.h"
 #include "mapanalysis.h"
+#include "AgreementMatrix.h"
 
-UnitAstar * g_theUnitAstar  = NULL; 
+UnitAstar *g_theUnitAstar; 
 
-void roboinit_Initalize(CivArchive &a)
+BOOL roboinit_Initalize(CivArchive &a)
+
 { 
 	Astar_Init();
-
-    delete g_theUnitAstar;
     g_theUnitAstar = new UnitAstar; 
+    return TRUE;
 } 
 
 void roboinit_Cleanup()
-{
-    delete g_theUnitAstar; 
-    g_theUnitAstar = NULL;
+
+{ 
+	
+	CtpAi::Cleanup();
+
+	
+	
+	
+
+	
+	MapAnalysis::GetMapAnalysis().Resize(0, 0, 0, 1);
+
+	
+	AgreementMatrix::s_agreements.~AgreementMatrix();
 
 	Astar_Cleanup();
+
+    if (g_theUnitAstar) { 
+        delete g_theUnitAstar; 
+        g_theUnitAstar = NULL; 
+    }
+
 }
 
 

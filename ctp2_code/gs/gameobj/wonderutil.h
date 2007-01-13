@@ -1,32 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Wonderutil game object
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - wonderutil_GetGoldPerBuildingAnywhere (E 5-27-2006)
-//
-//----------------------------------------------------------------------------
 
 #ifndef WONDER_UTIL_H__
 #define WONDER_UTIL_H__
@@ -35,18 +6,18 @@ class WonderRecord;
 
 const WonderRecord *wonderutil_Get(sint32 wonder);
 
-bool wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders);
-bool wonderutil_GetCloseEmbassies(const uint64 builtWonders);
-bool wonderutil_GetReformCities(const uint64 builtWonders);
-bool wonderutil_GetFreeSlaves(const uint64 builtWonders);
-bool wonderutil_GetGlobalRadar(const uint64 builtWonders);
-bool wonderutil_GetSpiesEverywhere(const uint64 builtWonders);
-bool wonderutil_GetFreeSpaceTransport(const uint64 builtWonders);
-bool wonderutil_GetProtectFromBiologicalWarfare(const uint64 builtWonders);
-bool wonderutil_GetPopulationMonitorEverywhere(const uint64 builtWonders);
-bool wonderutil_GetParkRangersEnabled(const uint64 builtWonders);
-bool wonderutil_GetAllCitizensContent(const uint64 builtWonders);
-bool wonderutil_GetNukesEliminated(const uint64 builtWonders);
+BOOL wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders);
+BOOL wonderutil_GetCloseEmbassies(const uint64 builtWonders);
+BOOL wonderutil_GetReformCities(const uint64 builtWonders);
+BOOL wonderutil_GetFreeSlaves(const uint64 builtWonders);
+BOOL wonderutil_GetGlobalRadar(const uint64 builtWonders);
+BOOL wonderutil_GetSpiesEverywhere(const uint64 builtWonders);
+BOOL wonderutil_GetFreeSpaceTransport(const uint64 builtWonders);
+BOOL wonderutil_GetProtectFromBiologicalWarfare(const uint64 builtWonders);
+BOOL wonderutil_GetPopulationMonitorEverywhere(const uint64 builtWonders);
+BOOL wonderutil_GetParkRangersEnabled(const uint64 builtWonders);
+BOOL wonderutil_GetAllCitizensContent(const uint64 builtWonders);
+BOOL wonderutil_GetNukesEliminated(const uint64 builtWonders);
 sint32 wonderutil_GetReadinessCostReduction(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseGoldPercentage(const uint64 builtWonders);
 sint32 wonderutil_GetDecreaseCrimePercentage(const uint64 builtWonders);
@@ -66,23 +37,23 @@ sint32 wonderutil_GetPollutionBonus(const uint64 builtWonders);
 
 sint32 wonderutil_GetPollutionCleaner(const uint64 builtWonders);
 
-bool wonderutil_WormholeDetector(const uint64 builtWonders);
+BOOL wonderutil_WormholeDetector(const uint64 builtWonders);
 sint32 wonderutil_GetOvercrowdingReduction(const uint64 builtWonders);
-bool wonderutil_GetAllBoatsDeepWater(const uint64 builtWonders);
+BOOL wonderutil_GetAllBoatsDeepWater(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseBoatMovement(const uint64 builtWonders);
-bool wonderutil_GetFreeTradeRoutes(const uint64 builtWonders);
+BOOL wonderutil_GetFreeTradeRoutes(const uint64 builtWonders);
 sint32 wonderutil_GetDecreaseTemples(const uint64 builtWonders);
 sint32 wonderutil_GetDecreaseMaintenance(const uint64 builtWonders);
 sint32 wonderutil_GetRandomAdvanceChance(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseHP(const uint64 builtWonders);
 sint32 wonderutil_GetMultiplyTradeRoutes(const uint64 builtWonders);
-bool wonderutil_GetForcefieldEverywhere(const uint64 builtWonders);
-bool wonderutil_GetRevoltingCitiesJoinPlayer(const uint64 builtWonders);
-bool wonderutil_GetNoPollutionUnhappiness(const uint64 builtWonders);
-bool wonderutil_GetEmbassiesEverywhereEvenAtWar(const uint64 builtWonders);
-bool wonderutil_PreventConversion(const uint64 builtWonders);
-bool wonderutil_GetProtectFromBarbarians(uint64 builtWonders);
-bool wonderutil_GetStartGaiaController(uint64 builtWonders);
+BOOL wonderutil_GetForcefieldEverywhere(const uint64 builtWonders);
+BOOL wonderutil_GetRevoltingCitiesJoinPlayer(const uint64 builtWonders);
+BOOL wonderutil_GetNoPollutionUnhappiness(const uint64 builtWonders);
+BOOL wonderutil_GetEmbassiesEverywhereEvenAtWar(const uint64 builtWonders);
+BOOL wonderutil_PreventConversion(const uint64 builtWonders);
+BOOL wonderutil_GetProtectFromBarbarians(uint64 builtWonders);
+BOOL wonderutil_GetStartGaiaController(uint64 builtWonders);
 sint32 wonderutil_GetIncreaseScientists(const uint64 builtWonders);
 sint32 wonderutil_GetOtherCivRandomAdvanceChance(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseProduction(const uint64 builtWonders);
@@ -93,15 +64,13 @@ sint32 wonderutil_GetIncreaseSpecialists(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseBrokerages(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseCathedrals(const uint64 builtWonders);
 sint32 wonderutil_GetIncreaseRegard(const uint64 builtWonders);
-bool wonderutil_IsAvailable(sint32 wonder, sint32 player);
+BOOL wonderutil_IsAvailable(sint32 wonder, sint32 player);
 sint32 wonderutil_GetOwner(sint32 wonder);
 void wonderutil_AddBuilt(sint32 wonder);
-bool wonderutil_IsBuilt(sint32 wonder);
-bool wonderutil_IsObsolete(sint32 wonder);
+BOOL wonderutil_IsBuilt(sint32 wonder);
+BOOL wonderutil_IsObsolete(sint32 wonder);
 sint32 wonderutil_GetProductionCost(sint32 wonder);
 sint32 wonderutil_GetGaiaIndex();
 sint32 wonderutil_GetFobCityIndex();
-sint32 wonderutil_GetGoldPerBuildingAnywhere(const uint64 builtWonders); //EMOD
-sint32 wonderutil_GetEnablesPunativeAirstrikes(const uint64 builtWonders); //EMOD
 
 #endif

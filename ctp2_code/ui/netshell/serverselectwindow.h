@@ -54,10 +54,17 @@ protected:
 
 	aui_Action *m_dbActionArray[ 1 ]; 
 
-	AUI_ACTION_BASIC(OKButtonAction);
-    AUI_ACTION_BASIC(CancelButtonAction);
-    AUI_ACTION_BASIC(ServerListBoxAction);
-    AUI_ACTION_BASIC(DialogBoxPopDownAction);
+	class OKButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class CancelButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class ServerListBoxAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class DialogBoxPopDownAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
 };
 
 

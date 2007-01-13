@@ -27,40 +27,11 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Updated friend declarations.
-// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
-
-#ifndef AUI_WINDOW_H
-#define AUI_WINDOW_H
-
-class aui_Window;
-
-enum AUI_WINDOW_TYPE
-{
-	AUI_WINDOW_TYPE_FIRST = 0,
-	AUI_WINDOW_TYPE_BACKGROUND = 0,
-	AUI_WINDOW_TYPE_SINKING,
-	AUI_WINDOW_TYPE_STANDARD,
-	AUI_WINDOW_TYPE_FLOATING,
-	AUI_WINDOW_TYPE_POPUP,
-	AUI_WINDOW_TYPE_TIP,
-	AUI_WINDOW_TYPE_LAST
-};
-
-#define k_WINDOW_ATTRIBUTE_HIDDEN			k_REGION_ATTRIBUTE_HIDDEN
-#define k_WINDOW_ATTRIBUTE_DISABLED			k_REGION_ATTRIBUTE_DISABLED
-#define k_WINDOW_ATTRIBUTE_DRAGDROP			k_REGION_ATTRIBUTE_DRAGDROP
-#define k_WINDOW_ATTRIBUTE_TRANSPARENT		0x00000008
-#define k_WINDOW_ATTRIBUTE_TRANSLUCENT		0x00000010
-#define k_WINDOW_ATTRIBUTE_STRONGLYMODAL	0x00000020
-#define k_WINDOW_ATTRIBUTE_WEAKLYMODAL		0x00000040
-#define k_WINDOW_ATTRIBUTE_DRAGGABLE		0x00000080
-#define k_WINDOW_ATTRIBUTE_DYNAMIC 	   	   	0x00000100
+#ifndef __AUI_WINDOW_H__
+#define __AUI_WINDOW_H__
 
 
 #include "aui_region.h"
@@ -74,9 +45,37 @@ class aui_Control;
 class aui_Surface;
 struct aui_Stencil;
 
+enum AUI_WINDOW_TYPE
+{
+	AUI_WINDOW_TYPE_FIRST = 0,
+	AUI_WINDOW_TYPE_BACKGROUND = 0,
+	AUI_WINDOW_TYPE_SINKING,
+	AUI_WINDOW_TYPE_STANDARD,
+	AUI_WINDOW_TYPE_FLOATING,
+	AUI_WINDOW_TYPE_POPUP,
+	AUI_WINDOW_TYPE_TIP,
+	AUI_WINDOW_TYPE_LAST
+};
+
+
+
+
+#define k_WINDOW_ATTRIBUTE_HIDDEN			k_REGION_ATTRIBUTE_HIDDEN
+#define k_WINDOW_ATTRIBUTE_DISABLED			k_REGION_ATTRIBUTE_DISABLED
+#define k_WINDOW_ATTRIBUTE_DRAGDROP			k_REGION_ATTRIBUTE_DRAGDROP
+#define k_WINDOW_ATTRIBUTE_TRANSPARENT		0x00000008
+#define k_WINDOW_ATTRIBUTE_TRANSLUCENT		0x00000010
+#define k_WINDOW_ATTRIBUTE_STRONGLYMODAL	0x00000020
+#define k_WINDOW_ATTRIBUTE_WEAKLYMODAL		0x00000040
+#define k_WINDOW_ATTRIBUTE_DRAGGABLE		0x00000080
+#define k_WINDOW_ATTRIBUTE_DYNAMIC 	   	   	0x00000100
+
+
+
 class aui_Window : public aui_Region
 {
 public:
+	
 	aui_Window(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -102,22 +101,7 @@ public:
 	static uint32 m_windowClassId;
 
 protected:
-	aui_Window()
-    :   aui_Region          (),  
-	    m_surface           (NULL),
-        m_opaqueControls    (FALSE),		
-        m_bpp               (0),
-        m_type              (AUI_WINDOW_TYPE_STANDARD),
-    	m_dirtyList         (NULL),
-        m_isDragging        (FALSE),
-        m_grabRegion        (NULL),
-        m_ogX               (0),
-	    m_ogY               (0),
-        m_stencil           (NULL),
-        m_focusControl      (NULL),
-        m_focusList         (NULL)
-    { ; };
-
+	aui_Window() : aui_Region() {}
 	AUI_ERRCODE InitCommon( sint32 bpp, AUI_WINDOW_TYPE type );
 #if defined(_MSC_VER)
 	friend class aui_UI;
@@ -177,7 +161,7 @@ public:
 	BOOL IsDynamic( void ) const
 		{ return m_attributes & k_WINDOW_ATTRIBUTE_DYNAMIC; }
 
-	uint32 SetTransparent( BOOL transparent, BOOL transparentControls = TRUE );  //FALSE );
+	uint32 SetTransparent( BOOL transparent, BOOL transparentControls = FALSE );
 	uint32 SetTranslucent( BOOL translucent, BOOL translucentControls = FALSE );
 	uint32 SetStronglyModal( BOOL stronglyModal );
 	uint32 SetWeaklyModal( BOOL weaklyModal );
@@ -255,6 +239,21 @@ protected:
 	aui_Control *m_focusControl;
 	tech_WLList<aui_Region *> *m_focusList;
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback PostChildrenCallback;
+
+	
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+	virtual MouseEventCallback MouseLDragInside;
+	virtual MouseEventCallback MouseLDragOutside;
+
+	
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLGrabOutside;
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseLDropOutside;
+#else
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);	
@@ -264,6 +263,7 @@ protected:
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
+#endif
 };
 
 

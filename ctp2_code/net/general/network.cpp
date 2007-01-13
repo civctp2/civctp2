@@ -2,8 +2,6 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Network framework
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,11 +16,6 @@
 //
 // Compiler flags
 // 
-// _DEBUG
-// - Generates debug information when set.
-//
-// _PLAYTEST
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,16 +26,15 @@
 // - Updated the above to prevent an invalid second delete.
 // - Feat tracking added.
 // - Memory leaks repaired.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Database in synchronicity check is now done on all databases. (Aug 25th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "network.h"
-
 #include "Cell.h"
+
+
 #include "net_types.h"
+#include "network.h"
 #include "net_io.h"
 #include "net_anet.h"
 #include "net_thread.h"
@@ -91,6 +83,7 @@
 #include "net_cheat.h"
 #endif
 
+
 #include "UnitData.h"
 #include "player.h"
 #include "XY_Coordinates.h"
@@ -98,7 +91,7 @@
 #include "UnitPool.h"
 #include "citydata.h"
 #include "TradeRouteData.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Path.h"
 #include "Agreement.h"
 #include "CivilisationPool.h"
@@ -116,28 +109,40 @@
 #include "chatbox.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "Order.h"
+#include "order.h"
 #include "UnseenCell.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "Exclusions.h"
+
+
+
 #include "profileDB.h"
 #include "pointerlist.h"
+
 #include "c3_utilitydialogbox.h"
+
+
 #include "netfunc.h"
 #include "netshell.h"
+
 #include "civapp.h"
+
 #include "StrDB.h"
 extern StringDB					*g_theStringDB;
 
 #include "GameSettings.h"
 #include "AgeRecord.h"
-#include "CivilisationRecord.h"
+#include "CivilisationDB.h"
+
 #include "GameEventManager.h"
+
 #include "ctpai.h"
 #include "chatlist.h"
+
 #include "soundmanager.h"
 #include "gamesounds.h"
+
 #include "progresswindow.h"
 extern ProgressWindow *g_theProgressWindow;
 
@@ -148,13 +153,23 @@ extern ProfileDB *g_theProfileDB;
 extern NETFunc *g_netfunc;
 extern DiplomaticRequestPool *g_theDiplomaticRequestPool;
 extern CivApp *g_civApp;
+extern CivilisationDatabase *g_theCivilisationDB;
+
 
 #include "SelItem.h"
+
+
 #include "resource.h"
+
 #include "director.h"
+
+#include "GameOver.h"
 #include "civ3_main.h"
+
 #include "sci_advancescreen.h"
+
 #include "c3_utilitydialogbox.h"
+
 #include "aui_button.h"
 #ifdef _DEBUG
 #include "aui.h"
@@ -167,13 +182,19 @@ extern CivApp *g_civApp;
 extern ControlPanelWindow		*g_controlPanel;
 
 #include "RandGen.h"
+
 #include "stringutils.h"
+
 #include "screenutils.h"
+
 #include "battleviewwindow.h"
 #include "c3ui.h"
+
 #include "sci_advancescreen.h"
+
 #include "dipwizard.h"
 #include "Diplomat.h"
+
 #include "CTP2Combat.h"
 #include "Strengths.h"
 
@@ -239,12 +260,12 @@ namespace
 } // namespace
 
 Network::Network() :
-	m_state(NETSTATE_READY),
+	m_initialized(FALSE),
 	m_pid(0),
 	m_hostId(0),
 	m_iAmHost(FALSE),
 	m_iAmClient(FALSE),
-	m_initialized(FALSE),
+	m_state(NETSTATE_READY),
 	m_processingNewPlayers(FALSE)
 {
 	m_noThread = FALSE;
@@ -290,10 +311,15 @@ Network::Network() :
 	m_condensePopMoves = FALSE;
 	m_enactedDiplomaticRequests = new DynamicArray<DiplomaticRequest>;
 
-#ifdef WIN32
+	
+	
+
+	
+	
+
 	char exepath[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-		char *lastbackslash = strrchr(exepath, FILE_SEPC);
+		char *lastbackslash = strrchr(exepath, '\\');
 		if(lastbackslash) {
 			*lastbackslash = 0;
 			SetCurrentDirectory(exepath);
@@ -314,7 +340,6 @@ Network::Network() :
 		Assert(r == sizeof(m_guid));
 		fclose(guidFile);
 	}
-#endif
 
 	m_progress = -1;
 	m_extraTimePerCity = 0;
@@ -335,40 +360,58 @@ Network::~Network()
 {
 	m_deleting = TRUE;
 
-	delete m_netIO;
-
-	for (size_t i = 0; i < k_MAX_PLAYERS; i++) 
-    {
-		delete m_playerData[i];
+	if(m_netIO) {
+		delete m_netIO;
+		m_netIO = NULL;
 	}
 
-
-	delete m_newPlayerList;
-
-	while (!m_sessionList->IsEmpty()) 
-    {
-	    delete m_sessionList->RemoveHead();
+	for(uint16 i = 0; i < k_MAX_PLAYERS; i++) {
+		if(m_playerData[i]) {
+			delete m_playerData[i];
+			m_playerData[i] = NULL;
+		}
 	}
-	delete m_sessionList;
+	SessionData* ses;
+	while(!m_sessionList->IsEmpty()) {
+		ses = m_sessionList->RemoveHead();
+		delete ses;
+	}
 
-	delete m_gameObjects;
-	delete m_deadUnitList;
-	delete m_resetCityOwnerHackList;
+	if(m_newPlayerList)
+		delete m_newPlayerList;
 
-	if (m_nsPlayerInfo) 
-    {
+	if(m_sessionList)
+		delete m_sessionList;
+
+	if(m_gameObjects)
+		delete m_gameObjects;
+
+	if(m_deadUnitList)
+		delete m_deadUnitList;
+
+	if(m_resetCityOwnerHackList)
+		delete m_resetCityOwnerHackList;
+
+	if(m_nsPlayerInfo) {
 		m_nsPlayerInfo->DeleteAll();
 		delete m_nsPlayerInfo;
 	}
 
-	if (m_nsAIPlayerInfo) 
-    {
+	if(m_nsAIPlayerInfo) {
 		m_nsAIPlayerInfo->DeleteAll();
 		delete m_nsAIPlayerInfo;
 	}
 
-	delete m_enactedDiplomaticRequests;
-	delete m_rememberExclusions;
+	if(m_enactedDiplomaticRequests) {
+		delete m_enactedDiplomaticRequests;
+		m_enactedDiplomaticRequests = NULL;
+	}
+
+	if(m_rememberExclusions) {
+		delete m_rememberExclusions;
+		m_rememberExclusions = NULL;
+	}
+
 	delete m_chatList;
 }
 
@@ -511,7 +554,7 @@ void Network::InitFromNetFunc()
 				ClosePlayer(i);
 			}
 		}
-		g_gamesetup.SetSize(static_cast<sint16>(numLegalSlots));
+		g_gamesetup.SetSize(numLegalSlots);
 		SetMaxPlayers(numLegalSlots);
 		if(!g_exclusions) {
 			
@@ -549,23 +592,18 @@ void Network::InitFromNetFunc()
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 			
 			char nonConstStr[1024];
-			if(str) {
+			if(str)
 				strcpy(nonConstStr, str);
-			} else {
-				strcpy(nonConstStr, "Waiting on players");
-			}
-			c3_AbortMessage(nonConstStr, k_UTILITY_ABORT, network_AbortCallback);
+			c3_AbortMessage( str ? nonConstStr : "Waiting on players", k_UTILITY_ABORT, network_AbortCallback );
 		} else if(!m_crcError) {
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_FOR_DATA");
 			char nonConstStr[1024];
-			if(str) {
+			if(str)
 				strcpy(nonConstStr, str);
-			} else {
-				strcpy(nonConstStr, "Waiting on data");
+			
+			c3_AbortMessage( str ? nonConstStr : "Waiting on data", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 		}
-			c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 	}
-}
 }
 
 void Network::SetNSPlayerInfo(uint16 id,
@@ -719,7 +757,7 @@ Network::Process()
 			return;
 	}
 
-	static time_t battleEndedTime = -1;
+	static sint32 battleEndedTime = -1;
 
 	
 	if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id()) && (!g_theCurrentBattle || g_theCurrentBattle->IsDone())) {
@@ -736,7 +774,7 @@ Network::Process()
 		
 	if(m_gameStyle & (k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES)) {
 
-		time_t timeNow = time(0); 
+		sint32 timeNow = time(0); 
 
 		bool diplomacyShouldPause = false;
 		if(!DipWizard::CanInitiateRightNow() && IsMyTurn()) {
@@ -782,12 +820,9 @@ Network::Process()
 	}
 
 	if(m_gameStyle & k_GAME_STYLE_TOTAL_TIME) {
-		if (    IsMyTurn() 
-             && (m_totalTimeUsed + static_cast<sint32>(time(0) - m_turnStartedAt) > 
-                 m_totalStartTime
-                )
-           ) 
-        {
+		if(IsMyTurn() && 
+		   (m_totalTimeUsed + (time(0) - m_turnStartedAt) > m_totalStartTime)) {
+			
 			g_player[g_selected_item->GetCurPlayer()]->
 				GameOver(GAME_OVER_LOST_OUT_OF_TIME, -1);
 		}
@@ -839,7 +874,7 @@ void Network::ProcessSends()
 						}
 
 #ifdef _DEBUG
-						LogSentPacket(sbuf[0], sbuf[1], static_cast<uint16>(size));
+						LogSentPacket(sbuf[0], sbuf[1], size);
 #endif
 						break;
 					case NET_ERR_WOULDBLOCK:
@@ -1063,10 +1098,10 @@ void Network::PacketReady(sint32 from,
 		
 		DechunkList(from, &buf[2], size - 2);
 	} else {
-		Packetizer* handler = GetHandler(buf, static_cast<sint16>(size));
+		Packetizer* handler = GetHandler(buf, size);
 		Assert(handler != NULL);
 		if(handler) {
-			handler->Unpacketize((uint16)from, buf, static_cast<sint16>(size));
+			handler->Unpacketize((uint16)from, buf, size);
 			handler->Release();
 		}
 		
@@ -1250,12 +1285,9 @@ void Network::ChangeHost(uint16 id)
 	m_hostId = id;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_FOR_DATA");
 	char nonConstStr[1024];
-	if(str) {
+	if(str)
 		strcpy(nonConstStr, str);
-	} else {
-		strcpy(nonConstStr, "Waiting on data");
-}
-	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+	c3_AbortMessage( str ? nonConstStr : "Waiting on data", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 }
 
 void Network::SessionLost()
@@ -1294,7 +1326,8 @@ void Network::SetReady(uint16 id)
 
 	MapPoint* size = g_theWorld->GetSize();
 
-	QueuePacket(player->m_id, new NetCRC());
+	QueuePacket(player->m_id, new NetCRC(0, 10));
+	QueuePacket(player->m_id, new NetCRC(11, 20));
 
 	QueuePacket(player->m_id, new NetGameSettings(size->x, size->y,
 												  g_theProfileDB->GetNPlayers(),
@@ -1351,6 +1384,7 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(0);
 	
+	uint16 cells = 0;
 	NetCellList* cellList = NULL;
 
 	double percentMap = 0;
@@ -1389,8 +1423,8 @@ void Network::SetReady(uint16 id)
 	QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_MAP_DONE, 0));
 	PROGRESS(50);
 
-	uint8 p;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
+	
+	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
 		chunkPackets.AddTail(new NetPlayer(g_player[p]));
 		chunkPackets.AddTail(new NetResearch(g_player[p]->m_advances));
@@ -1432,8 +1466,8 @@ void Network::SetReady(uint16 id)
 		
 		UnitDynamicArray *unitList = g_player[p]->GetAllCitiesList();
 		for(n = 0; n < unitList->Num(); n++) {
-			UnitData * unitData = 
-                g_theUnitPool->GetUnit(unitList->Get(n).m_id);
+			UnitData* unitData;
+			unitData = g_theUnitPool->GetUnit(unitList->Get(n).m_id);
 
 			
 			chunkPackets.AddTail( new NetUnit(unitData));
@@ -1491,8 +1525,8 @@ void Network::SetReady(uint16 id)
 		
 		UnitDynamicArray* traderList = g_player[p]->GetTradersList();
 		for(n = 0; n < traderList->Num(); n++) {
-			UnitData * unitData = 
-                g_theUnitPool->GetUnit(traderList->Get(n).m_id);
+			UnitData* unitData;
+			unitData = g_theUnitPool->GetUnit(traderList->Get(n).m_id);
 			chunkPackets.AddTail( new NetUnit(unitData));
 		}
 
@@ -1526,7 +1560,7 @@ void Network::SetReady(uint16 id)
 		
 		sint32 y;
 		for(y = 0; y < g_theWorld->GetYHeight(); y += k_VISION_STEP) {
-			chunkPackets.AddTail(new NetVision(p, static_cast<sint16>(y), k_VISION_STEP));
+			chunkPackets.AddTail( new NetVision(p, y, k_VISION_STEP));
 		}
 		static DynamicArray<UnseenCellCarton> array;
 		g_player[p]->m_vision->GetUnseenCellList(array);
@@ -1539,7 +1573,7 @@ void Network::SetReady(uint16 id)
 		chunkPackets.AddTail( new NetEndGame(p));
 
 		playerPercent += percentPerPlayer;
-		CPROGRESS(55 + static_cast<uint32>(playerPercent * 30));
+		CPROGRESS(55 + (playerPercent * 30));
 		ChunkList(player->m_id, &chunkPackets);
 		Assert(!chunkPackets.GetHead());
 	}
@@ -2389,7 +2423,7 @@ Network::ProcessNewPlayer(uint16 id)
 		
 		
 		
-//		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
+		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
 		if(player->m_id != m_pid) {
 			g_player[newslot]->SetPlayerType(PLAYER_TYPE_NETWORK);
 		} else {
@@ -2585,7 +2619,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 
 	
 	
-	AddChatText(str, len, static_cast<uint8>(g_selected_item->GetVisiblePlayer()), FALSE);
+	AddChatText(str, len, g_selected_item->GetVisiblePlayer(), FALSE);
 
 	NetChat *chatPacket = new NetChat(m_chatMask, str, (sint16)len);
 	chatPacket->AddRef();
@@ -2666,7 +2700,7 @@ void Network::DisplayChat(aui_Surface *surf)
 					m_packetName[i][0], m_packetName[i][1],
 					m_packetCounter[i], m_packetBytes[i],
 					m_sentPacketCounter[i], m_sentPacketBytes[i]);
-			primitives_DrawText(surf, k_LEFT_EDGE,
+			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
 								k_TOP_EDGE + ((i+1) * k_TEXT_SPACING),
 								buf, 0, 0);
 			totalCount += m_packetCounter[i];
@@ -2678,12 +2712,13 @@ void Network::DisplayChat(aui_Surface *surf)
 				totalCount, totalBytes, 
 				totalSent, totalSentBytes,
 				m_blockedPackets);
-		primitives_DrawText(surf, k_LEFT_EDGE,
-							k_TOP_EDGE + ((k_NUM_PACKET_TYPES+1) * k_TEXT_SPACING),
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE,
+							k_TOP_EDGE + ((i+1) * k_TEXT_SPACING),
 							buf, 0, 0);
 	}
 
-	primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE, m_chatStr, 0, 0);
+	primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
+						m_chatStr, 0, 0);
 }
 #endif
 
@@ -2886,8 +2921,8 @@ PlayerData::PlayerData(char* name, uint16 id) :
 	m_id(id),
 	m_index(-1),
 	m_frozen(FALSE),
-	m_ready(FALSE),
 	m_blocked(0),
+	m_ready(FALSE),
 	m_ackBeginTurn(FALSE)
 {
 	if(name) {
@@ -2973,7 +3008,7 @@ sint32 Network::GetTurnStartTime() const
 
 sint32 Network::GetTurnStartedAt() const
 {
-    return static_cast<sint32>(m_turnStartedAt);
+    return m_turnStartedAt;
 }
 
 sint32 Network::GetTurnEndsAt() const
@@ -3139,7 +3174,7 @@ void Network::SetMyTurn(BOOL turn)
 	} else {
 		if(m_isMyTurn) {
 			
-			sint32 timeUsed = static_cast<sint32>(time(0) - m_turnStartedAt);
+			sint32 timeUsed = time(0) - m_turnStartedAt;
 			m_totalTimeUsed += timeUsed;
 			if((m_gameStyle & k_GAME_STYLE_SPEED) &&
 			   (m_gameStyle & k_GAME_STYLE_CARRYOVER)) {
@@ -3292,15 +3327,18 @@ BOOL Network::SetupMode() const
 void Network::SetSetupArea(PLAYER_INDEX player, const MapPoint &center,
 						   sint32 radius)
 {
+	BOOL revealed;
+
 	g_player[player]->m_setupCenter = center;
 	g_player[player]->m_setupRadius = radius;
 
-
-	bool revealed;
+	
 	g_player[player]->AddUnitVision(center, radius, revealed);
 
+	
 	g_player[player]->OwnExploredArea();
 
+	
 	g_player[player]->RemoveUnitVision(center, radius);
 
 	if(player == g_selected_item->GetVisiblePlayer()) {
@@ -3644,12 +3682,9 @@ void Network::SetProgress(sint32 progress)
 		const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 		
 		char nonConstStr[1024];
-		if(str) {
+		if(str)
 			strcpy(nonConstStr, str);
-	} else {
-			strcpy(nonConstStr, "Waiting on players");
-		}
-		c3_AbortUpdateData(nonConstStr, 100);
+		c3_AbortUpdateData( str ? nonConstStr : "Waiting on players", 100);
 	} else {
 		c3_AbortUpdateData(NULL, progress);
 
@@ -3890,12 +3925,9 @@ void Network::StartResync()
 
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
-	if(str) {
+	if(str)
 		strcpy(nonConstStr, str);
-	} else {
-		strcpy(nonConstStr, "Resyncing");
-	}
-	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+	c3_AbortMessage( str ? nonConstStr : "Resyncing", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 
 	if(g_gevManager)
 		g_gevManager->NotifyResync();
@@ -3928,12 +3960,9 @@ void Network::RequestResync(RESYNC_REASON reason)
 	m_readyToStart = FALSE;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
-	if(str) {
+	if(str)
 		strcpy(nonConstStr, str);
-	} else {
-		strcpy(nonConstStr, "Resyncing");
-	}
-	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
+	c3_AbortMessage( str ? nonConstStr : "Resyncing", k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 
 	SendAction(new NetAction(NET_ACTION_REQUEST_RESYNC, reason));
 
@@ -3960,8 +3989,8 @@ uint32 Network::PackedPos(const MapPoint &pnt)
 
 void Network::UnpackedPos(uint32 p, MapPoint &pnt)
 {
-	pnt.x = static_cast<sint16>((p & 0x7fff0000) >> 16);
-	pnt.y = static_cast<sint16>(p & 0x0000ffff);
+	pnt.x = (p & 0x7fff0000) >> 16;
+	pnt.y = (p & 0x0000ffff);
 }
 
 void network_PlayerListCallback(sint32 player, sint32 val, sint32 action)
@@ -4024,13 +4053,13 @@ void Network::SetDynamicJoin(BOOL on)
 	}
 }
 
-void Network::ChunkList(uint16 id, PointerList<Packetizer> * a_List)
+void Network::ChunkList(uint16 id, PointerList<Packetizer> *list)
 {
-	Assert(a_List);
-	if(!a_List)
+	Assert(list);
+	if(!list)
 		return;
 
-	sint32 mapBufSize = a_List->GetCount() * 258 + 16384;
+	sint32 mapBufSize = list->GetCount() * 258 + 16384;
 	uint8 *mapBuf = new uint8[mapBufSize];
 	
 	mapBuf[0] = k_CHUNK_HEAD;
@@ -4038,9 +4067,9 @@ void Network::ChunkList(uint16 id, PointerList<Packetizer> * a_List)
 	sint32 size = 2;
 
 	
-	while(a_List->GetHead()) {
+	while(list->GetHead()) {
 		uint16 len = 0;
-		Packetizer *packet = a_List->RemoveHead();
+		Packetizer *packet = list->RemoveHead();
 		packet->Packetize(&mapBuf[size + 2], len);
 		Assert(len < 16384); 
 		                   
@@ -4088,7 +4117,7 @@ void Network::SetCRCError()
 
 void Network::SetMaxPlayers(sint32 maxPlayers)
 {
-	m_netIO->SetMaxPlayers(static_cast<uint16>(maxPlayers), CountOpenSlots() > 0);
+	m_netIO->SetMaxPlayers(maxPlayers, CountOpenSlots() > 0);
 }
 
 void Network::SetRobotName(sint32 player)
@@ -4099,9 +4128,9 @@ void Network::SetRobotName(sint32 player)
 	Civilisation *civ = g_player[player]->m_civilisation;
 	StringId strId;
 	if(civ->GetGender() == GENDER_MALE) {
-		strId = g_theCivilisationDB->Get(civ->GetCivilisation())->GetLeaderNameMale();
+		strId = g_theCivilisationDB->GetLeaderName(civ->GetCivilisation());
 	} else {
-		strId = g_theCivilisationDB->Get(civ->GetCivilisation())->GetLeaderNameFemale();
+		strId = g_theCivilisationDB->GetLeaderNameFemale(civ->GetCivilisation());
 	}
 	civ->AccessData()->SetLeaderName(g_theStringDB->GetNameStr(strId));
 

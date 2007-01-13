@@ -135,7 +135,7 @@ shroud_t *shroud_updateopen( char *filename );
 
 
 
-size_t shroud_read( shroud_t *sfile, unsigned char *buffer, size_t length );
+size_t shroud_read( shroud_t *sfile, char *buffer, size_t length );
 
 
 
@@ -144,7 +144,7 @@ size_t shroud_read( shroud_t *sfile, unsigned char *buffer, size_t length );
 
 
 
-size_t shroud_write( shroud_t *sfile, unsigned char *buffer, size_t length );
+size_t shroud_write( shroud_t *sfile, char *buffer, size_t length );
 
 
 

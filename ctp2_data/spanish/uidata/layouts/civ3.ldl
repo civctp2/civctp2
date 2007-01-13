@@ -1,26 +1,24 @@
 ################################################################################
 #
-# Project      : Call To Power 2
-# File type    : LDL layout description 
-# Description  : Main ldl file
-# Id           : $Id:$
-#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Main ldl file
+# 
 ################################################################################
-#
-# Disclaimer
-#
-# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-#
-# This material has been developed at apolyton.net by the Apolyton CtP2 
-# Source Code Project. Contact the authors at ctp2source@apolyton.net.
-#
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
 ################################################################################
-#
-# Modifications from the original Activision code:
-#
-# - Added the refuel mouse cursor. - April 30th 2005 Martin Gühmann
-# - mywindow can now be loaded. (Aug 22nd 2005 Martin Gühmann)
-#
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Added the refuel mouse cursor. - April 30th 2005 Martin Gühmann
+# 
 ################################################################################
 
 #######################################
@@ -187,7 +185,7 @@ OldCityViewWindow {
 mywindow {
 	string	xanchor	"center"
 	string	yanchor	"center"
-	string	pattern	"pattern.tga"
+	string	pattern	"patternl.tga"
 	int	widthpct	75
 	int	heightpct	75
 	mybutton {
@@ -197,7 +195,7 @@ mywindow {
 		int	ypct	10
 		int	widthpct	20
 		int	heightpct	10
-		string	pattern	"pattern.tga"
+		string	pattern	"patternd.tga"
 		string	text	"str_ldl_Exit"
 	}
 	myspinner {
@@ -208,7 +206,7 @@ mywindow {
 		int	widthpct	10
 		int	heightpix	0
 		bool	vertical	TRUE
-		string	pattern	"pattern.tga"
+		string	pattern	"patternd.tga"
 	}
 	mytabgroup {
 		string	xanchor	"left"
@@ -220,7 +218,7 @@ mywindow {
 		sadtab {
 			string	parent	"mywindow"
 			int	heightpct	5
-			string	pattern	"pattern.tga"
+			string	pattern	"patternd.tga"
 			string	text	"str_ldl_Sad"
 			pane {
 				string	parent	"mywindow"
@@ -231,7 +229,7 @@ mywindow {
 					int	ypix	50
 					int	widthpix	150
 					int	heightpix	30
-					string	pattern	"upba3010.tga"
+					string	pattern	"upba3010.t"
 					string	text	"str_ldl_Add_Tab"
 				}
 				dragcheckbox {

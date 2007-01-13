@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : User interface - image handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,20 +16,20 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Crashes prevented.
-// - Use of delete to free memory. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
+
 #include "aui_imagebase.h"
+
 
 #include "aui_blitter.h"
 #include "aui_ldl.h"
@@ -38,7 +37,7 @@
 #include "aui_ui.h"
 
 
-MBCHAR const *  aui_ImageBase::m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST] =
+MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =
 {
 	"image",
 	"activeimage",
@@ -54,16 +53,15 @@ aui_ImageBase::aui_ImageBase
 	MBCHAR *        ldlBlock,
 	bool            loadOnDemand 
 )
-:
+:   m_stateImageNames           (NULL),
+	m_numberOfStateImageNames   (0),
 	m_numStateImageGroups       (0),
 	m_stateImageGroups          (NULL),
-	m_loadOnDemand              (loadOnDemand),
+    m_loadOnDemand              (loadOnDemand),
 	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
 	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
 	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
-	m_chromaSpecified           (false),
-	m_numberOfStateImageNames   (0),
-	m_stateImageNames           (NULL)
+	m_chromaSpecified           (false)
 {
 	InitCommonLdl(ldlBlock);
 }
@@ -77,16 +75,15 @@ aui_ImageBase::aui_ImageBase
 	AUI_IMAGEBASE_BLTFLAG imagebltflag,
 	bool loadOnDemand 
 )
-:
+:   m_stateImageNames           (NULL),
+	m_numberOfStateImageNames   (0),
 	m_numStateImageGroups       (0),
 	m_stateImageGroups          (NULL),
-	m_loadOnDemand              (loadOnDemand),
+    m_loadOnDemand              (loadOnDemand),
 	m_chromaRed	   		        (k_DEFAULT_CHROMA_RED),
 	m_chromaGreen		        (k_DEFAULT_CHROMA_GREEN),
 	m_chromaBlue		        (k_DEFAULT_CHROMA_BLUE),
-	m_chromaSpecified           (false),
-	m_numberOfStateImageNames   (0),
-	m_stateImageNames           (NULL)
+	m_chromaSpecified           (false)
 {
 	InitCommon(numStateImageGroups, imageblttype, imagebltflag);
 }
@@ -96,10 +93,21 @@ aui_ImageBase::aui_ImageBase
 AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 	MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	AUI_IMAGEBASE_BLTFLAG imagebltflag = AUI_IMAGEBASE_BLTFLAG_COPY;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
+	
 	if (block->GetAttributeType(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED  ) == ATTRIBUTE_TYPE_INT)
 	{
 		m_chromaRed		 =block->GetInt(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED);
@@ -119,10 +127,8 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 		m_chromaSpecified=true;
 	}
 
-	AUI_IMAGEBASE_BLTFLAG imagebltflag = (m_chromaSpecified) 
-                                         ? AUI_IMAGEBASE_BLTFLAG_CHROMAKEY 
-                                         : AUI_IMAGEBASE_BLTFLAG_COPY;
-	
+	if (m_chromaSpecified)
+		imagebltflag = AUI_IMAGEBASE_BLTFLAG_CHROMAKEY;
 
 	AUI_IMAGEBASE_BLTTYPE imageblttype = AUI_IMAGEBASE_BLTTYPE_COPY;
 	MBCHAR *type = block->GetString( k_AUI_IMAGEBASE_LDL_BLTTYPE );
@@ -149,9 +155,14 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 			}
 	}
 
-	sint32  numStateImageGroups = FindNumStateImageGroupsFromLdl( block );
-    bool    setImages           = numStateImageGroups > 0;
-    numStateImageGroups = std::max<sint32>(numStateImageGroups, 1);
+	
+	BOOL setImages = TRUE;
+	sint32 numStateImageGroups = FindNumStateImageGroupsFromLdl( block );
+	if ( !numStateImageGroups )
+	{
+		setImages = FALSE;
+		numStateImageGroups = 1;
+	}
 
 	m_centerImage = block->GetBool(k_AUI_IMAGEBASE_LDL_CENTERIMAGE) != FALSE;
 
@@ -205,6 +216,7 @@ sint32 aui_ImageBase::FindNumStateImageGroupsFromLdl( ldl_datablock *block )
 }
 
 
+
 AUI_ERRCODE aui_ImageBase::InitCommon(
 	sint32 numStateImageGroups,
 	AUI_IMAGEBASE_BLTTYPE imageblttype,
@@ -246,9 +258,7 @@ aui_ImageBase::~aui_ImageBase()
 	if (m_stateImageNames) 
     {
 		for (int index = 0; index < m_numberOfStateImageNames; index++)
-        {
-			delete m_stateImageNames[index];
-        }
+			if(m_stateImageNames[index]) free(m_stateImageNames[index]);
 
 		delete [] m_stateImageNames;
 	}
@@ -322,13 +332,13 @@ AUI_IMAGEBASE_BLTFLAG aui_ImageBase::SetImageBltFlag(
 
 
 
-aui_Image *aui_ImageBase::SetImage
-(
-	MBCHAR const *          image,
-	sint32                  state,
-	AUI_IMAGEBASE_SUBSTATE  substate 
-)
+aui_Image *aui_ImageBase::SetImage(
+	MBCHAR *image,
+	sint32 state,
+	AUI_IMAGEBASE_SUBSTATE substate )
 {
+	
+	
 	Assert(state >= 0 && state < m_numStateImageGroups);
 	if (state < 0 || state >= m_numStateImageGroups)
 		return NULL;
@@ -342,16 +352,25 @@ aui_Image *aui_ImageBase::SetImage
 
 	aui_Image *prevImage = GetImage( state, substate );
 
-	if (image)
+	if ( image )
 	{
-		if (m_loadOnDemand) 
-        {
+		
+		if(m_loadOnDemand) {
+			
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
+			
 			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
 
-			delete m_stateImageNames[index];
+			
+			if(m_stateImageNames[index]) {
+				free(m_stateImageNames[index]);
+			}
+
+			
 			m_stateImageNames[index] = strdup(image);
+
+			
 			m_stateImageGroups[ state ][ substate ] = NULL;
 		} 
 		else 
@@ -369,17 +388,22 @@ aui_Image *aui_ImageBase::SetImage
 
 		}
 	}
-	else 
-    {
-		if (m_loadOnDemand) 
-        {
+	else {
+		
+		if(m_loadOnDemand) {
+			
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
-			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
 			
-			delete m_stateImageNames[index];
-			m_stateImageNames[index] = NULL;
+			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
+
+			
+			if(m_stateImageNames[index]) {
+				free(m_stateImageNames[index]);
+				m_stateImageNames[index] = NULL;
+			}
 		}
+		
 		
 		m_stateImageGroups[ state ][ substate ] = NULL;
 	}

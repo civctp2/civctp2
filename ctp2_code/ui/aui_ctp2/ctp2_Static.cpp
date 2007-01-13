@@ -3,7 +3,7 @@
 #include "c3.h"
 #include "aui.h"
 #include "aui_ldl.h"
-#include "aui_ui.h"             // g_ui
+#include "aui_ui.h"
 #include "aui_window.h"
 #include "aui_gamespecific.h"
 
@@ -12,7 +12,10 @@
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
+
+extern aui_UI		*g_ui;
+extern ColorSet		*g_colorSet;
 
 
 ctp2_Static::ctp2_Static(
@@ -20,9 +23,9 @@ ctp2_Static::ctp2_Static(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
+	aui_Static( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Static( retval, id, ldlBlock ),
 	PatternBase(ldlBlock, NULL)
 {
 	m_drawFunc			= NULL;
@@ -55,9 +58,9 @@ ctp2_Static::ctp2_Static(
 	uint32 bevelWidth,
 	uint32 bevelType)
 	:
+	aui_Static( retval, id, x, y, width, height, text, maxLength),
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( text, maxLength ),
-	aui_Static( retval, id, x, y, width, height, text, maxLength),
 	PatternBase(pattern)
 {
 	
@@ -76,15 +79,24 @@ ctp2_Static::ctp2_Static(
 
 AUI_ERRCODE ctp2_Static::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	sint32 chromaRed=0,chromaGreen=0,chromaBlue=0;
+	bool   chromaSpecified=false;
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
+	
 	if ( !block ) 
 		return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	
-	sint32 chromaRed=0,chromaGreen=0,chromaBlue=0;
-	bool   chromaSpecified=false;
-
 	if (block->GetAttributeType(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED  ) == ATTRIBUTE_TYPE_INT)
 	{
 		chromaRed		 =block->GetInt(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED);
@@ -150,6 +162,8 @@ AUI_ERRCODE ctp2_Static::InitCommonLdl( MBCHAR *ldlBlock )
 	}
 
 	return AUI_ERRCODE_OK;
+	
+	return InitCommon(m_bevelWidth, m_bevelType);
 }
 
 

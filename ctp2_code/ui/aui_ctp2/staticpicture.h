@@ -44,7 +44,7 @@ public:
 	virtual ~StaticPicture();
 	
 protected:
-	StaticPicture() : aui_Static(), m_picture(NULL) {};
+	StaticPicture() : aui_Static() {}
 	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MBCHAR *picture );
 	AUI_ERRCODE InitCommon( MBCHAR *picture );
 	

@@ -40,30 +40,35 @@
 
 
 
-aui_DirectInput::aui_DirectInput
-(
+aui_DirectInput::aui_DirectInput(
 	AUI_ERRCODE *retval,
-	BOOL useExclusiveMode 
-)
-:
-	aui_Input		(),
-	aui_DirectX		(),
-	m_lpdid		(NULL),		
-	m_inputEvent	(NULL)	
-
+	BOOL useExclusiveMode )
+	:
+	aui_Input( retval ),
+	aui_DirectX()
 {
-	*retval = InitCommon(useExclusiveMode);
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
+
+	*retval = InitCommon( useExclusiveMode );
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE aui_DirectInput::InitCommon( BOOL useExclusiveMode )
 {
+	m_lpdid = NULL;
+
 	m_inputEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
 	if ( m_inputEvent == NULL ) return AUI_ERRCODE_CREATEEVENTFAILED;
 
 	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
-	return errcode;
+	Assert( AUI_SUCCESS(errcode) );
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
+
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -76,7 +81,7 @@ aui_DirectInput::~aui_DirectInput()
 	{
         m_lpdid->Release();
         m_lpdid = NULL;
-      }
+    }
 
 	if ( m_inputEvent )
 	{
@@ -89,39 +94,41 @@ aui_DirectInput::~aui_DirectInput()
 
 AUI_ERRCODE aui_DirectInput::Acquire( void )
 {
-    if (!g_ui)  return AUI_ERRCODE_ACQUIREFAILED;
-    
-#if defined(_DEBUG)
-	uint32 const coopFlags = DISCL_NONEXCLUSIVE | DISCL_BACKGROUND;
+	HRESULT hr;
+
+#ifndef _DEBUG
+		uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND;
 #else
-	uint32 const coopFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND;
+		uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_BACKGROUND;
 #endif
 
-	HRESULT hr  = m_lpdid->SetCooperativeLevel(g_ui->TheHWND(), coopFlags);
-	if ( hr != DI_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
+
+
+
+
+
+		hr = m_lpdid->SetCooperativeLevel( g_ui->TheHWND(), coopFlags );
+		if ( hr != DI_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 
 	hr = m_lpdid->Acquire();
 	if ( hr != DI_OK ) return AUI_ERRCODE_ACQUIREFAILED;
 
-	AUI_ERRCODE result  = aui_Input::Acquire();
-    if (!AUI_SUCCESS(result))
-    {
-        m_lpdid->Unacquire();
-    }
+	m_acquired = TRUE;
 
-    return result;
+	return AUI_ERRCODE_OK;
 }
 
 
 
 AUI_ERRCODE aui_DirectInput::Unacquire( void )
 {
-	aui_Input::Unacquire();
+	m_acquired = FALSE;
 
 	if ( !m_lpdid ) return AUI_ERRCODE_HACK;
 
-	HRESULT hr = m_lpdid->Unacquire();
+	HRESULT hr;
 
+	hr = m_lpdid->Unacquire();
 	if ( hr != DI_OK ) return AUI_ERRCODE_UNACQUIREFAILED;
 
 

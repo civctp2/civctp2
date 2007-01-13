@@ -1,36 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : World city handling
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "QuadTree.h"
@@ -48,9 +29,11 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern InstallationQuadTree  *g_theInstallationTree; 
 extern Player **g_player; 
 
-bool World::HasCity(const MapPoint &pos) const
+sint32 World::HasCity(const MapPoint &pos) const
+
 {
-	return GetCell(pos)->GetCity().m_id != (0);
+  
+  return GetCell(pos)->GetCity().m_id != (0); 
 }
 
 void World::MoveUnitToCitySlot(Unit newCity, const MapPoint &pos)
@@ -104,7 +87,6 @@ void World::CityRadiusFunc(const MapPoint &pos)
 				   IsWater(pos)) {
 					m_tempIrrigation = TRUE;
 				} else if(GetCell(pos)->GetNumImprovements()) {
-#if 0   // useless code
 					sint32 i;
 					for(i = theCell->GetNumImprovements() - 1; i >= 0; i--) {
 						TERRAIN_IMPROVEMENT type = theCell->AccessImprovement(i).GetType();
@@ -115,7 +97,6 @@ void World::CityRadiusFunc(const MapPoint &pos)
 						
 						
 					}
-#endif
 				}
 			}
 				
@@ -129,23 +110,27 @@ void World::CityRadiusFunc(const MapPoint &pos)
 			}
 			break;
 		default:
-			Assert(false);
+			Assert(FALSE);
 			break;
 	}
 }
 
-bool World::InsertCity(const MapPoint &pos, Unit u)
+sint32 World::InsertCity(const MapPoint &pos, Unit u)
+
 {
+	
+	Cell *c; 
+	static UnitDynamicArray revealed;
+	revealed.Clear();
+
 	g_theUnitTree->Insert(u);
-
-	UnitDynamicArray revealed;
 	u.DoVision(revealed);
-
-	Cell *  c   = GetCell(pos);
-	if (c->HasCity()) {
-		return false;
+	c = GetCell(pos); 
+	
+	if (c->GetCity().m_id != (0)) { 
+		return FALSE; 
 	} else { 
-		c->SetCity(u);
+		c->SetCity(u); 
 		
 		if(!g_network.IsClient() || g_network.ReadyToStart()) {
 			PLAYER_INDEX owner = u.GetOwner();
@@ -166,14 +151,14 @@ bool World::InsertCity(const MapPoint &pos, Unit u)
 
 		DPRINTF(k_DBG_GAMESTATE, ("World: Inserted city %d at (%d,%d)\n",
 			    (uint32)u, pos.x, pos.y));
-		return true;
-	}
+		return TRUE; 
+	} 
 }
 
 Unit World::GetCity(const MapPoint &pos)
 
 {
-	return GetCell(pos)->GetCity(); 
+   return GetCell(pos)->GetCity(); 
 }
 
 void World::CityXOff(const MapPoint &pos, sint32 &startx, sint32 &endx)

@@ -24,14 +24,14 @@ extern void cpw_NumberToCommas( uint64 number, MBCHAR *s );
 
 
 ScoreTab::ScoreTab(void) :
+	m_scoreList(static_cast<ctp2_ListBox *>(
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab1.TabPanel.List"))),
 	m_difficulty(static_cast<ctp2_Static *>(
 		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab1.TabPanel.Difficulty.Value"))),
 	m_rank(static_cast<ctp2_Static *>(
 		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab1.TabPanel.Rank.Value"))),
 	m_total(static_cast<ctp2_Static *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab1.TabPanel.Total.Value"))),
-	m_scoreList(static_cast<ctp2_ListBox *>(
-		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab1.TabPanel.List")))
+		aui_Ldl::GetObject("InfoDialog", "TabGroup.Tab1.TabPanel.Total.Value")))
 {
 	m_scoreList->Clear();
 	sint32 i;

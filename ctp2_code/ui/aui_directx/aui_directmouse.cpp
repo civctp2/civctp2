@@ -49,11 +49,12 @@ aui_DirectMouse::aui_DirectMouse(
 	AUI_ERRCODE *retval,
 	MBCHAR *ldlBlock,
 	BOOL useExclusiveMode )
-:
-	aui_Mouse		(retval, ldlBlock),
-	aui_Input		(),
-	aui_DirectInput	(retval, useExclusiveMode)
+	:
+	aui_Mouse( retval, ldlBlock ),
+	aui_Input( retval ),
+	aui_DirectInput( retval, useExclusiveMode )
 {
+	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = CreateDirectMouse();
@@ -64,6 +65,7 @@ aui_DirectMouse::aui_DirectMouse(
     Assert(*retval != AUI_ERRCODE_SETEVENTFAILED);
     Assert(*retval != AUI_ERRCODE_SETPROPERTYFAILED);
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -125,7 +127,7 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 	
 	for ( sint32 numInputs = 200; numInputs; numInputs-- )
 	{
-		DWORD numElements = 1;
+		uint32 numElements = 1;
 		static DIDEVICEOBJECTDATA od[ 1 ];
 		DIDEVICEOBJECTDATA *ptrOd = od;
 

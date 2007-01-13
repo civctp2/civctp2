@@ -17,6 +17,14 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -27,46 +35,27 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #ifndef __CONSTDB_H__
 #define __CONSTDB_H__ 1
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class ConstDB;
+#include "MapPoint.h"
+#include "dbtypes.h"
 
 #define k_MAX_CONST_DB 3
 
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
-
-#include "MapPoint.h"
-#include "dbtypes.h"
-#include "c3files.h"
-#include "Globals.h"    // MAPSIZE
-
-class CivArchive;
+class CivArchive ;
 class Token;
+enum C3DIR;
+enum MAPSIZE;
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
-
-class ConstDB { 
+typedef class ConstDB { 
 	
     
-private:	
+	
 	double	m_land; 
 	double	m_continent; 
 	double	m_homogenous; 
@@ -759,7 +748,7 @@ public:
 	sint32 GetPollutionCausedByNuke() { return m_pollution_caused_by_nuke;}
 
 	void Serialize(CivArchive &archive) ; 
-}; 
+} ConstDB; 
 
 extern ConstDB *g_theConstDB;
 

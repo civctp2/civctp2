@@ -1,38 +1,34 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : The map grid
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef __MAP_GRID_H__
 #define __MAP_GRID_H__
+
+
+
+#pragma warning(disable: 4786)
+
+
+
+
+#ifdef min
+	#undef min
+#endif
+
+#ifdef max
+	#undef max
+#endif
 
 #include <valarray>
 #include <sstream>
@@ -48,7 +44,7 @@
 
 template<class _Ty>
 class MapGrid {
-public:
+public:	
 	
 	typedef std::valarray< _Ty > MapGridArray;
 	
@@ -127,24 +123,20 @@ public:
 		m_valuesCount = 0;
 		m_totalValue = 0.0;
 	}
-
-	void Cleanup()
-	{
-		Clear();
-		m_values.resize(0);
-	}
 		
 	
 	void AddValue(const MapPoint &rc_pos, const _Ty & value)
 	{
 		MapPoint xy_pos;
 		xy_pos.rc2xy(rc_pos, MapPoint(m_xSize, m_ySize));
+		sint32 elem;
 		
-		int const elem = ( (xy_pos.y / m_resolution) * m_xGridSize) + 
+		
+		elem = ( (xy_pos.y / m_resolution) * m_xGridSize) + 
 			     (xy_pos.x / m_resolution);
 
 		Assert(elem >= 0);
-		Assert(static_cast<size_t>(elem) < m_values.size());
+		Assert(elem < m_values.size());
 		
 		
 		Assert(((double) m_values[elem] + value) == (double) (m_values[elem] + value));
@@ -251,11 +243,13 @@ public:
 
 					
 					
-					max_value = static_cast<_Ty>
-						(static_cast<double>(max_value) * 
-						 RELAX_DIAGONAL * 
-						 coefficient
-						);
+					max_value *= RELAX_DIAGONAL;
+					max_value *= coefficient;
+						
+					
+					
+
+					
 					
      				cur_value = *pCurFrom;
 					if (max_value > cur_value) cur_value = max_value;
@@ -371,12 +365,18 @@ public:
 	
 	_Ty GetGridValueXY(const MapPoint &xy_pos) const
 	{
-		int const elem = 
-			(1 == m_resolution)
-			? (xy_pos.y * m_xGridSize) + xy_pos.x;
-			: ((xy_pos.y / m_resolution) * m_xGridSize) + (xy_pos.x / m_resolution);
+		if (m_resolution==1) {
+			const elem = (xy_pos.y*m_xGridSize) + xy_pos.x;
+			Assert(elem >= 0);
+			Assert(elem < m_values.size());
+			return m_values[elem];
+		}
+
+		
+		const elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
+				(xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(static_cast<size_t>(elem) < m_values.size());
+		Assert(elem < m_values.size());
 
 		return m_values[elem];
 	}
@@ -387,11 +387,13 @@ public:
 	{
 		MapPoint xy_pos;
 		xy_pos.rc2xy(rc_pos, MapPoint(m_xSize, m_ySize));
+		sint32 elem;
 		
-		int const elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
+		
+		elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
 			    (xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(static_cast<size_t>(elem) < m_values.size());
+		Assert(elem < m_values.size());
 
 		return m_values[elem];
 	}
@@ -401,11 +403,13 @@ public:
 	{
 		MapPoint xy_pos;
 		xy_pos.rc2xy(rc_pos, MapPoint(m_xSize, m_ySize));
-
-		int const elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
-						 (xy_pos.x / m_resolution);
+		sint32 elem;
+		
+		
+		elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
+			    (xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(static_cast<size_t>(elem) < m_values.size());
+		Assert(elem < m_values.size());
 
 		m_values[elem] = value;
 	}
@@ -414,10 +418,13 @@ public:
 	
 	_Ty GetGridValueFromXY(const MapPoint &xy_pos) const
 	{
-		int const elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
-						 (xy_pos.x / m_resolution);
+		sint32 elem;
+		
+		
+		elem = ((xy_pos.y / m_resolution) * m_xGridSize) + 
+			    (xy_pos.x / m_resolution);
 		Assert(elem >= 0);
-		Assert(static_cast<size_t>(elem) < m_values.size());
+		Assert(elem < m_values.size());
 
 		return m_values[elem];
 	}
@@ -443,16 +450,19 @@ public:
 	
 	std::string GetDebugString() const
 	{
-		std::ostringstream ost;
+		ostringstream ost;
+
 		
-		for (size_t elem = 0; elem < m_values.size(); ++elem)
-		{	
-			ost.width( 3);
-			ost << m_values[elem];
-			ost << " ";
-			
-			if ( ((elem+1) % m_xGridSize) == 0)
-				ost << "\n";
+		for (sint32 elem = 0; elem < m_values.size(); elem++)
+		{
+				
+				ost.width( 3);
+				ost << m_values[elem];
+				ost << " ";
+
+				
+				if ( ((elem+1) % m_xGridSize) == 0)
+					ost << "\n";
 		}
 		
 		ost << "\n";
@@ -544,4 +554,4 @@ private:
 	double m_totalValue;
 };
 
-#endif // __MAP_GRID_H
+#endif __MAP_GRID_H__

@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __RAND_GEN_H__
 #define __RAND_GEN_H__ 1
 

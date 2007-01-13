@@ -13,9 +13,9 @@
 #include "UnitActor.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "Order.h"
+#include "order.h"
 #include "UnitRecord.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "tiledmap.h"
 #include "cityespionage.h"
 #include "Cell.h"
@@ -153,7 +153,7 @@ STDEHANDLER(InvestigationEvent)
 	
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
-	CityEspionage::Display(c);
+	CityEspionage::Display(&c);
 	return GEV_HD_Continue;
 }
 	
@@ -632,7 +632,7 @@ STDEHANDLER(ClearTargetEvent)
 
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 
-	u->SetTargetCity(Unit());
+	u->SetTargetCity(Unit(0));
 	return GEV_HD_Continue;
 }
 

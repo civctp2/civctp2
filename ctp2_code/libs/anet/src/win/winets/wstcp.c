@@ -17,23 +17,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-/*----------------------------------------------------------------------------
- *
- * Disclaimer
- *
- * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
- *
- * This material has been modified by the Apolyton CtP2 Source Code Project. 
- * Contact the authors at ctp2source@apolyton.net.
- *
- * Modifications from the Activision Anet 0.10 code:
- *
- * - 2005/03/11: Corrected detection of own address, based on remarks from
- *               tchu at the yahoo anet group.
- *
- *----------------------------------------------------------------------------
- */
-
 /*****************************************************************************
  Multiport Winsock TCP Protocol Driver Functions For Win32
  (c) 1997 By Activision Inc.  All rights reserved.
@@ -212,24 +195,11 @@ gethostaddr_connect(
 			addrlen = sizeof(stLclAddr);
 			getsockname(hSock, (LPSOCKADDR)&stLclAddr, (int FAR*)&addrlen);
 			if(INADDR_ANY != stLclAddr.sin_addr.s_addr) {
-#if defined(ANET_ORIGINAL)
 				addr.addr = stRmtAddr.sin_addr.s_addr;
 				addr.port = stRmtAddr.sin_port;
 				pTcp->myHandle = dcstReplace(pTcp->handles, pTcp->myHandle, &addr);
 				bAddressFound = TRUE;
 				DPRINT(("gethostaddr_connect: Host Address Retrieved: [%s:%d]\n", (char *) inet_ntoa(stRmtAddr.sin_addr), ntohs(stRmtAddr.sin_port)));
-#else
-				/* Based on remarks from tchu at the yahoo anet group */
-				TCPPEER * pAddr;
-				pAddr = (TCPPEER *) dcstFindValue(pTcp->handles, pTcp->myHandle);
-
-
-				addr.addr = stLclAddr.sin_addr.s_addr;
-				addr.port = pAddr->port;
-				DPRINT(("gethostaddr_connect: Host Address Retrieved: [%s:%d]\n", (char *) inet_ntoa(stLclAddr.sin_addr), ntohs(addr.port)));
-				pTcp->myHandle = dcstReplace(pTcp->handles, pTcp->myHandle, &addr);
-				bAddressFound = TRUE;
-#endif
 			}
 		}
 		closesocket(hSock);

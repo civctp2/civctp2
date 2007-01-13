@@ -1,6 +1,14 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef _INSTALALLATIONTREE_H_
 #define _INSTALALLATIONTREE_H_
 

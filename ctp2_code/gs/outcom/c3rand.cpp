@@ -6,7 +6,6 @@
 
 extern RandomGenerator *g_rand;
 
-#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP C3Rand::QueryInterface(REFIID riid, void **obj)
 {
 	*obj = NULL;
@@ -23,18 +22,11 @@ STDMETHODIMP C3Rand::QueryInterface(REFIID riid, void **obj)
 }
 
 STDMETHODIMP_(ULONG) C3Rand::AddRef()
-#else
-uint32 C3Rand::AddRef()
-#endif
 {
 	return ++m_refCount;
 }
 
-#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP_(ULONG) C3Rand::Release()
-#else
-uint32 C3Rand::Release()
-#endif
 {
 	if(--m_refCount)
 		return m_refCount;
@@ -62,11 +54,7 @@ C3Rand::~C3Rand()
 	}
 }
 
-#ifndef USE_COM_REPLACEMENT
 STDMETHODIMP_(sint32) C3Rand::Next(sint32 range)
-#else
-sint32 C3Rand::Next(sint32 range)
-#endif
 {
 	return m_rand->Next(range);
 }
@@ -75,13 +63,13 @@ sint32 C3Rand::Next(sint32 range)
 C3Rand::C3Rand(CivArchive &archive)
 {
 	m_rand = NULL;
-	Serialize(archive); 
+    Serialize(archive); 
 }
 
 void C3Rand::Serialize(CivArchive &archive)
 {
     if (archive.IsStoring()) { 
-        archive << static_cast<uint32>(m_refCount); 
+        archive << m_refCount; 
         archive.PutSINT32(m_ownGenerator);
 
         if (m_ownGenerator) { 
@@ -89,9 +77,7 @@ void C3Rand::Serialize(CivArchive &archive)
         } 
       
     } else { 
-        uint32  l_refCount;
-        archive >> l_refCount; 
-        m_refCount  = l_refCount;
+        archive >> m_refCount; 
         m_ownGenerator = archive.GetSINT32();
         if (m_ownGenerator) { 
 

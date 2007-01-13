@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of SLIC variables.
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,26 +16,23 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Repaired memory leaks.
+// - Repaired memory leak, by Martin Gühmann.
 // - Removed assert to prevent lots of pop-ups with e.g. the LOTR scenario.
 // - GetText function now returns FALSE if there is no proper string to 
 //   retrieve, so that this can be checked if. - Nov 5th 2004 Martin Gühmann
-// - Added validity checks to GetPos.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SlicSymbol.h"
-
 #include "c3errors.h"
 #include "SlicFunc.h"
+
+#include "SlicSymbol.h"
 #include "SlicObject.h"
 #include "SlicSegment.h"
 #include "slicif.h"
@@ -49,7 +45,7 @@
 #include "UnitData.h"
 #include "Civilisation.h"
 #include "player.h"
-#include "Gold.h"
+#include "gold.h"
 #include "TurnCnt.h"
 #include "TaxRate.h"
 #include "Agreement.h"
@@ -57,6 +53,7 @@
 #include "UnitPool.h"
 #include "pollution.h"
 #include "Score.h"
+#include "DiffDB.h"
 #include "profileDB.h"
 #include "CivilisationPool.h"
 #include "Readiness.h"
@@ -73,46 +70,60 @@
 #include "TerrImprove.h"
 #include "TerrImprovePool.h"
 
-SlicSymbolData::SlicSymbolData(SLIC_SYM type)
-:   m_type  (type)
+SlicSymbolData::SlicSymbolData()
 {
 	Init();
+	m_type = SLIC_SYM_UNDEFINED;
+}
+
+SlicSymbolData::SlicSymbolData(SLIC_SYM type)
+{
+	Init();
+	m_type = type;
 }
 
 SlicSymbolData::SlicSymbolData(SlicArray *array)
-:   m_type  (SLIC_SYM_ARRAY)
 {
 	Init();
+	m_type = SLIC_SYM_ARRAY;
 	m_val.m_array = array;
 }
 
 SlicSymbolData::SlicSymbolData(SlicStructInstance *aStruct)
-:   m_type  (SLIC_SYM_STRUCT)
 {
 	Init();
+	m_type = SLIC_SYM_STRUCT;
 	m_val.m_struct = aStruct;
 }
 
 SlicSymbolData::SlicSymbolData(SlicStructDescription *structDesc)
-:   m_type  (SLIC_SYM_STRUCT)
 {
+	
 	Init();
+	m_type = SLIC_SYM_STRUCT;
 	m_val.m_struct = new SlicStructInstance(structDesc);
 }
 
-SlicSymbolData::SlicSymbolData(SlicSymbolData const & copy)
-:   m_type  (copy.GetType())
+SlicSymbolData::SlicSymbolData(SlicSymbolData *copy)
 {
 	Init();
-    // TODO: check memory leaks?
-	memcpy(&m_val, &copy.m_val, sizeof(m_val));
+	m_type = copy->GetType();
+	
+		
+	
+			memcpy(&m_val, &copy->m_val, sizeof(m_val));
+	
+	
 }
 
 void SlicSymbolData::Init()
 {
+	m_type = (SLIC_SYM)0;
 	memset(&m_val, 0, sizeof(m_val));
 	m_debugInfo = NULL;
 }
+
+//Added by Martin Gühmann
 
 //----------------------------------------------------------------------------
 //
@@ -126,42 +137,36 @@ void SlicSymbolData::Init()
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : No need for valid checks.
+//              No need for nulling.
+//              Also Strings are now cleaned up.
 //
 //----------------------------------------------------------------------------
 SlicSymbolData::~SlicSymbolData()
 {
-    switch (GetType())
-    {
-    default:
-        // No action: no specific data to delete
-        break;
-
-    case SLIC_SYM_REGION:
+	if(GetType() == SLIC_SYM_REGION) {
 		delete m_val.m_region;
-        break;
+	}
 
-    case SLIC_SYM_COMPLEX_REGION:
-        while (m_val.m_complexRegion) 
-        {
+	if(GetType() == SLIC_SYM_COMPLEX_REGION) {
+		while(m_val.m_complexRegion) {
 			PSlicComplexRegion *next = m_val.m_complexRegion->next;
 			delete m_val.m_complexRegion;
 			m_val.m_complexRegion = next;
 		}
-        break;
+	}
 
-    case SLIC_SYM_STRUCT:
+	if(GetType() == SLIC_SYM_STRUCT) {
 		delete m_val.m_struct;
-        break;
+	}
 
-    case SLIC_SYM_ARRAY:
+	if(GetType() == SLIC_SYM_ARRAY) {
 		delete m_val.m_array;
-        break;
+	}
 
-	case SLIC_SYM_STRING:
+	if(GetType() == SLIC_SYM_STRING) {
 		delete m_val.m_hard_string;
-        break;
-    } // switch
+	}
 
 	delete m_debugInfo;
 }
@@ -192,10 +197,7 @@ BOOL SlicSymbolData::SetValueFrom(SlicSymbolData *sym)
 {
 	switch(GetType()) {
 		case SLIC_SYM_IVAR:
-			if (!sym->GetIntValue(m_val.m_int_value))
-            {
-                return FALSE;
-            }
+			sym->GetIntValue(m_val.m_int_value);
 			break;
 		case SLIC_SYM_UNIT:
 		{
@@ -247,7 +249,6 @@ BOOL SlicSymbolData::SetValueFrom(SlicSymbolData *sym)
 		default:
 			return FALSE;
 	}
-
 	NotifyChange();
 	return TRUE;
 }
@@ -325,9 +326,7 @@ BOOL SlicSymbolData::SetValueFromStackValue(SS_TYPE type, SlicStackValue value)
 			Assert(type == SS_TYPE_SYM);
 			if(type == SS_TYPE_SYM) {
 				char buf[k_MAX_MSG_LEN];
-				if(value.m_sym->GetText(buf, k_MAX_MSG_LEN)) 
-                {
-                    delete [] m_val.m_hard_string;
+				if(value.m_sym->GetText(buf, k_MAX_MSG_LEN)) {
 					m_val.m_hard_string = new MBCHAR[strlen(buf) + 1];
 					strcpy(m_val.m_hard_string, buf);
 					return TRUE;
@@ -425,27 +424,30 @@ BOOL SlicSymbolData::GetPos(MapPoint &point) const
 	if(GetType() == SLIC_SYM_LOCATION) {
 		point.x = sint16(m_val.m_location.x);
 		point.y = sint16(m_val.m_location.y);
-		return point.IsValid();
+		return TRUE;
 	} else if(GetType() == SLIC_SYM_UNIT) {
 		MapPoint upos;
 		Unit u(m_val.m_unit_id);
-		if(!u.IsValid())
+		if(!g_theUnitPool->IsValid(u))
 			return FALSE;
-		u.GetPos(point);
+		u.GetPos(upos);
+		point = upos;
 		return TRUE;
 	} else if(GetType() == SLIC_SYM_CITY) {
 		MapPoint cpos;
 		Unit c(m_val.m_city_id);
-		if(!c.IsValid())
+		if(!g_theUnitPool->IsValid(c))
 			return FALSE;
-		c.GetPos(point);
+		c.GetPos(cpos);
+		point = cpos;
 		return TRUE;
 	} else if(GetType() == SLIC_SYM_ARMY) {
 		MapPoint apos;
 		Army a(m_val.m_army_id);
-		if(!a.IsValid())
+		if(!g_theArmyPool->IsValid(a))
 			return FALSE;
-		a.GetPos(point);
+		a.GetPos(apos);
+		point = apos;
 		return TRUE;
 	} else if(GetType() == SLIC_SYM_STRUCT) {
 		if(m_val.m_struct && m_val.m_struct->GetDataSymbol()) {
@@ -527,7 +529,7 @@ BOOL SlicSymbolData::SetUnit(Unit &unit)
 	return FALSE;
 }
 
-BOOL SlicSymbolData::SetCity(const Unit &city)
+BOOL SlicSymbolData::SetCity(Unit &city)
 {
 	if(GetType() == SLIC_SYM_CITY) {
 		m_val.m_city_id = city.m_id;
@@ -542,7 +544,7 @@ BOOL SlicSymbolData::SetCity(const Unit &city)
 	return FALSE;
 }
 
-BOOL SlicSymbolData::SetArmy(const Army &army)
+BOOL SlicSymbolData::SetArmy(Army &army)
 {
 	if(GetType() == SLIC_SYM_ARMY) {
 		m_val.m_army_id = army.m_id;
@@ -630,7 +632,7 @@ BOOL SlicSymbolData::GetText(MBCHAR *text, sint32 maxLen) const
 	return TRUE;
 }
 
-void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len) const
+void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len)
 {
 	SlicSymbolData *dataSym;
 	sint32 ival;
@@ -783,14 +785,11 @@ void SlicSymbolData::SetStruct(SlicStructInstance *aStruct)
 
 void SlicSymbolData::SetType(SLIC_SYM type)
 { 
-//  Assert((m_type == type) || (m_type == SLIC_SYM_UNDEFINED));
-
-    m_type = type; 
+	m_type = type; 
 	sint32 res;
 
 	switch(GetType()) {
 		case SLIC_SYM_ARRAY:
-            Assert(!m_val.m_array);
 			m_val.m_array = new SlicArray(SS_TYPE_SYM, SLIC_SYM_UNDEFINED);
 			break;
 		case SLIC_SYM_FUNC:
@@ -812,7 +811,7 @@ void SlicSymbolData::SetArrayType(SLIC_SYM type)
 	}
 }
 
-SlicArray * SlicSymbolData::GetArray() const
+SlicArray *SlicSymbolData::GetArray()
 {
 	Assert(GetType() == SLIC_SYM_ARRAY);
 	if(GetType() == SLIC_SYM_ARRAY) {
@@ -917,19 +916,13 @@ void SlicSymbolDebugInfo::NotifyChange(SlicSymbolData *sym)
 	}
 }
 
-void SlicSymbolData::SetString(MBCHAR const * str)
+void SlicSymbolData::SetString(MBCHAR *str)
 {
+
+	
 	if(GetType() == SLIC_SYM_STRING) {
-        delete [] m_val.m_hard_string;
-        if (str)
-        {
-		    m_val.m_hard_string = new char[strlen(str) + 1];
-            strcpy(m_val.m_hard_string, str);
-        }
-        else
-        {
-            m_val.m_hard_string = NULL;            
-        }
+		m_val.m_hard_string = new char[strlen(str) + 1];
+		strcpy(m_val.m_hard_string, str);
 	} else if(GetType() == SLIC_SYM_STRUCT) {
 		m_val.m_struct->GetDataSymbol()->SetString(str);
 	} else {

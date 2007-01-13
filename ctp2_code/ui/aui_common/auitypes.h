@@ -100,13 +100,15 @@ enum AUI_ERRCODE
 #define AUI_NEWOK(obj,err)	((obj)&&AUI_SUCCESS(err))
 
 #if defined(WIN32)
-// _TCHAR has been predefined
+typedef _TCHAR				tchar;
+typedef tchar				MBCHAR;
+typedef MBCHAR*				LPMBCHAR;
 #else
-typedef char                _TCHAR; // TODO: or wchar_t, for Unicode
+typedef char                            _TCHAR;
+typedef _TCHAR                          tchar;
+typedef tchar                           MBCHAR;
+typedef MBCHAR*                         LPMBCHAR;
 #endif
 
-typedef _TCHAR              tchar;
-typedef tchar               MBCHAR;
-typedef MBCHAR*             LPMBCHAR;
 
 #endif 

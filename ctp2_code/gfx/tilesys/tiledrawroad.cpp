@@ -58,7 +58,7 @@ void TiledMap::DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sin
 
 void TiledMap::DrawRoads(
 	aui_Surface *surface,
-	const MapPoint &pos,		
+	MapPoint &pos,		
 	sint32 x,			
 	sint32 y,			
 	sint32 roadType,	
@@ -581,7 +581,7 @@ void TiledMap::DrawRoads(
 
 void TiledMap::DrawCityRoads(
 	aui_Surface *surface,
-	const MapPoint &pos,		
+	MapPoint &pos,		
 	sint32 x,			
 	sint32 y,			
 	sint32 roadType,	
@@ -591,6 +591,8 @@ void TiledMap::DrawCityRoads(
 	)
 {
 	MapPoint newPos;
+	sint32 isConnectStraight = 0, isConnectDiagonal = 0;
+	sint32 neighborFlag = 0;
 	Pixel16	*data = NULL;
 
 	

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomacy window
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,15 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Keep the embargo and war buttons enabled until confirmed by the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +53,7 @@
 #include "Events.h"
 
 #include "pixelutils.h"
-#include "colorset.h"                   // g_colorSet
+#include "colorset.h"
 
 #include "DiplomacyProposalRecord.h"
 #include "DiplomacyThreatRecord.h"
@@ -81,15 +77,14 @@
 #include "DiplomacyDetails.h"
 #include "Diplomat.h"
 
-extern C3UI                   *g_c3ui;
+static MBCHAR *s_dipWindowBlock = "DiplomacyWindow";
+static DiplomacyWindow *s_dipWindow;
+extern  C3UI				*g_c3ui;
+extern ColorSet *g_colorSet;
+static MBCHAR *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
 
-static MBCHAR                 *s_dipWindowBlock = "DiplomacyWindow";
-static DiplomacyWindow        *s_dipWindow;
-
-static MBCHAR                 *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
-
-#define k_INTELLIGENCE_TAB    0
-#define k_NEGOTIATION_TAB     1
+#define k_INTELLIGENCE_TAB 0
+#define k_NEGOTIATION_TAB 1
 #define k_CREATE_PROPOSAL_TAB 2
 
 char *DiplomacyWindow::sm_toneIcons[DIPLOMATIC_TONE_MAX] = {
@@ -195,9 +190,9 @@ DiplomacyWindow::DiplomacyWindow(AUI_ERRCODE *err)
 }
 
 ctp2_Button * DiplomacyWindow::sm_detailsButton;
-ctp2_Button * DiplomacyWindow::sm_warButton;
-ctp2_Button * DiplomacyWindow::sm_embargoButton;
-ctp2_Button * DiplomacyWindow::sm_messageButton;
+ctp2_Button	* DiplomacyWindow::sm_warButton;
+ctp2_Button	* DiplomacyWindow::sm_embargoButton;
+ctp2_Button	* DiplomacyWindow::sm_messageButton;
 
 DiplomacyWindow::~DiplomacyWindow()
 {
@@ -239,7 +234,7 @@ AUI_ERRCODE DiplomacyWindow::Initialize()
 		return AUI_ERRCODE_OK;
 
 	
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	s_dipWindow = new DiplomacyWindow(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -1570,7 +1565,7 @@ bool DiplomacyWindow::AddProposalData(SlicObject &so, sint32 proposal, Diplomacy
 			so.AddInt(arg.pollution);
 			return true;
 		case k_DiplomacyProposal_Arg1_Percent_Bit:
-			so.AddInt(static_cast<sint32>(arg.percent * 100.0));
+			so.AddInt(arg.percent * 100.0);
 			return true;
 		default:
 			return true;
@@ -1579,32 +1574,35 @@ bool DiplomacyWindow::AddProposalData(SlicObject &so, sint32 proposal, Diplomacy
 
 bool DiplomacyWindow::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg)
 {
+	
+	
 	const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(threat);
 	Assert(rec);
 	if(!rec)
 		return false;
 
-	switch(rec->GetArg1()) 
-    {
-	case k_DiplomacyThreat_Arg1_HisCity_Bit:
-	case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-	{
-		Unit city(arg.cityId);
-		if(city.IsValid()) {
-			so.AddCity(Unit(arg.cityId));
-			return true;
-		} else {
-			return false;
+	switch(rec->GetArg1()) {
+		case k_DiplomacyThreat_Arg1_HisCity_Bit:
+		case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
+		{
+			Unit city(arg.cityId);
+			if(city.IsValid()) {
+				so.AddCity(Unit(arg.cityId));
+				return true;
+			} else {
+				return false;
+			}
 		}
+		case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
+		{
+			so.AddPlayer(arg.playerId);
+			return true;
+		}
+		default:
+			return true;
 	}
-	case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-	{
-		so.AddPlayer(arg.playerId);
-		return true;
-	}
-	default:
-		return true;
-	}
+	Assert(false); 
+	return false;
 }
 
 void DiplomacyWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2110,17 +2108,11 @@ void DiplomacyWindow::Exchange(aui_Control *control, uint32 action, uint32 data,
 
 class DiplomacyWindowChangeModeAction : public aui_Action
 {
-public:
+  public:
 	DiplomacyWindowChangeModeAction(DW_CREATE_MODE mode) {
 		m_mode = mode;
 	}
-
-	virtual void Execute
-    (
-        aui_Control *   control,
-		uint32          action,
-		uint32          data
-    );
+	virtual ActionCallback Execute;
 
   protected:
 	DW_CREATE_MODE m_mode;
@@ -2380,13 +2372,13 @@ void DiplomacyWindow::RequestPollutionValue(sint32 player)
 
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPollutionRequest.Spinner");
 	
-	spinner->SetMaximum(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.95), 0);
+	spinner->SetMaximum((g_player[player]->GetPollutionLevel() * 0.95), 0);
 	
-	spinner->SetMinimum(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.25), 0);
+	spinner->SetMinimum((g_player[player]->GetPollutionLevel() * 0.25), 0);
 	
-	spinner->SetPage(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.20), 0);
+	spinner->SetPage((g_player[player]->GetPollutionLevel() * 0.20), 0);
 	
-	spinner->SetIncrement(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.10), 0);
+	spinner->SetIncrement((g_player[player]->GetPollutionLevel() * 0.10), 0);
 
 	g_c3ui->AddWindow(m_pollutionRequestWindow);
 }
@@ -2855,7 +2847,7 @@ void DiplomacyWindow::RejectCounter(aui_Control *control, uint32 action, uint32 
 		response.senderId = s_dipWindow->m_viewResponseSender;
 		response.receiverId = s_dipWindow->m_viewResponseReceiver;
 
-//		RESPONSE_TYPE typeRespondingTo = Diplomat::GetDiplomat(s_dipWindow->m_viewResponseReceiver).GetResponsePending(s_dipWindow->m_viewResponseSender).type;
+		RESPONSE_TYPE typeRespondingTo = Diplomat::GetDiplomat(s_dipWindow->m_viewResponseReceiver).GetResponsePending(s_dipWindow->m_viewResponseSender).type;
 
 		
 		response.type = RESPONSE_REJECT;

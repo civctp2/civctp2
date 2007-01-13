@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : The progress window displays the progress at loading and saving
-// Id           : $Id$
+// Description  : 
 //
 //----------------------------------------------------------------------------
 //
@@ -17,6 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
@@ -26,13 +28,53 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #include "c3_popupwindow.h"
 #include "aui_progressbar.h"
 #include "tech_wllist.h"
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ProgressWindow : public c3_PopupWindow
 {
@@ -84,10 +126,9 @@ public:
 		uint32 id,
 		MBCHAR *ldlBlock )
 		:
+		aui_ProgressBar( retval, id, ldlBlock ),
 		aui_ImageBase( ldlBlock ),
-		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-		aui_ProgressBar( retval, id, ldlBlock )
-	{}
+		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ) {}
 	virtual ~StandardProgressBar() {}
 
 protected:

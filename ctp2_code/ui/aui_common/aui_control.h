@@ -112,19 +112,18 @@ public:
 
 protected:
 	aui_Control() 
-	:	aui_ImageBase       (),
-		aui_TextBase        (),
-		aui_Region          (),
-		aui_SoundBase       (),
-		m_stringTable       (NULL),
-		m_allocatedTip      (false),
+    :   aui_Region          (), 
+        aui_ImageBase       (), 
+        aui_TextBase        (),
 		m_statusText        (NULL),
-		m_numberOfLayers    (0),
-		m_imagesPerLayer    (0),
+		m_numberOfLayers    (0), 
+        m_imagesPerLayer    (0),
 		m_imageLayerList    (NULL),
 		m_layerRenderFlags  (NULL),
-		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
-	{};
+		m_renderFlags       (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+        m_stringTable       (NULL),
+        m_allocatedTip      (false)
+    { ; };
 
 	AUI_ERRCODE InitCommonLdl(
 		MBCHAR *ldlBlock,
@@ -285,6 +284,25 @@ protected:
 	typedef void (KeyboardEventCallback)( aui_KeyboardEvent *mouseData );
 	typedef void (JoystickEventCallback)( aui_JoystickEvent *mouseData );
 
+#if defined(_MSC_VER)	
+	virtual KeyboardEventCallback KeyboardCallback {}
+	virtual JoystickEventCallback JoystickCallback {}
+
+	virtual MouseEventCallback MouseMoveOver;
+	virtual MouseEventCallback MouseMoveAway;
+	virtual MouseEventCallback MouseMoveInside;
+
+	
+	virtual MouseEventCallback MouseLDragInside;
+	virtual MouseEventCallback MouseRDragInside;
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+	virtual MouseEventCallback MouseRDragOver;
+	virtual MouseEventCallback MouseRDragAway;
+
+	
+	virtual MouseEventCallback MouseNoChange;
+#else
 	virtual void	KeyboardCallback(aui_KeyboardEvent * keyBoardData) {};
 	virtual void	JoystickCallback(aui_JoystickEvent * joystickData) {};
 
@@ -300,6 +318,7 @@ protected:
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
 
 	virtual void	MouseNoChange(aui_MouseEvent * mouseData);	
+#endif
 
 private:
 	

@@ -129,6 +129,13 @@ public:
 };
 
 
-AUI_ACTION_BASIC(CloseScenarioScreenAction);
+
+
+
+class CloseScenarioScreenAction : public aui_Action
+{
+public:
+	virtual ActionCallback Execute;
+};
 
 #endif

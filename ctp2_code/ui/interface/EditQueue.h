@@ -1,32 +1,3 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header file
-// Description  : City build queue handling.
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-//
-//----------------------------------------------------------------------------
 
 #ifndef EDIT_QUEUE_H__
 #define EDIT_QUEUE_H__
@@ -116,7 +87,6 @@ class EditQueue {
 	ctp2_Button *m_loadModeLoadButton, *m_loadModeSaveButton;
 
 	ctp2_Button *m_gotoCityButton;
-	ctp2_Button *m_nationalManagerButton;
 
 	PointerList<EditItemInfo> m_customBuildList;
 	PointerList<EditQueueCityInfo> m_multiCities;
@@ -225,11 +195,10 @@ class EditQueue {
 	static void QueueListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 	static void GotoCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveNameResponse(bool response, const char *text, void *userData);
 	static void SaveButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-	bool IsItemInQueueList(uint32 cat, sint32 type);
+	bool IsItemInQueueList(sint32 cat, sint32 type);
 
 	static void NotifyCityCaptured(const Unit &c);
 };

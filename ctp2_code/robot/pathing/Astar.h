@@ -10,9 +10,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef ASTAR_H
 #define ASTAR_H 1
 
@@ -24,7 +23,8 @@ class AstarPoint;
 
 const float k_ASTAR_BIG = 7654321.0f;
 
-class Astar {   
+class Astar { 
+    
    
     DAPriorityQueue<AstarPoint> m_priority_queue; 
 
@@ -58,7 +58,6 @@ public:
 		
 		m_pretty_path = false;
 	}
-	virtual ~Astar() { };
 
     virtual float EstimateFutureCost(const MapPoint &pos, const MapPoint &dest);
 

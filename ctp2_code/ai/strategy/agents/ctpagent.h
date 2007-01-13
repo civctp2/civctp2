@@ -1,61 +1,71 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Goal handling
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Improved design
-//
-//----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 
 #ifndef __CTP_AGENT_H__
 #define __CTP_AGENT_H__ 1
 
 #include <vector>
 
-class CTPAgent;
-typedef CTPAgent *  CTPAgent_ptr;
+#include "scheduler_types.h"
+#include "Agent.h"
 
-#include "agent.h"              // Agent
-#include "Army.h"               // Army
-#include "MapPoint.h"           // MapPoint
+
+#include "c3debugstl.h"
+#include "Army.h"
 #include "Path.h"
-#include "player.h"             // PLAYER_INDEX
-#include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
+
+
+class CTPAgent;
+typedef CTPAgent* CTPAgent_ptr;
 
 class CTPAgent : public Agent { 
 
 public:
-	  	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+
+	static std::vector<sint32, dbgallocator<sint32> > s_orderDBToEventMap;
+	static void AssociateEventsWithOrdersDB();
+
+  	
+  	
+    
+	
+  	
+
+	
+	
+	
+
+  	
 	CTPAgent();
+
+	
 	CTPAgent(const CTPAgent &agent);
 	
   	
   	virtual ~CTPAgent();
+
+	
+	
+	virtual void Init();
 
 	
 	virtual CTPAgent & operator= (const CTPAgent & agent);
@@ -150,10 +160,21 @@ public:
 	
 protected:
 
-    Army     m_army;
-    sint16   m_playerId;
-	sint32   m_targetOrder;
+	
+	
+	
+	
+	
+
+    
+    Army m_army;
+
+    
+    sint16 m_playerId;
+
+	
+	sint32 m_targetOrder;
 	MapPoint m_targetPos;
 };
 
-#endif // __CTP_AGENT_H__
+#endif __CTP_AGENT_H__

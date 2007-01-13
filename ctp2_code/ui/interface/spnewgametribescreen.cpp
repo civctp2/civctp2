@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player tribe selection screen.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,9 +28,6 @@
 // - Allow choice of 64 instead of 44 playable civs to be selected.
 // - Crash prevention: improved box index checking.
 // - Reordered layout to support mods.
-// - Tribe index handling corrected.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +50,7 @@
 #include "aui_uniqueid.h"
 
 #include "Civilisation.h"
-#include "CivilisationRecord.h"
+#include "CivilisationDB.h"
 #include "StrDB.h"
 #include "profileDB.h"
 
@@ -68,39 +64,39 @@
 
 #include <vector>           // std::vector
 
-extern C3UI                 *g_c3ui;
-extern StringDB             *g_theStringDB;
-extern ProfileDB            *g_theProfileDB;
+extern C3UI					*g_c3ui;
+extern CivilisationDatabase	*g_theCivilisationDB;
+extern StringDB				*g_theStringDB;
+extern ProfileDB			*g_theProfileDB;
 
-extern Player               **g_player;
+extern Player				**g_player;
 
-extern sint32               g_isCheatModeOn;
-
-
-
-#define k_NUM_TRIBECOLS     4
-#define k_NUM_TRIBEROWS     16
-#define k_NUM_TRIBEBOXES    (k_NUM_TRIBECOLS * k_NUM_TRIBEROWS)
-
-c3_PopupWindow              *g_spNewGameTribeScreen	= NULL;
-
-sint32 const                INDEX_TRIBE_INVALID = k_NUM_TRIBEBOXES;
+extern sint32				g_isCheatModeOn;
 
 
 
-static aui_SwitchGroup		*s_group				 = NULL;
+#define k_NUM_TRIBECOLS		4
+#define k_NUM_TRIBEROWS		16
+#define k_NUM_TRIBEBOXES	(k_NUM_TRIBECOLS * k_NUM_TRIBEROWS)
 
-static c3_Static			*s_leaderNameStatic		 = NULL;
-static C3TextField			*s_leaderNameTextField	 = NULL;
-static aui_SwitchGroup		*s_maleFemaleSwitchGroup = NULL;
-
-static GENDER				s_gender;
+c3_PopupWindow	*g_spNewGameTribeScreen	= NULL;
 
 
-aui_Radio					*s_maleRadio = NULL;
-aui_Radio					*s_femaleRadio = NULL;
 
-static MBCHAR				checknames[k_NUM_TRIBECOLS][50] = {
+
+static aui_SwitchGroup	*s_group		= NULL;
+
+static c3_Static		*s_leaderNameStatic = NULL;
+static C3TextField		*s_leaderNameTextField = NULL;
+static aui_SwitchGroup	*s_maleFemaleSwitchGroup = NULL;
+
+static GENDER			s_gender;
+
+
+aui_Radio		*s_maleRadio = NULL;
+aui_Radio		*s_femaleRadio = NULL;
+
+static MBCHAR			checknames[k_NUM_TRIBECOLS][50] = {
 	"TribeOne",
 	"TribeTwo",
 	"TribeThree",
@@ -110,11 +106,10 @@ static MBCHAR				checknames[k_NUM_TRIBECOLS][50] = {
 
 namespace
 {
-typedef	std::vector<aui_Radio *>    TribeSelector;
+sint32 const	            INDEX_ILLEGAL	= -1;
 
-TribeSelector   s_checkBox;
-size_t          s_skipIndex     = k_NUM_TRIBEBOXES;
-sint32          s_tribeIndex    = INDEX_TRIBE_INVALID;
+std::vector<aui_Radio *>    s_checkBox;
+sint32			            s_tribeIndex	= INDEX_ILLEGAL;
 
 //----------------------------------------------------------------------------
 //
@@ -131,11 +126,11 @@ sint32          s_tribeIndex    = INDEX_TRIBE_INVALID;
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ClearSelection(TribeSelector & a_List)
+void ClearSelection(std::vector<aui_Radio *> & a_List)
 {
     for 
     (
-        TribeSelector::iterator  p   = a_List.begin();
+        std::vector<aui_Radio *>::iterator  p   = a_List.begin();
         p != a_List.end();
         ++p
     )
@@ -150,7 +145,7 @@ void ClearSelection(TribeSelector & a_List)
 //
 // Description: Get the current user selection - when it exists.
 //
-// Parameters : a_List              : checkbox list (vector, actually)
+// Parameters : a_List  			: checkbox list (vector, actually)
 //
 // Globals    : -
 //
@@ -161,29 +156,24 @@ void ClearSelection(TribeSelector & a_List)
 //              INDEX_ILLEGAL.
 //
 //----------------------------------------------------------------------------
-bool IsGetSelectionIndex(TribeSelector const & a_List, size_t & index)
+bool IsGetSelectionIndex(std::vector<aui_Radio *> const & a_List, size_t & index)
 {
     index   = 0;
 
     for 
     (
-        TribeSelector::const_iterator  p   = a_List.begin();
+        std::vector<aui_Radio *>::const_iterator  p   = a_List.begin();
         p != a_List.end();
         ++p, ++index
     )
     {
-        if (index == s_skipIndex)
-        {
-            ++index;
-        }
-
-        if ((*p)->GetState())
+        if ((*p) && (*p)->GetState())
         {
             return true;
         }
     }
 
-    index   = INDEX_TRIBE_INVALID;
+    index   = INDEX_ILLEGAL;
     return false;
 }
 
@@ -196,20 +186,20 @@ bool IsGetSelectionIndex(TribeSelector const & a_List, size_t & index)
 // Description: Get the index of a civilisation when ordered lexicographically
 //              on name.
 //
-// Parameters : a_DbIndex           : index of civilisation in the database
+// Parameters : a_DbIndex			: index of civilisation in the database
 //
-// Globals    : g_theCivilisationDB : The civilisation database
+// Globals    : g_theCivilisationDB	: the civilisation database
 //
-// Returns    : sint32              : index in lexicographic ordering
+// Returns    : sint32				: index in lexicographic ordering
 //
 // Remark(s)  : When the civilisation index is not in the database, 
-//              INDEX_TRIBE_INVALID is returned.
+//              INDEX_ILLEGAL is returned.
 //
 //----------------------------------------------------------------------------
 sint32 LexicographicIndex(sint32 a_DbIndex)
 {
-	return (a_DbIndex < 0) || (a_DbIndex >= g_theCivilisationDB->NumRecords())
-		   ? INDEX_TRIBE_INVALID
+	return (a_DbIndex < 0) || (a_DbIndex >= g_theCivilisationDB->GetNumRec())
+		   ? INDEX_ILLEGAL
 		   : g_theCivilisationDB->m_indexToAlpha[a_DbIndex];
 }
 
@@ -236,41 +226,46 @@ void spnewgametribescreen_setTribeIndex(
 	sint32 index,
 	MBCHAR *lname )
 {
+	
 	if (index < 0)
 	{
         ClearSelection(s_checkBox);
-        s_tribeIndex = INDEX_TRIBE_INVALID;
+        s_tribeIndex = INDEX_ILLEGAL;
 		return;
 	}
 
-	sint32 alpha = LexicographicIndex(index);
-    if (alpha > static_cast<sint32>(s_skipIndex))
-    {
-        --alpha;
-    }
-	if ((alpha < 0) || (alpha >= static_cast<sint32>(s_checkBox.size()))) 
+	
+	
+	BOOL shouldSetProfileDB = FALSE;
+
+	if (!g_isCheatModeOn || 
+		(g_isCheatModeOn && 
+			g_player[g_selected_item->GetVisiblePlayer()] && 
+			g_player[g_selected_item->GetVisiblePlayer()]->GetPlayerType() == PLAYER_TYPE_HUMAN)) {
+
+		shouldSetProfileDB = TRUE;
+	}
+
+	
+	sint32 const	alpha = LexicographicIndex(index);
+
+	if ((alpha < 0) || (alpha >= s_checkBox.size())) 
 	{
 		return;
 	}
 
     ClearSelection(s_checkBox);
 	s_checkBox[alpha]->SetState(1);
+
 	s_tribeIndex = index;
 
-	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
-	sint32 const    playerIndex         = 
-        g_selected_item ? g_selected_item->GetVisiblePlayer() : 1;
-    bool const      shouldSetProfileDB  =
-        !g_isCheatModeOn || 
-		 (g_player[playerIndex] && 
-		  g_player[playerIndex]->GetPlayerType() == PLAYER_TYPE_HUMAN
-         );
+	CIV_INDEX	civ = (CIV_INDEX)index;
 
 	if (shouldSetProfileDB)
 		g_theProfileDB->SetCivIndex(civ);
 
 	
-	StringId civString = g_theCivilisationDB->Get(civ)->GetPluralCivName();
+	StringId civString = g_theCivilisationDB->GetPluralCivName(civ);
 
 	if (shouldSetProfileDB)
 		g_theProfileDB->SetCivName((MBCHAR *)g_theStringDB->GetNameStr(civString));
@@ -301,9 +296,9 @@ void spnewgametribescreen_setTribeIndex(
 		
 		StringId nameString;
 		if ( s_maleRadio->GetState() )
-			nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
+			nameString = g_theCivilisationDB->GetLeaderName(civ);
 		else
-			nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
+			nameString = g_theCivilisationDB->GetLeaderNameFemale(civ);
 
 		s_leaderNameTextField->SetFieldText(
 			g_theStringDB->GetNameStr(nameString) );
@@ -315,74 +310,64 @@ void spnewgametribescreen_setTribeIndex(
 		spnewgamescreen_setPlayerName(g_theStringDB->GetNameStr(nameString));
 	}
 }
-
-void spnewgametribescreen_getLeaderName(MBCHAR *lname)
+void spnewgametribescreen_getLeaderName( MBCHAR *lname )
 {
-	s_leaderNameTextField->GetFieldText(lname, 100);
+	s_leaderNameTextField->GetFieldText( lname, 100 );
 }
-
 void spnewgametribescreen_enableTribes( void )
 {
-	for(uint32 i = 0; i < s_checkBox.size(); i++)
+	for ( sint32 i = 0; i < s_checkBox.size(); i++ )
 	{
-		if(s_checkBox[ i ] && s_checkBox[ i ]->IsDisabled())
+		if ( s_checkBox[ i ] && s_checkBox[ i ]->IsDisabled() )
 		{
-			s_checkBox[ i ]->Enable(TRUE);
+			s_checkBox[ i ]->Enable( TRUE );
 		}
 	}
 }
-
 void spnewgametribescreen_disableTribes( void )
 {
-	for(uint32 i = 0; i < s_checkBox.size(); i++)
+	for ( sint32 i = 0; i < s_checkBox.size(); i++ )
 	{
-		if(s_checkBox[ i ] && !s_checkBox[ i ]->IsDisabled())
+		if ( s_checkBox[ i ] && !s_checkBox[ i ]->IsDisabled() )
 		{
-			s_checkBox[ i ]->Enable(FALSE);
+			s_checkBox[ i ]->Enable( FALSE );
 		}
 	}
 }
-
-void spnewgametribescreen_disableTribe(sint32 tribe)
+void spnewgametribescreen_disableTribe( sint32 tribe )
 {
-	sint32 alpha = LexicographicIndex(tribe);
-	if (alpha > static_cast<sint32>(s_skipIndex))
-	{
-		--alpha;
-	}
+	sint32 const alpha	= LexicographicIndex(tribe);
 
-	if ((alpha >= 0) && (alpha < static_cast<sint32>(s_checkBox.size())) &&
+	if ((alpha >= 0) && (alpha < s_checkBox.size()) &&
 		!s_checkBox[alpha]->IsDisabled()
 	   )
 	{
-		s_checkBox[alpha]->Enable(FALSE);
+		s_checkBox[ alpha ]->Enable( FALSE );
 	}
 }
-
-void spnewgametribescreen_enableTribe(sint32 tribe)
+void spnewgametribescreen_enableTribe( sint32 tribe )
 {
-	sint32 alpha	= LexicographicIndex(tribe);
-	if (alpha > static_cast<sint32>(s_skipIndex))
+	sint32 const alpha	= LexicographicIndex(tribe);
+
+	if ((alpha < 0) || (alpha >= s_checkBox.size()))
 	{
-		--alpha;
+		return;
+	}
+	
+	if (s_checkBox[alpha]->IsDisabled())
+	{
+		s_checkBox[ alpha ]->Enable( TRUE );
 	}
 
-	if ((alpha >= 0) && (alpha < static_cast<sint32>(s_checkBox.size())))
-	{
-		if (s_checkBox[alpha]->IsDisabled())
-		{
-			s_checkBox[alpha]->Enable(TRUE);
-		}
-		s_checkBox[alpha]->SetState(1);
-
-		
-		CIV_INDEX const civ         = static_cast<CIV_INDEX>(tribe);
-		StringId const  nameString  =
-			s_maleRadio->GetState()
-			? g_theCivilisationDB->Get(civ)->GetLeaderNameMale()
-			: g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
-		s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
-	}
+	
+	CIV_INDEX	civ = (CIV_INDEX)tribe;
+	StringId nameString;
+	if ( s_maleRadio->GetState() )
+		nameString = g_theCivilisationDB->GetLeaderName(civ);
+	else
+		nameString = g_theCivilisationDB->GetLeaderNameFemale(civ);
+	s_leaderNameTextField->SetFieldText( g_theStringDB->GetNameStr(nameString) );
+	s_checkBox[alpha]->SetState(1);
 }
 
 
@@ -417,26 +402,12 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-	size_t  index   = INDEX_TRIBE_INVALID;
-	uint32  id      = s_group->WhichIsSelected();
-	if (id) 
-    {
-        size_t  alpha   = 0;
-        for
-        (
-            TribeSelector::iterator p   = s_checkBox.begin();
-            p != s_checkBox.end();
-            ++p, ++alpha
-        )
-        {
-            if (alpha == s_skipIndex)
-            { 
-                ++alpha;
-            }
-
-            if ((*p) && (id == (*p)->Id()))
-            {
-				index = g_theCivilisationDB->m_alphaToIndex[alpha];
+	sint32 index = -1;
+	uint32 id = s_group->WhichIsSelected();
+	if ( id ) {
+		for ( sint32 i = 0; i < s_checkBox.size(); ++i) {
+			if ( id == s_checkBox[i]->Id() ) {
+				index = g_theCivilisationDB->m_alphaToIndex[ i ];
 				break;
 			}
 		}
@@ -464,14 +435,14 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname)
 
 AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_spNewGameTribeScreen ) return AUI_ERRCODE_OK; 
 
-	s_tribeIndex = INDEX_TRIBE_INVALID;	
+	s_tribeIndex = INDEX_ILLEGAL;	
 
 	strcpy(windowBlock, "SPNewGameTribeScreen");
 
@@ -500,64 +471,62 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	Assert( AUI_NEWOK(s_group, errcode) );
 	if ( !AUI_NEWOK(s_group, errcode) ) return errcode;
 
-	size_t const    civCount            = 
-	    std::min<size_t>(g_theCivilisationDB->NumRecords(), k_NUM_TRIBEBOXES);
-	size_t const    rowCount            = 
-	    std::min<size_t>(k_NUM_TRIBEROWS, 
-	                     (civCount + k_NUM_TRIBECOLS - 1) / k_NUM_TRIBECOLS
-	                    );
+    size_t const    civCount            = 
+        std::min<size_t>(g_theCivilisationDB->GetNumRec(), k_NUM_TRIBEBOXES);
+    size_t const    rowCount            = 
+        std::min<size_t>(k_NUM_TRIBEROWS, 
+                         (civCount + k_NUM_TRIBECOLS - 1) / k_NUM_TRIBECOLS
+                        );
+	s_checkBox.resize(civCount, (aui_Radio *) NULL);
 
-	size_t          column              = 0;
-	size_t          row                 = 0;
+    size_t          column              = 0;
+    size_t          row                 = 0;
 
-	for (size_t i = 0; i < civCount; ++i)
-	{
+    for (size_t i = 0; i < civCount; ++i)
+    {
 		sprintf(switchBlock, "%s.%s", controlBlock, checknames[column]);
 
-		// Sort lexicographically:
-		// i < civCount <= g_theCivilisationDB->NumRecords()
-		CIV_INDEX const ind = 
-		    static_cast<CIV_INDEX>(g_theCivilisationDB->m_alphaToIndex[i]);
+        // Sort lexicographically:
+        // i < civCount <= g_theCivilisationDB->GetNumRec()
+        CIV_INDEX const ind = 
+            static_cast<CIV_INDEX>(g_theCivilisationDB->m_alphaToIndex[i]);
 
+	    s_checkBox[i] = new aui_Radio(&errcode,
+                                      aui_UniqueId(),
+                                      switchBlock,
+	                                  spnewgametribescreen_switchPress,
+	                                  (void *) ind 
+                                     );
+	    Assert(AUI_NEWOK(s_checkBox[i], errcode));
+        if (!AUI_NEWOK(s_checkBox[i], errcode)) return errcode;
+
+	    s_checkBox[i]->Offset(0, row * 30);
+		s_checkBox[i]->SetText(g_theStringDB->GetNameStr
+                                (g_theCivilisationDB->GetSingularCivName(ind))
+                              );
+
+	    if (CIV_INDEX_VANDALS == ind)
+        {
 #if defined(USE_SHOW_BARBARIANS) || defined(USE_SELECT_BARBARIANS)
-		// Always create a button
-#else
-		if (CIV_INDEX_VANDALS == ind)
-		{
-			s_skipIndex = i;
-		}
-		else
-#endif
-		{
-			aui_Radio * newItem = 
-			    new aui_Radio(&errcode,
-			                  aui_UniqueId(),
-			                  switchBlock,
-			                  spnewgametribescreen_switchPress,
-			                  (void *) ind 
-			                 );
-			if (!AUI_NEWOK(newItem, errcode)) return errcode;
+		    s_group->AddSwitch(s_checkBox[i]);
+            ++row;
+#if !defined(USE_SELECT_BARBARIANS)
+            s_checkBox[i]->Enable(false);
+#endif // USE_SELECT_BARBARIANS
+#endif // USE_SHOW_BARBARIANS || USE_SELECT_BARBARIANS
+        }
+        else
+        {
+		    s_group->AddSwitch(s_checkBox[i]);
+            ++row;
+        }
 
-			newItem->Offset(0, row * 30);
-			newItem->SetText(g_theStringDB->GetNameStr
-			                 (g_theCivilisationDB->Get(ind)->GetSingularCivName())
-			                );
-			s_checkBox.push_back(newItem);
-			s_group->AddSwitch(newItem);
-#if defined(USE_SHOW_BARBARIANS) && !defined(USE_SELECT_BARBARIANS)
-			if (CIV_INDEX_VANDALS == ind)
-			{
-				newItem->Enable(false);
-			}
-#endif
-			++row;
-			if (row >= rowCount)
-			{
-				row = 0;
-				++column;
-			}
-		}
-	} // for
+        if (row >= rowCount)
+        {
+            row = 0;
+            ++column;
+        }
+    } // for
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "leadernamestatic" );
 	s_leaderNameStatic = new c3_Static(
@@ -616,7 +585,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 
 AUI_ERRCODE spnewgametribescreen_Cleanup()
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
 	if ( !g_spNewGameTribeScreen  ) return AUI_ERRCODE_OK; 
 
@@ -625,14 +594,14 @@ AUI_ERRCODE spnewgametribescreen_Cleanup()
 
     for
     (
-        TribeSelector::iterator  p = s_checkBox.begin();
+        std::vector<aui_Radio *>::iterator  p = s_checkBox.begin();
         p != s_checkBox.end();
         ++p
     )
     {
         delete *p;
     }
-    TribeSelector().swap(s_checkBox);
+    s_checkBox.swap(std::vector<aui_Radio *>());
 
 	mycleanup( s_group );
 
@@ -677,15 +646,15 @@ void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint3
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
-	if ( (sint32) cookie < 0 ) return;
+	if ( (sint32)cookie == -1 ) return;
 
 	
-	CIV_INDEX	civ = static_cast<CIV_INDEX>((sint32) cookie);
+	CIV_INDEX	civ = (CIV_INDEX)sint32(cookie);
 	StringId nameString;
 	if ( s_maleRadio->GetState() )
-		nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
+		nameString = g_theCivilisationDB->GetLeaderName(civ);
 	else
-		nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
+		nameString = g_theCivilisationDB->GetLeaderNameFemale(civ);
 	s_leaderNameTextField->SetFieldText( g_theStringDB->GetNameStr(nameString) );
 }
 
@@ -694,25 +663,24 @@ void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	size_t  i;
-	if (IsGetSelectionIndex(s_checkBox, i))
-	{
-		CIV_INDEX const civ         = 
-		    static_cast<CIV_INDEX>(g_theCivilisationDB->m_alphaToIndex[i]);
-		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
-		s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
-	}
+    if (IsGetSelectionIndex(s_checkBox, i))
+    {
+	    CIV_INDEX const civ         = 
+            static_cast<CIV_INDEX>(g_theCivilisationDB->m_alphaToIndex[i]);
+	    StringId const  nameString  = g_theCivilisationDB->GetLeaderName(civ);
+	    s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
+    }
 }
-
 void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	size_t  i;
-	if (IsGetSelectionIndex(s_checkBox, i))
-	{
-		CIV_INDEX const civ         = 
-		    static_cast<CIV_INDEX>(g_theCivilisationDB->m_alphaToIndex[i]);
-		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
-		s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
-	}
+    if (IsGetSelectionIndex(s_checkBox, i))
+    {
+	    CIV_INDEX const civ         = 
+            static_cast<CIV_INDEX>(g_theCivilisationDB->m_alphaToIndex[i]);
+	    StringId const  nameString  = g_theCivilisationDB->GetLeaderNameFemale(civ);
+	    s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
+    }
 }

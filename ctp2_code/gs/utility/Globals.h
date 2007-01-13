@@ -19,26 +19,11 @@
 // Compiler flags
 //
 //----------------------------------------------------------------------------
-//
-/// \file   Globals.h
-/// \brief  Global declarations
-
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER >= 1200)
 #pragma once
 #endif
-
 #ifndef GLOBALS_H
 #define GLOBALS_H 1
-
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-// None
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
 
 #define k_GAME_OBJ_TYPE_UNIT					1
 #define k_GAME_OBJ_TYPE_POP						2
@@ -55,14 +40,23 @@
 #define k_GAME_OBJ_TYPE_ARMY                    13
 #define k_GAME_OBJ_TYPE_ENDGAME_OBJECT          14
 #define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB  15
+
+
+
 #define k_GAME_OBJ_TYPE_CAPITALIZATION          16
 #define k_GAME_OBJ_TYPE_INFRASTRUCTURE          17
 
 
-#define k_MAX_CIVILISATIONS	64
 
+#define k_MAX_CIVILISATIONS	64
 #define k_MAP_WRAPAROUND 5
 
+
+
+#pragma warning (disable: 4661) 
+
+#include "gstypes.h"
+#include "directions.h"
 
 enum ATTITUDE { 
     ATTITUDE_NULL,
@@ -72,38 +66,15 @@ enum ATTITUDE {
     ATTITUDE_NO_EFFECT
 };
 
+
+typedef sint32 PopDBIndex; 
+
+
 enum MAPSIZE {
 	MAPSIZE_SMALL,
 	MAPSIZE_MEDIUM,
 	MAPSIZE_LARGE,
 	MAPSIZE_GIGANTIC
 };
-
-
-/// Global utilities for allocated object pointers
-namespace allocated
-{
-
-/// Reassign an allocated object
-/// \param      a_Pointer	Pointer to reassign to
-/// \remarks    The pointer shall have been allocated with new (or be 
-///             NULL, in which case this function is an assignment). 
-template <typename T> void reassign(T * & a_Pointer, T * a_NewPointer)
-{
-    delete a_Pointer;
-    a_Pointer = a_NewPointer;
-}
-
-/// Clear an allocated object
-/// \param      a_Pointer	Pointer to clear
-/// \remarks    The pointer shall have been allocated with new (or be 
-///             NULL, in which case this function has no effect). 
-template <typename T> void clear(T * & a_Pointer)
-{
-    delete a_Pointer;
-    a_Pointer = NULL;
-}
-
-} // global
 
 #endif

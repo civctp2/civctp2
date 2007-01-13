@@ -35,7 +35,7 @@ extern UnitPool *g_theUnitPool;
 
 bool TradeRoute::IsValid() const
 {
-	return g_theTradePool->IsValid(m_id);
+	return g_theTradePool->IsValid(m_id) == TRUE;
 }
 
 void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause)
@@ -89,9 +89,11 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 
 #ifdef RECIPROCAL_ROUTES
 	
-	if (GetRecip().IsValid()) 
-	{
-		AccessRecip().SetRecip(TradeRoute());
+	if(GetRecip() != TradeRoute(0)) {
+		
+		
+		
+		AccessRecip().SetRecip(TradeRoute(0));
 		AccessRecip().KillRoute();
 	}
 #endif
@@ -268,12 +270,12 @@ BOOL TradeRoute::IsPosInPath(const MapPoint &pos)
 	return AccessData()->IsPosInPath(pos);
 }
 
-void TradeRoute::UpdateSelectedCellData(TradeRoute route)
+void TradeRoute::UpdateSelectedCellData(TradeRoute &route)
 {
 	AccessData()->UpdateSelectedCellData(route);
 }
 
-void TradeRoute::ClearSelectedCellData(TradeRoute route)
+void TradeRoute::ClearSelectedCellData(TradeRoute &route)
 {
 	AccessData()->ClearSelectedCellData(route);
 }

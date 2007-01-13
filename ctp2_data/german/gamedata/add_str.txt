@@ -4,7 +4,6 @@
 # File type    : String text file
 # Description  : Contains additional strings that should go to other files
 #                eventually (German)
-# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -25,8 +24,8 @@
 #   - April 7th 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
 # - Renamed Lexikothek to Große Bibliothek
-# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
 #
+# 
 #----------------------------------------------------------------------------
 
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
@@ -51,6 +50,50 @@ str_ldl_DisbandUnit                 "Auflösen"
 
 # City Window
 str_ldl_CityWindowUpkeep "Unterhalt"
+
+# Diplomat pictures.  Bit weird storing these in a string file, but it works.
+# Transplanted, and modified (filenames are updp* now, ctp1 was upd*), from civ_str.txt 
+GREEK_DIPLOMAT_PHOTO		"updp023.tga"
+AMERICAN_DIPLOMAT_PHOTO	"updp010.tga"
+SCOTTISH_DIPLOMAT_PHOTO	"updp044.tga"
+IRISH_DIPLOMAT_PHOTO			"updp028.tga"
+ENGLISH_DIPLOMAT_PHOTO	"updp019.tga"
+NATIVE_AMERICAN_DIPLOMAT_PHOTO	"updp035.tga"
+GERMAN_DIPLOMAT_PHOTO	"updp022.tga"
+FRENCH_DIPLOMAT_PHOTO	"updp021.tga"
+JAPANESE_DIPLOMAT_PHOTO	"updp030.tga"
+CHINESE_DIPLOMAT_PHOTO	"updp015.tga"
+RUSSIAN_DIPLOMAT_PHOTO	"updp043.tga"
+SPANISH_DIPLOMAT_PHOTO	"updp045.tga"
+PORTUGUESE_DIPLOMAT_PHOTO	"updp041.tga"
+DUTCH_DIPLOMAT_PHOTO	"updp017.tga"
+VIKING_DIPLOMAT_PHOTO	"updp048.tga"
+ROMAN_DIPLOMAT_PHOTO	"updp042.tga"
+EGYPTIAN_DIPLOMAT_PHOTO	"updp018.tga"
+PERSIAN_DIPLOMAT_PHOTO	"updp038.tga"
+TURKISH_DIPLOMAT_PHOTO	"updp047.tga"
+PHOENICIAN_DIPLOMAT_PHOTO	"updp039.tga"
+WELSH_DIPLOMAT_PHOTO	"updp049.tga"
+CUBAN_DIPLOMAT_PHOTO	"updp016.tga"
+ZULU_DIPLOMAT_PHOTO	"updp050.tga"
+HEBREW_DIPLOMAT_PHOTO	"updp024.tga"
+ASSYRIAN_DIPLOMAT_PHOTO	"updp011.tga"
+INDIAN_DIPLOMAT_PHOTO	"updp026.tga"
+THAI_DIPLOMAT_PHOTO	"updp046.tga"
+POLYNESIAN_DIPLOMAT_PHOTO	"updp040.tga"
+INDONESIAN_DIPLOMAT_PHOTO	"updp027.tga"
+JAMAICAN_DIPLOMAT_PHOTO		"updp029.tga"
+INCAN_DIPLOMAT_PHOTO	"updp025.tga"
+MAYAN_DIPLOMAT_PHOTO	"updp032.tga"
+CANADIAN_DIPLOMAT_PHOTO	"updp014.tga"
+NIGERIAN_DIPLOMAT_PHOTO	"updp037.tga"
+KOREAN_DIPLOMAT_PHOTO	"updp031.tga"
+BRAZILIAN_DIPLOMAT_PHOTO	"updp013.tga"
+AUSTRALIAN_DIPLOMAT_PHOTO	"updp012.tga"
+MEXICAN_DIPLOMAT_PHOTO	"updp033.tga"
+ETHIOPIAN_DIPLOMAT_PHOTO	"updp020.tga"
+MONGOLIAN_DIPLOMAT_PHOTO	"updp034.tga"
+NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
 
 # Dip wizard strings
 # Gets displayed on the "Accept" button depending on context
@@ -333,6 +376,14 @@ str_SE_FindMe "Zum Zentrieren auf die X,Y-Koordinate anklicken"
 str_SE_RemoveGoods "Alle Handelsgüter von der Karte entfernen"
 str_SE_GenerateGoods "Handelsgüter zur Karte hinzufügen"
 
+### Changed Strings
+## add {city[0].name}
+#IA_SETTLING_TOO_CLOSE    		"Es ist nicht möglich, eine neue Stadt innerhalb der Stadtgrenzen von {city[0].name} anzusiedeln. Sie sollten sich stattdessen nach einem anderen Standort umsehen, der mehr Ausdehnungsmöglichkeiten bietet."
+
+### Trust Warning Messages ###
+### Global Trust Loss ###
+TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].leader_name#SIR_CAP}, wir haben eine zivile Einheit {player[1].civ_name_plural#ARTICLE_GEN} vernichtet! Diese Tat wird als Kriegsverbrechen gewertet werden und damit haben wir nicht nur die {player[1].civ_name_plural} gegen uns, sondern auch den Rest der Welt."
+
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "SCHNELLSPEICHERN"
 
@@ -342,6 +393,10 @@ REGARD_EVENT_WONDER "Die {player[0].civ_name_plural} sind angesichts unserer imp
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Erweiterte Optionen"
+
+# Two items on the options menu
+str_ldl_ZoomOut "Vergrößern"
+str_ldl_ZoomIn "Verkleinern"
 
 # Added for network games, there are more restrictions on when you can initiate diplomacy
 str_code_CantInitiateDiplomacyNow "Sie können kein neues Gesuch absenden, solange Sie nicht am Zug sind oder solange noch eine Antwort auf ein früheres Gesuch aussteht."

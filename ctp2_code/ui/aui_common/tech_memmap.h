@@ -20,15 +20,13 @@ public:
 	tech_MemMap() {}
 	virtual ~tech_MemMap() {}
 
-	virtual unsigned char * GetFileBits
-    (
-		const char *    filename,
-		size_t *        filesize = NULL 
-    );
+	virtual unsigned char *GetFileBits(
+		char *filename,
+		unsigned long *filesize = NULL );
 	virtual void ReleaseFileBits( unsigned char *&bits );
 
 	
-	static bool GetFileExtension(char const * filename, char * extension);
+	static int GetFileExtension( char *filename, char *extension );
 };
 
 

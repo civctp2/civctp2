@@ -13,10 +13,13 @@
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"       // g_colorSet
-#include "SlicEngine.h"     // g_slicEngine
+#include "colorset.h"
+
+#include "SlicEngine.h"
 
 extern C3UI			*g_c3ui;
+extern SlicEngine	*g_slicEngine;
+extern ColorSet		*g_colorSet;
 
 
 c3_Radio::c3_Radio(
@@ -26,9 +29,9 @@ c3_Radio::c3_Radio(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -54,9 +57,9 @@ c3_Radio::c3_Radio(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
 	aui_TextBase( NULL ),
-	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -71,11 +74,21 @@ c3_Radio::c3_Radio(
 
 AUI_ERRCODE c3_Radio::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	sint32		bevelWidth=k_C3_RADIO_DEFAULT_BEVELWIDTH, 
+				bevelType=0;
+	aui_Ldl		*theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
+
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
-	sint32  bevelWidth  = k_C3_RADIO_DEFAULT_BEVELWIDTH; 
 	if (block->GetAttributeType( k_C3_RADIO_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_RADIO_LDL_BEVELWIDTH );
 	}

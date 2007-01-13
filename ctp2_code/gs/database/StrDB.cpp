@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : String database
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,12 +24,6 @@
 // - Crash prevention.
 // - Repaired memory leaks.
 // - Reimplemented ** as vector of *, to make it less error prone.
-// - Load default strings if they are missing in the database so that mods
-//   also have a full set of strings. (Jan 30th 2006 Martin Gühmann)
-// - If a nested import occurs, it is ignored instead of canceling the 
-//   string loading. (Jan 30th 2006 Martin Gühmann)
-// - Added export method so that the string database in the system can be 
-//   written to one textfile. Only experiental. (Jan 30th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -44,15 +35,15 @@
 
 #include "Token.h"
 
-extern sint32   g_abort_parse;
-extern bool g_load_defaults;
+extern sint32	g_abort_parse;
 
 
 namespace
 {
 	
-	StringId const          INDEX_INVALID   = -1;
-	unsigned short const    STRDB_NUM_HEADS = 547; // hash table size
+	StringId const			INDEX_INVALID	= -1;
+	unsigned short const	STRDB_NUM_HEADS	= 547;	// hash table size
+
 
 //----------------------------------------------------------------------------
 //
@@ -60,17 +51,18 @@ namespace
 //
 // Description: Compute a hash index from a string.
 //
-// Parameters : id          : the string
+// Parameters : id			: the string
 //
 // Globals    : -
 //
-// Returns    : size_t      : index in the hash table
+// Returns    : size_t		: index in the hash table
 //
 // Remark(s)  : Returned value will be in [0, tableSize>
 //
 //----------------------------------------------------------------------------
-size_t ComputeHashIndex(MBCHAR const * id)
-{
+
+	size_t ComputeHashIndex(MBCHAR const * id)
+	{
 		unsigned short hash;
 
 		__asm 
@@ -92,7 +84,7 @@ size_t ComputeHashIndex(MBCHAR const * id)
           pop  edx              ; restore registers
           pop  ecx
           pop  eax
-		}
+		}     
 		
 		return static_cast<size_t>(hash % STRDB_NUM_HEADS);
 	}
@@ -102,7 +94,7 @@ size_t ComputeHashIndex(MBCHAR const * id)
 
 
 StringDB::StringDB()
-:	m_all(),
+:	m_all(),					
 	m_head(STRDB_NUM_HEADS, NULL)
 {
 }
@@ -132,29 +124,38 @@ StringRecord * & StringDB::GetHead(MBCHAR const * id)
 	return m_head[ComputeHashIndex(id)];
 }
 
+
+
+
+
+
+
+
+
 //----------------------------------------------------------------------------
 //
 // Name       : StringDB::InsertStr
 //
 // Description: Add a new string mapping to the database
 //
-// Parameters : add_id      : (language independent) id
-//              new_text    : (language dependent) real text
+// Parameters : add_id		: (language independent) id
+//				new_text	: (language dependent) real text
 //
 // Globals    : -
 //
-// Returns    : bool        : new string has been added
+// Returns    : bool		: new string has been added
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 bool StringDB::InsertStr
 (
 	MBCHAR const *			add_id, 
 	MBCHAR const *			new_text
-)
+) 
 {
-	StringRecord *  newRec;
+	StringRecord *	newRec;
 
 	if (AddStrNode(GetHead(add_id), add_id, new_text, newRec))
 	{
@@ -166,11 +167,11 @@ bool StringDB::InsertStr
 		// Generate a new one with a key (add_id + '#' + number) and maintain
 		// a special key (add_id + "#COUNT") to keep track of the (sequence)
 		// number.
-
+        
 		MBCHAR * 	tempstr	= new MBCHAR[strlen(add_id) + 7];
-		sprintf(tempstr, "%s#COUNT", add_id);
+        sprintf(tempstr, "%s#COUNT", add_id);
 
-		MBCHAR *	countstr;
+        MBCHAR *	countstr;
 		if (GetStrNode(GetHead(tempstr), tempstr, &countstr))
 		{
 			// No action: the special key has been created already.
@@ -183,18 +184,24 @@ bool StringDB::InsertStr
         }
 
 		// Create a new numbered key.
-		int const	count	= atoi(countstr);
-		sprintf(tempstr, "%s#%d", add_id, count);
-		AddStrNode(GetHead(tempstr), tempstr, new_text, newRec);
+        int const	count	= atoi(countstr);
+        sprintf(tempstr, "%s#%d", add_id, count);
+        AddStrNode(GetHead(tempstr), tempstr, new_text, newRec);
 
 		// Update the sequence counter.
-		sprintf(countstr, "%d", count + 1);
+        sprintf(countstr, "%d", count + 1);
 
 		delete [] tempstr;
-	}
+    }
 
 	return true;
 }
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------
 //
@@ -202,18 +209,19 @@ bool StringDB::InsertStr
 //
 // Description: Add a new node to the string tree.
 //
-// Parameters : ptr         : top of tree
-//              add_id      : key (string)
-//              new_text    : stored value (string)
+// Parameters : ptr			: top of tree
+//				add_id		: key (string)
+//				new_text	: stored value (string)
 //
 // Globals    : -
 //
-// Returns    : bool        : a new node has been added
-//              newPtr      : the new node, when added
+// Returns    : bool		: a new node has been added
+//				newPtr		: the new node, when added
 //
 // Remark(s)  : When the key already exists, the new node will not be added.
 //
 //----------------------------------------------------------------------------
+
 bool StringDB::AddStrNode
 (
 	StringRecord * &		ptr,
@@ -221,33 +229,33 @@ bool StringDB::AddStrNode
 	MBCHAR const *			new_text,
 	StringRecord * &		newPtr
 )
-{
+{ 
 	if (ptr)
 	{
 		// At a branch: traverse the tree to find the right place to add.
 		int const	r	= strcmp(add_id, ptr->m_id);
 		if (r < 0) 
 		{ 
-			return AddStrNode(ptr->m_lesser, add_id, new_text, newPtr);
+			return AddStrNode(ptr->m_lesser, add_id, new_text, newPtr); 
 		} 
 		else if (0 < r) 
 		{ 
-			return AddStrNode(ptr->m_greater, add_id, new_text, newPtr);
+			return AddStrNode(ptr->m_greater, add_id, new_text, newPtr); 
 		} 
 		else 
 		{ 
 			// Key exists: do not add
 			return false;
-		}
+		}   
 	}
 	else
 	{ 
-		// At a leaf: add here.
-		ptr				= new StringRecord();
+		// At a leaf: add here. 
+		ptr				= new StringRecord(); 
 		ptr->m_id		= new char[strlen(add_id) + 1];
 		strcpy(ptr->m_id, add_id); 
-		ptr->m_text		= new char[strlen(new_text) + 1];
-		strcpy(ptr->m_text, new_text);
+		ptr->m_text		= new char[strlen(new_text) + 1];	
+		strcpy(ptr->m_text, new_text); 
 		AssignIndex(ptr);
 		newPtr			= ptr;
 		return true;
@@ -264,6 +272,13 @@ bool StringDB::GetText(MBCHAR const * get_id, MBCHAR ** new_text) const
 	return GetStrNode(GetHead(get_id), get_id, new_text);
 }
 
+
+
+
+
+
+
+
 //----------------------------------------------------------------------------
 //
 // Name       : StringDB::GetIdStr
@@ -279,11 +294,12 @@ bool StringDB::GetText(MBCHAR const * get_id, MBCHAR ** new_text) const
 // Remark(s)  : Returns NULL for invalid indices.
 //
 //----------------------------------------------------------------------------
+
 MBCHAR * StringDB::GetIdStr(StringId const & index) const
 { 
 	Assert(0 <= index);
-	Assert(static_cast<size_t>(index) < m_all.size());
-	return (index < 0) || (index >= static_cast<sint32>(m_all.size())) ? NULL : m_all[index]->m_id;
+	Assert(index < m_all.size());
+	return (index < 0) || (index >= m_all.size()) ? NULL : m_all[index]->m_id;
 }
 
 
@@ -293,31 +309,38 @@ MBCHAR * StringDB::GetIdStr(StringId const & index) const
 
 bool StringDB::GetStrNode
 (
-    StringRecord const *	ptr,
-    MBCHAR const *			add_id,
+    StringRecord const *	ptr, 
+    MBCHAR const *			add_id, 
     MBCHAR **				new_text
 ) const
-{
+{ 
 	if (ptr)
-	{
+	{ 
 		int const r	= strcmp(add_id, ptr->m_id);
 		if (r < 0) 
-		{
-			return GetStrNode(ptr->m_lesser, add_id, new_text);
-		}
+		{ 
+			return GetStrNode(ptr->m_lesser, add_id, new_text); 
+		} 
 		else if (0 < r) 
-		{
-			return GetStrNode(ptr->m_greater, add_id, new_text);
-		}
-		else
-		{
-			*new_text = ptr->m_text;
-			return true;
-		}
+		{ 
+			return GetStrNode(ptr->m_greater, add_id, new_text); 
+		} 
+		else 
+		{ 
+			*new_text = ptr->m_text; 
+			return true;  
+		}   
 	}
 
 	return false;
 }
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------
 //
@@ -338,7 +361,7 @@ void StringDB::Btree2Array(void)
 {
 	m_all.clear();
 
-	for
+	for 
 	(
 		std::vector<StringRecord *>::iterator p	= m_head.begin();
 		p != m_head.end();
@@ -348,6 +371,13 @@ void StringDB::Btree2Array(void)
 		AssignIndex(*p);
 	}
 }
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------
 //
@@ -365,6 +395,7 @@ void StringDB::Btree2Array(void)
 //              m_all.
 //
 //----------------------------------------------------------------------------
+
 void StringDB::AssignIndex(StringRecord * & ptr)
 
 {
@@ -407,22 +438,29 @@ bool StringDB::GetIndexNode
 
 	sint32 r;
 	
-	if (ptr == NULL) {
-		index = INDEX_INVALID; // fill index to prevent crash
+	if (ptr == NULL) { 
+		index = INDEX_INVALID;	// fill index to prevent crash
 		return false;
-	} else {
+	} else { 
 		
 		r = strcmp(str_id, ptr->m_id);
-		if (r < 0) {
-			return GetIndexNode(ptr->m_lesser, str_id, index);
-		} else if (0 < r) {
-			return GetIndexNode(ptr->m_greater, str_id, index);
-		} else {
+		if (r < 0) { 
+			return GetIndexNode(ptr->m_lesser, str_id, index); 
+		} else if (0 < r) { 
+			return GetIndexNode(ptr->m_greater, str_id, index); 
+		} else { 
 			index = ptr->m_index;
 			return true;
-		}
+		}   
 	}
 }
+
+
+
+
+
+
+
 
 //----------------------------------------------------------------------------
 //
@@ -439,20 +477,21 @@ bool StringDB::GetIndexNode
 // Remark(s)  : Returns "BADSTRING" for invalid indices.
 //
 //----------------------------------------------------------------------------
+
 MBCHAR const * StringDB::GetNameStr(StringId const & n) const
 {
 	Assert(n >= 0);
-	return (n < 0) || (n >= static_cast<sint32>(m_all.size())) ? "BADSTRING" : m_all[n]->m_text;
+	return (n < 0) || (n >= m_all.size()) ? "BADSTRING" : m_all[n]->m_text;
 }
 
 
 
 
 
-
+	
 
 MBCHAR const * StringDB::GetNameStr(MBCHAR const * s) const
-{
+	{
 	char	*tmp ;
 
 	Assert(s != NULL);
@@ -463,124 +502,52 @@ MBCHAR const * StringDB::GetNameStr(MBCHAR const * s) const
 	} else {
 		return NULL;
 	}
-	
-}
+		
+	}
 
 
-//----------------------------------------------------------------------------
-//
-// Name       : StringDB::ParseAStringEntry
-//
-// Description: Parses a string entry from the ID to its actual text velue, 
-//              duplicates are added and numbered so that they are unique.
-//
-// Parameters : Token       : strToken string token from the parsed file
-//
-// Globals    : -
-//
-// Returns    : bool        : new string has been added
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool StringDB::ParseAStringEntry(Token *strToken)
+sint32 StringDB::ParseAStringEntry(Token *strToken)
+
 {
-	char id[k_MAX_TOKEN_LEN];
-	char text[k_MAX_TEXT_LEN];
+	char id[k_MAX_TOKEN_LEN]; 
+	char text[k_MAX_TEXT_LEN]; 
 
-	if (strToken->GetType() == TOKEN_EOF) {
-		return false;
-	}
+	if (strToken->GetType() == TOKEN_EOF) { 
+		return FALSE; 
+	} 
 	
-	if (strToken->GetType() != TOKEN_STRING) {
+   	if (strToken->GetType() != TOKEN_STRING) { 
 		c3errors_ErrorDialog (strToken->ErrStr(), "Missing string id");
-		g_abort_parse = TRUE;
-		return false;
-	} else {
-		strToken->GetString(id);
+        g_abort_parse = TRUE;
+		return FALSE; 
+	} else { 
+		strToken->GetString(id); 
 	}
 
-
-	strToken->Next();
-
-	if ( strToken->GetType() == TOKEN_MISSING_QUOTE)  {
-		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find end quote for id %s", id);
-		g_abort_parse = TRUE;
-		return false;
-	} else if ( strToken->GetType() != TOKEN_QUOTED_STRING) { 
+    
+    strToken->Next();
+    
+    if ( strToken->GetType() == TOKEN_MISSING_QUOTE)  { 
+   		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find end quote for id %s", id);
+        g_abort_parse = TRUE;
+		return FALSE; 
+    } else if ( strToken->GetType() != TOKEN_QUOTED_STRING) { 
 		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find text for id %s", id);
-		g_abort_parse = TRUE;
-		return false;
-	} else {
-		strToken->GetString(text);
+        g_abort_parse = TRUE;
+		return FALSE; 
+	} else { 
+		strToken->GetString(text); 
 	}
 
-	strToken->Next();
+    strToken->Next();
 
 	if (!InsertStr(id, text)) {
-			c3errors_ErrorDialog (strToken->ErrStr(), "Could not insert string into string db");
-			g_abort_parse = TRUE;
-			return false; 
+			c3errors_ErrorDialog (strToken->ErrStr(), "Could not inset string into string db"); 
+            g_abort_parse = TRUE;
+			return FALSE; 
 	}
 
-	return true;
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : StringDB::ParseAStringEntryNoDuplicate
-//
-// Description: Parses a string entry from the ID to its actual text velue, 
-//              are ignored duplicates.
-//
-// Parameters : Token       : strToken string token from the parsed file
-//
-// Globals    : -
-//
-// Returns    : bool        : new string has been added
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool StringDB::ParseAStringEntryNoDuplicates(Token *strToken)
-{
-	char id[k_MAX_TOKEN_LEN];
-	char text[k_MAX_TEXT_LEN];
-
-	if (strToken->GetType() == TOKEN_EOF) {
-		return false;
-	}
-	
-	if (strToken->GetType() != TOKEN_STRING) {
-		c3errors_ErrorDialog (strToken->ErrStr(), "Missing string id");
-		g_abort_parse = TRUE;
-		return false;
-	} else {
-		strToken->GetString(id);
-	}
-
-
-	strToken->Next();
-
-	if ( strToken->GetType() == TOKEN_MISSING_QUOTE)  {
-		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find end quote for id %s", id);
-		g_abort_parse = TRUE;
-		return false;
-	} else if ( strToken->GetType() != TOKEN_QUOTED_STRING) { 
-		c3errors_ErrorDialog (strToken->ErrStr(), "Could not find text for id %s", id);
-		g_abort_parse = TRUE;
-		return false;
-	} else {
-		strToken->GetString(text);
-	}
-
-	strToken->Next();
-
-
-	StringRecord *  newRec;
-	AddStrNode(GetHead(id), id, text, newRec);
-
-	return true;
+	return TRUE; 
 }
 
 //----------------------------------------------------------------------------
@@ -598,11 +565,10 @@ bool StringDB::ParseAStringEntryNoDuplicates(Token *strToken)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 bool StringDB::Parse(MBCHAR * filename)
 {
-	g_load_defaults = true;
-
-	Token *	strToken = new Token(filename, C3DIR_GAMEDATA);
+	Token *	strToken = new Token(filename, C3DIR_GAMEDATA); 
 
 	while (ParseAStringEntry(strToken))
 	{
@@ -611,52 +577,12 @@ bool StringDB::Parse(MBCHAR * filename)
 
 	delete strToken;	// or make it an auto_ptr
 
-	if(g_load_defaults){
-		strToken = new Token("Strings.txt", C3DIR_GAMEDATA);
-		while (ParseAStringEntryNoDuplicates(strToken))
-		{
-			// No action: ParseAStringEntry fills m_head and m_all.
-		}
-		delete strToken;	// or make it an auto_ptr
-	}
-
-	if (g_abort_parse)
+    if (g_abort_parse)
 	{
 		return false;
 	}
 
 	InsertStr("UNIT_MYSTERY", "???");
-	// Use export here so that the strings are in order of loading.
-	// Nice way to find duplicates in the string database.
-//	Export("AllStrings.txt"); 
-	Btree2Array();		// re-index all entries
-	return true;
+	Btree2Array();		// re-index all entries 
+	return true; 
 }
-
-#include "CivPaths.h"
-extern CivPaths *g_civPaths;
-
-void StringDB::Export(MBCHAR * file)
-{
-	char buff[_MAX_PATH];
-	MBCHAR *path = new MBCHAR[_MAX_PATH];
-	g_civPaths->GetSpecificPath(C3DIR_GAMEDATA, path, TRUE);
-	sprintf(buff, "%s%s%s", path, FILE_SEP, file);
-
-	FILE* fout = fopen(buff, "w");
-
-
-	DPRINTF(k_DBG_GAMESTATE, ("%s\n", buff));
-	for (size_t i = 0; i < m_all.size(); ++i)
-    {
-		c3files_fprintf(fout, "%s\t\"%s\"\t%d\n", 
-                        m_all[i]->m_id, 
-                        m_all[i]->m_text, 
-                        m_all[i]->m_index
-                       );
-	}
-
-	c3files_fclose(fout);
-	delete path;
-}
-

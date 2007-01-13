@@ -20,9 +20,8 @@
 
 
 #include "c3.h"
-#include "messagewin.h"
 
-#include "SelItem.h"        // g_selected_item
+#include "SelItem.h"
 
 
 #include "aui.h"
@@ -52,11 +51,13 @@
 #include "messagelist.h"
 #include "messagemodal.h"
 #include "messageadvice.h"
+#include "messagewin.h"
 
 #include "controlpanelwindow.h"
 
 
 extern C3UI				*g_c3ui;
+extern SelectedItem		*g_selected_item; 
 
 tech_WLList<MessageList *>		*g_messageUserList = NULL;
 PLAYER_INDEX			g_currentPlayerMessages = 0;
@@ -106,14 +107,25 @@ uint8 g_messageIconWidth = 33;
 
 AUI_ERRCODE messagewin_InitializeMessages( void )
 {
-	g_messageUserList = new tech_WLList<MessageList *>;
+	aui_Ldl *theLdl = g_ui->GetLdl();
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock("MessageboxAttributes");
+	g_messageUserList = new tech_WLList<MessageList *>;
+	Assert( g_messageUserList != NULL );
+	if ( g_messageUserList == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	BOOL valid = theLdl->IsValid( "MessageboxAttributes" );
+	Assert( valid );
+	if ( !valid ) {
+		return AUI_ERRCODE_HACK;
+	}
+
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( "MessageboxAttributes" );
 	Assert( block != NULL );
 	if ( !block ) {
 		return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	}
 
+	
 	if ( block->GetAttributeType( "readx" )
 			== ATTRIBUTE_TYPE_INT )
 		g_messageReadPositionX = block->GetInt( "readx" );
@@ -209,11 +221,15 @@ AUI_ERRCODE messagewin_InitializeMessages( void )
 
 MessageList *messagewin_InitializePlayerMessage( PLAYER_INDEX index )
 {
+	MessageList *list = NULL;
+		
 	if ( !g_messageUserList ) return NULL;
 	
 	if ( messagewin_GetPlayerMessageList( index )) return NULL;
 
-	MessageList *list = new MessageList(index);
+	list = new MessageList( index );
+	Assert( list != NULL );
+	if ( list == NULL ) return NULL;
 
 	g_messageUserList->AddTail( list );
 
@@ -224,14 +240,17 @@ MessageList *messagewin_InitializePlayerMessage( PLAYER_INDEX index )
 
 MessageList *messagewin_GetPlayerMessageList( PLAYER_INDEX index )
 {
+	ListPos position;
+	MessageList *list = NULL;
+
 	if ( !g_messageUserList ) return NULL;
 
-	ListPos position = g_messageUserList->GetHeadPosition();
+	position = g_messageUserList->GetHeadPosition();
 
 	for ( uint32 count = g_messageUserList->L(); count; count-- ) {
-		MessageList * l_List = g_messageUserList->GetNext( position );
-		if (l_List->GetPlayer() == index )
-			return l_List;
+		list = g_messageUserList->GetNext( position );
+		if ( list->GetPlayer() == index )
+			return list;
 	}
 
 	
@@ -253,13 +272,19 @@ MessageList *messagewin_GetPlayerMessageList( PLAYER_INDEX index )
 
 int messagewin_CreateMessage( Message data, BOOL bRecreate )
 {
-	if (data.IsHelpBox()) 
-    {
+	AUI_ERRCODE			errcode;
+
+
+
+	if ( data.IsHelpBox() ) {
+		
 		return 0;
 	}
 
+	
 	g_controlPanel->AddMessage(data);
 
+	
 	MessageList *messagelist = messagewin_GetPlayerMessageList( data.GetOwner() );
 
 	if ( !messagelist ) {
@@ -269,22 +294,18 @@ int messagewin_CreateMessage( Message data, BOOL bRecreate )
 		if ( messagelist == NULL ) return -1;
 	}
 
-	AUI_ERRCODE errcode = messagelist->CreateMessage(data);
+	errcode = messagelist->CreateMessage( data );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return -1;
 
 	
-	if (!bRecreate) 
-    {
-		MBCHAR const * wavName = data.AccessData()->GetMsgSound();
-		if (wavName) 
-        {
-			MBCHAR filename[_MAX_PATH]; 
-
-			if (g_civPaths->FindFile(C3DIR_SOUNDS, wavName, filename))
-            {
-			    PlaySound(filename, NULL, SND_ASYNC | SND_FILENAME); 
-            }
+	
+	if ( !bRecreate ) {
+		MBCHAR *wavName = NULL;
+		if ( wavName = ( MBCHAR * ) data.AccessData()->GetMsgSound() ) {
+			MBCHAR filename[ _MAX_PATH ]; 
+			g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
+			PlaySound( filename, NULL, SND_ASYNC | SND_FILENAME ); 
 		}
 	}
 
@@ -293,18 +314,18 @@ int messagewin_CreateMessage( Message data, BOOL bRecreate )
 
 
 
-int messagewin_CreateModalMessage(Message data)
+int messagewin_CreateModalMessage( Message data )
 {
-	messagemodal_CreateModalMessage(data);
+	
+	
 
-	MBCHAR const *  wavName = data.AccessData()->GetMsgSound();
-	if (wavName) 
-    {
+	messagemodal_CreateModalMessage( data );	
+
+	MBCHAR *wavName = NULL;
+	if ( wavName = ( MBCHAR * ) data.AccessData()->GetMsgSound() ) {
 		MBCHAR filename[ _MAX_PATH ]; 
-		if (g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename))
-        {
-		    PlaySound(filename, NULL, SND_ASYNC | SND_FILENAME); 
-        }
+		g_civPaths->FindFile( C3DIR_SOUNDS, wavName, filename );
+		PlaySound( filename, NULL, SND_ASYNC | SND_FILENAME ); 
 	}
 
 	return 1;
@@ -334,15 +355,14 @@ int messagewin_PrepareDestroyWindow( MessageWindow *window )
 int messagewin_FastKillWindow(MessageWindow *window)
 {
 	sint32			player = window->GetPlayer();
+	MessageList		*messagelist;
 
 	messagewin_CleanupMessage( window );
 
-	MessageList	* messagelist = messagewin_GetPlayerMessageList(player);
+	messagelist = messagewin_GetPlayerMessageList( player );
 	
-	if (messagelist)
-    {
-	    messagelist->CheckVisibleMessages();
-    }
+	
+	messagelist->CheckVisibleMessages( );
 
 	return 1;
 }
@@ -402,46 +422,75 @@ int messagewin_CleanupMessage( MessageIconWindow *iconWindow,
 
 
 
-void messagewin_Cleanup(void)
+int messagewin_Cleanup( void )
 {
-	messagewin_PurgeMessages();
+	
+	ListPos position;
+	MessageList			*messagelist = NULL;
 
+	if ( !g_messageUserList ) return 0; 
+
+	
+	messagewin_LessMessagesIcon( FALSE, TRUE );
+	messagewin_MoreMessagesIcon( FALSE, TRUE );
+
+	position = g_messageUserList->GetHeadPosition();
+	for ( uint32 count = g_messageUserList->L(); count; count-- ) {
+		messagelist = g_messageUserList->GetNext( position );
+		delete messagelist;
+		messagelist = NULL;
+	}
+
+	g_messageUserList->DeleteAll();
 	delete g_messageUserList;
 	g_messageUserList = NULL;
+
+	return 1;
 }
 
 
 
-void messagewin_PurgeMessages(void)
+int messagewin_PurgeMessages( void )
 {
-	if (g_messageUserList) 
-    {
-	    messagewin_LessMessagesIcon( FALSE, TRUE );
-	    messagewin_MoreMessagesIcon( FALSE, TRUE );
+	
+	ListPos position;
+	MessageList			*messagelist = NULL;
 
-	    ListPos position = g_messageUserList->GetHeadPosition();
-	    for (size_t count = g_messageUserList->L(); count; --count) 
-        {
-		    MessageList * & messagelist = g_messageUserList->GetNext(position);
-		    delete messagelist;
-		    messagelist = NULL;
-	    }
+	if ( !g_messageUserList ) return 0; 
+	
+	
+	messagewin_LessMessagesIcon( FALSE, TRUE );
+	messagewin_MoreMessagesIcon( FALSE, TRUE );
 
-	    g_messageUserList->DeleteAll();
-    }
+	position = g_messageUserList->GetHeadPosition();
+	for ( uint32 count = g_messageUserList->L(); count; count-- ) {
+		messagelist = g_messageUserList->GetNext( position );
+		delete messagelist;
+		messagelist = NULL;
+	}
+
+	g_messageUserList->DeleteAll();
+
+	return 1;
 }
 
 
 
 void messagewin_EndTurn( PLAYER_INDEX index )
 {
-	MessageList	* messagelist = messagewin_GetPlayerMessageList(index);
-	if (messagelist)
-    {
-	    messagelist->HideVisibleWindows();
-	    messagewin_MoreMessagesIcon( FALSE );
-	    messagewin_LessMessagesIcon( FALSE );
-    }
+	
+	MessageList		*messagelist = NULL;
+
+	
+	messagelist = messagewin_GetPlayerMessageList( index );
+	if ( !messagelist ) return;
+
+	messagelist->HideVisibleWindows();
+
+	
+	messagewin_MoreMessagesIcon( FALSE );
+	messagewin_LessMessagesIcon( FALSE );
+
 }
 
 
@@ -471,7 +520,7 @@ int messagewin_MoreMessagesIcon( BOOL make, BOOL destroy )
 {
 
 return 1;
-#if 0   // CtP1 code?
+
 	static aui_Window *window = NULL;
 	static aui_Button *button = NULL;
 	static ChangeOffsetMessageIconButtonAction *action = NULL;
@@ -541,7 +590,6 @@ return 1;
 	}
 
 	return 1;
-#endif
 }
 
 
@@ -549,8 +597,8 @@ int messagewin_LessMessagesIcon( BOOL make, BOOL destroy )
 {
 
 return 1;
-#if 0   // CtP1 code?
-    static aui_Window *window = NULL;
+
+	static aui_Window *window = NULL;
 	static aui_Button *button = NULL;
 	static ChangeOffsetMessageIconButtonAction	*action = NULL;
 
@@ -616,7 +664,6 @@ return 1;
 		}
 	}
 	return 1;
-#endif
 }
 
 int messagewin_IsModalMessageDisplayed()

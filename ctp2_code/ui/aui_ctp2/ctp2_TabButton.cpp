@@ -12,6 +12,7 @@
 
 
 #include <string>
+#include <strstream>
 
 
 #include "aui_ldl.h"
@@ -35,13 +36,21 @@ const sint32 ctp2_TabButton::k_CTP2_TAB_BUTTON_LAYER_FLAG_ACTIVE	= 256;
 
 ctp2_TabButton::ctp2_TabButton(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 							   ControlActionCallback *ActionFunc, void *cookie) :
+ctp2_Button(retval, id, ldlBlock, ActionFunc, cookie),
 aui_ImageBase(ldlBlock),
-aui_TextBase(ldlBlock, NULL),
-ctp2_Button(retval, id, ldlBlock, ActionFunc, cookie)
+aui_TextBase(ldlBlock, NULL)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
-	if (!block)
-    {
+	
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	ldl_datablock *theBlock = NULL;
+
+	
+	if(theLdl->IsValid(ldlBlock)) {
+		theBlock = theLdl->GetLdl()->FindDataBlock(ldlBlock);
+	} else {
+		
 		*retval = AUI_ERRCODE_HACK;
 		return;
 	}
@@ -56,11 +65,11 @@ ctp2_Button(retval, id, ldlBlock, ActionFunc, cookie)
 		sprintf(layerIndexString, "%d", layerIndex);
 
 		
-		InitializeLayerFlag(block, layerIndex, k_CTP2_BUTTON_LDL_LAYER_LEFT,
+		InitializeLayerFlag(theBlock, layerIndex, k_CTP2_BUTTON_LDL_LAYER_LEFT,
 			k_CTP2_TAB_BUTTON_LAYER_FLAG_LEFT, layerIndexString);
-		InitializeLayerFlag(block, layerIndex, k_CTP2_BUTTON_LDL_LAYER_RIGHT,
+		InitializeLayerFlag(theBlock, layerIndex, k_CTP2_BUTTON_LDL_LAYER_RIGHT,
 			k_CTP2_TAB_BUTTON_LAYER_FLAG_RIGHT, layerIndexString);
-		InitializeLayerFlag(block, layerIndex, k_CTP2_BUTTON_LDL_LAYER_ACTIVE,
+		InitializeLayerFlag(theBlock, layerIndex, k_CTP2_BUTTON_LDL_LAYER_ACTIVE,
 			k_CTP2_TAB_BUTTON_LAYER_FLAG_ACTIVE, layerIndexString);
 	}
 }
@@ -80,7 +89,7 @@ uint32 ctp2_TabButton::ShouldDraw(uint32 draw)
 		ctp2_Tab *tab = static_cast<ctp2_Tab*>(GetParent());
 		Assert(tab);
 		if(!tab)
-			return 0;
+			return(NULL);
 		ctp2_TabGroup *tabGroup = static_cast<ctp2_TabGroup*>(tab->GetParent());
 
 		

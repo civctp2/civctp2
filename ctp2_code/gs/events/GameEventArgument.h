@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __GAME_EVENT_ARGUMENT_H__
 #define __GAME_EVENT_ARGUMENT_H__
 

@@ -1,6 +1,11 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef ___BMH_CITY_CONTROL_PANEL_HEADER
 #define ___BMH_CITY_CONTROL_PANEL_HEADER
 

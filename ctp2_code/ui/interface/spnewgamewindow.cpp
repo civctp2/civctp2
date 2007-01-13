@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single Player New game Start Screen
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,19 +16,13 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Fixed crash when the game tries to display invalid text strings, 
 //   by Martin Gühmann.
-// - Tribe index check updated.
-// - Allowed for a number of players less than 3 to be displayed
-//   - JJB 2005/06/28
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +47,7 @@
 #include "c3_dropdown.h"
 #include "StrDB.h"
 #include "profileDB.h"
-#include "CivilisationRecord.h"
+#include "CivilisationDB.h"
 #include "CivilisationPool.h"
 #include "c3textfield.h"
 
@@ -69,6 +62,7 @@
 
 extern ProfileDB					*g_theProfileDB;
 extern StringDB						*g_theStringDB;
+extern CivilisationDatabase			*g_theCivilisationDB;
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 
 
@@ -161,6 +155,23 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 	
 	m_spScenario = spNew_ctp2_Button(retval, ldlBlock, "ScenarioButton", spnewgamescreen_scenarioPress);
 
+#ifndef _DEBUG
+	
+	 
+	
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
 
 	m_spName = spNewTextEntry(retval,ldlBlock,"Name");
 
@@ -197,7 +208,7 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 
 SPNewGameWindow::~SPNewGameWindow()
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 	mycleanup(m_spStart);
 
 	mycleanup(m_spReturn);
@@ -351,7 +362,8 @@ void SPNewGameWindow::Update( void )
 	
 	sint32 numPlayers = g_theProfileDB->GetNPlayers() - 1; 
 
-	// Removed the alteration to the value when it was below 3 - JJB
+	
+	if ( numPlayers < 3 ) numPlayers = 3;
 	sprintf( s, "%d", numPlayers);
 	m_spPlayers->SetText( s );
 
@@ -398,23 +410,19 @@ void SPNewGameWindow::Update( void )
 SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_spClan(NULL),m_spGender(NULL),m_spName(NULL),
 	m_spPreferences(NULL),m_spCustom(NULL),
-	m_PTOP(NULL),
-	m_PHEADER(NULL),
-	m_PBOT(NULL),
-	m_PLEFT(NULL),
-	m_PRIGHT(NULL)
+	m_PTOP(NULL),m_PBOT(NULL), m_PHEADER(NULL), m_PLEFT(NULL), m_PRIGHT(NULL)
 {
 	{
 		int i=0,numClans;
 		
-		numClans = g_theCivilisationDB->NumRecords();
+		numClans = g_theCivilisationDB->GetCivilisations();
 		
 		m_spClan		= spNew_c3_DropDown(retval,ldlBlock,"Clan",spnewgamescreen_clanSelect);
 
 		
 		while(i<numClans) {
 			aui_Item	*item = NULL;
-			const MBCHAR *cName = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetPluralCivName());
+			const MBCHAR *cName = g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName(CIV_INDEX(i)));
 			item = (aui_Item*)new SPDropDownListItem(retval, "SPDropDownListItem", "Clan", cName);
 			if (item)
 				m_spClan->AddItem(item );
@@ -462,12 +470,12 @@ SPProfileBox::~SPProfileBox()
 
 void SPProfileBox::SetLeader(uint32 index)
 {
-	sint32 const    tribeIndex = spnewgametribescreen_getTribeIndex();
-	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
+	
+	if ( spnewgametribescreen_getTribeIndex() < 0 )
 	{
 		const MBCHAR *name =
 			g_theStringDB->GetNameStr(
-				g_theCivilisationDB->Get(index)->GetLeaderNameMale());
+				g_theCivilisationDB->GetLeaderName(CIV_INDEX(index)));
 
 		m_spName->SetFieldText(name);
 	}
@@ -492,11 +500,7 @@ void SPProfileBox::SetLeader(uint32 index)
 SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_mapSize(NULL), m_worldType(NULL), m_worldShape(NULL),
 	m_difficulty(NULL), m_riskLevel(NULL), m_opponent(NULL), m_spCustom(NULL),
-	m_WTOP(NULL),
-	m_WHEADER(NULL),
-	m_WBOT(NULL),
-	m_WLEFT(NULL),
-	m_WRIGHT(NULL)
+	m_WTOP(NULL),m_WBOT(NULL), m_WHEADER(NULL), m_WLEFT(NULL), m_WRIGHT(NULL)
 {
 	{
 		aui_StringTable *mysizes = NULL;
@@ -594,11 +598,7 @@ SPWorldBox::~SPWorldBox()
 SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_spGenocide(NULL), m_spTrade(NULL), m_spCombat(NULL),
 	m_spPollution(NULL),
-	m_RTOP(NULL),
-	m_RHEADER(NULL),
-	m_RBOT(NULL),
-	m_RLEFT(NULL),
-	m_RRIGHT(NULL)
+	m_RTOP(NULL),m_RBOT(NULL), m_RHEADER(NULL), m_RLEFT(NULL), m_RRIGHT(NULL)
 {
 
 	m_spGenocide	= spNew_c3_CheckBox(retval,ldlBlock,"GenocideButton",0,spnewgamescreen_genocidePress);
@@ -654,9 +654,9 @@ uint32 SPRulesBox::GetPollutionRules() { return m_spGenocide->IsOn(); }
 
 SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock,MBCHAR *type,const MBCHAR *name)
 :
+	c3_ListItem( retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {
 	
@@ -695,9 +695,9 @@ TwoChoiceButton::TwoChoiceButton(
 		MBCHAR *choiceOff, MBCHAR *choiceOn, uint32 onoff,
 		ControlActionCallback *ActionFunc,
 		void *cookie) : 
+	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),
 	m_choice(0)
 {
 		Assert(onoff == 1 || onoff == 0 );

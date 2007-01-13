@@ -42,9 +42,9 @@ aui_ProgressBar::aui_ProgressBar(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
+	aui_Control( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -64,9 +64,9 @@ aui_ProgressBar::aui_ProgressBar(
 	sint32 width,
 	sint32 height )
 	:
+	aui_Control( retval, id, x, y, width, height ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -87,7 +87,15 @@ aui_ProgressBar::aui_ProgressBar(
 
 AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

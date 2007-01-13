@@ -1,28 +1,28 @@
 # Microsoft Developer Studio Project File - Name="dbgen" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
 CFG=dbgen - Win32 Debug Browse
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "dbgen.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "dbgen.mak" CFG="dbgen - Win32 Debug Browse"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "dbgen - Win32 Release" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - Win32 Final" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - Win32 Debug" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - Win32 Debug Browse" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - SDL Debug" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - SDL Final" (basierend auf  "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Final" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Debug Browse" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - SDL Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - SDL Final" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -56,7 +56,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"ctpdb.exe"
 
-!ELSEIF  "$(CFG)" == "dbgen - Win32 Final"
+!IF  "$(CFG)" == "dbgen - Win32 Final"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\..\os\include" /I "..\..\os\common" /I "..\..\os\win32" /I "..\..\ctp\ctp2_utils" /I "..\os\include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\os\include" /I "..\..\os\common" /I "..\..\os\win32" /I "..\..\ctp\ctp2_utils" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -94,7 +94,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\os\include" /I "..\..\ctp\ctp2_utils" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\os\include" /I "..\..\os\common" /I "..\..\os\win32" /I "..\\" /I "..\..\ctp\ctp2_utils" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe

@@ -37,9 +37,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
+
 #include "CityControlPanel.h"
 
+
 #include <strstream>
+
 
 #include "aui_ldl.h"
 #include "BuildingRecord.h"
@@ -66,7 +70,6 @@
 #include "network.h"
 #include "c3ui.h"
 #include "aui_blitter.h"
-#include "Globals.h"                        // k_GAME_OBJ_TYPE_... 
 
 extern C3UI *g_c3ui;
 
@@ -83,6 +86,9 @@ m_buildItemIconButton(static_cast<ctp2_Button*>(
 					  aui_Ldl::GetObject(ldlBlock,
 					  "CityTab.TabPanel.BuildProgress."
 					  "IconBorder.IconButton"))),
+m_buildItemProgressBar(static_cast<ctp2_Static *>(
+	aui_Ldl::GetObject(ldlBlock,
+					   "CityTab.TabPanel.BuildProgress.IconBorder.IconButton.ProgressBarParent.ProgressBar"))),
 m_buildItemTurnButton(static_cast<ctp2_Button*>(
 					  aui_Ldl::GetObject(ldlBlock,
 					  "CityTab.TabPanel.BuildProgress."
@@ -90,9 +96,6 @@ m_buildItemTurnButton(static_cast<ctp2_Button*>(
 m_buildRushBuy(static_cast<ctp2_Button*>(
 					 aui_Ldl::GetObject(ldlBlock,
 					 "CityTab.TabPanel.RushBuyButton"))),
-m_buildItemProgressBar(static_cast<ctp2_Static *>(
-	aui_Ldl::GetObject(ldlBlock,
-	"CityTab.TabPanel.BuildProgress.IconBorder.IconButton.ProgressBarParent.ProgressBar"))),
 m_rushBuyCost(static_cast<ctp2_Static *>(
 	aui_Ldl::GetObject(ldlBlock, "CityTab.TabPanel.RushBuyCost"))),
 m_cityListPreviousButton(static_cast<ctp2_Button*>(
@@ -792,7 +795,7 @@ StringId CityControlPanel::GetBuildStringId(const BuildNode *buildNode)
 	}
 
 	
-	return 0;
+	return(NULL);
 }
 
 
@@ -942,9 +945,7 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 		percentComplete = 1.0;
 
 	RECT destRect = rect;
-	destRect.right = 
-        destRect.left + 
-        static_cast<LONG>(percentComplete * (destRect.right - destRect.left));
+	destRect.right = destRect.left + percentComplete * (destRect.right - destRect.left);
 
 	g_c3ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,255), 0);
 	return AUI_ERRCODE_OK;

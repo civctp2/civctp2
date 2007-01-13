@@ -1,34 +1,7 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Slic watch list
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
+
 
 
 
@@ -75,7 +48,7 @@
 #include "pointerlist.h"
 
 extern C3UI			*g_c3ui;
-
+extern ColorSet						*g_colorSet;
 WatchList *g_watchList = NULL;
 
 
@@ -109,48 +82,37 @@ void watchlist_AddExpression(char *exp)
 	g_watchList->AddExpression(exp);
 }
 
-WatchList::WatchList(WatchListCallback callback, MBCHAR *ldlBlock)
-:   m_window                (NULL),
-    m_list                  (NULL),
-    m_newButton             (NULL),
-    m_clearButton           (NULL),
-    m_exitButton            (NULL),
-	m_callback              (callback)
+WatchList::WatchList(WatchListCallback *callback, MBCHAR *ldlBlock)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-    strcpy(windowBlock, ldlBlock ? ldlBlock : "WatchListPopup");
 
+	m_list = NULL;
+	m_newButton = NULL;
+	m_clearButton = NULL;
+
+	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	else strcpy(windowBlock,"WatchListPopup");
+
+	
+	{ 
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
-	if (AUI_NEWOK(m_window, errcode))
-    {	
+		if ( !AUI_NEWOK(m_window, errcode) ) return;
+
+		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(FALSE);
 		m_window->SetDraggable(TRUE);
-
-    	Initialize(windowBlock);
 	}
-}
 
-WatchList::~WatchList(void)
-{
-    if (g_c3ui && m_window)
-    {
-	    g_c3ui->RemoveWindow(m_window->Id());
-    }
 	
-    if (m_list)
-    {
-	    m_list->Clear();
-    }
+	m_callback = callback;
 
-	delete m_list;
-	delete m_newButton;
-    delete m_clearButton;
-    delete m_exitButton;
-	delete m_window;
+	
+	Initialize( windowBlock );
 }
 
 void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -202,7 +164,7 @@ void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, v
 
 sint32 WatchList::Initialize(MBCHAR *windowBlock)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	
@@ -233,6 +195,24 @@ sint32 WatchList::Initialize(MBCHAR *windowBlock)
 	return 0;
 }
 	
+sint32 WatchList::Cleanup(void)
+{
+#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+
+	g_c3ui->RemoveWindow( m_window->Id() );
+
+	mycleanup( m_list );
+	
+	m_callback = NULL;
+
+	delete m_window;
+	m_window = NULL;
+
+	return 0 ;
+
+#undef mycleanup
+}
+
 void WatchList::DisplayWindow()
 {
 	AUI_ERRCODE auiErr;
@@ -286,9 +266,9 @@ void WatchList::Clear()
 
 WatchListItem::WatchListItem(AUI_ERRCODE *retval, sint32 index,
 							 MBCHAR *line, MBCHAR *ldlBlock) :
+	c3_ListItem(retval, ldlBlock),
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	c3_ListItem(retval, ldlBlock)
+	aui_TextBase(ldlBlock, (MBCHAR *)NULL)
 {
 	m_index = index;
 	m_break = false;

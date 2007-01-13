@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : AI and automated governor handling.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,79 +35,61 @@
 // - Replaced ComputeMinimumFoodWorkers by ComputeMinimumWorkers function.
 //   - April 4th 2005 Martin Gühmann
 // - Made some methods const. - April 15th 2005 Martin Gühmann
-// - Added Cleanup to reduce memory leak reports.
-// - Merged with linux changes.
-// - Improved import structure, removed debug allocator versions.
-// - Added copy constructor to bypass a problem concerning memory 
-//   allocation. - June 18th 2005 Martin Gühmann
-// - Added no test sliders struct.
-// - Added OptimizeSliders method to have a better routine for AI sliders
-//   optimisation. - Jul 18th 2005 Martin Gühmann
-// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
-// - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifndef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 #ifndef __GOVERNOR_H__
 #define __GOVERNOR_H__
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
+
+
+#pragma warning(disable: 4786)
+
 
 #include <vector>
+#include "c3debugstl.h"
 
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
 
-class Governor;
-
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
-
-#include "civarchive.h"     // CivArchive
-#include "DB.h"             // StringId
+#include "Diplomat.h"
 #include "mapgrid.h"
-#include "Path.h"           // Path
-#include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
-#include "SlicContext.h"    // SlicContext
-#include "StrategyRecord.h" // StrategyRecord
-#include "citydata.h"       // NEW_RESOURCE_PROCESS
+#include "Path.h"
 
 class CityData;
 class BuildingBuildListRecord;
-class BuildListSequenceRecord;
 class WonderBuildListRecord;
 class StrategyRecord::PopAssignmentElement;
-class UnitBuildListRecord;
-
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
 
 class Governor {
 public:
-	typedef std::vector<Governor>   GovernorVector;
-	typedef std::vector<sint16>     UnitCountVector;
 
+	
+	
+	
+
+#ifdef _DEBUG
+	
+	typedef std::vector<Governor, dbgallocator<Governor> > GovernorVector;
+	typedef std::vector<sint16, dbgallocator<sint16> > UnitCountVector;
+#else
+	
+	typedef std::vector<Governor> GovernorVector;
+	typedef std::vector<sint16> UnitCountVector;
+#endif
 
 	
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
-	static void Cleanup(void);
+
 	
 	static void LoadAll(CivArchive & archive);
+
+	
 	static void SaveAll(CivArchive & archive);
 
 	
 	static Governor & GetGovernor(const PLAYER_INDEX & playerId);
-
-	static Governor const &         INVALID;
 
 	
 	
@@ -128,15 +109,17 @@ public:
 	};
 
 	
-	Governor(PLAYER_INDEX const & playerId = PLAYER_UNASSIGNED);
-	Governor(Governor const &copyme);
-	virtual ~Governor();
+	Governor();
 
+	
+	void Initialize();
+
+	
 	void SetPlayerId(const PLAYER_INDEX &playerId);
 
 	void Resize( const sint16 & xSize,
-	             const sint16 & ySize,
-	             const sint16 & resolution );
+				 const sint16 & ySize,
+				 const sint16 & resolution );
 
 	
 	void Load(CivArchive & archive);
@@ -171,9 +154,9 @@ public:
 			m_deltaProduction = rval.m_deltaProduction;
 			m_deltaGold = rval.m_deltaGold;
 			m_deltaFood = rval.m_deltaFood;
-			m_optimizeProduction = rval.m_optimizeProduction;
-			m_optimizeGold = rval.m_optimizeGold;
-			m_optimizeFood = rval.m_optimizeFood;
+			m_optimizeProduction = m_optimizeProduction;
+			m_optimizeGold = m_optimizeGold;
+			m_optimizeFood = m_optimizeFood;
 			return *this;
 		}
 
@@ -199,39 +182,7 @@ public:
 
 	};
 
-	struct SliderTests{
-		SliderTests(){
-			m_production = m_gold = m_food = m_happiness = 0;
-			m_productionTest = m_goldTest = m_foodTest = m_happinessTest = true;
-		}
-
-		const SliderTests & operator=(const SliderTests & rval){
-			m_production = rval.m_production;
-			m_gold = rval.m_gold;
-			m_food = rval.m_food;
-			m_happiness = rval.m_happiness;
-			m_productionTest = rval.m_productionTest;
-			m_goldTest = rval.m_goldTest;
-			m_foodTest = rval.m_foodTest;
-			m_happinessTest = rval.m_happinessTest;
-			return *this;
-		}
-
-		sint32 GetValue(){ return m_production + m_gold + m_food; }
-		bool   Test()    { return m_productionTest && m_goldTest && m_foodTest && m_happinessTest; }
-
-		sint32 m_production;
-		sint32 m_gold;
-		sint32 m_food;
-		sint32 m_happiness;
-
-		bool m_productionTest;
-		bool m_goldTest;
-		bool m_foodTest;
-		bool m_happinessTest;
-	};
-
-	// The sliders
+	
 	void NormalizeSliders(SlidersSetting & sliders_setting) const;
 
 	
@@ -250,15 +201,7 @@ public:
 	
 	StringId GetSlidersAdvice() const;
 
-	// New slider function
-
-	void OptimizeSliders(SlidersSetting & sliders_setting) const;
-	void GetMaxSliderSettings(SlidersSetting & sliders_setting) const;
-	bool ProdSliderReachedMin(SlidersSetting & sliders_setting) const;
-	bool GoldSliderReachedMin(SlidersSetting & sliders_setting) const;
-	bool FoodSliderReachedMin(SlidersSetting & sliders_setting) const;
-
-	// End of sliders
+	
 	
 	
 
@@ -285,23 +228,21 @@ public:
 	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
 
 
-	sint32 ComputeMinimumWorkers(const CityData *city, 
-	                           sint32 &farmers, 
-	                           sint32 &laborers, 
-	                           sint32 &merchants, 
-	                           sint32 &scientists,
-	                           sint32 &minFood,
-	                           sint32 &minProd,
-	                           sint32 &minGold,
-#if defined(NEW_RESOURCE_PROCESS)
-	                           sint32 &minScie) const;
-#else
-	                           sint32 &minScie,
-	                           double &farmersEff,
-	                           double &laborersEff,
-	                           double &merchantsEff,
-	                           double &scientistsEff) const;
-#endif
+	sint32 Governor::ComputeMinimumWorkers(const CityData *city, 
+	                                       sint32 &farmers, 
+	                                       sint32 &laborers, 
+	                                       sint32 &merchants, 
+	                                       sint32 &scientists,
+	                                       sint32 &minFood,
+	                                       sint32 &minProd,
+	                                       sint32 &minGold,
+	                                       sint32 &minScie,
+	                                       double &farmersEff,
+	                                       double &laborersEff,
+	                                       double &merchantsEff,
+	                                       double &scientistsEff) const;
+	
+
 	
 	void ComputeDesiredUnits();
 
@@ -367,26 +308,12 @@ private:
 	bool FitSlidersToCities( SlidersSetting & sliders_setting ) const;
 
 	
-	bool TestSliderSettings(const SlidersSetting & sliders_setting,
-	                        bool   & production_test,
-	                        bool   & gold_test,
-	                        bool   & food_test,
-	                        bool   & happiness_test,
-	                        sint32 & total_production,
-	                        sint32 & total_gold,
-	                        sint32 & total_food) const;
+	bool TestSliderSettings( const SlidersSetting & sliders_setting,
+							   bool & production_test,
+							   bool & gold_test,
+							   bool & food_test,
+							   bool & happiness_test) const;
 
-	bool inline TestSliderSettings(const SlidersSetting & sliders_setting,
-	                               SliderTests & slider_tests) const {
-		return TestSliderSettings(sliders_setting,
-		                          slider_tests.m_productionTest,
-		                          slider_tests.m_goldTest,
-		                          slider_tests.m_foodTest,
-		                          slider_tests.m_happinessTest,
-		                          slider_tests.m_production,
-		                          slider_tests.m_gold,
-		                          slider_tests.m_food);
-	}
 	
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;
 
@@ -434,7 +361,13 @@ private:
 		sint32 type;
 	};
 
+#ifdef _DEBUG
+	
+	typedef std::vector<TiGoal, dbgallocator<TiGoal> > TiGoalQueue;
+#else
+	
 	typedef std::vector<TiGoal> TiGoalQueue;
+#endif
 	
 	
 	static TiGoalQueue s_tiQueue;
@@ -460,12 +393,12 @@ private:
 	
 	UnitCountVector m_currentUnitCount;
 
-#if defined(NEW_RESOURCE_PROCESS)
-	sint32 GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const;
-#endif
+	
+	
+
 	
 	double m_neededFreight;
-	const UnitRecord * GetDBUnitRec(sint32 type) const;
+
 };
 
 #endif  //__GOVERNOR_H__

@@ -9,16 +9,10 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __UNITACTOR_H__
 #define __UNITACTOR_H__
-
-class UnitActor;
-
-
-#include "Unit.h"       // SPECATTACK
 
 #include "Actor.h"
 #include "pixelutils.h"
@@ -28,6 +22,38 @@ class UnitActor;
 #include "tech_wllist.h"
 #include "Anim.h"
 #include "UnitSpriteGroup.h"
+
+enum SPECATTACK {
+	SPECATTACK_NONE = -1,
+
+	SPECATTACK_NUKE,
+	SPECATTACK_HEARGOSSIP,
+	SPECATTACK_THROWPARTY,
+	SPECATTACK_ESTABLISHEMBASSY,
+	SPECATTACK_INCITEREVOLUTION,
+	SPECATTACK_BOMBCABINET,
+	SPECATTACK_CREATEFRANCHISE,
+	SPECATTACK_CAUSEUNHAPPINESS,
+	SPECATTACK_CONDUCTHIT,
+	SPECATTACK_BIOTERROR,
+	SPECATTACK_NANOTERROR,
+	SPECATTACK_SLAVERAID,
+	SPECATTACK_ENSLAVESETTLER,
+	SPECATTACK_SLAVEUPRISING,
+	SPECATTACK_FREESLAVES,
+	SPECATTACK_SELLINDULGENCE,
+	SPECATTACK_CONVERTCITY,
+	SPECATTACK_PLANTNUKE,
+	SPECATTACK_SOOTHSAY,
+	SPECATTACK_CREATEPARK,
+	SPECATTACK_INJOIN,
+	SPECATTACK_SPY,
+	SPECATTACK_STEALTECH,
+	SPECATTACK_REVOLUTION,
+	SPECATTACK_REFORMCITY,
+
+	SPECATTACK_MAX
+};
 
 class SpriteState;
 class SpriteGroup;
@@ -48,16 +74,7 @@ public:
 
 	~UnitActor();
 
-	void			GetIDAndType
-    (
-        sint32              owner, 
-        SpriteState *       ss, 
-        Unit                id, 
-        sint32              unitType, 
-        MapPoint const &    pos, 
-        sint32 *            spriteID, 
-        GROUPTYPE *         groupType
-    );
+	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, sint32 *spriteID, GROUPTYPE *groupType);
 
 	void			AddVision(void);
 	void			RemoveVision(void);
@@ -84,7 +101,7 @@ public:
 	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
 	void			ActionQueueUpIdle(BOOL NoIdleJustDelay = FALSE);
 
-	Anim *          CreateAnim(UNITACTION action);
+	Anim			*GetAnim(UNITACTION action);
 	Anim			*MakeFakeDeath(void);
 	Anim			*MakeFaceoff(void);
 

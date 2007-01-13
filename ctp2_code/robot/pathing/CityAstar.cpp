@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A-star pathfinding for City
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,8 +16,6 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -37,52 +34,48 @@
 //   but on pw costs per tile.
 // - Road path may go through foreign territory but is even more expensive 
 //   in comparision to unexplored territory. - Oct. 6th 2004 Martin Gühmann
-// - Initialised roadCostsPercent, so it will have a proper value when not 
-//   set in the strategy.
-// - removed bool fix attempt; - E 12.27.2006 note: MArtin G reports that
-//   fixing this defect made the AI act "weird" even though the bool in ln198 
-//   causes an error.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "CityAstar.h"
-
-#include "AgreementMatrix.h"    // Allow alliance checking
-#include "Astar.h"              // k_ASTAR_BIG, ASTAR_BLOCKED, ASTAR_CAN_ENTER
 #include "c3errors.h"
-#include "Diplomat.h"           // To be able to retrieve the current strategy
 #include "globals.h"
-#include "MoveFlags.h"
+
+
+#include "CityAstar.h"
+#include "dynarr.h"
 #include "Path.h"
-#include "player.h"             // g_player
-#include "StrategyRecord.h"     // For accessing the strategy database
+
+#include "XY_Coordinates.h"
+#include "World.h"
+#include "dynarr.h"
+#include "player.h"
+
+#include "MoveFlags.h"
+
+//Added by Martin Gühmann to acces the terrain improvement database
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
 #include "TerrImprove.h"
-#include "World.h"              // g_theWorld
+#include "AgreementMatrix.h" // Allow alliance checking
+#include "StrategyRecord.h"  // For accessing the strategy database
+#include "Diplomat.h"        // To be able to retrieve the current strategy
 
 CityAstar g_city_astar; 
 
-namespace
-{
-	sint32 const    NODE_VISIT_COUNT_LIMIT  = 2000000000;
-}
 
-sint32 CityAstar::EntryCost
-(
-    MapPoint const &    prev,
-    MapPoint const &    pos,
-    float &             cost,
-    BOOL &              is_zoc,
-    ASTAR_ENTRY_TYPE &  entry
-) 
+sint32 CityAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,                           
+                            float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry) 
+
 {
-	if (m_pathRoad)
-	{
+	sint32 i;
+
+	if(m_pathRoad){
+		
 		const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
-		if (!rec || !g_player[m_owner]->IsExplored(pos))
-		{
+		if(g_player[m_owner]->IsExplored(pos) == FALSE 
+		|| !rec
+		){ 
 			cost = k_ASTAR_BIG; 
 			entry = ASTAR_BLOCKED; 
 			return FALSE;
@@ -97,47 +90,37 @@ sint32 CityAstar::EntryCost
 
 //		cost = float(g_theWorld->GetMoveCost(pos) * effect->GetProductionCost());
 		cost = static_cast<float>(effect->GetProductionCost());
-
-		Cell *  entryCell   = g_theWorld->GetCell(pos);
-		
-		if (entryCell->GetOwner() < 0)
-		{
-			// Unowned territory
+		if(g_theWorld->AccessCell(pos)->GetOwner() == -1){
 			cost *= 10000.0; // Should be calculated from most expensive tile improvement + 20 percent
 		}
-		else if (  (entryCell->GetOwner() != m_owner)
-		        && !AgreementMatrix::s_agreements.HasAgreement(m_owner, entryCell->GetOwner(), PROPOSAL_TREATY_ALLIANCE)
-		        )
-		{
-			// "Hostile" territory
+		else if((g_theWorld->AccessCell(pos)->GetOwner() >= 0
+		&&      (g_theWorld->AccessCell(pos)->GetOwner() != m_owner
+		&&       !AgreementMatrix::s_agreements.HasAgreement(m_owner, g_theWorld->AccessCell(pos)->GetOwner(), PROPOSAL_TREATY_ALLIANCE)))
+		){
 			cost *= 20000.0; // Should be calculated from most expensive tile improvement + 20 percent and everything times 2
 		}
 
 		sint32 type = rec->GetIndex();
 
 		const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
-		double roadCostsPercent = strategy.GetRoadAlreadyThereCostsCoefficient();
+		double roadCostsPercent;
+		strategy.GetRoadAlreadyThereCostsCoefficient(roadCostsPercent);
 
-		// Reconsider this. This doesn't look right
-		sint32 i;
-		for(i = 0; i < entryCell->GetNumDBImprovements(); ++i)
-		{
-			rec = g_theTerrainImprovementDB->Get(entryCell->GetDBImprovement(i));
+
+		for(i = 0; i < g_theWorld->AccessCell(pos)->GetNumDBImprovements(); ++i){
+			rec = g_theTerrainImprovementDB->Get(g_theWorld->AccessCell(pos)->GetDBImprovement(i));
 			if(rec){
 				effect = terrainutil_GetTerrainEffect(rec, pos);
-				if(effect && effect->HasMoveCost()){
-					// roadCostsPercent < 1.0 so that new roads are planned along old roads
+				if(effect && effect->GetMoveCost()){
 					cost *= static_cast<float>(roadCostsPercent);
 					break;
 				}
 			}
 		}
 
-		if(i == entryCell->GetNumDBImprovements()){
-			for(i = 0; i < entryCell->GetNumImprovements(); ++i)
-			{
-				// Double the bonus for the same road type
-				if (entryCell->AccessImprovement(i).GetType() == type){
+		if(i == g_theWorld->AccessCell(pos)->GetNumDBImprovements()){
+			for(i = 0; i < g_theWorld->AccessCell(pos)->GetNumImprovements(); ++i){
+				if(g_theWorld->AccessCell(pos)->AccessImprovement(i).GetType() == type){
 					cost *= static_cast<float>(roadCostsPercent);
 					break;
 				}
@@ -145,56 +128,56 @@ sint32 CityAstar::EntryCost
 		}
 
 		entry = ASTAR_CAN_ENTER;
+		return TRUE;
 	}
-
-	return TRUE;
+	else{
+		return TRUE;
+	}
 }
 
 sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 {
-	return SOUTH;
+    return SOUTH; 
+}
+    
+
+
+void CityAstar::FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+      float &cost)
+
+{
+    Path tmp_path; 
+
+    m_owner = owner; 
+    m_alliance_mask = g_player[m_owner]->GetMaskAlliance(); 
+	m_pathRoad = false;
+
+    sint32 cutoff = 2000000000; 
+    sint32 nodes_opened=0;
+
+    if (!FindPath(start, dest, tmp_path, cost,  FALSE, cutoff, nodes_opened)) { 
+         cost = float(g_player[m_owner]->GetMaxEmpireDistance()); 
+    }
 }
 
-
-
-void CityAstar::FindCityDist
-(
-    PLAYER_INDEX        owner,
-    MapPoint const &    start,
-    MapPoint const &    dest,
-    float &             cost
-)
+bool CityAstar::FindRoadPath(const MapPoint & start, 
+							 const MapPoint & dest,
+							 PLAYER_INDEX owner,
+							 Path & new_path,
+							 float & total_cost)
 {
-	m_alliance_mask     = g_player[m_owner]->GetMaskAlliance(); 
-	m_pathRoad          = false;
-	m_owner             = owner; 
+    m_alliance_mask = 0x0; 
+	m_pathRoad = true;
+	total_cost = 0.0;
 
-	Path    tmp_path; 
-	sint32  nodes_opened    = 0;
+    sint32 cutoff = 2000000000; 
+    sint32 nodes_opened=0;
 
-	if (!FindPath(start, dest, tmp_path, cost, FALSE, NODE_VISIT_COUNT_LIMIT, nodes_opened)) 
-	{
-		cost = static_cast<float>(g_player[m_owner]->GetMaxEmpireDistance()); 
-	}
-}
+	m_owner = owner;
 
-bool CityAstar::FindRoadPath
-(
-	MapPoint const &    start,
-	MapPoint const &    dest,
-	PLAYER_INDEX        owner,
-	Path &              new_path,
-	float &             total_cost
-)
-{
-	m_alliance_mask     = 0x0;
-	m_pathRoad          = true;
-	m_owner             = owner;
-
-	total_cost          = 0.0;
-
-	sint32  nodes_opened    = 0;
-
-	return FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
+    if (FindPath(start, dest, new_path, total_cost,  FALSE, cutoff, nodes_opened)) { 
+        return true;
+    }
+	return false;
 }
 

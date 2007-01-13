@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Gold
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,6 +17,15 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,7 +37,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -62,9 +70,9 @@ class	Gold;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class Gold 
-{ 
-private:
+
+class Gold { 
+
 	sint32 m_level; 
     sint32 m_income_this_turn; 
     sint32 m_gross_income; 
@@ -95,7 +103,7 @@ public:
     void ClearIncome(); 
     void AddIncome(const sint32 delta); 
     void SubIncome(const sint32 delta); 
-    sint32 GetIncome() const { return m_income_this_turn; } 
+    sint32  GetIncome() const { return m_income_this_turn; } 
 	sint32 DeltaThisTurn() const
 	{
 		// Do not count the rushbuy costs (incidental & under full control of

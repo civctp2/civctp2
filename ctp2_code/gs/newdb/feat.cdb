@@ -41,11 +41,4 @@ Feat {
     Bit(struct BuildingFeat) Building
 
 	Bit(Int) MinimumSizeOfCiv
-
-	Bit(struct InfrastructureFeat) TileImp
-	Struct InfrastructureFeat {
-        Record TerrainImprovement TileImp
-        Bit(Int) Num
-    }
-	Record Advance[]	GrantAdvance
 }

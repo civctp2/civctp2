@@ -38,8 +38,8 @@
 #include "aui_mouse.h"
 #include "aui_keyboard.h"
 #include "aui_joystick.h"
-#include "aui_sdlsurface.h"
-#include "aui_sdlmouse.h"
+#include "aui_directsurface.h"
+#include "aui_directmouse.h"
 
 #include "aui_sdlui.h"
 
@@ -69,8 +69,9 @@ aui_SDLUI::aui_SDLUI
 	BOOL useExclusiveMode 
 )
 :   aui_UI              (),
-    aui_SDL             (),
-    m_X11Display        (0)
+    aui_DirectX         (),
+    m_lpdds             (NULL),
+    m_isCoinitialized   (false)
 {
 	
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
@@ -89,21 +90,9 @@ aui_SDLUI::aui_SDLUI
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = CreateScreen( useExclusiveMode );
+	*retval = CreateDirectScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-
-#if defined(HAVE_X11)
-	char *dispname = getenv("DISPLAY");
-	if (dispname) {
-		m_X11Display = XOpenDisplay(dispname);
-	} else {
-		m_X11Display = XOpenDisplay(":0.0");
-	}
-	if (!m_X11Display) {
-		*retval = AUI_ERRCODE_NOUI;
-	}
-#endif
 }
 
 
@@ -114,39 +103,107 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 	m_savedMouseAnimLastIndex = 0;
 	m_savedMouseAnimCurIndex = 0;
 
+#ifdef __AUI_USE_DIRECTMEDIA__
+	if (!m_isCoinitialized)
+    {
+    	HRESULT const   hr  = CoInitialize(NULL);
+        m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
+    }
+#endif 
+
 	return AUI_ERRCODE_OK;
 }
 
 
 
-AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
+AUI_ERRCODE aui_SDLUI::DestroyDirectScreen(void)
 {
-	if (m_primary)
-	{
+    if (m_primary)
+    {
+    	((aui_DirectSurface *)m_primary)->DDS()->Release();
 		delete m_primary;
-		m_primary   = NULL;
-		m_lpdds     = NULL;
-	}
+	    m_primary   = NULL;
+        m_lpdds     = NULL;
+    }
 
 	return AUI_ERRCODE_OK;
 }
 
 
-AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
+AUI_ERRCODE aui_SDLUI::CreateDirectScreen( BOOL useExclusiveMode )
 {
 	
-	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
+	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, SDL_SWSURFACE);
 	
-	m_primary = new aui_SDLSurface(
+	
+	
+
+	HRESULT hr;
+
+	
+	uint32 coopFlags = DDSCL_NORMAL;
+	if ( m_exclusiveMode )
+		coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
+
+	
+	
+	
+	if (g_createDirectDrawOnSecondary) {
+        coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | 
+					DDSCL_ALLOWREBOOT | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN;
+	}
+
+	
+	hr = m_lpdd->SetCooperativeLevel( m_hwnd, coopFlags );
+	Assert( hr == DD_OK );
+	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
+
+	
+	hr = m_lpdd->SetDisplayMode( m_width, m_height, m_bpp );
+	Assert( hr == DD_OK );
+	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;
+
+	
+	MoveWindow(
+		m_hwnd,
+		0, 0,
+
+		g_ScreenWidth, 
+		g_ScreenHeight,
+		TRUE );
+
+	
+	LPDIRECTDRAWSURFACE lpdds;
+	DDSURFACEDESC ddsd;
+	memset( &ddsd, 0, sizeof( ddsd ) );
+	ddsd.dwSize = sizeof( ddsd );
+	ddsd.dwFlags = DDSD_CAPS;
+	ddsd.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+	hr = m_lpdd->CreateSurface( &ddsd, &lpdds, NULL );
+	Assert( hr == DD_OK || hr == DDERR_PRIMARYSURFACEALREADYEXISTS );
+	if ( hr != DD_OK )
+	{
+		if ( hr != DDERR_PRIMARYSURFACEALREADYEXISTS )
+			return AUI_ERRCODE_CREATESURFACEFAILED;
+
+		hr = m_lpdds->Restore();
+		Assert( hr == DD_OK );
+		if ( hr != DD_OK ) return AUI_ERRCODE_CREATESURFACEFAILED;
+	}
+	else
+		m_lpdds = lpdds;
+
+	
+	m_primary = new aui_DirectSurface(
 		&errcode,
 		m_width,
 		m_height,
 		m_bpp,
 		m_lpdd,
+		m_lpdds,
 		TRUE );
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -156,26 +213,27 @@ AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
 	return AUI_ERRCODE_OK;
 }
 
-#ifdef HAVE_X11
-Display *
-aui_SDLUI::getDisplay()
-{
-	return m_X11Display;
-}
-#endif
+
+
 
 aui_SDLUI::~aui_SDLUI( void )
 {
-	if ( m_lpdds ) {
-		// m_lpdds is deleted by SDL_Quit()
-		m_lpdds = NULL;
+	if (m_lpdds)
+	{
+		m_lpdds->Release();
 	}
-#ifdef HAVE_X11
-	if (m_X11Display) {
-		XCloseDisplay(m_X11Display);
-		m_X11Display = 0;
-	}
-#endif
+
+    if (m_lpdd)
+    {
+	    m_lpdd->RestoreDisplayMode();
+    }
+
+#ifdef __AUI_USE_DIRECTMEDIA__
+	if (m_isCoinitialized)
+    {
+	    CoUninitialize();
+    }
+#endif 
 }
 
 
@@ -190,9 +248,7 @@ AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 
 		if ( m_minimize || m_exclusiveMode )
 		{
-#if 0
 			SetCursorPos( m_mouse->X(), m_mouse->Y() );
-#endif
 		}
 
 		m_mouse->End();
@@ -211,7 +267,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 	BOOL			exclusive = TRUE;
 
 	
-	aui_SDLMouse *mouse = new aui_SDLMouse( &auiErr, "CivMouse", exclusive );
+	aui_DirectMouse *mouse = new aui_DirectMouse( &auiErr, "CivMouse", exclusive );
 	Assert(mouse != NULL);
 	if ( !mouse ) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -229,7 +285,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 	if ( m_minimize || m_exclusiveMode )
 	{
 		POINT point;
-		//GetCursorPos( &point );
+		GetCursorPos( &point );
 		m_mouse->SetPosition( &point );
 	}
 
@@ -259,10 +315,9 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 	if ( m_minimize || m_exclusiveMode )
 	{
-		DestroyScreen();
+		DestroyDirectScreen();
 	}
 
-#if 0
 	while ( ShowCursor( TRUE ) < 0 )
 		; 
 
@@ -271,11 +326,11 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 		while ( !IsIconic( m_hwnd ) )
 			::ShowWindow( m_hwnd, SW_MINIMIZE );
 	}
-#endif
-	if (g_civApp)
-	{
-		g_civApp->SetInBackground(TRUE);
-	}
+
+    if (g_civApp)
+    {
+        g_civApp->SetInBackground(TRUE);
+    }
 
 	return AUI_ERRCODE_OK;
 }
@@ -286,9 +341,8 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
 
 
-	if ( !m_primary ) CreateScreen( m_exclusiveMode );
+	if ( !m_primary ) CreateDirectScreen( m_exclusiveMode );
 
-#if 0
 	if ( m_minimize || m_exclusiveMode )
 		while ( GetForegroundWindow() != m_hwnd )
 			::ShowWindow( m_hwnd, SW_RESTORE );
@@ -319,7 +373,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 		RECT clipRect = { 0, 0, m_width, m_height };
 		ClipCursor(&clipRect);
 	}
-#endif
+
 	if ( m_joystick ) m_joystick->Acquire();
 	if (m_keyboard) m_keyboard->Acquire();
 

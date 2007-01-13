@@ -3,7 +3,6 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Main string file (Italian)
-# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -32,7 +31,7 @@
 str_ldl_Already_Offer	"Stai già offrendo quella merce. Vuoi sostituire l'offerta precedente?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"Tutte le civiltà si inchineranno al nuovo sovrano: {player[0].leader_name} ha completato la clonazione di vita aliena."
+ENDGAME_WON_OTHER	"Tutte le civiltà si inchineranno al nuovo sovrano: {player[1].leader_name} ha completato la clonazione di vita aliena."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"."
@@ -50,10 +49,10 @@ AGE_NAME_DIAMOND	"Età del diamante"
 
 
 
-YOU_BROKE_ALLIANCE	"Hai rotto l'alleanza con {player[0].civ_name_plural#ARTICLE}."
-YOU_BROKE_CEASE_FIRE	"Hai rotto il trattato di pace con {player[0].civ_name_plural#ARTICLE}."
+YOU_BROKE_ALLIANCE	"Hai rotto l'alleanza con {player[1].civ_name_plural#ARTICLE}."
+YOU_BROKE_CEASE_FIRE	"Hai rotto il trattato di pace con {player[1].civ_name_plural#ARTICLE}."
 DIPxxx3_AGREEMENT_END_POLLUTION	"Eco-patto"
-CANT_ATTACK_ALLIES	"Sei alleato con {player[0].civ_name_plural#ARTICLE} e non puoi attaccare senza prima rompere l'alleanza. Vuoi rompere l'alleanza ora?"
+CANT_ATTACK_ALLIES	"Sei alleato con {player[1].civ_name_plural#ARTICLE} e non puoi attaccare senza prima rompere l'alleanza. Vuoi rompere l'alleanza ora?"
 X_LAB	"Xenolaboratorio"
 GENE_SEQUENCER	"Manipolatore di geni"
 
@@ -142,13 +141,8 @@ str_ldl_Pollution_Level	"Livello inquinamento"
 
 
 
-CANT_ATTACK_HAVE_TREATY	"Quest'azione romperà il nostro trattato con {player[0].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[0].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."
-#New Messages
-ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
-CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
-CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
+CANT_ATTACK_HAVE_TREATY	"Quest'azione romperà il nostro trattato con {player[1].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[1].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Risoluzione video"
@@ -240,7 +234,7 @@ str_ldl_CAPS_CANCEL_MOVE	"ANNULLARE LA MOSSA"
 str_ldl_END_TUTORIAL	"FINE TUTORIAL"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL	"Vuoi rompere il trattato con {player[0].civ_name_plural#ARTICLE}? Puoi espellere le unità senza rompere il trattato."
+CANT_ATTACK_ALLIES_CAN_EXPEL	"Vuoi rompere il trattato con {player[1].civ_name_plural#ARTICLE}? Puoi espellere le unità senza rompere il trattato."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Per richiedere dei progressi devi avere un'ambasciata."
@@ -550,14 +544,6 @@ ACCEPT	"Accetta"
 REJECT	"Rifiuta"
 YES	"Sì"
 NO	"No"
-BUTTON_RAZE       "Raze"
-BUTTON_PLUNDER    "Plunder"
-BUTTON_PILLAGE    "Pillage"
-BUTTON_LIBERATE   "Liberate"
-BUTTON_ENSLAVE	  "Enslave"
-BUTTON_FREESLAVES "Free Slaves"
-BUTTON_OCCUPY     "Occupy"
-
 str_ldl_Abort	"Abbandona"
 str_ldl_Open	"Apri"
 str_ldl_Close	"Chiudi"
@@ -1159,8 +1145,6 @@ str_ldl_Small_24_x_48	"Piccola"
 str_ldl_Soothsay	"Preveggenza. Costo: 500 monete d'oro"
 str_ldl_SOUND	"SONORO"
 str_ldl_SOUND_OPTIONS	"SONORO"
-str_ldl_Music	"Musica"
-str_ldl_MUSIC_OPTIONS	"Musica"
 str_ldl_Special	"Speciale"
 str_ldl_SPECIAL_ABILITIES	"ABILITÀ SPECIALI"
 str_ldl_SPECIAL_ATTACKS	"ATTACCHI SPECIALI"
@@ -2576,13 +2560,13 @@ str_ldl_ND_BUILD_QUEUE			"Gestione produzione..."
 str_ldl_ND_DISBAND			"Demolisci"
 str_ldl_ND_RESOURCE_TAB			"RISORSE"
 str_ldl_ND_RTL_CITY_NAME		"Nome città"
-str_ldl_ND_RTL_POPULATION		"Pop."
+str_ldl_ND_RTL_POPULATION		"Popolazione"
 str_ldl_ND_STATUS_TAB			"STATO"
 str_ldl_ND_STL_CITY_NAME		"Nome città"
 str_ldl_ND_STL_MAYOR			"Sindaco"
 str_ldl_ND_STL_PRIORITY			"Priorità"
 str_ldl_ND_STL_BUILDING			"Produzione"
-str_ldl_ND_STL_TIME			"Turni"
+str_ldl_ND_STL_TIME                 	"Turni"
 str_ldl_ND_ST_GOVERNOR			"SINDACO:"
 str_ldl_ND_ST_RUSH_BUY			"Compra ora"
 str_ldl_ND_ON				"SÌ"
@@ -3051,60 +3035,56 @@ str_ldl_CantDisbandCitySize		"Non puoi congedare le città di dimensione superior
 str_ldl_CantDisbandLastCity		"Non puoi congedare la tua ultima città."
 
 # Profile strings (Advanced options list)
-str_profile_UnitAnim                            "Attiva animazione unità"
-str_profile_GoodAnim                            "Attiva animazione merci"
-str_profile_TradeAnim                           "Attiva animazione commercio"
-str_profile_WonderMovies                        "Mostra filmati meraviglie"
-str_profile_EnemyMoves                          "Mostra mosse nemiche"
-str_profile_RevoltWarning                       "<OBS>"
-str_profile_EnemyIntrude                        "<OBS>"
-str_profile_UnitLostWarning                     "<OBS>"
-str_profile_TradeLostWarning                    "<OBS>"
-str_profile_CityLostWarning                     "<OBS>"
-str_profile_AutoCenter                          "Centra schermo su unità o città attiva"
-str_profile_AutoSave                            "Attiva salvataggio automatico"
-str_profile_AutoGroup                           "<OBS>"
-str_profile_AutoDeselect                        "Deselezione automatica unità"
-str_profile_AutoSelectNext                      "Selezione automatica unità seguente"
-str_profile_AutoSelectFirstUnit                 "Selezione automatica prossima unità"
-str_profile_AutoTurnCycle                       "Passaggio turno automatico"
-str_profile_ShowZoomedCombat                    "Attiva "
-str_profile_UseFingerPrinting                   "<OBS>"
-str_profile_UseRedbookAudio                     "Riproduci audio da CD"
-str_profile_TryWindowsResolution                "<OBS>"
-str_profile_ScreenResWidth                      "<OBS>"
-str_profile_ScreenResHeight                     "<OBS>"
-str_profile_ZoomedCombatAlways                  "Mostra tutte le battaglie in visuale comb."
-str_profile_AttackEveryone                      "<OBS>"
-str_profile_NonRandomCivs                       "<OBS>"
-str_profile_AutoEndMultiple                     "Scorrimento automatico multiplo turni"
-str_profile_UnitCompleteMessages                "Messaggio di fine costruzione delle unità"
-str_profile_NonContinuousUnitCompleteMessages   "Messaggio di completamento unità"
-str_profile_ShowCityNames                       "Mostra nomi città"
-str_profile_ShowTradeRoutes                     "Mostra rotte commerciali"
-str_profile_UnitSpeed                           "Velocità animazione unità"
-str_profile_MouseSpeed                          "Sensibilità mouse"
-str_profile_LeftHandedMouse                     "Mouse sinistrorso attivato"
-str_profile_CityBuiltMessage                    "<OBS>"
-str_profile_UseAttackMessages                   "<OBS>"
-str_profile_MoveHoldTime                        "<OBS>"
-str_profile_BattleSpeed                         "Velocità battaglia in visuale comb."
-str_profile_ScrollDelay                         "Ritardo scorrimento mouse"
-str_profile_AutoSwitchTabs                      "Attivazione automatica pannello di controllo"
-str_profile_AutoRenameCities                    "Consent rinomina automatica durante creazione città"
-str_profile_AutoOpenCityWindow                  "Gestione produzione durante creazione città"
-str_profile_ShowEnemyHealth                     "Mostra salute unità nemica"
-str_profile_ShowCityInfluence                   "Mostra influenza città"
-str_profile_ShowPoliticalBorders                "Mostra confini politici"
-str_ldl_CreateProposal                          "Crea proposta"
-str_profile_CloseOnEyepoint                     "Chiudi messaggi cliccando sull'occhio"
-str_profile_ShowExpensive                       "Mostra effetti miglioramenti casella costosi"
+str_profile_UnitAnim 				"Attiva animazione unità"
+str_profile_GoodAnim 				"Attiva animazione merci"
+str_profile_TradeAnim 				"Attiva animazione commercio"
+str_profile_WonderMovies 			"Mostra filmati meraviglie"
+str_profile_EnemyMoves 				"Mostra mosse nemiche"
+str_profile_RevoltWarning 			"<OBS>"
+str_profile_EnemyIntrude 			"<OBS>"
+str_profile_UnitLostWarning 			"<OBS>"
+str_profile_TradeLostWarning 			"<OBS>"
+str_profile_CityLostWarning 			"<OBS>"
+str_profile_AutoCenter 				"Centra schermo su unità o città attiva"
+str_profile_AutoSave 				"Attiva salvataggio automatico"
+str_profile_AutoGroup 				"<OBS>"
+str_profile_AutoDeselect 			"Deselezione automatica unità"
+str_profile_AutoSelectNext 			"Selezione automatica unità seguente"
+str_profile_AutoSelectFirstUnit 		"Selezione automatica prossima unità"
+str_profile_AutoTurnCycle 			"Passaggio turno automatico"
+str_profile_ShowZoomedCombat 			"Attiva "
+str_profile_UseFingerPrinting 		"<OBS>"
+str_profile_UseRedbookAudio 			"Riproduci audio da CD"
+str_profile_TryWindowsResolution 		"<OBS>"
+str_profile_ScreenResWidth 			"<OBS>"
+str_profile_ScreenResHeight 			"<OBS>"
+str_profile_ZoomedCombatAlways 		"Mostra tutte le battaglie in visuale comb."
+str_profile_AttackEveryone 			"<OBS>"
+str_profile_NonRandomCivs 			"<OBS>"
+str_profile_AutoEndMultiple 			"Scorrimento automatico multiplo turni"
+str_profile_UnitCompleteMessages 		"Messaggio di fine costruzione delle unità"
+str_profile_NonContinuousUnitCompleteMessages 	"Messaggio di completamento unità"
+str_profile_ShowCityNames 			"Mostra nomi città"
+str_profile_ShowTradeRoutes 			"Mostra rotte commerciali"
+str_profile_UnitSpeed 				"Velocità animazione unità"
+str_profile_MouseSpeed 				"Sensibilità mouse"
+str_profile_LeftHandedMouse 			"Mouse sinistrorso attivato"
+str_profile_CityBuiltMessage 			"<OBS>"
+str_profile_UseAttackMessages 		"<OBS>"
+str_profile_MoveHoldTime 			"<OBS>"
+str_profile_BattleSpeed 			"Velocità battaglia in visuale comb."
+str_profile_ScrollDelay 			"Ritardo scorrimento mouse"
+str_profile_AutoSwitchTabs 			"Attivazione automatica pannello di controllo"
+str_profile_AutoRenameCities 			"Consent rinomina automatica durante creazione città"
+str_profile_AutoOpenCityWindow 			"Gestione produzione durante creazione città"
+str_profile_ShowEnemyHealth 			"Mostra salute unità nemica"
+str_profile_ShowCityInfluence 			"Mostra influenza città"
+str_profile_ShowPoliticalBorders 		"Mostra confini politici"
+str_ldl_CreateProposal "Crea proposta"
+str_profile_CloseOnEyepoint			"Chiudi messaggi cliccando sull'occhio"
+str_profile_ShowExpensive			"Mostra effetti miglioramenti casella costosi"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
-str_profile_RecentAtTop                         "Put New Messages At Top"
-str_profile_CityClick                           "Select City Instead Of Army"
-str_profile_DebugSlic                           "Slic Debug Messages"
-str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_RecentAtTop				"Put New Messages At Top"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"Musicoptions"
@@ -3119,47 +3099,3 @@ str_tbl_ldl_Gamestate_Debug		"Debug gamestate (playtest)"
 str_tbl_ldl_Rand_Test			"Rand test (playtest)"
 str_tbl_ldl_Command_Enter		"Command enter (playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Command enter alternate (playtest)"
-
-# New gamesetting options
-
-str_tbl_ldl_NoAIProductionDeficit_Off "AI No Production Deficit - Off"	
-str_tbl_ldl_NoAIGoldDeficit_Off	"No negative Gold for AI Cities - Off"					# AI cities don't go negative in gold
-str_tbl_ldl_AICityDefenderBonus_Off "AI City Defense bonus - Off"					# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_Off	"Entrenched Barbarians settle cities - Off"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_Off "Conflicting citystyle unhappiness - Off"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_Off "Revolting Cities lose 1/3 Population - Off"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off "Revolting cities create barbarians - Off"					# Revolting city creates barbarians
-str_tbl_ldl_BarbarianCamps_Off	"Entrenched Barbarians create Tile Imps - Off"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off "Entrenched Barbarians spawn Barbarians - Off"			# Entrenched barbs create more barbs
-str_tbl_ldl_AINoSinking_Off "AI ships don't sink - Off"							# AI ships don't sink
-str_tbl_ldl_AINoCityLimit_Off "AI No City LImit - Off"						# AI not affected by city limit
-str_tbl_ldl_GoldPerUnitSupport_Off "1 Gold Per Unit Cost - Off"					# all pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off "2 Gold Per City x City Limit - Off"						# everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_Off "AI doesn't pay Shield Hunger - Off"					# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_Off "AI doesn't pay Unit Gold - Off"						# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_Off "AI Free Upgrades - Off"						# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_Off "AI Free Militia Unit - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_OneCityChallenge_Off "One City Challenge - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_Off "City Capture Options - Off"						#If city is empty at turn start AI gets cheapest unit
-
-
-str_tbl_ldl_NoAIProductionDeficit_On "AI No Production Deficit - On"	
-str_tbl_ldl_NoAIGoldDeficit_On	"No negative Gold for AI Cities - On"					# AI cities don't go negative in gold
-str_tbl_ldl_AICityDefenderBonus_On "AI City Defense bonus - On"					# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_On	"Entrenched Barbarians settle cities - On"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_On "Conflicting citystyle unhappiness - On"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_On "Revolting Cities lose 1/3 Population - On"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On "Revolting cities create barbarians - On"					# Revolting city creates barbarians
-str_tbl_ldl_BarbarianCamps_On	"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_On "Entrenched Barbarians spawn Barbarians - On"			# Entrenched barbs create more barbs
-str_tbl_ldl_AINoSinking_On "AI ships don't sink - On"							# AI ships don't sink
-str_tbl_ldl_AINoCityLimit_On "AI No City LImit - On"						# AI not affected by city limit
-str_tbl_ldl_GoldPerUnitSupport_On "1 Gold Per Unit Cost - On"					# all pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_On "2 Gold Per City x City Limit - On"						# everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_On "AI doesn't pay Shield Hunger - On"					# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_On "AI doesn't pay Unit Gold - On"						# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_On "AI Free Upgrades - On"						# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"						#If city is empty at turn start AI gets cheapest unit
-

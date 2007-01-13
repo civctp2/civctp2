@@ -11,24 +11,18 @@
 
  
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+#ifndef __UNITSPRITEGROUP_H__
+#define __UNITSPRITEGROUP_H__
 
-#ifndef UNITSPRITEGROUP_H__
-#define UNITSPRITEGROUP_H__
+#include "FacedSprite.h"
+#include "SpriteGroup.h"
+#include "Action.h"
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
+#include "aui_directsurface.h"
 
-#include "windows.h"          // BOOL, POINT
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class UnitSpriteGroup;
 
 enum UNITACTION 
 {
@@ -46,48 +40,43 @@ enum UNITACTION
 	UNITACTION_MAX
 };
 
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
+class Sprite;
+class FacedSprite;
+class Anim;
 
-#include "Action.h"         // GAME_ACTION
-#include "ctp2_inttypes.h"  // sint32, uint16
-#include "pixeltypes.h"		// Pixel16
-#include "SpriteGroup.h"	// SpriteGroup, GROUPTYPE
-
-class aui_Surface;
-
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
-
-class UnitSpriteGroup : public SpriteGroup 
-{
+class UnitSpriteGroup : public SpriteGroup {
 public:
 	UnitSpriteGroup(GROUPTYPE type);
+	virtual ~UnitSpriteGroup();
 
 	void			DeallocateStorage(void);
 	void			DeallocateFullLoadAnims(void);
 
-	void			LoadBasic(MBCHAR const * filename);
-	void			LoadIndexed(MBCHAR const * filename, GAME_ACTION index);
-	void			LoadFull(MBCHAR const * filename);
+	void			LoadBasic(char *filename);
+	void			LoadIndexed(char *filename,GAME_ACTION index);
+	void			LoadFull(char *filename);
 
-	bool			GetImageFileName(MBCHAR * name, char * format, ...);
+	bool			GetImageFileName(char *name,char *format,...);
 
-	void			Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode);
+	void			Save(char *filename,unsigned version_id,unsigned compression_mode);
 
 	void			Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack);
 
-	void			DrawText(sint32 x, sint32 y, MBCHAR const * s);
+	void			DrawText(sint32 x, sint32 y, MBCHAR *s);
 	void			DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
 							   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, 
 							   BOOL specialDelayProcess, 
 							   BOOL directionalAttack);
 
 
-	POINT *         GetShieldPoints(UNITACTION action) { return m_shieldPoints[action]; }
+	void			RunBenchmark(aui_Surface *surf);
+
+
+
+
+
+	POINT			*GetShieldPoints(UNITACTION action) { return m_shieldPoints[action]; }
 
 
 
@@ -103,7 +92,7 @@ public:
 	void			SetNumFirePointsWork(uint16 num) { m_numFirePointsWork = num; }
 
 	sint32			Parse(uint16 id,GROUPTYPE type);
-	void			ExportScript(MBCHAR const * name);
+	void			ExportScript(MBCHAR *name);
 
 	POINT			GetHotPoint(UNITACTION action, sint32 facing);
 	void			SetHotPoint(UNITACTION action, sint32 facing,POINT pt);

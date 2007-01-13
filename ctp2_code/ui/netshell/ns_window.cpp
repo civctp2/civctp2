@@ -56,20 +56,153 @@ ns_Window::ns_Window(
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommonLdl( ldlBlock );
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+	
+
+	
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	MBCHAR *tile = block->GetString( k_NS_WINDOW_TILE_LDL_NAME );
 	BOOL retired = block->GetBool( k_NS_WINDOW_RETIRED_LDL_NAME );
 
-	return InitCommon(tile, retired);
+	AUI_ERRCODE errcode = InitCommon(
+		tile,
+		retired );
+	Assert( AUI_SUCCESS(errcode) );
+	if ( !AUI_SUCCESS(errcode) ) return errcode;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -105,6 +238,17 @@ ns_Window::~ns_Window()
 		g_ui->UnloadImage( m_tile );
 		m_tile = NULL;
 	}
+
+
+
+
+
+
+
+
+
+
+
 
 	if ( m_controls )
 	{

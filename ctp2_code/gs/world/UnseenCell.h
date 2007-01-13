@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Map fog of war visibility handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,12 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// BATTLE_FLAGS
-//
-// HAVE_PRAGMA_ONCE
-// - Uses #pragma once preprocessor derective
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -34,101 +28,63 @@
 //   - Dec. 26th 2994 - Martin Gühmann
 //
 //----------------------------------------------------------------------------
-//
-/// \file   UnseenCell.h
-/// \brief  Handling of tiles that are not currently visible (declarations)
 
-#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
-#endif
+#ifndef _UNSEEN_CELL_H_
+#define _UNSEEN_CELL_H_
 
-#ifndef UNSEEN_CELL_H_
-#define UNSEEN_CELL_H_
+#include "MapPoint.h"
 
-//----------------------------------------------------------------------------
-// Library imports
-//----------------------------------------------------------------------------
-
-// None
-
-//----------------------------------------------------------------------------
-// Exported names
-//----------------------------------------------------------------------------
-
-class UnseenCell;
-class UnseenCellCarton;
-class UnseenImprovementInfo;
-class UnseenInstallationInfo;
-
-#define k_UCF_IS_BIOINFECTED            0x0001
-#define k_UCF_IS_NANOINFECTED           0x0002
-#define k_UCF_IS_CONVERTED              0x0004
-#define k_UCF_IS_FRANCHISED             0x0008
-#define k_UCF_IS_INJOINED               0x0010
-#define k_UCF_WAS_HAPPINESS_ATTACKED    0x0020
-#define k_UCF_HAS_HUT                   0x0040
-#define k_UCF_IS_RIOTING                0x0080
-#define k_UCF_HAS_AIRPORT               0x0100
-#define k_UCF_HAS_SLEEPINGUNITS         0x0200
-#define k_UCF_IS_WATCHFUL               0x0400
-
-//----------------------------------------------------------------------------
-// Project imports
-//----------------------------------------------------------------------------
-
-#include "civarchive.h"
-#include "ctp2_inttypes.h"    // sintN, uintN
-#include "MapPoint.h"         // MapPoint
-#include "player.h"           // PLAYER_INDEX
-#include "TerrImproveData.h"  // TERRAIN_IMPROVEMENT
-// MBCHAR
-
-template <class T> class PointerList;
 class TileInfo;
+class CivArchive;
+typedef sint32 TERRAIN_IMPROVEMENT;
+typedef sint32 PLAYER_INDEX;
+template <class T> class PointerList;
 class UnitActor;
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
-
-class UnseenImprovementInfo 
-{
+class UnseenImprovementInfo {
 public:
-    UnseenImprovementInfo(TERRAIN_IMPROVEMENT type,
-	                      sint32 percentComplete) 
-    :
-        m_type              (type),
-        m_percentComplete   (percentComplete)
-    {};
-
+	UnseenImprovementInfo(TERRAIN_IMPROVEMENT type,
+						  sint32 percentComplete) {
+		m_type = type;
+		m_percentComplete = percentComplete;
+	}
 	UnseenImprovementInfo(CivArchive &archive);
 	UnseenImprovementInfo(UnseenImprovementInfo *copy) {
 		*this = *copy;
 	}
 
-	TERRAIN_IMPROVEMENT     m_type;
-	sint32                  m_percentComplete;
+	TERRAIN_IMPROVEMENT m_type;
+	sint32 m_percentComplete;
 };
 
-class UnseenInstallationInfo 
-{
+class UnseenInstallationInfo {
 public:
-    UnseenInstallationInfo(sint32 type, uint32 visibility) 
-    :
-        m_type              (type),
-        m_visibility        (visibility)
-    {	};
-
+	UnseenInstallationInfo(sint32 type, uint32 visibility) {
+		m_type = type;
+		m_visibility = visibility;
+	}
 	UnseenInstallationInfo(CivArchive &archive);
 	UnseenInstallationInfo(UnseenInstallationInfo *copy)
 	{
 		*this = *copy;
 	}
 
-	sint32 m_type;
-	uint32 m_visibility;
+	sint32 m_type; 
+	uint32 m_visibility; 
 };
 
+#define k_UCF_IS_BIOINFECTED			0x0001
+#define k_UCF_IS_NANOINFECTED			0x0002
+#define k_UCF_IS_CONVERTED				0x0004
+#define k_UCF_IS_FRANCHISED				0x0008
+#define k_UCF_IS_INJOINED				0x0010
+#define k_UCF_WAS_HAPPINESS_ATTACKED	0x0020
+#define k_UCF_HAS_HUT					0x0040
+#define k_UCF_IS_RIOTING				0x0080
+#define k_UCF_HAS_AIRPORT				0x0100
+#define k_UCF_HAS_SLEEPINGUNITS			0x0200
+#define k_UCF_IS_WATCHFUL				0x0400
 
 
 
@@ -137,10 +93,10 @@ class UnseenCell
 	friend class NetUnseenCell;
 
 public:
-	uint32  m_env;
+	uint32 m_env;
 
-	sint16  m_terrain_type;
-	sint16  m_move_cost;
+	sint16 m_terrain_type;
+	sint16 m_move_cost;
 
 
 
@@ -157,17 +113,17 @@ public:
 	
 	
 	
-	uint16  m_flags;
-	sint8   m_bioInfectedOwner;
-	sint8   m_nanoInfectedOwner;
+	uint16	m_flags;
+	sint8	m_bioInfectedOwner;
+	sint8	m_nanoInfectedOwner;
 	
-	sint8   m_convertedOwner;
-	sint8   m_franchiseOwner;
-	sint8   m_injoinedOwner;
-	sint8   m_happinessAttackOwner;
+	sint8	m_convertedOwner;
+	sint8	m_franchiseOwner;
+	sint8	m_injoinedOwner;
+	sint8	m_happinessAttackOwner;
 	
-	sint16  m_citySize;
-	sint16  m_cityOwner;
+	sint16	m_citySize;
+	sint16	m_cityOwner;
 	sint16  m_citySpriteIndex;
 
 
@@ -178,12 +134,12 @@ public:
 
 
 
-	sint8   m_cell_owner;
+	sint8 m_cell_owner;
 
 	
 	
 	
-	uint32  m_slaveBits;
+	uint32	m_slaveBits;	
 
 private:
 #ifdef BATTLE_FLAGS
@@ -203,8 +159,8 @@ private:
 	UnitActor *m_actor;
 
 	sint32 m_poolIndex;
-	/// The ID of the city that owns the tile.
-	uint32 m_visibleCityOwner;
+	// Contains the ID of the city that owns the tile.
+	uint32  m_visibleCityOwner;
 public:
 	UnseenCell(const MapPoint &point);
 	UnseenCell();
@@ -214,60 +170,66 @@ public:
 	
 	
 
-	void GetPos(MapPoint &pos) const { pos = m_point; }
-	uint32 GetEnv() const { return m_env; }
-	uint32 GetTerrainType() const { return m_terrain_type; }
+	void GetPos(MapPoint &pos) { pos = m_point; }
+	uint32 GetEnv() { return m_env; }
+	uint32 GetTerrainType() { return m_terrain_type; }
 #ifdef BATTLE_FLAGS
-	uint16 GetBattleFlags() const { return m_battleFlags; }
+	uint16 GetBattleFlags() { return m_battleFlags; }
 #endif
-	TileInfo *GetTileInfo() const { return m_tileInfo; }
-	PointerList<UnseenInstallationInfo> *GetInstallations() const { return m_installations; }
-	PointerList<UnseenImprovementInfo> *GetImprovements() const { return m_improvements; }
-	sint32 GetCityOwner() const { return m_cityOwner; }
-	sint32 GetCitySize() const { return m_citySize; }
-	uint32 GetVisibleCityOwner() const { return m_visibleCityOwner; }
-	const MBCHAR *GetCityName() const { return m_cityName; }
-	UnitActor *GetActor() const { return m_actor; }
+	TileInfo *GetTileInfo() { return m_tileInfo; }
+	PointerList<UnseenInstallationInfo> *GetInstallations() { return m_installations; }
+	PointerList<UnseenImprovementInfo> *GetImprovements() { return m_improvements; }
+	sint32 GetCityOwner() { return m_cityOwner; }
+	sint32 GetCitySize() { return m_citySize; }
+	uint32 GetVisibleCityOwner() { return m_visibleCityOwner; }
+	const MBCHAR *GetCityName() { return m_cityName; }
+	UnitActor *GetActor() { return m_actor; }
 
-	bool    IsBioInfected(void) const           { return 0 != (m_flags & k_UCF_IS_BIOINFECTED); }
-	bool    IsNanoInfected(void) const          { return 0 != (m_flags & k_UCF_IS_NANOINFECTED); }
-	bool    IsConverted(void) const             { return 0 != (m_flags & k_UCF_IS_CONVERTED); }
-	bool    IsFranchised(void) const            { return 0 != (m_flags & k_UCF_IS_FRANCHISED); }
-	bool    IsInjoined(void) const              { return 0 != (m_flags & k_UCF_IS_INJOINED); }
-	bool    WasHappinessAttacked(void) const    { return 0 != (m_flags & k_UCF_WAS_HAPPINESS_ATTACKED); }
-	bool    HasHut(void) const                  { return 0 != (m_flags & k_UCF_HAS_HUT); }
-	bool    IsRioting(void) const               { return 0 != (m_flags & k_UCF_IS_RIOTING); }
-	bool    HasAirport(void) const              { return 0 != (m_flags & k_UCF_HAS_AIRPORT); }
-	bool    HasSleepingUnits(void) const        { return 0 != (m_flags & k_UCF_HAS_SLEEPINGUNITS); }
-	bool    IsWatchful(void) const              { return 0 != (m_flags & k_UCF_IS_WATCHFUL); }
+	BOOL	IsBioInfected(void)			{ return m_flags & k_UCF_IS_BIOINFECTED; }
+	BOOL	IsNanoInfected(void)		{ return m_flags & k_UCF_IS_NANOINFECTED; }
+	BOOL	IsConverted(void)			{ return m_flags & k_UCF_IS_CONVERTED; }
+	BOOL	IsFranchised(void)			{ return m_flags & k_UCF_IS_FRANCHISED; }
+	BOOL	IsInjoined(void)			{ return m_flags & k_UCF_IS_INJOINED; }
+	BOOL	WasHappinessAttacked(void)	{ return m_flags & k_UCF_WAS_HAPPINESS_ATTACKED; }
+	BOOL	HasHut(void)				{ return m_flags & k_UCF_HAS_HUT; }
+	BOOL	IsRioting(void)				{ return m_flags & k_UCF_IS_RIOTING; }
+	BOOL	HasAirport(void)			{ return m_flags & k_UCF_HAS_AIRPORT; }
+	BOOL	HasSleepingUnits(void)		{ return m_flags & k_UCF_HAS_SLEEPINGUNITS; }
+	BOOL	IsWatchful(void)			{ return m_flags & k_UCF_IS_WATCHFUL; }
 
-	void    SetIsBioInfected(bool yes)          { if (yes) m_flags |= k_UCF_IS_BIOINFECTED; else m_flags &= ~k_UCF_IS_BIOINFECTED;}
-	void    SetIsNanoInfected(bool yes)         { if (yes) m_flags |= k_UCF_IS_NANOINFECTED; else m_flags &= ~k_UCF_IS_NANOINFECTED;}
-	void    SetIsConverted(bool yes)            { if (yes) m_flags |= k_UCF_IS_CONVERTED; else m_flags &= ~k_UCF_IS_CONVERTED;}
-	void    SetIsFranchised(bool yes)           { if (yes) m_flags |= k_UCF_IS_FRANCHISED; else m_flags &= ~k_UCF_IS_FRANCHISED;}
-	void    SetIsInjoined(bool yes)             { if (yes) m_flags |= k_UCF_IS_INJOINED; else m_flags &= ~k_UCF_IS_INJOINED;}
-	void    SetWasHappinessAttacked(bool yes)   { if (yes) m_flags |= k_UCF_WAS_HAPPINESS_ATTACKED; else m_flags &= ~k_UCF_WAS_HAPPINESS_ATTACKED;}
-	void    SetHasHut(bool yes)                 { if (yes) m_flags |= k_UCF_HAS_HUT; else m_flags &= ~k_UCF_HAS_HUT;}
-	void    SetIsRioting(bool yes)              { if (yes) m_flags |= k_UCF_IS_RIOTING; else m_flags &= ~k_UCF_IS_RIOTING;}
-	void    SetHasAirport(bool yes)             { if (yes) m_flags |= k_UCF_HAS_AIRPORT; else m_flags &= ~k_UCF_HAS_AIRPORT;}
-	void    SetHasSleepingUnits(bool yes)       { if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS;}
-	void    SetIsWatchful(bool yes)             { if (yes) m_flags |= k_UCF_IS_WATCHFUL; else m_flags &= ~k_UCF_IS_WATCHFUL; }
+	void	SetIsBioInfected(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_BIOINFECTED; else m_flags &= ~k_UCF_IS_BIOINFECTED;}
+	void	SetIsNanoInfected(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_NANOINFECTED; else m_flags &= ~k_UCF_IS_NANOINFECTED;}
+	void	SetIsConverted(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_CONVERTED; else m_flags &= ~k_UCF_IS_CONVERTED;}
+	void	SetIsFranchised(BOOL yes)			{ if (yes) m_flags |= k_UCF_IS_FRANCHISED; else m_flags &= ~k_UCF_IS_FRANCHISED;}
+	void	SetIsInjoined(BOOL yes)				{ if (yes) m_flags |= k_UCF_IS_INJOINED; else m_flags &= ~k_UCF_IS_INJOINED;}
+	void	SetWasHappinessAttacked(BOOL yes)	{ if (yes) m_flags |= k_UCF_WAS_HAPPINESS_ATTACKED; else m_flags &= ~k_UCF_WAS_HAPPINESS_ATTACKED;}
+	void	SetHasHut(BOOL yes)					{ if (yes) m_flags |= k_UCF_HAS_HUT; else m_flags &= ~k_UCF_HAS_HUT;}
+	void	SetIsRioting(BOOL yes)				{ if (yes) m_flags |= k_UCF_IS_RIOTING; else m_flags &= ~k_UCF_IS_RIOTING;}
+	void	SetHasAirport(BOOL yes)				{ if (yes) m_flags |= k_UCF_HAS_AIRPORT; else m_flags &= ~k_UCF_HAS_AIRPORT;}
+	void	SetHasSleepingUnits(BOOL yes)		{ if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS;}
+	void	SetIsWatchful(BOOL yes)				{ if (yes) m_flags |= k_UCF_IS_WATCHFUL; else m_flags &= ~k_UCF_IS_WATCHFUL; }
 
-	bool    IsAirfield(void) const;
-	bool    IsListeningPost(void) const;
-	bool    IsRadar(void) const;
-	bool    IsHealUnits(void) const;
-	bool    IsFort(void) const;
 
-	uint32	GetSlaveBits(void) const { return m_slaveBits; }
+
+
+
+
+	sint32 IsAirfield(void);
+	sint32 IsListeningPost(void);
+
+	sint32 IsRadar(void);
+	sint32 IsHealUnits(void);
+	sint32 IsFort(void);
+
+	uint32	GetSlaveBits(void) { return m_slaveBits; }	
 
 // Added by Martin Gühmann to generate these pieces of information
 // for hidden tiles correctly as well.
 
 	sint32 GetFoodFromTerrain() const;
-	sint32 GetFoodProduced() const;
+    sint32 GetFoodProduced() const;
 	sint32 GetShieldsFromTerrain() const;
-	sint32 GetShieldsProduced() const;
+    sint32 GetShieldsProduced() const;
 	sint32 GetGoldFromTerrain() const;
 	sint32 GetGoldProduced() const;
 
@@ -275,25 +237,26 @@ public:
 	void Serialize(CivArchive &archive);
 };
 
-class UnseenCellCarton
-{
+class UnseenCellCarton {
 public:
-    UnseenCellCarton(UnseenCell * unseenCell = NULL)
-    :
-        m_unseenCell    (unseenCell)
-    { };
+	UnseenCellCarton(UnseenCell *unseenCell) {
+		m_unseenCell = unseenCell;
+	}
+	UnseenCellCarton() {m_unseenCell = NULL;}
 
-	void GetPos(MapPoint & pos) const
+	void GetPos(MapPoint &pos) 
 	{
 		Assert(m_unseenCell);
 		m_unseenCell->GetPos(pos);
 	}
 
-    // Stubs to enable use of QuadTree<UnseenCellCarton>
+	void Castrate() {}
 	void DelPointers() {}
-    sint32 GetOwner() const { return 0; }
+	sint32 GetOwner() { return 0; }
 
-    UnseenCell *    m_unseenCell;
+	void Serialize(CivArchive &) {};
+
+	UnseenCell *m_unseenCell;
 };
 
 #endif

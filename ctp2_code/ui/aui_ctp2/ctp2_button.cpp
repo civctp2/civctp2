@@ -12,6 +12,7 @@
 
 
 #include <string>
+#include <strstream>
 
 
 #include "aui_imagelist.h"
@@ -21,11 +22,12 @@
 
 #include "AttractWindow.h"
 
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 #include "primitives.h"
 
 
 extern C3UI	*g_c3ui;
+extern ColorSet *g_colorSet;
 
 
 static const MBCHAR *k_CTP2_BUTTON_LDL_LAYER_UP			= "layerup";
@@ -57,14 +59,23 @@ AUI_ERRCODE ctp2_Button::InitCommonLdl(MBCHAR *ldlBlock, MBCHAR *ldlTemplate,
 									   sint32 x, sint32 y,
 									   sint32 width, sint32 height)
 {
-    ldl_datablock * theBlock = aui_Ldl::FindDataBlock(ldlBlock);
+	
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-    if (!theBlock)
-	{
-        theBlock = aui_Ldl::FindDataBlock(ldlTemplate);
-		if (!theBlock) 
-        {
-            return AUI_ERRCODE_HACK; 
+	
+	ldl_datablock *theBlock = NULL;
+
+	
+	if(theLdl->IsValid(ldlBlock)) {
+		theBlock = theLdl->GetLdl()->FindDataBlock(ldlBlock);
+	} else {
+		
+		if(theLdl->IsValid(ldlTemplate)) {
+			theBlock = theLdl->GetLdl()->FindDataBlock(ldlTemplate);
+		} else {
+			
+			return AUI_ERRCODE_HACK; 
+			                         
 		}
 	}
 

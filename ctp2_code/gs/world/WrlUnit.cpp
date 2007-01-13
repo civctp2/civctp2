@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of impact of units on the world
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -39,6 +36,7 @@
 #include "player.h"
 #include "SelItem.h"
 #include "installationtree.h"
+#include "InstRec.h"
 #include "UnitData.h"
 #include "cellunitlist.h"
 #include "network.h"
@@ -51,7 +49,7 @@
 
 extern QuadTree<Unit> *g_theUnitTree;
 
-extern bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
+extern BOOL player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
 extern UnitPool *g_theUnitPool;
 
 
@@ -73,15 +71,16 @@ extern UnitPool *g_theUnitPool;
 
 
 
-bool World::InsertUnit (const MapPoint &pos, Unit &id, 
+sint32 World::InsertUnit (const MapPoint &pos, Unit &id, 
 						  UnitDynamicArray &revealedUnits)
-{
+
+{ 
 	Assert(!id.IsCity());
 	g_theUnitTree->Insert(id);
 	id.DoVision(revealedUnits);
 	if(id.IsCity()) {
 		GetCell(pos)->SetCity(id);
-		return true;
+		return TRUE;
 	} else {
 		return GetCell(pos)->InsertUnit(id);
 	}
@@ -165,7 +164,7 @@ BOOL World::IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos,
     if (n < 1) 
         return FALSE; 
 
-    if (!player_isEnemy(owner, a->GetOwner()))
+    if (player_isEnemy(owner, a->GetOwner()) == FALSE) 
         return FALSE; 
 
 	if(is_check_only_visible && !a->IsVisible(owner)) {
@@ -229,7 +228,10 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 
 	
 	
-	UnitDynamicArray startUnits;
+	static UnitDynamicArray startUnits;
+	static UnitDynamicArray destUnits;
+	startUnits.Clear();
+	destUnits.Clear();
 	GetAdjacentUnits(startUnits, start);
 	sint32 i;
 	BOOL canSeeStartUnit = FALSE;
@@ -258,7 +260,6 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 	if(!canSeeStartUnit)
 		return FALSE;
 
-	UnitDynamicArray destUnits;
 	GetAdjacentUnits(destUnits, dest);
 	for(i = 0; i < destUnits.Num(); i++) {
 		if(destUnits[i].GetOwner() != owner &&

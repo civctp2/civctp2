@@ -1,10 +1,33 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef __REGARD_H__
 #define __REGARD_H__ 1
 
-class Regard;
+class CivArchive;
+
+enum REGARD_TYPE ;
+
+#define k_REGARD_VERSION_MAJOR	0									
+#define k_REGARD_VERSION_MINOR	0									
+
+
+
+
+
+
+
+
+#include "gstypes.h"
+
 enum REGARD_TYPE
 	{
     REGARD_TYPE_INSANE_HATRED,
@@ -13,15 +36,7 @@ enum REGARD_TYPE
 	REGARD_TYPE_NEUTRAL,
 	REGARD_TYPE_FRIENDLY,
 	REGARD_TYPE_LOVE
-};
-
-class CivArchive;
-
-
-#define k_REGARD_VERSION_MAJOR	0								
-#define k_REGARD_VERSION_MINOR	0								
-
-#include "gstypes.h"
+	} ;
 
 class Regard
 	{ 

@@ -23,7 +23,7 @@ public:
 	
 	aui_Cursor(
 		AUI_ERRCODE *retval,
-		MBCHAR const * filename = NULL );
+		MBCHAR *filename = NULL );
 	virtual ~aui_Cursor() {}
 
 protected:
@@ -33,7 +33,6 @@ protected:
 public:
 	AUI_ERRCODE	SetHotspot( sint32 x, sint32 y );
 	AUI_ERRCODE	GetHotspot( sint32 *x, sint32 *y );
-    void        GetHotspot(POINT & a_Hotspot) const;
 
 	
 	virtual AUI_ERRCODE LoadEmpty( sint32 width, sint32 height, sint32 bpp );

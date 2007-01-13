@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of user preferences.
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,14 +24,10 @@
 // - Addion by Martin Gühmann: Two more world shape options, 
 //   flat world and Uranus world.
 // - Memory leak repaired.
-// - Restored compatibility.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "spnewgamemapshapescreen.h"
-
 #include "c3window.h"
 #include "c3_popupwindow.h"
 #include "c3_button.h"
@@ -48,64 +41,48 @@
 #include "aui_uniqueid.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "profileDB.h"			// WORLD_SHAPE
+
+#include "profileDB.h"
+
 #include "custommapscreen.h"
+
 #include "spnewgamewindow.h"
+#include "spnewgamemapshapescreen.h"
+
 #include "keypress.h"
-#include <vector>
 
 extern C3UI			*g_c3ui;
 extern ProfileDB	*g_theProfileDB;
 extern World		*g_theWorld;
 
-namespace
-{
-	typedef	std::vector<aui_Radio *>	MapShapeSelector;
-	
-	MapShapeSelector					s_checkBox;
-    size_t        						s_mapShapeIndex;
-
-    void SelectShape(size_t shape)
-    {
-        s_mapShapeIndex = shape;
-		size_t	i		= 0;
-        for 
-        (
-        	MapShapeSelector::iterator	p = s_checkBox.begin();
-        	p != s_checkBox.end();
-        	++p
-        )
-        {
-            (*p)->SetState(i == s_mapShapeIndex);
-            ++i;
-        }
-    }
-    
-} // namespace
+//Allow more shape options by Martin Gühmann
+#define k_NUM_MAPSHAPEBOXES	4
 
 static c3_PopupWindow	*s_spNewGameMapShapeScreen	= NULL;
 
 
 
 static aui_SwitchGroup	*s_group		= NULL;
+static aui_Radio	**s_checkBox;
 static c3_Static	*s_ewLabel			= NULL; // Earth world
 static c3_Static	*s_dwLabel			= NULL; // Doughnut world
 //Added by Martin Gühmann
 static c3_Static	*s_uwLabel			= NULL; // Uranus world
 static c3_Static	*s_fwLabel			= NULL; // Flat world
 
-static MBCHAR const	checknames[WORLD_SHAPE_COUNT][50] = {
+static MBCHAR	checknames[k_NUM_MAPSHAPEBOXES][50] = {
 	//Added two more shapes for more shape options by Martin Gühmann
 	"MapShapeOne",   //Earth world (West-East wrap world)
 	"MapShapeTwo",   //Doughnut world
-	"MapShapeThree", //Flat world
-	"MapShapeFour"   //Uranus world (North-South wrap world)
+	"MapShapeThree", //Uranus world (North-South wrap world)
+	"MapShapeFour"   //Flat world
 };
 
 static sint32 s_useMode = 0;
 
 
-size_t spnewgamemapshapescreen_getMapShapeIndex( void )
+static sint32 s_mapShapeIndex = 0;
+sint32 spnewgamemapshapescreen_getMapShapeIndex( void )
 {
 	return s_mapShapeIndex;
 }
@@ -115,81 +92,87 @@ size_t spnewgamemapshapescreen_getMapShapeIndex( void )
 
 
 
-void spnewgamemapshapescreen_setMapShapeIndex(size_t index)
+void spnewgamemapshapescreen_setMapShapeIndex( sint32 index )
 {
-    SelectShape(index);
-	g_theProfileDB->SetWorldShape(static_cast<WORLD_SHAPE>(index));
+	
+	if ( index < 0 || index >= k_NUM_MAPSHAPEBOXES )
+		return;
+
+	for (sint32 i = 0;i < k_NUM_MAPSHAPEBOXES;i++ )
+		s_checkBox[ i ]->SetState( 0 );
+	s_checkBox[ index ]->SetState( 1 );
+
+	switch ( s_mapShapeIndex = index ) {
+	case 0:
+		
+		g_theProfileDB->SetXWrap( TRUE );
+		g_theProfileDB->SetYWrap( FALSE );
+		break;
+	case 1:
+		
+		g_theProfileDB->SetXWrap( TRUE );
+		g_theProfileDB->SetYWrap( TRUE );
+		break;
+	case 2:
+
+		g_theProfileDB->SetXWrap( FALSE );
+		g_theProfileDB->SetYWrap( TRUE );
+
+		break;
+	case 3:
+
+		g_theProfileDB->SetXWrap( FALSE );
+		g_theProfileDB->SetYWrap( FALSE );
+		break;
+
+	default:
+		
+		Assert( FALSE );
+		break;
+	}
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : spnewgamemapshapescreen_displayMyWindow
-//
-// Description: Display the map shape selection window.
-//
-// Parameters : viewMode 
-//              useMode
-//
-// Globals    : s_spNewGameMapShapeScreen
-//              s_checkBox
-//              s_useMode
-//
-// Returns    : sint32          : 0 when the window is available
-//
-// Remark(s)  : When the window does not exist, it will be created.
-//
-//----------------------------------------------------------------------------
-sint32 spnewgamemapshapescreen_displayMyWindow(BOOL viewMode, sint32 useMode)
-{
-    sint32 const    retval = 
-        s_spNewGameMapShapeScreen ? 0 : spnewgamemapshapescreen_Initialize();
 
-	for 
-	(
-		MapShapeSelector::iterator	p = s_checkBox.begin();
-		p != s_checkBox.end();
-		++p
-	)
-    {
-        (*p)->Enable(!viewMode);
-    }
+
+
+
+sint32	spnewgamemapshapescreen_displayMyWindow(BOOL viewMode, sint32 useMode)
+{
+	sint32 retval=0;
+	if(!s_spNewGameMapShapeScreen) { retval = spnewgamemapshapescreen_Initialize(); }
+
+	AUI_ERRCODE auiErr;
+
+	
+	for (sint32 i = 0;i < k_NUM_MAPSHAPEBOXES;i++ )
+		s_checkBox[ i ]->Enable( !viewMode );
 
 	s_useMode = useMode;
 
-	AUI_ERRCODE const auiErr = g_c3ui->AddWindow(s_spNewGameMapShapeScreen);
-	Assert(auiErr == AUI_ERRCODE_OK);
-
+	auiErr = g_c3ui->AddWindow(s_spNewGameMapShapeScreen);
 	keypress_RegisterHandler(s_spNewGameMapShapeScreen);
+
+	Assert( auiErr == AUI_ERRCODE_OK );
 
 	return retval;
 }
-
 sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
 	uint32 id = s_group->WhichIsSelected();
 
-	if (id) 
-	{
-		size_t	i = 0;
-		for 
-		( 
-			MapShapeSelector::iterator	p = s_checkBox.begin();
-			p != s_checkBox.end();
-			++p
-		)
-		{
-			if (id == (*p)->Id())
-			{
-				spnewgamemapshapescreen_setMapShapeIndex(i);
+	if ( id ) {
+		for ( sint32 i = 0;i < k_NUM_MAPSHAPEBOXES;i ++ ) {
+			if ( id == s_checkBox[i]->Id() ) {
+				spnewgamemapshapescreen_setMapShapeIndex( i );
 			}
-			++i;
 		}
 	}
 
-	AUI_ERRCODE const auiErr = 
-        g_c3ui->RemoveWindow( s_spNewGameMapShapeScreen->Id());
+	AUI_ERRCODE auiErr;
+
+	auiErr = g_c3ui->RemoveWindow( s_spNewGameMapShapeScreen->Id() );
 	keypress_RemoveHandler(s_spNewGameMapShapeScreen);
 
 	Assert( auiErr == AUI_ERRCODE_OK );
@@ -207,7 +190,7 @@ sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -242,15 +225,33 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	Assert( AUI_NEWOK(s_group, errcode) );
 	if ( !AUI_NEWOK(s_group, errcode) ) return errcode;
 
-	for (i = 0; i < WORLD_SHAPE_COUNT; ++i) 
-    {
-		sprintf(switchBlock, "%s.%s", controlBlock, checknames[i]);
-		aui_Radio *	shape	= 
-			new aui_Radio(&errcode, aui_UniqueId(), switchBlock);
-		s_checkBox.push_back(shape);
-        s_group->AddSwitch(shape);
+	s_checkBox = new aui_Radio*[k_NUM_MAPSHAPEBOXES];
+
+	for ( i = 0;i < k_NUM_MAPSHAPEBOXES;i++ ) {
+		sprintf( switchBlock, "%s.%s", controlBlock, checknames[i] );
+		s_checkBox[i] = new aui_Radio( &errcode, aui_UniqueId(), switchBlock );
+		Assert( AUI_NEWOK(s_checkBox[i], errcode) );
+		if ( !AUI_NEWOK(s_checkBox[i], errcode) ) return errcode;
+		s_group->AddSwitch( (aui_Radio *)s_checkBox[i] );
+	
 	}
-	SelectShape(static_cast<size_t>(g_theProfileDB->GetWorldShape()));
+
+	if ( g_theProfileDB->IsXWrap() ) {
+		if ( g_theProfileDB->IsYWrap() ) {
+			s_checkBox[1]->SetState(1); //Earth world (x-warp only)
+		}
+		else {
+			s_checkBox[0]->SetState(1); //Doughnut world (x-warp and y-warp)
+		}
+	}
+	else {
+		if ( g_theProfileDB->IsYWrap() ) {
+			s_checkBox[2]->SetState(1); //Uranus world (y-warp only)
+		}
+		else {
+			s_checkBox[3]->SetState(1); //Flat World (no warp)
+		}
+	}
 
 	s_ewLabel = spNew_c3_Static( &errcode, windowBlock, "EWLabel" );
 	s_dwLabel = spNew_c3_Static( &errcode, windowBlock, "DWLabel" );
@@ -268,7 +269,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 
 //----------------------------------------------------------------------------
 //
-// Name       : spnewgamemapshapescreen_Cleanup
+// Name       : spnewgamediffscreen_Cleanup
 //
 // Description: Release the memory of the screen.
 //
@@ -282,28 +283,26 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 //				s_uwLabel
 //				s_fwLabel
 //
-// Returns    : -
+// Returns    : AUI_ERRCODE	: always AUI_ERRCODE_OK
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void spnewgamemapshapescreen_Cleanup()
+
+AUI_ERRCODE spnewgamemapshapescreen_Cleanup()
 {
 	if (s_spNewGameMapShapeScreen) 
 	{
 		g_c3ui->RemoveWindow(s_spNewGameMapShapeScreen->Id());
 		keypress_RemoveHandler(s_spNewGameMapShapeScreen);
 
-		for 
-		(
-			MapShapeSelector::iterator p = s_checkBox.begin();
-			p != s_checkBox.end();
-			++p
-		)
+		for (sint32 i = 0; i < k_NUM_MAPSHAPEBOXES; i++ ) 
 		{
-			delete *p;
+			delete s_checkBox[i];
+			// NULLing unnecessary: deleting the container next
 		}
-		MapShapeSelector().swap(s_checkBox);
+		delete [] s_checkBox;
+		s_checkBox = NULL;
 
 #define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
 		mycleanup(s_group);
@@ -315,6 +314,8 @@ void spnewgamemapshapescreen_Cleanup()
 		mycleanup(s_spNewGameMapShapeScreen);
 #undef mycleanup
 	}
+
+	return AUI_ERRCODE_OK;
 }
 
 

@@ -35,12 +35,12 @@ IconSwitch::IconSwitch(
 	void *cookie,
 	BOOL selected )
 :
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase(NULL),
 	aui_Switch( retval, id, x, y, icon->TheSurface()->Width(), icon->TheSurface()->Height(), ActionFunc, cookie, selected ),
 	PatternBase( pattern ),
 	m_icon( icon ),
-	m_color( color )
+	m_color( color ),
+	aui_TextBase(NULL),
+	aui_ImageBase( (sint32)0 )
 {
 }
 

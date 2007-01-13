@@ -15,13 +15,13 @@ struct PSlicRegion;
 struct PSlicComplexRegion;
 class Unit;
 class SlicArray;
+enum SS_TYPE;
+enum GAME_EVENT_ARGUMENT;
 class SlicStructDescription;
 class SlicStructInstance;
 class Army;
 template <class T> class PointerList;
 class TerrainImprovement;
-
-#include "GameEventTypes.h"
 
 enum SLIC_SYM_SERIAL_TYPE {
 	SLIC_SYM_SERIAL_GENERIC,
@@ -89,16 +89,20 @@ protected:
 	SlicSymbolDebugInfo *m_debugInfo;
 
 public:
-	SlicSymbolData(SLIC_SYM type = SLIC_SYM_UNDEFINED);
+	SlicSymbolData();
+	SlicSymbolData(SLIC_SYM type);
 	SlicSymbolData(SlicArray *array);
 	SlicSymbolData(SlicStructInstance *aStruct);
-	SlicSymbolData(SlicSymbolData const & copy);
+	SlicSymbolData(SlicSymbolData *copy);
 	SlicSymbolData(SlicStructDescription *structDesc);
 
 	void Serialize(CivArchive &archive);
 	virtual SLIC_SYM_SERIAL_TYPE GetSerializeType() { return SLIC_SYM_SERIAL_GENERIC; }
 	virtual ~SlicSymbolData();
 
+	void Init();
+
+	
 	virtual const char *GetName() const;
 	virtual BOOL GetIntValue(sint32 &value) const;
 	virtual BOOL GetPlayer(PLAYER_INDEX &player) const;
@@ -119,20 +123,20 @@ public:
 	void SetIntValue(sint32 val);
 	BOOL SetValueFrom(SlicSymbolData *sym);
 	BOOL SetValueFromStackValue(SS_TYPE type, SlicStackValue value);
-	void SetString(MBCHAR const * str);
+	void SetString(MBCHAR *str);
 
 	SlicFunc *GetFunction() const;
 
 	void SetFunction(SlicFunc *func) { m_val.m_function_object = func; }
 	BOOL SetUnit(Unit &unit);
-	BOOL SetCity(const Unit &city);
-	BOOL SetArmy(const Army &army);
+	BOOL SetCity(Unit &city);
+	BOOL SetArmy(Army &army);
 	BOOL SetPos(MapPoint &pos);
 
 	BOOL GetUnitType(sint32 &type) const;
 	BOOL GetRegion(struct PSlicRegion &region) const;
 	BOOL GetComplexRegion(const struct PSlicComplexRegion *&region) const;
-	void GetDebugText(MBCHAR *text, sint32 len) const;
+	void GetDebugText(MBCHAR *text, sint32 len);
 
 	BOOL ArrayLookup(sint32 index, SS_TYPE &retType, SlicStackValue &retValue);
 	BOOL SetArrayValue(sint32 index, SS_TYPE insType, SlicStackValue insValue);
@@ -142,7 +146,7 @@ public:
 	SlicStructInstance *GetStruct();
 	void SetStruct(SlicStructInstance *aStruct);
 
-	SlicArray *GetArray() const;
+	SlicArray *GetArray();
 
 	SlicSegment *GetSegment();
 	void SetSegment(SlicSegment *segment);
@@ -153,9 +157,6 @@ public:
 	void AddWatch(SlicSymbolWatchCallback *watch);
 	void RemoveWatch(SlicSymbolWatchCallback *watch);
 	void NotifyChange();
-
-private:
-   	void Init();
 };
 
 SlicSymbolData *slicsymbol_Load(CivArchive &archive, SlicSymbolData *useSymbol);

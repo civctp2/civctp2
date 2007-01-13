@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Event handlers for the user interface.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,16 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Prevent production errors when pressing F3 after end of turn.
-// - The information window is no more closed on the begin of a new turn.
-//   (Aug 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -49,7 +44,7 @@
 #include "network.h"
 #include "gamesounds.h"
 
-extern sint32               g_modalWindow;
+extern sint32				g_modalWindow;
 
 
 STDEHANDLER(InterfaceCreateCityEvent)
@@ -67,7 +62,7 @@ STDEHANDLER(InterfaceCreateCityEvent)
 }
 
 STDEHANDLER(InterfaceMakePopEvent)
-{
+{	
 #if 0
 	if(g_theProfileDB->GetAutoOpenCityWindow()) {
 		static Unit city;
@@ -93,7 +88,7 @@ STDEHANDLER(InterfaceOpenInitialCityInterfaceEvent)
 	}
 	return GEV_HD_Continue;
 }
-
+		   
 STDEHANDLER(InterfaceUpdateCityEvent)
 {
 	static Unit city, selCity;
@@ -169,7 +164,7 @@ STDEHANDLER(InterfacePreBeginTurn)
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
 	if(pl == g_selected_item->GetVisiblePlayer()) {
-		close_AllScreensAndUpdateInfoScreen();
+		close_AllScreens();
 		// Prevent opening the city window during the production computations.
 		// It will be reenabled in InterfaceUpdateCityProjection.
 		++g_modalWindow;	
@@ -185,9 +180,9 @@ STDEHANDLER(InterfacePreBeginTurn)
 			
 			if (g_soundManager) {
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
-				                         gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
-				                         0,
-				                         0);
+										 gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
+										 0,
+										 0);
 			}
 		}
 	}

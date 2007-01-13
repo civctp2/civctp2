@@ -159,7 +159,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 
 	HRESULT hr;
 
-	 // Unchanged if command line argument: nonexclusive is present
+	
 	uint32 coopFlags = DDSCL_NORMAL;
 	if ( m_exclusiveMode )
 		coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
@@ -177,7 +177,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 
-	// With nonexclusive windows collor depth must be 16 bit otherwise the game will crash.
+	
 	hr = m_lpdd->SetDisplayMode( m_width, m_height, m_bpp );
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;

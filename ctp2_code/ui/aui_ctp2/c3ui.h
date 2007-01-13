@@ -17,43 +17,18 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// __AUI_USE_SDL__
-// Use SDL instead of DirectX.
 // 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Added compiler option to use SDL as a replacement for DirectX.
-// - Added option to register cleanup functions.
 //
 //----------------------------------------------------------------------------
-
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
-
 #ifndef __C3UI_H__
 #define __C3UI_H__
-
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-#include <list>         // std::list
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class   C3UI;
-
-typedef void (* UiCleanupCallback) (void);
-
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
 
 #if defined(__AUI_USE_SDL__)
 #include "aui_sdlui.h"
@@ -66,11 +41,7 @@ typedef void (* UiCleanupCallback) (void);
 #include "aui_resource.h"	
 #include "aui_window.h"
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
-
-#if defined(__AUI_USE_SDL__) 
+#if defined(__AUI_USE_SDL__)
 class C3UI : public aui_SDLUI
 #else
 class C3UI : public aui_DirectUI
@@ -136,14 +107,12 @@ public:
 	AUI_ERRCODE	RemovePictureSearchPath( MBCHAR *path )
 		{ return m_pictureResource->RemoveSearchPath( path ); }
 
-    void        RegisterCleanup(UiCleanupCallback);
-	bool        TopWindowIsNonBackground(void) const;
-	
-private:
-	aui_Resource<Pattern> *         m_patternResource;
-	aui_Resource<Icon> *            m_iconResource;
-	aui_Resource<Picture> *         m_pictureResource;
-    std::list<UiCleanupCallback>    m_cleanupActions;
+	BOOL TopWindowIsNonBackground(void);
+
+protected:
+	aui_Resource<Pattern>	*m_patternResource;
+	aui_Resource<Icon>		*m_iconResource;
+	aui_Resource<Picture>	*m_pictureResource;
 };
 
 

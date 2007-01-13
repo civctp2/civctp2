@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Options popup screen
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,7 +24,6 @@
 // - When you close the options screen after opening it from the main menu
 //   it returns you to the main menu rather than to the SP menu
 //   (JJB)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -81,6 +77,8 @@
 extern C3UI					*g_c3ui;
 extern c3_PopupWindow		*g_scorewarn;
 extern GameSettings			*g_theGameSettings;
+
+extern aui_Surface			*g_sharedSurface;
 
 extern Network				g_network;
 
@@ -193,7 +191,7 @@ sint32 optionsscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE optionsscreen_Initialize( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 

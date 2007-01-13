@@ -157,11 +157,19 @@ protected:
 
 	sint32		m_selectedItem; 
 
+#if defined(_MSC_VER)	
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLGrabOutside;
+
+	virtual MouseEventCallback MouseLDropOutside;
+	virtual MouseEventCallback MouseRGrabInside;
+#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
 
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+#endif
 };
 
 

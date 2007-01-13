@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,10 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-// - Generate debug version when set.
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -84,64 +80,63 @@ uint32 aui_Control::m_controlClassId = aui_UniqueId();
 static const MBCHAR *const k_AUI_CONTROL_LDL_STATUS_TEXT	=	"statustext";
 
 
-aui_Control::aui_Control
-(
-	AUI_ERRCODE *           retval,
-	uint32                  id,
-	MBCHAR *                ldlBlock,
-	ControlActionCallback * ActionFunc,
-	void *                  cookie 
-)
+aui_Control::aui_Control(
+	AUI_ERRCODE *retval,
+	uint32 id,
+	MBCHAR *ldlBlock,
+	ControlActionCallback *ActionFunc,
+	void *cookie )
 :
+	aui_Region              (retval, id, ldlBlock),
 	aui_ImageBase           (ldlBlock),
 	aui_TextBase            (ldlBlock, (const MBCHAR *) NULL),
-	aui_Region              (retval, id, ldlBlock),
 	aui_SoundBase           (ldlBlock),
-	m_stringTable           (NULL),
-	m_allocatedTip          (false),
 	m_statusText            (NULL),
 	m_numberOfLayers        (0), 
-	m_imagesPerLayer        (0),
+    m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
-	m_layerRenderFlags      (NULL)
+	m_layerRenderFlags      (NULL),
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+    m_stringTable           (NULL),
+    m_allocatedTip          (false)
 {
-	if (AUI_SUCCESS(*retval))
-    {
-	    *retval = InitCommonLdl(ldlBlock, ActionFunc, cookie);
-    }
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
+
+	*retval = InitCommonLdl( ldlBlock, ActionFunc, cookie );
+	Assert( AUI_SUCCESS(*retval) );
 }
 
 
 
-aui_Control::aui_Control
-(
-	AUI_ERRCODE *           retval,
-	uint32                  id,
-	sint32                  x,
-	sint32                  y,
-	sint32                  width,
-	sint32                  height,
-	ControlActionCallback * ActionFunc,
-	void *                  cookie 
-)
+aui_Control::aui_Control(
+	AUI_ERRCODE *retval,
+	uint32 id,
+	sint32 x,
+	sint32 y,
+	sint32 width,
+	sint32 height,
+	ControlActionCallback *ActionFunc,
+	void *cookie )
 :
+	aui_Region              (retval, id, x, y, width, height),
 	aui_ImageBase           ((sint32) 0),
 	aui_TextBase            (NULL),
-	aui_Region              (retval, id, x, y, width, height),
 	aui_SoundBase           ((MBCHAR **) NULL),
-	m_stringTable           (NULL),
-	m_allocatedTip          (false),
 	m_statusText            (NULL),
 	m_numberOfLayers        (0), 
-	m_imagesPerLayer        (0),
+    m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
+    m_stringTable           (NULL),
+    m_allocatedTip          (false)
 {
-	if (AUI_SUCCESS(*retval))
-    {
-    	*retval = InitCommon(ActionFunc, cookie);
-	}
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
+
+	*retval = InitCommon( ActionFunc, cookie );
+	Assert( AUI_SUCCESS(*retval) );
 }
 
 
@@ -151,7 +146,15 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -207,7 +210,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	
 	static MBCHAR stblock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( stblock, "%s.%s", ldlBlock, k_AUI_CONTROL_LDL_STRINGTABLE );
-    ldl_datablock *ldlblock = aui_Ldl::GetLdl()->FindDataBlock( stblock );
+	ldl_datablock *ldlblock = theLdl->GetLdl()->FindDataBlock( stblock );
 	if ( ldlblock )
 	{
 		m_stringTable = new aui_StringTable( &errcode, stblock );
@@ -219,14 +222,10 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	
 	InitializeImageLayers(block);
 
-	if (block->GetAttributeType(k_AUI_CONTROL_CANFOCUS) == ATTRIBUTE_TYPE_INT)
-    {
-		m_focusIndex = block->GetInt(k_AUI_CONTROL_CANFOCUS);
-    }
-    else
-    {
+	if(block->GetAttributeType(k_AUI_CONTROL_CANFOCUS) != ATTRIBUTE_TYPE_INT)
 		m_focusIndex = -1;
-    }
+	else
+		m_focusIndex = block->GetInt(k_AUI_CONTROL_CANFOCUS);
 
 	return AUI_ERRCODE_OK;
 }
@@ -1368,19 +1367,14 @@ aui_Control::FillSize aui_Control::WidthToFill(ldl_datablock *theBlock,
 		sprintf(stretchXAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_X, layerIndex, imageIndex);
 
 		
-		if (theBlock->GetAttributeType(stretchXAttributeString) &&
-			theBlock->GetBool(stretchXAttributeString)
-           ) 
-        {
+		if(theBlock->GetAttributeType(stretchXAttributeString) &&
+			theBlock->GetBool(stretchXAttributeString)) {
 			result.first++;
-		} 
-        else 
-        {
-			result.second = std::max<sint32>
-                (0,
-				 result.second - 
-                    m_imageLayerList->GetSize(layerIndex, imageIndex)->right
-                );
+		} else {
+			
+				result.second = std::max(0L,
+				result.second -
+				m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 		}
 	}
 
@@ -1438,10 +1432,8 @@ bool aui_Control::FillWidth(ldl_datablock *theBlock,
 				desiredWidth;
 		}
 
-		width = std::max<sint32>
-                (width,
-			     m_imageLayerList->GetSize(layerIndex, imageIndex)->right
-                );
+		width = std::max(width,
+			m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 	}
 
 	
@@ -1537,19 +1529,18 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 		sprintf(stretchYAttributeString, "%s%d%d", k_AUI_CONTROL_IMAGE_STRETCH_Y, layerIndex, imageIndex);
 
 		
-		if (theBlock->GetAttributeType(stretchYAttributeString) &&
-			theBlock->GetBool(stretchYAttributeString)
-           ) 
-        {
+		if(theBlock->GetAttributeType(stretchYAttributeString) &&
+			theBlock->GetBool(stretchYAttributeString)) {
 			result.first++;
-		} 
-        else 
-        {
-			result.second = std::max<sint32>
-                (0,
-				 result.second -
-				    m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom
-                );
+		} else {
+			
+#if defined(ACTIVISION_DEFAULT)
+			result.second = std::_MAX(0L,
+#else
+			result.second = std::max(0L,
+#endif
+				result.second -
+				m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 		}
 	}
 
@@ -1621,10 +1612,12 @@ bool aui_Control::FillHeight(ldl_datablock *theBlock,
 				desiredHeight;
 		}
 
-		height = std::max<sint32>
-                    (height,
-			         m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom
-                    );
+#if defined(ACTIVISION_DEFAULT)
+		height = std::_MAX(height,
+#else
+		height = std::max(height,
+#endif
+			m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
 	}
 
 	
@@ -1714,13 +1707,16 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 			(rowIndices[rowIndex + 1] - 1) : (m_imagesPerLayer - 1);
 
 		
-		numberOfColumns = std::max<sint32>(numberOfColumns,
-			                               (imageEnd - imageStart + 1)
-                                          );
+#if defined(ACTIVISION_DEFAULT)		
+		numberOfColumns = std::_MAX(numberOfColumns,
+#else
+		numberOfColumns = std::max(numberOfColumns,
+#endif
+			(imageEnd - imageStart + 1L));
 	}
 
 	
-	return numberOfColumns;
+	return(numberOfColumns);
 }
 
 

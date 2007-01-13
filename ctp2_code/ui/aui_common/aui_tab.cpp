@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface tab
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_uniqueid.h"
@@ -45,9 +26,9 @@ aui_Tab::aui_Tab(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Radio( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -73,9 +54,9 @@ aui_Tab::aui_Tab(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
-	aui_TextBase( NULL ),
-	aui_Radio( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -94,10 +75,10 @@ AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
 	sprintf( block, "%s.%s", ldlBlock, "pane" );
 
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	m_pane = new aui_Static( &errcode, aui_UniqueId(), block );
 	Assert( AUI_NEWOK(m_pane,errcode) );
-	if ( !AUI_NEWOK(m_pane,errcode) ) return AUI_ERRCODE_OK; // Returnin OK?
+	if ( !AUI_NEWOK(m_pane,errcode) ) return AUI_ERRCODE_OK;
 
 	m_pane->SetBlindness( TRUE );
 
@@ -107,7 +88,7 @@ AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
 	
 	AddChild( m_pane );
 
-	return AUI_ERRCODE_OK; // Why not errcode?
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -120,7 +101,7 @@ AUI_ERRCODE aui_Tab::InitCommon( sint32 paneWidth, sint32 paneHeight )
 
 	
 	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	m_pane = new aui_Static(
 		&errcode,
 		aui_UniqueId(),
@@ -157,7 +138,7 @@ sint32 aui_Tab::SetState( sint32 state )
 	sint32 prevState = m_state;
 
 	
-	if ((m_state = state))
+	if ( m_state = state )
 	{
 		
 		

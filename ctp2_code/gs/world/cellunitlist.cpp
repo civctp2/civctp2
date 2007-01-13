@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of a list of Units in the same cell
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,13 +28,12 @@
 //   suggestions by NelsonAndBronte.
 // - Make unit types with 0 movement stand still (compiler option).
 // - Handled crashes with invalid units.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "cellunitlist.h"
-
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "player.h"
 #include "UnitRec.h"
@@ -47,66 +45,65 @@
 #include "SlicEngine.h"
 #include "Cell.h"
 #include "UnitDynArr.h"
+#include "UnitPool.h"
 #include "UnitData.h"
 #include "UnitRecord.h"
 #include "MoveFlags.h"
 #include "wonderutil.h"
 #include "GameEventManager.h"
-#include "TerrainRecord.h"	    // TerrainRecord
+#include "TerrainRecord.h"	// TerrainRecord
 
-// Visibility cheat flags
-extern sint32 g_god;
 extern sint32 g_fog_toggle;
 
-bool CellUnitList::Insert(Unit id)
+sint32 CellUnitList::Insert(Unit id)
 {
 	Assert(m_nElements < k_MAX_ARMY_SIZE);
 	if(m_nElements < k_MAX_ARMY_SIZE) {
 		m_array[m_nElements].m_id = id.m_id;
 		m_nElements++;
 		UpdateMoveIntersection();
-		return true;
+		return 1;
 	}
-	return false;
+	return 0;
 }
 
-bool CellUnitList::CanEnter(const MapPoint &point) const
+BOOL CellUnitList::CanEnter(const MapPoint &point) const
 {
 	if(m_nElements < 1) {
 		
-		return true;
+		return TRUE;
 	}
 
 	Cell *cell = g_theWorld->GetCell(point);
 	if(cell->GetCity().IsValid() &&
 	   cell->GetCity().GetOwner() == m_array[0].GetOwner()) {
-		return true;
+		return TRUE;
 	}
 	
 	uint32 env = cell->GetEnv();
 
 	if(m_moveIntersection) {
 		if((env & m_moveIntersection))
-			return true;
+			return TRUE;
 
 		if((m_moveIntersection & k_BIT_MOVEMENT_TYPE_AIR) && 
 		   !(env & k_BIT_MOVEMENT_TYPE_SPACE)) {
-			return true;
+			return TRUE;
 		}
 
 		if((m_moveIntersection & k_BIT_MOVEMENT_TYPE_LAND) &&
 		   (env & k_MASK_ENV_ROAD)) {
-			return true;
+			return TRUE;
 		}
 
 		if((m_moveIntersection & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
 		   !(m_moveIntersection & k_BIT_MOVEMENT_TYPE_WATER) &&
 		   (env & k_BIT_MOVEMENT_TYPE_WATER) &&
 		   wonderutil_GetAllBoatsDeepWater(g_player[m_array[0].GetOwner()]->m_builtWonders)) {
-			return true;
+			return TRUE;
 		}
 
-		return false;
+		return FALSE;
 	} else {
 		
 		for(sint32 i = 0; i < m_nElements; i++) {
@@ -124,10 +121,10 @@ bool CellUnitList::CanEnter(const MapPoint &point) const
 				   wonderutil_GetAllBoatsDeepWater(g_player[GetOwner()]->m_builtWonders)) {
 					continue;
 				}
-				return false;
+				return FALSE;
 			}
 		}
-		return true;
+		return TRUE;
 	}
 }
 
@@ -146,6 +143,7 @@ bool CellUnitList::CanEnter(const MapPoint &point) const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 bool CellUnitList::GetMovementTypeLand() const 
 { 
     for (int i = 0; i < m_nElements; ++i) 
@@ -159,15 +157,15 @@ bool CellUnitList::GetMovementTypeLand() const
     return true;
 }
 
-bool CellUnitList::HasWormholeProbe() const
+BOOL CellUnitList::HasWormholeProbe() const
 {
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetWormholeProbe()) {
-			return true;
+			return TRUE;
 		}
 	}
-	return false;
+	return FALSE;
 }
 
 PLAYER_INDEX CellUnitList::GetOwner() const
@@ -190,7 +188,7 @@ void CellUnitList::GetPos(MapPoint &pos) const
     m_array[0].GetPos(pos); 
 }
 
-bool CellUnitList::IsAtLeastOneMoveLand() const
+BOOL CellUnitList::IsAtLeastOneMoveLand() const
 
 {
     
@@ -198,38 +196,38 @@ bool CellUnitList::IsAtLeastOneMoveLand() const
     
     for (i=0; i<m_nElements; i++) { 
         if (m_array[i].GetMovementTypeLand()){
-            return true; 
+            return TRUE; 
         }
     }
-    return false; 
+    return FALSE; 
 }
 
-bool CellUnitList::IsAtLeastOneMoveWater() const
+BOOL CellUnitList::IsAtLeastOneMoveWater() const
 {
     
     sint32 i; 
     
     for (i=0; i<m_nElements; i++) { 
         if (m_array[i].GetMovementTypeSea()){
-            return true; 
+            return TRUE; 
         }
     }
-    return false;
+    return FALSE;
 }
 
 
-bool CellUnitList::IsAtLeastOneMoveShallowWater() const
+BOOL CellUnitList::IsAtLeastOneMoveShallowWater() const
 {
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetMovementTypeShallowWater()) {
-			return true;
+			return TRUE;
 		}
 	}
-	return false;
+	return FALSE;
 }
 
-bool CellUnitList::IsAtLeastOneMoveAir() const
+BOOL CellUnitList::IsAtLeastOneMoveAir() const
 
 {
     
@@ -237,14 +235,14 @@ bool CellUnitList::IsAtLeastOneMoveAir() const
     
     for (i=0; i<m_nElements; i++) { 
         if (m_array[i].GetMovementTypeAir()) {
-            return true; 
+            return TRUE; 
         }
     }
     
-    return false;
+    return FALSE;
 }
 
-bool CellUnitList::IsAtLeastOneMoveSpace() const
+BOOL CellUnitList::IsAtLeastOneMoveSpace() const
 
 {
     
@@ -252,14 +250,14 @@ bool CellUnitList::IsAtLeastOneMoveSpace() const
     
     for (i=0; i<m_nElements; i++) { 
         if (m_array[i].GetMovementTypeSpace()) {
-            return true; 
+            return TRUE; 
         }
     }
     
-    return false;
+    return FALSE;
 }
 
-bool CellUnitList::IsAtLeastOneMoveMountain() const
+BOOL CellUnitList::IsAtLeastOneMoveMountain() const
 
 {
     
@@ -267,72 +265,74 @@ bool CellUnitList::IsAtLeastOneMoveMountain() const
     
     for (i=0; i<m_nElements; i++) { 
         if (m_array[i].GetMovementTypeMountain()) {
-            return true; 
+            return TRUE; 
         }
     }
     
-    return false;
+    return FALSE;
 }
 
-bool CellUnitList::IsEnemy(PLAYER_INDEX owner) const
+BOOL CellUnitList::IsEnemy(PLAYER_INDEX owner) const
 {
 	sint32 myOwner = GetOwner();
 	if(g_network.IsActive() && g_network.TeamsEnabled() &&
 	   g_player[myOwner] && g_player[owner] &&
 	   g_player[myOwner]->m_networkGroup == g_player[owner]->m_networkGroup) {
-		return false;
+		return FALSE;
 	}
 
-	uint32 a, b;
-	a = ~(g_player[m_array[0].GetOwner()]->GetMaskAlliance()); 
-	b = (0x00000001 << owner); 
-
-	return (a & b) != 0;
+    uint32 a, b;
+    a = ~(g_player[m_array[0].GetOwner()]->GetMaskAlliance()); 
+    b = (0x00000001 << owner); 
+    
+    return a & b;
 }
 
-bool CellUnitList::IsEnemy( Unit defender) const
+BOOL CellUnitList::IsEnemy( Unit defender) const
 { 
     return player_isEnemy(GetOwner(), defender.GetOwner());
 }
 
-bool CellUnitList::IsEnemy(CellUnitList &defender) const
+BOOL CellUnitList::IsEnemy(CellUnitList &defender) const
 { 
     if (defender.Num() < 1) 
-        return false; 
+        return FALSE; 
     else 
         return IsEnemy(defender[0]); 
 }
 
-bool CellUnitList::CanAtLeastOneCaptureCity() const
+BOOL CellUnitList::CanAtLeastOneCaptureCity() const
 {
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		if(!m_array[i].GetDBRec()->GetCantCaptureCity()) {
-			return true;
+			return TRUE;
 		}
 	}
-	return false;
+	return FALSE;
 }
 
-bool CellUnitList::IsVisible(PLAYER_INDEX player) const
+BOOL CellUnitList::IsVisible(sint32 player) const
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetVisibility() & (1 << player))
-			return true;
+			return TRUE;
 	}
-	return false;
+	return FALSE;
 }
 
 
-bool CellUnitList::CanBeExpelled()
+BOOL CellUnitList::CanBeExpelled()
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(!m_array[i].CanBeExpelled())
-			return false;
+			return FALSE;
 	}
-	return true;
+	return TRUE;
 }
 
+
+extern sint32 g_god;
 
 //----------------------------------------------------------------------------
 //
@@ -364,6 +364,7 @@ bool CellUnitList::CanBeExpelled()
 //                "visibility class" + strength (enemy unit).
 //
 //----------------------------------------------------------------------------
+
 bool CellUnitList::GetTopVisibleUnitOfMoveType
 (
 	PLAYER_INDEX const	looker,
@@ -377,7 +378,7 @@ bool CellUnitList::GetTopVisibleUnitOfMoveType
     uint32	min_vis			= 0xffffffff; 
 	double	minmove			= -1;
 
-	Army	selectedArmy;
+	Army	selectedArmy(0);
 	g_selected_item->GetSelectedArmy(selectedArmy);
 
 	for (sint32 i = 0; i < m_nElements; ++i)
@@ -539,16 +540,16 @@ Unit CellUnitList::GetTopVisibleUnit(PLAYER_INDEX const looker) const
         }
     }                                
     
-    return Unit(); 
+    return Unit(0); 
 }
 
-bool CellUnitList::CanBeSued() const
+BOOL CellUnitList::CanBeSued() const
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetCanBeSued())
-			return true;
+			return TRUE;
 	}
-	return false;
+	return FALSE;
 }
 
 void CellUnitList::ForceVisibleThisTurn(const PLAYER_INDEX to_me)
@@ -576,7 +577,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 			
 			
 			Unit hc;
-			MapPoint slpos;
+			static MapPoint slpos;
 			GetPos(slpos);
 			
 
@@ -588,10 +589,12 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 			sint32 r = g_player[m_array[0].GetOwner()]->
 				GetSlaveCity(slpos, hc);
 			
-			Assert(r && (hc.m_id != (0)));
-			if (hc.m_id == (0))
+			Assert(hc.m_id != (0));
+			if(hc.m_id == (0))
 				break;
 
+			static MapPoint cpos;
+			hc.GetPos(cpos);
 			if(g_network.IsHost()) {
 				g_network.Block(hc.GetOwner());
 			}
@@ -612,31 +615,31 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 	}
 }
 	
-bool CellUnitList::ExertsZOC() const
+BOOL CellUnitList::ExertsZOC() const
 {
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		if(!m_array[i].IsNoZoc())
-			return true;
+			return TRUE;
 	}
-	return false;
+	return FALSE;
 }
 
 
 
-bool CellUnitList::CanMoveIntoCell(const MapPoint &pos, 
-								   bool &zocViolation,
-								   bool ignoreZoc,
-								   bool &alliedCity)
+BOOL CellUnitList::CanMoveIntoCell(const MapPoint &pos, 
+								   BOOL &zocViolation,
+								   BOOL ignoreZoc,
+								   BOOL &alliedCity)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 	CellUnitList *ul = cell->UnitArmy();
 
-	zocViolation = false;
-	alliedCity = false;
+	zocViolation = FALSE;
+	alliedCity = FALSE;
 
 	if(ul && ul->Num() + m_nElements > k_MAX_ARMY_SIZE)
-		return false;
+		return FALSE;
 
 	static MapPoint myPos;
 	GetPos(myPos);
@@ -644,39 +647,39 @@ bool CellUnitList::CanMoveIntoCell(const MapPoint &pos,
 	myOwner = GetOwner();
 
 	if(!CanEnter(pos)) {
-		return false;
+		return FALSE;
 	}
 
 	if((!(m_flags & k_CULF_IGNORES_ZOC)) && !ignoreZoc) {
-		if(g_theWorld->IsMoveZOC(myOwner, myPos, pos, false)) {
-			zocViolation = true;
-			return false;
+		if(g_theWorld->IsMoveZOC(myOwner, myPos, pos, FALSE)) {
+			zocViolation = TRUE;
+			return FALSE;
 		}
 	}
 
 	if(cell->GetCity().m_id != (0)) {
 		if(myOwner != cell->GetCity().GetOwner()) {
 			if(m_flags & k_CULF_CANT_CAPTURE_CITY)
-				return false;
+				return FALSE;
 			sint32 cityOwner = cell->GetCity().GetOwner();
 			
 			if(myOwner == PLAYER_INDEX_VANDALS && wonderutil_GetProtectFromBarbarians(g_player[cityOwner]->m_builtWonders)) {
-				return false;
+				return FALSE;
 			}
 
 			if(!IsEnemy(cell->GetCity().GetOwner()) ||
 			   g_player[myOwner]->WillViolateCeaseFire(cityOwner) ||
 			   g_player[myOwner]->WillViolatePact(cityOwner)) {
-				alliedCity = true;
-				return false;
+				alliedCity = TRUE;
+				return FALSE;
 			}
 		}
 	}
 
-    return true;
+    return TRUE;
 }
 
-bool CellUnitList::IsMovePointsEnough(const double cost) const
+BOOL CellUnitList::IsMovePointsEnough(const double cost) const
 {
 #if defined(USE_STOP_ZERO_MOVEMENT)
 	for (sint32 i = 0; i < m_nElements; ++i)
@@ -687,7 +690,7 @@ bool CellUnitList::IsMovePointsEnough(const double cost) const
 		    ((mp < cost) && !m_array[i].GetFirstMoveThisTurn())
 		   )
 		{
-			return false;
+			return FALSE;
 		}
 		// else: unit has enough movement points
 	}
@@ -703,24 +706,15 @@ bool CellUnitList::IsMovePointsEnough(const double cost) const
 
         mp = m_array[i].GetMovementPoints(); 
         if (mp < cost) { 
-            return false; 
+            return FALSE; 
         }
-
-		//EMOD
-//		sint32 PWFuel;
-//		if (m_array[i].GetDBRec->GetPWMoveCost(PWFuel)) {
-//			if ((g_player[m_owner]->m_materialPool->GetMaterials() <= PWFuel) && (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)) 
-//				return false;
-//			}
-//		}
-//END EMOD
     }
 #endif
 
-    return true; 
+    return TRUE; 
 }
 
-bool CellUnitList::IsMovePointsEnough(const MapPoint &pos)
+BOOL CellUnitList::IsMovePointsEnough(const MapPoint &pos)
 {
 
     double cost; 
@@ -739,87 +733,86 @@ bool CellUnitList::IsMovePointsEnough(const MapPoint &pos)
     return IsMovePointsEnough(cost); 
 }
  
-bool CellUnitList::GetMovementTypeAir() const 
+BOOL CellUnitList::GetMovementTypeAir() const 
 { 
     sint32 i; 
     
     for (i=0; i<m_nElements; i++) { 
         if (!m_array[i].GetMovementTypeAir()) {
-            return false; 
+            return FALSE; 
         }
     }
     
-    return true;
+    return TRUE;
 }
 
-bool CellUnitList::CanBeCargoPodded() const
+BOOL CellUnitList::CanBeCargoPodded() const
 {
 	sint32 i;
-	sint32 cargoPodType = -1;
-	sint32 gov = g_player[GetOwner()]->GetGovernmentType();
+	sint32 cargoPodType;
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
-		if(g_theUnitDB->Get(i, gov)->GetCargoPod()) {
+		if(g_theUnitDB->Get(i)->GetCargoPod()) {
 			cargoPodType = i;
 			break;
 		}
 	}
 	Assert(i < g_theUnitDB->NumRecords());
 	if(i >= g_theUnitDB->NumRecords())
-		return false;
+		return FALSE;
 	
-	const UnitRecord *cargoRec = g_theUnitDB->Get(cargoPodType, gov);
-	extern bool UnitCanCarry(sint32 src, sint32 dest, sint32 government);
+	const UnitRecord *cargoRec = g_theUnitDB->Get(cargoPodType);
+	extern BOOL UnitCanCarry(sint32 src, sint32 dest);
 	if(!cargoRec->GetCargoDataPtr())
-		return false;
+		return FALSE;
 
 	for(i = 0; i < m_nElements; i++) {
 		if(cargoRec->GetCargoDataPtr()->GetMaxCargo() < m_nElements ||
-		   !UnitCanCarry(cargoPodType, m_array[i].GetType(), gov)) {
-			return false;
+		   !UnitCanCarry(cargoPodType, m_array[i].GetType())) {
+			return FALSE;
 		}
 	}
-	return true;
+	return TRUE;
 }
 
-bool CellUnitList::CanSpaceLand() const
+BOOL CellUnitList::CanSpaceLand() const
 {
     sint32 i; 
     const UnitRecord *rec;
     for (i=0; i<m_nElements; i++) { 
-		rec = m_array[i].GetDBRec();
+		rec = g_theUnitDB->Get(m_array[i].GetType());
         if (!rec->GetSpaceLand()) {
-            return false; 
+            return FALSE; 
         }
     }
     
-    return true;
+    return TRUE;
 }
 
-bool CellUnitList::CanSpaceLaunch() const
+BOOL CellUnitList::CanSpaceLaunch() const
 {
     sint32 i; 
     const UnitRecord *rec;
-    for (i=0; i<m_nElements; i++) {
-		rec = m_array[i].GetDBRec();
-        if (!rec->HasSpaceLaunch()) {
-            return false;
+    for (i=0; i<m_nElements; i++) { 
+		rec = g_theUnitDB->Get(m_array[i].GetType());
+        if (!rec->GetSpaceLaunch()) {
+            return FALSE; 
         }
     }
     
-    return true;
+    return TRUE;
 }
 
 
-bool CellUnitList::IsIgnoresZOC() const
+BOOL CellUnitList::IsIgnoresZOC() const
 { 
     
     sint32 i; 
     
     for (i=0; i<m_nElements; i++) { 
         if (!m_array[i].IsIgnoresZOC())
-            return false; 
+            return FALSE; 
     } 
-    return true; 
+    return TRUE; 
 }
 
 
@@ -836,8 +829,8 @@ CellUnitList::CellUnitList(const DynamicArray<Unit> &copyme)
 {
 	Assert(copyme.Num() < k_MAX_ARMY_SIZE);
 	if(copyme.Num() < k_MAX_ARMY_SIZE) {
-		memcpy(m_array, copyme.m_array, sizeof(Unit) * copyme.Num());
-		m_nElements = copyme.Num();
+		memcpy(m_array, copyme.m_array, sizeof(Unit) * copyme.m_nElements);
+		m_nElements = copyme.m_nElements;
 		UpdateMoveIntersection();
 	}
 }
@@ -884,14 +877,14 @@ void CellUnitList::KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 	}
 }
 
-bool CellUnitList::IsPresent(const Unit &u)
+sint32 CellUnitList::IsPresent(const Unit &u)
 {
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		if(m_array[i].m_id == u.m_id)
-			return true;
+			return 1;
 	}
-	return false;
+	return 0;
 }
 
 void CellUnitList::UpdateMoveIntersection()
@@ -934,8 +927,7 @@ void CellUnitList::UpdateMoveIntersection()
 		
 		
 		
-		if (m_array[i].IsValid()) 
-        {
+		if(g_theUnitPool->IsValid(m_array[i])) {
 			m_moveIntersection &= oldMoveBits;
 			if(!m_array[i].IsIgnoresZOC()) {
 				m_flags &= ~(k_CULF_IGNORES_ZOC);
@@ -971,25 +963,25 @@ void CellUnitList::ComputeStrength(double & attack,
 	double hitpoints;
 	
 	double r;
+	sint32 unit_type;
 	UnitDynamicArray* cargo_list;
 	int j;
 	const UnitRecord *rec;
 	
-	for (int i = 0; i < m_nElements; i++) 
-    {
-		if (!m_array[i].IsValid())
+	for(int i = 0; i < m_nElements; i++) {
+		if (!g_theUnitPool->IsValid(m_array[i]))
 			continue;
-
-		rec = m_array[i].GetDBRec();
-		firepower = static_cast<double>(rec->GetFirepower());
-		attack   += static_cast<double>(rec->GetAttack()
+		unit_type = m_array[i].GetType();
+		rec = g_theUnitDB->Get(unit_type);
+		firepower = double(g_theUnitDB->Get(unit_type)->GetFirepower());
+        attack += (double) (rec->GetAttack() 
 			* m_array[i].GetHP()
 			* firepower); 
-		defense  += static_cast<double>(m_array[i]->GetPositionDefense(Unit())
+        defense += (double) (m_array[i]->GetPositionDefense(Unit(0)) 
 			* m_array[i].GetHP()
 			* firepower);
-		r         = static_cast<double>(rec->GetZBRangeAttack()
-		                              * firepower);
+        r = rec->GetZBRangeAttack()	
+			* firepower;
         if ( r > 0.0 ) { 
             ranged +=  r; 
             ranged_unit_count++; 
@@ -998,8 +990,8 @@ void CellUnitList::ComputeStrength(double & attack,
 		
 		if (rec->GetCanBombardLand() ||
 			rec->GetCanBombardMountain()) {
-			land_bombard += static_cast<double>(rec->GetAttack()
-			                                  * m_array[i].GetHP()
+			land_bombard += (double) (rec->GetAttack() 
+				* double(m_array[i].GetHP())
 				* firepower);
 		}
 		
@@ -1022,18 +1014,17 @@ void CellUnitList::ComputeStrength(double & attack,
 		if (cargo_list != NULL)
 		{
 			for (j = 0; j < cargo_list->Num(); j++) {
-				rec = cargo_list->Access(j).GetDBRec();
+				unit_type = cargo_list->Access(j).GetType();
+				rec = g_theUnitDB->Get(unit_type);
 				
-				firepower = static_cast<double>(rec->GetFirepower());
-				hitpoints = static_cast<double>(rec->GetMaxHP());
-				attack   += static_cast<double>(rec->GetAttack()
-				                              * hitpoints
-				                              * firepower);
-				defense  += static_cast<double>(rec->GetDefense()
-				                              * hitpoints
-				                              * firepower);
-				r         = static_cast<double>(rec->GetZBRangeAttack()
-				                              * firepower);
+				firepower = double(rec->GetFirepower());
+				hitpoints = double(rec->GetMaxHP());
+				attack += (double) (rec->GetAttack() 
+					* hitpoints	* firepower); 
+				defense += (double) (rec->GetDefense()  
+					* hitpoints	* firepower);
+				r = rec->GetZBRangeAttack()
+					* firepower;
 				if ( r > 0.0 ) { 
 					ranged +=  r; 
 					ranged_unit_count++; 

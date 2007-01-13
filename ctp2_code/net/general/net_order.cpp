@@ -8,8 +8,7 @@
 
 
 #include "c3.h"
-#include "Globals.h"
-#include "GameEventDescription.h"
+#include "globals.h"
 #include "net_order.h"
 #include "net_util.h"
 #include "network.h"

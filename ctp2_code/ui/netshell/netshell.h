@@ -136,7 +136,13 @@ public:
 
 	BOOL &WasMinimizing( void ) { return m_wasMinimizing; }
 
-	AUI_ACTION_BASIC(DestroyAction);
+
+
+
+
+	
+	class DestroyAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
 
 	MBCHAR *GetTrueBmp( void ) { return m_truebmp->GetString(); }
 
@@ -156,7 +162,7 @@ protected:
 
 	
 	
-	void MoveButton(aui_Window *window, const MBCHAR *parentBlock, const MBCHAR *regionBlock, BOOL left);
+	void NetShell::MoveButton(aui_Window *window, const MBCHAR *parentBlock, const MBCHAR *regionBlock, BOOL left);
 
 };
 

@@ -5,6 +5,13 @@
 #include "c3_updateaction.h"
 
 
+
+c3_UpdateAction::c3_UpdateAction()
+{
+}
+
+
+
 c3_UpdateAction *c3_UpdateAction::CopyMe(void)
 {
 	c3_UpdateAction *action = new c3_UpdateAction;

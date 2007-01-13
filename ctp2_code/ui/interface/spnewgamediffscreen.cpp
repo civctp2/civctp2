@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game difficulty screen
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,16 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code. (Mai 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -152,8 +147,8 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	AUI_ERRCODE auiErr;
 
-	sint32 i;
-	for ( i = 0;i < k_NUM_DIFFBOXES;i++ )
+	
+	for (sint32 i = 0;i < k_NUM_DIFFBOXES;i++ )
 		s_checkBox[ i ]->Enable( !viewMode );
 	for ( i = 0;i < k_NUM_RISKBOXES;i++ )
 		s_riskBox[ i ]->Enable( !viewMode );
@@ -165,7 +160,6 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	return retval;
 }
-
 sint32 spnewgamediffscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
@@ -206,7 +200,7 @@ sint32 spnewgamediffscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -312,6 +306,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 AUI_ERRCODE spnewgamediffscreen_Cleanup()
 {
 	if (s_spNewGameDiffScreen)
@@ -319,8 +314,7 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 		g_c3ui->RemoveWindow(s_spNewGameDiffScreen->Id());
 		keypress_RemoveHandler(s_spNewGameDiffScreen);
 
-		sint32 i;
-		for (i = 0; i < k_NUM_DIFFBOXES; i++) 
+		for (sint32 i = 0; i < k_NUM_DIFFBOXES; i++) 
 		{
 			delete s_checkBox[i];
 			// NULLing not necessary: deleting container next
@@ -329,7 +323,11 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 		s_checkBox	= NULL;
 
 
+#if defined(_MSC_VER)	// MS C++ has incorrect scopes: i is still defined?!
 		for (i = 0; i < k_NUM_RISKBOXES; ++i) 
+#else
+		for (sint32 i = 0; i < k_NUM_RISKBOXES; i++)
+#endif
 		{
 			delete s_riskBox[i];
 			// NULLing not necessary: deleting container next

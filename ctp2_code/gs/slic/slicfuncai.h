@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -226,4 +226,4 @@ SLICFUNC(SFR_INT, GetMostAtRiskCity)//Not implemented
 SLICFUNC(SFR_VOID, DeclareWar)
 
 
-#endif // __SLICFUNCAI_H__
+#endif __SLICFUNCAI_H__

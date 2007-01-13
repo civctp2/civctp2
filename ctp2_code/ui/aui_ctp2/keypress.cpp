@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Key press handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,13 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _PLAYTEST
-// - Generates version with utilities for playtesting
-//
-// _DEBUG
-// - Generate debug version when set.
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,8 +25,6 @@
 // - Start the great library with the current research project of the player.
 // - Disabled restart key in network, hot seat and email gmase, by 
 //   Martin Gühmann.
-// - Opening the score tab of the info window doesn't close other windows
-//   anymore like the other tabs. - Aug 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -242,9 +233,12 @@ void init_defaultKeymap() {
 }
 
 void cleanup_keymap()
+
 { 
-	delete theKeyMap; 
-	theKeyMap = NULL;
+	if (theKeyMap) {
+		delete theKeyMap; 
+		theKeyMap = NULL;
+	}
 } 
 
 
@@ -362,7 +356,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			} else if(g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(wParam)) {
 				
 			} else if(g_battleViewWindow) {
-				battleview_ExitButtonActionCallback( NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+				battleview_ExitButtonActionCallback( NULL, AUI_BUTTON_ACTION_EXECUTE, NULL, NULL);
 			} else {
 				
 				optionsscreen_Initialize();
@@ -393,6 +387,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	
 	
 	if (!g_civApp->IsGameLoaded()) {
+		switch (kf) {
+		case KEY_FUNCTION_HELP_MODE_TOGGLE:
+
+		break;
+		}
 		return TRUE;
 	}
 
@@ -677,6 +676,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	case KEY_FUNCTION_OPEN_INFO_SCREEN:
 		if ( !g_modalWindow ) {
+			close_AllScreens();
 			InfoWindow::SelectScoreTab();
 			InfoWindow::Open();
 		}
@@ -708,14 +708,37 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
         if (g_tiledMap) {
 			g_tiledMap->ZoomIn();
 		}
-		break;
 
+		break;
+    case KEY_FUNCTION_ZOOM_IN2: 
+		break;
     case KEY_FUNCTION_ZOOM_OUT1:
         if (g_tiledMap) {
 			g_tiledMap->ZoomOut();
         }
 
 		break;
+    case KEY_FUNCTION_ZOOM_OUT2: 
+		break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	case KEY_FUNCTION_CENTER_MAP:
 	{
@@ -962,7 +985,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			sint32 i;
 			g_gevManager->Pause();
 			for(i = 0; i < g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Num(); i++) {
-//				g_director->IncrementPendingGameActions();
+				g_director->IncrementPendingGameActions();
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Access(i),
 									   GEA_End);
@@ -986,8 +1009,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			}
 		}
 		break;
-
-#if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	case KEY_FUNCTION_TOGGLE_SPACE:
 	{
 		if(!g_network.IsActive()) {
@@ -996,10 +1017,10 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			void WhackScreen();
 			WhackScreen();
 		}
+		
+		
 		break;
 	}
-#endif
-
 	case KEY_FUNCTION_TOGGLE_CITY_NAMES:
 		g_theProfileDB->SetShowCityNames(!g_theProfileDB->GetShowCityNames());
 		break;
@@ -1089,6 +1110,19 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 		
+		
+		
+		
+		
+
+	case KEY_FUNCTION_CONTROL_BUILD:
+		if(g_controlPanel) {
+
+
+
+
+		}
+		break;
 	case KEY_FUNCTION_CONTROL_NEXT:
 		if(g_controlPanel) {
 

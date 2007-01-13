@@ -1,32 +1,4 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Playlist database
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 
@@ -76,7 +48,7 @@ BOOL PlayListDB::Parse(MBCHAR *filename)
 	Assert(playListToken);
 	if (!playListToken) return FALSE;
 
-	sint32		val = 0;
+	sint32		val;
 
 	if (playListToken->GetType() == TOKEN_PLAYLIST_NUM_SONGS) { 
 		if (playListToken->Next() == TOKEN_NUMBER) { 

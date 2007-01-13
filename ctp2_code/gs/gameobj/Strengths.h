@@ -1,11 +1,7 @@
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
 
 #ifndef __STRENGTH_H__
 #define __STRENGTH_H__
-
-class Strengths;
 
 enum STRENGTH_CAT {
 	STRENGTH_CAT_NONE = -1,
@@ -26,8 +22,9 @@ enum STRENGTH_CAT {
 	STRENGTH_CAT_MAX
 };
 
-#include "CivArchive.h"     // CivArchive
 #include "SimpleDynArr.h"
+
+class CivArchive;
 
 class Strengths {
 private:
@@ -47,13 +44,13 @@ public:
 	void Serialize(CivArchive &archive);
 
 	void Calculate();
-	sint32 GetStrength(STRENGTH_CAT category) const;
-	sint32 GetTurnStrength(STRENGTH_CAT category, sint32 turn) const;
+	sint32 GetStrength(STRENGTH_CAT category);
+	sint32 GetTurnStrength(STRENGTH_CAT category, sint32 turn);
 
-	sint32 GetTotalUnitCost() const;
-	sint32 GetTotalBuildingCost() const;
-	sint32 GetTotalWonderCost() const;
-	sint32 GetTotalProduction() const;
+	sint32 GetTotalUnitCost();
+	sint32 GetTotalBuildingCost();
+	sint32 GetTotalWonderCost();
+	sint32 GetTotalProduction();
 };
 
 #endif

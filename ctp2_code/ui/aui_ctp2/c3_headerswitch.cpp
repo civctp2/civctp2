@@ -33,14 +33,14 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Radio(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
 		cookie ),
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	m_image( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -71,8 +71,6 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_ImageBase( numStates ),
-	aui_TextBase( text ),
 	aui_Radio(
 		retval,
 		id,
@@ -84,6 +82,8 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 		cookie,
 		state,
 		numStates ),
+	aui_ImageBase( numStates ),
+	aui_TextBase( text ),
 	m_image( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -102,7 +102,15 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 
 AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -111,9 +119,9 @@ AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 	{
 		AUI_ERRCODE errcode;
 		MBCHAR imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-		sprintf(imageBlock, "%s.%s", ldlBlock, k_C3_HEADERSWITCH_IMAGE );
+		sprintf( imageBlock, "%s.%s", ldlBlock, k_C3_HEADERSWITCH_IMAGE );
 
-        if (aui_Ldl::FindDataBlock(imageBlock))
+		if ( theLdl->GetLdl()->FindDataBlock( imageBlock ) )
 		{
 			m_image = new c3_Static(
 				&errcode,

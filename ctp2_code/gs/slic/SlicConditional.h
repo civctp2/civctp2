@@ -1,6 +1,4 @@
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
 #ifndef __SLIC_CONDITIONAL_H__
 #define __SLIC_CONDITIONAL_H__
 

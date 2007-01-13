@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game screen
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,8 +24,6 @@
 // - Clean up any created subscreens when cleaning up the main screen.
 // - Always return to main menu, never SP menu (JJB)
 // - Repaired memory leaks.
-// - Added tribe index check.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -97,19 +92,20 @@
 #include "SlicEngine.h"
 
 #include "MessageBoxDialog.h"
+#include "CivilisationDB.h"
 
-extern ProfileDB            *g_theProfileDB;
-extern C3UI                 *g_c3ui;
-extern CivApp               *g_civApp;
-extern c3_PopupWindow       *g_spNewGameTribeScreen;
+extern	ProfileDB			*g_theProfileDB;
+extern C3UI					*g_c3ui;
+extern CivApp				*g_civApp;
+extern c3_PopupWindow		*g_spNewGameTribeScreen;
 
-extern MBCHAR               g_slic_filename[_MAX_PATH];
-extern MBCHAR               g_civilisation_filename[_MAX_PATH];
+extern MBCHAR g_slic_filename[_MAX_PATH];
+extern MBCHAR g_civilisation_filename[_MAX_PATH];
 
 
-SPNewGameWindow             *g_spNewGameWindow      = NULL;
+SPNewGameWindow				*g_spNewGameWindow		= NULL;
 
-BOOL                        g_launchIntoCheatMode = FALSE;
+BOOL						g_launchIntoCheatMode = FALSE;
 
 void spnewgamescreen_SetupHotseatOrEmail();
 
@@ -140,8 +136,8 @@ sint32	spnewgamescreen_displayMyWindow()
 	
 	if ( !g_spNewGameTribeScreen ) spnewgametribescreen_Initialize();
 
-	sint32 const    tribeIndex = spnewgametribescreen_getTribeIndex();
-	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
+	
+	if ( spnewgametribescreen_getTribeIndex() < 0 )
 	{
 		spnewgamescreen_setPlayerName(g_theProfileDB->GetLeaderName());
 	}
@@ -204,7 +200,7 @@ sint32 spnewgamescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE spnewgamescreen_Initialize( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( g_spNewGameWindow ) return AUI_ERRCODE_OK; 
@@ -669,7 +665,7 @@ spnewgamescreen_genocidePress(aui_Control *control, uint32 action, uint32 data, 
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetGenocideRule( state ? FALSE : TRUE );
 	}
@@ -679,7 +675,7 @@ spnewgamescreen_tradePress(aui_Control *control, uint32 action, uint32 data, voi
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetTradeRule( state ? FALSE : TRUE );
 	}
@@ -689,7 +685,7 @@ spnewgamescreen_combatPress(aui_Control *control, uint32 action, uint32 data, vo
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetSimpleCombatRule( state ? FALSE : TRUE );
 	}
@@ -699,7 +695,7 @@ spnewgamescreen_pollutionPress(aui_Control *control, uint32 action, uint32 data,
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
 		uint32 state = data; 
-//		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
+		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
 		
 		g_theProfileDB->SetPollutionRule( state ? FALSE : TRUE );
 	}

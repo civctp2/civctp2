@@ -1,12 +1,10 @@
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __WONDERMOVIEWIN__
 #define __WONDERMOVIEWIN__
 
-#include "aui_action.h"     // aui_Action
-#include "ctp2_inttypes.h"  // sint32, uint32
+#include "aui_action.h"
 
 class Sequence;
 
@@ -17,6 +15,9 @@ void wondermoviewin_Cleanup();
 
 void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
 
-AUI_ACTION_BASIC(CloseMovieAction);
+class CloseMovieAction : public aui_Action
+{
+	virtual ActionCallback Execute;
+};
 
 #endif

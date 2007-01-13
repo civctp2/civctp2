@@ -57,9 +57,10 @@
 
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 
 extern aui_UI		*g_ui;
+extern ColorSet		*g_colorSet;
 
 
 
@@ -70,9 +71,9 @@ c3_ListBox::c3_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_ListBox(),
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ListBox(),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -113,9 +114,9 @@ c3_ListBox::c3_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
+	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
-	aui_ListBox(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
@@ -148,10 +149,18 @@ c3_ListBox::c3_ListBox(
 
 c3_ListBox::~c3_ListBox()
 {
+	
+
+
+
+
+
+
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		aui_Item * item = (aui_Item *) m_pane->ChildList()->GetNext(position);
+		ListPos prevPosition = position;
+		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		delete item;
 	}
 	m_pane->ChildList()->DeleteAll();
@@ -161,12 +170,22 @@ c3_ListBox::~c3_ListBox()
 
 AUI_ERRCODE c3_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	sint32		bevelWidth=0, bevelType=0;
+	aui_Ldl		*theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
+
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	sint32 bevelWidth   = block->GetInt( k_C3_LISTBOX_LDL_BEVELWIDTH );
-	sint32 bevelType    = block->GetInt( k_C3_LISTBOX_LDL_BEVELTYPE );
+	bevelWidth = block->GetInt( k_C3_LISTBOX_LDL_BEVELWIDTH );
+	bevelType = block->GetInt( k_C3_LISTBOX_LDL_BEVELTYPE );
 
 	return InitCommon(bevelWidth, bevelType);
 }
@@ -192,9 +211,14 @@ AUI_ERRCODE c3_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 
 AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode         = AUI_ERRCODE_OK;
-    MBCHAR *    patternFilename = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	MBCHAR		*patternFilename = NULL;
 
+	if (m_pattern)
+		patternFilename = m_pattern->GetFilename();
+
+	
+	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -210,7 +234,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_header = new c3_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -239,7 +263,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -270,7 +294,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -296,8 +320,9 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-	sint32 maxRangerSize = 
-        std::max<sint32>(m_verticalRanger->Width(), m_horizontalRanger->Height());
+	sint32 maxRangerSize = m_verticalRanger->Width();
+	if ( m_horizontalRanger->Height() > maxRangerSize )
+		maxRangerSize = m_horizontalRanger->Height();
 
 	if ( maxRangerSize )
 		SetRangerSize( maxRangerSize ); 
@@ -317,9 +342,12 @@ void c3_ListBox::Clear(void)
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
+		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
+		
 		RemoveItem(item->Id());
 		delete item;
+		
 	}
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 

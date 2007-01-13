@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City build queue handling.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -13,12 +12,6 @@
 //
 // This material has been developed at apolyton.net by the Apolyton CtP2 
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -36,15 +29,11 @@
 //   the changes above.
 // - #01 Standardization of city selection and focus handling  
 //   (L. Hirth 6/2004)
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "EditQueue.h"
-
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "ctp2_Window.h"
@@ -81,8 +70,6 @@
 
 #include "network.h"
 #include "IconRecord.h"
-#include "NationalManagementDialog.h"
-#include "Globals.h"
 
 static EditQueue *s_editQueue = NULL;
 
@@ -98,6 +85,8 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 		*err = AUI_ERRCODE_INVALIDPARAM;
 		return;
 	}
+
+	m_window->SetStronglyModal(TRUE);
 
 	m_itemsBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox");
 	m_queueBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup");
@@ -121,9 +110,7 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsButton");
 	m_buildingsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingsButton");
 	m_wondersButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WondersButton");
-	//EMOD to have button that has all units buildings, and wobders in the build box instead of sort
-	//m_AllButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AllButton");
-	
+
 	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.UnitsButton", EditQueue::ToggleUnits, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 	
@@ -225,9 +212,6 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_gotoCityButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "GotoCityButton");
 	m_gotoCityButton->SetActionFuncAndCookie(GotoCity, NULL);
 
-	m_nationalManagerButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "NationalManagerButton");
-	if(m_nationalManagerButton) m_nationalManagerButton->SetActionFuncAndCookie(OpenNationalManager, NULL);
-
 	m_attachedToWindow = NULL; 
 
 	m_inCallback = false;
@@ -245,7 +229,7 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 
 EditQueue::~EditQueue()
 {
-	ClearChoiceLists();
+    ClearChoiceLists();
 
 	if(m_window) {
 		aui_Ldl::DeleteHierarchyFromRoot(s_editQueueBlock);
@@ -262,7 +246,7 @@ AUI_ERRCODE EditQueue::Initialize()
 	if(s_editQueue)
 		return AUI_ERRCODE_OK;
 
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	s_editQueue = new EditQueue(&err);
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -436,17 +420,17 @@ sint32 EditQueue::CompareUnitItems(ctp2_ListItem *item1, ctp2_ListItem *item2, s
 		case 0: 
 			return stricmp(rec1->GetNameText(), rec2->GetNameText());
 		case 1: 
-			return static_cast<sint32>(rec1->GetAttack() - rec2->GetAttack());
+			return rec1->GetAttack() - rec2->GetAttack();
 		case 2: 
-			return static_cast<sint32>(rec1->GetDefense() - rec2->GetDefense());
+			return rec1->GetDefense() - rec2->GetDefense();
 		case 3: 
-			return static_cast<sint32>(rec1->GetArmor() - rec2->GetArmor());
+			return rec1->GetArmor() - rec2->GetArmor();
 		case 4: 
 			return rec1->GetZBRangeAttack() - rec2->GetZBRangeAttack();
 		case 5: 
 			return rec1->GetFirepower() - rec2->GetFirepower();
 		case 6: 
-			return static_cast<sint32>(rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints());
+			return rec1->GetMaxMovePoints() - rec2->GetMaxMovePoints();
 		case 7: 
 			return rec1->GetShieldCost() - rec2->GetShieldCost();
 	}
@@ -1108,12 +1092,19 @@ void EditQueue::UpdateButtons()
 		}
 	}
 
-    m_addButton->Enable(visList && visList->GetSelectedItem());
+	if(visList && visList->GetSelectedItem()) {
+		m_addButton->Enable(TRUE);
+	} else {
+		m_addButton->Enable(FALSE);
+	}
 }
 
 
-void EditQueue::SetQueueList(ctp2_ListBox *)
+void EditQueue::SetQueueList(ctp2_ListBox *list)
 {
+	
+
+
 }
 
 
@@ -1310,7 +1301,7 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed)
 
 	if(checkRemoveList) {
 		sint32 type = info->m_type;
-		uint32 cat = info->m_category;
+		sint32 cat = info->m_category;
 		sint32 i;
 		for(i = checkRemoveList->NumItems() - 1; i >= 0; i--) {
 			ctp2_ListItem *item = (ctp2_ListItem *)checkRemoveList->GetItemByIndex(i);
@@ -1465,10 +1456,7 @@ void EditQueue::ToggleBuildings(aui_Control *control, uint32 action, uint32 data
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	s_editQueue->SelectChoiceList(s_editQueue->m_buildingList);
-//	if(!s_editQueue->m_cityData) return;
-//	char buff[200];
-//	sprintf(buff, "Baut Kapitalisierung: %i, Baut Infrastruktur: %i\n", s_editQueue->m_cityData->IsBuildingCapitalization(), s_editQueue->m_cityData->IsBuildingInfrastructure());
-//	MessageBoxDialog::Information(buff, "InfoMustName");
+	
 }
 
 void EditQueue::ToggleWonders(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1559,7 +1547,7 @@ void EditQueue::ShowSelectedInfo()
 
 	ctp2_ListBox *visList = s_editQueue->GetVisibleItemList();
 
-	uint32 category = 0xffffffffu;
+	uint32 category = -1;
 	sint32 type = -1;
 
 	ctp2_ListItem *item;
@@ -1663,7 +1651,7 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
 
-//	sint32 saveMode = (sint32)cookie;
+	sint32 saveMode = (sint32)cookie;
 
 	Assert(s_editQueue->m_itemsBox);
 	Assert(s_editQueue->m_loadBox);
@@ -1838,7 +1826,7 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 			bq->Clear();
 		}
 
-		sint32 insIndex = 0;
+		sint32 insIndex;
 		switch(eqAction) {
 			case EDIT_QUEUE_MULTI_ACTION_INSERT:
 				
@@ -1901,7 +1889,7 @@ void EditQueue::SaveCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-	strcat(saveFileName, FILE_SEP);
+	strcat(saveFileName, "\\");
 	strcat(saveFileName, saveName);
 
 	FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");
@@ -1938,7 +1926,7 @@ void EditQueue::Save(const MBCHAR *saveFileName)
 	if(s_editQueue->m_cityData) {
 		s_editQueue->m_cityData->SaveQueue(saveFileName);
 	} else {
-		FILE * saveFile = c3files_fopen(C3DIR_DIRECT, saveFileName, "w");
+		FILE *saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)saveFileName, "w");
 		Assert(saveFile);
 		if(!saveFile) return;
 		
@@ -2008,7 +1996,7 @@ void EditQueue::LoadQueryCallback(bool response, void *data)
 
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, FILE_SEP);
+	strcat(loadFileName, "\\");
 	strcat(loadFileName, loadName);
 
 	if(s_editQueue->m_cityData) {
@@ -2029,12 +2017,14 @@ void  EditQueue::LoadCustom(const MBCHAR *loadName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, FILE_SEP);
+	strcat(loadFileName, "\\");
 	strcat(loadFileName, loadName);
 
 	s_editQueue->m_customBuildList.DeleteAll();
 
-	FILE	*fpQueue = c3files_fopen(C3DIR_DIRECT, loadFileName, "r");
+	FILE	*fpQueue ;
+
+	fpQueue = c3files_fopen(C3DIR_DIRECT, (char *)loadFileName, "r");
 	if(!fpQueue) return;
 
 	char buf[k_MAX_NAME_LEN];
@@ -2136,10 +2126,12 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
-	strcat(loadFileName, FILE_SEP);
+	strcat(loadFileName, "\\");
 	strcat(loadFileName, queueName);
 
-	FILE * fpQueue = c3files_fopen(C3DIR_DIRECT, loadFileName, "r");
+	FILE	*fpQueue ;
+
+	fpQueue = c3files_fopen(C3DIR_DIRECT, (char *)loadFileName, "r");
 	if(!fpQueue) return;
 
 	m_queueContents->Clear();
@@ -2251,12 +2243,11 @@ void EditQueue::DeleteQueryCallback(bool response, void *data)
 	s_editQueue->UpdateFileLists();
 }
 
-void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
+void EditQueue::SelectChoiceList(ctp2_ListBox *list)
 {
-	a_List->Show();
+	list->Show();
 
-	if (a_List != m_buildingList) 
-    {
+	if(list != m_buildingList) {
 		m_buildingList->Hide();
 		m_buildingList->DeselectItem(m_buildingList->GetSelectedItem());
 		m_buildingsButton->SetToggleState(false);
@@ -2264,8 +2255,7 @@ void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
 		m_buildingsButton->SetToggleState(true);
 	}
 
-	if (a_List != m_unitList) 
-    {
+	if(list != m_unitList) {
 		m_unitList->Hide();
 		m_unitList->DeselectItem(m_unitList->GetSelectedItem());
 		m_unitsButton->SetToggleState(false);
@@ -2273,8 +2263,7 @@ void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
 		m_unitsButton->SetToggleState(true);
 	}
 
-	if (a_List != m_wonderList) 
-    {
+	if(list != m_wonderList) {
 		m_wonderList->Hide();
 		m_wonderList->DeselectItem(m_wonderList->GetSelectedItem());
 		m_wondersButton->SetToggleState(false);
@@ -2283,6 +2272,7 @@ void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
 	}
 
 	ShowSelectedInfo();
+
 	UpdateButtons();
 }
 
@@ -2341,42 +2331,12 @@ void EditQueue::GotoCity(aui_Control *control, uint32 action, uint32 data, void 
 	CityWindow::Display(s_editQueue->m_cityData);
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : EditQueue::OpenNationalManager
-//
-// Description: Opens the National Manager when the National Manager button is clicked.
-//
-// Parameters : aui_Control *control
-//              uint32 action
-//              uint32 data
-//              void *cookie
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-void EditQueue::OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-
-	NationalManagementDialog::Open();
-}
-
 class ConfirmOverwriteQueueAction:public aui_Action
 {
   public:
 	ConfirmOverwriteQueueAction(MBCHAR *saveFileName, const MBCHAR *text) { m_saveFileName = saveFileName; strncpy(m_text, text, 256); m_text[256] = 0; }
 
-	virtual void	Execute
-	(
-		aui_Control	*	control,
-		uint32			action,
-		uint32			data
-	); 
+	virtual ActionCallback Execute;
 
   private:
 	MBCHAR m_text[257];
@@ -2393,7 +2353,12 @@ void ConfirmOverwriteQueueAction::Execute(aui_Control *control, uint32 action, u
 	MessageBoxDialog::Query(buf, "QueryOverwiteQueue", EditQueue::SaveQueryCallback, (void *)m_saveFileName);
 };
 
-AUI_ACTION_BASIC(MustEnterNameAction);
+class MustEnterNameAction : public aui_Action
+{
+  public:
+	  MustEnterNameAction() {};
+	virtual ActionCallback Execute;
+};
 
 void MustEnterNameAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
@@ -2410,7 +2375,7 @@ void EditQueue::SaveNameResponse(bool response, const char *text, void *userData
 			
 		static MBCHAR saveFileName[_MAX_PATH];
 		g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-		strcat(saveFileName, FILE_SEP);
+		strcat(saveFileName, "\\");
 		strcat(saveFileName, text);
 
 		FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");
@@ -2434,7 +2399,7 @@ void EditQueue::SaveButton(aui_Control *control, uint32 action, uint32 data, voi
 								SaveNameResponse);
 }
 
-bool EditQueue::IsItemInQueueList(uint32 cat, sint32 type)
+bool EditQueue::IsItemInQueueList(sint32 cat, sint32 type)
 {
 	sint32 i;
 	for(i = 0; i < m_queueList->NumItems(); i++) {

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : declarations for the Diplomat class
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,6 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
@@ -27,61 +29,48 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #ifndef __DIPLOMAT_H__
 #define __DIPLOMAT_H__
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-#include <list>
-#include <string>
 #include <vector>
+#include <list>
 
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
+#include "c3debugstl.h"
 
-class Diplomat;
+#include "Foreigner.h"
+#include "StrategyRecord.h"
+#include "PersonalityRecord.h"
+#include "Unit.h"
+#include "SlicContext.h"
 
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
 
-#include "CivArchive.h"             // CivArchive
-#include "ctp2_inttypes.h"          // sintN, uintN
-#include "dbtypes.h"                // StringId
-#include "DiplomacyRecord.h"        // DiplomacyRecord
-#include "DiplomatTypes.h"          // ai, AiState, Motivation, Threat, etc.
-#include "Foreigner.h"              // Foreigner
-#include "PersonalityRecord.h"      // PersonalityRecord     
-#include "player.h"                 // PLAYER_INDEX, k_MAX_PLAYERS
-#include "SlicContext.h"            // SlicContext
-#include "StrategyRecord.h"         // StrategyRecord
-#include "Unit.h"                   // Unit
-
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
+const sint16 k_maxStategicState = 10;
 
 class Diplomat 
 {
 public:
-	struct PiracyHistory 
-    {
-		PiracyHistory()
-        :   
-            m_sourceCity        (),
-            m_destinationCity   (),
-            m_piratingPlayer    (PLAYER_UNASSIGNED),
-            m_accumEvents       (0),
-            m_lastTurn          (-1)
-		{ };
 
+	
+	
+	
+
+	
+	
+	
+
+	struct PiracyHistory {
+		PiracyHistory() 
+			{
+				m_sourceCity.m_id = 0;
+				m_destinationCity.m_id = 0;
+				m_piratingPlayer = -1;
+				m_accumEvents = 0; 
+				m_lastTurn = -1;
+			}
 		bool operator<(const PiracyHistory & rval) const
 			{
 				if (m_sourceCity.m_id < rval.m_sourceCity.m_id &&
@@ -106,17 +95,33 @@ public:
 		sint32 m_lastTurn;		
 	};
 
-	typedef std::list<Motivation> MotivationList;
-	typedef std::vector<MotivationList::iterator> MotivationVector;
-	typedef std::vector<AiState> AiStateVector;
-	typedef std::vector<Foreigner> ForeignerVector;
-	typedef std::list<Threat> ThreatList;
-	typedef std::vector<DiplomacyRecord> DiplomacyRecordVector;
-	typedef std::vector<Diplomat> DiplomatVector;
-	typedef std::list<PiracyHistory> PiracyHistoryList;
-	typedef std::list<AiState> AiStateList;
-	typedef std::list<std::pair<sint32, Unit> > NukeTargetList;
-	typedef std::vector<bool> BoolVector;
+
+	
+	typedef std::list<Motivation, dbgallocator<Motivation> > MotivationList;
+	typedef std::vector<MotivationList::iterator, dbgallocator<MotivationList::iterator> > MotivationVector;
+	typedef std::vector<AiState, dbgallocator<AiState> > AiStateVector;
+	typedef std::vector<Foreigner, dbgallocator<Foreigner> > ForeignerVector;
+	typedef std::list<Threat, dbgallocator<Threat> > ThreatList;
+	typedef std::vector<DiplomacyRecord, dbgallocator<DiplomacyRecord> > DiplomacyRecordVector;
+	typedef std::vector<Diplomat, dbgallocator<Diplomat> > DiplomatVector;
+	typedef std::list<PiracyHistory, dbgallocator<PiracyHistory> > PiracyHistoryList;
+	typedef std::list<AiState, dbgallocator<AiState> > AiStateList;
+	typedef std::list<std::pair<sint32, Unit>, dbgallocator<std::pair<sint32, Unit> > > NukeTargetList;
+	typedef std::vector<bool, dbgallocator<bool> > BoolVector;
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
 
 	
 	static AiState s_badAiState;
@@ -168,12 +173,10 @@ public:
 	
 	
 
+	
 	Diplomat();
-    Diplomat(Diplomat const & a_Original);
-    ~Diplomat();
 
-	Diplomat const & operator = (Diplomat const & a_Original);
-
+	
 	void Resize(const PLAYER_INDEX & newMaxPlayers);
 
 	
@@ -584,19 +587,19 @@ public:
 	sint32 GetAdvanceLevelPercent(const PLAYER_INDEX &foreignId) const;
 
 	
-	sint32 AtWarCount() const;
+	sint16 AtWarCount() const;
 
 	
-	sint32 EffectiveAtWarCount() const;
+	sint16 EffectiveAtWarCount();
 
 	
 	bool TestPublicRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard) const;
 
 	
-	bool TestEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard) const;
+	bool TestEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard);
 
 	
-	bool TestAlliedRegard(const PLAYER_INDEX & foreignerId) const;
+	bool TestAlliedRegard(const PLAYER_INDEX & foreignerId);
 
 	
 	bool GetBorderIncursionBy(const PLAYER_INDEX & foreignerId) const;
@@ -641,13 +644,13 @@ public:
 	void SetHotwarAttack(const PLAYER_INDEX foreignerId, const sint16 last_hot_war_attack);
 
 	
-	sint32 GetLastHotwarAttack(const PLAYER_INDEX foreignerId) const;
+	sint16 GetLastHotwarAttack(const PLAYER_INDEX foreignerId) const;
 
 	
 	void SetColdwarAttack(const PLAYER_INDEX foreignerId, const sint16 last_cold_war_attack);
 
 	
-	sint32 GetLastColdwarAttack(const PLAYER_INDEX foreignerId) const;
+	sint16 GetLastColdwarAttack(const PLAYER_INDEX foreignerId) const;
 
 	
 	
@@ -712,9 +715,6 @@ public:
 
 	
 	bool FirstTurnOfWar() const;
-
-
-	void ClearEffectiveRegardCache();
 
 private:
 	
@@ -839,21 +839,25 @@ private:
 	
 	
 	bool ComputeEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard) const;
+public:
+	
+	void ClearEffectiveRegardCache();
+private:
 
 	struct cEffectiveRegardEntry
 	{
 	public:
-		cEffectiveRegardEntry() {m_round=-666;}
+		inline cEffectiveRegardEntry() {m_round=-666;}
 		int m_round;	
 		uint32 m_bits;	
 
 		
 		
-		int RegardToIndex(int regard) {return (regard>>6);}
+		inline int RegardToIndex(int regard) {return (regard>>6);}
 	};
 
 	
-	mutable cEffectiveRegardEntry m_effectiveRegardCache[k_MAX_PLAYERS];
+	cEffectiveRegardEntry m_effectiveRegardCache[k_MAX_PLAYERS];
 };
 
-#endif // __DIPLOMAT_H__
+#endif __DIPLOMAT_H__

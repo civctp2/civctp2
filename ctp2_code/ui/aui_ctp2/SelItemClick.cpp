@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Selection item click handling
-// Id           : $Id$
+// Description  : 
 //
 //----------------------------------------------------------------------------
 //
@@ -17,47 +16,52 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Bug fix: prevent easy invisible unit detection, by reporting the basic 
 //   terrain info when (right-)clicking on an enemy object.
-// - Added selection of goods. (Oct 8th 2005 Martin Gühmann)
-// - Added option to open cities or the army manager if there are units
-//   on top of a city. (Oct 8th 2005 Martin Gühmann)
-// - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "SelItem.h"    // SelItemClick.h does not exist
-
+#include "SelItem.h"
+#include "Unit.h"
 #include "Army.h"
-#include "armymanagerwindow.h"
-#include "aui.h"
-#include "aui_mouse.h"
-#include "aui_uniqueid.h"
-#include "Cell.h"
-#include "citywindow.h"
-#include "controlpanelwindow.h"
-#include "GameEventManager.h"
-#include "gfx_options.h"
-#include "helptile.h"
-#include "Path.h"
-#include "player.h"
 #include "profileDB.h"
 #include "QuickSlic.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitRecord.h"
+#include "GameEventManager.h"
+#include "Path.h"
 #include "World.h"
+#include "UnitData.h"
+
+#include "UnitRecord.h"
+
+#include "aui.h"
+#include "aui_uniqueid.h"
+#include "aui_mouse.h"
+#include "Cell.h"
+#include "controlpanelwindow.h"
+#include "armymanagerwindow.h"
+#include "citywindow.h"
+
+#include "helptile.h"
+#include "player.h"
+
+
+
+#include "gfx_options.h"
+
+
+
+
+
+
+
 
 void SelectedItem::SetupClickFunctions()
 {
@@ -77,7 +81,7 @@ void SelectedItem::SetupClickFunctions()
 		for(clicked = SELECT_TYPE_NONE; clicked < SELECT_TYPE_MAX; clicked = SELECT_TYPE(sint32(clicked) + 1)) {
 			for(button = SELECT_BUTTON_LEFT; button < SELECT_BUTTON_MAX; button = SELECT_BUTTON(sint32(button) + 1)) {
 				for(mode = SELECT_MODE_RIGHT; mode < SELECT_MODE_MAX; mode = SELECT_MODE(sint32(mode) + 1)) {
-					m_clickFunc[selected][clicked][button][mode] = &SelectedItem::NullClick;
+					m_clickFunc[selected][clicked][button][mode] = NullClick;
 				}
 			}
 		}
@@ -96,112 +100,112 @@ void SelectedItem::SetupClickFunctions()
 	
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::NullClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = NullClick;	
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = UnloadClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 	
 
 
@@ -214,112 +218,112 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = MoveArmyClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = UnloadClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SendGoodClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SendGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_RIGHT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 	
 
 
@@ -334,112 +338,112 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::NullClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = NullClick;	
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::MoveArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = MoveArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = MoveArmyClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = UnloadClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 	
 
 
@@ -451,112 +455,112 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = DeselectClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = UnloadClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SendGoodClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SendGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_LEFT;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 	
 
 
@@ -574,84 +578,84 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::NullClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyStartMoveClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
-
-	
-	mode = SELECT_MODE_CTP2;
-	button = SELECT_BUTTON_LEFT_PATHING;
-	selected = SELECT_TYPE_NONE;
-
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::ActionClick;
-
-	
-	mode = SELECT_MODE_CTP2;
-	button = SELECT_BUTTON_LEFT;
-	selected = SELECT_TYPE_LOCAL_ARMY;
-
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick; 
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyStartMoveClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = NullClick;	
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyStartMoveClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
+	selected = SELECT_TYPE_NONE;
+
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = ActionClick;
+
+	
+	mode = SELECT_MODE_CTP2;
+	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick; 
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyStartMoveClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
+
+	
+	mode = SELECT_MODE_CTP2;
+	button = SELECT_BUTTON_LEFT_PATHING;
+	selected = SELECT_TYPE_LOCAL_ARMY;
+
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = ActionClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DRAG;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::MoveDrag;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::MoveDrag;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::MoveDrag;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::MoveDrag;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::MoveDrag;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::MoveDrag;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = MoveDrag;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = MoveDrag;
 	
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DROP;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::MoveDrop;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::MoveDrop;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::MoveDrop;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::MoveDrop;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::MoveDrop;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::MoveDrop;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = MoveDrop;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = MoveDrop;
 	
 
 	
@@ -659,98 +663,98 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyStartMoveClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyStartMoveClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DROP;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = ActionClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = ActionClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = UnloadClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	
@@ -758,42 +762,42 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyStartMoveClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyStartMoveClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT_DROP;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_LEFT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = SelectArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = SelectGoodClick;
 	
 
 
@@ -806,168 +810,168 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_LOCAL_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = CancelPathingClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = CancelPathingClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = CancelPathingClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT_PATHING;
 	selected = SELECT_TYPE_NONE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::CancelPathingClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = CancelPathingClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = CancelPathingClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::UnloadClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = UnloadClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = UnloadClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_REMOTE_ARMY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_GOOD;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SendGoodClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SendGoodClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = SendGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = SendGoodClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 
 	
 	mode = SELECT_MODE_CTP2;
 	button = SELECT_BUTTON_RIGHT;
 	selected = SELECT_TYPE_TRADE_ROUTE;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::TerrainContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::CityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::EnemyCityContextClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = TerrainContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = ArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = ErrorClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = CityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = EnemyCityContextClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = EnemyArmyContextClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = TradeRouteContextClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = GoodContextClick;
 	
 
 
@@ -1110,11 +1114,11 @@ void SelectedItem::SelectArmyStartMoveClick(const MapPoint &pos, const aui_Mouse
 void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	
-	if(!GetIsPathing()){
+	if(!GetIsPathing()) {
 		Unit top;
 		GetTopUnitOrCity(pos, top);
 		SetSelectCity(top);
-		if(doubleClick){
+		if(doubleClick) {
 			if(top.IsCity())
 				CityWindow::Display(top.CD());
 			else
@@ -1146,6 +1150,7 @@ void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEven
 
 void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
+	
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
@@ -1188,6 +1193,7 @@ void SelectedItem::UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, 
 // Remark(s)  : When the tile is unexplored, nothing will be shown.
 //
 //----------------------------------------------------------------------------
+
 void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	if(g_player[GetVisiblePlayer()] && g_player[GetVisiblePlayer()]->IsExplored(pos)) {
@@ -1210,6 +1216,7 @@ void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void SelectedItem::ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	SelectArmyClick(pos, data, FALSE);
@@ -1232,6 +1239,7 @@ void SelectedItem::ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *d
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	SelectCityClick(pos, data, FALSE);
@@ -1254,6 +1262,7 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	// Report the underlying terrain information. This is just being useful. 
@@ -1275,6 +1284,7 @@ void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEve
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void SelectedItem::EnemyArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
 	// Report the underlying terrain information. For visible units, this is 
@@ -1289,9 +1299,6 @@ void SelectedItem::TradeRouteContextClick(const MapPoint &pos, const aui_MouseEv
 
 void SelectedItem::GoodContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	if(g_player[GetVisiblePlayer()] && g_player[GetVisiblePlayer()]->IsExplored(pos)) {
-		helptile_displayData(pos);
-	}
 }
 
 
@@ -1351,45 +1358,35 @@ void SelectedItem::SendGoodClick(const MapPoint &pos, const aui_MouseEvent *data
 
 void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	sint32 player = GetVisiblePlayer();
-	
 	MapPoint army_pos;
+	sint32 player = GetVisiblePlayer();
+
+	
 	m_selected_army[player].GetPos(army_pos);
 	
-	if (army_pos == pos && 
-	    GetClickedThing(pos, true) == SELECT_TYPE_LOCAL_ARMY
-       ) 
-    {
+	if(army_pos == pos && 
+	   GetClickedThing(pos, true) == SELECT_TYPE_LOCAL_ARMY) {
 
-	} 
-    else 
-    {
-		Unit unit = m_selected_army[player][0];
-
+	} else {
+		Unit *unit = &((m_selected_army[player])[0]);
 		if (m_good_path &&
-			unit.GetDBRec()->GetCanCarry() &&
-			(unit.GetNumCarried() > 0)
-           ) 
-        {
-            // Ask user confirmations about special situations when moving a 
-            // non-empty cargo unit
-
-			if (unit.GetDBRec()->GetCargoPod() &&
-				unit.GetData()->CargoHasLandUnits() &&
-				g_theWorld->IsWater(pos)
-               ) 
-            {
-                // Dropping land units in a sea square could be lethal
-				QuickSlic("15IALandInOcean", player);
+			(unit->GetDBRec()->GetCanCarry()) &&
+			(unit->GetNumCarried() > 0)) {
+			
+								
+								
+			if ((unit->GetDBRec()->GetCargoPod()) &&
+				(g_theWorld->IsWater(pos)) &&
+				(unit->GetData()->CargoHasLandUnits())) {
+				QuickSlic("15IALandInOcean", player, TRUE);
 				return;
 			}
-
-            if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
-				g_theWorld->IsLand(pos)
-               ) 
-            {
-                // Reaching a shore: unload units?
-				SlicObject * so = new SlicObject("14IAAutoUnload");
+			
+								
+								
+			if ((unit->GetMovementTypeSea() || unit->GetMovementTypeShallowWater()) &&
+				(g_theWorld->IsLand(pos))) {
+				SlicObject *so = new SlicObject("14IAAutoUnload");
 				so->AddLocation(pos);
 				so->AddCivilisation(player);
 				so->AddRecipient(player);
@@ -1397,7 +1394,6 @@ void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data
 				return;
 			}
 		}
-
 		EnterArmyMove(player, pos);
 	}
 }
@@ -1516,18 +1512,16 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 		
 		m_is_pathing = FALSE;
 
-		if (army_pos != pos) 
-        {
-			Unit unit = m_selected_army[player][0];
+		if(army_pos != pos) {
+			Unit *unit = &((m_selected_army[player])[0]);
 			if (m_good_path &&
-				(unit.GetDBRec()->GetCanCarry()) &&
-				(unit.GetNumCarried() > 0)
-               ) 
-            {
-				if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
-					(g_theWorld->IsLand(pos))
-                   ) 
-                {
+				(unit->GetDBRec()->GetCanCarry()) &&
+				(unit->GetNumCarried() > 0)) {
+
+				
+				
+				if ((unit->GetMovementTypeSea() || unit->GetMovementTypeShallowWater()) &&
+					(g_theWorld->IsLand(pos))) {
 					SlicObject *so = new SlicObject("14IAAutoUnload");
 					so->AddLocation(pos);
 					so->AddCivilisation(player);
@@ -1578,20 +1572,12 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 						}
 					}
 				}
-				else if(hasUnitOrCity && top.IsCity()) {
-
-					if(top.GetOwner() == visiblePlayer) {
-						return SELECT_TYPE_LOCAL_CITY;
-					} else {
-						return SELECT_TYPE_REMOTE_CITY;
-					}
-				}				
+				
 				
 				break;
 			case SELECT_TYPE_LOCAL_ARMY:
 				if(hasUnitOrCity && top.IsCity()) {
-
-					if(top.GetOwner() == visiblePlayer) {
+					if(top.GetOwner() == visiblePlayer) {						
 						return SELECT_TYPE_LOCAL_CITY;
 					} else {
 						return SELECT_TYPE_REMOTE_CITY;
@@ -1631,40 +1617,37 @@ SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 		}
 	}
 
-	if(GetTopUnitOrCity(pos, top)){
+	
+	if (GetTopUnitOrCity(pos, top)) {
 		
-		if(top.IsCity()){
-			if(top.GetOwner() == visiblePlayer){
-				if(!g_theProfileDB->GetValueByName("CityClick")
-				&& g_theWorld->GetCell(pos)->GetNumUnits() > 0
-				){
+		if (top.IsCity()) {
+			if (top.GetOwner() == visiblePlayer) {
+				if(g_theWorld->GetCell(pos)->GetNumUnits() > 0) {
 					sint32 i;
-					for(i = 0; i < g_theWorld->GetCell(pos)->GetNumUnits(); i++){
-						if(!g_theWorld->GetCell(pos)->AccessUnit(i).IsEntrenched()
-						&& !g_theWorld->GetCell(pos)->AccessUnit(i).IsEntrenching()
-						){
+					for(i = 0; i < g_theWorld->GetCell(pos)->GetNumUnits(); i++) {
+						if(!g_theWorld->GetCell(pos)->AccessUnit(i).IsEntrenched()) {
 							return SELECT_TYPE_LOCAL_ARMY;
 						}
 					}
 				}
 				return SELECT_TYPE_LOCAL_CITY;
-			}
-			else{
+			} else {
 				return SELECT_TYPE_REMOTE_CITY;
 			}
-		}
-		else{
-			if(top.GetOwner() == visiblePlayer){
+		} else {
+			if (top.GetOwner() == visiblePlayer) {
+				
 				return SELECT_TYPE_LOCAL_ARMY;
-			}
-			else{
+			} else {
 				return SELECT_TYPE_REMOTE_ARMY;
 			}
 		}
+	} else {
+		
+		
+		
 	}
-	else if(g_theWorld->IsGood(pos)){
-		return SELECT_TYPE_GOOD;
-	}
+
 	
 	return SELECT_TYPE_NONE;
 }

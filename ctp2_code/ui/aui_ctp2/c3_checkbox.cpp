@@ -13,12 +13,14 @@
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 
 #include "SlicEngine.h"
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
+
+extern ColorSet		*g_colorSet;
 
 c3_CheckBox::c3_CheckBox(
 	AUI_ERRCODE *retval,
@@ -27,9 +29,9 @@ c3_CheckBox::c3_CheckBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -56,9 +58,9 @@ c3_CheckBox::c3_CheckBox(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
 	aui_TextBase( text ),
-	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	PatternBase(pattern)
 {
 
@@ -74,10 +76,19 @@ c3_CheckBox::c3_CheckBox(
 
 AUI_ERRCODE c3_CheckBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_CHECKBOX_DEFAULT_BEVELWIDTH;
+	sint32		bevelWidth=k_C3_CHECKBOX_DEFAULT_BEVELWIDTH, 
+				bevelType=0;
+	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
+
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
 	if (block->GetAttributeType( k_C3_CHECKBOX_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {

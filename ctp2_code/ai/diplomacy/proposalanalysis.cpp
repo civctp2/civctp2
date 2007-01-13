@@ -9,12 +9,11 @@
 
 
 #include "c3.h"
-#include "ProposalAnalysis.h"
 
-#include <algorithm>            // std::max, std::min
 #include "MapPoint.h"
 #include "player.h"
 #include "Diplomat.h"
+#include "ProposalAnalysis.h"
 #include "AdvanceRecord.h"
 #include "Unit.h"
 #include "UnitData.h"
@@ -22,9 +21,14 @@
 #include "AgreementMatrix.h"
 #include "GSLogs.h"
 #include "mapanalysis.h"
+#include "c3math.h"
 #include "gold.h"
 #include "DiplomacyProposalRecord.h"
 #include "diplomacyutil.h"
+
+#include "UnitPool.h"
+
+using namespace ai;
 
 
 void ProposalAnalysis::ComputeResult( const NewProposal & proposal,
@@ -268,6 +272,7 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Unit city;
 	double scale_regard = 0.0;
 	const AdvanceRecord * advance_record = NULL;
 
@@ -281,52 +286,51 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 	}
 	
 	ai::Agreement agreement;
-	switch (proposal_type) 
-    {
+	switch (proposal_type) {
 	case PROPOSAL_OFFER_GIVE_CITY:
-        {
-	        Unit city   = Unit(proposal_arg.cityId);
 		
-		    Assert(city.IsValid());
-		    if (city.IsValid())
-            {
-		        senderResult.gold -= city->GetCityData()->GetValue();
-		        senderResult.production -= city->GetNetCityProduction() * 10;
-		        senderResult.science -= city.CD()->GetScience() * 10;
+		
+		
+		Assert(g_theUnitPool->IsValid(proposal_arg.cityId));
+		if (!g_theUnitPool->IsValid(proposal_arg.cityId))
+			break;
 
-		        receiverResult.gold += city->GetCityData()->GetValue();
-		        receiverResult.production += city->GetNetCityProduction() * 10;
-		        receiverResult.science += city.CD()->GetScience() * 10;
+		city.m_id = proposal_arg.cityId;
+		senderResult.gold -= city->GetCityData()->GetValue();
+		senderResult.production -= city->GetNetCityProduction() * 10;
+		senderResult.science -= city.CD()->GetScience() * 10;
 
-		        scale_regard = 
-			        (double) map.GetAlliedValue(sender, city.RetPos()) / 
-					         map.GetMaxAlliedValue(sender);
-            }
-        }
+		receiverResult.gold += city->GetCityData()->GetValue();
+		receiverResult.production += city->GetNetCityProduction() * 10;
+		receiverResult.science += city.CD()->GetScience() * 10;
+
+		scale_regard = 
+			(double) map.GetAlliedValue(sender, city.RetPos()) / 
+					 map.GetMaxAlliedValue(sender);
+
 		break;
-
 	case PROPOSAL_REQUEST_GIVE_CITY:
-        {
-	        Unit city   = Unit(proposal_arg.cityId);
 		
-		    Assert(city.IsValid());
-		    if (city.IsValid())
-            {
-		        senderResult.gold += city->GetCityData()->GetValue();
-		        senderResult.production += city->GetNetCityProduction() * 10;
-		        senderResult.science += city.CD()->GetScience() * 10;
 
-		        receiverResult.gold -= city->GetCityData()->GetValue();
-		        receiverResult.production -= city->GetNetCityProduction() * 10;
-		        receiverResult.science -= city.CD()->GetScience() * 10;
+		
+		Assert(g_theUnitPool->IsValid(proposal_arg.cityId));
+		if (!g_theUnitPool->IsValid(proposal_arg.cityId))
+			break;
 
-		        scale_regard = 
-			        (double) map.GetAlliedValue(receiver, city.RetPos()) / 
-					         map.GetMaxAlliedValue(receiver);
-            }
-        }
+		city.m_id = proposal_arg.cityId;
+		senderResult.gold += city->GetCityData()->GetValue();
+		senderResult.production += city->GetNetCityProduction() * 10;
+		senderResult.science += city.CD()->GetScience() * 10;
+
+		receiverResult.gold -= city->GetCityData()->GetValue();
+		receiverResult.production -= city->GetNetCityProduction() * 10;
+		receiverResult.science -= city.CD()->GetScience() * 10;
+
+		scale_regard = 
+			(double) map.GetAlliedValue(receiver, city.RetPos()) / 
+					 map.GetMaxAlliedValue(receiver);
+
 		break;
-
 	case PROPOSAL_OFFER_WITHDRAW_TROOPS:
 		
 
@@ -397,32 +401,32 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 	case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_REDUCE_BIO_WEAPONS:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration/2)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_GIVE_ADVANCE:
 		
@@ -486,12 +490,12 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 	case PROPOSAL_OFFER_REDUCE_POLLUTION:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration)
-            scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_REQUEST_REDUCE_POLLUTION:
 		
 		if (turns_since_last_agreed >= 0 && turns_since_last_agreed < duration)
-			scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
+			scale_regard = MIN((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_MAP:
 		
@@ -626,8 +630,16 @@ void ProposalAnalysis::ComputeRegardResultFromProfit(DiplomacyResult & senderRes
 
 bool ProposalAnalysis::IsSimpleGift(const NewProposal & proposal)
 {
-    return IsGift(proposal.detail) && 
-           (proposal.detail.second_type == PROPOSAL_NONE);
+	
+	if (proposal.detail.second_type != PROPOSAL_NONE)
+		return false;
+
+	
+	if (IsGift(proposal.detail))
+		return true;
+
+	
+	return false;
 }
 
 
@@ -639,7 +651,16 @@ bool ProposalAnalysis::IsGift(const ProposalData & proposal_data)
 	const DiplomacyProposalRecord *second_rec = 
 		g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex(proposal_data.second_type));
 	
-	return second_rec->GetCategoryGift() || first_rec->GetCategoryGift();
+	if (second_rec->GetCategoryGift())
+	{
+		return true;
+	}
+
+	if (first_rec->GetCategoryGift())
+	{
+		return true;
+	}
+	return false;
 }
 
 
@@ -695,15 +716,27 @@ bool ProposalAnalysis::GetTreatyFromProposal(const ProposalData & proposal_data,
 	{
 		treaty_type = proposal_data.second_type;
 		treaty_arg = proposal_data.second_arg;
-		treaty_found = !treaty_found;
+
+		
+		if (treaty_found)
+			treaty_found = false;
+		else
+			treaty_found = true;
 	}
 
-	return treaty_found;
+	
+	return (treaty_found);
 }
 
 
 bool ProposalAnalysis::IsAcceptResponse(const Response & response)
 {
+	
+	if (response.type != RESPONSE_COUNTER && 
+		response.type != RESPONSE_ACCEPT)
+		return false;
+
+	
 	if (response.type == RESPONSE_COUNTER)
 	{
 		switch (response.counter.second_type)
@@ -726,6 +759,7 @@ bool ProposalAnalysis::IsAcceptResponse(const Response & response)
 			return true;
 		}
 	}
+
 	
 	return false;
 }
@@ -756,7 +790,7 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 	bool piracy = (MapAnalysis::GetMapAnalysis().GetPiracyIncomeByPlayer(foreignerId, playerId) > 0);
 
 	
-//	bool border_incursion = (diplomat.GetBorderIncursionBy(foreignerId));
+	bool border_incursion = (diplomat.GetBorderIncursionBy(foreignerId));
 
 	
 	bool untrustworthy = (diplomat.GetTrust(foreignerId) < NEUTRAL_REGARD);

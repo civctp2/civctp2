@@ -33,9 +33,9 @@ aui_Win::aui_Win(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -57,9 +57,9 @@ aui_Win::aui_Win(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -404,16 +404,26 @@ void aui_Win::WinMouseLDrag( aui_MouseEvent *mouseData )
 {
 	if ( GetMouseOwnership() == this )
 	{
-		POINT   local   =
-		    { mouseData->position.x - m_x, mouseData->position.y - m_y };
-        WPARAM  wParam  = MK_LBUTTON;
+		POINT local =
+		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
+		POINT screen =
+		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
+
+		
+		
+
+		
+		
+
+		WPARAM wParam = MK_LBUTTON;
 		if ( mouseData->rbutton ) wParam |= MK_RBUTTON;
 
-		SendMessage(m_hwnd,
-			        WM_MOUSEMOVE,
-			        wParam,
-			        local.x + ( local.y << 16 ) 
-                   );
+		
+		SendMessage(
+			m_hwnd,
+			WM_MOUSEMOVE,
+			wParam,
+			local.x + ( local.y << 16 ) );
 
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
@@ -459,16 +469,23 @@ void aui_Win::WinMouseRDrag( aui_MouseEvent *mouseData )
 {
 	if ( GetMouseOwnership() == this )
 	{
-		POINT   local   =
-		    { mouseData->position.x - m_x, mouseData->position.y - m_y };
-		WPARAM wParam   = MK_RBUTTON;
+		POINT local =
+		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
+		POINT screen =
+		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
+
+		
+		
+
+		WPARAM wParam = MK_RBUTTON;
 		if ( mouseData->lbutton ) wParam |= MK_LBUTTON;
 
-		SendMessage(m_hwnd,
-			        WM_MOUSEMOVE,
-			        wParam,
-			        local.x + ( local.y << 16 ) 
-                   );
+		
+		SendMessage(
+			m_hwnd,
+			WM_MOUSEMOVE,
+			wParam,
+			local.x + ( local.y << 16 ) );
 
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSERDRAGOVER;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )

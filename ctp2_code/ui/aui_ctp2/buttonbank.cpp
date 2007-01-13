@@ -1,32 +1,4 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Button Bank
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 
@@ -79,9 +51,9 @@ ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	: 
-	aui_ImageBase( ldlBlock ),
+	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie)
+	aui_ImageBase( ldlBlock )
 {
 	InitCommon(ldlBlock);
 }
@@ -96,9 +68,9 @@ ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	:
-	aui_ImageBase( (sint32)0 ),
+	ControlSheet(retval, id, x, y, width, height, pattern, ActionFunc, cookie),
 	aui_TextBase( NULL ),
-	ControlSheet(retval, id, x, y, width, height, pattern, ActionFunc, cookie)
+	aui_ImageBase( (sint32)0 )
 {
 	InitCommon(NULL);
 }
@@ -141,8 +113,8 @@ AUI_ERRCODE ButtonBank::InitCommon(MBCHAR *bankBlock)
 {
 	MBCHAR				buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR				tableBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	aui_Action			*action = NULL;
-	AUI_ERRCODE			errcode = AUI_ERRCODE_OK;
+	aui_Action			*action;
+	AUI_ERRCODE			errcode;
 	sint32				i,j;
 
 	m_buttonsInBank = 0;
@@ -376,6 +348,7 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 	sint32				i, count, countAll;
 	Unit				unit;
 	const UnitRecord	*unitRec;
+	BOOL				condition = FALSE;
 	MapPoint			pos;
 	double				success, death;
 	sint32				timer, amount;
@@ -518,6 +491,18 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 		if ( count == 1 && unitRec->GetCanCarry() ) {	
 			AddButton( ORDERMODE_CARGO );
 		}
+
+		BOOL canRailLaunch = FALSE;
+		
+		
+		Unit city = g_theWorld->GetCell(unit.RetPos())->GetCity();
+		if (city.m_id != (0)) {
+			
+			
+			
+			
+		}
+		
 	}
 
 	

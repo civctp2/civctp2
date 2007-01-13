@@ -4,15 +4,17 @@
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
-#if defined(WIN32)
+#if !defined(USE_COM_REPLACEMENT)
 #include "c3.h"
-#endif
+#else
+#include <algorithm>
 
 #if defined(HAVE_STRING_H)
 #include <string.h>
 #endif
 
-#include <algorithm>
+using std::max;
+#endif
 #include "Geometric.h"
 #include "FaultGen.h"
 #include <stdlib.h>
@@ -201,7 +203,7 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 				yu = y - 1;
 				if(yu < 0)
 					yu += outheight;
-                sint32 h = std::max(OUTM(xl, y), OUTM(x, yu)) - 1;
+				sint32 h = max(OUTM(xl, y), OUTM(x, yu)) - 1;
 				if(h > -126)
 					h -= m_randgen->Next((h+127)/2);
 				if(h > -127) {
@@ -224,7 +226,7 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 				yd = y + 1;
 				if(yd >= outheight)
 					yd = 0;
-                sint32 h = std::max(OUTM(xr, y), OUTM(x, yd)) - 1;
+				sint32 h = max(OUTM(xr, y), OUTM(x, yd)) - 1;
 				if(h > -126)
 					h -= m_randgen->Next((h + 127)/2);
 				if(h > -127) {
@@ -329,12 +331,9 @@ void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 
 	sint32 cont;
 	for(cont = 0; cont < numContinents; cont++) {
-		bool    locOk       = false;
-		sint32  loop_guard  = 100;
-		sint32  contx       = 0;
-        sint32  conty       = 0;
-        sint32  width       = 0;
-        sint32  height      = 0;
+		bool locOk = false;
+		sint32 loop_guard = 100;
+		sint32 contx, conty, width, height;
 		while(!locOk && loop_guard-- > 0) {
 			contx = randgen->Next(outwidth);
 			conty = randgen->Next(outheight);

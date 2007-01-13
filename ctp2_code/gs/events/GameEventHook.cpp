@@ -25,8 +25,6 @@
 // Modifications from the original Activision code:
 //
 // - Redesigned (replaced PointerList with std::list) to repair memory leaks.
-// - Made the order of callback execution more logical: adding at the end of 
-//   the sublist with the same priority.
 //
 //----------------------------------------------------------------------------
 
@@ -73,9 +71,6 @@ private:
 
 } // namespace
 
-
-char const GameEventHookCallback::DESCRIPTION_MISSING[] = "An undescribed callback";
-
 //----------------------------------------------------------------------------
 //
 // Name       : GameEventHook::GameEventHook
@@ -114,7 +109,7 @@ GameEventHook::GameEventHook(GAME_EVENT type)
 //----------------------------------------------------------------------------
 GameEventHook::~GameEventHook()
 {
-    std::list<Node>().swap(m_callbacks);
+    m_callbacks.clear();
 }
 
 //----------------------------------------------------------------------------
@@ -131,8 +126,8 @@ GameEventHook::~GameEventHook()
 // Returns    : -       : may throw std::bad_alloc when no more memory
 //
 // Remark(s)  : * The new (Node) pair will be inserted before the first Node 
-//                - if any - with higher priority, so the list will stay 
-//                ordered when it was ordered when entering this function.
+//                - if any - with higher or equal priority, so the list will 
+//                stay ordered when it was ordered when entering this function.
 //              * NULL-callbacks will not be entered in the list, so we don't
 //                have to check this later.
 //
@@ -144,17 +139,12 @@ void GameEventHook::AddCallback
 )
 {
     Assert(cb);
+
     if (cb)
     {
-#if defined(_DEBUG)
-        char desc   [1024];
-        cb->GetDescription(desc, 1024);
-        Assert(strncmp(desc, GameEventHookCallback::DESCRIPTION_MISSING, 1024));
-#endif
-
         std::list<Node>::iterator   walk = m_callbacks.begin();
 
-        while ((walk != m_callbacks.end()) && (walk->m_priority <= pri))
+        while ((walk != m_callbacks.end()) && (walk->m_priority < pri))
         {
             ++walk;
         }
@@ -173,11 +163,10 @@ void GameEventHook::AddCallback
 //
 // Globals    : -
 //
-// Returns    : void    : should always succeed
+// Returns    : -       : should always succeed
 //
-// Remark(s)  : At the moment, this function is used only for cleaning up
-//              (unique) SlicSegment pool objects that are being destroyed,
-//              so we return immediately after deleting the first found.
+// Remark(s)  : The priority is not passed as parameter, so this function will
+//              remove *all* callback occurrences in the list.
 //
 //----------------------------------------------------------------------------
 void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
@@ -188,8 +177,7 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
     {
         if (walk->m_cb == cb)   
         {
-            walk = m_callbacks.erase(walk);
-            return;
+            walk == m_callbacks.erase(walk);
         }
         else
         {
@@ -201,6 +189,33 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
 //----------------------------------------------------------------------------
 //
 // Name       : GameEventHook::Activate
+//
+// Description: Start executing all event handlers in the list in sequence.
+//
+// Parameters : args            : parameters to pass to the event handlers
+//
+// Globals    : -
+//
+// Returns    : resumeIndex     : the index of the first event handler that 
+//                                has not been executed yet.
+//              GAME_EVENT_ERR  : result of execution
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+GAME_EVENT_ERR GameEventHook::Activate
+(
+    GameEventArgList *  args, 
+    sint32 &            resumeIndex
+)
+{
+    return Resume(args, 0, resumeIndex);
+};
+
+
+//----------------------------------------------------------------------------
+//
+// Name       : GameEventHook::Resume
 //
 // Description: Resume executing the event handlers in the list in sequence.
 //
@@ -217,59 +232,85 @@ void GameEventHook::RemoveCallback(GameEventHookCallback * cb)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-GAME_EVENT_ERR GameEventHook::Activate
+GAME_EVENT_ERR GameEventHook::Resume
 (
     GameEventArgList *  args, 
     sint32              startIndex, 
     sint32 &            resumeIndex
-) const
+)
 {
-    resumeIndex = 0;
+	std::list<Node>::iterator   walk = m_callbacks.begin();
 
-	for 
-    (
-        std::list<Node>::const_iterator walk = m_callbacks.begin();
-        walk != m_callbacks.end();
-        ++walk
-    )
+    for (resumeIndex = 0; resumeIndex < startIndex; ++resumeIndex)
     {
-        Node const &    runningNow  = *walk;
+        if (walk != m_callbacks.end())
+        {
+            ++walk;
+        }
+    }
+
+	return Run(walk, args, resumeIndex);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : GameEventHook::Run
+//
+// Description: Execute the event handlers in the list in sequence.
+//
+// Parameters : walk            : first event handler to execute
+//              args            : parameters to pass to the event handlers
+//
+// Globals    : -
+//
+// Returns    : walk            : first event handler that has not been 
+//                                executed yet.
+//              resumeIndex     : the index of the first event handler that 
+//                                has not been executed yet.
+//              GAME_EVENT_ERR  : result of execution
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+GAME_EVENT_ERR GameEventHook::Run
+(
+    std::list<Node>::iterator & walk,
+	GameEventArgList *          args,
+	sint32 &                    resumeIndex
+)
+{
+	while (walk != m_callbacks.end())
+    {
+        Node &  running = *walk;
+        ++walk;
+        ++resumeIndex;
+
 #if defined(_DEBUG)
-        char desc[1024];
-	    runningNow.m_cb->GetDescription(desc, 1024);
+        {
+            char desc[1024];
+		    running.m_cb->GetDescription(desc, 1024);
+		    EVENTLOG(("  %s\n", desc));
+		}
 #endif //_DEBUG
 
-        ++resumeIndex;  // updated before execution
+		GAME_EVENT_HOOK_DISPOSITION const disp = 
+            running.m_cb->GEVHookCallback(m_type, args);
 
-        if (resumeIndex <= startIndex)
+		switch (disp) 
         {
-            // No action yet
-        }
-        else
-        {
-#if defined(_DEBUG)
-	        EVENTLOG(("  %s\n", desc));
-#endif //_DEBUG
+		default:
+			Assert(disp == GEV_HD_Continue);
+            // Continue execution with the next handler in the list.
+            break;
 
-		    GAME_EVENT_HOOK_DISPOSITION const disp =  
-                runningNow.m_cb->GEVHookCallback(m_type, args);
+		case GEV_HD_NeedUserInput:
+			return GEV_ERR_NeedUserInput;
 
-		    switch (disp) 
-            {
-		    default:
-			    Assert(disp == GEV_HD_Continue);
-                // Continue execution with the next handler in the list.
-                break;
+		case GEV_HD_Stop:
+            Assert(running.m_priority <= GEV_PRI_Primary);
+			return GEV_ERR_StopProcessing;
 
-		    case GEV_HD_NeedUserInput:
-			    return GEV_ERR_NeedUserInput;
-
-		    case GEV_HD_Stop:
-                Assert(runningNow.m_priority <= GEV_PRI_Primary);
-			    return GEV_ERR_StopProcessing;
-
-            } // switch
-        }
+        } // switch
     } // for
 
     return GEV_ERR_OK;	

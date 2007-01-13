@@ -10,419 +10,862 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2
+// This material has been developed at apolyton.net by the Apolyton CtP2 
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added OrthogonalPoint to facilitate wrap computations.
-// - Corrected wrap computation for city influence and borders.
-// - Fixed first RadiusIterator constructor so that it does the same as
-//   in the original version. The defect caused a significant AI 
-//   performance loss. July 16th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                 // pre-compiled header
-#include "MapPoint.h"           // own declarations: consistency check
 
+#include "c3.h"
+
+#include "MapPoint.h"
 #include "civarchive.h"
+
 #include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld
+#include "World.h"
 #include "directions.h"
+
 #include "c3math.h"
+
+extern World *g_theWorld; 
+
 
 MapPoint g_mp_size;
 
-#define k_MAPPOINT_VERSION_MAJOR    0
-#define k_MAPPOINT_VERSION_MINOR    0
+#if 0
 
-namespace
-{
-MapPoint const  MAP_POINT_UNKNOWN   = MapPoint(-1, -1);
-
-void sqmp(const MapPoint &mp, sint32 &sq_min, MapPoint &diff)
-{
-	sint32 square = mp.x * mp.x + mp.y * mp.y;
-
-	if (square < sq_min) {
-		diff = mp;
-		sq_min = square;
-	} else if (square == sq_min) {
-		if (diff.x < mp.x) {
-			diff = mp;
-		} else if (diff.y < mp.y) {
-			diff = mp;
-		}
-	}
+MapPoint::MapPoint() 
+{ 
+   x = y= 0;
 }
 
-sint32 WrapDelta(sint32 delta, sint32 size)
-{
-	if (delta > 0)
-	{
-		while (2 * delta > size)
-		{
-			delta -= size;
-		}
-	}
-	else
-	{
-		while (-2 * delta > size)
-		{
-			delta += size;
-		}
-	}
+MapPoint::MapPoint(const sint32 ix, const sint32 iy)
 
-	return delta;
+{
+   x = ix; 
+   y = iy;
 }
 
-}	// namespace
 
+MapPoint::MapPoint (const MapPoint &copyMe)
 
-MapPoint& MapPoint::operator += (const MapPoint &rhs)
 {
-	x += rhs.x;
-	y += rhs.y;
-#if !defined(_SMALL_MAPPOINTS)
-	z += rhs.z;
+ 	memcpy(this, &copyMe, sizeof(MapPoint));
+
+}
+
+
+
+MapPoint & MapPoint::operator= (const MapPoint &copyMe)
+
+{
+	memcpy(this, &copyMe, sizeof(MapPoint));
+
+	return *this; 
+}
 #endif
-	return *this;
-}
 
-MapPoint & MapPoint::operator -= (const MapPoint &rhs)
+const MapPoint& MapPoint::operator += (const MapPoint &rhs) 
+
 {
-	x -= rhs.x;
-	y -= rhs.y;
-#if !defined(_SMALL_MAPPOINTS)
-	z -= rhs.z;
-#endif
-    return *this;
-}
+    x += rhs.x; 
+    y += rhs.y; 
+
+    return *this; 
+} 
 
 void MapPoint::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
 		{
-		archive<<x;
-		archive<<y;
-#if !defined(_SMALL_MAPPOINTS)
-		archive << z;
-#endif
+		archive<<x ;
+		archive<<y ;
+
 		}
 	else
 		{
-		archive>>x;
-		archive>>y;
-#if !defined(_SMALL_MAPPOINTS)
-		archive >> z;
-#endif
+		archive>>x ;
+		archive>>y ;
 		}
+
+
 }
 
-bool MapPoint::operator == (const MapPoint &test_me) const
+const BOOL MapPoint::operator== (const MapPoint &test_me) const
+
 {
-	return ((x == test_me.x) && (y == test_me.y));
+    return ((x == test_me.x) && (y == test_me.y));
 }
 
-bool MapPoint::operator!= (const MapPoint &test_me) const
+const BOOL MapPoint::operator!= (const MapPoint &test_me) const 
+
 {
-	return ((x != test_me.x) || (y != test_me.y));
+    return ((x != test_me.x) || (y != test_me.y));
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::GetNeighborPosition
-//
-// Description: Get a neighbour of this point.
-//
-// Parameters : direction       : the direction to get the neighbour for
-//
-// Globals    : -
-//
-// Returns    : bool            : the neighbour is valid (i.e. on the map)
-//              pos             : the neighbour
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool MapPoint::GetNeighborPosition
-(
-	WORLD_DIRECTION const & direction,
-	MapPoint &              pos
-) const
-{
-	OrthogonalPoint	point(*this);
-	Assert(point.IsValid());
 
-	point.Move(direction);
-	bool const	isAtMap	= point.IsValid();
-	if (isAtMap)
+
+MapPoint g_dir_offset[NOWHERE] = { 
+
+   MapPoint(1, -2),    
+   MapPoint(1, -1),    
+   MapPoint(1,  0),     
+   MapPoint(0, -1),    
+   MapPoint(0,  1),      
+   MapPoint(-1, 0),    
+   MapPoint(-1, 1),    
+   MapPoint(-1, 2),     
+};   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sint32 MapPoint::GetNeighborPosition( const WORLD_DIRECTION d, MapPoint &pos) const
+{
+	Assert(0 <= d); 
+	Assert(d < NOWHERE); 
+	sint16 sx = g_mp_size.x;
+	sint16 sy = g_mp_size.y;
+
+	Assert((x >= 0) && (x < sx));
+	Assert((y >= 0) && (y < sy));
+	
+	sint16 from_x = x;
+	sint16 from_y = y;
+	pos.x = x + g_dir_offset[d].x; 
+	pos.y = y + g_dir_offset[d].y;
+	
+    if (pos.x < 0) pos.x = sx + pos.x; 
+    else if (sx <= pos.x) pos.x = pos.x - sx; 
+
+	if (!g_theWorld->IsYwrap())
 	{
-		pos = point.GetRC();
+	   if (pos.y < 0) { 
+		   pos.y = 0; 
+		   return FALSE; 
+	   } else if (sy <= pos.y) { 
+		   pos.y = sy - 1;
+		   return FALSE; 
+	   } 
 	}
-
-	return isAtMap;
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::GetNeighborDirection
-//
-// Description: Get the direction of a neighbour.
-//
-// Parameters : neighbor        : the neighbour to get the direction for
-//
-// Globals    : -
-//
-// Returns    : WORLD_DIRECTION : the direction of the neighbour
-//
-// Remark(s)  : When neighbor is not actually a - direct - neighbour,
-//              NOWHERE will be returned.
-//
-//----------------------------------------------------------------------------
-WORLD_DIRECTION MapPoint::GetNeighborDirection(MapPoint const & neighbor) const
-{
-	MapPointData diff = NormalizedSubtract(neighbor);
-
-	switch (diff.x)
+	else
 	{
-	default:
-		break;
-
-	case -2:
-		if ( 0 == diff.y)       return WEST;
-		break;
-
-	case -1:
-		if (-1 == diff.y)       return NORTHWEST;
-		if ( 1 == diff.y)       return SOUTHWEST;
-		break;
-
-	case  0:
-		if (-2 == diff.y)       return NORTH;
-		if ( 2 == diff.y)       return SOUTH;
-#if !defined(_SMALL_MAPPOINTS)
-		if ( 0 == diff.y) 
+	
+		Assert (2*sx == sy);
+		if (pos.y < 0) pos.y += sy;
+		else if (pos.y >= sy) pos.y -= sy;
+	}
+    
+	if (!g_theWorld->IsXwrap())
+	{
+		Assert( 2*sx >= sy);
+		
+		if (from_x + (from_y/2) == sx - 1)
 		{
-			if (-1 == diff.z)   return DOWN;
-			if ( 1 == diff.z)   return UP;
+			
+			switch (d)
+			{
+			case EAST:
+				return FALSE;
+				break;
+			case NORTHEAST:
+			case SOUTHEAST:
+				
+				if (from_y & 1)
+					return FALSE;
+				break;
+			default:
+				break;
+			}
 		}
-#endif
-		break;
-
-	case 1:
-		if (-1 == diff.y)       return NORTHEAST;
-		if ( 1 == diff.y)       return SOUTHEAST;
-		break;
-
-	case 2:
-		if ( 0 == diff.y)       return EAST;
-		break;
+		else if (pos.x + pos.y/2 == sx - 1)
+		{
+			
+			switch (d)
+			{
+			case WEST:
+				return FALSE;
+				break;
+			case NORTHWEST:
+			case SOUTHWEST:
+				
+				if (pos.y & 1)
+					return FALSE;
+				break;
+			default:
+				break;
+			}
+		}
 	}
+	Assert(0 <= pos.x); 
+	Assert(pos.x < sx); 
+	Assert(0 <= pos.y); 
+	Assert(pos.y < sy); 
 
-	return NOWHERE;
+	return TRUE; 
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::IsNextTo
-//
-// Description: Check whether neighbor is actually a neighbour.
-//
-// Parameters : neighbor        : the neighbour to check
-//
-// Globals    : -
-//
-// Returns    : bool            : neighbor is a direct neighbour
-//
-// Remark(s)  : When neighbor is not a valid map location, false will be
-//              returned. The validity of this location is not checked.
-//
-//----------------------------------------------------------------------------
-bool MapPoint::IsNextTo(MapPoint const & neighbor) const
-{
-	WORLD_DIRECTION	const	direction	= GetNeighborDirection(neighbor);
 
-	if (NOWHERE == direction)
+WORLD_DIRECTION MapPoint::GetNeighborDirection(MapPoint neighbor) const 
+
+{
+    Assert(g_theWorld); 
+	if (g_theWorld->IsYwrap()) { 
+		if ((neighbor.y < 2) && ((g_mp_size.y-2) <= y)) { 
+			neighbor.y += g_mp_size.y; 
+			neighbor.x -= g_mp_size.y/2; 
+			while (neighbor.x < 0 ) { 
+				neighbor.x += g_mp_size.x; 
+			}
+		} else if (((g_mp_size.y-2) <= neighbor.y) && (y < 2)) { 
+			neighbor.y -= g_mp_size.y;
+			neighbor.x += g_mp_size.y/2; 
+			while (g_mp_size.x <= neighbor.x) { 
+				neighbor.x -= g_mp_size.x; 
+			} 
+			
+		} 
+	}
+	
+	if ((neighbor.x == 0) && (x == (g_mp_size.x-1))) { 
+		neighbor.x = g_mp_size.x; 
+	} else if ((neighbor.x == (g_mp_size.x-1)) && (x == 0)) { 
+		neighbor.x = -1; 
+	} 
+	
+	switch(neighbor.x - x) { 
+        case 1: 
+            switch ((neighbor.y - y)) {
+				case -2: return NORTH; 
+				case -1: return NORTHEAST; 
+				case 0: return EAST; 
+				default:
+					Assert(0); 
+					return NOWHERE; 
+            }
+        case 0: 
+            switch ((neighbor.y - y)) {
+				case -1: return NORTHWEST; 
+				case 1: return SOUTHEAST; 
+				default:
+					Assert(0);
+					return NOWHERE; 
+            }
+        case -1:
+            switch ((neighbor.y - y)) {
+				case 0: return WEST; 
+				case 1: return SOUTHWEST; 
+				case 2: return SOUTH; 
+				default:
+					Assert(0); 
+					return NOWHERE; 
+            } 
+        default: 
+            Assert(0); 
+            return NOWHERE; 
+	} 
+}
+
+BOOL MapPoint::IsNextTo(const MapPoint &neighbor) const 
+
+{
+	static MapPoint tmp;
+    
+  
+
+    
+    if(GetNeighborPosition(NORTH,tmp))
+	   if (neighbor == tmp) return TRUE; 
+
+	if(GetNeighborPosition(NORTHWEST,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    if(GetNeighborPosition(NORTHEAST,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    if(GetNeighborPosition(SOUTH,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    if(GetNeighborPosition(SOUTHWEST,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    if(GetNeighborPosition(SOUTHEAST,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    if(GetNeighborPosition(WEST,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    if(GetNeighborPosition(EAST,tmp))
+		if (neighbor == tmp) return TRUE; 
+
+    return FALSE; 
+}
+
+
+struct ScreenPoint
+{
+	ScreenPoint(const MapPoint &mp)
 	{
-		return false;
+		x = 2 * mp.x + mp.y;
+		y = mp.y;
+		if (x >= 2 * g_mp_size.x)
+			x -= 2 * g_mp_size.x;
 	}
+	sint32 x, y;
+};
 
-	MapPoint				tmp;
-	return GetNeighborPosition(direction, tmp) && (neighbor == tmp);
+
+
+
+static sint32 WrapDelta(sint32 delta, sint32 size)
+{
+	if (delta > 0)
+	{
+		if (2*delta > size)
+			delta -= size;
+	}
+	else
+	{
+		if (-2*delta > size)
+			delta += size;
+	}
+	return delta;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::IsValid
-//
-// Description: Test whether the point is valid (i.e. on the map).
-//
-// Parameters : -
-//
-// Globals    : g_mp_size
-//              g_theWorld
-//
-// Returns    : bool	: point is valid
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool MapPoint::IsValid(void) const
+void MapPoint::NormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 {
-	return (g_theWorld->IsXwrap() || ((x >= 0) && (x < g_mp_size.x)))
-	    && (g_theWorld->IsYwrap() || ((y >= 0) && (y < g_mp_size.y)))
-#if !defined(_SMALL_MAPPOINTS)
-	    && (z >= 0) && (z < g_mp_size.z)
-#endif
-	    ;
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::NormalizedSubtract
-//
-// Description: Return the (shortest) difference between dest and this point.
-//
-// Parameters : dest            : the point to go to from here
-//
-// Globals    : g_mp_size
-//              g_theWorld
-//
-// Returns    : MapPointData     : the difference, in XY coordinates
-//
-// Remark(s)  : Not valid for z component yet.
-//
-//----------------------------------------------------------------------------
-MapPointData MapPoint::NormalizedSubtract(MapPoint const & dest) const
-{
-	OrthogonalPoint here    (*this);
-	OrthogonalPoint to      (dest);
-	to.Move(MapPointData(-here.x, -here.y));
-
-	MapPointData    diff    (to.x, to.y);    
-
+	ScreenPoint src(*this);
+	ScreenPoint dst(dest);
+	sint32 dx = dst.x - src.x;
+	sint32 dy = dst.y - src.y;
+	
+	if (g_theWorld->IsYwrap())
+		dy = WrapDelta(dy, g_mp_size.y);
 	if (g_theWorld->IsXwrap())
-	{
-		diff.x = static_cast<sint16>(WrapDelta(diff.x, 2 * g_mp_size.x));
-	}
+		dx = WrapDelta(dx, 2 * g_mp_size.x);
+
+	diff.x = (sint16 )dx;
+	diff.y = (sint16 )dy;
+}
+
+sint32 MapPoint::NormalizedDistance(const MapPoint &dest) const
+{
+	ScreenPoint src(*this);
+	ScreenPoint dst(dest);
+	sint32 dx = dst.x - src.x;
+	sint32 dy = dst.y - src.y;
+	if (dx < 0) dx = -dx;
+	if (dy < 0) dy = -dy;
+	
 	if (g_theWorld->IsYwrap())
 	{
-		diff.y = static_cast<sint16>(WrapDelta(diff.y, g_mp_size.y));
+		sint32 y_size = g_mp_size.y;
+		if (2*dy > y_size)
+			dy = y_size - dy;
 	}
+	if (g_theWorld->IsXwrap())
+	{
+		sint32 x_size = 2 * g_mp_size.x;
+		if (2*dx > x_size)
+			dx = x_size - dx;
+	}
+	sint32 result = (dx + dy)/2;
 
-	return diff;
+
+
+
+	
+	return result;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::NormalizedDistance
-//
-// Description: Return the (shortest) difference between dest and this point.
-//
-// Parameters : dest    : the point to go to from here
-//
-// Globals    : -
-//
-// Returns    : sint32  : the distance
-//
-// Remark(s)  : Not valid for z component yet.
-//
-//----------------------------------------------------------------------------
-sint32 MapPoint::NormalizedDistance(MapPoint const & dest) const
+
+static void sqmp(const MapPoint &mp, sint32 &sq_min, MapPoint &diff) 
 {
-	MapPointData	diff    = NormalizedSubtract(dest);
+    sint32 square = mp.x * mp.x + mp.y * mp.y;
 
-	return (abs(diff.x) + abs(diff.y)) / 2;
-}
+    if (square < sq_min) { 
+        diff = mp; 
+        sq_min = square; 
+    } else if (square == sq_min) { 
+        if (diff.x < mp.x) { 
+            diff = mp; 
+        } else if (diff.y < mp.y) { 
+            diff = mp; 
+        } 
+    }
+} 
+
+
+
 
 void MapPoint::OldNormalizedSubtract(const MapPoint &dest, MapPoint &diff) const
 {
 
+    
+    static MapPoint s, d;
 
-	static MapPoint s, d;
+    s.x = (g_mp_size.y-1) - (x + y);
+    s.y = x; 
 
-	s.x = (g_mp_size.y-1) - (x + y);
-	s.y = x;
+    d.x = (g_mp_size.y-1) - (dest.x + dest.y);
+    d.y = dest.x; 
 
-	d.x = (g_mp_size.y-1) - (dest.x + dest.y);
-	d.y = dest.x;
-
-
-	static MapPoint delta_inner,
+    
+    static MapPoint delta_inner, 
 					delta_left, delta_right,
-					delta_up, delta_down,
-					delta_ur, delta_ul, delta_dr, delta_dl;
+					delta_up, delta_down, 
+					delta_ur, delta_ul, delta_dr, delta_dl; 
+
+    
+    delta_inner.x = d.x - s.x; 
+    delta_inner.y = d.y - s.y; 
+    sint32 sq_min = delta_inner.x * delta_inner.x + delta_inner.y * delta_inner.y; 
+    diff = delta_inner; 
+
+    delta_up.x = delta_inner.x + g_mp_size.x; 
+    delta_up.y = -(g_mp_size.x - d.y) - s.y;
+    sqmp(delta_up, sq_min, diff); 
+
+    delta_down.x = delta_inner.x - g_mp_size.x; 
+    delta_down.y = (g_mp_size.x - s.y) + d.y;
+    sqmp(delta_down, sq_min, diff); 
+
+    if (g_theWorld->IsYwrap()) { 
+
+        delta_right.x = g_mp_size.y + d.x - s.x; 
+        delta_right.y = d.y - s.y;
+        sqmp(delta_right, sq_min, diff); 
+
+        delta_left.x = -(g_mp_size.y + s.x - d.x); 
+        delta_left.y = d.y - s.y;
+        sqmp(delta_left, sq_min, diff); 
+
+        delta_ur.x = delta_right.x + g_mp_size.x; 
+        delta_ur.y = delta_up.y;
+        sqmp(delta_ur, sq_min, diff); 
+
+        delta_ul.x = delta_left.x + g_mp_size.x; 
+        delta_ul.y = delta_up.y;
+        sqmp(delta_ul, sq_min, diff); 
 
 
-	delta_inner.x = d.x - s.x;
-	delta_inner.y = d.y - s.y;
-	sint32 sq_min = delta_inner.x * delta_inner.x + delta_inner.y * delta_inner.y;
-	diff = delta_inner;
+        delta_dr.x = delta_right.x- g_mp_size.x; 
+        delta_dr.y = delta_down.y;
+        sqmp(delta_dr, sq_min, diff); 
 
-	delta_up.x = delta_inner.x + g_mp_size.x;
-	delta_up.y = -(g_mp_size.x - d.y) - s.y;
-	sqmp(delta_up, sq_min, diff);
-
-	delta_down.x = delta_inner.x - g_mp_size.x;
-	delta_down.y = (g_mp_size.x - s.y) + d.y;
-	sqmp(delta_down, sq_min, diff);
-
-	if (g_theWorld->IsYwrap()) {
-
-		delta_right.x = g_mp_size.y + d.x - s.x;
-		delta_right.y = d.y - s.y;
-		sqmp(delta_right, sq_min, diff);
-
-		delta_left.x = -(g_mp_size.y + s.x - d.x);
-		delta_left.y = d.y - s.y;
-		sqmp(delta_left, sq_min, diff);
-
-		delta_ur.x = delta_right.x + g_mp_size.x;
-		delta_ur.y = delta_up.y;
-		sqmp(delta_ur, sq_min, diff);
-
-		delta_ul.x = delta_left.x + g_mp_size.x;
-		delta_ul.y = delta_up.y;
-		sqmp(delta_ul, sq_min, diff);
-
-
-		delta_dr.x = delta_right.x- g_mp_size.x;
-		delta_dr.y = delta_down.y;
-		sqmp(delta_dr, sq_min, diff);
-
-		delta_dl.x = delta_left.x - g_mp_size.x;
-		delta_dl.y = delta_down.y;
-		sqmp(delta_dl, sq_min, diff);
-	}
+        delta_dl.x = delta_left.x - g_mp_size.x; 
+        delta_dl.y = delta_down.y;
+        sqmp(delta_dl, sq_min, diff); 
+    }
 }
 
 
-void MapPoint::Iso2Norm(const MapPointData &pos)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void MapPoint::FirstRectItt(const sint32 d, MapPoint &pos, sint32 &count)
 {
-	x = pos.x;
-	y = pos.y;
+	count = 0;
+	pos.Set(x,y);
+	sint32 i;
 
+	for(i = 0; i < d; i++) {
+		pos.GetNeighborPosition(WEST,pos);
+	}
+}
 
+BOOL MapPoint::EndRectItt(const sint32 d, const sint32 count)
+{ 
+	return count < (4 * (d * d) + 4 * d + 1);
+}
+
+void MapPoint::NextRectItt(const sint32 d, MapPoint &pos, sint32 &count)
+{
+	count++;
+	sint32 i;
+	sint32 len;
+	len = 2 * d + 1;
+	if((count % len) == 0) {
+		pos.GetNeighborPosition(SOUTHEAST, pos);
+		for(i = 0; i < len - 1; i++) {
+			pos.GetNeighborPosition(SOUTHWEST, pos);
+		}
+	} else {
+		pos.GetNeighborPosition(NORTHEAST, pos);
+	}
+}
+
+void MapPoint::Iso2Norm(const MapPointData &pos) 
+{
+    x = pos.x; 
+    y = pos.y; 
+
+   
 	y += x;
-	while (y >= g_mp_size.y) {
+    while (y >= g_mp_size.y) { 
 		y -= g_mp_size.y;
-	}
+    }
+
+    
+
+
+
+
+
+
+
 }
 
-void MapPoint::Norm2Iso(const MapPointData &pos)
+void MapPoint::Norm2Iso(const MapPointData &pos) 
 {
-	x = pos.x;
-	y = pos.y;
+    x = pos.x; 
+    y = pos.y; 
 
 	while(x < 0)
 		x += g_mp_size.x;
@@ -433,19 +876,89 @@ void MapPoint::Norm2Iso(const MapPointData &pos)
 	while(y < 0)
 		y += g_mp_size.y;
 
+#if 0
+	
+	if(x >= g_mp_size.x) {
+		y -= x;
+		x -= g_mp_size.x;
+	} else if(x < 0) {
+		y -= x;
+		x += g_mp_size.x;
+	} else {
+		y -= x;
+	}
+
+	while(y < 0) {
+		y += g_mp_size.y;
+		x = (x + g_mp_size.x - (((g_mp_size.y / 2) % g_mp_size.x) - 1)) % g_mp_size.x;
+	}
+#endif
+
+
+    
+
+
+
+
+
+
+
 }
 
-void MapPoint::Iso2Norm(const MapPoint &pos)
+void MapPoint::Iso2Norm(const MapPoint &pos) 
+
+{ 
+    Iso2Norm(MapPointData(pos)); 
+}
+
+void MapPoint::Norm2Iso(const MapPoint &pos) 
 
 {
-	Iso2Norm(MapPointData(pos));
+    Norm2Iso(MapPointData(pos)); 
 }
 
-void MapPoint::Norm2Iso(const MapPoint &pos)
 
-{
-	Norm2Iso(MapPointData(pos));
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #ifdef _DEBUG
@@ -456,8 +969,8 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 	sint16 h = sint16(g_theWorld->GetYHeight());
 
 	if(!g_theWorld->IsXwrap()) {
-
-
+		
+		
 		sint32 adjX1 = (((uPos.x + (uPos.y / 2)) % w) * 2) + (uPos.y & 1);
 		sint32 adjX2 = (((pos.x + (pos.y / 2)) % w) * 2) + (pos.y & 1);
 
@@ -466,7 +979,7 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 		return (dx1 * dx1 + dy1 * dy1) / 2;
 	}
 
-
+	
 	dx1 = uPos.x - pos.x;
 
 	if(w - ABS(dx1) < ABS(dx1)) {
@@ -481,7 +994,7 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 
 	if(g_theWorld->IsYwrap()) {
 		sint16 magicXAdj = (h - (w * 2)) / 2;
-
+		
 		MapPoint topPos = pos;
 		topPos.x += sint16(magicXAdj);
 		topPos.x = topPos.x % w;
@@ -515,9 +1028,9 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 
 		dy3 = (uPos.y - bottomPos.y) + dx3;
 
-        return std::min(std::min((dx1*dx1)+(dy1*dy1),
-					             (dx2*dx2)+(dy2*dy2)),
-				                 (dx3*dx3)+(dy3*dy3));
+		return min(min((dx1*dx1)+(dy1*dy1), 
+					   (dx2*dx2)+(dy2*dy2)),
+				   (dx3*dx3)+(dy3*dy3));
 	} else {
 		return dx1*dx1 + dy1*dy1;
 	}
@@ -525,27 +1038,19 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 #endif
 
 
-//----------------------------------------------------------------------------
-//
-// Name       : MapPoint::GetSquaredDistance
-//
-// Description: Return the (shortest) difference between dest and this point.
-//
-// Parameters : dest    : the point to go to from here
-//
-// Globals    : -
-//
-// Returns    : sint32  : the squared distance
-//
-// Remark(s)  : Not valid for z component yet.
-//
-//----------------------------------------------------------------------------
-sint32 MapPoint::GetSquaredDistance(MapPoint const & from, MapPoint const & to)
+sint32 MapPoint::GetSquaredDistance(const MapPoint &from, const MapPoint &to)
 {
-	MapPointData diff = from.NormalizedSubtract(to);
-
-	return ((diff.x * diff.x) + (diff.y * diff.y)) / 2;
-	// Check return value when defining !_SMALL_MAPPOINTS
+	ScreenPoint src(from);
+	ScreenPoint dst(to);
+	sint32 dx = dst.x - src.x;
+	sint32 dy = dst.y - src.y;
+	
+	if (g_theWorld->IsYwrap())
+		dy = WrapDelta(dy, g_mp_size.y);
+	if (g_theWorld->IsXwrap())
+		dx = WrapDelta(dx, 2 * g_mp_size.x);
+	sint32 retval = (dx * dx + dy * dy) / 2;
+	return retval;
 }
 
 
@@ -567,54 +1072,161 @@ uint32 MapPoint_MapPoint_GetVersion(void)
 
 void verifyYwrap()
 {
-	MapPoint pos, tmp1, tmp2;
+    MapPoint pos, tmp1, tmp2; 
 
-	for (pos.x=0; pos.x<g_mp_size.x; pos.x++)
-	{
-		for (pos.y=0; pos.y<g_mp_size.y; pos.y++)
-		{
-			tmp1.Norm2Iso(pos);
-			tmp2.Iso2Norm(tmp1);
-			Assert(pos == tmp2);
-		}
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   for (pos.x=0; pos.x<g_mp_size.x; pos.x++) { 
+      for (pos.y=0; pos.y<g_mp_size.y; pos.y++) {    
+         tmp1.Norm2Iso(pos); 
+         tmp2.Iso2Norm(tmp1); 
+         Assert(pos == tmp2); 
+      } 
+   } 
 }
 
 
 void MapPoint::xy2rc(const MapPoint & xy_pos, const MapPoint & map_size)
 {
-	y = xy_pos.y;
-	x = (xy_pos.x - xy_pos.y) >> 1;
-
-	sint16 const	w = map_size.x;
-
-	while (x < 0)
+#if 0
+	sint16 c1 = ((xy_pos.x - xy_pos.y) / 2) % map_size.x;
+	
+	if (c1 < 0)
 	{
-		x += w;
+		x = (sint16)(map_size.x + c1);
+		y = xy_pos.y;
 	}
-
-	while (x >= w)
+	else
 	{
-		x -= w;
+		x = c1;
+		y = xy_pos.y;
 	}
+#endif
+
+	
+	
+	
+	y = xy_pos.y;	
+	x = (xy_pos.x - xy_pos.y)>>1;
+	if (x<0) {
+		do {
+			x+= map_size.x;
+		} while (x<0);
+	}
+	else while (x>=map_size.x) x-=map_size.x;
 }
 
 
 void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 {
-	y = rc_pos.y;
-	x = (2 * rc_pos.x) + rc_pos.y;
+	
+	
+	
+	
+	
+	
+	y = rc_pos.y;	
+	x = (2*rc_pos.x) + rc_pos.y;
 
-	sint16 const	w	= map_size.x * 2;
-	while (x < 0)
-	{
-		x += w;
-	}
-
-	while (x >=w)
-	{
-		x -= w;
-	}
+	const w = map_size.x*2;
+	while (x>=w) x -= w;
 }
 
 
@@ -633,66 +1245,14 @@ void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 // Remark(s)  : Constructor. Does not do any checking.
 //
 //----------------------------------------------------------------------------
+
 OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 #if defined(_SMALL_MAPPOINTS)
-:
-	x       (m_point.x),
-	y       (m_point.y),
-	m_point ((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y)
+:	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y)
 #else
-:
-	x       (m_point.x),
-	y       (m_point.y),
-	z       (m_point.z),
-	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z)
+:	m_point((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z)
 #endif
 { }
-
-//----------------------------------------------------------------------------
-//
-// Name       : OrthogonalPoint::OrthogonalPoint
-//
-// Description: Copy constructor
-//
-// Parameters : copy    : data to copy from
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : Constructor. Does not do any checking.
-//
-//----------------------------------------------------------------------------
-OrthogonalPoint::OrthogonalPoint(OrthogonalPoint const & copy)
-:
-	x       (m_point.x),
-	y       (m_point.y),
-#if !defined(_SMALL_MAPPOINTS)
-	z       (m_point.z),
-#endif
-	m_point (copy.m_point)
-{ }
-
-//----------------------------------------------------------------------------
-//
-// Name       : OrthogonalPoint::operator =
-//
-// Description: Assignment operator
-//
-// Parameters : copy    : data to assign from
-//
-// Globals    : -
-//
-// Returns    : OrthogonalPoint &   : this object, after modification
-//
-// Remark(s)  : Does not do any checking.
-//
-//----------------------------------------------------------------------------
-OrthogonalPoint & OrthogonalPoint::operator = (OrthogonalPoint const & copy)
-{
-	m_point = copy.m_point;
-	return *this;
-}
 
 //----------------------------------------------------------------------------
 //
@@ -706,10 +1266,11 @@ OrthogonalPoint & OrthogonalPoint::operator = (OrthogonalPoint const & copy)
 //
 // Returns    : MapPoint	: Point with RC coordinates.
 //
-// Remark(s)  : The returned value is only valid when the current point is
-//              a valid map point.
+// Remark(s)  : The returned value is only valid when the current point is 
+//              a valid map point. 
 //
 //----------------------------------------------------------------------------
+
 MapPoint OrthogonalPoint::GetRC(void)
 {
 	MapPoint	remap(m_point);
@@ -722,6 +1283,7 @@ MapPoint OrthogonalPoint::GetRC(void)
 	else
 	{
 		// Invalid data
+		Assert(false);
 	}
 
 	return remap;
@@ -737,21 +1299,22 @@ MapPoint OrthogonalPoint::GetRC(void)
 //
 // Globals    : g_mp_size
 //
-// Returns    : bool    : point is valid
+// Returns    : bool	: point is valid
 //
-// Remark(s)  : Apply wrapping first.
+// Remark(s)  : Apply wrapping first. 
 //
 //----------------------------------------------------------------------------
-bool OrthogonalPoint::IsValid(void) 
+
+bool OrthogonalPoint::IsValid(void)
 {
 	Normalise();
 
-	return (m_point.x >= 0) && (m_point.x < (2 * g_mp_size.x))  &&
-	       (m_point.y >= 0) && (m_point.y < g_mp_size.y)        &&
+	return (m_point.x >= 0) && (m_point.x < (2 * g_mp_size.x))	&&
+		   (m_point.y >= 0) && (m_point.y < g_mp_size.y)		&&
 #if !defined(_SMALL_MAPPOINTS)
-	       (m_point.z >= 0) && (m_point.z < g_mp_size.z)        &&
+		   (m_point.z >= 0) && (m_point.z < g_mp_size.z)		&&
 #endif
-	       (((m_point.x + m_point.y) & 1) == 0);
+		   (((m_point.x + m_point.y) & 1) == 0);
 }
 
 //----------------------------------------------------------------------------
@@ -760,10 +1323,10 @@ bool OrthogonalPoint::IsValid(void)
 //
 // Description: Move the position of a point.
 //
-// ParametersA: delta           : movement vector
+// ParametersA: delta			: movement vector
 //
-// ParametersB: direction       : direction to move in
-//              count           : number of steps to move
+// ParametersB: direction		: direction to move in
+//				count			: number of steps to move
 //
 // Globals    : -
 //
@@ -772,6 +1335,7 @@ bool OrthogonalPoint::IsValid(void)
 // Remark(s)  : The move is always applied - even when invalid.
 //
 //----------------------------------------------------------------------------
+
 void OrthogonalPoint::Move(MapPointData const & delta)
 {
 	m_point += MapPoint(delta);
@@ -781,18 +1345,18 @@ void OrthogonalPoint::Move(MapPointData const & delta)
 
 void OrthogonalPoint::Move
 (
-	WORLD_DIRECTION const   direction,
-	size_t const            count
+	WORLD_DIRECTION const	direction,
+	size_t const			count
 )
 {
-	MapPointData	delta   = Step(direction);
-	delta.x *= count;
-	delta.y *= count;
+	MapPointData	delta	= Step(direction);
+	delta.x	*= count;
+	delta.y	*= count;
 #if !defined(_SMALL_MAPPOINTS)
-	delta.z *= count;
+	delta.z	*= count;
 #endif
 
-	m_point += MapPoint(delta);
+	m_point	+= MapPoint(delta);
 }
 
 //----------------------------------------------------------------------------
@@ -805,13 +1369,14 @@ void OrthogonalPoint::Move
 // Parameters : -
 //
 // Globals    : g_theWorld
-//              g_mp_size
+//				g_mp_size
 //
 // Returns    : -
 //
-// Remark(s)  : "Usual" range: 0 <= x < 2 * map width, 0 <= y < map height
+// Remark(s)  : "Usual" range: 0 <= x < 2 * map width, 0 <= y < map height 
 //
 //----------------------------------------------------------------------------
+
 void OrthogonalPoint::Normalise(void)
 {
 	if (g_theWorld->IsXwrap())
@@ -855,8 +1420,9 @@ void OrthogonalPoint::Normalise(void)
 //
 // Remark(s)  : When the argument is not a valid direction, the returned delta
 //              is all 0.
-//
+//			
 //----------------------------------------------------------------------------
+
 MapPointData OrthogonalPoint::Step
 (
 	WORLD_DIRECTION const	direction
@@ -864,13 +1430,13 @@ MapPointData OrthogonalPoint::Step
 {
 	switch (direction)
 	{
-	case NORTH:
+	case NORTH:	
 		return MapPointData(0, -2);
 	case NORTHEAST:
 		return MapPointData(1, -1);
 	case EAST:
 		return MapPointData(2 , 0);
-	case SOUTHEAST:
+	case SOUTHEAST:        
 		return MapPointData(1, 1);
 	case SOUTH:
 		return MapPointData(0, 2);
@@ -880,7 +1446,7 @@ MapPointData OrthogonalPoint::Step
 		return MapPointData(-2, 0);
 	case NORTHWEST:
 		return MapPointData(-1, -1);
-#if !defined(_SMALL_MAPPOINTS)
+#if 0	// Not in WORLD_DIRECTION now, but could be used for space launches.
 	case UP:
 		return MapPointData(0, 0, 1);
 	case DOWN:
@@ -891,129 +1457,3 @@ MapPointData OrthogonalPoint::Step
 	}
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : SquareIterator
-//
-// Description: -
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-
-SquareIterator::SquareIterator(MapPoint const & center, sint32 size)
-:	m_center        (center),
-	m_cur           (center),
-	m_wrappedCur    (center),
-	m_startX        (center.x),
-	m_endX          (center.x),
-	m_row           (static_cast<sint16>(size)),
-	m_intRadius     (static_cast<sint16>(size)),
-	m_testXY        (OrthogonalPoint(m_center))
-{
-}
-
-void SquareIterator::Start()
-{
-	m_startX    = m_center.x - m_intRadius;
-	m_endX      = m_center.x + m_intRadius;
-	m_cur.x     = m_startX;
-	m_row       = 0;
-	m_cur.y     = m_center.y + m_row;
-	
-	m_testXY    = OrthogonalPoint(m_center);
-	m_testXY.Move(WEST, m_intRadius);
-	
-	if (IsIncluded())
-	{
-		// Point is on the map
-		m_wrappedCur = m_testXY.GetRC();
-	}
-	else
-	{
-		Next();
-	}
-}
-
-void SquareIterator::Next()
-{
-	bool	isValid	= false;
-	
-	while (!isValid && !End())  
-	{
-		m_cur.x++;
-		m_cur.y--;
-		m_testXY.Move(NORTHEAST);
-
-		if (m_cur.x > m_endX) 
-		{
-			m_row++;
-			m_cur.x = m_startX;
-			m_cur.y = m_center.y + m_row;
-			m_testXY.Move(SOUTH);
-			m_testXY.Move(SOUTHWEST, m_endX - m_startX);
-		}
-
-		isValid	= IsIncluded();
-	} 
-		
-	if (isValid)
-	{
-		m_wrappedCur = m_testXY.GetRC();
-	}
-}
-
-bool SquareIterator::End() const
-{
-	return m_row > (2 * m_intRadius);
-}
-
-bool SquareIterator::IsIncluded()
-{
-	return m_testXY.IsValid();
-}
-
-MapPoint SquareIterator::Pos() const
-{
-	return m_wrappedCur;
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : RadiusIterator
-//
-// Description: -
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-
-RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size)
-:	SquareIterator  (center, size),
-	m_squaredRadius (static_cast<double>(size * size))
-{
-}
-
-RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size, double squaredSize)
-:	SquareIterator  (center, size),
-	m_squaredRadius (squaredSize)
-{
-}
-
-bool RadiusIterator::IsIncluded()
-{
-	return m_testXY.IsValid() &&
-	       (MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius);
-}

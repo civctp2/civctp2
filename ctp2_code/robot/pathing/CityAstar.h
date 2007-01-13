@@ -25,9 +25,7 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
 #ifndef __CITY_ASTAR_H__
 #define __CITY_ASTAR_H__ 1
 
@@ -45,14 +43,6 @@ class CityAstar : public Astar {
 
      
 public:
-	CityAstar() 
-	: 
-		Astar			(),
-		m_owner			(PLAYER_UNASSIGNED),
-		m_alliance_mask	(0),
-		m_pathRoad		(false)
-	{ ; }
-
 
     void FindCityDist(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
       float &cost);

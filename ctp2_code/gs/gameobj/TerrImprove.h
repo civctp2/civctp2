@@ -6,9 +6,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef _TERRIMPROVE_H_
 #define _TERRIMPROVE_H_
 
@@ -18,10 +17,13 @@
 template <class T> class DynamicArray;
 
 class TerrainImprovement : public ID {
+private:
 public:
 	TerrainImprovement () : ID() { return; } ; 
 	TerrainImprovement (sint32 val) : ID (val) { return; }; 
 	TerrainImprovement (uint32 val) : ID (val) { return; }; 
+	TerrainImprovement (const int val) : ID (val) { return; }; 
+	TerrainImprovement (const unsigned int val) : ID (val) { return; }; 
 
 	TerrainImprovementData *operator -> () const { return AccessData(); }
 
@@ -31,7 +33,6 @@ public:
 	void Kill() { KillImprovement(); }
 	void RemoveAllReferences();
 
-	//const TerrainImprovementRecord * GetDBRec() const;  //added by E although the game uses installations?
 	const TerrainImprovementData *GetData() const;
 	TerrainImprovementData *AccessData() const;
 
@@ -41,7 +42,6 @@ public:
 	MapPoint GetLocation() const { return GetData()->GetLocation(); }
 	sint32 GetCompletion() const { return GetData()->GetCompletion(); }
 	sint32 PercentComplete() const { return GetData()->PercentComplete(); }
-//	sint32 GetBonusProductionExport() const { return GetData()->GetBonusProductionExport(); } //EMOD 4-5-2006
 	sint32 GetMaterialCost() const { return GetData()->GetMaterialCost(); }
 	bool IsBuilding() const { return GetData()->IsBuilding(); }
 

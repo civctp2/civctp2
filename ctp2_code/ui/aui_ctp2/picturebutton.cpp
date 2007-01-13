@@ -36,12 +36,13 @@ PictureButton::PictureButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_ImageBase( (sint32)0 ),
+	aui_Button( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_TextBase(NULL),
-	aui_Button      (retval, id, x, y, width, height, ActionFunc, cookie),
-    m_upPicture     (NULL),
-    m_downPicture   (NULL)
+	aui_ImageBase( (sint32)0 )
 {
+	m_upPicture = NULL;
+	m_downPicture = NULL;
+
 	InitCommon(upPicture, downPicture);
 }
 
@@ -52,12 +53,13 @@ PictureButton::PictureButton(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_ImageBase( ldlBlock ),
+	aui_Button(retval, id, ldlBlock, ActionFunc, cookie),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Button      (retval, id, ldlBlock, ActionFunc, cookie),
-    m_upPicture     (NULL),
-    m_downPicture   (NULL)
+	aui_ImageBase( ldlBlock )
 {
+	m_upPicture = NULL;
+	m_downPicture = NULL;
+
 	InitCommon(ldlBlock, NULL, TRUE);
 }
 
@@ -67,11 +69,18 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 	MBCHAR		*upName, *downName;
 	MBCHAR		path[_MAX_PATH];
 
-	if (isLDL) 
-    {
+	if (isLDL) {
+		aui_Ldl *theLdl = g_c3ui->GetLdl();
+
 		ldlBlock = upPicture;
 
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+		
+		BOOL valid = theLdl->IsValid( ldlBlock );
+		Assert( valid );
+		if ( !valid ) return AUI_ERRCODE_HACK;
+
+		
+		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -86,18 +95,20 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 		downName = downPicture;
 	}
 	
-	AUI_ERRCODE retval = AUI_ERRCODE_OK;
+	AUI_ERRCODE retval;
 
-	delete m_upPicture;
+	
 	if (g_civPaths->FindFile(C3DIR_PICTURES, upName, path)) {
+		if (m_upPicture) delete m_upPicture;
 		m_upPicture = new Picture(&retval, path);
 		Assert(retval == AUI_ERRCODE_OK);
 	} else {
 		m_upPicture = NULL;
 	}
 
-	delete m_downPicture;
+	
 	if (g_civPaths->FindFile(C3DIR_PICTURES, downName, path)) {
+		if (m_downPicture) delete m_downPicture;
 		m_downPicture = new Picture(&retval, path);
 		Assert(retval == AUI_ERRCODE_OK);
 	} else {
@@ -109,8 +120,8 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 
 PictureButton::~PictureButton()
 {
-	delete m_upPicture;
-	delete m_downPicture;
+	if (m_upPicture) delete m_upPicture;
+	if (m_downPicture) delete m_downPicture;
 }
 
 

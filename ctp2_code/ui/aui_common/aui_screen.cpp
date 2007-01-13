@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface screen
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Standardized code (May 21th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -104,15 +85,14 @@ AUI_ERRCODE aui_Screen::Show( void )
 AUI_ERRCODE aui_Screen::Hide( void )
 {
 	ListPos position = m_windowList->GetHeadPosition();
-	sint32 i;
-	for ( i = m_windowList->L(); i; i-- )
+	for ( sint32 i = m_windowList->L(); i; i-- )
 	{
 		aui_Window *window = m_windowList->GetNext( position );
 		g_ui->RemoveWindow( window->Id() );
 	}
 
 	
-	for (sint32 j = m_tempWindowList->L(); j; --j)
+	for ( i = m_tempWindowList->L(); i; i-- )
 	{
 		aui_Window *window = m_tempWindowList->RemoveTail();
 		g_ui->RemoveWindow( window->Id() );
@@ -151,8 +131,7 @@ AUI_ERRCODE aui_Screen::AddWindow( aui_Window *window, BOOL temp )
 AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 {
 	ListPos position = m_windowList->GetHeadPosition();
-	sint32 i;
-	for ( i = m_windowList->L(); i; i-- )
+	for ( sint32 i = m_windowList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Window *window = m_windowList->GetNext( position );
@@ -166,7 +145,7 @@ AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 	}
 
 	position = m_tempWindowList->GetHeadPosition();
-	for ( sint32 j = m_tempWindowList->L(); j; j-- )
+	for ( i = m_tempWindowList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Window *window = m_tempWindowList->GetNext( position );
@@ -187,15 +166,14 @@ AUI_ERRCODE aui_Screen::RemoveWindow( uint32 windowId )
 aui_Window *aui_Screen::GetWindow( uint32 windowId )
 {
 	ListPos position = m_windowList->GetHeadPosition();
-	sint32 i;
-	for ( i = m_windowList->L(); i; i-- )
+	for ( sint32 i = m_windowList->L(); i; i-- )
 	{
 		aui_Window *window = m_windowList->GetNext( position );
 		if ( window->Id() == windowId ) return window;
 	}
 
 	position = m_tempWindowList->GetHeadPosition();
-	for ( sint32 j = m_tempWindowList->L(); j; j-- )
+	for ( i = m_tempWindowList->L(); i; i-- )
 	{
 		aui_Window *window = m_tempWindowList->GetNext( position );
 		if ( window->Id() == windowId ) return window;

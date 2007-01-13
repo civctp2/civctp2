@@ -146,11 +146,6 @@ UNIT_ARCHER {
    VisionRange 2
    EnableAdvance ADVANCE_BALLISTICS
    ObsoleteAdvance ADVANCE_CANNON_MAKING
-   UpgradeTo UNIT_LONGBOWMAN
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -205,8 +200,6 @@ UNIT_ARTILLERY {
    MaxMovePoints 200
    VisionRange 2
    EnableAdvance ADVANCE_EXPLOSIVES
-   UpgradeTo UNIT_MOBILE_SAM
-   UpgradeTo UNIT_WAR_WALKER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -268,7 +261,6 @@ UNIT_BATTLESHIP {
    MaxMovePoints 500
    VisionRange 3
    EnableAdvance ADVANCE_ADV_NAVAL_TACTICS
-   UpgradeTo UNIT_PLASMA_DESTROYER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -330,7 +322,6 @@ UNIT_BOMBER {
    VisionRange 2
    EnableAdvance ADVANCE_JET_PROPULSION
    ObsoleteAdvance ADVANCE_ADVANCED_COMPOSITES
-   UpgradeTo	UNIT_STEALTH_BOMBER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -395,9 +386,6 @@ UNIT_CANNON {
    VisionRange 2
    EnableAdvance ADVANCE_CANNON_MAKING
    ObsoleteAdvance ADVANCE_CYBERNETICS
-   UpgradeTo UNIT_ARTILLERY
-   UpgradeTo UNIT_MOBILE_SAM
-   UpgradeTo UNIT_WAR_WALKER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -520,7 +508,7 @@ UNIT_CARGO_HELICOPTER {
    CanAttack: Air
    CanAttack: Land
    CanAttack: Mountain
-   CanCarry: MedLand
+   CanCarry: SmallLand
    CanSee: Standard
    MovementType: Air
    Size: Large
@@ -555,7 +543,6 @@ UNIT_CARRACK {
    VisionRange 2
    EnableAdvance ADVANCE_OCEAN_FARING
    ObsoleteAdvance ADVANCE_INTERNAL_COMBUSTION
-   UpgradeTo UNIT_TROOP_SHIP
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -610,9 +597,6 @@ UNIT_CATAMARAN {
    VisionRange 1
    EnableAdvance ADVANCE_SHIP_BUILDING
    ObsoleteAdvance ADVANCE_HULL_MAKING
-   UpgradeTo UNIT_LONGSHIP
-   UpgradeTo UNIT_CARRACK
-   UpgradeTo UNIT_TROOP_SHIP
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -673,10 +657,6 @@ UNIT_CATAPULT {
    VisionRange 2
    EnableAdvance ADVANCE_GEOMETRY
    ObsoleteAdvance ADVANCE_EXPLOSIVES
-   UpgradeTo UNIT_CANNON
-   UpgradeTo UNIT_ARTILLERY
-   UpgradeTo UNIT_MOBILE_SAM
-   UpgradeTo UNIT_WAR_WALKER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -735,8 +715,6 @@ UNIT_CAVALRY {
    VisionRange 2
    EnableAdvance ADVANCE_CAVALRY_TACTICS
    ObsoleteAdvance ADVANCE_FUSION
-   UpgradeTo	UNIT_TANK
-   UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -846,7 +824,6 @@ UNIT_CLERIC {
    VisionRange 1
    EnableAdvance ADVANCE_THEOLOGY
    ObsoleteAdvance ADVANCE_MASS_MEDIA
-   UpgradeTo UNIT_TELEVANGELIST
    GovernmentType GOVERNMENT_THEOCRACY
    ActiveDefenseRange 0
    LossMoveToDmgNone
@@ -1176,7 +1153,6 @@ UNIT_DESTROYER {
    VisionRange 3
    EnableAdvance ADVANCE_MASS_PRODUCTION
    ObsoleteAdvance ADVANCE_PLASMA_WEAPONRY
-   UpgradeTo UNIT_PLASMA_DESTROYER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 1
@@ -1238,7 +1214,6 @@ UNIT_DIPLOMAT {
    VisionRange 2
    EnableAdvance ADVANCE_BUREAUCRACY
    ObsoleteAdvance ADVANCE_EUGENICS
-   UpgradeTo UNIT_EMPATHIC_DIPLOMAT
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -1570,8 +1545,6 @@ UNIT_FIGHTER {
    VisionRange 3
    EnableAdvance ADVANCE_AERODYNAMICS
    ObsoleteAdvance ADVANCE_SUPERSONIC_FLIGHT
-   UpgradeTo	UNIT_INTERCEPTOR
-   UpgradeTo	UNIT_STEALTH_FIGHTER
    ActiveDefenseRange 0
    EnableCarrierDefenses
    LossMoveToDmgNone
@@ -1626,10 +1599,6 @@ UNIT_FIRE_TRIREME {
    VisionRange 1
    EnableAdvance ADVANCE_ALCHEMY
    ObsoleteAdvance ADVANCE_MODERN_METALLURGY
-   UpgradeTo UNIT_SHIP_OF_THE_LINE
-   UpgradeTo UNIT_IRONCLAD
-   UpgradeTo UNIT_BATTLESHIP
-   UpgradeTo UNIT_PLASMA_DESTROYER
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -1803,11 +1772,6 @@ UNIT_HOPLITE {
    VisionRange 1
    EnableAdvance ADVANCE_BRONZE_WORKING
    ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_PIKEMEN
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -1917,9 +1881,6 @@ UNIT_INFANTRYMAN {
    VisionRange 2
    EnableAdvance ADVANCE_GUNPOWDER
    ObsoleteAdvance ADVANCE_ADV_INFANTRY_TACTICS
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2035,7 +1996,6 @@ UNIT_INTERCEPTOR {
    VisionRange 4
    EnableAdvance ADVANCE_SUPERSONIC_FLIGHT
    ObsoleteAdvance ADVANCE_AI_SURVEILLANCE
-   UpgradeTo	UNIT_STEALTH_FIGHTER
    ActiveDefenseRange 0
    EnableCarrierDefenses
    LossMoveToDmgNone
@@ -2090,8 +2050,6 @@ UNIT_IRONCLAD {
    VisionRange 2
    EnableAdvance ADVANCE_MODERN_METALLURGY
    ObsoleteAdvance ADVANCE_ADV_NAVAL_TACTICS
-   UpgradeTo UNIT_BATTLESHIP
-   UpgradeTo UNIT_PLASMA_DESTROYER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -2152,9 +2110,6 @@ UNIT_KNIGHT {
    EnableAdvance ADVANCE_FEUDALISM
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_TANK_WARFARE
-   UpgradeTo	UNIT_CAVALRY
-   UpgradeTo	UNIT_TANK
-   UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2209,7 +2164,6 @@ UNIT_KRAKEN {
    MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_GENETIC_TAILORING
-   UpgradeTo UNIT_DREADNAUGHT
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2385,8 +2339,6 @@ UNIT_LONGSHIP {
    VisionRange 1
    EnableAdvance ADVANCE_HULL_MAKING
    ObsoleteAdvance ADVANCE_INTERNAL_COMBUSTION
-   UpgradeTo UNIT_CARRACK
-   UpgradeTo UNIT_TROOP_SHIP
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2441,8 +2393,6 @@ UNIT_MACHINE_GUNNER {
    VisionRange 1
    EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_CHAOS_THEORY
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2497,7 +2447,6 @@ UNIT_MARINE {
    MaxMovePoints 300
    VisionRange 2
    EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2554,7 +2503,6 @@ UNIT_MOBILE_SAM {
    MaxMovePoints 400
    VisionRange 3
    EnableAdvance ADVANCE_RADAR
-   UpgradeTo UNIT_WAR_WALKER
    BombRounds 5
    BombardRange 1
    CanCounterBombard
@@ -2674,9 +2622,6 @@ UNIT_MOUNTED_ARCHER {
    EnableAdvance ADVANCE_HORSE_RIDING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ObsoleteAdvance ADVANCE_TANK_WARFARE
-   UpgradeTo UNIT_CAVALRY
-   UpgradeTo UNIT_TANK
-   UpgradeTo UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -2731,7 +2676,6 @@ UNIT_NUCLEAR_SUBMARINE {
    VisionRange 3
    EnableAdvance ADVANCE_NUCLEAR_POWER
    ObsoleteAdvance ADVANCE_GENETIC_TAILORING
-   UpgradeTo UNIT_MOREY_STRIKER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -2970,10 +2914,6 @@ UNIT_PIKEMEN {
    VisionRange 1
    EnableAdvance ADVANCE_FEUDALISM
    ObsoleteAdvance ADVANCE_FASCISM
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3257,9 +3197,6 @@ UNIT_SHIP_OF_THE_LINE {
    VisionRange 2
    EnableAdvance ADVANCE_NAVAL_TACTICS
    ObsoleteAdvance ADVANCE_MASS_PRODUCTION
-   UpgradeTo UNIT_IRONCLAD
-   UpgradeTo UNIT_BATTLESHIP
-   UpgradeTo UNIT_PLASMA_DESTROYER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -3489,7 +3426,6 @@ UNIT_SPY {
    VisionRange 3
    EnableAdvance ADVANCE_NATIONALISM
    ObsoleteAdvance ADVANCE_NEURAL_INTERFACE
-   UpgradeTo UNIT_CYBER_NINJA
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3737,8 +3673,6 @@ UNIT_SUBMARINE {
    VisionRange 2
    EnableAdvance ADVANCE_OIL_REFINING
    ObsoleteAdvance ADVANCE_NUCLEAR_POWER
-   UpgradeTo UNIT_NUCLEAR_SUBMARINE
-   UpgradeTo UNIT_MOREY_STRIKER
    BombRounds 5
    BombardRange 1
    ActiveDefenseRange 0
@@ -3802,10 +3736,6 @@ UNIT_SWORDSMAN {
    VisionRange 1
    EnableAdvance ADVANCE_IRON_WORKING
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -3862,7 +3792,6 @@ UNIT_TANK {
    VisionRange 3
    EnableAdvance ADVANCE_TANK_WARFARE
    ObsoleteAdvance ADVANCE_UNIFIED_PHYSICS
-   UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4169,11 +4098,6 @@ UNIT_WARRIOR {
    VisionRange 2
    EnableAdvance ADVANCE_TOOLMAKING
    ObsoleteAdvance ADVANCE_GUNPOWDER
-   UpgradeTo UNIT_SWORDSMAN
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4245,115 +4169,3 @@ UNIT_Z_FREIGHT_TRANSPORT {
 
 ############################################################
 
-## UNIT 72
-UNIT_LONGBOWMAN {
-   Description DESCRIPTION_UNIT_ARCHER
-   DefaultIcon ICON_UNIT_LONGBOWMAN
-   DefaultSprite SPRITE_LONGBOWMAN
-   Category UNIT_CATEGORY_RANGED
-   Attack 10
-   Defense 15
-   ZBRangeAttack 25
-   Firepower 2
-   Armor 1
-   MaxHP 10
-   ShieldCost 370
-   PowerPoints 200
-   ShieldHunger 3
-   FoodHunger 0
-   MaxMovePoints 100
-   VisionRange 2
-   EnableAdvance ADVANCE_FEUDALISM
-   ObsoleteAdvance ADVANCE_CANNON_MAKING
-   UpgradeTo UNIT_INFANTRYMAN
-   UpgradeTo UNIT_MACHINE_GUNNER
-   UpgradeTo UNIT_MARINE
-   UpgradeTo UNIT_HOVER_INFANTRY
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   SoundSelect1 SOUND_SELECT1_ARCHER
-   SoundSelect2 SOUND_SELECT2_ARCHER
-   SoundMove SOUND_MOVE_ARCHER
-   SoundAcknowledge SOUND_ACKNOWLEDGE_ARCHER
-   SoundCantMove SOUND_CANTMOVE_ARCHER
-   SoundAttack SOUND_ATTACK_ARCHER
-   SoundWork SOUND_WORK_ARCHER
-   SoundVictory SOUND_VICTORY_ARCHER
-   SoundDeath SOUND_DEATH_ARCHER
-
-   CanAttack: Land
-   CanAttack: Mountain
-   CanSee: Standard
-   MovementType: Land
-   MovementType: Mountain
-   Size: Small
-   VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}
-
-############################################################
-## UNIT 73
-UNIT_ELEPHANT_WARRIOR {
-   Description DESCRIPTION_UNIT_KNIGHT
-   DefaultIcon ICON_UNIT_ELEPHANT_WARRIOR
-   DefaultSprite SPRITE_ELEPHANT_WARRIOR
-   Category UNIT_CATEGORY_FLANKER
-   Attack 30
-   Defense 20
-   ZBRangeAttack 0
-   Firepower 2
-   Armor 1
-   MaxHP 10
-   ShieldCost 3000
-   PowerPoints 400
-   ShieldHunger 10
-   FoodHunger 0
-   MaxMovePoints 200
-   VisionRange 2
-   EnableAdvance ADVANCE_SUBNEURAL_ADS #ADVANCE_FEUDALISM
-   ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
-   ObsoleteAdvance ADVANCE_TANK_WARFARE
-   ActiveDefenseRange 0
-   LossMoveToDmgNone
-   MaxFuel 0
-   CanEntrench
-   CanExpel
-   CanPillage
-   CanPirate
-   ExertsMartialLaw
-   DeathEffectsHappy
-   IsFlanker
-   CanBeGifted
-   ImmuneToHostileTerrain
-   NeedsCityGood TERRAIN_PLAINS_GOOD_TWO
-   SoundSelect1 SOUND_ID_ELEPHANT
-   SoundSelect2 SOUND_SELECT2_PIKEMEN
-   SoundMove SOUND_MOVE_PIKEMEN
-   SoundAcknowledge SOUND_ID_ELEPHANT
-   SoundCantMove SOUND_CANTMOVE_PIKEMEN
-   SoundAttack SOUND_ID_ELEPHANT
-   SoundWork SOUND_WORK_PIKEMEN
-   SoundVictory SOUND_ID_ELEPHANT
-   SoundDeath SOUND_ID_ELEPHANT
-   CanAttack: Land
-   CanSee: Standard
-   MovementType: Land
-   Size: Large
-   VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
-}

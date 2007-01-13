@@ -16,23 +16,19 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added unitutil_GetSmallCityMaxSize to figure out the maximum population
 //   size a ring one city. - Oct. 6th 2004 Martin Gühmann
-// - EMOD TO DO add check for buildings and wonder for ring size
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "unitutil.h"
-
 #include "UnitRecord.h"
+#include "unitutil.h"
 #include "World.h"
 #include "SpecialAttackInfoRecord.h"
 #include "UnitActor.h"
@@ -43,8 +39,11 @@
 #include "ConstDB.h"
 #include "GameEventUser.h"
 #include "player.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "FeatTracker.h"
+
+#include "UnitPool.h"
+extern UnitPool *g_theUnitPool;
 
 static sint32 s_maxDefenseRange;
 static sint32 s_maxVisionRange;
@@ -52,7 +51,6 @@ static sint32 s_maxVisionRange;
 #include "CitySizeRecord.h"
 
 static sint32 s_smallCityMaxSize;
-static sint32 s_maxCitySquaredRadius;
 
 static const SpecialAttackInfoRecord *s_specialAttackMap[SPECATTACK_MAX];
 
@@ -112,7 +110,6 @@ void unitutil_Initialize()
 	sint32 min = 0x7fffffff;
 	sint32 candidate;
 	s_smallCityMaxSize = 0x7fffffff;
-	s_maxCitySquaredRadius = 0;
 
 	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
 		candidate = g_theCitySizeDB->Get(i)->GetPopulation();
@@ -123,21 +120,13 @@ void unitutil_Initialize()
 		else if(candidate >= min && candidate < s_smallCityMaxSize){
 			s_smallCityMaxSize = candidate;
 		}
-		if(s_maxCitySquaredRadius < g_theCitySizeDB->Get(i)->GetSquaredRadius()){
-			s_maxCitySquaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
-		}
-		// EMOD add else if or if here? to check built buildings and wonders and get squared Radius
-
-
 	}
+
 }
 
 sint32 unitutil_GetSmallCityMaxSize()
 {
 	return s_smallCityMaxSize;
-}
-sint32 unitutil_GetMaxRadius(){
-	return s_maxCitySquaredRadius;
 }
 
 sint32 unitutil_MaxActiveDefenseRange()
@@ -202,14 +191,14 @@ const SpecialAttackInfoRecord *unitutil_GetSpecialAttack(SPECATTACK attack)
 void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers, const CellUnitList &defenders, double & city_bonus, double & entrenched_bonus)
 {
 	const CityData *cityData;
+	const Cell *cell;
 	city_bonus = 0.0;
 	entrenched_bonus = 0.0;
 	const UnitRecord *rec;
 	sint32 i;
 	
-	const Cell *    cell = g_theWorld->GetCell(pos);
-	if (cell->GetCity().IsValid()) 
-    {
+	cell = g_theWorld->GetCell(pos);
+	if(cell->GetCity().m_id != (0)) {
 		cityData = cell->GetCity().GetData()->GetCityData();
 		Assert(cityData);
 
@@ -244,9 +233,10 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 {
 	const CityData *cityData;
+	const Cell *cell;
 	image_index = -1;
 
-	const Cell *    cell = g_theWorld->GetCell(pos);
+	cell = g_theWorld->GetCell(pos);
 
 	if(cell->GetCity().m_id != (0)) {
 		cityData = cell->GetCity().GetData()->GetCityData();
@@ -290,8 +280,8 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 void unitutil_ExecuteMadLaunch(Unit & unit)
 {
 	
-	if( unit.GetDBRec()->HasNuclearAttack() && 
-		unit->GetTargetCity().IsValid() &&
+	if( unit.GetDBRec()->GetNuclearAttack() && 
+		g_theUnitPool->IsValid(unit->GetTargetCity()) &&
 		!unit.Flag(k_UDF_MAD_LAUNCHED)) {
 		
 		

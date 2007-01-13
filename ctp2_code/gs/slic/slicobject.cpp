@@ -1,38 +1,7 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Slic objects
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _BAD_BUTTON
-// - Tracts a list of deleted buttons.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - The finish method just deletes the MessageData from the asscicated 
-//   SlicFrame as the SlicFrame may be used later. (Sep. 24th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 #include "SlicObject.h"
-
 #include "SlicEngine.h"
 #include "SlicSegment.h"
 #include "dynarr.h"
@@ -44,219 +13,230 @@
 #include "SlicFrame.h"
 #include "MessageData.h"
 #include "MessagePool.h"
-#include "player.h"             // g_player
-#include "SelItem.h"            // g_selected_item
+#include "player.h"
+#include "SelItem.h"
 #include "SlicButton.h"
 #include "network.h"
 #include "civapp.h"
 #include "messagewin.h"
 #include "TradeBids.h"
 #include "messagewindow.h"
-#include "stringutils.h"        
-#include "TurnCnt.h"            // g_turn
-#include "Globals.h"
+
+#include "stringutils.h"
+
+#include "TurnCnt.h"
+#include "globals.h"
+
 #include "controlpanelwindow.h"
+extern ControlPanelWindow *g_controlPanel;
 
-extern ControlPanelWindow * g_controlPanel;
-extern CivApp			*   g_civApp;
+extern TurnCount		*g_turn;
 
-namespace
-{
-    sint32 const            INDEX_INVALID   = -1;
-}
+extern Player			**g_player;
+extern SelectedItem		*g_selected_item;
+extern CivApp			*g_civApp;
 
 #ifdef _PLAYTEST
 sint32 g_robotMessages = FALSE;
 #endif
 
+#pragma optimize ("", off)
+
+
 sint32 g_hackInstantMessages = 0;	
 
 SlicObject::SlicObject()
-:
-    SlicContext             (),
-    m_refCount              (0),
-    m_id                    (NULL),
-	m_segment               (NULL),
-	m_frame                 (NULL),
-	m_seconds               (1),
-	m_recipientList         (NULL),
-	m_numRecipients         (0),
-	m_request               (NULL),
-	m_defaultAdvanceSet     (FALSE),
-	m_defaultAdvance        (INDEX_INVALID),
-	m_aborted               (FALSE),
-	m_instantMessage        (FALSE),
-	m_index                 (INDEX_INVALID),
-	m_class                 (k_NON_TUTORIAL_MESSAGE_CLASS),
-	m_dontSave              (FALSE),
-    m_closeDisabled         (FALSE),
-	m_isDiplomaticResponse  (FALSE),
-	m_useDirector           (FALSE),
-	m_result                (0),
-	m_argList               (NULL)
 {
+	m_index = -1;
+	m_refCount = 0;
+	m_id = NULL;
+	m_recipientList = NULL;
+	m_frame = NULL;
+	m_request = NULL;
+    m_seconds = 1; 
+    m_defaultAdvance = -1; 
+    m_segment = NULL;
+    m_request = NULL;
+	m_aborted = FALSE;
+	m_instantMessage = FALSE;
+	m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
+	m_dontSave = FALSE;
+	m_closeDisabled = FALSE;
+	m_isDiplomaticResponse = FALSE;
+	m_useDirector = FALSE;
 }
 
-SlicObject::SlicObject(char const * id)
-:
-    SlicContext             (),
-    m_refCount              (0),
-    m_id                    (new char[strlen(id) + 1]),
-	m_segment               (NULL),
-	m_frame                 (NULL),
-	m_seconds               (1),
-	m_recipientList         (NULL),
-	m_numRecipients         (0),
-	m_request               (new ID),
-	m_defaultAdvanceSet     (FALSE),
-	m_defaultAdvance        (INDEX_INVALID),
-	m_aborted               (FALSE),
-	m_instantMessage        (FALSE),
-	m_index                 (INDEX_INVALID),
-	m_class                 (k_NON_TUTORIAL_HELP_CLASS),
-	m_dontSave              (FALSE),
-    m_closeDisabled         (FALSE),
-	m_isDiplomaticResponse  (FALSE),
-	m_useDirector           (FALSE),
-	m_result                (0),
-	m_argList               (NULL)
+SlicObject::SlicObject(char *id)
 {
+    m_seconds = 1; 
+    m_defaultAdvance = -1; 
+    m_segment = NULL;
+    m_request = NULL;
+
+	m_id = new char[strlen(id) + 1];
 	strcpy(m_id, id);
 
-	m_segment   = g_slicEngine->GetSegment(m_id);
-	m_frame     = new SlicFrame(m_segment);
-
-    if (m_segment && !m_segment->IsHelp()) 
-    {
+	m_recipientList = NULL;
+	m_numRecipients = 0;
+	m_defaultAdvanceSet = FALSE;
+	
+	m_segment = g_slicEngine->GetSegment(m_id);
+	m_frame = new SlicFrame(m_segment);
+	m_refCount = 0;
+	m_request = new ID;
+	m_aborted = FALSE;
+	m_instantMessage = FALSE;
+	if(m_segment && !m_segment->IsHelp()) {
 		m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
+	} else {
+		m_class = k_NON_TUTORIAL_HELP_CLASS;
 	}
+
+	m_dontSave = FALSE;
+	m_closeDisabled = FALSE;
+	m_isDiplomaticResponse = FALSE;
+	m_useDirector = FALSE;
 }
 
 SlicObject::SlicObject(SlicSegment *segment)
-:
-    SlicContext             (),
-    m_refCount              (0),
-    m_id                    (new char[strlen(segment->GetName()) + 1]),
-	m_segment               (segment),
-	m_frame                 (new SlicFrame(segment)),
-	m_seconds               (1),
-	m_recipientList         (NULL),
-	m_numRecipients         (0),
-	m_request               (new ID),
-	m_defaultAdvanceSet     (FALSE),
-	m_defaultAdvance        (INDEX_INVALID),
-	m_aborted               (FALSE),
-	m_instantMessage        (FALSE),
-	m_index                 (INDEX_INVALID),
-	m_class                 (k_NON_TUTORIAL_HELP_CLASS),
-	m_dontSave              (FALSE),
-    m_closeDisabled         (FALSE),
-	m_isDiplomaticResponse  (FALSE),
-	m_useDirector           (FALSE),
-	m_result                (0),
-	m_argList               (NULL)
 {
+	m_id = new char[strlen(segment->GetName()) + 1];
 	strcpy(m_id, segment->GetName());
-	if (m_segment && !m_segment->IsHelp()) 
-    {
+    m_segment = NULL;
+    m_request = NULL;
+	
+	m_recipientList = NULL;
+	m_numRecipients = 0;
+
+	m_segment = segment;
+	m_frame = new SlicFrame(m_segment);
+	m_refCount = 0;
+	m_defaultAdvanceSet = FALSE;
+	m_request = new ID;
+	m_aborted = FALSE;
+	m_instantMessage = FALSE;
+	if(m_segment && !m_segment->IsHelp()) {
 		m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
+	} else {
+		m_class = k_NON_TUTORIAL_HELP_CLASS;
 	}
+	m_dontSave = FALSE;
+	m_closeDisabled = FALSE;
+	m_isDiplomaticResponse = FALSE;
+	m_useDirector = FALSE;
 }
 
-SlicObject::SlicObject(SlicSegment * segment, SlicObject * copy) 
-: 
-    SlicContext             (copy),
-    m_refCount              (0),
-    m_id                    (new char[strlen(segment->GetName()) + 1]),
-	m_segment               (segment),
-	m_frame                 (new SlicFrame(segment)),
-	m_seconds               (1),
-	m_recipientList         (NULL),
-	m_numRecipients         (0),
-	m_request               (NULL),
-    m_defaultAdvanceSet     (copy->m_defaultAdvanceSet),
-    m_defaultAdvance        (copy->m_defaultAdvance),
-	m_aborted               (FALSE),
-	m_instantMessage        (copy->m_instantMessage),
-	m_index                 (INDEX_INVALID),
-	m_class                 (copy->m_class),
-    m_dontSave              (copy->m_dontSave),
-    m_closeDisabled         (copy->m_closeDisabled),
-    m_isDiplomaticResponse  (copy->m_isDiplomaticResponse),
-    m_useDirector           (copy->m_useDirector),
-	m_result                (0),
-	m_argList               (NULL)
+SlicObject::SlicObject(SlicSegment *segment, SlicObject *copy) 
+	: SlicContext(copy)
 {
+    m_seconds = 1; 
+    m_defaultAdvance = -1; 
+    m_segment = NULL;
+    m_request = NULL;
+
+	m_id = new char[strlen(segment->GetName()) + 1];
 	strcpy(m_id, segment->GetName());
-	m_request               = new ID(*copy->m_request);
+	
+	
+	
+	
+	
+	
+	
+	m_recipientList = NULL;
+	m_numRecipients = 0;
+
+	m_segment = segment;
+	m_frame = new SlicFrame(m_segment);
+	m_refCount = 0;
+	m_defaultAdvanceSet = copy->m_defaultAdvanceSet;
+	m_defaultAdvance = copy->m_defaultAdvance;
+	m_request = new ID(*copy->m_request);
+
+	
+	m_aborted = FALSE;
+	m_instantMessage = copy->m_instantMessage; 
+	m_class = copy->m_class;
+	m_dontSave = copy->m_dontSave;
+	m_closeDisabled = copy->m_closeDisabled;
+	m_isDiplomaticResponse = copy->m_isDiplomaticResponse;
+	m_useDirector = copy->m_useDirector;
 }
 
-SlicObject::SlicObject(char const * id, SlicContext *copy) 
-: 
-    SlicContext             (copy),
-    m_refCount              (0),
-    m_id                    (new char[strlen(id) + 1]),
-	m_segment               (NULL),
-	m_frame                 (NULL),
-	m_seconds               (1),
-	m_recipientList         (NULL),
-	m_numRecipients         (0),
-	m_request               (new ID),
-	m_defaultAdvanceSet     (FALSE),
-	m_defaultAdvance        (INDEX_INVALID),
-	m_aborted               (FALSE),
-	m_instantMessage        (FALSE),
-	m_index                 (INDEX_INVALID),
-	m_class                 (k_NON_TUTORIAL_HELP_CLASS),
-	m_dontSave              (FALSE),
-    m_closeDisabled         (FALSE),
-	m_isDiplomaticResponse  (FALSE),
-	m_useDirector           (FALSE),
-	m_result                (0),
-	m_argList               (NULL)
+SlicObject::SlicObject(char *id, SlicContext *copy) 
+	: SlicContext(copy)
 {
+    m_seconds = 1; 
+    m_defaultAdvance = -1; 
+    m_segment = NULL;
+    m_request = NULL;
+
+	m_id = new char[strlen(id) + 1];
 	strcpy(m_id, id);
-	m_segment   = g_slicEngine->GetSegment(m_id);
-	m_frame     = new SlicFrame(m_segment);
-	if (m_segment && !m_segment->IsHelp()) 
-    {
+
+	m_recipientList = NULL;
+	m_numRecipients = 0;
+	m_defaultAdvanceSet = FALSE;
+	
+	m_segment = g_slicEngine->GetSegment(m_id);
+	m_frame = new SlicFrame(m_segment);
+	m_refCount = 0;
+	m_request = new ID;
+	m_aborted = FALSE;
+	m_instantMessage = FALSE;
+	if(m_segment && !m_segment->IsHelp()) {
 		m_class = k_NON_TUTORIAL_MESSAGE_CLASS;
+	} else {
+		m_class = k_NON_TUTORIAL_HELP_CLASS;
 	}
+	m_dontSave = FALSE;
+	m_closeDisabled = FALSE;
+	m_isDiplomaticResponse = FALSE;
+	m_useDirector = FALSE;
 }
 
 SlicObject::SlicObject(CivArchive &archive)
-:
-    SlicContext             (),
-    m_refCount              (0),
-    m_id                    (NULL),
-	m_segment               (NULL),
-	m_frame                 (NULL),
-	m_seconds               (1),
-	m_recipientList         (NULL),
-	m_numRecipients         (0),
-	m_request               (new ID),
-	m_defaultAdvanceSet     (FALSE),
-	m_defaultAdvance        (INDEX_INVALID),
-	m_aborted               (FALSE),
-	m_instantMessage        (FALSE),
-	m_index                 (INDEX_INVALID),
-	m_class                 (k_NON_TUTORIAL_MESSAGE_CLASS),
-	m_dontSave              (FALSE),
-    m_closeDisabled         (FALSE),
-	m_isDiplomaticResponse  (FALSE),
-	m_useDirector           (FALSE),
-	m_result                (0),
-	m_argList               (NULL)
 {
+
+	
+	
+    m_segment = NULL;
+    m_request = NULL;
+	m_id = NULL;
+	m_recipientList = NULL;
+	m_request = new ID;
+	
+	
+	m_frame = NULL;
+
 	Serialize(archive);
 }
 
 SlicObject::~SlicObject()
 {
-	delete [] m_id;
-	delete [] m_recipientList;
-	delete m_frame;
-	delete m_request;
+	
+	
+	m_refCount = 0x7fffffff; 
+
+	if(m_id) {
+		delete [] m_id;
+		m_id = NULL;
+	}
+
+	if(m_recipientList) {
+		delete [] m_recipientList;
+		m_recipientList = NULL;
+	}
+
+	if(m_frame) {
+		delete m_frame;
+		m_frame = NULL;
+	}
+
+	if(m_request) {
+		delete m_request;
+		m_request = NULL;
+	}
 }
 
 sint32 SlicObject::AddRef()
@@ -276,6 +256,43 @@ sint32 SlicObject::Release()
 	}
 	return m_refCount;
 }
+
+#ifdef USE_SLICOBJECT_POOLS
+void *SlicObject::operator new(size_t size)
+{
+	Assert(g_slicEngine);
+	if(g_slicEngine) {
+		SlicObject *obj = g_slicEngine->GetNewObject();
+		return obj;
+	} else {
+		SlicObject *obj = ::new SlicObject();
+		obj->SetIndex(-1);
+		return obj;
+	}
+}
+
+void SlicObject::operator delete(void *ptr)
+{
+	SlicObject *obj = (SlicObject *)ptr;
+	Assert(obj->m_index >= 0);
+	if(obj->m_index >= 0) {
+		g_slicEngine->ReleaseObject(obj);
+
+		
+		
+		static SlicObject hackObject;
+		memcpy(ptr, (uint8*)&hackObject, (uint8*)&obj->m_refCount - (uint8*)ptr);
+	} else
+		::delete(ptr);
+}
+
+void SlicObject::operator delete[] (void *ptr, size_t size)
+{
+
+	::delete[] (ptr);
+}
+
+#endif
 
 BOOL SlicObject::IsValid()
 {
@@ -320,6 +337,9 @@ sint32 SlicObject::GetRecipient(const PLAYER_INDEX recip) const
 
 void SlicObject::Execute()
 {
+#ifdef _DEBUG
+	
+#endif
 	Assert(!g_slicEngine->AtBreak());
 	if(g_slicEngine->AtBreak())
 		return;
@@ -354,12 +374,10 @@ void SlicObject::Execute()
 
 //----------------------------------------------------------------------------
 //
-// Name       : SlicObject::Finish
+// Name       : Finish
 //
-// Description: Displays any messagebox defined by this SlicObject and then 
-//              deletes the original MessageData from the associated SlicFrame.
-//              The SlicFrame is not deleted as it may be used for error 
-//              messages later.
+// Description: Displays any messagebox defined by this SlicObject
+//              and then deletes the associated SlicFrame
 //
 // Parameters : -
 //
@@ -377,7 +395,7 @@ void SlicObject::Execute()
 //              out of the for loop.
 //
 //----------------------------------------------------------------------------
-void SlicObject::Finish()
+void SlicObject::Finish() 
 {
 	if(m_segment->GetType() == SLIC_OBJECT_MESSAGEBOX) {
 		
@@ -419,7 +437,7 @@ void SlicObject::Finish()
 						continue;
 
 					if(g_player[m_recipientList[i]]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-					   *m_request == ID()
+					   *m_request == ID(0)
 #ifdef _DEBUG
 					   && !g_robotMessages
 #endif
@@ -483,7 +501,8 @@ void SlicObject::Finish()
 			}
 		}
 	}
-	m_frame->DeleteMessageData();
+	delete m_frame;
+	m_frame = NULL;
 }
 
 #ifdef _DEBUG
@@ -686,3 +705,4 @@ void SlicObject::Continue()
 	Finish();
 }
 
+#pragma optimize ("", on)

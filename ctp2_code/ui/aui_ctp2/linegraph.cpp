@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Line graph
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,13 +24,10 @@
 // - Repaired memory leaks.
 // - Resolved ambigious calls of std::max.
 // - Removed all warnings on .NET
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "linegraph.h"
-
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_directsurface.h"
@@ -43,48 +37,49 @@
 #include "c3blitter.h"
 
 #include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
+#include "colorset.h"
 #include "primitives.h"
 #include "textutils.h"
 
 #include "EventTracker.h"
 
+#include "linegraph.h"
 
+extern ColorSet		*g_colorSet;
 extern C3UI			*g_c3ui;
 
 
-LineGraph::LineGraph
-(
-    AUI_ERRCODE *           retval,
-	sint32                  id,
-	MBCHAR *                ldlBlock,
-	ControlActionCallback * ActionFunc,
-	void *                  cookie,
-	EventTracker *          events
-)
-:	aui_Control     (retval, id, ldlBlock, ActionFunc, cookie),
-    m_events        (events)
+LineGraph::LineGraph(AUI_ERRCODE *retval,
+							sint32 id,
+							MBCHAR *ldlBlock,
+							ControlActionCallback *ActionFunc,
+							void *cookie,
+							EventTracker *events)
+	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+		aui_ImageBase(ldlBlock),
+		aui_TextBase(ldlBlock)
 {
+	m_events = events;
 	InitCommonLdl(ldlBlock);
 }
 
 
-LineGraph::LineGraph
-(
-    AUI_ERRCODE *           retval,
-	uint32                  id,
-	sint32                  x,
-	sint32                  y,
-	sint32                  width,
-	sint32                  height,
-	ControlActionCallback * ActionFunc,
-	void *                  cookie
-)
-:	aui_Control     (retval, id, x, y, width, height, ActionFunc, cookie),
-    m_events        (NULL)
+LineGraph::LineGraph(AUI_ERRCODE *retval,
+							uint32 id,
+							sint32 x,
+							sint32 y,
+							sint32 width,
+							sint32 height,
+							ControlActionCallback *ActionFunc,
+							void *cookie)
+	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+		aui_ImageBase((sint32)0),
+		aui_TextBase((MBCHAR *)NULL)
 {
+	m_events=NULL;
 	InitCommon();	
 }
+
 
 //----------------------------------------------------------------------------
 //
@@ -98,7 +93,7 @@ LineGraph::LineGraph
 //
 // Returns    : -
 //
-// Remark(s)  : -
+// Remark(s)  : Use delete [] for items that have been created with new [].
 //
 //----------------------------------------------------------------------------
 
@@ -121,9 +116,19 @@ LineGraph::~LineGraph()
 
 void LineGraph::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
+
+
 
 	InitCommon();
 }
@@ -131,7 +136,7 @@ void LineGraph::InitCommonLdl(MBCHAR *ldlBlock)
 
 void LineGraph::InitCommon(void)
 {
-	AUI_ERRCODE			errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE			errcode;
 
 	m_xmin = 0.0;
 	m_ymin = 0.0;
@@ -153,8 +158,7 @@ void LineGraph::InitCommon(void)
 	m_enablePrecision = TRUE;
 
 	
-    m_surface = new aui_DirectSurface
-        (&errcode, m_width, m_height, 16, g_c3ui ? g_c3ui->DD() : NULL);
+	m_surface = new aui_DirectSurface(&errcode, m_width, m_height, 16, g_c3ui->DD());
 	Assert( AUI_NEWOK(m_surface, errcode) );
 
 	SetRect(&m_surfaceRect, 0, 0, m_width, m_height);
@@ -218,7 +222,7 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.3f", m_xmax);
 		else sprintf(s, "%d", (sint32)m_xmax);
 
-        primitives_DrawText(m_surface, std::max(0L, m_graphRect.right-35L), m_graphRect.bottom + (m_events?20:0),
+		primitives_DrawText(m_surface, max(0L, m_graphRect.right-35L), m_graphRect.bottom + (m_events?20:0),
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 
@@ -236,24 +240,14 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymin);
 		else sprintf(s, "%d", (sint32)m_ymin);
 
-        primitives_DrawText(m_surface, 
-                            std::max(0L, m_graphRect.left-45L), 
-                            std::max(0L, m_graphRect.bottom-15L),
-							s, 
-                            g_colorSet->GetColorRef(COLOR_WHITE), 
-                            TRUE
-                           );
+		primitives_DrawText(m_surface, max(0L, m_graphRect.left-45L), max(0L, m_graphRect.bottom-15L),
+								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 
 		if (m_enablePrecision) sprintf(s, "%#.1f", m_ymax);
 		else sprintf(s, "%d", (sint32)m_ymax);
 	
-        primitives_DrawText(m_surface, 
-                            std::max(0L, m_graphRect.left-45L), 
-                            m_graphRect.top,
-							s, 
-                            g_colorSet->GetColorRef(COLOR_WHITE), 
-                            TRUE
-                           );
+		primitives_DrawText(m_surface, max(0L, m_graphRect.left-45L), m_graphRect.top,
+								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 }
 
@@ -280,18 +274,24 @@ void LineGraph::DrawLines(int eventsOfset)
 {
 	sint32		color = (sint32)COLOR_RED;
 	sint32		i, j;
-	sint32		xpos = 0, ypos = 0, oldxpos = 0, oldypos = 0;
+	sint32		xpos, ypos, oldxpos, oldypos;
 	double		point;
+	BOOL		first;
 	
     Assert(m_ymin <= m_ymax); 
 	if(m_graphType == GRAPH_TYPE_LINE)
 	{
 		for (i=0; i<m_numLines; i++) {
-			bool first = true;		
-			for (j=0; j<m_numSamples; j++) 
-            {
-                point = std::min(m_ymax, m_lineData[i][j]);
-                point = std::max(m_ymin, point);
+			first = TRUE;		
+			for (j=0; j<m_numSamples; j++) {
+				point = m_lineData[i][j];
+				
+				
+				if (m_ymax < point) { 
+					point = m_ymax; 
+				} else if (point < m_ymin) { 
+					point = m_ymin; 
+				} 
 
 				sint32 num = m_numSamples-1;
 				if (num == 0) num = 1;
@@ -299,19 +299,25 @@ void LineGraph::DrawLines(int eventsOfset)
 				xpos = m_graphRect.left + ((m_graphRect.right-m_graphRect.left) * j) / num;
 				ypos = (sint32)(m_graphRect.bottom - ((point-m_ymin) / (m_ymax - m_ymin)) * (m_graphRect.bottom - m_graphRect.top));
 
-                sint32  l_Color = (m_data) ? m_data[i].color : color;
-
-                if (first) 
-                {
-					primitives_DrawLine16(m_surface, xpos, ypos, xpos, ypos, g_colorSet->GetColor((COLOR) l_Color));
-					first = false;
-				} 
-                else 
-                {
-					primitives_DrawLine16(m_surface, oldxpos, oldypos, xpos, ypos, g_colorSet->GetColor((COLOR) l_Color));
+				if (!m_data)
+				{
+					if (first) {
+						primitives_DrawLine16(m_surface, xpos, ypos, xpos, ypos, g_colorSet->GetColor((COLOR)color));
+						first = FALSE;
+					} else {
+						primitives_DrawLine16(m_surface, oldxpos, oldypos, xpos, ypos, g_colorSet->GetColor((COLOR)color));
+					}
 				}
-
-                oldxpos = xpos;
+				else
+				{
+					if (first) {
+						primitives_DrawLine16(m_surface, xpos, ypos, xpos, ypos, g_colorSet->GetColor((COLOR)m_data[i].color));
+						first = FALSE;
+					} else {
+						primitives_DrawLine16(m_surface, oldxpos, oldypos, xpos, ypos, g_colorSet->GetColor((COLOR)m_data[i].color));
+					}
+				}
+				oldxpos = xpos;
 				oldypos = ypos;
 			}
 		
@@ -346,16 +352,14 @@ void LineGraph::DrawLines(int eventsOfset)
 			color++;
 		}
 
-		if (m_events)
+		if(m_events)
 		{
-			int currentEventNum = 0;
-			for 
-            (
-                EventData * curData = m_events->GetEvents(true);
-                curData;
-                curData = m_events->GetEvents(false)
-            )
+			int currentEventNum=0;
+			first=TRUE;
+			EventData *curData;
+			while(curData=m_events->GetEvents(first))
 			{
+				first=FALSE;
 				xpos=m_graphRect.left+(curData->m_turn-1)*width/m_numSamples;
 				ypos=((sint32)((m_data[curData->m_playerNum-1].bottomArray[curData->m_turn-1] + 
 					m_data[curData->m_playerNum-1].topArray[curData->m_turn-1])/2.0)*height)+
@@ -466,7 +470,9 @@ void LineGraph::SetXAxisName(MBCHAR *name)
 	Assert(name);
 	if (!name) return;
 
-	delete [] m_xAxisName;
+	if (m_xAxisName)
+		delete[] m_xAxisName;
+
 	m_xAxisName = new MBCHAR[strlen(name)+1];
 	strcpy(m_xAxisName, name);
 }
@@ -477,7 +483,9 @@ void LineGraph::SetYAxisName(MBCHAR *name)
 	Assert(name);
 	if (!name) return;
 
-	delete[] m_yAxisName;
+	if (m_yAxisName)
+		delete[] m_yAxisName;
+
 	m_yAxisName = new MBCHAR[strlen(name)+1];
 	strcpy(m_yAxisName, name);
 }

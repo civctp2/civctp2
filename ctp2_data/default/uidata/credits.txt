@@ -52,7 +52,7 @@
 <font1>      Martin Gühmann
 <font3>	
 <font0>	PROGRAMMING
-<font1> ahenobarb       
+<font1> ahenobarb
 <font1> ctplinuxfan
 <font1>	Fromafar
 <font1>	J Bytheway
@@ -61,7 +61,7 @@
 <font1>	Martin Gühmann
 <font1> MrBaggins
 <font1> NelsonAndBronte
-<font1>	Peter Triggs      "E"
+<font1>	Peter Triggs
 <font3>	
 <font0>	ART
 <font1>	OnePresent
@@ -105,14 +105,14 @@
 <font1> berXpert   Dale
 <font1> DDowell   ErichG
 <font1> Fromafar   J Bytheway
-<font1> Joss   Locutus  kaan
+<font1> Joss   Locutus
 <font1> Martin Gühmann   mjs0
 <font1> MrBaggins   Peter Triggs
 <font1> RalphTrickey   Raster
 <font1> Solver   vovan
 <font3>
 <font0> LINUX PORT EFFORTS
-<font1> bfennema    J Bytheway
+<font1> bfennema
 <font1> btb
 <font1> ctplinuxfan
 <font1> closms
@@ -638,13 +638,12 @@
 <font1>
 <font1>
 <font1>
+<font1>
+<font1>
 <font1>	
 <font1>	USES MILES SOUND SYSTEM.  
 <font1>	COPYRIGHT (C) 1991-2000 BY RAD GAME TOOLS, INC.
 <font1>
 <font1> Uses Freetype library
 <font1> Copyright 1996-1999 by David Turner, Robert Wilhelm, and Werner Lemberg
-<font1>
-<font1> Uses the zlib compression library
-<font1> Copyright (C) 1995-2005 Jean-loup Gailly and Mark Adler
 <end>		

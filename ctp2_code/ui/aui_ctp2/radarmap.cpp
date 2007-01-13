@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : User interface radar map
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,8 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
+// 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -39,7 +39,6 @@
 // - Borders on the minimap are now shown if fog of war is off or god mode
 //   is on, even if the there is no contact to that civilisation.
 //   - Mar. 4th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,28 +56,35 @@
 #include "aui_ldl.h"
 #include "aui_action.h"
 #include "c3ui.h"
-#include "player.h"                 // g_player
-#include "World.h"                  // g_theWorld
+#include "player.h"
+#include "XY_Coordinates.h"
+#include "World.h"
 #include "Cell.h"
 #include "UnseenCell.h"
 #include "citydata.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
-#include "SelItem.h"                // g_selected_item
-#include "tiledmap.h"               // g_tiledMap
+#include "colorset.h"
+#include "SelItem.h"
+#include "tiledmap.h"
 #include "director.h"
 #include "maputils.h"
 #include "primitives.h"
-#include "profileDB.h"              // g_theProfileDB
+#include "profileDB.h"
 #include "pointerlist.h"
 #include "terrainutil.h"
 #include "Scheduler.h"
 
 
 extern C3UI				*g_c3ui;
+extern TiledMap			*g_tiledMap;
+extern Player			**g_player;
 extern PointerList<Player> *g_deadPlayer;
+extern ProfileDB		*g_theProfileDB;
+extern SelectedItem		*g_selected_item;
+extern ColorSet			*g_colorSet;
+extern World			*g_theWorld;
 
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
@@ -101,10 +107,9 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:
+	:	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
-		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -125,10 +130,9 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
-	:
+	:	aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
-		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();	
@@ -142,8 +146,10 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 //---------------------------------------------------------------------------
 RadarMap::~RadarMap()
 {
-	delete m_mapSurface;
-	delete m_tempSurface;
+	if (m_mapSurface)
+		delete m_mapSurface;
+	if (m_tempSurface) 
+		delete m_tempSurface;
 	if (m_tempBuffer) 
 		free(m_tempBuffer);
 }
@@ -156,9 +162,19 @@ RadarMap::~RadarMap()
 //---------------------------------------------------------------------------
 void RadarMap::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
+
+
 
 	InitCommon();
 }
@@ -171,6 +187,9 @@ void RadarMap::InitCommonLdl(MBCHAR *ldlBlock)
 //---------------------------------------------------------------------------
 void RadarMap::InitCommon(void)
 {
+	AUI_ERRCODE			errcode;
+
+	
 	m_mapSurface = NULL;
 	m_mapSize = NULL;
 	m_tempSurface = NULL;
@@ -199,9 +218,9 @@ void RadarMap::InitCommon(void)
 	
 	m_selectedCity.m_id = 0;
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	
 	m_mapSurface = new aui_DirectSurface(&errcode, m_width, m_height, 16, g_c3ui->DD());
-	Assert(AUI_NEWOK(m_mapSurface, errcode));
+	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
 	RECT rect = { 0, 0, m_width, m_height };
 
@@ -226,7 +245,7 @@ void RadarMap::InitCommon(void)
 //---------------------------------------------------------------------------
 void RadarMap::ClearMapOverlay(void)
 {
-	delete [] m_mapOverlay;
+	delete[] m_mapOverlay;
 	m_mapOverlay = NULL;
 }
 
@@ -240,7 +259,7 @@ void RadarMap::ClearMapOverlay(void)
 //    lay it does not exists yet  
 //	
 //---------------------------------------------------------------------------
-void RadarMap::SetMapOverlayCell(MapPoint const & pos, COLOR color)
+void RadarMap::SetMapOverlayCell(MapPoint &pos, COLOR color)
 {
 	if (m_mapOverlay == NULL) {
 		sint32 len = m_mapSize->x * m_mapSize->y;
@@ -265,10 +284,15 @@ void RadarMap::SetMapOverlayCell(MapPoint const & pos, COLOR color)
 //---------------------------------------------------------------------------
 AUI_ERRCODE	RadarMap::Resize( sint32 width, sint32 height )
 {
-	AUI_ERRCODE		errcode = aui_Region::Resize(width, height);
+	AUI_ERRCODE		errcode;
+
+	errcode = aui_Region::Resize(width, height);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-	delete m_mapSurface;
+	if (m_mapSurface)
+		delete m_mapSurface;
+
+	
 	m_mapSurface = new aui_DirectSurface(&errcode, width, height, 16, g_c3ui->DD());
 	Assert( AUI_NEWOK(m_mapSurface, errcode) );
 
@@ -293,7 +317,8 @@ void RadarMap::CalculateMetrics(void)
 {
 	if (!g_theWorld) return;
 
-	delete m_tempSurface;
+	if (m_tempSurface) 
+		delete m_tempSurface;
 	if (m_tempBuffer) 
 		free(m_tempBuffer);
 
@@ -302,12 +327,12 @@ void RadarMap::CalculateMetrics(void)
 	m_tilePixelWidth = ((double )m_width) / m_mapSize->x;
 	m_tilePixelHeight = ((double )m_height) / m_mapSize->y;
 
+	AUI_ERRCODE err;
 	uint32 width = m_mapSize->x * 2;
 	uint32 height = m_mapSize->y;
 	
 	m_tempBuffer = (uint8 *)calloc((width + 2) * (height + 2), 2);
 	
-	AUI_ERRCODE err;
 	m_tempSurface = new aui_Surface(&err, width, height, 16, 2*(width + 2), &m_tempBuffer[2*((width + 2) + (1))]);
 }
 
@@ -322,9 +347,16 @@ void RadarMap::CalculateMetrics(void)
 //---------------------------------------------------------------------------
 POINT RadarMap::MapToPixel(sint32 x, sint32 y)
 {
-	sint32		k       = ((y / 2) + x) % m_mapSize->x;
+	POINT		pt;
+	sint32		k;
+	double		nudge;
+	k = ((y / 2) + x) % m_mapSize->x;
 
-    POINT		pt;
+	nudge = 0;
+	if (y&1) {
+		nudge = m_tilePixelWidth / 2.0;
+	}
+	
 	pt.x = (sint32)(k * m_tilePixelWidth);
 	pt.y = (sint32)(y * m_tilePixelHeight);
 
@@ -743,14 +775,14 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 
 	
 	RECT tileRectangle = {
-		static_cast<LONG>(ceil(xPosition)),
-		static_cast<LONG>(ceil(yPosition)),
-		static_cast<LONG>(ceil(xPosition + m_tilePixelWidth)),
-		static_cast<LONG>(ceil(yPosition + m_tilePixelHeight))
+		static_cast<sint32>(ceil(xPosition)),
+		static_cast<sint32>(ceil(yPosition)),
+		static_cast<sint32>(ceil(xPosition + m_tilePixelWidth)),
+		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
 	};
 
 	
-	LONG    middle = static_cast<LONG>(ceil(xPosition + m_tilePixelWidth/2));
+	sint32 middle = ceil(xPosition + m_tilePixelWidth/2);
 
 	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
@@ -948,17 +980,14 @@ void RadarMap::RenderMap(aui_Surface *surface)
 			RenderTile(m_tempSurface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);	
 		}
 
-    fRect const sRect = { 0.0, 
-                          0.0, 
-                          static_cast<float>(m_tempSurface->Width()), 
-                          static_cast<float>(m_tempSurface->Height())
-                        };
-    fRect const dRect = { 0.0, 
-                          0.0, 
-                          static_cast<float>((m_tilePixelWidth/2) * sRect.right),
-                          static_cast<float>(m_tilePixelHeight * sRect.bottom)
-                        };
+	fRect sRect = {0, 0, m_tempSurface->Width(), m_tempSurface->Height()};
+	fRect dRect;
+	dRect.left = 0;
+	dRect.top = 0;
+	dRect.right = (m_tilePixelWidth/2) * sRect.right;
+	dRect.bottom = m_tilePixelHeight * sRect.bottom;
 
+	
 	primitives_Scale16(m_tempSurface, surface, 
 		sRect, 
 		dRect, 
@@ -989,18 +1018,18 @@ void RadarMap::RenderViewRect
 	sint32 y	
 )
 {
-    RECT offsetRect = {0, 0, 0, 0};
+	RECT offsetRect;
+	sint32 nrplayer;
 
-	if (g_tiledMap) 
-    {
-		RECT *  temp        = g_tiledMap->GetMapViewRect();
+	if (g_tiledMap) {
 
-        m_mapViewRect = *temp;
+		nrplayer = g_selected_item->GetVisiblePlayer();
+
+		RECT *temp = g_tiledMap->GetMapViewRect();
+		m_mapViewRect = *temp;
 
 		if(!g_tiledMap->ReadyToDraw())
 			return;
-
-	    sint32  nrplayer    = g_selected_item->GetVisiblePlayer();
 
 		offsetRect.bottom = m_mapViewRect.bottom;
 		offsetRect.top = m_mapViewRect.top;
@@ -1052,16 +1081,19 @@ void RadarMap::RenderViewRect
 
 		else 
 		{
+		   	
 			if (offsetRect.left < 0) 
 			{
 				x1 = offsetRect.left + mapWidth;
 				x2 = mapWidth;
 
+				
 				if (offsetRect.right <= 0) 
 				{
 					x3 = mapWidth;
 					x4 = mapWidth;
 				}
+				
 				else 
 				{
 					x3 = 0;
@@ -1071,6 +1103,7 @@ void RadarMap::RenderViewRect
 			
 			else 
 			{
+				
 				if (offsetRect.right > mapWidth) 
 				{
 					x1 = offsetRect.left;
@@ -1078,6 +1111,8 @@ void RadarMap::RenderViewRect
 					x3 = 0;
 					x4 = offsetRect.right - mapWidth;
 				}
+				
+				
 				else 
 				{
 					x1 = offsetRect.left;
@@ -1097,11 +1132,25 @@ void RadarMap::RenderViewRect
 		// Set the Y points
 		if ( !g_theWorld->IsYwrap() && ( offsetRect.top < 0 || offsetRect.bottom >= mapHeight)) 
 		{
-            y1 = y3 = std::max<sint32>(0, offsetRect.top);
-            y2 = y4 = std::min<sint32>(mapHeight, offsetRect.bottom);
+			
+			y1 = y3 = offsetRect.top;
+			y2 = y4 = offsetRect.bottom;
+			if (offsetRect.top < 0) 
+			{
+				y1 = y3 = 0;
+			}
+
+			
+			if (offsetRect.bottom > mapHeight) 
+			{
+				y2 = y4 = mapHeight;
+			}
 		}
+
+		
 		else 
 		{
+
 			if ( offsetRect.top < 0 )
 			{
 				y1 = offsetRect.top + mapHeight;
@@ -1187,18 +1236,22 @@ void RadarMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
 //	RadarMap::ComputeCenteredMap
 //		
 //---------------------------------------------------------------------------
-MapPoint RadarMap::ComputeCenteredMap(MapPoint const & pos, RECT *viewRect)
+MapPoint RadarMap::ComputeCenteredMap(MapPoint &pos, RECT *viewRect)
 {
-	LONG const  w   = viewRect->right - viewRect->left;
-	LONG const  h   = viewRect->bottom - viewRect->top;
+	RECT *mapViewRect = viewRect;
+
+	
+	sint32 w = mapViewRect->right - mapViewRect->left;
+	sint32 h = mapViewRect->bottom - mapViewRect->top;
 
 	sint32 tileX;
-	maputils_MapX2TileX(pos.x, pos.y, &tileX);
+	maputils_MapX2TileX(pos.x,pos.y,&tileX);
 	
-	viewRect->left      = tileX - (w>>1);
-	viewRect->top       = (pos.y - (h>>1)) & (~1);  
-	viewRect->right     = viewRect->left + w;
-	viewRect->bottom    = viewRect->top + h;
+	
+	mapViewRect->left = tileX - (w>>1);
+	mapViewRect->top = (pos.y - (h>>1)) & (~1);  
+	mapViewRect->right = mapViewRect->left + w;
+	mapViewRect->bottom = mapViewRect->top + h;
 
 	return pos;
 }
@@ -1212,7 +1265,7 @@ MapPoint RadarMap::ComputeCenteredMap(MapPoint const & pos, RECT *viewRect)
 //  - Used to focus the RadarMap to a specific point 
 //
 //---------------------------------------------------------------------------
-MapPoint RadarMap::CenterMap(MapPoint const & pos)
+MapPoint RadarMap::CenterMap(MapPoint &pos)
 {
 	MapPoint LastPT = m_lastCenteredPoint;
 	if(LastPT.x == 0 && LastPT.y == 0)
@@ -1356,17 +1409,17 @@ void RadarMap::RedrawTile( const MapPoint *point )
 
 
 
-	float adjust = m_filter ? 0.5f : 0.0f;
+	float adjust = m_filter ? 0.5 : 0.0;
 	if (x0 == 2 * m_mapSize->x - 1)
 	{
 		
-		sRect.left      = x0 - adjust;
-		sRect.right     = x0 + 1.0f;
-        sRect.top       = std::max(0.0f, offsetpos.y - adjust);
-        sRect.bottom    = std::min(static_cast<float>(m_tempSurface->Height()), 
-                                   offsetpos.y + 1 + adjust
-                                  );
+		sRect.left = x0 - adjust;
+		sRect.right = x0 + 1;
+		sRect.top = offsetpos.y - adjust;
+		sRect.bottom = offsetpos.y + 1 + adjust;
 
+		if (sRect.top < 0) sRect.top = 0;
+		if (sRect.bottom > m_tempSurface->Height()) sRect.bottom = m_tempSurface->Height();
 		dRect.left = sRect.left * (m_tilePixelWidth/2);
 		dRect.right = sRect.right * (m_tilePixelWidth/2);
 		dRect.top = sRect.top * m_tilePixelHeight;
@@ -1384,14 +1437,14 @@ void RadarMap::RedrawTile( const MapPoint *point )
 	else
 	{
 		
-        sRect.left      = std::max(0.0f, x0 - adjust);
-        sRect.right     = std::min(static_cast<float>(m_tempSurface->Width()),
-                                   x0 + 2 + adjust
-                                  );
-        sRect.top       = std::max(0.0f, offsetpos.y - adjust);
-        sRect.bottom    = std::min(static_cast<float>(m_tempSurface->Height()),
-                                   offsetpos.y + 1 + adjust
-                                  );
+		sRect.left = x0 - adjust;
+		sRect.right = x0 + 2 + adjust;
+		sRect.top = offsetpos.y - adjust;
+		sRect.bottom = offsetpos.y + 1 + adjust;
+		if (sRect.bottom > m_tempSurface->Height()) sRect.bottom = m_tempSurface->Height();
+		if (sRect.right > m_tempSurface->Width()) sRect.right = m_tempSurface->Width();
+		if (sRect.left < 0) sRect.left = 0;
+		if (sRect.top < 0) sRect.top = 0;
 		
 		dRect.left = sRect.left * (m_tilePixelWidth/2);
 		dRect.right = sRect.right * (m_tilePixelWidth/2);
@@ -1634,9 +1687,9 @@ MapPoint RadarMap::MapOffset(MapPoint oldPoint)
 //---------------------------------------------------------------------------
 MapPoint RadarMap::PosWorldToPosRadar(MapPoint worldpos)
 {
+	MapPoint posRadar;
 	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
 
-	MapPoint posRadar;
 	posRadar.x = (worldpos.x - m_displayOffset[nrplayer].y/2 + m_mapSize->x 
 					+ m_displayOffset[nrplayer].x) % m_mapSize->x;
 	

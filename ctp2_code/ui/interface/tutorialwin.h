@@ -1,7 +1,6 @@
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __TUTORIALWIN_H__
 #define __TUTORIALWIN_H__
 

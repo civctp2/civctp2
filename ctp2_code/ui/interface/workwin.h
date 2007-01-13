@@ -6,8 +6,19 @@
 
 #include "aui_action.h"
 
-AUI_ACTION_BASIC(WorkWinCleanupAction);
-AUI_ACTION_BASIC(WorkWinUpdateAction);
+class WorkWinCleanupAction : public aui_Action
+{
+public:
+	virtual ActionCallback Execute;
+};
+
+class WorkWinUpdateAction : public aui_Action
+{
+public:
+	virtual ActionCallback Execute;
+};
+
+
 
 sint32 workwin_Initialize( void );
 sint32 workwin_Cleanup( void );

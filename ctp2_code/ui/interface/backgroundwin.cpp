@@ -162,15 +162,15 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 	return 0;
 }
 
-void backgroundWin_Cleanup(void)
+sint32 backgroundWin_Cleanup( void )
 {
-	if (g_c3ui && g_background)
-    {
-    	g_c3ui->RemoveWindow(g_background->Id());
-    }
+	if ( !g_background ) return 0; 
 
+	g_c3ui->RemoveWindow( g_background->Id() );
 	delete g_background;
 	g_background = NULL;
+
+	return 0;
 }
 
 #ifdef _PLAYTEST
@@ -179,80 +179,109 @@ sint32 g_debugOwner = k_DEBUG_OWNER_NONE;
 
 AUI_ERRCODE background_draw_handler(LPVOID bg)
 {
-	Background  *   back    = reinterpret_cast<Background *>(bg);
-	aui_Surface	*   surface = (back)    ? back->TheSurface() : NULL;
-	aui_Mouse *     mouse   = (g_c3ui)  ? g_c3ui->TheMouse() : NULL;
+	Background		*back = (Background *)bg;
+	aui_Surface		*surface = back->TheSurface();
+	aui_Mouse		*mouse = g_c3ui->TheMouse();
 
-    if (!mouse || !g_tiledMap) 
-    {
-        // Busy initialising: postpone drawing until ready.
-        return AUI_ERRCODE_INVALIDPARAM;    
-    }
+	mouse = g_c3ui->TheMouse();
+	if (mouse == NULL) return AUI_ERRCODE_INVALIDPARAM;
+
 	
-	if (g_modalWindow > 0) 
-    {
-		g_screenManager->LockSurface(surface);
-		g_tiledMap->DrawChatText();
-		g_screenManager->UnlockSurface();
 	
+	
+	if ( !g_tiledMap ) return AUI_ERRCODE_INVALIDPARAM;
+
+	
+	if (g_modalWindow > 0) {
+		
+			g_screenManager->LockSurface(surface);
+			g_tiledMap->DrawChatText();
+			g_screenManager->UnlockSurface();
+		
 		return AUI_ERRCODE_OK;
 	}
 
+	Assert(g_c3ui);
+	if (!g_c3ui) return AUI_ERRCODE_INVALIDPARAM;
+
+	
 	g_tiledMap->UpdateMixFromMap(surface);
 
-	if (g_theProfileDB->IsWaterAnim()) 
-    {
-        g_tiledMap->DrawWater();
-    }
+	
+	if ( g_theProfileDB->IsWaterAnim() ) g_tiledMap->DrawWater();
 
+	
 	g_theTradePool->Draw(surface);
+
+	
 	g_tiledMap->RepaintSprites(surface, g_tiledMap->GetMapViewRect(), false);
 
-	if (g_director) 
-    {
+	if(g_director) {
 		g_director->GarbageCollectItems();
 	}
 
-	g_tiledMap->DrawUnfinishedMove(surface);
-
 	POINT pos;
+
 	pos.y = mouse->Y() - back->Y();
+
+	
+	g_tiledMap->DrawUnfinishedMove( surface );
+
 	if (pos.y < back->Height()) 
 	{
+		
 		g_tiledMap->DrawHiliteMouseTile(surface);
+
+		
 		g_tiledMap->DrawLegalMove(surface);
 	}
 
 
 #ifdef _PLAYTEST
-	switch(g_debugOwner) 
-    {
+	switch(g_debugOwner) {
+
+
+
+
+
+
+
+
+
+
+
 #ifdef _DEBUG
-	case k_DEBUG_OWNER_CRC:
-		if(g_dataCheck) {
-			g_dataCheck->DisplayCRC(surface);
+		case k_DEBUG_OWNER_CRC:
+			if(g_dataCheck) {
+				g_dataCheck->DisplayCRC(surface);
+				g_tiledMap->InvalidateMix();
+			}
+			break;
+		case k_DEBUG_OWNER_NETWORK_CHAT:
+			g_network.DisplayChat(surface);
 			g_tiledMap->InvalidateMix();
-		}
-		break;
-	case k_DEBUG_OWNER_NETWORK_CHAT:
-		g_network.DisplayChat(surface);
-		g_tiledMap->InvalidateMix();
-		break;
+			break;
 #endif
-	case k_DEBUG_OWNER_COMMANDLINE:
-		g_commandLine.DisplayOutput(surface);
-		g_tiledMap->InvalidateMix();
-		break;
-    case k_DEBUG_OWNER_FRAME_RATE:
-        DisplayFrame (surface);
-        break; 
-	default:
-		break;
+		case k_DEBUG_OWNER_COMMANDLINE:
+			g_commandLine.DisplayOutput(surface);
+			g_tiledMap->InvalidateMix();
+			break;
+        case k_DEBUG_OWNER_FRAME_RATE:
+            DisplayFrame (surface);
+            break; 
+		default:
+			break;
 	}
-#endif // _PLAYTEST
+#endif
 
 	
+	
+	
+	
 	g_tiledMap->CopyMixDirtyRects(back->GetDirtyList());
+
+	
+	
 	g_tiledMap->ClearMixDirtyRects();
 
 	return AUI_ERRCODE_OK;

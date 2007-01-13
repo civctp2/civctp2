@@ -19,7 +19,8 @@
 
 #include "pixelutils.h"
 #include "primitives.h"
-#include "colorset.h"   // g_colorSet
+#include "colorset.h"
+extern ColorSet *g_colorSet;
 
 
 aui_TipWindow::aui_TipWindow(
@@ -61,7 +62,15 @@ aui_TipWindow::aui_TipWindow(
 
 AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -75,7 +84,7 @@ AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 
 	
 
-    if (aui_Ldl::FindDataBlock(tipBlock))
+	if ( theLdl->GetLdl()->FindDataBlock( tipBlock ) )
 	{
 		m_staticTip = new aui_Static(
 			&errcode,

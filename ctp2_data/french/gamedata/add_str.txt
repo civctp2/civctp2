@@ -4,7 +4,6 @@
 # File type    : String text file
 # Description  : Contains additional strings that should go to other files
 #                eventually (French)
-# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -24,9 +23,8 @@
 # - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
 #   - 7th April 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
-# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
-# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
 #
+# 
 #----------------------------------------------------------------------------
 
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
@@ -55,6 +53,50 @@ str_ldl_DisbandUnit                 "Démanteler"
 
 # City Window
 str_ldl_CityWindowUpkeep "Entretien"
+
+# Diplomat pictures.  Bit weird storing these in a string file, but it works.
+# Transplanted, and modified (filenames are updp* now, ctp1 was upd*), from civ_str.txt 
+GREEK_DIPLOMAT_PHOTO		"updp023.tga"
+AMERICAN_DIPLOMAT_PHOTO	"updp010.tga"
+SCOTTISH_DIPLOMAT_PHOTO	"updp044.tga"
+IRISH_DIPLOMAT_PHOTO			"updp028.tga"
+ENGLISH_DIPLOMAT_PHOTO	"updp019.tga"
+NATIVE_AMERICAN_DIPLOMAT_PHOTO	"updp035.tga"
+GERMAN_DIPLOMAT_PHOTO	"updp022.tga"
+FRENCH_DIPLOMAT_PHOTO	"updp021.tga"
+JAPANESE_DIPLOMAT_PHOTO	"updp030.tga"
+CHINESE_DIPLOMAT_PHOTO	"updp015.tga"
+RUSSIAN_DIPLOMAT_PHOTO	"updp043.tga"
+SPANISH_DIPLOMAT_PHOTO	"updp045.tga"
+PORTUGUESE_DIPLOMAT_PHOTO	"updp041.tga"
+DUTCH_DIPLOMAT_PHOTO	"updp017.tga"
+VIKING_DIPLOMAT_PHOTO	"updp048.tga"
+ROMAN_DIPLOMAT_PHOTO	"updp042.tga"
+EGYPTIAN_DIPLOMAT_PHOTO	"updp018.tga"
+PERSIAN_DIPLOMAT_PHOTO	"updp038.tga"
+TURKISH_DIPLOMAT_PHOTO	"updp047.tga"
+PHOENICIAN_DIPLOMAT_PHOTO	"updp039.tga"
+WELSH_DIPLOMAT_PHOTO	"updp049.tga"
+CUBAN_DIPLOMAT_PHOTO	"updp016.tga"
+ZULU_DIPLOMAT_PHOTO	"updp050.tga"
+HEBREW_DIPLOMAT_PHOTO	"updp024.tga"
+ASSYRIAN_DIPLOMAT_PHOTO	"updp011.tga"
+INDIAN_DIPLOMAT_PHOTO	"updp026.tga"
+THAI_DIPLOMAT_PHOTO	"updp046.tga"
+POLYNESIAN_DIPLOMAT_PHOTO	"updp040.tga"
+INDONESIAN_DIPLOMAT_PHOTO	"updp027.tga"
+JAMAICAN_DIPLOMAT_PHOTO		"updp029.tga"
+INCAN_DIPLOMAT_PHOTO	"updp025.tga"
+MAYAN_DIPLOMAT_PHOTO	"updp032.tga"
+CANADIAN_DIPLOMAT_PHOTO	"updp014.tga"
+NIGERIAN_DIPLOMAT_PHOTO	"updp037.tga"
+KOREAN_DIPLOMAT_PHOTO	"updp031.tga"
+BRAZILIAN_DIPLOMAT_PHOTO	"updp013.tga"
+AUSTRALIAN_DIPLOMAT_PHOTO	"updp012.tga"
+MEXICAN_DIPLOMAT_PHOTO	"updp033.tga"
+ETHIOPIAN_DIPLOMAT_PHOTO	"updp020.tga"
+MONGOLIAN_DIPLOMAT_PHOTO	"updp034.tga"
+NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
 
 # Dip wizard strings
 # Gets displayed on the "Accept" button depending on context
@@ -249,11 +291,11 @@ str_ldl_FindMeButton "Localiser !"
 str_ldl_FindX "X"
 str_ldl_FindY "Y"
 str_ldl_FindPosLabel "Position :"
-str_ldl_CityManager "Gest. de ville"
+str_ldl_CityManager "Gestionnaire de ville"
 
 # Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
 NETWORK_CURRENT_PLAYER "Joueur actuel "
-str_tbl_ldl_Open_City_Management "Gest. de ville"
+str_tbl_ldl_Open_City_Management "Gestionnaire de ville"
 str_tbl_ldl_Open_Build_Queue "Gest. de construction"
 str_tbl_ldl_Open_Trade_Summary "Bilan commercial"
 str_tbl_ldl_Open_Dip_Wizard "Nouvelle proposition"
@@ -344,6 +386,27 @@ str_SE_FindMe "Cliquer pour centrer les coordonnées"
 str_SE_RemoveGoods "Supprimer toutes les marchandises de la carte"
 str_SE_GenerateGoods "Ajouter des marchandises à la carte"
 
+### Changed Strings
+## add {city[0].name}
+#IA_SETTLING_TOO_CLOSE    		"Vous ne pouvez pas construire de ville à l'intérieur de {city[0].name}. Il serait préférable que nous trouvions un emplacement plus favorable à notre expansion."
+
+### Trust Warning Messages ###
+### Global Trust Loss ###
+TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, nous avons tué une unité civile des {player[1].civ_name_plural} ! Cela est considéré comme un crime de guerre. Outre les {player[1].civ_name_plural}, nous avons bouleversé le monde entier."
+TRUST_LOSS_UNPROVOKED_ATTACK            "{player[0].sir_cap}, nous avons attaqué les {player[1].civ_name_plural} sans avertissement ni provocation préalables ! Ils se sentent profondément trahis par notre conduite. Pis encore, la communauté internationale met en cause notre fiabilité."
+MILITARY_PACT_BROKEN_BY_YOU       "{player[0].sir_cap}, en refusant d'envoyer des troupes sur les premières lignes des {player[1].civ_name_plural}, nous avons violé notre pacte militaire. Ils se sentent trahis."
+TRUST_LOSS_VIOLATED_PEACE_TREATY        "{player[0].sir_cap}, en attaquant les {player[1].civ_name_plural}, nous avons violé notre traité de paix ! Vu leur indignation, ils risquent de conseiller aux autres nations de se méfier de nous."
+ALLIANCE_BROKEN_BY_YOU            "{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
+
+### Nation-specific Trust Loss ###
+IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, nous avons accepté de respecter les frontières des {player[1].civ_name_plural}. Allez-vous vous risquer à susciter leur courroux en déplaçant des unités sur leur territoire ?"
+TRUST_LOSS_FAIL_TO_WITHDRAW             "{player[0].sir_cap}, nous n'avons pas retiré nos troupes du territoire des {player[1].civ_name_plural}. Désormais, ils se méfient et risquent de rechigner à signer des accords avec nous."
+TRUST_LOSS_FAIL_TO_STOP_PIRACY          "Les {player[1].civ_name_plural} sont furieux car nous n'avons pas cessé de pirater leurs routes commerciales. A l'avenir, les {player[1].civ_name_plural} ne nous feront plus confiance."
+TRUST_LOSS_VIOLATED_CEASE_FIRE          "{player[0].sir_cap}, nous avons violé l'accord de cessez-le-feu signé avec les {player[1].civ_name_plural}. Ils sont furieux contre nous et risquent de ne plus nous faire confiance."
+TRUST_LOSS_VIOLATED_RESEARCH_PACT       "{player[0].sir_cap}, nos récentes actions ont constitué une violation de notre pacte de recherche avec les {player[1].civ_name_plural}. Désormais, ils se méfient de nous et s'interrogent sur nos intentions."
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, nos récentes actions nous ont forcé à renégocier notre Pacte Commercial avec les {player[1].civ_name_plural}.  Ils ne vont pas oublier de si tôt cet abus de confiance !"
+ECO_PACT_BROKEN_BY_YOU      "{player[0].sir_cap}, nous avons violé l'éco-pacte que nous avons signé avec {player[1].civ_name_plural}. Ceux-ci nous en veulent."
+
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "SAUV. RAPIDE"
 
@@ -371,6 +434,10 @@ CONTEXT_VIEW_CARGO "Voir cargaison"
 
 # For netshell list header
 str_ldl_Settlers "Colons"
+
+# Diplomacy Manager Embargo Button
+TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Frapper d'embargo"
+STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Cliquez ici pour empêcher une nation étrangère de réaliser des échanges avec vous."
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "En instaurant ce gouvernement, certaines de vos unités risquent d'être démantelées. Etes-vous sûr de vouloir changer de régime ?"

@@ -1,33 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The civilization 3 blitter
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _TRY_ALL_BLITTERS
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -47,8 +29,17 @@ unsigned which_blit=0;
 
 
 C3Blitter::C3Blitter() 
-:	_Blt16To16Fast	(&C3Blitter::Blt16To16Fast)
-{ ; };
+{
+   
+   
+   
+   if(CheckMMXTechnology())	
+	   
+	   
+	   _Blt16To16Fast =Blt16To16Fast;
+   else
+	   _Blt16To16Fast =Blt16To16Fast;
+};
 
 
 AUI_ERRCODE C3Blitter::Blt16To16(
@@ -65,9 +56,9 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	  
   	   	switch(which_blit)
   	   	{
-			case 0:_Blt16To16Fast = &C3Blitter::Blt16To16Fast   ; break;
-			case 1:_Blt16To16Fast = &C3Blitter::Blt16To16FastFPU; break;
-			case 2:_Blt16To16Fast = &C3Blitter::Blt16To16FastMMX; break;
+  	   	case 0:_Blt16To16Fast=Blt16To16Fast   ; break;
+  	    case 1:_Blt16To16Fast=Blt16To16FastFPU;	break;
+  	    case 2:_Blt16To16Fast=Blt16To16FastMMX;	break;
   	   	}
 
 	   	which_blit ++;
@@ -656,7 +647,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 bool C3Blitter::CheckMMXTechnology(void)
 {
     bool retval = true;
-    DWORD RegEDX = 0;
+    DWORD RegEDX;
 
     __try {
             _asm {

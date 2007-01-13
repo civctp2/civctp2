@@ -17,24 +17,13 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-// - Generates debug information when set.
-//
-// CTP1_TRADE
-// - Creates an executable with trade like in CTP1. Currently broken.
-//
-// _PLAYTEST
-// DUMP_ASTAR
-// _DEBUG_MEMORY
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Removed non-standard include file <iostream.h>.
 // - Standardised min/max usage.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -42,8 +31,10 @@
 #ifdef _PLAYTEST
 #include "c3cmdline.h"
 
-#include "CivilisationRecord.h"
+
+#include "CivilisationDB.h"
 #include "ConstDB.h"
+
 #include "c3ui.h"
 #include "debugmemory.h"
 #include "log.h"
@@ -53,6 +44,7 @@
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
+#include "c3ui.h"
 #include "background.h"
 #include "statuswindow.h"
 #include "civ3_main.h"
@@ -61,6 +53,7 @@
 #include "TradePool.h"
 #include "UnitData.h"
 #include "citydata.h"
+#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImprove.h"
 #include "Readiness.h"
@@ -76,18 +69,21 @@
 #include "director.h"
 #include "maputils.h"
 #include "Regard.h"
+#include "UnoccupiedTiles.h"
 
 #include "profileDB.h"
 #include "order.h"
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
+
 #include "statswindow.h"
 #include "controlpanelwindow.h"
-#include "chatbox.h"
 
+#include "chatbox.h"
 #include "Score.h"
 #include "Happy.h"
+
 
 #include "debugwindow.h"
 
@@ -97,11 +93,11 @@
 #include "sc.tab.h"
 
 #include "watchlist.h"
-
 #include "UnitRecord.h"
 #include "DBLexer.h"
 #include "TerrainRecord.h"
 #include "ResourceRecord.h"
+
 
 #include "GoalRecord.h"
 #include "UnitBuildListRecord.h"
@@ -151,17 +147,19 @@ extern MBCHAR g_improvement_list_db_filename[_MAX_PATH];
 extern MBCHAR g_diplomacy_db_filename[_MAX_PATH];
 extern MBCHAR g_advance_list_db_filename[_MAX_PATH];
 
-extern ConstDB              *g_theConstDB;
+extern ConstDB				*g_theConstDB;
+extern CivilisationDatabase *g_theCivilisationDB;
 
 
-extern Background           *g_background;
-extern ChatBox              *g_chatBox;
-extern StatsWindow          *g_statsWindow;
-extern ControlPanelWindow   *g_controlPanel;
-extern C3UI                 *g_c3ui;
+extern Background			*g_background;
+extern ChatBox				*g_chatBox;
+extern StatsWindow			*g_statsWindow;
+extern ControlPanelWindow	*g_controlPanel;
+extern C3UI					*g_c3ui;
 
-extern sint32               g_check_mem;
-extern sint32               g_robotMessages;
+extern sint32 g_check_mem; 
+extern sint32 g_robotMessages;
+
 
 
 #include "aui.h"
@@ -184,12 +182,16 @@ extern sint32               g_robotMessages;
 #include "SpriteFile.h"
 
 #include "gameinit.h"
+
 #include "aicause.h"
 #include "TurnCnt.h"
 
+
 #include "civapp.h"
+#include "TurnCnt.h"
 
 #include "AttractWindow.h"
+
 #include "screenutils.h"
 
 #include "UnitPool.h"
@@ -204,39 +206,39 @@ static sint32 s_helpLines = 15;
 
 #define k_HELP_LINES s_helpLines
 
-extern Player**       g_player;
-extern StatusWindow*  g_statusWindow;
-extern sint32         g_debugOwner;
-extern SelectedItem   *g_selected_item;
-extern World          *g_theWorld;
-extern TiledMap       *g_tiledMap;
-extern UnitPool       *g_theUnitPool;
+extern Player**		g_player;
+extern StatusWindow* g_statusWindow;
+extern sint32		g_debugOwner;
+extern SelectedItem *g_selected_item;
+extern World		*g_theWorld;
+extern TiledMap		*g_tiledMap;
+extern UnitPool *g_theUnitPool;
 
-extern sint32         g_fog_toggle;
+extern sint32		g_fog_toggle;
 
-extern BOOL           g_smoothScroll;
+extern BOOL			g_smoothScroll;
 
-extern sint32         g_god;
+extern sint32		g_god; 
 
-extern sint32         g_isGridOn;
-extern BOOL           g_showHeralds;
-
-
-extern BOOL           g_useDDBlit;
-
-extern CivApp         *g_civApp;
-
-extern C3UI           *g_c3ui;
+extern sint32		g_isGridOn;
+extern BOOL			g_showHeralds;
 
 
-extern BOOL           g_powerPointsMode;
+extern BOOL			g_useDDBlit;
 
-sint32                g_is_debug_map_color;
-BOOL                  g_show_ai_dbg;
-BOOL                  g_doingFastRounds = FALSE;
+extern CivApp		*g_civApp;
+
+extern C3UI			*g_c3ui;
 
 
-extern BOOL           g_ai_revolt = TRUE;
+extern BOOL			g_powerPointsMode;
+
+sint32				g_is_debug_map_color;
+BOOL g_show_ai_dbg;
+BOOL g_doingFastRounds = FALSE;
+
+
+extern BOOL		g_ai_revolt = TRUE;
 
 extern void WhackScreen();
 
@@ -249,6 +251,7 @@ extern Director *g_director;
 
 extern BOOL	g_drawArmyClumps;
 
+
 #include "sciencewin.h"
 #include "greatlibrary.h"
 #include "infowin.h"
@@ -259,168 +262,166 @@ extern BOOL	g_drawArmyClumps;
 
 CommandLine g_commandLine;
 
-                                      ZBCommand g_zbCommand;
-                                     PopCommand g_popCommand;
-                                     TaxCommand g_taxCommand;
-                                     SueCommand g_sueCommand;
+									 ZBCommand  g_zbCommand;
+                                     PopCommand	g_popCommand;
+                                     TaxCommand	g_taxCommand;
+                                     SueCommand	g_sueCommand;
                                      PacCommand g_PacCommand;
-                                    ChatCommand g_chatCommand;
-                                    SaveCommand g_saveCommand;
-                                    HelpCommand g_helpCommand;
-                                    UpgradeCity g_upgradeCity;
-                                   BuildCommand g_buildCommand;
-                                   OfferCommand g_offerCommand;
-                                   FloodCommand g_floodCommand;
-                                   OzoneCommand g_ozoneCommand;
-                                   FrameCommand g_frameCommand;
-                                   CloakCommand g_cloakCommand;
-                                   ExpelCommand g_expelCommand;
-                                   LogAICommand g_logAICommand;
-                                  CreateCommand g_createCommand;
-                                  RevoltCommand g_revoltCommand;
-                                  SeeWWRCommand g_SeeWWRCommand;
-                                  RustleCommand g_rustleCommand;
-                                  StayOnCommand g_stayOnCommand;
-                                 UncloakCommand g_uncloakCommand;
-                                 BombardCommand g_bombardCommand;
-                                 RestoreCommand g_restoreCommand;
-                                 RestartCommand g_restartCommand;
-                                 ImproveCommand g_improveCommand;
-                                 TurnOffCommand g_turnOffCommand;
-                                 GiveMapCommand g_giveMapCommand;
-                                 LoadAIPCommand g_loadAIPCommand;
-                                ChatMaskCommand g_chatMaskCommand;
-                                RandTestCommand g_randTestCommand;
-                                GiveCityCommand g_giveCityCommand;
-                                GiveGoldCommand g_giveGoldCommand;
+                                    ChatCommand	g_chatCommand;
+                                    SaveCommand	g_saveCommand;
+                                    HelpCommand	g_helpCommand;
+                                    UpgradeCity	g_upgradeCity;
+                                   BuildCommand	g_buildCommand;
+                                   OfferCommand	g_offerCommand;
+                                   FloodCommand	g_floodCommand;
+                                   OzoneCommand	g_ozoneCommand;
+                                   FrameCommand	g_frameCommand;
+                                   CloakCommand	g_cloakCommand;
+                                   ExpelCommand	g_expelCommand;
+								   LogAICommand g_logAICommand;
+                                  CreateCommand	g_createCommand;
+                                  RevoltCommand	g_revoltCommand;
+                                  SeeWWRCommand	g_SeeWWRCommand;
+                                  RustleCommand	g_rustleCommand;
+                                  StayOnCommand	g_stayOnCommand;
+                                UncloakCommand	g_uncloakCommand;
+                                 BombardCommand	g_bombardCommand;
+                                 RestoreCommand	g_restoreCommand;
+                                 RestartCommand	g_restartCommand;
+                                 ImproveCommand	g_improveCommand;
+                                 TurnOffCommand	g_turnOffCommand;
+                                 GiveMapCommand	g_giveMapCommand;
+								 LoadAIPCommand g_loadAIPCommand;
+                                ChatMaskCommand	g_chatMaskCommand;
+                                RandTestCommand	g_randTestCommand;
+                                GiveCityCommand	g_giveCityCommand;
+                                GiveGoldCommand	g_giveGoldCommand;
                                 KillTileCommand g_killTileCommand;
-                                GiveUnitCommand g_giveUnitCommand;
-                                SetWagesCommand g_SetWagesCommand;
-                                TileTypeCommand g_tileTypeCommand;
-                                SoothsayCommand g_soothsayCommand;
-                               BuildWhatCommand g_buildWhatCommand;
-                               FastRoundCommand g_fastRoundCommand;
+                                GiveUnitCommand	g_giveUnitCommand;
+                                SetWagesCommand	g_SetWagesCommand;
+                                TileTypeCommand	g_tileTypeCommand;
+                                SoothsayCommand	g_soothsayCommand;
+         				       BuildWhatCommand g_buildWhatCommand;
+                               FastRoundCommand	g_fastRoundCommand;      
                                ClearTextCommand g_clearTextCommand;
-                               DatacheckCommand g_datacheckCommand;
-                               InterceptCommand g_interceptCommand;
-                               ReadinessCommand g_readinessCommand;
-                               DebugMaskCommand g_debugMaskCommand;
-                               ShowOwnerCommand g_showOwnerCommand;
-                               ToggleFogCommand g_toggleFogCommand;
-                               PlantNukeCommand g_plantNukeCommand;
-                               FranchiseCommand g_franchiseCommand;
-                               SlaveRaidCommand g_slaveRaidCommand;
-                               SpewUnitsCommand g_spewUnitsCommand;
-                               BioInfectCommand g_bioInfectCommand;
-                               HelpLinesCommand g_helpLinesCommand;
-                              NanoInfectCommand g_nanoInfectCommand;
-                              DumpAlliesCommand g_dumpAlliesCommand;
-                              TradeRouteCommand g_tradeRouteCommand;
-                              HearGossipCommand g_hearGossipCommand;
-                              SetWorkdayCommand g_SetWorkdayCommand;
-                              SetRationsCommand g_SetRationsCommand;
-                              ShowOffersCommand g_showOffersCommand;
-                              ToggleGridCommand g_toggleGridCommand;
-                              IndulgenceCommand g_indulgenceCommand;
-                              ReformCityCommand g_reformCityCommand;
-                              CreateParkCommand g_createParkCommand;
-                              CreateRiftCommand g_createRiftCommand;
+                               DatacheckCommand	g_datacheckCommand;
+                               InterceptCommand	g_interceptCommand;
+                               ReadinessCommand	g_readinessCommand;
+				               DebugMaskCommand	g_debugMaskCommand;
+                               ShowOwnerCommand	g_showOwnerCommand;
+                               ToggleFogCommand	g_toggleFogCommand;
+                               PlantNukeCommand	g_plantNukeCommand;
+                               FranchiseCommand	g_franchiseCommand;
+                               SlaveRaidCommand	g_slaveRaidCommand;
+                               SpewUnitsCommand	g_spewUnitsCommand;
+                               BioInfectCommand	g_bioInfectCommand;
+                               HelpLinesCommand	g_helpLinesCommand;
+                              NanoInfectCommand	g_nanoInfectCommand;
+                              DumpAlliesCommand	g_dumpAlliesCommand;
+                              TradeRouteCommand	g_tradeRouteCommand;
+                              HearGossipCommand	g_hearGossipCommand;
+                              SetWorkdayCommand	g_SetWorkdayCommand;
+                              SetRationsCommand	g_SetRationsCommand;
+                              ShowOffersCommand	g_showOffersCommand;
+                              ToggleGridCommand	g_toggleGridCommand;
+                              IndulgenceCommand	g_indulgenceCommand;
+                              ReformCityCommand	g_reformCityCommand;
+                              CreateParkCommand	g_createParkCommand;
+                              CreateRiftCommand	g_createRiftCommand;
 
-                             BuildWonderCommand g_buildWonderCommand;
-                             GiveAdvanceCommand g_giveAdvanceCommand;
-                             ToggleWaterCommand g_toggleWaterCommand;
-                             ToggleSpaceCommand g_toggleSpaceCommand;
-                             SetCityNameCommand g_setCityNameCommand;
-                             SetCitySizeCommand g_setCitySizeCommand;
-                                    ToggleAIStr g_toggleAiStr;
-                             ExchangeMapCommand g_exchangeMapCommand;
-                             ConvertCityCommand g_convertCityCommand;
+                             BuildWonderCommand	g_buildWonderCommand;
+                             GiveAdvanceCommand	g_giveAdvanceCommand;
+                             ToggleWaterCommand	g_toggleWaterCommand;
+	                         ToggleSpaceCommand	g_toggleSpaceCommand;
+                             SetCityNameCommand	g_setCityNameCommand;
+                             SetCitySizeCommand	g_setCitySizeCommand;
+                             ToggleAIStr g_toggleAiStr; 
+	                         ExchangeMapCommand	g_exchangeMapCommand;
+                             ConvertCityCommand	g_convertCityCommand;
                              SetAIRevoltCommand g_setAIRevoltCommand;
-                            NullifyWallsCommand g_nullifyWallsCommand;
-                            SetReadinessCommand g_SetReadinessCommand;
-                            ToggleHeraldCommand g_toggleHeraldCommand;
-                            CalcChecksumCommand g_calcChecksumCommand;
-                            ExchangeCityCommand g_exchangeCityCommand;
-                            FormAllianceCommand g_formAllianceCommand;
-                            UntradeRouteCommand g_untradeRouteCommand;
-                            ShowAdvancesCommand g_showAdvancesCommand;
-                            AddMaterialsCommand g_AddMaterialsCommand;
-                            SueFranchiseCommand g_sueFranchiseCommand;
-                            GrantAdvanceCommand g_grantAdvanceCommand;
-                            DumpMessagesCommand g_dumpMessagesCommand;
-                            DumpChecksumCommand g_dumpChecksumCommand;
-                           DumpCallStackCommand g_dumpCallStackCommand;
-                           MakeCeaseFireCommand g_makeCeaseFireCommand;
-                           SetGovernmentCommand g_setGovernmentCommand;
-                           CityResourcesCommand g_cityResourcesCommand;
-                           BreakAllianceCommand g_breakAllianceCommand;
-                           WithdrawOfferCommand g_withdrawOfferCommand;
-                          ToggleQuitFastCommand g_toggleQuitFastCommand;
-                          BreakCeaseFireCommand g_breakCeaseFireCommand;
-                          DumpAgreementsCommand g_dumpAgreementsCommand;
-                          EnslaveSettlerCommand g_enslaveSettlerCommand;
-                          LoadBuildQueueCommand g_loadBuildQueueCommand;
-                          SaveBuildQueueCommand g_saveBuildQueueCommand;
-                          InciteUprisingCommand g_inciteUprisingCommand;
-                         RequestGreetingCommand g_requestGreetingCommand;
-                         PactCaptureCityCommand g_pactCaptureCityCommand;
-                         DisplayChecksumCommand g_displayChecksumCommand;
-                         StopTradingWithCommand g_stopTradingWithCommand;
-                         InvestigateCityCommand g_investigateCityCommand;
-                         StealTechnologyCommand g_stealTechnologyCommand;
-                         RequestOfferMapCommand g_requestOfferMapCommand;
-                        InciteRevolutionCommand g_inciteRevolutionCommand;
-                        CauseUnhappinessCommand g_causeUnhappinessCommand;
-                        RequestOfferCityCommand g_requestOfferCityCommand;
-                        RequestOfferGoldCommand g_requestOfferGoldCommand;
-                        RequestDemandMapCommand g_requestDemandMapCommand;
-                        AssassinateRulerCommand g_assassinateRulerCommand;
-                        ShowNetworkStatsCommand g_showNetworkStatsCommand;
-                        IsViolatingPeaceCommand g_isViolatingPeaceCommand;
+                            NullifyWallsCommand	g_nullifyWallsCommand;
+                            SetReadinessCommand	g_SetReadinessCommand;
+                            ToggleHeraldCommand	g_toggleHeraldCommand;
+                            CalcChecksumCommand	g_calcChecksumCommand;
+                            ExchangeCityCommand	g_exchangeCityCommand;
+                            FormAllianceCommand	g_formAllianceCommand;
+                            UntradeRouteCommand	g_untradeRouteCommand;
+                            ShowAdvancesCommand	g_showAdvancesCommand;
+                            AddMaterialsCommand	g_AddMaterialsCommand;
+                            SueFranchiseCommand	g_sueFranchiseCommand;
+                            GrantAdvanceCommand	g_grantAdvanceCommand;
+                            DumpMessagesCommand	g_dumpMessagesCommand;
+                            DumpChecksumCommand	g_dumpChecksumCommand;
+						   DumpCallStackCommand g_dumpCallStackCommand;
+                           MakeCeaseFireCommand	g_makeCeaseFireCommand;
+                           SetGovernmentCommand	g_setGovernmentCommand;
+                           CityResourcesCommand	g_cityResourcesCommand;
+                           BreakAllianceCommand	g_breakAllianceCommand;
+                           WithdrawOfferCommand	g_withdrawOfferCommand;
+						  ToggleQuitFastCommand g_toggleQuitFastCommand;
+                          BreakCeaseFireCommand	g_breakCeaseFireCommand;
+                          DumpAgreementsCommand	g_dumpAgreementsCommand;
+                          EnslaveSettlerCommand	g_enslaveSettlerCommand;
+                          LoadBuildQueueCommand	g_loadBuildQueueCommand;
+                          SaveBuildQueueCommand	g_saveBuildQueueCommand;
+                          InciteUprisingCommand	g_inciteUprisingCommand;
+                         RequestGreetingCommand	g_requestGreetingCommand;
+                         PactCaptureCityCommand	g_pactCaptureCityCommand;
+                         DisplayChecksumCommand	g_displayChecksumCommand;
+                         StopTradingWithCommand	g_stopTradingWithCommand;
+                         InvestigateCityCommand	g_investigateCityCommand;
+                         StealTechnologyCommand	g_stealTechnologyCommand;
+                         RequestOfferMapCommand	g_requestOfferMapCommand;
+                        InciteRevolutionCommand	g_inciteRevolutionCommand;
+                        CauseUnhappinessCommand	g_causeUnhappinessCommand;
+                        RequestOfferCityCommand	g_requestOfferCityCommand;
+                        RequestOfferGoldCommand	g_requestOfferGoldCommand;
+                        RequestDemandMapCommand	g_requestDemandMapCommand;
+                        AssassinateRulerCommand	g_assassinateRulerCommand;
+                        ShowNetworkStatsCommand	g_showNetworkStatsCommand;
+                        IsViolatingPeaceCommand	g_isViolatingPeaceCommand;
 
-                       RequestDemandGoldCommand g_requestDemandGoldCommand;
-                       CreateImprovementCommand g_createImprovementCommand;
-                       RequestDemandCityCommand g_requestDemandCityCommand;
-                      ToggleSmoothScrollCommand g_toggleSmoothScrollCommand;
-                      UndergroundRailwayCommand g_undergroundRailwayCommand;
-                      DisplayChecksumOffCommand g_displayChecksumOffCommand;
-                      TerrainImprovementCommand g_terrainImprovementCommand;
-              TerrainImprovementCompleteCommand g_terrainImprovementCompleteCommand;
-                      IsPollutionReducedCommand g_isPollutionReducedCommand;
-                      IsViolatingBordersCommand g_isViolatingBordersCommand;
-
-
-                      RequestExchangeMapCommand g_requestExchangeMapCommand;
-                     SetMaterialsPercentCommand g_SetMaterialsPercentCommand;
-                     RequestExchangeCityCommand g_requestExchangeCityCommand;
-                     RequestOfferAdvanceCommand g_requestOfferAdvanceCommand;
-                    InvestigateReadinessCommand g_investigateReadinessCommand;
-                    IsViolatingCeaseFireCommand g_isViolatingCeaseFireCommand;
-                    RequestDemandAdvanceCommand g_requestDemandAdvanceCommand;
-                        PactEndPollutionCommand g_pactEndPollutionCommand;
-
-                   RequestOfferCeaseFireCommand g_requestOfferCeaseFireCommand;
-                  DumpDiplomaticRequestsCommand g_dumpDiplomaticRequestsCommand;
-                  RequestExchangeAdvanceCommand g_requestExchangeAdvanceCommand;
-                  RequestDemandStopTradeCommand g_requestDemandStopTradeCommand;
-                RequestDemandAttackEnemyCommand g_requestDemandAttackEnemyCommand;
-              RequestDemandLeaveOurLandsCommand g_requestDemandLeaveOurLandsCommand;
-             RequestOfferPactCaptureCityCommand g_requestOfferPactCaptureCityCommand;
-            RequestDemandReducePollutionCommand g_requestDemandReducePollutionCommand;
-
-           RequestOfferPermanentAllianceCommand g_requestOfferPermanentAllianceCommand;
-            RequestOfferPactEndPollutionCommand g_requestOfferPactEndPollutionCommand;
+                       RequestDemandGoldCommand	g_requestDemandGoldCommand;
+                       CreateImprovementCommand	g_createImprovementCommand;
+                       RequestDemandCityCommand	g_requestDemandCityCommand;
+                      ToggleSmoothScrollCommand	g_toggleSmoothScrollCommand;
+                      UndergroundRailwayCommand	g_undergroundRailwayCommand;
+                      DisplayChecksumOffCommand	g_displayChecksumOffCommand;
+                      TerrainImprovementCommand	g_terrainImprovementCommand;
+			  TerrainImprovementCompleteCommand g_terrainImprovementCompleteCommand;
+                      IsPollutionReducedCommand	g_isPollutionReducedCommand;
+                      IsViolatingBordersCommand	g_isViolatingBordersCommand;
 
 
+                      RequestExchangeMapCommand	g_requestExchangeMapCommand;
+                     SetMaterialsPercentCommand	g_SetMaterialsPercentCommand;
+                     RequestExchangeCityCommand	g_requestExchangeCityCommand;
+                     RequestOfferAdvanceCommand	g_requestOfferAdvanceCommand;
+                    InvestigateReadinessCommand	g_investigateReadinessCommand;
+                    IsViolatingCeaseFireCommand	g_isViolatingCeaseFireCommand;
+                    RequestDemandAdvanceCommand	g_requestDemandAdvanceCommand;
+                    PactEndPollutionCommand	g_pactEndPollutionCommand;
+
+                   RequestOfferCeaseFireCommand	g_requestOfferCeaseFireCommand;
+                  DumpDiplomaticRequestsCommand	g_dumpDiplomaticRequestsCommand;
+                  RequestExchangeAdvanceCommand	g_requestExchangeAdvanceCommand;
+                  RequestDemandStopTradeCommand	g_requestDemandStopTradeCommand;
+                RequestDemandAttackEnemyCommand	g_requestDemandAttackEnemyCommand;
+              RequestDemandLeaveOurLandsCommand	g_requestDemandLeaveOurLandsCommand;
+             RequestOfferPactCaptureCityCommand	g_requestOfferPactCaptureCityCommand;
+            RequestDemandReducePollutionCommand	g_requestDemandReducePollutionCommand;
+
+           RequestOfferPermanentAllianceCommand	g_requestOfferPermanentAllianceCommand;
+        RequestOfferPactEndPollutionCommand	g_requestOfferPactEndPollutionCommand;
 
 
 
 
-                            EndTurnSoundCommand g_endTurnSoundCommand;
-
-                                   DRayTestCode g_DRayTestCode;
 
 
+		EndTurnSoundCommand	g_endTurnSoundCommand;
+
+DRayTestCode g_DRayTestCode;
 
 
 
@@ -452,156 +453,157 @@ CommandLine g_commandLine;
 
 
 
-                       ThroneRoomUpgradeCommand g_throneRoomUpgradeCommand;
-                             GiveMeProbeCommand g_giveMeProbeCommand;
-                          ToggleMapColorCommand g_toggleMapColorCommand;
-                         ToggleHeuristicCommand g_toggleHeuristicCommand;
-                                     YumCommand g_yumCommand;
-                                    SlicCommand g_slicCommand;
-                                 ShowPopCommand g_showPopCommand;
-                                 HidePopCommand g_hidePopCommand;
-                                 HowLongCommand g_howLongCommand;
-                           DebugCheckMemCommand g_debugCheckMem;
-                                OvertimeCommand g_overtimeCommand;
-                               LearnWhatCommand g_learnWhatCommand;
-                               GivesWhatCommand g_givesWhatCommand;
-                              GetAdvanceCommand g_getAdvanceCommand;
-                             TestMessageCommand g_testMessageCommand;
-                            OvertimeCostCommand g_overtimeCostCommand;
-                            BequeathGoldCommand g_bequeathGoldCommand;
-                          InstantMessageCommand g_instantMessageCommand;
-                                  InjoinCommand g_injoinCommand;
-                                FastMoveCommand g_fastMoveCommand;
-                                GrantAllCommand g_grantAllCommand;
-                               GrantManyCommand g_grantManyCommand;
-                               UseLadderCommand g_useLadderCommand;
-                                TutorialCommand g_tutorialCommand;
-                            SimultaneousCommand g_simultaneousCommand;
-                              AutoCenterCommand g_autoCenterCommand;
-                                  AiDumpCommand g_aiDumpCommand;
-                                  RegardCommand g_regardCommand;
-                                AttitudeCommand g_attitudeCommand;
-                            DumpFZRegardCommand g_dumpFZRegardCommand;
-                             SetFZRegardCommand g_setFZRegardCommand;
-                                TotalWarCommand g_totalWarCommand;
-                       SetUnitMovesStyleCommand g_setUnitMovesStyleCommand;
-                         SetClassicStyleCommand g_setClassicStyleCommand;
-                           SetSpeedStyleCommand g_setSpeedStyleCommand;
+
+
+ThroneRoomUpgradeCommand g_throneRoomUpgradeCommand;
+GiveMeProbeCommand g_giveMeProbeCommand;
+ToggleMapColorCommand g_toggleMapColorCommand; 
+ToggleHeuristicCommand g_toggleHeuristicCommand; 
+YumCommand g_yumCommand;
+SlicCommand g_slicCommand;
+ShowPopCommand g_showPopCommand;
+HidePopCommand g_hidePopCommand;
+HowLongCommand g_howLongCommand;
+DebugCheckMemCommand g_debugCheckMem;
+OvertimeCommand g_overtimeCommand;
+LearnWhatCommand g_learnWhatCommand;
+GivesWhatCommand g_givesWhatCommand;
+GetAdvanceCommand g_getAdvanceCommand;
+TestMessageCommand	g_testMessageCommand;
+OvertimeCostCommand g_overtimeCostCommand;
+BequeathGoldCommand	g_bequeathGoldCommand;
+InstantMessageCommand g_instantMessageCommand;
+InjoinCommand g_injoinCommand;
+FastMoveCommand g_fastMoveCommand;
+GrantAllCommand g_grantAllCommand;
+GrantManyCommand g_grantManyCommand; 
+UseLadderCommand g_useLadderCommand;
+TutorialCommand g_tutorialCommand;
+SimultaneousCommand g_simultaneousCommand;
+AutoCenterCommand g_autoCenterCommand;
+AiDumpCommand g_aiDumpCommand; 
+RegardCommand g_regardCommand ;
+AttitudeCommand g_attitudeCommand ;
+DumpFZRegardCommand g_dumpFZRegardCommand; 
+SetFZRegardCommand g_setFZRegardCommand;
+TotalWarCommand g_totalWarCommand; 
+SetUnitMovesStyleCommand g_setUnitMovesStyleCommand;
+SetClassicStyleCommand g_setClassicStyleCommand;
+SetSpeedStyleCommand g_setSpeedStyleCommand;
 
 
 
 
 
-                       SetCarryoverStyleCommand g_setCarryoverStyleCommand;
-                           SetTimedStyleCommand g_timedGameCommand;
-                                MainMenuCommand g_mainMenuCommand;
-                               SetupModeCommand g_setupModeCommand;
-                                   ReadyCommand g_readyCommand;
-                              DisplayMemCommand g_displayMemCommand; 
-                               UseDDBlitCommand g_useDDBlitCommand;
-                                  LoadDBCommand g_loadDBCommand;
-                        SellImprovementsCommand g_sellImprovementsCommand;
-                               SellUnitsCommand g_sellUnitsCommand;
-                           RobotMessagesCommand g_robotMessagesCommand;
-                               FZCommentCommand g_fzCommentCommand;
-                             AcceptOfferCommand g_acceptOfferCommand;
-                                 DescendCommand g_descendCommand;
-                                NearFortCommand g_nearestFortCommand;
-                                NearCityCommand g_nearestCityCommand;
-                             ForceRevoltCommand g_forceRevoltCommand;
-                                     ToeCommand g_toeCommand;
-                                  WhoAmICommand g_whoAmICommand;
-                                AutoSaveCommand g_autoSaveCommand;
-                              HeapTotalsCommand g_heapTotalsCommand;
-                                 HotSeatCommand g_hotSeatCommand;
-                                   EmailCommand g_emailCommand;
-                                   ScoreCommand g_scoreCommand;
-                                  FliLogCommand g_fliLogCommand;
-                               SendSlaveCommand g_sendSlaveCommand;
-                                 DisbandCommand g_disbandCommand;
-                                  AttachCommand g_attachCommand;
-                                  DetachCommand g_detachCommand;
-                            ToggleShieldSupport g_toggleShieldSupport;
-                      SuperFastDebugModeCommand g_superFastDebugModeCommand;
-                                 KillPopCommand g_killPopCommand;
-                                   BoardCommand g_boardCommand;
-                               AutoGroupCommand g_autoGroupCommand;
-                                  AddPopCommand g_addPopCommand; 
-                              CopyVisionCommand g_copyVisionCommand;
+SetCarryoverStyleCommand g_setCarryoverStyleCommand;
+SetTimedStyleCommand g_timedGameCommand;
+MainMenuCommand g_mainMenuCommand;
+SetupModeCommand g_setupModeCommand;
+ReadyCommand g_readyCommand;
+DisplayMemCommand g_displayMemCommand; 
+UseDDBlitCommand g_useDDBlitCommand;
+LoadDBCommand g_loadDBCommand;
+SellImprovementsCommand g_sellImprovementsCommand;
+SellUnitsCommand g_sellUnitsCommand;
+RobotMessagesCommand g_robotMessagesCommand;
+FZCommentCommand g_fzCommentCommand;
+AcceptOfferCommand g_acceptOfferCommand;
+DescendCommand g_descendCommand;
+NearFortCommand g_nearestFortCommand;
+NearCityCommand g_nearestCityCommand;
+ForceRevoltCommand g_forceRevoltCommand;
+ToeCommand g_toeCommand;
+WhoAmICommand g_whoAmICommand;
+AutoSaveCommand g_autoSaveCommand;
+HeapTotalsCommand g_heapTotalsCommand;
+HotSeatCommand g_hotSeatCommand;
+EmailCommand g_emailCommand;
+ScoreCommand g_scoreCommand;
+FliLogCommand g_fliLogCommand;
+SendSlaveCommand g_sendSlaveCommand;
+DisbandCommand g_disbandCommand;
+AttachCommand g_attachCommand;
+DetachCommand g_detachCommand;
+ToggleShieldSupport g_toggleShieldSupport;  
+SuperFastDebugModeCommand g_superFastDebugModeCommand;
+KillPopCommand g_killPopCommand;
+BoardCommand g_boardCommand;
+AutoGroupCommand g_autoGroupCommand;
+AddPopCommand g_addPopCommand; 
+CopyVisionCommand g_copyVisionCommand;
 
-                               CombatLogCommand g_combatLogCommand;
-                               RedrawMapCommand g_redrawMapCommand;
-                                     GodCommand g_godCommand;
-                               ReloadFliCommand g_reloadFliCommand;
-                              MultiCycleCommand g_multiCycleCommand;
-                              LeaksClearCommand g_leaksClearCommand;
-                               LeaksShowCommand g_leaksShowCommand;
-                            SlicVariableCommand g_slicVariableCommand;
-                                DipLogOnCommand g_dipLogOnCommand;
-                               DipLogOffCommand g_dipLogOffCommand;
-                            DirectorDumpCommand g_directorDumpCommand;
-                                  ResyncCommand g_resyncCommand;
-                            CleanSpritesCommand g_cleanSpritesCommand;
-                             CleanScreenCommand g_cleanScreenCommand;
-                             ResetVisionCommand g_resetVisionCommand;
-
-
-                               ExportMapCommand g_exportMapCommand;
-                               ImportMapCommand g_importMapCommand;
+CombatLogCommand g_combatLogCommand;
+RedrawMapCommand g_redrawMapCommand;
+GodCommand g_godCommand;
+ReloadFliCommand g_reloadFliCommand; 
+MultiCycleCommand g_multiCycleCommand;
+LeaksClearCommand g_leaksClearCommand;
+LeaksShowCommand g_leaksShowCommand;
+SlicVariableCommand g_slicVariableCommand;
+DipLogOnCommand g_dipLogOnCommand;
+DipLogOffCommand g_dipLogOffCommand;
+DirectorDumpCommand g_directorDumpCommand;
+ResyncCommand g_resyncCommand;
+CleanSpritesCommand g_cleanSpritesCommand;
+CleanScreenCommand g_cleanScreenCommand;
+ResetVisionCommand g_resetVisionCommand;
 
 
-                     InitializeDiplomacyCommand g_initializeDiplomacyCommand;
-                          BeginDiplomacyCommand g_beginDiplomacyCommand;
-                       ChooseNewProposalCommand g_chooseNewProposalCommand;
-                          SetNewProposalCommand g_setNewProposalCommand;
-                        SetHasInitiativeCommand g_setHasInitiativeCommand;
-                             SetResponseCommand g_setResponseCommand;
-                      ExecuteNewProposalCommand g_executeNewProposalCommand;
-                         ExecuteResponseCommand g_executeResponseCommand;
-                           ShowDiplomacyCommand g_showDiplomacyCommand;
-                               NextStateCommand g_nextStateCommand;
-                          SetPersonalityCommand g_setPersonalityCommand;
-                              DeclareWarCommand g_declareWar;
+ExportMapCommand g_exportMapCommand;
+ImportMapCommand g_importMapCommand;
 
 
-                      SetGovernorForCityCommand g_setGovernorForCityCommand;
-                    SetGovernorPwReserveCommand g_setGovernorPwReserveCommand;
+InitializeDiplomacyCommand g_initializeDiplomacyCommand;
+BeginDiplomacyCommand g_beginDiplomacyCommand;
+ChooseNewProposalCommand g_chooseNewProposalCommand;
+SetNewProposalCommand g_setNewProposalCommand;
+SetHasInitiativeCommand g_setHasInitiativeCommand;
+SetResponseCommand g_setResponseCommand;
+ExecuteNewProposalCommand g_executeNewProposalCommand;
+ExecuteResponseCommand g_executeResponseCommand;
+ShowDiplomacyCommand g_showDiplomacyCommand;
+NextStateCommand g_nextStateCommand;
+SetPersonalityCommand g_setPersonalityCommand;
+DeclareWarCommand g_declareWar;
 
 
-                                 ToggleCellText g_toggleCellText;
-                                 ToggleArmyText g_toggleArmyText;
-								 ToggleArmyText g_toggleArmyName;
+SetGovernorForCityCommand g_setGovernorForCityCommand;
+SetGovernorPwReserveCommand g_setGovernorPwReserveCommand;
 
 
-                                     ArmyClumps g_armyClumps;
+ToggleCellText g_toggleCellText;
+ToggleArmyText g_toggleArmyText;
 
 
-                                SetGoodsCommand g_setGoodsCommand;
+ArmyClumps		g_armyClumps;
+
+
+SetGoodsCommand g_setGoodsCommand;
 
 #ifdef DUMP_ASTAR
 
-                               DumpAstarCommand g_dumpAstarCommand;
+DumpAstarCommand g_dumpAstarCommand;
 #endif
 
 
-                                 AiDebugCommand g_aiDebugCommand;
+AiDebugCommand g_aiDebugCommand;
 
 
-                             ShowVictoryCommand g_showVictoryCommand;
+ShowVictoryCommand g_showVictoryCommand;
 
 
-                           ReloadSpritesCommand g_reloadSpritesCommand;
+ReloadSpritesCommand g_reloadSpritesCommand;
 
 
 COMMAND(ShowVisCommand);
 ShowVisCommand g_showVisCommand;
 
 CommandRecord commands[] = {
-	{"help", &g_helpCommand,
+    {"help", &g_helpCommand,
 	"help [page] - this text, default is page 0"},
 	{"helplines", &g_helpLinesCommand,
 	"helplines <lines> - this many lines for 1 page of help text"},
-	{"clear", &g_clearTextCommand,
+    {"clear", &g_clearTextCommand,
 	"clear - clear debug text from the screen"},
 	{"build", &g_buildCommand,
 	"build <city_idx> <unit_type> [player] - enter unit in build queue for city"},
@@ -620,24 +622,24 @@ CommandRecord commands[] = {
 	{"loadaip", &g_loadAIPCommand,
 	"loadaip <filename> <team_idx> - force the loading of the aip file from aip directory for specified team"},
 
-	{"whoami", &g_whoAmICommand, "whoami - what aip is loaded up"},
+    { "whoami", &g_whoAmICommand, "whoami - what aip is loaded up"},
 	{"logai", &g_logAICommand,
 	"logai <log_level> <team_idx> - set AI's level of logging"},
-	{"diplogon", &g_dipLogOnCommand, "diplogon [player] - turn on diplomacy logging for player"}, 
-	{"diplogoff", &g_dipLogOffCommand, "diplogoff [player] - turn off diplomacy logging for player"}, 
+    {"diplogon", &g_dipLogOnCommand, "diplogon [player] - turn on diplomacy logging for player"}, 
+    {"diplogoff", &g_dipLogOffCommand, "diplogoff [player] - turn off diplomacy logging for player"}, 
 	{"restart", &g_restartCommand,
 	"restart - restart game (Rereading profile.txt)"},
 	{"improve", &g_improveCommand,
 	"improve <city_idx> <improvement> [player] - insert improvement in build queue"},
-	{"crc", &g_calcChecksumCommand,
+    {"crc", &g_calcChecksumCommand,
 	"crc - show crc's"},
 	{"dumpcrc", &g_dumpChecksumCommand,
 	"dumpcrc - dump crc's to log"},
-	{"crcstart", &g_displayChecksumCommand,
+    {"crcstart", &g_displayChecksumCommand,
 	"crcstart - keep showing crc's"},
-	{"crcoff", &g_displayChecksumOffCommand,
+    {"crcoff", &g_displayChecksumOffCommand,
 	"crcoff - stop showing crc's"},
-	{"rtest", &g_randTestCommand,
+    {"rtest", &g_randTestCommand,
 	"rtest <num commands> <wait factor> - make <num commands> random moves"},
 	{"stayon", &g_stayOnCommand,
 	"stayon - stay in command mode after enter"},
@@ -735,25 +737,25 @@ CommandRecord commands[] = {
 	"dumprequests - display all diplomatic requests for current player to log file"},
 	{"dumpmessages", &g_dumpMessagesCommand,
 	"dumpmessages - display all queued messages for current player to log file"},
-	{"seestats", &g_SeeWWRCommand,
+    {"seestats", &g_SeeWWRCommand,
 	"seestats - see workday, wages and rations, material contribution, readiness"},
-	{"setworkday", &g_SetWorkdayCommand,
+    {"setworkday", &g_SetWorkdayCommand,
 	"setkworday <level> - set workday to new level"},
-	{"setwages", &g_SetWagesCommand,
+    {"setwages", &g_SetWagesCommand,
 	"setwages <level> - set wages to a new level"},
-	{"setrations", &g_SetRationsCommand,
+    {"setrations", &g_SetRationsCommand,
 	"setrations <level> - set rations to a new level "},
-	{"setmat", &g_SetMaterialsPercentCommand,
+    {"setmat", &g_SetMaterialsPercentCommand,
 	"setmat <percent> - set the percent of production for materials"},
 	{"addmat", &g_AddMaterialsCommand,
 	"addmat <value> - Give the current player %d material points"},
-	{"setready", &g_SetReadinessCommand,
+    {"setready", &g_SetReadinessCommand,
 	"setready <level> - set the readiness 0 - peace - 1 alert 2 - war"},
 	{"shownet", &g_showNetworkStatsCommand,
 	"shownet - toggle display of network stats"},
 	{"pop", &g_popCommand,
 	"pop - place or remove a pop at the mouse (place from selected city)"},
-	{"tframe", &g_frameCommand,
+    {"tframe", &g_frameCommand,
 	"tframe - turn frame rate display on or off"},
 	{"government", &g_setGovernmentCommand,
 	"government <type> - set the type of government"},
@@ -837,8 +839,8 @@ CommandRecord commands[] = {
 	"setcityname <name> - set name of city"},
 	{"setcitysize", &g_setCitySizeCommand, 
 	"setcitysize <size> - set the size of the selected city"},
-	{"taistr", &g_toggleAiStr, "taistr - toggle to ai strings on and off"}, 
-
+    {"taistr", &g_toggleAiStr, "taistr - toggle to ai strings on and off"}, 
+ 	
 	{"investigatecity", &g_investigateCityCommand,
 	"investigatecity - use the selected secret agent to investigate the pointed at city"},
 	{"stealtechnology", &g_stealTechnologyCommand,
@@ -911,7 +913,7 @@ CommandRecord commands[] = {
 	"createpark - use a park ranger"},
 	{"createrift", &g_createRiftCommand,
 	"createrift - Open a rift gate to the pointed at location"},
-	{"rnd", &g_fastRoundCommand,
+    {"rnd", &g_fastRoundCommand,
 	"rnd <num> - make num rounds pass"}, 
 	{"killtile", &g_killTileCommand,
 	"killtile - kills the tile under the mouse"},
@@ -932,18 +934,18 @@ CommandRecord commands[] = {
 	 "giveswhat <num> - show what the advance will give you"},
 	{"howlong", &g_howLongCommand,
 	 "howlong - how long it will take the selected city to build the current item"},
-	{"checkmem", &g_debugCheckMem, "toggle Crt memory validate - the game goes really slow"}, 
+    {"checkmem", &g_debugCheckMem, "toggle Crt memory validate - the game goes really slow"}, 
 
-	{"slic", &g_slicCommand,
+    {"slic", &g_slicCommand,
 	 "slic <expression> - add an expression to the watch window"},
-	{"assign", &g_slicCommand,
+    {"assign", &g_slicCommand,
 	 "assign <symbol> = <value> - assign a slic symbol a value"},
 	{"bequeathgold", &g_bequeathGoldCommand,
 	"bequeathgold <amount> - just give a player some gold"},
 	{"testmessage", &g_testMessageCommand,
 	"testmessage - send a test message -- do not use!!"},
-	{"tcolor", &g_toggleMapColorCommand, "toggle map debug color"}, 
-	{"theuristic",  &g_toggleHeuristicCommand, "toggle the old astar heuristic"},
+    {"tcolor", &g_toggleMapColorCommand, "toggle map debug color"}, 
+    {"theuristic",  &g_toggleHeuristicCommand, "toggle the old astar heuristic"},
 	{"yum", &g_yumCommand,
 	 "yum - show food, production, goods for the pointed at square"},
 	{"getadvance", &g_getAdvanceCommand,
@@ -966,17 +968,17 @@ CommandRecord commands[] = {
 	 "simultaneous - toggle simultaneous mode"},
 	{"autocenter", &g_autoCenterCommand,
 	 "Toggle auto center"},
-	{"aidump", &g_aiDumpCommand,
+    {"aidump", &g_aiDumpCommand,
 	"dump the ai stats to a file"},
 	{"regard", &g_regardCommand,
 	"regard [civ] [regard] - set regard of current civ to other civ"},
 	{"attitude", &g_attitudeCommand,
 	"attitude [civ] [attitude] - set attitude of current civ to other civ"},
-	{"showregard", &g_dumpFZRegardCommand, 
-	    "showregard [player] - show the regard of the player to the screen"},
-	{"setregard", &g_setFZRegardCommand, 
-	    "setregard me him r - set the regard of player me to player him to r"},
-	{"totalwar", &g_totalWarCommand, "totalwar - everyone hates everyone"}, 
+    {"showregard", &g_dumpFZRegardCommand, 
+        "showregard [player] - show the regard of the player to the screen"},
+    {"setregard", &g_setFZRegardCommand, 
+        "setregard me him r - set the regard of player me to player him to r"},
+    {"totalwar", &g_totalWarCommand, "totalwar - everyone hates everyone"}, 
 	{"unitmoves", &g_setUnitMovesStyleCommand,
 	 "unitmoves [nummoves] - set unit moves style game for network"},
 	{"classic", &g_setClassicStyleCommand,
@@ -994,7 +996,7 @@ CommandRecord commands[] = {
 
 
 
-	{"timedgame", &g_timedGameCommand,
+    {"timedgame", &g_timedGameCommand,
 	 "timedgame <m> [s] - set time for network game to m minutes, s seconds per player"},
 	{"carryover", &g_setCarryoverStyleCommand,
 	 "carryover - enable carryover bonus for speed turns"},
@@ -1004,7 +1006,7 @@ CommandRecord commands[] = {
 	{"ready", &g_readyCommand,
 	 "ready - signal done setting up"},
 	{"ddblit", &g_useDDBlitCommand, "ddblit [on/off] - use Direct Draw for blitting"},
-	{"tmem", &g_displayMemCommand, "tmem - toggle memory display"},
+    {"tmem", &g_displayMemCommand, "tmem - toggle memory display"},
 	{"loaddb", &g_loadDBCommand, 
 	 "loaddb [dbname] - reload a database (string, advance, terrain, unit, const, improve, wonder, civ, inst, pop)"},
 	{"sellunits", &g_sellUnitsCommand,
@@ -1037,7 +1039,7 @@ CommandRecord commands[] = {
 	 "score - show the current player's score"},
 	{"flilog", &g_fliLogCommand,
 	"flilog - toggle flilog.txt logging on and off"},
-	{"reloadfli", &g_reloadFliCommand, "reloadfli [player] - reload this players ai"},
+     {"reloadfli", &g_reloadFliCommand, "reloadfli [player] - reload this players ai"},
 	{"sendslave", &g_sendSlaveCommand,
 	 "sendslave - send a slave from selected city to pointed at city"},
 	{"disband", &g_disbandCommand,
@@ -1047,7 +1049,7 @@ CommandRecord commands[] = {
 	 "attach [slot] - attach an AI to player [slot] or current player"},
 	{"detach", &g_detachCommand,
 	 "detach [slot] - detach an AI player"},
-	{"tsupport", &g_toggleShieldSupport, "tsupport - turn off and on shield support"},
+    {"tsupport", &g_toggleShieldSupport, "tsupport - turn off and on shield support"},
 	{"superfast", &g_superFastDebugModeCommand,
 	"superfast [on/off] - turn SuperFastDebugMode on and off (no goal execute)"},
 	{"killpop", &g_killPopCommand,
@@ -1055,10 +1057,10 @@ CommandRecord commands[] = {
 	{"board", &g_boardCommand,
 	 "board - board selected army into transports in the same tile"},
 	{"autogroup", &g_autoGroupCommand,
-	 "autogroup - make the game a living hell"},
-
-	{"addpop", &g_addPopCommand, 
-	    "addpop - add one or more new populations to the currently selected city"},
+	 "autogroup - make the game a living hell"}, 
+												 
+    {"addpop", &g_addPopCommand, 
+        "addpop - add one or more new populations to the currently selected city"},
 	{"copyvision", &g_copyVisionCommand,
 	 "copyvision - copy gamestate vision to screen"},
 
@@ -1079,8 +1081,8 @@ CommandRecord commands[] = {
 	
 	{"svariable", &g_slicVariableCommand,
 	 "svariable <name> - show the value of a slic variable"},
-
-	{"directordump", &g_directorDumpCommand,
+     
+	 {"directordump", &g_directorDumpCommand,
 	 "directordump - dump director stats to the logfile"},
 
 	{"resync", &g_resyncCommand,
@@ -1136,14 +1138,12 @@ CommandRecord commands[] = {
 	
 	
 
-	{"celltext", &g_toggleCellText,
-	"celltext - toggle the displaying of AI debug text for Cells on and off"},
-	{"armytext", &g_toggleArmyText,
-	"armytext - toggle the displaying of AI debug text for Armies on and off"},
-	{"armyname", &g_toggleArmyName,
-	"armyname - toggle the displaying of name for Armies on and off"},
+	 {"celltext", &g_toggleCellText,
+	 "celltext - toggle the displaying of AI debug text for Cells on and off"},
+	 {"armytext", &g_toggleArmyText,
+	 "armytext - toggle the displaying of AI debug text for Armies on and off"},
 
-	
+	 
 	{"armyclumps", &g_armyClumps,
 	"armyclumps - display armies as clumps of up to 3 small units"},
 
@@ -1151,8 +1151,8 @@ CommandRecord commands[] = {
 	"setgoods <good type> - place good of type at current cursor location"},
 
 #ifdef DUMP_ASTAR
-	{"dumpastar", &g_dumpAstarCommand,
-	"dumpsastar <filename> - dumps the astar findpath call stack to filename."},
+	 {"dumpastar", &g_dumpAstarCommand,
+	 "dumpsastar <filename> - dumps the astar findpath call stack to filename."},
 #endif
 
 	{"aidebug", &g_aiDebugCommand,
@@ -1168,10 +1168,10 @@ CommandRecord commands[] = {
 	{"draytest", &g_DRayTestCode,
 	"This is just my test function, it will never do anything useful in the game."},
 
-	{"reloadsprites", &g_reloadSpritesCommand,
+    {"reloadsprites", &g_reloadSpritesCommand,
 	 "Tell all UnitActors to reload their sprites."},
 
-	{"showvisibility", &g_showVisCommand, "Show visibility flags for first unit in all armies"},
+    {"showvisibility", &g_showVisCommand, "Show visibility flags for first unit in all armies"},
 	 {NULL, NULL, NULL}
 };
 
@@ -1189,7 +1189,7 @@ void ShowVisCommand::Execute(sint32 argc, char **argv)
 		}
 	}
 }
-
+											 
 void ReloadSpritesCommand::Execute(sint32 argc, char **argv)
 {
 	g_director->ReloadAllSprites();
@@ -1459,30 +1459,30 @@ void ShowDiplomacyCommand::Execute(sint32 argc, char **argv) {
 }
 
 
-void NextStateCommand::Execute(sint32 argc, char **argv) 
-{
-	sint32 playerId     = PLAYER_INDEX_VANDALS;
+void NextStateCommand::Execute(sint32 argc, char **argv) {
 
-	if (argc >= 2) 
-    {
+	sint32 playerId;
+	sint32 foreignerId;
+	if(argc >= 2 ) {
 		playerId = atoi(argv[1]);
+
+		
 		Diplomat::GetDiplomat(playerId).NextStrategicState();
 	}
 
-	if (argc == 3) 
-    {
-		Diplomat::GetDiplomat(playerId).NextDiplomaticState(atoi(argv[2]));		
+	if(argc == 3 ) {
+		foreignerId = atoi(argv[2]);
+		Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);		
 	}
-	else 
-    {
-		for (sint32 foreignerId = 0; foreignerId < k_MAX_PLAYERS; ++foreignerId) 
-        {
+	else {
+		
+		for(foreignerId=0; foreignerId < k_MAX_PLAYERS; foreignerId++) {
+			
 			if (foreignerId != playerId)
-            {
 				Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);
-            }
 		}
 	}
+
 }
 
 void SetPersonalityCommand::Execute(sint32 argc, char **argv) {
@@ -1512,9 +1512,9 @@ void DeclareWarCommand::Execute(sint32 argc, char **argv) {
 }
 
 void SetGovernorForCityCommand::Execute(sint32 argc, char **argv) {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
     g_selected_item->GetTopCurItem(player, item, state);
 
@@ -1576,14 +1576,6 @@ void ToggleArmyText::Execute(sint32 argc, char **argv)
 	}
 }
 
-void ToggleArmyName::Execute(sint32 argc, char **argv)
-{
-	if (g_graphicsOptions->IsArmyNameOn()) {
-		g_graphicsOptions->ArmyNameOff();
-	} else {
-		g_graphicsOptions->ArmyNameOn();
-	}
-}
 
 void ArmyClumps::Execute(sint32 argc, char **argv)
 {
@@ -2041,9 +2033,9 @@ void AutoGroupCommand::Execute(sint32 argc, char **argv)
 
 void BoardCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_ARMY) {
@@ -2120,9 +2112,9 @@ void ToggleShieldSupport::Execute(sint32 argc, char **argv)
 
 void DisbandCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_ARMY) {
@@ -2138,9 +2130,9 @@ void DisbandCommand::Execute(sint32 argc, char **argv)
 
 void SendSlaveCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
@@ -2153,9 +2145,9 @@ void SendSlaveCommand::Execute(sint32 argc, char **argv)
 		g_tiledMap->GetMouseTilePos(pos);
 		Cell *cell = g_theWorld->GetCell(pos);
 		Unit toCity = cell->GetCity();
-		Assert(toCity != Unit());
+		Assert(toCity != Unit(0));
 		
-		if(toCity != Unit()) {
+		if(toCity != Unit(0)) {
 			Assert(toCity.GetOwner() == fromCity.GetOwner());
 			if(toCity.GetOwner() != fromCity.GetOwner())
 				return;
@@ -2202,16 +2194,16 @@ void ForceRevoltCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(point);
 
 	Cell *cell = g_theWorld->GetCell(point);
-	if(cell->GetCity() != Unit()) {
+	if(cell->GetCity() != Unit(0)) {
 		cell->GetCity().AccessData()->GetCityData()->Revolt(g_player[cell->GetCity().GetOwner()]->m_civRevoltingCitiesShouldJoin, TRUE);
 	}
 }
 
 void NearFortCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_ARMY) {
@@ -2223,9 +2215,9 @@ void NearFortCommand::Execute(sint32 argc, char **argv)
 
 void NearCityCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_ARMY) {
@@ -2272,13 +2264,17 @@ void FliLogCommand::Execute(sint32 argc, char **argv)
 }
 
 void ReloadFliCommand::Execute (sint32 argc, char **argv)
+
 { 
-#if 0   /// @todo Find out what this code was supposed to do
     Assert(argc == 2) 
     if (argc != 2) return; 
 
     PLAYER_INDEX p = atoi (argv[1]); 
-#endif    
+    
+    
+    
+    
+    
 }
 
 void RobotMessagesCommand::Execute(sint32 argc, char **argv)
@@ -2435,12 +2431,16 @@ void ZBCommand::Execute(sint32 argc, char **argv)
 
 void ShowPopCommand::Execute(sint32 argc, char **argv)
 {
-    // Didn't do anything
+#ifdef _DEBUG
+	g_tiledMap->m_showPopHack = TRUE;
+#endif
 }
 
 void HidePopCommand::Execute(sint32 argc, char **argv)
 {
-    // Didn't do anything
+#ifdef _DEBUG
+	g_tiledMap->m_showPopHack = FALSE;
+#endif
 }
 
 void AddPopCommand::Execute(sint32 argc, char **argv)
@@ -2587,18 +2587,18 @@ void SlicCommand::Execute(sint32 argc, char **argv)
 
 void TestMessageCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc==1);
+	Assert(argc==1) ;
 	if (argc!=1)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->SendTestMessage();
+	g_player[g_selected_item->GetVisiblePlayer()]->SendTestMessage() ;
 	}
 
 void HowLongCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
@@ -2631,7 +2631,7 @@ void PacCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(pos);
 
 	Unit newu = g_player[player]->CreateUnit(g_theUnitDB->NumRecords() - 1, 
-											 pos, Unit(), 
+											 pos, Unit(0), 
 											 FALSE, CAUSE_NEW_ARMY_INITIAL);
 	newu.AccessData()->SetPacMan();
 }
@@ -2671,9 +2671,9 @@ void GivesWhatCommand::Execute(sint32 argc, char **argv)
 
 void OvertimeCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
@@ -2686,9 +2686,9 @@ void OvertimeCommand::Execute(sint32 argc, char **argv)
 
 void OvertimeCostCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
@@ -2715,9 +2715,9 @@ void LearnWhatCommand::Execute(sint32 argc, char **argv)
 
 void BuildWhatCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	Assert(state == SELECT_TYPE_LOCAL_CITY);
@@ -2903,14 +2903,12 @@ void HearGossipCommand::Execute(sint32 argc, char **argv)
 	BOOL DontUseThisCommandItSucks = FALSE;
 	Assert(DontUseThisCommandItSucks);
 	return;
-#if 0   // Unreachable
 	Assert(argc == 2);
 	if(argc != 2)
 		return;
 
 	g_player[g_selected_item->GetVisiblePlayer()]->m_all_units->Access(0).AccessData()->HearGossip(
 		g_player[atoi(argv[1])]->m_all_units->Access(0));
-#endif
 }
 
 void BombardCommand::Execute(sint32 argc, char **argv)
@@ -2929,7 +2927,7 @@ void GrantAdvanceCommand::Execute(sint32 argc, char **argv)
 
 	if(g_network.IsClient()) {
 		g_network.SendCheat(new NetCheat(NET_CHEAT_GRANT_ADVANCE,
-		                                 atoi(argv[1])));
+										 atoi(argv[1])));
 	}
 
 	g_player[g_selected_item->GetVisiblePlayer()]->m_advances->GiveAdvance(atoi(argv[1]), CAUSE_SCI_UNKNOWN);
@@ -3014,9 +3012,9 @@ void InvestigateReadinessCommand::Execute(sint32 argc, char **argv)
 	
 void CreateImprovementCommand::Execute(sint32 argc, char **argv)
 {
-	PLAYER_INDEX    player;
-	ID              item;
-	SELECT_TYPE     state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 	Assert(argc == 2);
 	if(argc != 2)
 		return;
@@ -3030,7 +3028,7 @@ void CreateImprovementCommand::Execute(sint32 argc, char **argv)
 	c.AccessData()->m_city_data->m_built_improvements |= ((uint64)1 << atoi(argv[1]));
 	if(g_network.IsClient()) {
 		g_network.SendCheat(new NetCheat(NET_CHEAT_CREATE_IMPROVEMENT,
-		                                 (uint32)c, atoi(argv[1])));
+										 (uint32)c, atoi(argv[1])));
 	} else if(g_network.IsHost()) {
 		g_network.Enqueue(c.AccessData(), c.AccessData()->m_city_data);
 	}
@@ -3043,7 +3041,7 @@ void SpewUnitsCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(point);
 
 	gameinit_SpewUnits(g_selected_item->GetVisiblePlayer(),
-	                   point);
+							  point);
 }
 
 void DebugMaskCommand::Execute(sint32 argc, char **argv)
@@ -3098,14 +3096,14 @@ void BuildWonderCommand::Execute(sint32 argc, char **argv)
 
 
 
-	PLAYER_INDEX    player;
-	ID              item;
-	SELECT_TYPE     state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
 		g_player[player]->BuildWonder(atoi(argv[1]),
-		                              Unit(item));
+									  Unit(item));
 	}
 }
 
@@ -3167,17 +3165,17 @@ void TerrainImprovementCommand::Execute(sint32 argc, char **argv)
 
 	if(argc == 3) {
 		g_player[vplayer]->CreateImprovement(imp,
-		                                     point,
-		                                     atoi(argv[2]));
+											 point,
+											 atoi(argv[2]));
 	} else {
 		Assert(argc == 2);
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
-		                       GEV_CreateImprovement,
-		                       GEA_Player, vplayer,
-		                       GEA_MapPoint, point,
-		                       GEA_Int, imp,
-		                       GEA_Int, 0,
-		                       GEA_End);
+							   GEV_CreateImprovement,
+							   GEA_Player, vplayer,
+							   GEA_MapPoint, point,
+							   GEA_Int, imp,
+							   GEA_Int, 0,
+							   GEA_End);
 		
 		
 		
@@ -3190,9 +3188,7 @@ void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
 
-#if 0   // Unused
 	sint32 vplayer = g_selected_item->GetVisiblePlayer();
-#endif
 
 	Cell *cell = g_theWorld->GetCell(point);
 	
@@ -3213,22 +3209,22 @@ void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 
 
 void KillTileCommand::Execute(sint32 argc, char **argv)
-{
-	MapPoint pos;
+	{
+	MapPoint pos ;
 
-	Cell     *c;
+	Cell	*c ;
 
-	Assert(argc==1);
+	Assert(argc==1) ;
 	if (argc != 1)
-		return;
+		return ;
 
-	g_tiledMap->GetMouseTilePos(pos);
-	c = g_theWorld->GetCell(pos.x, pos.y);
-	c->Kill();
+	g_tiledMap->GetMouseTilePos(pos) ;								
+	c = g_theWorld->GetCell(pos.x, pos.y) ;					
+	c->Kill() ;														
 	
-	g_tiledMap->PostProcessMap();
-	g_tiledMap->Refresh();
-}
+	g_tiledMap->PostProcessMap() ;
+	g_tiledMap->Refresh() ;											
+	}
 
 
 
@@ -3244,29 +3240,29 @@ void KillTileCommand::Execute(sint32 argc, char **argv)
 
 
 void SaveBuildQueueCommand::Execute(sint32 argc, char **argv)
-{
-	PLAYER_INDEX    player;
+	{
+	PLAYER_INDEX	player ;
 
-	ID              item;
+	ID	item ;
 
-	SELECT_TYPE     state;
+	SELECT_TYPE	state ;
 
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	Assert(argv[1] != NULL);
-	Assert(argv[1][0] != NULL);
+	Assert(argv[1] != NULL) ;
+	Assert(argv[1][0] != NULL) ;
 
-	g_selected_item->GetTopCurItem(player, item, state);
+	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
-		return;
+		return ;
 
-	Unit city(item);
-	CityData *cityData = city.GetData()->GetCityData();
-	cityData->SaveQueue(argv[1]);
-}
+	Unit city(item) ;
+	CityData *cityData = city.GetData()->GetCityData() ;
+	cityData->SaveQueue(argv[1]) ;
+	}
 
 
 
@@ -3416,28 +3412,28 @@ void SaveBuildQueueCommand::Execute(sint32 argc, char **argv)
 
 
 void LoadBuildQueueCommand::Execute(sint32 argc, char **argv)
-{
-	PLAYER_INDEX    player;
+	{
+	PLAYER_INDEX	player ;
 
-	ID              item;
+	ID	item ;
 
-	SELECT_TYPE     state;
+	SELECT_TYPE	state ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	Assert(argv[1] != NULL);
-	Assert(argv[1][0] != NULL);
+	Assert(argv[1] != NULL) ;
+	Assert(argv[1][0] != NULL) ;
 
-	g_selected_item->GetTopCurItem(player, item, state);
+	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
-		return;
+		return ;
 
-	Unit city(item);
-	CityData *cityData = city.GetData()->GetCityData();
-	cityData->LoadQueue(argv[1]);
-}
+	Unit city(item) ;
+	CityData *cityData = city.GetData()->GetCityData() ;
+	cityData->LoadQueue(argv[1]) ;
+	}
 
 	
 
@@ -3453,61 +3449,61 @@ void LoadBuildQueueCommand::Execute(sint32 argc, char **argv)
 
 
 void SetCityNameCommand::Execute(sint32 argc, char **argv)
-{
-	PLAYER_INDEX    player;
+	{
+	PLAYER_INDEX	player ;
 
-	ID              item;
+	ID	item ;
 
-	SELECT_TYPE     state;
+	SELECT_TYPE	state ;
 
 	MapPoint pos;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_selected_item->GetTopCurItem(player, item, state);
+	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
-		return;
+		return ;
 
-	Unit city(item);
+	Unit city(item) ;
 	city.GetPos(pos);
 	g_tiledMap->RedrawTile(&pos);
-	CityData *cityData = city.GetData()->GetCityData();
-	cityData->SetName(argv[1]);
-}
+	CityData *cityData = city.GetData()->GetCityData() ;
+	cityData->SetName(argv[1]) ;
+	}
 
 void SetCitySizeCommand::Execute(sint32 argc, char **argv)
-{
-	PLAYER_INDEX    player;
+	{
+	PLAYER_INDEX	player ;
 
-	ID              item;
+	ID	item ;
 
-	SELECT_TYPE     state;
+	SELECT_TYPE	state ;
 
 	MapPoint pos;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_selected_item->GetTopCurItem(player, item, state);
+	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
-		return;
+		return ;
 
-	sint32           size = atoi(argv[1]);
+	sint32		size = atoi(argv[1]);
 
 
-	Unit city(item);
+	Unit city(item) ;
 	city.GetPos(pos);
 	g_tiledMap->RedrawTile(&pos);
-	CityData *cityData = city.GetData()->GetCityData();
-	cityData->SetSize(size);
-}
+	CityData *cityData = city.GetData()->GetCityData() ;
+	cityData->SetSize(size) ;
+	}
 
 void ToggleAIStr::Execute(sint32 argc, char** argv)
-{
-	g_show_ai_dbg = !g_show_ai_dbg;
+{ 
+    g_show_ai_dbg = !g_show_ai_dbg; 
 }
 
 #if 0
@@ -3515,8 +3511,8 @@ void ToggleAIStr::Execute(sint32 argc, char** argv)
 
 extern bool g_full_propagate_path;
 void FullPathToggle::Execute(sint32 argc, char** argv)
-{
-	g_full_propagate_path = !g_full_propagate_path;
+{ 
+    g_full_propagate_path = !g_full_propagate_path; 
 }
 #endif
 
@@ -3534,19 +3530,19 @@ void FullPathToggle::Execute(sint32 argc, char** argv)
 
 
 void RegardCommand::Execute(sint32 argc, char **argv)
-{
-	sint32          regard;
+	{
+	sint32	regard ;
 
-	PLAYER_INDEX    otherParty;
+	PLAYER_INDEX	otherParty ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	otherParty = (PLAYER_INDEX)(atoi(argv[1]));
-	regard = atoi(argv[2]);
-	g_player[g_selected_item->GetVisiblePlayer()]->GetRegard()->SetForPlayer(otherParty, (REGARD_TYPE)regard);
-}
+	otherParty = (PLAYER_INDEX)(atoi(argv[1])) ;
+	regard = atoi(argv[2]) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->GetRegard()->SetForPlayer(otherParty, (REGARD_TYPE)regard) ;
+	}
 
 	
 
@@ -3563,65 +3559,65 @@ void RegardCommand::Execute(sint32 argc, char **argv)
 
 
 void AttitudeCommand::Execute(sint32 argc, char **argv)
-{
-	sint32          attitude;
+	{
+	sint32	attitude ;
 
-	PLAYER_INDEX    otherParty;
+	PLAYER_INDEX	otherParty ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	otherParty = (PLAYER_INDEX)(atoi(argv[1]));
-	attitude = atoi(argv[2]);
-	DPRINTF(k_DBG_INFO, ("Current attitude for player %d is %d\n", otherParty, g_player[g_selected_item->GetVisiblePlayer()]->GetAttitude(otherParty)));
-	g_player[g_selected_item->GetVisiblePlayer()]->SetAttitude(otherParty, (ATTITUDE_TYPE)attitude);
-	DPRINTF(k_DBG_INFO, ("New attitude for player %d is %d\n", otherParty, attitude));
-}
-
-
-void DumpFZRegardCommand::Execute(sint32 argc, char **argv)
-{
-	sint32 p;
-	if (argc == 1) {
-		p = g_selected_item->GetCurPlayer();
-	} else if (argc == 2) {
-		p = atoi(argv[1]);
-	} else { 
-		Assert(argc <= 2);
-		return;
+	otherParty = (PLAYER_INDEX)(atoi(argv[1])) ;
+	attitude = atoi(argv[2]) ;
+	DPRINTF(k_DBG_INFO, ("Current attitude for player %d is %d\n", otherParty, g_player[g_selected_item->GetVisiblePlayer()]->GetAttitude(otherParty))) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->SetAttitude(otherParty, (ATTITUDE_TYPE)attitude) ;
+	DPRINTF(k_DBG_INFO, ("New attitude for player %d is %d\n", otherParty, attitude)) ;
 	}
 
-	
-	
 
-	char out_str[80];
-	sint32 i;
-	sprintf (out_str, "Player %d regards", p);
-	g_chatBox->AddLine(g_selected_item->GetCurPlayer(), out_str);
-	
-	for (i=0; i<k_MAX_PLAYERS; i++) {
-		if (i == p )continue;
-		if (!g_player[i]) continue;
+void DumpFZRegardCommand::Execute(sint32 argc, char **argv) 
+{ 
+    sint32 p; 
+    if (argc == 1) { 
+        p = g_selected_item->GetCurPlayer(); 
+    } else if (argc == 2) { 
+        p = atoi(argv[1]); 
+    } else { 
+        Assert(argc <= 2); 
+        return;
+    } 
 
-		
+    
+    
 
-		
-		
-	}
-}
+    char out_str[80]; 
+    sint32 i; 
+    sprintf (out_str, "Player %d regards", p); 
+    g_chatBox->AddLine(g_selected_item->GetCurPlayer(), out_str);
+    
+    for (i=0; i<k_MAX_PLAYERS; i++) { 
+        if (i == p )continue; 
+        if (!g_player[i]) continue; 
+
+        
+
+        
+        
+    }
+} 
 
 
 void SetFZRegardCommand::Execute(sint32 argc, char **argv) 
 { 
-#if 0   /// @todo Find out what this code is supposed to do
     Assert(argc == 4)
     if (argc != 4) return; 
 
     sint32 me = atoi(argv[1]); 
     sint32 him = atoi(argv[2]); 
     sint32 r = atoi(argv[3]); 
-#endif
+
+    
 }
 
 void TotalWarCommand::Execute(sint32 argc, char **argv)
@@ -3771,26 +3767,26 @@ void TotalWarCommand::Execute(sint32 argc, char **argv)
 
 
 void PactCaptureCityCommand::Execute(sint32 argc, char **argv)
-{
-	PLAYER_INDEX    owner,
-	                recipient,
-	                thirdParty;
+	{
+	PLAYER_INDEX	owner,
+					recipient,
+					thirdParty ;
 
-	sint32          cityIndex;
+	sint32	cityIndex ;
 
-	Unit            targetCity;
+	Unit	targetCity ;
 
-	Assert(argc==4);
+	Assert(argc==4) ;
 	if (argc != 4)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	thirdParty = (PLAYER_INDEX)(atoi(argv[2]));
-	cityIndex = atoi(argv[3]);
-	targetCity = g_player[thirdParty]->CityIndexToUnit(cityIndex);
-	g_player[owner]->MakeCaptureCityPact(recipient, targetCity);
-}
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	thirdParty = (PLAYER_INDEX)(atoi(argv[2])) ;
+	cityIndex = atoi(argv[3]) ;
+	targetCity = g_player[thirdParty]->CityIndexToUnit(cityIndex) ;
+	g_player[owner]->MakeCaptureCityPact(recipient, targetCity) ;
+	}
 
 
 
@@ -3803,16 +3799,16 @@ void PactCaptureCityCommand::Execute(sint32 argc, char **argv)
 
 
 void PactEndPollutionCommand::Execute(sint32 argc, char **argv)
-{
-	PLAYER_INDEX    other_party;
+	{
+	PLAYER_INDEX	other_party ;
 
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	other_party = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[g_selected_item->GetVisiblePlayer()]->MakeEndPollutionPact(other_party);
-}
+	other_party = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->MakeEndPollutionPact(other_party) ;
+	}
 
 
 
@@ -3826,29 +3822,29 @@ void PactEndPollutionCommand::Execute(sint32 argc, char **argv)
 
 void RevoltCommand::Execute(sint32 argc, char **argv)
 	{
-	PLAYER_INDEX	player;
+	PLAYER_INDEX	player ;
 
-	ID	item;
+	ID	item ;
 
-	SELECT_TYPE	state;
+	SELECT_TYPE	state ;
 
-	sint32	index;
+	sint32	index ;
 
-	MapPoint	p;
+	MapPoint	p ;
 
-	Assert(argc==1);
+	Assert(argc==1) ;
 	if (argc != 1)
-		return;
+		return ;
 
 
-	g_selected_item->GetTopCurItem(player, item, state);
+	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
-		return;
+		return ;
 
-	if (!g_player[player]->GetCityIndex(item, index))
-		return;
+    if (!g_player[player]->GetCityIndex(item, index)) 
+        return; 
 
-	g_player[player]->Revolt(index);
+	g_player[player]->Revolt(index) ;
 
 	}
 
@@ -3865,14 +3861,14 @@ void RevoltCommand::Execute(sint32 argc, char **argv)
 
 void IsViolatingBordersCommand::Execute(sint32 argc, char **argv)
 	{
-	PLAYER_INDEX	player;
+	PLAYER_INDEX	player ;
 
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	player = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[g_selected_item->GetVisiblePlayer()]->IsViolatingBorders(player);
+	player = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->IsViolatingBorders(player) ;
 	}
 
 
@@ -3888,14 +3884,14 @@ void IsViolatingBordersCommand::Execute(sint32 argc, char **argv)
 
 void IsViolatingPeaceCommand::Execute(sint32 argc, char **argv)
 	{
-	PLAYER_INDEX	player;
+	PLAYER_INDEX	player ;
 
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	player = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[g_selected_item->GetVisiblePlayer()]->IsViolatingPeace(player);
+	player = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->IsViolatingPeace(player) ;
 	}
 
 
@@ -3911,14 +3907,14 @@ void IsViolatingPeaceCommand::Execute(sint32 argc, char **argv)
 
 void IsViolatingCeaseFireCommand::Execute(sint32 argc, char **argv)
 	{
-	PLAYER_INDEX	player;
+	PLAYER_INDEX	player ;
 
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	player = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[g_selected_item->GetVisiblePlayer()]->WillViolateCeaseFire(player);
+	player = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->WillViolateCeaseFire(player) ;
 	}
 
 
@@ -3933,11 +3929,11 @@ void IsViolatingCeaseFireCommand::Execute(sint32 argc, char **argv)
 
 void IsPollutionReducedCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 1);
+	Assert(argc == 1) ;
 	if (argc != 1)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->IsPollutionReduced();
+	g_player[g_selected_item->GetVisiblePlayer()]->IsPollutionReduced() ;
 	}
 
 
@@ -3955,15 +3951,15 @@ void IsPollutionReducedCommand::Execute(sint32 argc, char **argv)
 void MakeCeaseFireCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->MakeCeaseFire(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->MakeCeaseFire(recipient) ;
 	}
 
 
@@ -3981,15 +3977,15 @@ void MakeCeaseFireCommand::Execute(sint32 argc, char **argv)
 void BreakCeaseFireCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->BreakCeaseFire(recipient, TRUE);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->BreakCeaseFire(recipient, TRUE) ;
 	}
 
 
@@ -4005,15 +4001,15 @@ void BreakCeaseFireCommand::Execute(sint32 argc, char **argv)
 void RequestGreetingCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestGreeting(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestGreeting(recipient) ;
 	}
 
 	
@@ -4028,18 +4024,18 @@ void RequestGreetingCommand::Execute(sint32 argc, char **argv)
 void RequestDemandAdvanceCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	AdvanceType	advance;
+	AdvanceType	advance ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	advance = (AdvanceType)(atoi(argv[2]));
-	g_player[owner]->RequestDemandAdvance(recipient, advance);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	advance = (AdvanceType)(atoi(argv[2])) ;
+	g_player[owner]->RequestDemandAdvance(recipient, advance) ;
 	}
 
 
@@ -4054,21 +4050,21 @@ void RequestDemandAdvanceCommand::Execute(sint32 argc, char **argv)
 void RequestDemandCityCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Unit	city;
+	Unit	city ;
 
-	sint32	cityIndex;
+	sint32	cityIndex ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	cityIndex = atoi(argv[2]);
-	city = g_player[recipient]->CityIndexToUnit(cityIndex);
-	g_player[owner]->RequestDemandCity(recipient, city);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	cityIndex = atoi(argv[2]) ;
+	city = g_player[recipient]->CityIndexToUnit(cityIndex) ;
+	g_player[owner]->RequestDemandCity(recipient, city) ;
 	}
 
 
@@ -4083,15 +4079,15 @@ void RequestDemandCityCommand::Execute(sint32 argc, char **argv)
 void RequestDemandMapCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestDemandMap(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestDemandMap(recipient) ;
 	}
 
 
@@ -4106,18 +4102,18 @@ void RequestDemandMapCommand::Execute(sint32 argc, char **argv)
 void RequestDemandGoldCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Gold	amount;
+	Gold	amount ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	amount.SetLevel(atoi(argv[2]));
-	g_player[owner]->RequestDemandGold(recipient, amount);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	amount.SetLevel(atoi(argv[2])) ;
+	g_player[owner]->RequestDemandGold(recipient, amount) ;
 	}
 
 
@@ -4133,16 +4129,16 @@ void RequestDemandStopTradeCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
 					recipient,
-					thirdParty;
+					thirdParty ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	thirdParty = (PLAYER_INDEX)(atoi(argv[2]));
-	g_player[owner]->RequestDemandStopTrade(recipient, thirdParty);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	thirdParty = (PLAYER_INDEX)(atoi(argv[2])) ;
+	g_player[owner]->RequestDemandStopTrade(recipient, thirdParty) ;
 	}
 
 
@@ -4158,16 +4154,16 @@ void RequestDemandAttackEnemyCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
 					recipient,
-					thirdParty;
+					thirdParty ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	thirdParty = (PLAYER_INDEX)(atoi(argv[2]));
-	g_player[owner]->RequestDemandAttackEnemy(recipient, thirdParty);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	thirdParty = (PLAYER_INDEX)(atoi(argv[2])) ;
+	g_player[owner]->RequestDemandAttackEnemy(recipient, thirdParty) ;
 	}
 
 
@@ -4182,15 +4178,15 @@ void RequestDemandAttackEnemyCommand::Execute(sint32 argc, char **argv)
 void RequestDemandLeaveOurLandsCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestDemandLeaveOurLands(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestDemandLeaveOurLands(recipient) ;
 	}
 
 
@@ -4205,15 +4201,15 @@ void RequestDemandLeaveOurLandsCommand::Execute(sint32 argc, char **argv)
 void RequestDemandReducePollutionCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestDemandReducePollution(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestDemandReducePollution(recipient) ;
 	}
 
 
@@ -4228,18 +4224,18 @@ void RequestDemandReducePollutionCommand::Execute(sint32 argc, char **argv)
 void RequestOfferAdvanceCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	AdvanceType	advance;
+	AdvanceType	advance ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	advance = (AdvanceType)(atoi(argv[2]));
-	g_player[owner]->RequestOfferAdvance(recipient, advance);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	advance = (AdvanceType)(atoi(argv[2])) ;
+	g_player[owner]->RequestOfferAdvance(recipient, advance) ;
 	}
 
 
@@ -4254,21 +4250,21 @@ void RequestOfferAdvanceCommand::Execute(sint32 argc, char **argv)
 void RequestOfferCityCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Unit	city;
+	Unit	city ;
 
-	sint32	cityIndex;
+	sint32	cityIndex ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	cityIndex = atoi(argv[2]);
-	city = g_player[owner]->CityIndexToUnit(cityIndex);
-	g_player[owner]->RequestOfferCity(recipient, city);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	cityIndex = atoi(argv[2]) ;
+	city = g_player[owner]->CityIndexToUnit(cityIndex) ;
+	g_player[owner]->RequestOfferCity(recipient, city) ;
 	}
 
 
@@ -4283,15 +4279,15 @@ void RequestOfferCityCommand::Execute(sint32 argc, char **argv)
 void RequestOfferMapCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestOfferMap(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestOfferMap(recipient) ;
 	}
 
 
@@ -4304,21 +4300,21 @@ void RequestOfferMapCommand::Execute(sint32 argc, char **argv)
 
 
 void RequestOfferGoldCommand::Execute(sint32 argc, char **argv)
-{
+	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Gold	amount;
+	Gold	amount ;
 
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	amount.SetLevel(atoi(argv[2]));
-	g_player[owner]->RequestOfferGold(recipient, amount);
-}
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	amount.SetLevel(atoi(argv[2])) ;
+	g_player[owner]->RequestOfferGold(recipient, amount) ;
+	}
 
 
 
@@ -4330,18 +4326,18 @@ void RequestOfferGoldCommand::Execute(sint32 argc, char **argv)
 
 
 void RequestOfferCeaseFireCommand::Execute(sint32 argc, char **argv)
-{
+	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestOfferCeaseFire(recipient);
-}
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestOfferCeaseFire(recipient) ;
+	}
 
 
 
@@ -4355,15 +4351,15 @@ void RequestOfferCeaseFireCommand::Execute(sint32 argc, char **argv)
 void RequestOfferPermanentAllianceCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestOfferPermanentAlliance(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestOfferPermanentAlliance(recipient) ;
 	}
 
 
@@ -4379,22 +4375,22 @@ void RequestOfferPactCaptureCityCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
 					recipient,
-					thirdParty;
+					thirdParty ;
 
-	Unit	city;
+	Unit	city ;
 
-	sint32	cityIndex;
+	sint32	cityIndex ;
 
-	Assert(argc==4);
+	Assert(argc==4) ;
 	if (argc != 4)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	thirdParty = (PLAYER_INDEX)(atoi(argv[2]));
-	cityIndex = atoi(argv[3]);
-	city = g_player[thirdParty]->CityIndexToUnit(cityIndex);
-	g_player[owner]->RequestOfferPactCaptureCity(recipient, city);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	thirdParty = (PLAYER_INDEX)(atoi(argv[2])) ;
+	cityIndex = atoi(argv[3]) ;
+	city = g_player[thirdParty]->CityIndexToUnit(cityIndex) ;
+	g_player[owner]->RequestOfferPactCaptureCity(recipient, city) ;
 	}
 
 
@@ -4409,15 +4405,15 @@ void RequestOfferPactCaptureCityCommand::Execute(sint32 argc, char **argv)
 void RequestOfferPactEndPollutionCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestOfferPactEndPollution(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestOfferPactEndPollution(recipient) ;
 	}
 
 
@@ -4621,20 +4617,20 @@ void RequestOfferPactEndPollutionCommand::Execute(sint32 argc, char **argv)
 void RequestExchangeAdvanceCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
 	AdvanceType	advance,
-				rewardAdvance;
+				rewardAdvance ;
 
-	Assert(argc==4);
+	Assert(argc==4) ;
 	if (argc != 4)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	advance = (AdvanceType)(atoi(argv[2]));
-	rewardAdvance = (AdvanceType)(atoi(argv[3]));
-	g_player[owner]->RequestExchangeAdvance(recipient, advance, rewardAdvance);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	advance = (AdvanceType)(atoi(argv[2])) ;
+	rewardAdvance = (AdvanceType)(atoi(argv[3])) ;
+	g_player[owner]->RequestExchangeAdvance(recipient, advance, rewardAdvance) ;
 	}
 
 
@@ -4649,24 +4645,24 @@ void RequestExchangeAdvanceCommand::Execute(sint32 argc, char **argv)
 void RequestExchangeCityCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	sint32	cityIndex;
+	sint32	cityIndex ;
 
 	Unit	cityA,
-			cityB;
+			cityB ;
 
-	Assert(argc==4);
+	Assert(argc==4) ;
 	if (argc != 4)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	cityIndex = atoi(argv[2]);
-	cityA = g_player[recipient]->CityIndexToUnit(cityIndex);
-	cityIndex = atoi(argv[3]);
-	cityB = g_player[owner]->CityIndexToUnit(cityIndex);
-	g_player[owner]->RequestExchangeCity(recipient, cityA, cityB);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	cityIndex = atoi(argv[2]) ;
+	cityA = g_player[recipient]->CityIndexToUnit(cityIndex) ;
+	cityIndex = atoi(argv[3]) ;
+	cityB = g_player[owner]->CityIndexToUnit(cityIndex) ;
+	g_player[owner]->RequestExchangeCity(recipient, cityA, cityB) ;
 	}
 
 
@@ -4681,15 +4677,15 @@ void RequestExchangeCityCommand::Execute(sint32 argc, char **argv)
 void RequestExchangeMapCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	owner,
-					recipient;
+					recipient ;
 
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	owner = g_selected_item->GetVisiblePlayer();
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	g_player[owner]->RequestExchangeMap(recipient);
+	owner = g_selected_item->GetVisiblePlayer() ;
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	g_player[owner]->RequestExchangeMap(recipient) ;
 	}
 
 
@@ -4704,7 +4700,7 @@ void RequestExchangeMapCommand::Execute(sint32 argc, char **argv)
 
 void DumpAgreementsCommand::Execute(sint32 argc, char **argv)
 	{
-	g_player[g_selected_item->GetVisiblePlayer()]->DumpAgreements();
+	g_player[g_selected_item->GetVisiblePlayer()]->DumpAgreements() ;
 	}
 
 
@@ -4718,7 +4714,7 @@ void DumpAgreementsCommand::Execute(sint32 argc, char **argv)
 
 void DumpMessagesCommand::Execute(sint32 argc, char **argv)
 	{
-	g_player[g_selected_item->GetVisiblePlayer()]->DumpMessages();
+	g_player[g_selected_item->GetVisiblePlayer()]->DumpMessages() ;
 	}
 
 
@@ -4733,7 +4729,7 @@ void DumpMessagesCommand::Execute(sint32 argc, char **argv)
 
 void DumpDiplomaticRequestsCommand::Execute(sint32 argc, char **argv)
 	{
-	g_player[g_selected_item->GetVisiblePlayer()]->DumpRequests();
+	g_player[g_selected_item->GetVisiblePlayer()]->DumpRequests() ;
 	}
 
 
@@ -4748,17 +4744,17 @@ void DumpDiplomaticRequestsCommand::Execute(sint32 argc, char **argv)
 
 void GiveGoldCommand::Execute(sint32 argc, char **argv)
 	{
-	PLAYER_INDEX	recipient;
+	PLAYER_INDEX	recipient ;
 
-	Gold	amount;
+	Gold	amount ;
 
-	Assert(argc == 3);
+	Assert(argc == 3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	recipient = (PLAYER_INDEX)(atoi(argv[1]));
-	amount.SetLevel(atoi(argv[2]));
-	g_player[g_selected_item->GetVisiblePlayer()]->GiveGold(recipient, amount);
+	recipient = (PLAYER_INDEX)(atoi(argv[1])) ;
+	amount.SetLevel(atoi(argv[2])) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->GiveGold(recipient, amount) ;
 	}
 
 
@@ -4773,11 +4769,11 @@ void GiveGoldCommand::Execute(sint32 argc, char **argv)
 
 void BequeathGoldCommand::Execute(sint32 argc, char **argv)
 	{
-	Gold	amount;
+	Gold	amount ;
 
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
 	if(g_network.IsClient() && !g_network.SetupMode()) {
 		g_network.SendCheat(new NetCheat(NET_CHEAT_ADD_GOLD,
@@ -4785,8 +4781,8 @@ void BequeathGoldCommand::Execute(sint32 argc, char **argv)
 										 atoi(argv[1])));
 	}
 
-	amount.SetLevel(atoi(argv[1]));
-	g_player[g_selected_item->GetVisiblePlayer()]->BequeathGold(amount);
+	amount.SetLevel(atoi(argv[1])) ;
+	g_player[g_selected_item->GetVisiblePlayer()]->BequeathGold(amount) ;
 	}
 
 
@@ -4800,11 +4796,11 @@ void BequeathGoldCommand::Execute(sint32 argc, char **argv)
 
 void DumpAlliesCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 1);
+	Assert(argc == 1) ;
 	if (argc != 1)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->DumpAllies();
+	g_player[g_selected_item->GetVisiblePlayer()]->DumpAllies() ;
 	}
 
 
@@ -4819,11 +4815,11 @@ void DumpAlliesCommand::Execute(sint32 argc, char **argv)
 
 void FormAllianceCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->FormAlliance((PLAYER_INDEX)(atoi(argv[1])));
+	g_player[g_selected_item->GetVisiblePlayer()]->FormAlliance((PLAYER_INDEX)(atoi(argv[1]))) ;
 	}
 
 
@@ -4838,11 +4834,11 @@ void FormAllianceCommand::Execute(sint32 argc, char **argv)
 
 void BreakAllianceCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->BreakAlliance((PLAYER_INDEX)(atoi(argv[1])));
+	g_player[g_selected_item->GetVisiblePlayer()]->BreakAlliance((PLAYER_INDEX)(atoi(argv[1]))) ;
 	}
 
 
@@ -4857,11 +4853,11 @@ void BreakAllianceCommand::Execute(sint32 argc, char **argv)
 
 void ExchangeMapCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->ExchangeMap((PLAYER_INDEX)(atoi(argv[1])));
+	g_player[g_selected_item->GetVisiblePlayer()]->ExchangeMap((PLAYER_INDEX)(atoi(argv[1]))) ;
 	}
 
 
@@ -4876,11 +4872,11 @@ void ExchangeMapCommand::Execute(sint32 argc, char **argv)
 
 void GiveMapCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->GiveMap((PLAYER_INDEX)(atoi(argv[1])));
+	g_player[g_selected_item->GetVisiblePlayer()]->GiveMap((PLAYER_INDEX)(atoi(argv[1]))) ;
 	}
 
 
@@ -4895,11 +4891,11 @@ void GiveMapCommand::Execute(sint32 argc, char **argv)
 
 void StopTradingWithCommand::Execute(sint32 argc, char **argv)
 	{
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if(argc != 2)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->StopTradingWith((PLAYER_INDEX)(atoi(argv[1])));
+	g_player[g_selected_item->GetVisiblePlayer()]->StopTradingWith((PLAYER_INDEX)(atoi(argv[1]))) ;
 	}
 
 
@@ -4915,18 +4911,18 @@ void StopTradingWithCommand::Execute(sint32 argc, char **argv)
 void GiveUnitCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	target_player,
-					other_player;
+					other_player ;
 
-	sint32	unit_idx;
+	sint32	unit_idx ;
 
-	Assert(argc == 4);
+	Assert(argc == 4) ;
 	if (argc != 4)
-		return;
+		return ;
 
-	target_player = (PLAYER_INDEX)(atoi(argv[1]));
-	other_player = (PLAYER_INDEX)(atoi(argv[2]));
-	unit_idx = atoi(argv[3]);
-	g_player[target_player]->GiveUnit(other_player, unit_idx);
+	target_player = (PLAYER_INDEX)(atoi(argv[1])) ;
+	other_player = (PLAYER_INDEX)(atoi(argv[2])) ;
+	unit_idx = atoi(argv[3]) ;
+	g_player[target_player]->GiveUnit(other_player, unit_idx) ;
 	}
 
 
@@ -4941,16 +4937,16 @@ void GiveUnitCommand::Execute(sint32 argc, char **argv)
 
 void GiveAdvanceCommand::Execute(sint32 argc, char **argv)
 	{
-	PLAYER_INDEX	player;
+	PLAYER_INDEX	player ;
 	(void)player;
 
-	MapPoint	p;
+	MapPoint	p ;
 
-	Assert(argc == 3);
+	Assert(argc == 3) ;
 	if (argc != 3)
-		return;
+		return ;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->GiveAdvance((PLAYER_INDEX)(atoi(argv[1])), (AdvanceType)(atoi(argv[2])), CAUSE_SCI_UNKNOWN);
+	g_player[g_selected_item->GetVisiblePlayer()]->GiveAdvance((PLAYER_INDEX)(atoi(argv[1])), (AdvanceType)(atoi(argv[2])), CAUSE_SCI_UNKNOWN) ;
 }
 
 
@@ -4966,29 +4962,29 @@ void GiveAdvanceCommand::Execute(sint32 argc, char **argv)
 void GiveCityCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	other_player,
-					player;
+					player ;
 
-	ID	item;
+	ID	item ;
 
-	SELECT_TYPE	state;
+	SELECT_TYPE	state ;
 
 	sint32	city_idx;
 
-	MapPoint	p;
-	Assert(argc == 2);
+	MapPoint	p ;
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
-	g_selected_item->GetTopCurItem(player, item, state);
+	g_selected_item->GetTopCurItem(player, item, state) ;
 	if (state != SELECT_TYPE_LOCAL_CITY)
-		return;
+		return ;
 
-	Unit u(item);
+	Unit u(item) ;
 
-	other_player = (PLAYER_INDEX)(atoi(argv[1]));
-	city_idx = g_player[player]->GetAllCitiesList()->Find(u);
+	other_player = (PLAYER_INDEX)(atoi(argv[1])) ;
+	city_idx = g_player[player]->GetAllCitiesList()->Find(u) ;
 	if (city_idx != -1)
-		g_player[player]->GiveCity(other_player, city_idx);
+		g_player[player]->GiveCity(other_player, city_idx) ;
 
 	}
 
@@ -5005,24 +5001,24 @@ void GiveCityCommand::Execute(sint32 argc, char **argv)
 void ExchangeCityCommand::Execute(sint32 argc, char **argv)
 	{
 	PLAYER_INDEX	other_player,
-					player;
+					player ;
 
-	ID	item;
+	ID	item ;
 
-	SELECT_TYPE	state;
+	SELECT_TYPE	state ;
 
 	sint32	c1, c2;
 
-	MapPoint	p;
-	Assert(argc == 4);
+	MapPoint	p ;
+	Assert(argc == 4) ;
 	if (argc != 4)
-		return;
+		return ;
 
-	g_selected_item->GetTopCurItem(player, item, state);
-	other_player = (PLAYER_INDEX)(atoi(argv[1]));
-	c1 = atoi(argv[2]);
-	c2 = atoi(argv[3]);
-	g_player[player]->ExchangeCity(other_player, c1, c2);
+	g_selected_item->GetTopCurItem(player, item, state) ;
+	other_player = (PLAYER_INDEX)(atoi(argv[1])) ;
+	c1 = atoi(argv[2]) ;
+	c2 = atoi(argv[3]) ;
+	g_player[player]->ExchangeCity(other_player, c1, c2) ;
 	}
 
 
@@ -5037,15 +5033,15 @@ void ExchangeCityCommand::Execute(sint32 argc, char **argv)
 
 void FloodCommand::Execute(sint32 argc, char **argv)
 {
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
 	if(g_network.IsClient()) {
 		g_network.SendCheat(new NetCheat(NET_CHEAT_GLOBAL_WARMING,
 										 atoi(argv[1])));
 	} else {
-		g_theWorld->GlobalWarming(atoi(argv[1]));
+		g_theWorld->GlobalWarming(atoi(argv[1])) ;
 	}
 }
 
@@ -5060,15 +5056,15 @@ void FloodCommand::Execute(sint32 argc, char **argv)
 
 void OzoneCommand::Execute(sint32 argc, char **argv)
 {
-	Assert(argc == 2);
+	Assert(argc == 2) ;
 	if (argc != 2)
-		return;
+		return ;
 
 	if(g_network.IsClient()) {
 		g_network.SendCheat(new NetCheat(NET_CHEAT_OZONE_DEPLETION,
 										 atoi(argv[1])));
 	} else {
-		g_theWorld->OzoneDepletion();
+		g_theWorld->OzoneDepletion() ;
 	}
 }
 
@@ -5086,131 +5082,131 @@ void OzoneCommand::Execute(sint32 argc, char **argv)
 void TileTypeCommand::Execute(sint32 argc, char** argv)
 	{
 #if 0
-	MapPoint pos;
+	MapPoint pos ;
 
-	MBCHAR	terrainName[k_MAX_NAME_LEN];
+	MBCHAR	terrainName[k_MAX_NAME_LEN] ;
 
-	Assert(argc ==1 || argc == 4);
+	Assert(argc ==1 || argc == 4) ;
 	if(argc != 1 && argc != 4)
-		return;
+		return ;
 
-	g_tiledMap->GetMouseTilePos(pos);
+	g_tiledMap->GetMouseTilePos(pos) ;
 
 	if(argc == 4)
 		{
-		pos.x = atoi(argv[1]);
-		pos.y = atoi(argv[2]);
-		pos.z = atoi(argv[3]);
+		pos.x = atoi(argv[1]) ;
+		pos.y = atoi(argv[2]) ;
+		pos.z = atoi(argv[3]) ;
 		}
 
-	Cell	*c = g_theWorld->GetCell(pos.x, pos.y, pos.z);
+	Cell	*c = g_theWorld->GetCell(pos.x, pos.y, pos.z) ;
 
 	switch (c->GetTerrainType())
 		{
 		case TERRAIN_NULL :
-			strcpy(terrainName, "NULL");
-			break;
+			strcpy(terrainName, "NULL") ;
+			break ;
 
 		case TERRAIN_FOREST :
-			strcpy(terrainName, "Forest");
-			break;
+			strcpy(terrainName, "Forest") ;
+			break ;
 
 		case TERRAIN_PLAINS :
-			strcpy(terrainName, "Plains");
-			break;
+			strcpy(terrainName, "Plains") ;
+			break ;
 
 		case TERRAIN_TUNDRA :
-			strcpy(terrainName, "Tundra");
-			break;
+			strcpy(terrainName, "Tundra") ;
+			break ;
 
 		case TERRAIN_GLACIER :
-			strcpy(terrainName, "Glacier");
-			break;
+			strcpy(terrainName, "Glacier") ;
+			break ;
 
 		case TERRAIN_GRASSLAND :
-			strcpy(terrainName, "Grassland");
-			break;
+			strcpy(terrainName, "Grassland") ;
+			break ;
 
 		case TERRAIN_DESERT: 
-			strcpy(terrainName, "Desert");
-			break;
+			strcpy(terrainName, "Desert") ;
+			break ;
 
 		case TERRAIN_SWAMP: 
-			strcpy(terrainName, "Swamp");
-			break;
+			strcpy(terrainName, "Swamp") ;
+			break ;
 
 		case TERRAIN_JUNGLE: 
-			strcpy(terrainName, "Jungle");
-			break;
+			strcpy(terrainName, "Jungle") ;
+			break ;
 
 		case TERRAIN_MOUNTAIN : 
-			strcpy(terrainName, "Mountain");
-			break;
+			strcpy(terrainName, "Mountain") ;
+			break ;
 
 		case TERRAIN_HILL :
-			strcpy(terrainName, "Hill");
-			break;
+			strcpy(terrainName, "Hill") ;
+			break ;
 
 		case TERRAIN_WATER_SHALLOW :
-			strcpy(terrainName, "Shallow Water");
-			break;
+			strcpy(terrainName, "Shallow Water") ;
+			break ;
 
 		case TERRAIN_WATER_DEEP : 
-			strcpy(terrainName, "Deep Water");
-			break;
+			strcpy(terrainName, "Deep Water") ;
+			break ;
 
 		case TERRAIN_WATER_VOLCANO :
-			strcpy(terrainName, "Water Volcano");
-			break;
+			strcpy(terrainName, "Water Volcano") ;
+			break ;
 
 		case TERRAIN_SPACE : 
-			strcpy(terrainName, "Space");
-			break;
+			strcpy(terrainName, "Space") ;
+			break ;
 
 		case TERRAIN_WATER_BEACH :
-			strcpy(terrainName, "Water Beach");
-			break;
+			strcpy(terrainName, "Water Beach") ;
+			break ;
 
 		case TERRAIN_WATER_SHELF : 
-			strcpy(terrainName, "Water Shelf");
-			break;
+			strcpy(terrainName, "Water Shelf") ;
+			break ;
 
 		case TERRAIN_WATER_TRENCH :
-			strcpy(terrainName, "Water Trench");
-			break;
+			strcpy(terrainName, "Water Trench") ;
+			break ;
 
 		case TERRAIN_WATER_RIFT :
-			strcpy(terrainName, "Water Rift");
-			break;
+			strcpy(terrainName, "Water Rift") ;
+			break ;
 
 		case TERRAIN_DEAD :
-			strcpy(terrainName, "Dead");
-			break;
+			strcpy(terrainName, "Dead") ;
+			break ;
 
 		case TERRAIN_BROWN_HILL :
-			strcpy(terrainName, "Brown Hill");
+			strcpy(terrainName, "Brown Hill") ;
 			break;
 		case TERRAIN_BROWN_MOUNTAIN :
-			strcpy(terrainName, "Brown Mountain");
+			strcpy(terrainName, "Brown Mountain") ;
 			break;
 		case TERRAIN_WHITE_HILL :
-			strcpy(terrainName, "White Hill");
+			strcpy(terrainName, "White Hill") ;
 			break;
 		case TERRAIN_WHITE_MOUNTAIN :
-			strcpy(terrainName, "White Mountain");
+			strcpy(terrainName, "White Mountain") ;
 			break;
 
 		case TERRAIN_UNEXPLORED :
-			strcpy(terrainName, "Unexplored");
-			break;
+			strcpy(terrainName, "Unexplored") ;
+			break ;
 
 		default :
-			strcpy(terrainName, "Unknown");
+			strcpy(terrainName, "Unknown") ;
 
 		}
 
 	
-	DPRINTF(k_DBG_INFO, ("Tile \"%s\" with environment 0x%x @ %d, %d, %d\n", terrainName, c->GetEnv(), pos.x, pos.y, pos.z));
+	DPRINTF(k_DBG_INFO, ("Tile \"%s\" with environment 0x%x @ %d, %d, %d\n", terrainName, c->GetEnv(), pos.x, pos.y, pos.z)) ;
 #endif
 	}
 
@@ -5447,7 +5443,7 @@ void ToggleHeraldCommand::Execute(sint32 argc, char **argv)
 void ShowAdvancesCommand::Execute(sint32 argc, char **argv)
 {
 #ifdef _DEBUG
-	g_player[g_selected_item->GetVisiblePlayer()]->DisplayAdvances();
+	g_player[g_selected_item->GetVisiblePlayer()]->DisplayAdvances() ;
 #endif
 
 
@@ -5528,7 +5524,7 @@ void DumpChecksumCommand::Execute(sint32 argc, char **argv)
 {
 	if(g_dataCheck) {
 		g_debugOwner = k_DEBUG_OWNER_CRC;
-		g_dataCheck->DumpChecksum();
+		g_dataCheck->DumpChecksum() ;
 	}
 }
 
@@ -5559,9 +5555,9 @@ void BuildCommand::Execute(sint32 argc, char** argv)
 	if(argc != 2)
 		return;
 
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
@@ -5641,7 +5637,7 @@ void CreateCommand::Execute(sint32 argc, char** argv)
         if(unitList->Num() > 0) {
 	        city = unitList->Get(city_idx);
         } else {
-	        city = Unit();
+	        city = Unit(0);
         }
 
         Unit newu = g_player[player]->CreateUnit(type, pos, city, 
@@ -5668,31 +5664,31 @@ void TaxCommand::Execute(sint32 argc, char** argv)
 
 void SaveCommand::Execute(sint32 argc, char **argv)
 {
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc!=2)
-		return;
+		return ;
 
 
 	
 	
 	g_isScenario = FALSE;
 
-	GameFile::SaveGame(argv[1], NULL);
+	GameFile::SaveGame(argv[1], NULL) ;
 }
 void RestoreCommand::Execute(sint32 argc, char **argv)
 {
-	Assert(argc==2);
+	Assert(argc==2) ;
 	if (argc!=2)
-		return;
+		return ;
 
-	main_RestoreGame(argv[1]);
+	main_RestoreGame(argv[1]) ;
 }
 
 void LoadAIPCommand::Execute(sint32 argc, char **argv)
 {
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc!=3)
-		return;
+		return ;
 
 	sint32 team_idx;
 
@@ -5704,18 +5700,29 @@ void LoadAIPCommand::Execute(sint32 argc, char **argv)
 
 void WhoAmICommand::Execute(sint32 argc, char **argv)
 { 
-#if 0   /// @todo Find out what this was supposed to do
     Assert(argc==1)
 
 	char *aipName = NULL;
-#endif	
+	
+        
+        
+
+       
+		
+        
+        
+        
+         
+        
+       
+	
 }
 
 void LogAICommand::Execute(sint32 argc, char **argv)
 {
-	Assert(argc==3);
+	Assert(argc==3) ;
 	if (argc!=3)
-		return;
+		return ;
 
 	sint32 team_idx;
 	sint32 log_level;
@@ -5775,9 +5782,9 @@ void ImproveCommand::Execute(sint32 argc, char** argv)
 	if(argc != 2)
 		return;
 
-	PLAYER_INDEX	player;
-	ID	item;
-	SELECT_TYPE	state;
+	PLAYER_INDEX	player ;
+	ID	item ;
+	SELECT_TYPE	state ;
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
@@ -6144,7 +6151,7 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 	if (!strcmp(argv[1], "wonder")) {
 		
 		delete g_theWonderDB;
-		g_theWonderDB = new CTPDatabase<WonderRecord>;
+        g_theWonderDB = new CTPDatabase<WonderRecord>;
 		
 		if (g_theWonderDB) {
 			if(!g_theWonderDB->Parse(C3DIR_GAMEDATA, g_wonder_filename)) {
@@ -6158,13 +6165,9 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 	if (!strcmp(argv[1], "civ")) {
 		
 		delete g_theCivilisationDB;
-		g_theCivilisationDB = new CTPDatabase<CivilisationRecord>;
-		if (g_theCivilisationDB) {
-			if(!g_theCivilisationDB->Parse(C3DIR_GAMEDATA, g_civilisation_filename)) {
-				Assert(FALSE);
-				return;
-			}
-		} else {
+		g_theCivilisationDB = new CivilisationDatabase() ;
+		if (!g_theCivilisationDB->Initialise(g_civilisation_filename, C3DIR_GAMEDATA)) {
+			Assert (FALSE) ;
 			return;
 		}
 	} else
@@ -6356,18 +6359,14 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
     sint32 arsize =  sizeof(commands)/sizeof(CommandRecord);
 
 	if(m_displayHelp) {
-		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
 							(MBCHAR*)"command <required_param> [optional_param]",
 							0,0);
-		sint32 i;
-		for 
-		(
-			i = m_helpStart;
-            (i < arsize) && commands[i].m_name && (i < m_helpStart + k_HELP_LINES);
-			++i
-		) 
-		{
-			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
+		for(sint32 i = m_helpStart;
+            (i<arsize) &&
+			commands[i].m_name != NULL && i < m_helpStart + k_HELP_LINES;
+			i++) {
+			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i-m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)commands[i].m_helptext, 0, 0);
 
 
@@ -6375,15 +6374,14 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 
 
 		}
-		if (commands[i].m_name) 
-		{
+		if(commands[i].m_name != NULL) {
 			
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
-			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
+			primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,
 								(MBCHAR*)buf, 0, 0);
 		}
 	} else if(m_displayCityResources) {
-		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE,
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE,
 						   (MBCHAR*)"player city resources",
 						   0, 0);
 		l = 0;
@@ -6395,22 +6393,20 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				char buf[1024];
 				sprintf(buf, "    %2d %4d ", i, j);
 				CityData* cityData = cityList->Get(j).GetData()->GetCityData();
-				for(sint32 r = 0; r < g_theResourceDB->NumRecords(); r++) 
-                {
-                     
+				sint32 rc;
+				for(sint32 r = 0; r < g_theResourceDB->NumRecords(); r++) {
 #ifdef CTP1_TRADE
-				    sint32 const rc = cityData->GetResourceCount(r);
+					if((rc = cityData->GetResourceCount(r)) > 0) 
 #else
-					sint32 const rc = (*cityData->GetCollectingResources())[r];
+					if(rc = (*cityData->GetCollectingResources())[r] > 0)
 #endif
-                    if (rc > 0)
 					{
 						char rbuf[80];
 						sprintf(rbuf, "%d:%d ", r, rc);
 						strcat(buf, rbuf);
 					}
 				}
-				primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + l * k_TEXT_SPACING,
+				primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + l * k_TEXT_SPACING,
 									(MBCHAR*)buf, 0, 0);
 				l++;
 			}
@@ -6457,7 +6453,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				sprintf(buf2, " to city %d", tradeOffers->Get(j).GetToCity());
 
 				strcat(buf, buf2);
-				primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+				primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, 0, 0);
 				l++;
 			}
@@ -6467,17 +6463,17 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		
 		l=0;
 		sprintf (buf, "EXE total bytes: %d", DebugMemory_GetTotalFromEXE());       
-		primitives_DrawText(surf, k_LEFT_EDGE, 
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, 
 			k_TOP_EDGE + l * k_TEXT_SPACING, (MBCHAR *)buf, 0, 0);
 		
 		l++;
 		sprintf (buf, "DLL total bytes: %d", DebugMemory_GetTotalFromDLL());
-		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 		
 		l++;
 		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
-		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
+		primitives_DrawText((aui_DirectSurface *)surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 #else
 #ifdef _DEBUG
@@ -6653,7 +6649,7 @@ CommandLine::Parse()
 
 	while(isspace(m_buf[p])) p++;
 
-	for(; p < m_len; p++) {
+	for( ; p < m_len; p++) {
 		switch(state) {
 		case 0:
 			if(isspace(m_buf[p])) {

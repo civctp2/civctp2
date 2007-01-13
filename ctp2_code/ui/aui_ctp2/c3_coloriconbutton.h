@@ -96,11 +96,21 @@ protected:
 	BOOL		m_shrinkToFit;
 	RECT		m_pictureRect;
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLDoubleClickInside;
+
+	
+	virtual MouseEventCallback MouseRGrabInside;
+	virtual MouseEventCallback MouseRDropInside;
+	virtual MouseEventCallback MouseRDropOutside;
+#else
     virtual void	MouseLDoubleClickInside(aui_MouseEvent * data);
 
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
     virtual void	MouseRDropInside(aui_MouseEvent * data);
     virtual void	MouseRDropOutside(aui_MouseEvent * data);
+#endif
+    
 };
 
 

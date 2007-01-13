@@ -46,7 +46,7 @@ public:
 	
 	aui_Image(
 		AUI_ERRCODE *retval,
-		MBCHAR const *filename = NULL );
+		MBCHAR *filename = NULL );
 	virtual ~aui_Image();
 
 	
@@ -57,7 +57,7 @@ public:
 
 protected:
 	aui_Image() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR const * filename );
+	AUI_ERRCODE InitCommon( MBCHAR *filename );
 
 public:
 	
@@ -77,7 +77,7 @@ public:
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_filename; }
 
 	
-	AUI_ERRCODE	SetFilename( MBCHAR const *filename );
+	AUI_ERRCODE	SetFilename( MBCHAR *filename );
 
 protected:
 	MBCHAR			m_filename[ MAX_PATH + 1 ];	

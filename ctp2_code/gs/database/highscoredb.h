@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __HIGHSCOREDB_H__
 #define __HIGHSCOREDB_H__
 

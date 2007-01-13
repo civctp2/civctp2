@@ -17,6 +17,14 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -28,12 +36,13 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
-#ifndef SPRITEGROUPLIST_H__
-#define SPRITEGROUPLIST_H__
+#ifndef __SPRITEGROUPLIST_H__
+#define __SPRITEGROUPLIST_H__
+
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -67,7 +76,7 @@ enum	SPRITELISTERR
 // Class declarations
 //----------------------------------------------------------------------------
 
-uint8 const	k_MAX_SPRITES	= 255;
+uint8 const	k_MAX_SPRITES	= 255;	
 // uint8 restriction: see UnitActor::Serialize. Going beyond 255 will require
 // a file format update.
 
@@ -77,15 +86,16 @@ public:
 	SpriteGroupList();
 	virtual ~SpriteGroupList();
 
-	SPRITELISTERR	LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action);
+	SPRITELISTERR			LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action);
+	SPRITELISTERR			PurgeSprite(uint32 index);
 
-	SpriteGroup *   GetSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action);
-	bool			ReleaseSprite(uint32 index, LOADTYPE loadType);
+	SpriteGroup				*GetSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action);
+	BOOL					ReleaseSprite(uint32 index, LOADTYPE loadType);
 
-	void			RefreshBasicLoads(GROUPTYPE groupType);
+	void					RefreshBasicLoads(GROUPTYPE groupType);
 
 private:
-	SpriteGroup	*   m_spriteList[k_MAX_SPRITES];
+	SpriteGroup				*m_spriteList[k_MAX_SPRITES];
 };
 
 //----------------------------------------------------------------------------

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Intelligence window (diplomacy subwindow)
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,16 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Update the state of the embargo and war buttons after confirmation.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Moved cleanup of statics into the the cleanup method. (Sep 14th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,7 +38,7 @@
 #include "SelItem.h"
 #include "aui_blitter.h"
 #include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
+#include "colorset.h"
 #include "aui_stringtable.h"
 #include "aui_tipwindow.h"
 #include "ctp2_hypertextbox.h"
@@ -69,31 +64,31 @@
 #include "network.h"
 #include "net_action.h"
 
-extern C3UI                 *g_c3ui;
+static IntelligenceWindow *s_intelligenceWindow = NULL;
+static MBCHAR *s_intelligenceBlock = "IntelligenceWindow";
+static MBCHAR *s_intelligenceAdviceBlock = "IntelligenceAdvice";
+ctp2_ListBox *IntelligenceWindow::sm_list = NULL;
 
-static IntelligenceWindow   *s_intelligenceWindow = NULL;
-static MBCHAR               *s_intelligenceBlock = "IntelligenceWindow";
-static MBCHAR               *s_intelligenceAdviceBlock = "IntelligenceAdvice";
-ctp2_ListBox                *IntelligenceWindow::sm_list = NULL;
+extern C3UI *g_c3ui;
+
+extern ColorSet *g_colorSet;
+
+aui_StringTable *IntelligenceWindow::sm_strengthImages = NULL;
+aui_StringTable *IntelligenceWindow::sm_embassyImages = NULL;
+
+ctp2_Window *IntelligenceWindow::sm_showTreatyDetail = NULL;
 
 
+#define k_INT_FLAG_COL		0
+#define k_INT_NATION_COL	1		
+#define k_INT_REGARD_COL	2		
+#define k_INT_STRENGTH_COL	3		
+#define k_INT_EMBASSY_COL	4		
+#define k_INT_TREATIES_COL	5		
 
-aui_StringTable             *IntelligenceWindow::sm_strengthImages = NULL;
-aui_StringTable             *IntelligenceWindow::sm_embassyImages = NULL;
-
-ctp2_Window                 *IntelligenceWindow::sm_showTreatyDetail = NULL;
-
-
-#define k_INT_FLAG_COL      0
-#define k_INT_NATION_COL    1
-#define k_INT_REGARD_COL    2
-#define k_INT_STRENGTH_COL  3
-#define k_INT_EMBASSY_COL   4
-#define k_INT_TREATIES_COL  5
-
-#define k_WEAK_STRENGTH   -50
-#define k_EQUAL_STRENGTH    0
-#define k_STRONG_STRENGTH  50
+#define k_WEAK_STRENGTH -50
+#define k_EQUAL_STRENGTH 0
+#define k_STRONG_STRENGTH 50
 
 IntelligenceWindow::IntelligenceWindow(AUI_ERRCODE *err)
 {
@@ -136,6 +131,15 @@ IntelligenceWindow::~IntelligenceWindow()
 	aui_Ldl::DeleteHierarchyFromRoot(s_intelligenceAdviceBlock);
 	m_adviceWindow = NULL;
 
+	if(sm_strengthImages) {
+		delete sm_strengthImages;
+		sm_strengthImages = NULL;
+	}
+
+	if(sm_embassyImages) {
+		delete sm_embassyImages;
+		sm_embassyImages = NULL;
+	}
 }
 
 AUI_ERRCODE IntelligenceWindow::Initialize()
@@ -144,7 +148,7 @@ AUI_ERRCODE IntelligenceWindow::Initialize()
 		return AUI_ERRCODE_OK;
 	}
 
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	s_intelligenceWindow = new IntelligenceWindow(&err);
 	Assert(err == AUI_ERRCODE_OK);
 
@@ -167,16 +171,6 @@ AUI_ERRCODE IntelligenceWindow::Cleanup()
 
 		aui_Ldl::DeleteHierarchyFromRoot("IntelTreatyDetail");
 		sm_showTreatyDetail = NULL;
-	}
-
-	if(sm_strengthImages) {
-		delete sm_strengthImages;
-		sm_strengthImages = NULL;
-	}
-
-	if(sm_embassyImages) {
-		delete sm_embassyImages;
-		sm_embassyImages = NULL;
 	}
 
 	return AUI_ERRCODE_OK;
@@ -530,6 +524,13 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 
 
 
+	sint32 myTotalStrength = 0;
+	sint32 hisTotalStrength = 0;
+
+	
+	
+
+	
 	DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayer());
 	
 	if(!sm_strengthImages) {
@@ -578,6 +579,7 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 											RECT &rect,
 											void *cookie)
 {
+	aui_Image *image = NULL;
 	MBCHAR *imageName = NULL;
 	sint32 p = (sint32)cookie;
 
@@ -632,18 +634,43 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 											 RECT &rect,
 											 void *cookie)
 {
-	sint32 p    = (sint32) cookie;
+	sint32 p = (sint32)cookie;
 	sint32 visP = g_selected_item->GetVisiblePlayer();
-	sint32 slot;
 
-	for (sint32 ag = 1; ag < PROPOSAL_MAX; ++ag) 
-    {
+	
+
+
+
+
+
+
+
+	sint32 x = 0;
+
+	
+	
+	
+
+	sint32 ag;
+	sint32 slot;
+	sint32 embargo_slot = -1;
+	for(ag = 1; ag < PROPOSAL_MAX; ag++) {
+
+		
+		
+		
+		
+		
+
 		const DiplomacyProposalRecord *rec = 
 			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
-		if (!rec->GetImageSlot(slot))
+		if (!rec->GetImageSlot())
 			continue;
 
+		rec->GetImageSlot(slot);
+
+		
 		if (rec->GetHasEmbargo())
 		{
 			if (!Diplomat::GetDiplomat(p).GetEmbargo(visP))
@@ -665,7 +692,7 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 		image->SetChromakey(255,0,255);
 		
 		
-		sint32 x = image->TheSurface()->Width() * slot;
+		x = image->TheSurface()->Width() * slot;
 		
 		g_c3ui->TheBlitter()->Blt(surface, rect.left + x, 
 			rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
@@ -673,7 +700,18 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 			&srcRect,
 			k_AUI_BLITTER_FLAG_CHROMAKEY);
 		
+		
+		
+		
 		g_c3ui->UnloadImage(image);
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	return AUI_ERRCODE_OK;

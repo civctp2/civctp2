@@ -12,7 +12,6 @@
 
 
 #include "c3.h"
-#include "c3spinner.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -28,6 +27,7 @@
 
 #include "primitives.h"
 
+#include "c3spinner.h"
 
 
 extern C3UI *g_c3ui;
@@ -41,9 +41,9 @@ C3Spinner::C3Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
+	aui_Ranger(),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	aui_Ranger()
+	aui_ImageBase( ldlBlock )
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -71,13 +71,22 @@ C3Spinner::C3Spinner(
 
 	*retval = CreateButtons();
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE C3Spinner::InitCommon( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -101,9 +110,9 @@ C3Spinner::C3Spinner(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( (sint32)0 ),
+	aui_Ranger(),
 	aui_TextBase(NULL),
-	aui_Ranger()
+	aui_ImageBase( (sint32)0 )
 {
 	aui_Region::InitCommon( id, x, y, width, height );
 	Assert( AUI_SUCCESS(*retval) );
@@ -131,15 +140,14 @@ C3Spinner::C3Spinner(
 
 	*retval = CreateButtons();
 	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 {
-    m_isVertical = isVertical;
-
-	if (m_isVertical)
+	if ( m_isVertical = isVertical )
 		m_valX = m_minX = m_maxX = m_incX = m_pageX = 0;
 	else
 		m_valY = m_minY = m_maxY = m_incY = m_pageY = 0;
@@ -151,26 +159,30 @@ AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 
 AUI_ERRCODE C3Spinner::CreateButtons( void )
 {
+	aui_Button *button1;
+	aui_Button *button2;
+
 	AUI_ERRCODE errcode;
 
 	if ( m_isVertical )
 	{
-		m_incYButton = new TextButton( &errcode,
+		button1 = m_incYButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "v", RangerButtonActionCallback, this );
-	    AddChild(m_incYButton);
-		m_decYButton = new TextButton( &errcode,
+		button2 = m_decYButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "^", RangerButtonActionCallback, this );
-	    AddChild(m_decYButton);
 	}
 	else
 	{
-		m_incXButton = new TextButton( &errcode,
+		button1 = m_incXButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), ">", RangerButtonActionCallback, this );
-	    AddChild(m_incXButton);
-		m_decXButton = new TextButton( &errcode,
+		button2 = m_decXButton = new TextButton( &errcode,
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "<", RangerButtonActionCallback, this );
-	    AddChild(m_decXButton);
 	}
+
+	
+	AddChild( button1 );
+	AddChild( button2 );
+
 	
 	RepositionButtons();
 
@@ -223,7 +235,7 @@ AUI_ERRCODE C3Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	sprintf( s, "%d", 100 - ( m_isVertical ? GetValueY() : GetValueX() ) );
 
 	primitives_DropText(
-		surface,
+		(aui_DirectSurface *)surface,
 		rect.left + 5,
 		rect.top + 5,
 		s,

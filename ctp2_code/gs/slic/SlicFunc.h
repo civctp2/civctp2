@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC functions
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -39,14 +38,27 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #ifndef __SLICFUNC_H__
 #define __SLICFUNC_H__
 
-#include <vector>
+
+#define k_MAX_SLIC_ARGS 8
+
+class CivArchive;
+class SlicSegment;
+class SlicSymbolData;
+class Unit;
+class MapPoint;
+class GameEventArgList;
+class Army;
+
+typedef sint32 StringId;
+
+enum GAME_EVENT;
 
 enum SA_TYPE {
 	SA_TYPE_INT,
@@ -96,41 +108,10 @@ enum SLIC_FUNC_RET_TYPE {
 	SFR_ARMY
 };
 
-struct  SlicArg;
-class   SlicArgList;
-class   SlicFunc;
-class   SlicStringToToken;
-
-#include "dbtypes.h"                // StringId;
-#include "GameEventDescription.h"
-class Army;
-class CivArchive;
-class GameEventArgList;
-class MapPoint;
-class SlicSegment;
-class SlicSymbolData;
-class Unit;
-
-struct SlicArg 
-{
-    SlicArg
-    (
-        SA_TYPE             a_Type      = SA_TYPE_INT,
-        sint32              a_Value     = 0,
-        SlicSegment *       a_Segment   = NULL,
-        SlicSymbolData *    a_Symbol    = NULL
-    )
-    :
-        m_int               (a_Value),
-        m_segment           (a_Segment),
-        m_symbol            (a_Symbol),
-        m_type              (a_Type)
-    { ; }
-
-    sint32                  m_int;
-	SlicSegment *           m_segment;
-	SlicSymbolData *        m_symbol;
-    SA_TYPE                 m_type;
+struct SlicArg {
+	sint32 m_int;
+	SlicSegment* m_segment;
+	SlicSymbolData *m_symbol;
 };
 
 class SlicStringToToken {
@@ -152,38 +133,27 @@ public:
 	void Serialize(CivArchive &archive) {};
 };
 
-class SlicArgList 
-{
+class SlicArgList {
 public:
 	SlicArgList();
-
 	void AddArg(SA_TYPE type, sint32 value);
 	void AddArg(SlicSegment *segment, SlicSymbolData *symbol);
 	void AddArg(SA_TYPE type, SlicSymbolData *symbol);
-	
-    void Clear() 
-    { 
-        m_argValue.clear(); 
-    };
-
-	bool GetInt(sint32 arg, sint32 &value) const;
-	bool GetPlayer(sint32 arg, sint32 &value) const;
-	bool GetString(sint32 arg, char *&value) const;
-	bool GetUnit(sint32 arg, Unit &u) const;
-	bool GetCity(sint32 arg, Unit &city) const;
-	bool GetPos(sint32 arg, MapPoint &pos) const;
-	bool GetArmy(sint32 arg, Army &a) const;
-	bool GetStringId(sint32 arg, StringId &id) const;
+	void Clear() { m_numArgs = 0; }
+	BOOL GetInt(sint32 arg, sint32 &value);
+	BOOL GetPlayer(sint32 arg, sint32 &value);
+	BOOL GetString(sint32 arg, const char *&value);
+	BOOL GetUnit(sint32 arg, Unit &u);
+	BOOL GetCity(sint32 arg, Unit &city);
+	BOOL GetPos(sint32 arg, MapPoint &pos);
+	BOOL GetArmy(sint32 arg, Army &a);
+	BOOL GetStringId(sint32 arg, StringId &id);
 
 	GameEventArgList *CreateGameEventArgs(GAME_EVENT ev);
-    void ReleaseSymbols(void);
 
-    size_t Count(void) const
-    {
-        return m_argValue.size();
-    }
-
-    std::vector<SlicArg>    m_argValue;
+	SA_TYPE m_argType[k_MAX_SLIC_ARGS];
+	SlicArg m_argValue[k_MAX_SLIC_ARGS];
+	sint32 m_numArgs;
 };
 
 union SlicFuncResult {
@@ -201,14 +171,14 @@ protected:
 	SlicFuncResult m_result;
 
 public:
-	SlicFunc(char const * name, SLIC_FUNC_RET_TYPE type);
+	SlicFunc(char *name, SLIC_FUNC_RET_TYPE type);
 	SlicFunc(CivArchive &archive);
-	virtual ~SlicFunc();
+	~SlicFunc();
 	void Serialize(CivArchive &archive);
 	SlicFuncResult GetResult() { return m_result; }
 	SLIC_FUNC_RET_TYPE GetReturnType() { return m_type; }
 
-	char const *GetName() const { return m_name; }
+	const char *GetName() const { return m_name; }
 	virtual SFN_ERROR Call(SlicArgList *args) 
 	{
 		DPRINTF(k_DBG_SLIC, ("Hey you!  Stop that!\n"));
@@ -220,9 +190,17 @@ public:
 class Slic_##x : public SlicFunc { \
 public:\
 	Slic_##x() : SlicFunc(#x, type) {} \
-	virtual ~Slic_##x() {} \
 	SFN_ERROR Call(SlicArgList *args); \
 };
+
+
+
+
+
+
+
+
+
 
 
 
@@ -637,13 +615,7 @@ SLICFUNC(SFR_INT, GetContinent)
 SLICFUNC(SFR_INT, IsWater)
 //New slicfunctions by Solver
 SLICFUNC(SFR_INT, IsOnSameContinent)
-//New slicfunctions by E
-SLICFUNC(SFR_VOID, KillCity); 
-SLICFUNC(SFR_VOID, Pillage);
-SLICFUNC(SFR_VOID, Plunder);
-SLICFUNC(SFR_VOID, Liberate);
-SLICFUNC(SFR_VOID, AddPW);  
-SLICFUNC(SFR_VOID, PuppetGovt); 
+
 
 
 #endif // __SLICFUNC_H__

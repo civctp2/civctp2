@@ -1,32 +1,9 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Call to Power 2 user interface tabgroup
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Standardized code (May 21th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -40,9 +17,9 @@
 
 ctp2_TabGroup::ctp2_TabGroup(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 							 ControlActionCallback *ActionFunc, void *cookie) :
+aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 aui_ImageBase(ldlBlock),
 aui_TextBase(ldlBlock, NULL),
-aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 m_currentTab(NULL)
 {
 }
@@ -130,8 +107,7 @@ AUI_ERRCODE ctp2_TabGroup::Draw(aui_Surface *surface, sint32 x, sint32 y)
 		
 		
 		ListPos position = ChildList()->GetHeadPosition();
-		int countdown;
-		for(countdown = ChildList()->L(); countdown; countdown--) {
+		for(int countdown = ChildList()->L(); countdown; countdown--) {
 			
 			ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 
@@ -195,8 +171,7 @@ void ctp2_TabGroup::SelectTab(ctp2_Tab *tab)
 			
 			
 			ListPos position = ChildList()->GetHeadPosition();
-			size_t countdown;
-			for(countdown = ChildList()->L(); countdown; countdown--) {
+			for(int countdown = ChildList()->L(); countdown; countdown--) {
 				
 				ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 

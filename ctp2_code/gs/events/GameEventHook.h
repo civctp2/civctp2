@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
 // _DEBUG
 // Generate extra debugging output.
 //
@@ -28,7 +31,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
@@ -54,6 +57,7 @@ class GameEventHookCallback;
 
 #include "GameEventArgList.h"   // GameEventArgList
 #include "GameEventTypes.h"     // GAME_EVENT...
+#include "pointerlist.h"
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -62,21 +66,18 @@ class GameEventHookCallback;
 class GameEventHookCallback 
 {
 public:
-    virtual GAME_EVENT_HOOK_DISPOSITION GEVHookCallback
-    (
-        GAME_EVENT         type, 
-        GameEventArgList * args
-    ) 
+    virtual ~GameEventHookCallback() { ; };
+
+	virtual GAME_EVENT_HOOK_DISPOSITION 
+        GEVHookCallback(GAME_EVENT type, GameEventArgList *args) 
     { 
         return GEV_HD_Continue;
     };
 
-    virtual void GetDescription(char * str, sint32 maxsize) 
+	virtual void GetDescription(char * str, sint32 maxsize) 
     { 
-        strncpy(str, DESCRIPTION_MISSING, maxsize);
-    };
-
-    static char const DESCRIPTION_MISSING[];
+		strncpy(str, "An undescribed callback", maxsize);
+	};
 };
 
 	
@@ -85,11 +86,7 @@ class GameEventHook
 public:
     struct Node 
     {
-	    Node
-        (
-            GameEventHookCallback * cb  = NULL, 
-            GAME_EVENT_PRIORITY     pri = GEV_PRI_Primary
-        ) 
+	    Node(GameEventHookCallback * cb, GAME_EVENT_PRIORITY pri) 
         :   m_cb        (cb),
             m_priority  (pri)
         { ; };
@@ -107,9 +104,14 @@ public:
 	GAME_EVENT_ERR      Activate
     (
         GameEventArgList *  args, 
+        sint32 &            resumeIndex
+    );
+	GAME_EVENT_ERR      Resume
+    (
+        GameEventArgList *  args, 
         sint32              startIndex, 
         sint32 &            resumeIndex
-    ) const;
+    );
 
 
 #if defined(_DEBUG)
@@ -117,8 +119,14 @@ public:
 #endif
 
 private:
+    GAME_EVENT_ERR      Run
+    (
+        std::list<Node>::iterator &     startAt,
+        GameEventArgList *              args, 
+        sint32 &                        resumeIndex
+    );
 
-    GAME_EVENT              m_type;
+	GAME_EVENT              m_type;
     std::list<Node>         m_callbacks;
 };
 

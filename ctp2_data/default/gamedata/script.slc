@@ -27,11 +27,6 @@
 // - Added quit button to the hotseat interturn pop-up.
 // - Re-implemented messagebox '001TreatyToExpire' to warn when dip agreements
 //   are about to expire. See Diplomat::NextDiplomaticState. 
-// - Add 999AttackWarning that notifies the human that war may be started
-// - Added 999CITYCAPTUREOPTIONs allows player to raze, liberate, or occupy a city
-// - Changed 128CivStartedWar from messagebox to alertbox
-// - Added but not implented 999CivStartedWarWithUs using an unused string
-//   that notifis the player that a civ declared war on him
 //
 //----------------------------------------------------------------------------
 
@@ -735,7 +730,6 @@ messagebox '38BuildingBuiltQueueEmpty' {
 }
 
 messagebox '38WonderBuilt' {
-	Show();
 	Text(ID_WONDER_BUILT);
 	Duration(1);
 	MessageType("IWONDER");
@@ -806,7 +800,6 @@ messagebox '45WonderAlmostFinished' {
 }
 
 messagebox '46WonderComplete' {
-	Show();
 	MessageType("IWONDER");
 	Text(ID_WONDER_COMPLETE_OWNER);
 	Duration(2);
@@ -824,7 +817,7 @@ messagebox '48WorldPollutionSpaceLaunch' {
 		space_launch_count = 0;
 		MessageType("POLLUTION");
 		Text(ID_WORLD_POLLUTION_SPACE_LAUNCH) ;
-	} else {
+        } else {
 		space_launch_count = space_launch_count + 1;
 		Abort();
 	}
@@ -965,7 +958,7 @@ alertbox '82MercenariesHaveJoinedYourCivilisation' {
 
 alertbox '83DiscoveredAncientTreasure' {
 //	MessageType("TRADE");
-	Text(ID_DISCOVERED_ANCIENT_TREASURE);
+	Text(ID_DISCOVERED_ANCIENT_TREASURE) ;
 	Button(ID_BUTTON_CLOSE) {
 		Kill();
 	}
@@ -973,7 +966,7 @@ alertbox '83DiscoveredAncientTreasure' {
 }
 
 alertbox '84BesetByVandals' {
-	Text(ID_BESET_BY_VANDALS);
+	Text(ID_BESET_BY_VANDALS) ;
 	Button(ID_BUTTON_CLOSE) {
 		Kill();
 	}
@@ -1007,7 +1000,7 @@ messagebox '90AcceptTradeOffer' {
 	Button(ID_BUTTON_YES) {
 		AcceptTradeOffer(1);
 		Kill();
-	}
+}
 
 	Button(ID_BUTTON_NO) {
 		DontAcceptTradeOffer(1);
@@ -1627,7 +1620,7 @@ MessageClass(420);
 //
 // re-implemented, PFT: 
 messagebox '001TreatyToExpire' {
-	Show();
+    Show();
 	Text(ID_TREATY_TO_EXPIRE) ;
 	MessageType("ANTIDIPLOMATIC");
 }
@@ -1873,8 +1866,7 @@ messagebox '127CapitalCityCapturedVictim' {
 	MessageType("MILITARY");
 }
 
-messagebox  '128CivStartedWar' {
-	Show();
+messagebox '128CivStartedWar' {
 	Text(ID_CIV_STARTED_WAR) ;
 	MessageType("MILITARY");
 }
@@ -2912,69 +2904,7 @@ messagebox '911ImminentFlood' {
 	Show();
 	Text(ID_WORLD_POLLUTION_FLOODING_IMMINENT);
 	MessageType("POLLUTION");
-}
-
-alertBox '999CITYCAPTUREOPTIONS' {
-	MessageClass(420);
-	Text(ID_CAPTURED_CITY_OPTIONS);
-
-	//Button(ID_BUTTON_PLUNDER) {
-	//	Plunder();
-	//	Kill();
-	//}
-
-	//Button(ID_BUTTON_PILLAGE) {
-	//	Pillage();
-	//	Kill();
-	//}
-	Button(ID_BUTTON_LIBERATE) {
-		Liberate();
-		Kill();
-	}
-	Button(ID_BUTTON_RAZE) {
-		KillCity();
-		Kill();
-	}
-	Button(ID_BUTTON_OCCUPY) {
-		Kill();
-	}
-}
-
-alertBox '999AttackWarning' {
-	Text(ID_ATTACK_WARNING);
-
-	MessageType("DIPLOMATIC");
-	
-
-	Button(ID_BUTTON_NO) {
-		ClearOrders(unit[0]);
-		Kill();
-	}
-
-	Button(ID_BUTTON_YES) {
-		// TODO check whether this is still an unprovoked act of war.
-		DeclareWar(unit[0].owner, player[0]);
-		AddOrder(unit[0], location[0]);
-		Kill();
-	}
-}
-
-messagebox '999CivStartedWarWithUs' {
-	Show();
-	Text(ID_POPUP_DECLARE_WAR_ANNC) ;
-	MessageType("MILITARY");
-}
-
-messagebox  '999LostAtSea' {
-	Show();
-	Text(ID_LOST_AT_SEA) ;
-	MessageType("MILITARY");
-}
-
-messagebox  '999UnitUpgraded' {
-	Text(ID_UNIT_UPGRADED) ;
-	MessageType("MILITARY");
-}
+}	
 
 #include "feats.slc"
 
@@ -2984,8 +2914,4 @@ messagebox  '999UnitUpgraded' {
 #include "scenario.slc"
 
 #include "diplomacy.slc"
-
-
-
-
 

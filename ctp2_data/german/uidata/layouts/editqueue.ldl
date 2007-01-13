@@ -1,26 +1,3 @@
-################################################################################
-#
-#  Project      : Call To Power 2
-#  File type    : LDL layout description 
-#  Description  : Main ldl file
-#  Id           : $Id$
-# 
-################################################################################
-# 
-#  Disclaimer
-# 
-#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
-#  This material has been developed at apolyton.net by the Apolyton CtP2 
-#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
-################################################################################
-# 
-#  Modifications from the original Activision code:
-# 
-# - Added a national manager button. - July 24th 2005 Martin Gühmann
-# 
-################################################################################
 
 eq_QueueListItem:CTP2_LIST_ITEM {
 	int	widthpix	153
@@ -588,17 +565,17 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 		int heightpix 24
 		
 		InsertButton:CTP2_BUTTON_SMALL {
-			int xpix 5
+			int xpix 0
 			int ypix 0
-			int widthpix 88
+			int widthpix 90
 			int heightpix 24
 			string text "str_ldl_Insert"
 			string statustext "STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON"
 		}
 		AppendButton:CTP2_BUTTON_SMALL {
-			int xpix 98
+			int xpix 95
 			int ypix 0
-			int widthpix 88
+			int widthpix 90
 			int heightpix 24
 			string text "str_ldl_Append"
 			string statustext "STATUSBAR_CITYMAN_MAIN_APPEND_BUTTON"
@@ -606,32 +583,20 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 		OverwriteButton:CTP2_BUTTON_SMALL {
 			int xpix 190
 			int ypix 0
-			int widthpix 88
+			int widthpix 90
 			int heightpix 24
 			string text "str_ldl_Overwrite"
 			string statustext "STATUSBAR_CITYMAN_MAIN_OVERWRITE_BUTTON"
 		}
 	}
 	
-#	GotoCityButton:CTP2_NAV_BUTTON_152 {
-	GotoCityButton:CTP2_NAV_BUTTON_98 {
-		int xpix 40
+	GotoCityButton:CTP2_NAV_BUTTON_152 {
+		int xpix 47
 		int ypix 354
-		int widthpix 94
 		int focusindex 8
 		string text "str_ldl_CityManager"
 		# Tooltip
 		string	statustext	"STATUSBAR_SHORTCUTPAD_GOTO_CITYSCR_BUTTON"
-	}
-	NationalManagerButton:CTP2_NAV_BUTTON_98 {
-	#	int xpix 47
-		int xpix 136
-		int ypix 354
-		int widthpix 104
-		int focusindex 11
-		string text "str_ldl_NatlManager"
-		# Tooltip
-		string	statustext	"STATUSBAR_SHORTCUTPAD_NATLSCR_BUTTON"
 	}
 
 	NormalModeButtons:CTP2_STATIC_BASE {
@@ -639,8 +604,8 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 		int ypix 354
 
 		CustomButton:CTP2_BUTTON_SMALL {
-			int xpix 26
-			int widthpix 146
+			int xpix 0
+			int widthpix 160
 			int focusindex 9
 			string text "str_ldl_EditQueueCustomItems"
 			# Tooltip

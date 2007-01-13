@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Map visibility handling 
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,6 +17,15 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - When defined, allows Microsoft C++ extensions.
+// - When not defined, generates standard C++.
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
+//       between #else and #endif are modified Apolyton code. The blocks 
+//       between #if and #else are the original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,35 +34,16 @@
 // - Corrected strange vision behaviour at the top row.
 //
 //----------------------------------------------------------------------------
-//
-/// \file   Vision.h
-/// \brief  Handling of tile visibility (declarations)
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
-#ifndef VISION_H_
-#define VISION_H_
-
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-// None
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class Vision;
+#ifndef _VISION_H_
+#define _VISION_H_
 
 #define k_EXPLORED_BIT 0x8000
 #define k_VISIBLE_REFERENCE_MASK (~(k_EXPLORED_BIT))
-
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
 
 #include "MapPoint.h"
 
@@ -64,21 +53,16 @@ class UnseenCellCarton;
 template <class T> class DynamicArray;
 class UnseenCell;
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
+enum CIRCLE_OP {
+	CIRCLE_OP_ADD,
+	CIRCLE_OP_SUBTRACT,
+	CIRCLE_OP_ADD_RADAR,
+	CIRCLE_OP_MERGE
+};
 
 class Vision
 {
 private:
-    /// Operation to perform
-    enum CIRCLE_OP 
-    {
-	    CIRCLE_OP_ADD,          ///< add to normal vision
-	    CIRCLE_OP_SUBTRACT,     ///< remove from normal vision
-	    CIRCLE_OP_ADD_RADAR,    ///< add to radar vision
-	    CIRCLE_OP_MERGE         ///< merge 2 visions
-    };
 	
 //----------------------------------------------------------------------------
 // Do not change anything in the types or order of the following variable 
@@ -89,13 +73,18 @@ private:
 	sint16 m_width;
 	sint16 m_height;
 	sint32 m_owner;
-	sint16 m_xyConversion;   // Unused
+	sint16 m_xyConversion;
 	BOOL   m_isYwrap;
 	BOOL   m_amOnScreen;
 	
 //----------------------------------------------------------------------------
 // Changing the order below this should not break anything.
 //----------------------------------------------------------------------------
+	
+	
+
+	
+	
 	
 	uint16 **m_array;
 	UnseenCellQuadTree *m_unseenCells;
@@ -110,7 +99,7 @@ private:
 	
 
 	Vision *m_mergeFrom; 
-	bool m_revealedUnexplored;
+	BOOL m_revealedUnexplored; 
 
 	void FillCircle
 	(
@@ -122,9 +111,13 @@ private:
 	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
 						DynamicArray<MapPoint> *removeadd);
 
+#if 0
+	void RasterFill(sint32 xc, sint32 yc, sint32 x, sint32 y,
+			   CIRCLE_OP op);
+#endif
 
 public:
-	Vision(sint32 owner, bool amOnScreen = false);
+	Vision(sint32 owner, BOOL amOnScreen = FALSE);
 	~Vision();
 
 	void Copy(const Vision *copy);
@@ -133,51 +126,38 @@ public:
     void SetTheWholeWorldExplored();
 	void SetTheWholeWorldUnexplored();
 	void SetTheWholeWorldUnseen();
-	bool IsExplored(MapPoint pos) const;
+	BOOL IsExplored(MapPoint pos) const;
 
 	void AddRadar(MapPoint pos, double radius);
 
-	void AddVisible(MapPoint pos, double radius, bool &revealed_unexplored, 
+	void AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored, 
 					DynamicArray<MapPoint> *removeadd = NULL);
 	void RemoveVisible(MapPoint pos, double radius,
 					   DynamicArray<MapPoint> *removeadd = NULL);
-	bool IsVisible(MapPoint pos) const;
+	BOOL IsVisible(MapPoint pos) const;
 
 	
 	
 	
-	bool GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
+	BOOL GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
 
-	void Convert(MapPoint &pos) const 
-    {
-        int l_ResultY   = pos.y + pos.x;
-		while (l_ResultY >= m_height) 
-        {
-			l_ResultY  -= m_height;
+	inline void Convert(MapPoint &pos) const {
+		pos.y += pos.x;
+		while(pos.y >= m_height) {
+			pos.y -= m_height;
 		}
-        pos.y = static_cast<sint16>(l_ResultY);
 	}
 
-	void Unconvert(MapPoint & pos) const 
-    {
-        int l_ResultX   = pos.x;
-
-        while (l_ResultX < 0)
-        {
-			l_ResultX += m_width;
-        }
-		while (l_ResultX >= m_width)
-        {
-			l_ResultX -= m_width;
-        }
-        pos.x = static_cast<sint16>(l_ResultX);
-
-        int l_ResultY   = pos.y - l_ResultX;
-		while (l_ResultY < 0) 
-        {
-			l_ResultY += m_height;
+	inline void Unconvert(MapPoint &pos) const {
+		while(pos.x < 0)
+			pos.x += m_width;
+		while(pos.x >= m_width)
+			pos.x -= m_width;
+		
+		pos.y -= pos.x;
+		while(pos.y < 0) {
+			pos.y += m_height;
 		}
-        pos.y = static_cast<sint16>(l_ResultY);
 	}
 
 
@@ -191,7 +171,7 @@ public:
 
 	
 	void CopyCircle(Vision *src, const MapPoint &center, sint32 radius);
-	bool MergePoint(sint32 x, sint32 y);
+	BOOL MergePoint(sint32 x, sint32 y);
 	void ModifyPoint(Vision *src, sint32 x, sint32 y);
 
 	void Serialize(CivArchive &archive);

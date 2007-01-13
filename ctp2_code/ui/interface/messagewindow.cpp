@@ -1,32 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Message text box window.
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Made message window non-modal. - Oct 16th 2005 Martin Gühmann
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -160,6 +139,7 @@ AUI_ERRCODE MessageWindow::InitCommon( Message data,
 	
 	data.AccessData()->SetMessageWindow( this );
 
+	SetStronglyModal(TRUE);
 	SetDynamic(TRUE);
 
 	return AUI_ERRCODE_OK;
@@ -273,7 +253,7 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 		
 		if(g_useCustomYear && g_pTurnLengthOverride)
 		{
-			copyBlock[0]=0;
+			copyBlock[0]=NULL;
 		}
 		else
 		{
@@ -743,6 +723,7 @@ void MessageWindow::BringBorderToTop()
 
 AUI_ERRCODE MessageWindow::AddBordersToUI()
 {
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	
 
 
@@ -779,6 +760,7 @@ AUI_ERRCODE MessageWindow::AddBordersToUI()
 
 AUI_ERRCODE MessageWindow::RemoveBordersFromUI()
 {
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
 

@@ -1,13 +1,12 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef OPTIONSWINDOW_FLAG
 #define OPTIONSWINDOW_FLAG
 
 #include "c3_popupwindow.h"
 
 class c3_Static;
-class c3_Button;
+;class c3_Button;
 class ctp2_Button;
 
 sint32 optionsscreen_displayMyWindow(sint32 from);

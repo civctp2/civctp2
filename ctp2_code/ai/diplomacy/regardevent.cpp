@@ -1,48 +1,19 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Regard Event
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _DEBUG
-// - Generate debug version when set.
-//
-// _SLOW_BUT_SAFE
-// - Define 2 other symbols (PROJECTED_CHECK_START and PROJECTED_CHECK_END) 
-//   when set. But the defined symbols are never used, so this doesn't do
-//   anything at all. This makes preprocessing and compilation slower, but
-//   should be safe.
-//
-// USE_LOGGING
-// - Enable logging when set, even when not a debug version. This is not
-//   original Activision code.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-//  - Hidden Nationality check added to AfterBattle by E 18 Nov 2005 if unit is 
-//    not Hidden Nationality then Regard Event is Logged 
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
-#include "RegardEvent.h"
 
+#include "RegardEvent.h"
 #include "AgreementMatrix.h"
 #include "ctpai.h"
 #include "mapanalysis.h"
@@ -95,34 +66,33 @@ STDEHANDLER(KillUnitRegardEvent)
 		cause != CAUSE_REMOVE_ARMY_ATTACKED)
 		return GEV_HD_Continue;
 
+	sint32 cost;
+
+	
 	if (u.Flag(k_UDF_IS_IN_TRANSPORT))
 	{
 		return GEV_HD_Continue;
 	}
 
-	DPRINTF(k_DBG_AI, ("//	Kill Unit regard event\n"));  //EMOD added
+	
 	
 	CellUnitList army;
 	g_theWorld->GetArmy(u.RetPos(), army);
 	bool not_at_war = (AgreementMatrix::s_agreements.TurnsAtWar(killer, u.GetOwner()) < 1);
-
-	if (u.GetDBRec()->GetCivilian()) 
-    {
-    	sint32 cost;
-
-		if (not_at_war
-		&& army.Num() == 1
-		&& diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost(cost)
-		&& g_theWorld->GetCell(u.RetPos())->GetCity().m_id == 0x0
-		){
+	if (u.GetDBRec()->GetCivilian() == true) {
+		if (not_at_war &&
+			army.Num() == 1 &&
+			diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost() &&
+			g_theWorld->GetCell(u.RetPos())->GetCity().m_id == 0x0)
+		{
+			diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianRegardCost(cost);
 			g_theStringDB->GetStringID("REGARD_EVENT_ATTACKED_CIVILIANS", strId);
 			diplomat.LogRegardEvent( killer,
 				cost,
 				REGARD_EVENT_MILITARY_SAFETY,	
 				strId);
 
-			sint32 trust_cost;
-			if (diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost(trust_cost))
+			if (diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost())
 			{
 				SlicObject *so = new SlicObject("TANoKillCivilian");
 				so->AddRecipient(killer);
@@ -130,9 +100,12 @@ STDEHANDLER(KillUnitRegardEvent)
 				so->AddPlayer(u.GetOwner());
 				g_slicEngine->Execute(so);
 
+				sint32 trust_cost;
+				diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost(trust_cost);
 				Diplomat::ApplyGlobalTrustChange(killer, trust_cost, "Committed the war crime of killing a civilian unit.");
 			}
 
+			
 			diplomat.UpdateRegard(killer);
 		}
 	}
@@ -178,6 +151,111 @@ STDEHANDLER(BorderIncursionRegardEvent)
 
 	return GEV_HD_Continue;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 STDEHANDLER(InvaderMovementRegardEvent)
 {
@@ -241,7 +319,6 @@ STDEHANDLER(BattleAftermathRegardEvent)
 {
 	Army army;
 	MapPoint pos;
-
 	Unit ta;
 	Unit td;
 	sint32 attack_owner, defense_owner;
@@ -261,11 +338,10 @@ STDEHANDLER(BattleAftermathRegardEvent)
 	if(!args->GetPlayer(1, defense_owner))
 		return GEV_HD_Continue;
 
+	Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 
-// out commented and put into armydata::fight	
-//		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
-//		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
-
+	
+	defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
@@ -568,10 +644,11 @@ STDEHANDLER(PlantNukeUnit_RegardEvent)
 	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
-	sint32 trust_cost;
-	if(city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
-	&&!city_diplomat.HasLaunchedNukes()
-	){
+	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
+		!city_diplomat.HasLaunchedNukes())
+	{
+		sint32 trust_cost;
+		city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*3, "Committed the war crime of planting a nuke in a city first.");
 	}
 
@@ -632,7 +709,6 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
-	// cost should be variable not standard each time
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetSlaveRaidRegardCost(cost);
 
@@ -644,6 +720,7 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
+	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
@@ -690,8 +767,10 @@ STDEHANDLER(EmbargoRegardEvent)
 		
 		
 		sint32 regard_cost = 0;
-		if (diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost(regard_cost))
+		if (diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost())
 		{
+			diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost(regard_cost);
+				
 			StringId strId;
 			g_theStringDB->GetStringID("REGARD_EVENT_EMBARGO_TRADE", strId);
 			diplomat.LogRegardEvent(foreignerId, 
@@ -818,10 +897,11 @@ STDEHANDLER(NukeCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	sint32 trust_cost = 0;
-	if(city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
-	&&!city_diplomat.HasLaunchedNukes()
-	){
+	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
+		!city_diplomat.HasLaunchedNukes())
+	{
+		sint32 trust_cost;
+		city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*2, "Committed the war crime of nuking a city first.");
 	}
 
@@ -873,10 +953,11 @@ STDEHANDLER(NukeLocationUnit_RegardEvent)
 	
 	pos_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
-	sint32 trust_cost = 0;
-	if(pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
-	&&!pos_diplomat.HasLaunchedNukes()
-	){
+	if (pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
+		!pos_diplomat.HasLaunchedNukes())
+	{
+		sint32 trust_cost;
+		pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost, "Committed the war crime of using nuclear weapons first.");
 	}
 
@@ -1167,10 +1248,11 @@ STDEHANDLER(CreateParkUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	sint32 trust_cost = 0;
-	if(city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost)
-	&&!city_diplomat.HasLaunchedNanoAttack()
-	){
+	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
+		!city_diplomat.HasLaunchedNanoAttack())
+	{
+		sint32 trust_cost;
+		city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost(trust_cost);
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*2, "Committed the war crime of nano-attacking a city first.");
 	}
 
@@ -1212,18 +1294,8 @@ STDEHANDLER(PillageUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-// EMOD - Hidden Nationality check added by E 19 Nov 2005 - if unit is not Hidden Nationality then Regard Event is Logged 
-	if(!(unit.GetDBRec()->GetSneakPillage() == true)) {
-
-//; || (!(td.GetDBRec()->GetHiddenNationality() == true)); 
-//original code
-	victim_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
-//  end original code
-	}
-// end EMOD
-
 	
-
+	victim_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }

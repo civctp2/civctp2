@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Listbox for network game setup
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,7 +24,6 @@
 // - Corrected strange access of non-static members from static data.
 // - Replaced typename T in specialized template member function by the 
 //   the type for that the function is specialized, by Martin Gühmann.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -96,16 +92,16 @@ ns_PlayerSetupListBox::ns_PlayerSetupListBox (
 	void *cookie,
 	char *filename)
 
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_FileDataListBox<nf_PlayerSetup, ns_PlayerSetup>(
+	:ns_FileDataListBox<nf_PlayerSetup, ns_PlayerSetup>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
 	cookie,
-	filename)
+	filename),
+
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	SetForceSelect( TRUE );
 }
@@ -118,17 +114,16 @@ ns_GameSetupListBox::ns_GameSetupListBox (
 	void *cookie,
 	char *filename)
 
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_FileDataListBox<nf_GameSetup, ns_GameSetup>(
+	:ns_FileDataListBox<nf_GameSetup, ns_GameSetup>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
 	cookie,
-	filename)
-{
+	filename),
+
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 }
 
 ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
@@ -139,17 +134,16 @@ ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 	void *cookie,
 	char *filename)
 
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_FileDataListBox<nf_AIPlayer, ns_AIPlayerSetup>(
+	:ns_FileDataListBox<nf_AIPlayer, ns_AIPlayerSetup>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
 	cookie,
-	filename)
-{
+	filename),
+
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 }
 
 
@@ -166,12 +160,10 @@ HotseatTransport::HotseatTransport()
 
 ns_TransportListBox::ns_TransportListBox (
 	AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, void *cookie )
-	:
+	:ns_ListBox<NETFunc::Transport, ns_Transport> (
+	retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Transport, ns_Transport> (
-	retval, id, ldlBlock, ActionFunc, cookie )
-{
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 	
 	NETFunc::TransportList *l = &(g_netfunc->transportList);
 	NETFunc::TransportList::iterator i;
@@ -246,16 +238,14 @@ ns_SessionListBox::ns_SessionListBox (
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Session, ns_Session>(
+	:ns_ListBox<NETFunc::Session, ns_Session>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
-	cookie )
-{
+	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 };
 
 ns_LobbyListBox::ns_LobbyListBox (
@@ -264,16 +254,14 @@ ns_LobbyListBox::ns_LobbyListBox (
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Lobby, ns_Lobby>(
+	:ns_ListBox<NETFunc::Lobby, ns_Lobby>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
-	cookie )
-{
+	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 };
 
 ns_GameListBox::ns_GameListBox (
@@ -282,16 +270,14 @@ ns_GameListBox::ns_GameListBox (
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Game, ns_Game>(
+	:ns_ListBox<NETFunc::Game, ns_Game>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
-	cookie )
-{
+	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 };
 
 ns_PlayerListBox::ns_PlayerListBox (
@@ -300,15 +286,14 @@ ns_PlayerListBox::ns_PlayerListBox (
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Player, ns_Player>(
+	:ns_ListBox<NETFunc::Player, ns_Player>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
-	cookie )
+	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	m_pingFastStyle = new aui_TextBase( "styles.ping.fast", (MBCHAR *)NULL );
 	m_pingMedStyle = new aui_TextBase( "styles.ping.med", (MBCHAR *)NULL );
@@ -388,16 +373,14 @@ ns_RPlayerListBox::ns_RPlayerListBox (
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Player, ns_RPlayer>(
+	:ns_ListBox<NETFunc::Player, ns_RPlayer>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
-	cookie )
-{
+	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ) {
 };
 
 ns_ServerListBox::ns_ServerListBox (
@@ -406,15 +389,14 @@ ns_ServerListBox::ns_ServerListBox (
 		MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Server, ns_Server>(
+	:ns_ListBox<NETFunc::Server, ns_Server>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
-	cookie )
+	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	m_pingFastStyle = new aui_TextBase( "styles.ping.fast", (MBCHAR *)NULL );
 	m_pingMedStyle = new aui_TextBase( "styles.ping.med", (MBCHAR *)NULL );
@@ -493,15 +475,14 @@ ns_GPlayerListBox::ns_GPlayerListBox (
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<NETFunc::Player, ns_GPlayer>(
+	:ns_ListBox<NETFunc::Player, ns_GPlayer>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
 	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	m_hplayerlistbox( hplayerlistbox )
 {
 	m_pingFastStyle = new aui_TextBase( "styles.ping.fast", (MBCHAR *)NULL );
@@ -565,7 +546,7 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 {
 	ns_ListBox<NETFunc::Player, ns_GPlayer>::Insert( player );
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	ns_HPlayerItem *item = new ns_HPlayerItem(
 		&errcode,
 		player,
@@ -840,15 +821,14 @@ ns_AIPlayerListBox::ns_AIPlayerListBox (
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
-	:
-	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_ListBox<nf_AIPlayer, ns_AIPlayer>(
+	:ns_ListBox<nf_AIPlayer, ns_AIPlayer>(
 	retval,
 	id,
 	ldlBlock,
 	ActionFunc,
 	cookie ),
+	aui_ImageBase( ldlBlock),
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	m_hplayerlistbox( hplayerlistbox )
 {
 }
@@ -859,7 +839,7 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 {
 	ns_ListBox<nf_AIPlayer, ns_AIPlayer>::Insert( player );
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	ns_HPlayerItem *item = new ns_HPlayerItem(
 		&errcode,
 		player,

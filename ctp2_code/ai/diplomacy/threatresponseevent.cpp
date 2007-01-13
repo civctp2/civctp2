@@ -51,7 +51,7 @@ STDEHANDLER(DefaultReject_ThreatResponseEvent)
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
-//	const Response & sender_response = sender_diplomat.GetMyLastResponse(receiver);
+	const Response & sender_response = sender_diplomat.GetMyLastResponse(receiver);
 
 	if (proposal.detail.first_type == PROPOSAL_REQUEST_GIVE_CITY ||
 		proposal.detail.second_type == PROPOSAL_REQUEST_GIVE_CITY)
@@ -109,8 +109,8 @@ STDEHANDLER(DestroyCityAccept_ThreatResponseEvent)
 	
 	sint32 sender_nukes = MapAnalysis::GetMapAnalysis().GetNuclearWeaponsCount(sender);
 	sint32 sender_nano  = MapAnalysis::GetMapAnalysis().GetNanoWeaponsCount(sender);
-//	sint32 receiver_nukes = MapAnalysis::GetMapAnalysis().GetNuclearWeaponsCount(receiver);
-//	sint32 receiver_nano  = MapAnalysis::GetMapAnalysis().GetNanoWeaponsCount(receiver);
+	sint32 receiver_nukes = MapAnalysis::GetMapAnalysis().GetNuclearWeaponsCount(receiver);
+	sint32 receiver_nano  = MapAnalysis::GetMapAnalysis().GetNanoWeaponsCount(receiver);
 
 	Unit city(sender_response.threat.arg.cityId);
 	if (!g_theUnitPool->IsValid(city.m_id))

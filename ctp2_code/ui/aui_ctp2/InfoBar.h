@@ -1,8 +1,7 @@
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __INFOBAR_H__
 #define __INFOBAR_H__
 

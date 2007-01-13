@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of a list of Units in the same cell
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,54 +16,32 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
 //
-// - None
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Microsoft extensions removed.
+// - Microsoft C++ extensions marked for future GCC compiliation.
 // - MovementTypeLand added, as suggested by NelsonAndBronte.
 // - Option added to report sync errors only once.
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
-#endif
+#endif // _MSC_VER
 
 #ifndef __CELL_UNIT_LIST_H__
 #define __CELL_UNIT_LIST_H__
-
-//----------------------------------------------------------------------------
-//
-// Library imports
-//
-//----------------------------------------------------------------------------
-
-// none
-
-//----------------------------------------------------------------------------
-//
-// Exported names
-//
-//----------------------------------------------------------------------------
-
-class CellUnitList;
-
-#define k_CULF_IGNORES_ZOC          0x01
-#define k_CULF_CANT_CAPTURE_CITY    0x02
-#define k_CULF_CAN_SPACE_LAUNCH     0x04
-#define k_CULF_CAN_SPACE_LAND       0x08
-#define k_CULF_IN_SPACE             0x10
-#define k_CULF_EXECUTED_THIS_TURN   0x80
-
-//----------------------------------------------------------------------------
-//
-// Project imports
-//
-//----------------------------------------------------------------------------
 
 #include "Unit.h"
 #include "gstypes.h"
@@ -73,11 +50,14 @@ template <class T> class DynamicArray;
 
 class CivArchive;
 
-//----------------------------------------------------------------------------
-//
-// Declarations
-//
-//----------------------------------------------------------------------------
+#define k_CULF_IGNORES_ZOC 0x01
+#define k_CULF_CANT_CAPTURE_CITY 0x02
+#define k_CULF_CAN_SPACE_LAUNCH 0x04
+#define k_CULF_CAN_SPACE_LAND 0x08
+#define k_CULF_IN_SPACE       0x10
+
+
+#define k_CULF_EXECUTED_THIS_TURN 0x80
 
 class CellUnitList
 {
@@ -95,7 +75,7 @@ public:
 	CellUnitList(const DynamicArray<Unit> &copyme);
 	void Serialize(CivArchive &archive);
 
-	virtual bool Insert(Unit id);
+	virtual sint32 Insert(Unit id);
 	sint32 Del(const Unit &delme);
 	sint32 DelIndex(const sint32 index);
 
@@ -127,25 +107,25 @@ public:
 
 	const sint32 Num() const { if(!this) return 0; else return m_nElements; }
 	void KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
-	bool IsPresent(const Unit &u);
+	sint32 IsPresent(const Unit &u);
 
-	bool CanEnter(const MapPoint &pos) const;
-	bool HasWormholeProbe() const;
+	BOOL CanEnter(const MapPoint &pos) const;
+	BOOL HasWormholeProbe() const;
 	virtual void GetPos(MapPoint &pos) const;
 	virtual PLAYER_INDEX GetOwner() const;
-	bool IsAtLeastOneMoveLand() const;
-	bool IsAtLeastOneMoveWater() const;
-	bool IsAtLeastOneMoveShallowWater() const;
-	bool IsAtLeastOneMoveAir() const;
-	bool IsAtLeastOneMoveSpace() const;
-	bool IsAtLeastOneMoveMountain() const;
-	bool IsEnemy(PLAYER_INDEX player) const;
-	bool IsEnemy(Unit defender) const;
-	bool IsEnemy(CellUnitList &defender) const;
-	bool CanAtLeastOneCaptureCity() const;
-	bool CanBeExpelled(); 
+	BOOL IsAtLeastOneMoveLand() const;
+	BOOL IsAtLeastOneMoveWater() const;
+	BOOL IsAtLeastOneMoveShallowWater() const;
+	BOOL IsAtLeastOneMoveAir() const;
+	BOOL IsAtLeastOneMoveSpace() const;
+	BOOL IsAtLeastOneMoveMountain() const;
+	BOOL IsEnemy(PLAYER_INDEX player) const;
+	BOOL IsEnemy(Unit defender) const;
+	BOOL IsEnemy(CellUnitList &defender) const;
+	BOOL CanAtLeastOneCaptureCity() const;
+    BOOL CanBeExpelled(); 
 
-	bool IsVisible(PLAYER_INDEX player) const;
+	BOOL IsVisible(PLAYER_INDEX player) const;
 	bool GetTopVisibleUnitOfMoveType
 	(
 		PLAYER_INDEX const	looker,
@@ -158,25 +138,25 @@ public:
 		PLAYER_INDEX const	looker
 	) const;
 	
-	bool CanBeSued() const;
-	bool ExertsZOC() const;
+	BOOL CanBeSued() const;
+	BOOL ExertsZOC() const;
 
     void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 	double GetHPModifier();
 	void DoVictoryEnslavement(sint32 origOwner);
 
-	bool CanMoveIntoCell(const MapPoint &pos,
-						 bool &zocViolation,
-						 bool ignoreZoc,
-						 bool &alliedCity);
-	bool IsMovePointsEnough(const double cost) const;
-	bool IsMovePointsEnough(const MapPoint &pos);
-    bool GetMovementTypeAir() const; 
+	BOOL CanMoveIntoCell(const MapPoint &pos,
+						 BOOL &zocViolation,
+						 BOOL ignoreZoc,
+						 BOOL &alliedCity);
+	BOOL IsMovePointsEnough(const double cost) const;
+	BOOL IsMovePointsEnough(const MapPoint &pos);
+    BOOL GetMovementTypeAir() const; 
 	bool GetMovementTypeLand() const; 
-	bool CanBeCargoPodded() const;
-	bool CanSpaceLand() const;
-	bool CanSpaceLaunch() const;
-	bool IsIgnoresZOC() const;
+	BOOL CanBeCargoPodded() const;
+	BOOL CanSpaceLand() const;
+	BOOL CanSpaceLaunch() const;
+	BOOL IsIgnoresZOC() const;
 
 	void UpdateMoveIntersection();
 

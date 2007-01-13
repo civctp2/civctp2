@@ -1,38 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Debugging
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-// _DEBUG			(automatically set when choosing the Debug configuration)
-// _NO_GAME_WATCH
-// USE_LOGGING		Enable logging for the release/final version.
-//                  The debug version has logging enabled always.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - 
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
-#if defined(_DEBUG) || defined(USE_LOGGING)
+#ifdef _DEBUG
 
 #include "aui.h"
 #include "debugwindow.h"
@@ -57,15 +37,14 @@ char g_last_debug_text[4096];
 extern DebugWindow *g_debugWindow;
 #endif
 
-#define k_FILENAME				"logs" FILE_SEP "civ3log%#.2d.txt"
+#define k_FILENAME				"logs\\civ3log%#.2d.txt"
 #define k_MAX_LOG_FILE_LINES	10000		
 
 MBCHAR	s_logFileName[20];
 sint32	s_logFileNumber=0;
 sint32	s_logLinesThisFile=0;
 
-#if 0
-MBCHAR const * c3debug_GetLogFileName(void)
+MBCHAR *c3debug_GetLogFileName(void)
 {
 	return s_logFileName;
 }
@@ -79,7 +58,6 @@ sint32 *c3debug_GetLogLinesThisFile(void)
 {
 	return &s_logLinesThisFile;
 }
-#endif
 
 int c3debug_InitDebugLog()
 {
@@ -94,17 +72,19 @@ int c3debug_InitDebugLog()
 
 	
 	WIN32_FIND_DATA	fileData;
+	HANDLE lpFileList;
 	MBCHAR path[_MAX_PATH];
 
-	strcpy(path, "logs" FILE_SEP "*.*");
+	strcpy(path, "logs\\*.*");
 		
-	HANDLE lpFileList = FindFirstFile(path, &fileData);
+	
+	lpFileList = FindFirstFile(path, &fileData);
 	
 	if (lpFileList != INVALID_HANDLE_VALUE) {
 		
 		MBCHAR fileName[256];
 		do {
-			sprintf(fileName, "logs%s%s", FILE_SEP, fileData.cFileName);
+			sprintf(fileName, "logs\\%s", fileData.cFileName);
 			DeleteFile(fileName);
 		} while(FindNextFile(lpFileList,&fileData));
 
@@ -132,17 +112,15 @@ int c3debug_InitDebugLog()
 	return 0;
 }
 
-int c3debug_dprintfPrefix
-(
-    int             mask, 
-	char const *    file, 
-	int             line
-) 
+int
+c3debug_dprintfPrefix(int mask, 
+			  char* file, 
+			  int line) 
 {
 	g_useMask = mask;
+	char *filename;
 
-	if (mask & g_debug_mask) 
-    {
+	if(mask & g_debug_mask) {
 		FILE* f = fopen(s_logFileName, "a");
 		
 		
@@ -157,15 +135,11 @@ int c3debug_dprintfPrefix
 			fprintf(f, "[Continued from Part %#.2d]\n\n", s_logFileNumber-1);
 		}
 
-	    char const * filename = strrchr(file, FILE_SEPC);
-		if (filename)
-        {
-            filename++;
-        }
-        else
-        {
+		filename = strrchr(file, '\\');
+		if(!filename)
 			filename = file;
-        }
+		else
+			filename++;
 		
 		fprintf(f, "%15.15s@%-4d: ", filename, line);
 		
@@ -178,7 +152,9 @@ int c3debug_dprintfPrefix
 	return 0;
 }
 
-int c3debug_dprintf(char const * format, ...) 
+int
+c3debug_dprintf(char* format, 
+		...) 
 {
 	va_list list;
 	if(g_debug_mask & g_useMask) {
@@ -305,31 +281,33 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 
 void c3debug_ExceptionExecute(CivExceptionFunction function)
 {
+	
 	__try
 	{
 		function();
 	}
+
+	
 	__except (c3debug_CivExceptionHandler(GetExceptionInformation()))
 	{
+		
 		DoFinalCleanup();
 	}
 }
 
-void c3debug_Assert(char const *s, char const * file, int line)
+void c3debug_Assert(char *s, char *file, int line)
 {
 	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line)); 
- 	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", c3debug_StackTrace()));
+ 
+	MBCHAR *traceStr = c3debug_StackTrace();
+	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", traceStr));
 
-#if defined(_DEBUG)
-    do 
-    { 
-		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) 
-        {
-            _CrtDbgBreak(); 
-        }
-	} 
-    while (0);
-#endif
+    do { 
+
+
+ 		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) _CrtDbgBreak(); 
+
+	} while (0);
 }	
 
 #endif 

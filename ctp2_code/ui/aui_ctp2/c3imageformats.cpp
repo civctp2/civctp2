@@ -162,8 +162,11 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
 
 	int		width, height, pitch;
 	int		record_is_565;
+    long     size;
 
     char *basename;
+    char rname[256];
+    int  rlen;
 
     
     if (((basename = strrchr(filename, '\\')) == NULL) &&
@@ -173,9 +176,9 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
         basename++;
     }
     
-    char rname[256];
+    
     strcpy(rname, basename);
-    size_t const    rlen    = strlen(rname);
+    rlen = strlen(rname);
     if (rlen < 3) {
 		c3errors_ErrorDialog("Targa Load", "Invalid filename '%s'", filename);
         return AUI_ERRCODE_LOADFAILED;
@@ -184,17 +187,11 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
     rname[rlen - 2] = 'i';
     rname[rlen - 1] = 'm';
 
-    size_t  size    = 0;
-    void *  buffer  = g_ImageMapPF ? g_ImageMapPF->getData(rname, size) : NULL;
+    
+    void *  buffer  = g_ImageMapPF ? g_ImageMapPF->getData(rname, &size) : NULL;
 
-    if (buffer == NULL) 
-    {
-        if (g_ImageMapPF && !g_ImageMapPF->IsReported(filename))
-        {
-		    c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", filename);
-            g_ImageMapPF->MarkReported(filename);
-        }
-
+    if (buffer == NULL) {
+		c3errors_ErrorDialog("Targa Load", "Unable to find the file '%s'", filename);
         return AUI_ERRCODE_LOADFAILED;
     }
     

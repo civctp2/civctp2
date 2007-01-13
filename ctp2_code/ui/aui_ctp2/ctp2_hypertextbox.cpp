@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Call to Power 2 hypertextbox
-// Id           : $Id$
+// Description  : User interface hypertext link box
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,7 +25,6 @@
 // - Interpret a zero-length link text as display of the text from gl_str.txt.
 //   Example: <L:DATABASE_UNITS,UNIT_STEALTH_BOMBER><e> will display a
 //            "Stealth Bomber" hyperlink when using the English version.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,6 +55,7 @@
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
+extern ColorSet		*g_colorSet;
 
 #define k_CTP2_HYPERTEXTBOX_BEVELWIDTH	2
 #define k_CTP2_HYPERTEXTBOX_INSETWIDTH	5
@@ -87,9 +84,10 @@ size_t const	MAX_SIZE_IDENTIFIER	= 255;
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 bool IsIdentifierBegin(MBCHAR a_Char)
 {
-	return isalnum(a_Char) != 0;
+	return isalnum(a_Char);
 }
 
 //----------------------------------------------------------------------------
@@ -107,6 +105,7 @@ bool IsIdentifierBegin(MBCHAR a_Char)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 bool IsNotInIdentifier(MBCHAR a_Char)
 {
 	return ('_' != a_Char) && !isalnum(a_Char);
@@ -133,6 +132,7 @@ bool IsNotInIdentifier(MBCHAR a_Char)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void ctp2_HyperTextBox::FormatText
 (
 	MBCHAR const *	a_Text,
@@ -294,9 +294,9 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	void *cookie )
 	:
 
+	aui_HyperTextBox(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
 
@@ -344,10 +344,10 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
+	PatternBase(pattern),
 	aui_HyperTextBox(retval, id, x,y, width, height, ActionFunc, cookie),
-	PatternBase(pattern)
+	aui_ImageBase( (sint32)0 ),
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -365,7 +365,15 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 
 AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -398,10 +406,11 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommon( void )
 
 ctp2_HyperTextBox::~ctp2_HyperTextBox()
 {
-	if (m_hyperLinkList) 
-    {
+	if ( m_hyperLinkList ) {
 		RemoveHyperLinks();
+
 		delete m_hyperLinkList;
+		m_hyperLinkList = NULL;
 	}
 }
 
@@ -411,6 +420,8 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
+	
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -418,7 +429,7 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
 		
-        if (aui_Ldl::FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_ranger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -427,7 +438,10 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 				this );
 	}
 
-    MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	MBCHAR *pattern;
+
+	if (m_pattern)
+		pattern = m_pattern->GetFilename();
 
 	if ( !m_ranger )
 		m_ranger = new c3_Ranger(
@@ -455,8 +469,9 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 
 AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
-	if (!hyperText)
+	if ( !hyperText )
 	{
+		
 		RemoveHyperStatics();
 		RemoveHyperLinks();
 		m_curStaticPos.x = 0;
@@ -473,11 +488,11 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 
 
-	sint32      hyperLinkDB     = 0;
-	sint32      hyperLinkIndex  = k_GL_INDEX_INVALID;
-	bool        isHyperLink     = false;
-	COLORREF    oldColor        = 0;
-	sint32      oldUnderline    = 0;
+	sint32 hyperLinkDB = 0;
+	sint32 hyperLinkIndex = 0;
+	sint32 isHyperLink = FALSE;
+	COLORREF oldColor;
+	sint32 oldUnderline;
 
 	while ( ptr != stop )
 	{
@@ -506,7 +521,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				uint8 r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperColorOld = m_hyperColor;
-				m_hyperColor    = RGB(r,g,b);
+				m_hyperColor = RGB(r,g,b);
 			}
 			break;
 
@@ -532,13 +547,16 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			case 'l':
 				sscanf( ++ptr, ":%d,%d>", &hyperLinkDB, &hyperLinkIndex );
 				
-				oldUnderline        = m_hyperUnderline;
-				oldColor            = m_hyperColor;
-				m_hyperColorOld     = m_hyperColor;
+				
+				
+				
+				oldUnderline = m_hyperUnderline;
+				oldColor = m_hyperColor;
+				m_hyperColorOld = m_hyperColor;
 
-				m_hyperUnderline    = 1;
-				m_hyperColor        = RGB(0,0,100);
-				isHyperLink         = true;
+				m_hyperUnderline = 1;
+				m_hyperColor = RGB(0,0,100);
+				isHyperLink = TRUE;
 				break;
 
 			
@@ -575,16 +593,29 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 				ptr			= std::find(copyEnd, stop, '>');
 
-				hyperLinkDB         = 
-                    GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
-				hyperLinkIndex      = 
+
+
+
+				
+
+
+				
+				hyperLinkDB = GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
+				hyperLinkIndex = 
 					GreatLibrary::Get_Object_Index_From_Name(hyperLinkDB, hyperLinkIndex_name);
-				oldUnderline        = m_hyperUnderline;
-				oldColor            = m_hyperColor;
-				m_hyperColorOld     = m_hyperColor;
-				m_hyperUnderline    = 1;
-				m_hyperColor        = RGB(0,0,100);
-				isHyperLink         = true;
+		
+
+				
+				
+				
+				
+				oldUnderline = m_hyperUnderline;
+				oldColor = m_hyperColor;
+				m_hyperColorOld = m_hyperColor;
+
+				m_hyperUnderline = 1;
+				m_hyperColor = RGB(0,0,100);
+				isHyperLink = TRUE;
 				break;
 				}
 
@@ -595,7 +626,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					// Perform database text lookup.
 					if (hyperLinkDB)
 					{
-						MBCHAR const *	ptr	= g_greatLibrary->GetObjectName
+						MBCHAR const *	ptr	= g_greatLibrary->GetItemName
 												(hyperLinkDB, hyperLinkIndex);
 						
 						FormatText(ptr, 
@@ -608,7 +639,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					}
 
 					m_hyperUnderline	= oldUnderline;
-					isHyperLink			= false;
+					isHyperLink			= FALSE;
 				}
 				m_hyperColor = m_hyperColorOld;
 				break;
@@ -640,11 +671,11 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			FormatText(ptr, nextStop, hyperLinkDB, hyperLinkIndex, isHyperLink);
 			ptr	= nextStop;
 
-			if (isHyperLink) 
-            {
-				isHyperLink         = false;
-				m_hyperUnderline    = oldUnderline;
-				m_hyperColor        = oldColor;
+			
+			if ( isHyperLink ) {
+				isHyperLink = FALSE;
+				m_hyperUnderline = oldUnderline;
+				m_hyperColor = oldColor;
 			}
 		}
 	}
@@ -657,11 +688,18 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void ctp2_HyperTextBox::RemoveHyperLinks( void )
 {
-	for (sint32 i = m_hyperLinkList->L(); i; --i)
-    {
-		delete m_hyperLinkList->RemoveTail();
-    }
-    m_selectedHyperLink = NULL;
+	ListPos position = m_hyperLinkList->GetHeadPosition();
+	for ( sint32 i = m_hyperLinkList->L(); i; i-- )
+		DestroyHyperLink( m_hyperLinkList->RemoveTail() );
+}
+
+
+void ctp2_HyperTextBox::DestroyHyperLink( ctp2_HyperLink *hl )
+{
+	Assert( hl != NULL );
+	if ( !hl ) return;
+
+	delete hl;
 }
 
 

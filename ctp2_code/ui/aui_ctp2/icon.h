@@ -17,9 +17,11 @@
 #define __ICON_H__
 
 
-class Icon;
-
 #include "aui_image.h"
+
+#include "CivPaths.h"
+
+extern CivPaths		*g_civPaths;
 
 
 class Icon : public aui_Image
@@ -28,7 +30,7 @@ public:
 	
 	Icon(
 		AUI_ERRCODE *retval,
-		MBCHAR const * szFileName = NULL);
+		MBCHAR *szFileName = NULL);
 
 	virtual ~Icon();
 

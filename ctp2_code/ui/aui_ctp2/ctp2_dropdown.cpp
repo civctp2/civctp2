@@ -38,9 +38,9 @@ ctp2_DropDown::ctp2_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
 	aui_DropDown(),
+	aui_TextBase( NULL ),
+	aui_ImageBase( (sint32)0 ),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon(id, x, y, width, height);
@@ -72,9 +72,9 @@ ctp2_DropDown::ctp2_DropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
+	aui_DropDown(),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_DropDown(),
 	PatternBase(ldlBlock, NULL)
 {
 	*retval = aui_Region::InitCommonLdl(id, ldlBlock);
@@ -102,16 +102,20 @@ ctp2_DropDown::ctp2_DropDown(
 
 AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 {
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+
+	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-    MBCHAR *    pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	MBCHAR *pattern = NULL;
+	if (m_pattern) 
+		pattern = m_pattern->GetFilename();
 
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_STATICPANE );
 
-        if (aui_Ldl::FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 		{
 			m_staticPane = new c3_Static(
 				&errcode,
@@ -133,11 +137,11 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 		aui_Ldl::BuildHierarchyFromRoot(const_cast<MBCHAR*>(
 			std::string(ldlBlock).append(".autobutton").c_str()));
-		if((m_button = static_cast<aui_Button*>(
-			aui_Ldl::GetObject(ldlBlock, "autobutton")))) {
+		if(m_button = static_cast<aui_Button*>(
+			aui_Ldl::GetObject(ldlBlock, "autobutton"))) {
 			m_button->SetActionFuncAndCookie(DropDownButtonActionCallback, this);
 			m_buttonSize = 0;
-        } else if (aui_Ldl::FindDataBlock( block ) ) {
+		} else if ( theLdl->GetLdl()->FindDataBlock( block ) ) {
 			
 			m_button = new aui_Button(
 				&errcode,
@@ -188,7 +192,7 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 
 
-        if (aui_Ldl::FindDataBlock( block ) ) {
+			if ( theLdl->GetLdl()->FindDataBlock( block ) ) {
 			m_listBoxWindow = new aui_Window(
 				&errcode,
 				aui_UniqueId(),
@@ -207,7 +211,7 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-            if (aui_Ldl::FindDataBlock( block ) )
+			if ( theLdl->GetLdl()->FindDataBlock( block ) )
 				m_listBox = new ctp2_ListBox(
 					&errcode,
 					aui_UniqueId(),

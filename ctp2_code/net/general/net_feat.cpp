@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer feat packet handler.
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,7 +17,7 @@
 //
 // Compiler flags
 //
-// - None
+// None yet.
 //
 //----------------------------------------------------------------------------
 //
@@ -28,17 +27,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"             // general settings
-#include "net_feat.h"       // own declarations: consistency check
+#include "c3.h"				// general settings
+#include "net_feat.h"		// own declarations: consistency check
 
-#include "FeatTracker.h"    // g_featTracker
-#include "net_packet.h"     // k_PACKET_FEAT_TRACKER_ID
-#include "net_util.h"       // PULL..., PUSH...
+#include "FeatTracker.h"	// g_featTracker
+#include "net_packet.h"		// k_PACKET_FEAT_TRACKER_ID
+#include "net_util.h"		// PULL..., PUSH...
 
 namespace
 {
 
-	unsigned char const        FIXED_BLOCK[6] =
+	unsigned char const			FIXED_BLOCK[6]	=
 	{
 		0x40, 0x42, 0x42, 0x42, 0x43, 0x43
 	};
@@ -60,6 +59,7 @@ namespace
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 NetFeatTracker::NetFeatTracker()
 :	Packetizer()
 {
@@ -80,6 +80,7 @@ NetFeatTracker::NetFeatTracker()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 NetFeatTracker::~NetFeatTracker()
 {
 }
@@ -88,17 +89,18 @@ NetFeatTracker::~NetFeatTracker()
 //
 // Name       : NetFeatTracker::Packetize
 //
-// Description: Generate an application data packet to transmit.
+// Description: Generate an application message to transmit.
 //
-// Parameters : buf         : buffer to store the message
+// Parameters : buf			: buffer to store the message
 //
 // Globals    : -
 //
-// Returns    : size        : number of bytes stored in buf
+// Returns    : size		: number of bytes stored in buf
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void NetFeatTracker::Packetize(uint8 * buf, uint16 & size)
 {
 	size = 0;
@@ -119,7 +121,7 @@ void NetFeatTracker::Packetize(uint8 * buf, uint16 & size)
 	PointerList<Feat>::Walker walk(g_featTracker->m_activeList);
 	while (walk.IsValid()) 
 	{
-		Feat * feat = walk.GetObj();
+		Feat *	feat	= walk.GetObj();
 		PUSHLONG(feat->GetType());
 		PUSHLONG(feat->GetPlayer());
 		PUSHLONG(feat->GetRound());
@@ -134,9 +136,9 @@ void NetFeatTracker::Packetize(uint8 * buf, uint16 & size)
 //
 // Description: Retrieve the data from a received application data packet.
 //
-// Parameters : id          : TODO (sender identification?)
-//              buf         : buffer with received message
-//              size        : length of received message (in bytes)
+// Parameters : id			: TODO (sender identification?)
+//				buf			: buffer with received message
+//				size		: length of received message (in bytes)
 //
 // Globals    : -
 //
@@ -145,6 +147,7 @@ void NetFeatTracker::Packetize(uint8 * buf, uint16 & size)
 // Remark(s)  : TODO: make useful code
 //
 //----------------------------------------------------------------------------
+
 void NetFeatTracker::Unpacketize(uint16 id, uint8 * buf, uint16 size)
 {
 	sint32 pos = 0;	// required for the PULL macros

@@ -36,7 +36,7 @@
 #include "Unit.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "Gold.h"
+#include "gold.h"
 #include "TurnCnt.h"
 #include "UnitRecord.h"
 #include "wonderutil.h"
@@ -138,14 +138,14 @@ void Strengths::Calculate()
 	}
 }
 
-sint32 Strengths::GetStrength(STRENGTH_CAT category) const
+sint32 Strengths::GetStrength(STRENGTH_CAT category)
 {
 	return m_strengthRecords[category].Num() 
 		   ? m_strengthRecords[category].GetLast()
 		   : 0;
 }
 
-sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
+sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) 
 {
 	if (!m_strengthRecords[category].Num()) return 0;
 	
@@ -158,7 +158,7 @@ sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
 	return m_strengthRecords[category][turn];
 }
 
-sint32 Strengths::GetTotalUnitCost() const
+sint32 Strengths::GetTotalUnitCost()
 {
 	sint32 i;
 	sint32 c = 0;
@@ -169,7 +169,7 @@ sint32 Strengths::GetTotalUnitCost() const
 	return c;
 }
 
-sint32 Strengths::GetTotalBuildingCost() const
+sint32 Strengths::GetTotalBuildingCost()
 {
 	sint32 i, j;
 	sint32 c = 0;
@@ -185,7 +185,7 @@ sint32 Strengths::GetTotalBuildingCost() const
 	return c;
 }
 
-sint32 Strengths::GetTotalWonderCost() const
+sint32 Strengths::GetTotalWonderCost()
 {
 	sint32 i;
 	sint32 c = 0;
@@ -197,7 +197,7 @@ sint32 Strengths::GetTotalWonderCost() const
 	return c;
 }
 
-sint32 Strengths::GetTotalProduction() const
+sint32 Strengths::GetTotalProduction()
 {
 	sint32 i;
 	sint32 c = 0;

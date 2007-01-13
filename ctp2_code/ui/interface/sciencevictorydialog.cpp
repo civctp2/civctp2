@@ -1,34 +1,14 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface screen
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Standardized code (May 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 #include "c3.h"
+
+
 #include "sciencevictorydialog.h"
 
 
@@ -37,7 +17,7 @@
 #include "c3ui.h"
 #include "citydata.h"
 #include "civarchive.h"
-#include "colorset.h"           // g_colorSet
+#include "colorset.h"
 #include "ctp2_button.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
@@ -45,7 +25,6 @@
 #include "ctp2_Window.h"
 #include "EditQueue.h"
 #include "gaiacontroller.h"
-#include "Globals.h"            // k_GAME_OBJ_TYPE_IMPROVEMENT
 #include "installation.h"
 #include "player.h"
 #include "radarmap.h"
@@ -57,6 +36,8 @@
 
 
 extern C3UI		*g_c3ui;
+extern ColorSet	*g_colorSet;
+
 
 ScienceVictoryDialog *g_scienceVictoryDialog = NULL;
 
@@ -107,7 +88,6 @@ m_window(static_cast<ctp2_Window*>(
 		 aui_Ldl::BuildHierarchyFromRoot("ScienceVictoryDialog"))),
 m_switch(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch"))),
-m_switchState(-1),
 m_startButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch.Construction.Start"))),
 m_map(static_cast<RadarMap*>(aui_Ldl::GetObject(
@@ -134,10 +114,13 @@ m_statusText(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch.Status.Text"))),
 m_statusBar(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.Switch.Status.Bar"))),
+
+
 m_buildQueueButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"ScienceVictoryDialog.BuildQueueButton"))),
 m_closeButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
-	"ScienceVictoryDialog.CloseButton")))
+	"ScienceVictoryDialog.CloseButton"))),
+m_switchState(-1)	
 {
 	g_c3ui->AddWindow(m_window);
 
@@ -614,8 +597,8 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
 
 	
-	sint32 cityIndex;
-	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
+	
+	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 		
 		Unit city = cityList->Get(cityIndex);
 

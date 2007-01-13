@@ -40,17 +40,7 @@ public:
 	
 	
 	void ResetArmyText(const Army &army);
-
-	bool IsArmyNameOn(void) { return m_armyNameOn; }
-
-	void ArmyNameOn(void);
-	void ArmyNameOff(void);
-
 	
-	bool AddNameToArmy(const Army &army, const MBCHAR *name, const uint8 &colorMagnitude);
-	
-	
-	void ResetArmyName(const Army &army);	
 	
 	
 	
@@ -77,7 +67,6 @@ private:
 
 	uint32					m_armyTextOn:1,
 							m_cellTextOn:1,
-							m_armyNameOn:1,
 							fill:30;
 
 	AvlTree<CellText *>		*m_cellAVL;

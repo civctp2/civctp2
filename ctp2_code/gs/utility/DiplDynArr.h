@@ -1,6 +1,18 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef __DIPLOMATICREQUEST_DYNAMIC_ARRAY_H__
 #define __DIPLOMATICREQUEST_DYNAMIC_ARRAY_H__
 

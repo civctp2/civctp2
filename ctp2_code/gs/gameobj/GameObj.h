@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Game object
+// Description  : 
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -18,31 +18,25 @@
 //
 // Compiler flags
 //
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - #pragma once commented out.
-// - Corrected return types
 //
 //----------------------------------------------------------------------------
-
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER >= 1000)
 #pragma once
 #endif
 #ifndef __GAME_OBJ_H__
 #define __GAME_OBJ_H__ 1
 
-class GAMEOBJ;
-typedef class GAMEOBJ GameObj; 
-
-class CivArchive;
+class CivArchive ;
 
 #define k_GAMEOBJ_VERSION_MAJOR	0									
 #define k_GAMEOBJ_VERSION_MINOR	0									
 
+typedef class GAMEOBJ GameObj; 
 
 class GAMEOBJ { 
 
@@ -53,7 +47,7 @@ public:
 	uint32 m_id; 
 	uint8 m_isFromPool; 
 
-	GAMEOBJ(uint32 h); 
+	GAMEOBJ(const uint32 h); 
 	virtual ~GAMEOBJ();
 	void operator delete(void *ptr);
 	void operator delete(void *ptr, size_t size);
@@ -63,19 +57,19 @@ public:
 
 	friend GameObj * GameObj_Access(GameObj *p, const uint32 i);
 	friend const GameObj *GameObj_Get(GameObj *p, const uint32 i);
-	friend bool GameObj_Valid(GameObj *p, uint32 id);
+	friend const sint32 GameObj_Valid(GameObj *p, const uint32 id);
    
 	friend void GameObj_Insert(GameObj **p, GameObj *ins);
-	friend void GameObj_Delete(GameObj **p, uint32 i);
+	friend sint32 GameObj_Delete(GameObj **p, const uint32 i);
 }; 
 
 
 uint32 GameObj_GameObj_GetVersion(void) ;
 GameObj * GameObj_Access(GameObj *p, const uint32 i);
 const GameObj * GameObj_Get(GameObj *p, const uint32 i);
-bool GameObj_Valid(GameObj *p, uint32 id);
+const sint32 GameObj_Valid(GameObj *p, const uint32 id);
 void GameObj_Insert(GameObj **p, GameObj *ins);
-void GameObj_Delete(GameObj **p, uint32 i);
+sint32 GameObj_Delete(GameObj **p, const uint32 i);
 void GameObj_Slurp(CivArchive &archive, GameObj *p) ;
 
 #endif

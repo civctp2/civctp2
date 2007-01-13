@@ -1,51 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Good sprite handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Fixed memory leaks.
-//
-//----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+
+
+
+
+
+
+
+
+
+
+ 
+
+
 #pragma once
-#endif
+#ifndef __GOODSPRITEGROUP_H__
+#define __GOODSPRITEGROUP_H__
 
-#ifndef GOODSPRITEGROUP_H__
-#define GOODSPRITEGROUP_H__
+#include "FacedSprite.h"
+#include "SpriteGroup.h"
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
-
-#include "windows.h"          // POINT
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class GoodSpriteGroup;
+#define k_NOT_GOOD		-1
 
 enum GOODACTION {
 	GOODACTION_NONE = -1,
@@ -55,49 +29,57 @@ enum GOODACTION {
 	GOODACTION_MAX
 };
 
-#define k_NOT_GOOD		-1
-
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
-
-#include "ctp2_inttypes.h"    // sint32, uint16
-#include "pixeltypes.h"		// Pixel16
-#include "SpriteGroup.h"	// SpriteGroup, GROUPTYPE
-
 class aui_Surface;
+class aui_DirectSurface;
 
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
- 
-class GoodSpriteGroup : public SpriteGroup 
-{
+class Sprite;
+
+class Anim;
+
+class GoodSpriteGroup : public SpriteGroup {
 public:
-	GoodSpriteGroup(GROUPTYPE type) : SpriteGroup(type) {};
+	GoodSpriteGroup(GROUPTYPE type);
+	virtual ~GoodSpriteGroup();
 
-	void			DeallocateStorage(void);
-	void			DeallocateFullLoadAnims(void);
+	void			LoadBasic(char *filename);
+	void			LoadFull(char *filename);
 
-	void			LoadBasic(MBCHAR const * filename);
-	void			LoadFull(MBCHAR const * filename);
+	void			Save(char *filename,unsigned version_id,unsigned compression_mode);
 
-	void			Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode);
-
-	void			ExportScript(MBCHAR const * name);
+	void			ExportScript(MBCHAR *name);
 
 	void			Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	void			DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
 
-	void			DrawText(sint32 x, sint32 y, MBCHAR const * s);
+	void			DrawText(sint32 x, sint32 y, char *s);
 
+	void			RunBenchmark(aui_Surface *surf);
+
+
+
+
+
+
+
+
+
+
+ 
 	POINT			GetHotPoint(GOODACTION action);
 
 
  
+	
 	sint32			Parse(uint16 id,GROUPTYPE group);
+
+private:
+
+
+
+
+
 };
 
 

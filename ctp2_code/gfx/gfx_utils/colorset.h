@@ -16,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,27 +24,15 @@
 // - Added new colors above player 15 by Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 #ifndef __COLORSET_H__
 #define __COLORSET_H__
 
-//----------------------------------------------------------------------------
-// Library dependencies
-//----------------------------------------------------------------------------
+#include "pixeltypes.h"
 
-#include <vector>      
-
-//----------------------------------------------------------------------------
-// Export overview
-//----------------------------------------------------------------------------
-
-class ColorSet;
-
-#define k_MAX_COLOR_SET     100     // File name: Colors##.txt (00 - 99)
+#define k_MAX_COLOR_SET			100
 
 enum COLOR {
 	COLOR_BLACK,
@@ -79,7 +65,8 @@ enum COLOR {
 	COLOR_PLAYER16,
 	COLOR_PLAYER17,
 
-	// Added by Martin Gühmann to support more players with colors
+	//Added by Martin Gühmann to support 
+	//more players with colors
 	COLOR_PLAYER18,
 	COLOR_PLAYER19,
 	COLOR_PLAYER20,
@@ -136,44 +123,31 @@ enum COLOR {
 	COLOR_MAX
 };
 
-extern ColorSet *	g_colorSet;
-
-//----------------------------------------------------------------------------
-// Project dependencies
-//----------------------------------------------------------------------------
-
-#include "pixeltypes.h" // Pixel16
-
-//----------------------------------------------------------------------------
-// Class declarations
-//----------------------------------------------------------------------------
-
 class ColorSet
 {
 public:
-	ColorSet();
-	virtual ~ColorSet(void);
+				ColorSet();
+				~ColorSet();
 
+	void		Import(uint32 which);
 
-	Pixel16		GetColor(COLOR color) const;
-	COLORREF	GetColorRef(COLOR color) const;
-	Pixel16		GetPlayerColor(sint32 playerNum) const;
-	COLOR		ComputePlayerColor(sint32 playerNum) const;
+	static void	Initialize(void);
 
-	Pixel16		GetDarkColor(COLOR color) const;
-	Pixel16		GetDarkPlayerColor(sint32 playerNum) const;
-	COLORREF	GetDarkColorRef(COLOR color) const;
-	Pixel16		GetLightColor(COLOR color) const;
-	Pixel16		GetLightPlayerColor(sint32 playerNum) const;
-	COLORREF	GetLightColorRef(COLOR color) const;
+	Pixel16		GetColor(COLOR color);
+	COLORREF	GetColorRef(COLOR color);
+	Pixel16		GetPlayerColor(sint32 playerNum);
+	COLOR		ComputePlayerColor(sint32 playerNum);
 
-	static void	Initialize(uint32 fileNumber = 0);
-    static void Cleanup(void);
+	Pixel16		GetDarkColor(COLOR color);
+	Pixel16		GetDarkPlayerColor(sint32 playerNum);
+	COLORREF	GetDarkColorRef(COLOR color);
+	Pixel16		GetLightColor(COLOR color);
+	Pixel16		GetLightPlayerColor(sint32 playerNum);
+	COLORREF	GetLightColorRef(COLOR color);
 
 private:
-    void        Import(uint32 fileNumber = 0);
-
-	std::vector<Pixel16>    m_colors;
+	uint32		m_numColors;
+	Pixel16		m_colors[k_MAX_COLOR_SET];
 };
 
 #endif

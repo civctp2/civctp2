@@ -1,45 +1,34 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Proposal response event handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
+
+#include "c3math.h"
+
+#include "ProposalAnalysis.h"
+
 #include "ProposalResponseEvent.h"
 
-#include <algorithm>            // std::max, std::min
-#include "ProposalAnalysis.h"
 #include "Events.h"
 #include "GameEventUser.h"
 #include "Unit.h"
 #include "UnitData.h"
 #include "StrDB.h"
 #include "GameEventManager.h"
+
 #include "aicause.h"
+
 #include "Diplomat.h"
 #include "mapanalysis.h"
 #include "AgreementMatrix.h"
@@ -168,7 +157,7 @@ STDEHANDLER(Accept_ProposalResponseEvent)
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & proposal = sender_diplomat.GetMyLastNewProposal(receiver);
-//	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
+	const Response & receiver_response = receiver_diplomat.GetMyLastResponse(sender);
 
 	sint32 accept_priority =
 		receiver_diplomat.GetAcceptPriority( sender, proposal.detail.first_type);
@@ -278,10 +267,10 @@ STDEHANDLER(PayTribute_ProposalResponseEvent)
 		MapAnalysis::GetMapAnalysis().TotalThreat(receiver) < 1.25)
 		return GEV_HD_Continue;
 
-	double const	extort_gold_precise = 0.85 * 
-		std::min<sint32>(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold());
+	sint32 extort_gold = 
+		MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
 
-	sint32 extort_gold = ProposalAnalysis::RoundGold(static_cast<sint32>(extort_gold_precise));
+	extort_gold = ProposalAnalysis::RoundGold(extort_gold);
 	if (extort_gold <= 0)
 	{
 		return GEV_HD_Continue;
@@ -385,21 +374,20 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 	
 
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
-	double desired_gold_precise = 0;
+	sint32 desired_gold = 0;
 
 	
 	if (regard >= NEUTRAL_REGARD)
-		desired_gold_precise = proposal_sender_result.science * 1.5;
+		desired_gold = proposal_sender_result.science * 1.5;
 	else if (regard >= FRIEND_REGARD)
-		desired_gold_precise = proposal_sender_result.science * 1.0;
+		desired_gold = proposal_sender_result.science * 1.0;
 	else if (regard >= ALLIED_REGARD)
-		desired_gold_precise = proposal_sender_result.science * 0.8;
+		desired_gold = proposal_sender_result.science * 0.8;
 	else 
 		return GEV_HD_Continue;
 	
 	
-	sint32 const desired_gold = ProposalAnalysis::RoundGold
-									(static_cast<sint32>(desired_gold_precise));
+	desired_gold = ProposalAnalysis::RoundGold(desired_gold);
 	if (desired_gold <= 0)
 		return GEV_HD_Continue;
 	
@@ -482,9 +470,9 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 	if (regard >= NEUTRAL_REGARD)
 		max_cost  = proposal_sender_result.science * 0.8;
 	else if (regard >= FRIEND_REGARD)
-		max_cost = proposal_sender_result.science;
+		max_cost = proposal_sender_result.science * 1.0;
 	else if (regard >= ALLIED_REGARD)
-		max_cost = proposal_sender_result.science * 3;
+		max_cost = proposal_sender_result.science * 3.0;
 	else 
 		return GEV_HD_Continue;
 
@@ -494,13 +482,13 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 	{
 		
 		min_cost = proposal_sender_result.science * 0.5;
-        max_cost = std::min(max_cost, proposal_sender_result.science * 3);
+		max_cost = MIN(max_cost, proposal_sender_result.science * 3.0);
 	}
 	else
 	{
 		
 		min_cost = proposal_sender_result.science * 0.8;
-		max_cost = std::min(max_cost, proposal_sender_result.science * 2);
+		max_cost = MIN(max_cost, proposal_sender_result.science * 2.0);
 	}
 	sint32 desired_advance = receiver_diplomat.GetDesiredAdvanceFrom(sender, min_cost, max_cost);
 	
@@ -824,8 +812,8 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	sint32 accept_priority =
 		receiver_diplomat.GetAcceptPriority( sender, sender_proposal.detail.first_type);
 
-//	sint32 reject_priority =
-//		receiver_diplomat.GetRejectPriority( sender, sender_proposal.detail.first_type);
+	sint32 reject_priority =
+		receiver_diplomat.GetRejectPriority( sender, sender_proposal.detail.first_type);
 
 	
 	if (accept_priority <= 0)
@@ -986,7 +974,7 @@ STDEHANDLER(CeasefireForGold_ProposalResponseEvent)
 
 	
 	sint32 extort_gold = 
-        std::min(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
+		MIN(3 * g_player[receiver]->m_gold->GetIncome(), g_player[receiver]->GetGold()) * 0.85;
 
 	
 	if (sender_proposal.detail.first_arg.gold > extort_gold)
@@ -1388,7 +1376,7 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 		receiver_diplomat.GetRejectPriority( sender, sender_proposal.detail.first_type);
 
 	
-	if (foreigner == PLAYER_INDEX_VANDALS ||
+	if (foreigner == NULL ||
 		AgreementMatrix::s_agreements.HasAgreement(receiver, foreigner, PROPOSAL_TREATY_DECLARE_WAR))
 	{
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_ACCEPT, accept_priority);
@@ -1404,9 +1392,8 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 	}
 
 	DIPLOMATIC_STRENGTH sender_strength = 
-        std::max(g_player[sender]->GetRelativeStrength(foreigner),
-			     g_player[sender]->GetRelativeStrength(receiver)
-                );
+		MAX(g_player[sender]->GetRelativeStrength(foreigner),
+			g_player[sender]->GetRelativeStrength(receiver));
 
 	
 	if (sender_strength > DIPLOMATIC_STRENGTH_VERY_STRONG)
@@ -1416,7 +1403,7 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 	}
 
 	DIPLOMATIC_STRENGTH foreigner_strength = 
-        foreigner_ptr->GetRelativeStrength(sender);
+		g_player[foreigner]->GetRelativeStrength(sender);
 
 	
 	if (foreigner_strength > DIPLOMATIC_STRENGTH_VERY_STRONG)
@@ -1504,7 +1491,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 
 	
 	sint32 receiver_promised_pollution = receiver_agreement.proposal.first_arg.pollution;
-//	double receiver_pollution_ratio = (double) receiver_pollution / receiver_promised_pollution;
+	double receiver_pollution_ratio = (double) receiver_pollution / receiver_promised_pollution;
 	sint32 requested_pollution = sender_proposal.detail.first_arg.pollution;
 
 	
@@ -1578,7 +1565,7 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 	else if ((receiver_pollution / sender_pollution) < 1.0)
 	{
 		DiplomacyArg arg;
-		double percent = 0.0;
+		double percent;
 		DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
 		
 		if (receiver_diplomat.GetPersonality()->GetDiscoveryEcotopian())

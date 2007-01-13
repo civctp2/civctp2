@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : General text handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,15 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Unload font when something fails.
-// - Added left, center and right to textblttype. (Aug 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,26 +39,25 @@ extern StringDB	*g_theStringDB;
 
 
 
-aui_TextBase::aui_TextBase
-(
-	MBCHAR *        ldlBlock,
-	const MBCHAR *  text 
-)
+aui_TextBase::aui_TextBase(
+	MBCHAR *ldlBlock,
+	const MBCHAR *text )
 {
-	InitCommonLdl(ldlBlock,	text);
+	AUI_ERRCODE errcode = InitCommonLdl(
+		ldlBlock,
+		text );
+	Assert( AUI_SUCCESS(errcode) );
+	if ( !AUI_SUCCESS(errcode) ) return;
 }
 
 
 
-aui_TextBase::aui_TextBase
-(
-	const MBCHAR *  text,
-	uint32          maxLength 
-)
+aui_TextBase::aui_TextBase(
+	const MBCHAR *text,
+	uint32 maxLength )
 {
-	InitCommon
-    (
-        text,
+	AUI_ERRCODE errcode = InitCommon(
+		text,
 		maxLength,
 		k_AUI_TEXTBASE_DEFAULT_FONTNAME,
 		k_AUI_TEXTBASE_DEFAULT_FONTSIZE,
@@ -72,15 +67,25 @@ aui_TextBase::aui_TextBase
 		k_AUI_TEXTBASE_DEFAULT_ITALIC,
 		k_AUI_TEXTBASE_DEFAULT_UNDERLINE,
 		k_AUI_TEXTBASE_DEFAULT_SHADOW,
-		k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER | k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER
-    );
+		k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |
+			k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER );
+	Assert( AUI_SUCCESS(errcode) );
+	if ( !AUI_SUCCESS(errcode) ) return;
 }
 
 
 
 AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -133,18 +138,6 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 	if ( type )
 	{
 		if ( !stricmp( type, k_AUI_TEXTBASE_LDL_FILL ) )
-			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
-				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
-		else if ( !stricmp( type, k_AUI_TEXTBASE_LDL_LEFT ) )
-			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
-				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
-		else if ( !stricmp( type, k_AUI_TEXTBASE_LDL_CENTER ) )
-			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |
-				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
-		else if ( !stricmp( type, k_AUI_TEXTBASE_LDL_RIGHT ) )
-			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTRIGHT |
-				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
-		else
 			flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
 				k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP;
 	}
@@ -285,7 +278,7 @@ aui_TextBase::~aui_TextBase()
 {
 	delete [] m_text;
 
-	if (m_textfont && g_ui)
+	if (m_textfont)
 	{
 		g_ui->UnloadBitmapFont(m_textfont);
 	}
@@ -473,8 +466,9 @@ uint32 aui_TextBase::FindNextWordBreak(
 	uint32 totalLength = 0;	
 	sint32 totalSize = 0;	
 
+	MBCHAR *token;
 	MBCHAR *word = text;
-	while (MBCHAR * token = FindNextToken( word, " \t\n", 1 ) )
+	while ( token = FindNextToken( word, " \t\n", 1 ) )
 	{
 		SIZE wordSize = { 0, 0 };				
 		sint32 wordLength = token - word + 1;	

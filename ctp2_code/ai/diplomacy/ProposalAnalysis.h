@@ -9,12 +9,14 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __PROPOSAL_ANALYSIS_H__
 #define __PROPOSAL_ANALYSIS_H__
 
+
+
+#pragma warning(disable: 4786)
 
 #include "diplomattypes.h"
 
@@ -96,4 +98,4 @@ private:
 
 };
 
-#endif // __PROPOSAL_ANALYSIS_H__
+#endif __PROPOSAL_ANALYSIS_H__

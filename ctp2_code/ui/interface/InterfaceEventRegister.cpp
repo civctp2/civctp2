@@ -8,6 +8,10 @@
 
 #include "c3.h"
 
+
+#pragma warning(disable:4786)
+
+
 #include "InterfaceEventRegister.h"
 
 

@@ -49,7 +49,7 @@ public:
 	aui_MovieFormat() {}
 	virtual ~aui_MovieFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR const *filename, aui_Movie *movie )
+	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Movie *movie )
 		{ return AUI_ERRCODE_OK; }
 };
 
@@ -61,11 +61,11 @@ public:
 	
 	aui_Movie(
 		AUI_ERRCODE *retval,
-		MBCHAR const * filename = NULL );
+		MBCHAR *filename = NULL );
 	virtual ~aui_Movie();
 
 protected:
-	AUI_ERRCODE InitCommon( MBCHAR const * filename );
+	AUI_ERRCODE InitCommon( MBCHAR *filename );
 
 public:
 	
@@ -73,7 +73,7 @@ public:
 	AUI_ERRCODE Unload( void );
 
 	
-	AUI_ERRCODE	SetFilename( MBCHAR const * filename );
+	AUI_ERRCODE	SetFilename( MBCHAR *filename );
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_filename; }
 
 	aui_Surface	*SetDestSurface( aui_Surface *surface );

@@ -22,14 +22,13 @@
 // Modifications from the original Activision code:
 //
 // - Corrected wrap detection.
-// - Improved iterator class structure.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "CityInfluenceIterator.h"
 
 #include "MapPoint.h"
+#include "CityInfluenceIterator.h"
 
 #include "CityRadius.h"
 #include "World.h"
@@ -65,60 +64,304 @@ namespace
 //----------------------------------------------------------------------------
 void ClearScratch(MapPoint const & a_Center, size_t const a_Radius)
 {
-    SquareIterator  it(a_Center, a_Radius);
+	for (size_t row = 0; row <= (2 * a_Radius); ++row) 
+	{
+		OrthogonalPoint	testXY(a_Center);
+		testXY.Move(WEST, a_Radius);
+		testXY.Move(SOUTHEAST, row);
 
-    for (it.Start(); !it.End(); it.Next())
-    {
-        g_theWorld->GetCell(it.Pos())->SetScratch(0);
+		for (size_t column = 0; column <= (2 * a_Radius); ++column) 
+		{
+			if (testXY.IsValid())
+			{
+				g_theWorld->GetCell(testXY.GetRC())->SetScratch(0);
+			}
+			testXY.Move(NORTHEAST);
+		}
 	}
 };
 
-bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint32 squaredRadius)
+}; // namespace
+
+
+CityInfluenceIterator::CityInfluenceIterator(const MapPoint &center, sint32 size)
+:	m_testXY(center),
+	m_wrappedCur(center)
 {
-	Cell *cell = g_theWorld->GetCell(curPos);
-    Assert(cell);
+	Init(center, size);
+}
 
-	if (cell->GetScratch() != 0) return false; 
+CityInfluenceIterator::CityInfluenceIterator()
+:	m_testXY(MapPoint()),
+	m_wrappedCur()
+{
+	m_intRadius = 0;
+	m_cur.Set(-1,-1);
+	m_cityId = 0;
+}
 
-	cell->SetScratch(1);
-
-	if(cell->GetOwner() >= 0 && cell->GetOwner() != player) return false; 
-	if(UnitData::GetDistance(center, curPos, 0) > squaredRadius) return false;
-
-	cell->SetOwner(player);
-
-	if(player >= 0)
-		g_network.Block(player);
-	g_network.Enqueue(cell, curPos.x, curPos.y);
-	if(player >= 0)
-		g_network.Unblock(player);
-
-	MapPoint nextPos;
-
-	bool redrawMe = false;
-
-	if(curPos.GetNeighborPosition(NORTHEAST, nextPos)) 
-		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
-			redrawMe = true;
-		}
-	if(curPos.GetNeighborPosition(SOUTHEAST, nextPos))
-		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
-			redrawMe = true;
-		}
-	if(curPos.GetNeighborPosition(SOUTHWEST, nextPos))
-		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
-			redrawMe = true;
-		}
-	if(curPos.GetNeighborPosition(NORTHWEST, nextPos))
-		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
-			redrawMe = true;
-		}
-
-	if(redrawMe) {
-		g_tiledMap->RedrawTile(&curPos);
+void CityInfluenceIterator::Init(const MapPoint &center, sint32 size)
+{
+	m_center = center;
+	if(size >= g_theCitySizeDB->NumRecords()) {
+		size = g_theCitySizeDB->NumRecords() - 1;
 	}
 
-	return true;
+	m_cur.Set(-1,-1);
+	m_cityId = g_theWorld->GetCell(center)->GetCityOwner().m_id;
+	m_intRadius = (sint16)g_theCitySizeDB->Get(size)->GetIntRadius();
+}
+
+void CityInfluenceIterator::Start()
+{
+	m_startX = m_center.x - m_intRadius;
+	m_endX = m_center.x + m_intRadius;
+	m_cur.x = m_startX;
+	m_row = 0;
+	m_cur.y = m_center.y + m_row;
+
+	m_testXY = OrthogonalPoint(m_center);
+	m_testXY.Move(WEST, m_intRadius);
+	if (m_testXY.IsValid() &&
+		(g_theWorld->GetCell(m_testXY.GetRC())->GetCityOwner().m_id == m_cityId)
+	   )
+	{
+		// Point is on the map, and has not been taken by another city.
+		m_wrappedCur = m_testXY.GetRC();
+	}
+	else
+	{
+		Next();
+	}
+}
+
+bool CityInfluenceIterator::End()
+{
+	return m_row > (2 * m_intRadius);
+}
+
+void CityInfluenceIterator::Next()
+{
+	bool	isValid	= false;
+	
+	while (!isValid && !End())  
+	{
+		m_cur.x++;
+		m_cur.y--;
+		m_testXY.Move(NORTHEAST);
+
+		if (m_cur.x > m_endX) 
+		{
+			m_row++;
+			m_cur.x = m_startX;
+			m_cur.y = m_center.y + m_row;
+			m_testXY.Move(SOUTH);
+			m_testXY.Move(SOUTHWEST, m_endX - m_startX);
+		}
+
+		isValid = m_testXY.IsValid() && 
+			      (g_theWorld->GetCell(m_testXY.GetRC())->GetCityOwner().m_id == m_cityId);
+	} 
+
+	if (isValid)
+	{
+		m_wrappedCur = m_testXY.GetRC();
+	}
+}
+
+MapPoint &CityInfluenceIterator::Pos()
+{
+	return m_wrappedCur;
+}
+
+RadiusIterator::RadiusIterator(const MapPoint &center, sint32 size)
+:	CityInfluenceIterator(center, size)
+{
+	Init(center, size, size * size);
+}
+
+RadiusIterator::RadiusIterator(const MapPoint &center, sint32 size, sint32 squaredSize)
+:	CityInfluenceIterator(center, size)
+{
+	Init(center, size, squaredSize);
+}
+
+RadiusIterator::RadiusIterator()
+:	CityInfluenceIterator()
+{
+}
+
+
+void RadiusIterator::Init(const MapPoint &center, sint32 size, sint32 squaredSize)
+{
+	m_center = center;
+	m_cur.Set(-1,-1);
+	m_cityId = g_theWorld->GetCell(center)->GetCityOwner().m_id;
+	m_intRadius = sint16(size);
+	m_squaredRadius = sint16(squaredSize);
+}
+
+void RadiusIterator::Start()
+{
+	m_startX = m_center.x - m_intRadius;
+	m_endX = m_center.x + m_intRadius;
+	m_cur.x = m_startX;
+	m_row = 0;
+	m_cur.y = m_center.y + m_row;
+	
+	m_testXY = OrthogonalPoint(m_center);
+	m_testXY.Move(WEST, m_intRadius);
+	if ( m_testXY.IsValid() &&
+		(MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius)
+	   )
+	{
+		// Point is on the map, and not too far away.
+		m_wrappedCur = m_testXY.GetRC();
+	}
+	else
+	{
+		Next();
+	}
+}
+
+void RadiusIterator::Next()
+{
+	bool	isValid	= false;
+	
+	while (!isValid && !End())  
+	{
+		m_cur.x++;
+		m_cur.y--;
+		m_testXY.Move(NORTHEAST);
+
+		if (m_cur.x > m_endX) 
+		{
+			m_row++;
+			m_cur.x = m_startX;
+			m_cur.y = m_center.y + m_row;
+			m_testXY.Move(SOUTH);
+			m_testXY.Move(SOUTHWEST, m_endX - m_startX);
+		}
+
+		isValid = m_testXY.IsValid() &&
+				  (MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius);
+	} 
+
+	if (isValid)
+	{
+		m_wrappedCur = m_testXY.GetRC();
+	}
+}
+
+SquareIterator::SquareIterator(const MapPoint &center, sint32 size)
+:	CityInfluenceIterator(center, size)
+{
+	Init(center, size);
+}
+
+SquareIterator::SquareIterator()
+:	CityInfluenceIterator()
+{
+}
+
+
+void SquareIterator::Init(const MapPoint &center, sint32 size)
+{
+	m_center = center;
+	m_cur.Set(-1,-1);
+	m_cityId = g_theWorld->GetCell(center)->GetCityOwner().m_id;
+	m_intRadius = sint16(size);
+}
+
+void SquareIterator::Start()
+{
+	m_startX = m_center.x - m_intRadius;
+	m_endX = m_center.x + m_intRadius;
+	m_cur.x = m_startX;
+	m_row = 0;
+	m_cur.y = m_center.y + m_row;
+	
+	m_testXY = OrthogonalPoint(m_center);
+	m_testXY.Move(WEST, m_intRadius);
+	if (m_testXY.IsValid())
+	{
+		// Point is on the map
+		m_wrappedCur = m_testXY.GetRC();
+	}
+	else
+	{
+		Next();
+	}
+}
+
+void SquareIterator::Next()
+{
+	bool	isValid	= false;
+	
+	while (!isValid && !End())  
+	{
+		m_cur.x++;
+		m_cur.y--;
+		m_testXY.Move(NORTHEAST);
+
+		if (m_cur.x > m_endX) 
+		{
+			m_row++;
+			m_cur.x = m_startX;
+			m_cur.y = m_center.y + m_row;
+			m_testXY.Move(SOUTH);
+			m_testXY.Move(SOUTHWEST, m_endX - m_startX);
+		}
+
+		isValid	= m_testXY.IsValid();
+	} 
+		
+	if (isValid)
+	{
+		m_wrappedCur = m_testXY.GetRC();
+	}
+}
+
+bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
+					 const CitySizeRecord *rec);
+
+
+//----------------------------------------------------------------------------
+//
+// Name       : GenerateCityInfluence
+//
+// Description: -
+//
+// Parameters : cpos				: location of city
+//				size				: size of city
+//
+// Globals    : g_theWorld
+//				g_tiledMap
+//				g_theCitySizeDB
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+void GenerateCityInfluence(const MapPoint &cpos, sint32 size)
+{
+	Assert(g_theWorld->GetCell(cpos)->HasCity());
+	Unit					city		= g_theWorld->GetCell(cpos)->GetCity();
+	CitySizeRecord const *	rec			= g_theCitySizeDB->Get(size);
+	sint32 const			intRadius	= rec->GetIntRadius();
+	ClearScratch(cpos, size);
+	g_theWorld->GetCell(cpos)->SetScratch(1);
+
+	MapPoint				cur;
+	if(cpos.GetNeighborPosition(NORTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
+	if(cpos.GetNeighborPosition(SOUTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
+	if(cpos.GetNeighborPosition(SOUTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
+	if(cpos.GetNeighborPosition(NORTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
+
+	if(g_tiledMap)
+		g_tiledMap->RedrawTile(&cpos);
 }
 
 bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
@@ -174,127 +417,8 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 	return true;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : RadiusFromIndex
-//
-// Description: Determine the city radius
-//
-// Parameters : sizeIndex   : city size index
-//
-// Globals    : g_theCitySizeDB
-//
-// Returns    : radius belonging to the give sizeIndex
-//
-// Remark(s)  : - Assumption: the city size database exists.
-//              - When the sizeIndex is larger than the number of entries in 
-//                the city size database, the maximum available entry is used.
-//              - When no valid entry is found, 0 is returned.
-//              
-//
-//----------------------------------------------------------------------------
-sint32 RadiusFromIndex(sint32 sizeIndex)
-{
-    Assert(g_theCitySizeDB && (g_theCitySizeDB->NumRecords() > 0));
+bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint32 squaredRadius);
 
-    if (sizeIndex >= g_theCitySizeDB->NumRecords())
-    {
-        sizeIndex = g_theCitySizeDB->NumRecords() - 1;
-    }
-    
-    CitySizeRecord const *  citySizeData    = g_theCitySizeDB->Get(sizeIndex);
-    
-    return citySizeData ? citySizeData->GetIntRadius() : 0;
-}
-
-}; // namespace
-
-//----------------------------------------------------------------------------
-//
-// Name       : CityInfluenceIterator::CityInfluenceIterator
-//
-// Description: Constructor
-//
-// Parameters : center			: location of city
-//				size			: size of city (as index in city size database)
-//
-// Globals    : g_theWorld
-//				g_theCitySizeDB
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-CityInfluenceIterator::CityInfluenceIterator(MapPoint const & center, sint32 size)
-:	RadiusIterator  (center, RadiusFromIndex(size)),
-    m_cityId        (g_theWorld->GetCell(center)->GetCityOwner().m_id)
-{
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : CityInfluenceIterator::IsIncluded
-//
-// Description: Determine whether the current prospect is a valid location for
-//              the iterator.
-//
-// Parameters : - 
-//				size			: size of city (as index in city size database)
-//
-// Globals    : g_theWorld
-//				g_theCitySizeDB
-//
-// Returns    : bool            : valid location
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool CityInfluenceIterator::IsIncluded()
-{
-    return (m_testXY.IsValid() &&
-		    (g_theWorld->GetCell(m_testXY.GetRC())->GetCityOwner().m_id == m_cityId)
-    	   );
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : GenerateCityInfluence
-//
-// Description: -
-//
-// Parameters : cpos				: location of city
-//				size				: size of city
-//
-// Globals    : g_theWorld
-//				g_tiledMap
-//				g_theCitySizeDB
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-void GenerateCityInfluence(const MapPoint &cpos, sint32 size)
-{
-	Assert(g_theWorld->GetCell(cpos)->HasCity());
-	Unit					city		= g_theWorld->GetCell(cpos)->GetCity();
-	sint32 const			intRadius	= RadiusFromIndex(size);
-	ClearScratch(cpos, size);
-	g_theWorld->GetCell(cpos)->SetScratch(1);
-
-	MapPoint				cur;
-    CitySizeRecord const *  rec         = g_theCitySizeDB->Get(size);
-	if(cpos.GetNeighborPosition(NORTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
-	if(cpos.GetNeighborPosition(SOUTHEAST, cur)) ExpandInfluence(city, cpos, cur, rec);
-	if(cpos.GetNeighborPosition(SOUTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
-	if(cpos.GetNeighborPosition(NORTHWEST, cur)) ExpandInfluence(city, cpos, cur, rec);
-
-	if (g_tiledMap)
-    {
-		g_tiledMap->RedrawTile(&cpos);
-    }
-}
 
 void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint32 squaredRadius)
 {
@@ -315,9 +439,51 @@ void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint
 	if(cpos.GetNeighborPosition(SOUTHWEST, cur)) ExpandBorders(cpos, cur, player, squaredRadius);
 	if(cpos.GetNeighborPosition(NORTHWEST, cur)) ExpandBorders(cpos, cur, player, squaredRadius);
 
-	if (g_tiledMap)
-    {
-	    g_tiledMap->RedrawTile(&cpos);
-    }
+	g_tiledMap->RedrawTile(&cpos);
 }
 
+bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint32 squaredRadius)
+{
+	Cell *cell = g_theWorld->GetCell(curPos);
+	if(cell->GetScratch() != 0) return false; 
+
+	cell->SetScratch(1);
+
+	if(cell->GetOwner() >= 0 && cell->GetOwner() != player) return false; 
+	if(UnitData::GetDistance(center, curPos, 0) > squaredRadius) return false;
+
+	cell->SetOwner(player);
+
+	if(player >= 0)
+		g_network.Block(player);
+	g_network.Enqueue(cell, curPos.x, curPos.y);
+	if(player >= 0)
+		g_network.Unblock(player);
+
+	MapPoint nextPos;
+
+	bool redrawMe = false;
+
+	if(curPos.GetNeighborPosition(NORTHEAST, nextPos)) 
+		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
+			redrawMe = true;
+		}
+	if(curPos.GetNeighborPosition(SOUTHEAST, nextPos))
+		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
+			redrawMe = true;
+		}
+	if(curPos.GetNeighborPosition(SOUTHWEST, nextPos))
+		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
+			redrawMe = true;
+		}
+	if(curPos.GetNeighborPosition(NORTHWEST, nextPos))
+		if(!ExpandBorders(center, nextPos, player, squaredRadius)) {
+			redrawMe = true;
+		}
+
+	if(redrawMe) {
+		g_tiledMap->RedrawTile(&curPos);
+	}
+
+	return true;
+}

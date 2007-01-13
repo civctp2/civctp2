@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface header
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -44,9 +25,9 @@ aui_Header::aui_Header(
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
+	aui_SwitchGroup( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_SwitchGroup( retval, id, ldlBlock )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -70,9 +51,9 @@ aui_Header::aui_Header(
 	sint32 width,
 	sint32 height )
 	:
+	aui_SwitchGroup( retval, id, x, y, width, height ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_SwitchGroup( retval, id, x, y, width, height )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -104,9 +85,10 @@ AUI_ERRCODE aui_Header::InitCommon( void )
 
 AUI_ERRCODE aui_Header::CreateSwitches( MBCHAR *ldlBlock )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 	
+	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -116,7 +98,7 @@ AUI_ERRCODE aui_Header::CreateSwitches( MBCHAR *ldlBlock )
 		{
 			sprintf( block, "%s.%s%d", ldlBlock, k_AUI_HEADER_LDL_SWITCH, i );
 
-            if (!aui_Ldl::GetLdl()->FindDataBlock( block ) )
+			if ( !theLdl->GetLdl()->FindDataBlock( block ) )
 				break;
 
 			aui_Switch *theSwitch = new aui_Switch(

@@ -1,41 +1,20 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Agreement data
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _DEBUG
-// - Generate debug version
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "c3errors.h"
 
-#include "Globals.h"
+#include "globals.h"
 #include "player.h"
 #include "Unit.h"
-#include "Gold.h"
+#include "gold.h"
 #include "Advances.h"
 #include "AgreementData.h"
 #include "TurnCnt.h"
@@ -55,7 +34,7 @@
 
 #include "network.h"
 
-#include "AICause.h"
+#include "aicause.h"
 #include "AgreementPool.h"
 
 extern	Player	**g_player ;
@@ -143,9 +122,9 @@ void AgreementData::Init()
 	m_agreement = AGREEMENT_TYPE_NULL;		
   
 	m_round = -1;
-    m_expires = k_EXPIRATION_NEVER;	
+    m_expires = -1;	
 	m_isBroken = FALSE;
-    m_targetCity = Unit(); 
+    m_targetCity = Unit(0); 
 }
 
 
@@ -248,7 +227,7 @@ void AgreementData::MakeAgreement(PLAYER_INDEX owner, PLAYER_INDEX recipient, AG
             g_theDiplomacyLog->LogMakeAgreement(m_owner, m_recipient, m_thirdParty,
                 m_agreement); 
         } 
-#endif // _DEBUG
+#endif _DEBUG
 
 	ENQUEUE();
 }
@@ -458,7 +437,7 @@ void AgreementData::Dump(const sint32 i)
 			break ;
 
 		case AGREEMENT_TYPE_PACT_CAPTURE_CITY :
-			sprintf(s, "%s capture city %d", s, m_targetCity.m_id) ;
+			sprintf(s, "%s capture city %d", s, m_targetCity) ;
 			break ;
 
 		case AGREEMENT_TYPE_PACT_END_POLLUTION :
@@ -526,7 +505,7 @@ void AgreementData::Dump(const sint32 i)
 
 void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpanded)
 	{
-	Civilisation	*civ = NULL;
+	Civilisation	*civ ;
 
 	if (indexId >= 2)
 		{
@@ -555,7 +534,7 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 
 		default :
 			c3errors_ErrorDialogFromDB("AGREEMENT_ERROR", "AGREEMENT_ERROR_INDEX_OUT_OF_BOUNDS") ;
-			return ;
+			break ;
 
 		}
 
@@ -840,7 +819,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 			}
 
 			pInput++ ;												
-			*pToken = 0 ;										
+			*pToken = NULL ;										
 			pToken = sToken;
 
 			
@@ -848,7 +827,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 			while (*pToken && (*pToken!='.'))						
 				*p++=*pToken++ ;
 
-			*p = 0 ;												
+			*p = NULL ;												
 			pToken++ ;												
 
 			
@@ -858,7 +837,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 				while (*pToken && (*pToken!='.'))					
 					*p++=*pToken++ ;
 
-				*p = 0 ;											
+				*p = NULL ;											
 				if (!pToken) {										
 					c3errors_ErrorDialog("error", "malformed class string") ;
 					strcpy(sInterpreted, msg);
@@ -868,7 +847,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 				pToken++ ;											
 				}
 			else
-				sNum[0] = 0 ;
+				sNum[0] = NULL ;
 
 			
 			strcpy(sMember, pToken) ;								
@@ -961,7 +940,7 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 
 		}
 
-	*pOutput = 0 ;												
+	*pOutput = NULL ;												
 	}
 
 
@@ -1417,7 +1396,7 @@ void AgreementData::Break()
             g_theDiplomacyLog->LogBrokenAgreement(m_owner, m_recipient, m_thirdParty,
                 m_agreement); 
         } 
-#endif // _DEBUG
+#endif _DEBUG
 
 } 
 
@@ -1426,8 +1405,8 @@ void AgreementData::BeginTurnRecipient()
 	
 	return;
 
-#if 0   // Unreachable
-    if(!g_player[m_owner] || g_player[m_owner]->m_isDead)
+	
+	if(!g_player[m_owner] || g_player[m_owner]->m_isDead)
 		return;
 
 	switch(m_agreement) {
@@ -1479,7 +1458,7 @@ void AgreementData::BeginTurnRecipient()
 			}
 			break;
 		}
-
+#if 0
 		case AGREEMENT_TYPE_PACT_CAPTURE_CITY:
 		{
 			if(g_player[m_recipient]) {
@@ -1492,8 +1471,8 @@ void AgreementData::BeginTurnRecipient()
 			}
 			break;
 		}
-
-        case AGREEMENT_TYPE_PACT_END_POLLUTION:
+#endif
+		case AGREEMENT_TYPE_PACT_END_POLLUTION:
 		{
 			if(g_player[m_recipient]) {
 				sint32 now = g_turn->GetRound();
@@ -1538,7 +1517,6 @@ void AgreementData::BeginTurnRecipient()
 			
 			return;
 	}
-#endif
 }
 
 

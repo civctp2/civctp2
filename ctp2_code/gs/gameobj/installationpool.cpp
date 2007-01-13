@@ -14,7 +14,7 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "civarchive.h"
-#include "Globals.h"
+#include "globals.h"
 
 
 InstallationPool::InstallationPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_INSTALLATION)

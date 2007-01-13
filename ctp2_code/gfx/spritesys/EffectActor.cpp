@@ -1,35 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Effect actor
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Removed some unused local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 #include "c3.h"
-#include "EffectActor.h"
 
 #include "aui.h"
 #include "pixelutils.h"
@@ -42,6 +24,7 @@
 #include "SpriteGroupList.h"
 #include "tiledmap.h"
 #include "Anim.h"
+#include "EffectActor.h"
 #include "Action.h"
 #include "director.h"
 #include "colorset.h"
@@ -49,59 +32,68 @@
 
 #define k_doInvisible FALSE
 
+extern ColorSet			*g_colorSet;
 extern SpriteGroupList	*g_effectSpriteGroupList;
 extern TiledMap			*g_tiledMap;
 extern Director			*g_director;
 
-EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
-: 
-    Actor                       (ss),
-    m_pos                       (pos),
-    m_savePos                   (),
-    m_shX                       (0), 
-    m_shY                       (0), 
-    m_effectSpriteGroup         (NULL),
-    m_facing                    (0),
-    m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
-    m_frame                     (0),
-//    m_transparency;
-    m_curAction                 (NULL),
-    m_curEffectAction           (EFFECTACTION_NONE),
-    m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
-//    m_playerNum;
-    m_effectVisibility          (0), 
-//    m_effectSaveVisibility; 
-    m_dieAtTick                 (0),
-//    m_directionalAttack; 
-    m_needsToDie                (false), 
-    m_killNow                   (false), 
-    m_generateDeath             (false),
-    m_bVisSpecial               (false) 
+EffectActor::EffectActor(SpriteState *ss, const MapPoint &pos)
+: Actor(ss)
 {
-    if (ss && g_effectSpriteGroupList)
-    {
-	    m_effectSpriteGroup = (EffectSpriteGroup *)
-            g_effectSpriteGroupList->GetSprite
-                (ss->GetIndex(), GROUPTYPE_EFFECT, LOADTYPE_FULL,(GAME_ACTION) 0);
-    }
+	GROUPTYPE		type;
+	RECT			tmpRect = {0, 0, 10, 16};
+
+	
+	m_effectVisibility = NULL;
+	m_bVisSpecial = FALSE;
+	m_spriteState = ss;
+	m_curEffectAction = EFFECTACTION_NONE;
+	m_curAction = NULL;
+	m_animPos = 0;
+	m_needsToDie = FALSE;
+	m_dieAtTick = 0;
+	m_killNow = FALSE;
+	m_generateDeath = FALSE;
+
+	type = GROUPTYPE_EFFECT;
+
+	m_effectSpriteGroup = (EffectSpriteGroup *)g_effectSpriteGroupList->GetSprite(ss->GetIndex(), type, LOADTYPE_FULL,(GAME_ACTION)0);
+
+	m_pos = pos;
+	
+	m_savePos.x = m_savePos.y = 0;
+
+	m_shX = m_x = 0;
+	m_shY = m_y = 0;
+
+	m_facing = 0;
+	m_frame = 0;
+	m_lastMoveFacing = k_DEFAULTSPRITEFACING;
+
+	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
+
 }
 
 
 EffectActor::~EffectActor()
 {
-    if (g_effectSpriteGroupList && m_spriteState)
-    {
-	    g_effectSpriteGroupList->ReleaseSprite(m_spriteState->GetIndex(), LOADTYPE_FULL);
-    }
+	g_effectSpriteGroupList->ReleaseSprite(m_spriteState->GetIndex(), LOADTYPE_FULL);
 
-    /// @todo Check moving m_spriteState delete to Actor
-	delete m_spriteState;
-	m_spriteState = NULL;
+	if(m_spriteState) {
+		delete m_spriteState;
+		m_spriteState = NULL;
+	}
+
+	m_actionQueue.Deallocate();
+
 }
 
 void EffectActor::ChangeType(SpriteState *ss, sint32 type,  Unit id)
 {
-	delete m_spriteState;
+	
+	if(m_spriteState)
+		delete m_spriteState;
+
 	m_spriteState = ss;
 
 	
@@ -258,10 +250,13 @@ void EffectActor::GetNextAction(BOOL isVisible)
 {
 	uint32 numItems = GetActionQueueNumItems();
 
-	delete m_curAction;
-	m_curAction = NULL;
+	if (m_curAction) {
 
-//	Action *pendingAction = LookAtNextAction(); // Not used
+		delete m_curAction;
+		m_curAction = NULL;
+	}
+
+		Action *pendingAction = LookAtNextAction();
 		
 		
 	if (numItems > 0) 
@@ -326,7 +321,7 @@ void EffectActor::AddAction(Action *actionObj)
 
 }
 
-Anim *EffectActor::CreateAnim(EFFECTACTION action)
+Anim *EffectActor::GetAnim(EFFECTACTION action)
 {
 	Assert(m_effectSpriteGroup != NULL);
 	if (m_effectSpriteGroup == NULL) return NULL;
@@ -336,21 +331,28 @@ Anim *EffectActor::CreateAnim(EFFECTACTION action)
 	if (origAnim == NULL) 
 	{
 		
-//		origAnim = m_effectSpriteGroup->GetAnim((GAME_ACTION)EFFECTACTION_PLAY);
+		origAnim = m_effectSpriteGroup->GetAnim((GAME_ACTION)EFFECTACTION_PLAY);
 
 		return NULL;
 	}
 
-	return new Anim(*origAnim);
+	Anim	*anim = new Anim();
+	*anim = *origAnim;
+	anim->SetSpecialCopyDelete(ANIMXEROX_COPY);
+
+	return anim;
 }
 
 void EffectActor::Draw(void)
 {
-	uint16			flags   = k_DRAWFLAGS_NORMAL;;
-	Pixel16			color   = 0x0000;
+	uint16			flags;
+	Pixel16			color;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
+	flags = k_DRAWFLAGS_NORMAL;
+	color = 0x0000;
+	
 	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset, 
 								m_shX+xoffset, m_shY+yoffset, m_facing, 
 								g_tiledMap->GetScale(), m_transparency, color, flags,
@@ -359,8 +361,9 @@ void EffectActor::Draw(void)
 
 void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 {
-	uint16			flags   = k_DRAWFLAGS_NORMAL;
-	Pixel16			color   = 0;
+	uint16			flags = k_DRAWFLAGS_NORMAL;
+	Pixel16			color=0;
+	BOOL			directionAttack = FALSE;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
@@ -383,6 +386,7 @@ void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 void EffectActor::DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uint16 flags)
 {
 	Pixel16			color=0;
+	BOOL			directionAttack = FALSE;
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
@@ -432,9 +436,9 @@ uint16 EffectActor::GetHeight(void)
 	Assert(m_effectSpriteGroup != NULL);
 	if (m_effectSpriteGroup == NULL) return 0;
 
-	Sprite *    theSprite = 
-        m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
+	Sprite	*theSprite;
 
+	theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
 	if (theSprite != NULL) {
 		return theSprite->GetHeight();
 	} else {

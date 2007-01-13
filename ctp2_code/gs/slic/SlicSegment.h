@@ -1,49 +1,21 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Slic segment handling
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Cleanup added
-//
-//----------------------------------------------------------------------------
-
 #ifndef __SLIC_SEGMENT_H__
 #define __SLIC_SEGMENT_H__
+
+enum SLIC_RT;
 
 #include "slicif.h"
 #include "StringHash.h"
 #include "GameEventHook.h"
 #include "GameEventHook.h"
-#include "SlicError.h"
-#include "SlicFunc.h"
 #include "gstypes.h"
 
 class SlicSegment;
 class SlicStack;
+enum SS_TYPE;
 class CivArchive;
 class SlicSymbolData;
 class SlicObject;
+enum SFN_ERROR;
 class SlicArgList;
 class SlicConditional;
 class SlicUITrigger;
@@ -103,8 +75,7 @@ public:
 
 	void *operator new(size_t size);
 	void operator delete(void *ptr);
-
-    void SetPoolIndex(int index) { m_poolIndex = index; }
+	void SetPoolIndex(int index) { m_poolIndex = index; }
 	int GetPoolIndex() const { return m_poolIndex; }
 
 	const char* GetName() const { return m_id; }
@@ -148,8 +119,6 @@ public:
 	void RemoveConditional(sint32 line);
 	SlicConditional *GetConditional(sint32 line);
 	SlicConditional *NewConditional(sint32 line, const char *expression);
-
-    static void Cleanup(void);
 };
 
 class SlicSegmentHash : public StringHash<SlicSegment>
@@ -167,7 +136,9 @@ public:
 		m_nextSegment = 0;
 	}
 	~SlicSegmentHash() {
-		delete [] m_segments;
+		if(m_segments) {
+			delete [] m_segments;
+		}
 	}
 
 	void SetSize(sint32 size);

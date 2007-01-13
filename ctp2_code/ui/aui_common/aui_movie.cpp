@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Activision User Interface movie window
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 #include "aui_ui.h"
@@ -45,7 +26,7 @@ aui_Movie *aui_Movie::m_onScreenMovie = NULL;
 
 aui_Movie::aui_Movie(
 	AUI_ERRCODE *retval,
-	MBCHAR const * filename )
+	MBCHAR *filename )
 	:
 	aui_Base()
 {
@@ -56,7 +37,7 @@ aui_Movie::aui_Movie(
 
 
 
-AUI_ERRCODE aui_Movie::InitCommon( MBCHAR const * filename )
+AUI_ERRCODE aui_Movie::InitCommon( MBCHAR *filename )
 {
 	m_format = NULL;
 	m_surface = NULL;
@@ -99,7 +80,7 @@ aui_Movie::~aui_Movie()
 
 
 
-AUI_ERRCODE aui_Movie::SetFilename( MBCHAR const *filename )
+AUI_ERRCODE aui_Movie::SetFilename( MBCHAR *filename )
 {
 	
 	Unload();
@@ -151,10 +132,9 @@ AUI_ERRCODE aui_Movie::Unload( void )
 
 aui_Surface *aui_Movie::SetDestSurface( aui_Surface *surface )
 {
-	aui_Surface *   prevSurface = m_surface;
-    m_surface   = surface;
+	aui_Surface *prevSurface = m_surface;
 
-	if (m_surface)
+	if ( m_surface = surface )
 	{
 		RECT surfRect =
 		{
@@ -387,7 +367,7 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	aui_Mouse *mouse = g_ui->TheMouse();
 	sint32 numEvents;
 	static aui_MouseEvent mouseEvents[ k_MOUSE_MAXINPUT ];
-	aui_MouseEvent *mouseState = NULL;
+	aui_MouseEvent *mouseState;
 
 	if (mouse) {
 		
@@ -475,9 +455,9 @@ AUI_ERRCODE aui_Movie::Stop( void )
 
 
 
-AUI_ERRCODE aui_Movie::Pause(void)
+AUI_ERRCODE aui_Movie::Pause( void )
 {
-	if (m_isPlaying)
+	if ( m_isPlaying && !m_isPaused )
 	{
 		m_isPaused = TRUE;
 	}
@@ -487,9 +467,9 @@ AUI_ERRCODE aui_Movie::Pause(void)
 
 
 
-AUI_ERRCODE aui_Movie::Resume(void)
+AUI_ERRCODE aui_Movie::Resume( void )
 {
-	if (m_isPlaying)
+	if ( m_isPlaying && m_isPaused )
 	{
 		m_isPaused = FALSE;
 	}

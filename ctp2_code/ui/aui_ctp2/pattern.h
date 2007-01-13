@@ -27,12 +27,12 @@ public:
 	
 	Pattern(
 		AUI_ERRCODE *retval,
-		MBCHAR const *filename,
-		MBCHAR const *lightFilename,
-		MBCHAR const *darkFilename );
+		MBCHAR *filename,
+		MBCHAR *lightFilename,
+		MBCHAR *darkFilename );
 	Pattern(
 		AUI_ERRCODE *retval,
-		MBCHAR const *filename = NULL );
+		MBCHAR *filename = NULL );
 	virtual ~Pattern();
 
 	

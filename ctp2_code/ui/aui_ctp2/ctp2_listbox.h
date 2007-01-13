@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -27,45 +30,29 @@
 //----------------------------------------------------------------------------
 
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
 #ifndef __CTP2_LISTBOX__
 #define __CTP2_LISTBOX__
 
-class ctp2_Listbox;
+#include "patternbase.h"
+#include "aui_listbox.h"
 
 #define k_CTP2_LISTBOX_LDL_BEVELWIDTH		"bevelwidth"
 #define k_CTP2_LISTBOX_LDL_BEVELTYPE		"beveltype"
 #define k_CTP2_LISTBOX_LDL_BORDER_WIDTH     "borderwidth"
 #define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT    "borderheight"
 
-#include "aui_control.h"    // ControlActionCallback
-#include "aui_listbox.h"    // aui_ListBox
-#include "auitypes.h"       // AUI_ERRCODE
-#include "c3types.h"        // MBCHAR
-#include "ctp2_inttypes.h"  // sint32, uint32
-#include "patternbase.h"    // PatternBase
-#include "windows.h"        // BOOL, POINT
-
-struct  aui_MouseEvent;
-class   aui_Surface;
-class   ctp2_ListItem;
-class   ctp2_MenuButton;
+class aui_Surface;
+class ctp2_ListItem;
+class ctp2_MenuButton;
 
 class ctp2_ListBox : public aui_ListBox, public PatternBase 
 {
 public:
-    ctp2_ListBox() 
-    : 
-        aui_ListBox     (),
-        m_bevelWidth    (0),
-        m_bevelType     (0),
-        m_menuButton    (NULL)
-        // m_borderOffset
-    {};
-
+	ctp2_ListBox() : aui_ListBox() {}
 	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, MBCHAR *ldlBlock, 
 							ControlActionCallback *ActionFunc=NULL, void *cookie=NULL );
 	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, 
@@ -85,24 +72,6 @@ public:
 	AUI_ERRCODE InitCommon(sint32 bevelWidth, sint32 bevelType );
 	AUI_ERRCODE CreateRangersAndHeader( MBCHAR *ldlBlock = NULL );
 	
-/// Clear the user data.
-/// \remarks Does not clear the list itself.
-    template <typename T> 
-    void ClearUserData(VOID_PARAMETER_FOR_TEMPLATE(T))
-    {
-        for (int i = 0; i < this->NumItems(); ++i)
-        {
-            ctp2_ListItem * item = static_cast<ctp2_ListItem *>(this->GetItemByIndex(i));
-            if (item)
-            {
-                 T * info = static_cast<T *>(item->GetUserData());
-                 delete info;
-                 item->SetUserData(NULL);
-            }
-        } // for
-    }
-
-
 	void Clear(void);
 
 	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );
@@ -128,15 +97,22 @@ public:
 	void GetDisplayRange(sint32 &top, sint32 &bottom);
 	void EnsureItemVisible(sint32 index);
 
-	static uint32		m_ctp2_listboxClassId;
-
-	friend class ctp2_Menu;
-
 protected:
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
 	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);		
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseMoveOver;
+	virtual MouseEventCallback MouseMoveInside;
+	virtual MouseEventCallback MouseMoveOutside;
+	virtual MouseEventCallback MouseMoveAway;
+
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+	virtual MouseEventCallback MouseRDragOver;
+	virtual MouseEventCallback MouseRDragAway;
+#else
 	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData);
@@ -146,7 +122,14 @@ protected:
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
+#endif
 
+public:
+	
+	
+	static uint32		m_ctp2_listboxClassId;
+
+	friend class ctp2_Menu;
 private:
 	sint32		m_bevelWidth;
 	sint32		m_bevelType;

@@ -1,17 +1,21 @@
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
 
+
+
+
+
+
+
+#pragma once
 #ifndef ___BMH_UNIT_CONTROL_PANEL_HEADER
 #define ___BMH_UNIT_CONTROL_PANEL_HEADER
 
+
 #include <utility>
-#include <vector>
 
-class UnitControlPanel;
 
-#include "Army.h"           // Army
-#include "Unit.h"           // Unit
+#include "Army.h"
+#include "Unit.h"
+
 
 class aui_Control;
 class aui_Region;
@@ -21,6 +25,7 @@ class ctp2_Static;
 class ctp2_Switch;
 class OrderRecord;
 struct aui_MouseEvent;
+class CellUnitList;
 
 #define k_MAX_CP_CARGO 5
 #define k_CP_CARGO_HEIGHT 4
@@ -195,9 +200,6 @@ private:
 	Army m_lastSelectedArmy;
 	sint32 m_lastSelectionUnit;
 	sint32 m_lastSelectedArmyCount;
-
-    std::vector<Unit>   m_cellUnitList;
-    std::vector<Army>   m_cellArmyList;
 };
 
 #endif 

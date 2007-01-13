@@ -28,7 +28,7 @@
 
 #include "c3.h"
 
-#include "Gold.h"
+#include "gold.h"
 #include "civarchive.h"
 #include "network.h"
 

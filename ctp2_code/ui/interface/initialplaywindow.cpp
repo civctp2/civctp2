@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main menu screen
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,10 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-// - Generates debug information when set.
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,7 +24,6 @@
 // - Shifted buttons from the "Single Player" subscreen into this one to
 //   simplify the interface.
 //   (JJB)
-// - Removed civilisation database refferences. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -50,6 +45,8 @@
 #include "c3_listitem.h"
 #include "c3_dropdown.h"
 #include "StrDB.h"
+#include "CivilisationDB.h"
+#include "CivilisationPool.h"
 
 #include "ctp2_button.h"
 
@@ -57,6 +54,7 @@
 #include "initialplaywindow.h"
 
 extern StringDB						*g_theStringDB;
+extern CivilisationDatabase			*g_theCivilisationDB;
 
 
 
@@ -70,21 +68,14 @@ extern StringDB						*g_theStringDB;
 InitPlayWindow::InitPlayWindow(AUI_ERRCODE *retval, uint32 id,
 		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 		: C3Window(retval,id,ldlBlock,bpp,type,bevel),
-		m_sp(NULL),
-		m_email(NULL),
-		m_hotseat(NULL),
-		m_mp(NULL),
-		m_quit(NULL),
+		m_sp(NULL), m_mp(NULL), m_load(NULL), m_continue(NULL), m_instant(NULL),
+		m_mapeditor(NULL), m_quit(NULL), m_background(NULL), m_email(NULL),
 		// Code for new buttons taken from spwindow.cpp and altered
-		m_tutorial(NULL), 
 		m_newgame(NULL), 
 		m_loadgame(NULL),
+		m_tutorial(NULL), 
 		m_options(NULL), 
-		m_load(NULL),
-		m_continue(NULL),
-		m_instant(NULL),
-		m_mapeditor(NULL),
-		m_background(NULL)
+		m_hotseat(NULL)
 {
 	ctp2_Static *testBox=new ctp2_Static(retval, aui_UniqueId(),"InitPlayWindow.TestTextBox");
 

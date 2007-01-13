@@ -1,9 +1,8 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
+// File type    : C++ source
 // Description  : Base DB Template class header
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -41,9 +38,7 @@
 //   an improvement file without sound defintions.
 // - Removed some completely unused code.
 // - Modernised some code: e.g. implemented the modified records list as a 
-//   std::vector, so we don't have to do the memory management ourselves.
-// - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
-// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
+//   std::vector, so we don't have to do the memory management ourselves. 
 //
 //----------------------------------------------------------------------------
 
@@ -51,7 +46,6 @@
 #define __CTPDATABASE_H__
 
 #include "c3files.h"
-#include "civarchive.h"
 #include <vector>
 
 class DBLexer;
@@ -71,21 +65,12 @@ class GovernmentModifiedRecordNode
 public:
 	GovernmentModifiedRecordNode
 	(
-		sint32	a_governmentModified    = -1,
-		sint32	a_modifiedRecord        = -1
-	)
-	:   m_governmentModified(a_governmentModified),
-	    m_modifiedRecord(a_modifiedRecord)
+		sint32	a_governmentModified	= -1,
+		sint32	a_modifiedRecord		= -1
+	) 
+	:	m_governmentModified(a_governmentModified),
+		m_modifiedRecord(a_modifiedRecord)
 	{ };
-	void Serialize(CivArchive &archive){
-		if(archive.IsStoring()) {
-			archive << m_governmentModified;
-			archive << m_modifiedRecord;
-	} else {
-			archive >> m_governmentModified;
-			archive >> m_modifiedRecord;
-		}
-	}
 
 	sint32 m_governmentModified;
 	sint32 m_modifiedRecord;
@@ -100,7 +85,7 @@ protected:
 	sint32 m_allocatedSize;
 
 	PointerList<GovernmentModifiedRecordNode> **m_modifiedList;
-	std::vector<T *> m_modifiedRecords;
+	std::vector<T *>	m_modifiedRecords;
 
 	void Grow();
 
@@ -111,7 +96,7 @@ public:
 	CTPDatabase();
 	virtual ~CTPDatabase();
 
-	void Serialize(CivArchive &archive);
+
 
 	sint32 Parse(DBLexer *lex);
 	sint32 Parse(const C3DIR & c3dir, const char *filename);
@@ -119,7 +104,7 @@ public:
 	
 	
 	
-	const T *Get(sint32 index)
+	inline const T *Get(sint32 index)
 	{
 		Assert(index < m_numRecords);
 		if((index < 0) || (index >= m_numRecords))
@@ -135,7 +120,7 @@ public:
 	sint32 GetName(sint32 index);
 	const char *GetNameStr(sint32 index);
 	void Add(T *obj);
-	sint32 NumRecords() const 
+	inline sint32 NumRecords() const 
 	{ 
 		return m_numRecords; 
 	}
@@ -146,10 +131,9 @@ public:
 	sint32 FindTypeIndex(const char *str) const;
 	sint32 FindRecordNameIndex(const char *str) const;
 
-	bool GetRecordFromLexer(DBLexer *lex, sint32 &index);
-	bool GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index);
-	bool ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
-	bool ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
+	bool GetRecordFromLexer(DBLexer *lex, sint32 &index, DBPARSE_ERROR &err);
+	bool ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements, DBPARSE_ERROR &err);
+	bool ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize, DBPARSE_ERROR &err);
 	bool ResolveReferences();
 };
 

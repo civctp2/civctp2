@@ -38,7 +38,7 @@
 #include "Happy.h"
 #include "UnitPool.h"       // g_theUnitPool
 #include "PlayHap.h"
-#include "player.h"         // g_player
+#include "Player.h"         // g_player
 
 
 NetHappy::NetHappy(Unit city, Happy *data, BOOL isInitial)

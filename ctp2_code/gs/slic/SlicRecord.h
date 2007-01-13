@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __SLIC_RECORD_H__
 #define __SLIC_RECORD_H__
 

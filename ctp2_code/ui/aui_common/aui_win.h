@@ -92,6 +92,40 @@ protected:
 
 	static tech_WLList<aui_Win *> *m_winList;
 
+#if defined(_MSC_VER)	
+	MouseEventCallback WinMouseMove;
+	MouseEventCallback WinMouseLDrag;
+	MouseEventCallback WinMouseRDrag;
+
+	virtual MouseEventCallback MouseMoveOver;
+	virtual MouseEventCallback MouseMoveAway;
+	virtual MouseEventCallback MouseMoveInside;
+	virtual MouseEventCallback MouseMoveOutside;
+
+	
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLDragAway;
+	virtual MouseEventCallback MouseLDragInside;
+	virtual MouseEventCallback MouseLDragOutside;
+	virtual MouseEventCallback MouseRDragOver;
+	virtual MouseEventCallback MouseRDragAway;
+	virtual MouseEventCallback MouseRDragInside;
+	virtual MouseEventCallback MouseRDragOutside;
+
+	
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseLGrabOutside;
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseLDropOutside;
+	virtual MouseEventCallback MouseRGrabInside;
+	virtual MouseEventCallback MouseRGrabOutside;
+	virtual MouseEventCallback MouseRDropInside;
+	virtual MouseEventCallback MouseRDropOutside;
+
+	
+	virtual MouseEventCallback MouseLDoubleClickInside;
+	virtual MouseEventCallback MouseRDoubleClickInside;
+#else
 	void			WinMouseMove(aui_MouseEvent * mouseData);
 	void			WinMouseLDrag(aui_MouseEvent * mouseData);
 	void			WinMouseRDrag(aui_MouseEvent * mouseData);
@@ -121,6 +155,7 @@ protected:
 
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);	
 	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);	
+#endif
 };
 
 

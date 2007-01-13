@@ -20,10 +20,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
-#pragma once
-#endif
 
+#pragma once
 #ifndef __BOUNDING_RECT_H__
 #define __BOUNDING_RECT_H__
 
@@ -137,6 +135,6 @@ private:
 	bool m_lr_y_wrap;
 };
 
-#endif // __BOUNDING_RECT_H
+#endif __BOUNDING_RECT_H
 
 

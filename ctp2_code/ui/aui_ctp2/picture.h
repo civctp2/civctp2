@@ -31,7 +31,7 @@ public:
 	
 	Picture(
 		AUI_ERRCODE *retval,
-		MBCHAR const *szFileName = NULL );
+		MBCHAR *szFileName = NULL );
 	virtual ~Picture();
 
 	

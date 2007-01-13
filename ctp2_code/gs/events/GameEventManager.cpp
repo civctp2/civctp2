@@ -5,11 +5,10 @@
 
 
 #include "c3.h"
-#include "GameEventManager.h"
-
 #include "c3errors.h"
 #include "c3debug.h"
 
+#include "GameEventManager.h"
 #include "GameEventHook.h"
 #include "GameEventDescription.h"
 #include "GameEventArgList.h"
@@ -26,7 +25,6 @@
 #include "TradeRoute.h"
 
 #include "director.h"
-#include "SelItem.h"                // g_selected_item
 
 GameEventManager *g_gevManager = NULL;
 
@@ -38,61 +36,64 @@ extern BOOL g_eventLog;
 
 void gameEventManager_Initialize()
 {
-    delete g_gevManager;
 	g_gevManager = new GameEventManager();
 }
 
 void gameEventManager_Cleanup()
 {
-	delete g_gevManager;
-	g_gevManager = NULL;
+	if(g_gevManager) {
+		delete g_gevManager;
+		g_gevManager = NULL;
+	}
 }
 
 GameEventManager::GameEventManager()
-:
-	m_eventList         (new PointerList<GameEvent>),
-#if defined(_DEBUG)
-	m_eventHistory      (),
-#endif
-    // 	GameEventHook *m_hooks[GEV_MAX];
-    m_processing        (false),
-	m_processingEvent   (GEV_MAX),
-	m_serial            (0),
-    m_needUserInput     (false),
-    m_pauseCount        (0)
 {
+	m_eventList = new PointerList<GameEvent>;
+	m_processing = false;
+	m_processingEvent = GEV_MAX;
+	m_needUserInput = false;
+	m_pauseCount = 0;
+
 #ifdef _DEBUG
-	FILE *  f = fopen(EVENTLOGNAME, "w");
+	m_eventHistory = new PointerList<GameEvent>;
+
+	
+	FILE *f = fopen(EVENTLOGNAME, "w");
 	fclose(f);
 #endif
 
-	std::fill(m_hooks, m_hooks + GEV_MAX, (GameEventHook *) NULL);
+	sint32 i;
+	for(i = 0; i < GEV_MAX; i++) {
+		
+		m_hooks[i] = NULL;
+	}
+
+	m_serial = 0;
 }
 
 GameEventManager::~GameEventManager()
 {
-	if (m_eventList) 
-    {
+	if(m_eventList) {
 		m_eventList->DeleteAll();
 		delete m_eventList;
+		m_eventList = NULL;
 	}
 
 #ifdef _DEBUG
-    for 
-    (
-        std::list<GameEvent *>::iterator    p = m_eventHistory.begin();
-        p != m_eventHistory.end();
-        ++p
-    )
-    {
-		delete *p;
+	if(m_eventHistory) {
+		m_eventHistory->DeleteAll();
+		delete m_eventHistory;
+		m_eventHistory = NULL;
 	}
-    std::list<GameEvent *>().swap(m_eventHistory);
 #endif
 
-	for (size_t i = 0; i < GEV_MAX; ++i) 
-    {
-		delete m_hooks[i];
+	sint32 i;
+	for(i = 0; i < GEV_MAX; i++) {
+		if(m_hooks[i]) {
+			delete m_hooks[i];
+			m_hooks[i] = NULL;
+		}
 	}
 }
 
@@ -104,7 +105,8 @@ GameEventManager::~GameEventManager()
 GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
 										  GAME_EVENT type, ...)
 {
-	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
+	Assert(type >= (GAME_EVENT)0);
+	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
 	
@@ -150,13 +152,15 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 												 GAME_EVENT type,
 												 GameEventArgList *argList)
 {
-	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
+	Assert(type >= (GAME_EVENT)0);
+	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
 	
 	
 	GameEvent *newEvent = new GameEvent(type, argList, m_serial++, m_processingEvent);
 
+	newEvent->SetType(type);	
 	switch(insert) {
 		case GEV_INSERT_Front:
 			m_eventList->AddHead(newEvent);
@@ -176,77 +180,90 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 	
 	g_director->IncrementPendingGameActions();
 
-	return Process();
+	
+	Process();
+
+	return GEV_ERR_OK;
 }
 
 GAME_EVENT_ERR GameEventManager::Process()
 {
-    if (m_processing)   // busy already?
-    {
-        return GEV_ERR_OK;
-    }
+	if(m_processing)
+		
+		return GEV_ERR_OK;
 
-    m_processing        = true;
-	GAME_EVENT_ERR  err = GEV_ERR_OK;
-
-    while ((GEV_ERR_OK == err) 
-            && m_eventList->GetHead()
-            && !g_slicEngine->AtBreak() 
-            && !m_needUserInput
-            && !m_pauseCount
-          )
-    {
-        err             = ProcessHead();
-    }
-	m_processing        = false;
-
-	if (GEV_ERR_NeedUserInput == err)
-    {		
-		m_needUserInput = true;
+	
+	if(!m_eventList->GetHead()) {
 		return GEV_ERR_OK;
 	}
 
+	if(g_slicEngine->AtBreak() || m_needUserInput || m_pauseCount)
+		return GEV_ERR_OK;
+
+	EVENTLOG(("\nGameEventManager::Process()\n"));
+
+	
+	m_processing = true;
+
+	GAME_EVENT_ERR err = GEV_ERR_OK;
+
+	do {
+		
+		err = ProcessHead();
+	} while(m_eventList->GetHead() && err == GEV_ERR_OK && !g_slicEngine->AtBreak() && !m_needUserInput && !m_pauseCount);
+
+	switch(err) {
+		case GEV_ERR_OK:
+			err = GEV_ERR_OK;
+			break;
+		case GEV_ERR_NeedUserInput:
+			
+			
+			err = GEV_ERR_OK;
+			m_needUserInput = true;
+			break;
+		default:
+			break;
+	}
+	m_processing = false;
 	return err;
 }
 
 GAME_EVENT_ERR GameEventManager::ProcessHead()
 {
-	GameEvent *     event   = m_eventList->GetHead();
-    
-    // Processing busy
-	m_processingEvent       = event->GetType();
+	GameEvent *event = m_eventList->GetHead();
+	BOOL complete;
 
-	EVENTLOG(("ProcessEvent: %s Serial: %d\n", 
-              g_eventDescriptions[m_processingEvent].name,
-			  event->GetSerial()
-            ));
+	EVENTLOG(("ProcessEvent: %s Serial: %d\n", g_eventDescriptions[event->GetType()].name,
+			event->GetSerial()));
 
-	GAME_EVENT_ERR  err     = event->Process();
+	
+	
+	m_processingEvent = event->GetType();
 
-    // Processing ready
-	m_processingEvent       = GEV_MAX;
+	GAME_EVENT_ERR err = event->Process(complete);
 
-	if (GEV_ERR_NeedUserInput != err) 
-    {
+	m_processingEvent = GEV_MAX;
+	if(complete) {
+
+		
 		Assert(event == m_eventList->GetHead());
 		m_eventList->RemoveHead();
 		g_director->DecrementPendingGameActions();
 
-#if defined(_DEBUG)
-        // Debug version: keep the last k_MAX_EVENT_HISTORY handled events
-        // to be able to find out how we got here.
-		m_eventHistory.push_back(event);
-		if (m_eventHistory.size() > k_MAX_EVENT_HISTORY)
-        {
-            // delete the oldest
-			delete m_eventHistory.front();
-            m_eventHistory.pop_front();
-        }
-#else
-        // Release version: delete the handled event immediately
-		delete event;
+#ifdef _DEBUG
+		m_eventHistory->AddTail(event);
+		if(m_eventHistory->GetCount() > k_MAX_EVENT_HISTORY)
+			event = m_eventHistory->RemoveHead();
+		else
+			event = NULL;
 #endif
-	} 
+		if(event)
+			delete event;
+
+	} else {
+		err = GEV_ERR_NeedUserInput;
+	}
 
 	return err;
 }
@@ -255,7 +272,8 @@ GAME_EVENT_ERR GameEventManager::AddCallback(GAME_EVENT type,
 											 GAME_EVENT_PRIORITY pri,
 											 GameEventHookCallback *cb)
 {
-	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
+	Assert(type >= (GAME_EVENT)0);
+	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
 
@@ -266,33 +284,43 @@ GAME_EVENT_ERR GameEventManager::AddCallback(GAME_EVENT type,
 	return GEV_ERR_OK;
 }
 
-void GameEventManager::RemoveCallback
-(
-    GAME_EVENT              type,
-	GameEventHookCallback * cb
-)
+GAME_EVENT_ERR GameEventManager::RemoveCallback(GAME_EVENT type,
+												GameEventHookCallback *cb)
 {
-	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
+	Assert(type >= (GAME_EVENT)0);
+	Assert(type < GEV_MAX);
+	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
+		return GEV_ERR_BadEvent;
 
-	if ((type >= (GAME_EVENT) 0) && (type < GEV_MAX) && m_hooks[type])
-    {
-		m_hooks[type]->RemoveCallback(cb);
-    }
-}
-
-GAME_EVENT_ERR GameEventManager::ActivateHook
-(
-    GAME_EVENT          type, 
-											  GameEventArgList *args,
-	sint32              startIndex,
-	sint32 &            resumeIndex
-)
-{
-	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
-	if(type < (GAME_EVENT) 0 || (type >= GEV_MAX) || !m_hooks[type])
+	if(!m_hooks[type])
 		return GEV_ERR_OK;
 
-	return m_hooks[type]->Activate(args, 0, resumeIndex);
+	m_hooks[type]->RemoveCallback(cb);
+	return GEV_ERR_OK;
+}
+
+GAME_EVENT_ERR GameEventManager::ActivateHook(GAME_EVENT type, 
+											  GameEventArgList *args,
+											  sint32 &resumeIndex)
+{
+	Assert(type < GEV_MAX);
+	if((type >= GEV_MAX) || !m_hooks[type])
+		
+		return GEV_ERR_OK;
+
+	return m_hooks[type]->Activate(args, resumeIndex);
+}
+
+GAME_EVENT_ERR GameEventManager::ResumeHook(GAME_EVENT type,
+											GameEventArgList *args,
+											sint32 startIndex,
+											sint32 &resumeIndex)
+{
+	if(!m_hooks[type])
+		
+		return GEV_ERR_OK;
+
+	return m_hooks[type]->Resume(args, startIndex, resumeIndex);
 }
 
 char *GameEventManager::ArgCharToName(char want)
@@ -338,7 +366,7 @@ GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(char arg)
 	}
 }
 
-const char *GameEventManager::GetArgString(GAME_EVENT ev) const
+const char *GameEventManager::GetArgString(GAME_EVENT ev)
 {
 	Assert(ev >= (GAME_EVENT)0);
 	Assert(ev < GEV_MAX);
@@ -361,73 +389,66 @@ BOOL GameEventManager::CheckArg(sint32 num, char got, char want)
 	return TRUE;
 }
 
-char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
+char GameEventManager::ArgChar(GAME_EVENT type, sint32 index)
 {
 	Assert(type >= (GAME_EVENT)0);
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return '\0';
 
-	size_t count = 0;
+	GameEventDescription *desc = &g_eventDescriptions[type];
+	char *argString = desc->args;
+	sint32 count = 0;
 
-	for 
-    (
-        char const * argString = g_eventDescriptions[type].args; 
-        *argString; 
-        ++argString
-    ) 
-    {
+	while(*argString) {
 		Assert(*argString == '%' || *argString == '&');
 		if(*argString != '%' && *argString != '&')
 			return '\0';
 
-		++argString;
+		argString++;
 		Assert(*argString != '\0');
 		if(*argString == '\0')
 			return '\0';
 
-		if (count == index)
+		if(count == index)
 			return *argString;
 		
-		++count;
+		argString++;
+		count++;
 	}
 
 	Assert(index > count);
 	return '\0';
 }
 
-size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
+sint32 GameEventManager::GetNumArgs(GAME_EVENT type)
 {
-    Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
-    if ((type < (GAME_EVENT) 0) || (type >= GEV_MAX))
-        return 0;
+	Assert(type >= (GAME_EVENT)0);
+	Assert(type < GEV_MAX);
+	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
+		return -1;
 
-    size_t count = 0;
+	GameEventDescription *desc = &g_eventDescriptions[type];
+	char *argString = desc->args;
+	sint32 count = 0;
 
-    for 
-    (
-        char const * argString = g_eventDescriptions[type].args; 
-        *argString; 
-        ++argString
-    )
-    {
-        Assert(*argString == '%' || *argString == '&');
-        if (*argString != '%') 
-        {
-            break;	
-        }
+	while(*argString) {
+		Assert(*argString == '%' || *argString == '&');
+		if(*argString != '%') {
+			
+			return count;
+		}
 
-        ++argString;
-        Assert(*argString != '\0');
-        if (*argString == '\0')
-        {
-            break;
-        }
+		argString++;
+		Assert(*argString != '\0');
+		if(*argString == '\0')
+			return count;
 
-        ++count;
-    }
+		argString++;
+		count++;
+	}
 
-    return count;
+	return count;
 }
 	
 	
@@ -670,7 +691,7 @@ void GameEventManager::Dump()
 }
 #endif
 
-GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name) const
+GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name)
 {
 	GAME_EVENT e;
 	for(e = (GAME_EVENT)0; e < GEV_MAX; e = GAME_EVENT(sint32(e) + 1)) {
@@ -680,7 +701,7 @@ GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name) const
 	return GEV_MAX;
 }
 
-const char *GameEventManager::GetEventName(GAME_EVENT ev) const
+const char *GameEventManager::GetEventName(GAME_EVENT ev)
 {
 	Assert(ev >= (GAME_EVENT)0);
 	Assert(ev < GEV_MAX);
@@ -691,7 +712,7 @@ const char *GameEventManager::GetEventName(GAME_EVENT ev) const
 	return g_eventDescriptions[ev].name;
 }
 
-bool GameEventManager::EventsPending() const
+bool GameEventManager::EventsPending()
 {
 	return m_eventList->GetCount() > 0;
 }

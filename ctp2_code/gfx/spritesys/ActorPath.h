@@ -9,9 +9,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __ACTORPATH_H__
 #define __ACTORPATH_H__
 
@@ -28,15 +27,16 @@ class ActorPath
 public:
 	ActorPath(uint16 numPoints);
 	ActorPath(sint32 x1, sint32 y1, sint32 x2, sint32 y2);
-	virtual ~ActorPath();
+	~ActorPath();
 
-	void    SetPos(uint16 pointNum, sint32 x, sint32 y);
 
-	void    CalcPosition(sint32 start, sint32 end, sint32 current, POINT *pos);
-	sint32  CalcFacing(sint32 start, sint32 end, sint32 current) const;
+	void SetPos(uint16 pointNum, sint32 x, sint32 y);
 
-	BOOL	Finished(void) const        { return m_finished; };
-	void	SetFinished(BOOL finished)  { m_finished = finished; };
+	void CalcPosition(sint32 start, sint32 end, sint32 current, POINT *pos);
+	void CalcFacing(sint32 start, sint32 end, sint32 current, uint16 *facing);
+
+	BOOL	Finished(void) { return m_finished; }
+	void	SetFinished(BOOL finished) { m_finished = finished; }
 
 protected:
 	uint16		m_numPoints;

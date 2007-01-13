@@ -17,6 +17,8 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -24,11 +26,10 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - #pragma once commented out.
-// - Removed compiler complaint. 
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -52,7 +53,7 @@ class aui_StringTable;
 class ResourceMap : public aui_Control, public PatternBase {
 public:
 
-	typedef BOOL (ResourceMapDrawFunc)(aui_Surface *surf, MapPoint const & pos, void *context);
+	typedef BOOL (ResourceMapDrawFunc)(aui_Surface *surf, MapPoint &pos, void *context);
 
 	
 	ResourceMap(AUI_ERRCODE *retval, 
@@ -134,7 +135,7 @@ public:
 	void		GetOwningCity(Unit &c) { c = m_unit; }
 
 protected:		
-	aui_Surface *   m_surface;
+	aui_DirectSurface *m_surface;
 
 	Unit		m_unit;
 
@@ -165,9 +166,16 @@ protected:
 	RECT        m_usedRect; 
 	
 	// Event callback handlers	
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLGrabInside;
+	virtual MouseEventCallback MouseMoveInside;
+	virtual MouseEventCallback MouseMoveAway;
+#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
+#endif
+
 };
 
 #endif

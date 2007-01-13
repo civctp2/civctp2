@@ -4,9 +4,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef ___BMH_SCIENCE_MANAGEMENT_DIALOG_HEADER
 #define ___BMH_SCIENCE_MANAGEMENT_DIALOG_HEADER
 

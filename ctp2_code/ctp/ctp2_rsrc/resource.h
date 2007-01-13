@@ -1,7 +1,7 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by civ3.rc
-//
+
+
+
+
 #define IDS_STRING1                     1
 #define IDD_SESSION_LIST_DIALOG         102
 #define IDD_SESSION_NAME_DIALOG         103
@@ -22,8 +22,8 @@
 #define IDC_BUTTON4                     1007
 #define IDC_SLIDER1                     1008
 
-// Next default values for new objects
-// 
+
+
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        148

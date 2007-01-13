@@ -3,7 +3,6 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Main string file (Spanish)
-# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -18,13 +17,13 @@
 #
 # Modifications from the original Activision code:
 #
-# - Moved build list sequence strings to gl_str.txt.
+# - Moved build list sequence strings to gl_str.txt. Has to be done when gl_str.txt is available.
 #   - April 7th 2005 Martin Gühmann
 # - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
-#
+# 
 #
 #----------------------------------------------------------------------------
 
@@ -32,7 +31,7 @@
 str_ldl_Already_Offer	"Ya estás ofreciendo esa mercancía. ¿Sustituyes la oferta anterior?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"Todos los imperios tendrán ahora que rendir homenaje al nuevo señor, [player[0].leader_name], que ha completado el Proyecto de Vida Alienígena."
+ENDGAME_WON_OTHER	"Todos los imperios tendrán ahora que rendir homenaje al nuevo señor, [player.1.leader_name], que ha completado el Proyecto de Vida Alienígena."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"."
@@ -52,10 +51,10 @@ AGE_NAME_MODERN	"Edad Moderna"
 AGE_NAME_GENETIC	"Edad Genética"
 AGE_NAME_DIAMOND	"Edad del Diamante"
 
-YOU_BROKE_ALLIANCE	"Has incumplido una alianza con los {player[0].civ_name_plural}."
-YOU_BROKE_CEASE_FIRE	"Has roto un tratado de paz con los {player[0].civ_name_plural}."
+YOU_BROKE_ALLIANCE	"Has incumplido una alianza con los [player.1.civ_name_plural]."
+YOU_BROKE_CEASE_FIRE	"Has roto un tratado de paz con los [player.1.civ_name_plural]."
 DIPxxx3_AGREEMENT_END_POLLUTION	"Ecopacto"
-CANT_ATTACK_ALLIES	"Tienes una alianza con los {player[0].civ_name_plural}; no puedes atacarles sin romper primero la alianza. ¿Quieres romper ahora la alianza?"
+CANT_ATTACK_ALLIES	"Tienes una alianza con los [player.1.civ_name_plural]; no puedes atacarles sin romper primero la alianza. ¿Quieres romper ahora la alianza?"
 X_LAB	"Laboratorio Xenoforma"
 GENE_SEQUENCER	"Secuenciador de genes"
 
@@ -146,13 +145,8 @@ str_ldl_Pollution_Level	"Nivel de contamin."
 
 
 
-CANT_ATTACK_HAVE_TREATY	"Esta acción romperá tu tratado con los {player[0].civ_name_plural}.  ¿Quieres continuar?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Los {player[0].civ_name_plural} no encuentran alojamiento para todos sus ejércitos en nuestro territorio. Prometen retirar sus unidades tan pronto como sea posible."
-#New Messages
-ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
-CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
-CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
+CANT_ATTACK_HAVE_TREATY	"Esta acción romperá tu tratado con los [player.1.civ_name_plural].  ¿Quieres continuar?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Los [player.1.civ_name_plural] no encuentran alojamiento para todos sus ejércitos en nuestro territorio. Prometen retirar sus unidades tan pronto como sea posible."
 
 
 str_ldl_RES_CHANGE_BUTTON	"Tamaño de pantalla"
@@ -267,7 +261,7 @@ str_ldl_CAPS_CANCEL_MOVE	"ANULAR MOVIMIENTO"
 str_ldl_END_TUTORIAL	"TERMINAR TUTORIAL"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL	"¿Quieres incumplir tu tratado con los {player[0].civ_name_plural}? Puedes expulsar a las unidades sin incumplir el tratado."
+CANT_ATTACK_ALLIES_CAN_EXPEL	"¿Quieres incumplir tu tratado con los [player.1.civ_name_plural]? Puedes expulsar a las unidades sin incumplir el tratado."
 
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Necesitas tener una embajada para exigir adelantos."
@@ -573,14 +567,6 @@ ACCEPT	"Aceptar"
 REJECT	"Rechazar"
 YES	"Sí"
 NO	"No"
-BUTTON_RAZE       "Raze"
-BUTTON_PLUNDER    "Plunder"
-BUTTON_PILLAGE    "Pillage"
-BUTTON_LIBERATE   "Liberate"
-BUTTON_ENSLAVE	  "Enslave"
-BUTTON_FREESLAVES "Free Slaves"
-BUTTON_OCCUPY     "Occupy"
-
 str_ldl_Abort	"Cancelar"
 str_ldl_Open	"Abrir"
 str_ldl_Close	"Cerrar"
@@ -1110,7 +1096,7 @@ str_ldl_Reserves	"Reservas"
 str_ldl_RESET_DEFAULTS	"RESTABLECER"
 str_ldl_RESET_ROUTE	"RESTABLECER"
 str_ldl_RESTART	"REINICIAR"
-str_ldl_Restless_Tribes	"Tribus inquietas"
+str_ldl_Restless_Tribes	" Tribus inquietas"
 str_ldl_REV	"REV."
 str_ldl_REV_COLON	"REV:"
 str_ldl_Review	"Revisar"
@@ -1121,7 +1107,7 @@ str_ldl_Revolution_Risk	"Riesgo de revolución"
 str_ldl_RIOT	"DISTURB."
 str_ldl_RIOT_COLON	"DISTURB:"
 str_ldl_Riot_Risk	"Riesgo de disturbios"
-str_ldl_Roving_Bands	"Bandas ambulantes"
+str_ldl_Roving_Bands	"  Bandas ambulantes"
 str_ldl_Rules	"Reglas"
 str_ldl_RUSH_BUY	"COMPRA"
 str_ldl_Sale_Price_COLON	"Precio de venta:"
@@ -2606,27 +2592,27 @@ str_ldl_DD_GOV_MARTIAL_LAW		"Ley marcial:"
 str_ldl_DD_GOV_ANTI_POLLUTION		"Medidas contra la contaminación:"
 
 # Advance Selection Pop-up
-str_ldl_ASP_GOAL			"Objetivo"
+str_ldl_ASP_GOAL				"Objetivo"
 
 # National Management
 str_ldl_NATIONAL_DIALOG_TITLE		"A D M I N I S T R A C I Ó N   N A C I O N A L"
-str_ldl_ND_ADVICE			"Consejo"
+str_ldl_ND_ADVICE				"Consejo"
 str_ldl_ND_BUILD_QUEUE			"Cola de construcción..."
 str_ldl_ND_DISBAND			"Disolver"
 str_ldl_ND_RESOURCE_TAB			"RECURSOS"
 str_ldl_ND_RTL_CITY_NAME		"Nombre de ciudad"
-str_ldl_ND_RTL_POPULATION		"Pob."
+str_ldl_ND_RTL_POPULATION		"Población"
 str_ldl_ND_STATUS_TAB			"ESTADO"
 str_ldl_ND_STL_CITY_NAME		"Nombre de la ciudad"
 str_ldl_ND_STL_MAYOR			"Alcalde"
 str_ldl_ND_STL_PRIORITY			"Prioridad"
 str_ldl_ND_STL_BUILDING			"Construcción"
-str_ldl_ND_STL_TIME			"Turnos"
+str_ldl_ND_STL_TIME                	"Turnos"
 str_ldl_ND_ST_GOVERNOR			"ALCALDE:"
 str_ldl_ND_ST_RUSH_BUY			"Compra urg."
 str_ldl_ND_ON				"ACTIVADO"
 str_ldl_ND_OFF				"DESACTIVADO"
-str_ldl_ND_EMPTY			"VACÍO"
+str_ldl_ND_EMPTY				"VACÍO"
 str_ldl_ND_NA				"N/C"
 str_ldl_ND_VERIFY_DISBAND		"¿Estás seguro de que quieres disolver las ciudades seleccionadas?"
 
@@ -2884,6 +2870,15 @@ INFOBAR_UNEXPLORED 			"Inexplorado"
 
 UNIT_HOPLITE_NEW 				"Hoplita"
 
+BUILD_LIST_SEQUENCE_PRODUCTION 	"Producción"
+BUILD_LIST_SEQUENCE_GROWTH 		"Crecim."
+BUILD_LIST_SEQUENCE_OFFENSE 		"Ataque"
+BUILD_LIST_SEQUENCE_DEFENSE 		"Defensa"
+BUILD_LIST_SEQUENCE_SCIENCE 		"Ciencia"
+BUILD_LIST_SEQUENCE_GOLD 		"Oro"
+BUILD_LIST_SEQUENCE_WONDERS 		"Maravillas"
+BUILD_LIST_SEQUENCE_HAPPINESS 	"Felicidad"
+
 MOVED_ALL_ARMIES_GENIUS 		"¡Has movido todos tus ejércitos, debes de ser un genio!"
 
 UNIT_CATEGORY_GENERIC 			"Genérico"
@@ -3134,14 +3129,10 @@ str_profile_AutoOpenCityWindow                  "Abrir Cola de construc. al crea
 str_profile_ShowEnemyHealth                     "Mostrar Estado de salud enemigos"
 str_profile_ShowCityInfluence                   "Mostrar influencia ciudad"
 str_profile_ShowPoliticalBorders                "Mostrar fronteras nacionales"
-str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
-str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
+str_profile_CloseOnEyepoint			"Close Message When Clicking Eyeball"
+str_profile_ShowExpensive			"Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
-str_profile_RecentAtTop                         "Put New Messages At Top"
-str_profile_CityClick                           "Select City Instead Of Army"
-str_profile_DebugSlic                           "Slic Debug Messages"
-str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_RecentAtTop				"Put New Messages At Top"
 
 str_ldl_City_Manager_Title  "A D M I N I S T R A C I Ó N    D E   L A   C I U D A D"
 
@@ -3159,46 +3150,7 @@ str_tbl_ldl_Rand_Test			"Prueba al azar (playtest)"
 str_tbl_ldl_Command_Enter		"Insertar comando (playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Insertar comando alterno (playtest)"
 
-# New gamesetting options
-
-str_tbl_ldl_NoAIProductionDeficit_Off "AI No Production Deficit - Off"	
-str_tbl_ldl_NoAIGoldDeficit_Off	"No negative Gold for AI Cities - Off"					# AI cities don't go negative in gold
-str_tbl_ldl_AICityDefenderBonus_Off "AI City Defense bonus - Off"					# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_Off	"Entrenched Barbarians settle cities - Off"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_Off "Conflicting citystyle unhappiness - Off"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_Off "Revolting Cities lose 1/3 Population - Off"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off "Revolting cities create barbarians - Off"					# Revolting city creates barbarians
-str_tbl_ldl_BarbarianCamps_Off	"Entrenched Barbarians create Tile Imps - Off"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off "Entrenched Barbarians spawn Barbarians - Off"			# Entrenched barbs create more barbs
-str_tbl_ldl_AINoSinking_Off "AI ships don't sink - Off"							# AI ships don't sink
-str_tbl_ldl_AINoCityLimit_Off "AI No City LImit - Off"						# AI not affected by city limit
-str_tbl_ldl_GoldPerUnitSupport_Off "1 Gold Per Unit Cost - Off"					# all pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off "2 Gold Per City x City Limit - Off"						# everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_Off "AI doesn't pay Shield Hunger - Off"					# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_Off "AI doesn't pay Unit Gold - Off"						# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_Off "AI Free Upgrades - Off"						# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_Off "AI Free Militia Unit - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_OneCityChallenge_Off "One City Challenge - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_Off "City Capture Options - Off"						#If city is empty at turn start AI gets cheapest unit
-
-
-str_tbl_ldl_NoAIProductionDeficit_On "AI No Production Deficit - On"	
-str_tbl_ldl_NoAIGoldDeficit_On	"No negative Gold for AI Cities - On"					# AI cities don't go negative in gold
-str_tbl_ldl_AICityDefenderBonus_On "AI City Defense bonus - On"					# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_On	"Entrenched Barbarians settle cities - On"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_On "Conflicting citystyle unhappiness - On"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_On "Revolting Cities lose 1/3 Population - On"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On "Revolting cities create barbarians - On"					# Revolting city creates barbarians
-str_tbl_ldl_BarbarianCamps_On	"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_On "Entrenched Barbarians spawn Barbarians - On"			# Entrenched barbs create more barbs
-str_tbl_ldl_AINoSinking_On "AI ships don't sink - On"							# AI ships don't sink
-str_tbl_ldl_AINoCityLimit_On "AI No City LImit - On"						# AI not affected by city limit
-str_tbl_ldl_GoldPerUnitSupport_On "1 Gold Per Unit Cost - On"					# all pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_On "2 Gold Per City x City Limit - On"						# everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_On "AI doesn't pay Shield Hunger - On"					# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_On "AI doesn't pay Unit Gold - On"						# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_On "AI Free Upgrades - On"						# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"						#If city is empty at turn start AI gets cheapest unit
-
+# Añadido para Extender el Manejo Nacional 6/2004 L. Hirth
+str_ldl_ND_RTL_WORKER		"Tra."
+str_ldl_ND_RTL_SLAVE		"Esc."
+str_ldl_ND_RTL_COMBAT_UNITS	"Mil."

@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Activision User Interface element: list with rangers.
-// Id           : $Id$
+// Description  : User interface element: list with rangers.
 //
 //----------------------------------------------------------------------------
 //
@@ -17,16 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Always focus on the latest message.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -60,9 +55,9 @@ aui_ListBox::aui_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -88,9 +83,9 @@ aui_ListBox::aui_ListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie ),
 	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Control( retval, id, x, y, width, height, ActionFunc, cookie )
+	aui_TextBase( NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -108,7 +103,15 @@ aui_ListBox::aui_ListBox(
 
 AUI_ERRCODE aui_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -172,7 +175,7 @@ AUI_ERRCODE aui_ListBox::InitCommon( void )
 
 	m_buildingTheList = FALSE;		
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 	m_pane =
 		new aui_Static( &errcode, aui_UniqueId(), 0, 0, m_width, m_height );
@@ -216,6 +219,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	
+	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -231,7 +235,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_header = new aui_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -260,7 +264,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -290,7 +294,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -334,18 +338,58 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 aui_ListBox::~aui_ListBox()
 {
-	delete m_pane;
-	delete m_header;
-	delete m_verticalRanger;
-	delete m_horizontalRanger;
-	delete m_widthList;
-	delete m_selectedList;
-    delete m_selectedListLastTime;
-	delete m_visualSelectedList;
-	
-	if (m_dragDropWindow)
+	if ( m_pane )
 	{
-		DestroyDragDropWindow(m_dragDropWindow);
+		delete m_pane;
+		m_pane = NULL;
+	}
+
+	if ( m_header )
+	{
+		delete m_header;
+		m_header = NULL;
+	}
+
+	if ( m_verticalRanger )
+	{
+		delete m_verticalRanger;
+		m_verticalRanger = NULL;
+	}
+
+	if ( m_horizontalRanger )
+	{
+		delete m_horizontalRanger;
+		m_horizontalRanger = NULL;
+	}
+
+	if ( m_widthList )
+	{
+		delete m_widthList;
+		m_widthList = NULL;
+	}
+
+	if ( m_selectedList )
+	{
+		delete m_selectedList;
+		m_selectedList = NULL;
+	}
+
+	if ( m_selectedListLastTime )
+	{
+		delete m_selectedListLastTime;
+		m_selectedListLastTime = NULL;
+	}
+
+	if ( m_visualSelectedList )
+	{
+		delete m_visualSelectedList;
+		m_visualSelectedList = NULL;
+	}
+
+	if ( m_dragDropWindow )
+	{
+		DestroyDragDropWindow( m_dragDropWindow );
+		m_dragDropWindow = NULL;
 	}
 }
 
@@ -608,8 +652,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	sint32	i;
-	for ( i = m_selectedList->L(); i; i-- )
+	for ( sint32 i = m_selectedList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 		sint32 curIndex = m_selectedList->GetNext( position );
@@ -869,18 +912,17 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 	sint32 width = 0;
 	sint32 count = 0;
 
-	sint32 i;
-	for(
-		i = m_numColumns - m_widthList->L();
+	for (
+		sint32 i = m_numColumns - m_widthList->L();
 		i > 0 && (width += m_maxItemWidth) <= m_width;
 		i-- )
 			count++;
 
 	ListPos position = m_widthList->GetTailPosition();
-	for(
-		sint32 j = m_widthList->L();
-		j && (width += m_widthList->GetPrev( position )) <= m_width;
-		j-- )
+	for (
+		i = m_widthList->L();
+		i && (width += m_widthList->GetPrev( position )) <= m_width;
+		i-- )
 			count++;
 
 	sint32 columns = m_numColumns ? m_numColumns : m_widthList->L();
@@ -1180,7 +1222,7 @@ aui_DragDropWindow *aui_ListBox::CreateDragDropWindow( aui_Control *dragDropItem
 	};
 	dragDropItem->ToWindow( &itemPoint );
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	aui_DragDropWindow *ddw = new aui_DragDropWindow(
 		&errcode,
 		dragDropItem,
@@ -1284,8 +1326,7 @@ void aui_ListBox::WhatsChanged(
 
 	
 	ListPos position = m_selectedList->GetHeadPosition();
-	sint32 i;
-	for ( i = m_selectedList->L(); i; i-- )
+	for ( sint32 i = m_selectedList->L(); i; i-- )
 	{
 		sint32 itemIndex = m_selectedList->GetNext( position );
 		if ( !m_selectedListLastTime->Find( itemIndex ) )
@@ -1294,7 +1335,7 @@ void aui_ListBox::WhatsChanged(
 
 	
 	position = m_selectedListLastTime->GetHeadPosition();
-	for ( sint32 j = m_selectedListLastTime->L(); j; j-- )
+	for ( i = m_selectedListLastTime->L(); i; i-- )
 	{
 		sint32 itemIndex = m_selectedListLastTime->GetNext( position );
 		if ( !m_selectedList->Find( itemIndex ) )
@@ -1335,13 +1376,13 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 				if ( m_dragIndex < itemIndex )
 				{
 					for ( sint32 i = m_dragIndex; i <= itemIndex; i++ )
-						if ((pos = m_visualSelectedList->Find( i )))
+						if ( pos = m_visualSelectedList->Find( i ) )
 							m_visualSelectedList->DeleteAt( pos );
 				}
 				else
 				{
 					for ( sint32 i = itemIndex; i <= m_dragIndex; i++ )
-						if ((pos = m_visualSelectedList->Find( i )))
+						if ( pos = m_visualSelectedList->Find( i ) )
 							m_visualSelectedList->DeleteAt( pos );
 				}
 			}
@@ -1730,18 +1771,17 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 					sint32		firstIndex = 999999, 
 								index;
 					
-					sint32 i;
-					for (i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
+					for (sint32 i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
 						index = m_visualSelectedList->GetAtIndex(i);
 						if (index <= firstIndex) firstIndex = index;
 					}
 					if (firstIndex != 999999 && firstIndex != itemIndex) {
 						if (firstIndex < itemIndex) {
-							for (sint32 i=firstIndex; i<itemIndex; i++) {
+							for (i=firstIndex; i<itemIndex; i++) {
 								m_visualSelectedList->AddTail(i);
 							}
 						} else {
-							for (sint32 i=itemIndex+1; i<firstIndex; i++) {
+							for (i=itemIndex+1; i<firstIndex; i++) {
 								m_visualSelectedList->AddTail(i);
 							}
 						}

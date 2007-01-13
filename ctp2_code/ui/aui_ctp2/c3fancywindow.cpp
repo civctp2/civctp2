@@ -1,32 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : The civilization 3 fancy window
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -168,7 +151,7 @@ void C3FancyWindow::BringBorderToTop()
 
 AUI_ERRCODE C3FancyWindow::AddBordersToUI()
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	for(int i=0; i< k_NUM_BORDERS; i++)
 	{
 		if(m_border[i])
@@ -180,7 +163,7 @@ AUI_ERRCODE C3FancyWindow::AddBordersToUI()
 
 AUI_ERRCODE C3FancyWindow::RemoveBordersFromUI()
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 	for(int i=0; i< k_NUM_BORDERS; i++)
 	{
 		if(m_border[i])
@@ -207,7 +190,7 @@ AUI_ERRCODE	C3FancyWindow::Resize( sint32 width, sint32 height )
 	
 	
 	sint32 lx =0, cx = dw/2, rx = dw,
-			ty = 0, by = dh;
+			ty = 0, cy = dh/2, by = dh;
 	
 	
 #if 0

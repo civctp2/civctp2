@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Trade utilities
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,7 +26,6 @@
 // - Devided caravan costs by 10 so that we don't have to update const.txt.
 //   This allows better mod compatibility. - May 7th 2005 Martin Gühmann
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
-// - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -40,10 +38,11 @@
 #include "TradeAstar.h"
 #include "Path.h"
 #include "AgreementMatrix.h"
+#include "ConstDB.h"
 
 extern TradeAstar g_theTradeAstar; 
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sint32 resource)
+sint32 tradeutil_GetTradeValue(const sint32 owner, Unit &destination, sint32 resource)
 {
 	Assert(destination.IsValid());
 	if(!destination.IsValid()) return 0;
@@ -54,17 +53,14 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sin
 
 
 	double baseValue = g_theWorld->GetGoodValue(resource);
-	double distance = static_cast<double>(destination.GetCityData()->GetDistanceToGood(resource));
+	double distance = double(destination.CD()->GetDistanceToGood(resource));
 	sint32 totalValue = sint32(baseValue * distance);
 	
 	
-    PLAYER_INDEX const  tradePartner    = destination.GetOwner();
-
-    if (    (owner != tradePartner)
-         && AgreementMatrix::s_agreements.HasAgreement
-                (owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT)
-       )
-    {
+	
+	bool trade_pact = 
+		AgreementMatrix::s_agreements.HasAgreement(owner, destination.GetOwner(), PROPOSAL_TREATY_TRADE_PACT);
+	if (trade_pact) {
 		totalValue = (sint32) (totalValue * 1.05);
 	}
 
@@ -73,24 +69,52 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sin
 
 sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 {
-	Path    path;
-	float   cost;
+	
+	Path path;
+	float cost;
 
-	if (g_theTradeAstar.FindPath
-            (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
-       )
-    {
-        return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
-    }
+	sint32 r = g_theTradeAstar.FindPath(source.GetOwner(), source.RetPos(),
+										destination.RetPos(), path,
+										cost, FALSE);
 
-	return DISTANCE_UNKNOWN;
+	
+
+	
+	cost = (float)((int)((cost * g_theConstDB->GetCaravanCoef() * 0.1) + 0.5));
+	
+	
+	if(cost < 1)
+		cost = 1;
+
+	return sint32(cost);
 }
 
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
-	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
-                  static_cast<double>
-                    (source.RetPos().NormalizedDistance(destination.RetPos()));
+	Path path;
+	double cost;
+
+#if 0
 	
-    return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
+	
+	
+	
+	sint32 r = g_theTradeAstar.FindPath(source.GetOwner(), source.RetPos(),
+										destination.RetPos(), path,
+										cost, FALSE);
+#endif
+
+	cost = static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
+
+	
+	cost *= g_theWorld->CalcTerrainFreightCost(source.RetPos());
+
+	
+	
+	
+	cost = cost * g_theConstDB->GetCaravanCoef() + .5;
+	if(cost < 1)
+		cost = 1;
+
+	return static_cast<sint32>(cost);
 }

@@ -16,7 +16,6 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// __SPRITETEST__
 // 
 //----------------------------------------------------------------------------
 //
@@ -27,109 +26,51 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "Token.h"
 #include "Anim.h"
+#include "c3errors.h"
+#ifndef __SPRITETEST__
+#include "director.h"
 
-#include <algorithm>    // std::copy
-#include "director.h"   // g_director
 
+extern Director			*g_director;
+extern double			g_ave_frame_rate;
+
+#endif
 
 Anim::Anim()
 :
-	m_type              (ANIMTYPE_SEQUENTIAL),
-	m_numFrames         (0),
-	m_frames            (NULL),
-	m_moveDeltas        (NULL),
-	m_transparencies    (NULL),
-	m_playbackTime      (0),
-	m_delay             (0),
-	m_delayEnd          (0),
-	m_lastFrameTime     (0),
-	m_elapsed           (0),
-	m_loopFinished      (FALSE),
-	m_finished          (FALSE),
-	m_weAreInDelay      (FALSE),
-	m_noIdleJustDelay   (FALSE)
-{ ; }
+	m_type(ANIMTYPE_SEQUENTIAL),
+	m_numFrames(0),
+	m_frames(NULL),
+	m_playbackTime(0),
+	m_delay(0),
+	m_weAreInDelay(FALSE),
+	m_moveDeltas(NULL),
+	m_transparencies(NULL),
+	m_delayEnd(0),
+	m_finished(FALSE),
+	m_loopFinished(FALSE),
+	m_lastFrameTime(0),
+	m_elapsed(0), 
+	m_specialCopyDelete(ANIMXEROX_ORIGINAL), 
+	m_noIdleJustDelay(FALSE)
 
-Anim::Anim(Anim const & copy)
-:
-	m_type              (copy.m_type),
-	m_numFrames         (copy.m_numFrames),
-	m_frames            (NULL),
-	m_moveDeltas        (NULL),
-	m_transparencies    (NULL),
-	m_playbackTime      (copy.m_playbackTime),
-	m_delay             (copy.m_delay),
-	m_delayEnd          (copy.m_delayEnd),
-	m_lastFrameTime     (copy.m_lastFrameTime),
-	m_elapsed           (copy.m_elapsed),
-	m_loopFinished      (copy.m_loopFinished),
-	m_finished          (copy.m_finished),
-	m_weAreInDelay      (copy.m_weAreInDelay),
-	m_noIdleJustDelay   (copy.m_noIdleJustDelay)
 {
-    if (m_numFrames > 0)
-    {
-        m_frames            = new uint16[m_numFrames];
-        m_transparencies    = new uint16[m_numFrames];
-        m_moveDeltas        = new POINT [m_numFrames];
-
-        std::copy(copy.m_frames, copy.m_frames + m_numFrames, m_frames);
-        std::copy(copy.m_transparencies, copy.m_transparencies + m_numFrames, m_transparencies);
-        std::copy(copy.m_moveDeltas, copy.m_moveDeltas + m_numFrames, m_moveDeltas);
-    }
 }
-
-Anim const & Anim::operator = (Anim const & copy)
-{
-    if (this != &copy)
-    {
-        if (m_numFrames != copy.m_numFrames)
-        {
-            delete [] m_frames;
-            delete [] m_transparencies;
-            delete [] m_moveDeltas;
-        }
-
-        m_type              = copy.m_type;
-        m_numFrames         = copy.m_numFrames;
-    	m_playbackTime      = copy.m_playbackTime;
-	    m_delay             = copy.m_delay;
-	    m_delayEnd          = copy.m_delayEnd;
-	    m_lastFrameTime     = copy.m_lastFrameTime;
-	    m_elapsed           = copy.m_elapsed;
-	    m_loopFinished      = copy.m_loopFinished;
-	    m_finished          = copy.m_finished;
-	    m_weAreInDelay      = copy.m_weAreInDelay;
-	    m_noIdleJustDelay   = copy.m_noIdleJustDelay;
-
-        if (m_numFrames > 0)
-        {
-            m_frames            = new uint16[m_numFrames];
-            m_transparencies    = new uint16[m_numFrames];
-            m_moveDeltas        = new POINT [m_numFrames];
-
-            std::copy(copy.m_frames, copy.m_frames + m_numFrames, m_frames);
-            std::copy(copy.m_transparencies, copy.m_transparencies + m_numFrames, m_transparencies);
-            std::copy(copy.m_moveDeltas, copy.m_moveDeltas + m_numFrames, m_moveDeltas);
-        }
-        else
-        {
-            m_frames            = NULL;
-            m_transparencies    = NULL;
-            m_moveDeltas        = NULL;
-        }
-    }
-
-    return *this;
-}
-
 
 Anim::~Anim()
 {
-	delete [] m_frames;
-	delete [] m_moveDeltas;
-	delete [] m_transparencies;
+	if(m_specialCopyDelete == ANIMXEROX_ORIGINAL)
+	{
+		
+//Added by Martin Gühmann
+		//These fields are initialized with new[] therefore use
+		//delete[] to delete them.
+		if (m_frames) delete[] m_frames;
+		if (m_moveDeltas) delete[] m_moveDeltas;
+		if (m_transparencies) delete[] m_transparencies;
+	}
 }
 
 uint16 Anim::GetFrame(sint32 animPos)

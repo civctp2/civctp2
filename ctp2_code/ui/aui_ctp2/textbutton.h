@@ -1,6 +1,17 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef __TEXTBUTTON_H__
 #define __TEXTBUTTON_H__
 

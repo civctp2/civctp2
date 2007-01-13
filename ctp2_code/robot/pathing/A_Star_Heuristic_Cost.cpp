@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Heuristic cost for the A* pathing algorithm
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -47,8 +46,8 @@ namespace
 //
 // Description: Divide and round up to nearest integer
 //
-// Parameters : a_Value         : value to divide
-//              a_Divisor       : divisor
+// Parameters : a_Value			: value to divide
+//				a_Divisor		: divisor
 //
 // Globals    : -
 //

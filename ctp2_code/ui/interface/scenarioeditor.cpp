@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Scenario editor
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -46,10 +43,6 @@
 //   changing.
 // - Added icons and tooltips to city style buttons, by Martin Gühmann.
 // - Repaired backwards compatibility and possible crashes.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
-// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -81,7 +74,6 @@
 //Added by Martin Gühmann to have the appropiate number 
 //on the city style tab 
 #include "CityStyleRecord.h"
-#include "DifficultyRecord.h"   // g_theDifficultyDB
 
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
@@ -113,7 +105,7 @@
 #include "scenariowindow.h"
 
 #include "profileDB.h"
-#include "CivilisationRecord.h"
+#include "CivilisationDB.h"
 
 #include "MapCopyBuffer.h"
 
@@ -122,7 +114,8 @@
 #include "CivPaths.h"
 #include "ctp2_dropdown.h"
 
-#include "RiskRecord.h"
+#include "RiskDB.h"
+#include "DiffDB.h"
 
 #include "Cell.h"
 #include "aicause.h"
@@ -236,11 +229,10 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 }
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
-:
+:	m_terrainImpSwitches(NULL),		
 	m_terrainSwitches(NULL),
-	m_terrainImpSwitches(NULL),
-	m_xWrapButton(NULL),  // never used?
-	m_yWrapButton(NULL)   // never used?
+	m_xWrapButton(NULL),			// never used?
+	m_yWrapButton(NULL)				// never used?
 {
 	m_initializing = true;
 
@@ -283,7 +275,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
 
-			//Added by Martin Gühmann to make sure that the Scenario Editor 
+			//Added by Martin Gühmann to amke sure that the Scenario Editor 
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
@@ -316,31 +308,6 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.City.AddWonders", CityAddWonders, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "CivControls.AddAdvances", CivAddAdvances, NULL);
-	
-	spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivControls.CityStyleSpinner");
-	if(spin)
-	{
-		spin->SetMinimum(0, 0);
-		spin->SetMaximum(g_theCityStyleDB->NumRecords()-1, 0);
-		spin->SetDispalyValue(false);
-
-		sint32 style = g_player[g_selected_item->GetPlayerOnScreen()]->GetCivilisation()->GetCityStyle();
-		style = (style >= 0 && style < g_theCityStyleDB->NumRecords()) ? style : 0;
-
-		spin->SetValue(style, 0);
-		spin->SetSpinnerCallback(CivCityStyleSpinner, NULL);
-		
-		const CityStyleRecord* rec = g_theCityStyleDB->Get(style);
-
-		spin->SetText(rec->GetNameText());
-		spin->SetDisplay();
-
-		aui_TipWindow* tipWindow = (aui_TipWindow *)spin->GetTipWindow();
-		if(tipWindow)
-		{
-			tipWindow->SetTipText(const_cast<char*>(rec->GetNameText()));
-		}
-	}
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment", SetGovernment, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.PlayerSelect", LimitPlayerChoice, NULL);
@@ -429,7 +396,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	m_paintTerrainImprovement = -1;		
 	m_brushSize = 1;
 	m_unitIndex = -1;
-	m_cityStyle = CITY_STYLE_EDITOR;
+	m_cityStyle = -2;
 	//Added by Martin Gühmann to initialize the pop number
 	//for newly created cities
 	m_newPopSize = 1;
@@ -530,7 +497,7 @@ AUI_ERRCODE ScenarioEditor::Initialize()
 	if(s_scenarioEditor)
 		return AUI_ERRCODE_OK;
 
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	s_scenarioEditor = new ScenarioEditor(&err);
 	Assert(err == AUI_ERRCODE_OK);
 
@@ -540,16 +507,7 @@ AUI_ERRCODE ScenarioEditor::Initialize()
 AUI_ERRCODE ScenarioEditor::Cleanup()
 {
 	if(s_scenarioEditor) {
-
-		// Only execute the necessary stuff from ScenarioEditor::Hide
-		if(s_scenarioEditor->m_addStuffWindow) {
-			g_c3ui->RemoveWindow(s_scenarioEditor->m_addStuffWindow->Id());
-		}
-
-		if(s_scenarioEditor->m_window){
-			g_c3ui->RemoveWindow(s_scenarioEditor->m_window->Id());
-		}
-		//
+		Hide();
 
 		delete s_scenarioEditor;
 		s_scenarioEditor = NULL;
@@ -1731,27 +1689,6 @@ void ScenarioEditor::CivAddAdvances(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-
-void ScenarioEditor::CivCityStyleSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
-	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
-
-	ctp2_Spinner *spinner = (ctp2_Spinner *)control;
-
-	const CityStyleRecord* rec = g_theCityStyleDB->Get(spinner->GetValueX());
-
-	if(rec){
-		g_player[g_selected_item->GetVisiblePlayer()]->GetCivilisation()->AccessData()->SetCityStyle(spinner->GetValueX());
-		spinner->SetText(rec->GetNameText());
-
-		aui_TipWindow* tipWindow = (aui_TipWindow *)spinner->GetTipWindow();
-		if(tipWindow)
-		{
-			tipWindow->SetTipText(const_cast<char*>(rec->GetNameText()));
-		}
-	}
-}
-
 void ScenarioEditor::CivAddRemovePlayer(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
@@ -1940,8 +1877,8 @@ void ScenarioEditor::SetupNations()
 
 	
 	
-	for(i = 0; i < g_theCivilisationDB->NumRecords(); i++) {
-		const MBCHAR *name = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetCountryName());
+	for(i = 0; i < g_theCivilisationDB->GetNumRec(); i++) {
+		const MBCHAR *name = g_theStringDB->GetNameStr(g_theCivilisationDB->Access(i)->GetCountryName());
 
 		
 		AddDropDownItem(plgroup, "ScenNationItem", (MBCHAR *)name);
@@ -1996,15 +1933,15 @@ void ScenarioEditor::SetupNations()
 
 void ScenarioEditor::AddLeftList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	ScenarioEditor::AddAddButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);	
+	ScenarioEditor::AddAddButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, NULL, NULL);	
 }
 
 void ScenarioEditor::AddRightList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);
+	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, NULL, NULL);
 }
 
-void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint32 userData)
+void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
 {
 	ctp2_ListItem *item = (ctp2_ListItem*)aui_Ldl::BuildHierarchyFromRoot("ScenAddStuffItem");
 	Assert(item);
@@ -2018,7 +1955,7 @@ void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint3
 	
 	textBox->SetText(text);
 	item->SetUserData((void *)userData);
-	a_List->AddItem(item);
+	list->AddItem(item);
 }
 
 			
@@ -2094,6 +2031,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			city.CD()->SetWonders(city.CD()->GetBuiltWonders() | ((uint64)1 << (uint64)dbindex));
 			wonderutil_AddBuilt(dbindex);
 			g_player[city->GetOwner()]->AddWonder(dbindex, city);
+			g_player[city->GetOwner()]->RegisterCreateWonder(city, dbindex);
 
 			leftList->RemoveItem(selItem->Id());
 			AddAddItem(rightList, g_theWonderDB->Get(dbindex)->GetNameText(), dbindex);
@@ -2270,12 +2208,6 @@ void ScenarioEditor::NotifyPlayerChange()
 		Assert(tf);
 		if(tf) {
 			tf->SetFieldText(g_player[player]->m_civilisation->GetLeaderName());
-		}
-
-		ctp2_Spinner* spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivControls.CityStyleSpinner");
-		if(spin)
-		{
-			spin->SetValue(g_player[player]->GetCivilisation()->GetCityStyle(), 0);
 		}
 
 		
@@ -2550,10 +2482,10 @@ void ScenarioEditor::GetLabel(MBCHAR *labelString, sint32 playerOrCiv)
 	} else 
 	if (mode == SCEN_START_LOC_MODE_CIV) {
 		if(g_theCivilisationDB->Get(index)) {
-			sprintf(labelString, "%s (%d/%d)",
-					g_theStringDB->GetNameStr(g_theCivilisationDB->Get(index)->GetPluralCivName()),
+			sprintf(labelString, "%s (%d/%d)", 
+					g_theStringDB->GetNameStr(g_theCivilisationDB->GetPluralCivName((CIV_INDEX)(index))),
 					index,
-					g_theCivilisationDB->NumRecords()-1);
+					g_theCivilisationDB->GetNumRec()-1);
 		} else {
 			sprintf(labelString, "???");
 		}
@@ -2834,11 +2766,11 @@ void ScenarioEditor::SetupGlobalControls()
 
 	sint32 i;
 	ctp2_DropDown *dd;
-//	ctp2_ListItem *item = NULL;
-//	ctp2_Static *box = NULL;
+	ctp2_ListItem *item = NULL;
+	ctp2_Static *box = NULL;
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
 
-	AUI_ERRCODE err = AUI_ERRCODE_OK;
+	AUI_ERRCODE err;
 	aui_StringTable *table = new aui_StringTable(&err, "SPMapSizeStringTable");
 
 	Assert(err == AUI_ERRCODE_OK);
@@ -2866,11 +2798,11 @@ void ScenarioEditor::SetupGlobalControls()
 	dd->Clear();
 	table = new aui_StringTable(&err, "SPRiskLevelStringTable");
 	if(dd) {
-		for(i = 0; i < g_theRiskDB->NumRecords(); i++) {
+		for(i = 0; i < g_theRiskDB->GetNumRec(); i++) {
 			
 
 
-			// Should be taken from the string database directly
+
 			AddDropDownItem(dd, "ScenBarbarianItem", table->GetString(i));	
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetRiskLevel());
@@ -2885,10 +2817,10 @@ void ScenarioEditor::SetupGlobalControls()
 	table = new aui_StringTable(&err, "SPNewGameStrings");
 	Assert(err == AUI_ERRCODE_OK);
 	if(dd && (err == AUI_ERRCODE_OK)) {
-		for(i = 0; i < g_theDifficultyDB->NumRecords(); i++) {
+		for(i = 0; i < LEVELS_OF_DIFFICULTY; i++) {
 			
 			
-			AddDropDownItem(dd, "ScenDifficultyItem", g_theDifficultyDB->Get(i)->GetNameText());
+			AddDropDownItem(dd, "ScenDifficultyItem",table->GetString(i));
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetDifficulty());
 	}
@@ -3002,14 +2934,22 @@ void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data,
 	g_theProfileDB->SetPollutionRule(!g_theProfileDB->IsPollutionRule());
 }
 
-AUI_ACTION_BASIC(ReopenEditorAction);
+class ReopenEditorAction : public aui_Action
+{
+  public:
+	virtual ActionCallback Execute;
+};
 
 void ReopenEditorAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {
 	ScenarioEditor::Display();
 }
 
-AUI_ACTION_BASIC(PostReopenEditorActionAction);
+class PostReopenEditorActionAction : public aui_Action
+{
+  public:
+	virtual ActionCallback Execute;
+};
 
 void PostReopenEditorActionAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {
@@ -3302,7 +3242,7 @@ void ScenarioEditor::ClearWorld(aui_Control *control, uint32 action, uint32 data
 		}
 	}
 
-	Unit c;
+	Unit c(0);
 
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
@@ -3361,7 +3301,7 @@ void ScenarioEditor::FogButton(aui_Control *control, uint32 action, uint32 data,
 }
 
 
-void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item)
+void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item)
 {
 	
 	ctp2_ListItem *listItem = NULL;
@@ -3448,7 +3388,7 @@ void ScenarioEditor::RemoveGoods(aui_Control *control, uint32 action, uint32 dat
 
 	for(sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(sint32 y = 0; y < g_theWorld->GetYHeight(); y++) {
-//			Cell *cell = g_theWorld->GetCell(x, y);
+			Cell *cell = g_theWorld->GetCell(x, y);
 			g_theWorld->ClearGoods(x,y);		
 		}
 	}
@@ -3523,8 +3463,8 @@ void ScenarioEditor::FindPosNow(aui_Control *control, uint32 action, uint32 data
 
 	MBCHAR Xtext[MAX_CHARS];
 	MBCHAR Ytext[MAX_CHARS];
-	uint32 posX = 0;
-	uint32 posY = 0;
+	uint32 posX;
+	uint32 posY;
 
 	ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
 	if(!tf->GetFieldText(Xtext, MAX_CHARS)) {

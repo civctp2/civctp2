@@ -10,7 +10,7 @@
 #include "c3.h"
 
 #include "civarchive.h"
-#include "Gold.h"
+#include "gold.h"
 #include "player.h"
 #include "Unit.h"
 #include "AgreementData.h"

@@ -17,27 +17,23 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Import structure cleaned up somewhat.
-// - Tribe index handling corrected.
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER) && (_MSC_VER > 1000)
 #pragma once
 #endif
 
 #ifndef __SPNEWGAMETRIBESCREEN_H__
 #define __SPNEWGAMETRIBESCREEN_H__
-
-//----------------------------------------------------------------------------
-// Exported names
-//----------------------------------------------------------------------------
-
-extern sint32 const         INDEX_TRIBE_INVALID;
 
 //----------------------------------------------------------------------------
 // Project dependencies

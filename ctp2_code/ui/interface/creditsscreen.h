@@ -8,14 +8,11 @@
 
 
 
-#if defined(HAVE_PRAGMA_ONCE)
-#pragma once
-#endif
 
+#pragma once
 #ifndef _BMH_CREDITS_SCREEN_H_
 #define _BMH_CREDITS_SCREEN_H_
 
-class CreditsWindow;
 
 #include "c3window.h"
 

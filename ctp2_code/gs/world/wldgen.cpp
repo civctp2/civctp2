@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World generator
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,12 +17,6 @@
 //
 // Compiler flags
 // 
-// _DEBUG
-// - Generate debug version
-//
-// DUMP_TERRAIN_HEIGHT_MAPS
-// USE_COM_REPLACEMENT
-// CELL_COLOR
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,35 +26,29 @@
 // - Resolved ambiguous sqrt call.
 // - Standardised min/max usage.
 // - Repaired memory leaks.
-// - Force a good value recalculation on reload if the ressouce database was
-//   modified (goods added removed). - May 19th 2005 Martin Gühmann
-// - Wrap handling improved
-// - Using /importmap to import a text map no longer causes the river mouths
-//   to be deleted - 2005-07-01 Shaun Dove
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
-#include "c3.h"                     // pre-compiled
-#include "World.h"                  // own declarations, g_theWorld
-
+#include "c3.h"
 #include "c3errors.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "TerrainRecord.h"
 
+#include "XY_Coordinates.h"
 #include "A_Star_Heuristic_Cost.h"
+#include "World.h"
 #include "Cell.h"
 
 #include "civarchive.h"
-#include "ConstDB.h"                // g_theConstDB
-#include "player.h"                 // g_player
-#include "RandGen.h"                // g_rand
-#include "tiledmap.h"               // g_tiledMap
+#include "ConstDB.h"
+#include "player.h"
+#include "RandGen.h"
+#include "tiledmap.h"
 #include "TileInfo.h"
 #include "GoodyHuts.h"
 
-#include "profileDB.h"              // g_theProfileDB
+#include "profileDB.h"
 #include "dynarr.h"
 #include "network.h"
 #include "MapDB.h"
@@ -72,27 +59,32 @@
 #include "StartingPosition.h"
 
 #include "MoveFlags.h"
+#include "CityInfluenceIterator.h"
 
 
 #include "ResourceRecord.h"
 
 #include "terrainutil.h"
 #include "cellunitlist.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "citydata.h"
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
 #include "bmp_io.h"
 #endif
 
-#ifndef USE_COM_REPLACEMENT
+
 #include <initguid.h>
-#else
-#include <ltdl.h>
-#endif
 #include "C3Rand.h"
+#include "ic3RobotAstar.h"
 #include "IMapGen.h"
 
+extern	Player	**g_player ;
+extern	ConstDB	*g_theConstDB ;
+extern  RandomGenerator *g_rand; 
+extern  World *g_theWorld; 
+extern	TiledMap *g_tiledMap ;
+extern  ProfileDB *g_theProfileDB;
 
 
 
@@ -112,24 +104,23 @@ void TemperatureFilter(sint8 *map, sint32 *histogram);
 extern MapPoint g_mp_size;
 
 World::World(const MapPoint m, const int xw, const int yw)
-:   
-    m_isYwrap               (yw),
-    m_isXwrap               (xw),
-    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
-    m_size                  (m),
+:   m_current_plugin        (NULL),
+	m_distanceQueue         (NULL),
     m_map                   (NULL), 
+    m_tmpx                  (NULL),
+    m_cellArray             (NULL),
     m_water_next_too_land   (NULL), 
     m_land_next_too_water   (NULL),  
     m_water_size            (NULL), 
     m_land_size             (NULL),
-    m_cellArray             (NULL),
-    m_tmpx                  (NULL),
-    m_tileInfoStorage       (NULL),
     m_goodValue             (NULL),
+    m_tileInfoStorage       (NULL),
+    A_star_heuristic        (NULL),
     m_num_civ_starts        (0),
-    m_current_plugin        (NULL),
-    m_distanceQueue         (NULL),
-    A_star_heuristic        (NULL)
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
+    m_isXwrap               (xw),
+    m_isYwrap               (yw),
+    m_size                  (m)
 { 
     Assert(0 < m_size.x); 
     Assert(0 < m_size.y); 
@@ -222,21 +213,20 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 
 World::World(CivArchive &archive, BOOL fromMapFile)
-:   
-    m_mapGenerator          (MAP_GENERATOR_PLUGIN),
+:   m_current_plugin        (NULL),
+	m_distanceQueue         (NULL),
     m_map                   (NULL), 
+    m_tmpx                  (NULL),
+    m_cellArray             (NULL),
     m_water_next_too_land   (NULL), 
     m_land_next_too_water   (NULL),  
     m_water_size            (NULL), 
     m_land_size             (NULL),
-    m_cellArray             (NULL),
-    m_tmpx                  (NULL),
-    m_tileInfoStorage       (NULL),
     m_goodValue             (NULL),
+    m_tileInfoStorage       (NULL),
+    A_star_heuristic        (NULL),
     m_num_civ_starts        (0),
-    m_current_plugin        (NULL),
-    m_distanceQueue         (NULL),
-    A_star_heuristic        (NULL)
+    m_mapGenerator          (MAP_GENERATOR_PLUGIN)
 //  m_isXwrap, m_isYwrap, m_size: set by Serialize
 {
 	if ( fromMapFile )
@@ -251,10 +241,10 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	XY_Coords.Init(m_size.y, m_size.x);
 
 	A_star_heuristic = new A_Star_Heuristic_Cost
-							(m_size.y,
-							 m_size.x,
-							 IsYwrap(),
-							 IsXwrap()
+							(m_size.y, 
+							 m_size.x, 
+							 m_isYwrap, 
+							 m_isXwrap
 							);
 }
 
@@ -264,19 +254,14 @@ World::~World()
                 // m_land_next_too_water, m_water_size, m_land_size,
                 // m_tileInfoStorage
 	delete m_distanceQueue;
-	delete A_star_heuristic;
+    delete A_star_heuristic;
 
-	delete [] m_goodValue;
+    delete [] m_goodValue;
 	
-	if (m_current_plugin)
-	{
-#ifndef USE_COM_REPLACEMENT
-		FreeLibrary(m_current_plugin);
-#else
-		lt_dlclose(m_current_plugin);
-		lt_dlexit();
-#endif
-	}
+    if (m_current_plugin)
+    {
+        FreeLibrary(m_current_plugin);
+    }
 }
 
 void World::FreeMap()
@@ -313,7 +298,7 @@ void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
 	m_size.x = sx;
 	m_size.y = sy;
     g_mp_size = m_size; 
-	bool yWrapOk = sy % sx == 0;
+	BOOL yWrapOk = sy % sx == 0;
 	m_isYwrap = yWrapOk ? yWrap : FALSE;
 	m_isXwrap = xWrap;
 	AllocateMap();
@@ -403,6 +388,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	}
 	
 	sint8 *map = new sint8[m_size.y * m_size.x];
+	sint32 totalsize = m_size.y * m_size.x;
 	sint32 histogramarray[256];
 	sint32 *histogram = &histogramarray[128];
 	sint32 x, y;
@@ -786,8 +772,8 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	delete [] wetmap;
 	delete [] temperatureMap;
 
-	GenerateGoodyHuts();
-	GenerateGoods(); 
+    GenerateGoodyHuts();
+    GenerateGoods(); 
 }
 
 
@@ -1003,28 +989,117 @@ void World::ComputeGoodsValues()
 
 
 sint32 World::IsNextToLand(const sint32 i, const sint32 j) 
-{  
-    MapPoint pos(i, j);
-    MapPoint n; 
 
-    return GetAdjacentLand(pos, n);    
-}
-
-BOOL World::GetAdjacentLand(MapPoint const & pos, MapPoint & land) const
 {  
-    for (sint16 dir = 0; dir < NOWHERE; ++dir) 
-    {
-        if (pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), land)) 
-        {
-            if (IsLand(land) || IsMountain(land)) 
-            { 
-		    return TRUE; 
-	      }
-        }
-    }
+    
+    MapPoint pos, n; 
+    
+    pos.Set(i, j); 
+   
+    if(pos.GetNeighborPosition(NORTH, n)) {
+	   if (IsLand(n) || IsMountain(n)) { 
+		   return TRUE; 
+	   }
+	}
+	
+    if(pos.GetNeighborPosition(NORTHWEST, n)) {
+		if (IsLand(n) || IsMountain(n)) { 
+			return TRUE; 
+		}
+	}
+
+	if(pos.GetNeighborPosition(NORTHEAST, n)) {
+		if (IsLand(n) || IsMountain(n)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(SOUTH, n)) {
+		if (IsLand(n) || IsMountain(n)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(SOUTHWEST, n)) {
+		if (IsLand(n) || IsMountain(n)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(SOUTHEAST, n)) {
+		if (IsLand(n) || IsMountain(n)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(WEST, n)) {
+		if (IsLand(n) || IsMountain(n)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(EAST, n)) {
+		if (IsLand(n) || IsMountain(n)) {
+			return TRUE; 
+		}
+	}
 
     return FALSE; 
 }
+
+BOOL World::GetAdjacentLand(MapPoint &pos, MapPoint &land) 
+{  
+    if(pos.GetNeighborPosition(NORTH, land)) {
+	   if (IsLand(land) || IsMountain(land)) { 
+		   return TRUE; 
+	   }
+	}
+	
+    if(pos.GetNeighborPosition(NORTHWEST, land)) {
+		if (IsLand(land) || IsMountain(land)) { 
+			return TRUE; 
+		}
+	}
+
+	if(pos.GetNeighborPosition(NORTHEAST, land)) {
+		if (IsLand(land) || IsMountain(land)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(SOUTH, land)) {
+		if (IsLand(land) || IsMountain(land)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(SOUTHWEST, land)) {
+		if (IsLand(land) || IsMountain(land)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(SOUTHEAST, land)) {
+		if (IsLand(land) || IsMountain(land)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(WEST, land)) {
+		if (IsLand(land) || IsMountain(land)) { 
+			return TRUE; 
+		}
+	}
+
+    if(pos.GetNeighborPosition(EAST, land)) {
+		if (IsLand(land) || IsMountain(land)) {
+			return TRUE; 
+		}
+	}
+
+    return FALSE; 
+}
+
 
 BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 {
@@ -1057,10 +1132,11 @@ BOOL World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 
 
 sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y) 
-{  
-    MapPoint	pos (x,y);
-    MapPoint	n ;
+	{  
+    MapPoint	pos,
+				n ;
     
+	pos.Set(x, y) ;
     if(pos.GetNeighborPosition(NORTH, n)) {
 		if (!IsWater(n))
 			return (FALSE) ;
@@ -1115,8 +1191,9 @@ sint32 World::IsSurroundedByWater(const sint32 x, const sint32 y)
 sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j) 
 
 { 
-    MapPoint pos (i, j);
-    MapPoint n; 
+    MapPoint pos, n; 
+    
+    pos.Set(i, j); 
    
     if(pos.GetNeighborPosition(NORTH, n))
 		if (GetCell(n)->m_terrain_type == t) return TRUE; 
@@ -1160,8 +1237,10 @@ sint32 World::IsNextTo (const sint32 t, const sint32 i, const sint32 j)
 
 sint32 World::IsNextToWater(const sint32 i, const sint32 j) 
 {  
-    MapPoint pos (i, j);
-    MapPoint n; 
+    
+    MapPoint pos, n; 
+    
+    pos.Set(i, j); 
    
     if(pos.GetNeighborPosition(NORTH, n))
 		if (IsWater(n)) return TRUE; 
@@ -1193,9 +1272,10 @@ sint32 World::IsNextToWater(const sint32 i, const sint32 j)
 sint32 World::IsNextToWaterNotDiagonals(const sint32 i, const sint32 j) 
 {  
     
-    MapPoint pos (i, j);
-    MapPoint n; 
-
+    MapPoint pos, n; 
+    
+    pos.Set(i, j); 
+   
     if(pos.GetNeighborPosition(NORTHWEST, n))
 		if (IsWater(n)) return TRUE; 
 
@@ -1216,12 +1296,19 @@ void World::GenerateDeepWater()
 
 {  
 	sint32 i, j; 
+
+	
+	sint32 cur = -1;
+
 	MapPoint tmp; 
-	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k; 
-	sint32 radius       = 2; 
-	sint32 delta        = 1; 
-	sint32 cellWidth    = g_theConstDB->RiverCellWidth();
-    sint32 cellHeight   = g_theConstDB->RiverCellHeight();
+	sint32 minx, miny, rmin, ocount, dcount, k; 
+	BOOL find; 
+	sint32 radius = 2; 
+	sint32 delta = 1; 
+
+	sint32 cellWidth, cellHeight;
+	cellWidth = g_theConstDB->RiverCellWidth();
+	cellHeight = g_theConstDB->RiverCellHeight();
 
 	for(i = 0; i < cellWidth; i++) {
 		for(j = 0; j < cellHeight; j++) {
@@ -1238,9 +1325,9 @@ void World::GenerateDeepWater()
 
 	ClearScratch();
 
-	BOOL    find = TRUE;
-	sint32  rcount = 0;  
-	sint32  x, y; 
+	find = TRUE;
+	sint32 rcount = 0;  
+	sint32 x, y; 
 	BOOL hot; 
 	sint32 oldval;
 	MapPoint pos;
@@ -1680,29 +1767,34 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 
 	MapPoint pos(x, y);   
 	sint32 cont;
-	BOOL is_land;
+	int is_land;
 	GetContinent(pos, cont, is_land);
-    cum_score   = 0.0;
-	if (is_land &&
-        (m_land_size->Access(cont) >= s_actualMinContinentStartSize) 
-       ) 
-    {
-		MapPoint        start   (x, y);
-        RadiusIterator  it      (start, d);
-        
-		for (it.Start(); !it.End(); it.Next())
-        { 
-            MapPoint pos     = it.Pos();
+    if (!is_land) {
+        cum_score = 0.0; 
+	} else if(m_land_size->Access(cont) < s_actualMinContinentStartSize) {
+		cum_score = 0.0;
+    } else { 
+        MapPoint start, pos;
+        start.Set(x, y); 
+        cum_score = 0.0; 
+
+		
+		sint32 oldYwrap = m_isYwrap;
+	    m_isYwrap = TRUE;
+        for (start.FirstRectItt(d, pos, i); start.EndRectItt(d, i); start.NextRectItt(d, pos, i)) { 
+			if(i == 0 || i == 4 || i == 20 || i == 24)
+				continue; 
 			Cell *cell = m_map[pos.x][pos.y];
-			if ((numCounted[cell->m_terrain_type] < maxToCount) ||
-			    IsRiver(pos) || IsGood(pos)
-               ) 
-            {
+			if(numCounted[cell->m_terrain_type] < maxToCount ||
+			   IsRiver(pos) || IsGood(pos)) {
+			   
 				cum_score += raw_score[pos.x][pos.y]; 
 				numCounted[cell->m_terrain_type]++;
 			}
-		}
-	} 
+        }
+		m_isYwrap = oldYwrap;
+
+    } 
 	m_map[x][y]->m_color = sint32(cum_score);
 }
 
@@ -1716,7 +1808,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
     sint32 searching; 
 	MapPoint chk;
 	sint32 s;
-	sint32 badx = 0, bady = 0;
+	sint32 badx, bady;
 	float badmax = -1.0;
 
     maxx = 0; 
@@ -1729,7 +1821,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	}
 	sint32 playerContinent;
 	if(index > 0) {
-		BOOL is_land;
+		int is_land;
 		GetContinent(player_start[0], playerContinent, is_land);
 	} else {
 		playerContinent = 0;
@@ -1742,7 +1834,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 			
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules && index != 0) {
 				sint32 cont;
-				BOOL is_land;
+				int is_land;
 				GetContinent(chk, cont, is_land);
 				if(is_land && cont == playerContinent)
 					continue;
@@ -1781,7 +1873,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
                 max = cum_score[chk.x][chk.y]; 
                 maxx = chk.x; 
                 maxy = chk.y; 
-                searching = FALSE;
+                searching = FALSE; 
             } 
         }
     }
@@ -1799,37 +1891,42 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	return !searching; 
 } 
 
-// Not a clue what this - apparenly unused - function is supposed to do.
-// Just replaced the flawed iterator with a working one.
 void World::FlattenCumScore(sint32 d, float **cum_score,
     const sint32 maxx, const sint32 maxy)
 
 {
-    MapPoint    start(maxx, maxy);
+    sint32 i;     
+    MapPoint start, pos;
+    start.Set(maxx, maxy);
    
     float s; 
-    float r = 2.0f * float(d) + 1.0f;   // unused?
+    float r = 2.0f * float(d) + 1.0f; 
 
-	SquareIterator  it  (start, d);
-    for (it.Start(); !it.End(); it.Next())
-    {		
-        MapPoint pos = it.Pos();
-		sint32 dist = start.NormalizedDistance(pos);		  
-		s = float(d - dist) / (float(d) +1.0f);   // unused?
-		cum_score[pos.x][pos.y] = -50000.0f; 
+	
+	
+	sint32 oldYwrap = m_isYwrap;
+	m_isYwrap = TRUE;
+    for (start.FirstRectItt(d, pos, i); start.EndRectItt(d, i); start.NextRectItt(d, pos, i)) {		
+		  sint32 dist = start.NormalizedDistance(pos);		  
+		  s = float(d - dist) / (float(d) +1.0f); 		  
+		  cum_score[pos.x][pos.y] = -50000.0f; 
     }
+	m_isYwrap = oldYwrap;
 
     cum_score[start.x][start.y] = -60000.0f;
 }
 
 
 uint16 myRGB(sint32 r,  sint32 g, sint32 b)
+
 { 
-    return static_cast<uint16> 
-            (   ((r & 0x1f) << 11)
-              | ((g & 0x1f) <<  5) 
-              | ((b & 0x1f))
-            ); 
+    uint16 val = 0; 
+
+    val = (r & 0x1f) << 11; 
+    val |= (g & 0x1f) <<  5; 
+    val |= (b & 0x1f); 
+
+    return val; 
 } 
 
 void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS], 
@@ -1838,24 +1935,26 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 							sint32 player_start_score[k_MAX_PLAYERS])
 
 {
+    float **raw_score, **cum_score; 
     sint32 x, y, i, j; 
     sint32 maxx, maxy; 
 
-	sint32 maxContinentSize = 0;
-	for(i = 0; i < m_land_size->Num(); i++) 
-    {
-        maxContinentSize = std::max(m_land_size->Access(i), maxContinentSize);
-	}
+    raw_score = new float*[m_size.x]; 
+    cum_score = new float*[m_size.x]; 
 
-	if (maxContinentSize < g_theConstDB->MinContinentStartSize()) {
+	sint32 maxContinentSize = 0;
+	for(i = 0; i < m_land_size->Num(); i++) {
+		if(m_land_size->Access(i) > maxContinentSize) {
+			maxContinentSize = m_land_size->Access(i);
+		}
+	}
+	if(maxContinentSize < g_theConstDB->MinContinentStartSize()) {
 		s_actualMinContinentStartSize = 2;
 	} else {
 		s_actualMinContinentStartSize = g_theConstDB->MinContinentStartSize();
 	}
 
-    float ** raw_score = new float*[m_size.x]; 
-    float ** cum_score = new float*[m_size.x]; 
-
+    
     for (x=0; x<m_size.x; x++) { 
         raw_score[x] = new float [m_size.y]; 
         cum_score[x] = new float [m_size.y]; 
@@ -1880,7 +1979,7 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
         }
     }
 
-    sint32 maxSize = std::max(m_size.x, m_size.y);
+	sint32 maxSize = max(m_size.x, m_size.y);
 	double const someNumber = 
 		sqrt(static_cast<double>(maxSize * maxSize) / 
 			 (2 * g_theProfileDB->GetNPlayers())
@@ -1892,7 +1991,7 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 	if(maxDistance < minDistance)
 		maxDistance = minDistance;
 
-    double third = std::min(m_size.x, m_size.y) * 0.33; 
+    double third = min(m_size.x, m_size.y) * 0.33; 
     if (third < minDistance) { 
         minDistance = (sint32)third; 
     } 
@@ -2419,10 +2518,10 @@ void World::Mdump(FILE *fout)
 				}
 				fprintf(fout, " ");
 				
-			}
-		}
-		fprintf (fout, "\n");
-	}
+			}  
+      }
+      fprintf (fout, "\n");
+   }   
 #endif
 }
 
@@ -2435,112 +2534,102 @@ void World::Mdump(FILE *fout)
 
 
 
-// Need a global to fix number of goods.
-sint32 g_numGoods = 0;
 
-//----------------------------------------------------------------------------
-//
-// Name       : World::Serialize
-//
-// Description: Store/Load CityData
-//
-// Parameters : CivArchive &archive       :
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
+
+
 void World::Serialize(CivArchive &archive)
 {
+	sint32	w, h,
+			x, y;
+
 #define WORLD_MAGIC 0x48A8A848
 
-	CHECKSERIALIZE
+    CHECKSERIALIZE
 
-	if (archive.IsStoring()) 
-    {
-		archive.PerformMagic(WORLD_MAGIC);
-		archive << m_isXwrap;
-		archive << m_isYwrap;
-		archive.PutSINT32(m_continents_are_numbered);
+	if (archive.IsStoring()) {					
+		archive.PerformMagic(WORLD_MAGIC) ;
+		archive<<m_isXwrap ;
+		archive<<m_isYwrap ;
+        archive.PutSINT32(m_continents_are_numbered); 
 		archive << m_water_continent_max;
 		archive << m_land_continent_max;
-		m_size.Serialize(archive) ;
+
+		m_size.Serialize(archive) ;				
+
 		
-		sint32 const    w   = GetWidth();
-		sint32 const    h   = GetHeight();
-		sint32 const	len = w * h;
-		for (sint32 i = 0; i < len; ++i) 
-        {
+		w = GetWidth() ;
+		h = GetHeight() ;
+
+		sint32			len = w*h;
+		for (sint32 i=0; i<len; i++) {
 			m_tileInfoStorage[i].Serialize(archive);
 		}
 
-		for (sint32 x = 0; x < w; ++x) 
-        {
-			for (sint32 y = 0; y < h; ++y) 
-            {
-				GetCell(x, y)->Serialize(archive);
+		for (x=0; x<w; x++) {
+			for (y=0; y<h; y++) {
+				GetCell(x,y)->Serialize(archive) ;
 			}
 		}
-	
+		
+		
 		archive << m_num_civ_starts;
 		archive.Store((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
 		archive << g_theResourceDB->NumRecords();
 		archive.Store((uint8*)m_goodValue, sizeof(double) * g_theResourceDB->NumRecords());
-	} 
-    else 
-    {
-		archive.TestMagic(WORLD_MAGIC);
 
-		FreeMap();
+	} else {	
+		sint32	i,
+				x, y,
+				w, h ;
 
-		archive >> m_isXwrap;
-		archive >> m_isYwrap;
-		m_continents_are_numbered = archive.GetSINT32();
+		MapPoint	pos ;
+
+        FreeMap();
+
+		archive.TestMagic(WORLD_MAGIC) ;
+		archive>>m_isXwrap ;
+		archive>>m_isYwrap ;
+        m_continents_are_numbered = archive.GetSINT32(); 
 		archive >> m_water_continent_max;
 		archive >> m_land_continent_max;
 
-		m_size.Serialize(archive) ;
+		m_size.Serialize(archive) ;		
+
 
 		AllocateMap();
 
-		sint32 const    w   = GetWidth();
-		sint32 const    h   = GetHeight();
-		sint32 const    len = w * h;
+		w = GetWidth() ;
+		h = GetHeight() ;
 
-		for (sint32 i = 0; i < len; i++) 
-        {
+
+
+
+
+		sint32		len = w * h;
+		for (i=0; i<len; i++) {
 			m_tileInfoStorage[i].Serialize(archive);
 		}
 		
-		for (sint32 x = 0; x < w; ++x) 
-        {
-			for (sint32 y = 0; y < h; ++y) 
-            {
+		for (x=0; x<w; x++) {
+			for (y=0; y<h; y++) {
+				Cell		*theCell;
 				MapPoint	pos(x,y);
-				Cell *      theCell = GetCell(x, y);
+
+				theCell = GetCell(x, y);
 				theCell->Serialize(archive);
+				
 			}
 		}
 		
 		archive >> m_num_civ_starts;
 		archive.Load((uint8*)m_civ_starts, sizeof(m_civ_starts));
 
-		archive >> g_numGoods;
-		if(g_numGoods == g_theResourceDB->NumRecords()){
-			m_goodValue = new double[g_numGoods];
-			archive.Load((uint8 *)m_goodValue, sizeof(double) * g_numGoods);
-		}
-		else{ // Handle sized up good database
-			// Remove good values from archieve and recalculate them
-			double *tmpGoodValue = new double[g_numGoods];
-			archive.Load((uint8 *)tmpGoodValue, sizeof(double) * g_numGoods);
-			delete[] tmpGoodValue;
-			ComputeGoodsValues();
-		}
+		sint32 numGoods;
+		archive >> numGoods;
+		Assert(numGoods == g_theResourceDB->NumRecords());
+		m_goodValue = new double[numGoods];
+		archive.Load((uint8 *)m_goodValue, sizeof(double) * numGoods);
 	}
 }
 
@@ -2621,14 +2710,18 @@ void World::DisposeTileInfoStorage(void)
 
 TileInfo *World::GetTileInfoStoragePtr(const MapPoint &pos)
 {
-	Assert(m_tileInfoStorage);
-	if (!m_tileInfoStorage)
-    {
-        return NULL;
-    }
+	TileInfo		*info;
+
+	Assert(m_tileInfoStorage != NULL);
+	if (m_tileInfoStorage == NULL) return NULL;
 		
-	sint32 const    width = m_size.x;
-	return &m_tileInfoStorage[pos.x + pos.y * width];
+	sint32			width = m_size.x;
+	sint32			height = m_size.y;
+	sint32			area = m_size.x * m_size.y;
+
+	info = &m_tileInfoStorage[pos.x + pos.y * width];
+
+	return info;
 }
 
 void World::GenerateGoodyHuts()
@@ -2667,62 +2760,29 @@ void World::GenerateGoodyHuts()
 
 IMapGenerator *World::LoadMapPlugin(sint32 pass)
 {
-#ifndef USE_COM_REPLACEMENT
 	HINSTANCE plugin;
-#else
-	lt_dlhandle plugin;
-#endif
 	const char *name = g_theProfileDB->MapPluginName(pass);
 	if(stricmp(name, "none") == 0)
 		return NULL;
-#ifndef USE_COM_REPLACEMENT
 	plugin = LoadLibrary(name);
-#else
-	int rc = lt_dlinit();
-	if (0 != rc) {
-		return NULL;
-	}
-	plugin = lt_dlopen(name);
-#endif
 	if(plugin == NULL) {
 		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
-#ifdef USE_COM_REPLACEMENT
-		lt_dlexit();
-#endif
 		return NULL;
 	}
-#ifndef USE_COM_REPLACEMENT
 	CreateMapGenerator creator = (CreateMapGenerator)GetProcAddress(plugin, "CoCreateMapGenerator");
-#else
-	CreateMapGenerator creator = (CreateMapGenerator)lt_dlsym(plugin, "CoCreateMapGenerator");
-#endif
 	if(creator == NULL) {
-#ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
-#else
-		lt_dlclose(plugin);
-		lt_dlexit();
-#endif
 		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name);
 		return NULL;
 	}
-#ifndef USE_COM_REPLACEMENT
+	
 	IUnknown *unknown;
 	if(creator(&unknown) != S_OK) {
-#else
-	IMapGenerator *generator = creator();
-	if (!generator) {
-#endif
 		c3errors_ErrorDialog("Map Generator", "Plugin creation failed");
-#ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
-#else
-		lt_dlclose(plugin);
-		lt_dlexit();
-#endif
 		return NULL;
 	}
-#ifndef USE_COM_REPLACEMENT	
+	
 	IMapGenerator *generator;
 	if(unknown->QueryInterface(CLSID_MapGenerator, (void **)&generator) != S_OK) {
 		c3errors_ErrorDialog("Map Generator", "Plugin does not have map generator interface");
@@ -2730,23 +2790,16 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 		FreeLibrary(plugin);
 		return NULL;
 	}
-#endif
+	
 	m_current_plugin = plugin;
-#ifndef USE_COM_REPLACEMENT
 	unknown->Release();
-#endif
 	return generator;
 }
 	
 void World::FreeMapPlugin()
 {
-#ifndef USE_COM_REPLACEMENT
 	FreeLibrary(m_current_plugin);
-#else
-	lt_dlclose(m_current_plugin);
-	lt_dlexit();
-#endif
-	m_current_plugin = NULL;
+    m_current_plugin = NULL;
 }
 
 void World::GetHeightMap(IMapGenerator *mapgen,
@@ -2831,7 +2884,7 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 	sint32 maxheight;
 	sint32 xsrch, ysrch;
 	sint32 xend, yend;
-	sint32 maxx = 0, maxy = 0;
+	sint32 maxx, maxy;
 
 	BOOL atMouth;
 	
@@ -2894,12 +2947,25 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 			while(!atMouth) {
 				sint32 xc, yc;
 				sint32 lowest = 0x7fffffff;
-				sint32 lowx = 0x7fffffff, lowy = 0x7fffffff;
+				sint32 lowx, lowy;
 				CHKCOORD(x, y);
 
-                sint32 left = (y & 1) ? x : x -1;
-
-                for(xc = left; xc < left+2; xc++) {
+				sint32 curheight = map[y * m_size.x + x];
+				sint32 left;
+				if(y & 1) { 
+					left = x;
+					
+					
+					
+					
+				} else { 
+					left = x - 1;
+					
+					
+					
+					
+				}
+				for(xc = left; xc < left+2; xc++) {
 					if(xc < 0 || xc >= m_size.x)
 						continue;
 					for(yc = y-1; yc < y + 2; yc+=2) {
@@ -3173,13 +3239,15 @@ void World::DeleteStartingPoint(sint32 index)
 
 BOOL World::ExportMap(MBCHAR *filename)
 {
+	FILE	*outfile;
+
 	Assert(filename);
 	if (!filename) return FALSE;
 
 	Assert(strlen(filename) > 0);
 	if (strlen(filename) <= 0) return FALSE;
 
-	FILE * outfile = fopen(filename, "wt");
+	outfile = fopen(filename, "wt");
 	Assert(outfile);
 	if (!outfile) return FALSE;
 
@@ -3223,19 +3291,24 @@ BOOL World::ExportMap(MBCHAR *filename)
 
 BOOL World::ImportMap(MBCHAR *filename)
 {
+	FILE *infile;
+
 	Assert(filename);
 	if (!filename) return FALSE;
 
 	Assert(strlen(filename) > 0);
 	if (strlen(filename) <= 0) return FALSE;
 
-	FILE * infile = fopen(filename, "rt");
+	infile = fopen(filename, "rt");
 	Assert(infile);
 	if (!infile) return FALSE;
 
+	MapPoint size;
 	sint32 width,height;
+
 	fscanf(infile, "%d,%d\n", &width, &height);
-	MapPoint size ((sint16)width, (sint16)height);
+	size.x = (sint16)width;
+	size.y = (sint16)height;
 
 	if (size != m_size) {
 		fclose(infile);
@@ -3255,22 +3328,25 @@ BOOL World::ImportMap(MBCHAR *filename)
 
 	for (y=0; y<m_size.y; y++) {
 		for (x=0; x<m_size.x; x++) {
-			Cell	*   cell;
-			MapPoint	pos(x, y);
+			MapPoint	pos;
+			Cell	*cell;
 		
+			pos.x = x;
+			pos.y = y;
+
 			BOOL hasHut;
 			BOOL hasRiver;
 			BOOL hasGood;
 			sint32 terrainType;
 			uint32 env;
-			
+
 			fscanf(infile, "%d,%d,%d,%d,%ld\t", 
 					&terrainType,
 					&hasHut,
 					&hasRiver,
 					&hasGood,
 					&env);
-			
+
 			cell = GetCell(pos);
 
 			
@@ -3310,8 +3386,7 @@ BOOL World::ImportMap(MBCHAR *filename)
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
 			if(IsWater(x,y) && !IsSurroundedByWater(x,y)) {
-				// ConvertToBeach(x, y, GetCell(x,y));
-				GetCell(x,y)->SetTerrain(TERRAIN_WATER_BEACH);
+				ConvertToBeach(x, y, GetCell(x,y));
 			} else if(GetCell(x,y)->GetTerrainType() == TERRAIN_WATER_BEACH && IsSurroundedByWater(x,y)) {
 				GetCell(x,y)->SetTerrain(TERRAIN_WATER_SHALLOW);
 			}
@@ -3400,7 +3475,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 	if(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) {
 		
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2);
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
 
@@ -3416,7 +3491,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		}
 	} else if(rec->GetMovementTypeShallowWater()) {
 		
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2);
 		bool nextToLand = false;
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
@@ -3467,7 +3542,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 			terr = TERRAIN_WATER_SHALLOW;
 		}
 	} else if(rec->GetMovementTypeSea()) {
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2);
 		bool nextToLand = false;
 		bool nextToShallow = false;
 		bool nextToBeach = false;
@@ -3585,7 +3660,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 		
 		
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2);
 		for(it.Start(); !it.End(); it.Next()) {
 			Cell *cell = GetCell(it.Pos());
 			if(cell) {
@@ -3610,6 +3685,7 @@ void World::WholePlayerLandArea(int *array) const
 {
 	memset(array,0,(k_MAX_PLAYERS+1)*sizeof(int));
 
+	sint32 area=0;
 	Cell* const pLastCell = &m_cellArray[m_size.x * m_size.y - 1];
 	Cell *pCurCell = &m_cellArray[0];
 

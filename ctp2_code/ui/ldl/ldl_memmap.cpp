@@ -33,7 +33,7 @@ unsigned char *ldl_MemMap::GetFileBits( char *filename, unsigned long *junk )
 	}
 
 	if ( fread( bits, 1, filesize, f ) != filesize ) {
-		delete[] bits;
+		delete[filesize] bits;
 		fclose(f);
 		return NULL;
 	}

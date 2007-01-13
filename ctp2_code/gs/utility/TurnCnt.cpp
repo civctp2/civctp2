@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : turncounter handles the clockwork of turn progression
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,7 +25,6 @@
 // - Altered filename generating for PBEM saves (JJB 2004/12/30)
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
 //   - April 24th 2005 Martin Gühmann
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "c3.h"
@@ -52,8 +48,7 @@
 #include "player.h"
 #include "profileDB.h"
 #include "CivPaths.h"
-#include "DifficultyRecord.h"
-#include "Diffcly.h"
+#include "DiffDB.h"
 #include "ConstDB.h"
 #include "StrDB.h"
 #include "BuildingRecord.h"
@@ -100,7 +95,7 @@
 #include "A_Star_Heuristic_Cost.h"
 #include "World.h"
 #include "messagemodal.h"
-#include "AICause.h"
+#include "aicause.h"
 
 #include "GameSettings.h"
 #include "Score.h"
@@ -131,6 +126,7 @@ extern TiledMap                 *g_tiledMap;
 
 extern ProfileDB                *g_theProfileDB;
 extern RadarMap                 *g_radarMap;
+extern DifficultyDB             *g_theDifficultyDB;
 extern ConstDB                  *g_theConstDB;
 extern StringDB                 *g_theStringDB;
 
@@ -176,7 +172,7 @@ void TurnCount::Init()
 	m_round = 0;
 	m_simultaneousMode = FALSE;
 	m_activePlayers = g_theProfileDB->GetNPlayers();
-	m_year = diffutil_GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
+	m_year = g_theDifficultyDB->GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 	m_lastBeginTurn = -1;
 	m_isHotSeat = FALSE;
 	m_isEmail = FALSE;
@@ -195,7 +191,7 @@ void TurnCount::Init(CivArchive &archive)
 void TurnCount::SkipToRound(sint32 round)
 {
 	m_round = round;
-	m_year = diffutil_GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
+	m_year = g_theDifficultyDB->GetYearFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 }
 
 void TurnCount::Serialize(CivArchive &archive) 
@@ -223,16 +219,16 @@ void TurnCount::Serialize(CivArchive &archive)
 		tmp = NewTurnCount::m_sentGameAlmostOverMessage;
 		archive << tmp;
 	} else {
-		archive >> m_turn;  // Unused always -4000 or what you have in const.txt
-		archive >> m_round; // Unused always 0
-		archive >> m_year;  // Unused
+		archive >> m_turn; 
+		archive >> m_round;
+		archive >> m_year;
 		archive >> sim;
 		m_simultaneousMode = sim;
-		archive >> m_activePlayers; // Seems to be number of players at the start
-		archive >> m_lastBeginTurn; // Unused always -1
+		archive >> m_activePlayers;
+		archive >> m_lastBeginTurn;
 		m_isEmail = (BOOL)archive.GetSINT8();
 		m_isHotSeat = (BOOL)archive.GetSINT8();
-		archive >> m_happinessPlayer; // Unused always 0
+		archive >> m_happinessPlayer;
 
 		uint8 tmp;
 		archive >> tmp;
@@ -335,6 +331,7 @@ void TurnCount::ChooseNextActivePlayer()
 void TurnCount::EndThisTurn()
 { 
 	PLAYER_INDEX curPlayer = g_selected_item->GetCurPlayer();
+	PLAYER_INDEX visPlayer = g_selected_item->GetVisiblePlayer();
 
 #ifdef _DEBUG
 	if (g_theDiplomacyLog) g_theDiplomacyLog->EndTurn();
@@ -389,14 +386,14 @@ void TurnCount::BeginNewRound()
     if (g_theDiplomacyLog) { 
         g_theDiplomacyLog->BeginRound();
     }
-#endif // _DEBUG
+#endif _DEBUG
 
 	Barbarians::BeginYear();
 
 	ChooseHappinessPlayer();
 
 	
-	m_year += diffutil_GetYearIncrementFromTurn(g_theGameSettings->GetDifficulty(), m_round);
+	m_year += g_theDifficultyDB->GetYearIncrementFromTurn(g_theGameSettings->GetDifficulty(), m_round);
 
 	RunNewYearMessages() ;
 	if(g_network.IsHost()) {
@@ -495,7 +492,7 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 		}
 
 	}
-#endif // _DEBUG
+#endif _DEBUG
 
 	if(g_network.IsHost()) {
 		
@@ -535,35 +532,48 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 #endif
 }
 
-void TurnCount::EndThisTurnBeginNewTurn(BOOL clientRequest)
+void TurnCount::EndThisTurnBeginNewTurn (BOOL clientRequest)
+
 {
-	if (clientRequest) 
-    {
-		if (g_network.CurrentPlayerAckedBeginTurn()) 
-        {
-		    EndThisTurnBeginNewTurn(FALSE);
+	if(clientRequest) {
+		if(!g_network.CurrentPlayerAckedBeginTurn()) {
+			return;
 		}
+
+		
+		
+		
+		PLAYER_INDEX start_player = g_selected_item->GetCurPlayer();
+
+
+
+
+
+
+
+
+		EndThisTurnBeginNewTurn(FALSE);
+		return;
 	}
-    else
-    {
-	    EndThisTurn();
 
-	    if (m_activePlayers <= 0) 
-        {
-		    BeginNewRound();
-	    } 
-        else 
-        {
-		    BeginNewTurn(FALSE);
-	    }
+	EndThisTurn();
+	if(m_activePlayers <= 0) {
+		BeginNewRound();
+	} else {
+		BeginNewTurn(FALSE);
+	}
 
-	    if (!g_network.IsActive() || 
-            g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()
-           ) 
-        {
-		    g_selected_item->Refresh();
-	    }
-    }
+	
+	if(!g_network.IsActive() || g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()) {
+
+
+
+
+
+
+
+		g_selected_item->Refresh();
+	}
 }
 
 void TurnCount::EndThisSlice()
@@ -804,7 +814,7 @@ void TurnCount::NetworkEndTurn(BOOL force)
 		return;
 
 	if (!VerifyEndTurn(force))
-		return;
+		return;;
 
 	if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_END_TURN));
@@ -816,7 +826,6 @@ void TurnCount::NetworkEndTurn(BOOL force)
 	}
 
 	return;	
-#if 0 // Unreachable
 	{
 		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
 			for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
@@ -830,26 +839,30 @@ void TurnCount::NetworkEndTurn(BOOL force)
 		}
 	}
 
-    EndThisTurnBeginNewTurn(FALSE);
+	PLAYER_INDEX start_player = g_selected_item->GetCurPlayer();
+
+	EndThisTurnBeginNewTurn(FALSE);
+
+
 
 #ifdef _DEBUG
 	extern BOOL g_doingFastRounds;
 
-	if (!g_doingFastRounds) 
-    {
+	if (!g_doingFastRounds) {
+		
 		g_tiledMap->InvalidateMix();
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->Refresh();
 		g_radarMap->Update();
 	}
 #else
+	
 	g_tiledMap->InvalidateMix();
 	g_tiledMap->InvalidateMap();
 	g_tiledMap->Refresh();
 	g_radarMap->Update();
 #endif
 
-#endif // Unreachable
 }
 
 void TurnCount::RunNewYearMessages(void)
@@ -1104,6 +1117,8 @@ sint32 finite_count=0;
 			TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 		}
 
+		sint32 oldPlayer = g_selected_item->GetCurPlayer();
+
 		EndThisTurnBeginNewTurn();
 
 		if(m_isHotSeat || m_isEmail) {
@@ -1188,6 +1203,29 @@ void TurnCount::ChooseHappinessPlayer()
 #ifdef _DEBUG
 void TurnCount::LogPlayerStats(void)
 {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	FILE            *logfile;
 	MBCHAR          filename[80];
 	PLAYER_INDEX    playerNum;
@@ -1208,10 +1246,13 @@ void TurnCount::LogPlayerStats(void)
 
 	CityData            *cityData;
 	Unit                city;
+	sint32              cityIndex;
+	BOOL                unknown;
 
 	for (i=0; i<cityList->Num(); i++) {
 		city = cityList->Access(i);
 		cityData = city.AccessData()->GetCityData();
+		cityIndex = g_player[playerNum]->GetCityId(city);
 
 		cityData->GetPop(citySize);
 
@@ -1226,9 +1267,14 @@ void TurnCount::LogPlayerStats(void)
 		if (cityData->GetIsRioting())
 			numCitiesRioting++;
 
-		totalFood       += cityData->GetNetCityFood();
-		totalProduction += cityData->GetNetCityProduction();
-		totalGold       += cityData->GetNetCityGold();
+		
+		totalFood += g_player[playerNum]->CityGetNetFood(cityIndex, &unknown);
+
+		
+		totalProduction += g_player[playerNum]->CityGetNetProduction(cityIndex, &unknown);
+
+		
+		totalGold += g_player[playerNum]->CityGetNetGold(cityIndex, &unknown);
 
 	}
 
@@ -1326,6 +1372,7 @@ void TurnCount::LogPlayerStats(void)
 	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetCurrentPollution());
 
+	double incomepercent = g_player[playerNum]->GetIncomePercent();
 	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetIncomePercent());
 	

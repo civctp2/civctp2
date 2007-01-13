@@ -33,13 +33,9 @@ void Direction::Serialize(CivArchive &archive)
 
 
 Path::Path()
-:
-    m_next_dir          (0),
-	m_start             (-1, -1),
-    m_step              (),
-    m_current           (-1, -1), 
-    m_next              (0)
+
 { 
+    Clear(); 
 } 
 
 
@@ -52,6 +48,7 @@ Path::Path(const Path *copy) : m_step(copy->m_step)
 }
 
 void Path::Clear() 
+
 { 
     m_step.Clear(); 
     m_next = 0; 
@@ -61,12 +58,15 @@ void Path::Clear()
 } 
 
 void Path::FlattenAstarList(AstarPoint *best)
+
 {
-    Assert(best); 
-    AstarPoint *    ptr = best;
+    AstarPoint *ptr=NULL, *old = NULL;
+    sint32 i; 
 
     sint32 n; 
-    for (n=0; ptr->m_parent; n++, ptr = ptr->m_parent);
+
+    Assert(best); 
+    for (n=0, ptr = best; ptr->m_parent; n++, ptr = ptr->m_parent);
 
     m_current = m_start = ptr->m_pos;
     m_next = 0;
@@ -76,13 +76,12 @@ void Path::FlattenAstarList(AstarPoint *best)
     m_step.m_nElements = n; 
 
 
-    AstarPoint *    old = best; 
-    sint32          i   = n - 1;
-    for (ptr = old->m_parent; ptr; ptr = ptr->m_parent) 
-    { 
+    old = best; 
+
+
+    for (i=n-1, ptr = old->m_parent; ptr; i--, ptr = ptr->m_parent) { 
         m_step[i] = ptr->m_pos.GetNeighborDirection(old->m_pos); 
-        old = ptr;
-        --i;
+        old = ptr; 
     } 
 }
 
@@ -150,7 +149,9 @@ void Path::FlattenNormalizedPointList(const MapPoint &start,
 
 
 void Path::Start(MapPoint &p)
+
 {
+
     m_next = 0; 
 	m_next_dir = 0;
     m_current = m_start; 
@@ -219,7 +220,7 @@ void Path::ClipStartToCurrent()
 
  
 
-void Path::GetStartPoint(MapPoint &pos) const
+void Path::GetStartPoint(MapPoint &pos)
 {
     pos = m_start;
 }
@@ -255,12 +256,15 @@ void Path::IncDir()
 	m_next_dir++; 
 }
 
-void Path::Concat(Path const & otherpath)
+void Path::Concat(Path &otherpath)
 {
-	MapPoint    start_pos;
-	otherpath.GetStartPoint(start_pos);
+	sint32 i, n = otherpath.m_step.Num();
+	MapPoint start_pos;
+	MapPoint end_pos;
 
-	MapPoint    end_pos     = GetEnd();
+	otherpath.GetStartPoint(start_pos);
+	end_pos = GetEnd();
+
 	
 	if (start_pos.x != -1 && start_pos.y != -1 && 
 		end_pos.x != -1 && end_pos.y != -1)
@@ -272,17 +276,15 @@ void Path::Concat(Path const & otherpath)
 		}
 	}
 
-	sint32  n  = otherpath.m_step.Num();
-	for (sint32 i = 0; i < n; i++) 
-    {
+	for(i = 0; i < n; i++) {
 		m_step.Insert(otherpath.m_step[i]);
 	}
 }
 
 void Path::ConcatReturnPath()
 {
-	for (sint32 i = m_step.Num() - 1; i >= 0; i--) 
-    {
+	sint32 i, n = m_step.Num();
+	for(i = n-1; i >= 0; i--) {
 		switch(WORLD_DIRECTION(m_step[i].dir)) {
 			case NORTH: m_step.Insert(SOUTH); break;
 			case NORTHEAST: m_step.Insert(SOUTHWEST); break;
@@ -319,23 +321,28 @@ void Path::Serialize(CivArchive &archive)
 
 void Path::InsertFront(const MapPoint &pos)
 {
-    sint32 num_step = m_step.Num(); 
+    sint32 idx_step, num_step; 
+    num_step = m_step.Num(); 
 
     m_step.ExtendByOne(); 
-    for (sint32 idx_step =(num_step-1); 0 <= idx_step; idx_step--) { 
+    for(idx_step=(num_step-1); 0 <= idx_step; idx_step--) { 
        m_step[idx_step+1] = m_step[idx_step]; 
     } 
-    m_step[0]   = pos.GetNeighborDirection(m_start); 
-    m_start     = pos;
+
+    MapPoint tmppos;
+    
+    m_step[0] = pos.GetNeighborDirection(m_start); 
+    m_start = pos;
 }
 
 void Path::PrependDir (sint32 dir)
 
 { 
-    sint32 num_step = m_step.Num(); 
+    sint32 idx_step, num_step; 
+    num_step = m_step.Num(); 
 
     m_step.ExtendByOne(); 
-    for (sint32 idx_step=(num_step-1); 0 <= idx_step; idx_step--) { 
+    for(idx_step=(num_step-1); 0 <= idx_step; idx_step--) { 
        m_step[idx_step+1] = m_step[idx_step]; 
     } 
     m_step[0] = (sint8)dir; 
@@ -390,9 +397,10 @@ sint32 Path::GetMovesRemaining()
 
 MapPoint Path::GetEnd() const
 {
+	sint32 i;
 	MapPoint end = m_start;
 	MapPoint next;
-	for(sint32 i = 0; i < m_step.Num(); i++) {
+	for(i = 0; i < m_step.Num(); i++) {
 		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next)) {
 			end = next;
 		} else {
@@ -411,7 +419,7 @@ sint32 Path::GetNextIndex() const
 void Path::RestoreIndexAndCurrentPos(const sint32 & index)
 {
 	m_current = m_start;
-	m_next    = 0;
+	m_next = 0;
 	while (m_next < index)
 	{
 		Next(m_current);

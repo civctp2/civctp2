@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of user preferences.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,8 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
+// 
 //
 //----------------------------------------------------------------------------
 //
@@ -30,209 +28,220 @@
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
 // - Option added to include multiple data directories.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Option added to select whether an army is selected or a city is selected,
-//   if both options are available. (Oct 8th 2005 Martin Gühmann)
-// - DebugSlic and GoodAnim are now part of the advance options. (Oct 16th 2005 Martin Gühmann)
-// - Added option to avoid an end turn if there are cities with empty build 
-//   queues. (Oct. 22nd 2005 Martin Gühmann)
-// - Added option to allow end turn if the game runs in the background,
-//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
-// - Options CityClick, EndTurnWithEmptyBuildQueues and RunInBackground
-//   removed from advance options since they do not work. (May 21st 2006 Martin Gühmann)
-// - Made automatic treaty ending an option.
-// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "profileDB.h"
-
-#include "AgreementData.h"      // k_EXPIRATION_NEVER
 #include "c3errors.h"
+#include "profileDB.h"	
+#include "MapPoint.h"
 #include "Token.h"
-#include "Globals.h"
-#include "StrDB.h"              // g_theStringDB
+#include "globals.h"
+
+#include "StrDB.h"
+#include "CivilisationDB.h"
 #include "Civilisation.h"
-#include "GameSettings.h"       // g_theGameSettings
-#include "soundmanager.h"       // g_soundManager
-#include "CivPaths.h"           // g_civPaths
-#include "player.h"             // g_player
+#include "SimpleDynArr.h"
+#include "SlicEngine.h"
+#include "civapp.h"
+#include "screenutils.h"
+#include "GameSettings.h"
+#include "soundmanager.h"
+#include "CivPaths.h"
+#include "player.h"
 #include "Diffcly.h"
+
+
+#include "Action.h"
+
+extern CivPaths				*g_civPaths;
+extern StringDB				*g_theStringDB;
+extern CivilisationDatabase *g_theCivilisationDB;
+extern SlicEngine			*g_slicEngine;
+extern CivApp				*g_civApp;
+extern GameSettings			*g_theGameSettings;
+extern SoundManager			*g_soundManager;
+extern Player              **g_player;
+
 #include "Diplomacy_Log.h"
+extern Diplomacy_Log *g_theDiplomacyLog; 
 
-extern Diplomacy_Log        *g_theDiplomacyLog; 
-
-namespace
-{
-sint32 const                AUDIO_VOLUME_DEFAULT        = 8;
-sint32 const                PLAYER_COUNT_DEFAULT        = 3;
-sint32 const                PLAYER_COUNT_MAX_DEFAULT    = 16;
-sint32 const                SLIDER_MIDDLE               = 5;
-
-sint32 const                USE_UNKNOWN                 = 0;
-}
 
 ProfileDB::ProfileDB()
-:
-    m_nPlayers                          (PLAYER_COUNT_DEFAULT),
-    m_ai_on                             (FALSE),
-    m_use_nice_start                    (FALSE),
-    m_use_map_plugin                    (FALSE),
-    m_use_ipx                           (FALSE),
-    m_setupRadius                       (0),
-    m_powerPoints                       (0),
-    m_difficulty                        (0),
-    m_risklevel                         (0),
-    m_genocide                          (FALSE),
-    m_trade                             (FALSE),
-    m_simplecombat                      (FALSE),
-    m_pollution                         (FALSE),
-    m_lineofsight                       (FALSE),
-    m_unitAnim                          (FALSE),
-    m_goodAnim                          (FALSE),
-    m_tradeAnim                         (FALSE),
-    m_waterAnim                         (FALSE),
-    m_libraryAnim                       (FALSE),
-    m_wonderMovies                      (FALSE),
-    m_bounceMessage                     (FALSE),
-    m_messageAdvice                     (FALSE),
-    m_tutorialAdvice                    (FALSE),
-    m_enemyMoves                        (TRUE),
-    m_revoltWarning                     (FALSE),
-    m_enemyIntrude                      (FALSE),
-    m_unitLostWarning                   (FALSE),
-    m_tradeLostWarning                  (FALSE),
-    m_cityLostWarning                   (FALSE),
-    m_autocenter                        (TRUE),
-    m_fullScreenMovies                  (FALSE),
-    m_showCityInfluence                 (FALSE),
-    m_invulnerableTrade                 (FALSE),
-    m_fogOfWar                          (FALSE),
-    m_startType                         (FALSE),
-    m_autoSave                          (FALSE),
-    m_playerNumber                      (1),
-    m_civIndex                          (static_cast<CIV_INDEX>(PLAYER_COUNT_MAX_DEFAULT)),
-    m_gender                            (GENDER_MALE),
-    m_isSaved                           (FALSE),
-    m_isScenario                        (FALSE),
-    m_noHumansOnHost                    (FALSE),
-    m_logPlayerStats                    (FALSE),
-    m_sfxVolume                         (AUDIO_VOLUME_DEFAULT),
-    m_voiceVolume                       (AUDIO_VOLUME_DEFAULT),
-    m_musicVolume                       (AUDIO_VOLUME_DEFAULT),
-    m_xWrap                             (TRUE),
-    m_yWrap                             (FALSE),
-    m_autoGroup                         (FALSE),
-    m_autoDeselect                      (FALSE),
-    m_autoSelectNext                    (FALSE),
-    m_autoSelectFirstUnit               (FALSE),
-    m_autoTurnCycle                     (FALSE),
-    m_combatLog                         (FALSE),
-    m_useLeftClick                      (FALSE),
-    m_showZoomedCombat                  (FALSE),
-    m_useFingerprinting                 (FALSE),
-    m_useRedbookAudio                   (FALSE),
-    m_requireCD                         (FALSE),
-    m_protected                         (TRUE),
-    m_tryWindowsResolution              (TRUE),
-    m_useDirectXBlitter                 (TRUE),
-    m_screenResWidth                    (640),
-    m_screenResHeight                   (480),
-    m_zoomedCombatAlways                (FALSE),
-    m_attackEveryone                    (FALSE),
-    m_nonRandomCivs                     (FALSE),
-    m_autoEndMultiple                   (FALSE),
-    m_wetdry                            (SLIDER_MIDDLE), 
-    m_warmcold                          (SLIDER_MIDDLE), 
-    m_oceanland                         (SLIDER_MIDDLE), 
-    m_islandcontinent                   (SLIDER_MIDDLE),
-    m_homodiverse                       (SLIDER_MIDDLE), 
-    m_goodcount                         (SLIDER_MIDDLE),
-    m_throneRoom                        (FALSE),
-    m_max_players                       (PLAYER_COUNT_MAX_DEFAULT),
-    m_mapSize                           (MAPSIZE_MEDIUM),
-    m_alienEndGame                      (TRUE),
-    m_allow_ai_settle_move_cheat        (FALSE),
-    m_unitCompleteMessages              (FALSE),
-    m_nonContinuousUnitCompleteMessages (FALSE),
-    m_debugSlic                         (FALSE),
-    m_dontKillMessages                  (FALSE),
-    m_aiPopCheat                        (TRUE),
-    m_showCityNames                     (TRUE),
-    m_showTradeRoutes                   (TRUE),
-    m_unitSpeed                         (1),
-    m_mouseSpeed                        (SLIDER_MIDDLE),
-    m_leftHandedMouse                   (FALSE),
-    m_cityBuiltMessage                  (TRUE),
-    m_useAttackMessages                 (FALSE),
-    m_useOldRegisterClick               (FALSE),
-    m_useCTP2Mode                       (TRUE),
-    m_is_diplomacy_log_on               (FALSE),
-    m_cheat_age                         (0),
-    m_autoSwitchTabs                    (TRUE),
-    m_showPoliticalBorders              (TRUE),
-    m_moveHoldTime                      (500),
-    m_battleSpeed                       (SLIDER_MIDDLE),
-    m_showEnemyHealth                   (FALSE),
-    m_scrollDelay                       (3),
-    m_autoRenameCities                  (FALSE),
-    m_autoOpenCityWindow                (TRUE),
-    m_endTurnSound                      (TRUE),
-    m_enableLogs                        (FALSE),
-    m_displayUnits                      (TRUE),
-    m_displayCities                     (TRUE),
-    m_displayBorders                    (TRUE),
-    m_displayFilter                     (TRUE),
-    m_displayTrade                      (TRUE),
-    m_displayTerrain                    (TRUE),
-    m_forest                            (USE_UNKNOWN),
-    m_grass                             (USE_UNKNOWN),
-    m_plains                            (USE_UNKNOWN),
-    m_desert                            (USE_UNKNOWN),
-    m_whitePercent                      (USE_UNKNOWN),
-    m_brownPercent                      (USE_UNKNOWN),
-    m_temperatureRangeAdjust            (USE_UNKNOWN),
-    m_land                              (USE_UNKNOWN),
-    m_continent                         (USE_UNKNOWN),
-    m_homogenous                        (USE_UNKNOWN),
-    m_richness                          (USE_UNKNOWN),
-    m_closeEyepoint                     (FALSE),
-    m_colorSet                          (0),
-    m_showExpensive                     (FALSE),
-    m_showOrderUnion                    (FALSE),
-    m_recentAtTop                       (FALSE),
-    m_cityClick                         (FALSE),
-    m_dontSave                          (FALSE),
-    m_endTurnWithEmptyBuildQueues       (FALSE),
-    m_runInBackground                   (FALSE),
-    m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
-    m_cityCaptureOptions                (FALSE),
-    m_vars                              (new PointerList<ProfileVar>),
-    m_loadedFromTutorial                (FALSE)
+:	m_closeEyepoint(FALSE),
+	m_colorSet(0),
+	m_showExpensive(FALSE),
+	m_showOrderUnion(FALSE),
+	m_recentAtTop(FALSE)
 {
-	for (size_t player = 0; player < k_MAX_PLAYERS; ++player) 
-	{
-		m_ai_personality[player][0] = 0;
+	m_vars = new PointerList<ProfileVar>;
+
+    m_autocenter = TRUE;
+
+	m_mapSize = MAPSIZE_MEDIUM;
+
+	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
+		m_ai_personality[i][0] = 0;
 	}
 
-	m_gameName[0]           = 0;
-	m_leaderName[0]         = 0;
-	m_civName[0]            = 0;
-	m_saveNote[0]           = 0;
-	m_ruleSets[0]           = 0;
-	m_gameWatchDirectory[0] = 0;
+	m_genocide = FALSE;
+	m_trade = FALSE;
+	m_simplecombat = FALSE;
+	m_pollution = FALSE;
+	m_lineofsight = FALSE;
 	
-	for (size_t map_pass = 0; map_pass < k_NUM_MAP_PASSES; ++map_pass)
-	{
-		m_map_plugin_name[map_pass][0]  = 0;
-		m_map_settings[map_pass]        = NULL;
-	};
+	m_unitAnim = FALSE;
+
+	m_goodAnim = FALSE;
+	m_tradeAnim = FALSE;
+	m_waterAnim = FALSE;
+	m_libraryAnim = FALSE;
+	m_wonderMovies = FALSE;
+	m_bounceMessage = FALSE;
+	m_messageAdvice = FALSE;
+	m_tutorialAdvice = FALSE;
+	m_enemyMoves = TRUE;
+	m_revoltWarning = FALSE;
+	m_enemyIntrude = FALSE;
+	m_unitLostWarning = FALSE;
+	m_tradeLostWarning = FALSE;
+	m_cityLostWarning = FALSE; 
+	m_invulnerableTrade = FALSE;
+	m_fullScreenMovies = FALSE;
+	m_showCityInfluence = FALSE;
+
+	
+	m_fogOfWar = FALSE;
+	m_startType = FALSE;
+
+	m_playerNumber = 1;
+
+	
+	
+	m_civIndex = (CIV_INDEX)16; 
+
+	m_gameName[0] = '\0';
+	m_leaderName[0] = '\0';
+	m_civName[0] = '\0';
+	m_saveNote[0] = '\0';
+	m_ruleSets[0] = '\0';
+	m_isSaved = FALSE;
+	m_isScenario = FALSE;
+    m_gender = GENDER_MALE; 
+
+    m_cheat_age = 0; 
+
+	m_autoSave = FALSE;
+
+	m_noHumansOnHost = FALSE;
+
+	m_logPlayerStats = FALSE;
+
+	m_sfxVolume = 8;
+	m_musicVolume = 8;
+	m_voiceVolume = 8;
+
+	m_xWrap = FALSE;
+	m_yWrap = FALSE;
+	m_autoGroup = FALSE;
+	m_autoDeselect = FALSE;
+	m_autoSelectNext = FALSE;
+	m_autoSelectFirstUnit = FALSE;
+	m_autoTurnCycle = FALSE;
+	m_combatLog = FALSE;
+
+	m_useLeftClick = FALSE;
+
+	m_showZoomedCombat = FALSE;
+	m_useFingerprinting = FALSE;
+	m_useRedbookAudio = FALSE;
+	m_requireCD = FALSE;
+	m_protected = TRUE;
+	m_tryWindowsResolution = TRUE;
+	m_useDirectXBlitter = TRUE;
+	m_screenResWidth = 640;
+	m_screenResHeight = 480;
+
+	m_zoomedCombatAlways = FALSE;
+
+	m_attackEveryone = FALSE;
+
+	m_nonRandomCivs = FALSE;
+
+	for(i = 0; i < k_NUM_MAP_PASSES; i++) {
+		m_map_settings[i] = NULL;
+	}
+
+	m_gameWatchDirectory[0] = '\0';
+
+	m_autoEndMultiple = FALSE;
+
+	m_wetdry = 5;
+	m_warmcold = 5;
+	m_oceanland = 5;
+	m_islandcontinent = 5;
+	m_homodiverse = 5;
+	m_goodcount = 5;
+	
+	m_throneRoom = FALSE;
+
+	m_alienEndGame = TRUE;
+
+	m_max_players = 16;
+
+	m_allow_ai_settle_move_cheat = FALSE;
+    m_is_diplomacy_log_on = FALSE; 
+	m_unitCompleteMessages = FALSE;
+	m_nonContinuousUnitCompleteMessages = FALSE;
+
+	m_debugSlic = FALSE;
+
+	m_loadedFromTutorial = FALSE;
+	m_dontSave = FALSE;
+	m_dontKillMessages = FALSE;
+	m_aiPopCheat = TRUE;
+
+	
+	m_unitSpeed = 1;
+	m_mouseSpeed = 5;
+	m_showCityNames = TRUE;
+	m_showTradeRoutes = TRUE;
+
+	
+	m_leftHandedMouse = FALSE;
+
+	m_cityBuiltMessage = TRUE;
+	m_useAttackMessages = FALSE;
+
+	m_useOldRegisterClick = FALSE;
+	m_useCTP2Mode = TRUE;
+	m_moveHoldTime = 500;
+
+	m_autoSwitchTabs = TRUE;
+	m_showPoliticalBorders = TRUE;
+	m_battleSpeed = 5;
+
+	m_scrollDelay = 3;
+
+	m_showEnemyHealth = FALSE;
+
+	m_autoRenameCities = FALSE;
+	m_autoOpenCityWindow = TRUE;
+
+	m_endTurnSound = TRUE;
+
+	m_enableLogs = FALSE;
+
+	m_displayUnits=TRUE;
+	m_displayCities=TRUE;
+	m_displayBorders=TRUE;
+	m_displayFilter=TRUE;
+	m_displayTrade=TRUE;
+	m_displayTerrain=TRUE;
 
 	Var("NumPlayers", PV_NUM, &m_nPlayers, NULL, false);
 	Var("AiOn", PV_BOOL, &m_ai_on, NULL, false);
-	Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
+    Var("UseNiceStart", PV_BOOL, &m_use_nice_start, NULL, false); 
 	Var("UseMapPlugin", PV_BOOL, &m_use_map_plugin, NULL, false);
 	
 	Var("Difficulty", PV_NUM, &m_difficulty, NULL, false);
@@ -241,7 +250,7 @@ ProfileDB::ProfileDB()
 	Var("Pollution", PV_BOOL, &m_pollution, NULL, false);
 	Var("UnitAnim", PV_BOOL, &m_unitAnim, NULL);
 
-	Var("GoodAnim", PV_BOOL, &m_goodAnim, NULL);
+	Var("GoodAnim", PV_BOOL, &m_goodAnim, NULL, false);
 	Var("TradeAnim", PV_BOOL, &m_tradeAnim, NULL);
 	Var("WaterAnim", PV_BOOL, &m_waterAnim, NULL, false);
 	Var("LibraryAnim", PV_BOOL, &m_libraryAnim, NULL, false);
@@ -268,6 +277,7 @@ ProfileDB::ProfileDB()
 	Var("SaveNote", PV_STRING, NULL, (char*)m_saveNote, false);
 	Var("Gender", PV_NUM, (sint32 *)&m_gender, NULL, false);
 
+	
 	Var("NoHumansOnHost", PV_BOOL, &m_noHumansOnHost, NULL, false);
 	Var("LogPlayerStats", PV_BOOL, &m_logPlayerStats, NULL, false);
 
@@ -315,7 +325,7 @@ ProfileDB::ProfileDB()
 	Var("AlienEndGame", PV_BOOL, &m_alienEndGame, NULL, false);
 	Var("UnitCompleteMessages", PV_BOOL, &m_unitCompleteMessages, NULL);
 	Var("NonContinuousUnitCompleteMessages", PV_BOOL, &m_nonContinuousUnitCompleteMessages, NULL);
-	Var("DebugSlic", PV_BOOL, &m_debugSlic, NULL);
+	Var("DebugSlic", PV_BOOL, &m_debugSlic, NULL, false);
 	Var("DiplomacyLog", PV_BOOL, &m_is_diplomacy_log_on, NULL, false);
 	Var("CheatAge", PV_NUM, &m_cheat_age, NULL, false);
 	Var("DontKillMessages", PV_BOOL, &m_dontKillMessages, NULL, false);
@@ -323,11 +333,15 @@ ProfileDB::ProfileDB()
 	Var("ShowCityNames", PV_BOOL, &m_showCityNames, NULL);
 	Var("ShowTradeRoutes", PV_BOOL, &m_showTradeRoutes, NULL);
 
+	
 	Var("UnitSpeed", PV_NUM, &m_unitSpeed, NULL);
 	Var("MouseSpeed", PV_NUM, &m_mouseSpeed, NULL);
+
+	
 	Var("LeftHandedMouse", PV_BOOL, &m_leftHandedMouse, NULL);
 	
 	Var("CityBuiltMessage", PV_BOOL, &m_cityBuiltMessage, NULL, false);
+
 	Var("UseAttackMessages", PV_BOOL, &m_useAttackMessages, NULL, false);
 
 	Var("MapPlugin0", PV_STRING, NULL, (char *)m_map_plugin_name[0], false);
@@ -366,17 +380,16 @@ ProfileDB::ProfileDB()
 	Var("ShowOrderUnion", PV_BOOL, &m_showOrderUnion, NULL);
 	Var("RecentAtTop", PV_BOOL, &m_recentAtTop, NULL);
 	Var("RuleSets", PV_STRING, NULL, m_ruleSets, false);
-	Var("CityClick", PV_BOOL, &m_cityClick, NULL, false);
-	Var("EndTurnWithEmptyBuildQueues", PV_BOOL, &m_endTurnWithEmptyBuildQueues, NULL, false);
-	Var("RunInBackground", PV_BOOL, &m_runInBackground, NULL, false);
-    Var("AutoExpireTreatyBase", PV_NUM, &m_autoExpireTreatyTurn, NULL, false);
-    Var("CityCaptureOptions", PV_BOOL, &m_cityCaptureOptions, NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)
 {
-	StringId    leaderNameId = g_theCivilisationDB->Get(m_civIndex)->GetLeaderNameMale();
-	StringId    civNameId = g_theCivilisationDB->Get(m_civIndex)->GetPluralCivName();
+	
+	
+
+	
+	StringId	leaderNameId = g_theCivilisationDB->GetLeaderName((CIV_INDEX)m_civIndex);
+	StringId	civNameId = g_theCivilisationDB->GetPluralCivName((CIV_INDEX)m_civIndex);
 
 	strcpy(m_leaderName, g_theStringDB->GetNameStr(leaderNameId));
 	strcpy(m_civName, g_theStringDB->GetNameStr(civNameId));
@@ -387,8 +400,7 @@ ProfileDB::~ProfileDB()
 {
 	Save();
 
-	if (m_vars) 
-	{
+	if(m_vars) {
 		m_vars->DeleteAll();
 		delete m_vars;
 	}
@@ -399,55 +411,54 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 	MBCHAR profileName[_MAX_PATH];
 	MBCHAR *profileTxtFile;
 
-	if (forTutorial) 
-	{
-		m_loadedFromTutorial = TRUE;
-		profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
-		                                      "tut_profile.txt", profileName);
-	}
-	else
-	{
+	if(!forTutorial) {
 		profileTxtFile = g_civPaths->FindFile(C3DIR_DIRECT, "userprofile.txt",
-		                                      profileName);
-		if (!profileTxtFile || !c3files_PathIsValid(profileTxtFile)) 
-		{
+											  profileName);
+		if(!profileTxtFile || !c3files_PathIsValid(profileTxtFile)) {
 			profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
-			                                      "profile.txt", profileName);
+												  "profile.txt", profileName);
 		}
+	} else {
+		
+		m_loadedFromTutorial = TRUE;
+        profileTxtFile = g_civPaths->FindFile(C3DIR_GAMEDATA, 
+                                              "tut_profile.txt", profileName);
 	}
 	
-	if (profileTxtFile) 
-	{
+    if (profileTxtFile == NULL) { 
+        m_nPlayers = 3; 
+	    m_ai_on = FALSE;
+		return FALSE;
+    } else { 
 		FILE *pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
+		if(pro_file) {
 			
-		if (pro_file) 
-		{
-			sint32 const    saved_width     = m_screenResWidth;
-			sint32 const    saved_height    = m_screenResHeight;
-			BOOL const      res             = Parse(pro_file);
+			
+			sint32 saved_width;
+			sint32 saved_height;
+
+			if (forTutorial) {
+				saved_width = m_screenResWidth;
+				saved_height = m_screenResHeight;
+			}
+
+			BOOL res = Parse(pro_file);
 			fclose(pro_file);
 
-			if (res) 
-			{
+			if(res) {
 				Save();
 			}
 
-			if (forTutorial) 
-			{
+			if (forTutorial) {
 				m_screenResWidth = saved_width;
 				m_screenResHeight = saved_height;
 			}
 			
 			return res;
 		}
+		return FALSE;
 	}
-	else 
-	{
-		m_nPlayers  = PLAYER_COUNT_DEFAULT; 
-		m_ai_on     = FALSE;
-	} 
 
-	return FALSE;
 }
 
 
@@ -466,19 +477,20 @@ BOOL ProfileDB::Parse(FILE *file)
 			len--;
 		}
 
-		char *  name  = line;
+		char *name, *value;
+		name = line;
 		while(isspace(*name) && *name != 0) {
 			name++;
 		}
 		if(*name == 0 || *name == '#') {
+			
 			continue;
 		}
 		if(!isalpha(*name)) {
 			c3errors_ErrorDialog("Profile", "Line %d: name must start with a letter", linenum);
 			return FALSE;
 		}
-
-		char *  value = name + 1;
+		value = name + 1;
 		while(*value != '=' && *value != 0) {
 			if(isspace(*value))
 				*value = 0;
@@ -545,26 +557,48 @@ BOOL ProfileDB::Parse(FILE *file)
 		}
 	}
 
-	return TRUE;
+    return TRUE; 
 }
 
 void ProfileDB::SetTutorialAdvice( BOOL val )
 {
 	m_tutorialAdvice = val;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 void ProfileDB::SetDiplmacyLog(BOOL b)
 {
-	if (b == m_is_diplomacy_log_on)
-	{
-		// No action: keep current log status
-	}
-	else
-	{
-		delete g_theDiplomacyLog;
-		g_theDiplomacyLog       = b ? new Diplomacy_Log : NULL;
-		m_is_diplomacy_log_on   = b;
-	}
+    if (b) { 
+        if (m_is_diplomacy_log_on) {
+            Assert(g_theDiplomacyLog); 
+        } else { 
+            m_is_diplomacy_log_on = TRUE; 
+            Assert(g_theDiplomacyLog); 
+            g_theDiplomacyLog = new Diplomacy_Log;
+        }
+    } else { 
+        if (m_is_diplomacy_log_on) { 
+            m_is_diplomacy_log_on = FALSE; 
+            Assert(g_theDiplomacyLog);
+            delete g_theDiplomacyLog; 
+            g_theDiplomacyLog=NULL; 
+        } else { 
+            Assert(g_theDiplomacyLog == NULL); 
+        }
+    }
 }
 
 void ProfileDB::SetPollutionRule( BOOL rule ) 
@@ -576,15 +610,15 @@ void ProfileDB::SetPollutionRule( BOOL rule )
 	}
 }
 
-void ProfileDB::SetSFXVolume(sint32 vol)
+void ProfileDB::SetSFXVolume(sint32 vol)	
 {
 	m_sfxVolume = vol; 
 	if ( g_soundManager ) {
 		g_soundManager->SetVolume( SOUNDTYPE_SFX, vol );
 	}
-}
+}		
 
-void ProfileDB::SetVoiceVolume(sint32 vol)
+void ProfileDB::SetVoiceVolume(sint32 vol)				
 { 
 	m_voiceVolume = vol; 
 	if ( g_soundManager ) {
@@ -592,7 +626,7 @@ void ProfileDB::SetVoiceVolume(sint32 vol)
 	}
 }
 
-void ProfileDB::SetMusicVolume(sint32 vol)
+void ProfileDB::SetMusicVolume(sint32 vol)				
 { 
 	m_musicVolume = vol; 
 	if ( g_soundManager ) {
@@ -602,7 +636,7 @@ void ProfileDB::SetMusicVolume(sint32 vol)
 
 void ProfileDB::SetDifficulty(uint32 x)
 { 
-	Assert((x>=0) && (x<7));
+	Assert((x>=0) && (x<7)); 
 	if(x >= 0 && x < 7) {
 		m_difficulty = x;
 		if(g_player) {
@@ -611,8 +645,8 @@ void ProfileDB::SetDifficulty(uint32 x)
 				if(g_player[p]) {
 					delete g_player[p]->m_difficulty;
 					g_player[p]->m_difficulty = new Difficulty(m_difficulty,
-					                                           p,
-					                                           g_player[p]->m_playerType != PLAYER_TYPE_ROBOT);
+															   p,
+															   g_player[p]->m_playerType != PLAYER_TYPE_ROBOT);
 				}
 			}
 		}
@@ -620,7 +654,7 @@ void ProfileDB::SetDifficulty(uint32 x)
 }
 
 void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
-                    char *stringValue, bool visible)
+					char *stringValue, bool visible)
 {
 	m_vars->AddTail(new ProfileVar(name, type, numValue, stringValue, visible));
 }
@@ -628,10 +662,12 @@ void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
 void ProfileDB::Save()
 {
 	if(m_loadedFromTutorial || m_dontSave) {
+		
 		return;
 	}
 
-	FILE *file = c3files_fopen(C3DIR_DIRECT, "userprofile.txt", "w");
+	FILE *file;
+	file = c3files_fopen(C3DIR_DIRECT, "userprofile.txt", "w");
 	if(file) {
 		PointerList<ProfileVar>::Walker walk(m_vars);
 		while(walk.IsValid()) {
@@ -692,3 +728,5 @@ void ProfileDB::SetValueByName(const char *name, sint32 value)
 		walk.Next();
 	}
 }
+
+

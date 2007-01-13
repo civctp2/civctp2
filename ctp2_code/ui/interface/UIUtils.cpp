@@ -65,10 +65,10 @@ void ui_TruncateString( aui_Control *control, MBCHAR *str )
 
 MBCHAR *uiutils_ChooseLdl(MBCHAR *firstChoice, MBCHAR *fallback)
 {
-    if (aui_Ldl::IsValid(firstChoice))
+	if(g_c3ui->GetLdl()->IsValid(firstChoice))
 		return firstChoice;
 
-    if (aui_Ldl::IsValid(fallback))
+	if(g_c3ui->GetLdl()->IsValid(fallback))
 		return fallback;
 
 	return NULL;

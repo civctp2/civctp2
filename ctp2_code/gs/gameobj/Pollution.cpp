@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Pollution handling
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,8 +17,6 @@
 //
 // Compiler flags
 // 
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,19 +29,21 @@
 
 #include "c3debug.h"
 #include "c3.h"
-#include "Globals.h"
+#include "globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "pollution.h"
 #include "player.h"
+#include "gwdb.h"
+#include "UVDB.h"
 #include "WonderRecord.h"
 #include "civarchive.h"
 #include "network.h"
 #include "SlicSegment.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
-#include "PollutionRecord.h"
+#include "PollutionDB.h"
 #include "profileDB.h"
 #include "GameSettings.h"
 #include "Cell.h"
@@ -59,6 +58,9 @@
 #include "newturncount.h"
 
 #include "GameEventManager.h"
+
+	extern	PollutionDatabase	*g_thePollutionDB ;
+
 
 sint32 const	Pollution::ROUNDS_COUNT_IMMEASURABLE	= 9999;
 
@@ -159,6 +161,7 @@ void Pollution::Serialize(CivArchive &archive)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
+
 void Pollution::WarnPlayers()
 {
 	SlicObject *	so	= new SlicObject("911ImminentFlood");
@@ -196,82 +199,80 @@ void Pollution::WarnPlayers()
 
 sint32 Pollution::AtTriggerLevel(void)
 	{
+	sint32	pollution ;												
+	sint32 trigger;
+	pollution = GetGlobalPollutionLevel() ;
+	trigger = g_thePollutionDB->GetTrigger(g_theProfileDB->GetMapSize(), m_phase);
+
 	if(!g_theGameSettings->GetPollution())
 		return FALSE;
 
+	bool gaia = false;
 	sint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++)
-	{
+	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if(!g_player[i])
 			continue;
 
-		if(wonderutil_GetReduceWorldPollution(g_player[i]->GetBuiltWonders()))
-		{
+		if(wonderutil_GetReduceWorldPollution(g_player[i]->GetBuiltWonders())) {
 			return FALSE;
 		}
 	}
 
-	const PollutionRecord::Phase* pprec = g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase);
-	sint32 trigger = pprec->GetPollutionTrigger();
+    if (pollution > trigger) {
 
-	sint32 pollution = GetGlobalPollutionLevel();
+        switch (g_thePollutionDB->GetDisasterType(g_theProfileDB->GetMapSize(), m_phase)) {
+          case POLLUTION_DISASTER_TYPE_OZONE: {
 
-	if (pollution > trigger)
-	{
-		if(pprec->GetOzoneDisaster())
-		{
-			// Missing stuff
+              break;
           }
+          case POLLUTION_DISASTER_TYPE_FLOOD: {
+              if (m_phase < (g_thePollutionDB->NumTriggers(g_theProfileDB->GetMapSize()) / 2)) {
 
-		if(pprec->GetFloodDisaster())
-		{
-			if (m_phase < (g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase()) / 2)
-			{
-				// Missing stuff
+              } else {
+
               }
-			else
-			{
-				// Missing stuff
           }
-		}
+          case POLLUTION_DISASTER_TYPE_WARNING: {
 
-		if(pprec->GetWarning())
-		{
-			// Missing stuff
+              break;
           }
+        }
 
-		return TRUE;
+        return(TRUE);
     }
 
     if (m_history[0] <= m_history[1]) {
-		if (pollution > g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(0)->GetPollutionTrigger()) {
-			// Missing stuff
-        }
-        }
-	else if (pollution > (sint32)((double)trigger * 0.80))
-	{
-		if (m_phase == 0)
-		{
-			// Missing stuff
-		}
+        if (pollution > g_thePollutionDB->GetTrigger(g_theProfileDB->GetMapSize(), 0)) {
+            
 
-		if(pprec->GetOzoneDisaster())
-		{
-			// Missing stuff
+        }
+
+    } else if (pollution > (sint32)((double)trigger * 0.80)) {
+        if (m_phase == 0) {
+            
+
+        }
+
+        
+        switch (g_thePollutionDB->GetDisasterType(g_theProfileDB->GetMapSize(), m_phase)) {
+          case POLLUTION_DISASTER_TYPE_OZONE: {
+
+              break;
           }
+          case POLLUTION_DISASTER_TYPE_FLOOD: {
               
-		if(pprec->GetFloodDisaster())
-		{
-			// Missing stuff
+              break;
           }
         }
-	return FALSE;
     }        
+
+	return(FALSE);
+	}
 
 
 sint32 Pollution::GetNextTrigger()
 	{
-	return g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase)->GetPollutionTrigger();
+	return (g_thePollutionDB->GetTrigger(g_theProfileDB->GetMapSize(), m_phase)) ;
 	}
 
 
@@ -346,6 +347,18 @@ void Pollution::SetGlobalPollutionLevel(sint32 requiredPollution)
 
 void Pollution::BeginTurn(void)
 	{
+	sint32	gwPhaseList[] = { 0, 1, 0 } ;
+
+	
+	sint32	disasterType ;
+
+
+
+	
+
+
+
+
 	if(!g_theGameSettings->GetPollution())
 		return;
 
@@ -362,23 +375,29 @@ void Pollution::BeginTurn(void)
 
 
 	
-	if(GetRoundsToNextDisaster() < k_ROUNDS_BEFORE_DISASTER)
-	{
+	if(GetRoundsToNextDisaster() < k_ROUNDS_BEFORE_DISASTER) {
 		WarnPlayers();
 	}
 
+
 	if (AtTriggerLevel())    
 		{
-		if (m_phase < g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase())
+		if (m_phase < g_thePollutionDB->NumTriggers(g_theProfileDB->GetMapSize()))
 			{
-			const PollutionRecord::Phase* pprec = g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase);
+			disasterType = g_thePollutionDB->GetDisasterType(g_theProfileDB->GetMapSize(), m_phase) ;
+			
+			switch (disasterType)
+				{
+				case POLLUTION_DISASTER_TYPE_OZONE :
 
-			if(pprec->GetOzoneDisaster()){
 					g_theWorld->OzoneDepletion();
-			}
-			if(pprec->GetFloodDisaster()){
+					break ;
+
+				case POLLUTION_DISASTER_TYPE_FLOOD :
 					g_theWorld->GlobalWarming(m_gwPhase) ;
 					m_gwPhase++;
+					break ;
+
 				}
 
 			GotoNextLevel() ;
@@ -401,8 +420,9 @@ void Pollution::BeginTurn(void)
 
 void Pollution::GotoNextLevel(void)
 	{
-	if (m_phase < (g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase() - 1))
+	if (m_phase < (g_thePollutionDB->NumTriggers(g_theProfileDB->GetMapSize()) - 1))
 		m_phase++ ;
+
 	}
 
 
@@ -542,6 +562,7 @@ sint32 Pollution::GetTrend(void) const
 //				m_history[1]	: pollution level previous turn
 //
 //----------------------------------------------------------------------------
+
 sint32 Pollution::GetRoundsToNextDisaster(void)
 {
 	// Check if there has been any pollution at all in this turn.
@@ -553,6 +574,7 @@ sint32 Pollution::GetRoundsToNextDisaster(void)
 	// Check for a pollution suppressing wonder built by some player.
 	for (int i = 0; i < k_MAX_PLAYERS; ++i)
 	{
+		
 		if (g_player[i] && 
 			wonderutil_GetReduceWorldPollution(g_player[i]->GetBuiltWonders())
 		   )
@@ -564,7 +586,7 @@ sint32 Pollution::GetRoundsToNextDisaster(void)
 	// Estimate the number of turns until the next disaster.
 	sint32 const pollutionDeltaPerTurn	= m_history[0] - m_history[1];
 	sint32 const pollutionUntilTrigger	= 
-		g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase)->GetPollutionTrigger() - m_history[0];
+		g_thePollutionDB->GetTrigger(g_theProfileDB->GetMapSize(), m_phase) - m_history[0];
 	return pollutionUntilTrigger / pollutionDeltaPerTurn;
 }
 
@@ -574,7 +596,7 @@ void pollution_NukeCell(MapPoint &pos, Cell *cell)
 	bool CutNPasteCodeIsBad = false;
 	Assert(CutNPasteCodeIsBad);
 	return;
-#if 0 // CtP1?
+
 	if(cell->GetCanDie()) {
 		
 		
@@ -617,12 +639,12 @@ void pollution_NukeCell(MapPoint &pos, Cell *cell)
 		}
 		g_tiledMap->RedrawTile(&pos);
 	}
-#endif
 }
 
 void Pollution::AddNukePollution(const MapPoint &cpos)
 {
 	MapPoint pos;
+	sint32 i;
 	Cell *centerCell = g_theWorld->GetCell(cpos);
 	if(centerCell->GetCity().m_id == 0) {
 		
@@ -634,9 +656,9 @@ void Pollution::AddNukePollution(const MapPoint &cpos)
 		
 	}
 
-	for (sint32 i = 0; i < g_theConstDB->NukeKillTiles(); i++) {
+	for(i = 0; i < g_theConstDB->NukeKillTiles(); i++) {
 		if(cpos.GetNeighborPosition((WORLD_DIRECTION)g_rand->Next(sint32(NOWHERE)), pos)) {
-//			Cell *cell = g_theWorld->GetCell(pos);
+			Cell *cell = g_theWorld->GetCell(pos);
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_KillTile,
 								   GEA_MapPoint, pos,

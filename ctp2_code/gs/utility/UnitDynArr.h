@@ -1,6 +1,5 @@
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __UNIT_DYNAMIC_ARRAY_H__
 #define __UNIT_DYNAMIC_ARRAY_H__ 1
 

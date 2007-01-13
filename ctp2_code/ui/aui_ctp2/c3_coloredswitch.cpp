@@ -10,7 +10,7 @@
 
 #include "c3ui.h"
 #include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
+#include "colorset.h"
 #include "c3_coloredswitch.h"
 #include "patternbase.h"
 #include "pattern.h"
@@ -20,6 +20,7 @@
 
 extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
+extern ColorSet		*g_colorSet;
 
 
 c3_ColoredSwitch::c3_ColoredSwitch(
@@ -29,9 +30,9 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -57,9 +58,9 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	sint32 state,
 	sint32 numStates )
 	:
+	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	aui_ImageBase( numStates ),
 	aui_TextBase( NULL ),
-	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
 	PatternBase(pattern)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -74,10 +75,19 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 
 AUI_ERRCODE c3_ColoredSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH;
-    
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
-    Assert( block != NULL );
+	sint32		bevelWidth=k_C3_COLOREDSWITCH_DEFAULT_BEVELWIDTH, 
+				bevelType=0;
+	aui_Ldl		*theLdl = g_c3ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
+	Assert( block != NULL );
+
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 	
 	if (block->GetAttributeType( k_C3_COLOREDSWITCH_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {

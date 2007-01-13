@@ -1,32 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer chat box
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
@@ -47,6 +28,7 @@
 #include "ns_chatbox.h"
 
 
+
 ns_ChatBox::ns_ChatBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -54,9 +36,9 @@ ns_ChatBox::ns_ChatBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	TextBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	TextBox( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -86,6 +68,7 @@ ns_ChatBox::ns_ChatBox(
 	bWhisper = false;
 	bGroup = false;
 }
+
 
 
 void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
@@ -124,8 +107,39 @@ void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	AppendText( buf, color, bold, italic );
 }
+
 
 AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
@@ -137,9 +151,10 @@ AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
+
 AUI_ERRCODE ns_ChatBox::CreateComponents( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
 
 	m_inputField = new C3TextField(
 		&errcode,
@@ -177,15 +192,27 @@ AUI_ERRCODE ns_ChatBox::InitCommon()
 
 ns_ChatBox::~ns_ChatBox()
 {
-	if (m_inputField)
-	{
-		delete m_inputField->GetAction();
-        delete m_inputField;
-	}
+	aui_Action *action;
 
-    delete m_textstyleSystem;
-	delete m_textstyleChat;
-	delete m_textstyleWhisper;
+	if ( m_inputField )
+	{
+		if ( action = m_inputField->GetAction() )
+			delete action;
+		delete m_inputField;
+		m_inputField = NULL;
+	}
+	if(m_textstyleSystem) {
+		delete m_textstyleSystem;
+		m_textstyleSystem = NULL;
+	}
+	if(m_textstyleChat) {
+		delete m_textstyleChat;
+		m_textstyleChat = NULL;
+	}
+	if(m_textstyleWhisper) {
+		delete m_textstyleWhisper;
+		m_textstyleWhisper = NULL;
+	}
 }
 
 
@@ -257,10 +284,12 @@ void ns_ChatBox::InputFieldAction::Execute(
 }
 
 
+
 AUI_ERRCODE ns_ChatBox::RepositionItems( void )
 {
 	return aui_TextBox::RepositionItems();
 }
+
 
 
 AUI_ERRCODE ns_ChatBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )

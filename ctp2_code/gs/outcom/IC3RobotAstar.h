@@ -1,28 +1,96 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 
 #ifndef __IC3ROBOT_ASTAR_H__
 #define __IC3ROBOT_ASTAR_H__ 1
 
+
 #define k_ASTAR_BIG 7654321.0f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 
 enum ASTAR_ENTRY_TYPE; 
 
 typedef BOOL RobotPathEval (
-	BOOL can_enter,   
-	
-	MapPointData *prev,  
-	MapPointData *pos,    
-	
-	float *cost,       
-	
-	BOOL is_zoc,         
-	
-	ASTAR_ENTRY_TYPE &entry 
-); 
+     BOOL can_enter,   
+                        
+                        
+                        
+    MapPointData *prev,  
+    MapPointData *pos,    
 
-#ifndef USE_COM_REPLACEMENT
+    float *cost,       
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+
+    BOOL is_zoc,         
+                        
+                        
+	ASTAR_ENTRY_TYPE &entry 
+							
+							
+							
+							
+    ); 
+
+
 #include <OBJBASE.H>  
 
 DEFINE_GUID(CLSID_IC3RobotAstar, 
@@ -34,7 +102,6 @@ DEFINE_GUID(CLSID_IC3RobotAstar,
 
 #undef INTERFACE
 #define INTERFACE IC3RobotAstar
-#endif
 
 enum PATH_ARMY_TYPE { 
     PATH_ARMY_TYPE_EXISTS, 
@@ -42,46 +109,49 @@ enum PATH_ARMY_TYPE {
     PATH_ARMY_TYPE_MADEUP 
 }; 
 
-#ifndef USE_COM_REPLACEMENT
 DECLARE_INTERFACE_(IC3RobotAstar, IUnknown)
 {
-	STDMETHOD_ (BOOL,  FindPath) (
-#else
-class IC3RobotAstar : public ICTP2Unknown {
-public:
-	virtual BOOL FindPath(
-#endif
-		RobotPathEval *cb, 
-                                               
-		uint32 army_id, 
-		PATH_ARMY_TYPE pat, 
-		uint32 army_type, 
 
-		MapPointData *start, 
-		MapPointData *dest, 
-		sint32 *bufSize,  
-		MapPointData ** buffer, 
-                                   
-		sint32 *nPoints, 
-		float *total_cost, 
+
+
+
+
+    STDMETHOD_ (BOOL,  FindPath) (
+        RobotPathEval *cb, 
+                                
+                                
+       uint32 army_id, 
+       PATH_ARMY_TYPE pat, 
+       uint32 army_type, 
+
+       MapPointData *start, 
+       MapPointData *dest, 
+       sint32 *bufSize,  
+	   MapPointData ** buffer, 
+                                
+                                
+                                
+                                
+   
+       sint32 *nPoints, 
+       float *total_cost, 
                           
-		BOOL made_up_can_space_launch,  
-		BOOL made_up_can_space_land,     
-		BOOL check_rail_launch,         
+     BOOL made_up_can_space_launch,  
+     BOOL made_up_can_space_land,     
+     BOOL check_rail_launch,         
                                     
-		BOOL pretty_path,               
+    BOOL pretty_path,               
+                                    
+                                    
+                                    
+     sint32 cutoff,                 
+                                    
+     sint32 &nodes_opened,            
+	 BOOL check_dest,			
+     BOOL no_straigth_line,          
+     const BOOL check_units_in_cell 
+    ) PURE;
 
-		sint32 cutoff,                 
-                                    
-		sint32 &nodes_opened,            
-		BOOL check_dest,			
-		BOOL no_straigth_line,          
-		const BOOL check_units_in_cell
-#ifndef USE_COM_REPLACEMENT
-	) PURE;
-#else
-	) = 0;
-#endif
 };
 
-#endif // __IC3ROBOT_ASTAR_H__
+#endif __IC3ROBOT_ASTAR_H__

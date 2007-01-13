@@ -80,32 +80,49 @@ public:
 	void SpitOutDetails( void );
 	void UpdatePlayerButtons( void );
 
-public: 
-	AUI_ACTION_BASIC(JoinButtonAction);
-	AUI_ACTION_BASIC(CreateButtonAction);
-    AUI_ACTION_BASIC(InfoButtonAction);
-	AUI_ACTION_BASIC(MuteSwitchAction);
-	AUI_ACTION_BASIC(WhisperSwitchAction);
-	AUI_ACTION_BASIC(ReviewButtonAction);
-	AUI_ACTION_BASIC(BackButtonAction);
-	AUI_ACTION_BASIC(PlayersListBoxAction);
-	AUI_ACTION_BASIC(DialogBoxPopDownAction);
-	AUI_ACTION_BASIC(GamesListBoxAction);
-
-	friend class WhisperSwitchAction;
-
-
 protected:
 	ns_String	*m_messageLobbyEnter;
 
 	aui_StringTable *m_PPStrings;
 
-	bool m_wait;
+	bool wait;
 	
 
 	aui_Action *m_dbActionArray[ 1 ]; 
 
-	AUI_ACTION_BASIC(ChangeButtonAction);
+	class ChangeButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+public: 
+	class JoinButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class CreateButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class InfoButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class MuteSwitchAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class WhisperSwitchAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+	friend WhisperSwitchAction;
+
+	class ReviewButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class BackButtonAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class PlayersListBoxAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class DialogBoxPopDownAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
+
+	class GamesListBoxAction : public aui_Action
+	{ public: virtual ActionCallback Execute; };
 };
 
 

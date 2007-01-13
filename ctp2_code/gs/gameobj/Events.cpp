@@ -12,11 +12,11 @@
 #include "Score.h"
 #include "Army.h"
 #include "Path.h"
-#include "Order.h"
+#include "order.h"
 
 #include "director.h"
 #include "gamesounds.h"
-#include "AICause.h"
+#include "aicause.h"
 #include "SelItem.h"
 
 #include "SlicObject.h"
@@ -43,7 +43,7 @@
 
 #include "directorevent.h"
 
-#include "Order.h"
+#include "order.h"
 
 #include "World.h"
 #include "bset.h"
@@ -136,6 +136,4 @@ void events_Cleanup()
 	ArmyManagerWindow::CleanupEvents();
 	TradeManager::CleanupEvents();
 	UnitManager::CleanupEvents();
-
-	CtpAi::CleanupEvents();
 }

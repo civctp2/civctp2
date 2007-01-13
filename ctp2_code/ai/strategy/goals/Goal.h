@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : the Goal motherclass header
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,30 +17,30 @@
 //
 // Compiler flags
 //
-// None
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
+//
+// Note: For the blocks with _MSC_VER preprocessor directives, the following
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks that
+//       are active for _MSC_VER value 1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Removed MSVC specific code
-// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will 
-//   be changed on wounded case) - Calvitix
+//
+// - Changes the const attribute for Compute_Matching_Value (Raw_Priority will be changed on wounded case) - Calvitix
 //
 //----------------------------------------------------------------------------
 
 #ifndef __GOAL_H__
-#define __GOAL_H__
-
-#include <list>
-#include <string>
-
-class Goal;
-
-#include "Plan.h"
-#include "scheduler_types.h"
-#include "squad_Strength.h"
-
+    #define __GOAL_H__
+    #pragma warning(disable: 4786)
+    #include "Plan.h"
+    #include "Scheduler_Types.h"
+    #include "Squad_Strength.h"
+    #include <string>
 class Goal
 {
 public:
@@ -60,15 +59,16 @@ public:
     const static Utility MAX_UTILITY;
 
 
-protected:
-	// Only part of derived classes
     Goal();
 
 
     Goal(const Goal & goal);
 
-public:
+
     virtual ~Goal();
+
+
+    virtual void Init();
 
 
     virtual Goal & operator = (const Goal & goal);
@@ -210,6 +210,9 @@ protected:
 
 
     PLAYER_INDEX m_playerId;
+
+
+    std::pair < sint16, sint16 > m_pos;
 
 
 private:

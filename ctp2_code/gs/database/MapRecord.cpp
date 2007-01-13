@@ -1,3 +1,5 @@
+#pragma once
+
 #include "c3.h"
 #include "MapRecord.h"
 #include "Token.h"

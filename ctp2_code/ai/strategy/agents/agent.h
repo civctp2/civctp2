@@ -5,29 +5,56 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 
 #ifndef __AGENT_H__
 #define __AGENT_H__ 1
 
-class Agent;
-
 #include "c3.h"
 
+
+
+#pragma warning(disable: 4786)
+
 #include "scheduler_types.h"
-#include "squad_Strength.h"
+#include "squad_strength.h"
 
 
 
-class Agent 
-{ 
+class Agent { 
+
 public:
+	
+	
+	
+	
+	
+
+  	
+  	
+    
+	
+  	
+
+	
+	
+	
+
+  	
 	Agent();
+
+	
 	Agent(const Agent &agent);
+	
+  	
   	virtual ~Agent();
 
+	
+	
+	virtual void Init();
+
+	
 	virtual Agent& operator= (const Agent &agent);
 
 	
@@ -52,13 +79,13 @@ public:
     void Set_Squad_Class(const SQUAD_CLASS & squad_class);
 
 	
-    virtual SQUAD_CLASS Compute_Squad_Class() { return m_squad_class; } ;
+	virtual SQUAD_CLASS Compute_Squad_Class() = 0;
 
 	
     virtual const Squad_Strength & Get_Squad_Strength() const;
 
 	
-    virtual const Squad_Strength & Compute_Squad_Strength() { return m_squad_strength; } ;
+	virtual const Squad_Strength & Compute_Squad_Strength() = 0;
 
 	
 	virtual void Set_Can_Be_Executed(const bool &can_be_executed);
@@ -77,7 +104,7 @@ public:
     
 
 	
-    virtual void Log_Debug_Info(const int & log) {};
+    virtual void Log_Debug_Info(const int & log) const = 0;
 
 protected:
 
@@ -106,4 +133,4 @@ protected:
 	bool m_detached;
 };
 
-#endif // __AGENT_H__
+#endif __AGENT_H__

@@ -8,7 +8,7 @@ class c3_ListItem;
 class MapPoint;
 
 sint32 helptile_Initialize();
-void helptile_Cleanup( void );
+sint32 helptile_Cleanup( void );
 void helptile_displayData(const MapPoint&);
 void helptile_setPosition(const MapPoint&);
 

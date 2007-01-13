@@ -1,52 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Debug memory handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-// 
-// _DEBUG
-// - Generate debug version
-//
-// MEMORY_LOGGED
-// - ??
-//
-// MEMORY_FAST
-// - ??
-//
-// _AIDLL
-// - ??
-//
-// MEMORY_LOGGED
-// - ??
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added alternative leak report. (Sep 9th 2005 Martin Gühmann)
-// - Increased the stack size to be reported. (Sep 9th 2005 Martin Gühmann)
-//
-//////////////////////////////////////////////////////////////////////////////
-
 #ifdef _DEBUG
 
-#include "debugmemory.h"	// own declarations
+
+
+
+
+
+
+
+
+
+
 
 #include "log.h"
+#include "debugmemory.h"
 #include "debugcallstack.h"
 #include "debugassert.h"
 #include "breakpoint.h"
@@ -217,7 +183,7 @@ static void DebugMemory_CreateDefaultHeap (void)
 	
 	heap->next = NULL;
 	heap->last = NULL;
-#endif // MEMORY_LOGGED
+#endif MEMORY_LOGGED
 
 	debug_memory->default_heap = heap;
 }
@@ -338,7 +304,7 @@ void DebugMemory_Close (void)
 	
 	if (!g_quitfast)
 		DebugMemory_LeaksShow(99999);
-#endif // MEMORY_LOGGED
+#endif MEMORY_LOGGED
 
 	debug_memory->open = false;
 
@@ -660,7 +626,7 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 
 
 
-#endif // MEMORY_FAST
+#endif MEMORY_FAST
 #ifdef MEMORY_LOGGED
 
 
@@ -700,7 +666,7 @@ const unsigned char FILL_BYTE_REALLOC = 0x69;
 const int DATA_GUARD_SIZE = 4;			
 const int HEADER_GUARD_SIZE = 4;		
 
-const int CALL_STACK_SIZE = 60;			
+const int CALL_STACK_SIZE = 29;			
 
 struct CallStack 
 {
@@ -986,7 +952,7 @@ MemPtr DebugMemory_GuardedBlockAlloc (
 	ASSERT_CLASS (LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
 
 	
-	ASSERT_INDIRECT (module_name, module_line, size >= 0);
+	ASSERT_INDIRECT (module_name, module_line, size > 0);
 
 	
 	total_size = size + sizeof (AllocHeader) + sizeof (AllocBuffer) + sizeof (AllocBuffer);
@@ -1372,22 +1338,28 @@ MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *
 
 
 
-void DebugMemoryHeap_GuardedClose
-(
-    const char *    /* file */ ,
-    int             /* line */ ,
-    MemoryHeap      heap
-)
+void DebugMemoryHeap_GuardedClose    (const char *file, int line, MemoryHeap heap)
 {
-	ASSERT_CLASS(LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
+	BOOL ok;
 
+	
+	ASSERT_CLASS (LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
+
+	
 	heap->is_open = false;
 
+	
 	if (heap->total_outstanding == 0)
 	{
-		BOOL ok = HeapDestroy (heap->handle);
+		ok = HeapDestroy (heap->handle);
 		ASSERT_CLASS (LOG_MEMORY_FAIL, ok);
 	}
+
+	
+
+
+	
+
 }
 
 
@@ -1434,16 +1406,16 @@ int Debug_GuardedValidate (const char *file, int line, void *p)
 
 
 
-int Debug_GuardedValidateHeap
-(
-    const char *    file, 
-    int             line, 
-    MemoryHeap *    /* heap */
-)
+int Debug_GuardedValidateHeap (const char *file, int line, MemoryHeap *heap)
 {
+  AllocHeader *header;
   MemPtr mem;
-  int ok                = 1;
-  AllocHeader * header  = debug_memory->default_heap->first_memory_block;
+  int ok;
+
+  ok = 1;
+
+  
+  header = debug_memory->default_heap->first_memory_block;
 
   
   while (header) {
@@ -1455,7 +1427,7 @@ int Debug_GuardedValidateHeap
   }
 
 
-  return ok;
+  return (ok);
 }
 
 
@@ -1635,8 +1607,6 @@ void Debug_MemNodeList (int turn_count)
 	char fname[120];
 	sprintf(fname, "CTP_LEAKS_%#.3ld.TXT", turn_count);
 	FILE *leakFile = fopen(fname, "w");
-	sprintf(fname, "CTP_LEAKS_ALT_%#.3ld.TXT", turn_count);
-	FILE *leakAltFile = fopen(fname, "w");
 
 	if (!leakFile)
 		return;
@@ -1651,25 +1621,22 @@ void Debug_MemNodeList (int turn_count)
 	}
 
 	fprintf(leakFile, "Num\tSize\tTotal\tStack\tAllocator\n");
-	fprintf(leakAltFile, "Num\tSize\tTotal\tStack\n");
 
 	while (node) {
 		fprintf(leakFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size, 
 												node->reference_count * node->size);
-		fprintf(leakAltFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size, 
-												node->reference_count * node->size);
+
 		
 		
 
+
 		DebugCallStack_ShowToFile(LOG_MEMORY_LEAK, node->call_stack.function, CALL_STACK_SIZE, leakFile);
-		DebugCallStack_ShowToAltFile(LOG_MEMORY_LEAK, node->call_stack.function, CALL_STACK_SIZE, leakAltFile);
 		
 		node = node->next;
 		counter++;
 	}
 
 	fclose(leakFile);
-	fclose(leakAltFile);
 
 
 }

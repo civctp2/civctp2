@@ -19,16 +19,22 @@
 extern StringDB	*g_theStringDB;
 
 
-ns_String::ns_String( char *ldlBlock ) 
-:
-    m_string    (NULL)
-{
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+ns_String::ns_String( char *ldlBlock ) {
+	m_string = NULL;
+
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	Assert( theLdl->IsValid( ldlBlock ) );
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
 
 	const char *string;
 
+	
 	if ( block->GetBool(k_NS_STRING_LDL_NODATABASE) || (!block->GetString("text"))) {
 		
 		string = block->GetString( "text" );
@@ -37,13 +43,12 @@ ns_String::ns_String( char *ldlBlock )
 		string = g_theStringDB->GetNameStr( block->GetString("text") );
 	}
 
-	m_string = new char[strlen(string) + 1];
-    strcpy(m_string, string);
+	strcpy((m_string = new char[strlen(string) + 1]), string);
 }
 
-ns_String::~ns_String( void ) 
-{
-	delete [] m_string;
+ns_String::~ns_String( void ) {
+	delete m_string;
+	m_string = NULL;
 }
 
 char *ns_String::GetString( void ) {

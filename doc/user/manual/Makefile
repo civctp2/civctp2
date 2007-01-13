@@ -1,6 +1,6 @@
 HTLATEX=htlatex
 LATEX2HTML=latex2html
-PDFLATEX=pdflatex -interaction nonstopmode
+PDFLATEX=pdflatex
 MAKEINDEX=makeindex
 PERL=perl
 THUMBPDF=thumbpdf
@@ -20,12 +20,11 @@ user_manual.pdf: $(USER_MANUAL_SOURCES)
 	$(PDFLATEX) $<
 
 clean:
-	-rm -f user_manual.pdf
-	-rm -f *.aux *.dvi *.log *.out *.toc *.tpt
-	-rm -f include/*.aux
+	rm -f user_manual.pdf
+	rm -f *.aux *.dvi *.log *.out *.toc *.tpt
+	rm -f include/*.aux
 
 view: user_manual.pdf
 	$(VIEWPDF) $<
 
 .DELETE_ON_ERROR:
-

@@ -1,47 +1,37 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Battle view actor handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
-#include "battle.h"
 
+#include "XY_Coordinates.h"
 #include "Army.h"
-#include "World.h"                  // g_theWorld
+#include "World.h"
+#include "ConstDB.h"
+#include "installationtree.h"
+#include "installation.h"
+
+#include "TerrainImprovementRecord.h"
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "player.h"                 // g_player
-#include "colorset.h"               // g_colorSet
+#include "citydata.h"
+#include "Unit.h"
+#include "UnitData.h"
+#include "player.h"
+#include "AgeRecord.h"
+#include "ConstDB.h"
+#include "SpriteStateDB.h"
+
+#include "pixelutils.h"
+#include "colorset.h"
 
 #include "battleevent.h"
+#include "battleview.h"
+#include "battleviewwindow.h"
+#include "battle.h"
 #include "battleviewactor.h"
 #include "EffectActor.h"
+#include "gamesounds.h"
 #include "soundmanager.h"
+#include "AgeRecord.h"
 #include "SpriteState.h"
 
 #include "UnitRecord.h"
@@ -51,6 +41,10 @@
 #include "unitutil.h"
 #include "ArmyData.h"
 
+extern World		*g_theWorld;
+extern ColorSet		*g_colorSet;
+extern Player		**g_player;
+extern ConstDB		*g_theConstDB;
 
 
 Battle::Battle() :
@@ -76,7 +70,13 @@ m_fortifiedBonus(0.0)
 
 Battle::~Battle()
 {
-    delete m_eventQueue;
+	
+	
+	
+	
+	
+	if(m_eventQueue)
+		delete m_eventQueue;
 }
 
 
@@ -97,7 +97,7 @@ PointerList<BattleEvent> *Battle::GrabEventQueue()
 }
 
 
-void Battle::Initialize(Army const & attackers, CellUnitList const & defenders)
+void Battle::Initialize(Army &attackers, CellUnitList &defenders)
 {
 	m_numAttackers = attackers.Num();
 	m_numDefenders = defenders.Num();
@@ -252,7 +252,7 @@ void Battle::Initialize(Army const & attackers, CellUnitList const & defenders)
 
 
 
-void Battle::MakeAttackers(sint32 numAttackers, Army const &attackers)
+void Battle::MakeAttackers(sint32 numAttackers, Army &attackers)
 {
 	sint32			i;
 	MapPoint		pos;
@@ -270,7 +270,7 @@ void Battle::MakeAttackers(sint32 numAttackers, Army const &attackers)
 
 
 
-void Battle::MakeDefenders(sint32 numDefenders, CellUnitList const & defenders)
+void Battle::MakeDefenders(sint32 numDefenders, CellUnitList &defenders)
 {
 	sint32			i;
 	MapPoint		pos;

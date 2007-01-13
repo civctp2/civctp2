@@ -22,7 +22,6 @@
 // Modifications from the original Activision code:
 //
 // - Use the difficulty and barbarian risk as selected by the user.
-// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 

@@ -80,8 +80,13 @@ protected:
 	uint32	m_whichWasSelected;	
 	uint32	m_whichIsSelected;	
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback PreChildrenCallback;
+	virtual MouseEventCallback PostChildrenCallback;
+#else
 	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData);
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
+#endif
 };
 
 

@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Battle order box.
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,14 +17,11 @@
 //
 // Compiler flags
 //
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Added unit display name.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,7 +41,7 @@
 #include "SpriteState.h"
 
 #include "pixelutils.h"
-#include "colorset.h"               // g_colorSet
+#include "colorset.h"
 #include "c3_coloredstatic.h"
 #include "controlsheet.h"
 #include "textbutton.h"
@@ -64,6 +60,8 @@
 #include "UnitRecord.h"
 #include "IconRecord.h"
 
+extern ColorSet		*g_colorSet;
+
 #define k_UNIT_FRAME_THICKNESS	2
 
 BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval, 
@@ -72,9 +70,9 @@ BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	: 
-	aui_ImageBase( ldlBlock ),
+	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie)
+	aui_ImageBase( ldlBlock )
 {
 	InitCommon(ldlBlock);
 }
@@ -89,9 +87,9 @@ BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
 					   ControlActionCallback *ActionFunc, 
 					   void *cookie)
 	:
-	aui_ImageBase( (sint32)0 ),
+	ControlSheet(retval, id, x, y, width, height, pattern, ActionFunc, cookie),
 	aui_TextBase( NULL ),
-	ControlSheet(retval, id, x, y, width, height, pattern, ActionFunc, cookie)
+	aui_ImageBase( (sint32)0 )
 {
 	InitCommon(NULL);
 }
@@ -106,7 +104,7 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 	MBCHAR			fortifyBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	RECT			iconRect;
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE		errcode;
 	
 	sint32	i,j;
 
@@ -124,19 +122,17 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 		InflateRect(&iconRect, -4, -3);
 
 
-		for (j=0; j<3; j++) 
-        {
-			sint32 const index = i*3+j;
+		for (j=0; j<3; j++) {
+			sint32 index = i*3+j;
 
-			m_unitRect[index] = iconRect;
+			m_unitRect[i*3+j] = iconRect;
 
+			UnitTabButton	*button;
+			BobButtonAction	*buttonAction;
 
 			
-			UnitTabButton * button = new UnitTabButton
-                (&errcode, aui_UniqueId(), iconRect.left, iconRect.top, 
-				 (iconRect.right-iconRect.left), (iconRect.bottom-iconRect.top), 
-                 "upba0119.tga" 
-                );
+			button = new UnitTabButton(&errcode, aui_UniqueId(), iconRect.left, iconRect.top, 
+						(iconRect.right-iconRect.left), (iconRect.bottom-iconRect.top), "upba0119.tga" );
 
 			Assert(button);
 			if (!button) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -146,7 +142,7 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 			
 
 
-			BobButtonAction	*   buttonAction = new BobButtonAction(this);
+			buttonAction = new BobButtonAction(this);
 			Assert(buttonAction);
 			if (!buttonAction) continue;
 
@@ -161,9 +157,9 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 
 
 
-			m_unitControls[index] = button;
+			m_unitControls[i*3+j] = button;
 			
-			m_unitRectColors[index] = COLOR_BLACK;
+			m_unitRectColors[i*3+j] = COLOR_BLACK;
 
 			OffsetRect(&iconRect, cellWidth, 0);
 		}
@@ -622,8 +618,8 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 			Assert(action);
 			if (!action) continue;
 
-			action->SetUnit(Unit());
-			action->SetArmy(Army());
+			action->SetUnit(Unit(0));
+			action->SetArmy(Army(0));
 		}
 	} else {
 		sint32		count = fullArmy->Num();
@@ -645,8 +641,8 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 			Assert(action);
 			if (!action) continue;
 
-			action->SetUnit(Unit());
-			action->SetArmy(Army());
+			action->SetUnit(Unit(0));
+			action->SetArmy(Army(0));
 
 		}
 

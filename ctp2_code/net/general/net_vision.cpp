@@ -1,91 +1,34 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer vision packet handling.
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// BATTLE_FLAGS
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 #include "net_vision.h"
-
-#include "gstypes.h"        // TERRAIN_TYPES
 #include "net_util.h"
 #include "Vision.h"
-#include "player.h"         // g_player
-#include "tiledmap.h"       // g_tiledMap
-#include "radarmap.h"       // g_radarMap
+#include "player.h"
+#include "tiledmap.h"
+#include "radarmap.h"
 #include "UnseenCell.h"
 #include "TileInfo.h"
 #include "Vision.h"
 #include "TerrImprove.h"
 #include "pointerlist.h"
+
 #include "UnitActor.h"
 #include "SpriteState.h"
+
 #include "UnitRecord.h"
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetVision::NetVision
-//
-// Description: Constructor
-//
-// Parameters : sint32 owner:  First database to check
-//              uint16 row:    
-//              uint8 numRows: 
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-NetVision::NetVision(sint32 owner, uint16 row, uint8 numRows)
-:
-    m_owner     (static_cast<uint8>(owner)),
-    m_row       (row),
-    m_numRows   (numRows)
-{ ; }
+extern Player **g_player;
+extern TiledMap *g_tiledMap;
+extern RadarMap *g_radarMap;
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetVision::Packetize
-//
-// Description: Generate an application data packet to transmit.
-//
-// Parameters : buf         : buffer to store the message
-//
-// Globals    : -
-//
-// Returns    : size        : number of bytes stored in buf
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
+NetVision::NetVision(sint32 owner, uint16 row, uint8 numRows)
+{
+	m_owner = (uint8)owner;
+	m_row = row;
+	m_numRows = numRows;
+}
+
 void NetVision::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
@@ -94,21 +37,23 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 	PUSHSHORT(m_row);
 	PUSHBYTE(m_numRows);
 
-	uint8 *ptr = NULL;
-	uint8 bitPos = 0;
+	
+	
+	
+	uint8 *ptr;
+	sint32 x, y;
+	uint8 bitPos;
 	Vision *vision = g_player[m_owner]->m_vision;
 	sint32 w = vision->m_width;
 	sint32 bottom = m_row + m_numRows;
 	if(bottom > vision->m_height)
 		bottom = vision->m_height;
 
-	for (sint32 y = m_row; y < bottom; ++y) 
-	{
+	for(y = m_row; y < bottom; y++) {
 		bitPos = 0;
 		ptr = &buf[size] + ((y - m_row) * ((w+7) / 8));
 		*ptr = 0;
-		for (sint32 x = 0; x < vision->m_width; ++x) 
-		{
+		for(x = 0; x < vision->m_width; x++) {
 			uint16 vis = vision->m_array[x][y];
 			if(vis & 0x8000) {
 				*ptr |= 1 << bitPos;
@@ -128,23 +73,6 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 	size = ptr - buf + 1;
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetVision::Unpacketize
-//
-// Description: Retrieve the data from a received application data packet.
-//
-// Parameters : id          : Sender identification?
-//              buf         : Buffer with received message
-//              size        : Length of received message (in bytes)
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	sint32 pos = 0;
@@ -156,19 +84,22 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLSHORT(m_row);
 	PULLBYTE(m_numRows);
 
-	uint8 *         ptr     = NULL;
-	uint8           bitPos  = 0;
-	Vision *        vision  = g_player[m_owner]->m_vision;
-	sint32          w       = vision->m_width;
-	sint32 const    bottom  = 
-	    std::min<sint32>(m_row + m_numRows, vision->m_height);
+	
+	
+	
+	uint8 *ptr;
+	sint32 x, y;
+	uint8 bitPos;
+	Vision *vision = g_player[m_owner]->m_vision;
+	sint32 w = vision->m_width;
+	sint32 bottom = m_row + m_numRows;
+	if(bottom > vision->m_height)
+		bottom = vision->m_height;
 
-	for (sint32 y = m_row; y < bottom; ++y) 
-	{
+	for(y = m_row; y < bottom; y++) {
 		bitPos = 0;
 		ptr = &buf[pos] + ((y - m_row) * ((w+7) / 8));
-		for (sint32 x = 0; x < vision->m_width; ++x) 
-		{
+		for(x = 0; x < vision->m_width; x++) {
 			if(*ptr & (1 << bitPos)) {
 				vision->m_array[x][y] |= 0x8000;
 			} else {
@@ -189,27 +120,11 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetUnseenCell::NetUnseenCell
-//
-// Description: Constructor
-//
-// Parameters : UnseenCell *ucell: The unseen cell from/to the network
-//              uint8 owner:       
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 NetUnseenCell::NetUnseenCell(UnseenCell *ucell, uint8 owner)
-:
-    m_ucell (ucell),
-    m_owner (owner)
-{ ; }
+{
+	m_ucell = ucell;
+	m_owner = owner;
+}
 
 #define k_BIO 1
 #define k_NANO 2
@@ -219,21 +134,6 @@ NetUnseenCell::NetUnseenCell(UnseenCell *ucell, uint8 owner)
 #define k_HAPPINESS 0x20
 #define k_HUT 0x40
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetUnseenCell::Packetize
-//
-// Description: Generate an application data packet to transmit.
-//
-// Parameters : buf         : buffer to store the message
-//
-// Globals    : -
-//
-// Returns    : size        : number of bytes stored in buf
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 void NetUnseenCell::Packetize(uint8 *buf, uint16 &size)
 {
 	PUSHID(k_PACKET_UNSEEN_CELL_ID);
@@ -262,9 +162,12 @@ void NetUnseenCell::Packetize(uint8 *buf, uint16 &size)
 
 
 
-	uint8 const citySize = (m_ucell->m_actor) 
-                           ? static_cast<uint8>(m_ucell->m_citySize) 
-                           : 0;
+	uint8 citySize;
+	if(!m_ucell->m_actor) {
+		citySize = 0;
+	} else {
+		citySize = (uint8)m_ucell->m_citySize;
+	}
 	PUSHBYTE(citySize);
 
 	if(citySize > 0) {
@@ -322,23 +225,6 @@ void NetUnseenCell::Packetize(uint8 *buf, uint16 &size)
 	}
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : NetUnseenCell::Unpacketize
-//
-// Description: Retrieve the data from a received application data packet.
-//
-// Parameters : id          : Sender identification?
-//              buf         : Buffer with received message
-//              size        : Length of received message (in bytes)
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
 void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 {
 	uint16 pos = 0;
@@ -404,14 +290,14 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		
 		
 		SpriteState *ss = new SpriteState(0);
-		Unit		unitID;
+		Unit		unitID = Unit(0);
 		
 		
 		uint16 dbIndex;
 		PULLSHORT(dbIndex);
 
 		
-		double		visionRange = g_theUnitDB->Get(dbIndex, g_player[m_owner]->GetGovernmentType())->GetVisionRange();
+		double		visionRange = g_theUnitDB->Get(dbIndex)->GetVisionRange();
 
 		
 		
@@ -461,9 +347,7 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLBYTE(m_ucell->m_tileInfo->m_riverPiece);
 	PULLBYTE(m_ucell->m_tileInfo->m_megaInfo);
-	uint16 terrain;
-	PULLSHORT(terrain);
-	m_ucell->m_tileInfo->m_terrainType = static_cast<uint8>(terrain);
+	PULLSHORT(m_ucell->m_tileInfo->m_terrainType);
 	PULLSHORT(m_ucell->m_tileInfo->m_tileNum);
 	for(c = 0; c < k_NUM_TRANSITIONS; c++) {
 		PULLBYTE(m_ucell->m_tileInfo->m_transitions[c]);

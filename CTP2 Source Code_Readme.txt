@@ -35,19 +35,14 @@ for DirectX Media SDK should work.
 
 Make sure you add the Include and Lib and classes/base directories from those SDKs to Tools->Options->Directories from Visual Studio, if they aren't there already.  If you installed them to default locations, that means you need to add:
 
-C:\DXMEDIA\Classes\Base
-C:\DXMEDIA\Include
-c:\DXSDK\Samples\C++\DirectShow\BaseClasses
 c:\DXSDK\Include
-c:\Program Files\Direct X\Include
-[directory] svncode\trunk\ctp2_code\compiler\msvc6
+C:\DXMEDIA\Include
+C:\DXMEDIA\Classes\Base
 
 to your include directories path, and
 
-C:\DXMEDIA\Lib
-C:\DXSDK\Samples\C++\DirectShow\BaseClasses
 C:\DXSDK\Lib
-
+C:\DXMEDIA\Lib
 
 to your lib directories path. 
 

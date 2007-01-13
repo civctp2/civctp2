@@ -88,26 +88,19 @@ public:
 		AUI_ERRCODE *retval,
 		uint32 id,
 		MBCHAR *ldlBlock,
-#if defined(_MSC_VER)
-        ControlActionCallback * ActionFunc  = NULL,
-#else
-		typename ns_FileDataListBox<NFT,NST>::ControlActionCallback *ActionFunc = NULL,
-#endif
-
+		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		char *filename = "")
 
-		:
-		aui_ImageBase( ldlBlock),
-		aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-		Keys(),
-		ns_ListBox<NFT, NST>(
+		:ns_ListBox<NFT, NST>(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
-		cookie )
-	{
+		cookie ),
+		aui_ImageBase( ldlBlock),
+		aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+		Keys() {
 
 		strncpy(m_filename, filename, 64);
 		FILE *file = fopen(filename, "rb");
@@ -123,7 +116,7 @@ public:
 				NFT *t;
 				do {
 					t = new NFT();
-					t->SetKey(&(this->curkey));
+					t->SetKey(&(Keys::key));
 					if(t->Load(file) == NETFunc::OK) {
 
 						InsertItem(t);
@@ -142,7 +135,7 @@ public:
 
 	void InsertItem(NFT *t) {
 		NextKey();
-		t->SetKey(&(this->curkey));
+		t->SetKey(&(Keys::key));
 		Insert(Add(t));
 	}
 
@@ -157,8 +150,8 @@ public:
 
 	AUI_ERRCODE Save(void) {
 		
-		memset(&(this->curkey), 0, sizeof(this->curkey));
-		this->curkey.len = 1;
+		memset(&(Keys::key), 0, sizeof(NETFunc::KeyStruct));
+		Keys::key.len = 1;
 		FILE *file = fopen(m_filename, "wb");
 		if(file) {
 			
@@ -169,11 +162,10 @@ public:
 			
 			sint32 first = -1;
 			sint32 j = 0;
-			typename ns_FileDataListBox<NFT,NST>::iterator i = begin();
-			for(; i!=end(); i++, j++) {
+			for(iterator i=begin(); i!=end(); i++, j++) {
 				if ( FindItem( *i ) == GetSelectedItem() )
 				{
-					(*i)->SetKey(&(this->curkey));
+					(*i)->SetKey(&(Keys::key));
 					(*i)->Save(file);
 					NextKey();
 
@@ -184,7 +176,7 @@ public:
 			for(i=begin(), j=0; i!=end(); i++, j++) {
 				if ( j != first )
 				{
-					(*i)->SetKey(&(this->curkey));
+					(*i)->SetKey(&(Keys::key));
 					(*i)->Save(file);
 					NextKey();
 				}

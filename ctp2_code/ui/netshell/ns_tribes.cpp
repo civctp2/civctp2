@@ -1,37 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Multiplayer tribe list
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
-#include "CivilisationRecord.h"
+#include "CivilisationDB.h"
 #include "StrDB.h"
 
 #include "aui_uniqueid.h"
@@ -44,6 +24,7 @@
 ns_Tribes *g_nsTribes = NULL;
 
 
+extern CivilisationDatabase *g_theCivilisationDB;
 extern StringDB *g_theStringDB;
 
 
@@ -53,14 +34,14 @@ ns_Tribes::ns_Tribes()
 	Assert( g_nsTribes == NULL );
 	if ( !g_nsTribes )
 	{
-		sint32 numCivs = g_theCivilisationDB->NumRecords();
+		sint32 numCivs = g_theCivilisationDB->GetCivilisations();
 
 		
 		Assert( numCivs <= k_TRIBES_MAX - 1 );
 		if ( numCivs > k_TRIBES_MAX - 1 )
 			numCivs = k_TRIBES_MAX - 1;
 
-		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+		AUI_ERRCODE errcode;
 		m_stringtable = new aui_StringTable( &errcode, numCivs + 1 );
 		Assert( AUI_NEWOK(m_stringtable,errcode) );
 		if ( !AUI_NEWOK(m_stringtable,errcode) ) return;
@@ -72,7 +53,7 @@ ns_Tribes::ns_Tribes()
 		for ( sint32 i = 0; i < numCivs; i++ )
 		{
 			StringId stringNum =
-				g_theCivilisationDB->Get(i)->GetSingularCivName();
+				g_theCivilisationDB->GetSingularCivName( (CIV_INDEX)i );
 			const MBCHAR *name = g_theStringDB->GetNameStr( stringNum );
 
 			m_stringtable->SetString( name, i + 1 );
@@ -103,9 +84,9 @@ ns_TribesDropDown::ns_TribesDropDown(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	c3_DropDown( retval, aui_UniqueId(), ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	c3_DropDown( retval, aui_UniqueId(), ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;

@@ -17,6 +17,9 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
+//
 // __USING_SPANS
 // unknown
 //
@@ -29,7 +32,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
@@ -91,6 +94,24 @@ protected:
     sint32 m_lbutton_isdown; 
     sint32 m_rbutton_isdown; 
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLDragOver;
+	virtual MouseEventCallback MouseLGrabInside;
+    virtual MouseEventCallback MouseLDropInside;
+    virtual MouseEventCallback MouseLDropOutside;
+	virtual MouseEventCallback MouseLDragInside;
+    virtual MouseEventCallback MouseRGrabInside;
+
+    virtual MouseEventCallback MouseMoveOver;
+	virtual MouseEventCallback MouseMoveInside;
+    virtual MouseEventCallback MouseMoveAway;
+	virtual MouseEventCallback MouseMoveOutside;
+
+	virtual MouseEventCallback MouseNoChange;
+
+	virtual MouseEventCallback MouseLDoubleClickInside;
+	virtual MouseEventCallback MouseRDoubleClickInside;
+#else
     virtual void	MouseLDragOver(aui_MouseEvent * data);
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseLDropInside(aui_MouseEvent * data);
@@ -104,6 +125,7 @@ protected:
     virtual void	MouseNoChange(aui_MouseEvent * data);
     virtual void	MouseLDoubleClickInside(aui_MouseEvent * data);
     virtual void	MouseRDoubleClickInside(aui_MouseEvent * data);
+#endif
     
     void ProcessLastMouseMoveThisFrame(aui_MouseEvent *data);
 

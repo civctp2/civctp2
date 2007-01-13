@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : The Slic Engine
-// Id           : $Id:$
+// Description  : 
 //
 //----------------------------------------------------------------------------
 //
@@ -17,25 +16,76 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
+// 
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Redesigned to prevent memory leaks and crashes.
-// - Reuse SlicSegment pool between SlicEngine sessions.
 //
 //----------------------------------------------------------------------------
 
 #ifndef __SLIC_ENGINE_H__
 #define __SLIC_ENGINE_H__
 
-class SlicEngine;
+class SlicObject;
+class CivArchive;
 
-enum SLIC_TAG 
-{
+#define k_SEGMENT_HASH_SIZE 512
+
+class SlicSegment;
+class SlicFunc;
+template <class T> class StringHash;
+template <class T> class PointerList;
+class SlicSymTab;
+class SlicSymbolData;
+class SlicContext;
+class SlicSegmentHash;
+class Unit;
+class MapPoint;
+class TradeOffer;
+class Agreement;
+struct BuildNode;
+class Message;
+class TradeRoute;
+class SlicRecord;
+class SlicConst;
+class SlicStructDescription;
+class SlicNamedSymbol;
+class SlicParameterSymbol;
+class SlicBuiltinNamedSymbol;
+enum SLIC_BUILTIN;
+class SlicStack;
+class SlicModFunc;
+class SlicUITrigger;
+
+class SlicDBInterface;
+
+template <class T> class Pool;
+template <class T> class SimpleDynamicArray;
+
+typedef sint32 AdvanceType;
+typedef sint32 PLAYER_INDEX;
+
+#define k_NORMAL_FILE 0
+#define k_TUTORIAL_FILE 1
+
+#define k_NON_TUTORIAL_MESSAGE_CLASS 666
+#define k_NON_TUTORIAL_HELP_CLASS 667
+
+#define k_MAX_TRIGGER_KEYS 10
+
+#include "SlicTriggerLists.h"
+#include "message.h"
+#include "slicif_sym.h"
+#include "SlicModFuncEnum.h"
+#include "gstypes.h"
+
+
+enum SLIC_TAG {
 	ST_NONE,
 	ST_UNIT,
 	ST_CITY,
@@ -52,59 +102,6 @@ enum SLIC_TAG
 };
 
 #define k_NUM_TIMERS 11
-#define k_SEGMENT_HASH_SIZE 512
-
-#define k_NORMAL_FILE 0
-#define k_TUTORIAL_FILE 1
-
-#define k_NON_TUTORIAL_MESSAGE_CLASS 666
-#define k_NON_TUTORIAL_HELP_CLASS 667
-
-#define k_MAX_TRIGGER_KEYS 10
-
-extern SlicEngine *g_slicEngine;
-
-
-class SlicObject;
-class CivArchive;
-class SlicSegment;
-class SlicFunc;
-template <class T> class StringHash;
-template <class T> class PointerList;
-class SlicSymTab;
-class SlicSymbolData;
-class SlicContext;
-class SlicSegmentHash;
-class Unit;
-class MapPoint;
-class TradeOffer;
-class Agreement;
-class Message;
-class TradeRoute;
-class SlicRecord;
-class SlicConst;
-class SlicStructDescription;
-class SlicNamedSymbol;
-class SlicParameterSymbol;
-class SlicBuiltinNamedSymbol;
-class SlicStack;
-class SlicModFunc;
-class SlicUITrigger;
-class SlicDBInterface;
-template <class T> class SimpleDynamicArray;
-
-typedef sint32 AdvanceType;
-
-#include "Advances.h"           // AdvanceType
-#include "BldQue.h"             // BuildNode
-#include "SlicBuiltinEnum.h"
-#include "SlicTriggerLists.h"
-#include "message.h"
-#include "slicif_sym.h"
-#include "SlicModFuncEnum.h"
-#include "c3types.h"            // MBCHAR, sint32
-#include "player.h"             // PLAYER_INDEX
-
 
 class SlicEngine {
 private:
@@ -122,12 +119,16 @@ private:
 
 	SlicModFunc *m_modFunc[mod_MAX];
 
-	PointerList<SlicSegment> *		m_triggerLists[TRIGGER_LIST_MAX];
-	PointerList<SlicRecord> *		m_records[k_MAX_PLAYERS];
-	sint32                          m_timer[k_NUM_TIMERS];
-	SimpleDynamicArray<sint32> *	m_disabledClasses;
-	PointerList<SlicObject> *		m_uiExecuteObjects;
-	Message							m_eyepointMessage;
+	PointerList<SlicSegment> *m_triggerLists[TRIGGER_LIST_MAX];
+
+	Pool<SlicObject> *m_objectPond;
+	Pool<SlicSegment> *m_segmentPond;
+	
+	PointerList<SlicRecord> *m_records[k_MAX_PLAYERS];
+	sint32 m_timer[k_NUM_TIMERS];
+	SimpleDynamicArray<sint32> *m_disabledClasses;
+	PointerList<SlicObject> *m_uiExecuteObjects;
+	Message m_eyepointMessage;
 
 	MBCHAR m_triggerKey[k_MAX_TRIGGER_KEYS];
 	sint32 m_timerGranularity;
@@ -139,12 +140,12 @@ private:
 	StringHash<SlicConst> *m_constHash;
 
 	
-	SlicSymbolData const **     m_builtins;
+	SlicSymbolData **m_builtins;
 	SlicStructDescription **m_builtin_desc;
 
 	char *m_loadGameName;
 	MBCHAR m_currentKeyTrigger;
-	bool m_blankScreen;
+	BOOL m_blankScreen;
 
 	bool m_atBreak;
 	SlicObject *m_breakContext;
@@ -155,10 +156,19 @@ private:
 public:
 	SlicEngine();
 	SlicEngine(CivArchive &archive);
-	virtual ~SlicEngine();
+	~SlicEngine();
+	void Cleanup();
 
 	void Serialize(CivArchive &archive);
 	void PostSerialize();
+
+	
+	SlicObject *GetNewObject();
+	void ReleaseObject(SlicObject *object);
+	
+	
+	SlicSegment *GetNewSegment();
+	void ReleaseSegment(SlicSegment *seg);
 
 	SlicSegment *GetSegment(const char *id);
 	SlicSegmentHash *GetSegmentHash() { return m_segmentHash; }
@@ -173,17 +183,17 @@ public:
 	void Execute(SlicObject *obj);
 
 	void AddBuiltinFunctions();
-	bool Load(MBCHAR * filename, sint32 filenum);
+	BOOL Load(MBCHAR *filename, sint32 filenum);
 	void Link();
 
 	sint32 GetTutorialPlayer() const { return m_tutorialPlayer; }
 	void SetTutorialPlayer(sint32 tut) { m_tutorialPlayer = tut; }
 	void SetTutorialActive(BOOL on);
-	bool GetTutorialActive() const { return m_tutorialActive != FALSE; }
+	BOOL GetTutorialActive() const { return m_tutorialActive; }
 
 	void AddTrigger(SlicSegment *trigger, TRIGGER_LIST which);
 
-	bool SpecialSameGoodEnabled() const;
+	BOOL SpecialSameGoodEnabled() const;
 
 	void SetCurrentMessage(const Message &message);
 	void GetCurrentMessage(Message &message) const;
@@ -194,19 +204,19 @@ public:
 	void AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
 						   SlicSegment *segment);
 
-	bool IsTimerExpired(sint32 timer) const;
-	void StartTimer(sint32 timer, time_t duration);
+	BOOL IsTimerExpired(sint32 timer);
+	void StartTimer(sint32 timer, sint32 duration);
 	void StopTimer(sint32 timer);
 	sint32 GetTimerGranularity() { return m_timerGranularity; }
 	void SetTimerGranularity(sint32 gran) { m_timerGranularity = gran; }
 
 	void EnableMessageClass(sint32 mclass);
 	void DisableMessageClass(sint32 mclass);
-	bool IsMessageClassDisabled(sint32 mclass) const;
+	BOOL IsMessageClassDisabled(sint32 mclass);
 
 	void SetLoadGame(char *string) { m_loadGameName = string; }
-	bool WaitingForLoad() const { return m_loadGameName != NULL; }
-	char *GetLoadName() const { return m_loadGameName; }
+	BOOL WaitingForLoad() { return m_loadGameName != NULL; }
+	char *GetLoadName() { return m_loadGameName; }
 
 	void RecreateTutorialRecord();
 
@@ -215,8 +225,8 @@ public:
 	
 	void ProcessUITriggers();
 
-	void BlankScreen(bool blank);
-	bool ShouldScreenBeBlank() const { return m_blankScreen; }
+	void BlankScreen(BOOL blank);
+	BOOL ShouldScreenBeBlank() { return m_blankScreen; }
 
 	void RunYearlyTriggers();
 	void RunPlayerTriggers(PLAYER_INDEX player);
@@ -309,8 +319,8 @@ public:
 	void RunTrigger(TRIGGER_LIST tlist, ...);
 	MBCHAR GetTriggerKey(sint32 index);
 	void SetTriggerKey(sint32 index, MBCHAR key);
-	bool IsKeyPressed(MBCHAR key) const;
-	bool RunKeyboardTrigger(MBCHAR key);
+	BOOL IsKeyPressed(MBCHAR key);
+	BOOL RunKeyboardTrigger(MBCHAR key);
 
 	void CheckPendingResearch();
 	void AddResearchOnUnblank(sint32 owner, MBCHAR *text);	
@@ -318,12 +328,12 @@ public:
 	SlicSymbolData *CheckForBuiltinWithIndex(MBCHAR *name, sint32 &index);
 
 	void AddConst(const MBCHAR *name, sint32 value);
-	bool FindConst(const MBCHAR *name, sint32 *value) const;
+	BOOL FindConst(const MBCHAR *name, sint32 *value);
 
 	void AddSymbol(SlicNamedSymbol *sym);
 	void AddStructArray(bool createSymbols, SlicStructDescription *desc, SLIC_BUILTIN which);
 	void AddStruct(bool createSymbols, SlicStructDescription *desc, SLIC_BUILTIN which);
-	SlicSymbolData const * GetBuiltinSymbol(SLIC_BUILTIN which) const;
+	SlicSymbolData *GetBuiltinSymbol(SLIC_BUILTIN which);
 
 	void AddStructs(bool createSymbols);
 	void AddBuiltinSymbol(SlicBuiltinNamedSymbol *sym);
@@ -335,7 +345,7 @@ public:
 	void Break(SlicSegment *segment, sint32 codeOffset, SlicObject *context, SlicStack *stack,
 			   MessageData *message);
 	void Continue();
-	bool AtBreak() const { return m_atBreak; }
+	bool AtBreak() { return m_atBreak; }
 
 	void RequestBreak();
 	bool BreakRequested();
@@ -351,5 +361,7 @@ public:
 
 	sint32 CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 player);
 };
+
+extern SlicEngine *g_slicEngine;
 
 #endif

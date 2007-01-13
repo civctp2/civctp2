@@ -140,6 +140,10 @@ private:
 	ColorIconButton		*m_buttons[ORDERMODE_MAX];
 };
 
-AUI_ACTION_BASIC(BaseBankAction);
+class BaseBankAction : public aui_Action
+{
+public:
+	virtual ActionCallback Execute;
+};
 
 #endif 

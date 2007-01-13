@@ -1,6 +1,4 @@
-#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
 #ifndef __ENDGAMETOKEN_H__
 #define __ENDGAMETOKEN_H__
 

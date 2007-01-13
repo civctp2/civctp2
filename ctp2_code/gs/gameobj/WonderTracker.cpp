@@ -1,38 +1,8 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Wonder Tracker
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - None
-//
-//----------------------------------------------------------------------------
+
 
 #include "c3.h"
 #include "WonderTracker.h"
-
 #include "civarchive.h"
-#include "Globals.h"        // k_GAME_OBJ_TYPE_WONDER
 #include "player.h"
 #include "network.h"
 #include "net_info.h"
@@ -49,20 +19,20 @@ extern sint32 g_saveFileVersion;
 WonderTracker *g_theWonderTracker = NULL;
 
 WonderTracker::WonderTracker()
-:   m_builtWonders      (0),
-//  m_buildingWonders
-    m_globeSatFlags     (0)
 {
-	sint32 i;
-	for(i=0; i<k_MAX_PLAYERS; i++)
-		m_buildingWonders[i] = (uint64) 0x0;
+    sint32 i;
+
+    m_builtWonders = 0;
+    for(i=0; i<k_MAX_PLAYERS; i++)
+        m_buildingWonders[i] = (uint64) 0x0;
+	m_globeSatFlags = 0;
 }
 
 void WonderTracker::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
 		archive << m_builtWonders;
-		archive.Store((uint8*)m_buildingWonders, k_MAX_PLAYERS * sizeof(uint64));
+        archive.Store((uint8*)m_buildingWonders, k_MAX_PLAYERS * sizeof(uint64));
 		archive << m_globeSatFlags;
 	} else {
 		archive >> m_builtWonders;
@@ -79,13 +49,13 @@ void WonderTracker::Serialize(CivArchive &archive)
 			
 			sint32 tmp[k_MAX_PLAYERS];
 			archive.Load((uint8*)tmp, k_MAX_PLAYERS * sizeof(sint32));
-			for(int i=0; i<k_MAX_PLAYERS; i++)
-				m_buildingWonders[i] = (uint64) 0x0;
+		    for(int i=0; i<k_MAX_PLAYERS; i++)
+		        m_buildingWonders[i] = (uint64) 0x0;
 		}
 	}
 }
 
-bool WonderTracker::HasWonderBeenBuilt(sint32 which)
+BOOL WonderTracker::HasWonderBeenBuilt(sint32 which)
 {
 	return (m_builtWonders & ((uint64)1 << (uint64)which)) != 0;
 }
@@ -121,7 +91,7 @@ void WonderTracker::SetBuiltWonders(uint64 built)
 	m_builtWonders = built;
 }
 
-bool WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
+BOOL WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
 {
 	sint32 p;
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
@@ -132,11 +102,11 @@ bool WonderTracker::GetCityWithWonder(sint32 which, Unit &city)
 			if(g_player[p]->m_all_cities->Access(c).GetData()->GetCityData()->GetBuiltWonders() & ((uint64)1 << which)) {
 
 				city = g_player[p]->m_all_cities->Access(c);
-				return true;
+				return TRUE;
 			}
 		}
 	}
-	return false;
+	return FALSE;
 }
 void WonderTracker::SetBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
@@ -152,9 +122,11 @@ void WonderTracker::ClearBuildingWonder(sint32 which, PLAYER_INDEX who)
 }
 
 
-bool WonderTracker::IsBuildingWonder(sint32 which, PLAYER_INDEX who)
+BOOL WonderTracker::IsBuildingWonder(sint32 which, PLAYER_INDEX who)
 {
-	return (m_buildingWonders[who] & ((uint64)1 << (uint64)which)) != 0;
+	
+	
+	return ((m_buildingWonders[who] & ((uint64)1 << (uint64)which)) != 0);
 }
 
 
@@ -163,7 +135,7 @@ void WonderTracker::RecomputeIsBuilding(const PLAYER_INDEX who)
 	
 	
 	
-	m_buildingWonders[who] = (uint64) 0x0;
+    m_buildingWonders[who] = (uint64) 0x0;
 
 	Unit city;
 	sint32 category;

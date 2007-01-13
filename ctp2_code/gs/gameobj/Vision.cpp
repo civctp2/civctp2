@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map visibility handling
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,9 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// - None
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -29,118 +26,122 @@
 // - Removed causes of memory leak reports (static variables).
 // - Unseen cells are now always created and not only in the case if a 
 //   tile improvement is under construction there. - Dec. 21st 2004 Martin Gühmann
-// - Corrected cleanup (using the old m_width!) when reloading in Serialize.
 //
 //----------------------------------------------------------------------------
-//
-/// \file   Vision.h
-/// \brief  Handling of tile visibility (definitions)
 
 #include "c3.h"
 #include "Vision.h"
-
+#include "XY_Coordinates.h"
+#include "World.h"
+#include "tiledmap.h"
+#include "dynarr.h"
+#include "SelItem.h"
+#include "civarchive.h"
+#include "UnseenCellQuadTree.h"
 #include "Army.h"
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "civarchive.h"
-#include "dynarr.h"
-#include "player.h"                   // g_player
-#include "net_info.h"
+#include "player.h"
 #include "network.h"
-#include "SelItem.h"                  // g_selected_item
-#include "tiledmap.h"                 // g_tiledMap
-#include "UnseenCellQuadTree.h"
-#include "World.h"                    // g_theWorld
+#include "net_info.h"
 
-extern sint32 g_god;
+extern World *g_theWorld;
+extern TiledMap *g_tiledMap;
+extern SelectedItem *g_selected_item;
+extern Player **g_player;
 
-/// The fog of war has been toggled off.
-/// This should make all tiles visible once explored.
-sint32 g_fog_toggle; 
 
-namespace
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Vision::Vision(sint32 owner, BOOL amOnScreen)
 {
-    /// Indicate whether a player can see the whole map
-    /// \param a_Index Index of the player
-    bool IsAllVisible(PLAYER_INDEX const & a_Index)
-    {
-        return g_god 
-            || g_fog_toggle 
-            || (g_player[a_Index] && g_player[a_Index]->m_hasGlobalRadar);
-    }
-}
+	sint32 x;
+	MapPoint *size;
+	m_owner = owner;
+	m_amOnScreen = amOnScreen;
 
-Vision::Vision(sint32 owner, bool amOnScreen)
-:
-    m_width                 (0),
-    m_height                (0),
-    m_owner                 (owner),  
-    m_xyConversion          (0),
-    m_isYwrap               (false),      
-    m_amOnScreen            (amOnScreen),
-    m_array                 (NULL),
-    m_unseenCells           (NULL),
-    m_mergeFrom             (NULL), 
-    m_revealedUnexplored    (false)
-{
-    Assert(g_theWorld);
-	MapPoint * size = g_theWorld->GetSize();
+	size = g_theWorld->GetSize();
+	m_array = new uint16*[size->x];
 	m_width = size->x;
 	m_height = size->y;
 	m_xyConversion = (m_height - (2 * m_width)) / 2;
 	m_isYwrap = g_theWorld->IsYwrap();
 	
-    m_array = new uint16*[m_width];
-    for (int x = 0; x < m_width; x++) 
-    {
-        m_array[x] = new uint16[m_height];
-        std::fill(m_array[x], m_array[x] + m_height, 0);
-    }
-    m_unseenCells = new UnseenCellQuadTree(m_width, m_height, m_isYwrap);
+	for(x = 0; x < size->x; x++) {
+		m_array[x] = new uint16[size->y];
+		memset(m_array[x], 0, sizeof(uint16) * size->y);
+	}
+	m_unseenCells = new UnseenCellQuadTree(m_width, m_height, g_theWorld->IsYwrap());
 }
 
 Vision::~Vision()
 {
-    DeleteUnseenCells();
-    delete m_unseenCells;
+	DeleteUnseenCells();
+	if(m_unseenCells)
+		delete m_unseenCells;
 
-    for (int x = 0; x < m_width; x++) 
-    {
-        delete [] m_array[x];
-    }
-    delete [] m_array;
+	if(m_array) {
+		for(sint32 x = 0; x < m_width; x++) {
+			if(m_array[x])
+				delete [] m_array[x];
+		}
+		delete [] m_array;
+	}
 }
 
 
 void Vision::Clear()
 {
-    for (int x = 0; x < m_width; x++) 
-    {
-        std::fill(m_array[x], m_array[x] + m_height, 0);
-    }
+	for(sint32 x = 0; x < m_width; x++) {
+		for(sint32 y = 0; y < m_height; y++) {
+			m_array[x][y] = 0;
+		}
+	}
 	
-    delete m_unseenCells;
-    m_unseenCells = new UnseenCellQuadTree(m_width, m_height, m_isYwrap);
+
+	if(m_unseenCells)
+		delete m_unseenCells;
+	m_unseenCells = new UnseenCellQuadTree(m_width, m_height, g_theWorld->IsYwrap());
 }
+
 
 void Vision::AddExplored(MapPoint pos, double radius)
 {
 	FillCircle(pos, radius, CIRCLE_OP_ADD);
 }
 
+
+
 void Vision::SetTheWholeWorldExplored()
 {
-	for (int x = 0; x < m_width; x++) { 
-		for (int y = 0; y < m_height; y++) { 
-			m_array[x][y] |= k_EXPLORED_BIT; 
-		} 
-	} 
+    sint32 x, y;
+    for (x=0; x<m_width; x++) { 
+        for (y=0; y<m_height; y++) { 
+            m_array[x][y] |= k_EXPLORED_BIT; 
+        } 
+    } 
 }
 
 void Vision::SetTheWholeWorldUnexplored()
 {
-	for (int x = 0; x < m_width; x++) {
-		for (int y = 0; y < m_height; y++) {
+	sint32 x, y;
+	for(x = 0; x < m_width; x++) {
+		for(y = 0; y < m_height; y++) {
 			
 			if(!(m_array[x][y] & k_VISIBLE_REFERENCE_MASK)) {
 				m_array[x][y] = 0;
@@ -151,33 +152,44 @@ void Vision::SetTheWholeWorldUnexplored()
 
 void Vision::SetTheWholeWorldUnseen()
 {
-	for (int x = 0; x < m_width; x++) {
-		for (int y = 0; y < m_height; y++) {
+	
+	sint32 x, y;
+	for(x = 0; x < m_width; x++) {
+		for(y = 0; y < m_height; y++) {
 			m_array[x][y] &= k_EXPLORED_BIT;
 		}
 	}
 }
 
+sint32 g_fog_toggle; 
 
 
-bool Vision::IsExplored(MapPoint pos) const 
+extern sint32 g_god;
+
+BOOL Vision::IsExplored(MapPoint pos) const 
 {
-    if (IsAllVisible(m_owner))
-    {
-        return true;
-    }
+	  
+    if (g_fog_toggle) { 
+        return TRUE; 
+    } 
 
-    Convert(pos);
-    return (m_array[pos.x][pos.y] & k_EXPLORED_BIT) ? true : false;
+	
+	if (g_god) return TRUE;
+
+	if(g_player[m_owner] && g_player[m_owner]->m_hasGlobalRadar)
+		return TRUE;
+
+	Convert(pos);
+	return (m_array[pos.x][pos.y] & k_EXPLORED_BIT) ? TRUE : FALSE;
 }
 
-void Vision::AddVisible(MapPoint pos, double radius, bool &revealed_unexplored,
+void Vision::AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored,
 						DynamicArray<MapPoint> *removeadd)
 {
-	m_revealedUnexplored	= false;
+	m_revealedUnexplored	= FALSE;
 	FillCircle(pos, radius, CIRCLE_OP_ADD, removeadd);
 	if(m_revealedUnexplored)
-		revealed_unexplored = true;
+		revealed_unexplored = TRUE;
 
 	if(removeadd) {
 		for(sint32 i = 0; i < removeadd->Num(); i++) {
@@ -205,12 +217,18 @@ void Vision::AddRadar(MapPoint pos, double radius)
 	FillCircle(pos, radius, CIRCLE_OP_ADD_RADAR);
 }
 
-bool Vision::IsVisible(MapPoint pos) const 
+BOOL Vision::IsVisible(MapPoint pos) const 
 {
-    if (IsAllVisible(m_owner))
-    {
-        return true;
-    }
+    if (g_fog_toggle) { 
+        return TRUE; 
+    } 
+	
+	if (g_god) 
+		return TRUE;
+
+	
+	if(g_player[m_owner] && g_player[m_owner]->m_hasGlobalRadar)
+		return TRUE;
 
 	Assert(pos.x >= 0 && pos.x < m_width &&
 		   pos.y >= 0 && pos.y < m_height);
@@ -218,16 +236,31 @@ bool Vision::IsVisible(MapPoint pos) const
 	return ((m_array[pos.x][pos.y] & k_VISIBLE_REFERENCE_MASK) > 0);
 }
 
-bool Vision::GetLastSeen(const MapPoint &pos, UnseenCellCarton &ucell)
+BOOL Vision::GetLastSeen(const MapPoint &pos, UnseenCellCarton &ucell)
 {
-    /// @todo Check why g_fog_toggle is not tested here
-	if(g_god) return false;
+	
+	if(g_god) return FALSE;
 
+	
 	if(g_player[m_owner] && g_player[m_owner]->m_hasGlobalRadar)
-		return false;
+		return FALSE;
 
+	
+	
+	
 	return m_unseenCells->GetAt(pos, ucell);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 void Vision::MergeMap(Vision *src)
 {
@@ -238,15 +271,18 @@ void Vision::MergeMap(Vision *src)
 	Assert(m_width == src->m_width && m_height == src->m_height);
 	Assert(m_owner != src->m_owner);
 
+	sint32 x, y;
 	UnseenCellCarton ucell;
 
-	for (int x = 0; x < m_width; x++) {
-		for (int y = 0; y < m_height; y++) {
+	for(x = 0; x < m_width; x++) {
+		for(y = 0; y < m_height; y++) {
+			uint16 *myVersion = &m_array[x][y];
 			uint16 *hisVersion = &src->m_array[x][y];
+			MapPoint point(x, y);
+
 			if(!(*hisVersion & k_EXPLORED_BIT))
 				continue;
 
-			uint16 *myVersion = &m_array[x][y];
 			if(*myVersion & k_EXPLORED_BIT) {
 				
 				if((*myVersion & k_VISIBLE_REFERENCE_MASK) > 0) {
@@ -258,7 +294,6 @@ void Vision::MergeMap(Vision *src)
 					
 					
 					
-					MapPoint point(x, y);
 					Unconvert(point);
 					if(m_unseenCells->RemoveAt(point, ucell)) {
 						delete ucell.m_unseenCell;
@@ -272,7 +307,7 @@ void Vision::MergeMap(Vision *src)
 							}
 						}
 					}
-					// Added by Martin Gühmann
+// Added by Martin Gühmann
 					// Create always an unseen cell
 					if(cell->GetCity().m_id != 0)
 						cell->GetCity().SetVisible(m_owner);
@@ -285,7 +320,6 @@ void Vision::MergeMap(Vision *src)
 				
 
 				*myVersion |= k_EXPLORED_BIT;
-				MapPoint point(x, y);
 				Unconvert(point);
 
 				
@@ -319,32 +353,32 @@ void Vision::MergeMap(Vision *src)
 }
 
 
-bool Vision::MergePoint(sint32 x, sint32 y)
+BOOL Vision::MergePoint(sint32 x, sint32 y)
 {
-	uint16 *hisVersion = &m_mergeFrom->m_array[x][y];
-	if(!(*hisVersion & k_EXPLORED_BIT))
-		return false;
-
 	uint16 *myVersion = &m_array[x][y];
+	uint16 *hisVersion = &m_mergeFrom->m_array[x][y];
+	MapPoint point(x, y);
+	UnseenCellCarton ucell;
+	
+	if(!(*hisVersion & k_EXPLORED_BIT))
+		return FALSE;
 	
 	if(*myVersion & k_EXPLORED_BIT) {
 		
 		if((*myVersion & k_VISIBLE_REFERENCE_MASK) > 0) {
 			
-			return false;
+			return FALSE;
 		}
 		
 		if((*hisVersion & k_VISIBLE_REFERENCE_MASK) > 0) {
 			
 			
 			
-			MapPoint point(x, y);
 			Unconvert(point);
-			UnseenCellCarton ucell;
 			if(m_unseenCells->RemoveAt(point, ucell)) {
 				delete ucell.m_unseenCell;
 			}
-			return true;
+			return TRUE;
 		}
 		
 	} else {
@@ -354,20 +388,21 @@ bool Vision::MergePoint(sint32 x, sint32 y)
 		
 		if((*hisVersion & k_VISIBLE_REFERENCE_MASK) == 0) {
 			
-			MapPoint point(x, y);
 			Unconvert(point);
-			UnseenCellCarton ucell;
 			if(m_mergeFrom->m_unseenCells->GetAt(point, ucell)) {
 				UnseenCellCarton newUnseen(
 					new UnseenCell(ucell.m_unseenCell));
 				
 				m_unseenCells->Insert(newUnseen);
-			}
-		}
-		return true;
+				return TRUE;
+			} 
+		} 
+		return TRUE;
 	}
-	return false;
+	return FALSE;
 }
+
+
 
 //----------------------------------------------------------------------------
 //
@@ -375,27 +410,27 @@ bool Vision::MergePoint(sint32 x, sint32 y)
 //
 // Description: Perform an operation within a circle of a certain point.
 //
-// Parameters : centerRC        : the point (RC coordinate)
-//              radius          : the radius of the circle
-//              op              : the operation to perform
+// Parameters : centerRC		: the point (RC coordinate)
+//				radius			: the radius of the circle
+//				op				: the operation to perform
 //
-// Globals    : g_theWorld      : world information
+// Globals    : g_theWorld		: world information
 //
-// Returns    : removeadd       : filled with changed points
+// Returns    : removeadd		: filled with changed points
 //
 // Remark(s)  : The center is now passed as an RC coordinate (used in most of 
 //              the game). dx and dy are still for Convert-ed coordinates,
 //              and map wrap checks are easier when using XY coordinates. 
 //              Quite a mess.
 //
-//                          Convert       XY          RC
-//              step
-//              N           +1 -1        0 -2       +1 -2
-//              NE          +1  0       +1 -1       +1 -1
-//              E           +1 +1       +2  0       +1  0
-//              SE           0 +1       +1 +1        0 +1
+//					      Convert		   XY		   RC
+//              step          		
+//              N			+1 -1		 0 -2		+1 -2       
+//              NE          +1  0		+1 -1		+1 -1
+//              E           +1 +1		+2  0		+1  0
+//              SE           0 +1		+1 +1		 0 +1
 //
-//              Assumption: centerRC is valid and on the map.
+//				Assumption: centerRC is valid and on the map.				
 //
 //----------------------------------------------------------------------------
 void Vision::FillCircle
@@ -469,12 +504,12 @@ void Vision::FillCircle
 //
 // Description: Handle the actual circle operation.
 //
-// Parameters : posRC           : the point (RC coordinate)
-//              op              : the operation
+// Parameters : posRC			: the point (RC coordinate)
+//				op				: the operation
 //
-// Globals    : g_theWorld      : world information
+// Globals    : g_theWorld		: world information
 //
-// Returns    : removeadd       : filled with changed points
+// Returns    : removeadd		: filled with changed points
 //
 // Remark(s)  : Assumption: iso will be a valid map location after applying
 //              wrapping.
@@ -489,16 +524,16 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 	MapPoint	iso(pos);
 	Unconvert(iso);
 
-	bool		redraw	= false;
+	BOOL		redraw	= FALSE;
 	uint16 *	entry	= &m_array[pos.x][pos.y];
 	switch(op) 
 	{
 		case CIRCLE_OP_ADD:
 			if(!((*entry) & k_EXPLORED_BIT)) {
-				redraw = true;
-				m_revealedUnexplored = true;
+				redraw = TRUE;
+				m_revealedUnexplored = TRUE;
 			} else if (((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
-				redraw = true;
+				redraw = TRUE;
 				UnseenCellCarton ucell;
 				if(m_unseenCells->RemoveAt(iso, ucell)) {
 					delete ucell.m_unseenCell;
@@ -508,10 +543,11 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			if(redraw && removeadd) {
 				if(removeadd->Del(iso)) {
 					
+					redraw = FALSE;
 				} else {
 					removeadd->Insert(iso);
+					redraw = FALSE;
 				}
-				redraw = false;
 			}
 			break;
 		case CIRCLE_OP_SUBTRACT:
@@ -521,25 +557,26 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			}
 			// else: No action: keep counter at 0
 			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0) {
-//				Cell *cell = g_theWorld->GetCell(iso);
-				// Added by Martin Gühmann
+				Cell *cell = g_theWorld->GetCell(iso);
+// Added by Martin Gühmann
 				AddUnseen(iso);
 
 				if(removeadd) {
 					
 					removeadd->Insert(iso);
-					redraw = false;
+					redraw = FALSE;
 				} else {
-					redraw = true;
+					redraw = TRUE;
 				}
 			}
 			break;
 		case CIRCLE_OP_ADD_RADAR:
 		{
-			CellUnitList army;
+			static CellUnitList army;
+			army.Clear();
 			g_theWorld->GetArmy(iso, army);
-			sint32 n = army.Num();
-			for(sint32 i = 0; i < n; i++) {
+			sint32 i, n = army.Num();
+			for(i = 0; i < n; i++) {
 				army[i].SetRadar(m_owner);
 			}
 			break;
@@ -549,11 +586,11 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 				if(g_selected_item->GetVisiblePlayer() == m_owner) {
 					g_tiledMap->GetLocalVision()->ModifyPoint(this, pos.x, pos.y);
 				}
-				redraw = true;
+				redraw = TRUE;
 			}
 			break;
 		default:
-			Assert(false);
+			Assert(FALSE);
 			break;
 	}
 
@@ -580,11 +617,10 @@ void Vision::AddUnseen(const MapPoint &point)
 										  m_owner, g_network.PackedPos(point)));
 		}
 
-		UnseenCellCarton unseen(new UnseenCell(point)); // Memory leak?
+		UnseenCellCarton unseen(new UnseenCell(point));
 		m_unseenCells->Insert(unseen);
 	}
 }
-
 void Vision::Copy(const Vision *copy)
 {
 	Assert(m_width == copy->m_width && m_height == copy->m_height);
@@ -602,21 +638,20 @@ void Vision::Copy(const Vision *copy)
 	m_unseenCells->Clear();
 	DynamicArray<UnseenCellCarton> array;
 	copy->m_unseenCells->BuildList(array);
-	sint32 n = array.Num();
-	for (int i = 0; i < n; i++) {
+	sint32 i, n = array.Num();
+	for(i = 0; i < n; i++) {
 		UnseenCellCarton newUnseen(new UnseenCell(array[i].m_unseenCell));
 		m_unseenCells->Insert(newUnseen);
 	}
 }
-
 void Vision::Serialize(CivArchive &archive)
 {
-	CHECKSERIALIZE
+    CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive.StoreChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
 
-		for (sint32 x = 0; x < m_width; x++) {
+		for(sint32 x = 0; x < m_width; x++) {
 			archive.Store((uint8 *)m_array[x], sizeof(m_array[0][0]) * m_height) ;
 
 
@@ -624,35 +659,34 @@ void Vision::Serialize(CivArchive &archive)
 		}
 		DynamicArray<UnseenCellCarton> array;
 		m_unseenCells->BuildList(array);
-		sint32 n = array.Num();
+		sint32 i, n = array.Num();
 		archive << n;
-		for (sint32 i = 0; i < n; i++) {
+		for(i = 0; i < n; i++) {
 			array[i].m_unseenCell->Serialize(archive);
 		}
-	} 
-    else 
-    {
-        for (sint16 x = 0; x < m_width; x++) 
-        {
-            delete [] m_array[x];
-        }
-        delete [] m_array;
-        DeleteUnseenCells();
-        delete m_unseenCells;
+	} else {
+		archive.LoadChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
 
-        archive.LoadChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
 
-        m_array         = new uint16*[m_width];
-        for (sint16 y = 0; y < m_width; y++) 
-        {
-            m_array[y] = new uint16[m_height];
-            archive.Load((uint8 *)m_array[y], sizeof(m_array[0][0]) * m_height) ;
-        }
+		if(m_array) {
+			for(sint32 x = 0; x < m_width; x++) {
+				if(m_array[x])
+					delete [] m_array[x];
+			}
+			delete [] m_array;
+		}
 
-	    m_unseenCells   = new UnseenCellQuadTree(m_width, m_height, m_isYwrap);
-		sint32 n;
+		m_array = new uint16*[m_width];
+		for(sint32 x = 0; x < m_width; x++) {
+			m_array[x] = new uint16[m_height];
+			archive.Load((uint8 *)m_array[x], sizeof(m_array[0][0]) * m_height) ;
+
+
+
+		}
+		sint32 i, n;
 		archive >> n;
-		for (sint32 i = 0; i < n; i++) {
+		for(i = 0; i < n; i++) {
 			UnseenCell *ucell = new UnseenCell(archive);
 			UnseenCellCarton uc(ucell);
 			m_unseenCells->Insert(uc);
@@ -674,20 +708,21 @@ void Vision::CopyCircle(Vision *src, const MapPoint &center, sint32 radius)
 
 void Vision::ModifyPoint(Vision *src, sint32 x, sint32 y)
 {
+	UnseenCellCarton ucell, ucell2;
+	MapPoint pnt(x,y);
+
 	if(m_array[x][y] & k_EXPLORED_BIT) {
 		if(m_array[x][y] & k_VISIBLE_REFERENCE_MASK) {
 			
 			return;
 		} else {
-			MapPoint pnt(x,y);
-			UnseenCellCarton ucell2;
 			if(m_unseenCells->RemoveAt(pnt, ucell2)) {
 				delete ucell2.m_unseenCell;
 			}
 			if(src->m_array[x][y] & k_VISIBLE_REFERENCE_MASK) {
 				
 			} else {
-				UnseenCellCarton ucell;
+				
 				if(src->m_unseenCells->GetAt(pnt, ucell)) {
 					ucell2.m_unseenCell = new UnseenCell(ucell.m_unseenCell);
 					m_unseenCells->Insert(ucell2);
@@ -699,10 +734,7 @@ void Vision::ModifyPoint(Vision *src, sint32 x, sint32 y)
 		if(src->m_array[x][y] & k_EXPLORED_BIT) {
 			
 			m_array[x][y] |= k_EXPLORED_BIT;
-			MapPoint pnt(x,y);
-			UnseenCellCarton ucell;
 			if(src->m_unseenCells->GetAt(pnt, ucell)) {
-				UnseenCellCarton ucell2;
 				
 				ucell2.m_unseenCell = new UnseenCell(ucell.m_unseenCell);
 				m_unseenCells->Insert(ucell2);
@@ -713,13 +745,13 @@ void Vision::ModifyPoint(Vision *src, sint32 x, sint32 y)
 
 void Vision::DeleteUnseenCells()
 {
-	DynamicArray<UnseenCellCarton>  array;
+	DynamicArray<UnseenCellCarton>	array;
 	m_unseenCells->BuildList(array, 0xffffffff);
 
-    for (int i = 0; i < array.Num(); i++) 
-    {
-        delete array[i].m_unseenCell;
-    }
+	sint32 i;
+	for(i = 0; i < array.Num(); i++) {
+		delete array[i].m_unseenCell;
+	}
 }
 
 void Vision::AddUnseen(UnseenCell *ucell)

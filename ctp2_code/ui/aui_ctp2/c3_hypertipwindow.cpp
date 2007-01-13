@@ -21,7 +21,8 @@
 #include "pattern.h"
 #include "pixelutils.h"
 #include "primitives.h"
-#include "colorset.h"               // g_colorSet
+#include "colorset.h"
+extern ColorSet *g_colorSet;
 
 
 c3_HyperTipWindow::c3_HyperTipWindow(
@@ -66,7 +67,15 @@ c3_HyperTipWindow::c3_HyperTipWindow(
 
 AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	aui_Ldl *theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -78,7 +87,9 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	MBCHAR tipBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( tipBlock, "%s.%s", ldlBlock, k_C3_HYPERTIPWINDOW_LDL_TIP );
 
-    if (aui_Ldl::GetLdl()->FindDataBlock( tipBlock ) )
+	
+	Assert( theLdl->GetLdl()->FindDataBlock( tipBlock ) );
+	if ( theLdl->GetLdl()->FindDataBlock( tipBlock ) )
 	{
 		m_hyperTip = new aui_HyperTextBox(
 			&errcode,
@@ -108,9 +119,14 @@ AUI_ERRCODE c3_HyperTipWindow::SetHyperTipText(MBCHAR *text)
 
 	aui_BitmapFont	*font = m_hyperTip->GetTextFont();
 
-	sint32			width   = 10 + font->GetStringWidth(text);
-	sint32			height  = 2 + font->GetMaxHeight();
+	sint32			width = font->GetStringWidth(text);
+	sint32			height = font->GetMaxHeight();
 
+
+
+	width += 10;
+	height += 2;
+	
 	Resize(width, height);
 
 	m_hyperTip->Resize(m_width - 2, m_height);
@@ -134,9 +150,11 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommon( void )
 
 c3_HyperTipWindow::~c3_HyperTipWindow()
 {
-	if ( m_allocatedHyperTip)
+	if ( m_allocatedHyperTip && m_hyperTip )
 	{
 		delete m_hyperTip;
+		m_hyperTip = NULL;
+		m_allocatedHyperTip = FALSE;
 	}
 }
 

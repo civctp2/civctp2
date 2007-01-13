@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Activision User Interface - image handling
+// Description  : User interface - image handling
 //
 //----------------------------------------------------------------------------
 //
@@ -16,15 +16,12 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// __AUI_USE_DIRECTX__
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Crash prevented.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,7 +45,7 @@
 
 aui_Image::aui_Image(
 	AUI_ERRCODE *retval,
-	MBCHAR const * filename )
+	MBCHAR *filename )
 	:
 	aui_Base()
 {
@@ -67,7 +64,7 @@ aui_Image::aui_Image(
 
 
 
-AUI_ERRCODE aui_Image::InitCommon( MBCHAR const *filename )
+AUI_ERRCODE aui_Image::InitCommon( MBCHAR *filename )
 {
 	m_surface = NULL,
 	m_format = NULL;
@@ -88,7 +85,7 @@ aui_Image::~aui_Image()
 
 
 
-AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
+AUI_ERRCODE aui_Image::SetFilename( MBCHAR *filename )
 {
 	
 	Unload();	// deletes and NULLs m_format and m_surface
@@ -131,14 +128,17 @@ AUI_ERRCODE aui_Image::Load( void )
 
 AUI_ERRCODE aui_Image::Unload( void )
 {
-	if (g_ui && g_ui->TheMemMap() && m_format)
+	if ( m_format )
 	{
-		g_ui->TheMemMap()->ReleaseFileFormat(m_format);
+		g_ui->TheMemMap()->ReleaseFileFormat( m_format );
 		m_format = NULL;
 	}
 
-	delete  m_surface;
-    m_surface = NULL;
+	if ( m_surface )
+	{
+		delete m_surface;
+		m_surface = NULL;
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -148,7 +148,7 @@ AUI_ERRCODE aui_Image::Unload( void )
 
 AUI_ERRCODE aui_Image::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE retcode;
 
 #ifdef __AUI_USE_DIRECTX__
 	m_surface = new aui_DirectSurface(
@@ -176,7 +176,7 @@ AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
                                        sint32 bpp, sint32 pitch, 
                                        uint8 *buffer )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE retcode;
 
 	m_surface = new aui_Surface(
 		&retcode,
@@ -346,7 +346,11 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 		{
 			const sint32 pitch = surface->Pitch();
 
+			
 			uint8 *temp = new uint8[ pitch ];
+			Assert( temp != NULL );
+			if ( !temp ) return AUI_ERRCODE_MEMALLOCFAILED;
+
 			uint8 *top = (uint8 *)bits;
 			uint8 *bot = top + pitch * ( surface->Height() - 1 );
 			for ( sint32 i = surface->Height() / 2; i; i-- )
@@ -359,7 +363,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 				bot -= pitch;
 			}
 
-			delete [] temp;
+			delete[ pitch ] temp;
 
 			errcode = surface->Unlock( bits );
 			Assert( AUI_SUCCESS(errcode) );

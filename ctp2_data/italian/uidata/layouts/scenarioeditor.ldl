@@ -614,7 +614,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 			AddPWLabel:CTP2_STATIC_BASE {
 				int xpix 4
-				int ypix 178
+				int ypix 170
 				int widthpix 130
 				string text "str_ldl_AddPW"
 			}
@@ -630,7 +630,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 			AddGoldLabel:CTP2_STATIC_BASE {
 				int xpix 4
-				int ypix 206
+				int ypix 198
 				int widthpix 130
 				string text "str_ldl_AddGold"
 			}
@@ -644,7 +644,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 				string tipwindow "str_SE_AddGold"
 			}
 		}
-	}
+}
 	UniversalControls:SCEN_UNIVERSAL_CONTROLS_BOX {
 
 		SelectButton:SCEN_BUTTON {
@@ -673,7 +673,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 			string tipwindow "str_SE_ClearWorld"
 		}
 		ReloadSlicButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-			int	xpix 10	
+			int	xpix 100	
 			int	ypix 42
 			string text "str_ldl_reloadSlic"
 			string statustext "str_SE_ReloadSlic"
@@ -914,19 +914,6 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 			string statustext "str_SE_Nation"
 			string tipwindow "str_SE_Nation"
 		}
-		CityStyleSpinner:CTP2_SPINNER {
-			int xpix 6
-			int ypix 150
-			int widthpix 180
-			int heightpix 30
-
-			int minxval 0
-			int maxxval 900
-			int incxval 1
-			int xval 0
-			string statustext "str_ldl_0"
-			string tipwindow "str_ldl_0"
-		}
 	}
 
 	CivExtraControls:SCEN_EXTRA_CONTROLS_BOX {
@@ -992,7 +979,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 		}
 		FindPosXLabel:CTP2_STANDARD_FONT {
 			string objecttype "ctp2_Static"
-			int xpix 106
+			int xpix 103
 			int ypix 3 
 			int widthpix 20
 			int heightpix 20
@@ -1011,7 +998,7 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 		}
 		FindPosYLabel:CTP2_STANDARD_FONT {
 			string objecttype "ctp2_Static"
-			int xpix 166
+			int xpix 163
 			int ypix 3
 			int widthpix 20
 			int heightpix 20

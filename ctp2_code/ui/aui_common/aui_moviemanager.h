@@ -41,17 +41,17 @@ public:
 	aui_MovieManager( BOOL init = TRUE );
 	virtual ~aui_MovieManager();
 
-	virtual aui_Movie	*Load( const MBCHAR *filename, C3DIR dir = C3DIR_DIRECT )
+	virtual aui_Movie	*Load( MBCHAR *filename, C3DIR dir = C3DIR_DIRECT )
 	{ return m_movieResource->Load( filename, dir ); }
 
 	virtual AUI_ERRCODE Unload( aui_Movie *movie )
 	{ return m_movieResource->Unload( movie ); }
-	virtual AUI_ERRCODE Unload( const MBCHAR *movie )
+	virtual AUI_ERRCODE Unload( MBCHAR *movie )
 	{ return m_movieResource->Unload( movie ); }
 
-	virtual AUI_ERRCODE AddSearchPath( const MBCHAR *path )
+	virtual AUI_ERRCODE AddSearchPath( MBCHAR *path )
 	{ return m_movieResource->AddSearchPath( path ); }
-	virtual AUI_ERRCODE RemoveSearchPath( const MBCHAR *path )
+	virtual AUI_ERRCODE RemoveSearchPath( MBCHAR *path )
 	{ return m_movieResource->RemoveSearchPath( path ); }
 
 	aui_Resource<aui_Movie> *MovieResource( void ) const

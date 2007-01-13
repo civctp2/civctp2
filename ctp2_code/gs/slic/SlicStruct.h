@@ -2,8 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Slic Structure
-// Id           : $Id:$
+// Description  : 
 //
 //----------------------------------------------------------------------------
 //
@@ -33,18 +32,19 @@
 //
 // - pragma once marked as MS specific.
 // - Accessor functionality added. 
-// - Standardized code. (May 29th 2006 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(_MSC_VER)
 #pragma once
 #endif
 
 #ifndef __SLIC_STRUCT_H__
-#define __SLIC_STRUCT_H__ 1
+#define __SLIC_STRUCH_H__
 
+#if !defined(ACTIVISION)
 #include <vector>		// std::vector
+#endif
 
 #include "slicif.h"
 #include "SlicStack.h"
@@ -57,12 +57,18 @@ class SlicNamedSymbol;
 class SlicStructInstance;
 class SlicStructMemberData;
 
+
+
+
+
+
+
 class SlicStructDescription {
 public:
 	class Member {
 	public:
-		Member(SlicStructDescription *parent, char const * name, SLIC_SYM type);
-		Member(SlicStructDescription *parent, char const * name, SlicStructMemberData *sym);
+		Member(SlicStructDescription *parent, char *name, SLIC_SYM type);
+		Member(SlicStructDescription *parent, char *name, SlicStructMemberData *sym);
 		~Member();
 
 		SlicStructDescription *GetParent() { return m_parent; }
@@ -73,14 +79,14 @@ public:
 
 		SLIC_SYM m_type;
 		char *m_name;
-		class SlicStructDescription *m_parent;
-		class SlicStructMemberData *m_symbol; 
+		SlicStructDescription *m_parent;
+		SlicStructMemberData *m_symbol; 
 	};
 
-	SlicStructDescription(char const * name, SLIC_BUILTIN type);
-	virtual ~SlicStructDescription();
+	SlicStructDescription(char *name, SLIC_BUILTIN type);
+	~SlicStructDescription();
 
-	void AddAccessor(char const * name, SlicStructMemberData * symbol);
+	void AddAccessor(char * name, SlicStructMemberData * symbol);
 
 	SlicStructMemberData * GetMemberSymbol(sint32 index) const;
 	sint32 GetMemberSymbolIndex(SlicStructMemberData * symbol) const;
@@ -88,14 +94,14 @@ public:
 		{ return m_accessors.size(); };
 
 	void AddMember(SlicStructDescription::Member *member);
-	void AddMember(char const * name, SLIC_SYM type);
-	void AddMember(char const * name, SlicStructMemberData *sym);
-	const char * GetName() const { return m_name; }
-	sint32 GetMemberIndex(char const * name) const;
-	const char *GetMemberName(sint32 index) const;
+	void AddMember(char *name, SLIC_SYM type);
+	void AddMember(char *name, SlicStructMemberData *sym);
+	const char *GetName() { return m_name; }
+	sint32 GetMemberIndex(char *name);
+	const char *GetMemberName(sint32 index);
 	sint32 GetNumMembers() { return m_numMembers; }
 
-	SLIC_BUILTIN GetType() const { return m_type; }
+	SLIC_BUILTIN GetType() { return m_type; }
 
 	SlicSymbolData *CreateInstance(SS_TYPE type, SlicStackValue value);
 	SlicSymbolData *CreateInstance();
@@ -105,7 +111,7 @@ public:
 	virtual SlicSymbolData *CreateDataSymbol();
 
 	friend class SlicStructInstance;
-	friend SlicSymbolData *slicsymbol_Load(CivArchive &archive);
+	friend slicsymbol_Load(CivArchive &archive);
 private:
 	char *m_name;
 	SLIC_BUILTIN m_type;
@@ -125,25 +131,22 @@ protected:
 
 public:
 
-	SlicStructMemberData
-    (
-        SlicStructInstance *    parent, 
-        SlicSymbolData const &  data
-    ) 
-    :   SlicSymbolData  (data),
-        m_parent        (parent)
-    { ; }
+	SlicStructMemberData(SlicStructInstance *parent, SlicSymbolData *data) :
+		SlicSymbolData(data)
+	{
+		m_parent = parent;
+	}
 
 	SlicStructMemberData
 	(
 		SlicStructInstance *	parent	= NULL, 
 		SLIC_SYM				type	= SLIC_SYM_UNDEFINED
 	)
-	:	SlicSymbolData  (type),
-		m_parent        (parent)
-	{ ; };
+	:	SlicSymbolData(type),
+		m_parent(parent)
+	{ };
 
-	virtual ~SlicStructMemberData() {}
+	~SlicStructMemberData() {}
 
 	void Serialize(CivArchive &archive) {}
 	void SerializeMemberReference(CivArchive &archive);

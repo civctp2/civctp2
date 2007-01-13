@@ -1,59 +1,49 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : New proposal event handling
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
+
 #include "NProposalEvent.h"
 
-#include <algorithm>            // std::max, std::min
 #include "Events.h"
 #include "GameEventUser.h"
 #include "Unit.h"
 #include "StrDB.h"
 #include "GameEventManager.h"
+
 #include "player.h"
 #include "Strengths.h"
+
 #include "Diplomat.h"
 #include "mapanalysis.h" 
 #include "AdvanceRecord.h"
 #include "AgreementMatrix.h"
 #include "newturncount.h"
-#include "SelItem.h"			// g_selected_item
+#include "SelItem.h"
 #include "ctpai.h"
 #include "ProposalAnalysis.h"
+#include "c3math.h"
 #include "UnitData.h"
-#include "UnitPool.h"			// g_theUnitPool
+#include "UnitPool.h"
 #include "network.h"
 #include "pollution.h"
 #include "director.h"
 #include "gold.h"
 
+extern SelectedItem *g_selected_item;
+extern UnitPool *g_theUnitPool;
 
 
 STDEHANDLER(NewProposalEvent)
@@ -70,7 +60,7 @@ STDEHANDLER(NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & newProposal = sender_diplomat.GetMyLastNewProposal(receiver);
 
@@ -175,7 +165,7 @@ STDEHANDLER(Scenario_NewProposalEvent) {
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);				  
+	new_proposal.priority = priority;				  
 	
 	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_PEACE; 
@@ -244,7 +234,7 @@ STDEHANDLER(LeaveOurBorders_NewProposalEvent) {
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;				
 	
 	
 	new_proposal.detail.first_type = PROPOSAL_REQUEST_WITHDRAW_TROOPS;	
@@ -357,33 +347,36 @@ STDEHANDLER(ExchangeMaps_NewProposalEvent) {
 	
 	
 	if (sender_saw_map == -1 ||	sender_saw_map > want_map_turns)
-	{
-		NewProposal new_proposal;
-
-		
-		new_proposal.priority = static_cast<sint16>((offer_priority + request_priority) / 2);		
-
-		
-		new_proposal.detail.first_type = PROPOSAL_REQUEST_MAP;	
-		new_proposal.detail.second_type = PROPOSAL_OFFER_MAP;	
-		new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;	    
-		
-		new_proposal.receiverId = receiver;
-		new_proposal.senderId = sender;
-
-		
-
-		g_theStringDB->GetStringID("EXPLAIN_EXCHANGE_MAPS_0001",new_proposal.explainStrId);
-		g_theStringDB->GetStringID("ADVICE_EXCHANGE_MAPS_0001",new_proposal.adviceStrId);
-		g_theStringDB->GetStringID("NEWS_EXCHANGE_MAPS_0001",new_proposal.newsStrId);
-
-		if (!sender_diplomat.GetNewProposalTimeout
-				(new_proposal, static_cast<sint16>(want_map_turns))
-		   )
 		{
+			NewProposal new_proposal;
+
+			
+			new_proposal.priority = (offer_priority + request_priority)/2;		
+
+			
+			new_proposal.detail.first_type = PROPOSAL_REQUEST_MAP;	
+			new_proposal.detail.second_type = PROPOSAL_OFFER_MAP;	
+			new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;	    
+			
+			new_proposal.receiverId = receiver;
+			new_proposal.senderId = sender;
+
+			
+
+			g_theStringDB->GetStringID("EXPLAIN_EXCHANGE_MAPS_0001",new_proposal.explainStrId);
+			g_theStringDB->GetStringID("ADVICE_EXCHANGE_MAPS_0001",new_proposal.adviceStrId);
+			g_theStringDB->GetStringID("NEWS_EXCHANGE_MAPS_0001",new_proposal.newsStrId);
+
+			
+			if (sender_diplomat.GetNewProposalTimeout( new_proposal, want_map_turns ) )
+				{
+					
+					return GEV_HD_Continue;
+				}
+
+			
 			sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
 		}
-	}
 	
 	return GEV_HD_Continue;
 }
@@ -412,7 +405,7 @@ STDEHANDLER(MakePeace_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -449,7 +442,7 @@ STDEHANDLER(MakePeace_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);	
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_PEACE; 
@@ -535,7 +528,7 @@ STDEHANDLER(CeaseFire_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_CEASEFIRE; 
@@ -549,7 +542,7 @@ STDEHANDLER(CeaseFire_NewProposalEvent)
 		new_proposal.detail.tone = DIPLOMATIC_TONE_MEEK;
 
 		sint32 max_can_pay_gold = 
-            std::min(g_player[receiver]->m_gold->GetIncome() * 2, g_player[sender]->GetGold());
+		MIN(g_player[receiver]->m_gold->GetIncome() * 2, g_player[sender]->GetGold());
 
 		
 		max_can_pay_gold = ProposalAnalysis::RoundGold(max_can_pay_gold);
@@ -620,7 +613,7 @@ STDEHANDLER(ReducePollution_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -657,24 +650,30 @@ STDEHANDLER(ReducePollution_NewProposalEvent)
 
 	
 	reduce_percent = ProposalAnalysis::RoundPercentReduction(reduce_percent);
-	sint32 target_pollution = static_cast<sint16>((1.0 - reduce_percent) * receiver_pollution);
+	sint32 target_pollution = ((1.0 - reduce_percent) * receiver_pollution);
 	target_pollution = ProposalAnalysis::RoundGold(target_pollution);
-	if (target_pollution > 0)
+	if (target_pollution <= 0)
+		return GEV_HD_Continue;
+
+	NewProposal new_proposal;
+	
+	
+	new_proposal.priority = priority;	
+	new_proposal.senderId = sender;		
+	new_proposal.receiverId = receiver;	
+	new_proposal.detail.first_type = PROPOSAL_REQUEST_REDUCE_POLLUTION; 
+	new_proposal.detail.first_arg.pollution = target_pollution;
+	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;	   
+	
+	
+	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ) )
 	{
-		NewProposal new_proposal;
 		
-		new_proposal.priority = static_cast<sint16>(priority);
-		new_proposal.senderId = sender;		
-		new_proposal.receiverId = receiver;	
-		new_proposal.detail.first_type = PROPOSAL_REQUEST_REDUCE_POLLUTION; 
-		new_proposal.detail.first_arg.pollution = target_pollution;
-		new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;	   
-		
-		if (!sender_diplomat.GetNewProposalTimeout(new_proposal, 20))
-		{
-			sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
-		}
+		return GEV_HD_Continue;
 	}
+	
+	
+	sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
 
 	return GEV_HD_Continue;
 }
@@ -704,7 +703,7 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -725,9 +724,8 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	uint32 receiver_pollution = g_player[receiver]->GetPollutionLevel();
-	uint32 promised_pollution = 
-        static_cast<uint32>(std::max<sint32>(0, agreement.proposal.first_arg.pollution));
-	uint32 half_promised_pollution = promised_pollution / 2;
+	sint32 promised_pollution = agreement.proposal.first_arg.pollution;;
+	sint32 half_promised_pollution = promised_pollution / 2;
 	double pollution_ratio = (double) receiver_pollution / promised_pollution;
 
 	sint32 turns_since_start = NewTurnCount::GetCurrentRound() - agreement.start;
@@ -755,12 +753,12 @@ STDEHANDLER(HonorPollutionAgreement_NewProposalEvent)
 			return GEV_HD_Continue;
 	}
 
-//	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
+	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
 
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);	
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT; 
@@ -855,16 +853,21 @@ STDEHANDLER(TradePact_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_TRADE_PACT; 
 	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;   
 	
-	if (!sender_diplomat.GetNewProposalTimeout( new_proposal, 22 ) )
+	
+	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 22 ) )
 	{
-		sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
+		
+		return GEV_HD_Continue;
 	}
+	
+	
+	sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
 
 	return GEV_HD_Continue;
 }
@@ -906,7 +909,7 @@ STDEHANDLER(ResearchPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -943,17 +946,26 @@ STDEHANDLER(ResearchPact_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);	
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_RESEARCH_PACT; 
-	new_proposal.detail.tone = 
-		(sender_science < receiver_science) ? DIPLOMATIC_TONE_MEEK : DIPLOMATIC_TONE_EQUAL;
+
+    
+	if (sender_science < receiver_science)
+		new_proposal.detail.tone = DIPLOMATIC_TONE_MEEK; 
+	else
+		new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;
 	
-	if (!sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ) )
+	
+	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ) )
 	{
-		sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
+		
+		return GEV_HD_Continue;
 	}
+	
+	
+	sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
 
 	return GEV_HD_Continue;
 }
@@ -996,7 +1008,7 @@ STDEHANDLER(MilitaryPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_MILITARY_PACT))
@@ -1033,18 +1045,22 @@ STDEHANDLER(MilitaryPact_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_MILITARY_PACT; 
 	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;   
 	
 	
-	if (!sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ) )
+	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ) )
 	{
-		sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
+		
+		return GEV_HD_Continue;
 	}
 	
+	
+	sender_diplomat.ConsiderNewProposal( receiver, new_proposal);
+
 	return GEV_HD_Continue;
 }
 
@@ -1072,7 +1088,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_POLLUTION_PACT))
@@ -1132,7 +1148,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 
 	
 	reduce_percent = ProposalAnalysis::RoundPercentReduction(reduce_percent);
-	sint32 target_pollution = static_cast<sint32>(reduce_percent * receiver_pollution);
+	sint32 target_pollution = (reduce_percent * receiver_pollution);
 	target_pollution = ProposalAnalysis::RoundGold(target_pollution);
 	if (target_pollution <= 0)
 		return GEV_HD_Continue;
@@ -1140,12 +1156,11 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_POLLUTION_PACT; 
-	new_proposal.detail.first_arg.pollution = 
-		static_cast<sint32>((1.0 - reduce_percent) * receiver_pollution);
+	new_proposal.detail.first_arg.pollution = (1.0 - reduce_percent) * receiver_pollution;
 	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;   
 	
 	
@@ -1185,7 +1200,7 @@ STDEHANDLER(Alliance_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	if (AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_ALLIANCE))
@@ -1226,7 +1241,7 @@ STDEHANDLER(Alliance_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;	
 	new_proposal.senderId = sender;		
 	new_proposal.receiverId = receiver;	
 	new_proposal.detail.first_type = PROPOSAL_TREATY_ALLIANCE; 
@@ -1312,7 +1327,7 @@ STDEHANDLER(RequestAdvance_NewProposalEvent)
 		sint32 priority =
 			sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_GIVE_ADVANCE);
 
-		new_proposal.priority = static_cast<sint16>(priority);
+		new_proposal.priority = priority;				
 		new_proposal.senderId = sender;			
 		new_proposal.receiverId = receiver;		
 		new_proposal.detail.first_type = PROPOSAL_REQUEST_GIVE_ADVANCE;	
@@ -1366,7 +1381,7 @@ STDEHANDLER(StopPiracy_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 
 	
@@ -1384,7 +1399,7 @@ STDEHANDLER(StopPiracy_NewProposalEvent)
 		NewProposal new_proposal;
 
 		
-		new_proposal.priority = static_cast<sint16>(priority);
+		new_proposal.priority = priority;	
 		new_proposal.senderId = sender;		
 		new_proposal.receiverId = receiver;	
 		new_proposal.detail.first_type = PROPOSAL_REQUEST_STOP_PIRACY; 
@@ -1435,7 +1450,7 @@ STDEHANDLER(BegForGold_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
+	Diplomat & sender_diplomat = Diplomat::GetDiplomat(receiver);
 
 	bool allied = 
 		AgreementMatrix::s_agreements.HasAgreement(sender,receiver,PROPOSAL_TREATY_MILITARY_PACT) ||
@@ -1457,26 +1472,51 @@ STDEHANDLER(BegForGold_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	
-	sint32 gold = ProposalAnalysis::RoundGold(5 * g_player[sender]->m_gold->GetIncome());
+	sint32 gold = 0;
+
+	
+	gold = 5 * g_player[sender]->m_gold->GetIncome();
+
+	
+	gold = ProposalAnalysis::RoundGold(gold);
 
 	if (gold <= 0)
 		return GEV_HD_Continue;
 	
 	NewProposal new_proposal;
+
 	
-	new_proposal.priority               = static_cast<sint16>
-        (sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_GIVE_GOLD));
-	new_proposal.detail.first_type      = PROPOSAL_REQUEST_GIVE_GOLD;	
-	new_proposal.detail.first_arg.gold  = gold; 
-    new_proposal.detail.tone            = 
-        (allied) ? DIPLOMATIC_TONE_KIND : DIPLOMATIC_TONE_MEEK;	   
-	new_proposal.receiverId             = receiver;
-	new_proposal.senderId               = sender;
 	
-	if (!sender_diplomat.GetNewProposalTimeout(new_proposal, 50))
+	sint32 priority =
+		sender_diplomat.GetNewProposalPriority(receiver, PROPOSAL_REQUEST_GIVE_GOLD);
+	
+	
+	new_proposal.priority = priority;				
+	
+	
+	new_proposal.detail.first_type = PROPOSAL_REQUEST_GIVE_GOLD;	
+	new_proposal.detail.first_arg.gold = gold; 
+
+	if (allied)
+		
+		new_proposal.detail.tone = DIPLOMATIC_TONE_KIND;	   
+	else
+		
+		new_proposal.detail.tone = DIPLOMATIC_TONE_MEEK;	   
+	
+	new_proposal.receiverId = receiver;
+	new_proposal.senderId = sender;
+	
+	
+	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 50 ) )
 	{
-	    sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
+		
+		return GEV_HD_Continue;
 	}
+	
+	
+	sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
+	
 	
 	return GEV_HD_Continue;
 }
@@ -1536,7 +1576,13 @@ STDEHANDLER(BlackmailGold_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	
-	sint32 gold = ProposalAnalysis::RoundGold(2 * g_player[sender]->m_gold->GetIncome());
+	sint32 gold = 0;
+
+	
+	gold = (2 * g_player[sender]->m_gold->GetIncome());
+
+	
+	gold = ProposalAnalysis::RoundGold(gold);
 
 	
 	
@@ -1549,7 +1595,7 @@ STDEHANDLER(BlackmailGold_NewProposalEvent)
 	NewProposal new_proposal;
 	
 	
-	new_proposal.priority = static_cast<sint16>(priority);
+	new_proposal.priority = priority;				
 	
 	
 	new_proposal.detail.first_type = PROPOSAL_REQUEST_GIVE_GOLD;	
@@ -1608,8 +1654,7 @@ STDEHANDLER(BreakAgreementWithEnemy_NewProposalEvent)
 	const Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 	ai::Agreement agreement;
 
-	PLAYER_INDEX cold_war_enemy;
-	for (cold_war_enemy = 1; cold_war_enemy < CtpAi::s_maxPlayers; cold_war_enemy++)
+	for (PLAYER_INDEX cold_war_enemy = 1; cold_war_enemy < CtpAi::s_maxPlayers; cold_war_enemy++)
 	{
 		if (g_player[cold_war_enemy] == NULL)
 			continue;
@@ -1944,7 +1989,7 @@ STDEHANDLER(RequestTribute_NewProposalEvent)
 		
 		type = PROPOSAL_REQUEST_GIVE_GOLD;
 		tone = DIPLOMATIC_TONE_ANGRY;
-        gold = std::min(at_risk_value, sender_income);
+		gold = MIN(at_risk_value, sender_income);
 	}
 	
 	else if ((MOTIVATION_TYPE) motivation_type == MOTIVATION_DESIRE_ENLIST_FRIEND)
@@ -1971,8 +2016,8 @@ STDEHANDLER(RequestTribute_NewProposalEvent)
 
 		type = PROPOSAL_OFFER_GIVE_GOLD;
 		tone = DIPLOMATIC_TONE_EQUAL;
-        gold = std::max(receiver_income / 2, 100);
-        gold = std::min(gold, sender_savings);
+		gold = MAX(receiver_income / 2, 100);
+		gold = MIN(gold, sender_savings);
 	}
 	else
 		
@@ -2044,8 +2089,10 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
 
 	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_ANGRY;
+	sint32 gold = 0;
 
-//	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	
 	
@@ -2159,8 +2206,8 @@ STDEHANDLER(RequestHonorMilitaryAgeement_NewProposalEvent)
 	if (g_player[receiver] == NULL)
 		return GEV_HD_Continue;
 
-	PLAYER_INDEX hot_war_enemy;
-	for (hot_war_enemy = 1; hot_war_enemy < CtpAi::s_maxPlayers; hot_war_enemy++)
+	
+	for (PLAYER_INDEX hot_war_enemy = 1; hot_war_enemy < CtpAi::s_maxPlayers; hot_war_enemy++)
 	{
 		if (g_player[hot_war_enemy] == NULL)
 			continue;
@@ -2215,7 +2262,7 @@ STDEHANDLER(RequestHonorMilitaryAgeement_NewProposalEvent)
 
 STDEHANDLER(RequestEndEmbargo_NewProposalEvent)
 {
-	DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_NOT_CHOSEN;
+	DIPLOMATIC_TONE tone;
 
 	
 	if (gameEventType == GEV_DesireMotivation)

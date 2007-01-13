@@ -9,9 +9,8 @@
 
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __EFFECTACTOR_H__
 #define __EFFECTACTOR_H__
 
@@ -45,7 +44,7 @@ public:
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(BOOL isVisible = TRUE);
 
-	Anim *          CreateAnim(EFFECTACTION action);
+	Anim			*GetAnim(EFFECTACTION action);
 
 	void			Draw(void);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);

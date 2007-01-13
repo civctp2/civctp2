@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : String utilities
-// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,15 +27,43 @@
 // - fixed for japanese by t.s. 2003.12
 // - Made the interpretation text size a parameter to support the German 
 //   version.
-// - Removed unneeded inlcude files. (Aug 20th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 
 #include "StrDB.h"
+#include "AgeRecord.h"
+#include "CivilisationDB.h"
+#include "WonderRecord.h"
+#include "AdvanceRecord.h"
+#include "GovernmentRecord.h"
+
+#include "TurnCnt.h"
+
+#include "Civilisation.h"
+#include "player.h"
+#include "Unit.h"
+#include "UnitData.h"
+#include "UnitPool.h"
+#include "MessageData.h"
+
 #include "SlicContext.h"
+#include "RandGen.h"
+
+#include "pixelutils.h"
+#include "colorset.h"
+
 #include "stringutils.h"
+#include "BuildingRecord.h"
+
+#include "SlicSymbol.h"
+#include "SlicEngine.h"
+#include "SlicNamedSymbol.h"
+#include "UnitRecord.h"
+#include "GovernmentRecord.h"
+#include "ResourceRecord.h"
+
 #include "sliccmd.h"
 #include "sc.tab.h"
 
@@ -48,16 +75,17 @@ void stringutils_HackColor(BOOL on)
 {
 }
 
+
 //----------------------------------------------------------------------------
 //
 // Name       : stringutils_Interpret
 //
 // Description: Fill the variable and language dependent parts of a string.
 //
-// Parameters : msg             : original string
-//              slicObj         : context to look up values of variables
-//              sInterpreted    : (space reserved for) interpreted string
-//              a_Capacity      : size available for interpreted string
+// Parameters : msg				: original string
+//				slicObj			: context to look up values of variables
+//				sInterpreted	: (space reserved for) interpreted string
+//				a_Capacity		: size available for interpreted string
 //
 // Globals    : -
 //
@@ -66,21 +94,22 @@ void stringutils_HackColor(BOOL on)
 // Remark(s)  : When the original string does not contain any variables, it 
 //              will be copied literally.
 //              The interpreted string is truncated at a_Capacity characters.
-//              Any individual (sub)expression will still be truncated at 
+//				Any individual (sub)expression will still be truncated at 
 //              k_MAX_INTERP_LEN characters.
-//              TODO: Reimplementation with std::string/stringstream.
+//				TODO: Reimplementation with std::string/stringstream.
 //              TODO: Check all calls of this function to pass the proper
 //                    capacity, instead of relying on the default 
-//                    k_MAX_INTERP_LEN value to work "because it worked in the
+//					  k_MAX_INTERP_LEN value to work "because it worked in the
 //                    original version".
 //
 //----------------------------------------------------------------------------
+
 void stringutils_Interpret
 (
-	MBCHAR const *  msg,
-	SlicContext &   slicObj,
-	MBCHAR *        sInterpreted,
-	size_t const    a_Capacity
+	MBCHAR const *	msg,
+	SlicContext &	slicObj,
+	MBCHAR *		sInterpreted,
+	size_t const	a_Capacity
 )
 {
 	const char *input = msg;

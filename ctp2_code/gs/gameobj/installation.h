@@ -1,6 +1,13 @@
-#ifdef HAVE_PRAGMA_ONCE
+
+
+
+
+
+
+
+
+
 #pragma once
-#endif
 #ifndef _INSTALLATION_H_
 #define _INSTALLATION_H_
 
@@ -15,6 +22,8 @@ public:
 	Installation () : ID() { return; } ; 
 	Installation (sint32 val) : ID (val) { return; }; 
 	Installation (uint32 val) : ID (val) { return; }; 
+	Installation (const int val) : ID (val) { return; }; 
+	Installation (const unsigned int val) : ID (val) { return; }; 
 
 	void KillInstallation();
 	void Kill() { KillInstallation(); }

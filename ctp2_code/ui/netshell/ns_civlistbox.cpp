@@ -26,18 +26,26 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "ns_civlistbox.h"
 
 #include "aui_ui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "aui_window.h"
 #include "aui_item.h"
+
 #include "c3_ranger.h"
+
 #include "pattern.h"
 #include "primitives.h"
-#include "colorset.h"       // g_colorSet
+#include "colorset.h"
+
 #include "ns_header.h"
+
+#include "ns_civlistbox.h"
+
+
+extern ColorSet		*g_colorSet;
+
 
 
 ns_CivListBox::ns_CivListBox(
@@ -47,9 +55,9 @@ ns_CivListBox::ns_CivListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	aui_ListBox(),
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_ListBox(),
 	PatternBase(ldlBlock, (MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -92,9 +100,9 @@ ns_CivListBox::ns_CivListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
+	aui_ListBox(),
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
-	aui_ListBox(),
 	PatternBase(pattern)
 {
 	*retval = aui_Region::InitCommon( id, x, y, width, height );
@@ -126,12 +134,22 @@ ns_CivListBox::ns_CivListBox(
 
 AUI_ERRCODE ns_CivListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	sint32		bevelWidth=0, bevelType=0;
+	aui_Ldl		*theLdl = g_ui->GetLdl();
+
+	
+	BOOL valid = theLdl->IsValid( ldlBlock );
+	Assert( valid );
+	if ( !valid ) return AUI_ERRCODE_HACK;
+
+	
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
+
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	sint32 bevelWidth   = block->GetInt(k_NS_CIVLISTBOX_LDL_BEVELWIDTH);
-	sint32 bevelType    = block->GetInt(k_NS_CIVLISTBOX_LDL_BEVELTYPE);
+	bevelWidth = block->GetInt( k_NS_CIVLISTBOX_LDL_BEVELWIDTH );
+	bevelType = block->GetInt( k_NS_CIVLISTBOX_LDL_BEVELTYPE );
 
 	return InitCommon(bevelWidth, bevelType);
 }
@@ -164,6 +182,8 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
 
+	
+	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
@@ -179,7 +199,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_header = new ns_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -209,7 +229,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -240,7 +260,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
 		
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -266,8 +286,9 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_horizontalRanger );
 
-	sint32 maxRangerSize = 
-        std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
+	sint32 maxRangerSize = m_verticalRanger->Width();
+	if ( m_horizontalRanger->Height() > maxRangerSize )
+		maxRangerSize = m_horizontalRanger->Height();
 
 	if ( maxRangerSize )
 		SetRangerSize( maxRangerSize ); 
@@ -431,9 +452,9 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
+	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie ),
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	ns_CivListBox( retval, id, ldlBlock, ActionFunc, cookie )
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL )
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -458,11 +479,11 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
-	aui_ImageBase((sint32) 0),
-	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
 	ns_CivListBox(
 		retval, id, x, y, width, height, pattern, bevelWidth, bevelType,
-		ActionFunc, cookie )
+		ActionFunc, cookie ),
+	aui_ImageBase((sint32) 0),
+	aui_TextBase((MBCHAR const *) NULL, (uint32) 0)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -474,9 +495,13 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 
 ns_HPlayerListBox::~ns_HPlayerListBox()
 {
+	
+	
+	
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
+		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		delete item;
 	}

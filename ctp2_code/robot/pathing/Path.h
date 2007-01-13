@@ -24,7 +24,9 @@ struct Direction {
 
 sint8 dir; 
 
-Direction (WORLD_DIRECTION val = NOWHERE) { dir = static_cast<sint8>(val); } 
+Direction () { dir = sint8(NOWHERE); }
+
+Direction (WORLD_DIRECTION val) { dir = val; } 
 
 void Castrate() {}
 void DelPointers() {}  
@@ -82,14 +84,14 @@ public:
     void GetCurrentPoint(MapPoint &p) const; 
     void ClipStartToCurrent();
 
-    void GetStartPoint(MapPoint &pos) const; 
+    void GetStartPoint(MapPoint &pos); 
     void StartDir(WORLD_DIRECTION &d);
     void GetCurrentDir(WORLD_DIRECTION &d);
     sint32 IsEndDir();
     void IncDir();
 
 	void ConcatReturnPath();
-	void Concat(Path const & otherpath);
+	void Concat(Path &otherpath);
 
     void Serialize(CivArchive &archive); 
     void InsertFront(const MapPoint &pos);

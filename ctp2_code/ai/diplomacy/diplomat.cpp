@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Diplomacy
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,14 +16,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
-// _DEBUG
-// - Generates debug information when set.
-//
-// _BFR_
-// - Force CD checking when set (build final release).
-// - If not defined it anabled some more loogs.
-//
+// 
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -41,19 +33,17 @@
 // - Prevented crash on incorrect input (personality typo).
 // - Improved CleanupAll.
 // - Some agreements have limited duration, PFT 05 MAR 05
-// - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
-// - Made limited duration optional.
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Diplomat.h"
 
-#include <algorithm>            // std::min
+
 #include "c3errors.h"
+#include "c3math.h"
+
 #include "MoveFlags.h"
+
 #include "MapPoint.h"
 #include "player.h"
 #include "Events.h"
@@ -64,6 +54,7 @@
 #include "Army.h"
 #include "ArmyData.h"
 #include "dynarr.h"
+#include "ArmyPool.h"
 #include "World.h"
 #include "Cell.h"
 #include "gold.h"
@@ -86,102 +77,54 @@
 #include "TradePool.h"
 #include "TradeRouteData.h"
 #include "wonderutil.h"
+
 #include "unitutil.h"
 #include "director.h"
 #include "ctpai.h"
 #include "GSLogs.h"
 #include "profileDB.h"
 #include "aicause.h"
-#include "CivilisationRecord.h"
+
+
+#include "CivilisationDB.h"
+extern	CivilisationDatabase	*g_theCivilisationDB ;
 #include "Civilisation.h"
-#include "TurnCnt.h"            // g_turn
+
+extern sint32 g_saveFileVersion;
+
+
+#include "TurnCnt.h"
+extern TurnCount *g_turn;
+
+
+#include <algorithm>
+using namespace std;
+
+#include "Diplomat.h"
 #include "AgreementMatrix.h"
+
 #include "SlicObject.h"
 #include "SlicEngine.h"
+
 #include "dipwizard.h"
 #include "network.h"
 #include "net_action.h"
 #include "SelItem.h"
 #include "net_action.h"
+
 #include "Path.h"
 #include "ctpagent.h"
 #include "OrderRecord.h"
 #include "gfx_options.h"
+
 #include "net_diplomacy.h"
-#include "RandGen.h"            // g_rand
 
-extern sint32 g_saveFileVersion;
+#include "RandGen.h"
+extern	RandomGenerator	*g_rand ;
 
-namespace
-{
+using namespace ai;
 
-/// Maximum number of strategic states to consider
-size_t const    k_maxStategicState      = 10;
 
-sint32 const    WARN_EXPIRY_TURN_COUNT  = 3;
-
-//----------------------------------------------------------------------------
-//
-// Name       : ProposalAutoExpiryTurn
-//
-// Description: Get the number of turns for automatic expiry of a proposal.
-//
-// Parameters : baseExpiryTurn  : base expiry turn value
-//              prop_type       : type of proposal
-//
-// Globals    : -
-//
-// Returns    : sint32  : the number of turns for automatic expiry
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-sint32 ProposalAutoExpiryTurn
-(
-    sint32              baseExpiryTurn,
-    enum PROPOSAL_TYPE  prop_type
-)
-{
-	switch (prop_type) 
-    {
-    // One-time gifts (no use cancelling these)
-    default:
-        return k_EXPIRATION_NEVER;  
-
-    // Simple agreements
-	case PROPOSAL_OFFER_WITHDRAW_TROOPS:
-    case PROPOSAL_REQUEST_WITHDRAW_TROOPS:
-    case PROPOSAL_OFFER_STOP_PIRACY:
-	case PROPOSAL_REQUEST_STOP_PIRACY:
-	case PROPOSAL_TREATY_CEASEFIRE:
-        return baseExpiryTurn;
-
-    // Advanced agreements
-	case PROPOSAL_OFFER_STOP_RESEARCH:
-	case PROPOSAL_REQUEST_STOP_RESEARCH:
-	case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
-    case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
-    case PROPOSAL_OFFER_REDUCE_BIO_WEAPONS:
-    case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
-    case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
-    case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
-        return baseExpiryTurn + (baseExpiryTurn / 2);
-
-    // Treaties (except full alliance)
-    case PROPOSAL_TREATY_PEACE:
-    case PROPOSAL_TREATY_TRADE_PACT:
-    case PROPOSAL_TREATY_RESEARCH_PACT:
-    case PROPOSAL_TREATY_MILITARY_PACT:
-    case PROPOSAL_TREATY_POLLUTION_PACT:
-        return 2 * baseExpiryTurn;
-
-    // Full alliance
-    case PROPOSAL_TREATY_ALLIANCE:
-        return k_EXPIRATION_NEVER;
-	}
-}
-
-} // namespace
 
 
 
@@ -203,7 +146,7 @@ sint32 Diplomat::s_proposalTypeToElemIndex[PROPOSAL_MAX];
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
 Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId) { 
 	Assert(playerId >= 0);
-	Assert(static_cast<size_t>(playerId) < s_theDiplomats.size());
+	Assert(playerId < s_theDiplomats.size());
 	Assert(playerId == s_theDiplomats[playerId].GetPlayerId());
 
 	return s_theDiplomats[playerId]; 
@@ -215,26 +158,31 @@ void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
 	sint32 old_size = s_theDiplomats.size();
 	s_theDiplomats.resize(newMaxPlayers);
 
+	
+	sint32 foreignerId;
 	for (sint32 playerId = 0; playerId < newMaxPlayers; playerId++)
-	{
-		s_theDiplomats[playerId].SetPlayerId(playerId);
-		s_theDiplomats[playerId].Resize(newMaxPlayers);
-
-		if (playerId < old_size)
 		{
-			for (sint32 foreignerId = 0; foreignerId < newMaxPlayers; ++foreignerId)
+			s_theDiplomats[playerId].SetPlayerId(playerId);
+			s_theDiplomats[playerId].Resize(newMaxPlayers);
+
+			
+			if (playerId < old_size)
 			{
-				if (foreignerId >= old_size || g_player[foreignerId] == NULL)
+				
+				for (foreignerId=0; foreignerId < newMaxPlayers; foreignerId++)
 				{
-					s_theDiplomats[playerId].InitForeigner(foreignerId);
+					if (foreignerId >= old_size || g_player[foreignerId] == NULL)
+					{
+						s_theDiplomats[playerId].InitForeigner(foreignerId);
+					}
 				}
 			}
+			else
+			{
+				
+				s_theDiplomats[playerId].Initialize();
+			}
 		}
-		else
-		{
-			s_theDiplomats[playerId].Initialize();
-		}
-	}
 }
 
 
@@ -242,19 +190,20 @@ void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
 
 void Diplomat::CleanupAll()
 {
-	for (size_t i = 0; i < s_theDiplomats.size(); ++i)
+	for (sint32 i = 0; i < s_theDiplomats.size(); i++)
 	{
+		
 		s_theDiplomats[i].Cleanup();
 	}
 
 	s_theDiplomats.clear();
-	DiplomatVector().swap(s_theDiplomats);
 }
 
 
 void Diplomat::InitializeAll() 
 {
-	for (size_t i = 0; i < s_theDiplomats.size(); ++i)
+	
+	for (sint32 i = 0; i < s_theDiplomats.size(); i++)
 	{
 		s_theDiplomats[i].Initialize();
 	}
@@ -264,10 +213,13 @@ void Diplomat::InitializeAll()
 void Diplomat::LoadAll(CivArchive & archive)
 {
 	archive >> s_nextId;
+
+	
 	AgreementMatrix::s_agreements.Load(archive);
 
-	for (size_t i = 0; i < s_theDiplomats.size(); ++i)
+	for (sint32 i = 0; i < s_theDiplomats.size(); i++)
 	{
+		
 		s_theDiplomats[i].Load(archive);
 	}
 }
@@ -276,30 +228,34 @@ void Diplomat::LoadAll(CivArchive & archive)
 void Diplomat::SaveAll(CivArchive & archive)
 {
 	archive << s_nextId;
+
+	
 	AgreementMatrix::s_agreements.Save(archive);
 
-	for (size_t i = 0; i < s_theDiplomats.size(); i++)
-	{
-		s_theDiplomats[i].Save(archive);
-	}
+	for (sint32 i = 0; i < s_theDiplomats.size(); i++)
+		{
+			
+			s_theDiplomats[i].Save(archive);
+		}
 }
 
-void Diplomat::DebugStatusAll() 
-{
-	for (size_t playerId = 1; playerId < s_theDiplomats.size(); ++playerId) 
-    {
-		if (g_player[playerId] && !g_player[playerId]->IsDead())
-		{
-		    Diplomat & diplomat = GetDiplomat(playerId);
+void Diplomat::DebugStatusAll() {
+	
+	for (int playerId = 1; playerId < s_theDiplomats.size(); playerId++) {
 
-		    printf("Player %d: ",diplomat.GetPlayerId());
+		
+		if (!g_player[playerId] || g_player[playerId]->IsDead())
+			continue;
 
-		    if (g_player[diplomat.GetPlayerId()]->m_playerType == PLAYER_TYPE_ROBOT) 
-			    printf("(AI)");
-		    printf("\n");
+		Diplomat & diplomat = GetDiplomat(playerId);
 
-		    diplomat.DebugStatus();
-        }
+		printf("Player %d: ",diplomat.GetPlayerId());
+
+		if (g_player[diplomat.GetPlayerId()]->m_playerType == PLAYER_TYPE_ROBOT) 
+			printf("(AI)");
+		printf("\n");
+
+		diplomat.DebugStatus();
 	}
 }
 
@@ -318,12 +274,15 @@ void Diplomat::AddDiplomacyArgToSlicContext(SlicContext & sc, const DiplomacyArg
 		sc.AddAdvance(dip_arg.advanceType);
 	else if (dip_arg.unitType != -1)
 		sc.AddUnitRecord(dip_arg.unitType);
+	
+	
 	else if (dip_arg.gold != -1)
 		sc.AddGold(dip_arg.gold);
 	else if (dip_arg.pollution != -1)
 		sc.AddInt(dip_arg.pollution);
 	else if (dip_arg.percent != -1.0)
 		sc.AddInt(static_cast<sint32>(100.0 * dip_arg.percent));
+	
 }
 
 
@@ -342,152 +301,19 @@ void Diplomat::SetNextId(const sint32 & id) {
 
 
 Diplomat::Diplomat() 
-:
-    m_playerId                      (PLAYER_UNASSIGNED),
-    m_personalityName               (),
-	m_personality                   (NULL),
-    m_motivations                   (),
-	m_lastMotivation                (),
-    m_diplomaticStates              (),
-    m_bestStrategicStates           (),	
-    m_bestDiplomaticState           (s_badAiState),	
-    m_strategy                      (),
-	m_diplomacy                     (),
-    m_foreigners                    (),
-    m_threats                       (),
-    m_friendCount                   (0),
-    m_enemyCount                    (0),
-    m_friendPower                   (0),
-    m_enemyThreat                   (0),
-    m_piracyHistory                 (),
-    m_incursionPermission           (1 << PLAYER_INDEX_VANDALS),
-    m_outstandingProposals          (0),
-    m_diplomcyVictoryCompleteTurn   (-1),
-	m_nuclearAttackTarget           (PLAYER_UNASSIGNED),
-	m_lastParty                     (-1),
-	m_launchedNukes                 (false),
-	m_launchedNanoAttack            (false),
-	m_desireWarWith                 ()
 {
-}
+	
+	m_playerId = -1;
 
-Diplomat::Diplomat(Diplomat const & a_Original)
-:
-    m_playerId                      (a_Original.m_playerId),
-    m_personalityName               (a_Original.m_personalityName),
-    m_personality                   (a_Original.m_personality),
-    m_motivations                   (a_Original.m_motivations),
-	m_lastMotivation                (),
-    m_diplomaticStates              (a_Original.m_diplomaticStates),
-    m_bestStrategicStates           (a_Original.m_bestStrategicStates),	
-    m_bestDiplomaticState           (a_Original.m_bestDiplomaticState),	
-    m_strategy                      (a_Original.m_strategy),
-	m_diplomacy                     (a_Original.m_diplomacy),
-    m_foreigners                    (a_Original.m_foreigners),
-    m_threats                       (a_Original.m_threats),
-    m_friendCount                   (a_Original.m_friendCount),
-    m_enemyCount                    (a_Original.m_enemyCount),
-    m_friendPower                   (a_Original.m_friendPower),
-    m_enemyThreat                   (a_Original.m_enemyThreat),
-    m_piracyHistory                 (a_Original.m_piracyHistory),
-    m_incursionPermission           (a_Original.m_incursionPermission),
-    m_outstandingProposals          (a_Original.m_outstandingProposals),
-    m_diplomcyVictoryCompleteTurn   (a_Original.m_diplomcyVictoryCompleteTurn),
-    m_nuclearAttackTarget           (a_Original.m_nuclearAttackTarget),
-    m_lastParty                     (a_Original.m_lastParty),
-    m_launchedNukes                 (a_Original.m_launchedNukes),
-    m_launchedNanoAttack            (a_Original.m_launchedNanoAttack),
-	m_desireWarWith                 (a_Original.m_desireWarWith)
-{
-    // Update the iterators in m_lastMotivation to point to the new list
-	for
-    (
-        MotivationVector::const_iterator p = a_Original.m_lastMotivation.begin();
-        p != a_Original.m_lastMotivation.end();
-        ++p
-    )
-    {
-        MotivationList::difference_type l_Distance  =
-            std::distance<MotivationList::const_iterator>
-                (a_Original.m_motivations.begin(), *p);
-
-        MotivationList::iterator        l_Reference = m_motivations.begin();
-        std::advance(l_Reference, l_Distance);
-
-        m_lastMotivation.push_back(l_Reference);
-    }
-}
-
-Diplomat const & Diplomat::operator = (Diplomat const & a_Original)
-{
-    if (this != &a_Original)
-    {
-        m_playerId                      = a_Original.m_playerId;
-        m_personalityName               = a_Original.m_personalityName;
-	    m_personality                   = a_Original.m_personality;
-        m_motivations                   = a_Original.m_motivations;
-        m_diplomaticStates              = a_Original.m_diplomaticStates;
-        m_bestStrategicStates           = a_Original.m_bestStrategicStates;	
-        m_bestDiplomaticState           = a_Original.m_bestDiplomaticState;
-        m_strategy                      = a_Original.m_strategy;
-	    m_diplomacy                     = a_Original.m_diplomacy;
-        m_foreigners                    = a_Original.m_foreigners;
-        m_threats                       = a_Original.m_threats;
-        m_friendCount                   = a_Original.m_friendCount;
-        m_enemyCount                    = a_Original.m_enemyCount;
-        m_friendPower                   = a_Original.m_friendPower;
-        m_enemyThreat                   = a_Original.m_enemyThreat;
-        m_piracyHistory                 = a_Original.m_piracyHistory;
-        m_incursionPermission           = a_Original.m_incursionPermission;
-        m_outstandingProposals          = a_Original.m_outstandingProposals;
-        m_diplomcyVictoryCompleteTurn   = a_Original.m_diplomcyVictoryCompleteTurn;
-        m_nuclearAttackTarget           = a_Original.m_nuclearAttackTarget;
-        m_lastParty                     = a_Original.m_lastParty;
-        m_launchedNukes                 = a_Original.m_launchedNukes;
-        m_launchedNanoAttack            = a_Original.m_launchedNanoAttack;
-	    m_desireWarWith                 = a_Original.m_desireWarWith;
-
-        // Update the iterators in m_lastMotivation to point to the new list
-	    m_lastMotivation.clear();
-	    for 
-        (
-            MotivationVector::const_iterator p = a_Original.m_lastMotivation.begin();
-            p != a_Original.m_lastMotivation.end();
-            ++p
-        )
-        {
-            MotivationList::difference_type l_Distance  =
-                std::distance<MotivationList::const_iterator>
-                    (a_Original.m_motivations.begin(), *p);
-
-            MotivationList::iterator        l_Reference = m_motivations.begin();
-            std::advance(l_Reference, l_Distance);
-
-            m_lastMotivation.push_back(l_Reference);
-        }
-    }
-
-    return *this;
-}
 	
 	
-
-Diplomat::~Diplomat()
-{
-	MotivationList().swap(m_motivations);
-	MotivationVector().swap(m_lastMotivation);
-    AiStateVector().swap(m_diplomaticStates);
-	AiStateList().swap(m_bestStrategicStates);
-	DiplomacyRecordVector().swap(m_diplomacy);
-	ForeignerVector().swap(m_foreigners);
-	ThreatList().swap(m_threats);
-    BoolVector().swap(m_desireWarWith);
-    std::string().swap(m_personalityName);
-	PiracyHistoryList().swap(m_piracyHistory);
 }
+
 
 void Diplomat::Resize(const PLAYER_INDEX & newMaxPlayerId)
 {
+	sint32 old_size = m_lastMotivation.size();
+
 	m_lastMotivation.resize(newMaxPlayerId);
 	m_diplomaticStates.resize(newMaxPlayerId);
 	m_diplomacy.resize(newMaxPlayerId);
@@ -500,15 +326,18 @@ void Diplomat::Load(CivArchive & archive)
 {
 	uint16	count;
 	size_t	i;
-	Threat  threat;
+	char *str;
+	ai::Agreement agreement;
+	Threat threat;
 	AiState ai_state;
 
 	
 	Initialize();
 
+	
 	archive >> count;
-	char * str  = new char [count+1];
-	archive.Load((uint8 *) str, count);
+	str = new char [count+1];
+	archive.Load((uint8 *)str, count);
 	str[count] = '\0';
 	SetPersonalityName(str);
 	delete [] str;
@@ -541,32 +370,29 @@ void Diplomat::Load(CivArchive & archive)
 		Resize(count);
 	}
 
-	for (size_t foreigner = 0; foreigner < m_foreigners.size(); ++foreigner)
-	{
-		m_lastMotivation[foreigner] = m_motivations.end();
-		if (foreigner < count)
+	for (sint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
 		{
-			m_foreigners[foreigner].Load(archive);
-			archive.Load((uint8 *)&ai_state, sizeof(AiState));
-		}
-		else
-		{
-			m_foreigners[foreigner].Initialize();
-			ai_state.dbIndex = -1;
-		}
-		
-        PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
+			m_lastMotivation[foreigner] = m_motivations.end();
+			if (foreigner < count)
+			{
+				m_foreigners[foreigner].Load(archive);
+				archive.Load((uint8 *)&ai_state, sizeof(AiState));
+			}
+			else
+			{
+				m_foreigners[foreigner].Initialize();
+				ai_state.dbIndex = -1;
+			}
+			
+			
+			if (g_player[m_playerId] && g_player[foreigner])
+			{
+				ChangeDiplomacy(foreigner, ai_state.dbIndex);
 
-		if (    g_player[m_playerId] 
-             && g_player[foreigner] 
-             && (m_playerId != foreignerId)
-            )
-		{
-			ChangeDiplomacy(foreignerId, ai_state.dbIndex);
-			UpdateRegard(foreignerId);
+				
+				UpdateRegard(foreigner);
+			}
 		}
-	}
-
 	archive >> m_diplomcyVictoryCompleteTurn;
 	archive >> m_nuclearAttackTarget;
 
@@ -614,13 +440,13 @@ void Diplomat::Save(CivArchive & archive) const
 
 	
 	archive << static_cast<uint16>(m_foreigners.size());
-	for (uint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
-	{
-		m_foreigners[foreigner].Save(archive);
+	for (sint32 foreigner=0; foreigner < m_foreigners.size(); foreigner++)
+		{
+			m_foreigners[foreigner].Save(archive);
 
-		
-		archive.Store((uint8 *) &(m_diplomaticStates[foreigner]), sizeof(AiState));
-	}
+			
+			archive.Store((uint8 *) &(m_diplomaticStates[foreigner]), sizeof(AiState));
+		}
 	archive << m_diplomcyVictoryCompleteTurn;
 	archive << m_nuclearAttackTarget;
 	archive << m_lastParty;
@@ -635,17 +461,28 @@ void Diplomat::Save(CivArchive & archive) const
 
 void Diplomat::Cleanup()
 {
+	
 	m_motivations.clear();
+
+	
+	for (sint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+		{
+			m_foreigners[foreigner].Initialize();
+		}
+
 	m_lastMotivation.resize(0);
 	m_foreigners.resize(0);
 	m_diplomaticStates.resize(0);
 	m_diplomacy.resize(0);
 	m_desireWarWith.resize(0);
+
+	
 	m_threats.clear();
 	
+	
 	m_bestDiplomaticState = s_badAiState;
-	m_personality                   = NULL;
-	m_nuclearAttackTarget = PLAYER_UNASSIGNED;
+	m_personality = 0x0;
+	m_nuclearAttackTarget = -1;
 	m_lastParty = -1;
 	m_launchedNukes = false;
 	m_launchedNanoAttack = false;
@@ -669,33 +506,36 @@ void Diplomat::Initialize()
 {
 	if ((m_playerId >= 0) && (m_playerId < k_MAX_PLAYERS))
 	{
-		Player *        player  = g_player[m_playerId];
-		Civilisation *  civ     = player ? player->GetCivilisation() : NULL;
-		CivilisationRecord const *
-		                civRec  = civ ? civ->GetDBRec() : NULL;
+		Player *		player	= g_player[m_playerId];
+		Civilisation *	civ		= player ? player->GetCivilisation() : NULL;
+		CivilisationRecord const *	
+						civRec	= civ ? civ->GetDBRec() : NULL;	
 
 		if (civRec)
 		{
 			SetPersonalityName(GENDER_MALE == civ->GetGender()
-			                   ? civRec->GetPersonalityMale()->GetIDText()
-			                   : civRec->GetPersonalityFemale()->GetIDText()
-			                   );
+							   ? civRec->GetMalePersonality()
+							   : civRec->GetFemalePersonality()
+							  );
 		}
 	}
 
 	if (!m_personality)
 	{
-		m_personality = g_thePersonalityDB->Get(0);
+		m_personality	= g_thePersonalityDB->Get(0);
 	}
 	
 	m_motivations.clear();
-	
-	for (uint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
-	{
-		InitForeigner(foreigner);
-	}
 
+	
+	for (sint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+		{
+			InitForeigner(foreigner);
+		}
+
+	
 	m_threats.clear();
+	
 	
 	Assert(g_thePersonalityDB);
 	m_nuclearAttackTarget = -1;
@@ -723,25 +563,16 @@ void Diplomat::InitForeigner(const PLAYER_INDEX & foreigner)
 void Diplomat::DebugStatus(const PLAYER_INDEX & foreignerId) const
 {
 	
-	for 
-    (
-        size_t tmp_foreignerIndex = 1; 
-        tmp_foreignerIndex < m_foreigners.size(); 
-        ++tmp_foreignerIndex
-    ) 
-    {
-        PLAYER_INDEX    tmp_foreignerId = 
-            static_cast<PLAYER_INDEX>(tmp_foreignerIndex);
-
+	for (int tmp_foreignerId = 1; tmp_foreignerId< m_foreigners.size(); tmp_foreignerId++) {
+		
 		if (tmp_foreignerId == m_playerId)
 			continue;
 
-		if (    (foreignerId != PLAYER_UNASSIGNED) 
-             && (tmp_foreignerId != foreignerId)
-           )
+		
+		if (foreignerId != -1 && tmp_foreignerId != foreignerId)
 			continue;
 		
-		const Foreigner &foreigner = m_foreigners[tmp_foreignerIndex];
+		const Foreigner &foreigner = m_foreigners[tmp_foreignerId];
 		
 		DPRINTF(k_DBG_DIPLOMACY, ("Player %d -> Foreigner %d\n", 
 			m_playerId, tmp_foreignerId));
@@ -774,7 +605,7 @@ void Diplomat::DebugStatus(const PLAYER_INDEX & foreignerId) const
 		}
 
 		
-		if (foreignerId != PLAYER_UNASSIGNED)
+		if (foreignerId != -1)
 		{
 			foreigner.DebugStatus();
 		}
@@ -861,7 +692,7 @@ PLAYER_INDEX Diplomat::GetPlayerId() const {
 
 
 void Diplomat::SetPersonalityName(const char *personality_name) {
-	m_personalityName = std::string(personality_name);
+	m_personalityName = string(personality_name);
 
 	
 	sint32 index;
@@ -873,8 +704,7 @@ void Diplomat::SetPersonalityName(const char *personality_name) {
 }
 
 
-std::string Diplomat::GetPersonalityName() const 
-{
+string Diplomat::GetPersonalityName() const {
 	return m_personalityName;
 }
 
@@ -909,7 +739,7 @@ void Diplomat::BeginTurn()
 	ClearEffectiveRegardCache();
 
 	
-	Assert(m_playerId != PLAYER_UNASSIGNED);
+	Assert(m_playerId != -1);
 
 	
 	if (m_playerId < 0 || (g_player[m_playerId] == NULL) || g_player[m_playerId]->IsDead())
@@ -930,15 +760,15 @@ void Diplomat::BeginTurn()
 	m_motivations.clear();
 
 	
-	for (size_t foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
-	{
+	for (sint32 foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+		{
 			m_lastMotivation[foreigner] = m_motivations.end();
-	}
+		}
 
 	
 	for ( ForeignerVector::iterator iter = m_foreigners.begin(); 
 		  iter != m_foreigners.end(); 
-		  ++iter ) {
+		  iter++ ) {
 		
 		iter->SetMyLastResponse( Diplomat::s_badResponse );
 		iter->SetMyLastNewProposal( Diplomat::s_badNewProposal );
@@ -953,21 +783,15 @@ void Diplomat::BeginTurn()
 	NextStrategicState();
 
 	
-	for 
-    (
-        size_t foreignerIndex = 1; 
-        foreignerIndex < m_foreigners.size(); 
-        ++foreignerIndex
-    ) 
-    {
-	    PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);	
+	for(sint32 foreignerId=1; foreignerId < m_foreigners.size(); foreignerId++) {
+		
 		if (foreignerId == m_playerId)
 			continue;
 
 		
 		if (!g_player[m_playerId]->HasContactWith(foreignerId) ||
-			!g_player[foreignerIndex] ||
-			!g_player[foreignerIndex]->HasContactWith(m_playerId))
+			!g_player[foreignerId] ||
+			!g_player[foreignerId]->HasContactWith(m_playerId))
 			continue;
 
 		NextDiplomaticState(foreignerId);
@@ -987,15 +811,16 @@ void Diplomat::BeginTurn()
 	{
 		double population_percent;
 		double land_percent;
-		PLAYER_INDEX leaderId           = PLAYER_UNASSIGNED;
+		PLAYER_INDEX leaderId;
 		double population_needed;
 		const EndGameObjectRecord *rec = 
 			g_theEndGameObjectDB->Get(diplomacyEndgameIndex);
 		MapAnalysis::GetMapAnalysis().ComputeAllianceSize(m_playerId, leaderId, population_percent, land_percent);
 
 		
-		if (leaderId > 0 && rec->GetMinCoverage(population_needed))
+		if (leaderId > 0 && rec->GetMinCoverage())
 		{
+			rec->GetMinCoverage(population_needed);
 			if (leaderId == m_playerId && population_percent >= population_needed)
 			{
 				if (m_diplomcyVictoryCompleteTurn > 0)
@@ -1003,13 +828,17 @@ void Diplomat::BeginTurn()
 					if (m_diplomcyVictoryCompleteTurn <= NewTurnCount::GetCurrentRound())
 						g_player[m_playerId]->GameOver(GAME_OVER_WON_DIPLOMACY, -1);
 				}
-				else 
+				else if (rec->GetTurnsToActivate())
 				{
-					sint32 turns_to_activate = 1;
-					(void) rec->GetTurnsToActivate(turns_to_activate);
+					sint32 turns_to_activate;
+					rec->GetTurnsToActivate(turns_to_activate);
+					m_diplomcyVictoryCompleteTurn = 
+						NewTurnCount::GetCurrentRound() + turns_to_activate;
+				}
+				else
+				{
 					
-					m_diplomcyVictoryCompleteTurn = static_cast<sint16>
-							(NewTurnCount::GetCurrentRound() + turns_to_activate);
+					m_diplomcyVictoryCompleteTurn = NewTurnCount::GetCurrentRound() + 1;
 				}
 			}
 			else
@@ -1034,8 +863,8 @@ void Diplomat::LogRegardEvent( const PLAYER_INDEX & foreignerId,
 					 const sint16 duration) {
 	
 	
-	RegardEvent regardEvent(static_cast<ai::Regard>(regardDelta), 
-							static_cast<sint16>(NewTurnCount::GetCurrentRound()+1), explain, duration);
+	RegardEvent regardEvent(regardDelta, 
+							NewTurnCount::GetCurrentRound()+1, explain, duration);
 	m_foreigners[foreignerId].LogRegardEvent(type, regardEvent);
 }
 
@@ -1199,7 +1028,7 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 		const MBCHAR * reason = g_theStringDB->GetNameStr(strId);
 		if (rec->GetTrustViolationGlobal())
 		{
-			Diplomat::ApplyGlobalTrustChange(foreignerId, static_cast<ai::Regard>(trust_cost), reason);
+			Diplomat::ApplyGlobalTrustChange(foreignerId, trust_cost, reason);
 		}
 		else
 		{
@@ -1230,9 +1059,11 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 		ai::Agreement war_agreement = AgreementMatrix::s_agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR);
 		if (!war_declared || (turnsatwar == 0 && war_agreement.senderId != m_playerId))
 		{
-			sint32 regard_cost;
-			if (GetCurrentDiplomacy(foreignerId).GetPreemptiveAttackRegardCost(regard_cost))
+			if (GetCurrentDiplomacy(foreignerId).GetPreemptiveAttackRegardCost())
 			{
+				sint32 regard_cost;
+				GetCurrentDiplomacy(foreignerId).GetPreemptiveAttackRegardCost(regard_cost);
+				
 				g_theStringDB->GetStringID("REGARD_EVENT_UNPROVOKED_ATTACK",strId);
 				LogRegardEvent( foreignerId,
 					regard_cost,
@@ -1240,12 +1071,11 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 					strId);
 			}
 		
-			sint32 trust_cost;
-			if (GetCurrentDiplomacy(foreignerId).GetPreemptiveAttackTrustCost(trust_cost))
+			if (GetCurrentDiplomacy(foreignerId).GetPreemptiveAttackTrustCost())
 			{
-				Diplomat::ApplyGlobalTrustChange(foreignerId, static_cast<ai::Regard>(trust_cost), 
-												 "Made preemptive attack without declaring war first."
-												);
+				sint32 trust_cost;
+				GetCurrentDiplomacy(foreignerId).GetPreemptiveAttackTrustCost(trust_cost);
+				Diplomat::ApplyGlobalTrustChange(foreignerId, trust_cost, "Made preemptive attack without declaring war first.");
 			}
 		}
 	}
@@ -1328,13 +1158,11 @@ void Diplomat::ApplyGlobalTrustChange(const PLAYER_INDEX & foreignerId, const ai
 	}
 #endif
 
-	for (size_t i = 1; i < s_theDiplomats.size(); i++)
-    {
-		if (static_cast<PLAYER_INDEX>(i) != foreignerId)
-        {
-			s_theDiplomats[i].ApplyTrustChange(foreignerId, trust_delta, NULL);
-        }
-	}
+	for (sint32 i = 1; i < s_theDiplomats.size(); i++)
+		{
+			if (i != foreignerId)
+				s_theDiplomats[i].ApplyTrustChange(foreignerId, trust_delta, NULL);
+		}
 }
 
 
@@ -1348,18 +1176,22 @@ void Diplomat::ApplyTrustChange(const PLAYER_INDEX & foreignerId, const ai::Rega
 	}
 #endif
 
-	ai::Regard new_trust = 
-        std::min<ai::Regard>(m_foreigners[foreignerId].GetTrust() + trust_delta,
-                             MAX_REGARD
-                            );
+	ai::Regard new_trust = m_foreigners[foreignerId].GetTrust();
+
+	
+	if (new_trust + trust_delta < MAX_REGARD)
+		new_trust += trust_delta;
+	else
+		new_trust = MAX_REGARD;
 
 	m_foreigners[foreignerId].SetTrust(new_trust);
 }
 
 
-const ai::Regard Diplomat::GetTrust(const PLAYER_INDEX & foreignerId) const 
-{
-	if (foreignerId == PLAYER_INDEX_VANDALS)
+const ai::Regard Diplomat::GetTrust(const PLAYER_INDEX & foreignerId) const {
+
+	
+	if (foreignerId == 0)
 		return MIN_REGARD;
 
 	return m_foreigners[foreignerId].GetTrust();
@@ -1406,13 +1238,10 @@ void Diplomat::RecomputeRegard()
 	sint32 wonder_regard = wonderutil_GetIncreaseRegard(g_player[m_playerId]->GetBuiltWonders());
 
 	
- 	for (size_t foreigner = 1; foreigner < m_foreigners.size(); ++foreigner) 
-    {
-        PLAYER_INDEX const  foreignerId = static_cast<PLAYER_INDEX>(foreigner);
+ 	for (sint32 foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++) {
+
 		
-		if (    (m_playerId != foreignerId) 
-             && g_player[m_playerId]->HasContactWith(foreignerId)
-           )
+		if (g_player[m_playerId]->HasContactWith(foreignerId))
 		{
 
 			
@@ -1430,11 +1259,10 @@ void Diplomat::RecomputeRegard()
 
 			ai::Regard baseRegard = GetBaseRegard(foreignerId);
 			
-			m_foreigners[foreigner].RecomputeRegard
-                (m_diplomacy[foreigner], 
-				 NewTurnCount::GetCurrentRound(),
-				 baseRegard
-                );
+			m_foreigners[foreignerId].
+				RecomputeRegard(m_diplomacy[foreignerId], 
+				NewTurnCount::GetCurrentRound(),
+				baseRegard);
 		}
 
 	} 
@@ -1447,10 +1275,10 @@ void Diplomat::RecomputeRegard()
 void Diplomat::UpdateRegard(const PLAYER_INDEX foreignerId)
 {
 	Assert(foreignerId >= 0);
-	Assert(static_cast<size_t>(foreignerId) < m_foreigners.size());
+	Assert(foreignerId < m_foreigners.size());
 
 	
-	if (foreignerId < 0 || static_cast<size_t>(foreignerId) > m_foreigners.size())
+	if (foreignerId < 0 || foreignerId > m_foreigners.size())
 		return;
 
 	ai::Regard baseRegard = GetBaseRegard(foreignerId);
@@ -1518,7 +1346,7 @@ sint32 Diplomat::AddAgreement(const PLAYER_INDEX & foreignerId)
 	agreement.id = GetNextId();
 	agreement.senderId = m_playerId;
 	agreement.receiverId = foreignerId;
-	agreement.start = static_cast<sint16>(player_ptr->GetCurRound());
+	agreement.start = player_ptr->GetCurRound();
 	
 	agreement.end = -1; 
 
@@ -1527,7 +1355,7 @@ sint32 Diplomat::AddAgreement(const PLAYER_INDEX & foreignerId)
 	negotiation_event.proposal = sender_proposal;
 	negotiation_event.response = receiver_response;
 	negotiation_event.agreement = agreement;
-	negotiation_event.round = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+	negotiation_event.round = NewTurnCount::GetCurrentRound();
 	AddNewNegotiationEvent(foreignerId, negotiation_event);
 
 	
@@ -1543,29 +1371,39 @@ sint32 Diplomat::AddAgreement(const PLAYER_INDEX & foreignerId)
 
 void Diplomat::EnactStopPiracy(const PLAYER_INDEX victimId, const PLAYER_INDEX pirateId)
 {
-	Player * player_ptr = g_player[victimId];
-	Assert(player_ptr);
+	Player *player_ptr = g_player[victimId];
+	Assert(player_ptr != NULL);
 
-	sint32 const num_cities = player_ptr ? player_ptr->m_all_cities->Num() : 0;
+	sint32 num_cities = player_ptr->m_all_cities->Num();
+	sint32 i,r;
+	TradeRoute route;
+	Unit city;
+	Army army;
+
 	
-	for (sint32 i = 0; i < num_cities; i++)
+	for (i = 0; i < num_cities; i++)
 	{
-		Unit city = player_ptr->m_all_cities->Access(i);
-		Assert(city.IsValid());
+		city = player_ptr->m_all_cities->Access(i);
+		Assert( g_theUnitPool->IsValid(city) );
 		
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); ++r) 
+		
+		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
 		{
-			TradeRoute  route = city.CD()->GetTradeSourceList()->Access(r);
-			Army        army  = route->GetPiratingArmy();
+			route = city.CD()->GetTradeSourceList()->Access(r);
 
-			if (army.IsValid() && (army.GetOwner() == pirateId))
+			
+			army = route->GetPiratingArmy();
+			if (!g_theArmyPool->IsValid(army))
+				continue;
+			
+			
+			if (army.GetOwner() == pirateId)
 			{
-				g_gevManager->AddEvent
-                    (GEV_INSERT_Tail, GEV_SetPiratingArmy,
-					 GEA_TradeRoute, route,
-					 GEA_Army, 0,
-					 GEA_End
-                    );
+				
+				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SetPiratingArmy,
+					   GEA_TradeRoute, route,
+					   GEA_Army, Army(0),
+					   GEA_End);
 			}
 		} 
 	} 
@@ -1740,22 +1578,24 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		Diplomat::GetDiplomat(receiver).DisbandNanoWeapons(proposal_arg.percent);
 		break;
 	case PROPOSAL_OFFER_GIVE_ADVANCE:
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GrantAdvance,
+		
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
 			GEA_Player, receiver,
-			GEA_Int,    proposal_arg.advanceType,
-			GEA_Int,    CAUSE_SCI_DIPLOMACY,
+			GEA_Int, proposal_arg.advanceType,
+			GEA_Int, 0,
 			GEA_End);
 		break;
 	case PROPOSAL_REQUEST_GIVE_ADVANCE:
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GrantAdvance,
+		
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GrantAdvance,
 			GEA_Player, sender,
-			GEA_Int,    proposal_arg.advanceType,
-			GEA_Int,    CAUSE_SCI_DIPLOMACY,
+			GEA_Int, proposal_arg.advanceType,
+			GEA_Int, 0,
 			GEA_End);
 		break;
 	case PROPOSAL_OFFER_GIVE_GOLD:
 		
-        gold = std::min(proposal_arg.gold, g_player[sender]->m_gold->GetLevel());
+		gold = MIN(proposal_arg.gold, g_player[sender]->m_gold->GetLevel());
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SubGold,
@@ -1770,7 +1610,7 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 	case PROPOSAL_REQUEST_GIVE_GOLD:
 		
-		gold = std::min(proposal_arg.gold, g_player[receiver]->m_gold->GetLevel());
+		gold = MIN(proposal_arg.gold, g_player[receiver]->m_gold->GetLevel());
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SubGold,
@@ -1916,7 +1756,7 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 	ai::Agreement agreement;
 	agreement.senderId = m_playerId;
 	agreement.receiverId = foreignerId;
-	agreement.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+	agreement.start = NewTurnCount::GetCurrentRound();
 	agreement.end = -1;
 	agreement.proposal.first_type = PROPOSAL_TREATY_DECLARE_WAR;
 
@@ -1973,7 +1813,7 @@ void Diplomat::SetEmbargo(const PLAYER_INDEX foreignerId, const bool state)
 		threat.id = GetNextId();
 		threat.senderId = m_playerId;
 		threat.receiverId = foreignerId;
-		threat.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+		threat.start = NewTurnCount::GetCurrentRound();
 		threat.end = -1; 
 		
 		
@@ -1983,8 +1823,10 @@ void Diplomat::SetEmbargo(const PLAYER_INDEX foreignerId, const bool state)
 		LogViolationEvent(foreignerId, PROPOSAL_TREATY_TRADE_PACT);
 
 		sint32 regard_cost = 0;
-		if (foreigner.GetCurrentDiplomacy(m_playerId).GetEmbargoTradeRegardCost(regard_cost))
+		if (foreigner.GetCurrentDiplomacy(m_playerId).GetEmbargoTradeRegardCost())
 		{
+			foreigner.GetCurrentDiplomacy(m_playerId).GetEmbargoTradeRegardCost(regard_cost);
+				
 			StringId strId;
 			g_theStringDB->GetStringID("REGARD_EVENT_EMBARGO_TRADE", strId);
 			foreigner.LogRegardEvent(m_playerId, 
@@ -2058,7 +1900,7 @@ void Diplomat::AddRejection(const PLAYER_INDEX & foreignerId)
 	NegotiationEvent negotiation_event;
 	negotiation_event.proposal = sender_proposal;
 	negotiation_event.response = receiver_response;
-	negotiation_event.round = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+	negotiation_event.round = NewTurnCount::GetCurrentRound();
 	AddNewNegotiationEvent(foreignerId, negotiation_event);
 }
 
@@ -2070,7 +1912,7 @@ void Diplomat::AddRejection(const PLAYER_INDEX & foreignerId)
 const Threat & Diplomat::GetThreatById(const sint32 & id) const {
 	static Threat bad_threat;
 	
-	ThreatList::const_iterator found = std::find(m_threats.begin(), m_threats.end(), id);
+	ThreatList::const_iterator found = find(m_threats.begin(), m_threats.end(), id);
 	if (found != m_threats.end())
 		return *found;
 	else
@@ -2080,7 +1922,7 @@ const Threat & Diplomat::GetThreatById(const sint32 & id) const {
 
 void Diplomat::RemoveThreatById(const sint32 & id) {
 	
-	ThreatList::iterator found = std::find(m_threats.begin(), m_threats.end(), id);
+	ThreatList::iterator found = find(m_threats.begin(), m_threats.end(), id);
 	if (found != m_threats.end())
 		m_threats.erase(found);
 	else
@@ -2123,7 +1965,7 @@ sint32 Diplomat::AddThreat(const PLAYER_INDEX & foreignerId) {
 	threat.id = GetNextId();
 	threat.senderId = m_playerId;
 	threat.receiverId = foreignerId;
-	threat.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+	threat.start = NewTurnCount::GetCurrentRound();
 	threat.end = -1; 
 
 	
@@ -2131,7 +1973,7 @@ sint32 Diplomat::AddThreat(const PLAYER_INDEX & foreignerId) {
 	negotiation_event.proposal = sender_proposal;
 	negotiation_event.response = receiver_response;
 	negotiation_event.threat = threat;
-	negotiation_event.round = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+	negotiation_event.round = NewTurnCount::GetCurrentRound();
 	AddNewNegotiationEvent(foreignerId, negotiation_event);
 
 	
@@ -2162,37 +2004,48 @@ bool Diplomat::LaunchNuclearAttackOnCity(const Unit & city)
 	
 	
 	sint32 num_units = player_ptr->m_all_units->Num();
+	Unit tmp_unit;
+	bool found_targeted_nuke = false;
 	
-	for (sint32 i = 0; i < num_units; i++)
+	
+	for (sint16 i = 0; i < num_units; i++)
 	{
-		Unit tmp_unit = player_ptr->m_all_units->Access(i);
-		Assert(tmp_unit.IsValid());
-
-		if (tmp_unit.IsValid() && tmp_unit.GetDBRec()->HasNuclearAttack()) 
-        {		
-		    if (tmp_unit->GetTargetCity().m_id == city.m_id)
-		    {
-		        unitutil_ExecuteMadLaunch(tmp_unit);
-			    return true;
-		    }
-        }
+		tmp_unit = player_ptr->m_all_units->Access(i);
+		Assert( g_theArmyPool->IsValid(tmp_unit) );
+		if ( !g_theArmyPool->IsValid(tmp_unit) )
+			continue;
+		
+		
+		if(!tmp_unit.GetDBRec()->GetNuclearAttack())
+			continue;
+		
+		
+		found_targeted_nuke = tmp_unit->GetTargetCity().m_id != 0x0;
+		if (tmp_unit->GetTargetCity().m_id == city.m_id)
+		{
+			break;
+		}
 	}
 
+	if (found_targeted_nuke)
+	{
+		unitutil_ExecuteMadLaunch(tmp_unit);
+
+		return true;
+	}
 	return false;
 }
 
 
 bool Diplomat::ExecuteThreat(const Threat & threat)
 {
-#if 0   // unused
 	const NewProposal & sender_proposal = 
 		GetMyLastNewProposal(threat.receiverId);
-#endif
 	const Diplomat & receiver_diplomat = Diplomat::GetDiplomat(threat.receiverId);
 	StringId strId;
 	sint32 regard_cost=0;
 	sint32 trust_cost=0;
-	char *str_buf = NULL;
+	char *str_buf;
 
 	switch (threat.detail.type)
 	{
@@ -2241,7 +2094,7 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		strId);
 
 	Diplomat::GetDiplomat(threat.receiverId).
-		ApplyTrustChange(threat.senderId, static_cast<ai::Regard>(trust_cost), str_buf);
+		ApplyTrustChange(threat.senderId, trust_cost, str_buf);
 
 	return false;
 }
@@ -2312,9 +2165,8 @@ bool Diplomat::ComputeThreatResponse(const PLAYER_INDEX foreignerId, Response & 
 	const Diplomat & foreign_diplomat = Diplomat::GetDiplomat(foreignerId);
 	const MapAnalysis & map_analysis = MapAnalysis::GetMapAnalysis();
 	const AgreementMatrix & agreements = AgreementMatrix::s_agreements;
-#if 0 // unused
 	const Response & receiver_response = GetDiplomat(foreignerId).GetMyLastResponse(m_playerId);
-#endif
+
 	
 	ai::Agreement pact;
 
@@ -2618,7 +2470,7 @@ void Diplomat::ConsiderResponse( const PLAYER_INDEX senderId,
 
 	Response response;
 	
-	response.priority = static_cast<sint16>(priority);
+	response.priority = priority;
 	response.receiverId = m_playerId;
 	response.senderId = senderId;
 	response.type = response_type;
@@ -2641,7 +2493,7 @@ void Diplomat::ConsiderCounterResponse( const PLAYER_INDEX senderId,
 
 	Response response;
 
-	response.priority = static_cast<sint16>(priority);
+	response.priority = priority;
 	response.receiverId = m_playerId;
 	response.senderId = senderId;
 
@@ -2737,7 +2589,7 @@ void Diplomat::ExecuteResponse( const PLAYER_INDEX sender,
 	  {
 	    ProposalAnalysis::LogDebugResult(response);
 	  }
-#endif // _BFR_
+#endif _BFR_
 
 	Assert(response.type != RESPONSE_INVALID);
 	if (response.type == RESPONSE_INVALID)
@@ -3192,32 +3044,33 @@ void Diplomat::ContinueDiplomacy(const PLAYER_INDEX & foreignerId) {
 
 bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 {
-	Player *    player_ptr  = g_player[m_playerId];
+	Player *player_ptr;
+	player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
-	m_outstandingProposals = 0;
+	Player *foreigner_ptr;
+
+	int foreignerId;
+	bool found = false;
+
 	
-	if (g_network.IsHost() && !g_network.IsLocalPlayer(m_playerId)) {
+	m_outstandingProposals = 0;
+
+	
+	if(g_network.IsHost() && !g_network.IsLocalPlayer(m_playerId)) {
 		
 		return false;
 	}
 
-	bool        found       = false;
 	
-	for 
-    (
-        size_t foreignerIndex = 1; 
-        foreignerIndex < m_foreigners.size(); 
-        ++foreignerIndex
-    ) 
+	for (foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++) 
 	{
-		PLAYER_INDEX    foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
-
-        if (foreignerId == m_playerId)
+		
+		if (foreignerId == m_playerId)
 			continue;
 
 		
-		Player * foreigner_ptr = g_player[foreignerIndex];
+		foreigner_ptr = g_player[foreignerId];
 		if (foreigner_ptr == NULL)
 			continue;
 
@@ -3225,12 +3078,13 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 		if (g_turn->IsHotSeat() || g_turn->IsEmail())
 		{
 			
-			if (hotseat_foreignerId != PLAYER_UNASSIGNED)
+			if (hotseat_foreignerId != -1)
 			{
 				if (hotseat_foreignerId != foreignerId)
 					continue;
 			}
-			else if (g_player[foreignerIndex]->m_playerType != PLAYER_TYPE_ROBOT)
+			
+			else if (g_player[foreignerId]->m_playerType != PLAYER_TYPE_ROBOT)
 				continue;
 		}
 
@@ -3240,10 +3094,10 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 	//	if player has contact with foreignerId, 
     //	set m_lastMotivation[foreignerId] = the player's top motivation 
 	//	and choose a new proposal for foreignerId
-		if (m_foreigners[foreignerIndex].GetTurnsSinceGreeting() >= -1 &&
+		if (m_foreigners[foreignerId].GetTurnsSinceGreeting() >= -1 &&
 			g_player[m_playerId] && g_player[m_playerId]->HasContactWith(foreignerId))
 		{
-			m_lastMotivation[foreignerIndex] = m_motivations.begin();
+			m_lastMotivation[foreignerId] = m_motivations.begin();
 
 			DPRINTF(k_DBG_AI, ("(Start Negotiations)%d choosing proposal for foreigner %d\n",m_playerId,foreignerId));
 			
@@ -3252,7 +3106,7 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 		}
 		else
 		{
-			m_lastMotivation[foreignerIndex] = m_motivations.end();
+			m_lastMotivation[foreignerId] = m_motivations.end();
 		}
 	}
 
@@ -3262,9 +3116,10 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 
 bool Diplomat::InvalidNewProposal(const PLAYER_INDEX & foreignerId, const DiplomacyProposalRecord *rec) const
 {
-	if (foreignerId == PLAYER_UNASSIGNED)
+	if (foreignerId == -1)
 		return true;
 
+	
 	if (rec->GetDisabled())
 		return true;
 
@@ -3437,7 +3292,7 @@ void Diplomat::ChooseNewProposal(const PLAYER_INDEX & foreignerId) {
 	else
 		{
 			Motivation topMotivation = *motivation_iter;
-			GAME_EVENT motivation_event = static_cast<GAME_EVENT>(0);
+			GAME_EVENT motivation_event;
 	
 			switch (topMotivation.type)
 			{
@@ -3571,7 +3426,7 @@ void Diplomat::ExecuteNewProposal( const PLAYER_INDEX & receiver ) {
 
 #ifndef _BFR_
 	ProposalAnalysis::LogDebugResult(proposal);
-#endif // _BFR_
+#endif _BFR_
 }
 
 
@@ -3609,27 +3464,32 @@ sint32 Diplomat::GetNewProposalPriority(const PLAYER_INDEX foreignerId,
 							  const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
 
-//
-	if (elem == NULL)
-		return -1;
-//	
+	
 	const DiplomacyProposalRecord * rec = elem->GetProposal();
 	if (InvalidNewProposal(foreignerId, rec))
 		return -1;
 
-	sint32 priority = -1;
-	(void) elem->GetSendPriority(priority);
-	return priority;
+	sint32 priority;
+	if (elem->GetSendPriority())
+	{
+		elem->GetSendPriority(priority);
+		return priority;
+	}
+
+	return -1;
 }
+
 
 sint32 Diplomat::GetAcceptPriority(const PLAYER_INDEX foreignerId, 
 						 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3643,6 +3503,7 @@ sint32 Diplomat::GetRejectPriority(const PLAYER_INDEX foreignerId,
 						 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3657,6 +3518,7 @@ sint32 Diplomat::GetSenderRegardResult(const PLAYER_INDEX foreignerId,
 							 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3671,6 +3533,7 @@ sint32 Diplomat::GetReceiverRegardResult(const PLAYER_INDEX foreignerId,
 							   const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3688,6 +3551,7 @@ sint32 Diplomat::GetViolationRegardCost(const PLAYER_INDEX foreignerId,
 							  const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3702,6 +3566,7 @@ sint32 Diplomat::GetViolationTrustCost(const PLAYER_INDEX foreignerId,
 							 const PROPOSAL_TYPE proposalType ) const
 {
 	Assert(s_proposalTypeToElemIndex[proposalType] < m_diplomacy[foreignerId].GetNumProposalElement());
+	Assert(foreignerId < m_diplomacy.size() );
 	
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
@@ -3908,7 +3773,7 @@ void Diplomat::ComputeCurrentStrategy()
 		MergeStrategy(ai_state_iter->dbIndex);
 
 		
-		++ai_state_iter;
+		ai_state_iter++;
 	}
 }
 
@@ -3957,83 +3822,130 @@ void Diplomat::MergeStrategy(const sint32 index) {
 
 
 
-void Diplomat::InitDiplomaticState(const PLAYER_INDEX & foreignerId) 
-{
-	m_bestDiplomaticState           = s_badAiState;
+void Diplomat::InitDiplomaticState( const PLAYER_INDEX & foreignerId ) {
+
+	
+	m_bestDiplomaticState = s_badAiState;
 	m_diplomaticStates[foreignerId] = s_badAiState;
 
 	
-	if (    g_player[foreignerId] 
-         && !g_player[foreignerId]->IsDead()
-         && (foreignerId != m_playerId)
-       )
-    {
-    	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_InitDiplomaticState,
-	                           GEA_Player, m_playerId,
-			                   GEA_Player, foreignerId,
-			                   GEA_End
-                              );
-    }
+	if (g_player[foreignerId] == NULL || g_player[foreignerId]->IsDead())
+		return;
+
+	
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_InitDiplomaticState,
+			GEA_Player, m_playerId,
+			GEA_Player, foreignerId,
+			GEA_End);
 }
 
 
-void Diplomat::NextDiplomaticState( const PLAYER_INDEX & foreignerId ) 
-{
+void Diplomat::NextDiplomaticState( const PLAYER_INDEX & foreignerId ) {
+
+	
+	
+	
 	m_bestDiplomaticState = s_badAiState;
+
 	
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NextDiplomaticState,
-                           GEA_Player, m_playerId,
-                           GEA_Player, foreignerId,
-			               GEA_End
-                          );
-    
-    /// @todo Make this a game setting. It is not really a user profile setting.
-    sint32 const        baseExpiryTurn = 
-        g_theProfileDB->GetValueByName("AutoExpireTreatyBase");
-    
-    if (k_EXPIRATION_NEVER == baseExpiryTurn)
-    {
-        // No action: agreements will not be terminated automatically.
-    }
-    else
-    {
-        // added by PFT 05 MAR 05: some agreements have limited duration
+			GEA_Player, m_playerId,
+			GEA_Player, foreignerId,
+			GEA_End);
 
-        // TODO: Check whether this is the right place to do this.
-        //       Maybe better use Agreement::SetExpires when starting the agreement?
+    // added by PFT 05 MAR 05: some agreements have limited duration
+    sint32 duration;
+    sint32 send_warning;
+    sint32 cancel_agt;
 
-	    for (sint32 prop_index = 1; prop_index < PROPOSAL_MAX; ++prop_index)
-        {
-            PROPOSAL_TYPE const prop_type   = static_cast<PROPOSAL_TYPE>(prop_index);
-    
-	        if (AgreementMatrix::s_agreements.HasAgreement
-                    (m_playerId, foreignerId, prop_type)
-               ) 
-            {
-			    sint32 const    duration        =
-                    AgreementMatrix::s_agreements.GetAgreementDuration
-                        (m_playerId, foreignerId, prop_type);
-				    
-                sint32 const    expiryTurn      = 
-                    ProposalAutoExpiryTurn(baseExpiryTurn, prop_type);
+	for (sint32 prop_type=1; prop_type<PROPOSAL_MAX; prop_type++){
 
-                if (duration == expiryTurn)
-                {
-                    AgreementMatrix::s_agreements.CancelAgreement
-                        (m_playerId, foreignerId, prop_type);
-			    }
-			    else if ((expiryTurn > 2 * WARN_EXPIRY_TURN_COUNT) &&
-                         (duration == expiryTurn - WARN_EXPIRY_TURN_COUNT)
-                        )
-                {
-                    SlicObject * so = new SlicObject("001TreatyToExpire");
-				    so->AddRecipient(m_playerId);
-				    so->AddCivilisation(foreignerId);
-			        g_slicEngine->Execute(so);
-			    }
-            }
-	    }
-    }
+	    if (AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, (const enum PROPOSAL_TYPE)prop_type)){
+
+			duration=AgreementMatrix::s_agreements.GetAgreementDuration(m_playerId, foreignerId, (const enum PROPOSAL_TYPE)prop_type);
+				
+			send_warning=0;
+            cancel_agt=0;
+			switch (prop_type) {
+	            case PROPOSAL_NONE:
+	            case PROPOSAL_OFFER_GIVE_CITY:
+	            case PROPOSAL_REQUEST_GIVE_CITY:
+		            break;
+
+	            case PROPOSAL_OFFER_WITHDRAW_TROOPS:
+                case PROPOSAL_REQUEST_WITHDRAW_TROOPS:
+                case PROPOSAL_OFFER_STOP_PIRACY:
+	            case PROPOSAL_REQUEST_STOP_PIRACY:
+					if(duration==17){send_warning=1;}
+                    else if (duration==20){cancel_agt=1;}
+		            break;
+
+	            case PROPOSAL_OFFER_BREAK_AGREEMENT:
+		        case PROPOSAL_REQUEST_BREAK_AGREEMENT:
+		            break;
+	
+	            case PROPOSAL_OFFER_STOP_RESEARCH:
+	            case PROPOSAL_REQUEST_STOP_RESEARCH:
+		        case PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS:
+                case PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS:
+                case PROPOSAL_OFFER_REDUCE_BIO_WEAPONS:
+                case PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS:
+                case PROPOSAL_OFFER_REDUCE_NANO_WEAPONS:
+                case PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS:
+                    if(duration==27){send_warning=1;}
+                    else if (duration==30){cancel_agt=1;}
+		            break;
+
+	            case PROPOSAL_OFFER_GIVE_ADVANCE:
+	            case PROPOSAL_REQUEST_GIVE_ADVANCE:
+	            case PROPOSAL_OFFER_GIVE_GOLD:
+	            case PROPOSAL_REQUEST_GIVE_GOLD:
+	            case PROPOSAL_OFFER_REDUCE_POLLUTION:
+	            case PROPOSAL_REQUEST_REDUCE_POLLUTION:		
+	            case PROPOSAL_OFFER_MAP:
+	            case PROPOSAL_REQUEST_MAP:
+	            case PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT:
+	            case PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT:
+	            case PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT:
+	            case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:   		
+	            case PROPOSAL_OFFER_END_EMBARGO:// possible term ?
+	            case PROPOSAL_REQUEST_END_EMBARGO:
+		            break;
+	
+	            case PROPOSAL_TREATY_DECLARE_WAR:
+		            break;
+	            case PROPOSAL_TREATY_CEASEFIRE:
+                    if(duration==17){send_warning=1;}
+                    else if (duration==20){cancel_agt=1;}
+		            break;
+	            case PROPOSAL_TREATY_PEACE:
+
+	            case PROPOSAL_TREATY_TRADE_PACT:
+	            case PROPOSAL_TREATY_RESEARCH_PACT:
+	            case PROPOSAL_TREATY_MILITARY_PACT:
+	            case PROPOSAL_TREATY_POLLUTION_PACT:
+                    if(duration==37){send_warning=1;}
+                    else if (duration==40){cancel_agt=1;}
+		            break;
+
+	            case PROPOSAL_TREATY_ALLIANCE:// possible term ?
+		            break;
+	            case PROPOSAL_MAX:
+	            default:
+		            Assert(0);
+			}
+			if(send_warning){
+                SlicObject *so = new SlicObject("001TreatyToExpire");
+				so->AddRecipient(m_playerId);
+				so->AddCivilisation(foreignerId);
+			    g_slicEngine->Execute(so);
+			}
+			else if (cancel_agt){
+
+                AgreementMatrix::s_agreements.CancelAgreement(m_playerId, foreignerId, (const enum PROPOSAL_TYPE)prop_type);
+			}
+        }
+	}// end: some aggreements have limited duration
 }
 
 
@@ -4198,36 +4110,50 @@ sint32 Diplomat::GetNextAdvance() const
 	if (rec == NULL)
 		return -1;
 
-	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); ++wanted_advance)
+	
+	sint32 advance_index = -1;
+	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
 	{
-		sint32 const advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
+		advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
 
-		if (!g_player[m_playerId]->HasAdvance(advance_index))
-		{
-			return advance_index;
-		}
+		
+		if (g_player[m_playerId]->HasAdvance(advance_index) == TRUE)
+			continue;
+
+		
+		break;
 	}
 
-	return -1;
+	if (wanted_advance == rec->GetNumAdvance())
+	{
+		
+		return -1;
+	}
+
+	
+	return advance_index;
 }
 
 
 sint32 Diplomat::GetDesiredAdvanceFrom( const PLAYER_INDEX & foreignerId, const sint32 min_cost, const sint32 max_cost ) const
 {
+
 	if (g_player[m_playerId] == NULL)
 		return -1;
 
 	if (g_player[foreignerId] == NULL)
 		return -1;
 
+	
 	const AdvanceListRecord *rec = m_strategy.GetResearchPtr();
 	if (rec == NULL)
 		return -1;
 
+	
 	sint32 advance_index = -1;
-	sint32 wanted_advance;
-	for (wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
+	for (sint32 wanted_advance = 0; wanted_advance < rec->GetNumAdvance(); wanted_advance++)
 	{
+
 		advance_index = rec->GetAdvance(wanted_advance)->GetIndex();
 
 		
@@ -4235,11 +4161,11 @@ sint32 Diplomat::GetDesiredAdvanceFrom( const PLAYER_INDEX & foreignerId, const 
 			continue;
 
 		
-		if (g_player[m_playerId]->HasAdvance(advance_index))
+		if (g_player[m_playerId]->HasAdvance(advance_index) == TRUE)
 			continue;
 
 		
-		if (!g_player[foreignerId]->HasAdvance(advance_index))
+		if (g_player[foreignerId]->HasAdvance(advance_index) == FALSE)
 			continue;
 
 		
@@ -4303,27 +4229,38 @@ sint32 Diplomat::GetStopResearchingAdvance( const PLAYER_INDEX & foreignerId) co
 
 sint32 Diplomat::GetNextKeyAdvance() const
 {
+	
 	Assert(g_player[m_playerId]);
+
 	if (g_player[m_playerId] == NULL)
 		return -1;
 
-#if 0 // Not used
+	
 	AdvanceType my_research = g_player[m_playerId]->m_advances->GetResearching();
-#endif
 
-	for (sint32 advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); ++advance_index)
+	
+	
+	const AdvanceRecord *rec;
+	for (sint32 advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); advance_index++)
 	{
-		AdvanceRecord const *	rec = g_theAdvanceDB->Get(advance_index);
+		rec = g_theAdvanceDB->Get(advance_index);
 
-		if (rec->HasKeyAdvanceAdvice() && 
-			!g_player[m_playerId]->HasAdvance(advance_index)
-		   )
-		{
-			return advance_index;
-		}
+		
+		if (!rec->GetKeyAdvanceAdvice())
+			continue;
+		
+		
+		if (g_player[m_playerId]->HasAdvance(advance_index) == TRUE)
+			continue;
+
+		break;
 	}
 
-	return -1;
+	
+	if (advance_index < g_theAdvanceDB->NumRecords())
+		return -1;
+
+	return advance_index;
 }
 
 
@@ -4346,31 +4283,34 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 
 	
 	sint32 stop_researching_adv;
-	uint32 foreignerId;
-	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
-	{
-		if (TestEffectiveRegard(foreignerId, ALLIED_REGARD))
-			continue;
-
-		stop_researching_adv = GetStopResearchingAdvance(foreignerId);
-		
-		if (stop_researching_adv >= 0)
+	for (PLAYER_INDEX foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
 		{
-			sc.AddPlayer(foreignerId);
-			sc.AddAdvance(stop_researching_adv);
 			
-			(void) g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice(advance_advice);
+			if (TestEffectiveRegard(foreignerId, ALLIED_REGARD ))
+				continue;
 
-			if (g_player[m_playerId]->HasAdvance(stop_researching_adv))
-			{
-				return nonProliferationAdvice;
-			}
-			else
-			{
-				return manhattanProjectAdvice;
-			}
+			stop_researching_adv = GetStopResearchingAdvance(foreignerId);
+			
+			if (stop_researching_adv >= 0)
+				{
+					sc.AddPlayer(foreignerId);
+					sc.AddAdvance(stop_researching_adv);
+
+					
+					if (g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice())
+						g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice(advance_advice);
+
+					
+					if (g_player[m_playerId]->HasAdvance(stop_researching_adv) == TRUE)
+						{
+							return nonProliferationAdvice;
+						}
+					else
+						{
+							return manhattanProjectAdvice;
+						}
+				}
 		}
-	}
 
 	
 	sint32 next_key_adv = GetNextKeyAdvance();
@@ -4382,19 +4322,21 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 		sc.AddAdvance(next_key_adv);
 
 		
-		(void) g_theAdvanceDB->Get(next_key_adv)->GetKeyAdvanceAdvice(advance_advice);
+		if (g_theAdvanceDB->Get(next_key_adv)->GetKeyAdvanceAdvice())
+			g_theAdvanceDB->Get(next_key_adv)->GetKeyAdvanceAdvice(advance_advice);
 		
 		
 		ai::Regard best_enemy_regard = MAX_REGARD;
 		PLAYER_INDEX best_enemy = -1;
 		
+		
 		ai::Regard best_friend_regard = MIN_REGARD;
 		PLAYER_INDEX best_friend = -1;
 
-		sint32 unit_type;
-		for (unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
+		
+		for (sint32 unit_type = 0; unit_type < g_theUnitDB->NumRecords(); unit_type++)
 		{
-			const UnitRecord *unit_rec = g_theUnitDB->Get(unit_type, g_player[m_playerId]->GetGovernmentType());
+			const UnitRecord *unit_rec = g_theUnitDB->Get(unit_type);
 			if (unit_rec->GetEnableAdvance() &&
 				unit_rec->GetEnableAdvance()->GetIndex() == next_key_adv)
 				break;
@@ -4407,15 +4349,18 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 		}
 		else
 		{
+			
 			sc.AddUnitRecord(0);
 		}
+		
 		
 		ai::Regard regard;
 		for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId++)
 		{
 			regard = GetEffectiveRegard(foreignerId);
 			
-			if ((g_player[foreignerId]->HasAdvance(next_key_adv)) &&
+			
+			if ((g_player[foreignerId]->HasAdvance(next_key_adv) == TRUE) &&
 				(regard < best_enemy_regard) &&
 				TestEffectiveRegard(foreignerId, COLDWAR_REGARD))
 			{
@@ -4423,7 +4368,8 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 				best_enemy = foreignerId;
 			}
 			
-			if ((g_player[foreignerId]->HasAdvance(next_key_adv)) &&
+			
+			if ((g_player[foreignerId]->HasAdvance(next_key_adv) == TRUE) &&
 				(regard > best_friend_regard) &&
 				TestEffectiveRegard(foreignerId, NEUTRAL_REGARD))
 			{
@@ -4432,12 +4378,14 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 			}
 		}
 		
+		
 		if (best_friend != -1)
 		{
 			sc.AddPlayer(best_friend);
 			
 			return allyHasAdvanceAdvice;
 		}
+		
 		else if (best_enemy != -1)
 		{
 			sc.AddPlayer(best_enemy);
@@ -4497,7 +4445,6 @@ sint32 Diplomat::GetGoldSurplusPercent() const
 
 
 bool Diplomat::CanBuySurplus(const PLAYER_INDEX &foreignId) const {
-    /// @todo Check meaning: always returns false now.
 	sint32 goldReserve = 100; 
 	sint32 minSurplusCost = 50; 
 	return ((minSurplusCost > 0) && (minSurplusCost > goldReserve));
@@ -4517,41 +4464,20 @@ sint32 Diplomat::GetAdvanceLevelPercent(const PLAYER_INDEX &foreignId) const {
 }
 
 
-sint32 Diplomat::AtWarCount() const 
-{
-	sint32 atWarCount = 0;
-
-	for (size_t foreigner = 1; foreigner < m_foreigners.size(); ++foreigner)
-    {
-        PLAYER_INDEX const  foreignerId  = static_cast<PLAYER_INDEX>(foreigner);
-        if (    (foreignerId != m_playerId)
-             && AgreementMatrix::s_agreements.HasAgreement
-                    (m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR)
-           )
-        {
-            ++atWarCount;
-        }
-    }
+sint16 Diplomat::AtWarCount() const {
+	sint16 atWarCount = 0;
+	for (int foreigner = 1; foreigner < m_foreigners.size(); foreigner++)
+		atWarCount += 
+			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreigner,PROPOSAL_TREATY_DECLARE_WAR);
 	return atWarCount;
 }
 
 
-sint32 Diplomat::EffectiveAtWarCount() const
-{
+sint16 Diplomat::EffectiveAtWarCount() {
 	int atWarCount = 0;
-
-    /// @todo Check inconsistent inclusion of 0 (barbarians), see AtWarCount
-	for (size_t foreigner = 0; foreigner < m_foreigners.size(); ++foreigner)
-    {
-        PLAYER_INDEX const  foreignerId  = static_cast<PLAYER_INDEX>(foreigner);
-        if (    (foreignerId != m_playerId)
-             && TestEffectiveRegard(foreigner, HOTWAR_REGARD)
-           )
-        {
-            ++atWarCount;
-        }
-    }
-
+	for (int foreigner = 0; foreigner < m_foreigners.size(); foreigner++)
+		atWarCount += 
+			( TestEffectiveRegard(foreigner, HOTWAR_REGARD ) );
 	return atWarCount;
 }
 
@@ -4579,13 +4505,14 @@ bool Diplomat::TestPublicRegard(const PLAYER_INDEX & foreignerId, const ai::Rega
 
 
 
-bool Diplomat::TestEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard) const
+bool Diplomat::TestEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard)
 {
 	const sint32 curRound = NewTurnCount::GetCurrentRound();
 	static int s_regardList[7] = 
 	{MIN_REGARD,HOTWAR_REGARD,COLDWAR_REGARD,NEUTRAL_REGARD,FRIEND_REGARD,ALLIED_REGARD,MAX_REGARD};
 
-	cEffectiveRegardEntry * pEntry = &m_effectiveRegardCache[foreignerId];
+	cEffectiveRegardEntry *pEntry;
+	pEntry = &(m_effectiveRegardCache[foreignerId]);
 
 	if (pEntry->m_round != curRound) {
 		
@@ -4602,8 +4529,17 @@ bool Diplomat::TestEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::R
 	const bool retVal = (pEntry->m_bits>>pEntry->RegardToIndex(test_regard))&1;
 
 #ifdef _DEBUG
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	const bool test = ComputeEffectiveRegard(foreignerId,test_regard);
-    (void) test;
+	
 #endif
 
 	return retVal;
@@ -4611,9 +4547,9 @@ bool Diplomat::TestEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::R
 
 void Diplomat::ClearEffectiveRegardCache()
 {
-	for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
-    {
-		m_effectiveRegardCache[i].m_round = -666;
+	int i;
+	for (i=0;i<k_MAX_PLAYERS;++i) {
+		m_effectiveRegardCache[i].m_round=-666;
 	}
 }
 
@@ -4622,14 +4558,16 @@ bool Diplomat::ComputeEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai
 {
 	ai::Regard regard = m_foreigners[foreignerId].GetEffectiveRegard();
 
-	if (AgreementMatrix::s_agreements.HasAgreement
-            (m_playerId, 
-		     foreignerId, 
-		     PROPOSAL_TREATY_DECLARE_WAR
-            )
-       )
+	if (AgreementMatrix::s_agreements.HasAgreement(m_playerId, 
+		foreignerId, 
+		PROPOSAL_TREATY_DECLARE_WAR))
 	{
-		return (test_regard < NEUTRAL_REGARD);
+		
+		if (test_regard < NEUTRAL_REGARD)
+			return true;
+		
+		else
+			return false;
 	}
 
 	if ( test_regard <= HOTWAR_REGARD )
@@ -4683,10 +4621,11 @@ bool Diplomat::ComputeEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai
 	return true;
 }
 
-bool Diplomat::TestAlliedRegard(const PLAYER_INDEX & foreignerId) const
+bool Diplomat::TestAlliedRegard(const PLAYER_INDEX & foreignerId)
 {
+	
+	
 	Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
-
 	return  foreignerId == m_playerId ||
 		 diplomat.TestEffectiveRegard(foreignerId, ALLIED_REGARD) ||
 		 AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) ||
@@ -4748,6 +4687,8 @@ sint32 Diplomat::GetEnemyThreat() const
 
 void Diplomat::UpdateAttributes() 
 {
+	
+	
 	Army army;
 	sint32 cell_owner;
 	sint32 num_armies;
@@ -4758,6 +4699,8 @@ void Diplomat::UpdateAttributes()
 	
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
+	Assert(g_theArmyPool);
+	
 	
 	m_friendCount = 0;
 	m_enemyCount = 0;
@@ -4766,15 +4709,15 @@ void Diplomat::UpdateAttributes()
 	m_enemyThreat = 0;
 
 	
-	uint32 foreigner;
+	PLAYER_INDEX foreigner;
 	sint32 i;
 	for ( foreigner = 1;  foreigner< m_foreigners.size(); foreigner++ ) 
 	{
-		PLAYER_INDEX    foreignerId = static_cast<PLAYER_INDEX>(foreigner);
+		
 		m_foreigners[foreigner].BeginTurn();
 		
 		
-		if (foreignerId == m_playerId)
+		if (foreigner == m_playerId)
 			continue;
 		
 		
@@ -4785,116 +4728,124 @@ void Diplomat::UpdateAttributes()
 			continue;
 		
 		
-		if (!player_ptr->HasContactWith(foreignerId))
+		if ( !player_ptr->HasContactWith(foreigner) == TRUE )
 			continue;
 		
 		
 		if (m_foreigners[foreigner].GetEffectiveRegard() <= COLDWAR_REGARD ||
-			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
+			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_DECLARE_WAR))
 		{
 			m_enemyCount++;
-			m_enemyThreat += MapAnalysis::GetMapAnalysis().TotalThreat(foreignerId);
+			m_enemyThreat += MapAnalysis::GetMapAnalysis().TotalThreat(foreigner);
 		}
 		else if (m_foreigners[foreigner].GetEffectiveRegard() >= FRIEND_REGARD ||
-			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) ||
-			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT))
+			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_ALLIANCE) ||
+			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_MILITARY_PACT))
 		{
 			m_friendCount++;
-			m_friendPower += MapAnalysis::GetMapAnalysis().TotalThreat(foreignerId);
+			m_friendPower += MapAnalysis::GetMapAnalysis().TotalThreat(foreigner);
 		}
 		
 		
 		sint32 add_trust;
 		if (AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT) ||
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_MILITARY_PACT) ||
 			AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_POLLUTION_PACT) ||
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_POLLUTION_PACT) ||
 			AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_RESEARCH_PACT) ||
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_RESEARCH_PACT) ||
 			AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE))
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_ALLIANCE))
 		{
-			if (GetCurrentDiplomacy(foreignerId).GetHasPactTrustBonus(add_trust))
+			if (GetCurrentDiplomacy(foreigner).GetHasPactTrustBonus())
 			{
-				ApplyTrustChange(foreignerId, 
-                                 static_cast<ai::Regard>(add_trust), 
-								 "Increase trust because they kept our pact."
-								);
+				GetCurrentDiplomacy(foreigner).GetHasPactTrustBonus(add_trust);
+				
+				
+				ApplyTrustChange(foreigner, add_trust, "Increase trust because they kept our pact.");
 			}
 		}
 
 		if (AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_CEASEFIRE) ||
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_CEASEFIRE) ||
 			AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_PEACE))
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_PEACE))
 		{
-			if (GetCurrentDiplomacy(foreignerId).GetNoWarTrustBonus(add_trust))
+			if (GetCurrentDiplomacy(foreigner).GetNoWarTrustBonus())
 			{
-				if (GetTrust(foreignerId) < (NEUTRAL_REGARD + 20))
+				GetCurrentDiplomacy(foreigner).GetNoWarTrustBonus(add_trust);
+
+				
+				if (GetTrust(foreigner) < (NEUTRAL_REGARD + 20))
 				{
 					
-					ApplyTrustChange(foreignerId, 
-                                     add_trust, 
-                                     "Increase trust because we're not at war."
-                                    );
+					ApplyTrustChange(foreigner, add_trust, "Increase trust because we're not at war.");
 				}
 			}
 		}
 
 		
 		if (AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS))
+			HasAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_WITHDRAW_TROOPS))
 		{
 			sint16 duration = 
-				AgreementMatrix::s_agreements.GetAgreementDuration(m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
+				AgreementMatrix::s_agreements.GetAgreementDuration(m_playerId, foreigner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 
 			if ((duration > 20) &&
-				GetCurrentDiplomacy(foreignerId).GetFollowThroughTrustBonus(add_trust)
-               )
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus())
 			{
-				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Withdraw Troops agreement.");
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus(add_trust);
+				
+				
+				ApplyTrustChange(foreigner, add_trust, "Increase trust because we followed through with Withdraw Troops agreement.");
 			}
 		}
 			
 		if (AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_PIRACY))
+			HasAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_STOP_PIRACY))
 		{
 			const ai::Agreement & agreement = AgreementMatrix::s_agreements.
-				GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_PIRACY);
+				GetAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_STOP_PIRACY);
 			
 			if ((NewTurnCount::GetCurrentRound() - agreement.start == 20) &&
-				GetCurrentDiplomacy(foreignerId).GetFollowThroughTrustBonus(add_trust)
-               )
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus())
 			{
-				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Stop Piracy agreement.");
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus(add_trust);
+				
+				
+				ApplyTrustChange(foreigner, add_trust, "Increase trust because we followed through with Stop Piracy agreement.");
 			}
 		}
 
 		if (AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_REDUCE_POLLUTION))
+			HasAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_REDUCE_POLLUTION))
 		{
 			const ai::Agreement & agreement = AgreementMatrix::s_agreements.
-				GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_REDUCE_POLLUTION);
+				GetAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_REDUCE_POLLUTION);
 			
 			if ((NewTurnCount::GetCurrentRound() - agreement.start == 20) &&
-				GetCurrentDiplomacy(foreignerId).GetFollowThroughTrustBonus(add_trust)
-               )
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus())
 			{
-				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Reduce Pollution agreement.");
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus(add_trust);
+				
+				
+				ApplyTrustChange(foreigner, add_trust, "Increase trust because we followed through with Reduce Pollution agreement.");
 			}
 		}
 		
 		if (AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_RESEARCH))
+			HasAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_STOP_RESEARCH))
 		{
 			const ai::Agreement & agreement = AgreementMatrix::s_agreements.
-				GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_RESEARCH);
+				GetAgreement(m_playerId, foreigner, PROPOSAL_REQUEST_STOP_RESEARCH);
 			
 			if ((NewTurnCount::GetCurrentRound() - agreement.start == 20) &&
-				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus(add_trust)
-               )
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus())
 			{
-				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Stop Research agreement.");
+				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus(add_trust);
+				
+				
+				ApplyTrustChange(foreigner, add_trust, "Increase trust because we followed through with Stop Research agreement.");
 			}
 		}
 			
@@ -4903,7 +4854,7 @@ void Diplomat::UpdateAttributes()
 		
 
 		
-		sint32 last_incursion = GetLastBorderIncursionBy(foreignerId);
+		sint32 last_incursion = GetLastBorderIncursionBy(foreigner);
 		if ( last_incursion >= 0 && last_incursion + 5 < NewTurnCount::GetCurrentRound())
 		{
 			
@@ -4912,17 +4863,17 @@ void Diplomat::UpdateAttributes()
 		
 		
 		if ( AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR) )
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_DECLARE_WAR) )
 			continue;
 		
 		
 		if ( AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT) )
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_MILITARY_PACT) )
 			continue;
 		
 		
 		if ( AgreementMatrix::s_agreements.
-			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) )
+			HasAgreement(m_playerId, foreigner, PROPOSAL_TREATY_ALLIANCE) )
 			continue;
 		
 		
@@ -4930,11 +4881,11 @@ void Diplomat::UpdateAttributes()
 		for (i = 0; i < num_armies; i++)
 		{
 			army = foreign_player_ptr->m_all_armies->Access(i);
-			if (army.IsValid())
+			if ( g_theArmyPool->IsValid(army) )
 			{
 				army->GetPos(pos);
 				cell_owner = g_theWorld->GetCell(pos)->GetOwner();
-				bool is_threat = army->HasCargo();
+				bool is_threat = (army->HasCargo() == TRUE);
 				if (!is_threat)
 				{
 					army->CharacterizeArmy(isspecial,
@@ -4952,7 +4903,7 @@ void Diplomat::UpdateAttributes()
 					player_ptr->IsVisible(pos) &&
 					(cell_owner == m_playerId) )
 				{
-					SetBorderIncursionBy(foreignerId);
+					SetBorderIncursionBy(foreigner);
 					break;
 				}
 			}
@@ -4960,23 +4911,26 @@ void Diplomat::UpdateAttributes()
 		
 	} 
 	
-	sint32 const    num_cities = player_ptr->m_all_cities->Num();
-	TradeRoute      route;
-	Unit            city;
+	sint32 num_cities = player_ptr->m_all_cities->Num();
+	sint32 r;
+	TradeRoute route;
+	Unit city;
+	sint32 value;
 	
 	for (i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
-		Assert(city.IsValid());
+		Assert( g_theUnitPool->IsValid(city) );
 		
 		
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
+		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
 		{
 			route = city.CD()->GetTradeSourceList()->Access(r);
 			
 			
+			value = route->GetValue();
 			foreigner = route->GetDestination().GetOwner();
-			m_foreigners[foreigner].AddTradeValue(route->GetValue());
+			m_foreigners[foreigner].AddTradeValue(value);
 		}
 	}
 
@@ -4987,26 +4941,25 @@ void Diplomat::UpdateAttributes()
 
 bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & dest_city) const
 {
-	for 
-    (
-        PiracyHistoryList::const_iterator piracy_iter = m_piracyHistory.begin(); 
-	    piracy_iter != m_piracyHistory.end();
-        ++piracy_iter
-    )
-	{ 
-		if ((piracy_iter->m_sourceCity == source_city) &&
-			(piracy_iter->m_destinationCity == dest_city) &&
-			!AgreementMatrix::s_agreements.HasAgreement(piracy_iter->m_piratingPlayer,
-													   m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
-           )
-		{
-        	sint32 max_piracy_events;
-	        GetCurrentStrategy().GetMaxPiracyEvents(max_piracy_events);
+	
+	
+	sint32 max_piracy_events;
+	GetCurrentStrategy().GetMaxPiracyEvents(max_piracy_events);
 
-			return piracy_iter->m_accumEvents >= max_piracy_events;
+	PiracyHistoryList::const_iterator piracy_iter = m_piracyHistory.begin(); 
+	while( piracy_iter != m_piracyHistory.end() )
+		{ 
+			
+			if (piracy_iter->m_sourceCity == source_city &&
+				piracy_iter->m_destinationCity == dest_city &&
+				!AgreementMatrix::s_agreements.HasAgreement(piracy_iter->m_piratingPlayer,
+														   m_playerId, PROPOSAL_OFFER_STOP_PIRACY))
+				{
+					return (piracy_iter->m_accumEvents >= max_piracy_events);
+				}
+
+			piracy_iter++;
 		}
-	}
-
 	return false;
 }
 
@@ -5014,27 +4967,33 @@ bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & de
 void Diplomat::ComputeTradeRoutePiracyRisk()
 {
 	Player * player_ptr = g_player[m_playerId];
-	Assert(player_ptr);
+	Assert(player_ptr != NULL);
 
 	sint32 cur_round = player_ptr->GetCurRound();
 
+	
 	PiracyHistoryList::iterator piracy_iter = m_piracyHistory.begin(); 
-	while (piracy_iter != m_piracyHistory.end())
-	{ 
-		sint32 piracy_memory_turns;
-		GetCurrentStrategy().GetPiracyMemoryTurns(piracy_memory_turns);
-		
-		if (cur_round > piracy_iter->m_lastTurn + piracy_memory_turns)
-		{
-			piracy_iter = m_piracyHistory.erase(piracy_iter);
+	while( piracy_iter != m_piracyHistory.end() )
+		{ 
+			
+			sint32 piracy_memory_turns;
+			GetCurrentStrategy().GetPiracyMemoryTurns(piracy_memory_turns);
+			
+			
+			if ( (cur_round - piracy_iter->m_lastTurn) > piracy_memory_turns)
+				{
+					
+					piracy_iter = m_piracyHistory.erase( piracy_iter );
+				}
+			else
+				{
+					
+					piracy_iter++;
+				}
 		}
-		else
-		{
-			++piracy_iter;
-		}
-	}
 
 	sint32 num_cities = player_ptr->m_all_cities->Num();
+	sint32 i,r;
 	TradeRoute route;
 	Unit city;
 	PiracyHistory piracy;
@@ -5043,13 +5002,13 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 	sint32 piracy_regard_cost;
 
 	
-	for (sint32 i = 0; i < num_cities; i++)
+	for (i = 0; i < num_cities; i++)
 		{
 			city = player_ptr->m_all_cities->Access(i);
-			Assert(city.IsValid());
+			Assert( g_theUnitPool->IsValid(city) );
 
 			
-			for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
+			for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
 				route = city.CD()->GetTradeSourceList()->Access(r);
 
 				
@@ -5071,9 +5030,9 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 										piracy_str_id );
 
 						
-						piracy_iter = std::find(m_piracyHistory.begin(), 
-										        m_piracyHistory.end(), 
-										        piracy);
+						piracy_iter = find(m_piracyHistory.begin(), 
+										   m_piracyHistory.end(), 
+										   piracy);
 
 						if (piracy_iter != m_piracyHistory.end())
 							{
@@ -5096,22 +5055,22 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 
 bool Diplomat::GetTradeRoutePiracyRisk(const PLAYER_INDEX foreignerId) const
 {
-	for 
-    (
-        PiracyHistoryList::const_iterator piracy_iter = m_piracyHistory.begin(); 
-	    piracy_iter != m_piracyHistory.end();
-        ++piracy_iter
-    )
+	sint32 max_piracy_events;
+	GetCurrentStrategy().GetMaxPiracyEvents(max_piracy_events);
+
+	PiracyHistoryList::const_iterator piracy_iter = m_piracyHistory.begin(); 
+	while( piracy_iter != m_piracyHistory.end() )
 	{ 
-		if ((piracy_iter->m_piratingPlayer == foreignerId) &&
-			!AgreementMatrix::s_agreements.HasAgreement
-                (piracy_iter->m_piratingPlayer, m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
-           )
+		
+		
+		if (piracy_iter->m_piratingPlayer == foreignerId &&
+			!AgreementMatrix::s_agreements.HasAgreement(piracy_iter->m_piratingPlayer,
+			m_playerId, PROPOSAL_OFFER_STOP_PIRACY))
 		{
 			return true;
 		}
+		piracy_iter++;
 	}
-
 	return false;
 }
 
@@ -5123,43 +5082,98 @@ void Diplomat::AddNewNegotiationEvent(const PLAYER_INDEX foreignerId, const Nego
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NewNegotiationEvent,
 						   GEA_Player, m_playerId,
 						   GEA_Player, foreignerId,
-						   GEA_End
-                          );
+						   GEA_End);
+
 }
 
 
 void Diplomat::ComputeIncursionPermission()
 {
-	m_incursionPermission = 1 << PLAYER_INDEX_VANDALS; 
-
-	Player *                player_ptr = g_player[m_playerId];
-	Assert(player_ptr);
-	AgreementMatrix const & agreements = AgreementMatrix::s_agreements;
 	
-	for 
-    ( 
-        size_t  foreignerIndex = 1; 
-        foreignerIndex < s_theDiplomats.size(); 
-        ++foreignerIndex
-    )
-	{
-        PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
+	m_incursionPermission = 0x1; 
 
-		if (    (foreignerId == m_playerId)                 // own territory
-            ||  !player_ptr->HasContactWith(foreignerId)    // never met
-            ||  agreements.HasAgreement                     // military pact
-                    (m_playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT)
-            ||  agreements.HasAgreement                     // alliance
-                    (m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE)
-            ||  (!agreements.HasAgreement                   // (almost) war
-                    (m_playerId, foreignerId, PROPOSAL_OFFER_WITHDRAW_TROOPS) &&
-                 TestEffectiveRegard(foreignerId, COLDWAR_REGARD)
-                )
-           )
+	Player *player_ptr = g_player[m_playerId];
+	Assert(player_ptr);
+
+	const AgreementMatrix & agreements = AgreementMatrix::s_agreements;
+
+	
+	Assert(s_theDiplomats.size() <= sizeof(uint32) * 8);
+
+	
+	for (sint32 foreignerId = 1; foreignerId < s_theDiplomats.size() ; foreignerId++)
 		{
-			m_incursionPermission |= (1 << foreignerId);
+			
+		if (foreignerId == m_playerId)
+		{
+			m_incursionPermission |= (0x1 << foreignerId);
+			continue;
+		}
+		
+		
+		if (player_ptr->HasContactWith(foreignerId) == FALSE)
+		{
+			m_incursionPermission |= (0x1 << foreignerId);
+			continue;				
+		}
+		
+		
+		if (agreements.HasAgreement(m_playerId, 
+			foreignerId, 
+			PROPOSAL_TREATY_MILITARY_PACT) ||
+			agreements.HasAgreement(m_playerId, 
+			foreignerId, 
+			PROPOSAL_TREATY_ALLIANCE) )
+		{
+			m_incursionPermission |= (0x1 << foreignerId);
+			continue;
+		}
+		
+		
+		if ( !agreements.HasAgreement(m_playerId, 
+			foreignerId, 
+			PROPOSAL_OFFER_WITHDRAW_TROOPS) &&
+			
+			
+			TestEffectiveRegard(foreignerId, COLDWAR_REGARD) ) 
+		{
+			
+			m_incursionPermission |= (0x1 << foreignerId);					
 		}
 	}
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -5171,7 +5185,7 @@ uint32 Diplomat::GetIncursionPermission() const
 
 bool Diplomat::IncursionPermission(const PLAYER_INDEX foreignerId) const
 {
-	return (m_incursionPermission & (1 << foreignerId)) != 0;
+	return ((m_incursionPermission & (0x1 << foreignerId)) != 0x0);
 }
 
 
@@ -5181,7 +5195,7 @@ void Diplomat::SetHotwarAttack(const PLAYER_INDEX foreignerId, const sint16 last
 }
 
 
-sint32 Diplomat::GetLastHotwarAttack(const PLAYER_INDEX foreignerId) const
+sint16 Diplomat::GetLastHotwarAttack(const PLAYER_INDEX foreignerId) const
 {
 	return m_foreigners[foreignerId].GetLastHotwarAttack();
 }
@@ -5193,7 +5207,7 @@ void Diplomat::SetColdwarAttack(const PLAYER_INDEX foreignerId, const sint16 las
 }
 
 
-sint32 Diplomat::GetLastColdwarAttack(const PLAYER_INDEX foreignerId) const
+sint16 Diplomat::GetLastColdwarAttack(const PLAYER_INDEX foreignerId) const
 {
 	return m_foreigners[foreignerId].GetLastColdwarAttack();
 }
@@ -5226,7 +5240,7 @@ PLAYER_INDEX Diplomat::ComputeNuclearLaunchTarget()
 	Assert(player_ptr);
 
 	
-	PLAYER_INDEX best_foreigner = PLAYER_UNASSIGNED;
+	PLAYER_INDEX best_foreigner = -1;
 
 	
 	bool has_nuke_enemy = false;
@@ -5242,26 +5256,22 @@ PLAYER_INDEX Diplomat::ComputeNuclearLaunchTarget()
 	
 	
 	sint32 tmp_nuke_count;
-	for 
-    (
-        size_t foreignerIndex = 1; 
-        foreignerIndex < s_theDiplomats.size(); 
-        ++foreignerIndex
-    )
+	for (sint32 foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId++)
 	{
-		player_ptr = g_player[foreignerIndex];
+		
+		player_ptr = g_player[foreignerId];
 		if (player_ptr == NULL)
 			continue;
 			
-		PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
-
+		
 		if (foreignerId == m_playerId)
 			continue;
 
 		
-		sint32 regard;
-		if (m_strategy.GetPreemptiveStrikeRegard(regard))
+		if (m_strategy.GetPreemptiveStrikeRegard())
 		{
+			sint32 regard;
+			m_strategy.GetPreemptiveStrikeRegard(regard);
 			if (GetPublicRegard(foreignerId) > regard)
 				continue;
 		}
@@ -5277,17 +5287,23 @@ PLAYER_INDEX Diplomat::ComputeNuclearLaunchTarget()
 		if (tmp_nuke_count > 0)
 		{
 			if (has_nuke_enemy)
-				return PLAYER_UNASSIGNED;
+				return -1;
 			has_nuke_enemy = true;
 		}
 		else
+			
 			continue;
 
-		double risk;
-		if (m_strategy.GetPreemptiveStrikeRiskRatio(risk))
+		
+		
+		
+		if (m_strategy.GetPreemptiveStrikeRiskRatio())
 		{
+			double risk;
+			m_strategy.GetPreemptiveStrikeRiskRatio(risk);
+			
 			if (((double) tmp_nuke_count / our_vulnerable_city_count) > risk)
-				return PLAYER_UNASSIGNED;
+				return -1;
 		}
 
 		sint32 foreign_vulnerable_city_count = 0;
@@ -5297,11 +5313,15 @@ PLAYER_INDEX Diplomat::ComputeNuclearLaunchTarget()
 				foreign_vulnerable_city_count++;
 		}
 
-		double superiority;
-		if (m_strategy.GetPreemptiveStrikeSuperiorityRatio(superiority))
+		
+		
+		
+		if (m_strategy.GetPreemptiveStrikeSuperiorityRatio())
 		{
+			double superiority;
+			m_strategy.GetPreemptiveStrikeSuperiorityRatio(superiority);
 			if (((double) our_nuke_count / foreign_vulnerable_city_count) < superiority)
-				return PLAYER_UNASSIGNED;
+				return -1;
 		}
 
 		
@@ -5329,30 +5349,36 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 		return;
 	
 	Player * player_ptr = g_player[m_playerId];
-	Assert(player_ptr && player_ptr->m_all_armies);
+	Assert(player_ptr != NULL);
+	Assert(player_ptr->m_all_armies != NULL);
+	
+	sint32 num_armies = player_ptr->m_all_armies->Num();
+	Army army;
 	
 	NukeTargetList nuke_city_list;
+	
+	
 	ComputeNukeTargets(nuke_city_list, foreignerId);
 
-	sint32 num_armies = player_ptr->m_all_armies->Num();
 	
 	Unit unit;
-	std::list<Unit> weapon_list;
-	for (sint32 i = 0; i < num_armies; i++) 
-    {
+	list<Unit> weapon_list;
+	Assert(player_ptr->m_all_units);
+	for(sint32 i = 0; i < player_ptr->m_all_units->Num(); i++) {
+		
 		unit = player_ptr->m_all_units->Access(i);
 		
-		if (unit.GetDBRec()->HasNuclearAttack())
-        {
-    		if (unit->GetArmy().m_id != 0)
-            {
-			    unit->GetArmy()->ClearOrders();
-            }
+		if(!unit.GetDBRec()->GetNuclearAttack())
+			continue;
 
-		    weapon_list.push_back(unit);
-        }
+		
+		if (unit->GetArmy().m_id != 0)
+			unit->GetArmy()->ClearOrders();
+
+		weapon_list.push_back(unit);
 	}
 
+	
 	bool no_first_strike = false;
 	if (m_strategy.GetNuclearFirstStrikeDisabled() ||
 		!m_strategy.GetNuclearFirstStrikeEnabled())
@@ -5365,11 +5391,11 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 			no_first_strike = true;
 	}
 
-	Army army;
+	
 	NukeTargetList::iterator city_iter;
 	MapPoint target_pos;
-	std::list<Unit>::iterator nuke_iter;
-	std::list<Unit>::iterator closest_nuke_iter;
+	list<Unit>::iterator nuke_iter;
+	list<Unit>::iterator closest_nuke_iter;
 	MapPoint weapon_pos;
 	sint32 closest_nuke_dist;
 	sint32 tmp_nuke_dist;
@@ -5385,7 +5411,7 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 		city_iter = nuke_city_list.begin(); 
 		while(city_iter != nuke_city_list.end())
 		{
-			if (!city_iter->second.IsValid())
+			if (!g_theUnitPool->IsValid(city_iter->second.m_id))
 			{
 				city_iter = nuke_city_list.erase(city_iter);
 				continue;
@@ -5396,30 +5422,26 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 			closest_nuke_dist = 99999;
 			target_pos = city_iter->second->GetPos();
 			
-			for 
-            (
-                nuke_iter = weapon_list.begin();
-			    nuke_iter != weapon_list.end();
-			    ++nuke_iter
-            )
+			for (nuke_iter = weapon_list.begin();
+			nuke_iter != weapon_list.end();
+			nuke_iter++)
 			{
-                if (nuke_iter->IsValid())
-                {
-				    weapon_pos = nuke_iter->RetPos();
-				    tmp_nuke_dist = MapPoint::GetSquaredDistance(target_pos, weapon_pos);
-				    if (tmp_nuke_dist < closest_nuke_dist)
-				    {
-					    closest_nuke_dist = tmp_nuke_dist;
-					    closest_nuke_iter = nuke_iter;
-				    }
-                }
+				if (!g_theUnitPool->IsValid((*nuke_iter).m_id))
+					continue;
+				weapon_pos = (*nuke_iter).RetPos();
+				tmp_nuke_dist = MapPoint::GetSquaredDistance(target_pos, weapon_pos);
+				if (tmp_nuke_dist < closest_nuke_dist)
+				{
+					closest_nuke_dist = tmp_nuke_dist;
+					closest_nuke_iter = nuke_iter;
+				}
 			}
 			
 			
 			bool close_enough = false;
 			if (closest_nuke_iter != weapon_list.end())
 			{
-				sint32 nuke_range = static_cast<sint32>
+				sint32 nuke_range = 
 					((*closest_nuke_iter).GetDBRec()->GetMaxMovePoints() / k_MOVE_AIR_COST) - 5;
 				close_enough = ((nuke_range * nuke_range) > closest_nuke_dist);
 			}
@@ -5440,7 +5462,7 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 				weapon_list.erase(closest_nuke_iter);
 
 				
-				++city_iter;
+				city_iter++;
 			}
 			else
 			{
@@ -5458,32 +5480,28 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX targetId) const
 {
 	Player * player_ptr;
-	std::pair<sint32, Unit> nuke_target;
+	sint32 nuke_count;
+	pair<sint32, Unit> nuke_target;
 	Unit city;
 
 	city_list.clear();
 
 	
-	for 
-    (
-        size_t foreignerIndex = 0; 
-        foreignerIndex < s_theDiplomats.size(); 
-        ++foreignerIndex
-    )
+	for (sint32 foreignerId = 0; foreignerId < s_theDiplomats.size(); foreignerId++)
 	{
-		player_ptr = g_player[foreignerIndex];
+		
+		player_ptr = g_player[foreignerId];
 		if (player_ptr == NULL)
 			continue;
 
-        PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
-
+		
 		if (foreignerId == m_playerId)
 			continue;
 
 		sint32 regard = GetPublicRegard(foreignerId);
 
 		
-		if (targetId != PLAYER_UNASSIGNED)
+		if (targetId != -1)
 		{
 			
 			if (foreignerId != targetId)
@@ -5495,7 +5513,7 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 			if (regard >= COLDWAR_REGARD)
 				continue;
 			
-			sint32 const    nuke_count = 
+			nuke_count = 
 				MapAnalysis::GetMapAnalysis().GetNuclearWeaponsCount(foreignerId);
 			
 			
@@ -5514,10 +5532,10 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 				nuke_target.first = city.CD()->GetValue();
 				
 				
-				nuke_target.first += (city->IsCapitol() ? static_cast<sint32>(nuke_target.first * 0.25) : 0);
+				nuke_target.first += (city->IsCapitol() ? nuke_target.first * 0.25 : 0);
 
 				
-				nuke_target.first += (regard <= HOTWAR_REGARD ? static_cast<sint32>(nuke_target.first * 0.75) : 0); 
+				nuke_target.first += (regard <= HOTWAR_REGARD ? nuke_target.first * 0.75 : 0); 
 
 				nuke_target.second = city.m_id;
 
@@ -5526,117 +5544,130 @@ void Diplomat::ComputeNukeTargets(NukeTargetList & city_list, const PLAYER_INDEX
 		}
 	}
 	
-	city_list.sort(std::greater<std::pair<sint32, Unit> >());
+	city_list.sort(greater<pair<sint32, Unit> >());
 }
 
 
 void Diplomat::DisbandNuclearWeapons(const double percent)
 {
-	Player *    player_ptr = g_player[m_playerId];
-	Assert(player_ptr && player_ptr->m_all_units);
+	Assert(g_player[m_playerId]);
+	Player *player_ptr = g_player[m_playerId];
+
 	
 	if (player_ptr == NULL)
 		return;
 	
-	sint32  total_weapons = 0;
-	Unit    unit;
-    sint32  i;
-
-	for (i = player_ptr->m_all_units->Num() - 1; i >= 0; --i) 
-    {
+	sint32 total_weapons = 0;
+	Unit unit;
+	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
+		
 		unit = player_ptr->m_all_units->Access(i);
-		if (unit.IsValid() && unit.GetDBRec()->HasNuclearAttack())
-        {
-			++total_weapons;
-        }
+		if (!g_theUnitPool->IsValid(unit.m_id))
+			continue;
+
+		if(unit.GetDBRec()->GetNuclearAttack())
+			total_weapons++;
 	}
 
-	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
+	sint32 goal_weapons = total_weapons * (1.0 - percent);
 
-	for (i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); --i)
-    {
+	
+	Assert(player_ptr->m_all_units);
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); i--) {
+		
 		unit = player_ptr->m_all_units->Access(i);
-		if (unit.IsValid() && unit.GetDBRec()->HasNuclearAttack())
+		if (!g_theUnitPool->IsValid(unit.m_id))
+			continue;
+
+		if(unit.GetDBRec()->GetNuclearAttack())
 		{
 			unit.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			--total_weapons;
+			total_weapons--;
 		}
 	}
-
 	MapAnalysis::GetMapAnalysis().SetNuclearWeaponsCount(m_playerId, total_weapons);
+
 }
 
 
 void Diplomat::DisbandBioWeapons(const double percent)
 {
-	Player *    player_ptr = g_player[m_playerId];
-    Assert(player_ptr && player_ptr->m_all_units);
+	Assert(g_player[m_playerId]);
+	Player *player_ptr = g_player[m_playerId];
+	
 	
 	if (player_ptr == NULL)
 		return;
 	
-	sint32  total_weapons = 0;
-	Unit    unit;
-    sint32  i;
-
-	for (i = player_ptr->m_all_units->Num() - 1; i >= 0; --i) 
-    {
+	sint32 total_weapons = 0;
+	Unit unit;
+	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
+		
 		unit = player_ptr->m_all_units->Access(i);
-		if (unit.IsValid() && unit.GetDBRec()->HasBioTerror())
-        {
-			++total_weapons;
-        }
+		if (!g_theUnitPool->IsValid(unit.m_id))
+			continue;
+
+		if(unit.GetDBRec()->GetBioTerror())
+			total_weapons++;
 	}
 
-	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
+	sint32 goal_weapons = total_weapons * (1.0 - percent);
 
-	for (i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); --i) 
-    {
+	
+	Assert(player_ptr->m_all_units);
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); i--) {
+		
 		unit = player_ptr->m_all_units->Access(i);
-		if (unit.IsValid() && unit.GetDBRec()->HasBioTerror())
+		if (!g_theUnitPool->IsValid(unit.m_id))
+			continue;
+
+		if(unit.GetDBRec()->GetBioTerror())
 		{
 			unit.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			--total_weapons;
+			total_weapons--;
 		}
 	}
-
 	MapAnalysis::GetMapAnalysis().SetBioWeaponsCount(m_playerId, total_weapons);
 }
 
 
 void Diplomat::DisbandNanoWeapons(const double percent)
 {
-	Player *    player_ptr = g_player[m_playerId];
-	Assert(player_ptr && player_ptr->m_all_units);
+	Assert(g_player[m_playerId]);
+	Player *player_ptr = g_player[m_playerId];
+	
 	
 	if (player_ptr == NULL)
 		return;
 	
-	sint32  total_weapons = 0;
-	Unit    unit;
-    sint32  i;
-
-	for (i = player_ptr->m_all_units->Num() - 1; i >= 0; --i) 
-    {
+	sint32 total_weapons = 0;
+	Unit unit;
+	for(sint32 i = player_ptr->m_all_units->Num() - 1; i >= 0; i--) {
+		
 		unit = player_ptr->m_all_units->Access(i);
-		if (unit.IsValid() && unit.GetDBRec()->HasCreateParks())
-        {
-			++total_weapons;
-        }
+		if (!g_theUnitPool->IsValid(unit.m_id))
+			continue;
+
+		if(unit.GetDBRec()->GetCreateParks())
+			total_weapons++;
 	}
 
-	sint32 goal_weapons = static_cast<sint32>(total_weapons * (1.0 - percent));
+	sint32 goal_weapons = total_weapons * (1.0 - percent);
 
-	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); --i) 
-    {
+	
+	Assert(player_ptr->m_all_units);
+	for(i = player_ptr->m_all_units->Num() - 1; i >= 0 && (total_weapons > goal_weapons); i--) {
+		
 		unit = player_ptr->m_all_units->Access(i);
-		if (unit.IsValid() && unit.GetDBRec()->HasCreateParks())
+		if (!g_theUnitPool->IsValid(unit.m_id))
+			continue;
+
+		if(unit.GetDBRec()->GetCreateParks())
 		{
 			unit.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			--total_weapons;
+			total_weapons--;
 		}
 	}
-
 	MapAnalysis::GetMapAnalysis().SetNanoWeaponsCount(m_playerId, total_weapons);
 }
 
@@ -5645,31 +5676,27 @@ void Diplomat::ExecutePersistantAgreements()
 {
 	AgreementMatrix & agreements = AgreementMatrix::s_agreements;
 	
-	for 
-    (
-        size_t foreignerIndex = 1; 
-        foreignerIndex < m_foreigners.size(); 
-        ++foreignerIndex
-    )
+	for (sint16 foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++)
 	{
-		if (g_player[foreignerIndex] == NULL)
-			continue;
-
-        PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
-
+		
 		if (foreignerId == m_playerId)
 			continue;
+
+		
+		if (g_player[foreignerId] == NULL)
+			continue;
+	
+			
 		
 		
-		if (    GetBorderIncursionBy(foreignerId)
-             &&	agreements.HasAgreement
-                    (m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS)
-           )
+		if (GetBorderIncursionBy(foreignerId) == true &&
+			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, 
+				PROPOSAL_REQUEST_WITHDRAW_TROOPS))
 		{
 			
 			
 			sint16 duration = 
-				agreements.GetAgreementDuration(m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
+				AgreementMatrix::s_agreements.GetAgreementDuration(m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 			
 			if (duration > 20)
 			{
@@ -5680,14 +5707,14 @@ void Diplomat::ExecutePersistantAgreements()
 
 		
 		const ai::Agreement	& stop_research = 
-			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_RESEARCH);
+			AgreementMatrix::s_agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_RESEARCH);
 			
 		
 		if (stop_research.start != -1 && stop_research.end == -1)
 		{
 			double science_tax;
-			g_player[foreignerIndex]->GetScienceTaxRate(science_tax);
-			if ( (g_player[foreignerIndex]->m_advances->GetResearching() == 
+			g_player[foreignerId]->GetScienceTaxRate(science_tax);
+			if ( (g_player[foreignerId]->m_advances->GetResearching() == 
 				  stop_research.proposal.first_arg.advanceType ) &&
 				 (science_tax > 0.0) )
 			{
@@ -5697,7 +5724,7 @@ void Diplomat::ExecutePersistantAgreements()
 
 		
 		const ai::Agreement	& reduce_pollution = 
-			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_REDUCE_POLLUTION);
+			AgreementMatrix::s_agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_REDUCE_POLLUTION);
 			
 		sint32 agreement_duration = 
 			NewTurnCount::GetCurrentRound() - reduce_pollution.start;
@@ -5706,9 +5733,9 @@ void Diplomat::ExecutePersistantAgreements()
 		if (reduce_pollution.start != -1 && reduce_pollution.end == -1 &&
 			agreement_duration > 25)
 		{
-			uint32 target_pollution = reduce_pollution.proposal.first_arg.pollution;
+			sint32 target_pollution = reduce_pollution.proposal.first_arg.pollution;
 			
-			if (g_player[foreignerIndex]->GetPollutionLevel() > target_pollution)
+			if (g_player[foreignerId]->GetPollutionLevel() > target_pollution)
 			{
 				LogViolationEvent(foreignerId, PROPOSAL_REQUEST_REDUCE_POLLUTION);
 			}
@@ -5716,10 +5743,10 @@ void Diplomat::ExecutePersistantAgreements()
 
 		
 		const ai::Agreement	& pollution_pact = 
-			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_POLLUTION_PACT);
+			AgreementMatrix::s_agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_POLLUTION_PACT);
 		
 		const ai::Agreement	& honor_pollution_pact = 
-			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT);
+			AgreementMatrix::s_agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT);
 
 		agreement_duration = 
 			NewTurnCount::GetCurrentRound() - honor_pollution_pact.start;
@@ -5731,9 +5758,9 @@ void Diplomat::ExecutePersistantAgreements()
 			
 			Assert(pollution_pact.start != -1 && pollution_pact.end == -1);
 
-			uint32 target_pollution = pollution_pact.proposal.first_arg.pollution;
+			sint32 target_pollution = pollution_pact.proposal.first_arg.pollution;
 			
-			if (g_player[foreignerIndex]->GetPollutionLevel() > target_pollution)
+			if (g_player[foreignerId]->GetPollutionLevel() > target_pollution)
 			{
 				LogViolationEvent(foreignerId, PROPOSAL_TREATY_POLLUTION_PACT);
 			}
@@ -5765,9 +5792,9 @@ void Diplomat::SendGreeting(const PLAYER_INDEX & foreignerId)
 		greeting = m_personality->GetWeakGreeting();
 	}
 
-	SlicObject *so = new SlicObject("DIPLOMACY_POPUP_GREETING");
+	SlicObject *so = new SlicObject((MBCHAR *)"DIPLOMACY_POPUP_GREETING");
 	so->AddRecipient(foreignerId);
-	so->AddCivilisation(m_playerId);
+	so->AddCivilisation(m_playerId) ;
 	MBCHAR buf[k_MAX_NAME_LEN];
 	stringutils_Interpret(g_theStringDB->GetNameStr(greeting), *so, buf);
 	so->AddAction(buf);
@@ -5777,18 +5804,17 @@ void Diplomat::SendGreeting(const PLAYER_INDEX & foreignerId)
 
 bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 {
+	Assert(foreignerId < m_desireWarWith.size());
 	Assert(foreignerId >= 0);
-	Assert(static_cast<size_t>(foreignerId) < m_desireWarWith.size());
-
-	if (foreignerId >= 0 && static_cast<size_t>(foreignerId) < m_desireWarWith.size())
+	if (foreignerId >= 0 && foreignerId < m_desireWarWith.size())
 		return m_desireWarWith[foreignerId];
-
 	return false;
 }
 
 
 bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 {
+	
 	if (!g_player[m_playerId]) 
 		return false;
 	sint32 const		turns_at_peace		= 
@@ -5879,8 +5905,8 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId)
 
 void Diplomat::ComputeAllDesireWarWith()
 {
-	PLAYER_INDEX const	foreignerCount	= m_desireWarWith.size();
-	for (PLAYER_INDEX foreignerId = 0; foreignerId < foreignerCount; ++foreignerId)
+	size_t const	foreignerCount	= m_desireWarWith.size();
+	for (size_t foreignerId = 0; foreignerId < foreignerCount; ++foreignerId)
 	{
 		m_desireWarWith[foreignerId] =
 			(foreignerId != m_playerId) && ComputeDesireWarWith(foreignerId);
@@ -5890,62 +5916,77 @@ void Diplomat::ComputeAllDesireWarWith()
 
 bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 {
-	Player *    foreigner_ptr = g_player[foreignerId];
-	if (foreigner_ptr == NULL)
+	
+	Player *foreigner_ptr = g_player[foreignerId];
+	if ( foreigner_ptr == NULL)
 		return false;
 
-	bool look_for_human = (foreigner_ptr->GetPlayerType() != PLAYER_TYPE_ROBOT);
+	
+	bool look_for_human = false;
+	if (foreigner_ptr->GetPlayerType() != PLAYER_TYPE_ROBOT)
+	{
+		look_for_human = true;
+	}
 
-	DIPLOMATIC_STRENGTH lowest_relative_strength    = DIPLOMATIC_STRENGTH_VERY_STRONG;
-	PLAYER_INDEX        weakest_enemy               = PLAYER_UNASSIGNED; 
+	DIPLOMATIC_STRENGTH relative_strength;
+	
+	DIPLOMATIC_STRENGTH lowest_relative_strength = DIPLOMATIC_STRENGTH_VERY_STRONG;
+	PLAYER_INDEX weakest_enemy = -1; 
 
-	for (size_t otherIndex = 1; otherIndex < m_foreigners.size(); ++otherIndex) 
-    {
-		Player *    other_ptr = g_player[otherIndex];
-        if (other_ptr == NULL)
+	for (PLAYER_INDEX otherId = 1; otherId < m_foreigners.size(); otherId++) {
+
+		foreigner_ptr = g_player[otherId];
+
+		
+		if (foreigner_ptr == NULL)
 			continue;
-        
-        PLAYER_INDEX const  otherId = static_cast<PLAYER_INDEX>(otherIndex);
-		if ((otherId == m_playerId) || (otherId == foreignerId))
+
+		
+		if (foreignerId == m_playerId)
 			continue;
 
+		
 		if (!AgreementMatrix::s_agreements.
 			 HasAgreement(m_playerId, otherId, PROPOSAL_TREATY_DECLARE_WAR))
 			continue;
 
 		if (look_for_human)
 		{
+			
 			if (foreigner_ptr->GetPlayerType() == PLAYER_TYPE_ROBOT) 
 				continue;
 		}
+		
 		else
 		{
 			if (foreigner_ptr->GetPlayerType() != PLAYER_TYPE_ROBOT) 
 			{
-                /// @todo Check if this is deliberate: AIs after human are not considered?
+				
 				return false;
 			}
 		}
 			
-		DIPLOMATIC_STRENGTH const   relative_strength = 
-            other_ptr->GetRelativeStrength(m_playerId);
-
+		relative_strength = foreigner_ptr->GetRelativeStrength(m_playerId);
 		if (relative_strength < lowest_relative_strength)
 		{
-			lowest_relative_strength    = relative_strength;
-			weakest_enemy               = otherId;
+			lowest_relative_strength = relative_strength;
+			weakest_enemy = otherId;
 		}
 	}
 
-	return     (weakest_enemy == PLAYER_UNASSIGNED) // only enemy
-            || (weakest_enemy == foreignerId);      // weakest enemy
+	
+	if (weakest_enemy == -1)
+		return true;
+
+	
+	return (weakest_enemy == foreignerId);
 }
 
 
 bool Diplomat::CanFormAlliance(const PLAYER_INDEX foreignerId)
 {
-//	Diplomat & foreign_diplomat =
-//		Diplomat::GetDiplomat(foreignerId);
+	Diplomat & foreign_diplomat =
+		Diplomat::GetDiplomat(foreignerId);
 
 	Player *player_ptr = g_player[m_playerId];
 	Player *foreigner_ptr = g_player[foreignerId];
@@ -5953,14 +5994,8 @@ bool Diplomat::CanFormAlliance(const PLAYER_INDEX foreignerId)
 	Assert(foreigner_ptr);
 
 	
-	for 
-    (
-        size_t thirdPartyIndex = 1; 
-        thirdPartyIndex < m_foreigners.size(); 
-        ++thirdPartyIndex
-    ) 
-    {
-		PLAYER_INDEX thirdpartyId   = static_cast<PLAYER_INDEX>(thirdPartyIndex);
+	for (sint32 thirdpartyId = 1; thirdpartyId < m_foreigners.size(); thirdpartyId++) {
+		
 		if (thirdpartyId == m_playerId ||
 			thirdpartyId == foreignerId)
 			continue;
@@ -6008,8 +6043,8 @@ bool Diplomat::CanExtortCityFrom(const PLAYER_INDEX foreginerId, const sint32 ma
 	for (sint32 i = num_cities-1; i >= 0; i--)
 		{
 			city = receiver_ptr->m_all_cities->Access(i);
-			Assert(city.IsValid());
-			Assert(city->GetCityData() != NULL);
+			Assert( g_theUnitPool->IsValid(city) );
+			Assert( city->GetCityData() != NULL );
 			
 			
 			if (!sender_ptr->IsExplored(city->GetPos()))
@@ -6030,10 +6065,9 @@ bool Diplomat::CanExtortCityFrom(const PLAYER_INDEX foreginerId, const sint32 ma
 				continue;
 
 			
-            break;  /// @todo Check: this will return false always.
-#if 0   // unreachable			
+			break;
+			
 			return true;
-#endif
 		}				
 
 	return false;
@@ -6042,12 +6076,12 @@ bool Diplomat::CanExtortCityFrom(const PLAYER_INDEX foreginerId, const sint32 ma
 
 void Diplomat::ThrowParty(const PLAYER_INDEX foreignerId)
 {
+	
+	
 	if (ReadyToParty())
 	{
 		sint32 regard_bonus;
 		StringId strId;
-
-//Add random regard bonus generator for throw party
 		GetCurrentDiplomacy(foreignerId).GetHoldReceptionRegardBonus(regard_bonus);
 		
 		g_theStringDB->GetStringID("REGARD_EVENT_HOLD_RECEPTION",strId);
@@ -6056,14 +6090,14 @@ void Diplomat::ThrowParty(const PLAYER_INDEX foreignerId)
 			REGARD_EVENT_DIPLOMACY,
 			strId,
 			10);
-		m_lastParty = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+		m_lastParty = NewTurnCount::GetCurrentRound();
 	}
 }
 
 
 bool Diplomat::ReadyToParty() const
 {
-	if (m_lastParty < 0)
+	if (m_lastParty <0)
 		return true;
 	if (m_lastParty + 10 < NewTurnCount::GetCurrentRound())
 		return true;
@@ -6164,7 +6198,8 @@ void Diplomat::HasLaunchedNanoAttack(const bool val)
 
 void Diplomat::ClearInitiatives()
 {
-	for (sint32 p = 0; p < k_MAX_PLAYERS; p++) {
+	sint32 p;
+	for(p = 0; p < k_MAX_PLAYERS; p++) {
 		if(g_player[p]) {
 			SetReceiverHasInitiative(p, false);
 			Diplomat::GetDiplomat(p).SetReceiverHasInitiative(m_playerId, false);
@@ -6177,18 +6212,15 @@ void Diplomat::ClearInitiatives()
 
 bool Diplomat::FirstTurnOfWar() const
 {
+	PLAYER_INDEX foreignerId;
 	sint32 duration;
 
+	
 	if (g_player[m_playerId] == NULL)
 		return false;
 
 	bool at_war = false;
-	for 
-    (
-        PLAYER_INDEX foreignerId = 1; 
-        static_cast<size_t>(foreignerId) < m_foreigners.size(); 
-        ++foreignerId
-    )
+	for ( foreignerId = 1;  foreignerId< m_foreigners.size(); foreignerId++ ) 
 	{
 		
 		if (foreignerId == m_playerId)

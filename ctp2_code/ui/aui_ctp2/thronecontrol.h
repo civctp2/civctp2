@@ -17,6 +17,8 @@
 //
 // Compiler flags
 // 
+// _MSC_VER		
+// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -88,13 +90,24 @@ public:
 		void *cookie = NULL );
 	virtual ~ThroneControl();
 
+protected:
+	ThroneControl() : aui_Control() {}
+	void InitCommonLdl( MBCHAR *ldlBlock );
+	void InitCommon( void  );
+
+public:
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 
+#if defined(_MSC_VER)
+	virtual MouseEventCallback MouseLDropInside;
+	virtual MouseEventCallback MouseMoveInside;
+#else
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+#endif
 
 	AUI_ERRCODE Idle( void );
 
@@ -129,10 +142,6 @@ public:
 
 	void		SetZoomedMode( BOOL on );
 
-protected:
-	ThroneControl() : aui_Control() {}
-	void InitCommonLdl( MBCHAR *ldlBlock );
-	void InitCommon( void  );
 
 private:
 	aui_Surface	*m_throneSurface;

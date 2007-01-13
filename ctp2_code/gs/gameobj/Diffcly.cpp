@@ -1,86 +1,82 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ source
-// Description  : Difficulty settings class and diffutils.
-// Id           : $Id:$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// - Moved some functionality from DiffDB to create the diffutils. (April 29th 2006 Martin Gühmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 #include "c3.h"
 
 #include "Diffcly.h"
-#include "DifficultyRecord.h"
+#include "DiffDB.h"
 #include "civarchive.h"
-#include "mapanalysis.h"
-#include "TurnYearStatus.h"
-#include "StrDB.h"
 
+
+extern DifficultyDB *g_theDifficultyDB; 
+	
 Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
-{
-	m_pad = 0; 
+
+{	
+    m_pad = 0; 
 	m_owner = owner;
 
-	m_max_martial_law_units=0;
-	m_martial_law_effect=0;
+    m_max_martial_law_units=0;
+    m_martial_law_effect=0; 
 
-	m_content_in_the_field=0;
-	m_in_the_field_effect=0;
+    m_content_in_the_field=0; 
+    m_in_the_field_effect=0; 
 
-	m_base_contentment =           g_theDifficultyDB->Get(diff_level)->GetBaseContentment();
+    m_base_contentment = g_theDifficultyDB->GetBaseContentment(diff_level); 
 
-	m_big_city_scale =             g_theDifficultyDB->Get(diff_level)->GetBigCityScale();
-	m_big_city_offset =            g_theDifficultyDB->Get(diff_level)->GetBigCityOffset();
+    m_big_city_scale = g_theDifficultyDB->GetBigCityScale (diff_level); 
+    m_big_city_offset = g_theDifficultyDB->GetBigCityOffset(diff_level);
+  
+	m_science_handicap = g_theDifficultyDB->GetScienceHandicap(diff_level);
+	m_pollution_multiplier = g_theDifficultyDB->GetPollutionMultiplier(diff_level) ;
+	m_riot_chance = g_theDifficultyDB->GetRiotChance(diff_level);
+	m_starvation_effect = g_theDifficultyDB->GetStarvationEffect(diff_level);
+	m_starting_gold = g_theDifficultyDB->GetStartingGold(diff_level);
 
-	m_science_handicap =           g_theDifficultyDB->Get(diff_level)->GetScienceHandicap();
-	m_pollution_multiplier =       g_theDifficultyDB->Get(diff_level)->GetPollutionMultiplier();
-	m_riot_chance =                g_theDifficultyDB->Get(diff_level)->GetRiotChance();
-	m_starvation_effect =          g_theDifficultyDB->Get(diff_level)->GetStarvationEffect();
-	m_starting_gold =              g_theDifficultyDB->Get(diff_level)->GetStartingGold();
+	m_feats_factor = g_theDifficultyDB->GetFeatsFactor(diff_level);
+	m_advances_factor = g_theDifficultyDB->GetAdvancesFactor(diff_level);
+	m_wonders_factor = g_theDifficultyDB->GetWondersFactor(diff_level);
+	m_cities0to30_factor = g_theDifficultyDB->GetCities0To30Factor(diff_level);
+	m_cities30to100_factor = g_theDifficultyDB->GetCities30To100Factor(diff_level);
+	m_cities100to500_factor = g_theDifficultyDB->GetCities100To500Factor(diff_level);
+	m_cities500plus_factor = g_theDifficultyDB->GetCities500PlusFactor(diff_level);
+	m_cities_recaptured_factor = g_theDifficultyDB->GetCitiesRecapturedFactor(diff_level);
+	m_population_factor = g_theDifficultyDB->GetPopulationFactor(diff_level);
+	m_rank_factor = g_theDifficultyDB->GetRankFactor(diff_level);
+	m_allies_factor = g_theDifficultyDB->GetAlliesFactor(diff_level);
+	m_opponents_conquered_factor = g_theDifficultyDB->GetOpponentsConqueredFactor(diff_level);
+	m_wonder_victory_bonus = g_theDifficultyDB->GetWonderVictoryBonus(diff_level);
+	m_allied_victory_bonus = g_theDifficultyDB->GetAlliedVictoryBonus(diff_level);
+	m_solo_victory_bonus = g_theDifficultyDB->GetSoloVictoryBonus(diff_level);
 
-	m_feats_factor =               g_theDifficultyDB->Get(diff_level)->GetFeatsFactor();
-	m_advances_factor =            g_theDifficultyDB->Get(diff_level)->GetAdvancesFactor();
-	m_wonders_factor =             g_theDifficultyDB->Get(diff_level)->GetWondersFactor();
-	m_cities0to30_factor =         g_theDifficultyDB->Get(diff_level)->GetCities0To3Factor();
-	m_cities30to100_factor =       g_theDifficultyDB->Get(diff_level)->GetCities3To10Factor();
-	m_cities100to500_factor =      g_theDifficultyDB->Get(diff_level)->GetCities10To50Factor();
-	m_cities500plus_factor =       g_theDifficultyDB->Get(diff_level)->GetCities50PlusFactor();
-	m_cities_recaptured_factor =   g_theDifficultyDB->Get(diff_level)->GetCitiesRecapturedFactor();
-	m_population_factor =          g_theDifficultyDB->Get(diff_level)->GetPopulationFactor();
-	m_rank_factor =                g_theDifficultyDB->Get(diff_level)->GetRankFactor();
-	m_allies_factor =              g_theDifficultyDB->Get(diff_level)->GetAlliesFactor();
-	m_opponents_conquered_factor = g_theDifficultyDB->Get(diff_level)->GetOpponentsConqueredFactor();
-	m_wonder_victory_bonus =       g_theDifficultyDB->Get(diff_level)->GetWonderVictoryBonus();
-	m_allied_victory_bonus =       g_theDifficultyDB->Get(diff_level)->GetAlliedVictoryBonus();
-	m_solo_victory_bonus =         g_theDifficultyDB->Get(diff_level)->GetSoloVictoryBonus();
 
-	m_vision_bonus =               g_theDifficultyDB->Get(diff_level)->GetVisionBonus();
-	m_base_score =                 g_theDifficultyDB->Get(diff_level)->GetBaseScore();
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	m_vision_bonus = g_theDifficultyDB->GetVisionBonus(diff_level);
+	m_base_score = g_theDifficultyDB->GetBaseScore(diff_level);
 
 	if(isHuman) {
-		m_distance_from_capitol_adjustment = g_theDifficultyDB->Get(diff_level)->GetDistanceFromCapitolAdjustment();
+		m_distance_from_capitol_adjustment = g_theDifficultyDB->Get(diff_level)->m_distance_from_capitol_adjustment;
 	} else {
-		m_distance_from_capitol_adjustment = g_theDifficultyDB->Get(diff_level)->GetAIDistanceFromCapitolAdjustment();
+		m_distance_from_capitol_adjustment = g_theDifficultyDB->Get(diff_level)->m_ai_distance_from_capitol_adjustment;
 	}
 }
 
@@ -96,178 +92,28 @@ Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 
 
 void Difficulty::Serialize(CivArchive &archive)
-{
+	{
 	if (archive.IsStoring())
 		archive.Store((uint8 *)this, sizeof(Difficulty)) ;
 	else
 		archive.Load((uint8 *)this, sizeof(Difficulty)) ;
 
-}
-
-double diffutil_GetAiAdjustment(const sint32 diff,
-                                const sint32 playerId,
-                                const double & max_behind_value,
-                                const double & min_behind_value,
-                                const double &  max_ahead_value,
-                                const double &  min_ahead_value
-                                )
-{
-	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
-	double const	rank_percent		= 
-		MapAnalysis::GetMapAnalysis().GetScienceHandicapRatio(playerId);
-	float percent_spread;
-	float value_spread;
-	float rank_spread_percent;
-	float value;
-
-	if (rank_percent < rec->GetAIMinBehind())
-	{
-		if (rank_percent < rec->GetAIMaxBehind())
-			value = max_behind_value;
-		else
-		{
-			
-			percent_spread = rec->GetAIMaxBehind() - rec->GetAIMinBehind();
-			value_spread = max_behind_value - min_behind_value;
-			rank_spread_percent = (rec->GetAIMinBehind() - rank_percent) / fabs(percent_spread);
-			value = min_behind_value + (value_spread * rank_spread_percent);
-		}
-	}
-	else if (rank_percent > rec->GetAIMaxAhead())
-		value = max_ahead_value;
-	else if (rank_percent < rec->GetAIMinAhead())
-		value = min_ahead_value;
-	else
-	{
-		
-		percent_spread = rec->GetAIMaxAhead() - rec->GetAIMinAhead();
-		value_spread =  max_ahead_value - min_ahead_value;
-		rank_spread_percent = (rec->GetAIMinAhead() - rank_percent) / fabs(percent_spread);
-		value = max_ahead_value + (value_spread * rank_spread_percent);
 	}
 
-	return value;
-}
-
-double diffutil_GetAiTechnologyCost(const sint32 diff, const sint32 playerId, const sint32 age)
-{
-	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
-
-	return diffutil_GetAiAdjustment(diff,
-	                                playerId,
-	                                rec->GetAIMaxBehindTechnologyCost(age),
-	                                rec->GetAIMinBehindTechnologyCost(age),
-	                                rec->GetAIMaxAheadTechnologyCost(age),
-	                                rec->GetAIMinAheadTechnologyCost(age));
-
-}
-
-double diffutil_GetAiProductionCostAdjustment(const sint32 diff, const sint32 playerId, const sint32 age)
-{
-	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
-
-	return diffutil_GetAiAdjustment(diff,
-	                                playerId,
-	                                rec->GetAIMaxBehindProductionCostAdjustment(age),
-	                                rec->GetAIMinBehindProductionCostAdjustment(age),
-	                                rec->GetAIMaxAheadProductionCostAdjustment(age),
-	                                rec->GetAIMinAheadProductionCostAdjustment(age));
-
-}
-
-double diffutil_GetAiGoldAdjustment(const sint32 diff, const sint32 playerId, const sint32 age)
-{
-	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
-
-	return diffutil_GetAiAdjustment(diff,
-	                                playerId,
-	                                rec->GetAIMaxBehindGoldCostAdjustment(age),
-	                                rec->GetAIMinBehindGoldCostAdjustment(age),
-	                                rec->GetAIMaxAheadGoldCostAdjustment(age),
-	                                rec->GetAIMinAheadGoldCostAdjustment(age));
-
-}
-
-sint32 diffutil_GetYearFromTurn(const sint32 diff, const sint32 turn)
-{
-	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
 
 
-	sint32 period = -1;
 
-	const DifficultyRecord::TimeScale *tsrec = rec->GetTimeScale();
-	sint32 i;
-	for(i = tsrec->GetNumPeriod() - 1; i >= 0; i--){
-		if(turn >= tsrec->GetPeriod(i)->GetStartTurn()){
-			period = i;
-			break;
-		}
-	}
 
-	Assert(period >= 0);
-	if (period < 0) return 0;
 
-	sint32			curYear = tsrec->GetStartYear();
-	sint32			turnsLeft = turn;
 
-	for(i = 0; i <= period; i++){
-		if(i < period){
-			sint32 totalTurns = tsrec->GetPeriod(i+1)->GetStartTurn() -
-								tsrec->GetPeriod(i)->GetStartTurn();
-			curYear += (totalTurns * tsrec->GetPeriod(i)->GetYearsPerTurn());
-			
-			turnsLeft -= totalTurns;
-		} else {
-			
-			curYear += (turnsLeft * tsrec->GetPeriod(i)->GetYearsPerTurn());
-		}
-	}
 
-	return curYear;
-}
 
-sint32 diffutil_GetYearIncrementFromTurn(sint32 diff, sint32 turn)
-{
-	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
 
-	const DifficultyRecord::TimeScale *tsrec = rec->GetTimeScale();
-	sint32 i;
-	for(i = tsrec->GetNumPeriod() - 1; i >= 0; i--){
-		if(turn >= tsrec->GetPeriod(i)->GetStartTurn()){
-			return tsrec->GetPeriod(i)->GetYearsPerTurn();
-		}
-	}
 
-	Assert(FALSE);
-	return 0;
-}
 
-const char *diffutil_GetYearStringFromTurn(sint32 diff, sint32 turn)
-{
-
-	static char buf[k_MAX_NAME_LEN];
-	if(g_useCustomYear && g_pTurnLengthOverride) {
-		if(turn >= g_turnLengthOverrideSize) {
-			turn = g_turnLengthOverrideSize - 1;
-		}
-		strcpy(buf, g_pTurnLengthOverride[turn].text);
-	} else {
-		sint32 year = diffutil_GetYearFromTurn(diff, turn);
-		if(year == 0) {
-			
-			year = 1;
-		}
-
-		sprintf(buf, "%d %s", abs(year), ((year < 0) ?
-		                                         g_theStringDB->GetNameStr("str_tbl_ldl_BC") :
-		                                         g_theStringDB->GetNameStr("str_tbl_ldl_AD")));
-	}
-
-	return buf;
-}
 
 
 uint32 Diffcly_Difficulty_GetVersion(void)
-{
+	{
 	return (k_DIFFICULTY_VERSION_MAJOR<<16 | k_DIFFICULTY_VERSION_MINOR) ;
-}
+	}

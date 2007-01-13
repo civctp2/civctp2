@@ -1,11 +1,10 @@
-#-----------------------------------------------------------------------------
+	#-----------------------------------------------------------------------------
 #
 #  Project      : Call To Power 2
 #  File type    : dbgen input
 #  Description  : City style descriptor
-#  Id           : $Id:$
 # 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # 
 #  Disclaimer
 # 
@@ -21,7 +20,6 @@
 #  - Added sprites for walls and forcefield per age (Martin Gühmann).
 #  - Added city icon file (Martin Gühmann).
 #  - Restored backwards compatibility (made city icon optional).
-#  - Added HappyInc (Oct. 7th 2005 Martin Gühmann)
 # 
 #-----------------------------------------------------------------------------
 
@@ -31,33 +29,19 @@ AgeCityStyle {
 		Int MinSize
 		Int MaxSize
 		Int Sprite
-		Int Walls       = 38    // Sprite (index) for walls
-		Int ForceField  = 154   // Sprite (index) for a forcefield
+#not ACTIVISION_ORIGINAL
+		Int Walls		= 38	// sprite (index) for walls
+		Int ForceField	= 154	// sprite (index) for a forcefield
+#end
 	}
 
 	Struct SizeSprite[] Sprites
-	Int HappyInc        = 0
-    Float ProductionPercent = 0.0
-    Float FoodPercent       = 0.0
-    Float CommercePercent   = 0.0
-    Float SciencePercent    = 0.0
-    Int BonusGold           = 0
-    Int BonusFood           = 0
-    Int BonusProduction     = 0
-    Int BonusScience        = 0
 }
 
 CityStyle {
 	Record AgeCityStyle[] AgeStyle
 
-	Bit(File) CPIcon            // City icon file
-	Int HappyInc        = 0     // Base city happiness increasement
-    Float ProductionPercent = 0.0
-    Float FoodPercent       = 0.0
-    Float CommercePercent   = 0.0
-    Float SciencePercent    = 0.0
-    Int BonusGold           = 0
-    Int BonusFood           = 0
-    Int BonusProduction     = 0
-    Int BonusScience        = 0
+#not ACTIVISION_ORIGINAL
+	Bit (File) CPIcon			// city icon file
+#end
 }

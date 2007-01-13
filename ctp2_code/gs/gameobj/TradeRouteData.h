@@ -1,40 +1,8 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Trade Route Data
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// - None
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added SetSourceResource method to correct the trade route index if 
-//   the size of the Resource database was increased. - June 4th 2005 Martin Gühmann
-//
-//----------------------------------------------------------------------------
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef _TRADEROUTEDATA_H_
 #define _TRADEROUTEDATA_H_
-
-class TradeRouteData;
 
 #include "GameObj.h"
 #include "Unit.h"
@@ -48,6 +16,14 @@ class TradeRouteData;
 #define k_TRADEROUTE_NO_PATH		0
 #define k_TRADEROUTE_ORIGINAL_PATH	1
 #define k_TRADEROUTE_SELECTED_PATH	2
+
+
+enum ROUTE_TYPE {
+	ROUTE_TYPE_RESOURCE,
+	ROUTE_TYPE_FOOD,
+	ROUTE_TYPE_GOLD,
+	ROUTE_TYPE_SLAVE, 
+};
 
 class Path;
 
@@ -150,7 +126,6 @@ public:
 	const DynamicArray<MapPoint>* GetSelectedPath() const { return &m_selectedPath; }
 
 	void GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const;
-	void SetSourceResource(sint32 resource){ m_sourceResource = resource; }
 	void RemoveFromCells();
 
 	BOOL PassesThrough(sint32 player) const;
@@ -161,6 +136,7 @@ public:
 	
 	void ClearPath();
 	void AddWayPoint(MapPoint pos);
+	BOOL GeneratePath(const PLAYER_INDEX owner);
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 					DynamicArray<MapPoint> &fullpath,
 					double &cost);
@@ -200,9 +176,9 @@ public:
 	void SetPiratingArmy(Army &a);
 	Army GetPiratingArmy();
 	bool IsBeingPirated();
-
-private:
-	bool GeneratePath();
 };
 
+#else
+class TradeRouteData;
+enum ROUTE_TYPE;
 #endif

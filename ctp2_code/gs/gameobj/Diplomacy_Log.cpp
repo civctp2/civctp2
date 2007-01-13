@@ -5,7 +5,7 @@
 
 #include "MapPoint.h"
 #include "ArmyData.h"
-#include "Order.h"
+#include "order.h"
 
 #include "SelItem.h"
 extern SelectedItem *g_selected_item; 
@@ -20,7 +20,7 @@ extern TurnCount *g_turn;
 extern Player **g_player; 
 
 #include "AgreementTypes.h"
-#include "DiplomaticTypes.h"
+#include "diplomatictypes.h"
 
 Diplomacy_Log::Diplomacy_Log()
 {

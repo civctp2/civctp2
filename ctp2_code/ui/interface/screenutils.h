@@ -1,39 +1,7 @@
-//----------------------------------------------------------------------------
-//
-// Project      : Call To Power 2
-// File type    : C++ header
-// Description  : Screen utilities
-// Id           : $Id$
-//
-//----------------------------------------------------------------------------
-//
-// Disclaimer
-//
-// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-//
-// This material has been developed at apolyton.net by the Apolyton CtP2 
-// Source Code Project. Contact the authors at ctp2source@apolyton.net.
-//
-//----------------------------------------------------------------------------
-//
-// Compiler flags
-//
-// _DEBUG
-// - Generate debug version when set.
-//
-//----------------------------------------------------------------------------
-//
-// Modifications from the original Activision code:
-//
-// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the 
-//   information window can stay open. (Aug. 7th 2005 Martin Gühmann)
-//
-//----------------------------------------------------------------------------
 
 
-#ifdef HAVE_PRAGMA_ONCE
+
 #pragma once
-#endif
 #ifndef __SCREENUTILS_H__
 #define __SCREENUTILS_H__
 
@@ -95,14 +63,16 @@ sint32 close_OptionsScreen( void );
 sint32 open_KeyMappingScreen( void );
 sint32 close_KeyMappingScreen( void );
 
+
+
 sint32 open_EndGame( void );
 sint32 close_EndGame( void );
+
 
 sint32 open_TutorialWin( void );
 sint32 close_TutorialWin( void );
 
 sint32 close_AllScreens( void );
-sint32 close_AllScreensAndUpdateInfoScreen( void );
 
 sint32 open_ScenarioEditor(void);
 sint32 close_ScenarioEditor(void);

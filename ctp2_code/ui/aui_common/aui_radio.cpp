@@ -24,14 +24,14 @@ aui_Radio::aui_Radio(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	aui_Switch(
 		retval,
 		id,
 		ldlBlock,
 		ActionFunc,
-		cookie )
+		cookie ),
+	aui_ImageBase( ldlBlock ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL )
 {
 }
 
@@ -49,8 +49,6 @@ aui_Radio::aui_Radio(
 	sint32 state,
 	sint32 numStates )
 	:
-	aui_ImageBase( numStates ),
-	aui_TextBase( NULL ),
 	aui_Switch(
 		retval,
 		id,
@@ -61,7 +59,9 @@ aui_Radio::aui_Radio(
 		ActionFunc,
 		cookie,
 		state,
-		numStates )
+		numStates ),
+	aui_ImageBase( numStates ),
+	aui_TextBase( NULL )
 {
 }
 
