@@ -112,10 +112,11 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	MCI_STATUS_PARMS msp;
 	MCI_SET_PARMS mp;
 	long totalLen_ms = 0;
+#else
+        uint64 totalLen_ms = 0;
 #endif
 	DWORD i;
 	BOOL bAllTracksOK = TRUE;
-	uint64 totalLen_ms = 0;
 	int iRet;
 
 #if defined(WIN32) && !defined(USE_SDL)

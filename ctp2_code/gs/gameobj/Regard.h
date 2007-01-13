@@ -1,3 +1,4 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __REGARD_H__

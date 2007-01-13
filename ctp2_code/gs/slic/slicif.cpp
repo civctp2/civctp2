@@ -17,6 +17,8 @@
 //
 // Compiler flags
 // 
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -102,7 +104,7 @@ static int s_parenLevel = 0;
 
 static GAME_EVENT s_currentEvent;
 static sint32 s_currentEventArgument[k_MAX_PAREN_LEVEL];
-
+7
 static bool s_argValuePushed = false;
 static SlicSymbolData *s_argSymbol;
 static int s_argMemberIndex;
@@ -161,7 +163,6 @@ void slicif_cleanup()
 	s_code				= NULL;
 	s_code_ptr			= NULL;
 	s_allocated_code	= 0;
-
 }
 
 void slicif_start()
@@ -2026,18 +2027,16 @@ void slicif_check_argument()
 	}
 }
 
-			
+
 void slicif_check_num_args()
 {
 	char errbuf[1024];
 
-	
-	
 	if((s_currentEvent < GEV_MAX) && s_parenLevel == 1) {
 		if((s_currentEventArgument[s_parenLevel]) != g_gevManager->GetNumArgs(s_currentEvent)) {
 			sprintf(errbuf, "Wrong number of arguments for event %s, expected %d",
-					g_gevManager->GetEventName(s_currentEvent),
-					g_gevManager->GetNumArgs(s_currentEvent));
+                               g_gevManager->GetEventName(s_currentEvent),
+                               g_gevManager->GetNumArgs(s_currentEvent));
 			yyerror(errbuf);
 			return;
 		}
@@ -2164,7 +2163,6 @@ int slicif_find_db_value(void *dbptr, const char *recname, const char *valname)
 #endif
 
 	return conduit->GetValue(index, valname);
-				
 }
 
 //----------------------------------------------------------------------------
@@ -2245,5 +2243,4 @@ int slicif_is_name(void *dbptr, const char *name)
 		return 0;
 
 	return conduit->GetIndex(name);
-
 }

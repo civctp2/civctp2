@@ -9,10 +9,12 @@ AC_DEFUN([AC_OS_DEFINES],[
       *-cygwin*)
          AC_DEFINE(WIN32,1,[Define to 1 if you are compiling on Windows])
          AC_DEFINE(_WINDOWS,1,[Define to 1 if you are compiling on Windows])
+	 CTP2_NOWIN32_INC=""
          ac_OpSystem="WIN32"
          ;;
       *-linux*)
          AC_DEFINE(LINUX,1,[Define to 1 if you are compiling on Linux])
+	 CTP2_NOWIN32_INC='-I$(ctp2_code)/os/nowin32'
          ac_OpSystem="LINUX"
    esac
 

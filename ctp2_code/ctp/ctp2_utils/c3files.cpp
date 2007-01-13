@@ -560,10 +560,10 @@ MBCHAR *c3files_GetVolumeName(int cdIndex)
     uint32 SerialNumber;
     uint32 MaxComponentLen;
     uint32 FSFlags;
-		MBCHAR name = (MBCHAR) cdIndex+'A';
+    MBCHAR name = (MBCHAR) cdIndex+'A';
     
     strcpy(drivepath, " :\\");
-    drivepath[0] = cdIndex + 'A';
+    drivepath[0] = name;
     if (GetVolumeInformation(drivepath, VolumeName, 32, &SerialNumber,
                              &MaxComponentLen, &FSFlags, FSName, 32)) {
 	    return(VolumeName);

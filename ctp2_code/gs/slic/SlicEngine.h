@@ -59,7 +59,6 @@ class SlicStructDescription;
 class SlicNamedSymbol;
 class SlicParameterSymbol;
 class SlicBuiltinNamedSymbol;
-enum SLIC_BUILTIN;
 class SlicStack;
 class SlicModFunc;
 class SlicUITrigger;
@@ -80,6 +79,7 @@ typedef sint32 PLAYER_INDEX;
 
 #define k_MAX_TRIGGER_KEYS 10
 
+#include "SlicBuiltinEnum.h"
 #include "SlicTriggerLists.h"
 #include "message.h"
 #include "slicif_sym.h"

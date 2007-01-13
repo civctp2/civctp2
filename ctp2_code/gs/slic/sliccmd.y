@@ -38,7 +38,9 @@
 #include <math.h>
 
 /* Avoid silly warnings */
+#ifdef _MSC_VER
 #pragma warning( disable : 4013 )
+#endif
 #define lint
 
 void yyerror(char* err);

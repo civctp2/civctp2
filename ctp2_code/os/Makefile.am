@@ -1,0 +1,2 @@
+SUBDIRS=\
+	nowin32
