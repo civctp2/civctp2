@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// -None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -102,10 +104,10 @@ static int copy_file(char *srcFName, char *dstFName)
 	fclose(outFile);
 	fclose(inFile);
 
-	if (0 == read)
+	if (static_cast<size_t>(-1) == read)
 		return -1;
 
-	if (0 == wrote)
+	if (static_cast<size_t>(-1) == wrote)
 		return -1;
 
 	return 0;

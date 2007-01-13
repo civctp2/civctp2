@@ -5949,7 +5949,7 @@ void TiledMap::HandleCheat(MapPoint &pos)
 	}
 
 	if(needPostProcess) {
-		RadiusIterator it(pos, 1, 2);
+		RadiusIterator it(pos, 1);
 		for(it.Start(); !it.End(); it.Next()) {
 			PostProcessTile(it.Pos(), GetTileInfo(it.Pos()));
 			RedrawTile(&it.Pos());

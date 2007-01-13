@@ -27,6 +27,7 @@
 //   sint32, by Martin Gühmann.
 // - Made GetCivilisation method const - May 7th 2005 Martin Gühmann
 // - Import structure improved, merged with linux version.
+// - Made player.h to compile again.
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -108,12 +109,15 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 #include "Advances.h"           // Advances
 #include "AgreementTypes.h"     // AGREEMENT_TYPE
 #include "AICause.h"            // CAUSE_..., ERR_BUILD_INST
-#include "directions.h"		    // WORLD_DIRECTION
+#include "directions.h"         // WORLD_DIRECTION
 #include "GameObj_types.h"      // CIV_INDEX, GENDER
 #include "GameOver.h"           // GAME_OVER
 #include "MapPoint.h"           // MapPoint
 #include "PollutionConst.h"     // k_MAX_EVENT_POLLUTION_TURNS, etc.
 #include "TradeRoute.h"         // TradeRoute
+#include "Readiness.h"          // READINESS_LEVEL
+#include "Strengths.h"          // STRENGTH_CAT
+#include "UnitData.h"           // UNIT_COMMAND
 
 template <class T> class DynamicArray;
 template <class T> class Database;

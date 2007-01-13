@@ -1,3 +1,29 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Slic eyepoint message
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - AOM facilitation: set player[0] to the recipient.
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -153,10 +179,12 @@ Message SlicEyePoint::GetMessage() const
 
 void SlicEyePoint::Callback()
 {
-	SlicObject *obj = NULL;
-	if(m_segment) {
+	SlicObject * obj = NULL;
+	if (m_segment) 
+    {
 		obj = new SlicObject(m_segment);
 		obj->AddRecipient(m_recipient);
+        obj->AddPlayer(m_recipient);
 	}
 
 	switch(m_type) {

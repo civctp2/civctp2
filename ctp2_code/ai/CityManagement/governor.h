@@ -38,6 +38,8 @@
 // - Added Cleanup to reduce memory leak reports.
 // - Merged with linux changes.
 // - Improved import structure, removed debug allocator versions.
+// - Added copy constructor to bypass a problem concerning memory 
+//   allocation. - June 18th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 
@@ -91,7 +93,7 @@ public:
 
 	
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
-    static void Cleanup(void);
+	static void Cleanup(void);
 	
 	static void LoadAll(CivArchive & archive);
 	static void SaveAll(CivArchive & archive);
@@ -99,7 +101,7 @@ public:
 	
 	static Governor & GetGovernor(const PLAYER_INDEX & playerId);
 
-    static Governor const &         INVALID;
+	static Governor const &         INVALID;
 
 	
 	
@@ -120,13 +122,14 @@ public:
 
 	
 	Governor(PLAYER_INDEX const & playerId = PLAYER_UNASSIGNED);
-    virtual ~Governor();
+	Governor(Governor const &copyme);
+	virtual ~Governor();
 
 	void SetPlayerId(const PLAYER_INDEX &playerId);
 
 	void Resize( const sint16 & xSize,
-				 const sint16 & ySize,
-				 const sint16 & resolution );
+	             const sint16 & ySize,
+	             const sint16 & resolution );
 
 	
 	void Load(CivArchive & archive);
@@ -316,10 +319,10 @@ private:
 
 	
 	bool TestSliderSettings( const SlidersSetting & sliders_setting,
-							   bool & production_test,
-							   bool & gold_test,
-							   bool & food_test,
-							   bool & happiness_test) const;
+	                           bool & production_test,
+	                           bool & gold_test,
+	                           bool & food_test,
+	                           bool & happiness_test) const;
 
 	
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;

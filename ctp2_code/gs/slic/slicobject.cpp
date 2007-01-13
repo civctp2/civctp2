@@ -68,7 +68,7 @@ SlicObject::SlicObject()
 	m_useDirector = FALSE;
 }
 
-SlicObject::SlicObject(char *id)
+SlicObject::SlicObject(char const * id)
 {
     m_seconds = 1; 
     m_defaultAdvance = -1; 
@@ -165,7 +165,7 @@ SlicObject::SlicObject(SlicSegment *segment, SlicObject *copy)
 	m_useDirector = copy->m_useDirector;
 }
 
-SlicObject::SlicObject(char *id, SlicContext *copy) 
+SlicObject::SlicObject(char const * id, SlicContext *copy) 
 	: SlicContext(copy)
 {
     m_seconds = 1; 
@@ -259,43 +259,6 @@ sint32 SlicObject::Release()
 	return m_refCount;
 }
 
-#ifdef USE_SLICOBJECT_POOLS
-void *SlicObject::operator new(size_t size)
-{
-	Assert(g_slicEngine);
-	if(g_slicEngine) {
-		SlicObject *obj = g_slicEngine->GetNewObject();
-		return obj;
-	} else {
-		SlicObject *obj = ::new SlicObject();
-		obj->SetIndex(-1);
-		return obj;
-	}
-}
-
-void SlicObject::operator delete(void *ptr)
-{
-	SlicObject *obj = (SlicObject *)ptr;
-	Assert(obj->m_index >= 0);
-	if(obj->m_index >= 0) {
-		g_slicEngine->ReleaseObject(obj);
-
-		
-		
-		static SlicObject hackObject;
-		memcpy(ptr, (uint8*)&hackObject, (uint8*)&obj->m_refCount - (uint8*)ptr);
-	} else
-		::delete(ptr);
-}
-
-void SlicObject::operator delete[] (void *ptr, size_t size)
-{
-
-	::delete[] (ptr);
-}
-
-#endif
-
 BOOL SlicObject::IsValid()
 {
 	return m_segment != NULL;
@@ -339,9 +302,6 @@ sint32 SlicObject::GetRecipient(const PLAYER_INDEX recip) const
 
 void SlicObject::Execute()
 {
-#ifdef _DEBUG
-	
-#endif
 	Assert(!g_slicEngine->AtBreak());
 	if(g_slicEngine->AtBreak())
 		return;

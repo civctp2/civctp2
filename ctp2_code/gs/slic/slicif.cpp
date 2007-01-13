@@ -33,6 +33,7 @@
 //   modelled slicif_find_db_index but without error message if this 
 //   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
 // - Added debugging code for bitwise operator
+// - Prevented crash with invalid Slic input.
 //
 //----------------------------------------------------------------------------
 
@@ -58,6 +59,11 @@
 struct PSlicObject **g_slicObjectArray = NULL;
 int g_slicArraySize = 0;
 int g_slicNumEntries = 0;
+
+namespace
+{
+    char const NAME_STRUCT_INVALID[]    = "*invalid struct*";
+} // namespace
 
 static unsigned char * s_code = NULL;
 static int s_allocated_code = 0;
@@ -1168,16 +1174,23 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				fprintf(debuglog, "pusha %s(%d)\n", symval->GetName(), ival);
 				break;
 			case SOP_PUSHM:
-				
-				ival = *((int *)codePtr);
-				codePtr += sizeof(int);
-				symval = g_slicEngine->GetSymbol(ival);
+				{
+				    ival = *((int *)codePtr);
+				    codePtr += sizeof(int);
+				    symval = g_slicEngine->GetSymbol(ival);
 
-				
-				ival2 = *((int *)codePtr);
-				codePtr += sizeof(int);
-				fprintf(debuglog, "pushm %s(%d).%s(%d)\n", symval->GetName(), symval->GetIndex(),
-						symval->GetStruct()->GetDescription()->GetMemberName(ival2), ival2);
+				    ival2 = *((int *)codePtr);
+				    codePtr += sizeof(int);
+
+                    SlicStructInstance *    gotStruct   = symval->GetStruct();
+                    char const *            memberName  = 
+                        gotStruct 
+                        ? gotStruct->GetDescription()->GetMemberName(ival2) 
+                        : NAME_STRUCT_INVALID;
+			        fprintf(debuglog, "pushm %s(%d).%s(%d)\n", 
+                            symval->GetName(), symval->GetIndex(), memberName, ival2
+                           );
+                }
 				break;
 			case SOP_PUSHAM:
 				

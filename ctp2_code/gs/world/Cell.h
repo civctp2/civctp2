@@ -16,7 +16,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -99,8 +101,8 @@
 #define k_MASK_ENV_HAS_IMPROVEMENT (1 << k_SHIFT_ENV_HAS_IMPROVEMENT)
 #define k_BIT_ENV_HAS_IMPROVEMENT k_MASK_ENV_HAS_IMPROVEMENT
 
-#define k_CELL_VERSION_MAJOR	0									
-#define k_CELL_VERSION_MINOR	0									
+#define k_CELL_VERSION_MAJOR	0
+#define k_CELL_VERSION_MINOR	0
 
 #define k_BATTLE_FLAG_VICTOR_SHIFT 8
 #define k_BATTLE_FLAG_DECAY_TIME 5 
@@ -131,24 +133,24 @@ typedef sint32 PLAYER_INDEX;
 
 
 class Cell {
-    
+
 private:
-    
-	
-    
-    uint32 m_env;
+
+
+
+	uint32 m_env;
 	uint32 m_zoc;
-    sint16 m_move_cost; 
+	sint16 m_move_cost; 
 
 #ifdef BATTLE_FLAGS
 	uint16 m_battleFlags;
 #endif
-    sint16 m_continent_number; 
-    sint8 m_gf; 
+	sint16 m_continent_number;
+	sint8 m_gf;
 	sint8 m_terrain_type;
 
 	
-    Unit m_city;
+	Unit m_city;
 
 	
 	
@@ -156,16 +158,16 @@ private:
 	sint8 m_cellOwner;
 	
 	
-    
+
 	
 	
-    CellUnitList *m_unit_army;
+	CellUnitList *m_unit_army;
 	DynamicArray<ID> *m_objects;
 
 #if 0
-    Pop m_aPop; 
+	Pop m_aPop;
 	TradeDynamicArray *m_tradeRoutes;
-    DynamicArray<TerrainImprovement> *m_improvements;
+	DynamicArray<TerrainImprovement> *m_improvements;
 	
 	
 #endif
@@ -174,32 +176,32 @@ private:
 	
 
 public:
-    
-    sint32 m_search_count; 
-    AstarPoint *m_point;
+
+	sint32 m_search_count;
+	AstarPoint *m_point;
 
 	friend class World;
 	friend class NetCellData;
 	friend class NetCellList;
 
 #ifdef CELL_COLOR
-    int m_color; 
+	int m_color;
 #endif
-    Cell();
-    ~Cell();
+	Cell();
+	~Cell();
 
-    sint32 IsAnyUnitInCell() const;
-    sint32 InsertUnit(const Unit id);
-    sint32 RemoveUnitReference(const Unit &id);
-    
-    
-    sint64 IsZoc (sint32 UnitFlags, uint64 maskAlliance);
-    uint32 GetRawZoc() { return m_zoc; }
-    
+	sint32 IsAnyUnitInCell() const;
+	sint32 InsertUnit(const Unit id);
+	sint32 RemoveUnitReference(const Unit &id);
+
+
+	sint64 IsZoc (sint32 UnitFlags, uint64 maskAlliance);
+	uint32 GetRawZoc() { return m_zoc; }
+
 	sint32 GetFoodFromTerrain() const;
-    sint32 GetFoodProduced() const;
+	sint32 GetFoodProduced() const;
 	sint32 GetShieldsFromTerrain() const;
-    sint32 GetShieldsProduced() const;
+	sint32 GetShieldsProduced() const;
 	sint32 GetGoldFromTerrain() const;
 	sint32 GetGoldProduced() const;
 	sint32 GetScore() const;
@@ -208,14 +210,14 @@ public:
 	sint32 GetShieldsFromTerrain(sint8 terrainType) const;
 	sint32 GetGoldFromTerrain(sint8 terrainType) const;
 
-    TERRAIN_TYPES GetTerrainType() const { return TERRAIN_TYPES(m_terrain_type); } 
+	TERRAIN_TYPES GetTerrainType() const { return TERRAIN_TYPES(m_terrain_type); }
 
-    sint32 GetGoodIndex() const;
-    sint32 GetRoadIndex() const;
-    sint32 GetIrrIndex() const;
-    sint32 GetMineIndex() const;
-    sint32 GetRivCurIndex() const;
-    sint32 GetCanalTunnelIndex() const;
+	sint32 GetGoodIndex() const;
+	sint32 GetRoadIndex() const;
+	sint32 GetIrrIndex() const;
+	sint32 GetMineIndex() const;
+	sint32 GetRivCurIndex() const;
+	sint32 GetCanalTunnelIndex() const;
 	BOOL GetCanDie(void) const ;
 
 	void SetIrrigation(sint32 level);
@@ -224,7 +226,7 @@ public:
 	void SetCanalTunnel(sint32 level);
 
 	sint32 GetNumUnits() const;
-    void GetArmy(CellUnitList &al);
+	void GetArmy(CellUnitList &al);
 	CellUnitList *UnitArmy();
 	Unit &AccessUnit(sint32 index);
 
@@ -241,16 +243,16 @@ public:
 	
 	void SetEnvFast(uint32 env) { m_env = env; }
 
-    BOOL CanEnter(const uint32 flag) const;
+	BOOL CanEnter(const uint32 flag) const;
 
 	void SetTerrain(sint32 terrain);
 	sint32 GetTerrain() { return (sint32)m_terrain_type; }
 	void SetMoveCost(double cost) { m_move_cost = (sint16)cost; }
 	double GetMoveCost() const { return double(m_move_cost); }
 
-    BOOL GetIsChokePoint() const { return BOOL(m_gf); }
-    sint16 GetContinent() const { return m_continent_number; }
-    void SetContinent(sint16 val) { m_continent_number = val; } 
+	BOOL GetIsChokePoint() const { return BOOL(m_gf); }
+	sint16 GetContinent() const { return m_continent_number; }
+	void SetContinent(sint16 val) { m_continent_number = val; }
 
 	sint32 GetNumImprovements();
 	TerrainImprovement AccessImprovement(sint32 index);
@@ -280,10 +282,10 @@ public:
 	ID GetObject(sint32 index);
 
 #ifdef CELL_COLOR
-    void SetColor(sint32 c);
+	void SetColor(sint32 c);
 #endif
-    sint32 GetGoodsIndex (sint32 &val) const;
-    
+	sint32 GetGoodsIndex (sint32 &val) const;
+
 	void InsertImprovement(const TerrainImprovement &imp);
 	void RemoveImprovement(const TerrainImprovement &imp);
 
@@ -327,11 +329,11 @@ public:
 
 	void ClearUnitsNStuff();
 #ifdef CELL_COLOR
-    void DebugUpdatePopColor(); 
-#endif    
+	void DebugUpdatePopColor();
+#endif
 
-    sint16 GF() const; 
-    void SetGF(const sint16 v); 
+	sint16 GF() const;
+	void SetGF(const sint16 v);
 
 	void CalcTerrainMoveCost();
 	void CalcMovementType();
@@ -359,7 +361,7 @@ public:
 };
 
 uint32 Cell_CELL_GetVersion(void) ;
-#else 
+#else
 
 #ifdef WIN32
 class CELL;
@@ -368,4 +370,4 @@ typedef class CELL Cell;
 class Cell;
 #endif
 
-#endif 
+#endif

@@ -19,6 +19,7 @@
 # 
 #  - Set the minimum number of players from 3 to 1.
 #  - Removed references to non-existing files upba5700.tga and upba5701.tga.
+#  - Uranus world shape added
 # 
 ################################################################################
 
@@ -797,8 +798,8 @@ SPNewGameMapShapeScreen {
 
 		string	text	"str_ldl_East_West_and_North_South_edges"
 	}
-	#Added by Martin Gühmann
-	UWLabel:SP_POPUP_LABEL {
+
+	FWLabel:SP_POPUP_LABEL {
 
 		int	xpix	190
 
@@ -806,10 +807,10 @@ SPNewGameMapShapeScreen {
 
 		string	just	"left"
 
-		string	text	"str_ldl_North_and_South_edges_of_the_map_connect"
+		string	text	"str_ldl_No_wrapping"
 	}
 
-	FWLabel:SP_POPUP_LABEL {
+	UWLabel:SP_POPUP_LABEL {
 
 		int	xpix	190
 
@@ -817,9 +818,8 @@ SPNewGameMapShapeScreen {
 
 		string	just	"left"
 
-		string	text	"str_ldl_No_wrapping"
+		string	text	"str_ldl_North_and_South_edges_of_the_map_connect"
 	}
-
 
 	Group {
 
@@ -838,10 +838,10 @@ SPNewGameMapShapeScreen {
 			int	ypix	80
 
 		}
-		#Added by Martin Gühmann
+
 		MapShapeThree:POPUP_CHECKBOX {
 
-			string	text	"str_ldl_Uranus_World"
+			string	text	"str_ldl_Flat_World"
 			int	xpix	20
 
 			int	ypix	115
@@ -850,7 +850,7 @@ SPNewGameMapShapeScreen {
 
 		MapShapeFour:POPUP_CHECKBOX {
 
-			string	text	"str_ldl_Flat_World"
+			string	text	"str_ldl_Uranus_World"
 			int	xpix	20
 
 			int	ypix	150
