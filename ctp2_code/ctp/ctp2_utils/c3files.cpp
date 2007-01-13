@@ -324,18 +324,20 @@ void c3files_StripSpaces(MBCHAR *s)
 
 sint32 c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list)
 {
+#ifdef WIN32
 	MBCHAR strbuf[256];
+#endif
 	MBCHAR *lpFileName = NULL;
 	MBCHAR path[_MAX_PATH];
 
-#if defined(WIN32)
+#ifdef WIN32
 	WIN32_FIND_DATA	fileData;
 	HANDLE lpFileList;
 #endif
 
 	g_civPaths->GetSavePath(dirID, path);
 
-#if defined(WIN32)	
+#ifdef WIN32
 	if (ext) sprintf(strbuf,"*.%s",ext);
 	else strcpy(strbuf, "*.*");
 		
@@ -455,18 +457,13 @@ BOOL c3files_HasLegalCD()
 		
 		if (success && g_theProfileDB->IsProtected()) {		
 			BOOL		valid;
-			BOOL		silent = TRUE;
 
 			valid = tracklen_CheckTrackLengths();
-			
 
 			if (!valid) 
 				success = TRUE;
 			else
 				success = FALSE;
-			
-			
-			
 		}
 
 		if (!success) {
@@ -563,6 +560,7 @@ MBCHAR *c3files_GetVolumeName(int cdIndex)
     uint32 SerialNumber;
     uint32 MaxComponentLen;
     uint32 FSFlags;
+		MBCHAR name = (MBCHAR) cdIndex+'A';
     
     strcpy(drivepath, " :\\");
     drivepath[0] = cdIndex + 'A';
@@ -572,8 +570,8 @@ MBCHAR *c3files_GetVolumeName(int cdIndex)
     }
 	return(NULL);
 #elif defined(LINUX)
-	// FIXME: Add code to determine beginsector of iso_primary_sector
-	//        On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
+	/// \todo Add code to determine beginsector of iso_primary_sector
+	/// On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
 	const char *cd_dev = SDL_CDName(cdIndex);
 	FILE *cd = fopen("/dev/cdrom", "rb");
 	if (cd == NULL) {
@@ -595,7 +593,7 @@ MBCHAR *c3files_GetVolumeName(int cdIndex)
 		return NULL;
 	}
 	bool validName = true;
-	int i = 0;
+	unsigned int i = 0;
 	while (1) {
 		if (i > min(sizeof(ipd.volume_id), sizeof(VolumeName))) {
 			validName = false;
@@ -644,7 +642,7 @@ BOOL c3files_FindCDByName(CHAR *name, BOOL findDriveLetter)
 			if (IsCD[i])
 			{
 				CDIndex++;
-        		cdName = c3files_GetVolumeName((MBCHAR)(i + 'A'));
+				cdName = c3files_GetVolumeName(i);
 				if (cdName && !strnicmp(cdName, name, strlen(name)))
 				{
 					if (findDriveLetter)

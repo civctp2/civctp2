@@ -16,7 +16,7 @@
 #include "network.h"
 #include "WonderRecord.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "UnitRec.h"
 #include "Army.h"
 #include "dynarr.h"

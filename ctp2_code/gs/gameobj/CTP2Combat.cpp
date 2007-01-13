@@ -33,7 +33,7 @@
 #include "UnitRecord.h"
 #include "UnitData.h"
 #include "GameEventManager.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "RandGen.h"
 
 #include "battleevent.h"
@@ -1069,8 +1069,8 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 		att->m_alreadyAttacked = true;
 	}
 
-	char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
-	char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
+	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
+	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
 	
 	double hitChance = att->GetRangedAttack() /
@@ -1172,8 +1172,8 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 		att->m_alreadyAttacked = true;
 	}
 
-	char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
-	char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
+	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
+	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
 	
 	double hitChance = att->m_unit->GetOffense(def->m_unit) /

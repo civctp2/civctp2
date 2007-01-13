@@ -38,7 +38,7 @@
 
 #include "UnitPool.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "Unit.h"
 #include "BldQue.h"
 

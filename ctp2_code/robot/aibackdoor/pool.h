@@ -433,6 +433,6 @@ DATA_TYPE * Pool<DATA_TYPE>::Get_Nth_Pointer
 
 
 
-#endif __Pool_h__
+#endif // __Pool_h__
 
 

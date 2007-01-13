@@ -27,8 +27,9 @@
 // - Added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNIT_DATA_H__ 
 #define __UNIT_DATA_H__ 1
 
@@ -171,8 +172,6 @@ enum CAUSE_REMOVE_CITY;
 #define k_UDF_TELEPORT_DEATH                         0x20000000 
 #define k_UDF_BEACH_ASSAULT_LEGAL                    0x40000000
 
-enum DEFAULT_PLACE_POP;
-
 class UnitData : public GAMEOBJ,
 				 public CityRadiusCallback
 { 
@@ -278,7 +277,7 @@ public:
     BOOL CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const BOOL & use_vision) const;
     BOOL CanThisCargoUnloadAt(const Unit &the_cargo, const MapPoint & old_pos, const MapPoint & new_pos, const BOOL & use_vision) const;
     BOOL UnloadCargo(const MapPoint &new_pos, Army &debark,
-					 BOOL justOneUnit, Unit &theUnit);
+					 BOOL justOneUnit, const Unit &theUnit);
 	BOOL UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
 
 
@@ -441,7 +440,7 @@ public:
     BOOL GetMilitaryContribution() const;
 
 	static sint32 GetDistance(UnitData *unit1, UnitData *unit2, sint32 wrap);
-	static sint32 GetDistance(Installation &inst, UnitData *unit2, sint32 wrap);
+	static sint32 GetDistance(const Installation &inst, UnitData *unit2, sint32 wrap);
 	static sint32 GetDistance(const UnitData *unit, const MapPoint &pos, sint32 wrap);
 	static sint32 GetDistance(const MapPoint &pos1, const MapPoint &pos2, sint32 wrap);
 
@@ -505,9 +504,9 @@ public:
 	BOOL HasCityWalls() const;
 	BOOL HasForceField() const;
 
-	BOOL StoppedBySpies(Unit &c);
+	BOOL StoppedBySpies(const Unit &c);
 	ORDER_RESULT InvestigateCity(Unit &c);
-	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
+	ORDER_RESULT StealTechnology(const Unit &c, sint32 whichAdvance);
 	ORDER_RESULT InciteRevolution(Unit &c);
 	ORDER_RESULT AssassinateRuler(Unit &c);
 	ORDER_RESULT NullifyWalls(Unit &c);
@@ -529,7 +528,7 @@ public:
 	sint32 GetFranchiseTurnsRemaining() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
 
-	BOOL CanSee(Army &al) const;
+	BOOL CanSee(const Army &al) const;
 
 #ifdef _DEBUG
     void SetIgnoreHappiness(BOOL v); 
@@ -674,7 +673,7 @@ public:
 	void AddEndGameObject(sint32 type);
 	double GetVisionRange() const;
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(const Unit &dest);
 
 	void SetFullHappinessTurns(sint32 turns);
 	sint32 GetIncomingTrade() const;
@@ -687,7 +686,7 @@ public:
 	void BuildCapitalization();
 	void BuildInfrastructure();
 
-	void ActionSuccessful(SPECATTACK attack, Unit &c);
+	void ActionSuccessful(SPECATTACK attack, const Unit &c);
 	void ActionUnsuccessful(void);;
 
 	const Unit &GetTransport() const;
@@ -701,7 +700,7 @@ public:
 
 	void CheckVisionRadius();
 
-	void SetTargetCity(Unit &city);
+	void SetTargetCity(const Unit &city);
 	const Unit &GetTargetCity();
 
 	bool CanBeachAssaultRightNow();
@@ -709,5 +708,4 @@ public:
 
 uint32 UnitData_UnitData_GetVersion(void) ;
 #endif
-
 

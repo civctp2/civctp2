@@ -450,9 +450,9 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-		AssignPopulation(city);
+//		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-		city->CalcHappiness(gold, FALSE);
+//		city->CalcHappiness(gold, FALSE);
 
 		city->DoSupport(true);
 		city->SplitScience(true);
@@ -953,9 +953,9 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-		AssignPopulation(city);
+//		AssignPopulation(city);
 		// Force happiness recalculation as crime losses depend on happiness.
-		city->CalcHappiness(gold, FALSE);
+//		city->CalcHappiness(gold, FALSE);
 			
 		city->ProcessFood();
 		city->CollectOtherTrade(TRUE, FALSE);

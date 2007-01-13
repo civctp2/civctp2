@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __BATTLEVIEWACTOR_H__
 #define __BATTLEVIEWACTOR_H__
 
@@ -40,7 +41,7 @@ public:
 
 	~BattleViewActor();
 
-	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, MapPoint &pos, uint32 *spriteID, GROUPTYPE *groupType);
+	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, uint32 *spriteID, GROUPTYPE *groupType);
 	
 	void			Initialize(void);
 

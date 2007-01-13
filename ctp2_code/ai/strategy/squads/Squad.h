@@ -266,5 +266,5 @@ private:
 
 
 
-#endif __SQUAD_H__
+#endif // __SQUAD_H__
 

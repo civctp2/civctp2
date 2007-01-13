@@ -15,7 +15,7 @@
 
 #include "network.h"
 #include "civarchive.h"
-#include "globals.h"
+#include "Globals.h"
 
 
 

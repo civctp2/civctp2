@@ -12,8 +12,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AVL_HEAP_H__
 #define  __AVL_HEAP_H__
 

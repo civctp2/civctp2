@@ -63,7 +63,15 @@ enum AUI_KEYBOARD_KEY
 };
 #endif 
 
-
+const uint32 AUI_KEYBOARD_MOD_LSHIFT = 1;
+const uint32 AUI_KEYBOARD_MOD_RSHIFT = 2;
+const uint32 AUI_KEYBOARD_MOD_LCTRL   = 4;
+const uint32 AUI_KEYBOARD_MOD_RCTRL = 8;
+const uint32 AUI_KEYBOARD_MOD_LALT = 16;
+const uint32 AUI_KEYBOARD_MOD_RALT = 32;
+const uint32 AUI_KEYBOARD_MOD_LWIN = 64;
+const uint32 AUI_KEYBOARD_MOD_RWIN = 128;
+const uint32 AUI_KEYBOARD_MOD_WINMENU = 256;
 
 
 struct aui_KeyboardEvent

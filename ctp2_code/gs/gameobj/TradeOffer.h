@@ -6,8 +6,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _TRADEOFFER_H_
 #define _TRADEOFFER_H_
 
@@ -20,8 +21,10 @@ public:
 	TradeOffer () : ID() { return; } ; 
 	TradeOffer (sint32 val) : ID (val) { return; }; 
 	TradeOffer (uint32 val) : ID (val) { return; }; 
+#ifdef WIN32
 	TradeOffer (const int val) : ID (val) { return; }; 
 	TradeOffer (const unsigned int val) : ID (val) { return; }; 
+#endif
 
 	void KillOffer();
 	void Kill() { KillOffer(); }
@@ -38,7 +41,7 @@ public:
 	ROUTE_TYPE GetAskingType() const { return GetData()->GetAskingType(); }
 	sint32 GetAskingResource() const { return GetData()->GetAskingResource(); }
 
-	BOOL Accept(PLAYER_INDEX player, Unit &sourceCity, Unit &destCity);
+	BOOL Accept(PLAYER_INDEX player, const Unit &sourceCity, const Unit &destCity);
 
 	void Castrate() {};
 };

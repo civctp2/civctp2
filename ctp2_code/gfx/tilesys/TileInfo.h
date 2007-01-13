@@ -27,8 +27,9 @@
 //   - April 23rd 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TILEINFO_H__
 #define __TILEINFO_H__
 

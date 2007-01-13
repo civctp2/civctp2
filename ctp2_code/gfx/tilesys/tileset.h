@@ -251,8 +251,13 @@ private:
 	BOOL			m_quick;
 	BOOL			m_mapped;
 
+#ifdef WIN32
 	HANDLE			m_fileHandle;
 	HANDLE			m_mappedFileHandle;
+#else
+	int			m_fd;
+	size_t			m_MMapSize;
+#endif
 };
 
 

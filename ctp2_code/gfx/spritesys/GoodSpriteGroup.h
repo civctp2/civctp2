@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GOODSPRITEGROUP_H__
 #define __GOODSPRITEGROUP_H__
 

@@ -77,7 +77,7 @@
 
 #include "controlpanelwindow.h"
 #include "CriticalMessagesPrefs.h"
-#include "gold.h"
+#include "Gold.h"
 #include "radarwindow.h"
 #include "screenutils.h"
 

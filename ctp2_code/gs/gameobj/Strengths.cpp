@@ -36,7 +36,7 @@
 #include "Unit.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "gold.h"
+#include "Gold.h"
 #include "TurnCnt.h"
 #include "UnitRecord.h"
 #include "wonderutil.h"

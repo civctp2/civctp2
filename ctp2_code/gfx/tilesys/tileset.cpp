@@ -29,6 +29,20 @@
 #include "rimutils.h"
 
 #include "prjfile.h"
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+#include <sys/stat.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include <fcntl.h>
+#ifdef LINUX
+#include <sys/mman.h>
+#endif
+
 extern ProjectFile *g_ImageMapPF;
 
 
@@ -163,10 +177,15 @@ void TileSet::CleanupMapped(void)
 		m_mapIcons[i] = NULL;
 	}
 
+#ifdef WIN32
 	UnmapViewOfFile(m_tileSetData);
 
 	CloseHandle(m_mappedFileHandle);
 	CloseHandle(m_fileHandle);
+#else
+	munmap(m_tileSetData, m_MMapSize);
+	close(m_fd);
+#endif
 }
 
 void TileSet::Cleanup(void)
@@ -725,7 +744,7 @@ void TileSet::QuickLoad(void)
 	MBCHAR		filename[_MAX_PATH];
 	FILE		*file;
 	fpos_t		pos;
-	uint32		fileSize;
+	size_t		fileSize;
 	uint8		*dataPtr;
 	size_t		count;
 
@@ -733,10 +752,6 @@ void TileSet::QuickLoad(void)
 		sprintf(filename, "gtset565.til");
 	else
 		sprintf(filename, "gtset555.til");
-
-
-
-
 
 
 	file = c3files_fopen(C3DIR_TILES, filename, "rb");
@@ -749,7 +764,11 @@ void TileSet::QuickLoad(void)
 			
 			if (c3files_fgetpos(file, &pos)) goto Error;
 
+#ifndef LINUX
 			fileSize = (uint32)pos;
+#else
+			fileSize = pos.__pos;
+#endif
 
 			
 			if (c3files_fseek(file, 0, SEEK_SET)) goto Error;
@@ -797,7 +816,7 @@ Error:
 void TileSet::QuickLoadMapped(void)
 {
 	MBCHAR		filename[_MAX_PATH],
-				path[_MAX_PATH];
+			path[_MAX_PATH];
 	uint8		*dataPtr;
 
 	if (g_is565Format)
@@ -808,7 +827,7 @@ void TileSet::QuickLoadMapped(void)
 	
 
 	g_civPaths->FindFile(C3DIR_TILES, filename, path);
-
+#ifdef WIN32
 	m_fileHandle = CreateFile(path, 
 						GENERIC_READ,
 						FILE_SHARE_READ,
@@ -816,35 +835,62 @@ void TileSet::QuickLoadMapped(void)
 						OPEN_EXISTING,
 						FILE_ATTRIBUTE_NORMAL,
 						NULL);
-	if (m_fileHandle == INVALID_HANDLE_VALUE) goto Error;
+	if (m_fileHandle == INVALID_HANDLE_VALUE) {
+		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		return;
+	}
 
 	sint32	size;
 
 	size = GetFileSize(m_fileHandle, NULL);
-	if (size <= 0) goto Error;
+	if (size <= 0) {
+		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		return;
+	}
 
 	m_mappedFileHandle = CreateFileMapping(m_fileHandle, 
-											NULL,
-											PAGE_READONLY,
-											0,
-											0,
-											NULL);
+						NULL,
+						PAGE_READONLY,
+						0,
+						0,
+						NULL);
 
 	if (m_mappedFileHandle == INVALID_HANDLE_VALUE) {
 		CloseHandle(m_fileHandle);
-		goto Error;
+		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		return;
 	}
 
 	m_tileSetData = (uint8 *)MapViewOfFile(m_mappedFileHandle,
-								FILE_MAP_READ,
-								0,
-								0,
-								0);
+						FILE_MAP_READ,
+						0,
+						0,
+						0);
+#else
+	struct stat st;
+	int rc = stat(filename, &st);
+	if (0 != rc) {
+		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		return;
+	}
+	m_MMapSize = st.st_size;
+	m_fd = open(filename, O_RDONLY);
+	if (m_fd < 0) {
+		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		return;
+	}
+	m_tileSetData = (uint8 *)mmap(0, m_MMapSize, PROT_READ, MAP_PRIVATE, m_fd, 0);
+#endif
 
 	if (m_tileSetData == NULL) {
+#ifdef WIN32
 		CloseHandle(m_fileHandle);
 		CloseHandle(m_mappedFileHandle);
-		goto Error;
+#else
+		close(m_fd);
+#endif
+		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
+		return;
 	}
 
 	m_mapped = TRUE;
@@ -865,7 +911,4 @@ void TileSet::QuickLoadMapped(void)
 	m_quick = TRUE;
 
 	return;
-
-Error:
-	c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
 }

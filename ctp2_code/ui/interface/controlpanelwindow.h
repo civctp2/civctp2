@@ -248,7 +248,7 @@ public:
 	
 	void	InitMessageTab();
 	void	AddMessage(Message &message,bool initializing=false);
-	void    SetMessageRead(Message &message);
+	void    SetMessageRead(const Message &message);
 	void	RemoveMessage(Message &message);
 	void	PopulateMessageList(PLAYER_INDEX player);
 

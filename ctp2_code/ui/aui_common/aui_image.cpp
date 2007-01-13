@@ -34,6 +34,7 @@
 #include "aui_ui.h"
 #include "aui_surface.h"
 #endif 
+#include "aui_Factory.h"
 
 #include "aui_blitter.h"
 #include "aui_memmap.h"
@@ -150,20 +151,11 @@ AUI_ERRCODE aui_Image::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 {
 	AUI_ERRCODE retcode;
 
-#ifdef __AUI_USE_DIRECTX__
-	m_surface = new aui_DirectSurface(
-		&retcode,
+	m_surface = aui_Factory::new_Surface(
+		retcode,
 		width,
 		height,
-		bpp,
-		((aui_DirectUI *)g_ui)->DD() );
-#else
-	m_surface = new aui_Surface(
-		&retcode,
-		width,
-		height,
-		bpp );
-#endif 
+		bpp);
 
 	Assert( AUI_NEWOK(m_surface,retcode) );
 
@@ -201,7 +193,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-	
+#ifdef WIN32	
 	uint8 *filebits = g_ui->TheMemMap()->GetFileBits( filename );
 	Assert( filebits != NULL );
 	if ( !filebits ) return AUI_ERRCODE_HACK;
@@ -363,7 +355,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 				bot -= pitch;
 			}
 
-			delete[ pitch ] temp;
+			delete[] temp;
 
 			errcode = surface->Unlock( bits );
 			Assert( AUI_SUCCESS(errcode) );
@@ -373,6 +365,9 @@ AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
 	}
 
 	return retcode;
+#else
+	return AUI_ERRCODE_LOADFAILED;
+#endif
 }
 
 

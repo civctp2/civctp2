@@ -202,8 +202,8 @@ public:
 
 	SPRITEFILEERR	ReadData(void *data, size_t bytes);
 
-	sint32			GetFilePos(void);
-	void			SetFilePos(sint32 pos);
+	size_t			GetFilePos(void);
+	void			SetFilePos(size_t pos);
 
 protected:
 	unsigned	m_version;			
@@ -224,16 +224,16 @@ protected:
 	SPRITEFILEERR	Write_v20(UnitSpriteGroup *s);
 
 	
-	void *CompressData  (void *Data,unsigned &DataLen);
-	void *DeCompressData(void *Data,unsigned CompressedLen,unsigned ActualLen);
+	void *CompressData  (void *Data, size_t &DataLen);
+	void *DeCompressData(void *Data, size_t CompressedLen, size_t ActualLen);
 	
 	
-	void *CompressData_Default  (void *Data,unsigned &DataLen);
-	void *DeCompressData_Default(void *Data,unsigned CompressedLen,unsigned ActualLen);
+	void *CompressData_Default  (void *Data, size_t &DataLen);
+	void *DeCompressData_Default(void *Data, size_t CompressedLen, size_t ActualLen);
 
 	
-	void *CompressData_LZW1  (void *Data,unsigned &DataLen);
-	void *DeCompressData_LZW1(void *Data,unsigned CompressedLen,unsigned ActualLen);
+	void *CompressData_LZW1  (void *Data, size_t &DataLen);
+	void *DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen);
 
 private:
 	FILE *      m_file;

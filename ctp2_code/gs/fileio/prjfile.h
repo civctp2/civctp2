@@ -29,8 +29,13 @@ struct PFPath {
 
     void *zms_start;
     void *zms_end;
+
+#ifdef WIN32
     HANDLE zms_hf;
     HANDLE zms_hm;
+#else
+    int    zms_hf;
+#endif
 
     char dos_path[256];
 };

@@ -37,8 +37,9 @@
 //
 //----------------------------------------------------------------------------
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP_GOAL_H__
     #define __CTP_GOAL_H__ 1
 
@@ -222,4 +223,4 @@ protected:
 };
 
 
-#endif __CTP_GOAL_H__
+#endif // __CTP_GOAL_H__

@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SPRITEUTILS_H__
 #define __SPRITEUTILS_H__
 

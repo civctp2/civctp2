@@ -52,8 +52,9 @@
 #define k_MAP_WRAPAROUND 5
 
 
-
-#pragma warning (disable: 4661) 
+#ifdef _MSC_VER
+#pragma warning (disable: 4661)
+#endif
 
 #include "gstypes.h"
 #include "directions.h"

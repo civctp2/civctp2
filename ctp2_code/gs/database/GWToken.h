@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GWTOKEN_H__
 #define __GWTOKEN_H__
 

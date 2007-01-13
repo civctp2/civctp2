@@ -122,9 +122,13 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR *ldlFilename )
 
 	
 	MBCHAR outDir[ MAX_PATH + 1 ];
+#ifdef WIN32
 	GetCurrentDirectory( MAX_PATH, outDir );
+#else
+	getcwd(outDir, MAX_PATH);
+#endif
 
-	strcat(outDir, "\\ldl_out");
+	strcat(outDir, FILE_SEP "ldl_out");
 
 	m_ldl = new ldl( ldlFilename, outDir );
 	Assert( m_ldl != NULL );
@@ -381,7 +385,7 @@ void aui_Ldl::DeleteLdlObject( aui_LdlObject *ldlObject )
 	if ( ldlObject )
 	{
 		if ( ldlObject->ldlBlock )
-			delete[ strlen( ldlObject->ldlBlock ) + 1 ] ldlObject->ldlBlock;
+			delete[] ldlObject->ldlBlock;
 
 		delete ldlObject;
 	}
@@ -660,7 +664,7 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR *rootBlock)
 
 	ldl_datablock		*dataBlock;
 
-	dataBlock = m_ldl->FindDataBlock(rootBlock, NULL);
+	dataBlock = m_ldl->FindDataBlock(rootBlock);
 	Assert(dataBlock);
 	if (!dataBlock)
 		return NULL;
@@ -932,7 +936,7 @@ AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(MBCHAR *rootBlock)
 
 	ldl_datablock		*dataBlock;
 
-	dataBlock = m_ldl->FindDataBlock(rootBlock, NULL);
+	dataBlock = m_ldl->FindDataBlock(rootBlock);
 	Assert(dataBlock);
 	if (!dataBlock) return AUI_ERRCODE_INVALIDPARAM;
 

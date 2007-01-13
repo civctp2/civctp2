@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ source
+// File type    : C/C++ header
 // Description  : Player game object header
 //
 //----------------------------------------------------------------------------
@@ -35,6 +35,7 @@
 #define __PLAYER_H__ 1
 
 #include "ctp2_enums.h"
+#include "GameOver.h"
 #include "AgreementTypes.h"
 #include "GameObj_types.h"
 #include "PollutionConst.h"
@@ -383,7 +384,7 @@ public:
 	Unit InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 							 const Unit &whereBuilt);
 	Army GetNewArmy(CAUSE_NEW_ARMY cause);
- 	sint32 RemoveUnitReference(Unit &id, const CAUSE_REMOVE_ARMY cause,
+ 	sint32 RemoveUnitReference(const Unit &id, const CAUSE_REMOVE_ARMY cause,
 							   PLAYER_INDEX killedBy);
 	void AddArmy(const Army &army,
 				 const CAUSE_NEW_ARMY cause,
@@ -394,11 +395,11 @@ public:
 					PLAYER_INDEX killedBy,
 					BOOL fromNetwork = FALSE);
 
-	BOOL RemoveCityReferenceFromPlayer(Unit &id,  CAUSE_REMOVE_CITY cause,
+	BOOL RemoveCityReferenceFromPlayer(const Unit &id,  CAUSE_REMOVE_CITY cause,
 									   sint32 &killedBy); 
 
-	BOOL RefreshAIArmyReference(Army &the_army);
-	BOOL RemoveUnitReferenceFromPlayer(Unit &killme,  CAUSE_REMOVE_ARMY cause, 
+	BOOL RefreshAIArmyReference(const Army &the_army);
+	BOOL RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARMY cause, 
 									   sint32 &killedBy);
 
 	BOOL AddCityReferenceToPlayer(Unit id,  CAUSE_NEW_CITY cause); 
@@ -661,9 +662,9 @@ public:
 	void WithdrawTradeOffer(TradeOffer offer);
 	void AcceptTradeOffer(TradeOffer offer, Unit &sourceCity, Unit &destCity);
 	void CreateTradeBid(Unit &fromCity, sint32 resource, Unit &toCity);
-	void SendTradeBid(Unit &fromCity, sint32 resource, Unit &toCity, sint32 price);
-	void AcceptTradeBid(Unit &fromCity, sint32 resource, Unit &toCity, sint32 price);
-	void RejectTradeBid(Unit &fromCity, sint32 resource, Unit &toCity, sint32 price);
+	void SendTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
+	void AcceptTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
+	void RejectTradeBid(const Unit &fromCity, sint32 resource, const Unit &toCity, sint32 price);
 
 	void AddTrader(Unit uid);
     sint32 GetUnusedFreight()const; 
@@ -696,8 +697,8 @@ public:
 	
 	sint32 GetMaterialsStored()  const;  
 	Installation CreateInstallation(sint32 type, MapPoint &point);
-	void AddInstallation(Installation &inst);
-	void RemoveInstallationReferences(Installation &inst);
+	void AddInstallation(const Installation &inst);
+	void RemoveInstallationReferences(const Installation &inst);
 
 #ifdef BATTLE_FLAGS
 	void AddBattleFlag(const MapPoint &point);

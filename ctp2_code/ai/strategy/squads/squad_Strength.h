@@ -6,9 +6,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __AGENT_STRENGTH_H__
 #define __AGENT_STRENGTH_H__
 
@@ -188,4 +188,4 @@ inline void Squad_Strength::Init()
 	m_air_bombard_str = 0.0;
 }
 
-#endif __AGENT_STRENGTH_H__
+#endif // __AGENT_STRENGTH_H__

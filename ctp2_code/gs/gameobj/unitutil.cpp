@@ -39,7 +39,7 @@
 #include "ConstDB.h"
 #include "GameEventUser.h"
 #include "player.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "FeatTracker.h"
 
 #include "UnitPool.h"

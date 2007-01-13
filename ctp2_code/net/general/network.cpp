@@ -91,7 +91,7 @@
 #include "UnitPool.h"
 #include "citydata.h"
 #include "TradeRouteData.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Path.h"
 #include "Agreement.h"
 #include "CivilisationPool.h"
@@ -109,7 +109,7 @@
 #include "chatbox.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "order.h"
+#include "Order.h"
 #include "UnseenCell.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -311,12 +311,7 @@ Network::Network() :
 	m_condensePopMoves = FALSE;
 	m_enactedDiplomaticRequests = new DynamicArray<DiplomaticRequest>;
 
-	
-	
-
-	
-	
-
+#ifdef WIN32
 	char exepath[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
 		char *lastbackslash = strrchr(exepath, '\\');
@@ -340,6 +335,7 @@ Network::Network() :
 		Assert(r == sizeof(m_guid));
 		fclose(guidFile);
 	}
+#endif
 
 	m_progress = -1;
 	m_extraTimePerCity = 0;
@@ -592,16 +588,21 @@ void Network::InitFromNetFunc()
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 			
 			char nonConstStr[1024];
-			if(str)
+			if(str) {
 				strcpy(nonConstStr, str);
-			c3_AbortMessage( str ? nonConstStr : "Waiting on players", k_UTILITY_ABORT, network_AbortCallback );
+			} else {
+				strcpy(nonConstStr, "Waiting on players");
+			}
+			c3_AbortMessage(nonConstStr, k_UTILITY_ABORT, network_AbortCallback);
 		} else if(!m_crcError) {
 			const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_FOR_DATA");
 			char nonConstStr[1024];
-			if(str)
+			if(str) {
 				strcpy(nonConstStr, str);
-			
-			c3_AbortMessage( str ? nonConstStr : "Waiting on data", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+			} else {
+				strcpy(nonConstStr, "Waiting on data");
+			}
+			c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 		}
 	}
 }
@@ -1285,9 +1286,12 @@ void Network::ChangeHost(uint16 id)
 	m_hostId = id;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_FOR_DATA");
 	char nonConstStr[1024];
-	if(str)
+	if(str) {
 		strcpy(nonConstStr, str);
-	c3_AbortMessage( str ? nonConstStr : "Waiting on data", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+	} else {
+		strcpy(nonConstStr, "Waiting on data");
+	}
+	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 }
 
 void Network::SessionLost()
@@ -1423,8 +1427,8 @@ void Network::SetReady(uint16 id)
 	QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_MAP_DONE, 0));
 	PROGRESS(50);
 
-	
-	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
+	sint32 p;	
+	for(p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
 		chunkPackets.AddTail(new NetPlayer(g_player[p]));
 		chunkPackets.AddTail(new NetResearch(g_player[p]->m_advances));
@@ -3682,9 +3686,12 @@ void Network::SetProgress(sint32 progress)
 		const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 		
 		char nonConstStr[1024];
-		if(str)
+		if(str) {
 			strcpy(nonConstStr, str);
-		c3_AbortUpdateData( str ? nonConstStr : "Waiting on players", 100);
+		} else {
+			strcpy(nonConstStr, "Waiting on players");
+		}
+		c3_AbortUpdateData(nonConstStr, 100);
 	} else {
 		c3_AbortUpdateData(NULL, progress);
 
@@ -3925,9 +3932,12 @@ void Network::StartResync()
 
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
-	if(str)
+	if(str) {
 		strcpy(nonConstStr, str);
-	c3_AbortMessage( str ? nonConstStr : "Resyncing", k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
+	} else {
+		strcpy(nonConstStr, "Resyncing");
+	}
+	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 
 	if(g_gevManager)
 		g_gevManager->NotifyResync();
@@ -3960,9 +3970,12 @@ void Network::RequestResync(RESYNC_REASON reason)
 	m_readyToStart = FALSE;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
 	char nonConstStr[1024];
-	if(str)
+	if(str) {
 		strcpy(nonConstStr, str);
-	c3_AbortMessage( str ? nonConstStr : "Resyncing", k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
+	} else {
+		strcpy(nonConstStr, "Resyncing");
+	}
+	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 
 	SendAction(new NetAction(NET_ACTION_REQUEST_RESYNC, reason));
 

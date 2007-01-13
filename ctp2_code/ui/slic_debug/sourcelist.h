@@ -1,9 +1,6 @@
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SOURCE_LIST_H__
 #define __SOURCE_LIST_H__
 
@@ -59,7 +56,7 @@ class SourceList : public KeyboardHandler
 {
 public:
 	SourceList(SourceListCallback *callback = NULL, MBCHAR *ldlBlock = NULL);
-	~SourceList();
+	virtual ~SourceList();
 
 	c3_PopupWindow *m_window;
 	c3_ListBox     *m_list;

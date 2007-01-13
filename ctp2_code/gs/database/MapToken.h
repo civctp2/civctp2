@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MAPTOKEN_H__
 #define __MAPTOKEN_H__
 

@@ -58,12 +58,12 @@ class UnitDynamicArray;
 class SpriteState;
 class UnitActor; 
 class TradeRoute;
-class aui_DirectSurface;
 class Resources;
 class Army;
 class CellUnitList;
 class SlicObject;
 class CityData;
+class aui_Surface;
 
 #define k_UNIT_VERSION_MAJOR	0
 #define k_UNIT_VERSION_MINOR	0
@@ -180,7 +180,7 @@ public:
 	BOOL CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const BOOL & used_vision) const;
 
 	BOOL UnloadCargo(const MapPoint &new_pos, Army &debark,
-					 BOOL justOneUnit, Unit &theUnit);
+			 BOOL justOneUnit, const Unit &theUnit);
 	BOOL UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
 
 	BOOL IsMovePointsEnough(const MapPoint &pos) const;
@@ -228,7 +228,7 @@ public:
 	sint32 CanConvertCity(Unit &city) const;
 	sint32 CanBombard(CellUnitList &defender) const;
 	sint32 CanCounterBombard(CellUnitList &defender) const;
-	sint32 CanActivelyDefend(Army &attacker) const;
+	sint32 CanActivelyDefend(const Army &attacker) const;
 	sint32 CanActivelyDefend(CellUnitList &attacker) const;
 
 	void Bombard(const UnitRecord *rec, Unit defender, BOOL isCounterBombardment);
@@ -305,7 +305,7 @@ public:
 	void GetTurnsToNextPop(sint32 &p)const;//PFT 29 mar 05, show # turns until city next grows a pop
 	void GetTradeStats(sint32 &g, sint32 &l, sint32 &sci) const;
 	sint32 IsCity() const;
-	void DrawCityStats(aui_DirectSurface *surf, sint32 x, sint32 y);
+	void DrawCityStats(aui_Surface *surf, sint32 x, sint32 y);
 
 	
 	void AddTradeRoute(TradeRoute &route, BOOL fromNetwork = FALSE);
@@ -414,7 +414,7 @@ public:
 	BOOL HasForceField() const;
 
 	ORDER_RESULT InvestigateCity(Unit &c);
-	ORDER_RESULT StealTechnology(Unit &c, sint32 whichAdvance);
+	ORDER_RESULT StealTechnology(const Unit &c, sint32 whichAdvance);
 	ORDER_RESULT InciteRevolution(Unit &c);
 	ORDER_RESULT AssassinateRuler(Unit &c);
 	ORDER_RESULT InvestigateReadiness(Unit &c);
@@ -435,7 +435,7 @@ public:
 	void SetFranchiseTurnsRemaining(sint32 turns);
 	sint32 GetFranchiseTurnsRemaining() const;
 
-	BOOL CanSee(Army &army) const;
+	BOOL CanSee(const Army &army) const;
 
 #ifdef _DEBUG
 	void SetIgnoreHappiness(BOOL v); 
@@ -582,7 +582,7 @@ public:
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(const Unit &dest);
 
 	void SetFullHappinessTurns(sint32 turns);
 

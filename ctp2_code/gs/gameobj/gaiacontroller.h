@@ -167,5 +167,5 @@ class GaiaController {
 	MapPoint_List m_newTowerPositions;
 };
 
-#endif __GAIA_CONTROLLER_H__
+#endif // __GAIA_CONTROLLER_H__
 

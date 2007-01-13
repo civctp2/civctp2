@@ -27,7 +27,7 @@ public:
 	virtual AUI_ERRCODE LoadSoundData(
 		MBCHAR *filename,
 		uint8 **wavdata,
-		uint32 *size ) { return AUI_ERRCODE_OK; }
+		size_t *size ) { return AUI_ERRCODE_OK; }
 	virtual void ReleaseSoundData();
 protected:
 	uint8 *m_data;
@@ -44,10 +44,10 @@ public:
 	virtual AUI_ERRCODE LoadSoundData(
 		MBCHAR *filename,
 		uint8 **wavdata,
-		uint32 *size) ;
+		size_t *size) ;
 
 protected:
-	void TrimWavHeader( uint8 **wavdata, uint32 *size );
+	void TrimWavHeader( uint8 **wavdata, size_t *size);
 };
 
 
@@ -84,7 +84,7 @@ protected:
 	MBCHAR m_filename[ MAX_PATH + 1 ];
 	aui_SoundFormat *m_format;
 	uint8 *m_data;
-	uint32 m_size;
+	size_t m_size;
 }; 
 
 

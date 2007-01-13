@@ -11,7 +11,7 @@
 #include "TradeOfferData.h"
 #include "civarchive.h"
 #include "player.h"
-#include "gold.h"
+#include "Gold.h"
 #include "network.h"
 #include "net_action.h"
 #include "net_info.h"
@@ -58,8 +58,8 @@ void TradeOfferData::Serialize(CivArchive &archive)
 }
 
 BOOL TradeOfferData::Accept(PLAYER_INDEX player, 
-							Unit &sourceCity,
-							Unit &destCity)
+                            const Unit &sourceCity,
+                            const Unit &destCity)
 {
 #ifndef RECIPROCAL_ROUTES
 	Assert(m_askingType == ROUTE_TYPE_GOLD);

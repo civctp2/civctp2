@@ -72,10 +72,6 @@ extern "C" {
 #define BLUE 2
 #endif
 
-
-
-
-
 #define DEBUG 1
 
 #define BEGIN_DEBUG 
@@ -83,11 +79,11 @@ extern "C" {
 
 #define MAX_STRING 100
 
+#ifdef WIN32
 #define and &&
-
 #define or ||
-
 #define not !
+#endif
 
 #define TRUE 1
 #define FALSE 0

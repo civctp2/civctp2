@@ -10,7 +10,7 @@
 #include "c3errors.h"
 
 #include "Civilisation.h"
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"
 #include "Unit.h"
 #include "MessageData.h"

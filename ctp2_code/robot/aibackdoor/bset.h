@@ -1,13 +1,13 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once 
-
+#endif
 #ifndef __BSET_H__
 #define __BSET_H__ 1
 
-struct IC3CivArchive; 
+#include "Ic3CivArchive.h"
 
 
-    class CivArchive; 
+class CivArchive; 
 
 
 enum BSET_STACK { 
@@ -26,12 +26,14 @@ public:
 
     BSetID (); 
     BSetID (IC3CivArchive *);
-    BSetID (const int &copy_me);
-    BSetID (const uint32 &copy_me); 
+    BSetID (const uint32 &copy_me);
     BSetID (const sint32 &copy_me); 
-    BSetID (const BSetID &copy_me); 
+    BSetID (const BSetID &copy_me);
+#ifdef WIN32
+    BSetID (const int &copy_me);
 
-    BSetID& operator= (const int &copy_me); 
+    BSetID& operator= (const int &copy_me);
+#endif
     BSetID& operator= (const uint32 &copy_me); 
     BSetID& operator= (const sint32 &copy_me); 
     BSetID& operator= (const BSetID &copy_me); 
@@ -74,7 +76,7 @@ public:
     void SetId(BSetID val) { m_id = val; }
     void SetData(T* d);
     
-    friend BSet<T>; 
+    friend class BSet<T>; 
 }; 
 
 template <class T> BSetNode<T>::BSetNode()
@@ -508,4 +510,4 @@ template <class T> void BSet<T>::Clear()
     } 
 }
 
-#endif __BSET_H__
+#endif // __BSET_H__

@@ -387,39 +387,29 @@ void Sprite::SetSurface(void)
 
 void Sprite::InitializeDrawLow()
 {
-
-
-
-
-
-
 	if (g_is565Format)
 	{	
-		_DrawLowClipped        	= DrawLowClipped565			;
-		_DrawLow               	= DrawLow565				;
-		_DrawLowReversedClipped	= DrawLowReversedClipped565	;
-		_DrawLowReversed       	= DrawLowReversed565		;
-		_DrawReflectionLow     	= DrawReflectionLow565		;
-		_DrawFlashLow          	= DrawFlashLow565			;
-		_DrawFlashLowReversed  	= DrawFlashLowReversed565	;
-														
-		
-		_DrawScaledLow			= DrawScaledLow565			;
-		_DrawFlashScaledLow		= DrawFlashScaledLow565		;
+		_DrawLowClipped        	= &DrawLowClipped565		;
+		_DrawLow               	= &DrawLow565			;
+		_DrawLowReversedClipped	= &DrawLowReversedClipped565	;
+		_DrawLowReversed       	= &DrawLowReversed565		;
+		_DrawReflectionLow     	= &DrawReflectionLow565		;
+		_DrawFlashLow          	= &DrawFlashLow565		;
+		_DrawFlashLowReversed  	= &DrawFlashLowReversed565	;
+		_DrawScaledLow		= &DrawScaledLow565		;
+		_DrawFlashScaledLow	= &DrawFlashScaledLow565	;
 	}
 	else
 	{	
-		_DrawLowClipped        	= DrawLowClipped555			;
-		_DrawLow               	= DrawLow555				;
-		_DrawLowReversedClipped	= DrawLowReversedClipped555	;
-		_DrawLowReversed       	= DrawLowReversed555		;
-		_DrawReflectionLow     	= DrawReflectionLow555		;
-		_DrawFlashLow          	= DrawFlashLow555			;
-		_DrawFlashLowReversed  	= DrawFlashLowReversed555	;
-														
-		
-		_DrawScaledLow			= DrawScaledLow555			;
-		_DrawFlashScaledLow		= DrawFlashScaledLow555		;
+		_DrawLowClipped        	= &DrawLowClipped555		;
+		_DrawLow               	= &DrawLow555			;
+		_DrawLowReversedClipped	= &DrawLowReversedClipped555	;
+		_DrawLowReversed       	= &DrawLowReversed555		;
+		_DrawReflectionLow     	= &DrawReflectionLow555		;
+		_DrawFlashLow          	= &DrawFlashLow555		;
+		_DrawFlashLowReversed  	= &DrawFlashLowReversed555	;
+		_DrawScaledLow		= &DrawScaledLow555		;
+		_DrawFlashScaledLow	= &DrawFlashScaledLow555	;
 	}
 }
 

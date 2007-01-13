@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
 #include "c3.h"
 #include "c3math.h"
 
@@ -1246,7 +1231,7 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 
 
 PRIMITIVES_ERRCODE primitives_DrawText(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
 	MBCHAR *pString,					
@@ -1254,8 +1239,8 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1265,7 +1250,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	COLORREF oldColor;
 	sint32 oldMode;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1293,7 +1278,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1303,7 +1288,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 
 PRIMITIVES_ERRCODE primitives_DrawBoundedText(
-		aui_DirectSurface *pDirectSurface,	
+		aui_Surface *pSurface,	
 		RECT *bound,						
 		MBCHAR *pString,				
 		COLORREF color,					
@@ -1315,12 +1300,12 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	COLORREF oldColor;
 	sint32 oldMode;
 
-	Assert(pDirectSurface);
-	if (pDirectSurface==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	
@@ -1354,7 +1339,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 
@@ -1368,7 +1353,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 
 
 PRIMITIVES_ERRCODE primitives_DrawTextBatch(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
 	MBCHAR **pString,					
@@ -1377,8 +1362,8 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1389,7 +1374,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	TEXTMETRIC tm;
 	sint32 oldMode;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1423,7 +1408,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 
@@ -1437,7 +1422,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 
 
 PRIMITIVES_ERRCODE primitives_DropText(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
 	MBCHAR *pString,					
@@ -1445,8 +1430,8 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1456,7 +1441,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	COLORREF oldColor;
 	sint32 oldMode;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1491,7 +1476,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -1505,7 +1490,7 @@ PRIMITIVES_ERRCODE primitives_DropText(
 
 
 PRIMITIVES_ERRCODE primitives_ColoredDropText(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
 	MBCHAR *pString,					
@@ -1514,8 +1499,8 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1525,7 +1510,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	COLORREF oldColor;
 	sint32 oldMode;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1561,7 +1546,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -1569,15 +1554,15 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 }
 
 PRIMITIVES_ERRCODE primitives_DropTextCentered(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	RECT *destRect,
 	MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1589,7 +1574,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	SIZE		size;
 	sint32		x,y;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1629,7 +1614,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -1637,7 +1622,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 }
 
 PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	RECT *destRect,
 	MBCHAR *pString,					
 	COLORREF textColor,						
@@ -1645,8 +1630,8 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString==NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1658,7 +1643,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	SIZE		size;
 	sint32		x,y;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1699,7 +1684,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 
@@ -1714,7 +1699,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 
 
 PRIMITIVES_ERRCODE primitives_DropTextBatch(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	sint32 x,							
 	sint32 y,							
 	MBCHAR **pString,					
@@ -1723,8 +1708,8 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	BOOL bg								
 	)
 {
-	Assert(pDirectSurface);
-	if (pDirectSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+	Assert(pSurface);
+	if (pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
 
 	Assert(pString);
 	if (pString == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
@@ -1736,7 +1721,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	sint32 oldMode;
 	sint32 saveY = y;
 
-	hr = pDirectSurface->GetDC(&hdc);
+	hr = pSurface->GetDC(&hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSGETDCFAILED;
 
 	
@@ -1787,7 +1772,7 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	if (bg)
 		SetBkMode(hdc,oldMode);
 
-	hr = pDirectSurface->ReleaseDC(hdc);
+	hr = pSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 

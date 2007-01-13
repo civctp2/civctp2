@@ -122,7 +122,7 @@ public:
 class GreatLibrary : public KeyboardHandler {
 public:
 	GreatLibrary( sint32 theMode );
-	~GreatLibrary( void );
+	virtual ~GreatLibrary( void );
 
 	sint32 Initialize( MBCHAR *windowBlock );
 

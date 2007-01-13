@@ -5,10 +5,9 @@
 #define __ORDER_H__
 
 #include "ctp2_enums.h"
-
+#include "GameEventDescription.h"
+#include "cursormanager.h"
 class GameEventArgList;
-enum GAME_EVENT;
-enum CURSORINDEX;
 class OrderRecord;
 
 

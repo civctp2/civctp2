@@ -37,7 +37,7 @@ bool Get_TGA_Dimension (char *fname,
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return 0;
     }
     setvbuf(fp, NULL, _IONBF, 0);
 
@@ -105,7 +105,7 @@ bool Load_TGA_File_Simple(char *fname,
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return 0;
     }
 
     setvbuf(fp, NULL, _IONBF, 0);
@@ -259,7 +259,7 @@ bool Load_TGA_File(char *fname,
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return 0;
     }
 
     setvbuf(fp, NULL, _IONBF, 0);
@@ -425,7 +425,7 @@ int write_tga(char *fname, int width, int height, unsigned char *data)
 
 		sprintf(Str,"%s not found.",fname);
 		MessageBox(NULL,Str,NULL,MB_OK);
-		return NULL;
+		return 0;
     }
     setvbuf(fp, NULL, _IONBF, 0);
 

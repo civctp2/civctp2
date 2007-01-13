@@ -27,8 +27,9 @@
 // - Added some casts and corrected some return types. - April 15th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MAP_ANALYSIS_H__
 #define __MAP_ANALYSIS_H__
 
@@ -335,4 +336,4 @@ private:
 	DoubleVector m_scienceHandicapRatio;
 };
 
-#endif __MAP_ANALYSIS_H__
+#endif // __MAP_ANALYSIS_H__

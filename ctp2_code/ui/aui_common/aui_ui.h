@@ -43,7 +43,7 @@
 
 class			aui_UI;
 
-extern aui_UI *	g_ui;
+extern class aui_UI *	g_ui;
 
 #define			k_AUI_UI_NOCOLOR	0xff000000
 

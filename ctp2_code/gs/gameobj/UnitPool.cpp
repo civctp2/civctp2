@@ -11,7 +11,7 @@
 
 
 #include "c3.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "UnitPool.h"
 

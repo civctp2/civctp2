@@ -1,19 +1,17 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
+#include "ctp2_config.h"
+// Whether we want to supply our own inttypes to libtiff
+// (size must match of course)
+#ifdef _TIFF_DATA_TYPEDEFS_
+#define CONFIG_TELLS_TO_DEFINE_TIFF_INTTYPES 1
+#endif
 
 #include "c3.h"
-#include "tiffio.h"
+#ifdef CONFIG_TELLS_TO_DEFINE_TIFF_INTTYPES
+typedef sint8 int8;
+typedef sint16 int16;
+typedef sint32 int32;
+#endif
+#include <tiffio.h>
 #include "tiffutils.h"
 
 char *tiffutils_LoadTIF(char *filename, uint16 *width, uint16 *height)

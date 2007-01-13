@@ -14,6 +14,13 @@
 
 extern CivPaths *g_civPaths;
 
+#ifndef WIN32
+#include <sys/types.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <dirent.h>
+#endif
+
 #define MAX_ENTRIES_PER_TABLE 100
 #define ZFSFLAG_DELETED 0x0001
 
@@ -58,49 +65,72 @@ int PFEntry_compare(const void *a, const void *b)
     return(stricmp(((PFEntry *) a)->rname, ((PFEntry *) b)->rname));
 }
 
-void *mapFile(char *path, long *size, HANDLE *mhandle, HANDLE *fhandle)
+void *mapFile(char *path, size_t *size, PFPath &pfp)
 {
     void *ptr;
 
-    *fhandle = CreateFile(path,
+#ifdef WIN32
+    pfp->zms_hf = CreateFile(path,
                           GENERIC_READ,
                           FILE_SHARE_READ | FILE_SHARE_WRITE,
                           NULL,
                           OPEN_EXISTING,
                           0,
                           NULL);
-    if (*fhandle == INVALID_HANDLE_VALUE) {
-        return(NULL);
+    if (pfp.zms_hf == INVALID_HANDLE_VALUE) {
+#else
+    struct stat tmpstat = { 0 };
+    if (!stat(path, &tmpstat)) {
+    	return NULL;
     }
-
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) {
+        return NULL;
+    }
+    *size = tmpstat.st_size;
+#endif
+#ifdef WIN32
     *size = GetFileSize(*fhandle, NULL);
 
-    *mhandle = CreateFileMapping(*fhandle,
+    pfp.zms_hm = CreateFileMapping(*fhandle,
                                  NULL,
                                  PAGE_READONLY,
                                  0,
                                  0,
                                  NULL);
-    if (*mhandle == INVALID_HANDLE_VALUE) {
+    if (pfp.zms_hm == INVALID_HANDLE_VALUE) {
         CloseHandle(*fhandle);
         return(NULL);
     }
 
-    ptr = MapViewOfFile(*mhandle, FILE_MAP_READ, 0, 0, 0);
+    ptr = MapViewOfFile(pfp.zms_hm, FILE_MAP_READ, 0, 0, 0);
     if (ptr == NULL) {
-        CloseHandle(*mhandle);
-        CloseHandle(*fhandle);
+        CloseHandle(pfp.zms_hm);
+        CloseHandle(pfp.zms_hf);
         return(NULL);
     }
+#else
+    ptr = mmap(NULL, *size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (!ptr) {
+    	close(fd);
+        return(NULL);
+    }
+    pfp.zms_hf = fd;
+#endif
 
     return(ptr);
 }
 
-void unmapFile(void *ptr, HANDLE mhandle, HANDLE fhandle)
+void unmapFile(void *ptr, PFPath &pfp)
 {
+#ifdef WIN32
     UnmapViewOfFile(ptr);
-    CloseHandle(mhandle);
-    CloseHandle(fhandle);
+    CloseHandle(pfp.zms_hm);
+    CloseHandle(pfp.zms_hf);
+#else
+    munmap(ptr, (uint8 *) pfp.zms_end - (uint8 *)pfp.zms_start);
+    close(pfp.zms_hf);
+#endif
 }
 
 ProjectFile::ProjectFile()
@@ -138,9 +168,7 @@ ProjectFile::~ProjectFile()
               break;
           }
           case PRJFILE_PATH_ZMS: {
-              unmapFile(m_paths[i].zms_start, 
-                        m_paths[i].zms_hm,
-                        m_paths[i].zms_hf);
+              unmapFile(m_paths[i].zms_start, m_paths[i]);
               break;
           }
         }
@@ -277,7 +305,9 @@ void *ProjectFile::getData_ZMS(PFEntry *entry, long *size,
 
     *size = entry->size;
     data = (char *)(m_paths[entry->path].zms_start) + entry->offset;
+#ifdef WIN32
     *hFileMap = m_paths[entry->path].zms_hm;
+#endif
     *offset = entry->offset;
 
     return(data);
@@ -334,7 +364,6 @@ void ProjectFile::freeData(void *ptr)
         if ((m_paths[i].type == PRJFILE_PATH_ZMS) &&
             (ptr >= m_paths[i].zms_start) && 
             (ptr < m_paths[i].zms_end)) {
-            
             return;
         }
     }
@@ -347,24 +376,57 @@ void ProjectFile::freeData(void *ptr)
 int ProjectFile::readDOSdir(long path, PFEntry *table)
 {
     char tmp[256];
+#ifdef WIN32
     WIN32_FIND_DATA dirent;
     HANDLE dirhandle;
+#else
+    DIR *dir;
+    struct dirent *dent = 0;
+    struct stat tmpstat;
+#endif
     int count=0;
-
-    sprintf(tmp, "%s\\*.*", m_paths[path].dos_path);
-
+    
+    sprintf(tmp, "%s%s*.*", m_paths[path].dos_path, FILE_SEP);
+#ifdef WIN32
     dirhandle = FindFirstFile(tmp, &dirent);
     if (dirhandle == INVALID_HANDLE_VALUE) {
+#else
+    dir = opendir(m_paths[path].dos_path);
+    if (!dir) {
         sprintf(m_error_string, "Couldn't find \"%s\"", tmp);
         return(0);
     }
+#endif
+
         
     do {
-        if (dirent.cFileName[0] == '.')
+#ifndef WIN32
+        dent = readdir(dir);
+        if (!dent)
             continue;
+
+        MBCHAR *name = dent->d_name;
+#else
+        MBCHAR *name = dirent.cFileName;
+#endif
+
+        if (!stricmp(".", name))
+            continue;
+
+        if (!stricmp("..", name))
+            continue;
+
+#ifndef WIN32
+        snprintf(tmp, sizeof(tmp), "%s%s%s", m_paths[path].dos_path, FILE_SEP, name);
+        if (!stat(tmp, &tmpstat))
+            continue;
+
+        if (!S_ISDIR(tmpstat.st_mode)) {
+#else
         if (!(dirent.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-            if ((table) && (!exists(dirent.cFileName))) {
-                strcasecpy(table->rname, dirent.cFileName);
+#endif
+            if ((table) && (!exists(name))) {
+                strcasecpy(table->rname, name);
                 table->offset = 0;
                 table->size = 0;
                 table->path = path;
@@ -374,8 +436,13 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
                 count++;
             }
         }
+#ifndef WIN32
+    } while (dent);
+    closedir(dir);
+#else
     } while (FindNextFile(dirhandle, &dirent) == TRUE);
     FindClose(dirhandle);
+#endif
     return(count);
 }
 
@@ -522,14 +589,13 @@ int ProjectFile::addPath_ZFS(char *path)
 int ProjectFile::addPath_ZMS(char *path)
 {
     void *fbase;
-    long fsize;
+    size_t fsize;
     int count;
     int pathnum = m_num_paths;
     ZFS_FHEADER *header;
     ZFS_DTABLE *dtable;
 
-    fbase = mapFile(path, &fsize, &(m_paths[pathnum].zms_hm), 
-                    &(m_paths[pathnum].zms_hf));
+    fbase = mapFile(path, &fsize, m_paths[pathnum]);
     if (fbase == NULL) {
         sprintf(m_error_string, "Could not open file \"%s\"", path);
         return(0);

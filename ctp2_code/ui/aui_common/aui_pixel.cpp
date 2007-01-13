@@ -43,6 +43,7 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPA
 	uint8 color = 0;
 	sint32 diff = INT_MAX;
 	AUI_SURFACE_PIXELFORMAT pf = g_ui->PixelFormat();
+#ifndef USE_SDL
 	PALETTEENTRY *pe;
 
 	pe = new PALETTEENTRY[ 256 ];
@@ -80,6 +81,9 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPA
 
 	}
 	delete[256] pe;
+#else
+#warning "8bit modes wanted?"
+#endif
 	return color;
 
 }

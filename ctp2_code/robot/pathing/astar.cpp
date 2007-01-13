@@ -29,7 +29,7 @@
 
 #include "c3.h"
 #include "c3errors.h"
-#include "globals.h"
+#include "Globals.h"
 
 
 #include "astarpnt.h"
@@ -316,7 +316,7 @@ void Astar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_ent
 
 #ifdef _DEBUG
 sint32 finite_stack; 
-#endif _DEUBG
+#endif // _DEUBG
 
 
 

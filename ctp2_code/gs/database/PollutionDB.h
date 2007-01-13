@@ -7,11 +7,10 @@
 #include "DB.h"
 #include "pollutionrecord.h"
 #include "pollutiontoken.h"
-
+#include "c3files.h"
+#include "Globals.h"
 
 class CivArchive ;
-enum C3DIR;
-enum MAPSIZE;
 
 class PollutionDatabase : public Database <PollutionRecord>
 	{

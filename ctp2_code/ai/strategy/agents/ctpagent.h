@@ -6,16 +6,16 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __CTP_AGENT_H__
 #define __CTP_AGENT_H__ 1
 
 #include <vector>
 
 #include "scheduler_types.h"
-#include "Agent.h"
+#include "agent.h"
 
 
 #include "c3debugstl.h"
@@ -177,4 +177,4 @@ protected:
 	MapPoint m_targetPos;
 };
 
-#endif __CTP_AGENT_H__
+#endif // __CTP_AGENT_H__

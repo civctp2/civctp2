@@ -30,7 +30,7 @@
 
 
 #include <string>
-#include <strstream>
+#include <sstream>
 
 
 #include "aui_ui.h"
@@ -194,7 +194,11 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 			else
 				m_actionKey = '^';
 		} else if(stricmp(shortcut, "ESC") == 0) {
+#ifdef WIN32
 			m_actionKey = VK_ESCAPE;
+#else
+			m_actionKey = AUI_KEYBOARD_KEY_ESCAPE;
+#endif
 		} else {
 			m_actionKey = shortcut[0];
 		}
@@ -615,7 +619,12 @@ AUI_ERRCODE aui_Control::ReleaseKeyboardFocus( void )
 {
 	if ( GetKeyboardFocus() == this )
 	{
-		SetFocus( g_ui->TheHWND() );
+#ifdef WIN32
+		SetFocus(g_ui->TheHWND());
+#else
+		extern class aui_Win* g_winFocus;
+		g_winFocus = 0;
+#endif
 		m_whichHasFocus = NULL;
 	}
 	else
@@ -1371,8 +1380,7 @@ aui_Control::FillSize aui_Control::WidthToFill(ldl_datablock *theBlock,
 			theBlock->GetBool(stretchXAttributeString)) {
 			result.first++;
 		} else {
-			
-				result.second = std::max(0L,
+				result.second = std::max(0,
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->right);
 		}
@@ -1535,9 +1543,9 @@ aui_Control::FillSize aui_Control::HeightToFill(ldl_datablock *theBlock,
 		} else {
 			
 #if defined(ACTIVISION_DEFAULT)
-			result.second = std::_MAX(0L,
+			result.second = std::_MAX(0,
 #else
-			result.second = std::max(0L,
+			result.second = std::max(0,
 #endif
 				result.second -
 				m_imageLayerList->GetSize(layerIndex, imageIndex)->bottom);
@@ -1712,7 +1720,7 @@ sint32 aui_Control::NumberOfColumns(sint32 numberOfRows,
 #else
 		numberOfColumns = std::max(numberOfColumns,
 #endif
-			(imageEnd - imageStart + 1L));
+			(imageEnd - imageStart + 1));
 	}
 
 	

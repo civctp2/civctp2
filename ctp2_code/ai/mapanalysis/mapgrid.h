@@ -10,17 +10,16 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MAP_GRID_H__
 #define __MAP_GRID_H__
 
 
-
+#ifdef _MSC_VER
 #pragma warning(disable: 4786)
-
-
-
+#endif
 
 #ifdef min
 	#undef min
@@ -450,16 +449,13 @@ public:
 	
 	std::string GetDebugString() const
 	{
-		ostringstream ost;
-
+		std::ostringstream ost;
 		
 		for (sint32 elem = 0; elem < m_values.size(); elem++)
-		{
-				
+		{	
 				ost.width( 3);
 				ost << m_values[elem];
 				ost << " ";
-
 				
 				if ( ((elem+1) % m_xGridSize) == 0)
 					ost << "\n";
@@ -554,4 +550,4 @@ private:
 	double m_totalValue;
 };
 
-#endif __MAP_GRID_H__
+#endif // __MAP_GRID_H

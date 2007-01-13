@@ -11,8 +11,9 @@
 
  
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CITYSPRITEGROUP_H__
 #define __CITYSPRITEGROUP_H__
 

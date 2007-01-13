@@ -7,8 +7,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AGREEMENT_H__
 #define __AGREEMENT_H__
 
@@ -26,8 +27,10 @@ class Agreement : public ID
 		Agreement() : ID() { return ; }
 		Agreement(sint32 val) : ID(val) { return ; }
 		Agreement(uint32 val) : ID(val) { return ; }
+#ifdef WIN32
 		Agreement(const int val) : ID(val) { return ; }
 		Agreement(const unsigned int val) : ID(val) { return ; }
+#endif
 
 		void KillAgreement() ;
 		void Kill() { KillAgreement() ; } ;

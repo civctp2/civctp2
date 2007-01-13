@@ -6,7 +6,7 @@
 #include "Army.h"
 #include "ArmyData.h"
 #include "civarchive.h"
-#include "globals.h"
+#include "Globals.h"
 
 ArmyPool::ArmyPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_ARMY)
 {

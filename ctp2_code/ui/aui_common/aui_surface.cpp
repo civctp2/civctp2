@@ -358,7 +358,16 @@ AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
 	return errcode;
 }
 
+AUI_ERRCODE aui_Surface::Blank(const uint32 &color)
+{
+	return AUI_ERRCODE_BLTFAILED;
+}
 
+AUI_ERRCODE aui_Surface::BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue);
+{
+	uint32 color = 0;
+	return Blank(color);
+}
 
 
 inline BOOL aui_Surface::IsLocked( RECT *rect )

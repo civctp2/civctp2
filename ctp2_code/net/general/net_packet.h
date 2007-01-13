@@ -150,9 +150,13 @@ public:
 
 	virtual void Packetize(uint8* buf, uint16& size)
 	{
-#pragma warning( disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning( disable : 4127)							
+#endif
 		Assert(FALSE);
-#pragma warning( default : 4127)									
+#ifdef _MSC_VER
+#pragma warning( default : 4127)
+#endif		
 		buf[0] = 'G';
 		buf[1] = 'N';
 		size = 2;
@@ -162,9 +166,13 @@ public:
 	virtual void Unpacketize(uint16 id, uint8* buf, uint16 size)
 	{
 		Assert(buf[0] == 'G' && buf[1] == 'N');
-#pragma warning( disable : 4127)									
+#ifdef _MSC_VER
+#pragma warning( disable : 4127)
+#endif		
 		Assert(FALSE);
-#pragma warning( default : 4127)									
+#ifdef _MSC_VER
+#pragma warning( default : 4127)
+#endif		
 		Assert(id) ;												
 		Assert(size) ;												
 	}

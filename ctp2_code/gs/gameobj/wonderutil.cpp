@@ -385,7 +385,8 @@ sint32 wonderutil_GetProductionCost(sint32 wonder)
 
 sint32 wonderutil_GetGaiaIndex()
 {
-	for(sint32 i = 0; i < g_theWonderDB->NumRecords(); i++) {
+	sint32 i;
+	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
 		if(g_theWonderDB->Get(i)->GetStartGaiaController())
 			return i;
 	}
@@ -394,7 +395,8 @@ sint32 wonderutil_GetGaiaIndex()
 
 sint32 wonderutil_GetFobCityIndex()
 {
-	for(sint32 i = 0; i < g_theWonderDB->NumRecords(); i++) {
+	sint32 i;
+	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
 		if(g_theWonderDB->Get(i)->GetCloseEmbassies()) 
 			return i;
 	}

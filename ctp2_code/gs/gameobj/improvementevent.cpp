@@ -58,7 +58,7 @@ STDEHANDLER(ImprovementCompleteEvent)
 	args->Add(new GameEventArgument(GEA_Int, imptype));
 	args->Add(new GameEventArgument(GEA_Player, owner));
 
-	TerrainImprovementData	tmpData(ID(imp), owner, pos, imptype, 0);
+	TerrainImprovementData tmpData = TerrainImprovementData(ID(imp), owner, pos, imptype, 0);
 	tmpData.Complete();
 
 	return GEV_HD_Continue;

@@ -22,7 +22,7 @@ public:
 
 	virtual unsigned char *GetFileBits(
 		char *filename,
-		unsigned long *filesize = NULL );
+		size_t *filesize = NULL );
 	virtual void ReleaseFileBits( unsigned char *&bits );
 
 	

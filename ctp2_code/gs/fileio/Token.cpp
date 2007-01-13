@@ -40,7 +40,7 @@
 
 #include "Token.h"
 #include "ErrMsg.h"
-#include "globals.h"
+#include "Globals.h"
 #include "StrDB.h"
 #ifndef __MAKESPR__
 #include "AdvanceRecord.h"
@@ -832,7 +832,7 @@ sint32 Token::IsNumber(char *str)
 		str++ ;
 	
 	
-	if (*str == NULL)
+	if (0 == *str)
 		return (TRUE) ;
 	
 	

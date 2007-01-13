@@ -1,7 +1,9 @@
 /**
  * $Id$
  */
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __PLASMA_GEN_1_H__
 #define __PLASMA_GEN_1_H__

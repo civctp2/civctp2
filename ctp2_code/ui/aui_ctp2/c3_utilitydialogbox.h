@@ -257,7 +257,7 @@ class c3_UtilityAbortPopup : public KeyboardHandler
 {
 public:
 	c3_UtilityAbortPopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
-	~c3_UtilityAbortPopup( void );
+	virtual ~c3_UtilityAbortPopup( void );
 
 	c3_PopupWindow	*m_window;
 
@@ -301,7 +301,7 @@ class c3_UtilityPlayerListPopup : public KeyboardHandler
 {
 public:
 	c3_UtilityPlayerListPopup( c3_UtilityPlayerListCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
-	~c3_UtilityPlayerListPopup( void );
+	virtual ~c3_UtilityPlayerListPopup( void );
 
 	c3_PopupWindow	*m_window;
 

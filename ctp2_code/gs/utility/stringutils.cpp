@@ -75,17 +75,16 @@ void stringutils_HackColor(BOOL on)
 {
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : stringutils_Interpret
 //
 // Description: Fill the variable and language dependent parts of a string.
 //
-// Parameters : msg				: original string
-//				slicObj			: context to look up values of variables
-//				sInterpreted	: (space reserved for) interpreted string
-//				a_Capacity		: size available for interpreted string
+// Parameters : msg             : original string
+//              slicObj         : context to look up values of variables
+//              sInterpreted    : (space reserved for) interpreted string
+//              a_Capacity      : size available for interpreted string
 //
 // Globals    : -
 //
@@ -94,22 +93,21 @@ void stringutils_HackColor(BOOL on)
 // Remark(s)  : When the original string does not contain any variables, it 
 //              will be copied literally.
 //              The interpreted string is truncated at a_Capacity characters.
-//				Any individual (sub)expression will still be truncated at 
+//              Any individual (sub)expression will still be truncated at 
 //              k_MAX_INTERP_LEN characters.
-//				TODO: Reimplementation with std::string/stringstream.
+//              TODO: Reimplementation with std::string/stringstream.
 //              TODO: Check all calls of this function to pass the proper
 //                    capacity, instead of relying on the default 
-//					  k_MAX_INTERP_LEN value to work "because it worked in the
+//                    k_MAX_INTERP_LEN value to work "because it worked in the
 //                    original version".
 //
 //----------------------------------------------------------------------------
-
 void stringutils_Interpret
 (
-	MBCHAR const *	msg,
-	SlicContext &	slicObj,
-	MBCHAR *		sInterpreted,
-	size_t const	a_Capacity
+	MBCHAR const *  msg,
+	SlicContext &   slicObj,
+	MBCHAR *        sInterpreted,
+	size_t const    a_Capacity
 )
 {
 	const char *input = msg;

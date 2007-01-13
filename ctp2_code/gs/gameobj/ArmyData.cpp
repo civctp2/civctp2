@@ -70,7 +70,7 @@
 #include "UnitData.h"
 #include "ConstDB.h"
 #include "UnitAstar.h"
-#include "aicause.h"
+#include "AICause.h"
 
 #include "GoodyHuts.h"
 #include "SlicSegment.h"
@@ -105,7 +105,7 @@
 
 #include "soundmanager.h"
 #include "gamesounds.h"
-#include "order.h"
+#include "Order.h"
 #include "cellunitlist.h"
 
 #include "CityAstar.h"
@@ -135,12 +135,12 @@ extern Pollution *g_thePollution;
 
 #include "SoundRecord.h"
 
-#include "squad.h"
+#include "Squad.h"
 #include "ctpagent.h"
 #include "ctpgoal.h"
 
 #include "TradeRouteData.h"
-#include "gold.h"
+#include "Gold.h"
 #include "buildingutil.h"
 #include "Diplomat.h"
 #include "radarmap.h"
@@ -1479,7 +1479,7 @@ ORDER_RESULT ArmyData::InvestigateCity(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	UnitRecord::InvestigateCityData *values;
+	const UnitRecord::InvestigateCityData *values;
 
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN))
@@ -1809,7 +1809,7 @@ sint32 ArmyData::GetCost()
 BOOL ArmyData::CanFranchise(double &chance, sint32 &uindex) const
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
-		UnitRecord::ChanceEffect *data;
+		const UnitRecord::ChanceEffect *data;
 		if(m_array[i].GetDBRec()->GetCreateFranchise(data) &&
 		   !m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -2167,10 +2167,10 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 		if(cell->AccessUnit(i).CanBeExpelled() &&
 		   cell->AccessUnit(i).GetVisibility() & (1 << m_owner)) {
 			Unit u = cell->AccessUnit(i);
-
-            victim = u.GetOwner();
+			victim = u.GetOwner();
+			Army army = u.GetArmy();
 			foundCity = u.NearestFriendlyCityWithRoom(cpos, numToExpel,
-													  &u.GetArmy());
+								  &army);
 		
 			expelled.Insert(u);
 		}
@@ -2221,7 +2221,7 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 BOOL ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt,
 								   sint32 &uindex) const
 {
-	UnitRecord::CauseUnhappinessData *data;
+	const UnitRecord::CauseUnhappinessData *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetCauseUnhappiness(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -2255,7 +2255,7 @@ BOOL ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt,
 //----------------------------------------------------------------------------
 BOOL ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt) const
 {
-	UnitRecord::CauseUnhappinessData *data;	
+	const UnitRecord::CauseUnhappinessData *data;	
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetCauseUnhappiness(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -2294,7 +2294,7 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 	sint32 timer, amount;
 	Assert(uindex >= 0);
 	Assert(uindex < m_nElements);
-	UnitRecord::CauseUnhappinessData *cuData;	
+	const UnitRecord::CauseUnhappinessData *cuData;	
 	if(uindex < 0 || uindex >= m_nElements)
 		return ORDER_RESULT_ILLEGAL;
 
@@ -2411,7 +2411,7 @@ BOOL ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
 		return FALSE;
 
-	UnitRecord::PlantNukeData *data;
+	const UnitRecord::PlantNukeData *data;
 
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetPlantNuke(data) &&
@@ -2448,7 +2448,7 @@ BOOL ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
 	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
 		return FALSE;
 
-	UnitRecord::PlantNukeData *data;
+	const UnitRecord::PlantNukeData *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetPlantNuke(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -2675,7 +2675,7 @@ BOOL ArmyData::CanSlaveRaid(double &success, double &death,
 							sint32 &timer, sint32 &amount,
 							sint32 &uindex) const
 {
-	UnitRecord::SlaveRaidsData *data;
+	const UnitRecord::SlaveRaidsData *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetSlaveRaids(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -2712,7 +2712,7 @@ BOOL ArmyData::CanSlaveRaid(double &success, double &death,
 BOOL ArmyData::CanSlaveRaid(double &success, double &death, 
 							sint32 &timer, sint32 &amount) const
 {
-	UnitRecord::SlaveRaidsData *data;
+	const UnitRecord::SlaveRaidsData *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if( !m_array[i].GetDBRec()->GetSlaveRaids(data)) {
 			
@@ -3072,7 +3072,7 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 BOOL ArmyData::CanUndergroundRailway(double &success, double &death,
 						   sint32 &uindex) const
 {
-	UnitRecord::SuccessDeathEffect *data;
+	const UnitRecord::SuccessDeathEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetUndergroundRailway(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3088,7 +3088,7 @@ BOOL ArmyData::CanUndergroundRailway(double &success, double &death,
 
 BOOL ArmyData::CanUndergroundRailway(double &success, double &death) const
 {
-	UnitRecord::SuccessDeathEffect *data;
+	const UnitRecord::SuccessDeathEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetUndergroundRailway(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3242,7 +3242,7 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SubGold,
 						   GEA_Player, m_owner,
-						   GEA_Int, cost,
+						   GEA_Int, static_cast<int>(cost),
 						   GEA_End);
 	
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_InciteUprisingUnit,
@@ -3408,7 +3408,7 @@ ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 
 BOOL ArmyData::CanBioInfect(double &chance, sint32 &uindex) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetBioTerror(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3422,7 +3422,7 @@ BOOL ArmyData::CanBioInfect(double &chance, sint32 &uindex) const
 
 BOOL ArmyData::CanBioInfect(double &chance) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetBioTerror(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3515,7 +3515,7 @@ ORDER_RESULT ArmyData::BioInfect(const MapPoint &point)
 
 BOOL ArmyData::CanPlague(double &chance, sint32 &uindex) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetPlague(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3529,7 +3529,7 @@ BOOL ArmyData::CanPlague(double &chance, sint32 &uindex) const
 
 BOOL ArmyData::CanPlague(double &chance) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetPlague(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3618,7 +3618,7 @@ ORDER_RESULT ArmyData::Plague(const MapPoint &point)
 
 BOOL ArmyData::CanNanoInfect(double &chance, sint32 &uindex) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetNanoTerror(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3632,7 +3632,7 @@ BOOL ArmyData::CanNanoInfect(double &chance, sint32 &uindex) const
 
 BOOL ArmyData::CanNanoInfect(double &chance) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetDBRec()->GetNanoTerror(data) &&
 		   m_array[i].CanPerformSpecialAction()) {
@@ -3757,7 +3757,7 @@ BOOL ArmyData::CanConvertCity(double &best_chance, double &best_death_chance,
 	sint32 i;
 	best_chance = -1.0;
 
-	UnitRecord::SuccessDeathEffect *data;
+	const UnitRecord::SuccessDeathEffect *data;
     for (i = m_nElements - 1; i>= 0; i--) { 
         if (m_array[i].GetDBRec()->GetConvertCities(data) &&
 			m_array[i].CanPerformSpecialAction()) {
@@ -3782,7 +3782,7 @@ BOOL ArmyData::CanConvertCity(double &best_chance, double &best_death_chance) co
 	
 	best_chance = -1.0;
 
-	UnitRecord::SuccessDeathEffect *data;
+	const UnitRecord::SuccessDeathEffect *data;
     for (i = m_nElements - 1; i>= 0; i--) { 
 		
         if ( m_array[i].GetDBRec()->GetConvertCities(data) &&
@@ -3905,7 +3905,7 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	UnitRecord::SuccessDeathEffect *data;
+	const UnitRecord::SuccessDeathEffect *data;
 	
     for (i = m_nElements - 1; i>= 0; i--) { 
 		if(m_array[i].CanPerformSpecialAction()&&
@@ -5879,8 +5879,11 @@ BOOL ArmyData::ExecuteOrders(bool propagate)
 				completedOrder = TRUE;
 				break;
 			case UNIT_ORDER_GROUP_UNIT:
-				GroupUnit(Unit(order->m_argument));
-				completedOrder = TRUE;
+				{
+					Unit u = order->m_argument;
+					GroupUnit(u);
+					completedOrder = TRUE;
+				}
 				break;
 			case UNIT_ORDER_INVESTIGATE_CITY:
 			case UNIT_ORDER_NULLIFY_WALLS:
@@ -5951,11 +5954,11 @@ BOOL ArmyData::ExecuteOrders(bool propagate)
 				Assert(FALSE);
 		}
 
-        #ifdef _DEBUG
+#ifdef _DEBUG
             if (g_theDiplomacyLog) { 
                 g_theDiplomacyLog->PopRegardRequest(); 
             } 
-        #endif _DEBUG
+#endif // _DEBUG
 
 		if(!g_theArmyPool->IsValid(me)) {
 			keepGoing = FALSE;
@@ -6210,7 +6213,8 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 					u.UndoVision();
 					u.RemoveUnitVision();
 					m_array[i].InsertCargo(u);
-					ID *tmp_id = (ID*)(&m_array[i].GetArmy());
+					Army army = m_array[i].GetArmy();
+					ID *tmp_id = (ID*)(&army);
 					g_player[m_owner]->RegisterInsertCargo(tmp_id, u.GetType(),
 														   (sint32)u.GetHP());
 				}
@@ -7438,7 +7442,8 @@ BOOL ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 					g_network.Unblock(m_owner);
 				}
 
-                ID *tmp_id = (ID*)(&transports[j].GetArmy());
+				Army army = transports[j].GetArmy();
+				ID *tmp_id = (ID*)(&army);
 				
                 
 				break;
@@ -8262,7 +8267,7 @@ BOOL ArmyData::CanMove()
 	return FALSE;
 }
 
-void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit &c)
+void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, const Unit &c)
 {
 	sint32		soundID, spriteID;
 
@@ -8342,7 +8347,7 @@ BOOL ArmyData::CanSlaveUprising() const
 
 BOOL ArmyData::CanInciteRevolution( double &chance, double &eliteChance ) const
 {
-	UnitRecord::InciteRevolutionData *data;
+	const UnitRecord::InciteRevolutionData *data;
     for(sint32 i = 0; i < m_nElements; i++) {
         if(g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType())->GetInciteRevolution(data) &&
 			m_array[i].CanPerformSpecialAction()) {
@@ -8366,7 +8371,7 @@ BOOL ArmyData::CanCloak() const
 
 BOOL ArmyData::CanCreateFranchise( double &chance ) const
 {
-	UnitRecord::ChanceEffect *data;
+	const UnitRecord::ChanceEffect *data;
     for(sint32 i = 0; i < m_nElements; i++) {
         if(g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType())->GetCreateFranchise(data) &&
 			m_array[i].CanPerformSpecialAction()) {
@@ -8379,7 +8384,7 @@ BOOL ArmyData::CanCreateFranchise( double &chance ) const
 
 BOOL ArmyData::CanAssasinateRuler( double &chance, double &eliteChance) const
 {
-	UnitRecord::AssasinateRulerData *data;
+	const UnitRecord::AssasinateRulerData *data;
 
     for(sint32 i = 0; i < m_nElements; i++) {
         if(g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType())->GetAssasinateRuler(data) &&
@@ -8394,7 +8399,7 @@ BOOL ArmyData::CanAssasinateRuler( double &chance, double &eliteChance) const
 
 BOOL ArmyData::CanStealTechnology( double &randChance, double &chance) const
 {
-	UnitRecord::StealTechnologyData *data;
+	const UnitRecord::StealTechnologyData *data;
     for(sint32 i = 0; i < m_nElements; i++) {
         if(g_theUnitDB->Get(m_array[i].GetType(), g_player[GetOwner()]->GetGovernmentType())->GetStealTechnology(data) &&
 			m_array[i].CanPerformSpecialAction()) {
@@ -8408,7 +8413,7 @@ BOOL ArmyData::CanStealTechnology( double &randChance, double &chance) const
 
 BOOL ArmyData::CanInvestigateCity( double &chance, double &eliteChance) const
 {
-	UnitRecord::InvestigateCityData *data;
+	const UnitRecord::InvestigateCityData *data;
     for(sint32 i = 0; i < m_nElements; i++) {
         if(m_array[i].GetDBRec()->GetInvestigateCity(data) &&
 			m_array[i].CanPerformSpecialAction()) {
@@ -8613,7 +8618,7 @@ BOOL ArmyData::ExecuteSpecialOrder(Order *order, BOOL &keepGoing)
         if (g_theDiplomacyLog) { 
             g_theDiplomacyLog->PopRegardRequest(); 
         } 
-#endif _DEBUG
+#endif // _DEBUG
 
 	if(result == ORDER_RESULT_ILLEGAL) { 
 		

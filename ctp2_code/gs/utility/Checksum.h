@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CHECKSUM_H__
 #define __CHECKSUM_H__ 1
 

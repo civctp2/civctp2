@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TEXTTAB_H__
 #define __TEXTTAB_H__
 

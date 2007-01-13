@@ -1,16 +1,7 @@
 
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CITYLAYER_H__
 #define __CITYLAYER_H__
 

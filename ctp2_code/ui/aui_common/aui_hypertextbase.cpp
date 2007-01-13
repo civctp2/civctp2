@@ -132,7 +132,7 @@ aui_HyperTextBase::~aui_HyperTextBase()
 {
 	if ( m_hyperText )
 	{
-		delete[ m_hyperMaxLen + 1 ] m_hyperText;
+		delete[] m_hyperText;
 		m_hyperText = NULL;
 	}
 

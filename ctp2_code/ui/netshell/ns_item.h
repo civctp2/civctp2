@@ -19,6 +19,7 @@
 #include "aui_window.h"
 #include "aui_blitter.h"
 #include "aui_uniqueid.h"
+#include "aui_ui.h"
 
 #include "c3_static.h"
 #include "c3_listitem.h"

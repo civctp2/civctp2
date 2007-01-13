@@ -25,7 +25,7 @@
 // - #pragma once added.
 //
 //----------------------------------------------------------------------------
-#if defined(_MSC_VER) && (_MSC_VER >= 1000)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __IC3_CIVARCHIVE_H__
@@ -51,9 +51,11 @@ STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ;
 #else
 #include "noCOMBase.h"
 
-class IC3CivArchive : public IUnknown {
+class IC3CivArchive : public ICTP2Unknown {
+public:
   virtual void Store(uint8 *pbData, uint32 ulLen) = 0;
   virtual void Load(uint8 *pbData, uint32 ulLen) = 0;
+  virtual BOOL IsStoring() = 0;
 };
 #endif// !USE_COM_REPLACEMENT
 

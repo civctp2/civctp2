@@ -115,6 +115,7 @@ protected:
     :   aui_Region          (), 
         aui_ImageBase       (), 
         aui_TextBase        (),
+	aui_SoundBase       (),
 		m_statusText        (NULL),
 		m_numberOfLayers    (0), 
         m_imagesPerLayer    (0),

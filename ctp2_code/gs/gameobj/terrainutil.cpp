@@ -1177,7 +1177,8 @@ sint32 terrainutil_GetTerraformGrasslandImprovement()
 sint32 terrainutil_GetEndgameTileImpIndex()
 {
 	const TerrainImprovementRecord *me; 
-	for(sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+	sint32 i;
+	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
 		me = g_theTerrainImprovementDB->Get(i);
 		if(me->GetEffectPtr()->GetEndgame())
 			return i;

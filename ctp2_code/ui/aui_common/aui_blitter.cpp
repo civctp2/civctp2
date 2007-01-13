@@ -1361,10 +1361,11 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 
 		
 
-		
-		for ( sint32 i = 0; i < bevelThickness; i++ )
+		sint32 i;		
+		for ( i = 0; i < bevelThickness; i++ )
 		{
-			for ( sint32 j = i; j; j-- )
+			sint32 j;
+			for ( j = i; j; j-- )
 			{
 				
 				*destBuf++ = white;
@@ -1389,7 +1390,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 		
 		for ( i = skipHeight; i; i-- )
 		{
-			for ( sint32 j = bevelThickness; j; j-- )
+			sint32 j;
+			for ( j = bevelThickness; j; j-- )
 			{
 				
 				*destBuf++ = white;
@@ -1412,7 +1414,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt8(
 		
 		for ( i = bevelThickness; i; i-- )
 		{
-			for ( sint32 j = i - 1; j; j-- )
+			sint32 j;
+			for ( j = i - 1; j; j-- )
 			{
 				
 				*destBuf++ = white;
@@ -1529,10 +1532,11 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 
 		if ( destSurf->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
 		{
-			
-			for ( sint32 i = 0; i < bevelThickness; i++ )
+			sint32 i;
+			for ( i = 0; i < bevelThickness; i++ )
 			{
-				for ( sint32 j = i; j; j-- )
+				sint32 j;
+				for ( j = i; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
@@ -1557,7 +1561,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = skipHeight; i; i-- )
 			{
-				for ( sint32 j = bevelThickness; j; j-- )
+				sint32 j;
+				for ( j = bevelThickness; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
@@ -1580,7 +1585,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = bevelThickness; i; i-- )
 			{
-				for ( sint32 j = i - 1; j; j-- )
+				sint32 j;
+				for ( j = i - 1; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
@@ -1604,10 +1610,11 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 		}
 		else 
 		{
-			
-			for ( sint32 i = 0; i < bevelThickness; i++ )
+			sint32 i;
+			for ( i = 0; i < bevelThickness; i++ )
 			{
-				for ( sint32 j = i; j; j-- )
+				sint32 j;
+				for ( j = i; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
@@ -1632,7 +1639,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = skipHeight; i; i-- )
 			{
-				for ( sint32 j = bevelThickness; j; j-- )
+				sint32 j;
+				for ( j = bevelThickness; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
@@ -1655,7 +1663,8 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 			
 			for ( i = bevelThickness; i; i-- )
 			{
-				for ( sint32 j = i - 1; j; j-- )
+				sint32 j;
+				for ( j = i - 1; j; j-- )
 				{
 					
 					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
@@ -2353,7 +2362,9 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 
 void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength)
 {
-	
+#ifndef WIN32
+	memcpy(pDst, pSrc, copylength * sizeof(uint16));
+#else
 	if (((uint32 )pDst) & 2)
 	{
 		*pDst = *pSrc;
@@ -2395,6 +2406,7 @@ __asm
 		mov		[edi], ax
 	L2:
 	}
+#endif
 }
 
 

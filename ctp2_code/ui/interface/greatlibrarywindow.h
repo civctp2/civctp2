@@ -29,7 +29,7 @@ public:
 	
 	static const int GREAT_LIBRARY_PANEL_BLANK;
 	GreatLibraryWindow(AUI_ERRCODE *err);
-	~GreatLibraryWindow();
+	virtual ~GreatLibraryWindow();
 
 
 

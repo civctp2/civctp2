@@ -10,7 +10,9 @@
 
 
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TILEDRAWROAD_H__
 #define __TILEDRAWROAD_H__
 

@@ -10,15 +10,16 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __AGREEMENT_MATRIX_H__
 #define __AGREEMENT_MATRIX_H__
 
 
-
+#ifdef _MSC_VER
 #pragma warning(disable: 4786)
-
+#endif
 
 #include <vector>
 #include "c3debugstl.h"
@@ -141,4 +142,4 @@ private:
 	sint16 m_maxPlayers;
 };
 
-#endif __AGREEMENT_MATRIX_H__
+#endif // __AGREEMENT_MATRIX_H__

@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GAME_EVENT_ARGUMENT_H__
 #define __GAME_EVENT_ARGUMENT_H__
 
@@ -24,6 +25,8 @@ class GameEventArgument {
 public:
 	GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl);
 	GameEventArgument(GAME_EVENT_ARGUMENT type, ...);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, sint32);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, const MapPointData &);
 	GameEventArgument(CivArchive &archive);
 	~GameEventArgument();
 	void Serialize(CivArchive &archive);

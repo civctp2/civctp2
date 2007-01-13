@@ -28,8 +28,9 @@
 //   - Dec. 26th 2994 - Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _UNSEEN_CELL_H_
 #define _UNSEEN_CELL_H_
 

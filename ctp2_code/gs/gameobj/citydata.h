@@ -324,7 +324,7 @@ public:
 	CityData(CivArchive &archive) ;									
     CityData(PLAYER_INDEX o, Unit hc, const MapPoint &center_pos);
 	CityData(CityData *copy);
-	~CityData();
+	virtual ~CityData();
 
 	void Copy(CityData *copy);
     void Serialize(CivArchive &archive) ;
@@ -764,7 +764,7 @@ public:
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit &dest);
+	BOOL SendSlaveTo(const Unit &dest);
 	void SetFullHappinessTurns(sint32 turns);
 
 	void AiStartMovingPops();

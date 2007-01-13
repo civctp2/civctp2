@@ -22,12 +22,10 @@ class Gold;
 class MilitaryReadiness; 
 class PlayerHappiness;
 class UnitMoveList;
-enum UNIT_ORDER_TYPE;
 class Path;
 class AgreementData;
 class Agreement;
 class CivilisationData;
-enum PLAYER_TYPE;
 class DiplomaticRequestData;
 class MessageData;
 class NetCheat;
@@ -48,9 +46,10 @@ class ArmyData;
 class DiplomaticRequest;
 class Exclusions;
 struct Response;
-enum GAME_OVER;
 class ChatList;
 class CellUnitList;
+
+#include "player.h"
 
 #ifdef _DEBUG
 class aui_Surface;
@@ -147,7 +146,7 @@ class Network : public NetIOResponse
 {
 public:
 	Network();
-	~Network();
+	virtual ~Network();
 
 	void SetLaunchFromNetFunc(BOOL fromSave);
 	void InitFromNetFunc();

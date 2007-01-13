@@ -3,7 +3,6 @@
 
 #ifndef WIN32
 #include "windows.h"
-#endif
 
 struct DisplayDevice {
 	LPSTR		szName;
@@ -11,6 +10,7 @@ struct DisplayDevice {
 	GUID*		lpGUID;
 	GUID	DisplayGUID;
 	HMONITOR	hMon;
+#endif
 	RECT		rect;
 };
 
@@ -19,12 +19,15 @@ struct CTPDisplayMode {
 	sint32		height;
 };
 
+#ifdef WIN32
 BOOL CALLBACK		display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 								   LPSTR szDevice, LPVOID lParam, HMONITOR hMonitor);
+#endif
 BOOL				display_EnumerateDisplayDevices(void);
 
-
+#ifdef WIN32
 HRESULT CALLBACK	display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam);
+#endif
 void				display_EnumerateDisplayModes(void);
 BOOL				display_IsLegalResolution(sint32 width, sint32 height);
 

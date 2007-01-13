@@ -10,14 +10,15 @@
 
 
 
-
+#ifndef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ROBOT_ASTAR_H__
 #define __ROBOT_ASTAR_H__ 1
 
 
 #include "UnitAstar.h"
-#include "ic3RobotAstar.h"
+#include "IC3RobotAstar.h"
 
 class Player; 
 class CivArchive; 
@@ -25,22 +26,30 @@ class CivArchive;
 class RobotAstar :  public IC3RobotAstar, public UnitAstar
 
 {
+#ifndef USE_COM_REPLACEMENT
 	ULONG m_refCount;
+#else
+	uint32 m_refCount;
+#endif
 
     Player *m_player; 
     RobotPathEval *m_callback; 
 
 public:
-
-    	
+#ifndef USE_COM_REPLACEMENT
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
-
+#else
+	virtual uint32 AddRef();
+	virtual uint32 Release();
+#endif
     
 
     RobotAstar(Player *p); 
     RobotAstar(Player *p, CivArchive &archive); 
+    virtual ~RobotAstar();
+    
     void Serialize(CivArchive &archive); 
 
     sint32 EntryCost(const MapPoint &prev, const MapPoint &pos,
@@ -54,8 +63,11 @@ public:
 
 
 
-
+#ifndef USE_COM_REPLACEMENT
     STDMETHODIMP_ (BOOL) FindPath(RobotPathEval *cb, 
+#else
+	virtual BOOL FindPath(RobotPathEval *cb, 
+#endif
        uint32 army_id, PATH_ARMY_TYPE pat, uint32 army_type, 
        MapPointData *start, MapPointData *dest, sint32 *bufSize, 
 	   MapPointData ** buffer, sint32 *nPoints,
@@ -68,4 +80,4 @@ public:
 
 };
 
-#endif __ROBOT_ASTAR_H__
+#endif // __ROBOT_ASTAR_H__

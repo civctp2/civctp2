@@ -61,10 +61,10 @@ void TradeBids::Serialize(CivArchive &archive)
 }
 
 uint32 TradeBids::AddBid(sint32 owner,
-						 Unit &fromCity,
-						 sint32 resource,
-						 Unit &toCity,
-						 sint32 price)
+                         const Unit &fromCity,
+                         sint32 resource,
+                         const Unit &toCity,
+                         sint32 price)
 {
 	uint32 id = (owner << 24) | (m_nextId[owner]++);
 	m_table[owner]->AddTail(new Bid(id,

@@ -1,16 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -48,9 +36,11 @@ public:
 						Pixel16 outlineColor, uint16 flags);
 
 	Pixel16			*GetFrameData(uint16 facing, uint16 frame) { return m_frames[facing][frame]; }
+	size_t			GetFrameDataSize(uint16 facing, uint16 frame);
 	Pixel16			*GetMiniFrameData(uint16 facing, uint16 frame) { return m_miniframes[facing][frame]; }
-	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_frames[facing][frame] = data; }
-	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data) { m_miniframes[facing][frame] = data; }
+	size_t			GetMiniFrameDataSize(uint16 facing, uint16 frame);
+	void			SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_frames[facing][frame] = data; }
+	void			SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size) { m_miniframes[facing][frame] = data; m_miniframesSizes[facing][frame] = size; }
 
 	POINT			GetHotPoint(uint16 facing) { return m_hotPoints[facing]; }
 	POINT			*GetHotPoints(void) { return m_hotPoints; }
@@ -62,7 +52,9 @@ public:
 
 protected:
 	Pixel16			**m_frames[k_NUM_FACINGS];
+	size_t			*m_framesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniframes[k_NUM_FACINGS];
+	size_t			*m_miniframesSizes[k_NUM_FACINGS];
 	POINT			m_hotPoints[k_NUM_FACINGS];
 };
 

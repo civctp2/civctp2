@@ -41,7 +41,7 @@
 #include "citydata.h"
 #include "civarchive.h"
 #include "BuildingRecord.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "Checksum.h"
 #include "CivPaths.h"
 #include "WonderRecord.h"
@@ -83,7 +83,7 @@
 #include "GameEventManager.h"
 
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "buildingutil.h"
 #include "wonderutil.h"

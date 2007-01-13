@@ -44,7 +44,7 @@
 #include "Plan.h"
 
 #include "scheduler_types.h"
-#include "squad_strength.h"
+#include "squad_Strength.h"
 #include "StrategyRecord.h"
 
 

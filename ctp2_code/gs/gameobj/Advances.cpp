@@ -45,7 +45,7 @@
 #include "Civilisation.h"
 
 
-#include "aicause.h"
+#include "AICause.h"
 #include "SelItem.h"
 
 #include "UnitActor.h"
@@ -53,7 +53,7 @@
 
 #include "Unit.h"
 #include "Sci.h"
-#include "gold.h"
+#include "Gold.h"
 
 #include "DiffDB.h"
 #include "profileDB.h"

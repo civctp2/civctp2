@@ -76,12 +76,12 @@ static int copy_file(char *srcFName, char *dstFName)
 	char buf[FREAD_BUF_SIZE];
 	FILE *inFile = fopen(srcFName, "r");
 
-	Assert(inFile);
+	//Assert(inFile);
 	if (!inFile)
 		return -1;
 
 	FILE *outFile = fopen(dstFName, "w");
-	Assert(outFile);
+	//Assert(outFile);
 	if (!outFile) {
 		fclose(inFile);
 		return -1;
@@ -102,10 +102,10 @@ static int copy_file(char *srcFName, char *dstFName)
 	fclose(outFile);
 	fclose(inFile);
 
-	if (-1 == read)
+	if (0 == read)
 		return -1;
 
-	if (-1 == wrote)
+	if (0 == wrote)
 		return -1;
 
 	return 0;

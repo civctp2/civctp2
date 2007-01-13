@@ -7,9 +7,6 @@ plugin_LTLIBRARIES=crater.la fault.la geometric.la plasma2.la
 if WIN32
 CTP2_WIN32_FREETYPE_INC=\
 	-I$(ctp2_code)/ui/freetype
-else
-CTP2_NOWIN32_INC=
-	-I$(ctp2_code)/os/nowin32
 endif
 
 crater_la_SOURCES = Crater.cpp

@@ -2,6 +2,7 @@
 #define __NETFUNC_H__
 
 #include "anet.h"
+#include <locale>
 #include <iterator>
 #include <stdio.h>
 #include <stdlib.h>
@@ -293,7 +294,7 @@ public:
 	
 	Message(void *p, size_t s, dpid_t id, bool b = true);
 	
-	~Message(void);
+	virtual ~Message(void);
 	
 	CODE GetCode(void);
 	
@@ -524,7 +525,7 @@ public:
 	
 	Server(dp_object_t *o, KeyStruct *k, long f);
 	
-	~Server(void);
+	virtual ~Server(void);
 	
 	char *GetName(void);
 	
@@ -548,7 +549,7 @@ public:
 	
 	Contact(void);
 	
-	~Contact(void);
+	virtual ~Contact(void);
 	
 	char *GetName(void);
 	
@@ -585,7 +586,7 @@ public:
 	
 	Port(void);
 	
-	~Port(void);
+	virtual ~Port(void);
 	
 	commPortName_t *GetPort(void);
 	
@@ -879,7 +880,7 @@ public:
 	
 	void Set(dp_playerId_t *p);
 	
-	~Player(void);
+	virtual ~Player(void);
 	
 	dpid_t GetId(void);
 	

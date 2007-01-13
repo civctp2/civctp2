@@ -151,7 +151,6 @@ public:
 
 #if defined(_MSC_VER)	
 	virtual MouseEventCallback PostChildrenCallback;
-
 	virtual MouseEventCallback MouseLGrabOutside;
 #else
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
@@ -160,9 +159,9 @@ public:
 };
 
 
-
-
+#ifdef WIN32
 LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, LPARAM lParam );
+#endif
 
 #endif 

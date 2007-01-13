@@ -46,7 +46,7 @@
 #include "installation.h"
 #include "TerrImprove.h"
 #include "installationpool.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "DiplomaticRequest.h"
 #include "DiplomaticRequestPool.h"
 #include "message.h"
@@ -54,13 +54,13 @@
 #include "UnitData.h"
 #include "citydata.h"
 #include "TurnCnt.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "Advances.h"
 #include "MaterialPool.h"
 #include "TerrImprovePool.h"
 #include "net_playerdata.h"
 #include "UnitPool.h"
-#include "order.h"
+#include "Order.h"
 #include "ArmyPool.h"
 #include "tiledmap.h"
 #include "radarmap.h"
@@ -436,7 +436,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_BUILD:
 			DPRINTF(k_DBG_NET, ("Server: Building unit type %d at city %d\n", m_data[0], m_data[1]));
 			if(g_player[index]) {
-				g_player[index]->BuildUnit(m_data[0], Unit(m_data[1]));
+				Unit unit = Unit(m_data[1]);
+				g_player[index]->BuildUnit(m_data[0], unit);
 			}
 			break;
 		case NET_ACTION_TAX_RATES:
@@ -455,8 +456,10 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_BUILD_IMP:
 			DPRINTF(k_DBG_NET, ("Server: Building improvement %d at city %d\n",
 								m_data[0], m_data[1]));
-			if(g_player[index])
-				g_player[index]->BuildImprovement(m_data[0], Unit(m_data[1]));
+			if(g_player[index]) {
+				Unit unit(m_data[1]);
+				g_player[index]->BuildImprovement(m_data[0], unit);
+			}
 			break;
 		case NET_ACTION_CREATE_TRADE_ROUTE:
 		{
@@ -729,8 +732,10 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Server: Player %d building wonder %d in city %lx\n",
 								index, m_data[1], m_data[0]));
-			if(g_theUnitPool->IsValid(Unit(m_data[0])))
-				Unit(m_data[0]).BuildWonder(m_data[1]);
+			Unit unit = Unit(m_data[0]);
+			if(g_theUnitPool->IsValid(unit)) {
+				unit.BuildWonder(m_data[1]);
+			}
 			break;
 		}
 		case NET_ACTION_INTERCEPT_TRADE:
@@ -1254,7 +1259,8 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_ACTION_CHANGE_BUILD:
 		{
 			if(g_player[index]) {
-				g_player[index]->ChangeCurrentlyBuildingItem(Unit(m_data[0]), m_data[1], m_data[2]);
+				Unit unit(m_data[0]);
+				g_player[index]->ChangeCurrentlyBuildingItem(unit, m_data[1], m_data[2]);
 			}
 			break;
 		}
@@ -1708,8 +1714,11 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Client %d takes trade offer %lx\n", index, m_data[0]));
 			TradeOffer offer(m_data[0]);
 			if(g_theTradeOfferPool->IsValid(offer)) {
-				if(g_player[index])
-					g_player[index]->AcceptTradeOffer(offer, Unit(m_data[1]), Unit(m_data[2]));
+				if(g_player[index]) {
+					Unit unit1(m_data[1]);
+					Unit unit2(m_data[2]);
+					g_player[index]->AcceptTradeOffer(offer, unit1, unit2);
+				}
 			}
 			break;
 		}

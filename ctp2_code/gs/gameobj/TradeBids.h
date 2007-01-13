@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TRADE_BIDS_H__
 #define __TRADE_BIDS_H__
 
@@ -48,9 +50,9 @@ public:
 	void Serialize(CivArchive &archive);
 
 	uint32 AddBid(sint32 owner,
-				  Unit &fromCity,
+				  const Unit &fromCity,
 				  sint32 resource,
-				  Unit &toCity,
+				  const Unit &toCity,
 				  sint32 price);
 	void Reject(uint32 id);
 	void Accept(uint32 id);

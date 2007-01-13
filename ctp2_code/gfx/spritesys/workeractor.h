@@ -9,8 +9,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __WORKERACTOR_H__
 #define __WORKERACTOR_H__
 

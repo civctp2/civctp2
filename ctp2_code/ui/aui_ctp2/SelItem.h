@@ -248,7 +248,7 @@ public:
 	void Goto(MapPoint &dest);
 
 	void EnterMovePath(sint32 owner, Army &army,
-					   MapPoint &src, MapPoint &dest);
+			const MapPoint &src, const MapPoint &dest);
 	void EntrenchArmy(sint32 owner, sint32 index);
 	void SleepArmy(sint32 owner, sint32 index);
 	void InterceptTrade(void);
@@ -262,7 +262,7 @@ public:
 	void EndUnitTurn();
 
 	void DirectorUnitSelection(uint32 flags);
-	void ForceDirectorSelect(Army &army);
+	void ForceDirectorSelect(const Army &army);
     void RegisterUIClick();
 	void RegisterManualEndTurn();
 	void UpdateSelectedItem( void );

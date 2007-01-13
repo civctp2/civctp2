@@ -16,6 +16,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+//
+// - None
 // 
 //----------------------------------------------------------------------------
 //
@@ -40,6 +42,8 @@
 //   # turns until city grows
 // - implemented immobile units (set MaxMovePoints equal to 0 in units.txt) 
 //   PFT 17 Mar 05
+// - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -85,7 +89,7 @@
 #include "SlicEngine.h"
 #include "SlicObject.h"
 
-#include "aicause.h"
+#include "AICause.h"
 #include "HappyTracker.h"
 #include "AchievementTracker.h"
 
@@ -95,7 +99,7 @@
 #include "Wormhole.h"
 #include "victorymoviewin.h"
 #include "cellunitlist.h"
-#include "order.h"
+#include "Order.h"
 
 #include "Diffcly.h"
 #include "DiffDB.h"
@@ -139,7 +143,7 @@
 #include "terrainutil.h"
 #include "buildingutil.h"
 #include "BuildingRecord.h"
-#include "gold.h"
+#include "Gold.h"
 #include "ArmyData.h"
 #include "WonderTracker.h"
 
@@ -342,11 +346,11 @@ void UnitData::Create(const sint32 t,
     }
     
     if (g_theUnitDB->Get(m_type)->GetHasPopAndCanBuild()) 
-		{
+	{
         m_city_data = new CityData(m_owner, i, m_pos);
 		
 		
-		}
+	}
     else 
         m_city_data = NULL; 
 
@@ -1044,7 +1048,7 @@ BOOL UnitData::CanThisCargoUnloadAt(const Unit & the_cargo, const MapPoint & old
 //
 //----------------------------------------------------------------------------
 BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
-						   BOOL justOneUnit, Unit &theUnit)
+						   BOOL justOneUnit, const Unit &theUnit)
 
 {
     sint32 i, n; 	
@@ -2289,13 +2293,13 @@ void UnitData::Serialize(CivArchive &archive)
     CHECKSERIALIZE
 
 	if (archive.IsStoring())
-		{
+	{
 		
-		archive<<m_id ;
-		archive.PutSINT32(m_owner) ;
-		archive<<m_fuel ;
-		archive<<m_hp ;
-		archive<<m_movement_points ;
+		archive<<m_id;
+		archive.PutSINT32(m_owner);
+		archive<<m_fuel;
+		archive<<m_hp;
+		archive<<m_movement_points;
 		
 		archive<<m_type; 
 		archive<<m_visibility;
@@ -2307,25 +2311,25 @@ void UnitData::Serialize(CivArchive &archive)
 		archive << m_flags;
 
 		m_army.Serialize(archive);
-		m_pos.Serialize(archive) ;
+		m_pos.Serialize(archive);
 		
 		
 		if (m_cargo_list)
-			{
-			archive<<(uint8)(TRUE) ;								
-			m_cargo_list->Serialize(archive) ;						
-			}
+		{
+			archive<<(uint8)(TRUE);								
+			m_cargo_list->Serialize(archive);						
+		}
 		else
-			archive<<(uint8)(FALSE) ;								
+			archive<<(uint8)(FALSE);								
 
 		
 		if (m_city_data)
-			{
-			archive<<(uint8)(TRUE) ;								
-			m_city_data->Serialize(archive) ;						
-			}
+		{
+			archive<<(uint8)(TRUE);								
+			m_city_data->Serialize(archive);						
+		}
 		else
-			archive<<(uint8)(FALSE) ;								
+			archive<<(uint8)(FALSE);								
 
 		m_actor->Serialize(archive);
 
@@ -2339,25 +2343,25 @@ void UnitData::Serialize(CivArchive &archive)
 		archive << (uint32)(m_lesser != NULL);
 
 		if (m_lesser)
-			((UnitData *)(m_lesser))->Serialize(archive) ;
+			((UnitData *)(m_lesser))->Serialize(archive);
 
 		archive << (uint32)(m_greater != NULL);
 
 		if (m_greater)
-			((UnitData *)(m_greater))->Serialize(archive) ;
+			((UnitData *)(m_greater))->Serialize(archive);
 
-		}
+	}
 	else
-		{
-		uint8	tmp ;
+	{
+		uint8	tmp;
 
-		archive>>m_id ;
-		m_owner = (PLAYER_INDEX)archive.GetSINT32() ;
-		archive>>m_fuel ;
-		archive>>m_hp ;
-		archive>>m_movement_points ;
+		archive>>m_id;
+		m_owner = (PLAYER_INDEX)archive.GetSINT32();
+		archive>>m_fuel;
+		archive>>m_hp;
+		archive>>m_movement_points;
 		
-		archive>>m_type, 
+		archive>>m_type;
 		archive>>m_visibility;
 		archive>>m_temp_visibility;
 		archive>>m_radar_visibility;
@@ -2367,42 +2371,42 @@ void UnitData::Serialize(CivArchive &archive)
 		archive >> m_flags;
 		
 		m_army.Serialize(archive);
-		m_pos.Serialize(archive) ;
+		m_pos.Serialize(archive);
 		
 #ifdef _DEBUG
 		m_text[0] = 0;
 #endif
 		
 		if (m_cargo_list)
-			delete m_cargo_list ;
+			delete m_cargo_list;
 
-		archive>>tmp ;
+		archive>>tmp;
 		if (tmp)
-			{
-			m_cargo_list = new UnitDynamicArray() ;
-			m_cargo_list->Serialize(archive) ;
-			}
+		{
+			m_cargo_list = new UnitDynamicArray();
+			m_cargo_list->Serialize(archive);
+		}
 		else
-			m_cargo_list=NULL ;
+			m_cargo_list=NULL;
 
 		
 		if (m_city_data)
-			delete m_city_data ;
+			delete m_city_data;
 
 		archive>>tmp ;
 		if (tmp)
-			m_city_data = new CityData(archive) ;
+			m_city_data = new CityData(archive);
 		else
 			m_city_data = NULL ;
 
 		
 		if (m_actor)
 		{
-			delete m_actor ;
+			delete m_actor;
 			m_actor = NULL;
 		}
 
-		m_actor = new UnitActor(archive) ;
+		m_actor = new UnitActor(archive);
 
 		m_sprite_state = m_actor->GetSpriteState();
 
@@ -2944,7 +2948,8 @@ void UnitData::UndoVision()
 							  (sint32)(GetVisionRange()) * 2 + 1,
 							  ~(1 << m_owner));
 	sint32 en = enemyArray.Num();
-	for(sint32 i = 0; i < en; i++) {
+	sint32 i;
+	for(i = 0; i < en; i++) {
 		
 		if(!(enemyArray[i].GetRealVisibility() & (1 << m_owner)))
 			continue;
@@ -3036,7 +3041,7 @@ sint32 UnitData::GetDistance(UnitData* unit1, UnitData* unit2,
 	return GetDistance(unit1, u2pos, wrapRange);
 }
 
-sint32 UnitData::GetDistance(Installation &inst, UnitData* unit2,
+sint32 UnitData::GetDistance(const Installation &inst, UnitData* unit2,
 							 sint32 wrapRange)
 {
 	MapPoint iPos;
@@ -3194,7 +3199,8 @@ void UnitData::CityRadiusFunc(const MapPoint &pos)
 	   cell->GetCity().GetOwner() != m_owner &&
 	   cell->GetCity().IsCapitol() &&
 	   g_rand->Next(100) < sint32(g_theConstDB->HearGossipChance() * 100.0)) {
-		HearGossip(cell->GetCity());
+	   	Unit unit = cell->GetCity();
+		HearGossip(unit);
 	}
 }
 
@@ -3574,7 +3580,7 @@ BOOL UnitData::HasForceField() const
 	return m_city_data->HasForceField();
 }
 
-BOOL UnitData::StoppedBySpies(Unit &c)
+BOOL UnitData::StoppedBySpies(const Unit &c)
 {
 	SlicObject	*so ;
 	MapPoint pos;
@@ -3641,7 +3647,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::InvestigateCityData *data;
+	const UnitRecord::InvestigateCityData *data;
 	g_theUnitDB->Get(m_type)->GetInvestigateCity(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -3706,7 +3712,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit &c)
 	return ORDER_RESULT_SUCCEEDED;
 }
 
-ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
+ORDER_RESULT UnitData::StealTechnology(const Unit &c, sint32 whichAdvance)
 {
 	SlicObject	*so ;
 
@@ -3729,7 +3735,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 															  num);
 	double randChance, specChance, deathChance;
 	BOOL r;
-	UnitRecord::StealTechnologyData *data;
+	const UnitRecord::StealTechnologyData *data;
 	r = g_theUnitDB->Get(m_type)->GetStealTechnology(data);
 	randChance = data->GetRandomChance();
 	specChance = data->GetSpecificChance();
@@ -3745,8 +3751,8 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 			randChance += g_theConstDB->EliteSpyBonus();
 		}
 
-		c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, randChance);
-		c.SetWatchful();
+		const_cast<Unit &>(c).ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, randChance);
+		const_cast<Unit &>(c).SetWatchful();
 
 		if(g_rand->Next(100) >= sint32(randChance * 100.0)) {
 			so = new SlicObject("10bStealTechnologyFailed") ;
@@ -3816,8 +3822,8 @@ ORDER_RESULT UnitData::StealTechnology(Unit &c, sint32 whichAdvance)
 			specChance += g_theConstDB->EliteSpyBonus();
 		}
 
-		c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, specChance);
-		c.SetWatchful();
+		const_cast<Unit &>(c).ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, specChance);
+		const_cast<Unit &>(c).SetWatchful();
 
 		if(g_rand->Next(100) > sint32(specChance * 100.0)) {
 			
@@ -3896,7 +3902,7 @@ ORDER_RESULT UnitData::InciteRevolution(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::InciteRevolutionData *data;
+	const UnitRecord::InciteRevolutionData *data;
 	g_theUnitDB->Get(m_type)->GetInciteRevolution(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -3960,7 +3966,7 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit &c)
 	}
 
 	double chance, eliteChance, deathChance;
-	UnitRecord::AssasinateRulerData *data;
+	const UnitRecord::AssasinateRulerData *data;
 	g_theUnitDB->Get(m_type)->GetAssasinateRuler(data);
 	chance = data->GetChance();
 	eliteChance = data->GetEliteChance();
@@ -4253,7 +4259,7 @@ sint32 UnitData::GetFranchiseTurnsRemaining() const
 	return m_city_data->GetFranchiseTurnsRemaining();
 }
 
-BOOL UnitData::CanSee(Army &al) const
+BOOL UnitData::CanSee(const Army &al) const
 {
 	sint32 i, n = al.Num();
 	for(i = 0; i < n; i++) {
@@ -5518,7 +5524,7 @@ void UnitData::AddEndGameObject(sint32 type)
 	}
 }
 
-BOOL UnitData::SendSlaveTo(Unit &dest)
+BOOL UnitData::SendSlaveTo(const Unit &dest)
 {
 	Assert(m_city_data);
 	if(m_city_data) {
@@ -5678,7 +5684,7 @@ void UnitData::BuildCapitalization()
 	}
 }
 
-void UnitData::ActionSuccessful(SPECATTACK attack, Unit &c)
+void UnitData::ActionSuccessful(SPECATTACK attack, const Unit &c)
 {
 	sint32		soundID, spriteID;
 
@@ -5821,7 +5827,7 @@ void UnitData::CheckVisionRadius()
 #endif
 }
 
-void UnitData::SetTargetCity(Unit &city)
+void UnitData::SetTargetCity(const Unit &city)
 {
 	m_target_city = city;
 	if(m_target_city.IsValid()) {

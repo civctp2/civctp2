@@ -1,5 +1,5 @@
 #
-# $Id$
+# $Id: GNUmakefile.am 676 2007-01-13 18:30:10Z richardh $
 #
 SUBDIRS=\
 	ctp2_code

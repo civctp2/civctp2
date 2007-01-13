@@ -1,7 +1,7 @@
 /**
  * $Id$
  */
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -36,7 +36,8 @@ DECLARE_INTERFACE_(IMapGenerator, IUnknown)
 
 class IC3Rand;
 
-class IMapGenerator : public IUnknown {
+class IMapGenerator : public ICTP2Unknown {
+public:
 	virtual void Generate(sint8 *map, sint32 width, sint32 height,
                               IC3Rand *randgen,
                               const double *settings, sint32 numSettings) = 0;

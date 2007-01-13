@@ -34,7 +34,7 @@
 
 #include "tech_wllist.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "player.h"
 #include "dynarr.h"
 #include "UnitPool.h"
@@ -1450,10 +1450,6 @@ uint32 Director::ProcessActiveUnits(void)
 
 	if (m_activeUnitList->IsEmpty()) return 0;
 
-	
-	
-	
-
 	m_processingActiveUnits = TRUE;
 
 	
@@ -1474,7 +1470,7 @@ uint32 Director::ProcessActiveUnits(void)
 
 	
 	pos = m_activeUnitList->GetHeadPosition();
-	for (i=m_activeUnitList->L(); i; i--) {
+	for (size_t i=m_activeUnitList->L(); i; i--) {
 		actorPos = pos;
 		actor = m_activeUnitList->GetNext(pos);
 		if (actor) {
@@ -1542,7 +1538,7 @@ uint32 Director::ProcessActiveEffects(void)
 	m_processingActiveEffects = FALSE;
 
 	pos = m_activeEffectList->GetHeadPosition();
-	for (i=m_activeEffectList->L(); i; i--) {
+	for (size_t i=m_activeEffectList->L(); i; i--) {
 		actorPos = pos;
 
 		actor = m_activeEffectList->GetNext(pos);
@@ -1559,7 +1555,7 @@ void Director::ProcessTradeRouteAnimations(void)
 {
 	ListPos			pos;
 	TradeActor		*tActor;
-	uint32			numToProcess;
+	size_t			numToProcess;
 
 	if (!g_theProfileDB->IsTradeAnim()) return;
 
@@ -1567,7 +1563,7 @@ void Director::ProcessTradeRouteAnimations(void)
 
 	pos = m_tradeActorList->GetHeadPosition();
 	numToProcess = m_tradeActorList->L();
-	for (uint32 i=0; i<numToProcess; i++) 
+	for (size_t i=0; i<numToProcess; i++) 
 	{
 		tActor = m_tradeActorList->GetNext(pos);
 		Assert(tActor != NULL);
@@ -2197,18 +2193,12 @@ void Director::AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID)
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddCombatFlash(MapPoint &pos)
+void Director::AddCombatFlash(const MapPoint &pos)
 {
 	DQActionCombatFlash		*action = new DQActionCombatFlash;
-	DQItem					*item = new DQItem(DQITEM_COMBATFLASH, action, dh_combatflash);
-
-
-
+	DQItem				*item = new DQItem(DQITEM_COMBATFLASH, action, dh_combatflash);
 
 	action->flash_pos = pos;
-
-
-
 
 	m_itemQueue->AddTail(item);
 }
@@ -2398,7 +2388,7 @@ void Director::AddAttack(Unit attacker, Unit defender)
 		}
 }
 
-void Director::AddAttackPos(Unit attacker, MapPoint &pos)
+void Director::AddAttackPos(Unit attacker, const MapPoint &pos)
 {
 	DQActionAttackPos	*action = new DQActionAttackPos;
 	DQItem				*item = new DQItem(DQITEM_ATTACKPOS, action, dh_attackpos);
@@ -2826,23 +2816,15 @@ void Director::AddBattle(Battle *battle)
 	m_itemQueue->AddTail(item);
 }
 
-void Director::AddPlaySound(sint32 soundID, MapPoint &pos)
+void Director::AddPlaySound(sint32 soundID, const MapPoint &pos)
 {
 	if (soundID <= 0) return;
 
 	DQActionPlaySound	*action = new DQActionPlaySound;
-	DQItem				*item = new DQItem(DQITEM_PLAYSOUND, action, dh_playSound);
-
-
-
+	DQItem			*item = new DQItem(DQITEM_PLAYSOUND, action, dh_playSound);
 
 	action->playsound_soundID = soundID;
 	action->playsound_pos = pos;
-
-
-
-
-
 
 	m_itemQueue->AddTail(item);
 }

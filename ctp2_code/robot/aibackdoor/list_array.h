@@ -16,23 +16,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class DATA_TYPE>
 class list_array
 {
@@ -639,7 +622,7 @@ void list_array<DATA_TYPE>::Assign
 	
 
 	
-	Clean_Up();
+	this->Clean_Up();
 
 	
 	size = the_list.size;
@@ -673,7 +656,7 @@ void list_array<DATA_TYPE>::Check_Size
 	int extra_chunks;					
 	
 
-    _ASSERTE(0 < chunk_size); 
+    _ASSERTE(0 < this->chunk_size); 
 	
 	if (desired_new_count > size)
 	{
@@ -718,6 +701,6 @@ void list_array<DATA_TYPE>::Check_Size
 
 
 
-#endif __List_Array_h__
+#endif // __List_Array_h__
 
 

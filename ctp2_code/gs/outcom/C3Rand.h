@@ -1,18 +1,13 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __C3RAND_H__
 #define __C3RAND_H__
 
-#include "ic3Rand.h"
+#include "IC3Rand.h"
 
 class CivArchive; 
 class RandomGenerator;
-
-
-
-
-
-
 
 class C3Rand : public IC3Rand
 {
@@ -22,16 +17,25 @@ class C3Rand : public IC3Rand
 
 public:
 	C3Rand(BOOL ownGenerator = FALSE);
-	~C3Rand();
+	virtual ~C3Rand();
 
+#ifndef USE_COM_REPLACEMENT
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
+#else
+	virtual uint32 AddRef();
+	virtual uint32 Release();
+#endif
 
-    C3Rand(CivArchive &archive); 
-    void Serialize(CivArchive &archive);
+	C3Rand(CivArchive &archive); 
+	void Serialize(CivArchive &archive);
 
+#ifndef USE_COM_REPLACEMENT
 	STDMETHODIMP_(sint32) Next(sint32 range);
+#else
+	virtual sint32 Next(sint32 range);
+#endif
 };
 
 #endif

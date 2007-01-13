@@ -430,8 +430,8 @@ void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 void UnitSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
 {
 #ifndef __MAKESPR__
-	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x+1, y+1, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_BLACK), 1);
-	primitives_DrawText((aui_DirectSurface *)g_screenManager->GetSurface(), x, y, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
+	primitives_DrawText(g_screenManager->GetSurface(), x+1, y+1, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_BLACK), 1);
+	primitives_DrawText(g_screenManager->GetSurface(), x, y, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
 #endif
 }
 

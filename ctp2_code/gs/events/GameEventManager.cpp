@@ -98,24 +98,135 @@ GameEventManager::~GameEventManager()
 }
 
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2)
+{ return AddEvent(insert, type, t1, a1, t2, 0, 3, 0, 4, 0, 5, 0, 6, 0); }
 
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, 0, 4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, a3, t4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, a3, t4, a4, t5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5, int a5,
+				GAME_EVENT_ARGUMENT t6)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, a3, t4, a4, t5, a5, t6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, const MapPoint& a1,
+				GAME_EVENT_ARGUMENT t2)
+{ return AddEvent(insert, type, t1, (const MapPointData&)a1, t2, 0, 3, 0, 4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+				GAME_EVENT_ARGUMENT t3)
+{ return AddEvent(insert, type, t1, a1, t2, (const MapPointData&)a2, t3, 0, 4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+				GAME_EVENT_ARGUMENT t4)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, (const MapPointData&)a3, t4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4)
+{ return AddEvent(insert, type, t1, a1, t2, (const MapPointData&)a2, t3, a3, t4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+				GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+				GAME_EVENT_ARGUMENT t4)
+{ return AddEvent(insert, type, t1, a1, t2, (const MapPointData&)a2, t3, (const MapPointData&)a3, t4, 0, 5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5)
+{ return AddEvent(insert, type, t1, a1, t2, (const MapPointData&)a2, t3, a3, t4, a4, t5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, (const MapPointData&)a3, t4, a4, t5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, Path* a2,
+				GAME_EVENT_ARGUMENT t3, const MapPoint& a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, (const MapPointData&)a3, t4, a4, t5, 0, 6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5, int a5,
+				GAME_EVENT_ARGUMENT t6)
+{ return AddEvent(insert, type, t1, a1, t2, (const MapPointData&)a2, t3, a3, t4, a4, t5, a5, t6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, int a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5, const MapPoint& a5,
+				GAME_EVENT_ARGUMENT t6)
+{ return AddEvent(insert, type, t1, a1, t2, a2, t3, a3, t4, a4, t5, (const MapPointData&)a5, t6, 0); }
+
+GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
+				GAME_EVENT_ARGUMENT t1, int a1,
+				GAME_EVENT_ARGUMENT t2, const MapPoint& a2,
+				GAME_EVENT_ARGUMENT t3, int a3,
+				GAME_EVENT_ARGUMENT t4, int a4,
+				GAME_EVENT_ARGUMENT t5, int a5,
+				GAME_EVENT_ARGUMENT t6, int a6,
+				GAME_EVENT_ARGUMENT t7, int a7,
+				GAME_EVENT_ARGUMENT t8)
+{ return AddEvent(insert, type, t1, a1, t2, (const MapPointData&)a2, t3, a3, t4, a4, t5, a5, t6, a6, t7, a7, t8, 0); }
 
 
 
 GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
-										  GAME_EVENT type, ...)
+					  GAME_EVENT type, ...)
 {
 	Assert(type >= (GAME_EVENT)0);
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
-	
-	
-	
-	
-	
-	
-	
 	
 	if(g_slicEngine->AtBreak()) {
 		return GEV_ERR_AtBreak;

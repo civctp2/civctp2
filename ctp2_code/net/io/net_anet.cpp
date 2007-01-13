@@ -261,9 +261,9 @@ ActivNetIO::SetTransport(sint32 trans_id)
 
 
 int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
-									  sint32 *pTimeout,
-									  sint32 flags,
-									  void* context)
+					long *pTimeout,
+					long flags,
+					void* context)
 {
 	
 	return ((ActivNetIO*)context)->SessionReadyCallback(ps, pTimeout, flags);
@@ -271,7 +271,7 @@ int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
 
 
 void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, char_t *name,
-									sint32 flags, void *context)
+					long flags, void *context)
 {
 	
 	((ActivNetIO*)context)->PlayerReady(id, name, flags);
@@ -291,15 +291,11 @@ ActivNetIO::PlayerReady(dpid_t id, char_t *name, sint32 flags)
 
 sint32
 ActivNetIO::SessionReadyCallback(dp_session_t *ps,
-								   sint32 *pTimeout,
-								   sint32 flags)
+				   long *pTimeout,
+				   long flags)
 {
 	if(ps) {
 		m_session = *ps;
-
-		
-		
-		
 		
 		m_sessionState = SESSION_STATE_CREATE_PLAYER;
 	} else {
@@ -352,9 +348,9 @@ ActivNetIO::Host(char* sessionName)
 
 
 int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
-										sint32 *pTimeout,
-										sint32 flags,
-										void* context)
+					long *pTimeout,
+					long flags,
+					void* context)
 {
 	
 	return ((ActivNetIO*)context)->SessionCallback(sDesc, pTimeout, flags);
@@ -363,8 +359,8 @@ int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
 
 sint32
 ActivNetIO::SessionCallback(dp_session_t *sDesc, 
-							 sint32 *pTimeout, 
-							 sint32 flags)
+			 long *pTimeout, 
+			 long flags)
 {
 	if(sDesc) {
 		

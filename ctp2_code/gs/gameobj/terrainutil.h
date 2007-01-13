@@ -42,7 +42,7 @@ double terrainutil_GetMaxVisionRange();
 double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint & pos);
 
 bool terrainutil_GetSomethingOwnsCell(MapPoint &pos, sint32 owner, Unit &ignoreCity);
-void terrainutil_RemoveBorders(MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit &ignoreCity);
+void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, const Unit &ignoreCity);
 
 bool terrainutil_AdvanceEnablesImprovementForPlayer(sint32 player, sint32 advance, sint32 imp);
 bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp);

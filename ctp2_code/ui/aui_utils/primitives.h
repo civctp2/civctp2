@@ -9,7 +9,6 @@
 #include "aui_tabgroup.h"
 
 class aui_Surface;
-class aui_DirectSurface;
 class aui_Image;
 class Pattern;
 
@@ -39,32 +38,32 @@ PRIMITIVES_ERRCODE	primitives_DrawLine16(aui_Surface *pSurface,
 
 
 
-PRIMITIVES_ERRCODE	primitives_DrawText(aui_DirectSurface *pDirectSurface,
+PRIMITIVES_ERRCODE	primitives_DrawText(aui_Surface *pSurface,
 				sint32 x,sint32 y,MBCHAR *pString,COLORREF color,BOOL bg);
-PRIMITIVES_ERRCODE	primitives_DrawBoundedText(aui_DirectSurface *pDirectSurface,
+PRIMITIVES_ERRCODE	primitives_DrawBoundedText(aui_Surface *pSurface,
 				RECT *bound,MBCHAR *pString,COLORREF color,BOOL bg);
-PRIMITIVES_ERRCODE	primitives_DrawTextBatch(aui_DirectSurface *pDirectSurface,sint32 x,sint32 y,
+PRIMITIVES_ERRCODE	primitives_DrawTextBatch(aui_Surface *pSurface,sint32 x,sint32 y,
 				MBCHAR **pString,sint32 numStrings,COLORREF color,BOOL bg);
-PRIMITIVES_ERRCODE	primitives_DropText(aui_DirectSurface *pDirectSurface,
+PRIMITIVES_ERRCODE	primitives_DropText(aui_Surface *pSurface,
 				sint32 x,sint32 y,MBCHAR *pString,COLORREF color,BOOL bg);
-PRIMITIVES_ERRCODE	primitives_ColoredDropText(aui_DirectSurface *pDirectSurface,
+PRIMITIVES_ERRCODE	primitives_ColoredDropText(aui_Surface *pSurface,
 				sint32 x,sint32 y,MBCHAR *pString,COLORREF textColor,COLORREF dropColor,BOOL bg);
 PRIMITIVES_ERRCODE primitives_DropTextCentered(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	RECT *destRect,
 	MBCHAR *pString,					
 	COLORREF color,						
 	BOOL bg								
 	);
 PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
-	aui_DirectSurface *pDirectSurface,	
+	aui_Surface *pSurface,	
 	RECT *destRect,
 	MBCHAR *pString,					
 	COLORREF textColor,						
 	COLORREF dropColor,						
 	BOOL bg								
 	);
-PRIMITIVES_ERRCODE	primitives_DropTextBatch(aui_DirectSurface *pDirectSurface,sint32 x,sint32 y,
+PRIMITIVES_ERRCODE	primitives_DropTextBatch(aui_Surface *pSurface,sint32 x,sint32 y,
 				MBCHAR **pString,sint32 numStrings,COLORREF color,BOOL bg);
 
 PRIMITIVES_ERRCODE	primitives_OldBevelPane16(aui_Surface *pSurface, RECT *pRect,sint32 level,BOOL flag);

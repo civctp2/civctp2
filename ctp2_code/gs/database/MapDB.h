@@ -7,9 +7,8 @@
 #include "Rec.h"
 #include "DB.h"
 #include "MapRecord.h"
-
-class Token;
-enum C3DIR;
+#include "c3files.h"
+#include "Token.h"
 
 class MapDatabase : public Database<MapRecord> {
 public:

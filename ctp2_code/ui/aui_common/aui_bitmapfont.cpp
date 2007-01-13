@@ -155,7 +155,7 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_HACK;
 
-		
+#ifdef WIN32		
 		static MBCHAR fontdir[ MAX_PATH + 1 ];
 		sint32 last;
 		if ( (last = GetWindowsDirectory( fontdir, MAX_PATH ) - 1) > 1 )
@@ -167,6 +167,7 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR *descriptor )
 
 			g_ui->GetBitmapFontResource()->AddSearchPath( fontdir );
 		}
+#endif
 	}
 	return AUI_ERRCODE_OK;
 }
@@ -240,7 +241,8 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	Assert( n != 0 );
 	if ( !n ) return AUI_ERRCODE_HACK;
 
-	for ( uint16 i = 0; i < n; i++ )
+	uint16 i;
+	for ( i = 0; i < n; i++ )
 	{
 		uint16 platform, encoding;
 		TT_Get_CharMap_ID( m_ttFace, i, &platform, &encoding );
