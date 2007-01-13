@@ -25,7 +25,7 @@
 #include "stringutils.h"
 
 #include "TurnCnt.h"
-#include "globals.h"
+#include "Globals.h"
 
 #include "controlpanelwindow.h"
 extern ControlPanelWindow *g_controlPanel;
@@ -40,7 +40,9 @@ extern CivApp			*g_civApp;
 sint32 g_robotMessages = FALSE;
 #endif
 
+#ifdef _MSC_VER
 #pragma optimize ("", off)
+#endif
 
 
 sint32 g_hackInstantMessages = 0;	
@@ -705,4 +707,6 @@ void SlicObject::Continue()
 	Finish();
 }
 
+#ifdef _MSC_VER
 #pragma optimize ("", on)
+#endif

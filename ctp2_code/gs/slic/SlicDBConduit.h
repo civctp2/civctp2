@@ -26,8 +26,9 @@
 //   in a database, addion by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SLIC_DB_CONDUIT_H__
 #define __SLIC_DB_CONDUIT_H__
 
@@ -42,8 +43,8 @@ public:
 	virtual sint32 GetRecordNameIDByIndex(sint32 index) = 0;
 //Added by Martin Gühmann to get the number of records in a database via slic
 	virtual sint32 GetNumRecords() = 0;
-	virtual bool IsTokenInDB(const char *valname) = false;
-	virtual ~SlicDBInterface() {};
+	virtual bool IsTokenInDB(const char *valname) { return false; }
+	virtual ~SlicDBInterface() {}
 };
 
 template <class T> class CTPDatabase;

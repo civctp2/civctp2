@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SLIC_ARRAY_H__
 #define __SLIC_ARRAY_H__
 

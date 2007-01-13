@@ -1,21 +1,19 @@
 #ifndef __SLIC_SEGMENT_H__
 #define __SLIC_SEGMENT_H__
 
-enum SLIC_RT;
-
 #include "slicif.h"
 #include "StringHash.h"
 #include "GameEventHook.h"
 #include "GameEventHook.h"
+#include "SlicError.h"
+#include "SlicFunc.h"
 #include "gstypes.h"
 
 class SlicSegment;
 class SlicStack;
-enum SS_TYPE;
 class CivArchive;
 class SlicSymbolData;
 class SlicObject;
-enum SFN_ERROR;
 class SlicArgList;
 class SlicConditional;
 class SlicUITrigger;

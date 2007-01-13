@@ -15,13 +15,13 @@ struct PSlicRegion;
 struct PSlicComplexRegion;
 class Unit;
 class SlicArray;
-enum SS_TYPE;
-enum GAME_EVENT_ARGUMENT;
 class SlicStructDescription;
 class SlicStructInstance;
 class Army;
 template <class T> class PointerList;
 class TerrainImprovement;
+
+#include "GameEventTypes.h"
 
 enum SLIC_SYM_SERIAL_TYPE {
 	SLIC_SYM_SERIAL_GENERIC,
@@ -129,8 +129,8 @@ public:
 
 	void SetFunction(SlicFunc *func) { m_val.m_function_object = func; }
 	BOOL SetUnit(Unit &unit);
-	BOOL SetCity(Unit &city);
-	BOOL SetArmy(Army &army);
+	BOOL SetCity(const Unit &city);
+	BOOL SetArmy(const Army &army);
 	BOOL SetPos(MapPoint &pos);
 
 	BOOL GetUnitType(sint32 &type) const;

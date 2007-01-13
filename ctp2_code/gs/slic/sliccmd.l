@@ -1,4 +1,6 @@
 %{
+#include "ctp2_config.h"
+#include "ctp2_inttypes.h"
 #include "scyaccdefs.h"
 #include "sliccmd.h" 
 #include "sc.tab.h"

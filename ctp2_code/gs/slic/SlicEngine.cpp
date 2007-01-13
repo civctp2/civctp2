@@ -48,6 +48,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include <iterator>
+#include <list>
 #include "c3errors.h"
 #include "SlicObject.h"
 #include "SlicEngine.h"
@@ -143,7 +145,7 @@ extern TutorialWin *g_tutorialWin;
 
 #include "GameEventManager.h"
 
-#include "globals.h"
+#include "Globals.h"
 
 #include "ResourceRecord.h"
 #include "CriticalMessagesPrefs.h"
@@ -286,25 +288,26 @@ SlicEngine::~SlicEngine()
 {
 	Cleanup();
 
-    delete m_uiHash;
-    delete m_currentMessage;
-    delete m_segmentHash;
-    delete m_constHash;
-    delete m_uiExecuteObjects;
-    delete m_disabledClasses;
-    delete m_contextStack;
+	delete m_uiHash;
+	delete m_currentMessage;
+	delete m_segmentHash;
+	delete m_constHash;
+	delete m_uiExecuteObjects;
+	delete m_disabledClasses;
+	delete m_contextStack;
 
 	// m_loadGameName: reference only
 
-    for (size_t i = 0; i < TRIGGER_LIST_MAX; ++i)
-    {
-        delete m_triggerLists[i];
-    }
+	size_t i;
+	for (i = 0; i < TRIGGER_LIST_MAX; ++i)
+	{
+		delete m_triggerLists[i];
+	}
 
 	for (i = 0; i < SLIC_BUILTIN_MAX; ++i) 
-    {
+	{
 		delete m_builtin_desc[i];
-        // m_builtins[i]: deleted through m_symTab in Cleanup
+		// m_builtins[i]: deleted through m_symTab in Cleanup
 	}
     delete [] m_builtin_desc;
     delete [] m_builtins;
@@ -1131,7 +1134,8 @@ BOOL SlicEngine::Load(MBCHAR *filename, sint32 filenum)
 
 void SlicEngine::AddTrigger(SlicSegment *trigger, TRIGGER_LIST which)
 {
-	for(sint32 t = sint32(which); t < sint32(TRIGGER_LIST_MAX); t++) {
+	sint32 t;
+	for(t = sint32(which); t < sint32(TRIGGER_LIST_MAX); t++) {
 		if(m_triggerLists[t]->Find(trigger))
 			return;
 	}
