@@ -9,3 +9,5 @@ purge: $(top_srcdir)/Makefile distclean
 
 bootstrap doc local playtest: $(top_srcdir)/Makefile
 	$(MAKE) -f $< $@
+
+.PHONY: purge bootstrap doc local playtest

@@ -42,9 +42,9 @@ BOOL CALLBACK display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 	
 	if (lpGUID)
 	{
-		p->GUID = *lpGUID;
+		p->DisplayGUID = *lpGUID;
 		p->szName = szName;
-		p->lpGUID = &p->GUID;
+		p->lpGUID = &p->DisplayGUID;
 		p->szDevice = szDevice;
 	}
 	else

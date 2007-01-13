@@ -379,12 +379,14 @@ CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
 ../gs/newdb/AdvanceBranchRecord.cpp \
 ../gs/newdb/AdvanceBranchRecord.h: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/AdvanceListRecord.cpp \
 ../gs/newdb/AdvanceListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb \
 		../gs/newdb/AdvanceRecord.h \
 		$(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/AdvanceRecord.cpp \
 ../gs/newdb/AdvanceRecord.h: $(ctp2_code)/gs/newdb/advance.cdb \
@@ -393,142 +395,176 @@ CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
 		../gs/newdb/FeatRecord.h ../gs/newdb/IconRecord.h \
 		$(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/AgeCityStyleRecord.cpp \
 ../gs/newdb/AgeCityStyleRecord.h: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/AgeRecord.cpp \
 ../gs/newdb/AgeRecord.h: $(ctp2_code)/gs/newdb/advance.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/BuildListSequenceRecord.cpp \
 ../gs/newdb/BuildListSequenceRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/BuildingBuildListRecord.cpp \
 ../gs/newdb/BuildingBuildListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb \
 		../gs/newdb/BuildingRecord.h \
 		$(CTPDB) 
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/BuildingRecord.cpp \
 ../gs/newdb/BuildingRecord.h: $(ctp2_code)/gs/newdb/building.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/CitySizeRecord.cpp \
 ../gs/newdb/CitySizeRecord.h: $(ctp2_code)/gs/newdb/citysize.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/CityStyleRecord.cpp \
 ../gs/newdb/CityStyleRecord.h: $(ctp2_code)/gs/newdb/citystyle.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/DiplomacyProposalRecord.cpp \
 ../gs/newdb/DiplomacyProposalRecord.h: $(ctp2_code)/gs/newdb/dipproposal.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/DiplomacyRecord.cpp \
 ../gs/newdb/DiplomacyRecord.h: $(ctp2_code)/gs/newdb/diplomacy.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/DiplomacyThreatRecord.cpp \
 ../gs/newdb/DiplomacyThreatRecord.h: $(ctp2_code)/gs/newdb/dipthreat.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/EndGameObjectRecord.cpp \
 ../gs/newdb/EndGameObjectRecord.h: $(ctp2_code)/gs/newdb/EndGameObject.cdb \
 		../gs/newdb/TerrainImprovementRecord.h \
+		../gs/newdb/WonderRecord.h \
 		$(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/FeatRecord.cpp \
 ../gs/newdb/FeatRecord.h: $(ctp2_code)/gs/newdb/feat.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/GoalRecord.cpp \
 ../gs/newdb/GoalRecord.h: $(ctp2_code)/gs/newdb/goal.cdb \
 		../gs/newdb/OrderRecord.h \
 		$(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/GovernmentRecord.cpp \
 ../gs/newdb/GovernmentRecord.h: $(ctp2_code)/gs/newdb/government.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/IconRecord.cpp \
 ../gs/newdb/IconRecord.h: $(ctp2_code)/gs/newdb/icon.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/ImprovementListRecord.cpp \
 ../gs/newdb/ImprovementListRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/OrderRecord.cpp \
 ../gs/newdb/OrderRecord.h: $(ctp2_code)/gs/newdb/order.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/PersonalityRecord.cpp \
 ../gs/newdb/PersonalityRecord.h: $(ctp2_code)/gs/newdb/personality.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/PopRecord.cpp \
 ../gs/newdb/PopRecord.h: $(ctp2_code)/gs/newdb/pop.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/ResourceRecord.cpp \
 ../gs/newdb/ResourceRecord.h: $(ctp2_code)/gs/newdb/terrain.cdb \
 		../gs/newdb/SoundRecord.h \
 		$(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/SoundRecord.cpp \
 ../gs/newdb/SoundRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/SpecialAttackInfoRecord.cpp \
 ../gs/newdb/SpecialAttackInfoRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/SpecialEffectRecord.cpp \
 ../gs/newdb/SpecialEffectRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/SpriteRecord.cpp \
 ../gs/newdb/SpriteRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/StrategyRecord.cpp \
 ../gs/newdb/StrategyRecord.h: $(ctp2_code)/gs/newdb/strategy.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/TerrainImprovementRecord.cpp \
 ../gs/newdb/TerrainImprovementRecord.h: $(ctp2_code)/gs/newdb/terrimprove.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/TerrainRecord.cpp \
 ../gs/newdb/TerrainRecord.h: $(ctp2_code)/gs/newdb/terrain.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/UnitBuildListRecord.cpp \
 ../gs/newdb/UnitBuildListRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/UnitRecord.cpp \
 ../gs/newdb/UnitRecord.h: $(ctp2_code)/gs/newdb/unit.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/WonderBuildListRecord.cpp \
 ../gs/newdb/WonderBuildListRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/WonderMovieRecord.cpp \
 ../gs/newdb/WonderMovieRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 ../gs/newdb/WonderRecord.cpp \
 ../gs/newdb/WonderRecord.h: $(ctp2_code)/gs/newdb/wonder.cdb $(CTPDB)
 	$(CTPDB) ../gs/newdb < $<
+	touch $@
 
 
 AM_CXXFLAGS=\
@@ -599,4 +635,6 @@ AM_CPPFLAGS=\
 	-I$(ctp2_code)/ai/strategy/agents \
 	-I$(ctp2_code)/ai/strategy/goals \
 	-I$(ctp2_code)/ai/strategy/squads \
+	-I$(ctp2_code)/ai \
 	-I$(ctp2_code)/ai/citymanagement
+

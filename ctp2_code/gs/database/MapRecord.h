@@ -1,6 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #include "Rec.h"
 
 #define k_MAP_LEVELS 11

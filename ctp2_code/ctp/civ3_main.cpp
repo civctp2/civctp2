@@ -61,6 +61,7 @@
 #include "statuswindow.h"
 #include "debugwindow.h"
 #include "aui_directmouse.h"
+#include "aui_sdlmouse.h"
 #include "aui_directsurface.h"
 #include "primitives.h"
 #include "aui_directmoviemanager.h"
@@ -88,9 +89,16 @@
 #include "videoutils.h"
 #endif
 
+#if defined(USE_SDL)
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
+
+
 #include "radarmap.h"
 #include "statswindow.h"
 #include "aui_directkeyboard.h"
+#include "aui_sdlkeyboard.h"
 #include "ancientwindows.h"
 #include "splash.h"
 #include "bevellesswindow.h"
@@ -163,11 +171,6 @@
 
 
 #include <locale.h>
-
-#if defined(USE_SDL)
-#include <SDL.h>
-#include <SDL_mixer.h>
-#endif
 
 
 #include "civscenarios.h"
@@ -431,12 +434,38 @@ int ui_Initialize(void)
         }
     }
 
+#ifdef WIN32
 	if (!GetWindowsDirectory(s, _MAX_PATH)) {
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_FONTS), 
 								appstrings_GetString(APPSTR_NOWINDOWSDIR));
 	}
 	strcat(s, "\\fonts");
 	g_c3ui->AddBitmapFontSearchPath(s);
+#elif defined(LINUX)
+	const int maxPaths = 3;
+	const char* fontPaths[maxPaths] = {
+		"/usr/share/fonts",
+		"/usr/X11R6/lib/X11/fonts",
+		"/usr/lib/X11/fonts"
+	};
+	const int maxDirs = 3;
+	const char* fontDirs[maxDirs] = {
+		"TTF",
+		"corefonts",
+		"truetype"
+	};
+	for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
+		for (int dIdx = 0; dIdx < maxPaths; dIdx++) {
+			struct stat st = { 0 };
+			snprintf(s, sizeof(s), "%s/%s",
+			         fontPaths[pIdx], fontDirs[dIdx]);
+			int rc = stat(s, &st);
+			if ((rc == 0) && (S_ISDIR(st.st_mode))) {
+				g_c3ui->AddBitmapFontSearchPath(s);
+			}
+		}
+	}
+#endif
 
 	
     for (i = 0; g_civPaths->FindPath(C3DIR_VIDEOS, i, s); ++i)
@@ -455,11 +484,19 @@ int ui_Initialize(void)
 	SPLASH_STRING("Creating Mouse...");
 	
 	BOOL const mouseExclusiveMode = TRUE;
+#if defined(__AUI_USE_SDL__)
+	g_c3ui->RegisterObject(new aui_SDLMouse(&auiErr, "CivMouse", mouseExclusiveMode));
+#else
 	g_c3ui->RegisterObject(new aui_DirectMouse(&auiErr, "CivMouse", mouseExclusiveMode));
+#endif
 
 	SPLASH_STRING("Creating Keyboard...");
 
+#if defined(__AUI_USE_SDL__)
+	g_c3ui->RegisterObject(new aui_SDLKeyboard(&auiErr));
+#else
 	g_c3ui->RegisterObject(new aui_DirectKeyboard(&auiErr));
+#endif
 
 
 #if !defined(__GNUC__)
@@ -472,9 +509,10 @@ int ui_Initialize(void)
 	Assert(auiErr == AUI_ERRCODE_OK);
 	if ( auiErr != AUI_ERRCODE_OK ) return 14;
 
-	
+#ifdef WIN32
 	while ( ShowCursor( FALSE ) >= 0 )
-		;
+	;
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -616,8 +654,12 @@ BOOL ui_CheckForScroll(void)
 	
 	g_tiledMap->SetScrolling(false);
 
-	s_scrolllasttick = s_scrollcurtick;	
+	s_scrolllasttick = s_scrollcurtick;
+#ifdef USE_SDL
+	s_scrollcurtick	 = SDL_GetTicks();
+#else
 	s_scrollcurtick	 = GetTickCount();
+#endif
 
 	tickDelta = s_scrollcurtick-s_scrolllasttick;
 	
@@ -651,22 +693,22 @@ BOOL ui_CheckForScroll(void)
 	{
 		switch (g_civApp->GetKeyboardScrollingKey()) 
 		{
-			case DIK_UPARROW:
+			case AUI_KEYBOARD_KEY_UPARROW:
 					deltaX = 0;
 					deltaY = -1;
 					scrolled = TRUE;
 				break;
-			case DIK_LEFTARROW:
+			case AUI_KEYBOARD_KEY_LEFTARROW:
 					deltaX = -1;
 					deltaY = 0;
 					scrolled = TRUE;
 				break;
-			case DIK_RIGHTARROW:
+			case AUI_KEYBOARD_KEY_RIGHTARROW:
 					deltaX = 1;
 					deltaY = 0;
 					scrolled = TRUE;
 				break;
-			case DIK_DOWNARROW:
+			case AUI_KEYBOARD_KEY_DOWNARROW:
 					deltaX = 0;
 					deltaY = 1;
 					scrolled = TRUE;
@@ -764,10 +806,18 @@ BOOL ui_CheckForScroll(void)
 				g_cursorManager->SetCursor(scrollCursor);
 
 			if(!scrolled_last_time) {
+#ifdef USE_SDL
+				scroll_start = SDL_GetTicks();
+#else
 				scroll_start = GetTickCount();			
+#endif
 			}
 
+#ifdef USE_SDL
+			if(SDL_GetTicks() < scroll_start + g_theProfileDB->GetScrollDelay() * 100) {
+#else
 			if(GetTickCount() < scroll_start + g_theProfileDB->GetScrollDelay() * 100) {
+#endif
 				scrolled_last_time = scrolled;
 				return false;
 			} else if(!scrolled_last_time) {
@@ -888,16 +938,15 @@ BOOL ui_CheckForScroll(void)
 
 int ui_Process(void)
 {
-	
-	
-	
 	if ( g_c3ui->TheMouse()->IsSuspended() ) return 0;
 
 	
 	
-	
-	
+#ifdef USE_SDL	
+	uint32 curTicks = SDL_GetTicks();
+#else
 	uint32			curTicks = GetTickCount();
+#endif
 	static uint32	lastTicks = curTicks;
 
 	
@@ -1186,17 +1235,19 @@ static HWND s_taskBar;
 
 void main_HideTaskBar(void)
 {
-	
+#ifndef __AUI_USE_SDL__
 	s_taskBar = FindWindow("Shell_TrayWnd", NULL);
 
 	if (g_hideTaskBar)
 		ShowWindow(s_taskBar, SW_HIDE);
+#endif // !__AUI_USE_SDL__
 }
 
 void main_RestoreTaskBar(void)
 {
-	
+#ifndef __AUI_USE_SDL__
 	ShowWindow(s_taskBar,SW_SHOWDEFAULT);
+#endif // !__AUI_USE_SDL__
 }
 
 void ui_CivAppProcess(void)
@@ -1239,7 +1290,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 
 
 
-void ParseCommandLine(PSTR szCmdLine)
+void ParseCommandLine(MBCHAR *szCmdLine)
 { 
 #ifndef _BFR_
 	if(stricmp(szCmdLine, "crash.txt") == 0) {
@@ -1341,13 +1392,16 @@ void ParseCommandLine(PSTR szCmdLine)
     } else if (NULL != strstr(szCmdLine, "age5")) { 
         g_cheat_age = 5; 
     }
-#endif _DEBUG
+#endif // _DEBUG
 
+#ifdef WIN32
 	if (g_noAssertDialogs) {
 		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
 	}
+#endif // WIN32
 } 
 
+#ifdef WIN32
 int WINAPI main_filehelper_GetOS(void)
 {
 	OSVERSIONINFO osvi;
@@ -1358,18 +1412,59 @@ int WINAPI main_filehelper_GetOS(void)
 
 	return osvi.dwPlatformId;
 }
+#endif
 
+/// \brief Returns the amount of free memory available [kB].
+///
+/// This function determines the amount of physical and virtual memory 
+/// available (in kBytes) and returns the sum of them.
 DWORD main_GetRemainingSwapSpace(void)
 {
+#ifdef WIN32
+	DWORD dwRet = 0;
 	MEMORYSTATUS ms;
 	GlobalMemoryStatus( &ms );
 	
-	DWORD dwRet = ms.dwAvailPageFile;
+	dwRet = ms.dwAvailPageFile;
 
 	if( main_filehelper_GetOS() != VER_PLATFORM_WIN32_NT )
 		dwRet += ms.dwAvailPhys;
-
+	
 	return dwRet;
+#elif defined(LINUX)
+	FILE *meminfo = fopen("/proc/meminfo", "r");
+	char fbuf[1024] = { 0 };
+	char whatbuf[1024] = { 0 };
+	unsigned long size = 0;
+	unsigned long totalsize = 0;
+	char units = 'k';
+	
+	if (!meminfo)
+		return 0;
+	
+	while (fgets(fbuf, sizeof(fbuf) - 1, meminfo)) {
+		sscanf(fbuf, "%s: %lu %cB", whatbuf, &size, &units);
+		// TODO: Perhaps conversion of k/M later on
+		switch (units) {
+		case 'M': size *= 1024UL;
+		          break;
+		}
+		
+		if (0 == strncasecmp("MemFree", whatbuf, 7)) {
+			totalsize += size;
+		} else if (0 == strncasecmp("Buffers", whatbuf, 7)) {
+			totalsize += size;
+		} else if (0 == strncasecmp("Cached", whatbuf, 6)) {
+			totalsize += size;
+		} else if (0 == strncasecmp("SwapFree", whatbuf, 8)) {
+			totalsize += size;
+		}
+	}
+	
+	fclose(meminfo);
+	return totalsize;
+#endif
+// Compiler error on other systems due to missing return.
 }
 
 
@@ -1391,6 +1486,9 @@ BOOL main_VerifyRAMToRun(void)
 
 void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 {
+// we get a core file on linux, and there are POSIX 1003.1-2003 
+// incompabilities within the code
+#ifdef WIN32
 	uint32	crawl[100];
 	uint32	pos = 0;
 
@@ -1433,15 +1531,12 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 	FILE *outFile = fopen(fName, "wb");
 
 	if (outFile) {
-		
-
+#ifndef USE_SDL
 		srand(GetTickCount());
+#endif
 
 		fwrite((void *)&guid, 4, 1, outFile);
-		
 		fwrite((void *)&pos, 4, 1, outFile);
-
-		
 		fwrite((void *)crawl, 4, pos, outFile);
 
 		
@@ -1532,18 +1627,22 @@ void main_OutputCrashInfo(uint32 eip, uint32 ebp, uint32 *outguid)
 
 		fclose(outFile);
 	}
+#endif
 }
 
 static uint32 s_guid = 0;
 
+#ifdef WIN32
 #ifndef _DEBUG
 char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);
-#endif
+#endif // !_DEBUG
+#endif // WIN32
 
 #ifdef _BFR_
 extern sint32 g_logCrashes;
 #endif
 
+#ifdef WIN32
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
 #if defined(_DEBUG)
@@ -1586,7 +1685,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 
 #ifdef _BFR_
     if (g_logCrashes) 
-#endif
+#endif // _BFR_
 	{
 		FILE *crashLog = fopen("logs\\crash.txt", "w");
 		if(!crashLog)
@@ -1602,7 +1701,9 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 
 #endif // _DEBUG
 }
+#endif // WIN32
 
+#ifdef __AUI_USE_DIRECTX__
 BOOL main_CheckDirectX(void)
 {
 	BOOL found = FALSE;
@@ -1631,6 +1732,7 @@ BOOL main_CheckDirectX(void)
 
 	return found;
 }
+#endif // WIN32
 
 #define k_MEMORY_THRESHHOLD_1		(10 * 1024 * 1024)
 #define k_MEMORY_THRESHHOLD_2		(1 * 1024 * 1024)
@@ -1675,23 +1777,24 @@ void main_InitializeLogs(void)
 	time_t		ltime;
 	struct tm	*now;
 
-
-	
 	
 	time(&ltime);
 	now = localtime(&ltime);
 
-    g_splash_old = GetTickCount(); 
+#ifdef USE_SDL
+    g_splash_old = SDL_GetTicks();
+#else
+    g_splash_old = GetTickCount();
+#endif
 
 	strftime(timebuf, 100, "Log started at %I:%M%p %m/%d/%Y", now);
 
+#ifdef WIN32
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	c3debug_InitDebugLog();
 	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC, 1);
 #endif
 
-	
-	
 	MBCHAR filepath[_MAX_PATH];
 	sint32 filepathlen; 
 
@@ -1784,6 +1887,7 @@ void main_InitializeLogs(void)
 	
 	Debug_Open();
 #endif
+#endif // !WIN32
 }
 
 
@@ -1879,18 +1983,13 @@ Error:
 
 }
 
-#if defined(__GNUC__)
-int CivMain
-(
-	int		    iCmdShow,   // argc 
-	char *	    szCmdLine   // argv
-)
-{
-	MSG			msg;
-    void *      hInstance   = NULL;
-#else	// __GNUC__
+#ifdef __AUI_USE_SDL__
+void SDLMessageHandler(const SDL_Event &event);
+#endif
+
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+#ifdef WIN32
 	MSG			msg;
 
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
@@ -1903,25 +2002,15 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		
 		return FALSE;
 	}
-#endif // __GNUC__
 	
 	char exepath[_MAX_PATH];
 	char launchcommand[_MAX_PATH];
 	if(GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) {
-		
-		
-		
-		
-			
+				
 			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT,
 									".c2g",
 									NULL,
 									"c2gfile");
-			
-
-			
-			
-			
 			ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT,
 									"c2gfile",
 									NULL, 
@@ -1940,36 +2029,29 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			SetCurrentDirectory(exepath);
 		}
 	}
+#endif // __WIN32__
 
-	
 	
 	g_e3Demo = false;
 
 	
 	appstrings_Initialize();
-
-	
-	
-	
-	
-
-
-	
 	
 	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 
+#ifdef __AUI_USE_DIRECTX__
 	if (!main_CheckDirectX()) {
-
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
-								appstrings_GetString(APPSTR_NEEDDIRECTX));
+							appstrings_GetString(APPSTR_NEEDDIRECTX));
 	}
+#endif
 
 	
 #ifdef _DEBUG
 	main_InitializeLogs();
 #endif
 #if !defined(_DEBUG) && !defined(_BFR_)
-	
+#ifdef WIN32
 	SECURITY_ATTRIBUTES		sa;
 
 	sa.nLength = sizeof(sa);
@@ -1977,7 +2059,11 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	sa.bInheritHandle = TRUE;
 	
 	CreateDirectory((LPCTSTR)"logs", &sa);
-#endif
+#else // WIN32
+	mode_t mode = 0777;
+	mkdir("logs", mode);
+#endif // WIN32
+#endif // !defined(_DEBUG) && !defined(_BFR_)
 
     ParseCommandLine(szCmdLine);
 
@@ -1997,22 +2083,15 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		Scenario		*scen;
 
 		if (g_civScenarios->FindScenarioFromSaveFile(g_cmdline_load_filename, &pack, &scen)) {
-			
 			g_civPaths->SetCurScenarioPath(scen->m_path);
-			
-			
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-
 			
 			g_theProfileDB->SetIsScenario(TRUE);
 
 			
 			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-				
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			} else {
-				
-				
 				spnewgamescreen_displayMyWindow();
 			}
 		} else {
@@ -2026,22 +2105,15 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		Scenario		*scen;
 
 		if (g_civScenarios->FindScenario(g_scenarioName, &pack, &scen)) {
-			
 			g_civPaths->SetCurScenarioPath(scen->m_path);
-			
-			
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
-
 			
 			g_theProfileDB->SetIsScenario(TRUE);
 
 			
 			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-				
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			} else {
-				
-				
 				spnewgamescreen_displayMyWindow();
 			}
 		}
@@ -2054,23 +2126,51 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	{
 		g_civApp->Process();
 
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) 
+#ifdef __AUI_USE_SDL__
+		SDL_Event event;
+		while (1)
+#else
+		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
+#endif
 		{
+#ifdef __AUI_USE_SDL__
+			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
+			                       ~SDL_MOUSEEVENTMASK);
+			if (0 > n) {
+				fprintf(stderr, "PeepEvents failed: %s\n", SDL_GetError());
+				break;
+			}
+			if (0 == n) {
+				// other events are handled in other threads
+				// or no more events
+				break;
+			}
+			if (SDL_QUIT == event.type)
+#else // __AUI_USE_SDL__
 			if (WM_QUIT == msg.message)
+#endif // __AUI_USE_SDL__
 			{
 				gDone = TRUE;
 			}
+#ifndef __AUI_USE_SDL__
 			else
 			{
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
+#else // !__AUI_USE_SDL__
+			SDLMessageHandler(event);
+#endif // !__AUI_USE_SDL__
 		}
 
 		g_letUIProcess = FALSE;
 	}
 
+#ifdef WIN32
 	return msg.wParam;
+#else
+	return 0;
+#endif
 }
 
 
@@ -2112,7 +2212,9 @@ void DoFinalCleanup(int exitCode)
 		g_c3ui->DestroyDirectScreen();
     }
 
+#ifdef WIN32
 	ShowWindow(gHwnd, SW_HIDE);
+#endif
 
 	if (!s_cleaningUpTheApp) 
     {
@@ -2131,73 +2233,41 @@ void DoFinalCleanup(int exitCode)
 
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
+#ifndef __AUI_USE_SDL__
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+#else
+void SDLMessageHandler(const SDL_Event &event)
+#endif
 {
 	AUI_ERRCODE		errcode;
-
-	
 	
 	if ( !gDone )
 
+#ifndef __AUI_USE_SDL__
 	if (g_c3ui != NULL) {
 		errcode = g_c3ui->HandleWindowsMessage(hwnd, iMsg, wParam, lParam);
 
 	}
+#endif
 
 	static int swallowNextChar = 0;
 
+#ifndef __AUI_USE_SDL__
 	switch (iMsg) {
 	case WM_CHAR :
-	    
-        
 		if(!swallowNextChar)
 			ui_HandleKeypress(wParam, lParam);
 		swallowNextChar = FALSE;
 		break;
-		
 	case WM_KEYDOWN :
-
-
-
-
-
-
-
+#else
+	switch(event.type) {
+	case SDL_KEYDOWN:
+		// TODO: Add Event handling here
+		break;
+#endif
+#ifndef __AUI_USE_SDL__
 		switch (wParam) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		case VK_F1:
 		case VK_F2:
 		case VK_F3:
@@ -2303,6 +2373,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
+#else
+	}
+#endif
 }
 
 #ifdef _DEBUG
@@ -2312,8 +2385,7 @@ extern DataCheck *g_dataCheck;
 
 
 
-void DisplayFrame (aui_Surface *surf) 
-
+void DisplayFrame (aui_Surface *surf)
 { 
     static double fr_decay = 0.85; 
     g_ave_frame_rate = 10.0; 
@@ -2328,7 +2400,11 @@ void DisplayFrame (aui_Surface *surf)
         is_init = 0; 
     }
 
+#ifdef USE_SDL
+    new_tick = SDL_GetTicks(); 
+#else
     new_tick = GetTickCount(); 
+#endif
 
     double d = double (new_tick - g_old_last_tick); 
     g_old_last_tick = new_tick;
@@ -2348,7 +2424,11 @@ void DisplayFrame (aui_Surface *surf)
 
 BOOL ExitGame(void)
 {
+#ifdef WIN32
 	return PostMessage(gHwnd, WM_CLOSE, 0, 0);
+#else
+	return TRUE;
+#endif
 }
 
 

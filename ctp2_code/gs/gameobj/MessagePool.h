@@ -5,8 +5,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _MESSAGEPOOL_H_
 #define _MESSAGEPOOL_H_
 

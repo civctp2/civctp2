@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __BUILD_QUEUE_H__
 #define __BUILD_QUEUE_H__ 1
 

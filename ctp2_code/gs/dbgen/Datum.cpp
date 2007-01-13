@@ -542,7 +542,7 @@ void Datum::ExportDestructor(FILE *outfile)
 		case DATUM_FLOAT:
 		case DATUM_RECORD:
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n", m_name, m_name );
 			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
 			break;
@@ -555,14 +555,14 @@ void Datum::ExportDestructor(FILE *outfile)
 			fprintf(outfile, "\t\t\t\tdelete m_%s[index]; \n", m_name );
 			fprintf(outfile, "\t\t} \n" );
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n", m_name, m_name );
 			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
 			break;
 		case DATUM_STRUCT:
 			fprintf(outfile, "\t\t\t// free struct elements\n",m_name);
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n", m_name, m_name );
 			fprintf(outfile, "\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\tm_num%s = 0; \n\n", m_name );
 			break;
@@ -606,7 +606,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_RECORD:
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
 			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n", m_name, m_name );
 			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\t\tm_num%s = 0; \n", m_name );
 			fprintf(outfile, "\t}\n");
@@ -621,7 +621,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 		case DATUM_FLOAT:
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
 			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n\n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n\n", m_name, m_name );
 			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\t\tm_num%s = 0; \n", m_name );
 			fprintf(outfile, "\t}\n");
@@ -644,7 +644,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
 			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n", m_name, m_name );
 			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\t}\n\n");
 
@@ -666,7 +666,7 @@ void Datum::ExportOperatorEqual(FILE *outfile)
 			fprintf(outfile, "\t// free struct elements of %s[]\n",m_name);
 			fprintf(outfile, "\tif (m_num%s > 0) \n", m_name );
 			fprintf(outfile, "\t{\n");
-			fprintf(outfile, "\t\tdelete [m_num%s] m_%s; \n", m_name, m_name );
+			fprintf(outfile, "\t\tdelete[] m_%s; \n", m_name, m_name );
 			fprintf(outfile, "\t\tm_%s = NULL; \n", m_name );
 			fprintf(outfile, "\t}\n\n");
 

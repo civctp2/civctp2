@@ -216,7 +216,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                              exist                              R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                              copy                              C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                              R:\ctp2_project\ctp2_code\ctp\                             	rem      if                              exist                              R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                              copy                              C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                              R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                               exist                               R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                               copy                               C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                               R:\ctp2_project\ctp2_code\ctp\                              	rem       if                               exist                               R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                               copy                               C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                               R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -1713,6 +1713,10 @@ SOURCE=..\gs\gameobj\GameObj.cpp
 # Begin Source File
 
 SOURCE=..\gs\gameobj\GameObj.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\gameobj\gameover.h
 # End Source File
 # Begin Source File
 
@@ -12619,10 +12623,6 @@ SOURCE=..\ui\interface\FileDialog.cpp
 # Begin Source File
 
 SOURCE=..\ui\interface\FileDialog.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\gameobj\gameover.h
 # End Source File
 # Begin Source File
 

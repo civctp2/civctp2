@@ -4,8 +4,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef ___BMH_DOMESTIC_MANAGEMENT_DIALOG_HEADER
 #define ___BMH_DOMESTIC_MANAGEMENT_DIALOG_HEADER
 

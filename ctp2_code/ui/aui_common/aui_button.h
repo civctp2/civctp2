@@ -33,6 +33,7 @@
 
 
 #include "aui_control.h"
+#include "aui_keyboard.h"
 
 
 class aui_Surface;
@@ -109,7 +110,7 @@ protected:
 
 	virtual MouseEventCallback MouseRDropInside;
 #else
-	virtual void	KeyboardCallback(aui_KeyBoardEvent * keyboardData);
+	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
 	
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 

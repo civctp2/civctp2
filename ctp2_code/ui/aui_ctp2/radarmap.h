@@ -39,7 +39,7 @@
 #define ___BMH_RADAR_MAP_HEADER
 
 
-
+#include "colorset.h"
 #include "aui_control.h"
 #include "MapPoint.h"
 #include "patternbase.h"
@@ -52,7 +52,6 @@ enum C3_RADAR_ACTION {
 	C3_RADAR_ACTION_NULL,
 	C3_RADAR_ACTION_MAX
 };
-enum COLOR;
 
 
 class aui_Surface;

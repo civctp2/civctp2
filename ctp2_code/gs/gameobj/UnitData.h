@@ -32,6 +32,7 @@
 #ifndef __UNIT_DATA_H__ 
 #define __UNIT_DATA_H__ 1
 
+#include "ctp2_enums.h"
 #include "GameObj.h"
 #include "MapPoint.h"
 #include "Unit.h"
@@ -62,14 +63,6 @@ enum HAPPY_REASON;
 
 #define k_MAX_PLAYERS 32
 #endif
-
-enum UNIT_COMMAND {
-	UNIT_COMMAND_NEAREST_CITY,
-	UNIT_COMMAND_NEAREST_FORT,
-	UNIT_COMMAND_NEAREST_AIRFIELD,
-	UNIT_COMMAND_ENTRENCH,
-	UNIT_COMMAND_SLEEP
-};
 
 class VisibilityDurationArray
 {

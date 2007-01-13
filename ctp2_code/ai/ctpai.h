@@ -29,8 +29,9 @@
 // - BombardNearbyEnemies before ending turn (during ExecuteOpportunityActions) PFT
 //----------------------------------------------------------------------------
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CTP_AI_H__
 #define __CTP_AI_H__
 
@@ -159,4 +160,4 @@ private:
 	static sint32 sm_endgameWorldUnionIndex;
 };
 
-#endif __CTP_AI_H__
+#endif // __CTP_AI_H__

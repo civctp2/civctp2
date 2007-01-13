@@ -288,6 +288,10 @@ int g_gameWatchID = -1;
 #include "EditQueue.h"
 #include "ProfileEdit.h"
 
+#ifdef LINUX
+#include <time.h>
+#endif
+
 #include "screenmanager.h"
 extern ScreenManager *g_screenManager;
 
@@ -1433,11 +1437,9 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
 	sint32		success;
 
-	
-
-	
-    CoInitialize(NULL);
-
+#ifndef USE_COM_REPLACEMENT
+	CoInitialize(NULL);
+#endif
 	
 	Splash::Initialize();
 
@@ -2090,10 +2092,9 @@ sint32 CivApp::CleanupApp(void)
 	    
 	    CivPaths_CleanupCivPaths();
 
-	    
+#ifndef USE_COM_REPLACEMENT
 	    CoUninitialize();
-
-	    
+#endif
 
 	    display_Cleanup();
     }
@@ -2142,8 +2143,11 @@ sint32 CivApp::InitializeGameUI(void)
 	g_theProgressWindow->StartCountingTo( 40, s );
 
 	SPLASH_STRING("Creating Main Windows...");
-    g_splash_old = GetTickCount(); 
-
+#ifdef USE_SDL
+	g_splash_old = SDL_GetTicks();
+#else
+	g_splash_old = GetTickCount();
+#endif
 
 	SPLASH_STRING("Creating Status Window...");
 	errcode = c3windows_MakeStatusWindow(TRUE);
@@ -2272,7 +2276,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	
 	SPLASH_STRING("Initializing Game Watch...");
 	g_gameWatchID = gameWatch.StartGame();
-#endif _NO_GAME_WATCH
+#endif // _NO_GAME_WATCH
 
 #ifdef _DEBUG_MEMORY
 
@@ -2606,7 +2610,11 @@ sint32 InitializeSpriteEditorUI(void)
 	g_theProgressWindow->StartCountingTo( 10, s );
 
 	SPLASH_STRING("Creating Main Windows...");
-    g_splash_old = GetTickCount(); 
+#ifdef USE_SDL
+	g_splash_old = SDL_GetTicks();
+#else
+	g_splash_old = GetTickCount();
+#endif
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
@@ -3253,13 +3261,22 @@ void CivApp::ProcessGraphicsCallback(void)
 
 sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_milliseconds)
 {
-    uint32 start_time_ms = GetTickCount(); 
-	uint32			curTicks = GetTickCount();
+#ifdef USE_SDL
+	uint32 start_time_ms = SDL_GetTicks();
+	uint32 curTicks = SDL_GetTicks();
+#else
+	uint32 start_time_ms = GetTickCount();
+	uint32 curTicks = GetTickCount();
+#endif
 	static uint32	lastTicks = curTicks;
 
 	if (g_c3ui->TheMouse()) {
 		if (g_c3ui->TheMouse()->IsSuspended() ) {
-	        used_milliseconds = GetTickCount() - start_time_ms; 
+#ifdef USE_SDL
+			used_milliseconds = SDL_GetTicks() - start_time_ms;
+#else
+			used_milliseconds = GetTickCount() - start_time_ms;
+#endif
 
 			if (g_runInBackground) {
 				if (m_gameLoaded) {
@@ -3351,7 +3368,11 @@ sint32 CivApp::ProcessAI()
 	if(victorywin_IsOnScreen())
 		return 0;
 
-    uint32 start_time_ms = GetTickCount();
+#ifdef USE_SDL
+	uint32 start_time_ms = SDL_GetTicks();
+#else
+	uint32 start_time_ms = GetTickCount();
+#endif
 
 	if (g_c3ui->TheMouse()) {
 		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground) {
@@ -3371,11 +3392,19 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 	if(victorywin_IsOnScreen())
 		return 0;
 
-    uint32 start_time_ms = GetTickCount();
-
+#ifdef USE_SDL
+	uint32 start_time_ms = SDL_GetTicks();
+#else
+	uint32 start_time_ms = GetTickCount();
+#endif
+	
 	if (g_c3ui->TheMouse()) {
 		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground) {
-	        used_milliseconds = GetTickCount() - start_time_ms; 
+#ifdef USE_SDL
+			used_milliseconds = SDL_GetTicks() - start_time_ms;
+#else
+			used_milliseconds = GetTickCount() - start_time_ms;
+#endif
 			return 0;
 		}
 	}
@@ -3393,7 +3422,11 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 
 sint32 CivApp::ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds)
 {
-    uint32 start_time_ms = GetTickCount();
+#ifdef USE_SDL
+	uint32 start_time_ms = SDL_GetTicks();
+#else
+	uint32 start_time_ms = GetTickCount();
+#endif
 
 	if(m_gameLoaded) {
 		g_network.Process();
@@ -3491,17 +3524,31 @@ sint32 CivApp::Process(void)
 	
 	if(g_netConsole) {
 		static uint32 last_tick = 0;
+#ifdef USE_SDL
+		if(SDL_GetTicks() > last_tick + 250) {
+#else
 		if(GetTickCount() > last_tick + 250) {
+#endif
 			g_netConsole->Idle();
+#ifdef USE_SDL
+			last_tick = SDL_GetTicks();
+#else
 			last_tick = GetTickCount();
+#endif
 		}
 	}
 
 	
 	
 	if (m_inBackground) {
-		
+#ifdef LINUX
+		struct timespec backgroundSleepTime;
+		backgroundSleepTime.tv_sec=0;
+		backgroundSleepTime.tv_nsec=50000000;
+		nanosleep(&backgroundSleepTime, NULL);
+#else
 		Sleep(50);
+#endif
 		return 0;
 	}
 

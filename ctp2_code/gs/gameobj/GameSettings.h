@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GAME_SETTINGS_H__
 #define __GAME_SETTINGS_H__
 

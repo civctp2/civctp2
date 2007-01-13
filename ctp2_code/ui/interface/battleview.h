@@ -1,7 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __BATTLEVIEW_H__
 #define __BATTLEVIEW_H__
 

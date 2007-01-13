@@ -3,6 +3,7 @@
 #ifndef __CITY_AGENT_H__
 #define __CITY_AGENT_H__ 1
 
+#include "ctp2_enums.h"
 #include "Agent.h"
 #include "MapPoint.h"
 
@@ -32,39 +33,6 @@ interface IC3TradeOffer;
 enum GOAL_TYPE; 
 enum INST_TILE_STATE;
 enum PRODUCTION_TYPE;
-
-
-enum POPTYPE
-	{
-	POPTYPE_FIRST,
-	POPTYPE_WORKER=POPTYPE_FIRST,
-	POPTYPE_MUSICIAN,
-	POPTYPE_SCIENTIST,
-	POPTYPE_GRUNT,
-	POPTYPE_SLAVE,
-	POPTYPE_BANKER,
-	POPTYPE_LAST=POPTYPE_BANKER,
-	POPTYPE_MAX,
-	} ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class CityAgent; 
 class RoadDest; 

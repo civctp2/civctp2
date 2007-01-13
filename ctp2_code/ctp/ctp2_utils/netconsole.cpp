@@ -1,8 +1,40 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - added linux specific code
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 #include "netconsole.h"
 #include "c3cmdline.h"
+#if defined(WIN32)
 #include <winsock.h>
+#elif defined(LINUX)
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#endif
 
 static int s_winsockInitialized = 0;
 
@@ -23,7 +55,7 @@ void netconsole_Cleanup()
 		g_netConsole = NULL;
 	}
 }
-
+#if defined(WIN32)
 static void initWinsock()
 {
 	if(s_winsockInitialized) {
@@ -38,19 +70,10 @@ static void initWinsock()
 	nErrorStatus = WSAStartup(wVersionRequested, &wsaData);
 
 	if(nErrorStatus != 0) {
-		
-		
-
 		return;
 	}
-
-	
 	
 	if( LOBYTE(wsaData.wVersion) != LOBYTE(wVersionRequested) ||  HIBYTE(wsaData.wVersion) != HIBYTE(wVersionRequested) ) {
-		
-		
-		
-		
 		WSACleanup();   
 		return;
 	}
@@ -60,7 +83,6 @@ static void initWinsock()
 
 static void cleanupWinsock()
 {
-
 	if(!s_winsockInitialized)
 		return;
 
@@ -68,11 +90,14 @@ static void cleanupWinsock()
 	if(!s_winsockInitialized)
 		WSACleanup();
 }
+#endif
 
 NetConsole::NetConsole(uint16 port)
 {
+#if defined(WIN32)
 	initWinsock();
 	Assert(s_winsockInitialized);
+#endif
 
 	m_listenSock = -1;
 	sint32 i;
@@ -90,13 +115,21 @@ NetConsole::NetConsole(uint16 port)
 		addr.sin_port = htons(port);
 		if(bind(m_listenSock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 			c3errors_ErrorDialog("NetConsole", "Can't open listen port");
+#if defined(WIN32)
 			closesocket(m_listenSock);
+#else
+			close(m_listenSock);
+#endif
 			m_listenSock = -1;
 		} else {
 			if(listen(m_listenSock, 1) < 0) {
 				
 				c3errors_ErrorDialog("NetConsole", "Can't listen on port");
+#if defined(WIN32)
 				closesocket(m_listenSock);
+#else
+				close(m_listenSock);
+#endif
 				m_listenSock = -1;
 			}
 		}
@@ -106,19 +139,29 @@ NetConsole::NetConsole(uint16 port)
 NetConsole::~NetConsole()
 {
 	if(m_listenSock >= 0) {
+#if defined(WIN32)
 		closesocket(m_listenSock);
+#else
+		close(m_listenSock);
+#endif
 		m_listenSock = -1;
 	}
 
 	sint32 i;
 	for(i = 0; i < k_MAX_CONNECTIONS; i++) {
 		if(m_connections[i] >= 0) {
+#if defined(WIN32)
 			closesocket(m_connections[i]);
+#else
+			close(m_listenSock);
+#endif
 			m_connections[i] = -1;
 		}
 	}
 
+#if defined(WIN32)
 	cleanupWinsock();
+#endif
 }
 
 void NetConsole::Idle()
@@ -224,7 +267,11 @@ void NetConsole::Print(const char *fmt, va_list vl)
 
 		sint32 w = send(m_connections[i], buf, len, 0);
 		if(w < len) {
+#if defined(WIN32)
 			closesocket(m_connections[i]);
+#else
+			close(m_connections[i]);
+#endif
 			m_connections[i] = -1;
 		}
 	}

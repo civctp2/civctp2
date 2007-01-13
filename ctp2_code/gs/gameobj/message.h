@@ -1,19 +1,13 @@
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __MESSAGE_H__ 
 #define __MESSAGE_H__
 
 #include "ID.h"
 #include "MessageData.h"
 
-extern enum MESSAGE_RESPONSE_TYPE ;
+enum MESSAGE_RESPONSE_TYPE ;
 typedef sint32 AdvanceType;
 
 class Message : public ID
@@ -25,8 +19,10 @@ class Message : public ID
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }
+#ifdef WIN32
 		Message(const int val) : ID(val) { return ; }
 		Message(const unsigned int val) : ID(val) { return ; }
+#endif
 
 		void KillMessage() ;
 		void Kill() { KillMessage() ; }

@@ -1,29 +1,17 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __PRIMITIVES_H__
 #define __PRIMITIVES_H__
 
+#include "ctp2_enums.h"
 #include "pixelutils.h"
+#include "aui_tabgroup.h"
 
 class aui_Surface;
 class aui_DirectSurface;
 class aui_Image;
 class Pattern;
-enum AUI_TABGROUP_ALIGNMENT;
 
 enum PRIMITIVES_ERRCODE
 {

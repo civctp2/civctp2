@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __RISKDB_H__
 #define __RISKDB_H__
 #include "DB.h"

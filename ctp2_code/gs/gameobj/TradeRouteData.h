@@ -4,6 +4,7 @@
 #ifndef _TRADEROUTEDATA_H_
 #define _TRADEROUTEDATA_H_
 
+#include "ctp2_enums.h"
 #include "GameObj.h"
 #include "Unit.h"
 #include "TradeRoute.h"
@@ -16,14 +17,6 @@
 #define k_TRADEROUTE_NO_PATH		0
 #define k_TRADEROUTE_ORIGINAL_PATH	1
 #define k_TRADEROUTE_SELECTED_PATH	2
-
-
-enum ROUTE_TYPE {
-	ROUTE_TYPE_RESOURCE,
-	ROUTE_TYPE_FOOD,
-	ROUTE_TYPE_GOLD,
-	ROUTE_TYPE_SLAVE, 
-};
 
 class Path;
 

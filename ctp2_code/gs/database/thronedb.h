@@ -5,8 +5,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _BMH_THRONE_DB_H_
 #define _BMH_THRONE_DB_H_
 

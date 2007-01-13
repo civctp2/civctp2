@@ -1,7 +1,7 @@
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __C3_LISTBOX__
 #define __C3_LISTBOX__
 

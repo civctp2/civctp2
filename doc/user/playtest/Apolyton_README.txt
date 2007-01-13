@@ -34,6 +34,12 @@ are described briefly below, and in more detail in ChangeLog.txt
 
 Changelog:
 
+2005-05-23
+Added: Brief changelog to playtest readme
+Fixed: Incorrect bonuses from goods
+Fixed: Misc crashes
+Added: Some more credits
+
 2005-05-17
 Added: /debugai and /debugcells commands in chat window
 Changed: Some diplomatic agreements to have limited duration

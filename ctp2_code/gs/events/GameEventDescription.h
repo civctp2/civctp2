@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GAME_EVENT_DESCRIPTION_H__
 #define __GAME_EVENT_DESCRIPTION_H__
 
@@ -8,32 +9,6 @@ struct GameEventDescription {
 	char *description;
 	char *args;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef EVENT
 #undef EVENT

@@ -1,5 +1,6 @@
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef OPTIONWARNING_FLAG
 #define		OPTIONWARNING_FLAG
 

@@ -17,7 +17,7 @@ AC_PROG_CXX(cl g++ gcc cxx c++ cc++ KCC CC egcs)
 AC_LANG(C++)
 AM_PROG_LEX
 dnl AC_PROG_YACC
-AC_PATH_PROG(YACC,byacc)
+AC_PATH_PROG(YACC,byacc,no)
 if test "x$YACC" == "xno"
 then
    AC_MSG_ERROR([
@@ -52,7 +52,14 @@ case $host in
 *)	AC_DEFINE(USE_COM_REPLACEMENT,1,[Do not use COM])
 	;;
 esac
+
 AC_DEFINE(YYDEBUG,9,[Debug Parsers])
+AC_PATH_PROG(HTLATEX,htlatex)
+AC_PATH_PROG(MAKEINDEX,makeindex)
+AC_PATH_PROG(PDFLATEX,pdflatex)
+AC_PATH_PROG(PERL,perl)
+AC_PATH_PROG(THUMBPDF,thumbpdf)
+AC_PATH_PROGS(VIEWPDF,acroread gpdf)
 
 for ac_remove_CFLAG in "-O1" "-O2" "-O3" ; do
 	CFLAGS=${CFLAGS//${ac_remove_CFLAG}/}

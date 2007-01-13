@@ -28,12 +28,15 @@
 // - Made GetCivilisation method const - May 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __PLAYER_H__
 #define __PLAYER_H__ 1
 
+#include "ctp2_enums.h"
+#include "AgreementTypes.h"
+#include "GameObj_types.h"
 #include "PollutionConst.h"
 
 #include "MapPoint.h"
@@ -46,19 +49,9 @@
 #define k_ANNOUNCE_TRADE_MESSAGES 1
 #define k_SQUELCH_TRADE_MESSAGES 0
 
-extern enum ROUTE_TYPE; 
+#include "TradeRouteData.h"
+#include "AgreementTypes.h"
 
-extern enum AGREEMENT_TYPE ;
-extern enum CIV_INDEX ;
-extern enum MSG_CLS ;
-extern enum POPTYPE ;
-extern enum UNIT_ORDER_TYPE;
-extern enum REGARD_TYPE ;
-extern enum UNIT_COMMAND;
-extern enum CAUSE_KILL_TRADE_ROUTE;
-
-extern enum GENDER;
-extern enum DATABASE;
 
 enum ATTITUDE_TYPE
 	{
@@ -69,7 +62,7 @@ enum ATTITUDE_TYPE
 	ATTITUDE_TYPE_WEAK_HOSTILE,
 	ATTITUDE_TYPE_WEAK_FRIENDLY,
 	ATTITUDE_TYPE_MAX,
-	} ;
+} ;
 
 
 enum DEATH_EFFECT_MORALE {
@@ -121,12 +114,10 @@ class DiplomaticRequest;
 typedef sint32 TERRAIN_IMPROVEMENT;
 class TerrainImprovement;
 
-enum READINESS_LEVEL;
 class MilitaryReadiness;
 
 class MaterialPool;
 
-enum INSTALLATION_TYPE;
 class Installation;
 
 typedef sint32 PLAYER_INDEX;
@@ -137,8 +128,6 @@ enum CAUSE_REMOVE_ARMY;
 enum CAUSE_NEW_CITY; 
 enum CAUSE_REMOVE_CITY; 
 enum CAUSE_SCI; 
-
-enum STRENGTH_CAT;
 
 class CreateUnitRequest;
 
@@ -367,7 +356,7 @@ public:
 public:
 	friend class SelectedItem; 
 
-	Player(const PLAYER_INDEX o, sint32 d, 	PLAYER_TYPE pt); 
+	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt); 
 	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const CIV_INDEX civ, GENDER gender) ;
 	Player(CivArchive &archive) ;
 	~Player();

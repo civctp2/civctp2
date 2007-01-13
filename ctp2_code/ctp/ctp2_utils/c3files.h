@@ -1,7 +1,30 @@
-/**
- * $Id$
- */
-#if defined(_MSC_VER) && (_MSC_VER > 1200)
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header file
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __C3FILES_H__
@@ -76,10 +99,9 @@ void		c3files_StripSpaces(MBCHAR *s);
 
 
 sint32		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
-#if !defined(WIN32)
-typedef MBCHAR WIN32_FIND_DATA;
-#endif
+#if defined WIN32
 sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
+#endif
 
 
 BOOL		c3files_HasLegalCD(void);
@@ -87,7 +109,7 @@ void		c3files_InitializeCD(void);
 MBCHAR		c3files_GetCTPCDDriveLetter(void);
 BOOL		c3files_HasCD(void);
 void		c3files_GetCDDrives(void);
-MBCHAR		*c3files_GetVolumeName(MBCHAR name);
+MBCHAR		*c3files_GetVolumeName(int cdIndex);
 BOOL		c3files_FindCDByName(CHAR *name, BOOL findDriveLetter);
 
 #endif

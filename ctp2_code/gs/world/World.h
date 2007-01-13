@@ -67,7 +67,11 @@ typedef bool (FindDistanceCellCallback) (const MapPoint &pos, Cell *cell, void *
 template <class T> class PQueue;
 struct DistItem;
 
+#ifndef USE_COM_REPLACEMENT
 interface IMapGenerator;
+#else
+#include "IMapGen.h"
+#endif
 #define k_WORLD_VERSION_MAJOR	0									
 #define k_WORLD_VERSION_MINOR	0									
 

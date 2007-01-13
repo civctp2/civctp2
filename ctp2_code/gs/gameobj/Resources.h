@@ -6,8 +6,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _RESOURCES_H_
 #define _RESOURCES_H_
 

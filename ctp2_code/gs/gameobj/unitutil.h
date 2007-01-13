@@ -25,8 +25,9 @@
 //   size a ring one city. - Oct. 6th 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __UNIT_UTIL_H__
 #define __UNIT_UTIL_H__
 
