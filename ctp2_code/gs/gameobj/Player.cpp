@@ -50,13 +50,13 @@
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
 // - Allow loading of savegames with diffrent number of goods than in 
 //   the good database. - May 28th 2005 Martin Gühmann
+// - Made version constants local, merged with linux branch.
 //
 //----------------------------------------------------------------------------
 
-#include "c3debug.h"
-
-
 #include "c3.h"
+
+#include "c3debug.h"
 #include "Globals.h"
 #include "c3errors.h"
 #include "c3math.h"
@@ -315,7 +315,8 @@ extern BOOL                     g_ai_revolt;
 #include "ctpai.h"
 
 
-
+#define k_PLAYER_VERSION_MAJOR	0
+#define k_PLAYER_VERSION_MINOR	2
 
 
 

@@ -193,6 +193,10 @@ void Scheduler::ValidateAll()
 	}
 }
 
+void Scheduler::CleanupAll(void)
+{
+    Scheduler_Vector().swap(s_theSchedulers);
+}
 
 Scheduler::Scheduler()
 {

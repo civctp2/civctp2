@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leaks.
+// - Updated tribe index check.
 //
 //----------------------------------------------------------------------------
 
@@ -343,8 +344,10 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 
 	CIV_INDEX	tribeIndex = (CIV_INDEX)spnewgametribescreen_getTribeIndex();
 
-	if (tribeIndex == -1)
-		tribeIndex = (CIV_INDEX)1;
+	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
+    {
+		tribeIndex = CIV_INDEX_CIV_1;
+    }
 
 	g_theProfileDB->SetCivIndex(tribeIndex);
 	

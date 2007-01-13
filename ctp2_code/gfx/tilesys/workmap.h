@@ -29,7 +29,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -169,7 +169,7 @@ public:
 	void		SetNumWorkers(sint32 num) { m_numWorkers = num; }
 
 protected:		
-	aui_DirectSurface *m_surface;
+	aui_Surface *m_surface;
 
 	Unit		m_unit;
 

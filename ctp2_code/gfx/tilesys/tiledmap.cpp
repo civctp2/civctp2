@@ -17,7 +17,10 @@
 //
 // Compiler flags
 //
-// - None
+// - _DEBUG
+//   Set when generating the debug version
+// - __BIG_DIRTY_BLITS__
+// - __USING_SPANS__
 // 
 //----------------------------------------------------------------------------
 //
@@ -34,6 +37,7 @@
 //   right position are displayed. - Dec. 25th 2004 - Martin Gühmann
 // - Improved destructor (useless code removed, corrected delete [])
 // - Removed .NET compiler warnings. - April 23rd 2005 Martin Gühmann
+// - Prevented crashes on game startup and exit.
 //
 //----------------------------------------------------------------------------
 
@@ -351,7 +355,7 @@ TiledMap::~TiledMap()
 {
 	DeleteGrid();
 
-	if (m_font)
+	if (g_c3ui && m_font)
 	{
 		g_c3ui->UnloadBitmapFont(m_font);
 	}
@@ -6483,22 +6487,41 @@ void TiledMap::CopyVision()
 }
 
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : TiledMap::ReadyToDraw
+//
+// Description: Determine whether the display should contain visible tiles.
+//
+// Parameters : -
+//
+// Globals    : g_network       : multiplayer information
+//              g_slicEngine    : general game engine
+//              g_selected_item : selected item on screen
+//              g_turn          : turn information
+//
+// Returns    : BOOL            : tiles may be drawn
+//
+// Remark(s)  : The tiles may not be drawn in the following cases:
+//              - For multiplayer games, when the network is not ready.
+//              - When the game engine says so (e.g. between turns in hotseat).
+//              - When there is no selected item (yet).
+//              - Before the actual start of the game.
+//
+//----------------------------------------------------------------------------
 BOOL TiledMap::ReadyToDraw() const
 {
-	if((g_network.IsActive() || g_network.IsNetworkLaunch()) &&
-	   !g_network.ReadyToStart())
+	if ((g_network.IsActive() || g_network.IsNetworkLaunch()) &&
+	    !g_network.ReadyToStart()
+       )
+    {
 		return FALSE;
+    }
 
-	if(g_slicEngine->ShouldScreenBeBlank())
-		return FALSE;
-
-	if((!g_selected_item  && !g_turn) || 
-	   (g_turn->GetRound() == 0 && m_localVision->GetOwner() == 0)) {
-		return FALSE;
-	}
-
-	return TRUE;
+    return g_slicEngine     && !g_slicEngine->ShouldScreenBeBlank() &&
+           g_selected_item  &&
+           g_turn           && 
+                ((g_turn->GetRound() > 0) || (m_localVision->GetOwner() > 0));
 }
 
 

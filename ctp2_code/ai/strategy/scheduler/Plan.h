@@ -25,9 +25,14 @@
 // - Add the CanMatchesBeReevaluated (implemented for the moment always at true)
 //   so, the matches are rollbacked and changed every turn... - Calvitix
 // - Standardised <list> import.
+// - Cleaned up the code somewhat (removed sint16 conversions, removed Init)
 //
 //----------------------------------------------------------------------------
  
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __PLAN_H__
 #define __PLAN_H__ 1
 
@@ -86,9 +91,6 @@ public:
 	bool operator!= (const Plan &plan) const;
 
 
-	void Init();
-
-    
 	GOAL_TYPE Get_Goal_Type() const;
 
 	
@@ -113,16 +115,13 @@ public:
     Squad_ptr Get_Squad() const;
 
 	
-	sint16 Commit_Agents();
+	sint32 Commit_Agents();
 	
 	
     GOAL_RESULT Execute_Task();
 
 	
-	sint16 Rollback_Invalid_Agents();
-
-	
-	sint16 Rollback_All_Agents();
+	sint32 Rollback_All_Agents();
 
  	
  	bool Commited_Agents_Need_Orders() const;
@@ -132,7 +131,7 @@ public:
     /// (for example : not if they are too close to their goals and grouping)
     ///
     bool CanMatchesBeReevaluated() const;
-	sint16 Move_All_Agents(Squad_ptr new_squad);
+	void Move_All_Agents(Squad_ptr new_squad);
 
 	
     bool Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter);

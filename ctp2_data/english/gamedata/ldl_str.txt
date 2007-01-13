@@ -1543,7 +1543,7 @@ str_ldl_Fuel_COLON  "Fuel:"
 ### New World Shape Strings ###
 
 str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
-str_ldl_North_and_South_edges_of_the_map_connect	"Noth and South edges of the map connect."
+str_ldl_North_and_South_edges_of_the_map_connect	"North and South edges of the map connect."
 str_ldl_Uranus_World					"Uranus World"
 str_tbl_ldl_Uranus_World					"Uranus World"
 
