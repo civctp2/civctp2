@@ -499,7 +499,65 @@ void TileSet::LoadMapIcons(void)
 
 	}
 }
+/*
+Pixel16 TileSet::ConvertMapIcons(const MBCHAR *name)  //EMOD
+{
+	//MBCHAR		name[_MAX_PATH];
+	MBCHAR		path[_MAX_PATH];
+	uint16		width, height;
+	uint32		len;
+	Pixel16		*tga;
+	Pixel16		*data;
+ 
+	//for (int i = 0; i < MAPICON_MAX; ++i) 
+    //{
+	//	sprintf(name, "UPC%.3d.TGA", i+1);
 
+		if (g_civPaths->FindFile(C3DIR_PICTURES, name, path, TRUE, FALSE) == NULL) {
+			//sprintf(path, "upc%.3d.rim", i+1);
+            size_t  testlen = 0;
+			uint8 * buf = reinterpret_cast<uint8 *>(g_ImageMapPF->getData(path, testlen));
+            len = testlen;
+			if (buf == NULL) {
+				c3errors_ErrorDialog("TileSet", "'%s not found in asset tree.", name);
+				//continue;
+			}
+			len -= sizeof(RIMHeader);
+			RIMHeader * rhead = (RIMHeader *)buf;
+			width = rhead->width;
+			height = rhead->height;
+			Pixel16 *   image = (Pixel16 *)(buf + sizeof(RIMHeader));
+			data = (Pixel16 *)tileutils_EncodeTile16(image, width, height, &len, rhead->pitch);
+			
+				if (data) {
+				m_mapIcons[i] = data;
+				POINT pt = {width, height};
+				m_mapIconDimensions[i] = pt;
+
+				tileutils_ConvertPixelFormatFrom555(data);
+			}
+			continue; 
+		}
+
+            
+		tga = tileutils_TGA2mem(path, &width, &height);
+		if (tga) {
+			data = (Pixel16 *)tileutils_EncodeTile16(tga, width, height, &len);
+			delete[] tga;
+			tga = NULL;
+
+			if (data) {
+				
+				tileutils_ConvertPixelFormatFrom555(data);
+
+				m_mapIcons[i] = data;
+				POINT pt = {width, height};
+				m_mapIconDimensions[i] = pt;
+			}
+		}
+	//}
+}
+*/
 
 void TileSet::Load(void)
 {

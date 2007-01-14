@@ -71,7 +71,7 @@ class UnseenInstallationInfo;
 #define k_UCF_HAS_AIRPORT               0x0100
 #define k_UCF_HAS_SLEEPINGUNITS         0x0200
 #define k_UCF_IS_WATCHFUL               0x0400
-
+#define k_UCF_ISCAPITOL               0x0800  //emod
 //----------------------------------------------------------------------------
 // Project imports
 //----------------------------------------------------------------------------
@@ -240,6 +240,7 @@ public:
 	bool    HasAirport(void) const              { return 0 != (m_flags & k_UCF_HAS_AIRPORT); }
 	bool    HasSleepingUnits(void) const        { return 0 != (m_flags & k_UCF_HAS_SLEEPINGUNITS); }
 	bool    IsWatchful(void) const              { return 0 != (m_flags & k_UCF_IS_WATCHFUL); }
+	bool    IsCapitol(void) const              { return 0 != (m_flags & k_UCF_ISCAPITOL); } //emod
 
 	void    SetIsBioInfected(bool yes)          { if (yes) m_flags |= k_UCF_IS_BIOINFECTED; else m_flags &= ~k_UCF_IS_BIOINFECTED;}
 	void    SetIsNanoInfected(bool yes)         { if (yes) m_flags |= k_UCF_IS_NANOINFECTED; else m_flags &= ~k_UCF_IS_NANOINFECTED;}
@@ -252,7 +253,7 @@ public:
 	void    SetHasAirport(bool yes)             { if (yes) m_flags |= k_UCF_HAS_AIRPORT; else m_flags &= ~k_UCF_HAS_AIRPORT;}
 	void    SetHasSleepingUnits(bool yes)       { if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS;}
 	void    SetIsWatchful(bool yes)             { if (yes) m_flags |= k_UCF_IS_WATCHFUL; else m_flags &= ~k_UCF_IS_WATCHFUL; }
-
+	void    SetIsCapitol(bool yes)             { if (yes) m_flags |= k_UCF_ISCAPITOL; else m_flags &= ~k_UCF_ISCAPITOL; } //emod
 	bool    IsAirfield(void) const;
 	bool    IsListeningPost(void) const;
 	bool    IsRadar(void) const;

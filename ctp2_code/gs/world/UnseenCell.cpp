@@ -246,6 +246,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 		    SetHasAirport(cityData->HasAirport());
 		    SetHasSleepingUnits(cityData->HasSleepingUnits());
 		    SetIsWatchful(cityData->IsWatchful());
+			SetIsCapitol(cityData->IsCapitol());  //emod
 
 		    m_bioInfectedOwner = (sint8)cityData->GetOwner();
 		    m_nanoInfectedOwner = (sint8)cityData->GetOwner();

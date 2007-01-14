@@ -55,6 +55,10 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Display non-growth as "---"
 // - Repaired crashes when zooming out
+// - Added IsCapitol Bool to DrawCityIcons 1-5-2006 EMOD
+// - Implemented HasAirport; for some reason it was forgotten 1-5-2006 EMOD
+// - Moved citypop box to the left name in the center and turns until next pop 
+//   to the right for cleaner interface 1-13-2007 EMOD 
 //
 //----------------------------------------------------------------------------
 
@@ -100,6 +104,7 @@
 #include "TerrainImprovementRecord.h"
 #include "TerrImprovePool.h"
 #include "Civilisation.h"
+#include "BuildingRecord.h"    //emod
 
 extern Background	*g_background;
 extern ScreenManager *g_screenManager;
@@ -3582,6 +3587,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 				sint32		pop = 0;
                 sint32      nextpop = 0;//PFT
 				MBCHAR		*name = NULL;
+				//IsBuilding = GetCurrentBuildQueue //emod
 				sint32		owner = 0;
 
 				BOOL	isBioInfected = FALSE, 
@@ -3593,7 +3599,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						isRioting = FALSE,
 						hasAirport = FALSE,
 						hasSleepingUnits = FALSE,
-						isWatchful = FALSE;
+						isWatchful = FALSE, //emod ; to ,
+						isCapitol = FALSE;  //emod
 				sint32	bioInfectedOwner=0, 
 						nanoInfectedOwner=0, 
 						convertedOwner=0, 
@@ -3606,6 +3613,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle) {
 					pop = ucell.m_unseenCell->GetCitySize();
 					name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
+					//IsBuilding = GetCurrentBuildQueue //emod
 					owner = ucell.m_unseenCell->GetCityOwner();
 					isBioInfected = ucell.m_unseenCell->IsBioInfected();
 					isNanoInfected = ucell.m_unseenCell->IsNanoInfected();
@@ -3621,6 +3629,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						hasSleepingUnits = FALSE;
 					
 					isWatchful = ucell.m_unseenCell->IsWatchful();
+					isCapitol = ucell.m_unseenCell->IsCapitol(); //emod
 					
 					bioInfectedOwner = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
 					nanoInfectedOwner = ucell.m_unseenCell->m_nanoInfectedOwner;
@@ -3658,7 +3667,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							isInjoined = cityData->IsInjoined();
 							wasHappinessAttacked = cityData->WasHappinessAttacked();
 							isWatchful = cityData->IsWatchful();
-							
+							isCapitol = cityData->IsCapitol(); //emod
 							bioInfectedOwner = cityData->GetOwner();
 							nanoInfectedOwner = cityData->GetOwner();
 							convertedOwner = cityData->IsConvertedTo();
@@ -3694,6 +3703,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					RECT rect;//the city name rectangle
 					RECT boxRect;//boxRect-rect will = the player colored border for the city name
 					RECT clipRect;//working surface
+					RECT namerect;
 
 					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight) {//it's on the screen
 						if (m_font) {
@@ -3703,11 +3713,19 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
                             // get the proper colors for the city's owner
 							Pixel16	const pixelColor = GetPlayerColor(owner, fog);
 
+							//emod
+							MBCHAR str[80];
+							sint32 width1 = m_font->GetStringWidth(name);
+							sint32 width2 = m_font->GetStringWidth(str);
+							//x = width2 + 1;  //moved to far screen
+							//RECT popRect = {0, 0, width+4, height+4};  //made big # box
+							//end emod
+
                             //define rect's screen co-ordinates
-							rect.left = x;
+							rect.left = x;   //original rect.left = x; 
 							rect.top = y;
-							rect.right = x+width;
-							rect.bottom = y+height;
+							rect.right = rect.left + width;//x+width;
+							rect.bottom = rect.top + height; //y+height;
 
 							boxRect = rect;//copy rect to boxRect
 
@@ -3760,13 +3778,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							m_font->DrawString(surf, &rect, &clipRect, name, 0, nameColor, 0);
 
 							AddDirtyRectToMix(boxRect);
+
+							namerect = boxRect;
 							
-                            //start on the city's pop rectangle
+           //start on the city's pop rectangle
                             //put the city's pop in str
-							MBCHAR str[80];
+							
+							//MBCHAR str[80];  //moved higher
 							sprintf(str,"%i",pop);
 							//the top line of the pop rectangle
-							y = boxRect.bottom + 1;
+							//y = boxRect.bottom + 1;   //original
 
 
 							width = m_font->GetStringWidth(str);
@@ -3774,10 +3795,12 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								width = k_POP_BOX_SIZE_MINIMUM;
 							height = m_font->GetMaxHeight();
 
+											
+
 							// the pop rectangle
-							RECT popRect = {0, 0, width+4, height+4};
+							RECT popRect = {0, 0, width+4, height+4};  //original
                             //add the top left co-ordinates
-							OffsetRect(&popRect, boxRect.left, y);
+							OffsetRect(&popRect, boxRect.left - width - 4, boxRect.top);  //orig OffsetRect(&popRect, boxRect.left, y)
 
 							//copy popRect to the working surface clipRect
 							clipRect = popRect;
@@ -3844,13 +3867,13 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							popRect.bottom++;
 							popRect.right++;
 
-							AddDirtyRectToMix(rect);
+							AddDirtyRectToMix(rect); 
 
 							//top left co-ordinates of nextPop rect
-							x = popRect.left;
-                            y = popRect.bottom + 1;
+							x = clipRect.right + width1 + 8; // popRect.left;
+                            //original  y = popRect.bottom + 1;
 
-							// nextpop rect, PFT
+	// nextpop rect, PFT
 							if (owner == g_selected_item->GetVisiblePlayer())
                             {
                                 //put the number of turns until the city's nextpop in str
@@ -3872,7 +3895,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							    //RECT for next pop
 								RECT popRectn = {0, 0, width+4, height+4};
                                 //add the top left co-ordinates
-								OffsetRect(&popRectn, x, y);
+								OffsetRect(&popRectn, x, boxRect.top); //OffsetRect(&popRectn, x, y);
 
 								//copy popRectn to the working surface clipRect
 								clipRect = popRectn;
@@ -3946,14 +3969,19 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							}
 						} else 
 							continue;
+
 					}
-					DrawCityIcons(surf, pos, owner, fog, rect,
+					if (owner == !g_selected_item->GetVisiblePlayer()) {  //emod
+						clipRect = namerect;
+					}
+
+					DrawCityIcons(surf, pos, owner, fog, clipRect,   //rect?   works for non-civ need for civ...
 								isBioInfected, isNanoInfected, isConverted, 
 								isFranchised, isInjoined, wasHappinessAttacked,
 								bioInfectedOwner, nanoInfectedOwner, convertedOwner,
 								franchiseOwner, injoinedOwner, happinessAttackOwner, 
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
-								isWatchful);
+								isWatchful, isCapitol);
 
 				}
 			}
@@ -3994,7 +4022,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 //				
 // Returns    : 
 //
-// Remark(s)  : 
+// Remark(s)  : added Capitol
 //
 //----------------------------------------------------------------------------
 void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect,
@@ -4003,7 +4031,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 								sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful)
+								BOOL isWatchful, BOOL isCapitol)  //added capitol
 {
 	TileSet	*   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
@@ -4038,12 +4066,35 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right += iconDim.x;
 	}
 
-	
 	if (iconRect.left < 0 || iconRect.top < 0 || 
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
+	//emod to add an icon for the city capitol like civ3/4
+	if (isCapitol) {  
+		iconRect.left   = popRect.right + 1;
+		iconRect.right  = iconRect.left + iconDim.x;
+		iconRect.top    = popRect.top - 2;
+		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
 
+		color = GetPlayerColor(owner, fog);  //optional
+		//color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+//end EMOD
 	if (isNanoInfected) {
 		cityIcon = tileSet->GetMapIconData(MAPICON_NANODISEASE);
 		Assert(cityIcon); if (!cityIcon) return;
@@ -4200,6 +4251,63 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
 	}
+//emod. this bool is in he function line but never called and there is an icon so its a possible oversight/defect
+	if (hasAirport) {  
+		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_AIRPORT);
+
+		color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+//emod to add an icon for the city capitol like civ3/4
+/*	if (isCapitol) {  
+		cityIcon = tileSet->GetMapIconData(MAPICON_ARMY);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_ARMY);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
+
+		color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+*/	//}
+//emod to draw city icons for wonders and buildings
+	/*
+
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+		Unit unit;
+		CityData *cityData = unit.GetData()->GetCityData();
+		UnseenCellCarton	ucell;
+		owner = ucell.m_unseenCell->GetCityOwner();
+
+		if(cityData->GetImprovements() & ((uint64)1 << b)){
+			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[owner]->GetGovernmentType());
+			MBCHAR const *	iconName;
+			cityIcon = tileSet->ConvertMapIcons(iconName);
+			
+			if (rec->GetShowAsIcon(iconName))
+			{
+				color = GetColor(COLOR_YELLOW, fog);
+				DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				iconRect.left += iconDim.x;
+				iconRect.right += iconDim.x;
+			}
+		}
+	}
+*/
+//end emod
+
 }
 
 
@@ -4567,6 +4675,27 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	UnitData *myCityData = myCity.IsValid() ? myCity.AccessData() : NULL;
 
 	MapPoint neighbor;
+//emod
+	sint32		x, y;
+	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
+
+	TileSet	*   tileSet     = GetTileSet();
+	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_POLBORDERNW);
+    RECT		iconRect;
+	iconRect.left   = x;
+	iconRect.right  = iconRect.left + iconDim.x + 1;
+	iconRect.top    = y;
+	iconRect.bottom = iconRect.top + iconDim.y + 1;
+	Pixel16 *   borderIcon;
+	
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surface->Width() ||
+		iconRect.bottom >= surface->Height())
+		return;
+	//add city wall icons?
+	//add Great Wall Icon?
+
+//end emod
 	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
 		if(neighborOwner != myOwner 
@@ -4576,7 +4705,16 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 			DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
-		}
+	   //could change this to the same DrawColorizedOverlay but use different icons for NW etc.
+		//create a new function like drawcityicons but requires a pos and converts a pos to pixels THEN place Icon.
+		//emod
+			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
+			Assert(borderIcon); 
+			if (!borderIcon) return;
+			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+			AddDirtyRectToMix(iconRect);
+		//end emod
+		}	
 
 		neighborCityOwner = GetVisibleCityOwner(neighbor);		
 		if(neighborCityOwner != myCityOwner) {
@@ -4597,6 +4735,13 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 			DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID);
+			//emod
+			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSW);
+			Assert(borderIcon); 
+			if (!borderIcon) return;
+			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+			AddDirtyRectToMix(iconRect);
+			//end emod
 		}		
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
@@ -4617,6 +4762,13 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 			DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);
+			//emod
+			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNE);
+			Assert(borderIcon); 
+			if (!borderIcon) return;
+			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+			AddDirtyRectToMix(iconRect);
+			//end emod
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
@@ -4637,6 +4789,13 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 			DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID);
+			//emod
+			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSE);
+			Assert(borderIcon); 
+			if (!borderIcon) return;
+			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+			AddDirtyRectToMix(iconRect);
+			//end emod
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
@@ -4730,3 +4889,5 @@ void TiledMap::AddChatDirtyRectToMap()
 		AddDirtyRectToMap(m_chatRect);
 	}
 }
+
+//emod

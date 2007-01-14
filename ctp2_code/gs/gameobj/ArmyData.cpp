@@ -1595,7 +1595,7 @@ void ArmyData::BeginTurn()
 		if(m_array[i].IsEntrenched()
 		&& urec->GetSpawnsBarbarians()
 		&& CellOwner != m_owner
-		){ //Added to allow units settle improvements
+		){ 
 			Barbarians::AddBarbarians(m_pos, meat, FALSE);
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
@@ -1603,7 +1603,7 @@ void ArmyData::BeginTurn()
 
 
 	// END EMOD barb spawn units
-
+	//TODO: EMOD  make terrain hostility resk dependent? 1-2-2007
 	//EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;

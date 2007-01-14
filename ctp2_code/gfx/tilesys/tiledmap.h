@@ -434,7 +434,7 @@ public:
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful);
+								BOOL isWatchful, BOOL isCapitol);  //added capitol
 
 	void		Serialize(CivArchive &archive);
 
