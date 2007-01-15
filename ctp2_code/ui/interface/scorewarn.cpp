@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Cheat editor score warning window.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,7 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "scorewarn.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -48,7 +48,6 @@
 
 #include "scenarioeditor.h"
 
-#include "scorewarn.h"
 #include "StrDB.h"
 #include "profileDB.h"
 #include "SelItem.h"
@@ -57,10 +56,9 @@
 
 extern C3UI				*g_c3ui;
 
-c3_PopupWindow	*g_scorewarn = NULL;
+c3_PopupWindow	*   g_scorewarn = NULL;
 
-
-static c3_Static	*s_message;
+static c3_Static *  s_message   = NULL;
 
 
 
@@ -147,18 +145,15 @@ sint32 scorewarn_Initialize( void )
 	return 0;
 }
 
-sint32 scorewarn_Cleanup( void )
+void scorewarn_Cleanup(void)
 {
-	if (!g_scorewarn) return 0;	
-
-	g_c3ui->RemoveWindow( g_scorewarn->Id() );
-	keypress_RemoveHandler(g_scorewarn);
-
-	RemoveControl ( s_message );
-
-	RemoveControl ( g_scorewarn );
-
-	return 0;
+	if (g_scorewarn)
+    {
+    	g_c3ui->RemoveWindow( g_scorewarn->Id() );
+	    keypress_RemoveHandler(g_scorewarn);
+        RemoveControl(s_message);
+    	RemoveControl(g_scorewarn);
+    }
 }
 
 
@@ -171,7 +166,7 @@ static c3_Static		*s_disclaimerLabel = NULL;
 static ctp2_Button		*s_disclaimerAcceptButton = NULL;
 static ctp2_Button		*s_disclaimerDeclineButton = NULL;
 static aui_Control::ControlActionCallback *s_disclaimerCallback = NULL;
-static ctp2_HyperTextBox	*s_disclaimerTextBox;
+static ctp2_HyperTextBox	*s_disclaimerTextBox = NULL;
 
 extern BOOL g_launchIntoCheatMode;
 
@@ -320,9 +315,7 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 	fclose(f);
 
 	s_disclaimerTextBox->SetHyperText(message);
-
 	delete message;
-	message = NULL;
 
 	s_disclaimerCallback = callback;
 
@@ -335,25 +328,23 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 	return 0;
 
 Error:
-	if (s_disclaimerWindow) {
-		disclaimer_Cleanup();
-	}
-
+	disclaimer_Cleanup();
 	return -1;
 }
 
 
 
-void disclaimer_Cleanup()
+void disclaimer_Cleanup(void)
 {
-	if (!s_disclaimerWindow) return;
+	if (s_disclaimerWindow) 
+    {
+	    g_c3ui->RemoveWindow( s_disclaimerWindow->Id() );
 
-	g_c3ui->RemoveWindow( s_disclaimerWindow->Id() );
+	    RemoveControl(s_disclaimerLabel);
+	    RemoveControl(s_disclaimerAcceptButton);
+	    RemoveControl(s_disclaimerDeclineButton);
+	    RemoveControl(s_disclaimerTextBox);
 
-	RemoveControl(s_disclaimerLabel);
-	RemoveControl(s_disclaimerAcceptButton);
-	RemoveControl(s_disclaimerDeclineButton);
-	RemoveControl(s_disclaimerTextBox);
-
-	RemoveControl(s_disclaimerWindow);
+	    RemoveControl(s_disclaimerWindow);
+    }
 }

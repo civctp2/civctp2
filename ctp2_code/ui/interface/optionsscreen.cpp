@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Options popup screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -98,13 +98,9 @@ static sint32			s_return = 0;
 
 sint32	optionsscreen_displayMyWindow( sint32 from )
 {
-	sint32 retval=0;
-	if(!g_optionsWindow) { retval = optionsscreen_Initialize(); }
+    sint32 retval = (g_optionsWindow) ? 0 : optionsscreen_Initialize();
 
 	s_return = from;
-
-	extern bool g_e3Demo;
-	if(g_e3Demo) return 0;
 
 	g_c3ui->AddWindow(g_optionsWindow);
 
@@ -232,23 +228,16 @@ AUI_ERRCODE optionsscreen_Initialize( void )
 }
 
 
-AUI_ERRCODE optionsscreen_Cleanup()
+void optionsscreen_Cleanup()
 {
-	if ( g_scorewarn )
-	{
-		scorewarn_Cleanup();
-	}
+	scorewarn_Cleanup();
 
-	if ( !g_optionsWindow  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( g_optionsWindow->Id() );
-
-	g_optionsWindow->SetSurface( NULL );
-
-	delete g_optionsWindow;
-	g_optionsWindow = NULL;
-
-	return AUI_ERRCODE_OK;
+	if (g_optionsWindow)
+    {
+	    g_c3ui->RemoveWindow( g_optionsWindow->Id() );
+    	g_optionsWindow->SetSurface(NULL);
+        allocated::clear(g_optionsWindow);
+    }
 }
 
 

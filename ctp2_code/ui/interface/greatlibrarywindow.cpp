@@ -299,24 +299,17 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //----------------------------------------------------------------------------
 sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, SlicObject &so)
 {
-
-
     if (textbox == NULL)
         return(1);
 
-
-
-	
 	char * lower_case_filename = new char[strlen(filename)+1];
 	strcpy(lower_case_filename, filename);
 
-	
 	for (size_t j = 0; j < strlen(lower_case_filename); j++)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
 
 	
-    char * text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
-
+    char * text = GreatLibrary::s_great_library_info->Look_Up_Data(lower_case_filename);
 	delete [] lower_case_filename;
 
     if (text == NULL) {
@@ -504,12 +497,18 @@ char * GreatLibraryWindow::GetIconRecText
 	uint8 historical
 )
 {
-	char * the_text = NULL;
+	const IconRecord *  iconRec;
 
-	const IconRecord *iconRec = NULL;
+	switch (database) 
+    {
+    default:
+		iconRec = NULL;
+        {
+            bool InvalidDatabase = false;		
+            Assert(InvalidDatabase);
+        }
+		break;
 
-	
-	switch ( database ) {
 	case DATABASE_UNITS:
 		iconRec = g_theUnitDB->Get(item)->GetDefaultIcon();
 		break;
@@ -551,14 +550,11 @@ char * GreatLibraryWindow::GetIconRecText
 	case DATABASE_TILE_IMPROVEMENTS:
 		iconRec = g_theTerrainImprovementDB->Get(item)->GetIcon();
 		break;
-
-	default:
-		BOOL InvalidDatabase = FALSE;
-		Assert(InvalidDatabase);
-		break;
 	}
 
-	if(iconRec) 
+   	char * the_text = NULL;
+
+	if (iconRec) 
 	{
 		
 		char * lower_case_filename;
@@ -612,12 +608,8 @@ char * GreatLibraryWindow::GetIconRecText
 		for (size_t j = 0; j < strlen(lower_case_filename); j++)
 			lower_case_filename[j] = tolower(lower_case_filename[j]);
 
-		
-		the_text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
-
-		
-		if (lower_case_filename)
-			delete [] lower_case_filename;
+		the_text = GreatLibrary::s_great_library_info->Look_Up_Data(lower_case_filename);
+		delete [] lower_case_filename;
 	}
 
 	return the_text;

@@ -114,8 +114,8 @@ private:
 };
 
 
-int messagemodal_CreateModalMessage( Message data );	
-int messagemodal_DestroyModalMessage( void );
-int messagemodal_PrepareDestroyWindow();
+int     messagemodal_CreateModalMessage(Message data);	
+void    messagemodal_DestroyModalMessage(void);
+void    messagemodal_PrepareDestroyWindow(void);
 
 #endif 

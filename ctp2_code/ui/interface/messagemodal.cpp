@@ -8,7 +8,7 @@
 
 
 #include "c3.h"
-
+#include "messagemodal.h"
 
 #include "aui.h"
 #include "c3ui.h"
@@ -30,13 +30,8 @@
 #include "messageactions.h"
 #include "messagewindow.h"
 #include "messageeyepoint.h"
-#include "messagemodal.h"
-#include "player.h"
-#include "SelItem.h"
-
-extern Player **g_player;
-extern SelectedItem *g_selected_item;
-
+#include "player.h"             // g_player
+#include "SelItem.h"            // g_selected_item
 
 extern C3UI			*g_c3ui;
 
@@ -77,13 +72,12 @@ int messagemodal_CreateModalMessage( Message data )
 }
 
 
-int messagemodal_PrepareDestroyWindow() 
+void messagemodal_PrepareDestroyWindow() 
 {
 	g_c3ui->AddDestructiveAction( new MessageModalDestroyAction());
-	return 1;
 }
 
-int messagemodal_DestroyModalMessage( void )
+void messagemodal_DestroyModalMessage( void )
 {
 	if ( g_modalMessage ) 
 	{
@@ -101,8 +95,6 @@ int messagemodal_DestroyModalMessage( void )
 			g_player[g_selected_item->GetVisiblePlayer()]->NotifyModalMessageDestroyed();
 		}
 	}
-
-	return 1;
 }
 
 
@@ -302,53 +294,31 @@ AUI_ERRCODE MessageModal::CreateListboxEyePointBox( MBCHAR *ldlBlock )
 AUI_ERRCODE MessageModal::CreateResponses( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	ctp2_Button		*button, *lastbutton = NULL;
-	MessageModalResponseAction	*action = NULL;
+	ctp2_Button		*lastbutton = NULL;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	const MBCHAR	*text = NULL;
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "ModalResponseButton");
 	sint32			responseCount = 0;
-	SlicButton		*sButton = NULL;
 
 	m_messageModalResponseButton = new tech_WLList<ctp2_Button *>;
 	m_messageModalResponseAction = new tech_WLList<MessageModalResponseAction *>;
 
-	sint32 textlength = k_MODAL_BUTTON_DEFAULT_WIDTH;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	while ( sButton = m_message.AccessData()->GetButton( responseCount )) {
-		text = sButton->GetName();
-		
-		
-		sprintf(buttonBlock, "%s.%s", ldlBlock, "ModalResponseButton");
-		button = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock );
+	while (SlicButton * sButton = m_message.AccessData()->GetButton(responseCount)) 
+    {
+		ctp2_Button	*       button  = new ctp2_Button(&errcode, aui_UniqueId(), buttonBlock);
 		Assert( AUI_NEWOK( button, errcode ));
 		if ( !AUI_NEWOK( button, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		button->TextReloadFont();
 		button->Enable(TRUE);
 
-		
-		aui_BitmapFont *font = button->GetTextFont();
+		aui_BitmapFont *    font        = button->GetTextFont();
 		Assert(font);
-		textlength = font->GetStringWidth(text);
 
-		button->Resize( ( textlength + k_MODAL_BUTTON_TEXT_PADDING ), button->Height() );
-		
-		
-		button->SetText( text );
-		
+		MBCHAR const *      text        = sButton->GetName();
+		sint32              textlength  = font->GetStringWidth(text);
+
+		button->Resize((textlength + k_MODAL_BUTTON_TEXT_PADDING), button->Height());
+		button->SetText(text);
 		
 		m_messageModalResponseButton->AddTail( button );
 
@@ -367,7 +337,8 @@ AUI_ERRCODE MessageModal::CreateResponses( MBCHAR *ldlBlock )
 		}
 
 		
-		action = new MessageModalResponseAction( &m_message, responseCount );
+		MessageModalResponseAction	* action = 
+            new MessageModalResponseAction( &m_message, responseCount );
 		Assert( action != NULL );
 		if ( action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 		
@@ -395,68 +366,33 @@ AUI_ERRCODE MessageModal::CreateResponses( MBCHAR *ldlBlock )
 
 MessageModal::~MessageModal () 
 {
-	if ( m_messageText ) {
-		delete m_messageText;
-		m_messageText = NULL;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	delete m_messageText;
 	
 	if ( m_messageModalResponseAction ) {
-		MessageModalResponseAction *action = NULL;
 		ListPos position = m_messageModalResponseAction->GetHeadPosition();
 
 
-		for ( sint32 i = m_messageModalResponseAction->L(); i; i-- ) {
-			action = m_messageModalResponseAction->GetNext( position );
-			
-			if ( action ) {
-				delete action;
-				action = NULL;
-			}
+		for ( sint32 i = m_messageModalResponseAction->L(); i; i-- ) 
+        {
+			delete m_messageModalResponseAction->GetNext( position );
 		}
 
 		m_messageModalResponseAction->DeleteAll();
 		delete m_messageModalResponseAction;
-		m_messageModalResponseAction = NULL;
 	}
 
 	
-	if ( m_messageModalResponseButton ) {
-		ctp2_Button *button = NULL;
+	if ( m_messageModalResponseButton ) 
+    {
 		ListPos position = m_messageModalResponseButton->GetHeadPosition();
 
-		for ( sint32 i = m_messageModalResponseButton->L(); i; i-- ) {
-			button = m_messageModalResponseButton->GetNext( position );
-			
-			if ( button ) {
-				delete button;
-				button = NULL;
-			}
+		for ( sint32 i = m_messageModalResponseButton->L(); i; i-- ) 
+        {
+			delete m_messageModalResponseButton->GetNext( position );
 		}
 
 		m_messageModalResponseButton->DeleteAll();
 		delete m_messageModalResponseButton;
-		m_messageModalResponseButton = NULL;
 	}
 
 }

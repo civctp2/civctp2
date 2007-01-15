@@ -29,18 +29,16 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
-
+#include "spriteeditor.h"
 
 #include "aui.h"
 #include "aui_blitter.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
-#include "aui_stringtable.h"
 #include "aui_dimension.h"
-
+#include "aui_ldl.h"
+#include "aui_stringtable.h"
+#include "aui_uniqueid.h"
+#include "c3ui.h"
+#include "director.h"           // g_director
 
 
 
@@ -72,7 +70,6 @@
 
 
 #include "tiledmap.h"
-#include "spriteeditor.h"
 
 #include "colorset.h"
 #include "SelItem.h"
@@ -430,8 +427,14 @@ SpriteEditWindow::SetFrame	(sint32 frame)
 {
 	m_frame = frame;
 
-	if ((m_frame<0)||(m_frame>=m_currentSprite->GetNumFrames((GAME_ACTION)m_animation)))
-		m_frame=0;
+	if ((m_frame < 0) ||
+        (static_cast<size_t>(m_frame) >= 
+            m_currentSprite->GetNumFrames((GAME_ACTION) m_animation)
+        )
+       )
+    {
+		m_frame = 0;
+    }
 }
 
 void	

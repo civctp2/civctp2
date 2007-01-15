@@ -626,12 +626,11 @@ AUI_ERRCODE ScenarioEditor::Hide()
 	if (g_controlPanel!=NULL)
 		g_controlPanel->TileImpPanelRedisplay();
 
-	s_scenarioEditor->m_paintTerrain = -1;
+	s_scenarioEditor->m_paintTerrain            = -1;
 	s_scenarioEditor->m_paintTerrainImprovement = -1;	
-	s_scenarioEditor->m_unitIndex = -1;
-	s_scenarioEditor->m_cityStyle = -2;
-
-	s_scenarioEditor->m_mapMode = SCEN_MAP_NONE;
+	s_scenarioEditor->m_unitIndex               = -1;
+	s_scenarioEditor->m_cityStyle               = CITY_STYLE_EDITOR;
+	s_scenarioEditor->m_mapMode                 = SCEN_MAP_NONE;
 
 	if(g_theWorld)
 		g_theWorld->NumberContinents();
@@ -1151,8 +1150,7 @@ bool ScenarioEditor::PlaceCityMode()
 
 sint32 ScenarioEditor::CityStyle()
 {
-	if(!s_scenarioEditor) return -2;
-	return s_scenarioEditor->m_cityStyle;
+    return (s_scenarioEditor) ? s_scenarioEditor->m_cityStyle : CITY_STYLE_EDITOR;
 }
 
 //Added by Martin Gühmann to make 
@@ -1367,8 +1365,9 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action == AUI_SWITCH_ACTION_OFF) {
-		if(s_scenarioEditor && s_scenarioEditor->m_cityStyle == (sint32)cookie) {
-			s_scenarioEditor->m_cityStyle = -2;
+		if (s_scenarioEditor && s_scenarioEditor->m_cityStyle == (sint32)cookie) 
+        {
+			s_scenarioEditor->m_cityStyle = CITY_STYLE_EDITOR;
 			if(s_scenarioEditor->m_mapMode == SCEN_MAP_CITY) {
 				s_scenarioEditor->m_mapMode = SCEN_MAP_NONE;
 			}

@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
+#include "screenutils.h"
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -68,8 +68,6 @@
 #include "SelItem.h"
 #include "profileDB.h"
 #include "network.h"
-
-#include "screenutils.h"
 
 #include "director.h"
 
@@ -109,44 +107,34 @@ extern ProfileDB            *g_theProfileDB;
 
 extern Network              g_network;
 extern BattleViewWindow     *g_battleViewWindow;
-
+extern sint32               g_modalWindow;
 
 double	g_screenTime = 0.0;
 
-extern bool g_e3Demo;
-
 sint32 open_WorkView( void )
 {
-	if(g_e3Demo) return 0;
-
-	AUI_ERRCODE auiErr;
-	sint32 err;
-
-	err = workwin_Initialize();
+	sint32      err     = workwin_Initialize();
 	Assert( !err );
 	if ( err ) return -1;
 
-	auiErr = g_c3ui->AddWindow( g_workWindow );
+	AUI_ERRCODE auiErr  = g_c3ui->AddWindow(g_workWindow);
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return -1;
 
 	return 0;
 }
 
-sint32 close_WorkView( void )
+void close_WorkView(void)
 {
-	if ( g_workWindow ) {
-		g_c3ui->RemoveWindow( g_workWindow->Id() );
+	if (g_workWindow) 
+    {
+		g_c3ui->RemoveWindow(g_workWindow->Id());
 	}
-
-	return 0;
 }
 
 sint32 open_CityView( void )
 {
-	AUI_ERRCODE auiErr;
-
-	auiErr = CityWindow::Display(NULL);
+	AUI_ERRCODE auiErr  = CityWindow::Display(NULL);
 
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return -1;
@@ -154,16 +142,13 @@ sint32 open_CityView( void )
 	return 0;
 }
 
-sint32 close_CityView( void )
+void close_CityView(void)
 {
 	CityWindow::Close(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-
-	return 0;
 }
 
 sint32 open_CityStatus( void )
 {
-	if(g_e3Demo) return 0;
 #ifdef _DEBUG
 	SET_TIME
 #endif // _DEBUG
@@ -177,17 +162,13 @@ sint32 open_CityStatus( void )
 	return 0;
 }
 
-sint32 close_CityStatus( void )
+void close_CityStatus(void)
 {
 	NationalManagementDialog::Close();
-
-	return 0;
 }
 
 sint32 open_CivStatus()
 {
-	if(g_e3Demo) return 0;
-
 #ifdef _DEBUG
 	SET_TIME
 #endif // _DEBUG
@@ -201,10 +182,9 @@ sint32 open_CivStatus()
 	return 0;
 }
 
-sint32 close_CivStatus( void )
+void close_CivStatus(void)
 {
 	DomesticManagementDialog::Close();
-	return 0;
 }
 
 sint32 open_ScienceStatus( void )
@@ -213,10 +193,9 @@ sint32 open_ScienceStatus( void )
 	return 0;
 }
 
-sint32 close_ScienceStatus( void )
+void close_ScienceStatus(void)
 {
 	ScienceManagementDialog::Close();
-	return 0;
 }
 
 sint32 open_ScienceVictory( void )
@@ -225,10 +204,9 @@ sint32 open_ScienceVictory( void )
 	return 0;
 }
 
-sint32 close_ScienceVictory( void )
+void close_ScienceVictory( void )
 {
 	ScienceVictoryDialog::Close();
-	return 0;
 }
 
 sint32 open_UnitStatus( void )
@@ -237,10 +215,9 @@ sint32 open_UnitStatus( void )
 	return 0;
 }
 
-sint32 close_UnitStatus( void )
+void close_UnitStatus( void )
 {
 	UnitManager::Hide();
-	return 0;
 }
 
 sint32 open_TradeStatus( void )
@@ -261,22 +238,16 @@ sint32 open_TradeStatus( void )
 	return 0;
 }
 
-sint32 close_TradeStatus( void )
+void close_TradeStatus( void )
 {
 	TradeManager::Hide();
-	return 0;
 }
 
 sint32 open_VictoryWindow( void )
 {
-	if(g_e3Demo) return 0;
-
 #ifdef _DEBUG
 	SET_TIME
 #endif // _DEBUG
-
-
-
 
 	victorywin_Initialize(0);
 	victorywin_DisplayWindow(0);
@@ -288,10 +259,9 @@ sint32 open_VictoryWindow( void )
 	return 0;
 }
 
-sint32 close_VictoryWindow( void )
+void close_VictoryWindow( void )
 {
 	victorywin_RemoveWindow();
-	return 0;
 }
 
 sint32 open_Diplomacy( void )
@@ -309,16 +279,13 @@ sint32 open_Diplomacy( void )
 	return 0;
 }
 
-sint32 close_Diplomacy( void )
+void close_Diplomacy(void)
 {
 	DiplomacyWindow::Hide();
-	return 0;
 }
 
 sint32 open_InfoScreen( void )
 {
-	if(g_e3Demo) return 0;
-
 #ifdef _DEBUG
 	SET_TIME
 #endif // _DEBUG
@@ -332,10 +299,9 @@ sint32 open_InfoScreen( void )
 	return 0;
 }
 
-sint32 close_InfoScreen( void )
+void close_InfoScreen( void )
 {
 	InfoWindow::Close();
-	return 0;
 }
 
 
@@ -349,9 +315,6 @@ sint32 close_InfoScreen( void )
 //              sci                 : force display of index, even when the
 //                                    library was open
 //
-// Globals    : g_e3Demo            : flag to indicate special E3 demo without
-//                                    great library functionality
-//
 // Returns    : sint32              : opening succeeded
 //
 // Remark(s)  : When the library is not open already, or the sci parameter is
@@ -360,8 +323,6 @@ sint32 close_InfoScreen( void )
 //----------------------------------------------------------------------------
 sint32 open_GreatLibrary(sint32 index, BOOL sci)
 {
-	if (g_e3Demo) return false;
-
 #ifdef _DEBUG
 	SET_TIME
 #endif // _DEBUG
@@ -405,13 +366,12 @@ sint32 open_GreatLibrary( void )
 }
 
 
-sint32 close_GreatLibrary( void )
+void close_GreatLibrary(void)
 {
-	if ( g_greatLibrary ) {
+	if (g_greatLibrary) 
+    {
 		g_greatLibrary->Remove();
 	}
-
-	return 0;
 }
 
 
@@ -430,37 +390,31 @@ sint32 open_OptionsScreen( sint32 fromWhichScreen )
 	return err;
 }
 
-sint32 close_OptionsScreen( void )
+void close_OptionsScreen( void )
 {
-	return optionsscreen_removeMyWindow( AUI_BUTTON_ACTION_EXECUTE );
+	optionsscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 }
 
 
 sint32 open_KeyMappingScreen( void )
 {
-	if(g_e3Demo) return 0;
-
-	sint32 err = km_screen_displayMyWindow();
-
-	return err;
+	return km_screen_displayMyWindow();
 }
 
 sint32 open_ScenarioEditor(void)
 {
-	sint32 err = ScenarioEditor::Display();
-	return err;
+	return ScenarioEditor::Display();
 }
 
-sint32 close_ScenarioEditor(void)
+void close_ScenarioEditor(void)
 {
-	sint32 err = ScenarioEditor::Hide();
-	return err;
+	ScenarioEditor::Hide();
 }
 
 
-sint32 close_KeyMappingScreen( void )
+void close_KeyMappingScreen( void )
 {
-	return km_screen_removeMyWindow( AUI_BUTTON_ACTION_EXECUTE );
+	km_screen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 }
 
 
@@ -492,26 +446,19 @@ sint32 close_KeyMappingScreen( void )
 
 
 
-
+/// Open alien life window (removed CTP1 functionality)
 sint32 open_EndGame() 
 {
-#if 0   // CTP1?
-	if(g_e3Demo) return 0;
-
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
-#endif
 	return 0;
 }
 
-
-sint32 close_EndGame( void )
+/// Close alien life window (removed CTP1 functionality)
+void close_EndGame(void)
 {
-	return 0;
 }
 
 sint32 open_TutorialWin( void )
 {
-	if(g_e3Demo) return 0;
 #ifdef _DEBUG
 	SET_TIME
 #endif // _DEBUG
@@ -531,53 +478,31 @@ sint32 open_TutorialWin( void )
 	return 0;
 }
 
-sint32 close_TutorialWin( void )
+void close_TutorialWin(void)
 {
-	if(!g_tutorialWin) return 0;
-
-	g_tutorialWin->Remove();
-
-	return 0;
+	if (g_tutorialWin)
+    {
+    	g_tutorialWin->Remove();
+    }
 }
 
 
 
 sint32 open_CreditsScreen() 
 {
-	if(g_e3Demo) return 0;
-	
-	
 	sint32 err = creditsscreen_Initialize();
-
-	
 	Assert(!err);
 	if(err) return(-1);
 
-	
 	AUI_ERRCODE auiErr = g_c3ui->AddWindow(g_creditsWindow);
-
-	
 	Assert(auiErr == AUI_ERRCODE_OK);
-	if(auiErr != AUI_ERRCODE_OK) return(-1);
-
-	
-	return(0);
+    return (auiErr == AUI_ERRCODE_OK) ? 0 : -1;
 }
 
 
-sint32 close_CreditsScreen( void )
+void close_CreditsScreen(void)
 {
-	
-	
-	
-	sint32 err = creditsscreen_Cleanup();
-
-	
-	Assert(!err);
-	if(err) return(-1);
-
-	
-	return(0);
+	creditsscreen_Cleanup();
 }
 
 
@@ -595,10 +520,10 @@ void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, u
 //
 // Returns    : -
 //
-// Remark(s)  : Returns always 1.
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 close_AllScreens( void )
+void close_AllScreens(void)
 {
 	close_CreditsScreen();
 	close_WorkView();
@@ -619,24 +544,17 @@ sint32 close_AllScreens( void )
 	DipWizard::Hide();
 	ScienceVictoryDialog::Close();
 
-	extern sint32 g_modalWindow;
-
-	g_modalWindow = 0;
-
-	if (g_battleViewWindow) {
-		
+	if (g_battleViewWindow) 
+    {
 		g_modalWindow = 1;
 
-		battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-
-		
-		
+		battleview_ExitButtonActionCallback
+            (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 	}
-
-	
-	
-
-	return 1;
+    else
+    {
+	    g_modalWindow = 0;
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -651,10 +569,10 @@ sint32 close_AllScreens( void )
 //
 // Returns    : -
 //
-// Remark(s)  : Returns always 1.
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 close_AllScreensAndUpdateInfoScreen( void )
+void close_AllScreensAndUpdateInfoScreen(void)
 {
 	close_CreditsScreen();
 	close_WorkView();
@@ -675,22 +593,14 @@ sint32 close_AllScreensAndUpdateInfoScreen( void )
 	DipWizard::Hide();
 	ScienceVictoryDialog::Close();
 
-	extern sint32 g_modalWindow;
-
-	g_modalWindow = 0;
-
-	if (g_battleViewWindow) {
-		
+	if (g_battleViewWindow)
+    {
 		g_modalWindow = 1;
-
-		battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-
-		
-		
+		battleview_ExitButtonActionCallback
+            (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 	}
-
-	
-	
-
-	return 1;
+    else
+    {
+        g_modalWindow = 0;
+    }
 }

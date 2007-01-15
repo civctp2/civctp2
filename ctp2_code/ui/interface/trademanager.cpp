@@ -76,9 +76,9 @@ extern C3UI *g_c3ui;
 #include "net_action.h"
 #include "tiledmap.h"
 
-static TradeManager *s_tradeManager = NULL;
-static MBCHAR *s_tradeManagerBlock = "TradeManager";
-static MBCHAR *s_tradeAdviceBlock = "TradeAdvice";
+static TradeManager *   s_tradeManager      = NULL;
+static MBCHAR *         s_tradeManagerBlock = "TradeManager";
+static MBCHAR *         s_tradeAdviceBlock  = "TradeAdvice";
 
 #define k_MAX_CITIES_PER_GOOD 5
 
@@ -199,9 +199,6 @@ AUI_ERRCODE TradeManager::Cleanup()
 
 AUI_ERRCODE TradeManager::Display()
 {
-	extern bool g_e3Demo;
-	if(g_e3Demo) return AUI_ERRCODE_OK;
-
 	if(!s_tradeManager)
 		Initialize();
 
@@ -317,31 +314,26 @@ void TradeManager::Update()
 
 void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 {
-	ctp2_ListItem *item = NULL;
-	
 	Assert(player_id >= 0 && player_id < k_MAX_PLAYERS);
 	if(player_id < 0 || player_id >= k_MAX_PLAYERS) return;
 
-	Assert(g_player[player_id]);
-	if(!g_player[player_id]) return;
+	Player *    p = g_player[player_id];
+	Assert(p);
+	if (!p) return;
 
-	Player *p = g_player[player_id];
-	sint32 c, g, d;
+	
+	sint32 d;
 	Unit maxCity[k_MAX_CITIES_PER_GOOD];
 
 	m_createList->Clear();
-	
-	
-	
-
 	m_createData.DeleteAll();
-
 	
-	for(c = 0; c < p->m_all_cities->Num(); c++) {
+	for (sint32 c = 0; c < p->m_all_cities->Num(); c++) 
+    {
 		Unit city = p->m_all_cities->Access(c);
 		
-		
-		for(g = 0; g < g_theResourceDB->NumRecords(); g++) {
+		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++) 
+        {
 			if(city.CD()->IsLocalResource(g)) {
 				
 				sint32 op;
@@ -427,7 +419,8 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 						
 						
-						item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("CreateRouteItem");
+						ctp2_ListItem * item = 
+                            (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("CreateRouteItem");
 						Assert(item);
 						if(!item)
 							break;
@@ -445,9 +438,9 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						
 						ctp2_Static *child;
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX))) {
-							MBCHAR name[501];
-							strncpy(name, city.GetName(), 500);
-							name[500] = 0;
+							MBCHAR name[k_MAX_NAME_LEN + 1];
+							strncpy(name, city.GetName(), k_MAX_NAME_LEN);
+							name[k_MAX_NAME_LEN] = 0;
 							child->TextReloadFont();
 							child->GetTextFont()->TruncateString(name, child->Width());
 							child->SetText(name);
@@ -458,7 +451,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 							if(stricmp(iconname, "NULL") == 0) {
 								iconname = NULL;
 							}
-							child->SetImage((char *)iconname);
+							child->SetImage(iconname);
 						}
 						
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX))) {
@@ -469,9 +462,9 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						}
 						
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX))) {
-							MBCHAR name[501];
-							strncpy(name, maxCity[i].GetName(), 500);
-							name[500] = 0;
+							MBCHAR name[k_MAX_NAME_LEN + 1];
+							strncpy(name, maxCity[i].GetName(), k_MAX_NAME_LEN);
+							name[k_MAX_NAME_LEN] = 0;
 							child->TextReloadFont();
 							child->GetTextFont()->TruncateString(name, child->Width());
 							child->SetText(name);
@@ -651,8 +644,6 @@ void TradeManager::UpdateAdviceText()
 
 void TradeManager::UpdateSummaryList()
 {
-	ctp2_ListItem *item = NULL;
-	
 	sint32 pl = g_selected_item->GetVisiblePlayer();
 	Assert(pl >= 0 && pl < k_MAX_PLAYERS);
 	if(pl < 0 || pl >= k_MAX_PLAYERS) return;
@@ -661,19 +652,19 @@ void TradeManager::UpdateSummaryList()
 	if(!g_player[pl]) return;
 
 	Player *p = g_player[pl];
-	sint32 c;
 	Unit maxCity;
 
 	m_summaryList->Clear();
 
 	
-	for(c = 0; c < p->m_all_cities->Num(); c++) {
+	for (sint32 c = 0; c < p->m_all_cities->Num(); c++) 
+    {
 		Unit city = p->m_all_cities->Access(c);
 		
-		
-		sint32 r;
-		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
-			item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("TradeSummaryItem");
+		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
+        {
+			ctp2_ListItem * item = (ctp2_ListItem *)
+                aui_Ldl::BuildHierarchyFromRoot("TradeSummaryItem");
 			Assert(item);
 			if(!item)
 				break;
@@ -682,9 +673,9 @@ void TradeManager::UpdateSummaryList()
 
 			ctp2_Static *child;
 			if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))) {
-				MBCHAR name[501];
-				strncpy(name, city.GetName(), 500);
-				name[500] = 0;
+				MBCHAR name[k_MAX_NAME_LEN + 1];
+				strncpy(name, city.GetName(), k_MAX_NAME_LEN);
+				name[k_MAX_NAME_LEN] = 0;
 				child->TextReloadFont();
 				child->GetTextFont()->TruncateString(name, child->Width());
 				child->SetText(name);
@@ -701,7 +692,7 @@ void TradeManager::UpdateSummaryList()
 					if(stricmp(imageName, "NULL") == 0) {
 						child->SetImage(NULL);
 					} else {
-						child->SetImage((char *)g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
+						child->SetImage(g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
 					}
 				} else {
 					
@@ -717,10 +708,10 @@ void TradeManager::UpdateSummaryList()
 			}
 
 			if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX))) {
-				MBCHAR name[501];
+				MBCHAR name[k_MAX_NAME_LEN + 1];
 				Unit dCity = route.GetDestination();
-				strncpy(name, dCity.GetName(), 500);
-				name[500] = 0;
+				strncpy(name, dCity.GetName(), k_MAX_NAME_LEN);
+				name[k_MAX_NAME_LEN] = 0;
 				child->TextReloadFont();
 				child->GetTextFont()->TruncateString(name, child->Width());
 				child->SetText(name);
@@ -1177,10 +1168,8 @@ void TradeManager::CityFilterButton(aui_Control *control, uint32 action, uint32 
 
 void TradeManager::SetNumCities(sint32 num)
 {
-	m_numCities = num;
-	Assert(m_numCities <= k_MAX_CITIES_PER_GOOD);
-	if(m_numCities > k_MAX_CITIES_PER_GOOD)
-		m_numCities = k_MAX_CITIES_PER_GOOD;
+	Assert(num <= k_MAX_CITIES_PER_GOOD);
+    m_numCities = std::min<sint32>(num, k_MAX_CITIES_PER_GOOD);
 
 	char buf[10];
 	sprintf(buf, "%d", m_numCities);

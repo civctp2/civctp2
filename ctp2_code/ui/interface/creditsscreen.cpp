@@ -45,13 +45,14 @@
 #include "c3ui.h"
 #include "c3window.h"
 #include "ctp2_button.h"
+#include "Globals.h"                // allocated::clear
 #include "UIUtils.h"
 #include "primitives.h"
 #include "soundmanager.h"           // g_soundManager
 #include "aui_bitmapfont.h"
 #include "MessageBoxDialog.h"
 #include "colorset.h"               // g_colorSet
-#include "StrDB.h"					// g_theStringDB;
+#include "StrDB.h"					// g_theStringDB
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
@@ -96,8 +97,6 @@ uint32 const    NUMBER_INVALID          = static_cast<uint32>(-1);
 
 CreditsWindow*			g_creditsWindow = NULL;	
 
-C3Window *GetInitialPlayScreen();
-
 
 AUI_ACTION_BASIC(RemoveCreditsAction);
 
@@ -109,18 +108,14 @@ void RemoveCreditsAction::Execute(aui_Control *control, uint32 action, uint32 da
 
 void creditsscreen_ExitButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	
-	if(action == (uint32)AUI_BUTTON_ACTION_EXECUTE) {
-		
+	if (action == (uint32)AUI_BUTTON_ACTION_EXECUTE) 
+    {
 		AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(g_creditsWindow->Id());
-
-		
 		Assert(auiErr == AUI_ERRCODE_OK);
-		if(auiErr != AUI_ERRCODE_OK) return;
-
-		
-		RemoveCreditsAction	*actionObj = new RemoveCreditsAction;
-		g_c3ui->AddAction(actionObj);
+		if (auiErr == AUI_ERRCODE_OK)
+        {
+    		g_c3ui->AddAction(new RemoveCreditsAction());
+        }
 	}
 }
 
@@ -145,52 +140,41 @@ void creditsscreen_SecretButtonActionCallback(aui_Control *control, uint32 actio
 
 sint32 creditsscreen_Initialize()
 {
-	
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	if (!g_creditsWindow)
+    {
+	    AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
-	if(g_creditsWindow) return(0);
+	    g_creditsWindow = new CreditsWindow
+            (&errcode, aui_UniqueId(), k_LDL_CREDITS_WINDOW, 
+		     k_CREDITS_BITS_PER_PIXEL, AUI_WINDOW_TYPE_FLOATING
+            );
+	    Assert(AUI_SUCCESS(errcode));
+	    if (!AUI_SUCCESS(errcode)) return -1;
 
-	
-	g_creditsWindow = new CreditsWindow(&errcode, aui_UniqueId(), k_LDL_CREDITS_WINDOW, 
-		k_CREDITS_BITS_PER_PIXEL, AUI_WINDOW_TYPE_FLOATING);
-	TestControl(g_creditsWindow);
+	    TestControl(g_creditsWindow);
 
-	
-	Assert(AUI_SUCCESS(errcode));
-	if(!AUI_SUCCESS(errcode)) return(-1);
+        g_creditsWindow->Move((g_ScreenWidth - g_creditsWindow->Width()) / 2,
+		    (g_ScreenHeight - g_creditsWindow->Height()) / 2);
+    	
+	    Assert(AUI_SUCCESS(errcode));
+	    if (!AUI_SUCCESS(errcode)) return -1;
+    }
 
-	
-#if 0   // Unused	
-	C3Window *initPlayWindow = GetInitialPlayScreen();
-#endif	
-	
-	g_creditsWindow->Move((g_ScreenWidth - g_creditsWindow->Width()) / 2,
-		(g_ScreenHeight - g_creditsWindow->Height()) / 2);
-	
-	Assert(AUI_SUCCESS(errcode));
-	if(!AUI_SUCCESS(errcode)) return(-1);
-
-
-	
-	return(0);
+    return 0;
 }
 
 
-sint32 creditsscreen_Cleanup()
+void creditsscreen_Cleanup()
 {
-	
-	if(!g_creditsWindow) return(0);
+	if (g_creditsWindow)
+    {
+        if (g_c3ui)
+        {
+            g_c3ui->RemoveWindow(g_creditsWindow->Id());
+        }
 
-	
-	g_c3ui->RemoveWindow(g_creditsWindow->Id());
-
-	
-	delete g_creditsWindow;
-	g_creditsWindow = NULL;
-
-	
-	return(0);
+        allocated::clear(g_creditsWindow);
+    }
 }
 
 
@@ -1142,11 +1126,10 @@ cCreditsPage::cCreditsPage(void)
 
 cCreditsPage::~cCreditsPage()
 {
-	sCreditsLine *pFoo;
 	ResetLines();
 	while (m_pCurrLine)
 	{
-		pFoo = m_pCurrLine;
+	    sCreditsLine * pFoo = m_pCurrLine;
 		m_pCurrLine = m_pCurrLine->m_pNext;
 		delete pFoo;
 	}
@@ -1557,28 +1540,20 @@ uint32 c3_CreditsText::GetFontSize(MBCHAR *pToken)
 
 uint32 c3_CreditsText::GetNumberFromToken(MBCHAR *pToken)
 {
+	MBCHAR *    pFoo    = pToken;
+	size_t      len     = strlen(pToken);
 
-	MBCHAR *pFoo = pToken;
-	bool error = true;
-	int i;
-	int len = strlen(pToken);
-
-	for (i = 0; i < len; i++)
+	for (size_t i = 0; i < len; ++i)
 	{
 		if (isdigit(*pFoo))
 		{
-			error = false;
-			break;
+			return atoi(pFoo);
 		}
-		pFoo = pFoo + 1;
+
+		++pFoo;
 	}
 
-	if (error)
-	{
-		return NUMBER_INVALID;
-	}
-
-	return atoi(pFoo);
+    return NUMBER_INVALID;
 }
 
 
@@ -1594,12 +1569,9 @@ void c3_CreditsText::ResetPages()
 {
 	m_pCurrPage = m_pPages;
 
-	cCreditsPage *pFoo = m_pPages;
-	
-	while (pFoo)
+	for (cCreditsPage * pFoo = m_pPages; pFoo; pFoo = pFoo->m_pNext)
 	{
 		pFoo->ResetLines();
-		pFoo = pFoo->m_pNext;
 	}
 }
 

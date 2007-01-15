@@ -2600,6 +2600,7 @@ STDEHANDLER(DipWizContinueDiplomacyEvent)
 		DipWizard::SetViewResponse(p1, p2, true);
 
 		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(p2).GetResponsePending(p1).type;
+        /// @todo Probably need to do something here - this doesn't make sense
 	} else if(p2 == g_selected_item->GetVisiblePlayer()) {
 		
 		DipWizard::SetViewResponse(p1, p2, true);

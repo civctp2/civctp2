@@ -172,7 +172,8 @@ sint32 helptile_Initialize( void )
 	if(newC3Static(windowBlock,"GoldN",&s_tileGold)) return -1;
 	if(newC3Static(windowBlock,"GoldV",&s_tileGoldV)) return -1;
 
-	if(!(s_stringTable = spNewStringTable(&errcode,"HelpTileStringTable"))) return -1;
+    s_stringTable = spNewStringTable(&errcode, "HelpTileStringTable");
+	if (!s_stringTable) return -1;
 	
 	
 	if(newC3Static(windowBlock,"TileITop",&s_tileITop)) return -1;

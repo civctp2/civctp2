@@ -6,25 +6,26 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __SPRITEEDITOR_H__
-#define __SPRITEEDITOR_H__
 
+#ifndef SPRITEEDITOR_H__
+#define SPRITEEDITOR_H__
 
+class SpriteEditWindow;
 
+#include "c3window.h"       // C3Window
+#include "ctp2_inttypes.h"  // sintNN, uintNN
+#include "MapPoint.h"       // MapPoint
+// AUI_ERRCODE, AUI_WINDOW_TYPE
+// BOOL, MBCHAR, RECT
 
-#include "c3window.h"
-#include "c3_static.h"
-
-
-
-
-class Sprite;
-class Anim;
 class Action;
-class UnitSpriteGroup;
+class Anim;
+class aui_Surface;
+class c3_Static;
 class C3TextField;
-
-
+class ctp2_Button;
+class Sprite;
+class UnitSpriteGroup;
 
 
 class SpriteEditWindow : public C3Window

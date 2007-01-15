@@ -48,6 +48,7 @@
 #include "colorset.h"               // g_colorSet
 #include "controlpanelwindow.h"     // g_controlPanel
 #include "controlsheet.h"
+#include "Globals.h"                // allocated::clear
 #include "infowindow.h"
 #include "pixelutils.h"
 #include "player.h"                 // g_player
@@ -63,6 +64,7 @@
 #include "UnitRec.h"
 #include "World.h"                  // g_theWorld
 #include "workmap.h"
+
 #include "StrDB.h"                  // g_theStringDB
 #include "ConstDB.h"                // g_theConstDB
 #include "BuildingRecord.h"
@@ -178,6 +180,23 @@ static c3_Static                *s_bottomRightImage;
 
 static sint32                   s_minRound = 0;
 
+namespace
+{
+
+/// Evaluate a combined "strength" value at a given turn
+/// @param  a_Strengths Information per category and turn
+/// @param  a_Turn      The turn 
+/// @return The combined "strength" value 
+sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn)
+{
+	return a_Strengths.GetTurnStrength(STRENGTH_CAT_UNITS,      a_Turn)
+	     + a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,       a_Turn)
+	     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,  a_Turn)
+	     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,    a_Turn)
+	     + a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION, a_Turn);
+}
+
+} // namespace
 
 void InfoCleanupAction::Execute(aui_Control *control,
 									uint32 action,
@@ -207,6 +226,7 @@ void InfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data,
 	{
 		infowin_ChangeSetting(k_INFOWIN_SCORE_SETTING);
 	}
+#if 0   // Inactive CTP1 functionality
 	else if ((c3_Button*)control == s_labButton)
 	{
 		infowin_DisplayLab();
@@ -215,6 +235,7 @@ void InfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data,
 	{
 
 	}
+#endif  // Inactive CTP1 functionality
 	else if ((c3_Button*)control == s_pollutionButton)
 	{
 		infowin_ChangeSetting(k_INFOWIN_POLLUTION_SETTING);
@@ -246,25 +267,9 @@ void EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32
 
 void InfoExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
-
-
-
-
-
-
-
-
-
-
-	InfoCleanupAction *tempAction = new InfoCleanupAction;
-
-	g_c3ui->AddAction(tempAction);
-
-
+	g_c3ui->AddAction(new InfoCleanupAction());
 }
 
 void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -278,165 +283,36 @@ void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, void
 	if (!item)
 	{ 
 		infowin_ChangeDataSetting( k_INFOWIN_DATA_OFF );
-
-		return;
 	} 
-	else {
-
-		
+	else 
+    {
 		infowin_UpdateCivData();
 		
 		infowin_ChangeDataSetting( k_INFOWIN_DATA_ON );
 
 		
 		Unit *unit = item->GetCity();
-		Unit nullUnit;
-		nullUnit.m_id = 0;
 
-		
-		MapPoint cityPos;
-
-		
-		
-		
-		
 		if (curPlayer == unit->GetOwner())
 		{
-			
 			s_infoRadar->SetSelectedCity(*unit);
+		    MapPoint cityPos;
 			unit->GetPos(cityPos);
 			s_infoRadar->CenterMap(cityPos);
-			s_infoRadar->Update();
-			
-			s_infoRadar->Idle();
 		} 
 		else
 		{
-			
-			s_infoRadar->SetSelectedCity(nullUnit);
-
-			s_infoRadar->Update();
-			
-			s_infoRadar->Idle();
+			s_infoRadar->SetSelectedCity(Unit());
 		}
+
+        s_infoRadar->Update();
+		s_infoRadar->Idle();
 	}
-
-	return;
 }
-
 
 sint32 infowin_Initialize( void )
 {
-
-
-
-
 	return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void infowin_Cleanup(void)
@@ -445,27 +321,25 @@ void infowin_Cleanup(void)
 
 void infowin_Cleanup_Controls(void)
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
-
-	mycleanup( s_titleBox );
-	mycleanup( s_bottomRightBox );
-	mycleanup( s_bottomRightImage );
-	mycleanup( s_civNameBox );
-	mycleanup( s_turnsBox );
-	mycleanup( s_foundedBox );
-	mycleanup( s_pollutionBox );
-	mycleanup( s_civNameLabel );
-	mycleanup( s_turnsLabel );
-	mycleanup( s_foundedLabel );
-	mycleanup( s_pollutionLabel );
-	mycleanup( s_pollutionTherm );
-	mycleanup( s_infoPlayerList );
-	mycleanup( s_infoBigList );
-	mycleanup( s_infoScoreList );
-	mycleanup( s_infoWonderList );
-	mycleanup( s_pollutionList );
-	mycleanup( s_infoGraph );
-	mycleanup( s_pollutionGraph );
+    allocated::clear(s_titleBox);
+    allocated::clear(s_bottomRightBox);
+	allocated::clear(s_bottomRightImage);
+	allocated::clear(s_civNameBox);
+	allocated::clear(s_turnsBox);
+	allocated::clear(s_foundedBox);
+	allocated::clear(s_pollutionBox);
+	allocated::clear(s_civNameLabel);
+	allocated::clear(s_turnsLabel);
+	allocated::clear(s_foundedLabel);
+	allocated::clear(s_pollutionLabel);
+	allocated::clear(s_pollutionTherm);
+	allocated::clear(s_infoPlayerList);
+	allocated::clear(s_infoBigList);
+	allocated::clear(s_infoScoreList);
+	allocated::clear(s_infoWonderList);
+	allocated::clear(s_pollutionList);
+	allocated::clear(s_infoGraph);
+	allocated::clear(s_pollutionGraph);
 
 	if (s_infoGraphData)
 	{
@@ -487,15 +361,14 @@ void infowin_Cleanup_Controls(void)
 		s_pollutionGraphData = NULL;
 	}
 
-	mycleanup(s_bigButton);
-	mycleanup(s_wonderButton);
-	mycleanup(s_strengthButton);
-	mycleanup(s_scoreButton);
-	mycleanup(s_labButton);
-	mycleanup(s_throneButton);
-	mycleanup(s_pollutionButton);
-    mycleanup(s_stringTable);
-#undef mycleanup
+	allocated::clear(s_bigButton);
+	allocated::clear(s_wonderButton);
+	allocated::clear(s_strengthButton);
+	allocated::clear(s_scoreButton);
+	allocated::clear(s_labButton);
+	allocated::clear(s_throneButton);
+	allocated::clear(s_pollutionButton);
+    allocated::clear(s_stringTable);
 }
 
 sint32 infowin_Init_Controls( MBCHAR *windowBlock )
@@ -974,11 +847,9 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 							sint32 &infoYCount,
 							double ***infoGraphData)
 {
-	sint32 i = 0;
-	sint32 j = 0;
-
-	
 	if (!infoGraph) return 0;
+
+	sint32 i = 0;
 
 	sint32 maxPlayers = k_MAX_PLAYERS + g_deadPlayer->GetCount();
 	sint32 *color = new sint32[maxPlayers];
@@ -1011,16 +882,12 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 	
 	double minRound = s_minRound;
 	double curRound = g_turn->GetRound();
-	double minPower = 0;
-	double maxPower = 10;
-	infoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
+	double minPower = 0.0;
+	double maxPower = 10.0;
 
-	
+    infoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
 	infoGraph->HasIndicator(FALSE);
 
-	
-
-	
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
@@ -1030,17 +897,19 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 		}
 	}
 	
-	
-	PointerList<Player>::Walker walk(g_deadPlayer);
-	while(walk.IsValid()) {
+	for
+    (
+	    PointerList<Player>::Walker walk(g_deadPlayer);
+	    walk.IsValid();
+        walk.Next()
+    ) 
+    {
 		color[infoYCount] = g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
 		infoYCount++;
-		walk.Next();
 	}
 
 	infoXCount = (sint32)curRound - (sint32)minRound;
 
-	
 	if (!infoXCount) 
 	{
 		delete [] color;
@@ -1049,104 +918,65 @@ sint32 infowin_UpdateGraph( LineGraph *infoGraph,
 		return 0;
 	}
 
-	
+    infoXCount = std::max<sint32>(infoXCount, 1);
+    infoYCount = std::max<sint32>(infoYCount, 1);
+
 	Assert(!*infoGraphData);
-	if (infoYCount == 0)
-		infoYCount = 1;
-
 	*infoGraphData = new double *[infoYCount];
-	
-	if (infoXCount <= 0)
-		infoXCount = 1;
-
-	for ( i = 0 ; i < infoYCount ; i++ )
+	for (i = 0 ; i < infoYCount ; ++i)
+    {
 		(*infoGraphData)[i] = new double[infoXCount];
-
-	
-	for ( i = 0 ; i < infoYCount ; i++ )
-	{
-		for ( j = 0 ; j < infoXCount ; j++ )
-			(*infoGraphData)[i][j] = 0;
-	}
-
+        std::fill((*infoGraphData)[i], (*infoGraphData)[i] + infoXCount, 0.0);
+    }
 	
 	sint32 playerCount = 0;
-	sint32 strValue = 0;
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS)) 
 		{
-			for ( j = 0 ; j < infoXCount ; j++ )
+			for (sint32 round = 0 ; round < infoXCount ; ++round)
 			{
-				strValue = 0;
+                sint32 strValue = GetCombinedStrength(*g_player[i]->m_strengths, round);
+				(*infoGraphData)[playerCount][round] = strValue;
 
-				
-
-				sint32 round =  j;
-
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, round);
-				(*infoGraphData)[playerCount][j] = (double)strValue;
-
-				
 				while (strValue > maxPower)
-					maxPower += 10;
+					maxPower += 10.0;
 			}
 			
 			playerCount++;
 		}
 	}
 
-	
-	PointerList<Player>::Walker walk2(g_deadPlayer);
-	
-	while (walk2.IsValid()) 
+	for
+    (
+        PointerList<Player>::Walker walk2(g_deadPlayer);
+	    walk2.IsValid();
+        walk2.Next()
+    )
 	{
-		for ( j = 0 ; j < infoXCount ; j++ )
+		for (sint32 round = 0 ; round < infoXCount ; ++round)
 		{
-			strValue = 0;
-
-			
-			
-			sint32 round =  j;
-
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_UNITS, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, round);
-			(*infoGraphData)[playerCount][j] = (double)strValue;
-
-			
+			sint32 strValue = GetCombinedStrength(*walk2.GetObj()->m_strengths, round);
+			(*infoGraphData)[playerCount][round] = strValue;
+                
 			while (strValue > maxPower)
-				maxPower += 10;
+				maxPower += 10.0;
 		}
 		
 		playerCount++;
-		walk2.Next();
 	}
 
-	
 	Assert(playerCount == infoYCount);
 
-	
 	infoGraph->SetLineData(infoYCount, infoXCount, (*infoGraphData), color);
-	
-	
 	infoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
-
-	
 	infoGraph->RenderGraph();
 
-	
 	delete [] color;
 
-	if (dumpStrings) {
-		delete s_stringTable;
-		s_stringTable = NULL;
+	if (dumpStrings) 
+    {
+        allocated::clear(s_stringTable);
 	}
 
 	return 0;
@@ -1160,37 +990,25 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 							sint32 &infoYCount,
 							double ***infoGraphData)
 {
-	sint32 i = 0;
-	sint32 j = 0;
-	sint32 color[k_MAX_PLAYERS];
-
-	
 	if (!infoGraph) return 0;
 
-	
 	infoYCount = 0;
 	infoXCount = 0;
 
-	
 	infoGraph->SetXAxisName(s_stringTable->GetString(6));	
 	infoGraph->SetYAxisName("Pollution");
-
 	
 	double curRound = g_turn->GetRound();
-	double minRound = curRound - 20;
-	
-	if (minRound < 0) minRound = 0;
+    double minRound = std::max(0.0, curRound - 20.0);
+	double minPower = 0.0;
+	double maxPower = 10.0;
 
-	double minPower = 0;
-	double maxPower = 10;
 	infoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
-
-	
 	infoGraph->HasIndicator(FALSE);
 
+	sint32 color[k_MAX_PLAYERS];
 	
-
-	
+	sint32 i;
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
@@ -1200,9 +1018,7 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 		}
 	}
 
-	if (curRound > 20) infoXCount = 20;
-	else infoXCount = (sint32)curRound;
-
+    infoXCount = std::min<sint32>(20, (sint32) curRound);
 	
 	if (!infoXCount) 
 	{
@@ -1210,37 +1026,28 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 		return 0;
 	}
 
-	
 	Assert(!*infoGraphData);
 	*infoGraphData = new double *[infoYCount];
-	
-	for ( i = 0 ; i < infoYCount ; i++ )
+	for (i = 0 ; i < infoYCount ; ++i)
+    {
 		(*infoGraphData)[i] = new double[infoXCount];
-
-	
-	for ( i = 0 ; i < infoYCount ; i++ )
-	{
-		for ( j = 0 ; j < infoXCount ; j++ )
-			(*infoGraphData)[i][j] = 0;
+        std::fill((*infoGraphData)[i], (*infoGraphData)[i] + infoXCount, 0.0);
 	}
 
 	
 	sint32 playerCount = 0;
-	sint32 pollutionValue = 0;
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS)) 
 		{
-			for ( j = 0 ; j < infoXCount ; j++ )
+			for (sint32 j = 0 ; j < infoXCount ; j++ )
 			{
-				pollutionValue = 0;
-				
-				pollutionValue += g_player[i]->m_pollution_history[(infoXCount - 1) - j];
-				(*infoGraphData)[playerCount][j] = (double)pollutionValue;
+				sint32 pollutionValue = 
+                    g_player[i]->m_pollution_history[(infoXCount - 1) - j];
+				(*infoGraphData)[playerCount][j] = pollutionValue;
 
-				
-				while (pollutionValue > maxPower)
-					maxPower += 10;
+                while (pollutionValue > maxPower)
+					maxPower += 10.0;
 			}
 			
 			playerCount++;
@@ -1249,13 +1056,8 @@ sint32 infowin_UpdatePollutionGraph( LineGraph *infoGraph,
 	
 	Assert(playerCount == infoYCount);
 
-	
 	infoGraph->SetLineData(infoYCount, infoXCount, (*infoGraphData), color);
-	
-	
 	infoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
-
-	
 	infoGraph->RenderGraph();
 
 	return 0;
@@ -1270,11 +1072,8 @@ sint32 infowin_UpdatePlayerList( void )
 	
 	s_infoPlayerList->Clear();
 	strcpy(ldlBlock,"InfoPlayerListItem");
-	InfoPlayerListItem *pItem = NULL;
 
-	
-	
-	sint32 color = 0;
+    sint32 color = 0;
 
 	
 	LineGraphData *myData = s_infoGraph->GetData();
@@ -1283,7 +1082,6 @@ sint32 infowin_UpdatePlayerList( void )
 	sint32 lineIndex = 0;
 
 	
-	Player *p = NULL;
 	Civilisation *civ = NULL;
 
 	
@@ -1297,41 +1095,46 @@ sint32 infowin_UpdatePlayerList( void )
 				color = (sint32)g_colorSet->ComputePlayerColor(i);
 			else color = myData[lineIndex++].color;
 
-			
-			p = g_player[i];
-			if (!p) continue;
-
-			civ = p->GetCivilisation();
+			civ = g_player[i]->GetCivilisation();
 			if (civ != NULL && g_theCivilisationPool->IsValid(*civ)) {
 				civ->GetSingularCivName(strbuf);
 
-				pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
-				s_infoPlayerList->AddItem((c3_ListItem *)pItem);
+				s_infoPlayerList->AddItem
+                    ((c3_ListItem *) new InfoPlayerListItem(&retval, strbuf, color, ldlBlock));
 			}
 		}
 	}
 
 	
-	PointerList<Player>::Walker walk(g_deadPlayer);
-
-	while(walk.IsValid()) {
+	for 
+    (
+        PointerList<Player>::Walker walk(g_deadPlayer);
+        walk.IsValid();
+        walk.Next()
+    )
+    {
+		Player * p = walk.GetObj();
 		
-		if (!myData)
-			color = (sint32)g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
-		else color = myData[lineIndex++].color;
+		if (p) 
+        {
+		    if (myData)
+            {
+                color = myData[lineIndex++].color;
+            }
+			else 
+            {
+                color = (sint32)g_colorSet->ComputePlayerColor(p->GetOwner());
+            }
 
-		
-		p = walk.GetObj();
-		if (p) {
 			civ = p->GetCivilisation();
-			if (civ != NULL && g_theCivilisationPool->IsValid(*civ)) {
+			if (civ && g_theCivilisationPool->IsValid(*civ)) 
+            {
 				civ->GetSingularCivName(strbuf);
 
-				pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
-				s_infoPlayerList->AddItem((c3_ListItem *)pItem);
+				s_infoPlayerList->AddItem
+                    ((c3_ListItem *) new InfoPlayerListItem(&retval, strbuf, color, ldlBlock));
 			}
 		}
-		walk.Next();
 	}
 
 	return 0;
@@ -1346,8 +1149,7 @@ sint32 infowin_UpdatePollutionData( void )
 
 	
 	s_pollutionList->Clear();
-	strcpy(ldlBlock,"InfoPlayerListItem");
-	InfoPlayerListItem *pItem = NULL;
+	strcpy(ldlBlock, "InfoPlayerListItem");
 
 	
 	
@@ -1359,11 +1161,6 @@ sint32 infowin_UpdatePollutionData( void )
 	
 	sint32 lineIndex = 0;
 
-	
-	Player *p = NULL;
-	Civilisation *civ = NULL;
-
-	
 	for ( sint32 i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		
@@ -1374,12 +1171,11 @@ sint32 infowin_UpdatePollutionData( void )
 				color = (sint32)g_colorSet->ComputePlayerColor(i);
 			else color = myData[lineIndex++].color;
 
-			p = g_player[i];
-			civ = p->GetCivilisation();
+			Civilisation * civ = g_player[i]->GetCivilisation();
 			civ->GetSingularCivName(strbuf);
 
-			pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
-			s_pollutionList->AddItem((c3_ListItem *)pItem);
+			s_pollutionList->AddItem
+                ((c3_ListItem *) new InfoPlayerListItem(&retval, strbuf, color, ldlBlock));
 		}
 	}
 
@@ -1412,11 +1208,9 @@ sint32 infowin_UpdatePollutionData( void )
 
 sint32 infowin_ChangeSetting( sint32 type )
 {
-	sint32 oldType = s_infoSetting;
-
-	
 	if (s_infoSetting == type ) return type;
 	
+	sint32 oldType = s_infoSetting;
 	
 	s_infoSetting = type;
 	
@@ -1566,9 +1360,6 @@ sint32 infowin_ChangeDataSetting( sint32 type )
 	
 	s_infoDataSetting = type;
 	
-	Unit nullUnit;
-	nullUnit.m_id = 0;
-
 	switch(type)
 	{
 	case k_INFOWIN_DATA_OFF:
@@ -1583,7 +1374,7 @@ sint32 infowin_ChangeDataSetting( sint32 type )
 		s_turnsLabel->Hide();
 
 		
-		s_infoRadar->SetSelectedCity(nullUnit);
+		s_infoRadar->SetSelectedCity(Unit());
 		s_infoRadar->Update();
 		
 		s_infoRadar->Idle();
@@ -1608,9 +1399,6 @@ sint32 infowin_ChangeDataSetting( sint32 type )
 
 sint32 infowin_GetCivScore( sint32 player )
 {
-	sint32 result = 0;
-
-	
 	Player *pl = g_player[player];
 	if(!pl) {
 		PointerList<Player>::Walker walk(g_deadPlayer);
@@ -1624,33 +1412,23 @@ sint32 infowin_GetCivScore( sint32 player )
 	}
 	if (!pl) return 0;
 
-	Score *score = pl->m_score;
-	sint32 totalValue = score->GetTotalScore();
+	Score *         score   = pl->m_score;
+	Difficulty *    diff    = pl->m_difficulty;
 
-	
-	Difficulty *diff = pl->m_difficulty;
-	sint32 baseValue = diff->GetBaseScore();
-
-	
-	double percent = (double(totalValue) / double(baseValue)) * 100.0;
-	if (percent < 0) percent = 0;
-
-
-	return result = (totalValue+baseValue);
+	return score->GetTotalScore() + diff->GetBaseScore();
 }
 
-
+/// Open alien life window (removed CTP1 functionality)
 sint32 infowin_DisplayLab()
 {
-	
-	open_EndGame();
-	return 0;
+	return open_EndGame();
 }
-
 
 
 sint32 infowin_LabReady()
 {
+#if 0   // Old CTP1 functionality, does nothing worthwhile
+
 	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
 	Player *pl = g_player[curPlayer];
 	if(!pl) {
@@ -1682,6 +1460,8 @@ sint32 infowin_LabReady()
 		
 //	}
 
+#endif // 0
+
 	return FALSE;
 }
 
@@ -1693,12 +1473,10 @@ sint32 infowin_GetWonderCityName( sint32 index, MBCHAR *name)
 	
 	if (g_theWonderTracker->GetCityWithWonder( index, city ))
 	{
-		
 		strcpy(name, city.GetData()->GetCityData()->GetName());
 	}
 	else 
 	{
-		
 		strcpy(name, "NULL");	
 	}
 	
@@ -1723,7 +1501,6 @@ InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, 
 	
 	*retval = InitCommonLdl(city, index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
 InfoBigListItem::~InfoBigListItem()
@@ -1953,7 +1730,6 @@ InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint3
 	
 	*retval = InitCommonLdl(player, index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
 
@@ -2058,7 +1834,6 @@ InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 
 	
 	*retval = InitCommonLdl(player, index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
 
@@ -2145,7 +1920,6 @@ InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *labe
 	
 	*retval = InitCommonLdl(label, text, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
 
@@ -2210,7 +1984,6 @@ InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32
 	
 	*retval = InitCommonLdl(name, index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
 

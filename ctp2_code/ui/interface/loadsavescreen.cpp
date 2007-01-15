@@ -36,6 +36,7 @@
 #include "civ3_main.h"
 #include "civapp.h"
 #include "gamefile.h"
+#include "Globals.h"            // allocated::reassign
 
 #include "aui.h"
 #include "aui_ldl.h"
@@ -742,11 +743,6 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		}
 	}
 
-	
-
-
-	extern bool g_e3Demo;
-
 	if (saveInfo->isScenario &&
 		(saveInfo->startInfoType == STARTINFOTYPE_CIVS ||
 		 saveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED ||
@@ -759,27 +755,14 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		
 		
 		strcpy(s_tempPath, path);
-		delete s_tempSaveInfo;
-		s_tempSaveInfo = new SaveInfo(saveInfo);
+        allocated::reassign(s_tempSaveInfo, new SaveInfo(saveInfo));
 
-		if(g_e3Demo) {
-			spnewgamediffscreen_Cleanup();
-			spnewgamediffscreen_Initialize(loadsavescreen_DifficultyScreenActionCallback);
-			spnewgamediffscreen_setDifficulty1(0);
-			spnewgamediffscreen_setDifficulty2(0);
-			loadsavescreen_DifficultyScreenActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-		} else
-			
-
-
-
-		if (s_tempSaveInfo->numPositions <= 3 || saveInfo->startInfoType == STARTINFOTYPE_NOLOCS) {
-			
-			
-			
+		if (s_tempSaveInfo->numPositions <= 3 || saveInfo->startInfoType == STARTINFOTYPE_NOLOCS) 
+        {
 			loadsavescreen_PlayersScreenActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-		} else {
-			
+		} 
+        else 
+        {
 			spnewgameplayersscreen_Cleanup();
 			spnewgameplayersscreen_Initialize( loadsavescreen_PlayersScreenActionCallback );
 			spnewgameplayersscreen_SetMaxPlayers(s_tempSaveInfo->numPositions);

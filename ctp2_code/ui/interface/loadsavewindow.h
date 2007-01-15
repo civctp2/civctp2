@@ -53,7 +53,8 @@ void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 d
 void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-typedef enum { 
+enum LSS_TYPE
+{ 
 	LSS_FIRST=0, 
 
 	LSS_LOAD_GAME=0, 
@@ -67,7 +68,7 @@ typedef enum {
 	LSS_SAVE_SCEN,
 
 	LSS_TOTAL
-} LSS_TYPE;
+};
 
 class LoadSaveWindow : public c3_PopupWindow
 {

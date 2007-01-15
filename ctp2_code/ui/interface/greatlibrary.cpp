@@ -43,111 +43,72 @@
 // - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+//
+/// \file   greatlibrary.cpp
+/// \brief  Great library handling
 
 #include "c3.h"
 #include "greatlibrary.h"
 
+#include "AdvanceRecord.h"
 #include "aui.h"
-#include "aui_uniqueid.h"
-#include "c3ui.h"
 #include "aui_ldl.h"
-#include "aui_stringtable.h"
-
-
-#include "ctp2_Window.h"
-
-
-#include "ctp2_button.h"
-
-#include "aui_switchgroup.h"
-#include "ctp2_TabGroup.h"
-#include "ctp2_Tab.h"
-#include "texttab.h"
-#include "c3_button.h"
-
-
-#include "aui_static.h"
-
-
 #include "aui_listbox.h"
-#include "ctp2_hypertextbox.h"
-
-
+#include "aui_static.h"
+#include "aui_stringtable.h"
+#include "aui_switchgroup.h"
+#include "aui_uniqueid.h"
+#include "BuildingRecord.h"
+#include "c3_button.h"
+#include "c3ui.h"
+#include "chart.h"
+#include "colorset.h"
+#include "conceptdb.h"
+#include "controlsheet.h"
+#include <cstdlib>
 #include "ctp2_button.h"
+#include "ctp2_hypertextbox.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
 #include "ctp2_Static.h"
-
-#include "SlicObject.h"
-#include "SelItem.h"
-#include "player.h"
-
-#include "controlsheet.h"
-#include "videoutils.h"
-
-#include "pixelutils.h"
-#include "colorset.h"
-
-
-#include "AdvanceRecord.h"
-
-#include "conceptdb.h"
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
-#include "StrDB.h"
-#include "TerrainRecord.h"
-#include "GovernmentRecord.h"
-#include "TerrainImprovementRecord.h"
-
-
-#include "ResourceRecord.h"
-
-
-#include "OrderRecord.h"
-
-#include "profileDB.h"
-
-
-#include "chart.h"
-
-#include "UIUtils.h"
-#include "screenutils.h"
-
-#include "greatlibrarywindow.h"
-#include "directvideo.h"
-
-#include "keypress.h"
-#include "UnitRecord.h"
-#include "GovernmentRecord.h"
-
-#include "wonderutil.h"
-
-
-#include "text_hasher.h"
-
-
-#include "MessageBoxDialog.h"
-
-
+#include "ctp2_Tab.h"
+#include "ctp2_TabGroup.h"
 #include "ctp2_textfield.h"
-#include <vector>
-#include "String_Search.h"
-
+#include "ctp2_Window.h"
+#include "directvideo.h"
+#include "Globals.h"            // allocated::clear
+#include "GovernmentRecord.h"
+#include "greatlibrarywindow.h"
+#include "keypress.h"
+#include "MessageBoxDialog.h"
+#include "OrderRecord.h"
+#include "pixelutils.h"
+#include "player.h"
+#include "profileDB.h"          // g_theProfileDB
+#include "ResourceRecord.h"
 #include "sci_advancescreen.h"
-#include <stdlib.h>
-
-
-
+#include "screenutils.h"
+#include "SelItem.h"
+#include "SlicObject.h"
+#include "StrDB.h"              // g_theStringDB
+#include "String_Search.h"
+#include "TerrainImprovementRecord.h"
+#include "TerrainRecord.h"
+#include "text_hasher.h"
+#include "texttab.h"
+#include "UIUtils.h"
+#include "UnitRecord.h"
+#include <vector>
+#include "videoutils.h"
+#include "WonderRecord.h"
+#include "wonderutil.h"
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
-
 extern C3UI			*g_c3ui;
 extern sint32		g_modalWindow;
-
 extern ConceptDB					*g_theConceptDB;
-extern StringDB						*g_theStringDB;
-extern ProfileDB			*g_theProfileDB;
+
 
 static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
 {
@@ -173,7 +134,7 @@ static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
 GreatLibrary	*g_greatLibrary = NULL;
 
 
-Text_Hasher<char *> * GreatLibrary::m_great_library_info = NULL;
+Text_Hasher<char *> * GreatLibrary::s_great_library_info = NULL;
 
 
 
@@ -182,19 +143,14 @@ Text_Hasher<char *> * GreatLibrary::m_great_library_info = NULL;
 
 void GreatLibrary::Initialize_Great_Library_Data()
 {
-	
-	const int GREAT_LIBRARY_HASH_SIZE = 2000;
+    const int GREAT_LIBRARY_HASH_SIZE = 2000;
 
-	delete m_great_library_info;
-	m_great_library_info = new Text_Hasher<char *> 
-		(
-			GREAT_LIBRARY_HASH_SIZE,
-			NULL
-		);
+    allocated::reassign(s_great_library_info, 
+                        new Text_Hasher<char *> 
+                           (GREAT_LIBRARY_HASH_SIZE, NULL)
+                       );
 
-	
-	Load_Great_Library();
-
+    Load_Great_Library();
 }
 
 
@@ -209,9 +165,7 @@ void GreatLibrary::Initialize_Great_Library_Data()
 
 void GreatLibrary::Shutdown_Great_Library_Data()
 {
-	
-	delete m_great_library_info;
-	m_great_library_info = NULL;
+    allocated::clear(s_great_library_info);	
 }
 
 
@@ -233,23 +187,19 @@ enum Read_Library_State
 
 void GreatLibrary::Load_Great_Library()
 {
-	Assert(m_great_library_info); // Using m_great_library_info-> later on.
-	if (!m_great_library_info)
+	Assert(s_great_library_info);
+	if (!s_great_library_info)
 	{
 		return;
 	}
 	
 	FILE * great_library = c3files_fopen(C3DIR_GL, "Great_Library.txt", "r");
-
 	Assert(great_library);
-
-	
 	if (!great_library)
 		return;
 
 	
 	{
-		
 		char ch;
 		
 		
@@ -423,7 +373,7 @@ void GreatLibrary::Load_Great_Library()
 								name_copy[j] = tolower(name_copy[j]);
 
 							
-							m_great_library_info->Add_To_Hash_Table(
+							s_great_library_info->Add_To_Hash_Table(
 								name_copy,
 								entry_copy
 								);
@@ -453,9 +403,7 @@ void GreatLibrary::Load_Great_Library()
 		}
 	}
 
-	
 	fclose(great_library);
-
 }
 
 
@@ -798,7 +746,7 @@ void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uin
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
-	sint32 numPreReq = chart->GetNumPreReq();
+	sint32 numPreReq = chart ? chart->GetNumPreReq() : 0;
 
 	for ( sint32 i = 0;i < numPreReq;i++ ) {
 		if ( control->Id() == chart->GetPreReqButton(i)->Id() ) {
@@ -814,7 +762,7 @@ void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, ui
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
-	sint32 numLeadsTo = chart->GetNumLeadsTo();
+	sint32 numLeadsTo = chart ? chart->GetNumLeadsTo() : 0;
 
 	for ( sint32 i = 0;i < numLeadsTo;i++ ) {
 		if ( control->Id() == chart->GetLeadsToButton(i)->Id() ) {
@@ -843,57 +791,47 @@ void GreatLibrary_Topics_List_Callback
 
 
 
-TechListItem::TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock)
-	:
+TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, MBCHAR * ldlBlock)
+:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
-	ctp2_ListItem( retval, ldlBlock)
+    ctp2_ListItem    (retval, ldlBlock),
+    m_index          (index),
+    m_database       (database)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = InitCommonLdl(index, database, ldlBlock);
-	Assert( AUI_SUCCESS(*retval) );
+	*retval = InitCommonLdl(ldlBlock);
 }
 
 
-AUI_ERRCODE TechListItem::InitCommonLdl(sint32 index, DATABASE database, MBCHAR *ldlBlock)
+AUI_ERRCODE TechListItem::InitCommonLdl(MBCHAR const * ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
-	AUI_ERRCODE		retval;
-
-	m_index = index;
-	m_database = database;
-
-	ctp2_Static		*subItem;
-
 	sprintf(block, "%s.%s", ldlBlock, "Name");
-	subItem = new ctp2_Static(&retval, aui_UniqueId(), block);
-	AddChild(subItem);
+
+	AUI_ERRCODE		retval = AUI_ERRCODE_OK;
+	AddChild(new ctp2_Static(&retval, aui_UniqueId(), block));
+	Assert(AUI_SUCCESS(retval));
 
 	Update();
 
-	return AUI_ERRCODE_OK;
+	return retval;
 }
 
 void TechListItem::Update(void)
 {
-
-	ctp2_Static *subItem;
-
+	ctp2_Static *   subItem         = (ctp2_Static *) GetChildByIndex(0);
+	enum DATABASE   real_database   = m_database;
+	int             real_index      = m_index;
 	
-	subItem = (ctp2_Static *)GetChildByIndex(0);
-
-	
-	enum DATABASE real_database = m_database;
-	int real_index = m_index;
-
 	
 	if (m_database == DATABASE_SEARCH)
 	{
 		
-		real_database = g_greatLibrary->m_search_results[m_index].m_database;
-		real_index = g_greatLibrary->m_search_results[m_index].m_item;
+		real_database   = g_greatLibrary->m_search_results[m_index].m_database;
+		real_index      = g_greatLibrary->m_search_results[m_index].m_item;
 
 	} 
 
@@ -939,7 +877,7 @@ void TechListItem::Update(void)
 		break;
 
 	default:
-		BOOL invalidDatabase = FALSE;
+		bool invalidDatabase = false;
 		Assert( invalidDatabase );
 	}
 }
@@ -966,7 +904,8 @@ sint32 TechListItem::Compare(ctp2_ListItem *item2, uint32 column)
 
 sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
 {
-	if ( g_greatLibrary ) {
+    if (g_greatLibrary)
+    {
 		if ( sci ) {
 			g_greatLibrary->SetLibrary( theMode, DATABASE_ADVANCES );
 		}
@@ -975,77 +914,83 @@ sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
 		}
 		g_greatLibrary->SetSci( sci );
 		g_greatLibrary->GetWindow()->MoveOG();
-		return 0;	
-	}
+    }
+    else
+    {
+        g_greatLibrary = new GreatLibrary(theMode);
+        g_greatLibrary->SetSci( sci );
+    }
 
-	g_greatLibrary = new GreatLibrary( theMode );
-	g_greatLibrary->SetSci( sci );
-
-
-	return 0;
+    return 0;
 }
 
-sint32 greatlibrary_Cleanup( void )
+void greatlibrary_Cleanup(void)
 {
-	if ( g_greatLibrary ) {
-		
-		
-		
-		g_greatLibrary->Remove();
-		delete g_greatLibrary;
-	}
-	g_greatLibrary = NULL;
-
-	return 0;
+    if (g_greatLibrary) 
+    {
+        g_greatLibrary->Remove();
+        allocated::clear(g_greatLibrary);
+    }
 }
 
-GreatLibrary::GreatLibrary( sint32 theMode )
+GreatLibrary::GreatLibrary(sint32 theMode)
+:
+    KeyboardHandler             (),
+    m_setGoalButton             (NULL),
+    m_techTree                  (NULL),
+    m_techRequirementsText      (NULL),
+    m_techVariablesText         (NULL),
+    m_techMovie                 (NULL),
+    m_techStillShot             (NULL),
+    m_string                    (NULL),
+    m_buttonString              (LIB_STRING_INDEX),
+    m_tabGroup                  (NULL),
+    m_gameplayTab               (NULL),
+    m_historicalTab             (NULL),
+    m_techTab                   (NULL),
+    m_techHistoricalText        (NULL),
+    m_techGameplayText          (NULL),
+    m_okButton                  (NULL),
+    m_backButton                (NULL),
+    m_forwardButton             (NULL),
+    m_categoryText              (NULL),
+    m_searchLabel               (NULL),
+    m_search_word               (NULL),
+    m_indexButtonSwitchGroup    (NULL),
+    m_searchButton              (NULL),
+    m_unitsButton               (NULL),
+    m_improveButton             (NULL),
+    m_wondersButton             (NULL),
+    m_advancesButton            (NULL),
+    m_governButton              (NULL),
+    m_terrainButton             (NULL),
+    m_tileimpButton             (NULL),
+    m_conceptButton             (NULL),
+    m_goodsButton               (NULL),
+    m_ordersButton              (NULL),
+    m_topics_list               (NULL),
+    m_indexLeft                 (NULL),
+    m_indexMiddle               (NULL),
+    m_indexRight                (NULL),
+    m_page                      (0),
+    m_maxPage                   (false),
+    m_database                  (DATABASE_UNITS),
+    m_listDatabase              (DATABASE_UNITS), 
+    m_selectedIndex             (k_GL_INDEX_INVALID),
+    m_maxIndex                  (0),
+    m_sci                       (false),
+    m_itemLabel                 (NULL),
+    m_search_results            (),
+    m_history                   (),
+    m_history_position          (0),
+    m_window                    (NULL)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-	m_page = 0;
-	m_maxPage = FALSE;
-	m_selectedIndex = -1;
-	m_database = DATABASE_UNITS;
-	m_listDatabase = DATABASE_UNITS;
-	m_maxIndex = 0;
-
-	
-	m_history_position = 0;
-
-	strcpy(windowBlock,"GreatLibrary");
 
 	m_window = new GreatLibraryWindow(&errcode);
-
 	m_window->m_window->SetDraggable(TRUE);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	m_techMovie = NULL;
-
-
-	
-	Initialize( windowBlock );
+	Initialize("GreatLibrary");
 
 	m_techTree->Update( theMode );
 	m_window->SetTechMode( theMode, DATABASE_ADVANCES );
@@ -1059,7 +1004,6 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	m_window->SetTechRequirementsText ( m_techRequirementsText );
 	m_window->SetTechVariablesText ( m_techVariablesText );
 
-	
 	SlicObject so;
 	so.AddAdvance(theMode);
 
@@ -1095,18 +1039,10 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 			m_techStillShot->Show();
 		}
 	}
-
-	
-	m_buttonString = LIB_STRING_INDEX;
-
 }
 
-sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
+void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	m_okButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "OkButton");
 	m_okButton->SetActionFuncAndCookie(greatlibrary_ExitCallback, NULL);
 
@@ -1168,10 +1104,12 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 	m_techStillShot = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "TechStillShot");
 
 
-	sprintf( controlBlock, "LibraryStrings" );
-	m_string = new aui_StringTable( &errcode, controlBlock );
-	TestControl( m_string );
 
+	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	sprintf( controlBlock, "LibraryStrings" );
+
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	m_string = new aui_StringTable( &errcode, controlBlock );
 
 	ctp2_Static *control = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Tabs.TechTreeTab.TabPanel");
 	m_techTree = new Chart(&errcode, aui_UniqueId(), "TechTree", NULL, NULL);
@@ -1204,6 +1142,7 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 	ctp2_Static *switchGroup = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, controlBlock);
 	switchGroup->SetBlindness( TRUE );
 
+	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( buttonBlock, "%s.%s", controlBlock, "UnitsButton" );
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
 	m_unitsButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
@@ -1244,34 +1183,25 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 	m_conceptButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
 	m_conceptButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
 
-	
 	if (m_history.size() == 0)
 	{
-		
 		m_forwardButton->Enable(FALSE);
-
-		
 		m_backButton->Enable(FALSE);
-
 	} 
-
-	return 0;
 }
 
 GreatLibrary::~GreatLibrary( void )
 {
     delete m_window;
-	delete m_techTree;
-	delete m_string;
-	delete m_techMovie;
+    delete m_techTree;
+    delete m_string;
+    delete m_techMovie;
 }
 
 void GreatLibrary::Display( void )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	
 	GetWindow()->SetType(AUI_WINDOW_TYPE_FLOATING);
-	errcode = g_c3ui->AddWindow( GetWindow() );
+	AUI_ERRCODE errcode = g_c3ui->AddWindow( GetWindow() );
 	Assert( errcode == AUI_ERRCODE_OK );
 	
 	
@@ -1288,18 +1218,12 @@ void GreatLibrary::Display( void )
 	FixTabs();
 }
 
-void GreatLibrary::Remove( void )
+void GreatLibrary::Remove(void)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode = g_c3ui->RemoveWindow(GetWindow()->Id());
+	Assert(errcode == AUI_ERRCODE_OK);
 
-	errcode = g_c3ui->RemoveWindow( GetWindow()->Id() );
-	Assert( errcode == AUI_ERRCODE_OK );
-
-	
-	
-
-	keypress_RemoveHandler(this);
-
+    keypress_RemoveHandler(this);
 }
 
 sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_to_history )
@@ -1308,11 +1232,11 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
         return 0;
 
 	m_selectedIndex = theMode;
-	enum DATABASE real_database = theDatabase;
-	int real_index = theMode;
 
 	if (!g_greatLibrary || !g_greatLibrary->m_window) return 0;
 
+	enum DATABASE real_database = theDatabase;
+	int real_index = theMode;
 #if 0   // unused	
 	sint32 videoWidth = 242;
 	sint32 videoHeight = 182;
@@ -1491,25 +1415,6 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 			m_techStillShot->Hide();
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	return 0;
 }
@@ -1835,9 +1740,9 @@ const MBCHAR * GreatLibrary::GetSelectionName() const
 
 
 
-ctp2_Window *GreatLibrary::GetWindow( void )
+ctp2_Window *GreatLibrary::GetWindow(void) const
 {
-	return m_window->m_window;
+    return m_window ? m_window->m_window : NULL;
 }
 
 //----------------------------------------------------------------------------

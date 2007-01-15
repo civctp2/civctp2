@@ -33,10 +33,8 @@ class c3_CreditsText;
 
 
 
-extern sint32 creditsscreen_Initialize();
-
-
-extern sint32 creditsscreen_Cleanup();
+sint32  creditsscreen_Initialize(void);
+void    creditsscreen_Cleanup(void);
 
 
 class CreditsWindow : public C3Window {

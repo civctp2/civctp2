@@ -35,8 +35,8 @@
 #pragma once
 #endif
 
-#ifndef __WORLD_H__
-#define __WORLD_H__
+#ifndef WORLD_H__
+#define WORLD_H__
 
 class Terrain;
 class World; 
@@ -306,8 +306,9 @@ public:
 						 MapPoint player_start[k_MAX_PLAYERS], sint32 index,
 						 sint32 minDist, sint32 maxDist,
 						 BOOL ignoreTutorialRules);
+#if 0 // Unused
     void FlattenCumScore(sint32 d, float **cum_score, const sint32 maxx, const sint32 maxy);
-    
+#endif    
     sint32 CalcStartNiceness(const sint32 x, const sint32 y, const sint32 d, sint32 **con);
     
     void FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS], 
@@ -416,17 +417,17 @@ public:
     sint32 CanEnter(const MapPoint &pos, const uint32 flag) const;
 
 	// @ToDo make this stuff dependent on TerrainDB or figure out whether this is already TerrainDB dependent
-	bool World::EnvIsWater(const uint32 env) const
+	bool EnvIsWater(const uint32 env) const
 	{
 		return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER | k_BIT_MOVEMENT_TYPE_SHALLOW_WATER))) != 0;
 	}
 
-	bool World::IsWater(const MapPoint &pos) const
+	bool IsWater(const MapPoint &pos) const
 	{
 		return EnvIsWater(GetCell(pos)->m_env);
 	}
 
-	bool World::IsWater(const sint32 x, const sint32 y) const 
+	bool IsWater(const sint32 x, const sint32 y) const 
 	{ 
 		return EnvIsWater(m_map[x][y]->m_env);
 	}

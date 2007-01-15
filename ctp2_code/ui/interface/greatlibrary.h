@@ -32,15 +32,26 @@
 // - Added alpha <-> index functions. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+//
+/// \file   GreatLibrary.cpp
+/// \brief  Great library handling
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __GREATLIBRARY_H__
-#define __GREATLIBRARY_H__
+#ifndef GREATLIBRARY_H__
+#define GREATLIBRARY_H__
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
 
 #include <vector>	// std::vector
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 class GreatLibrary;
 class Great_Library_Item;
@@ -56,11 +67,6 @@ class TechListItem;
 
 #define k_GL_TITLE_WIDTH	340
 #define k_GL_TITLE_HEIGHT	30
-
-
-
-
-
 
 #define k_VIDEO_X		239
 #define k_VIDEO_Y		184
@@ -98,6 +104,10 @@ enum LIB_STRING {
 	LIB_STRING_TREE
 };
 
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
 #include "ctp2_listitem.h"
 #include "keyboardhandler.h"
 
@@ -120,9 +130,9 @@ class ctp2_Window;
 template <class DATA_TYPE> class Text_Hasher;
 class SlicContext;
 
-
-
-
+//----------------------------------------------------------------------------
+// Declarations
+//----------------------------------------------------------------------------
 
 class Great_Library_Item
 {
@@ -131,68 +141,128 @@ public:
 	int m_item;
 };
 
+class TechListItem: public ctp2_ListItem
+{
+public:
+	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock);
+	
+	virtual void Update(void);
 
+	sint32	GetIndex(void) const { return m_index; }
+	DATABASE GetDatabase(void) const { return m_database; }
+	
+	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
+protected:
+    TechListItem() 
+    : 
+        ctp2_ListItem        (),
+        m_index              (k_GL_INDEX_INVALID),
+        m_database           (DATABASE_DEFAULT)
+    {};
 
+private:
+    AUI_ERRCODE InitCommonLdl(MBCHAR const * ldlBlock);
+	
+    sint32      m_index;
+    DATABASE    m_database;     
+};
 
-class GreatLibrary : public KeyboardHandler {
+class GreatLibrary : public KeyboardHandler 
+{
 public:
 	GreatLibrary( sint32 theMode );
 	virtual ~GreatLibrary( void );
 
-	sint32 Initialize( MBCHAR *windowBlock );
-
-	
-	static Text_Hasher<char *> * m_great_library_info;
-
-	
-	
-	
-	
-	
 	static void Initialize_Great_Library_Data();
-
-	
-	
-	
-	
-	
 	static void Shutdown_Great_Library_Data();
-
-	
-	
-	
-	
-	
 	static void Load_Great_Library();
 
-	
-	
-	
-	
 	static int Get_Database_From_Name
 	(
 		char * database_name
 	);
 
-
-	
-	
-	
-	
-	
 	static int Get_Object_Index_From_Name
 	(
 		int which_database,				
 		char * object_name
 	);
 
+	static Text_Hasher<char *> * s_great_library_info;
+
+	void Back();
+	void Forward();
+
+	void Display( void );
+	void Remove( void );
+	void kh_Close();
+
+	sint32 SetLibrary( sint32 theMode, DATABASE theDatabase,
+		bool add_to_history = true);
+
+
+
+	void    ClearHistory(void);
+	void    HandleSetGoal(void);
+
+	MBCHAR const *  GetItemName(int database, int item) const;      // lexicographic index
+    MBCHAR const *  GetObjectName(int database, int index) const;   // database index
+	MBCHAR const *  GetSelectionName() const;
+
+	void SetCategoryName
+	(
+		int the_database
+	);
+
+	void    HandleIndexButton( ctp2_Button *button );
+	void    HandleListButton
+	( 
+		aui_Control *control, 
+		uint32 action, 
+		uint32 data, 
+		void *cookie 
+	);
+
+	void UpdateList(DATABASE database);
+
+	BOOL GetSci( void ) const { return m_sci; }
+	void SetSci( BOOL sci ) { m_sci = sci; }
+
+	ctp2_Button *GetAdvancesButton( void ) const { return m_advancesButton; }
+
+
+
 
 	
+	int Get_Database_Size(int the_database);
+
 	
+	void Search_Great_Library();
+
+	
+	void Force_A_Search();
+
+	
+	void Add_Item_To_Topics_List
+	(
+		const MBCHAR *name,
+		int index
+	);
+
+	ctp2_Window * GetWindow( void ) const;
+
+	void FixTabs();
+	sint32 GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const;
+	sint32 GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const;
+
+private:
+    void Initialize(MBCHAR const * windowBlock);
+
+    friend void TechListItem::Update(void);
+    friend sint32 greatlibrary_Initialize(sint32 theMode, BOOL sci);
+
 	ctp2_Button		*m_setGoalButton;
-
-protected:
 
 	Chart *m_techTree;
 
@@ -261,8 +331,6 @@ protected:
 
 	ctp2_Static *m_itemLabel;
 
-public:
-	
 	std::vector<Great_Library_Item> m_search_results;
 
 	
@@ -272,116 +340,13 @@ public:
 	int m_history_position;
 
 	
-	void Back();
-	void Forward();
-
-	void Display( void );
-	void Remove( void );
-	void kh_Close();
-
-	sint32 SetLibrary( sint32 theMode, DATABASE theDatabase,
-		bool add_to_history = true);
-
-
-
-	void    ClearHistory(void);
-	void    HandleSetGoal(void);
-
-	MBCHAR const *  GetItemName(int database, int item) const;      // lexicographic index
-    MBCHAR const *  GetObjectName(int database, int index) const;   // database index
-	MBCHAR const *  GetSelectionName() const;
-
-	void SetCategoryName
-	(
-		int the_database
-	);
-
-	void    HandleIndexButton( ctp2_Button *button );
-	void    HandleListButton
-	( 
-		aui_Control *control, 
-		uint32 action, 
-		uint32 data, 
-		void *cookie 
-	);
-
-	void UpdateList(DATABASE database);
-
-	BOOL GetSci( void ) { return m_sci; }
-	void SetSci( BOOL sci ) { m_sci = sci; }
-
-	ctp2_Button *GetAdvancesButton( void ) const { return m_advancesButton; }
-
-
-
-
-	
-	int Get_Database_Size(int the_database);
-
-	
-	void Search_Great_Library();
-
-	
-	void Force_A_Search();
-
-	
-	void Add_Item_To_Topics_List
-	(
-		const MBCHAR *name,
-		int index
-	);
-
 	GreatLibraryWindow	*m_window;
-
-	ctp2_Window *GetWindow( void );
-
-	void FixTabs();
-	sint32 GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const;
-	sint32 GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const;
 };
 
-class TechListItem: public ctp2_ListItem
-{
-public:
-	
-	
-	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock);
+const MBCHAR *  glutil_LoadText(const char * filename, SlicContext & so);
+sint32          greatlibrary_Initialize(sint32 theMode, BOOL sci = FALSE);
+void            greatlibrary_Cleanup(void);
 
-	
-	
-	virtual void Update(void);
+extern GreatLibrary	*   g_greatLibrary;
 
-	
-	sint32	GetIndex(void) { return m_index; }
-	DATABASE GetDatabase(void) { return m_database; }
-
-protected:
-	TechListItem() : ctp2_ListItem() {}
-
-	
-	
-	AUI_ERRCODE InitCommonLdl(sint32 index, DATABASE database, MBCHAR *ldlBlock);
-	
-public:
-	
-	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
-
-private:
-	sint32		m_index;
-	DATABASE	m_database;     
-};
-
-
-
-sint32 greatlibrary_UpdateList( DATABASE database );
-sint32 GreatLibraryWindow_Initialize( sint32 theMode = 0, BOOL sci = FALSE );
-sint32 GreatLibraryWindow_Cleanup( void );
-sint32 greatlibrary_InitGraphicTrim( MBCHAR *windowBlock );
-
-sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci = FALSE );
-sint32 greatlibrary_Cleanup( void );
-
-extern GreatLibrary	*g_greatLibrary;
-
-const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so);
 #endif

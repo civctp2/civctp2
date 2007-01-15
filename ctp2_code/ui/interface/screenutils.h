@@ -34,8 +34,9 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __SCREENUTILS_H__
-#define __SCREENUTILS_H__
+
+#ifndef SCREENUTILS_H__
+#define SCREENUTILS_H__
 
 #ifdef _DEBUG
 
@@ -47,64 +48,62 @@
 								if ( g_debugWindow) g_debugWindow->AddText( str );
 #endif
 
-class Sequence;
+sint32  open_CreditsScreen( void );
+void    close_CreditsScreen( void );
 
-sint32 open_CreditsScreen( void );
-sint32 close_CreditsScreen( void );
+sint32  open_WorkView( void );
+void    close_WorkView( void );
 
-sint32 open_WorkView( void );
-sint32 close_WorkView( void );
+sint32  open_CityView( void );
+void    close_CityView( void );
 
-sint32 open_CityView( void );
-sint32 close_CityView( void );
+sint32  open_CityStatus( void );
+void    close_CityStatus( void );
 
-sint32 open_CityStatus( void );
-sint32 close_CityStatus( void );
+sint32  open_CivStatus( void );
+void    close_CivStatus( void );
 
-sint32 open_CivStatus( void );
-sint32 close_CivStatus( void );
+sint32  open_ScienceStatus( void );
+void    close_ScienceStatus(void);
 
-sint32 open_ScienceStatus( void );
-sint32 close_ScienceStatus( void );
+sint32  open_ScienceVictory( void );
+void    close_ScienceVictory( void );
 
-sint32 open_ScienceVictory( void );
-sint32 close_ScienceVictory( void );
+sint32  open_UnitStatus( void );
+void    close_UnitStatus( void );
 
-sint32 open_UnitStatus( void );
-sint32 close_UnitStatus( void );
+sint32  open_TradeStatus( void );
+void    close_TradeStatus( void );
 
-sint32 open_TradeStatus( void );
-sint32 close_TradeStatus( void );
+sint32  open_VictoryWindow( void );
+void    close_VictoryWindow( void );
 
-sint32 open_VictoryWindow( void );
-sint32 close_VictoryWindow( void );
+sint32  open_Diplomacy( void );
+void    close_Diplomacy( void );
 
-sint32 open_Diplomacy( void );
-sint32 close_Diplomacy( void );
+sint32  open_InfoScreen( void );
+void    close_InfoScreen( void );
 
-sint32 open_InfoScreen( void );
-sint32 close_InfoScreen( void );
+sint32  open_GreatLibrary( sint32 index, BOOL sci = FALSE );
+sint32  open_GreatLibrary( void );
+void    close_GreatLibrary( void );
 
-sint32 open_GreatLibrary( sint32 index, BOOL sci = FALSE );
-sint32 open_GreatLibrary( void );
-sint32 close_GreatLibrary( void );
+sint32  open_OptionsScreen( sint32 fromWhichScreen );
+void    close_OptionsScreen( void );
 
-sint32 open_OptionsScreen( sint32 fromWhichScreen );
-sint32 close_OptionsScreen( void );
+sint32  open_KeyMappingScreen( void );
+void    close_KeyMappingScreen( void );
 
-sint32 open_KeyMappingScreen( void );
-sint32 close_KeyMappingScreen( void );
+sint32  open_EndGame( void );
+void    close_EndGame( void );
 
-sint32 open_EndGame( void );
-sint32 close_EndGame( void );
+sint32  open_TutorialWin( void );
+void    close_TutorialWin( void );
 
-sint32 open_TutorialWin( void );
-sint32 close_TutorialWin( void );
+void    close_AllScreens( void );
+void    close_AllScreensAndUpdateInfoScreen( void );
 
-sint32 close_AllScreens( void );
-sint32 close_AllScreensAndUpdateInfoScreen( void );
-
-sint32 open_ScenarioEditor(void);
-sint32 close_ScenarioEditor(void);
+sint32  open_ScenarioEditor(void);
+void    close_ScenarioEditor(void);
 
 #endif

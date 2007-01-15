@@ -13,7 +13,7 @@ class ctp2_Button;
 sint32 optionsscreen_displayMyWindow(sint32 from);
 sint32 optionsscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE optionsscreen_Initialize( void );
-AUI_ERRCODE optionsscreen_Cleanup();
+void optionsscreen_Cleanup(void);
 
 void optionsscreen_graphicsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void optionsscreen_soundPress(aui_Control *control, uint32 action, uint32 data, void *cookie );

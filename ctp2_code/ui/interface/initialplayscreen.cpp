@@ -30,6 +30,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "initialplaywindow.h"  // initialplayscreen.h does not exist
 
 #include "civ3_main.h"
 #include "civapp.h"
@@ -45,33 +46,22 @@
 #include "c3_button.h"
 #include "c3_dropdown.h"
 #include "c3_listitem.h"
-#include "CivPaths.h"
-#include "UIUtils.h"
-
-#include "netshell.h"
-
-#include "screenutils.h"
-
-
-#include "loadsavewindow.h"
-#include "initialplaywindow.h"
-#include "scenariowindow.h"
-
-// Need more includes for the actions of the new buttons
-#include "ctp2_Static.h"
-#include "optionswindow.h"
-
-#include "gameinit.h"
-#include "profileDB.h"
-
+#include "CivPaths.h"           // g_civPaths
+#include "ctp2_dropdown.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
-#include "ctp2_dropdown.h"
+#include "ctp2_Static.h"
+#include "gameinit.h"
+#include "loadsavewindow.h"
+#include "netshell.h"
+#include "optionswindow.h"
+#include "profileDB.h"          // g_theProfileDB
+#include "scenariowindow.h"
+#include "screenutils.h"
+#include "UIUtils.h"
 
 extern  C3UI				*g_c3ui;
 extern  CivApp				*g_civApp;
-extern  CivPaths			*g_civPaths;
-extern	ProfileDB			*g_theProfileDB;
 
 
 static C3Window				*s_initplayWindow		= NULL;
@@ -83,16 +73,10 @@ static MBCHAR				*s_initplayWindowLDLBlock = "InitPlayWindow";
 
 sint32	initialplayscreen_displayMyWindow()
 {
-	extern bool g_e3Demo;
-	if(g_e3Demo)
-		return 0;
-
-	sint32 retval=0;
-	if(!s_initplayWindow) { retval = initialplayscreen_Initialize(); }
+    sint32 retval = (s_initplayWindow) ? 0 : initialplayscreen_Initialize();
 
 	g_c3ui->AddWindow(s_initplayWindow);
 
-	
 	return retval;
 }
 sint32 initialplayscreen_removeMyWindow(uint32 action)
@@ -217,21 +201,20 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 
 
 
-AUI_ERRCODE initialplayscreen_Cleanup()
+void initialplayscreen_Cleanup(void)
 {
-	if ( !s_initplayWindow  ) return AUI_ERRCODE_OK; 
+	if (s_initplayWindow)
+    {
+        if (g_c3ui)
+        {
+	        g_c3ui->RemoveWindow(s_initplayWindow->Id());
+        }
 
-	g_c3ui->RemoveWindow( s_initplayWindow->Id() );
-
-	AUI_ERRCODE		errcode;
-
-	errcode = aui_Ldl::DeleteHierarchyFromRoot(s_initplayWindowLDLBlock);
-	Assert(errcode == AUI_ERRCODE_OK);
-
-	
-	s_initplayWindow = NULL;
-
-	return errcode;
+	    AUI_ERRCODE errcode = 
+            aui_Ldl::DeleteHierarchyFromRoot(s_initplayWindowLDLBlock);
+	    Assert(errcode == AUI_ERRCODE_OK);
+    	s_initplayWindow = NULL;
+    }
 }
 
 
@@ -377,9 +360,4 @@ void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	optionsscreen_displayMyWindow(0);
-}
-
-C3Window *GetInitialPlayScreen()
-{
-	return s_initplayWindow;
 }

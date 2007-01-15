@@ -215,9 +215,6 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 
 sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequence *seq )
 {
-	extern bool g_e3Demo;
-	if(g_e3Demo) return 0;
-
 	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
 	s_oldResearching = p->m_advances->GetResearching();
 

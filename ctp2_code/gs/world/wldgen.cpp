@@ -281,12 +281,16 @@ World::~World()
 
 void World::FreeMap()
 {
-	int x;
-	for(x = 0; x < m_size.x; x++) {
-		if(m_isYwrap)
+	for (int x = 0; x < m_size.x; x++) 
+    {
+		if (m_isYwrap)
+        {
 			delete [] (CellPtr*)(m_map[x] - k_MAP_WRAPAROUND);
+        }
 		else
+        {
 			delete [] m_map[x];
+        }
 	}
 	
 	delete [] m_tmpx;
@@ -321,56 +325,49 @@ void World::Reset(sint16 sx, sint16 sy, BOOL yWrap, BOOL xWrap)
 
 void World::AllocateMap()
 {
-    sint32 i, x, y;
-    CellYarray *tmpx; 
-    CellPtr *tmpy;
-    
     AllocateTileInfoStorage();
 
+    delete [] m_cellArray;
 	m_cellArray = new Cell[m_size.x * m_size.y];
 
-	
-
-    
     Assert (2 * k_MAP_WRAPAROUND <= m_size.x); 
     Assert (2 * k_MAP_WRAPAROUND <= m_size.y); 
 
-	tmpx = new CellYarray[m_size.x + 2 * k_MAP_WRAPAROUND]; 
+    CellYarray *    tmpx = new CellYarray[m_size.x + 2 * k_MAP_WRAPAROUND]; 
 	m_tmpx = tmpx;
 
 	m_map = &(tmpx[k_MAP_WRAPAROUND]); 
 	Assert(m_map);
         
-	
-	for(x=0; x<m_size.x; x++) { 
-		if (m_isYwrap) { 
-			tmpy = new CellPtr[m_size.y + 2 * k_MAP_WRAPAROUND];
-			Assert(tmpy); 
+    sint32 i, x, y;
+	for (x = 0; x < m_size.x; x++) 
+    { 
+		if (m_isYwrap) 
+        { 
+			CellPtr * tmpy = new CellPtr[m_size.y + 2 * k_MAP_WRAPAROUND];
 			m_map[x] = &(tmpy[k_MAP_WRAPAROUND]);
-		} else { 
+		} 
+        else 
+        { 
 			m_map[x] = new CellPtr[m_size.y];
 		}
 		
-		for (y=0; y<m_size.y; y++) { 
+		for (y=0; y<m_size.y; y++) 
+        { 
 			m_map[x][y] = &m_cellArray[y * m_size.x + x];
-			
-			
 		}
     }  
     
-	for (i=0; i< k_MAP_WRAPAROUND; i++)  { 
-		m_map[m_size.x + i] = m_map[i]; 
-	} 
-	
-	for (i=-1; - k_MAP_WRAPAROUND <= i; i--) { 
+    std::copy(m_map, m_map + k_MAP_WRAPAROUND, m_map + m_size.x);
+	for (i = -1; - k_MAP_WRAPAROUND <= i; i--) 
+    { 
 		m_map[i] = m_map[m_size.x + i]; 
 	}
 	
 	if (m_isYwrap) { 
-		for (x=0; x<m_size.x; x++) { 
-			for (i=0; i< k_MAP_WRAPAROUND; i++)  { 
-				m_map[x][m_size.y + i] = m_map[x][i]; 
-			} 
+		for (x=0; x<m_size.x; x++) 
+        { 
+            std::copy(m_map[x], m_map[x] + k_MAP_WRAPAROUND, m_map[x] + m_size.y);
 			
 			for (i=-1; - k_MAP_WRAPAROUND <= i; i--) { 
 				m_map[x][i] = m_map[x][m_size.y + i]; 
@@ -409,14 +406,11 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	sint32 h;
 			
 	sint32 numSettings;
-	const double *settings;
 	const MapRecord *mapRec = g_theMapDB->FindBestMapSizeMatch(m_size.x, m_size.y);
-	sint32 whichSet = sint32(g_theProfileDB->PercentContinent() * 10);
+	sint32          whichSet    = sint32(g_theProfileDB->PercentContinent() * 10);
+	const double *  settings    = mapRec->GetSettings(whichSet, numSettings);
 
-	settings = mapRec->GetSettings(whichSet, numSettings);
-
-	GetHeightMap(firstPass, map,
-				 settings, numSettings);
+	GetHeightMap(firstPass, map, settings, numSettings);
 	firstPass->Release();
 	FreeMapPlugin();
 
@@ -1799,6 +1793,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	return !searching; 
 } 
 
+#if 0
 // Not a clue what this - apparenly unused - function is supposed to do.
 // Just replaced the flawed iterator with a working one.
 void World::FlattenCumScore(sint32 d, float **cum_score,
@@ -1821,7 +1816,7 @@ void World::FlattenCumScore(sint32 d, float **cum_score,
 
     cum_score[start.x][start.y] = -60000.0f;
 }
-
+#endif
 
 uint16 myRGB(sint32 r,  sint32 g, sint32 b)
 { 

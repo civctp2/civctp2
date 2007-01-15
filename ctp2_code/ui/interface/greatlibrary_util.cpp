@@ -65,7 +65,7 @@ const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
 		lower_case_filename[j] = tolower(lower_case_filename[j]);
 	}
 	
-	text = GreatLibrary::m_great_library_info->Look_Up_Data(lower_case_filename);
+	text = GreatLibrary::s_great_library_info->Look_Up_Data(lower_case_filename);
 	delete [] lower_case_filename;
 
 	if (text) 

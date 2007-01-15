@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The progress window displays the progress at loading and saving
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,15 +29,15 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "aui_uniqueid.h"
+#include "progresswindow.h"
+
 #include "aui_ldl.h"
+#include "aui_uniqueid.h"
 #include "c3_static.h"
 #include "c3ui.h"
 
-#include "progresswindow.h"
+extern C3UI *   g_c3ui;
 
-extern C3UI *g_c3ui;
-extern sint32 g_ScreenWidth;
 
 void ProgressWindow::BeginProgress(
 	ProgressWindow *&progwin,
@@ -87,14 +87,9 @@ void ProgressWindow::BeginProgress(
 
 void ProgressWindow::StartCountingTo( sint32 val, MBCHAR const * message )
 {
-	
 	if ( message )
 	{
 		m_message->SetText( message );
-	}
-	else
-	{
-		
 	}
 
 	m_pbar->SetCurValue(
@@ -104,7 +99,6 @@ void ProgressWindow::StartCountingTo( sint32 val, MBCHAR const * message )
 	m_prevValList.GetTail() = m_nextValList.GetTail();
 	m_nextValList.GetTail() = val;
 
-	
 	Draw();
 	g_c3ui->Draw();
 }
@@ -128,7 +122,6 @@ void ProgressWindow::EndProgress( ProgressWindow *&progwin )
 			delete progwin;
 			progwin = NULL;
 
-			
 			g_c3ui->Draw();
 			g_c3ui->SetBackgroundColor( k_AUI_UI_NOCOLOR );
 		}
@@ -189,14 +182,12 @@ ProgressWindow::~ProgressWindow()
 	{
 		RemoveChild( m_message->Id() );
 		delete m_message;
-		m_message = NULL;
 	}
 
 	if ( m_pbar )
 	{
 		RemoveChild( m_pbar->Id() );
 		delete m_pbar;
-		m_pbar = NULL;
 	}
 }
 

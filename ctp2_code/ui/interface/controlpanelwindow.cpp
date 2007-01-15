@@ -993,19 +993,9 @@ void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 
 void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-	
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT) 
 		return;
 
-	
-	uint32 type = LSS_SAVE_GAME;
-
-	extern bool g_e3Demo;
-	if(g_e3Demo && itemIndex != CP_MENU_ITEM_7)
-		
-		return;
-
-	
 	switch ((sint32)cookie)
 	{
    	case	CP_MENU_ITEM_0:
@@ -1025,10 +1015,9 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			
 			break;
    	case	CP_MENU_ITEM_5:
-		    if(!g_network.IsClient()) {
-				if ( g_network.IsActive() )
-					type = LSS_SAVE_MP;
-			
+		    if (!g_network.IsClient()) 
+            {
+                uint32 type = (g_network.IsActive()) ? LSS_SAVE_MP : LSS_SAVE_GAME;
 				g_isScenario = FALSE;
 				loadsavescreen_displayMyWindow( type );
 			}
@@ -1047,12 +1036,7 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			optionwarningscreen_displayMyWindow(OWS_QUITTOSHELL);
 			break;
 	case	CP_MENU_ITEM_9:	
-		    if(g_e3Demo) {
-				ExitGame();
-				exit(0);
-			} else {
-				optionwarningscreen_displayMyWindow(OWS_QUIT);
-			}
+			optionwarningscreen_displayMyWindow(OWS_QUIT);
 			break;
 	
 	case CP_MENU_ITEM_10:
