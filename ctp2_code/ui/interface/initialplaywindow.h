@@ -83,7 +83,6 @@ public:
 
 private:
     std::auto_ptr<ctp2_Button>  m_spriteTest;
-    std::auto_ptr<ctp2_Button>  m_sp;
     std::auto_ptr<ctp2_Button>  m_email;
     std::auto_ptr<ctp2_Button>  m_hotseat;
     std::auto_ptr<ctp2_Button>  m_mp;

@@ -33,6 +33,9 @@
 //
 //----------------------------------------------------------------------------
 
+/// \file   InitialPlayWindow.cpp
+/// \brief  The first window to display (defnitions).
+
 #include "c3.h"
 #include "initialplaywindow.h"
 
@@ -63,93 +66,62 @@ InitPlayWindow::InitPlayWindow
 )
 : 
     C3Window        (retval, id, ldlBlock, bpp, type, bevel),
-    m_spriteTest    (NULL),
-    m_sp            (NULL),
-    m_email         (NULL),
-    m_hotseat       (NULL),
-    m_mp            (NULL),
-    m_credits       (NULL),
-    m_quit          (NULL),
-    m_tutorial      (NULL), 
-    m_newgame       (NULL), 
-    m_loadgame      (NULL),
-    m_options       (NULL), 
+    m_spriteTest    (spNew_ctp2_Button
+                       (retval, ldlBlock, 
+		   		        "SpriteTestButton", "Sprite Test", spritetest_spPress, 
+                        "CTP2_BUTTON_TEXT_RIGHT_LARGE"
+                       )
+                    ),
+    m_email         (spNew_ctp2_Button
+                       (retval, ldlBlock, 
+		   		        "EmailButton", "Email",	initialplayscreen_emailPress, 
+                        "CTP2_BUTTON_TEXT_RIGHT_LARGE"
+                       )
+                    ),
+    m_hotseat       (spNew_ctp2_Button
+                       (retval, ldlBlock, 
+		   		        "HotSeatButton", "Hotseat", initialplayscreen_hotseatPress, 
+                        "CTP2_BUTTON_TEXT_RIGHT_LARGE"
+                       )
+                    ),
+    m_mp            (spNew_ctp2_Button
+                       (retval, ldlBlock, 
+		   		        "MPButton", "Multiplayer", initialplayscreen_mpPress, 
+                        "CTP2_BUTTON_TEXT_RIGHT_LARGE"
+                       )
+                    ),
+    m_credits       (spNew_ctp2_Button
+                       (retval, ldlBlock, 
+		   		        "CreditsButton", "Credits", initialplayscreen_creditsPress, 
+                        "CTP2_BUTTON_TEXT_RIGHT_LARGE"
+                       )
+                    ),
+    m_quit          (spNew_ctp2_Button
+                       (retval, ldlBlock, 
+		   		        "QuitButton", "Quit Out", initialplayscreen_quitPress, 
+                        "CTP2_BUTTON_TEXT_RIGHT_LARGE"
+                       )
+                    ),
+    // New buttons moved from the SP screen (code taken from spwindow.cpp)
+    m_tutorial      (spNew_ctp2_Button
+                       (retval, ldlBlock, "TutorialButton", initialplayscreen_tutorialPress)
+                    ),
+    m_newgame       (spNew_ctp2_Button
+                       (retval, ldlBlock, "NewGameButton", initialplayscreen_newgamePress)
+                    ),
+    m_loadgame      (spNew_ctp2_Button
+                       (retval, ldlBlock, "LoadGameButton", initialplayscreen_loadgamePress)
+                    ),
+    m_options       (spNew_ctp2_Button
+                       (retval, ldlBlock, "OptionsButton", initialplayscreen_optionsPress)
+                    ),
     m_background    (spNew_c3_Static(retval, ldlBlock, "Background")),
     m_testBox       (new ctp2_Static
                         (retval, aui_UniqueId(), "InitPlayWindow.TestTextBox")
                     )
 {
- 	m_spriteTest = spNew_ctp2_Button(retval,
-		   							ldlBlock, 
-		   							"SpriteTestButton",
-		   							"Sprite Test",
-		   							spritetest_spPress,
-		   							"CTP2_BUTTON_TEXT_RIGHT_LARGE");
 #ifndef _DEBUG
-	m_spriteTest->Hide();
+    m_spriteTest->Hide();
 #endif
-
-
-	
-	m_email	= spNew_ctp2_Button(retval,
-								ldlBlock, 
-								"EmailButton",
-								"Email",
-								initialplayscreen_emailPress,
-								"CTP2_BUTTON_TEXT_LEFT_LARGE");
-	
-	
-	
-	m_hotseat = spNew_ctp2_Button(retval,
-								  ldlBlock, 
-								  "HotseatButton",
-								  "Hotseat",
-								  initialplayscreen_hotseatPress,
-								  "CTP2_BUTTON_TEXT_LEFT_LARGE");
-   
-	
-	
-	m_mp = spNew_ctp2_Button(retval,
-							 ldlBlock, 
-							 "MPButton",
-							 "Multiplayer",
-							 initialplayscreen_mpPress,
-							 "CTP2_BUTTON_TEXT_LEFT_LARGE");
-
-	m_quit = spNew_ctp2_Button(retval,
-							   ldlBlock,
-							   "QuitButton",
-							   "Quit Out",
-							   initialplayscreen_quitPress,
-							   "CTP2_BUTTON_TEXT_LEFT_LARGE");
-
-	m_credits = spNew_ctp2_Button(retval,
-								  ldlBlock,
-								  "CreditsButton",
-								  "Credits",
-								  initialplayscreen_creditsPress,
-								  "CTP2_BUTTON_TEXT_RIGHT_LARGE");
-
-	// New buttons moved from the SP screen
-	// (code taken from spwindow.cpp (and altered))
-	m_newgame = spNew_ctp2_Button(retval,
-								  ldlBlock,
-								  "NewGameButton",
-								  initialplayscreen_newgamePress);
-
-	m_loadgame = spNew_ctp2_Button(retval,
-								   ldlBlock,
-								   "LoadGameButton",
-								   initialplayscreen_loadgamePress);
-	
-	m_tutorial = spNew_ctp2_Button(retval,
-								   ldlBlock,
-								   "TutorialButton",
-								   initialplayscreen_tutorialPress);
-
-	m_options = spNew_ctp2_Button(retval,
-								  ldlBlock,
-								  "OptionsButton",
-								  initialplayscreen_optionsPress);
 }
 

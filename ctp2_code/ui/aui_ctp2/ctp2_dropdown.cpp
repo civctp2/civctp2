@@ -61,7 +61,6 @@ ctp2_DropDown::ctp2_DropDown(
 
 	*retval = CreateComponents(NULL);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -95,7 +94,6 @@ ctp2_DropDown::ctp2_DropDown(
 
 	*retval = CreateComponents(ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -125,20 +123,18 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			AddChild(m_staticPane);
 		}
-	}
 
-	if ( ldlBlock )
-	{
-		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
+        sprintf(block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
+		aui_Ldl::BuildHierarchyFromRoot(std::string(ldlBlock).append(".autobutton").c_str());
+        m_button = static_cast<aui_Button*>(aui_Ldl::GetObject(ldlBlock, "autobutton"));
 
-		aui_Ldl::BuildHierarchyFromRoot(const_cast<MBCHAR*>(
-			std::string(ldlBlock).append(".autobutton").c_str()));
-		if((m_button = static_cast<aui_Button*>(
-			aui_Ldl::GetObject(ldlBlock, "autobutton")))) {
+		if (m_button) 
+        {
 			m_button->SetActionFuncAndCookie(DropDownButtonActionCallback, this);
 			m_buttonSize = 0;
-        } else if (aui_Ldl::FindDataBlock( block ) ) {
-			
+        } 
+        else if (aui_Ldl::FindDataBlock(block)) 
+        {
 			m_button = new aui_Button(
 				&errcode,
 				aui_UniqueId(),
@@ -166,27 +162,6 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         if (aui_Ldl::FindDataBlock( block ) ) {
 			m_listBoxWindow = new aui_Window(
@@ -293,11 +268,7 @@ AUI_ERRCODE ctp2_DropDown::RepositionListBoxWindow( void )
 
 AUI_ERRCODE ctp2_DropDown::Draw(aui_Surface *surface, sint32 x, sint32 y)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-	
-	errcode = DrawChildren( surface, x, y );
-
+	AUI_ERRCODE errcode = DrawChildren( surface, x, y );
 	
 	if(!IsHidden() && (errcode == AUI_ERRCODE_OK))
 		DrawThis( surface, x, y );

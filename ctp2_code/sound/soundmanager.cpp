@@ -395,18 +395,22 @@ void SoundManager::Process(const uint32 &target_milliseconds,
 }
 
 
-BOOL FindSoundinList(PointerList<CivSound> *sndList, CivSound *sound)
+bool FindSoundinList(PointerList<CivSound> * sndList, sint32 soundID)
 {
-	
-	PointerList<CivSound>::Walker walk(sndList);
-	while(walk.IsValid()) {
-		if (walk.GetObj()->GetSoundID() == sound->GetSoundID())
+    for 
+    (
+	    PointerList<CivSound>::Walker walk(sndList);
+	    walk.IsValid();
+        walk.Next()
+    ) 
+    {
+		if (walk.GetObj()->GetSoundID() == soundID)
 		{
-			return TRUE;
+			return true;
 		}
-		walk.Next();
 	}
-	return FALSE;
+
+	return false;
 }
 
 void
@@ -421,31 +425,35 @@ SoundManager::AddSound(const SOUNDTYPE &type,
                        const uint32 &associatedObject,
                        const sint32 &soundID, sint32 x, sint32 y)
 {
-	CivSound	*sound;
-	BOOL		found = FALSE;
-
 	if (m_noSound) return;
 
-	if (m_usePlaySound) {
+	if (m_usePlaySound) 
+    {
 		StupidPlaySound(soundID);
-
 		return;
 	}
 	
-	sound = new CivSound(associatedObject, soundID);
+    bool        found   = false;
+    CivSound *  sound   = new CivSound(associatedObject, soundID);
 	
-	switch (type) {
+	switch (type) 
+    {
+    default:
+//  case SOUNDTYPE_MUSIC:
+        break;
+
 	case SOUNDTYPE_SFX:
 		sound->SetVolume(m_sfxVolume);
-		found = FindSoundinList(m_sfxSounds, sound);
+		found = FindSoundinList(m_sfxSounds, soundID);
 		if (!found)
 		{
 			m_sfxSounds->AddTail(sound);
 		}
 		break;
+
 	case SOUNDTYPE_VOICE:
 		sound->SetVolume(m_voiceVolume);
-		found = FindSoundinList(m_voiceSounds, sound);
+		found = FindSoundinList(m_voiceSounds, soundID);
 		if (!found)
 		{
 			m_voiceSounds->AddTail(sound);
@@ -453,7 +461,12 @@ SoundManager::AddSound(const SOUNDTYPE &type,
 		break;
 	}
 
-	if (!found)
+	if (found)
+    {
+        // This sound was already being played
+        delete sound;   
+    }
+    else
 	{
 #if !defined(USE_SDL)
 		AIL_quick_play(sound->GetHAudio(), 1);	
@@ -462,9 +475,7 @@ SoundManager::AddSound(const SOUNDTYPE &type,
         sound->SetChannel(channel);
 #endif
 		sound->SetIsPlaying(TRUE);
-	} else {
-		delete sound;
-	}
+	} 
 }
 
 void
@@ -472,32 +483,31 @@ SoundManager::AddLoopingSound(const SOUNDTYPE &type,
                               const uint32 &associatedObject,
                               const sint32 &soundID, sint32 x, sint32 y)
 {
-	CivSound	*sound;
-	CivSound	*existingSound = FindLoopingSound(type, associatedObject);
-
 	if (m_noSound) return;
 
-	if (m_usePlaySound) {
+	if (m_usePlaySound) 
+    {
 		StupidPlaySound(soundID);
+        return;
+    }
 
-		return;
-	}
+	CivSound *  existingSound   = FindLoopingSound(type, associatedObject);
 
-	
-	if (existingSound) {
-		if (existingSound->GetSoundID() == soundID)
-			return;
-	}
+	if (existingSound && (existingSound->GetSoundID() == soundID)) return;
 
-	
-	sound = new CivSound(associatedObject, soundID);
+	CivSound *  sound           = new CivSound(associatedObject, soundID);
 
-	
-	switch (type) {
+	switch (type) 
+    {
+    default:
+        delete sound;
+        return;
+
 	case SOUNDTYPE_SFX:
 		sound->SetVolume(m_sfxVolume);
 		m_sfxSounds->AddTail(sound);
 		break;
+
 	case SOUNDTYPE_VOICE:
 		sound->SetVolume(m_voiceVolume);
 		m_voiceSounds->AddTail(sound);

@@ -107,9 +107,9 @@ AUI_ERRCODE aui_Switch::InitCommon( sint32 state, sint32 numStates )
 sint32 aui_Switch::SetState( sint32 state )
 {
 	sint32 prevState = m_state;
+	m_state = state;
 
-	
-	if ((m_state = state))
+	if (m_state)
 	{
 		
 		

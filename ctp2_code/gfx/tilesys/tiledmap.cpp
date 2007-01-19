@@ -1463,9 +1463,10 @@ void TiledMap::BreakMegaTile(MapPoint &pos)
 	RedrawTile(&pos);
 
 	MapPoint	curPos = pos;
-	sint32	next;
-	while ((next = tileInfo->GetNextMega())) {
-		switch (next) {
+	while (sint32 next = tileInfo->GetNextMega()) 
+    {
+		switch (next) 
+        {
 		case k_MEGATILE_DIRECTION_N : 
 			curPos.GetNeighborPosition(NORTHWEST, curPos); 
 			break;
@@ -1490,9 +1491,10 @@ void TiledMap::BreakMegaTile(MapPoint &pos)
 
 	
 	curPos = pos;
-	sint32 	last;
-	while ((last = tileInfo->GetLastMega())) {
-		switch (last) {
+	while (sint32 last = tileInfo->GetLastMega()) 
+    {
+		switch (last) 
+        {
 		case k_MEGATILE_DIRECTION_N : 
 			curPos.GetNeighborPosition(NORTHWEST, curPos); 
 			break;
@@ -1533,32 +1535,26 @@ void TiledMap::ReloadGoodActors(void)
 	Assert (g_theWorld);
 	if (g_theWorld == NULL) return;
 
-	MapPoint		pos;
-	
 	LOADTYPE const	loadType = (g_theProfileDB->IsGoodAnim()) ? LOADTYPE_FULL : LOADTYPE_BASIC;
 
 	for (sint16 i = 0; i < m_mapBounds.bottom; ++i) 
 	{
 		for (sint16 j = 0; j < m_mapBounds.right; ++j) 
 		{
-			pos.x = j;
-			pos.y = i;
-			
-			TileInfo * theTileInfo = g_theWorld->GetTileInfoStoragePtr(pos);
+			TileInfo *  theTileInfo = g_theWorld->GetTileInfoStoragePtr(MapPoint(j, i));
+
 			if (theTileInfo) 
 			{
 				GoodActor * goodActor = theTileInfo->GetGoodActor();
-				if (goodActor) {
-					
-					if (goodActor->GetLoadType() != loadType) {
-						
-						if (loadType == LOADTYPE_FULL) {
-							
-							goodActor->FullLoad();
-						} else {
-							
-							goodActor->DumpFullLoad();
-						}
+				if (goodActor && (goodActor->GetLoadType() != loadType))
+                {
+					if (loadType == LOADTYPE_FULL) 
+                    {
+						goodActor->FullLoad();
+					} 
+                    else 
+                    {
+						goodActor->DumpFullLoad();
 					}
 				}
 			}

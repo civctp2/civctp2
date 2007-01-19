@@ -1,4 +1,40 @@
- 74
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : Color definitions
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added color definitions for players 17 - 32 (Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+#
+# NOTES: This file (colors00.txt) contains the original Activision color 
+#        scheme. 
+#
+#        If you don't like these colors, do not change this file, but create 
+#        and/or use another one. See colors01.txt, colors02.txt, etc. for 
+#        some examples. 
+#
+#        You can define which color set to use by modifiying the number at 
+#        the ColorSet line in userprofile.txt.
+#
+#----------------------------------------------------------------------------
+
+74
 COLORSET
 {
 	COLORSET_COLOR	0	0	0	#	COLOR_BLACK
@@ -9,28 +45,27 @@ COLORSET
 	COLORSET_COLOR	0	0	255	#	COLOR_BLUE
 
 	COLORSET_COLOR	255	255	0	#	COLOR_YELLOW
-	COLORSET_COLOR	255	128	0	#	COLOR_ORANGE
+	COLORSET_COLOR	255	179	69	#	COLOR_ORANGE
 	COLORSET_COLOR	255	0	255	#	COLOR_PURPLE
 	COLORSET_COLOR	0	128	0	#	COLOR_DARK_GREEN
 
-COLORSET_COLOR		32	32	32	#	COLOR_PLAYER0  - black
-COLORSET_COLOR		0	96	255	#	COLOR_PLAYER1  - blue
-COLORSET_COLOR		192	0	32	#	COLOR_PLAYER2 - bordeaux red
-COLORSET_COLOR		255	160	0	#	COLOR_PLAYER3  - orange
-COLORSET_COLOR		0	128	0	#	COLOR_PLAYER4  - dark green
-COLORSET_COLOR		255	160	160	#	COLOR_PLAYER5  - pink
-COLORSET_COLOR		255	224	0	#	COLOR_PLAYER6  - yellow
-COLORSET_COLOR		128	192	255	#	COLOR_PLAYER7  - sky blue
-COLORSET_COLOR		128	0	128	#	COLOR_PLAYER8  - violet
-COLORSET_COLOR		128	64	32	#	COLOR_PLAYER9  - dark brown
-
-COLORSET_COLOR		112	112	112 	#	COLOR_PLAYER10  - grey
-COLORSET_COLOR		0	255	0	#	COLOR_PLAYER11 - green
-COLORSET_COLOR		255	0	255	#	COLOR_PLAYER12 - magenta
-COLORSET_COLOR		255	96	0	#	COLOR_PLAYER13 - dark orange
-COLORSET_COLOR		0	0	176	#	COLOR_PLAYER14 - dark blue
-COLORSET_COLOR		128	0	255	#	COLOR_PLAYER15 - blue violet
-COLORSET_COLOR		64	64	64	#	COLOR_PLAYER16 - anthracite
+COLORSET_COLOR		196	0	38	#	COLOR_PLAYER0  - red
+COLORSET_COLOR		0	0	255	#	COLOR_PLAYER1  - blue
+COLORSET_COLOR		255	128	0	#	COLOR_PLAYER2  - orange
+COLORSET_COLOR		0	135	64	#	COLOR_PLAYER3
+COLORSET_COLOR		225	104	113	#	COLOR_PLAYER4   		
+COLORSET_COLOR		138	59	204	#	COLOR_PLAYER5   			
+COLORSET_COLOR		89	132	189	#	COLOR_PLAYER6   			
+COLORSET_COLOR		153	0	80	#	COLOR_PLAYER7   			
+COLORSET_COLOR		137	98	53	#	COLOR_PLAYER8   			
+COLORSET_COLOR		90	173	109 	#	COLOR_PLAYER9  		
+COLORSET_COLOR		248	149	182 	#	COLOR_PLAYER10  			
+COLORSET_COLOR		0	160	221	#	COLOR_PLAYER11  			
+COLORSET_COLOR		94	94	94	#	COLOR_PLAYER12  			
+COLORSET_COLOR		35	0	135 	#	COLOR_PLAYER13  		
+COLORSET_COLOR		199	159	109	#	COLOR_PLAYER14  			
+COLORSET_COLOR		138	202	15	#	COLOR_PLAYER15 		
+COLORSET_COLOR		86	53	13	#	COLOR_PLAYER16
 
 COLORSET_COLOR		64	160	255	#	COLOR_PLAYER17 - light blue
 COLORSET_COLOR		64	192	64	#	COLOR_PLAYER18 - lime green
@@ -48,8 +83,7 @@ COLORSET_COLOR		192	0	192	#	COLOR_PLAYER29 - orchid purple
 COLORSET_COLOR		208	160	144	#	COLOR_PLAYER30 - brown violet
 COLORSET_COLOR		192	192	128	#	COLOR_PLAYER31 - khaki
 COLORSET_COLOR		192	160	128	#	COLOR_PLAYER32 - beige
-#COLORSET_COLOR		153	0	36	#	Tyrian Red/Purple
-#COLORSET_COLOR		102	2	60	#	Tyrian Red/Purple wikipedia
+
 
 # RADAR MAP BASE TILE COLORS:  1 COLOR FOR EACH TYPE.
 	#COLORSET_COLOR	85	105	10	#	COLOR_TERRAIN_0
@@ -104,7 +138,7 @@ COLORSET_COLOR		192	160	128	#	COLOR_PLAYER32 - beige
 	COLORSET_COLOR	221	185	100	 #	Plains
 	COLORSET_COLOR	204	208	211	 # 	Tundra
 	COLORSET_COLOR	220	220	230	 # 	Glacier
-	COLORSET_COLOR	117	150	57	 # 	Grassland +8 gr LOQ 2004-02-16
+	COLORSET_COLOR	117	142	57	 # 	Grassland
 	COLORSET_COLOR	208	199	160 	 # 	Desert
 	COLORSET_COLOR	45	122	87	 # 	Swamp
 	COLORSET_COLOR	57	120	54	 # 	Jungle

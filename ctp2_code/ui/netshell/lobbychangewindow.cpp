@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer lobby window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -66,7 +66,6 @@ LobbyChangeWindow::LobbyChangeWindow(
 
 	*retval = CreateControls();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -190,12 +189,8 @@ void LobbyChangeWindow::Update(void)
 
 AUI_ERRCODE LobbyChangeWindow::Idle( void )
 {
-	NETFunc::Message *m;
-	
-	while(m = g_netfunc->GetMessage()) {
-		
-		
-		
+    while (NETFunc::Message * m = g_netfunc->GetMessage()) 
+    {
 		g_netfunc->HandleMessage(m);
 
 		switch ( m->GetCode() )

@@ -111,12 +111,12 @@ class aui_StringTable;
 // Declarations
 //----------------------------------------------------------------------------
 
-sint32 spnewgamescreen_displayMyWindow();
-sint32 spnewgamescreen_removeMyWindow(uint32 action);
-sint32 spnewgamescreen_setPlayerName( const MBCHAR *name );
+sint32      spnewgamescreen_displayMyWindow();
+sint32      spnewgamescreen_removeMyWindow(uint32 action);
+sint32      spnewgamescreen_setPlayerName( const MBCHAR *name );
 AUI_ERRCODE spnewgamescreen_Initialize( void );
-AUI_ERRCODE spnewgamescreen_Cleanup();
-sint32 spnewgamescreen_update( void );
+void        spnewgamescreen_Cleanup();
+sint32      spnewgamescreen_update( void );
 
 
 

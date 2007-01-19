@@ -24,8 +24,15 @@
 //
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef LDL_DATA_HPP
 #define LDL_DATA_HPP
+
+class ldl_datablock;
 
 #include "pointerlist.h"
 #include "ldl_list.h"
@@ -54,7 +61,7 @@ class ldl_datablock {
 	ldl_datablock(PointerList<char> *templateNames);
 	ldl_datablock(ldl_datablock *tempChild);
 	ldl_datablock(sint32 hash);
-	ldl_datablock(ldl *theLdl, char *name);
+	ldl_datablock(ldl *theLdl, char const * name);
 
 	~ldl_datablock();
 	const char *GetName() { return m_name; }

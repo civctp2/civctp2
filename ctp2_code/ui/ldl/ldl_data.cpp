@@ -18,12 +18,16 @@
 #include "ldlif.h"
 
 ldl_datablock::ldl_datablock(PointerList<char> *templateNames)
+:
+	m_templates     (),
+    m_children      (),
+    m_attributes    (),
+    m_parent        (NULL),
+    m_name          (NULL),
+    m_hash          (0)
 {
 	PointerList<char>::Walker walk(templateNames);
 
-	m_parent = NULL;
-
-	
 	Assert(walk.IsValid());
 	m_name = walk.GetObj();
 	walk.Next();
@@ -41,14 +45,22 @@ ldl_datablock::ldl_datablock(PointerList<char> *templateNames)
 }
 
 ldl_datablock::ldl_datablock(ldl_datablock *copy)
+:
+	m_templates     (),
+    m_children      (),
+    m_attributes    (),
+    m_parent        (NULL),
+    m_name          (copy->m_name),
+    m_hash          (0)
 {
-	m_name = copy->m_name;
-	m_parent = NULL;
-	ldl_attribute *attr = copy->m_attributes.GetHead();
-
-	for(; attr; attr = copy->m_attributes.GetNext(attr)) {
-		ldl_attribute *newattr = attr->GetCopy();
-		m_attributes.AddTail(newattr);
+	for
+    (	
+        ldl_attribute * attr = copy->m_attributes.GetHead();
+        attr; 
+        attr = copy->m_attributes.GetNext(attr)
+    ) 
+    {
+		m_attributes.AddTail(attr->GetCopy());
 	}
 
 	PointerList<ldl_datablock>::Walker bwalk(&copy->m_children);
@@ -62,16 +74,24 @@ ldl_datablock::ldl_datablock(ldl_datablock *copy)
 }
 
 ldl_datablock::ldl_datablock(sint32 hash)
-{ 
-	m_hash = hash; 
-	m_parent = NULL;
-	m_name = NULL;
-}
+:
+	m_templates     (),
+    m_children      (),
+    m_attributes    (),
+    m_parent        (NULL),
+    m_name          (NULL),
+    m_hash          (hash)
+{ }
 
-ldl_datablock::ldl_datablock(ldl *theLdl, char *name)
+ldl_datablock::ldl_datablock(ldl *theLdl, char const * name)
+:
+	m_templates     (),
+    m_children      (),
+    m_attributes    (),
+    m_parent        (NULL),
+    m_name          (ldlif_getnameptr(name)),
+    m_hash          (0)
 {
-	m_name = ldlif_getnameptr(name);
-	m_parent = NULL;
 	ldlif_add_block_to_tree(this);
 }
 
@@ -118,13 +138,17 @@ ldl_attribute *ldl_datablock::GetLastAttribute( void )
 
 ldl_attribute *ldl_datablock::GetAttribute( const char *szName )
 {
-	ldl_attribute *atr;
+	char * strPtr = ldlif_getnameptr(szName);
 
-	
-	char *strPtr = ldlif_getnameptr(szName);
-
-	for (atr = m_attributes.GetHead(); atr; atr = m_attributes.GetNext(atr)) {
-		if (atr->GetName() == strPtr) {
+	for 
+    (
+        ldl_attribute * atr = m_attributes.GetHead(); 
+        atr; 
+        atr = m_attributes.GetNext(atr)
+    ) 
+    {
+		if (atr->GetName() == strPtr) 
+        {
 			return atr;
 		}
 	}

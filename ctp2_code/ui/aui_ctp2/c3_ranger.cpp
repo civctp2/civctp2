@@ -241,10 +241,8 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				return AUI_ERRCODE_MEMALLOCFAILED;
 
 			sint32 i = 2;
-			ldl_datablock *dataBlock;
-
-			sprintf( block, "RangerRight" );
-            if ((dataBlock = aui_Ldl::GetLdl()->FindDataBlock( block )))
+			sprintf(block, "RangerRight");
+            if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -295,7 +293,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			i = 3;
 			sprintf( block, "RangerLeft" );
-            if ((dataBlock = aui_Ldl::GetLdl()->FindDataBlock( block )))
+            if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -348,10 +346,8 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				return AUI_ERRCODE_MEMALLOCFAILED;
 
 			sint32 i = 0;
-			ldl_datablock *dataBlock;
-
-			sprintf( block, "RangerDown" );
-            if ((dataBlock = aui_Ldl::GetLdl()->FindDataBlock( block )))
+			sprintf(block, "RangerDown");
+            if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -400,8 +396,8 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 				return AUI_ERRCODE_MEMALLOCFAILED;
 
 			i = 1;
-			sprintf( block, "RangerUp" );
-            if ((dataBlock = aui_Ldl::GetLdl()->FindDataBlock( block )))
+			sprintf(block, "RangerUp");
+            if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,

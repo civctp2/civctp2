@@ -423,7 +423,7 @@ public:
     void SetMessageAdvice(BOOL val)				{ m_messageAdvice = val; }
 
     void SetTutorialAdvice(BOOL val);
-    void ProfileDB::SetEnemyMoves(BOOL val)		{ m_enemyMoves = val; }
+    void SetEnemyMoves(BOOL val)		{ m_enemyMoves = val; }
     void SetRevoltWarning(BOOL val)				{ m_revoltWarning = val; }
     void SetEnemyIntrude(BOOL val)				{ m_enemyIntrude = val; }
     void SetUnitLostWarning(BOOL val)			{ m_unitLostWarning = val; }

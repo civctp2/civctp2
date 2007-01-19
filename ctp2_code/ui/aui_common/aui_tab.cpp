@@ -155,9 +155,9 @@ aui_Tab::~aui_Tab()
 sint32 aui_Tab::SetState( sint32 state )
 {
 	sint32 prevState = m_state;
-
+	m_state = state;
 	
-	if ((m_state = state))
+    if (m_state)
 	{
 		
 		

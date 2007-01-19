@@ -95,33 +95,27 @@ struct aui_LdlObject
 class aui_Ldl : public aui_Base
 {
 public:
-	
-	aui_Ldl(
-		AUI_ERRCODE *retval,
-		MBCHAR const * ldlFilename );
+	aui_Ldl
+    (
+		AUI_ERRCODE *   retval,
+		MBCHAR const *  ldlFilename 
+    );
 	virtual ~aui_Ldl();
 
-protected:
-	aui_Ldl() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR const * ldlFilename );
-
 public:
+	static bool			IsValid(MBCHAR const * ldlBlock);
+	static ldl *        GetLdl( void ) { return s_ldl; }
 	
-	static BOOL			IsValid( MBCHAR *ldlBlock );
-
-	static ldl			*GetLdl( void ) { return s_ldl; }
-
-	
-	static AUI_ERRCODE	Associate( void *object, MBCHAR *ldlBlock );
+	static AUI_ERRCODE	Associate( void *object, MBCHAR const * ldlBlock);
 	static AUI_ERRCODE	Remove( void *object );
-	static AUI_ERRCODE	Remove( MBCHAR *ldlBlock );
+	static AUI_ERRCODE	Remove(MBCHAR const * ldlBlock);
 	static MBCHAR		*GetBlock( void *object );
 	static void			*GetObject(const MBCHAR *ldlBlock);
 	static void			*GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock);
 	
 	
 	static AUI_ERRCODE	SetupHeirarchyFromRoot(MBCHAR const * rootBlock);
-	static AUI_ERRCODE	SetupHeirarchyFromLeaf(MBCHAR *leafBlock, aui_Region *object );
+	static AUI_ERRCODE	SetupHeirarchyFromLeaf(MBCHAR * leafBlock, aui_Region *object);
 
 	
 	
@@ -168,9 +162,12 @@ public:
 	
 	
 	
-	static AUI_ERRCODE  SetActionFuncAndCookie(MBCHAR *ldlBlock, 
-												aui_Control::ControlActionCallback *actionFunc,
-												void *cookie = NULL);
+	static AUI_ERRCODE  SetActionFuncAndCookie
+    (
+        MBCHAR const *                          ldlBlock, 
+	    aui_Control::ControlActionCallback *    actionFunc,
+		void *                                  cookie          = NULL
+    );
 	static AUI_ERRCODE  SetActionFuncAndCookie
     (
         MBCHAR const *                          parentBlock, 
@@ -179,21 +176,20 @@ public:
 		void *                                  cookie          = NULL
     );
 	
-	
 	static AUI_ERRCODE	DetachHierarchy(aui_Region *root);
 
 	
-	static void			ModifyAttributes( MBCHAR *ldlBlock, aui_Dimension *dimension );
+	static void			ModifyAttributes( MBCHAR const *ldlBlock, aui_Dimension * dimension);
 
 
 	
-	static sint32		GetIntDependent( MBCHAR *strPtr );
-    static ldl_datablock * FindDataBlock(MBCHAR * ldlBlock);
+	static sint32		    GetIntDependent(MBCHAR const * strPtr);
+    static ldl_datablock *  FindDataBlock(MBCHAR const * ldlBlock);
 
 protected:
 	static void			DeleteLdlObject( aui_LdlObject *ldlObject );
 
-	static AUI_ERRCODE	MakeSureBlockExists( MBCHAR *ldlBlock );
+	static AUI_ERRCODE	MakeSureBlockExists(MBCHAR const * ldlBlock);
 	static AUI_ERRCODE	MakeSureDefaultTemplateExists( void );
 
 	static AUI_ERRCODE	AppendLdlObject(aui_LdlObject *object);
@@ -209,6 +205,10 @@ protected:
 	static AvlTree<aui_LdlObject *>		*s_objectListByString;
 
 	static sint32						s_ldlRefCount;
+
+private:
+	AUI_ERRCODE InitCommon( MBCHAR const * ldlFilename );
+
 };
 
 
