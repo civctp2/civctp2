@@ -4351,6 +4351,7 @@ UNIT_ELEPHANT_WARRIOR {
    MovementType: Land
    Size: Large
    VisionClass: Standard
+   GLHidden
 
    CanReform {
       Sound SOUND_ID_REFORM_CITY

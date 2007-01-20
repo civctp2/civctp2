@@ -25,6 +25,7 @@
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
 #
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -3216,6 +3217,7 @@ str_profile_CityClick                           "Sélectionner la ville au lieu d
 str_profile_DebugSlic                           "Messages du débogueur de Slic"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
 str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_Upgrade                             "Unit upgrading"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"0ptions Musique"

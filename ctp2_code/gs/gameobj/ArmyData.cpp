@@ -10864,6 +10864,9 @@ bool ArmyData::NearestUnexplored(MapPoint &pos) const
 
 void ArmyData::Upgrade()
 {
+	if(!g_theProfileDB->GetValueByName("Upgrade"))
+		return;
+
 	// Should be moved to an event
 	if(g_player[m_owner]->HasFreeUnitUpgrades()
 //	|| Position allows free upgrades

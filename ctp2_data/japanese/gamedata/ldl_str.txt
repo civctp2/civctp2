@@ -3194,6 +3194,7 @@ str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
 str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_Upgrade                             "Unit upgrading"
 
 ### Great Libary Strings ###
 

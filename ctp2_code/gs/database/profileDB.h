@@ -246,7 +246,7 @@ private:
 
     sint32 m_max_players;
 
-    MAPSIZE	m_mapSize;
+    MAPSIZE m_mapSize;
 
     sint32 m_alienEndGame;
 
@@ -345,9 +345,11 @@ private:
     /// Allow the application to run in the background with autoturn
     sint32 m_runInBackground;      
     /// Automatically expiry treaties after a number of turns
-    sint32 m_autoExpireTreatyTurn; 
+    sint32 m_autoExpireTreatyTurn;
     /// Enable city capture options pop-up
-    sint32 m_cityCaptureOptions;    
+    sint32 m_cityCaptureOptions;
+    /// Enable unit upgrade
+    sint32 m_upgrade;
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;

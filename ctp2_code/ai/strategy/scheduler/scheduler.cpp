@@ -78,12 +78,12 @@ namespace
 //
 // Description: Determine whether a goal is valid in a given context
 //
-// Parameters : a_Goal			: the goal (type)
-//				a_Context		: the context
+// Parameters : a_Goal          : the goal (type)
+//              a_Context       : the context
 //
 // Globals    : -
 //
-// Returns    : bool			: the goal is valid in the context
+// Returns    : bool            : the goal is valid in the context
 //
 // Remark(s)  : -
 //
@@ -94,7 +94,7 @@ namespace
 	    Scheduler::Sorted_Goal_List_Vector 	const &     a_Context
 	)
 	{
-		return static_cast<size_t>(a_Goal) < a_Context.size(); 	
+		return static_cast<size_t>(a_Goal) < a_Context.size();
 	};
 
 } // namespace
@@ -115,10 +115,10 @@ uint32 Scheduler::m_allyRegardCache           =  0;
 
 void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
-    s_theSchedulers.resize(newMaxPlayerId + 1); // 1 extra for the Barbarians
+	s_theSchedulers.resize(newMaxPlayerId + 1); // 1 extra for the Barbarians
 
-    for (size_t i = 0; i <= newMaxPlayerId; ++i)
-    {
+	for (size_t i = 0; i <= newMaxPlayerId; ++i)
+	{
 		s_theSchedulers[i].SetPlayerId(i);
 	}
 }
@@ -170,25 +170,25 @@ void Scheduler::ValidateAll()
 
 void Scheduler::CleanupAll(void)
 {
-    Scheduler_Vector().swap(s_theSchedulers);
+	Scheduler_Vector().swap(s_theSchedulers);
 }
 
 Scheduler::Scheduler()
-{	
+{
 	m_playerId = -1;
 	
-	Initialize();	
+	Initialize();
 }
 
 Scheduler::Scheduler(const Scheduler &scheduler)
-{	
+{
 	m_playerId = -1;
 
 	*this = scheduler;
 }
 
 Scheduler::~Scheduler()
-{	
+{
 	Cleanup();
 }
 
@@ -197,7 +197,7 @@ Scheduler& Scheduler::operator= (const Scheduler &scheduler)
 	Assert(m_playerId == -1);
 	Assert(scheduler.m_playerId == -1);
 
-	Initialize();	
+	Initialize();
 
 	return *this;
 }
@@ -270,7 +270,6 @@ void Scheduler::Initialize()
 	m_total_agents = 0;
 	m_matches.clear();
 	m_current_plan_iter = m_matches.end();
-//	m_AllIsExplored = false;
 }
 
 void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
@@ -371,8 +370,8 @@ void Scheduler::Reset_Squad_Execution()
 	while (squad_ptr_iter != m_squads.end()) 
 	{
 		(*squad_ptr_iter)->Set_Can_Be_Executed(true);
-        squad_ptr_iter++;
-    }
+		squad_ptr_iter++;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -449,7 +448,7 @@ bool Scheduler::Sort_Matches()
 			continue;
 		}
 		
-        if(first_turn_of_war
+		if(first_turn_of_war
 		|| plan_iter->Commited_Agents_Need_Orders()
 		|| m_playerId == 0
 		|| plan_iter->CanMatchesBeReevaluated())
@@ -765,7 +764,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 {
-	
 	m_new_goals.push_back(new_goal);
 }
 
@@ -833,7 +831,7 @@ void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
 	Sorted_Goal_List &	goalList	= m_goals_of_type[rec->GetIndex()];
 	for 
 	(
-		Sorted_Goal_Iter	sorted_goal_iter	= goalList.begin();
+		Sorted_Goal_Iter sorted_goal_iter = goalList.begin();
 		sorted_goal_iter != goalList.end();
 		sorted_goal_iter = Remove_Goal(sorted_goal_iter)
 	)
@@ -847,7 +845,7 @@ bool Scheduler::Validate() const
 #ifdef _DEBUG_SCHEDULER
 	Sorted_Goal_List::const_iterator sorted_goal_iter;
 
-	for (sint32 goal_type = 0;	goal_type < g_theGoalDB->NumRecords(); goal_type++) 
+	for (sint32 goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++) 
 	{
 		sorted_goal_iter = m_goals_of_type[goal_type].begin();
 		while (sorted_goal_iter != m_goals_of_type[goal_type].end()) 
@@ -892,7 +890,7 @@ Scheduler::Sorted_Goal_List Scheduler::Get_Top_Goals(const int &number) const
 //----------------------------------------------------------------------------
 sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const 
 {
-	sint32	total_value	= 0;
+	sint32	total_value = 0;
 
 	if (IsValid(type, m_goals_of_type))
 	{
@@ -904,7 +902,7 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 			++sorted_goal_iter
 		)
 		{
-			CTPGoal_ptr	const	ctp_goal_ptr = 
+			CTPGoal_ptr const ctp_goal_ptr = 
 				static_cast<CTPGoal_ptr const>(sorted_goal_iter->second);
 
 			if(ctp_goal_ptr->Get_Invalid()		||
@@ -930,18 +928,19 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 //
 // Description: Get the highest valued goal of a given type.
 //
-// Parameters : type		: type of goal
-//				satisfied	: consider satisfied/unsatisfied goals only
+// Parameters : type        : type of goal
+//              satisfied   : consider satisfied/unsatisfied goals only
 //
 // Globals    : -
 //
 // Returns    : sint32	: sum of value of the unsatisfied goals of type type.
 //
-// Remark(s)  : Returns the first found goal that matches the parameters. The list m_goals_of_type[type]
-//              is ordered by raw priority.
+// Remark(s)  : Returns the first found goal that matches the parameters.
+//              The list m_goals_of_type[type] is ordered by raw priority.
 //
 //              Used in governor to give advice on what city to defend
-//              and in ThreatenedCity_MotivationEvent to trigger MOTIVATION_FEAR_CITY_DEFENSE
+//              and in ThreatenedCity_MotivationEvent to trigger
+//              MOTIVATION_FEAR_CITY_DEFENSE
 //
 //----------------------------------------------------------------------------
 Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const 
@@ -959,9 +958,9 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 			CTPGoal_ptr	const	ctp_goal_ptr = 
 				static_cast<CTPGoal_ptr const>(sorted_goal_iter->second);
 		
-			if (ctp_goal_ptr->Get_Invalid()					||
-				(satisfied != ctp_goal_ptr->Is_Satisfied())	||
-				ctp_goal_ptr->ArmiesAtGoal()
+			if (ctp_goal_ptr->Get_Invalid()                 ||
+			    (satisfied != ctp_goal_ptr->Is_Satisfied()) ||
+			    ctp_goal_ptr->ArmiesAtGoal()
 			   )
 			{
 				// Goal does not match: try next.
@@ -986,8 +985,8 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 {
 	return IsValid(type, m_goals_of_type) 
-		   ? m_goals_of_type[type].size() 
-		   : 0;
+	       ? m_goals_of_type[type].size() 
+	       : 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1070,14 +1069,14 @@ bool Scheduler::Prioritize_Goals()
 	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	for (goal_type = 0;	goal_type < g_theGoalDB->NumRecords(); goal_type++) {
-		
+
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n\n "));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// %s \n",g_theGoalDB->Get(goal_type)->GetNameText()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n\n"));
-    AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
-    ("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
-    this));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+	("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
+	this));
 		
 		sorted_goal_iter = m_goals_of_type[goal_type].begin();
 		while(sorted_goal_iter != m_goals_of_type[goal_type].end())
@@ -1144,7 +1143,7 @@ bool Scheduler::Prioritize_Goals()
 		m_committed_agents = committed_agents;
 	}
 
-    return true;
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1168,11 +1167,11 @@ bool Scheduler::Prioritize_Goals()
 //////////////////////////////////////////////////////////////////////////
 bool Scheduler::Prune_Goals()
 {
-	m_pruned_goals_count.assign(g_theGoalDB->NumRecords(), 0); 
-	
+	m_pruned_goals_count.assign(g_theGoalDB->NumRecords(), 0);
+
 	Sorted_Goal_Iter goal_ptr_iter;
 	Sorted_Goal_Iter pruned_goal_iter;
- 	Sorted_Goal_Iter tmp_goal_iter;
+	Sorted_Goal_Iter tmp_goal_iter;
 
 	GOAL_TYPE goal_type;
 	bool ok_to_match_goal;
@@ -1186,9 +1185,9 @@ bool Scheduler::Prune_Goals()
 	time_t t2;
 	sint32 prune_time = 0;
 
-	for(sint16 goal_element = 0; 
+	for(sint16 goal_element = 0;
 	    goal_element < strategy.GetNumGoalElement();
-		goal_element++
+	    goal_element++
 	){
 		t1 = GetTickCount();
 
@@ -1252,7 +1251,6 @@ bool Scheduler::Prune_Goals()
 
 #ifdef _DEBUG
 		sint32 count = 0;
-//		CTPGoal_ptr ctpgoal_ptr;
 		for (goal_ptr_iter  = m_pruned_goals_of_type[goal_type];
 			 goal_ptr_iter != m_goals_of_type[goal_type].end();
 			 goal_ptr_iter++
@@ -1318,7 +1316,7 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
  const Goal_ptr & goal_ptr,
  const Squad_List::iterator & squad_iter,
  Plan_List::iterator & plan_iter
-) 
+)
 {
 	Plan the_match;
 
@@ -1332,9 +1330,9 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 
 	if(matching_value > (Goal::BAD_UTILITY + 0.5))
 	{
-		while (plan_iter != m_matches.end() &&
-			   *plan_iter > the_match)
-			   plan_iter++;
+		while( plan_iter != m_matches.end() &&
+		      *plan_iter > the_match)
+		       plan_iter++;
 
 		plan_iter = m_matches.insert(plan_iter, the_match);
 		goal_ptr->Add_Match_Reference(plan_iter);
@@ -1357,7 +1355,7 @@ bool Scheduler::Add_New_Match_For_Goal_And_Squad
 			 goal_ptr,
         goal_iter->second->Get_Goal_Type(),
 			 (*squad_iter)));
-	*/ 
+	*/
 		return false;
 	}
 }
@@ -1391,7 +1389,7 @@ sint32 Scheduler::Add_New_Matches_For_Goal
 	Plan_List::iterator plan_iter;
 
 	GOAL_TYPE type = goal_ptr->Get_Goal_Type();
-    SQUAD_CLASS goal_squad_class = 
+	SQUAD_CLASS goal_squad_class = 
 			  g_theGoalDB->Get(type)->GetSquadClass();
 
 	for(squad_iter  = m_squads.begin();
@@ -1530,8 +1528,8 @@ void Scheduler::Remove_Matches_For_Goal
  const Goal_ptr & goal_ptr 
 )
 {
-    std::list<Plan_List::iterator> & match_refs = goal_ptr->Get_Match_References();
-    std::list<Plan_List::iterator>::iterator plan_ref_iter;
+	std::list<Plan_List::iterator> & match_refs = goal_ptr->Get_Match_References();
+	std::list<Plan_List::iterator>::iterator plan_ref_iter;
 	Squad_ptr squad_ptr;
 
 	sint32 rolled_back_agents = 0;
@@ -1559,8 +1557,8 @@ void Scheduler::Remove_Matches_For_Squad
  const Squad_ptr & squad   
 )
 {
-    std::list<Plan_List::iterator> & match_refs = squad->Get_Match_References();
-    std::list<Plan_List::iterator>::iterator plan_ref_iter;
+	std::list<Plan_List::iterator> & match_refs = squad->Get_Match_References();
+	std::list<Plan_List::iterator>::iterator plan_ref_iter;
 	Goal_ptr goal_ptr;
 
 	for(plan_ref_iter  = match_refs.begin();
@@ -1590,8 +1588,8 @@ sint32 Scheduler::Rollback_Matches_For_Goal
  const Goal_ptr & goal 
 )
 {
-    std::list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
-    std::list<Plan_List::iterator>::iterator plan_ref_iter;
+	std::list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
+	std::list<Plan_List::iterator>::iterator plan_ref_iter;
 
 #ifdef _DEBUG
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("ROLLBACK_MATCHES_FOR_GOAL\n"));
@@ -1635,7 +1633,7 @@ sint32 Scheduler::Rollback_Matches_For_Goal
 	}
 	m_committed_agents -= count;
 
-    DPRINTF(k_DBG_SCHEDULER, ("\t%d agents rolled back for Goal %x, %d.\n", count, goal, goal->Get_Goal_Type()));
+	DPRINTF(k_DBG_SCHEDULER, ("\t%d agents rolled back for Goal %x, %d.\n", count, goal, goal->Get_Goal_Type()));
 
 	return count;
 }
@@ -1647,8 +1645,8 @@ Squad_ptr Scheduler::Form_Squad_From_Goal
 {
 	Assert(goal->Get_Totally_Complete());
 
-    std::list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
-    std::list<Plan_List::iterator>::iterator plan_ref_iter;
+	std::list<Plan_List::iterator> & match_refs = goal->Get_Match_References();
+	std::list<Plan_List::iterator>::iterator plan_ref_iter;
 
 	Squad_ptr new_squad = new Squad();
 
@@ -1677,8 +1675,8 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 {
 	Squad_List::iterator squad_iter;
 
-    std::list<Plan_List::iterator> & matches_to_goal = goal_ptr->Get_Match_References();
-    std::list<Plan_List::iterator>::iterator matches_to_goal_iter;
+	std::list<Plan_List::iterator> & matches_to_goal = goal_ptr->Get_Match_References();
+	std::list<Plan_List::iterator>::iterator matches_to_goal_iter;
 
 	for(matches_to_goal_iter  = matches_to_goal.begin(); 
 	    matches_to_goal_iter != matches_to_goal.end(); 
@@ -1729,7 +1727,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			goal_ptr,
 			squad_iter,
 			plan_iter);
-	} 
+	}
 
 	return match_added;
 }

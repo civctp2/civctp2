@@ -28,7 +28,7 @@
 #
 #----------------------------------------------------------------------------
 
-###Those darn hard-coded strings 03-09-00
+##Those darn hard-coded strings 03-09-00
 str_ldl_Already_Offer	"Sie bieten dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
 
 ##That one last change 03-07-99
@@ -3189,10 +3189,11 @@ str_profile_CloseOnEyepoint                     "Meldung schließ. bei Klick auf 
 str_profile_ShowExpensive                       "Kosten für Terrainverbes. immer anzeigen"
 str_profile_ShowOrderUnion                      "Alle Armeebefehle anzeigen"
 str_profile_RecentAtTop                         "Neue Meldungen oben anzeigen"
-str_profile_CityClick                           "Wähle Stadt anstatt Armee"
+str_profile_CityClick                           "Stadt anstatt Armee auswählen"
 str_profile_DebugSlic                           "Slic-Debug-Meldungen"
 str_profile_EndTurnWithEmptyBuildQueues         "Rundenende mit leerer Bauliste"
 str_profile_RunInBackground                     "Rundenende im Hintergrund"
+str_profile_Upgrade                             "Einheiten aufrüsten"
 
 str_ldl_Pw_COLON_	"Siedler:"
 

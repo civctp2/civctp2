@@ -42,40 +42,40 @@
 
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
-    // Transport squads should always be always bigger:
-    if (m_transport > squad_strength.m_transport)
-    {
-        return true;
-    }
-    else if (m_transport < squad_strength.m_transport)
-    {
-	  return false;
-    }
+	// Transport squads should always be bigger:
+	if (m_transport > squad_strength.m_transport)
+	{
+		return true;
+	}
+	else if (m_transport < squad_strength.m_transport)
+	{
+		return false;
+	}
 
-    // Equal transport strength: test the battle strength
+	// Equal transport strength: test the battle strength
 
-    // Attack difference
-    double const attack_cpr = (m_attack_str - squad_strength.m_attack_str);
-    // Defense difference
-    double const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
-    // ranged difference
-    double const ranged_cpr = (m_ranged_str - squad_strength.m_ranged_str);
-    // value difference
-    double const value_cpr  = (m_value - squad_strength.m_value);
+	// Attack difference
+	double const attack_cpr  = (m_attack_str  - squad_strength.m_attack_str );
+	// Defense difference
+	double const defense_cpr = (m_defense_str - squad_strength.m_defense_str);
+	// ranged difference
+	double const ranged_cpr  = (m_ranged_str  - squad_strength.m_ranged_str );
+	// value difference
+	double const value_cpr   = (m_value       - squad_strength.m_value      );
 
-    double const battle_cpr = attack_cpr	+ defense_cpr + ranged_cpr + value_cpr;
-    if (battle_cpr > 0)
-    {
-        return true;
-    }
-    else if (battle_cpr < 0)
-    {
-        return false;
-    }
+	double const battle_cpr  = attack_cpr + defense_cpr + ranged_cpr + value_cpr;
+	if (battle_cpr > 0)
+	{
+		return true;
+	}
+	else if (battle_cpr < 0)
+	{
+		return false;
+	}
 
-    // Equal battle strength: test the agent count
+	// Equal battle strength: test the agent count
 
-    if (m_agent_count > 0 && squad_strength.m_agent_count > 0){
+	if (m_agent_count > 0 && squad_strength.m_agent_count > 0){
 
 		//If only agent count is a criterion : (for special units for example)
 		if(m_attack_str + m_defense_str + m_ranged_str + m_value  == 0
@@ -84,7 +84,7 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 			return (m_agent_count > squad_strength.m_agent_count);
 		}
 	}
-    return false;
+	return false;
 }
 
 
@@ -97,14 +97,14 @@ Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 	m_value             += add_me.m_value;
 	m_transport         += add_me.m_transport;
 	m_defenders         += add_me.m_defenders;
-    m_ranged            += add_me.m_ranged; 
+	m_ranged            += add_me.m_ranged; 
 
 	m_land_bombard_str  += add_me.m_land_bombard_str;
 	m_water_bombard_str += add_me.m_water_bombard_str;
 	m_air_bombard_str   += add_me.m_air_bombard_str;
 
-    return *this;
-} 
+	return *this;
+}
 
 
 Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
@@ -116,12 +116,12 @@ Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 	m_value             -= remove_me.m_value;
 	m_transport         -= remove_me.m_transport;
 	m_defenders         -= remove_me.m_defenders;
-    m_ranged            -= remove_me.m_ranged; 
+	m_ranged            -= remove_me.m_ranged; 
 	m_land_bombard_str  -= remove_me.m_land_bombard_str;
 	m_water_bombard_str -= remove_me.m_water_bombard_str;
 	m_air_bombard_str   -= remove_me.m_air_bombard_str;
 
-    return *this;
+	return *this;
 }
 
 
@@ -163,16 +163,16 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	m_agent_count = army->Num();
 
 	
-	army->ComputeStrength(m_defense_str,	
-						  m_attack_str,		
-						  m_ranged_str,		
-						  m_defenders,		
+	army->ComputeStrength(m_defense_str,
+						  m_attack_str,
+						  m_ranged_str,
+						  m_defenders,
 						  m_ranged,
 						  m_land_bombard_str,
 						  m_water_bombard_str,
-						  m_air_bombard_str);		
-   
-	
+						  m_air_bombard_str);
+
+
 	m_value = 0.0;
 	m_transport = 0;
 	for (int i = m_agent_count; i > 0; --i)
@@ -197,25 +197,25 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 double Squad_Strength::Get_Attack() const
 {
 	return m_attack_str;
-} 
+}
 
 
 void Squad_Strength::Set_Attack(const double & attack)
 {
 	m_attack_str = attack;
-} 
+}
 
 
 double Squad_Strength::Get_Defense() const
 {
 	return m_defense_str;
-} 
+}
 
 
 void Squad_Strength::Set_Defense(const double & defense)
 {
 	m_defense_str = defense;
-} 
+}
 
 
 double Squad_Strength::Get_Ranged() const
@@ -233,7 +233,7 @@ void Squad_Strength::Set_Ranged(const double & ranged)
 double Squad_Strength::Get_Value() const
 {
 	return m_value;
-} 
+}
 
 
 void Squad_Strength::Set_Value(const double & value)
@@ -246,7 +246,7 @@ sint16 Squad_Strength::Get_Transport() const
 {
 	return m_transport;
 }
-	
+
 
 void Squad_Strength::Set_Transport(const sint16 & slots)
 {
@@ -284,13 +284,13 @@ void Squad_Strength::Set_Force_Matching( const double attack_ratio,
                                          const double bombard_ratio,
                                          const double value_ratio )
 {
-	m_attack_str *= attack_ratio;
-	m_defense_str *= defense_ratio;
-	m_ranged_str *= ranged_ratio;
-	m_land_bombard_str *= bombard_ratio;
+	m_attack_str        *= attack_ratio;
+	m_defense_str       *= defense_ratio;
+	m_ranged_str        *= ranged_ratio;
+	m_land_bombard_str  *= bombard_ratio;
 	m_water_bombard_str *= bombard_ratio;
-	m_air_bombard_str *= bombard_ratio;
-	m_value *= value_ratio;
+	m_air_bombard_str   *= bombard_ratio;
+	m_value             *= value_ratio;
 }
 
 void Squad_Strength::Set_To_The_Maximum(Squad_Strength otherStrength)

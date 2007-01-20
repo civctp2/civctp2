@@ -3142,6 +3142,7 @@ str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
 str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_Upgrade                             "Unit upgrading"
 
 str_ldl_City_Manager_Title  "A D M I N I S T R A C I Ó N    D E   L A   C I U D A D"
 

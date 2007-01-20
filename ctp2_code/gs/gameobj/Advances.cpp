@@ -1117,48 +1117,56 @@ uint32 Advances_Advances_GetVersion(void)
 //
 // Returns    : sint32  : the number of missing prerequisite steps
 //
-// Remark(s)  : - When you already have the advance, the returned value is 0.
-//              - When you have all prerequisites for the advance, but do not
+// Remark(s)  : - If you already have the advance, the returned value is 0.
+//              - If you have all prerequisites for the advance, but do not
 //                have the advance itself, the returned value is 1.
-//              - When you are missing prerequisites for the advance, the 
+//              - If you are missing prerequisites for the advance, the 
 //                returned value is the sum of the recursive application of 
 //                this function to the missing prerequisites.
-//              - When the limit is reached, the returned value is unspecified,
+//              - If the advance cannot be researched, because it is the 
+//                prerequisite of itsself, limit + 1 is returned.
+//              - If the limit is reached, the returned value is unspecified,
 //                but always larger than the limit.
 //
 //----------------------------------------------------------------------------
 sint32 Advances::GetMinPrerequisites(sint32 adv, sint32 limit) const
 {
-	if (m_hasAdvance[adv])
-    {
+	if(m_hasAdvance[adv])
+	{
 		return 0;
-    }
+	}
 
 	AdvanceRecord const *   rec         = g_theAdvanceDB->Get(adv);
 	sint32                  totalneeded = 0;
 
-	for (sint32 prereq = 0; prereq < rec->GetNumPrerequisites(); ++prereq)
-    {
-        sint32 const        prereqDbIndex = rec->GetPrerequisitesIndex(prereq);
-		if (    (rec->GetIndex() != prereqDbIndex) 
-             && !m_hasAdvance[prereqDbIndex]
-           ) 
-        {
-			totalneeded += GetMinPrerequisites(prereqDbIndex, limit - 1);
+	for(sint32 i = 0; i < rec->GetNumPrerequisites(); ++i)
+	{
+		sint32 const prereqDbIndex = rec->GetPrerequisitesIndex(i);
+		
+		if(rec->GetIndex() != prereqDbIndex)
+		{
+			if(!m_hasAdvance[prereqDbIndex])
+			{
+				totalneeded += GetMinPrerequisites(prereqDbIndex, limit - 1);
 
-            if (totalneeded > limit)
-            {
-                return totalneeded;
-            }
+				if(totalneeded > limit)
+				{
+					return totalneeded;
+				}
+			}
+		}
+		else
+		{
+			return limit + 1;
 		}
 	}
 
-	return totalneeded + 1; 
+	return totalneeded + 1;
 }
 
 sint32 Advances::GetMinPrerequisites(sint32 adv) const
 {
-    return GetMinPrerequisites(adv, m_size * k_MAX_Prerequisites);
+	return GetMinPrerequisites(adv, m_size * k_MAX_Prerequisites);
 }
 
 sint32 Advances::GetProjectedScience() const

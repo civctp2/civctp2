@@ -402,7 +402,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 				// else : too advanced
 			}
 
-            if (nextPossible) 
+            if (nextPossible > 0)
 			{
 				m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
 			}
