@@ -20,6 +20,10 @@
 //
 // _DEBUG
 // - Set when generating the debug version
+//
+// _SMALL_MAPPOINTS
+// - Use 2D world when set, add 3rd dimension (CTP1 space layer) when not set.
+//
 // __BIG_DIRTY_BLITS__
 // __USING_SPANS__
 // 
@@ -49,188 +53,109 @@
 #include "c3.h"
 #include "tiledmap.h"
 
-#include <algorithm>            // std::fill
-#include "c3errors.h"
-
-#include "Cell.h"
-#include "player.h"
-#include "cellunitlist.h"
-#include "SelItem.h"
-#include "civarchive.h"
-
-#include "aui.h"
-#include "c3ui.h"
-#include "aui_stringtable.h"
-#include "aui_directsurface.h"
-#include "aui_blitter.h"
-#include "aui_dirtylist.h"
-#include "c3window.h"
-
-#include "ctp2_button.h"
-#include "spriteeditor.h"
-
-#include "background.h"
-
-#include "primitives.h"
-#include "pixelutils.h"
-#include "tileutils.h"
-#include "tiffutils.h"
-
-#include "MapPoint.h"
-#include "UnseenCell.h"
-#include "GoodyHuts.h"
-#include "TerrainRecord.h"
-#include "StrDB.h"
-
-#include "screenmanager.h"
-#include "Sprite.h"
-#include "UnitSpriteGroup.h"
-#include "UnitActor.h"
-
-#include "EffectActor.h"
-#include "GoodActor.h"
-#include "director.h"
-
-#include "TileInfo.h"
-#include "BaseTile.h"
-#include "TerrImproveData.h"
-#include "maputils.h"
-#include "tileset.h"
-#include "TileDrawRoad.h"
-
-#include "CivPaths.h"
-
-#include "colorset.h"               // g_colorSet
-#include "radarmap.h"
-
-#include "buttonbank.h"
-#include "controlpanelwindow.h"
-
-#include "pointerlist.h"
-
-#include "profileDB.h"
 #include "AICause.h"
-#include "UnitPool.h"
-
-
-
-
+#include <algorithm>                    // std::fill
+#include "ArmyData.h"
+#include "aui.h"
+#include "aui_blitter.h"
+#include "aui_directsurface.h"
+#include "aui_dirtylist.h"
+#include "aui_stringtable.h"
+#include "background.h"
+#include "BaseTile.h"
+#include "buttonbank.h"
+#include "c3errors.h"
+#include "c3_popupwindow.h"
+#include "c3ui.h"
+#include "c3window.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "citydata.h"
+#include "CityInfluenceIterator.h"
+#include "CityRadius.h"
+#include "civarchive.h"
+#include "CivPaths.h"                   // g_civPaths
+#include "colorset.h"                   // g_colorSet
+#include "controlpanelwindow.h"         // g_controlPanel
+#include "ctp2_button.h"
+#include "ctp2_Window.h"
+#include "director.h"                   // g_director
+#include "EffectActor.h"
+#include "gamefile.h"
+#include "gfx_options.h"
+#include "GoodActor.h"
+#include "GoodyHuts.h"
+#include "grabitem.h"
+#include "MapPoint.h"
+#include "maputils.h"
+#include "MoveFlags.h"
+#include "network.h"
+#include "pixelutils.h"
+#include "player.h"                     // g_player
+#include "pointerlist.h"
+#include "primitives.h"
+#include "profileDB.h"                  // g_theProfileDB
+#include "radarmap.h"                   // g_radarMap
+#include "radarwindow.h"
+#include "ResourceRecord.h"
+#include "scenarioeditor.h"
+#include "screenmanager.h"
+#include "SelItem.h"                    // g_selected_item
+#include "SlicEngine.h"
+#include "Sprite.h"
+#include "spriteeditor.h"
+#include "StrDB.h"                      // g_theStringDB
+#include "TerrainImprovementRecord.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "TerrImprove.h"
+#include "TerrImproveData.h"
+#include "TerrImprovePool.h"		
+#include "tiffutils.h"
+#include "TileDrawRoad.h"
+#include "TileInfo.h"
+#include "tileset.h"
+#include "tileutils.h"
 #include "TradeRoute.h"
 #include "TradeRouteData.h"
-#include "grabitem.h"
-#include "ArmyPool.h"
-#include "ArmyData.h"
-
-#include "CityRadius.h"
-#include "network.h"
-#include "TurnCnt.h"
-
-
-#include "terrainutil.h"
-#include "TerrainRecord.h"
-#include "TerrImprove.h"
-#include "TerrainImprovementRecord.h"
-#include "TerrImprovePool.h"		
-
-
-#include "c3_popupwindow.h"
-
-
-
-#include "SlicEngine.h"
-
+#include "TurnCnt.h"                    // g_turn
+#include "UnitActor.h"
 #include "UnitData.h"
-#include "citydata.h"
 #include "UnitRecord.h"
-#include "ResourceRecord.h"
+#include "UnitSpriteGroup.h"
+#include "UnseenCell.h"
+#include "World.h"                      // g_theWorld
 
-#include "MoveFlags.h"
-
-#include "CityInfluenceIterator.h"
-
-
-#include "gfx_options.h"
-
-#include "scenarioeditor.h"
-
-
-#include "gamefile.h"
-
-#include "radarwindow.h"
-#include "ctp2_Window.h"
-
-extern World            *g_theWorld;
-extern UnitPool         *g_theUnitPool;
-
-extern CivPaths         *g_civPaths;
-extern Player           **g_player;
 extern C3UI             *g_c3ui;
 extern sint32           g_is565Format;
-extern SelectedItem     *g_selected_item;
-extern Director         *g_director;
 extern Background       *g_background;
-extern RadarMap         *g_radarMap;
 extern RECT             g_backgroundViewport;
 extern ScreenManager    *g_screenManager;
-extern StringDB         *g_theStringDB;
-extern ControlPanelWindow *g_controlPanel;
-extern TurnCount        *g_turn;
-extern ArmyPool         *g_theArmyPool;
 extern SpriteEditWindow *g_spriteEditWindow;
-
-
 extern GrabItem         *g_grabbedItem;
 extern sint32           g_tradeSelectedState;
-
 extern sint32           g_fog_toggle;
 extern sint32           g_god; 
-
 extern sint32           g_isCheatModeOn;
-
-extern sint32           g_isCityPadOn;
-
-sint32                  g_unitNum = -1;
-sint32                  g_cityNum = -1;
-BOOL                    g_killMode = FALSE;
-
-extern sint32           g_toolbarCurPlayer; 
-
-extern sint32           g_isLegalMode;
-
-sint32                  g_tileImprovementMode = 0;
-extern sint32           g_specialAttackMode;
-extern ProfileDB        *g_theProfileDB; 
 extern TiledMap         *g_tiledMap;
-
-
-
-
-BOOL                    g_isTransportOn = FALSE;
-
 extern BOOL             g_show_ai_dbg; 
 extern sint32           g_modalWindow;
 
-Pixel16 tcolor;
-
-sint32 g_isFastCpu = 1;
-sint32 g_isGridOn = 0;
+sint32      g_unitNum               = -1;
+sint32      g_cityNum               = -1;
+BOOL        g_killMode              = FALSE;
+sint32      g_tileImprovementMode   = 0;
+BOOL        g_isTransportOn         = FALSE;
+sint32      g_isFastCpu             = 1;
+sint32      g_isGridOn              = 0;
+sint32      g_placeGoodsMode        = FALSE;
+BOOL	    g_drawArmyClumps;
 
 sint32 s_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS]	=	{48,56,68,76,88,96};
 sint32 s_zoomTilePixelHeight[k_MAX_ZOOM_LEVELS]	=	{24,28,34,38,44,48};
 sint32 s_zoomTileGridHeight[k_MAX_ZOOM_LEVELS] =	{36,42,51,57,66,72};
 sint32 s_zoomTileHeadroom[k_MAX_ZOOM_LEVELS] =		{12,14,17,19,22,24};
 double s_zoomTileScale[k_MAX_ZOOM_LEVELS] =			{0.50526, 0.58947, 0.71578, 0.8, 0.92631, 1.0};
-
-
-
-sint32 g_placeGoodsMode = FALSE;
-
-
-
-
-
-BOOL	g_drawArmyClumps;
-
 
 
 #define k_GRID_CHUNKS_X		10
@@ -1040,7 +965,7 @@ sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs
 
 #define MATCH_GLOB(t, m) (MATCH_ALL(t) || (t == g_theTerrainDB->Get(m)->GetTilesetIndex()) || MATCH_LAND(t, m) || MATCH_WATER(t, m) || MATCH_DEEP(t,m) || MATCH_SHALLOW(t,m) || MATCH_TRENCHSHELF(t,m) || MATCH_ALL_BUT_SELF(t,m) || MATCH_LAND_NOT_SELF(t,m) || MATCH_WATER_NOT_SELF(t,m))
 
-BOOL TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, 
+bool TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, 
 							 uint16 s, uint16 sw, uint16 w, uint16 nw, uint16 *newIndex)
 {
 	sint32		i;
@@ -1088,17 +1013,17 @@ BOOL TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint1
 			if (tNew == k_TRANSFORM_TO_LIST_ID) {
 				
 				sint16		xform;
-				BOOL		legal = FALSE;
+				bool		legal = false;
 				sint32		j;
 				
 				
 				for (j=0; j<k_MAX_TRANSFORM_TO_LIST; j++) {
 					xform = (sint16)m_tileSet->GetTransform((uint16)i, (uint16)(k_TRANSFORM_TO_LIST_FIRST + j));
-					if (xform != k_TRANSFORM_TO_LIST_ID) legal = TRUE;
+					if (xform != k_TRANSFORM_TO_LIST_ID) legal = true;
 				}
 
 				
-				if (!legal) return FALSE;
+				if (!legal) return false;
 
 				sint32		which = -2;
 				
@@ -1122,7 +1047,7 @@ BOOL TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint1
 						which = k_MAX_TRANSFORM_TO_LIST;
 					}
 					if(which == ti->GetTransform() % k_MAX_TRANSFORM_TO_LIST) {
-						return FALSE; 
+						return false; 
 					}
 				} while (xform == k_TRANSFORM_TO_LIST_ID || m_tileSet->GetBaseTile(xform) == NULL);
 
@@ -1131,12 +1056,12 @@ BOOL TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint1
 				
 				*newIndex = tNew;
 			}
-			return TRUE;
+			return true;
 		}
 
 	}
 
-	return FALSE;
+	return false;
 }
 
 void TiledMap::TryMegaTiles(MapPoint &pos, BOOL regenTilenum)
@@ -2155,19 +2080,6 @@ sint32 TiledMap::RepaintTiles(RECT *repaintRect)
 sint32 
 TiledMap::RepaintTilesClipped(RECT *repaintRect)
 {
-	sint32		mapWidth, mapHeight;
-
-	static   unsigned  which_color=0;
-
-	which_color ++;
-
-	if( which_color & 1)
-		tcolor = 0xF000;
-	else
-		tcolor = 0x0F00;
-
-	GetMapMetrics(&mapWidth,&mapHeight);
-
 	for (sint32 i=repaintRect->top; i<=repaintRect->bottom; i++)
 	{ 
 		for (sint32 j=repaintRect->left; j<=repaintRect->right; j++) 
@@ -2567,7 +2479,7 @@ void TiledMap::PaintArmyActors(MapPoint &pos)
 BOOL g_show_ai_dbg = 0;
 #endif
 
-void TiledMap::PaintUnitActor(UnitActor *actor, BOOL fog)
+void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 {
 	Assert(actor != NULL);
 	if (actor == NULL) return;
@@ -2800,19 +2712,14 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 				
 				if (!g_theWorld->GetTopVisibleUnit(pos, top)) continue;
 
-				if (g_drawArmyClumps) {
-					if (g_theArmyPool->IsValid(top.GetArmy())) {
-
-						sint32 size = top.GetArmy().Num();
-						
-						if (size > 1) {
-							PaintArmyActors(pos);
-
-							return 0;
-						}
-
+				if (g_drawArmyClumps) 
+                {
+                    Army    a   = top.GetArmy();
+					if (a.IsValid() && (a.Num() > 1)) 
+                    {
+						PaintArmyActors(pos);
+						return 0;
 					}
-
 				}
 				
 				UnitActor *actor = top.GetActor();
@@ -2925,7 +2832,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 						
 						Army		army(s_item);
-						if (!g_theArmyPool->IsValid(army))
+						if (!army.IsValid())
 							continue;
 						
 						
@@ -3070,7 +2977,7 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 				
 				unit = g_theWorld->GetCell(pos)->GetCity();
 
-				if ((unit.m_id!=0) && g_theUnitPool->IsValid(unit)) 
+				if (unit.IsValid()) 
 				{
 					curUnitActor = unit.GetActor();
 				
@@ -3789,11 +3696,8 @@ if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 sint32 TiledMap::Refresh(void)
 {
-
-	
-	LPVOID buffer;
-
-	sint32 errcode = m_surface->Lock( NULL, &buffer, 0 );
+	LPVOID      buffer;
+	AUI_ERRCODE errcode = m_surface->Lock(NULL, &buffer, 0);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if ( errcode == AUI_ERRCODE_OK )
 	{
@@ -3805,7 +3709,13 @@ sint32 TiledMap::Refresh(void)
 
 	LockSurface();
 
-	if (!SmoothScrollAligned())
+	if (SmoothScrollAligned())
+	{
+		RepaintTiles(&m_mapViewRect);
+		RepaintHats (&m_mapViewRect);
+		RepaintBorders(&m_mapViewRect);
+	}
+	else
 	{
 		RECT   altrect=m_mapViewRect;
 	
@@ -3816,12 +3726,6 @@ sint32 TiledMap::Refresh(void)
 		RepaintTilesClipped(&altrect);
 		RepaintHats(&altrect,true);
 		RepaintBorders(&altrect, true);
-	}
-	else
-	{
-		RepaintTiles(&m_mapViewRect);
-		RepaintHats (&m_mapViewRect);
-		RepaintBorders(&m_mapViewRect);
 	}
 	
 	RepaintImprovements(&m_mapViewRect);
@@ -3839,13 +3743,9 @@ sint32 TiledMap::Refresh(void)
 
 void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 {
-	sint32		errcode;
-	char		*buffer;
-
-	errcode = surf->Lock(NULL, (LPVOID *)&buffer, 0);
-	
+	char *      buffer;
+	AUI_ERRCODE errcode = surf->Lock(NULL, (LPVOID *)&buffer, 0);
 	Assert(errcode == AUI_ERRCODE_OK);
-	
 	if (errcode != AUI_ERRCODE_OK) 
 		return;
 
@@ -3973,10 +3873,10 @@ void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 
 
 
-BOOL TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
+bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 {
 	if (g_modalWindow) 
-		return FALSE;
+		return false;
 
 	RECT	repaintRect;
 	RECT	oldMapViewRect;
@@ -4107,12 +4007,10 @@ BOOL TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	RepaintHats(&tempRect);
 	RepaintBorders(&tempRect);
-
 	RepaintImprovements(&tempRect);
 
-	
-	UnlockSurface();
 
+	UnlockSurface();
 
 	m_mapDirtyList->Flush();
 
@@ -4123,15 +4021,14 @@ BOOL TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	RepaintSprites(m_surface, &tempRect, true);
 
-	return TRUE;
+	return true;
 }
 
 
 
 
 
-bool 
-TiledMap::SmoothScrollAligned()
+bool TiledMap::SmoothScrollAligned() const
 {
 	return ((!m_smoothOffsetX) && (!m_smoothOffsetY));
 }
@@ -4146,11 +4043,11 @@ TiledMap::SmoothScrollAligned()
 
 
 
-BOOL TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
+bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 {
 	
 	if (g_modalWindow) 
-		return FALSE;
+		return false;
 
 	
 	m_smoothOffsetX += pdeltaX;
@@ -4215,77 +4112,49 @@ BOOL TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 	RepaintHats			(&repaintRect,true);
 	RepaintBorders      (&repaintRect, true);
 
-	
 	UnlockSurface();
 
-	
 	InvalidateMix();
 
-	
  	RepaintSprites(m_surface, &repaintRect, true);
 
-	return TRUE;
+	return true;
 }
 
-#else
+#else // IANSCROLL
 
-
-
-
-
-
-
-BOOL TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
+bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 {
-	
 	if (g_modalWindow) 
-		return FALSE;
+		return false;
 
-	
-
-
-
-	
 	m_smoothOffsetX += pdeltaX;
 	m_smoothOffsetY	+= pdeltaY;
 
-	
 	sint32 signX  = (!pdeltaX ? 0 :(pdeltaX<0? -1:1));
 	sint32 signY  = (!pdeltaY ? 0 :(pdeltaY<0? -1:1));
-
-	
 	
 	RetargetTileSurface(g_background->TheSurface());
 
-	sint32		mapWidth	= g_theWorld->GetWidth();
-	sint32		mapHeight	= g_theWorld->GetHeight();
-	sint32		hscroll		= GetZoomTilePixelWidth();
-	sint32		vscroll		= GetZoomTilePixelHeight()>>1;
+	sint32	mapWidth	= g_theWorld->GetWidth();
+	sint32	mapHeight	= g_theWorld->GetHeight();
+	sint32	hscroll		= GetZoomTilePixelWidth();
+	sint32	vscroll		= GetZoomTilePixelHeight() >> 1;
+	sint32  deltaX      = m_smoothOffsetX / hscroll;
+	sint32  deltaY      = m_smoothOffsetY / vscroll;
 
-	
-	sint32 deltaX =	(m_smoothOffsetX/hscroll);
-	sint32 deltaY =	(m_smoothOffsetY/vscroll);
-
-	
-	
 	if (deltaX != 0)
 	{
-		
 		m_smoothOffsetX -= deltaX * hscroll;
 	}
-
 	
 	if (deltaY != 0)
 	{
-		
 		m_smoothOffsetY -= deltaY * vscroll;
 	}
 
-
-	
 	m_smoothLastX =	pdeltaX;
 	m_smoothLastY =	pdeltaY;
-
 	
    	if ((!g_theWorld->IsXwrap())&&signX)
    	{
@@ -4293,17 +4162,16 @@ BOOL TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 		{
 			m_smoothOffsetX=0;
 			m_mapViewRect.top = 0;
-			return FALSE;
+			return false;
 		}
    		
 		if ((m_mapViewRect.right + signX) >= (m_mapBounds.right)) 
 		{
 			m_smoothOffsetX=0;
 			m_mapViewRect.top = 0;
-			return FALSE;
+			return false;
 		}
    	}
-
 	
    	if ((!g_theWorld->IsYwrap())&&(signY))
    	{
@@ -4311,13 +4179,13 @@ BOOL TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 		{
 			m_mapViewRect.top = 0;
 			m_smoothOffsetY=0;
-			return FALSE;
+			return false;
 		}
 		if ((m_mapViewRect.bottom+signY) >= (m_mapBounds.bottom)) 
 		{
 			m_smoothOffsetY=0;
 			m_mapViewRect.bottom = m_mapBounds.bottom;
-			return FALSE;
+			return false;
 		}
    	}
 
@@ -4406,269 +4274,19 @@ BOOL TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 
 	RepaintHats(&tempRect);
 	RepaintBorders(&tempRect);
-
 	RepaintImprovements(&tempRect);
 
-	
+
 	UnlockSurface();
 
-
-	
 	InvalidateMix();
-
-
 
 	RepaintSprites(m_surface, &tempRect, true);
 
-	return TRUE;
+	return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
+#endif // IANSCROLL
 
 
 
@@ -4863,19 +4481,17 @@ sint32 TiledMap::RedrawBorders(
 
 
 
-void TiledMap::RedrawTile(
-		const MapPoint *point		
-		)
+void TiledMap::RedrawTile
+(
+	const MapPoint *    point		
+)
 {
-	sint32 tileX;
-
-	
-	if(TileIsVisible(point->x,point->y)) {
+	if (TileIsVisible(point->x, point->y)) 
+    {
+		MapPoint    pos;
+	    sint32      tileX;
+		
 		LockSurface();
-
-		
-		MapPoint pos;
-		
 		if(point->GetNeighborPosition(NORTH,pos)) {
 			maputils_MapX2TileX(pos.x,pos.y,&tileX);
 			CalculateWrap(NULL,pos.y,tileX);
@@ -4947,7 +4563,6 @@ void TiledMap::RedrawTile(
 			DrawImprovements(NULL, pos.y, tileX, 0);
 		}
 
-
 		UnlockSurface();
 	}
 
@@ -4984,17 +4599,7 @@ void TiledMap::Blt(aui_Surface *surf)
 	g_c3ui->TheBlitter()->Blt(surf, 0, 0, m_surface, &rect, 0);
 }
 
-
-BOOL TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 mapZ)
-{
-	if(!TileIsVisible(mapX, mapY))
-		return FALSE;
-
-	return TRUE;
-}
-
-
-BOOL TiledMap::TileIsCompletelyVisible(sint32 mapX, sint32 mapY, RECT *viewRect)
+bool TiledMap::TileIsCompletelyVisible(sint32 mapX, sint32 mapY, RECT *viewRect)
 {
     RECT	shrunkMapViewRect   = viewRect ? *viewRect : m_mapViewRect;
 
@@ -5055,10 +4660,16 @@ BOOL TiledMap::TileIsCompletelyVisible(sint32 mapX, sint32 mapY, RECT *viewRect)
            );
 }
 
-
-BOOL TiledMap::TileIsVisible(sint32 mapX, sint32 mapY)
+/// Determine whether a tile is visible
+/// \param mapX X coordinate of tile
+/// \param mapY Y coordinate of tile
+/// \remarks The mapZ coordinate parameter is not used
+#if defined(_SMALL_MAPPOINTS)
+bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY)
+#else
+bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 /* mapZ */)
+#endif
 {
-	
 	RECT ul = m_mapViewRect;
 	RECT ll = m_mapViewRect;
 	RECT ur = m_mapViewRect;
@@ -5096,6 +4707,7 @@ BOOL TiledMap::TileIsVisible(sint32 mapX, sint32 mapY)
 
 	POINT point = {tileX,tileY};
 
+      /// @todo Check IsYwrap
 	if(!g_theWorld->IsXwrap()) {
 		if(m_mapViewRect.left < 0) {
 			return PtInRect(&ul, point) || PtInRect(&ll, point);
@@ -5355,7 +4967,7 @@ UnitActor *TiledMap::GetClickedUnit(aui_MouseEvent *data)
 	return g_director->GetClickedActiveUnit(data);
 }
 
-BOOL TiledMap::PointInMask(POINT hitPt)
+bool TiledMap::PointInMask(POINT hitPt) const
 {
 	sint32 x = (sint32)((double)hitPt.x / GetZoomScale(GetZoomLevel()));
 	sint32 y = (sint32)(((double)hitPt.y / GetZoomScale(GetZoomLevel())) + k_TILE_PIXEL_HEADROOM);
@@ -5363,7 +4975,7 @@ BOOL TiledMap::PointInMask(POINT hitPt)
 	return (x >= m_tileHitMask[y].start) && (x <= m_tileHitMask[y].end);
 }
 
-BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
+bool TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos) const
 {
 	sint32      width   = GetZoomTilePixelWidth();
 	sint32      height  = GetZoomTilePixelHeight();
@@ -5396,7 +5008,7 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 		hitPt.y = (y + (height)/2) % height;
 
 		if (!PointInMask(hitPt)) 
-			return FALSE;
+			return false;
 		else {
 			if (pos.x >= pos.y) {
 				tilePos.x = pos.x - pos.y;
@@ -5416,9 +5028,9 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 
 	if(!g_theWorld->IsXwrap()) {
 		if(pos.x < 0)
-			return FALSE;
+			return false;
 		if(pos.x >= g_theWorld->GetXWidth())
-			return FALSE;
+			return false;
 	}
 
 	
@@ -5454,10 +5066,10 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
 		
 		if (tilePos.y <0) { 
 			tilePos.y = 0; 
-			return FALSE; 
+			return false; 
 		} else if (g_theWorld->GetHeight() <= tilePos.y) { 
 			tilePos.y = static_cast<sint16>(g_theWorld->GetHeight() -1);
-			return FALSE; 
+			return false; 
 		} 
 	}
 
@@ -5468,7 +5080,7 @@ BOOL TiledMap::MousePointToTilePos(POINT point, MapPoint &tilePos)
     Assert (m_mapBounds.top <= tilePos.y); 
     Assert (tilePos.y < m_mapBounds.bottom); 
 
-	return TRUE;
+	return true;
 }
 
 void TiledMap::HandleCheat(MapPoint &pos)
@@ -5910,34 +5522,23 @@ void TiledMap::Idle(void)
 }
 
 
-BOOL TiledMap::GetMousePos(POINT &pos)
+bool TiledMap::GetMousePos(POINT &pos) const
 {
-	Assert(g_c3ui);
-	if (!g_c3ui) return FALSE;
-
-	Assert(g_background);
-	if (!g_background) return FALSE;
+	Assert(g_c3ui && g_background);
+	if (!g_c3ui || !g_background) return false;
 
 	aui_Mouse * mouse = g_c3ui->TheMouse();
-	if (mouse == NULL) return FALSE;
+	if (mouse == NULL) return false;
 
 	pos.x = mouse->X() - g_background->X();
 	pos.y = mouse->Y() - g_background->Y();
-
-	return TRUE;
+	return true;
 }
 
-BOOL TiledMap::GetMouseTilePos(MapPoint &pt)
+bool TiledMap::GetMouseTilePos(MapPoint &pt) const
 {
-	POINT	pos;
-
-	if (!GetMousePos(pos)) return FALSE;
-
-	if (!MousePointToTilePos(pos, pt)) return FALSE;
-
-
-
-	return TRUE;
+	POINT   pos;
+	return GetMousePos(pos) && MousePointToTilePos(pos, pt);
 }
 
 TileInfo *TiledMap::GetTileInfo(const MapPoint &pos)
@@ -5985,7 +5586,7 @@ void TiledMap::CopyVision()
 //              g_selected_item : selected item on screen
 //              g_turn          : turn information
 //
-// Returns    : BOOL            : tiles may be drawn
+// Returns    : bool            : tiles may be drawn
 //
 // Remark(s)  : The tiles may not be drawn in the following cases:
 //              - For multiplayer games, when the network is not ready.
@@ -5994,13 +5595,13 @@ void TiledMap::CopyVision()
 //              - Before the actual start of the game.
 //
 //----------------------------------------------------------------------------
-BOOL TiledMap::ReadyToDraw() const
+bool TiledMap::ReadyToDraw() const
 {
 	if ((g_network.IsActive() || g_network.IsNetworkLaunch()) &&
 	    !g_network.ReadyToStart()
        )
     {
-		return FALSE;
+		return false;
     }
 
     return g_slicEngine     && !g_slicEngine->ShouldScreenBeBlank() &&

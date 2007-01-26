@@ -934,6 +934,13 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 
 }
 
+/// Draw a colored border edge at a tile
+/// \param      surf                Surface to draw on
+/// \param      pos                 Tile to draw
+/// \param      selectColorPixel    Color to use
+/// \param      side                Side of the tile to draw
+/// \param      dashMode            Not used
+/// \remarks    This function expects that \a surf has been locked
 void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side, sint32 dashMode)
 {
 	sint32		x, y;
@@ -946,7 +953,9 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 	sint32 width = GetZoomTilePixelWidth();  // changing here got rid of the border
 	sint32 height = GetZoomTilePixelHeight();
 
-	if (x >= surf->Width()-width) return;
+	if (!surf) surf = m_surface;
+
+    if (x >= surf->Width()-width) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
@@ -3716,7 +3725,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							//emod
 							MBCHAR str[80];
 							sint32 width1 = m_font->GetStringWidth(name);
-							sint32 width2 = m_font->GetStringWidth(str);
+							//sint32 width2 = m_font->GetStringWidth(str);
 							//x = width2 + 1;  //moved to far screen
 							//RECT popRect = {0, 0, width+4, height+4};  //made big # box
 							//end emod
@@ -3809,6 +3818,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+
+                            // Prevent Asserts in primitives_PaintRect16 when moving the mouse 
+                            if (clipRect.right < clipRect.left) clipRect.right = clipRect.left;
 
 							//paint clipRect's surface the proper player color and give it a black frame
 							primitives_PaintRect16(surf, &clipRect, pixelColor);
@@ -3972,6 +3984,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 					}
 					if (owner == !g_selected_item->GetVisiblePlayer()) {  //emod
+/// @bug warning C4701: potentially uninitialized local variable 'namerect' used
 						clipRect = namerect;
 					}
 
@@ -4663,21 +4676,18 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if (visP == NULL)
 		return;
 
-	sint32 neighborOwner;
 	uint32 myCityOwner = GetVisibleCityOwner(pos);
-	uint32 neighborCityOwner;
 	Pixel16 color = g_colorSet->GetPlayerColor(myOwner);
 	Pixel16 white = GetColor(COLOR_WHITE);
-
-	if(!surface) surface = m_surface;
 
 	Unit myCity(myCityOwner);
 	UnitData *myCityData = myCity.IsValid() ? myCity.AccessData() : NULL;
 
-	MapPoint neighbor;
 //emod
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
+    if ((x < 0) || (y < 0))
+        return;
 
 	TileSet	*   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_POLBORDERNW);
@@ -4686,16 +4696,20 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	iconRect.right  = iconRect.left + iconDim.x + 1;
 	iconRect.top    = y;
 	iconRect.bottom = iconRect.top + iconDim.y + 1;
-	Pixel16 *   borderIcon;
 	
-	if (iconRect.left < 0 || iconRect.top < 0 || 
-		iconRect.right >= surface->Width() ||
-		iconRect.bottom >= surface->Height())
+    sint32  maxWidth    = surface ? surface->Width() : m_surface->Width();
+    sint32  maxHeight   = surface ? surface->Height() : m_surface->Height();
+
+	if ((iconRect.right >= maxWidth) || (iconRect.bottom >= maxHeight))
 		return;
 	//add city wall icons?
 	//add Great Wall Icon?
 
 //end emod
+	Pixel16 *   borderIcon;
+	uint32      neighborCityOwner;
+	sint32      neighborOwner;
+	MapPoint    neighbor;
 	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
 		if(neighborOwner != myOwner 

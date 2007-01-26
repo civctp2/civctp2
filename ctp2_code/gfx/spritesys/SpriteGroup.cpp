@@ -34,6 +34,7 @@
 #include "SpriteGroup.h"
 
 #include <algorithm>    // std::fill
+#include "Anim.h"
 #include "pixelutils.h"
 #include "Sprite.h"
 #include "Token.h"

@@ -86,6 +86,7 @@ namespace allocated
 
 /// Reassign an allocated object
 /// \param      a_Pointer	Pointer to reassign to
+/// \param      a_NewPointer  New value to assign
 /// \remarks    The pointer shall have been allocated with new (or be 
 ///             NULL, in which case this function is an assignment). 
 template <typename T> void reassign(T * & a_Pointer, T * a_NewPointer)

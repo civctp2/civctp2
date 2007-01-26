@@ -19,7 +19,10 @@
 // 
 // _DEBUG
 // - Debug version when set.
-// 
+//
+// _SMALL_MAPPOINTS
+// - Use 2D world when set, add 3rd dimension (CTP1 space layer) when not set.
+//
 // __SPRITETEST__
 // - ?
 //
@@ -37,11 +40,44 @@
 #pragma once
 #endif
 
-#ifndef __TILEDMAP_H__
-#define __TILEDMAP_H__
+#ifndef TILEDMAP_H__
+#define TILEDMAP_H__
 
-#include "MapPoint.h"
-#include "Vision.h"
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// BOOL, MBCHAR, RECT, etc.
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+class   TiledMap;
+struct  TILEHITMASK; 
+
+#define k_BORDER_SOLID              0
+#define k_BORDER_DASHED             1
+
+#define k_FOW_COLOR	                0x0000
+#define k_FOW_BLEND_VALUE	        16
+
+#define k_MEDIUM_KEY	            0x4208
+
+#define k_OVERLAY_FLAG_NORMAL		0x00000000
+#define k_OVERLAY_FLAG_SHADOWSONLY	0x00000001
+#define k_OVERLAY_FLAG_NOSHADOWS	0x00000002
+
+#define k_MAX_ZOOM_LEVELS	        6
+#define k_ZOOM_NORMAL		        5
+#define k_ZOOM_SMALLEST		        0
+#define k_ZOOM_LARGEST		        5
+
+extern TiledMap *   g_tiledMap;
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
 #ifndef __SPRITETEST__
 #include "aui.h"
@@ -49,72 +85,51 @@
 #else
 #include "mouse.h"
 #endif
-
-#include "pixelutils.h"
-#include "tileutils.h"
-#include "tileset.h"
 #include "colorset.h"
-#include "World.h"
+#include "directions.h"     // WORLD_DIRECTION
+#include "MapPoint.h"       // MapPoint
+#include "pixelutils.h"
 #include "SelItem.h"
+#include "tileset.h"        // TileSet
+#include "tileutils.h"
+#include "Vision.h"
+#include "World.h"
 
-#define k_MEDIUM_KEY	0x4208
+class Army; 
+class aui_BitmapFont;
+class aui_DirtyList;
+class aui_Surface;
+class BaseTile;
+class CellUnitList; 
+class CivArchive;
+class CityData;
+class EffectActor;
+class GoodActor;
+class Path;
+class TerrainImprovementRecord;
+class TileInfo;
+class Unit; 
+class UnitActor;
 
-#define k_FOW_COLOR	0x0000
-#define k_FOW_BLEND_VALUE	16
+//----------------------------------------------------------------------------
+// Declarations
+//----------------------------------------------------------------------------
 
-struct TILEHITMASK {
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
+
+struct TILEHITMASK 
+{
 	uint16		start;
 	uint16		end;  
 	double      d_start;
 	double      d_end;
 };
 
-struct GridRect {
-	RECT		rect;
-	BOOL		dirty;
-};
-
-#define k_MAX_ZOOM_LEVELS	6
-#define k_ZOOM_NORMAL		5
-#define k_ZOOM_SMALLEST		0
-#define k_ZOOM_LARGEST		5
-
-
-#define k_OVERLAY_FLAG_NORMAL		0x00000000
-#define k_OVERLAY_FLAG_SHADOWSONLY	0x00000001
-#define k_OVERLAY_FLAG_NOSHADOWS	0x00000002
-
-
-#define k_BORDER_SOLID 0
-#define k_BORDER_DASHED 1
-
-class aui_Surface;
-class aui_DirtyList;
-
-class BaseTile;
-class TileSet;
-class TileInfo;
-
-class MapPoint;
-class Path;
-
-class CivArchive;
-class CityData;
-
-class UnitActor;
-
-class EffectActor;
-class GoodActor;
-
-class aui_BitmapFont;
-class Army; 
-class Unit; 
-class CellUnitList; 
-class TerrainImprovementRecord;
-
-enum WORLD_DIRECTION;
-
-class TiledMap {
+class TiledMap 
+{
 public:
 	TiledMap(MapPoint &size);
 	virtual ~TiledMap();
@@ -156,7 +171,7 @@ public:
 	void			LoadTileset(void);
 
 	sint16			TryRiver(BOOL c, BOOL n, BOOL ne, BOOL e, BOOL se, BOOL s, BOOL sw, BOOL w, BOOL nw, BOOL cwater);
-	BOOL			TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, uint16 s, 
+	bool			TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, uint16 s, 
 									uint16 sw, uint16 w, uint16 nw, uint16 *newIndex);
 	void			TryMegaTiles(MapPoint &pos, BOOL regenTilenum);
 	void			PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
@@ -256,7 +271,7 @@ public:
 	
 	void			PaintArmyActors(MapPoint &pos);
 
-	void			PaintUnitActor(UnitActor *actor, BOOL fog = FALSE);
+	void			PaintUnitActor(UnitActor *actor, bool fog = false);
 
 	void			PaintEffectActor(EffectActor *actor);
 
@@ -272,10 +287,10 @@ public:
 	bool	        IsScrolling() const { return m_isScrolling;};
 	void	        SetScrolling(bool scroll){ m_isScrolling=scroll;};
 	void			ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf);
-	BOOL			ScrollMap(sint32 deltaX, sint32 deltaY);
-	BOOL			ScrollMapSmooth(sint32 deltaX, sint32 deltaY);
-	bool			SmoothScrollAligned();
-	void			GetSmoothScrollOffsets(sint32 &xoff,sint32 &yoff)
+	bool			ScrollMap(sint32 deltaX, sint32 deltaY);
+	bool			ScrollMapSmooth(sint32 deltaX, sint32 deltaY);
+	bool			SmoothScrollAligned() const;
+	void			GetSmoothScrollOffsets(sint32 &xoff,sint32 &yoff) const
 					{
 						xoff = m_smoothOffsetX;
 						yoff = m_smoothOffsetY;
@@ -372,10 +387,13 @@ public:
 
 	void		Blt(aui_Surface *surf);
 
-	BOOL		TileIsVisible(sint32 mapX, sint32 mapY);
-	BOOL		TileIsCompletelyVisible(sint32 mapX, sint32 mapY, RECT *viewRect = NULL);
-	
-	BOOL        TileIsVisible(sint32 mapX, sint32 mapY, sint32 mapZ);
+#if defined(_SMALL_MAPPOINTS)
+	bool		TileIsVisible(sint32 mapX, sint32 mapY);
+#else
+	bool        TileIsVisible(sint32 mapX, sint32 mapY, sint32 mapZ = 0);
+#endif
+	bool		TileIsCompletelyVisible(sint32 mapX, sint32 mapY, RECT *viewRect = NULL);
+
 
 	double		GetScale(void) { return m_scale; }
 	void		SetScale(double s) { m_scale = s; }
@@ -395,8 +413,8 @@ public:
 
 	UnitActor	*GetClickedUnit(aui_MouseEvent *data);
 
-	BOOL		PointInMask(POINT hitPt);
-	BOOL		MousePointToTilePos(POINT point, MapPoint &tilePos);
+	bool		PointInMask(POINT hitPt) const;
+	bool		MousePointToTilePos(POINT point, MapPoint &tilePos) const;
 	void		AdjustForOverlappingSprite(POINT point, MapPoint &pos);
 
 	void		MouseDrag(aui_MouseEvent *data);
@@ -404,15 +422,15 @@ public:
 	void		Drop(aui_MouseEvent *data);
 	void		Idle(void);
 
-	BOOL		GetMousePos(POINT &pos);
-	BOOL		GetMouseTilePos(MapPoint &pt);
+	bool		GetMousePos(POINT &pos) const;
+	bool		GetMouseTilePos(MapPoint &pt) const;
 
 	void		DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y);
 	void		DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
 
 	void		DrawWater(void);
 
-    BOOL        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
+    bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
 	void		DrawLegalMove(aui_Surface *pSurface);
 	void		DrawUnfinishedMove(aui_Surface *pSurface);
 
@@ -457,7 +475,7 @@ public:
 
 	void		DrawHilite( BOOL drawHilite ) { m_drawHilite = drawHilite; }
 
-	BOOL        ReadyToDraw() const;
+	bool        ReadyToDraw() const;
 
 	aui_BitmapFont		*GetFont(void) { return m_font; }
 	MBCHAR				*GetFortifyString(void) { return m_fortifyString; }
@@ -489,6 +507,11 @@ public:
 	double GetZoomScale(sint32 level) const { return m_zoomTileScale[level]; }
 
 protected:
+    struct GridRect 
+    {
+	    RECT		rect;
+	    BOOL		dirty;
+    };
 	
 	void CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
 
@@ -568,8 +591,6 @@ protected:
 
 	RECT m_chatRect;
 };
-
-extern TiledMap *g_tiledMap;
 
 #endif
 

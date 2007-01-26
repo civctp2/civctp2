@@ -3,25 +3,28 @@
 
 #include "c3.h"
 #include "UnitEvent.h"
+
+#include "AICause.h"
+#include "Army.h"
+#include "ArmyData.h"
+#include "Cell.h"
+#include "CellUnitList.h"
+#include "cityespionage.h"
+#include "director.h"                   // g_director
 #include "Events.h"
 #include "GameEventUser.h"
-#include "Unit.h"
-#include "Army.h"
-#include "UnitData.h"
-#include "ArmyData.h"
-#include "player.h"
-#include "UnitActor.h"
-#include "SlicObject.h"
-#include "SlicEngine.h"
-#include "Order.h"
-#include "UnitRecord.h"
-#include "AICause.h"
-#include "tiledmap.h"
-#include "cityespionage.h"
-#include "Cell.h"
-#include "network.h"
 #include "net_info.h"
-#include "CityInfluenceIterator.h"
+#include "network.h"                    // g_network
+#include "Order.h"
+#include "player.h"                     // g_player
+#include "SlicEngine.h"                 // g_slicEngine
+#include "SlicObject.h"
+#include "tiledmap.h"                   // g_tiledMap
+#include "Unit.h"
+#include "UnitData.h"
+#include "UnitRecord.h"
+#include "World.h"                      // g_theWorld
+
 
 STDEHANDLER(KillUnitEvent)
 {
@@ -525,9 +528,7 @@ STDEHANDLER(NukeLocationUnitEvent)
 						   GEA_Player, -1,
 						   GEA_End);
 
-	static CellUnitList tempKillList;
-	tempKillList.Clear();
-	
+	CellUnitList tempKillList;
 	
 	SquareIterator it(pos, 1);
 	for(it.Start(); !it.End(); it.Next()) {

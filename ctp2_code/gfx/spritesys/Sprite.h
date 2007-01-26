@@ -239,7 +239,7 @@ protected:
 	
 	
 	
-	void Sprite::__Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
+	void __Copy_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
 		{
@@ -253,7 +253,7 @@ protected:
 	
 	
 	
-	void Sprite::__Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
+	void __Copy_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 	{
 		while(num)
 		{

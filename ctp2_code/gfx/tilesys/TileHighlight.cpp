@@ -182,12 +182,12 @@ bool IsKnownEntryCost
 //            : g_controlPanel  :
 //            : g_selected_item : 
 //
-// Returns    : BOOL			: 
+// Returns    : bool			: 
 //
 // Remark(s)  : 
 //
 //----------------------------------------------------------------------------
-BOOL TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &dest_pos)
+bool TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &dest_pos)
 { 
     
     switch (sType) { 
@@ -197,18 +197,18 @@ BOOL TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPo
 				const OrderRecord *rec = g_controlPanel->GetCurrentOrder();
 				if(rec->GetTargetPretestEnemyCity()) {
 					if(g_theWorld->GetCell(dest_pos)->GetCity().GetOwner() != g_selected_item->GetVisiblePlayer()) {
-						return TRUE;
+						return true;
 					}
 				}
 			}
-            return FALSE; 
+            return false;
         } else { 
             return sel_army.CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, TRUE); 
         }
     case SELECT_TYPE_LOCAL_ARMY_UNLOADING:
         return sel_army.CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, TRUE); 
     default:
-        return FALSE; 
+        return false; 
     } 
 } 
 

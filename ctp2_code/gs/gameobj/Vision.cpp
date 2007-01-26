@@ -33,7 +33,7 @@
 //
 //----------------------------------------------------------------------------
 //
-/// \file   Vision.h
+/// \file   Vision.cpp
 /// \brief  Handling of tile visibility (definitions)
 
 #include "c3.h"
