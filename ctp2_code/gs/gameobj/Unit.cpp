@@ -40,6 +40,7 @@
 // - Added GetAllTerrainAsImp by E 2-24-2006
 // - Corrected pollution handling.
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+// - added IsReligion bools 1-23-2007
 //
 //----------------------------------------------------------------------------
 
@@ -2599,5 +2600,50 @@ sint32 Unit::GetUpgradeCosts(sint32 upgradeType) const
 	double rushmod   = g_theGovernmentDB->Get(govType)->GetUnitRushModifier();
 
 	return static_cast<sint32>((newshield - oldshield) * rushmod);
+}
+
+bool Unit::IsReligion1() const
+{
+	return GetData()->IsReligion1();
+}
+
+bool Unit::IsReligion2() const
+{
+	return GetData()->IsReligion2();
+}
+
+bool Unit::IsReligion3() const
+{
+	return GetData()->IsReligion3();
+}
+
+bool Unit::IsReligion4() const
+{
+	return GetData()->IsReligion4();
+}
+
+bool Unit::IsReligion5() const
+{
+	return GetData()->IsReligion6();
+}
+
+bool Unit::IsReligion7() const
+{
+	return GetData()->IsReligion7();
+}
+
+bool Unit::IsReligion8() const
+{
+	return GetData()->IsReligion8();
+}
+
+bool Unit::IsReligion9() const
+{
+	return GetData()->IsReligion9();
+}
+
+bool Unit::IsReligion10() const
+{
+	return GetData()->IsReligion10();
 }
 

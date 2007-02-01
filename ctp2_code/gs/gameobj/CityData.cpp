@@ -163,6 +163,7 @@
 //   being available once a certian population is reached. by E
 // - Added RevoltInsurgents diffDB to beginturn. If a city is rioting then there
 //   is a chance that the riot will spawn barbarians
+// - added IsReligion bools 1-23-2007
 //
 //----------------------------------------------------------------------------
 
@@ -10005,3 +10006,55 @@ sint32 CityData::TileImpHappinessIncr() const
 	return totalHappinessInc;
 
 }
+
+// called by TiledMap::DrawCityNames
+bool CityData::IsReligion1() const
+{
+	return buildingutil_GetIsReligion1(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion2() const
+{
+	return buildingutil_GetIsReligion2(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion3() const
+{
+	return buildingutil_GetIsReligion3(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion4() const
+{
+	return buildingutil_GetIsReligion4(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion5() const
+{
+	return buildingutil_GetIsReligion5(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion6() const
+{
+	return buildingutil_GetIsReligion6(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion7() const
+{
+	return buildingutil_GetIsReligion7(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion8() const
+{
+	return buildingutil_GetIsReligion8(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion9() const
+{
+	return buildingutil_GetIsReligion9(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligion10() const
+{
+	return buildingutil_GetIsReligion10(GetEffectiveBuildings());
+}
+

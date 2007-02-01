@@ -36,6 +36,8 @@
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
 //   - April 13th 2005 Martin Gühmann
 // - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
+// - added ISCApitol
+// - added IsReligion bools 1-23-2007
 //
 //----------------------------------------------------------------------------
 //
@@ -247,6 +249,17 @@ UnseenCell::UnseenCell(const MapPoint & point)
 		    SetHasSleepingUnits(cityData->HasSleepingUnits());
 		    SetIsWatchful(cityData->IsWatchful());
 			SetIsCapitol(cityData->IsCapitol());  //emod
+			SetIsReligion1(cityData->IsReligion1());  //emod
+			SetIsReligion2(cityData->IsReligion2());  //emod
+			SetIsReligion3(cityData->IsReligion3());  //emod
+			SetIsReligion4(cityData->IsReligion4());  //emod
+			SetIsReligion5(cityData->IsReligion5());  //emod
+			SetIsReligion6(cityData->IsReligion6());  //emod
+			SetIsReligion7(cityData->IsReligion7());  //emod
+			SetIsReligion8(cityData->IsReligion8());  //emod
+			SetIsReligion9(cityData->IsReligion9());  //emod
+			SetIsReligion10(cityData->IsReligion10());  //emod
+
 
 		    m_bioInfectedOwner = (sint8)cityData->GetOwner();
 		    m_nanoInfectedOwner = (sint8)cityData->GetOwner();

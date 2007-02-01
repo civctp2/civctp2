@@ -47,6 +47,15 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
+2007-02-01
+Added:	Religious City Icons (up to 10 Religions)
+Added:	National Borders are now displayed with icons.
+Changed: Cityname. population rectangle, and turns to population growth are all aligned.
+Changed: Next Pop rectangle is now black like the city name to differentiate it from City Population.
+Added:	Player Capitols now have a star Icon.
+Fixed: Implemented HasAirport Icon.
+
+
 2006-10-05 (Revision 647)
 Fixed:    No new civ message if the city in questions joins another civ.
 Added:    New database flags for modders:

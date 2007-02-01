@@ -972,7 +972,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 	sint32 startI, endI;
 	if(side == NORTHWEST || side == NORTHEAST) {
 		startI = k_TILE_PIXEL_HEADROOM;  // E - pixel headroom is the space on the tga above the square tileset.h has these values
-		endI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
+		endI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2); 
 	} else {
 		startI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
 		endI = k_TILE_GRID_HEIGHT;
@@ -3609,7 +3609,17 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						hasAirport = FALSE,
 						hasSleepingUnits = FALSE,
 						isWatchful = FALSE, //emod ; to ,
-						isCapitol = FALSE;  //emod
+						isCapitol = FALSE,  //emod
+						IsReligion1 = FALSE,
+						IsReligion2 = FALSE,
+						IsReligion3 = FALSE,
+						IsReligion4 = FALSE,
+						IsReligion5 = FALSE,							
+						IsReligion6 = FALSE,
+						IsReligion7 = FALSE,
+						IsReligion8 = FALSE,
+						IsReligion9 = FALSE,
+						IsReligion10 = FALSE;
 				sint32	bioInfectedOwner=0, 
 						nanoInfectedOwner=0, 
 						convertedOwner=0, 
@@ -3646,6 +3656,17 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					franchiseOwner = ucell.m_unseenCell->m_franchiseOwner;
 					injoinedOwner = ucell.m_unseenCell->m_injoinedOwner;
 					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
+					//emod religion bools
+					IsReligion1 = ucell.m_unseenCell->IsReligion1();
+					IsReligion2 = ucell.m_unseenCell->IsReligion2();
+					IsReligion3 = ucell.m_unseenCell->IsReligion3();
+					IsReligion4 = ucell.m_unseenCell->IsReligion4();
+					IsReligion5 = ucell.m_unseenCell->IsReligion5();
+					IsReligion6 = ucell.m_unseenCell->IsReligion6();
+					IsReligion7 = ucell.m_unseenCell->IsReligion7();
+					IsReligion8 = ucell.m_unseenCell->IsReligion8();
+					IsReligion9 = ucell.m_unseenCell->IsReligion9();
+					IsReligion10 = ucell.m_unseenCell->IsReligion10();
 					
 					slaveBits = ucell.m_unseenCell->GetSlaveBits();
 					
@@ -3683,6 +3704,18 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							franchiseOwner = cityData->GetFranchiseOwner();
 							injoinedOwner = cityData->GetOwner();
 							happinessAttackOwner = cityData->GetOwner();
+							//emod
+							IsReligion1 = cityData->IsReligion1();
+							IsReligion2 = cityData->IsReligion2();
+							IsReligion3 = cityData->IsReligion3();
+							IsReligion4 = cityData->IsReligion4();
+							IsReligion5 = cityData->IsReligion5();
+							IsReligion6 = cityData->IsReligion6();
+							IsReligion7 = cityData->IsReligion7();
+							IsReligion8 = cityData->IsReligion8();
+							IsReligion9 = cityData->IsReligion9();
+							IsReligion10 = cityData->IsReligion10();
+
 							
 							slaveBits = cityData->GetSlaveBits();
 							
@@ -3712,29 +3745,27 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					RECT rect;//the city name rectangle
 					RECT boxRect;//boxRect-rect will = the player colored border for the city name
 					RECT clipRect;//working surface
-					RECT namerect;
 
 					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight) {//it's on the screen
 						if (m_font) {
-							width = m_font->GetStringWidth(name);
-							height = m_font->GetMaxHeight();
+							//width = m_font->GetStringWidth(name); //original
+							//height = m_font->GetMaxHeight(); //original
+							sint32 widthname = m_font->GetStringWidth(name);
+							sint32 heightname = m_font->GetMaxHeight();
 
-                            // get the proper colors for the city's owner
-							Pixel16	const pixelColor = GetPlayerColor(owner, fog);
-
-							//emod
-							MBCHAR str[80];
-							sint32 width1 = m_font->GetStringWidth(name);
-							//sint32 width2 = m_font->GetStringWidth(str);
-							//x = width2 + 1;  //moved to far screen
-							//RECT popRect = {0, 0, width+4, height+4};  //made big # box
-							//end emod
-
-                            //define rect's screen co-ordinates
-							rect.left = x;   //original rect.left = x; 
+							Pixel16			pixelColor;
+                            //get the proper colors for the city's owner
+							if (fog) {
+								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
+							} else {
+								pixelColor = g_colorSet->GetPlayerColor(owner);
+							}
+							COLORREF color = GetColorRef(g_colorSet->ComputePlayerColor(owner), fog);
+							//define rect's screen co-ordinates
+							rect.left = x;
 							rect.top = y;
-							rect.right = rect.left + width;//x+width;
-							rect.bottom = rect.top + height; //y+height;
+							rect.right = rect.left + widthname;//x+width;
+							rect.bottom = rect.top + heightname; //y+height;
 
 							boxRect = rect;//copy rect to boxRect
 
@@ -3787,16 +3818,13 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							m_font->DrawString(surf, &rect, &clipRect, name, 0, nameColor, 0);
 
 							AddDirtyRectToMix(boxRect);
-
-							namerect = boxRect;
 							
-           //start on the city's pop rectangle
+                   //start on the city's pop rectangle
                             //put the city's pop in str
-							
-							//MBCHAR str[80];  //moved higher
+							MBCHAR str[80];
 							sprintf(str,"%i",pop);
 							//the top line of the pop rectangle
-							//y = boxRect.bottom + 1;   //original
+							//y = boxRect.bottom + 1; //original
 
 
 							width = m_font->GetStringWidth(str);
@@ -3804,12 +3832,18 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								width = k_POP_BOX_SIZE_MINIMUM;
 							height = m_font->GetMaxHeight();
 
-											
-
 							// the pop rectangle
-							RECT popRect = {0, 0, width+4, height+4};  //original
+							RECT popRect = {0, 0, width+4, height+4};
                             //add the top left co-ordinates
+							//OffsetRect(&popRect, boxRect.left, y);  //original
 							OffsetRect(&popRect, boxRect.left - width - 4, boxRect.top);  //orig OffsetRect(&popRect, boxRect.left, y)
+
+							//get the proper color for the city's owner
+							if (fog) {
+								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
+							} else {
+								pixelColor = g_colorSet->GetPlayerColor(owner);
+							}
 
 							//copy popRect to the working surface clipRect
 							clipRect = popRect;
@@ -3818,9 +3852,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
-                            // Prevent Asserts in primitives_PaintRect16 when moving the mouse 
-                            if (clipRect.right < clipRect.left) clipRect.right = clipRect.left;
 
 							//paint clipRect's surface the proper player color and give it a black frame
 							primitives_PaintRect16(surf, &clipRect, pixelColor);
@@ -3879,13 +3910,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							popRect.bottom++;
 							popRect.right++;
 
-							AddDirtyRectToMix(rect); 
+							AddDirtyRectToMix(rect);
 
 							//top left co-ordinates of nextPop rect
-							x = clipRect.right + width1 + 8; // popRect.left;
+							//x = popRect.left;
+                            //y = popRect.bottom + 1;
+							//emod top left co-ordinates of nextPop rect
+							x = boxRect.right; // + widthname + 8; // popRect.left;
                             //original  y = popRect.bottom + 1;
 
-	// nextpop rect, PFT
+			// nextpop rect, PFT
 							if (owner == g_selected_item->GetVisiblePlayer())
                             {
                                 //put the number of turns until the city's nextpop in str
@@ -3907,7 +3941,15 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							    //RECT for next pop
 								RECT popRectn = {0, 0, width+4, height+4};
                                 //add the top left co-ordinates
+								//OffsetRect(&popRectn, x, y); //original
 								OffsetRect(&popRectn, x, boxRect.top); //OffsetRect(&popRectn, x, y);
+
+								//get the proper color for the city's owner
+								if (fog) {
+									pixelColor = g_colorSet->GetDarkPlayerColor(owner);
+								} else {
+									pixelColor = g_colorSet->GetPlayerColor(owner);
+								}
 
 								//copy popRectn to the working surface clipRect
 								clipRect = popRectn;
@@ -3918,8 +3960,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
 
 								//paint clipRect's surface the proper player color and give it a black frame
-								primitives_PaintRect16(surf, &clipRect, pixelColor);
-								primitives_FrameRect16(surf, &clipRect, GetColor(COLOR_BLACK));
+								//emod to differentiate nextpop to match city name
+								primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK)); //pixelColor);
+								primitives_FrameRect16(surf, &clipRect, pixelColor); //GetColor(COLOR_BLACK));
 	
 								//width and height of the nextpop number	
 								width = m_font->GetStringWidth(strn);
@@ -3981,20 +4024,20 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							}
 						} else 
 							continue;
-
 					}
-					if (owner == !g_selected_item->GetVisiblePlayer()) {  //emod
-/// @bug warning C4701: potentially uninitialized local variable 'namerect' used
-						clipRect = namerect;
-					}
-
-					DrawCityIcons(surf, pos, owner, fog, clipRect,   //rect?   works for non-civ need for civ...
+					DrawCityIcons(surf, pos, owner, fog, rect,
 								isBioInfected, isNanoInfected, isConverted, 
 								isFranchised, isInjoined, wasHappinessAttacked,
 								bioInfectedOwner, nanoInfectedOwner, convertedOwner,
 								franchiseOwner, injoinedOwner, happinessAttackOwner, 
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
 								isWatchful, isCapitol);
+					//added religion Icons
+					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, 
+								IsReligion1, IsReligion2, IsReligion3,
+								IsReligion4, IsReligion5, IsReligion6,
+								IsReligion7, IsReligion8, IsReligion9,
+								IsReligion10); 
 
 				}
 			}
@@ -4083,31 +4126,6 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
-	//emod to add an icon for the city capitol like civ3/4
-	if (isCapitol) {  
-		iconRect.left   = popRect.right + 1;
-		iconRect.right  = iconRect.left + iconDim.x;
-		iconRect.top    = popRect.top - 2;
-		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
-		Assert(cityIcon); 
-		if (!cityIcon) return;
-		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
-		iconDim = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
-
-		color = GetPlayerColor(owner, fog);  //optional
-		//color = GetColor(COLOR_YELLOW, fog);
-		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
-		AddDirtyRectToMix(iconRect);
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
-	}
-
-	if (iconRect.left < 0 || iconRect.top < 0 || 
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-//end EMOD
 	if (isNanoInfected) {
 		cityIcon = tileSet->GetMapIconData(MAPICON_NANODISEASE);
 		Assert(cityIcon); if (!cityIcon) return;
@@ -4280,20 +4298,31 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right += iconDim.x;
 	}
 //emod to add an icon for the city capitol like civ3/4
-/*	if (isCapitol) {  
-		cityIcon = tileSet->GetMapIconData(MAPICON_ARMY);
+	if (isCapitol) {
+		POINT       iconDim2     = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
+		iconRect.left   = popRect.left - + iconDim2.x;
+		iconRect.right  = iconRect.left + iconDim2.x;
+		iconRect.top    = popRect.top - iconDim2.y - 2;
+		iconRect.bottom = popRect.top - 1;
+		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
 		Assert(cityIcon); 
 		if (!cityIcon) return;
-		cityIcon = tileSet->GetMapIconData(MAPICON_ARMY);
-		iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
+		cityIcon = tileSet->GetMapIconData(MAPICON_CAPITOL);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
 
-		color = GetColor(COLOR_YELLOW, fog);
+		color = GetPlayerColor(owner, fog);  //optional
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 		AddDirtyRectToMix(iconRect);
 
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
-*/	//}
+	}
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+//end EMOD
 //emod to draw city icons for wonders and buildings
 	/*
 
@@ -4694,7 +4723,7 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
     RECT		iconRect;
 	iconRect.left   = x;
 	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = y;
+	iconRect.top    = y;  //y
 	iconRect.bottom = iconRect.top + iconDim.y + 1;
 	
     sint32  maxWidth    = surface ? surface->Width() : m_surface->Width();
@@ -4703,7 +4732,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if ((iconRect.right >= maxWidth) || (iconRect.bottom >= maxHeight))
 		return;
 	//add city wall icons?
+	//bool HasCityWall = myCity.hasCityWall
 	//add Great Wall Icon?
+	// bool PlayerHasGreatWall = g_player->GethasGreatWall future function
 
 //end emod
 	Pixel16 *   borderIcon;
@@ -4718,15 +4749,27 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
+			//DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
 	   //could change this to the same DrawColorizedOverlay but use different icons for NW etc.
 		//create a new function like drawcityicons but requires a pos and converts a pos to pixels THEN place Icon.
 		//emod
+			//X = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2); -> 24 + 72/2 = 60 FROM DRAWCOLOREDBORDEREDGE
+			iconRect.top    = y + 18;  //y
 			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
 			Assert(borderIcon); 
 			if (!borderIcon) return;
 			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
 			AddDirtyRectToMix(iconRect);
+
+			//if ((PlayerHasGreatWall) && (IsLand(pos)) {
+				//iconRect.top    = y + 20;  //y
+				//GWIcon = tileSet->GetMapIconData(MAPICON_GREATWALLNW);
+				//Assert(borderIcon); 
+				//if (!borderIcon) return;
+				//DrawColorizedOverlay(GWIcon, surface, iconRect.left, iconRect.top, color);
+				//AddDirtyRectToMix(iconRect);
+		//}
+			
 		//end emod
 		}	
 
@@ -4736,6 +4779,14 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
 			   g_theProfileDB->IsShowCityInfluence()) {
 				DrawColoredBorderEdge(surface, pos, white, NORTHWEST, k_BORDER_DASHED);
+				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
+					//iconRect.top    = y + 20;  //y
+					//CWIcon = tileSet->GetMapIconData(MAPICON_CITYWALLNW);
+					//Assert(CWIcon); 
+					//if (!CWIcon) return;
+					//DrawColorizedOverlay(CWIcon, surface, iconRect.left, iconRect.top, color);
+					//AddDirtyRectToMix(iconRect);
+				//}
 			}
 		}
 	}
@@ -4748,8 +4799,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID);
+			//DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID); //original
 			//emod
+			iconRect.top    = y + 46;  //y
 			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSW);
 			Assert(borderIcon); 
 			if (!borderIcon) return;
@@ -4775,8 +4827,12 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);
+
+			//DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);  //original
 			//emod
+			iconRect.left   = x + 44;
+			iconRect.top    = y + 22;  //y
+	
 			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNE);
 			Assert(borderIcon); 
 			if (!borderIcon) return;
@@ -4802,8 +4858,12 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID);
+
+			//DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID); //original
 			//emod
+			iconRect.left   = x + 46;
+			iconRect.top    = y + 48;  //y
+			
 			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSE);
 			Assert(borderIcon); 
 			if (!borderIcon) return;
@@ -4904,4 +4964,184 @@ void TiledMap::AddChatDirtyRectToMap()
 	}
 }
 
-//emod
+void TiledMap::DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, 
+								RECT &rect, BOOL IsReligion1, BOOL IsReligion2, BOOL IsReligion3,
+								BOOL IsReligion4, BOOL IsReligion5, BOOL IsReligion6,
+								BOOL IsReligion7, BOOL IsReligion8, BOOL IsReligion9,
+								BOOL IsReligion10
+								)  
+{
+	TileSet	*   tileSet     = GetTileSet();
+	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_RELIGION1);
+    RECT		iconRect;
+
+	iconRect.left   = rect.left - 5;
+	iconRect.right  = iconRect.left + iconDim.x + 1;
+	iconRect.top    = rect.bottom;
+	iconRect.bottom = rect.top + iconDim.y + 1;;
+
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	Pixel16     color       = GetPlayerColor(owner, fog);
+	Pixel16 *   cityIcon;
+
+	if (IsReligion1) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION1);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION1);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION1);
+
+		color = GetColor(COLOR_YELLOW, fog);
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+	if (IsReligion2) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION2);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION2);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION2);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion3) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION3);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION3);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION3);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion4) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION4);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION4);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION4);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion4) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION4);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION4);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION4);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion5) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION5);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION5);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION5);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion6) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION6);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION6);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION6);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion7) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION7);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION7);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION7);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion8) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION8);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION8);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION8);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion9) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION9);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION9);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION9);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+		if (IsReligion10) { 
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION10);
+		Assert(cityIcon); 
+		if (!cityIcon) return;
+		cityIcon = tileSet->GetMapIconData(MAPICON_RELIGION10);
+		iconDim = tileSet->GetMapIconDimensions(MAPICON_RELIGION10);
+
+		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+		AddDirtyRectToMix(iconRect);
+
+
+		iconRect.left += iconDim.x;
+		iconRect.right += iconDim.x;
+	}
+}

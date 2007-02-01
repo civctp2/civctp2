@@ -68,6 +68,7 @@
 // - Total fuel, total move points and total hp calculation moved into their own
 //   methods. (Dec 24th 2006 Martin Gühmann)
 // - Completed SetType() method. (Dec 24th 2006 Martin Gühmann)
+// - added IsReligion bools 1-23-2007
 //
 //----------------------------------------------------------------------------
 
@@ -5915,3 +5916,92 @@ const UnitRecord * UnitData::GetDBRec(void) const
 	}
 }
 
+bool UnitData::IsReligion1() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion1();
+}
+
+bool UnitData::IsReligion2() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion2();
+}
+
+bool UnitData::IsReligion3() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion3();
+}
+
+bool UnitData::IsReligion4() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion4();
+}
+
+bool UnitData::IsReligion5() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion5();
+}
+
+bool UnitData::IsReligion6() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion6();
+}
+
+bool UnitData::IsReligion7() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion7();
+}
+
+bool UnitData::IsReligion8() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion8();
+}
+
+bool UnitData::IsReligion9() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion9();
+}
+
+bool UnitData::IsReligion10() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return false;
+
+	return m_city_data->IsReligion10();
+}

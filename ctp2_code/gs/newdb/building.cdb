@@ -152,5 +152,19 @@ Building {
 	Bit(Float) ProductionPollutionPercent
 	Bit(Float) PollutionAmount
 
+	Bit(File) ShowAsIcon            // tiledraw icon file?
+
+	#Religion Bools for MAPICONS
+	Bit        IsReligion1
+	Bit        IsReligion2
+	Bit        IsReligion3
+	Bit        IsReligion4
+	Bit        IsReligion5
+	Bit        IsReligion6
+	Bit        IsReligion7
+	Bit        IsReligion8
+	Bit        IsReligion9
+	Bit        IsReligion10
+
 	Bit GLHidden
 }

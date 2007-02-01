@@ -197,6 +197,7 @@ public:
 
 	sint32			RecalculateViewRect(RECT &myRect);
 	sint32			CalculateMetrics(void);
+	void			DrawBorderIcon(aui_Surface *surf, const MapPoint &pos);  //test
 
 
 	
@@ -452,7 +453,15 @@ public:
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful, BOOL isCapitol);  //added capitol
+								BOOL isWatchful, BOOL isCapitol //added capitol
+								); 
+	//EMOD to add Civ4 Style Icons
+	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, 
+								RECT &rect, BOOL IsReligion1, BOOL IsReligion2, BOOL IsReligion3,
+								BOOL IsReligion4, BOOL IsReligion5, BOOL IsReligion6,
+								BOOL IsReligion7, BOOL IsReligion8, BOOL IsReligion9,
+								BOOL IsReligion10
+								); 
 
 	void		Serialize(CivArchive &archive);
 

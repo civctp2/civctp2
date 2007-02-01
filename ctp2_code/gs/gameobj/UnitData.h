@@ -32,6 +32,7 @@
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Total fuel, total move points and total hp calculation moved into their own
 //   methods. (Dec 24th 2006 Martin Gühmann)
+// - added IsReligion bools
 //
 //----------------------------------------------------------------------------
 
@@ -707,6 +708,16 @@ public:
 	sint32 CalculateTotalHP() const;
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
+	bool IsReligion1() const;
+	bool IsReligion2() const;
+	bool IsReligion3() const;
+	bool IsReligion4() const;
+	bool IsReligion5() const;
+	bool IsReligion6() const;
+	bool IsReligion7() const;
+	bool IsReligion8() const;
+	bool IsReligion9() const;
+	bool IsReligion10() const;
 
 
 private:

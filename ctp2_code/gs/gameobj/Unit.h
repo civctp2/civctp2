@@ -788,6 +788,16 @@ public:
 	void Sink(sint32 chance);
 	sint32 GetBestUpgradeUnitType() const;
 	sint32 GetUpgradeCosts(sint32 upgradeType) const;
+	bool IsReligion1() const;  //emod
+	bool IsReligion2() const;
+	bool IsReligion3() const;
+	bool IsReligion4() const;
+	bool IsReligion5() const;
+	bool IsReligion6() const;
+	bool IsReligion7() const;
+	bool IsReligion8() const;
+	bool IsReligion9() const;
+	bool IsReligion10() const;
 };
 
 uint32 Unit_Unit_GetVersion(void);

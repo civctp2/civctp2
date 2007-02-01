@@ -674,3 +674,84 @@ sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements)
 	}
 	return amt;
 }
+
+bool buildingutil_GetIsReligion1(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion1) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion2(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion2) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion3(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion3) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion4(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion4) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion5(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion5) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion6(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion6) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion7(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion7) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion8(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion8) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion9(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion9) {
+		return true;
+	}
+	return false;
+}
+
+bool buildingutil_GetIsReligion10(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligion10) {
+		return true;
+	}
+	return false;
+}
+

@@ -989,7 +989,22 @@ public:
 	sint32 SectarianHappiness() const;             //EMOD 5-24-2006
 //	sint32 AddGoodToCity (sint32 good) const;      //EMOD 5-31-2006
 	sint32 TileImpHappinessIncr() const;		   //EMOD 10-05-2006
+//Religion Bools for Civ4 style Religion MAPICONS
+	bool CityData::IsReligion1() const;
+	bool CityData::IsReligion2() const;
+	bool CityData::IsReligion3() const;
+	bool CityData::IsReligion4() const;
+	bool CityData::IsReligion5() const;
+	bool CityData::IsReligion6() const;
+	bool CityData::IsReligion7() const;
+	bool CityData::IsReligion8() const;
+	bool CityData::IsReligion9() const;
+	bool CityData::IsReligion10() const;
 
+	
+	
+	
+	
 	void ProcessAllResources();
 
 private:

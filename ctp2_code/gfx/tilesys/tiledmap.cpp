@@ -4427,6 +4427,7 @@ sint32 TiledMap::RedrawHat(
 	if(tempPos.GetNeighborPosition(NORTHWEST, nw)) {
 		if (m_localVision->IsExplored(nw)) 
         {
+			
 			DrawNationalBorders(surface, nw);
 		}
 	}
@@ -4470,7 +4471,7 @@ sint32 TiledMap::RedrawBorders(
     {
 		return 0;
 	}
-
+	//DrawBorderIcon(surface, tempPos);  //emod?
 	DrawNationalBorders(surface, tempPos);
 
 	return 0;
