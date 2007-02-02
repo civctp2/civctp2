@@ -335,7 +335,8 @@ public:
     
     
     sint16 GetContinent(const MapPoint & pos) const;
-    
+    bool IsOnSameContinent(const MapPoint & pos1, const MapPoint & pos2) const;
+
     sint16 GetMinWaterContinent() const; 
     sint16 GetMaxWaterContinent() const; 
     sint16 GetMinLandContinent() const; 
@@ -368,7 +369,7 @@ public:
         MapPoint &pos);
     
     void GetContinent(const MapPoint &pos, sint32 &cont_number, 
-        BOOL &is_land) const;
+        bool &is_land) const;
     
     void AllocateNeighborMem();
 

@@ -191,7 +191,7 @@ void MapAnalysis::BeginTurn()
     Army pirate_army;
     sint32 route_value;
 
-    BOOL is_land;
+    bool is_land;
     sint32 cont;
 
 

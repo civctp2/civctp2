@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map fog of war visibility handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,8 +37,7 @@
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
 //   - April 13th 2005 Martin Gühmann
 // - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
-// - added ISCApitol
-// - added IsReligion bools 1-23-2007
+// - Added isCapitol
 //
 //----------------------------------------------------------------------------
 //
@@ -136,81 +136,75 @@ UnseenCell::UnseenCell(const MapPoint & point)
 	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
-    if (g_theWorld->GetTileInfo(point))
-    {
-        m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(point));
-    }
+	if (g_theWorld->GetTileInfo(point))
+	{
+		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(point));
+	}
 
-    Cell * cell = g_theWorld->GetCell(point);
-    if (cell)
-    {
-	    m_env = cell->GetEnv();
-	    m_move_cost = sint16(cell->GetMoveCost());
-	    m_terrain_type = (sint8)TERRAIN_TYPES(cell->GetTerrain());
+	Cell * cell = g_theWorld->GetCell(point);
+	if (cell)
+	{
+		m_env = cell->GetEnv();
+		m_move_cost = sint16(cell->GetMoveCost());
+		m_terrain_type = (sint8)TERRAIN_TYPES(cell->GetTerrain());
 #ifdef BATTLE_FLAGS
-	    m_battleFlags = cell->GetBattleFlags();
+		m_battleFlags = cell->GetBattleFlags();
 #endif
 
-	    sint32 i;
-// Added by Martin Gühmann
+		sint32 i;
 
-	    // Same as well information about existing
-	    // tile improvments, except roadlike ones,
-	    // so that this information is available
-	    // later as well.
-	    // And in order not to break anythink use the existing
-	    // list for unfinished tile improvements.
-	    for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-		    sint32 imp = cell->GetDBImprovement(i);
-		    m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
-	    }
-	    for(i = 0; i < cell->GetNumImprovements(); i++) {
-		    TerrainImprovement imp = cell->AccessImprovement(i);
-		    if (imp.IsValid()) 
-            {
-			    m_improvements->AddTail(new UnseenImprovementInfo(imp.GetType(),
+		// Same as well information about existing
+		// tile improvments, except roadlike ones,
+		// so that this information is available
+		// later as well.
+		// And in order not to break anythink use the existing
+		// list for unfinished tile improvements.
+		for(i = 0; i < cell->GetNumDBImprovements(); i++) {
+			sint32 imp = cell->GetDBImprovement(i);
+			m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
+		}
+		for(i = 0; i < cell->GetNumImprovements(); i++) {
+			TerrainImprovement imp = cell->AccessImprovement(i);
+			if (imp.IsValid()) 
+			{
+				m_improvements->AddTail(new UnseenImprovementInfo(imp.GetType(),
 															      imp.PercentComplete()));
-		    }
-	    }
+			}
+		}
 
-	    DynamicArray<Installation> instArray;
-	    g_theInstallationTree->GetAt(point, instArray);
-	    for(i = 0; i < instArray.Num(); i++) {
-		    m_installations->AddTail(new UnseenInstallationInfo(instArray[i].GetType(),
+		DynamicArray<Installation> instArray;
+		g_theInstallationTree->GetAt(point, instArray);
+		for(i = 0; i < instArray.Num(); i++) {
+			m_installations->AddTail(new UnseenInstallationInfo(instArray[i].GetType(),
 														       instArray[i].GetVisibility()));
-	    }
-    	
-	    m_cell_owner = (sint8) cell->GetOwner();
-// Added by Martin Gühmann
-	    // Store the city that controlls this tile.
-	    m_visibleCityOwner = cell->GetCityOwner().m_id;
+		}
 
-	    Unit    city = cell->GetCity();
+		m_cell_owner = (sint8) cell->GetOwner();
 
-	    if (city.IsValid()) 
-        {
-		    m_citySize = (sint16)city.PopCount();
-		    m_citySpriteIndex = (sint16)city.CD()->GetDesiredSpriteIndex();
-		    const MBCHAR *name = city.GetName();
-		    m_cityName = new MBCHAR[strlen(name) + 1];
-		    strcpy(m_cityName, name);
-		
-// Added by Martin Gühmann
-		    m_cityOwner = static_cast<sint16>(city.GetCityData()->GetOwner());
+		// Store the city that controlls this tile.
+		m_visibleCityOwner = cell->GetCityOwner().m_id;
 
-		    CityData *cityData = city.GetData()->GetCityData();
+		Unit    city = cell->GetCity();
 
-		    UnitActor *actor = city.GetActor();
+		if (city.IsValid()) 
+		{
+			m_citySize = (sint16)city.PopCount();
+			m_citySpriteIndex = (sint16)city.CD()->GetDesiredSpriteIndex();
+			const MBCHAR *name = city.GetName();
+			m_cityName = new MBCHAR[strlen(name) + 1];
+			strcpy(m_cityName, name);
 
-    		
-    		
-    		
-    		
-		    if (actor) {
-    			
-			    SpriteState *newSS = new SpriteState(city.GetSpriteState()->GetIndex());
+			m_cityOwner = static_cast<sint16>(city.GetCityData()->GetOwner());
 
-			    UnitActor *newActor = new UnitActor(newSS, 
+			CityData *cityData = city.GetData()->GetCityData();
+
+			UnitActor *actor = city.GetActor();
+
+			if (actor) {
+
+				SpriteState *newSS = new SpriteState(city.GetSpriteState()->GetIndex());
+
+				UnitActor *newActor = new UnitActor(newSS, 
 												    city, 
 												    city.GetType(), 
 												    point, 
@@ -219,60 +213,49 @@ UnseenCell::UnseenCell(const MapPoint & point)
 												    city.GetVisionRange(),
 												    city.CD()->GetDesiredSpriteIndex());
 
-			    newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
+				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
 										    | actor->GetUnitVisibility());
-			    newActor->SetPos(point);
-    			
-			    newActor->SetIsFortified(actor->IsFortified());
-			    newActor->SetIsFortifying(actor->IsFortifying());
-			    newActor->SetHasCityWalls(actor->HasCityWalls());
-			    newActor->SetHasForceField(actor->HasForceField());
+				newActor->SetPos(point);
 
-			    newActor->SetSize(m_citySize);
-    			
-			    newActor->ChangeImage(newSS, city.GetType(), city);
+				newActor->SetIsFortified(actor->IsFortified());
+				newActor->SetIsFortifying(actor->IsFortifying());
+				newActor->SetHasCityWalls(actor->HasCityWalls());
+				newActor->SetHasForceField(actor->HasForceField());
 
-			    newActor->AddIdle();
-			    newActor->GetNextAction();
+				newActor->SetSize(m_citySize);
 
-			    m_actor = newActor;
-            } // actor
+				newActor->ChangeImage(newSS, city.GetType(), city);
 
-		    SetIsBioInfected(cityData->IsBioInfected());
-		    SetIsNanoInfected(cityData->IsNanoInfected());
-		    SetIsConverted(cityData->IsConverted());
-		    SetIsFranchised(cityData->IsFranchised());
-		    SetIsInjoined(cityData->IsInjoined());
-		    SetWasHappinessAttacked(cityData->WasHappinessAttacked());
-		    SetIsRioting(cityData->GetIsRioting());
-		    SetHasAirport(cityData->HasAirport());
-		    SetHasSleepingUnits(cityData->HasSleepingUnits());
-		    SetIsWatchful(cityData->IsWatchful());
-			SetIsCapitol(cityData->IsCapitol());  //emod
-			SetIsReligion1(cityData->IsReligion1());  //emod
-			SetIsReligion2(cityData->IsReligion2());  //emod
-			SetIsReligion3(cityData->IsReligion3());  //emod
-			SetIsReligion4(cityData->IsReligion4());  //emod
-			SetIsReligion5(cityData->IsReligion5());  //emod
-			SetIsReligion6(cityData->IsReligion6());  //emod
-			SetIsReligion7(cityData->IsReligion7());  //emod
-			SetIsReligion8(cityData->IsReligion8());  //emod
-			SetIsReligion9(cityData->IsReligion9());  //emod
-			SetIsReligion10(cityData->IsReligion10());  //emod
+				newActor->AddIdle();
+				newActor->GetNextAction();
 
+				m_actor = newActor;
+			} // actor
 
-		    m_bioInfectedOwner = (sint8)cityData->GetOwner();
-		    m_nanoInfectedOwner = (sint8)cityData->GetOwner();
-		    m_convertedOwner = (sint8)cityData->IsConvertedTo();
-		    m_franchiseOwner = (sint8)cityData->GetFranchiseOwner();
-		    m_injoinedOwner = (sint8)cityData->GetOwner();
-		    m_happinessAttackOwner = (sint8)cityData->GetOwner();
-		    m_slaveBits = cityData->GetSlaveBits();
+			SetIsBioInfected(cityData->IsBioInfected());
+			SetIsNanoInfected(cityData->IsNanoInfected());
+			SetIsConverted(cityData->IsConverted());
+			SetIsFranchised(cityData->IsFranchised());
+			SetIsInjoined(cityData->IsInjoined());
+			SetWasHappinessAttacked(cityData->WasHappinessAttacked());
+			SetIsRioting(cityData->GetIsRioting());
+			SetHasAirport(cityData->HasAirport());
+			SetHasSleepingUnits(cityData->HasSleepingUnits());
+			SetIsWatchful(cityData->IsWatchful());
+			SetIsCapitol(cityData->IsCapitol());
 
-        } // city.IsValid
-    } // cell
+			m_bioInfectedOwner = (sint8)cityData->GetOwner();
+			m_nanoInfectedOwner = (sint8)cityData->GetOwner();
+			m_convertedOwner = (sint8)cityData->IsConvertedTo();
+			m_franchiseOwner = (sint8)cityData->GetFranchiseOwner();
+			m_injoinedOwner = (sint8)cityData->GetOwner();
+			m_happinessAttackOwner = (sint8)cityData->GetOwner();
+			m_slaveBits = cityData->GetSlaveBits();
+
+		} // city.IsValid
+	} // cell
 	
-    SetHasHut(NULL != g_theWorld->GetGoodyHut(point));
+	SetHasHut(NULL != g_theWorld->GetGoodyHut(point));
 }
 
 //----------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map point handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -136,6 +137,40 @@ bool MapPoint::operator == (const MapPoint &test_me) const
 bool MapPoint::operator!= (const MapPoint &test_me) const
 {
 	return ((x != test_me.x) || (y != test_me.y));
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : MapPoint::HasUnexploredNeighbor
+//
+// Description: Check whther this MapPoint has an unexplored tile for the
+//              given player nearby.
+//
+// Parameters : player       : The player for that the the unexplored test is done.
+//
+// Globals    : -
+//
+// Returns    : bool         : Wheter there is an unexplored neighbor.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool MapPoint::HasUnexploredNeighbor(sint32 player) const
+{
+	sint32 d;
+	for(d = 0; d < sint32(NOWHERE); d++)
+	{
+		MapPoint n;
+		if(GetNeighborPosition((WORLD_DIRECTION)d, n))
+		{
+			if(!g_player[player]->IsExplored(n))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 //----------------------------------------------------------------------------
@@ -1016,4 +1051,39 @@ bool RadiusIterator::IsIncluded()
 {
 	return m_testXY.IsValid() &&
 	       (MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CircleIterator
+//
+// Description: -
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+
+CircleIterator::CircleIterator(MapPoint const & center, sint32 outerSize, sint32 innerSize)
+:	RadiusIterator       (center, outerSize),
+	m_innerSquaredRadius (static_cast<double>(innerSize * innerSize))
+{
+}
+
+CircleIterator::CircleIterator(MapPoint const & center, sint32 outerSize, double outerSquaredSize, sint32 innerSize)
+:	RadiusIterator       (center, outerSize, outerSquaredSize),
+	m_innerSquaredRadius (static_cast<double>(innerSize * innerSize))
+{
+}
+
+bool CircleIterator::IsIncluded()
+{
+	return m_testXY.IsValid()
+	    &&(MapPoint::GetSquaredDistance(m_cur, m_center) <= m_squaredRadius)
+		&&(MapPoint::GetSquaredDistance(m_cur, m_center) >  m_innerSquaredRadius);
 }

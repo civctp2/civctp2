@@ -73,17 +73,12 @@ class UnseenInstallationInfo;
 #define k_UCF_HAS_AIRPORT               0x0100
 #define k_UCF_HAS_SLEEPINGUNITS         0x0200
 #define k_UCF_IS_WATCHFUL               0x0400
-#define k_UCF_ISCAPITOL					0x0800  //emod
-#define k_UCF_ISRELIGION1				0x1000 
-#define k_UCF_ISRELIGION2				0x1200
-#define k_UCF_ISRELIGION3				0x1400
-#define k_UCF_ISRELIGION4				0x1600
-#define k_UCF_ISRELIGION5				0x1800
-#define k_UCF_ISRELIGION6				0x2000
-#define k_UCF_ISRELIGION7				0x2200
-#define k_UCF_ISRELIGION8				0x2400
-#define k_UCF_ISRELIGION9				0x2600
-#define k_UCF_ISRELIGION10				0x2800
+#define k_UCF_IS_CAPITOL                0x0800
+//#define k_UCF_BIT_13_UNUSED           0x1000
+//#define k_UCF_BIT_14_UNUSED           0x2000
+//#define k_UCF_BIT_15_UNUSED           0x4000
+//#define k_UCF_BIT_16_UNUSED           0x8000
+
 //----------------------------------------------------------------------------
 // Project imports
 //----------------------------------------------------------------------------
@@ -241,61 +236,39 @@ public:
 	const MBCHAR *GetCityName() const { return m_cityName; }
 	UnitActor *GetActor() const { return m_actor; }
 
-	bool    IsBioInfected(void) const           { return 0 != (m_flags & k_UCF_IS_BIOINFECTED); }
-	bool    IsNanoInfected(void) const          { return 0 != (m_flags & k_UCF_IS_NANOINFECTED); }
-	bool    IsConverted(void) const             { return 0 != (m_flags & k_UCF_IS_CONVERTED); }
-	bool    IsFranchised(void) const            { return 0 != (m_flags & k_UCF_IS_FRANCHISED); }
-	bool    IsInjoined(void) const              { return 0 != (m_flags & k_UCF_IS_INJOINED); }
-	bool    WasHappinessAttacked(void) const    { return 0 != (m_flags & k_UCF_WAS_HAPPINESS_ATTACKED); }
-	bool    HasHut(void) const                  { return 0 != (m_flags & k_UCF_HAS_HUT); }
-	bool    IsRioting(void) const               { return 0 != (m_flags & k_UCF_IS_RIOTING); }
-	bool    HasAirport(void) const              { return 0 != (m_flags & k_UCF_HAS_AIRPORT); }
-	bool    HasSleepingUnits(void) const        { return 0 != (m_flags & k_UCF_HAS_SLEEPINGUNITS); }
-	bool    IsWatchful(void) const              { return 0 != (m_flags & k_UCF_IS_WATCHFUL); }
-	bool    IsCapitol(void) const              { return 0 != (m_flags & k_UCF_ISCAPITOL); } //emod
-	bool    IsReligion1(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION1); } //emod
-	bool    IsReligion2(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION2); } //emod
-	bool    IsReligion3(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION3); } //emod
-	bool    IsReligion4(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION4); } //emod
-	bool    IsReligion5(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION5); } //emod
-	bool    IsReligion6(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION6); } //emod
-	bool    IsReligion7(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION7); } //emod
-	bool    IsReligion8(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION8); } //emod
-	bool    IsReligion9(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION9); } //emod
-	bool    IsReligion10(void) const              { return 0 != (m_flags & k_UCF_ISRELIGION10); } //emod
+	bool    IsBioInfected        (void) const   { return 0 != (m_flags & k_UCF_IS_BIOINFECTED)         ; }
+	bool    IsNanoInfected       (void) const   { return 0 != (m_flags & k_UCF_IS_NANOINFECTED)        ; }
+	bool    IsConverted          (void) const   { return 0 != (m_flags & k_UCF_IS_CONVERTED)           ; }
+	bool    IsFranchised         (void) const   { return 0 != (m_flags & k_UCF_IS_FRANCHISED)          ; }
+	bool    IsInjoined           (void) const   { return 0 != (m_flags & k_UCF_IS_INJOINED)            ; }
+	bool    WasHappinessAttacked (void) const   { return 0 != (m_flags & k_UCF_WAS_HAPPINESS_ATTACKED) ; }
+	bool    HasHut               (void) const   { return 0 != (m_flags & k_UCF_HAS_HUT)                ; }
+	bool    IsRioting            (void) const   { return 0 != (m_flags & k_UCF_IS_RIOTING)             ; }
+	bool    HasAirport           (void) const   { return 0 != (m_flags & k_UCF_HAS_AIRPORT)            ; }
+	bool    HasSleepingUnits     (void) const   { return 0 != (m_flags & k_UCF_HAS_SLEEPINGUNITS)      ; }
+	bool    IsWatchful           (void) const   { return 0 != (m_flags & k_UCF_IS_WATCHFUL)            ; }
+	bool    IsCapitol            (void) const   { return 0 != (m_flags & k_UCF_IS_CAPITOL)             ; }
 
-	void    SetIsBioInfected(bool yes)          { if (yes) m_flags |= k_UCF_IS_BIOINFECTED; else m_flags &= ~k_UCF_IS_BIOINFECTED;}
-	void    SetIsNanoInfected(bool yes)         { if (yes) m_flags |= k_UCF_IS_NANOINFECTED; else m_flags &= ~k_UCF_IS_NANOINFECTED;}
-	void    SetIsConverted(bool yes)            { if (yes) m_flags |= k_UCF_IS_CONVERTED; else m_flags &= ~k_UCF_IS_CONVERTED;}
-	void    SetIsFranchised(bool yes)           { if (yes) m_flags |= k_UCF_IS_FRANCHISED; else m_flags &= ~k_UCF_IS_FRANCHISED;}
-	void    SetIsInjoined(bool yes)             { if (yes) m_flags |= k_UCF_IS_INJOINED; else m_flags &= ~k_UCF_IS_INJOINED;}
-	void    SetWasHappinessAttacked(bool yes)   { if (yes) m_flags |= k_UCF_WAS_HAPPINESS_ATTACKED; else m_flags &= ~k_UCF_WAS_HAPPINESS_ATTACKED;}
-	void    SetHasHut(bool yes)                 { if (yes) m_flags |= k_UCF_HAS_HUT; else m_flags &= ~k_UCF_HAS_HUT;}
-	void    SetIsRioting(bool yes)              { if (yes) m_flags |= k_UCF_IS_RIOTING; else m_flags &= ~k_UCF_IS_RIOTING;}
-	void    SetHasAirport(bool yes)             { if (yes) m_flags |= k_UCF_HAS_AIRPORT; else m_flags &= ~k_UCF_HAS_AIRPORT;}
-	void    SetHasSleepingUnits(bool yes)       { if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS;}
-	void    SetIsWatchful(bool yes)             { if (yes) m_flags |= k_UCF_IS_WATCHFUL; else m_flags &= ~k_UCF_IS_WATCHFUL; }
-	void    SetIsCapitol(bool yes)             { if (yes) m_flags |= k_UCF_ISCAPITOL; else m_flags &= ~k_UCF_ISCAPITOL; } //emod
-	void    SetIsReligion1(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION1; else m_flags &= ~k_UCF_ISRELIGION1; } //emod
-	void    SetIsReligion2(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION2; else m_flags &= ~k_UCF_ISRELIGION2; } //emod
-	void    SetIsReligion3(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION3; else m_flags &= ~k_UCF_ISRELIGION3; } //emod
-	void    SetIsReligion4(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION4; else m_flags &= ~k_UCF_ISRELIGION4; } //emod
-	void    SetIsReligion5(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION5; else m_flags &= ~k_UCF_ISRELIGION5; } //emod
-	void    SetIsReligion6(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION6; else m_flags &= ~k_UCF_ISRELIGION6; } //emod
-	void    SetIsReligion7(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION7; else m_flags &= ~k_UCF_ISRELIGION7; } //emod
-	void    SetIsReligion8(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION8; else m_flags &= ~k_UCF_ISRELIGION8; } //emod
-	void    SetIsReligion9(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION9; else m_flags &= ~k_UCF_ISRELIGION9; } //emod
-	void    SetIsReligion10(bool yes)             { if (yes) m_flags |= k_UCF_ISRELIGION10; else m_flags &= ~k_UCF_ISRELIGION10; } //emod
-	bool    IsAirfield(void) const;
-	bool    IsListeningPost(void) const;
-	bool    IsRadar(void) const;
-	bool    IsHealUnits(void) const;
-	bool    IsFort(void) const;
+	void    SetIsBioInfected        (bool yes)     { if (yes) m_flags |= k_UCF_IS_BIOINFECTED          ; else m_flags &= ~k_UCF_IS_BIOINFECTED         ; }
+	void    SetIsNanoInfected       (bool yes)     { if (yes) m_flags |= k_UCF_IS_NANOINFECTED         ; else m_flags &= ~k_UCF_IS_NANOINFECTED        ; }
+	void    SetIsConverted          (bool yes)     { if (yes) m_flags |= k_UCF_IS_CONVERTED            ; else m_flags &= ~k_UCF_IS_CONVERTED           ; }
+	void    SetIsFranchised         (bool yes)     { if (yes) m_flags |= k_UCF_IS_FRANCHISED           ; else m_flags &= ~k_UCF_IS_FRANCHISED          ; }
+	void    SetIsInjoined           (bool yes)     { if (yes) m_flags |= k_UCF_IS_INJOINED             ; else m_flags &= ~k_UCF_IS_INJOINED            ; }
+	void    SetWasHappinessAttacked (bool yes)     { if (yes) m_flags |= k_UCF_WAS_HAPPINESS_ATTACKED  ; else m_flags &= ~k_UCF_WAS_HAPPINESS_ATTACKED ; }
+	void    SetHasHut               (bool yes)     { if (yes) m_flags |= k_UCF_HAS_HUT                 ; else m_flags &= ~k_UCF_HAS_HUT                ; }
+	void    SetIsRioting            (bool yes)     { if (yes) m_flags |= k_UCF_IS_RIOTING              ; else m_flags &= ~k_UCF_IS_RIOTING             ; }
+	void    SetHasAirport           (bool yes)     { if (yes) m_flags |= k_UCF_HAS_AIRPORT             ; else m_flags &= ~k_UCF_HAS_AIRPORT            ; }
+	void    SetHasSleepingUnits     (bool yes)     { if (yes) m_flags |= k_UCF_HAS_SLEEPINGUNITS       ; else m_flags &= ~k_UCF_HAS_SLEEPINGUNITS      ; }
+	void    SetIsWatchful           (bool yes)     { if (yes) m_flags |= k_UCF_IS_WATCHFUL             ; else m_flags &= ~k_UCF_IS_WATCHFUL            ; }
+	void    SetIsCapitol            (bool yes)     { if (yes) m_flags |= k_UCF_IS_CAPITOL              ; else m_flags &= ~k_UCF_IS_CAPITOL             ; }
 
-	uint32	GetSlaveBits(void) const { return m_slaveBits; }
+	bool    IsAirfield      (void) const;
+	bool    IsListeningPost (void) const;
+	bool    IsRadar         (void) const;
+	bool    IsHealUnits     (void) const;
+	bool    IsFort          (void) const;
 
-// Added by Martin Gühmann to generate these pieces of information
-// for hidden tiles correctly as well.
+	uint32 GetSlaveBits(void) const { return m_slaveBits; }
 
 	sint32 GetFoodFromTerrain() const;
 	sint32 GetFoodProduced() const;

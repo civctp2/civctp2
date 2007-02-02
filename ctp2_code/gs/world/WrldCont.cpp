@@ -50,6 +50,11 @@ sint16 World::GetContinent(const MapPoint & pos) const
     return GetCell(pos)->GetContinent(); 
 }
 
+bool World::IsOnSameContinent(const MapPoint & pos1, const MapPoint & pos2) const
+{
+    return GetContinent(pos1) == GetContinent(pos2);
+}
+
 struct MapPointNode { 
     MapPoint pos; 
     MapPointNode *next; 
@@ -424,7 +429,7 @@ void World::FindContinentSize()
         m_land_size->Access(i) = 0; 
     } 
 
-    BOOL is_land;
+    bool is_land;
     sint32 cont;
     for (pos.x = 0; pos.x<m_size.x; pos.x++) { 
         for (pos.y=0; pos.y<m_size.y; pos.y++) { 
@@ -451,7 +456,7 @@ sint32 World::GetWaterContinentSize(sint32 cont_num)const
 
 
 
-void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land) const
+void World::GetContinent(const MapPoint &pos, sint32 &cont_number, bool &is_land) const
 {
 	static bool REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT  = false;
 	is_land = !IsWater(pos); 
@@ -466,7 +471,7 @@ void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land
 	{
 		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
         REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
-        is_land = FALSE; 
+        is_land = false; 
         cont_number = 0; 
 	}
 
@@ -475,7 +480,7 @@ void World::GetContinent(const MapPoint &pos, sint32 &cont_number, BOOL &is_land
 		
 		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
         REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
-        is_land = FALSE; 
+        is_land = false; 
         cont_number = 0; 
 	}
 }
@@ -510,7 +515,7 @@ void World::FindContinentNeighbors()
     sint32 center_cont; 
     MapPoint center; 
     MapPoint test_cont; 
-    BOOL is_land=FALSE; 
+    bool is_land = false;
 
     
     AllocateNeighborMem();
@@ -541,8 +546,8 @@ void World::FindContinentNeighbors()
 void World::FindAContinentNeighbor(const sint32 center_cont, 
     MapPoint &test_point, const BOOL is_land)                                    
 {
-    BOOL is_neighbor_land = FALSE; 
-    BOOL is_neighbor_water = FALSE; 
+    bool is_neighbor_land = false; 
+    bool is_neighbor_water = false; 
     sint32 test_cont;
     
     GetContinent(test_point, test_cont, is_neighbor_land);

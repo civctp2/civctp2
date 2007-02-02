@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Goal handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -457,7 +457,7 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 		return false; 
 
     BOOL check_continents = !transport->Get_Army().GetMovementTypeAir();
-	BOOL is_land;
+	bool is_land;
 
 	sint32 my_continent;
 	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );

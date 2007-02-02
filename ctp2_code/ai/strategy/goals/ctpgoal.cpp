@@ -803,7 +803,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		
 		
 		sint32 army_cont, goal_cont;
-		BOOL is_land;
+		bool is_land;
 		g_theWorld->GetContinent(dest_pos, goal_cont, is_land);
 		g_theWorld->GetContinent(ctpagent_ptr->Get_Pos(), army_cont, is_land);
 		if ( (goal_cont != army_cont) && 

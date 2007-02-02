@@ -1674,7 +1674,7 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 
 	MapPoint pos(x, y);   
 	sint32 cont;
-	BOOL is_land;
+	bool is_land;
 	GetContinent(pos, cont, is_land);
     cum_score   = 0.0;
 	if (is_land &&
@@ -1723,7 +1723,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 	}
 	sint32 playerContinent;
 	if(index > 0) {
-		BOOL is_land;
+		bool is_land;
 		GetContinent(player_start[0], playerContinent, is_land);
 	} else {
 		playerContinent = 0;
@@ -1736,7 +1736,7 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 			
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules && index != 0) {
 				sint32 cont;
-				BOOL is_land;
+				bool is_land;
 				GetContinent(chk, cont, is_land);
 				if(is_land && cont == playerContinent)
 					continue;

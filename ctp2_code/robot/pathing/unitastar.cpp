@@ -1310,9 +1310,9 @@ BOOL UnitAstar::PretestDest_SameLandContinent(const MapPoint &start, const MapPo
 {
     
      sint32 start_cont_number;
-     BOOL start_is_land;
+     bool start_is_land;
      sint32 dest_cont_number;
-     BOOL dest_is_land;
+     bool dest_is_land;
 
     if (((m_move_intersection & k_Unit_MovementType_Land_Bit) ||
         (m_move_intersection & k_Unit_MovementType_Mountain_Bit)) 
@@ -1343,9 +1343,9 @@ BOOL UnitAstar::PretestDest_SameLandContinent(const MapPoint &start, const MapPo
 
 BOOL UnitAstar::PretestDest_SameWaterContinent(const MapPoint &start, const MapPoint &dest)
 {
-    BOOL start_is_land; 
+    bool start_is_land; 
     sint32 start_cont_number;
-    BOOL dest_is_land; 
+    bool dest_is_land; 
     sint32 dest_cont_number;
 
     
@@ -1371,7 +1371,7 @@ BOOL UnitAstar::PretestDest_SameWaterContinent(const MapPoint &start, const MapP
 
         g_theWorld->GetContinent(dest, dest_cont_number, dest_is_land);
 
-		if((start_is_land == FALSE) && (dest_is_land == FALSE) && 
+		if(!start_is_land && !dest_is_land && 
             (start_cont_number != dest_cont_number)) {
                 return FALSE;
         }

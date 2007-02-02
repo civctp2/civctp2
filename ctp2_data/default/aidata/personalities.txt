@@ -143,28 +143,28 @@ PERSONALITY_GHANDI {
 PERSONALITY_STALIN {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
 
-  FullAttackStrategy      {  Strategy STRATEGY_ATTACK          Priority 250  }
-  BuildupStrengthStrategy {  Strategy STRATEGY_DEFEND          Priority 75   }
-  SeigeCitiesStrategy     {  Strategy STRATEGY_SEIGE           Priority 200  }
+  FullAttackStrategy       {  Strategy STRATEGY_ATTACK            Priority 250  }
+  BuildupStrengthStrategy  {  Strategy STRATEGY_DEFEND            Priority 75   }
+  SeigeCitiesStrategy      {  Strategy STRATEGY_SEIGE             Priority 200  }
 
   LastStartTurn 75
-  StartStrategy            {  Strategy STRATEGY_CAREFUL_START   Priority 200  }
+  StartStrategy            {  Strategy STRATEGY_CAREFUL_START     Priority 200  }
 
-  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES    Priority 150  }
+  NuclearStrikeStrategy    {  Strategy STRATEGY_LAUNCH_NUKES      Priority 150  }
 
-  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES   Priority 100  }
-  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES   Priority 100  }
-  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES   Priority 100  }
-  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES   Priority 100  }
+  MinimumNukesStrategy     {  Strategy STRATEGY_MINIMAL_NUKES     Priority 100  }
+  LowNukesStrategy         {  Strategy STRATEGY_AVERAGE_NUKES     Priority 100  }
+  AverageNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
+  MaximumNukesStrategy     {  Strategy STRATEGY_MAXIMUM_NUKES     Priority 100  }
 
-  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT  Priority 1100 }
-  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR    Priority 1000 }
+  ExpansionStrategy        {  Strategy STRATEGY_SETTLE_COMPACT    Priority 1100 }
+  ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_NEAR      Priority 1000 }
 
   MaxIslandSize 100
-  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION   Priority 150  }
+  IslandNationStrategy     {  Strategy STRATEGY_ISLAND_NATION     Priority 150  }
 
-  StartLowDefenceStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
-  StartHighDefenceStrategy  {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
+  StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
+  StartHighDefenceStrategy {  Strategy STRATEGY_DEFENSE_VERY_LOW  Priority 800  }
 
   DefenceNoneStrategy      {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
   DefenceVeryLowStrategy   {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }

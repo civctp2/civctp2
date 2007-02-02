@@ -431,7 +431,7 @@ sint32 Unit::IsIgnoresZOC() const
 bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 {
 	uint32 distance = 0xffffffff;
-/*	MapPoint center;
+	MapPoint center;
 	GetPos(center);
 	CircleIterator it(center, searchRadius, GetVisionRange());
 	for(it.Start(); !it.End(); it.Next()) {
@@ -444,7 +444,7 @@ bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 			pos = it.Pos();
 		}
 	}
-*/
+
 	return distance < 0xffffffff;
 }
 

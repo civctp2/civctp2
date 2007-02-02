@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : SLIC functions
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 // - New slic function by Solver: IsOnSameContinent - Checks whether two
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -632,8 +633,9 @@ SLICFUNC(SFR_VOID, RemoveGood);
 SLICFUNC(SFR_INT, CargoCapacity);
 SLICFUNC(SFR_INT, MaxCargoSize);
 SLICFUNC(SFR_INT, CargoSize);
-SLICFUNC(SFR_INT, GetUnitFromCargo) 
+SLICFUNC(SFR_INT, GetUnitFromCargo)
 SLICFUNC(SFR_INT, GetContinent)
+SLICFUNC(SFR_INT, GetContinentSize)
 SLICFUNC(SFR_INT, IsWater)
 //New slicfunctions by Solver
 SLICFUNC(SFR_INT, IsOnSameContinent)

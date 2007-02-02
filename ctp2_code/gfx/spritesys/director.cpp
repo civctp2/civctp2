@@ -1735,7 +1735,7 @@ void Director::DrawActiveUnits(RECT *paintRect, sint32 layer)
 			{
 				
 							
-				BOOL fog = FALSE;
+				bool fog = false;
 
 				
 				g_tiledMap->PaintUnitActor(actor, fog);

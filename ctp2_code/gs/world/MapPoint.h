@@ -160,6 +160,7 @@ public:
     void Set(sint32 ix, sint32 iy, sint32 iz) { x = ix; y = iy; z = iz; }
 #endif
 
+	bool HasUnexploredNeighbor(sint32 player) const;
 	bool GetNeighborPosition
 	(
 		WORLD_DIRECTION const &	direction,
@@ -263,6 +264,18 @@ public:
 	
 protected:
 	double          m_squaredRadius;
+
+    virtual bool    IsIncluded();
+};
+
+class CircleIterator : public RadiusIterator 
+{
+public:
+	CircleIterator(MapPoint const & center, sint32 outerSize, sint32 innerSize);
+	CircleIterator(MapPoint const & center, sint32 outerSize, double squaredOuterSize, sint32 innerSize);
+	
+protected:
+	double          m_innerSquaredRadius;
 
     virtual bool    IsIncluded();
 };

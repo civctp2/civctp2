@@ -2690,8 +2690,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
                 );
 
 			UnseenCellCarton		ucell;
-			
-// Added by Martin Gühmann
+
 			// For visibility god mode and fog of war should be handled equally
 			if(!g_fog_toggle
 			&&  m_localVision 
@@ -2746,7 +2745,6 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 
 
-// Added by Martin Gühmann
 				// For visibility god mode and fog of war should be handled equally
 				if(!( actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 				&& !g_fog_toggle
@@ -2798,7 +2796,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 				MapPoint actorCurPos = actor->GetPos();
 				if (actor->IsActive())
                 {
-				    // No action: already busy	
+				    // No action: already busy
                 }
                 else
                 {
@@ -2847,7 +2845,6 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 						top = hypotheticalUnit;
 					}
 
-// Added by Martin Gühmann
 					// For visibility god mode and fog of war should be handled equally
 					if (top.GetOwner() != g_selected_item->GetVisiblePlayer()
 					&& !g_fog_toggle

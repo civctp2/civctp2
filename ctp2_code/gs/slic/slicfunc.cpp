@@ -57,6 +57,7 @@
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Removed the old endgame database. (Aug 29th 2005 Martin Gühmann)
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -7269,6 +7270,40 @@ SFN_ERROR Slic_GetContinent::Call(SlicArgList *args)
 //
 // Authored   : Martin Gühmann
 //
+// Name       : Slic_GetContinentSize
+//
+// Description: Get the size of position's continent.
+//
+// Parameters : SlicArg 0: location
+//
+// Globals    : g_theWorld
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_GetContinentSize::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	MapPoint pos;
+	if(!args->GetPos(0, pos))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(g_theWorld->IsWater(pos)){
+		m_result.m_int = g_theWorld->GetWaterContinentSize(g_theWorld->GetContinent(pos));
+	}
+	else{
+		m_result.m_int = g_theWorld->GetLandContinentSize(g_theWorld->GetContinent(pos));
+	}
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
 // Name       : Slic_IsWater
 //
 // Description: Gets whether this location is water.
@@ -7325,12 +7360,11 @@ SFN_ERROR Slic_IsOnSameContinent::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 
-	if (g_theWorld->GetContinent(pos) ==
-		g_theWorld->GetContinent(pos2)) {
-		m_result.m_int = 1; 
+	if (g_theWorld->IsOnSameContinent(pos, pos2)) {
+		m_result.m_int = 1;
 	}
 	else {
-		m_result.m_int = 0; 
+		m_result.m_int = 0;
 	}
 	
 	return SFN_ERROR_OK;

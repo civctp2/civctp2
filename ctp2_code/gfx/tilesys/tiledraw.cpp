@@ -3610,16 +3610,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						hasSleepingUnits = FALSE,
 						isWatchful = FALSE, //emod ; to ,
 						isCapitol = FALSE,  //emod
-						IsReligion1 = FALSE,
-						IsReligion2 = FALSE,
-						IsReligion3 = FALSE,
-						IsReligion4 = FALSE,
-						IsReligion5 = FALSE,							
-						IsReligion6 = FALSE,
-						IsReligion7 = FALSE,
-						IsReligion8 = FALSE,
-						IsReligion9 = FALSE,
-						IsReligion10 = FALSE;
+						isReligion1 = FALSE,
+						isReligion2 = FALSE,
+						isReligion3 = FALSE,
+						isReligion4 = FALSE,
+						isReligion5 = FALSE,
+						isReligion6 = FALSE,
+						isReligion7 = FALSE,
+						isReligion8 = FALSE,
+						isReligion9 = FALSE,
+						isReligion10 = FALSE;
 				sint32	bioInfectedOwner=0, 
 						nanoInfectedOwner=0, 
 						convertedOwner=0, 
@@ -3630,6 +3630,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 				UnseenCellCarton	ucell;
 				// Don't forget if fog was toggled
 				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle) {
+
 					pop = ucell.m_unseenCell->GetCitySize();
 					name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
 					//IsBuilding = GetCurrentBuildQueue //emod
@@ -3656,36 +3657,40 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					franchiseOwner = ucell.m_unseenCell->m_franchiseOwner;
 					injoinedOwner = ucell.m_unseenCell->m_injoinedOwner;
 					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
-					//emod religion bools
-					IsReligion1 = ucell.m_unseenCell->IsReligion1();
-					IsReligion2 = ucell.m_unseenCell->IsReligion2();
-					IsReligion3 = ucell.m_unseenCell->IsReligion3();
-					IsReligion4 = ucell.m_unseenCell->IsReligion4();
-					IsReligion5 = ucell.m_unseenCell->IsReligion5();
-					IsReligion6 = ucell.m_unseenCell->IsReligion6();
-					IsReligion7 = ucell.m_unseenCell->IsReligion7();
-					IsReligion8 = ucell.m_unseenCell->IsReligion8();
-					IsReligion9 = ucell.m_unseenCell->IsReligion9();
-					IsReligion10 = ucell.m_unseenCell->IsReligion10();
-					
+
+/*
+					// Religion shit
+					CityData *cityData = unit.GetData()->GetCityData();
+					isReligion1 = cityData->IsReligion1();
+					isReligion2 = cityData->IsReligion2();
+					isReligion3 = cityData->IsReligion3();
+					isReligion4 = cityData->IsReligion4();
+					isReligion5 = cityData->IsReligion5();
+					isReligion6 = cityData->IsReligion6();
+					isReligion7 = cityData->IsReligion7();
+					isReligion8 = cityData->IsReligion8();
+					isReligion9 = cityData->IsReligion9();
+					isReligion10 = cityData->IsReligion10();
+*/
+
 					slaveBits = ucell.m_unseenCell->GetSlaveBits();
 					
 					if (pop > 0)
 						drawCity = TRUE;
 				}else{
-					    //if there's a unit at pos
+					// if there's a unit at pos
 					if (g_theWorld->GetTopVisibleUnit(pos,unit)) {
-                        //and it's a city visible to the current player
+						//and it's a city visible to the current player
 						if (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()) && unit.IsCity()) {
 							CityData *cityData = unit.GetData()->GetCityData();
 							
 							if (!unit.GetActor()) {
 								pop = cityData->PopCount();
-                                nextpop = cityData->TurnsToNextPop();
+								nextpop = cityData->TurnsToNextPop();
 								owner = cityData->GetOwner();
 							} else {
 								pop = unit.GetActor()->GetSize();
-                                nextpop = unit.GetActor()->GetNextPop();
+								nextpop = unit.GetActor()->GetNextPop();
 								owner = unit.GetActor()->GetPlayerNum();
 							}
 							
@@ -3705,16 +3710,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							injoinedOwner = cityData->GetOwner();
 							happinessAttackOwner = cityData->GetOwner();
 							//emod
-							IsReligion1 = cityData->IsReligion1();
-							IsReligion2 = cityData->IsReligion2();
-							IsReligion3 = cityData->IsReligion3();
-							IsReligion4 = cityData->IsReligion4();
-							IsReligion5 = cityData->IsReligion5();
-							IsReligion6 = cityData->IsReligion6();
-							IsReligion7 = cityData->IsReligion7();
-							IsReligion8 = cityData->IsReligion8();
-							IsReligion9 = cityData->IsReligion9();
-							IsReligion10 = cityData->IsReligion10();
+							isReligion1 = cityData->IsReligion1();
+							isReligion2 = cityData->IsReligion2();
+							isReligion3 = cityData->IsReligion3();
+							isReligion4 = cityData->IsReligion4();
+							isReligion5 = cityData->IsReligion5();
+							isReligion6 = cityData->IsReligion6();
+							isReligion7 = cityData->IsReligion7();
+							isReligion8 = cityData->IsReligion8();
+							isReligion9 = cityData->IsReligion9();
+							isReligion10 = cityData->IsReligion10();
 
 							
 							slaveBits = cityData->GetSlaveBits();
@@ -4034,10 +4039,10 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								isWatchful, isCapitol);
 					//added religion Icons
 					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, 
-								IsReligion1, IsReligion2, IsReligion3,
-								IsReligion4, IsReligion5, IsReligion6,
-								IsReligion7, IsReligion8, IsReligion9,
-								IsReligion10); 
+								isReligion1, isReligion2, isReligion3,
+								isReligion4, isReligion5, isReligion6,
+								isReligion7, isReligion8, isReligion9,
+								isReligion10); 
 
 				}
 			}

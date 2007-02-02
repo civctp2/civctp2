@@ -276,13 +276,11 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
 		settle_target.m_pos = rc_pos;
 
-#ifdef _DEBUG
 		if (g_graphicsOptions->IsCellTextOn()) {
 			char buf[16];
 			sprintf(buf,"*%4.0f*",settle_target.m_value );
 			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 		}
-#endif _DEBUG
 
 
 		if (!CanSettlePos(rc_pos))
@@ -291,13 +289,11 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		if (settle_target.m_value <= settle_threshold)
 		{
 
-#ifdef _DEBUG
 			if (g_graphicsOptions->IsCellTextOn()) {
 				char buf[16];
 				sprintf(buf,"(%4.0f)",settle_target.m_value );
 				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 			}
-#endif _DEBUG
 
 			continue;
 		}
@@ -305,13 +301,11 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
 			continue;	
 
-#ifdef _DEBUG
 		if (g_graphicsOptions->IsCellTextOn()) {
 			char buf[16];
 			sprintf(buf,"%4.0f",settle_target.m_value );
 			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
 		}
-#endif _DEBUG
 
 		targets.push_back(settle_target);
 	}
@@ -332,7 +326,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	
 	std::vector<sint16> water_continent_count(max_water_cont, 0);
 	std::vector<sint16> land_continent_count(max_land_cont, 0);
-	BOOL is_land;
+	bool is_land;
 	sint32 cont;
 
 	

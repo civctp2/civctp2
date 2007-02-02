@@ -55,6 +55,7 @@
 //   databases. (July 15th 2006 Martin Gühmann)
 // - PopContext refills the builtins when it restores the old context so
 //   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin Gühmann)
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -955,6 +956,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_CargoSize);
 	m_functionHash->Add(new Slic_GetUnitFromCargo);
 	m_functionHash->Add(new Slic_GetContinent);
+	m_functionHash->Add(new Slic_GetContinentSize);
 	m_functionHash->Add(new Slic_IsWater);
 	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
