@@ -4,6 +4,7 @@
 // File type    : C++ source
 // File name    : \UI\Interface\CityControlPanel.cpp
 // Description  : Handling for the city tab of the control panel 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,6 +36,8 @@
 //   player has changed.
 // - #01 Standardization of city selection and focus handling  
 //   (L. Hirth 6/2004)
+// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin Gühmann)
+// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -407,10 +412,9 @@ CityData *CityControlPanel::GetSelectedCity()
 // Name       : CityControlPanel::CitySelectActionCallback
 //
 // Description: Will be called when a city is selected on the control panel 
-//              city list.  
-//              
+//              city list.
+//
 //----------------------------------------------------------------------------
-
 void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 												uint32 action, uint32 data, void *cookie)
 {
@@ -421,7 +425,7 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
-    // Get the currently selected city of the list
+	// Get the currently selected city of the list
 	CityData *cd = cityControlPanel->GetSelectedCity();
 
 	if(cd) {  // City data pointer is valid
@@ -457,15 +461,14 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 //
 // Parameters : -
 //
-// Globals    : g_player		: list of players
-//				g_selected_item	: currently selected item
+// Globals    : g_player        : list of players
+//              g_selected_item : currently selected item
 //
 // Returns    : -
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void CityControlPanel::UpdateBuildItem()
 {
 	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
@@ -705,13 +708,12 @@ void CityControlPanel::UpdateGovernor()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void CityControlPanel::UpdateCityList()
 {
-	// clear the list
+	// Clear the list
 	m_cityListDropDown->Clear();
 
-	// set the player
+	// Set the player
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player)
 		return;
@@ -719,7 +721,7 @@ void CityControlPanel::UpdateCityList()
 	// How many cities has player
 	sint32 numberOfCities = player->GetNumCities();
 
-	// deactivate prev and next button if less than 2 cities
+	// Deactivate prev and next button if less than 2 cities
 	// activate if there are more than one city
 	if(numberOfCities < 2) {
 		m_cityListPreviousButton->Enable(false);
@@ -735,23 +737,25 @@ void CityControlPanel::UpdateCityList()
 	if(numberOfCities < 1)
 		return;
 
-	// loop throgh the cities to fill the drop down list
+	// Loop throgh the cities to fill the drop down list
+	m_cityListDropDown->SetForceSelect(false);
 	for(sint32 cityIndex = 0; cityIndex < numberOfCities; cityIndex++) {
-		// create the item
+		// Create the item
 		ctp2_ListItem *listItem = static_cast<ctp2_ListItem*>(
 			aui_Ldl::BuildHierarchyFromRoot("CityListItem"));
 
-		// set the cityname as text
+		// Set the cityname as text
 		ctp2_Static *label = static_cast<ctp2_Static*>(
 			listItem->GetChildByIndex(0));
 		label->SetText(player->GetCityFromIndex(cityIndex).GetName());
 
-		// fill userdata of the dropdown list with the city ID
+		// Fill userdata of the dropdown list with the city ID
 		listItem->SetUserData(reinterpret_cast<void*>(player->GetCityFromIndex(cityIndex).m_id));
 
-		// add the item to the list
+		// Add the item to the list
 		m_cityListDropDown->AddItem(listItem);
 	}
+	m_cityListDropDown->SetForceSelect(true);
 }
 
 
@@ -942,11 +946,17 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 		percentComplete = 1.0;
 
 	RECT destRect = rect;
-	destRect.right = 
-        destRect.left + 
-        static_cast<LONG>(percentComplete * (destRect.right - destRect.left));
 
-	g_c3ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,255), 0);
+	destRect.top += 1;
+	destRect.bottom -= 1;
+	destRect.left += 1;
+	destRect.right -= 1;
+
+	destRect.right = 
+	    destRect.left + 
+	    static_cast<LONG>(percentComplete * (destRect.right - destRect.left));
+
+	g_c3ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,255,0), 0);
 	return AUI_ERRCODE_OK;
 }
 

@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : CTP2 drop down menu
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// -None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - ForceSelect can now be disabled. (Feb 4th 2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -326,7 +355,6 @@ AUI_ERRCODE ctp2_DropDown::AddItem(ctp2_ListItem *item)
 
 	m_listBox->AddItem((aui_Item *)item);
 
-	
 	ctp2_ListBox *myListBox = (ctp2_ListBox *)m_listBox;
 	sint32 height = ((ctp2_ListBox *)m_listBox)->GetMaxItemHeight() * m_listBox->NumItems() + 
 		(2 * myListBox->GetBevelWidth()) + 20;
@@ -358,4 +386,9 @@ void ctp2_DropDown::BuildListEnd(void)
 		(2 * myListBox->GetBevelWidth());
 
 	SetWindowSize(height < 350 ? height : 350);
+}
+
+void ctp2_DropDown::SetForceSelect(bool forceSelect)
+{
+	m_listBox->SetForceSelect(forceSelect);
 }

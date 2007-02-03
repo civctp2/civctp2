@@ -25,9 +25,10 @@
 // Modifications from the original Activision code:
 //
 // - Blank function added to hide the data of the previous player for hotseat
-//   games. 
+//   games.
 // - Use the same science percentage everywhere.
-// - Domestic control panel shows now city limit. (Aug 7th 2005 Martin Gühmann)
+// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin Gühmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -39,6 +40,7 @@
 #include "aui_ldl.h"
 #include "ctp2_button.h"
 #include "ctp2_Static.h"
+#include "aui_Surface.h"
 #include "IconRecord.h"
 #include "player.h"
 #include "sci_advancescreen.h"
@@ -50,6 +52,7 @@
 #include "GovernmentRecord.h"
 #include "aui_bitmapfont.h"
 #include "c3math.h"             // AsPercentage
+#include "c3ui.h"
 
 extern Pollution            *g_thePollution;
 
@@ -159,6 +162,10 @@ m_scienceTurnButton(static_cast<ctp2_Button*>(
                     aui_Ldl::GetObject(ldlBlock,
                     "DomesticTab.TabPanel.AdvanceProgress."
                     "IconBorder.IconButton.RadialButton"))),
+m_scienceProgressBar(static_cast<ctp2_Static*>(
+                     aui_Ldl::GetObject(ldlBlock,
+                    "DomesticTab.TabPanel.AdvanceProgress."
+                    "IconBorder.IconButton.ProgressBarParent.ProgressBar"))),
 m_citiesValue(static_cast<ctp2_Static*>(
               aui_Ldl::GetObject(ldlBlock,
               "DomesticTab.TabPanel.CitiesValue"))),
@@ -213,6 +220,10 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 
 	m_menuPollutionValue->SetDrawCallbackAndCookie(domesticcontrolpanel_PollutionDrawCallback, NULL, false);
 	m_menuPollutionValue->ShouldDraw(TRUE);
+
+	if(m_scienceProgressBar) {
+		m_scienceProgressBar->SetDrawCallbackAndCookie(DomesticControlPanel::DrawScienceBar, NULL);
+	}
 
 	m_currentResearch = -1;
 	m_currentTurns = -1;
@@ -286,7 +297,6 @@ void DomesticControlPanel::EditResearchButtonActionCallback(aui_Control *control
 
 void DomesticControlPanel::UpdateScience()
 {
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player) {
 		ClearScience();
@@ -446,4 +456,44 @@ void DomesticControlPanel::UpdateGoldPW()
 
 	m_menuHappinessValue->ShouldDraw(TRUE);
 	m_menuPollutionValue->ShouldDraw(TRUE);
+}
+
+AUI_ERRCODE DomesticControlPanel::DrawScienceBar(ctp2_Static *control,
+                                                 aui_Surface *surface,
+                                                 RECT &rect,
+                                                 void *cookie )
+{
+	if(!g_selected_item)
+		return AUI_ERRCODE_OK;
+
+	if(g_selected_item->GetVisiblePlayer() < 0)
+		return AUI_ERRCODE_OK;
+
+	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	if(!player)
+		return AUI_ERRCODE_OK;
+
+	RECT destRect = rect;
+
+	g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
+
+	destRect.top += 1;
+	destRect.bottom -= 1;
+	destRect.left += 1;
+	destRect.right -= 1;
+
+	sint32 width = destRect.right - destRect.left;
+
+	double percentComplete = player->m_advances->FractionComplete();
+	if(percentComplete < 0.0)
+	{
+		destRect.right = destRect.left;
+	}
+	else if(percentComplete < 1.0)
+	{
+		destRect.right = destRect.left + sint32(double(width) * percentComplete);
+	}
+
+	return g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(255,0,0), 0);
+
 }

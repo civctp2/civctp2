@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Advance (tech) handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +28,7 @@
 // - Microsoft specifics marked.
 // - Safeguard FindLevel against infinite recursion.
 // - Speeded up goody hut advance and unit selection.
+// - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -157,6 +159,8 @@ public:
 	void AddAlienLifeAdvance();
 
 	void Serialize(CivArchive &archive);
+	double FractionComplete(AdvanceType adv) const;
+	double FractionComplete() const;
 };
 
 #endif

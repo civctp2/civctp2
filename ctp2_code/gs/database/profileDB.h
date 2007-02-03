@@ -53,6 +53,7 @@
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 // - Made automatic treaty ending an option.
 // - Made city capture options an option.
+// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -350,6 +351,8 @@ private:
     sint32 m_cityCaptureOptions;
     /// Enable unit upgrade
     sint32 m_upgrade;
+    /// Smooth the borders instead of diplaying square borders
+    sint32 m_smoothBorders;
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
@@ -738,6 +741,7 @@ public:
     double PercentContinent() { return m_continent; }
     double PercentHomogenous() { return m_homogenous; }
     sint32 PercentRichness() { return m_richness; }
+    BOOL IsSmoothBorders() { return m_smoothBorders; }
 };
 
 extern ProfileDB *g_theProfileDB;

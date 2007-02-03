@@ -45,6 +45,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standardized code (May 21st 2006 Martin Gühmann)
 // - Made limited duration optional.
+// - Added war over message. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1755,7 +1756,7 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 	case PROPOSAL_OFFER_GIVE_GOLD:
 		
-        gold = std::min(proposal_arg.gold, g_player[sender]->m_gold->GetLevel());
+		gold = std::min(proposal_arg.gold, g_player[sender]->m_gold->GetLevel());
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SubGold,
@@ -1830,9 +1831,17 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 	case PROPOSAL_TREATY_CEASEFIRE:
 	case PROPOSAL_TREATY_PEACE:
-		
-		AgreementMatrix::s_agreements.
-			CancelAgreement(sender, receiver, PROPOSAL_TREATY_DECLARE_WAR);
+		{
+			AgreementMatrix::s_agreements.
+				CancelAgreement(sender, receiver, PROPOSAL_TREATY_DECLARE_WAR);
+
+			// Maybe add to CancelAgreement as message from DB
+			SlicObject *so = new SlicObject("401WarOver");
+			so->AddCivilisation(sender);
+			so->AddCivilisation(receiver);
+			so->AddAllRecipients();
+			g_slicEngine->Execute(so);
+		}
 		break;
 	case PROPOSAL_TREATY_TRADE_PACT:
 		break;

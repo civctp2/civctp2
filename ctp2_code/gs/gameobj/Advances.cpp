@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // -None
 //
 //----------------------------------------------------------------------------
@@ -27,10 +27,11 @@
 // - Safeguard FindLevel against infinite recursion.
 // - Speeded up goody hut advance and unit selection.
 // - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
-// - Fixed GetPollutionProductionModifier (June 11nd 2005 Martin Gühmann)
-// - Fixed GetPollutionSizeModifier (June 11nd 2005 Martin Gühmann)
+// - Fixed GetPollutionProductionModifier (June 11st 2005 Martin Gühmann)
+// - Fixed GetPollutionSizeModifier (June 11st 2005 Martin Gühmann)
 // - Added checks for advances requiring goods, cultureonly, govt only
 // - Added EitherPreRequisite to allow flexible tech tree like civ4
+// - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1278,3 +1279,15 @@ void Advances::SetResearching(AdvanceType adv)
 							 ST_END);
 }
 
+double Advances::FractionComplete(AdvanceType adv) const
+{
+	if(adv < 0)
+		adv = m_researching;
+
+	return static_cast<double>(g_player[m_owner]->m_science->GetLevel()) / static_cast<double>(GetCost(adv));
+}
+
+double Advances::FractionComplete() const
+{
+	return FractionComplete(m_researching);
+}

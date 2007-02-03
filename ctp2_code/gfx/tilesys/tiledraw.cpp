@@ -59,6 +59,7 @@
 // - Implemented HasAirport; for some reason it was forgotten 1-5-2006 EMOD
 // - Moved citypop box to the left name in the center and turns until next pop 
 //   to the right for cleaner interface 1-13-2007 EMOD 
+// - Allowed to select between smooth and square borders. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -955,7 +956,7 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 
 	if (!surf) surf = m_surface;
 
-    if (x >= surf->Width()-width) return;
+	if (x >= surf->Width()-width) return;
 	if (y >= surf->Height() - height) return;
 
 	AddDirtyToMix(x, y, width, height);
@@ -1026,8 +1027,8 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 
 		row++;
 	}
-
 }
+
 void TiledMap::DrawPath(Path *path)
 {
     MapPoint	pos; 
@@ -3594,7 +3595,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 				BOOL		drawCity = FALSE;
 				bool        drawQueueEmpty = false;
 				sint32		pop = 0;
-                sint32      nextpop = 0;//PFT
+				sint32      nextpop = 0;//PFT
 				MBCHAR		*name = NULL;
 				//IsBuilding = GetCurrentBuildQueue //emod
 				sint32		owner = 0;
@@ -3657,21 +3658,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					franchiseOwner = ucell.m_unseenCell->m_franchiseOwner;
 					injoinedOwner = ucell.m_unseenCell->m_injoinedOwner;
 					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
-
-/*
-					// Religion shit
-					CityData *cityData = unit.GetData()->GetCityData();
-					isReligion1 = cityData->IsReligion1();
-					isReligion2 = cityData->IsReligion2();
-					isReligion3 = cityData->IsReligion3();
-					isReligion4 = cityData->IsReligion4();
-					isReligion5 = cityData->IsReligion5();
-					isReligion6 = cityData->IsReligion6();
-					isReligion7 = cityData->IsReligion7();
-					isReligion8 = cityData->IsReligion8();
-					isReligion9 = cityData->IsReligion9();
-					isReligion10 = cityData->IsReligion10();
-*/
 
 					slaveBits = ucell.m_unseenCell->GetSlaveBits();
 					
@@ -3750,6 +3736,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					RECT rect;//the city name rectangle
 					RECT boxRect;//boxRect-rect will = the player colored border for the city name
 					RECT clipRect;//working surface
+					sint32 right = 0;
 
 					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight) {//it's on the screen
 						if (m_font) {
@@ -3759,7 +3746,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							sint32 heightname = m_font->GetMaxHeight();
 
 							Pixel16			pixelColor;
-                            //get the proper colors for the city's owner
+							//get the proper colors for the city's owner
 							if (fog) {
 								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
 							} else {
@@ -3777,19 +3764,19 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							InflateRect(&boxRect, 2, 1);//expand boxRect to allow for borders
 							
 							clipRect = boxRect;//copy boxRect to the working surface clipRect
-                            //adjust clipRect to fit on the screen
+							//adjust clipRect to fit on the screen
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-                            //color clipRect BLACK
+							//color clipRect BLACK
 							primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK));
 							
 							InflateRect(&boxRect, 1, 1);//get ready to do borders (clipRect - boxRect now= a one pixel border)
 							                            // this is only for the cityname box EMOD note    
 
 							clipRect = boxRect;//copy boxRect to the working surface clipRect
-                            //adjust clipRect to fit on the screen
+							//adjust clipRect to fit on the screen
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
@@ -3799,7 +3786,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							primitives_FrameRect16(surf, &clipRect, pixelColor);
 
 							//get the color for the city's name text
-							COLORREF nameColor;							
+							COLORREF nameColor;
 							if (fog) {
 								nameColor = GetColorRef(COLOR_WHITE, fog);
 							} else {
@@ -3819,16 +3806,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-                            //draw the city name
+							//draw the city name
 							m_font->DrawString(surf, &rect, &clipRect, name, 0, nameColor, 0);
 
 							AddDirtyRectToMix(boxRect);
 							
-                   //start on the city's pop rectangle
-                            //put the city's pop in str
+					//start on the city's pop rectangle
+							// Put the city's pop in str
 							MBCHAR str[80];
 							sprintf(str,"%i",pop);
-							//the top line of the pop rectangle
+							// The top line of the pop rectangle
 							//y = boxRect.bottom + 1; //original
 
 
@@ -3837,35 +3824,38 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								width = k_POP_BOX_SIZE_MINIMUM;
 							height = m_font->GetMaxHeight();
 
-							// the pop rectangle
+							// The pop rectangle
 							RECT popRect = {0, 0, width+4, height+4};
-                            //add the top left co-ordinates
+							// Add the top left co-ordinates
 							//OffsetRect(&popRect, boxRect.left, y);  //original
 							OffsetRect(&popRect, boxRect.left - width - 4, boxRect.top);  //orig OffsetRect(&popRect, boxRect.left, y)
 
-							//get the proper color for the city's owner
+							// Get the proper color for the city's owner
 							if (fog) {
 								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
 							} else {
 								pixelColor = g_colorSet->GetPlayerColor(owner);
 							}
 
-							//copy popRect to the working surface clipRect
+							// Copy popRect to the working surface clipRect
 							clipRect = popRect;
-                            //adjust clipRect's screen location
+							// Adjust clipRect's screen location
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
 
-							//paint clipRect's surface the proper player color and give it a black frame
+							// Prevent Asserts in primitives_PaintRect16 when moving the mouse 
+							if (clipRect.right < clipRect.left) clipRect.right = clipRect.left;
+
+							// Paint clipRect's surface the proper player color and give it a black frame
 							primitives_PaintRect16(surf, &clipRect, pixelColor);
 							primitives_FrameRect16(surf, &clipRect, GetColor(COLOR_BLACK));
 							
-							//width and height of the pop number 
+							// Width and height of the pop number 
 							width = m_font->GetStringWidth(str);
 							height = m_font->GetMaxHeight();
-                            //this rect will be the inner rect that shows the pop number
+							// This rect will be the inner rect that shows the pop number
 							RECT		rect = {0, 0, width, height};
 
 							OffsetRect(&rect, popRect.left + (popRect.right-popRect.left)/2 -
@@ -3874,19 +3864,19 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 											height/2);
 
 
-							//copy rect to clipRect (and adjust screen location)
+							// Copy rect to clipRect (and adjust screen location)
 							clipRect = rect;
 							if (clipRect.left < 0) clipRect.left = 0;
 							if (clipRect.top < 0) clipRect.top = 0;
 							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-                            //draw the pop number in black
+							// Draw the pop number in black
 							m_font->DrawString(surf, &rect, &clipRect, str, 
 								0, 
 								GetColorRef(COLOR_BLACK),
 								0);
 
-							//move two pixels right and do it again ? 
+							// Move two pixels right and do it again ? 
 							OffsetRect(&rect, 2, 0);
 							clipRect = rect;
 							if (clipRect.left < 0) clipRect.left = 0;
@@ -3898,7 +3888,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								GetColorRef(COLOR_BLACK),
 								0);
 
-							//move one pixel left and do it again ?
+							// Move one pixel left and do it again ?
 							OffsetRect(&rect, -1, 0);
 
 							clipRect = rect;
@@ -3919,33 +3909,33 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 							//top left co-ordinates of nextPop rect
 							//x = popRect.left;
-                            //y = popRect.bottom + 1;
+							//y = popRect.bottom + 1;
 							//emod top left co-ordinates of nextPop rect
 							x = boxRect.right; // + widthname + 8; // popRect.left;
-                            //original  y = popRect.bottom + 1;
+							//original  y = popRect.bottom + 1;
 
-			// nextpop rect, PFT
+							// nextpop rect, PFT
 							if (owner == g_selected_item->GetVisiblePlayer())
-                            {
-                                //put the number of turns until the city's nextpop in str
+							{
+								//put the number of turns until the city's nextpop in str
 								MBCHAR strn[80];
-                                if (nextpop < THRESHOLD_SLOW_GROWTH)
-                                {
-                					 sprintf(strn, "%i", nextpop);
-                                }
-                                else
-                                {
-                                     sprintf(strn, "%s", TEXT_NONE);
-                                }
-                                //width and height of the pop number 
+								if (nextpop < THRESHOLD_SLOW_GROWTH)
+								{
+									sprintf(strn, "%i", nextpop);
+								}
+								else
+								{
+									sprintf(strn, "%s", TEXT_NONE);
+								}
+								//width and height of the pop number 
 								width = m_font->GetStringWidth(strn);
 								if (width < k_POP_BOX_SIZE_MINIMUM)
 									width = k_POP_BOX_SIZE_MINIMUM;
 								height = m_font->GetMaxHeight();
 
-							    //RECT for next pop
+								//RECT for next pop
 								RECT popRectn = {0, 0, width+4, height+4};
-                                //add the top left co-ordinates
+								//add the top left co-ordinates
 								//OffsetRect(&popRectn, x, y); //original
 								OffsetRect(&popRectn, x, boxRect.top); //OffsetRect(&popRectn, x, y);
 
@@ -3958,7 +3948,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 								//copy popRectn to the working surface clipRect
 								clipRect = popRectn;
-                                //adjust clipRect's screen location
+								//adjust clipRect's screen location
 								if (clipRect.left < 0) clipRect.left = 0;
 								if (clipRect.top < 0) clipRect.top = 0;
 								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
@@ -3973,7 +3963,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								width = m_font->GetStringWidth(strn);
 								height = m_font->GetMaxHeight();
 
-                                //this rect will be the inner rect that shows the nextpop number
+								//this rect will be the inner rect that shows the nextpop number
 								RECT		rect = {0, 0, width, height};
 
 								OffsetRect(&rect, popRectn.left + (popRectn.right-popRectn.left)/2 -
@@ -3988,7 +3978,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								if (clipRect.top < 0) clipRect.top = 0;
 								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
 								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-                                //draw the nextpop number in black
+								//draw the nextpop number in black
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
 									GetColorRef(COLOR_BLACK),
@@ -4023,13 +4013,14 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 								popRectn.bottom++;
 								popRectn.right++;
-
+								right = popRectn.right;
 								AddDirtyRectToMix(rect);
 
 							}
 						} else 
 							continue;
 					}
+					rect.right = right;
 					DrawCityIcons(surf, pos, owner, fog, rect,
 								isBioInfected, isNanoInfected, isConverted, 
 								isFranchised, isInjoined, wasHappinessAttacked,
@@ -4049,6 +4040,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 		}
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : TiledMap::DrawCityIcons
@@ -4080,7 +4072,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 //              BOOL              isWatchful           : if TRUE then draw MAPICON_WATCHFUL
 //
 // Globals    : 
-//				
+//
 // Returns    : 
 //
 // Remark(s)  : added Capitol
@@ -4287,7 +4279,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
 	}
-//emod. this bool is in he function line but never called and there is an icon so its a possible oversight/defect
+	//emod. this bool is in he function line but never called and there is an icon so its a possible oversight/defect
 	if (hasAirport) {  
 		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
 		Assert(cityIcon); 
@@ -4302,7 +4294,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
 	}
-//emod to add an icon for the city capitol like civ3/4
+	//emod to add an icon for the city capitol like civ3/4
 	if (isCapitol) {
 		POINT       iconDim2     = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
 		iconRect.left   = popRect.left - + iconDim2.x;
@@ -4327,8 +4319,8 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
-//end EMOD
-//emod to draw city icons for wonders and buildings
+	//end EMOD
+	//emod to draw city icons for wonders and buildings // Are you mad for each, one?
 	/*
 
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
@@ -4647,7 +4639,7 @@ TiledMap::DrawTerrainOverlay(aui_Surface *surf)
 
 
 
-void            
+void
 TiledMap::DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip)
 {
 	if (fog) 
@@ -4717,22 +4709,22 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	Unit myCity(myCityOwner);
 	UnitData *myCityData = myCity.IsValid() ? myCity.AccessData() : NULL;
 
-//emod
+	//emod
 	sint32		x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
-    if ((x < 0) || (y < 0))
-        return;
+	if ((x < 0) || (y < 0))
+		return;
 
-	TileSet	*   tileSet     = GetTileSet();
+	TileSet *   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_POLBORDERNW);
-    RECT		iconRect;
+	RECT        iconRect;
 	iconRect.left   = x;
 	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = y;  //y
+	iconRect.top    = y;
 	iconRect.bottom = iconRect.top + iconDim.y + 1;
 	
-    sint32  maxWidth    = surface ? surface->Width() : m_surface->Width();
-    sint32  maxHeight   = surface ? surface->Height() : m_surface->Height();
+	sint32  maxWidth    = surface ? surface->Width() : m_surface->Width();
+	sint32  maxHeight   = surface ? surface->Height() : m_surface->Height();
 
 	if ((iconRect.right >= maxWidth) || (iconRect.bottom >= maxHeight))
 		return;
@@ -4741,7 +4733,8 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	//add Great Wall Icon?
 	// bool PlayerHasGreatWall = g_player->GethasGreatWall future function
 
-//end emod
+	//end emod
+
 	Pixel16 *   borderIcon;
 	uint32      neighborCityOwner;
 	sint32      neighborOwner;
@@ -4754,28 +4747,33 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			//DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
-	   //could change this to the same DrawColorizedOverlay but use different icons for NW etc.
-		//create a new function like drawcityicons but requires a pos and converts a pos to pixels THEN place Icon.
-		//emod
-			//X = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2); -> 24 + 72/2 = 60 FROM DRAWCOLOREDBORDEREDGE
-			iconRect.top    = y + 18;  //y
-			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
-			Assert(borderIcon); 
-			if (!borderIcon) return;
-			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-			AddDirtyRectToMix(iconRect);
+			if(!g_theProfileDB->IsSmoothBorders())
+			{
+				DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
+			}
+			else
+			{
+				// could change this to the same DrawColorizedOverlay but use different icons for NW etc.
+				// create a new function like drawcityicons but requires a pos and converts a pos to pixels THEN place Icon.
+				// emod
+				//X = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2); -> 24 + 72/2 = 60 FROM DRAWCOLOREDBORDEREDGE
+				iconRect.top    = y + 18;
+				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
+				Assert(borderIcon); 
+				if (!borderIcon) return;
+				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
 
-			//if ((PlayerHasGreatWall) && (IsLand(pos)) {
-				//iconRect.top    = y + 20;  //y
-				//GWIcon = tileSet->GetMapIconData(MAPICON_GREATWALLNW);
-				//Assert(borderIcon); 
-				//if (!borderIcon) return;
-				//DrawColorizedOverlay(GWIcon, surface, iconRect.left, iconRect.top, color);
-				//AddDirtyRectToMix(iconRect);
-		//}
-			
-		//end emod
+				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
+					//iconRect.top    = y + 20;  //y
+					//GWIcon = tileSet->GetMapIconData(MAPICON_GREATWALLNW);
+					//Assert(borderIcon); 
+					//if (!borderIcon) return;
+					//DrawColorizedOverlay(GWIcon, surface, iconRect.left, iconRect.top, color);
+					//AddDirtyRectToMix(iconRect);
+				//}
+			}
+			//end emod
 		}	
 
 		neighborCityOwner = GetVisibleCityOwner(neighbor);		
@@ -4804,16 +4802,22 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
-			//DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID); //original
-			//emod
-			iconRect.top    = y + 46;  //y
-			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSW);
-			Assert(borderIcon); 
-			if (!borderIcon) return;
-			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-			AddDirtyRectToMix(iconRect);
-			//end emod
-		}		
+			if(!g_theProfileDB->IsSmoothBorders())
+			{
+				DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
+			}
+			else
+			{
+				//emod
+				iconRect.top    = y + 46;  //y
+				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSW);
+				Assert(borderIcon); 
+				if (!borderIcon) return;
+				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				//end emod
+			}
+		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
 			if(myCityData &&
@@ -4833,17 +4837,23 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 
-			//DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);  //original
-			//emod
-			iconRect.left   = x + 44;
-			iconRect.top    = y + 22;  //y
+			if(!g_theProfileDB->IsSmoothBorders())
+			{
+				DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);  //original
+			}
+			else
+			{
+				//emod
+				iconRect.left   = x + 44;
+				iconRect.top    = y + 22;  //y
 	
-			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNE);
-			Assert(borderIcon); 
-			if (!borderIcon) return;
-			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-			AddDirtyRectToMix(iconRect);
-			//end emod
+				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNE);
+				Assert(borderIcon); 
+				if (!borderIcon) return;
+				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				//end emod
+			}
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
@@ -4864,17 +4874,23 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 
-			//DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID); //original
-			//emod
-			iconRect.left   = x + 46;
-			iconRect.top    = y + 48;  //y
+			if(!g_theProfileDB->IsSmoothBorders())
+			{
+				DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID); //original
+			}
+			else
+			{
+				//emod
+				iconRect.left   = x + 46;
+				iconRect.top    = y + 48;  //y
 			
-			borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSE);
-			Assert(borderIcon); 
-			if (!borderIcon) return;
-			DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-			AddDirtyRectToMix(iconRect);
-			//end emod
+				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSE);
+				Assert(borderIcon); 
+				if (!borderIcon) return;
+				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				//end emod
+			}
 		}
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {

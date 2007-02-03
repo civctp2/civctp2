@@ -3194,6 +3194,7 @@ str_profile_DebugSlic                           "Slic-Debug-Meldungen"
 str_profile_EndTurnWithEmptyBuildQueues         "Rundenende mit leerer Bauliste"
 str_profile_RunInBackground                     "Rundenende im Hintergrund"
 str_profile_Upgrade                             "Einheiten aufrüsten"
+str_profile_SmoothBorders                       "Reichsgrenzen glätten"
 
 str_ldl_Pw_COLON_	"Siedler:"
 

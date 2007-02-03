@@ -50,6 +50,10 @@
 // - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
+// - Spinner callbacks are added at the end so that they aren't called due to
+//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin Gühmann)
+// - Switing between players now updates the city list of the main control 
+//   panel city tab. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -239,8 +243,8 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 :
 	m_terrainSwitches(NULL),
 	m_terrainImpSwitches(NULL),
-	m_xWrapButton(NULL),  // never used?
-	m_yWrapButton(NULL)   // never used?
+	m_xWrapButton(NULL),  // Unused
+	m_yWrapButton(NULL)   // Unused
 {
 	m_initializing = true;
 
@@ -279,19 +283,19 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		
 	ctp2_Spinner *spin;
 	sint32 i;
-	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
+	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++)
+	{
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
-		if(spin) {
-
+		if(spin)
+		{
 			//Added by Martin Gühmann to make sure that the Scenario Editor 
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
-			spin->SetSpinnerCallback(PlayerSpinner, NULL);
-
 			spin->SetMinimum(0, 0);
-			//Added by Martin Gühmann
 			spin->SetMaximum(GetLastPlayer(), 0);
+			// Set the callback at the end, otherwise it is always executed when you set min or max
+			spin->SetSpinnerCallback(PlayerSpinner, NULL);
 		}
 	}
 
@@ -328,7 +332,6 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		style = (style >= 0 && style < g_theCityStyleDB->NumRecords()) ? style : 0;
 
 		spin->SetValue(style, 0);
-		spin->SetSpinnerCallback(CivCityStyleSpinner, NULL);
 		
 		const CityStyleRecord* rec = g_theCityStyleDB->Get(style);
 
@@ -340,6 +343,8 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		{
 			tipWindow->SetTipText(const_cast<char*>(rec->GetNameText()));
 		}
+		// Set callback at least so that nothing else calls it, before everything is finished
+		spin->SetSpinnerCallback(CivCityStyleSpinner, NULL);
 	}
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment", SetGovernment, NULL);
@@ -2258,7 +2263,7 @@ void ScenarioEditor::NotifyPlayerChange()
 			s_scenarioEditor->m_initializing = true;
 			
 			 
-			if(plgroup) plgroup->SetSelectedItem(nation);	
+			if(plgroup) plgroup->SetSelectedItem(nation);
 
 			plgroup->SetActionFuncAndCookie(SetPlayerNation, (void *)0);
 			
@@ -2303,10 +2308,10 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-//Added by Martin Gühmann to prevent a crash if you use the
-//Scenario Editor to select a city, change the player without deselecting
-//it, destroy this city by conquest or slic or starvation and switching back
-//to that player.
+		// Added by Martin Gühmann to prevent a crash if you use the
+		// Scenario Editor to select a city, change the player without deselecting
+		// it, destroy this city by conquest or slic or starvation and switching back
+		// to that player.
 		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
 
 		tf->SetFieldText(g_player[newPlayer]->m_civilisation->GetLeaderName());
@@ -2319,8 +2324,9 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 		g_tiledMap->Refresh();
 		g_radarMap->Update();
 		g_turn->InformMessages();
+		MainControlPanel::UpdateCityList();
 	}
-		inCallback = false;
+	inCallback = false;
 }
 
 void ScenarioEditor::BrushSize(aui_Control *control, uint32 action, uint32 data, void *cookie)

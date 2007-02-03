@@ -3218,6 +3218,7 @@ str_profile_DebugSlic                           "Messages du débogueur de Slic"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
 str_profile_RunInBackground                     "Allow end turn in background"
 str_profile_Upgrade                             "Unit upgrading"
+str_profile_SmoothBorders                       "Smooth empire borders"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"0ptions Musique"

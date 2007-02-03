@@ -875,7 +875,7 @@ void SelectedItem::RemovePlayer(PLAYER_INDEX p)
 }
 
 void SelectedItem::AddPlayer(PLAYER_INDEX p)
-	{
+{
 	sint32	i ;
 
 	Assert(p != PLAYER_INDEX_VANDALS) ;	
@@ -892,7 +892,7 @@ void SelectedItem::AddPlayer(PLAYER_INDEX p)
 	m_next_player[p] = m_next_player[m_current_player] ;
 	m_next_player[m_current_player] = p ;
 	g_turn->RegisterNewPlayer(p);
-	}
+}
 
 
 uint32 SelectedItem_GetVersion(void)
@@ -906,7 +906,6 @@ void SelectedItem::KeyboardSelectFirstUnit()
 }
 
 void SelectedItem::SelectFirstUnit(BOOL setSelect)
-
 {
 	sint32 player = GetVisiblePlayer();
     m_select_state[player] = SELECT_TYPE_LOCAL_ARMY;
@@ -983,25 +982,23 @@ void SelectedItem::Refresh()
 	}
 
 }
-		
-void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 
+void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 {
 	SetSelectUnit(u, all, isDoubleClick);
 }
 
 void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
-
 {
 	m_selected_something_since_director_select = TRUE;
 
-    PLAYER_INDEX o = GetVisiblePlayer(); 
+	PLAYER_INDEX o = GetVisiblePlayer(); 
 
 	if (g_player[o] == NULL) return;
 
-    BOOL didSelect = FALSE;
+	BOOL didSelect = FALSE;
 
-    m_auto_unload = FALSE;
+	m_auto_unload = FALSE;
 
 	m_waypoints.Clear();
 
@@ -1010,7 +1007,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 	if(!u.IsValid())
 		return;
 
-    if (u.IsCity()) {
+	if (u.IsCity()) {
 
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_CITY;
@@ -1154,10 +1151,9 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		return;
 	}
 
-    Deselect(o);
-    
-    Assert(0); 
-    
+	Deselect(o);
+
+	Assert(false);
 }
 
 
@@ -1165,7 +1161,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 void SelectedItem::SetSelectGood(const MapPoint &pos)
 {
-    PLAYER_INDEX o = GetVisiblePlayer(); 
+	PLAYER_INDEX o = GetVisiblePlayer(); 
 
 	Assert(g_theWorld->IsGood(pos));
 

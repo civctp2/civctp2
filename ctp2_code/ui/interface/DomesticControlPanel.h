@@ -34,6 +34,7 @@
 // - Microsoft C++ extensions marked for future GCC compilation.
 // - Functionality added to hide the data of the previous player for hotseat
 //   games.
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,6 +49,7 @@
 class aui_Control;
 class ctp2_Button;
 class ctp2_Static;
+class aui_Surface;
 
 
 class DomesticControlPanel {
@@ -64,7 +66,6 @@ private:
 	static void EditResearchButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
 	void UpdateScience();
 
 	
@@ -76,10 +77,16 @@ private:
 	
 	void UpdateGoldPW();
 
-	
+	static AUI_ERRCODE DrawScienceBar(ctp2_Static *control,
+	                                  aui_Surface *surface,
+	                                  RECT &rect,
+	                                  void *cookie );
+
+
 	ctp2_Static *m_scienceLabel;
 	ctp2_Button *m_scienceIconButton;
 	ctp2_Button *m_scienceTurnButton;
+	ctp2_Static *m_scienceProgressBar;
 	ctp2_Static *m_citiesValue;
 	ctp2_Static *m_populationValue;
 	ctp2_Static *m_publicWorksValue;

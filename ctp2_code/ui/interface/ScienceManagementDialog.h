@@ -1,8 +1,35 @@
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Science Manager Dialog
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Display the cost for the player, not the base advancement cost.
+// - Start the great library with the current research project of the player.
+// - Reduced the length of the generated advance effect string.
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -62,27 +89,31 @@ private:
 	
 	ctp2_ListItem *CreateAdvanceItem(const AdvanceRecord *advance);
 
-	
+
 	BOOL UpdateAdvanceItem(ctp2_ListItem *item,
 		const AdvanceRecord *advance);
 
-	
+
 	ctp2_Static *GetListItemColumn(ctp2_ListItem *item, sint32 column);
 
-	
+
 	static void CloseButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
-	
+
 	static void HyperlinkActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
+
 	static void EditResearchButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
+
+	static AUI_ERRCODE DrawScienceBar(ctp2_Static *control,
+									  aui_Surface *surface,
+									  RECT &rect,
+									  void *cookie );
+
 	static void AdvanceListCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
@@ -108,12 +139,13 @@ private:
 	ctp2_Button		*m_changeButton;
 
 	
-	ctp2_Static *m_scienceLabel;		
-	ctp2_Button *m_scienceIconButton;	
-	ctp2_Button *m_scienceTurnButton;	
-	ctp2_Static *m_scienceTurnValue;	
-	ctp2_Static *m_scienceCurrentValue;	
-	ctp2_Static *m_scienceTotalValue;	
+	ctp2_Static *m_scienceLabel;
+	ctp2_Button *m_scienceIconButton;
+	ctp2_Button *m_scienceTurnButton;
+	ctp2_Static *m_scienceProgress;
+	ctp2_Static *m_scienceTurnValue;
+	ctp2_Static *m_scienceCurrentValue;
+	ctp2_Static *m_scienceTotalValue;
 
 	
 	ctp2_HyperTextBox	*m_scienceDescription;
@@ -125,4 +157,4 @@ private:
 
 extern ScienceManagementDialog *g_scienceManagementDialog;
 
-#endif 
+#endif // ___BMH_SCIENCE_MANAGEMENT_DIALOG_HEADER

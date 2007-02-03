@@ -1,8 +1,9 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
+// File type    : C++ source
 // Description  : Science Manager Dialog
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -24,6 +27,7 @@
 // - Display the cost for the player, not the base advancement cost.
 // - Start the great library with the current research project of the player.
 // - Reduced the length of the generated advance effect string.
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -128,6 +132,9 @@ m_scienceIconButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 m_scienceTurnButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"ScienceManagementDialog.CurrentResearch.AdvanceProgress.IconBorder."
 	"IconButton.RadialButton"))),
+m_scienceProgress(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
+	"ScienceManagementDialog.CurrentResearch.AdvanceProgress.IconBorder."
+	"IconButton.ProgressBarParent.ProgressBar"))),
 m_scienceTurnValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 	"ScienceManagementDialog.CurrentResearch.Turn.Value"))),
 m_scienceCurrentValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(
@@ -161,6 +168,8 @@ m_advanceList(static_cast<ctp2_ListBox*>(aui_Ldl::GetObject(
 		EditResearchButtonActionCallback, this);
 	m_scienceTurnButton->SetActionFuncAndCookie(
 		EditResearchButtonActionCallback, this);
+	m_scienceProgress->SetDrawCallbackAndCookie(
+		DrawScienceBar, this);
 	m_scienceDescription->SetActionFuncAndCookie(
 		HyperlinkActionCallback, this);
 
@@ -489,6 +498,45 @@ void ScienceManagementDialog::EditResearchButtonActionCallback(aui_Control *cont
 	
 	
 	sci_advancescreen_displayMyWindow(NULL, k_SCI_INCLUDE_CANCEL);
+}
+
+AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
+													aui_Surface *surface,
+													RECT &rect,
+													void *cookie )
+{
+	if(!g_selected_item)
+		return AUI_ERRCODE_OK;
+
+	if(g_selected_item->GetVisiblePlayer() < 0)
+		return AUI_ERRCODE_OK;
+
+	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	if(!player)
+		return AUI_ERRCODE_OK;
+
+	RECT destRect = rect;
+
+	g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
+
+	destRect.top += 1;
+	destRect.bottom -= 1;
+	destRect.left += 1;
+	destRect.right -= 1;
+
+	sint32 width = destRect.right - destRect.left;
+
+	double percentComplete = player->m_advances->FractionComplete();
+	if(percentComplete < 0.0)
+	{
+		destRect.right = destRect.left;
+	}
+	else if(percentComplete < 1.0)
+	{
+		destRect.right = destRect.left + sint32(double(width) * percentComplete);
+	}
+
+	return g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(255,0,0), 0);
 }
 
 

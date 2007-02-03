@@ -42,7 +42,7 @@
 // - Options CityClick, EndTurnWithEmptyBuildQueues and RunInBackground
 //   removed from advance options since they do not work. (May 21st 2006 Martin Gühmann)
 // - Made automatic treaty ending an option.
-// - removed new rules attempt - E 12.27.2006
+// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -210,6 +210,7 @@ ProfileDB::ProfileDB()
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
     m_cityCaptureOptions                (FALSE),
     m_upgrade                           (TRUE),
+    m_smoothBorders                     (FALSE),
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
 {
@@ -373,6 +374,7 @@ ProfileDB::ProfileDB()
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
+	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
 }
 
 void ProfileDB::DefaultSettings(void)

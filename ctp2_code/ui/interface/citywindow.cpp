@@ -56,6 +56,8 @@
 // - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standartized code (May 21st 2006 Martin Gühmann)
+// - Made appear the progress bar of the build item icon button. (Feb 4th 2007 Martin Gühmann)
+// - Pressing the build item icon button opens now the build manager. (Feb 4th 2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -147,38 +149,38 @@ static sint32 s_isWonder = 1;
 
 CityWindow::CityWindow(AUI_ERRCODE *err)
 :
-	m_window                (NULL),
-	m_statsWindow           (NULL),
-	m_cityData              (NULL),
-	m_cities                (NULL),
-	m_updating              (false),
+    m_window                (NULL),
+    m_statsWindow           (NULL),
+    m_cityData              (NULL),
+    m_cities                (NULL),
+    m_updating              (false),
     m_queueList             (NULL),
     m_inventoryList         (NULL),
-	m_happinessList         (NULL),
+    m_happinessList         (NULL),
     m_pollutionList         (NULL),
-	m_rushBuyButton         (NULL),
-	m_sellButton            (NULL),
+    m_rushBuyButton         (NULL),
+    m_sellButton            (NULL),
     m_happyIcon             (g_c3ui->LoadImage("upic10.tga")),
     m_unhappyIcon           (g_c3ui->LoadImage("updi43.tga")),
     m_growthBar             (NULL),
-	m_happinessBar          (NULL),
-	m_growthDelta           (NULL),
-	m_happinessValue        (NULL),
-	m_buildProgressBar      (NULL),
-	m_globalBox             (NULL),
-	m_globalFood            (NULL),
+    m_happinessBar          (NULL),
+    m_growthDelta           (NULL),
+    m_happinessValue        (NULL),
+    m_buildProgressBar      (NULL),
+    m_globalBox             (NULL),
+    m_globalFood            (NULL),
     m_globalProduction      (NULL),
     m_globalTrade           (NULL),
     m_globalScience         (NULL),
     m_globalPopulation      (NULL),
-	m_activateButton        (NULL),
-	m_disbandButton         (NULL)
+    m_activateButton        (NULL),
+    m_disbandButton         (NULL)
 {
-    std::fill(m_popSpinners, m_popSpinners + POP_MAX, (ctp2_Spinner *) NULL);
-    std::fill(m_resVal, m_resVal + CW_RES_MAX, (ctp2_Static *) NULL);
-    std::fill(m_tabPanels, m_tabPanels + CW_PANEL_MAX, (ctp2_Static *) NULL);
-    std::fill(m_unitId, m_unitId + k_MAX_ARMY_SIZE, 0);
-    std::fill(m_unitButtons, m_unitButtons + k_MAX_ARMY_SIZE, (ctp2_Button *) NULL);
+	std::fill(m_popSpinners, m_popSpinners + POP_MAX, (ctp2_Spinner *) NULL);
+	std::fill(m_resVal, m_resVal + CW_RES_MAX, (ctp2_Static *) NULL);
+	std::fill(m_tabPanels, m_tabPanels + CW_PANEL_MAX, (ctp2_Static *) NULL);
+	std::fill(m_unitId, m_unitId + k_MAX_ARMY_SIZE, 0);
+	std::fill(m_unitButtons, m_unitButtons + k_MAX_ARMY_SIZE, (ctp2_Button *) NULL);
 
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_cityWindowBlock);
 	Assert(m_window);
@@ -288,7 +290,13 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	}
 	m_happinessValue = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.HappinessValue");
 
-	m_buildProgressBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.ProgressBar");
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton", CityWindow::EditQueue, NULL);
+	Assert(*err == AUI_ERRCODE_OK);
+
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton", CityWindow::EditQueue, NULL);
+	Assert(*err == AUI_ERRCODE_OK);
+
+	m_buildProgressBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.ProgressBarParent.ProgressBar");
 	if(m_buildProgressBar) {
 		m_buildProgressBar->SetDrawCallbackAndCookie(CityWindow::DrawBuildBar, NULL);
 	}
@@ -1316,6 +1324,24 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 	s_cityWindow->Update();
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : CityWindow::EditQueue
+//
+// Description: Opens the Build Queue Manager. (Button callback function)
+//
+// Parameters : aui_Control *control
+//              uint32 action
+//              uint32 data
+//              void *cookie
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
@@ -1326,12 +1352,6 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 
 	EditQueue::Display(s_cityWindow->m_cityData);
 
-		
-		
-		
-
-
-
 	s_cityWindow->Update();
 }
 
@@ -1340,7 +1360,7 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 // Name       : CityWindow::OpenNationalManager
 //
 // Description: Opens the National Manager, when the National Manager button
-//              is clicked.
+//              is clicked. (Button callback function)
 //
 // Parameters : aui_Control *control
 //              uint32 action
@@ -1366,7 +1386,7 @@ void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32
 //
 // Name       : CityWindow::OptimizeSpecialists
 //
-// Description: Optimizes the specialists assignment. 
+// Description: Optimizes the specialists assignment. (Button callback function)
 //
 // Parameters : aui_Control *control
 //              uint32 action
@@ -1404,7 +1424,7 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 //
 // Description: Select the data for the image button and the hyper text box.
 //              Now it also handles the turn count button below the image
-//              button.
+//              button. (Button callback function)
 //
 // Parameters : aui_Control *control
 //              uint32 action
@@ -1863,7 +1883,8 @@ AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 	CityData *cd = s_cityWindow->m_cityData;
 
 	double percentComplete = (cd->GetBuildQueue()->GetPercentCompleted(cd->GetStoredCityProduction())) / 100.0;
-	if(percentComplete < 0) {
+	if(s_cityWindow->m_queueList->GetSelectedItemIndex() != 0
+	|| percentComplete < 0) {
 		
 		destRect.right = destRect.left;
 	} else {
