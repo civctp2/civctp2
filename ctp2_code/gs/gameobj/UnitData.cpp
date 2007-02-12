@@ -2346,14 +2346,14 @@ char const * UnitData::GetText() const
 	return m_text; 
 }
 
-void UnitData::SetText(char *str) 
+void UnitData::SetText(char const * str) 
 {
 	strcpy(m_text, str); 
 }
 
 void UnitData::GamestateDebug()
 {
-	strcpy(m_text, g_theStringDB->GetIdStr(GetDBRec()->m_name));
+	strcpy(m_text, g_theStringDB->GetIdStr(GetDBRec()->GetName()));
 }
 
 #endif
@@ -5866,10 +5866,8 @@ sint32 UnitData::CalculateTotalHP() const
 
 sint32 UnitData::CalculateTotalFuel() const
 {
-	const UnitRecord* rec = GetDBRec();
-
-	// Add some more stuff
-	return rec->GetMaxFuel();
+	UnitRecord const *  rec = GetDBRec();
+    return rec ? rec->GetMaxFuel() : 0;
 }
 
 double UnitData::CalculateTotalMovePoints() const

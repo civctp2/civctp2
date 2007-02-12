@@ -52,7 +52,7 @@ class	ID;
 //----------------------------------------------------------------------------
 
 #include "civarchive.h"			// CivArchive
-#include "ctp2_inttypes.h"      // sint32, uint32
+#include "ctp2_inttypes.h"      // uint32
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -62,18 +62,24 @@ class ID {
 public:
 	uint32 m_id; 
 	
-	ID (sint32 val) { m_id = val; }; 
-	ID (uint32 val = 0) { m_id = val; }; 
-    ID (const ID & i) { m_id = i.m_id; };
+	ID (uint32 val = 0) 
+    :   m_id    (val)
+    {  };
 
-	void Castrate() { } 
-	void DelPointers() {} 
+    ID (const ID & i) 
+    :   m_id    (i.m_id)
+    {  };
+
+	void DelPointers() 
+    {
+        // Nothing to delete, but required for use in DynamicArray<ID>
+    };
 	
 	operator int() const  { return m_id; }; 
 	operator unsigned int() const  { return m_id; }; 
 	operator unsigned long() const  { return m_id; };
    
-	sint32 operator! () const { return !m_id; };
+	bool operator! () const { return !m_id; };
 
 	uint32 operator~ () const { return ~m_id; };
 	uint32  operator& (const ID &val) const { return m_id & val.m_id; };  
@@ -114,11 +120,6 @@ public:
 		return m_id >= val.m_id; 
 	};
 
-	ID & operator = (const ID &val) { 
-        m_id = val.m_id;
-        return *this; };
-
-	
 	void Serialize(CivArchive &archive) ;
 };
 

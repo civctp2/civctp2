@@ -54,16 +54,11 @@ void gslog_print(char *fmt, ...)
 	if(!g_theProfileDB->GetEnableLogs())
 		return;
 
-	FILE *f;
-	if (s_initialized) 
+    FILE * f = fopen("logs" FILE_SEP "gslog.txt", (s_initialized) ? "a" : "w");
+	if (!s_initialized) 
 	{
-		f = fopen("logs\\gslog.txt", "a");
-	}
-	else
-	{
-		f = fopen("logs\\gslog.txt", "w");
-		s_initialized = true;
 		std::fill(s_populationHack, s_populationHack + k_MAX_PLAYERS, 0);
+		s_initialized = true;
 	}
 	
 	char buf[k_MAX_NAME_LEN];
@@ -84,19 +79,11 @@ void gslog_print(char *fmt, ...)
 void gslog_dipprint(char *fmt, ...)
 {
 #ifndef _BFR_
-	if(!g_theProfileDB->GetEnableLogs())
+	if (!g_theProfileDB->GetEnableLogs())
 		return;
 
-	FILE *f;
-	if (s_dip_initialized) 
-	{
-		f = fopen("logs\\diplog.txt", "a");
-	} 
-	else 
-	{
-		f = fopen("logs\\diplog.txt", "w");
-		s_dip_initialized = true;
-	}
+	FILE * f = fopen("logs" FILE_SEP "diplog.txt", (s_dip_initialized) ? "a" : "w");
+	s_dip_initialized = true;
 	
 	char buf[k_MAX_NAME_LEN];
 	va_list vl;
@@ -134,25 +121,16 @@ void gslog_LogPlayerStats(sint32 player)
 	
 	
 	
-	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
-		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
+	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
+    {
+		CityData * cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
-		
-		sint32 food = static_cast<sint32>(cityData->GetGrossCityFood());
-
-		
-		static sint32 foodCrime = 0;
+		sint32 foodCrime = 0;
 		cityData->GetFoodCrime(foodCrime);
 
-		
-		sint32 foodConsumed =
-			static_cast<sint32>(cityData->GetConsumedFood());
-
-		
-		totalFood += food;
-		totalFoodCrime += foodCrime;
-		totalFoodConsumed += foodConsumed;
+		totalFood           += cityData->GetGrossCityFood();
+		totalFoodCrime      += foodCrime;
+		totalFoodConsumed   += static_cast<sint32>(cityData->GetConsumedFood());
 	}
 
 	
@@ -175,25 +153,13 @@ void gslog_LogPlayerStats(sint32 player)
 	
 	
 	
-	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
+	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) 
+    {
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
-		
-		sint32 production =
-			static_cast<sint32>(cityData->GetGrossCityProduction());
-
-		
-		sint32 productionCrime = cityData->GetProdCrime();
-
-		
-		sint32 productionPublicWorks =
-			cityData->ComputeMaterialsPaid(pl->m_materialsTax);
-
-		
-		totalProduction += production;
-		totalProductionCrime += productionCrime;
-		totalProductionPublicWorks += productionPublicWorks;
+		totalProduction             += cityData->GetGrossCityProduction();
+		totalProductionCrime        += cityData->GetProdCrime();
+		totalProductionPublicWorks  += cityData->ComputeMaterialsPaid(pl->m_materialsTax);
 	}
 
 	
@@ -206,8 +172,10 @@ void gslog_LogPlayerStats(sint32 player)
 		((totalProductionUnitUpkeep * 100) / totalProduction) : 0;
 	sint32 percentProductionPublicWorks = totalProduction ?
 		((totalProductionPublicWorks * 100) / totalProduction) : 0;
+#if 0   // Unused
 	sint32 percentProductionCityUse = 100 - (percentProductionCrime +
 		percentProductionUnitUpkeep + totalProductionPublicWorks);
+#endif
 
 	gslog_print("  Total Production: %d\n", totalProduction);
 	gslog_print("  Production Crime: %d (%d%%)\n", totalProductionCrime, percentProductionCrime);
@@ -221,40 +189,21 @@ void gslog_LogPlayerStats(sint32 player)
 
 	
 	
-	
-	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
-		
+    sint32  personWages     = static_cast<sint32>(pl->GetWagesPerPerson());
+    sint32  wonderReduction = wonderutil_GetDecreaseMaintenance(pl->GetBuiltWonders());
+	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
+    {
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
-		
-		sint32 commerce =
-			static_cast<sint32>(cityData->GetGrossCityGold());
+		sint32 commerceBuildingUpkeep = buildingutil_GetTotalUpkeep
+            (cityData->GetImprovements(), wonderReduction, cityData->GetOwner()); //EMOD added owner
 
-		
-		sint32 commerceCrime = cityData->GetTradeCrime();
-
-		
-		sint32 commerceWages = cityData->CalcWages(
-			static_cast<sint32>(pl->GetWagesPerPerson()));
-
-		
-		sint32 commerceBuildingUpkeep = buildingutil_GetTotalUpkeep(
-			cityData->GetImprovements(),
-			wonderutil_GetDecreaseMaintenance(pl->m_builtWonders), cityData->GetOwner()); //EMOD added owner
-
-		
-		
-		
-		
-		sint32 commerceScience = cityData->GetScience();
-
-		
-		totalCommerce += commerce;
-		totalCommerceCrime += commerceCrime;
-		totalCommerceWages += commerceWages;
+		totalCommerce               += cityData->GetGrossCityGold();
+		totalCommerceCrime          += cityData->GetTradeCrime();
+		totalCommerceWages          += cityData->CalcWages(personWages);
 		totalCommerceBuildingUpkeep += commerceBuildingUpkeep;
-		totalCommerceScience += commerceScience;
-		totalTrade += cityData->GetNetCityGold();
+		totalCommerceScience        += cityData->GetScience();
+		totalTrade                  += cityData->GetNetCityGold();
 	}
 
 	

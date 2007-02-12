@@ -26,6 +26,7 @@
 //
 // - Arrays can now be parsed sequentially, if their values are in sequence
 //   without being separated of any other tokens. (Sep 3rd 2005 Martin Gühmann)
+// - Repaired memory leaks
 //
 //----------------------------------------------------------------------------
 
@@ -51,8 +52,9 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElement
 			sint32 *oldArray = *array;
 			*array = new sint32[*numElements + 1];
 			memcpy(*array, oldArray, (*numElements) * sizeof(sint32));
-			delete oldArray;
+			delete [] oldArray;
 		} else {
+            delete [] *array;
 			*array = new sint32[1];
 		}		
 		(*array)[*numElements] = value;
@@ -75,8 +77,9 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double **array, sint32 *numEleme
 			double *oldArray = *array;
 			*array = new double[*numElements + 1];
 			memcpy(*array, oldArray, (*numElements) * sizeof(double));
-			delete oldArray;
+			delete [] oldArray;
 		} else {
+            delete [] *array;
 			*array = new double[1];
 		}		
 		(*array)[*numElements] = value;
@@ -100,8 +103,9 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElement
 			char **oldArray = *array;
 			*array = new char *[*numElements + 1];
 			memcpy(*array, oldArray, (*numElements) * sizeof(char *));
-			delete oldArray;
+			delete [] oldArray;
 		} else {
+            delete [] *array;
 			*array = new char *[1];
 		}		
 		(*array)[*numElements] = new char[strlen(value) + 1];
@@ -126,8 +130,9 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numEl
 			sint32 *oldArray = *array;
 			*array = new sint32[(*numElements) + 1];
 			memcpy(*array, oldArray, (*numElements) * sizeof(sint32));
-			delete oldArray;
+			delete [] oldArray;
 		} else {
+            delete [] *array;
 			*array = new sint32[1];
 		}		
 		sint32 id;
@@ -235,29 +240,22 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 *array, sint32 *numEle
 void CTPRecord::SetTextName(const char *text)
 {
 	Assert(text);
-	if(!text)
-		return;
-
-	m_name = -1;
-	m_textName = new char[strlen(text) + 1];
-	strcpy(m_textName, text);
+	if (text)
+    {
+	    m_name      = INDEX_INVALID;
+        delete [] m_textName;
+	    m_textName  = new char[strlen(text) + 1];
+	    strcpy(m_textName, text);
+    }
 }
 
 const char *CTPRecord::GetIDText() const
 {
 	Assert(m_name >= 0);
-	if(m_name >= 0)
-		return g_theStringDB->GetIdStr(m_name);
-
-	return "NO_ID";
+    return (m_name >= 0) ? g_theStringDB->GetIdStr(m_name) : "NO_ID";
 }
 
 const char *CTPRecord::GetNameText() const
 {
-	if(m_textName) {
-		return m_textName;
-	} else {
-		Assert(m_name >= 0);
-		return g_theStringDB->GetNameStr(m_name);
-	}
+    return (m_textName) ? m_textName : g_theStringDB->GetNameStr(m_name);
 }

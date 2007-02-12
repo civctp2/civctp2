@@ -93,6 +93,10 @@
 
 extern Pollution *  g_thePollution;
 
+namespace
+{
+    size_t const    DISTANCE_NOT_ON_MAP = 0xffffffffu;
+}
 
 void Unit::KillUnit(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 { 
@@ -430,98 +434,98 @@ sint32 Unit::IsIgnoresZOC() const
 
 bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 {
-	uint32 distance = 0xffffffff;
+	size_t  distance    = DISTANCE_NOT_ON_MAP;
 	MapPoint center;
 	GetPos(center);
 	CircleIterator it(center, searchRadius, GetVisionRange());
-	for(it.Start(); !it.End(); it.Next()) {
-		if(!g_player[GetOwner()]->IsExplored(it.Pos())
-		&& MapPoint::GetSquaredDistance(center, it.Pos()) < distance
-		&& GetArmy()->CanEnter(it.Pos())
-		&& g_theWorld->IsOnSameContinent(it.Pos(), center)
-		){
-			distance = MapPoint::GetSquaredDistance(center, it.Pos());
-			pos = it.Pos();
-		}
+	for (it.Start(); !it.End(); it.Next()) 
+    {
+		if (    !g_player[GetOwner()]->IsExplored(it.Pos()) 
+             && GetArmy()->CanEnter(it.Pos())
+             && g_theWorld->IsOnSameContinent(it.Pos(), center)
+           )
+        {
+            size_t  target_distance = static_cast<size_t>
+                (MapPoint::GetSquaredDistance(center, it.Pos()));
+
+            if (target_distance < distance)
+            {
+                distance    = target_distance;
+                pos         = it.Pos();
+            }
+        }
 	}
 
-	return distance < 0xffffffff;
+	return distance < DISTANCE_NOT_ON_MAP;
 }
 
 bool Unit::NearestFriendlyCity(MapPoint &p) const
 {
-	MapPoint	unit_pos,
-				city_pos ;
-
-	uint32	closest_distance = 0xFFFFFFFF;
-
+    size_t	    closest_distance = DISTANCE_NOT_ON_MAP;
+	MapPoint    unit_pos;
 	GetPos(unit_pos);
 	p = unit_pos;
-	sint32 const n = g_player[GetOwner()]->m_all_cities->Num();
-	for (sint32 i = 0; i < n; i++)
+
+    MapPoint    city_pos;
+	int const   n = g_player[GetOwner()]->m_all_cities->Num();
+
+	for (int i = 0; i < n; i++)
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-		
-        uint32 d = std::max(abs(city_pos.x - unit_pos.x), 
+        size_t d = std::max(abs(city_pos.x - unit_pos.x), 
                             abs(city_pos.y - unit_pos.y)
                            );
-
-		
-		if (d<closest_distance)
+		if (d < closest_distance)
 		{
-			
-			closest_distance = d ;
-			p = city_pos ;
-		}
-
-	}
-
-	return closest_distance < 0xffffffff;
-}
-
-bool Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
-                                       Army army) const
-{
-	MapPoint    unit_pos,
-	            city_pos;
-
-	uint32	closest_distance = 0xFFFFFFFF;
-
-	
-	GetPos(unit_pos);
-	p = unit_pos;
-
-	sint32 const    n = g_player[GetOwner()]->m_all_cities->Num();
-
-	for (sint32 i = 0; i < n; i++)	
-    {
-		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
-		
-		
-        uint32	d = std::max(abs(city_pos.x - unit_pos.x), 
-                             abs(city_pos.y - unit_pos.y)
-                            );
-		sint32 numUnits = g_theWorld->GetCell(city_pos)->GetNumUnits();
-		if(numUnits + needRoom > k_MAX_ARMY_SIZE)
-			continue;
-
-		if (army.IsValid() && 
-		   (army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater())) {
-			if(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) && 
-			   !g_theWorld->IsWater(city_pos))
-				continue;
-		}
-
-		
-		if (d<closest_distance) {
-			
 			closest_distance = d;
 			p = city_pos;
 		}
 	}
 
-	return closest_distance < 0xffffffff;
+	return closest_distance < DISTANCE_NOT_ON_MAP;
+}
+
+bool Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
+                                       Army army) const
+{
+	size_t      closest_distance = DISTANCE_NOT_ON_MAP;
+
+	MapPoint    unit_pos;
+	GetPos(unit_pos);
+	p = unit_pos;
+
+    MapPoint    city_pos;
+	int const   n = g_player[GetOwner()]->m_all_cities->Num();
+    bool const  testWaterMove   = 
+        army.IsValid() &&
+		(army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater()); 
+
+	for (int i = 0; i < n; i++)	
+    {
+		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
+		
+		if (g_theWorld->GetCell(city_pos)->GetNumUnits() + needRoom > k_MAX_ARMY_SIZE)
+			continue;
+
+		if (testWaterMove &&  
+			(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) && 
+			 !g_theWorld->IsWater(city_pos)
+            )
+           )
+			continue;
+
+        size_t	d = std::max(abs(city_pos.x - unit_pos.x), 
+                             abs(city_pos.y - unit_pos.y)
+                            );
+		if (d < closest_distance) 
+        {
+			closest_distance = d;
+			p = city_pos;
+		}
+	}
+
+	return closest_distance < DISTANCE_NOT_ON_MAP;
 }
 
 
@@ -536,23 +540,23 @@ bool Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 
 bool Unit::NearestFriendlyCity(Unit &c) const
 {
-	MapPoint    unit_pos,
-	            city_pos;
-
-	uint32	closest_distance = 0xFFFFFFFF;
-
+	size_t	closest_distance = DISTANCE_NOT_ON_MAP;
 	c = Unit();
+
+	MapPoint    unit_pos;
 	GetPos(unit_pos);
-	sint32 const    n = g_player[GetOwner()]->m_all_cities->Num();
-	for (sint32 i = 0; i < n; i++)
+
+    MapPoint    city_pos;
+	int const   n = g_player[GetOwner()]->m_all_cities->Num();
+	for (int i = 0; i < n; i++)
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-        uint32	d = std::max(abs(city_pos.x - unit_pos.x), 
+        size_t	d = std::max(abs(city_pos.x - unit_pos.x), 
                              abs(city_pos.y - unit_pos.y)
                             );
 
-		if (d<closest_distance)
+		if (d < closest_distance)
 		{
 			closest_distance = d;
 			c = g_player[GetOwner()]->m_all_cities->Get(i).m_id;
@@ -560,7 +564,7 @@ bool Unit::NearestFriendlyCity(Unit &c) const
 
 	}
 
-	return closest_distance < 0xffffffff;
+	return closest_distance < DISTANCE_NOT_ON_MAP;
 }
 
 void Unit::Launch()
@@ -582,17 +586,10 @@ bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed,
 bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed, 
                        bool &revealed_unexplored)
 {
-	bool left_map;
+	bool left_map = false;
 	AccessData()->SetPos(p, revealed_unexplored, left_map); 
 
-    if (left_map) 
-    {
-        return true;
-    }
-    else
-    {
-		return g_theWorld->InsertUnit(p, *this, revealed); 
-	}
+    return left_map || g_theWorld->InsertUnit(p, *this, revealed); 
 }
 
 void Unit::SetPosAndNothingElse(const MapPoint &p)
@@ -846,39 +843,38 @@ void Unit::UnVeteran()
 	AccessData()->UnVeteran();
 }
 
-sint32 Unit::CanInterceptTrade() const
+bool Unit::CanInterceptTrade() const
 {
 	return GetData()->CanInterceptTrade(); 
 }
 
-sint32 Unit::CanRustle(CellUnitList &defender) const
+bool Unit::CanRustle(CellUnitList &defender) const
 {
 	return GetData()->CanRustle(defender);
 }
 
-sint32 Unit::CanConvertCity(Unit &city) const
+bool Unit::CanConvertCity(Unit &city) const
 {
 	return GetData()->CanConvertCity(city);
 }
 
-sint32 Unit::CanBombard(CellUnitList &defender) const 
+bool Unit::CanBombard(CellUnitList &defender) const 
 {
 	return GetData()->CanBombard(defender);
 }
 
-
-sint32 Unit::CanCounterBombard(CellUnitList &defender) const
+bool Unit::CanCounterBombard(CellUnitList &defender) const
 {
 	return GetData()->CanCounterBombard(defender);
 }
 
-sint32 Unit::CanActivelyDefend(const Army &attacker) const
+bool Unit::CanActivelyDefend(const Army &attacker) const
 {
-	CellUnitList *list = g_theArmyPool->AccessArmy(attacker);
+	CellUnitList * list = g_theArmyPool->AccessArmy(attacker);
 	return GetData()->CanActivelyDefend(*list);
 }
 
-sint32 Unit::CanActivelyDefend(CellUnitList &attacker) const
+bool Unit::CanActivelyDefend(CellUnitList &attacker) const
 {
 	return GetData()->CanActivelyDefend(attacker);
 }
@@ -1020,11 +1016,9 @@ bool Unit::CanSettle(const MapPoint &pos) const
 	return GetData()->CanSettle(pos);
 }
 
-sint32 Unit::Settle()
+bool Unit::Settle()
 {
-	sint32 r = AccessData()->Settle();
-
-	return r;
+	return AccessData()->Settle();
 }
 
 #ifdef _DEBUG
@@ -1042,7 +1036,7 @@ void Unit::SetText(char *str)
 #endif
 
 
-sint32 Unit::IsCantCaptureCity()
+bool Unit::IsCantCaptureCity()
 {
 	return GetDBRec()->GetCantCaptureCity();
 }

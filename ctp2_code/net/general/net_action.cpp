@@ -321,7 +321,7 @@ void NetAction::Packetize(uint8* buf, uint16& size)
 	buf[1] = 'A';
 	size = 2;
 
-	PUSHSHORT(m_action);
+	PUSHSHORT(static_cast<uint16>(m_action));
 	for(uint32 i = 0; i < m_args[m_action]; i++) {
 		PUSHLONG(m_data[i]);
 	}

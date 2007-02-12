@@ -3168,11 +3168,8 @@ void World::DeleteStartingPoint(sint32 index)
 
 BOOL World::ExportMap(MBCHAR *filename)
 {
-	Assert(filename);
-	if (!filename) return FALSE;
-
-	Assert(strlen(filename) > 0);
-	if (strlen(filename) <= 0) return FALSE;
+	Assert(filename && (strlen(filename) > 0));
+	if (!filename || (0 == strlen(filename))) return FALSE;
 
 	FILE * outfile = fopen(filename, "wt");
 	Assert(outfile);
@@ -3180,33 +3177,25 @@ BOOL World::ExportMap(MBCHAR *filename)
 
 	fprintf(outfile, "%d,%d\n", m_size.x, m_size.y);
 
-	sint32		x, y, z;
-	
-	
-	z = 0;
-
-	for (y=0; y<m_size.y; y++) {
-		for (x=0; x<m_size.x; x++) {
-			MapPoint	pos;
-			Cell	*cell;
-			sint32	good;
-
-			pos.x = x;
-			pos.y = y;
-
-			cell = GetCell(pos);
+	for (sint16 y = 0; y < m_size.y; y++) 
+    {
+		for (sint16 x = 0; x < m_size.x; x++) 
+        {
+			MapPoint    pos(x, y);
+			Cell *      cell = GetCell(pos);
+			sint32	    good;
 
 			BOOL hasHut = (cell->GetGoodyHut() != NULL);
 			BOOL hasRiver = IsRiver(pos);
 			BOOL hasGood = GetGood(pos, good);
-			uint32 env = cell->GetEnv();
 
 			fprintf(outfile, "%d,%d,%d,%d,%ld\t", 
 					cell->GetTerrain(),
 					hasHut,
 					hasRiver,
 					hasGood,
-					env);
+					cell->GetEnv()
+                   );
 		}
 		fprintf(outfile, "\n");		
 	}
@@ -3218,11 +3207,8 @@ BOOL World::ExportMap(MBCHAR *filename)
 
 BOOL World::ImportMap(MBCHAR *filename)
 {
-	Assert(filename);
-	if (!filename) return FALSE;
-
-	Assert(strlen(filename) > 0);
-	if (strlen(filename) <= 0) return FALSE;
+	Assert(filename && (strlen(filename) > 0));
+	if (!filename || (0 == strlen(filename))) return FALSE;
 
 	FILE * infile = fopen(filename, "rt");
 	Assert(infile);
@@ -3367,11 +3353,7 @@ void World::SmartSetTerrain(const MapPoint &pos, sint32 terr, sint32 radius)
 
 void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 {
-	const TerrainRecord *rec = NULL;
-	sint32 oldTerr;
-
-	Cell *thisCell;
-	thisCell = GetCell(pos);
+	Cell *  thisCell = GetCell(pos);
 	Assert(thisCell);
 	if(!thisCell) return;
 
@@ -3381,18 +3363,16 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 	thisCell->SetScratch(thisCell->GetScratch() | k_SMART_SET_HIT);
 
-	
-	rec = g_theTerrainDB->Get(terr);
-	const TerrainRecord *neighborRec;
-
+	const TerrainRecord * rec = g_theTerrainDB->Get(terr);
 	Assert(rec);
 	if(!rec)
 		return;
 
-	oldTerr = thisCell->GetTerrainType();
+	sint32 oldTerr = thisCell->GetTerrainType();
 
 	thisCell->SetTerrain(terr);
 
+	const TerrainRecord *neighborRec;
 	if(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) {
 		
 		RadiusIterator it(pos, 1);

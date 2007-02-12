@@ -94,267 +94,166 @@
 #include "c3.h"
 #include "player.h"
 
-#include <algorithm>    // std::max
-#include "c3debug.h"
-#include "Globals.h"
-#include "c3errors.h"
-
-#include "Army.h"
-#include "cellunitlist.h"
-#include "World.h"
-#include "Cell.h"
-#include "civarchive.h"
-
-
-#include "SelItem.h"
-#include "aui.h"
-#include "debugwindow.h"
-
-
-#include "network.h"
-#include "net_action.h"
-#include "net_info.h"
-#include "net_army.h"
-#include "net_research.h"
-
-#include "AdvanceRecord.h"
-#include "DataCheck.h"
-#include "pollution.h"
-
-#include "CivPaths.h"
-
-#include "TradePool.h"
-#include "TradeOfferPool.h"
-
-
-#include "UnitData.h"
-#include "citydata.h"
-
-#include "Vision.h"
-
-#include "TerrImprovePool.h"
-#include "TerrainRecord.h"
-#include "TerrainImprovementRecord.h"
-
-#include "Readiness.h"
-#include "ResourceRecord.h" //EMOD
-#include "Resources.h"
-
-#include "UnseenCell.h"
-#include "MaterialPool.h"
-#include "ConstDB.h"
-
-#include "installationpool.h"
-
-#include "installation.h"
-#include "installationtree.h"
-
-
-#include "WonderRecord.h"
-
-#include "radarmap.h"
-
-#include "Gold.h"
-#include "Sci.h"
-#include "TaxRate.h"
-#include "Diffcly.h"
-#include "Advances.h"
-#include "PlayHap.h"
-#include "DiplomaticRequestData.h"
-#include "DiplomaticRequest.h"
-#include "DiplomaticRequestPool.h"
-
-#include "AgreementData.h"
-#include "AgreementPool.h"
-#include "Agreement.h"
-#include "UnitPool.h"
-#include "BuildingRecord.h"
-#include "director.h"
-#include "RandGen.h"
-#include "Regard.h"
-#include "CivilisationPool.h"
-#include "MessagePool.h"
-
-#include "profileDB.h"
-#include "AICause.h"
-#include "CreateUnit.h"
-#include "SlicSegment.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "QuickSlic.h"
-#include "StrDB.h"
-#include "TopTen.h"
-#include "Strengths.h"
-#include "soundmanager.h"
-#include "gamesounds.h"
-
-#include "messagewin.h"
-#include "victorymoviewin.h"
-#include "GameOver.h"
-#include "infowin.h"
-#include "victorywin.h"
-
-#include "civapp.h"
-
-#include "Happy.h"
-#include "AgreementDynArr.h"
-
-#include "GovernmentRecord.h"
-
-
-
-#include "Wormhole.h"
-
-#include "HappyTracker.h"
 #include "AchievementTracker.h"
-
-#include "ArmyPool.h"
-#include "Order.h"
-#include "ArmyData.h"
-#include "civapp.h"
-
-#include "Score.h"
-
-#include "DifficultyRecord.h"
-
-#include "EndGame.h"
-
+#include "AdvanceRecord.h"
+#include "Advances.h"
 #include "AgeRecord.h"
-
-#ifdef _DEBUG
-#include "primitives.h"
-#endif
-
-#include "c3dialogs.h"
-#include "TradeBids.h"
-
-#include "controlpanelwindow.h"
-
-#include "statswindow.h"
-#include "sci_advancescreen.h"
-
-#include "sciencewin.h"
-
-#include "stringutils.h"
-#include "screenutils.h"
-
-#include "EndgameWindow.h"
-
-#include "GameSettings.h"
-#include "WonderTracker.h"
-
-#include "c3ui.h"
-
-#include "net_strengths.h"
-#include "net_endgame.h"
-
-#include "gamefile.h"
-
-#include "gameinit.h"
-
-#include "GameEventManager.h"
-#include "GovernmentRecord.h"
-#include "UnitRecord.h"
-#include "TerrainRecord.h"
-#include "ResourceRecord.h"
-
-#include "terrainutil.h"
+#include "Agreement.h"
+#include "AgreementData.h"
+#include "AgreementDynArr.h"
+#include "AgreementMatrix.h"
+#include "AgreementPool.h"              // g_theAgreementPool
+#include "AICause.h"
+#include <algorithm>                    // std::max
+#include "Army.h"
+#include "ArmyData.h"
+#include "ArmyPool.h"
+#include "aui.h"
+#include "Barbarians.h"
+#include "BFS.h"
+#include "BuildingRecord.h"
 #include "buildingutil.h"
-
-#include "wonderutil.h"
-
-#include "MainControlPanel.h"
-#include "trademanager.h"
-#include "scenarioeditor.h"
-
+#include "c3debug.h"
+#include "c3dialogs.h"
+#include "c3errors.h"
+#include "c3ui.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "citydata.h"
+#include "CityInfluenceIterator.h"
+#include "civapp.h"
+#include "civarchive.h"
+#include "CivilisationPool.h"           // g_theCivilisationPool
+#include "CivPaths.h"                   // g_civPaths
+#include "ConstDB.h"                    // g_theConstDB
+#include "controlpanelwindow.h"         // g_controlPanel
+#include "CreateUnit.h"
+#include "ctpai.h"
+#include "ctp2_Window.h"
+#include "DataCheck.h"
+#include "debugwindow.h"
+#include "Diffcly.h"
+#include "DifficultyRecord.h"
+#include "Diplomat.h"
+#include "DiplomaticRequest.h"
+#include "DiplomaticRequestData.h"
+#include "DiplomaticRequestPool.h"      // g_theDiplomaticRequestPool
+#include "director.h"
+#include "EndGame.h"
+#include "EndgameWindow.h"
+#include "EventTracker.h"
+#include "Exclusions.h"
 #include "FeatTracker.h"
 #include "gaiacontroller.h"
+#include "GameEventManager.h"
+#include "gamefile.h"
+#include "gameinit.h"
+#include "GameOver.h"
+#include "GameSettings.h"
+#include "gamesounds.h"
+#include "GovernmentRecord.h"
+#include "Globals.h"
+#include "Gold.h"
 #include "greatlibrary.h"
-#include "EventTracker.h"
-
-#include "ctp2_Window.h"
-#include "Barbarians.h" //EMOD
-#include "CityInfluenceIterator.h" //EMOD
-
-
-#include "AgreementMatrix.h"
-#include "Diplomat.h"
+#include "Happy.h"
+#include "HappyTracker.h"
+#include "infowin.h"
+#include "installation.h"
+#include "installationpool.h"
+#include "installationtree.h"           // g_theInstallationTree
+#include "MainControlPanel.h"
 #include "mapanalysis.h"
-
+#include "MaterialPool.h"
+#include "MessagePool.h"
+#include "messagewin.h"
 #include "messagewindow.h"
-
+#include "net_action.h"
+#include "net_army.h"
+#include "net_endgame.h"
+#include "net_info.h"
+#include "net_research.h"
+#include "net_strengths.h"
+#include "network.h"
+#include "newturncount.h"
+#include "Order.h"
+#include "PlayHap.h"
+#include "pollution.h"
+#include "profileDB.h"
+#include "QuickSlic.h"
+#if defined(_DEBUG)
+#include "primitives.h"
+#endif
+#include "radarmap.h"                   // g_radarMap
+#include "RandGen.h"                    // g_rand
+#include "Readiness.h"
+#include "Regard.h"
+#include "ResourceRecord.h"
+#include "Resources.h"
 #include "scenarioeditor.h"
+#include "Sci.h"
+#include "Score.h"
+#include "SelItem.h"
+#include "SlicEngine.h"
+#include "SlicObject.h"
+#include "SlicSegment.h"
+#ifdef MOVED_TO_SOUNDEVENT_CPP
+#include "soundmanager.h"               // g_soundManager
+#endif
+#include "sci_advancescreen.h"
+#include "sciencewin.h"
+#include "screenutils.h"
+#include "statswindow.h"
+#include "StrDB.h"
+#include "Strengths.h"
+#include "stringutils.h"
+#include "TaxRate.h"
+#include "TerrainImprovementRecord.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "TerrImprovePool.h"
+#include "tiledmap.h"                   // g_tiledMap
+#include "TopTen.h"
+#include "TradeBids.h"
+#include "trademanager.h"
+#include "TradeOfferPool.h"
+#include "TradePool.h"
+#include "TurnCnt.h"                    // g_turn
+#include "UnitData.h"
+#include "UnitPool.h"
+#include "UnitRecord.h"
+#include "UnseenCell.h"
+#include "victorymoviewin.h"
+#include "victorywin.h"
+#include "Vision.h"
+#include "WonderRecord.h"
+#include "WonderTracker.h"
+#include "wonderutil.h"
+#include "World.h"
+#include "Wormhole.h"
 
 extern C3UI                     *g_c3ui;
-extern ControlPanelWindow       *g_controlPanel;
-extern CivPaths                 *g_civPaths;
 extern PointerList<Player>      *g_deadPlayer;
 extern Pollution                *g_thePollution ;
 extern TopTen                   *g_theTopTen ;
-extern ConstDB                  *g_theConstDB ;
-extern AgreementPool            *g_theAgreementPool ;
-extern DiplomaticRequestPool    *g_theDiplomaticRequestPool ;
-extern RandomGenerator          *g_rand ;
-extern CivilisationPool         *g_theCivilisationPool ;
 extern MessageWindow            *g_currentMessageWindow;
-
 extern DebugWindow              *g_debugWindow;
-
-
-extern InstallationQuadTree     *g_theInstallationTree; 
-
-extern RadarMap                 *g_radarMap;
 extern CivApp                   *g_civApp;
 extern sint32                   g_numGoods; // To fix games with altered ressource database
 extern sint32                   *g_newGoods;
-
-#ifdef _DEBUG
-BOOL                            g_toggleAdvances ;
-#endif
-
-BOOL                            g_aPlayerIsDead = FALSE;
-
-
-#include "newturncount.h"
-
-#include "TurnCnt.h"
-extern TurnCount                *g_turn;
-#include "tiledmap.h" 
-extern TiledMap                 *g_tiledMap;
-
-extern BOOL g_powerPointsMode;
-
-
+extern BOOL                     g_powerPointsMode;
 extern sint32                   g_tileImprovementMode;
-
-sint32                          g_specialAttackMode = 0;
-
-extern SoundManager             *g_soundManager;
-
 extern sint32                   g_isTileImpPadOn;
-
 extern sint32                   g_isCheatModeOn;
-
-extern void WhackScreen();
-
 #ifdef _DEBUG
 extern BOOL                     g_ai_revolt;
 #endif
-
-#include "BFS.h"
-
-
-#include "Exclusions.h"
-
-#include "ctpai.h"
 
 
 #define k_PLAYER_VERSION_MAJOR	0
 #define k_PLAYER_VERSION_MINOR	2
 
-
-
-
+BOOL                            g_aPlayerIsDead     = FALSE;
+sint32                          g_specialAttackMode = 0;
 
 Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt)
 {
@@ -7086,24 +6985,21 @@ void Player::RemoveWonder(sint32 which, bool destroyed)
 	m_builtWonders &= ~((uint64)1 << which);
 
     if (!wonderutil_IsObsolete(which)) { 
+        /// @todo Find out what was supposed to happen here: this is doing nothing
 	    sint32 increaseRegard = wonderutil_GetIncreaseRegard((uint64)1 << which);
-		
 		
     }
 
-	if(destroyed) {
-		
-		
-        sint32 j;
+	if (destroyed) 
+    {
 		Unit c;
 		g_theWonderTracker->GetCityWithWonder(which, c);
-		SlicObject *so = new SlicObject("097WonderDestroyed") ;
-        for (j=1; j<k_MAX_PLAYERS; j++)
-            if (g_player[j] && !g_player[j]->m_isDead)
-                so->AddRecipient(j) ;
+
+		SlicObject * so = new SlicObject("097WonderDestroyed");
+        so->AddAllRecipientsBut(PLAYER_INDEX_VANDALS);
         so->AddWonder(which);
 		so->AddCity(c);
-        g_slicEngine->Execute(so) ;
+        g_slicEngine->Execute(so);
     }
 
 	sint32 buildingIndex;
@@ -9997,18 +9893,31 @@ void Player::ResetVision()
 
 sint32 Player::CountCityHappiness(sint32 &rioting, sint32 &content, sint32 &happy)
 {
-	sint32 i;
-	rioting = content = happy = 0;
-	for(i = 0; i < m_all_cities->Num(); i++) {
-		if(m_all_cities->Access(i).CD()->GetIsRioting()) {
+	sint32 const cityCount = m_all_cities->Num();
+
+	rioting = 0;
+    content = 0;
+    happy   = 0;
+
+	for (int i = 0; i < cityCount; ++i) 
+    {
+        CityData const * city = m_all_cities->Access(i).CD();
+
+		if (city->GetIsRioting()) 
+        {
 			rioting++;
-		} else if(m_all_cities->Access(i).CD()->IsCelebratingHappiness()) {
+		} 
+        else if (city->IsCelebratingHappiness()) 
+        {
 			happy++;
-		} else {
+		} 
+        else 
+        {
 			content++;
 		}
 	}
-	return m_all_cities->Num();
+
+	return cityCount;
 }
 
 //----------------------------------------------------------------------------

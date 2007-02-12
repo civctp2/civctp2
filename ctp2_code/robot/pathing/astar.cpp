@@ -464,7 +464,7 @@ cDebugCallStackSet g_astarCallStackSet(5);
 #endif
 
 
-sint32 Astar::FindPath
+bool Astar::FindPath
 (
     MapPoint const &    start, 
     MapPoint const &    dest, 
@@ -505,7 +505,7 @@ sint32 Astar::FindPath
     Cell *          c           = g_theWorld->GetCell(start); 
     Assert(c);
     if (!c) 
-        return FALSE; 
+        return false; 
     
     nodes_opened++;
 
@@ -690,7 +690,7 @@ sint32 Astar::FindPath
     WhackScreen();  
 #endif
 
-    sint32 const r =  Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
+    bool const r =  Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
 
 #ifdef TRACK_ASTAR_NODES
 	g_paths_found++;
@@ -700,24 +700,26 @@ sint32 Astar::FindPath
     return r; 
 }
 
-sint32 Astar::Cleanup (const MapPoint &dest, Path &a_path, 
+bool Astar::Cleanup (const MapPoint &dest, Path &a_path, 
                        float &total_cost, const sint32 isunit, 
                        AstarPoint *best, AstarPoint *cost_tree)
 {
     if ((best == NULL) ||
-        (best->m_pos != dest)) {
+        (best->m_pos != dest)) 
+    {
        total_cost = 0.0;
        
        a_path.Clear(); 
        g_astar_mem.MassDelete(isunit);
-       return FALSE; 
-    }  else { 
-        
+       return false; 
+    }
+    else 
+    { 
        total_cost = best->m_past_cost + best->m_entry_cost; 
        a_path.FlattenAstarList(best); 
        g_astar_mem.MassDelete(isunit);   
 
-       return TRUE;
+       return true;
     }
 }
 

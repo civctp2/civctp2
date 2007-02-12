@@ -362,11 +362,9 @@ void Path::SpaceMove(const MapPoint &start, const MapPoint &dest)
 {
     m_start = start; 
     m_step.Clear(); 
-    Direction d; 
-
-     d = start.GetNeighborDirection(dest); 
-     m_step.Insert(d); 
-     m_step.Insert(d); 
+    Direction const d = Direction(start.GetNeighborDirection(dest)); 
+    m_step.Insert(d); 
+    m_step.Insert(d); 
 }
 
 void Path::SnipEnd()

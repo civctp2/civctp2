@@ -399,13 +399,13 @@ public:
 	void GetDesiredPosInArmy(MapPoint &p) const;
 	void SetDesiredPosInArmy(const MapPoint &p);
 
-	sint32 CanInterceptTrade() const;
-	sint32 CanRustle(CellUnitList &defender) const; 
-	sint32 CanConvertCity(Unit &city) const;
-	sint32 CanBombard(CellUnitList &defender) const;
-	sint32 CanCounterBombard(CellUnitList &defender) const;
-	sint32 CanActivelyDefend(const Army &attacker) const;
-	sint32 CanActivelyDefend(CellUnitList &attacker) const;
+	bool CanInterceptTrade() const;
+	bool CanRustle(CellUnitList &defender) const; 
+	bool CanConvertCity(Unit &city) const;
+	bool CanBombard(CellUnitList &defender) const;
+	bool CanCounterBombard(CellUnitList &defender) const;
+	bool CanActivelyDefend(const Army &attacker) const;
+	bool CanActivelyDefend(CellUnitList &attacker) const;
 
 	void Bombard(const UnitRecord *rec, Unit defender, bool isCounterBombardment);
 	bool Bombard(CellUnitList &defender, bool isCounterBombardment);
@@ -439,9 +439,9 @@ public:
 
 	bool CanSettle(const MapPoint &pos) const;
 
-	sint32 Settle(); 
+	bool Settle(); 
 
-	sint32 IsCantCaptureCity();
+	bool IsCantCaptureCity();
 	void ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
 	                    const CAUSE_REMOVE_CITY cause);
 	void ResetUnitOwner(const PLAYER_INDEX newo,

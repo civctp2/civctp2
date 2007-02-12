@@ -45,7 +45,7 @@ protected:
     virtual sint32 InitPoint(AstarPoint *parent, AstarPoint *point, 
         const MapPoint &pos, const float pc, const MapPoint &dest);
 
-      sint32 Cleanup (const MapPoint &dest, Path &a_path, float &total_cost, 
+    bool Cleanup (const MapPoint &dest, Path &a_path, float &total_cost, 
                    const sint32 isunit, AstarPoint *best, 
                    AstarPoint *cost_tree);
 
@@ -62,7 +62,7 @@ public:
 
     virtual float EstimateFutureCost(const MapPoint &pos, const MapPoint &dest);
 
-    sint32 FindPath(const MapPoint &start, const MapPoint &dest, 
+    bool FindPath(const MapPoint &start, const MapPoint &dest, 
                       Path &a_path, float &total_cost, const sint32 isunit, 
                       const sint32 cutoff, sint32 &nodes_opened);
 

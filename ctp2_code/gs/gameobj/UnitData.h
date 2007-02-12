@@ -322,10 +322,10 @@ public:
 	CityData* GetCityData() const { return m_city_data; }
 	void InitializeCityData(sint32 settlerType = -1);
 
-	void Serialize(CivArchive &archive) ;
+	void Serialize(CivArchive &archive);
 #ifdef _DEBUG
 	char const * GetText() const; 
-	void SetText(char *str);
+	void SetText(char const * str);
 	void GamestateDebug();
 #endif
 	bool BuildUnit(sint32 type);
