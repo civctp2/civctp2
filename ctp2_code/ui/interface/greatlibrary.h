@@ -33,7 +33,7 @@
 //
 //----------------------------------------------------------------------------
 //
-/// \file   GreatLibrary.cpp
+/// \file   GreatLibrary.h
 /// \brief  Great library handling
 
 #if defined(HAVE_PRAGMA_ONCE)

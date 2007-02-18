@@ -3847,7 +3847,7 @@ void AllinoneWindow::AddAIPlayer( sint32 curCount )
 		key.len = 1;
 	}
 
-	if( key.buf[ key.len - 1 ] == (char) 255 )
+	if( key.buf[ key.len - 1 ] == (char) 255u )
 		key.len++;
 	key.buf[ key.len - 1 ]++;
 	

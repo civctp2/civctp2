@@ -284,55 +284,56 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Assert(item);
 					if(!item) break;
 
-					MBCHAR buf[k_MAX_NAME_LEN];
 					Civilisation civ = *g_player[p]->m_civilisation;
 
-					ctp2_Static * child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL);
-					if (child) 
+					if (ctp2_Static * flag = (ctp2_Static *) item->GetChildByIndex(k_INT_FLAG_COL)) 
                     {
-						child->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
-						child->SetActionFuncAndCookie(SelectItem, (void *)item);
+						flag->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
+						flag->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 
-					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL)) {
+					if (ctp2_Static * nation = (ctp2_Static *) item->GetChildByIndex(k_INT_NATION_COL))
+                    {
+					    MBCHAR buf[k_MAX_NAME_LEN];
 						civ->GetCountryName(buf);
-						child->SetText(buf);
-						
-						
-						child->SetActionFuncAndCookie(SelectItem, (void *)item);
+						nation->SetText(buf);
+						nation->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 
-					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_REGARD_COL)) {
-						child->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)p, true);
+					if (ctp2_Static * regard = (ctp2_Static *) item->GetChildByIndex(k_INT_REGARD_COL))
+                    {
+						regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *) p, true);
+#if 0   // buf filled, but never used
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d", 
 								g_theStringDB->GetNameStr("str_ldl_Regard"),
 								Diplomat::GetDiplomat(p).GetPublicRegard(detailPlayer));
-			
-						child->SetActionFuncAndCookie(SelectItem, (void *)item);
+#endif			
+						regard->SetActionFuncAndCookie(SelectItem, item);
 					}
 
-					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL)) {
-						child->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)p, true);
-
+					if (ctp2_Static * strength = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))
+                    {
+						strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *) p, true);
+#if 0   // buf filled, but never used
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
 								g_theStringDB->GetNameStr("str_ldl_Strength"),
 								MapAnalysis::GetMapAnalysis().TotalValue(p));
-			
-						child->SetActionFuncAndCookie(SelectItem, (void *)item);
+#endif			
+						strength->SetActionFuncAndCookie(SelectItem, item);
 					}
 
-					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL)) {
-						child->SetDrawCallbackAndCookie(DrawEmbassy, (void *)p, true);
-						child->SetActionFuncAndCookie(SelectItem, (void *)item);
+					if (ctp2_Static * embassy = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))
+                    {
+						embassy->SetDrawCallbackAndCookie(DrawEmbassy, (void *) p, true);
+						embassy->SetActionFuncAndCookie(SelectItem, item);
 					}
 
-					if(child = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL)) {
-						child->SetDrawCallbackAndCookie(DrawTreaties, (void *)p, true);
-						
-						
-						child->SetActionFuncAndCookie(SelectItem, (void *)item);
+					if (ctp2_Static * treaty = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))
+                    {
+						treaty->SetDrawCallbackAndCookie(DrawTreaties, (void *) p, true);
+						treaty->SetActionFuncAndCookie(SelectItem, item);
 					}
 
 					item->SetUserData((void*)p);

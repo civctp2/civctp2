@@ -800,14 +800,14 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		s->SetName( name );
 		//Special rules
 		s->SetBloodlust(!g_theProfileDB->IsAlienEndGameOn());
-		s->SetPollution(g_theProfileDB->IsPollutionRule()); 
+		s->SetPollution(static_cast<char>(g_theProfileDB->IsPollutionRule()));
 
 		//Ages
 		s->SetStartAge(0);
 		s->SetEndAge(static_cast<char>(g_theAgeDB->NumRecords() - 1));
 		//World size and shape
-		s->SetMapSize(g_theProfileDB->GetMapSize());
-		s->SetWorldShape(g_theProfileDB->GetWorldShape());
+		s->SetMapSize(static_cast<char>(g_theProfileDB->GetMapSize()));
+		s->SetWorldShape(static_cast<char>(g_theProfileDB->GetWorldShape()));
 		//World types
 		s->SetWorldType1(static_cast<char>(g_theProfileDB->GetWetDry()));
 		s->SetWorldType2(static_cast<char>(g_theProfileDB->GetWarmCold()));

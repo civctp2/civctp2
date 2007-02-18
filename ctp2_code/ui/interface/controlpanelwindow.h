@@ -472,6 +472,7 @@ void controlpanelwindow_Update(Unit *city = NULL);
 sint32  controlpanelwindow_Initialize();
 sint32  controlpanelwindow_InitializeHats(void);
 void    controlpanelwindow_Cleanup(void);
+void    HideControlPanel(void);
 
 
 extern ControlPanelWindow *g_controlPanel;

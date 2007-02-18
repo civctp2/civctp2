@@ -436,53 +436,62 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						m_createData.AddTail(data);
 						item->SetUserData(data);
 						
-						ctp2_Static *child;
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX))) {
+						if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX)) 
+                        {
 							MBCHAR name[k_MAX_NAME_LEN + 1];
 							strncpy(name, city.GetName(), k_MAX_NAME_LEN);
 							name[k_MAX_NAME_LEN] = 0;
-							child->TextReloadFont();
-							child->GetTextFont()->TruncateString(name, child->Width());
-							child->SetText(name);
+							origin->TextReloadFont();
+							origin->GetTextFont()->TruncateString(name, origin->Width());
+							origin->SetText(name);
 						}
 						
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_INDEX))) {
+						if (ctp2_Static * icon = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_INDEX)) 
+                        {
 							const char *iconname = g_theResourceDB->Get(g)->GetIcon()->GetIcon();
-							if(stricmp(iconname, "NULL") == 0) {
+							if (stricmp(iconname, "NULL") == 0) 
+                            {
 								iconname = NULL;
 							}
-							child->SetImage(iconname);
+							icon->SetImage(iconname);
 						}
 						
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX))) {
-							child->SetText(g_theResourceDB->Get(g)->GetNameText());
-							if(curDestCity.m_id != 0) {
-								child->SetTextColor(g_colorSet->GetColorRef(COLOR_RED));
+						if (ctp2_Static * good = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX)) 
+                        {
+							good->SetText(g_theResourceDB->Get(g)->GetNameText());
+							if (curDestCity.m_id != 0) 
+                            {
+								good->SetTextColor(g_colorSet->GetColorRef(COLOR_RED));
 							}
 						}
 						
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX))) {
+						if (ctp2_Static * dest = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX)) 
+                        {
 							MBCHAR name[k_MAX_NAME_LEN + 1];
 							strncpy(name, maxCity[i].GetName(), k_MAX_NAME_LEN);
 							name[k_MAX_NAME_LEN] = 0;
-							child->TextReloadFont();
-							child->GetTextFont()->TruncateString(name, child->Width());
-							child->SetText(name);
+							dest->TextReloadFont();
+							dest->GetTextFont()->TruncateString(name, dest->Width());
+							dest->SetText(name);
 						}
 						
 						MBCHAR buf[20];
 						sprintf(buf, "%d", maxPrice[i]);
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX))) {
-							child->SetText(buf);
+						if (ctp2_Static * price = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX)) 
+                        {
+							price->SetText(buf);
 						}
 						
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_INDEX))) {
+						if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_INDEX)) 
+                        {
 							sprintf(buf, "%d", data->m_caravans);
-							child->SetText(buf);
+							count->SetText(buf);
 						}
 						
-						if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))) {
-							child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)data->m_destination.GetOwner());
+						if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX)) 
+                        {
+							nation->SetDrawCallbackAndCookie
+                                (DrawNationColumn, (void *)data->m_destination.GetOwner());
 						}
 						
 						item->SetCompareCallback(CompareCreateItems);
@@ -671,54 +680,62 @@ void TradeManager::UpdateSummaryList()
 
 			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
 
-			ctp2_Static *child;
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))) {
+			if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX)) 
+            {
 				MBCHAR name[k_MAX_NAME_LEN + 1];
 				strncpy(name, city.GetName(), k_MAX_NAME_LEN);
 				name[k_MAX_NAME_LEN] = 0;
-				child->TextReloadFont();
-				child->GetTextFont()->TruncateString(name, child->Width());
-				child->SetText(name);
+				origin->TextReloadFont();
+				origin->GetTextFont()->TruncateString(name, origin->Width());
+				origin->SetText(name);
 			}
 
 			ROUTE_TYPE rtype;
 			sint32 resource;
-
 			route.GetSourceResource(rtype, resource);
 
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_SUM_INDEX))) {
-				if(rtype == ROUTE_TYPE_RESOURCE) {
+			if (ctp2_Static * icon = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_SUM_INDEX)) 
+            {
+				if (rtype == ROUTE_TYPE_RESOURCE) 
+                {
 					const MBCHAR *imageName = g_theResourceDB->Get(resource)->GetIcon()->GetIcon();
-					if(stricmp(imageName, "NULL") == 0) {
-						child->SetImage(NULL);
-					} else {
-						child->SetImage(g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
+					if (stricmp(imageName, "NULL") == 0) 
+                    {
+						icon->SetImage(NULL);
+					} 
+                    else 
+                    {
+						icon->SetImage(g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
 					}
-				} else {
-					
 				}
 			}
 
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_SUM_INDEX))) {
-				if(rtype == ROUTE_TYPE_RESOURCE) {
-					child->SetText(g_theResourceDB->Get(resource)->GetNameText());
-				} else {
-					child->SetText(g_theStringDB->GetNameStr("ROUTE_TYPE_FOOD"));
+			if (ctp2_Static * good = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_SUM_INDEX))
+            {
+				if (rtype == ROUTE_TYPE_RESOURCE) 
+                {
+					good->SetText(g_theResourceDB->Get(resource)->GetNameText());
+				} 
+                else 
+                {
+					good->SetText(g_theStringDB->GetNameStr("ROUTE_TYPE_FOOD"));
 				}
 			}
 
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX))) {
+			if (ctp2_Static * dest = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX))
+            {
 				MBCHAR name[k_MAX_NAME_LEN + 1];
 				Unit dCity = route.GetDestination();
 				strncpy(name, dCity.GetName(), k_MAX_NAME_LEN);
 				name[k_MAX_NAME_LEN] = 0;
-				child->TextReloadFont();
-				child->GetTextFont()->TruncateString(name, child->Width());
-				child->SetText(name);
+				dest->TextReloadFont();
+				dest->GetTextFont()->TruncateString(name, dest->Width());
+				dest->SetText(name);
 			}
 	
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))) {
-				child->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
+			if (ctp2_Static * piracy = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))
+            {
+				piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
 			}
 
 			MBCHAR buf[20];
@@ -728,17 +745,21 @@ void TradeManager::UpdateSummaryList()
 				strcpy(buf, "---");
 			}
 
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_SUM_INDEX))) {
-				child->SetText(buf);
+			if (ctp2_Static * price = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_SUM_INDEX)) 
+            {
+				price->SetText(buf);
 			}
 
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX))) {
+			if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX)) 
+            {
 				sprintf(buf, "%.0f", route.GetCost());
-				child->SetText(buf);
+				count->SetText(buf);
 			}
 
-			if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))) {
-				child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)route.GetDestination().GetOwner());
+			if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX)) 
+            {
+				nation->SetDrawCallbackAndCookie
+                    (DrawNationColumn, (void *)route.GetDestination().GetOwner());
 			}
 
 			item->SetUserData((void *)route.m_id);
