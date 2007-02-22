@@ -47,6 +47,13 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
+
+2007-02-22
+Fixed: Goal text from appearing inside the science box in the english/science.ldl
+Added: Civilization Flags to Units
+Added: Hidden Nationality flag to Units implemented. Units with this flag use the barbarian
+       color, have barbarian in the info bar and use the barbarian flag
+
 2007-02-01
 Added:	Religious City Icons (up to 10 Religions)
 Added:	National Borders are now displayed with icons.

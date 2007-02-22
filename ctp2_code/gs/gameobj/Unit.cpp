@@ -41,6 +41,7 @@
 // - Corrected pollution handling.
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 // - added IsReligion bools 1-23-2007
+// - Added IsHiddenNationality bool 2-7-2007
 //
 //----------------------------------------------------------------------------
 
@@ -2640,4 +2641,9 @@ bool Unit::IsReligion10() const
 {
 	return GetData()->IsReligion10();
 }
+bool Unit::IsHiddenNationlity() const //emod to map to unit actor andmake color same as barbarians
+{
+	return GetDBRec()->GetHiddenNationality();
+}
+
 

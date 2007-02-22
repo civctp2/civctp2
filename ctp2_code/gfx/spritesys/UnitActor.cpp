@@ -45,6 +45,8 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Fixed memory leaks.
+// - added Hidden Nationality check for units 2-21-2007
+// - Added Civilization flag MAPICONS
 //
 //----------------------------------------------------------------------------
 
@@ -80,6 +82,7 @@
 
 #include "CityStyleRecord.h"
 #include "AgeCityStyleRecord.h"
+#include "Civilisation.h"  //added for civ flags
 
 BOOL                    g_showHeralds = TRUE;
 
@@ -1738,7 +1741,7 @@ void UnitActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)
 	}
 }
 
-void UnitActor::DrawHerald(void)
+void UnitActor::DrawHerald(void) //not used?
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -1768,7 +1771,7 @@ void UnitActor::DrawHerald(void)
 		icon = (MAPICON) ((sint32) MAPICON_HERALD10 + (army.Num() - 10));
 	}
 
-	color = g_colorSet->GetPlayerColor(m_playerNum);
+	color = g_colorSet->GetPlayerColor(m_playerNum); //original
 
 	tileSet = g_tiledMap->GetTileSet();
 
@@ -1799,6 +1802,9 @@ void UnitActor::DrawHerald(void)
 	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), rect.left, rect.top, color);
 
 	g_tiledMap->AddDirtyRectToMix(rect);
+
+
+
 }
 
 void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
@@ -1807,10 +1813,31 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 	STOMPCHECK();
 #endif
 	TileSet		*tileSet = g_tiledMap->GetTileSet();
-	Pixel16		color = g_colorSet->GetPlayerColor(m_playerNum);
+	Pixel16		color; // = g_colorSet->GetPlayerColor(m_playerNum);
 	MAPICON		icon = MAPICON_HERALD;
+	MAPICON		civicon = MAPICON_CIVFLAG_0;
 
+
+//this will make all heralds the same as barbs for HiddenNationality Units
+	if ((m_unitID.IsHiddenNationlity()) && (m_playerNum != g_selected_item->GetVisiblePlayer())) {   
+		color = g_colorSet->GetPlayerColor(PLAYER_INDEX_VANDALS); 
+	} else { //if (!m_unitID.IsHiddenNationlity()) 
+		color = g_colorSet->GetPlayerColor(m_playerNum);
+	}
 	if(!g_showHeralds) return;
+
+	//add civilization flags here - moved flags here and edited the heralds to put numbers on national flags emod 2-21-2007
+	sint32 civ; // = g_player[m_playerNum]->m_civilisation
+		if ((m_unitID.IsHiddenNationlity()) && (m_playerNum != g_selected_item->GetVisiblePlayer())) {  //needed to add visible player check so you can find your own units
+		civ = PLAYER_INDEX_VANDALS;
+	} else { //just an else?  or switch it to !hidden&visible
+		civ = g_player[m_playerNum]->m_civilisation->GetCivilisation();
+	}
+	   civicon = (MAPICON) ((sint32) MAPICON_CIVFLAG_0 + civ);
+	 g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, color);
+// end emod
+
+
 
 	if (stack > 1 && stack <= 9) {
 		icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
@@ -1827,6 +1854,32 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 
 	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, color);
 
+
+	// need to adjust DrawStackingIndicator for army flags and verterans etc
+	// 
+	/*
+	//emod - is it possible to just get a file name just like diplomat photo.
+	void DipWizard::DisplayDiplomat(sint32 player)
+{
+	//Added by Martin Gühmann to display the emissary photo of recipient
+	if (m_emissary_photo)
+	{
+		MBCHAR const *	fileName	= NULL;
+		if ((player >= 0) && (player < k_MAX_PLAYERS) && g_player[player])
+		{
+			StringId strID;
+			if(g_player[player]->GetCivilisation()->GetGender() == GENDER_MALE){
+				strID = g_player[player]->GetCivilisation()->GetDBRec()->GetEmissaryPhotoMale();
+			}
+			else{
+				strID = g_player[player]->GetCivilisation()->GetDBRec()->GetEmissaryPhotoFemale();
+			}
+			fileName = g_theStringDB->GetNameStr(strID);
+		}
+
+		m_emissary_photo->ExchangeImage(0,0, fileName);
+	*/
+	//end emod
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
 	sint32 w = iconDim.x;

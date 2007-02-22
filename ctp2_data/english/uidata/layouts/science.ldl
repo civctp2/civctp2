@@ -484,7 +484,7 @@ SciAdvanceScreen {
 
 		ResearchGoal:CTP2_STANDARD_FONT {
 			int xpix		33
-			int ypix		280
+			int ypix		480 #280
 			int widthpix	160
 			int heightpix	20
 			string text "str_ldl_ResearchGoal"

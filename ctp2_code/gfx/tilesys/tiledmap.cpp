@@ -47,6 +47,7 @@
 //   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Outcomment for Vanish and Visible good check to PostProcessTile - emod 2-22-2007
 //
 //----------------------------------------------------------------------------
 
@@ -1171,8 +1172,25 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 		theTileInfo->DeleteGoodActor();
 
 	sint32			goodIndex;
+	
 	if(g_theWorld->GetGood(pos, goodIndex)) {
-		theTileInfo->SetGoodActor(g_theResourceDB->Get(goodIndex)->GetSpriteID(), pos);
+	//emod - @TODO this code did make the rubies not appear but when given the visible they didnot appear
+		// with diamonds (vanish) they didnot vanish but when i changed another terrain they did vanish
+		// a change in good handling may be required.
+	//	bool  goodvisible = true;
+	//	if ((g_theResourceDB->Get(goodIndex)->GetVisibleAdvanceIndex() > 0) || (g_theResourceDB->Get(goodIndex)->GetVanishAdvanceIndex() > 0))
+		//not having the above line made all goods vanish from the map
+	//	{
+	//		if((!g_player[g_selected_item->GetVisiblePlayer()]->HasAdvance(g_theResourceDB->Get(goodIndex)->GetVisibleAdvanceIndex())) 
+	//		|| (g_player[g_selected_item->GetVisiblePlayer()]->HasAdvance(g_theResourceDB->Get(goodIndex)->GetVanishAdvanceIndex()))
+	//		){
+	//			goodvisible = false;
+	//		}
+	//	}
+
+	//	if (goodvisible) {  //emod
+			theTileInfo->SetGoodActor(g_theResourceDB->Get(goodIndex)->GetSpriteID(), pos); //original
+	//	} //end emod
 	}
 
 	uint8 index = static_cast<uint8>(g_theWorld->GetTerrain(pos.x, pos.y));

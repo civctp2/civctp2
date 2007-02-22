@@ -43,6 +43,7 @@
 //   - Last 2 on Mar. 4th 2004 Martin Gühmann
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
 //   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
+// - Added Hidden Nationality check to SetTextFromMap - by E 2-21-2007
 //
 //----------------------------------------------------------------------------
 
@@ -455,12 +456,21 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 					if(!wroteOwner) {
 						Concat("(");
 						MBCHAR civName[k_MAX_INFOBAR_TEXT];
-						g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);
+						//hidden nationality here?
+						//original
+						//g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);
+						//emod
+						if ((cell->AccessUnit(0).IsHiddenNationlity()) && (cell->AccessUnit(0).GetOwner() != g_selected_item->GetVisiblePlayer())) {  
+							g_player[PLAYER_INDEX_VANDALS]->m_civilisation->GetSingularCivName(civName);
+						} else { 
+							g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);
+						}
+						//end emod 2-21-2007
 						Concat(civName);
 						Concat(") ");
 						wroteOwner = true;
 					}
-					
+					//hidden nationality? 
 					for(i = 0; i < cell->GetNumUnits(); i++) {
 						if(cell->AccessUnit(i).GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
 							Concat(cell->AccessUnit(i).GetName());
