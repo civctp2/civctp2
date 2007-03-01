@@ -1817,25 +1817,30 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 	MAPICON		icon = MAPICON_HERALD;
 	MAPICON		civicon = MAPICON_CIVFLAG_0;
 
-
-//this will make all heralds the same as barbs for HiddenNationality Units
-	if ((m_unitID.IsHiddenNationlity()) && (m_playerNum != g_selected_item->GetVisiblePlayer())) {   
-		color = g_colorSet->GetPlayerColor(PLAYER_INDEX_VANDALS); 
-	} else { //if (!m_unitID.IsHiddenNationlity()) 
-		color = g_colorSet->GetPlayerColor(m_playerNum);
-	}
 	if(!g_showHeralds) return;
 
-	//add civilization flags here - moved flags here and edited the heralds to put numbers on national flags emod 2-21-2007
-	sint32 civ; // = g_player[m_playerNum]->m_civilisation
-		if ((m_unitID.IsHiddenNationlity()) && (m_playerNum != g_selected_item->GetVisiblePlayer())) {  //needed to add visible player check so you can find your own units
-		civ = PLAYER_INDEX_VANDALS;
-	} else { //just an else?  or switch it to !hidden&visible
-		civ = g_player[m_playerNum]->m_civilisation->GetCivilisation();
+//added valid check to make scenarios work
+	if(m_unitID.IsValid()) {
+//this will make all heralds the same as barbs for HiddenNationality Units
+		if ((m_unitID.IsHiddenNationlity()) && (m_playerNum != g_selected_item->GetVisiblePlayer())) {   
+			color = g_colorSet->GetPlayerColor(PLAYER_INDEX_VANDALS); 
+		} else { //if (!m_unitID.IsHiddenNationlity()) 
+			color = g_colorSet->GetPlayerColor(m_playerNum);
+		}
+
+		if(g_theProfileDB->IsCivFlags()) { //added for flag optional
+		//add civilization flags here - moved flags here and edited the heralds to put numbers on national flags emod 2-21-2007
+			sint32 civ; // = g_player[m_playerNum]->m_civilisation
+				if ((m_unitID.IsHiddenNationlity()) && (m_playerNum != g_selected_item->GetVisiblePlayer())) {  //needed to add visible player check so you can find your own units
+				civ = PLAYER_INDEX_VANDALS;
+			} else { //just an else?  or switch it to !hidden&visible
+				civ = g_player[m_playerNum]->m_civilisation->GetCivilisation();
+			}
+				civicon = (MAPICON) ((sint32) MAPICON_CIVFLAG_0 + civ);
+			g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, color);
+		}
 	}
-	   civicon = (MAPICON) ((sint32) MAPICON_CIVFLAG_0 + civ);
-	 g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, color);
-// end emod
+		// end emod
 
 
 

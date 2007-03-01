@@ -106,6 +106,8 @@
 // - Added random number for beginturn barbarian code
 // - Moved the upgrade stuff into its own methods, however more work is needed.
 //   (Dec 24th 2006 Martin Gühmann)
+// - Added message for hostile terrain and guerrilla spawn
+// - readded message for ship sinking
 //
 //----------------------------------------------------------------------------
 
@@ -1598,6 +1600,9 @@ void ArmyData::BeginTurn()
 		){ 
 			Barbarians::AddBarbarians(m_pos, meat, FALSE);
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			SlicObject *so = new SlicObject("999GuerrillaSpawn");
+			so->AddRecipient(m_owner);
+            so->AddUnit(m_array[i]);
 		}
 	}
 
@@ -1615,6 +1620,9 @@ void ArmyData::BeginTurn()
 			&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
 			){
 				m_array[u].DeductHP(hpcost);
+			    SlicObject *so = new SlicObject("999HostileTerrain");
+				so->AddRecipient(m_owner);
+				so->AddUnit(m_array[i]);
 			}
 
 			if (m_array[u].GetHP() < 0.999) {
@@ -1661,6 +1669,9 @@ void ArmyData::BeginTurn()
 		for(i = 0; i < m_nElements; i++) 
 		{
 			m_array[i].Sink(chance);
+			SlicObject *so = new SlicObject("999LostAtSea");
+			so->AddRecipient(m_owner);
+            so->AddUnit(m_array[i]);
 		}
 	}
 

@@ -3107,6 +3107,28 @@ str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queue
 str_profile_RunInBackground                     "Allow end turn in background"
 str_profile_Upgrade                             "Unit upgrading"
 str_profile_SmoothBorders                       "Smooth empire borders"
+str_profile_CivFlags                       	"Show Civilization Unit flags"
+str_profile_NoAIProductionDeficit 		"AI No Production Deficit"	
+str_profile_NoAIGoldDeficit			"No negative Gold for AI Cities"					# AI cities don't go negative in gold
+str_profile_AICityDefenderBonus 		"AI City Defense bonus"					# AI population adds to city defenses
+str_profile_BarbarianCities			"Entrenched Barbarians settle cities"					# Entrenched barbarians create a city
+str_profile_SectarianHappiness 			"Conflicting citystyle unhappiness"					# Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties 			"Revolting Cities lose Population"					# Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents 			"Revolting cities create barbarians"					# Revolting city creates barbarians
+str_profile_BarbarianCamps			"Entrenched Barbarians create Tile Imps"		# Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian 		"Entrenched Barbarians spawn Barbarians"			# Entrenched barbs create more barbs
+str_profile_AINoSinking 			"AI ships don't sink"							# AI ships don't sink
+str_profile_AINoCityLimit 			"AI No City LImit"						# AI not affected by city limit
+str_profile_GoldPerUnitSupport 			"1 Gold Per Unit Cost"					# all pay thins int times unit support calculation
+str_profile_GoldPerCity 			"2 Gold Per City x City Limit"						# everyone pays gold amount per city
+str_profile_AINoShieldHunger 			"AI doesn't pay Shield Hunger"					# AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger			"AI doesn't pay Unit Gold"						# AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade 			"AI Free Upgrades"						# AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit 			"AI Free Militia Unit"						#If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge 			"One City Challenge"						#If city is empty at turn start AI gets cheapest unit
+str_profile_CityCaptureOptions 			"City Capture Options"						#If city is empty at turn start AI gets cheapest unit
+
+
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options		"Musicoptions"

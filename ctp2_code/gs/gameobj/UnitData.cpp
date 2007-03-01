@@ -69,6 +69,7 @@
 //   methods. (Dec 24th 2006 Martin Gühmann)
 // - Completed SetType() method. (Dec 24th 2006 Martin Gühmann)
 // - added IsReligion bools 1-23-2007
+// - Added SpawnsBarbarian code from ArmyData
 //
 //----------------------------------------------------------------------------
 
@@ -171,6 +172,8 @@
 #include "WonderTracker.h"
 
 #include "citywindow.h"
+#include "Barbarians.h" //EMOD
+#include "RiskRecord.h"  //add for barb code
 
 #ifdef _DEBUG
 #include "aui.h"
@@ -3278,6 +3281,9 @@ void UnitData::EndTurn()
 {
 	const UnitRecord *rec = GetDBRec();
 
+//emod adding cellowner
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();
 //EMOD add civbonus
 
 	sint32     wonderBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
@@ -3325,6 +3331,15 @@ void UnitData::EndTurn()
 			g_network.Unblock(m_owner);
 		}
 	}
+//emod adding guerrilla SF code here 2-22-2007
+
+	if((Flag(k_UDF_IS_ENTRENCHED) && rec->GetSpawnsBarbarians() && CellOwner != m_owner) 
+
+		){ 
+			g_director->AddCenterMap(m_pos);
+			Barbarians::AddBarbarians(m_pos, CellOwner, FALSE);
+		}
+//end emod
 }
 
 void UnitData::InitializeCityData(sint32 settlerType)

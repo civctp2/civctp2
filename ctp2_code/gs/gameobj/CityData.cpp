@@ -164,6 +164,10 @@
 // - Added RevoltInsurgents diffDB to beginturn. If a city is rioting then there
 //   is a chance that the riot will spawn barbarians
 // - added IsReligion bools 1-23-2007
+// - Added Energy Ratio to production and gold. Only enebaled in profileDB also
+//   units, buildings, wonders, and tileimps must have energy flags for 
+//   calculation - by E 2-28-2007
+// - Added Insurgent Spawn slic message
 //
 //----------------------------------------------------------------------------
 
@@ -1773,7 +1777,14 @@ sint32 CityData::ComputeGrossProduction(double workday_per_person, sint32 collec
 			}
 		}
 	}
-
+//emod for energy impacts
+	if(g_theProfileDB->IsNRG()) {
+		double energysupply = g_player[m_owner]->EnergySupply();
+		if ((energysupply < 1.0) && (energysupply > 0)) { //if greater than 1 no change because industrial capacity is maximized however in the processgold method you'll get extra gold
+			gross_production = static_cast<sint32>(ceil(gross_production * energysupply));
+		}
+	}
+	 
 
 // end EMOD
 
@@ -4163,6 +4174,9 @@ bool CityData::BeginTurn()
 		if(g_rand->Next(10000) < static_cast<sint32>(barbchance * 10000.0)) {
 			// Add some Barbarians nearby cpos.
 			Barbarians::AddBarbarians(cpos, m_owner, false);
+			SlicObject *so = new SlicObject("999InsurgentSpawn");
+			so->AddRecipient(m_owner);
+            so->AddCity(m_home_city);
 		}
 	}
 
@@ -8526,6 +8540,14 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
 		gold += static_cast<sint32>(g_player[m_owner]->m_gold->GetLevel() * interest);
 
+//emod for energy impacts
+	if(g_theProfileDB->IsNRG()) {
+		double energysupply = g_player[m_owner]->EnergySupply();
+		if (energysupply > 0) {  //&& profile energy
+			gold = static_cast<sint32>(ceil(gold * energysupply));  //if greater than one that is additional wealth
+		}
+	}
+
 	//EMOD to assist AI
 	if(gold < 0){
 		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit()
@@ -8533,6 +8555,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 			gold = 0;
 		}
 	}
+
 }
 
 //----------------------------------------------------------------------------
@@ -10057,4 +10080,100 @@ bool CityData::IsReligion10() const
 {
 	return buildingutil_GetIsReligion10(GetEffectiveBuildings());
 }
+
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::ProduceEnergy
+//
+// Description: calculates total city energy 
+//
+// Parameters : -
+//              
+// Globals    : -
+//
+// Returns    : energy produced
+//
+// Remark(s)  : 
+//
+//----------------------------------------------------------------------------
+sint32 CityData::ProduceEnergy()
+{
+	sint32 energy = 0;
+		
+	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if(HasNeededGood(tgood))
+		{
+			//sint32 e;
+			ResourceRecord const * tgoodData = g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				energy += tgoodData->GetProducesEnergy();
+			}
+		}
+	}
+
+	//Bit(Int)   EnergyHunger
+	//Bit(Int)   EnergyHungerPerPop
+	//Bit(Int)   ProducesEnergy
+	//Bit(Int)   ProducesEnergyPerPop
+
+	//energy produced per person
+	sint32 energyPerCitizen = buildingutil_GetProducesEnergyPerPop(GetEffectiveBuildings());
+	energy += energyPerCitizen * PopCount();
+
+	//energy produced per person
+	sint32 energyperbldg = buildingutil_GetProducesEnergy(GetEffectiveBuildings());
+	energy += energyperbldg;
+
+	//energy produced per person
+	sint32 WenergyPerCitizen = wonderutil_GetProducesEnergyPerPop(GetEffectiveBuildings());
+	energy += WenergyPerCitizen * PopCount();
+
+	//energy produced per person
+	sint32 Wenergyperbldg = wonderutil_GetProducesEnergy(GetEffectiveBuildings());
+	energy += Wenergyperbldg;
+
+	return energy;
+}
+
+sint32 CityData::ConsumeEnergy()
+{
+	
+	sint32 energy = 0;
+	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
+	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
+	{
+		if(HasNeededGood(tgood))
+		{
+			//sint32 e;
+			ResourceRecord const * tgoodData = g_theResourceDB->Get(tgood);
+			if (tgoodData)
+			{
+				energy += tgoodData->GetEnergyHunger();
+			}
+		}
+	}
+
+	//energy produced per person
+	sint32 energyPerCitizen = buildingutil_GetEnergyHungerPerPop(GetEffectiveBuildings());
+	energy += energyPerCitizen * PopCount();
+
+	//energy produced per person
+	sint32 energyperbldg = buildingutil_GetEnergyHunger(GetEffectiveBuildings());
+	energy += energyperbldg;
+
+	//energy produced per person
+	sint32 WenergyPerCitizen = wonderutil_GetEnergyHungerPerPop(GetEffectiveBuildings());
+	energy += WenergyPerCitizen * PopCount();
+
+	//energy produced per person
+	sint32 Wenergyperbldg = wonderutil_GetEnergyHunger(GetEffectiveBuildings());
+	energy += Wenergyperbldg;
+
+	return energy;
+}
+
 

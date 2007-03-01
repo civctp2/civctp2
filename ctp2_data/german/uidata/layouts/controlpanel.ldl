@@ -1466,40 +1466,47 @@ ControlPanelWindow:CTP2_WINDOW {
 ################################################################################
 # Start Tiles Tab Panel
 ################################################################################
+################################################################################
 					LandImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 17
+						int ypix 12 #17
 						string text "str_ldl_ImproveLand"
 					}
 
 					OceanImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 37
+						int ypix 32 #37
 						string text "str_ldl_ImproveOcean"
 					}
 
 					SpecialImpButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 57
+						int ypix 52 #57
 						string text "str_ldl_ImproveSpecial"
 					}
 
 					TerraformLandButton:CTP2_TILE_RADIO_BUTTON 
 					{
 						int xpix 18
-						int ypix 77
+						int ypix 72 #77
 						string text "str_ldl_ImproveTerraformLand"
 					}
 
-#					TerraformOceanButton:CTP2_TILE_RADIO_BUTTON 
-#					{
-#						int xpix 18
-#						int ypix 90
-#						string text "str_ldl_ImproveTerraformOcean"
-#					}
+					TerraformOceanButton:CTP2_TILE_RADIO_BUTTON 
+					{
+						int xpix 18
+						int ypix 92 #90
+						string text "str_ldl_ImproveTerraformOcean"
+					}
+					#TerraformExtraButton:CTP2_TILE_RADIO_BUTTON 
+					#{
+					#	int xpix 18
+					#	int ypix 102
+					#	string text "str_ldl_ImproveExtra"
+					#}
 					tiLandButtonBank:TILE_IMP_BUTTON_PANEL {
 					}
 					tiOceanButtonBank:TILE_IMP_BUTTON_PANEL {
@@ -1508,8 +1515,11 @@ ControlPanelWindow:CTP2_WINDOW {
 					}
 					tfLandButtonBank:TILE_IMP_BUTTON_PANEL {
 					}
-#					tfOceanButtonBank:TILE_IMP_BUTTON_PANEL {
-#					}
+					tfOceanButtonBank:TILE_IMP_BUTTON_PANEL {
+					}
+					#tfExtraButtonBank:TILE_IMP_BUTTON_PANEL {
+					#}
+
 
 ################################################################################
 # End Tiles Tab Panel

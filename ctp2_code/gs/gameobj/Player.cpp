@@ -88,6 +88,8 @@
 //   and GoldPerCity so they don't have to be tied to the palace
 // - added FranchiseProduction to BeginTurnProduction
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Added EnergySupply method it calculates all energy produced and demanded by
+//   cities and installations and calcluates what percentage is met - Emod 2-27-2007
 //
 //----------------------------------------------------------------------------
 
@@ -1892,7 +1894,7 @@ void Player::BeginTurnProduction()
 	
 			sint32 bge;
 			if (rec->GetBonusGoldExport(bge)) {
-				m_gold->AddGold(bpe);					// i.e. allows for colonies to generate gold
+				m_gold->AddGold(bge);					// i.e. allows for colonies to generate gold
 			}
 	
 			sint32 bfp;
@@ -2329,7 +2331,7 @@ void Player::BeginTurn()
 		
 		BeginTurnPollution();
 
-		BeginTurnAllCities(); 
+		//BeginTurnAllCities();  //2-27-2007  the intro says this method was removed  
 
 		g_thePollution->BeginTurn() ;
 
@@ -10176,3 +10178,71 @@ bool Player::HasFreeUnitUpgrades() const
 //	    || FreeUpgradeFeat
 //	    || Whatever
 }
+
+
+double Player::EnergySupply()
+{
+	if(!m_all_cities)
+		return 0;
+	sint32 civenergy;
+	sint32 civdemand;
+	sint32 n = m_all_cities->Num();
+	//get from city data all energy from cities
+	for(sint32 i = 0; i < n; i++) {
+		civenergy += m_all_cities->Access(i).AccessData()->GetCityData()->ProduceEnergy();
+		civdemand += m_all_cities->Access(i).AccessData()->GetCityData()->ConsumeEnergy();
+	}
+    //get from all units energy capabilities
+	//sint32 eu;
+	for(sint32 u = 0; u < m_all_units->Num(); u++) {
+		civenergy += m_all_units->Access(u).GetDBRec()->GetEnergyHunger();
+		civdemand += m_all_units->Access(u).GetDBRec()->GetProducesEnergy();
+	}
+
+	//get from all installations energy production
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			/*
+			sint32 bpe;
+			if (rec->GetProducesEnergy(bpe)) {
+				civenergy += bpe;		// i.e. allows oil to give PW
+			}
+	
+			sint32 bge;
+			if (rec->GetEnergyHunger(bge)) {
+				civdemand += bpe;					// i.e. allows for colonies to generate gold
+			}
+			*/
+			
+			if(rec->HasIntBorderRadius()){ //have all energy producers require a radius - determines ownership
+				sint32 radius;
+				rec->GetIntBorderRadius(radius);
+				CityInfluenceIterator it(inst.RetPos(), radius);
+				for(it.Start(); !it.End(); it.Next()) {
+					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
+	
+					//sint32 bp;
+					if (rec->GetProducesEnergy()) {
+						civenergy += rec->GetProducesEnergy();		
+					}
+	
+					//sint32 bg;
+					if (rec->GetEnergyHunger()) {
+						civdemand += rec->GetEnergyHunger();					
+					}
+				}
+			}
+		}
+	}
+	double energysupply;
+	if (civdemand > 0) {
+;		energysupply = civenergy / civdemand;
+	} else {
+		energysupply = 0;
+	}
+	return energysupply;
+
+}
+

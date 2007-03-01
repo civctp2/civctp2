@@ -1005,6 +1005,8 @@ public:
 	bool IsReligion8() const;
 	bool IsReligion9() const;
 	bool IsReligion10() const;
+	sint32 CityData::ConsumeEnergy();
+	sint32 CityData::ProduceEnergy();
 
 	
 	

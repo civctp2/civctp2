@@ -142,6 +142,9 @@ TerrainImprovement {
 		Int HappyInc = 0                    // Allows tileimps to add (or subtract) happiness
 		Int ProductionTime
 		Int TilesetIndex
+		#not implemented by maybe later
+		Int   EnergyHunger = 0
+		Int   ProducesEnergy = 0
 	}
 
 	#Added Sound by Martin Gühmann
@@ -175,10 +178,10 @@ TerrainImprovement {
 	Bit(Int) IntBorderRadius
 	Bit(Int) SquaredBorderRadius
 	Bit(Int) MoveBonus
-	Bit      Colony                         // FU
-	Bit(Int) BonusFoodExport                // FU
-	Bit(Int) BonusProductionExport          // FU
-	Bit(Int) BonusGoldExport                // FU
+	Bit      Colony                         // sends good every turn to a city
+	Bit(Int) BonusFoodExport                // not implemented
+	Bit(Int) BonusProductionExport          // Installation Gives PW
+	Bit(Int) BonusGoldExport                // Installation gives Gold
 	Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 
 	Bit NeedsIrrigation                     // FU Can only be build on rivers or adjacent to rivers or other tileimps with flag IsWaterSupply
 
@@ -192,4 +195,8 @@ TerrainImprovement {
 	Bit CanBuildAlly						// can be built in ally territory
 	Bit CanBuildWasteland					// can be nuilt in unclaimed land, to connect cities
 	Bit CanUpgrade
+
+		#Energy Code
+	Int   EnergyHunger = 0
+	Int   ProducesEnergy = 0
 }

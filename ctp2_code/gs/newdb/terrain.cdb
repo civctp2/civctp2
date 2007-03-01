@@ -55,6 +55,9 @@ Resource {
 	Bit IsLuxuryGood
 	Bit AddsASlave							//New flag that adds a slave to a city for each turn
 
+	Int   EnergyHunger = 0
+	Int   ProducesEnergy = 0
+
 	Bit GLHidden
 	Bit CanUpgrade
 }

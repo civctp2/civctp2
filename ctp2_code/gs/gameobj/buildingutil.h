@@ -115,9 +115,9 @@ bool buildingutil_GetIsReligion7(const uint64 built_improvements);
 bool buildingutil_GetIsReligion8(const uint64 built_improvements);
 bool buildingutil_GetIsReligion9(const uint64 built_improvements);
 bool buildingutil_GetIsReligion10(const uint64 built_improvements);
-
-
-
-
+sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements);
+sint32 buildingutil_GetEnergyHungerPerPop(const uint64 built_improvements);
+sint32 buildingutil_GetProducesEnergy(const uint64 built_improvements);
+sint32 buildingutil_GetProducesEnergyPerPop(const uint64 built_improvements);
 
 #endif

@@ -140,5 +140,11 @@ Wonder {
 
 	Record Building[]    ExcludedByBuilding 
 	Record Wonder[]      ExcludedByWonder 
+
+		#Energy Code
+	Bit(Int)   EnergyHunger 
+	Bit(Int)   ProducesEnergy
+	Bit(Int)   EnergyHungerPerPop
+	Bit(Int)   ProducesEnergyPerPop 
 }
 

@@ -47,10 +47,22 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
+2007-02-28
+Added: Risk dependency for hostile terrain
+Added: SpawnBarbarian code for entrenched units that can spawnbarbarians
+Added: EnergySupply and Demand Concept
+Added: Energy Profile option to make it optional
+Fixed: Number of flags (restored them)
+Added: Profile option to have civflag graphics show up under the playercolor flag
+Fixed: Civ flags to be below player color flag
+Added: TerraformOcean button in tile bank (restored it) this allows modders up to 60 of the 64 
+       available tileimp slots (previously only 48/60 available)
+Added: Slic messages for sinking ship (again), hostile terrain, insurgent spawn, guerrilla spawn
+Added: additional but not implemented userprofile options
 
 2007-02-22
 Fixed: Goal text from appearing inside the science box in the english/science.ldl
-Added: Civilization Flags to Units
+Added: Civilization Flags to Units (most artwork from Civ2 modders Michael D McCart & Michael D Raney)
 Added: Hidden Nationality flag to Units implemented. Units with this flag use the barbarian
        color, have barbarian in the info bar and use the barbarian flag
 

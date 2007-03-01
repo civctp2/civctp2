@@ -353,6 +353,51 @@ private:
     sint32 m_upgrade;
     /// Smooth the borders instead of diplaying square borders
     sint32 m_smoothBorders;
+	/// emod new profile options
+	/// enables civ flags
+	sint32 m_CivFlags;   
+	/// bae=sed on diffdb gives ai no prod deficit
+	sint32 m_NoAIProductionDeficit;
+	/// based on diffdb ai doesn't get 0 as a city gold
+	sint32 m_NoAIGoldDeficit;
+	/// adds population defense to AI cities
+	sint32 m_AICityDefenderBonus; 
+	/// after entrenching chance barbs makes cities
+	sint32 m_BarbarianCities;
+	/// increased unhapiness for city's with differnt culture owners
+	sint32 m_SectarianHappiness; 
+	/// when city revolts population dies
+	sint32 m_RevoltCasualties;
+	/// when city revolts it may spawn barbarians
+	sint32 m_RevoltInsurgents; 
+	/// chance barabarians make a camp tileimp
+	sint32 m_BarbarianCamps;
+	/// chance barbarians will reproduce
+	sint32 m_BarbarianSpawnsBarbarian; 
+	/// sinking flag enabled?
+	/// ai ships don't sink
+	sint32 m_AINoSinking; 
+	/// based on diffdb AI has no city build limit
+	sint32 m_AINoCityLimit; 
+	/// gold unit support
+	sint32 m_GoldPerUnitSupport; 
+	//gold per city
+	sint32 m_GoldPerCity;
+	/// ai units dont cost shields
+	sint32 m_AINoShieldHunger; 
+	/// ai units gold hunger not calculated
+	sint32 m_AINoGoldHunger;
+	/// ai gets free upgrades
+	sint32 m_AIFreeUpgrade; 
+	/// empty ai units spawn cheapest unit
+	sint32 m_AIMilitiaUnit; 
+	/// human player cant create settlers
+	sint32 m_OneCityChallenge; 
+		/// energy demand-supply ratio affects production and gold
+	sint32 m_NRG; 
+ 
+
+
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
@@ -742,6 +787,31 @@ public:
     double PercentHomogenous() { return m_homogenous; }
     sint32 PercentRichness() { return m_richness; }
     BOOL IsSmoothBorders() { return m_smoothBorders; }
+	
+//emod new profile flags later to be gameplay rules options
+	BOOL	IsCivFlags()              { return m_CivFlags; }
+	BOOL	IsNoAIProductionDeficit() 	{ return m_NoAIProductionDeficit; }
+	BOOL	IsNoAIGoldDeficit()	{ return m_NoAIGoldDeficit; }
+	BOOL	IsAICityDefenderBonus() 	{ return m_AICityDefenderBonus; }	
+	BOOL	IsBarbarianCities()	{ return m_BarbarianCities; }
+	BOOL	IsSectarianHappiness() 	{ return m_SectarianHappiness; }
+	BOOL	IsRevoltCasualties() 	{ return m_RevoltCasualties; }
+	BOOL	IsRevoltInsurgents() 	{ return m_RevoltInsurgents; }
+	BOOL	IsBarbarianCamps()	{ return m_BarbarianCamps; }
+	BOOL	IsBarbarianSpawnsBarbarian() 	{ return m_BarbarianSpawnsBarbarian; }
+	BOOL	IsAINoSinking() 	{ return m_AINoSinking; }
+	BOOL	IsAINoCityLimit() 	{ return m_AINoCityLimit; }
+	BOOL	IsGoldPerUnitSupport() 	{ return m_GoldPerUnitSupport; }
+	BOOL	IsGoldPerCity() 	{ return m_GoldPerCity; }
+	BOOL	IsAINoShieldHunger() 	{ return m_AINoShieldHunger; }
+	BOOL	IsAINoGoldHunger()	{ return m_AINoGoldHunger; }
+	BOOL	IsAIFreeUpgrade() 	{ return m_AIFreeUpgrade; }
+	BOOL	IsAIMilitiaUnit()	{ return m_AIMilitiaUnit; }
+	BOOL	IsOneCityChallenge() 	{ return m_OneCityChallenge; }
+	BOOL	IsNRG() 	{ return m_NRG; }
+//later add start age and end age?
+
+
 };
 
 extern ProfileDB *g_theProfileDB;

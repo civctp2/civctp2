@@ -754,4 +754,50 @@ bool buildingutil_GetIsReligion10(const uint64 built_improvements)
 	}
 	return false;
 }
+	//Bit(Int)   EnergyHunger
+	//Bit(Int)   EnergyHungerPerPop
+	//Bit(Int)   ProducesEnergy
+	//Bit(Int)   ProducesEnergyPerPop
+sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements)
+{
+	sint32 e = 0;
+	FOREACH_BUILT(HasEnergyHunger) {
+		sint32 mod;
+		rec->GetEnergyHunger(mod);
+		e += mod;
+	}
+	return e;
+}
 
+sint32 buildingutil_GetEnergyHungerPerPop(const uint64 built_improvements)
+{
+	sint32 e = 0;
+	FOREACH_BUILT(HasEnergyHungerPerPop) {
+		sint32 mod;
+		rec->GetEnergyHungerPerPop(mod);
+		e += mod;
+	}
+	return e;
+}
+
+sint32 buildingutil_GetProducesEnergy(const uint64 built_improvements)
+{
+	sint32 e = 0;
+	FOREACH_BUILT(HasProducesEnergy) {
+		sint32 mod;
+		rec->GetProducesEnergy(mod);
+		e += mod;
+	}
+	return e;
+}
+
+sint32 buildingutil_GetProducesEnergyPerPop(const uint64 built_improvements)
+{
+	sint32 e = 0;
+	FOREACH_BUILT(HasProducesEnergyPerPop) {
+		sint32 mod;
+		rec->GetProducesEnergyPerPop(mod);
+		e += mod;
+	}
+	return e;
+}

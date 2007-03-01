@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - wonderutil_GetGoldPerBuildingAnywhere (E 5-27-2006)
+// - added energy related wonderutils E 2-27-2007
 //
 //----------------------------------------------------------------------------
 
@@ -103,5 +104,10 @@ sint32 wonderutil_GetGaiaIndex();
 sint32 wonderutil_GetFobCityIndex();
 sint32 wonderutil_GetGoldPerBuildingAnywhere(const uint64 builtWonders); //EMOD
 sint32 wonderutil_GetEnablesPunativeAirstrikes(const uint64 builtWonders); //EMOD
+sint32 wonderutil_GetEnergyHunger(const uint64 builtWonders);
+sint32 wonderutil_GetEnergyHungerPerPop(const uint64 builtWonders);
+sint32 wonderutil_GetProducesEnergy(const uint64 builtWonders);
+sint32 wonderutil_GetProducesEnergyPerPop(const uint64 builtWonders);
+
 
 #endif

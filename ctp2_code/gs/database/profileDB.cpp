@@ -43,6 +43,8 @@
 //   removed from advance options since they do not work. (May 21st 2006 Martin Gühmann)
 // - Made automatic treaty ending an option.
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
+// - Added additional options, most to be implemented later
+// - Implemented NRG - option to ccalculate energy ratio affecting production and demand
 //
 //----------------------------------------------------------------------------
 
@@ -211,6 +213,29 @@ ProfileDB::ProfileDB()
     m_cityCaptureOptions                (FALSE),
     m_upgrade                           (TRUE),
     m_smoothBorders                     (FALSE),
+	//emod new profile flags
+	m_CivFlags                       	(FALSE),
+	m_NoAIProductionDeficit 			(FALSE),
+	m_NoAIGoldDeficit					(FALSE),
+	m_AICityDefenderBonus 				(FALSE),
+	m_BarbarianCities					(FALSE),
+	m_SectarianHappiness 				(FALSE),
+	m_RevoltCasualties 					(FALSE),
+	m_RevoltInsurgents 					(FALSE),
+	m_BarbarianCamps					(FALSE),
+	m_BarbarianSpawnsBarbarian 			(FALSE),
+	m_AINoSinking 						(FALSE),
+	m_AINoCityLimit 					(FALSE),
+	m_GoldPerUnitSupport 				(FALSE),
+	m_GoldPerCity 						(FALSE),
+	m_AINoShieldHunger 					(FALSE),
+	m_AINoGoldHunger					(FALSE),
+	m_AIFreeUpgrade 					(FALSE),
+	m_AIMilitiaUnit 					(FALSE),
+	m_OneCityChallenge 					(FALSE),
+	m_NRG			 					(FALSE),
+
+	//end emod
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
 {
@@ -375,6 +400,28 @@ ProfileDB::ProfileDB()
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
+		//emod new profile flags
+	Var("CivFlags"					 , PV_BOOL  , &m_CivFlags                   , NULL);
+	Var("NoAIProductionDeficit"      , PV_BOOL  , &m_NoAIProductionDeficit      , NULL);
+	Var("NoAIGoldDeficit"            , PV_BOOL  , &m_NoAIGoldDeficit	        , NULL);
+	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL);
+	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities	        , NULL);
+	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL);
+	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties 	        , NULL);
+	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents 	        , NULL);
+	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL);
+	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL);
+	Var("AINoSinking"				 , PV_BOOL  , &m_AINoSinking 	            , NULL);
+	Var("AINoCityLimit"				 , PV_BOOL  , &m_AINoCityLimit 	            , NULL);
+	Var("GoldPerUnitSupport "        , PV_BOOL  , &m_GoldPerUnitSupport 	    , NULL);
+	Var("GoldPerCity"				 , PV_BOOL  , &m_GoldPerCity 	            , NULL);
+	Var("AINoShieldHunger"           , PV_BOOL  , &m_AINoShieldHunger 	        , NULL);
+	Var("AINoGoldHunger"             , PV_BOOL  , &m_AINoGoldHunger	            , NULL);
+	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade 	            , NULL);
+	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit 	            , NULL);
+	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge 	        , NULL);
+	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG			 	        , NULL);
+
 }
 
 void ProfileDB::DefaultSettings(void)

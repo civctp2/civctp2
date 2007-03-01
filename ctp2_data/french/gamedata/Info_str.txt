@@ -464,3 +464,6 @@ IMMUNE_TO_NANO_TERROR_AGRESSOR		"Malgré tous vos efforts, l'ennemi s'est aperçu 
 CAPTURED_CITY_OPTIONS			"{city[0].name} est tombée entre nos mains ! La cité est à notre merci, quels sont vos ordres ? "
 LOST_AT_SEA				"Notre {unit[0].name} s'est  abîmé(e) en mer ! Souvenez-vous que certaines unités peuvent couler avec leur cargaison !"
 UNIT_UPGRADED				"Notre unité {unit[0].name} a été entraînée et transformée en {unit[1].name} ! "
+HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unit[0].name}!"
+INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}"
+GUERRILLA_SPAWN				"Our {unit[0].name} has raised guerrillas to aid our cause!"

@@ -2581,7 +2581,7 @@ void ControlPanelWindow::InitUnitTab(void)
 	m_unitDefense = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","DefenseData");
 	m_unitStatus  = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","StatusData");
 	m_unitOrders  = (ctp2_ListBox*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","OrderListBox");
-
+//emod added unitaction here?
 	if (m_unitOrders!=NULL)
 		m_unitOrders->SetActionFuncAndCookie(UnitPanelListBoxCallback,NULL);
 }
@@ -2648,7 +2648,9 @@ ControlPanelWindow::CreateTileImpBanks()
 	m_activatorButtons[CP_TILEIMP_OCEAN  ]=(ctp2_Button*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.OceanImpButton"	);
 	m_activatorButtons[CP_TILEIMP_SPECIAL]=(ctp2_Button*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.SpecialImpButton");
 	m_activatorButtons[CP_TERRAFORM_LAND] = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.TerraformLandButton");
-
+//emod to utilize all 64 slots for tileimps
+	m_activatorButtons[CP_TERRAFORM_OCEAN] = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.TerraformOceanButton");
+//	m_activatorButtons[CP_EXTRA] = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.ExtraButton");
 
 
 	
@@ -2656,6 +2658,9 @@ ControlPanelWindow::CreateTileImpBanks()
 	m_tileImpPanes[CP_TILEIMP_OCEAN  ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tiOceanButtonBank"  );
 	m_tileImpPanes[CP_TILEIMP_SPECIAL]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tiSpecialButtonBank");
 	m_tileImpPanes[CP_TERRAFORM_LAND ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfLandButtonBank"   );
+//emod to utilize all 64 spaces
+	m_tileImpPanes[CP_TERRAFORM_OCEAN ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfOceanButtonBank"   );
+//	m_tileImpPanes[CP_EXTRA ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfExtraButtonBank"   );
 
 
 	sint32 i;
@@ -2689,6 +2694,8 @@ ControlPanelWindow::CreateTileImpBanks()
 			"tiSpecialButtonBank",
 			"tiOceanButtonBank",
 			"tfLandButtonBank",
+			"tfOceanButtonBank", //emod
+			//"tfExtraButtonBank", //emod
 
 	};
 	sint32 panel;
@@ -3757,7 +3764,7 @@ ControlPanelWindow::UnitPanelRedisplay()
 void
 ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 {
-
+//emod TODO  removing obsolete tileimps
 	
 	if (button>=CP_MAX_TILEIMPBUTTONS)
 		return;
@@ -3780,7 +3787,7 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 	bool const	hideExpensive	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
    	grey_button = !terrainutil_CanPlayerBuild(rec,player_id, hideExpensive);
-	show_button = terrainutil_PlayerHasAdvancesFor(rec, player_id);
+	show_button = terrainutil_PlayerHasAdvancesFor(rec, player_id);  //emod this needs to see obsolete tileimps
 
 	aui_TipWindow *tipwin = (aui_TipWindow *)m_tileImpButtons[button]->GetTipWindow();
 
@@ -3855,15 +3862,7 @@ ControlPanelWindow::TileImpPanelRedisplay()
 {
 	
 
-
-
-
-
-
-
-
-
-  
+ 
 	ctp2_Static *tileImpPanel = static_cast<ctp2_Static*>(
 		aui_Ldl::GetObject(
 		"ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel"));

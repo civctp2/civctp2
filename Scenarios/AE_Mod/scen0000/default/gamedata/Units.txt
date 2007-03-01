@@ -1123,7 +1123,7 @@ UNIT_CRUISE_MISSILE {
    CanBombard: Mountain
    CanBombard: Air
    CanBombard: Water
-   CanBombard: ShallowWater
+   #CanBombard: ShallowWater
    CanSee: Standard
    MovementType: Air
    Size: Small

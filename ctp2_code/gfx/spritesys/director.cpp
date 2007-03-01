@@ -1423,7 +1423,7 @@ uint32 Director::ProcessActiveEffects(void)
 
 		actor = m_activeEffectList->GetNext(pos);
 		if (actor) {
-			actor->Process();
+			actor->Process(); //rev689 Protra crash points here
 		}
 	}
 

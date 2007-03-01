@@ -165,6 +165,13 @@ Building {
 	Bit        IsReligion8
 	Bit        IsReligion9
 	Bit        IsReligion10
+	Bit(Int)   IsReligion
+
+	#Energy Code
+	Bit(Int)   EnergyHunger 
+	Bit(Int)   ProducesEnergy
+	Bit(Int)   EnergyHungerPerPop
+	Bit(Int)   ProducesEnergyPerPop 
 
 	Bit GLHidden
 }

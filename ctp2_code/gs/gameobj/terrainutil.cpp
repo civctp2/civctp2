@@ -451,7 +451,7 @@ bool terrainutil_PlayerHasAdvancesForTerrain(const TerrainImprovementRecord *rec
 				bool haveObsolete = false;
 				for(a = 0; a < eff->GetNumObsoleteAdvance(); a++) {
 					if(g_player[pl]->HasAdvance(eff->GetObsoleteAdvanceIndex(a))) {
-						haveObsolete = true;
+						haveObsolete = true;  //emod is this source of defect
 					}
 				}
 

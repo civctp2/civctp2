@@ -456,3 +456,26 @@ sint32 wonderutil_GetEnablesPunativeAirstrikes(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetEnablesPunativeAirstrikes);
 }
+	//Bit(Int)   EnergyHunger
+	//Bit(Int)   EnergyHungerPerPop
+	//Bit(Int)   ProducesEnergy
+	//Bit(Int)   ProducesEnergyPerPop
+sint32 wonderutil_GetEnergyHunger(const uint64 builtWonders)
+{
+	INT_WNDR(HasEnergyHunger, GetEnergyHunger);
+}
+
+sint32 wonderutil_GetEnergyHungerPerPop(const uint64 builtWonders)
+{
+	INT_WNDR(HasEnergyHungerPerPop, GetEnergyHungerPerPop);
+}
+
+sint32 wonderutil_GetProducesEnergy(const uint64 builtWonders)
+{
+	INT_WNDR(HasProducesEnergy, GetProducesEnergy);
+}
+
+sint32 wonderutil_GetProducesEnergyPerPop(const uint64 builtWonders)
+{
+	INT_WNDR(HasProducesEnergyPerPop, GetProducesEnergyPerPop);
+}

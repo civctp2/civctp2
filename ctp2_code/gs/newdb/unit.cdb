@@ -631,4 +631,8 @@ Unit {
 	Bit CanSinkInSea				// to implement ConstDb Chance_lost_at_sea
 
 	Bit Leader						// Special "king" unit
+
+	#Energy Code
+	Int   EnergyHunger = 0
+	Int   ProducesEnergy = 0
 }

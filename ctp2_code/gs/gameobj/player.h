@@ -36,6 +36,7 @@
 // - Made player.h to compile again.
 // - Removed unused void BeginTurnAllCities all cities method. - Aug. 7th 2005 Martin Gühmann
 // - Added civilisation specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
+// - Added EnergySupply method 2-28-2007
 //
 //----------------------------------------------------------------------------
 
@@ -1045,7 +1046,7 @@ public:
 	void StartResearchingAdvanceForGoal(sint32 goal);
 	bool RecursivelyStartResearching(sint32 advance);
 	bool HasFreeUnitUpgrades() const;
-
+	double EnergySupply();
 };
 
 #endif

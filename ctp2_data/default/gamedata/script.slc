@@ -2976,6 +2976,22 @@ messagebox  '999UnitUpgraded' {
 	MessageType("MILITARY");
 }
 
+messagebox  '999HostileTerrain' {
+	Show();
+	Text(ID_HOSTILE_TERRAIN) ;
+	MessageType("MILITARY");
+}
+messagebox  '999InsurgentSpawn' {
+	Show();
+	Text(ID_INSURGENT_SPAWN) ;
+	MessageType("MILITARY");
+}
+messagebox  '999GuerrillaSpawn' {
+	Show();
+	Text(ID_GUERRILLA_SPAWN) ;
+	MessageType("MILITARY");
+}
+
 #include "feats.slc"
 
 // #including scenario.slc here will pick up the empty scenario.slc in
