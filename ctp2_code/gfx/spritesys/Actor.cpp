@@ -26,6 +26,9 @@
 // - Merged constructors and initialised all members.
 //
 //----------------------------------------------------------------------------
+///
+/// \file   Actor.cpp
+/// \brief  Base actor class
 
 #include "c3.h"
 #include "Actor.h"
@@ -45,9 +48,6 @@ Actor::Actor(SpriteState * ss)
     m_spriteState   (ss),
     m_morphing      (false),
     m_animPos       (0)
-{ }
-
-Actor::~Actor(void)
 { }
 
 

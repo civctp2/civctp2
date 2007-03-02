@@ -307,41 +307,19 @@ void EffectActor::GetNextAction(BOOL isVisible)
 
 void EffectActor::AddAction(Action *actionObj)
 {
-	Assert(m_effectSpriteGroup != NULL);
-	if (m_effectSpriteGroup == NULL) return;
-	
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
-
-
-	
-	
-	
-	
-	
-	
-	
+	Assert(m_effectSpriteGroup && actionObj);
+	if (!m_effectSpriteGroup || !actionObj) return;
 
 	m_actionQueue.Enqueue(actionObj);
-
 }
 
 Anim *EffectActor::CreateAnim(EFFECTACTION action)
 {
-	Assert(m_effectSpriteGroup != NULL);
-	if (m_effectSpriteGroup == NULL) return NULL;
+	Assert(m_effectSpriteGroup);
+	if (!m_effectSpriteGroup) return NULL;
 
-	
-	Anim	*origAnim = m_effectSpriteGroup->GetAnim((GAME_ACTION)action);
-	if (origAnim == NULL) 
-	{
-		
-//		origAnim = m_effectSpriteGroup->GetAnim((GAME_ACTION)EFFECTACTION_PLAY);
-
-		return NULL;
-	}
-
-	return new Anim(*origAnim);
+	Anim	* origAnim = m_effectSpriteGroup->GetAnim((GAME_ACTION) action);
+	return origAnim ? new Anim(*origAnim) : NULL;
 }
 
 void EffectActor::Draw(void)
@@ -406,52 +384,40 @@ void EffectActor::DrawText(sint32 x, sint32 y, MBCHAR *effectText)
 	m_effectSpriteGroup->DrawText(x, y, effectText);
 }
 
-uint16 EffectActor::GetWidth(void)
+uint16 EffectActor::GetWidth(void) const
 {
-	Assert(m_effectSpriteGroup != NULL);
-	if (m_effectSpriteGroup == NULL) return 0;
+    Assert(m_effectSpriteGroup);
+    if (!m_effectSpriteGroup) return 0;
 
-	Sprite	*theSprite;
+    Sprite * theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
 
-	theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
-	if (theSprite != NULL) {
-		return theSprite->GetWidth();
-	} else {
-		if (m_curEffectAction != EFFECTACTION_PLAY) {
-			theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)EFFECTACTION_PLAY);
-			if (theSprite != NULL)
-				return theSprite->GetWidth();
-		}
+    if (!theSprite && (m_curEffectAction != EFFECTACTION_PLAY))
+    {
+        theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)EFFECTACTION_PLAY);
+    }
 
-		return 0;
-	}
+    return theSprite ? theSprite->GetWidth() : 0;
 }
 
-uint16 EffectActor::GetHeight(void)
+uint16 EffectActor::GetHeight(void) const
 {
-	Assert(m_effectSpriteGroup != NULL);
-	if (m_effectSpriteGroup == NULL) return 0;
+    Assert(m_effectSpriteGroup);
+    if (!m_effectSpriteGroup) return 0;
 
-	Sprite *    theSprite = 
-        m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
+    Sprite * theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)m_curEffectAction);
 
-	if (theSprite != NULL) {
-		return theSprite->GetHeight();
-	} else {
-		if (m_curEffectAction != EFFECTACTION_PLAY) {
-			theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)EFFECTACTION_PLAY);
-			if (theSprite != NULL)
-				return theSprite->GetHeight();
-		}
+    if (!theSprite && (m_curEffectAction != EFFECTACTION_PLAY))
+    {
+        theSprite = m_effectSpriteGroup->GetGroupSprite((GAME_ACTION)EFFECTACTION_PLAY);
+    }
 
-		return 0;
-	}
+    return theSprite ? theSprite->GetHeight() : 0;
 }
 
-void EffectActor::GetBoundingRect(RECT *rect)
+void EffectActor::GetBoundingRect(RECT *rect) const
 {
-	Assert(rect != NULL);
-	if (rect == NULL) return;
+	Assert(rect);
+	if (!rect) return;
 
 	POINT	hotPoint = m_effectSpriteGroup->GetHotPoint(m_curEffectAction, m_facing);
 	double	scale = g_tiledMap->GetScale();

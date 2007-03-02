@@ -32,8 +32,10 @@
 #include "c3.h"
 #include "battleviewactor.h"
 
+#include <algorithm>
 #include "aui_surface.h"
 #include "colorset.h"
+#include "director.h"           // g_director
 #include "primitives.h"
 #include "soundmanager.h"       // g_soundManager
 #include "SpriteGroupList.h"
@@ -115,12 +117,10 @@ void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 	}
 
 	delete m_curAction;
-
 	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
 	m_curAction->SetAnim(anim);
 	m_curUnitAction = UNITACTION_IDLE;
 
-	
 	if (g_soundManager)
 		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
 }
@@ -153,20 +153,18 @@ void BattleViewActor::Process(void)
 		}
 	}
 	
-	if (m_curAction != NULL) {
-		
-		m_frame = m_curAction->GetSpriteFrame();
-
-		
-		m_transparency = m_curAction->GetTransparency();
-	}
+    if (m_curAction) 
+    {
+        m_frame        = m_curAction->GetSpriteFrame();
+        m_transparency = m_curAction->GetTransparency();
+    }
 }
 
 
 void BattleViewActor::DumpAllActions(void)
 {
 	
-	if (m_curAction != NULL) {
+	if (m_curAction) {
 		m_facing = m_curAction->GetFacing();
 		delete m_curAction;
 		m_curAction = NULL;
@@ -189,11 +187,8 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 {
 	uint32 numItems = GetActionQueueNumItems();
 
-	if (m_curAction) 
-	{
-		delete m_curAction;
-		m_curAction = NULL;
-	}
+	delete m_curAction;
+	m_curAction = NULL;
 
 	Action *pendingAction = LookAtNextAction();
 	
@@ -228,59 +223,37 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 
 void BattleViewActor::AddAction(Action *actionObj)
 {
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return;
-	
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
-
-
-	
-	
-	
+	Assert(m_unitSpriteGroup && actionObj);
+	if (!m_unitSpriteGroup || !actionObj) return;
 	
 	if (m_unitID.IsValid()) 
 	{
 		m_playerNum = m_unitID.GetOwner();
 	}
 
-	
-	
-	
-
 	m_actionQueue.Enqueue(actionObj);
-
 }
 
 Anim *BattleViewActor::CreateAnim(UNITACTION action)
 {
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return NULL;
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) return NULL;
 
-	
-	Anim	*origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
+	Anim *  origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
 
-	if (origAnim == NULL) 
+	if (!origAnim && (UNITACTION_IDLE == action))
 	{
-		if(action != UNITACTION_IDLE)
-		{
-			return NULL;
-		}
-		else
-		{
-			
-			origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_MOVE);;
-			Assert(origAnim != NULL);
-			if(origAnim == NULL)
-				return NULL;
-			else
-				action = UNITACTION_MOVE;
-		}
+		origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION) UNITACTION_MOVE);;
+		Assert(origAnim);
+		action = UNITACTION_MOVE;
 	}
 
-	Anim * anim = new Anim(*origAnim);
+	if (!origAnim)
+		return NULL;
 
-	if(action == UNITACTION_IDLE)
+    Anim * anim = new Anim(*origAnim);
+
+	if (action == UNITACTION_IDLE)
 	{
 		srand(anim->GetDelay() + g_director->GetMasterCurTime());
 		anim->AdjustDelay(rand() % 2000);
@@ -292,36 +265,28 @@ Anim *BattleViewActor::CreateAnim(UNITACTION action)
 #define k_FAKE_DEATH_FRAMES			15		
 #define k_FAKE_DEATH_DURATION		1500	
 
-Anim *BattleViewActor::MakeFakeDeath(void)
+Anim * BattleViewActor::MakeFakeDeath(void)
 {
-	sint32		i;
-	Anim		*anim = new Anim();
+    Anim *      anim        = new Anim();
 
-	
-	uint16 *frames = new uint16[k_FAKE_DEATH_FRAMES];
-	for (i=0; i<k_FAKE_DEATH_FRAMES; i++) {
-		frames[i] = 0;
-	}
-
-	
-	POINT *moveDeltas = new POINT[k_FAKE_DEATH_FRAMES];
-	POINT pt = {0,0};
-	for (i=0; i<k_FAKE_DEATH_FRAMES; i++) {
-		moveDeltas[i] = pt;
-	}
-	
-	
-	uint16 *transparencies = new uint16[k_FAKE_DEATH_FRAMES];
-	for (i=0; i<k_FAKE_DEATH_FRAMES; i++) {
-		transparencies[i] = (uint16)(15 - i);
-	}
-
-	anim->SetNumFrames(k_FAKE_DEATH_FRAMES);
+    uint16 *    frames      = new uint16[k_FAKE_DEATH_FRAMES];
+    std::fill(frames, frames + k_FAKE_DEATH_FRAMES, 0);
 	anim->SetFrames(frames);
-	anim->SetPlaybackTime(k_FAKE_DEATH_DURATION);
+	anim->SetNumFrames(k_FAKE_DEATH_FRAMES);
+
+    POINT *     moveDeltas  = new POINT[k_FAKE_DEATH_FRAMES];
+    POINT       pt          = {0,0};
+    std::fill(moveDeltas, moveDeltas + k_FAKE_DEATH_FRAMES, pt);
 	anim->SetDeltas(moveDeltas);
+	
+    uint16 *    transparencies = new uint16[k_FAKE_DEATH_FRAMES];
+    for (uint16 i = 0; i < k_FAKE_DEATH_FRAMES; ++i) 
+    {
+        transparencies[i] = (uint16) (k_FAKE_DEATH_FRAMES - i);
+    }
 	anim->SetTransparencies(transparencies);
 
+	anim->SetPlaybackTime(k_FAKE_DEATH_DURATION);
 	anim->SetType(ANIMTYPE_SEQUENTIAL);
 
 	return anim;

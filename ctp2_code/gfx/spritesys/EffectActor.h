@@ -53,44 +53,44 @@ public:
 
 	void			DrawText(sint32 x, sint32 y, MBCHAR *EffectText);
 
-	BOOL			IsAnimating(void);
+	BOOL			IsAnimating(void) const;
 
-	MapPoint		GetPos(void) { return m_pos; }
+	MapPoint		GetPos(void) const { return m_pos; }
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-	MapPoint		GetSavedPos(void) { return m_savePos; }
+	MapPoint		GetSavedPos(void) const { return m_savePos; }
 	void			SetSavedPos(MapPoint pnt) { m_savePos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) { x = m_x; y = m_y; } 
+    void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; } 
 
-	uint16			GetWidth(void);
-	uint16			GetHeight(void);
+	uint16			GetWidth(void) const;
+	uint16			GetHeight(void) const;
 
 	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
 
-	Action			*GetCurAction(void) { return m_curAction; }
+	Action			*GetCurAction(void) const { return m_curAction; }
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	uint32			GetActionQueueNumItems(void) { return m_actionQueue.GetNumItems(); }
+	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
 
 	void			SetGenerateDeath(BOOL val) { m_generateDeath = val; }
-	BOOL			GetGenerateDeath(void) { return m_generateDeath; }
+	BOOL			GetGenerateDeath(void) const { return m_generateDeath; }
 
 	void			SetDieAtTick(uint32 val) { m_dieAtTick = val; }
-	uint32			GetDieAtTick(void) { return m_dieAtTick; }
+	uint32			GetDieAtTick(void) const { return m_dieAtTick; }
 
 	void			SetEffectVisibility(uint32 val) { m_effectVisibility = val; }
 	void			SetEffectVisibility(uint32 val, BOOL bval) { m_effectSaveVisibility = m_effectVisibility; m_effectVisibility = val; m_bVisSpecial = TRUE; }
 											
 	void			SetEffectVisibility() { m_bVisSpecial = FALSE; }
-	uint32			GetEffectVisibility(void) { return m_effectVisibility; }
-	BOOL			GetVisSpecial(void) { return m_bVisSpecial; }
+	uint32			GetEffectVisibility(void) const { return m_effectVisibility; }
+	BOOL			GetVisSpecial(void) const { return m_bVisSpecial; }
 
 	void			SetNeedsToDie(BOOL val) { m_needsToDie = val; }
-	BOOL			GetNeedsToDie(void) { return m_needsToDie; }
+	BOOL			GetNeedsToDie(void) const { return m_needsToDie; }
 
 	void			SetKillNow(void) { m_killNow = TRUE; }
-	BOOL			GetKillNow(void) { return m_killNow; }
+	BOOL			GetKillNow(void) const { return m_killNow; }
 
-	void			GetBoundingRect(RECT *rect);
-	EFFECTACTION	GetEffectAction(void) { return m_curEffectAction; }
+	void			GetBoundingRect(RECT *rect) const;
+	EFFECTACTION	GetEffectAction(void) const { return m_curEffectAction; }
 
 
 protected:

@@ -34,7 +34,6 @@
 #include "aui.h"
 #include "pixelutils.h"
 #include "tileutils.h"
-
 #include "Unit.h"
 
 #include "SelItem.h"                // g_selected_item
@@ -84,6 +83,97 @@ GoodActor::GoodActor(sint32 index, const MapPoint &pos)
     }
 
 	AddIdle();
+}
+
+GoodActor::GoodActor(GoodActor const & a_Original)
+:
+    Actor               (a_Original),
+    m_facing            (a_Original.m_facing),
+    m_frame             (a_Original.m_frame),
+    m_transparency      (a_Original.m_transparency),
+    m_index             (a_Original.m_index),
+	m_pos               (a_Original.m_pos),
+    m_goodSpriteGroup   (NULL),
+    m_curAction         (NULL),
+    m_curGoodAction     (a_Original.m_curGoodAction),     
+    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
+    m_loadType          (LOADTYPE_BASIC)
+{
+    Assert(g_goodSpriteGroupList);
+
+    if (a_Original.m_curAction)
+    {
+        m_curAction = new Action(*a_Original.m_curAction);
+    }
+
+    for (size_t i = 0; i < a_Original.m_actionQueue.GetNumItems(); ++i)
+    {
+        Action *    data = NULL;
+        if (a_Original.m_actionQueue.GetQueueItem(i, data))
+        {
+            m_actionQueue.Enqueue(data ? new Action(*data) : NULL);
+        }
+    }
+
+    if (g_goodSpriteGroupList)
+    {
+        m_loadType = a_Original.m_loadType;
+	    m_goodSpriteGroup = (GoodSpriteGroup *)
+            g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+    }
+}
+
+GoodActor & GoodActor::operator = (GoodActor const & a_Original)
+{
+    if (this != &a_Original)
+    {
+        Assert(g_goodSpriteGroupList);
+
+        Actor::operator     = (a_Original);
+        m_facing            = a_Original.m_facing;
+        m_frame             = a_Original.m_frame;
+        m_transparency      = a_Original.m_transparency;
+        m_index             = a_Original.m_index;
+	    m_pos               = a_Original.m_pos;
+ 
+        if (g_goodSpriteGroupList)
+        {
+            if (m_goodSpriteGroup)
+            {
+	            g_goodSpriteGroupList->ReleaseSprite(m_index, GetLoadType());
+            }
+
+            m_loadType = a_Original.m_loadType;
+	        m_goodSpriteGroup = (GoodSpriteGroup *)
+                g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+        }
+        else
+        {
+            m_goodSpriteGroup   = NULL;
+            m_loadType          = LOADTYPE_BASIC;
+        }
+
+        delete m_curAction;
+        m_curAction     = a_Original.m_curAction ? new Action(*a_Original.m_curAction) : NULL;
+        m_curGoodAction = a_Original.m_curGoodAction;
+        
+      	while (m_actionQueue.GetNumItems() > 0) 
+        {
+            Action *    action  = NULL;
+		    m_actionQueue.Dequeue(action);
+		    delete action;
+        }
+        for (size_t i = 0; i < a_Original.m_actionQueue.GetNumItems(); ++i)
+        {
+            Action *    data = NULL;
+            if (a_Original.m_actionQueue.GetQueueItem(i, data))
+            {
+                m_actionQueue.Enqueue(data ? new Action(*data) : NULL);
+            }
+        }
+    }
+
+    return *this;
 }
 
 /// @todo Replace with proper copy constructor
@@ -143,7 +233,6 @@ GoodActor::~GoodActor()
     {
 	    g_goodSpriteGroupList->ReleaseSprite(m_index, GetLoadType());
     }
-
 }
 
 void GoodActor::FullLoad(void)
@@ -271,14 +360,9 @@ void GoodActor::GetNextAction(void)
 
 void GoodActor::AddAction(Action *actionObj)
 {
-	Assert(m_goodSpriteGroup != NULL);
-	if (m_goodSpriteGroup == NULL) return;
+	Assert(m_goodSpriteGroup && actionObj);
+	if (!m_goodSpriteGroup || !actionObj) return;
 	
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
-
-	
-
 	m_actionQueue.Enqueue(actionObj);
 
 	if (m_curAction) {
@@ -290,9 +374,8 @@ void GoodActor::AddAction(Action *actionObj)
 
 Anim *GoodActor::CreateAnim(GOODACTION action)
 {
-	Assert(m_goodSpriteGroup != NULL);
-	if (m_goodSpriteGroup == NULL) return NULL;
-
+	Assert(m_goodSpriteGroup);
+	if (!m_goodSpriteGroup) return NULL;
 	
 	Anim	*origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)action);
 	if (origAnim == NULL) 
@@ -305,10 +388,10 @@ Anim *GoodActor::CreateAnim(GOODACTION action)
 
 void GoodActor::DrawSelectionBrackets(void)
 {
-	RECT		rect;
 
 	TileSet		*tileSet = g_tiledMap->GetTileSet();
 
+	RECT		rect;
 	SetRect(&rect, 0, 0, 1, 1);
 	
 
@@ -326,16 +409,13 @@ void GoodActor::DrawSelectionBrackets(void)
 	rect.right -= (iconDim.x+1);
 	rect.bottom -= (iconDim.y+1);
 
-	
-	Pixel16			*topLeft, *topRight, *botLeft, *botRight;
-
-	topLeft = tileSet->GetMapIconData(MAPICON_BRACKET1);
+	Pixel16 * topLeft = tileSet->GetMapIconData(MAPICON_BRACKET1);
 	Assert(topLeft); if (!topLeft) return;
-	topRight = tileSet->GetMapIconData(MAPICON_BRACKET2);
+	Pixel16 * topRight = tileSet->GetMapIconData(MAPICON_BRACKET2);
 	Assert(topRight); if (!topRight) return;
-	botRight = tileSet->GetMapIconData(MAPICON_BRACKET3);
+	Pixel16 * botRight = tileSet->GetMapIconData(MAPICON_BRACKET3);
 	Assert(botRight); if (!botRight) return;
-	botLeft = tileSet->GetMapIconData(MAPICON_BRACKET4);
+	Pixel16 * botLeft = tileSet->GetMapIconData(MAPICON_BRACKET4);
 	Assert(botLeft); if (!botLeft) return;
 
 	g_tiledMap->DrawColorizedOverlayIntoMix(topLeft, rect.left, rect.top);
@@ -429,8 +509,8 @@ bool GoodActor::IsAnimating(void) const
 
 uint16 GoodActor::GetWidth(void) const
 {
-	Assert(m_goodSpriteGroup != NULL);
-	if (m_goodSpriteGroup == NULL) return 0;
+	Assert(m_goodSpriteGroup);
+	if (!m_goodSpriteGroup) return 0;
 
 	Sprite	*   theSprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
     return (theSprite) ? theSprite->GetWidth() : 0;
@@ -438,8 +518,8 @@ uint16 GoodActor::GetWidth(void) const
 
 uint16 GoodActor::GetHeight(void) const
 {
-	Assert(m_goodSpriteGroup != NULL);
-	if (m_goodSpriteGroup == NULL) return 0;
+	Assert(m_goodSpriteGroup);
+	if (!m_goodSpriteGroup) return 0;
 
 	Sprite *    theSprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
     return (theSprite) ? theSprite->GetHeight() : 0;
@@ -447,8 +527,8 @@ uint16 GoodActor::GetHeight(void) const
 
 void GoodActor::GetBoundingRect(RECT *rect) const
 {
-	Assert(rect != NULL);
-	if (rect == NULL) return;
+	Assert(m_goodSpriteGroup && rect);
+	if (!m_goodSpriteGroup || !rect) return;
 
 	POINT	hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 	double	scale = g_tiledMap->GetScale();

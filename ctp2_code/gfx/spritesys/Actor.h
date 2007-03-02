@@ -17,9 +17,6 @@
 //
 // Compiler flags
 //
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 // _ACTOR_DRAW_OPTIMIZATION
 //
 // 
@@ -31,38 +28,61 @@
 // - Merged constructors and initialised all members.
 //
 //----------------------------------------------------------------------------
+///
+/// \file   Actor.h
+/// \brief  Base actor class
 
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __ACTOR_H__
-#define __ACTOR_H__
+#ifndef ACTOR_H__
+#define ACTOR_H__
+
+//----------------------------------------------------------------------------
+//
+// Library imports
+//
+//----------------------------------------------------------------------------
+
+#include "windows.h"            // POINT
+
+//----------------------------------------------------------------------------
+//
+// Exported names
+//
+//----------------------------------------------------------------------------
 
 class Actor;
 
 #define k_ACTOR_CENTER_OFFSET_X		48
 #define k_ACTOR_CENTER_OFFSET_Y		48
 
-//fix bug #4 by kaan
+// "fix" bug #4 by kaan
 #define k_MAX_ACTION_QUEUE_SIZE		12
 
-#include "Action.h"             // Action, GAME_ACTION
-#include "ctp2_inttypes.h"      // sint32, uint32
-#include "windows.h"            // POINT
+//----------------------------------------------------------------------------
+//
+// Project imports
+//
+//----------------------------------------------------------------------------
 
+#include "ctp2_inttypes.h"      // sint32
+
+class Action;
 class Anim;
 class SpriteState;
 
-
-
-
+//----------------------------------------------------------------------------
+//
+// Declarations
+//
+//----------------------------------------------------------------------------
 
 class Actor 
 {
 public:
 	Actor(SpriteState * ss = NULL);
-	virtual ~Actor(void);
 
 	void	SetX(sint32 x) { m_x = x; }
 	void	SetY(sint32 y) { m_y = y; }
@@ -75,7 +95,7 @@ public:
 	POINT	GetPos(void) const { POINT p; p.x = m_x; p.y = m_y; return p; }
 	bool	GetMorphing(void) const { return m_morphing; }
 
-	SpriteState *GetSpriteState(void) { return m_spriteState; }
+	SpriteState * GetSpriteState(void) const { return m_spriteState; }
 	void SetSpriteState(SpriteState *ss) { m_spriteState = ss; }
 
 	virtual void	SetAnim(Anim *a)  {};
@@ -102,11 +122,6 @@ protected:
 	bool			m_morphing; 
 
 	sint32			m_animPos;
-
-
-	void			SetAnimation(GAME_ACTION action);
-	void			ServeAnimation(uint32 timeslice_msecs);
-
 
 	virtual bool    ActionMove(Action *actionObj) { return false; };
 };

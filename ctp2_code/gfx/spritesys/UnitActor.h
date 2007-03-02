@@ -17,26 +17,32 @@
 
 class UnitActor;
 
-
-#include "Unit.h"       // SPECATTACK
-
-#include "Actor.h"
-#include "pixelutils.h"
+#include "Action.h"             // Action, GAME_ACTION
+#include "Actor.h"              // Actor
+#include "Anim.h"               // Anim
+#include "ctp2_inttypes.h"      // sintN, uintN
+#include "MapPoint.h"           // MapPoint
 #include "Queue.h"
+#include "SpriteGroup.h"        // GROUPTYPE, LOADTYPE
+#include "Unit.h"               // SPECATTACK, Unit
+#include "UnitSpriteGroup.h"    // UNITACTION
+
+class aui_Surface;
+class CivArchive;
+class SpriteState;
+// BOOL, POINT, RECT
+
+#if 0
+#include "pixelutils.h"
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "tech_wllist.h"
-#include "Anim.h"
-#include "UnitSpriteGroup.h"
 
-class SpriteState;
 class SpriteGroup;
 class ProjectileActor;
 class EffectActor;
-class aui_Surface;
 class ActorPath;
-class Action;
-class CivArchive;
+#endif
 
 class UnitActor : public Actor
 {
@@ -57,7 +63,7 @@ public:
         MapPoint const &    pos, 
         sint32 *            spriteID, 
         GROUPTYPE *         groupType
-    );
+    ) const;
 
 	void			AddVision(void);
 	void			RemoveVision(void);
@@ -71,32 +77,35 @@ public:
 	void			ChangeType(SpriteState *ss, sint32 type, Unit id, BOOL updateVision);
 
 	void			SetSize(sint32 size) { m_size = size; }
-	sint32			GetSize(void) { return m_size; }
+	sint32			GetSize(void) const { return m_size; }
 
 	
 	virtual void	Process(void);
 	void			DumpAllActions(void);
 	void			EndTurnProcess(void);
-	Action 			*WillMorph(void);
-	Action			*WillDie(void);
+	Action 			*WillMorph(void) const;
+	Action			*WillDie(void) const;
 	void			AddAction(Action *actionObj);
-	void			GetNextAction(BOOL isVisible = TRUE);
-	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
-	void			ActionQueueUpIdle(BOOL NoIdleJustDelay = FALSE);
+	void			GetNextAction(bool isVisible = true);
+	void			AddIdle(bool NoIdleJustDelay = false);
+	void			ActionQueueUpIdle(bool NoIdleJustDelay = false);
 
 	Anim *          CreateAnim(UNITACTION action);
 	Anim			*MakeFakeDeath(void);
 	Anim			*MakeFaceoff(void);
 
-	BOOL			HasThisAnim(UNITACTION action) { if (!m_unitSpriteGroup) return FALSE; return (m_unitSpriteGroup->GetAnim((GAME_ACTION)action) != NULL); }
+	bool			HasThisAnim(UNITACTION action) const
+    { 
+        return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action); 
+    }
 
 	
-	void			DrawFortified(BOOL fogged);
-	void			DrawFortifying(BOOL fogged);
-	void			DrawCityWalls(BOOL fogged);
-	void			DrawForceField(BOOL fogged);
+	void			DrawFortified(bool fogged);
+	void			DrawFortifying(bool fogged);
+	void			DrawCityWalls(bool fogged);
+	void			DrawForceField(bool fogged);
 
-	BOOL			Draw(BOOL fogged = FALSE);
+	bool			Draw(bool fogged = FALSE);
 	void			DrawHerald(void);
 	void			DrawSelectionBrackets(void);
 	void			DrawHealthBar(void);
@@ -106,101 +115,101 @@ public:
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
 
 	
-	BOOL			IsAnimating(void);
+	bool			IsAnimating(void) const;
 
-	MapPoint		GetPos(void) { return m_pos; }
+	MapPoint		GetPos(void) const { return m_pos; }
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-	MapPoint		GetSavedPos(void) { return m_savePos; }
+	MapPoint		GetSavedPos(void) const { return m_savePos; }
 	void			SetSavedPos(MapPoint pnt) { m_savePos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) { x = m_x; y = m_y; } 
+    void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; } 
 
 	sint32			GetFacing(void) const { return m_facing; }
 
-	uint16			GetWidth(void);
-	uint16			GetHeight(void);
+	uint16			GetWidth(void) const;
+	uint16			GetHeight(void) const;
 
-	uint32		    GetUnitID(void) { return m_unitID.m_id; }
-	sint32			GetUnitDBIndex(void) { return m_unitDBIndex; }
+	uint32		    GetUnitID(void) const { return m_unitID.m_id; }
+	sint32			GetUnitDBIndex(void) const { return m_unitDBIndex; }
 
 	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
-	sint32			GetPlayerNum(void) { return m_playerNum;}
+	sint32			GetPlayerNum(void) const { return m_playerNum;}
 
-    sint32			GetNextPop(void) { return m_nextPop;}//PFT 29 mar 05, show # turns until city next grows a pop
+    sint32			GetNextPop(void) const { return m_nextPop;}
 
-	Action			*GetCurAction(void) { return m_curAction; }
+	Action			*GetCurAction(void) const { return m_curAction; }
 
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
 	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
-	uint32			GetActionQueueNumItems(void) { return m_actionQueue.GetNumItems(); }
+	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
 
-	BOOL			HasDeath(void) { return m_unitSpriteGroup->HasDeath(); }
-	BOOL			HasDirectional(void) { return m_unitSpriteGroup->HasDirectional(); }
+	bool			HasDeath(void) const { return m_unitSpriteGroup->HasDeath(); }
+	bool			HasDirectional(void) { return m_unitSpriteGroup->HasDirectional(); }
 
 	void			SetUnitVisibility(uint32 val) { m_unitSaveVisibility = m_unitVisibility = val; }
 	void			SetUnitVisibility(uint32 val, BOOL bval) { m_unitSaveVisibility = m_unitVisibility; m_unitVisibility = val; m_bVisSpecial = TRUE; }
 											
 	void			SetUnitVisibility() { m_bVisSpecial = FALSE; }
-	uint32			GetUnitVisibility(void) { return m_unitVisibility; }
-	uint32			GetUnitSavedVisibility(void) { return m_unitSaveVisibility; }
+	uint32			GetUnitVisibility(void) const { return m_unitVisibility; }
+	uint32			GetUnitSavedVisibility(void) const { return m_unitSaveVisibility; }
 
-	BOOL			GetVisSpecial(void) { return m_bVisSpecial; }
+	BOOL			GetVisSpecial(void) const { return m_bVisSpecial; }
 	void			SetVisSpecial(BOOL val) { m_bVisSpecial = val; }
 	
-	double			GetUnitVisionRange(void) { return m_unitVisionRange; }
+	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
 	void            SetUnitVisionRange(double range) { m_unitVisionRange = range; }
 	void            SetNewUnitVisionRange(double range) { m_newUnitVisionRange = range; }
 
 	void			SetNeedsToDie(BOOL val) { m_needsToDie = val; }
-	BOOL			GetNeedsToDie(void) { return m_needsToDie; }
+	BOOL			GetNeedsToDie(void) const { return m_needsToDie; }
 
 	void			SetNeedsToVictor(BOOL val) { m_needsToVictor = val; }
-	BOOL			GetNeedsToVictor(void) { return m_needsToVictor; }
+	BOOL			GetNeedsToVictor(void) const { return m_needsToVictor; }
 
 	void			SetKillNow(void) { m_killNow = TRUE; }
-	BOOL			GetKillNow(void) { return m_killNow; }
+	BOOL			GetKillNow(void) const { return m_killNow; }
 
 	void			SetRevealedActors(UnitActor **revealedActors) { m_revealedActors = revealedActors; }
 	void			SaveRevealedActors(UnitActor **revealedActors) { m_savedRevealedActors = revealedActors; }
-	UnitActor		**GetRevealedActors(void) { return m_revealedActors; }
+	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
 
 	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors) { m_moveActors = moveActors; m_numOActors = numOActors; }
-	UnitActor		**GetMoveActors(void) { return m_moveActors; }
-	sint32			GetNumOActors(void) { return m_numOActors; }
+	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
+	sint32			GetNumOActors(void) const { return m_numOActors; }
 
-	BOOL			HiddenUnderStack(void) { return m_hiddenUnderStack; }
+	BOOL			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
 	void			SetHiddenUnderStack(BOOL val) { m_hiddenUnderStack = val; }
 
 	void			SetIsTransported(sint32 val) { m_isTransported = val; }
-	sint32			GetIsTransported() { return m_isTransported; }
+	sint32			GetIsTransported() const { return m_isTransported; }
 
-	void			GetBoundingRect(RECT *rect);
+	void			GetBoundingRect(RECT *rect) const;
 
-	sint32			GetHoldingCurAnimPos(UNITACTION action) { return m_holdingCurAnimPos[action]; }
-	sint32			GetHoldingCurAnimDelayEnd(UNITACTION action) { return m_holdingCurAnimDelayEnd[action]; }
-	sint32			GetHoldingCurAnimElapsed(UNITACTION action) { return m_holdingCurAnimElapsed[action]; }
-	sint32			GetHoldingCurAnimLastFrameTime(UNITACTION action) { return m_holdingCurAnimLastFrameTime[action]; }
-	sint32			GetHoldingCurAnimSpecialDelayProcess(UNITACTION action) { return m_holdingCurAnimSpecialDelayProcess; }
+	sint32			GetHoldingCurAnimPos(UNITACTION action) const { return m_holdingCurAnimPos[action]; }
+	sint32			GetHoldingCurAnimDelayEnd(UNITACTION action) const { return m_holdingCurAnimDelayEnd[action]; }
+	sint32			GetHoldingCurAnimElapsed(UNITACTION action) const { return m_holdingCurAnimElapsed[action]; }
+	sint32			GetHoldingCurAnimLastFrameTime(UNITACTION action) const { return m_holdingCurAnimLastFrameTime[action]; }
+	sint32			GetHoldingCurAnimSpecialDelayProcess(UNITACTION action) const { return m_holdingCurAnimSpecialDelayProcess; }
 
-	LOADTYPE		GetLoadType(void);
+	LOADTYPE		GetLoadType(void) const;
 
 	void			FullLoad(UNITACTION action);
 	void			DumpFullLoad(void);
 
 	void			SetIsFortified(BOOL fort) { m_isFortified = fort; }
 	void			SetIsFortifying(BOOL fort) { m_isFortifying = fort; }
-	BOOL			IsFortified(void) { return m_isFortified; }
-	BOOL			IsFortifying(void) { return m_isFortifying; }
+	BOOL			IsFortified(void) const { return m_isFortified; }
+	BOOL			IsFortifying(void) const { return m_isFortifying; }
 
 	void			SetHasCityWalls(BOOL has) { m_hasCityWalls = has; }
 	void			SetHasForceField(BOOL has) { m_hasForceField = has; }
-	BOOL			HasCityWalls(void) { return m_hasCityWalls;}
-	BOOL			HasForceField(void) { return m_hasForceField; }
+	BOOL			HasCityWalls(void) const { return m_hasCityWalls;}
+	BOOL			HasForceField(void) const { return m_hasForceField; }
 
 	void			SetHealthPercent(double p) { m_healthPercent = p;}
-	double			GetHealthPercent(void) { return m_healthPercent; }
+	double			GetHealthPercent(void) const { return m_healthPercent; }
 
 	void			SetTempStackSize(sint32 i) { m_tempStackSize = i; }
-	sint32			GetTempStackSize(void) { return m_tempStackSize; }
+	sint32			GetTempStackSize(void) const { return m_tempStackSize; }
 
 
 	BOOL			HitTest(POINT mousePt);
@@ -211,7 +220,7 @@ public:
 	
 	void			AddActiveListRef(void) { m_activeListRef++; }
 	sint32			ReleaseActiveListRef(void) { return --m_activeListRef;}
-	sint32			GetActiveListRef(void) { return m_activeListRef; }
+	sint32			GetActiveListRef(void) const { return m_activeListRef; }
 
 	void			Serialize(CivArchive &archive);
 

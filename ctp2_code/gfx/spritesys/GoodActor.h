@@ -1,21 +1,62 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Handling of good animations on screen
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//----------------------------------------------------------------------------
+///
+/// \file   GoodActor.h
+/// \brief  Handling of good animations on screen
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __GOODACTOR_H__
-#define __GOODACTOR_H__
+
+#ifndef GOODACTOR_H__
+#define GOODACTOR_H__
+
+//----------------------------------------------------------------------------
+//
+// Library imports
+//
+//----------------------------------------------------------------------------
+
+// none
+
+//----------------------------------------------------------------------------
+//
+// Exported names
+//
+//----------------------------------------------------------------------------
 
 class GoodActor;
+
+//----------------------------------------------------------------------------
+//
+// Project imports
+//
+//----------------------------------------------------------------------------
 
 #include "Actor.h"              // Actor
 #include "civarchive.h"         // CivArchive
@@ -29,14 +70,22 @@ class Action;
 class Anim;
 class aui_Surface;
 
+//----------------------------------------------------------------------------
+//
+// Declarations
+//
+//----------------------------------------------------------------------------
 
 class GoodActor : public Actor
 {
 public:
-	GoodActor(sint32 index, const MapPoint &pos);
-	GoodActor(GoodActor *copy);
-	GoodActor(CivArchive &archive);
-	virtual ~GoodActor();
+    GoodActor(sint32 index, MapPoint const & pos);
+    GoodActor(GoodActor const & a_Original);
+    GoodActor(GoodActor * copy); /// @todo Remove when no longer needed
+    GoodActor(CivArchive & archive);
+
+    virtual ~GoodActor();
+    GoodActor & operator = (GoodActor const & a_Original);
 
 	virtual void	Process(void);
 
