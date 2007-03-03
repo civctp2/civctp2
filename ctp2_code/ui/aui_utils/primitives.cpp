@@ -26,6 +26,7 @@
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added primitives_GetScreenAdjustedRectCopy function. (3-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3933,4 +3934,18 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 	}
 
 	return;
+}
+
+RECT primitives_GetScreenAdjustedRectCopy(aui_Surface *surf, RECT &theRect)
+{
+
+	RECT clipRect = theRect;
+
+	// Adjust clipRect to fit on the screen
+	if (clipRect.left   <  0             ) clipRect.left   = 0;
+	if (clipRect.top    <  0             ) clipRect.top    = 0;
+	if (clipRect.right  >= surf->Width() ) clipRect.right  = surf->Width()  - 1;
+	if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+
+	return clipRect;
 }

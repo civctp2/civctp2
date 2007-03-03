@@ -1351,7 +1351,7 @@ uint32 Director::ProcessActiveEffects(void)
 
 	ListPos pos = m_activeEffectList->GetHeadPosition();
 	for (size_t i = m_activeEffectList->L(); i > 0; --i) 
-    {
+	{
 		EffectActor * actor = m_activeEffectList->GetNext(pos);
 		if (actor) 
         {
@@ -1363,7 +1363,7 @@ uint32 Director::ProcessActiveEffects(void)
 
 	pos = m_activeEffectList->GetHeadPosition();
 	for (size_t n = m_activeEffectList->L(); n > 0; --n) 
-    {
+	{
 	    ListPos	      oldPos    = pos;
 		EffectActor * oldActor  = m_activeEffectList->GetNext(pos);
 		if (oldActor && oldActor->GetKillNow()) 

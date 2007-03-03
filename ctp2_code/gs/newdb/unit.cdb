@@ -19,6 +19,7 @@
 #  Modifications from the original Activision code:
 #
 #  - Government specific options added (Martin Gühmann).
+#  - MapIcon database added (22-Feb-2007 Martin Gühmann)
 #  - Leader option added.
 #  - NoBarbarian             : Added by tombom
 #  - CantGroup               : For future use to make solo moving units
@@ -55,13 +56,14 @@
 #  - CollateralTileDamage    : If a defender is on a tile then improvements cut
 #                              too
 #  - GoodyHutExcluded        : Prevents Some Units from appearing
-#  - ExcludedByWonder		 : Prevents Units being built in cities with wonder
+#  - ExcludedByWonder        : Prevents Units being built in cities with wonder
 #  - PrerequisiteWonder      : Needs Wonder in city to be built
 #
 #-----------------------------------------------------------------------------
 
 Sprite : Int
 Sound : File
+MapIcon : File
 SpecialEffect : Int
 
 SpecialAttackInfo {

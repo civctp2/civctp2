@@ -28,7 +28,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added new map icon database. (3-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,6 +48,7 @@
 
 #include "CivPaths.h"   // g_civPaths
 #include "rimutils.h"
+#include "MapIconRecord.h"
 
 #include "prjfile.h"
 #ifdef HAVE_UNISTD_H
@@ -91,6 +92,7 @@ TileSet::TileSet()
 	m_numMegaTiles          (0),
     m_quick                 (false),
 	m_mapped                (false),
+	m_mapIcons              (NULL),
 #ifdef WIN32
 	m_fileHandle            (INVALID_HANDLE_VALUE),
 	m_mappedFileHandle      (INVALID_HANDLE_VALUE)
@@ -101,6 +103,7 @@ TileSet::TileSet()
 {
 	sint32		i,j,k;
 
+	// Data from the tile file
 	for (i=0; i<TERRAIN_MAX; i++) {
 		for (j=0; j<TERRAIN_MAX; j++) {
 			for(k=0; k<k_TRANSITIONS_PER_TILE; k++) {
@@ -109,19 +112,17 @@ TileSet::TileSet()
 		}
 	}
 
+	// Data from the tile file
 	for (i=0; i<k_MAX_BASE_TILES; i++) {
 		m_baseTiles[i] = NULL;
 	}
 
-	
-	for (i=0; i<MAPICON_MAX; i++) {
-		m_mapIcons[i] = NULL;
-	}
-
+	// Data from the tile file
 	for (i=0; i<k_MAX_IMPROVEMENTS; i++) {
 		m_improvementData[i] = NULL;
 	}
 
+	// Data from the tile file
 	for (i=0; i<k_MAX_MEGATILES; i++) {
 		for (j=0; j<k_MAX_MEGATILE_STEPS; j++) {
 			m_megaTileData[i][j].direction = 0;
@@ -136,6 +137,8 @@ TileSet::~TileSet()
 {
 	Cleanup();
 }
+
+// ToDo: Merge the comon parts of CleanuoQuick and CleanupMapped
 
 void TileSet::CleanupQuick(void)
 {
@@ -152,17 +155,17 @@ void TileSet::CleanupQuick(void)
 	sint32 i;
 	
 	for (i=0; i<k_MAX_BASE_TILES; i++) 
-    {
+	{
 		delete m_baseTiles[i];
 		m_baseTiles[i] = NULL;
 	}
 
-	
-	for (i=0; i<MAPICON_MAX; i++) 
-    {
+	for (i=0; i < g_theMapIconDB->NumRecords(); i++) 
+	{
 		delete m_mapIcons[i];
-		m_mapIcons[i] = NULL;
 	}
+	delete[] m_mapIcons;
+	m_mapIcons = NULL;
 
 	delete[] m_tileSetData;
 	m_tileSetData = NULL;
@@ -183,17 +186,18 @@ void TileSet::CleanupMapped(void)
 	sint32 i;
 
 	for (i=0; i<k_MAX_BASE_TILES; i++) 
-    {
+	{
 		delete m_baseTiles[i];
 		m_baseTiles[i] = NULL;
 	}
 
 	
-	for (i=0; i<MAPICON_MAX; i++) 
-    {
+	for (i=0; i < g_theMapIconDB->NumRecords(); i++) 
+	{
 		delete m_mapIcons[i];
-		m_mapIcons[i] = NULL;
 	}
+	delete[] m_mapIcons;
+	m_mapIcons = NULL;
 
 #ifdef WIN32
 	UnmapViewOfFile(m_tileSetData);
@@ -450,16 +454,31 @@ void TileSet::LoadMapIcons(void)
 	uint32		len;
 	Pixel16		*tga;
 	Pixel16		*data;
- 
-	for (int i = 0; i < MAPICON_MAX; ++i) 
-    {
-		sprintf(name, "UPC%.3d.TGA", i+1);
+
+	m_mapIcons = new Pixel16*[g_theMapIconDB->NumRecords()];
+	for (int i = 0; i < g_theMapIconDB->NumRecords(); ++i) 
+	{
+
+		sprintf(name, g_theMapIconDB->Get(i)->GetValue());
+
 
 		if (g_civPaths->FindFile(C3DIR_PICTURES, name, path, TRUE, FALSE) == NULL) {
-			sprintf(path, "upc%.3d.rim", i+1);
-            size_t  testlen = 0;
+			
+			sprintf(path, "%s", name);
+			char * lastDot = strrchr(path, '.');
+			if (lastDot)
+			{
+				++lastDot;
+				sprintf(lastDot, "rim");
+			}
+			else
+			{
+				sprintf(path, "%s.rim", path);
+			}
+
+			size_t  testlen = 0;
 			uint8 * buf = reinterpret_cast<uint8 *>(g_ImageMapPF->getData(path, testlen));
-            len = testlen;
+			len = testlen;
 			if (buf == NULL) {
 				c3errors_ErrorDialog("TileSet", "'%s not found in asset tree.", name);
 				continue;
@@ -480,7 +499,6 @@ void TileSet::LoadMapIcons(void)
 			continue;
 		}
 
-            
 		tga = tileutils_TGA2mem(path, &width, &height);
 		if (tga) {
 			data = (Pixel16 *)tileutils_EncodeTile16(tga, width, height, &len);
@@ -499,6 +517,7 @@ void TileSet::LoadMapIcons(void)
 
 	}
 }
+
 /*
 Pixel16 TileSet::ConvertMapIcons(const MBCHAR *name)  //EMOD
 {

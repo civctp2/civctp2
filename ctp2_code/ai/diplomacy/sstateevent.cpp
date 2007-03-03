@@ -682,13 +682,13 @@ STDEHANDLER(IslandNation_NextSStateEvent)
 	sint32 avg_cont_size = MapAnalysis::GetMapAnalysis().AverageSettledContinentSize(playerId);
 
 	if(avg_cont_size < diplomat.GetPersonality()->GetMaxIslandSize() && avg_cont_size > 0){
-	    AiState state;
+		AiState state;
 		if(diplomat.GetPersonality()->HasIslandNationStrategy()){
-			state.priority = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetPriority();		   
-			state.dbIndex = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetStrategyIndex();
+			state.priority = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetPriority();
+			state.dbIndex  = diplomat.GetPersonality()->GetIslandNationStrategyPtr()->GetStrategyIndex();
 		}
 		else{
-			state.priority = 150;		   
+			state.priority = 150;
 			g_theStrategyDB->GetNamedItem("STRATEGY_ISLAND_NATION", state.dbIndex);
 		}
 

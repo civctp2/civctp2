@@ -78,6 +78,7 @@
 //   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
 // - Added new pollution database. (July 15th 2006 Martin Gühmann)
 // - Added new global warming database. (July 15th 2006 Martin Gühmann)
+// - Added new map icon database. (3-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -831,4 +832,7 @@ template class CTPDatabase<PollutionRecord>;
 
 #include "GlobalWarmingRecord.h" // 39
 template class CTPDatabase<GlobalWarmingRecord>;
+
+#include "MapIconRecord.h" // 40
+template class CTPDatabase<MapIconRecord>;
 #endif // __TILETOOL__

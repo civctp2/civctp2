@@ -214,7 +214,7 @@ ProfileDB::ProfileDB()
     m_upgrade                           (TRUE),
     m_smoothBorders                     (FALSE),
 	//emod new profile flags
-	m_CivFlags                       	(FALSE),
+	m_CivFlags                       	(TRUE),
 	m_NoAIProductionDeficit 			(FALSE),
 	m_NoAIGoldDeficit					(FALSE),
 	m_AICityDefenderBonus 				(FALSE),
@@ -400,27 +400,27 @@ ProfileDB::ProfileDB()
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
-		//emod new profile flags
-	Var("CivFlags"					 , PV_BOOL  , &m_CivFlags                   , NULL);
-	Var("NoAIProductionDeficit"      , PV_BOOL  , &m_NoAIProductionDeficit      , NULL);
-	Var("NoAIGoldDeficit"            , PV_BOOL  , &m_NoAIGoldDeficit	        , NULL);
-	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL);
-	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities	        , NULL);
-	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL);
-	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties 	        , NULL);
-	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents 	        , NULL);
-	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL);
-	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL);
-	Var("AINoSinking"				 , PV_BOOL  , &m_AINoSinking 	            , NULL);
-	Var("AINoCityLimit"				 , PV_BOOL  , &m_AINoCityLimit 	            , NULL);
-	Var("GoldPerUnitSupport "        , PV_BOOL  , &m_GoldPerUnitSupport 	    , NULL);
-	Var("GoldPerCity"				 , PV_BOOL  , &m_GoldPerCity 	            , NULL);
-	Var("AINoShieldHunger"           , PV_BOOL  , &m_AINoShieldHunger 	        , NULL);
-	Var("AINoGoldHunger"             , PV_BOOL  , &m_AINoGoldHunger	            , NULL);
-	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade 	            , NULL);
-	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit 	            , NULL);
-	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge 	        , NULL);
-	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG			 	        , NULL);
+	// emod new profile flags // Please make sure that only those show up which are used.
+	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL);
+	Var("NoAIProductionDeficit"      , PV_BOOL  , &m_NoAIProductionDeficit      , NULL, false);
+	Var("NoAIGoldDeficit"            , PV_BOOL  , &m_NoAIGoldDeficit            , NULL, false);
+	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);
+	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities            , NULL, false);
+	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL, false);
+	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties           , NULL, false);
+	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents           , NULL, false);
+	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL, false);
+	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL, false);
+	Var("AINoSinking"                , PV_BOOL  , &m_AINoSinking                , NULL, false);
+	Var("AINoCityLimit"              , PV_BOOL  , &m_AINoCityLimit              , NULL, false);
+	Var("GoldPerUnitSupport"         , PV_BOOL  , &m_GoldPerUnitSupport         , NULL, false);
+	Var("GoldPerCity"                , PV_BOOL  , &m_GoldPerCity                , NULL, false);
+	Var("AINoShieldHunger"           , PV_BOOL  , &m_AINoShieldHunger           , NULL, false);
+	Var("AINoGoldHunger"             , PV_BOOL  , &m_AINoGoldHunger             , NULL, false);
+	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade              , NULL, false);
+	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
+	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
+	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);
 
 }
 

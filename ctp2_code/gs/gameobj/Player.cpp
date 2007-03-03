@@ -10184,8 +10184,8 @@ double Player::EnergySupply()
 {
 	if(!m_all_cities)
 		return 0;
-	sint32 civenergy;
-	sint32 civdemand;
+	sint32 civenergy = 0;
+	sint32 civdemand = 0;
 	sint32 n = m_all_cities->Num();
 	//get from city data all energy from cities
 	for(sint32 i = 0; i < n; i++) {

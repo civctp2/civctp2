@@ -1,31 +1,31 @@
 # Microsoft Developer Studio Project File - Name="Crater" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** DO NOT EDIT **
+# ** NICHT BEARBEITEN **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
 CFG=Crater - Win32 Debug Browse
-!MESSAGE This is not a valid makefile. To build this project using NMAKE,
-!MESSAGE use the Export Makefile command and run
+!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
+!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
 !MESSAGE 
 !MESSAGE NMAKE /f "Crater.mak".
 !MESSAGE 
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
+!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
 !MESSAGE 
 !MESSAGE NMAKE /f "Crater.mak" CFG="Crater - Win32 Debug Browse"
 !MESSAGE 
-!MESSAGE Possible choices for configuration are:
+!MESSAGE Für die Konfiguration stehen zur Auswahl:
 !MESSAGE 
-!MESSAGE "Crater - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - Win32 Test" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - Win32 NDebug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - Win32 Final" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - Win32 Leaks" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - Win32 Debug Browse" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - SDL Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "Crater - SDL Final" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 Release" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 Test" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 NDebug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 Final" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 Leaks" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - Win32 Debug Browse" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - SDL Debug" (basierend auf  "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "Crater - SDL Final" (basierend auf  "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -316,10 +316,6 @@ SOURCE=.\Crater.def
 # Begin Source File
 
 SOURCE=.\Crater.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\newdb\religion.cdb
 # End Source File
 # End Target
 # End Project

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Tile map handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -406,9 +407,9 @@ public:
 
 	void		DrawLabel(aui_Surface *surface, sint32 color, sint32 x, sint32 y);
 
-    void        SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint32 x, sint32 y);
+	void        SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint32 x, sint32 y);
 	void        DrawNumber(aui_Surface *surface, sint32 num, sint32 color, 
-                    sint32 x, sint32 y);
+	                sint32 x, sint32 y);
 
 	void		HandleCheat(MapPoint &pos);
 

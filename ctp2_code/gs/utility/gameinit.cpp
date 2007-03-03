@@ -42,6 +42,7 @@
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
+// - Reused obsolate concept icon database slot by new map icon database. (3-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -252,7 +253,7 @@ MBCHAR g_conceptdb_filename[_MAX_PATH];
 MBCHAR g_terrainicondb_filename[_MAX_PATH];
 MBCHAR g_advanceicondb_filename[_MAX_PATH];
 MBCHAR g_advancedb_filename[_MAX_PATH];
-MBCHAR g_concepticondb_filename[_MAX_PATH];
+MBCHAR g_mapicondb_filename[_MAX_PATH];
 MBCHAR g_tileimprovementdb_filename[_MAX_PATH];
 MBCHAR g_tileimprovementicondb_filename[_MAX_PATH];
 MBCHAR g_spritestatedb_filename[_MAX_PATH]; // Free slot
@@ -736,10 +737,10 @@ sint32 gameinit_InitializeGameFiles(void)
 	
 	r = fscanf (fin, "%s", str1); 
 	if (r == EOF) { 
-		c3errors_ErrorDialog  (fn, "Missing ConceptIconDB file"); 
+		c3errors_ErrorDialog  (fn, "Missing MapIconDB file"); 
 		return FALSE; 
 	}
-	sprintf (g_concepticondb_filename, "%s%s", dir, str1); 
+	sprintf (g_mapicondb_filename, "%s%s", dir, str1); 
 
 	r = fscanf (fin, "%s", str1); 
 	if (r == EOF) { 

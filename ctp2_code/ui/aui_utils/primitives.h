@@ -1,15 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
- 
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The primitive rectabgles for painting
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added primitives_GetScreenAdjustedRectCopy function. (3-Mar-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -117,5 +136,7 @@ void	primitives_HackStencilDraw(aui_Surface *pSurface);
 void	primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurface, aui_Surface *pDstSurface, RECT *pDstRect, sint32 blend );
 void	primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten );
 void	primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLighten);
+
+RECT	primitives_GetScreenAdjustedRectCopy(aui_Surface *surf, RECT &clipRect);
 
 #endif

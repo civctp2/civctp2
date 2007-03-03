@@ -1,31 +1,31 @@
 # Microsoft Developer Studio Project File - Name="ctp2" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=CTP2 - WIN32 RELEASE
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "civctp.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "civctp.mak" CFG="CTP2 - WIN32 RELEASE"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "ctp2 - Win32 Release" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Debug" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Test" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 NDebug" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Final" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Debug Browse" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - Win32 Optimized Test" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - SDL Debug" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "ctp2 - SDL Final" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Test" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 NDebug" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Final" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Debug Browse" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - Win32 Optimized Test" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Debug" (based on "Win32 (x86) Application")
+!MESSAGE "ctp2 - SDL Final" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -217,7 +217,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                                        exist                                                        R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                        copy                                                        C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                        R:\ctp2_project\ctp2_code\ctp\                                                       	rem                                if                                                        exist                                                        R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                        copy                                                        C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                        R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                                         exist                                                         R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                         copy                                                         C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                         R:\ctp2_project\ctp2_code\ctp\                                                        	rem                                 if                                                         exist                                                         R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                         copy                                                         C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                         R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -4607,6 +4607,121 @@ SOURCE=..\gs\newdb\DifficultyRecord.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\gs\newdb\DiplomacyProposal.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__DIPLOM="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyProposal.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\gs\newdb\DiplomacyProposalRecord.cpp
 # End Source File
 # Begin Source File
@@ -4615,241 +4730,126 @@ SOURCE=..\gs\newdb\DiplomacyProposalRecord.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\gs\newdb\DiplomacyThreat.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__DIPLOMA="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\DiplomacyThreat.cdb
+
+"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\gs\newdb\DiplomacyThreatRecord.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\gs\newdb\DiplomacyThreatRecord.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\newdb\DiplomacyProposal.cdb
-
-!IF  "$(CFG)" == "ctp2 - Win32 Release"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
-
-USERDEP__DIPPR="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyProposal.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyProposalRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\newdb\DiplomacyThreat.cdb
-
-!IF  "$(CFG)" == "ctp2 - Win32 Release"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
-
-USERDEP__DIPTH="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\DiplomacyThreat.cdb
-
-"$(ProjDir)\..\gs\newdb\DiplomacyThreatRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -5511,6 +5511,14 @@ SOURCE=..\gs\newdb\lex.dbl.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\gs\newdb\MapIconRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\MapIconRecord.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\gs\newdb\order.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
@@ -6158,6 +6166,121 @@ InputPath=..\gs\newdb\terrain.cdb
 # End Source File
 # Begin Source File
 
+SOURCE=..\gs\newdb\TerrainImprovement.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+USERDEP__TERRAI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\TerrainImprovement.cdb
+
+"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\gs\newdb\TerrainImprovementRecord.cpp
 # End Source File
 # Begin Source File
@@ -6171,121 +6294,6 @@ SOURCE=..\gs\newdb\TerrainRecord.cpp
 # Begin Source File
 
 SOURCE=..\gs\newdb\TerrainRecord.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\newdb\TerrainImprovement.cdb
-
-!IF  "$(CFG)" == "ctp2 - Win32 Release"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
-
-USERDEP__TERRI="$(ProjDir)\..\gs\dbgen\ctpdb.exe"	
-# Begin Custom Build
-ProjDir=.
-InputPath=..\gs\newdb\TerrainImprovement.cdb
-
-"$(ProjDir)\..\gs\newdb\TerrainImprovementRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
-
-# End Custom Build
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

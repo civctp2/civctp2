@@ -3688,7 +3688,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							isInjoined = cityData->IsInjoined();
 							wasHappinessAttacked = cityData->WasHappinessAttacked();
 							isWatchful = cityData->IsWatchful();
-							isCapitol = cityData->IsCapitol(); //emod
+							isCapitol = cityData->IsCapitol();
 							bioInfectedOwner = cityData->GetOwner();
 							nanoInfectedOwner = cityData->GetOwner();
 							convertedOwner = cityData->IsConvertedTo();
@@ -3756,32 +3756,21 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							//define rect's screen co-ordinates
 							rect.left = x;
 							rect.top = y;
-							rect.right = rect.left + widthname;//x+width;
-							rect.bottom = rect.top + heightname; //y+height;
+							rect.right = rect.left + widthname;  // x+width;    // Don't state the obvious
+							rect.bottom = rect.top + heightname; // y+height;
 
 							boxRect = rect;//copy rect to boxRect
 
 							InflateRect(&boxRect, 2, 1);//expand boxRect to allow for borders
-							
-							clipRect = boxRect;//copy boxRect to the working surface clipRect
-							//adjust clipRect to fit on the screen
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, boxRect);
 							//color clipRect BLACK
 							primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK));
-							
+
 							InflateRect(&boxRect, 1, 1);//get ready to do borders (clipRect - boxRect now= a one pixel border)
 							                            // this is only for the cityname box EMOD note    
 
-							clipRect = boxRect;//copy boxRect to the working surface clipRect
-							//adjust clipRect to fit on the screen
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, boxRect);
 							//color clipRect to be the player's color (this creates the border)
 							primitives_FrameRect16(surf, &clipRect, pixelColor);
 
@@ -3799,19 +3788,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								}
 							}
 
-							//copy rect to clipRect (this is now the interior rectangle that holds the city name)
-							clipRect = rect;
-							//adjust to fit on the screen
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 							//draw the city name
 							m_font->DrawString(surf, &rect, &clipRect, name, 0, nameColor, 0);
 
 							AddDirtyRectToMix(boxRect);
 							
-					//start on the city's pop rectangle
+							///////////////////////////////////////
+							// Start on the city's pop rectangle //
+							///////////////////////////////////////
+							
 							// Put the city's pop in str
 							MBCHAR str[80];
 							sprintf(str,"%i",pop);
@@ -3837,13 +3823,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								pixelColor = g_colorSet->GetPlayerColor(owner);
 							}
 
-							// Copy popRect to the working surface clipRect
-							clipRect = popRect;
-							// Adjust clipRect's screen location
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, popRect);
 
 							// Prevent Asserts in primitives_PaintRect16 when moving the mouse 
 							if (clipRect.right < clipRect.left) clipRect.right = clipRect.left;
@@ -3864,12 +3844,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 											height/2);
 
 
-							// Copy rect to clipRect (and adjust screen location)
-							clipRect = rect;
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 							// Draw the pop number in black
 							m_font->DrawString(surf, &rect, &clipRect, str, 
 								0, 
@@ -3878,25 +3853,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 							// Move two pixels right and do it again ? 
 							OffsetRect(&rect, 2, 0);
-							clipRect = rect;
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 							m_font->DrawString(surf, &rect, &clipRect, str, 
-								0, 
-								GetColorRef(COLOR_BLACK),
-								0);
+							                   0, 
+							                   GetColorRef(COLOR_BLACK),
+							                   0);
 
 							// Move one pixel left and do it again ?
 							OffsetRect(&rect, -1, 0);
 
-							clipRect = rect;
-							if (clipRect.left < 0) clipRect.left = 0;
-							if (clipRect.top < 0) clipRect.top = 0;
-							if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-							if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
+							clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 							m_font->DrawString(surf, &rect, &clipRect, str, 
 								0, 
 								GetColorRef(COLOR_WHITE, fog),
@@ -3946,14 +3912,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 									pixelColor = g_colorSet->GetPlayerColor(owner);
 								}
 
-								//copy popRectn to the working surface clipRect
-								clipRect = popRectn;
-								//adjust clipRect's screen location
-								if (clipRect.left < 0) clipRect.left = 0;
-								if (clipRect.top < 0) clipRect.top = 0;
-								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
+								clipRect = primitives_GetScreenAdjustedRectCopy(surf, popRectn);
 								//paint clipRect's surface the proper player color and give it a black frame
 								//emod to differentiate nextpop to match city name
 								primitives_PaintRect16(surf, &clipRect, GetColor(COLOR_BLACK)); //pixelColor);
@@ -3972,12 +3931,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 												height/2);
 
 
-								//copy rect to clipRect (and adjust screen location)
-								clipRect = rect;
-								if (clipRect.left < 0) clipRect.left = 0;
-								if (clipRect.top < 0) clipRect.top = 0;
-								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+								clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 								//draw the nextpop number in black
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
@@ -3986,26 +3940,15 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 								
 								OffsetRect(&rect, 2, 0);
-								clipRect = rect;
-								if (clipRect.left < 0) clipRect.left = 0;
-								if (clipRect.top < 0) clipRect.top = 0;
-								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
+								clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
 									GetColorRef(COLOR_BLACK),
 									0);
 
-								
 								OffsetRect(&rect, -1, 0);
 
-								clipRect = rect;
-
-								if (clipRect.left < 0) clipRect.left = 0;
-								if (clipRect.top < 0) clipRect.top = 0;
-								if (clipRect.right >= surf->Width()) clipRect.right = surf->Width() - 1;
-								if (clipRect.bottom >= surf->Height()) clipRect.bottom = surf->Height() - 1;
-
+								clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
 									0, 
 									GetColorRef(COLOR_WHITE, fog),

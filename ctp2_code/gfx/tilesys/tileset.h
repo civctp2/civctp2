@@ -1,13 +1,36 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Tile set
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_UNISTD_H
+// HAVE_SYS_STAT_H
+// HAVE_SYS_TYPES_H
+// LINUX
+// WIN32
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added new map icon database. (3-Mar-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE 
 #pragma once
@@ -343,7 +366,7 @@ public:
 	uint16			GetMegaTileLength(sint32 megaTileNum) const { return m_megaTileLengths[megaTileNum]; }
 	MegaTileStep	GetMegaTileStep(sint32 megaTileNum, sint32 stepNum) const { return m_megaTileData[megaTileNum][stepNum]; }
 
-	Pixel16			*GetMapIconData(MAPICON icon) { return m_mapIcons[icon]; }
+	Pixel16			*GetMapIconData(sint32 icon) { return m_mapIcons[icon]; }
 	POINT			GetMapIconDimensions(MAPICON icon) { return m_mapIconDimensions[icon]; }
 
 	uint8			ReverseDirection(sint32 dir);
@@ -381,7 +404,7 @@ private:
 	uint16			m_megaTileLengths[k_MAX_MEGATILES];
 	MegaTileStep	m_megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
 	
-	Pixel16			*m_mapIcons[MAPICON_MAX];
+	Pixel16			**m_mapIcons;
 	POINT			m_mapIconDimensions[MAPICON_MAX];
 
 	BOOL			m_quick;

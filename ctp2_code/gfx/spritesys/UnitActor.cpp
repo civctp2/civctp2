@@ -47,6 +47,7 @@
 // - Fixed memory leaks.
 // - added Hidden Nationality check for units 2-21-2007
 // - Added Civilization flag MAPICONS
+// - Added MapIcon database (3-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1273,7 +1274,6 @@ void UnitActor::DrawFortifying(bool fogged)
 //              Does not draw force fields: use DrawForceField for that.
 //
 //----------------------------------------------------------------------------
-
 void UnitActor::DrawCityWalls(bool fogged)
 {
 	TileSet const *	tileSet		= g_tiledMap->GetTileSet();
@@ -1369,7 +1369,6 @@ void UnitActor::DrawCityWalls(bool fogged)
 //              Does not draw walls: use DrawCityWalls for that.
 //
 //----------------------------------------------------------------------------
-
 void UnitActor::DrawForceField(bool fogged)
 {
 	sint32 const	nudgeX	= 
@@ -1718,6 +1717,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 #ifndef _TEST
 	STOMPCHECK();
 #endif
+
 	if (!g_showHeralds) return;
 	if (x < 0) return;
 	if (y < 0) return;
@@ -1727,31 +1727,34 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
-    sint32      displayedOwner;
-    if (    m_unitID.IsValid() 
-         && m_unitID.IsHiddenNationality() 
-         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // do know own units
-       ) 
-    {
-        // Display unit as barbarians
-        displayedOwner  = PLAYER_INDEX_VANDALS;
-    }
-    else
-    {   
-        displayedOwner  = m_playerNum;
-    }
+	sint32 civ;
+	Pixel16 color;
+	// Hide the unit if it has the hidden nationality atribute
+	if(m_unitID.IsValid()
+	&& m_unitID.IsHiddenNationlity()
+	&& m_playerNum != g_selected_item->GetVisiblePlayer()
+	){
+		civ = g_player[PLAYER_INDEX_VANDALS]->m_civilisation->GetCivilisation();
+		color = g_colorSet->GetPlayerColor(PLAYER_INDEX_VANDALS);
+	} 
+	else // You want to spot your own units
+	{
+		civ = g_player[m_playerNum]->m_civilisation->GetCivilisation();
+		color = g_colorSet->GetPlayerColor(m_playerNum);
+	}
 
-	Pixel16		color   = g_colorSet->GetPlayerColor(displayedOwner);
-
-	if (g_theProfileDB->IsCivFlags()) 
-    { 
-		// Display civilisation flag
-        CIV_INDEX   civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
-		MAPICON     civicon = static_cast<MAPICON>(MAPICON_CIVFLAG_0 + civ);
+	// Add civilization flags here - moved flags here and edited the 
+	// heralds to put numbers on national flags emod 2-21-2007
+	sint32 civicon = 0;
+	if(g_theProfileDB->IsCivFlags()
+	&& g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
+	{
 		g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, color);
 	}
 
 	MAPICON		icon = MAPICON_HERALD;
+	// ToDo: Replace by drawn numbers
+	// than we can remove these extra icons
 	if (stack > 1 && stack <= 9) {
 		icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
 	} else if(stack >= 10 && stack <= 12) {

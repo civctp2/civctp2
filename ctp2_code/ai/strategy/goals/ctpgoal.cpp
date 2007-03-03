@@ -1114,13 +1114,9 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 GOAL_RESULT CTPGoal::Execute_Task()
 {
-	
-
-	
 	if (Get_Totally_Complete())
 		return GOAL_COMPLETE;
 
-	
 	if (Can_Be_Executed() == false)
 		return GOAL_ALREADY_MOVED;
 
@@ -1142,10 +1138,8 @@ GOAL_RESULT CTPGoal::Execute_Task()
 		                          && m_current_attacking_strength.Get_Agent_Count() > (2*k_MAX_ARMY_SIZE/3);
     if (Is_Satisfied() || Is_Execute_Incrementally() || hastogowithoutgrouping) 
     {
-	
 		if (goal_record->GetRallyFirst()) 
 		{
-			
 			if ( !RallyComplete() )
             {
                 Set_Sub_Task(SUB_TASK_RALLY);
@@ -1154,7 +1148,6 @@ GOAL_RESULT CTPGoal::Execute_Task()
 			if (Goal_Too_Expensive() == true)
 				return GOAL_FAILED;
 
-			
 			if ( Ok_To_Rally() )
 			{
 				if ( RallyTroops() == false)
@@ -1163,64 +1156,60 @@ GOAL_RESULT CTPGoal::Execute_Task()
 				// If hastogowithoutgrouping is true, execute the goal 
 				// even if the rally is not complete
 				if (RallyComplete() == false)
+				{
 					return GOAL_IN_PROGRESS;
+				}
 				else
 				{
 					Set_Sub_Task(SUB_TASK_GOAL);
 				}
 			}
 		}
-	
-	
 
-//Added an Ungroup method (sometimes, for example to explore, it is more interessant
-//to have a lot of small units rather than a huge army	
+		// Added an Ungroup method (sometimes, for example to explore, 
+		// it is more interessant to have a lot of small units rather 
+		// than a huge army	
 		else if (goal_record->GetUnGroupFirst()) 
 		{
-
 				Set_Sub_Task(SUB_TASK_UNGROUP);
 				if ( UnGroupTroops() == false)
+				{
 					return GOAL_FAILED;
+				}
 
-				
 				if (UnGroupComplete() == false)
+				{
 					return GOAL_IN_PROGRESS;
+				}
 				else
 				{
 					Set_Sub_Task(SUB_TASK_GOAL);
 				}
 		}
-/*        else
+/*		else
         {
             Set_Sub_Task(SUB_TASK_GOAL);
         }*/
-        Agent_List::iterator agent_iter;
+
+		Agent_List::iterator agent_iter;
         for (agent_iter = m_agents.begin(); agent_iter != m_agents.end();agent_iter++) 
 		{
-			
-			
 			ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
 
-			
-			if (ctpagent_ptr->Get_Is_Dead() == true)
+			if (ctpagent_ptr->Get_Is_Dead())
 				continue;
 
-			
-			if (ctpagent_ptr->Get_Can_Be_Executed() == false)
+			if (!ctpagent_ptr->Get_Can_Be_Executed())
 				continue;
 
-			if (GotoGoalTaskSolution(ctpagent_ptr, goto_pos, m_sub_task) == false)
+			if (!GotoGoalTaskSolution(ctpagent_ptr, goto_pos, m_sub_task))
 			{
-					
-					
-					
-					if (Needs_Transport())
-						return GOAL_NEEDS_TRANSPORT;
-					else
-						return GOAL_FAILED;
-				}
+				if (Needs_Transport())
+					return GOAL_NEEDS_TRANSPORT;
+				else
+					return GOAL_FAILED;
+			}
 		} 
-		
     } 
 	
     return GOAL_IN_PROGRESS;
