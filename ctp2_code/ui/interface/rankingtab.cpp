@@ -27,12 +27,14 @@
 // - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Redesigned constructor, fixed possible crash. (June 5th 2006 Martin Gühmann)
+// - Repaired crashes and memory leaks
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "rankingtab.h"
 
+#include <algorithm>            // std::fill
 #include "aui_ldl.h"
 #include "aui_stringtable.h"
 #include "aui_uniqueid.h"
@@ -48,6 +50,7 @@
 #include "gstypes.h"
 #include "infowin.h"
 #include "linegraph.h"
+#include <memory>               // std::auto_ptr
 #include "player.h"
 #include "StrDB.h"              // g_theStringDB
 #include "Strengths.h"
@@ -56,9 +59,6 @@
 
 extern C3UI *g_c3ui;
 extern PointerList<Player>      *g_deadPlayer;
-
-static aui_StringTable	*s_stringTable;
-
 
 static sint32			s_minRound = 0;
 
@@ -69,7 +69,8 @@ RankingTab * RankingTab::s_current_ranking_tab = NULL;
 
 
 RankingTab::RankingTab(ctp2_Window *parent)
-:   m_line_graph         (true), // Has to be set again
+:   
+    m_line_graph         (true), // Has to be set again
     m_infoGraph          (static_cast<LineGraph *>(aui_Ldl::GetObject(
                           "InfoDialog", "TabGroup.Tab3.TabPanel.InfoGraph"))),
     m_infoGraphData      (NULL),
@@ -87,9 +88,8 @@ RankingTab::RankingTab(ctp2_Window *parent)
 //  m_rankingPollution   (0), // Initialized seperately
 //  m_rankingOverall     (0), // Initialized seperately
 {
-
 	Assert(m_rankingDropDown);
-	m_rankingDropDown->SetActionFuncAndCookie(SelectRankingActionCallback, m_info_window);
+	m_rankingDropDown->SetActionFuncAndCookie(SelectRankingActionCallback, parent);
 	m_rankingDropDown->Clear();
 
 	uint32 counter = 0;
@@ -121,20 +121,20 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	Assert( m_infoPlayerList );
 	m_infoPlayerList->GetHeader()->Enable( FALSE );
 
-	s_current_ranking_tab = this;
-
 	LoadData();
+
+	if (!s_current_ranking_tab)
+    {
+        s_current_ranking_tab = this;
+    }
 }
 
 
 void RankingTab::Add_Dropdown_Category(char * category)
 {
 	
-	ctp2_ListItem *listItem = NULL;
-
-	
-	listItem = static_cast<ctp2_ListItem*>(
-		aui_Ldl::BuildHierarchyFromRoot("RankingListItem"));
+	ctp2_ListItem * listItem = 
+        static_cast<ctp2_ListItem*>(aui_Ldl::BuildHierarchyFromRoot("RankingListItem"));
 
 	
 	ctp2_Static *label = static_cast<ctp2_Static*>(
@@ -255,120 +255,86 @@ void RankingTab::UpdateGraph()
 }
 
 
-sint32 SetupRankingGraph(
+sint32 SetupRankingGraph
+(
 	LineGraph * pInfoGraph, 
-	double ***pInfoGraphData,
-	sint32 category)
+	double ***  pInfoGraphData,
+	sint32      category
+)
 {
+    if (!pInfoGraph) return 0;
 
-	sint32 i = 0;
-	sint32 j = 0;
-	sint32 infoXCount = 0;
-	sint32 infoYCount = 0;
-	double **infoGraphData;
+    AUI_ERRCODE                     errcode     = AUI_ERRCODE_OK;
+    std::auto_ptr<aui_StringTable>  stringTable (new aui_StringTable(&errcode, "InfoStrings"));
 
-
-	
-	if (!pInfoGraph) return infoYCount;
-
-	sint32 maxPlayers = k_MAX_PLAYERS + g_deadPlayer->GetCount();
-	sint32 *color = new sint32[maxPlayers];
-
-	
-	
-	
-	
-	
-	
-	
-	BOOL dumpStrings = FALSE;
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-
-	if (!s_stringTable) {
-		s_stringTable = new aui_StringTable( &errcode, "InfoStrings" );
-		Assert( AUI_NEWOK(s_stringTable, errcode) );
-		if ( !AUI_NEWOK(s_stringTable, errcode) ) return infoYCount;
-
-		dumpStrings = TRUE;
-	}
-
-	
-	pInfoGraph->SetXAxisName(s_stringTable->GetString(6));	
+	pInfoGraph->SetXAxisName(stringTable->GetString(6));	
 	pInfoGraph->SetYAxisName("Power");
 
-	
 	double minRound = s_minRound;
 	double curRound = g_turn->GetRound();
 	double minPower = 0;
 	double maxPower = 10;
 	pInfoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
 
-	
 	pInfoGraph->HasIndicator(FALSE);
-
 	
 
-	
+    sint32      maxPlayers      = k_MAX_PLAYERS + g_deadPlayer->GetCount();
+    sint32 *    color       = new sint32[maxPlayers];
+
+    sint32      infoYCount  = 0;
+    sint32      i;
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
 		{
-			
-			color[infoYCount] = g_colorSet->ComputePlayerColor(i);
-			infoYCount++;
+			color[infoYCount++] = g_colorSet->ComputePlayerColor(i);
 		}
 	}
 	
-	
-	PointerList<Player>::Walker walk(g_deadPlayer);
-	while(walk.IsValid()) {
-		
-		color[infoYCount] = g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
-		infoYCount++;
-		walk.Next();
-	}
+    for
+    (
+        PointerList<Player>::Walker walk(g_deadPlayer);
+	  walk.IsValid();
+        walk.Next()
+    ) 
+    {
+        color[infoYCount++] = g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
+    }
 
-	infoXCount = (sint32)curRound - (sint32)minRound;
 
-	
-	if (!infoXCount) 
-	{
-		delete [] color;
-		
-		pInfoGraph->RenderGraph();
-		return infoYCount;
-	}
+    sint32 infoXCount = (sint32)curRound - (sint32)minRound;
+    if (infoXCount == 0) 
+    {
+        pInfoGraph->RenderGraph();
 
-	
-	if (infoYCount <= 0)
-		infoYCount = 1;
+        delete [] color;
 
-	infoGraphData = new double *[infoYCount];
+        return infoYCount;
+    }
+    else
+    {
+        infoXCount = std::max<sint32>(1, infoXCount);
+    }
+
+    infoYCount = std::max<sint32>(1, infoYCount);
+
+	double **infoGraphData = new double *[infoYCount];
 	*pInfoGraphData = infoGraphData;
 
-	if (infoXCount <= 0)
-		infoXCount = 1;
+    for (i = 0 ; i < infoYCount; i++)
+    {
+        infoGraphData[i] = new double[infoXCount];
+        std::fill(infoGraphData[i], infoGraphData[i] + infoXCount, 0);
+    }
 
-	for ( i = 0 ; i < infoYCount ; i++ )
-		infoGraphData[i] = new double[infoXCount];
-
-	
-	for ( i = 0 ; i < infoYCount ; i++ )
-	{
-		for ( j = 0 ; j < infoXCount ; j++ )
-			infoGraphData[i][j] = 0;
-	}
-
-
-
-	
 	sint32 playerCount = 0;
 	sint32 strValue = 0;
 	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 	{
 		if (g_player[i] && (i != PLAYER_INDEX_VANDALS)) 
 		{
-			for ( j = 0 ; j < infoXCount ; j++ )
+			for (int j = 0 ; j < infoXCount ; j++ )
 			{
 				strValue = 0;
 
@@ -424,11 +390,14 @@ sint32 SetupRankingGraph(
 	}
 
 	
-	PointerList<Player>::Walker walk2(g_deadPlayer);
-	
-	while (walk2.IsValid()) 
+	for 
+    (
+        PointerList<Player>::Walker walk2(g_deadPlayer);
+	    walk2.IsValid();
+        walk2.Next()
+    )
 	{
-		for ( j = 0 ; j < infoXCount ; j++ )
+		for (int j = 0 ; j < infoXCount ; j++ )
 		{
 			strValue = 0;
 
@@ -480,110 +449,92 @@ sint32 SetupRankingGraph(
 		}
 		
 		playerCount++;
-		walk2.Next();
 	}
 
 	
 	Assert(playerCount == infoYCount);
 
-	
 	pInfoGraph->SetLineData(infoYCount, infoXCount, infoGraphData, color);
-	
-	
 	pInfoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
 
-	
 	pInfoGraph->RenderGraph();
-	
-	delete [] color;
 
-	
-	
-	
-	
-	if (dumpStrings) {
-		delete s_stringTable;
-		s_stringTable = NULL;
-	}
-	return infoYCount;
+    delete [] color;
+
+    return infoYCount;
 }
 
 
 void RankingTab::UpdatePlayerList( void )
 {
+	m_infoPlayerList->Clear();
 
+	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	strcpy(ldlBlock, "InfoPlayerListItem");
 	
 	AUI_ERRCODE	retval;
-	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR strbuf[256];
 
-	
-	m_infoPlayerList->Clear();
-	strcpy(ldlBlock,"InfoPlayerListItem");
-	InfoPlayerListItem *pItem = NULL;
+    sint32 color = 0;
 
 	
-	
-	sint32 color = 0;
-
-	
-	LineGraphData *myData = m_infoGraph->GetData();
+	LineGraphData * myData = m_infoGraph->GetData();
 
 	
 	sint32 lineIndex = 0;
-
-	
-	Player *p = NULL;
-	Civilisation *civ = NULL;
-
-	
-	for ( sint32 i = 0 ; i < k_MAX_PLAYERS ; i++ )
+	for (sint32 i = 1 ; i < k_MAX_PLAYERS ; i++)
 	{
-		
-		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
+		Player * p = g_player[i];
+
+		if (p)
 		{
-			
-			if (!myData)
+			if (myData)
+            {
+			    color = myData[lineIndex++].color;
+            }
+            else
+            {
 				color = (sint32)g_colorSet->ComputePlayerColor(i);
-			else color = myData[lineIndex++].color;
+            }
 
-			
-			p = g_player[i];
-			if (!p) continue;
-
-			civ = p->GetCivilisation();
-			if (civ != NULL && g_theCivilisationPool->IsValid(*civ)) {
+			Civilisation * civ = p->GetCivilisation();
+			if (civ && g_theCivilisationPool->IsValid(*civ)) 
+            {
 				civ->GetSingularCivName(strbuf);
-
-				pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
-				m_infoPlayerList->AddItem((c3_ListItem *)pItem);
+				m_infoPlayerList->AddItem
+                    (new InfoPlayerListItem(&retval, strbuf, color, ldlBlock));
 			}
 		}
 	}
 
-	
-	PointerList<Player>::Walker walk(g_deadPlayer);
+	for
+    (
+	    PointerList<Player>::Walker walk(g_deadPlayer);
+        walk.IsValid();
+        walk.Next()
+    )
+	{
+		Player * p = walk.GetObj();
+		if (p) 
+        {
+		    if (myData)
+            {
+                color = myData[lineIndex++].color;
+            }
+		    else 
+            {
+			    color = (sint32) g_colorSet->ComputePlayerColor(p->GetOwner());
+            }
 
-	while(walk.IsValid()) {
-		
-		if (!myData)
-			color = (sint32)g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
-		else color = myData[lineIndex++].color;
-
-		
-		p = walk.GetObj();
-		if (p) {
-			civ = p->GetCivilisation();
-			if (civ != NULL && g_theCivilisationPool->IsValid(*civ)) {
+		    Civilisation * civ = p->GetCivilisation();
+			if (civ  && g_theCivilisationPool->IsValid(*civ)) 
+            {
 				civ->GetSingularCivName(strbuf);
-
-				pItem = new InfoPlayerListItem(&retval, strbuf, color, ldlBlock); 
-				m_infoPlayerList->AddItem((c3_ListItem *)pItem);
+				m_infoPlayerList->AddItem
+                    (new InfoPlayerListItem(&retval, strbuf, color, ldlBlock));
 			}
 		}
-		walk.Next();
 	}
-
 }
 
 
@@ -591,7 +542,6 @@ void RankingTab::UpdatePlayerList( void )
 void RankingTab::SelectRankingActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
 
@@ -599,40 +549,6 @@ void RankingTab::SelectRankingActionCallback(aui_Control *control,
 	{
 		s_current_ranking_tab->UpdateGraph();
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -640,18 +556,23 @@ void RankingTab::SelectRankingActionCallback(aui_Control *control,
 void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
-	s_current_ranking_tab->SetLineGraph( s_current_ranking_tab->m_line_graph ? false : true);
-
-	s_current_ranking_tab->UpdateGraph();
+    if (s_current_ranking_tab)
+    {
+	    s_current_ranking_tab->SetLineGraph(!s_current_ranking_tab->m_line_graph);
+    	s_current_ranking_tab->UpdateGraph();
+    }
 }
 
 
 RankingTab::~RankingTab(void)
 {
+    if (this == s_current_ranking_tab)
+    {
+        s_current_ranking_tab = NULL;
+    }
+
 	CleanupGraph();
 }
