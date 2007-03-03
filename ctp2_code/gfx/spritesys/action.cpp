@@ -1,49 +1,56 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Action on the screen
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//----------------------------------------------------------------------------
+///
+/// \file   Action.cpp
+/// \brief  Action on the screen
 
 #include "c3.h"
-
-#include "pixelutils.h"
-#include "spriteutils.h"
-
-#include "Actor.h"
-#include "Unit.h"
-#include "Anim.h"
-#include "ActorPath.h"
 #include "Action.h"
-#include "director.h"
+
+#include "ActorPath.h"
+#include "Anim.h"
 #include "UnitActor.h"
-#include "tech_wllist.h"
-
-#include "EffectActor.h"
-#include "profileDB.h"
+#if 0
+#include "Actor.h"
 #include "debugmemory.h"
+#include "director.h"       // g_director
+#include "EffectActor.h"
+#include "pixelutils.h"
+#include "profileDB.h"      // g_theProfileDB
+#include "spriteutils.h"
+#include "tech_wllist.h"
+#include "Unit.h"
+#endif
 
-extern ProfileDB		*g_theProfileDB;
-extern Director			*g_director;
-extern double			g_ave_frame_rate;
-extern double			g_ave_frame_time;
-
-
-
-
-
-
-
-#define STOMPCHECK() ;
+#define STOMPCHECK()
 
 
-
-
-
-Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, BOOL specialDelayProcess)
+Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, sint32 specialDelayProcess)
 :
     m_actionType                (actionType),
     m_endCondition              (endCondition),
@@ -56,9 +63,9 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, B
 	m_animElapsed               (0),
 	m_animLastFrameTime         (0),
 	m_delay                     (0), 
-	m_itIsTimeToAct             (FALSE), 
-	m_finished                  (FALSE), 
-	m_loopAnimFinished          (FALSE), 
+	m_itIsTimeToAct             (false), 
+	m_finished                  (false), 
+	m_loopAnimFinished          (false), 
 	m_specialDelayProcess       (specialDelayProcess), 
     m_startMapPoint             (),
 	m_endMapPoint               (),
@@ -74,7 +81,46 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, B
     m_sequence                  (NULL)
 { ; }
 
+Action::Action(Action const & a_Original)
+:
+    m_actionType                (a_Original.m_actionType),
+    m_endCondition              (a_Original.m_endCondition),
+	m_curAnim                   (NULL),
+	m_curPath                   (NULL),
+	m_maxActionCounter          (a_Original.m_maxActionCounter),
+	m_curActionCounter          (a_Original.m_curActionCounter),
+	m_animPos                   (a_Original.m_animPos), 
+	m_animDelayEnd              (a_Original.m_animDelayEnd),
+	m_animElapsed               (a_Original.m_animElapsed),
+	m_animLastFrameTime         (a_Original.m_animLastFrameTime),
+	m_delay                     (a_Original.m_delay), 
+	m_itIsTimeToAct             (a_Original.m_itIsTimeToAct), 
+	m_finished                  (a_Original.m_finished), 
+	m_loopAnimFinished          (a_Original.m_loopAnimFinished), 
+	m_specialDelayProcess       (a_Original.m_specialDelayProcess), 
+    m_startMapPoint             (a_Original.m_startMapPoint),
+	m_endMapPoint               (a_Original.m_endMapPoint),
+	m_facing                    (a_Original.m_facing),
+	m_sound_effect_id           (a_Original.m_sound_effect_id), 
+	m_unitsVisibility           (a_Original.m_unitsVisibility), 
+	m_unitVisionRange           (a_Original.m_unitVisionRange), 
+	m_numRevealedActors         (a_Original.m_numRevealedActors),
+	m_revealedActors            (NULL),
+	m_moveActors                (NULL), 
+	m_numOActors                (a_Original.m_numOActors), 
+    m_specialUnitEffectsAction  (a_Original.m_specialUnitEffectsAction), 
+    /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
+    m_sequence                  (a_Original.m_sequence)
+{
+    if (a_Original.m_curAnim)
+    {
+        m_curAnim = new Anim(*a_Original.m_curAnim);
+    }
 
+    /// @todo Check copying of m_curPath, m_moveActors, m_revealedActors (NULLed in original code)
+}
+
+/// @todo Remove when no longer used
 Action::Action(Action *copyme)
 {
 	*this = *copyme;
@@ -105,7 +151,7 @@ void Action::Process(void)
 
 	if (!m_curAnim)
     {
-        SetFinished(TRUE);
+        SetFinished(true);
         return;
     }
 	
@@ -125,15 +171,10 @@ void Action::Process(void)
 
 
 	
-	
-	if(m_curAnim->GetWeAreInDelay() && m_actionType == UNITACTION_IDLE)
-	{
+	m_specialDelayProcess = m_curAnim->GetWeAreInDelay() && (m_actionType == UNITACTION_IDLE);
+	if (m_specialDelayProcess)
+    {
 		m_animPos = 0;
-		m_specialDelayProcess = TRUE;
-	}
-	else
-	{
-		m_specialDelayProcess = FALSE;
 	}
 
 	m_curActionCounter++;
@@ -145,12 +186,12 @@ void Action::Process(void)
 	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished()) 
 	{
 		m_curActionCounter = m_maxActionCounter;
-		m_loopAnimFinished = TRUE;
+		m_loopAnimFinished = true;
 
 		if ( m_endCondition == ACTIONEND_ANIMEND ||
 			m_endCondition == ACTIONEND_PATHEND )
 		{
-			SetFinished(TRUE);
+			SetFinished(true);
 		}
 	}
 
@@ -158,12 +199,6 @@ void Action::Process(void)
 
 void Action::Process(Action *pendingAction)
 {
-	
-	
-	
-
-	
-	
 #ifndef _TEST
 	STOMPCHECK();
 #endif
@@ -173,13 +208,13 @@ void Action::Process(Action *pendingAction)
 
 	if (m_endCondition == ACTIONEND_INTERRUPT || Finished())
 	{
-		pendingAction->SetItIsTimeToAct(TRUE);
-		SetFinished(TRUE);
+		pendingAction->SetItIsTimeToAct(true);
+		SetFinished(true);
 	}
+
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-
 }
 
 void Action::SetAnim(Anim *anim)
@@ -191,27 +226,15 @@ void Action::SetAnim(Anim *anim)
 //	Assert(anim != NULL);
 	if (anim == NULL) return;
 
-	anim->SetFinished(FALSE);
+	anim->SetFinished(false);
 
-
-
-
-
-
-
-
-
-
-
-
-
-	m_maxActionCounter = anim->GetNumFrames();
+    m_maxActionCounter = anim->GetNumFrames();
 
 	m_curAnim = anim;
+
 #ifndef _TEST
 	STOMPCHECK();
 #endif
-
 }
 
 void Action::CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
@@ -220,14 +243,8 @@ void Action::CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
 	STOMPCHECK();
 #endif
 
-	if (m_curPath != NULL) 
-		delete m_curPath;
-
-	ActorPath	*path = new ActorPath(x1, y1, x2, y2);
-
-	m_curPath = path;
-
-
+	delete m_curPath;
+	m_curPath = new ActorPath(x1, y1, x2, y2);
 
 	m_maxActionCounter = k_MAX_UNIT_MOVEMENT_ITERATIONS;
 
@@ -237,22 +254,19 @@ void Action::CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
 
 }
 
-POINT Action::GetPosition(void)
+POINT Action::GetPosition(void) const
 {
-#ifndef _TEST
-
-#endif
-
 	POINT pos = {0,0};
 
-	if (m_curPath == NULL)
-		return pos;
+	if (m_curPath)
+    {
+    	m_curPath->CalcPosition(0, m_maxActionCounter, m_curActionCounter, &pos);
+    }
 
-	m_curPath->CalcPosition(0, m_maxActionCounter, m_curActionCounter, &pos);
 	return pos;
 }
 
-uint16 Action::GetSpriteFrame(void)
+uint16 Action::GetSpriteFrame(void) const
 {
 	uint16 frame;
 	
@@ -270,7 +284,7 @@ uint16 Action::GetSpriteFrame(void)
 	return frame;
 }
 
-sint32 Action::GetFacing(void) 
+sint32 Action::GetFacing(void)
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -285,7 +299,7 @@ sint32 Action::GetFacing(void)
 	return m_facing;
 }
 
-uint16 Action::GetTransparency(void)
+uint16 Action::GetTransparency(void) const
 {
 #ifndef _TEST
 	STOMPCHECK();
