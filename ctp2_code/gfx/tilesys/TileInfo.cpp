@@ -58,7 +58,7 @@ TileInfo::TileInfo()
     m_riverPiece    (-1),
     m_megaInfo      (0),
     m_terrainType   (0),
-    m_transform     (rand() % 256),
+    m_transform     (static_cast<uint8>(rand() % 256)),
     m_tileNum       (0),
     m_goodActor     (NULL)
 {
@@ -72,7 +72,7 @@ TileInfo::TileInfo(TileInfo *copy)
 
 	if (copy->m_goodActor) 
     {
-		m_goodActor = new GoodActor(copy->m_goodActor);
+		m_goodActor = new GoodActor(*copy->m_goodActor);
 	}
     // else: already set in *this = *copy;
 }
