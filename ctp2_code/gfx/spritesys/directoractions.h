@@ -36,8 +36,8 @@
 #pragma once
 #endif
 
-#ifndef __DIRECTORACTIONS_H__
-#define __DIRECTORACTIONS_H__
+#ifndef DIRECTORACTIONS_H__
+#define DIRECTORACTIONS_H__
 
 //----------------------------------------------------------------------------
 //
@@ -118,7 +118,18 @@ public:
 class DQActionMove : public DQAction
 {
 public:
-	DQActionMove() {}
+	DQActionMove() 
+    :
+        DQAction        (),
+        move_actor      (NULL),
+        move_oldPos     (),
+        move_newPos     (),
+        moveArraySize   (0),
+        moveActors      (NULL),
+        numRevealed     (0),
+        revealedActors  (NULL),
+        move_soundID    (CTPRecord::INDEX_INVALID)
+    {};
 
 	UnitActor					*move_actor;
 	MapPoint					move_oldPos;
@@ -157,7 +168,18 @@ public:
 class DQActionAttack : public DQAction
 {
 public:
-	DQActionAttack() {}
+	DQActionAttack() 
+    :
+        DQAction        (),
+        attacker        (NULL),
+        defender        (NULL),
+        attacker_Pos    (),
+        defender_Pos    (),
+        attacker_ID     (0),
+        defender_ID     (0),
+        attacker_IsCity (false),
+        defender_IsCity (false)
+    {};
 
 	UnitActor					*attacker;
 	UnitActor					*defender;
@@ -172,7 +194,14 @@ public:
 class DQActionAttackPos : public DQAction
 {
 public:
-	DQActionAttackPos() {}
+	DQActionAttackPos() 
+    :
+        DQAction                (),
+        attackpos_attacker      (NULL),
+        attackpos_attacker_pos  (),
+        attackpos_target_pos    (),
+        attackpos_soundID       (CTPRecord::INDEX_INVALID)
+    {};
 
 	UnitActor					*attackpos_attacker;
 	MapPoint					attackpos_attacker_pos;
@@ -200,7 +229,18 @@ public:
 class DQActionDeath : public DQAction
 {
 public:
-	DQActionDeath() {}
+	DQActionDeath()
+    :
+        DQAction            (),
+        death_dead          (NULL),
+        death_victor        (NULL),
+        dead_id             (0),
+        victor_id           (0),
+        victor_Pos          (),
+        dead_Pos            (),
+        dead_soundID        (CTPRecord::INDEX_INVALID),
+        victor_soundID      (CTPRecord::INDEX_INVALID)
+    {};
 
 	UnitActor					*death_dead;
 	UnitActor					*death_victor;
@@ -215,7 +255,14 @@ public:
 class DQActionMorph : public DQAction
 {
 public:
-	DQActionMorph() {}
+	DQActionMorph() 
+    :
+        DQAction        (),
+        morphing_actor  (NULL),
+        ss              (NULL),
+        type            (0),
+        id              ()
+    {};
 
 	UnitActor					*morphing_actor;
 	SpriteState					*ss;
@@ -226,29 +273,44 @@ public:
 class DQActionHideShow : public DQAction
 {
 public:
-	DQActionHideShow() {}
+	DQActionHideShow() 
+    :
+        DQAction        (),
+        hiding_actor    (NULL),
+        hiding_pos      ()
+    {}
 
-	UnitActor					*hiding_actor;
-	MapPoint					hiding_pos;
+	UnitActor *     hiding_actor;
+	MapPoint		hiding_pos;
 };
 
 class DQActionWork : public DQAction
 {
 public:
-	DQActionWork() {}
+	DQActionWork() 
+    :
+        DQAction        (),
+        working_actor   (NULL),
+        working_pos     (),
+        working_soundID (CTPRecord::INDEX_INVALID)
+    {};
 
-	UnitActor					*working_actor;
-	MapPoint					working_pos;
-	sint32						working_soundID;
+	UnitActor*      working_actor;
+	MapPoint		working_pos;
+	sint32			working_soundID;
 
 };
 
 class DQActionFastKill : public DQAction
 {
 public:
-	DQActionFastKill() {}
+	DQActionFastKill() 
+    :
+        DQAction    (),
+        dead        (NULL)
+    {};
 
-	UnitActor					*dead;
+	UnitActor *     dead;
 };
 
 class DQActionVision : public DQAction
@@ -256,35 +318,49 @@ class DQActionVision : public DQAction
 public:
 	DQActionVision() {}
 
-	MapPoint					vision_pos;
-	double						vision_range;
+	MapPoint		vision_pos;
+	double			vision_range;
 };
 
 class DQActionSetOwner : public DQAction
 {
 public:
-	DQActionSetOwner() {}
+	DQActionSetOwner() 
+    :
+        DQAction        (),
+        setowner_actor  (NULL),
+        owner           (PLAYER_UNASSIGNED)
+    {};
 
-	UnitActor					*setowner_actor;
-	sint32						owner;
+	UnitActor *     setowner_actor;
+	sint32			owner;
 };
 
 class DQActionSetVisibility : public DQAction
 {
 public:
-	DQActionSetVisibility() {}
+	DQActionSetVisibility() 
+    :
+        DQAction            (),
+        setvisibility_actor (NULL),
+        visibilityFlag      (0)
+    {};
 
-	UnitActor					*setvisibility_actor;
-	uint32						visibilityFlag;
+	UnitActor *     setvisibility_actor;
+	uint32			visibilityFlag;
 };
 
 class DQActionSetVisionRange : public DQAction
 {
 public:
-	DQActionSetVisionRange() {}
+	DQActionSetVisionRange() 
+    :
+        DQAction                (),
+        setvisionrange_actor    (NULL)
+    {}
 
-	UnitActor					*setvisionrange_actor;
-	double						range;
+	UnitActor *     setvisionrange_actor;
+	double			range;
 };
 
 class DQActionCombatFlash : public DQAction
@@ -349,7 +425,11 @@ public:
 class DQActionBattle : public DQAction
 {
 public:
-	DQActionBattle() {}
+	DQActionBattle()
+    :
+        DQAction        (),
+        battle          (NULL)
+    {};
 	~DQActionBattle() {}
 
 	Battle						*battle;
@@ -358,8 +438,13 @@ public:
 class DQActionPlaySound : public DQAction
 {
 public:
-	DQActionPlaySound() {}
-	~DQActionPlaySound() {}
+	DQActionPlaySound() 
+    :
+        DQAction            (),
+        playsound_soundID   (CTPRecord::INDEX_INVALID),
+        playsound_pos       ()
+    {};
+	~DQActionPlaySound() {};
 
 	sint32						playsound_soundID;
 	MapPoint					playsound_pos;
@@ -395,22 +480,33 @@ public:
 class DQActionFaceoff : public DQAction
 {
 public:
-	DQActionFaceoff() {}
+	DQActionFaceoff() 
+    :
+        DQAction                (),
+        faceoff_attacker        (NULL),
+        faceoff_attacker_pos    (),
+        faceoff_attacked        (NULL),
+        faceoff_attacked_pos    ()
+    {};
 	~DQActionFaceoff() {}
 
-	UnitActor					*faceoff_attacker;
-	MapPoint					faceoff_attacker_pos;
-	UnitActor					*faceoff_attacked;
-	MapPoint					faceoff_attacked_pos;
+	UnitActor *     faceoff_attacker;
+	MapPoint	    faceoff_attacker_pos;
+	UnitActor *     faceoff_attacked;
+	MapPoint	    faceoff_attacked_pos;
 };
 
 class DQActionTerminateFaceOff : public DQAction
 {
 public:
-	DQActionTerminateFaceOff() {}
+	DQActionTerminateFaceOff() 
+    :
+        DQAction    (),
+        faceroffer  (NULL)
+    {};
 	~DQActionTerminateFaceOff() {}
 
-	UnitActor					*faceroffer;
+	UnitActor *     faceroffer;
 };
 
 class DQActionTerminateSound : public DQAction
@@ -419,7 +515,7 @@ public:
 	DQActionTerminateSound() {}
 	~DQActionTerminateSound() {}
 
-	Unit						terminate_sound_unit;
+	Unit            terminate_sound_unit;
 };
 
 class DQActionInvokeThroneRoom : public DQAction
@@ -432,10 +528,14 @@ public:
 class DQActionInvokeResearchAdvance : public DQAction
 {
 public:
-	DQActionInvokeResearchAdvance() {}
-	~DQActionInvokeResearchAdvance() {}
+	DQActionInvokeResearchAdvance() 
+    :
+        DQAction    (),
+        message     (NULL)
+    {}
+	~DQActionInvokeResearchAdvance();
 
-	MBCHAR						*message;
+	MBCHAR *        message;
 };
 
 

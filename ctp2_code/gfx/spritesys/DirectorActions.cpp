@@ -36,6 +36,11 @@
 
 #include "EffectActor.h"        // EffectActor destructor
 
+DQActionInvokeResearchAdvance::~DQActionInvokeResearchAdvance()
+{
+    delete [] message;
+}
+
 DQActionMoveProjectile::DQActionMoveProjectile()
 :
     pshooting_actor     (NULL),
@@ -53,4 +58,5 @@ DQActionMoveProjectile::~DQActionMoveProjectile()
     // ptarget_actor    : reference only
     delete end_projectile;
 }
+
 
