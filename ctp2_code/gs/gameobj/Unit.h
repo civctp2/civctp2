@@ -798,7 +798,7 @@ public:
 	bool IsReligion8() const;
 	bool IsReligion9() const;
 	bool IsReligion10() const;
-	bool IsHiddenNationlity() const;  //emod for barb color 2-7-2009
+	bool IsHiddenNationality() const;  //emod for barb color 2-7-2009
 };
 
 uint32 Unit_Unit_GetVersion(void);

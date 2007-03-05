@@ -2641,7 +2641,8 @@ bool Unit::IsReligion10() const
 {
 	return GetData()->IsReligion10();
 }
-bool Unit::IsHiddenNationlity() const //emod to map to unit actor andmake color same as barbarians
+
+bool Unit::IsHiddenNationality() const //emod to map to unit actor andmake color same as barbarians
 {
 	return GetDBRec()->GetHiddenNationality();
 }

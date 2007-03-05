@@ -61,7 +61,7 @@
 #include "cellunitlist.h"
 #include "CityStyleRecord.h"
 #include "Civilisation.h"
-#include "colorset.h"
+#include "colorset.h"           // g_colorset
 #include "CTPRecord.h"
 #include "debugmemory.h"
 #include "director.h"           // g_director
@@ -1727,30 +1727,34 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
-	sint32 civ;
-	Pixel16 color;
-	// Hide the unit if it has the hidden nationality atribute
-	if(m_unitID.IsValid()
-	&& m_unitID.IsHiddenNationlity()
-	&& m_playerNum != g_selected_item->GetVisiblePlayer()
-	){
-		civ = g_player[PLAYER_INDEX_VANDALS]->m_civilisation->GetCivilisation();
-		color = g_colorSet->GetPlayerColor(PLAYER_INDEX_VANDALS);
-	} 
-	else // You want to spot your own units
-	{
-		civ = g_player[m_playerNum]->m_civilisation->GetCivilisation();
-		color = g_colorSet->GetPlayerColor(m_playerNum);
-	}
+    sint32      displayedOwner;
+    if (    m_unitID.IsValid() 
+         && m_unitID.IsHiddenNationality()
+         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
+       ) 
+    {
+        // Display unit as barbarians
+        displayedOwner  = PLAYER_INDEX_VANDALS;
+    }
+    else
+    {   
+        displayedOwner  = m_playerNum;
+    }
 
-	// Add civilization flags here - moved flags here and edited the 
-	// heralds to put numbers on national flags emod 2-21-2007
-	sint32 civicon = 0;
-	if(g_theProfileDB->IsCivFlags()
-	&& g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
-	{
-		g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, color);
-	}
+    Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
+
+	if (g_theProfileDB->IsCivFlags())
+    {
+	    // Add civilization flags here - moved flags here and edited the 
+	    // heralds to put numbers on national flags emod 2-21-2007
+        sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
+	    sint32  civicon = 0;
+
+        if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
+	    {
+		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, displayedColor);
+	    }
+    }
 
 	MAPICON		icon = MAPICON_HERALD;
 	// ToDo: Replace by drawn numbers
@@ -1761,7 +1765,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 		icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
 	}
 
-	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, color);
+	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, displayedColor);
 
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
@@ -1772,7 +1776,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 		
 		if(m_unitID->GetArmy()->HasCargo()) {
 			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, color);
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
 				y2 += iconDim.y;
 				h += iconDim.y;
@@ -1782,7 +1786,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 
 		if(m_unitID->GetArmy()->Num() > 1) {
 			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ARMY), x2, y2, color);
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ARMY), x2, y2, displayedColor);
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
 				y2 += iconDim.y;
 				h += iconDim.y;
@@ -1792,7 +1796,7 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 
 		if(m_unitID->GetArmy()->HasVeterans()) {
 			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_VETERAN), x2, y2, color);
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_VETERAN), x2, y2, displayedColor);
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_VETERAN);
 				y2 += iconDim.y;
 				h += iconDim.y;
