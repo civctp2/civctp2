@@ -376,9 +376,11 @@ public:
 		first = body;
 	}
 	
-	void Set(SizeT s, void *b) {
+	void Set(size_t s, void * b) 
+    {
+        Assert(s < nf_MAX_PACKETSIZE);
 		memcpy(body, b, s);
-		size = s;
+        size = static_cast<NETFunc::Packet::SizeT>(s);
 		first = body;
 		Unpack();
 	}

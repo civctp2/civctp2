@@ -17,7 +17,7 @@
 class NetChat : public Packetizer
 {
 public:
-	NetChat(uint32 dest, MBCHAR *str, sint16 len);
+	NetChat(uint32 dest, MBCHAR const * str, size_t len);
 	NetChat() { m_str = NULL; m_len = 0; m_destmask = 0; }
 	~NetChat();
 

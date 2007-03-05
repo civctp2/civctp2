@@ -15,20 +15,19 @@
 
 extern Player **g_player;
 
-NetChat::NetChat(uint32 destmask, MBCHAR *str, sint16 len)
+NetChat::NetChat(uint32 destmask, MBCHAR const * str, size_t len)
 {
 	m_destmask = destmask;
 	m_str = new MBCHAR[len+1];
 	memcpy(m_str, str, len * sizeof(MBCHAR));
 	m_str[len] = 0;
-	m_len = len;
+	m_len = static_cast<sint16>(len);
 	m_from = (uint8)g_network.GetPlayerIndex();
 }
 
 NetChat::~NetChat()
 {
-	if(m_str)
-		delete [] m_str;
+	delete [] m_str;
 }
 
 void 

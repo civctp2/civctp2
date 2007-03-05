@@ -63,7 +63,7 @@ NetCity::NetCity(UnitData* unit, BOOL isInitial) :
 	m_unitData(unit) 
 {
 	m_unitId = unit->m_id;
-	m_isInitialPacket = isInitial;
+	m_isInitialPacket = static_cast<uint8>(isInitial);
 }
 
 void NetCity::Packetize(uint8* buf, uint16& size)

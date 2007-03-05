@@ -36,44 +36,33 @@ ActivNetIO::ActivNetIO()
 
 ActivNetIO::~ActivNetIO()
 {
-	uint16 i;
-
-	if(m_name) {
-		delete [] m_name;
-		m_name = NULL;
-	}
+	delete [] m_name;
 
 	if(m_dp) {
 		dpDestroyPlayer(m_dp, m_pid);
 		Idle();
 		dpClose(m_dp);
 		
-		
-		
-
-		int start = time(0);
+		time_t start = time(0);
 		do {
 			Idle();
 		} while(time(0) < start + 3);
 
-
 		dpDestroy(m_dp, 0);
-		m_dp = NULL;
 	}
 
-	while(!m_playerList.IsEmpty()) {
-		AnetPlayerData *pd = m_playerList.RemoveHead();
-		delete pd;
+	while (!m_playerList.IsEmpty()) 
+    {
+		delete m_playerList.RemoveHead();
 	}
 
+    int i;
 	for(i = 0; i < m_transports.GetSize(); i++) {
-		dp_transport_t *trans = (dp_transport_t *)m_transports.Get(i);
-		delete trans;
+		delete (dp_transport_t *)m_transports.Get(i);
 	}
 
 	for(i = 0; i < m_sessions.GetSize(); i++) {
-		dp_session_t *sess = (dp_session_t *)m_sessions.Get(i);
-		delete sess;
+		delete (dp_session_t *)m_sessions.Get(i);
 	}
 }
 
@@ -127,7 +116,6 @@ void ActivNetIO::PlayerCallback(dpid_t id,
 
 void ActivNetIO::SetDP(dp_t *dp)
 {
-	dp_result_t res;
 	m_dp = dp;
 
 	
@@ -139,7 +127,7 @@ void ActivNetIO::SetDP(dp_t *dp)
 	}
 
 	if(m_dp) {
-		res = dpSetPingIntervals(m_dp, 0, 0);
+		dp_result_t res = dpSetPingIntervals(m_dp, 0, 0);
 		Assert(res == dp_RES_OK);
 
 		m_got_end_players = FALSE;
@@ -201,7 +189,7 @@ ActivNetIO::EnumTransports()
 	memset(&dlldir, 0, sizeof(dlldir));
 
 	
-	strcpy(dlldir.fname, "dll\\net");
+	strcpy(dlldir.fname, "dll" FILE_SEP "net");
 
 	
 	dp_result_t dp_res = dpEnumTransports(&dlldir,
@@ -223,7 +211,6 @@ ActivNetIO::SetTransport(sint32 trans_id)
 			return NET_ERR_BADTRANSPORT;
 		}
 
-		dp_transport_t* trans;
 		commInitReq_t commInitReq;
 		uint8 modeminit[80];
 		uint8 phonenum[80];
@@ -231,7 +218,7 @@ ActivNetIO::SetTransport(sint32 trans_id)
 		
 		
 		memset(&commInitReq, 0, sizeof(commInitReq));
-		commInitReq.sessionId = rand() ^ (rand() << 16) ^ time(0);
+		commInitReq.sessionId = static_cast<long>(rand() ^ (rand() << 16) ^ time(0));
 		commInitReq.reqLen = sizeof(commInitReq_t);
 		modeminit[0] = 0;
 		phonenum[0] = 0;
@@ -243,16 +230,14 @@ ActivNetIO::SetTransport(sint32 trans_id)
 		commInitReq.dialing_method = comm_INIT_DIALING_METHOD_TONE;
 		
 		
-		trans = (dp_transport_t*)m_transports.Get(trans_id);
+		dp_transport_t * trans = (dp_transport_t*)m_transports.Get(trans_id);
 
 		
 		dp_result_t res = dpCreate(&m_dp, 
 								   trans,
 								   &commInitReq,
 								   NULL);
-		if(res != dp_RES_OK)
-			return NET_ERR_TRANSPORTERROR;
-		return NET_ERR_OK;
+        return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
 	}
 	
 	
@@ -312,9 +297,6 @@ ActivNetIO::SessionReadyCallback(dp_session_t *ps,
 NET_ERR
 ActivNetIO::Host(char* sessionName)
 {
-	dp_session_t sess;
-	dp_result_t res;
-
 	Assert(m_dp != NULL);
 	if(m_dp == NULL) {
 		return NET_ERR_NOTSTARTED;
@@ -322,7 +304,7 @@ ActivNetIO::Host(char* sessionName)
 
 	
 	if(m_state == ANET_STATE_CONTACTING_LOBBY) {
-		sint32 t = time(0) + 3;
+		time_t t = time(0) + 3;
 		while(time(0) < t) {
 			Idle();
 		}
@@ -332,6 +314,7 @@ ActivNetIO::Host(char* sessionName)
 	m_isHost = TRUE;
 
 	
+	dp_session_t sess;
 	memset(&sess, 0, sizeof(sess));
 	sess.sessionType = CIV3_SPECIES; 
 	sess.maxPlayers = (uint16)16 - 1;
@@ -341,12 +324,9 @@ ActivNetIO::Host(char* sessionName)
 	sess.dwUser1 = 0;
 
 	
-	res = dpOpen(m_dp, &sess, anet_CreateSessionCallback, this);
-	if(res == dp_RES_OK) {
-		return NET_ERR_OK;
-	} else {
-		return NET_ERR_TRANSPORTERROR;
-	}
+	dp_result_t res = dpOpen(m_dp, &sess, anet_CreateSessionCallback, this);
+
+    return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
 }
 
 
@@ -394,12 +374,9 @@ ActivNetIO::EnumSessions()
 {
 	Assert(m_dp != NULL);
 
-	dp_session_t sess;
-	dp_result_t res;
-
 	
 	if(m_state == ANET_STATE_CONTACTING_LOBBY) {
-		sint32 t = time(0) + 3;
+		time_t t = time(0) + 3;
 		while(time(0) < t) {
 			Idle();
 		}
@@ -407,9 +384,10 @@ ActivNetIO::EnumSessions()
 	}
 
 	
+	dp_session_t sess;
 	memset(&sess, 0, sizeof(sess));
 	sess.sessionType = CIV3_SPECIES;
-	res = dpEnumSessions(m_dp, &sess, NULL, 1750L, anet_EnumSessionsCallback, this);
+	(void) dpEnumSessions(m_dp, &sess, NULL, 1750L, anet_EnumSessionsCallback, this);
 	return NET_ERR_OK;
 }
 
@@ -417,9 +395,6 @@ ActivNetIO::EnumSessions()
 NET_ERR
 ActivNetIO::Join(sint32 sesindex)
 {
-	dp_session_t* sess;
-	dp_result_t res;
-	
 	Assert(m_dp != NULL);
 
 	
@@ -428,15 +403,11 @@ ActivNetIO::Join(sint32 sesindex)
 	if(sesindex < 0 || sesindex >= m_sessions.GetSize()) {
 		return NET_ERR_INVALIDSESSION;
 	}
-	sess = (dp_session_t*)m_sessions.Get(sesindex);
 
-	
-	res = dpOpen(m_dp, sess, anet_CreateSessionCallback, this);
-	if(res == dp_RES_OK) {
-		return NET_ERR_OK;
-	} else {
-		return NET_ERR_TRANSPORTERROR;
-	}
+	dp_session_t *  sess    = (dp_session_t*)m_sessions.Get(sesindex);
+	dp_result_t     res     = dpOpen(m_dp, sess, anet_CreateSessionCallback, this);
+
+    return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
 }
 
 
@@ -475,14 +446,13 @@ ActivNetIO::Send(uint16 id,
 	if(len < 0 || len >= 0x10000)
 		return NET_ERR_TOO_LARGE;
 
-	dp_result_t res;
-
-	res = dpSend(m_dp,
-				 m_pid,
-				 id,
-				 flags ? dp_SEND_RELIABLE : 0,
-				 buf,
-				 len);
+	dp_result_t res = dpSend(m_dp,
+				             m_pid,
+				             id,
+				             flags ? dp_SEND_RELIABLE : 0,
+				             buf,
+				             len
+                            );
 	
 	if(res == dp_RES_OK) {
 #ifdef LOG_NETWORK_OUTPUT
@@ -818,6 +788,7 @@ ActivNetIO::Idle()
 NET_ERR
 ActivNetIO::SetName(char* name)
 {
+    delete [] m_name;
 	m_name = new char[strlen(name) + 1];
 	strcpy(m_name, name);
 	return NET_ERR_OK;

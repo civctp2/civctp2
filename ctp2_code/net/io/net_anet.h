@@ -74,7 +74,7 @@ private:
 	dpid_t m_hostId;
 	sint32 m_isHost;
 	sint32 m_broadcastAddMessage;
-	sint32 m_broadcastAddMessageTime;
+	time_t m_broadcastAddMessageTime;
 
 	dp_session_t m_session;
 

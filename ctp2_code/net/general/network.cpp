@@ -1675,7 +1675,7 @@ Network::Enqueue(UnitData* unit, CityData* city, BOOL isInitial)
 		NetCity* netCity = new NetCity(unit, isInitial);
 		QueuePacketToAll(netCity);
 
-		NetCity2* netCity2 = new NetCity2(city, isInitial);
+		NetCity2* netCity2 = new NetCity2(city, static_cast<uint8>(isInitial));
 		QueuePacketToAll(netCity2);
 
 		Unit u(unit->m_id);
@@ -2568,7 +2568,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 						dest = atoi(destination);
 					}
 					if(dest > 0 && dest < k_MAX_PLAYERS && g_player[dest]) {
-						NetChat *chatPacket = new NetChat(1 << dest, c, (sint16)len - (c - str));
+						NetChat *chatPacket = new NetChat(1 << dest, c, len - (c - str));
 						if(g_network.IsHost()) {
 							QueuePacket(IndexToId(dest), chatPacket);
 						} else {

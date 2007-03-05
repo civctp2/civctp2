@@ -55,8 +55,7 @@ NetCheat::NetCheat(NET_CHEAT cheat, ...) :
 	
 NetCheat::~NetCheat()
 {
-	if(m_data)
-		delete [] m_data;
+	delete [] m_data;
 }
 
 void

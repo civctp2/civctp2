@@ -58,12 +58,12 @@ inline void putdouble(uint8* b, double l)
 	*(double*)b = l;
 }
 
-#define NET_STRLEN strlen
+#define NET_STRLEN(x)   static_cast<uint16>(strlen(x))
 
-#define PUSHBYTE(x)    {buf[size++] = (x);}
-#define PUSHSHORT(x)  {putshort(&buf[size], (x)); size += sizeof(uint16);}
-#define PUSHLONG(x)   {putlong(&buf[size], (x)); size += sizeof(uint32);}
-#define PUSHLONG64(x) {putlong64(&buf[size], (x)); size += sizeof(uint64);}
+#define PUSHBYTE(x)    {buf[size++] = static_cast<uint8>(x);}
+#define PUSHSHORT(x)  {putshort(&buf[size], static_cast<uint16>(x)); size += sizeof(uint16);}
+#define PUSHLONG(x)   {putlong(&buf[size], static_cast<uint32>(x)); size += sizeof(uint32);}
+#define PUSHLONG64(x) {putlong64(&buf[size], static_cast<uint64>(x)); size += sizeof(uint64);}
 #define PUSHDOUBLE(x) {putdouble(&buf[size], (x)); size += sizeof(double);}
 #define PUSHID(x) {buf[size++] = ((x) >> 8); buf[size++] = ((x) & 0xff); }
 #define PUSHSTRING(x) { uint16 l = ((x) ? (NET_STRLEN(x)) : 0); PUSHSHORT(l); if(l > 0) {memcpy(&buf[size], x, l); size += l;}}
