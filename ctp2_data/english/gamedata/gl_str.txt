@@ -21,8 +21,6 @@
 # - Added CityMod2 age concept strings.
 # - Added new age strings.
 # - Added new city style strings.
-# - Moved build list sequence strings from ldl_str.txt and add_str.txt.
-#   - Mar. 7th 2005 Martin Gühmann
 # - Moved risk strings from junk_str.txt. (Aug 31st 2005 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
@@ -730,23 +728,6 @@ CITY_STYLE_AMERICAN				"American Style"
 CITY_STYLE_CASTLE				"Castle Style"
 CITY_STYLE_EGYPTAIN				"Egyptian Style"
 CITY_STYLE_PALACE				"Palace Style"
-
-### Build Sequences from ldl_str.txt ###
-
-BUILD_LIST_SEQUENCE_PRODUCTION			"Production"
-BUILD_LIST_SEQUENCE_GROWTH			"Growth"
-BUILD_LIST_SEQUENCE_OFFENSE			"Offense"
-BUILD_LIST_SEQUENCE_DEFENSE			"Defense"
-BUILD_LIST_SEQUENCE_SCIENCE			"Science"
-BUILD_LIST_SEQUENCE_GOLD			"Gold"
-BUILD_LIST_SEQUENCE_WONDERS			"Wonders"
-BUILD_LIST_SEQUENCE_HAPPINESS			"Happiness"
-BUILD_LIST_SEQUENCE_DEFAULT			"Default"
-BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"Wonders (Sci.)"
-BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"Wonders (Mil.)"
-BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"Wonders (Econ.)"
-BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"Wonders (Ecot.)"
-BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
 
 ##Risk strings moved from junk_str.txt ##
 RISK_NO_DANGER_HERE				"No Danger Here"

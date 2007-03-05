@@ -214,7 +214,7 @@ ProfileDB::ProfileDB()
     m_upgrade                           (TRUE),
     m_smoothBorders                     (FALSE),
 	//emod new profile flags
-	m_CivFlags                       	(TRUE),
+	m_CivFlags                       	(FALSE),
 	m_NoAIProductionDeficit 			(FALSE),
 	m_NoAIGoldDeficit					(FALSE),
 	m_AICityDefenderBonus 				(FALSE),
@@ -234,7 +234,6 @@ ProfileDB::ProfileDB()
 	m_AIMilitiaUnit 					(FALSE),
 	m_OneCityChallenge 					(FALSE),
 	m_NRG			 					(FALSE),
-
 	//end emod
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
