@@ -182,15 +182,12 @@ void TradeRouteData::SetRecip(TradeRoute route)
 	ENQUEUE();
 }
 
-void TradeRouteData::CheckSquareForCity(MapPoint pos)
+void TradeRouteData::CheckSquareForCity(MapPoint const & pos)
 {
-	if(pos.x < 0) pos.x += (sint16)g_theWorld->GetWidth();
-	if(pos.x >= g_theWorld->GetWidth()) pos.x -= (sint16)g_theWorld->GetWidth();
-	if(pos.y < 0) pos.y += (sint16)g_theWorld->GetHeight();
-	if(pos.y >= g_theWorld->GetHeight()) pos.y -= (sint16)g_theWorld->GetHeight();
-
 	Unit city = g_theWorld->GetCell(pos)->GetCity();
-	if(city.m_id != (0)) {
+
+	if (city.IsValid()) 
+    {
 		m_passesThrough[city.GetOwner()] = TRUE;
 	}
 }
@@ -260,11 +257,9 @@ bool TradeRouteData::GeneratePath()
 		m_transportCost += cost;
 	}
 
-	m_transportCost = (float)((int)tradeutil_GetNetTradeCosts(m_transportCost));
+	m_transportCost = std::max<double>
+        (1.0, (double)((int)tradeutil_GetNetTradeCosts(m_transportCost)));
 	
-	if(m_transportCost < 1.0)
-		m_transportCost = 1.0;
-
 	m_path.Insert(m_wayPoints[0]);
 	MapPoint pnt;
 	for (sint32 p = 1; p < m_astarPath->Num(); p++) 
@@ -295,47 +290,55 @@ bool TradeRouteData::GeneratePath()
 void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
                              DynamicArray<MapPoint> &waypoints)
 {
-	sint32 p;
 	m_setPath.Clear();
-	for(p = 0; p < fullpath.Num(); p++) {
+	for (int p = 0; p < fullpath.Num(); p++) 
+    {
 		m_setPath.Insert(fullpath[p]);
 	}
 }
 
 void TradeRouteData::BeginTurn()
 {
-	sint32 p;
-	if(m_setPath.Num() > 0) {
+	if (m_setPath.Num() > 0) 
+    {
 		RemoveFromCells();
 		m_path.Clear();
 		m_wayPoints.Clear();
-		for(p = 0; p < m_setPath.Num(); p++) {
+		for (int p = 0; p < m_setPath.Num(); p++) 
+        {
 			m_path.Insert(m_setPath[p]);
 		}
-		for(p = 0; p < m_setWayPoints.Num(); p++) {
-			m_wayPoints.Insert(m_setWayPoints[p]);
+		for (int wp = 0; wp < m_setWayPoints.Num(); wp++) 
+        {
+			m_wayPoints.Insert(m_setWayPoints[wp]);
 		}
 		m_setPath.Clear();
 		m_setWayPoints.Clear();
 	}
 }
 
-void TradeRouteData::ReturnPath(const PLAYER_INDEX owner, 
-    DynamicArray<MapPoint> &waypoints, DynamicArray<MapPoint> &fullpath,
-	double &cost)
+void TradeRouteData::ReturnPath
+(
+    const PLAYER_INDEX          owner, 
+    DynamicArray<MapPoint> &    waypoints, 
+    DynamicArray<MapPoint> &    fullpath,
+	double &                    cost
+)
 {
 	fullpath.Clear();
 	Path partialAstarPath;
 	float partialcost = 0;
-	cost = 0;
+	cost = 0.0;
 
 	m_astarPath->Clear();
 
-	sint32 wp, nwp = waypoints.Num();
-	sint32 r;
+	int     nwp = waypoints.Num();
+	sint32  r;
 
-	for(wp = 0; wp < nwp - 1; wp++) {
-		if(wp == 0) {
+	for (int wp = 0; wp < nwp - 1; wp++) 
+    {
+		if (wp == 0) 
+        {
 			r = g_theTradeAstar.FindPath(owner, waypoints[wp], waypoints[wp + 1],
 			                             *m_astarPath, partialcost, FALSE);
 			Assert(r);
@@ -348,11 +351,10 @@ void TradeRouteData::ReturnPath(const PLAYER_INDEX owner,
 		cost += partialcost;
 	}
 
-	sint32 p;
 	fullpath.Insert(waypoints[0]);
 	MapPoint pnt;
 	m_crossesWater = FALSE;
-	for(p = 1; p < m_astarPath->Num(); p++) {
+	for (int p = 1; p < m_astarPath->Num(); p++) {
 		WORLD_DIRECTION d;
 		m_astarPath->GetCurrentDir(d);
 		sint32 r = fullpath[p-1].GetNeighborPosition(d, pnt);
@@ -385,7 +387,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive << m_sourceResource;
 		archive.Store((uint8 *)m_passesThrough, sizeof(m_passesThrough)) ;
 		archive.PutSINT32(m_crossesWater) ;
-		archive.PutSINT8(m_isActive);
+		archive.PutSINT8(static_cast<sint8>(m_isActive));
 		archive.PutUINT32(m_color);
 		archive.PutUINT32(m_outline);
 		archive.PutSINT32(m_selectedIndex);
@@ -508,45 +510,37 @@ BOOL TradeRouteData::IsSelectedPathSame()
 
 sint32 TradeRouteData::AddSelectedWayPoint(const MapPoint &pos)
 {
-	sint32 i = 0;
-	sint32 wpIndex = 0;
-	BOOL posIsWayPoint = FALSE;
-
-	
-	for ( i = 0 ; i < m_selectedWayPoints.Num() ; i++ )
-		if (pos == m_selectedWayPoints[i]) 
+	for (sint32 wp = 0; wp < m_selectedWayPoints.Num(); ++wp)
+    {
+		if (pos == m_selectedWayPoints[wp]) 
 		{
-			posIsWayPoint = TRUE;
-			wpIndex = i;
+			m_selectedIndex = wp;
+            return m_selectedIndex;
 		}
-
+    }
 	
-	if (!posIsWayPoint)
+    sint32 wpIndex  = 0;
+	for (int i = 0; i < m_selectedPath.Num(); ++i)
 	{
-		
-		for ( i = 0 ; i < m_selectedPath.Num() ; i++ )
+		if (pos == m_selectedPath[i])
 		{
-			
-			if (pos == m_selectedPath[i])
-			{
-				
-				m_selectedWayPoints.InsertBefore(pos,wpIndex);
-				break;
-			}
-
-			
-			if (m_selectedPath[i] == m_selectedWayPoints[wpIndex]) wpIndex++;
+			m_selectedWayPoints.InsertBefore(pos, wpIndex);
+			break;
 		}
+        else if (m_selectedPath[i] == m_selectedWayPoints[wpIndex]) 
+        {
+            ++wpIndex;
+        }
 	}
-
-	
-	return m_selectedIndex = wpIndex;
+    
+    m_selectedIndex = wpIndex;
+    return m_selectedIndex;
 }
 
 void TradeRouteData::GenerateSelectedPath(const MapPoint &pos)
 {
-	if ((m_selectedIndex == 0) || (m_selectedIndex == m_selectedWayPoints.Num())) return;
-
+	if ((m_selectedIndex == 0) || (m_selectedIndex == m_selectedWayPoints.Num())) 
+        return;
 	
 	DynamicArray<MapPoint> tempWp = m_selectedWayPoints;
 	tempWp[m_selectedIndex] = pos;

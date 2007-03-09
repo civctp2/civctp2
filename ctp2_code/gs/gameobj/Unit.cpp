@@ -428,7 +428,7 @@ uint32 Unit::GetOwnerBit() const
 }
 
 
-sint32 Unit::IsIgnoresZOC() const
+bool Unit::IsIgnoresZOC() const
 {
 	return GetDBRec()->GetIgnoreZOC();
 }
@@ -669,52 +669,52 @@ uint32 Unit::GetMovementType() const
 
 }
 
-sint32 Unit::GetMovementTypeLand() const
+bool Unit::GetMovementTypeLand() const
 {
 	return GetDBRec()->GetMovementTypeLand();
 }
 
-sint32 Unit::GetMovementTypeSea() const
+bool Unit::GetMovementTypeSea() const
 {
 	return GetDBRec()->GetMovementTypeSea();
 }
 
-sint32 Unit::GetMovementTypeShallowWater() const
+bool Unit::GetMovementTypeShallowWater() const
 {
 	return GetDBRec()->GetMovementTypeShallowWater();
 }
 
-sint32 Unit::GetMovementTypeAir() const
+bool Unit::GetMovementTypeAir() const
 {
 	return GetDBRec()->GetMovementTypeAir();
 }
 
-//sint32 Unit::GetAllTerrainAsImprovement() const  //EMOD
+//bool Unit::GetAllTerrainAsImprovement() const  //EMOD
 //{
 //	return GetDBRec()->GetAllTerrainAsImprovementIndex();  //EMOD
 //}
 
-sint32 Unit::GetMovementTypeSpace() const
+bool Unit::GetMovementTypeSpace() const
 {
 	return GetDBRec()->GetMovementTypeSpace();
 }
 
-sint32 Unit::GetMovementTypeMountain() const
+bool Unit::GetMovementTypeMountain() const
 {
 	return GetDBRec()->GetMovementTypeMountain();
 }
 
-sint32 Unit::IsSubmarine() const
+bool Unit::IsSubmarine() const
 {
 	return GetDBRec()->GetIsSubmarine();
 }
 
-sint32 Unit::IsNoZoc() const 
+bool Unit::IsNoZoc() const 
 {
 	return GetDBRec()->GetNoZoc();
 }
 
-sint32 Unit::DeductMoveCost(const double cost, bool &out_of_fuel)
+bool Unit::DeductMoveCost(const double cost, bool &out_of_fuel)
 {
 	return AccessData()->DeductMoveCost(*this, cost, out_of_fuel);
 }
@@ -1157,9 +1157,9 @@ UnitActor * Unit::GetActor() const
 	return GetData()->GetActor();
 }
 
-sint32 Unit::IsSameMovementType(uint32 bit_field) const
+bool Unit::IsSameMovementType(uint32 bit_field) const
 {
-	return GetDBRec()->GetMovementType() & bit_field;
+	return (GetDBRec()->GetMovementType() & bit_field) != 0;
 }
 
 void Unit::DestroyCapitol()

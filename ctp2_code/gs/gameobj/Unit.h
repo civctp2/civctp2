@@ -319,25 +319,23 @@ public:
 	sint32 GetGoldHunger() const;
 	sint32 GetFoodHunger() const;
 
-	sint32 IsIgnoresZOC() const;
-	sint32 IsNoZoc() const;
-	sint32 GetMovementTypeLand() const;
-	sint32 GetMovementTypeSea() const;
-	sint32 GetMovementTypeShallowWater() const;
-	sint32 GetMovementTypeAir() const;
-	sint32 GetAllTerrainAsImprovement() const;  //EMOD
-	sint32 GetMovementTypeSpace() const;
-	sint32 GetMovementTypeMountain() const;
-	sint32 IsSameMovementType(uint32 bit_field) const;
-	sint32 IsSubmarine() const;
-	uint32 GetMovementType() const;
-
-
-	double GetMaxMovePoints() const;
-	double GetMovementPoints() const;
-	void SetMovementPoints(double m);
-	sint32 DeductMoveCost(const double cost, bool &out_of_fuel);
-	void GetPos(MapPoint &pos) const;
+	bool    IsIgnoresZOC() const;
+	bool    IsNoZoc() const;
+	bool    GetMovementTypeLand() const;
+	bool    GetMovementTypeSea() const;
+	bool    GetMovementTypeShallowWater() const;
+	bool    GetMovementTypeAir() const;
+//  bool    GetAllTerrainAsImprovement() const;  //EMOD
+	bool    GetMovementTypeSpace() const;
+	bool    GetMovementTypeMountain() const;
+	bool    IsSameMovementType(uint32 bit_field) const;
+	bool    IsSubmarine() const;
+	uint32  GetMovementType() const;
+	double  GetMaxMovePoints() const;
+	double  GetMovementPoints() const;
+	void    SetMovementPoints(double m);
+	bool    DeductMoveCost(const double cost, bool &out_of_fuel);
+	void    GetPos(MapPoint &pos) const;
 	MapPoint RetPos(void) const;
 	bool MoveToPosition(const MapPoint &p, UnitDynamicArray &revealedUnits,
 	                    bool &revealed_unexplored);

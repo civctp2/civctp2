@@ -10236,8 +10236,10 @@ double Player::EnergySupply()
 			}
 		}
 	}
+
 	double energysupply;
 	if (civdemand > 0) {
+/// @todo Check whether you really want an integer division here.
 ;		energysupply = civenergy / civdemand;
 	} else {
 		energysupply = 0;

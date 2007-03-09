@@ -107,7 +107,7 @@ private:
 	
 	BOOL m_dontAdjustPointsWhenKilled;
 
-	void CheckSquareForCity(MapPoint pos);
+	void CheckSquareForCity(MapPoint const & pos);
 
 	friend class NetTradeRoute;
 

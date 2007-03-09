@@ -40,8 +40,10 @@
 #pragma once
 #endif
 
-#ifndef __ARMY_DATA_H__
-#define __ARMY_DATA_H__ 1
+#ifndef ARMY_DATA_H__
+#define ARMY_DATA_H__
+
+class ArmyData;
 
 #include "GameObj.h"
 #include "Unit.h"
@@ -528,8 +530,8 @@ public:
 
 
 
-    MBCHAR *GetDebugString(void) const { return m_debugString; }
-    void SetDebugString(MBCHAR *string) { m_debugString = string; }
+    MBCHAR const * GetDebugString(void) const;
+    void SetDebugString(MBCHAR const * string);
     uint8 GetDebugStringColor(void) const { return m_debugStringColor; }
     void SetDebugStringColor(uint8 color) { m_debugStringColor = color; }
 
@@ -595,10 +597,10 @@ public:
 
 	void Upgrade();
 	//EMOD
-//	void ArmyData::UpgradeNoGold();
-//	void ArmyData::Upgrade();
-//	bool ArmyData::CanUpgradeNoGold(const sint32 i);
-//	bool ArmyData::CanUpgrade(const sint32 i);
+//	void UpgradeNoGold();
+//	void Upgrade();
+//	bool CanUpgradeNoGold(const sint32 i);
+//	bool CanUpgrade(const sint32 i);
 
     static void DisassociateEventsFromOrdersDB(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
     static void AssociateEventsWithOrdersDB();

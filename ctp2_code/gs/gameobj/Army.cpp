@@ -31,15 +31,14 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "Globals.h"
 #include "Army.h"
-#include "ArmyPool.h"
-#include "ArmyData.h"
-#include "player.h"
-#include "SelItem.h"
 
-extern SelectedItem *g_selected_item;
-extern Player **g_player;
+#include "ArmyPool.h"       // g_theArmyPool
+#include "ArmyData.h"
+#include "Globals.h"
+#include "player.h"         // g_player
+#include "SelItem.h"        // g_selected_item
+
 
 bool Army::IsValid() const
 {
