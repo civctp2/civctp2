@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Tile map handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -255,7 +255,15 @@ public:
 
 	
 	void			ColorMagnitudeToRGB(uint8 col, sint32 *r, sint32 *g, sint32 *b);
-	void			DrawSomeText(BOOL mixingPort, MBCHAR *text, sint32 tx, sint32 ty, COLORREF bgColorRef, COLORREF fgColorRef);
+	void			DrawSomeText
+    (
+        bool            mixingPort, 
+        MBCHAR const *  text, 
+        sint32          tx, 
+        sint32          ty, 
+        COLORREF        bgColorRef, 
+        COLORREF        fgColorRef
+    );
 
 	void            DrawChatText();
 	void            AddChatDirtyRectToMap();

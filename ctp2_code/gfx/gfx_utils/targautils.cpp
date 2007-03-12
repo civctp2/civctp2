@@ -18,24 +18,24 @@
 //
 // Compiler flags
 //
-// - None
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Outcommented unused code. (Sep 9th 2005 Martin Gühmann)
+// - Redesigned to get rid of global variables.
 //
 //----------------------------------------------------------------------------
+///
+/// \file   targautils.cpp
+/// \brief  Targa (.tga) file support
 
 #include "c3.h"
-
-#include "pixelutils.h"
 #include "targautils.h"
 
-#ifdef __MAKESPR__
-#define DPRINTF
-#endif
+#include <algorithm>
+#include "pixelutils.h"
+extern sint32		g_is565Format;
 
 #define BYTES_PER_PIXEL 2
 
@@ -43,24 +43,39 @@
 #define MAX_HEIGHT 256
 #define MAX_DATASIZE (MAX_WIDTH * MAX_HEIGHT * 4)
 
+namespace
+{
+    BYTE GetByte(BYTE **p)
+    {
+        BYTE rval = **p;
+	  (*p)++;
+	  return rval;
+    }
+
+    /// Report that a file does not exist
+    /// \param a_FileName     Name of the file
+    void ReportFileNotFound(char const * a_FileName)
+    {
+        char error[128];
+        sprintf(error, "%s not found.", a_FileName);
+        MessageBox(NULL, error, NULL, MB_OK);
+    }
+
+} // namespace
+
 SHORT TgaDecodeScanLine(BYTE *DecodedBuffer, WORD LineLength,
                         WORD PixelSize, BYTE **DpTga);
 
-unsigned char *tmpbuf = NULL;
-unsigned char *tmpbuf1= NULL;
-
-bool Get_TGA_Dimension (char *fname,
+ 
+bool Get_TGA_Dimension (char const * fname,
                         int &Width,
                         int &Height,
                         int &Bpp)
 {
 	FILE *  fp  = fopen(fname, "rb");
-
-	if (fp == NULL) {
-		char	Str[128];
-
-		sprintf(Str,"%s not found.",fname);
-		MessageBox(NULL,Str,NULL,MB_OK);
+	if (!fp) 
+	{
+		ReportFileNotFound(fname);
 		return false;
 	}
 	setvbuf(fp, NULL, _IONBF, 0);
@@ -78,7 +93,7 @@ bool Get_TGA_Dimension (char *fname,
     case 16:
     case 24:
     case 32:
-        // Correct format
+        // Supported format
 	    Width   = head.ImageWidth;
 	    Height  = head.ImageHeight;
 	    Bpp     = head.PixelDepth / 8;
@@ -105,32 +120,23 @@ static void Get_Pixel_Mask_Scale (
 }
 #endif
 
-bool Load_TGA_File_Simple(char *fname,
+bool Load_TGA_File_Simple(char const * fname,
 						  unsigned char *data,
 						  int Buffer_Width,
 						  int width,
 						  int height
 						  )
 {
-	TGAHEADER head;
-	long fsize;
-	long datasize;
-	int bpp;
-
-	FILE *fp;
-	fp = fopen(fname, "rb");
-
-	if (fp == NULL)
+	FILE * fp = fopen(fname, "rb");
+	if (!fp)
 	{
-		char	Str[128];
-
-		sprintf(Str,"%s not found.",fname);
-		MessageBox(NULL,Str,NULL,MB_OK);
+		ReportFileNotFound(fname);
 		return false;
 	}
 
 	setvbuf(fp, NULL, _IONBF, 0);
 
+	TGAHEADER head;
 	if (fread(&head, sizeof(TGAHEADER), 1, fp) < 1)
 	{
 		DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
@@ -138,6 +144,7 @@ bool Load_TGA_File_Simple(char *fname,
 		return false;
 	}
 
+    int bpp;
 	switch (head.PixelDepth)
 	{
 	case 16: bpp=2;	break;
@@ -152,16 +159,13 @@ bool Load_TGA_File_Simple(char *fname,
 	width  = head.ImageWidth;
 	height = head.ImageHeight;
 
-	fsize = head.ImageWidth * head.ImageHeight * bpp;
-
 	if (head.IdLength > 0)
 		fseek(fp, head.IdLength, SEEK_CUR);
 
 	long curpos = ftell(fp);
-	 fseek(fp, 0, SEEK_END);
-	 datasize = ftell(fp) - curpos;
-	 fseek(fp, curpos, SEEK_SET);
-
+	fseek(fp, 0, SEEK_END);
+	long datasize = ftell(fp) - curpos;
+	fseek(fp, curpos, SEEK_SET);
 
 	if (head.ImageType==2)
 	{
@@ -184,107 +188,78 @@ bool Load_TGA_File_Simple(char *fname,
 
 		fclose(fp);
 	}
-	else
-		if (head.ImageType == 10)
+	else if (head.ImageType == 10)
+	{
+		unsigned char * tmpbuf  = new unsigned char[MAX_DATASIZE];
+
+		if (fread(tmpbuf, datasize, 1, fp) < 1)
 		{
-
-			int i, byteCount;
-			unsigned char *dp, *tp;
-
-			if (tmpbuf == NULL)
-			{
-				tmpbuf = (unsigned char *)malloc(MAX_DATASIZE);
-				tmpbuf1 = (unsigned char *)malloc(MAX_DATASIZE);
-			}
-
-			if (fread(tmpbuf, datasize, 1, fp) < 1)
-			{
-				DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
-				fclose(fp);
-				free(tmpbuf);
-				free(tmpbuf1);
-				tmpbuf=NULL;
-				return false;
-			}
+			DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
 			fclose(fp);
-
-			dp = tmpbuf1;
-			tp = tmpbuf;
-
-			for (i=0; i < head.ImageHeight; i++)
-			{
-				byteCount = TgaDecodeScanLine(dp, head.ImageWidth, (WORD)bpp, &tp);
-				if (byteCount < 0)
-				{
-					DPRINTF(k_DBG_UI, ("Error decoding file \"%s\"\n", fname));
-					free(tmpbuf);
-					free(tmpbuf1);
-					tmpbuf=NULL;
-					return false;
-				}
-				dp += byteCount;
-			}
+			delete [] tmpbuf;
+			return false;
 		}
 
-	free(tmpbuf);
-	free(tmpbuf1);
-	tmpbuf=NULL;
+		fclose(fp);
+		unsigned char * tmpbuf1 = new unsigned char[MAX_DATASIZE];
+		unsigned char * dp      = tmpbuf1;
+		unsigned char * tp      = tmpbuf;
+
+		for (int i = 0; i < head.ImageHeight; i++)
+		{
+			int byteCount = TgaDecodeScanLine(dp, head.ImageWidth, (WORD)bpp, &tp);
+			if (byteCount < 0)
+			{
+				DPRINTF(k_DBG_UI, ("Error decoding file \"%s\"\n", fname));
+				delete [] tmpbuf;
+				delete [] tmpbuf1;
+				return false;
+			}
+			dp += byteCount;
+		}
+
+		delete [] tmpbuf;
+		delete [] tmpbuf1;
+	}
+
 	return true;
 }
 
 
-void TGA2RGB32(Pixel32 *data,int datasize)
+void TGA2RGB32(Pixel32 * data, int datasize)
 {
+    struct TGA_DATA
+    {
+        char r,g,b,a;
+    };
 
-	struct TGA_DATA
-	{
-		char r,g,b,a;
+    struct TGA_DATA * dp = reinterpret_cast<struct TGA_DATA *>(data);
 
-	} orig,*converted,*dp;
-
-	dp = (TGA_DATA *)data;
-
-
-	for(int i=0;i<datasize;i++)
-	{
-		converted	= dp;
-		orig		= *converted;
-
-		converted->b=orig.r;
-		converted->r=orig.b;
-
-		dp ++;
-	}
+    for (int i = 0; i < datasize; ++i)
+    {
+        std::swap<char>(dp->b, dp->r);
+        ++dp;
+    }
 }
 
 
-bool Load_TGA_File(char *fname,
+bool Load_TGA_File(char const *fname,
 			 unsigned char *data,
 			 int Buffer_Width,
 			 int width,
 			 int height,
 			 void *Pixel_Format,
-			 BOOL convertToNative)
+			 bool convertToNative)
 {
-	TGAHEADER head;
-	long fsize;
-	long datasize;
-	int bpp;
-
-	FILE *fp;
-	fp = fopen(fname, "rb");
-
-	if (fp == NULL)
+	FILE * fp = fopen(fname, "rb");
+	if (!fp)
 	{
-		char	Str[128];
-
-		sprintf(Str,"%s not found.",fname);
-		MessageBox(NULL,Str,NULL,MB_OK);
+		ReportFileNotFound(fname);
 		return false;
 	}
-
 	setvbuf(fp, NULL, _IONBF, 0);
 
+	TGAHEADER head;
 	if (fread(&head, sizeof(TGAHEADER), 1, fp) < 1)
 	{
 		DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
@@ -292,6 +267,7 @@ bool Load_TGA_File(char *fname,
 		return false;
 	}
 
+	int bpp;
 	switch (head.PixelDepth)
 	{
 	case 16: bpp=2;	break;
@@ -306,16 +282,16 @@ bool Load_TGA_File(char *fname,
 	width  = head.ImageWidth;
 	height = head.ImageHeight;
 
-	fsize = head.ImageWidth * head.ImageHeight * bpp;
-
 	if (head.IdLength > 0)
 		fseek(fp, head.IdLength, SEEK_CUR);
 
 	long curpos = ftell(fp);
-	 fseek(fp, 0, SEEK_END);
-	 datasize = ftell(fp) - curpos;
-	 fseek(fp, curpos, SEEK_SET);
+	fseek(fp, 0, SEEK_END);
+	long datasize = ftell(fp) - curpos;
+	fseek(fp, curpos, SEEK_SET);
 
+	unsigned char * tmpbuf  = NULL;
+	unsigned char * tmpbuf1 = NULL;
 
 	if (head.ImageType == 2)
 	{
@@ -330,18 +306,11 @@ bool Load_TGA_File(char *fname,
 				return false;
 			}
 
-			if (convertToNative)
+			if (convertToNative && g_is565Format)
 			{
-
-				extern sint32		g_is565Format;
-				if (g_is565Format)
-				{
-					Pixel16 *pixelPtr = (Pixel16 *)dataPtr;
-					for (sint32 p=0; p<width; p++)
-						pixelPtr[p] = pixelutils_Convert555to565(pixelPtr[p]);
-				}
+				Pixel16 * pixelPtr = reinterpret_cast<Pixel16 *>(dataPtr);
+				std::transform(pixelPtr, pixelPtr + width, pixelPtr, pixelutils_Convert555to565);
 			}
-
 
 			dataPtr -= Buffer_Width;
 		}
@@ -349,50 +318,40 @@ bool Load_TGA_File(char *fname,
 		fclose(fp);
 
 	}
-	else
-		if (head.ImageType == 10)
+	else if (head.ImageType == 10)
+	{
+		tmpbuf  = new unsigned char[MAX_DATASIZE];
+
+		if (fread(tmpbuf, datasize, 1, fp) < 1)
 		{
+			DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
+			fclose(fp);
+			delete [] tmpbuf;
+			return false;
+		}
+		fclose(fp);
 
-			int i, byteCount;
-			unsigned char *dp, *tp;
+		tmpbuf1 = new unsigned char[MAX_DATASIZE];
+		unsigned char * dp = tmpbuf1;
+		unsigned char * tp = tmpbuf;
 
-			if (tmpbuf == NULL)
+		for (int i = 0; i < head.ImageHeight; i++)
+		{
+			int byteCount = TgaDecodeScanLine(dp, head.ImageWidth, (WORD)bpp, &tp);
+			if (byteCount < 0)
 			{
-				tmpbuf = (unsigned char *)malloc(MAX_DATASIZE);
-				tmpbuf1 = (unsigned char *)malloc(MAX_DATASIZE);
-			}
-
-			if (fread(tmpbuf, datasize, 1, fp) < 1)
-			{
-				DPRINTF(k_DBG_UI, ("Error reading file \"%s\"\n", fname));
-				fclose(fp);
-				free(tmpbuf);
-				free(tmpbuf1);
-				tmpbuf=NULL;
+				DPRINTF(k_DBG_UI, ("Error decoding file \"%s\"\n", fname));
+				delete [] tmpbuf;
+				delete [] tmpbuf1;
 				return false;
 			}
-			fclose(fp);
-
-			dp = tmpbuf1;
-			tp = tmpbuf;
-
-			for (i=0; i < head.ImageHeight; i++)
-			{
-				byteCount = TgaDecodeScanLine(dp, head.ImageWidth, (WORD)bpp, &tp);
-				if (byteCount < 0)
-				{
-					DPRINTF(k_DBG_UI, ("Error decoding file \"%s\"\n", fname));
-					free(tmpbuf);
-					free(tmpbuf1);
-					tmpbuf=NULL;
-					return(0);
-				}
-				dp += byteCount;
-			}
+			dp += byteCount;
 		}
+	}
 
 	if ((BYTES_PER_PIXEL == 3) && (bpp == 4))
 	{
+		Assert(tmpbuf1);
 		unsigned char *fp = data;
 		unsigned char *tp = tmpbuf1;
 		int count = (width * height);
@@ -405,9 +364,9 @@ bool Load_TGA_File(char *fname,
 			fp++;
 		}
 	}
-
-	if ((BYTES_PER_PIXEL == 2) && (bpp==4))
+	else if ((BYTES_PER_PIXEL == 2) && (bpp==4))
 	{
+		Assert(tmpbuf1);
 		unsigned char *fp = tmpbuf1;
 		unsigned char *fp1= tmpbuf1 + 1;
 		unsigned char *fp2= tmpbuf1 + 2;
@@ -429,56 +388,48 @@ bool Load_TGA_File(char *fname,
 			fp3++;
 		}
 	}
-	free(tmpbuf);
-	free(tmpbuf1);
-	tmpbuf=NULL;
+
+	delete [] tmpbuf;
+	delete [] tmpbuf1;
 	return true;
 }
 
-int	write_tga(char *fname, int width, int height, unsigned char *data)
+bool write_tga(char const * fname, int width, int height, unsigned char const * data)
 {
-	TGAHEADER head;
-	long fsize;
-
-	FILE *fp;
-	if ((fp = fopen(fname, "wb")) == NULL) {
-		char	Str[128];
-
-		sprintf(Str,"%s not found.",fname);
-		MessageBox(NULL,Str,NULL,MB_OK);
-		return 0;
+	FILE * fp = fopen(fname, "wb");
+	if (!fp) 
+    {
+		ReportFileNotFound(fname);
+		return false;
 	}
+
 	setvbuf(fp, NULL, _IONBF, 0);
 
-	head.IdLength = 0;
-	head.CmapType = 0;
-	head.ImageType = 2;
-	head.CmapIndex = 0;
-	head.CmapLength = 0;
-	head.CmapEntrySize = 0;
-	head.X_Origin = 0;
-	head.Y_Origin = 0;
-	head.ImageWidth = width;
-	head.ImageHeight = height;
-	head.PixelDepth = BYTES_PER_PIXEL * 8;
-	head.ImagDesc = 0;
+	TGAHEADER head;
+	head.IdLength       = 0;
+	head.CmapType       = 0;
+	head.ImageType      = 2;
+	head.CmapIndex      = 0;
+	head.CmapLength     = 0;
+	head.CmapEntrySize  = 0;
+	head.X_Origin       = 0;
+	head.Y_Origin       = 0;
+	head.ImageWidth     = static_cast<WORD>(width);
+	head.ImageHeight    = static_cast<WORD>(height);
+	head.PixelDepth     = BYTES_PER_PIXEL * 8;
+	head.ImagDesc       = 0;
 
-	if (fwrite(&head, sizeof(TGAHEADER), 1, fp) < 1) {
-		DPRINTF(k_DBG_UI, ("Error writing file \"%s\"\n", fname));
-		fclose(fp);
-		return(0);
-	}
-
-	fsize = width * height * BYTES_PER_PIXEL;
-
-	if (fwrite(data, fsize, 1, fp) < 1) {
-		DPRINTF(k_DBG_UI, ("Error writing file \"%s\"\n", fname));
-		fclose(fp);
-		return(0);
-	}
-
+	bool    isWritten   = 
+        (1 == fwrite(&head, sizeof(TGAHEADER), 1, fp)) &&
+        (1 == fwrite(data, width * height * BYTES_PER_PIXEL, 1, fp));
 	fclose(fp);
-	return(1);
+
+    if (!isWritten) 
+    {
+		DPRINTF(k_DBG_UI, ("Error writing file \"%s\"\n", fname));
+	}
+
+	return isWritten;
 }
 
 
@@ -486,54 +437,33 @@ int	write_tga(char *fname, int width, int height, unsigned char *data)
 
 
 
-BYTE GetByte(BYTE **p)
-{
-	BYTE rval = **p;
-	(*p)++;
-	return(rval);
-}
 
 SHORT TgaDecodeScanLine(unsigned char *DecodedBuffer, WORD LineLength,
 						WORD PixelSize, BYTE **DpTga)
 {
 	WORD    i;
-	SHORT   byteCount;
-	WORD    runCount;
-	WORD    bufIndex;
-	WORD    bufMark;
-	WORD    pixelCount;
-
-	bufIndex   = 0;
-	byteCount  = 0;
-	pixelCount = 0;
-
+	SHORT   byteCount   = 0;
+	WORD    bufIndex    = 0;
+	WORD    pixelCount  = 0;
 
 	while (pixelCount < LineLength)
 	{
-
-		runCount = GetByte(DpTga);
-
+		WORD runCount = GetByte(DpTga);
 
 		if (pixelCount + (runCount & 0x7f) + 1 > LineLength)
-			return(-1);
-
+			return -1;
 
 		if (runCount & 0x80)
 		{
-			runCount &= ~0x80;
-
-			bufMark = bufIndex;
-
+			runCount   &= ~0x80;
 
 			pixelCount += (runCount + 1);
+			byteCount  += ((runCount + 1) * PixelSize);
 
-
-			byteCount += ((runCount + 1) * PixelSize);
-
+			WORD bufMark = bufIndex;
 
 			for (i = 0; i < PixelSize; i++)
 				DecodedBuffer[bufIndex++] = GetByte(DpTga);
-
 
 			while (runCount--)
 			{
@@ -543,12 +473,8 @@ SHORT TgaDecodeScanLine(unsigned char *DecodedBuffer, WORD LineLength,
 		}
 		else
 		{
-
 			pixelCount += (runCount + 1);
-
-
 			byteCount  += ((runCount + 1) * PixelSize);
-
 
 			do
 			{
@@ -558,5 +484,6 @@ SHORT TgaDecodeScanLine(unsigned char *DecodedBuffer, WORD LineLength,
 			while (runCount--);
 		}
 	}
-	return(byteCount);
+
+	return byteCount;
 }

@@ -22,17 +22,15 @@ enum PRJFILE_PATH_TYPE {
     PRJFILE_PATH_ZMS                    
 };
 
-struct PFPath {
-    PRJFILE_PATH_TYPE type;
-
-    FILE *zfs_fp;
-
-    void *zms_start;
-    void *zms_end;
-    HANDLE zms_hf;
-    HANDLE zms_hm;
-
-    char dos_path[256];
+struct PFPath 
+{
+    PRJFILE_PATH_TYPE   type;
+    FILE *              zfs_fp;
+    unsigned char *     zms_start;
+    unsigned char *     zms_end;
+    HANDLE              zms_hf;
+    HANDLE              zms_hm;
+    char                dos_path[256];
 };
 
 struct PFEntry {
@@ -48,22 +46,9 @@ public:
     ProjectFile();
     ~ProjectFile();
 
-    int addPath(char *path, int use_filemapping = 0);
+    int addPath(char const * path, bool use_filemapping = false);
 
     void * getData(char const * rname, size_t & size, C3DIR dir = C3DIR_DIRECT);
-    /// For backwards compatibility: remove when all callers have been replaced.
-    void * getData(char const * rname, sint32 * size, C3DIR dir = C3DIR_DIRECT)
-    {
-        size_t  l_Size      = (size) ? static_cast<size_t>(*size) : 0;
-        void *  l_Result    = getData(rname, l_Size, dir);
-        
-        if (size) 
-        {
-            *size = static_cast<sint32>(l_Size);
-        }
-        return l_Result;
-    };
-
     void * getData(char const * rname, size_t & size, HANDLE * hFileMap, size_t & offset);
 
     
@@ -87,9 +72,9 @@ private:
     void read_ZFS_dtable(int pathnum, ZFS_DTABLE *dtable,
                          PFEntry **tlp, long *rcount);
 
-    int addPath_DOS(char *path);
-    int addPath_ZFS(char *path);
-    int addPath_ZMS(char *path);
+    int addPath_DOS(char const * path);
+    int addPath_ZFS(char const * path);
+    int addPath_ZMS(char const * path);
 
     void *getData_DOS(PFEntry *entry, size_t & size, C3DIR dir = C3DIR_DIRECT);
     void *getData_ZFS(PFEntry *entry, size_t & size);

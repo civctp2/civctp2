@@ -2555,9 +2555,11 @@ void Unit::Sink(sint32 chance)
 			// Maybe something else than CAUSE_REMOVE_ARMY_DISBANDED
 			// or it least call it diferently
 			KillUnit(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+#if 0 // Not used: memory leak + crash
 			SlicObject *so = new SlicObject("999LostAtSea");
 			so->AddRecipient(GetOwner());
 			so->AddUnit(*this);
+#endif
 		}
 	}
 }

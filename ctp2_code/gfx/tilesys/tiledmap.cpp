@@ -47,7 +47,6 @@
 //   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-// - Outcomment for Vanish and Visible good check to PostProcessTile - emod 2-22-2007
 //
 //----------------------------------------------------------------------------
 
@@ -1172,25 +1171,8 @@ void TiledMap::PostProcessTile(MapPoint &pos, TileInfo *theTileInfo,
 		theTileInfo->DeleteGoodActor();
 
 	sint32			goodIndex;
-	
 	if(g_theWorld->GetGood(pos, goodIndex)) {
-	//emod - @TODO this code did make the rubies not appear but when given the visible they didnot appear
-		// with diamonds (vanish) they didnot vanish but when i changed another terrain they did vanish
-		// a change in good handling may be required.
-	//	bool  goodvisible = true;
-	//	if ((g_theResourceDB->Get(goodIndex)->GetVisibleAdvanceIndex() > 0) || (g_theResourceDB->Get(goodIndex)->GetVanishAdvanceIndex() > 0))
-		//not having the above line made all goods vanish from the map
-	//	{
-	//		if((!g_player[g_selected_item->GetVisiblePlayer()]->HasAdvance(g_theResourceDB->Get(goodIndex)->GetVisibleAdvanceIndex())) 
-	//		|| (g_player[g_selected_item->GetVisiblePlayer()]->HasAdvance(g_theResourceDB->Get(goodIndex)->GetVanishAdvanceIndex()))
-	//		){
-	//			goodvisible = false;
-	//		}
-	//	}
-
-	//	if (goodvisible) {  //emod
-			theTileInfo->SetGoodActor(g_theResourceDB->Get(goodIndex)->GetSpriteID(), pos); //original
-	//	} //end emod
+		theTileInfo->SetGoodActor(g_theResourceDB->Get(goodIndex)->GetSpriteID(), pos);
 	}
 
 	uint8 index = static_cast<uint8>(g_theWorld->GetTerrain(pos.x, pos.y));
@@ -1757,22 +1739,21 @@ sint32 TiledMap::CalculateWrap
 	if (g_graphicsOptions) {
 		if (g_graphicsOptions->IsCellTextOn()) {
 			CellText *cellText = g_graphicsOptions->GetCellText(pos);
-			if (cellText != NULL) {
-				COLORREF bgColor = RGB(0,0,0);
-				
-				uint8 col = cellText->m_color;
+			if (cellText != NULL) 
+            {
 				sint32 r,g,b;
-				
-				ColorMagnitudeToRGB(col, &r, &g, &b);
+				ColorMagnitudeToRGB(cellText->m_color, &r, &g, &b);
 
 				COLORREF fgColor = RGB(r, g, b);
+				COLORREF bgColor = RGB(0, 0, 0);
 				
-				DrawSomeText(FALSE, 
-								cellText->m_text, 
-								x + GetZoomTilePixelWidth()/2, 
-								y + GetZoomTilePixelHeight(),
-								bgColor, 
-								fgColor);	
+				DrawSomeText(false, 
+							 cellText->m_text, 
+							 x + GetZoomTilePixelWidth()/2, 
+							 y + GetZoomTilePixelHeight(),
+							 bgColor, 
+							 fgColor
+                            );	
 			}
 		}
 	}
@@ -2368,18 +2349,21 @@ void TiledMap::ColorMagnitudeToRGB(uint8 col, sint32 *r, sint32 *g, sint32 *b)
 }
 
 
-void TiledMap::DrawSomeText(BOOL mixingPort,
-							MBCHAR *text, 
-							sint32 tx, sint32 ty, 
-							COLORREF bgColorRef, 
-							COLORREF fgColorRef )
+void TiledMap::DrawSomeText
+(
+    bool            mixingPort,
+	MBCHAR const *  text, 
+	sint32          tx, 
+    sint32          ty, 
+	COLORREF        bgColorRef, 
+	COLORREF        fgColorRef 
+)
 {
-	aui_Surface		*surface;
-
 	if (text == NULL) return;
 	if (strlen(text) < 1) return;
 	if (m_font == NULL) return;
 
+	aui_Surface		*surface;
 	if (mixingPort) {
 		if (!g_screenManager) return;
 
@@ -2505,43 +2489,32 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 	{
 		
-		if (actor->Draw(fog)) {
-			
+		if (actor->Draw(fog)) 
+        {
 			RECT rect;
-
 			actor->GetBoundingRect(&rect);
 			AddDirtyRectToMix(rect);
-		} else {
-			
-			
-
-			
-			
 		}
 
-		if (g_graphicsOptions) {
-			if (g_graphicsOptions->IsArmyTextOn()) {
-				Unit	u = actor->GetUnitID();
+		if (g_graphicsOptions && g_graphicsOptions->IsArmyTextOn()) 
+        {
+			Unit	u = actor->GetUnitID();
 				
-				if (u.IsValid() && u.GetArmy().m_id != 0) 
-                {
-					Army		a = u.GetArmy();
+			if (u.IsValid()) 
+            {
+				Army		a = u.GetArmy();
 
-					MBCHAR		*s = a.GetData()->GetDebugString();
+				sint32		tx = actor->GetX() + GetZoomTilePixelWidth()/2;
+				sint32 		ty = actor->GetY() + GetZoomTileHeadroom();
 
-					sint32		tx = (sint32)(actor->GetX()+GetZoomTilePixelWidth()/2),
-								ty = (sint32)(actor->GetY()+GetZoomTileHeadroom());
+				uint8		col = a.GetData()->GetDebugStringColor();
+				sint32		r,g,b;
+				ColorMagnitudeToRGB(col, &r, &g, &b);
 
-					sint32		r,g,b;
-					uint8		col = a.GetData()->GetDebugStringColor();
+				COLORREF	fgColor = RGB(r, g, b);
+				COLORREF    bgColor = RGB(0,0,0);
 
-					ColorMagnitudeToRGB(col, &r, &g, &b);
-
-					COLORREF	fgColor = RGB(r, g, b),
-								bgColor = RGB(0,0,0);
-
-					DrawSomeText(TRUE, s, tx, ty, fgColor, bgColor);
-				}
+				DrawSomeText(true, a.GetData()->GetDebugString(), tx, ty, fgColor, bgColor);
 			}
 		}
 
@@ -2551,50 +2524,27 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 		{
 			MapPoint pos = actor->GetPos();
 
-			char text[80]; 
-			text[0] = '\0';
-			
 			sint32	tx = (sint32)(actor->GetX()+(k_TILE_PIXEL_WIDTH*m_scale)/2),
 					ty = (sint32)(actor->GetY()+(k_TILE_PIXEL_HEIGHT*m_scale));
 
 			Cell *c = g_theWorld->GetCell(pos); 
 			Unit city = c->GetCity(); 
 
-			
 			if ((city != Unit()) && g_show_ai_dbg)
 			{               
-
-
-
-
-
-
-
-				
-				
-				strcpy(text, city.GetName());
-
-				DrawSomeText(TRUE, text, tx, ty+10, 
-								g_colorSet->GetColorRef(COLOR_YELLOW),
-								g_colorSet->GetColorRef(COLOR_PURPLE));
+				DrawSomeText(true, city.GetName(), tx, ty+10, 
+							 g_colorSet->GetColorRef(COLOR_YELLOW),
+							 g_colorSet->GetColorRef(COLOR_PURPLE)
+                            );
 			} 
 				
 			CellUnitList *al = c->UnitArmy(); 
-			if (al) { 
-
-
-
-
-
-
-
-				
-				
-				strcpy(text, al->Access(0).GetName()); 
-
-				DrawSomeText(TRUE, text, tx, ty,
-					g_colorSet->GetColorRef(COLOR_BLACK),
-					g_colorSet->GetColorRef(COLOR_WHITE));
+			if (al) 
+            { 
+				DrawSomeText(true, al->Access(0).GetName(), tx, ty,
+					         g_colorSet->GetColorRef(COLOR_BLACK),
+					         g_colorSet->GetColorRef(COLOR_WHITE)
+                            );
 			}
 
 		}
