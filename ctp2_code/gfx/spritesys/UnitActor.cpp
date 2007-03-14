@@ -48,6 +48,8 @@
 // - added Hidden Nationality check for units 2-21-2007
 // - Added Civilization flag MAPICONS
 // - Added MapIcon database (3-Mar-2007 Martin Gühmann)
+// - Implemented but then outcomment DrawCityImps just didn't come out right
+//   maybe revisit
 //
 //----------------------------------------------------------------------------
 
@@ -79,6 +81,8 @@
 #include "UnitPool.h"           // g_theUnitPool
 #include "UnitRecord.h"
 #include "wonderutil.h"
+#include "BuildingRecord.h"    //emod
+#include "WonderRecord.h"    //emod
 
 extern SpriteGroupList  *g_unitSpriteGroupList;
 extern SpriteGroupList  *g_citySpriteGroupList;
@@ -1274,7 +1278,7 @@ void UnitActor::DrawFortifying(bool fogged)
 //              Does not draw force fields: use DrawForceField for that.
 //
 //----------------------------------------------------------------------------
-void UnitActor::DrawCityWalls(bool fogged)
+void UnitActor::DrawCityWalls(bool fogged)   //TODO make a draw wonders and draw buildings method
 {
 	TileSet const *	tileSet		= g_tiledMap->GetTileSet();
 	Pixel16 *		cityImage	= tileSet->GetImprovementData(38);	// default
@@ -1582,6 +1586,9 @@ bool UnitActor::Draw(bool fogged)
 
 	if (m_unitSpriteGroup && m_unitID.IsValid())
 	{
+		//if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007  it works but doesnt look right
+		//	DrawCityImprovements(fogged); 
+
 		if (IsFortified())
 			DrawFortified(fogged);
 
@@ -1628,6 +1635,14 @@ bool UnitActor::Draw(bool fogged)
 		if (HasForceField() || forcefieldsEverywhere) {
 			DrawForceField(fogged);
 		}
+
+	// adding drawwonders and buildings using mapicons
+	//mapicons will save tile file space and make it so modders don't have to add a new tilefile all the time
+    // also to cut on visible wonders slic and my visible wonder code doesn't work to well
+	// bool check is in the method
+	//emod
+
+
 	}
 
 	if (drawSelectionBrackets) 
@@ -1752,20 +1767,35 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 
         if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
 	    {
-		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), x, y, displayedColor);
+			sint32 xf = x + iconDim.x;
+		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
 	    }
     }
 
 	MAPICON		icon = MAPICON_HERALD;
-	// ToDo: Replace by drawn numbers
+
+	// ToDo: Replace by drawn numbers see tiledraw code
 	// than we can remove these extra icons
-	if (stack > 1 && stack <= 9) {
-		icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
-	} else if(stack >= 10 && stack <= 12) {
-		icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
-	}
+	//original
+	//if (stack > 1 && stack <= 9) {
+	//	icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
+	//} else if(stack >= 10 && stack <= 12) {
+	//	icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
+	//}
 
 	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, displayedColor);
+
+	//code for text
+	MBCHAR strn[80];
+	sprintf(strn, "%i", stack);
+
+	if (stack > 1 && stack <= 9) {
+		DrawText(x + 5, y, strn);
+	} else if(stack >= 10 && stack <= 12) {
+		DrawText(x, y, strn);
+	}
+	//DrawSomeText(TRUE, strn, x, y, g_colorSet->GetColorRef(COLOR_BLACK), g_colorSet->GetColorRef(COLOR_WHITE));
+	//DrawString(surf, &rect, &clipRect, strn, 0, GetColorRef(COLOR_BLACK),0);
 
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
@@ -1804,6 +1834,25 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 			}
 		}			
 	}
+	//Add DrawArmyName?
+	/*
+
+		if (g_theProfileDB->IsShowArmyNames()) {
+			COLORREF nameColor = GetColorRef(COLOR_WHITE);
+				Unit	u = actor->GetUnitID();
+				
+				if (m_unitID.IsValid() && m_unitID.GetArmy().m_id != 0) 
+                {
+					Army		a = m_unitID.GetArmy();
+
+					MBCHAR		*name = a.GetData()->GetName();
+					m_font->DrawString(surf, &rect, &clipRect, name, 0, nameColor, 0);
+				}
+			}
+		}
+
+		
+    */
 	
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
 }
@@ -2440,6 +2489,80 @@ void UnitActor::TerminateLoopingSound(uint32 sound_type)
 }
 
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnitActor::DrawCityImprovements
+//
+// Description: Draw wonders and buildings on city graphics
+//
+// Parameters : fogged	: city is under fog of war
+//
+// Globals    : g_tiledMap
+//				g_theCityStyleDB
+//				g_player
+//				g_theTerrainDB
+//				g_theWorld
+//
+// Returns    : -
+//
+// Remark(s)  : Assumption: checks for icons
+//				The code works but doesn't look right
+//				Just goingto use the DRawCityNames method and do it 
+//				Like I did for religions but have the icon placement vary it
+//----------------------------------------------------------------------------
+/*
+void UnitActor::DrawCityImprovements(bool fogged)
+{
+	sint32 const	nudgeX	= 
+		(sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
+	sint32 const	nudgeY = 
+		(sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
+
+	Unit			unit(GetUnitID());
+	//Pixel16 *cityImage = g_tiledMap->GetTileSet()->GetImprovementData((uint16)which); //original code used pixel16 mapicon uses sint32 w/db
+	sint32  cityIcon = 0;
+	
+	TileSet	*   tileSet =	g_tiledMap->GetTileSet();
+
+	//Pixel16     color       = GetPlayerColor(owner, fog);
+
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+		if(unit.CD()->GetImprovements() & ((uint64)1 << b)){
+			if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+			{
+				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
+					g_tiledMap->DrawDitheredOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, fogged);
+				} else {
+					g_tiledMap->DrawDitheredOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
+														g_tiledMap->GetZoomTilePixelWidth(),
+														g_tiledMap->GetZoomTileGridHeight(),
+														fogged);
+				}
+			}
+		}
+	}
+
+
+  	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
+	{
+		if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)
+		{
+			if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+			{
+				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
+					g_tiledMap->DrawDitheredOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, fogged);
+				} else {
+					g_tiledMap->DrawDitheredOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
+														g_tiledMap->GetZoomTilePixelWidth(),
+														g_tiledMap->GetZoomTileGridHeight(),
+														fogged);
+				}
+			}
+		}
+	}
+///end for loop
+}
+*/
 
 #ifdef _DEBUG
 void UnitActor::DumpActor(void)

@@ -41,6 +41,7 @@
 // - implemented above and added HasMinefield by E 5-30-2006
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 // - added CanBuildAlly and CanBuildWasteland checks
+// - added outcommented infrastructure flags
 //
 //----------------------------------------------------------------------------
 
@@ -1121,6 +1122,7 @@ bool terrainutil_IsInstallation(const sint32 type)
 					effect->HasDefenseBonus() ||
 					effect->GetRadar() ||
 					effect->GetColony() ||  //EMOD
+					//effect->GetFort()
 					effect->GetListeningPost() ||
 					effect->GetEndgame())
 					return true;

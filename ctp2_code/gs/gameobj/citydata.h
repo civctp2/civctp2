@@ -989,22 +989,6 @@ public:
 	sint32 SectarianHappiness() const;             //EMOD 5-24-2006
 //	sint32 AddGoodToCity (sint32 good) const;      //EMOD 5-31-2006
 	sint32 TileImpHappinessIncr() const;		   //EMOD 10-05-2006
-//Religion Bools for Civ4 style Religion MAPICONS
-    /// @todo Generalise the next block of functions to something which has the
-    ///       religion number as parameter (HasReligion(int religion)). 
-    ///       Fixing the number of religions in the code as method names is bad 
-    ///       style. Just imagine we would have had BuildUnit1(), BuildUnit2(), 
-    ///       etc. as methods.
-	bool IsReligion1() const;
-	bool IsReligion2() const;
-	bool IsReligion3() const;
-	bool IsReligion4() const;
-	bool IsReligion5() const;
-	bool IsReligion6() const;
-	bool IsReligion7() const;
-	bool IsReligion8() const;
-	bool IsReligion9() const;
-	bool IsReligion10() const;
 
 	sint32 ConsumeEnergy();
 	sint32 ProduceEnergy();

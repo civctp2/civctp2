@@ -41,6 +41,9 @@
 // - Added special attack window. (Aug 15th 2005 Martin Gühmann)
 // - Removed unused methods: FillBank, ClearButtons and AddButton.
 //   (Aug 16th 2005 Martin Gühmann)
+// - Restored Fifth Tileimp Button Bank by E 2-27-2007
+// - TODO fix obsolete tileimp defect
+// - TODO add buttons for orders button bank
 //
 //----------------------------------------------------------------------------
 //

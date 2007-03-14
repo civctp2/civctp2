@@ -3338,6 +3338,10 @@ void UnitData::EndTurn()
 		){ 
 			g_director->AddCenterMap(m_pos);
 			Barbarians::AddBarbarians(m_pos, CellOwner, FALSE);
+			//added since army data doesn't do the slic?
+			SlicObject *so = new SlicObject("999GuerrillaSpawn");
+			so->AddRecipient(m_owner);
+            so->AddUnit(m_id);
 		}
 //end emod
 }
@@ -5929,92 +5933,3 @@ const UnitRecord * UnitData::GetDBRec(void) const
 	}
 }
 
-bool UnitData::IsReligion1() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion1();
-}
-
-bool UnitData::IsReligion2() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion2();
-}
-
-bool UnitData::IsReligion3() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion3();
-}
-
-bool UnitData::IsReligion4() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion4();
-}
-
-bool UnitData::IsReligion5() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion5();
-}
-
-bool UnitData::IsReligion6() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion6();
-}
-
-bool UnitData::IsReligion7() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion7();
-}
-
-bool UnitData::IsReligion8() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion8();
-}
-
-bool UnitData::IsReligion9() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion9();
-}
-
-bool UnitData::IsReligion10() const
-{
-	Assert(m_city_data);
-	if(!m_city_data)
-		return false;
-
-	return m_city_data->IsReligion10();
-}

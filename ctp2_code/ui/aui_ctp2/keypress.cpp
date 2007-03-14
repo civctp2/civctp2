@@ -1007,6 +1007,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_TOGGLE_TRADE_ROUTES:
 		g_theProfileDB->SetShowTradeRoutes(!g_theProfileDB->GetShowTradeRoutes());
 		break;
+//#if 0
+//	case KEY_FUNCTION_TOGGLE_ARMY_NAMES: //emod
+//		g_theProfileDB->SetShowArmyNames(!g_theProfileDB->GetShowArmyNames());
+//		break;
+//#endif
 
 #ifdef _DEBUG
 #if 0

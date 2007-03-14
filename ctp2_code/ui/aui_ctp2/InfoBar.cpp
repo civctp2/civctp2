@@ -460,7 +460,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 						//original
 						//g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);
 						//emod
-						if ((cell->AccessUnit(0).IsHiddenNationlity()) && (cell->AccessUnit(0).GetOwner() != g_selected_item->GetVisiblePlayer())) {  
+						if ((cell->AccessUnit(0).IsHiddenNationality()) && (cell->AccessUnit(0).GetOwner() != g_selected_item->GetVisiblePlayer())) {  
 							g_player[PLAYER_INDEX_VANDALS]->m_civilisation->GetSingularCivName(civName);
 						} else { 
 							g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);

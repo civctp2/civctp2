@@ -41,24 +41,26 @@ Wonder {
 	StringId Description
 	Record Advance EnableAdvance
 	Record Advance [0..5] ObsoleteAdvance
-	Record Building[] PrerequisiteBuilding  // Added by E to limit wonders to cities with certain buildings
-	Record Government[] GovernmentsModified  // Added by MrBaggins
-	Record CityStyle[] CultureOnly //added by E -- can only build wonders if civ has certain citystyle
-	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
-	Record Government[] ObsoleteGovernmentType //added by E --- switching to this obsoletes your imp
-	Record CityStyle[] CityStyleOnly //added by E--can only build wonders at cities with certain citystyle 
-	Record Resource[] NeedsCityGood // must have good in radius of city or buying resource to build 
-	Record Resource[] NeedsCityGoodAll //a city must have all resource to build wonder
-	Record Resource[] NeedsCityGoodAnyCity //FU
-    Record Resource[] EnablesGood //added by E -- having a TI gives a city a good
-	Record TerrainImprovement[] ShowOnMap //FU
+	Record Building[] PrerequisiteBuilding		// Added by E to limit wonders to cities with certain buildings
+	Record Government[] GovernmentsModified		// Added by MrBaggins
+	Record CityStyle[] CultureOnly				//added by E -- can only build wonders if civ has certain citystyle
+	Record Government[] GovernmentType			//added by E --- a copy of unit Government type code
+	Record Government[] ObsoleteGovernmentType	//added by E --- switching to this obsoletes your imp
+	Record CityStyle[] CityStyleOnly			//added by E--can only build wonders at cities with certain citystyle 
+	Record Resource[] NeedsCityGood				// must have good in radius of city or buying resource to build 
+	Record Resource[] NeedsCityGoodAll			//a city must have all resource to build wonder
+	Record Resource[] NeedsCityGoodAnyCity		//FU
+    Record Resource[] EnablesGood				//added by E -- having a TI gives a city a good
+	Record TerrainImprovement[] ShowOnMap		//FU
 	Record TerrainImprovement[] ShowOnMapRadius //FU
 	Record Civilisation[] CivilisationOnly 
-	Record Feat[] NeedsFeatToBuild		// implemented by E
+	Record Feat[] NeedsFeatToBuild				// implemented by E
+	Bit(Record MapIcon)   ShowCityIcon			// Like show on map but put on city?
 
-	Bit(Int) SquaredBorderRadius 		//FU added by E
-	Bit(Int) IntBorderRadius    		//FU added by E
-	Bit		 OnePerCiv					//EMOD implement 5-12-2006
+	Bit(Int) SquaredBorderRadius 				//FU added by E
+	Bit(Int) IntBorderRadius    				//FU added by E
+	Bit		 OnePerCiv							//EMOD implement 5-12-2006
+	Bit(Record MapIcon)			IsReligionIcon	// Displays city religion icon - can be used for Holy Cities
 	
 	# Flags
 	Bit(Int) ReduceReadinessCost
@@ -94,10 +96,10 @@ Wonder {
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
 	Bit(Int) BonusGold
-	Bit CantBuildInSea					// FU Added by E to restrict some wonders to Land
-	Bit CantBuildOnLand					// FU Added by E to restrict some wonders to Sea				
-	Bit CoastalBuilding 			    // FU Added by E to restrict some wonders to the Coast
-	Bit EnablesPunativeAirstrikes       // FU Added by E Air Bombard without War 
+	Bit CantBuildInSea							// FU Added by E to restrict some wonders to Land
+	Bit CantBuildOnLand							// FU Added by E to restrict some wonders to Sea				
+	Bit CoastalBuilding 						// FU Added by E to restrict some wonders to the Coast
+	Bit EnablesPunativeAirstrikes				// FU Added by E Air Bombard without War 
 
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness
@@ -113,13 +115,13 @@ Wonder {
 	Bit StartGaiaController
 	Bit GLHidden
 
-	Struct BuildingFeat {                 // From feats implemented by E 2-24-2006
+	Struct BuildingFeat {						// From feats implemented by E 2-24-2006
 		Record Building Building
 		Bit(Int) Num
 		Bit(Int) PercentCities
 	}
 
-	Bit(struct BuildingFeat) BuildingFeat // From feats implemented by E 2-24-2006
+	Bit(struct BuildingFeat) BuildingFeat		// From feats implemented by E 2-24-2006
 
     Struct BuildingGold {
         	Record Building Building

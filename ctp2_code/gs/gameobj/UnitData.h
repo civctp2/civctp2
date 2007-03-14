@@ -708,17 +708,6 @@ public:
 	sint32 CalculateTotalHP() const;
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
-	bool IsReligion1() const;
-	bool IsReligion2() const;
-	bool IsReligion3() const;
-	bool IsReligion4() const;
-	bool IsReligion5() const;
-	bool IsReligion6() const;
-	bool IsReligion7() const;
-	bool IsReligion8() const;
-	bool IsReligion9() const;
-	bool IsReligion10() const;
-
 
 private:
     bool CanExecuteNextTo

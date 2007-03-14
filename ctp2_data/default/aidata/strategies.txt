@@ -47,6 +47,10 @@
 //   units only that needs refueling. - April 30th 2005 Martin Gühmann
 // - Used the values of ApolytonPack-GoodMod for RoadUtilityBonus,
 //   ImproveProductionBonus and ImproveGrowthBonus. (Aug 26th 2005 Martin Gühmann)
+// - inreased SEIGE values for militarist and barbarian
+// - diplomatic more emphasis on embassies
+// - economic moe emphasis on piracy
+// - ecotopian more defense oriented (temporary)
 //
 //----------------------------------------------------------------------------
 
@@ -214,7 +218,7 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   3 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  20  MaxExec   3 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -558,7 +562,7 @@ STRATEGY_BARBARIAN {
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_WANDER              Priority        0  MaxEval   0  MaxExec   0 }
     GoalElement { Goal GOAL_DEFEND              Priority        0  MaxEval   0	MaxExec   0 }
-    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0	MaxExec   0 }
+    GoalElement { Goal GOAL_SEIGE               Priority   500000  MaxEval  25	MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0	MaxExec   0 }
@@ -716,7 +720,7 @@ STRATEGY_SEIGE {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec   5 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   600000  MaxEval   3  MaxExec   1 }
     GoalElement { Goal GOAL_ATTACK              Priority   600000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS              Priority   595000  MaxEval  25  MaxExec  10 }
@@ -799,7 +803,7 @@ STRATEGY_ATTACK {
     AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
 
-    GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_DEFEND              Priority   507000  MaxEval   2  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec   3 }
     GoalElement { Goal GOAL_ATTACK              Priority   605000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  25 }
@@ -1681,7 +1685,7 @@ STRATEGY_MILITARIST_DEFAULT {
     // GOALS
     //
 
-    GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_DEFEND              Priority   257000  MaxEval   2  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   3 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
@@ -2172,14 +2176,14 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_BOMBARD             Priority   407000  MaxEval  25  MaxExec   4 }
     GoalElement { Goal GOAL_EXPEL               Priority     9000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
-    GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
+    GoalElement { Goal GOAL_PIRATE              Priority   593000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
     GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
-    GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority   550000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
@@ -2616,7 +2620,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     // GOALS
     //
 
-    GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_DEFEND              Priority   657000  MaxEval   2  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
     GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
@@ -3104,10 +3108,10 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   750000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   530000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }

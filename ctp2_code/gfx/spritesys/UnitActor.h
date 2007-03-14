@@ -104,6 +104,7 @@ public:
 	void			DrawFortifying(bool fogged);
 	void			DrawCityWalls(bool fogged);
 	void			DrawForceField(bool fogged);
+	//void			DrawCityImprovements(bool fogged); //emod
 
 	bool			Draw(bool fogged = FALSE);
 	void			DrawHerald(void);

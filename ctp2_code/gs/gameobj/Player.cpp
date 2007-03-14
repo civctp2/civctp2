@@ -90,6 +90,10 @@
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 // - Added EnergySupply method it calculates all energy produced and demanded by
 //   cities and installations and calcluates what percentage is met - Emod 2-27-2007
+// - TODO break energy code to allow for slic access
+// - TODO HasInstallation method for oneperciv and installation wonder
+// - TODO Commodity Market Code
+// - TODO BreadBasket Code
 //
 //----------------------------------------------------------------------------
 
@@ -10184,8 +10188,8 @@ double Player::EnergySupply()
 {
 	if(!m_all_cities)
 		return 0;
-	sint32 civenergy = 0;
-	sint32 civdemand = 0;
+	double civenergy = 0.0;
+	double civdemand = 0.0;
 	sint32 n = m_all_cities->Num();
 	//get from city data all energy from cities
 	for(sint32 i = 0; i < n; i++) {
@@ -10240,11 +10244,55 @@ double Player::EnergySupply()
 	double energysupply;
 	if (civdemand > 0) {
 /// @todo Check whether you really want an integer division here.
-;		energysupply = civenergy / civdemand;
+		energysupply = (static_cast<double> (civenergy) / static_cast<double> (civdemand));
 	} else {
 		energysupply = 0;
 	}
 	return energysupply;
 
+//add profiledb option for energy market report
+
 }
 
+
+//Commodity Market TODO
+/*
+use exportgold like colonies
+add a random variable to show market fluctuations
+make each tileimp random variable independent to encourage variety
+add diplomacy contacts modifier
+add trade agreement modifier
+add embargo check
+add peace treaty check
+add profiledb options for commodity market report
+add the gold under calcwondergold method
+*/
+
+//BreadBasket Code
+/*
+create export tilefood 
+recommend less value than irrigation food
+possible use exporttile value food code as well
+add random variable for harvest
+get total food produce and divide by city population and add to citydata::processfood
+this will allow the player to make places like Algeria&Egypt in Ancient Rome, or the Midwest for America, or Ukraine for Russia where a large ag area supports the empire
+A build option not to exceed city limit
+*/
+
+
+/*
+bool Player::HasInstallation (sint32 type) 
+{
+	sint32 n = m_all_cities->Num();
+
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; type < m_allInstallations->Num(); b++) {
+			if (type == m_allInstallations->Access(b))
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+*/

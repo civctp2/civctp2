@@ -47,6 +47,18 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
+2007-03-12
+Fixed: Crash caused by SectarianHappiness because the founder civ was destroyed
+Fixed: Crash caused by Sink code
+Added: GovtIcon DB flag (future use)
+Added: ShowCityIcon for Wonders and buildings (uses mapicons in concepticon.txt)
+Added: IsReligionIcon to wonders and buildings (uses mapicons in concepticon.txt)
+Added: Graphic window option to show/hide Army Names
+Added: Graphics window option to show/hide nation flags
+Added: New strategies.txt that emphasizes more city captures
+Fixed: Location of Nation Flag is now right of the herald
+Fixed: Army stack now done by drawingstring not icons
+Deleted: Old IsReligion# system
 2007-02-28
 Added: Risk dependency for hostile terrain
 Added: SpawnBarbarian code for entrenched units that can spawnbarbarians

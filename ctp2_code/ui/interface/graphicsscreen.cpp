@@ -55,13 +55,16 @@ static aui_Switch			*s_walk		= NULL,
 							*s_cityInfluence = NULL,
 							*s_grid		= NULL,
 							
-							*s_cityNames = NULL;
+							*s_cityNames = NULL, //;
+							*s_civflags = NULL, //CivFlagButton
+							*s_armyNames = NULL;
 
 
 static BOOL			s_gridToggled = FALSE;
 static BOOL			s_cityInfluenceToggled = FALSE;
 static BOOL			s_politicalBordersToggled = FALSE;
-
+static BOOL			s_armyNamesToggled = FALSE; //emod
+static BOOL			s_civflagsToggled = FALSE; //emod
 static BOOL			s_unitAnimToggled = FALSE;
 
 enum
@@ -80,6 +83,8 @@ enum
 	GS_CITYINFLUENCE,
 	GS_GRID,
 	GS_CITYNAMES,	
+	GS_ARMYNAMES,  //emod
+	GS_CIVFLAGS,  //emod
 
 	GS_TOTAL };
 
@@ -99,7 +104,9 @@ static uint32 check[] =
 	GS_CITYINFLUENCE,
 	GS_GRID,
 
-	GS_CITYNAMES,	
+	GS_CITYNAMES,
+	GS_ARMYNAMES,  //emod
+	GS_CIVFLAGS,  //emod
 	
 	GS_TOTAL 
 };
@@ -177,7 +184,9 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	
 	s_cityNames = spNew_aui_Switch(&errcode,windowBlock,"CityNamesButton", graphicsscreen_checkPress, &check[GS_CITYNAMES]);
-
+	//emod
+	s_armyNames = spNew_aui_Switch(&errcode,windowBlock,"ArmyNamesButton", graphicsscreen_checkPress, &check[GS_ARMYNAMES]);
+	s_civflags = spNew_aui_Switch(&errcode,windowBlock,"CivFlagButton", graphicsscreen_checkPress, &check[GS_CIVFLAGS]);
 	s_resScreenButton = spNew_ctp2_Button( &errcode, windowBlock, "ResolutionButton", graphicsscreen_selectResolution );
 
 	
@@ -203,7 +212,8 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	
 	s_cityNames->SetState(g_theProfileDB->GetShowCityNames());
-
+	s_armyNames->SetState(g_theProfileDB->GetShowArmyNames());  //emod
+	s_civflags->SetState(g_theProfileDB->IsCivFlags());  //emod
 
 
 	
@@ -246,6 +256,8 @@ void graphicsscreen_Cleanup()
 	mycleanup(s_unitSpeed);
 	mycleanup(s_unitSpeedN);
 	mycleanup(s_graphicsWindow);
+	mycleanup(s_armyNames); //emod
+	mycleanup(s_civflags); //emod
 #undef mycleanup
 }
 
@@ -340,6 +352,12 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		break;
 	case GS_CITYNAMES:
 		func = &ProfileDB::SetShowCityNames; break;
+		break;
+	case GS_ARMYNAMES:
+		func = &ProfileDB::SetShowArmyNames; break;  //emod
+		break;
+	case GS_CIVFLAGS:
+		func = &ProfileDB::SetShowCivFlags; break;  //emod
 		break;
 
 	case GS_TOTAL:  break;

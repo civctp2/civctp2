@@ -262,6 +262,7 @@ private:
     sint32 m_aiPopCheat;
 
     sint32 m_showCityNames;
+	sint32 m_showArmyNames; //emod
     sint32 m_showTradeRoutes;
 
     sint32 m_unitSpeed;
@@ -538,6 +539,7 @@ public:
     void SetNonContinuousUnitCompleteMessages(BOOL on) { m_nonContinuousUnitCompleteMessages = on; }
 
     void SetShowCityNames(BOOL on) { m_showCityNames = on; }
+	void SetShowArmyNames(BOOL on) { m_showArmyNames = on; } //emod
     void SetShowTradeRoutes(BOOL on) { m_showTradeRoutes = on; }
 
     void SetMoveHoldTime(sint32 t) { m_moveHoldTime = t; }
@@ -566,8 +568,7 @@ public:
     void SetDisplayFilter(BOOL on) { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on) { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on) { m_displayTerrain = on;}
-
-
+	void SetShowCivFlags(BOOL on) { m_CivFlags = on; } //emod
 
     sint32		GetNPlayers() const				{ return m_nPlayers; }
 
@@ -719,6 +720,7 @@ public:
     BOOL        AIPopCheat() const { return m_aiPopCheat; }
 
     BOOL        GetShowCityNames() { return m_showCityNames; }
+	BOOL        GetShowArmyNames() { return m_showArmyNames; } //emod
     BOOL        GetShowTradeRoutes() { return m_showTradeRoutes; }
 
 

@@ -3277,4 +3277,7 @@ str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"						#If city is empty 
 str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"						#If city is empty at turn start AI gets cheapest unit
 str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"						#If city is empty at turn start AI gets cheapest unit
 
-
+str_ldl_Army_Names_Off			"Army Names Off"
+str_ldl_Army_Names_On			"Army Names On"
+str_ldl_Civ_Flags_Off			"Nation Flags Off"
+str_ldl_Civ_Flags_On			"Nation Flags On"

@@ -81,7 +81,8 @@ Government {
 
 	Record Advance       EnableAdvance
 	Record Advance[0..5] ObsoleteAdvance
-	Record CityStyle[]   CultureOnly // Added by E -- govt only if civ has certain citystyle
+	Record CityStyle[]   CultureOnly			// Added by E -- govt only if civ has certain citystyle
+	Bit(Record MapIcon)	 GovtIcon				// Display different capital icon? Or for diplomacy?
 
 	Record Icon Icon
 	Int   GrowthRank
@@ -117,6 +118,7 @@ Government {
 	Bit   IsAgrarian                  // Adds farmers each turn
 	Bit   HasMindlessTelevision       // Adds entertainers each turn
 	Bit   GLHidden                    // Makes the db record disappear from the GL
+
 
 	// The discovery of governments of the same rank 
 	// trigger different advice than higher ranked ones

@@ -163,6 +163,7 @@ ProfileDB::ProfileDB()
     m_dontKillMessages                  (FALSE),
     m_aiPopCheat                        (TRUE),
     m_showCityNames                     (TRUE),
+	m_showArmyNames                     (TRUE),  //emod
     m_showTradeRoutes                   (TRUE),
     m_unitSpeed                         (1),
     m_mouseSpeed                        (SLIDER_MIDDLE),
@@ -347,6 +348,7 @@ ProfileDB::ProfileDB()
 	Var("DontKillMessages"           , PV_BOOL  , &m_dontKillMessages           , NULL, false);
 	Var("AIPopCheat"                 , PV_BOOL  , &m_aiPopCheat                 , NULL, false);
 	Var("ShowCityNames"              , PV_BOOL  , &m_showCityNames              , NULL);
+	Var("ShowArmyNames"              , PV_BOOL  , &m_showArmyNames              , NULL);  //emod
 	Var("ShowTradeRoutes"            , PV_BOOL  , &m_showTradeRoutes            , NULL);
 
 	Var("UnitSpeed"                  , PV_NUM   , &m_unitSpeed                  , NULL);
@@ -400,7 +402,7 @@ ProfileDB::ProfileDB()
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
 	// emod new profile flags // Please make sure that only those show up which are used.
-	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL);
+	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL); //used
 	Var("NoAIProductionDeficit"      , PV_BOOL  , &m_NoAIProductionDeficit      , NULL, false);
 	Var("NoAIGoldDeficit"            , PV_BOOL  , &m_NoAIGoldDeficit            , NULL, false);
 	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);
@@ -419,7 +421,7 @@ ProfileDB::ProfileDB()
 	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade              , NULL, false);
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
-	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);
+	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
 
 }
 

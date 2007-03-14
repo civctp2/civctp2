@@ -168,6 +168,7 @@
 //   units, buildings, wonders, and tileimps must have energy flags for 
 //   calculation - by E 2-28-2007
 // - Added Insurgent Spawn slic message
+// - removed founder city check from sectarianhappiness b/c crash
 //
 //----------------------------------------------------------------------------
 
@@ -9906,7 +9907,7 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 					sint32 c;
 					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
 						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-						if(aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i))){
+						if((rec->GetNumConflictsWithBuilding()) && (aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i)))){
 							SectarianHappiness -= sh;
 						}
 					}
@@ -9934,11 +9935,12 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
 			SectarianHappiness -= sh;
 		}
-
+		/*   removed if the founder is destroyed it causes a crash
 		// Checks if the original owner of the city has a different govt than the occupier for political strife
-		if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
+		if(g_player[m_founder]->GetGovernmentType() != g_player[m_owner]->GetGovernmentType()) {
 			SectarianHappiness -= sh;
 		}
+		*/
 	}
 	return SectarianHappiness;
 }
@@ -10030,56 +10032,6 @@ sint32 CityData::TileImpHappinessIncr() const
 
 }
 
-// called by TiledMap::DrawCityNames
-bool CityData::IsReligion1() const
-{
-	return buildingutil_GetIsReligion1(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion2() const
-{
-	return buildingutil_GetIsReligion2(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion3() const
-{
-	return buildingutil_GetIsReligion3(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion4() const
-{
-	return buildingutil_GetIsReligion4(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion5() const
-{
-	return buildingutil_GetIsReligion5(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion6() const
-{
-	return buildingutil_GetIsReligion6(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion7() const
-{
-	return buildingutil_GetIsReligion7(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion8() const
-{
-	return buildingutil_GetIsReligion8(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion9() const
-{
-	return buildingutil_GetIsReligion9(GetEffectiveBuildings());
-}
-
-bool CityData::IsReligion10() const
-{
-	return buildingutil_GetIsReligion10(GetEffectiveBuildings());
-}
 
 
 //----------------------------------------------------------------------------

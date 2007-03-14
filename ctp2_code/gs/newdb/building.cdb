@@ -70,6 +70,8 @@ Building {
 	Bit(Int)                    IntBorderRadius          // FU added by E
 	Record TerrainImprovement[] ShowOnMap                // FU
 	Record TerrainImprovement[] ShowOnMapRadius          // FU
+	Bit(Record MapIcon)			ShowCityIcon			 // Like show on map but put on city?
+	Bit(Record MapIcon)			IsReligionIcon			 // Displays city religion icon
 
     Bit(Float)                  TreasuryInterest         // FU
     Bit                         CantSell                 // Some Buildings Cant Be Sold
@@ -154,7 +156,7 @@ Building {
 
 	Bit(File) ShowAsIcon            // tiledraw icon file?
 
-	#Religion Bools for MAPICONS
+	#Religion Bools for MAPICONS   //remove
 	Bit        IsReligion1
 	Bit        IsReligion2
 	Bit        IsReligion3

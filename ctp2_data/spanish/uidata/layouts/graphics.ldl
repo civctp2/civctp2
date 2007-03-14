@@ -1,6 +1,11 @@
 #######################################
 # File: graphics.ldl
 # Last Access: Thu Apr 22 17:20:10 1999
+# -------------------------------------
+# 
+# - Increased size 3-9-2007
+# - Added ArmyNames Option 3-9-2007
+# - Added CivFlags Option 3-13-2007
 #######################################
 
 ##-----------------------------------##
@@ -29,7 +34,7 @@ GraphicsWindow {
 	string	xanchor	"center"
 	string	yanchor	"center"
 	int	widthpix	680
-	int	heightpix	290
+	int	heightpix	390 #290
 	int	xpix	0
 	int	ypix	0
 	Name:CTP_GREY_TITLE_FONT {
@@ -86,6 +91,15 @@ GraphicsWindow {
 			string	string1	"str_ldl_City_Names_On"
 		}
 	}
+	#emod
+	ArmyNamesButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	210
+		stringtable {
+			string	string0	"str_ldl_Army_Names_Off"
+			string	string1	"str_ldl_Army_Names_On"
+		}
+	}
 
 	# Second Column of Switches
 	##############################################
@@ -122,6 +136,15 @@ GraphicsWindow {
 			string	string1	"str_ldl_Grid_On"
 		}
 	}
+	#EMOD
+	CivFlagButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	210
+		stringtable {
+			string	string0	"str_ldl_Civ_Flags_Off"
+			string	string1	"str_ldl_Civ_Flags_On"
+		}
+	}
 
 	#At bottom center
 	####################################
@@ -132,7 +155,7 @@ GraphicsWindow {
 		string	imagebltflag	"chromakey"
 #		int xpix	279
 		string	xanchor	"center"
-		int	ypix	225
+		int	ypix	325 #225
 		string	text	"str_ldl_RES_CHANGE_BUTTON"
 	}
 
