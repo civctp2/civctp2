@@ -29,6 +29,7 @@ HAPPY_REASON_ATTACKED_CONVERTER "Angegr. Reformierer"
 HAPPY_REASON_ASSASSINATION "Kabinett bombardiert"
 HAPPY_REASON_NUM_CITIES "Nationsgröße"
 HAPPY_REASON_CONQUEST_DISTRESS "Belagerungsnot"
+HAPPY_REASON_SECTHAPPY "Sectarian Happiness"
 
 SCORE_CAT_FEATS "Meisterleistung:"
 SCORE_CAT_ADVANCES "Neuerungen:"

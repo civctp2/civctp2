@@ -97,7 +97,7 @@ MAPICON_POLBORDERSE		"upc056.tga"
 
 # The mind virusses: The religions
 MAPICON_JUDAISM			"upc057.tga"
-MAPICON_BUHDDISM		"upc058.tga"
+MAPICON_BUDDHISM		"upc058.tga"
 MAPICON_ISLAM			"upc059.tga"
 MAPICON_TAOISM			"upc060.tga"
 MAPICON_CHRISTENDOM		"upc061.tga"

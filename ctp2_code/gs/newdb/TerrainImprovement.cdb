@@ -117,9 +117,10 @@ TerrainImprovement {
 		Bit Urban                           // FU
 		Bit Installation                    // FU
 		Bit DeniedToEnemy                   // FU
-		Bit(Int) BonusFoodExport            // FU
-		Bit(Int) BonusProductionExport      // FU
-		Bit(Int) BonusGoldExport            // FU
+		Bit(Int) BonusFoodExport                // installation gives a food modifier
+		Bit(Int) BonusProductionExport          // Installation Gives PW
+		Bit(Int) BonusGoldExport                // Installation gives Gold
+		Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 		
 		Bit CanBeCaptured                   // FU
 		Bit CanUpgrade                      // FU
 		Bit(Float) Minefield                // FU
@@ -179,10 +180,11 @@ TerrainImprovement {
 	Bit(Int) SquaredBorderRadius
 	Bit(Int) MoveBonus
 	Bit      Colony                         // sends good every turn to a city
-	Bit(Int) BonusFoodExport                // not implemented
-	Bit(Int) BonusProductionExport          // Installation Gives PW
-	Bit(Int) BonusGoldExport                // Installation gives Gold
-	Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 
+	// moved to effects
+	//Bit(Int) BonusFoodExport                // not implemented
+	//Bit(Int) BonusProductionExport          // Installation Gives PW
+	//Bit(Int) BonusGoldExport                // Installation gives Gold
+	//Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 
 	Bit NeedsIrrigation                     // FU Can only be build on rivers or adjacent to rivers or other tileimps with flag IsWaterSupply
 
 	Bit GLHidden

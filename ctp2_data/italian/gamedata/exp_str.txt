@@ -29,6 +29,7 @@ HAPPY_REASON_ATTACKED_CONVERTER "Convertitore attaccato"
 HAPPY_REASON_ASSASSINATION "Palazzo bombardato"
 HAPPY_REASON_NUM_CITIES "Dimensioni impero"
 HAPPY_REASON_CONQUEST_DISTRESS "Dolore conquista"
+HAPPY_REASON_SECTHAPPY "Sectarian Happiness"
 
 SCORE_CAT_FEATS "Imprese:"
 SCORE_CAT_ADVANCES "Progressi:"

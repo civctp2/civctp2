@@ -45,6 +45,7 @@
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 // - Added additional options, most to be implemented later
 // - Implemented NRG - option to ccalculate energy ratio affecting production and demand
+// - You need two changes here for a profile option
 //
 //----------------------------------------------------------------------------
 
@@ -211,7 +212,7 @@ ProfileDB::ProfileDB()
     m_endTurnWithEmptyBuildQueues       (FALSE),
     m_runInBackground                   (FALSE),
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
-    m_cityCaptureOptions                (FALSE),
+    m_cityCaptureOptions                (FALSE),  //emod1
     m_upgrade                           (TRUE),
     m_smoothBorders                     (FALSE),
 	//emod new profile flags
@@ -398,7 +399,7 @@ ProfileDB::ProfileDB()
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL  , &m_endTurnWithEmptyBuildQueues, NULL, false);
 	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL, false);
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
-	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
+	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false); //used emod2
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
 	// emod new profile flags // Please make sure that only those show up which are used.
@@ -420,7 +421,7 @@ ProfileDB::ProfileDB()
 	Var("AINoGoldHunger"             , PV_BOOL  , &m_AINoGoldHunger             , NULL, false);
 	Var("AIFreeUpgrade"              , PV_BOOL  , &m_AIFreeUpgrade              , NULL, false);
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
-	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
+	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false); //used
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
 
 }

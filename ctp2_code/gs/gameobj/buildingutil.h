@@ -105,16 +105,7 @@ sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements); //EMOD 5-27-
 bool buildingutil_GetTreasuryInterest(const uint64 built_improvements,
                                       double &percent, sint32 owner);
 //EMOD Religion Flags to give Civ4 MAPICONS
-bool buildingutil_GetIsReligion1(const uint64 built_improvements);
-bool buildingutil_GetIsReligion2(const uint64 built_improvements);
-bool buildingutil_GetIsReligion3(const uint64 built_improvements);
-bool buildingutil_GetIsReligion4(const uint64 built_improvements);
-bool buildingutil_GetIsReligion5(const uint64 built_improvements);
-bool buildingutil_GetIsReligion6(const uint64 built_improvements);
-bool buildingutil_GetIsReligion7(const uint64 built_improvements);
-bool buildingutil_GetIsReligion8(const uint64 built_improvements);
-bool buildingutil_GetIsReligion9(const uint64 built_improvements);
-bool buildingutil_GetIsReligion10(const uint64 built_improvements);
+
 sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements);
 sint32 buildingutil_GetEnergyHungerPerPop(const uint64 built_improvements);
 sint32 buildingutil_GetProducesEnergy(const uint64 built_improvements);

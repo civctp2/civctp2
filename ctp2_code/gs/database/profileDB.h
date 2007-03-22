@@ -54,6 +54,8 @@
 // - Made automatic treaty ending an option.
 // - Made city capture options an option.
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
+// - Added Army Names and Civflags options
+// - YOu need to make 3 changes here for a new profile option
 //
 //----------------------------------------------------------------------------
 
@@ -262,7 +264,7 @@ private:
     sint32 m_aiPopCheat;
 
     sint32 m_showCityNames;
-	sint32 m_showArmyNames; //emod
+	sint32 m_showArmyNames; //emod1
     sint32 m_showTradeRoutes;
 
     sint32 m_unitSpeed;
@@ -349,7 +351,7 @@ private:
     /// Automatically expiry treaties after a number of turns
     sint32 m_autoExpireTreatyTurn;
     /// Enable city capture options pop-up
-    sint32 m_cityCaptureOptions;
+    sint32 m_cityCaptureOptions;  //emod1
     /// Enable unit upgrade
     sint32 m_upgrade;
     /// Smooth the borders instead of diplaying square borders
@@ -539,7 +541,7 @@ public:
     void SetNonContinuousUnitCompleteMessages(BOOL on) { m_nonContinuousUnitCompleteMessages = on; }
 
     void SetShowCityNames(BOOL on) { m_showCityNames = on; }
-	void SetShowArmyNames(BOOL on) { m_showArmyNames = on; } //emod
+	void SetShowArmyNames(BOOL on) { m_showArmyNames = on; } //emod2
     void SetShowTradeRoutes(BOOL on) { m_showTradeRoutes = on; }
 
     void SetMoveHoldTime(sint32 t) { m_moveHoldTime = t; }
@@ -568,7 +570,29 @@ public:
     void SetDisplayFilter(BOOL on) { m_displayFilter = on;}
     void SetDisplayTrade(BOOL on) { m_displayTrade = on;}
     void SetDisplayTerrain(BOOL on) { m_displayTerrain = on;}
-	void SetShowCivFlags(BOOL on) { m_CivFlags = on; } //emod
+	void SetShowCivFlags(BOOL on) { m_CivFlags = on; } //emod2
+	void SetCityCaptureOptions(BOOL on) { m_cityCaptureOptions = on; } //emod2
+	void SetShowSmooth(BOOL on) { m_smoothBorders = on; } //emod2
+	void SetOneCity(BOOL on) { m_OneCityChallenge = on; } //emod2
+	void SetRevoltInsurgents (BOOL on) { m_RevoltInsurgents = on; } //emod2
+	void SetNoAIProductionDeficit(BOOL on) 	{ m_NoAIProductionDeficit = on; }
+	void SetNoAIGoldDeficit(BOOL on)	{ m_NoAIGoldDeficit = on; }
+	void SetAICityDefenderBonus(BOOL on) 	{ m_AICityDefenderBonus = on; }	
+	void SetBarbarianCities(BOOL on)	{ m_BarbarianCities = on; }
+	void SetSectarianHappiness(BOOL on) 	{ m_SectarianHappiness = on; }
+	void SetRevoltCasualties(BOOL on) 	{ m_RevoltCasualties = on; }
+	void SetBarbarianCamps(BOOL on)	{ m_BarbarianCamps = on; }
+	void SetBarbarianSpawnsBarbarian(BOOL on) 	{ m_BarbarianSpawnsBarbarian = on; }
+	void SetAINoSinking(BOOL on) 	{ m_AINoSinking = on; }
+	void SetAINoCityLimit(BOOL on) 	{ m_AINoCityLimit = on; }
+	void SetGoldPerUnitSupport(BOOL on) 	{ m_GoldPerUnitSupport = on; }
+	void SetGoldPerCity(BOOL on)	{ m_GoldPerCity = on; }
+	void SetAINoShieldHunger(BOOL on) 	{ m_AINoShieldHunger = on; }
+	void SetAINoGoldHunger(BOOL on)	{ m_AINoGoldHunger = on; }
+	void SetAIFreeUpgrade(BOOL on) 	{ m_AIFreeUpgrade = on; }
+	void SetAIMilitiaUnit(BOOL on)	{ m_AIMilitiaUnit = on; }
+	void SetNRG(BOOL on) 	{ m_NRG = on; }
+
 
     sint32		GetNPlayers() const				{ return m_nPlayers; }
 
@@ -720,7 +744,6 @@ public:
     BOOL        AIPopCheat() const { return m_aiPopCheat; }
 
     BOOL        GetShowCityNames() { return m_showCityNames; }
-	BOOL        GetShowArmyNames() { return m_showArmyNames; } //emod
     BOOL        GetShowTradeRoutes() { return m_showTradeRoutes; }
 
 
@@ -788,19 +811,21 @@ public:
     double PercentContinent() { return m_continent; }
     double PercentHomogenous() { return m_homogenous; }
     sint32 PercentRichness() { return m_richness; }
-    BOOL IsSmoothBorders() { return m_smoothBorders; }
+    BOOL IsSmoothBorders() { return m_smoothBorders; } //emod3
+	BOOL GetShowArmyNames() { return m_showArmyNames; } //emod3
+	BOOL	IsCityCaptureOptions()	{ return m_cityCaptureOptions; } //emod3
+	BOOL	IsRevoltInsurgents() 	{ return m_RevoltInsurgents; } //emod3
+	BOOL	IsRevoltCasualties() 	{ return m_RevoltCasualties; } //emod3
 	
 //emod new profile flags later to be gameplay rules options
-	BOOL	IsCivFlags()              { return m_CivFlags; }
+	BOOL	IsCivFlags()              { return m_CivFlags; } //emod3
 	BOOL	IsNoAIProductionDeficit() 	{ return m_NoAIProductionDeficit; }
 	BOOL	IsNoAIGoldDeficit()	{ return m_NoAIGoldDeficit; }
 	BOOL	IsAICityDefenderBonus() 	{ return m_AICityDefenderBonus; }	
 	BOOL	IsBarbarianCities()	{ return m_BarbarianCities; }
 	BOOL	IsSectarianHappiness() 	{ return m_SectarianHappiness; }
-	BOOL	IsRevoltCasualties() 	{ return m_RevoltCasualties; }
-	BOOL	IsRevoltInsurgents() 	{ return m_RevoltInsurgents; }
 	BOOL	IsBarbarianCamps()	{ return m_BarbarianCamps; }
-	BOOL	IsBarbarianSpawnsBarbarian() 	{ return m_BarbarianSpawnsBarbarian; }
+	BOOL	IsBarbarianSpawnsBarbarian() 	{ return m_BarbarianSpawnsBarbarian; } //emod3
 	BOOL	IsAINoSinking() 	{ return m_AINoSinking; }
 	BOOL	IsAINoCityLimit() 	{ return m_AINoCityLimit; }
 	BOOL	IsGoldPerUnitSupport() 	{ return m_GoldPerUnitSupport; }
@@ -811,6 +836,7 @@ public:
 	BOOL	IsAIMilitiaUnit()	{ return m_AIMilitiaUnit; }
 	BOOL	IsOneCityChallenge() 	{ return m_OneCityChallenge; }
 	BOOL	IsNRG() 	{ return m_NRG; }
+
 //later add start age and end age?
 
 

@@ -168,7 +168,12 @@
 //   units, buildings, wonders, and tileimps must have energy flags for 
 //   calculation - by E 2-28-2007
 // - Added Insurgent Spawn slic message
-// - removed founder city check from sectarianhappiness b/c crash
+// - added BreadBasket modifier so you can have food producing areas i.e.
+//   America's midwest or Rome's Egypt
+// - outcommented extra insurgent code in riot
+// - outcomment founder code in insurgents b/c it may cause same crash as
+//   sectarianhappiness
+// - implemented RevoltInsurgents Rules/Profile option
 //
 //----------------------------------------------------------------------------
 
@@ -1345,16 +1350,6 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 				}
 			}
 		}
-	}
-
-	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()) {
-		sint32 casualties = (PopCount() / 3) * -1;
-		ChangePopulation(casualties);
-	}
-
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()) {
-		Barbarians::AddBarbarians(city_pos, m_owner, false);
 	}
 
 	// Modified by kaan to address bug # 12
@@ -2969,6 +2964,14 @@ void CityData::ProcessFood(double &foodLostToCrime, double &producedFood, double
 			}
 		}
 	}
+//EMOD to have food colonies out side your cities i.e. America's Midwest, USSR's Ukraine, Rome's Egypt & Algeria
+	if ((g_player[m_owner]->BreadBasket() > 0) && (g_player[m_owner]->GetTotalPopulation() > 0)) {  
+			grossFood += g_player[m_owner]->BreadBasket() * PopCount();  //excess food spread throughout empire
+			//unique capitol code later?
+			// if (IsCapitol()) {
+			// 
+
+	}
 	//end EMOD
 	producedFood = ProcessFinalFood(foodLostToCrime, grossFood);
 
@@ -4149,46 +4152,53 @@ bool CityData::BeginTurn()
 
 	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	if(m_is_rioting
-	&& g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
-	){
+	if(m_is_rioting) {
+		if (
+		   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents())
+		|| (g_theProfileDB->IsRevoltInsurgents())
+		){
 		double barbchance   = risk->GetBarbarianChance();
 		double notFounder   = 0.0;
 		double notCityStyle = 0.0;
 
 		// If the city has a diffferent culture more likely to have insurgents
-		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-			notCityStyle = barbchance * 2.0;
-		}
+			if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+				notCityStyle = barbchance * 3.0;
+			}
 		// If the revolting city is because of an occupation more likely to revolt
-		if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
-			notFounder = barbchance * 2.0;
-		}
+		//if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
+		//	notFounder = barbchance * 2.0;
+		//}  //this may cause a crash if founder is already dead
 
 		//TODO: Technology modifier from the founder that increases insurgents
 		//TODO: Technology modifier that allows for more suppression
 		//TODO: Govt modifier that allows for more suppression
-		barbchance += notFounder;
-		barbchance += notCityStyle;
+			barbchance += notFounder;
+			barbchance += notCityStyle;
 
 
-		if(g_rand->Next(10000) < static_cast<sint32>(barbchance * 10000.0)) {
-			// Add some Barbarians nearby cpos.
-			Barbarians::AddBarbarians(cpos, m_owner, false);
-			SlicObject *so = new SlicObject("999InsurgentSpawn");
-			so->AddRecipient(m_owner);
-            so->AddCity(m_home_city);
+			if(g_rand->Next(10000) < static_cast<sint32>(barbchance * 10000.0)) {
+				// Add some Barbarians nearby cpos.
+				Barbarians::AddBarbarians(cpos, m_owner, false);
+				SlicObject *so = new SlicObject("999InsurgentSpawn");
+				so->AddRecipient(m_owner);
+				so->AddCity(m_home_city);
+			}
 		}
-	}
-
 	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
-	if((m_is_rioting) &&
-		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
+		if (
+		   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
+		|| (g_theProfileDB->IsRevoltCasualties())
 		&& (PopCount() > 1)
 		){
-			sint32 casualties = (PopCount() / 3) * -1;
+			sint32 casualties = (g_rand->Next(PopCount() / 2)) * -1 ; //random number of caualties
 			ChangePopulation(casualties);
+		}
+
 	}
+
+
+
 
 	//END EMOD
 
@@ -5952,7 +5962,6 @@ bool CityData::CanBuildUnit(sint32 type) const
 	MapPoint pos;
 	m_home_city.GetPos(pos);
 
-
 	// Added by E - units can be obsolete by the availability of other units
 	if(rec->GetNumObsoleteUnit() > 0) {
 		sint32 newunit;
@@ -6067,6 +6076,7 @@ bool CityData::CanBuildUnit(sint32 type) const
 		if(!found)
 			return false;
 	}
+
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, true, m_home_city.m_id, rec->GetIndex()))
 		return false;
@@ -9884,11 +9894,15 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 // This code creates a happiness modifier based off of the factors of:
 {
 	sint32 SectarianHappiness = 0;
-	sint32 sh;
 
 	// Checks if a city has a buildng that conflicts with 
 	// another (mosques, churches, synagogues, etc)
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness(sh)) {
+	// randomized to add unpredictable realism
+	if(
+	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
+	||(g_theProfileDB->IsSectarianHappiness())
+	) {
+
 		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 			if(m_built_improvements & ((uint64)1 << b)){
 				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
@@ -9898,7 +9912,7 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 				// another (mosques, churches, synagogues, etc)
 				for(i = 0; i < rec->GetNumConflictsWithBuilding(); i++) {
 					if((rec->GetNumConflictsWithBuilding()) && HaveImprovement(rec->GetConflictsWithBuildingIndex(i))) {
-						SectarianHappiness -= sh;
+						SectarianHappiness -= g_rand->Next(PopCount() / 3);
 					}
 				
 					// Checks if ANY city has a building that conflicts 
@@ -9907,8 +9921,8 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 					sint32 c;
 					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
 						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-						if((rec->GetNumConflictsWithBuilding()) && (aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i)))){
-							SectarianHappiness -= sh;
+						if(aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i))){
+							SectarianHappiness -= g_rand->Next(PopCount() / 3);
 						}
 					}
 				}
@@ -9916,14 +9930,14 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 				//checks if govt conflicts prereqgovt
 				for(i = 0; i < rec->GetNumGovernmentType(); i++) {
 					if(rec->GetGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
-						SectarianHappiness -= sh;
+						SectarianHappiness -= g_rand->Next(PopCount() / 3);
 					}
 				}
 
 				//checks if cultureonly conflicts
 				for(i = 0; i < rec->GetNumCultureOnly(); i++) {
 					if(rec->GetCultureOnlyIndex(i) != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-						SectarianHappiness -= sh;
+						SectarianHappiness -= g_rand->Next(PopCount() / 3);
 					}
 				}
 				//end Buildings
@@ -9933,14 +9947,13 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 
 		// Checks if the citystle of the city is different than the person that owns it for cultural/ethnic strife
 		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-			SectarianHappiness -= sh;
+			SectarianHappiness -= g_rand->Next(PopCount() / 3);
 		}
-		/*   removed if the founder is destroyed it causes a crash
+
 		// Checks if the original owner of the city has a different govt than the occupier for political strife
-		if(g_player[m_founder]->GetGovernmentType() != g_player[m_owner]->GetGovernmentType()) {
-			SectarianHappiness -= sh;
-		}
-		*/
+		//if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
+		//	SectarianHappiness -= g_rand->Next(PopCount() / 3);
+		//}
 	}
 	return SectarianHappiness;
 }
@@ -10032,6 +10045,7 @@ sint32 CityData::TileImpHappinessIncr() const
 
 }
 
+// called by TiledMap::DrawCityNames
 
 
 //----------------------------------------------------------------------------

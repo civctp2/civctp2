@@ -156,19 +156,6 @@ Building {
 
 	Bit(File) ShowAsIcon            // tiledraw icon file?
 
-	#Religion Bools for MAPICONS   //remove
-	Bit        IsReligion1
-	Bit        IsReligion2
-	Bit        IsReligion3
-	Bit        IsReligion4
-	Bit        IsReligion5
-	Bit        IsReligion6
-	Bit        IsReligion7
-	Bit        IsReligion8
-	Bit        IsReligion9
-	Bit        IsReligion10
-	Bit(Int)   IsReligion
-
 	#Energy Code
 	Bit(Int)   EnergyHunger 
 	Bit(Int)   ProducesEnergy

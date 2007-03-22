@@ -1661,7 +1661,7 @@ sint32 TiledMap::CalculateWrap
 	{
 		if (!fog) 
         {
-			DrawTransitionTile(surface, pos, x, y);
+			DrawTransitionTile(surface, pos, x, y); //crash
 
 			if (river != -1)
 				DrawOverlay(surface, m_tileSet->GetRiverData(river), x, y);
@@ -2518,6 +2518,7 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 			}
 		}
 //EMOD to allow option for army names
+
 		if (g_theProfileDB->GetShowArmyNames()) {
 				Unit	u = actor->GetUnitID();
 				
@@ -2538,7 +2539,7 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 					COLORREF	fgColor = RGB(r, g, b),
 								bgColor = RGB(0,0,0);
 
-					DrawSomeText(TRUE, s, tx, ty+40, g_colorSet->GetColorRef(COLOR_BLACK), g_colorSet->GetColorRef(COLOR_WHITE));
+					DrawSomeText(true, s, tx, ty+40, g_colorSet->GetColorRef(COLOR_BLACK), g_colorSet->GetColorRef(COLOR_WHITE));
 				}
 			
 		}

@@ -1586,8 +1586,8 @@ bool UnitActor::Draw(bool fogged)
 
 	if (m_unitSpriteGroup && m_unitID.IsValid())
 	{
-		//if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007  it works but doesnt look right
-		//	DrawCityImprovements(fogged); 
+		if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007  
+			DrawCityImprovements(fogged); 
 
 		if (IsFortified())
 			DrawFortified(fogged);
@@ -2506,38 +2506,48 @@ void UnitActor::TerminateLoopingSound(uint32 sound_type)
 // Returns    : -
 //
 // Remark(s)  : Assumption: checks for icons
-//				The code works but doesn't look right
-//				Just goingto use the DRawCityNames method and do it 
-//				Like I did for religions but have the icon placement vary it
+//				Replaced dithered with overlay to make it work better
+//				Places wonder "behind" the city and city name
+//				Looks a lot nicer
 //----------------------------------------------------------------------------
-/*
+
 void UnitActor::DrawCityImprovements(bool fogged)
 {
-	sint32 const	nudgeX	= 
-		(sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
-	sint32 const	nudgeY = 
-		(sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 
-	Unit			unit(GetUnitID());
-	//Pixel16 *cityImage = g_tiledMap->GetTileSet()->GetImprovementData((uint16)which); //original code used pixel16 mapicon uses sint32 w/db
+	Unit	unit(GetUnitID());
 	sint32  cityIcon = 0;
 	
-	TileSet	*   tileSet =	g_tiledMap->GetTileSet();
+	TileSet	*   tileSet = g_tiledMap->GetTileSet();
 
-	//Pixel16     color       = GetPlayerColor(owner, fog);
+	
+	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()), 
+			nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 
+	POINT	    iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
+	if ((m_x + nudgeX) >= g_screenManager->GetSurfWidth() - iconDim.x) return;
+	if ((m_y + nudgeY) >= g_screenManager->GetSurfHeight() - iconDim.y) return;
+
+	if (unit.IsValid() && unit.IsCity()) {
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 		if(unit.CD()->GetImprovements() & ((uint64)1 << b)){
-			if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+			if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon)) 
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
-					g_tiledMap->DrawDitheredOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, fogged);
+					if (fogged)
+						g_tiledMap->DrawBlendedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
+					else
+							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
 				} else {
-					g_tiledMap->DrawDitheredOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-														g_tiledMap->GetZoomTilePixelWidth(),
-														g_tiledMap->GetZoomTileGridHeight(),
-														fogged);
+					if (fogged)
+						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
+								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+					else
+						g_tiledMap->DrawScaledOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
+								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTileGridHeight());
 				}
+				nudgeX += 5;
 			}
 		}
 	}
@@ -2547,22 +2557,31 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	{
 		if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)
 		{
-			if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+			if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon)) 
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
-					g_tiledMap->DrawDitheredOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, fogged);
+					if (fogged)
+						g_tiledMap->DrawBlendedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
+					else
+							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
 				} else {
-					g_tiledMap->DrawDitheredOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-														g_tiledMap->GetZoomTilePixelWidth(),
-														g_tiledMap->GetZoomTileGridHeight(),
-														fogged);
+					if (fogged)
+						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
+								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+					else
+						g_tiledMap->DrawScaledOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
+								g_tiledMap->GetZoomTilePixelWidth(), 
+								g_tiledMap->GetZoomTileGridHeight());
 				}
+				nudgeX += 5;
 			}
 		}
 	}
-///end for loop
+	}
+/// */ end for loop
 }
-*/
+
 
 #ifdef _DEBUG
 void UnitActor::DumpActor(void)

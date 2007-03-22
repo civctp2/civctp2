@@ -46,6 +46,20 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2007-03-22
+Fixed: Rules screen so it works
+Added: Rules Screen Options: 
+       One City Challenge, City Capture Options, Revolt Insurgents, RevoltCasualties
+       BarbarianSpawnBarbarian, SectarianHappiness
+Added: Graphics Screen: Smooth Borders
+Added: Gameplay Options: City Capture Options
+Fixed: Crash for Alex Scenario caused by Special Icons
+Added: 'BreadBasket code'  Tile imps with BonusFoodExport now randomly generate a food value
+       this total value is then divided by totalpopulation and then added by population size 
+       to your cities
+Added: 'Commodity code'  Tile imps with BonusGoldExport now randomly generate a gold value
+       this total value is added to your total wonder gold
+Added: SectarianHappiness value to CityWindow
 
 2007-03-12
 Fixed: Crash caused by SectarianHappiness because the founder civ was destroyed

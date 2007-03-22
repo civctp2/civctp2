@@ -720,7 +720,7 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 	m_happiness += m_timed;
  
 	m_tracker->SetHappiness(HAPPY_REASON_ASSASSINATION, p->GetTimedHappiness());
-
+	m_tracker->SetHappiness(HAPPY_REASON_SECTHAPPY, cd.SectarianHappiness());
 	
 	
 	

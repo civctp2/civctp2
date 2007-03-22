@@ -1046,7 +1046,12 @@ public:
 	void StartResearchingAdvanceForGoal(sint32 goal);
 	bool RecursivelyStartResearching(sint32 advance);
 	bool HasFreeUnitUpgrades() const;
-	double EnergySupply();
+	double EnergySupply(); //EMOD
+	sint32 CommodityMarket(); //EMOD
+	sint32 BreadBasket(); //EMOD
+
+
+
 };
 
 #endif

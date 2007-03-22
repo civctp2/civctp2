@@ -3235,16 +3235,32 @@ str_tbl_ldl_Command_Enter		"Kommando eingeben (Playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Alternativkommando eingeben (Playtest)"
 
 # New gamesetting options
+#implemented
+str_ldl_Army_Names_Off			"Army Names Off"
+str_ldl_Army_Names_On			"Army Names On"
+str_ldl_Civ_Flags_Off			"Nation Flags Off"
+str_ldl_Civ_Flags_On			"Nation Flags On"
+str_ldl_SmoothBorders_On                "Smooth Borders - On"
+str_ldl_SmoothBorders_Off               "Smooth Borders - Off"
+str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"
+str_tbl_ldl_CityCaptureOptions_Off "City Capture Options - Off"
+str_tbl_ldl_OneCityChallenge_Off "One City Challenge - Off"
+str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"
+str_tbl_ldl_RevoltCasualties_Off "Revolting Cities lose Population - Off"					# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_Off "Revolting cities create barbarians - Off"   # Revolting city creates barbarians
+str_tbl_ldl_SectarianHappiness_Off "Conflicting citystyle unhappiness - Off"  # Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_On "Conflicting citystyle unhappiness - On"					# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_RevoltCasualties_On "Revolting Cities lose Population - On"					# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On "Revolting cities create barbarians - On"					# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On "Barbarians Spawn Barbarians - On"			# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off "Barbarians Spawn Barbarians - Off"			# Entrenched barbs create more barbs
 
+# Not Implemented
 str_tbl_ldl_NoAIProductionDeficit_Off "AI No Production Deficit - Off"	
 str_tbl_ldl_NoAIGoldDeficit_Off	"No negative Gold for AI Cities - Off"					# AI cities don't go negative in gold
 str_tbl_ldl_AICityDefenderBonus_Off "AI City Defense bonus - Off"					# AI population adds to city defenses
 str_tbl_ldl_BarbarianCities_Off	"Entrenched Barbarians settle cities - Off"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_Off "Conflicting citystyle unhappiness - Off"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_Off "Revolting Cities lose 1/3 Population - Off"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off "Revolting cities create barbarians - Off"					# Revolting city creates barbarians
 str_tbl_ldl_BarbarianCamps_Off	"Entrenched Barbarians create Tile Imps - Off"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off "Entrenched Barbarians spawn Barbarians - Off"			# Entrenched barbs create more barbs
 str_tbl_ldl_AINoSinking_Off "AI ships don't sink - Off"							# AI ships don't sink
 str_tbl_ldl_AINoCityLimit_Off "AI No City LImit - Off"						# AI not affected by city limit
 str_tbl_ldl_GoldPerUnitSupport_Off "1 Gold Per Unit Cost - Off"					# all pay thins int times unit support calculation
@@ -3253,19 +3269,11 @@ str_tbl_ldl_AINoShieldHunger_Off "AI doesn't pay Shield Hunger - Off"					# AI d
 str_tbl_ldl_AINoGoldHunger_Off "AI doesn't pay Unit Gold - Off"						# AI doesnt pay unit gold hunger
 str_tbl_ldl_AIFreeUpgrade_Off "AI Free Upgrades - Off"						# AI doesn't pay goldfor upgrades
 str_tbl_ldl_AIMilitiaUnit_Off "AI Free Militia Unit - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_OneCityChallenge_Off "One City Challenge - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_Off "City Capture Options - Off"						#If city is empty at turn start AI gets cheapest unit
-
-
 str_tbl_ldl_NoAIProductionDeficit_On "AI No Production Deficit - On"	
 str_tbl_ldl_NoAIGoldDeficit_On	"No negative Gold for AI Cities - On"					# AI cities don't go negative in gold
 str_tbl_ldl_AICityDefenderBonus_On "AI City Defense bonus - On"					# AI population adds to city defenses
 str_tbl_ldl_BarbarianCities_On	"Entrenched Barbarians settle cities - On"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_On "Conflicting citystyle unhappiness - On"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_On "Revolting Cities lose 1/3 Population - On"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On "Revolting cities create barbarians - On"					# Revolting city creates barbarians
 str_tbl_ldl_BarbarianCamps_On	"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_On "Entrenched Barbarians spawn Barbarians - On"			# Entrenched barbs create more barbs
 str_tbl_ldl_AINoSinking_On "AI ships don't sink - On"							# AI ships don't sink
 str_tbl_ldl_AINoCityLimit_On "AI No City LImit - On"						# AI not affected by city limit
 str_tbl_ldl_GoldPerUnitSupport_On "1 Gold Per Unit Cost - On"					# all pay thins int times unit support calculation
@@ -3273,11 +3281,4 @@ str_tbl_ldl_GoldPerCity_On "2 Gold Per City x City Limit - On"						# everyone p
 str_tbl_ldl_AINoShieldHunger_On "AI doesn't pay Shield Hunger - On"					# AI doesn't pay shield hunger (gets lots of units)
 str_tbl_ldl_AINoGoldHunger_On "AI doesn't pay Unit Gold - On"						# AI doesnt pay unit gold hunger
 str_tbl_ldl_AIFreeUpgrade_On "AI Free Upgrades - On"						# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"						#If city is empty at turn start AI gets cheapest unit
-
-str_ldl_Army_Names_Off			"Army Names Off"
-str_ldl_Army_Names_On			"Army Names On"
-str_ldl_Civ_Flags_Off			"Nation Flags Off"
-str_ldl_Civ_Flags_On			"Nation Flags On"
+str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"

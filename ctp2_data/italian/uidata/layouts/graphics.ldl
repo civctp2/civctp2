@@ -6,6 +6,8 @@
 # - Increased size 3-9-2007
 # - Added ArmyNames Option 3-9-2007
 # - Added CivFlags Option 3-13-2007
+# - Added Smooth Borders Option 3-27-2007
+#
 #######################################
 
 ##-----------------------------------##
@@ -100,6 +102,15 @@ GraphicsWindow {
 			string	string1	"str_ldl_Army_Names_On"
 		}
 	}
+	CivFlagButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	240
+		stringtable {
+			string	string0	"str_ldl_Civ_Flags_Off"
+			string	string1	"str_ldl_Civ_Flags_On"
+		}
+	}
+
 
 	# Second Column of Switches
 	##############################################
@@ -137,14 +148,15 @@ GraphicsWindow {
 		}
 	}
 	#EMOD
-	CivFlagButton:GRAPHICS_CHECKBOX {
+		SmoothButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
 		int	ypix	210
 		stringtable {
-			string	string0	"str_ldl_Civ_Flags_Off"
-			string	string1	"str_ldl_Civ_Flags_On"
+			string	string0	"str_ldl_SmoothBorders_Off"
+			string	string1	"str_ldl_SmoothBorders_On"
 		}
 	}
+
 
 	#At bottom center
 	####################################

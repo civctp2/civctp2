@@ -1574,18 +1574,19 @@ void ArmyData::BeginTurn()
 	}
 	//Barbarian leader spawn
 	// This should be risk level depending ADDED EMOD 10-05-2006
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-	{
+	if(
+		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
+	||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+	){
 		//Cell *cell = g_theWorld->GetCell(m_pos);
 		//if cell->GetNumUnits() < 2;  //limits spawn amounts?
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-			for(i = 0; i < m_nElements; i++) {
+		//	for(i = 0; i < m_nElements; i++) {
 //				const UnitRecord *rec = m_array[i].GetDBRec();
-				if(m_array[i].IsEntrenched()
-				&& m_owner == PLAYER_INDEX_VANDALS
+				if(m_owner == PLAYER_INDEX_VANDALS
 				){
 				Barbarians::AddBarbarians(m_pos, meat, FALSE);
-				}
+		//		}
 			}
 		}
 	}

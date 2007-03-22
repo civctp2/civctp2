@@ -92,8 +92,9 @@
 //   cities and installations and calcluates what percentage is met - Emod 2-27-2007
 // - TODO break energy code to allow for slic access
 // - TODO HasInstallation method for oneperciv and installation wonder
-// - TODO Commodity Market Code
-// - TODO BreadBasket Code
+// - Added Commodity Market Code gold adds with CalcWonderGold 3-14-2007
+// - Added BreadBasket Code 3-14-2007
+// - implemented One City Challenge Option in CanBuildUnit 3.21.2007
 //
 //----------------------------------------------------------------------------
 
@@ -1890,19 +1891,22 @@ void Player::BeginTurnProduction()
 		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 			Installation inst = m_allInstallations->Access(b);
 			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			MapPoint pos;
+			inst.GetPos(pos); 
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
 
 			sint32 bpe;
-			if (rec->GetBonusProductionExport(bpe)) {
+			if (effect->GetBonusProductionExport(bpe)) {
 				m_materialPool->AddMaterials(bpe);		// i.e. allows oil to give PW
 			}
 	
-			sint32 bge;
-			if (rec->GetBonusGoldExport(bge)) {
-				m_gold->AddGold(bge);					// i.e. allows for colonies to generate gold
-			}
+			//sint32 bge;								// moved to commodity market made it randomized
+			//if (rec->GetBonusGoldExport(bge)) {
+			//	m_gold->AddGold(bge);					// i.e. allows for colonies to generate gold
+			//}
 	
 			sint32 bfp;
-			if (rec->GetFranchiseProduction(bfp)) {	
+			if (effect->GetFranchiseProduction(bfp)) {	
 				m_productionFromFranchises += bfp;		// i.e. allows oil to pay for military
 			}
 	
@@ -2141,6 +2145,7 @@ void Player::BeginTurnWonders()
 {
 	m_gold->AddGold(CalcWonderGold());
 
+	m_gold->AddGold(CommodityMarket());  //emod for calculating commodities should it be in profileDB?
 	
 	g_theWonderTracker->RecomputeIsBuilding(m_owner);
 }
@@ -9634,7 +9639,12 @@ bool Player::CanBuildUnit(const sint32 type) const
 	   !wonderutil_GetParkRangersEnabled(g_theWonderTracker->GetBuiltWonders())) {
 		return false;
 	}
-
+	//OneCityChallenge Option - emod 3-21-2007
+	if((rec->GetSettleLand()) || (rec->GetSettleWater())) {  //so far it makes all units unavailable?
+		if ( (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) && (g_theProfileDB->IsOneCityChallenge()) ) {
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -10221,6 +10231,7 @@ double Player::EnergySupply()
 			*/
 			
 			if(rec->HasIntBorderRadius()){ //have all energy producers require a radius - determines ownership
+				// i don't thinnk this iterator is needed
 				sint32 radius;
 				rec->GetIntBorderRadius(radius);
 				CityInfluenceIterator it(inst.RetPos(), radius);
@@ -10267,6 +10278,37 @@ add peace treaty check
 add profiledb options for commodity market report
 add the gold under calcwondergold method
 */
+sint32 Player::CommodityMarket()
+{
+	if(!m_all_cities)
+		return 0;
+	sint32 comgold = 0;
+	sint32 n = m_all_cities->Num();
+	MapPoint pos;
+
+    	//get from all installations goldexportbonus
+		// varied installations the better
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			inst.GetPos(pos); 
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+			if(rec->HasIntBorderRadius()){ //have all commodity colonies require a radius - determines ownership
+				sint32 bge;
+				if (effect->GetBonusGoldExport(bge)) { // i.e. allows for colonies to generate gold
+					comgold += g_rand->Next(bge); //randomizes the return per installation
+								
+				}
+			}
+		}
+	}
+					
+	return comgold;
+
+//add profiledb option for commodity market slic report?
+}
+
 
 //BreadBasket Code
 /*
@@ -10277,6 +10319,68 @@ add random variable for harvest
 get total food produce and divide by city population and add to citydata::processfood
 this will allow the player to make places like Algeria&Egypt in Ancient Rome, or the Midwest for America, or Ukraine for Russia where a large ag area supports the empire
 A build option not to exceed city limit
+*/
+sint32 Player::BreadBasket()  //allows for food outside the empire to contribute to all cities
+{
+	if(!m_all_cities)
+		return 0;
+	sint32 breadbasket = 0;
+	sint32 comfood = 0;
+	sint32 n = m_all_cities->Num();
+	MapPoint pos;
+
+    	//get from all installations goldexportbonus
+		// varied installations the better
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			inst.GetPos(pos); 
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+			if(rec->HasIntBorderRadius()){ //have all farm colonies require a radius - determines ownership
+				sint32 bge;
+				if (effect->GetBonusFoodExport(bge)) { // i.e. allows for colonies to generate food modifier
+					comfood += g_rand->Next(bge); //randomizes the return per installation
+								
+				}
+			}
+		}
+	}
+	if (comfood > 0 && GetTotalPopulation() > 0) {			
+		breadbasket = comfood / GetTotalPopulation();
+	}
+
+	return breadbasket;
+
+//add profiledb option for commodity market slic report?
+}
+
+// DRUG TRADE code?
+/*
+// like commodity code but this affects other players
+// lowers production, increases crime, and unhappiness
+// sint32 Player::DRUGTRADE()
+
+
+/// calculate (total number of drug imps) / number of players = unhappiness affect?
+//  calculate (total number of drug imps) / total number of cities = crime increase?
+//  calculate (total number of drug imps) / total number of cities = production decrease?
+
+	if ((0 < m_allInstallations->Num()) && (0 < n)) {
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+			Installation inst = m_allInstallations->Access(b);
+			const TerrainImprovementRecord *rec = inst.GetDBRec();
+			inst.GetPos(pos); 
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+			if(rec->HasIntBorderRadius()){ //have all farm colonies require a radius - determines ownership
+				sint32 bge;
+				if (effect->GetBonusFoodExport(bge)) { // i.e. allows for colonies to generate food modifier
+					comfood += g_rand->Next(bge); //randomizes the return per installation
+								
+				}
+			}
+		}
+	}
 */
 
 
