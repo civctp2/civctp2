@@ -50,7 +50,7 @@ enum EXPEL_ACTION {
 typedef void (c3_UtilityCityListCallback)(Unit city, sint32 val2);
 typedef void (c3_PiracyCallback)(sint32 player, sint32 val2);
 typedef void (c3_ExpelCallback)(sint32 val);
-typedef void (c3_UtilityTextFieldCallback)(MBCHAR *text, sint32 accepted, void *data);
+typedef void (c3_UtilityTextFieldCallback)(MBCHAR const *text, sint32 accepted, void *data);
 typedef void (c3_UtilityTextMessageCallback)(sint32 val);
 typedef void (c3_AbortMessageCallback)(sint32 val);
 typedef void (c3_UtilityPlayerListCallback)(sint32 player, sint32 val2, PLAYER_ACTION action);
@@ -76,9 +76,9 @@ public:
 	c3_UtilityCityListCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
+	sint32  UpdateData(void);
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -106,9 +106,9 @@ public:
 	c3_PiracyCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
+	sint32  UpdateData(void);
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -136,8 +136,8 @@ public:
 	c3_ExpelCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -177,11 +177,11 @@ public:
 	bool            m_wantEmpties;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
+	sint32  UpdateData(void);
 	
-	void *GetData(void) const { return m_data; }
+	void *  GetData(void) const { return m_data; }
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -209,8 +209,8 @@ public:
     );
 	~c3_UtilityTextMessagePopup( void );
 
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( MBCHAR const *text );
+	void    Cleanup(void);
+	sint32  UpdateData(MBCHAR const * text);
 
 	void RemoveWindow( void );
 	void DisplayWindow( MBCHAR const *text );

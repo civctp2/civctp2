@@ -30,15 +30,22 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
-#ifndef __INFOWINDOW_H__
-#define __INFOWINDOW_H__
+#endif
+
+#ifndef INFOWINDOW_H__
+#define INFOWINDOW_H__
+
+class InfoWindow;
+
+#include "ctp2_inttypes.h"  // uint32
 
 class aui_Control;
-class ctp2_Window;
 class ctp2_Button;
-class ScoreTab;
+class ctp2_Window;
 class RankingTab;
+class ScoreTab;
 class WonderTab;
 
 class InfoWindow
@@ -59,7 +66,6 @@ public:
 
 private:
 	void Show();
-
 	void Hide();
 
 	static void CloseButtonActionCallback(aui_Control *control,

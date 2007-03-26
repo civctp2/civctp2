@@ -31,42 +31,54 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "infowindow.h"
 
 #include "aui_ldl.h"
-#include "ctp2_Window.h"
+#include "c3ui.h"
 #include "ctp2_button.h"
 #include "ctp2_Tab.h"
 #include "ctp2_TabGroup.h"
-#include "c3ui.h"
-
-#include "infowindow.h"
+#include "ctp2_Window.h"
+#include "Globals.h"            // allocated::clear
 #include "rankingtab.h"
 #include "scoretab.h"
 #include "WonderTab.h"
 
-extern void cpw_NumberToCommas( uint64 number, MBCHAR *s );
+extern C3UI *       g_c3ui;
 
-static InfoWindow *s_InfoWindow = NULL;
-extern C3UI *g_c3ui;
+static InfoWindow * s_InfoWindow = NULL;
 
-InfoWindow::InfoWindow(void) :
-	m_window(static_cast<ctp2_Window*>(
-		aui_Ldl::BuildHierarchyFromRoot("InfoDialog"))),	
-	m_closeButton(static_cast<ctp2_Button*>(
-		aui_Ldl::GetObject("InfoDialog.CloseButton")))
+InfoWindow::InfoWindow(void) 
+:
+	m_window        (static_cast<ctp2_Window*>
+                        (aui_Ldl::BuildHierarchyFromRoot("InfoDialog"))
+                    ),	
+	m_closeButton   (NULL),
+	m_ranking_tab   (NULL),
+    m_score_tab     (new ScoreTab()),
+    m_wonder_tab    (NULL)
 {
 	Assert(m_window);
 
-	m_score_tab = new ScoreTab();
-	
-	m_ranking_tab = new RankingTab(m_window);
+    m_ranking_tab   = new RankingTab(m_window);
+	m_wonder_tab    = new WonderTab(m_window);
 
-	m_wonder_tab = new WonderTab(m_window);
+    m_closeButton   = static_cast<ctp2_Button*>
+                        (aui_Ldl::GetObject("InfoDialog.CloseButton"));
+    Assert(m_closeButton);
+    if (m_closeButton)
+    {
+	    m_closeButton->SetActionFuncAndCookie(&CloseButtonActionCallback, this);
+    }
+}
 
-	
-	Assert(m_closeButton);
-	
-	m_closeButton->SetActionFuncAndCookie(CloseButtonActionCallback, this);
+InfoWindow::~InfoWindow(void)
+{
+	aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
+
+	delete m_ranking_tab;
+	delete m_score_tab;
+	delete m_wonder_tab;
 }
 
 void InfoWindow::SelectRankingTab(void)
@@ -116,68 +128,52 @@ void InfoWindow::Open(void)
 //----------------------------------------------------------------------------
 void InfoWindow::Update(void)
 {
-	if(s_InfoWindow
-	&&!s_InfoWindow->m_window->IsHidden()
-	){
+	if (s_InfoWindow)
+    {
 		s_InfoWindow->Show();
 	}
 }
 
 void InfoWindow::Close(void)
 {
-	if (s_InfoWindow != NULL) {
-		s_InfoWindow->m_window->Hide();
-		g_c3ui->RemoveWindow(s_InfoWindow->m_window->Id());
+	if (s_InfoWindow) 
+    {
+        s_InfoWindow->Hide();
 	}
 }
 
 
 void InfoWindow::Show()
 {
-	
-	m_score_tab->Update();
-	
-	m_ranking_tab->LoadData();
-	m_wonder_tab->UpdateList();
-
-	m_window->Show();
+	if (!m_window->IsHidden())
+    {
+    	m_score_tab->Update();
+    	m_ranking_tab->LoadData();
+	    m_wonder_tab->UpdateList();
+    	m_window->Show();
+    }
 }
 
 
 void InfoWindow::Hide()
 {
-	Close(); 
+    m_window->Hide();
+	g_c3ui->RemoveWindow(m_window->Id());
 }
 
 
-void InfoWindow::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+void InfoWindow::CloseButtonActionCallback
+(
+    aui_Control *   control,
+	uint32          action, 
+    uint32          data, 
+    void *          cookie
+)
 {
-	
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	static_cast<InfoWindow*>(cookie)->Hide();
-}
-
-InfoWindow::~InfoWindow(void)
-{
-	if (m_window) 
-	{
-		aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
-		m_window = NULL;
-	}
-
-	
-	if (m_ranking_tab)
-		delete m_ranking_tab;
-
-	if (m_score_tab)
-		delete m_score_tab;
-
-	if (m_wonder_tab)
-		delete m_wonder_tab;
 }
 
 //----------------------------------------------------------------------------
@@ -197,10 +193,6 @@ InfoWindow::~InfoWindow(void)
 //----------------------------------------------------------------------------
 void InfoWindow::Cleanup(void)
 {
-	if(s_InfoWindow) {
-		s_InfoWindow->m_window->Hide();
-		g_c3ui->RemoveWindow(s_InfoWindow->m_window->Id());
-		delete s_InfoWindow;
-		s_InfoWindow = NULL;
-	}
+	Close();
+    allocated::clear(s_InfoWindow);
 }

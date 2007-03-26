@@ -65,15 +65,17 @@ LPCRITICAL_SECTION aui_Mouse::m_lpcs = NULL;
 extern CivApp		*g_civApp;
 
 
-aui_Mouse::aui_Mouse(
-	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock )
-	:
-	aui_Input()
+aui_Mouse::aui_Mouse
+(
+	AUI_ERRCODE *   retval,
+	MBCHAR *        ldlBlock 
+)
+:
+    aui_Base    (),
+	aui_Input   ()
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -289,33 +291,35 @@ void aui_Mouse::SetClip( RECT *clip )
 
 
 
-void aui_Mouse::SetCursor( sint32 index, MBCHAR *cursor )
+void aui_Mouse::SetCursor(sint32 index, MBCHAR * cursor)
 {
 	Assert( index >= 0 && index < k_MOUSE_MAXNUMCURSORS );
 	if ( index < 0 || index >= k_MOUSE_MAXNUMCURSORS ) return;
 
-	aui_Cursor *oldCursor = m_cursors[ index ];
-	if ( cursor )
+	aui_Cursor *    oldCursor   = m_cursors[index];
+    aui_Cursor *    c           = cursor ? g_ui->LoadCursor(cursor) : NULL;
+
+	if (cursor)
 	{
-		aui_Cursor *c = g_ui->LoadCursor( cursor );
-		Assert( cursor != NULL );
-		if ( !cursor ) return;
+		Assert(c);
+		if (c)
+        {
+		    Assert(c->TheSurface()->Width() <= k_MOUSE_MAXSIZE);
+		    Assert(c->TheSurface()->Height() <= k_MOUSE_MAXSIZE);
 
-		Assert( c->TheSurface()->Width() <= k_MOUSE_MAXSIZE );
-		Assert( c->TheSurface()->Height() <= k_MOUSE_MAXSIZE );
-		if ( c->TheSurface()->Width() > k_MOUSE_MAXSIZE
-		||   c->TheSurface()->Height() > k_MOUSE_MAXSIZE )
-		{
-			g_ui->UnloadCursor( c );
-			return;
+		    if (    c->TheSurface()->Width() > k_MOUSE_MAXSIZE
+		         || c->TheSurface()->Height() > k_MOUSE_MAXSIZE 
+               )
+		    {
+			    g_ui->UnloadCursor(c);
+                c = NULL;
+            }
 		}
-
-		m_cursors[ index ] = c;
 	}
-	else
-		m_cursors[ index ] = NULL;
+	
+    m_cursors[index] = c;
 
-	if ( oldCursor ) g_ui->UnloadCursor( oldCursor );
+	if (oldCursor) g_ui->UnloadCursor(oldCursor);
 }
 
 
@@ -335,9 +339,8 @@ void aui_Mouse::SetCurrentCursor( sint32 index )
 
 sint32 aui_Mouse::GetCurrentCursorIndex(void) 
 {
-	sint32 i=0;
-
-	for (i=m_firstIndex; i<=m_lastIndex; i++) {
+	for (sint32 i = m_firstIndex; i <= m_lastIndex; ++i) 
+    {
 		if (m_curCursor == (m_cursors + i))
 			return i;
 	}
@@ -496,23 +499,14 @@ AUI_ERRCODE aui_Mouse::CreatePrivateBuffers( void )
 
 void aui_Mouse::DestroyPrivateBuffers( void )
 {
-	if ( m_privateMix )
-	{
-		delete m_privateMix;
-		m_privateMix = NULL;
-	}
+	delete m_privateMix;
+	m_privateMix = NULL;
 
-	if ( m_pickup )
-	{
-		delete m_pickup;
-		m_pickup = NULL;
-	}
-
-	if ( m_prevPickup )
-	{
-		delete m_prevPickup;
-		m_prevPickup = NULL;
-	}
+    delete m_pickup;
+	m_pickup = NULL;
+	
+	delete m_prevPickup;
+	m_prevPickup = NULL;
 }
 
 
@@ -774,11 +768,8 @@ AUI_ERRCODE aui_Mouse::SetHotspot( sint32 x, sint32 y, sint32 index )
 	if ( index < 0 || index >= k_MOUSE_MAXNUMCURSORS )
 		return AUI_ERRCODE_INVALIDPARAM;
 
-	aui_Cursor *cursor = m_cursors[ index ];
-	if ( cursor )
-		return cursor->SetHotspot( x, y );
-
-	return AUI_ERRCODE_OK;
+	aui_Cursor * cursor = m_cursors[index];
+	return (cursor) ? cursor->SetHotspot(x, y) : AUI_ERRCODE_OK;
 }
 
 

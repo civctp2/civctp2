@@ -31,6 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_control.h"
 
 
 #include <string>
@@ -45,14 +46,10 @@
 #include "aui_ldl.h"
 #include "aui_action.h"
 #include "aui_stringtable.h"
-#include "aui_control.h"
-#include "StrDB.h"
+#include "StrDB.h"              // g_theStringDB
 #include "StatusBar.h"
 #include "aui_imagelist.h"
 #include "aui_static.h"
-
-
-extern StringDB		*g_theStringDB;
 
 
 static const MBCHAR *k_AUI_CONTROL_NUMBER_OF_LAYERS		= "numberoflayers";
@@ -76,9 +73,9 @@ const sint32 aui_Control::k_AUI_CONTROL_LAYER_FLAG_DISABLED		= 4;
 const sint32 aui_Control::k_AUI_CONTROL_LAYER_FLAG_ENABLED		= 8;
 
 
-aui_Control *aui_Control::m_whichOwnsMouse = NULL;	
-aui_Control *aui_Control::m_whichHasFocus = NULL;	
-uint32 aui_Control::m_controlClassId = aui_UniqueId();
+uint32          aui_Control::s_controlClassId   = aui_UniqueId();
+aui_Control *   aui_Control::s_whichOwnsMouse   = NULL;	
+aui_Control *   aui_Control::s_whichHasFocus    = NULL;
 
 
 static const MBCHAR *const k_AUI_CONTROL_LDL_STATUS_TEXT	=	"statustext";
@@ -259,10 +256,11 @@ AUI_ERRCODE aui_Control::InitCommon(
 
 aui_Control::~aui_Control()
 {
-	delete m_stringTable;
-	
 	ReleaseKeyboardFocus();
+    ReleaseMouseOwnership();
 
+    delete m_stringTable;
+	
 	if (m_allocatedTip)
 	{
 		delete m_tip;
@@ -565,7 +563,7 @@ aui_Control *aui_Control::SetMouseOwnership( void )
 {
 	aui_Control *prevOwner = GetMouseOwnership();
 	if ( prevOwner ) prevOwner->ReleaseMouseOwnership();
-	m_whichOwnsMouse = this;
+	s_whichOwnsMouse = this;
 
 #if FALSE
 		
@@ -586,24 +584,23 @@ aui_Control *aui_Control::SetMouseOwnership( void )
 
 AUI_ERRCODE aui_Control::ReleaseMouseOwnership( void )
 {
-	if ( GetMouseOwnership() == this )
-		m_whichOwnsMouse = 0;
-	else
-		return AUI_ERRCODE_NOCONTROL;
+	if (GetMouseOwnership() != this)
+	    return AUI_ERRCODE_NOCONTROL;
 
-	return AUI_ERRCODE_OK;
+	s_whichOwnsMouse = NULL;
+    return AUI_ERRCODE_OK;
 }
 
 
 
 aui_Control *aui_Control::SetKeyboardFocus( void )
 {
-	aui_Control *prevFocus = GetKeyboardFocus();
+	aui_Control *   prevFocus = GetKeyboardFocus();
 	if ( prevFocus ) prevFocus->ReleaseKeyboardFocus();
 
-	if ( !IsDisabled() )
+	if (!IsDisabled())
 	{
-		m_whichHasFocus = this;
+		s_whichHasFocus = this;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
 	}
 
@@ -612,19 +609,20 @@ aui_Control *aui_Control::SetKeyboardFocus( void )
 
 
 
-AUI_ERRCODE aui_Control::ReleaseKeyboardFocus( void )
+AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 {
-	if ( GetKeyboardFocus() == this )
-	{
-		SetFocus( g_ui->TheHWND() );
-		m_whichHasFocus = NULL;
-	}
-	else
-		return AUI_ERRCODE_NOCONTROL;
+	if (GetKeyboardFocus() != this)
+	    return AUI_ERRCODE_NOCONTROL;
 
-	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
+	s_whichHasFocus = NULL;
+    m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
 
-	return AUI_ERRCODE_OK;
+    if (g_ui)
+    {
+	    SetFocus(g_ui->TheHWND());
+    }
+
+    return AUI_ERRCODE_OK;
 }
 
 
@@ -679,7 +677,7 @@ AUI_ERRCODE aui_Control::DrawThisStateImage(
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_NOIMAGE;
 
-	BOOL hasFocus = aui_Control::GetKeyboardFocus() == this;
+	bool hasFocus = aui_Control::GetKeyboardFocus() == this;
 
 	if ( IsActive() )
 	{

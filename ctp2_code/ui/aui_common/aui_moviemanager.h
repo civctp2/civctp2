@@ -24,21 +24,25 @@
 //
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __AUI_MOVIEMANAGER_H__
 #define __AUI_MOVIEMANAGER_H__
 
+class aui_MovieManager;
 
-#include "aui_base.h"
-#include "aui_ui.h"
-#include "aui_resource.h"
+#include "aui_base.h"       // aui_Base
 #include "aui_movie.h"
-
-#include "c3files.h"
+#include "aui_resource.h"
+#include "c3files.h"        // C3DIR
 
 class aui_MovieManager : aui_Base
 {
 public:
-	aui_MovieManager( BOOL init = TRUE );
+	aui_MovieManager(bool init = true);
 	virtual ~aui_MovieManager();
 
 	virtual aui_Movie	*Load( const MBCHAR *filename, C3DIR dir = C3DIR_DIRECT )

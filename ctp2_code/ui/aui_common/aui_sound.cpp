@@ -24,7 +24,6 @@ aui_Sound::aui_Sound(
 {
 	*retval = InitCommon ( filename );
 	Assert ( AUI_SUCCESS (*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -43,9 +42,7 @@ AUI_ERRCODE aui_Sound::InitCommon( MBCHAR const *filename )
 
 	AUI_ERRCODE errcode = SetFilename( filename );
 	Assert ( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return errcode;
-
-	return AUI_ERRCODE_OK;
+	return errcode;
 }
 
 
@@ -63,17 +60,16 @@ AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
 
 	m_format = (aui_SoundFormat *)
 		g_ui->TheMemMap()->GetFileFormat ( m_filename );
-	Assert( m_format != NULL );
-	if ( !m_format )
-		return AUI_ERRCODE_MEMALLOCFAILED;
-
-	return AUI_ERRCODE_OK;
+	Assert(m_format);
+	
+    return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
 }
 
 
 
 AUI_ERRCODE aui_Sound::Load( void ) 
 {
+
 	Assert ( m_format != NULL );
 	if ( !m_format ) return AUI_ERRCODE_INVALIDPARAM;
 
@@ -86,11 +82,7 @@ AUI_ERRCODE aui_Sound::Load( void )
 
 AUI_ERRCODE aui_Sound::Unload( void ) 
 {
-	if ( m_format )
-	{
-		g_ui->TheMemMap()->ReleaseFileFormat( m_format );
-		m_format = NULL;
-	}
+	g_ui->TheMemMap()->ReleaseFileFormat(m_format);
 
 	return AUI_ERRCODE_OK;
 }

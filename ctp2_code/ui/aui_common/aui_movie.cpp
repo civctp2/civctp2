@@ -51,7 +51,6 @@ aui_Movie::aui_Movie(
 {
 	*retval = InitCommon( filename );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -123,11 +122,8 @@ AUI_ERRCODE aui_Movie::SetFilename( MBCHAR const *filename )
 
 AUI_ERRCODE aui_Movie::Load( void )
 {
-	Assert( m_format != NULL );
+	Assert(m_format);
 	if ( !m_format ) return AUI_ERRCODE_INVALIDPARAM;
-
-	
-	
 
 	return m_format->Load( m_filename, this );
 }
@@ -138,11 +134,8 @@ AUI_ERRCODE aui_Movie::Unload( void )
 {
 	Close();
 
-	if ( m_format )
-	{
-		g_ui->TheMemMap()->ReleaseFileFormat( m_format );
-		m_format = NULL;
-	}
+	g_ui->TheMemMap()->ReleaseFileFormat(m_format);
+	m_format = NULL;
 
 	return AUI_ERRCODE_OK;
 }

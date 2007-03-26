@@ -25,6 +25,7 @@ enum SLIC_BUILTIN {
 	SLIC_BUILTIN_UNITRECORD,
 
 	SLIC_BUILTIN_MAX
+    // Should not have more than 256 entries
 };
 
 #endif

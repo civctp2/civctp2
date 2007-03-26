@@ -26,194 +26,157 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "aui_ui.h"
-#include "aui_ldl.h"
-
 #include "aui_stringtable.h"
 
-#include "StrDB.h"
+#include <algorithm>
+#include "aui_ldl.h"
+#include "aui_ui.h"
+#include "StrDB.h"              // g_theStringDB
 
-extern StringDB	*g_theStringDB;
+#define k_AUI_STRINGTABLE_LDL_NUMSTRINGS		"numstrings"
+#define k_AUI_STRINGTABLE_LDL_STRING			"string"
+#define k_AUI_STRINGTABLE_LDL_NODATABASE		"nodatabase"
 
-
-
-aui_StringTable::aui_StringTable(
-	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock )
+aui_StringTable::aui_StringTable
+(
+	AUI_ERRCODE *   retval,
+	size_t          numStrings 
+)
+:
+	m_Strings       (numStrings, (MBCHAR *) NULL)
 {
-	*retval = InitCommonLdl( ldlBlock );
-	Assert( AUI_SUCCESS(*retval) );
+    *retval = AUI_ERRCODE_OK;
 }
 
-
-
-aui_StringTable::aui_StringTable(
-	AUI_ERRCODE *retval,
-	sint32 numStrings )
-{
-	*retval = InitCommon( numStrings );
-	Assert( AUI_SUCCESS(*retval) );
-}
-
-
-
-AUI_ERRCODE aui_StringTable::InitCommonLdl( MBCHAR *ldlBlock )
+aui_StringTable::aui_StringTable
+(
+	AUI_ERRCODE *   retval,
+	MBCHAR const *  ldlBlock 
+)
+:
+	m_Strings       ()
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
-	Assert( block != NULL );
-	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+	Assert(block);
+	if (!block)
+    {
+        *retval = AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+        return;
+    }
 
-	
-	sint32 numStrings = FindNumStringsFromLdl( block );
+	m_Strings.resize(FindNumStringsFromLdl(block), (MBCHAR *) NULL);
 
-	AUI_ERRCODE errcode = InitCommon( numStrings );
-	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return errcode;
+    MBCHAR temp[k_AUI_LDL_MAXBLOCK + 1];
 
-	
-	MBCHAR temp[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-	if ( block->GetBool(k_AUI_STRINGTABLE_LDL_NODATABASE) ) {
-		for ( sint32 i = 0; i < m_numStrings; i++ )
+	if ( block->GetBool(k_AUI_STRINGTABLE_LDL_NODATABASE) )
+    {
+		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
-			sprintf( temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i );
-			SetString(
-				block->GetString( temp ),
-				i );
+			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i);
+			SetString(block->GetString(temp), i);
 		}
 	}
-	else {
-		for ( sint32 i = 0; i < m_numStrings; i++ )
+	else 
+    {
+		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
-			sprintf( temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i );
-			SetString(
-				g_theStringDB->GetNameStr( block->GetString(temp) ),
-				i );
+			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i);
+			SetString(g_theStringDB->GetNameStr(block->GetString(temp)), i);
 		}
 	}
 
-	return AUI_ERRCODE_OK;
+	*retval = AUI_ERRCODE_OK;
 }
-
-
-
-sint32 aui_StringTable::FindNumStringsFromLdl( ldl_datablock *block )
-{
-	if ( block->GetAttributeType( k_AUI_STRINGTABLE_LDL_NUMSTRINGS ) ==
-			ATTRIBUTE_TYPE_INT )
-		return block->GetInt( k_AUI_STRINGTABLE_LDL_NUMSTRINGS );
-
-	sint32 i = -1;
-	BOOL found = TRUE;
-	MBCHAR temp[ k_AUI_LDL_MAXBLOCK + 1 ];
-	while ( found )
-	{
-		i++;
-		found = FALSE;
-		sprintf( temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i );
-		if ( block->GetString( temp ) ) found = TRUE;
-	}
-
-	return i;
-}
-
-
-
-AUI_ERRCODE aui_StringTable::InitCommon( sint32 numStrings )
-{
-	if ( m_numStrings = numStrings )
-	{
-		m_strings = new MBCHAR *[ numStrings ];
-		Assert( m_strings != NULL );
-		if ( !m_strings ) return AUI_ERRCODE_MEMALLOCFAILED;
-
-		memset( m_strings, 0, m_numStrings * sizeof( MBCHAR * ) );
-	}
-	else
-		m_strings = NULL;
-
-	return AUI_ERRCODE_OK;
-}
-
 
 
 aui_StringTable::~aui_StringTable()
 {
-	if ( m_strings )
+    for 
+    (
+        std::vector<MBCHAR *>::iterator p = m_Strings.begin();
+        p != m_Strings.end();
+        ++p
+    )
 	{
-		for (sint32 i = 0; i < m_numStrings; ++i)
-		{
-			delete [] m_strings[i];
-		}
-		delete [] m_strings;
+		delete [] *p;
 	}
+    
+    std::vector<MBCHAR *>().swap(m_Strings);
+}
+
+size_t aui_StringTable::FindNumStringsFromLdl(ldl_datablock * block)
+{
+    sint32  stringCount = 0;
+
+	if (ATTRIBUTE_TYPE_INT == 
+            block->GetAttributeType(k_AUI_STRINGTABLE_LDL_NUMSTRINGS)
+       )
+    {
+        // Use the numstrings entry
+		stringCount = block->GetInt(k_AUI_STRINGTABLE_LDL_NUMSTRINGS);
+        Assert(stringCount >= 0);
+    }
+    else
+    {
+        // Look for string0, string1, etc. entries and count
+	    MBCHAR  temp[k_AUI_LDL_MAXBLOCK + 1];
+	    bool    isAtEnd = false;
+        
+        while (!isAtEnd)
+        {
+		    sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, stringCount);
+            if (block->GetString(temp))
+            {
+                ++stringCount;
+            }
+            else
+            {
+                isAtEnd = true;
+            }
+	    }
+    }
+
+	return static_cast<size_t>(stringCount);
 }
 
 
 
-sint32 aui_StringTable::SetNumStrings( sint32 numStrings )
+
+
+
+MBCHAR * aui_StringTable::GetString( sint32 index ) const
 {
-	Assert( numStrings >= 0 );
-	if ( numStrings < 0 ) return AUI_ERRCODE_INVALIDPARAM;
+	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
+	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size()) return NULL;
 
-	sint32 prevNumStrings = m_numStrings;
-
-	MBCHAR **		strings	= NULL;
-	size_t const	copyEnd	= std::min(m_numStrings, numStrings);
-
-	if (numStrings)
-	{
-		strings	= new MBCHAR *[numStrings];
-		std::copy(m_strings, m_strings + copyEnd, strings);
-		std::fill(strings + copyEnd, strings + numStrings, (MBCHAR *) NULL);
-	}
-
-	for (sint32 i = copyEnd; i < m_numStrings; ++i)
-	{
-		delete [] m_strings[i];
-	}
-	delete [] m_strings;
-
-	m_strings		= strings;
-	m_numStrings	= numStrings;
-
-	return prevNumStrings;
+	return m_Strings[index];
 }
 
 
 
-MBCHAR *aui_StringTable::GetString( sint32 index )
+AUI_ERRCODE aui_StringTable::SetString(const MBCHAR *text, sint32 index)
 {
-	Assert( index >= 0 && index < m_numStrings );
-	if ( index < 0 || index >= m_numStrings ) return NULL;
-
-	return m_strings[ index ];
-}
-
-
-
-AUI_ERRCODE aui_StringTable::SetString( const MBCHAR *text, sint32 index )
-{
-	Assert( index >= 0 && index < m_numStrings );
-	if ( index < 0 || index >= m_numStrings ) return AUI_ERRCODE_INVALIDPARAM;
+	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
+	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size()) 
+        return AUI_ERRCODE_INVALIDPARAM;
 
 	if (text)
 	{
-		size_t const oldSize = m_strings[index] ? 1 + strlen(m_strings[index]) : 0;
+		size_t const oldSize = m_Strings[index] ? 1 + strlen(m_Strings[index]) : 0;
 		size_t const newSize = 1 + strlen(text);
 
 		if (oldSize < newSize)
 		{
-			delete m_strings[index];
-			m_strings[index] = new MBCHAR[newSize];
+			delete [] m_Strings[index];
+			m_Strings[index] = new MBCHAR[newSize];
 		}
 
-		strcpy(m_strings[index], text);
+		strcpy(m_Strings[index], text);
 	}
 	else
 	{
-		delete m_strings[index];
-		m_strings[index] = NULL;
+		delete [] m_Strings[index];
+		m_Strings[index] = NULL;
 	}
 
 	return AUI_ERRCODE_OK;

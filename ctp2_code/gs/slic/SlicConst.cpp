@@ -26,7 +26,7 @@ void SlicConst::Serialize(CivArchive &archive)
 	uint16 len;
 
 	if(archive.IsStoring()) {
-		len = strlen(m_name) + 1;
+		len = static_cast<uint16>(strlen(m_name) + 1);
 		archive << len;
 		archive.Store((uint8*)m_name, len);
 		archive << m_value;

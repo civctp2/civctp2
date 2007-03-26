@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Handling of SLIC variables.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -939,13 +939,15 @@ void SlicSymbolData::SetString(MBCHAR const * str)
 
 void SlicSymbolData::Serialize(CivArchive &archive)
 {
-	uint16 len;
 	MBCHAR buf[_MAX_PATH];
 
-	if(archive.IsStoring()) {
-		archive.PutUINT8(GetSerializeType());
-		archive.PutUINT8(m_type);
-		switch(GetType()) {
+	if(archive.IsStoring()) 
+    {
+		archive.PutUINT8(static_cast<uint8>(GetSerializeType()));
+		archive.PutUINT8(static_cast<uint8>(m_type));
+
+		switch(GetType()) 
+        {
 			case SLIC_SYM_IVAR:
 #ifdef SLIC_DOUBLES
 			case SLIC_SYM_DVAR:
@@ -956,76 +958,83 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 			case SLIC_SYM_ARMY:
 			case SLIC_SYM_LOCATION:
 			case SLIC_SYM_PLAYER:
-				
 				archive.Store((uint8*)&m_val, sizeof(m_val));
 				break;
 
-							  
-			
 			case SLIC_SYM_FUNC:
-				if(m_val.m_function_object) {
-					len = strlen(m_val.m_function_object->GetName());
-					archive << len;
-					archive.Store((uint8*)m_val.m_function_object->GetName(), len);
-				} else {
-					len = 0;
-					archive << len;
-				}
+                {
+                    size_t len = (m_val.m_function_object) 
+                                 ? strlen(m_val.m_function_object->GetName()) 
+                                 : 0;
+    			    archive << static_cast<uint16>(len);
+                    if (len > 0)
+                    {
+					    archive.Store((uint8*)m_val.m_function_object->GetName(), len);
+				    }
+                }
 				break;
+
 			case SLIC_SYM_REGION:
 			case SLIC_SYM_COMPLEX_REGION:
-				
 				Assert(FALSE);
 				break;
-			case SLIC_SYM_STRING:
-				if(!m_val.m_hard_string)
-					len = 0;
-				else
-					len = strlen(m_val.m_hard_string);
 
-				archive << len;
-				
-				if(len > 0)
-					archive.Store((uint8*)m_val.m_hard_string, len);
+			case SLIC_SYM_STRING:
+                {
+                    size_t  len = 
+                        (m_val.m_hard_string) ? strlen(m_val.m_hard_string) : 0;
+				    archive << static_cast<uint16>(len);
+				    if (len > 0)
+                    {
+					    archive.Store((uint8*)m_val.m_hard_string, len);
+                    }
+                }
 				break;
+
 			case SLIC_SYM_ARRAY:
 				m_val.m_array->Serialize(archive);
 				break;
+
 			case SLIC_SYM_BUILTIN:
 				Assert(FALSE); 
 				break;
+
 			case SLIC_SYM_STRUCT:
 				m_val.m_struct->Serialize(archive);
 				break;
+
 			case SLIC_SYM_STRUCT_MEMBER:
-				
 				break;
+
 			case SLIC_SYM_UFUNC:
 			case SLIC_SYM_ID:
-				if(!m_val.m_segment) {
-					len = 0;
-					archive << len;
-					
-				} else {
-					len = strlen(m_val.m_segment->GetName());
-					archive << len;
-					archive.Store((uint8*)m_val.m_segment->GetName(), len);
-				}
+                {
+                    size_t  len = 
+                        (m_val.m_segment) ? strlen(m_val.m_segment->GetName()) : 0;
+				    archive << static_cast<uint16>(len);
+				    if (len > 0)
+                    {
+					    archive.Store((uint8*)m_val.m_segment->GetName(), len);
+				    }
+                }
 				break;
+
 			case SLIC_SYM_POP:  
 			case SLIC_SYM_PATH: 
 				Assert(FALSE); 
 				break;
+
 			case SLIC_SYM_UNDEFINED:
-				
-				
 				break;
 		}
-	} else {
+	} 
+    else 
+    {
+        uint16  len;
 
-		
 		m_type = (SLIC_SYM)archive.GetUINT8();
-		switch(GetType() == SLIC_SYM_UNDEFINED ? m_type : GetType()) {
+		switch (GetType() == SLIC_SYM_UNDEFINED ? m_type : GetType()) 
+        {
 			case SLIC_SYM_IVAR:
 #ifdef SLIC_DOUBLES
 			case SLIC_SYM_DVAR:
@@ -1036,13 +1045,10 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 			case SLIC_SYM_ARMY:
 			case SLIC_SYM_LOCATION:
 			case SLIC_SYM_PLAYER:
-				
 				archive.Load((uint8*)&m_val, sizeof(m_val));
 				break;
 
-							  
-			
-			case SLIC_SYM_FUNC:
+            case SLIC_SYM_FUNC:
 				archive >> len;				
 				if(len > 0) {
 					archive.Load((uint8*)buf, len);
@@ -1076,7 +1082,6 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				m_val.m_struct = new SlicStructInstance(archive);
 				break;
 			case SLIC_SYM_STRUCT_MEMBER:
-				
 				break;
 			case SLIC_SYM_UFUNC:
 			case SLIC_SYM_ID:
@@ -1094,7 +1099,6 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				Assert(FALSE); 
 				break;
 			case SLIC_SYM_UNDEFINED:
-				
 				break;
 		}
 	}

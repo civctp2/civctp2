@@ -29,37 +29,26 @@
 #include "c3.h"                     // Pre-compiled header
 #include "c3imageformats.h"         // Own declarations: consistency check
 
-#include <io.h>
-
 #include "aui.h"
 #include "aui_image.h"
 #include "aui_surface.h"
-
+#include <io.h>
 #include "pixelutils.h"
-
-#include "tiffutils.h"
-#include "targautils.h"
-#include "rimutils.h"
-
-
 #include "prjfile.h"
-extern ProjectFile *g_ImageMapPF;
+#include "rimutils.h"
+#include "targautils.h"
+#include "tiffutils.h"
+
+extern ProjectFile *    g_ImageMapPF;
+extern sint32           g_is565Format;
 
 
-
-
-
-
-AUI_ERRCODE TiffImageFormat::Load( MBCHAR *filename, aui_Image *image )
+AUI_ERRCODE TiffImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-	AUI_ERRCODE errcode;
 	uint16	width, height;
-	uint16  *buffer;
-
 	TIFGetMetrics( filename, &width, &height);
 
-	errcode = image->LoadEmpty( width, height, 16 );
+	AUI_ERRCODE errcode = image->LoadEmpty( width, height, 16 );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
 		c3errors_ErrorDialog("TIF Load", "Unable to find the file '%s'", filename);
@@ -67,16 +56,16 @@ AUI_ERRCODE TiffImageFormat::Load( MBCHAR *filename, aui_Image *image )
 	}
 
 	aui_Surface *surface = image->TheSurface();
-
 	if (!surface) return AUI_ERRCODE_LOADFAILED;
 
-	errcode = surface->Lock( NULL, (LPVOID *)&buffer, 0 );
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
+	uint16  * buffer;
+	errcode = surface->Lock( NULL, (LPVOID *)&buffer, 0 );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
 		BOOL		is565 = (surface->PixelFormat() == AUI_SURFACE_PIXELFORMAT_565);
-
 		TIFLoadIntoBuffer16( filename, &width, &height, (uint16)surface->Pitch(), buffer, is565);
 
 		errcode = surface->Unlock( buffer );
@@ -93,41 +82,37 @@ AUI_ERRCODE TiffImageFormat::Load( MBCHAR *filename, aui_Image *image )
 
 
 
-AUI_ERRCODE TargaImageFormat::Load(MBCHAR *filename, aui_Image *image)
+AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-	AUI_ERRCODE errcode;
-	
-	uint16  *buffer;
-
-	int		width, height;
-	int		bpp;
-
-    
-    if (_access(filename, 0) != 0) {
+    if (_access(filename, 0) != 0) 
+    {
 		return LoadRIM(filename, image);
     }        
 
-	if (!Get_TGA_Dimension(filename, width, height, bpp)) {
+	int		width;
+    int     height;
+	int		bpp;
+	if (!Get_TGA_Dimension(filename, width, height, bpp)) 
+    {
 		return AUI_ERRCODE_LOADFAILED;
     }
 
-	errcode = image->LoadEmpty( width, height, 16 );
+	AUI_ERRCODE errcode = image->LoadEmpty( width, height, 16 );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
 		MBCHAR	s[200];
 		sprintf(s, "Unable to load the file '%s' (w:%d, h:%d)", filename, width, height);
-		DPRINTF(k_DBG_FIX, (s));
 		c3errors_ErrorDialog("Targa Load", s, filename);
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
-	aui_Surface *surface = image->TheSurface();
-
+	aui_Surface * surface = image->TheSurface();
 	if (!surface) return AUI_ERRCODE_LOADFAILED;
 
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	uint16 *    buffer;
 	errcode = surface->Lock( NULL, (LPVOID *)&buffer, 0 );
-
+	
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
@@ -152,37 +137,31 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR *filename, aui_Image *image)
 
 
 
-AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
+AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR const * filename, aui_Image *image)
 {
-    extern sint32 g_is565Format;
-
-	AUI_ERRCODE errcode;
-    uint8 *image_data;
-    RIMHeader *rhead;
-
-	int		width, height, pitch;
-	int		record_is_565;
-
-    char *basename;
-
-    
-    if (((basename = strrchr(filename, '\\')) == NULL) &&
-        ((basename = strrchr(filename, '/')) == NULL)) {
-        basename = filename;
-    } else {
-        basename++;
+    // Find the last DOS or Unix style file separator
+    char const *    lastSep     = strrchr(filename, '\\');  
+    if (!lastSep)
+    {
+        lastSep = strrchr(filename, '/');
     }
     
-    char rname[256];
-    strcpy(rname, basename);
-    size_t const    rlen    = strlen(rname);
-    if (rlen < 3) {
+    char const *    basename        = (lastSep) ? lastSep + 1 : filename;
+    size_t const    BASE_LEN_MAX    = 255;
+    size_t const    rlen            = strlen(basename);
+
+    if ((rlen < 3) || (rlen >= BASE_LEN_MAX))
+    {
 		c3errors_ErrorDialog("Targa Load", "Invalid filename '%s'", filename);
         return AUI_ERRCODE_LOADFAILED;
     }
+
+    char rname[1 + BASE_LEN_MAX];
+    strncpy(rname, basename, rlen - 3);
     rname[rlen - 3] = 'r';
     rname[rlen - 2] = 'i';
     rname[rlen - 1] = 'm';
+    rname[rlen]     = '\0';
 
     size_t  size    = 0;
     void *  buffer  = g_ImageMapPF ? g_ImageMapPF->getData(rname, size) : NULL;
@@ -198,10 +177,9 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
         return AUI_ERRCODE_LOADFAILED;
     }
     
-    image_data = (uint8 *)buffer + sizeof(RIMHeader);
+    uint8 *     image_data  = (uint8 *)buffer + sizeof(RIMHeader);
+    RIMHeader * rhead       = (RIMHeader *)buffer;
 
-    
-    rhead = (RIMHeader *)buffer;
     if ((rhead->tag[0] != 'R') ||
         (rhead->tag[1] != 'I') ||
         (rhead->tag[2] != 'M') ||
@@ -211,17 +189,17 @@ AUI_ERRCODE TargaImageFormat::LoadRIM(MBCHAR *filename, aui_Image *image)
         return AUI_ERRCODE_LOADFAILED;
     }
 
-    record_is_565 = ((rhead->flags & RFLAG_BIT_ENCODING) != 0);
+    sint32 record_is_565 = ((rhead->flags & RFLAG_BIT_ENCODING) != 0);
     if (g_is565Format != record_is_565) {
 		c3errors_ErrorDialog("Targa Load", "Invalid RIM file format '%s'", rname);
         return AUI_ERRCODE_LOADFAILED;
     }
 
-    width = rhead->width;
-    height = rhead->height;
-    pitch = rhead->pitch;
+    int width   = rhead->width;
+    int height  = rhead->height;
+    int pitch   = rhead->pitch;
 
-	errcode = image->LoadFileMapped(width, height, 16, pitch, image_data);
+	AUI_ERRCODE errcode = image->LoadFileMapped(width, height, 16, pitch, image_data);
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
 		c3errors_ErrorDialog("Targa Load", "Unable map the file '%s'", rname);

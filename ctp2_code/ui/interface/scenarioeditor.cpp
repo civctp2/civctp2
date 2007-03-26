@@ -154,19 +154,19 @@
 #include "network.h"
 #include "AttractWindow.h"
 
-extern C3UI *g_c3ui;
+extern C3UI *               g_c3ui;
+extern sint32               g_fog_toggle;
+extern RadarMap *           g_radarMap;
+extern ControlPanelWindow * g_controlPanel;
+extern sint32               g_startInfoType;
+extern CivApp *             g_civApp;
+extern MBCHAR               g_slic_filename[_MAX_PATH];
+
+extern void WhackScreen(); 
 
 static MBCHAR *s_scenarioEditorBlock = "ScenarioEditor";
 static ScenarioEditor *s_scenarioEditor = NULL;
 static MBCHAR *s_scenarioAddStuffBlock = "ScenAddStuffWindow";
-
-extern RadarMap *g_radarMap;
-extern ControlPanelWindow *g_controlPanel;
-
-extern sint32 g_startInfoType;
-extern CivApp *g_civApp;
-
-extern MBCHAR g_slic_filename[_MAX_PATH];
 
 #define k_TERRAIN_COLS_PER_ROW 6
 #define k_CITY_COLS_PER_ROW 6
@@ -187,7 +187,6 @@ static MBCHAR *k_UNIT_TAB_BUTTON = "ScenarioEditor.TabGroup.UnitButton";
 static MBCHAR *k_CITY_TAB_BUTTON = "ScenarioEditor.TabGroup.CityButton";
 static MBCHAR *k_CIV_TAB_BUTTON = "ScenarioEditor.TabGroup.CivButton";
 
-extern void WhackScreen(); 
 
 char *s_scenTabNames[SCEN_TAB_MAX] = {
 	"World",
@@ -241,12 +240,45 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 :
-	m_terrainSwitches(NULL),
-	m_terrainImpSwitches(NULL),
-	m_xWrapButton(NULL),  // Unused
-	m_yWrapButton(NULL)   // Unused
+	m_window                    (NULL),
+	m_terrainSwitches           (NULL),
+	m_terrainImpSwitches        (NULL),
+	m_addStuffWindow            (NULL),
+//	ctp2_Switch *m_otherMapSwitch[k_NUM_OTHER_MAP_SWITCHES];
+	m_eraseButton               (NULL),
+//	ctp2_Button *m_tabButton[k_NUM_TAB_BUTTONS];
+	m_xWrapButton               (NULL),     // unused
+	m_xWrap                     (true),
+	m_yWrap                     (false),
+	m_yWrapButton               (NULL),     // unused
+	m_addMode                   (SCEN_ADD_BUILDINGS),
+    m_paintTerrain              (-1),
+    m_paintTerrainImprovement   (-1),
+    m_brushSize                 (1),
+    m_unitIndex                 (-1),
+    m_cityStyle                 (CITY_STYLE_EDITOR),
+	//Added by Martin Gühmann to add the pop number 
+	//displayed in the CityPopSpinner to new created cities.
+	m_newPopSize                (1),
+    m_startLocMode              (SCEN_START_LOC_MODE_NONE),
+    m_haveRegion                (false),
+    m_mapMode                   (SCEN_MAP_NONE),
+    m_regionStart               (),
+    m_regionWidth               (0),
+    m_regionHeight              (0),
+	m_copyBuffer                (NULL),
+	m_fileDialog                (NULL),
+	m_initializing              (true),
+	m_placeNationFlag           (0),
+	m_isGivingAdvances          (false)
+	// MBCHAR m_scenarioName[k_SCENARIO_NAME_MAX];
 {
-	m_initializing = true;
+	m_scenarioName[0] = 0;
+    if (g_theWorld)
+    {
+	    m_xWrap = g_theWorld->IsXwrap();
+	    m_yWrap = g_theWorld->IsYwrap();
+    }
 
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_scenarioEditorBlock);
 	Assert(m_window);
@@ -430,53 +462,17 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 	
 	m_eraseButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "UniversalControls.EraseButton");
 
-	m_paintTerrain = -1;
-	m_paintTerrainImprovement = -1;		
-	m_brushSize = 1;
-	m_unitIndex = -1;
-	m_cityStyle = CITY_STYLE_EDITOR;
-	//Added by Martin Gühmann to initialize the pop number
-	//for newly created cities
-	m_newPopSize = 1;
-	m_scenarioName[0] = 0;
-	m_startLocMode = SCEN_START_LOC_MODE_NONE;
-
-	m_mapMode = SCEN_MAP_NONE;
-	
-	
-	
-
-	m_regionWidth = 0;
-	m_regionHeight = 0;
-
-	m_haveRegion = false;
-	m_copyBuffer = NULL;
-	m_fileDialog = NULL;
-	m_paintTerrainImprovement = -1;
-
 	m_window->SetDraggable( TRUE );
 	m_addStuffWindow->SetDraggable( TRUE);
 	
 	
-	m_xWrap = (g_theWorld->IsXwrap())?true:false;
-	m_yWrap = (g_theWorld->IsYwrap())?true:false;
 	ctp2_Switch *pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.XWrapButton");
-	if (m_xWrap)
-		pButton->SetState(1);
-	else
-		pButton->SetState(0);
-
+    pButton->SetState((m_xWrap) ? 1 : 0);
 	
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.XWrapButton", SetXWrap, NULL);
 
 	pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.YWrapButton");
-	if (m_yWrap)
-		pButton->SetState(1);
-	else
-		pButton->SetState(0);
-
-	m_isGivingAdvances = false;
-
+    pButton->SetState((m_yWrap) ? 1 : 0);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.YWrapButton", SetYWrap, NULL);
 
 	*err = AUI_ERRCODE_OK;
@@ -505,29 +501,22 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 //----------------------------------------------------------------------------
 ScenarioEditor::~ScenarioEditor()
 {
-	if(m_window) {
+	if (m_window) 
+    {
 		aui_Ldl::DeleteHierarchyFromRoot(s_scenarioEditorBlock);
-		m_window = NULL;
 	}
 
-	if(m_addStuffWindow) {
+	if (m_addStuffWindow) 
+    {
 		aui_Ldl::DeleteHierarchyFromRoot(s_scenarioAddStuffBlock);
-		m_addStuffWindow = NULL;
 	}
 
 	//Added by Martin Gühmann
 	delete [] m_terrainSwitches;
 	delete [] m_terrainImpSwitches;
 
-	if(m_copyBuffer) {
-		delete m_copyBuffer;
-		m_copyBuffer = NULL;
-	}
-
-	if(m_fileDialog) {
-		delete m_fileDialog;
-		m_fileDialog = NULL;
-	}
+	delete m_copyBuffer;
+	delete m_fileDialog;
 }
 
 AUI_ERRCODE ScenarioEditor::Initialize()
@@ -554,10 +543,8 @@ AUI_ERRCODE ScenarioEditor::Cleanup()
 		if(s_scenarioEditor->m_window){
 			g_c3ui->RemoveWindow(s_scenarioEditor->m_window->Id());
 		}
-		//
 
-		delete s_scenarioEditor;
-		s_scenarioEditor = NULL;
+        allocated::clear(s_scenarioEditor);
 	}
 
 	return AUI_ERRCODE_OK;
@@ -570,18 +557,15 @@ AUI_ERRCODE ScenarioEditor::Display()
 		return AUI_ERRCODE_OK;
 
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
-	if(!s_scenarioEditor) {
+	if (!s_scenarioEditor) 
+    {
 		err = Initialize();
+	    Assert(err == AUI_ERRCODE_OK);
+	    if (err != AUI_ERRCODE_OK) 
+        {
+		    return err;
+	    }
 	}
-
-	Assert(err == AUI_ERRCODE_OK);
-	if(err != AUI_ERRCODE_OK) {
-		return err;
-	}
-
-	Assert(s_scenarioEditor);
-	if(!s_scenarioEditor)
-		return AUI_ERRCODE_INVALIDPARAM;
 
 	if(!g_attractWindow) {
 		g_attractWindow->Initialize();
@@ -717,7 +701,6 @@ void ScenarioEditor::PopulateTerrainList()
 	lb->SetAbsorbancy(FALSE);
 	lb->Clear();
 
-	sint32 t;
 	sint32 col = 0;
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
@@ -725,7 +708,7 @@ void ScenarioEditor::PopulateTerrainList()
 	delete [] m_terrainSwitches;
 	m_terrainSwitches = new ctp2_Switch *[g_theTerrainDB->NumRecords()];
 
-	for(t = 0; t < g_theTerrainDB->NumRecords(); t++) {
+	for (sint32 t = 0; t < g_theTerrainDB->NumRecords(); t++) {
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenTerrainItem");
 			Assert(curItem);
@@ -757,8 +740,8 @@ void ScenarioEditor::PopulateTerrainList()
 		const MBCHAR *iconname = trec->GetIcon()->GetIcon();
 		Assert(iconname);
 		if(iconname) {
-			sw->SetImage((char *)iconname, 0);
-			sw->SetImage((char *)iconname, 1);
+			sw->SetImage(iconname, 0);
+			sw->SetImage(iconname, 1);
 		}
 		
 		m_terrainSwitches[t] = sw;
@@ -796,12 +779,11 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 	lb->SetAbsorbancy(FALSE);
 	lb->Clear();
 
-	sint32 ui;
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
 
-	for(ui = 0; ui < g_theUnitDB->NumRecords(); ui++) {
+	for (sint32 ui = 0; ui < g_theUnitDB->NumRecords(); ui++) {
 		bool addme = false;
 		const UnitRecord *rec = g_theUnitDB->Get(ui);
 
@@ -895,8 +877,7 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 	
 	if(col > 0) {
 		Assert(curItem && curItemBox);
-		sint32 dis;
-		for(dis = col; dis < k_UNIT_COLS_PER_ROW; dis++) {
+		for (sint32 dis = col; dis < k_UNIT_COLS_PER_ROW; dis++) {
 			ctp2_Switch *sw = (ctp2_Switch *)curItemBox->GetChildByIndex(dis * 2);
 			sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)-1);
 			Assert(sw);
@@ -915,13 +896,12 @@ void ScenarioEditor::PopulateCityList()
 	lb->SetAbsorbancy(FALSE);
 	lb->Clear();
 
-	sint32 cs;
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
 	//Added by Martin Gühmann so that there are now as much buttons
 	//as city styles.
-	for(cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
+	for (sint32 cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenCityItem");
 			Assert(curItem);
@@ -983,8 +963,7 @@ void ScenarioEditor::PopulateCityList()
 
 	if(col > 0) {
 		Assert(curItem && curItemBox);
-		sint32 dis;
-		for(dis = col; dis < k_CITY_COLS_PER_ROW; dis++) {
+		for (sint32 dis = col; dis < k_CITY_COLS_PER_ROW; dis++) {
 			ctp2_Switch *sw = (ctp2_Switch *)curItemBox->GetChildByIndex(dis);
 			sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)-1);
 			Assert(sw);
@@ -1004,7 +983,6 @@ void ScenarioEditor::PopulateTerrainImprovementList()
 	lb->SetAbsorbancy(FALSE);
 	lb->Clear();
 
-	sint32 t;
 	sint32 col = 0;
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
@@ -1012,7 +990,7 @@ void ScenarioEditor::PopulateTerrainImprovementList()
 	delete [] m_terrainImpSwitches;
 	m_terrainImpSwitches = new ctp2_Switch *[g_theTerrainImprovementDB->NumRecords()];
 
-	for(t = 0; t < g_theTerrainImprovementDB->NumRecords(); t++) {
+	for (sint32 t = 0; t < g_theTerrainImprovementDB->NumRecords(); t++) {
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenTerrainImprovementItem");
 			Assert(curItem);
@@ -1064,8 +1042,7 @@ void ScenarioEditor::PopulateTerrainImprovementList()
 	
 	if(col > 0) {
 		Assert(curItem && curItemBox);
-		sint32 dis;
-		for(dis = col; dis < k_TERRAINIMP_COLS_PER_ROW; dis++) {
+		for (sint32 dis = col; dis < k_TERRAINIMP_COLS_PER_ROW; dis++) {
 			ctp2_Switch *sw = (ctp2_Switch *)curItemBox->GetChildByIndex(dis);
 			Assert(sw);
 			if(sw)
@@ -1088,8 +1065,7 @@ void ScenarioEditor::RehideUnitSwitches()
 	Assert(box);
 	if(!box) return;
 
-	sint32 i;
-	for(i = 0; i < k_UNIT_COLS_PER_ROW; i++) {
+	for (sint32 i = 0; i < k_UNIT_COLS_PER_ROW; i++) {
 		ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i * 2);
 		Assert(sw);
 		if(!sw) break;
@@ -1234,7 +1210,6 @@ void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 actio
 		DisableErase();
 
 	sint32 ter = (sint32)cookie;
-	sint32 i;
 
 	if(s_scenarioEditor->m_terrainImpSwitches[ter]->GetState() == 0) {
 		s_scenarioEditor->m_paintTerrainImprovement = -1;
@@ -1245,8 +1220,7 @@ void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 actio
 		return;
 	}
 
-	
-	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+	for (sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
 		if(i == ter)
 			continue;
 		if(s_scenarioEditor->m_terrainImpSwitches[i]) {
@@ -1272,7 +1246,6 @@ void ScenarioEditor::TerrainSwitch(aui_Control *control, uint32 action, uint32 d
 		DisableErase();
 
 	sint32 ter = (sint32)cookie;
-	sint32 i;
 	if(s_scenarioEditor->m_terrainSwitches[ter]->GetState() == 0) {
 		s_scenarioEditor->m_paintTerrain = -1;
 		if(s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAIN) {
@@ -1282,8 +1255,7 @@ void ScenarioEditor::TerrainSwitch(aui_Control *control, uint32 action, uint32 d
 		return;
 	}
 
-	
-	for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
+	for(sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		if(i == ter)
 			continue;
 		if(s_scenarioEditor->m_terrainSwitches[i]) {
@@ -1323,8 +1295,6 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 		return;
 
 	
-	sint32 ui = (sint32)cookie;
-	sint32 i;
 	ctp2_Switch *me = (ctp2_Switch *)control;
 	
 	if(me->GetState() == 0) {
@@ -1337,8 +1307,7 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 	if(!lb) return;
 
 	
-	sint32 itemIndex;
-	for(itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++) {
+	for (sint32 itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(itemIndex);
 		Assert(item);
 		if(!item)
@@ -1349,7 +1318,7 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 		if(!box)
 			continue;
 
-		for(i = 0; i < k_UNIT_COLS_PER_ROW; i++) {
+		for (sint32 i = 0; i < k_UNIT_COLS_PER_ROW; i++) {
 			ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i * 2);
 			if(!sw || sw->IsHidden())
 				break;
@@ -1361,9 +1330,10 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 		}
 	}
 	Assert(s_scenarioEditor);
-	if(s_scenarioEditor) {
-		s_scenarioEditor->m_unitIndex = ui;
-		s_scenarioEditor->m_mapMode = SCEN_MAP_UNIT;
+	if (s_scenarioEditor) 
+    {
+		s_scenarioEditor->m_unitIndex   = (sint32) cookie;
+		s_scenarioEditor->m_mapMode     = SCEN_MAP_UNIT;
 	}
 }
 
@@ -1390,10 +1360,7 @@ void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32
 
 
 
-	sint32 cs = (sint32)cookie;
-	sint32 i;
 	ctp2_Switch *me = (ctp2_Switch *)control;
-	
 	if(me->GetState() == 0) {
 		
 		return;
@@ -1403,9 +1370,7 @@ void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32
 	Assert(lb);
 	if(!lb) return;
 
-	
-	sint32 itemIndex;
-	for(itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++) {
+	for(sint32 itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(itemIndex);
 		Assert(item);
 		if(!item)
@@ -1416,7 +1381,7 @@ void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32
 		if(!box)
 			continue;
 
-		for(i = 0; i < k_CITY_COLS_PER_ROW; i++) {
+		for (sint32 i = 0; i < k_CITY_COLS_PER_ROW; i++) {
 			ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i);
 			if(!sw || sw->IsHidden())
 				break;
@@ -1428,17 +1393,17 @@ void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32
 		}
 	}
 	Assert(s_scenarioEditor);
-	if(s_scenarioEditor) {
-		s_scenarioEditor->m_cityStyle = cs;
-		s_scenarioEditor->m_mapMode = SCEN_MAP_CITY;
+	if (s_scenarioEditor) 
+    {
+		s_scenarioEditor->m_cityStyle   = (sint32) cookie;
+		s_scenarioEditor->m_mapMode     = SCEN_MAP_CITY;
 	}
 }
 
 
 void ScenarioEditor::SetTab(SCEN_TAB tab)
 {
-	sint32 t;
-	for(t = 0; t < SCEN_TAB_MAX; t++) {
+	for (sint32 t = 0; t < SCEN_TAB_MAX; t++) {
 		MBCHAR panelName[k_MAX_NAME_LEN];
 		sprintf(panelName, "%s.TabGroup.%s", s_scenarioEditorBlock, s_scenTabNames[t]);
 
@@ -1508,18 +1473,15 @@ void ScenarioEditor::ResetButts()
 
 void ScenarioEditor::TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	Assert(s_scenarioEditor);
-	if(!s_scenarioEditor)
-		return;
-
 	if(action != AUI_SWITCH_ACTION_ON) {
 		return;
 	}
 
 	Assert(s_scenarioEditor);
-	if(s_scenarioEditor) {
-		s_scenarioEditor->SetTab((SCEN_TAB)(sint32)cookie);
-	}
+	if (s_scenarioEditor)
+    {
+	    s_scenarioEditor->SetTab((SCEN_TAB)(sint32)cookie);
+    }
 }
 
 void ScenarioEditor::UnitTabButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1570,14 +1532,6 @@ void ScenarioEditor::ShowAddList(SCEN_ADD addtype)
 
 bool ScenarioEditor::UpdateAddList(SCEN_ADD addtype)
 {
-	
-	
-	Unit city;
-	BOOL haveCity = g_selected_item->GetSelectedCity(city);
-	sint32 i;
-
-	
-	
 	ctp2_ListBox *leftList = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioAddStuffBlock, "Left");
 	ctp2_ListBox *rightList = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioAddStuffBlock, "Right");
 
@@ -1590,6 +1544,10 @@ bool ScenarioEditor::UpdateAddList(SCEN_ADD addtype)
 	leftList->Clear();
 	rightList->Clear();
 	sint32 player = g_selected_item->GetVisiblePlayer();
+
+	Unit city;
+	BOOL haveCity = g_selected_item->GetSelectedCity(city);
+	sint32 i;
 
 	switch(addtype) {
 		case SCEN_ADD_BUILDINGS:
@@ -1874,8 +1832,7 @@ void ScenarioEditor::UpdateCivMode()
 
 void ScenarioEditor::SetCivSwitches()
 {
-	sint32 i;
-	for(i = 0; i < SCEN_START_LOC_MODE_MAX; i++) {
+	for (sint32 i = 0; i < SCEN_START_LOC_MODE_MAX; i++) {
 		ctp2_Switch *sw = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_modeSwitchNames[i]);
 		Assert(sw);
 		if(sw) {
@@ -1894,9 +1851,9 @@ void ScenarioEditor::UpdatePlayerSelect()
 	players->Clear();
 	const MBCHAR *plr_choice = g_theStringDB->GetNameStr("str_player_choice");
 	AddDropDownItem(players, "ScenNationItem", (MBCHAR *)plr_choice);
-	sint32 i;
-	char str[256];
-	for(i = 1; i < k_MAX_PLAYERS; i++)
+
+    char str[k_MAX_NAME_LEN];
+	for (sint32 i = 1; i < k_MAX_PLAYERS; i++)
 	{
 		if(g_player[i])
 		{
@@ -1928,9 +1885,6 @@ void ScenarioEditor::LimitPlayerChoice(aui_Control *control, uint32 action, uint
 }
 void ScenarioEditor::SetupNations()
 {	
-	
-	
-	sint32 i;
 	ctp2_DropDown *plgroup = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivControls.Nation");
 
 	Assert(plgroup);
@@ -1943,7 +1897,7 @@ void ScenarioEditor::SetupNations()
 
 
 	
-	
+	sint32 i;
 	for(i = 0; i < g_theCivilisationDB->NumRecords(); i++) {
 		const MBCHAR *name = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetCountryName());
 
@@ -2334,9 +2288,10 @@ void ScenarioEditor::BrushSize(aui_Control *control, uint32 action, uint32 data,
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	Assert(s_scenarioEditor);
-	if(!s_scenarioEditor) return;
-
-	s_scenarioEditor->m_brushSize = (sint32)cookie;
+	if (s_scenarioEditor)
+    {
+    	s_scenarioEditor->m_brushSize = (sint32)cookie;
+    }
 }
 
 
@@ -2451,30 +2406,27 @@ void ScenarioEditor::NameTheScenarioCallback(MBCHAR *text, sint32 accepted, void
 
 bool ScenarioEditor::WorldHasPlayerOrCiv(sint32 playerOrCiv, sint32 &index)
 {
-	if(!s_scenarioEditor)
+	if (!s_scenarioEditor)
 		return false;
 
-	bool has = false;
-
-	if (s_scenarioEditor->m_startLocMode == SCEN_START_LOC_MODE_CIV) {
-		for (sint32 i=0; i<g_theWorld->GetNumStartingPositions(); i++) {
-			sint32 civ = g_theWorld->GetStartingPointCiv(i);
-			if (civ == playerOrCiv) {
+	if (s_scenarioEditor->m_startLocMode == SCEN_START_LOC_MODE_CIV) 
+    {
+		for (sint32 i = 0; i < g_theWorld->GetNumStartingPositions(); i++) 
+        {
+			if (playerOrCiv == g_theWorld->GetStartingPointCiv(i)) 
+            {
 				index = i;
-				has = true;
-				break;
+				return true;
 			}
 		}
-	} else {
-		if (g_theWorld->GetNumStartingPositions() >= playerOrCiv) {
-			index = playerOrCiv-1;
-			return true;
-		} else {
-			index = playerOrCiv-1;
-			return false;
-		}
+	} 
+    else 
+    {
+		index = playerOrCiv - 1;
+		return g_theWorld->GetNumStartingPositions() >= playerOrCiv;
 	}
-	return has;
+
+    return false;
 }
 
 
@@ -2482,8 +2434,6 @@ bool ScenarioEditor::WorldHasPlayerOrCiv(sint32 playerOrCiv, sint32 &index)
 
 void ScenarioEditor::PlaceFlag(MapPoint &pos)
 {
-	sint32 index;
-
 	if(!s_scenarioEditor)
 		return;
 
@@ -2492,6 +2442,7 @@ void ScenarioEditor::PlaceFlag(MapPoint &pos)
 		playerOrCiv = s_scenarioEditor->m_placeNationFlag;
 	}
 	
+	sint32 index;
 	if (WorldHasPlayerOrCiv(playerOrCiv, index)) {
 		
 		
@@ -2520,8 +2471,7 @@ void ScenarioEditor::PlaceFlag(MapPoint &pos)
 				
 			}
 
-			Player *p = NULL;
-			p = g_player[playerOrCiv];
+			Player * p = g_player[playerOrCiv];
 			if (p) {
 				playerOrCiv = p->GetCivilisation()->GetCivilisation();
 			}
@@ -2547,13 +2497,15 @@ void ScenarioEditor::GetLabel(MBCHAR *labelString, sint32 playerOrCiv)
 	SCEN_START_LOC_MODE mode = s_scenarioEditor->m_startLocMode;
 
 	if (mode == SCEN_START_LOC_MODE_PLAYER ||
-		mode == SCEN_START_LOC_MODE_PLAYER_WITH_CIV) {
+		mode == SCEN_START_LOC_MODE_PLAYER_WITH_CIV) 
+    {
 		sprintf(labelString, "%s (%d/%d)", 
 					g_theStringDB->GetNameStr("str_ldl_Player_Text"),
 					index,
 					g_theProfileDB->GetNPlayers()-1);
-	} else 
-	if (mode == SCEN_START_LOC_MODE_CIV) {
+	} 
+    else if (mode == SCEN_START_LOC_MODE_CIV) 
+    {
 		if(g_theCivilisationDB->Get(index)) {
 			sprintf(labelString, "%s (%d/%d)",
 					g_theStringDB->GetNameStr(g_theCivilisationDB->Get(index)->GetPluralCivName()),
@@ -2581,15 +2533,12 @@ void ScenarioEditor::RegionButton(aui_Control *control, uint32 action, uint32 da
 
 bool ScenarioEditor::DrawRegion()
 {
-	if(!s_scenarioEditor) return false;
-	return s_scenarioEditor->m_haveRegion;
+	return s_scenarioEditor && s_scenarioEditor->m_haveRegion;
 }
 
 bool ScenarioEditor::SelectRegion()
 {
-	if(!s_scenarioEditor) return false;
-
-	return s_scenarioEditor->m_mapMode == SCEN_MAP_SELECT;
+	return s_scenarioEditor && (s_scenarioEditor->m_mapMode == SCEN_MAP_SELECT);
 }
 
 void ScenarioEditor::StartRegion(MapPoint &pos)
@@ -2603,17 +2552,23 @@ void ScenarioEditor::StartRegion(MapPoint &pos)
 
 void ScenarioEditor::EndRegion(MapPoint &pos)
 {
-	if(!s_scenarioEditor) return;
-	ExpandRegion(pos);
-	s_scenarioEditor->m_haveRegion = true;
+	if (s_scenarioEditor)
+    {
+	    ExpandRegion(pos);
+	    s_scenarioEditor->m_haveRegion = true;
+    }
 }
 
 void ScenarioEditor::ExpandRegion(MapPoint &pos)
 {
-	if(!s_scenarioEditor) return;
-	s_scenarioEditor->m_regionHeight = pos.y - s_scenarioEditor->m_regionStart.y + 1;
-	s_scenarioEditor->m_regionWidth = pos.x - s_scenarioEditor->m_regionStart.x + 
-		(s_scenarioEditor->m_regionHeight / 2) + 1;
+	if (s_scenarioEditor)
+    {
+	    s_scenarioEditor->m_regionHeight    = 
+            pos.y - s_scenarioEditor->m_regionStart.y + 1;
+	    s_scenarioEditor->m_regionWidth     = 
+            pos.x - s_scenarioEditor->m_regionStart.x + 
+		        (s_scenarioEditor->m_regionHeight / 2) + 1;
+    }
 }
 
 MapPoint ScenarioEditor::GetRegionUpperLeft()
@@ -2837,44 +2792,34 @@ void ScenarioEditor::SetupGlobalControls()
 	bool initstate=m_initializing;
 	m_initializing=true;
 
-	sint32 i;
-	ctp2_DropDown *dd;
-//	ctp2_ListItem *item = NULL;
-//	ctp2_Static *box = NULL;
-	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
+	ctp2_DropDown * dd = (ctp2_DropDown *)
+        aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
 
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	aui_StringTable *table = new aui_StringTable(&err, "SPMapSizeStringTable");
 
 	Assert(err == AUI_ERRCODE_OK);
 	Assert(dd);
-	dd->Clear();
-	if(dd && (err == AUI_ERRCODE_OK)) {
-		for(i = MAPSIZE_SMALL; i <= MAPSIZE_GIGANTIC; i++) {
-			
 
+    if(dd && (err == AUI_ERRCODE_OK)) {
+	    dd->Clear();
 
-
+		for (sint32 i = MAPSIZE_SMALL; i <= MAPSIZE_GIGANTIC; i++) 
+        {
 			AddDropDownItem(dd, "ScenMapSizeItem", table->GetString(i));
-
-
-
 			dd->SetSelectedItem(g_theProfileDB->GetMapSize());
 		}
 	}
 
 	delete table;
-	table = NULL;
 
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.Barbarians");
 	Assert(dd);
-	dd->Clear();
 	table = new aui_StringTable(&err, "SPRiskLevelStringTable");
-	if(dd) {
-		for(i = 0; i < g_theRiskDB->NumRecords(); i++) {
-			
-
-
+	if (dd) 
+    {
+	    dd->Clear();
+		for (sint32 i = 0; i < g_theRiskDB->NumRecords(); i++) {
 			// Should be taken from the string database directly
 			AddDropDownItem(dd, "ScenBarbarianItem", table->GetString(i));	
 		}
@@ -2882,24 +2827,21 @@ void ScenarioEditor::SetupGlobalControls()
 	}
 
 	delete table;
-	table = NULL;
 
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.Difficulty");
 	Assert(dd);
-	dd->Clear();
 	table = new aui_StringTable(&err, "SPNewGameStrings");
 	Assert(err == AUI_ERRCODE_OK);
-	if(dd && (err == AUI_ERRCODE_OK)) {
-		for(i = 0; i < g_theDifficultyDB->NumRecords(); i++) {
-			
-			
+	if (dd && (err == AUI_ERRCODE_OK)) 
+    {
+	    dd->Clear();
+		for (sint32 i = 0; i < g_theDifficultyDB->NumRecords(); i++) {
 			AddDropDownItem(dd, "ScenDifficultyItem", g_theDifficultyDB->Get(i)->GetNameText());
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetDifficulty());
 	}
 
 	delete table;
-	table = NULL;
 
 	ctp2_Switch *pollSwitch = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.World.Pollution");
 	Assert(pollSwitch);
@@ -2909,9 +2851,9 @@ void ScenarioEditor::SetupGlobalControls()
 
 	
 	
-	ctp2_Button *button = NULL;
 	table = new aui_StringTable(&err, "WorldControlsStringTable");
 
+	ctp2_Button * button;
 	button = (ctp2_Button *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.XWrapButton");
 	((aui_TipWindow *)button->GetTipWindow())->SetTipText( table->GetString(0) );
 	button = (ctp2_Button *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.YWrapButton");
@@ -2945,13 +2887,9 @@ void ScenarioEditor::SetupGlobalControls()
 	((aui_TipWindow *)button->GetTipWindow())->SetTipText( table->GetString(12) );
 
 	delete table;
-	table = NULL;
 
 	ctp2_Static *st = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.YearDisplay");
-	MBCHAR tempstr[_MAX_PATH];
-	
-	sprintf(tempstr, TurnYearStatus::GetCurrentYear()); 
-	st->SetText(tempstr);
+	st->SetText(TurnYearStatus::GetCurrentYear());
 
 	UpdatePlayerCount();
 
@@ -3068,8 +3006,7 @@ void ScenarioEditor::Year(aui_Control *control, uint32 action, uint32 data, void
 	if(!spinner) return;
 
 	PLAYER_INDEX current_player = g_selected_item->GetCurPlayer();
-	Assert(g_player != NULL);
-	Assert(g_player[current_player] != NULL);
+	Assert(g_player && g_player[current_player]);
 	if(!g_player || !g_player[current_player]) return;
 
 	sint32 newRound = spinner->GetValueX();
@@ -3083,10 +3020,7 @@ void ScenarioEditor::Year(aui_Control *control, uint32 action, uint32 data, void
 	}
 
 	ctp2_Static *st = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.YearDisplay");
-	MBCHAR tempstr[_MAX_PATH];
-	
-	sprintf(tempstr, TurnYearStatus::GetCurrentYear()); 
-	st->SetText(tempstr);
+	st->SetText(TurnYearStatus::GetCurrentYear());
 
 	MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayer());
 }
@@ -3098,8 +3032,7 @@ void ScenarioEditor::Barbarians(aui_Control *control, uint32 action, uint32 data
 		return;
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
-	sint32 risk = dd->GetSelectedItem();
-	g_theProfileDB->SetRiskLevel(risk);
+	g_theProfileDB->SetRiskLevel(dd->GetSelectedItem());
 	
 }
 void ScenarioEditor::SetGovernment(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3109,9 +3042,8 @@ void ScenarioEditor::SetGovernment(aui_Control *control, uint32 action, uint32 d
 		return;
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
-	sint32 gov = dd->GetSelectedItem();
-
-	g_player[g_selected_item->GetVisiblePlayer()]->ActuallySetGovernment(gov);
+	g_player[g_selected_item->GetVisiblePlayer()]->ActuallySetGovernment
+        (dd->GetSelectedItem());
 }
 
 void ScenarioEditor::Difficulty(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3122,9 +3054,7 @@ void ScenarioEditor::Difficulty(aui_Control *control, uint32 action, uint32 data
 		return;
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
-	sint32 diff = dd->GetSelectedItem();
-	g_theProfileDB->SetDifficulty(diff);
-	
+	g_theProfileDB->SetDifficulty(dd->GetSelectedItem());
 }
 
 
@@ -3133,9 +3063,7 @@ void ScenarioEditor::SetXWrap(aui_Control *control, uint32 action, uint32 data, 
 	if(( action != AUI_SWITCH_ACTION_ON) && (action != AUI_SWITCH_ACTION_OFF) )
 		return;
 
-	
-	s_scenarioEditor->m_xWrap = (s_scenarioEditor->m_xWrap)?false:true;
-
+	s_scenarioEditor->m_xWrap = !s_scenarioEditor->m_xWrap;
 	g_theWorld->SetXWrap(s_scenarioEditor->m_xWrap);
 }
 
@@ -3145,9 +3073,7 @@ void ScenarioEditor::SetYWrap(aui_Control *control, uint32 action, uint32 data, 
 	if(( action != AUI_SWITCH_ACTION_ON) && (action != AUI_SWITCH_ACTION_OFF) )
 		return;
 
-	
-	s_scenarioEditor->m_yWrap = (s_scenarioEditor->m_yWrap)?false:true;
-
+	s_scenarioEditor->m_yWrap = !s_scenarioEditor->m_yWrap;
 	g_theWorld->SetYWrap(s_scenarioEditor->m_yWrap);
 }
 
@@ -3268,18 +3194,16 @@ void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 
 	ctp2_Switch *sw = (ctp2_Switch *)control;
 
 	if(sw->GetState() != 0) {
-		if(s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAIN) {
-			
-			sint32 i;
-			for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
+		if(s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAIN) 
+        {
+			for(sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 				if(s_scenarioEditor->m_terrainSwitches[i]) {
 					s_scenarioEditor->m_terrainSwitches[i]->SetState(0);
 				}
 			}
 		}
 		
-		sint32 i;
-		for(i = 0; i < k_NUM_OTHER_MAP_SWITCHES; i++) {
+		for (sint32 i = 0; i < k_NUM_OTHER_MAP_SWITCHES; i++) {
 			if(s_scenarioEditor->m_otherMapSwitch[i] == control)
 				continue;
 			s_scenarioEditor->m_otherMapSwitch[i]->SetState(0);
@@ -3326,15 +3250,14 @@ void ScenarioEditor::ClearWorld(aui_Control *control, uint32 action, uint32 data
 	WhackScreen(); 
 }
 
-extern sint32 g_fog_toggle;
-
 void ScenarioEditor::ExploreButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 
-	if(player > 0) {
+	if ((player > 0) && g_player[player])
+    {
 		g_player[player]->m_vision->SetTheWholeWorldExplored();
 	}
 
@@ -3368,30 +3291,19 @@ void ScenarioEditor::FogButton(aui_Control *control, uint32 action, uint32 data,
 
 void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item)
 {
-	
-	ctp2_ListItem *listItem = NULL;
+	ctp2_ListItem * listItem    = static_cast<ctp2_ListItem*>
+        (aui_Ldl::BuildHierarchyFromRoot((MBCHAR *)ldlblock));
+	ctp2_Static *   label       = static_cast<ctp2_Static*>
+        (listItem->GetChildByIndex(0));
 
-	
-	listItem = static_cast<ctp2_ListItem*>(
-		aui_Ldl::BuildHierarchyFromRoot((MBCHAR *)ldlblock));
-
-	
-	ctp2_Static *label = static_cast<ctp2_Static*>(
-		listItem->GetChildByIndex(0));
-
-	
 	label->SetText(item);
-
-	
 	dd->AddItem(listItem);
-
 }
 
 sint32 ScenarioEditor::GetNumPlayers() 
 {
 	sint32 players = 0;
-	sint32 i;
-	for(i = 1; i < k_MAX_PLAYERS; i++) {
+	for (sint32 i = 1; i < k_MAX_PLAYERS; i++) {
 		if(g_player[i])
 			players++;
 	}
@@ -3402,8 +3314,7 @@ sint32 ScenarioEditor::GetNumPlayers()
 sint32 ScenarioEditor::GetLastPlayer() 
 {
 	sint32 players = 0;
-	sint32 i;
-	for(i = 1; i < k_MAX_PLAYERS; i++) {
+	for (sint32 i = 1; i < k_MAX_PLAYERS; i++) {
 		if(g_player[i])
 			players = i;
 	}
@@ -3412,16 +3323,8 @@ sint32 ScenarioEditor::GetLastPlayer()
 
 void ScenarioEditor::DisableErase(void)
 {
-	if (g_toeMode)
-	{
-		g_toeMode = 0;
-		s_scenarioEditor->m_eraseButton->SetState(0);
-	}
-	else
-	{
-		
-		s_scenarioEditor->m_eraseButton->SetState(0);
-	}
+	g_toeMode = 0;
+	s_scenarioEditor->m_eraseButton->SetState(0);
 }
 
 void ScenarioEditor::ReloadSlic(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3429,20 +3332,18 @@ void ScenarioEditor::ReloadSlic(aui_Control *control, uint32 action, uint32 data
 	if(action != AUI_BUTTON_ACTION_EXECUTE) 
 		return;
 
-	sint32 p;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
+	for (sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(g_player[p]) {
 			g_player[p]->m_messages->KillList();
 		}
 	}
 
-	Assert(g_slicEngine);
-	delete g_slicEngine;
-	g_slicEngine = new SlicEngine;
-	if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE)) {
-		g_slicEngine->Link();
+    if (SlicEngine::Reload(g_slic_filename))
+    {
 		MessageBoxDialog::Information("str_ReloadSlic_OK", "ReloadSlicOK"); 
-	} else {
+	} 
+    else 
+    {
 		MessageBoxDialog::Information("str_ReloadSlic_Fail", "ReloadSlicFail");
 	}
 }
@@ -3453,7 +3354,6 @@ void ScenarioEditor::RemoveGoods(aui_Control *control, uint32 action, uint32 dat
 
 	for(sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(sint32 y = 0; y < g_theWorld->GetYHeight(); y++) {
-//			Cell *cell = g_theWorld->GetCell(x, y);
 			g_theWorld->ClearGoods(x,y);		
 		}
 	}
@@ -3464,12 +3364,11 @@ void ScenarioEditor::GenerateGoods(aui_Control *control, uint32 action, uint32 d
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	sint32 x,y, good;
-
 	g_theWorld->GenerateGoods();
 
-	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
-		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
+	sint32 good;
+	for (sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
+		for (sint32 y = 0; y < g_theWorld->GetYHeight(); y++) {
 			MapPoint pos(x,y);
 			if(g_theWorld->GetGood(pos, good)) { 
 				g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
@@ -3569,7 +3468,5 @@ void ScenarioEditor::FindPosNow(aui_Control *control, uint32 action, uint32 data
 
 bool ScenarioEditor::IsGivingAdvances()
 {
-	if(!s_scenarioEditor)
-		return false;
-	return s_scenarioEditor->m_isGivingAdvances;
+	return s_scenarioEditor && s_scenarioEditor->m_isGivingAdvances;
 }

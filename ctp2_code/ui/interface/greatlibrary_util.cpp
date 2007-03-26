@@ -53,20 +53,10 @@
 // Remark(s)  : When the library string name is not found, NULL is returned.
 //
 //----------------------------------------------------------------------------
-const MBCHAR *glutil_LoadText(const char *filename, SlicContext &so)
+const MBCHAR * glutil_LoadText(const char *filename, SlicContext &so)
 {
-	char *text;
-	
-	char * lower_case_filename = new char[strlen(filename)+1];
-	strcpy(lower_case_filename, filename);
-	
-	for (size_t j = 0; j < strlen(lower_case_filename); ++j)
-	{
-		lower_case_filename[j] = tolower(lower_case_filename[j]);
-	}
-	
-	text = GreatLibrary::s_great_library_info->Look_Up_Data(lower_case_filename);
-	delete [] lower_case_filename;
+	char const * text = 
+        GreatLibrary::s_great_library_info->Look_Up_Data(filename);
 
 	if (text) 
 	{

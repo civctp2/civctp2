@@ -62,10 +62,32 @@ LineGraph::LineGraph
 	void *                  cookie,
 	EventTracker *          events
 )
-:	aui_Control     (retval, id, ldlBlock, ActionFunc, cookie),
-    m_events        (events)
+:	
+    aui_Control         (retval, id, ldlBlock, ActionFunc, cookie),
+	m_xmin              (0.0),
+	m_xmax              (0.0),
+	m_ymin              (0.0),
+	m_ymax              (0.0),
+	m_numLines          (0),
+	m_numSamples        (0),
+	m_lineData          (NULL),
+	m_hasIndicator      (false),
+	m_indicatorValue    (0.0),
+	m_xAxisName         (NULL),
+	m_yAxisName         (NULL),
+    m_surface           (NULL),
+//  RECT m_graphRect
+//  RECT m_surfaceRect
+	m_data              (NULL),
+	m_enableXLabel      (true),
+	m_enableXNumber     (true),
+	m_enableYLabel      (true),
+	m_enableYNumber     (true),
+	m_enablePrecision   (true),
+    m_graphType         (events ? GRAPH_TYPE_ZEROSUM : GRAPH_TYPE_LINE),
+    m_events            (events)
 {
-	InitCommonLdl(ldlBlock);
+    InitCommon();	
 }
 
 
@@ -80,8 +102,29 @@ LineGraph::LineGraph
 	ControlActionCallback * ActionFunc,
 	void *                  cookie
 )
-:	aui_Control     (retval, id, x, y, width, height, ActionFunc, cookie),
-    m_events        (NULL)
+:	
+    aui_Control         (retval, id, x, y, width, height, ActionFunc, cookie),
+	m_xmin              (0.0),
+	m_xmax              (0.0),
+	m_ymin              (0.0),
+	m_ymax              (0.0),
+	m_numLines          (0),
+	m_numSamples        (0),
+	m_lineData          (NULL),
+	m_hasIndicator      (false),
+	m_indicatorValue    (0.0),
+	m_xAxisName         (NULL),
+	m_yAxisName         (NULL),
+    m_surface           (NULL),
+//  RECT m_graphRect
+//  RECT m_surfaceRect
+	m_data              (NULL),
+	m_enableXLabel      (true),
+	m_enableXNumber     (true),
+	m_enableYLabel      (true),
+	m_enableYNumber     (true),
+	m_enablePrecision   (true),
+    m_graphType         (GRAPH_TYPE_NONE)
 {
 	InitCommon();	
 }
@@ -119,40 +162,10 @@ LineGraph::~LineGraph()
 	}
 }
 
-void LineGraph::InitCommonLdl(MBCHAR *ldlBlock)
-{
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
-	Assert( block != NULL );
-	if ( !block ) return;
-
-	InitCommon();
-}
-
-
 void LineGraph::InitCommon(void)
 {
 	AUI_ERRCODE			errcode = AUI_ERRCODE_OK;
 
-	m_xmin = 0.0;
-	m_ymin = 0.0;
-	m_xmax = 0.0;
-	m_ymax = 0.0;
-	m_numLines = 0;
-	m_numSamples = 0;
-	m_lineData = NULL;
-	m_hasIndicator = FALSE;
-	m_indicatorValue = 0.0;
-	m_xAxisName = NULL;
-	m_yAxisName = NULL;
-	m_data = NULL;
-
-	m_enableXLabel = TRUE;
-	m_enableYLabel = TRUE;
-	m_enableXNumber = TRUE;
-	m_enableYNumber = TRUE;
-	m_enablePrecision = TRUE;
-
-	
     m_surface = new aui_DirectSurface
         (&errcode, m_width, m_height, 16, g_c3ui ? g_c3ui->DD() : NULL);
 	Assert( AUI_NEWOK(m_surface, errcode) );
@@ -165,8 +178,6 @@ void LineGraph::InitCommon(void)
 	m_graphRect.left += 20;
 
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE;
-
-	m_graphType = (m_events)?GRAPH_TYPE_ZEROSUM:GRAPH_TYPE_LINE;
 }
 
 
@@ -193,12 +204,11 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 }
 
 
-void LineGraph::UpdateGraph(aui_DirectSurface *surface, sint32 x, sint32 y)
+void LineGraph::UpdateGraph(aui_Surface * surface, sint32 x, sint32 y)
 {
 	RECT		rect = {0, 0, m_width, m_height};
 
-	
-	g_c3ui->TheBlitter()->Blt(surface, x, y, m_surface, &rect, k_AUI_BLITTER_FLAG_COPY);
+    g_c3ui->TheBlitter()->Blt(surface, x, y, m_surface, &rect, k_AUI_BLITTER_FLAG_COPY);
 }
 
 

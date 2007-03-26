@@ -1,15 +1,10 @@
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
+#endif
 
-#ifndef __LINEGRAPH_H__
-#define __LINEGRAPH_H__
-
-#include "aui_control.h"
-
-class aui_EditText;
-class aui_DirectSurface;
-class EventTracker;
+#ifndef LINEGRAPH_H__
+#define LINEGRAPH_H__
 
 enum GRAPH_TYPE
 {
@@ -19,12 +14,24 @@ enum GRAPH_TYPE
 	GRAPH_TYPE_MAX
 };
 
-typedef struct LINE_GRAPH_DATA {
-	double *array;
-	double *topArray,*bottomArray;
-	sint32 index;
-	sint32 color;
-} LineGraphData;
+class  LineGraph;
+struct LineGraphData;
+
+#include "aui_control.h"
+#include "ctp2_inttypes.h"
+
+class aui_EditText;
+class aui_Surface;
+class EventTracker;
+
+struct LineGraphData
+{
+	double *    array;
+	double *    topArray;
+    double *    bottomArray;
+	sint32      index;
+	sint32      color;
+};
 
 class LineGraph : public aui_Control
 {
@@ -46,9 +53,6 @@ public:
 					void *cookie = NULL);
 	virtual ~LineGraph();
 
-	void		InitCommonLdl(MBCHAR *ldlBlock);
-	void		InitCommon(void);
-
 	void		SetXBounds(double min, double max) { m_xmin = min; m_xmax = max; }
 	void		SetYBounds(double min, double max) { m_ymin = min; m_ymax = max; }
 	void		SetGraphBounds(double minx, double maxx, double miny, double maxy);
@@ -61,7 +65,7 @@ public:
 	void		SetXAxisName(MBCHAR *name);
 	void		SetYAxisName(MBCHAR *name);
 
-	void		UpdateGraph(aui_DirectSurface *surface, sint32 x, sint32 y);
+	void		UpdateGraph(aui_Surface *surface, sint32 x, sint32 y);
 
 	void		LabelAxes(void);
 	void		DrawIndicator(void);
@@ -84,10 +88,12 @@ public:
 
 	virtual AUI_ERRCODE		DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
-	
-	aui_DirectSurface	*GetGraphSurface(void) const { return m_surface; }
+	aui_Surface	*   GetGraphSurface(void) const { return m_surface; }
 
 private:
+	void		InitCommon(void);
+	void		InitCommonLdl(MBCHAR *ldlBlock);
+
 	double			m_xmin;
 	double			m_xmax;
 	double			m_ymin;
@@ -103,7 +109,7 @@ private:
 	MBCHAR			*m_xAxisName;
 	MBCHAR			*m_yAxisName;
 
-	aui_DirectSurface *m_surface;
+	aui_Surface *   m_surface;
 
 	RECT			m_graphRect;
 	RECT			m_surfaceRect;

@@ -29,13 +29,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_hypertextbase.h"
+
 #include "aui_ui.h"
 #include "aui_ldl.h"
 #include "aui_surface.h"
 #include "aui_bitmapfont.h"
 #include "aui_static.h"
-
-#include "aui_hypertextbase.h"
 
 
 aui_HyperTextBase::aui_HyperTextBase(
@@ -44,7 +44,6 @@ aui_HyperTextBase::aui_HyperTextBase(
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -56,7 +55,6 @@ aui_HyperTextBase::aui_HyperTextBase(
 {
 	*retval = InitCommon( hyperText, hyperMaxLen );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -140,7 +138,7 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 
 aui_HyperTextBase::~aui_HyperTextBase()
 {
-	delete[] m_hyperText;
+	delete [] m_hyperText;
 
 	if (m_hyperStaticList)
 	{
@@ -151,23 +149,25 @@ aui_HyperTextBase::~aui_HyperTextBase()
 
 
 
-AUI_ERRCODE aui_HyperTextBase::SetHyperText(
-	const MBCHAR *hyperText,
-	uint32 maxlen )
+AUI_ERRCODE aui_HyperTextBase::SetHyperText
+(
+	const MBCHAR *  hyperText,
+	uint32          maxlen 
+)
 {
-	Assert( hyperText != NULL );
-	if ( !hyperText ) return AUI_ERRCODE_INVALIDPARAM;
+	memset(m_hyperText, '\0', m_hyperMaxLen + 1);
 
-	
-	memset( m_hyperText, '\0', m_hyperMaxLen + 1 );
-
-	
-	if ( maxlen > m_hyperMaxLen ) maxlen = m_hyperMaxLen;
-	strncpy( m_hyperText, hyperText, maxlen );
-
-	m_hyperCurLen = strlen( m_hyperText );
-
-	return AddHyperStatics( NULL );
+	if (hyperText) 
+    {
+        strncpy(m_hyperText, hyperText, std::min(maxlen, m_hyperMaxLen));
+        m_hyperCurLen = std::min(m_hyperMaxLen, strlen(m_hyperText));
+    	return AddHyperStatics(NULL);
+    }
+    else
+    {
+        m_hyperCurLen = 0;
+        return AUI_ERRCODE_INVALIDPARAM;
+    }
 }
 
 

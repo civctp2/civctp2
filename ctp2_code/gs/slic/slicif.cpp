@@ -710,7 +710,7 @@ void slicif_add_op(SOP op, ...)
 			
 			
 			sptr = (char *)(s_block_ptr[s_level] - 1);
-			*sptr = op;
+			*sptr = static_cast<char>(op);
 			sptr++;
 			*((int*)sptr) = (int)(s_code_ptr - s_code) - 1; 
 

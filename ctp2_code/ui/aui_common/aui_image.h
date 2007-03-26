@@ -34,7 +34,7 @@ public:
 	aui_ImageFormat() {}
 	virtual ~aui_ImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Image *image )
+	virtual AUI_ERRCODE	Load(MBCHAR const * filename, aui_Image *image )
 		{ return AUI_ERRCODE_OK; }
 };
 
@@ -101,7 +101,7 @@ public:
 	aui_BmpImageFormat() {}
 	virtual ~aui_BmpImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Image *image );
+	virtual AUI_ERRCODE	Load(MBCHAR const * filename, aui_Image *image );
 };
 
 

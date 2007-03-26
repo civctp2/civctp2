@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic array variable handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -123,7 +123,7 @@ void SlicArray::Serialize(CivArchive &archive)
 		archive.PutUINT8((uint8)m_sizeIsFixed);
 
 		if(m_varType == SLIC_SYM_STRUCT) {
-			archive.PutUINT8(m_structTemplate->GetType());
+			archive.PutUINT8(static_cast<uint8>(m_structTemplate->GetType()));
 		}
 
 		if(m_type == SS_TYPE_INT) {

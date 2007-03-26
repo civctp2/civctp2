@@ -124,11 +124,7 @@ sint32	spnewgamescreen_displayMyWindow()
 
 		if (g_slicEngine)
 		{
-			allocated::reassign(g_slicEngine, new SlicEngine());
-			if (g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE))
-            {
-				g_slicEngine->Link();
-			}
+            SlicEngine::Reload(g_slic_filename);
 		}
 
 		g_spNewGameWindow->Update();
@@ -738,22 +734,22 @@ aui_StringTable* spNewStringTable(AUI_ERRCODE *errcode, MBCHAR *ldlme)
 
 void spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *mytable, MBCHAR *listitemparent, MBCHAR *listitemme)
 {
-	for (int i = 0; i<mytable->GetNumStrings(); i++) 
+	for (sint32 i = 0; i < mytable->GetNumStrings(); ++i) 
     {
-		aui_Item * item = (aui_Item*) 
-            new SPDropDownListItem(retval, listitemparent, listitemme, mytable->GetString(i));
-		if (item)
-			mydrop->AddItem(item );
+		mydrop->AddItem
+            (new SPDropDownListItem
+                (retval, listitemparent, listitemme, mytable->GetString(i))
+            );
 	}
 }
 void spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable, MBCHAR *listitemparent, MBCHAR *listitemme)
 {
-	for (int i = 0; i < mytable->GetNumStrings(); i++) 
+	for (sint32 i = 0; i < mytable->GetNumStrings(); i++) 
     {
-		aui_Item * item = (aui_Item*) 
-            new SPDropDownListItem(retval, listitemparent, listitemme, mytable->GetString(i));
-		if (item)
-			mylist->AddItem(item );
+		mylist->AddItem
+		    (new SPDropDownListItem
+                (retval, listitemparent, listitemme, mytable->GetString(i))
+            );
 	}
 }
 

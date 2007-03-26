@@ -90,7 +90,6 @@ aui_Image::~aui_Image()
 
 AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
 {
-	
 	Unload();	// deletes and NULLs m_format and m_surface
 
 	memset( m_filename, '\0', sizeof( m_filename ) );
@@ -104,10 +103,9 @@ AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
 		m_format = static_cast<aui_ImageFormat *>
 						(g_ui->TheMemMap()->GetFileFormat(m_filename));
 	}
-	Assert( m_format != NULL );
-	if ( !m_format ) return AUI_ERRCODE_MEMALLOCFAILED;
-	
-	return AUI_ERRCODE_OK;
+
+	Assert(m_format);
+    return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
 }
 
 
@@ -115,15 +113,13 @@ AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
 
 AUI_ERRCODE aui_Image::Load( void )
 {
-	Assert( m_format != NULL );
+	Assert(m_format);
 	if ( !m_format ) return AUI_ERRCODE_INVALIDPARAM;
 
 	
 	if ( m_surface ) return AUI_ERRCODE_OK;
 
-	AUI_ERRCODE retval=m_format->Load( m_filename, this );
-
-	return retval;
+	return m_format->Load(m_filename, this);
 }
 
 
@@ -131,10 +127,10 @@ AUI_ERRCODE aui_Image::Load( void )
 
 AUI_ERRCODE aui_Image::Unload( void )
 {
-	if (g_ui && g_ui->TheMemMap() && m_format)
+	if (g_ui && g_ui->TheMemMap())
 	{
 		g_ui->TheMemMap()->ReleaseFileFormat(m_format);
-		m_format = NULL;
+        m_format = NULL;
 	}
 
 	delete  m_surface;
@@ -197,7 +193,7 @@ AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
 
 
 
-AUI_ERRCODE aui_BmpImageFormat::Load( MBCHAR *filename, aui_Image *image )
+AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 

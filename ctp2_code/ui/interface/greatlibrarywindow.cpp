@@ -30,6 +30,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "greatlibrarywindow.h"
 
 #include "aui.h"
 #include "aui_control.h"
@@ -37,13 +38,11 @@
 
 #include "pattern.h"
 #include "primitives.h"
-#include "greatlibrarywindow.h"
 #include "greatlibrary.h"
 
 
 
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "StrDB.h"
 #include "BuildingRecord.h"
@@ -103,58 +102,37 @@ extern DebugWindow					*g_debugWindow;
 extern ConceptDB					*g_theConceptDB;
 extern ProjectFile                  *g_GreatLibPF;
 extern SoundManager					*g_soundManager;
-
-static MBCHAR *s_libraryWindowBlock = "GreatLibrary";
-static GreatLibraryWindow	*s_libraryWindow;
-
 extern  C3UI				*g_c3ui;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-GreatLibraryWindow::GreatLibraryWindow(AUI_ERRCODE *err)
+namespace
 {
 
+MBCHAR const         s_libraryWindowBlock[]  = "GreatLibrary";
+GreatLibraryWindow * s_libraryWindow         = NULL;
 
+} // namespace
 
-	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_libraryWindowBlock);
+GreatLibraryWindow::GreatLibraryWindow(AUI_ERRCODE * err)
+:
+    m_window                (NULL),
+	m_mode                  (0),
+	m_database              (DATABASE_DEFAULT),
+	m_techTitle             (NULL),
+	m_techTree              (NULL),
+	m_techStillShot         (NULL),
+    m_techDescriptionGroup  (NULL),
+	m_techHistoricalText    (NULL),
+	m_techGameplayText      (NULL),
+	m_techRequirementsText  (NULL),
+	m_techVariablesText     (NULL),
+	m_techMovie             (NULL)
+{
+	m_window = (ctp2_Window *) aui_Ldl::BuildHierarchyFromRoot(s_libraryWindowBlock);
 	Assert(m_window);
-	if(!m_window) {
+	if (!m_window) 
+    {
 		*err = AUI_ERRCODE_INVALIDPARAM;
-		return;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 GreatLibraryWindow::~GreatLibraryWindow()
@@ -163,107 +141,11 @@ GreatLibraryWindow::~GreatLibraryWindow()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 {
-	if ( !m_techMovie ) return AUI_ERRCODE_OK;
-
-	if ( m_techMovie->Open() ) {
-		HRESULT hr;
-		hr = m_techMovie->PlayOne();
+	if (m_techMovie && m_techMovie->Open()) 
+    {
+		HRESULT hr = m_techMovie->PlayOne();
 		Assert(!FAILED(hr));
 		if (FAILED(hr)) {
 			m_techMovie->CloseStream();
@@ -299,42 +181,23 @@ AUI_ERRCODE GreatLibraryWindow::Idle ( void )
 //----------------------------------------------------------------------------
 sint32 GreatLibraryWindow::LoadText(ctp2_HyperTextBox *textbox, char *filename, SlicObject &so)
 {
-    if (textbox == NULL)
-        return(1);
+    if (textbox)
+    {
+        char const *    text    = 
+            GreatLibrary::s_great_library_info->Look_Up_Data(filename);
 
-	char * lower_case_filename = new char[strlen(filename)+1];
-	strcpy(lower_case_filename, filename);
+        if (text == NULL) 
+        {
+		    textbox->SetHyperText(" ");
+            return 0;
+        }
 
-	for (size_t j = 0; j < strlen(lower_case_filename); j++)
-		lower_case_filename[j] = tolower(lower_case_filename[j]);
-
-	
-    char * text = GreatLibrary::s_great_library_info->Look_Up_Data(lower_case_filename);
-	delete [] lower_case_filename;
-
-    if (text == NULL) {
-		textbox->SetHyperText(" ");
-        return(0);
+	    MBCHAR interpreted[k_MAX_GL_ENTRY];
+	    stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);
+        textbox->SetHyperText(interpreted);
     }
 
-	MBCHAR interpreted[k_MAX_GL_ENTRY];
-	stringutils_Interpret(text, so, interpreted, k_MAX_GL_ENTRY);
-
-	
-	
-
-
-    
-
-
-
-
-
-
-    textbox->SetHyperText(interpreted);
-
-
-    return(1);
+    return 1;
 }
 
 sint32 GreatLibraryWindow::LoadHistoricalText ( SlicObject &so )
@@ -369,14 +232,10 @@ sint32 GreatLibraryWindow::LoadVariablesText ( SlicObject &so )
 
 sint32 GreatLibraryWindow::LoadTechMovie ( void )
 {
-	MBCHAR fullPath[256];
-
-	
 	if (!m_techMovie) return 0;
 	if (!strcmp(m_movie_file,"null")) return 0;
 
-	
-	
+	MBCHAR fullPath[_MAX_PATH];
 	if (g_civPaths->FindFile(C3DIR_VIDEOS, m_movie_file, fullPath, TRUE)) {
 		
 		g_soundManager->ReleaseSoundDriver();
@@ -395,15 +254,12 @@ sint32 GreatLibraryWindow::LoadTechMovie ( void )
 
 sint32 GreatLibraryWindow::LoadTechStill( void )
 {
-	MBCHAR fullPath[256];
-
-	
 	if ( !m_techStillShot ) return 0;
 	if ( !strcmp(m_still_file, "null") ) return 0;
 
-	
-	
-	if ( g_civPaths->FindFile(C3DIR_PICTURES, m_still_file, fullPath, TRUE) ) {
+	MBCHAR fullPath[_MAX_PATH];
+	if ( g_civPaths->FindFile(C3DIR_PICTURES, m_still_file, fullPath, TRUE) ) 
+    {
 		m_techStillShot->SetImage( m_still_file );
 	}
 	else {
@@ -416,7 +272,10 @@ sint32 GreatLibraryWindow::LoadTechStill( void )
 
 void GreatLibraryWindow::PlayTechMovie ( void )
 {
-	m_techMovie->PlayAll();
+	if (m_techMovie)
+    {
+        m_techMovie->PlayAll();
+    }
 }
 
 sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
@@ -426,8 +285,8 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 
 	const IconRecord *  iconRec = NULL;
 
-	
-	switch ( theDatabase ) {
+	switch ( theDatabase ) 
+    {
 	case DATABASE_UNITS:
 		iconRec = g_theUnitDB->Get(theMode)->GetDefaultIcon();
 		break;
@@ -475,7 +334,8 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 		break;
 	}
 
-	if(iconRec) {
+	if (iconRec)
+    {
 		sprintf( m_still_file, iconRec->GetFirstFrame());
 		sprintf( m_movie_file, iconRec->GetMovie());
 		sprintf( m_gameplay_file, iconRec->GetGameplay());
@@ -490,14 +350,14 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 
 
 
-char * GreatLibraryWindow::GetIconRecText
+char const * GreatLibraryWindow::GetIconRecText
 ( 
 	int database, 
 	int item,
 	uint8 historical
 )
 {
-	const IconRecord *  iconRec;
+	IconRecord const *  iconRec;
 
 	switch (database) 
     {
@@ -530,16 +390,14 @@ char * GreatLibraryWindow::GetIconRecText
 		break;
 
 	case DATABASE_ADVANCES:
-	{
 		iconRec = g_theAdvanceDB->Get(item)->GetIcon();
 		break;
-	}
-	case DATABASE_TERRAIN:
-	{
+
+    case DATABASE_TERRAIN:
 		iconRec = g_theTerrainDB->Get(item)->GetIcon();
 		break;
-	}
-	case DATABASE_CONCEPTS:
+
+    case DATABASE_CONCEPTS:
 		iconRec = g_theIconDB->Get(g_theConceptDB->GetConceptInfo(item)->m_iconDBIndex);
 		break;
 
@@ -552,86 +410,59 @@ char * GreatLibraryWindow::GetIconRecText
 		break;
 	}
 
-   	char * the_text = NULL;
-
 	if (iconRec) 
 	{
-		
-		char * lower_case_filename;
+		char const * filename;
 
-		switch(historical){
-			case 0:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetGameplay())+1];
+		switch (historical)
+        {
+        default:
+            filename = NULL;
+			Assert(false);
 
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetGameplay());
+		case 0:
+		    filename = iconRec->GetGameplay();
+		    break;
 
-				break;
-			}
-			case 1:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetHistorical())+1];
+		case 1:
+		    filename = iconRec->GetHistorical();
+			break;
 
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetHistorical());
+        case 2:
+			filename = iconRec->GetPrereq();
+			break;
 
-				break;
-			}
-			case 2:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetPrereq())+1];
-
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetPrereq());
-
-				break;
-			}
-			case 3:
-			{
-				lower_case_filename = new char[strlen(iconRec->GetVari())+1];
-
-				if (lower_case_filename)
-					strcpy(lower_case_filename, iconRec->GetVari());
-				break;
-			}
-			default:
-				lower_case_filename = NULL;
-				Assert(false);
-				break;
+        case 3:
+			filename = iconRec->GetVari();
+			break;
 		}
 		
-		if (!lower_case_filename)
-			return NULL;
-
-		
-		for (size_t j = 0; j < strlen(lower_case_filename); j++)
-			lower_case_filename[j] = tolower(lower_case_filename[j]);
-
-		the_text = GreatLibrary::s_great_library_info->Look_Up_Data(lower_case_filename);
-		delete [] lower_case_filename;
+        if (filename)
+        {
+    		return GreatLibrary::s_great_library_info->Look_Up_Data(filename);
+        }
 	}
 
-	return the_text;
+	return NULL;
 }
 
 
-char * GreatLibraryWindow::GetGameplayText( int database, int item )
+char const * GreatLibraryWindow::GetGameplayText( int database, int item )
 {
 	return GetIconRecText( database, item, 0 );
 }
 
-char * GreatLibraryWindow::GetHistoricalText( int database, int item )
+char const * GreatLibraryWindow::GetHistoricalText( int database, int item )
 {
 	return GetIconRecText( database, item, 1 );
 }
 
-char * GreatLibraryWindow::GetRequirementsText( int database, int item )
+char const * GreatLibraryWindow::GetRequirementsText( int database, int item )
 {
 	return GetIconRecText( database, item, 2 );
 }
 
-char * GreatLibraryWindow::GetVariablesText( int database, int item )
+char const * GreatLibraryWindow::GetVariablesText( int database, int item )
 {
 	return GetIconRecText( database, item, 3 );
 }

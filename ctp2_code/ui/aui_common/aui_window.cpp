@@ -164,17 +164,17 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 
 aui_Window::~aui_Window()
 {
+    if (g_c3ui)
+    {
+        g_c3ui->RemoveWindow(Id());
+    }
+
     delete m_surface;
     delete m_dirtyList;
     delete m_grabRegion;	
     free(m_stencil);
     delete m_focusControl;
     delete m_focusList;
-
-    if (g_c3ui)
-    {
-        g_c3ui->RemoveWindow(Id());
-    }
 }
 
 

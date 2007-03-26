@@ -48,23 +48,28 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "aui_ui.h"
+#include "aui_bitmapfont.h"
+
+#include <algorithm>
 #include "aui_blitter.h"
 #include "aui_surface.h"
 #include "aui_pixel.h"
 #include "aui_rectangle.h"
-
-#include "aui_bitmapfont.h"
-
+#include "aui_ui.h"
 #include <locale.h>
 
 #if defined(_JAPANESE)
 #include "japanese.h"
 #endif
 
-sint32 aui_BitmapFont::m_bitmapFontRefCount = 0;
-TT_Engine aui_BitmapFont::m_ttEngine = { NULL };
+namespace
+{
+    bool    SUPPORT_MBCS      = false;
+    bool    SUPPORT_UNICODE   = false;
+}
 
+sint32      aui_BitmapFont::s_bitmapFontRefCount    = 0;
+TT_Engine   aui_BitmapFont::s_ttEngine              = { NULL };
 
 
 aui_BitmapFont::aui_BitmapFont(
@@ -75,7 +80,6 @@ aui_BitmapFont::aui_BitmapFont(
 {
 	*retval = InitCommon( descriptor );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -137,12 +141,13 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
 
 	m_surfaceList = NULL;
 
-#if defined(_MBCS) || defined(_UNICODE)
-	
-	
-	
-	Assert( FALSE );
+#if defined(_MBCS)
+    Assert(SUPPORT_MBCS);
 #endif
+#if defined(_UNICODE)
+    Assert(SUPPORT_UNICODE);
+#endif
+
 	memset( m_glyphs, 0, sizeof( m_glyphs ) );
 
 	m_curOffset = 0;
@@ -163,9 +168,9 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
 	Assert( m_surfaceList != NULL );
 	if ( !m_surfaceList ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	if ( !m_bitmapFontRefCount++ )
+	if ( !s_bitmapFontRefCount++ )
 	{
-		sint32 error = TT_Init_FreeType( &m_ttEngine );
+		sint32 error = TT_Init_FreeType(&s_ttEngine);
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_HACK;
 
@@ -178,19 +183,19 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( MBCHAR const *descriptor )
 			255		
 		};
 
-		error = TT_Set_Raster_Gray_Palette( m_ttEngine, palette );
+		error = TT_Set_Raster_Gray_Palette(s_ttEngine, palette );
 		Assert( error == 0 );
 		if ( error ) return AUI_ERRCODE_HACK;
 
 		
 		static MBCHAR fontdir[ MAX_PATH + 1 ];
-		sint32 last;
-		if ( (last = GetWindowsDirectory( fontdir, MAX_PATH ) - 1) > 1 )
+		sint32 last = GetWindowsDirectory( fontdir, MAX_PATH ) - 1;
+		if (last > 1)
 		{
-			if ( fontdir[ last ] == '\\' )
+			if ( fontdir[ last ] == FILE_SEPC )
 				fontdir[ last ] = '\0';
 
-			strcat( fontdir, "\\fonts" );
+			strcat( fontdir, FILE_SEP "fonts" );
 
 			g_ui->GetBitmapFontResource()->AddSearchPath( fontdir );
 		}
@@ -204,18 +209,14 @@ aui_BitmapFont::~aui_BitmapFont()
 {
 	Unload();
 
-	if ( m_surfaceList )
-	{
-		delete m_surfaceList;
-		m_surfaceList = NULL;
-	}
+	delete m_surfaceList;
 
-	if ( !--m_bitmapFontRefCount )
+	if ( !--s_bitmapFontRefCount )
 	{
-		if ( m_ttEngine.z )
+		if (s_ttEngine.z)
 		{
-			TT_Done_FreeType( m_ttEngine );
-			m_ttEngine.z = NULL;
+			TT_Done_FreeType(s_ttEngine);
+			s_ttEngine.z = NULL;
 		}
 	}
 }
@@ -244,7 +245,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	if ( g_ui->GetBitmapFontResource()->FindFile( fullPath, m_ttffile ) )
 		strncpy( m_ttffile, fullPath, MAX_PATH );
 
-	sint32 error = TT_Open_Face( m_ttEngine, m_ttffile, &m_ttFace );
+	sint32 error = TT_Open_Face(s_ttEngine, m_ttffile, &m_ttFace);
 	Assert( error == 0 );
 	if ( error ) return AUI_ERRCODE_HACK;
 
@@ -316,7 +317,7 @@ AUI_ERRCODE aui_BitmapFont::Unload( void )
 
 
 
-AUI_ERRCODE aui_BitmapFont::SetTTFFile( MBCHAR *ttffile )
+AUI_ERRCODE aui_BitmapFont::SetTTFFile( MBCHAR const * ttffile )
 {
 	
 	Assert( !IsLoaded() );
@@ -612,7 +613,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 
 				// copy pixcel map of font to gi->surface.m_saveBuffer
 				error = TT_Get_Outline_Pixmap(
-					m_ttEngine,
+					s_ttEngine,
 					&ttOutline,
 					&bitmap );
 				Assert( error == 0 );
@@ -1045,22 +1046,19 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 	sint32 underline,
 	sint32 *ascend,
 	sint32 *descend,
-	BOOL wrap,
-	BOOL midWordBreaks,
-	BOOL midWordBreaksOnly )
+	bool wrap,
+	bool midWordBreaks,
+	bool midWordBreaksOnly )
 {
-	
-	sint32 tabBase = penPos->x;
-
-	
-	const MBCHAR *lastBreakPtr = NULL;
-	sint32 lastBreakPos = 0;
-
 	if ( wrap && !midWordBreaksOnly )
 	{
 		Assert( bound != NULL );
 		if ( !bound ) return AUI_ERRCODE_INVALIDPARAM;
 	}
+
+	sint32 tabBase = penPos->x;
+	const MBCHAR *lastBreakPtr = NULL;
+	sint32 lastBreakPos = 0;
 
 	if ( ascend ) *ascend = 0;
 	if ( descend ) *descend = 0;
@@ -1155,14 +1153,12 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 
 			if ( ascend )
 			{
-				sint32 glyphAscend = gi->bbox.top - m_baseLine;
-				if ( glyphAscend < *ascend ) *ascend = glyphAscend;
+				*ascend = std::min<sint32>(*ascend, gi->bbox.top - m_baseLine);
 			}
 
 			if ( descend )
 			{
-				sint32 glyphDescend = gi->bbox.bottom - m_baseLine;
-				if ( glyphDescend > *descend ) *descend = glyphDescend;
+				*descend = std::max<sint32>(*descend, gi->bbox.bottom - m_baseLine);
 			}
 
 			
@@ -1208,8 +1204,8 @@ AUI_ERRCODE aui_BitmapFont::GetLineInfo(
 	sint32 *descend,
 	const MBCHAR **start,
 	const MBCHAR *stop,
-	BOOL midWordBreaks,
-	BOOL midWordBreaksOnly )
+	bool midWordBreaks,
+	bool midWordBreaksOnly )
 {
 	return RenderLine(
 		NULL,
@@ -1230,20 +1226,18 @@ AUI_ERRCODE aui_BitmapFont::GetLineInfo(
 
 
 
-sint32 aui_BitmapFont::GetStringWidth( const MBCHAR *string )
+sint32 aui_BitmapFont::GetStringWidth( const MBCHAR * a_String )
 {
-	Assert( string != NULL );
-	if ( !string ) return 0;
+	Assert(a_String);
+	if (!a_String ) return 0;
 
 	POINT penPos = { 0, 0 };
 
-	AUI_ERRCODE errcode = RenderLine(
-		NULL,
-		NULL,
-		NULL,
-		&penPos,
-		&string,
-		string + strlen( string ) );
+	(void) RenderLine(NULL, NULL, NULL,
+		              &penPos,
+		              &a_String,
+		              a_String + strlen(a_String) 
+                     );
 
 	return penPos.x;
 }
@@ -1259,7 +1253,6 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph(
 	COLORREF color,
 	sint32 underline )
 {
-	
 	
 	
 
@@ -1293,22 +1286,10 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph(
 	}
 
 	
-	sint32 leftClip;
-	if ( (leftClip = destRect.left - clipRect->left) > 0 )
-		leftClip = 0;
-
-	sint32 topClip;
-	if ( (topClip  = destRect.top - clipRect->top) > 0 )
-		topClip = 0;
-
-	sint32 rightClip;
-	if ( (rightClip = destRect.right - clipRect->right) < 0 )
-		rightClip = 0;
-
-	sint32 bottomClip;
-	if ( (bottomClip = destRect.bottom - clipRect->bottom) < 0 )
-		bottomClip = 0;
-
+	sint32  leftClip    = std::min<sint32>(0, destRect.left - clipRect->left);
+	sint32  topClip     = std::min<sint32>(0, destRect.top - clipRect->top);
+	sint32  rightClip   = std::max<sint32>(0, destRect.right - clipRect->right);
+	sint32  bottomClip  = std::max<sint32>(0, destRect.bottom - clipRect->bottom);
 	
 	destRect.left -= leftClip;
 	destRect.top -= topClip;
@@ -1326,37 +1307,10 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph(
 	srcRect.right -= rightClip;
 	srcRect.bottom -= bottomClip;
 
-	switch ( destSurf->BitsPerPixel() )
-	{
-	case 8:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
+    Assert(16 == destSurf->BitsPerPixel());
+    if (16 != destSurf->BitsPerPixel()) return AUI_ERRCODE_INVALIDPARAM;
 
-	case 16:
-		
-		return RenderGlyph16(
-			destSurf,
-			&destRect,
-			gi->surface,
-			&srcRect,
-			color );
-
-	case 24:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
-
-	case 32:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
-
-	default:
-		
-		Assert( FALSE );
-		return AUI_ERRCODE_INVALIDPARAM;
-	}
+    return RenderGlyph16(destSurf, &destRect, gi->surface, &srcRect, color);
 }
 
 
@@ -1369,26 +1323,28 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph16(
 	RECT *srcRect,
 	COLORREF color )
 {
-	AUI_ERRCODE		retval = AUI_ERRCODE_OK;
-	BOOL			wasLocked = FALSE;
+	AUI_ERRCODE		retval    = AUI_ERRCODE_OK;
+	bool			wasLocked = (NULL != destSurf->Buffer());
 
 	uint16			*destBuf;
 	AUI_ERRCODE		errcode;
 
 	
-	if (destSurf->Buffer()) {
+    if (wasLocked) 
+    {
 		destBuf = (uint16 *)(destSurf->Buffer() + 
 								destRect->left * 2 + 
 								destRect->top * destSurf->Pitch());
-		wasLocked = TRUE;
-	} else {
+    } 
+    else 
+    {
 		errcode = destSurf->Lock( destRect, (LPVOID *)&destBuf, 0 );
 		Assert( AUI_SUCCESS(errcode) );
 		if ( !AUI_SUCCESS(errcode) ) {
 			retval = AUI_ERRCODE_SURFACELOCKFAILED;
 			return retval;
 		}
-	}
+    }
 
 	uint16 *origDestBuf = destBuf;
 
@@ -1482,7 +1438,7 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph16(
 	return retval;
 }
 
-BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
+bool aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 {
 	const MBCHAR *string = name;
 	POINT penPos = { 0, 0 };
@@ -1495,8 +1451,8 @@ BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 		NULL,
 		&string,
 		stop,
-		TRUE,
-		TRUE );
+		true,
+		true );
 
 	if ( string != stop )
 	{
@@ -1516,11 +1472,10 @@ BOOL aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 		}
 
 		
-		return TRUE;
+		return true;
 	}
 
-	
-	return FALSE;
+	return false;
 }
 
 
@@ -1582,7 +1537,5 @@ void aui_BitmapFont::DumpCachedSurfaces( aui_Surface *destSurf )
 	}
 
 	destSurf->Unlock( (LPVOID)origDestBuf );
-	Assert( AUI_SUCCESS(errcode) );
-	if ( !AUI_SUCCESS(errcode) ) return;
 }
 #endif 

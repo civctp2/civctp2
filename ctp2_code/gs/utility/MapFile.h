@@ -126,7 +126,7 @@ private:
 			}
 			Assert(idStr);
 			if(idStr) {
-				sint16 len = strlen(idStr);
+				uint16 len = static_cast<uint16>(strlen(idStr));
 				Assert(len > 0);
 				archive << len;
 				archive.Store((uint8*)idStr, len);
@@ -136,13 +136,10 @@ private:
 		m_chunk.m_id = chunkId;
 		m_chunk.m_size = archive.StreamLen();
 		
-		if(!m_chunk.Save(outfile))
-			return false;
-		
-		if(fwrite(archive.GetStream(), 1, archive.StreamLen(), outfile) != archive.StreamLen())
-			return false;
-		
-		return true;
+		return m_chunk.Save(outfile) &&
+               (fwrite(archive.GetStream(), 1, archive.StreamLen(), outfile) == 
+                    archive.StreamLen()
+               );
 	}		
 
 };

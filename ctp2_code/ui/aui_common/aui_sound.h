@@ -70,7 +70,7 @@ public:
 	virtual ~aui_Sound();
 
 	virtual AUI_ERRCODE Load(
-		char *fileName,
+		char const * fileName,
 		float x,
 		float y,
 		float z ) { return AUI_ERRCODE_OK; } 

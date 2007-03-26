@@ -27,8 +27,8 @@ public:
 	TargaImageFormat() {}
 	virtual ~TargaImageFormat() {}
 
-	AUI_ERRCODE LoadRIM(MBCHAR *filename, aui_Image *image);
-	virtual AUI_ERRCODE Load(MBCHAR *filename, aui_Image *image);
+	AUI_ERRCODE LoadRIM(MBCHAR const *filename, aui_Image *image);
+	virtual AUI_ERRCODE Load(MBCHAR const * filename, aui_Image *image);
 };
 
 
@@ -40,7 +40,7 @@ public:
 	TiffImageFormat() {}
 	virtual ~TiffImageFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Image *image );
+	virtual AUI_ERRCODE	Load(MBCHAR const *filename, aui_Image *image );
 };
 
 

@@ -31,120 +31,69 @@
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
+#include "TurnCnt.h"
 
-
-#include "director.h"
-
-#include "tiledmap.h"
-
-
-
-#include "dynarr.h"
-#include "SelItem.h"
-#include "civarchive.h"
-
-#include "DB.h"
-#include "AgreementPool.h"
-#include "pollution.h"
-#include "DiplomaticRequestData.h"
-#include "DiplomaticRequestPool.h"
-#include "player.h"
-#include "profileDB.h"
-#include "CivPaths.h"
-#include "DifficultyRecord.h"
-#include "Diffcly.h"
-#include "ConstDB.h"
-#include "StrDB.h"
+#include "A_Star_Heuristic_Cost.h"
+#include "AgreementPool.h"          // g_theAgreementPool
+#include "AICause.h"
+#include "Barbarians.h"
 #include "BuildingRecord.h"
-#include "GovernmentRecord.h"
+#include "buildingutil.h"
+#include "Cell.h"
+#include "citydata.h"
+#include "civarchive.h"
+#include "CivPaths.h"               // g_civPaths
+#include "ConstDB.h"                // g_theConstDB 
+#include "DB.h"
+#include "debugmemory.h"
+#include "Diffcly.h"
+#include "DifficultyRecord.h"
+#include "Diplomacy_Log.h"
+#include "DiplomaticRequestData.h"
+#include "DiplomaticRequestPool.h"  // g_theDiplomaticRequestPool
+#include "director.h"               // g_director
+#include "dynarr.h"
+#include "GameEventManager.h"
+#include "gamefile.h"
 #include "GameOver.h"
-
-
-
-
-
-
-#include "network.h"
+#include "GameSettings.h"
+#include "gamesounds.h"
+#include "GovernmentRecord.h"
+#include "MaterialPool.h"
+#include "messagemodal.h"
+#include "messagewin.h"
 #include "net_action.h"
 #include "net_info.h"
 #include "net_rand.h"
 #include "net_ready.h"
-#include "radarmap.h"
-
-
-#include "director.h"
-
-
-#include "messagewin.h"
-
-#include "TurnCnt.h"
+#include "network.h"
+#include "player.h"                 // g_player
+#include "pollution.h"
+#include "profileDB.h"              // g_theProfileDB
+#include "radarmap.h"               // g_radarMap
 #include "Readiness.h"
-
-#include "SlicSegment.h"
+#include "Score.h"
+#include "SelItem.h"                // g_selected_item
+#include "SimpleDynArr.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
-
-#include "SimpleDynArr.h"
-
-#include "soundmanager.h"
-#include "gamesounds.h"
-
-#include "Barbarians.h"
-#include "gamefile.h"
-
-#include "debugmemory.h"
-
-#include "Cell.h"
-#include "XY_Coordinates.h"
-#include "A_Star_Heuristic_Cost.h"
-#include "World.h"
-#include "messagemodal.h"
-#include "AICause.h"
-
-#include "GameSettings.h"
-#include "Score.h"
-
-#include "GameEventManager.h"
-
-#include "UnitDynArr.h"
-#include "citydata.h"
+#include "SlicSegment.h"
+#include "soundmanager.h"           // g_soundManager
+#include "StrDB.h"                  // g_theStringDB
+#include "tiledmap.h"               // g_tiledMap
 #include "UnitData.h"
+#include "UnitDynArr.h"
 #include "UnitRecord.h"
+#include "XY_Coordinates.h"
+#include "World.h"                  // g_theWorld
 
-#include "buildingutil.h"
+extern Diplomacy_Log *  g_theDiplomacyLog;
+extern MessageModal *   g_modalMessage;
+extern Network          g_network;
+extern Pollution *      g_thePollution;
 
-// Propagate PW each turn update
-#include "MaterialPool.h"
-
-extern World *g_theWorld; 
-
-extern SelectedItem             *g_selected_item;
-extern DiplomaticRequestPool    *g_theDiplomaticRequestPool;
-extern AgreementPool            *g_theAgreementPool;
-extern Director                 *g_director;
-extern Pollution                *g_thePollution;
-extern Player                   **g_player;
-extern Network                  g_network;
-extern TiledMap                 *g_tiledMap;
-
-
-extern ProfileDB                *g_theProfileDB;
-extern RadarMap                 *g_radarMap;
-extern ConstDB                  *g_theConstDB;
-extern StringDB                 *g_theStringDB;
-
-extern int ui_Process(void);
-extern CivPaths                 *g_civPaths;
-
-extern SoundManager             *g_soundManager;
-
-extern MessageModal             *g_modalMessage;
-
-extern void WhackScreen();
-
-#include "Diplomacy_Log.h"
-extern Diplomacy_Log *g_theDiplomacyLog;
 
 sint32 g_cantEndTurn = 0;
 
@@ -199,22 +148,18 @@ void TurnCount::SkipToRound(sint32 round)
 }
 
 void TurnCount::Serialize(CivArchive &archive) 
-
 {
-	sint32 sim;
-
 	CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive << m_turn;
 		archive << m_round;
 		archive << m_year;
-		sim = (sint32)m_simultaneousMode;
-		archive << sim;
+		archive << static_cast<sint32>(m_simultaneousMode);
 		archive << m_activePlayers;
 		archive << m_lastBeginTurn;
-		archive.PutSINT8(m_isEmail);
-		archive.PutSINT8(m_isHotSeat);
+		archive.PutUINT8(static_cast<uint8>(m_isEmail));
+		archive.PutUINT8(static_cast<uint8>(m_isHotSeat));
 		archive << m_happinessPlayer;
 
 		uint8 tmp = NewTurnCount::m_sentGameOverMessage;
@@ -226,12 +171,13 @@ void TurnCount::Serialize(CivArchive &archive)
 		archive >> m_turn;  // Unused always -4000 or what you have in const.txt
 		archive >> m_round; // Unused always 0
 		archive >> m_year;  // Unused
+        sint32  sim;
 		archive >> sim;
 		m_simultaneousMode = sim;
 		archive >> m_activePlayers; // Seems to be number of players at the start
 		archive >> m_lastBeginTurn; // Unused always -1
-		m_isEmail = (BOOL)archive.GetSINT8();
-		m_isHotSeat = (BOOL)archive.GetSINT8();
+		m_isEmail = (BOOL)archive.GetUINT8();
+		m_isHotSeat = (BOOL)archive.GetUINT8();
 		archive >> m_happinessPlayer; // Unused always 0
 
 		uint8 tmp;
@@ -1188,53 +1134,21 @@ void TurnCount::ChooseHappinessPlayer()
 #ifdef _DEBUG
 void TurnCount::LogPlayerStats(void)
 {
-	FILE            *logfile;
+	PLAYER_INDEX    playerNum   = g_selected_item->GetCurPlayer();
 	MBCHAR          filename[80];
-	PLAYER_INDEX    playerNum;
-	sint32          i;
-
-	
-	playerNum = g_selected_item->GetCurPlayer();
-
-	
-	UnitDynamicArray    *cityList = g_player[playerNum]->GetAllCitiesList();
-	sint32              citySize, 
-	                    maxCitySize = -1;
-	sint32              numCitiesRioting = 0;
-	sint32              totalPop = 0;
-	sint32              totalFood = 0;
-	sint32              totalProduction = 0;
-	sint32              totalGold = 0;
-
-	CityData            *cityData;
-	Unit                city;
-
-	for (i=0; i<cityList->Num(); i++) {
-		city = cityList->Access(i);
-		cityData = city.AccessData()->GetCityData();
-
-		cityData->GetPop(citySize);
-
-		
-		totalPop += citySize;
-
-		
-		if (citySize > maxCitySize) 
-			maxCitySize = citySize;
-
-		
-		if (cityData->GetIsRioting())
-			numCitiesRioting++;
-
-		totalFood       += cityData->GetNetCityFood();
-		totalProduction += cityData->GetNetCityProduction();
-		totalGold       += cityData->GetNetCityGold();
-
-	}
-
 	sprintf(filename, "Playerlog%#.2d.txt", playerNum);
-	logfile = fopen(filename, "rt");
-	if (!logfile) {
+	FILE *  logfile = fopen(filename, "rt");
+
+	if (logfile) 
+    {
+        // Created before
+		fclose(logfile);
+		logfile = fopen(filename, "at");
+       	if (!logfile) return;
+    }
+    else
+    {
+        // First creation
 		logfile = fopen(filename, "wt");
 		if (!logfile) return;
 		
@@ -1261,74 +1175,68 @@ void TurnCount::LogPlayerStats(void)
 		        "Income Percent",
 		        "# advances known",
 		        "AIP File");
-	} else {
-		fclose(logfile);
-		logfile = fopen(filename, "at");
 	}
-	if (!logfile) return;
 
-	
+
+	UnitDynamicArray *  cityList    = g_player[playerNum]->GetAllCitiesList();
+	sint32              citySize, 
+	                    maxCitySize = -1;
+	sint32              numCitiesRioting = 0;
+	sint32              totalPop = 0;
+	sint32              totalFood = 0;
+	sint32              totalProduction = 0;
+	sint32              totalGold = 0;
+
+	CityData            *cityData;
+	Unit                city;
+
+	for (int i = 0; i < cityList->Num(); i++) {
+		city = cityList->Access(i);
+		cityData = city.AccessData()->GetCityData();
+
+		cityData->GetPop(citySize);
+
+		
+		totalPop += citySize;
+
+		
+		if (citySize > maxCitySize) 
+			maxCitySize = citySize;
+
+		
+		if (cityData->GetIsRioting())
+			numCitiesRioting++;
+
+		totalFood       += cityData->GetNetCityFood();
+		totalProduction += cityData->GetNetCityProduction();
+		totalGold       += cityData->GetNetCityGold();
+
+	}
+
 	fprintf(logfile, "%d\t", m_round);
-	
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumCities());
-
-	
 	fprintf(logfile, "%d\t", totalProduction);
-
-	
 	fprintf(logfile, "%d\t", totalFood);
-
-	
 	fprintf(logfile, "%d\t", totalGold);
-
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->m_gold->GetScience());
-
-	
 	fprintf(logfile, "%d\t", numCitiesRioting);
-
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumRevolted());
-
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetGovernmentType());
-
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetWorkdayPerPerson());
-
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetWagesPerPerson());
-
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetRationsPerPerson());
 
-	
 	double taxRate;
 	g_player[playerNum]->GetScienceTaxRate(taxRate);
 	fprintf(logfile, "%#.2f\t", taxRate);
 
-	
 	fprintf(logfile, "%#.2f\t", g_player[playerNum]->m_materialsTax);
-
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetAllUnitList()->Num());
-
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetReadinessCost());
-
-	
 	fprintf(logfile, "%d\t", totalPop);
-	
-	
 	fprintf(logfile, "%d\t", maxCitySize);
-
-	
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetCurrentPollution());
-
-	
 	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetIncomePercent());
-	
 	
 	sint32 numAdvances = 0;
 	for (sint32 adv=0; adv<g_player[playerNum]->NumAdvances(); adv++)
@@ -1337,12 +1245,7 @@ void TurnCount::LogPlayerStats(void)
 		}
 	fprintf(logfile, "%d\t", numAdvances);
 
-	
-	
-	
-
-	fprintf(logfile, "\n");
-
+    fprintf(logfile, "\n");
 	fclose(logfile);
 }
 
@@ -1395,13 +1298,8 @@ void TurnCount::SendNextPlayerMessage()
 		GameFile::SaveGame(fullPath, NULL);
 	}
 
-	SlicObject *so;
-	if(m_isHotSeat) {
-		so = new SlicObject("104NextHotSeatPlayer");
-	} else {
-		so = new SlicObject("105NextEmailPlayer");
-	}
-	
+    SlicObject * so = 
+        new SlicObject(m_isHotSeat ? "104NextHotSeatPlayer" : "105NextEmailPlayer");
 	so->AddRecipient(g_selected_item->GetCurPlayer());
 	so->AddCivilisation(g_selected_item->GetCurPlayer());
 	if(m_isEmail)

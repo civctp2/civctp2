@@ -31,6 +31,7 @@ typedef enum {
 	SLIC_SYM_IMPROVEMENT, 
 
 	SLIC_SYM_UNDEFINED,
+    // Should not have more than 256 entries
 } SLIC_SYM;
 
 

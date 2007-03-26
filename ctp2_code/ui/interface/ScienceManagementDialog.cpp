@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Science Manager Dialog
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -32,15 +32,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "ScienceManagementDialog.h"
-
 
 #include "AdvanceRecord.h"
 #include "aui_blitter.h"
 #include "aui_ldl.h"
 #include "aui_switch.h"
+#include "BuildingRecord.h"
 #include "c3ui.h"
 #include "colorset.h"               // g_colorSet
 #include "ctp2_button.h"
@@ -50,7 +48,9 @@
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
 #include "c3_listitem.h"
-#include "greatlibrary.h"
+#include "Globals.h"                // allocated::...
+#include "GovernmentRecord.h"
+#include "greatlibrary.h"           // k_MAX_GL_ENTRY
 #include "IconRecord.h"
 #include "player.h"
 #include "prjfile.h"
@@ -58,15 +58,11 @@
 #include "Sci.h"
 #include "screenutils.h"
 #include "SelItem.h"
-
-
-#include "UnitRecord.h"
-#include "BuildingRecord.h"
-#include "WonderRecord.h"
 #include "StrDB.h"
 #include "TerrainImprovementRecord.h"
-#include "GovernmentRecord.h"
 #include "terrainutil.h"
+#include "UnitRecord.h"
+#include "WonderRecord.h"
 
 extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;
@@ -84,7 +80,6 @@ ScienceManagementDialog *g_scienceManagementDialog = NULL;
 
 void ScienceManagementDialog::Open()
 {
-	
 	if(!g_scienceManagementDialog) {
 		g_scienceManagementDialog = new ScienceManagementDialog;
 	}
@@ -97,7 +92,6 @@ void ScienceManagementDialog::Open()
 
 void ScienceManagementDialog::Close()
 {
-	
 	if(g_scienceManagementDialog)
 		g_scienceManagementDialog->Hide();
 }
@@ -105,15 +99,12 @@ void ScienceManagementDialog::Close()
 
 void ScienceManagementDialog::Cleanup()
 {
-	
 	if(g_scienceManagementDialog &&
 	   g_c3ui->GetWindow(g_scienceManagementDialog->m_window->Id()) &&
 	   !g_scienceManagementDialog->m_window->IsHidden())
 		g_scienceManagementDialog->Hide();
 
-	
-	delete g_scienceManagementDialog;
-	g_scienceManagementDialog = NULL;
+    allocated::clear(g_scienceManagementDialog);
 }
 
 
@@ -212,7 +203,6 @@ void ScienceManagementDialog::Hide()
 
 void ScienceManagementDialog::Update()
 {
-	
 	UpdateScience();
 	UpdateAdvanceList();
 }
@@ -220,18 +210,15 @@ void ScienceManagementDialog::Update()
 
 void ScienceManagementDialog::UpdateScience()
 {
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player) {
 		ClearScience();
 		return;
 	}
 
-	
-	Advances *advances = player->m_advances;
-	AdvanceType currentAdvance = advances->GetResearching();
-	sint32 numberOfTurns = advances->TurnsToNextAdvance();
-	BOOL alreadyHas = player->HasAdvance(advances->GetResearching());
+	Advances *  advances        = player->m_advances;
+	AdvanceType currentAdvance  = advances->GetResearching();
+	bool        alreadyHas      = player->HasAdvance(currentAdvance);
 
 	const AdvanceRecord *currentAdvanceRecord =
 		g_theAdvanceDB->Get(currentAdvance);
@@ -265,6 +252,7 @@ void ScienceManagementDialog::UpdateScience()
 	}
 
 	
+	sint32 numberOfTurns = advances->TurnsToNextAdvance();
 	MBCHAR buffer[64];
 	if(numberOfTurns < 0)
 		sprintf(buffer, "-");
@@ -290,20 +278,15 @@ void ScienceManagementDialog::UpdateScience()
             )
         );
 
-	
-	
-	
-	
-	MBCHAR *descriptionCopy = new char[textLength + 1];
-	memcpy(descriptionCopy, description, textLength);
-	descriptionCopy[textLength] = 0;
-
-	
-	m_scienceDescription->SetHyperText(descriptionCopy);
-
-	
-	delete [] descriptionCopy;
-	g_GreatLibPF->freeData(description);
+    if (description)
+    {
+	    m_scienceDescription->SetHyperText(description);
+	    g_GreatLibPF->freeData(description);
+    }
+    else
+    {
+        m_scienceDescription->SetHyperText("");
+    }
 }
 
 
@@ -322,10 +305,8 @@ void ScienceManagementDialog::ClearScience()
 
 void ScienceManagementDialog::UpdateAdvanceList()
 {
-	
-	ctp2_ListItem *item = NULL;
+	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
 		
 		aui_Switch *header = m_advanceList->GetHeaderSwitchByIndex(index+1);
@@ -334,45 +315,36 @@ void ScienceManagementDialog::UpdateAdvanceList()
 		header->SetDrawCallbackAndCookie(ColorHeaderActionCallback,
 			reinterpret_cast<void*>(index), false);
 
-		
-		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-		if(player) {
-			
-			if(player->HasEmbassyWith(index)) {
-				
-				
-				header->SetImage("upic01.tga", 0);
-				header->SetImage("upic01.tga", 1);
-				header->SetImage("upic01.tga", 2);
-			} else {
-				
-				header->SetImage(NULL, 0);
-				header->SetImage(NULL, 1);
-				header->SetImage(NULL, 2);
-			}
+		if (player && player->HasEmbassyWith(index)) 
+		{
+			header->SetImage("upic01.tga", 0);
+			header->SetImage("upic01.tga", 1);
+			header->SetImage("upic01.tga", 2);
+		} 
+		else 
+		{
+			header->SetImage(NULL, 0);
+			header->SetImage(NULL, 1);
+			header->SetImage(NULL, 2);
 		}
 	}
 
 	
 	m_advanceList->BuildListStart();
 
-	
 	m_advanceList->Clear();
-
 	
 	for(sint32 advanceIndex = 0; advanceIndex <
 		g_theAdvanceDB->NumRecords(); advanceIndex++) {
 		
 		
-		item = CreateAdvanceItem( g_theAdvanceDB->Get(advanceIndex) );
+		ctp2_ListItem *item = CreateAdvanceItem(g_theAdvanceDB->Get(advanceIndex));
 		if (item)
 			m_advanceList->AddItem(item);
 
 	}
-
 	
 	m_advanceList->BuildListEnd();
-
 	
 	m_advanceList->SortByColumn(0, true);
 }
@@ -384,25 +356,19 @@ ctp2_ListItem *ScienceManagementDialog::CreateAdvanceItem(const AdvanceRecord *a
 	ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 		aui_Ldl::BuildHierarchyFromRoot("ScienceAdvanceListItem"));
 
-	
 	Assert(item);
-	if(!item)
-		return(NULL);
+	if (!item)
+		return NULL;
 
-	
 	item->SetUserData(reinterpret_cast<void*>(advance->GetIndex()));
-
-	
 	item->SetCompareCallback(CompareAdvance);
 
-	
 	if (UpdateAdvanceItem(item, advance))
-		
-		return(item);
+	{
+		return item;
+	}
 	else
 	{
-		
-		
 		delete item;
 		return NULL;
 	}
@@ -531,7 +497,7 @@ AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
 	{
 		destRect.right = destRect.left;
 	}
-	else if(percentComplete < 1.0)
+	else if (percentComplete < 1.0)
 	{
 		destRect.right = destRect.left + sint32(double(width) * percentComplete);
 	}
@@ -632,31 +598,19 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	if (action != AUI_LISTBOX_ACTION_SELECT)
 		return;
 	
-	ctp2_ListItem *item;
-
-	
 	ScienceManagementDialog *pMe = static_cast<ScienceManagementDialog*>(cookie);
 
-
-	ctp2_ListBox *listbox =
-		static_cast<ctp2_ListBox*>(control);
-
-
-	
-	item = (ctp2_ListItem *)listbox->GetSelectedItem();
-	if (!item) return;
-
-	sint32 index =  (sint32)item->GetUserData();
-
-
-	
-
-	if (pMe->m_scienceDescription == NULL) 
+	if (!(pMe && pMe->m_scienceDescription))
         return;
 
-#define GIVES_TEXT_LEN 8192
-	MBCHAR givesText[GIVES_TEXT_LEN];
-	MBCHAR linkText[GIVES_TEXT_LEN];
+	ctp2_ListBox *  listbox = static_cast<ctp2_ListBox*>(control);
+	ctp2_ListItem * item    = listbox ? (ctp2_ListItem *)listbox->GetSelectedItem() : NULL;
+	if (!item) return;
+
+	sint32          index   = reinterpret_cast<sint32>(item->GetUserData());
+
+	MBCHAR givesText[k_MAX_GL_ENTRY];
+	MBCHAR linkText[k_MAX_GL_ENTRY];
 	givesText[0] = 0;
 
 	
@@ -684,16 +638,16 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 			}
 
 			sprintf(linkText, "  <L:DATABASE_UNITS,%s><e>\n", rec->GetIDText());
-			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
+			strncat(givesText, linkText, k_MAX_GL_ENTRY - strlen(givesText));
 		}
 	}
 
-	isAdvance = false;
 
-	if(strlen(givesText) > GIVES_TEXT_LEN - 100) {
+	if(strlen(givesText) > k_MAX_GL_ENTRY - 100) {
 		return;
 	}
 
+	isAdvance = false;
 
 	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		const BuildingRecord *rec = g_theBuildingDB->Get(i);
@@ -709,11 +663,11 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 			}
 
 			sprintf(linkText, "  <L:DATABASE_BUILDINGS,%s><e>\n", rec->GetIDText());
-			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
+			strncat(givesText, linkText, k_MAX_GL_ENTRY - strlen(givesText));
 		}
 	}
 
-	if(strlen(givesText) > GIVES_TEXT_LEN - 100) {
+	if(strlen(givesText) > k_MAX_GL_ENTRY - 100) {
 		return;
 	}
 
@@ -735,7 +689,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 			}
 
 			sprintf(linkText, "  <L:DATABASE_WONDERS,%s><e>\n", rec->GetIDText());
-			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
+			strncat(givesText, linkText, k_MAX_GL_ENTRY - strlen(givesText));
 		}
 	}
 
@@ -752,7 +706,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 			}
 
 			sprintf(linkText, "  <L:DATABASE_TILE_IMPROVEMENTS,%s><e>\n", rec->GetIDText());
-			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
+			strncat(givesText, linkText, k_MAX_GL_ENTRY - strlen(givesText));
 		}
 	}
 
@@ -767,7 +721,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 			}
 
 			sprintf(linkText, "  <L:DATABASE_GOVERNMENTS,%s><e>\n", rec->GetIDText());
-			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
+			strncat(givesText, linkText, k_MAX_GL_ENTRY - strlen(givesText));
 		}
 	}
 

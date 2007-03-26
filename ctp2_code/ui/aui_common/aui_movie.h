@@ -27,12 +27,13 @@
 #ifndef __AUI_MOVIE_H__
 #define __AUI_MOVIE_H__
 
+class aui_Movie;
+class aui_MovieFormat;
+class aui_AviMovieFormat;
 
 #include "aui_base.h"
-#include "aui_memmap.h"
+#include "aui_memmap.h" // aui_FileFormat
 
-
-class aui_Movie;
 class aui_Surface;
 
 
@@ -176,7 +177,7 @@ public:
 	virtual ~aui_AviMovieFormat() {}
 
 	
-	virtual AUI_ERRCODE	Load( MBCHAR *filename, aui_Movie *movie )
+	virtual AUI_ERRCODE	Load( MBCHAR const * filename, aui_Movie *movie )
 	{ return AUI_ERRCODE_OK; }
 };
 

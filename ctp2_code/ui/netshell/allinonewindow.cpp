@@ -1595,7 +1595,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 	m_createdExclusions = true;
 
 	
-	BOOL isScenario = m_scenInfo.isScenario;
+	uint8 isScenario = m_scenInfo.isScenario;
 	
 	if ( m_mode == JOIN ||
 		 m_mode == CONTINUE_CREATE ||
@@ -2070,10 +2070,10 @@ BOOL AllinoneWindow::AssignTribe(
 
 
 
-		tribeSlots[ playerIndex ].isFemale = isFemale;
-		tribeSlots[ playerIndex ].isAI = isAI;
-		tribeSlots[ playerIndex ].key = key;
-		tribeSlots[ playerIndex ].tribe = index;
+		tribeSlots[ playerIndex ].isFemale  = static_cast<sint8>(isFemale);
+		tribeSlots[ playerIndex ].isAI      = static_cast<sint8>(isAI);
+		tribeSlots[ playerIndex ].key       = key;
+		tribeSlots[ playerIndex ].tribe     = index;
 
 		if ( !isAI )
 		{
@@ -3595,7 +3595,7 @@ void AllinoneWindow::UpdateConfig( void )
 	aui_Control *psstatic = m_controls[ CONTROL_PLAYSTYLEVALUESTATICTEXT ];
 
 	sint32 index = playstyle->GetSelectedItem();
-	Assert( index >= 0 && index < m_playStyleValueStrings->GetNumStrings() );
+	Assert( index >= 0 && index < m_playStyleValueStrings->GetNumStrings());
 	if ( index < 0 || index >= m_playStyleValueStrings->GetNumStrings() )
 		return;
 
@@ -4452,7 +4452,7 @@ void AllinoneWindow::OKButtonAction::Execute(
 	if ( g_netfunc->IsHost() )
 	{
 		
-		BOOL isScenario = g_allinoneWindow->GetScenarioInfo()->isScenario;
+		uint8 isScenario = g_allinoneWindow->GetScenarioInfo()->isScenario;
 		
 		g_allinoneWindow->SetMode( g_allinoneWindow->GetMode() );
 		g_allinoneWindow->GetScenarioInfo()->isScenario = isScenario;
@@ -5974,9 +5974,8 @@ void AllinoneWorldShapeCallback(
 
 	if ( w->GetMode() == w->CREATE )
 	{
-
-		g_gamesetup.SetWorldShape(
-			spnewgamemapshapescreen_getMapShapeIndex() );
+		g_gamesetup.SetWorldShape
+            (static_cast<char>(spnewgamemapshapescreen_getMapShapeIndex()));
 		w->UpdateGameSetup(true);
 	}
 }

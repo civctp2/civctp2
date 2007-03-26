@@ -29,6 +29,7 @@ enum SLIC_SYM_SERIAL_TYPE {
 	SLIC_SYM_SERIAL_PARAMETER,
 	SLIC_SYM_SERIAL_MEMBER,
 	SLIC_SYM_SERIAL_BUILTIN
+    // Should not have more than 256 entries
 };
 
 struct SlicSymMapPoint {

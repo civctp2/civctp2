@@ -72,10 +72,10 @@ class aui_StringTable;
 
 
 class aui_Control
-	:
-	public aui_Region,
+:
 	public virtual aui_ImageBase,
 	public virtual aui_TextBase,
+	public aui_Region,
 	public aui_SoundBase
 {
 public:
@@ -105,10 +105,9 @@ public:
 
 	virtual BOOL IsThisA( uint32 classId )
 	{
-		return classId == m_controlClassId
+		return classId == s_controlClassId
 		||     aui_Region::IsThisA( classId );
 	}
-	static uint32 m_controlClassId;
 
 protected:
 	aui_Control() 
@@ -179,10 +178,10 @@ public:
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		return aui_TextBase::SetText( text, maxlen );
 	}
-	virtual AUI_ERRCODE	AppendText( MBCHAR *text )
+	virtual AUI_ERRCODE	AppendText(MBCHAR const * text)
 	{
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
-		return aui_TextBase::AppendText( text );
+		return aui_TextBase::AppendText(text);
 	}
 
 	
@@ -217,11 +216,11 @@ public:
 	AUI_ERRCODE	SetRepeatTime( uint32 repeatTime )
 		{ m_repeatTime = repeatTime; return AUI_ERRCODE_OK; }
 
-	static aui_Control	*GetMouseOwnership( void ) { return m_whichOwnsMouse; }
+	static aui_Control	*GetMouseOwnership( void ) { return s_whichOwnsMouse; }
 	virtual aui_Control	*SetMouseOwnership( void );
 	virtual AUI_ERRCODE	ReleaseMouseOwnership( void );
 
-	static aui_Control	*GetKeyboardFocus( void ) { return m_whichHasFocus; }
+	static aui_Control	*GetKeyboardFocus( void ) { return s_whichHasFocus; }
 	virtual aui_Control	*SetKeyboardFocus( void );
 	virtual AUI_ERRCODE	ReleaseKeyboardFocus( void );
 
@@ -269,9 +268,6 @@ protected:
 	uint32			m_repeatTime;	
 	uint32			m_lastRepeatTime;		
 
-	static aui_Control	*m_whichOwnsMouse;	
-	static aui_Control	*m_whichHasFocus;	
-
 	aui_KeyboardEvent	m_keyboardEvent;	
 	aui_JoystickEvent	m_joystickEvent;	
 
@@ -279,8 +275,6 @@ protected:
 	uint32 m_keyboardAction;                
 	
 	
-	
-
 	
 	typedef void (KeyboardEventCallback)( aui_KeyboardEvent *mouseData );
 	typedef void (JoystickEventCallback)( aui_JoystickEvent *mouseData );
@@ -373,8 +367,12 @@ private:
 	static const sint32 k_AUI_CONTROL_LAYER_FLAG_DISABLED;
 	static const sint32 k_AUI_CONTROL_LAYER_FLAG_ENABLED;
 
-	
-	
+	static uint32           s_controlClassId;
+    /// The control that owns the mouse
+	static aui_Control *    s_whichOwnsMouse;	
+    /// The control that has the focus
+	static aui_Control *    s_whichHasFocus;	
+
 	void InitializeLayerFlags(ldl_datablock *theBlock,
 		sint32 layerIndex);
 

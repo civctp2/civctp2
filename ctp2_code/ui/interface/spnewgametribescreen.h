@@ -57,7 +57,7 @@ sint32 spnewgametribescreen_displayMyWindow(
 sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname = NULL);
 
 AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
-AUI_ERRCODE spnewgametribescreen_Cleanup();
+void spnewgametribescreen_Cleanup();
 
 
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );

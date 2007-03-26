@@ -1,114 +1,164 @@
-#ifdef HAVE_PRAGMA_ONCE
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Main application
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//----------------------------------------------------------------------------
+///
+/// \file   civapp.h
+/// \brief  Main application
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
-#ifndef __CIVAPP_H__
-#define __CIVAPP_H__
+
+#ifndef CIVAPP_H__
+#define CIVAPP_H__
+
+//----------------------------------------------------------------------------
+//
+// Library imports
+//
+//----------------------------------------------------------------------------
+
+#include "windows.h"            // HINSTANCE, MBCHAR
+
+//----------------------------------------------------------------------------
+//
+// Exported names
+//
+//----------------------------------------------------------------------------
+
+class CivApp;
+
+//----------------------------------------------------------------------------
+//
+// Project imports
+//
+//----------------------------------------------------------------------------
 
 #include "aui_ldl.h"
-#include "aui_action.h"
-#include "player.h"
-
+#include "aui_action.h"     // aui_Action
+#include "ctp2_inttypes.h"  // sint32, uint32
+#include "player.h"         // PLAYER_INDEX
 class CivArchive;
 
-class CivApp {
+//----------------------------------------------------------------------------
+//
+// Declarations
+//
+//----------------------------------------------------------------------------
+
+class CivApp 
+{
 public:
 	CivApp();
-	~CivApp();
-
-	sint32		InitializeAppDB(CivArchive &archive);
-	sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
-	sint32		QuickInit(HINSTANCE hInstance, int iCmdShow);
-	sint32		CleanupAppUI(void);
-	sint32		CleanupAppDB(void);
-	sint32		CleanupApp(void);
-
-	
-	sint32		InitializeGameUI(void);
-	sint32		InitializeGame(CivArchive &archive);
-	sint32		InitializeSpriteEditor(CivArchive &archive);
-	sint32		CleanupGameUI(void);
-	sint32		CleanupGame(bool keepScenInfo);
-	sint32      StartMessageSystem();
-
-	void		ProcessGraphicsCallback(void);
-
-	void		BeginKeyboardScrolling(sint32 key);
-	void		StopKeyboardScrolling(sint32 key);
-
-	BOOL		IsKeyboardScrolling(void) { return m_isKeyboardScrolling; }
-	sint32		GetKeyboardScrollingKey(void) { return m_keyboardScrollingKey; }
-
-	
-	sint32      ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds);
-	sint32      ProcessAI();
-	sint32      ProcessRobot(const uint32 target_milliseconds, uint32 &used_milliseconds);
-	sint32		ProcessUI(const uint32 target_milliseconds, uint32 &used_milliseconds);
-	sint32      ProcessSLIC(void);
-
-	sint32		ProcessProfile(void);
-	sint32		Process(void);
-
-	
-	sint32		StartSpriteEditor(void);
-	sint32		StartGame(void);
-	sint32		EndGame(void);
-
-	sint32		LoadSavedGame(MBCHAR *name);
-	sint32		LoadSavedGameMap(MBCHAR *name); 
-	sint32		LoadScenarioGame(MBCHAR *name);
-	sint32		RestartGame(void);
-
-	
-	sint32		RestartGameSameMap(void);
-	sint32		QuitToSPShell(void);
-	sint32		QuitToLobby(void);
-
-	sint32		QuitGame(void);
 
 	void		AutoSave(PLAYER_INDEX player, bool isQuickSave = false);
-	void		RestoreAutoSave(PLAYER_INDEX player);
+	void		BeginKeyboardScrolling(sint32 key);
+	void		CleanupAppDB(void);
+	sint32		EndGame(void);
 
-	
-	BOOL		SaveDBInGameFile(void) { return m_saveDBInGameFile; }
+	sint32		GetKeyboardScrollingKey(void) const 
+    { 
+        return m_keyboardScrollingKey; 
+    };
 
-	
-	void		PostStartGameAction(void);
-	void		PostSpriteTestAction(void);
-	void		PostLoadSaveGameAction(MBCHAR *);
-	void        PostLoadQuickSaveAction(PLAYER_INDEX player);
+    sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
+	sint32		InitializeAppDB(CivArchive &archive);
+	sint32		InitializeGame(CivArchive &archive);
 
-	void		PostLoadSaveGameMapAction(MBCHAR *); 
-	void		PostRestartGameAction(void);
+   	bool		IsGameLoaded(void) const 
+    { 
+        return m_gameLoaded; 
+    };
 
-	
-	void		PostRestartGameSameMapAction(void);
-	void		PostQuitToSPShellAction(void);
-	void		PostQuitToLobbyAction(void);
+	bool		IsInBackground(void) const 
+    { 
+        return m_inBackground; 
+    };
 
+	bool		IsKeyboardScrolling(void) const 
+    { 
+        return m_isKeyboardScrolling; 
+    };
+
+	sint32		LoadSavedGame(MBCHAR const * name);
+	sint32		LoadSavedGameMap(MBCHAR const * name); 
+	sint32		LoadScenarioGame(MBCHAR const * name);
 	void		PostEndGameAction(void);
-	void		PostLoadScenarioGameAction(MBCHAR *name);
-
-	BOOL		IsAppLoaded(void) const { return m_appLoaded; }
-	BOOL		IsDBLoaded(void) const { return m_dbLoaded; }
-	BOOL		IsGameLoaded(void) const { return m_gameLoaded; }
-
-	BOOL		IsAIFinishedThisTurn(void) const { return m_aiFinishedThisTurn; }
-	void		SetAIFinishedThisTurn(BOOL finished) { m_aiFinishedThisTurn = finished; }
-
-	BOOL		IsInBackground(void) { return m_inBackground; }
-	void		SetInBackground(BOOL in) { m_inBackground = in; }
+	void        PostLoadQuickSaveAction(PLAYER_INDEX player);
+	void		PostLoadSaveGameAction(MBCHAR const *);
+	void		PostLoadScenarioGameAction(MBCHAR const * name);
+	void		PostQuitToLobbyAction(void);
+	void		PostQuitToSPShellAction(void);
+	void		PostRestartGameAction(void);
+	void		PostRestartGameSameMapAction(void);
+	void		PostSpriteTestAction(void);
+	void		PostStartGameAction(void);
+	sint32		Process(void);
+	void		ProcessGraphicsCallback(void);
+	sint32		QuickInit(HINSTANCE hInstance, int iCmdShow);
+	void		QuitGame(void);
+	sint32		QuitToLobby(void);
+	sint32		QuitToSPShell(void);
+	sint32		RestartGame(void);
+	sint32		RestartGameSameMap(void);
+	bool		SaveDBInGameFile(void) const 
+    { 
+        return m_saveDBInGameFile; 
+    }
+	void		SetInBackground(bool in = true) 
+    { 
+        m_inBackground = in; 
+    }
+	sint32		StartSpriteEditor(void);
+	sint32		StartGame(void);
+	void		StopKeyboardScrolling(sint32 key);
 
 private:
+	void		CleanupApp(void);
+	void		CleanupAppUI(void);
+	void		CleanupGame(bool keepScenInfo);
+	void		CleanupGameUI(void);
 	void 		InitializeAppUI(void);
+	sint32  	InitializeGameUI(void);
+	sint32		InitializeSpriteEditor(CivArchive &archive);
+	void		PostLoadSaveGameMapAction(MBCHAR const *); 
+	sint32      ProcessAI();
+	sint32      ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds);
+	sint32		ProcessProfile(void);
+	sint32      ProcessRobot(const uint32 target_milliseconds, uint32 &used_milliseconds);
+	sint32      ProcessSLIC(void);
+	sint32		ProcessUI(const uint32 target_milliseconds, uint32 &used_milliseconds);
+	void		RestoreAutoSave(PLAYER_INDEX player);
+	void        StartMessageSystem();
 
-	BOOL		m_appLoaded;
-	BOOL		m_dbLoaded;
-	BOOL		m_gameLoaded;
-	BOOL		m_saveDBInGameFile;
-	BOOL		m_aiFinishedThisTurn;
-	BOOL		m_inBackground;
-
-	BOOL		m_isKeyboardScrolling;
+	bool		m_appLoaded;
+	bool		m_dbLoaded;
+	bool		m_gameLoaded;
+	bool		m_saveDBInGameFile;
+	bool		m_aiFinishedThisTurn;
+	bool		m_inBackground;
+	bool		m_isKeyboardScrolling;
 	sint32		m_keyboardScrollingKey;
 };
 
@@ -148,7 +198,7 @@ private:
 	MBCHAR m_filename[k_AUI_LDL_MAXBLOCK + 1];
 };
 
-
+#if 0   // never used
 class LoadSaveGameMapAction : public aui_Action
 {
 public:
@@ -175,9 +225,7 @@ public:
 private:
 	MBCHAR m_filename[k_AUI_LDL_MAXBLOCK + 1];
 };
-
-
-
+#endif
 
 class LoadScenarioGameAction : public aui_Action
 {

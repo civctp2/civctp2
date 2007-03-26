@@ -36,44 +36,33 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"                     // Precompiled header
-
 #include "spnewgametribescreen.h"   // Own declarations: consistency check
 
-#include "c3window.h"
-#include "c3_popupwindow.h"
-#include "c3_button.h"
-#include "c3_listitem.h"
-#include "c3_dropdown.h"
-#include "c3_static.h"
-#include "c3slider.h"
-#include "c3ui.h"
 #include "aui_radio.h"
-#include "c3textfield.h"
-#include "textradio.h"
 #include "aui_switchgroup.h"
 #include "aui_uniqueid.h"
-
+#include "c3_button.h"
+#include "c3_dropdown.h"
+#include "c3_listitem.h"
+#include "c3_popupwindow.h"
+#include "c3_static.h"
+#include "c3slider.h"
+#include "c3textfield.h"
+#include "c3ui.h"
+#include "c3window.h"
 #include "Civilisation.h"
 #include "CivilisationRecord.h"
-#include "StrDB.h"
-#include "profileDB.h"
-
-#include "player.h"
-
-#include "spnewgamewindow.h"
-#include "keypress.h"
-#include "SelItem.h"
-
 #include "gamefile.h"
-
-#include <vector>           // std::vector
+#include "keypress.h"
+#include "player.h"                 // g_player
+#include "profileDB.h"              // g_theProfileDB
+#include "SelItem.h"
+#include "spnewgamewindow.h"
+#include "StrDB.h"                  // g_theStringDB
+#include "textradio.h"
+#include <vector>                   // std::vector
 
 extern C3UI                 *g_c3ui;
-extern StringDB             *g_theStringDB;
-extern ProfileDB            *g_theProfileDB;
-
-extern Player               **g_player;
-
 extern sint32               g_isCheatModeOn;
 
 
@@ -275,16 +264,10 @@ void spnewgametribescreen_setTribeIndex(
 	if (shouldSetProfileDB)
 		g_theProfileDB->SetCivName((MBCHAR *)g_theStringDB->GetNameStr(civString));
 
-    if (s_maleRadio->GetState() ) {
-	 	if (shouldSetProfileDB)
-	       g_theProfileDB->SetGender(GENDER_MALE);
-
-		s_gender = GENDER_MALE;
-    } else {
-		if (shouldSetProfileDB)
-			g_theProfileDB->SetGender(GENDER_FEMALE);
-		
-		s_gender = GENDER_FEMALE;
+    s_gender = s_maleRadio->GetState() ? GENDER_MALE : GENDER_FEMALE;
+    if (shouldSetProfileDB)
+    {
+	    g_theProfileDB->SetGender(s_gender);
     }
 
 	if ( lname )
@@ -391,15 +374,13 @@ void spnewgametribescreen_enableTribe(sint32 tribe)
 
 sint32	spnewgametribescreen_displayMyWindow( void *cookie, BOOL edit )
 {
-	sint32 retval=0;
-	if(!g_spNewGameTribeScreen) { retval = spnewgametribescreen_Initialize(); }
+    sint32 retval = g_spNewGameTribeScreen ? 0 : spnewgametribescreen_Initialize();
 
-	AUI_ERRCODE auiErr;
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow(g_spNewGameTribeScreen);
+	Assert(auiErr == AUI_ERRCODE_OK);
 
-	auiErr = g_c3ui->AddWindow(g_spNewGameTribeScreen);
 	keypress_RegisterHandler(g_spNewGameTribeScreen);
 
-	Assert( auiErr == AUI_ERRCODE_OK );
 
 	if ( edit && !(g_isScenario && g_startInfoType == STARTINFOTYPE_NOLOCS))
 		s_leaderNameTextField->Enable( TRUE );
@@ -448,13 +429,10 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname)
 
 	spnewgametribescreen_setTribeIndex( index, lname );
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( g_spNewGameTribeScreen->Id() );
-	keypress_RemoveHandler(g_spNewGameTribeScreen);
-
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(g_spNewGameTribeScreen->Id());
 	Assert( auiErr == AUI_ERRCODE_OK );
 
+    keypress_RemoveHandler(g_spNewGameTribeScreen);
 	spnewgamescreen_update();
 
 	return 1;
@@ -464,21 +442,19 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname)
 
 AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	if ( g_spNewGameTribeScreen ) return AUI_ERRCODE_OK; 
 
 	s_tribeIndex = INDEX_TRIBE_INVALID;	
 
+	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "SPNewGameTribeScreen");
+
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	{ 
 		g_spNewGameTribeScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(g_spNewGameTribeScreen, errcode) );
-		if ( !AUI_NEWOK(g_spNewGameTribeScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(g_spNewGameTribeScreen, errcode) ) return errcode;
 
 		
 		g_spNewGameTribeScreen->Resize(g_spNewGameTribeScreen->Width(),g_spNewGameTribeScreen->Height());
@@ -488,7 +464,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	
 	if ( !callback ) callback = spnewgametribescreen_backPress;
 
-	
+	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	g_spNewGameTribeScreen->AddTitle( controlBlock );
 	g_spNewGameTribeScreen->AddClose( callback );
@@ -510,6 +486,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	size_t          column              = 0;
 	size_t          row                 = 0;
 
+	MBCHAR		switchBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	for (size_t i = 0; i < civCount; ++i)
 	{
 		sprintf(switchBlock, "%s.%s", controlBlock, checknames[column]);
@@ -614,43 +591,32 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 
 
 
-AUI_ERRCODE spnewgametribescreen_Cleanup()
+void spnewgametribescreen_Cleanup()
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
-
-	if ( !g_spNewGameTribeScreen  ) return AUI_ERRCODE_OK; 
-
-	g_c3ui->RemoveWindow( g_spNewGameTribeScreen->Id() );
-	keypress_RemoveHandler(g_spNewGameTribeScreen);
-
-    for
-    (
-        TribeSelector::iterator  p = s_checkBox.begin();
-        p != s_checkBox.end();
-        ++p
-    )
+	if (g_spNewGameTribeScreen)
     {
-        delete *p;
+	    g_c3ui->RemoveWindow(g_spNewGameTribeScreen->Id());
+	    keypress_RemoveHandler(g_spNewGameTribeScreen);
+
+        for
+        (
+            TribeSelector::iterator  p = s_checkBox.begin();
+            p != s_checkBox.end();
+            ++p
+        )
+        {
+            delete *p;
+        }
+        TribeSelector().swap(s_checkBox);
+
+        allocated::clear(s_group);
+        allocated::clear(s_leaderNameStatic);
+        allocated::clear(s_leaderNameTextField);
+        allocated::clear(s_maleFemaleSwitchGroup);
+        allocated::clear(s_maleRadio);
+        allocated::clear(s_femaleRadio);
+        allocated::clear(g_spNewGameTribeScreen);
     }
-    TribeSelector().swap(s_checkBox);
-
-	mycleanup( s_group );
-
-
-	mycleanup( s_leaderNameStatic );
-	mycleanup( s_leaderNameTextField );
-	mycleanup( s_maleFemaleSwitchGroup );
-	mycleanup( s_maleRadio );
-	mycleanup( s_femaleRadio );
-	
-
-
-	delete g_spNewGameTribeScreen;
-	g_spNewGameTribeScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
 }
 
 

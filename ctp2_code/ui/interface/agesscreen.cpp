@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : MP Age Screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -33,56 +33,25 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3window.h"
-#include "dialogboxwindow.h"
-#include "c3_listitem.h"
-#include "c3_button.h"
-#include "ns_item.h"
-#include "c3ui.h"
-
-#include "ctp2_dropdown.h"	
-#include "aui_stringtable.h"
-
-#include "agerecord.h"
-#include "StrDB.h"
-
-#include "spnewgamewindow.h"
-
 #include "agesscreen.h"
 
+#include "agerecord.h"
+#include "aui_stringtable.h"
+#include "c3_button.h"
+#include "c3_listitem.h"
+#include "c3ui.h"
+#include "c3window.h"
+#include "ctp2_dropdown.h"	
+#include "dialogboxwindow.h"
+#include "Globals.h"                // allocated::...
 #include "ns_gamesetup.h"
-extern	nf_GameSetup	g_gamesetup;
+#include "ns_item.h"
+#include "spnewgamewindow.h"
+#include "StrDB.h"                  // g_theStringDB
 
-extern C3UI			*g_c3ui;
-extern StringDB		*g_theStringDB;
+extern nf_GameSetup g_gamesetup;
+extern C3UI	*       g_c3ui;
 
-namespace
-{
-
-//----------------------------------------------------------------------------
-//
-// Name       : DeleteAndNull
-//
-// Description: Delete and NULL a pointer.
-//
-// Parameters : a_Pointer	: the pointer to delete
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : Only works for regular pointers (delete).
-//				Do not use for arrays (delete [])!
-//
-//----------------------------------------------------------------------------
-
-template <typename T> inline void DeleteAndNull(T * & a_Pointer)
-{
-	delete a_Pointer;
-	a_Pointer = NULL;
-};
-
-};	// namespace
 
 static DialogBoxWindow *s_agesScreen	= NULL;
 
@@ -120,8 +89,8 @@ void agesscreen_setStartAge( sint32 index )
 
 	s_startDropDown->SetSelectedItem( index );
 
-	
-	g_gamesetup.SetStartAge(s_startAge = index);
+	s_startAge = index;
+	g_gamesetup.SetStartAge(static_cast<char>(index));
 }
 
 
@@ -137,31 +106,27 @@ void agesscreen_setEndAge( sint32 index )
 
 	s_endDropDown->SetSelectedItem( index );
 
-	
-	g_gamesetup.SetEndAge(s_endAge = index);
-
+	s_endAge = index;
+	g_gamesetup.SetEndAge(static_cast<char>(index));
 }
 
 
 
 
 
-sint32	agesscreen_displayMyWindow(BOOL viewMode)
+sint32	agesscreen_displayMyWindow(bool viewMode)
 {
-	sint32 retval=0;
-	if(!s_agesScreen) { retval = agesscreen_Initialize(); }
+    sint32 retval = s_agesScreen ? 0 : agesscreen_Initialize();
 
-	AUI_ERRCODE auiErr;
-
-	
 	s_startDropDown->Enable( !viewMode );
 	s_endDropDown->Enable( !viewMode );
 
-	auiErr = g_c3ui->AddWindow(s_agesScreen);
-	Assert( auiErr == AUI_ERRCODE_OK );
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow(s_agesScreen);
+	Assert(auiErr == AUI_ERRCODE_OK);
 
 	return retval;
 }
+
 sint32 agesscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
@@ -169,10 +134,8 @@ sint32 agesscreen_removeMyWindow(uint32 action)
 	agesscreen_setStartAge( s_startDropDown->GetSelectedItem() );
 	agesscreen_setEndAge( s_endDropDown->GetSelectedItem() );
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( s_agesScreen->Id() );
-	Assert( auiErr == AUI_ERRCODE_OK );
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(s_agesScreen->Id());
+	Assert(auiErr == AUI_ERRCODE_OK);
 
 	return 1;
 }
@@ -181,16 +144,12 @@ sint32 agesscreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	sint32 i;
-
 	if ( s_agesScreen ) return AUI_ERRCODE_OK; 
 
+	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "agesscreen");
 
-	if ( !callback ) callback = agesscreen_backPress;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	s_agesScreen = new DialogBoxWindow(
 		&errcode,
@@ -206,12 +165,15 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		"agesscreen.closebutton" );
 	Assert( AUI_NEWOK(s_back,errcode) );
 	if ( !AUI_NEWOK(s_back,errcode) ) return errcode;
+
+	if ( !callback ) callback = agesscreen_backPress;
 	s_back->SetActionFuncAndCookie(callback, NULL);
 
 	s_name = spNew_c3_Static(&errcode,windowBlock,"NameStatic");
 	s_start = spNew_c3_Static(&errcode,windowBlock,"StartStatic");
 	s_end = spNew_c3_Static(&errcode,windowBlock,"EndStatic");
 
+	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( controlBlock, "%s.%s", windowBlock, "StartDropDown" );
 	
 	s_startDropDown = new ctp2_DropDown(
@@ -238,16 +200,8 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	aui_StringTable	startagestrings(&errcode, "strings.startagestrings");
 	s_numAges = g_theAgeDB->NumRecords();
 	bool const		isLdlUsable = s_numAges == startagestrings.GetNumStrings();
-	for ( i = 0; i < s_numAges; i++ )
+	for (sint32 i = 0; i < s_numAges; i++)
 	{
-		
-		
-		
-
-
-
-
-
 //Added by Martin Gühmann so that no *.ldl needs to be edited
 //anymore when new ages are added.
 		MBCHAR const *	ageId	= g_theAgeDB->GetNameStr(i);
@@ -326,37 +280,34 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 //
 // Globals    : All static variables.
 //
-// Returns    : Useless error code (always AUI_ERRCODE_OK).
+// Returns    : -
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
-AUI_ERRCODE agesscreen_Cleanup()
+void agesscreen_Cleanup()
 {
 	if (s_startDropDown)
 	{
 		s_startDropDown->Clear();
-		DeleteAndNull(s_startDropDown);
+        allocated::clear(s_startDropDown);
 	}
 	if (s_endDropDown)
 	{
 		s_endDropDown->Clear();
-		DeleteAndNull(s_endDropDown);
+        allocated::clear(s_endDropDown);
 	}
 
-	DeleteAndNull(s_name);
-	DeleteAndNull(s_start);
-	DeleteAndNull(s_end);
-	DeleteAndNull(s_back);
+    allocated::clear(s_name);
+	allocated::clear(s_start);
+	allocated::clear(s_end);
+	allocated::clear(s_back);
 
 	if (s_agesScreen)
 	{
 		g_c3ui->RemoveWindow(s_agesScreen->Id());
-		DeleteAndNull(s_agesScreen);
+		allocated::clear(s_agesScreen);
 	}
-
-	return AUI_ERRCODE_OK;
 }
 
 

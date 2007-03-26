@@ -64,11 +64,19 @@
 #pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
 #pragma warning(   1   :4800)   // (Level 3)   'type' : forcing value to bool 'true' or 'false' (performance warning)
 
-#pragma warning(disable:4511)   // (Level 3)   'class' : copy constructor could not be generated
-#pragma warning(disable:4512)   // (Level 4)   'class' : assignment operator could not be generated
-
 #pragma warning( error :4700)   // (Level 1&4) uninitialized local variable 'name' used
 #pragma warning( error :4804)   // (Level 1)   'operation' : unsafe use of type 'bool' in operation
+
+#if defined(_DEBUG)
+#pragma warning(disable:4130)   // logical operation on address of string constant (used in Asserts)
+#endif
+
+#if (_MSC_VER >= 1400)
+// Suppress some rediculous MS warnings about deprecated standard functions
+#define _SECURE_SCL					0	
+#define _SECURE_SCL_NO_DEPRECATE
+#define _HAS_ITERATOR_DEBUGGING		0	// this one may be more interesting
+#endif
 #endif	// _MSC_VER
 
 #include <limits.h>
@@ -85,7 +93,7 @@
 #endif // WIN32
 
 #if defined(_MSC_VER) && (_MSC_VER < 1300)
-	// MSVC 6.0 does not even have std::min and std::max.
+	// MSVC 6.0 does not have std::min and std::max.
 	namespace std
 	{
 		template <typename T>
@@ -100,14 +108,7 @@
 			return (a < b) ? b : a;
 		};
 	};	// namespace std
-
-#else
-	#include <algorithm>
 #endif	// _MSC_VER < 1300
-
-	// Allow usage of global min and max to reduce the number of code changes.
-	using std::min;
-	using std::max;
 
 #if defined(WIN32)
 #include <tchar.h>

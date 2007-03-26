@@ -53,8 +53,8 @@ aui_Surface::aui_Surface(
 	sint32 pitch,
 	uint8 *buffer,
 	BOOL isPrimary )
-	:
-	aui_Base()
+:
+	aui_Base    ()
 {
 	*retval = InitCommon( width, height, bpp, isPrimary );
 	Assert( AUI_SUCCESS(*retval) );
@@ -67,8 +67,8 @@ aui_Surface::aui_Surface(
 
 	m_size = m_pitch * m_height;
 
-	
-	if ( !(m_saveBuffer = buffer) )
+	m_saveBuffer = buffer;
+	if (!m_saveBuffer)
 	{
 #ifndef __AUI_USE_SDL__
 		HDC hdc = ::GetDC( g_ui->TheHWND() );
@@ -96,13 +96,15 @@ aui_Surface::aui_Surface(
 		m_saveBuffer = (uint8 *)(new uint32[ m_size >> 2 ]);
 		Assert( m_saveBuffer != NULL );
 
-		
-		if ((m_allocated = (BOOL) (NULL != m_saveBuffer)))
+		if (m_saveBuffer)
+        {
+            m_allocated = TRUE;
 			memset( m_saveBuffer, 0x00, m_size );
-		else
-		{
+        }
+        else
+        {
+            m_allocated = FALSE;
 			*retval = AUI_ERRCODE_MEMALLOCFAILED;
-			return;
 		}
 	}
 }
@@ -287,95 +289,70 @@ AUI_ERRCODE aui_Surface::Unlock( LPVOID buffer )
 
 
 #ifdef __AUI_USE_DIRECTX__
-AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
+AUI_ERRCODE aui_Surface::GetDC(HDC * hdc)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	Assert(hdc);
+	if (!hdc) return AUI_ERRCODE_INVALIDPARAM;
 
-	
-	Assert( hdc != NULL );
-	if ( !hdc ) return AUI_ERRCODE_INVALIDPARAM;
+	Assert(m_allocated && !m_dcIsGot);
+    if (!m_allocated || m_dcIsGot) return AUI_ERRCODE_SURFACELOCKFAILED;
 
-	Assert( m_allocated != FALSE );
-    if ( !m_allocated ) return AUI_ERRCODE_SURFACELOCKFAILED;
+    *hdc = m_hdc;
 
-	Assert( !m_dcIsGot );
-	if ( m_dcIsGot )
-		errcode = AUI_ERRCODE_SURFACELOCKFAILED;
-	else
-	{
-		if ( *hdc = m_hdc )
-		{
-			m_dcIsGot = TRUE;
+	if (!m_hdc) return AUI_ERRCODE_HACK;
 
-			
-			
-			BITMAPINFOHEADER bih;
-			memset( &bih, 0, sizeof( bih ) );
-			bih.biSize = sizeof( bih );
-			bih.biWidth = m_width;
-			bih.biHeight = -m_height;
-			bih.biPlanes = 1;
-			bih.biBitCount = GetDeviceCaps( m_hdc, BITSPIXEL );
-			bih.biCompression = BI_RGB;
+	m_dcIsGot = TRUE;
 
-			SetDIBits(
-				m_hdc,
-				m_hbitmap,
-				0,
-				m_height,
-				m_saveBuffer,
-				(BITMAPINFO *)&bih, 
-				DIB_RGB_COLORS );
-		}
-		else
-			errcode = AUI_ERRCODE_HACK;
-	}
+    BITMAPINFOHEADER bih;
+	memset( &bih, 0, sizeof( bih ) );
+	bih.biSize = sizeof( bih );
+	bih.biWidth = m_width;
+	bih.biHeight = -m_height;
+	bih.biPlanes = 1;
+	bih.biBitCount = GetDeviceCaps( m_hdc, BITSPIXEL );
+	bih.biCompression = BI_RGB;
 
-	return errcode;
+	SetDIBits(
+		m_hdc,
+		m_hbitmap,
+		0,
+		m_height,
+		m_saveBuffer,
+		(BITMAPINFO *)&bih, 
+		DIB_RGB_COLORS );
+
+	return AUI_ERRCODE_OK;
 }
 
 
-AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
+AUI_ERRCODE aui_Surface::ReleaseDC(HDC hdc)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+    if (hdc != m_hdc) return AUI_ERRCODE_INVALIDPARAM;
 
-	Assert( m_allocated != FALSE );
-    if ( !m_allocated ) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
+	Assert(m_allocated && !m_dcIsGot);
+    if (!m_allocated || m_dcIsGot) return AUI_ERRCODE_SURFACEUNLOCKFAILED;
 
-	Assert( m_dcIsGot );
-	if ( !m_dcIsGot )
-		errcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
-	else
-	{
-		if ( hdc == m_hdc )
-		{
-			m_dcIsGot = FALSE;
+	m_dcIsGot = FALSE;
 
-			
-			
-			BITMAPINFOHEADER bih;
-			memset( &bih, 0, sizeof( bih ) );
-			bih.biSize = sizeof( bih );
-			bih.biWidth = m_width;
-			bih.biHeight = -m_height;
-			bih.biPlanes = 1;
-			bih.biBitCount = GetDeviceCaps( m_hdc, BITSPIXEL );
-			bih.biCompression = BI_RGB;
+    BITMAPINFOHEADER bih;
+	memset( &bih, 0, sizeof( bih ) );
+	bih.biSize = sizeof( bih );
+	bih.biWidth = m_width;
+	bih.biHeight = -m_height;
+	bih.biPlanes = 1;
+	bih.biBitCount = GetDeviceCaps( m_hdc, BITSPIXEL );
+	bih.biCompression = BI_RGB;
 
-			GetDIBits(
-				m_hdc,
-				m_hbitmap,
-				0,
-				m_height,
-				m_saveBuffer,
-				(BITMAPINFO *)&bih, 
-				DIB_RGB_COLORS );
-		}
-		else
-			errcode = AUI_ERRCODE_INVALIDPARAM;
-	}
+	GetDIBits(
+		m_hdc,
+		m_hbitmap,
+		0,
+		m_height,
+		m_saveBuffer,
+		(BITMAPINFO *)&bih, 
+		DIB_RGB_COLORS );
 
-	return errcode;
+    return AUI_ERRCODE_OK;
 }
 #endif // __AUI_USE_DIRECTX__
 

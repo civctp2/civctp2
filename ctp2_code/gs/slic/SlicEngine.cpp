@@ -343,6 +343,22 @@ SlicEngine::~SlicEngine()
 	}
 }
 
+/// Reset the Slic handling and reload from file.
+/// \param  a_FileName  Name of the Slic file to load
+/// \result File loaded and parsed successfully
+bool SlicEngine::Reload(std::basic_string<MBCHAR> const & a_File)
+{
+    delete g_slicEngine;
+    g_slicEngine = new SlicEngine();
+
+    bool isParsedOk = g_slicEngine->Load(a_File, k_NORMAL_FILE);
+    if (isParsedOk)
+    {
+        g_slicEngine->Link();
+    }
+    return isParsedOk;
+}
+
 void SlicEngine::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
@@ -382,7 +398,7 @@ void SlicEngine::Serialize(CivArchive &archive)
 		archive.Store((uint8*)m_triggerKey, sizeof(m_triggerKey));
 
 		
-		archive.PutUINT8(m_doResearchOnUnblank);
+		archive.PutUINT8(static_cast<uint8>(m_doResearchOnUnblank));
 		archive << m_researchOwner;
 		archive.Store((uint8*)m_researchText, sizeof(m_researchText));
 
@@ -500,7 +516,7 @@ void SlicEngine::Execute(SlicObject *obj)
 		obj->Execute();
 	}
 
-	if (m_atBreak)
+    if (m_atBreak)
     {
         // No action: keep context active to Continue later.
     }
@@ -972,50 +988,54 @@ void SlicEngine::AddBuiltinFunctions()
 
 void SlicEngine::Link()
 {
-	if(!m_segmentHash)
-		m_segmentHash = new SlicSegmentHash(k_SEGMENT_HASH_SIZE);
+    if (!m_segmentHash)
+    {
+        m_segmentHash = new SlicSegmentHash(k_SEGMENT_HASH_SIZE);
+    }
 
-	sint32 symStart;
-	if(!m_symTab) {
-		symStart = 0;
-		m_symTab = new SlicSymTab(0);
-	} else {
-		symStart = m_symTab->GetNumEntries();
-	}
+    if (!m_symTab) 
+    {
+        m_symTab = new SlicSymTab(0);
+    }
 
-	m_segmentHash->SetSize(g_slicNumEntries);
+    m_segmentHash->SetSize(g_slicNumEntries);
 
-	for(sint32 i = 0; i < g_slicNumEntries; i++) {
-		SlicSegment *seg = new SlicSegment(i);
-		m_segmentHash->Add(seg->GetName(), seg);
-	}
+    for (sint32 i = 0; i < g_slicNumEntries; i++) 
+    {
+        SlicSegment * seg = new SlicSegment(i);
+        m_segmentHash->Add(seg->GetName(), seg);
+    }
 
-	m_segmentHash->LinkTriggerSymbols(m_uiHash);
-
+    m_segmentHash->LinkTriggerSymbols(m_uiHash);
 	
-	slicif_init();
-
-	AddModFuncs();
+    slicif_init();
+    AddModFuncs();
 }
+
 
 extern "C" char slic_parser_error_text[1024];
 
-bool SlicEngine::Load(MBCHAR * filename, sint32 filenum)
+bool SlicEngine::Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum)
 {
 	slicconst_Initialize();
 
 	sint32 symStart = m_symTab->GetNumEntries();
-    AddBuiltinFunctions();
 
+    AddBuiltinFunctions();
 	slicif_init();
 	slicif_set_file_num(filenum);
 
-	if (slicif_run_parser(filename, symStart) != SLIC_ERROR_OK) {
-		c3errors_ErrorDialog(filename, "%s", slic_parser_error_text);
-		return false;
+    bool isParsedOk = 
+        (SLIC_ERROR_OK == 
+            slicif_run_parser(const_cast<MBCHAR *>(a_File.c_str()), symStart)
+        );    
+
+	if (!isParsedOk)
+    {
+		c3errors_ErrorDialog(a_File.c_str(), "%s", slic_parser_error_text);
 	}
 
-	return true;
+	return isParsedOk;
 }
 
 void SlicEngine::AddTrigger(SlicSegment *trigger, TRIGGER_LIST which)
@@ -1057,8 +1077,6 @@ void SlicEngine::KillCurrentMessage()
 
 void SlicEngine::AddCurrentMessage()
 {
-	
-	
 	if(!g_theMessagePool->IsValid(*m_currentMessage))
 		return;
 
@@ -1074,25 +1092,30 @@ PointerList<SlicRecord> *SlicEngine::GetRecords(sint32 player)
 void SlicEngine::AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
 								   SlicSegment *segment)
 {
-	if(!m_records[player]) {
-		m_records[player] = new PointerList<SlicRecord>;
-	}
+    if (!m_records[player]) 
+    {
+        m_records[player] = new PointerList<SlicRecord>;
+    }
 
-	
-	PointerList<SlicRecord>::Walker walk(m_records[player]);
-	while(walk.IsValid()) {
-		if(walk.GetObj()->GetSegment() == segment) {
-			return;
-		}
-		walk.Next();
-	}
+    for
+    (
+        PointerList<SlicRecord>::Walker walk(m_records[player]);
+        walk.IsValid();
+        walk.Next()
+    )
+    {
+        if (walk.GetObj()->GetSegment() == segment) 
+        {
+            return;
+	  }
+    }
 
-	m_records[player]->AddTail(new SlicRecord(player, title, text, segment));
+    m_records[player]->AddTail(new SlicRecord(player, title, text, segment));
 
-	
-	if ( g_tutorialWin && title) {
-		g_tutorialWin->AddToList( title, m_records[player]->GetCount() - 1 );
-	}
+    if (g_tutorialWin && title) 
+    {
+        g_tutorialWin->AddToList(title, m_records[player]->GetCount() - 1);
+    }
 }
 
 bool SlicEngine::IsTimerExpired(sint32 timer) const
@@ -1187,27 +1210,31 @@ bool SlicEngine::IsMessageClassDisabled(sint32 mclass) const
 
 void SlicEngine::ProcessUITriggers()
 {
-	for 
+    for 
     (
         SlicObject *    obj = m_uiExecuteObjects->RemoveHead();
         obj;
         obj = m_uiExecuteObjects->RemoveHead()
     )
     {
-		Execute(obj);
-	}
+        Execute(obj);
+    }
 }
 
 void SlicEngine::RunYearlyTriggers()
 {
-	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_YEARLY]);
-	while(walk.IsValid()) {
-		if(walk.GetObj()->IsEnabled()) {
-			SlicObject *obj = new SlicObject(walk.GetObj());
-			Execute(obj);
-		}
-		walk.Next();
-	}
+    for
+    (
+        PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_YEARLY]);
+        walk.IsValid();
+        walk.Next()
+    )
+    {
+        if (walk.GetObj()->IsEnabled()) 
+        {
+		Execute(new SlicObject(walk.GetObj()));
+	  }
+    }
 }
 
 void SlicEngine::RunPlayerTriggers(PLAYER_INDEX player)
@@ -1220,7 +1247,7 @@ void SlicEngine::RunPlayerTriggers(PLAYER_INDEX player)
 			Execute(obj);
 		}
 		walk.Next();
-	}
+    }
 }
 
 void SlicEngine::RunCityTriggers(const Unit &city)
@@ -1234,7 +1261,7 @@ void SlicEngine::RunCityTriggers(const Unit &city)
 			Execute(obj);
 		}
 		walk.Next();
-	}
+    }
 }
 
 void SlicEngine::RunCityPopTriggers(const Unit &city)
@@ -2070,8 +2097,7 @@ void SlicEngine::RunUITriggers(const MBCHAR *controlName)
 	if(trig) {
 		SlicSegment *seg = trig->GetSegment();
 		if(seg && seg->IsEnabled()) {
-			SlicObject *obj = new SlicObject(seg);
-			m_uiExecuteObjects->AddTail(obj);
+			m_uiExecuteObjects->AddTail(new SlicObject(seg));
 			
 		}
 	}

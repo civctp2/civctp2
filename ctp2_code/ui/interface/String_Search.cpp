@@ -8,176 +8,100 @@
 
 
 #include "c3.h"
+#include "String_Search.h"
 
+#include <algorithm>
 #ifdef TEST_STRING_SEARCH
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #endif 
 
 
-#include "String_Search.h"
-
-
-
-char * String_Search::m_key = NULL;
-
-
-int String_Search::m_key_length = 0;
-
-
-bool String_Search::m_case_sensitive = false;
-
-
-int String_Search::m_skip_table[NUM_CHAR_VALUES];
-
-
-
+char *  String_Search::s_key            = NULL;
+int     String_Search::s_key_length     = 0;
+bool    String_Search::s_case_sensitive = false;
+int     String_Search::s_skip_table[NUM_CHAR_VALUES];
 
 
 void String_Search::Set_Search_Key
 (
-	
 	char * new_key
 )
 {
-	
 	if (!new_key)
 		return;
 
-	
-	m_key = new_key;
+	s_key           = new_key;
+	s_key_length    = strlen(s_key);
+    std::fill(s_skip_table, s_skip_table + NUM_CHAR_VALUES, s_key_length);
 
-	
-	m_key_length = strlen(m_key);
-
-	
-	for (int i = 0; i < NUM_CHAR_VALUES; i++)
+	for (int j = 0; j < s_key_length; j++)
 	{
-		
-		m_skip_table[i] = m_key_length;
+        char key_char = 
+            (s_case_sensitive) ? s_key[j] : static_cast<char>(tolower(s_key[j]));
 
-	} 
-
-	
-	char key_char;
-
-	
-	for (int j = 0; j < m_key_length; j++)
-	{
-		
-		key_char = m_key[j];
-
-		
-		if (!m_case_sensitive)
-			key_char = tolower(key_char);
-
-		
-		
-		m_skip_table[(int)key_char] = m_key_length - j - 1;
-
+		s_skip_table[key_char] = s_key_length - j - 1;
 	} 
 }
-
-
-
-
-
-
-
-
 
 
 bool String_Search::Search
 (
-	
-	char * my_string,
-
-	
-	char * new_key 
-
+	char const *    my_string,
+	char *          new_key 
 )
 {
-	
 	if (new_key)
 		Set_Search_Key(new_key);
 
-	
-	if (!m_key)
+	if (!s_key)
 		return false;
 
-	
-	int i, j, t;
+	int     my_string_length    = strlen(my_string);
+	int     i                   = s_key_length-1;
+    char    key_char;
+    char    string_char;
 
-	
-	char key_char, string_char;
-
-	
-	int my_string_length = strlen(my_string);
-
-	
-	for (i = m_key_length-1, j = m_key_length - 1; j >= 0; i--, j--)
+	for (int j = s_key_length - 1; j >= 0; i--, j--)
 	{
-		
-		key_char = m_key[j];
-		string_char = my_string[i];
-
-		
-		if (!m_case_sensitive)
+		if (s_case_sensitive)
+        {
+            key_char    = s_key[j];
+            string_char = my_string[i];
+        }
+        else
 		{
-			
-			key_char = tolower(key_char);
-			string_char = tolower(string_char);
-
+			key_char    = static_cast<char>(tolower(s_key[j]));
+			string_char = static_cast<char>(tolower(my_string[i]));
 		} 
 
-		
 		while (string_char != key_char)
 		{
-			
+			int t = s_skip_table[string_char];
 
-			t = m_skip_table[(int)string_char];
+			i += (s_key_length-j > t) ? s_key_length-j : t;
 
-			
-			i += (m_key_length-j > t) ? m_key_length-j : t;
-
-			
 			if (i >= my_string_length)
 				return false;
 
-			
-			j = m_key_length - 1;
+			j   = s_key_length - 1;
 
-			
-			key_char = m_key[j];
-			string_char = my_string[i];
-
-			
-			if (!m_case_sensitive)
+			if (s_case_sensitive)
+            {
+			    key_char    = s_key[j];
+			    string_char = my_string[i];
+            }
+            else
 			{
-				
-				key_char = tolower(key_char);
-				string_char = tolower(string_char);
-
+				key_char    = static_cast<char>(tolower(s_key[j]));
+				string_char = static_cast<char>(tolower(my_string[i]));
 			} 
-
 		} 
-
 	} 
-
 	
 	return true;
 }
-
-
-
-
-
-
-
-
 
 
 void String_Search::Set_Case_Sensitive
@@ -185,24 +109,13 @@ void String_Search::Set_Case_Sensitive
 	bool case_sensitive
 )
 {
-	
-	m_case_sensitive = case_sensitive;
+	s_case_sensitive = case_sensitive;
 }
 
 
-
-
-
-
 #ifdef TEST_STRING_SEARCH
-
-
-
-
-
-void main()
+int main()
 {
-	
 	char my_string[1024];
 	char key[256];
 
@@ -231,9 +144,4 @@ void main()
 
 	} 
 }
-
-
-
-
-
 #endif 

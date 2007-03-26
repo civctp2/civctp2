@@ -76,16 +76,18 @@ SlicNamedSymbol::~SlicNamedSymbol()
 
 void SlicNamedSymbol::Serialize(CivArchive &archive)
 {
-	uint16 len;
-
-	if(archive.IsStoring()) {
+	if (archive.IsStoring()) 
+    {
 		archive.StoreChunk((uint8*)&m_index, (uint8*)&m_fromFile + sizeof(m_fromFile));
-		len = strlen(m_name);
-		archive << len;
+        size_t  len = strlen(m_name);
+		archive << static_cast<uint16>(len);
 		archive.Store((uint8*)m_name, len);
-	} else {
+	} 
+    else 
+    {
 		archive.LoadChunk((uint8*)&m_index, (uint8*)&m_fromFile + sizeof(m_fromFile));
-		archive >> len;
+        uint16 len;	
+        archive >> len;
 		m_name = new char[len + 1];
 		archive.Load((uint8*)m_name, len);
 		m_name[len] = 0;
@@ -209,10 +211,13 @@ BOOL SlicParameterSymbol::GetCity(Unit &c) const
 
 void SlicBuiltinNamedSymbol::Serialize(CivArchive &archive)
 {
-	if(archive.IsStoring()) {
-		archive.PutUINT8(m_builtin);
-	} else {
-		m_builtin = (SLIC_BUILTIN)archive.GetUINT8();
+	if (archive.IsStoring()) 
+    {
+		archive.PutUINT8(static_cast<uint8>(m_builtin));
+	} 
+    else 
+    {
+		m_builtin = static_cast<enum SLIC_BUILTIN>(archive.GetUINT8());
 	}
 
 	SlicNamedSymbol::Serialize(archive);

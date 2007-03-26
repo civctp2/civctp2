@@ -46,7 +46,7 @@ class aui_Surface;
 
 int ui_Initialize(void);
 int ui_Process(void);
-BOOL ui_CheckForScroll(void);
+bool ui_CheckForScroll(void);
 
 sint32 sharedsurface_Initialize( void );
 void   sharedsurface_Cleanup( void );
@@ -59,8 +59,6 @@ int tile_Initialize(BOOL isRestoring);
 void tile_Cleanup(void);
 
 int WINAPI main_filehelper_GetOS(void);
-DWORD main_GetRemainingSwapSpace(void);
-BOOL main_VerifyRAMToRun(void);
 
 int main_Restart();
 int main_RestoreGame(const MBCHAR *filename);

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : The window of the Great Libary
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -79,21 +79,17 @@ public:
 	};
 
 	
-	char * GetIconRecText( int database, int item,
-		uint8 historical);
+	char const * GetIconRecText(int database, int item, uint8 historical);
+	char const * GetHistoricalText( int database, int item );
+	char const * GetGameplayText( int database, int item );
+	char const * GetRequirementsText( int database, int item );
+	char const * GetVariablesText( int database, int item );
 
-	
-	char * GetHistoricalText( int database, int item );
-	char * GetGameplayText( int database, int item );
-	char * GetRequirementsText( int database, int item );
-	char * GetVariablesText( int database, int item );
-
-	
 	sint32 SetTechMode ( sint32 mode, DATABASE database );
-	sint32 GetTechMode ( void ) { return m_mode; };
+	sint32 GetTechMode ( void ) const { return m_mode; };
 
 	void SetTechDatabase( DATABASE database ) { m_database = database; }
-	DATABASE GetTechDatabase( void ) { return m_database; }
+	DATABASE GetTechDatabase( void ) const { return m_database; }
 
 	sint32 LoadText( ctp2_HyperTextBox *textbox, char *filename, SlicObject &so );
 	sint32 LoadHistoricalText( SlicObject &so );
@@ -115,7 +111,6 @@ public:
 	char	m_variable_file[_MAX_PATH];
 
 private:
-
 	sint32					m_mode;
 	DATABASE				m_database;
 
@@ -129,7 +124,6 @@ private:
 	ctp2_HyperTextBox		*m_techRequirementsText;
 	ctp2_HyperTextBox		*m_techVariablesText;
 	DirectVideo				*m_techMovie;
-
 };
 
 

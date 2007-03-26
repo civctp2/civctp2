@@ -40,13 +40,15 @@ class ChatBox;
 class ChatWindow : public C3Window
 {
 public:
-	ChatWindow(
-		AUI_ERRCODE *retval,
-		uint32 id,
-		MBCHAR *ldlBlock,
-		sint32 bpp,
-		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD);
-
+	ChatWindow
+    (
+		AUI_ERRCODE *   retval,
+		uint32          id,
+		MBCHAR *        ldlBlock,
+		sint32          bpp,
+		AUI_WINDOW_TYPE type    = AUI_WINDOW_TYPE_STANDARD,
+        ChatBox *       parent  = NULL
+    );
 	virtual ~ChatWindow();
 
 	virtual AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
@@ -58,11 +60,9 @@ public:
 	BOOL CheckForEasterEggs(MBCHAR *s);
 
 	
-	c3_HyperTextBox		*GetTextBox(void) { return m_textBox; }
-	C3TextField			*GetTextField(void) { return m_textField; }
-
-	void				SetChatBox(ChatBox *box) { m_chatBox = box; }
-	ChatBox				*GetChatBox(void) { return m_chatBox; }
+	c3_HyperTextBox	*   GetTextBox(void) const { return m_textBox; }
+	C3TextField	*       GetTextField(void) const { return m_textField; }
+	ChatBox	*           GetChatBox(void) const { return m_chatBox; }
 
 	void				ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF colorRef);
 

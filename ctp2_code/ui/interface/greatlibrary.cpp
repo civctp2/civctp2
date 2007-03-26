@@ -146,8 +146,7 @@ void GreatLibrary::Initialize_Great_Library_Data()
     const int GREAT_LIBRARY_HASH_SIZE = 2000;
 
     allocated::reassign(s_great_library_info, 
-                        new Text_Hasher<char *> 
-                           (GREAT_LIBRARY_HASH_SIZE, NULL)
+                        new Text_Hasher<char *>(GREAT_LIBRARY_HASH_SIZE, NULL)
                        );
 
     Load_Great_Library();
@@ -349,7 +348,6 @@ void GreatLibrary::Load_Great_Library()
 
 					if (ch == ']')
 					{
-						
 						the_entry[entry_pos] = 0;
 
 #if !defined(_JAPANESE)
@@ -360,31 +358,23 @@ void GreatLibrary::Load_Great_Library()
 						{
 							*end_ptr = 0;
 
-							
-							char * name_copy = new char[strlen(the_name)+1];
-							char * entry_copy = new char[strlen(the_entry)+1];
-							strcpy(name_copy, the_name);
-							strcpy(entry_copy, the_entry);
-							name_copy[strlen(the_name)] = 0;
-							entry_copy[strlen(the_entry)] = 0;
+							size_t  nameLength  = strlen(the_name);
+							char *  name_copy   = new char[nameLength + 1];
+                            strcpy(name_copy, the_name);
+							name_copy[nameLength] = 0;
 
-							
-							for (unsigned int j = 0; j < strlen(name_copy); j++)
-								name_copy[j] = tolower(name_copy[j]);
+                            size_t  entryLength = strlen(the_entry);
+							char *  entry_copy  = new char[entryLength + 1];
+                            strcpy(entry_copy, the_entry);
+							entry_copy[entryLength] = 0;
 
-							
-							s_great_library_info->Add_To_Hash_Table(
-								name_copy,
-								entry_copy
-								);
-
+							s_great_library_info->Add_To_Hash_Table
+                                (name_copy, entry_copy);
 							
 							reading_what = LOOKING_FOR_NAME;
 						}
-						
 						else
 						{
-							
 							reading_what = IN_TEXT;
 						}
 
@@ -2287,65 +2277,39 @@ int GreatLibrary::Get_Database_Size(int the_database)
 //----------------------------------------------------------------------------
 void GreatLibrary::Search_Great_Library()
 {
-	
-	const int MAX_SEARCH_KEY = 100;
-
-	
-	char search_key[MAX_SEARCH_KEY];
-
-	
-	char * gameplay_text = NULL;
-	char * historical_text = NULL;
-	char * title_text = NULL;
-	char * requirements_text = NULL;
-	char * variables_text = NULL;
-
-	
-	Great_Library_Item current;
-
-	
-	bool match = false;
-
-	
-	m_search_results.erase( 
-		m_search_results.begin(), 
-		m_search_results.end()
-		);
-
-
-	
+	const int   MAX_SEARCH_KEY              = 100;
+	char        search_key[MAX_SEARCH_KEY];
 	m_search_word->GetFieldText(search_key, MAX_SEARCH_KEY);
 
-	
-	String_Search::Set_Case_Sensitive(false);
-	
-	
+    String_Search::Set_Case_Sensitive(false);
 	String_Search::Set_Search_Key(search_key);
 
+	Great_Library_Item  current;
+	m_search_results.clear();
 	
 	for (int i = DATABASE_UNITS; i < DATABASE_SEARCH; i++)
 	{
 		for (int j = 0; j < Get_Database_Size(i); j++)
 		{
-			match = false;
+			bool match = false;
 
-			gameplay_text = m_window->GetGameplayText(i, j);
+			char const * gameplay_text = m_window->GetGameplayText(i, j);
 			if (gameplay_text)
 				match |= String_Search::Search(gameplay_text);
 
-			historical_text = m_window->GetHistoricalText(i, j);
+			char const * historical_text = m_window->GetHistoricalText(i, j);
 			if (historical_text)
 				match |= String_Search::Search(historical_text);
 
-			title_text = const_cast<char*>(GetObjectName(i, j));
+			char const * title_text = GetObjectName(i, j);
 			if (title_text)
 				match |= String_Search::Search(title_text);
 
-			requirements_text = m_window->GetRequirementsText(i, j);
+			char const * requirements_text = m_window->GetRequirementsText(i, j);
 			if (requirements_text)
 				match |= String_Search::Search(requirements_text);
 
-			variables_text = m_window->GetVariablesText(i, j);
+			char const * variables_text = m_window->GetVariablesText(i, j);
 			if (variables_text)
 				match |= String_Search::Search(variables_text);
 			

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : The Slic Engine
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,8 +29,14 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef __SLIC_ENGINE_H__
-#define __SLIC_ENGINE_H__
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
+#ifndef SLIC_ENGINE_H__
+#define SLIC_ENGINE_H__
+
+#include <string>       // std::string
 
 class SlicEngine;
 
@@ -61,9 +67,6 @@ enum SLIC_TAG
 #define k_NON_TUTORIAL_HELP_CLASS 667
 
 #define k_MAX_TRIGGER_KEYS 10
-
-extern SlicEngine *g_slicEngine;
-
 
 class SlicObject;
 class CivArchive;
@@ -106,52 +109,8 @@ typedef sint32 AdvanceType;
 #include "player.h"             // PLAYER_INDEX
 
 
-class SlicEngine {
-private:
-	BOOL m_tutorialActive;
-	PLAYER_INDEX m_tutorialPlayer;
-	Message *m_currentMessage;
-
-	SlicSegmentHash *m_segmentHash;
-	StringHash<SlicFunc> *m_functionHash;
-	StringHash<SlicUITrigger> *m_uiHash;
-	StringHash<SlicDBInterface> *m_dbHash;
-
-	SlicSymTab *m_symTab;
-	SlicObject *m_context;
-
-	SlicModFunc *m_modFunc[mod_MAX];
-
-	PointerList<SlicSegment> *		m_triggerLists[TRIGGER_LIST_MAX];
-	PointerList<SlicRecord> *		m_records[k_MAX_PLAYERS];
-	sint32                          m_timer[k_NUM_TIMERS];
-	SimpleDynamicArray<sint32> *	m_disabledClasses;
-	PointerList<SlicObject> *		m_uiExecuteObjects;
-	Message							m_eyepointMessage;
-
-	MBCHAR m_triggerKey[k_MAX_TRIGGER_KEYS];
-	sint32 m_timerGranularity;
-
-	BOOL m_doResearchOnUnblank;
-	sint32 m_researchOwner;
-	MBCHAR m_researchText[256];
-
-	StringHash<SlicConst> *m_constHash;
-
-	
-	SlicSymbolData const **     m_builtins;
-	SlicStructDescription **m_builtin_desc;
-
-	char *m_loadGameName;
-	MBCHAR m_currentKeyTrigger;
-	bool m_blankScreen;
-
-	bool m_atBreak;
-	SlicObject *m_breakContext;
-
-	PointerList<SlicObject> *   m_contextStack;
-	bool                        m_breakRequested;
-
+class SlicEngine 
+{
 public:
 	SlicEngine();
 	SlicEngine(CivArchive &archive);
@@ -173,7 +132,7 @@ public:
 	void Execute(SlicObject *obj);
 
 	void AddBuiltinFunctions();
-	bool Load(MBCHAR * filename, sint32 filenum);
+    bool Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum);
 	void Link();
 
 	sint32 GetTutorialPlayer() const { return m_tutorialPlayer; }
@@ -350,6 +309,55 @@ public:
 	sint32 CallMod(MOD_FUNC modFunc, sint32 def, ...);
 
 	sint32 CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 player);
+
+    static bool Reload(std::basic_string<MBCHAR> const & a_File);
+
+private:
+	BOOL m_tutorialActive;
+	PLAYER_INDEX m_tutorialPlayer;
+	Message *m_currentMessage;
+
+	SlicSegmentHash *m_segmentHash;
+	StringHash<SlicFunc> *m_functionHash;
+	StringHash<SlicUITrigger> *m_uiHash;
+	StringHash<SlicDBInterface> *m_dbHash;
+
+	SlicSymTab *m_symTab;
+	SlicObject *m_context;
+
+	SlicModFunc *m_modFunc[mod_MAX];
+
+	PointerList<SlicSegment> *		m_triggerLists[TRIGGER_LIST_MAX];
+	PointerList<SlicRecord> *		m_records[k_MAX_PLAYERS];
+	sint32                          m_timer[k_NUM_TIMERS];
+	SimpleDynamicArray<sint32> *	m_disabledClasses;
+	PointerList<SlicObject> *		m_uiExecuteObjects;
+	Message							m_eyepointMessage;
+
+	MBCHAR m_triggerKey[k_MAX_TRIGGER_KEYS];
+	sint32 m_timerGranularity;
+
+	BOOL m_doResearchOnUnblank;
+	sint32 m_researchOwner;
+	MBCHAR m_researchText[256];
+
+	StringHash<SlicConst> *m_constHash;
+
+	
+	SlicSymbolData const **     m_builtins;
+	SlicStructDescription **m_builtin_desc;
+
+	char *m_loadGameName;
+	MBCHAR m_currentKeyTrigger;
+	bool m_blankScreen;
+
+	bool m_atBreak;
+	SlicObject *m_breakContext;
+
+	PointerList<SlicObject> *   m_contextStack;
+	bool                        m_breakRequested;
 };
+
+extern SlicEngine * g_slicEngine;
 
 #endif

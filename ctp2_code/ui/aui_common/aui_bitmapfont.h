@@ -1,28 +1,57 @@
-/*
-	fixed for japanese by t.s. 2003.12
-		add uint16 GlyphInfo->c2
-			BOOL IsCached( uint16 c )
-		extract GlyphInfo m_glyphs
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// Generate extra debug output
+//
+// _JAPANESE
+// Support SJIS characters
+// 
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added support for Japanese characters (by t.s. 2003-12)
+//
+//----------------------------------------------------------------------------
+//
+/// \file  aui_bitmapfont.h
+/// \brief Font handling
 
-*/
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef AUI_BITMAPFONT_H__
+#define AUI_BITMAPFONT_H__
 
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
 
+// #include <>      
 
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-#ifndef __AUI_BITMAPFONT_H__
-#define __AUI_BITMAPFONT_H__
-
-
-#include "aui_base.h"
-#include "tech_wllist.h"
-#include "aui_surface.h"
-
+class aui_BitmapFont;
 
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT		0x00000001 
 #define k_AUI_BITMAPFONT_DRAWFLAG_JUSTRIGHT		0x00000002
@@ -32,18 +61,26 @@
 #define k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER	0x00000020
 #define k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP		0x00000040
 
-
-
-
 #define k_AUI_BITMAPFONT_SURFACEWIDTH		512
-
 
 #define k_AUI_BITMAPFONT_MAXSTRLEN			4096
 
-
 #define k_AUI_BITMAPFONT_MAXDESCLEN			(2*MAX_PATH)
 
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
+#include "aui_base.h"       // aui_Base
+#include "aui_surface.h"    // aui_Surface
+#include "ctp2_inttypes.h"  // uint8, uint16, sint32
+#include "freetype.h"       // TT_...
+#include "tech_wllist.h"
+// AUI_ERRCODE, COLORREF, MBCHAR, POINT, RECT
+
+//----------------------------------------------------------------------------
+// Declarations
+//----------------------------------------------------------------------------
 
 class aui_BitmapFont : public aui_Base
 {
@@ -77,9 +114,9 @@ public:
 	AUI_ERRCODE Unload( void );
 
 	
-	BOOL IsLoaded( void ) const { return m_ttFace.z != NULL; }
+	bool IsLoaded( void ) const { return m_ttFace.z != NULL; }
 	
-	BOOL HasCached( void ) const { return m_surfaceList->L() != 0; }
+	bool HasCached( void ) const { return m_surfaceList->L() != 0; }
 
 	
 	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_descriptor; }
@@ -87,7 +124,7 @@ public:
 
 	
 	MBCHAR		*GetTTFFile( void ) const { return (MBCHAR *)m_ttffile; }
-	AUI_ERRCODE	SetTTFFile( MBCHAR *ttffile );
+	AUI_ERRCODE	SetTTFFile( MBCHAR const * ttffile );
 	sint32		GetPointSize( void ) const { return m_pointSize; }
 	AUI_ERRCODE	SetPointSize( sint32 pointSize );
 	sint32		GetBold( void ) const { return m_bold; }
@@ -148,9 +185,9 @@ public:
 		sint32 underline = 0,
 		sint32 *ascend = NULL,	
 		sint32 *descend = NULL,	
-		BOOL wrap = FALSE,
-		BOOL midWordBreaks = FALSE, 
-		BOOL modWordBreaksOnly = FALSE ); 
+		bool wrap = false,
+		bool midWordBreaks = false, 
+		bool modWordBreaksOnly = false ); 
 
 	
 	
@@ -161,8 +198,8 @@ public:
 		sint32 *descend,
 		const MBCHAR **start,
 		const MBCHAR *stop,
-		BOOL midWordBreaks = FALSE,
-		BOOL midWordBreaksOnly = FALSE );
+		bool midWordBreaks = false,
+		bool midWordBreaksOnly = false );
 
 	
 	
@@ -180,7 +217,7 @@ public:
 		sint32 underline = 0 );
 
 	
-	BOOL TruncateString( MBCHAR *name, sint32 width );
+	bool TruncateString( MBCHAR *name, sint32 width );
 
 #ifdef _DEBUG
 	void DumpCachedSurfaces( aui_Surface *destSurf = NULL );
@@ -200,12 +237,12 @@ protected:
 	
 	
 #if !defined(_JAPANESE)
-	BOOL IsCached( MBCHAR c )
+	bool IsCached( MBCHAR c ) const
 	{ return m_glyphs[ (uint16)uint8(c) ].surface != NULL; }
 #else
-	BOOL IsCached( MBCHAR c )
+	bool IsCached( MBCHAR c ) const
 	{ return IsCached( (uint16)uint8(c) ); }
-	BOOL IsCached( uint16 c )
+	bool IsCached( uint16 c ) const
 	{ return m_glyphs[ c ].surface != NULL; }
 #endif
 
@@ -235,10 +272,9 @@ protected:
 	sint32 m_lineSkip;	
 	sint32 m_tabSkip;	
 
-	static sint32 m_bitmapFontRefCount;
+	static sint32           s_bitmapFontRefCount;
+	static TT_Engine	      s_ttEngine;
 
-	
-	static TT_Engine	m_ttEngine;
 	TT_Face				m_ttFace;
 	TT_Face_Properties	m_ttFaceProperties;
 	TT_Instance			m_ttInstance;

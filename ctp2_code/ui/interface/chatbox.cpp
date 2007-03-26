@@ -91,26 +91,21 @@ ChatBox::ChatBox()
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	m_chatWindow = new ChatWindow(&errcode, aui_UniqueId(), "ChatWindow", 16,
-									AUI_WINDOW_TYPE_FLOATING);
+									AUI_WINDOW_TYPE_FLOATING, this);
 	Assert(AUI_NEWOK(m_chatWindow, errcode));
 	if (!m_chatWindow || errcode != AUI_ERRCODE_OK) return;
-
-	m_chatWindow->SetChatBox(this);
 
 	m_active = FALSE;
 }
 
 ChatBox::~ChatBox()
 {
-	if (!m_chatWindow) return;
-
-	if (m_active)
+	if (m_active && m_chatWindow)
+    {
 		g_c3ui->RemoveWindow(m_chatWindow->Id());
-
-	m_active = FALSE;
+    }
 
 	delete m_chatWindow;
-	m_chatWindow = NULL;
 }
 
 void ChatBox::AddText(MBCHAR *text)
@@ -168,21 +163,30 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 
 
 
-ChatWindow::ChatWindow(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, sint32 bpp,
-						AUI_WINDOW_TYPE type)
-:	C3Window(retval, id, ldlBlock, bpp, type)
+ChatWindow::ChatWindow
+(
+    AUI_ERRCODE *   retval, 
+    uint32          id, 
+    MBCHAR *        ldlBlock, 
+    sint32          bpp,
+	AUI_WINDOW_TYPE type,
+    ChatBox *       parent
+)
+:	
+    C3Window        (retval, id, ldlBlock, bpp, type),
+    m_textBox       (NULL),
+    m_textField     (NULL),
+    m_chatBox       (parent)
 {
 	*retval = InitCommonLdl(ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 ChatWindow::~ChatWindow()
 {
-	if (m_textBox)
-		delete m_textBox;
-	if (m_textField)
-		delete m_textField;
+	delete m_textBox;
+	delete m_textField;
+    // m_chatBox not deleted: reference only
 }
 
 AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
@@ -224,13 +228,11 @@ void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF 
 
 	destString[0] = '\0';
 
+	uint32 r = (colorRef & 0x000000FF);
+	uint32 g = (colorRef & 0x0000FF00) >> 8;
+	uint32 b = (colorRef & 0x00FF0000) >> 16;
+
 	MBCHAR		colorString[20];
-	uint32		r, g, b;
-
-	r = (colorRef & 0x000000FF);
-	g = (colorRef & 0x0000FF00) >> 8;
-	b = (colorRef & 0x00FF0000) >> 16;
-
 	sprintf(colorString, "<c:%u,%u,%u>", r, g, b); 
 	strcat(destString, colorString);
 	strcat(destString, srcString);
@@ -252,7 +254,8 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 	chatWindow->GetTextField()->SetFieldText("");
 
 	
-	if (strlen(str) == 0 || !strcmp(str, "\n")) {
+	if (strlen(str) == 0 || !strcmp(str, "\n")) 
+    {
 		chatWindow->GetChatBox()->SetActive(FALSE);
 		return;
 	}
@@ -290,28 +293,28 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 
 BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 {
-	if (!strcmp(s, "pacman")) {
+	if (!strcmp(s, "pacman")) 
+    {
 		return TRUE;
-	} else 
-	if (!strcmp(s, "toe")) {
-
+	} 
+    else if (!strcmp(s, "toe")) 
+    {
 		return TRUE;
-	} else
-	if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) {
-		sint32 i, n; 
+	} 
+    else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) 
+    {
 		extern BOOL gDone;
 		MSG	msg;
 
-		MBCHAR *temp = s+4;
-		while(isspace(*temp))
+		MBCHAR * temp = s+4;
+		while (isspace(*temp))
 			temp++;
 
-		n = atoi(temp);
+		sint32 n = atoi(temp);
 		
-		for (i=0; i<(n) && !gDone; i++) {
-			
+		for (sint32 i = 0; i < n && !gDone; i++) 
+        {
 			NewTurnCount::StartNextPlayer(false);
-			
 			
 			g_director->NextPlayer();
 			do {
@@ -342,9 +345,10 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		} 
 
 		return TRUE;
+    }
 #if 0
-	} else
-	if (!strcmp(s, "/A") && !g_network.IsActive()) {
+	else if (!strcmp(s, "/A") && !g_network.IsActive()) 
+    {
         if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
 			return TRUE;
 
@@ -372,58 +376,60 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			g_turn->InformMessages();
 		}
 		return TRUE;
+	} 
 #endif
-	} else
-	if (!strcmp(s, "/resetlos") && !g_network.IsActive()) {
-		sint32 i;
-		for(i = 0; i < k_MAX_PLAYERS; i++) {
-			if(g_player[i]) {
+    else if (!strcmp(s, "/resetlos") && !g_network.IsActive()) 
+    {
+		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
+        {
+			if (g_player[i]) 
+            {
 				g_player[i]->m_vision->SetTheWholeWorldUnexplored();
 			}
 		}
 		g_director->AddCopyVision();
+    }
 #if 0
-	} else
-	if(!strcmp(s, "/goodmode") && !g_network.IsActive()) {
+	else if(!strcmp(s, "/goodmode") && !g_network.IsActive()) 
+    {
 		extern sint32 g_placeGoodsMode;
 		g_placeGoodsMode = !g_placeGoodsMode;
+	}
 #endif
-	} else
-	if(!strcmp(s, "/reloadslic") && !g_network.IsActive()) {
-		sint32 p;
-		for(p = 0; p < k_MAX_PLAYERS; p++) {
-			if(g_player[p]) {
+	else if (!strcmp(s, "/reloadslic") && !g_network.IsActive()) 
+    {
+		for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
+        {
+			if (g_player[p]) 
+            {
 				g_player[p]->m_messages->KillList();
 			}
 		}
-
-		Assert(g_slicEngine);
-		delete g_slicEngine;
-		g_slicEngine = new SlicEngine;
-		if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE)) {
-			g_slicEngine->Link();
-		}
-	} else
-	if (!strncmp(s, "/exportmap", 10)) {
-		MBCHAR *temp = s + 11;
-		g_theWorld->ExportMap(temp);
+        
+        SlicEngine::Reload(g_slic_filename);
+	}
+	else if (!strncmp(s, "/exportmap", 10)) 
+    {
+		g_theWorld->ExportMap(s + 11);
 		return TRUE;
-	} else
-	if (!strncmp(s, "/importmap", 10)) {
-		MBCHAR *temp = s + 11;
-		
-		if (g_theWorld->ImportMap(temp)) {
+	} 
+    else if (!strncmp(s, "/importmap", 10)) 
+    {
+		if (g_theWorld->ImportMap(s + 11)) 
+        {
 			g_tiledMap->PostProcessMap();
 			g_tiledMap->Refresh();
 		}
 		return TRUE;
-	}  else
-	if(!strncmp(s, "/attach", 7) && !g_network.IsActive()) {
+	}  
+    else if(!strncmp(s, "/attach", 7) && !g_network.IsActive()) 
+    {
 		MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
-		if(*arg >= '0' && *arg <= '9') {
-			
+
+		if (isdigit(*arg)) 
+        {
 			sint32 player = atoi(arg);
 			if(g_network.IsActive()) {
 				Assert(g_network.IsLocalPlayer(player));
@@ -436,40 +442,34 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			
 			if (g_player[player])
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
-
-			
-			
-			
 		}
-	} else
-	if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) {
+	} 
+    else if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) 
+    {
 		MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
-		if(*arg >= '0' && *arg <= '9') {
-			
+
+		if (isdigit(*arg)) 
+        {
 			sint32 player = atoi(arg);
-			if(g_network.IsActive()) {
+			if (g_network.IsActive()) 
+            {
 				Assert(g_network.IsLocalPlayer(player));
 				if(!g_network.IsLocalPlayer(player))
 					return FALSE;
-				if(!g_network.IsHost())
-					g_player[player]->m_playerType = PLAYER_TYPE_NETWORK;
-				else
-					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
+
+                g_player[player]->m_playerType = 
+                    g_network.IsHost() ? PLAYER_TYPE_HUMAN : PLAYER_TYPE_NETWORK;
 			} else {
 				if(g_player[player])
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
 			}
-
-			
-			
-			
 		}
 	}
 #if 0
- else
-	if (!strncmp(s, "/demo", 5) && !g_network.IsActive()) {
+    else if (!strncmp(s, "/demo", 5) && !g_network.IsActive()) 
+    {
 		sint32 i, n; 
 		extern BOOL gDone;
 		MSG	msg;
@@ -524,29 +524,26 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		return TRUE;
 	} 
 #endif
-	else
-	if(!strncmp(s, "/resetstrings", 13)) {
-		sint32 i;
-		for(i = 0; i < k_MAX_PLAYERS; i++) {
-			if(g_player[i]) {
+	else if(!strncmp(s, "/resetstrings", 13)) 
+    {
+		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
+        {
+			if (g_player[i]) 
+            {
 				g_player[i]->m_civilisation->AccessData()->ResetStrings();
 			}
 		}
 	}
-    else
-
-	if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive()) {
-		
+    else if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive()) 
+    {
         if(g_graphicsOptions->IsArmyNameOn()){
 			g_graphicsOptions->ArmyNameOff();
         }
 		else
             g_graphicsOptions->ArmyNameOn();
 	}
-
-    else
-
-	if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) {
+    else if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) 
+    {
 		
         if(g_graphicsOptions->IsArmyTextOn()){
 			g_graphicsOptions->ArmyTextOff();
@@ -554,16 +551,15 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		else
             g_graphicsOptions->ArmyTextOn();
 	}
-
-    else
-	if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) {
-
+    else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) 
+    {
 		if(g_graphicsOptions->IsCellTextOn()){
 			g_graphicsOptions->CellTextOff();
         }
 		else
             g_graphicsOptions->CellTextOn();
 	}
+
 	return FALSE;
 }
 

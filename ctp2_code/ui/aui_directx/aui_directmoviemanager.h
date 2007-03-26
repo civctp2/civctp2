@@ -7,10 +7,12 @@
 
 
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
-
-#ifndef __AUI_DIRECTMOVIEMANAGER_H__
-#define __AUI_DIRECTMOVIEMANAGER_H__
+#ifndef AUI_DIRECTMOVIEMANAGER_H__
+#define AUI_DIRECTMOVIEMANAGER_H__
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 
@@ -25,7 +27,7 @@
 class aui_DirectMovieManager : public aui_MovieManager
 {
 public:
-	aui_DirectMovieManager( BOOL init = FALSE, BOOL initDirect = TRUE );
+	aui_DirectMovieManager(bool init = false, bool initDirect = true);
 	virtual ~aui_DirectMovieManager();
 
 	virtual aui_Movie	*Load( MBCHAR const *filename, C3DIR dir = C3DIR_DIRECT )

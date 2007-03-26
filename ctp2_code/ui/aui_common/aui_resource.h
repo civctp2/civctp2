@@ -188,21 +188,11 @@ aui_Resource<T>::aui_Resource()
 template<class T>
 aui_Resource<T>::~aui_Resource()
 {
-	if ( m_resourceList )
-	{
-		
-		
-		Assert( m_resourceList->L() == 0 );
+	Assert(!m_resourceList || (m_resourceList->L() == 0));
+	delete m_resourceList;
+    m_resourceList = NULL;
 
-
-
-
-
-		delete m_resourceList;
-		m_resourceList = NULL;
-	}
-
-	if ( !--m_resourceRefCount )
+	if (!--m_resourceRefCount)
 	{
 		ListPos position = m_pathList->GetHeadPosition();
 		for ( sint32 i = m_pathList->L(); i; i-- )
@@ -225,19 +215,13 @@ aui_Resource<T>::~aui_Resource()
 template<class T>
 AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
 {
-	Assert( path != NULL );
-	if ( !path ) return AUI_ERRCODE_INVALIDPARAM;
+	Assert(path);
+	if (!path) return AUI_ERRCODE_INVALIDPARAM;
 
-	uint32 len = strlen( path );
+	size_t len = strlen(path);
+	Assert((len > 0) && (len <= MAX_PATH));
+	if ((len <= 0) || (len > MAX_PATH)) return AUI_ERRCODE_INVALIDPARAM;
 
-	Assert( len != 0 );
-	if ( !len ) return AUI_ERRCODE_INVALIDPARAM;
-
-	Assert( len <= MAX_PATH );
-	if ( len > MAX_PATH ) return AUI_ERRCODE_INVALIDPARAM;
-
-	
-	
 	const MBCHAR *last = path + len - 1;
 	Assert( *last != FILE_SEPC );
 	while ( len && ( *last == FILE_SEPC )) {
@@ -287,8 +271,8 @@ AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 template<class T>
 T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 {
-	Assert( resName != NULL );
-	if ( !resName ) return NULL;
+	Assert(resName);
+	if (!resName) return NULL;
 
 	const MBCHAR *name;
 	MBCHAR tempName[MAX_PATH + 1];

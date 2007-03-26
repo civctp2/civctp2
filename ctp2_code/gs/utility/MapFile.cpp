@@ -367,20 +367,20 @@ bool MapFile::SaveUnits(FILE *outfile)
 	sint32 numCellsWithUnits = 0;
 	CivArchive archive;
 	archive.SetStore();
-	sint32 i;
 
-	sint16 x, y;
-	for(y = 0; y < g_theWorld->GetYHeight(); y++) {
-		for(x = 0; x < g_theWorld->GetXWidth(); x++) {
+	for (int y = 0; y < g_theWorld->GetYHeight(); y++) 
+    {
+		for (int x = 0; x < g_theWorld->GetXWidth(); x++) 
+        {
 			Cell *cell = g_theWorld->GetCell(x, y);
 			CellUnitList *units = cell->UnitArmy();
 			if(units) {
-				archive << x;
-				archive << y;
-				archive << units->Num();				
-				for(i = 0; i < units->Num(); i++) {
+				archive << static_cast<uint16>(x);
+				archive << static_cast<uint16>(y);
+				archive << static_cast<uint32>(units->Num());
+                for (sint32 i = 0; i < units->Num(); i++) {
 					archive.PutUINT8((uint8)units->Access(i).GetOwner());
-					archive << units->Access(i).GetType();
+					archive << static_cast<sint32>(units->Access(i).GetType());
 				}
 				numCellsWithUnits++;
 			}
@@ -424,22 +424,23 @@ bool MapFile::SaveImprovements(FILE *outfile)
 	}
 
 	
-	sint16 x, y;
 	sint32 numCells = 0;
 	CivArchive archive;
 	archive.SetStore();
-	sint32 i;
 
-	for(y = 0; y < g_theWorld->GetYHeight(); y++) {
-		for(x = 0; x < g_theWorld->GetXWidth(); x++) {
+	for (int y = 0; y < g_theWorld->GetYHeight(); y++) 
+    {
+		for (int x = 0; x < g_theWorld->GetXWidth(); x++) 
+        {
 			Cell *cell = g_theWorld->GetCell(x, y);
-			if(cell->GetNumDBImprovements() > 0) {
-				archive << x;
-				archive << y;
+			if (cell->GetNumDBImprovements() > 0) 
+            {
+				archive << static_cast<uint16>(x);
+				archive << static_cast<uint16>(y);
 				archive.PutUINT8((uint8)cell->GetNumDBImprovements());
-				for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-					sint32 type = cell->GetDBImprovement(i);
-					archive << type;
+				for (sint32 i = 0; i < cell->GetNumDBImprovements(); i++) 
+                {
+					archive << static_cast<sint32>(cell->GetDBImprovement(i));
 				}
 				numCells++;
 			}
@@ -511,9 +512,10 @@ bool MapFile::SaveVision(FILE *outfile)
 			return false;
 		}
 
-		sint16 x, y;
-		for(x = 0; x < w; x++) {
-			for(y = 0; y < h; y++) {
+		for(int x = 0; x < w; x++) 
+        {
+			for(int y = 0; y < h; y++) 
+            {
 				if(fwrite(&g_player[p]->m_vision->m_array[x][y], 1, sizeof(uint16), outfile) != sizeof(uint16))
 				{
 					
@@ -638,13 +640,11 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 
 	uint8 *civs = new uint8[m_chunk.m_size];
 	uint8 *ptr = civs;
-	uint32 *longPtr;
 
 	for (int i = 0; i < k_MAX_PLAYERS; i++)
 	{
-		longPtr = (uint32 *)ptr;
+		uint32 * longPtr = (uint32 *)ptr;
 
-		
 		if (g_player[i])
 		{
 			*longPtr = g_player[i]->m_civilisation->GetCivilisation();
@@ -708,11 +708,11 @@ bool MapFile::LoadMap(FILE *infile)
     while (!feof(infile)) 
     {
 		uint32 chunkId;
-		sint32 chunkSize;
 		sint32 r = fread(&chunkId, 1, sizeof(chunkId), infile);
 		if(r != sizeof(chunkId))
 			return feof(infile) ? true : false;
 		
+		sint32 chunkSize;
 		r = fread(&chunkSize, 1, sizeof(chunkSize), infile);
 		if(r != sizeof(chunkSize))
 		{
@@ -773,10 +773,9 @@ extern void gameinit_ResetMapSize();
 bool MapFile::LoadTerrain(uint8 *buf, sint32 size)
 {
 	sint32 pos = 0;
-	sint16 w, h;
 	sint16 x, y;
-	w = (sint16)g_theWorld->GetXWidth();
-	h = (sint16)g_theWorld->GetYHeight();
+	sint16 w = (sint16)g_theWorld->GetXWidth();
+	sint16 h = (sint16)g_theWorld->GetYHeight();
 
 	g_isCheatModeOn = TRUE;
 
@@ -816,7 +815,7 @@ bool MapFile::LoadTerrain(uint8 *buf, sint32 size)
 	PULLSHORT(w);
 	PULLSHORT(h);
 
-	BOOL yWrapOk = h % w == 0;
+	bool yWrapOk = (h % w == 0);
 
 	g_theWorld->Reset(w, h, yWrapOk ? g_theProfileDB->IsYWrap() : FALSE, g_theProfileDB->IsXWrap());
 	
