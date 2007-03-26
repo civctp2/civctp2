@@ -135,24 +135,26 @@ AUI_ERRCODE aui_TextBox::SetText(
 
 
 
-AUI_ERRCODE aui_TextBox::AppendText( MBCHAR *text )
+AUI_ERRCODE aui_TextBox::AppendText( MBCHAR const *text )
 {
-	return AppendText( text, k_AUI_UI_NOCOLOR );
+	return AppendText(text, k_AUI_UI_NOCOLOR);
 }
 
 
 
-AUI_ERRCODE aui_TextBox::AppendText(
-	MBCHAR *text,
-	COLORREF color,
-	sint32 bold,
-	sint32 italic )
+AUI_ERRCODE aui_TextBox::AppendText
+(
+	MBCHAR const *  text,
+	COLORREF        color,
+	sint32          bold,
+	sint32          italic 
+)
 {
 	Assert( text != NULL );
 	if ( !text ) return AUI_ERRCODE_INVALIDPARAM;
 
 	
-	if ( !strlen( text ) ) return AppendText( " ", color, bold, italic );
+	if ( !strlen( text ) ) return AppendText(" ", color, bold, italic );
 
 	
 	m_curColor = color;
@@ -176,11 +178,8 @@ AUI_ERRCODE aui_TextBox::AppendText(
 
 
 
-AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
+AUI_ERRCODE aui_TextBox::CalculateItems(MBCHAR const * text)
 {
-	
-	
-	
 	sint32 rangerValue = m_verticalRanger->GetValueY();
 	BOOL moveToEnd = rangerValue == m_verticalRanger->GetMaximumY();
 
@@ -197,8 +196,8 @@ AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
 	}
 
 	
-	MBCHAR *cur = text;
-	MBCHAR *stop = text + strlen( text );
+	MBCHAR const *  cur     = text;
+	MBCHAR const *  stop    = text + strlen( text );
 
 	
 	if ( cur == stop ) return AUI_ERRCODE_OK;
@@ -229,8 +228,7 @@ AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
 
 			if ( !length )
 			{
-				
-				MBCHAR *token = FindNextToken( cur, " \t\n", 1 );
+				MBCHAR const * token = FindNextToken(cur, " \t\n", 1);
 				if ( token )
 					length = token - cur + 1;
 				else
@@ -242,9 +240,9 @@ AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
 			if ( cur + length > stop ) length = stop - cur;
 
 			
-			MBCHAR tempChar = cur[ length ];
-			cur[ length ] = '\0';
-
+			MBCHAR * tempCopy = new MBCHAR[length + 1];
+            std::copy(cur, cur + length, tempCopy);
+            tempCopy[length] = '0';
 			
 			if ( ++m_numItems > k_AUI_TEXTBOX_MAXITEMS )
 			{
@@ -257,7 +255,7 @@ AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
 			}
 
 			
-			(*itemPtr)->SetText( cur );
+			(*itemPtr)->SetText(tempCopy);
 
 			
 			COLORREF color = m_curColor;
@@ -282,9 +280,6 @@ AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
 			
 			AddItem( (aui_Item *)*itemPtr++ );
 
-			
-			cur[ length ] = tempChar;
-
 			if ( ++m_curItem == k_AUI_TEXTBOX_MAXITEMS )
 			{
 				m_curItem = 0;
@@ -305,9 +300,9 @@ AUI_ERRCODE aui_TextBox::CalculateItems( MBCHAR *text )
 
 
 
-AUI_ERRCODE aui_TextBox::CalculateAppendedItems( MBCHAR *text )
+AUI_ERRCODE aui_TextBox::CalculateAppendedItems(MBCHAR const * text)
 {
-	return CalculateItems( text );
+	return CalculateItems(text);
 }
 
 
@@ -340,7 +335,7 @@ AUI_ERRCODE aui_TextBox::DrawThis(
 
 
 
-void aui_TextBox::SetTextFont( MBCHAR *ttffile )
+void aui_TextBox::SetTextFont(MBCHAR const *ttffile )
 {
 	aui_TextBase::SetTextFont( ttffile );
 

@@ -25,14 +25,14 @@ extern C3UI *g_c3ui;
 
 
 
-PatternBase::PatternBase( MBCHAR *ldlBlock, MBCHAR *pattern )
+PatternBase::PatternBase( MBCHAR const * ldlBlock, MBCHAR const * pattern)
 {
 	InitCommonLdl( ldlBlock, pattern );
 }
 
 
 
-PatternBase::PatternBase( MBCHAR *pattern )
+PatternBase::PatternBase( MBCHAR const * pattern)
 {
 	
 	m_srcX = 0;
@@ -46,7 +46,7 @@ PatternBase::PatternBase( MBCHAR *pattern )
 
 
 
-AUI_ERRCODE PatternBase::InitCommonLdl( MBCHAR *ldlBlock, MBCHAR *pattern )
+AUI_ERRCODE PatternBase::InitCommonLdl( MBCHAR const *ldlBlock, MBCHAR const *pattern )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -87,7 +87,7 @@ AUI_ERRCODE PatternBase::InitCommonLdl( MBCHAR *ldlBlock, MBCHAR *pattern )
 
 
 
-AUI_ERRCODE PatternBase::InitCommon( MBCHAR *pattern )
+AUI_ERRCODE PatternBase::InitCommon( MBCHAR const *pattern )
 {
 	if (pattern != NULL) {
 		m_pattern = g_c3ui->LoadPattern( pattern );

@@ -30,23 +30,20 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_textbase.h"
+
 #include "aui_ui.h"
 #include "aui_ldl.h"
 #include "aui_surface.h"
 #include "aui_bitmapfont.h"
-
-#include "aui_textbase.h"
-
-#include "StrDB.h"
-
-extern StringDB	*g_theStringDB;
+#include "StrDB.h"            // g_theStringDB
 
 
 
 aui_TextBase::aui_TextBase
 (
-	MBCHAR *        ldlBlock,
-	const MBCHAR *  text 
+	MBCHAR const *  ldlBlock,
+	MBCHAR const *  text 
 )
 {
 	InitCommonLdl(ldlBlock,	text);
@@ -56,7 +53,7 @@ aui_TextBase::aui_TextBase
 
 aui_TextBase::aui_TextBase
 (
-	const MBCHAR *  text,
+	MBCHAR const *  text,
 	uint32          maxLength 
 )
 {
@@ -78,7 +75,7 @@ aui_TextBase::aui_TextBase
 
 
 
-AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
+AUI_ERRCODE aui_TextBase::InitCommonLdl(MBCHAR const * ldlBlock, MBCHAR const * text)
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -121,8 +118,7 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 		shadowcolor = RGB( red, green, blue );
 	}
 
-	MBCHAR *fontname;
-	fontname = block->GetString( k_AUI_TEXTBASE_LDL_FONTNAME );
+	MBCHAR * fontname = block->GetString( k_AUI_TEXTBASE_LDL_FONTNAME );
 	if ( !fontname )
 		fontname = k_AUI_TEXTBASE_DEFAULT_FONTNAME;
 
@@ -343,7 +339,7 @@ AUI_ERRCODE	aui_TextBase::SetText2(MBCHAR *fmt,...)
 
 
 
-AUI_ERRCODE aui_TextBase::AppendText( MBCHAR *text )
+AUI_ERRCODE aui_TextBase::AppendText(MBCHAR const * text)
 {
 	Assert( text != NULL );
 	if ( !text ) return AUI_ERRCODE_INVALIDPARAM;
@@ -359,7 +355,7 @@ AUI_ERRCODE aui_TextBase::AppendText( MBCHAR *text )
 
 
 
-void aui_TextBase::SetTextFont( MBCHAR *ttffile )
+void aui_TextBase::SetTextFont(MBCHAR const * ttffile)
 {
 	if ( !ttffile ) return;
 	strncpy( m_textttffile, ttffile, MAX_PATH );
@@ -464,17 +460,21 @@ AUI_ERRCODE aui_TextBase::DrawThisText(
 
 
 
-uint32 aui_TextBase::FindNextWordBreak(
-	MBCHAR *text, HDC hdc, sint32 width )
+uint32 aui_TextBase::FindNextWordBreak
+(
+	MBCHAR const *  text, 
+    HDC             hdc, 
+    sint32          width 
+)
 {
-	Assert( text != NULL );
+	Assert(text);
 	if ( !text ) return 0;
 
 	uint32 totalLength = 0;	
 	sint32 totalSize = 0;	
 
-	MBCHAR *word = text;
-	while (MBCHAR * token = FindNextToken( word, " \t\n", 1 ) )
+	MBCHAR const *  word = text;
+	while (MBCHAR const * token = FindNextToken(word, " \t\n", 1 ))
 	{
 		SIZE wordSize = { 0, 0 };				
 		sint32 wordLength = token - word + 1;	
@@ -512,21 +512,23 @@ uint32 aui_TextBase::FindNextWordBreak(
 
 
 
-MBCHAR *aui_TextBase::FindNextToken(
-	MBCHAR *text, MBCHAR *tokenList, sint32 count )
+MBCHAR const * aui_TextBase::FindNextToken
+(
+	MBCHAR const *  text, 
+    MBCHAR *        tokenList, 
+    sint32          count 
+)
 {
-	Assert( text != NULL );
-	if ( !text ) return NULL;
-	Assert( tokenList != NULL );
-	if ( !tokenList ) return NULL;
+	Assert(text && tokenList);
+	if (!text || !tokenList) return NULL;
 
-	MBCHAR *tokenPtr = NULL;
+	MBCHAR const *  tokenPtr    = NULL;
+	MBCHAR *        charPtr     = tokenList;
 
-	MBCHAR *charPtr = tokenList;
-	for ( sint32 i = strlen( tokenList ); i; i-- )
+	for (size_t i = strlen(tokenList); i; i--)
 	{
-		MBCHAR *newTokenPtr = strchr( text, *charPtr++ );
-		if ( newTokenPtr )
+		MBCHAR const *  newTokenPtr = strchr(text, *charPtr++);
+		if (newTokenPtr)
 		{
 			if ( tokenPtr )
 			{
@@ -541,7 +543,7 @@ MBCHAR *aui_TextBase::FindNextToken(
 
 	if ( count > 1 && tokenPtr )
 	{
-		MBCHAR *nextTokenPtr = FindNextToken( tokenPtr + 1, tokenList, --count );
+		MBCHAR const *  nextTokenPtr = FindNextToken(tokenPtr + 1, tokenList, --count);
 		return nextTokenPtr ? nextTokenPtr : tokenPtr;
 	}
 	else

@@ -43,12 +43,11 @@ ns_Header::ns_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
 	MBCHAR *ldlBlock )
-	:
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
-	aui_Header()
+:
+	aui_ImageBase   (ldlBlock),
+	aui_TextBase    (ldlBlock, (MBCHAR const *) NULL),
+	aui_Header      (retval, id, ldlBlock)
 {
-	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -70,7 +69,6 @@ ns_Header::ns_Header(
 
 	*retval = CreateSwitches( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -81,13 +79,11 @@ ns_Header::ns_Header(
 	sint32 y,
 	sint32 width,
 	sint32 height )
-	:
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Header()
+:
+	aui_ImageBase   ((sint32) 0),
+	aui_TextBase    (NULL),
+	aui_Header      (retval, id, x, y, width, height)
 {
-	*retval = aui_Region::InitCommon( id, x, y, width, height );
-	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = aui_Control::InitCommon( NULL, NULL );
@@ -108,7 +104,6 @@ ns_Header::ns_Header(
 
 	*retval = CreateSwitches();
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

@@ -1,23 +1,19 @@
 
 
 #include "c3.h"
+#include "ctp2_Switch.h"
 
 #include "aui.h"
 #include "aui_ui.h"
 #include "aui_action.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
-
 #include "c3ui.h"
-#include "ctp2_Switch.h"
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
 
-#include "SlicEngine.h"
-
 extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
 
 
 ctp2_Switch::ctp2_Switch(
@@ -28,7 +24,7 @@ ctp2_Switch::ctp2_Switch(
 	void *cookie )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (MBCHAR const *)NULL ),
 	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
@@ -37,7 +33,6 @@ ctp2_Switch::ctp2_Switch(
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -65,7 +60,6 @@ ctp2_Switch::ctp2_Switch(
 
 	*retval = InitCommon(k_CTP2_SWITCH_DEFAULT_BEVELWIDTH);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

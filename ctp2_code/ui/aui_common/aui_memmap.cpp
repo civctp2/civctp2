@@ -26,16 +26,18 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "aui_memmap.h"
 
 #include "aui_image.h"
 #include "aui_sound.h"
 #include "aui_movie.h"
 
-#include "aui_memmap.h"
-
-
-
-aui_FileFormat *aui_MemMap::GetFileFormat( MBCHAR *filename )
+/// Create an aui_FileFormat object
+/// \param  filename The file to use  
+/// \return The created object (or NULL, when the file format is not supported).
+/// \remarks The format is derived from the extension of the file.
+/// \see C3MemMap::GetFileFormat for more supported extensions.
+aui_FileFormat * aui_MemMap::GetFileFormat(MBCHAR const * filename)
 {
 	MBCHAR extension[ 8 ];
 	if ( GetFileExtension( filename, extension ) )
@@ -51,28 +53,14 @@ aui_FileFormat *aui_MemMap::GetFileFormat( MBCHAR *filename )
 	return NULL;
 }
 
-
-//Added by Martin Gühmann
-
-//----------------------------------------------------------------------------
-//
-// Name       : aui_MemMap::ReleaseFileFormat
-//
-// Description: Deletes a aui_FileFormat object.
-//
-// Parameters : format - The aui_FileFormat object to delete.
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : The validy of format does not need to be checked.
-//              It is just a waste of time.
-//              Nulling format after deletion is unnecessary and
-//              causes harm here for some reasons.
-//
-//----------------------------------------------------------------------------
-void aui_MemMap::ReleaseFileFormat( aui_FileFormat *format )
+/// Delete an aui_FileFormat object
+/// \param  format  The object to delete
+/// \remarks Assumption: format is NULL, or has been created with GetFileFormat.
+///          Would have liked to make format an aui_FileFormat * & , so it could
+///          have been NULLed here. But this does not work with derived classes,
+///          and using templates might cause problems with MSVC6. So, the caller
+///          is now responsible for NULLing format.
+void aui_MemMap::ReleaseFileFormat(aui_FileFormat * format)
 {
-		delete format;
+	delete format;
 }

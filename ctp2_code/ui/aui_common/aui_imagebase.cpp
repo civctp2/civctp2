@@ -51,7 +51,7 @@ MBCHAR const *  aui_ImageBase::m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST
 
 aui_ImageBase::aui_ImageBase
 (
-	MBCHAR *        ldlBlock,
+	MBCHAR const *  ldlBlock,
 	bool            loadOnDemand 
 )
 :
@@ -93,12 +93,11 @@ aui_ImageBase::aui_ImageBase
 
 
 
-AUI_ERRCODE aui_ImageBase::InitCommonLdl(
-	MBCHAR *ldlBlock )
+AUI_ERRCODE aui_ImageBase::InitCommonLdl(MBCHAR const *ldlBlock)
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
-	Assert( block != NULL );
-	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+	Assert(block);
+	if (!block) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	if (block->GetAttributeType(k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED  ) == ATTRIBUTE_TYPE_INT)
 	{

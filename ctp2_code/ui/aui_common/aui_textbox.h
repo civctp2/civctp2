@@ -55,11 +55,11 @@ public:
 	virtual AUI_ERRCODE	SetText(
 		const MBCHAR *text,
 		uint32 maxlen = 0xffffffff );
-	virtual AUI_ERRCODE	AppendText( MBCHAR *text );
+	virtual AUI_ERRCODE	AppendText(MBCHAR const *text);
 
 	
 	virtual AUI_ERRCODE AppendText(
-		MBCHAR *text,
+		MBCHAR const *  text,
 		COLORREF color,
 		sint32 bold = 0,
 		sint32 italic = 0 );
@@ -70,13 +70,13 @@ public:
 		sint32 y = 0 );
 
 	
-	virtual void SetTextFont( MBCHAR *ttffile );
+	virtual void SetTextFont( MBCHAR const * ttffile );
 	virtual void SetTextFontSize( sint32 pointSize );
 
 protected:
 	
-	AUI_ERRCODE	CalculateItems( MBCHAR *text = NULL );
-	AUI_ERRCODE	CalculateAppendedItems( MBCHAR *text = NULL );
+	AUI_ERRCODE	CalculateItems(MBCHAR const * text = NULL);
+	AUI_ERRCODE	CalculateAppendedItems(MBCHAR const * text = NULL);
 
 	sint32		m_numItems;		
 	sint32		m_curItem;		

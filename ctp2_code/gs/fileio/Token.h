@@ -31,19 +31,17 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __TOKEN_H__
-#define __TOKEN_H__ 1
+#ifndef TOKEN_H__
+#define TOKEN_H__
 
-#define k_MAX_TOKEN_LEN _MAX_PATH
+class Token;
 
-#include "c3files.h"
-#include "dbtypes.h"
-
-enum TOKEN_TYPES { 
+enum TOKEN_TYPES 
+{ 
 	TOKEN_STRING,
 	TOKEN_QUOTED_STRING,
 	TOKEN_MISSING_QUOTE,
@@ -140,6 +138,10 @@ enum TOKEN_TYPES {
 	TOKEN_MAX
 };
 
+#define k_MAX_TOKEN_LEN _MAX_PATH
+
+#include "c3files.h"
+#include "dbtypes.h"
 class StringDB; 
 
 struct TokenData { 
@@ -147,8 +149,34 @@ struct TokenData {
 	char keyword[k_MAX_NAME_LEN]; 
 };
 
-class Token { 
+class Token 
+{ 
+public:
+	Token(char const * fn, C3DIR dir, sint32 a_Count = 0, TokenData * il = NULL);
+    /// @todo Remove when no longer referenced (backwards compatibility)
+	Token(char *fn, sint32, TokenData *il, C3DIR dir);
+	~Token(); 
+
+    static char const * GetKeyword(sint32 tok);
+    static bool IsWhitespace(char c);
+    static bool IsNumber(char const * str);
+    static bool ValidateAllTokens();
+
+	sint32 GetType() const;
+	void NextNumber();
+	void NextString();
+
+	bool    HandleImport(void);
+	void    CloseImport(void);
+
+	sint32 Next();
+	void GetString(char *str);
+	void GetNumber(sint32 &n); 
+	void GetFloat(double &n); 
 	
+	char const * ErrStr(); 
+	
+private:	
 	FILE			*m_fin;
 	char			m_filename[_MAX_PATH];
 	char			m_buf[k_MAX_TOKEN_LEN]; 
@@ -171,47 +199,19 @@ class Token {
 	sint32			m_savedLineNumber;
 	FILE			*m_savedFin;
 	
-public:
 	
-	Token(char *fn, C3DIR dir);
-	Token(char *fn, sint32, TokenData *il, C3DIR dir);
-	~Token(); 
-	sint32 IsWhitespace(const char c);
-	sint32 IsNumber(char *str);
-	sint32 GetType ();
-	void NextNumber();
-	void NextString();
-
-	sint32 HandleImport(void);
-	sint32 CloseImport(void);
-
-	sint32 Next();
-	void GetString (char *str);
-	void GetNumber (sint32 &n); 
-	void GetFloat(double &n); 
-	
-	char * ErrStr(); 
-	
-	sint32 ValidateAllTokens();
-	
-	char * GetKeyword(const sint32 tok) const;
-	
-	
-	friend sint32 token_ParseValNext(Token *aToken, const sint32 t, sint32 &val);
-	friend sint32 token_ParseFloatNext(Token *aToken, const sint32 t, double &val);
-	
+	friend bool token_ParseValNext(Token *aToken, sint32 t, sint32 &val);
+	friend bool token_ParseFloatNext(Token *aToken, sint32 t, double &val);
 };
 
 
-
-extern char *token_GetKeyword(const sint32 i);
-
-sint32	token_ParseKeywordNext(Token *aToken, const sint32 t);
-sint32	token_ParseValNext(Token *aToken, const sint32 t, sint32 &val);
-sint32  token_ParseFloatNext(Token *aToken, const sint32 t, double &val);
-sint32	token_ParseAnOpenBraceNext(Token *aToken);
-sint32	token_ParseAnCloseBraceNext(Token *aToken);
-sint32	token_ParseAnCloseBrace(Token *aToken);
-POINT	token_ParsePoint(Token *theToken);
+char const *    token_GetKeyword(sint32 i);
+bool            token_ParseKeywordNext(Token *aToken, sint32 t);
+bool            token_ParseValNext(Token *aToken, sint32 t, sint32 &val);
+bool            token_ParseFloatNext(Token *aToken, sint32 t, double &val);
+bool            token_ParseAnOpenBraceNext(Token *aToken);
+bool            token_ParseAnCloseBraceNext(Token *aToken);
+bool            token_ParseAnCloseBrace(Token *aToken);
+POINT           token_ParsePoint(Token *theToken);
 
 #endif

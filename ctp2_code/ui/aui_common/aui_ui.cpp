@@ -72,8 +72,7 @@ aui_UI::aui_UI(
 {
 	if (AUI_SUCCESS(*retval))
     {
-	    Assert( aui_Base::GetBaseRefCount() == 2 );
-        if (2 == aui_Base::GetBaseRefCount())
+        if (!g_ui)
         {
 	        g_ui = this;
         }
@@ -356,8 +355,9 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 	aui_Image *prevImage = m_image;
 
 	SetRect( &m_imageRect, x, y, x, y );
+    m_image = image;
 
-	if ((m_image = image))
+	if (m_image)
 	{
 		m_imageRect.right += m_image->TheSurface()->Width();
 		m_imageRect.bottom += m_image->TheSurface()->Height();
@@ -368,7 +368,7 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 			Assert( m_imageAreas != NULL );
 		}
 	}
-	else if ( m_imageAreas )
+	else
 	{
 		delete m_imageAreas;
 		m_imageAreas = NULL;
@@ -856,52 +856,41 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				windowDirtyList->Flush();
 				windowDirtyList->AddRect( &windowRect );
 				
-				if ((j = m_childList->L() - i))
+				ListPos remainPosition = tailPosition;
+				for (j = m_childList->L() - i; j > 0; --j)
 				{
-					
-					
-					
-					ListPos remainPosition = tailPosition;
-					for ( ; j; j-- )
+					aui_Window *remainWindow =
+						(aui_Window *) m_childList->GetPrev(remainPosition);
+
+					if ( !remainWindow->IsHidden() )
 					{
-						aui_Window *remainWindow =
-							(aui_Window *)m_childList->
-								GetPrev( remainPosition );
-
-						if ( !remainWindow->IsHidden() )
+						sint32 left = remainWindow->X() - windowX;
+						sint32 top = remainWindow->Y() - windowY;
+						RECT rect =
 						{
-							sint32 left = remainWindow->X() - windowX;
-							sint32 top = remainWindow->Y() - windowY;
-							RECT rect =
-							{
-								left,
-								top,
-								left + remainWindow->Width(),
-								top + remainWindow->Height()
-							};
+							left,
+							top,
+							left + remainWindow->Width(),
+							top + remainWindow->Height()
+						};
 
-							if (Rectangle_Clip( &rect, &windowRect ))
-							{
-								RECT srcRect = rect;
-								OffsetRect( &srcRect, -left, -top );
+						if (Rectangle_Clip( &rect, &windowRect ))
+						{
+							RECT srcRect = rect;
+							OffsetRect( &srcRect, -left, -top );
 
-								g_ui->TheBlitter()->StencilMixBlt16(
-									windowSurface, 
-									&rect,
-									NULL, 
-									&rect,
-									remainWindow->TheSurface(),
-									&srcRect,
-									windowStencil,
-									&rect);
-							}
-
-
+							g_ui->TheBlitter()->StencilMixBlt16(
+								windowSurface, 
+								&rect,
+								NULL, 
+								&rect,
+								remainWindow->TheSurface(),
+								&srcRect,
+								windowStencil,
+								&rect);
 						}
 					}
 				}
-
-
 
 #if 0
 				if ( m_colorAreas || m_imageAreas )
@@ -1990,8 +1979,8 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 		
 		
 		
-		BOOL moveCount = 0;
-		sint32 i;
+		sint32  moveCount = 0;
+		sint32  i;
 		for ( i = numEvents - 1; i; i--, thisEvent++ )
 		{
 			
@@ -2003,22 +1992,25 @@ AUI_ERRCODE aui_UI::TagMouseEvents( sint32 numEvents, aui_MouseEvent *events )
 			}
 			else
 			{
-				
-				for ( sint32 j = moveCount; ((baseEvent++)->movecount = j); j-- );
+				for (sint32 j = moveCount; j >= 0; j--)
+                {
+                    (baseEvent++)->movecount = j;
+                }
 
-				
 				moveCount = 0;
 			}
 		}
 
 		
-		for ( i = moveCount; ((baseEvent++)->movecount = i); i-- );
+		for (i = moveCount; i >= 0; i--)
+        {
+            (baseEvent++)->movecount = i;
+        }
 
-		
-		
-		
-
-		for ( i = numEvents - 1; ((events++)->framecount = i); i-- );
+		for (i = numEvents - 1; i >= 0; i--)
+        {
+            (events++)->framecount = i;
+        }
 	}
 
 	return AUI_ERRCODE_OK;

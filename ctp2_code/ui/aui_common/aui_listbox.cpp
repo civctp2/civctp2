@@ -361,8 +361,11 @@ AUI_ERRCODE aui_ListBox::Draw(
 
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
-	if ( !surface )
-		if ( !(surface = m_window->TheSurface()) ) return AUI_ERRCODE_OK;
+	if (!surface)
+    {
+		surface = m_window->TheSurface();
+        if (!surface) return AUI_ERRCODE_OK;
+    }
 
 	AUI_ERRCODE errcode = DrawThis( surface, x, y );
 

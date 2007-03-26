@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "c3slider.h"
 
 #include "aui.h"
 #include "aui_ldl.h"
@@ -38,26 +39,15 @@
 #include "aui_ranger.h"
 #include "aui_ldl.h"
 #include "aui_action.h"
-
 #include "c3thumb.h"
 #include "c3ui.h"
-#include "textbutton.h"
-#include "pattern.h"
-#include "c3ui.h"
-
-#include "primitives.h"
-
-#include "c3slider.h"
-
-#include "SlicEngine.h"
-
-extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
-
 #include "gamesounds.h"
-#include "soundmanager.h"
+#include "pattern.h"
+#include "primitives.h"
+#include "soundmanager.h"   // g_soundManager
+#include "textbutton.h"
 
-extern SoundManager		*g_soundManager;
+extern C3UI	*           g_c3ui;
 
 
 
@@ -69,7 +59,7 @@ C3Slider::C3Slider(
 	void *cookie )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (MBCHAR const *) NULL ),
 	aui_Ranger()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -99,7 +89,6 @@ C3Slider::C3Slider(
 
 	*retval = CreateThumb( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -150,7 +139,6 @@ C3Slider::C3Slider(
 
 	*retval = CreateThumb( NULL );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -402,6 +390,4 @@ void C3SliderButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
 				gamesounds_GetGameSoundID(sound), 0, 0);
 	}
-	return;
-
 }

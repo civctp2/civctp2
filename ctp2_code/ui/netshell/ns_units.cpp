@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer units list
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,69 +29,40 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "StrDB.h"
+#include "ns_units.h"
 
 #include "aui_stringtable.h"
+#include "StrDB.h"              // g_theStringDB
+#include "UnitRecord.h"         // g_theUnitDB
 
-#include "ns_units.h"
-#include "UnitRecord.h"
-
-
-ns_Units *g_nsUnits = NULL;
-
-
-extern StringDB *g_theStringDB;
-
-
+ns_Units *  g_nsUnits = NULL;
 
 ns_Units::ns_Units()
+:
+	m_noIndex       (NULL),
+    m_stringtable   (NULL)
 {
-	Assert( g_nsUnits == NULL );
-	if ( !g_nsUnits )
+	Assert(g_theUnitDB->NumRecords() <= k_UNITS_MAX);
+    sint32      numUnits    = 
+        std::min<sint32>(k_UNITS_MAX, g_theUnitDB->NumRecords());
+	m_noIndex = new sint32[numUnits];
+
+	AUI_ERRCODE errcode     = AUI_ERRCODE_OK;
+	m_stringtable = new aui_StringTable(&errcode, numUnits);
+	Assert(AUI_NEWOK(m_stringtable, errcode));
+	if (!AUI_NEWOK(m_stringtable,errcode)) return;
+
+	for (sint32 i = 0; i < numUnits; i++)
 	{
-		sint32 numUnits = g_theUnitDB->NumRecords();
+		StringId stringNum = g_theUnitDB->GetName(i);
+		m_stringtable->SetString(g_theStringDB->GetNameStr(stringNum), i);
 
-		
-		Assert( numUnits <= k_UNITS_MAX );
-		if ( numUnits > k_UNITS_MAX )
-			numUnits = k_UNITS_MAX;
-
-		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-		m_noIndex = new sint32[ numUnits ];
-		m_stringtable = new aui_StringTable( &errcode, numUnits );
-		Assert( AUI_NEWOK(m_stringtable,errcode) );
-		if ( !AUI_NEWOK(m_stringtable,errcode) ) return;
-
-		for ( sint32 i = 0; i < numUnits; i++ )
-		{
-			StringId stringNum = g_theUnitDB->GetName( i );
-			const MBCHAR *name = g_theStringDB->GetNameStr( stringNum );
-
-			m_stringtable->SetString( name, i );
-
-			m_noIndex[ i ] = g_theUnitDB->Get( i )->GetNoIndex();
-		}
-
-		g_nsUnits = this;
+		m_noIndex[i] = g_theUnitDB->Get(i)->GetNoIndex();
 	}
 }
 
-
-
 ns_Units::~ns_Units()
 {
-	if ( m_stringtable )
-	{
-		delete m_stringtable;
-		m_stringtable = NULL;
-	}
-
-	if ( m_noIndex )
-	{
-		delete m_noIndex;
-		m_noIndex = NULL;
-	}
-
-	g_nsUnits = NULL;
+	delete m_stringtable;
+	delete [] m_noIndex;
 }

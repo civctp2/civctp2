@@ -41,14 +41,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
-
-#include "c3files.h"
-
 #include "Token.h"
+
+#include "c3errors.h"
+#include "c3files.h"
 #include "ErrMsg.h"
 #include "Globals.h"
-#include "StrDB.h"
+#include "StrDB.h"              // g_theStringDB
 #ifndef __MAKESPR__
 #include "AdvanceRecord.h"
 #include "BuildingRecord.h"
@@ -58,17 +57,14 @@
 #include "japanese.h"
 #endif
 
-sint32 g_parse_line; 
-sint32 g_saved_parse_line;
-bool g_load_defaults;
-
 extern sint32 g_abort_parse; 
 
-extern StringDB *g_theStringDB;
+sint32      g_parse_line; 
+sint32      g_saved_parse_line;
+bool        g_load_defaults;
 
-TokenData g_allTokens [] = { 
-
-
+TokenData   g_allTokens [] = 
+{ 
 	// The string database and common
 	{TOKEN_STRING, "TOKEN_STRING"}, 
 	{TOKEN_QUOTED_STRING,"TOKEN_QUOTED_STRING"},   
@@ -176,89 +172,47 @@ TokenData g_allTokens [] = {
 	
 };
 
-char *token_GetKeyword(const sint32 i)
-
+char const * token_GetKeyword(sint32 i)
 { 
-	Assert(0 <= i); 
-	return  g_allTokens[i].keyword; 
+	Assert (0 <= i); 
+	return g_allTokens[i].keyword; 
 }
 
-sint32 Token::ValidateAllTokens()
-
-{  sint32 i; 
-
-for (i=0; i<TOKEN_MAX; i++) { 
-	if (g_allTokens[i].tok != i) { 
-		return FALSE; 
-	} 
-} 
-return TRUE;
-}
-
-
-
-
-
-
-
-
-Token::Token
-(
-    char *      fn, 
-    C3DIR       dir
-) 
-:	m_fin		        (c3files_fopen(dir, fn, "r")),
-    m_len               (0),
-	m_index             (0),
-	m_val_string_len    (0), 
-	m_current_type		(TOKEN_UNKNOWN), 
-	m_val_number        (0),
-	m_cur               (' '),
-    m_num_it            (0),
-	m_imported_tokens   (0),
-	m_dir				(dir),
-	m_importFile		(NULL),
-	m_savedLineNumber   (0),
-	m_savedFin			(NULL)
+bool Token::ValidateAllTokens()
 {
-	Assert(ValidateAllTokens()); 
-	
-	strcpy(m_filename, fn);
+    for (int i = 0; i <TOKEN_MAX; ++i) 
+    { 
+	  if (g_allTokens[i].tok != i) 
+        { 
+            return false; 
+        } 
+    } 
 
-    if (m_fin)
-	{
-		g_parse_line		= 0;
-		g_saved_parse_line	= 0;
-		Next();
-	}
-	else
-	{
-		c3errors_ErrorDialog("Token.cpp", "Could not open %s", m_filename); 
-		g_abort_parse		= TRUE; 
-	}
+    return true;
 }
 
 
 Token::Token
 (
-	 char *         fn,
-	 sint32         n, 
-	 TokenData *    it,
-	 C3DIR	        dir
+	 char const *   fn,
+	 C3DIR	        dir,
+	 sint32         a_ImportCount, 
+	 TokenData *    it
 ) 
-:	m_fin		        (c3files_fopen(dir, fn, "r")),
+:	
+    m_fin               (c3files_fopen(dir, fn, "r")),
     m_len               (0),
-	m_index             (0),
-	m_val_string_len    (0), 
-	m_current_type		(TOKEN_UNKNOWN), 
-	m_val_number        (0),
-	m_cur               (' '),
-    m_num_it            (n),
-	m_imported_tokens   (it),
-	m_dir				(dir),
-	m_importFile		(NULL),
-	m_savedLineNumber   (0),
-	m_savedFin			(NULL)
+    m_index             (0),
+    m_val_string_len    (0), 
+    m_current_type      (TOKEN_UNKNOWN),
+    m_val_number        (0),
+    m_cur               (' '),
+    m_num_it            (a_ImportCount),
+    m_imported_tokens   (it),
+    m_dir               (dir),
+    m_importFile		(NULL),
+    m_savedLineNumber   (0),
+    m_savedFin          (NULL)
 {
 	Assert(ValidateAllTokens()); 
 	
@@ -277,9 +231,47 @@ Token::Token
 	}
 }
 
+/// @todo Remove when no longer referenced
+/// This is the same as above: only the parameter order differs.
+Token::Token
+(
+	 char *         fn,
+	 sint32         n, 
+	 TokenData *    it,
+	 C3DIR	        dir
+) 
+:	m_fin		        (c3files_fopen(dir, fn, "r")),
+    m_len               (0),
+    m_index             (0),
+    m_val_string_len    (0), 
+    m_current_type      (TOKEN_UNKNOWN),
+    m_val_number        (0),
+    m_cur               (' '),
+    m_num_it            (n),
+    m_imported_tokens   (it),
+    m_dir               (dir),
+    m_importFile		(NULL),
+    m_savedLineNumber   (0),
+    m_savedFin          (NULL)
+{
+	Assert(ValidateAllTokens()); 
+	
+	strcpy(m_filename, fn);
+	
+	if (m_fin)
+	{
+		g_parse_line		= 0;
+		g_saved_parse_line	= 0;
+		Next();
+	}
+	else
+	{
+		c3errors_ErrorDialog("Token.cpp", "Could not open %s", m_filename); 
+		g_abort_parse		= TRUE; 
+	}
+}
 
 Token::~Token()
-
 { 
 	if (m_fin)
 	{
@@ -292,102 +284,69 @@ Token::~Token()
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-sint32 Token::IsNumber(char *str)
+// [<sign>] <one or more digits> [<decimal separator><one or more digits>]
+// OK      : "0", "-4", "+2.00"
+// not OK  : "five", "1E2", "+", "0.", ".3", "1 2"
+bool Token::IsNumber(char const * str)
 {
-	
-	
-	
 	if (*str == '-' || *str == '+')
-		str++ ;
-	
+		str++;
 	
 	if (!isdigit(*str++))
-		return (FALSE) ;
-	
+		return false;
 	
 	while (isdigit(*str))
-		str++ ;
-	
+		str++;
 	
 	if (0 == *str)
-		return (TRUE) ;
-	
+		return true;
 	
 	if (*str++ != '.')
-		return (FALSE) ;
-	
+		return false;
 	
 	if (!isdigit(*str++))
-		return (FALSE) ;
-	
+		return false;
 	
 	while (isdigit(*str))
-		str++ ;
+		str++;
 	
-	
-	if (*str)
-		return (FALSE) ;											
-	
-	return (TRUE) ;													
+	return (0 == *str);
 }
 
 
-sint32 Token::GetType ()
-
+sint32 Token::GetType() const
 { 
 	return m_current_type; 
 } 
 
 
 void Token::NextNumber()
-
 { 
 	m_current_type = TOKEN_NUMBER; 
 	m_val_number = atof(m_buf); 
 }
 
-sint32 Token::IsWhitespace(const char c) 
-
-{   return (c == ' ') || (c == '\t') || (c == 13) || (c == 10); 
+bool Token::IsWhitespace(char c)
+{   
+    return (c == ' ') || (c == '\t') || (c == 13) || (c == 10); 
 } 
 
 void Token::NextString()
-
 { 
-	sint32 i, searching = TRUE; 
+    bool searching = true; 
 	
-	for (i=TOKEN_UNKNOWN+1; i<TOKEN_MAX && searching; i++) { 
+	for (sint32 i=TOKEN_UNKNOWN+1; i<TOKEN_MAX && searching; i++) { 
 		if (strcmp(m_buf, g_allTokens[i].keyword) == 0) { 
 			m_current_type = i; 
-			searching = FALSE;
+			searching = false;
 		}
 	}
 	
 	if ((searching) && (m_num_it)) { 
-		for (i=0; i<m_num_it && searching ; i++) { 
+		for (sint32 i = 0; i<m_num_it && searching ; i++) { 
 			if (strcmp(m_buf, m_imported_tokens[i].keyword) == 0) { 
 				m_current_type = m_imported_tokens[i].tok; 
-				searching = FALSE;
+				searching = false;
 			}
 		}
 	}
@@ -399,15 +358,15 @@ void Token::NextString()
 	}
 } 
 
-sint32 Token::HandleImport(void)
+bool Token::HandleImport(void)
 {
-	MBCHAR		fileName[256];
-	
-	if (Next() != TOKEN_QUOTED_STRING) {
+	if (Next() != TOKEN_QUOTED_STRING) 
+    {
 		Assert(FALSE);
-		return 0;
+		return false;
 	}
 	
+	MBCHAR		fileName[_MAX_PATH];
 	GetString(fileName);
 	
 	g_saved_parse_line = g_parse_line;
@@ -419,31 +378,27 @@ sint32 Token::HandleImport(void)
 	m_savedFin = m_fin;
 	m_importFile = c3files_fopen(m_dir, fileName, "r");
 	
-	if (!m_importFile) { 
+	if (!m_importFile) 
+    { 
 		c3errors_ErrorDialog ("Token.cpp", "Could not open import file '%s'", fileName); 
-		g_abort_parse = TRUE; 
-		return 0;
+		g_abort_parse = TRUE;
+        return false;
 	}
-	
-	m_fin = m_importFile;
 
-	return 0;
+    m_fin = m_importFile;
+	return true;
 }
 
-sint32 Token::CloseImport(void)
+void Token::CloseImport(void)
 {
 	Assert(m_importFile);
-
 	fclose(m_importFile);
-
 	m_fin = m_savedFin;
 	m_savedFin   = NULL;	// for safe destruction
 	m_importFile = NULL;
 	strcpy(m_filename, m_savedFilename);
 	g_parse_line = g_saved_parse_line;
 	g_saved_parse_line = 0;
-
-	return 0;
 }
 
 sint32 Token::Next() 
@@ -580,39 +535,43 @@ sint32 Token::Next()
 		
 	}
 	
-	if (GetType() == TOKEN_IMPORT) {
-		if (m_importFile != NULL) {
+	if (GetType() == TOKEN_IMPORT) 
+    {
+		if (m_importFile) 
+        {
 			c3errors_FatalDialog("Token", "Nested import is not supported, nested import ignored.\n");
-			return Next();
-		} else {
-			HandleImport();
+		} 
+        else if (HandleImport())
+        {
 			m_cur = getc(m_fin);
-			return Next();
 		}
+
+		return Next();
 	}
 
-	if (GetType() == TOKEN_DO_NOT_IMPORT_DEFAULTS){
-			g_load_defaults = false;
-			return Next();
+	if (GetType() == TOKEN_DO_NOT_IMPORT_DEFAULTS) 
+    {
+		g_load_defaults = false;
+
+		return Next();
 	}
 	
 	return GetType(); 
 }
 
-void Token::GetString (char *str) 
+void Token::GetString(char * str) 
 {   
-	sint32 i; 
-
-	if ((m_current_type != TOKEN_STRING) && (m_current_type != TOKEN_QUOTED_STRING)) { 
-		c3errors_ErrorDialog (ErrStr(), "current type is not string");
-		g_abort_parse = TRUE; 
-		str[0] = 0; 
-		return;
-	} 
-	for (i=0; i<m_val_string_len; i++) { 
-		str[i] = m_val_string[i]; 
-	} 
-	str[i] = 0; 
+    if ((m_current_type == TOKEN_STRING) || (m_current_type == TOKEN_QUOTED_STRING))
+    {
+        std::copy(m_val_string, m_val_string + m_val_string_len, str);
+        str[m_val_string_len] = 0;
+    }
+    else
+    {
+        c3errors_ErrorDialog (ErrStr(), "current type is not string");
+        g_abort_parse = TRUE; 
+        str[0] = 0;
+    }
 } 
 
 void Token::GetFloat(double &n)
@@ -627,133 +586,132 @@ void Token::GetFloat(double &n)
 }
 
 
-void Token::GetNumber (sint32 &n)
-
+void Token::GetNumber(sint32 &n)
 { 
 	if (m_current_type != TOKEN_NUMBER) { 
 		c3errors_ErrorDialog (ErrStr(), "Token is not number"); 
 		g_abort_parse = TRUE; 
 	} 
+
 	n = (sint32)m_val_number; 
 } 
 
 
-char * Token::ErrStr()
-
+char const * Token::ErrStr()
 { 
-	sprintf (m_estr, "%s line %d:", m_filename, g_parse_line); 
+	sprintf(m_estr, "%s line %d:", m_filename, g_parse_line); 
 	return m_estr; 
 } 
 
-char * Token::GetKeyword(const sint32 tok) const
-
-{  return g_allTokens[tok].keyword;
+char const * Token::GetKeyword(sint32 tok)
+{  
+    return g_allTokens[tok].keyword;
 }
 
 
 
-sint32 token_ParseKeywordNext(Token *aToken, const sint32 t) 
-
+bool token_ParseKeywordNext(Token *aToken, sint32 t) 
 {
-	if (aToken->Next() != t) { 
-		return FALSE; 
-	} else { 
-		return TRUE; 
-	}
+    return aToken->Next() == t;
 }
 
 
 
-sint32 token_ParseValNext(Token *aToken, const sint32 t, sint32 &val)
-
+bool token_ParseValNext(Token *aToken, sint32 t, sint32 &val)
 {
-	if (!token_ParseKeywordNext(aToken, t)) { 
-		
-		if (TOKEN_MAX < t) { 
-			c3errors_ErrorDialog(aToken->ErrStr(), "Expected keword %s not found", aToken->m_imported_tokens[t - (TOKEN_MAX + 1)].keyword);
-		} else { 
-			c3errors_ErrorDialog(aToken->ErrStr(), "Expected keword %s not found", g_allTokens[t].keyword);
-		}
-		g_abort_parse = TRUE; 
-		return FALSE; 
-	} else { 
-		if (aToken->Next() != TOKEN_NUMBER) { 
-			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
-			g_abort_parse = TRUE; 
-			return FALSE;
-		} else { 
+    if (token_ParseKeywordNext(aToken, t)) 
+    { 
+		if (aToken->Next() == TOKEN_NUMBER) { 
 			aToken->GetNumber(val); 
-			return TRUE; 
-		}
-	}
-}
-
-
-
-sint32 token_ParseFloatNext(Token *aToken, const sint32 t, double &val)
-
-{
-	if (!token_ParseKeywordNext(aToken, t)) { 
-		
-		if (TOKEN_MAX < t) { 
-			c3errors_ErrorDialog(aToken->ErrStr(), "Expected keword %s not found", aToken->m_imported_tokens[t - (TOKEN_MAX + 1)].keyword);
+			return true; 
 		} else { 
-			c3errors_ErrorDialog(aToken->ErrStr(), "Expected keword %s not found", g_allTokens[t].keyword);
-		}
-		g_abort_parse = TRUE; 
-		return FALSE; 
-	} else { 
-		if (aToken->Next() != TOKEN_NUMBER) { 
 			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
-			g_abort_parse = TRUE; 
-			return FALSE;
-		} else { 
-			aToken->GetFloat(val); 
-			return TRUE; 
 		}
+    } 
+    else 
+    { 
+        TokenData & data = (TOKEN_MAX < t) 
+                           ? aToken->m_imported_tokens[t - (TOKEN_MAX + 1)]
+                           : g_allTokens[t];
+
+	    c3errors_ErrorDialog
+            (aToken->ErrStr(), "Expected keyword %s not found", data.keyword);
+    }
+
+    g_abort_parse = TRUE; 
+    return false; 
+}
+
+
+
+bool token_ParseFloatNext(Token *aToken, sint32 t, double &val)
+{
+    if (token_ParseKeywordNext(aToken, t)) 
+    { 
+		if (aToken->Next() == TOKEN_NUMBER) 
+        { 
+			aToken->GetFloat(val); 
+			return true; 
+		} 
+        else 
+        { 
+			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
+		}
+    } 
+    else 
+    { 
+        TokenData & data = (TOKEN_MAX < t) 
+                           ? aToken->m_imported_tokens[t - (TOKEN_MAX + 1)]
+                           : g_allTokens[t];
+
+	    c3errors_ErrorDialog
+            (aToken->ErrStr(), "Expected keyword %s not found", data.keyword);
 	}
+
+    g_abort_parse = TRUE; 
+    return false; 
 }
 
 
 
-sint32 token_ParseAnOpenBraceNext(Token *aToken)
-
+bool token_ParseAnOpenBraceNext(Token *aToken)
 {
-	if (aToken->Next() == TOKEN_OPEN_BRACE) { 
-		return TRUE; 
-	} else { 
-		c3errors_ErrorDialog(aToken->ErrStr(), "Expected open brace missing");
-		g_abort_parse = TRUE; 
-		return FALSE; 
-	} 
+    if (aToken->Next() == TOKEN_OPEN_BRACE) 
+    { 
+		return true; 
+    } 
+
+    c3errors_ErrorDialog(aToken->ErrStr(), "Expected open brace missing");
+    g_abort_parse = TRUE; 
+    return false; 
 }
 
 
 
-sint32 token_ParseAnCloseBraceNext(Token *aToken)
-
+bool token_ParseAnCloseBraceNext(Token *aToken)
 {
-	if (aToken->Next() == TOKEN_CLOSE_BRACE) { 
-		return TRUE; 
-	} else { 
-		c3errors_ErrorDialog(aToken->ErrStr(), "Expected close brace missing");
-		g_abort_parse = TRUE; 
-		return FALSE; 
-	} 
+    if (aToken->Next() == TOKEN_CLOSE_BRACE) 
+    { 
+		return true; 
+    } 
+
+    c3errors_ErrorDialog(aToken->ErrStr(), "Expected close brace missing");
+    g_abort_parse = TRUE; 
+    return false; 
 }
 
 
 
-sint32 token_ParseAnCloseBrace(Token *aToken)
-
+bool token_ParseAnCloseBrace(Token *aToken)
 {
-	if (aToken->GetType() == TOKEN_CLOSE_BRACE) { 
-		return TRUE; 
-	} else { 
-		c3errors_ErrorDialog(aToken->ErrStr(), "Expected close brace missing");
-		g_abort_parse = TRUE; 
-		return FALSE; 
-	} 
+    if (aToken->GetType() == TOKEN_CLOSE_BRACE) 
+    { 
+		return true; 
+    } 
+
+    c3errors_ErrorDialog(aToken->ErrStr(), "Expected close brace missing");
+    g_abort_parse = TRUE; 
+    return false; 
 }
 
 

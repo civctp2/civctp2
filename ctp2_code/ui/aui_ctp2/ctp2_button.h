@@ -52,7 +52,7 @@ public:
 				void *cookie = NULL) :
 	aui_Button(retval, id, ldlBlock, ActionFunc, cookie),
 		aui_ImageBase(ldlBlock),
-		aui_TextBase(ldlBlock, NULL)
+		aui_TextBase(ldlBlock, (MBCHAR const *) NULL)
 	{ *retval = InitCommonLdl(ldlBlock, NULL, 0, 0, 0, 0); }
 
 	
@@ -68,7 +68,7 @@ public:
 				void *cookie = NULL) :
 	aui_Button(retval, id, ldlBlock, ActionFunc, cookie),
 		aui_ImageBase(ldlBlock),
-		aui_TextBase(ldlBlock, NULL)
+		aui_TextBase(ldlBlock, (MBCHAR const *) NULL)
 	{ *retval = InitCommonLdl(ldlBlock, ldlTemplate,
 		x, y, width, height); }
 

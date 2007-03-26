@@ -33,7 +33,9 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ctp2_hypertextbox.h"
 
+#include <algorithm>
 #include "aui.h"
 #include "aui_ui.h"
 #include "aui_window.h"
@@ -41,31 +43,23 @@
 #include "aui_ldl.h"
 #include "aui_control.h"
 #include "aui_action.h"
-
-#include "c3ui.h"
 #include "c3_static.h"
 #include "c3_ranger.h"
+#include "c3ui.h"
+#include "colorset.h"
+#include "ctp2_listbox.h"
+#include "greatlibrary.h"
 #include "pattern.h"
 #include "patternbase.h"
 #include "pixelutils.h"
 #include "primitives.h"
-#include "ctp2_hypertextbox.h"
-#include "SlicEngine.h"
-#include "colorset.h"
-
-#include "ctp2_listbox.h"
-#include "greatlibrary.h"
 #include "screenutils.h"
 
-extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
+extern C3UI	*   g_c3ui;
 
 #define k_CTP2_HYPERTEXTBOX_BEVELWIDTH	2
 #define k_CTP2_HYPERTEXTBOX_INSETWIDTH	5
 
-extern C3UI *g_c3ui;
-
-#include <algorithm>
 
 namespace
 {
@@ -328,7 +322,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 
 	*retval = CreateRanger( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -358,7 +351,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 
 	*retval = CreateRanger( NULL );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

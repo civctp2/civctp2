@@ -41,7 +41,7 @@
 ctp2_TabGroup::ctp2_TabGroup(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
 							 ControlActionCallback *ActionFunc, void *cookie) :
 aui_ImageBase(ldlBlock),
-aui_TextBase(ldlBlock, NULL),
+aui_TextBase(ldlBlock, (MBCHAR const *) NULL),
 aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 m_currentTab(NULL)
 {

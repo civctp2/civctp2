@@ -48,8 +48,8 @@ aui_DirectSurface::aui_DirectSurface(
 
 	HRESULT hr;
 
-	
-	if ( !(m_lpdds = lpdds) )
+	m_lpdds = lpdds;
+	if (!m_lpdds)
 	{
 		if ( !lpdd )
 		{

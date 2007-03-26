@@ -18,9 +18,6 @@
 //
 // Compiler flags
 //
-// _MSC_VER
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -31,18 +28,14 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __AUI_TEXTBASE_H__
-#define __AUI_TEXTBASE_H__
+#ifndef AUI_TEXTBASE_H__
+#define AUI_TEXTBASE_H__
 
-
-class aui_Surface;
-class aui_BitmapFont;
-
-
+class aui_TextBase;
 
 #define k_AUI_TEXTBASE_DEFAULTMAXLENGTH			256
 #define k_AUI_TEXTBASE_DEFAULT_COLOR			RGB(255,255,255)
@@ -93,24 +86,33 @@ class aui_BitmapFont;
 #define k_AUI_TEXTBASE_LDL_VERTCENTER			"vertcenter"
 #define k_AUI_TEXTBASE_LDL_WORDWRAP				"wordwrap"
 
+#include "ctp2_inttypes.h"
+class aui_Surface;
+class aui_BitmapFont;
 
 
 class aui_TextBase
 {
 public:
 	
-	aui_TextBase(
-		MBCHAR *ldlBlock,
-		const MBCHAR *text );
-	aui_TextBase(
-		const MBCHAR *text = NULL,
-		uint32 maxLength = 0 );
+	aui_TextBase
+    (
+		MBCHAR const *  ldlBlock,
+		MBCHAR const *  text 
+    );
+	aui_TextBase
+    (
+		MBCHAR const *  text        = NULL,
+		uint32          maxLength   = 0 
+    );
 	virtual ~aui_TextBase();
 
 protected:
-	AUI_ERRCODE InitCommonLdl(
-		MBCHAR *ldlBlock,
-		const MBCHAR *text );
+	AUI_ERRCODE InitCommonLdl
+    (
+		MBCHAR const *  ldlBlock,
+		MBCHAR const *  text 
+    );
 	AUI_ERRCODE InitCommon(
 		const MBCHAR *text,
 		uint32 maxLength,
@@ -125,7 +127,7 @@ protected:
 		uint32 flags );
 
 public:
-	MBCHAR *GetText( void ) const { return (MBCHAR *)m_text; }
+	MBCHAR *GetText( void ) const { return m_text; }
 	virtual AUI_ERRCODE	SetText(
 		const MBCHAR *text,
 		uint32 len = 0xffffffff );
@@ -133,7 +135,7 @@ public:
 	
 	AUI_ERRCODE	SetText2(MBCHAR *fmt,...);
 
-	virtual AUI_ERRCODE	AppendText( MBCHAR *text );
+	virtual AUI_ERRCODE	AppendText(MBCHAR const * text);
 
 	COLORREF GetTextColor( void ) const { return m_textcolor; }
 	void SetTextColor( COLORREF color ) { m_textcolor = color; }
@@ -154,7 +156,7 @@ public:
 
 	
 	
-	virtual void SetTextFont( MBCHAR *ttffile );
+	virtual void SetTextFont(MBCHAR const * ttffile);
 	virtual void SetTextFontSize( sint32 pointSize );
 	void SetTextBold( sint32 bold );
 	void SetTextItalic( sint32 italic );
@@ -164,9 +166,13 @@ public:
 protected:
 	
 	static uint32 FindNextWordBreak(
-		MBCHAR *text, HDC hdc, sint32 width );
-	static MBCHAR *FindNextToken(
-		MBCHAR *text, MBCHAR *tokenList, sint32 count );
+		MBCHAR const *text, HDC hdc, sint32 width );
+	static MBCHAR const * FindNextToken
+    (
+		MBCHAR const *  text, 
+        MBCHAR *        tokenList, 
+        sint32          count 
+    );
 
 	AUI_ERRCODE DrawThisText(
 		aui_Surface *destSurf,

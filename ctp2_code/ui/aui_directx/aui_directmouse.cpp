@@ -51,7 +51,6 @@ aui_DirectMouse::aui_DirectMouse(
 	BOOL useExclusiveMode )
 :
 	aui_Mouse		(retval, ldlBlock),
-	aui_Input		(),
 	aui_DirectInput	(retval, useExclusiveMode)
 {
 	if ( !AUI_SUCCESS(*retval) ) return;

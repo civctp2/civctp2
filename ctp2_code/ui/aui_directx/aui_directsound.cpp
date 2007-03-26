@@ -41,31 +41,39 @@ aui_DirectSound::~aui_DirectSound()
 
 AUI_ERRCODE aui_DirectSound::Load( void ) 
 {
-	LPVOID pMem1, pMem2;
-	DWORD dwSize1, dwSize2;
-	HRESULT hr;
+    aui_SoundFormat *   format = static_cast<aui_SoundFormat *>(m_format);
+	Assert(format);
+	if (!format) return AUI_ERRCODE_INVALIDPARAM;
 
-	Assert ( m_format != NULL );
-	if ( !m_format ) return AUI_ERRCODE_INVALIDPARAM;
+	if (m_data) return AUI_ERRCODE_OK;
 
-	if ( m_data ) return AUI_ERRCODE_OK;
 
-	if ( m_format->LoadSoundData( m_filename, &m_data, &m_size ) == AUI_ERRCODE_OK )
+	if (AUI_ERRCODE_OK == format->LoadSoundData(m_filename, &m_data, &m_size))
 	{
-		if( !CreateDSBuffer() )
+		if (!CreateDSBuffer())
 		{
-		 if ((hr=dsb->Lock( 0, m_size, &pMem1, &dwSize1, &pMem2, &dwSize2, 0 )))
-			return AUI_ERRCODE_MEMALLOCFAILED;
-
-		 CopyMemory(pMem1,m_data, m_size);
-
-		 if((hr=dsb->Unlock( pMem1, dwSize1, pMem2, dwSize2 )))
-			return AUI_ERRCODE_MEMALLOCFAILED;
+        	LPVOID  pMem1;
+            LPVOID  pMem2;
+	        DWORD   dwSize1;
+            DWORD   dwSize2;
+	        HRESULT hr  = dsb->Lock(0, m_size, &pMem1, &dwSize1, &pMem2, &dwSize2, 0);
+            
+            if (DS_OK == hr)
+            {
+                CopyMemory(pMem1, m_data, m_size);
+                hr = dsb->Unlock(pMem1, dwSize1, pMem2, dwSize2);
+            }
+	        
+            if (DS_OK != hr)
+            {
+                return AUI_ERRCODE_MEMALLOCFAILED;
+            }
 		}		
-		m_format->ReleaseSoundData();
+		
+        format->ReleaseSoundData();
 	}
-	return AUI_ERRCODE_OK;
 
+	return AUI_ERRCODE_OK;
 }
 
 

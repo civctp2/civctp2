@@ -75,6 +75,8 @@ extern class aui_UI *	g_ui;
 #include "c3types.h"			// MBCHAR, sint32, uint32
 #include "tech_wllist.h"		// tech_WLList
 
+class aui_Movie;
+
 //----------------------------------------------------------------------------
 // Class declarations
 //----------------------------------------------------------------------------

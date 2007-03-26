@@ -32,25 +32,25 @@ class PatternBase
 public:
 	
 	PatternBase(
-		MBCHAR *pattern );
+		MBCHAR const * pattern );
 	PatternBase(
-		MBCHAR *ldlBlock,
-		MBCHAR *pattern );
+		MBCHAR const * ldlBlock,
+		MBCHAR const * pattern );
 	virtual ~PatternBase();
 
 protected:
 	PatternBase() {}
-	AUI_ERRCODE InitCommon( MBCHAR *pattern );
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock, MBCHAR *pattern );
+	AUI_ERRCODE InitCommon( MBCHAR const *pattern );
+	AUI_ERRCODE InitCommonLdl( MBCHAR const *ldlBlock, MBCHAR const *pattern );
 
 public:
 	
 	Pattern *&ThePattern( void ) { return m_pattern; }
 
-	sint32	SrcX( void ) { return m_srcX; }
-	sint32	SrcY( void ) { return m_srcY; }
-	sint32	SrcWidthPix( void ) { return m_srcWidthPix; }
-	sint32	SrcHeightPix( void ) { return m_srcHeightPix; }
+	sint32	SrcX( void ) const { return m_srcX; }
+	sint32	SrcY( void ) const { return m_srcY; }
+	sint32	SrcWidthPix( void ) const { return m_srcWidthPix; }
+	sint32	SrcHeightPix( void ) const { return m_srcHeightPix; }
 
 	void	MoveSrc( sint32 srcX, sint32 srcY ) { m_srcX = srcX; m_srcY = srcY; }
 	void	ResizeSrc( sint32 widthPix, sint32 heightPix ) { m_srcWidthPix = widthPix; m_srcHeightPix = heightPix; }

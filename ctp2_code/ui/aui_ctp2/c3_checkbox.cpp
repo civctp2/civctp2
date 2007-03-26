@@ -1,24 +1,20 @@
 
 
 #include "c3.h"
+#include "c3_checkbox.h"
 
 #include "aui.h"
 #include "aui_ui.h"
 #include "aui_action.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
-
 #include "c3ui.h"
-#include "c3_checkbox.h"
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
 #include "colorset.h"           // g_colorSet
 
-#include "SlicEngine.h"
-
 extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
 
 c3_CheckBox::c3_CheckBox(
 	AUI_ERRCODE *retval,
@@ -26,9 +22,9 @@ c3_CheckBox::c3_CheckBox(
 	MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
-	:
+:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (MBCHAR const *) NULL ),
 	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
@@ -37,7 +33,6 @@ c3_CheckBox::c3_CheckBox(
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -55,7 +50,7 @@ c3_CheckBox::c3_CheckBox(
 	void *cookie,
 	sint32 state,
 	sint32 numStates )
-	:
+:
 	aui_ImageBase( numStates ),
 	aui_TextBase( text ),
 	aui_Switch( retval, id, x, y, width, height, ActionFunc, cookie, state, numStates ),
@@ -67,7 +62,6 @@ c3_CheckBox::c3_CheckBox(
 
 	*retval = InitCommon(k_C3_CHECKBOX_DEFAULT_BEVELWIDTH);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

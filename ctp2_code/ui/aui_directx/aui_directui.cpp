@@ -71,35 +71,12 @@ aui_DirectUI::aui_DirectUI
 	MBCHAR *ldlFilename,
 	BOOL useExclusiveMode 
 )
-:   aui_UI              (),
+:   
+    aui_UI              (retval, hinst, hwnd, width, height, bpp, ldlFilename),
     aui_DirectX         (),
     m_lpdds             (NULL),
     m_isCoinitialized   (false)
 {
-	
-	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	
-
-	
-	
-
-	
-	
-	
-
-	
-
-	
-	
-	Assert( aui_Base::GetBaseRefCount() == 2 );
-	g_ui = aui_Base::GetBaseRefCount() == 2 ? this : NULL;
-
-	
-	*retval = aui_UI::InitCommon( hinst, hwnd, bpp, ldlFilename );
-	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommon();
@@ -108,7 +85,6 @@ aui_DirectUI::aui_DirectUI
 
 	*retval = CreateDirectScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -212,7 +188,7 @@ AUI_ERRCODE aui_DirectUI::CreateDirectScreen( BOOL useExclusiveMode )
 	else
 		m_lpdds = lpdds;
 
-	
+	delete m_primary;
 	m_primary = new aui_DirectSurface(
 		&errcode,
 		m_width,

@@ -1,23 +1,19 @@
 
 
 #include "c3.h"
+#include "c3_switch.h"
 
 #include "aui.h"
 #include "aui_ui.h"
 #include "aui_action.h"
 #include "aui_window.h"
 #include "aui_ldl.h"
-
 #include "c3ui.h"
-#include "c3_switch.h"
 #include "patternbase.h"
 #include "pattern.h"
 #include "primitives.h"
 
-#include "SlicEngine.h"
-
 extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
 
 
 c3_Switch::c3_Switch(
@@ -37,7 +33,6 @@ c3_Switch::c3_Switch(
 
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -65,7 +60,6 @@ c3_Switch::c3_Switch(
 
 	*retval = InitCommon(k_C3_SWITCH_DEFAULT_BEVELWIDTH);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

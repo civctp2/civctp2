@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "c3_hypertextbox.h"
 
 #include "aui.h"
 #include "aui_ui.h"
@@ -37,29 +38,22 @@
 #include "aui_ldl.h"
 #include "aui_control.h"
 #include "aui_action.h"
-
 #include "c3ui.h"
 #include "c3_static.h"
 #include "c3_ranger.h"
+#include "colorset.h"
+#include "ctp2_listbox.h"
+#include "greatlibrary.h"
 #include "pattern.h"
 #include "patternbase.h"
 #include "pixelutils.h"
 #include "primitives.h"
-#include "c3_hypertextbox.h"
-#include "SlicEngine.h"
-#include "colorset.h"
-#include "ctp2_listbox.h"
 
-
-#include "greatlibrary.h"
-
-extern C3UI			*g_c3ui;
-extern SlicEngine	*g_slicEngine;
+extern C3UI	*   g_c3ui;
 
 #define k_C3_HYPERTEXTBOX_BEVELWIDTH	2
 #define k_C3_HYPERTEXTBOX_INSETWIDTH	5
 
-extern C3UI *g_c3ui;
 
 
 c3_HyperTextBox::c3_HyperTextBox(
@@ -109,7 +103,6 @@ c3_HyperTextBox::c3_HyperTextBox(
 
 	*retval = CreateRanger( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -142,7 +135,6 @@ c3_HyperTextBox::c3_HyperTextBox(
 
 	*retval = CreateRanger( NULL );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 

@@ -103,20 +103,22 @@ typedef aui_Image * aui_StateImageGroup[ AUI_IMAGEBASE_SUBSTATE_LAST ];
 class aui_ImageBase
 {
 public:
-	
-	aui_ImageBase(
-		MBCHAR *ldlBlock,
-		bool loadOnDemand = false );
-	aui_ImageBase(
-		sint32 numStateImageGroups    = 0,
-		AUI_IMAGEBASE_BLTTYPE blttype = AUI_IMAGEBASE_BLTTYPE_COPY,
-		AUI_IMAGEBASE_BLTFLAG bltflag = AUI_IMAGEBASE_BLTFLAG_COPY,
-		bool loadOnDemand = false );
+	aui_ImageBase
+    (
+		MBCHAR const *          ldlBlock,
+		bool                    loadOnDemand        = false 
+    );
+	aui_ImageBase
+    (
+		sint32                  numStateImageGroups = 0,
+		AUI_IMAGEBASE_BLTTYPE   blttype             = AUI_IMAGEBASE_BLTTYPE_COPY,
+		AUI_IMAGEBASE_BLTFLAG   bltflag             = AUI_IMAGEBASE_BLTFLAG_COPY,
+		bool                    loadOnDemand        = false 
+    );
 	virtual ~aui_ImageBase();
 
 protected:
-	AUI_ERRCODE InitCommonLdl(
-		MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(MBCHAR const * ldlBlock);
 	AUI_ERRCODE InitCommon(
 		sint32 numImageGroups,
 		AUI_IMAGEBASE_BLTTYPE blttype,
