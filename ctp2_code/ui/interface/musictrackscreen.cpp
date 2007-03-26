@@ -120,12 +120,11 @@ void MusicTrackListCallback( aui_Control *control, uint32 action, uint32 data, v
 
 AUI_ERRCODE musictrackscreen_Initialize( void )
 {
+	if (s_musicTrackScreen) return AUI_ERRCODE_OK; 
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_musicTrackScreen ) return AUI_ERRCODE_OK; 
-
+	MBCHAR		windowBlock[k_AUI_LDL_MAXBLOCK + 1];
 	strcpy(windowBlock, "MusicTrackScreen");
 	{ 
 		s_musicTrackScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
@@ -141,6 +140,7 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	s_musicTrackScreen->AddTitle( "MusicTrackScreen.Name" );
 	s_musicTrackScreen->AddClose( musictrackscreen_acceptPress );
 
+	MBCHAR		controlBlock[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf( controlBlock, "%s.%s", windowBlock, "TrackList" );
 	s_trackList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, MusicTrackListCallback, NULL);
 	Assert( AUI_NEWOK(s_trackList, errcode) );
@@ -152,18 +152,16 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	Assert(AUI_NEWOK(s_trackNames, errcode));
 	if (!AUI_NEWOK(s_trackNames, errcode)) return errcode;
 	
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "MusicTrackListItem");
-	for (sint32 i=0; i<s_trackNames->GetNumStrings(); i++) {
-		MBCHAR					*s = s_trackNames->GetString(i);
-		MusicTrackListItem		*item = new MusicTrackListItem(&errcode, i, s, controlBlock);
-		Assert(item);
-		if (item) {
-			s_trackList->AddItem((aui_Item *)item);
-		}
+	for (sint32 i = 0; i < s_trackNames->GetNumStrings(); ++i) 
+    {
+		s_trackList->AddItem
+            (new MusicTrackListItem
+                (&errcode, i, s_trackNames->GetString(i), controlBlock)
+            );
 	}
 
 	return AUI_ERRCODE_OK;
@@ -172,23 +170,15 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 
 
 
-AUI_ERRCODE musictrackscreen_Cleanup()
+void musictrackscreen_Cleanup()
 {
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 	if (s_musicTrackScreen)
 	{
 		g_c3ui->RemoveWindow(s_musicTrackScreen->Id());
 	}
-	mycleanup(s_trackNames);
-
-	mycleanup(s_trackList);
-
-	delete s_musicTrackScreen;
-	s_musicTrackScreen = NULL;
-
-	return AUI_ERRCODE_OK;
-
-#undef mycleanup
+    allocated::clear(s_trackNames);
+    allocated::clear(s_trackList);
+    allocated::clear(s_musicTrackScreen);
 }
 
 

@@ -123,9 +123,15 @@ static sint32		g_bio_flash = 0;
 namespace
 {   
     // Do not display digits when the number of turns till next pop is too large
-    int const  THRESHOLD_SLOW_GROWTH    = 100;      // limit to 2 digits
+    int const       THRESHOLD_SLOW_GROWTH       = 100;  // limit to 2 digits
     /// Text to display when no valid number can be calculated
-    char const TEXT_NONE []             = "---";
+    char const      TEXT_NONE []                = "---";
+
+    Pixel16 const   DEFAULT_PIXEL[k_NUM_TRANSITIONS]    = 
+    {
+        0xf800, 0x07e0, 0x001f, 0xf81f
+    };
+
 
     // Simple shorthand functions
     Pixel16 GetColor(COLOR const & a_ColorName, bool a_IsFogged = false)
@@ -222,10 +228,8 @@ void  TiledMap::DrawRectMetrics()
 	{
 		if (m_font) 
 		{
-			sint32 width, height;
-
-			width = m_font->GetStringWidth(text);
-			height = m_font->GetMaxHeight();
+			sint32 width = m_font->GetStringWidth(text);
+			sint32 height = m_font->GetMaxHeight();
 
 			RECT		tempRect = {0, 0, width, height};
 			OffsetRect(&tempRect, 200, 200);
@@ -418,7 +422,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		
 		for (sint32 i=0; i<cell->GetNumImprovements(); i++) 
 		{
-			if(!g_theTerrainImprovementPool->IsValid(cell->AccessImprovement(i)))
+            if (!cell->AccessImprovement(i).IsValid())
 				continue;
 
 			sint32 percent = cell->AccessImprovement(i).GetData()->PercentComplete();
@@ -1271,10 +1275,12 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 	Assert(tilesetIndex == ((sint32) tilesetIndex_short));
 
-	Pixel16 * t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
-	Pixel16 * t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
-	Pixel16 * t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
-	Pixel16 * t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
+    Pixel16 *   t[k_NUM_TRANSITIONS];
+    for (uint16 i = 0; i < k_NUM_TRANSITIONS; ++i)
+    {
+        t[i]    = m_tileSet->GetTransitionData
+                    (tilesetIndex_short, tileInfo->GetTransition(i), i);
+    }
 	
 	BaseTile *  transitionBuffer    = 
         m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
@@ -1286,7 +1292,7 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 	sint32      surfPitch           = m_surfPitch;
 
 	
-	Pixel16 srcPixel, transPixel = 0;
+	Pixel16 transPixel = 0;
 
 
 	for (sint32 y = 0; y < k_TILE_PIXEL_HEIGHT; y++) 
@@ -1296,59 +1302,29 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 
 		for (sint32 x = startX; x < endX; x++) 
         {
-			srcPixel = *dataPtr++;
+			Pixel16 srcPixel = *dataPtr++;
 			if(transDataPtr)
 				transPixel = *transDataPtr++;
 
-			switch (srcPixel) {
-			case 0x0000 : 
+			if (srcPixel < k_NUM_TRANSITIONS) 
+            {
+                Pixel16 * &  tI = t[srcPixel];
+
+			    if (tI)
 				{
-					if (t0) {
-						srcPixel = *t0++;
-					} else if(transDataPtr) {
-						srcPixel = transPixel;
-					} else {
-						srcPixel = 0xF800;
-					}
+					srcPixel = *tI++;
+				} 
+                else if (transDataPtr) 
+                {
+					srcPixel = transPixel;
+				} 
+                else 
+                {
+					srcPixel = DEFAULT_PIXEL[srcPixel];
 				}
-				break;
-			case 0x0001 : 
-				{
-					if (t1) {
-						srcPixel = *t1++;
-					} else if(transDataPtr) {
-						srcPixel = transPixel;
-					} else {
-						srcPixel = 0x07E0;
-					}
-				}
-				break;
-			case 0x0002 : 
-				{
-					if (t2) {
-						srcPixel = *t2++;
-					} else if(transDataPtr) {
-						srcPixel = transPixel;
-					} else {
-						srcPixel = 0x001F; 
-					}
-				}
-				break;
-			case 0x0003 : 
-				{
-					if (t3) {
-						srcPixel = *t3++;
-					} else if(transDataPtr) {
-						srcPixel = transPixel;
-					} else {
-						srcPixel = 0xF81F;
-					}
-				}
-				break;
 			}
 			Pixel16 * pDestPixel = (Pixel16 *)
                 (pSurfBase + ((y+ypos) * surfPitch) + ((x+xpos) << 1));
-
 
 			*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
 		}
@@ -1425,10 +1401,12 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 	
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 
-	Pixel16 *   t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
-	Pixel16 *   t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
-	Pixel16 *   t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
-	Pixel16 *   t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
+    Pixel16 *   t[k_NUM_TRANSITIONS];
+    for (uint16 i = 0; i < k_NUM_TRANSITIONS; ++i)
+    {
+        t[i]    = m_tileSet->GetTransitionData
+                    (tilesetIndex_short, tileInfo->GetTransition(i), i);
+    }
 
 	BaseTile *  transitionBuffer    = 
         m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
@@ -1455,28 +1433,24 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
         {
 			vaccum += vincx;
 
-            for (sint32 i=startX; i<endX; i++) {
-				srcPixel = *dataPtr++;
+            for (sint32 i = startX; i < endX; i++) 
+            {
 				if(transDataPtr)
 					transPixel = *transDataPtr++;
 
-				switch (srcPixel) {
-				case 0x0000 : 
-					if (t0)	srcPixel = *t0++;
-					else if(transDataPtr) srcPixel = transPixel;
-					break;
-				case 0x0001 : 
-					if (t1)	srcPixel = *t1++;
-					else if(transDataPtr) srcPixel = transPixel;
-					break;
-				case 0x0002 : 
-					if (t2) srcPixel = *t2++;
-					else if(transDataPtr) srcPixel = transPixel;
-					break;
-				case 0x0003 : 
-					if (t3) srcPixel = *t3++;
-					else if(transDataPtr) srcPixel = transPixel;
-					break;
+				srcPixel = *dataPtr++;
+				if (srcPixel < k_NUM_TRANSITIONS)
+                {
+                    Pixel16 * &  tI = t[srcPixel];
+
+			        if (tI)
+				    {
+					    srcPixel = *tI++;
+				    } 
+					else if (transDataPtr) 
+                    {
+                        srcPixel = transPixel;
+                    }
 				}
 			}
 		} 
@@ -1489,30 +1463,26 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 
 			for (sint32 hpos = startX; hpos < endX; ++hpos) 
             {
-				srcPixel = *dataPtr++;
 				if(transDataPtr)
 					transPixel = *transDataPtr++;
-				switch (srcPixel) {
-				case 0x0000 : 
-						if (t0)	srcPixel = *t0++;
-						else if(transDataPtr) srcPixel = transPixel;
-						else srcPixel = 0xF800;
-					break;
-				case 0x0001 : 
-						if (t1)	srcPixel = *t1++;
-						else if(transDataPtr) srcPixel = transPixel;
-						else srcPixel = 0x07E0;
-					break;
-				case 0x0002 : 
-						if (t2) srcPixel = *t2++;
-						else if(transDataPtr) srcPixel = transPixel;
-						else srcPixel = 0x001F; 
-					break;
-				case 0x0003 : 
-						if (t3) srcPixel = *t3++;
-						else if(transDataPtr) srcPixel = transPixel;
-						else srcPixel = 0xF81F;
-					break;
+
+				srcPixel = *dataPtr++;
+				if (srcPixel < k_NUM_TRANSITIONS) 
+                {
+                    Pixel16 * &  tI = t[srcPixel];
+
+			        if (tI)
+				    {
+					    srcPixel = *tI++;
+				    } 
+					else if (transDataPtr) 
+                    {
+                        srcPixel = transPixel;
+                    }
+                    else
+                    {
+						srcPixel = DEFAULT_PIXEL[srcPixel];
+                    }
 				}
 				
 				if (haccum < 0) {
@@ -2359,15 +2329,14 @@ void TiledMap::DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sin
 	if (baseTile == NULL) return;
 
 	Pixel16 *   data        = baseTile->GetTileData();
-	Pixel16 *   t0          = 
-        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(0), 0);
-	Pixel16 *   t1          = 
-        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(1), 1);
-	Pixel16 *   t2          = 
-        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(2), 2);
-	Pixel16 *   t3          = 
-        m_tileSet->GetTransitionData(tileInfo->GetTerrainType(), tileInfo->GetTransition(3), 3);
-	Pixel16 *   dataPtr     = data;
+    Pixel16 *   t[k_NUM_TRANSITIONS];
+    for (uint16 i = 0; i < k_NUM_TRANSITIONS; ++i)
+    {
+        t[i]    = m_tileSet->GetTransitionData
+                    (tileInfo->GetTerrainType(), tileInfo->GetTransition(i), i);
+    }
+
+    Pixel16 *   dataPtr     = data;
 	uint8 *     pSurfBase   = m_surfBase;
 	sint32      surfPitch   = m_surfPitch;
 
@@ -2392,15 +2361,14 @@ void TiledMap::DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sin
 
 			for (sint32 i=startX; i<endX; i++) {
 				srcPixel = *dataPtr++;
-				switch (srcPixel) {
-				case 0x0000 : if (t0)	srcPixel = *t0++;
-					break;
-				case 0x0001 : if (t1)	srcPixel = *t1++;
-					break;
-				case 0x0002 : if (t2) srcPixel = *t2++;
-					break;
-				case 0x0003 : if (t3) srcPixel = *t3++;
-					break;
+				if (srcPixel < k_NUM_TRANSITIONS) 
+                {
+                    Pixel16 * &  tI = t[srcPixel];
+
+			        if (tI)
+				    {
+					    srcPixel = *tI++;
+				    } 
 				}
 			}
 		} 
@@ -2414,23 +2382,18 @@ void TiledMap::DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sin
 			for (sint32 hpos = startX; hpos < endX; ++hpos) 
             {
 				srcPixel = *dataPtr++;
-				switch (srcPixel) {
-				case 0x0000 : 
-						if (t0)	srcPixel = *t0++;
-						else srcPixel = 0xF800;
-					break;
-				case 0x0001 : 
-						if (t1)	srcPixel = *t1++;
-						else srcPixel = 0x07E0;
-					break;
-				case 0x0002 : 
-						if (t2) srcPixel = *t2++;
-						else srcPixel = 0x001F; 
-					break;
-				case 0x0003 : 
-						if (t3) srcPixel = *t3++;
-						else srcPixel = 0xF81F;
-					break;
+				if (srcPixel < k_NUM_TRANSITIONS) 
+                {
+                    Pixel16 * &  tI = t[srcPixel];
+
+			        if (tI)
+				    {
+					    srcPixel = *tI++;
+				    } 
+					else 
+                    {
+                        srcPixel = DEFAULT_PIXEL[srcPixel];
+                    }
 				}
 				
 				if (haccum < 0) {
@@ -2454,11 +2417,6 @@ void TiledMap::DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sin
 		} 
 		vpos2++;
 	}
-
-
-
-
-
 }
 
 
@@ -3199,7 +3157,7 @@ void TiledMap::DrawNumber(aui_Surface *surface, sint32 num, sint32 color, sint32
 
     UnlockSurface();
     
-    primitives_DrawText(surface, x - 8, y - 8, (MBCHAR *)buf, color , 1);
+    primitives_DrawText(surface, x - 8, y - 8, buf, color , 1);
 
     LockSurface();
 }
@@ -3210,7 +3168,7 @@ void TiledMap::SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint3
 
     UnlockSurface();
     
-    primitives_DrawText(surface, x - 32, y - 8, (MBCHAR *)buf, color , 1);
+    primitives_DrawText(surface, x - 32, y - 8, buf, color , 1);
 
     LockSurface();
 
@@ -3256,14 +3214,13 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 	Assert(tilesetIndex == ((sint32) tilesetIndex_short));
 #endif
 
-	static Pixel16 defaultPixel[4] = {0xf800, 0x07e0, 0x001f, 0xf81f};
+	Pixel16	*   tileData[k_NUM_TRANSITIONS];
+    for (uint16 i = 0; i < k_NUM_TRANSITIONS; ++i)
+    {
+	    tileData[i] = m_tileSet->GetTransitionData
+                        (tilesetIndex_short, tileInfo->GetTransition(i), i);
+    }
 
-	Pixel16	*   tileData[4];
-	tileData[0] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
-	tileData[1] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
-	tileData[2] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
-	tileData[3] = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
-	
 	BaseTile *  transitionBuffer = 
         m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
 	Pixel16 *   transData       = 
@@ -3358,17 +3315,17 @@ L1:
 				for (sint32 x = startX; x<endX; x++) 
 				{
 					srcPixel = *dataPtr++;
-					if (srcPixel < 4)
+					if (srcPixel < k_NUM_TRANSITIONS)
 					{
-						Pixel16 *tile = tileData[srcPixel];
-						if (tile != NULL)
-						{
-							tileData[srcPixel]++;
-							srcPixel = *tile;
-						}
+                        Pixel16 * &  tI = tileData[srcPixel];
+
+			            if (tI)
+				        {
+					        srcPixel = *tI++;
+				        } 
 						else
 						{
-							srcPixel = defaultPixel[srcPixel];
+							srcPixel = DEFAULT_PIXEL[srcPixel];
 						}
 					}
 					pDestPixel[x] = srcPixel;
@@ -3444,10 +3401,12 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 	sint32 tilesetIndex = g_theTerrainDB->Get(tileInfo->GetTerrainType())->GetTilesetIndex();
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 
-	Pixel16 * t0 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(0), 0);
-	Pixel16 * t1 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(1), 1);
-	Pixel16 * t2 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(2), 2);
-	Pixel16 * t3 = m_tileSet->GetTransitionData(tilesetIndex_short, tileInfo->GetTransition(3), 3);
+    Pixel16 * t[k_NUM_TRANSITIONS];
+    for (uint16 i = 0; i < k_NUM_TRANSITIONS; ++i)
+    {
+        t[i] = m_tileSet->GetTransitionData
+                (tilesetIndex_short, tileInfo->GetTransition(i), i);
+    }
 	
 	BaseTile *  transitionBuffer    = 
         m_tileSet->GetBaseTile(static_cast<uint16>((tilesetIndex * 100) + 99));
@@ -3476,26 +3435,24 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 
 
 			for (sint32 i=startX; i<endX; i++) {
-				srcPixel = *dataPtr++;
 				if(transData) {
 					transPixel = *transDataPtr++;
 				}
-				switch (srcPixel) {
-				case 0x0000 : 
-					if (t0)	srcPixel = *t0++;
-					else if(transData) srcPixel = transPixel;
-						
-					break;
-				case 0x0001 : if (t1)	srcPixel = *t1++;
-					else if(transData) srcPixel = transPixel;
-					break;
-				case 0x0002 : if (t2) srcPixel = *t2++;
-					else if(transData) srcPixel = transPixel;
-					break;
-				case 0x0003 : if (t3) srcPixel = *t3++;
-					else if(transData) srcPixel = transPixel;
-					break;
-				}
+				
+				srcPixel = *dataPtr++;
+                if (srcPixel < k_NUM_TRANSITIONS) 
+                {
+                    Pixel16 * &  tI = t[srcPixel];
+
+			        if (tI)
+				    {
+					    srcPixel = *tI++;
+				    } 
+					else if (transData) 
+                    {
+                        srcPixel = transPixel;
+                    }
+                }	
 			}
 		} 
         else 
@@ -3507,32 +3464,28 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 			sint32 hpos     = startX;
 			sint32 hend     = endX;
 
-			while (hpos < hend) {
-				srcPixel = *dataPtr++;
+			while (hpos < hend) 
+            {
 				if(transData)
 					transPixel = *transDataPtr++;
 
-				switch (srcPixel) {
-				case 0x0000 : 
-						if (t0)	srcPixel = *t0++;
-						else if(transData) srcPixel = transPixel;
-						else srcPixel = 0xF800;
-					break;
-				case 0x0001 : 
-						if (t1)	srcPixel = *t1++;
-						else if(transData) srcPixel = transPixel;
-						else srcPixel = 0x07E0;
-					break;
-				case 0x0002 : 
-						if (t2) srcPixel = *t2++;
-						else if(transData) srcPixel = transPixel;
-						else srcPixel = 0x001F; 
-					break;
-				case 0x0003 : 
-						if (t3) srcPixel = *t3++;
-						else if(transData) srcPixel = transPixel;
-						else srcPixel = 0xF81F;
-					break;
+				srcPixel = *dataPtr++;
+				if (srcPixel < k_NUM_TRANSITIONS) 
+                {
+                    Pixel16 * &  tI = t[srcPixel];
+
+			        if (tI)
+				    {
+					    srcPixel = *tI++;
+				    } 
+					else if (transData) 
+                    {
+                        srcPixel = transPixel;
+                    }
+                    else
+                    {
+						srcPixel = DEFAULT_PIXEL[srcPixel];
+                    }
 				}
 				
 				if (haccum < 0) {
@@ -3557,9 +3510,11 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 	}
 }
 
+#if 0   // Unused (for water animations?)
 #define k_MAX_WATER_DISPLACEMENTS		14
 sint32			inctable[k_MAX_WATER_DISPLACEMENTS] = {1, 2, 1, 0, -1, 1, 0, -1, -2, -1, 0, 1,  -1, 0};
 sint32			tinc[2]={0,1};
+#endif
 
 void TiledMap::DrawWater(void)
 {
@@ -3728,20 +3683,13 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							sint32 widthname = m_font->GetStringWidth(name);
 							sint32 heightname = m_font->GetMaxHeight();
 							
+							Pixel16 pixelColor = GetPlayerColor(owner, fog);
 
-							Pixel16			pixelColor;
-							//get the proper colors for the city's owner
-							if (fog) {
-								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
-							} else {
-								pixelColor = g_colorSet->GetPlayerColor(owner);
-							}
-							COLORREF color = GetColorRef(g_colorSet->ComputePlayerColor(owner), fog);
-							//define rect's screen co-ordinates
+                            //define rect's screen co-ordinates
 							rect.left = x;
 							rect.top = y;
-							rect.right = rect.left + widthname;  // x+width;    // Don't state the obvious
-							rect.bottom = rect.top + heightname; // y+height;
+							rect.right = rect.left + widthname;
+							rect.bottom = rect.top + heightname;
 
 							boxRect = rect;//copy rect to boxRect
 
@@ -3799,13 +3747,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							// Add the top left co-ordinates
 							//OffsetRect(&popRect, boxRect.left, y);  //original
 							OffsetRect(&popRect, boxRect.left - width - 4, boxRect.top);  //orig OffsetRect(&popRect, boxRect.left, y)
-
-							// Get the proper color for the city's owner
-							if (fog) {
-								pixelColor = g_colorSet->GetDarkPlayerColor(owner);
-							} else {
-								pixelColor = g_colorSet->GetPlayerColor(owner);
-							}
 
 							clipRect = primitives_GetScreenAdjustedRectCopy(surf, popRect);
 
@@ -3889,13 +3830,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								//OffsetRect(&popRectn, x, y); //original
 								OffsetRect(&popRectn, x, boxRect.top); //OffsetRect(&popRectn, x, y);
 
-								//get the proper color for the city's owner
-								if (fog) {
-									pixelColor = g_colorSet->GetDarkPlayerColor(owner);
-								} else {
-									pixelColor = g_colorSet->GetPlayerColor(owner);
-								}
-
 								clipRect = primitives_GetScreenAdjustedRectCopy(surf, popRectn);
 								//paint clipRect's surface the proper player color and give it a black frame
 								//emod to differentiate nextpop to match city name
@@ -3956,7 +3890,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
 								isWatchful, isCapitol);
 					if (CityIcons) {
-						DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit);
+					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit);
 					}
 
 				}
@@ -4935,29 +4869,29 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 
 //Religion Icons
 		for(sint32 rb = 0; rb < g_theBuildingDB->NumRecords(); rb++){
-			if(cityData->GetImprovements() & ((uint64)1 << rb)){
-				if (g_theBuildingDB->Get(rb, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
-				{
-					DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-					AddDirtyRectToMix(iconRect);
-					iconRect.left += iconDim.x;
-					iconRect.right += iconDim.x;
-				}
-			}
-		}
-
-
-  		for(sint32 rw=0; rw<g_theWonderDB->NumRecords(); rw++)
-		{
-			if(cityData->GetBuiltWonders() & (uint64)1 << (uint64)rw)
+		if(cityData->GetImprovements() & ((uint64)1 << rb)){
+			if (g_theBuildingDB->Get(rb, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
 			{
-				if(g_theWonderDB->Get(rw, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
-				{
-					DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-					AddDirtyRectToMix(iconRect);
-					iconRect.left += iconDim.x;
-					iconRect.right += iconDim.x;
-				}
+				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				iconRect.left += iconDim.x;
+				iconRect.right += iconDim.x;
 			}
 		}
-}
+	}
+
+
+  	for(sint32 rw=0; rw<g_theWonderDB->NumRecords(); rw++)
+	{
+		if(cityData->GetBuiltWonders() & (uint64)1 << (uint64)rw)
+		{
+			if(g_theWonderDB->Get(rw, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
+			{
+				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				iconRect.left += iconDim.x;
+				iconRect.right += iconDim.x;
+			}
+		}
+	}
+			}

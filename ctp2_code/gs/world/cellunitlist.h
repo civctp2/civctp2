@@ -29,13 +29,16 @@
 // - Option added to report sync errors only once.
 //
 //----------------------------------------------------------------------------
+//
+/// \file CellUnitList.cpp
+/// \brief List of units (e.g. army) at the same location of the map.
 
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __CELL_UNIT_LIST_H__
-#define __CELL_UNIT_LIST_H__
+#ifndef CELL_UNIT_LIST_H__
+#define CELL_UNIT_LIST_H__
 
 //----------------------------------------------------------------------------
 //
@@ -82,14 +85,6 @@ class CivArchive;
 class CellUnitList
 {
 public:
-	Unit m_array[k_MAX_ARMY_SIZE];
-
-	uint32 m_moveIntersection;
-	uint8 m_flags;
-
-	
-	sint32 m_nElements;
-
 	CellUnitList() {m_nElements = 0;}
 	CellUnitList(const sint32 size) {Assert(size == k_MAX_ARMY_SIZE); m_nElements = 0;}
 	CellUnitList(const DynamicArray<Unit> &copyme);
@@ -125,7 +120,7 @@ public:
 	
 	void Clear() { m_nElements = 0; }
 
-	const sint32 Num() const { if(!this) return 0; else return m_nElements; }
+	sint32 Num() const { return m_nElements; }
 	void KillList(CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 	bool IsPresent(const Unit &u);
 
@@ -191,7 +186,21 @@ public:
 						 double & air_bombard) const;
 
 	
-	double GetAverageHealthPercentage();
+	double  GetAverageHealthPercentage() const;
+    uint8   GetFlags() const 
+    {
+        return m_flags;
+    };
+
+protected:
+    /// List of units - implemented as a fixed size array
+	Unit    m_array[k_MAX_ARMY_SIZE];
+    /// Common move properties of all units
+	uint32  m_moveIntersection;
+    /// Properties of the group - see the k_CULF_... constants.
+	uint8   m_flags;
+    /// Number of units (valid entries in m_array)
+	sint32  m_nElements;
 };
 
 #endif

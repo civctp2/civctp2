@@ -47,139 +47,126 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h" 
-#include "c3debug.h"
-#include <ios>
-#include <iostream>
-
-#include "aui.h"
-
-
-
-#include "DB.h"
-#include "StrDB.h"
-#include "AdvanceRecord.h"
-
-#include "TerrainRecord.h"
-#include "UVDB.h"
-
-#include "BuildingRecord.h"
-#include "DifficultyRecord.h"
-
-#include "moviedb.h"
-
-
-#include "ConstDB.h"
-
-#include "XY_Coordinates.h"
-#include "A_Star_Heuristic_Cost.h"
-#include "World.h"
-#include "player.h"
-
-#include "RandGen.h"
-
-#include "TradePool.h"
 #include "gameinit.h"
-#include "SelItem.h"
-#include "TradeOfferPool.h"
 
-#include "newturncount.h"
-#include "TurnCnt.h"
-
-#include "QuadTree.h"
-
-#include "TerrImprovePool.h"
+#include "A_Star_Heuristic_Cost.h"
+#include "AchievementTracker.h"
+#include "AdvanceRecord.h"
+#include "Advances.h"
+#include "AgeRecord.h"
+#include "AgreementPool.h"
+#include "AICause.h"
+#include "ArmyPool.h"
+#include "aui.h"
+#include "aui.h"
+#include "aui_surface.h"
+#include "aui_window.h"
+#include "background.h"
+#include "BuildingRecord.h"
+#include "c3debug.h"
+#include "c3errors.h"
+#include "c3slider.h"
+#include "c3ui.h"
+#include "Cell.h"
+#include "civ3_main.h"
+#include "CivilisationPool.h"
+#include "conceptdb.h"
+#include "ConstDB.h"
+#include "controlpanelwindow.h"
+#include "CriticalMessagesPrefs.h"
+#include "ctp2_Window.h"
+#include "ctpai.h"
+#include "custommapscreen.h"
+#include "DB.h"
+#include "debugmemory.h"
+#include "debugwindow.h"
+#include "DifficultyRecord.h"
+#include "Diplomacy_Log.h"
+#include "DiplomaticRequestPool.h"
+#include "director.h"                   // g_director
+#include "EventTracker.h"
+#include "Exclusions.h"
+#include "FeatTracker.h"
+#include "filenamedb.h"
+#include "gamefile.h"
+#include "GameSettings.h"
+#include "Globals.h"                    // allocated::...
+#include "IconRecord.h"
+#include "infowin.h"
 #include "installationpool.h"
 #include "installationtree.h"
-
-#include "WonderRecord.h"
-#include "filenamedb.h"
-
-#include "pollution.h"
-#include "UnitPool.h"
-#include "ArmyPool.h"
-#include "DiplomaticRequestPool.h"
-#include "CivilisationPool.h"
-#include "MessagePool.h"
-#include "AgreementPool.h"
-
-#include "civ3_main.h"
-
-
-
-#include "profileDB.h"
-#include "c3errors.h"
-
-#include "AICause.h"
-#include "Advances.h"
-
-#include "SlicEngine.h"
-
-#include "AgeRecord.h"
-#include "thronedb.h"
-#include "conceptdb.h"
-
-#include "splash.h"
-#include "TopTen.h"
-#include "SoundRecord.h"
-
-#include "PlayListDB.h"
-
-#include "Wormhole.h"
-#include "WonderTracker.h"
-#include "AchievementTracker.h"
-#include "Exclusions.h"
-
-#include "network.h"
-
-#include "debugmemory.h"
-#include "TradeBids.h"
-
-#include "Order.h"
-#include "UnseenCell.h"
-#include "pool.h"
-
-#include "c3slider.h"
-#include "custommapscreen.h"
-
-#include "GameSettings.h"
-#include "pointerlist.h"
-
-#include "controlpanelwindow.h"
-
+#include <ios>
+#include <iostream>
 #include "MaterialPool.h"
-
-#include "gamefile.h"
-#include "Cell.h"
-
-#include "director.h"
-extern Director *g_director;
-
-#include "IconRecord.h"
-
-
-
-#include "infowin.h"
-
+#include "MessagePool.h"
 #include "MoveFlags.h"
-
-#include "wonderutil.h"
-
-
-#include "ctpai.h"
-#include "RoboInit.h"
-
-#include "FeatTracker.h"
-
-
-#include "EventTracker.h"
-
-#include "CriticalMessagesPrefs.h"
-
-#include "UnitData.h"
-#include "UnitActor.h"
-#include "SpriteState.h"
-#include "SpriteRecord.h"
+#include "moviedb.h"
+#include "network.h"
+#include "newturncount.h"
+#include "Order.h"
+#include "player.h"
+#include "PlayListDB.h"
+#include "pointerlist.h"
+#include "pollution.h"
+#include "pool.h"
+#include "primitives.h"
+#include "profileDB.h"
+#include "QuadTree.h"
+#include "radarmap.h"
+#include "radarwindow.h"
+#include "RandGen.h"
 #include "ResourceRecord.h"
+#include "RoboInit.h"
+#include "SelItem.h"
+#include "SlicEngine.h"
+#include "SoundRecord.h"
+#include "splash.h"
+#include "SpriteRecord.h"
+#include "SpriteState.h"
+#include "StrDB.h"
+#include "TerrainRecord.h"
+#include "TerrImprovePool.h"
+#include "thronedb.h"
+#include "tiledmap.h"
+#include "TopTen.h"
+#include "TradeBids.h"
+#include "TradeOfferPool.h"
+#include "TradePool.h"
+#include "TurnCnt.h"
+#include "UnitActor.h"
+#include "UnitData.h"
+#include "UnitDynArr.h"
+#include "UnitPool.h"
+#include "UnitRecord.h"
+#include "UnseenCell.h"
+#include "UVDB.h"
+#include "WonderRecord.h"
+#include "WonderTracker.h"
+#include "wonderutil.h"
+#include "World.h"
+#include "Wormhole.h"
+#include "XY_Coordinates.h"
+
+
+extern void Astar_Init();
+extern void Astar_Cleanup();
+
+extern C3UI *g_c3ui;
+extern Background *g_background;
+
+extern MBCHAR g_slic_filename[_MAX_PATH];
+extern MBCHAR g_tutorial_filename[_MAX_PATH];
+extern HWND               gHwnd;
+extern void               verifyYwrap();
+extern Splash             *g_splash;
+extern ControlPanelWindow *g_controlPanel;
+extern BOOL               g_aPlayerIsDead;
+extern sint32             g_numGoods; // To fix games with altered ressource database
+extern sint32             *g_newGoods;
+extern DebugWindow *g_debugWindow; 
+extern sint32 g_abort_parse;
+extern sint32 g_oldRandSeed;
+extern sint32 g_cheat_age;
 
 
 StringDB                    *g_theStringDB=NULL;
@@ -187,10 +174,7 @@ ConceptDB                   *g_theConceptDB = NULL;
 OzoneDatabase               *g_theUVDB=NULL;
 ConstDB                     *g_theConstDB=NULL;
 ThroneDB                    *g_theThroneDB = NULL;
-
-
 PlayListDB                  *g_thePlayListDB = NULL;
-
 World                       *g_theWorld=NULL;
 UnitPool                    *g_theUnitPool=NULL;
 ArmyPool                    *g_theArmyPool=NULL;
@@ -208,7 +192,6 @@ AgreementPool               *g_theAgreementPool=NULL;
 TerrainImprovementPool      *g_theTerrainImprovementPool = NULL;
 InstallationPool            *g_theInstallationPool = NULL;
 InstallationQuadTree        *g_theInstallationTree = NULL;
-
 TopTen                      *g_theTopTen = NULL;
 TurnCount                   *g_turn = NULL;
 ProfileDB                   *g_theProfileDB = NULL;
@@ -217,14 +200,9 @@ MovieDB                     *g_theVictoryMovieDB = NULL;
 FilenameDB                  *g_theMessageIconFileDB = NULL;
 Pool<Order>                 *g_theOrderPond = NULL;
 Pool<UnseenCell>            *g_theUnseenPond = NULL;
-
-#include "Diplomacy_Log.h"
 Diplomacy_Log               *g_theDiplomacyLog=NULL;
-
-
 EventTracker                *g_eventTracker;
-
-CriticalMessagesPrefs *g_theCriticalMessagesPrefs=NULL;
+CriticalMessagesPrefs * g_theCriticalMessagesPrefs=NULL;
 
 MapPoint g_player_start_list[k_MAX_PLAYERS];
 sint32 g_player_start_score[k_MAX_PLAYERS];
@@ -306,29 +284,10 @@ MBCHAR g_advance_list_db_filename[_MAX_PATH];
 MBCHAR g_diplomacy_proposal_filename[_MAX_PATH];
 MBCHAR g_diplomacy_threat_filename[_MAX_PATH];
 
-extern MBCHAR g_slic_filename[_MAX_PATH];
-extern MBCHAR g_tutorial_filename[_MAX_PATH];
-
-extern void Astar_Init();
-extern void Astar_Cleanup();
 CIV_INDEX gameinit_GetCivForSlot(sint32 slot);
 
 
 
-
-
-
-extern HWND               gHwnd;
-extern void               verifyYwrap();
-extern Splash             *g_splash;
-
-extern ControlPanelWindow *g_controlPanel;
-
-
-extern BOOL               g_aPlayerIsDead;
-
-extern sint32             g_numGoods; // To fix games with altered ressource database
-extern sint32             *g_newGoods;
 
 
 sint32 g_scenarioUsePlayerNumber = 0;
@@ -339,32 +298,15 @@ sint32                    g_difficultyToSetUponLaunch = 0;
 BOOL                      g_setBarbarianRiskUponLaunch = FALSE;
 sint32                    g_barbarianRiskUponLaunch = 0;
 
+SelectedItem *g_selected_item	= NULL; 
 
-#include "aui.h"
-#include "aui_surface.h"
-#include "primitives.h"
-#include "aui_window.h"
-#include "debugwindow.h"
-
-#include "UnitRecord.h"
-#include "UnitDynArr.h"
-
-extern DebugWindow *g_debugWindow; 
-
-SelectedItem *g_selected_item; 
-
-extern sint32 g_abort_parse;
-
-extern sint32 g_oldRandSeed;
-
-static sint32 s_networkSettlers[k_MAX_PLAYERS];
-extern sint32 g_cheat_age;
-
-BOOL g_startEmailGame = FALSE, g_startHotseatGame = FALSE;
+BOOL g_startEmailGame = FALSE;
+BOOL g_startHotseatGame = FALSE;
 HotseatPlayerSetup g_hsPlayerSetup[k_MAX_PLAYERS];
 
 //----------------------------------------------------------------------------
 
+static sint32 s_networkSettlers[k_MAX_PLAYERS];
 
 namespace
 {
@@ -479,7 +421,6 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 
 
 
-	Unit id;
 	const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theProfileDB->GetDifficulty());
 	sint32 humanStart = drec->GetHumanStartLocation();
 	if(humanStart > nPlayers - 1)
@@ -490,6 +431,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 	if(humanStart < 0)
 		return 0;
 
+	Unit id;
 	for (i=1; i<nPlayers; i++) 
 	{
 		if (g_player[i]==NULL)
@@ -566,7 +508,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 
 void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 {
-	FILE *uFile = fopen("logs\\unitlist.txt", "r");
+	FILE *uFile = fopen("logs" FILE_SEP "unitlist.txt", "r");
 	sint32 n = g_theUnitDB->NumRecords();
 	sint32 i;
 	if(!uFile) {
@@ -614,7 +556,8 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 						pos.x++; 
 						pos.y = 2; 
 					} 
-					if (g_theWorld->GetXWidth()<=pos.x) { 
+					if (g_theWorld->GetXWidth()<=pos.x) {
+						delete [] uids;
 						return; 
 					}
 				}  while(!g_theWorld->CanEnter(pos, g_theUnitDB->Get(uid)->GetMovementType()));
@@ -625,10 +568,9 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 				
 			}
 		}
+
 		delete[] uids;
 	}
-	if (uFile)
-		fclose(uFile);
 }
 
 void gameinit_PlaceInitalUnits()
@@ -646,31 +588,33 @@ void gameinit_PlaceInitalUnits()
 
 sint32 gameinit_InitializeGameFiles(void)
 {
-	int r;
-	
-	MBCHAR str1[_MAX_PATH];
-
-	MBCHAR dir[_MAX_PATH]; 
-	FILE *fin; 
-	MBCHAR		*fn = "InitializeGameFiles";
+	MBCHAR const fn[] = "InitializeGameFiles";
 
 	g_abort_parse = FALSE; 
 
-	fin = c3files_fopen(C3DIR_GAMEDATA, "gamefile.txt", "r");
+	FILE * fin = c3files_fopen(C3DIR_GAMEDATA, "gamefile.txt", "r");
+	if (!fin)
+	{
+		c3errors_ErrorDialog(fn, "Missing game file"); 
+		g_abort_parse = TRUE;
+		return FALSE; 
+	}
 
-	dir[0] = 0;
-
-	r=fscanf (fin, "%s", str1); 
+	MBCHAR str1[_MAX_PATH];
+	int r = fscanf(fin, "%s", str1); 
 	if (r == EOF) { 
 		c3errors_ErrorDialog(fn, "Missing strings file"); 
 		g_abort_parse = TRUE;
 		return FALSE; 
 	}
-	sprintf (g_stringdb_filename, "%s%s", dir, str1);
+
+	MBCHAR dir[_MAX_PATH]; 
+	dir[0] = 0;
+	sprintf(g_stringdb_filename, "%s%s", dir, str1);
 
 	r = fscanf (fin, "%s", str1);
 	if (r == EOF) {
-		c3errors_ErrorDialog  (fn, "Missing sounds file"); 
+		c3errors_ErrorDialog(fn, "Missing sounds file"); 
 		return FALSE; 
 	}
 	sprintf(g_sounddb_filename, "%s%s", dir, str1);
@@ -1252,15 +1196,10 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	SPLASH_STRING("Initializing SLIC Engine...");
 
-	delete g_slicEngine;
-	g_slicEngine = new SlicEngine();
-	if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE)) 
-		g_slicEngine->Link();
-	else
+    if (!SlicEngine::Reload(g_slic_filename))
+    {
 		return FALSE;
-
-	Assert(g_slicEngine);
-
+    }
 	
 	g_theProfileDB->SetTutorialAdvice(FALSE);
 	g_theProfileDB->SetThroneRoom(FALSE);
@@ -1734,60 +1673,57 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	else
 		g_theTradePool = new TradePool();
 
-	if(&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			g_theTradeOfferPool = new TradeOfferPool(archive);
-		} else {
-			g_theTradeOfferPool = new TradeOfferPool();
-		}
-	} else
+    // 55 is probably the last save game version for CTP1 
+	if (&archive && loadEverything && (g_saveFileVersion < 55)) 
+    {
+		g_theTradeOfferPool = new TradeOfferPool(archive);
+	} 
+    else
+    {
 		g_theTradeOfferPool = new TradeOfferPool();
-
+    }
 	Assert(g_theTradeOfferPool);
 
 	if (&archive && loadEverything)
 		g_thePollution = new Pollution(archive);
 	else
 		g_thePollution = new Pollution();
-
 	Assert(g_thePollution);
 
-	if (&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			g_theTopTen = new TopTen(archive) ;
-		} else {
-			g_theTopTen = new TopTen();
-		}
-	} else
+	if (&archive && loadEverything && (g_saveFileVersion < 55)) 
+    {
+		g_theTopTen = new TopTen(archive);
+	} 
+    else
+    {
 		g_theTopTen = new TopTen();
-
+    }
 	Assert(g_theTopTen);
-
-
-
 
 	SPLASH_STRING("Initializing SLIC Engine...");
 
-	delete g_slicEngine;
-	if(&archive) {
-		g_slicEngine = new SlicEngine(archive);
+	if (&archive) 
+    {
+        delete g_slicEngine;
+        g_slicEngine = new SlicEngine(archive);
 		g_slicEngine->PostSerialize();
-	} else {
-		g_slicEngine = new SlicEngine();
-		if(g_slicEngine->Load(g_slic_filename, k_NORMAL_FILE)) {
-			
-			
-			
-			g_slicEngine->Link();
-		} else {
+	} 
+    else 
+    {
+        if (!SlicEngine::Reload(g_slic_filename)) 
+        {
 			return FALSE;
 		}
-		if(!g_network.IsActive() && !g_network.IsNetworkLaunch()) {
-			
+
+		if (!g_network.IsActive() && !g_network.IsNetworkLaunch()) 
+        {
 			g_slicEngine->SetTutorialActive(g_theProfileDB->IsTutorialAdvice());
 			g_slicEngine->SetTutorialPlayer(g_theProfileDB->GetPlayerIndex());
-			if(g_theProfileDB->IsTutorialAdvice()) {
-				if(g_slicEngine->Load(g_tutorial_filename, k_TUTORIAL_FILE)) {
+
+			if (g_theProfileDB->IsTutorialAdvice()) 
+            {
+				if (g_slicEngine->Load(g_tutorial_filename, k_TUTORIAL_FILE)) 
+                {
 					g_slicEngine->Link();
 				}
 				
@@ -1796,12 +1732,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				g_theProfileDB->SetRiskLevel(0);
 				g_theProfileDB->SetNonRandomCivs(TRUE);
 			}
-		} else {
+		} 
+        else 
+        {
 			g_theProfileDB->SetTutorialAdvice(FALSE);
 		}
 	}
-
-
 
 	SPLASH_STRING("Initializing Object Pools...");
 
@@ -1809,46 +1745,39 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theTerrainImprovementPool = new TerrainImprovementPool(archive);
 	else
 		g_theTerrainImprovementPool = new TerrainImprovementPool();
-
 	Assert(g_theTerrainImprovementPool) ;
 
-	if (&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			g_theDiplomaticRequestPool = new DiplomaticRequestPool(archive) ;
-		} else {
-			g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
-		}
-	} else
+	if (&archive && loadEverything && (g_saveFileVersion < 55))
+    {
+		g_theDiplomaticRequestPool = new DiplomaticRequestPool(archive) ;
+	} 
+    else 
+    {
 		g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
-
+	}
 	Assert(g_theDiplomaticRequestPool) ;
 
 	if (&archive && loadEverything)
 		g_theCivilisationPool = new CivilisationPool(archive) ;
 	else
 		g_theCivilisationPool = new CivilisationPool() ;
-
 	Assert(g_theCivilisationPool) ;
 
-	if (&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			g_theAgreementPool = new AgreementPool(archive) ;
-		} else {
-			g_theAgreementPool = new AgreementPool;
-		}
-	} else
+	if (&archive && loadEverything && (g_saveFileVersion < 55))
+    {
+		g_theAgreementPool = new AgreementPool(archive) ;
+	} 
+    else
+    {
 		g_theAgreementPool = new AgreementPool() ;
-
+    }
 	Assert(g_theAgreementPool) ;
 
-	
-	
 	delete g_theMessagePool;
 	if (&archive && loadEverything)
 		g_theMessagePool = new MessagePool(archive) ;
 	else
 		g_theMessagePool = new MessagePool() ;
-
 	Assert(g_theMessagePool) ;
 
 	
@@ -1860,24 +1789,19 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theInstallationPool = new InstallationPool(archive);
 	else
 		g_theInstallationPool = new InstallationPool();
-
 	Assert(g_theInstallationPool) ;
 
 	g_theInstallationPool->RebuildQuadTree();
 
 	
-	if(&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			sint32 wormholeExists;
-			archive >> wormholeExists;
-			if(wormholeExists)
-				g_wormhole = new Wormhole(archive);
-			else
-				g_wormhole = NULL;
-		} else {
-			g_wormhole = NULL;
-		}
-	} else {
+	if (&archive && loadEverything && (g_saveFileVersion < 55))
+    {
+		sint32 wormholeExists;
+		archive >> wormholeExists;
+        g_wormhole = (wormholeExists) ? new Wormhole(archive) : NULL;
+	} 
+    else 
+    {
 		g_wormhole = NULL;
 	}
 	
@@ -1887,22 +1811,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theWonderTracker = new WonderTracker();
 	}
 
-	if(&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			g_theAchievementTracker = new AchievementTracker(archive);
-		} else {
-			g_theAchievementTracker = new AchievementTracker();
-		}
-	} else {
+	if(&archive && loadEverything && (g_saveFileVersion < 55))
+    {
+		g_theAchievementTracker = new AchievementTracker(archive);
+	}
+    else 
+    {
 		g_theAchievementTracker = new AchievementTracker();
 	}
 
-	if(&archive) {
+	if (&archive) 
+    {
 		delete g_exclusions;
 		g_exclusions = new Exclusions(archive);
-	} else {
-		
-		
+	} 
+    else 
+    {
+	    // Exclusions not used	
 	}
 
 	if(&archive && loadEverything) {
@@ -1911,17 +1836,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_featTracker = new FeatTracker;
 	}
 
-	if(&archive && loadEverything) {
-		if(g_saveFileVersion < 55) {
-			g_theTradeBids = new TradeBids(archive);
-		} else {
-			g_theTradeBids = new TradeBids();
-		}
-	} else {
+	if(&archive && loadEverything && (g_saveFileVersion < 55))
+    {
+		g_theTradeBids = new TradeBids(archive);
+	} 
+    else 
+    {
 		g_theTradeBids = new TradeBids;
 	}
 
-	
 	if(&archive && loadEverything)
 	{
 		g_eventTracker = new EventTracker(archive);
@@ -1931,15 +1854,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_eventTracker = new EventTracker;
 	}
 
-
-
-
-
-
 	SPLASH_STRING("Setting Up Players...");
 
-	sint32 i, j;
-	g_player = new Player*[k_MAX_PLAYERS];
+	g_player = new Player *[k_MAX_PLAYERS];
     std::fill(g_player, g_player + k_MAX_PLAYERS, (Player *) NULL);
 	g_deadPlayer = new PointerList<Player>;
 
@@ -1949,25 +1866,26 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	sint32 numPlayersLoaded = 0;
 
 	
-	if (&archive) {
-		for (i=0; i<k_MAX_PLAYERS; i++) {
+	sint32 i, j;
+	if (&archive) 
+    {
+		for (i = 0; i < k_MAX_PLAYERS; i++) 
+        {
 			archive >> playerAlive;
-			if(playerAlive) { 
+			if (playerAlive) 
+            { 
 				g_player[i] = new Player(archive);
 				numPlayersLoaded++;
-			} else { 
-				g_player[i] = NULL;
 			}
 		}
 
 		sint32 num;
 		archive >> num;
-		for(i = 0; i < num; i++) {
-			Player *pl = new Player(archive);
-			g_deadPlayer->AddTail(pl);
+		for (i = 0; i < num; i++) 
+        {
+			g_deadPlayer->AddTail(new Player(archive));
 		}
 
-		
 		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS) 
 		{
 			CreateBarbarians(diff);
@@ -2114,7 +2032,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				break;
 			} // switch
 		}
-	} else {
+	} 
+    else 
+    {
 		//
 		//	Normal game code
 		CreateBarbarians(diff);
@@ -2247,10 +2167,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 	}
 
-
-
-
-
 #ifdef _DEBUG
 	if (g_theProfileDB->IsDiplomacyLogOn()) 
     {
@@ -2260,12 +2176,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
     verifyYwrap();
 #endif
 
-
-
-
-
-
-	BOOL createRobotInterface = TRUE;
+	bool createRobotInterface = true;
 	
 	SPLASH_STRING("Initializing A-star Pathing...");
 	roboinit_Initalize(archive); 
@@ -2275,21 +2186,16 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	{
 		SPLASH_STRING("Load AI data elements...");
 		
-		
-		
+		CtpAi::Load(archive);
+		createRobotInterface = false;
+		if(!g_theProfileDB->IsAIOn()) {
 			
-			CtpAi::Load(archive);
-			createRobotInterface = FALSE;
-			if(!g_theProfileDB->IsAIOn()) {
-				
-				
-				for(i = 0; i < k_MAX_PLAYERS; i++) {
-					if(g_player[i])
-						g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
-				}
+			
+			for(i = 0; i < k_MAX_PLAYERS; i++) {
+				if(g_player[i])
+					g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
 			}
-		
-
+		}
 	}
 	else
 	{
@@ -2366,16 +2272,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		numPlaced = gameinit_PlaceInitalUnits(g_theProfileDB->GetNPlayers(), g_player_start_list);
 #endif
 		if(numPlaced < g_theProfileDB->GetNPlayers() - 1) { 
-			for(sint32 n = numPlaced; n < k_MAX_PLAYERS; n++) 
+			for (sint32 n = numPlaced; n < k_MAX_PLAYERS; n++) 
             {
 				delete g_player[n];
 				g_player[n] = NULL;
 			}
 		}
-	} else if(
-
-			  (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)) {
-
+	} 
+    else if (g_isScenario && (g_startInfoType != STARTINFOTYPE_NOLOCS)) 
+    {
 		sint32 landSettler = -1;
 		sint32 seaSettler = -1;
 		sint32 spaceSettler = -1;
@@ -2505,12 +2410,12 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 #ifdef _DEBUG
 	
 	{
-		sint32 x,y;
-		for(x = 0; x < g_theWorld->GetXWidth(); x++) {
-			for(y = 0; y < g_theWorld->GetYHeight(); y++) {
+		for (sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
+			for (sint32 y = 0; y < g_theWorld->GetYHeight(); y++) 
+            {
 				Cell *cell = g_theWorld->GetCell(x, y);
-				sint32 u;
-				for(u = 0; u < cell->GetNumUnits(); u++) {
+				for (sint32 u = 0; u < cell->GetNumUnits(); u++) 
+                {
 					Assert(cell->AccessUnit(u).IsValid());
 				}
 			}
@@ -2521,10 +2426,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	
 	for(i=0; i<k_MAX_PLAYERS; i++)
 	{
-		int j;
-		if(g_player[i])
+		if (g_player[i])
 		{
-			for(j=0; j<g_player[i]->m_all_cities->Num(); j++)
+			for (int j=0; j<g_player[i]->m_all_cities->Num(); j++)
 			{
 				g_player[i]->m_all_cities->Access(j)->GetCityData()->FindGoodDistances();
 			}
@@ -2596,23 +2500,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 
 
-	if(!(&archive) || g_isScenario) {
-		if(g_startHotseatGame || g_startEmailGame) {
-			
-			BOOL foundFirstHuman = FALSE;
+	if (!(&archive) || g_isScenario) 
+    {
+		if (g_startHotseatGame || g_startEmailGame) 
+        {
+			bool foundFirstHuman = false;
 
-			for(i = 1; i < g_theProfileDB->GetNPlayers(); i++) {
+			for(i = 1; i < g_theProfileDB->GetNPlayers(); i++) 
+            {
 				Assert(g_player[i]);
 				if(!g_player[i])
 					continue;
 
-				
-				
-				if(g_hsPlayerSetup[i].isHuman && !foundFirstHuman) {
-					
+				if (g_hsPlayerSetup[i].isHuman && !foundFirstHuman) 
+                {
 					NewTurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 					g_selected_item->SetPlayerOnScreen(i);
-					foundFirstHuman = TRUE;
+					foundFirstHuman = true;
 				}
 
 				if(g_hsPlayerSetup[i].isHuman && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT)
@@ -2621,30 +2525,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					g_player[i]->m_playerType = PLAYER_TYPE_ROBOT;
 
 				g_player[i]->m_civilisation->ResetCiv((CIV_INDEX)g_hsPlayerSetup[i].civ, g_player[i]->m_civilisation->GetGender());
-				if(g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
+				if(g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN) 
+                {
 					if(strlen(g_hsPlayerSetup[i].name) > 0)
 						g_player[i]->m_civilisation->AccessData()->SetLeaderName(g_hsPlayerSetup[i].name);
 
-					if(i == 1) {
-						
-						
+					if (i == 1) 
+                    {
 						g_theProfileDB->SetLeaderName(g_hsPlayerSetup[i].name);
 					}
 					g_player[i]->m_email = new MBCHAR[strlen(g_hsPlayerSetup[i].email) + 1];
 					strcpy(g_player[i]->m_email, g_hsPlayerSetup[i].email);
 				}
 			}
-			if(g_startHotseatGame) {
-				g_turn->SetHotSeat(TRUE);
-				g_turn->SetEmail(FALSE);
-			} else if(g_startEmailGame) {
-				g_turn->SetEmail(TRUE);
-				g_turn->SetHotSeat(FALSE);
-			}
-		} else {
-			g_turn->SetHotSeat(FALSE);
-			g_turn->SetEmail(FALSE);
 		}
+
+        g_turn->SetHotSeat(g_startHotseatGame);
+        g_turn->SetEmail(g_startEmailGame);
 	} 
 	
 	g_startHotseatGame = FALSE;
@@ -2661,18 +2558,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_setBarbarianRiskUponLaunch = FALSE;
 	}
 
-
-	
-	
-	if (g_isScenario) {
-		infowin_SetMinRoundForGraphs(g_turn->GetRound());
-	} else {
-		infowin_SetMinRoundForGraphs(0);
-	}
+    infowin_SetMinRoundForGraphs(g_isScenario ? g_turn->GetRound() : 0);
 
 	// Clean good old -> new good table
 	// Created in CityData if the good database was changed in size.
-	delete[] g_newGoods;
+	delete [] g_newGoods;
 	g_newGoods = NULL;
 
 	return 1;
@@ -2696,13 +2586,9 @@ void gameinit_CleanupMessages(void)
 
 void gameinit_Cleanup(void) 
 {
-#define CHECKDELETE(x)  { delete x; x = NULL; }
-	
-
-
-	CHECKDELETE(g_theInstallationPool);
-	CHECKDELETE(g_theMessagePool);
-	CHECKDELETE(g_theCriticalMessagesPrefs);
+    allocated::clear(g_theInstallationPool);
+    allocated::clear(g_theMessagePool);
+    allocated::clear(g_theCriticalMessagesPrefs);
 
 	if (g_player) 
     {
@@ -2713,55 +2599,55 @@ void gameinit_Cleanup(void)
 
 		delete [] g_player;
 		g_player = NULL;
+
 		if (g_deadPlayer) 
         {
 			g_deadPlayer->DeleteAll();
-			delete g_deadPlayer;
-			g_deadPlayer = NULL;
+            allocated::clear(g_deadPlayer);
 		}
 	}
 
-	CHECKDELETE(g_theAgreementPool);
-	CHECKDELETE(g_theCivilisationPool);
-	CHECKDELETE(g_theDiplomaticRequestPool);
-	CHECKDELETE(g_theTerrainImprovementPool);
-	CHECKDELETE(g_slicEngine);
-	CHECKDELETE(g_theTopTen);
-	CHECKDELETE(g_thePollution);
-	CHECKDELETE(g_theTradePool);
-	CHECKDELETE(g_theUnitPool);
-	CHECKDELETE(g_theInstallationTree);
-	CHECKDELETE(g_theUnitTree);
-	CHECKDELETE(g_selected_item);
-	CHECKDELETE(g_theTradePool); 
-	CHECKDELETE(g_theTradeOfferPool); 
-	CHECKDELETE(g_turn);
-	CHECKDELETE(g_theWorld);
-	CHECKDELETE(g_theGameSettings);
-	CHECKDELETE(g_theArmyPool);
-	CHECKDELETE(g_theWonderTracker);
-	CHECKDELETE(g_theAchievementTracker);
+    allocated::clear(g_theAgreementPool);
+	allocated::clear(g_theCivilisationPool);
+	allocated::clear(g_theDiplomaticRequestPool);
+	allocated::clear(g_theTerrainImprovementPool);
+	allocated::clear(g_slicEngine);
+	allocated::clear(g_theTopTen);
+	allocated::clear(g_thePollution);
+	allocated::clear(g_theTradePool);
+	allocated::clear(g_theUnitPool);
+	allocated::clear(g_theInstallationTree);
+	allocated::clear(g_theUnitTree);
+	allocated::clear(g_selected_item);
+	allocated::clear(g_theTradePool); 
+	allocated::clear(g_theTradeOfferPool); 
+	allocated::clear(g_turn);
+	allocated::clear(g_theWorld);
+	allocated::clear(g_theGameSettings);
+	allocated::clear(g_theArmyPool);
+	allocated::clear(g_theWonderTracker);
+	allocated::clear(g_theAchievementTracker);
 
 
 
 
-	CHECKDELETE(g_theTradeBids);
-	CHECKDELETE(g_eventTracker);
-	CHECKDELETE(g_wormhole);
+	allocated::clear(g_theTradeBids);
+	allocated::clear(g_eventTracker);
+	allocated::clear(g_wormhole);
 	
-	CHECKDELETE(g_theOrderPond);
-	CHECKDELETE(g_theUnseenPond);
+	allocated::clear(g_theOrderPond);
+	allocated::clear(g_theUnseenPond);
 
-	CHECKDELETE(g_featTracker);
+	allocated::clear(g_featTracker);
 
 
 
 #ifdef _DEBUG
-	CHECKDELETE(g_theDiplomacyLog);
+	allocated::clear(g_theDiplomacyLog);
 #endif
 	Astar_Cleanup();
 
-	CHECKDELETE(g_rand);
+	allocated::clear(g_rand);
 	roboinit_Cleanup();
 	CtpAi::Cleanup();
 }
@@ -2807,25 +2693,13 @@ sint32 gameinit_ResetForNetwork()
 	return 0;
 }
 
-#include "c3ui.h"
-extern C3UI *g_c3ui;
-#include "radarmap.h"
-#include "radarwindow.h"
-#include "ctp2_Window.h"
-#include "tiledmap.h"
-#include "background.h"
-extern Background *g_background;
 
 void gameinit_ResetMapSize()
 {
-	g_c3ui->RemoveWindow(g_radarWindow->Id());
 	radarwindow_Cleanup();
-			
-	delete g_tiledMap;
-	g_tiledMap = NULL;
 
-	MapPoint mapsize(g_theWorld->GetXWidth(),
-					 g_theWorld->GetYHeight());
+	MapPoint mapsize(g_theWorld->GetXWidth(), g_theWorld->GetYHeight());
+	delete g_tiledMap;
 	g_tiledMap = new TiledMap(mapsize);
 	g_tiledMap->LoadTileset();
 	
@@ -2837,12 +2711,11 @@ void gameinit_ResetMapSize()
 		g_background->Y() + g_background->Height() 
 	};
 	
-	sint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i]) {
-			if(g_player[i]->m_vision)
-				delete g_player[i]->m_vision;
-			
+	for (int i = 0; i < k_MAX_PLAYERS; i++) 
+    {
+		if (g_player[i]) 
+        {
+			delete g_player[i]->m_vision;
 			g_player[i]->m_vision = new Vision(i);
 		}
 	}
@@ -2851,7 +2724,6 @@ void gameinit_ResetMapSize()
 	g_tiledMap->Refresh();
 	
 	radarwindow_Initialize();
-	
 	radarwindow_Display();
 	
 	g_tiledMap->PostProcessMap();
@@ -2861,49 +2733,43 @@ void gameinit_ResetMapSize()
 	
 	g_background->Draw();
 	
-	delete g_theUnitTree;
-	g_theUnitTree = new QuadTree<Unit>(sint16(g_theWorld->GetXWidth()), 
-	                                   sint16(g_theWorld->GetYHeight()), 
-	                                   g_theWorld->IsYwrap());
+    delete g_theUnitTree;
+    g_theUnitTree = 
+        new QuadTree<Unit>(mapsize.x, mapsize.y, g_theWorld->IsYwrap());
 
-	delete g_theInstallationTree;
-	g_theInstallationTree = new InstallationQuadTree((sint16)g_theWorld->GetXWidth(),
-	                                                 (sint16)g_theWorld->GetYHeight(),
-	                                                 g_theWorld->IsYwrap());
+    delete g_theInstallationTree;
+    g_theInstallationTree = 
+        new InstallationQuadTree(mapsize.x, mapsize.y, g_theWorld->IsYwrap());
 
-	
-	
-	CHECKDELETE(g_theInstallationPool);
-	g_theInstallationPool = new InstallationPool;
+    delete g_theInstallationPool;
+    g_theInstallationPool = new InstallationPool;
 
-	CHECKDELETE(g_theAgreementPool);
-	g_theAgreementPool = new AgreementPool;
+    delete g_theAgreementPool;
+    g_theAgreementPool = new AgreementPool;
 
-	CHECKDELETE(g_theDiplomaticRequestPool);
-	g_theDiplomaticRequestPool = new DiplomaticRequestPool;
+    delete g_theDiplomaticRequestPool;
+    g_theDiplomaticRequestPool = new DiplomaticRequestPool;
 
-	CHECKDELETE(g_theTerrainImprovementPool);
-	g_theTerrainImprovementPool = new TerrainImprovementPool;
+    delete g_theTerrainImprovementPool;
+    g_theTerrainImprovementPool = new TerrainImprovementPool;
 
-	CHECKDELETE(g_theTradePool);
-	g_theTradePool = new TradePool;
+    delete g_theTradePool;
+    g_theTradePool = new TradePool;
 
-	CHECKDELETE(g_theUnitPool);
-	g_theUnitPool = new UnitPool;
+    delete g_theUnitPool;
+    g_theUnitPool = new UnitPool;
 
-	CHECKDELETE(g_theTradePool); 
-	g_theTradePool = new TradePool;
+    delete g_theTradePool;
+    g_theTradePool = new TradePool;
 
-	CHECKDELETE(g_theArmyPool);
-	g_theArmyPool = new ArmyPool;
+    delete g_theArmyPool;
+    g_theArmyPool = new ArmyPool;
 
-	
-	CHECKDELETE(g_theOrderPond);
-	g_theOrderPond = new Pool<Order>(INITIAL_CHUNK_LIST_SIZE);
+    delete g_theOrderPond;
+    g_theOrderPond = new Pool<Order>(INITIAL_CHUNK_LIST_SIZE);
 
+    delete g_theUnseenPond;
+    g_theUnseenPond = new Pool<UnseenCell>(INITIAL_CHUNK_LIST_SIZE);
 
-	CHECKDELETE(g_theUnseenPond);
-	g_theUnseenPond = new Pool<UnseenCell>(INITIAL_CHUNK_LIST_SIZE);
-
-	CtpAi::Initialize();
+    CtpAi::Initialize();
 }

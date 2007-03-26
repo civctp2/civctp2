@@ -1,33 +1,31 @@
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
-#ifndef __GAMEFILE_H__
-#define __GAMEFILE_H__
 
-#include "pixeltypes.h"
-#include "pointerlist.h"
-#include "ns_gamesetup.h"
-#include "MapPoint.h"
-#include "StartingPosition.h"
-#include "civscenarios.h"
-#include "CivilisationPool.h"
+#ifndef GAMEFILE_H__
+#define GAMEFILE_H__
+
+class GameFile;
+class GameInfo;
+class GameMapFile;
+class GameMapInfo;
+class SaveInfo;
+class SaveMapInfo;
+
+size_t const	SAVE_LEADER_NAME_SIZE	= 6;
 
 enum GAMEFILE_ERR
-	{
+{
 	GAMEFILE_ERR_LOAD_OK,
 	GAMEFILE_ERR_LOAD_FAILED,
 	GAMEFILE_ERR_INCORRECT_VERSION,
 	GAMEFILE_ERR_STORE_OK,
 	GAMEFILE_ERR_STORE_FAILED,
 	GAMEFILE_ERR_MAX
-	} ;
-
-struct CivGuid {
-	sint32 civIndex;
-	GUID guid;
 };
 
-enum SAVEINFOLOAD {
+enum SAVEINFOLOAD
+{
 	SAVEINFOLOAD_NONE = -1,
 
 	SAVEINFOLOAD_BASIC,
@@ -36,7 +34,23 @@ enum SAVEINFOLOAD {
 	SAVEINFOLOAD_MAX
 };
 
-class SaveInfo;
+#include "pixeltypes.h"
+#include "pointerlist.h"
+#include "ns_gamesetup.h"
+#include "MapPoint.h"
+#include "StartingPosition.h"
+#include "civscenarios.h"
+#include "CivilisationPool.h"
+class CivArchive;
+
+
+
+struct CivGuid {
+	sint32 civIndex;
+	GUID guid;
+};
+
+
 
 class SaveInfo {
 public:
@@ -130,36 +144,30 @@ public:
 };
 
 
-class CivArchive;
-
 class GameFile
-	{
-	private:
-		FILE	*m_ds ;												
+{
+public:
+	GameFile();
 
-	public:
+	uint32 SaveDB(CivArchive &archive);
+	uint32 Save(MBCHAR const * filepath, SaveInfo *info);
+	uint32 Restore(MBCHAR const * filepath);
 
-		GameFile() ;
+	static bool LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info);
+	static bool LoadBasicGameInfo(FILE *saveFile, SaveInfo *info);
+	static void SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info);
 
-		uint32 SaveDB(CivArchive &archive);
-		uint32 Save(const MBCHAR *filepath, SaveInfo *info) ;
-		uint32 Restore(const MBCHAR *filepath) ;
+	static void SetProfileFromExtendedInfo(SaveInfo *info);
+	static void GetExtendedInfoFromProfile(SaveInfo *info);
 
-		static BOOL LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info);
-		static BOOL LoadBasicGameInfo(FILE *saveFile, SaveInfo *info);
-		static void SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info);
+	static void RestoreGame(MBCHAR const *filename);
+	static void SaveGame(MBCHAR const * filename, SaveInfo *info);
+	static void RestoreScenarioGame(MBCHAR const *name);
 
-		static void SetProfileFromExtendedInfo(SaveInfo *info);
-		static void GetExtendedInfoFromProfile(SaveInfo *info);
-
-		static void RestoreGame(const MBCHAR *filename) ;
-		static void SaveGame(const MBCHAR *filename, SaveInfo *info) ;
-		static void RestoreScenarioGame(MBCHAR *name);
-
-		static BOOL ValidateGameFile(MBCHAR *path, SaveInfo *info);
-		static BOOL FetchExtendedSaveInfo(MBCHAR *path, SaveInfo *info);
-		static PointerList<GameInfo> *BuildSaveList(C3SAVEDIR dir);
-	} ;
+	static bool ValidateGameFile(MBCHAR const * path, SaveInfo *info);
+	static bool FetchExtendedSaveInfo(MBCHAR const * path, SaveInfo *info);
+	static PointerList<GameInfo> * BuildSaveList(C3SAVEDIR dir);
+};
 
 
 
@@ -186,29 +194,25 @@ public:
 };
 
 class GameMapFile
-	{
-	private:
-		FILE	*m_ds ;
+{
+public:
+	GameMapFile() ;
 
-	public:
+	uint32 Save(const MBCHAR *filepath, SaveMapInfo *info) ;
+	uint32 Restore(const MBCHAR *filepath) ;
 
-		GameMapFile() ;
+	static bool LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info);
+	static void SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info);
 
-		uint32 Save(const MBCHAR *filepath, SaveMapInfo *info) ;
-		uint32 Restore(const MBCHAR *filepath) ;
+	static void SetProfileFromExtendedInfo(SaveMapInfo *info);
+	static void GetExtendedInfoFromProfile(SaveMapInfo *info);
 
-		static BOOL LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info);
-		static void SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info);
+	static void RestoreGameMap(const MBCHAR *filename) ;
+	static void SaveGameMap(const MBCHAR *filename, SaveMapInfo *info) ;
 
-		static void SetProfileFromExtendedInfo(SaveMapInfo *info);
-		static void GetExtendedInfoFromProfile(SaveMapInfo *info);
-
-		static void RestoreGameMap(const MBCHAR *filename) ;
-		static void SaveGameMap(const MBCHAR *filename, SaveMapInfo *info) ;
-
-		static BOOL ValidateGameMapFile(MBCHAR *path, SaveMapInfo *info);
-		static PointerList<GameMapInfo> *BuildSaveMapList(C3SAVEDIR dir);
-	} ;
+	static bool ValidateGameMapFile(MBCHAR const * path, SaveMapInfo *info);
+	static PointerList<GameMapInfo> *BuildSaveMapList(C3SAVEDIR dir);
+};
 
 extern sint32 g_saveFileVersion;
 extern sint32 g_startInfoType;

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Difficulty settings class and diffutils.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -244,23 +244,25 @@ sint32 diffutil_GetYearIncrementFromTurn(sint32 diff, sint32 turn)
 
 const char *diffutil_GetYearStringFromTurn(sint32 diff, sint32 turn)
 {
-
 	static char buf[k_MAX_NAME_LEN];
-	if(g_useCustomYear && g_pTurnLengthOverride) {
-		if(turn >= g_turnLengthOverrideSize) {
-			turn = g_turnLengthOverrideSize - 1;
-		}
-		strcpy(buf, g_pTurnLengthOverride[turn].text);
-	} else {
+
+	if (g_useCustomYear && g_pTurnLengthOverride) 
+    {
+        size_t  index = std::min<size_t>(static_cast<size_t>(turn), g_turnLengthOverrideSize - 1);
+		strcpy(buf, g_pTurnLengthOverride[index].text);
+	} 
+    else 
+    {
 		sint32 year = diffutil_GetYearFromTurn(diff, turn);
-		if(year == 0) {
-			
+		if (year == 0) 
+        {
 			year = 1;
 		}
 
-		sprintf(buf, "%d %s", abs(year), ((year < 0) ?
-		                                         g_theStringDB->GetNameStr("str_tbl_ldl_BC") :
-		                                         g_theStringDB->GetNameStr("str_tbl_ldl_AD")));
+		sprintf(buf, "%d %s", 
+                abs(year),
+                g_theStringDB->GetNameStr((year < 0) ? "str_tbl_ldl_BC" : "str_tbl_ldl_AD")
+               );
 	}
 
 	return buf;

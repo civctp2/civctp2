@@ -34,28 +34,21 @@
 #include "net_util.h"
 
 #include "UnitData.h"
-#include "UnitPool.h"
+#include "UnitPool.h"           // g_theUnitPool
 #include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
+#include "World.h"              // g_theWorld
+#include "player.h"             // g_player
 
 #include "DB.h"
 #include "UnitRec.h"
-#include "SelItem.h"
-#include "director.h"
+#include "SelItem.h"            // g_selected_item
+#include "director.h"           // g_director
 #include "tech_wllist.h"
 
 #include "Cell.h"
 
 #include "AICause.h"
 #include "ctpai.h"
-
-extern UnitPool* g_theUnitPool;
-extern World* g_theWorld;
-extern Player   **g_player;
-extern SelectedItem *g_selected_item; 
-extern Director *g_director;
-
 
 //----------------------------------------------------------------------------
 //
@@ -100,12 +93,14 @@ void NetUnit::Packetize(uint8* buf, uint16& size)
 {
 	size = 0;
 	PUSHID(k_PACKET_UNIT_ID);
-	uint16 unitSize;
 
 	PUSHLONG(m_unitData->m_id);
-	PUSHLONG((uint32)m_actorId);
+	PUSHLONG(m_actorId);
+
+	uint16 unitSize;
 	PacketizeUnit(&buf[size], unitSize, m_unitData);
-	size += unitSize;
+
+	size = size + unitSize;
 }
 
 
@@ -137,12 +132,11 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	PULLLONGTYPE(uid, Unit);
 	PULLLONGTYPE(m_actorId, Unit);
 
+	g_network.CheckReceivedObject(uid.m_id);
+
 	uint16 unitSize;
-
-	g_network.CheckReceivedObject((uint32)uid);
-
-	if(g_theUnitPool->IsValid(uid)) {
-		
+	if (uid.IsValid()) 
+    {
 		m_unitData = g_theUnitPool->AccessUnit((const Unit)getlong(&buf[2]));
 		MapPoint pnt = m_unitData->m_pos;
 		PLAYER_INDEX oldowner = m_unitData->m_owner;
@@ -325,8 +319,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 void NetUnit::PacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 {
-	sint32 i;
-
 	uint8* ptr = buf;
 	putshort(ptr, (uint16)unitData->m_owner); ptr += 2;
 	putlong(ptr, unitData->m_type); ptr += 4;
@@ -345,6 +337,8 @@ void NetUnit::PacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 	
 #if 0
 	uint32 mask = 0;
+	sint32 i;
+
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if(g_player[i]) {
 			mask |= (1 << i);
@@ -376,20 +370,19 @@ void NetUnit::PacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 	if(canHaveCargo) {
 		uint8 transportedUnits = (uint8)unitData->m_cargo_list->Num();
 		putbyte(ptr, transportedUnits); ptr++;
-		for(i = 0; (uint8)i < transportedUnits; i++) {
+		for (uint8 i = 0; i < transportedUnits; i++) {
 			putlong(ptr, (uint32)unitData->m_cargo_list->Access(i)); ptr += 4;
 		}
 	}
 
 	putlong(ptr, (uint32)unitData->m_target_city.m_id); ptr += 4;
 
-	size = ptr - buf;
+	size = static_cast<uint16>(ptr - buf);
 }
 
 void NetUnit::UnpacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 {
 	uint8* ptr = buf;
-	sint32 i;
 
 	unitData->m_owner = (PLAYER_INDEX)getshort(ptr); ptr += 2;
 	unitData->m_type = getlong(ptr); ptr += 4;
@@ -407,7 +400,7 @@ void NetUnit::UnpacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 #if 0
 	uint32 mask = getlong(ptr); ptr += 4;
 
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
+	for (sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 		if(!g_player[i]) continue;
 		if(!(mask & (1 << i))) continue;
 		unitData->m_temp_visibility_array.m_array_index[i] = getbyte(ptr); ptr++;
@@ -438,7 +431,8 @@ void NetUnit::UnpacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 		}
 		uint8 transportedUnits = getbyte(ptr); ptr++;
 		unitData->m_cargo_list->Clear();
-		for(i = 0; (uint8)i < transportedUnits; i++) {
+		for (uint8 i = 0; i < transportedUnits; i++) 
+        {
 			Unit tunit = Unit(getlong(ptr)); ptr += 4;
 			unitData->m_cargo_list->Insert(tunit);
 		}
@@ -446,7 +440,7 @@ void NetUnit::UnpacketizeUnit(uint8* buf, uint16& size, UnitData* unitData)
 
 	unitData->m_target_city.m_id = getlong(ptr); ptr += 4;
 
-	size = ptr - buf;
+	size = static_cast<uint16>(ptr - buf);
 }
 
 NetUnitMove::NetUnitMove(const Unit id, const MapPoint &pnt)
@@ -461,8 +455,8 @@ void NetUnitMove::Packetize(uint8 *buf, uint16 &size)
 	PUSHID(k_PACKET_UNIT_MOVE_ID);
 
 	PUSHLONG(m_id);
-	PUSHSHORT((uint16)m_point.x);
-	PUSHSHORT((uint16)m_point.y);
+	PUSHSHORT(m_point.x);
+	PUSHSHORT(m_point.y);
 }
 
 void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
@@ -476,13 +470,13 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLSHORT(m_point.x);
 	PULLSHORT(m_point.y);
 
-	Assert(g_theUnitPool->IsValid(m_id));
-	if(!g_theUnitPool->IsValid(m_id))
+	Unit u(m_id);
+	Assert(u.IsValid());
+	if(!u.IsValid())
 		return;
 
 	DPRINTF(k_DBG_NET, ("Net: Unit %lx moved to %d,%d via move packet\n",
 						m_id, m_point.x, m_point.y));
-	Unit u(m_id);
 	UnitData *ud = u.AccessData();
 
 	UnitDynamicArray revealed;
@@ -516,7 +510,7 @@ void NetUnitHP::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
 	PUSHID(k_PACKET_UNIT_HP_ID);
-	PUSHLONG((uint32)m_unit);
+	PUSHLONG(m_unit.m_id);
 	PUSHDOUBLE(m_hp);
 }
 
@@ -529,8 +523,9 @@ void NetUnitHP::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		
 	PULLLONGTYPE(m_unit, Unit);
 	PULLDOUBLE(m_hp);
-	Assert(g_theUnitPool->IsValid(m_unit));
-	if(g_theUnitPool->IsValid(m_unit)) {
+	Assert(m_unit.IsValid());
+	if (m_unit.IsValid()) 
+    {
 		DPRINTF(k_DBG_NET, ("NetUnitHP for %lx (owner=%d): %lf\n", m_unit.m_id, m_unit.GetOwner(), m_hp));
 		m_unit.SetHP(m_hp);
 	}

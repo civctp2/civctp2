@@ -45,59 +45,51 @@
 #include "c3.h"                     // pre-compiled
 #include "World.h"                  // own declarations, g_theWorld
 
-#include "c3errors.h"
-#include "Globals.h"
-
-#include "TerrainRecord.h"
-
 #include "A_Star_Heuristic_Cost.h"
-#include "Cell.h"
-
-#include "civarchive.h"
-#include "ConstDB.h"                // g_theConstDB
-#include "player.h"                 // g_player
-#include "RandGen.h"                // g_rand
-#include "tiledmap.h"               // g_tiledMap
-#include "TileInfo.h"
-#include "GoodyHuts.h"
-
-#include "profileDB.h"              // g_theProfileDB
-#include "dynarr.h"
-#include "network.h"
-#include "MapDB.h"
-#include "PQueue.h"
-#include "WorldDistance.h"
-
-#include "gamefile.h"
-#include "StartingPosition.h"
-
-#include "MoveFlags.h"
-
-
-#include "ResourceRecord.h"
-
-#include "terrainutil.h"
-#include "cellunitlist.h"
 #include "AICause.h"
-#include "citydata.h"
-
-#ifdef DUMP_TERRAIN_HEIGHT_MAPS
+#if defined(DUMP_TERRAIN_HEIGHT_MAPS)
 #include "bmp_io.h"
 #endif
+#include "c3errors.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "citydata.h"
+#include "civarchive.h"
+#include "ConstDB.h"                // g_theConstDB
+#include "dynarr.h"
+#include "gamefile.h"
+#include "Globals.h"
+#include "GoodyHuts.h"
+#include "MapDB.h"
+#include "MoveFlags.h"
+#include "network.h"
+#include "player.h"                 // g_player
+#include "PQueue.h"
+#include "profileDB.h"              // g_theProfileDB
+#include "RandGen.h"                // g_rand
+#include "ResourceRecord.h"
+#include "StartingPosition.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "tiledmap.h"               // g_tiledMap
+#include "TileInfo.h"
+#include "WorldDistance.h"
 
-#ifndef USE_COM_REPLACEMENT
-#include <initguid.h>
-#else
+#if defined(USE_COM_REPLACEMENT)
 #include <ltdl.h>
+#else
+#include <initguid.h>
 #endif
 #include "C3Rand.h"
 #include "IMapGen.h"
 
+extern MapPoint g_mp_size;
 
 
 
 
-static C3Rand *s_randomGenerator    = NULL;
+static C3Rand *                 s_randomGenerator   = NULL;
+static DynamicArray<MapPoint> * s_visited           = NULL;
 
 void TemperatureFilter(sint8 *map, sint32 *histogram);
 
@@ -109,10 +101,10 @@ void TemperatureFilter(sint8 *map, sint32 *histogram);
 
 
 
-extern MapPoint g_mp_size;
 
-World::World(const MapPoint m, const int xw, const int yw)
+World::World(const MapPoint & m, const int xw, const int yw)
 :   
+    CityRadiusCallback      (),
     m_isYwrap               (yw),
     m_isXwrap               (xw),
     m_mapGenerator          (MAP_GENERATOR_PLUGIN),
@@ -2788,7 +2780,6 @@ void World::FlatToIso(const MapPoint &flat, MapPoint &iso)
 		iso.x += m_size.x;
 }
 
-static DynamicArray<MapPoint> *s_visited;
 
 
 BOOL World::IsNextToOldRiver(const MapPoint &newpoint, const MapPoint &lastpoint)

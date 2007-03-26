@@ -686,37 +686,36 @@ STDEHANDLER(TargetOrderEvent)
 STDEHANDLER(ArmyMoveEvent)
 {
 	Army army;
-	WORLD_DIRECTION dir;
-	UNIT_ORDER_TYPE order;
-	sint32 extra;
-	MapPoint extraOrderPos;
-
 	if(!args->GetArmy(0, army)) return GEV_HD_Continue;
+
+	WORLD_DIRECTION dir;
 	if(!args->GetDirection(0, dir))	return GEV_HD_Continue;
+
+	UNIT_ORDER_TYPE order;
 	if(!args->GetInt(0, (sint32 &)order)) return GEV_HD_Continue;
+
+	sint32 extra;
 	if(!args->GetInt(1, extra)) return GEV_HD_Continue;
+
+	MapPoint extraOrderPos;
 	if(!args->GetPos(0, extraOrderPos))	return GEV_HD_Continue;
 
-	sint32 owner = army.GetOwner();
-
-	
-	
-	MapPoint newPos, oldPos;
+	MapPoint    oldPos;
 	army.GetPos(oldPos);
 
-	sint32 r = oldPos.GetNeighborPosition(dir, newPos);
-
-	if(!r)
+    MapPoint    newPos; 
+	if (!oldPos.GetNeighborPosition(dir, newPos))
 		return GEV_HD_Continue;
 
-	if(army.AccessData()->CheckSpecialUnitMove(newPos)) {
+    ArmyData *  armyData    = army.AccessData();
+	if (armyData->CheckSpecialUnitMove(newPos)) {
 		return GEV_HD_Continue;
 	}
 
-	
-	army.AccessData()->CheckLoadSleepingCargoFromCity(NULL);
+	armyData->CheckLoadSleepingCargoFromCity(NULL);
 
-	if(army.AccessData()->IsMovePointsEnough(newPos)) {
+	if (armyData->IsMovePointsEnough(newPos)) 
+    {
 /*EMOD for rebasing? this just moves it to newpos maybe do pathing order? or move to? and then set newpos as endpos?
 		if (order == UNIT_ORDER_MOVE_TO
 
@@ -740,25 +739,26 @@ STDEHANDLER(ArmyMoveEvent)
  
 
 */ //end EMOD
-		if(army.AccessData()->IsOccupiedByForeigner(newPos)) {
-			
-			CellUnitList *defender = g_theWorld->GetCell(newPos)->UnitArmy();
+		if (armyData->IsOccupiedByForeigner(newPos)) 
+        {
+			CellUnitList * defender = g_theWorld->GetCell(newPos)->UnitArmy();
 
-			
-			
-			sint32 i;
-			for(i = 0; i < defender->Num(); i++) {
-				if(defender->Access(i).Flag(k_UDF_CANT_BE_ATTACKED))
+			for (sint32 d = 0; d < defender->Num(); ++d) 
+            {
+				if (defender->Access(d).Flag(k_UDF_CANT_BE_ATTACKED))
 					return GEV_HD_Continue;
 			}
 
 			
-			
-			if(army.GetOwner() == PLAYER_INDEX_VANDALS && wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders)) {
+	
+	        PLAYER_INDEX owner = army.GetOwner();
+			if ((owner == PLAYER_INDEX_VANDALS) && 
+                wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders)) 
+            {
 				return GEV_HD_Continue;
 			}
 
-			bool wasVisible = army.AccessData()->CheckWasEnemyVisible(newPos) != FALSE;
+			bool wasVisible = armyData->CheckWasEnemyVisible(newPos);
 			if(!wasVisible) {
 
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
@@ -769,34 +769,30 @@ STDEHANDLER(ArmyMoveEvent)
 
 			}
 
-			if(order == UNIT_ORDER_MOVE || (order == UNIT_ORDER_MOVE_TO && !wasVisible)) {
-				
-				
+			if (order == UNIT_ORDER_MOVE || 
+                ((order == UNIT_ORDER_MOVE_TO) && !wasVisible)) 
+            {
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 									   GEV_ClearOrders,
 									   GEA_Army, army,
 									   GEA_End);
 				
-				
-				
-				
 				if(!extra)
 					return GEV_HD_Continue;
 
-				
-				
-				
-				if(newPos != extraOrderPos)
+				if (newPos != extraOrderPos)
 					return GEV_HD_Continue;
 			}
 
-			if(order == UNIT_ORDER_MOVE_THEN_UNLOAD)
+			if (order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 				return GEV_HD_Continue;
 
-			for(i = 0; i < army.Num(); i++) {
-				if(army.AccessData()->m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN) ||
-				   army.AccessData()->m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN)) {
-					
+			for (sint32 i = 0; i < army.Num(); i++) 
+            {
+				if ((*armyData)[i].Flag(k_UDF_FOUGHT_THIS_TURN) ||
+				    (*armyData)[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN)
+                   )
+                {
 					return GEV_HD_Continue;
 				}
 			}
@@ -811,22 +807,20 @@ STDEHANDLER(ArmyMoveEvent)
 								   GEV_ClearOrders,
 								   GEA_Army, army,
 								   GEA_End);
-
-			return GEV_HD_Continue;
 		}
-
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-							   GEV_FinishMove,
-							   GEA_Army, army,
-							   GEA_Direction, dir,
-							   GEA_MapPoint, newPos,
-							   GEA_Int, order,
-							   GEA_End);
-
-		
-
-		return GEV_HD_Continue;
-	} else {
+        else
+        {
+		    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+							       GEV_FinishMove,
+							       GEA_Army, army,
+							       GEA_Direction, dir,
+							       GEA_MapPoint, newPos,
+							       GEA_Int, order,
+							       GEA_End);
+        }
+	}
+    else 
+    {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 							   GEV_CantMoveYet,
 							   GEA_Army, army,
@@ -834,6 +828,7 @@ STDEHANDLER(ArmyMoveEvent)
 							   GEA_MapPoint, newPos,
 							   GEA_End);
 	}
+
 	return GEV_HD_Continue;
 }
 

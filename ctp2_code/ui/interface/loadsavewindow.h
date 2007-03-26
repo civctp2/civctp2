@@ -2,8 +2,11 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef LOADSAVEWINDOW_FLAG
-#define LOADSAVEWINDOW_FLAG
+
+#ifndef LOADSAVEWINDOW_H
+#define LOADSAVEWINDOW_H
+
+class LoadSaveWindow;
 
 #include "pointerlist.h"
 #include "gamefile.h"
@@ -81,8 +84,6 @@ public:
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
-
 	virtual ~LoadSaveWindow();
 
 	
@@ -140,12 +141,10 @@ public:
 	c3_ListBox *GetListOne( void ) const { return m_listOne; }
 	c3_ListBox *GetListTwo( void ) const { return m_listTwo; }
 
-	BOOL NoName( void );
+	bool NoName( void );
 
 private:
-	
-	
-	BOOL CreateSaveInfoIfNeeded( SaveInfo *&info );
+	bool        CreateSaveInfoIfNeeded(SaveInfo *& info);
 
 	uint32			 m_type;
 	aui_StringTable *m_nameString;

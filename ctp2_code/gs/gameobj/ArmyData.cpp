@@ -334,7 +334,7 @@ bool IsSolist(Unit const & u)
 
 } // namespace
 
-sint32 *ArmyData::s_orderDBToEventMap = NULL;
+sint32 * ArmyData::s_orderDBToEventMap = NULL;
 
 
 
@@ -839,7 +839,7 @@ bool ArmyData::CargoCanEnter(const MapPoint &pos) const
 // Remark(s)  : "ships" means any unit with MovementType: Sea in it's DB rec
 //
 //----------------------------------------------------------------------------
-sint16 ArmyData::CountMovementTypeSea() const
+size_t ArmyData::CountMovementTypeSea() const
 {
     sint16 count = 0;
 
@@ -924,7 +924,7 @@ bool ArmyData::CanTransport() const
 {
     for (int i = 0; i < m_nElements; ++i)
     {
-        sint32 const	cargo = m_array[i].AccessData()->GetCargoCapacity();
+        sint32 const	cargo = m_array[i].GetData()->GetCargoCapacity();
         if (cargo > 0)
             return true;
     }
@@ -1712,7 +1712,7 @@ void ArmyData::BeginTurn()
 
     if (!g_player[m_owner]->m_can_use_sea_tab)
     {
-        g_player[m_owner]->m_can_use_sea_tab |= (CountMovementTypeSea() > 0);
+        g_player[m_owner]->m_can_use_sea_tab = (CountMovementTypeSea() > 0);
     }
 
     //Add any empty cargo slots in this army to it's owner's total cargo capacity
@@ -7073,8 +7073,8 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 		InformAI(UNIT_ORDER_FINISH_ATTACK, pos); 
 
 		sint32 numCloaked = 0;
-		for(sint32 i = 0; i < defender.Num(); i++) {
-			if(defender.m_array[i].IsCloaked())
+		for (sint32 i = 0; i < defender.Num(); i++) {
+			if (defender[i].IsCloaked())
 				numCloaked++;
 		}
 		if(numCloaked >= defender.Num() || m_array[0].AccessData()->PacMan()) {

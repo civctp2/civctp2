@@ -901,14 +901,19 @@ bool Army::IsWounded(void) const
 	return GetData()->IsWounded();
 }
 
-bool Army::CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & use_vision)
+bool Army::CanAtLeastOneCargoUnloadAt
+(
+    MapPoint const &    old_pos, 
+    MapPoint const &    dest_pos, 
+    bool                use_vision
+) const
 {
-	return AccessData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
+	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
 }
 
 bool Army::ExecutedThisTurn() const
 {
-	return (AccessData()->m_flags & k_CULF_EXECUTED_THIS_TURN) != 0;
+	return (GetData()->GetFlags() & k_CULF_EXECUTED_THIS_TURN) != 0;
 }
 
 void Army::InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos)

@@ -60,6 +60,7 @@
 #include "ArmyData.h"
 #include "ArmyPool.h"           // g_theArmyPool
 #include "aui_bitmapfont.h"
+#include "BuildingRecord.h"
 #include "cellunitlist.h"
 #include "CityStyleRecord.h"
 #include "Civilisation.h"
@@ -80,9 +81,8 @@
 #include "UnitData.h"
 #include "UnitPool.h"           // g_theUnitPool
 #include "UnitRecord.h"
+#include "WonderRecord.h"
 #include "wonderutil.h"
-#include "BuildingRecord.h"    //emod
-#include "WonderRecord.h"    //emod
 
 extern SpriteGroupList  *g_unitSpriteGroupList;
 extern SpriteGroupList  *g_citySpriteGroupList;
@@ -1691,11 +1691,10 @@ void UnitActor::DrawHerald(void)
 	if (!m_unitSpriteGroup)
 		return;
 
-	Unit unit   = Unit(GetUnitID());
-	if (!unit.IsValid()) return;
+	if (!m_unitID.IsValid()) return;
 
 	CellUnitList army;
-	g_theWorld->GetArmy(unit.RetPos(), army);
+	g_theWorld->GetArmy(m_unitID.RetPos(), army);
 
 	MAPICON		icon = MAPICON_HERALD;
 	if (army.Num() > 1 && army.Num() < 10) {
@@ -1772,30 +1771,45 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 	    }
     }
 
-	MAPICON		icon = MAPICON_HERALD;
+// Remove the next line when the scaling and centering of the text has been implemented
+// properly - or you want to test its operation. Currently, the generated text looks too
+// ugly to include it in a release.
+#define USE_PREDEFINED_ICONS	
 
-	// ToDo: Replace by drawn numbers see tiledraw code
-	// than we can remove these extra icons
-	//original
-	//if (stack > 1 && stack <= 9) {
-	//	icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
-	//} else if(stack >= 10 && stack <= 12) {
-	//	icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
-	//}
+#if defined(USE_PREDEFINED_ICONS)
+    MAPICON		icon = MAPICON_HERALD; // default: plain icon
 
-	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, displayedColor);
+    if (stack > 1 && stack <= 9) 
+    {
+        // single digit predefined icons
+        icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
+    } 
+    else if (stack >= 10 && stack <= 12) 
+    {
+        // double digits predefined icons
+        icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
+    }
 
-	//code for text
-	MBCHAR strn[80];
-	sprintf(strn, "%i", stack);
+    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, displayedColor);
+#else
+    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_HERALD), x, y, displayedColor);
 
-	if (stack > 1 && stack <= 9) {
-		DrawText(x + 5, y, strn);
-	} else if(stack >= 10 && stack <= 12) {
-		DrawText(x, y, strn);
-	}
-	//DrawSomeText(TRUE, strn, x, y, g_colorSet->GetColorRef(COLOR_BLACK), g_colorSet->GetColorRef(COLOR_WHITE));
-	//DrawString(surf, &rect, &clipRect, strn, 0, GetColorRef(COLOR_BLACK),0);
+    // Generate text
+    MBCHAR strn[80];
+    sprintf(strn, "%i", stack);
+
+    /// @todo Scale and center text
+    if (stack > 1 && stack <= 9) 
+    {
+        // single digit
+        DrawText(x + 5, y, strn);
+    } 
+    else if (stack >= 10 && stack <= 12) 
+    {
+        // double digits
+        DrawText(x, y, strn);
+    }
+#endif
 
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
@@ -1866,87 +1880,83 @@ void UnitActor::DrawHealthBar(void)
 	if (m_size > 0) return;
 	if (!g_showHeralds) return;
 
-	Unit		unit    = Unit(GetUnitID());
-	if (unit.IsValid() && unit.IsCity()) 
+    if (m_unitID.IsValid() && m_unitID.IsCity()) 
     {
         return;
-	}
+    }
 
-	RECT		leftRect, rightRect;
-	double		ratio;
-	Pixel16		color;
 	TileSet	*   tileSet = g_tiledMap->GetTileSet();
-	sint32		top, middle;
-
+	Cell *      myCell = g_theWorld->GetCell(m_pos);
 	
 	sint32		stackSize = 1;
-	static Army	army;	
-	
-	Cell *      myCell = g_theWorld->GetCell(m_pos);
-
-	
-	
-	if (m_tempStackSize != 0) {
+    if (m_tempStackSize != 0) 
+    {
 		stackSize = m_tempStackSize;
-	} else {
-		if (IsActive()) {
-			if (g_theUnitPool->IsValid(m_unitID)) {
-			
-				army = m_unitID.GetArmy();
+    } 
+    else if (IsActive()) 
+    {
+        if (m_unitID.IsValid()) 
+        {
+            Army army = m_unitID.GetArmy();
 
-				if (g_theArmyPool->IsValid(army)) {
-					stackSize = army.Num();
-				}
-			}
-		} else {
-			CellUnitList *  unitList = myCell->UnitArmy();
-			if (unitList) {
-				stackSize = unitList->Num();
-				for (sint32 i=0; i<unitList->Num(); i++) {
-					Army a      = Army(unitList->Access(i).GetArmy().m_id);
-					Unit top;
-					if(a.IsValid()) {
-						top = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
-					}
-					if(!top.IsValid()) {
-						top.m_id = unitList->Access(i).m_id;
-					}
-					if (top.GetActor()) {
-						if (top.GetActor()->IsActive())
-							stackSize--;
-					}
-				}
-			}
-		}
+            if (army.IsValid()) 
+            {
+                stackSize = army.Num();
+            }
+        }
+    } 
+    else 
+    {
+        CellUnitList *  unitList = myCell->UnitArmy();
+        if (unitList) 
+        {
+            stackSize = unitList->Num();
+            for (sint32 i=0; i<unitList->Num(); i++) 
+            {
+	            Unit top;
+
+	            Army a      = Army(unitList->Access(i).GetArmy().m_id);
+	            if (a.IsValid()) 
+	            {
+		            top = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+	            }
+            	
+	            if (!top.IsValid()) 
+	            {
+		            top.m_id = unitList->Access(i).m_id;
+	            }
+            	
+	            if (top.GetActor() && top.GetActor()->IsActive()) 
+	            {
+		            stackSize--;
+	            }
+            }
+        }
 	}
 
-	if(unit.IsValid()) {
-		if(stackSize > 1 && myCell->GetNumUnits()) {
-			if (myCell->UnitArmy()->GetAverageHealthPercentage() > 0) { // added by E (EMOD)
-				ratio = myCell->UnitArmy()->GetAverageHealthPercentage();
-			} else {
-				ratio = 0.0;
-				}
-		} else {
-			
-			
-			if (m_healthPercent < 0) {     //switch from < makes it zero
-				if (unit.GetHP() / unit.GetDBRec()->GetMaxHP() > 0) { // added by E (EMOD)
-					ratio =	unit.GetHP() / unit.GetDBRec()->GetMaxHP();
-				} else {
-					ratio = 0.0;
-				}
-			
-			} else {
-				ratio = 0.0;   //m_healthPercent;
-			}
-		}
-	} else {
-		if (m_healthPercent >= 0.0)
-			ratio = m_healthPercent;
-		else
-			ratio = 0.0;
-	}
+	double  ratio;
+    if (m_unitID.IsValid()) 
+    {
+        if (stackSize > 1 && myCell->GetNumUnits()) 
+        {
+            ratio = std::max(0.0, myCell->UnitArmy()->GetAverageHealthPercentage());
+        } 
+        else
+        {
+            if (m_healthPercent < 0) 
+            {
+	            ratio = std::max(0.0, m_unitID.GetHP() / m_unitID.GetDBRec()->GetMaxHP());
+            } 
+            else 
+            {
+	            ratio = 0.0;   //m_healthPercent;
+            }
+        }
+    } 
+    else 
+    {
+        ratio = std::max(0.0, m_healthPercent);
+    }
 
 
 	POINT	iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
@@ -1954,37 +1964,31 @@ void UnitActor::DrawHealthBar(void)
 	RECT	iconRect = {0, 0, iconDim.x, iconDim.y};
 
 	UNITACTION		unitAction = m_curUnitAction;
-	if (m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction) == NULL)
+	if (m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) unitAction) == NULL)
 		unitAction = UNITACTION_IDLE;
 
-	POINT *shieldPoint;
-
-	
-	
-	if (unitAction == UNITACTION_IDLE && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL) {
+	POINT *     shieldPoint;
+	if (unitAction == UNITACTION_IDLE && 
+        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL
+       )
+    {
 		shieldPoint = m_unitSpriteGroup->GetShieldPoints(UNITACTION_MOVE);
 		OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()), 
 							  m_y + (sint32)((double)(shieldPoint->y) * g_tiledMap->GetScale()));
-	} else {
+	} 
+    else 
+    {
 		if (m_unitSpriteGroup && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)unitAction) != NULL) {
 			shieldPoint = m_unitSpriteGroup->GetShieldPoints(unitAction);
 			OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()), 
 								  m_y + (sint32)((double)(shieldPoint->y) * g_tiledMap->GetScale()));
 		} else {
 			
-			top = m_y;
-			middle = m_x + (sint32)((k_TILE_PIXEL_WIDTH) * g_tiledMap->GetScale())/2;
+			sint32 top = m_y;
+			sint32 middle = m_x + (sint32)((k_TILE_PIXEL_WIDTH) * g_tiledMap->GetScale())/2;
 			OffsetRect(&iconRect, middle - iconDim.x / 2, top - iconDim.y);
 		}
 	}
-
-
-
-	
-
-
-	
-
 
 	if (iconRect.left < 0) return;
 	if (iconRect.right >= g_screenManager->GetSurfWidth()) return;
@@ -2003,7 +2007,10 @@ void UnitActor::DrawHealthBar(void)
 	if (black == 0x0000)
 		black = 0x0001;
 
-	if (g_theProfileDB->GetShowEnemyHealth() || m_playerNum == g_selected_item->GetVisiblePlayer()) {
+	if (g_theProfileDB->GetShowEnemyHealth() || 
+        m_playerNum == g_selected_item->GetVisiblePlayer()
+       ) 
+    {
 		iconRect.bottom = iconRect.top;
 		iconRect.top = iconRect.bottom - 4;
 
@@ -2016,9 +2023,9 @@ void UnitActor::DrawHealthBar(void)
 		
 		InflateRect(&iconRect, -1, -1);
 
-		leftRect = rightRect = iconRect;
-
-		color = g_colorSet->GetColor(COLOR_GREEN);
+		RECT    leftRect    = iconRect;
+        RECT    rightRect   = iconRect;
+		Pixel16 color       = g_colorSet->GetColor(COLOR_GREEN);
 
 		if (ratio < 1.0) {
 			leftRect.right = leftRect.left + (sint32)(ratio * (double)(iconRect.right-iconRect.left));
@@ -2091,13 +2098,13 @@ void UnitActor::DrawSelectionBrackets(void)
 
 	COLOR color = COLOR_YELLOW;
 	if (m_unitID.IsValid()) 
-      {
+    {
 		if (m_unitID.GetArmy().IsValid() && m_unitID.GetArmy().CanMove())
 		{
 			color = COLOR_GREEN;
 		}
 		else if (m_unitID.IsCity()) 
-            {
+        {
 			color = COLOR_RED;
 		}
 	}
@@ -2513,20 +2520,17 @@ void UnitActor::TerminateLoopingSound(uint32 sound_type)
 
 void UnitActor::DrawCityImprovements(bool fogged)
 {
-
-	Unit	unit(GetUnitID());
-	sint32  cityIcon = 0;
-	
 	TileSet	*   tileSet = g_tiledMap->GetTileSet();
 
-	
-	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale()), 
-			nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
+	sint32	nudgeX = (sint32)((double)((k_ACTOR_CENTER_OFFSET_X) - 48) * g_tiledMap->GetScale());
+	sint32 	nudgeY = (sint32)((double)((k_ACTOR_CENTER_OFFSET_Y) - 48) * g_tiledMap->GetScale());
 
 	POINT	    iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
 	if ((m_x + nudgeX) >= g_screenManager->GetSurfWidth() - iconDim.x) return;
 	if ((m_y + nudgeY) >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
+	Unit	unit(m_unitID);
+	sint32  cityIcon = 0;
 	if (unit.IsValid() && unit.IsCity()) {
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 		if(unit.CD()->GetImprovements() & ((uint64)1 << b)){
@@ -2579,7 +2583,6 @@ void UnitActor::DrawCityImprovements(bool fogged)
 		}
 	}
 	}
-/// */ end for loop
 }
 
 
@@ -2621,8 +2624,7 @@ void UnitActor::DumpActor(void)
 				if (action->GetSequence()) {
 					DPRINTF(k_DBG_UI, ("  action.m_sequence->m_sequenceID:%ld\n", 
 									action->GetSequence()->GetSequenceID()));
-					DQItem		*item = action->GetSequence()->GetItem();
-					g_director->DumpItem(item);
+					g_director->DumpItem(action->GetSequence()->GetItem());
 				}
 			}
 		}

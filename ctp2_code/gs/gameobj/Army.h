@@ -35,8 +35,8 @@
 #pragma once
 #endif
 
-#ifndef __ARMY_H__
-#define __ARMY_H__ 1
+#ifndef ARMY_H__
+#define ARMY_H__
 
 class Army;
 
@@ -299,7 +299,12 @@ public:
 	void SetTurnOver();
 	bool TurnOver() const;
 
-	bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & use_vision);
+	bool CanAtLeastOneCargoUnloadAt
+    (
+        MapPoint const &    old_pos, 
+        MapPoint const &    dest_pos, 
+        bool                use_vision
+    ) const;
 
 	void GetCurrentHP
 	(

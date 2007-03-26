@@ -3338,10 +3338,14 @@ void UnitData::EndTurn()
 		){ 
 			g_director->AddCenterMap(m_pos);
 			Barbarians::AddBarbarians(m_pos, CellOwner, FALSE);
+    /// @todo Educate E. 
+    /// Creating a SlicObject without handling it causes a memory leak, and does not do anything.
+#if 0	// Not used, memory leak.
 			//added since army data doesn't do the slic?
 			SlicObject *so = new SlicObject("999GuerrillaSpawn");
 			so->AddRecipient(m_owner);
             so->AddUnit(m_id);
+#endif
 		}
 //end emod
 }
@@ -5529,11 +5533,8 @@ void UnitData::AddEndGameObject(sint32 type)
 
 bool UnitData::SendSlaveTo(Unit &dest)
 {
-	Assert(m_city_data);
-	if(m_city_data) {
-		return m_city_data->SendSlaveTo(dest);
-	}
-	return false;
+    Assert(m_city_data);
+    return m_city_data && m_city_data->SendSlaveTo(dest);
 }
 
 void UnitData::SetFullHappinessTurns(sint32 turns)
@@ -5572,12 +5573,7 @@ void UnitData::AddUnitVision(bool &revealed)
 {
 	Assert(!Flag(k_UDF_VISION_ADDED));
 	if(!Flag(k_UDF_VISION_ADDED)) {
-		double radius;
-		if(m_city_data) {
-			radius = m_city_data->GetVisionRadius();
-		} else {
-			radius = GetVisionRange();
-		}
+		double radius = (m_city_data) ? m_city_data->GetVisionRadius() : GetVisionRange();
 		g_player[m_owner]->AddUnitVision(m_pos, radius, revealed);
 		SetFlag(k_UDF_VISION_ADDED);
 		
@@ -5588,20 +5584,14 @@ void UnitData::AddUnitVision(bool &revealed)
 
 sint32 UnitData::GetIncomingTrade() const
 {
-	Assert(m_city_data);
-	if(m_city_data) {
-		return m_city_data->GetIncomingTrade();
-	}
-	return 0;
+    Assert(m_city_data);
+    return (m_city_data) ? m_city_data->GetIncomingTrade() : 0;
 }
 
 sint32 UnitData::GetOutgoingTrade() const
 {
-	Assert(m_city_data);
-	if(m_city_data) {
-		return m_city_data->GetOutgoingTrade();
-	}
-	return 0;
+    Assert(m_city_data);
+    return (m_city_data) ? m_city_data->GetOutgoingTrade() : 0;
 }
 
 //----------------------------------------------------------------------------
@@ -5695,11 +5685,9 @@ void UnitData::BuildCapitalization()
 
 void UnitData::ActionSuccessful(SPECATTACK attack, const Unit &c)
 {
-	sint32		soundID, spriteID;
-
 	const SpecialAttackInfoRecord *rec = unitutil_GetSpecialAttack(attack);
-	soundID = rec->GetSoundIDIndex();
-	spriteID = rec->GetSpriteID()->GetValue();
+	sint32 soundID = rec->GetSoundIDIndex();
+	sint32 spriteID = rec->GetSpriteID()->GetValue();
 
 	if (spriteID != -1 && soundID != -1) {
 		g_director->AddSpecialAttack(m_actor->GetUnitID(), c, attack);

@@ -136,7 +136,7 @@ Happy::Happy(Happy const & copyme)
 	for (size_t i = 0; i < static_cast<size_t>(HAPPY_REASON_MAX); ++i)
 	{
 		double      data;
-		StringID    name;
+		StringId    name;
 		copyme.m_tracker->GetHappiness(static_cast<HAPPY_REASON>(i), data, name);
 		m_tracker->SetHappiness(static_cast<HAPPY_REASON>(i), data);
 	}
@@ -229,8 +229,7 @@ double Happy::CalcTooManyCities(Player *p)
 		num_cities++;
 	}
 
-	if(num_cities < 1)
-		num_cities = 1;
+    num_cities = std::max(1, num_cities);
 
 	double res;
 	if (num_cities <= t) {
@@ -268,67 +267,62 @@ double Happy::CalcConquestDistress(CityData &cd, Player *p)
 	return m_conquest_distress; 
 }
 
-double Happy::CalcDistanceFromCapitol(CityData &cd, Player *p)
+double Happy::CalcDistanceFromCapitol(CityData & cd, Player * p)
 {
+	if (cd.IsCapitol() || p->m_first_city) 
+    {
+		m_dist_to_capitol   = 0.0;
+		m_empire_dist       = 0.0;
+    }
+    else
+    {
+	    double      cost = p->GetMaxEmpireDistance();
+        MapPoint    start;
+        if (p->GetCapitolPos(start)) 
+        {
+	        MapPoint    dest;
+		    cd.m_home_city.GetPos(dest);
+            cost = std::min(cost,
+                            m_cost_to_capitol + 
+                                p->m_difficulty->GetDistanceFromCapitolAdjustment()
+                           );
 
-	double cost = 0.0;
-	MapPoint start, dest;
-	BOOL is_cap = cd.IsCapitol();
-
-	if (is_cap || p->GetCapitolPos(start) || p->m_first_city) {
-		cd.m_home_city.GetPos(dest);
-		if(is_cap || p->m_first_city) {
-			m_empire_dist = 0.0;
-			m_dist_to_capitol = 0.0;
-			m_tracker->SetHappiness(HAPPY_REASON_DISTANCE_FROM_CAPITOL,
-				m_empire_dist);
-			return 0;
-		}
-		
-        cost = std::min
-                (m_cost_to_capitol + p->m_difficulty->GetDistanceFromCapitolAdjustment(),
-                 p->GetMaxEmpireDistance()
-                );
-
-	} else {
-		 cost = p->GetMaxEmpireDistance();
-	}
-
-	
-    m_dist_to_capitol = 
-        std::max(0.0, cost - g_theGovernmentDB->Get(p->GetGovernmentType())->GetMinEmpireDistance()); 
+	    } 
+    	
+        m_dist_to_capitol = 
+            std::max(0.0, 
+                     cost - g_theGovernmentDB->Get(p->GetGovernmentType())->
+                                GetMinEmpireDistance()
+                    ); 
 
 
-	m_empire_dist = -p->GetEmpireDistanceScale() * m_dist_to_capitol;
-	sint32 wonderDistanceModifier = wonderutil_GetDecreaseEmpireSize(p->m_builtWonders);
-	if(wonderDistanceModifier > 0) {
-		m_empire_dist -= m_empire_dist * double(double(wonderDistanceModifier) / 100.0);
-	}
+	    m_empire_dist = -p->GetEmpireDistanceScale() * m_dist_to_capitol;
+	    sint32 wonderDistanceModifier = wonderutil_GetDecreaseEmpireSize(p->m_builtWonders);
+	    if (wonderDistanceModifier > 0) 
+        {
+		    m_empire_dist -= m_empire_dist * (double(wonderDistanceModifier) / 100.0);
+	    }
+    }
 
-	m_tracker->SetHappiness(HAPPY_REASON_DISTANCE_FROM_CAPITOL,
-							m_empire_dist);
+	m_tracker->SetHappiness(HAPPY_REASON_DISTANCE_FROM_CAPITOL,	m_empire_dist);
 	return m_empire_dist;
 }
 
-double Happy::CalcEnemyAction() {
-
+double Happy::CalcEnemyAction() 
+{
 	m_enemy_action = 0.0;
-	m_tracker->SetHappiness(HAPPY_REASON_ENEMY_ACTION,
-	                        m_enemy_action);
+	m_tracker->SetHappiness(HAPPY_REASON_ENEMY_ACTION, m_enemy_action);
 	return m_enemy_action;
 }
 
 double Happy::CalcPeaceMovement(CityData &cd, Player *p)
-
 { 
 	double overseas_defeat, home_defeat, overseas; 
 	double prev_peace = m_peace;
 
 	p->GetPeaceMovement(overseas_defeat, home_defeat, overseas);
 	
-	sint32 numCities = p->m_all_cities->Num();
-	if(numCities < 1) 
-		numCities = 1;
+    sint32 numCities = std::max<sint32>(1, p->m_all_cities->Num());
 	
 	overseas_defeat /= numCities;
 	home_defeat /= numCities;
@@ -351,8 +345,7 @@ double Happy::CalcPeaceMovement(CityData &cd, Player *p)
 
 	m_peace += m_peace * buildingutil_GetLowerPeaceMovement(cd.GetEffectiveBuildings());
 
-	m_tracker->SetHappiness(HAPPY_REASON_PEACE_MOVEMENT,
-							m_peace);
+	m_tracker->SetHappiness(HAPPY_REASON_PEACE_MOVEMENT, m_peace);
 	return m_peace;
 }
 
@@ -363,8 +356,7 @@ double Happy::CalcPollution(CityData &cd, Player *p)
 	} else {
 		m_pollution = - p->GetPollutionUnhappyCoef() * cd.m_total_pollution; 
 	}
-	m_tracker->SetHappiness(HAPPY_REASON_POLLUTION,
-							m_pollution);
+	m_tracker->SetHappiness(HAPPY_REASON_POLLUTION, m_pollution);
 	return m_pollution;
 }
 
@@ -423,17 +415,15 @@ double Happy::CalcRations(CityData &cd, Player *p)
 }
 
 double Happy::CalcMartialLaw(CityData &cd, Player *p)
-
 {
-	
 	sint32 mu = p->GetMaxMartialLawUnits();
 
 	if (mu < 1) { 
 		m_martial_law = 0.0;
 	} else { 
 		double me = p->GetMartialLawEffect();
-		MapPoint pos; 
 
+		MapPoint pos; 
 		cd.m_home_city.GetPos(pos); 
 		CellUnitList *a = g_theWorld->GetArmyPtr(pos);
 
@@ -452,6 +442,7 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 		}
         m_martial_law = std::min(mu, count) * me;
 	}
+
 	m_tracker->SetHappiness(HAPPY_REASON_MARTIAL_LAW, m_martial_law);
 	return m_martial_law; 
 }
@@ -461,7 +452,7 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 
 double Happy::CalcPopEntertain(CityData &cd, Player *p)
 {
-	double increaseSpecialists = double(wonderutil_GetIncreaseSpecialists(p->m_builtWonders));
+	double increaseSpecialists = wonderutil_GetIncreaseSpecialists(p->m_builtWonders);
 	
 	m_pop_ent = cd.GetHappinessFromPops(); 
 	m_tracker->SetHappiness(HAPPY_REASON_ENTERTAINERS, m_pop_ent);
@@ -472,27 +463,16 @@ double Happy::CalcPopEntertain(CityData &cd, Player *p)
 double Happy::CalcImprovementContentment(CityData &cd, Player *p)
 {
 	sint32 b;
-	
-	m_improvement = 0.0; 
-
 	buildingutil_GetHappinessIncrement(cd.GetEffectiveBuildings(), b, cd.m_owner);
-	m_improvement += b;
-
-	
-	
+	m_improvement = b;
 
 	m_tracker->SetHappiness(HAPPY_REASON_BUILDINGS, m_improvement);
 	return m_improvement;
 }
 
 double Happy::CalcWonders(CityData &cd, Player *p)
-
 {
-	m_wonders = 0.0;
-
-	
-	
-	m_wonders += wonderutil_GetIncreaseHappinessEmpire(p->GetBuiltWonders());
+	m_wonders = wonderutil_GetIncreaseHappinessEmpire(p->GetBuiltWonders());
 
 	m_tracker->SetHappiness(HAPPY_REASON_WONDERS, m_wonders);
 	return m_wonders;
@@ -563,14 +543,8 @@ double Happy::CalcTimedChanges(CityData &cd, Player *p, bool projectedOnly,
 
 double Happy::CalcStarvation(CityData &cd, Player *p)
 {
-	
-	
-	
-	
-	
-		m_tracker->SetHappiness(HAPPY_REASON_STARVATION, 0.0);
-		m_starvation = 0.0;
-	
+	m_tracker->SetHappiness(HAPPY_REASON_STARVATION, 0.0);
+	m_starvation = 0.0;
 
 	return m_starvation; 
 }
@@ -764,39 +738,15 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 
 void Happy::ResetCrime(CityData *cd, double target_happiness) 
 {
-	Player *p = g_player[cd->m_owner]; 
 	m_happiness = target_happiness; 
-	CalcCrime(*cd, p); 
+	CalcCrime(*cd, g_player[cd->m_owner]); 
 }
 
 
 
 double Happy::GetGreedyPopHappiness(CityData &cd)
 {
-	
-	Player *p = g_player[cd.m_owner]; 
-
-	
 	double local_happiness = m_base; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
 		return local_happiness;
@@ -811,6 +761,8 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
 	
 	local_happiness += m_peace;
 
+	
+	Player *p = g_player[cd.m_owner]; 
 
 	CalcWorkday(cd, p);
 	CalcWages(cd, p);
@@ -969,8 +921,7 @@ void Happy::SetFullHappinessTurns(sint32 turns)
 {
 	m_fullHappinessTurns = turns;
 	m_happiness = 100;
-	m_tracker->ClearEntries(HAPPY_REASON_SMOKING_CRACK,
-							HAPPY_REASON_MAX);
+	m_tracker->ClearEntries(HAPPY_REASON_SMOKING_CRACK, HAPPY_REASON_MAX);
 }
 
 
@@ -1002,7 +953,8 @@ void Happy::RestoreTracker()
 
 double Happy::CalcFeats(Player *p)
 {
-	double res = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_HAPPINESS, p->m_owner);
+	double res = g_featTracker->GetAdditiveEffect
+                    (FEAT_EFFECT_INCREASE_HAPPINESS, p->m_owner);
 	m_tracker->SetHappiness(HAPPY_REASON_FEATS, res);
 	return res;
 }
@@ -1023,13 +975,14 @@ double Happy::CalcFeats(Player *p)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void Happy::Copy(Happy *copy){
+void Happy::Copy(Happy *copy)
+{
 	memcpy(&m_happiness, &copy->m_happiness, (uint32)&m_crime + sizeof(m_crime) - (uint32)&m_happiness);
 	m_timedChanges = copy->m_timedChanges;
 
 	for (size_t i = 0; i < static_cast<size_t>(HAPPY_REASON_MAX); ++i){
 		double      data;
-		StringID    name;
+		StringId    name;
 		copy->m_tracker->GetHappiness(static_cast<HAPPY_REASON>(i), data, name);
 		m_tracker->SetHappiness(static_cast<HAPPY_REASON>(i), data);
 	}

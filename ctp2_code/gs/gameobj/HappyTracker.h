@@ -1,12 +1,14 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __HAPPY_TRACKER_H__
-#define __HAPPY_TRACKER_H__
+
+#ifndef HAPPY_TRACKER_H__
+#define HAPPY_TRACKER_H__
 
 class HappyTracker;
 
-enum HAPPY_REASON {
+enum HAPPY_REASON 
+{
 	HAPPY_REASON_SMOKING_CRACK = -1,
 
 	
@@ -43,31 +45,28 @@ enum HAPPY_REASON {
 	HAPPY_REASON_WONDER_TURNS_REMAINING,
 	HAPPY_REASON_ASSASSINATION,
 	HAPPY_REASON_SECTHAPPY, //emod
+
 	HAPPY_REASON_MAX
 };
 
-
-typedef sint32 StringID;
-
+#include "dbtypes.h"    // StringId
 class CivArchive;
 
-#define POLLUTION_LIST_MAX  70
-
-class HappyTracker {
-private:
-	double m_happinessAmounts[HAPPY_REASON_MAX];
-	static StringID sm_happinessNames[HAPPY_REASON_MAX];
-
-	double m_tempSaveHappiness[HAPPY_REASON_MAX]; 
+class HappyTracker
+{
 public:
 	HappyTracker();
 	HappyTracker(CivArchive &archive);
 	~HappyTracker();
+
 	void Serialize(CivArchive &archive);
 
-	void GetHappiness(HAPPY_REASON which,
-					  double &amount,
-					  StringID &name);
+    void GetHappiness
+    (
+        HAPPY_REASON    which,
+        double &        amount,
+        StringId &      name
+    );
 	void SetHappiness(HAPPY_REASON which, double amount);
 	
 	void SaveHappiness();
@@ -76,9 +75,17 @@ public:
 	void ClearEntries(HAPPY_REASON start, HAPPY_REASON end);
 	void AddTimedChange(HAPPY_REASON which, double delta);
 
-#ifdef _DEBUG
+#if defined(_DEBUG)
 	void Dump();
 #endif
+
+private:
+    static void RefreshStringIds(void);
+
+	double m_happinessAmounts[HAPPY_REASON_MAX];
+	static StringId sm_happinessNames[HAPPY_REASON_MAX];
+
+	double m_tempSaveHappiness[HAPPY_REASON_MAX]; 
 };
 	
 #endif

@@ -155,8 +155,9 @@ void TileInfo::Serialize(CivArchive &archive)
 		archive << m_terrainType;
 		archive << m_tileNum;
 		archive << m_transform;
-		for(sint32 i = 0; i < k_NUM_TRANSITIONS; i++) {
-			archive<< m_transitions[i];
+		for (size_t i = 0; i < k_NUM_TRANSITIONS; i++) 
+        {
+			archive << m_transitions[i];
 		}
 		hasGoodActor = (m_goodActor != NULL);
 		archive << hasGoodActor;
@@ -168,7 +169,8 @@ void TileInfo::Serialize(CivArchive &archive)
 		archive >> m_terrainType;
 		archive >> m_tileNum;
 		archive >> m_transform;
-		for(sint32 i = 0; i < k_NUM_TRANSITIONS; i++) {
+		for (size_t i = 0; i < k_NUM_TRANSITIONS; i++) 
+        {
 			archive >> m_transitions[i];
 		}
 		archive >> hasGoodActor;

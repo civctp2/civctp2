@@ -6733,7 +6733,7 @@ bool CityData::WasHappinessAttacked(void) const
 		return true;
 
 	double val;
-	StringID name;
+	StringId name;
 	m_happy->GetHappyTracker()->GetHappiness(HAPPY_REASON_HAPPINESS_ATTACK,
 	                                         val, name);
 	return val != 0.0;
@@ -6766,14 +6766,17 @@ double CityData::IsProtectedFromSlavery() const
 
 void CityData::NotifyAdvance(AdvanceType advance)
 {
-	sint32 i;
-	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-		if(m_built_improvements & ((uint64)1 << i)) {
-			const BuildingRecord *irec = g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType());
-			sint32 o;
+	for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) 
+    {
+		if (m_built_improvements & ((uint64)1 << i)) 
+        {
+			BuildingRecord const * irec = 
+                g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType());
 
-			for(o = 0; o < irec->GetNumObsoleteAdvance(); o++) {
-				if(irec->GetObsoleteAdvanceIndex(o) == advance) {
+			for (sint32 o = 0; o < irec->GetNumObsoleteAdvance(); o++) 
+            {
+				if (irec->GetObsoleteAdvanceIndex(o) == advance) 
+                {
 					SellBuilding(i, false);
 					break;
 				}
@@ -6792,17 +6795,15 @@ void CityData::ContributeScience(double incomePercent,
 {
 	Assert(false);
 
-	double goldToConsider = m_net_gold * incomePercent;
-	Player *p = g_player[m_owner];
 	double scienceRate;
-	p->m_tax_rate->GetScienceTaxRate(scienceRate);
+	g_player[m_owner]->m_tax_rate->GetScienceTaxRate(scienceRate);
 	
-	addscience = goldToConsider * scienceRate;
-	subgold = addscience;
+	subgold = m_net_gold * incomePercent * scienceRate;
 
 	double s;
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s);
-	addscience += addscience * s;
+
+	addscience = subgold + (subgold * s);
 
 }
 
@@ -6831,7 +6832,11 @@ sint32 CityData::TurnsToNextPop( void )
 		return 999;
 	}
 
-	return static_cast<sint32>(ceil((static_cast<double>(k_PEOPLE_PER_POPULATION - m_partialPopulation)) / static_cast<double>(m_growth_rate)));
+	return static_cast<sint32>
+        (ceil(static_cast<double>(k_PEOPLE_PER_POPULATION - m_partialPopulation) 
+                / static_cast<double>(m_growth_rate)
+             )
+        );
 }
 
 sint32 CityData::FreeSlaves()
@@ -6861,13 +6866,12 @@ void CityData::SetFullHappinessTurns(sint32 turns)
 
 sint32 CityData::GetHappinessFromPops()
 {
-	sint32 happy = 0;
-
-	if(m_specialistDBIndex[POP_ENTERTAINER] >= 0) {
-		happy += sint32(EntertainerCount() *
-		                g_thePopDB->Get(m_specialistDBIndex[POP_ENTERTAINER], g_player[m_owner]->GetGovernmentType())->GetHappiness());
-	}
-	return happy;
+	return (m_specialistDBIndex[POP_ENTERTAINER] < 0) 
+           ? 0
+           : EntertainerCount() * g_thePopDB->Get
+                                    (m_specialistDBIndex[POP_ENTERTAINER], 
+                                     g_player[m_owner]->GetGovernmentType()
+                                    )->GetHappiness();
 }
 
 #if !defined(NEW_RESOURCE_PROCESS)
@@ -7081,19 +7085,19 @@ void CityData::StopInfrastructureCapitalization()
 void CityData::InsertInfrastructure()
 {
 	Assert(CanBuildInfrastructure());
-	if(!CanBuildInfrastructure())
-		return;
-
-	m_build_queue.InsertTail(k_GAME_OBJ_TYPE_INFRASTRUCTURE, 0, 0);
+	if (CanBuildInfrastructure())
+    {
+    	m_build_queue.InsertTail(k_GAME_OBJ_TYPE_INFRASTRUCTURE, 0, 0);
+    }
 }
 
 void CityData::InsertCapitalization()
 {
 	Assert(CanBuildCapitalization());
-	if(!CanBuildCapitalization())
-		return;
-
-	m_build_queue.InsertTail(k_GAME_OBJ_TYPE_CAPITALIZATION, 0, 0);
+	if (CanBuildCapitalization())
+    {
+    	m_build_queue.InsertTail(k_GAME_OBJ_TYPE_CAPITALIZATION, 0, 0);
+    }
 }
 
 void CityData::BuildInfrastructure()
@@ -7142,8 +7146,7 @@ void CityData::BuildCapitalization()
 void CityData::EliminateNukes()
 {
 	if(buildingutil_IsNuclearPlant(m_built_improvements)) {
-		sint32 i;
-		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+		for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 			if(buildingutil_IsNuclearPlant((uint64)1 << i)) {
 				DestroyImprovement(i);
 			}
@@ -7155,8 +7158,7 @@ void CityData::EliminateNukes()
  
 bool CityData::BreakOneSourceRoute(ROUTE_TYPE type, sint32 resource)
 {
-	sint32 i;
-	for(i = 0; i < m_tradeSourceList.Num(); i++) {
+	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++) {
 		ROUTE_TYPE t;
 		sint32 r;
 		m_tradeSourceList[i].GetSourceResource(t, r);
@@ -7192,18 +7194,18 @@ void CityData::CheckForSlaveUprising()
 	sint32 numSlaves = SlaveCount();
 	if(numSlaves < 1)
 		return;
+
 	sint32 numMilitaryUnits = 0;
-	MapPoint pos;
-	m_home_city.GetPos(pos);
-	Cell *cell = g_theWorld->GetCell(pos);
-	sint32 i;
-	for(i = 0; i < cell->GetNumUnits(); i++) {
+	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
+
+    for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
 		if(cell->UnitArmy()->Access(i).GetAttack() > 0) {
 			numMilitaryUnits++;
 		}
 	}
-	if(double(numMilitaryUnits) >= 
-	   double(double(numSlaves) / double(g_theConstDB->SlavesPerMilitaryUnit())))
+	if (double(numMilitaryUnits) >= 
+	        (double(numSlaves) / double(g_theConstDB->SlavesPerMilitaryUnit()))
+       )
 		return;
 	sint32 over = numSlaves - (numMilitaryUnits * g_theConstDB->SlavesPerMilitaryUnit());
 
@@ -7288,19 +7290,14 @@ void CityData::AddSlaveBit(sint32 player)
 
 uint32 CityData::GetSlaveBits()
 {
-	if(m_numSpecialists[POP_SLAVE] <= 0)
-		return 0;
-
-	return m_slaveBits;
+    return (m_numSpecialists[POP_SLAVE] > 0) ? m_slaveBits : 0;
 }
 
 void CityData::AddGoods(SlicObject *obj)
 {
 	m_tempGoodAdder = obj;
 	m_cityRadiusOp = RADIUS_OP_ADD_GOODS;
-	MapPoint pos;
-	m_home_city.GetPos(pos);
-	CityRadiusIterator(pos, this);
+	CityRadiusIterator(m_home_city.RetPos(), this);
 }
 
 sint32 CityData::GetGoodCountInRadius(sint32 good)
@@ -7308,9 +7305,7 @@ sint32 CityData::GetGoodCountInRadius(sint32 good)
 	m_cityRadiusOp = RADIUS_OP_COUNT_GOODS;
 	m_tempGood = good;
 	m_tempGoodCount = 0;
-	MapPoint pos;
-	m_home_city.GetPos(pos);
-	CityRadiusIterator(pos, this);
+	CityRadiusIterator(m_home_city.RetPos(), this);
 	return m_tempGoodCount;
 }
 
@@ -7370,25 +7365,28 @@ void CityData::DestroyWonder(sint32 which)
 
 void CityData::BuildFront()
 {
-	MapPoint pos = m_home_city.RetPos();
-
 	m_shieldstore_at_begin_turn = m_shieldstore;
-	if(m_build_queue.BuildFront(m_shieldstore, this, pos, m_built_improvements, m_builtWonders, false)) {
+	if (m_build_queue.BuildFront
+            (m_shieldstore, 
+             this, 
+             m_home_city.RetPos(), 
+             m_built_improvements, 
+             m_builtWonders, 
+             false
+            )
+       ) 
+    {
 		m_shieldstore_at_begin_turn = m_shieldstore;
 	}
-	if(!m_build_queue.GetHead()) {
-		m_build_category_at_begin_turn = -3;
-	} else {
+
+	if (m_build_queue.GetHead()) 
+    {
 		m_build_category_at_begin_turn = m_build_queue.GetHead()->m_category;
+	} 
+    else 
+    {
+		m_build_category_at_begin_turn = -3;
 	}
-	if(!g_theUnitPool->IsValid(m_home_city)) {
-		
-		
-		
-		
-		return;
-	}
-	
 }
 
 
@@ -7687,21 +7685,17 @@ void CityData::AdjustSizeIndices()
 void CityData::ChangePopulation(sint32 delta)
 {
 	m_population += delta;
+	m_numSpecialists[POP_WORKER] += (sint16)delta;
 	
-
-	if(delta > 0) {
-		
-		m_numSpecialists[POP_WORKER] += (sint16)delta;
-	} else {
-		
-		
+	if (delta < 0) 
+    {
 		m_numSpecialists[POP_WORKER] += (sint16)delta;
 		if(m_numSpecialists[POP_WORKER] < 0) {
 			sint32 needToRemove = -m_numSpecialists[POP_WORKER];
 			m_numSpecialists[POP_WORKER] = 0;
 
-			sint32 i;
-			for(i = 0; i < POP_MAX && needToRemove > 0; i++) {
+			for (sint32 i = 0; i < POP_MAX && needToRemove > 0; i++) 
+            {
 				if(m_numSpecialists[i] >= (sint16)needToRemove) {
 					m_numSpecialists[i] -= (sint16)needToRemove;
 					needToRemove = 0;
@@ -7733,11 +7727,9 @@ void CityData::ChangePopulation(sint32 delta)
 
 void CityData::FindBestSpecialists()
 {
-	sint32 dbindex;
 	sint32 maxValue[POP_MAX];
 
-	sint32 popCategory;
-	for (popCategory = (sint32)POP_WORKER + 1; 
+	for (sint32 popCategory = (sint32)POP_WORKER + 1; 
 		 popCategory < (sint32)POP_SLAVE; 
 		 popCategory++) {
 		
@@ -7745,7 +7737,7 @@ void CityData::FindBestSpecialists()
 		m_specialistDBIndex[popCategory] = -1;
 	}
 
-	for(dbindex = 0; dbindex < g_thePopDB->NumRecords(); dbindex++) {
+	for (sint32 dbindex = 0; dbindex < g_thePopDB->NumRecords(); dbindex++) {
 		const PopRecord *rec = g_thePopDB->Get(dbindex, g_player[m_owner]->GetGovernmentType());
 
 		if(!g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
@@ -8008,9 +8000,7 @@ void CityData::AddBuyFront()
 
 void CityData::AddImprovement(sint32 type)
 {
-
 	MapPoint point(m_home_city.RetPos()); //EMOD add for borders
-	MapPoint Pos;
 	const BuildingRecord *rec = g_theBuildingDB->Get(type); //EMOD add for borders
 
 	SetImprovements(m_built_improvements | ((uint64)1 << (uint64)type));
@@ -8270,10 +8260,8 @@ sint32 CityData::GetSupport() const
 	if (g_player[m_owner] == NULL)
 		return 0;
 
-	sint32 support = CalcWages(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()));
-	support += GetSupportBuildingsCost();
-
-	return support;
+	return CalcWages(static_cast<sint32>(g_player[m_owner]->GetWagesPerPerson()))
+            + GetSupportBuildingsCost();
 }
 
 #if !defined(NEW_RESOURCE_PROCESS)
@@ -8327,7 +8315,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, b
 		baseGold = 0;
 	}
 
-	double s, ws;
+	double s;
 	g_player[m_owner]->m_tax_rate->GetScienceTaxRate(s);
 	science = static_cast<sint32>(ceil(baseGold * s));
 	gold -= science;
@@ -8336,7 +8324,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, b
 	buildingutil_GetSciencePercent(GetEffectiveBuildings(), s);
 	science += static_cast<sint32>(ceil(science * s));
 
-	ws = 0.01 * wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders());
+	double ws = 0.01 * wonderutil_GetIncreaseKnowledgePercentage(g_player[m_owner]->GetBuiltWonders());
 	science += static_cast<sint32>(ceil(science * ws));
 
 	science += GetScienceFromPops(considerOnlyFromTerrain);
@@ -8771,10 +8759,9 @@ sint32 CityData::GetFounder() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-bool CityData::NeedMoreFood(sint32 bonusFood, sint32 &foodMissing, bool considerOnlyFromTerrain){
-
-	const CitySizeRecord *rec = g_theCitySizeDB->Get(m_sizeIndex);
-	sint32 maxPop = GetMaxPop(rec);
+bool CityData::NeedMoreFood(sint32 bonusFood, sint32 &foodMissing, bool considerOnlyFromTerrain)
+{
+	sint32 maxPop = GetMaxPop(g_theCitySizeDB->Get(m_sizeIndex));
 
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
@@ -8808,8 +8795,8 @@ bool CityData::NeedMoreFood(sint32 bonusFood, sint32 &foodMissing, bool consider
 //              parameters.
 //
 //----------------------------------------------------------------------------
-sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool considerOnlyFromTerrain){
-
+sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool considerOnlyFromTerrain)
+{
 #if defined(NEW_RESOURCE_PROCESS)
 	double maxFoodFromTerrain = ProcessFood(m_max_food_from_terrain + bonusFood);
 	ApplyFoodCoeff(maxFoodFromTerrain);
@@ -9477,23 +9464,13 @@ sint32 CityData::GetRing(MapPoint pos) const
 {
 	MapPoint cityPos = m_home_city.RetPos();
 
-	//EMOD
-	// Doesn't belong here
-//	sint32 bldgradius; 
-//	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++) {
-//		if(m_built_improvements & ((uint64)1 << b)) {
-//			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-//			for(bldgradius = 0; bldgradius < rec->GetSquaredRadius(); bldgradius++); 
-//		}
-//	}
-	//End EMOD	
+	for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+    {
+		sint32 squaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
+		sint32 squaredDistance = MapPoint::GetSquaredDistance(cityPos, pos);
 
-	sint32 i, squaredRadius, squaredDistance;
-	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
-		squaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
-		squaredDistance = MapPoint::GetSquaredDistance(cityPos, pos);
-
-		if(squaredDistance <= squaredRadius){
+		if (squaredDistance <= squaredRadius)
+        {
 			return i;
 		}
 	
@@ -9523,15 +9500,15 @@ sint32 CityData::GetRing(MapPoint pos) const
 //----------------------------------------------------------------------------
 sint32 CityData::GetFoodFromRing(sint32 ring) const
 {
-	if(ring >= 0
-	&& ring < g_theCitySizeDB->NumRecords()
-	){
+	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
+    {
 		return m_ringFood[ring];
 	}
-	else{
-		sint32 i; 
+	else
+    {
 		sint32 maxFood = 0;
-		for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+        {
 			maxFood += m_ringFood[i];
 		}
 		return maxFood;
@@ -9558,15 +9535,15 @@ sint32 CityData::GetFoodFromRing(sint32 ring) const
 //----------------------------------------------------------------------------
 sint32 CityData::GetProdFromRing(sint32 ring) const
 {
-	if(ring >= 0
-	&& ring < g_theCitySizeDB->NumRecords()
-	){
+	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
+    {
 		return m_ringProd[ring];
 	}
-	else{
-		sint32 i; 
+	else
+    {
 		sint32 maxProd = 0;
-		for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+        {
 			maxProd += m_ringProd[i];
 		}
 		return maxProd;
@@ -9593,15 +9570,15 @@ sint32 CityData::GetProdFromRing(sint32 ring) const
 //----------------------------------------------------------------------------
 sint32 CityData::GetGoldFromRing(sint32 ring) const
 {
-	if(ring >= 0
-	&& ring < g_theCitySizeDB->NumRecords()
-	){
+	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
+    {
 		return m_ringGold[ring];
 	}
-	else{
-		sint32 i; 
+	else
+    {
 		sint32 maxGold = 0;
-		for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+        {
 			maxGold += m_ringGold[i];
 		}
 		return maxGold;
@@ -9627,15 +9604,15 @@ sint32 CityData::GetGoldFromRing(sint32 ring) const
 //----------------------------------------------------------------------------
 sint32 CityData::GetRingSize(sint32 ring) const
 {
-	if(ring >= 0
-	&& ring < g_theCitySizeDB->NumRecords()
-	){
+	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
+    {
 		return m_ringSizes[ring];
 	}
-	else{
-		sint32 i; 
+	else
+    {
 		sint32 numTiles = 0;
-		for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i){
+		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+        {
 			numTiles += m_ringSizes[i];
 		}
 		return numTiles;
@@ -10022,31 +9999,27 @@ void CityData::ProcessAllResources()
 //----------------------------------------------------------------------------
 sint32 CityData::TileImpHappinessIncr() const
 {
-
 	sint32 totalHappinessInc = 0;
-	MapPoint cityPos = m_home_city.RetPos();
 
-	CityInfluenceIterator it(cityPos, m_sizeIndex);
-	for(it.Start(); !it.End(); it.Next()) {
+	CityInfluenceIterator it(m_home_city.RetPos(), m_sizeIndex);
+	for (it.Start(); !it.End(); it.Next()) 
+    {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++){
+		for (sint32 t = 0; t < cell->GetNumDBImprovements(); t++)
+        {
 			sint32 timp = cell->GetDBImprovement(t);
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
+
 			if (effect)
 			{
-				if (effect->GetHappyInc() > 0){
-					totalHappinessInc += effect->GetHappyInc();
+				totalHappinessInc += effect->GetHappyInc();
 			}
 		}
 	}
-	}
-	return totalHappinessInc;
 
+    return totalHappinessInc;
 }
-
-// called by TiledMap::DrawCityNames
-
 
 //----------------------------------------------------------------------------
 //
@@ -10107,7 +10080,6 @@ sint32 CityData::ProduceEnergy()
 
 sint32 CityData::ConsumeEnergy()
 {
-	
 	sint32 energy = 0;
 	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
 	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
@@ -10136,6 +10108,8 @@ sint32 CityData::ConsumeEnergy()
 	energy += WenergyPerCitizen * PopCount();
 
 	//energy produced per person
+    /// @todo Use better identifiers: I don't even know how to pronounce
+    //        Wenergyperbldg 
 	sint32 Wenergyperbldg = wonderutil_GetEnergyHunger(GetEffectiveBuildings());
 	energy += Wenergyperbldg;
 

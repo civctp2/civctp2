@@ -608,9 +608,8 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 							const Unit &notThisCity)
 {
 	Cell *cell = GetCell(pos);
-	sint32 i;
-	CellUnitList *cunits = NULL;
-	if(cell->GetCity().m_id != 0 &&
+
+    if(cell->GetCity().m_id != 0 &&
 	   cell->GetCity().GetOwner() == player &&
 	   cell->GetCity().m_id != notThisCity.m_id) {
 		cell->m_zoc |= (1 << player);
@@ -618,17 +617,20 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 	}
 
 	
-	
-	if((cunits = cell->UnitArmy()) != NULL &&
-	   g_theUnitPool->IsValid(cunits->Access(0))) {
-		if(cunits->CanEnter(pos)) {
-			if(cunits->GetOwner() == player) {
-				for(i = cunits->Num() - 1; i >= 0; i--) {
-					if(cunits->m_array[i].GetArmy() != a &&
-					   !cunits->m_array[i].IsNoZoc()) {
-						cell->m_zoc |= (1 << player);
-						return;
-					}
+	CellUnitList * cunits = cell->UnitArmy();
+	if (cunits && cunits->Access(0).IsValid()) 
+    {
+		if (    (cunits->CanEnter(pos)) 
+             && (cunits->GetOwner() == player) 
+           ) 
+        {
+			for (sint32 i = cunits->Num() - 1; i >= 0; i--) 
+            {
+				if (    ((*cunits)[i].GetArmy() != a )
+                     && !(*cunits)[i].IsNoZoc()) 
+                {
+					cell->m_zoc |= (1 << player);
+					return;
 				}
 			}
 		}

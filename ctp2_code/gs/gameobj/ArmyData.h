@@ -158,7 +158,7 @@ public:
     bool GetCargo(sint32 &transports, sint32 &max, sint32 &empty) const;
     bool CargoCanEnter(const MapPoint &pos) const;
 
-    sint16 CountMovementTypeSea() const;
+    size_t  CountMovementTypeSea() const;
 
     bool CanSettle(const MapPoint &pos) const;
     bool CanSettle() const;

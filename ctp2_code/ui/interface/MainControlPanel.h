@@ -36,14 +36,12 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef ___BMH_MAIN_CONTROL_PANEL_HEADER
-#define ___BMH_MAIN_CONTROL_PANEL_HEADER
-
-
+#ifndef MAIN_CONTROL_PANEL_H__
+#define MAIN_CONTROL_PANEL_H__
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -75,9 +73,12 @@ class MainControlPanel;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class MainControlPanel {
+class MainControlPanel 
+{
 public:
-	
+	MainControlPanel(MBCHAR *ldlBlock);
+	~MainControlPanel();
+
 	static void Initialize(MBCHAR *ldlBlock);
 
 	
@@ -99,10 +100,7 @@ public:
 	
 	static void UpdateZoom();
 
-	
 	static void SelectedCity();
-
-	
 	static void SelectedUnit();
 
 	static void UnitPanelActivated();
@@ -114,26 +112,13 @@ public:
 
 	static aui_ProgressBar* GetProgressBar();
 	
-	
-	MainControlPanel(MBCHAR *ldlBlock);
-
-	
-#if defined(_MSC_VER)
-	MainControlPanel::~MainControlPanel();
-#else
-	virtual ~MainControlPanel();
-#endif
-
 private:
-	
 	std::auto_ptr<ControlTabPanel>	m_controlTabPanel;	
 	std::auto_ptr<EndTurnButton>	m_endTurnButton;	
 	std::auto_ptr<ShortcutPad>		m_shortcutPad;		
 	std::auto_ptr<StatusBar>		m_statusBar;		
 	std::auto_ptr<TurnYearStatus>	m_turnYearStatus;	
-
 };
-
 
 extern MainControlPanel *g_mainControlPanel;
 

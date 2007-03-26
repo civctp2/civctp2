@@ -254,11 +254,12 @@ void TiledMap::DrawLegalMove
 
 	// Get army information
     Army		sel_army(id);
-    Assert(sel_army.m_id != 0);
+    Assert(sel_army.IsValid());
 
      //PFT: handle immobile units
-    for(sint32 i=0; i<sel_army.AccessData()->Num(); i++){
-		if(sel_army.AccessData()->m_array[i]->IsImmobile())
+    for (sint32 i = 0; i < sel_army.Num(); i++)
+    {
+		if (sel_army[i]->IsImmobile())
 			return;
 	}
 	
@@ -808,14 +809,14 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
     } 
 
     Army 	sel_army 			= Army(id);
-    Assert(sel_army.m_id != (0)); 
+    Assert(sel_army.IsValid()); 
 	if ( !sel_army.GetOrder(0) ) return;
 	if ( !sel_army.GetOrder(0)->m_path ) return;
 	
 	//PFT: handle immobile units
-    for (sint32 i = 0; i < sel_army.AccessData()->Num(); i++)
+    for (sint32 i = 0; i < sel_army.Num(); i++)
     {
-		if (sel_army.AccessData()->m_array[i]->IsImmobile())
+		if (sel_army[i].IsImmobile())
 			return;
 	}
 	

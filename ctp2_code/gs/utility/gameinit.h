@@ -12,14 +12,16 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef GAMEINIT_H
-#define GAMEINIT_H 1
+#define GAMEINIT_H
 
 struct HotseatPlayerSetup;
 
-#include "civarchive.h"
-#include "ctp2_inttypes.h"
-#include "MapPoint.h"
+#include "civarchive.h"     // CivArchive
+#include "ctp2_inttypes.h"  // sint32
+#include "gstypes.h"        // k_MAX_PLAYERS
+#include "MapPoint.h"       // MapPoint
 
 sint32 gameinit_InitializeGameFiles(void);
 sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive);

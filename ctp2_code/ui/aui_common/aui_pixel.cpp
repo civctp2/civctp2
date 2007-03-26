@@ -58,14 +58,14 @@ uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPAL
 	uint8           color           = 0;
 	sint32          diff            = INT_MAX;
 
-	for (size_t i = 0; i < paletteCount; ++i) 
+	for (uint8 i = 0; i < static_cast<uint8>(paletteCount); ++i) 
     {
 		uint16  valCompare = ColorCode555(pe[i].peRed, pe[i].peGreen, pe[i].peBlue);
 		
 		if (abs(valCompare - valMain) < diff ) 
         {
 			color   = i;
-			diff    = abs( valCompare - valMain );
+			diff    = abs(valCompare - valMain);
 			if (diff == 0) break;
 		}
 	}

@@ -27,11 +27,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "MainControlPanel.h"
 
-
+#include "aui_progressbar.h"
+#include "aui_uniqueid.h"
 #include "CityControlPanel.h"
 #include "ControlTabPanel.h"
 #include "DomesticControlPanel.h"
@@ -46,11 +45,7 @@
 #include "UnitControlPanel.h"
 #include "ZoomPad.h"
 
-#include "aui_uniqueid.h"
-#include "aui_progressbar.h"
-
-
-MainControlPanel *g_mainControlPanel = NULL;
+MainControlPanel *  g_mainControlPanel = NULL;
 
 
 
@@ -93,34 +88,28 @@ static aui_ProgressBar	*s_progressBar;
 
 STDEHANDLER(MainControlPanel_BeginTurn)
 {
-	
 	PLAYER_INDEX player = 0;
-	if(!args->GetPlayer(0, player))
-		return(GEV_HD_Continue);
-
+	if (args->GetPlayer(0, player))
+    {
+	    MainControlPanel::UpdatePlayer(player);
+    }
 	
-	MainControlPanel::UpdatePlayer(player);
-
-	
-	return(GEV_HD_Continue);
+	return GEV_HD_Continue;
 }
 
 
 void MainControlPanel::InitializeEvents()
 {
-	
 	g_gevManager->AddCallback(GEV_BeginTurn, GEV_PRI_Post, &s_MainControlPanel_BeginTurn);
 }
 
 
 void MainControlPanel::Initialize(MBCHAR *ldlBlock)
 {
-	
-	if(g_mainControlPanel)
-		return;
-
-	
-	g_mainControlPanel = new MainControlPanel(ldlBlock);
+	if (!g_mainControlPanel)
+    {
+    	g_mainControlPanel = new MainControlPanel(ldlBlock);
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -149,9 +138,7 @@ void MainControlPanel::Blank()
 
 void MainControlPanel::CleanUp()
 {
-	
-	delete g_mainControlPanel;
-	g_mainControlPanel = NULL;
+    allocated::clear(g_mainControlPanel);
 }
 
 
@@ -230,38 +217,25 @@ aui_ProgressBar* MainControlPanel::GetProgressBar()
 }
 
 
-MainControlPanel::MainControlPanel(MBCHAR *ldlBlock) :
-m_controlTabPanel(new ControlTabPanel(ldlBlock)),
-m_endTurnButton(new EndTurnButton(ldlBlock)),
-m_shortcutPad(new ShortcutPad(ldlBlock)),
-m_statusBar(new StatusBar(ldlBlock)),
-m_turnYearStatus(new TurnYearStatus(ldlBlock))
-
+MainControlPanel::MainControlPanel(MBCHAR *ldlBlock) 
+:
+    m_controlTabPanel   (new ControlTabPanel(ldlBlock)),
+    m_endTurnButton     (new EndTurnButton(ldlBlock)),
+    m_shortcutPad       (new ShortcutPad(ldlBlock)),
+    m_statusBar         (new StatusBar(ldlBlock)),
+    m_turnYearStatus    (new TurnYearStatus(ldlBlock))
 {	
-
-
-
-
-
-
-
 }
 
 MainControlPanel::~MainControlPanel()
 {
-
-
-
-
-
-
-
-
+    // Nothing to do: only auto_ptr members
 }
 
 bool MainControlPanel::GetSelectedCargo(CellUnitList &cargo)
 {
-	return g_mainControlPanel->m_controlTabPanel->GetSelectedCargo(cargo);
+	return g_mainControlPanel && 
+           g_mainControlPanel->m_controlTabPanel->GetSelectedCargo(cargo);
 }
 
 void MainControlPanel::SwitchToTransportView()

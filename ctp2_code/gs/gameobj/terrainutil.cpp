@@ -355,59 +355,71 @@ sint32 terrainutil_GetBonusProductionExport(sint32 impType, const MapPoint &pos,
 
 void terrainutil_DoVision(const MapPoint &point)
 {
-	sint32 type = -1;
-	sint32 i;
-	Cell *cell = g_theWorld->GetCell(point);
-	double myVisionRange = 0;
+	Cell *  cell            = g_theWorld->GetCell(point);
+	sint32  maxVisionRange  = 0;
+	sint32  type            = -1;
 
-	
-	for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-		sint32 t = cell->GetDBImprovement(i);
-		const TerrainImprovementRecord *impRec = g_theTerrainImprovementDB->Get(t);
-		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(impRec, cell->GetTerrain());
+	for (sint32 impr = 0; impr < cell->GetNumDBImprovements(); ++impr)
+    {
+		sint32      t       = cell->GetDBImprovement(impr);
+		TerrainImprovementRecord::Effect const *    
+                    effect  = terrainutil_GetTerrainEffect
+                                (g_theTerrainImprovementDB->Get(t), 
+                                 cell->GetTerrain()
+                                );
 		sint32 range;
-		if(effect && effect->GetVisionRange(range) && range > (sint32)myVisionRange) {
-			type = t;
-			myVisionRange = (double)range;
+		if (effect && effect->GetVisionRange(range) && (range > maxVisionRange)) 
+        {
+			type            = t;
+			maxVisionRange  = range;
 		}
 	}
 
-	if(type < 0 || myVisionRange < 0.001) {
-		
+	if (type < 0 || maxVisionRange <= 0) 
+    {
 		return;
 	}
 
-	sint32 myrsq = sint32((myVisionRange+0.5)*(myVisionRange+0.5));
+	bool    revealedUnexplored  = false;
+    sint32  cellOwner           = cell->GetOwner();
+	if (cellOwner >= 0) 
+    {
+		g_player[cellOwner]->AddUnitVision(point, maxVisionRange, revealedUnexplored);
 
-	
-	bool revealedUnexplored = false;
-	if(cell->GetOwner() >= 0) {
-		g_player[cell->GetOwner()]->AddUnitVision(point, myVisionRange, revealedUnexplored);
-
-		if(g_selected_item->GetVisiblePlayer() == cell->GetOwner())
+		if (g_selected_item->GetVisiblePlayer() == cellOwner)
+        {
 			g_director->AddCopyVision();
+        }
 	}
 
-	MapPoint topleft = point;
-	topleft.x -= sint16(myVisionRange);
+	MapPoint topleft = MapPoint(point.x - maxVisionRange, point.y);
 	DynamicArray<Unit> unitArray;
 
 	g_theUnitTree->SearchRect(unitArray, topleft,
-	                          static_cast<sint16>(myVisionRange) * 2 + 1,
-	                          static_cast<sint16>(myVisionRange) * 2 + 1,
-	                          ~(1 << cell->GetOwner()));
-	sint32 un = unitArray.Num();
-	for(i = 0; i < un; i++) {
-		UnitData *ud = unitArray[i].AccessData();
-		sint32 ls = UnitData::GetDistance(ud, point, sint32(myVisionRange));
+	                          static_cast<sint16>(maxVisionRange) * 2 + 1,
+	                          static_cast<sint16>(maxVisionRange) * 2 + 1,
+	                          ~(1 << cellOwner)
+                             );
+
+	sint32 myrsq    = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
+	sint32 un       = unitArray.Num();
+
+	for (sint32 i = 0; i < un; i++) 
+    {
+		UnitData * ud = unitArray[i].AccessData();
+		sint32 ls = UnitData::GetDistance(ud, point, maxVisionRange);
 		if(ls >= myrsq)
 			continue;
 
-		if(ls <= myrsq && !(ud->GetRealVisibility() & (1 << cell->GetOwner()))) {
-			if(ud->GetDBRec()->GetVisionClass() &
-			   g_theTerrainImprovementDB->Get(type)->GetCanSee()) {
-				if(cell->GetOwner() >= 0) {
-					ud->SetVisible((PLAYER_INDEX)cell->GetOwner());
+		if (!(ud->GetRealVisibility() & (1 << cellOwner))) 
+        {
+			if (ud->GetDBRec()->GetVisionClass() &
+			    g_theTerrainImprovementDB->Get(type)->GetCanSee()
+               ) 
+            {
+				if (cellOwner >= 0) 
+                {
+					ud->SetVisible((PLAYER_INDEX)cellOwner);
 				}
 			}
 		}

@@ -367,6 +367,6 @@ void NetCellUnitOrder::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	for(i = 0; i < n; i++) {
 		Unit u;
 		PULLLONGTYPE(u, Unit);
-		units->m_array[i] = u;
+		(*units)[i] = u;
 	}
 }

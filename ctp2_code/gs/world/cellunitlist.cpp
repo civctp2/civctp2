@@ -1060,7 +1060,7 @@ void CellUnitList::ComputeStrength(double & attack,
     } 
 }
 
-double CellUnitList::GetAverageHealthPercentage()
+double CellUnitList::GetAverageHealthPercentage() const
 {
 	if(m_nElements < 1)
 		return 0.0;

@@ -22,6 +22,7 @@
 #include "c3.h"
 #include "messagewin.h"
 
+#include "Globals.h"        // allocated::...
 #include "SelItem.h"        // g_selected_item
 
 
@@ -56,14 +57,14 @@
 #include "controlpanelwindow.h"
 
 
-extern C3UI				*g_c3ui;
+extern C3UI	*           g_c3ui;
+extern MessageModal *   g_modalMessage;
+extern sint32           g_ScreenWidth;
+extern sint32           g_ScreenHeight;
 
 tech_WLList<MessageList *>		*g_messageUserList = NULL;
+
 PLAYER_INDEX			g_currentPlayerMessages = 0;
-
-extern MessageModal *g_modalMessage;
-
-
 
 uint16 g_messageReadPositionX = 32;
 uint16 g_messageReadPositionY = 241;
@@ -116,86 +117,76 @@ AUI_ERRCODE messagewin_InitializeMessages( void )
 
 	if ( block->GetAttributeType( "readx" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageReadPositionX = block->GetInt( "readx" );
+		g_messageReadPositionX = static_cast<uint16>(block->GetInt("readx"));
 		
 	if ( block->GetAttributeType( "ready" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageReadPositionY = block->GetInt( "ready" );
+		g_messageReadPositionY = static_cast<uint16>(block->GetInt("ready"));
 		
 	if ( block->GetAttributeType( "maxvisible" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageMaxVisible = block->GetInt( "maxvisible" );
+		g_messageMaxVisible = static_cast<uint8>(block->GetInt("maxvisible"));
 
 	if ( block->GetAttributeType( "buttonspacing" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageRespButtonSpacing = block->GetInt( "buttonspacing" );
+		g_messageRespButtonSpacing = static_cast<uint8>(block->GetInt("buttonspacing"));
 
 	if ( block->GetAttributeType( "textpadding" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageRespTextPadding = block->GetInt( "textpadding" );
+		g_messageRespTextPadding = static_cast<uint8>(block->GetInt("textpadding"));
 
 	if ( block->GetAttributeType( "buttonwidth" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageRespButtonWidth = block->GetInt( "buttonwidth" );
+		g_messageRespButtonWidth = static_cast<uint8>(block->GetInt("buttonwidth"));
 
 	if ( block->GetAttributeType( "dropdownpadding" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageRespDropPadding = block->GetInt( "dropdownpadding" );
+		g_messageRespDropPadding = static_cast<uint8>(block->GetInt("dropdownpadding"));
 
 	if ( block->GetAttributeType( "eyewidth" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageEyeDropWidth = block->GetInt( "eyewidth" );
+		g_messageEyeDropWidth = static_cast<uint8>(block->GetInt("eyewidth"));
 
 	if ( block->GetAttributeType( "greatlibrary" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageEyeGreatPadding = block->GetInt( "greatlibrary" );
+		g_messageEyeGreatPadding = static_cast<uint8>(block->GetInt("greatlibrary"));
 
 	if ( block->GetAttributeType( "morex" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageMoreX = block->GetInt( "morex" );
+		g_messageMoreX = static_cast<uint16>(block->GetInt("morex"));
 
 	if ( block->GetAttributeType( "morey" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageMoreY = block->GetInt( "morey" );
+		g_messageMoreY = static_cast<uint16>(block->GetInt("morey"));
 
 	if ( block->GetAttributeType( "lessx" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageLessX = block->GetInt( "lessx" );
+		g_messageLessX = static_cast<uint16>(block->GetInt("lessx"));
 
 	if ( block->GetAttributeType( "lessy" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageLessY = block->GetInt( "lessy" );
+		g_messageLessY = static_cast<uint16>(block->GetInt("lessy"));
 
 	if ( block->GetAttributeType( "miconspacing" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageIconSpacing = block->GetInt( "miconspacing" );
+		g_messageIconSpacing = static_cast<uint8>(block->GetInt("miconspacing"));
 
 	if ( block->GetAttributeType( "miconheight" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageIconHeight = block->GetInt( "miconheight" );
+		g_messageIconHeight = static_cast<uint8>(block->GetInt("miconheight"));
 
 	if ( block->GetAttributeType( "miconwidth" )
 			== ATTRIBUTE_TYPE_INT )
-		g_messageIconWidth = block->GetInt( "miconwidth" );
+		g_messageIconWidth = static_cast<uint8>(block->GetInt("miconwidth"));
 
 
-	
-	
-	sint32		distanceFromScreenBottom;
-	extern sint32 g_ScreenWidth, g_ScreenHeight;
+    sint32 distanceFromScreenBottom = (g_ScreenWidth < 1024) ? 270 : 300;
 
-	if (g_ScreenWidth < 1024) {
-		distanceFromScreenBottom = 270;
-	} else {
-		distanceFromScreenBottom = 300;
-	}
-
-	g_messageReadPositionX = 16;
-
+    g_messageReadPositionX = 16;
 	g_messageReadPositionY = (uint16)(g_ScreenHeight - distanceFromScreenBottom);
 
-	g_messageMaxVisible = (g_messageReadPositionY / 
-		(g_messageIconHeight + g_messageIconSpacing)) - 3;
+	g_messageMaxVisible = static_cast<uint8>
+        ((g_messageReadPositionY / (g_messageIconHeight + g_messageIconSpacing)) - 3);
 
 	g_messageMoreX = g_messageReadPositionX;
 	g_messageMoreY = g_messageReadPositionY - 
@@ -224,16 +215,20 @@ MessageList *messagewin_InitializePlayerMessage( PLAYER_INDEX index )
 
 MessageList *messagewin_GetPlayerMessageList( PLAYER_INDEX index )
 {
-	if ( !g_messageUserList ) return NULL;
+	if (g_messageUserList)
+    {
+	    ListPos position = g_messageUserList->GetHeadPosition();
 
-	ListPos position = g_messageUserList->GetHeadPosition();
-
-	for ( uint32 count = g_messageUserList->L(); count; count-- ) {
-		MessageList * l_List = g_messageUserList->GetNext( position );
-		if (l_List->GetPlayer() == index )
-			return l_List;
+	    for (size_t count = g_messageUserList->L(); count > 0; --count) 
+        {
+		    MessageList * l_List = g_messageUserList->GetNext(position);
+		    
+            if (l_List->GetPlayer() == index)
+            {
+			    return l_List;
+            }
+        }
 	}
-
 	
 	return NULL;
 }
@@ -361,18 +356,14 @@ int messagewin_FastKillWindow(MessageWindow *window)
 
 int messagewin_CleanupMessage( MessageWindow *window )
 {
-	MessageIconWindow *iconWindow = window->GetIconWindow();
-
-	return messagewin_CleanupMessage( iconWindow, window );
+	return messagewin_CleanupMessage(window->GetIconWindow(), window);
 }
 
 
 
 int messagewin_CleanupMessage( MessageIconWindow *iconWindow )
 {
-	MessageWindow *window = iconWindow->GetWindow();
-
-	return messagewin_CleanupMessage( iconWindow, window );
+	return messagewin_CleanupMessage(iconWindow, iconWindow->GetWindow());
 }
 
 
@@ -405,9 +396,7 @@ int messagewin_CleanupMessage( MessageIconWindow *iconWindow,
 void messagewin_Cleanup(void)
 {
 	messagewin_PurgeMessages();
-
-	delete g_messageUserList;
-	g_messageUserList = NULL;
+    allocated::clear(g_messageUserList);
 }
 
 
@@ -528,15 +517,11 @@ return 1;
 				button = NULL;
 			}
 
-			if ( window ) {
-				delete window;
-				window = NULL;
-			}
+			delete window;
+			window = NULL;
 
-			if ( action ) {
-				delete action;
-				action = NULL;
-			}
+			delete action;
+			action = NULL;
 		}
 	}
 
@@ -605,14 +590,10 @@ return 1;
 				delete button;
 				button = NULL;
 			}
-			if ( window ) {
-				delete window;
-				window = NULL;
-			}
-			if ( action ) {
-				delete action;
-				action = NULL;
-			}
+			delete window;
+			window = NULL;
+			delete action;
+			action = NULL;
 		}
 	}
 	return 1;

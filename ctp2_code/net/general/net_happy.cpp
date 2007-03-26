@@ -45,7 +45,7 @@ NetHappy::NetHappy(Unit city, Happy *data, BOOL isInitial)
 {
 	m_city = city;
 	m_data = data;
-	m_isInitialPacket = isInitial;
+	m_isInitialPacket = static_cast<uint8>(isInitial);
 }
 
 void

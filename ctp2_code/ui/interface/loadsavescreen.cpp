@@ -33,103 +33,63 @@
 
 #include "c3.h"
 
-#include "civ3_main.h"
-#include "civapp.h"
-#include "gamefile.h"
-#include "Globals.h"            // allocated::reassign
-
 #include "aui.h"
 #include "aui_ldl.h"
-#include "aui_uniqueid.h"
 #include "aui_stringtable.h"
 #include "aui_textfield.h"
-#include "ns_gamesetup.h"
-
-#include "c3ui.h"
-#include "c3window.h"
-#include "c3_static.h"
+#include "aui_uniqueid.h"
 #include "c3_button.h"
 #include "c3_dropdown.h"
-#include "c3_listitem.h"
 #include "c3_listbox.h"
+#include "c3_listitem.h"
+#include "c3_static.h"
 #include "c3_utilitydialogbox.h"
-
-#include "ctp2_button.h"
-
-#include "player.h"
-#include "Civilisation.h"
-
-#include "initialplaywindow.h"
-#include "loadsavewindow.h"
-#include "netshell.h"
-
-#include "profileDB.h"
-#include "c3_utilitydialogbox.h"
-#include "StrDB.h"
-
-#include "keypress.h"
-
-
-#include "spnewgametribescreen.h"
-#include "spnewgameplayersscreen.h"
-
-#include "io.h"
-#include "direct.h"
-
-
-#include "civscenarios.h"
-extern CivScenarios			*g_civScenarios;
-
-
-#include "gameinit.h"
+#include "c3ui.h"
+#include "c3window.h"
+#include "civ3_main.h"
 #include "civapp.h"
-extern CivApp				*g_civApp;
-
+#include "Civilisation.h"
+#include "CivilisationRecord.h"
+#include "civscenarios.h"               // g_civScenarios
+#include "ctp2_button.h"
+#include "direct.h"
+#include "gamefile.h"                   // SAVE_LEADER_NAME_SIZE	
+#include "gameinit.h"
+#include "Globals.h"                    // allocated::reassign
+#include "hotseatlist.h"
+#include "initialplaywindow.h"
+#include "io.h"
+#include "keypress.h"
+#include "loadsavewindow.h"
+#include "MessageBoxDialog.h"
+#include "netshell.h"                   // g_gamesetup
+#include "ns_gamesetup.h"
 #include "optionswindow.h"
-
-extern Player **g_player;
+#include "player.h"                     // g_player
+#include "profileDB.h"                  // g_theProfileDB
+#include "spnewgamediffscreen.h"
+#include "spnewgameplayersscreen.h"
+#include "spnewgametribescreen.h"
+#include "StrDB.h"                      // g_theStringDB
+#include "TurnYearStatus.h"
 
 extern C3UI					*g_c3ui;
 extern CivApp				*g_civApp;
-extern nf_GameSetup			g_gamesetup;
-extern ProfileDB			*g_theProfileDB;
-extern StringDB				*g_theStringDB;
-
-
-#include "CivilisationRecord.h"
-
 extern sint32				g_scenarioUsePlayerNumber;
-
-
-#include "spnewgamediffscreen.h"
 extern BOOL					g_setDifficultyUponLaunch;
 extern sint32				g_difficultyToSetUponLaunch;
 extern BOOL					g_setBarbarianRiskUponLaunch;
 extern sint32				g_barbarianRiskUponLaunch;
 
+SaveInfo *                  g_savedGameRequest  = NULL;
+LoadSaveWindow	*           g_loadsaveWindow    = NULL;
+
+static uint32               s_type              = LSS_TOTAL;
+static c3_Static *          s_name				= NULL;
+static aui_StringTable *    s_nameString		= NULL;
 
 
 
-SaveInfo					*g_savedGameRequest = NULL;
-
-
-LoadSaveWindow				*g_loadsaveWindow = NULL;
-
-
-#include "hotseatlist.h"
-
-
-#include "MessageBoxDialog.h"
-
-
-#include "TurnYearStatus.h"
-
-
-static uint32 s_type = LSS_TOTAL;
-static c3_Static					*s_name					= NULL;
-static aui_StringTable				*s_nameString			= NULL;
-
-void loadsavescreen_setMyType(uint32 type);
 
 void loadsavescreen_deleteDialog( bool response, void *data )
 {
@@ -143,31 +103,27 @@ void loadsavescreen_deleteDialog( bool response, void *data )
 
 sint32	loadsavescreen_displayMyWindow(uint32 type)
 {
-	sint32 retval=0;
-	if(!g_loadsaveWindow) { retval = loadsavescreen_Initialize(); }
-
-	
+    AUI_ERRCODE retval = g_loadsaveWindow ? AUI_ERRCODE_OK : loadsavescreen_Initialize();
 	
 	g_loadsaveWindow->CleanUpSaveInfo();
 
-	if(retval == AUI_ERRCODE_OK) {
+	if (retval == AUI_ERRCODE_OK) 
+    {
 		g_loadsaveWindow->SetType(type);
-
 		g_c3ui->AddWindow(g_loadsaveWindow);
 		keypress_RegisterHandler(g_loadsaveWindow);
 	}
 
 	return retval;
 }
+
 sint32 loadsavescreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-	AUI_ERRCODE auiErr;
-
-	auiErr = g_c3ui->RemoveWindow( g_loadsaveWindow->Id() );
-	keypress_RemoveHandler(g_loadsaveWindow);
+	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow( g_loadsaveWindow->Id() );
 	Assert( auiErr == AUI_ERRCODE_OK );
+	keypress_RemoveHandler(g_loadsaveWindow);
 
 	return 1;
 }
@@ -176,14 +132,12 @@ sint32 loadsavescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	if ( g_loadsaveWindow ) return AUI_ERRCODE_OK; 
 
-
+	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "LoadSaveWindow");
 
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	g_loadsaveWindow= new LoadSaveWindow(&errcode, aui_UniqueId(), windowBlock, 16 , AUI_WINDOW_TYPE_STANDARD);
 	Assert( AUI_NEWOK(g_loadsaveWindow, errcode) );
 	if ( !AUI_NEWOK(g_loadsaveWindow, errcode) ) return errcode;
@@ -231,13 +185,12 @@ void loadsavescreen_Cleanup()
     {
         if (g_c3ui)
         {
-	g_c3ui->RemoveWindow( g_loadsaveWindow->Id() );
+	        g_c3ui->RemoveWindow(g_loadsaveWindow->Id());
         }
-	keypress_RemoveHandler(g_loadsaveWindow);
+	    keypress_RemoveHandler(g_loadsaveWindow);
 
-	delete g_loadsaveWindow;
-	g_loadsaveWindow = NULL;
-}
+        allocated::clear(g_loadsaveWindow);
+    }
 }
 
 void loadsavescreen_PostCleanupAction(void)
@@ -419,9 +372,7 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 			}
 		}
 
-		
-		delete s_tempSaveInfo;
-		s_tempSaveInfo = NULL;
+        allocated::clear(s_tempSaveInfo);
 	}
 
 	
@@ -645,27 +596,15 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 		}
 	}
 
-	if (s_tempSaveInfo) {
-		delete s_tempSaveInfo;
-		s_tempSaveInfo = NULL;
-	}
+    allocated::clear(s_tempSaveInfo);
 }
 
 
 void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 {
-	
-	
-	
 	MBCHAR		path[_MAX_PATH];
-
 	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
 
-	
-	
-	
-	
-	
 	if (saveInfo->startInfoType != STARTINFOTYPE_NONE) {
 		
 		
@@ -692,7 +631,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 				
 				
 				MBCHAR tempStr[_MAX_PATH];
-				sprintf(tempStr, "%s%s", (MBCHAR *)g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
+				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
 				
 				
 				MessageBoxDialog::Information(tempStr,"CantLoadScenario",NULL, NULL, "str_ldl_MB_OK", false);
@@ -731,7 +670,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 				
 				
 				MBCHAR tempStr[_MAX_PATH];
-				sprintf(tempStr, "%s%s", (MBCHAR *)g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
+				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
 				
 				
 				MessageBoxDialog::Information(tempStr,"CantLoadScenarioData",NULL, NULL, "str_ldl_MB_OK", false);
@@ -839,84 +778,21 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 
 void loadsavescreen_LoadGame(void)
 {
-	GameInfo	*gameInfo = g_loadsaveWindow->GetGameInfo();
-	SaveInfo	*saveInfo = g_loadsaveWindow->GetSaveInfo();
+	GameInfo *  gameInfo = g_loadsaveWindow->GetGameInfo();
 
 	Assert(gameInfo);
 	if (!gameInfo) return;
-
-	
 	if (!c3files_HasLegalCD()) return;
 
-
-	if (!saveInfo) {
-		loadsavescreen_displayMyWindow(0);
-		return;
+	if (SaveInfo * saveInfo = g_loadsaveWindow->GetSaveInfo()) 
+    {
+	    loadsavescreen_BeginLoadProcess(saveInfo, gameInfo->path);
+    }	
+    else
+    {
+        loadsavescreen_displayMyWindow(0);
 	}
-
-	loadsavescreen_BeginLoadProcess(saveInfo, gameInfo->path);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
 
 
 void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
@@ -940,11 +816,10 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 			strcpy(saveInfo->gameName, g_loadsaveWindow->GetGameInfo()->name);
 		} else {
 			g_loadsaveWindow->BuildDefaultSaveName(NULL, saveInfo->gameName);
-			saveInfo->gameName[6] = '\0';
+			saveInfo->gameName[SAVE_LEADER_NAME_SIZE] = '\0';
 		}
 	}
 
-	
 	nf_GameSetup gs;
 
 	
@@ -1011,7 +886,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 			MessageBoxDialog::Information("str_ldl_InvalidCharsFixed", "InfoInvalidCharsFixed");
 		}
 
-		sprintf(fullPath, "%s\\%s", path, saveInfo->gameName);
+		sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
 
 		// Verify that this directory exists, and if it doesn't, create it
 		if (!c3files_PathIsValid(fullPath)) {
@@ -1040,11 +915,11 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 		}
 
 		// Full path, including the save file's filename
-		sprintf(saveInfo->pathName, "%s\\%s", fullPath, saveInfo->fileName);
+		sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, saveInfo->fileName);
 	} else {
 		sprintf(fullPath, "%s", path);
 		strcpy(saveInfo->fileName, useName);
-		sprintf(saveInfo->pathName, "%s\\%s", fullPath, useName);
+		sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, useName);
 	}
 
 	// Build a power graph from the UI
@@ -1052,13 +927,9 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	g_loadsaveWindow->GetRadarMap(saveInfo);
 
 	// SAM021899 changed to make a save request
-	if (g_savedGameRequest)
-		delete g_savedGameRequest;
-	
-	g_savedGameRequest = new SaveInfo(saveInfo);
+    allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
 
 //	GameFile::SaveGame(saveInfo->pathName, saveInfo);
-
 }
 
 /////////////////////////////////////////////////////////////
@@ -1072,12 +943,11 @@ void loadsavescreen_LoadMPGame(void)
 		return;
 	}
 
-	GameInfo	*gameInfo = g_loadsaveWindow->GetGameInfo();
-	SaveInfo	*saveInfo = g_loadsaveWindow->GetSaveInfo();
-
 	// SAM042099 check for a valid CD-ROM before allowing a game to be loaded
 	if ((!g_netfunc || g_netfunc->IsHost()) && !c3files_HasLegalCD())
 		return;
+
+	GameInfo *  gameInfo = g_loadsaveWindow->GetGameInfo();
 
 	// HACK FIXME this happens on the client, which probably shouldn't call
 	// this function at all, but it wasn't immediately obvious how to tell
@@ -1091,12 +961,13 @@ void loadsavescreen_LoadMPGame(void)
 		return;
 	}
 
+	SaveInfo *  saveInfo = g_loadsaveWindow->GetSaveInfo();
 	Assert(saveInfo);
 	if (!saveInfo) return;
 
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", gameInfo->path, saveInfo->fileName);
+	sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 	g_civApp->PostLoadSaveGameAction(path);
 }
 
@@ -1122,7 +993,7 @@ void loadsavescreen_SaveMPGame(void)
 			strcpy(saveInfo->gameName, g_loadsaveWindow->GetGameInfo()->name);
 		} else {
 			g_loadsaveWindow->BuildDefaultSaveName(NULL, saveInfo->gameName);
-			saveInfo->gameName[6] = '\0';
+			saveInfo->gameName[SAVE_LEADER_NAME_SIZE] = '\0';
 		}
 	}
 
@@ -1138,11 +1009,10 @@ void loadsavescreen_SaveMPGame(void)
 		k_NS_MAX_PLAYERS * sizeof( TribeSlot ) );
 
 	MBCHAR	path[_MAX_PATH];
-	MBCHAR	fullPath[_MAX_PATH];
-
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_MP, path)) return;
 	
-	sprintf(fullPath, "%s\\%s", path, saveInfo->gameName);
+	MBCHAR	fullPath[_MAX_PATH];
+	sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
 	
 	// Verify that this directory exists, and if it doesn't, create it
 	if (!c3files_PathIsValid(fullPath)) {
@@ -1156,17 +1026,14 @@ void loadsavescreen_SaveMPGame(void)
 	}
 
 	// Full path, including the save file's filename
-	sprintf(saveInfo->pathName, "%s\\%s", fullPath, saveInfo->fileName);
+	sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, saveInfo->fileName);
 
 	// Build a power graph from the UI
 	g_loadsaveWindow->GetPowerGraph(saveInfo);
 	g_loadsaveWindow->GetRadarMap(saveInfo);
 
 	// SAM021899 changed to make a save request
-	if (g_savedGameRequest)
-		delete g_savedGameRequest;
-	
-	g_savedGameRequest = new SaveInfo(saveInfo);
+    allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
 
 //	GameFile::SaveGame(saveInfo->pathName, saveInfo);
 
@@ -1180,17 +1047,17 @@ void loadsavescreen_LoadSCENGame(void)
 	if (!c3files_HasLegalCD()) return;
 
 	GameInfo	*gameInfo = g_loadsaveWindow->GetGameInfo();
-	SaveInfo	*saveInfo = g_loadsaveWindow->GetSaveInfo();
 
 	Assert(gameInfo);
 	if (!gameInfo) return;
 
+	SaveInfo	*saveInfo = g_loadsaveWindow->GetSaveInfo();
 	Assert(saveInfo);
 	if (!saveInfo) return;
 
 	MBCHAR		path[_MAX_PATH];
 
-	sprintf(path, "%s\\%s", gameInfo->path, saveInfo->fileName);
+	sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 //	g_civApp->PostLoadSaveGameAction(path);
 
 	g_civPaths->SetCurScenarioPath(gameInfo->path);
@@ -1219,7 +1086,7 @@ void loadsavescreen_SaveSCENGame(void)
 			strcpy(saveInfo->gameName, g_loadsaveWindow->GetGameInfo()->name);
 		} else {
 			g_loadsaveWindow->BuildDefaultSaveName(NULL, saveInfo->gameName);
-			saveInfo->gameName[6] = '\0';
+			saveInfo->gameName[SAVE_LEADER_NAME_SIZE] = '\0';
 		}
 	}
 
@@ -1253,11 +1120,11 @@ void loadsavescreen_SaveSCENGame(void)
 	saveInfo->gameSetup = gs;
 
 	MBCHAR	path[_MAX_PATH];
-	MBCHAR	fullPath[_MAX_PATH];
 
 	if (!g_civPaths->GetSavePath(C3SAVEDIR_SCEN, path)) return;
 	
-	sprintf(fullPath, "%s\\%s", path, saveInfo->gameName);
+	MBCHAR	fullPath[_MAX_PATH];
+	sprintf(fullPath, "%s%s%s", path, FILE_SEP, saveInfo->gameName);
 	
 	// Verify that this directory exists, and if it doesn't, create it
 	if (!c3files_PathIsValid(fullPath)) {
@@ -1271,17 +1138,14 @@ void loadsavescreen_SaveSCENGame(void)
 	}
 
 	// Full path, including the save file's filename
-	sprintf(saveInfo->pathName, "%s\\%s", fullPath, saveInfo->fileName);
+	sprintf(saveInfo->pathName, "%s%s%s", fullPath, FILE_SEP, saveInfo->fileName);
 
 	// Build a power graph from the UI
 	g_loadsaveWindow->GetPowerGraph(saveInfo);
 	g_loadsaveWindow->GetRadarMap(saveInfo);
 
 	// SAM021899 changed to make a save request
-	if (g_savedGameRequest)
-		delete g_savedGameRequest;
-	
-	g_savedGameRequest = new SaveInfo(saveInfo);
+    allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
 
 //	GameFile::SaveGame(saveInfo->pathName, saveInfo);
 }
@@ -1349,7 +1213,6 @@ void loadsavescreen_backPress(aui_Control *control, uint32 action, uint32 data, 
 void loadsavescreen_delete( void )
 {
 	GameInfo	*gameInfo = g_loadsaveWindow->GetGameInfo();
-	SaveInfo	*saveInfo = g_loadsaveWindow->GetSaveInfo();
 
 	Assert(gameInfo);
 	if (!gameInfo) return;
@@ -1357,11 +1220,12 @@ void loadsavescreen_delete( void )
 //	Assert(saveInfo);
 //	if (!saveInfo) return;
 
+	SaveInfo	*saveInfo = g_loadsaveWindow->GetSaveInfo();
 	if(saveInfo)
 	{
 		MBCHAR		path[_MAX_PATH];
 
-		sprintf(path, "%s\\%s", gameInfo->path, saveInfo->fileName);
+		sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, saveInfo->fileName);
 
 		if ( DeleteFile( path ) )
 		{
@@ -1394,15 +1258,13 @@ void loadsavescreen_delete( void )
 	else
 	{
 		MBCHAR		path[_MAX_PATH];
-		int fileHandle;
-
-		sprintf(path, "%s\\*.*", gameInfo->path);
+		sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
 		_finddata_t findData;
-		fileHandle=_findfirst(path,&findData);
+		int fileHandle=_findfirst(path,&findData);
 		while(fileHandle)
 		{
-			sprintf(path, "%s\\%s", gameInfo->path, findData.name);
+			sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, findData.name);
 			DeleteFile(path);
 			if(_findnext(fileHandle,&findData))
 			{
@@ -1422,11 +1284,13 @@ void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("DELETE_SAVE_CONFIRM") );
 
-	if(g_loadsaveWindow->GetGameInfo()) {	
-		MessageBoxDialog::Query( s, "ConfirmLoadSaveDelete", loadsavescreen_deleteDialog );
+	if (g_loadsaveWindow->GetGameInfo()) 
+    {	
+		MessageBoxDialog::Query(g_theStringDB->GetNameStr("DELETE_SAVE_CONFIRM"), 
+                                "ConfirmLoadSaveDelete", 
+                                loadsavescreen_deleteDialog 
+                               );
 	}
 }
 
@@ -1594,8 +1458,7 @@ void loadsavescreen_OverwriteCallback( bool response, void *data )
 BOOL loadsavescreen_CheckOverwrite( void )
 {
 	// EAS012199 - save the one we originally set out to save.
-	GameInfo	*gameInfo = g_loadsaveWindow->GetGameInfo();
-	SaveInfo		*saveInfo = g_loadsaveWindow->GetSaveInfoToSave();
+	SaveInfo *  saveInfo = g_loadsaveWindow->GetSaveInfoToSave();
 
 	Assert( saveInfo != NULL );
 	if ( !saveInfo ) return FALSE;
@@ -1604,22 +1467,27 @@ BOOL loadsavescreen_CheckOverwrite( void )
 	if (!g_loadsaveWindow->GetSaveName(saveInfo->fileName)) return FALSE;
 	if (!g_loadsaveWindow->GetNote(saveInfo->note)) return FALSE;
 
-	if ( gameInfo ) {
-		PointerList<SaveInfo>::Walker *walker = new PointerList<SaveInfo>::Walker(gameInfo->files);
-
-		while (walker->IsValid()) {
-			SaveInfo *info = walker->GetObj();
-			if ( !strcmp(info->fileName, saveInfo->fileName) ) {
-				MBCHAR s[_MAX_PATH];
-				sprintf( s, g_theStringDB->GetNameStr("SAVE_OVERWRITE") );
+	GameInfo *  gameInfo = g_loadsaveWindow->GetGameInfo();
+	if (gameInfo) 
+    {
+		for 
+        (
+            PointerList<SaveInfo>::Walker walker = PointerList<SaveInfo>::Walker(gameInfo->files);
+            walker.IsValid();
+            walker.Next()
+        )
+        {
+			SaveInfo * info = walker.GetObj();
+			if ( !strcmp(info->fileName, saveInfo->fileName) ) 
+            {
 				//c3_TextMessage( s, k_UTILITY_TEXTMESSAGE_YESNO, loadsavescreen_OverwriteCallback );
-				MessageBoxDialog::Query( s, "ConfirmSaveOverwrite", loadsavescreen_OverwriteCallback );
-				delete walker;
+				MessageBoxDialog::Query(g_theStringDB->GetNameStr("SAVE_OVERWRITE"), 
+                                        "ConfirmSaveOverwrite", 
+                                        loadsavescreen_OverwriteCallback 
+                                       );
 				return TRUE;
 			}
-			walker->Next();
 		}
-		delete walker;
 	}
 
 	return FALSE;

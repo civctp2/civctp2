@@ -93,11 +93,11 @@ typedef bool (FindDistanceCellCallback) (const MapPoint &pos, Cell *cell, void *
 template <class T> class PQueue;
 struct DistItem;
 
-#ifndef USE_COM_REPLACEMENT
-interface IMapGenerator;
-#else
+#if defined(USE_COM_REPLACEMENT)
 #include "IMapGen.h"
 #include <ltdl.h>
+#else
+interface IMapGenerator;
 #endif
 
 
@@ -193,7 +193,7 @@ public:
     XY_Coordinates XY_Coords;
 	A_Star_Heuristic_Cost * A_star_heuristic;
     
-    World(const MapPoint m, const int xw, const int yw);
+    World(const MapPoint & m, const int xw, const int yw);
     World(CivArchive &archive, BOOL fromMapFile = FALSE);
     void CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 						sint32 player_start_score[k_MAX_PLAYERS]);
@@ -203,15 +203,15 @@ public:
     void AllocateMap();
     void Reset(sint16 x, sint16 y, BOOL yWrap, BOOL xWrap);
     
-    inline bool IsYwrap() const { return m_isYwrap != 0; } 
-    inline bool IsXwrap() const { return m_isXwrap != 0; } 
+    bool IsYwrap() const { return m_isYwrap != 0; } 
+    bool IsXwrap() const { return m_isXwrap != 0; } 
 
 	
 	void SetXWrap(bool on) {m_isXwrap = on;};
 	void SetYWrap(bool on) {m_isYwrap = on;};
 
-    inline sint32 GetXWidth() const { return m_size.x; }
-    inline sint32 GetYHeight() const { return m_size.y; } 
+    sint32 GetXWidth() const { return m_size.x; }
+    sint32 GetYHeight() const { return m_size.y; } 
     
     Cell * GetCell(const MapPoint &p) const { 
         Assert(0 <= p.x);  Assert(p.x < m_size.x); 
@@ -327,9 +327,9 @@ public:
     
     sint32 GetTerrain(sint32 x, sint32 y);
     void SetTerrain(sint32 x, sint32 y, sint32 type);
-    MapPoint *GetSize() { return &m_size; }
-    inline sint32 GetWidth() { return m_size.x; }
-    inline sint32 GetHeight() { return m_size.y; }
+    MapPoint * GetSize() { return &m_size; }
+    sint32 GetWidth() const { return m_size.x; }
+    sint32 GetHeight() const { return m_size.y; }
     
     
     
@@ -346,27 +346,22 @@ public:
     void InitContinent(); 
     
     void GrowOceans();
-    BOOL IsNewWater(MapPoint &p);
-    void GrowWater(MapPoint &start);
+    bool IsNewWater(MapPoint const & p) const;
+    void GrowWater(MapPoint const & start);
     
-    void AddToWaterSearch(MapPointNode *&search_list, 
-        MapPoint &pos);
-    
-    BOOL NextPoint(MapPointNode *&search_list, MapPointNode *&finished_list, 
-        MapPoint &p);
+    bool NextPoint(MapPointNode *& search_list, MapPointNode *&finished_list, 
+        MapPoint & p);
     
     void ResetCanalsTunnels();
     
     void GrowContinents();
-    BOOL IsNewLand(MapPoint &p);
-    void GrowLand(MapPoint &start);
+    bool IsNewLand(MapPoint const & p) const;
+    void GrowLand(MapPoint const & start);
     
     void FindContinentSize();
-    sint32 GetLandContinentSize(sint32 cont_num)const; 
-    sint32 GetWaterContinentSize(sint32 cont_num)const; 
+    sint32 GetLandContinentSize(sint32 cont_num) const; 
+    sint32 GetWaterContinentSize(sint32 cont_num) const; 
 
-    void AddToLandSearch(MapPointNode *&search_list, 
-        MapPoint &pos);
     
     void GetContinent(const MapPoint &pos, sint32 &cont_number, 
         bool &is_land) const;
@@ -375,26 +370,30 @@ public:
 
     void FindContinentNeighbors();
     
-    void FindAContinentNeighbor(const sint32 center_cont, 
-        MapPoint &test_point, const BOOL is_land);
+    void FindAContinentNeighbor
+    (
+        sint32     center_cont, 
+        MapPoint & test_point, 
+        bool is_land
+    );
     
     void InsertWaterNextToLand(const sint32 waterc, const sint32 landc);    
     void InsertLandNextToWater(const sint32 landc, const sint32 waterc); 
     
 
-    BOOL IsWaterNextTooLand(const sint32 waterc, const sint32 landc) const;
-    BOOL IsLandNextTooWater(const sint32 landc, const sint32 waterc) const;
+    bool IsWaterNextTooLand(const sint32 waterc, const sint32 landc) const;
+    bool IsLandNextTooWater(const sint32 landc, const sint32 waterc) const;
 
 	
-	BOOL LandShareWater(const sint32 land1, const sint32 land2) const;
+    bool LandShareWater(const sint32 land1, const sint32 land2) const;
 
     
-    BOOL GetIsChokePoint(MapPoint &pos) const;
+    bool GetIsChokePoint(MapPoint const & pos) const;
     
     void CalcChokePoints();
     
-    BOOL IsGFComputed(const BOOL is_choke_land, MapPoint &pos);
-    void Grassfire8(const BOOL is_choke_land, sint16 **tmp_map);
+    bool IsGFComputed(bool is_choke_land, MapPoint const & pos) const;
+    void Grassfire8(bool is_choke_land, sint16 **tmp_map);
     void ClipGF(sint16 **tmp_map); 
     
     void SaveGF(sint16 **water_map, sint16 **land_map);
@@ -702,6 +701,9 @@ public:
 	void WholePlayerLandArea(int *array) const;
 #endif
 
+private:
+    void AddToLandSearch(MapPointNode *& search_list, MapPoint const & pos);
+    void AddToWaterSearch(MapPointNode *& search_list, MapPoint const & pos);
 }; 
 
 extern World *g_theWorld;

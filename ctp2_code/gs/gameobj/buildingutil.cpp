@@ -38,42 +38,23 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
+#include "buildingutil.h"
 
 #include "BuildingRecord.h"
-#include "StrDB.h"
-#include "ErrMsg.h"
-#include "Unit.h"
+#include "c3errors.h"
 #include "civarchive.h"
+#include "ErrMsg.h"
+#include "FeatTracker.h"
 #include "GovernmentRecord.h"
-#include "WonderTracker.h"
+#include "player.h"             // g_player    
+#include "StrDB.h"              // g_theStringDB
+#include "Unit.h"
 #include "WonderRecord.h"
-#include "player.h"
-
+#include "WonderTracker.h"
 #include "wonderutil.h"
 
-#include "FeatTracker.h"
-
-extern StringDB *g_theStringDB; 
-extern sint32 g_parse_improve_abort;
-
-extern Player **g_player;
 
 #define shiftbit(i) uint64(uint64(0x01) << uint64(i))		
-
-
-
-
-
-
-
-
-
-#define k_MAX_BUILDING_FLAGS 64
-
-
-
-
 
 #define FOREACH_BUILT(recordFunc) \
 const BuildingRecord *rec; \
@@ -91,23 +72,10 @@ void buildingutil_Initialize()
 
 sint32 buildingutil_GetProductionCost(const sint32 building_type)
 {
-	const BuildingRecord* rec = g_theBuildingDB->Get(building_type);
+	const BuildingRecord * rec = g_theBuildingDB->Get(building_type);
 	Assert(rec);
-	if(rec == NULL)
-		return 0;
 	
-	/*EMOD ProductionCostPopModifier  not needed here
-
-	sin32 cost = 0;
-
-	if rec->ProductionCostPopModifier() {
-		cost = rec->GetProductionCost() * ??citydata get popcount
-
-	else {
-		cost = rec->GetProductionCost();
-
-	return cost; */
-	return rec->GetProductionCost();
+	return rec ? rec->GetProductionCost() : 0;
 }
 
 sint32 buildingutil_GetTotalUpkeep(const uint64 built_improvements,
@@ -183,10 +151,7 @@ void buildingutil_GetDefendersBonus(const uint64 built_improvements,
 void buildingutil_GetHappinessIncrement(const uint64 built_improvements, 
      sint32 &bonus, sint32 owner)
 {
-
-
-
-	double wonderCathedralIncrease = 0;
+	double wonderCathedralIncrease = 0.0;
 	if(g_player[owner]) {
 		wonderCathedralIncrease = double(wonderutil_GetIncreaseCathedrals(
 			g_player[owner]->m_builtWonders)) / 100.0;
@@ -196,9 +161,11 @@ void buildingutil_GetHappinessIncrement(const uint64 built_improvements,
 	FOREACH_BUILT(HasHappyInc) {
 		sint32 inc;
 		rec->GetHappyInc(inc);
+#if 0 // Sitting on the dock of the bay ... 
 		if(rec->GetIsReligious())
+      // sint32(double(whatever) * 0)?  
 			inc -= sint32(double(inc) * 0); 
-
+#endif
 		if(rec->GetCathedral()) {
 			inc += sint32(double(inc * wonderCathedralIncrease));
 		}
