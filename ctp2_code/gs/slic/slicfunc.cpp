@@ -6372,14 +6372,8 @@ SFN_ERROR Slic_CityIsValid::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	Unit city;
+	m_result.m_int = args->GetCity(0, city) && city.IsValid() && city.CD();
 
-	if(!args->GetCity(0, city)) {
-		return SFN_ERROR_OK;
-	}
-
-	if(city.IsValid() && city.CD()) {
-		m_result.m_int = 1;
-	}
 	return SFN_ERROR_OK;
 }
 
@@ -6535,14 +6529,10 @@ SFN_ERROR Slic_ChangeGlobalRegard::Call(SlicArgList *args)
 	if(!args->GetInt(3, duration))
 		duration = -1;
 
-	sint32 i;
-	for (i = 0; i < k_MAX_PLAYERS; i++)
+	for (int i = 0; i < k_MAX_PLAYERS; i++)
 	{
 		if ( (g_player[i]) && (i != player) )
 		{
-			
-			
-			
 			Diplomat::GetDiplomat(i).LogRegardEvent( 
 						player, 
 						delta, 
@@ -6567,19 +6557,15 @@ SFN_ERROR Slic_SetAllCitiesVisible::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	UnitDynamicArray *cityList = NULL;
-	sint32 i, j;
-	Unit city;
-	for(i = 1; i < k_MAX_PLAYERS; i++)
+	for (int i = 1; i < k_MAX_PLAYERS; i++)
 	{
 		if(g_player[i])
 		{
-			cityList = g_player[i]->GetAllCitiesList();
+			UnitDynamicArray * cityList = g_player[i]->GetAllCitiesList();
 			int maxCity = cityList->Num();
-			for (j = 0; j < maxCity; j++)
+			for (int j = 0; j < maxCity; j++)
 			{
-				city = cityList->Access(j);
-				city.SetVisible(player);
+				cityList->Access(j).SetVisible(player);
 			}
 		}
 	}
@@ -6604,33 +6590,17 @@ SFN_ERROR Slic_SetCityVisible::Call(SlicArgList *args)
 	if(!str)
 		return SFN_ERROR_OUT_OF_RANGE;
 
-
-	
-	
-	
-	UnitDynamicArray *cityList = NULL;
-	sint32 i, j;
-	Unit city;
-	MapPoint pos;
-	
-	
-	for(i = 1; i < k_MAX_PLAYERS; i++)
+	for (int i = 1; i < k_MAX_PLAYERS; i++)
 	{
-		if(g_player[i])
+		if (g_player[i])
 		{
-			cityList = g_player[i]->GetAllCitiesList();
+			UnitDynamicArray * cityList = g_player[i]->GetAllCitiesList();
 			int maxCity = cityList->Num();
-			for (j = 0; j < maxCity; j++)
+			for (int j = 0; j < maxCity; j++)
 			{
-				city = cityList->Access(j);
+				Unit city = cityList->Access(j);
 				if ( !stricmp(city.GetName(), str) )
 				{
-					
-					
-					
-					
-
-					
 					city.SetVisible(player);
 
 					return SFN_ERROR_OK;
@@ -6651,12 +6621,12 @@ SFN_ERROR Slic_FinishImprovements::Call(SlicArgList *args)
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_ARGS;
 
-	sint32 i;
 	Cell *cell = g_theWorld->GetCell(pos);
 
 	g_gevManager->Pause();
 
-	for(i = 0; i < cell->GetNumImprovements(); i++) {
+	for (sint32 i = 0; i < cell->GetNumImprovements(); i++) 
+    {
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementComplete,
 							   GEA_Improvement, cell->AccessImprovement(i),
@@ -6721,10 +6691,8 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 	if(!args->GetUnit(0, u))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(!g_theUnitPool->IsValid(u))
-		return SFN_ERROR_OK;
-	
-	if(u.Flag(k_UDF_FOUGHT_THIS_TURN)) {
+	if (u.IsValid() && u.Flag(k_UDF_FOUGHT_THIS_TURN)) 
+    {
 		u.ClearFlag(k_UDF_FOUGHT_THIS_TURN);
 		u.SetMovementPoints(u.GetMaxMovePoints());
 	}
@@ -6825,12 +6793,7 @@ SFN_ERROR Slic_PlayerHasWonder::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-	sint32 owner = wonderutil_GetOwner(wonder);
-
-	if (owner == pl)
-		m_result.m_int = 1;
-	else
-		m_result.m_int = 0;
+	m_result.m_int = (pl == wonderutil_GetOwner(wonder));
 
 	return SFN_ERROR_OK;
 }
@@ -6874,12 +6837,15 @@ SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-	if (city.GetCityData()->GetBuiltWonders() & ((uint64)1 << wonder)) {
+	if (city.GetCityData()->GetBuiltWonders() & ((uint64)1 << wonder)) 
+    {
 		m_result.m_int = 1;
-		return SFN_ERROR_OK;
 	}
+    else
+    {
+        m_result.m_int = 0;
+    }
 
-	m_result.m_int = 0;
 	return SFN_ERROR_OK;
 }
 
@@ -6910,10 +6876,7 @@ SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 	}
 
 	Army	a;
-	if (args->GetArmy(0, a) && a.IsValid())
-	{
-		m_result.m_int = 1;
-	}
+	m_result.m_int = args->GetArmy(0, a) && a.IsValid();
 
 	return SFN_ERROR_OK;
 }
@@ -6940,14 +6903,9 @@ SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 	if(args->Count() != 0)
 		return SFN_ERROR_NUM_ARGS;
 
-	if (g_thePollution)
-	{
-		m_result.m_int = g_thePollution->GetRoundsToNextDisaster();
-	}
-	else
-	{
-		m_result.m_int = Pollution::ROUNDS_COUNT_IMMEASURABLE;
-	}
+	m_result.m_int = (g_thePollution) 
+                     ? g_thePollution->GetRoundsToNextDisaster()
+                     : Pollution::ROUNDS_COUNT_IMMEASURABLE;
 
 	return SFN_ERROR_OK;
 }
@@ -6970,17 +6928,11 @@ SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 {
-	if(args->Count() != 0)
+	if (args->Count() != 0)
 		return SFN_ERROR_NUM_ARGS;
 
-	if (g_thePollution)
-	{
-		m_result.m_int = g_thePollution->GetGlobalPollutionLevel();
-	}
-	else
-	{
-		m_result.m_int = 0;
-	}
+    m_result.m_int = 
+        (g_thePollution) ? g_thePollution->GetGlobalPollutionLevel() : 0;
 
 	return SFN_ERROR_OK;
 }
@@ -6992,8 +6944,8 @@ SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
-
-	if(!g_theUnitPool->IsValid(city)) {
+	if (!city.IsValid()) 
+    {
 		return SFN_ERROR_OK;
 	}
 
@@ -7030,7 +6982,6 @@ SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_PlantSpecificGood::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 	
@@ -7072,7 +7023,6 @@ SFN_ERROR Slic_PlantSpecificGood::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -7107,7 +7057,6 @@ SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_CargoCapacity::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -7138,7 +7087,6 @@ SFN_ERROR Slic_CargoCapacity::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -7174,7 +7122,6 @@ SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_CargoSize::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -7253,7 +7200,6 @@ SFN_ERROR Slic_GetUnitFromCargo::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_GetContinent::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -7317,7 +7263,6 @@ SFN_ERROR Slic_GetContinentSize::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_IsWater::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 1)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -7347,25 +7292,18 @@ SFN_ERROR Slic_IsWater::Call(SlicArgList *args)
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_IsOnSameContinent::Call(SlicArgList *args)
 {
-
 	if(args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	MapPoint pos;
-	MapPoint pos2;
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_ARGS;
 
+	MapPoint pos2;
 	if (!args->GetPos(1, pos2))
 		return SFN_ERROR_TYPE_ARGS;
 
-
-	if (g_theWorld->IsOnSameContinent(pos, pos2)) {
-		m_result.m_int = 1;
-	}
-	else {
-		m_result.m_int = 0;
-	}
+    m_result.m_int = g_theWorld->IsOnSameContinent(pos, pos2);
 	
 	return SFN_ERROR_OK;
 }
@@ -7420,8 +7358,8 @@ SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
         return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
-
-	if(!g_theUnitPool->IsValid(city)) {
+	if (!city.IsValid()) 
+    {
 		return SFN_ERROR_OK;
 	}
 
@@ -7450,7 +7388,8 @@ SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 
-	if(!g_theUnitPool->IsValid(city)) {
+	if (!city.IsValid()) 
+    {
 		return SFN_ERROR_OK;
 	}
 
@@ -7497,9 +7436,8 @@ SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 		}
 	}
 
-	sint32 rushmod = g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
-	amt = p / rushmod;
-	if(amt >= 0)
+	amt = p / g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
+	if (amt >= 0)
 		g_player[pl]->m_gold->AddGold(amt);
 
     return SFN_ERROR_OK;
@@ -7511,8 +7449,8 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
         return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
-
-	if(!g_theUnitPool->IsValid(city)) {
+	if (!city.IsValid()) 
+    {
 		return SFN_ERROR_OK;
 	}
 
@@ -7558,14 +7496,9 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 		}
 	}
 		
-	
-	sint32 rushmod = g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
-	amt = p / rushmod;
+	amt = p / g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
 
-
-
-
-	if(amt >= 0)
+    if(amt >= 0)
 		g_player[pl]->m_materialPool->AddMaterials(amt);
 
     return SFN_ERROR_OK;
@@ -7578,7 +7511,8 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 
-	if(!g_theUnitPool->IsValid(city)) {
+	if (!city.IsValid()) 
+    {
 		return SFN_ERROR_OK;
 	}
 
@@ -7596,9 +7530,7 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 	//if(!args->GetInt(0, cause)) 
 	//	return GEV_HD_Continue;
 	
-	sint32 newOwner = PLAYER_INDEX_VANDALS;
-
-    city.ResetCityOwner(newOwner, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
+    city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
 
     return SFN_ERROR_OK;
 }
@@ -7622,10 +7554,7 @@ SFN_ERROR Slic_AddPW::Call(SlicArgList *args)
 	if(!g_player || !g_player[pl])
 		return SFN_ERROR_DEAD_PLAYER;
 
-	if(amt >= 0)
-		g_player[pl]->m_materialPool->AddMaterials(amt);
-	else
-		g_player[pl]->m_materialPool->AddMaterials(amt);
+	g_player[pl]->m_materialPool->AddMaterials(amt);
 
 	return SFN_ERROR_OK;
 }

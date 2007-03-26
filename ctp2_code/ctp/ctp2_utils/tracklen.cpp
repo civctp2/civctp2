@@ -147,7 +147,8 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	memset(&mp, 0, sizeof(mp));
 	mp.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
 	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD)&mp);
-	if( iRet ) {
+	if (iRet) 
+    {
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: failed to set time format.\n" ));
 		return __LINE__;
 	}
@@ -156,7 +157,10 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	
 	memset(&msp, 0, sizeof(msp));
 	msp.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
-	if( iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&msp ) ) {
+
+	iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&msp );
+    if (iRet) 
+    {
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to read # of tracks\n"));
 		DMCIError( iRet );
 		return __LINE__;
@@ -227,7 +231,6 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 {
 	MCI_OPEN_PARMS mop;
 	char szDrive[16];
-	int iRet;
 
 #ifdef tracklen_LOGGING
 	if (!tracklen_fp) tracklen_fp = fopen(tracklen_LOGFILE, "w");
@@ -244,7 +247,13 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	mop.lpstrElementName = szDrive;
 	mop.dwCallback = NULL;
 	mop.wDeviceID = 0;
-	if( iRet = mciSendCommand( 0, MCI_OPEN, MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE, (DWORD)&mop ) )
+
+	int iRet = mciSendCommand
+                    (0, MCI_OPEN, 
+                     MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE, 
+                     (DWORD) &mop
+                    );
+	if (iRet)
 	{
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to open MCI device.\n" ));
 		DMCIError( iRet );

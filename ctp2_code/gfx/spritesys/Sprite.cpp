@@ -96,14 +96,14 @@ Sprite::~Sprite()
 
 
 
-void Sprite::Load(char *filename)
+void Sprite::Load(char const * filename)
 {
 }
 
 
 
 
-void Sprite::Save(char *filename)
+void Sprite::Save(char const * filename)
 {
 	SpriteFile *file = new SpriteFile(filename);
 	Anim		*a = new Anim();
@@ -123,8 +123,6 @@ void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData)
 {
 		
 		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height);
-		
-		return;
 }
 #if 0
 		
@@ -209,37 +207,16 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 
 
 
-void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
+void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 {
-	m_numFrames = nframes;
+	m_numFrames = static_cast<uint16>(nframes);
 
-	
-	if (m_frames != NULL) 
-	{
-		free(m_frames);
-	}
+    delete [] m_frames;
+    m_frames = new Pixel16*[m_numFrames];
 
-	
-	m_frames = new Pixel16*[m_numFrames];
-
-	
-	if (m_frames == NULL) 
-		return;
-
-	
-	if (m_miniframes != NULL) 
-	{
-		free(m_miniframes);
-	}
-
-	
+	delete [] m_miniframes;
 	m_miniframes = new Pixel16*[m_numFrames];
 
-	
-	if (m_miniframes == NULL) 
-		return;
-
-	
 	Pixel32 *image,*miniimage;
 	Pixel32 *shadow,*minishadow;
 
@@ -340,10 +317,8 @@ void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles)
 
 void Sprite::LockSurface(aui_Surface *surf)
 {
-	AUI_ERRCODE		errcode;
-	uint8			*buffer;
-
-	errcode = surf->Lock(NULL, (LPVOID *)&buffer, 0);
+	uint8 *         buffer;
+	AUI_ERRCODE		errcode = surf->Lock(NULL, (LPVOID *)&buffer, 0);
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return;
 
@@ -357,9 +332,7 @@ void Sprite::LockSurface(aui_Surface *surf)
 
 void Sprite::UnlockSurface(void)
 {
-	AUI_ERRCODE		errcode;
-
-	errcode = m_surface->Unlock(m_surfBase);
+	AUI_ERRCODE		errcode = m_surface->Unlock(m_surfBase);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	m_surfBase = NULL;
@@ -823,9 +796,9 @@ void Sprite::AllocateFrameArrays(size_t count)
 {
     Assert(!m_frames && !m_miniframes);
 
-	m_frames        = new Pixel16*[count];
-	m_miniframes    = new Pixel16*[count];
-    m_numFrames     = count;
+    m_numFrames     = static_cast<uint16>(count);
+	m_frames        = new Pixel16*[m_numFrames];
+	m_miniframes    = new Pixel16*[m_numFrames];
 }
 
 

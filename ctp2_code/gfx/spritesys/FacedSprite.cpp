@@ -79,7 +79,7 @@ FacedSprite::~FacedSprite()
 
 
 
-void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES])
+void FacedSprite::Import(size_t nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES])
 {
     AllocateFrameArrays(nframes);
  

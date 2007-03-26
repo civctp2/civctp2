@@ -309,79 +309,62 @@ POINT ThumbnailMap::MapToPixel(MapPoint *pos)
 
 void ThumbnailMap::RenderMap(aui_Surface *surf)
 {
-	sint32			i, j, k; 
-	sint32			terrainType;
-	Pixel16			color;
-	double			xPos, yPos;
-	sint32			xPos1, xPos2, yPos1, yPos2;
-	double			nudge;
-
 	if (!g_tiledMap) return;
 	if (!g_theWorld) return;
-
 	if (m_mapSize->x <= 0 || m_mapSize->y <= 0) return;
 
-	for (i=0; i<m_mapSize->y; i++){
-		for (j=0; j<m_mapSize->x; j++) {
-			k = ((i / 2) + j) % m_mapSize->x;
-			nudge = 0;
-			if (i&1) {
-				nudge = m_tilePixelWidth / 2.0;
-			}
+	Pixel16			color;
+
+	for (sint16 i = 0; i < m_mapSize->y; ++i)
+    {
+		for (sint16 j = 0; j < m_mapSize->x; ++j) 
+        {
+			int         k       = ((i / 2) + j) % m_mapSize->x;
+            double      nudge   = (i & 1) ? (m_tilePixelWidth / 2.0) : 0.0;
+            double      xPos    = (sint32)(k * m_tilePixelWidth);
+			double      yPos    = (sint32)(i * m_tilePixelHeight);
+			MapPoint	pos(j, i);
+			Vision *    vision  = g_player[g_selected_item->GetVisiblePlayer()]->m_vision;
 			
-			xPos = (sint32)(k * m_tilePixelWidth);
-			yPos = (sint32)(i * m_tilePixelHeight);
-
-			MapPoint			pos(j, i);
-
-			Vision				*vision = g_player[g_selected_item->GetVisiblePlayer()]->m_vision;
-			UnseenCellCarton	cellCarton;
+            UnseenCellCarton	cellCarton;
 			Unit				top;
-
 			
-			if (vision->IsExplored(pos)) {
-				
-				if(m_displayOverlay && m_mapOverlay && m_mapOverlay[i*m_mapSize->x + j] != COLOR_MAX) {
-					color = m_mapOverlay[i*m_mapSize->x + j];
-				} else {
-					if(m_displayUnits && g_theWorld->GetTopRadarUnit(pos, top)) {
-						color = g_colorSet->GetPlayerColor(top.GetOwner());
-					} else {
-						Cell *theLandCell = g_theWorld->GetCell(j, i);			
-						if (theLandCell->IsAnyUnitInCell()) { 
-						}
+			if (vision->IsExplored(pos))
+            {
+				if (m_displayOverlay && m_mapOverlay && m_mapOverlay[i*m_mapSize->x + j] != COLOR_MAX) 
+                {
+					color = static_cast<Pixel16>(m_mapOverlay[i*m_mapSize->x + j]);
+				} 
+                else if (m_displayUnits && g_theWorld->GetTopRadarUnit(pos, top)) 
+                {
+					color = g_colorSet->GetPlayerColor(top.GetOwner());
+				} 
+                else 
+                {
+					Cell *  theLandCell = g_theWorld->GetCell(j, i);			
+					sint32  terrainType = (vision->GetLastSeen(pos, cellCarton))
+                                          ? cellCarton.m_unseenCell->GetTerrainType()
+                                          : theLandCell->GetTerrainType();
 
-						if (vision->GetLastSeen(pos, cellCarton)) {
-							terrainType = cellCarton.m_unseenCell->GetTerrainType();
-						} else {
-							terrainType = theLandCell->GetTerrainType();
-						}
+					color = g_colorSet->GetColor((COLOR)(COLOR_TERRAIN_0 + terrainType));
 
-						color = g_colorSet->GetColor((COLOR)(COLOR_TERRAIN_0 + terrainType));
-
-
-						if (g_theWorld->IsGood(j,i)) { 
-						}
-
-						if (g_theWorld->IsRiver(j,i)) { 
-						}
-
-						
-						if (m_displayLandOwnership) {
-							PLAYER_INDEX	owner = theLandCell->GetOwner();
-							if (owner != -1)
-								color = g_colorSet->GetPlayerColor(owner);
-						}
+					if (m_displayLandOwnership) 
+                    {
+						PLAYER_INDEX	owner = theLandCell->GetOwner();
+						if (owner != -1)
+							color = g_colorSet->GetPlayerColor(owner);
 					}
 				}
-			} else {
+			} 
+            else 
+            {
 				color = COLOR_BLACK;
 			}
 
-			xPos1 = (sint32)floor(xPos + nudge);
-			yPos1 = (sint32)floor(yPos);
-			xPos2 = (sint32)ceil(xPos + m_tilePixelWidth + nudge);
-			yPos2 = (sint32)ceil(yPos + m_tilePixelHeight);
+			sint32 xPos1 = (sint32)floor(xPos + nudge);
+			sint32 yPos1 = (sint32)floor(yPos);
+			sint32 xPos2 = (sint32)ceil(xPos + m_tilePixelWidth + nudge);
+			sint32 yPos2 = (sint32)ceil(yPos + m_tilePixelHeight);
 
 			RECT tileRect = {xPos1, yPos1, xPos2, yPos2};
 			
@@ -391,8 +374,6 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
 			OffsetRect(&tileRect, m_centerX, m_centerY);
 
 			primitives_PaintRect16(surf, &tileRect, color);
-
-			
 		}
 	}
 }

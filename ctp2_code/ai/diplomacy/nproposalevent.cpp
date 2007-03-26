@@ -2124,20 +2124,17 @@ STDEHANDLER(RequestHonorMilitaryAgeement_NewProposalEvent)
 	if (!args->GetInt(0, motivation_type))
 		return GEV_HD_Continue;
 
-	
-	if ((MOTIVATION_TYPE) motivation_type != MOTIVATION_DESIRE_ENLIST_FRIEND )
+    if ((MOTIVATION_TYPE) motivation_type != MOTIVATION_DESIRE_ENLIST_FRIEND )
 		return GEV_HD_Continue;
 
 	PLAYER_INDEX sender;
-	PLAYER_INDEX receiver;
-
 	if (!args->GetPlayer(0, sender))
 		return GEV_HD_Continue;
 
+	PLAYER_INDEX receiver;
 	if (!args->GetPlayer(1, receiver))
 		return GEV_HD_Continue;
 
-	
 	if (!AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_MILITARY_PACT) &&
 		!AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_ALLIANCE))
 		return GEV_HD_Continue;
@@ -2155,10 +2152,6 @@ STDEHANDLER(RequestHonorMilitaryAgeement_NewProposalEvent)
 		return GEV_HD_Continue;
 
 	
-	Assert(g_player[receiver]);
-	if (g_player[receiver] == NULL)
-		return GEV_HD_Continue;
-
 	PLAYER_INDEX hot_war_enemy;
 	for (hot_war_enemy = 1; hot_war_enemy < CtpAi::s_maxPlayers; hot_war_enemy++)
 	{

@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -28,29 +26,18 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __AUI_REGION_H__
 #define __AUI_REGION_H__
 
-
-#include "aui_base.h"
-#include "aui_mouse.h"
-#include "tech_wllist.h"
-
-
-class aui_Surface;
-class aui_Dimension;
-class aui_Undo;
-class aui_DragDropWindow;
-class aui_Control;
-
-
-
+class aui_Region;
 
 #define k_REGION_ATTRIBUTE_HIDDEN		0x00000001
 #define k_REGION_ATTRIBUTE_DISABLED		0x00000002
 #define k_REGION_ATTRIBUTE_DRAGDROP		0x00000004
-
-
 
 #define k_AUI_REGION_DRAWFLAG_UPDATE					0x00000001 
 #define k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER				0x00000002
@@ -109,15 +96,28 @@ enum AUI_EDIT_MODE_STATUS
 	AUI_EDIT_MODE_LAST
 };
 
+#include "aui_base.h"        // aui_Base
+#include "aui_dimension.h"
+#include "aui_mouse.h"       // aui_MouseEvent
+#include "ctp2_inttypes.h"   // sintN, uintN
+#include "tech_wllist.h"
+
+class aui_Control;
+class aui_Dimension;
+class aui_DragDropWindow;
+class aui_Surface;
+class aui_Undo;
+// AUI_ERRCODE, MBCHAR, POINT, RECT
 
 class aui_Region : public aui_Base
 {
 public:
-	
-	aui_Region(
-		AUI_ERRCODE *retval,
-		uint32 id,
-		MBCHAR *ldlBlock );
+    aui_Region
+    (
+        AUI_ERRCODE *   retval,
+	    uint32          id,
+        MBCHAR const *  ldlBlock
+    );
 	aui_Region(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -129,22 +129,9 @@ public:
 
 	virtual BOOL IsThisA( uint32 classId )
 	{
-		return classId == m_regionClassId;
+		return classId == s_regionClassId;
 	}
-	static uint32 m_regionClassId;
 
-protected:
-	aui_Region() : aui_Base() {}
-	AUI_ERRCODE InitCommonLdl( uint32 id, MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon(
-		uint32 id,
-		sint32 x,
-		sint32 y,
-		sint32 width,
-		sint32 height );
-
-public:
-	
 	uint32	&Id( void ) { return m_id; }
 	uint32	Attributes( void ) const { return m_attributes; }
 
@@ -209,14 +196,14 @@ public:
 	void MouseDispatchEdit( aui_MouseEvent *input, BOOL handleIt );
 	void EditModeModifyRegion( RECT rect );
 	static void EditModeClear( void ) 
-			{ m_editChild = NULL;
-			  m_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
-			  m_editSelectionCount = 0;
-			  m_editSelectionCurrent = 0; }
+			{ s_editChild = NULL;
+			  s_editModeStatus = AUI_EDIT_MODE_CHOOSE_REGION;
+			  s_editSelectionCount = 0;
+			  s_editSelectionCurrent = 0; }
 
 	AUI_ERRCODE ExpandRect( RECT *rect ); 
 	AUI_ERRCODE AddUndo( void );
-	AUI_ERRCODE PurgeUndoList( void );
+	void        PurgeUndoList( void );
 	AUI_ERRCODE UndoEdit( void );
 
 	
@@ -267,8 +254,8 @@ public:
 	AUI_ERRCODE	SetDoubleClickTimeOut( uint32 doubleClickTimeOut )
 		{ m_doubleClickTimeOut = doubleClickTimeOut; return AUI_ERRCODE_OK; }
 
-	static aui_Region *GetWhichSeesMouse( void ) { return m_whichSeesMouse; }
-	static aui_Region *SetWhichSeesMouse(
+	static aui_Region * GetWhichSeesMouse( void ) { return s_whichSeesMouse; }
+	static aui_Region * SetWhichSeesMouse(
 		aui_Region *region,
 		BOOL force = FALSE );
 
@@ -295,7 +282,69 @@ public:
 	{ m_hideCallback = callback; m_hideCallbackData = userData; }
 
 protected:
-	
+	aui_Region() 
+    :
+        aui_Base                    (),
+        m_id                        (0),
+        m_x                         (0),
+        m_y                         (0),
+        m_width                     (0),	
+        m_height                    (0),
+        m_dim                       (new aui_Dimension()),
+        m_attributes                (0),
+        m_parent                    (NULL),
+        m_childList                 (new tech_WLList<aui_Region *>()),
+        m_childListChanged          (false),
+        m_blind                     (false),
+        m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
+        m_draw                      (0),
+        m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
+        m_ignoreEvents              (false),
+        m_isMouseInside             (false),
+        //	aui_MouseEvent	m_mouseState;
+        m_xLastTime                 (0),	
+        m_yLastTime                 (0),
+        m_noChange                  (false),
+        m_noChangeTime              (0),
+        m_doubleLClickStartWaitTime (0),
+        m_doubleRClickStartWaitTime (0),
+        m_doubleClickingInside      (true),
+        m_doubleClickTimeOut        (0),
+        // POINT		m_doubleClickOldPos;
+        m_ldlBlock                  (NULL),
+        // POINT		m_editGrabPoint;			
+        m_editGrabPointAttributes   (0),
+        m_showCallback              (NULL),
+        m_hideCallback              (NULL),
+        m_showCallbackData          (NULL),
+        m_hideCallbackData          (NULL)
+    {
+        InitCommon();
+    };
+    // @todo Remove later
+	AUI_ERRCODE InitCommonLdl(uint32 id, MBCHAR const * ldlBlock)
+    {
+        m_id = id;
+        return InitCommonLdl(ldlBlock);
+    };
+    // @todo Remove later
+	AUI_ERRCODE InitCommon
+    (
+        uint32 id, 
+		sint32 x,
+		sint32 y,
+		sint32 width,
+		sint32 height
+    )
+    {
+        m_id        = id;
+        m_x         = x;
+        m_y         = y;
+        m_width     = width;
+        m_height    = height;
+        InitCommon();
+        return AUI_ERRCODE_OK;
+    };
 	
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
@@ -321,8 +370,6 @@ protected:
 								
 	BOOL		m_childListChanged;
 
-	static aui_Region *m_whichSeesMouse;
-								
 	BOOL		m_blind;		
 
 	AUI_ERRCODE	m_mouseCode;	
@@ -354,12 +401,7 @@ protected:
 
 	
 	POINT				m_editGrabPoint;			
-	uint32				m_editGrabPointAttributes;	
-	static	uint32		m_editSelectionCount;
-	static	uint32		m_editSelectionCurrent;
-	static	aui_Region	*m_editChild;
-	static	uint32		m_editModeStatus;
-	static  tech_WLList<aui_Undo *> *m_undoList; 
+	uint32				m_editGrabPointAttributes;
 
 	
 	ShowHideCallback	m_showCallback;
@@ -437,6 +479,18 @@ protected:
 	void			MouseLDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
 	void			MouseRDoubleClickInsideEdit(aui_MouseEvent * mouseData) {};
 	void			MouseRDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
+
+private:
+	AUI_ERRCODE InitCommonLdl(MBCHAR const * ldlBlock);
+	void        InitCommon(void);
+
+	static aui_Region *                 s_whichSeesMouse;
+	static uint32                       s_regionClassId;
+	static uint32		                s_editSelectionCount;
+	static uint32		                s_editSelectionCurrent;
+	static aui_Region *                 s_editChild;
+	static uint32	        	        s_editModeStatus;
+	static tech_WLList<aui_Undo *> *    s_undoList; 
 };
 
 

@@ -74,6 +74,7 @@ public:
 
 	void		AutoSave(PLAYER_INDEX player, bool isQuickSave = false);
 	void		BeginKeyboardScrolling(sint32 key);
+	void		CleanupApp(void);
 	void		CleanupAppDB(void);
 	sint32		EndGame(void);
 
@@ -135,7 +136,6 @@ public:
 	void		StopKeyboardScrolling(sint32 key);
 
 private:
-	void		CleanupApp(void);
 	void		CleanupAppUI(void);
 	void		CleanupGame(bool keepScenInfo);
 	void		CleanupGameUI(void);

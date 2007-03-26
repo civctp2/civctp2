@@ -471,12 +471,8 @@ sint32 MapAnalysis::GetThreat(const PLAYER_INDEX & player, const MapPoint & pos)
 {
     sint32 threat = 0;
 
-    for (sint32 opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
+    for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
     {
-
-
-		
-		
         if (    (player == opponent) 
              || !Scheduler::CachedHasContactWithExceptSelf(player, opponent)
            )
@@ -496,10 +492,12 @@ sint32 MapAnalysis::GetMaxThreat(const PLAYER_INDEX & player) const
 {
     sint32 threat = 0;
 
-    for (sint32 opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
+    for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
     {
         if (opponent != player &&
-			!Scheduler::CachedIsNeutralRegard(player, opponent)) {
+			!Scheduler::CachedIsNeutralRegard(player, opponent)
+           ) 
+        {
 			threat += m_threatGrid[opponent].GetMaxGridValue();
 		}
     }
@@ -511,9 +509,8 @@ sint32 MapAnalysis::GetPower(const PLAYER_INDEX & player, const MapPoint & pos) 
 {
     sint32 power = 0;
 
-    for (sint32 ally = m_threatGrid.size() - 1; ally >= 0; ally--)
+    for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
     {
-
         if (Scheduler::CachedIsAllyRegard(player, ally))
 		{
 			power += m_threatGrid[ally].GetGridValue(pos);
@@ -527,7 +524,7 @@ sint32 MapAnalysis::GetMaxPower(const PLAYER_INDEX & player) const
 {
     sint32 power = 0;
 
-    for (sint32 ally = m_threatGrid.size() - 1; ally >= 0; ally--)
+    for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
     {
         if (Scheduler::CachedIsAllyRegard(player, ally))
 		{
@@ -542,8 +539,7 @@ sint32 MapAnalysis::GetAlliedValue(const PLAYER_INDEX & player, const MapPoint &
 {
     sint32 value = 0;
 
-
-    for (sint16 ally = m_threatGrid.size() - 1; ally >= 0; ally--)
+    for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
     {
 
         if (Scheduler::CachedIsAllyRegard(player, ally))
@@ -559,7 +555,7 @@ sint32 MapAnalysis::GetMaxAlliedValue(const PLAYER_INDEX & player) const
 {
     sint32 value = 0;
 
-    for (sint16 ally = m_threatGrid.size() - 1; ally >= 0; ally--)
+    for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
     {
 
         if (Scheduler::CachedIsAllyRegard(player, ally))
@@ -573,7 +569,7 @@ sint32 MapAnalysis::GetEnemyValue(const PLAYER_INDEX & player, const MapPoint & 
 {
     sint32 value = 0;
 
-    for (sint16 opponent = m_valueGrid.size() - 1; opponent >= 0; opponent--)
+    for (int opponent = m_valueGrid.size() - 1; opponent >= 0; opponent--)
     {
         if (!Scheduler::CachedIsNeutralRegard(player, opponent))
             value += m_valueGrid[opponent].GetGridValue(pos);
@@ -586,7 +582,7 @@ sint32 MapAnalysis::GetMaxEnemyValue(const PLAYER_INDEX & player) const
 {
     sint32 value = 0;
 
-    for (sint16 opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
+    for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
     {
         if (!Scheduler::CachedIsNeutralRegard(player, opponent))
             value += m_threatGrid[opponent].GetMaxGridValue();

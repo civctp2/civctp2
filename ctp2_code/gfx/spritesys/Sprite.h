@@ -108,15 +108,15 @@ public:
 	Sprite();
 	virtual ~Sprite();
 	
-	void			Load(char *filename);
+	void			Load(char const * filename);
 	
-	void			Import(uint16 nframes, char **imageFiles, char **shadowFiles);
+	void			Import(size_t nframes, char **imageFiles, char **shadowFiles);
 	
 	void			ImportTIFF(uint16 index,char **imageFiles,Pixel32 **imageData);
 	
 	void			ImportTGA (uint16 index,char **imageFiles,Pixel32 **imageData);
 	
-	void			Save(char *filename);
+	void			Save(char const * filename);
 	void			Export(FILE *file);
 
 	void			LockSurface(aui_Surface *surf);

@@ -164,7 +164,7 @@ ProfileDB::ProfileDB()
     m_dontKillMessages                  (FALSE),
     m_aiPopCheat                        (TRUE),
     m_showCityNames                     (TRUE),
-	m_showArmyNames                     (TRUE),  //emod
+    m_showArmyNames                     (FALSE),  //emod
     m_showTradeRoutes                   (TRUE),
     m_unitSpeed                         (1),
     m_mouseSpeed                        (SLIDER_MIDDLE),
@@ -213,7 +213,7 @@ ProfileDB::ProfileDB()
     m_runInBackground                   (FALSE),
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
     m_cityCaptureOptions                (FALSE),  //emod1
-    m_upgrade                           (TRUE),
+    m_upgrade                           (FALSE),
     m_smoothBorders                     (FALSE),
 	//emod new profile flags
 	m_CivFlags                       	(FALSE),
@@ -470,7 +470,7 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 	
 	if (profileTxtFile) 
 	{
-		FILE *pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
+		FILE * pro_file = c3files_fopen(C3DIR_DIRECT, profileTxtFile, "r");
 			
 		if (pro_file) 
 		{

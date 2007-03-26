@@ -58,14 +58,15 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ctpai.h"
+
 #include "profileai.h"
 #include "gfx_options.h"
 #include "Diplomat.h"
 #include "Scheduler.h"
 #include "ctpagent.h"
 #include "ctpgoal.h"
-#include "ctpai.h"
-#include "GoalRecord.h"
+#include "GoalRecord.h"                     // g_theGoalDB
 #include "Squad.h"
 #include "mapanalysis.h"
 #include "governor.h"
@@ -96,47 +97,34 @@
 #include "CTPDatabase.h"
 #include "Army.h"
 #include "ArmyData.h"
-#include "ArmyPool.h"
+#include "ArmyPool.h"                       // g_theArmyPool
 #include "Unit.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
 #include "UnitPool.h"
-#include "World.h"
+#include "World.h"                          // g_theWorld
 #include "time.h"
 #include "Cell.h"
 #include "Gold.h"
 #include "RandGen.h"
 #include "GameSettings.h"
-#include "SelItem.h"
-#include "network.h"
-#include "director.h"
+#include "SelItem.h"                        // g_selected_item
+#include "network.h"                        // g_network
+#include "director.h"                       // g_director
 #include "SlicEngine.h"
 #include "tiledmap.h"
-#include "radarmap.h"
-extern SelectedItem *g_selected_item; 
-extern Network g_network;
-extern Director *g_director;
-extern RadarMap		*g_radarMap;
+#include "radarmap.h"                       // g_radarMap
 #include "MoveFlags.h"
 #include <list>
-enum READINESS_LEVEL;
-
-
 #include "Events.h"
 #include "GameEventUser.h"
-#include "Unit.h"
 #include "settlemap.h"
 #include "ctpaidebug.h"
-#include "TurnCnt.h"
+#include "TurnCnt.h"                        // g_turn
 //Added by Martin Gühmann to access the ConstDB
 #include "ConstDB.h"
 #include "DifficultyRecord.h"
 
-extern TurnCount *g_turn;
-
-extern CTPDatabase<GoalRecord> *g_theGoalDB;
-extern ArmyPool		*g_theArmyPool;
-extern World		*g_theWorld;
 
 PLAYER_INDEX CtpAi::s_maxPlayers = 0;
 
@@ -158,6 +146,7 @@ namespace
 	size_t const    PERIOD_COMPUTE_TILE_IMPROVEMENTS    = 5;
 	size_t const    EXPLORE_RESOLUTION                  = 5;
 
+    char const      LOG_SECTION_START[]                 = "\n\n//\n";
 } // namespace
 
 
@@ -253,9 +242,10 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 			continue;
 		
 		
-		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeCity() == true ||
-			g_theGoalDB->Get(goal_type)->GetTargetTypeTradeRoute() == true ||
-			g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement() == true)
+		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeCity() ||
+			g_theGoalDB->Get(goal_type)->GetTargetTypeTradeRoute() ||
+			g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
+               )
 		{
 			goal_ptr = new CTPGoal;
 			goal_ptr->Set_Type(goal_type);
@@ -284,9 +274,10 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 			continue;
 		
 		
-		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeCity() == true ||
-			g_theGoalDB->Get(goal_type)->GetTargetTypeTradeRoute() == true ||
-			g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement() == true)
+		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeCity() ||
+			 g_theGoalDB->Get(goal_type)->GetTargetTypeTradeRoute() ||
+			 g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
+           )
 		{
 			goal_ptr = new CTPGoal;
 			goal_ptr->Set_Type(goal_type);
@@ -303,41 +294,33 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 
 STDEHANDLER(CtpAi_SettleEvent)
 {
-	
 	Army army;
-	MapPoint pos;
-	static sint32 last_settle;
-	static sint32 last_player;
-
-	
 	if (!args->GetArmy(0, army))
 		return GEV_HD_Continue;
-
-	pos = army->RetPos();
-	Player *player_ptr = g_player[army->GetOwner()];
+    
+    PLAYER_INDEX const  owner       = army->GetOwner();
+	Player *            player_ptr  = g_player[owner];
 	Assert(player_ptr != NULL);	
  	
+    static sint32 last_settle = NewTurnCount::GetCurrentRound();
+	static sint32 last_player = PLAYER_UNASSIGNED;
 	
-	
-	
-	
-	
-	
-	if(!g_network.IsActive()) {
+	if (!g_network.IsActive()) 
+    {
 		if (player_ptr->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-			!(g_network.IsClient() && g_network.IsLocalPlayer(army->GetOwner())) &&
+			!(g_network.IsClient() && g_network.IsLocalPlayer(owner)) &&
 			!(g_network.IsHost() && player_ptr->m_owner == g_selected_item->GetVisiblePlayer()) &&
 			last_settle == NewTurnCount::GetCurrentRound() &&
-			last_player == army->GetOwner())
+			(last_player == owner)
+           )
 		{
 			
 			return GEV_HD_Stop;
 		}
 	}
 
-	
-	last_settle = NewTurnCount::GetCurrentRound();
-	last_player = army->GetOwner();
+    last_settle = NewTurnCount::GetCurrentRound();
+	last_player = owner;
 
 	return GEV_HD_Continue;
 }
@@ -518,7 +501,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 	for (sint32 i = 0; i < candidate_units.Num(); i++)
 		{
 			tmp_army = candidate_units[i].GetArmy();
-			Assert( g_theArmyPool->IsValid(tmp_army) );
+			Assert(tmp_army.IsValid());
 
 			
 			if (tmp_army == army)
@@ -577,7 +560,6 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 	{
 		for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 		{
-			// Speed-up only, no functional change.
 			GoalRecord const *	goal	= g_theGoalDB->Get(goal_type);
 
 			if (    goal
@@ -602,24 +584,13 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 
 STDEHANDLER(CtpAi_StartNegotiationsEvent)
 {
-	time_t t1;
-	time_t t2;
-
 	PLAYER_INDEX playerId;
-
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	sint32 round;
-	if (g_player[playerId] != NULL)
-		round = g_player[playerId]->GetCurRound();
-	else
-		return GEV_HD_Continue;
-
-	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	sint32  round   = g_player[playerId]->GetCurRound();
+	time_t  t1      = GetTickCount();
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// START NEGOTIATIONS -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//					     Player %d\n", playerId));
 
@@ -665,8 +636,7 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 		}
 	}
 
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	return GEV_HD_Continue;
 }
@@ -677,15 +647,11 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 STDEHANDLER(CtpAi_ConsiderNuclearWar)
 {
 	PLAYER_INDEX playerId;
-
 	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
 	Player *player_ptr = g_player[playerId];
-	if (player_ptr == NULL)
-		return GEV_HD_Continue;
-
 	
 	if(player_ptr->m_playerType != PLAYER_TYPE_ROBOT ||
 	   (g_network.IsActive() && playerId == g_selected_item->GetVisiblePlayer())) {
@@ -698,17 +664,9 @@ STDEHANDLER(CtpAi_ConsiderNuclearWar)
 	PLAYER_INDEX enemy_to_nuke = diplomat.ComputeNuclearLaunchTarget();
 
 	
-	bool fire_now;
-	if (enemy_to_nuke != -1)
-	{
-		
-		fire_now = (AgreementMatrix::s_agreements.TurnsAtWar(playerId, enemy_to_nuke) > 15);
-	}
-	else
-	{
-		
-		fire_now = false;
-	}
+	bool fire_now = (enemy_to_nuke != -1) && 
+		          (AgreementMatrix::s_agreements.TurnsAtWar(playerId, enemy_to_nuke) > 15);
+
 	diplomat.TargetNuclearAttack(enemy_to_nuke, fire_now);
 
 
@@ -735,42 +693,34 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 
 	
 	time_t  t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                          Player %d\n", playerId));
 
 	
 	Scheduler::GetScheduler(playerId).Process_Squad_Changes();
 
-	
 	Scheduler::GetScheduler(playerId).Reset_Squad_Execution();
 
-	time_t  t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n"));
-	DPRINTF(k_DBG_AI, ("\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS GOAL CHANGES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                         Player %d\n", playerId));
        
 	
 	Scheduler::GetScheduler(playerId).Process_Goal_Changes();
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// SORT MATCHES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                 Player %d\n", playerId));
 
 	
 	Scheduler::GetScheduler(playerId).Sort_Matches();
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
@@ -797,21 +747,18 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	sint32      round       = player_ptr->GetCurRound();
 	time_t      t1          = GetTickCount();
 
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                          Player %d\n", playerId));
 	
 	
 	Scheduler::GetScheduler(playerId).Process_Squad_Changes();
-	time_t      t2          = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
     
 	
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS MATCHES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                    Cycle %d\n", cycle));
 	DPRINTF(k_DBG_AI, ("//                    Player %d\n", playerId));
@@ -820,8 +767,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	Scheduler::GetScheduler(playerId).
 		Match_Resources((player_ptr->m_playerType == PLAYER_TYPE_ROBOT));
 	
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	
 	
@@ -866,10 +812,10 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 		
 		sint32 i;
 		if(player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
-		   (!g_network.IsClient() || g_network.IsLocalPlayer(playerId))) {
-			for(i = 0; i < player_ptr->m_all_armies->Num(); i++) {
-//				g_director->IncrementPendingGameActions();
-
+		   (!g_network.IsClient() || g_network.IsLocalPlayer(playerId))) 
+        {
+			for(i = 0; i < player_ptr->m_all_armies->Num(); i++) 
+            {
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, player_ptr->m_all_armies->Access(i).m_id,
 									   GEA_End);
@@ -902,17 +848,14 @@ STDEHANDLER(CtpAi_TransportLoaded)
 	GameEventArgument *posArg = args->GetArg(GEA_MapPoint, 0);
 
 	Army a;
-	MapPoint pos;
-
 	if(!armyArg || !armyArg->GetArmy(a))
 		return GEV_HD_Continue;
 
+	MapPoint pos;
 	if(!posArg || !posArg->GetPos(pos))
 		return GEV_HD_Continue;
 
-	if( g_theArmyPool->IsValid(a) )
-		a->ClearOrders();
-	Assert(g_theArmyPool->IsValid(a) == TRUE);
+	a->ClearOrders();
 
 	return GEV_HD_Continue;
 }
@@ -933,54 +876,40 @@ STDEHANDLER(CtpAi_ImprovementComplete)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	
-	Player *owner_player = g_player[owner];
-	if (owner_player == NULL)
-		return GEV_HD_Continue;		
-
 	if (GaiaController::sm_endgameImprovements & ((uint64)0x1 << (uint64)type))
+	{
+		for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
 		{
-			GOAL_TYPE goal_type;
-			const StrategyRecord::GoalElement *goal_element_ptr;
-			sint16 goal_element;
-			const GoalRecord *goal_rec;
-				
-			
-			for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
-			{
-				Scheduler & scheduler = 
-					Scheduler::GetScheduler(playerId);
-				const StrategyRecord & strategy = 
-					Diplomat::GetDiplomat(playerId).GetCurrentStrategy();	
+			Scheduler & scheduler = Scheduler::GetScheduler(playerId);
+			const StrategyRecord & strategy = 
+				Diplomat::GetDiplomat(playerId).GetCurrentStrategy();	
 
-				for (goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
-				{
-					goal_element_ptr = strategy.GetGoalElement(goal_element);
-					goal_type = goal_element_ptr->GetGoalIndex();
-					goal_rec = g_theGoalDB->Get(goal_type);
+			for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+			{
+		        StrategyRecord::GoalElement const *
+                                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+				sint32              goal_type           = goal_element_ptr->GetGoalIndex();
+				GoalRecord const *  goal_rec            = g_theGoalDB->Get(goal_type);
 					
+				if ( !goal_rec->GetTargetTypeEndgame() )
+					continue;
 					
-					if ( !goal_rec->GetTargetTypeEndgame() )
-						continue;
+				if (playerId != owner && goal_rec->GetTargetOwnerSelf())
+					continue;
 					
+				if (playerId == owner && !goal_rec->GetTargetOwnerSelf())
+					continue;
 					
-					if (playerId != owner && goal_rec->GetTargetOwnerSelf())
-						continue;
+				CTPGoal_ptr goal_ptr = new CTPGoal();
+				goal_ptr->Set_Player_Index( playerId );
+				goal_ptr->Set_Type(static_cast<GOAL_TYPE>(goal_type));
+				goal_ptr->Set_Target_Pos( pos );
 					
-					
-					if (playerId == owner && !goal_rec->GetTargetOwnerSelf())
-						continue;
-					
-					CTPGoal_ptr goal_ptr = new CTPGoal();
-					goal_ptr->Set_Player_Index( playerId );
-					goal_ptr->Set_Type( goal_type );
-					goal_ptr->Set_Target_Pos( pos );
-					
-					scheduler.Add_New_Goal( goal_ptr );
-				}
+				scheduler.Add_New_Goal( goal_ptr );
 			}
-			
+		}
 	}
+
 	return GEV_HD_Continue;
 }
 
@@ -1086,8 +1015,8 @@ void CtpAi::Cleanup()
 	Scheduler::CleanupAll();
 	Governor::Cleanup();
 	Diplomat::CleanupAll();
-	MapAnalysis::GetMapAnalysis().Cleanup(); // Just removes leak reports, actually no real leaks
-	AgreementMatrix::Cleanup();              // Just removes leak reports, actually no real leaks
+	MapAnalysis::GetMapAnalysis().Cleanup();
+	AgreementMatrix::Cleanup();
 }
 
 
@@ -1185,70 +1114,48 @@ void CtpAi::Load(CivArchive & archive)
 	
 	g_theWorld->ComputeGoodsValues();
 
-	
-	Player *player_ptr;
-	sint32 num_armies;
-	sint32 num_cities; 
-	sint32 i;
-	Army army;
-	Unit city;
 	for (PLAYER_INDEX playerId=0; playerId < s_maxPlayers; playerId++)
 	{
-		player_ptr = g_player[playerId];
-		
-
-		
+		Player *    player_ptr  = g_player[playerId];
 		if (player_ptr == NULL)
 			continue;
 
-		num_armies = player_ptr->m_all_armies->Num();
-		num_cities = player_ptr->m_all_cities->Num();
-
-		for (i = 0; i < num_cities; i++)
+		sint32      num_cities  = player_ptr->m_all_cities->Num();
+		for (sint32 cityIndex = 0; cityIndex < num_cities; ++cityIndex)
 		{
-			city = player_ptr->m_all_cities->Access(i);
-			Assert( g_theUnitPool->IsValid(city) );
-			Assert( city->GetCityData() != NULL );
-
+			Unit city = player_ptr->m_all_cities->Access(cityIndex);
+			Assert(city.IsValid() && city->GetCityData());
 			
 			for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 			{
-				
-				if (foreignerId == city.GetOwner())
-					continue;
-
-				
-				AddForeignerGoalsForCity(city, foreignerId);
+				if (foreignerId != city.GetOwner())
+                        {
+       				AddForeignerGoalsForCity(city, foreignerId);
+                        }
 			}
 			AddOwnerGoalsForCity(city, city.GetOwner());
 
-			
 			SettleMap::s_settleMap.HandleCityGrowth(city);
 
-			
 			city.CD()->AdjustSizeIndices();
 		}
 
-		for (i = 0; i < num_armies; i++)
+		sint32      num_armies  = player_ptr->m_all_armies->Num();
+		for (sint32 armyIndex = 0; armyIndex < num_armies; ++armyIndex)
 		{
-			army = player_ptr->m_all_armies->Access(i);
-			Assert( g_theArmyPool->IsValid(army) );
+			Army army = player_ptr->m_all_armies->Access(armyIndex);
+			Assert(army.IsValid());
 
-			
 			AddGoalsForArmy(army);
 		}
 	}
 
-	
 	MapAnalysis::GetMapAnalysis().BeginTurn();
 }
 
 
 void CtpAi::Save(CivArchive & archive)
 {
-	
-	
-	
 	Diplomat::SaveAll(archive);
 }
 
@@ -1316,26 +1223,20 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 
 void CtpAi::BeginTurn(const PLAYER_INDEX player) 
 {
-	uint32 t1;
-	uint32 t2;
-
-	
 	if (s_maxPlayers <= 0)
 		return;
 
-	sint32 round;
-
 	Assert(player < s_maxPlayers);
-	Player *player_ptr = g_player[player];
-	if (player_ptr != NULL)
-		round = player_ptr->GetCurRound();
-	else
-		return;
 	Assert(player == g_selected_item->GetCurPlayer());
+	Player * player_ptr = g_player[player];
 
-	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	if (player_ptr == NULL)
+		return;
+
+	sint32 round = player_ptr->GetCurRound();
+
+	uint32 t1 = GetTickCount();
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// CHANGE GOVERNMENT -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//					    Player %d\n", player));
 
@@ -1350,12 +1251,10 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 			player_ptr->SetGovernmentType(government_type);
 	}
 
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS STRATEGY -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//					   Player %d\n", player));
 
@@ -1367,8 +1266,8 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
 		!g_network.IsClient()) 
 	{
-		sint32 pw_percent;
-		sint32 sci_percent;
+		sint32 pw_percent   = 0;
+		sint32 sci_percent  = 0;
 
 		strategy.GetPublicWorksPercent(pw_percent);
 		strategy.GetSciencePercent(sci_percent);
@@ -1376,27 +1275,22 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		player_ptr->SetMaterialsTax(pw_percent/100.0);
 		player_ptr->SetTaxes(sci_percent/100.0);
 
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 		
 		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// SET RESEARCH -- Turn %d\n", round));
 		DPRINTF(k_DBG_AI, ("//                 Player %d\n", player));
 		
 		
 		SetResearch(player);
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
 
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// MAP ANALYSIS -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
 
@@ -1408,19 +1302,16 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	Diplomat::GetDiplomat(player).ClearEffectiveRegardCache();
 
 	MapAnalysis::GetMapAnalysis().BeginTurn();
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// BEGIN DIPLOMACY -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
 
 	
 	Diplomat::GetDiplomat(player).BeginTurn();
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
     // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
 	// Road computation round now a constant 
@@ -1428,15 +1319,13 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	{
 		
 		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE ROAD PRIORITIES -- Turn %d\n", round));
 		DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
 		
 		
 		Governor::GetGovernor(player).ComputeRoadPriorities();
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
 
 	
@@ -1445,30 +1334,26 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		gaia_controller && gaia_controller->CanBuildTowers(false))
 	{
 		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// PLACE ENDGAME INSTALLATIONS -- Turn %d\n", round));
 		DPRINTF(k_DBG_AI, ("//							  Player %d\n", player));
 
 		
 		gaia_controller->BuildProcessingTowers();
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
 	else
 	{
 		if (round % PERIOD_COMPUTE_TILE_IMPROVEMENTS == 0)
 		{
 			t1 = GetTickCount();
-			DPRINTF(k_DBG_AI, ("\n\n"));
-			DPRINTF(k_DBG_AI, ("//\n"));
+			DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 			DPRINTF(k_DBG_AI, ("// PLACE TILE IMPROVEMENTS -- Turn %d\n", round));
 			DPRINTF(k_DBG_AI, ("//							  Player %d\n", player));
 			
 			
 			Governor::GetGovernor(player).PlaceTileImprovements();
-			t2 = GetTickCount();
-			DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+			DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 		}
 	}
 	
@@ -1476,8 +1361,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	if (player_ptr->m_playerType == PLAYER_TYPE_ROBOT && !g_network.IsClient()) 
 	{
 		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// SET MILITARY READINESS -- Turn %d\n", round));
 		DPRINTF(k_DBG_AI, ("//						     Player %d\n", player));
 
@@ -1486,12 +1370,10 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 
 		player_ptr->SetReadinessLevel(level, FALSE);
 		
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// ADJUST SLIDER SETTINGS -- Turn %d\n", round));
 		DPRINTF(k_DBG_AI, ("//						     Player %d\n", player));
 
@@ -1501,20 +1383,17 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
 		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
 
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	
 		t1 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE GOODS TRADE ROUTES -- Turn %d\n", round));
 		DPRINTF(k_DBG_AI, ("//				 			     Player %d\n", player));
 	
 		
 		Governor::GetGovernor(player).ManageGoodsTradeRoutes();
 	
-		t2 = GetTickCount();
-		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
 	
 
@@ -1529,15 +1408,14 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	
 	if (player == 0 && player_ptr->m_playerType == PLAYER_TYPE_ROBOT)
 	{
-		Unit city;
 		Player * player_ptr = g_player[player];
 		Assert(player_ptr != NULL);
 		sint32 num_cities = player_ptr->m_all_cities->Num();
 
 		for (sint32 i = 0; i < num_cities; i++)
 		{
-			city = player_ptr->m_all_cities->Access(i);
-			Assert( g_theUnitPool->IsValid(city) );
+			Unit city = player_ptr->m_all_cities->Access(i);
+			Assert( city.IsValid() );
 
 			
 			CtpAi::SellRandomBuildings(city, 0.3);
@@ -1704,19 +1582,15 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 	sint32 num_cities = player_ptr->m_all_cities->Num();
 	
 	CellUnitList garrison;
-	Unit city;
-	Army move_army;
-	sint8 min_size;
 	
-	sint32 i,j;
-	MapPoint pos,dest;
-	for (i = 0; i < num_cities; i++)
+	sint32 j;
+	MapPoint dest;
+	for (sint32 i = 0; i < num_cities; i++)
 	{
-		city = player_ptr->m_all_cities->Access(i);
-		Assert( g_theUnitPool->IsValid(city) );
-		Assert( city->GetCityData() != NULL );
+		Unit        city    = player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid() && city->GetCityData());
 		
-		pos = city.RetPos();
+		MapPoint    pos     = city.RetPos();
 		g_theWorld->GetArmy(pos, garrison);
 		if ((garrison.Num() >= k_MAX_ARMY_SIZE) &&
 			city.CD()->GetBuildQueue() &&
@@ -1725,8 +1599,8 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 			city.CD()->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_UNIT)
 		{
 			
-			move_army.m_id = 0x0;
-			min_size = k_MAX_ARMY_SIZE;
+			Army    move_army;
+			sint32  min_size = k_MAX_ARMY_SIZE;
 			for (j = 0; j < garrison.Num(); j++)
 			{
 				if (garrison.Access(j).GetArmy().Num() < min_size)
@@ -1736,13 +1610,11 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 				}
 			}
 			
-			
 			if (move_army.m_id == 0x0)
 			{
 				Assert(0);
 				continue;
 			}
-			
 			
 			bool found = false;
 			for (j = 0; j < NOWHERE && !found; j++)
@@ -1781,24 +1653,17 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 
 void CtpAi::FinishBeginTurn(const PLAYER_INDEX player) 
 {
-
-	time_t t1;
-	time_t t2;
-
-	sint32 round;
 	Assert(player < s_maxPlayers);
-	if (g_player[player] != NULL)
-		round = g_player[player]->GetCurRound();
-	else
+	if (!g_player[player])
+        return;
+
+	if (g_network.IsActive() && !g_network.IsLocalPlayer(player))
 		return;
 
-	if(g_network.IsActive() && !g_network.IsLocalPlayer(player))
-		return;
+    sint32 round = g_player[player]->GetCurRound();
 
-	
-	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	time_t  t1 = GetTickCount();
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// FILL EMPTY BUILD QUEUES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
 	if (Player::IsThisPlayerARobot(player))
@@ -1816,30 +1681,21 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	}
 	
 	Governor::GetGovernor(player).FillEmptyBuildQueues();
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)  ));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// COMPUTE GARRISONS -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                      Player %d\n", player));
-
-	
-	
-	
 	CtpAi::ComputeCityGarrisons(player);
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)  ));
 
 	t1 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("\n\n"));
-	DPRINTF(k_DBG_AI, ("//\n"));
+	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// ASSIGN POPULATIONS -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//						 Player %d\n", player));
 	Governor::GetGovernor(player).AssignPopulations();
-	t2 = GetTickCount();
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (t2 - t1)  ));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)  ));
 }
 
 void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
@@ -1867,8 +1723,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 			player_ptr->SetMaterialsTax(pw_percent/100.0);
 			player_ptr->SetTaxes(sci_percent/100.0);
 			
-			DPRINTF(k_DBG_AI, ("\n\n"));
-			DPRINTF(k_DBG_AI, ("//\n"));
+			DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 			DPRINTF(k_DBG_AI, ("// SET RESEARCH -- Turn %d\n", g_player[player]->m_current_round));
 			DPRINTF(k_DBG_AI, ("//                 Player %d\n", player));
 			
@@ -1876,8 +1731,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 			SetResearch(player);
 		}
 
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// SET MILITARY READINESS -- Turn %d\n", g_player[player]->m_current_round));
 		DPRINTF(k_DBG_AI, ("//						     Player %d\n", player));
 		
@@ -1886,8 +1740,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 		
 		player_ptr->SetReadinessLevel(level, FALSE);
 		
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// ADJUST SLIDER SETTINGS -- Turn %d\n", g_player[player]->m_current_round));
 		DPRINTF(k_DBG_AI, ("//						     Player %d\n", player));
 
@@ -1897,8 +1750,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
 		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
 		
-		DPRINTF(k_DBG_AI, ("\n\n"));
-		DPRINTF(k_DBG_AI, ("//\n"));
+		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE GOODS TRADE ROUTES -- Turn %d\n", g_player[player]->m_current_round));
 		DPRINTF(k_DBG_AI, ("//				 			     Player %d\n", player));
 	
@@ -1921,13 +1773,15 @@ void CtpAi::Resize()
 	}
 	Assert(s_maxPlayers > 0);
 
-	Scheduler::ResizeAll(s_maxPlayers);
+    Assert(g_theGoalDB);
+    size_t const goalTypeCount = 
+        g_theGoalDB ? static_cast<size_t>(g_theGoalDB->NumRecords()) : 0;
+	Scheduler::ResizeAll(s_maxPlayers, goalTypeCount);
+
 	AgreementMatrix::s_agreements.Resize(s_maxPlayers);
 	Diplomat::ResizeAll(s_maxPlayers);
 
-	sint32 resolution = 10;
-
-	
+	sint16 resolution = 10;
 	MapAnalysis::GetMapAnalysis().Resize( s_maxPlayers,
 										  (sint16) g_theWorld->GetWidth(), 
 										  (sint16) g_theWorld->GetHeight(), 
@@ -1963,17 +1817,13 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 	Player *player_ptr = g_player[playerId];
 	Assert(player_ptr);
 
-	CTPGoal_ptr goal_ptr;
-
 	//Added by Martin Gühmann explore resolution is now constant
     sint16 explore_res = EXPLORE_RESOLUTION;
-	GOAL_TYPE goal_type;
-	const StrategyRecord::GoalElement *goal_element_ptr;
-	sint16 goal_element;
-	for (goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+	for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
 	{
-		goal_element_ptr = strategy.GetGoalElement(goal_element);
-		goal_type = goal_element_ptr->GetGoalIndex();
+		const StrategyRecord::GoalElement * 
+                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+		GOAL_TYPE   goal_type           = static_cast<GOAL_TYPE>(goal_element_ptr->GetGoalIndex());
 
 		Assert(goal_type >= 0);
 
@@ -1994,7 +1844,7 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 		{
 			for (pos.y = 0; pos.y <  g_theWorld->GetHeight(); pos.y += explore_res)
 			{
-				// The idia of this is to set explore goals at the frontier 
+				// The idea of this is to set explore goals at the frontier 
 				// to the unknown, unfortunately this isn't so simple.
 			//	if(pos.HasUnexploredNeighbor(playerId))
 			//	{
@@ -2008,7 +1858,7 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 				// After completion of one exploration goal a human player
 				// explores the a map point nearby the old exploration target,
 				// in most cases a neighbour tile.
-				goal_ptr = new CTPGoal();
+				CTPGoal * goal_ptr = new CTPGoal();
 				goal_ptr->Set_Type( goal_type );
 				goal_ptr->Set_Player_Index( playerId );
 				goal_ptr->Set_Target_Pos( pos );
@@ -2022,7 +1872,6 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 
 void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 {
-	
 	Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
@@ -2032,7 +1881,6 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 	if (player_ptr == NULL)
 		return;
 
-
 	SettleMap::SettleTargetList targets;
 	SettleMap::s_settleMap.GetSettleTargets(playerId, targets);
     if (targets.empty())
@@ -2040,72 +1888,54 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
         return;
     }
 	
-	SettleMap::SettleTarget settle_target;
-	CTPGoal_ptr goal_ptr;
+	for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+	{
+		const StrategyRecord::GoalElement *
+                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+		GOAL_TYPE   goal_type           = static_cast<GOAL_TYPE>(goal_element_ptr->GetGoalIndex());
+		Assert(goal_type >= 0);
 
-	SettleMap::SettleTargetList::iterator iter;
-	sint32 desired_goals;
-	sint32 max_desired_goals;
-	uint8 magnitude;
-	char buf[10];
+		if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand() &&
+			 !g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea() )
+			continue;
 
-	
-	GOAL_TYPE goal_type;
-	const StrategyRecord::GoalElement *goal_element_ptr;
-	sint16 goal_element;
-	for (goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+		sint32  max_desired_goals   = static_cast<sint32>
+            (goal_element_ptr->GetMaxEval() - scheduler.CountGoalsOfType(goal_type));
+		sint32  desired_goals       = max_desired_goals;
+
+		for (SettleMap::SettleTargetList::iterator iter = targets.begin(); 
+		     iter != targets.end() && (desired_goals > 0); 
+			 ++iter
+            )
 		{
-			goal_element_ptr = strategy.GetGoalElement(goal_element);
-			goal_type = goal_element_ptr->GetGoalIndex();
+			SettleMap::SettleTarget settle_target = *iter;
 
-			
-			Assert(goal_type >= 0);
+			if ( (!g_theWorld->IsWater(settle_target.m_pos)) && 
+				 (g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand()) ||
+				 (g_theWorld->IsWater(settle_target.m_pos)) && 
+				 (g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()))
+			{
+				CTPGoal_ptr goal_ptr = new CTPGoal();
+				goal_ptr->Set_Type( goal_type );
+				goal_ptr->Set_Player_Index( playerId );
+				goal_ptr->Set_Target_Pos( settle_target.m_pos );
 
-			
-			if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand() &&
-				 !g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea() )
-				continue;
+				scheduler.Add_New_Goal( goal_ptr );
 
-			max_desired_goals = goal_element_ptr->GetMaxEval() -
-				scheduler.CountGoalsOfType(goal_type);
-
-			desired_goals = max_desired_goals;
-
-			
-			for (iter = targets.begin(); 
-				 iter != targets.end() && (desired_goals > 0); 
-				 iter++)
-				{
-					settle_target = *iter;
-
+				uint8   magnitude = (uint8) (((max_desired_goals - desired_goals) * 255) / max_desired_goals);
+	            char buf[10];
+				sprintf(buf, "%4.0f", settle_target.m_value);
+				g_graphicsOptions->AddTextToCell(settle_target.m_pos, buf, magnitude);
 					
-					if ( (g_theWorld->IsWater(settle_target.m_pos) == FALSE) && 
-						 (g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand()) ||
-						 (g_theWorld->IsWater(settle_target.m_pos) == TRUE) && 
-						 (g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()))
-						{
-							goal_ptr = new CTPGoal();
-							goal_ptr->Set_Type( goal_type );
-							goal_ptr->Set_Player_Index( playerId );
-							goal_ptr->Set_Target_Pos( settle_target.m_pos );
-
-							scheduler.Add_New_Goal( goal_ptr );
-
-							magnitude = (uint8) (((max_desired_goals - desired_goals)* 255.0) / max_desired_goals);
-							sprintf(buf,"%4.0f",settle_target.m_value);
-							g_graphicsOptions->AddTextToCell(settle_target.m_pos, buf, magnitude);
-							
-							
-							desired_goals--;
-						}
-				}
+				desired_goals--;
+			}
+		}
 	}
 }
 
 
 void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 {
-	
 	Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();	
@@ -2113,150 +1943,110 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 	Player *player_ptr = g_player[playerId];
 	Assert(player_ptr);
 
-	CTPGoal_ptr goal_ptr;
+    for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+	{
+		const StrategyRecord::GoalElement *
+                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+		GOAL_TYPE   goal_type           = static_cast<GOAL_TYPE>(goal_element_ptr->GetGoalIndex());
+		Assert(goal_type >= 0);
 
-	
-	GOAL_TYPE goal_type;
-	const StrategyRecord::GoalElement *goal_element_ptr;
-	sint16 goal_element;
-	for (goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+		if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeGoodyHut() &&
+			 !g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
+			 continue;
+
+        // Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+        // it can freeze all the goals of this type) - Calvitix
+		if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
+			continue;					
+
+		if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
+			continue;
+
+		MapPoint pos;
+		for ( pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x++) 
 		{
-			goal_element_ptr = strategy.GetGoalElement(goal_element);
-			goal_type = goal_element_ptr->GetGoalIndex();
-
-			
-			Assert(goal_type >= 0);
-
-			
-			if ( !g_theGoalDB->Get(goal_type)->GetTargetTypeGoodyHut() &&
-				 !g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
-				 continue;
-
-            //Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
-            // it can freeze all the goals of this type) - Calvitix
-			if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
-				continue;					
-
-			
-			if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
-				continue;
-
-			MapPoint pos;
-			for ( pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x++) 
+			for (pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++) 
+			{
+				Cell * cell = g_theWorld->GetCell(pos);
+				if (cell->GetIsChokePoint() &&
+					g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
 				{
-					for (pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++) 
-						{
-							Cell *cell = g_theWorld->GetCell(pos);
-							if (cell->GetIsChokePoint() &&
-								g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
-							{
-								goal_ptr = new CTPGoal();
-								goal_ptr->Set_Type( goal_type );
-								goal_ptr->Set_Player_Index( playerId );
-								goal_ptr->Set_Target_Pos( pos );
+					CTPGoal * goal_ptr = new CTPGoal();
+					goal_ptr->Set_Type( goal_type );
+					goal_ptr->Set_Player_Index( playerId );
+					goal_ptr->Set_Target_Pos( pos );
 
-								scheduler.Add_New_Goal( goal_ptr );
-							}
+                    scheduler.Add_New_Goal( goal_ptr );
+				}
 
-							if (cell->GetGoodyHut() != NULL)
-							{
-								goal_ptr = new CTPGoal();
-								goal_ptr->Set_Type( goal_type );
-								goal_ptr->Set_Player_Index( playerId );
-								goal_ptr->Set_Target_Pos( pos );
+				if (cell->GetGoodyHut())
+				{
+					CTPGoal * goal_ptr = new CTPGoal();
+					goal_ptr->Set_Type( goal_type );
+    				goal_ptr->Set_Player_Index( playerId );
+					goal_ptr->Set_Target_Pos( pos );
 
-								scheduler.Add_New_Goal( goal_ptr );
-							}
-						} 
-				} 
+					scheduler.Add_New_Goal( goal_ptr );
+				}
+			} 
 		} 
+	} 
 }
 
 	
 void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 {
-	Unit city;
-	MapPoint pos;
-	Army army;
-	double prev_city_defense;
-	double threat;
-	double defense_bonus;
-	sint32 slave_garrison;
-	sint32 min_garrison;
-	sint8 prev_garrison;
-	sint32 offensive_garrison;
-	sint32 defensive_garrison;
-	sint32 ranged_garrison;
 	Player *player_ptr = g_player[playerId];
-	sint32 hp;
-	sint32 defense_count;
-	sint32 ranged_count;
-	sint32 attack_strength;
-	sint32 defense_strength;
-	sint32 ranged_strength;
-	sint32 total_value;
-	
 	Assert(player_ptr != NULL);
-	sint32 num_armies = player_ptr->m_all_armies->Num();
-	sint32 num_cities = player_ptr->m_all_cities->Num();
-	
 	
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 
+	sint32 offensive_garrison;
+	sint32 defensive_garrison;
+	sint32 ranged_garrison;
 	strategy.GetOffensiveGarrisonCount(offensive_garrison);
 	strategy.GetDefensiveGarrisonCount(defensive_garrison);
 	strategy.GetRangedGarrisonCount(ranged_garrison);
-	min_garrison = offensive_garrison +
-				   defensive_garrison +
-				   ranged_garrison;
+	sint32 min_garrison = offensive_garrison + defensive_garrison + ranged_garrison;
 
-	sint32 i;
-	for (i = 0; i < num_cities; i++)
+	const StrategyRecord::ForceMatch *  defense_force_match;
+	strategy.GetDefensive(defense_force_match);
+	double const threatFactor = defense_force_match->GetDefenseMatch();
+
+	sint32 num_cities = player_ptr->m_all_cities->Num();
+	for (sint32 cityIndex = 0; cityIndex < num_cities; ++cityIndex)
 	{
-		city = player_ptr->m_all_cities->Access(i);
-		Assert( g_theUnitPool->IsValid(city) );
-		Assert( city->GetCityData() != NULL );
+		Unit city = player_ptr->m_all_cities->Access(cityIndex);
+		Assert( city.IsValid() );
 
-		pos = city.RetPos();
+        CityData *  cityData    = city->GetCityData();
+		Assert( cityData );
 
-		
-		slave_garrison = city->GetCityData()->SlaveCount() / 2;
+		MapPoint pos = city.RetPos();
+		double threat = MapAnalysis::GetMapAnalysis().GetThreat(playerId, pos) * threatFactor;
+		cityData->SetNeededGarrisonStrength(threat);
 
-		
-		threat = MapAnalysis::GetMapAnalysis().GetThreat(playerId, pos);
+		sint32 slave_garrison = cityData->SlaveCount() / 2;
+        cityData->SetNeededGarrison(std::max<sint32>(slave_garrison, min_garrison));
 
-		
-		const StrategyRecord::ForceMatch *defense_force_match;
-		strategy.GetDefensive(defense_force_match);
-		threat *= defense_force_match->GetDefenseMatch();
-
-		
-		city->GetCityData()->SetNeededGarrisonStrength(threat);
-
-		
-		if ( slave_garrison > min_garrison )
-			city->GetCityData()->SetNeededGarrison(slave_garrison);
-		else
-			city->GetCityData()->SetNeededGarrison(min_garrison);
-
-		
-		city->GetCityData()->SetCurrentGarrisonStrength(0.0);
-		city->GetCityData()->SetCurrentGarrison(0);
+		cityData->SetCurrentGarrisonStrength(0.0);
+		cityData->SetCurrentGarrison(0);
 	}
 
 	
-	for (i = 0; i < num_armies; i++)
+	sint32 num_armies = player_ptr->m_all_armies->Num();
+	for (sint32 armyIndex = 0; armyIndex < num_armies; ++armyIndex)
 	{
-		army = player_ptr->m_all_armies->Access(i);
-		Assert( g_theArmyPool->IsValid(army) );
+		Army army = player_ptr->m_all_armies->Access(armyIndex);
+		Assert( army.IsValid() );
 
 		if (army->NumOrders() > 0)
 			continue;
 
 		
-		pos = army->RetPos();
-		city = g_theWorld->GetCity(pos);
+		MapPoint pos = army->RetPos();
+		Unit city = g_theWorld->GetCity(pos);
 		if (city.m_id == 0)
 			continue;
 
@@ -2265,9 +2055,13 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		if (army->GetCargo(transports, max, empty))
 			continue;
 
-		
-		defense_bonus = city.GetDefendersBonus();
-
+	    sint32 defense_count;
+	    sint32 ranged_count;
+	    sint32 attack_strength;
+	    sint32 defense_strength;
+	    sint32 ranged_strength;
+	    sint32 total_value;
+	    sint32 hp;
 		army->GetArmyStrength(hp,
 			defense_count,
 			ranged_count,
@@ -2277,12 +2071,11 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 			total_value);
 		
 		
-		defense_strength += city->GetCityData()->GetDefendersBonus() * defense_count;
+		defense_strength += city.GetDefendersBonus() * defense_count;
 
-		
-		prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
+		double prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
 		city->GetCityData()->SetCurrentGarrisonStrength( prev_city_defense + defense_strength );
-		prev_garrison = city->GetCityData()->GetCurrentGarrison();
+		sint8 prev_garrison = city->GetCityData()->GetCurrentGarrison();
 		city->GetCityData()->SetCurrentGarrison( prev_garrison + defense_count );
 	}
 }
@@ -2293,7 +2086,6 @@ void CtpAi::BombardAdjacentEnemies(const Army & army)
 	if (!army->CanBombard())
 		return;
 
-	
 	if (!army->CanPerformSpecialAction())
 		return;
 
@@ -2361,7 +2153,6 @@ void CtpAi::BombardAdjacentEnemies(const Army & army)
 
 bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance)
 {
-
 	Player *player_ptr = g_player[army->GetOwner()];
 	Assert(player_ptr);
 
@@ -2369,27 +2160,22 @@ bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos,
 	sint32 max_squared_dist = (g_theWorld->GetWidth() * g_theWorld->GetHeight());
 	max_squared_dist *= max_squared_dist;
 	sint32 squared_distance = max_squared_dist;
-	double tmp_squared_distance;
-	Army tmp_army;
-
 	
-	
-	for (sint16 i = 0; i < num_armies; i++)
+	for (sint32 i = 0; i < num_armies; i++)
 	{
-		tmp_army = player_ptr->m_all_armies->Access(i);
-		Assert( g_theArmyPool->IsValid(tmp_army) );
-		if ( !g_theArmyPool->IsValid(tmp_army) )
+		Army    tmp_army = player_ptr->m_all_armies->Access(i);
+		Assert( tmp_army.IsValid() );
+		if ( !tmp_army.IsValid() )
 			continue;
 
-		
 		if (tmp_army->NumUnitsCanMoveIntoThisTransport(*tmp_army.GetData()) != tmp_army->Num())
 			continue;
 			
-		tmp_squared_distance = MapPoint::GetSquaredDistance(tmp_army->RetPos(), army->RetPos());
+		sint32 tmp_squared_distance = MapPoint::GetSquaredDistance(tmp_army->RetPos(), army->RetPos());
 		if (tmp_squared_distance < squared_distance)
 		{
 			squared_distance = tmp_squared_distance;
-			carrier_pos = tmp_army->RetPos();
+			carrier_pos      = tmp_army->RetPos();
 		}
 	}
 
@@ -2405,21 +2191,17 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 	sint32 num_tiles_to_half;
 	sint32 num_tiles_to_empty;
 	army->CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
-
-	
 	num_tiles_to_empty /= k_MOVE_AIR_COST;
 	num_tiles_to_half /= k_MOVE_AIR_COST;
 
 	
 	refueling_distance = -1;
 
-	MapPoint tmp_pos;
-	double distance;
-	Army carrier;
 	bool found = false;
 
 	
 	Unit city;
+	double distance;
 	if (player->GetNearestCity(start_pos, city, distance))
 	{
 		refueling_distance = distance;
@@ -2427,7 +2209,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		found = (refueling_distance < num_tiles_to_empty);
 	}
 
-	
+	MapPoint tmp_pos;
 	if (!found && CtpAi::GetNearestAircraftCarrier(army, tmp_pos, distance))
 	{
 		distance = sqrt(distance);
@@ -2468,26 +2250,21 @@ void CtpAi::RefuelAirplane(const Army & army)
 	sint32 num_tiles_to_half;
 	sint32 num_tiles_to_empty;
 	army->CalcRemainingFuel(num_tiles_to_half, num_tiles_to_empty);
-	MapPoint pos;
-
-	
 	num_tiles_to_empty /= k_MOVE_AIR_COST;
 	num_tiles_to_half /= k_MOVE_AIR_COST;
 
-	
+	MapPoint pos;
 	if (num_tiles_to_half > 0 && army->GetNextPathPoint(pos))
 		return;
 	
 	
-	Unit city = g_theWorld->GetCity(army->RetPos());
-	if (city.m_id != 0)
+	MapPoint start_pos = army->RetPos();
+	Unit city = g_theWorld->GetCity(start_pos);
+	if (city.IsValid())
 		return;
 
-	MapPoint start_pos = army->RetPos();
 	MapPoint refueling_pos;
 	sint32 refueling_distance;
-
-	
 	if (!CtpAi::GetNearestRefuel(army, start_pos, refueling_pos, refueling_distance))
 		return;
 	
@@ -2536,16 +2313,13 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 	Assert(player_ptr);
 	if (player_ptr == NULL)
 		return;
-	sint32 num_armies = player_ptr->m_all_armies->Num();
-	Army army;
 
-	
-	
-	for (sint16 i = 0; i < num_armies; i++)
+	sint32 num_armies = player_ptr->m_all_armies->Num();
+	for (sint32 i = 0; i < num_armies; i++)
 	{
-		army = player_ptr->m_all_armies->Access(i);
-		Assert( g_theArmyPool->IsValid(army) );
-		if ( !g_theArmyPool->IsValid(army) )
+		Army army = player_ptr->m_all_armies->Access(i);
+		Assert( army.IsValid() );
+		if ( !army.IsValid() )
 			continue;
 
 		//first get max bombard range
@@ -2619,14 +2393,13 @@ const sint32 CtpAi::GetEndgameWorldUnionIndex()
 
 void CtpAi::SetResearch(const PLAYER_INDEX player)
 {
-	const StrategyRecord & strategy = 
-		Diplomat::GetDiplomat(player).GetCurrentStrategy();
 	Player *player_ptr = g_player[player];
-	Assert(player_ptr);
-	Assert(player_ptr->m_advances);
+	Assert(player_ptr && player_ptr->m_advances);
 	if (player_ptr == NULL || player_ptr->m_advances == NULL)
 		return;
 
+	const StrategyRecord & strategy = 
+		Diplomat::GetDiplomat(player).GetCurrentStrategy();
 	const AdvanceListRecord * advance_list = 
 		strategy.GetResearchPtr();
 	Assert(advance_list);
@@ -2748,7 +2521,7 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 	for (i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
-		Assert( g_theUnitPool->IsValid(city) );
+		Assert( city.IsValid() );
 		Assert( city->GetCityData() != NULL );
 
 		rush_buy.first = city.CD()->HowMuchLonger();

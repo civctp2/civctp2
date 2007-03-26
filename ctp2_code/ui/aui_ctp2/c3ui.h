@@ -91,50 +91,50 @@ public:
 	
 	aui_Resource<Pattern>	*GetPatternResource( void ) const { return m_patternResource; }
 
-	Pattern	*LoadPattern( MBCHAR *name )
-		{ return m_patternResource->Load( name ); }
+	Pattern	*LoadPattern( MBCHAR const * name )
+		{ return m_patternResource->Load(name); }
 
 	AUI_ERRCODE	UnloadPattern( Pattern *resource )
 		{ return m_patternResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadPattern( MBCHAR *name )
-		{ return m_patternResource->Unload( name ); }
+	AUI_ERRCODE	UnloadPattern(MBCHAR const * name)
+		{ return m_patternResource->Unload(name); }
 
-	AUI_ERRCODE	AddPatternSearchPath( MBCHAR *path )
-		{ return m_patternResource->AddSearchPath( path ); }
-	AUI_ERRCODE	RemovePatternSearchPath( MBCHAR *path )
-		{ return m_patternResource->RemoveSearchPath( path ); }
+	AUI_ERRCODE	AddPatternSearchPath(MBCHAR const * path)
+		{ return m_patternResource->AddSearchPath(path); }
+	AUI_ERRCODE	RemovePatternSearchPath(MBCHAR const * path)
+		{ return m_patternResource->RemoveSearchPath(path); }
 
 	
 	aui_Resource<Icon>	*GetIconResource( void ) const { return m_iconResource; }
 
-	Icon	*LoadIcon( MBCHAR *name )
-		{ return m_iconResource->Load( name ); }
+	Icon	*LoadIcon(MBCHAR const * name)
+		{ return m_iconResource->Load(name); }
 
 	AUI_ERRCODE	UnloadIcon( Icon *resource )
 		{ return m_iconResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadIcon( MBCHAR *name )
-		{ return m_iconResource->Unload( name ); }
+	AUI_ERRCODE	UnloadIcon(MBCHAR const * name)
+		{ return m_iconResource->Unload(name); }
 
-	AUI_ERRCODE	AddIconSearchPath( MBCHAR *path )
-		{ return m_iconResource->AddSearchPath( path ); }
-	AUI_ERRCODE	RemoveIconSearchPath( MBCHAR *path )
-		{ return m_iconResource->RemoveSearchPath( path ); }
+	AUI_ERRCODE	AddIconSearchPath(MBCHAR const * path)
+		{ return m_iconResource->AddSearchPath(path); }
+	AUI_ERRCODE	RemoveIconSearchPath(MBCHAR const * path)
+		{ return m_iconResource->RemoveSearchPath(path); }
 
 	
 	aui_Resource<Picture>	*GetPictureResource( void ) const { return m_pictureResource; }
 
-	Picture	*LoadPicture( MBCHAR *name )
-		{ return m_pictureResource->Load( name ); }
+	Picture	*LoadPicture(MBCHAR const * name)
+		{ return m_pictureResource->Load(name); }
 
 	AUI_ERRCODE	UnloadPicture( Picture *resource )
 		{ return m_pictureResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadPicture( MBCHAR *name )
-		{ return m_pictureResource->Unload( name ); }
+	AUI_ERRCODE	UnloadPicture(MBCHAR const * name)
+		{ return m_pictureResource->Unload(name); }
 
-	AUI_ERRCODE	AddPictureSearchPath( MBCHAR *path )
-		{ return m_pictureResource->AddSearchPath( path ); }
-	AUI_ERRCODE	RemovePictureSearchPath( MBCHAR *path )
-		{ return m_pictureResource->RemoveSearchPath( path ); }
+	AUI_ERRCODE	AddPictureSearchPath(MBCHAR const * path)
+		{ return m_pictureResource->AddSearchPath(path); }
+	AUI_ERRCODE	RemovePictureSearchPath(MBCHAR const *path)
+		{ return m_pictureResource->RemoveSearchPath(path); }
 
     void        RegisterCleanup(UiCleanupCallback);
 	bool        TopWindowIsNonBackground(void) const;

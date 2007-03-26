@@ -59,7 +59,7 @@ extern uint8 g_messageRespDropPadding;
 
 
 
-MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR const * name, sint32 index, MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -71,10 +71,9 @@ MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR *na
 	
 	*retval = InitCommonLdl(name, index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
-AUI_ERRCODE MessageResponseListItem::InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE MessageResponseListItem::InitCommonLdl(MBCHAR const * name, sint32 index, MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -139,52 +138,38 @@ MessageResponseStandard::MessageResponseStandard(
 
 AUI_ERRCODE MessageResponseStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow *window )
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	ctp2_Button		*button, *lastbutton = NULL;
-	MessageResponseAction	*action = NULL;
-	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	const MBCHAR	*text = NULL;
-	sint32			responseCount = 0;
-	SlicButton		*sButton = NULL;
-
-	
 	m_messageResponseAction = NULL;
-
 	
 	m_messageResponseButton = new tech_WLList<ctp2_Button *>;
 	Assert( m_messageResponseButton != NULL );
 	if ( m_messageResponseButton == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_messageResponseAction = new tech_WLList<MessageResponseAction *>;
 	Assert( m_messageResponseAction != NULL );
 	if ( m_messageResponseAction == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	uint32 textlength = g_messageRespButtonWidth;
+	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+	AUI_ERRCODE		errcode         = AUI_ERRCODE_OK;
+	ctp2_Button	*   lastbutton      = NULL;
+    sint32			responseCount   = 0;
 
-
-
-
-
-
-
-
-
-	while ((sButton = window->GetMessage()->AccessData()->GetButton( responseCount ))) {
-		text = sButton->GetName();
-		
+	while (SlicButton * sButton = 
+            window->GetMessage()->AccessData()->GetButton(responseCount)
+          ) 
+    {
+		MBCHAR const *  text    = sButton->GetName();
 		
 		sprintf(buttonBlock, "%s.%s", ldlBlock, "StandardResponseButton");
-		button = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock );
+		ctp2_Button	*   button  = new ctp2_Button(&errcode, aui_UniqueId(), buttonBlock);
 		Assert( AUI_NEWOK( button, errcode ));
 		if ( !AUI_NEWOK( button, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
 	
 		button->TextReloadFont();
 
-		aui_BitmapFont *font = button->GetTextFont();
+		aui_BitmapFont * font   = button->GetTextFont();
 		Assert(font);
-		textlength = font->GetStringWidth(text);
-		if ( textlength < g_messageRespButtonWidth ) textlength = g_messageRespButtonWidth;
+        uint32  textlength      = 
+            std::max<uint32>(font->GetStringWidth(text), g_messageRespButtonWidth);
 
 		button->Resize( ( textlength + ( g_messageRespTextPadding << 1 )), button->Height() );
 		
@@ -208,8 +193,8 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow
 				button->Y() );
 		}
 
-		
-		action = new MessageResponseAction( window, responseCount );
+		MessageResponseAction * action = 
+            new MessageResponseAction(window, responseCount);
 		Assert( action != NULL );
 		if ( action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 		
@@ -337,20 +322,10 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	SlicButton		*sButton = NULL;
-	uint32			i = 0;
-	const MBCHAR	*text;
 	
-	m_action = NULL;
-	m_submitButton = NULL;
-	m_dropdown = NULL;
+	m_action        = NULL;
+	m_dropdown      = NULL;
 
-
-
-
-
-
-	
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardResponseButton");
 	m_submitButton = new ctp2_Button( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK( m_submitButton, errcode ));
@@ -362,27 +337,30 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 	m_submitButton->TextReloadFont();
 	
-	if ( const MBCHAR *submitText = window->GetMessage()->AccessData()->GetSubmitString() )
-		m_submitButton->SetText( submitText );
-
+	if (const MBCHAR * submitText = window->GetMessage()->AccessData()->GetSubmitString())
+    {
+		m_submitButton->SetText(submitText);
+    }
 	
-	m_submitButton->SetAction( m_action );
+	m_submitButton->SetAction(m_action);
 
-	
-	window->AddControl( m_submitButton );
+	window->AddControl(m_submitButton);
 
-	sint32 textlength = g_messageRespButtonWidth;
-	i = 0;
-	while ((sButton = window->GetMessage()->AccessData()->GetButton( i++ ))) {
-		text = sButton->GetName();
-		aui_BitmapFont *font = m_submitButton->GetTextFont();
-		Assert(font);
-		sint32 length = font->GetStringWidth(text);
+#if 0 
+    // This code block determines the maximum length of all submit button texts,
+    // but the resulting textlength is never used.
+	aui_BitmapFont *    font        = m_submitButton->GetTextFont();
+	Assert(font);
+	sint32              textlength  = g_messageRespButtonWidth;
+	sint32              i           = 0;
 
-		if ( length > textlength ) textlength = length;
+	while (SlicButton * subButton = window->GetMessage()->AccessData()->GetButton(i++)) 
+    {
+        textlength  = std::max<sint32>
+                        (textlength, font->GetStringWidth(subButton->GetName()));
 	}
+#endif
 
-	
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardResponseDropdown" );
 	m_dropdown = new c3_DropDown( &errcode, aui_UniqueId(), buttonBlock );
 	Assert( AUI_NEWOK( m_dropdown, errcode ));
@@ -392,33 +370,16 @@ AUI_ERRCODE MessageResponseDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 	m_action->SetDropdown( m_dropdown );
 	
 	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardResponseDropdownItem" );
-	i = 0;
-	while ((sButton = window->GetMessage()->AccessData()->GetButton( i++ ))) {
-		
-		text = sButton->GetName();
-
+	sint32 i = 0;
+	while (SlicButton * sButton = window->GetMessage()->AccessData()->GetButton(i++)) 
+    {
 		MessageResponseListItem	* item = 
-            new MessageResponseListItem(&errcode, (char *)text, i, buttonBlock);
+            new MessageResponseListItem(&errcode, sButton->GetName(), i, buttonBlock);
 
-		if ( item )
-			m_dropdown->AddItem((aui_Item *)item );
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		if (item)
+        {
+			m_dropdown->AddItem((aui_Item *) item);
+        }
 	}
 
 	m_dropdown->Offset( -m_dropdown->Width() - g_messageRespDropPadding, 0 );

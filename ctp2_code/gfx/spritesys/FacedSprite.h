@@ -69,7 +69,7 @@ public:
 	FacedSprite();
 	virtual ~FacedSprite();
 
-	void			Import(uint16 nframes, char *files[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES]);
+	void			Import(size_t nframes, char *files[k_NUM_FACINGS][k_MAX_NAMES], char *shadowFiles[k_NUM_FACINGS][k_MAX_NAMES]);
 	void			Export(FILE *file);
 
 	void			Load(char *filename);

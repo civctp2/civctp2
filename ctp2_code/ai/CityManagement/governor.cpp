@@ -3581,74 +3581,71 @@ void Governor::ComputeDesiredUnits()
 	sint32 desired_defense;
 	sint32 desired_ranged;
 	MapPoint pos;
-	CellUnitList *units_ptr;
+
 	for (city_index = 0; city_index < num_cities; city_index++)
+	{
+		strategy.GetOffensiveGarrisonCount(desired_offense);
+		strategy.GetDefensiveGarrisonCount(desired_defense);
+		strategy.GetRangedGarrisonCount(desired_ranged);
+
+		unit = player_ptr->m_all_cities->Get(city_index);
+
+		if (!unit.IsValid())
+			continue;
+
+		unit->GetPos(pos);
+		CellUnitList *  units_ptr   = g_theWorld->GetArmyPtr(pos);
+        sint32          unitCount   = units_ptr ? units_ptr->Num() : 0;
+		for (sint32 unit_index = 0; unit_index < unitCount; unit_index++)
 		{
-			strategy.GetOffensiveGarrisonCount(desired_offense);
-			strategy.GetDefensiveGarrisonCount(desired_defense);
-			strategy.GetRangedGarrisonCount(desired_ranged);
+		    Unit    armyUnit    = units_ptr->Get(unit_index);
 
-			unit = player_ptr->m_all_cities->Get(city_index);
+            if (armyUnit.IsValid())
+            {
+				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_bestType)
+					desired_offense--;
 
-			if (!unit.IsValid())
-				continue;
+				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType)
+					desired_defense--;
 
-			unit->GetPos(pos);
-			units_ptr = g_theWorld->GetArmyPtr(pos);
-			for (sint32 unit_index = 0; unit_index < units_ptr->Num(); unit_index++)
-			{
-			    Unit    armyUnit    = units_ptr->Get(unit_index);
+				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_bestType)
+					desired_ranged--;
+            }
+		}
 
-                if (armyUnit.IsValid())
-                {
-					if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_bestType)
-						desired_offense--;
+		Assert(unit->GetCityData());
+		if ( (desired_offense <= 0) &&
+			 (desired_defense <= 0) &&
+			 (desired_ranged <= 0) )
+		{
+			unit->GetCityData()->SetGarrisonComplete(TRUE);
+		}
+		else
+		{
+				
+			unit->GetCityData()->SetGarrisonComplete(FALSE);
+		}
 
-					if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType)
-						desired_defense--;
+		
+		if ( desired_offense > 0)
+		{
+			m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount += 
+				static_cast<sint16>(desired_offense);
+		}
 
-					if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_bestType)
-						desired_ranged--;
-                }
-			}
+		if ( desired_defense > 0 )
+		{
+			m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount += 
+				static_cast<sint16>(desired_defense);
+		}
 
-			
-			Assert(unit->GetCityData());
-			if ( (desired_offense <= 0) &&
-				 (desired_defense <= 0) &&
-				 (desired_ranged <= 0) )
-				{
-					unit->GetCityData()->SetGarrisonComplete(TRUE);
-				}
-			else
-				{
-					
-					unit->GetCityData()->SetGarrisonComplete(FALSE);
-				}
-
-			
-			if ( desired_offense > 0)
-				{
-					
-					m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount += 
-						static_cast<sint16>(desired_offense);
-				}
-
-			
-			if ( desired_defense > 0 )
-				{
-					m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount += 
-						static_cast<sint16>(desired_defense);
-				}
-
-			
-			if ( desired_ranged > 0 )
-				{
-					m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_garrisonCount +=
-						static_cast<sint16>(desired_ranged);
-				}
-
-		} 
+		
+		if ( desired_ranged > 0 )
+		{
+			m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_garrisonCount +=
+				static_cast<sint16>(desired_ranged);
+		}
+	} 
 }
 
 

@@ -56,26 +56,26 @@ void ProposalAnalysis::ComputeResult( const Response & response,
 									  DiplomacyResult & receiverResult )
 {
 	if (response.type == RESPONSE_COUNTER)
-		{
-			ComputeResult( response.senderId,
-						   response.receiverId,
-						   response.counter.first_type,
-						   response.counter.first_arg,
-						   senderResult,
-						   receiverResult );
+	{
+		ComputeResult( response.senderId,
+					   response.receiverId,
+					   response.counter.first_type,
+					   response.counter.first_arg,
+					   senderResult,
+					   receiverResult );
 
-			ComputeResult( response.senderId,
-						   response.receiverId,
-						   response.counter.second_type,
-						   response.counter.second_arg,
-						   senderResult,
-						   receiverResult );
-		}
+		ComputeResult( response.senderId,
+					   response.receiverId,
+					   response.counter.second_type,
+					   response.counter.second_arg,
+					   senderResult,
+					   receiverResult );
+	}
 	else
-		{
+	{
 			
-			Assert(0);
-		}
+		Assert(0);
+	}
 }
 
 void ProposalAnalysis::DebugResult( const NewProposal & proposal)
@@ -88,14 +88,13 @@ void ProposalAnalysis::DebugResult( const NewProposal & proposal)
 	DiplomacyResult sender_result;
 	DiplomacyResult receiver_result;
 	ComputeResult(proposal,sender_result, receiver_result);
-	DPRINTF(k_DBG_DIPLOMACY, ("\n"));
-	DPRINTF(k_DBG_DIPLOMACY, ("Sender Result:\n"));
+
+	DPRINTF(k_DBG_DIPLOMACY, ("\nSender Result:\n"));
 	DPRINTF(k_DBG_DIPLOMACY, ("  science = %d\n", sender_result.science));
 	DPRINTF(k_DBG_DIPLOMACY, ("  gold = %d\n", sender_result.gold));
 	DPRINTF(k_DBG_DIPLOMACY, ("  production = %d\n", sender_result.production));
 	DPRINTF(k_DBG_DIPLOMACY, ("  regard = %d\n", sender_result.regard));
-	DPRINTF(k_DBG_DIPLOMACY, ("\n"));
-	DPRINTF(k_DBG_DIPLOMACY, ("Receiver Result:\n"));
+	DPRINTF(k_DBG_DIPLOMACY, ("\nReceiver Result:\n"));
 	DPRINTF(k_DBG_DIPLOMACY, ("  science = %d\n", receiver_result.science));
 	DPRINTF(k_DBG_DIPLOMACY, ("  gold = %d\n", receiver_result.gold));
 	DPRINTF(k_DBG_DIPLOMACY, ("  production = %d\n", receiver_result.production));
@@ -107,27 +106,26 @@ void ProposalAnalysis::DebugResult( const Response & response )
 	DPRINTF(k_DBG_DIPLOMACY, ("Evaluated RESPONSE type %s [sender = %d, receiver = %d]\n", 
 		s_responseNames[response.type].c_str(),response.senderId, response.receiverId));
 
-	if (response.type != RESPONSE_THREATEN)
+	if (response.type == RESPONSE_THREATEN)
 	{
-		DPRINTF(k_DBG_DIPLOMACY, ("first = %s\n", s_proposalNames[response.counter.first_type].c_str()));
-		DPRINTF(k_DBG_DIPLOMACY, ("second = %s\n", s_proposalNames[response.counter.second_type].c_str()));
+		DPRINTF(k_DBG_DIPLOMACY, ("threat = %s\n", s_threatNames[response.threat.type].c_str()));
 	}
 	else
 	{
-		DPRINTF(k_DBG_DIPLOMACY, ("threat = %s\n", s_threatNames[response.threat.type].c_str()));
+		DPRINTF(k_DBG_DIPLOMACY, ("first = %s\n", s_proposalNames[response.counter.first_type].c_str()));
+		DPRINTF(k_DBG_DIPLOMACY, ("second = %s\n", s_proposalNames[response.counter.second_type].c_str()));
 	}
 	
 	DiplomacyResult sender_result;
 	DiplomacyResult receiver_result;
 	ComputeResult(response,sender_result, receiver_result);
-	DPRINTF(k_DBG_DIPLOMACY, ("\n"));
-	DPRINTF(k_DBG_DIPLOMACY, ("Sender Result:\n"));
+
+	DPRINTF(k_DBG_DIPLOMACY, ("\nSender Result:\n"));
 	DPRINTF(k_DBG_DIPLOMACY, ("  science = %d\n", sender_result.science));
 	DPRINTF(k_DBG_DIPLOMACY, ("  gold = %d\n", sender_result.gold));
 	DPRINTF(k_DBG_DIPLOMACY, ("  production = %d\n", sender_result.production));
 	DPRINTF(k_DBG_DIPLOMACY, ("  regard = %d\n", sender_result.regard));
-	DPRINTF(k_DBG_DIPLOMACY, ("\n"));
-	DPRINTF(k_DBG_DIPLOMACY, ("Receiver Result:\n"));
+	DPRINTF(k_DBG_DIPLOMACY, ("\nReceiver Result:\n"));
 	DPRINTF(k_DBG_DIPLOMACY, ("  science = %d\n", receiver_result.science));
 	DPRINTF(k_DBG_DIPLOMACY, ("  gold = %d\n", receiver_result.gold));
 	DPRINTF(k_DBG_DIPLOMACY, ("  production = %d\n", receiver_result.production));
@@ -144,8 +142,8 @@ void ProposalAnalysis::LogDebugResult( const NewProposal & proposal)
 	DiplomacyResult sender_result;
 	DiplomacyResult receiver_result;
 	ComputeResult(proposal,sender_result, receiver_result);
-	gslog_dipprint("\n");
-	gslog_dipprint("   Sender Result:\n");
+
+	gslog_dipprint("\n   Sender Result:\n");
 	if (sender_result.science != 0)
 		gslog_dipprint("     science = %d\n", sender_result.science);
 	if (sender_result.gold != 0)
@@ -154,8 +152,8 @@ void ProposalAnalysis::LogDebugResult( const NewProposal & proposal)
 		gslog_dipprint("     production = %d\n", sender_result.production);
 	if (sender_result.regard != 0)
 		gslog_dipprint("     regard = %d\n", sender_result.regard);
-	gslog_dipprint("\n");
-	gslog_dipprint("   Receiver Result:\n");
+
+	gslog_dipprint("\n   Receiver Result:\n");
 	if (receiver_result.science != 0)
 		gslog_dipprint("     science = %d\n", receiver_result.science);
 	if (receiver_result.gold != 0)
@@ -184,8 +182,8 @@ void ProposalAnalysis::LogDebugResult( const Response & response )
 		DiplomacyResult sender_result;
 		DiplomacyResult receiver_result;
 		ComputeResult(response,sender_result, receiver_result);
-		gslog_dipprint("\n");
-		gslog_dipprint("      Sender Result:\n");
+
+		gslog_dipprint("\n      Sender Result:\n");
 		if (sender_result.science != 0)
 			gslog_dipprint("        science = %d\n", sender_result.science);
 		if (sender_result.gold != 0)
@@ -194,8 +192,8 @@ void ProposalAnalysis::LogDebugResult( const Response & response )
 			gslog_dipprint("        production = %d\n", sender_result.production);
 		if (sender_result.regard != 0)
 			gslog_dipprint("        regard = %d\n", sender_result.regard);
-		gslog_dipprint("\n");
-		gslog_dipprint("      Receiver Result:\n");
+
+		gslog_dipprint("\n      Receiver Result:\n");
 		if (receiver_result.science != 0)
 			gslog_dipprint("        science = %d\n", receiver_result.science);
 		if (receiver_result.gold != 0)
@@ -247,39 +245,37 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 									  DiplomacyResult & senderResult,
 									  DiplomacyResult & receiverResult )
 {
-	
 	if (proposal_type == PROPOSAL_NONE)
 		return;
-
-	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
-	const AgreementMatrix & agreements = AgreementMatrix::s_agreements;
 
 	Player *receiver_ptr = g_player[receiver];
 	Player *sender_ptr = g_player[sender];
 	Assert(receiver_ptr);
 	Assert(sender_ptr);
 	
-	
 	if (receiver_ptr == NULL || sender_ptr == NULL)
 		return;
 
-	
-	sint32 duration = 20; 
+	const AgreementMatrix & agreements = AgreementMatrix::s_agreements;
 
-	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
-	double scale_regard = 0.0;
-	const AdvanceRecord * advance_record = NULL;
-
-	
-	
 	sint32 turns_since_last_agreed
 		= agreements.GetAgreementDuration(sender, receiver, proposal_type);
-	if (turns_since_last_agreed < (duration) || turns_since_last_agreed == -1)
-	{
-		scale_regard = 1.0;
-	}
+
+	sint32 duration = 20; 
+    double scale_regard;
+    if ((turns_since_last_agreed < duration) || turns_since_last_agreed == -1)
+    {
+        scale_regard = 1.0;
+    }
+    else 
+    {
+        scale_regard = 0.0;
+    }
 	
+	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
+	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
+	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
+
 	ai::Agreement agreement;
 	switch (proposal_type) 
     {
@@ -425,9 +421,8 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
             scale_regard = std::min((proposal_arg.percent + 0.25), 1.0);
 		break;
 	case PROPOSAL_OFFER_GIVE_ADVANCE:
-		
-		
-		advance_record = g_theAdvanceDB->Get(proposal_arg.advanceType);
+	{	
+		const AdvanceRecord * advance_record = g_theAdvanceDB->Get(proposal_arg.advanceType);
 		Assert(advance_record != NULL);
 		if (advance_record != NULL)
 		{
@@ -443,11 +438,12 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 					g_theAdvanceDB->Get(receiver_ptr->m_advances->GetResearching())->GetCost();
 			}
 		}
+	}
 		break;
 	case PROPOSAL_REQUEST_GIVE_ADVANCE:
 		
-		
-		advance_record = g_theAdvanceDB->Get(proposal_arg.advanceType);
+	{	
+		const AdvanceRecord * advance_record = g_theAdvanceDB->Get(proposal_arg.advanceType);
 		Assert(advance_record != NULL);
 		if (advance_record != NULL)
 		{
@@ -463,6 +459,7 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 					g_theAdvanceDB->Get(sender_ptr->m_advances->GetResearching())->GetCost();
 			}
 		}
+	}
 
 		break;
 	case PROPOSAL_OFFER_GIVE_GOLD:
@@ -601,7 +598,7 @@ void ProposalAnalysis::ComputeRegardResultFromProfit(DiplomacyResult & senderRes
 			sender_profit_ratio = 1.0;
 		}
 	}
-	if (total_receiver_result > total_sender_result)
+	else if (total_receiver_result > total_sender_result)
 	{
 		if (total_sender_result > 0)
 		{
@@ -626,7 +623,10 @@ void ProposalAnalysis::ComputeRegardResultFromProfit(DiplomacyResult & senderRes
 
 bool ProposalAnalysis::IsSimpleGift(const NewProposal & proposal)
 {
-    return IsGift(proposal.detail) && 
+    DiplomacyProposalRecord const * first_rec = 
+		g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex(proposal.detail.first_type));
+
+    return first_rec->GetCategoryGift() && 
            (proposal.detail.second_type == PROPOSAL_NONE);
 }
 
@@ -740,9 +740,14 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 											 PROPOSAL_TYPE & desire_type, 
 											 DiplomacyArg & desire_arg )
 {
-
-	
 	desire_type = PROPOSAL_MAX;
+
+	Player *player_ptr = g_player[playerId];
+	if (player_ptr == NULL)
+	{
+		Assert(0);
+		return;
+	}
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
@@ -775,12 +780,6 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 		regard_ratio = regard_delta / diplomat.GetReceiverRegardResult(foreignerId, treaty_type);
 	}
 	
-	Player *player_ptr = g_player[playerId];
-	if (player_ptr == NULL)
-	{
-		Assert(0);
-		return;
-	}
 	if (treaty_type == PROPOSAL_TREATY_TRADE_PACT)
 	{
 		sint32 trade_from = diplomat.GetTradeFrom(foreignerId);
@@ -964,16 +963,6 @@ void ProposalAnalysis::AcceptTreatyCondition(const PLAYER_INDEX playerId,
 			desire_arg.gold = player_ptr->m_gold->GetIncome() * 33;
 		}
 	}
-	if (treaty_type == PROPOSAL_TREATY_PEACE)
-	{
-		
-		return;
-	}
-	if (treaty_type == PROPOSAL_TREATY_ALLIANCE)
-	{
-		
-		return;
-	}
 }
 
 
@@ -1009,7 +998,7 @@ bool ProposalAnalysis::PlayerGetsEnoughValue(const PLAYER_INDEX playerId,
 	
 	double min_delta_science_percent = -0.2; 
 
-	
+	/// @todo Check next 2 ifs. The first one is useless now.
 	if (diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
 		

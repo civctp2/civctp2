@@ -654,14 +654,10 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 	double xPosition = screenPosition.x * m_tilePixelWidth;
 	double yPosition = screenPosition.y * m_tilePixelHeight;
 
-	
-	xPosition += m_tilePixelWidth / 2.0;
-
-	
 	RECT tileRectangle = {
-		static_cast<sint32>(ceil(xPosition)),
-		static_cast<sint32>(ceil(yPosition)),
 		static_cast<sint32>(ceil(xPosition + (m_tilePixelWidth / 2.0))),
+		static_cast<sint32>(ceil(yPosition)),
+		static_cast<sint32>(ceil(xPosition + m_tilePixelWidth)),
 		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
 	};
 
@@ -679,11 +675,9 @@ void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
 			tileRectangle.left, tileRectangle.bottom, borderColor);
 
 	
-	
-	tileRectangle.left = 0;
-	tileRectangle.right = static_cast<sint32>(ceil(m_tilePixelWidth / 2.0));
-
-	tileRectangle.right	= std::max(tileRectangle.left, (tileRectangle.right - 1L));
+	tileRectangle.left  = 0;
+	tileRectangle.right	= 
+        std::max<LONG>(0, static_cast<LONG>(ceil(m_tilePixelWidth / 2.0)) - 1);
 	
 	if(borderFlags & k_EAST_BORDER_FLAG)
 		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
@@ -749,12 +743,12 @@ void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
 		static_cast<LONG>(ceil(yPosition + m_tilePixelHeight))
 	};
 
-	
-	LONG    middle = static_cast<LONG>(ceil(xPosition + m_tilePixelWidth/2));
-
 	tileRectangle.right		= std::max(tileRectangle.left, (tileRectangle.right - 1L));
 	tileRectangle.bottom	= std::max(tileRectangle.top, (tileRectangle.bottom - 1L));
-	middle					= std::min(middle, tileRectangle.right);
+	LONG    middle			= 
+        std::min<LONG>(static_cast<LONG>(ceil(xPosition + m_tilePixelWidth/2)), 
+                       tileRectangle.right
+                      );
 	
 	
 	if(tileRectangle.right >= surface->Width())
@@ -1244,18 +1238,15 @@ BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 {
 	RECT		*mapViewRect = g_tiledMap->GetMapViewRect();
 	RECT		adjustedRect = *mapViewRect;
-	sint32		wrappedLeft, wrappedTop;
-	sint32		tileX, tileY;
-	
-	maputils_MapX2TileX(pos.x, pos.y, &tileX);
-	tileY = pos.y;
 
+	sint32		tileX;
+	maputils_MapX2TileX(pos.x, pos.y, &tileX);
+	sint32  tileY = pos.y;
+
+	sint32		wrappedLeft, wrappedTop;
 	maputils_WrapPoint(mapViewRect->left, mapViewRect->top, &wrappedLeft, &wrappedTop);
 
 	InflateRect(&adjustedRect, -radius, -radius);
-
-	
-	
 	adjustedRect.top += 1;
 	adjustedRect.bottom -= 3;
 
@@ -1264,8 +1255,6 @@ BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 			tileX >=adjustedRect.left && tileX < adjustedRect.right)
 		return FALSE;
 
-	sint32 w = mapViewRect->right - mapViewRect->left;
-	sint32 h = mapViewRect->bottom - mapViewRect->top;
 
 	sint32	newLeft=wrappedLeft,
 			newTop=wrappedTop;
@@ -1285,15 +1274,16 @@ BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 			newTop = wrappedTop + (tileY - adjustedRect.bottom);
 
 	sint32 newX, newY;
-
-	
 	maputils_WrapPoint(newLeft, newTop, &newX, &newY);
 
 	
+	sint32 w = mapViewRect->right - mapViewRect->left;
+	sint32 h = mapViewRect->bottom - mapViewRect->top;
+
 	mapViewRect->left = newX;
 	mapViewRect->top = newY & ~0x1;
-	mapViewRect->right = mapViewRect->left + w;
-	mapViewRect->bottom = mapViewRect->top + h;
+	mapViewRect->right = newX + w;
+	mapViewRect->bottom = newY + h;
 
 	return TRUE;
 }
@@ -1311,9 +1301,9 @@ void RadarMap::Setup(void)
 	
 	RenderMap(m_mapSurface);
 
-	if (g_tiledMap) {
-		RECT *realMapViewRect = g_tiledMap->GetMapViewRect();
-		m_mapViewRect = *realMapViewRect;
+	if (g_tiledMap) 
+    {
+		m_mapViewRect = *g_tiledMap->GetMapViewRect();
 	}
 }
 
@@ -1487,18 +1477,9 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 	sint32		mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth, &mapHeight);
 
-	
-	sint32 tileY = (sint32) (data->position.y / m_tilePixelHeight);
-	sint32 tileX;
-
-	double nudge = m_tilePixelWidth / 2.0;
-
-	if (tileY & 1) {
-		tileX = (sint32) ( ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)) );
-	}
-	else {
-		tileX = (sint32) ( ceil((double)data->position.x / m_tilePixelWidth) );
-	}
+	sint32  tileY   = (sint32) (data->position.y / m_tilePixelHeight);
+    double  nudge   = (tileY & 1) ? m_tilePixelWidth / 2.0 : 0.0;
+    sint32  tileX   = (sint32) ( ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)) );
 
 	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x 
 									+ m_mapSize->x) % m_mapSize->x);
@@ -1508,18 +1489,14 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 	sint32 width = m_mapViewRect.right - m_mapViewRect.left;
 	sint32 height = m_mapViewRect.bottom - m_mapViewRect.top;
 
-	sint32 offsetX = width / 2;
-	sint32 offsetY = height / 2;
-
-	m_mapViewRect.left = tileX - (sint32)offsetX;
+	m_mapViewRect.left = tileX - (width / 2);
 	m_mapViewRect.right = m_mapViewRect.left + width;
-	m_mapViewRect.top = (tileY - (sint32)offsetY) & ~0x01;	
+	m_mapViewRect.top = (tileY - (height / 2)) & ~0x01;	
 	m_mapViewRect.bottom = m_mapViewRect.top + height;
 
 
-	RECT *mapViewRect = &m_mapViewRect;
-	RECT *realMapViewRect = g_tiledMap->GetMapViewRect();
-	*realMapViewRect = *mapViewRect;
+	RECT *  realMapViewRect = g_tiledMap->GetMapViewRect();
+	*realMapViewRect = m_mapViewRect;
 
 	g_tiledMap->Refresh();
 	g_tiledMap->InvalidateMap();

@@ -5,41 +5,55 @@
 
 
 
-
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
-#ifndef __MESSAGE_RESPONSE_H__
-#define __MESSAGE_RESPONSE_H__
+#endif
 
-#include "c3_listitem.h"
+#ifndef MESSAGE_RESPONSE_H__
+#define MESSAGE_RESPONSE_H__
 
+class MessageResponseListItem;
+class MessageResponseStandard;
+class MessageResponseDropdown;
+
+#include "auitypes.h"       // AUI_ERRCODE
+#include "c3_listitem.h"    // c3_ListItem
+#include "ctp2_inttypes.h"  // sint32
+#include "tech_wllist.h"
+
+class c3_DropDown;
 class ctp2_Button;
-
+class MessageWindow;
 class MessageResponseAction;
 class MessageResponseSubmitAction;
-
+// MBCHAR
 
 
 class MessageResponseListItem : public c3_ListItem
 {
 public:
-	MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock);
+	MessageResponseListItem(AUI_ERRCODE *retval, MBCHAR const * name, sint32 index, MBCHAR *ldlBlock);
 	virtual void Update(void);
 
-	
-	MBCHAR	*GetName( void ) { return m_name; }
-	sint32	GetIndex( void ) { return m_index; }
+	MBCHAR const *  GetName(void) const { return m_name; }
+	sint32	        GetIndex(void) const { return m_index; }
+
+	virtual sint32  Compare(c3_ListItem * item2, uint32 column);
 
 protected:
-	MessageResponseListItem() : c3_ListItem() {}
+	MessageResponseListItem() 
+    : 
+        c3_ListItem (),
+        m_index     (0)
+    {
+        m_name[0] = 0;
+    }
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(MBCHAR const * name, sint32 index, MBCHAR *ldlBlock);
 	
-public:
-	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 private:
 	MBCHAR		m_name[_MAX_PATH];
 	sint32		m_index;
-
 };
 
 
@@ -87,12 +101,5 @@ private:
 
 	MessageResponseSubmitAction		*m_action;
 };
-
-
-
-#else
-
-class MessageResponseStandard;
-class MessageResponseDropdown;
 
 #endif 

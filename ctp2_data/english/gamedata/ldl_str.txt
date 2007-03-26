@@ -18,13 +18,11 @@
 #
 # Modifications from the original Activision code:
 #
-# - Moved build list sequence strings to gl_str.txt.
-#   - April 7th 2005 Martin Gühmann
 # - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
-#
+# - Moved build list sequence strings from add_str.txt.
 #
 #----------------------------------------------------------------------------
 
@@ -2972,6 +2970,21 @@ INFOBAR_CITY "City: "
 INFOBAR_UNEXPLORED "Unexplored"
 
 UNIT_HOPLITE_NEW "Hoplite"
+
+BUILD_LIST_SEQUENCE_PRODUCTION			"Production"
+BUILD_LIST_SEQUENCE_GROWTH			"Growth"
+BUILD_LIST_SEQUENCE_OFFENSE			"Offense"
+BUILD_LIST_SEQUENCE_DEFENSE			"Defense"
+BUILD_LIST_SEQUENCE_SCIENCE			"Science"
+BUILD_LIST_SEQUENCE_GOLD			"Gold"
+BUILD_LIST_SEQUENCE_WONDERS			"Wonders"
+BUILD_LIST_SEQUENCE_HAPPINESS			"Happiness"
+BUILD_LIST_SEQUENCE_DEFAULT			"Default"
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"Wonders (Sci.)"
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"Wonders (Mil.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"Wonders (Econ.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"Wonders (Ecot.)"
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
 
 MOVED_ALL_ARMIES_GENIUS "You have moved all of your armies, you must be some kind of genius!"
 

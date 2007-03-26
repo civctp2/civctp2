@@ -190,16 +190,16 @@ template <class T> void StringHash<T>::Serialize(ARCHIVE archive)
 template <class T> uint16 StringHash<T>::Key(const char *str)
 {
 	uint16			key = 0;
-	size_t const	l	= strlen(str);
+	size_t const	len	= strlen(str);
 
-	for (size_t i = 0; (i + 1) < l; ++i) 
+	for (size_t i = 0; (i + 1) < len; ++i) 
 	{
-		key += uint16(tolower(str[i]) << 8 | tolower(str[i + 1])) + i;
+		key = key + static_cast<uint16>((tolower(str[i]) << 8 | tolower(str[i + 1])) + i);
 	}
 
-	if (l > 0) 
+	if (len > 0) 
 	{
-		key += uint16(tolower(str[l - 1]) << 8) + (l - 1);
+		key = key + static_cast<uint16>((tolower(str[len - 1]) << 8) + (len - 1));
 	}
 
 	return static_cast<uint16>(key % m_table_size);

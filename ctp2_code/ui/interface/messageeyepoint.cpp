@@ -56,22 +56,26 @@ extern uint8		g_messageEyeGreatPadding;
 
 
 
-MessageEyePointListItem::MessageEyePointListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
-	:
+MessageEyePointListItem::MessageEyePointListItem
+(
+    AUI_ERRCODE *   retval, 
+    MBCHAR const *  name, 
+    sint32          index, 
+    MBCHAR const *  ldlBlock
+)
+:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (MBCHAR const *) NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	*retval = InitCommonLdl(name, index, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
-AUI_ERRCODE MessageEyePointListItem::InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE MessageEyePointListItem::InitCommonLdl(MBCHAR const *name, sint32 index, MBCHAR const *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -125,29 +129,27 @@ sint32 MessageEyePointListItem::Compare(c3_ListItem *item2, uint32 column)
 
 MessageEyePointStandard::MessageEyePointStandard(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	MBCHAR const *ldlBlock,
 	MessageWindow *window )
 {
 	*retval = InitCommon( ldlBlock, window );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
 MessageEyePointStandard::MessageEyePointStandard(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	MBCHAR const *ldlBlock,
 	MessageModal *window )
 {
 	*retval = InitCommon( ldlBlock, window );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
 
-AUI_ERRCODE MessageEyePointStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow *window )
+AUI_ERRCODE MessageEyePointStandard::InitCommon( MBCHAR const *ldlBlock, MessageWindow *window )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -184,7 +186,7 @@ AUI_ERRCODE MessageEyePointStandard::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 
 
-AUI_ERRCODE MessageEyePointStandard::InitCommon( MBCHAR *ldlBlock, MessageModal *window )
+AUI_ERRCODE MessageEyePointStandard::InitCommon( MBCHAR const *ldlBlock, MessageModal *window )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -223,17 +225,8 @@ AUI_ERRCODE MessageEyePointStandard::InitCommon( MBCHAR *ldlBlock, MessageModal 
 
 MessageEyePointStandard::~MessageEyePointStandard () 
 {
-	if ( m_button )
-	{
-		delete m_button;
-		m_button = NULL;
-	}
-	
-	if ( m_action )
-	{
-		delete m_action;
-		m_action = NULL;
-	}
+	delete m_button;
+	delete m_action;
 }
 
 
@@ -258,8 +251,13 @@ MessageEyePointStandard::~MessageEyePointStandard ()
 
 MessageEyePointDropdown::MessageEyePointDropdown(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	MBCHAR const *ldlBlock,
 	MessageWindow *window )
+:
+	m_button                (NULL),
+	m_dropdown              (NULL),
+	m_action                (NULL),
+    m_dropaction            (NULL)
 {
 	*retval = InitCommon( ldlBlock, window );
 	Assert( AUI_SUCCESS(*retval) );
@@ -269,72 +267,88 @@ MessageEyePointDropdown::MessageEyePointDropdown(
 
 MessageEyePointDropdown::MessageEyePointDropdown(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	MBCHAR const *ldlBlock,
 	MessageModal *window )
+:
+	m_button                (NULL),
+	m_dropdown              (NULL),
+	m_action                (NULL),
+    m_dropaction            (NULL)
 {
 	*retval = InitCommon( ldlBlock, window );
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
-
-AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow *window )
+AUI_ERRCODE MessageEyePointDropdown::InitCommonCommon
+(
+    MBCHAR const *      ldlBlock,
+    MessageData *       a_Message
+)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	const MBCHAR	*text = NULL;
-	uint32			i = 0;
+	MBCHAR		buttonBlock[k_AUI_LDL_MAXBLOCK + 1];
 
-	
-	m_button = NULL;
-	m_action = NULL;
-	m_dropdown = NULL;
-	m_dropaction = NULL;
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "StandardEyeButton");
+	m_button = new aui_Button(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(AUI_NEWOK(m_button, errcode));
+	if (!AUI_NEWOK(m_button, errcode)) return AUI_ERRCODE_MEMALLOCFAILED;
+    m_button->TextReloadFont();
 
-	
-	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyeButton" );
-	m_button = new aui_Button( &errcode, aui_UniqueId(), buttonBlock );
-	Assert( AUI_NEWOK( m_button, errcode ));
-	if ( !AUI_NEWOK( m_button, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
+	sprintf(buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdown");
+	m_dropdown = new c3_DropDown(&errcode, aui_UniqueId(), buttonBlock);
+	Assert(AUI_NEWOK(m_dropdown, errcode));
+	if (!AUI_NEWOK(m_dropdown, errcode)) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	m_button->TextReloadFont();
+	if (m_dropdown->GetListBox())
+    {
+		m_dropdown->GetListBox()->SetForceSelect(false);
+    }
 
-	m_action = new MessageDropdownEyePointAction( window );
-	Assert( m_action != NULL );
-	if ( m_action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
+	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
+	sint32 i = 0;
+	while (MBCHAR const * text = a_Message->GetEyePointName(i++)) 
+    {
+		MessageEyePointListItem	* item = 
+            new MessageEyePointListItem(&errcode, text, i, buttonBlock);
 
-	
-	m_button->SetAction( m_action );
-
-	
-	if ( window->GetGreatLibraryButton() ) {
-		m_button->Offset( window->GetGreatLibraryButton()->Width() + 3, 0 );
+		if (item)
+			m_dropdown->AddItem((aui_Item *) item);
 	}
 
-	
+    return errcode;
+}
+
+AUI_ERRCODE MessageEyePointDropdown::InitCommon(MBCHAR const * ldlBlock, MessageWindow *window )
+{
+	AUI_ERRCODE errcode = InitCommonCommon(ldlBlock, window->GetMessage()->AccessData());
+    if (AUI_ERRCODE_OK != errcode) return errcode;
+
+	m_action = new MessageDropdownEyePointAction(window);
+
+	m_action->SetDropdown(m_dropdown);
+	m_button->SetAction(m_action);
+
+	if (window->GetGreatLibraryButton()) 
+    {
+		m_button->Offset(window->GetGreatLibraryButton()->Width() + 3, 0);
+	}
+
 	errcode = window->AddControl( m_button );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
-
 	
-	i = 0;
-	sint32 textlength = g_messageEyeDropWidth;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
-		
-
-		aui_BitmapFont *font = m_button->GetTextFont();
+#if 0   // Computation of maximum length of text, which is never used
+    {
+	    sint32              i           = 0;
+	    sint32              textlength  = g_messageEyeDropWidth;
+		aui_BitmapFont *    font        = m_button->GetTextFont();
 		Assert(font);
-        textlength = std::max(textlength, font->GetStringWidth(text));
-	}
-
-	
-	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdown" );
-	m_dropdown = new c3_DropDown( &errcode, aui_UniqueId(), buttonBlock );
-	Assert( AUI_NEWOK( m_dropdown, errcode ));
-	if ( !AUI_NEWOK( m_dropdown, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
-
-	
-	m_action->SetDropdown( m_dropdown );
+	    while (MBCHAR const * text = window->GetMessage()->AccessData()->GetEyePointName(i++)) 
+        {
+            textlength = std::max(textlength, font->GetStringWidth(text));
+	    }
+    }
+#endif
 
 	m_dropaction = new MessageDropdownAction( window, m_dropdown );
 	Assert( m_dropaction != NULL );
@@ -342,23 +356,6 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 	m_dropdown->SetAction( m_dropaction );
 
-	
-	if (m_dropdown->GetListBox())
-		m_dropdown->GetListBox()->SetForceSelect(FALSE);
-
-	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
-	i = 0;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
-		
-		MessageEyePointListItem	* item = 
-            new MessageEyePointListItem(&errcode, (char *)text, i, buttonBlock);
-
-		if ( item )
-			m_dropdown->AddItem((aui_Item *)item );
-
-	}
-
-	
 	if ( window->GetGreatLibraryButton() ) {
 		m_dropdown->Offset( window->GetGreatLibraryButton()->Width() + 
 							g_messageEyeGreatPadding, 0 );
@@ -371,90 +368,40 @@ AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageWindow
 
 
 
-AUI_ERRCODE MessageEyePointDropdown::InitCommon( MBCHAR *ldlBlock, MessageModal *window )
+AUI_ERRCODE MessageEyePointDropdown::InitCommon(MBCHAR const *ldlBlock, MessageModal * window)
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	const MBCHAR	*text = NULL;
-	uint32			i = 0;
-
-	
-	m_button = NULL;
-	m_action = NULL;
-	m_dropdown = NULL;
-	m_dropaction = NULL;
-
-	
-	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyeButton" );
-	m_button = new aui_Button( &errcode, aui_UniqueId(), buttonBlock );
-	Assert( AUI_NEWOK( m_button, errcode ));
-	if ( !AUI_NEWOK( m_button, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
-
-	m_button->TextReloadFont();
+	AUI_ERRCODE     errcode = InitCommonCommon(ldlBlock, window->GetMessage()->AccessData());
+    if (AUI_ERRCODE_OK != errcode) return errcode;
 
 	m_action = new MessageDropdownEyePointAction( NULL, window );
-	Assert( m_action != NULL );
-	if ( m_action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
+	Assert(m_action);
+	if (m_action == NULL) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
-	m_button->SetAction( m_action );
+	m_action->SetDropdown(m_dropdown);
+	m_button->SetAction(m_action);
 
-
-
-
-
-
-	
 	errcode = window->AddControl( m_button );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return errcode;
 
-	
-	i = 0;
-	sint32 textlength = g_messageEyeDropWidth;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
-		
-
-		aui_BitmapFont *font = m_button->GetTextFont();
+#if 0   // Computation of maximum length of text, which is never used
+    {
+	    sint32              i           = 0;
+	    sint32              textlength  = g_messageEyeDropWidth;
+		aui_BitmapFont *    font        = m_button->GetTextFont();
 		Assert(font);
-        textlength = std::max(textlength, font->GetStringWidth(text));
-	}
-
+	    while (MBCHAR const * text = window->GetMessage()->AccessData()->GetEyePointName(i++)) 
+        {
+            textlength = std::max(textlength, font->GetStringWidth(text));
+	    }
+    }
+#endif
 	
-	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdown" );
-	m_dropdown = new c3_DropDown( &errcode, aui_UniqueId(), buttonBlock );
-	Assert( AUI_NEWOK( m_dropdown, errcode ));
-	if ( !AUI_NEWOK( m_dropdown, errcode )) return AUI_ERRCODE_MEMALLOCFAILED;
-
-	
-	m_action->SetDropdown( m_dropdown );
-
 	m_dropaction = new MessageDropdownAction( NULL, m_dropdown, window );
 	Assert( m_dropaction != NULL );
 	if ( m_dropaction == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_dropdown->SetAction( m_dropaction );
-
-	
-	if (m_dropdown->GetListBox())
-		m_dropdown->GetListBox()->SetForceSelect(FALSE);
-
-	sprintf( buttonBlock, "%s.%s", ldlBlock, "StandardEyePointDropdownItem" );
-	i = 0;
-	while ((text = window->GetMessage()->AccessData()->GetEyePointName( i++ ))) {
-		
-		MessageEyePointListItem	* item = 
-            new MessageEyePointListItem(&errcode, (char *)text, i, buttonBlock);
-
-		if ( item )
-			m_dropdown->AddItem((aui_Item *)item );
-
-	}
-
-
-
-
-
 
 	
 	window->AddControl( m_dropdown );
@@ -494,7 +441,7 @@ MessageEyePointDropdown::~MessageEyePointDropdown()
 
 MessageEyePointListbox::MessageEyePointListbox(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	MBCHAR const *ldlBlock,
 	MessageWindow *window )
 {
 	*retval = InitCommon( ldlBlock, window );
@@ -506,7 +453,7 @@ MessageEyePointListbox::MessageEyePointListbox(
 
 MessageEyePointListbox::MessageEyePointListbox(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	MBCHAR const *ldlBlock,
 	MessageModal *window )
 {
 	*retval = InitCommon( ldlBlock, window );
@@ -516,7 +463,7 @@ MessageEyePointListbox::MessageEyePointListbox(
 
 
 
-AUI_ERRCODE MessageEyePointListbox::InitCommon( MBCHAR *ldlBlock, MessageWindow *window ) 
+AUI_ERRCODE MessageEyePointListbox::InitCommon(MBCHAR const * ldlBlock, MessageWindow *window ) 
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -588,7 +535,7 @@ AUI_ERRCODE MessageEyePointListbox::InitCommon( MBCHAR *ldlBlock, MessageWindow 
 
 
 
-AUI_ERRCODE MessageEyePointListbox::InitCommon( MBCHAR *ldlBlock, MessageModal *window ) 
+AUI_ERRCODE MessageEyePointListbox::InitCommon(MBCHAR const * ldlBlock, MessageModal *window ) 
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -662,28 +609,8 @@ AUI_ERRCODE MessageEyePointListbox::InitCommon( MBCHAR *ldlBlock, MessageModal *
 
 MessageEyePointListbox::~MessageEyePointListbox() 
 {
-	if ( m_buttonLeft )
-	{
-		delete m_buttonLeft;
-		m_buttonLeft = NULL;
-	}
-	
-	if ( m_buttonRight )
-	{
-		delete m_buttonRight;
-		m_buttonRight = NULL;
-	}
-	
-	if ( m_action1 )
-	{
-		delete m_action1;
-		m_action1 = NULL;
-	}
-
-	if ( m_action2 )
-	{
-		delete m_action2;
-		m_action2 = NULL;
-	}
-
+	delete m_buttonLeft;
+	delete m_buttonRight;
+	delete m_action1;
+	delete m_action2;
 }

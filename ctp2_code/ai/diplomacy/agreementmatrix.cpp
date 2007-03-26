@@ -64,7 +64,7 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 	// Just make sure that we can rely on testing against m_maxPlayers to have
 	// a valid index in g_player.
 	Assert(newMaxPlayers <= k_MAX_PLAYERS);
-	m_maxPlayers = std::min<sint16>(newMaxPlayers, k_MAX_PLAYERS);
+	m_maxPlayers = std::min<sint16>(static_cast<sint16>(newMaxPlayers), k_MAX_PLAYERS);
 	
 	AgreementVector	old_agreements;
 	m_agreements.swap(old_agreements);
