@@ -56,6 +56,8 @@
 // - PopContext refills the builtins when it restores the old context so
 //   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin Gühmann)
 // - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
+// - Added slic database acces to the new map icon database. (27-Mar-2007 Martin Gühmann)
+// - Added slic database acces to the new map database. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -137,6 +139,8 @@
 #include "DifficultyRecord.h"
 #include "PollutionRecord.h"
 #include "GlobalWarmingRecord.h"
+#include "MapRecord.h"
+#include "MapIconRecord.h"
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
 #include "GameEventManager.h"
@@ -3041,6 +3045,16 @@ void SlicEngine::AddDatabases()
 																	  g_GlobalWarmingRecord_Accessors,
 																	  g_GlobalWarming_Tokens,
 																	  k_Num_GlobalWarmingRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<MapIconRecord, 
+									MapIconRecordAccessorInfo>("MapIconDB", g_theMapIconDB,
+																g_MapIconRecord_Accessors,
+																g_MapIcon_Tokens,
+																k_Num_MapIconRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<MapRecord, 
+									MapRecordAccessorInfo>("MapDB", g_theMapDB,
+															g_MapRecord_Accessors,
+															g_Map_Tokens,
+															k_Num_MapRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)

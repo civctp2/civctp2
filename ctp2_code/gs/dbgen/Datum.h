@@ -55,34 +55,36 @@ public:
 	Datum *m_bitPairDatum;
 	bool m_required;
 	bool m_hasValue;
+	bool m_isPreBody;
 	union dbvalue val;
 
 	Datum
-    (
-        char *              a_Name, 
-        DATUM_TYPE const &  a_Type  = DATUM_NONE
-    ) 
-    :
+		(
+	    char *              a_Name, 
+	    DATUM_TYPE const &  a_Type  = DATUM_NONE
+	) 
+	:
 	    m_type          (a_Type),
 	    m_name          (a_Name),
 	    m_akaName       (NULL),
 	    m_defaultName   (NULL),
 	    m_minSize       (-1),
-        m_maxSize       (-1),
+	    m_maxSize       (-1),
 	    m_subType       (NULL),
 	    m_bitNum        (-1),
 	    m_groupList     (NULL),
 	    m_bitPairDatum  (NULL),
 	    m_required      (false),
-	    m_hasValue      (false)
+	    m_hasValue      (false),
+	    m_isPreBody     (false)
 	{
 		memset(&val, 0, sizeof(val));
 	}
 
 	virtual ~Datum(void)
-    {
-        /// @todo Check m_name memory leak?
-    };
+	{
+		/// @todo Check m_name memory leak?
+	};
 
 	void SetValue(union dbvalue &v);
 

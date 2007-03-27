@@ -28,6 +28,7 @@
  *   for support of the old database format. (Aug 26th 2005 Martin Gühmann)
  * - Added method to determine the number of entries that should be parsed
  *   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
+ * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -107,6 +108,7 @@ void db_end_member_class(char *name);
 
 void db_add_bits(struct namelist *list, struct fieldsize *size);
 void db_add_ints(struct namelist *list, struct fieldsize *size);
+void db_add_ints_prebody(struct namelist *list, struct fieldsize *size);
 void db_add_floats(struct namelist *list, struct fieldsize *size);
 void db_add_records(char *recType, struct namelist *list, struct fieldsize *size);
 void db_add_structs(char *structType, struct namelist *list, struct fieldsize *size);

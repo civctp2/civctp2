@@ -27,6 +27,9 @@
 // - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Removed old endgame, risk and installation databases. (Aug 29th 2005 Martin Gühmann)
 // - Removed old pollution and global warming databases. (July 15th 2006 Martin Gühmann)
+// - Removed old map database. (24-Mar2007 Martin Gühmann)
+//
+// @ToDo: Check whether this file can be removed savely
 //
 //----------------------------------------------------------------------------
 
@@ -288,7 +291,3 @@ template <class T> void Database<T>::Serialize(CivArchive &archive)
 		return;
 	}
 }
-
-#include "MapRecord.h"
-
-template  class Database<MapRecord>;

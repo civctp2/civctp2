@@ -38,6 +38,7 @@
 // - Portability improved (ctplinuxfan).
 // - Added method to determine the number of entries that should be parsed
 //   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
+// - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -387,6 +388,17 @@ void db_add_ints(struct namelist *list, struct fieldsize *size)
 	}
 }
 
+void db_add_ints_prebody(struct namelist *list, struct fieldsize *size)
+{
+	Assert(g_record);
+	while(list) {
+		g_record->AddDatum(DATUM_INT, list, size->minSize, size->maxSize, NULL, true);
+		struct namelist *next = list->next;
+		free(list);
+		list = next;
+	}
+}
+
 void db_add_floats(struct namelist *list, struct fieldsize *size)
 {
 	Assert(g_record);
@@ -459,7 +471,6 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 {
 	Assert(g_record);
 	while(list) {
-		// Added by Martin Gühmann
 		g_record->AddBitPair(list, size->minSize, size->maxSize, pairtype);
 		struct namelist *next = list->next;
 		free(list);

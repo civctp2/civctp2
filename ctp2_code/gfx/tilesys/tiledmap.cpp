@@ -3610,7 +3610,6 @@ sint32 TiledMap::DrawCityRadius(const MapPoint &cpos, COLOR color, sint32 pop)
 //                    was just wrong.
 //
 //----------------------------------------------------------------------------
-
 sint32 TiledMap::DrawCityRadius1(const MapPoint &cpos, COLOR color)
 {
 	for (int dir = NORTHEAST; dir <= NOWHERE; ++dir)

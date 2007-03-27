@@ -39,11 +39,13 @@
 // - Using /importmap to import a text map no longer causes the river mouths
 //   to be deleted - 2005-07-01 Shaun Dove
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"                     // pre-compiled
 #include "World.h"                  // own declarations, g_theWorld
+#include "worldutils.h"
 
 #include "A_Star_Heuristic_Cost.h"
 #include "AICause.h"
@@ -60,7 +62,6 @@
 #include "gamefile.h"
 #include "Globals.h"
 #include "GoodyHuts.h"
-#include "MapDB.h"
 #include "MoveFlags.h"
 #include "network.h"
 #include "player.h"                 // g_player
@@ -398,13 +399,14 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	sint32 h;
 			
 	sint32 numSettings;
-	const MapRecord *mapRec = g_theMapDB->FindBestMapSizeMatch(m_size.x, m_size.y);
-	sint32          whichSet    = sint32(g_theProfileDB->PercentContinent() * 10);
-	const double *  settings    = mapRec->GetSettings(whichSet, numSettings);
+	const MapRecord *mapRec     = worldutils_FindBestMapSizeMatch(m_size.x, m_size.y);
+	sint32          whichSet    = static_cast<sint32>(g_theProfileDB->PercentContinent() * 10);
+	double *        settings    = worldutils_CreateSettings(mapRec, whichSet, numSettings);
 
 	GetHeightMap(firstPass, map, settings, numSettings);
 	firstPass->Release();
 	FreeMapPlugin();
+	worldutils_DeleteSettings(settings);
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
 	MapDump ("logs\\HeightMap.bmp", map, m_size.x, m_size.y);

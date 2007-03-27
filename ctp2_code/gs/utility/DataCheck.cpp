@@ -30,6 +30,8 @@
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
 // - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
+// - Added sync check for the new map icon database. (27-Mar-2007 Martin Gühmann)
+// - Added sync check for the new map database. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,6 +70,8 @@
 #include "GovernmentRecord.h"
 #include "IconRecord.h"
 #include "ImprovementListRecord.h"
+#include "MapIconRecord.h"
+#include "MapRecord.h"
 #include "OrderRecord.h"
 #include "UVDB.h"                      // Ozone database
 #include "PersonalityRecord.h"
@@ -281,6 +285,8 @@ void DataCheck::BeginTurn(void)
 	g_theGovernmentDB->Serialize(*archive);
 	g_theIconDB->Serialize(*archive);
 	g_theImprovementListDB->Serialize(*archive);
+	g_theMapIconDB->Serialize(*archive);
+	g_theMapDB->Serialize(*archive);
 	g_theOrderDB->Serialize(*archive);
 	g_theUVDB->Serialize(*archive);                     // Old database
 	g_thePersonalityDB->Serialize(*archive);
@@ -357,6 +363,8 @@ void DataCheck::BeginTurn(void)
 	CHECK_DB(g_theGovernmentDB, CRC_TYPE_GOVERNMENT_DB);
 	CHECK_DB(g_theIconDB, CRC_TYPE_ICON_DB);
 	CHECK_DB(g_theImprovementListDB, CRC_TYPE_IMPROVEMENT_LIST_DB);
+	CHECK_DB(g_theMapDB, CRC_TYPE_MAP_DB);
+	CHECK_DB(g_theMapIconDB, CRC_TYPE_MAP_ICON_DB);
 	CHECK_DB(g_theOrderDB, CRC_TYPE_ORDER_DB);
 	CHECK_DB(g_theUVDB, CRC_TYPE_OZONE_DB);
 	CHECK_DB(g_thePersonalityDB, CRC_TYPE_PERSONALITY_DB);

@@ -79,6 +79,7 @@
 // - Added new pollution database. (July 15th 2006 Martin Gühmann)
 // - Added new global warming database. (July 15th 2006 Martin Gühmann)
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Added new mao database. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -835,4 +836,7 @@ template class CTPDatabase<GlobalWarmingRecord>;
 
 #include "MapIconRecord.h" // 40
 template class CTPDatabase<MapIconRecord>;
+
+#include "MapRecord.h" // 41
+template class CTPDatabase<MapRecord>;
 #endif // __TILETOOL__

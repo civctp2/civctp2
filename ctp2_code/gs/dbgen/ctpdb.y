@@ -22,6 +22,7 @@
  * - Added new AKA token, to allow alias names for compatibility sake with.
  *   the old database format. (Aug 26th 2005 Martin Gühmann)
  * - Added the possibility of a default value from another entry. (Aug 26th 2005 Martin Gühmann)
+ * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -84,7 +85,7 @@ int g_generateRequirementWarnings = 0;
 }
 
 %token INT FLOAT RECORD STRUCT BIT BITS EXCLUSIVEBITS NAME NUMBER STRING STRINGID
-%token FILENAME FLOATVALUE STRINGVALUE RANGE AKA PARSENUM
+%token FILENAME FLOATVALUE STRINGVALUE RANGE AKA PARSENUM PREBODY
 
 %%
 databases: records { s_done = 1; }
@@ -119,6 +120,7 @@ datum:   structdescription
 	   | FILENAME size names    { db_add_filenames($3.list, &$2.size); }
 	   | STRING size names      { db_add_strings($3.list, &$2.size); }
 	   | STRINGID size names    { db_add_string_ids($3.list, &$2.size); }
+	   | PREBODY '(' INT ')' size names { db_add_ints_prebody($6.list, &$5.size); }
 	   ;
 
 bitpairtype: INT { $$.pairtype.type = DATUM_INT; $$.pairtype.extraData = NULL; }

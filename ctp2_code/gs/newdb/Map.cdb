@@ -1,0 +1,54 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Template type descriptor
+#  Id           : $Id:$
+#
+#-----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+#  - Created file (24-Mar-2007 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+Map {
+
+	Struct Settings {
+		Float NumContinents      aka MAP_NUM_CONTINENTS
+		Float MinWidth           aka MAP_MIN_WIDTH
+		Float MinHeight          aka MAP_MIN_HEIGHT
+		Float MaxWidth           aka MAP_MAX_WIDTH
+		Float MaxHeight          aka MAP_MAX_HEIGHT
+		Float BumpSize           aka MAP_BUMP_SIZE
+		Float MinSubcontinents   aka MAP_MIN_SUBCONTINENTS
+		Float MaxSubcontinents   aka MAP_MAX_SUBCONTINENTS
+		Float SubcontinentSize   aka MAP_SUBCONTINENT_SIZE
+		Float SubcontinentHeight aka MAP_SUBCONTINENT_HEIGHT
+		Float BorderSize         aka MAP_BORDER_SIZE
+		Float FaultLines         aka MAP_FAULT_LINES
+		Float FalutLength        aka MAP_FAULT_LENGTH
+		Float NSBorderSize       aka MAP_NS_BORDER_SIZE
+	}
+
+	Struct Settings[] Settings
+
+	PreBody(Int) Width
+	PreBody(Int) Height
+
+	# Do not add anything new before this line 
+	# otherwise you will break database compatibility
+
+	Float CityLimitModifyer = 1.0
+
+}

@@ -89,6 +89,7 @@
 // - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
 // - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -102,7 +103,7 @@
 #include "advanceutil.h"
 #include "AgeCityStyleRecord.h"
 #include "AgeRecord.h"
-#include <algorithm>	                // std::find
+#include <algorithm>                    // std::find
 #include "ancientwindows.h"
 #include "appstrings.h"
 #include "ArmyData.h"                   // ArmyData::Cleanup
@@ -191,8 +192,8 @@
 #include "km_screen.h"
 #include "loadsavewindow.h"
 #include "MainControlPanel.h"
-#include "MapDB.h"
 #include "MapIconRecord.h"
+#include "MapRecord.h"
 #include "message.h"
 #include "MessagePool.h"                // g_theMessagePool
 #include "messagewin.h"
@@ -691,52 +692,53 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 		"InitProgressWindow",
 		520 );
 
-	g_theUnitDB = new CTPDatabase<UnitRecord>;
-	g_theDifficultyDB = new CTPDatabase<DifficultyRecord>;
-	g_theIconDB = new CTPDatabase<IconRecord>;
-	g_theAdvanceDB = new CTPDatabase<AdvanceRecord>;
-	g_theSpriteDB = new CTPDatabase<SpriteRecord>;
-	g_theSoundDB = new CTPDatabase<SoundRecord>;
-	g_theSpecialEffectDB = new CTPDatabase<SpecialEffectRecord>;
-	g_theSpecialAttackInfoDB = new CTPDatabase<SpecialAttackInfoRecord>;
-	g_theGovernmentDB = new CTPDatabase<GovernmentRecord>;
-	g_theAdvanceBranchDB = new CTPDatabase<AdvanceBranchRecord>;
-	g_theAgeDB = new CTPDatabase<AgeRecord>;
-	g_theTerrainDB = new CTPDatabase<TerrainRecord>;
-	g_theResourceDB = new CTPDatabase<ResourceRecord>;
+	g_theUnitDB               = new CTPDatabase<UnitRecord>;
+	g_theDifficultyDB         = new CTPDatabase<DifficultyRecord>;
+	g_theIconDB               = new CTPDatabase<IconRecord>;
+	g_theAdvanceDB            = new CTPDatabase<AdvanceRecord>;
+	g_theSpriteDB             = new CTPDatabase<SpriteRecord>;
+	g_theSoundDB              = new CTPDatabase<SoundRecord>;
+	g_theSpecialEffectDB      = new CTPDatabase<SpecialEffectRecord>;
+	g_theSpecialAttackInfoDB  = new CTPDatabase<SpecialAttackInfoRecord>;
+	g_theGovernmentDB         = new CTPDatabase<GovernmentRecord>;
+	g_theAdvanceBranchDB      = new CTPDatabase<AdvanceBranchRecord>;
+	g_theAgeDB                = new CTPDatabase<AgeRecord>;
+	g_theTerrainDB            = new CTPDatabase<TerrainRecord>;
+	g_theResourceDB           = new CTPDatabase<ResourceRecord>;
 	g_theTerrainImprovementDB = new CTPDatabase<TerrainImprovementRecord>;
 	g_theMapIconDB            = new CTPDatabase<MapIconRecord>;
-	g_theOrderDB = new CTPDatabase<OrderRecord>;
-	g_theCityStyleDB = new CTPDatabase<CityStyleRecord>;
-	g_theAgeCityStyleDB = new CTPDatabase<AgeCityStyleRecord>;
+	g_theMapDB                = new CTPDatabase<MapRecord>;
+	g_theOrderDB              = new CTPDatabase<OrderRecord>;
+	g_theCityStyleDB          = new CTPDatabase<CityStyleRecord>;
+	g_theAgeCityStyleDB       = new CTPDatabase<AgeCityStyleRecord>;
 
-	g_theGoalDB = new CTPDatabase<GoalRecord>;
-	g_theUnitBuildListDB = new CTPDatabase<UnitBuildListRecord>;
-	g_theWonderBuildListDB = new CTPDatabase<WonderBuildListRecord>;
-	g_theBuildingBuildListDB = new CTPDatabase<BuildingBuildListRecord>;
-	g_theImprovementListDB = new CTPDatabase<ImprovementListRecord>;
-	g_theStrategyDB = new CTPDatabase<StrategyRecord>;
-	g_theBuildListSequenceDB = new CTPDatabase<BuildListSequenceRecord>;
-	g_theDiplomacyDB = new CTPDatabase<DiplomacyRecord>;
-	g_theDiplomacyProposalDB = new CTPDatabase<DiplomacyProposalRecord>;
-	g_theDiplomacyThreatDB = new CTPDatabase<DiplomacyThreatRecord>;
-	g_theAdvanceListDB = new CTPDatabase<AdvanceListRecord>;
+	g_theGoalDB               = new CTPDatabase<GoalRecord>;
+	g_theUnitBuildListDB      = new CTPDatabase<UnitBuildListRecord>;
+	g_theWonderBuildListDB    = new CTPDatabase<WonderBuildListRecord>;
+	g_theBuildingBuildListDB  = new CTPDatabase<BuildingBuildListRecord>;
+	g_theImprovementListDB    = new CTPDatabase<ImprovementListRecord>;
+	g_theStrategyDB           = new CTPDatabase<StrategyRecord>;
+	g_theBuildListSequenceDB  = new CTPDatabase<BuildListSequenceRecord>;
+	g_theDiplomacyDB          = new CTPDatabase<DiplomacyRecord>;
+	g_theDiplomacyProposalDB  = new CTPDatabase<DiplomacyProposalRecord>;
+	g_theDiplomacyThreatDB    = new CTPDatabase<DiplomacyThreatRecord>;
+	g_theAdvanceListDB        = new CTPDatabase<AdvanceListRecord>;
 
-	g_theCitySizeDB = new CTPDatabase<CitySizeRecord>;
-	g_thePopDB = new CTPDatabase<PopRecord>;
-	g_theBuildingDB = new CTPDatabase<BuildingRecord>;
-	g_thePollutionDB = new CTPDatabase<PollutionRecord>;
-	g_theCivilisationDB = new CTPDatabase<CivilisationRecord>;
-	g_theWonderDB = new CTPDatabase<WonderRecord>;
-	g_theWonderMovieDB = new CTPDatabase<WonderMovieRecord>;
-	g_thePersonalityDB = new CTPDatabase<PersonalityRecord>;
+	g_theCitySizeDB           = new CTPDatabase<CitySizeRecord>;
+	g_thePopDB                = new CTPDatabase<PopRecord>;
+	g_theBuildingDB           = new CTPDatabase<BuildingRecord>;
+	g_thePollutionDB          = new CTPDatabase<PollutionRecord>;
+	g_theCivilisationDB       = new CTPDatabase<CivilisationRecord>;
+	g_theWonderDB             = new CTPDatabase<WonderRecord>;
+	g_theWonderMovieDB        = new CTPDatabase<WonderMovieRecord>;
+	g_thePersonalityDB        = new CTPDatabase<PersonalityRecord>;
 
-	g_theFeatDB = new CTPDatabase<FeatRecord>;
-	g_theEndGameObjectDB = new CTPDatabase<EndGameObjectRecord>;
-	g_theRiskDB = new CTPDatabase<RiskRecord>;
-	g_theGlobalWarmingDB = new CTPDatabase<GlobalWarmingRecord>;
+	g_theFeatDB               = new CTPDatabase<FeatRecord>;
+	g_theEndGameObjectDB      = new CTPDatabase<EndGameObjectRecord>;
+	g_theRiskDB               = new CTPDatabase<RiskRecord>;
+	g_theGlobalWarmingDB      = new CTPDatabase<GlobalWarmingRecord>;
 
-	g_theStringDB = new StringDB();
+	g_theStringDB             = new StringDB();
 	Assert(g_theStringDB); 
 	if (g_theStringDB) {
 		if(!g_theStringDB->Parse(g_stringdb_filename))
@@ -1018,10 +1020,9 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 300 );
 
-	g_theMapDB = new MapDatabase;
-	if(!g_theMapDB->Initialize(g_mapdb_filename, C3DIR_GAMEDATA)) {
-		ExitGame();
-		return FALSE;
+	if (g_theMapDB) {
+		if (!g_theMapDB->Parse(C3DIR_GAMEDATA, g_mapdb_filename)) 
+			return FALSE;
 	}
 
 	g_theProgressWindow->StartCountingTo( 310 );
@@ -1170,50 +1171,51 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 500 );
 
-	if(!g_theUnitDB->ResolveReferences()) return FALSE;
-	if(!g_theAdvanceDB->ResolveReferences()) return FALSE;
-	if(!g_theIconDB->ResolveReferences()) return FALSE;
-	if(!g_theSpriteDB->ResolveReferences()) return FALSE;
-	if(!g_theSoundDB->ResolveReferences()) return FALSE;
-	if(!g_theSpecialEffectDB->ResolveReferences()) return FALSE;
-	if(!g_theSpecialAttackInfoDB->ResolveReferences()) return FALSE;
-	if(!g_theGovernmentDB->ResolveReferences()) return FALSE;
-	if(!g_theAdvanceBranchDB->ResolveReferences()) return FALSE;
-	if(!g_theAgeDB->ResolveReferences()) return FALSE;
-	if(!g_theTerrainDB->ResolveReferences()) return FALSE; 
-	if(!g_theResourceDB->ResolveReferences()) return FALSE; 
-	if(!g_theTerrainImprovementDB->ResolveReferences()) return FALSE; 
-	if(!g_theOrderDB->ResolveReferences()) return FALSE;
+	if(!g_theUnitDB->ResolveReferences())               return FALSE;
+	if(!g_theAdvanceDB->ResolveReferences())            return FALSE;
+	if(!g_theIconDB->ResolveReferences())               return FALSE;
+	if(!g_theSpriteDB->ResolveReferences())             return FALSE;
+	if(!g_theSoundDB->ResolveReferences())              return FALSE;
+	if(!g_theSpecialEffectDB->ResolveReferences())      return FALSE;
+	if(!g_theSpecialAttackInfoDB->ResolveReferences())  return FALSE;
+	if(!g_theGovernmentDB->ResolveReferences())         return FALSE;
+	if(!g_theAdvanceBranchDB->ResolveReferences())      return FALSE;
+	if(!g_theAgeDB->ResolveReferences())                return FALSE;
+	if(!g_theTerrainDB->ResolveReferences())            return FALSE;
+	if(!g_theResourceDB->ResolveReferences())           return FALSE;
+	if(!g_theTerrainImprovementDB->ResolveReferences()) return FALSE;
+	if(!g_theMapDB->ResolveReferences())                return FALSE;
+	if(!g_theOrderDB->ResolveReferences())              return FALSE;
 	if(!g_theMapIconDB->ResolveReferences())            return FALSE;
-	if(!g_theCitySizeDB->ResolveReferences()) return FALSE;
-	if(!g_thePopDB->ResolveReferences()) return FALSE;
-	if(!g_theBuildingDB->ResolveReferences()) return FALSE;
-	if(!g_thePollutionDB->ResolveReferences()) return FALSE;
-	if(!g_theCityStyleDB->ResolveReferences()) return FALSE;
-	if(!g_theAgeCityStyleDB->ResolveReferences()) return FALSE;
+	if(!g_theCitySizeDB->ResolveReferences())           return FALSE;
+	if(!g_thePopDB->ResolveReferences())                return FALSE;
+	if(!g_theBuildingDB->ResolveReferences())           return FALSE;
+	if(!g_thePollutionDB->ResolveReferences())          return FALSE;
+	if(!g_theCityStyleDB->ResolveReferences())          return FALSE;
+	if(!g_theAgeCityStyleDB->ResolveReferences())       return FALSE;
 
-	if(!g_theGoalDB->ResolveReferences()) return FALSE;
-	if(!g_thePersonalityDB->ResolveReferences()) return FALSE;
-	if(!g_theUnitBuildListDB->ResolveReferences()) return FALSE;
-	if(!g_theWonderBuildListDB->ResolveReferences()) return FALSE;
-	if(!g_theBuildingBuildListDB->ResolveReferences()) return FALSE;
-	if(!g_theImprovementListDB->ResolveReferences()) return FALSE;
-	if(!g_theStrategyDB->ResolveReferences()) return FALSE;
-	if(!g_theBuildListSequenceDB->ResolveReferences()) return FALSE;
-	if(!g_theDiplomacyDB->ResolveReferences()) return FALSE;
-	if(!g_theDiplomacyProposalDB->ResolveReferences()) return FALSE;
-	if(!g_theDiplomacyThreatDB->ResolveReferences()) return FALSE;
-	if(!g_theAdvanceListDB->ResolveReferences()) return FALSE;
+	if(!g_theGoalDB->ResolveReferences())               return FALSE;
+	if(!g_thePersonalityDB->ResolveReferences())        return FALSE;
+	if(!g_theUnitBuildListDB->ResolveReferences())      return FALSE;
+	if(!g_theWonderBuildListDB->ResolveReferences())    return FALSE;
+	if(!g_theBuildingBuildListDB->ResolveReferences())  return FALSE;
+	if(!g_theImprovementListDB->ResolveReferences())    return FALSE;
+	if(!g_theStrategyDB->ResolveReferences())           return FALSE;
+	if(!g_theBuildListSequenceDB->ResolveReferences())  return FALSE;
+	if(!g_theDiplomacyDB->ResolveReferences())          return FALSE;
+	if(!g_theDiplomacyProposalDB->ResolveReferences())  return FALSE;
+	if(!g_theDiplomacyThreatDB->ResolveReferences())    return FALSE;
+	if(!g_theAdvanceListDB->ResolveReferences())        return FALSE;
 
-	if(!g_theCivilisationDB->ResolveReferences()) return FALSE;
-	if(!g_theWonderDB->ResolveReferences()) return FALSE;
-	if(!g_theWonderMovieDB->ResolveReferences()) return FALSE;
+	if(!g_theCivilisationDB->ResolveReferences())       return FALSE;
+	if(!g_theWonderDB->ResolveReferences())             return FALSE;
+	if(!g_theWonderMovieDB->ResolveReferences())        return FALSE;
 
-	if(!g_theFeatDB->ResolveReferences()) return FALSE;
-	if(!g_theEndGameObjectDB->ResolveReferences()) return FALSE;
-	if(!g_theRiskDB->ResolveReferences()) return FALSE;
-	if(!g_theDifficultyDB->ResolveReferences()) return FALSE;
-	if(!g_theGlobalWarmingDB->ResolveReferences()) return FALSE;
+	if(!g_theFeatDB->ResolveReferences())               return FALSE;
+	if(!g_theEndGameObjectDB->ResolveReferences())      return FALSE;
+	if(!g_theRiskDB->ResolveReferences())               return FALSE;
+	if(!g_theDifficultyDB->ResolveReferences())         return FALSE;
+	if(!g_theGlobalWarmingDB->ResolveReferences())      return FALSE;
 
 	g_theProgressWindow->StartCountingTo( 510 );
 

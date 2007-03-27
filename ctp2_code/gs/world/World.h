@@ -704,11 +704,11 @@ public:
 private:
     void AddToLandSearch(MapPointNode *& search_list, MapPoint const & pos);
     void AddToWaterSearch(MapPointNode *& search_list, MapPoint const & pos);
-}; 
+};
 
 extern World *g_theWorld;
 
-uint32 World_World_GetVersion(void) ;
+uint32 World_World_GetVersion(void);
 
 #endif
 

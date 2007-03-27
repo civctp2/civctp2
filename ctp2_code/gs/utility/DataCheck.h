@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin Gühmann)
+// - Added sync check for the new map icon database. (27-Mar-2007 Martin Gühmann)
+// - Added sync check for the new map database. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -79,6 +81,8 @@ enum CRC_TYPE
 	CRC_TYPE_GOVERNMENT_DB,
 	CRC_TYPE_ICON_DB,
 	CRC_TYPE_IMPROVEMENT_LIST_DB,
+	CRC_TYPE_MAP_DB,
+	CRC_TYPE_MAP_ICON_DB,
 	CRC_TYPE_ORDER_DB,
 	CRC_TYPE_OZONE_DB,
 	CRC_TYPE_PERSONALITY_DB,

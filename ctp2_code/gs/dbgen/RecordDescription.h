@@ -37,6 +37,7 @@
 // - Added ParseNum so that a certain number of entries can be parsed if 
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
+// - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -64,7 +65,7 @@ public:
 	void SetBaseType(DATUM_TYPE type);
 
 	void AddDatum(DATUM_TYPE type, struct namelist *nameInfo, sint32 minSize, sint32 maxSize,
-				  char *subType = NULL);
+				  char *subType = NULL, bool isPreBody = false);
 	void AddGroupedBits(char *name, struct namelist *list);
 
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
@@ -85,6 +86,7 @@ public:
 	void ExportParser(FILE *outfile);
 	void ExportMerger(FILE *outfile);
 	void ExportTokenCases(FILE *outfile);
+	void ExportPreBodyTokens(FILE *outfile);
 	void ExportDefaultToken(FILE *outfile);
 	void ExportDataParsers(FILE *outfile);
 	void ExportDataCode(FILE *outfile);
@@ -93,6 +95,7 @@ public:
 	void ExportMemberClassDataCode(FILE *outfile);
 	void ExportResolver(FILE *outfile);
 	void SetParseNum(sint32 parseNum);
+	void SetPreBody(bool preBody);
 
 	sint32  FlagCount() const   { return (m_numBits + 31) / 32; };
 
@@ -105,7 +108,8 @@ private:
 	bool                        m_addingToMemberClass;
 	DATUM_TYPE                  m_baseType;
 
-	sint32                      m_parseNum; // Unimplemented
+	sint32                      m_parseNum; // Unimplemented; Only implemented in MemberClass
+	bool                        m_preBody;
 };
 
 #endif

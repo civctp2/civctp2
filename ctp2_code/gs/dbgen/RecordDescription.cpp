@@ -62,6 +62,7 @@
 // - Added ParseNum so that a certain number of entries can be parsed if 
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
+// - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -95,7 +96,9 @@ RecordDescription::RecordDescription(char *name)
 	m_hasGovernmentsModified    (false),
 	m_numBits                   (0),
 	m_addingToMemberClass       (false),
-	m_baseType                  (DATUM_NONE)
+	m_baseType                  (DATUM_NONE),
+	m_parseNum                  (0),
+	m_preBody                   (false)
 {
 	strncpy(m_name, name, k_MAX_RECORD_NAME);
 }
@@ -265,9 +268,14 @@ void RecordDescription::SetParseNum(sint32 parseNum)
 	m_parseNum = parseNum;
 }
 
+void RecordDescription::SetPreBody(bool preBody)
+{
+	m_preBody = preBody;
+}
+
 void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
                                  sint32 minSize, sint32 maxSize,
-                                 char *subType)
+                                 char *subType, bool isPreBody)
 {
 	if(m_addingToMemberClass) {
 		
@@ -286,12 +294,13 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
+	dat->m_isPreBody = isPreBody;
 	if ((!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)) &&
 	    (dat->m_maxSize <= 0)
-       ) 
-    {
+	   )
+	{
 		switch(dat->m_type) 
-        {
+		{
 		default:
 			break;
 		case DATUM_INT:
@@ -303,15 +312,15 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 			dat->m_required = true;
 			break;
 		}
-	} 
-    else 
-    {
+	}
+	else
+	{
 		dat->SetValue(nameInfo->v);
 	}
 	m_datumList.AddTail(dat);
 
 	if (dat->m_type == DATUM_BIT) 
-    {
+	{
 		dat->m_bitNum = m_numBits;
 		m_numBits++;
 	}
@@ -333,13 +342,11 @@ void RecordDescription::AddGroupedBits(char *groupName, struct namelist *list)
 	m_datumList.AddTail(dat);
 }
 
-// Added by Martin Gühmann
 void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype)
 {
 	if(m_addingToMemberClass) {
 		Assert(m_memberClasses.GetTail());
 		if(m_memberClasses.GetTail()) {
-// Added by Martin Gühmann
 			m_memberClasses.GetTail()->AddBitPair(nameInfo, minSize, maxSize, pairtype);
 		}
 		return;
@@ -349,7 +356,7 @@ void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, si
 	Datum *dat = new Datum(nameInfo->name, DATUM_BIT_PAIR);
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
-// Added by Martin Gühmann for adding default values
+	// Added to have default values
 	if((nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
 	|| (dat->m_maxSize > 0)
 	){
@@ -820,7 +827,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 	
 	sint32 numTokens = 0;
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next())
-    {
+	{
 		Datum *dat = walk.GetObj();
 		sprintf(nicename, "k_Token_%s_%s", m_name, dat->m_name);
 		fprintf(outfile, "#define %-40s ((k_Token_Custom_Base) + %d)\n", nicename, numTokens);
@@ -834,7 +841,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 	}
 
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
-    {
+	{
 		Datum *dat = walk.GetObj();
 		if(dat->m_akaName){
 			sprintf(nicename, "k_Token_%s_%s", m_name, dat->m_akaName);
@@ -851,28 +858,28 @@ void RecordDescription::ExportParser(FILE *outfile)
 	fprintf(outfile, "void %sRecord::CheckRequiredFields(DBLexer *lex)\n", m_name);
 	fprintf(outfile, "{\n");
 	if (g_generateRequirementWarnings) 
-    {
+	{
 		for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
-        {
+		{
 			Datum *dat = walk.GetObj();
 			if(dat->m_required) 
-            {
+			{
 				if(dat->m_akaName)
-                {
+				{
 					fprintf(outfile, "    if(!s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)\n", m_name, dat->m_name);
 					fprintf(outfile, "    && !s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)\n", m_name, dat->m_akaName);
 					fprintf(outfile, "    ){\n");
 				}
 				else
-                {
+				{
 					fprintf(outfile, "    if(!s_ParsedTokens.Bit(k_Token_%s_%s - k_Token_Custom_Base)) {\n", m_name, dat->m_name);
 				}
 				if (dat->m_defaultName)
-                {
+				{
 					fprintf(outfile, "        m_%s = m_%s;\n", dat->m_name, dat->m_defaultName);
 				}
 				else
-                {
+				{
 					fprintf(outfile, "        DBERROR((\"Warning: required field %s missing\"));\n", dat->m_name);
 				}
 				fprintf(outfile, "    }\n");
@@ -885,12 +892,12 @@ void RecordDescription::ExportParser(FILE *outfile)
 	fprintf(outfile, "sint32 %sRecord::Parse(DBLexer *lex, sint32 numRecords)\n", m_name);
 	fprintf(outfile, "{\n");
 	
-    if (DATUM_NONE == m_baseType) 
-    {
-        char uppName[256];
-        memset(uppName, 0, sizeof(uppName));
+	if (DATUM_NONE == m_baseType) 
+	{
+		char uppName[256];
+		memset(uppName, 0, sizeof(uppName));
 		for (size_t i = 0; i < strlen(m_name); ++i)
-        {
+		{
 			uppName[i] = static_cast<char>(toupper(m_name[i]));
 		}
 
@@ -944,6 +951,8 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    // End of GovMod Specific lexical analysis\n");
 		}
 
+		ExportPreBodyTokens(outfile);
+
 		fprintf(outfile, "    if(tok != k_Token_OpenBrace) {\n");
 		fprintf(outfile, "        DBERROR((\"Missing open brace\"));\n");
 		fprintf(outfile, "        return 0;\n");
@@ -974,9 +983,9 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    lex->RestoreTokens();\n");
 		fprintf(outfile, "    return result;\n");
 		fprintf(outfile, "}\n\n");
-    }
-    else
-    {
+	}
+	else
+	{
 		Assert(m_datumList.GetCount() == 2);
 		fprintf(outfile, "    sint32 tok;\n");
 		fprintf(outfile, "    tok = lex->GetToken();\n");
@@ -991,7 +1000,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 		fprintf(outfile, "    strcpy(m_NameText, lex->GetTokenText());\n");
 
 		switch (m_baseType) 
-        {
+		{
 		case DATUM_INT:
 			fprintf(outfile, "    if(!lex->GetIntAssignment(m_Value)) {\n");
 			fprintf(outfile, "        DBERROR((\"Expected integer\"));\n");
@@ -1032,22 +1041,52 @@ void RecordDescription::ExportParser(FILE *outfile)
 	ExportDataParsers(outfile);
 }
 
+void RecordDescription::ExportPreBodyTokens(FILE *outfile)
+{
+	for
+	(
+	    PointerList<Datum>::Walker walk(&m_datumList);
+	    walk.IsValid();
+	    walk.Next()
+	)
+	{
+		Datum *dat = walk.GetObj();
+		if(dat->m_isPreBody)
+		{
+			switch(dat->m_type) {
+				case DATUM_INT:
+					fprintf(outfile, "    if(tok == k_Token_Int) {\n");
+					fprintf(outfile, "        s_ParsedTokens.SetBit(k_Token_%s_%s - k_Token_Custom_Base);\n", m_name, dat->m_name);
+					fprintf(outfile, "        m_%s = atoi(lex->GetTokenText());\n", dat->m_name);
+					fprintf(outfile, "        tok = lex->GetToken();\n");
+					fprintf(outfile, "    }\n");
+					break;
+				default:
+					Assert(0);
+					break;
+			}
+		}
+	}
+
+	fprintf(outfile, "\n");
+}
+
 void RecordDescription::ExportTokenCases(FILE *outfile)
 {
 	for 
-    (
-        PointerList<Datum>::Walker walk(&m_datumList); 
-        walk.IsValid(); 
-        walk.Next()
-    )
-    {
+	(
+	    PointerList<Datum>::Walker walk(&m_datumList); 
+	    walk.IsValid(); 
+	    walk.Next()
+	)
+	{
 		Datum *dat = walk.GetObj();
 		if (dat->m_type == DATUM_BIT_PAIR) {
 			dat->ExportParseBitPairCase(outfile, m_name);
 		}
 		fprintf(outfile, "            case k_Token_%s_%s:\n", m_name, dat->m_name);
 		if (dat->m_akaName)
-        {
+		{
 			fprintf(outfile, "            case k_Token_%s_%s:\n", m_name, dat->m_akaName);
 		}
 		if(dat->m_maxSize == k_MAX_SIZE_VARIABLE) {

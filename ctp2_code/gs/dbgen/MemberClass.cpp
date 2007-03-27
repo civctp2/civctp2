@@ -38,6 +38,7 @@
 // - Fixed subsubstruct generation so that it can be used in DiffDB.txt. (April 29th 2006 Martin Gühmann)
 // - Added ParseNum so that a certain number of entries can be parsed if 
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
+// - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -566,20 +567,24 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	fprintf(outfile, "    sint32 result = 0;\n");
 	fprintf(outfile, "    tok = lex->PeekAhead();\n");
 	fprintf(outfile, "    if(tok != k_Token_OpenBrace) {\n");
+	fprintf(outfile, "        if(lex->GetCurrentToken() != k_Token_OpenBrace) {\n");
 	if(canParseSequentially) {
-		fprintf(outfile, "        if(ParseSequential(lex)) {\n");
-		fprintf(outfile, "            return 1;\n");
-		fprintf(outfile, "        }\n");
+		fprintf(outfile, "            if(ParseSequential(lex)) {\n");
+		fprintf(outfile, "                return 1;\n");
+		fprintf(outfile, "            }\n");
 	}
 	if(m_parseNum > 0){
-		fprintf(outfile, "        if(ParseNum(lex)) {\n");
-		fprintf(outfile, "            return 1;\n");
-		fprintf(outfile, "        }\n");
+		fprintf(outfile, "            if(ParseNum(lex)) {\n");
+		fprintf(outfile, "                return 1;\n");
+		fprintf(outfile, "            }\n");
 	}
-	fprintf(outfile, "        DBERROR((\"Expected open brace for %s\"));\n", m_name);
-	fprintf(outfile, "        return 0;\n");
+	fprintf(outfile, "            DBERROR((\"Expected open brace for %s\"));\n", m_name);
+	fprintf(outfile, "            return 0;\n");
+	fprintf(outfile, "        }\n");
 	fprintf(outfile, "    }\n");
-	fprintf(outfile, "    tok = lex->GetToken();\n");
+	fprintf(outfile, "    else {\n");
+	fprintf(outfile, "        tok = lex->GetToken();\n");
+	fprintf(outfile, "    }\n");
 	fprintf(outfile, "    lex->SetTokens(s_%s_%s_Tokens, k_Token_%s_%s_Max);\n", recordName, m_name, recordName, m_name);
 	fprintf(outfile, "    while(!done) {\n");
 	fprintf(outfile, "        tok = lex->GetToken();\n");
