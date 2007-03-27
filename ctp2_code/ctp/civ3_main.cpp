@@ -118,7 +118,7 @@
 #include "MainControlPanel.h"
 #include "messagewin.h"
 #include "network.h"
-#include <new>                          // std::set_new_handler
+#include <new>                          // std::bad_alloc, std::set_new_handler
 #include "pattern.h"
 #include "picture.h"
 #include "pixelutils.h"
@@ -290,7 +290,7 @@ void ThrowBadAlloc()
 {
     throw std::bad_alloc();
 }
-#endif
+#endif // _MSC_VER
 
 namespace Os
 {
@@ -311,8 +311,14 @@ namespace Os
     void Initialize(void)
     {
 #if defined(_MSC_VER)
+
+#if (_MSC_VER >= 1400)
         std::set_new_handler(ThrowBadAlloc);
+#else
+        set_new_handler(ThrowBadAlloc);
 #endif
+
+#endif // _MSC_VER
     }
 }
 

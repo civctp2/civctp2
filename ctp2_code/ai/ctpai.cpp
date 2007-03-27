@@ -153,33 +153,20 @@ namespace
 STDEHANDLER(CtpAi_CaptureCityEvent)
 {
 	Unit city;
-	sint32 newOwner;
-	sint32 cause;
-	MapPoint pos;
-	sint32 originalOwner;
-
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
+	sint32 newOwner;
 	if(!args->GetPlayer(0, newOwner))
 		return GEV_HD_Continue;
 
+	sint32 cause;
 	if(!args->GetInt(0, cause))
 		return GEV_HD_Continue;
 
-	originalOwner = city.GetOwner();
-	
-	
-	
-	
-
+	PLAYER_INDEX    originalOwner = city.GetOwner();
 	
 	CtpAi::AddOwnerGoalsForCity(city, newOwner);
-
-	
-	
-
-	
 	CtpAi::AddForeignerGoalsForCity(city, originalOwner);
 
 	return GEV_HD_Continue;
@@ -188,40 +175,32 @@ STDEHANDLER(CtpAi_CaptureCityEvent)
 
 STDEHANDLER(CtpAi_CreateCityEvent)
 {
-	PLAYER_INDEX playerId;
-	MapPoint pos;
-	sint32 cause;
-	Unit city;
-
-	
+	sint32 playerId;
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	
+	MapPoint pos;
 	if (!args->GetPos(0, pos))
 		return GEV_HD_Continue;
 
-	
+	sint32 cause;
 	if (!args->GetInt(0, cause))
 		return GEV_HD_Continue;
 
-	
+	Unit city;
 	if (!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
 	
 	for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		
-		if (foreignerId == city.GetOwner())
-			continue;
-
-		
-		CtpAi::AddForeignerGoalsForCity(city, foreignerId);
+		if (foreignerId != city.GetOwner())
+        {
+    		CtpAi::AddForeignerGoalsForCity(city, foreignerId);
+        }
 	}
 	CtpAi::AddOwnerGoalsForCity(city, city.GetOwner());
 
-	
 	SettleMap::s_settleMap.HandleCityGrowth(city);
 
 	return GEV_HD_Continue;
@@ -230,12 +209,9 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 
 void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 {
-	CTPGoal_ptr goal_ptr;
-	GOAL_TYPE goal_type;
-
 	Assert(city.IsValid());
 	
-	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+	for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
 		
 		if ( ! g_theGoalDB->Get(goal_type)->GetTargetOwnerSelf() )
@@ -247,12 +223,10 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 			g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
                )
 		{
-			goal_ptr = new CTPGoal;
+			CTPGoal * goal_ptr = new CTPGoal;
 			goal_ptr->Set_Type(goal_type);
 			goal_ptr->Set_Player_Index(ownerId);
 			goal_ptr->Set_Target_City(city);
-			
-			
 			
 			Scheduler::GetScheduler(ownerId).Add_New_Goal(goal_ptr);
 		}
@@ -262,12 +236,9 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 
 void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreignerId)
 {
-	CTPGoal_ptr goal_ptr;
-	GOAL_TYPE goal_type;
-
 	Assert(city.IsValid());
 	
-	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+	for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
 		
 		if ( g_theGoalDB->Get(goal_type)->GetTargetOwnerSelf() )
@@ -279,12 +250,10 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 			 g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
            )
 		{
-			goal_ptr = new CTPGoal;
+			CTPGoal * goal_ptr = new CTPGoal;
 			goal_ptr->Set_Type(goal_type);
 			goal_ptr->Set_Player_Index(foreignerId);
 			goal_ptr->Set_Target_City(city);
-			
-			
 			
 			Scheduler::GetScheduler(foreignerId).Add_New_Goal(goal_ptr);
 		}
@@ -309,12 +278,11 @@ STDEHANDLER(CtpAi_SettleEvent)
     {
 		if (player_ptr->GetPlayerType() == PLAYER_TYPE_ROBOT &&
 			!(g_network.IsClient() && g_network.IsLocalPlayer(owner)) &&
-			!(g_network.IsHost() && player_ptr->m_owner == g_selected_item->GetVisiblePlayer()) &&
+			!(g_network.IsHost() && owner == g_selected_item->GetVisiblePlayer()) &&
 			last_settle == NewTurnCount::GetCurrentRound() &&
 			(last_player == owner)
            )
 		{
-			
 			return GEV_HD_Stop;
 		}
 	}
@@ -330,11 +298,9 @@ STDEHANDLER(CtpAi_SettleEvent)
 STDEHANDLER(CtpAi_GrowCityEvent)
 {
 	Unit city;
-
 	if(!args->GetCity(0, city)) 
 		return GEV_HD_Continue;
 
-	
 	SettleMap::s_settleMap.HandleCityGrowth(city);
 
 	return GEV_HD_Continue;
@@ -344,42 +310,38 @@ STDEHANDLER(CtpAi_GrowCityEvent)
 STDEHANDLER(CtpAi_KillCityEvent)
 {
 	Unit u;
-	CAUSE_REMOVE_ARMY cause;
-	sint32 killer;
-
 	if(!args->GetCity(0, u))
 		return GEV_HD_Continue;
 
-	if(!args->GetInt(0, (sint32&)cause))
+	sint32 cause;
+	if(!args->GetInt(0, cause))
 		return GEV_HD_Continue;
 
+	sint32 killer;
 	if(!args->GetPlayer(0, killer))
 		killer = -1;
 
-	
 	SettleMap::s_settleMap.SetCanSettlePos(u.RetPos(), true);
 
-	
-	CTPGoal_ptr goal_ptr;
-	GOAL_TYPE goal_type;
 	for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
 	{
-		
 		if (playerId != killer && playerId != u.GetOwner())
 			continue;
 
 		Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 
-		
-		for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+
+        for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 		{
-			
-			if ( (g_theWorld->IsWater(u.RetPos()) == FALSE) && 
-				(g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand()) ||
-				(g_theWorld->IsWater(u.RetPos()) == TRUE) && 
-				(g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()))
+			if ( (!g_theWorld->IsWater(u.RetPos()) && 
+				  g_theGoalDB->Get(goal_type)->GetTargetTypeSettleLand() 
+                 ) ||
+				 (g_theWorld->IsWater(u.RetPos()) && 
+				  g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()
+                 )
+               )
 			{
-				goal_ptr = new CTPGoal();
+				CTPGoal * goal_ptr = new CTPGoal();
 				goal_ptr->Set_Type( goal_type );
 				goal_ptr->Set_Player_Index( playerId );
 				goal_ptr->Set_Target_Pos( u.RetPos() );
@@ -391,7 +353,6 @@ STDEHANDLER(CtpAi_KillCityEvent)
 		}
 	}
 
-
 	return GEV_HD_Continue;
 }
 
@@ -399,11 +360,10 @@ STDEHANDLER(CtpAi_KillCityEvent)
 STDEHANDLER(CtpAi_NukeCityUnit)
 {
 	Unit unit;
-	Unit city;
-	
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
+	Unit city;
 	if (!args->GetCity(0,city))
 		return GEV_HD_Continue;
 
@@ -422,19 +382,15 @@ STDEHANDLER(CtpAi_NukeCityUnit)
 		
 		SettleMap::s_settleMap.SetCanSettlePos(city.RetPos(), true);
 		
-		
-		CTPGoal_ptr goal_ptr;
-		GOAL_TYPE goal_type;
 		for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
 		{
-			
 			if (playerId != killer && playerId != city_owner)
 				continue;
 			
 			Scheduler & scheduler = Scheduler::GetScheduler(playerId);
 			
 			
-			for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+			for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 			{
 				
 				if ( (g_theWorld->IsWater(city.RetPos()) == FALSE) && 
@@ -442,7 +398,7 @@ STDEHANDLER(CtpAi_NukeCityUnit)
 					(g_theWorld->IsWater(city.RetPos()) == TRUE) && 
 					(g_theGoalDB->Get(goal_type)->GetTargetTypeSettleSea()))
 				{
-					goal_ptr = new CTPGoal();
+					CTPGoal * goal_ptr = new CTPGoal();
 					goal_ptr->Set_Type( goal_type );
 					goal_ptr->Set_Player_Index( playerId );
 					goal_ptr->Set_Target_Pos( city.RetPos() );
@@ -1773,10 +1729,14 @@ void CtpAi::Resize()
 	}
 	Assert(s_maxPlayers > 0);
 
+#if 0 /// @todo Finish modification of Ai/strategy code before activating this
     Assert(g_theGoalDB);
     size_t const goalTypeCount = 
         g_theGoalDB ? static_cast<size_t>(g_theGoalDB->NumRecords()) : 0;
-	Scheduler::ResizeAll(s_maxPlayers, goalTypeCount);
+    Scheduler::ResizeAll(s_maxPlayers, goalTypeCount);
+#else
+    Scheduler::ResizeAll(s_maxPlayers);
+#endif
 
 	AgreementMatrix::s_agreements.Resize(s_maxPlayers);
 	Diplomat::ResizeAll(s_maxPlayers);

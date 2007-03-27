@@ -572,7 +572,7 @@ public:
 	};
 };
 
-void SourceListItemConditionalCallback(MBCHAR *text, sint32 val2, void *data)
+void SourceListItemConditionalCallback(MBCHAR const *text, sint32 val2, void *data)
 {
 	if(!val2) 
 		return;
@@ -585,14 +585,16 @@ void SourceListItemConditionalCallback(MBCHAR *text, sint32 val2, void *data)
 	}
 
 	SlicConditional *cond = item->GetSegment()->GetConditional(item->GetLineNumber());
-	if(!cond) {
+	if (cond) 
+    {
+		cond->SetExpression(text);
+    }
+    else
+    {
 		cond = item->GetSegment()->NewConditional(item->GetLineNumber(), text);
 		Assert(cond);
-		item->SetBreak();
-	} else {
-		cond->SetExpression(text);
-		item->SetBreak();
 	}
+	item->SetBreak();
 
 	g_c3ui->AddAction(new KillConditionalPopupAction);
 }
@@ -603,7 +605,7 @@ void SourceListItem::EditConditional()
 	if(!s_conditionalPopup)
 	s_conditionalPopup = new c3_UtilityTextFieldPopup(SourceListItemConditionalCallback,
 													  NULL,
-													  cond ? (char *)cond->GetExpression() : "",
+													  cond ? cond->GetExpression() : "",
 													  NULL,
 													  "SourceListConditionalPopup",
 													  this,
