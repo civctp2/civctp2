@@ -553,7 +553,7 @@ void SelectColorSet(void)
 //----------------------------------------------------------------------------
 namespace Os
 {
-	inline uint32 GetTicks()
+	uint32 GetTicks() //inline uint32 GetTicks()
 	{
 #if defined(USE_SDL)
 		return SDL_GetTicks();

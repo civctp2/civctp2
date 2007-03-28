@@ -4849,7 +4849,7 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 {
 
 	TileSet	*   tileSet     = GetTileSet();
-	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_RELIGION1);
+	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_HERALD);
     RECT		iconRect;
 
 	CityData *cityData = unit.GetData()->GetCityData();
@@ -4868,14 +4868,16 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 	sint32  cityIcon = 0;
 
 //Religion Icons
-		for(sint32 rb = 0; rb < g_theBuildingDB->NumRecords(); rb++){
-		if(cityData->GetImprovements() & ((uint64)1 << rb)){
-			if (g_theBuildingDB->Get(rb, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
+	for(sint32 rb = 0; rb < g_theBuildingDB->NumRecords(); rb++){
+		if (g_theBuildingDB->Get(rb, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
+		{
+			if(cityData->GetImprovements() & ((uint64)1 << rb))
 			{
-				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				iconRect.left += iconDim.x;
-				iconRect.right += iconDim.x;
+				//DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				//AddDirtyRectToMix(iconRect);
+				DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
+				iconRect.left += iconRect.right;
+				iconRect.right += iconRect.left + iconRect.right;
 			}
 		}
 	}
@@ -4883,15 +4885,18 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 
   	for(sint32 rw=0; rw<g_theWonderDB->NumRecords(); rw++)
 	{
-		if(cityData->GetBuiltWonders() & (uint64)1 << (uint64)rw)
+		if(g_theWonderDB->Get(rw, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
 		{
-			if(g_theWonderDB->Get(rw, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
+			if(cityData->GetBuiltWonders() & (uint64)1 << (uint64)rw)
 			{
-				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				iconRect.left += iconDim.x;
-				iconRect.right += iconDim.x;
+				DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
+				iconRect.left += iconRect.right;
+				iconRect.right += iconRect.left + iconRect.right;
+				//DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				//AddDirtyRectToMix(iconRect);
+				//iconRect.left += iconDim.x;
+				//iconRect.right += iconDim.x;
 			}
 		}
 	}
-			}
+}

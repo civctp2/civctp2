@@ -205,6 +205,7 @@ extern Pollution *g_thePollution;
 #include "BuildingRecord.h" //EMOD
 #include "Barbarians.h" //EMOD
 #include "RiskRecord.h"  //add for barb code
+#include "mapanalysis.h" //emod
 
 BOOL g_smokingCrack = TRUE;
 BOOL g_useOrderQueues = TRUE;
@@ -1548,8 +1549,11 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-
-	PLAYER_INDEX meat = PLAYER_TYPE_HUMAN;
+	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
+	MapPoint epos = map.GetNearestForeigner(PLAYER_INDEX_VANDALS, m_pos);
+	Cell *cell = g_theWorld->GetCell(epos);
+	sint32 meat = cell->GetOwner();
+	//PLAYER_INDEX meat = CellOwner;
 
 	// EMOD Barbarian Camps
 	// This should be risk level depending  //EMOD added Risk 10-05-2006
@@ -1594,23 +1598,24 @@ void ArmyData::BeginTurn()
 	// END EMOD barb camps
 	// This should be risk level depending  //this was for special forces to raise Guerrillas
 	//if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-	for(i = 0; i < m_nElements; i++) {
-		Cell *cell = g_theWorld->GetCell(m_pos);
-		sint32 CellOwner = cell->GetOwner();
-		const UnitRecord *urec = m_array[i].GetDBRec();
-		if(m_array[i].IsEntrenched()
-		&& urec->GetSpawnsBarbarians()
-		&& CellOwner != m_owner
-		){ 
-			Barbarians::AddBarbarians(m_pos, meat, FALSE);
-			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+// MOVED TO ENDTURN UNITDATA
+//	for(i = 0; i < m_nElements; i++) {
+//		Cell *cell = g_theWorld->GetCell(m_pos);
+//		sint32 CellOwner = cell->GetOwner();
+//		const UnitRecord *urec = m_array[i].GetDBRec();
+//		if(m_array[i].IsEntrenched()
+//		&& urec->GetSpawnsBarbarians()
+//		&& CellOwner != m_owner
+//		){ 
+//			Barbarians::AddBarbarians(m_pos, meat, FALSE);
+//			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 #if 0 // Unused, memory leak
-			SlicObject *so = new SlicObject("999GuerrillaSpawn");
-			so->AddRecipient(m_owner);
-                  so->AddUnit(m_array[i]);
+		//	SlicObject *so = new SlicObject("999GuerrillaSpawn");
+		//	so->AddRecipient(m_owner);
+        //        so->AddUnit(m_array[i]);
 #endif
-		}
-	}
+//		}
+//	}
 
 
 	// END EMOD barb spawn units
@@ -1627,9 +1632,9 @@ void ArmyData::BeginTurn()
 			){
 				m_array[u].DeductHP(hpcost);
 #if 0 // Unused, memory leak
-			    SlicObject *so = new SlicObject("999HostileTerrain");
-				so->AddRecipient(m_owner);
-				so->AddUnit(m_array[i]);
+			    //SlicObject *so = new SlicObject("999HostileTerrain");
+				//so->AddRecipient(m_owner);
+				//so->AddUnit(m_array[i]);
 #endif
 			}
 
@@ -1678,15 +1683,16 @@ void ArmyData::BeginTurn()
 		{
 			m_array[i].Sink(chance);
 #if 0 // Unused, memory leak
-			SlicObject *so = new SlicObject("999LostAtSea");
-			so->AddRecipient(m_owner);
-            so->AddUnit(m_array[i]);
+		//	SlicObject *so = new SlicObject("999LostAtSea");
+		//	so->AddRecipient(m_owner);
+        //  so->AddUnit(m_array[i]);
 #endif
 		}
 	}
+	if (g_player[m_owner]->IsRobot()) { //added so human units don't automatically upgrade 3-27-2007
+		Upgrade();
 
-	Upgrade();
-
+	}
 //END EMOD
 
     m_flags &= ~(k_CULF_EXECUTED_THIS_TURN);
@@ -1700,6 +1706,7 @@ void ArmyData::BeginTurn()
                 TradeRoute route = cell->GetTradeRoute(i);
                 if(route->GetPiratingArmy().m_id == m_id) {
                     g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetPiracyWasteCoefficient()));
+					//added pirated strategic good? 
                     piratedByMe++;
                 }
             }

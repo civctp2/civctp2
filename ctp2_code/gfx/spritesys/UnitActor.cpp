@@ -1848,25 +1848,6 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 			}
 		}			
 	}
-	//Add DrawArmyName?
-	/*
-
-		if (g_theProfileDB->IsShowArmyNames()) {
-			COLORREF nameColor = GetColorRef(COLOR_WHITE);
-				Unit	u = actor->GetUnitID();
-				
-				if (m_unitID.IsValid() && m_unitID.GetArmy().m_id != 0) 
-                {
-					Army		a = m_unitID.GetArmy();
-
-					MBCHAR		*name = a.GetData()->GetName();
-					m_font->DrawString(surf, &rect, &clipRect, name, 0, nameColor, 0);
-				}
-			}
-		}
-
-		
-    */
 	
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
 }
@@ -2533,8 +2514,10 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	sint32  cityIcon = 0;
 	if (unit.IsValid() && unit.IsCity()) {
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-		if(unit.CD()->GetImprovements() & ((uint64)1 << b)){
-			if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon)) 
+		if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+		
+		{
+			if(unit.CD()->GetImprovements() & ((uint64)1 << b)) 
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
 					if (fogged)
@@ -2559,9 +2542,10 @@ void UnitActor::DrawCityImprovements(bool fogged)
 
   	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
-		if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)
+		if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+		
 		{
-			if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon)) 
+			 if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
 					if (fogged)

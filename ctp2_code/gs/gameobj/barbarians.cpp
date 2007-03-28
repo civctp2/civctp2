@@ -514,7 +514,7 @@ void Barbarians::BeginYear()
 			}
 		}
 		if(tries < k_MAX_BARBARIAN_TRIES) {
-			AddBarbarians(point, -1, FALSE);
+			AddBarbarians(point, p, FALSE);  //AddBarbarians(point, -1, FALSE);
 		}
 //EMOD for Pirates
 		sint32 ptries;
@@ -535,7 +535,8 @@ void Barbarians::BeginYear()
 			}
 		}
 		if(ptries < k_MAX_BARBARIAN_TRIES) {
-			AddPirates(point, -1, FALSE);
+			// is p selecting the the nearest player?
+			AddPirates(point, p, FALSE); //AddPirates(point, -1, FALSE);
 		}
 /*  EMOD Barbarian Special Forces code
 		sint32 sftries;

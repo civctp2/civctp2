@@ -1,0 +1,269 @@
+#######################################
+# File: graphics.ldl
+# Last Access: Thu Apr 22 17:20:10 1999
+# -------------------------------------
+# 
+# - Increased size 3-9-2007
+# - Added ArmyNames Option 3-9-2007
+# - Added CivFlags Option 3-13-2007
+# - Added Smooth Borders Option 3-27-2007
+#
+#######################################
+
+##-----------------------------------##
+##             Templates             ##
+##-----------------------------------##
+GRAPHICS_CHECKBOX:CTP2_STANDARD_FONT {
+
+# for now, put the toggle button art here
+	string	image0	"upbt11u0.tga"
+	string	image1	"upbt11u1.tga"
+	string	disabledimage0	"upbt11x0.tga"
+	string	disabledimage1	"upbt11x1.tga"
+	string	imagebltflag	"chromakey"
+	int	xpix	20
+	int	widthpix	300
+	int	heightpix	24
+}
+
+
+##-----------------------------------##
+##                Data               ##
+##-----------------------------------##
+GraphicsWindow {
+	string	pattern	"uptg20e.tga"
+
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	680
+	int	heightpix	390 #290
+	int	xpix	0
+	int	ypix	0
+	Name:CTP_GREY_TITLE_FONT {
+		string	parent	"c3_PopupTitle"
+		string	xanchor	"center"
+		string	yanchor	"top"
+		int	widthpct	50
+		int	heightpix	20
+		string	text	"str_ldl_GRAPHICS_OPTIONS"
+		int ypix 20
+	}
+
+	AcceptButton {
+		int	xpix	404
+		int	ypix	217
+		int	widthpix	48
+		int	heightpix	19
+		int	bevelwidth	0
+		string	imagebltflag	"chromakey"
+		string	image0	"upbb2303.tga"
+	}
+
+	# First Column of Switches
+	##############################################
+	WalkButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	90
+		stringtable {
+			string	string0	"str_ldl_Unit_Animation_Off"
+			string	string1	"str_ldl_Unit_Animation_On"
+		}
+	}
+	TradeButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	120
+		stringtable {
+			string	string0	"str_ldl_Animated_Trade_Routes_Off"
+			string	string1	"str_ldl_Animated_Trade_Routes_On"
+		}
+	}
+	WonderButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	150
+		stringtable {
+			string	string0	"str_ldl_Wonder_Movies_Off"
+			string	string1	"str_ldl_Wonder_Movies_On"
+		}
+	}
+	CityNamesButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	180
+		stringtable {
+			string	string0	"str_ldl_City_Names_Off"
+			string	string1	"str_ldl_City_Names_On"
+		}
+	}
+	#emod
+	ArmyNamesButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	210
+		stringtable {
+			string	string0	"str_ldl_Army_Names_Off"
+			string	string1	"str_ldl_Army_Names_On"
+		}
+	}
+	CivFlagButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	240
+		stringtable {
+			string	string0	"str_ldl_Civ_Flags_Off"
+			string	string1	"str_ldl_Civ_Flags_On"
+		}
+	}
+
+
+	# Second Column of Switches
+	##############################################
+
+	PoliticalBordersButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	90
+		stringtable {
+			string	string0	"str_ldl_ShowPoliticalBorders_Off"
+			string	string1	"str_ldl_ShowPoliticalBorders_On"
+		}
+	}
+	TradeRoutesButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	120
+		stringtable {
+			string	string0	"str_ldl_ShowTradeRoutes_Off"
+			string	string1	"str_ldl_ShowTradeRoutes_On"
+		}
+	}
+	CityInflenceButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	150
+		stringtable {
+			string	string0	"str_ldl_Show_City_Inflence_Off"
+			string	string1	"str_ldl_Show_City_Inflence_On"
+		}
+	}
+	GridButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	180
+		stringtable {
+			string	string0	"str_ldl_Grid_Off"
+			string	string1	"str_ldl_Grid_On"
+		}
+	}
+	#EMOD
+		SmoothButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	210
+		stringtable {
+			string	string0	"str_ldl_SmoothBorders_Off"
+			string	string1	"str_ldl_SmoothBorders_On"
+		}
+	}
+
+
+	#At bottom center
+	####################################
+	ResolutionButton:SP_BUTTON_SMALL{
+		int	widthpix	150
+		int	heightpix	21
+		int	bevelwidth	0
+		string	imagebltflag	"chromakey"
+#		int xpix	279
+		string	xanchor	"center"
+		int	ypix	325 #225
+		string	text	"str_ldl_RES_CHANGE_BUTTON"
+	}
+
+	#At top center
+	####################################
+	UnitSpeedSlider {
+		string	xanchor	"center"
+		int	ypix	50
+		int	widthpix	300
+		int	heightpix	40
+		int	maxxval	9
+		int	maxyval	0
+		int	pagexval	1
+		int	pageyval	1
+		int	xval	5
+		string	pattern	"uptg20e.tga"
+		string	type	"slider"
+		string	orientation	"horizontal"
+		bool	rigidthumb	TRUE
+		bool	quantizedrag	TRUE
+		int	minthumbsize	9
+		int	ticks	1
+		thumb {
+			int	widthpix	9
+			int	heightpix	40
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+		}
+	}
+	UnitSpeedName:CTP2_STANDARD_FONT {
+		int	xpix	30
+		int	ypix	60
+		int	widthpix	140
+		int	heightpix	20
+		string	pattern	"uptg20e.tga"
+		String	just	"right"
+		string	text	"str_ldl_Unit_Speed"
+	}
+}
+
+
+ScreenResScreen {
+	string	pattern	"uptg20e.tga"
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	235
+	int	heightpix	234
+	Name:CTP_GREY_TITLE_FONT {
+		string	parent	"c3_PopupTitle"
+		string	xanchor	"center"
+		int	widthpct	50
+		int	heightpix	20
+		int ypix 20
+		string	text	"str_ldl_RES_TITLE"
+	}
+	ResList:CTP2_LISTBOX {
+		int	xpix	21
+		int	ypix	55
+		int	widthpix	177
+		int	heightpix	89
+		int	columns	1
+		int	bevelwidth	1
+		int	beveltype	2
+		string	pattern	"uptg06e.tga"
+		header {
+			switch0 {
+				int	heightpix	0
+				int	widthpix	177
+				string	pattern	"uptg04e.tga"
+			}
+		}
+	}
+	Warning:CTP2_STANDARD_FONT {
+		int	fontcolorred	220
+		int	fontcolorgreen	10
+		int	fontcolorblue	10
+#		int	xpix	10
+#		int	ypix	125
+		int	xpix	20
+		int	ypix	155
+#		int	widthpix	215
+		int	widthpix	200
+		int	heightpix	30
+		string	text	"str_ldl_RES_REBOOT_WARNING"
+		string	textblttype	"fill"
+	}
+	ScreenResListItem {
+		int	widthpix	177
+		int	heightpix	20
+		ScreenRes:CTP2_STANDARD_FONT {
+			int	widthpix	177
+			int	heightpix	20
+		}
+	}
+}
+
+
+

@@ -3031,6 +3031,7 @@ UNIT_PARATROOPER {
    MaxMovePoints 100
    VisionRange 2
    UpgradeTo UNIT_HOVER_INFANTRY
+   EnableAdvance ADVANCE_ADV_INFANTRY_TACTICS
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4482,7 +4483,7 @@ UNIT_ELEPHANT_WARRIOR {
 ############################################################
 ## UNIT 73
 UNIT_SCOUT {
-   Description DESCRIPTION_WARRIOR
+   Description DESCRIPTION_UNIT_WARRIOR
    DefaultIcon ICON_UNIT_SCOUT
    DefaultSprite SPRITE_SCOUT
    Category UNIT_CATEGORY_FLANKER
@@ -4547,7 +4548,7 @@ UNIT_GUERRILLA {
    FoodHunger 0
    MaxMovePoints 100
    VisionRange 3
-   EnableAdvance ADVANCE_COMMUNISM
+   #EnableAdvance ADVANCE_COMMUNISM
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4558,8 +4559,11 @@ UNIT_GUERRILLA {
    DeathEffectsHappy
    IsSpecialForces
    CanBeGifted
+   GoodyHutExcluded
+   HiddenNationality
    ImmuneToHostileTerrain
-   CultureOnly CITY_STYLE_BARBARIAN
+   NeedsFeatToBuild FEAT_ADVANCE_MASS_PRODUCTION
+   #CultureOnly CITY_STYLE_BARBARIAN
    SoundSelect1 SOUND_SELECT1_FASCIST
    SoundSelect2 SOUND_SELECT2_FASCIST
    SoundMove SOUND_MOVE_FASCIST
@@ -4668,7 +4672,7 @@ UNIT_SAMURAI {
    ObsoleteAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ActiveDefenseRange 0
    LossMoveToDmgNone
-   CivilisationOnly JAPNESE
+   CivilisationOnly JAPANESE
    MaxFuel 0
    CanEntrench
    CanExpel
