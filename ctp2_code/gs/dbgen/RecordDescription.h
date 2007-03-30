@@ -41,8 +41,8 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef __RECORD_DESCRIPTION_H__
-#define __RECORD_DESCRIPTION_H__
+#ifndef RECORD_DESCRIPTION_H__
+#define RECORD_DESCRIPTION_H__
 
 #include <stdio.h>          // FILE
 
@@ -59,7 +59,7 @@ class   RecordDescription;
 class RecordDescription
 {
 public:
-	RecordDescription(char *name);
+	RecordDescription(char const * name);
 	~RecordDescription();
 
 	void SetBaseType(DATUM_TYPE type);
@@ -70,8 +70,8 @@ public:
 
 	void AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype);
 
-	void StartMemberClass(char *name);
-	void EndMemberClass(char *name);
+	void StartMemberClass(char const * name);
+	void EndMemberClass(char const * name);
 
 	void ExportHeader(FILE *outfile);
 	void ExportBits(FILE *outfile);

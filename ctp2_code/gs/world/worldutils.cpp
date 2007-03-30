@@ -77,7 +77,7 @@ double *worldutils_CreateSettings(const MapRecord *mapRec, sint32 level, sint32 
 	settings[ 9] = mapSetRec->GetSubcontinentHeight();
 	settings[10] = mapSetRec->GetBorderSize();
 	settings[11] = mapSetRec->GetFaultLines();
-	settings[12] = mapSetRec->GetFalutLength();
+	settings[12] = mapSetRec->GetFaultLength();
 	settings[13] = mapSetRec->GetNSBorderSize();
 
 	return settings;

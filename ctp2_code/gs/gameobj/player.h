@@ -718,8 +718,8 @@ public:
 	sint32 GetTotalUnitCost();
 	sint32 GetTotalGoldHunger();//EMOD
 
-	double GetHPModifier();
-	double GetSupportModifier();
+	double GetHPModifier() const;
+	double GetSupportModifier() const;
 
 	void GamestateDebug();
 

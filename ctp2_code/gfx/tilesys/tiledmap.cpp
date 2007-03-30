@@ -902,22 +902,21 @@ void TiledMap::LoadTileset(void)
 
 sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs, BOOL bsw, BOOL bw, BOOL bnw, BOOL cwater)
 {
-	sint16		tc, tn, tne, te, tse, ts, tsw, tw, tnw;
-	sint32		i;
-
 	if (!bc) return -1;
 
-	for (i=0; i<m_tileSet->GetNumRiverTransforms(); i++) {
+	sint16		tc, tn, tne, te, tse, ts, tsw, tw, tnw;
 
-		tn =	m_tileSet->GetRiverTransform((uint16)i, 2);
-		tne =	m_tileSet->GetRiverTransform((uint16)i, 5);
-		te =	m_tileSet->GetRiverTransform((uint16)i, 6);
-		tse =	m_tileSet->GetRiverTransform((uint16)i, 7);
-		tc =	m_tileSet->GetRiverTransform((uint16)i, 4);
-		ts =	m_tileSet->GetRiverTransform((uint16)i, 6);
-		tsw =	m_tileSet->GetRiverTransform((uint16)i, 3);
-		tw =	m_tileSet->GetRiverTransform((uint16)i, 0);
-		tnw =	m_tileSet->GetRiverTransform((uint16)i, 1);
+	for (uint16 i = 0; i < m_tileSet->GetNumRiverTransforms(); i++) 
+    {
+		tn =	m_tileSet->GetRiverTransform(i, 2);
+		tne =	m_tileSet->GetRiverTransform(i, 5);
+		te =	m_tileSet->GetRiverTransform(i, 6);
+		tse =	m_tileSet->GetRiverTransform(i, 7);
+		tc =	m_tileSet->GetRiverTransform(i, 4);
+		ts =	m_tileSet->GetRiverTransform(i, 6);
+		tsw =	m_tileSet->GetRiverTransform(i, 3);
+		tw =	m_tileSet->GetRiverTransform(i, 0);
+		tnw =	m_tileSet->GetRiverTransform(i, 1);
 
 		if (	((cwater && (tc == 2)) || (bc && (tc==1)))
 			&&	((bne && tne)	|| (!bne && !tne))
@@ -929,7 +928,6 @@ sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs
 			return (sint16)i;
 		}
 	}
-
 
 	return -1;
 }
@@ -968,38 +966,20 @@ sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs
 bool TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint16 e, uint16 se, 
 							 uint16 s, uint16 sw, uint16 w, uint16 nw, uint16 *newIndex)
 {
-	sint32		i;
+	for (uint16 i = 0; i < m_tileSet->GetNumTransforms(); i++) 
+    {
+		sint16  tn      = m_tileSet->GetTransform(i,2);
+		sint16  tne     = m_tileSet->GetTransform(i,5);
+		sint16  te      = m_tileSet->GetTransform(i,8);
+		sint16  tse     = m_tileSet->GetTransform(i,7);
+		sint16  tc      = m_tileSet->GetTransform(i,4);
+		sint16  ts      = m_tileSet->GetTransform(i,6);
+		sint16  tsw     = m_tileSet->GetTransform(i,3);
+		sint16  tw      = m_tileSet->GetTransform(i,0);
+		sint16  tnw     = m_tileSet->GetTransform(i,1);
+		sint16  tNew    = m_tileSet->GetTransform(i,9);
 
-	
-	for (i=0; i<m_tileSet->GetNumTransforms(); i++) {
-		sint16		tc, tn, tne, te, tse, ts, tsw, tw, tnw;
-		sint16		tNew;
-
-		tn = (sint16)m_tileSet->GetTransform((uint16)i,2);
-		tne = (sint16)m_tileSet->GetTransform((uint16)i,5);
-		te = (sint16)m_tileSet->GetTransform((uint16)i,8);
-		tse = (sint16)m_tileSet->GetTransform((uint16)i,7);
-		tc = (sint16)m_tileSet->GetTransform((uint16)i,4);
-		ts = (sint16)m_tileSet->GetTransform((uint16)i,6);
-		tsw = (sint16)m_tileSet->GetTransform((uint16)i,3);
-		tw = (sint16)m_tileSet->GetTransform((uint16)i,0);
-		tnw = (sint16)m_tileSet->GetTransform((uint16)i,1);
-
-		tNew = (sint16)m_tileSet->GetTransform((uint16)i,9);
-
-		if (
-
-
-
-
-
-
-
-
-
-
-
-			MATCH_GLOB(tc,c) &&
+		if (MATCH_GLOB(tc,c) &&
 			MATCH_GLOB(tn, n) &&
 			MATCH_GLOB(tne, ne) &&
 			MATCH_GLOB(te, e) &&
@@ -1007,40 +987,27 @@ bool TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint1
 			MATCH_GLOB(ts, s) &&
 			MATCH_GLOB(tsw, sw) &&
 			MATCH_GLOB(tw, w) &&
-			MATCH_GLOB(tnw, nw))
-			
+			MATCH_GLOB(tnw, nw)
+           )
 		{
 			if (tNew == k_TRANSFORM_TO_LIST_ID) {
 				
 				sint16		xform;
 				bool		legal = false;
-				sint32		j;
-				
-				
-				for (j=0; j<k_MAX_TRANSFORM_TO_LIST; j++) {
-					xform = (sint16)m_tileSet->GetTransform((uint16)i, (uint16)(k_TRANSFORM_TO_LIST_FIRST + j));
+
+                for (uint16 j = 0; j < k_MAX_TRANSFORM_TO_LIST; j++) 
+                {
+					xform = m_tileSet->GetTransform(i, k_TRANSFORM_TO_LIST_FIRST + j);
 					if (xform != k_TRANSFORM_TO_LIST_ID) legal = true;
 				}
 
 				
 				if (!legal) return false;
 
-				sint32		which = -2;
-				
-				TileInfo *ti = GetTileInfo(pos);
-				which = ti->GetTransform() % k_MAX_TRANSFORM_TO_LIST;
-				do { 
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
+				TileInfo *  ti      = GetTileInfo(pos);
+				sint32      which   = ti->GetTransform() % k_MAX_TRANSFORM_TO_LIST;
 
+				do { 
 					xform = (sint16)m_tileSet->GetTransform((uint16)i, (uint16)(k_TRANSFORM_TO_LIST_FIRST + which));
 					which--;
 					if(which < 0) {
@@ -1066,50 +1033,42 @@ bool TiledMap::TryTransforms(MapPoint &pos, uint16 c, uint16 n, uint16 ne, uint1
 
 void TiledMap::TryMegaTiles(MapPoint &pos, BOOL regenTilenum)
 {
-	uint16		pathPos, pathLen;
-	MapPoint	newPos = pos;
-	sint32		i,j;
-	MapPoint	goodPath[k_MAX_MEGATILE_STEPS];
-	uint16		goodPathTiles[k_MAX_MEGATILE_STEPS];
-	uint8		goodPathLastDirs[k_MAX_MEGATILE_STEPS];
-	uint8		goodPathNextDirs[k_MAX_MEGATILE_STEPS];
-	sint32		tilesTried;
-
-
-	MegaTileStep	step;
-	MapPoint	emptyPos(0,0);
-
-	
 	if (m_tileSet->GetNumMegaTiles() < 1) 
 		return;
 
-	i = rand() % m_tileSet->GetNumMegaTiles();
+	MapPoint	newPos = pos;
 
-	tilesTried = 0;
-	while (tilesTried < m_tileSet->GetNumMegaTiles()) {
+    MapPoint	goodPath[k_MAX_MEGATILE_STEPS];
+	uint16		goodPathTiles[k_MAX_MEGATILE_STEPS];
+	uint8		goodPathLastDirs[k_MAX_MEGATILE_STEPS];
+	uint8		goodPathNextDirs[k_MAX_MEGATILE_STEPS];
 
-		
-		for (j=0; j<k_MAX_MEGATILE_STEPS; j++) {
-			goodPath[j] = emptyPos;
-			goodPathTiles[j]  = 0;
-			goodPathLastDirs[j] = 0;
-			goodPathNextDirs[j] = 0;
-		}
+	MegaTileStep	step;
+	
+	sint32 i = rand() % m_tileSet->GetNumMegaTiles();
 
-		pathLen = m_tileSet->GetMegaTileLength(i);
-		pathPos = 0;
+	for 
+    (
+        sint32 tilesTried = 0; 
+        tilesTried < m_tileSet->GetNumMegaTiles(); 
+        ++tilesTried
+    ) 
+    {
+        std::fill(goodPath, goodPath + k_MAX_MEGATILE_STEPS, MapPoint());
+        std::fill(goodPathTiles, goodPathTiles + k_MAX_MEGATILE_STEPS, 0);
+        std::fill(goodPathLastDirs, goodPathLastDirs + k_MAX_MEGATILE_STEPS, 0);
+        std::fill(goodPathNextDirs, goodPathNextDirs + k_MAX_MEGATILE_STEPS, 0);
+
+		uint16  pathLen = m_tileSet->GetMegaTileLength(i);
+		uint16  pathPos = 0;
 		step = m_tileSet->GetMegaTileStep(i, pathPos);
 
-		while (pathPos < pathLen) {
-			sint32			terrainType;
-			TileInfo		*tileInfo;
-
-
-			tileInfo = GetTileInfo(newPos);
-			terrainType = tileInfo->GetTerrainType();
-			
+		while (pathPos < pathLen) 
+        {
+			TileInfo *  tileInfo    = GetTileInfo(newPos);
 			if (tileInfo->GetTileNum() >= k_FIRST_VARIATION) break;
 
+			sint32      terrainType = tileInfo->GetTerrainType();
 			if (terrainType != (sint32)step.terrainType || tileInfo->IsMega()) 
 				break;
 			
@@ -1142,24 +1101,19 @@ void TiledMap::TryMegaTiles(MapPoint &pos, BOOL regenTilenum)
 			}
 		}
 
-		if (pathPos == pathLen) {
-			TileInfo	*theTileInfo;
-
-			if(regenTilenum) {
-				
-				for (j=0; j<pathLen; j++) {
-					theTileInfo = g_theWorld->GetTileInfo(goodPath[j]);
+		if ((pathPos == pathLen) && regenTilenum)
+        {
+			for (uint16 j = 0; j < pathLen; j++) 
+            {
+				TileInfo *	theTileInfo = g_theWorld->GetTileInfo(goodPath[j]);
 					
-					theTileInfo->SetTileNum(goodPathTiles[j]);
-					
-					theTileInfo->SetLastMega(goodPathLastDirs[j]);
-					theTileInfo->SetNextMega(goodPathNextDirs[j]);
-				}
+				theTileInfo->SetTileNum(goodPathTiles[j]);
+				theTileInfo->SetLastMega(goodPathLastDirs[j]);
+				theTileInfo->SetNextMega(goodPathNextDirs[j]);
 			}
 		}
 		
 		if (++i >= m_tileSet->GetNumMegaTiles()) i = 0;
-		tilesTried++;
 	}
 }
 
@@ -4714,7 +4668,7 @@ bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 /* mapZ */)
 			PtInRect(&ur,point) || PtInRect(&lr,point));
 }
 
-inline Pixel16 TiledMap::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4)
+Pixel16 TiledMap::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4)
 {
 	short		r1, g1, b1, 
 				r2, g2, b2,
@@ -4882,7 +4836,7 @@ void TiledMap::ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1,
 	*pix2 = pixel2;
 }
 
-inline sint32 TiledMap::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
+sint32 TiledMap::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
 {
 	sint32			len;
 	Pixel16		tag = **rowData;

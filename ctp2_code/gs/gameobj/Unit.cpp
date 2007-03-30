@@ -412,7 +412,7 @@ MapPoint Unit::RetPos() const
 }
 
 
-double Unit::GetHPModifier()
+double Unit::GetHPModifier() const
 {
 	return g_player[GetOwner()]->GetHPModifier();
 }

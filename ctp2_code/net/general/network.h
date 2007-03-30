@@ -116,7 +116,7 @@ public:
 	int m_group;
 	int m_civpoints;
 	int m_settlers;
-	NSPlayerInfo(uint16 id, char *name, int civ, int group, int civpoints,
+	NSPlayerInfo(uint16 id, char const *name, int civ, int group, int civpoints,
 				 int settlers)
 	{
 		m_id = id;
@@ -166,7 +166,7 @@ public:
 	void SetLaunchFromNetFunc(BOOL fromSave);
 	void InitFromNetFunc();
 	void SetNSPlayerInfo(uint16 id,
-						 char *name,
+						 char const * name,
 						 int civ,
 						 int group,
 						 int civpoints,

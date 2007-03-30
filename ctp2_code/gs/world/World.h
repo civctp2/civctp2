@@ -414,7 +414,7 @@ public:
     void SetMovementType(const sint32 x, const sint32 y, const sint32 t); 
     uint32 GetMovementType(const MapPoint &pos); 
     
-    sint32 CanEnter(const MapPoint &pos, const uint32 flag) const;
+    bool CanEnter(const MapPoint &pos, const uint32 flag) const;
 
 	// @ToDo make this stuff dependent on TerrainDB or figure out whether this is already TerrainDB dependent
 	bool EnvIsWater(const uint32 env) const
@@ -593,17 +593,17 @@ public:
     
     void ChangeOwner(const MapPoint &point, sint32 fromOwner, sint32 toOwner);
     void CutImprovements(const MapPoint &point);
-    double GetDefenseBonus(const MapPoint &point);
-    BOOL IsAirfield(const MapPoint &point);
+    double GetDefenseBonus(const MapPoint &point) const;
+    bool IsAirfield(const MapPoint &point) const;
     
     
-    BOOL IsListeningPost(const MapPoint &point);
+    bool IsListeningPost(const MapPoint &point) const;
 
 
-    BOOL IsSafeFromNukes(const MapPoint &point);
-    BOOL IsRadar(const MapPoint &point);
-    BOOL IsHealUnits(const MapPoint &point);
-    BOOL IsFort(const MapPoint &point);
+    bool IsSafeFromNukes(const MapPoint &point) const;
+    bool IsRadar(const MapPoint &point) const;
+    bool IsHealUnits(const MapPoint &point) const;
+    bool IsFort(const MapPoint &point) const;
 
     
     void Serialize(CivArchive &archive) ;

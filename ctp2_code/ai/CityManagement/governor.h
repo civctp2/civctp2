@@ -376,8 +376,12 @@ private:
 	                        sint32 & total_gold,
 	                        sint32 & total_food) const;
 
-	bool inline TestSliderSettings(const SlidersSetting & sliders_setting,
-	                               SliderTests & slider_tests) const {
+	bool TestSliderSettings
+    (
+        SlidersSetting const &  sliders_setting,
+	    SliderTests &           slider_tests
+    ) const 
+    {
 		return TestSliderSettings(sliders_setting,
 		                          slider_tests.m_productionTest,
 		                          slider_tests.m_goldTest,

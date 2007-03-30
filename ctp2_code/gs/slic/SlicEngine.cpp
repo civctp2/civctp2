@@ -348,7 +348,7 @@ SlicEngine::~SlicEngine()
 }
 
 /// Reset the Slic handling and reload from file.
-/// \param  a_FileName  Name of the Slic file to load
+/// \param  a_File  Name of the top level Slic file to load
 /// \result File loaded and parsed successfully
 bool SlicEngine::Reload(std::basic_string<MBCHAR> const & a_File)
 {

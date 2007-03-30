@@ -54,8 +54,10 @@ c3_Button::c3_Button
 	void *cookie 
 )
 :
-	aui_ImageBase( ldlBlock ),                  /// @todo Find out why this is here
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),   /// @todo Find out why this is here
+    // virtual (see aui_Control)
+	aui_ImageBase   (ldlBlock ),                 
+	aui_TextBase    (ldlBlock, (MBCHAR *) NULL),   
+    // normal
 	aui_Button      (retval, id, ldlBlock, ActionFunc, cookie),
 	PatternBase     (ldlBlock, NULL),
     m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
@@ -81,8 +83,10 @@ c3_Button::c3_Button(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
-	aui_ImageBase( (sint32)0 ), /// @todo Find out why this is here
-	aui_TextBase( NULL ),       /// @todo Find out why this is here
+    // virtual (see aui_Control)
+	aui_ImageBase   ((sint32) 0),
+	aui_TextBase    (NULL),      
+    // normal
 	aui_Button      (retval, id, x, y, width, height, ActionFunc, cookie),
 	PatternBase     (pattern),
     m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
@@ -188,6 +192,10 @@ c3_EditButton::c3_EditButton
 	void *cookie 
 )
 :
+    // virtual (defined in aui_Control)
+	aui_ImageBase   (ldlBlock),
+	aui_TextBase    (ldlBlock, (MBCHAR const *) NULL),
+    // normal
 	c3_Button       (retval, id, ldlBlock, ActionFunc, cookie),
 	m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
 	m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
@@ -222,6 +230,10 @@ c3_EditButton::c3_EditButton
 	void *cookie 
 )
 :
+    // virtual (see aui_Control)
+	aui_ImageBase   ((sint32) 0),
+	aui_TextBase    (NULL),      
+    // normal
 	c3_Button       (retval, id, x, y, width, height, pattern, ActionFunc, cookie),
 	m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
 	m_min           (k_C3_EDITBUTTON_DEFAULTMIN),

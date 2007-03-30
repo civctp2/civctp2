@@ -53,7 +53,7 @@ private:
   	sint32  m_maxElements; 
 
 public: /// @todo Remove public access
-    sint32  m_nElements;    
+    sint32  m_nElements; // 1 reference left in Path::FlattenAstarList
 	T *     m_array;   
 	
 public: 
@@ -100,10 +100,9 @@ public:
 		Assert(i < m_nElements);
 		return m_array[i]; }
 
-	sint32 Find(const T &me) ;
+	sint32 Find(const T & me) const;
 
 	const sint32 Num() const  { return m_nElements; }
-    const sint32 ArraySize() const { return m_maxElements; } 
 
     void Concat(const DynamicArray<T> & addme);
 
@@ -119,7 +118,7 @@ public:
 	void InsertBeforeFlat(const T &addme, sint32 index);
     void InsertFlat(const T &addme);
 
-    bool IsPresent(const T &check);
+    bool IsPresent(const T &check) const;
 
     
     void Clear() { m_nElements = 0; }
@@ -163,7 +162,8 @@ template <class T> DynamicArray<T>::DynamicArray(const sint32 size)
 
 
 
-template <class T> DynamicArray<T>::DynamicArray (
+template <class T> DynamicArray<T>::DynamicArray 
+(
     const DynamicArray<T> &copyme 
 )
 :
@@ -198,20 +198,24 @@ template <class T> DynamicArray<T>::~DynamicArray()
 
 
 
-template <class T> DynamicArray<T> & DynamicArray<T>::operator= (
-                                      const DynamicArray<T> &copyme)
+template <class T> DynamicArray<T> & DynamicArray<T>::operator = 
+(
+    const DynamicArray<T> &copyme
+)
 {
-    Assert(this != &copyme);
-    Assert(copyme.m_array); 
-    Assert(0<copyme.m_maxElements);
-   
-    m_maxElements   = copyme.m_maxElements; 
-    m_nElements     = copyme.m_nElements; 
-    
-    delete [] m_array;
-    m_array         = new T[m_maxElements]; 
-    std::copy(copyme.m_array, copyme.m_array + m_nElements, m_array);
-    
+    if (this != &copyme)
+    {
+        Assert(copyme.m_array); 
+        Assert(0<copyme.m_maxElements);
+       
+        m_maxElements   = copyme.m_maxElements; 
+        m_nElements     = copyme.m_nElements; 
+        
+        delete [] m_array;
+        m_array         = new T[m_maxElements]; 
+        std::copy(copyme.m_array, copyme.m_array + m_nElements, m_array);
+    }
+
     return *this; 
 }
 
@@ -350,8 +354,9 @@ template <class T> void DynamicArray<T>::Insert(T *addme)
 template <class T> void DynamicArray<T>::InsertBefore(const T &addme, sint32 index)
 {
 	ExtendByOne();
-    sint32 i; 
-    for (i=(m_nElements-1); index <i; i--) { 
+
+    for (sint32 i = m_nElements - 1; index < i; i--) 
+    { 
         m_array[i] = m_array[i-1]; 
     } 
 
@@ -361,8 +366,9 @@ template <class T> void DynamicArray<T>::InsertBefore(const T &addme, sint32 ind
 template <class T> void DynamicArray<T>::InsertBeforeFlat(const T &addme, sint32 index)
 {
 	ExtendByOneFlat();
-    sint32 i; 
-    for (i=(m_nElements-1); index <i; i--) { 
+
+    for (sint32 i= m_nElements - 1; index < i; i--) 
+    { 
         m_array[i] = m_array[i-1]; 
     } 
 
@@ -371,14 +377,12 @@ template <class T> void DynamicArray<T>::InsertBeforeFlat(const T &addme, sint32
 
 
 template <class T> void DynamicArray<T>::InsertFlat(const T &addme)
-
 {
     ExtendByOneFlat();
     m_array[m_nElements-1] = addme; 
 }
 
 template <class T> void DynamicArray<T>::DelUpToIndex(const sint32 index)
-
 {
     Assert(0 <= index);
     Assert(index < m_nElements);
@@ -387,11 +391,11 @@ template <class T> void DynamicArray<T>::DelUpToIndex(const sint32 index)
 
     T * tmp = new T[new_size]; 
     
-    std::copy(m_array + index, m_array + (index + new_size), tmp); 
+    std::copy(m_array + index, (m_array + index) + new_size, tmp); 
 
-    for (sint32 i = index; i<m_nElements; i++) { 
+    for (sint32 i = index; i<m_nElements; i++) 
+    { 
         m_array[i].DelPointers(); 
-
     } 
 
     delete [] m_array; 
@@ -414,20 +418,18 @@ template <class T> bool DynamicArray<T>::DelIndex(const sint32 index)
     Assert(m_array != NULL); 
 
     m_array[index].DelPointers(); 
-    sint32 i; 
-    for (i=index; i<(m_nElements-1); i++) { 
+    for (sint32 i = index; i < m_nElements - 1; i++) 
+    { 
         m_array[i] = m_array[i+1]; 
     } 
 
-
     m_array[m_nElements-1].DelPointers(); 
    
-
-    
     if (((4 * k_FUDGE_MAX_ARMY_SIZE) < m_maxElements) && (m_nElements < (m_maxElements >> 2))) { 
         Resize(m_maxElements>>1); 
     } 
     m_nElements--;
+
     return true; 
 }
 
@@ -437,21 +439,16 @@ template <class T> bool DynamicArray<T>::DelIndexFlat(const sint32 index)
     Assert(index < m_nElements); 
     Assert(m_array != NULL); 
 
-    
-    
-
-	
-    sint32 i; 
 	const sint32 limit = m_nElements-1;
-    for (i=index; i<limit; i++) { 
+    for (sint32 i = index; i < limit; i++) 
+    { 
         m_array[i] = m_array[i+1]; 
     } 
    
-
- 
-    
-	
-    if ((m_nElements < (m_maxElements >> 2)) && ((4 * k_FUDGE_MAX_ARMY_SIZE) < m_maxElements)) { 
+    if ((m_nElements < (m_maxElements >> 2)) && 
+        ((4 * k_FUDGE_MAX_ARMY_SIZE) < m_maxElements)
+       ) 
+    { 
         ResizeFlat(m_maxElements>>1); 
     } 
     m_nElements--;
@@ -466,7 +463,8 @@ template <class T> bool DynamicArray<T>::DelIndexFlatNoShrink(const sint32 index
     Assert(m_array != NULL); 
 
 	const sint32 limit = m_nElements-1;
-    for (sint32 i=index; i<limit; i++) { 
+    for (sint32 i = index; i < limit; i++) 
+    { 
         m_array[i] = m_array[i+1]; 
     } 
     m_nElements--;
@@ -523,15 +521,19 @@ template <class T> void DynamicArray<T>::Change(const T &old, const T &newobj)
     }
 }
 	
-template <class T> bool DynamicArray<T>::IsPresent(const T &check)
+template <class T> bool DynamicArray<T>::IsPresent(const T &check) const
 {
 	Assert(m_array != NULL);
-	T * ptr     = m_array;
     T * last    = m_array + m_nElements;
-	for( ; (ptr != last) && (*ptr != check); ptr++)
-		;
+	for (T * ptr = m_array; ptr != last; ++ptr)
+    {
+        if (*ptr == check)
+        {
+            return true;
+        }
+    }
 
-	return ptr != last;
+    return false;
 }	
 
 
@@ -542,22 +544,20 @@ template <class T> bool DynamicArray<T>::IsPresent(const T &check)
 
 
 
-template <class T> sint32 DynamicArray<T>::Find(const T &me)
-	{
-	sint32	i ;
+template <class T> sint32 DynamicArray<T>::Find(const T &me) const
+{
+    T * ptr = m_array;
 
-	T	*ptr,
-		*last ;
+    for (sint32 i = 0; i < m_nElements; ++i)
+    {
+        if (me == *ptr++)
+        {
+            return i;
+        }
+    }
 
-	Assert(m_array != NULL) ;
-
-	for(i=0, ptr = m_array, last = m_array + m_nElements; (ptr != last) && (*ptr != me); ptr++, i++) ;
-
-	if (ptr != last)
-		return (i) ;
-
-	return (-1) ;
-	}
+	return -1;
+}
 
 
 
@@ -570,57 +570,46 @@ template <class T> sint32 DynamicArray<T>::Find(const T &me)
 template <class T> void DynamicArray<T>::KillList(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 
 { 
-    if (m_nElements <= 0) 
+    if (m_nElements <= 0)
         return; 
 
-    T* killList = new T[m_nElements];
-
-    
-    Assert(m_array!= NULL); 
-    int i; 
-    for (i=0; i<m_nElements; i++) { 
-        killList[i] = m_array[i];
-    } 
-
+    T * killList = new T[m_nElements];
+    std::copy(m_array, m_array + m_nElements, killList);
 
     int n = m_nElements;
-    
-    for (i=0; i<n; i++) {
+    int i;
+    for (i = 0; i < n; i++) 
+    {
         killList[i].Kill(cause, killedBy); 
     } 
 
-    for (i=0; i<m_maxElements; i++) { 
+    for (i = 0; i < m_maxElements; i++) 
+    { 
         killList[i].DelPointers(); 
-
     }
+
     delete [] killList;
     m_nElements = 0; 
 }
 
 
 template <class T> void DynamicArray<T>::KillList()
-
 { 
     if (m_nElements <= 0) 
         return; 
 
-    T* killList = new T[m_nElements];
+    T * killList = new T[m_nElements];
+    std::copy(m_array, m_array + m_nElements, killList);
 
-    Assert(m_array!= NULL); 
-    
-    int i; 
-    for (i=0; i<m_nElements; i++) { 
-       killList[i] = m_array[i]; 
-    } 
-    
     int n = m_nElements;
-    
-    for (i=0; i<n; i++) {
+    int i;
+    for (i = 0; i < n; i++) 
+    {
         killList[i].Kill(); 
     } 
-    for (i=0; i<m_maxElements; i++) { 
+    for (i=0; i<m_maxElements; i++) 
+    { 
         killList[i].DelPointers(); 
-
     }
     delete [] killList;
     m_nElements = 0; 
@@ -630,44 +619,37 @@ template <class T> void DynamicArray<T>::KillList()
 
 
 template <class T> void DynamicArray<T>::FastKillList()
-
 { 
-    Assert(m_array!= NULL); 
-
 	int n = m_nElements;
     for (int i = 0; i < n; i++) 
     {
         m_array[i].FastKill();
     } 
+
     m_nElements = 0; 
 }
 
 
 template <class T> void DynamicArray<T>::Serialize(CivArchive &archive)
 {
-    Assert(m_array != NULL); 
-
-    int	i ;
-    
-    if (archive.IsStoring()) {
-		archive<<m_maxElements ;
-		archive<<m_nElements ;
-
-        for (i=0; i<m_nElements; i++)
-			m_array[i].Serialize(archive) ;
-        
-    } else {
-		archive>>m_maxElements ;
+    if (archive.IsStoring()) 
+    {
+		archive << m_maxElements;
+		archive << m_nElements;
+    } 
+    else 
+    {
+		archive >> m_maxElements;
 		m_maxElements = std::max<sint32>(1, m_maxElements);
-		archive>>m_nElements ;
+		archive >> m_nElements;
 		delete [] m_array;    
-		m_array = new T[m_maxElements] ;
-
-
-        for (i=0; i<m_nElements; i++)
-  			m_array[i].Serialize(archive) ;
-        
+		m_array = new T[m_maxElements];
     }
-    
+
+    for (int i = 0; i < m_nElements; ++i)
+    {
+		m_array[i].Serialize(archive);
+    }
 }
+
 #endif

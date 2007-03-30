@@ -569,7 +569,7 @@ void Network::InitFromNetFunc()
 }
 
 void Network::SetNSPlayerInfo(uint16 id,
-							  char *name,
+							  char const *name,
 							  int civ,
 							  int group,
 							  int civpoints,

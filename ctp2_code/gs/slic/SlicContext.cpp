@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic context (values of variables)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -662,72 +662,55 @@ void SlicContext::CopyArray(sint32 *&to, sint32 *from,
 
 Unit SlicContext::GetCity(sint32 index) const
 {
-	if(m_eventArgs) {
-		Unit city;
-		if(m_eventArgs->GetCity(index, city))
-			return city;
+	Unit city;
+	if (m_eventArgs && m_eventArgs->GetCity(index, city))
+    {
+		return city;
 	}
 
-	if(!m_cityList)
-		return Unit();
-
-	return m_cityList->Access(index);
+    return m_cityList ? m_cityList->Access(index) : Unit();
 }
 
 sint32 SlicContext::GetNumCities() const
 {
-	if(!m_cityList)
-		return 0;
-
-	return m_cityList->Num();
+    return m_cityList ? m_cityList->Num() : 0;
 }
 
 Unit SlicContext::GetUnit(sint32 index) const
 {
-	if(m_eventArgs) {
-		Unit u;
-		if(m_eventArgs->GetUnit(index, u))
-			return u;
+	Unit u;
+	if (m_eventArgs && m_eventArgs->GetUnit(index, u))
+    {
+		return u;
 	}
 
-	if(!m_unitList)
-		return Unit();
-	return m_unitList->Access(index);
+    return m_unitList ? m_unitList->Access(index) : Unit();
 }
 
 sint32 SlicContext::GetNumUnits() const
 {
-	if(!m_unitList)
-		return 0;
-	return m_unitList->Num();
+    return m_unitList ? m_unitList->Num() : 0;
 }
 
 Army SlicContext::GetArmy(sint32 index) const
 {
-	if(!m_armyList)
-		return Army();
-	return m_armyList->Access(index);
+    return m_armyList ? m_armyList->Access(index) : Army();
 }
 
 sint32 SlicContext::GetNumArmies() const
 {
-	if(!m_armyList)
-		return 0;
-	return m_armyList->Num();
+    return m_armyList ? m_armyList->Num() : 0;
 }
 
 sint32 SlicContext::GetPlayer(sint32 index) const
 {
-	if(m_eventArgs) {
-		sint32 p;
-		if(m_eventArgs->GetPlayer(index, p))
-			return p;
+	sint32 p;
+	if (m_eventArgs && m_eventArgs->GetPlayer(index, p))
+    {
+		return p;
 	}
 
-	if(!m_playerList)
-		return -1;
-
-	return (*m_playerList)[index];
+    return m_playerList ? (*m_playerList)[index] : PLAYER_UNASSIGNED;
 }
 
 sint32 SlicContext::GetInt(sint32 index) const
@@ -862,32 +845,25 @@ void SlicContext::SetLocation(sint32 index, MapPoint &point)
 
 sint32 SlicContext::GetNumPlayers() const
 {
-	if(!m_playerList)
-		return 0;
-	return m_playerList->Num();
+    return m_playerList ? m_playerList->Num() : 0;
 }
 
 sint32 SlicContext::GetNumInts() const
 {
-	if(!m_intList)
-		return 0;
-	return m_intList->Num();
+    return m_intList ? m_intList->Num() : 0;
 }
 
 sint32 SlicContext::GetNumUnitRecords() const
 {
-	if(!m_unitRecordList) {
-		return 0;
-	}
-	return m_unitRecordList->Num();
+    return m_unitRecordList ? m_unitRecordList->Num() : 0;
 }
 
 AdvanceType SlicContext::GetAdvance(sint32 index) const
 {
-	if(m_eventArgs) {
-		AdvanceType a;
-		if(m_eventArgs->GetAdvance(index, a))
-			return a;
+	AdvanceType a;
+	if (m_eventArgs && m_eventArgs->GetAdvance(index, a))
+    {
+		return a;
 	}
 
 	if(!m_advanceList)
@@ -904,22 +880,18 @@ sint32 SlicContext::GetNumAdvances() const
 
 MapPoint SlicContext::GetLocation(sint32 index) const
 {
-	if(m_eventArgs) {
-		MapPoint pos;
-		if(m_eventArgs->GetPos(index, pos))
-			return pos;
+	MapPoint pos;
+	if (m_eventArgs && m_eventArgs->GetPos(index, pos))
+    {
+		return pos;
 	}
 
-	if(!m_locationList)
-		return MapPoint(0,0);
-	return m_locationList->Access(index);
+    return m_locationList ? m_locationList->Access(index) : MapPoint();
 }
 
 sint32 SlicContext::GetNumLocations() const
 {
-	if(!m_locationList)
-		return 0;
-	return m_locationList->Num();
+    return m_locationList ? m_locationList->Num() : 0;
 }
 
 sint32 SlicContext::GetCalamity(sint32 index) const
@@ -1009,17 +981,19 @@ void SlicContext::SetGovernment(sint32 index, sint32 &gov)
 
 sint32 SlicContext::GetNumGoods() const
 {
-	return m_goodList->Num();
+    return m_goodList ? m_goodList->Num() : 0;
 }
 
-BOOL SlicContext::HaveGoodOfType(sint32 good) const
+bool SlicContext::HaveGoodOfType(sint32 good) const
 {
-	sint32 i;
-	for(i = 0; i < m_goodList->Num(); i++) {
-		if(m_goodList->Access(i) == good)
-			return TRUE;
+	sint32 n    = GetNumGoods();
+	for(sint32 i = 0; i < n; i++) 
+    {
+		if (m_goodList->Access(i) == good)
+			return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 sint32 SlicContext::GetRank(sint32 index) const
@@ -1067,16 +1041,16 @@ sint32 SlicContext::GetNumActions() const
 	return m_numActions;
 }
 
-BOOL SlicContext::ConcernsPlayer(PLAYER_INDEX player)
+bool SlicContext::ConcernsPlayer(PLAYER_INDEX player) const
 {
 	if(!m_playerList)
-		return FALSE;
+		return false;
 
 	for(sint32 i = 0; i < m_playerList->Num(); i++) {
 		if((*m_playerList)[i] == player)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 void SlicContext::AddAgreement(const ai::Agreement &agreement)

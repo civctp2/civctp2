@@ -57,7 +57,7 @@
 #include "ctpdb.h"
 #include "RecordDescription.h"
 
-MemberClass::MemberClass(char *name)
+MemberClass::MemberClass(char const * name)
 {
 	strcpy(m_name, name);
 	m_numBits = 0;

@@ -44,6 +44,7 @@
 
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
+#include "ctpdb.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -61,37 +62,34 @@
 #include <time.h>
 #include <errno.h>
 
-#include "ctpdb.h"
 #include "RecordDescription.h"
 
-RecordDescription *g_record = NULL;
+RecordDescription * g_record = NULL;
 
-#ifndef _MAX_PATH
-#if defined(PATH_MAX)
-#define _MAX_PATH PATH_MAX
+#if !defined(PATH_MAX)
+#if defined(_MAX_PATH)
+#define PATH_MAX _MAX_PATH
 #else
-#define _MAX_PATH 1024
-#endif  // PATH_MAX
+#define PATH_MAX 1024
 #endif  // _MAX_PATH
+#endif  // PATH_MAX
 
 #ifndef FREAD_BUF_SIZE
 #define FREAD_BUF_SIZE 16384
 #endif
 
-static char s_output_dir[1 + _MAX_PATH];
+static char s_output_dir[1 + PATH_MAX];
 
 static int copy_file(char *srcFName, char *dstFName)
 {
 	Assert(srcFName);
 	Assert(dstFName);
 
-	char buf[FREAD_BUF_SIZE];
-	FILE *inFile = fopen(srcFName, "r");
-
+	FILE * inFile = fopen(srcFName, "r");
 	Assert(inFile);
 	if (!inFile)
 	{
-		fprintf(stderr, "\ndbgen: file '%s' not found", srcFName);
+		fprintf(stderr, "\ndbgen: file '%s' not found. ", srcFName);
 		return -1;
 	}
 
@@ -102,6 +100,7 @@ static int copy_file(char *srcFName, char *dstFName)
 		return -1;
 	}
 
+	char buf[FREAD_BUF_SIZE];
 	size_t read;
 	size_t wrote;
 
@@ -129,7 +128,7 @@ static int copy_file(char *srcFName, char *dstFName)
 void db_set_output_dir(char *dir)
 {
     memset(s_output_dir, '\0', sizeof(s_output_dir));
-	strncpy(s_output_dir, dir, _MAX_PATH);
+	strncpy(s_output_dir, dir, PATH_MAX);
 }
 
 static const char *db_get_code_directory()
@@ -139,6 +138,7 @@ static const char *db_get_code_directory()
 
 void db_start_record(char *name)
 {
+	delete g_record;
 	g_record = new RecordDescription(name);
 }
 
@@ -163,12 +163,11 @@ FILE *db_open_file(const char *filename)
 
 bool db_files_differ(char *newFilePath, char *oldFilePath)
 {
-	FILE *n, *o;
-	n = fopen(newFilePath, "r");
-	if(!n) return true;
+	FILE * n = fopen(newFilePath, "r");
+	if (!n) return true;
 
-	o = fopen(oldFilePath, "r");
-	if(!o) {
+	FILE * o = fopen(oldFilePath, "r");
+	if (!o) {
 		fclose(n);
 		return true;
 	}
@@ -185,8 +184,9 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 			fclose(o);
 			return true;
 		}
-		sint32 i;
-		for(i = 0; i < nr; i++) {
+
+		for (sint32 i = 0; i < nr; i++) 
+		{
 			if(nb[i] != ob[i]) {
 				fclose(n);
 				fclose(o);
@@ -198,17 +198,17 @@ bool db_files_differ(char *newFilePath, char *oldFilePath)
 	fclose(o);
 	return false;
 }
-void db_maybe_copy(char *newFilePath)
+
+void db_maybe_copy(char * newFilePath)
 {
-	char oldpath[_MAX_PATH];
-	getcwd(oldpath, _MAX_PATH);
+	char oldpath[PATH_MAX];
+	getcwd(oldpath, PATH_MAX);
 
 	chdir(db_get_code_directory());
 
-	char oldFilePath[_MAX_PATH];
-
-
+	char oldFilePath[PATH_MAX];
 	strcpy(oldFilePath, newFilePath);
+
 	char *dot = strrchr(oldFilePath, '.');
 	if(!dot) {
 		chdir(oldpath);
@@ -216,91 +216,63 @@ void db_maybe_copy(char *newFilePath)
 	}
 	*dot = 0;
 
-	if(db_files_differ(oldFilePath, newFilePath)) {
-		char backupPath[_MAX_PATH] = { 0 };
-		sprintf(backupPath, "%s.old", oldFilePath);
-#ifdef _DEBUG
-		printf("%s -> %s\n", oldFilePath, backupPath);
-#endif
-		if (0 != copy_file(oldFilePath, backupPath)) {
-		  fprintf(stderr, "%s\n", strerror(errno));
-		}
-#ifdef _DEBUG
-		printf("%s -> %s\n", newFilePath, oldFilePath);
-#endif
-		if (0 != copy_file(newFilePath, oldFilePath)) {
-		  fprintf(stderr, "%s\n", strerror(errno));
-		}
-	}
-#if 0
-	sprintf(cmd, "diff -q %s %s", oldFilePath, newFilePath);
-	fprintf(stderr, "%s\n", cmd);
-	fflush(stderr);
-	FILE *diffOutput = _popen(cmd, "r");
-	if(!diffOutput)
-		fprintf(stderr, "Foo!\n");
-	Assert(diffOutput);
-	FILE *oldFile = fopen(oldFilePath, "r");
-	if(!oldFile) {
-		fclose(diffOutput);
-		diffOutput = NULL;
-	} else {
-		fclose(oldFile);
-	}
+	FILE *  oldFile     = fopen(oldFilePath, "r");
+    bool    hasOldFile  = oldFile != NULL;
+    bool    hasChanges  = !hasOldFile;
 
-	if(!diffOutput) {
-		fprintf(stderr, "Diff failed (not in path?), copying\n", newFilePath, oldFilePath);
-		sprintf(cmd, "copy %s %s.old", oldFilePath, oldFilePath);
-		system(cmd);
-		sprintf(cmd, "copy %s %s", newFilePath, oldFilePath);
-		system(cmd);
-	} else {
-		if(feof(diffOutput)) {
-			fprintf(stderr, "No output\n");
-		}
-		while(!feof(diffOutput)) {
-			line[0] = 0;
-			fgets(line, 1024, diffOutput);
-			fprintf(stderr, "%s\n", line);
-			if(strstr(line, "differ") ||
-			   strstr(line, "No such file or directory")) {
-				fprintf(stderr, "%s and %s differ, copying\n", newFilePath, oldFilePath);
-				sprintf(cmd, "copy %s %s.old", oldFilePath, oldFilePath);
-				system(cmd);
-				sprintf(cmd, "copy %s %s", newFilePath, oldFilePath);
-				system(cmd);
-				break;
+    if (hasOldFile)
+    {
+        fclose(oldFile);
+        hasChanges = db_files_differ(oldFilePath, newFilePath);
+
+	    if (hasChanges) 
+	    {
+			char backupPath[PATH_MAX] = { 0 };
+			sprintf(backupPath, "%s.old", oldFilePath);
+
+#ifdef _DEBUG
+			printf("%s -> %s\n", oldFilePath, backupPath);
+#endif
+			if (0 != copy_file(oldFilePath, backupPath)) 
+			{
+			    fprintf(stderr, "%s\n", strerror(errno));
 			}
 		}
 	}
-#endif
-	unlink(newFilePath);
+    // else No action: first time generation
 
+    if (hasChanges)
+    {
+#ifdef _DEBUG
+		printf("%s -> %s\n", newFilePath, oldFilePath);
+#endif
+		if (0 != copy_file(newFilePath, oldFilePath)) 
+		{
+		    fprintf(stderr, "%s\n", strerror(errno));
+		}
+    }
+
+	unlink(newFilePath);
 	chdir(oldpath);
 }
 
 void db_end_record(char *name)
 {
-	char filename[1024];
-	FILE *outfile = NULL;
-	
-	sprintf(filename, "%s%s%sRecord.h.new",
-	        db_get_code_directory(), FILE_SEP, name);
+	char filename[PATH_MAX];
+	sprintf(filename, "%s" FILE_SEP "%sRecord.h.new",
+	        db_get_code_directory(), name);
 
-	outfile = db_open_file(filename);
+	FILE * outfile = db_open_file(filename);
 	if(!outfile)
 		return;
 
 	g_record->ExportHeader(outfile);
-
 	fclose(outfile);
 
-	
 	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
-
 	
-	sprintf(filename, "%s%s%sRecord.cpp.new",
-	        db_get_code_directory(), FILE_SEP, name);
+	sprintf(filename, "%s" FILE_SEP "%sRecord.cpp.new",
+	        db_get_code_directory(), name);
 
 	outfile = db_open_file(filename);
 	Assert(outfile);
@@ -308,14 +280,13 @@ void db_end_record(char *name)
 		return;
 
 	g_record->ExportCode(outfile);
-	
 	fclose(outfile);
 
 	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
 
-	sprintf(filename, "%s%s%sRecord.stamp",
-	        db_get_code_directory(), FILE_SEP, name);
-	FILE *stamp = fopen(filename, "w");
+	sprintf(filename, "%s" FILE_SEP "%sRecord.stamp",
+	        db_get_code_directory(), name);
+	FILE * stamp = fopen(filename, "w");
 	Assert(stamp);
 	if(stamp) {
 		fprintf(stamp, "//%d\n", time(0));
@@ -366,26 +337,37 @@ void db_end_member_class(char *name)
 	g_record->EndMemberClass(name);
 }
 
-void db_add_bits(struct namelist *list, struct fieldsize *size)
+void db_add_simple
+(
+	DATUM_TYPE 			a_Type,
+	struct namelist * 	a_List,
+	struct fieldsize *	a_Size
+)
 {
 	Assert(g_record);
-	while(list) {
-		g_record->AddDatum(DATUM_BIT, list, size->minSize, size->maxSize);
-		struct namelist *next = list->next;
-		free(list);
-		list = next;
+	for
+	(
+		struct namelist *	it	= a_List;
+		it;
+		/* it updated in loop */
+	)
+	{
+		struct namelist * toAdd	= it;
+		it = it->next;
+
+		g_record->AddDatum(a_Type, toAdd, a_Size->minSize, a_Size->maxSize);
+		free(toAdd);
 	}
+}	
+
+void db_add_bits(struct namelist *list, struct fieldsize *size)
+{
+	db_add_simple(DATUM_BIT, list, size);
 }
 
 void db_add_ints(struct namelist *list, struct fieldsize *size)
 {
-	Assert(g_record);
-	while(list) {
-		g_record->AddDatum(DATUM_INT, list, size->minSize, size->maxSize);
-		struct namelist *next = list->next;
-		free(list);
-		list = next;
-	}
+	db_add_simple(DATUM_INT, list, size);
 }
 
 void db_add_ints_prebody(struct namelist *list, struct fieldsize *size)
@@ -401,13 +383,7 @@ void db_add_ints_prebody(struct namelist *list, struct fieldsize *size)
 
 void db_add_floats(struct namelist *list, struct fieldsize *size)
 {
-	Assert(g_record);
-	while(list) {
-		g_record->AddDatum(DATUM_FLOAT, list, size->minSize, size->maxSize);
-		struct namelist *next = list->next;
-		free(list);
-		list = next;
-	}
+	db_add_simple(DATUM_FLOAT, list, size);
 }
 
 void db_add_records(char *recType, struct namelist *list, fieldsize *size)
@@ -436,35 +412,17 @@ void db_add_structs(char *structType, struct namelist *list, fieldsize *size)
 
 void db_add_filenames(struct namelist *list, fieldsize *size)
 {
-	Assert(g_record);
-	while(list) {
-		g_record->AddDatum(DATUM_FILE, list, size->minSize, size->maxSize);
-		struct namelist *next = list->next;
-		free(list);
-		list = next;
-	}
+	db_add_simple(DATUM_FILE, list, size);
 }
 
 void db_add_strings(struct namelist *list, struct fieldsize *size)
 {
-	Assert(g_record);
-	while(list) {
-		g_record->AddDatum(DATUM_STRING, list, size->minSize, size->maxSize);
-		struct namelist *next = list->next;
-		free(list);
-		list = next;
-	}
+	db_add_simple(DATUM_STRING, list, size);
 }
 
 void db_add_string_ids(struct namelist *list, struct fieldsize *size)
 {
-	Assert(g_record);
-	while(list) {
-		g_record->AddDatum(DATUM_STRINGID, list, size->minSize, size->maxSize);
-		struct namelist *next = list->next;
-		free(list);
-		list = next;
-	}
+	db_add_simple(DATUM_STRINGID, list, size);
 }
 
 void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpairtype *pairtype)
@@ -481,13 +439,11 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 void db_add_grouped_bits(char *groupName, struct namelist *list)
 {
 	Assert(g_record);
-
 	g_record->AddGroupedBits(groupName, list);
 }
 
 void db_add_parse_num(sint32 parseNum)
 {
 	Assert(g_record);
-
 	g_record->SetParseNum(parseNum);
 }

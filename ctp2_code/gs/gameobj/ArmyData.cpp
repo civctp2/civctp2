@@ -114,107 +114,91 @@
 #include "c3.h"
 #include "ArmyData.h"
 
-#include <algorithm>            // std::min
-#include "World.h"
-#include "player.h"
-#include "director.h"
-#include "SelItem.h"
-
-#include "terrainutil.h"
-#include "RandGen.h"
-#include "Cell.h"
+#include "advanceutil.h"
 #include "Agreement.h"
-#include "QuadTree.h"
-#include "UnitData.h"
-#include "ConstDB.h"
-#include "UnitAstar.h"
-#include "AICause.h"
-
-#include "GoodyHuts.h"
-#include "SlicSegment.h"
-#include "SlicEngine.h"
-#include "SlicObject.h"
-#include "QuickSlic.h"
-#include "tiledmap.h"
-#include "TurnCnt.h"
-#include "HappyTracker.h"
-
-#include "CTP2Combat.h"
-
-#include "TradePool.h"
-#include "UnitActor.h"
-#include "ArmyPool.h"
-#include "Advances.h"
-#include "AdvanceRecord.h"
-#include "StrDB.h"
-#include "WonderRecord.h"
-#include "TerrainRecord.h"
-#include "GameSettings.h"
-
-#include "UnitRecord.h"
-#include "SpecialAttackInfoRecord.h"
-
-#include "network.h"
-#include "net_order.h"
-#include "net_action.h"
-#include "net_info.h"
-
-#include "soundmanager.h"
-#include "gamesounds.h"
-#include "Order.h"
-#include "cellunitlist.h"
-
+#include "AgreementMatrix.h"
 #include "AgreementPool.h"
-extern AgreementPool *g_theAgreementPool;
-
-#include "pollution.h"
-extern Pollution *g_thePollution;
-
-#include "GameEventManager.h"
+#include "AICause.h"
+#include <algorithm>            // std::min
+#include "AdvanceRecord.h"
+#include "Advances.h"
+#include "ArmyPool.h"
+#include "Barbarians.h"
+#include "BuildingRecord.h"
+#include "buildingutil.h"
+#include "Cell.h"
+#include "cellunitlist.h"
+#include "ConstDB.h"
+#include "CTP2Combat.h"
+#include "ctpagent.h"
+#include "ctpai.h"
+#include "ctpgoal.h"
+#include "DifficultyRecord.h"
+#include "Diplomacy_Log.h"
+#include "Diplomat.h"
+#include "director.h"
+#include <functional>
 #include "GameEventArgList.h"
 #include "GameEventArgument.h"
-
-#include "unitutil.h"
-#include "advanceutil.h"
-
-#include "MoveFlags.h"
-
-#include "SpecialEffectRecord.h"
-#include "wonderutil.h"
-
-#include "ctpai.h"
-#include "OrderRecord.h"
-#include "AgreementMatrix.h"
-
-#include "SoundRecord.h"
-
-#include "Squad.h"
-#include "ctpagent.h"
-#include "ctpgoal.h"
-
-#include "TradeRouteData.h"
+#include "GameEventManager.h"
+#include "GameSettings.h"
+#include "gamesounds.h"
 #include "Gold.h"
-#include "buildingutil.h"
-#include "Diplomat.h"
+#include "GoodyHuts.h"
+#include "GovernmentRecord.h" 
+#include "HappyTracker.h"
+#include "mapanalysis.h"
+#include "MaterialPool.h" 
+#include "MoveFlags.h"
+#include "net_action.h"
+#include "net_info.h"
+#include "net_order.h"
+#include "network.h"
+#include "Order.h"
+#include "OrderRecord.h"
+#include "player.h"
+#include "pollution.h"
+#include "QuadTree.h"                   // g_theUnitTree
+#include "QuickSlic.h"
+#include "profileDB.h"
 #include "radarmap.h"
-#include "GovernmentRecord.h"   //EMOD to access government data
-#include "DifficultyRecord.h"   //EMOD
-#include "TerrImprovePool.h"    //EMOD
-#include "TerrainImprovementRecord.h"  //EMOD
-#include "MaterialPool.h"  //EMOD
-#include "BuildingRecord.h" //EMOD
-#include "Barbarians.h" //EMOD
-#include "RiskRecord.h"  //add for barb code
-#include "mapanalysis.h" //emod
+#include "RandGen.h"                    // g_rand
+#include "RiskRecord.h"
+#include "SelItem.h"
+#include "SlicEngine.h"
+#include "SlicObject.h"
+#include "SlicSegment.h"
+#include "soundmanager.h"               // g_soundManager
+#include "SoundRecord.h"
+#include "SpecialAttackInfoRecord.h"
+#include "SpecialEffectRecord.h"
+#include "Squad.h"
+#include "StrDB.h"
+#include "TerrainImprovementRecord.h" 
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "TerrImprovePool.h" 
+#include "tiledmap.h"
+#include "TradePool.h"
+#include "TradeRouteData.h"
+#include "TurnCnt.h"
+#include "UnitActor.h"
+#include "UnitAstar.h"
+#include "UnitData.h"
+#include "UnitRecord.h"
+#include "unitutil.h"
+#include "WonderRecord.h"
+#include "wonderutil.h"
+#include "World.h"
 
-BOOL g_smokingCrack = TRUE;
-BOOL g_useOrderQueues = TRUE;
+extern AgreementPool *  g_theAgreementPool;
+extern Diplomacy_Log *  g_theDiplomacyLog;
+extern Pollution *      g_thePollution;
+extern UnitAstar *      g_theUnitAstar;
 
-extern RandomGenerator *g_rand ;
-extern QuadTree<Unit> *g_theUnitTree;
-extern UnitAstar *g_theUnitAstar;
 
-extern SoundManager *g_soundManager;
+BOOL    g_smokingCrack      = TRUE;
+BOOL    g_useOrderQueues    = TRUE;
 
 #define N_F  (1 << NORTH)
 #define NE_F (1 << NORTHEAST)
@@ -225,10 +209,6 @@ extern SoundManager *g_soundManager;
 #define W_F  (1 << WEST)
 #define NW_F (1 << NORTHWEST)
 
-
-#include "profileDB.h"
-#include "Diplomacy_Log.h"
-extern Diplomacy_Log *g_theDiplomacyLog;
 
 namespace
 {
@@ -842,13 +822,24 @@ bool ArmyData::CargoCanEnter(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 size_t ArmyData::CountMovementTypeSea() const
 {
-    sint16 count = 0;
+    return std::count_if(m_array, m_array + m_nElements, 
+                         std::mem_fun_ref<bool, Unit>(&Unit::GetMovementTypeSea)
+                        );
+/// @todo Verify that the above works with MSVC6. If not, replace with the
+///       the following:
+#if 0 
+    size_t count = 0;
 
-    for (int i = 0; i < m_nElements; i++)
-        if(m_array[i].GetMovementTypeSea())
-            count++;
+    for (int i = 0; i < m_nElements; ++i)
+    {
+        if (m_array[i].GetMovementTypeSea())
+        {
+            ++count;
+        }
+    }
 
     return count;
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -1390,9 +1381,8 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
         m_array[0].GetDBRec()->HasNuclearAttack())
         return false;
 
-    MapPoint topleft = pos;
-    double maxActiveDefenseRange = unitutil_MaxActiveDefenseRange();
-    topleft.x -= sint16(maxActiveDefenseRange);
+    sint32 maxActiveDefenseRange = unitutil_MaxActiveDefenseRange();
+    MapPoint topleft(pos.x - maxActiveDefenseRange, pos.y);
 
     UnitDynamicArray possibleDefenders;
     g_theUnitTree->SearchRect(possibleDefenders, topleft,
@@ -1404,25 +1394,21 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
 
     UnitDynamicArray activeDefenders;
     GetActiveDefenders(possibleDefenders, activeDefenders, cargoPodCheck);
-    sint32 defenderOwner = -1;
-    sint32 owner = GetOwner();
+    sint32 defenderOwner    = PLAYER_UNASSIGNED;
+    sint32 owner            = GetOwner();
 
     UnitDynamicArray deadDefenders;
     sint32 i, j, n = activeDefenders.Num();
-    for(i = 0; i < n; i++) {
-        if(!activeDefenders[i].CanSee(Army(m_id)))
+    for (i = 0; i < n; i++) 
+    {
+        Unit        ta      = activeDefenders[i];
+        if (!ta.CanSee(Army(m_id)))
             continue;
-
-        MapPoint dpos;
-        activeDefenders[i].GetPos(dpos);
-
-        Unit ta = activeDefenders[i];
-        Unit td = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
-
-
+        Unit        td      = 
+            GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+        MapPoint    dpos    = ta.RetPos();
 
         g_director->AddAttackPos(ta, m_pos);
-
         g_slicEngine->RunActiveDefenseTriggers(ta, td);
 
         sint32 numAttacks = activeDefenders[i].CanActivelyDefend(Army(m_id));
@@ -1760,7 +1746,6 @@ void ArmyData::BeginTurn()
 bool ArmyData::CanFight(CellUnitList &defender)
 {
 	sint32 i;
-	sint32 j;
 
 	bool haveCombatUnits = false;
     for(i = 0; i < m_nElements; i++) {
@@ -1779,7 +1764,7 @@ bool ArmyData::CanFight(CellUnitList &defender)
     }
 
     for(i = 0; i < m_nElements; i++) {
-        for(j = 0; j < defender.Num(); j++) {
+        for(sint32 j = 0; j < defender.Num(); j++) {
 			const UnitRecord *rec = m_array[i].GetDBRec();
             if(defender[j].IsSubmarine() && !rec->GetCanAttackUnderwater())
                 continue;
@@ -2077,19 +2062,16 @@ ORDER_RESULT ArmyData::AssassinateRuler(const MapPoint &point)
 //----------------------------------------------------------------------------
 Unit ArmyData::GetAdjacentCity(const MapPoint &point) const
 {
-	Cell *cell = g_theWorld->GetCell(point);
+	Cell *  cell = g_theWorld->GetCell(point);
 
-	if(cell->GetCity().m_id == 0)
-		return Unit();
-
-	MapPoint mypos;
-	GetPos(mypos);
-	
-	if(!point.IsNextTo(mypos) && point != mypos) {
+	if (cell && ((point == m_pos) || point.IsNextTo(m_pos))) 
+    {
+        return cell->GetCity();
+    }
+    else
+    {
 		return Unit();
 	}
-
-	return cell->GetCity();
 }
 
 //----------------------------------------------------------------------------
@@ -2318,8 +2300,6 @@ bool ArmyData::CanBeSued() const
 ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 {
 	sint32 uindex;
-
-	
 	if(!CanSue(uindex))
 		return ORDER_RESULT_ILLEGAL;
 
@@ -5803,13 +5783,11 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 //----------------------------------------------------------------------------
 bool ArmyData::CanInterceptTrade(uint32 &uindex) const
 {
-	sint32 i;
-    for (i = m_nElements - 1; i>= 0; i--) { 
-		
+    for (sint32 i = m_nElements - 1; i>= 0; i--) 
+    { 
         if (m_array[i].CanInterceptTrade())
 		{
 			uindex = i;
-
 			return true;
 		}
 	}
@@ -5839,64 +5817,68 @@ bool ArmyData::CanInterceptTrade(uint32 &uindex) const
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::InterceptTrade()
 {
-	sint32 i;
-	sint32 j;
 	sint32 typeIndex = g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_PIRATE");
 	sint32 effectId = g_theSpecialEffectDB->Get(typeIndex)->GetValue();
 	sint32 soundId = g_theSoundDB->FindTypeIndex("SOUND_ID_SLAVE_RAIDS");
 
-    for (i = m_nElements - 1; i>= 0; i--) { 
-		
+    for (sint32 i = m_nElements - 1; i>= 0; i--) 
+    { 
         if (m_array[i].CanInterceptTrade() &&
 			m_array[i].CanPerformSpecialAction())
-			{
-				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-				   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-					Cell *cell = g_theWorld->GetCell(m_pos);
-					for(j = 0; j < cell->GetNumTradeRoutes(); j++) {
-						sint32 route_owner = cell->GetTradeRoute(j).GetOwner();
-						if (AgreementMatrix::s_agreements.HasAgreement(
-							route_owner, 
-							m_owner, 
-							PROPOSAL_OFFER_STOP_PIRACY))
-						{
-							char turnBuf[32];
-							
-							SlicObject *so = new SlicObject("12IABreakNoPiracy");
-							so->AddRecipient(m_owner);
-							so->AddCivilisation(m_owner);
-							so->AddCivilisation(route_owner );
-							so->AddUnit(m_array[i]);
-							so->AddLocation(m_pos);
-							so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
-							so->AddAction(turnBuf);
-							g_slicEngine->Execute(so);
-							g_selected_item->ForceDirectorSelect(Army(m_id));
-							return ORDER_RESULT_ILLEGAL;
-						}
+		{
+			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) 
+            {
+				Cell *cell = g_theWorld->GetCell(m_pos);
+				for (sint32 j = 0; j < cell->GetNumTradeRoutes(); j++) 
+                {
+					sint32 route_owner = cell->GetTradeRoute(j).GetOwner();
+					if (AgreementMatrix::s_agreements.HasAgreement(
+						route_owner, 
+						m_owner, 
+						PROPOSAL_OFFER_STOP_PIRACY))
+					{
+                        /// @todo Check what is missing here. turnBuf is never
+                        ///       initialised, so the effect of so->AddAction
+                        ///       is unpredictable.
+						char turnBuf[32];
+						
+						SlicObject *so = new SlicObject("12IABreakNoPiracy");
+						so->AddRecipient(m_owner);
+						so->AddCivilisation(m_owner);
+						so->AddCivilisation(route_owner);
+						so->AddUnit(m_array[i]);
+						so->AddLocation(m_pos);
+						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+						so->AddAction(turnBuf);
+						g_slicEngine->Execute(so);
+
+						g_selected_item->ForceDirectorSelect(Army(m_id));
+						return ORDER_RESULT_ILLEGAL;
 					}
 				}
-
-				ORDER_RESULT const	res	= m_array[i].InterceptTrade();
-
-				if (res == ORDER_RESULT_ILLEGAL)
-				{
-					// No action: nothing has happened yet.
-				}
-				else
-				{
-					//InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); //does nothing here but could be implemented 
-					if (g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)) 
-					{
-						g_director->AddCenterMap(m_pos);
-                        g_director->AddSpecialEffect(m_pos, effectId, soundId);
-					}	
-					AddSpecialActionUsed(m_array[i]);
-					m_isPirating = true;
-				}
-
-				return res;
 			}
+
+			ORDER_RESULT const	res	= m_array[i].InterceptTrade();
+
+			if (res == ORDER_RESULT_ILLEGAL)
+			{
+				// No action: nothing has happened yet.
+			}
+			else
+			{
+				//InformAI(UNIT_ORDER_INTERCEPT_TRADE, m_pos); //does nothing here but could be implemented 
+				if (g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)) 
+				{
+					g_director->AddCenterMap(m_pos);
+                    g_director->AddSpecialEffect(m_pos, effectId, soundId);
+				}	
+				AddSpecialActionUsed(m_array[i]);
+				m_isPirating = true;
+			}
+
+			return res;
+		}
 	}
 	return ORDER_RESULT_ILLEGAL;
 }

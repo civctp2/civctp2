@@ -47,7 +47,7 @@ class MemberClass;
 class MemberClass
 {
 public:
-	MemberClass(char *name);
+	MemberClass(char const * name);
 	~MemberClass();
 
 	void AddDatum(DATUM_TYPE type, struct namelist *nameInfo, sint32 minSize, sint32 maxSize,

@@ -157,7 +157,7 @@ public:
 	bool ExertsZOC() const;
 
     void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
-	double GetHPModifier();
+	double GetHPModifier() const;
 	void DoVictoryEnslavement(sint32 origOwner);
 
 	bool CanMoveIntoCell(const MapPoint &pos,
@@ -165,7 +165,7 @@ public:
 						 bool ignoreZoc,
 						 bool &alliedCity);
 	bool IsMovePointsEnough(const double cost) const;
-	bool IsMovePointsEnough(const MapPoint &pos);
+	bool IsMovePointsEnough(const MapPoint &pos) const;
     bool GetMovementTypeAir() const; 
 	bool GetMovementTypeLand() const; 
 	bool CanBeCargoPodded() const;

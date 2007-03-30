@@ -973,14 +973,11 @@ QuadTree<T>::SearchRect(DynamicArray<T> &array, MapPoint pos, sint16 width, sint
 	m_top->SearchRect(array, pos, curwidth, curheight, mask);
 
 	if(curwidth != width) {
-		sint16 eheight;
-		MapPoint nePos;
-		nePos.x = 0;
-		nePos.y = pos.y-m_width;
+		MapPoint nePos(0, pos.y - m_width);
 		if(nePos.y < 0)
 			nePos.y += m_height;
 
-		eheight = height;
+		sint16 eheight = height;
 		if(nePos.y + height >= m_height) {
 			eheight = m_height - nePos.y;
 		}
@@ -988,17 +985,13 @@ QuadTree<T>::SearchRect(DynamicArray<T> &array, MapPoint pos, sint16 width, sint
 		m_top->SearchRect(array, nePos, width - curwidth, eheight, mask);
 
 		if(eheight != height) {
-			MapPoint sePos;
-			sePos.x = 0;
-			sePos.y = 0;
+			MapPoint sePos  (0,0);
 			m_top->SearchRect(array, sePos, width - curwidth, height - eheight, mask);
 		}
 	}
 
 	if(curheight != height) {
-		MapPoint swPos;
-		swPos.x = pos.x;
-		swPos.y = 0;
+		MapPoint swPos  (pos.x, 0);
 		m_top->SearchRect(array, swPos, width, height - curheight, mask);
 	}
 }

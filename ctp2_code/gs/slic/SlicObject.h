@@ -69,7 +69,7 @@ public:
 	sint32 GetIndex() const { return m_index; }
 	void SetIndex(sint32 index) { m_index = index; }
 
-	BOOL IsValid();
+	bool IsValid() const;
 
 	void AddRecipient(const PLAYER_INDEX recip);
 	void AddAllRecipients();
@@ -94,7 +94,7 @@ public:
 
 	void SetDefaultAdvance(sint32 adv);
 
-	BOOL ConcernsPlayer(PLAYER_INDEX player);
+	bool ConcernsPlayer(PLAYER_INDEX player) const;
 
 	void Abort() { m_aborted = TRUE; }
 	void SetInstant() { m_instantMessage = TRUE; }

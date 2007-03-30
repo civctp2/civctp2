@@ -378,7 +378,7 @@ public:
 	sint32 GetFirepower() const;
 	double GetActiveDefenseRange() const;
 
-	double GetHPModifier();
+	double GetHPModifier() const;
 	double GetHP() const;
 	void SetHP(const double newval);
 	void SetHPToMax();

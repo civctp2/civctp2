@@ -47,6 +47,7 @@
 
 #include "c3.h"
 #include "terrainutil.h"
+
 #include "TerrainRecord.h"
 #ifndef __TILETOOL__
 #include "MapPoint.h"
@@ -74,111 +75,121 @@
 extern QuadTree<Unit> *g_theUnitTree;
 #endif
 
-sint32 s_TERRAIN_FOREST;
-sint32 s_TERRAIN_PLAINS;
-sint32 s_TERRAIN_TUNDRA;
-sint32 s_TERRAIN_GLACIER;
-sint32 s_TERRAIN_GRASSLAND;
-sint32 s_TERRAIN_DESERT;
-sint32 s_TERRAIN_SWAMP;
-sint32 s_TERRAIN_JUNGLE;
-sint32 s_TERRAIN_MOUNTAIN;
-sint32 s_TERRAIN_HILL;
-sint32 s_TERRAIN_WATER_SHALLOW;
-sint32 s_TERRAIN_WATER_DEEP;
-sint32 s_TERRAIN_WATER_VOLCANO;
-sint32 s_TERRAIN_WATER_BEACH;
-sint32 s_TERRAIN_WATER_SHELF;
-sint32 s_TERRAIN_WATER_TRENCH;
-sint32 s_TERRAIN_WATER_RIFT;
-sint32 s_TERRAIN_DEAD;
-sint32 s_TERRAIN_BROWN_HILL;
-sint32 s_TERRAIN_BROWN_MOUNTAIN;
-sint32 s_TERRAIN_WHITE_HILL;
-sint32 s_TERRAIN_WHITE_MOUNTAIN;
-sint32 s_TERRAIN_WATER_KELP;
-sint32 s_TERRAIN_WATER_REEF;
-sint32 s_TERRAFORM_HILLS_IMPROVEMENT;
-sint32 s_TERRAFORM_GRASSLAND_IMPROVEMENT;
-sint32 s_TERRAFORM_PLAINS_IMPROVEMENT;
-sint32 s_TERRAFORM_FORESTS_IMPROVEMENT;
+namespace
+{
+
+TERRAIN_TYPE    s_TERRAIN_FOREST;
+TERRAIN_TYPE    s_TERRAIN_PLAINS;
+TERRAIN_TYPE    s_TERRAIN_TUNDRA;
+TERRAIN_TYPE    s_TERRAIN_GLACIER;
+TERRAIN_TYPE    s_TERRAIN_GRASSLAND;
+TERRAIN_TYPE    s_TERRAIN_DESERT;
+TERRAIN_TYPE    s_TERRAIN_SWAMP;
+TERRAIN_TYPE    s_TERRAIN_JUNGLE;
+TERRAIN_TYPE    s_TERRAIN_MOUNTAIN;
+TERRAIN_TYPE    s_TERRAIN_HILL;
+TERRAIN_TYPE    s_TERRAIN_WATER_SHALLOW;
+TERRAIN_TYPE    s_TERRAIN_WATER_DEEP;
+TERRAIN_TYPE    s_TERRAIN_WATER_VOLCANO;
+TERRAIN_TYPE    s_TERRAIN_WATER_BEACH;
+TERRAIN_TYPE    s_TERRAIN_WATER_SHELF;
+TERRAIN_TYPE    s_TERRAIN_WATER_TRENCH;
+TERRAIN_TYPE    s_TERRAIN_WATER_RIFT;
+TERRAIN_TYPE    s_TERRAIN_DEAD;
+TERRAIN_TYPE    s_TERRAIN_BROWN_HILL;
+TERRAIN_TYPE    s_TERRAIN_BROWN_MOUNTAIN;
+TERRAIN_TYPE    s_TERRAIN_WHITE_HILL;
+TERRAIN_TYPE    s_TERRAIN_WHITE_MOUNTAIN;
+TERRAIN_TYPE    s_TERRAIN_WATER_KELP;
+TERRAIN_TYPE    s_TERRAIN_WATER_REEF;
+sint32 const    TERRAIN_TYPE_COUNT_MAX  = 127;  // to fit in sint8
+
+sint32          s_TERRAFORM_HILLS_IMPROVEMENT;
+sint32          s_TERRAFORM_GRASSLAND_IMPROVEMENT;
+sint32          s_TERRAFORM_PLAINS_IMPROVEMENT;
+sint32          s_TERRAFORM_FORESTS_IMPROVEMENT;
+
+} // namespace
 
 void terrainutil_Initialize()
 {
+    Assert(g_theTerrainDB->NumRecords() <= TERRAIN_TYPE_COUNT_MAX);
+
 	sint32 i;
 	for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 		const TerrainRecord *rec = g_theTerrainDB->Get(i);
+
 		if(rec->GetInternalTypeForest()) {
-			s_TERRAIN_FOREST = i;
+			s_TERRAIN_FOREST = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypePlains()) {
-			s_TERRAIN_PLAINS = i;
+			s_TERRAIN_PLAINS = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeTundra()) {
-			s_TERRAIN_TUNDRA = i;
+			s_TERRAIN_TUNDRA = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeGlacier()) {
-			s_TERRAIN_GLACIER = i;
+			s_TERRAIN_GLACIER = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeGrassland()) {
-			s_TERRAIN_GRASSLAND = i;
+			s_TERRAIN_GRASSLAND = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeDesert()) {
-			s_TERRAIN_DESERT = i;
+			s_TERRAIN_DESERT = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeSwamp()) {
-			s_TERRAIN_SWAMP = i;
+			s_TERRAIN_SWAMP = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeJungle()) {
-			s_TERRAIN_JUNGLE = i;
+			s_TERRAIN_JUNGLE = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeMountain()) {
-			s_TERRAIN_MOUNTAIN = i;
+			s_TERRAIN_MOUNTAIN = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeHill()) {
-			s_TERRAIN_HILL = i;
+			s_TERRAIN_HILL = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterShallow()) {
-			s_TERRAIN_WATER_SHALLOW = i;
+			s_TERRAIN_WATER_SHALLOW = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterDeep()) {
-			s_TERRAIN_WATER_DEEP = i;
+			s_TERRAIN_WATER_DEEP = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterVolcano()) {
-			s_TERRAIN_WATER_VOLCANO = i;
+			s_TERRAIN_WATER_VOLCANO = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterBeach()) {
-			s_TERRAIN_WATER_BEACH = i;
+			s_TERRAIN_WATER_BEACH = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterShelf()) {
-			s_TERRAIN_WATER_SHELF = i;
+			s_TERRAIN_WATER_SHELF = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterTrench()) {
-			s_TERRAIN_WATER_TRENCH = i;
+			s_TERRAIN_WATER_TRENCH = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterRift()) {
-			s_TERRAIN_WATER_RIFT = i;
+			s_TERRAIN_WATER_RIFT = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeDead()) {
-			s_TERRAIN_DEAD = i;
+			s_TERRAIN_DEAD = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeBrownHill()) {
-			s_TERRAIN_BROWN_HILL = i;
+			s_TERRAIN_BROWN_HILL = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeBrownMountain()) {
-			s_TERRAIN_BROWN_MOUNTAIN = i;
+			s_TERRAIN_BROWN_MOUNTAIN = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWhiteHill()) {
-			s_TERRAIN_WHITE_HILL = i;
+			s_TERRAIN_WHITE_HILL = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWhiteMountain()) {
-			s_TERRAIN_WHITE_MOUNTAIN = i;
+			s_TERRAIN_WHITE_MOUNTAIN = static_cast<TERRAIN_TYPE>(i);
 		}		
 		if(rec->GetInternalTypeWaterKelp()) {
-			s_TERRAIN_WATER_KELP = i;
+			s_TERRAIN_WATER_KELP = static_cast<TERRAIN_TYPE>(i);
 		}
 		if(rec->GetInternalTypeWaterReef()) {
-			s_TERRAIN_WATER_REEF = i;
+			s_TERRAIN_WATER_REEF = static_cast<TERRAIN_TYPE>(i);
 		}
 	}
 
@@ -1203,8 +1214,7 @@ bool terrainutil_AdvanceEnablesImprovementForPlayer(sint32 player, sint32 advanc
 	if(advance < 0 || advance >= g_theAdvanceDB->NumRecords()) return false;
 
 	bool enables = false;
-	sint32 i;
-	for(i = 0; i < rec->GetNumTerrainEffect(); i++) {
+	for (sint32 i = 0; i < rec->GetNumTerrainEffect(); i++) {
 		const TerrainImprovementRecord::Effect *effect = rec->GetTerrainEffect(i);
 		Assert(effect);
 		if(effect) {
@@ -1228,19 +1238,17 @@ bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp)
 	
 	if(advance < 0 || advance >= g_theAdvanceDB->NumRecords()) return false;
 
-	bool enables = false;
-	sint32 i;
-	for(i = 0; i < rec->GetNumTerrainEffect(); i++) {
+	for (sint32 i = 0; i < rec->GetNumTerrainEffect(); i++) 
+    {
 		const TerrainImprovementRecord::Effect *effect = rec->GetTerrainEffect(i);
 		Assert(effect);
-		if(effect) {
-			if(advance == effect->GetEnableAdvanceIndex()) {
-				enables = true;
-			}			
+		if (effect && (advance == effect->GetEnableAdvanceIndex())) 
+        {
+			return true;
 		}
 	}
 
-	return enables;
+	return false;
 }
 
 bool terrainutil_GetSomethingOwnsCell(MapPoint const & pos, sint32 owner, Unit ignoreCity)
@@ -1274,9 +1282,6 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint const & pos, sint32 owner, Unit i
 
 void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intRad, sint32 sqRad, Unit ignoreCity)
 {
-	
-	
-
 	if(!g_player[owner]) return;
 
 	RadiusIterator it(center, intRad, sqRad);
@@ -1294,9 +1299,9 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 
 		
 		bool stillOwned = terrainutil_GetSomethingOwnsCell(it.Pos(), owner, ignoreCity);
-		if(!stillOwned) {
+		if (!stillOwned) {
 			
-			cell->SetOwner(-1);
+			cell->SetOwner(PLAYER_UNASSIGNED);
 		}
 
 		g_network.Block(owner);
@@ -1310,122 +1315,122 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 
 #endif 
 
-sint32 terrainutil_GetForest()
+TERRAIN_TYPE terrainutil_GetForest()
 {
 	return s_TERRAIN_FOREST;
 }
 
-sint32 terrainutil_GetPlains()
+TERRAIN_TYPE terrainutil_GetPlains()
 {
 	return s_TERRAIN_PLAINS;
 }
 
-sint32 terrainutil_GetTundra()
+TERRAIN_TYPE terrainutil_GetTundra()
 {
 	return s_TERRAIN_TUNDRA;
 }
 
-sint32 terrainutil_GetGlacier()
+TERRAIN_TYPE terrainutil_GetGlacier()
 {
 	return s_TERRAIN_GLACIER;
 }
 
-sint32 terrainutil_GetGrassland()
+TERRAIN_TYPE terrainutil_GetGrassland()
 {
 	return s_TERRAIN_GRASSLAND;
 }
 
-sint32 terrainutil_GetDesert()
+TERRAIN_TYPE terrainutil_GetDesert()
 {
 	return s_TERRAIN_DESERT;
 }
 
-sint32 terrainutil_GetSwamp()
+TERRAIN_TYPE terrainutil_GetSwamp()
 {
 	return s_TERRAIN_SWAMP;
 }
 
-sint32 terrainutil_GetJungle()
+TERRAIN_TYPE terrainutil_GetJungle()
 {
 	return s_TERRAIN_JUNGLE;
 }
 
-sint32 terrainutil_GetMountain()
+TERRAIN_TYPE terrainutil_GetMountain()
 {
 	return s_TERRAIN_MOUNTAIN;
 }
 
-sint32 terrainutil_GetHill()
+TERRAIN_TYPE terrainutil_GetHill()
 {
 	return s_TERRAIN_HILL;
 }
 
-sint32 terrainutil_GetWaterShallow()
+TERRAIN_TYPE terrainutil_GetWaterShallow()
 {
 	return s_TERRAIN_WATER_SHALLOW;
 }
 
-sint32 terrainutil_GetWaterDeep()
+TERRAIN_TYPE terrainutil_GetWaterDeep()
 {
 	return s_TERRAIN_WATER_DEEP;
 }
 
-sint32 terrainutil_GetWaterVolcano()
+TERRAIN_TYPE terrainutil_GetWaterVolcano()
 {
 	return s_TERRAIN_WATER_VOLCANO;
 }
 
-sint32 terrainutil_GetWaterBeach()
+TERRAIN_TYPE terrainutil_GetWaterBeach()
 {
 	return s_TERRAIN_WATER_BEACH;
 }
 
-sint32 terrainutil_GetWaterShelf()
+TERRAIN_TYPE terrainutil_GetWaterShelf()
 {
 	return s_TERRAIN_WATER_SHELF;
 }
 
-sint32 terrainutil_GetWaterTrench()
+TERRAIN_TYPE terrainutil_GetWaterTrench()
 {
 	return s_TERRAIN_WATER_TRENCH;
 }
 
-sint32 terrainutil_GetWaterRift()
+TERRAIN_TYPE terrainutil_GetWaterRift()
 {
 	return s_TERRAIN_WATER_RIFT;
 }
 
-sint32 terrainutil_GetDead()
+TERRAIN_TYPE terrainutil_GetDead()
 {
 	return s_TERRAIN_DEAD;
 }
 
-sint32 terrainutil_GetBrownHill()
+TERRAIN_TYPE terrainutil_GetBrownHill()
 {
 	return s_TERRAIN_BROWN_HILL;
 }
 
-sint32 terrainutil_GetBrownMountain()
+TERRAIN_TYPE terrainutil_GetBrownMountain()
 {
 	return s_TERRAIN_BROWN_MOUNTAIN;
 }
 
-sint32 terrainutil_GetWhiteHill()
+TERRAIN_TYPE terrainutil_GetWhiteHill()
 {
 	return s_TERRAIN_WHITE_HILL;
 }
 
-sint32 terrainutil_GetWhiteMountain()
+TERRAIN_TYPE terrainutil_GetWhiteMountain()
 {
 	return s_TERRAIN_WHITE_MOUNTAIN;
 }
 
-sint32 terrainutil_GetWaterKelp()
+TERRAIN_TYPE terrainutil_GetWaterKelp()
 {
 	return s_TERRAIN_WATER_KELP;
 }
 
-sint32 terrainutil_GetWaterReef()
+TERRAIN_TYPE terrainutil_GetWaterReef()
 {
 	return s_TERRAIN_WATER_REEF;
 }
@@ -1453,13 +1458,12 @@ sint32 terrainutil_GetTerraformGrasslandImprovement()
 
 sint32 terrainutil_GetEndgameTileImpIndex()
 {
-	const TerrainImprovementRecord *me; 
-	sint32 i;
-	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
-		me = g_theTerrainImprovementDB->Get(i);
-		if(me->GetEffectPtr()->GetEndgame())
+	for (int i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) 
+    {
+		if (g_theTerrainImprovementDB->Get(i)->GetEffectPtr()->GetEndgame())
 			return i;
 	}
-	return i;
+
+    return CTPRecord::INDEX_INVALID;
 }
 			

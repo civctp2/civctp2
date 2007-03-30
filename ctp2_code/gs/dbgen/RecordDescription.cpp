@@ -76,6 +76,11 @@
 #else
 #include "windows.h"
 #endif
+
+#include <algorithm>
+#include <set>
+#include <string>
+
 #include "ctpdb.h"
 #include "RecordDescription.h"
 
@@ -89,7 +94,7 @@ namespace
     }
 }
 
-RecordDescription::RecordDescription(char *name)
+RecordDescription::RecordDescription(char const * name)
 :
 	m_datumList                 (),
 	m_memberClasses             (),
@@ -111,24 +116,24 @@ void RecordDescription::SetBaseType(DATUM_TYPE type)
 { 
 	m_baseType = type;
 
-	char * valueName = (char *) malloc(strlen("Value")  + 1);
-	strcpy(valueName, "Value");
-	Datum * l_Value     = new Datum(valueName, type);
+	Datum * l_Value     = new Datum("Value", type);
 	l_Value->m_required = true;
 	m_datumList.AddTail(l_Value);
 
-	char * nameText = (char *) malloc(strlen("NameText")  + 1);
-	strcpy(nameText, "NameText");
-	Datum * l_NameText = new Datum(nameText, DATUM_STRING);
-	m_datumList.AddTail(l_NameText);
+	m_datumList.AddTail(new Datum("NameText", DATUM_STRING));
 }
 
 void RecordDescription::ExportHeader(FILE *outfile)
 {
     // Multiple include guards
     fprintf(outfile, "\n#if defined(HAVE_PRAGMA_ONCE)\n#pragma once\n#endif\n");
-	fprintf(outfile, "\n#ifndef __%s_RECORD_H__\n#define __%s_RECORD_H__\n",
-			            m_name, m_name
+
+    char    capitalizedName[1 + k_MAX_RECORD_NAME];
+    size_t  nameLength  = std::min<size_t>(k_MAX_RECORD_NAME, strlen(m_name));
+    std::transform(m_name, m_name + nameLength, capitalizedName, toupper);
+    capitalizedName[nameLength] = 0;
+	fprintf(outfile, "\n#ifndef %s_RECORD_H__\n#define %s_RECORD_H__\n",
+			         capitalizedName, capitalizedName
            );
 
     // Exported class name
@@ -137,8 +142,8 @@ void RecordDescription::ExportHeader(FILE *outfile)
     // Project imports
     fprintf(outfile, "#include \"CTPDatabase.h\"\n");
 	fprintf(outfile, "#include \"CTPRecord.h\"\n");
-	ExportForwardDeclarations(outfile);
     fprintf(outfile, "class CivArchive;\n");
+	ExportForwardDeclarations(outfile);
 
     // Declarations
 	size_t  tokenCount = 0;
@@ -181,28 +186,29 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	fprintf(outfile, "\n}; /* %sRecord */\n\n", m_name);
 
     // Specials
-	fprintf(outfile, "struct %sRecordAccessorInfo {\n", m_name);
-	fprintf(outfile, "    %sRecord::IntAccessor m_intAccessor;\n", m_name);
-	fprintf(outfile, "    %sRecord::BoolAccessor m_boolAccessor;\n", m_name);
-	fprintf(outfile, "    %sRecord::FloatAccessor m_floatAccessor;\n", m_name);
-	fprintf(outfile, "    %sRecord::BitIntAccessor m_bitIntAccessor;\n", m_name);
-	fprintf(outfile, "    %sRecord::BitFloatAccessor m_bitFloatAccessor;\n", m_name);
-	fprintf(outfile, "    %sRecord::IntArrayAccessor m_intArrayAccessor;\n", m_name);
+	fprintf(outfile, "struct %sRecordAccessorInfo\n{\n", m_name);
+	fprintf(outfile, "    %sRecord::IntAccessor        m_intAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::BoolAccessor       m_boolAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::FloatAccessor      m_floatAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::BitIntAccessor     m_bitIntAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::BitFloatAccessor   m_bitFloatAccessor;\n", m_name);
+	fprintf(outfile, "    %sRecord::IntArrayAccessor   m_intArrayAccessor;\n", m_name);
 	fprintf(outfile, "    %sRecord::FloatArrayAccessor m_floatArrayAccessor;\n", m_name);
-	fprintf(outfile, "};\n");
+	fprintf(outfile, "};\n\n");
 
     // Global variables
-	fprintf(outfile, "extern %sRecordAccessorInfo g_%sRecord_Accessors[];\n", m_name, m_name);
-	fprintf(outfile, "extern char *g_%s_Tokens[];\n", m_name);
-	fprintf(outfile, "extern CTPDatabase<%sRecord> *g_the%sDB;\n\n", m_name, m_name);
+	fprintf(outfile, "extern %sRecordAccessorInfo      g_%sRecord_Accessors[];\n", m_name, m_name);
+	fprintf(outfile, "extern CTPDatabase<%sRecord> *   g_the%sDB;\n\n", m_name, m_name);
+	fprintf(outfile, "extern char * g_%s_Tokens[];\n", m_name);
 
     // Multiple include guard 
-	fprintf(outfile, "#endif /* ifndef __%s_RECORD_H__ */\n", m_name);
+	fprintf(outfile, "\n#endif\n");
 }
 
 void RecordDescription::ExportForwardDeclarations(FILE *outfile)
 {
-    /// @todo Collect names in map to prevent multiple occurrences
+    std::set<std::string>   forwardClasses;
+
     for
     (
 	    PointerList<Datum>::Walker walk(&m_datumList);
@@ -213,21 +219,29 @@ void RecordDescription::ExportForwardDeclarations(FILE *outfile)
         Datum * dat = walk.GetObj();
 		if (DATUM_RECORD == dat->m_type) 
         {
-            if (strcmp(m_name, dat->m_subType)) // already at the top
-            {
-			    fprintf(outfile, "class %sRecord;\n", dat->m_subType);
-            }
+            forwardClasses.insert(dat->m_subType);
 		}
-		else if (DATUM_BIT_PAIR == dat->m_type)
+		else if (    (DATUM_BIT_PAIR == dat->m_type) 
+                  && (DATUM_RECORD   == dat->m_bitPairDatum->m_type)
+                )
         {
-            if ((DATUM_RECORD == dat->m_bitPairDatum->m_type) &&
-                strcmp(m_name, dat->m_bitPairDatum->m_subType)
-               )
-            {
-			    fprintf(outfile, "class %sRecord;\n", dat->m_bitPairDatum->m_subType);
-            }
+		    forwardClasses.insert(dat->m_bitPairDatum->m_subType);
 		}
 	}
+
+    for 
+    (
+        std::set<std::string>::const_iterator  p = forwardClasses.begin();
+        p != forwardClasses.end();
+        ++p
+    )
+    {
+        if (strcmp(m_name, p->c_str()))
+        {
+	        fprintf(outfile, "class %sRecord;\n", p->c_str());
+        }
+        // else: The main class has been exported at the top
+    }
 
 	for 
     (
@@ -376,13 +390,13 @@ void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, si
 }
 
 
-void RecordDescription::StartMemberClass(char *name)
+void RecordDescription::StartMemberClass(char const * name)
 {
 	m_memberClasses.AddTail(new MemberClass(name));
 	m_addingToMemberClass = true;
 }
 
-void RecordDescription::EndMemberClass(char *name)
+void RecordDescription::EndMemberClass(char const * name)
 {
 	Assert(m_memberClasses.GetTail());
 	if(m_memberClasses.GetTail()) {
@@ -463,9 +477,8 @@ void RecordDescription::ExportData(FILE *outfile)
 {
 	for (sint32 flag = 0; flag < FlagCount(); ++flag) 
     {
-		fprintf(outfile, "\n    uint32 m_flags%d;", flag);
+		fprintf(outfile, "    uint32 m_flags%d;\n", flag);
 	}
-	fprintf(outfile, "\n");
 
 	for
     (

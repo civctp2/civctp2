@@ -37,7 +37,7 @@ Map {
 		Float SubcontinentHeight aka MAP_SUBCONTINENT_HEIGHT
 		Float BorderSize         aka MAP_BORDER_SIZE
 		Float FaultLines         aka MAP_FAULT_LINES
-		Float FalutLength        aka MAP_FAULT_LENGTH
+		Float FaultLength        aka MAP_FAULT_LENGTH
 		Float NSBorderSize       aka MAP_NS_BORDER_SIZE
 	}
 

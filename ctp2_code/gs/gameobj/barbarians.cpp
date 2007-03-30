@@ -493,9 +493,19 @@ void Barbarians::BeginYear()
 		return;
 
 	if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+/// @todo Refactor this (extract functions/methods) to make the code cleaner.
+///       The combination of continue + multiple break levels makes it very
+///       difficult to read. Added the initialisation of p "just in case".
+///       It could be OK without the initialisation, but I am not in the mood
+///       to work it out at the moment.
+///       What is p supposed to represent anyway? p will become k_MAX_PLAYERS 
+///       (not a valid player) when noone can see some random tile???
+
 		MapPoint point;
 		sint32 tries;
-		sint32 p;
+		sint32 p    = PLAYER_UNASSIGNED;
+
+
 // this is for standard attack units
 		for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
@@ -517,6 +527,10 @@ void Barbarians::BeginYear()
 			AddBarbarians(point, p, FALSE);  //AddBarbarians(point, -1, FALSE);
 		}
 //EMOD for Pirates
+
+/// @todo Also have to think about maybe reinitialising p here, or you might end
+///       up with the value of the previous loop.
+
 		sint32 ptries;
 		for(ptries = 0; ptries < k_MAX_BARBARIAN_TRIES; ptries++) {
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));

@@ -553,7 +553,7 @@ void SelectColorSet(void)
 //----------------------------------------------------------------------------
 namespace Os
 {
-	uint32 GetTicks() //inline uint32 GetTicks()
+	uint32 GetTicks(void)
 	{
 #if defined(USE_SDL)
 		return SDL_GetTicks();
@@ -562,7 +562,7 @@ namespace Os
 #endif
 	}
 
-	inline void Sleep(uint32 milliSeconds)
+	void Sleep(uint32 milliSeconds)
 	{
 #ifdef HAVE_UNISTD_H
 		usleep(milliSeconds);

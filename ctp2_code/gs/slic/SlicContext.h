@@ -175,7 +175,7 @@ public:
 	sint32 GetGood(sint32 index) const;
 	void   SetGood(sint32 index, sint32 &good);
 	sint32 GetNumGoods() const;
-	BOOL   HaveGoodOfType(sint32 good) const;
+	bool   HaveGoodOfType(sint32 good) const;
 	sint32 GetRank(sint32 index) const;
 	sint32 GetNumRanks() const;
 	sint32 GetWonder(sint32 index) const;
@@ -212,7 +212,7 @@ public:
 	sint32 GetUnitRecord(const sint32 index) const;
 	void SetUnitRecord(sint32 index, sint32 rec);
 
-	virtual BOOL ConcernsPlayer(PLAYER_INDEX player);
+	virtual bool ConcernsPlayer(PLAYER_INDEX player) const;
 
 	void Snarf(GameEventArgList *args);
 	void FillBuiltins();

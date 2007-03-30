@@ -280,8 +280,19 @@ public:
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],
 	                sint32 unit_hp[100]) const;
 
-	bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & use_vision) const;
-	bool CanThisCargoUnloadAt(const Unit &the_cargo, const MapPoint & old_pos, const MapPoint & new_pos, const bool & use_vision) const;
+	bool CanAtLeastOneCargoUnloadAt
+    (
+        MapPoint const &    old_pos, 
+        MapPoint const &    dest_pos, 
+        bool                use_vision
+    ) const;
+	bool CanThisCargoUnloadAt
+    (
+        Unit                the_cargo, 
+        MapPoint const &    old_pos, 
+        MapPoint const &    new_pos, 
+        bool                use_vision
+    ) const;
 	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
 	                 bool justOneUnit, const Unit &theUnit);
 	bool UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
@@ -345,12 +356,12 @@ public:
 	double GetDefendersBonus() const; 
 	bool ImprovementCanRefuel(const Unit &u) const;     
 	bool DeductMoveCost(const Unit &me, const double cost, bool &out_of_fuel);
-	bool CanRustle(CellUnitList &defender) const;
-	bool CanConvertCity(Unit &city) const;
+	bool CanRustle(CellUnitList const & defender) const;
+	bool CanConvertCity(Unit city) const;
 	bool CanBombardType(const Unit & defender) const;
-	bool CanBombard(CellUnitList &defender) const;
-	bool CanCounterBombard(CellUnitList &defender) const;
-	bool CanActivelyDefend(CellUnitList &attacker) const;
+	bool CanBombard(CellUnitList const & defender) const;
+	bool CanCounterBombard(CellUnitList const & defender) const;
+	bool CanActivelyDefend(CellUnitList const & attacker) const;
 
 	void BombardOneRound(const UnitRecord *rec, Unit &defender, double dbonus,
 	                     double dmr);

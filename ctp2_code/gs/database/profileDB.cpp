@@ -711,20 +711,30 @@ void ProfileDB::Save()
 	}
 }
 
-sint32 ProfileDB::GetValueByName(const char *name)
+sint32 ProfileDB::GetValueByName(const char * name) const
 {
-	PointerList<ProfileVar>::Walker walk(m_vars);
-	while(walk.IsValid()) {
-		ProfileVar *var = walk.GetObj();
-		if(stricmp(var->m_name, name) == 0) {
-			if(var->m_type == PV_BOOL || var->m_type == PV_NUM) {
+	for
+    (
+        PointerList<ProfileVar>::Walker walk(m_vars);
+	    walk.IsValid();
+        walk.Next()
+    ) 
+    {
+		ProfileVar *    var = walk.GetObj();
+		if (stricmp(var->m_name, name) == 0) 
+        {
+			if (var->m_type == PV_BOOL || var->m_type == PV_NUM) 
+            {
 				return *var->m_numValue;
-			} else {
+			} 
+            else 
+            {
+                // This function only works for boolean or integer values
 				return 0;
 			}
 		}
-		walk.Next();
 	}
+
 	return 0;
 }
 

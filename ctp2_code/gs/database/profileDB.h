@@ -433,7 +433,7 @@ public:
              char *stringValue, bool visible = true);
     void Save();
 
-    sint32 GetValueByName(const char *name);
+    sint32 GetValueByName(const char *name) const;
     void SetValueByName(const char *name, sint32 value);
 
 
@@ -442,11 +442,11 @@ public:
     //Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
     void SetNPlayers(uint32 n)				{ Assert((n > 1) && (n <= k_MAX_PLAYERS)); m_nPlayers = n; }
 
-    void SetLeaderName(MBCHAR *name)			{ strcpy(m_leaderName, name); }
-    void SetCivName(MBCHAR *name)				{ strcpy(m_civName, name); }
-    void SetSaveNote(MBCHAR *note)				{ strcpy(m_saveNote, note); }
+    void SetLeaderName(MBCHAR const *name)		{ strcpy(m_leaderName, name); }
+    void SetCivName(MBCHAR const *name)			{ strcpy(m_civName, name); }
+    void SetSaveNote(MBCHAR const * note)		{ strcpy(m_saveNote, note); }
     void SetIsSaved(BOOL isSaved)				{ m_isSaved = isSaved; }
-    void SetGameName(MBCHAR *name)				{ strcpy(m_gameName, name); }
+    void SetGameName(MBCHAR const * name)		{ strcpy(m_gameName, name); }
 
     void SetCivIndex(CIV_INDEX civ)				{ m_civIndex = civ; }
     void SetPlayerIndex(PLAYER_INDEX index)		{ m_playerNumber = index; }

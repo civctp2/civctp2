@@ -1,6 +1,9 @@
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
-#ifndef __TERRAIN_UTIL_H__
-#define __TERRAIN_UTIL_H__
+#ifndef TERRAIN_UTIL_H__
+#define TERRAIN_UTIL_H__
 
 #define k_MAX_GOODS_TYPES_PER_TERRAIN 4
 #define k_MAX_MINE_TYPES 3
@@ -53,6 +56,8 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 bool terrainutil_AdvanceEnablesImprovementForPlayer(sint32 player, sint32 advance, sint32 imp);
 bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp);
 
+#define TERRAIN_TYPE            sint8
+
 #define TERRAIN_FOREST terrainutil_GetForest()
 #define TERRAIN_PLAINS terrainutil_GetPlains()
 #define TERRAIN_TUNDRA terrainutil_GetTundra()
@@ -78,30 +83,30 @@ bool terrainutil_AdvanceEnablesImprovement(sint32 advance, sint32 imp);
 #define TERRAIN_WATER_KELP terrainutil_GetWaterKelp()
 #define TERRAIN_WATER_REEF terrainutil_GetWaterReef()
 
-sint32 terrainutil_GetForest();
-sint32 terrainutil_GetPlains();
-sint32 terrainutil_GetTundra();
-sint32 terrainutil_GetGlacier();
-sint32 terrainutil_GetGrassland();
-sint32 terrainutil_GetDesert();
-sint32 terrainutil_GetSwamp();
-sint32 terrainutil_GetJungle();
-sint32 terrainutil_GetMountain();
-sint32 terrainutil_GetHill();
-sint32 terrainutil_GetWaterShallow();
-sint32 terrainutil_GetWaterDeep();
-sint32 terrainutil_GetWaterVolcano();
-sint32 terrainutil_GetWaterBeach();
-sint32 terrainutil_GetWaterShelf();
-sint32 terrainutil_GetWaterTrench();
-sint32 terrainutil_GetWaterRift();
-sint32 terrainutil_GetDead();
-sint32 terrainutil_GetBrownHill();
-sint32 terrainutil_GetBrownMountain();
-sint32 terrainutil_GetWhiteHill();
-sint32 terrainutil_GetWhiteMountain();
-sint32 terrainutil_GetWaterKelp();
-sint32 terrainutil_GetWaterReef();
+TERRAIN_TYPE terrainutil_GetForest();
+TERRAIN_TYPE terrainutil_GetPlains();
+TERRAIN_TYPE terrainutil_GetTundra();
+TERRAIN_TYPE terrainutil_GetGlacier();
+TERRAIN_TYPE terrainutil_GetGrassland();
+TERRAIN_TYPE terrainutil_GetDesert();
+TERRAIN_TYPE terrainutil_GetSwamp();
+TERRAIN_TYPE terrainutil_GetJungle();
+TERRAIN_TYPE terrainutil_GetMountain();
+TERRAIN_TYPE terrainutil_GetHill();
+TERRAIN_TYPE terrainutil_GetWaterShallow();
+TERRAIN_TYPE terrainutil_GetWaterDeep();
+TERRAIN_TYPE terrainutil_GetWaterVolcano();
+TERRAIN_TYPE terrainutil_GetWaterBeach();
+TERRAIN_TYPE terrainutil_GetWaterShelf();
+TERRAIN_TYPE terrainutil_GetWaterTrench();
+TERRAIN_TYPE terrainutil_GetWaterRift();
+TERRAIN_TYPE terrainutil_GetDead();
+TERRAIN_TYPE terrainutil_GetBrownHill();
+TERRAIN_TYPE terrainutil_GetBrownMountain();
+TERRAIN_TYPE terrainutil_GetWhiteHill();
+TERRAIN_TYPE terrainutil_GetWhiteMountain();
+TERRAIN_TYPE terrainutil_GetWaterKelp();
+TERRAIN_TYPE terrainutil_GetWaterReef();
 
 
 sint32 terrainutil_GetTerraformHillsImprovement();

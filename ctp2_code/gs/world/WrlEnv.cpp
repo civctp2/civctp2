@@ -877,19 +877,19 @@ void World::CutImprovements(const MapPoint &point)
 }
 
 
-double World::GetDefenseBonus(const MapPoint &point)
+double World::GetDefenseBonus(const MapPoint &point) const
 {
 	double terrain_bonus, fort_bonus;
 	terrainutil_GetDefenseBonus(point,terrain_bonus, fort_bonus);
 	return fort_bonus;
 }
 
-BOOL World::IsAirfield(const MapPoint &point)
+bool World::IsAirfield(const MapPoint &point) const
 {
 	return terrainutil_HasAirfield(point);
 }
 
-BOOL World::IsListeningPost(const MapPoint &point)
+bool World::IsListeningPost(const MapPoint &point) const
 {
 	return terrainutil_HasListeningPost(point);
 }
@@ -913,7 +913,7 @@ BOOL World::IsListeningPost(const MapPoint &point)
 
 
 
-BOOL World::IsFort(const MapPoint &point)
+bool World::IsFort(const MapPoint &point) const
 {
 	return terrainutil_HasFort(point);
 }
@@ -929,28 +929,28 @@ BOOL World::IsFort(const MapPoint &point)
 
 
 
-BOOL World::IsSafeFromNukes(const MapPoint &point)
+bool World::IsSafeFromNukes(const MapPoint &point) const
 {
 	Cell *theCell = m_map[point.x][point.y];
 	Unit city = theCell->GetCity();
 	if(city.m_id == (0))
-		return FALSE;
+		return false;
 	
 	return city.SafeFromNukes();
 }
 
-BOOL World::IsRadar(const MapPoint &point)
+bool World::IsRadar(const MapPoint &point) const
 {
 	return terrainutil_HasRadar(point);
 }
 
 
-BOOL World::IsHealUnits(const MapPoint &point)
+bool World::IsHealUnits(const MapPoint &point) const
 {
 	return terrainutil_HasFort(point);
 }
 
-sint32 World::CanEnter(const MapPoint &pos, const uint32 flag) const
+bool World::CanEnter(const MapPoint &pos, const uint32 flag) const
 {
 	return GetCell(pos)->CanEnter(flag); 	
 }

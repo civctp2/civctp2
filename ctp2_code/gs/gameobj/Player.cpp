@@ -2243,13 +2243,13 @@ sint32 Player::CalcWonderGold()
 	sint32 goldPerUnitSupport;
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport)
 		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
-			totalWonderGold +=static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+			totalWonderGold += goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
 	}
 
 	sint32 goldPerCity;
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerCity(goldPerCity)
 		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
-			totalWonderGold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+			totalWonderGold += goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold();
 	
 	}
 //EMOD 
@@ -6719,12 +6719,12 @@ void Player::SetReadinessLevel(READINESS_LEVEL level, bool immediate)
 
 }
 
-double Player::GetHPModifier()
+double Player::GetHPModifier() const
 {
 	return m_readiness->GetHPModifier();
 }
 
-double Player::GetSupportModifier()
+double Player::GetSupportModifier() const
 {
 	return m_readiness->GetSupportModifier(m_government_type);
 }

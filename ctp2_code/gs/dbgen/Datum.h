@@ -30,11 +30,12 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef __DATUM_H__
-#define __DATUM_H__
+#ifndef DATUM_H__
+#define DATUM_H__
 
+#include <memory.h>         // memset
 #include <stdio.h>          // FILE
-#include <string.h>         // memset
+#include <string>           // std::string
 
 class Datum;
 
@@ -43,29 +44,34 @@ class Datum;
 
 class Datum
 {
+private:
+    std::string         m_Name;
+
 public:
-	DATUM_TYPE m_type;
-	char *m_name;
-	char *m_akaName;
-	char *m_defaultName;
-	sint32 m_minSize, m_maxSize;
-	char *m_subType;
-	sint32 m_bitNum;
-	struct namelist *m_groupList;
-	Datum *m_bitPairDatum;
-	bool m_required;
-	bool m_hasValue;
-	bool m_isPreBody;
-	union dbvalue val;
+	DATUM_TYPE          m_type;
+    char const *        m_name;
+	char *              m_akaName;
+	char *              m_defaultName;
+	sint32              m_minSize;
+    sint32              m_maxSize;
+	char *              m_subType;
+	sint32              m_bitNum;
+	struct namelist *   m_groupList;
+	Datum *             m_bitPairDatum;
+	bool                m_required;
+	bool                m_hasValue;
+	bool                m_isPreBody;
+	union dbvalue       val;
 
 	Datum
-		(
-	    char *              a_Name, 
+	(
+        std::string const & a_Name, 
 	    DATUM_TYPE const &  a_Type  = DATUM_NONE
 	) 
 	:
+        m_Name          (a_Name),
 	    m_type          (a_Type),
-	    m_name          (a_Name),
+	    m_name          (m_Name.c_str()),
 	    m_akaName       (NULL),
 	    m_defaultName   (NULL),
 	    m_minSize       (-1),
@@ -78,13 +84,10 @@ public:
 	    m_hasValue      (false),
 	    m_isPreBody     (false)
 	{
-		memset(&val, 0, sizeof(val));
+        memset(&val, 0, sizeof(val));
 	}
 
-	virtual ~Datum(void)
-	{
-		/// @todo Check m_name memory leak?
-	};
+	virtual ~Datum(void) {};
 
 	void SetValue(union dbvalue &v);
 

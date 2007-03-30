@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic objects
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -277,7 +277,7 @@ sint32 SlicObject::Release()
 	return m_refCount;
 }
 
-BOOL SlicObject::IsValid()
+bool SlicObject::IsValid() const
 {
 	return m_segment != NULL;
 }
@@ -334,22 +334,17 @@ void SlicObject::Execute()
 		m_segment->AddSpecials(this);
 	}
 
-	if(m_frame->GetMessageData()) {
-		char buf[1024];
-		sprintf(buf, "%s", m_segment->GetName());
-		m_frame->GetMessageData()->SetMsgText(buf);
+	if (m_frame->GetMessageData()) 
+    {
+		m_frame->GetMessageData()->SetMsgText(m_segment->GetName());
 	}
+
 	m_frame->Run();
 
-	if(g_slicEngine->AtBreak()) {
-		
-		
-		
-		return;
+	if (!g_slicEngine->AtBreak()) 
+    {
+	    Finish();
 	}
-
-	
-	Finish();
 }
 
 //----------------------------------------------------------------------------
@@ -389,9 +384,8 @@ void SlicObject::Finish()
 				messageData->SetIsHelpBox();
 			}
 			
-			MessageData *newData;
 			Message newMessage(g_theMessagePool->NewKey(k_BIT_GAME_OBJ_TYPE_MESSAGE));
-			newData = new MessageData(newMessage, messageData);
+			MessageData * newData = new MessageData(newMessage, messageData);
 			newData->SetOwner(0);
 			newData->SetSlicSegment(m_segment);
 			g_theMessagePool->Insert(newData);
@@ -423,7 +417,8 @@ void SlicObject::Finish()
 #ifdef _DEBUG
 					   && !g_robotMessages
 #endif
-						) {
+						) 
+                    {
 						continue;
 					}
 
@@ -464,8 +459,7 @@ void SlicObject::Finish()
 														messageData->GetMsgText(),
 														m_segment);
 					}
-					Message realMessage;
-					realMessage = g_theMessagePool->
+					Message realMessage = g_theMessagePool->
 						Create(m_recipientList[i], m_frame->GetMessageData());
 
 					if(GetNumTradeBids() > 0) {
@@ -497,13 +491,12 @@ void SlicObject::Dump()
 
 void SlicObject::SetMessageText(const MBCHAR *text)
 {
-	static MBCHAR interpretedText[k_MAX_TEXT_LEN];
 	Assert(m_frame);
 	if(!m_frame)
 		return;
 
-
-	stringutils_Interpret(text,  *this, interpretedText);
+	static MBCHAR interpretedText[k_MAX_TEXT_LEN];
+	stringutils_Interpret(text, *this, interpretedText, k_MAX_TEXT_LEN);
 
 	m_frame->GetMessageData()->SetMsgText(interpretedText);
 }
@@ -515,14 +508,14 @@ void SlicObject::SetMessageCaption(const MBCHAR *text)
 
 void SlicObject::SetMessageTitle(const MBCHAR *text)
 {
-	static MBCHAR interpretedText[k_MAX_TEXT_LEN];
 	Assert(m_frame);
 	if(!m_frame)
 		return;
 
+	static MBCHAR interpretedText[k_MAX_TEXT_LEN];
 
 	stringutils_HackColor(FALSE);
-	stringutils_Interpret(text,  *this, interpretedText);
+	stringutils_Interpret(text, *this, interpretedText, k_MAX_TEXT_LEN);
 	stringutils_HackColor(TRUE);
 
 	m_frame->GetMessageData()->SetTitle(interpretedText);
@@ -552,7 +545,7 @@ void SlicObject::SetMessageDuration(sint32 duration)
 
 void SlicObject::Serialize(CivArchive &archive)
 {
-	sint32	l ;
+	uint32	l;
 	
 #define SLICLIST_MAGIC 0x25831462
 	if (archive.IsStoring()) {
@@ -593,30 +586,26 @@ void SlicObject::Serialize(CivArchive &archive)
 		archive.TestMagic(SLICLIST_MAGIC) ;
 		
 		archive>>l ;
-		if (m_id)
-			delete m_id ;
 
 		m_refCount = 0;
 
+		delete [] m_id;
 		m_id = new char[l] ;
 		archive.Load((uint8 *)m_id, l) ;
 		
 		archive>>m_seconds ;
 		archive>>m_numRecipients ;
 		
-		if (m_recipientList)
-			delete m_recipientList ;
-		
+		delete [] m_recipientList ;
 		m_recipientList = new sint32[m_numRecipients] ;
 		archive.Load((uint8 *)m_recipientList, m_numRecipients * sizeof(sint32)) ;
 
-		
 		archive>>l ;
 		if(l > 0) {
 			MBCHAR	*tmpID =  new MBCHAR[l] ;
 			archive.Load((uint8 *)tmpID, l) ;
 			m_segment = g_slicEngine->GetSegment(tmpID) ;
-			delete tmpID ;
+			delete [] tmpID;
 		} else {
 			m_segment = NULL;
 		}
@@ -636,21 +625,20 @@ void SlicObject::Serialize(CivArchive &archive)
 
 void SlicObject::AddButton(SlicButton *button)
 {
-	Assert(m_frame);
-	if(!m_frame)
-		return;
-	Assert(m_frame->GetMessageData());
-	if(!m_frame->GetMessageData())
-		return;
-	m_frame->GetMessageData()->AddButton(button);
+	Assert(m_frame && m_frame->GetMessageData());
+	if (m_frame && m_frame->GetMessageData())
+    {
+    	m_frame->GetMessageData()->AddButton(button);
+    }
 }
 
 void SlicObject::AddEyePoint(SlicEyePoint *eyepoint)
 {
-	Assert(m_frame);
-	if(!m_frame)
-		return;
-	m_frame->GetMessageData()->AddEyePoint(eyepoint);
+	Assert(m_frame && m_frame->GetMessageData());
+	if (m_frame && m_frame->GetMessageData())
+    {
+	    m_frame->GetMessageData()->AddEyePoint(eyepoint);
+    }
 }
 
 void SlicObject::SetDefaultAdvance(sint32 adv)
@@ -659,30 +647,30 @@ void SlicObject::SetDefaultAdvance(sint32 adv)
 	m_defaultAdvance = adv;
 }
 
-BOOL SlicObject::ConcernsPlayer(PLAYER_INDEX player)
+bool SlicObject::ConcernsPlayer(PLAYER_INDEX player) const
 {
-	sint32 i;
-	for(i = 0; i < m_numRecipients; i++) {
-		if(m_recipientList[i] == player)
-			return TRUE;
+	for (sint32 i = 0; i < m_numRecipients; i++) 
+    {
+		if (m_recipientList[i] == player)
+			return true;
 	}
+
 	return SlicContext::ConcernsPlayer(player);
 }
 
 void SlicObject::SetFrame(SlicFrame *frame)
 {
-	if(m_frame)
-		delete m_frame;
-
+	delete m_frame;
 	m_frame = frame;
 }
 
 void SlicObject::Continue()
 {
 	m_frame->Run();
-	if(g_slicEngine->AtBreak())
-		return;
 
-	Finish();
+	if (!g_slicEngine->AtBreak())
+    {
+    	Finish();
+    }
 }
 

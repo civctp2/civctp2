@@ -74,6 +74,7 @@
 #include "terrainutil.h"
 #include "tiledmap.h"               // g_tiledMap
 #include "TileInfo.h"
+#include <vector>
 #include "WorldDistance.h"
 
 #if defined(USE_COM_REPLACEMENT)
@@ -140,8 +141,8 @@ World::World(const MapPoint & m, const int xw, const int yw)
 void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 						   sint32 player_start_score[k_MAX_PLAYERS])
 {
-	BOOL ignoreTutorialRules = FALSE;
-	BOOL worldIsGood = TRUE;
+	bool ignoreTutorialRules    = false;
+	bool worldIsGood            = true;
 
 	do {
 		
@@ -168,15 +169,15 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 		sint32 numFound;
 		FindPlayerStart(player_start_list, numFound, ignoreTutorialRules, player_start_score);
 		
-		worldIsGood = TRUE;
+		worldIsGood = true;
 
 		if(numFound < 3 || 
 		   (g_network.IsNetworkLaunch() && g_network.IsLaunchHost() &&
 			numFound < g_network.GetNumHumanPlayers())) {
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules) {
 				Reset(m_size.x, m_size.y, m_isYwrap, m_isXwrap);
-				ignoreTutorialRules = TRUE;
-				worldIsGood = FALSE;
+				ignoreTutorialRules = true;
+				worldIsGood = false;
 			} else {
 				Assert(g_theProfileDB->PercentLand() < 1.0);
 				if(g_theProfileDB->PercentLand() < 1.0) {
@@ -185,8 +186,8 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 						g_theProfileDB->SetPercentLand(1.0);
 					}
 					Reset(m_size.x, m_size.y, m_isYwrap, m_isXwrap);
-					ignoreTutorialRules = FALSE;
-					worldIsGood = FALSE;
+					ignoreTutorialRules = false;
+					worldIsGood = false;
 				}
 			}
 		}
@@ -200,9 +201,8 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
         }
         else
         {
-			sint32 x, y;
-			for(x = 0; x < m_size.x; x++) {
-				for(y = 0; y < m_size.y; y++) {
+			for (sint32 x = 0; x < m_size.x; x++) {
+				for (sint32 y = 0; y < m_size.y; y++) {
 					m_map[x][y]->m_env = 0;
 				}
 			}
@@ -332,7 +332,7 @@ void World::AllocateMap()
 	m_map = &(tmpx[k_MAP_WRAPAROUND]); 
 	Assert(m_map);
         
-    sint32 i, x, y;
+    sint32 x;
 	for (x = 0; x < m_size.x; x++) 
     { 
 		if (m_isYwrap) 
@@ -345,13 +345,14 @@ void World::AllocateMap()
 			m_map[x] = new CellPtr[m_size.y];
 		}
 		
-		for (y=0; y<m_size.y; y++) 
+		for (sint32 y = 0; y < m_size.y; y++) 
         { 
 			m_map[x][y] = &m_cellArray[y * m_size.x + x];
 		}
     }  
     
     std::copy(m_map, m_map + k_MAP_WRAPAROUND, m_map + m_size.x);
+    sint32 i;
 	for (i = -1; - k_MAP_WRAPAROUND <= i; i--) 
     { 
 		m_map[i] = m_map[m_size.x + i]; 
@@ -395,8 +396,6 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	sint8 *map = new sint8[m_size.y * m_size.x];
 	sint32 histogramarray[256];
 	sint32 *histogram = &histogramarray[128];
-	sint32 x, y;
-	sint32 h;
 			
 	sint32 numSettings;
 	const MapRecord *mapRec     = worldutils_FindBestMapSizeMatch(m_size.x, m_size.y);
@@ -409,7 +408,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	worldutils_DeleteSettings(settings);
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	MapDump ("logs\\HeightMap.bmp", map, m_size.x, m_size.y);
+	MapDump ("logs" FILE_SEP "HeightMap.bmp", map, m_size.x, m_size.y);
 #endif
 
 	IMapGenerator *filterPass = LoadMapPlugin(1);
@@ -423,7 +422,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		FreeMapPlugin();
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-		MapDump ("logs\\FilterMap.bmp", map, m_size.x, m_size.y);
+		MapDump ("logs" FILE_SEP "FilterMap.bmp", map, m_size.x, m_size.y);
 #endif
 	}
 	GetHistogram(map, histogram);
@@ -437,6 +436,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 	sint32 totalCells = m_size.y * m_size.x;
 	sint32 count = 0;
+    sint32 h;
 	for(h = -128; h < 128; h++) {
 		count += histogram[h];
 		if(count >= (totalCells * waterPercent) / 100) {
@@ -462,9 +462,10 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	}
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	TerrainDump ("logs\\TerrainMap.bmp", map, m_size.x, m_size.y, waterLevel, mountainLevel, hillLevel);
+	TerrainDump ("logs" FILE_SEP "TerrainMap.bmp", map, m_size.x, m_size.y, waterLevel, mountainLevel, hillLevel);
 #endif
 
+	sint32 x, y;
 	for(y = 0; y < m_size.y; y++) {
 		for(x = 0; x < m_size.x; x++) {
 			MapPoint from(x,y);
@@ -514,7 +515,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 					   &homogeneity, 1);
 
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	MapDump ("logs\\WetMap.bmp", wetmap, m_size.x, m_size.y);
+	MapDump ("logs" FILE_SEP "WetMap.bmp", wetmap, m_size.x, m_size.y);
 #endif
 
 	sint32 totalLandCells = 0;
@@ -635,7 +636,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	TemperatureFilter(temperatureMap, temperatureHist);
 			
 #ifdef DUMP_TERRAIN_HEIGHT_MAPS
-	MapDump ("logs\\TempMap.bmp", temperatureMap, m_size.x, m_size.y);
+	MapDump ("logs" FILE_SEP "TempMap.bmp", temperatureMap, m_size.x, m_size.y);
 #endif
 
 	sint32 whitePercent = g_theProfileDB->PercentWhite();
@@ -723,22 +724,19 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		}
 	}
 
-	MapPoint neighbor, curpos;
-
+	MapPoint neighbor;
 	
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
-			if(IS_SHALLOW(m_map[x][y]->m_terrain_type) &&
-			   !IsNextTo(TERRAIN_WATER_BEACH, x, y)) {
-
-				
-				
-				curpos.x = x;
-				curpos.y = y;
-				sint32 d;
+			if (IS_SHALLOW(m_map[x][y]->m_terrain_type) &&
+			    !IsNextTo(TERRAIN_WATER_BEACH, x, y)
+               ) 
+            {
+				MapPoint curpos(x, y);
 				bool skip = false;
-				for(d = 0; d < 8; d++) {
-					if(curpos.GetNeighborPosition((WORLD_DIRECTION)d, neighbor)) {
+				for (sint32 d = 0; d < 8; d++) 
+                {
+					if(curpos.GetNeighborPosition((WORLD_DIRECTION) d, neighbor)) {
 						if(IsNextTo(TERRAIN_WATER_BEACH, neighbor.x, neighbor.y)) {
 							skip = true;
 							break;
@@ -764,7 +762,6 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 
 	NewGenerateRivers(map, wetmap);
 	GenerateDeepWater();
-	
 	GenerateVolcano();
 
 	thirdPass->Release();
@@ -779,52 +776,19 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void World::GenerateGoods()
-
 {
-	sint32 x, y; 
-	sint32 ox, oy;    
-	sint32 b, a;
-	sint32 c;
-   
 	ClearScratch();
 
-   
-	for(x = 0; x < m_size.x; x++) {
-		for(y = 0; y < m_size.y; y++) {
+	sint32 x, y; 
+	for (x = 0; x < m_size.x; x++) 
+    {
+		for (y = 0; y < m_size.y; y++) 
+        {
 			MapPoint center(x, y);
-			SquareIterator it(center, 1);
 			Cell *centerCell = GetCell(center);
 
+			SquareIterator it(center, 1);
 			for(it.Start(); !it.End(); it.Next()) {
 				if(it.Pos() == center)
 					continue;
@@ -836,6 +800,7 @@ void World::GenerateGoods()
 		}
 	}
 
+	sint32 b, a;
 	if (90 < g_theProfileDB->PercentRichness()) { 
 		b = 1; 
 		a = 2; 
@@ -861,10 +826,11 @@ void World::GenerateGoods()
 		return; 
 	} 
    
-	c = b + a; 
+	sint32 c = b + a; 
 
 	sint32 minAdjacent = g_theConstDB->GetMinLikeTilesForGood();
 
+    sint32 ox, oy;
 	for (ox = b; ox + a < m_size.x ; ox += c) {
 		for (oy = b; oy + a < m_size.y ; oy += c) {
 			x = ox + g_rand->Next(a); 
@@ -885,11 +851,9 @@ void World::GenerateGoods()
 		}
 	}
    
-	sint32 r;
-	r = m_size.x - ox; 
-	if (0 < r) { 
-      
-		
+	sint32 r = m_size.x - ox; 
+	if (0 < r) 
+    { 
 		for (oy = b; oy + a < m_size.y ; oy += c) {
 			x = ox + g_rand->Next(r); 
 			y = oy + g_rand->Next(a);
@@ -898,7 +862,6 @@ void World::GenerateGoods()
 			}
 		}
 	   
-		
 		if (oy < m_size.y) { 
 			x = ox + g_rand->Next(r);
 			y = oy + g_rand->Next(m_size.y - oy);
@@ -907,28 +870,34 @@ void World::GenerateGoods()
 			}
 		}
 	}
+
 	ComputeGoodsValues();
 }
 
 void World::ComputeGoodsValues()
 {
-    if (g_theResourceDB->NumRecords() <= 0)
+
+    sint32 newGoodCount = g_theResourceDB->NumRecords();
+
+    delete [] m_goodValue;
+    if (newGoodCount > 0)
     {
-        delete [] m_goodValue;
+        m_goodValue = new double[newGoodCount];
+    }
+    else
+    {
         m_goodValue = NULL;
         return;
     }
 
-	sint32 *goodCounts = new sint32[g_theResourceDB->NumRecords()];
-	memset(goodCounts, 0, sizeof(sint32) * g_theResourceDB->NumRecords());
+    std::vector<sint32> goodCounts(newGoodCount, 0);
 	MapPoint pos;
 	sint32 good;
 	sint32 totalGoods = 0;
 	for(pos.x = 0; pos.x < m_size.x; pos.x++) {
 		for(pos.y = 0; pos.y < m_size.y; pos.y++) {
 			if(GetGood(pos, good)) {
-				Assert(good >= 0);
-				Assert(good < g_theResourceDB->NumRecords());
+				Assert((good >= 0) && (good < newGoodCount));
 
 				totalGoods++;
 				goodCounts[good]++;
@@ -942,53 +911,43 @@ void World::ComputeGoodsValues()
 	sint32 minCount = 0x7fffffff;
 
 	sint32 i;
-
-	
-	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
-		if(goodCounts[i] > maxCount) {
+	for(i = 0; i < newGoodCount; i++) {
+		if (goodCounts[i] > maxCount) {
 			maxCount = goodCounts[i];
 			maxGood = i;
 		}
 
-		if((goodCounts[i] > 0) && (goodCounts[i] < minCount)) {
+		if ((goodCounts[i] > 0) && (goodCounts[i] < minCount)) {
 			minCount = goodCounts[i];
 			minGood = i;
 		}		
 	}
 
-	double valueDiff = g_theConstDB->GetMaxGoodValue() - g_theConstDB->GetMinGoodValue();
+	double valueDiff = 
+        g_theConstDB->GetMaxGoodValue() - g_theConstDB->GetMinGoodValue();
 
-    delete [] m_goodValue;
-    m_goodValue = new double[g_theResourceDB->NumRecords()];
-
-	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
-		if(goodCounts[i] <= 0) {
-			
+	for (i = 0; i < newGoodCount; i++) 
+    {
+		if (goodCounts[i] <= 0) 
+        {
 			m_goodValue[i] = g_theConstDB->GetMaxGoodValue() + 1;
-		} else {
+		} 
+        else 
+        {
             // goodCounts[i] > 0 => maxCount > 0, so division by maxCount is OK
 			double percent = double(goodCounts[i]) / double(maxCount);
 			
 			m_goodValue[i] = g_theConstDB->GetMinGoodValue() +
-				((1.0 - percent) * double(valueDiff));
+				                ((1.0 - percent) * valueDiff);
 		}
+
 		DPRINTF(k_DBG_GAMESTATE, ("Good %s has a base value of %lf\n",
 								  g_theResourceDB->Get(i)->GetNameText(),
-								  m_goodValue[i]));
-
+								  m_goodValue[i]
+                                 )
+               );
 	}
-
-	delete [] goodCounts;
 }
-
-#define SS 1
-
-
-
-
-
-
-
 
 sint32 World::IsNextToLand(const sint32 i, const sint32 j) 
 {  
@@ -3351,7 +3310,6 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 	if(!thisCell) return;
 
 	if(thisCell->GetScratch() & k_SMART_SET_HIT)
-		
 		return;
 
 	thisCell->SetScratch(thisCell->GetScratch() | k_SMART_SET_HIT);
