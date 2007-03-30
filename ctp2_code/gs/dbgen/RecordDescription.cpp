@@ -68,15 +68,21 @@
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
+#pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #if defined(WIN32)
+// Do not define the min and max *macros* in <windows.h>.
+#define NOMINMAX	
 #include <windows.h>
 #else
 #include "windows.h"
 #endif
 
+#include "minmax.h"
 #include <algorithm>
 #include <set>
 #include <string>

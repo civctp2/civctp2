@@ -41,6 +41,7 @@
 // - Fixed display of topics after the fixing of the alphanumerical
 //   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
 // - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -63,7 +64,7 @@
 #include "c3ui.h"
 #include "chart.h"
 #include "colorset.h"
-#include "conceptdb.h"
+#include "ConceptRecord.h"
 #include "controlsheet.h"
 #include <cstdlib>
 #include "ctp2_button.h"
@@ -107,7 +108,6 @@ extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern C3UI			*g_c3ui;
 extern sint32		g_modalWindow;
-extern ConceptDB					*g_theConceptDB;
 
 
 static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
@@ -127,18 +127,9 @@ static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
 
 };
 
-
-
-
-
 GreatLibrary	*g_greatLibrary = NULL;
 
-
 Text_Hasher<char *> * GreatLibrary::s_great_library_info = NULL;
-
-
-
-
 
 
 void GreatLibrary::Initialize_Great_Library_Data()
@@ -152,24 +143,10 @@ void GreatLibrary::Initialize_Great_Library_Data()
     Load_Great_Library();
 }
 
-
-
-
-
-
-
-
-
-
-
 void GreatLibrary::Shutdown_Great_Library_Data()
 {
     allocated::clear(s_great_library_info);	
 }
-
-
-
-
 
 enum Read_Library_State
 {
@@ -178,11 +155,6 @@ enum Read_Library_State
 	IN_TEXT,
 	IN_END
 };
-
-
-
-
-
 
 void GreatLibrary::Load_Great_Library()
 {
@@ -396,15 +368,6 @@ void GreatLibrary::Load_Great_Library()
 	fclose(great_library);
 }
 
-
-
-
-
-
-
-
-
-
 int GreatLibrary::Get_Database_From_Name
 (
 	char * database_name
@@ -419,18 +382,8 @@ int GreatLibrary::Get_Database_From_Name
 	} 
 
 	Assert(false);
-	return k_GL_INDEX_INVALID;
+	return -1;
 }
-
-
-
-
-
-
-
-
-
-
 
 int GreatLibrary::Get_Object_Index_From_Name
 (
@@ -441,159 +394,58 @@ int GreatLibrary::Get_Object_Index_From_Name
 	int     index;
 	char *  db_item_name = NULL;
 	
+	// By truning which_database into a CTPDatabase<T> pointer we could even 
+	// simplify this code more, only problem would be the search database, 
+	// which could be a NULL pointer then.
 	switch (which_database) 
     {
 	case DATABASE_UNITS:
-		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theUnitDB->Get(index)->m_name);
-
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
+		index = g_theUnitDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_SEARCH:
 		return 0;
-
 	case DATABASE_ORDERS:
-		for (index = 0; index < g_theOrderDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theOrderDB->Get(index)->m_name);
-			
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
+		index = g_theOrderDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_RESOURCE:
-		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theResourceDB->Get(index)->m_name);
-			
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
+		index = g_theResourceDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_BUILDINGS:
-		for (index = 0; index < g_theBuildingDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theBuildingDB->Get(index)->m_name);
-			
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
+		index = g_theBuildingDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_WONDERS:
-		for (index = 0; index < g_theWonderDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theWonderDB->Get(index)->m_name);
-			
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
-
+		index = g_theWonderDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_ADVANCES:
-		for (index = 0; index < g_theAdvanceDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theAdvanceDB->Get(index)->m_name);
-
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
+		index = g_theAdvanceDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_TERRAIN:
-	{
-		for (index = 0; index < g_theTerrainDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theTerrainDB->Get(index)->m_name);
-
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
-
+		index = g_theTerrainDB->FindRecordNameIndex(object_name);
 		break;
-	}
 	case DATABASE_CONCEPTS:
-		for (index = 0; index < g_theConceptDB->m_nConcepts; index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theConceptDB->GetConceptInfo(index)->m_name);
-			
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-
-			} 
-		} 
-
+		index = g_theConceptDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_GOVERNMENTS:
-		for (index = 0; index < g_theGovernmentDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theGovernmentDB->Get(index)->m_name);
-			
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
-
+		index = g_theGovernmentDB->FindRecordNameIndex(object_name);
 		break;
-
 	case DATABASE_TILE_IMPROVEMENTS:
-		for (index = 0; index < g_theTerrainImprovementDB->NumRecords(); index++)
-		{
-			db_item_name = g_theStringDB->GetIdStr(g_theTerrainImprovementDB->Get(index)->m_name);
-
-			if (!strcmp(db_item_name, object_name))
-			{
-				return index;
-			} 
-		} 
+		index = g_theTerrainImprovementDB->FindRecordNameIndex(object_name);
 		break;
-
 	default:
 		bool InvalidDatabase = FALSE;
 		DPRINTF(k_DBG_GAMESTATE, ("DB: %i\n", which_database));
 		Assert(InvalidDatabase);
-        return k_GL_INDEX_INVALID;
+        return CTPRecord::INDEX_INVALID;
 	}
 
-	bool bad_object_name = false;
-	DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
-	Assert(bad_object_name);
+	if(index == CTPRecord::INDEX_INVALID){
+		bool bad_object_name = false;
+		DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
+		Assert(bad_object_name);
+	}
 	
-	return k_GL_INDEX_INVALID;
+	return index;
 }
-
-
-
-
-
-
-
-
-
 
 void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -604,9 +456,6 @@ void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 d
 	g_greatLibrary->HandleSetGoal();
 
 }
-
-
-
 
 void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -624,11 +473,6 @@ void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-
-
-
-
-
 void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	
@@ -637,11 +481,6 @@ void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data
 	
 	g_greatLibrary->Back();
 }
-
-
-
-
-
 
 void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -652,19 +491,10 @@ void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 d
 	g_greatLibrary->Forward();
 }
 
-
 void GreatLibrary::kh_Close()
 {
 	close_GreatLibrary();
 }
-
-
-
-
-
-
-
-
 
 void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -685,11 +515,6 @@ void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, ui
 	}
 }
 
-
-
-
-
-
 void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
@@ -698,37 +523,6 @@ void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action,
 	g_greatLibrary->Force_A_Search();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -761,11 +555,6 @@ void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, ui
 	}
 
 }
-
-
-
-
-
 
 void GreatLibrary_Topics_List_Callback
 ( 
@@ -827,23 +616,23 @@ void TechListItem::Update(void)
 
 	switch ( real_database ) {
 	case DATABASE_UNITS:
-		subItem->SetText( g_theStringDB->GetNameStr(g_theUnitDB->Get(real_index)->GetName()) );
+		subItem->SetText( g_theUnitDB->GetNameStr(real_index) );
 		break;
 
 	case DATABASE_ORDERS:
-		subItem->SetText( g_theStringDB->GetNameStr(g_theOrderDB->Get(real_index)->GetName()) );
+		subItem->SetText( g_theOrderDB->GetNameStr(real_index) );
 		break;
 		
 	case DATABASE_RESOURCE:
-		subItem->SetText( g_theStringDB->GetNameStr(g_theResourceDB->Get(real_index)->GetName()) );
+		subItem->SetText( g_theResourceDB->GetNameStr(real_index) );
 		break;
 		
 	case DATABASE_BUILDINGS:
-		subItem->SetText( g_theStringDB->GetNameStr(g_theBuildingDB->Get(real_index)->GetName()) );
+		subItem->SetText( g_theBuildingDB->GetNameStr(real_index) );
 		break;
 
 	case DATABASE_WONDERS:
-		subItem->SetText( g_theStringDB->GetNameStr(wonderutil_Get(real_index)->GetName()) );
+		subItem->SetText( g_theWonderDB->GetNameStr(real_index) );
 		break;
 
 	case DATABASE_ADVANCES:
@@ -851,7 +640,7 @@ void TechListItem::Update(void)
 		break;
 
 	case DATABASE_TERRAIN:
-		subItem->SetText( g_theStringDB->GetNameStr(g_theTerrainDB->GetName(real_index)) );
+		subItem->SetText( g_theTerrainDB->GetNameStr(real_index) );
 		break;
 
 	case DATABASE_CONCEPTS:
@@ -859,7 +648,7 @@ void TechListItem::Update(void)
 		break;
 
 	case DATABASE_GOVERNMENTS:
-		subItem->SetText( g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(real_index)) );
+		subItem->SetText( g_theGovernmentDB->GetNameStr(real_index) );
 		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
@@ -966,7 +755,7 @@ GreatLibrary::GreatLibrary(sint32 theMode)
     m_maxPage                   (false),
     m_database                  (DATABASE_UNITS),
     m_listDatabase              (DATABASE_UNITS), 
-    m_selectedIndex             (k_GL_INDEX_INVALID),
+    m_selectedIndex             (CTPRecord::INDEX_INVALID),
     m_maxIndex                  (0),
     m_sci                       (false),
     m_itemLabel                 (NULL),
@@ -1296,7 +1085,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		break;
 	case DATABASE_CONCEPTS:
 		g_greatLibrary->m_window->SetTechMode(theMode, DATABASE_CONCEPTS);
-		m_itemLabel->SetText(g_theConceptDB->GetNameStr(theMode));
+		m_itemLabel->SetText(g_theConceptDB->Get(theMode)->GetNameText());
 		break;
 
 	case DATABASE_GOVERNMENTS:
@@ -1413,114 +1202,8 @@ void GreatLibrary::ClearHistory( void )
 {
 	m_history.clear();
 	m_history_position  = 0;
-	m_selectedIndex     = k_GL_INDEX_INVALID;
+	m_selectedIndex     = CTPRecord::INDEX_INVALID;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //----------------------------------------------------------------------------
 //
@@ -1681,34 +1364,34 @@ MBCHAR const * GreatLibrary::GetObjectName(int database, int index) const
 		return NULL;
 
 	case DATABASE_UNITS:
-		return g_theStringDB->GetNameStr(g_theUnitDB->GetName(index));
+		return g_theUnitDB->GetNameStr(index);
 
 	case DATABASE_ORDERS:
-		return g_theStringDB->GetNameStr(g_theOrderDB->GetName(index));
+		return g_theOrderDB->GetNameStr(index);
 
 	case DATABASE_RESOURCE:
-		return g_theStringDB->GetNameStr(g_theResourceDB->GetName(index));
+		return g_theResourceDB->GetNameStr(index);
 
 	case DATABASE_BUILDINGS:
-		return g_theStringDB->GetNameStr(g_theBuildingDB->GetName(index));
+		return g_theBuildingDB->GetNameStr(index);
 
 	case DATABASE_WONDERS:
-		return g_theStringDB->GetNameStr(g_theWonderDB->GetName(index));
+		return g_theWonderDB->GetNameStr(index);
 
 	case DATABASE_ADVANCES:
-		return g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(index));
+		return g_theAdvanceDB->GetNameStr(index);
 
 	case DATABASE_TERRAIN:
-		return g_theStringDB->GetNameStr(g_theTerrainDB->GetName(index));
+		return g_theTerrainDB->GetNameStr(index);
 
 	case DATABASE_CONCEPTS:
 		return g_theConceptDB->GetNameStr(index);
 
 	case DATABASE_GOVERNMENTS:
-		return g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(index));
+		return g_theGovernmentDB->GetNameStr(index);
 
 	case DATABASE_TILE_IMPROVEMENTS:
-		return g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(index));
+		return g_theTerrainImprovementDB->GetNameStr(index);
 
 	} // switch database
 }
@@ -1876,7 +1559,7 @@ void GreatLibrary::HandleIndexButton( ctp2_Button *button )
 	SetCategoryName(newDatabase);
 
 	m_page = 0;
-	m_selectedIndex = k_GL_INDEX_INVALID;
+	m_selectedIndex = CTPRecord::INDEX_INVALID;
 	m_topics_list->ShouldDraw();
 	UpdateList( newDatabase );
 }
@@ -2155,8 +1838,11 @@ void GreatLibrary::UpdateList( DATABASE database )
 
 	case DATABASE_CONCEPTS:
 		
-		for (index = 0; index < g_theConceptDB->GetNumConcepts(); index++)
+		for (index = 0; index < g_theConceptDB->NumRecords(); index++)
 		{
+			
+			if(HIDE(g_theConceptDB, index)) continue;
+
 			
 			Add_Item_To_Topics_List(g_theConceptDB->GetNameStr(
 							g_theConceptDB->m_alphaToIndex[ index ]), index);
@@ -2248,7 +1934,7 @@ int GreatLibrary::Get_Database_Size(int the_database)
 		return g_theTerrainDB->NumRecords();
 
 	case DATABASE_CONCEPTS:
-		return g_theConceptDB->GetNumConcepts();
+		return g_theConceptDB->NumRecords();
 
 	case DATABASE_GOVERNMENTS:
 		return g_theGovernmentDB->NumRecords();
@@ -2336,7 +2022,7 @@ void GreatLibrary::Force_A_Search()
 {
 	m_listDatabase  = DATABASE_SEARCH;
 	m_page          = 0;
-	m_selectedIndex = k_GL_INDEX_INVALID;
+	m_selectedIndex = CTPRecord::INDEX_INVALID;
 	SetCategoryName(m_listDatabase);
 	m_topics_list->ShouldDraw();
 	UpdateList(m_listDatabase);

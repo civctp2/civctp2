@@ -217,7 +217,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Desc=Copy for Remote Debugging
-PostBuild_Cmds=if                                                            exist                                                            R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                            copy                                                            C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                            R:\ctp2_project\ctp2_code\ctp\                                                           	rem                                    if                                                            exist                                                            R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                            copy                                                            C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                            R:\ctp2_project\ctp2_code\ctp\ 
+PostBuild_Cmds=if                                                             exist                                                             R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                             copy                                                             C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.exe                                                             R:\ctp2_project\ctp2_code\ctp\                                                            	rem                                     if                                                             exist                                                             R:\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                             copy                                                             C:\src\ctp2_project\ctp2_code\ctp\CivCTP_dbg.map                                                             R:\ctp2_project\ctp2_code\ctp\ 
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
@@ -455,6 +455,10 @@ SOURCE=.\ctp2_utils\ddhelp.cpp
 # Begin Source File
 
 SOURCE=.\ctp2_utils\ddhelp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ctp2_utils\minmax.h
 # End Source File
 # Begin Source File
 
@@ -1081,14 +1085,6 @@ SOURCE=..\gfx\gfx_utils\Queue.h
 # Begin Group "database"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\gs\database\conceptDB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\gs\database\conceptDB.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\gs\database\ConstDB.cpp
@@ -4335,6 +4331,120 @@ SOURCE=..\gs\newdb\CivilisationRecord.cpp
 # Begin Source File
 
 SOURCE=..\gs\newdb\CivilisationRecord.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\Concept.cdb
+
+!IF  "$(CFG)" == "ctp2 - Win32 Release"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Concept.cdb
+
+"$(ProjDir)\..\gs\newdb\ConceptRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\ConceptRecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\gs\newdb\ConceptRecord.h
 # End Source File
 # Begin Source File
 

@@ -92,23 +92,7 @@
 #include "windows.h"
 #endif // WIN32
 
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
-	// MSVC 6.0 does not have std::min and std::max.
-	namespace std
-	{
-		template <typename T>
-		inline T const & min(T const & a, T const & b)
-		{
-			return (a < b) ? a : b;
-		};
-
-		template <typename T>
-		inline T const & max(T const & a, T const & b)
-		{
-			return (a < b) ? b : a;
-		};
-	};	// namespace std
-#endif	// _MSC_VER < 1300
+#include "minmax.h"
 
 #if defined(WIN32)
 #include <tchar.h>

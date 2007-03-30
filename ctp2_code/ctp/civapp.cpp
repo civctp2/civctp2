@@ -90,6 +90,7 @@
 // - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
 // - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -136,7 +137,7 @@
 #include "CivilisationRecord.h"
 #include "CivPaths.h"
 #include "civscenarios.h"
-#include "conceptdb.h"
+#include "ConceptRecord.h"
 #include "ConstDB.h"                    // g_theConstDB
 #include "controlpanelwindow.h"
 #include "ctpai.h"
@@ -280,7 +281,6 @@
 
 extern ScreenManager *          g_screenManager;
 extern sint32                   g_splash_old; 
-extern ConceptDB                *g_theConceptDB;
 extern OzoneDatabase            *g_theUVDB;
 extern MovieDB                  *g_theVictoryMovieDB;
 extern FilenameDB               *g_theMessageIconFileDB;
@@ -705,6 +705,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	g_theAgeDB                = new CTPDatabase<AgeRecord>;
 	g_theTerrainDB            = new CTPDatabase<TerrainRecord>;
 	g_theResourceDB           = new CTPDatabase<ResourceRecord>;
+	g_theConceptDB            = new CTPDatabase<ConceptRecord>;
 	g_theTerrainImprovementDB = new CTPDatabase<TerrainImprovementRecord>;
 	g_theMapIconDB            = new CTPDatabase<MapIconRecord>;
 	g_theMapDB                = new CTPDatabase<MapRecord>;
@@ -886,11 +887,11 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 170 );
 
-	if (&archive)
-		g_theConceptDB = new ConceptDB(archive);
-	else {
-		g_theConceptDB = new ConceptDB();
-		g_theConceptDB->Init(g_conceptdb_filename);
+	if(g_theConceptDB) {
+		if(!g_theConceptDB->Parse(C3DIR_GAMEDATA, g_conceptdb_filename)) {
+			ExitGame();
+			return FALSE;
+		}
 	}
 	Assert(g_theConceptDB);
 
@@ -1199,6 +1200,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	if(!g_theUnitBuildListDB->ResolveReferences())      return FALSE;
 	if(!g_theWonderBuildListDB->ResolveReferences())    return FALSE;
 	if(!g_theBuildingBuildListDB->ResolveReferences())  return FALSE;
+	if(!g_theConceptDB->ResolveReferences())            return FALSE;
 	if(!g_theImprovementListDB->ResolveReferences())    return FALSE;
 	if(!g_theStrategyDB->ResolveReferences())           return FALSE;
 	if(!g_theBuildListSequenceDB->ResolveReferences())  return FALSE;

@@ -119,7 +119,7 @@
 #include "AgreementMatrix.h"
 #include "AgreementPool.h"
 #include "AICause.h"
-#include <algorithm>            // std::min
+#include <algorithm>                    // std::min
 #include "AdvanceRecord.h"
 #include "Advances.h"
 #include "ArmyPool.h"
@@ -137,7 +137,7 @@
 #include "Diplomacy_Log.h"
 #include "Diplomat.h"
 #include "director.h"
-#include <functional>
+#include <functional>                   // std::mem_fun_ref
 #include "GameEventArgList.h"
 #include "GameEventArgument.h"
 #include "GameEventManager.h"
@@ -822,12 +822,19 @@ bool ArmyData::CargoCanEnter(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 size_t ArmyData::CountMovementTypeSea() const
 {
+#if 0
+	// Here is what I get:
+	// \ctp2_code\gs\gameobj\ArmyData.cpp(826) : error C2664: 'mem_fun_ref' : 
+	// cannot convert parameter 1 from 'bool (__thiscall Unit::*)(void) const' 
+	//                              to 'bool (__thiscall Unit::*)(void)'
     return std::count_if(m_array, m_array + m_nElements, 
                          std::mem_fun_ref<bool, Unit>(&Unit::GetMovementTypeSea)
                         );
 /// @todo Verify that the above works with MSVC6. If not, replace with the
 ///       the following:
-#if 0 
+///       Doesn't work on MSVC6. Maybe another workaround has to be added for that.
+#endif
+
     size_t count = 0;
 
     for (int i = 0; i < m_nElements; ++i)
@@ -839,7 +846,6 @@ size_t ArmyData::CountMovementTypeSea() const
     }
 
     return count;
-#endif
 }
 
 //----------------------------------------------------------------------------

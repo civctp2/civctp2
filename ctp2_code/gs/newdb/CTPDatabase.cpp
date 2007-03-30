@@ -79,7 +79,8 @@
 // - Added new pollution database. (July 15th 2006 Martin Gühmann)
 // - Added new global warming database. (July 15th 2006 Martin Gühmann)
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
-// - Added new mao database. (27-Mar-2007 Martin Gühmann)
+// - Added new map database. (27-Mar-2007 Martin Gühmann)
+// - Added new concept database. (31-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -698,7 +699,7 @@ template <class T> sint32 CTPDatabase<T>::FindTypeIndex(const char *str) const
 			return i;
 		}
 	}
-	return -1;
+	return CTPRecord::INDEX_INVALID;
 }
 
 template <class T> sint32 CTPDatabase<T>::FindRecordNameIndex(const char *str) const
@@ -709,7 +710,7 @@ template <class T> sint32 CTPDatabase<T>::FindRecordNameIndex(const char *str) c
 			return i;
 		}
 	}
-	return -1;
+	return CTPRecord::INDEX_INVALID;
 }
 
 #include "IconRecord.h" // 0
@@ -839,4 +840,7 @@ template class CTPDatabase<MapIconRecord>;
 
 #include "MapRecord.h" // 41
 template class CTPDatabase<MapRecord>;
+
+#include "ConceptRecord.h" // 42
+template class CTPDatabase<ConceptRecord>;
 #endif // __TILETOOL__

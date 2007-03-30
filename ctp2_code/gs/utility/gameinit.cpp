@@ -42,7 +42,9 @@
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
-// - Reused obsolate concept icon database slot by new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Reused obsolate concept icon database slot for new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Removed old concept database. (31-Mar-2007 Martin Gühmann)
+
 //
 //----------------------------------------------------------------------------
 
@@ -70,7 +72,6 @@
 #include "Cell.h"
 #include "civ3_main.h"
 #include "CivilisationPool.h"
-#include "conceptdb.h"
 #include "ConstDB.h"
 #include "controlpanelwindow.h"
 #include "CriticalMessagesPrefs.h"
@@ -170,7 +171,6 @@ extern sint32 g_cheat_age;
 
 
 StringDB                    *g_theStringDB=NULL;
-ConceptDB                   *g_theConceptDB = NULL;
 OzoneDatabase               *g_theUVDB=NULL;
 ConstDB                     *g_theConstDB=NULL;
 ThroneDB                    *g_theThroneDB = NULL;

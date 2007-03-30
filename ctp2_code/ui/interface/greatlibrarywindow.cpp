@@ -26,6 +26,7 @@
 //
 // - Memory leaks repaired in LoadText by Martin Gühmann.
 // - Added variable and requirement retriever methods. (Sep 13th 2005 Martin Gühmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@
 #include "TerrainImprovementRecord.h"
 
 #include "TerrainRecord.h"
-#include "conceptdb.h"
+#include "ConceptRecord.h"
 #include "GovernmentRecord.h"
 #include "prjfile.h"
 
@@ -99,7 +100,6 @@ extern CivPaths						*g_civPaths;
 extern sint32						g_ScreenWidth;
 extern sint32						g_ScreenHeight;
 extern DebugWindow					*g_debugWindow;
-extern ConceptDB					*g_theConceptDB;
 extern ProjectFile                  *g_GreatLibPF;
 extern SoundManager					*g_soundManager;
 extern  C3UI				*g_c3ui;
@@ -317,7 +317,7 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 		break;
 
 	case DATABASE_CONCEPTS:
-		iconRec = g_theIconDB->Get(g_theConceptDB->GetConceptInfo(theMode)->m_iconDBIndex);
+		iconRec = g_theConceptDB->Get(theMode)->GetDefaultIcon();
 		break;
 
 	case DATABASE_GOVERNMENTS:
@@ -398,7 +398,7 @@ char const * GreatLibraryWindow::GetIconRecText
 		break;
 
     case DATABASE_CONCEPTS:
-		iconRec = g_theIconDB->Get(g_theConceptDB->GetConceptInfo(item)->m_iconDBIndex);
+		iconRec = g_theConceptDB->Get(item)->GetDefaultIcon();
 		break;
 
 	case DATABASE_GOVERNMENTS:

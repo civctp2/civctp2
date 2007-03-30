@@ -1,0 +1,29 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Template type descriptor
+#  Id           : $Id:$
+#
+#-----------------------------------------------------------------------------
+#
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+#  - Created file (30-Mar-2007 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+Concept {
+	Record Icon DefaultIcon aka CONCEPT_DEFAULT_ICON
+	Bit GLHidden            aka NO_INDEX             # Maybe NO_INDEX was meant for something else
+	                                                 # but in the actual code it is not used.
+}

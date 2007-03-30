@@ -4990,7 +4990,7 @@ Unterhalt:
 Effekt:
 +{BuildingDB(Building[0]).DefendersPercent / 100}% <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>Stadtverteidigung<e>
 Vermindert {BuildingDB(Building[0]).PreventConversion}% der Glaubenswechselangriffe
-Verhindert {BuildingDB(Building[0]).PreventSlavery}% der Verklavungsangriffe
+Verhindert {BuildingDB(Building[0]).PreventSlavery}% der Versklavungsangriffe
  
 Ortseinschränkung:
 Nicht in Seestädten verfügbar

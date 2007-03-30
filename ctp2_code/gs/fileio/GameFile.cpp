@@ -34,6 +34,7 @@
 // - Removed old difficulty database. (April 29th 2006 Martin Gühmann)
 // - Removed old pollution database. (July 15th 2006 Martin Gühmann)
 // - Removed old gobal warming database. (July 15th 2006 Martin Gühmann)
+// - Removed old concept database. (31-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +61,6 @@
 #include "CivilisationRecord.h"
 #include "CivPaths.h"               // g_civPaths
 #include "civscenarios.h"
-#include "conceptdb.h"
 #include "ConstDB.h"                // g_theConstDB
 #include "ctpai.h"
 #include "Diffcly.h"
@@ -116,7 +116,6 @@ extern int g_gameWatchID;
 #endif
 
 extern  CivApp                      *g_civApp;
-extern  ConceptDB                   *g_theConceptDB;
 extern  OzoneDatabase               *g_theUVDB;
 extern  Pollution                   *g_thePollution;
 extern  TopTen                      *g_theTopTen;
@@ -226,7 +225,7 @@ static uint32 CompressData(uint8 *inbuf, size_t insize,
 	return (err == Z_OK);
 }
 
-
+// Obsolete
 uint32 GameFile::SaveDB(CivArchive &archive)
 {
 	ProgressWindow::BeginProgress(g_theProgressWindow, "InitProgressWindow", 340);
@@ -263,7 +262,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo(210);
 
-	g_theConceptDB->Serialize(archive);
+//	g_theConceptDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo(220);
 	g_theProgressWindow->StartCountingTo(230);

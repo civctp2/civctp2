@@ -49,6 +49,7 @@
 #include "colorset.h"
 #include "ctp2_listbox.h"
 #include "greatlibrary.h"
+#include "CTPRecord.h"
 #include "pattern.h"
 #include "patternbase.h"
 #include "pixelutils.h"
@@ -466,7 +467,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 
 	sint32      hyperLinkDB     = 0;
-	sint32      hyperLinkIndex  = k_GL_INDEX_INVALID;
+	sint32      hyperLinkIndex  = CTPRecord::INDEX_INVALID;
 	bool        isHyperLink     = false;
 	COLORREF    oldColor        = 0;
 	sint32      oldUnderline    = 0;

@@ -77,7 +77,7 @@ class TechListItem;
 #define k_GL_NUM_COLS			1
 #define k_GL_BUTTONS_PER_COL	18
 
-#define k_GL_INDEX_INVALID		-1
+//#define k_GL_INDEX_INVALID		-1
 
 size_t const	k_MAX_GL_ENTRY		= 8192;
 size_t const	GL_MAX_DB_NAME_SIZE	= 30; 
@@ -110,6 +110,7 @@ enum LIB_STRING {
 
 #include "ctp2_listitem.h"
 #include "keyboardhandler.h"
+#include "CTPRecord.h"
 
 class Chart;
 class ctp2_HyperTextBox;
@@ -157,7 +158,7 @@ protected:
     TechListItem() 
     : 
         ctp2_ListItem        (),
-        m_index              (k_GL_INDEX_INVALID),
+        m_index              (CTPRecord::INDEX_INVALID),
         m_database           (DATABASE_DEFAULT)
     {};
 

@@ -58,6 +58,7 @@
 // - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
 // - Added slic database acces to the new map icon database. (27-Mar-2007 Martin Gühmann)
 // - Added slic database acces to the new map database. (27-Mar-2007 Martin Gühmann)
+// - Added slic database acces to the new concept database. (31-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -120,6 +121,7 @@
 #include "BuildListSequenceRecord.h"
 #include "CitySizeRecord.h"
 #include "CityStyleRecord.h"
+#include "ConceptRecord.h"
 #include "DiplomacyProposalRecord.h"
 #include "DiplomacyThreatRecord.h"
 #include "EndGameObjectRecord.h"
@@ -3055,6 +3057,11 @@ void SlicEngine::AddDatabases()
 															g_MapRecord_Accessors,
 															g_Map_Tokens,
 															k_Num_MapRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<ConceptRecord, 
+									ConceptRecordAccessorInfo>("ConceptDB", g_theConceptDB,
+															   g_ConceptRecord_Accessors,
+															   g_Concept_Tokens,
+															   k_Num_ConceptRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
