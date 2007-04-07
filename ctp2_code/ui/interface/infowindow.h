@@ -54,6 +54,8 @@ public:
 	InfoWindow();
 	~InfoWindow();
 
+	ctp2_Window *GetWindow() {return m_window;}
+
 	static void Open(void);
 	static void Close(void);
 	static void Update(void);
@@ -62,24 +64,19 @@ public:
 	static void SelectWonderTab(void);
 	static void Cleanup(void);
 
-	ctp2_Window *GetWindow() {return m_window;}
-
 private:
-	void Show();
-	void Hide();
+	void Hide(void);
+	void Show(void);
+	void UpdateData(void);
 
 	static void CloseButtonActionCallback(aui_Control *control,
 	                                      uint32 action, uint32 data, void *cookie);
 
-	ctp2_Window *m_window;
-
-	ctp2_Button *m_closeButton;
-
-	RankingTab *m_ranking_tab;
-
-	ScoreTab *m_score_tab;
-
-	WonderTab *m_wonder_tab;
+	ctp2_Window * m_window;
+	ctp2_Button * m_closeButton;
+	RankingTab *  m_ranking_tab;
+	ScoreTab *    m_score_tab;
+	WonderTab *   m_wonder_tab;
 };
 
 #endif

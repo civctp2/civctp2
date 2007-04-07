@@ -52,6 +52,7 @@
 // - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
 //   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
+// - Added version to crash.txt
 //
 //----------------------------------------------------------------------------
 //
@@ -108,12 +109,13 @@
 #include "gamefile.h"
 #include "gameinit.h"
 #include "GameOver.h"
-#include "Globals.h"                    // allocated::reassign
+#include "Globals.h"                    // allocated::clear, allocated::reassign
 #include "grabitem.h"
 #include "greatlibrary.h"
 #include "helptile.h"
 #include "icon.h"
 #include "initialplaywindow.h"
+#include <iomanip>                      // std::setfill, std::setw
 #include "keypress.h"
 #include "MainControlPanel.h"
 #include "messagewin.h"
@@ -138,9 +140,11 @@
 #include "spnewgamewindow.h"
 #include "Sprite.h"
 #include "SpriteGroupList.h"
+#include <sstream>                      // std::basic_stringstream
 #include "statswindow.h"
 #include "statuswindow.h"
 #include "StrDB.h"                      // g_theStringDB
+#include <string>                       // std::basic_string
 #include "TerrainRecord.h"
 #include "tiledmap.h"
 #include "TradePool.h"
@@ -294,7 +298,8 @@ void ThrowBadAlloc()
 
 namespace Os
 {
-    /// Get name of executable
+    /// Get the name of the executable
+    /// \remarks Including the full path
     std::basic_string<TCHAR> GetExeName(void)
     {
 #if defined(WIN32)
@@ -305,6 +310,44 @@ namespace Os
 #else
         return std::basic_string<TCHAR>();
 #endif
+    }
+
+    /// Get the version of the executable
+    /// \remarks Using the last modification date as version
+    std::basic_string<TCHAR> GetExeVersion(void)
+    {
+        std::basic_stringstream<TCHAR>  exeVersion;
+
+#if defined(WIN32)
+        HANDLE		fileHandle	= CreateFile(Os::GetExeName().c_str(), 
+											 GENERIC_READ,
+			                                 FILE_SHARE_READ, 
+											 NULL, 
+											 OPEN_ALWAYS, 
+											 FILE_ATTRIBUTE_NORMAL, 
+											 NULL
+											);
+
+		if (fileHandle != INVALID_HANDLE_VALUE) 
+		{
+			FILETIME	lastWrite;
+			SYSTEMTIME	systemTime;
+
+			if (GetFileTime(fileHandle, NULL, NULL, &lastWrite)		&&
+				FileTimeToSystemTime(&lastWrite, &systemTime)
+			   ) 
+			{
+                exeVersion << std::setfill('0')
+                           << std::setw(4) << systemTime.wYear  << '-'
+                           << std::setw(2) << systemTime.wMonth << '-'
+                           << std::setw(2) << systemTime.wDay;
+			}
+
+			CloseHandle(fileHandle);
+		}
+#endif  // WIN32
+
+        return exeVersion.str();
     }
 
     /// Make OS or compiler behave as compatible as possible
@@ -1150,6 +1193,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 
 		if (crashLog) 
         {
+            fprintf(crashLog, "Version %s\n", Os::GetExeVersion().c_str());
 			fprintf(crashLog, "%s\n", c3debug_ExceptionStackTrace(pException));
 		    fclose(crashLog);
 		}

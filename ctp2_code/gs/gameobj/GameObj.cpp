@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected return types
+// - Repaired crashes
 //
 //----------------------------------------------------------------------------
 
@@ -68,77 +69,36 @@ void GAMEOBJ::operator delete[] (void *ptr, size_t size)
 	::delete[] ((GAMEOBJ*)ptr);
 }
 
-GameObj * GameObj_Access(
-    GameObj *p,   
-    uint32 id) 
+GameObj * GameObj_Access
+(
+    GameObj *   p,   
+    uint32      id
+) 
 {
-	
-#ifdef _DEBUG
-   if (p == NULL) { 
-	   DPRINTF(k_DBG_GAMESTATE, ("No such object %lx\n", id));
-      c3errors_FatalDialog ("GameObj.cpp", "No such object"); 
-      return NULL; 
-	}
-#endif
-
-	while (id != p->m_id)
+	while (p && (id != p->m_id))
 	{
-		if (id < p->m_id) {       
+		if (id < p->m_id) 
+        {       
 			p = p->m_lesser;
-		} else {
+		} 
+        else 
+        {
 			p = p->m_greater;
 		}
-
-#ifdef _DEBUG
-		if (p == NULL) { 
-			DPRINTF(k_DBG_GAMESTATE, ("No such object %lx\n", id));
-			c3errors_FatalDialog ("GameObj.cpp", "No such object"); 
-			return NULL; 
-		}
-#endif
 	}
      
+    if (!p) 
+    { 
+        DPRINTF(k_DBG_GAMESTATE, ("No such object %lx\n", id));
+        c3errors_ErrorDialog("GameObj.cpp", "No such object"); 
+    }
+
  	return p; 
 }
 
-const GameObj * GameObj_Get(GameObj *p, uint32 id) 
+GameObj const * GameObj_Get(GameObj *p, uint32 id) 
 {
-	
-#ifdef _DEBUG
-	if (p == NULL) { 
-		DPRINTF(k_DBG_GAMESTATE, ("No such id %lx\n", id));
-		c3errors_FatalDialog ("GameObj.cpp", "No such id %d", id); 
-		return NULL; 
-	}
-#endif 
-	
-	while (id != p->m_id)
-	{
-	   if (id < p->m_id) p = p->m_lesser;
-	   else p = p->m_greater;
-#ifdef _DEBUG
-		if (p == NULL) { 
-			DPRINTF(k_DBG_GAMESTATE, ("No such id %lx\n", id));
-			c3errors_FatalDialog ("GameObj.cpp", "No such id %d", id); 
-			return NULL; 
-		}
-#endif
-	} 
-
-#if 0
-   
-   } else {
-      if (id < p->m_id) {       
-         return GameObj_Get(p->m_lesser, id); 
-      } else if (p->m_id < id) { 
-         return GameObj_Get(p->m_greater, id); 
-      } else { 
-         return p; 
-      }
-   }
-#endif
-
-   return p;
+    return GameObj_Access(p, id);	
 }
 
 
@@ -179,24 +139,33 @@ bool GameObj_Valid(GameObj * p, uint32 id)
 
 
 
-void GameObj_Insert(
-   GameObj **p,  
-   GameObj *ins) 
+void GameObj_Insert
+(
+   GameObj **   p,  
+   GameObj *    ins
+)
 {
-   if (*p == NULL) { 
-      *p = ins; 
-   } else {
-      if (ins->m_id < (*p)->m_id) {       
-         GameObj_Insert (&((*p)->m_lesser), ins); 
-      } else { 
-         if (ins->m_id == (*p)->m_id) {   
-			 DPRINTF(k_DBG_GAMESTATE, ("Insert duplicate %lx", ins->m_id));
-           c3errors_FatalDialog ("GameObj_Insert.cpp", "insert duplicate %d ", ins->m_id); 
-         } else { 
+    if (*p == NULL) 
+    { 
+        *p = ins; 
+    } 
+    else if (ins)
+    {
+        if (ins->m_id < (*p)->m_id) 
+        {       
+            GameObj_Insert(&((*p)->m_lesser), ins); 
+        } 
+        else if ((*p)->m_id < ins->m_id)
+        { 
             GameObj_Insert(&((*p)->m_greater), ins);
-         }
-      }
-   }
+        }
+        else
+        {
+			DPRINTF(k_DBG_GAMESTATE, ("Insert duplicate %lx", ins->m_id));
+            c3errors_ErrorDialog
+                ("GameObj_Insert.cpp", "insert duplicate %d ", ins->m_id); 
+        }
+    }
 }
 
 
@@ -210,7 +179,7 @@ void GameObj_Delete(GameObj **p, uint32 id)
 {
    if (*p == NULL) {       
 	   DPRINTF(k_DBG_GAMESTATE, ("No such object %lx\n", id));
-      c3errors_FatalDialog ("GameObj.cpp", "No such id %d", id); 
+      c3errors_ErrorDialog ("GameObj.cpp", "No such id %d", id); 
    } else {
       if (id < (*p)->m_id) {       
          GameObj_Delete(&((*p)->m_lesser), id); 

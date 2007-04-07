@@ -43,8 +43,6 @@
 #include "player.h"
 #include "dynarr.h"
 #include "UnitDynArr.h"
-#include "ArmyPool.h"
-#include "UnitPool.h"
 #include "c3debug.h"
 #include "CitySizeRecord.h"
 #include "World.h"
@@ -70,10 +68,13 @@ MapAnalysis & MapAnalysis::GetMapAnalysis()
 }
 
 
-void MapAnalysis::Resize(const PLAYER_INDEX & maxPlayerId,
-const sint16 & xSize,
-const sint16 & ySize,
-const sint16 & resolution)
+void MapAnalysis::Resize
+(
+    const PLAYER_INDEX & maxPlayerId,
+    const sint16 & xSize,
+    const sint16 & ySize,
+    const sint16 & resolution
+)
 {
     sint32 old_size = m_threatGrid.size();
 
@@ -133,7 +134,7 @@ const sint16 & resolution)
 void MapAnalysis::ResizeContinents()
 {
     sint32 maxLandCont = g_theWorld->GetMaxLandContinent() -
-    g_theWorld->GetMinLandContinent();
+                            g_theWorld->GetMinLandContinent();
     sint32 maxPlayerId = m_threatGrid.size();
     m_cityOnContinent.Resize(maxPlayerId, maxLandCont, FALSE);
     m_armyOnContinent.Resize(maxPlayerId, maxLandCont, FALSE);
@@ -159,25 +160,7 @@ void MapAnalysis::BeginTurn()
     Army army;
     Unit city;
     Unit unit;
-    sint32 num_armies;
-    sint32 num_units;
-    sint32 num_cities;
-    Player * player_ptr;
-    sint32 hitpoints;
-    sint32 defense_strength;
-    sint32 attack_strength;
-    sint32 ranged_strength;
-    sint32 total_value;
-    sint32 defense_count;
-    sint32 ranged_count;
-    sint32 prod;
-    sint32 food;
-    sint32 gold;
-
-    sint32 happiness;
-    sint32 threat;
-
-    sint32 i, j, k;
+    sint32 i;
 
     m_minCityProductionAll = 99999;
     m_minCityGrowthAll = 99999;
@@ -187,26 +170,14 @@ void MapAnalysis::BeginTurn()
     m_maxCityGrowthAll = -99999;
     m_maxCityGoldAll = -99999;
 
-    TradeDynamicArray * trade_routes;
-    Army pirate_army;
-    sint32 route_value;
-
-    bool is_land;
-    sint32 cont;
-
-
     m_piracyIncomeMatrix.assign(m_piracyIncomeMatrix.size(), 0);
-
 
     m_cityOnContinent.Reset(FALSE);
     m_armyOnContinent.Reset(FALSE);
 
     m_worldPopulation = 0;
 
-
     ComputeHandicapRatios();
-
-
 	
 	size_t player;
     for (player = 0; player < m_threatGrid.size(); ++player)
@@ -215,9 +186,6 @@ void MapAnalysis::BeginTurn()
         m_valueGrid[player].Clear();
         m_tradeAtRiskGrid[player].Clear();
         m_piracyLossGrid[player].Clear();
-
-
-        player_ptr = g_player[player];
 
         m_minCityProduction[player] = 99999;
         m_minCityGrowth[player] = 99999;
@@ -243,45 +211,54 @@ void MapAnalysis::BeginTurn()
         m_landArea[player] = 0;
         m_totalTrade[player] = 0;
 
-
+        Player * player_ptr = g_player[player];
         if (player_ptr == NULL)
             continue;
 
-
-		
         m_projectedScience[player] =
-        player_ptr->m_advances->GetProjectedScience();
+            player_ptr->m_advances->GetProjectedScience();
 
         m_totalPopulation[player] = static_cast<sint16>(player_ptr->GetTotalPopulation());
         m_landArea[player] = static_cast<sint16>(player_ptr->GetLandArea());
         m_worldPopulation += m_totalPopulation[player];
 
-
-		
-        num_units = player_ptr->m_all_units->Num();
+        sint32 num_units = player_ptr->m_all_units->Num();
         for (i = 0; i < num_units; i++)
         {
             unit = player_ptr->m_all_units->Access(i);
-            Assert(g_theUnitPool->IsValid(unit));
+            Assert(unit.IsValid());
 
-            if (unit.GetDBRec()->GetNumSpecialAttacks() > 0)
-                m_specialAttackers[player] ++;
+            if (    unit.IsValid() 
+                 && unit.GetDBRec()
+                 && (unit.GetDBRec()->GetNumSpecialAttacks() > 0)
+               )
+            {
+                m_specialAttackers[player]++;
+            }
         }
 
-        num_armies = player_ptr->m_all_armies->Num();
+        sint32 num_armies = player_ptr->m_all_armies->Num();
         for (i = 0; i < num_armies; i++)
         {
             army = player_ptr->m_all_armies->Access(i);
-            Assert(g_theArmyPool->IsValid(army));
+            Assert(army.IsValid());
             army->GetPos(pos);
 
+            sint32 hitpoints;
+            sint32 defense_count;
+            sint32 ranged_count;
+            sint32 attack_strength;
+            sint32 defense_strength;
+            sint32 ranged_strength;
+            sint32 total_value;
             army->GetArmyStrength(hitpoints,
-            defense_count,
-            ranged_count,
-            attack_strength,
-            defense_strength,
-            ranged_strength,
-            total_value);
+                                  defense_count,
+                                  ranged_count,
+                                  attack_strength,
+                                  defense_strength,
+                                  ranged_strength,
+                                  total_value
+                                 );
 			Assert(total_value >= 0);
 
             m_nuclearWeapons[player] += army->CountNuclearUnits();
@@ -294,20 +271,22 @@ void MapAnalysis::BeginTurn()
 				UpdateBoundingRectangle(army);	
 			}
 
-
             m_threatGrid[player].AddValue(pos, attack_strength + ranged_strength);
-
-
             m_valueGrid[player].AddValue(pos, total_value);
 
-
+            bool    is_land;
+            sint32  cont;
             g_theWorld->GetContinent(pos, cont, is_land);
-            bool is_military = (attack_strength > 0 || ranged_strength > 0) &&
-            !army->IsCivilian();
-            if (is_land && is_military)
-			{
-				m_armyOnContinent.Set(player, cont, TRUE);
-			}
+
+            if (is_land)
+            {
+                bool is_military = (attack_strength > 0 || ranged_strength > 0) 
+                                && !army->IsCivilian();
+                if (is_military)
+			    {
+				    m_armyOnContinent.Set(player, cont, TRUE);
+			    }
+            }
 
 
             m_movementTypeUnion[player] |= army.GetMovementType();
@@ -325,13 +304,13 @@ void MapAnalysis::BeginTurn()
         }
 
 
-        num_cities = player_ptr->m_all_cities->Num();
+        sint32 num_cities = player_ptr->m_all_cities->Num();
         for (i = 0; i < num_cities; i++)
         {
             city = player_ptr->m_all_cities->Access(i);
-            Assert(g_theUnitPool->IsValid(city));
+            Assert(city.IsValid() && city->GetCityData());
             city.GetPos(pos);
-            total_value = city->GetCityData()->GetValue();
+            sint32 total_value = city->GetCityData()->GetValue();
 
 
             m_totalTrade[player] += city->GetCityData()->GetGoldFromTradeRoutes();
@@ -340,15 +319,15 @@ void MapAnalysis::BeginTurn()
             m_valueGrid[player].AddValue(pos, total_value);
 
 
-            trade_routes = city.CD()->GetTradeSourceList();
+            TradeDynamicArray * trade_routes = city.CD()->GetTradeSourceList();
             Assert(trade_routes != NULL);
 
-
-            for (j = 0; j < trade_routes->Num(); j++)
+            sint32 tradeRouteCount  = trade_routes ? trade_routes->Num() : 0;
+            for (sint32 j = 0; j < tradeRouteCount; j++)
             {
-                route_value = trade_routes->Get(j)->GetValue();
-                pirate_army = trade_routes->Get(j)->GetPiratingArmy();
-                if (pirate_army.m_id != 0 && g_theArmyPool->IsValid(pirate_army))
+                sint32 route_value = trade_routes->Get(j)->GetValue();
+                Army pirate_army = trade_routes->Get(j)->GetPiratingArmy();
+                if (pirate_army.IsValid())
                 {
 
                     m_piracyLossGrid[player].
@@ -367,19 +346,15 @@ void MapAnalysis::BeginTurn()
 				
                 const DynamicArray < MapPoint > * path = trade_routes->Get(j)->GetPath();
                 sint32 per_cell_value =
-                (sint32)(((double)route_value / path->Num()) * 1000.0);
-                for (k = 0; k < path->Num(); k++)
+                            (sint32)(((double)route_value / path->Num()) * 1000.0);
+                for (sint32 k = 0; k < path->Num(); k++)
                 {
                     m_tradeAtRiskGrid[player].AddValue(path->Get(k),
                     per_cell_value);
                 }
             }
 
-
-			
-			
-
-            prod = city->GetCityData()->GetGrossCityProduction();
+            sint32 prod = city->GetCityData()->GetGrossCityProduction();
             if (prod < m_minCityProduction[player])
                 m_minCityProduction[player] = prod;
             if (prod < m_minCityProductionAll)
@@ -389,7 +364,7 @@ void MapAnalysis::BeginTurn()
             if (prod > m_maxCityProductionAll)
                 m_maxCityProductionAll = prod;
 
-            food = city->GetCityData()->GetGrowthRate();
+            sint32 food = city->GetCityData()->GetGrowthRate();
             if (food < m_minCityGrowth[player])
                 m_minCityGrowth[player] = food;
             if (food < m_minCityGrowthAll)
@@ -399,7 +374,7 @@ void MapAnalysis::BeginTurn()
             if (food > m_maxCityGrowthAll)
                 m_maxCityGrowthAll = food;
 
-            gold = city->GetCityData()->GetGrossCityGold();
+            sint32 gold = city->GetCityData()->GetGrossCityGold();
             if (gold < m_minCityGold[player])
                 m_minCityGold[player] = gold;
             if (gold < m_minCityGoldAll)
@@ -409,13 +384,14 @@ void MapAnalysis::BeginTurn()
             if (gold > m_maxCityGoldAll)
                 m_maxCityGoldAll = gold;
 
-            happiness = (sint32)city->GetCityData()->GetHappiness();
+            sint32 happiness = (sint32)city->GetCityData()->GetHappiness();
             if (happiness < m_minCityHappiness[player])
                 m_minCityHappiness[player] = happiness;
             if (happiness > m_maxCityHappiness[player])
                 m_maxCityHappiness[player] = happiness;
 
-
+            bool    is_land;
+            sint32  cont;
             g_theWorld->GetContinent(pos, cont, is_land);
             if (is_land)
             {
@@ -441,17 +417,16 @@ void MapAnalysis::BeginTurn()
         m_valueGrid[player].Relax(cycles, coef);
 
 
-        player_ptr = g_player[player];
-
-
+        Player * player_ptr = g_player[player];
         if (player_ptr == NULL)
             continue;
 
-        num_cities = player_ptr->m_all_cities->Num();
+        sint32 num_cities = player_ptr->m_all_cities->Num();
         for (i = 0; i < num_cities; i++)
         {
             city = player_ptr->m_all_cities->Access(i);
-            threat = GetThreat(player, city.RetPos());
+            sint32 threat = GetThreat(player, city.RetPos());
+
             if (threat < m_minCityThreat[player])
                 m_minCityThreat[player] = threat;
 
@@ -683,10 +658,7 @@ double MapAnalysis::GetPowerRank(const CityData * city) const
     double power = GetPower(owner, city->GetHomeCity().RetPos());
     double max_power = GetMaxPower(owner);
 
-    if (max_power > 0.0)
-        return (power / max_power);
-
-    return 0.0;
+    return (max_power > 0.0) ? (power / max_power) : 0.0;
 }
 
 
@@ -814,86 +786,69 @@ const MapPoint & MapAnalysis::GetNearestForeigner(const PLAYER_INDEX player, con
 
 double MapAnalysis::CityAtRiskRatio(const Unit city, const PLAYER_INDEX opponentId) const
 {
-    MapPoint pos;
-    Assert(g_theUnitPool->IsValid(city));
-    city.GetPos(pos);
+    Assert(city.IsValid());
     PLAYER_INDEX playerId = city.GetOwner();
-    double ratio = 0.0;
-
 
     Player * player_ptr = g_player[playerId];
-
-
     if (player_ptr == NULL)
         return 0.0;
 
-
-    if (opponentId != -1 && g_player[opponentId] == NULL)
+    if (opponentId != PLAYER_UNASSIGNED && g_player[opponentId] == NULL)
         return 0.0;
 
-    sint32 player_threat;
-    sint32 opponent_threat;
+    MapPoint pos;
+    city.GetPos(pos);
 
-    player_threat = m_threatGrid[playerId].GetGridValue(pos);
 
-    if (opponentId != -1)
-        opponent_threat = m_threatGrid[opponentId].GetGridValue(pos);
-    else
-		
-        opponent_threat = GetThreat(playerId, pos);
+    sint32  player_threat   = m_threatGrid[playerId].GetGridValue(pos);
+    sint32  opponent_threat = (PLAYER_UNASSIGNED == opponentId)
+                              ? GetThreat(playerId, pos)
+                              : m_threatGrid[opponentId].GetGridValue(pos);
 
+    double ratio;
     if (player_threat > 0)
-		{
-			
-			
-			ratio = ((double) opponent_threat / (double) player_threat) * 0.2;
-		}
+	{
+		ratio = ((double) opponent_threat / (double) player_threat) * 0.2;
+        if (ratio > 1.0)
+            ratio = 1.0;
+        else if (ratio < 0.0)
+            ratio = 0.0;
+	}
     else if (opponent_threat <= 0)
-		{
-			
-			ratio  = 0.0;
-		}
+	{
+		ratio  = 0.0;
+	}
 	else 
-		{
-			
-			ratio = 1.0;
-		}
-
-
-    if (ratio > 1.0)
-        ratio = 1.0;
-    else if (ratio < 0.0)
-        ratio = 0.0;
+	{
+		ratio = 1.0;
+	}
 
     return ratio;
 }
 
 
-sint32 MapAnalysis::MostAtRiskCity(const PLAYER_INDEX & playerId,
-Unit & city,
-const PLAYER_INDEX & opponentId) const
+sint32 MapAnalysis::MostAtRiskCity
+(
+    const PLAYER_INDEX &    playerId,
+    Unit &                  city,
+    const PLAYER_INDEX &    opponentId
+) const
 {
+    Player * player_ptr = g_player[playerId];
+    if (player_ptr == NULL)
+        return 0;
+
+    if (opponentId != PLAYER_UNASSIGNED && g_player[opponentId] == NULL)
+        return 0;
 
     double most_at_risk_value = 0.0;
     double ratio = 0.0;
 
-
-    Player * player_ptr = g_player[playerId];
-
-
-    if (player_ptr == NULL)
-        return 0;
-
-
-    if (opponentId != -1 && g_player[opponentId] == NULL)
-        return 0;
-
-    Unit tmp_city;
     sint32 num_cities = player_ptr->m_all_cities->Num();
     for (sint32 i = 0; i < num_cities; i++)
     {
-        tmp_city = player_ptr->m_all_cities->Access(i);
-        Assert(g_theUnitPool->IsValid(tmp_city));
+        Unit tmp_city = player_ptr->m_all_cities->Access(i);
+        Assert(tmp_city.IsValid());
 
         ratio = CityAtRiskRatio(tmp_city, opponentId);
 
@@ -904,43 +859,35 @@ const PLAYER_INDEX & opponentId) const
         }
     }
 
-
     return static_cast<sint32>(ratio * 100.0);
 }
 
 
-sint32 MapAnalysis::AtRiskCitiesValue(const PLAYER_INDEX & playerId,
-const PLAYER_INDEX & opponentId) const
+sint32 MapAnalysis::AtRiskCitiesValue
+(
+    const PLAYER_INDEX & playerId,
+    const PLAYER_INDEX & opponentId
+) const
 {
+    Player * player_ptr = g_player[playerId];
+    if (player_ptr == NULL)
+        return 0;
 
-    Unit city;
+    if (opponentId != PLAYER_UNASSIGNED && g_player[opponentId] == NULL)
+        return 0;
+
     double at_risk_value = 0.0;
     double ratio;
 
 
-    Player * player_ptr = g_player[playerId];
-
-
-    if (player_ptr == NULL)
-        return 0;
-
-
-    if (opponentId != -1 && g_player[opponentId] == NULL)
-        return 0;
-
-    sint32 opponent_nukes =
-    GetNuclearWeaponsCount(opponentId);
-
-
+    sint32 opponent_nukes = GetNuclearWeaponsCount(opponentId);
 //  bool no_nuke_defense = (GetNuclearWeaponsCount(playerId) == 0);
 
     sint32 num_cities = player_ptr->m_all_cities->Num();
     for (sint32 i = 0; i < num_cities; i++)
     {
-        city = player_ptr->m_all_cities->Access(i);
-        Assert(g_theUnitPool->IsValid(city));
-
-
+        Unit city = player_ptr->m_all_cities->Access(i);
+        Assert(city.IsValid());
 		
         if (i < opponent_nukes && !city.GetCityData()->SafeFromNukes())
 		{
@@ -995,13 +942,13 @@ const PLAYER_INDEX foreignerId) const
 }
 
 
-bool MapAnalysis::PlayerCanEnter(const PLAYER_INDEX playerId,
-const MapPoint & pos) const
+bool MapAnalysis::PlayerCanEnter
+(
+    const PLAYER_INDEX  playerId,
+    const MapPoint &    pos
+) const
 {
-    if (g_theWorld->GetCell(pos)->CanEnter(m_movementTypeUnion[playerId]))
-        return true;
-    else
-        return false;
+    return g_theWorld->GetCell(pos)->CanEnter(m_movementTypeUnion[playerId]);
 }
 
 
@@ -1056,10 +1003,8 @@ sint32 MapAnalysis::AverageSettledContinentSize(const PLAYER_INDEX playerId) con
 
 sint16 MapAnalysis::GetTotalPopulation(const PLAYER_INDEX playerId) const
 {
-    if (playerId == -1)
-        return m_worldPopulation;
-    else
-        return m_totalPopulation[playerId];
+    return (playerId == PLAYER_UNASSIGNED) ? m_worldPopulation 
+                                           : m_totalPopulation[playerId];
 }
 
 
@@ -1072,8 +1017,7 @@ sint16 MapAnalysis::GetLandArea(const PLAYER_INDEX playerId) const
 double MapAnalysis::GetPopulationPercent(const PLAYER_INDEX playerId) const
 {
     Assert(m_worldPopulation);
-    return (double)m_totalPopulation[playerId] /
-    m_worldPopulation;
+    return (double)m_totalPopulation[playerId] / m_worldPopulation;
 }
 
 
@@ -1081,7 +1025,7 @@ double MapAnalysis::GetLandPercent(const PLAYER_INDEX playerId) const
 {
     Assert(g_theWorld);
     return (double)m_landArea[playerId] /
-    (g_theWorld->GetWidth() * g_theWorld->GetHeight());
+                (g_theWorld->GetWidth() * g_theWorld->GetHeight());
 }
 
 
@@ -1143,9 +1087,6 @@ void MapAnalysis::ComputeHandicapRatios()
     sint32 max_gold_strength = -1;
     sint32 min_gold_strength = -1;
 
-    sint32 strValue;
-
-
     size_t player;
     for (player = 0; player < m_threatGrid.size(); player++)
     {
@@ -1158,7 +1099,7 @@ void MapAnalysis::ComputeHandicapRatios()
             continue;
 
 
-        strValue = g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
+        sint32 strValue = g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
         strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_BUILDINGS);
         strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_WONDERS);
         strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_PRODUCTION);
@@ -1205,7 +1146,7 @@ void MapAnalysis::ComputeHandicapRatios()
             continue;
 
 
-        strValue = g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
+        sint32 strValue = g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY);
         strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_BUILDINGS);
         strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_WONDERS);
         strValue += g_player[player]->m_strengths->GetStrength(STRENGTH_CAT_PRODUCTION);

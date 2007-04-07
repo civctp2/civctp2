@@ -136,16 +136,13 @@ AUI_ERRCODE ArmyManagerWindow::Initialize()
 	return err;
 }
 
-AUI_ERRCODE ArmyManagerWindow::Cleanup()
+void ArmyManagerWindow::Cleanup()
 {
-	if(s_armyWindow) {
+	if (s_armyWindow) 
+    {
 		Hide();
-
-		delete s_armyWindow;
-		s_armyWindow = NULL;
+        allocated::clear(s_armyWindow);
 	}
-
-	return AUI_ERRCODE_OK;
 }
 
 AUI_ERRCODE ArmyManagerWindow::Display()
@@ -258,7 +255,8 @@ void ArmyManagerWindow::NotifySelection()
 
 void ArmyManagerWindow::NotifyRemoteGroupComplete(const Army &army)
 {
-	if(army.IsValid() && g_theUnitPool->IsValid(army[0])) {
+	if (army.IsValid() && army[0].IsValid()) 
+    {
 		g_selected_item->SetSelectUnit(army[0]);
 	}
 }
@@ -393,11 +391,11 @@ void ArmyManagerWindow::Update()
 			g_tiledMap->ColorMagnitudeToRGB(col, &r, &g, &b);
 
 			COLORREF	fgColor = RGB(r, g, b);
-			COLORREF	bgColor = RGB(0,0,0);
+			// not used COLORREF	bgColor = RGB(0,0,0);
 		
 			armyTextlabel->SetTextColor(fgColor);
 			armyTextlabel->SetTextShadow(true);
-			armyTextlabel->SetTextShadowColor(fgColor);
+			armyTextlabel->SetTextShadowColor(fgColor); /// @todo bgColor?
 		}
 		else{
 			armyTextlabel->SetText("");

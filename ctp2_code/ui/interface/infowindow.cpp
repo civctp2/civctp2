@@ -74,11 +74,14 @@ InfoWindow::InfoWindow(void)
 
 InfoWindow::~InfoWindow(void)
 {
-	aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
+    delete m_ranking_tab;
+    delete m_score_tab;
+    delete m_wonder_tab;
 
-	delete m_ranking_tab;
-	delete m_score_tab;
-	delete m_wonder_tab;
+    if (m_window)
+    {
+        aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
+    }
 }
 
 void InfoWindow::SelectRankingTab(void)
@@ -111,47 +114,38 @@ void InfoWindow::Open(void)
 	s_InfoWindow->Show();
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : InfoWindow::Update
-//
-// Description: Updates the information window without closing it.
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
+/// Update the data, without modifying the current window status
 void InfoWindow::Update(void)
 {
-	if (s_InfoWindow)
+    if (s_InfoWindow)
     {
-		s_InfoWindow->Show();
-	}
+        s_InfoWindow->UpdateData();
+    }
 }
+
 
 void InfoWindow::Close(void)
 {
-	if (s_InfoWindow) 
+    if (s_InfoWindow) 
     {
         s_InfoWindow->Hide();
-	}
+    }
 }
 
 
+/// Update the data at all tabs
+void InfoWindow::UpdateData(void)
+{
+    m_score_tab->Update();
+    m_ranking_tab->LoadData();
+    m_wonder_tab->UpdateList();
+}
+
+/// Show the window, after updating the data
 void InfoWindow::Show()
 {
-	if (!m_window->IsHidden())
-    {
-    	m_score_tab->Update();
-    	m_ranking_tab->LoadData();
-	    m_wonder_tab->UpdateList();
-    	m_window->Show();
-    }
+    UpdateData();
+    m_window->Show();
 }
 
 

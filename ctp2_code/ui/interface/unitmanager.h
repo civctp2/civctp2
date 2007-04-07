@@ -24,17 +24,21 @@ class UnitManager {
 	UnitManager(AUI_ERRCODE *err);
 	~UnitManager();
 
-	static AUI_ERRCODE Initialize();
-	static AUI_ERRCODE Cleanup();
-	static AUI_ERRCODE Display();
-	static AUI_ERRCODE Hide();
-
+	void DisbandSelected();
+	uint32 GetLastDisbandedUnit() const { return m_lastDisbandedUnit; }
+	void SetLastDisbandedUnit(uint32 u) { m_lastDisbandedUnit = u; }
 	void Update();
 	void UpdateStatsList();
 	void UpdateTacticalList();
 	void UpdateAdvice();
 	void UpdateReadiness();
 	void UpdateNumUnits();
+
+	static AUI_ERRCODE  Initialize();
+	static void         Cleanup();
+	static AUI_ERRCODE  Display();
+	static AUI_ERRCODE  Hide();
+
 	static void UpdateAdviceText();
 
 	static void TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, void *cookie);
@@ -59,23 +63,23 @@ class UnitManager {
 					uint32 action, uint32 data, void *cookie);
 
 	static void DisbandQuery(bool response, void *data);
-	void DisbandSelected();
 
 
 	static void InitializeEvents();
 	static void CleanupEvents();
 
-	uint32 GetLastDisbandedUnit() { return m_lastDisbandedUnit; }
-	void SetLastDisbandedUnit(uint32 u) { m_lastDisbandedUnit = u; }
-  private:
-    
+private:
 	static bool sm_statsTabVisible;
 
-	ctp2_Window *m_window, *m_adviceWindow;
-	ctp2_ListBox *m_statsList, *m_tacticalList, *m_adviceList;
-	ctp2_TabGroup *m_tabGroup;
-	PointerList<UnitManagerCategoryInfo> m_unitCategories;
-	uint32 m_lastDisbandedUnit;
+	ctp2_Window *       m_window;
+    ctp2_Window *       m_adviceWindow;
+	ctp2_ListBox *      m_statsList;
+    ctp2_ListBox *      m_tacticalList;
+    ctp2_ListBox *      m_adviceList;
+	ctp2_TabGroup *     m_tabGroup;
+	PointerList<UnitManagerCategoryInfo> 
+                        m_unitCategories;
+	uint32              m_lastDisbandedUnit;
 };
 
 #endif

@@ -58,17 +58,19 @@
 #include "profileDB.h"          // g_theProfileDB
 #include "scenariowindow.h"
 #include "screenutils.h"
+#include <string>               // std::basic_string
 #include "UIUtils.h"
 
 extern  C3UI				*g_c3ui;
 extern  CivApp				*g_civApp;
 
+namespace Os
+{
+    extern std::basic_string<TCHAR> GetExeVersion(void);
+}
 
 static C3Window				*s_initplayWindow		= NULL;
 static MBCHAR				*s_initplayWindowLDLBlock = "InitPlayWindow";
-
-
-
 
 
 sint32	initialplayscreen_displayMyWindow()
@@ -153,48 +155,13 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
             (s_initplayWindowLDLBlock, "SPButton", initialplayscreen_newgamePress, NULL);
     }
 
-	// Display executable date of last modification as version
+	// Display executable version
 	ctp2_Static * versionText = reinterpret_cast<ctp2_Static *>
 		(aui_Ldl::GetObject(s_initplayWindowLDLBlock, "VersionString"));
 	if (versionText)
 	{
-#if defined(_MSC_VER)
-		MBCHAR		exePath[MAX_PATH];
-		DWORD const	exePathSize	= GetModuleFileName(NULL, exePath, MAX_PATH);
-        Assert(exePathSize < MAX_PATH);
-		HANDLE		fileHandle	= CreateFile(exePath, 
-											 GENERIC_READ,
-			                                 FILE_SHARE_READ, 
-											 NULL, 
-											 OPEN_ALWAYS, 
-											 FILE_ATTRIBUTE_NORMAL, 
-											 NULL
-											);
-
-		if (fileHandle != INVALID_HANDLE_VALUE) 
-		{
-			FILETIME	lastWrite;
-			SYSTEMTIME	systemTime;
-
-			if (GetFileTime(fileHandle, NULL, NULL, &lastWrite)		&&
-				FileTimeToSystemTime(&lastWrite, &systemTime)
-			   ) 
-			{
-				MBCHAR	displayDate[4 + 1 + 2 + 1 + 2 + 1];	// YYYY-MM-DD\0
-				sprintf(displayDate, 
-						"%#.4d-%#.2d-%#.2d", 
-						systemTime.wYear, 
-						systemTime.wMonth, 
-						systemTime.wDay
-					   );
- 				versionText->SetText(displayDate);
-			}
-
-			CloseHandle(fileHandle);
-		}
-#endif  // _MSC_VER
+        versionText->SetText(Os::GetExeVersion().c_str());
 	}
-
 
 	return AUI_ERRCODE_OK;
 }

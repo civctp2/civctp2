@@ -50,7 +50,7 @@ class ArmyManagerWindow {
 	~ArmyManagerWindow();
 
 	static AUI_ERRCODE Initialize();
-	static AUI_ERRCODE Cleanup();
+	static void        Cleanup();
 	static AUI_ERRCODE Display();
 	static AUI_ERRCODE Hide();
 
