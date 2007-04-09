@@ -29,31 +29,31 @@
 #### General Message Strings ####
 
 ## Instant Action Messages ##
-IA_BREAK_TREATY				"Durch einen Verstoß gegen unser Abkommen mit den {player[1].civ_name_plural#DAT} würden wir nicht nur riskieren, uns deren Zorn zuzuziehen, sondern auch unser Ansehen bei anderen Völkern würde darunter leiden. Wollen Sie das wirklich in Kauf nehmen, {player[0].leader_name#SIR_CAP}?"
-IA_BREAK_CEASE_FIRE			"{player[0].leader_name#SIR_CAP}, sind Sie sicher, dass Sie gegen unser Friedensabkommen mit den {player[1].civ_name_plural#DAT} verstoßen wollen?"
-IA_BREAK_NO_PIRACY			"{player[0].leader_name#SIR_CAP}, sind Sie sicher, dass wir diesen Handelsweg überfallen sollen, obwohl wir doch versprochen haben, eben jene Nation zu verschonen?"
+IA_BREAK_TREATY				"Durch einen Verstoß gegen unser Abkommen mit den {player[1].civ_name_plural#DAT} würden wir nicht nur riskieren, uns deren Zorn zuzuziehen, sondern auch unser Ansehen bei anderen Völkern würde darunter leiden. Wollt Ihr das wirklich in Kauf nehmen, {player[0].leader_name#SIR_CAP}?"
+IA_BREAK_CEASE_FIRE			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass Ihr gegen unser Friedensabkommen mit den {player[1].civ_name_plural#DAT} verstoßen wollt?"
+IA_BREAK_NO_PIRACY			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass wir diesen Handelsweg überfallen sollen, obwohl wir doch versprochen haben, eben jene Nation zu verschonen?"
 IA_AUTO_UNLOAD				"Sollen unsere Einheiten hier aussteigen, {player[0].leader_name#SIR_CAP}?"
-IA_ENTERING_LANDS			"{player[0].leader_name#SIR_CAP}, sind Sie sicher, dass unsere Truppen in das Territorium {player[1].civ_name_plural#ARTICLE_GEN} vordringen sollen?"
-IA_OUT_OF_FUEL				"Wenn wir diesen Befehl ausführen, wird unseren Flugzeugen der Treibstoff ausgehen und sie werden abstürzen. Wollen Sie sie tatsächlich auf diese Weise zerstören, {player[0].leader_name#SIR_CAP}?"
+IA_ENTERING_LANDS			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass unsere Truppen in das Territorium {player[1].civ_name_plural#ARTICLE_GEN} vordringen sollen?"
+IA_OUT_OF_FUEL				"Wenn wir diesen Befehl ausführen, wird unseren Flugzeugen der Treibstoff ausgehen und sie werden abstürzen. Wollt Ihr sie tatsächlich auf diese Weise zerstören, {player[0].leader_name#SIR_CAP}?"
 IA_BREAK_ECOPACT			"{player[0].leader_name#SIR_CAP}, die Umweltverschmutzung in unseren Städten ist eindeutig zu hoch. Nicht mehr lange und wir verstoßen damit gegen unser Umweltschutzabkommen mit den {player[1].civ_name_plural#DAT}."
-IA_BREAK_LEAVE_OUR_LANDS		"{player[0].leader_name#SIR_CAP}, da wir uns einverstanden erklärt haben, {player[1].civ_name_singular#ARTICLE_PLURAL_ACC} Grenzgebiete zu respektieren, wäre der Vormarsch unserer Truppen ein klarer Akt der Provokation. Ist das wirklich Ihre Absicht?"
-IA_PILLAGE_OWN_LAND			"Diese Feld-Modernisierung wurde von unserem eigenen Volk errichtet. Wollen Sie die Früchte der harten Arbeit Ihrer Bürger wirklich zerstören?"
-IA_SELL_IMPROVEMENT			"Durch den Verkauf {improvement[0].name#ARTICLE_GEN} dieser Stadt würden wir einen Gewinn von {gold[0].value} Gold erwirtschaften. Wollen Sie verkaufen?"
+IA_BREAK_LEAVE_OUR_LANDS		"{player[0].leader_name#SIR_CAP}, da wir uns einverstanden erklärt haben, {player[1].civ_name_singular#ARTICLE_PLURAL_ACC} Grenzgebiete zu respektieren, wäre der Vormarsch unserer Truppen ein klarer Akt der Provokation. Ist das wirklich Eure Absicht?"
+IA_PILLAGE_OWN_LAND			"Diese Feld-Modernisierung wurde von unserem eigenen Volke errichtet. Wollt Ihr die Früchte der harten Arbeit Eurer Bürger wirklich zerstören?"
+IA_SELL_IMPROVEMENT			"Durch den Verkauf {improvement[0].name#ARTICLE_GEN} dieser Stadt würden wir einen Gewinn von {gold[0].value} Gold erwirtschaften. Wollt Ihr verkaufen?"
 IA_FREE_SLAVES				"Sollen die Sklaven in {city[0].name} befreit werden?"
-IA_POLLUTION_ENDS_GOVERNMENT		"Das Volk ist nicht länger bereit, Ihre Heuchelei in punkto Umweltschutz hinzunehmen: Die Regierung wurde von Rebellen gestürzt! Es herrscht Anarchie."
-IA_MAX_CITIES_REACHED			"Sie besitzen bereits die unter der aktuellen Regierungsform maximal mögliche Anzahl an Städten und jede weitere würde die Unzufriedenheit in der Bevölkerung erhöhen. Vielleicht sollten Sie daher einen Regierungswechsel in Erwägung ziehen."
-IA_SETTLING_TOO_CLOSE			"Es ist nicht möglich, eine neue Stadt innerhalb der Stadtgrenzen von {city[0].name} anzusiedeln. Sie sollten sich stattdessen nach einem anderen Standort umsehen, der mehr Ausdehnungsmöglichkeiten bietet."
+IA_POLLUTION_ENDS_GOVERNMENT		"Das Volk ist nicht länger bereit, Eure Heuchelei in punkto Umweltschutz hinzunehmen: Die Regierung wurde von Rebellen gestürzt! Es herrscht Anarchie!"
+IA_MAX_CITIES_REACHED			"Wir besitzen bereits die unter der aktuellen Regierungsform maximal mögliche Anzahl an Städten und jede weitere würde die Unzufriedenheit in der Bevölkerung erhöhen. Vielleicht solltet Ihr daher einen Regierungswechsel in Erwägung ziehen."
+IA_SETTLING_TOO_CLOSE			"Es ist nicht möglich, eine neue Stadt innerhalb der Stadtgrenzen von {city[0].name} anzusiedeln. Ihr solltet Euch stattdessen nach einem anderen Standort umsehen, der mehr Ausdehnungsmöglichkeiten bietet."
 IA_CITY_WILL_STARVE_INITIAL_WARNING	"{player[0].leader_name#SIR_CAP}, der Nahrungsausstoß der Stadt {city[0].name} ist zu gering, um die Versorgung der Bevölkerung zu gewährleisten. Vermutlich werden die Bürger schon bald die Nahrungslager stürmen."
 IA_CITY_WILL_STARVE_FOOD_STORES_LOW	"{player[0].leader_name#SIR_CAP}, die Nahrungslager der Stadt {city[0].name} sind fast leer. Wenn die dortige Nahrungsgewinnung nicht gesteigert wird, wird die Bevölkerung verhungern."
-IA_CITY_WILL_STARVE			"Die Bevölkerung der Stadt {city[0].name} hat keine Nahrung mehr und wenn Sie Ihren Spielzug jetzt beenden, wird sie verhungern. Wollen Sie die Runde wirklich beenden?"
+IA_CITY_WILL_STARVE			"Die Bevölkerung der Stadt {city[0].name} hat keine Nahrung mehr und wenn Ihr Euren Spielzug jetzt beendet, wird sie verhungern. Wollt Ihr die Runde wirklich beenden?"
 IA_CANNOT_CAPTURE_CITY			"Eine feindliche Stadt kann ausschließlich von Landeinheiten erobert werden."
-IA_CAPITOL_WARNING			"Das Kapitol beherbergt die Regierung einer jeden Nation, so dass pro Reich immer nur ein solches Gebäude existieren kann. Wenn Sie in {city[1].name} ein neues Kapitol errichten, wird das alte Gebäude in {city[0].name} verkauft und der Regierungssitz damit nach {city[1].name} verlegt."
-IA_PILLAGE_SUICIDE			"Während der Plünderung einer Straße, die über unpassierbares Gelände führte, wurden Einheiten vernichtet."
+IA_CAPITOL_WARNING			"Das Kapitol beherbergt die Regierung eines jeden Reiches, so dass pro Reich immer nur ein solches Gebäude existieren kann. Wenn Sie in {city[1].name} ein neues Kapitol errichten, wird das alte Gebäude in {city[0].name} verkauft und der Regierungssitz damit nach {city[1].name} verlegt."
+IA_PILLAGE_SUICIDE			"Während der Plünderung einer Straße, die über unpassierbares Gelände führte, sind Einheiten zu Tode gekommen."
 IA_TERRAFORM_DEAD_TILE			"Um Ödland mittels Terraforming umgestalten zu können, muss zunächst die Neuerung 'Umweltschutz' erforscht werden."
-IA_CERTAIN_REVOLUTION			"{player[0].leader_name#SIR_CAP}, alles deutet auf eine bevorstehende Revolution hin und wenn Sie Ihren Spielzug jetzt beenden, wird sich die Situation weiter verschlechtern. Wollen Sie diese Runde wirklich beenden, ohne zuvor Maßnahmen gegen diese Krise zu ergreifen?" 
-IA_CANNOT_AFFORD_MAINTENANCE		"{player[0].leader_name#SIR_CAP}, unsere Rücklagen sind aufgebraucht und wir können die Unterhaltskosten für unsere Gebäude und Modernisierungen nicht bestreiten. Wenn Sie den Spielzug jetzt beenden, sind wir gezwungen, Modernisierungen zu verkaufen, um die Verluste aufzufangen. Wollen Sie die Runde wirklich beenden?" 
-IA_CANNOT_AFFORD_SUPPORT		"{player[0].leader_name#SIR_CAP}, wir können die Unterhaltskosten für unsere Einheiten nicht bestreiten. Wenn Sie den Spielzug jetzt beenden, sind unsere Militärs gezwungen, einige Einheiten zu vernichten. Wollen Sie die Runde dennoch beenden?"
-IA_WAR_DISCONTENT_RISING		"{player[0].leader_name#SIR_CAP}, weil sich so viele unserer Truppen fern der Heimat befinden, steigt die Unzufriedenheit in der Bevölkerung. Vielleicht sollten Sie ein paar Einheiten nach Hause schicken."
+IA_CERTAIN_REVOLUTION			"{player[0].leader_name#SIR_CAP}, alles deutet auf eine bevorstehende Revolution hin und wenn Ihr Euren Spielzug jetzt beendet, wird sich die Situation weiter verschlechtern. Wollt Ihr diese Runde wirklich beenden, ohne zuvor Maßnahmen gegen diese Krise zu ergreifen?" 
+IA_CANNOT_AFFORD_MAINTENANCE		"{player[0].leader_name#SIR_CAP}, unsere Rücklagen sind aufgebraucht und wir können die Unterhaltskosten für unsere Gebäude und Modernisierungen nicht bestreiten. Wenn Ihr den Spielzug jetzt beendet, sind wir gezwungen, Modernisierungen zu verkaufen, um die Verluste aufzufangen. Wollt Ihr die Runde wirklich beenden?" 
+IA_CANNOT_AFFORD_SUPPORT		"{player[0].leader_name#SIR_CAP}, wir können die Unterhaltskosten für unsere Einheiten nicht bestreiten. Wenn Ihr den Spielzug jetzt beendet, sind unsere Militärs gezwungen, einige Einheiten aufzulösen. Wollt Ihr die Runde dennoch beenden?"
+IA_WAR_DISCONTENT_RISING		"{player[0].leader_name#SIR_CAP}, weil sich so viele unserer Truppen fern der Heimat befinden, steigt die Unzufriedenheit in der Bevölkerung. Vielleicht solltet Ihr einige Einheiten nach Hause holen."
 
 
 ## Diplomacy Messages ##
@@ -69,7 +69,7 @@ MILITARY_PACT_BROKEN_BY_3RD		"{player[0}.leader_name#SIR_CAP}, {player[1].countr
 ALLIANCE_BROKEN				"Die ehrlosen {player[1].civ_name_plural} haben uns angegriffen und damit eindeutig gegen unsere Allianz verstoßen!!"
 ALLIANCE_BROKEN_BY_YOU			"{player[0].leader_name#SIR_CAP}, wir haben entgegen unserer Bündnisvereinbarung mit den {player[1].civ_name_plural#DAT} gehandelt, so dass sie nun entsprechend schlecht auf uns zu sprechen sind! Auch andere Nationen werden diesen Vertrauensbruch nicht gutheißen!"
 ALLIANCE_BROKEN_BY_3RD			"{player[0].leader_name#SIR_CAP}, wir haben erfahren, dass die {player[1].civ_name_plural} gegen ihre Allianz mit den {player[2].civ_name_plural} verstoßen haben."
-ALL_AGREEMENTS_BROKEN_BY_AI		"{player[0].leader_name#SIR_CAP}, {player[1].leader_name} hat uns eine Nachricht zukommen lassen: Aufgrund äußerer Anlässe und Umstände {player[2].country_name#CAN_FRONT} die mit Ihnen getroffenen Vereinbarungen zukünftig nicht mehr einhalten. Betrachten Sie daher alle Abkommen und Bündnisse als null und nichtig."
+ALL_AGREEMENTS_BROKEN_BY_AI		"{player[0].leader_name#SIR_CAP}, {player[1].leader_name} hat uns eine Nachricht zukommen lassen: Aufgrund äußerer Anlässe und Umstände {player[2].country_name#CAN_FRONT} die mit Euch getroffenen Vereinbarungen zukünftig nicht mehr einhalten. Betrachtet daher alle Abkommen und Bündnisse als null und nichtig."
 
 ## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN			"Die ehrlosen {player[0].civ_name_plural} haben gegen unser Friedensabkommen verstoßen, indem sie uns grundlos angreifen."
@@ -97,10 +97,10 @@ WONDER_BUILT_QUEUE_EMPTY		"In {city[0].name} wurde {wonder[0].name#ARTICLE_SMALL
 ENDGAME_BUILT				"In {city[0].name} wurde {action[0].name#UNDEF_NEW_IS_READY} fertig gestellt. Nächstes Bauprojekt: {action[1].name}."
 ENDGAME_BUILT_QUEUE_EMPTY		"In {city[0].name} {action[0].name#UNDEF_NEW_IS_READY} fertig gestellt. Die Bauliste der Stadt ist jetzt leer."
 CITY_INEFFICIENCY			"Die Bürger von {city[0].name} versuchen, Objekte zu errichten, die veraltet und überholt sind. Wir sollten ihnen neue Anweisungen erteilen."
-CITY_IS_CELEBRATING_HAPPINESS		"{player[0].leader_name#SIR_CAP}, die Bürger von {city[0].name} richten Ihnen zu Ehren eine Feier aus. Sie sind mit Ihrer Regentschaft äußerst zufrieden und stolz, sich {player[0].civ_name_plural} nennen zu dürfen."
+CITY_IS_CELEBRATING_HAPPINESS		"{player[0].leader_name#SIR_CAP}, die Bürger von {city[0].name} richten Euch zu Ehren eine Feier aus. Sie sind mit Eurer Regentschaft äußerst zufrieden und stolz, sich {player[0].civ_name_plural} nennen zu dürfen."
 CRISIS_CITY_IS_INFECTED			"Die Bürger von {city[0].name} wurden einem höchst infektiösen biologischen Wirkstoff ausgesetzt. Wegen der hohen Ansteckungsgefahr sollten wir alle Handelswege dieser Stadt schließen."
 CITY_RIOTING				"Die Stadt {city[0].name} revoltiert!! Scharen wütender Bürger ziehen plündernd und randalierend durch die Straßen. Die Polizei ist machtlos und die Situation verschärft sich zusehends."
-NEW_CIV					"Die Bürger der  {player[0].civ_name_singular#UNDEF_SINGULAR_DAT} Stadt {city[0].name} haben revoltiert und eine neue Nation gegründet. Sie nennen sich jetzt die {player[1].civ_name_plural}. "
+NEW_CIV					"Die Bürger der {player[0].civ_name_singular#UNDEF_SINGULAR_DAT} Stadt {city[0].name} haben revoltiert und eine neue Nation gegründet. Sie nennen sich jetzt die {player[1].civ_name_plural}. "
 CITY_NEW_OWNER				"Die {player[1].civ_name_plural} haben die {player[0].civ_name_singular#UNDEF_PLURAL_ACC} Stadt {city[0].name} erobert."
 CIV_NEW_GOV				"Neuesten Meldungen zufolge sind die {player[0].civ_name_plural} {gov[0].name#CHANGE_TO} übergegangen."
 NEW_GOV_ENACTED				"Die Phase der Anarchie ist beendet und die neue Regierung ist in Kraft."
@@ -113,20 +113,20 @@ CANT_BUILD_UNIT_CELL_IS_FULL		"Die Stadt {city[0].name} ist gezwungen, das aktue
 BUILDING_SETTLER_CITY_OF_ONE		"In {city[0].name} wird gerade {unitrecord[0].name#UNDEF} errichtet. Da mit der Fertigstellung {unitrecord[0].name#ARTICLE_GEN} jedoch das Bevölkerungsmaximum von 1 überschritten wird, kommt es automatisch zur Auflösung der Stadt. Wollen Sie dennoch fortfahren?"
 CITY_DESTROYED_BY_STARVING		"Die Stadt {city[0].name} wurde durch eine Hungersnot vernichtet."
 CITY_DESTROYED_BY_WAR			"Die Stadt {city[0].name} wurde von feindlichen Truppen zerstört. Die Bevölkerung hat den Angriff nicht überlebt."
-CRISIS_CITIES_IN_REVOLT			"{player[0].leader_name#SIR_CAP}, es gibt beunruhigende Nachrichten aus {city[0].name}: Da die Bürger Sie als Staatsoberhaupt für ungeeignet halten, haben sie konsequenterweise revoltiert und ihre eigene Nation gegründet."
+CRISIS_CITIES_IN_REVOLT			"{player[0].leader_name#SIR_CAP}, es gibt beunruhigende Nachrichten aus {city[0].name}: Da die Bürger Euch als Staatsoberhaupt für ungeeignet halten, haben sie konsequenterweise revoltiert und ihre eigene Nation gegründet."
 CRISIS_CITY_IS_NANO_INFECTED		"{player[0].leader_name#SIR_CAP}, in der Stadt {city[0].name} wurde ein gefährlicher biologischer Wirkstoff freigesetzt. Wir sollten alle Handelswege schließen, damit sich die Epidemie nicht auf andere Städte ausbreiten kann."
 SEA_CITY_OTHERS				"{player[0].leader_name#SIR_CAP}, wir haben erfahren, dass es den {player[1].civ_name_plural#DAT} gelungen ist, die erste Meereskolonie zu errichten."
 UNIT_DISBANDED_ON_GOV_CHANGE		"{player[0].leader_name#SIR_CAP}, durch den Regierungswechsel wurden einige unserer Einheiten aufgelöst."
 
 ## SLIC stuff
 BUTTON_DONT_SHOW_AGAIN			"Nicht mehr anzeigen."
-NEW_CITY_BUILT				"Sie haben die Stadt {city[0].name} gegründet."
+NEW_CITY_BUILT				"Ihr habt die Stadt {city[0].name} gegründet."
 WAR_OVER				"Die {player[0].civ_name_plural} führen keinen Krieg mehr gegen die {player[1].civ_name_plural}."
 
 
 ## Trade Messages ##
 TRADE_PIRATED				"{player[0].leader_name#SIR_CAP}, unser Handelsweg von {city[0].name} nach {city[1].name} wurde von den {player[1].civ_name_plural#DAT} überfallen."
-TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].leader_name#SIR_CAP}, die {player[1].civ_name_plural} haben ein Handelsembargo gegen uns erhoben. Der Handel auf allen Handelswege {player[1].country_name#TOWARDS} wurde eingestellt! Außerdem haben wir alle Karawanen auf diesen Routen verloren."
+TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].leader_name#SIR_CAP}, die {player[1].civ_name_plural} haben ein Handelsembargo gegen uns verhengt. Der Handel auf allen Handelswege {player[1].country_name#TOWARDS} wurde eingestellt! Außerdem haben wir alle Karawanen auf diesen Routen verloren."
 TRADE_ROUTES_BROKEN_BY_WAR		"Es gibt beunruhigende Neuigkeiten, {player[0].leader_name#SIR_CAP}. Wegen des zwischen uns und {player[1].country_name#DAT} entbrannten Konflikts wurde der Handel auf unseren Handelswegen, die in {player[1].civ_name_singular#UNDEF_PLURAL_ACC} Städte führen, eingestellt. Außerdem haben wir alle Karawanen, die dort unterwegs waren, verloren."
 
 ## Trade Advisor Stuff ##
@@ -140,9 +140,9 @@ ROUTE_TYPE_FOOD				"Nahrung"
 ## Victory/End of Game Messages ##
 PLAYER_DEFEATED				"Die {player[0].civ_name_plural} wurden vernichtend geschlagen."
 PLAYER_DEFEATED_BY			"Die {player[1].civ_name_plural} haben {player[0].country_name#NOM_SMALL} erobert."
-YOU_LOSE				"Sie waren der Macht einfach nicht gewachsen. Ihre Nation liegt in Schutt und Asche und das Volk fordert einen neuen, fähigeren Regenten. Bleibt nur die Hoffnung, dass Sie in den Geschichtsbüchern noch mal glimpflich davonkommen. Fürs Erste ist die Ära der Regentschaft von {player[0].leader_name} damit jedoch beendet."
+YOU_LOSE				"Ihr wart der Macht einfach nicht gewachsen. Euer Reich liegt in Schutt und Asche und das Volk fordert einen neuen, fähigeren Regenten. Bleibt nur die Hoffnung, dass Ihr in den Geschichtsbüchern noch mal glimpflich davonkommt. Fürs Erste ist die Ära der Regentschaft von {player[0].leader_name} damit jedoch beendet."
 END_OF_GAME_TIME_IS_RUNNING_OUT		"Die Zeit wird knapp: Die Menschheit ist auf der Suche nach dem einen wahren Herrscher und wird schon bald ihre Wahl treffen."
-END_OF_GAME_OUT_OF_TIME			"Wir schreiben das Jahr 2300 nach Christus, die Zeit ist um. Sie können das Spiel zwar fortsetzen, es erfolgt jedoch keine Punktewertung mehr."
+END_OF_GAME_OUT_OF_TIME			"Wir schreiben das Jahr 2300 nach Christus, die Zeit ist um. Ihr könnt das Spiel zwar fortsetzen, es erfolgt jedoch keine Punktewertung mehr."
 
 ## Pollution ##
 WORLD_POLLUTION_SPACE_LAUNCH		"Unsere Satelliten haben es zutage befördert: Weltraumstarts verursachen eine steigende Verunreinigung der Atmosphäre."
@@ -151,43 +151,43 @@ WORLD_POLLUTION_NUCLEAR_WAR		"Die nukleare Kriegsführung hat verheerende Folgen 
 WORLD_POLLUTION_GLOBAL_WARMING		"Unser Planet kann der fortgesetzten rücksichtslosen Umweltverschmutzung nicht länger standhalten: Weil die Menschen nicht in der Lage sind, den Schadstoffausstoß zu verringern, steht die globale Erderwärmung unmittelbar bevor."
 WORLD_POLLUTION_FLOODING_IMMINENT	"Durch die globale Erderwärmung steigt der Meeresspiegel. Unseren Meteorologen zufolge könnte jederzeit eine katastrophale Flutwelle über uns hereinbrechen, wenn die Menschheit ihren ökologischen Raubbau weiterhin fortsetzt."
 WORLD_POLLUTION_FLOODING_MINOR		"Es gibt erste Anzeichen für die globale klimatische Erwärmung: Unsere Städte werden von ungewöhnlichen Wetterkapriolen und Überflutungen geplagt."
-WORLD_POLLUTION_VIRIDIAN		"Die globale Erderwärmung hat dazu geführt, dass sich große Teile unseres Planeten in nahezu unbewohnbares Ödland verwandelt haben. Wir hätten sorgsamer mit unseren Treibhäusern und Gärten umgehen sollen!"
+WORLD_POLLUTION_VIRIDIAN		"Die globale Erderwärmung hat dazu geführt, dass sich große Teile unseres Planeten in nahezu unbewohnbares Ödland verwandelt haben. Wir hätten sorgsamer mit unserer Erde umgehen sollen!"
 GROSS_POLLUTER				"Uns steht eine Umweltkatastrophe bevor: Der durch die Umweltverschmutzung verursachte Schadstoffausstoß zerstört die umliegenden Ländereien der Stadt {city[0].name}."
 WORLD_POLLUTION_STABLE			"Es gibt großartige Neuigkeiten, {player[0].leader_name#SIR_CAP}: Die existenzbedrohende globale Umweltverschmutzung konnte erfolgreich reduziert werden! Unsere Welt findet langsam wieder ins ökologische Gleichgewicht zurück."
 WORLD_POLLUTION_OZONE_LOSS_IMMINENT	"{player[0].leader_name#SIR_CAP}, die Ozonschicht baut rapide ab. Unsere Meteorologen gehen davon aus, dass die ultraviolette Strahlung schon bald gefährliche Werte annehmen wird."
 WORLD_POLLUTION_FLOODING_MAJOR		"{player[0].leader_name#SIR_CAP}, nach wie vor werden Städte durch Flutkatastrophen zerstört. Mittlerweile sind bereits Millionen von Todesopfern zu beklagen."
 CITY_POLLUTION_WARNING			"{player[0].leader_name#SIR_CAP}, die Umweltverschmutzung in der Stadt {city[0].name} ist sehr hoch."
-CITIES_KILLED_BY_CALAMITY		"Die Stadt {city[0].name} wurde durch eine Flutkatastrophe zerstört. Wir müssen die Umweltverschmutzung in unserem Reich so schnell wie möglich senken, bevor es zu weiteren Umweltkatastrophen kommt."
+CITIES_KILLED_BY_CALAMITY		"Die Stadt {city[0].name} wurde durch eine Flutkatastrophe zerstört. Wir müssen die Umweltverschmutzung in unserem Reiche so schnell wie möglich senken, bevor es zu weiteren Umweltkatastrophen kommt."
 
 ## Wonders ##
 WONDER_STARTED				"Der Wettlauf um die Errichtung eines Weltwunders hat begonnen: {player[0].leader_name}, das Staatsoberhaupt {player[0].civ_name_plural#ARTICLE_GEN}, hat mit der Errichtung {wonder[0].name#ARTICLE_GEN} begonnen."
 WONDER_STOPPED				"Unsere Konkurrenten werden ihr ruhmreiches Ziel in nächster Zeit nicht erreichen: {player[0].leader_name} hat die Arbeiten zur Errichtung {wonder[0].name#ARTICLE_GEN} eingestellt."
 WONDER_ALMOST_FINISHED			"Uns läuft die Zeit davon: {player[0].leader_name} hat die Errichtung {wonder[0].name#ARTICLE_GEN} beinahe abgeschlossen."
-WONDER_COMPLETE_OWNER			"Die Überlegenheit unserer Nation findet Bestätigung in dem Werk unseres Volkes: In der Stadt {city[0].name} wurde {wonder[0].name#ARTICLE_SMALL} fertig gestellt!"
+WONDER_COMPLETE_OWNER			"Die Überlegenheit unseres Reiches findet Bestätigung in dem glorreichen Werke unseres Volkes: In der Stadt {city[0].name} wurde {wonder[0].name#ARTICLE_SMALL} fertig gestellt!"
 WONDER_COMPLETE_ALL			"Besorgniserregende Neuigkeiten, {player[0].leader_name#SIR_CAP}: {player[0].leader_name} hat die Errichtung {wonder[0].name#ARTICLE_GEN} abgeschlossen."
 WONDER_DESTROYED			"Während des Angriffs auf die Stadt {city[0].name} wurde {wonder[0].name#ARTICLE_SMALL} zerstört. Unser Planet ist um ein Weltwunder ärmer."  
 NANITE_DEFUSER_ELIMINATES_NUKES		"Die {player[0].civ_name_plural} haben {wonder[0].name#ARTICLE_SMALL} errichtet, wodurch weltweit alle Nuklearwaffen vernichtet wurden."
 FORBIDDEN_CITY_PEACE			"Es ist uns gelungen, das Weltwunder 'Verbotene Stadt' zu vollenden."
-CITY_JOINE_YOUR_CIV			"Seit dem Inkrafttreten des Humanitätserlasses wollen sich immer mehr Unterdrückte in Ihre Obhut,  begeben{player[0].leader_name#SIR_CAP}. Die Bürger der Stadt {city[0].name} haben revoltiert, sich von {player[0].country_name#DAT} abgespalten und sich unserer Nation angeschlossen."
+CITY_JOINE_YOUR_CIV			"Seit dem Inkrafttreten des Humanitätserlasses wollen sich immer mehr Unterdrückte in unsere Obhut begeben{player[0].leader_name#SIR_CAP}. Die Bürger der Stadt {city[0].name} haben revoltiert, sich von {player[0].country_name#DAT} abgespalten und sich unserem Reiche angeschlossen."
 NO_EMBASSIES_WONDER			"Wegen des Einflusses der Verbotenen Stadt ist es uns nicht möglich, eine Botschaft {player[0].country_name#IN} zu eröffnen."
 WONDER_OBSOLETE				"Durch die Entdeckung {advance[0].name#ARTICLE_GEN} ist {wonder[0].name#ARTICLE_SMALL} veraltet und damit überholt."
 
 ## Ruins ##
 DISCOVERED_REMNANTS_OF_ANCIENT_CIV	"Wir haben in den Ruinen nicht nur die Überreste einer antiken Kultur, sondern auch das Geheimnis einer weiteren Neuerung entdeckt. Damit besitzen wir nun das Wissen über {advance[0].name#ARTICLE_ACC}."
-RUIN_BECOMES_CITY			"Wir haben eine verloren geglaubte Kultur wiederentdeckt! Weil diese Menschen in uns die Helden aus ihren alten Mythologien sehen, haben sie sich freudig unserer Nation angeschlossen."
-NOMADS_HAVE_JOINED_YOU			"Eine Gruppe von Nomaden hat sich aus freien Stücken unserer Nation angeschlossen."
-MERCENARIES_HAVE_JOINED_YOU		"Auf der Suche nach Ruhm und Reichtum haben sich einige Söldner unserer Nation angeschlossen."
+RUIN_BECOMES_CITY			"Wir haben eine verloren geglaubte Kultur wiederentdeckt! Weil diese Menschen in uns die Helden aus ihren alten Mythologien sehen, haben sie sich freudig unserem Reiche angeschlossen."
+NOMADS_HAVE_JOINED_YOU			"Eine Gruppe von Nomaden hat sich aus freien Stücken unserem Reiche angeschlossen."
+MERCENARIES_HAVE_JOINED_YOU		"Auf der Suche nach Ruhm und Reichtum haben sich einige Söldner unserem Reiche angeschlossen."
 DISCOVERED_ANCIENT_TREASURE		"In den Ruinen einer längst vergangenen Kultur haben wir einen antiken Schatz im Wert von {gold[0].value} Gold gefunden."
-BESET_BY_VANDALS			"Bereiten Sie sich auf einen Kampf vor! Unsere Truppen sind in einen Hinterhalt der Barbaren geraten!"
+BESET_BY_VANDALS			"Bereitet Euch auf einen Kampf vor! Unsere Truppen sind in einen Hinterhalt der Barbaren geraten!"
 BESET_BY_NOTHING			"Die Durchsuchung dieser alten Ruinenstätte verlief leider ergebnislos."
 
 ## Government ##
-CANT_CHANGE_GOV				"Solange Sie keine neue Regierungsform erforscht haben, können Sie auch keine neue Regierung einsetzen!"
-CHANGE_GOV_WARNING			"Ein Regierungswechsel zieht eine kurze Phase der Anarchie nach sich. Wollen Sie dennoch {government[0].name#CHANGE_TO} übergehen?"
-PLAYER_DISCOVERS_NEW_GOVERNMENT		"Sie haben {GovernmentDB(government[0].type)#ARTICLE_SMALL} erforscht. Wollen Sie eine neue Regierung einsetzen?"
+CANT_CHANGE_GOV				"Solange Ihr keine neue Regierungsform erforscht haben, könnt Ihr auch keine neue Regierung einsetzen!"
+CHANGE_GOV_WARNING			"Ein Regierungswechsel zieht eine kurze Phase der Anarchie nach sich. Wollen Ihr dennoch {government[0].name#CHANGE_TO} übergehen?"
+PLAYER_DISCOVERS_NEW_GOVERNMENT		"Ihr habt {GovernmentDB(government[0].type)#ARTICLE_SMALL} erforscht. Wollt Ihr eine neue Regierung einsetzen?"
 
 ## Advances ##
-PICK_NEW_DISCOVERY			"Ein Meilenstein in der Geschichte der Forschung ist erreicht, der uns völlig neue wissenschaftliche und kulturelle Möglichkeiten eröffnet: Wir haben <l:4,000>{advance[0].name#ARTICLE_ACC}<e> entdeckt. Wählen Sie nun ein neues Forschungsobjekt aus."
+PICK_NEW_DISCOVERY			"Ein Meilenstein in der Geschichte der Forschung ist erreicht, der uns völlig neue wissenschaftliche und kulturelle Möglichkeiten eröffnet: Wir haben <l:4,000>{advance[0].name#ARTICLE_ACC}<e> entdeckt. Wählt nun ein neues Forschungsobjekt aus."
 UNIT_OBSOLETE_CIVWIDE			"Durch die Entdeckung {advance[0].name#ARTICLE_GEN} sind folgende Einheiten veraltet und damit überholt:"
 
 ## Units ##
@@ -207,16 +207,16 @@ ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].leader_name#SIR_CAP}, mit Schreck
 UNIT_VETERAN				"Als Würdigung für besondere Tapferkeit wurde {unit[0].name#PRONOUN_YOUR} in den Veteranenstatus befördert."
 
 ## Age Change Messages ##
-AGE_ONE_ENTERED				"Unsere Nation entsteigt den Kinderschuhen: Wir sind in das Zeitalter der Antike vorgedrungen."
+AGE_ONE_ENTERED				"Unsere Reich entsteigt den Kinderschuhen: Wir sind in das Zeitalter der Antike vorgedrungen."
 AGE_TWO_ENTERED				"Erste schriftliche Quellen lösen die mündliche Überlieferung ab: Wir sind in das Klassische Zeitalter vorgedrungen."
 AGE_THREE_ENTERED			"Auf den Ruinen des antiken Rom wächst unsere Nation weiter: Wir haben das Mittelalter erreicht."
 AGE_FOUR_ENTERED			"Unsere Nation schreitet einer kulturellen und wissenschaftlichen Blütezeit entgegen: Wir haben das Zeitalter der Renaissance erreicht."
-AGE_FIVE_ENTERED			"Unsere Nation sieht einer Ära des bisher unbekannten Wachstums und einer noch nicht gekannten enormen Produktivität entgegen: Dank der Industriellen Revolution haben wir das Industriezeitalter erreicht."
+AGE_FIVE_ENTERED			"Unsere Reich sieht einer Ära des bisher unbekannten Wachstums und einer noch nicht gekannten enormen Produktivität entgegen: Dank der Industriellen Revolution haben wir das Industriezeitalter erreicht."
 AGE_SIX_ENTERED				"Wir haben uns auf diesem Planeten behauptet und treten nun in das Zeitalter der Moderne ein."
 AGE_SEVEN_ENTERED			"Die Entschlüsselung der Mysterien der Wissenschaft ist in greifbare Nähe gerückt, denn unser Volk steht an der der Schwelle zu einer neuen, bahnbrechenden Epoche der wissenschaftlichen Erkenntnisse und des ungeahnten Wohlstandes entgegen: Der Computer Ära."
 AGE_EIGHT_ENTERED			"Die Entschlüsselung der Mysterien des Lebens ist in greifbare Nähe gerückt, denn unser Volk steht an der Schwelle zu einer neuen, bahnbrechenden Epoche der biologischen Erkenntnisse: Der Genetischen Ära."
-AGE_NINE_ENTERED			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unsere Nation ist in das Diamantene Zeitalter vorangeschritten."
-AGE_TEN_ENTERED				"Die Erforschung aller Technologien ist abgeschlossen: Unsere Nation sieht einer unbekannten Zukunft entgegen."
+AGE_NINE_ENTERED			"Mit großen Schritten nähern wir uns dem Zenith des menschlichen Strebens: Unser Reich ist in das Diamantene Zeitalter vorangeschritten."
+AGE_TEN_ENTERED				"Die Erforschung aller Technologien ist abgeschlossen: Unser Reich sieht einer unbekannten Zukunft entgegen."
 
 ##                 ##
 ## Special Actions ##
@@ -232,7 +232,7 @@ ADVERTISE_COMPLETE_ATTACKER		"Der Einsatz unserer subneuralen Signale ist erfolg
 CRISIS_SLAVE_REVOLT			"Die Sklaven in {city[0].name} haben sich gegen ihre Herren erhoben."
 UPRISING_COMPLETE_VICTIM		"Fremde Freiheitskämpferinnen haben unsere Stadt {city[0].name} infiltriert und erfolgreich einen Sklavenaufstand angezettelt!"
 UPRISING_FAILED_ATTACKER		"Unserer Freiheitskämpferin ist es nicht gelungen, in {city[0].name} einen Sklavenaufstand zu initiieren."
-UPRISING_FAILED_VICTIM			"Unsere wachsamen und treu ergebenen Truppen haben eine Freiheitskämpferin überwältigt, die versucht hatte, in {city[0].name} einen Sklavenaufstand anzuzetteln."
+UPRISING_FAILED_VICTIM			"Unsere wachsamen und treu ergebenen Truppen haben eine Freiheitskämpferin überwältigt, die versucht hatte, in {city[0].name} die Sklaven zum Aufstand aufzuwiegeln."
 
 ## Conduct Hit ##
 ## Eco-terrorist Attack ##
@@ -330,7 +330,7 @@ SAFE_FROM_NUKES_AGRESSOR		"Unser Nuklearangriff auf die Stadt {city[0].name} ist
 ## Spy Attack ##
 ## Cyberninja Attack ##
 NUKE_COMPLETE_VICTIM			"Unsere Feinde haben in der Stadt {city[0].name} einen Nuklearsprengkörper gezündet. Sobald wir wissen, wer hinter diesem verachtenswerten Anschlag steckt, werden wir ihn dafür büßen lassen!"
-NUKE_FAILED_VICTIM			"Unsere erhöhte Wachsamkeit hat sich ausgezahlt: Unsere Spione haben einen Nuklearsprengkörper entdeckt, der auf unsere Stadt {city[0].name} gerichtet war, und konnten ihn entschärfen. Das war  mit Sicherheit das Werk fremder Spione!"
+NUKE_FAILED_VICTIM			"Unsere erhöhte Wachsamkeit hat sich ausgezahlt: Unsere Spione haben einen Nuklearsprengkörper entdeckt, der auf unsere Stadt {city[0].name} gerichtet war, und konnten ihn entschärfen. Das war mit Sicherheit das Werk fremder Spione!"
 NUKE_COMPLETE_AGRESSOR			"{unitrecord[0].name#UNDEF_CAPS} hat erfolgreich einen Nuklearsprengkörper in der feindlichen Stadt {city[0].name} deponiert und auch gezündet. Der angerichtete Schaden ist beträchtlich."
 NUKE_FAILED_AGRESSOR			"{unitrecord[0].name#OUR_SINGULAR_CAPS} wurde bei dem Versuch, in der Stadt {city[0].name} einen Nuklearsprengkörper zu deponieren, gefangen genommen. Damit steht uns jetzt ein diplomatischer Albtraum bevor."
 
@@ -367,7 +367,7 @@ SOOTHSAY_FAILED_ATTACKER		"Der Versuch {unitrecord[0].name#OUR_GEN}, in der Stad
 ## Cyberninja Attack ##
 STEAL_TECHNOLOGY_VICTIM			"Fremde Spione haben in der Stadt {city[0].name} Aufzeichnungen über eine unserer Neuerungen gestohlen. Wir wissen allerdings nicht genau, um welche Technologie es sich handelt."
 STEAL_TECHNOLOGY_FAILED_VICTIM		"Unsere Konkurrenten sind hinter unserem Wissen her wie der Teufel hinter der Seele, aber wir passen gut auf und konnten so auch Diebstahlversuch {unitrecord[0].name#A_FOREIGN_SMALL_GEN} in unserer Stadt {city[0].name} vereiteln."
-STOLE_TECHNOLOGY_AGRESSOR		"{unitrecord[0].name#OUR_SINGULAR_CAPS} hat sich erfolgreich in die geheimen Labors {player[0].civ_name_plural#ARTICLE_GEN} eingeschlichen und eine ihrer Technologien gestohlen. Wir besitzen nun das Wissen über {advance[0].name#ARTICLE_ACC}."
+STOLE_TECHNOLOGY_AGRESSOR		"{unitrecord[0].name#OUR_SINGULAR_CAPS} hat sich erfolgreich in die geheimen Labore {player[0].civ_name_plural#ARTICLE_GEN} eingeschlichen und eine ihrer Technologien gestohlen. Wir besitzen nun das Wissen über {advance[0].name#ARTICLE_ACC}."
 STEAL_TECHNOLOGY_FAILED_AGRESSOR	"Es ist {unitrecord[0].name#OUR_DAT} leider nicht gelungen, eine Technologie {player[0].civ_name_plural#ARTICLE_GEN} zu stehlen."
 NOTHING_TO_STEAL_AGRESSOR		"{unitrecord[0].name#OUR_SINGULAR_CAPS} berichtet, dass die {player[0].civ_name_plural} keine Neuerungen besitzen, die man stehlen könnte. Das deutet zweifellos auf unsere technologische Überlegenheit hin."
 STEAL_WHICH_ADVANCE			"Welche Neuerung soll den {player[0].civ_name_plural#DAT} gestohlen werden? (Eine Zufallsauswahl bietet höhere Erfolgschancen)."
@@ -391,7 +391,7 @@ SUE_FRANCHISE_FAILED_ATTACKER		"Obwohl sich unsere Anwälte große Mühe geben, gel
 ## Hold Reception ##
 ## Diplomat Action ##
 ## Empathic Diplomat Action ##
-PARTY_COMPLETE_VICTIM			"{unitrecord[0].name#UNDEF_CAPS} {player[0].civ_name_plural#ARTICLE_GEN} hat einen offiziellen Empfang in unserer Stadt {city[0].name} gegeben. Es wurde erstklassige Unterhaltung geboten, das Buffet war hervorragend und alle haben sich prächtig amüsiert. Viele unserer Beobachter waren von den {player[0].civ_name_plural#DAT} beeindruckt und sind der Meinung, dass wir versuchen sollten, unsere Differenzen beizulegen und auf partnerschaftliche Beziehungen mit diesem Volk hinzuarbeiten."
+PARTY_COMPLETE_VICTIM			"{unitrecord[0].name#UNDEF_CAPS} {player[0].civ_name_plural#ARTICLE_GEN} hat einen offiziellen Empfang in unserer Stadt {city[0].name} gegeben. Es wurde erstklassige Unterhaltung geboten, das Buffet war hervorragend und alle haben sich prächtig amüsiert. Viele unserer Beobachter waren von den {player[0].civ_name_plural#DAT} beeindruckt und sind der Meinung, dass wir versuchen sollten, unsere Differenzen beizulegen und auf partnerschaftliche Beziehungen mit diesem Volke hinzuarbeiten."
 PARTY_COMPLETE_ATTACKER			"{unitrecord[0].name#PRONOUN_OUR_PLURAL_CAPS} haben in der fremden Stadt {city[0].name} einen Empfang gegeben. Bei dieser erfolgreichen Veranstaltung waren auch {player[0].civ_name_singular#UNDEF_PLURAL_ACC} Würdenträger und Regierungsangehörige zu Gast und wir hoffen, dass die {player[0].civ_name_plural} in Zukunft bereitwilliger mit uns zusammenarbeiten werden."
 
 ##Disabled Screen Buttons##
@@ -425,13 +425,13 @@ GC_COMPLETED_FIRST_CORE_THEM		"Die {player[0].civ_name_plural} machen Fortschrit
 GC_COMPLETED_FIRST_SAT_THEM		"{player[0].country_name#HAS_REAR_THEIR_MALE} ersten Gaia-Satelliten fertig gestellt."
 GC_COMPLETED_FIRST_OBELISK_THEM		"{player[0].country_name#HAS_REAR_THEIR_FEMALE} erste Emitterstation fertig gestellt."
 GC_ENEMY_ACTIVATION_STOPPED_BY_US	"{player[0].leader_name#SIR_CAP}, wir haben den Gaia-Controller {player[1].civ_name_plural#ARTICLE_GEN} sabotiert, so dass sie die Aktivierungssequenz abbrechen mussten. Wir sollten diese Gelegenheit nutzen."
-GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"Wir haben soeben erfahren, dass die {player[0].civ_name_plural} überraschend die Aktivierungssequenz ihres Gaia-Controllers abgebrochen haben. Was dazu geführt hat, ist noch nicht bekannt, wir vermuten allerdings, dass eine feindliche Nation ein oder mehrere der erforderlichen Bauelemente zerstört hat."
+GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"Wir haben soeben erfahren, dass die {player[0].civ_name_plural} überraschend die Aktivierungssequenz ihres Gaia-Controllers abgebrochen haben. Was dazu geführt hat, ist noch nicht bekannt, wir vermuten allerdings, dass eine feindliche Nation einen oder mehrere der erforderlichen Bauelemente zerstört hat."
 
 ### Multiplayer ###
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
-NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} von den {player[0].civ_name_plural#DAT}, Sie sind dran."
-NEXT_EMAIL_PLAYER			"Bitte mailen Sie den auf Ihrem Desktop gespeicherten Spielstand an {player[0].leader_name}, ({action[0].name}) {player[0].civ_name_plural#ARTICLE_GEN}."
+NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} von den {player[0].civ_name_plural#DAT}, Ihr seid dran."
+NEXT_EMAIL_PLAYER			"Bitte mailt den auf Eurem Desktop gespeicherten Spielstand an {player[0].leader_name}, ({action[0].name}) {player[0].civ_name_plural#ARTICLE_GEN}."
 HOTSEAT_CITY_ATTACKED			"Die {player[0].civ_name_plural} haben die Stadt {city[0].name} mit {unit[0].name#UNDEF_DAT} angegriffen."
 HOTSEAT_ARMY_ATTACKED			"Die {player[0].civ_name_plural} haben {unit[1].name#PRONOUN_YOUR_ACC} mit {unit[0].name#UNDEF_DAT} angegriffen."
 
@@ -454,11 +454,11 @@ TRUST_LOSS_VIOLATED_POLLUTION_PACT	""
 TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].leader_name#SIR_CAP}, mit unseren letzten Operationen haben wir entgegen unseres Handelsabkommens mit den {player[1].civ_name_plural#DAT} gehandelt. Diesen Vertrauensmissbrauch werden sie uns nicht so schnell vergessen!"
 
 #Nano-Terror#
-IMMUNE_TO_NANO_TERROR_VICTIM		"Ihre Bürger können wieder ruhig schlafen: Die Stadt {city[0].name} ist immun gegen Nanoviren-Angriffe."
+IMMUNE_TO_NANO_TERROR_VICTIM		"Eure Bürger können wieder ruhig schlafen: Die Stadt {city[0].name} ist immun gegen Nanoviren-Angriffe."
 NANO_TERROR_FAILED_VICTIM		"Unsere Wissenschaftler haben die feindliche Sabotage unserer Industrieanlagen in {city[0].name} vereitelt, bei der eine teuflische Nanitenwaffe zum Einsatz kommen sollte."
 NANO_TERROR_COMPLETE_VICTIM		"Fremde Übeltäter haben in der Stadt {city[0].name} einen Nanovirus freigesetzt."
-NANO_TERROR_FAILED_AGRESSOR		"Ihr Plan zur Rettung der Welt scheint noch nicht so schnell aufzugehen: Ihr Nanoviren-Angriff ist fehlgeschlagen."
-IMMUNE_TO_NANO_TERROR_AGRESSOR		"Trotz Ihrer Vertuschungsversuche wurden Ihre Absichten durchschaut: Eine weitere feindliche Stadt wurde gegen Nanoviren-Angriffe immunisiert."
+NANO_TERROR_FAILED_AGRESSOR		"Euer Plan zur Rettung der Welt scheint noch nicht so schnell aufzugehen: Euer Nanoviren-Angriff ist fehlgeschlagen."
+IMMUNE_TO_NANO_TERROR_AGRESSOR		"Trotz Euer Vertuschungsversuche wurden Eure Absichten durchschaut: Eine weitere feindliche Stadt wurde gegen Nanoviren-Angriffe immunisiert."
 
 #New Messages#
 CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
@@ -467,3 +467,13 @@ UNIT_UPGRADED				"Our {unit[0].name} has been rearmed and trained as a {unit[1].
 HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unit[0].name}!"
 INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}"
 GUERRILLA_SPAWN				"Our {unit[0].name} has raised guerrillas to aid our cause!"
+
+CANT_ATTACK_HAVE_TREATY			"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollt Ihr wirklich fortfahren?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir Eure Truppen so schnell wie möglich vertreiben."
+
+# New Messages # Belong to somewhere else
+# Doves and hawks there are better names for them
+ATTACK_WARNING				"Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[0].civ_name_plural#DAT} den Krieg erklären?"
+CIV2DOVES				"Die Tauben haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
+CIV2HAWKS				"Die Falken verlanegen nach Krieg gegen diese Achse des Bösen!"
+BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 

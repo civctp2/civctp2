@@ -61,7 +61,7 @@ str_ldl_DipWizardCheckIntelligence "Geheimdienst"
 str_ldl_People_ "Menschen:"
 str_ldl_Cities_ "Städte:"
 
-T_NO_KILL_CIVILIAN "Ein Angriff auf {unitrecord[0].name#ARTICLE_ACC} {player[0].civ_name_plural#ARTICLE_GEN} führt zu diplomatischen Spannungen.\n\n Um dies zu vermeiden, können Sie zivile Einheiten wie {unitrecord[0].name#PLURAL} vertreiben, indem Sie eine Ihrer Militäreinheiten aktivieren und <c:0,50,200>Vertreiben<e> wählen." 
+T_NO_KILL_CIVILIAN "Ein Angriff auf {unitrecord[0].name#ARTICLE_ACC} {player[0].civ_name_plural#ARTICLE_GEN} führt zu diplomatischen Spannungen.\n\n Um dies zu vermeiden, könnt Ihr zivile Einheiten wie {unitrecord[0].name#PLURAL} vertreiben, indem Ihr eine Eurer Militäreinheiten aktiviert und <c:0,50,200>Vertreiben<e> wählt." 
 
 # Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
 # here for someone who does.
@@ -95,7 +95,7 @@ str_ldl_TradeManagerAllCities "Alle"
 str_ldl_TradeManagerCitiesPerGood "Städte nach Gut:"
 
 # Moved from info_str.txt, had an error (string[0] no good, need action[0])
-NEXT_EMAIL_PLAYER 			"Bitte mailen Sie den auf Ihrem Desktop gespeicherten Spielstand an {player[0].leader_name}, ({action[0].name}) {player[0].civ_name_plural#ARTICLE_GEN}."
+NEXT_EMAIL_PLAYER 			"Bitte mailt den auf Ihrem Desktop gespeicherten Spielstand an {player[0].leader_name}, ({action[0].name}) {player[0].civ_name_plural#ARTICLE_GEN}."
 
 # Added strings for the science screen.
 str_ldl_ResearchGoal		"* Ziel:"
@@ -173,9 +173,7 @@ NETWORK_PLAYER_JOINED	"{action[0].name} hat die Kontrolle über die {player[0].ci
 NETWORK_DIFFERENT_PLAYER_JOINED	"{action[0].name} will als die {player[0].civ_name_plural} am Spiel teilnehmen, diese Nation war aber ursprünglich einem anderen Spieler zugeordnet. Sollen er/sie rausgeworfen werden?"
 BUTTON_EJECT	"Rauswerfen"
 BUTTON_LET_THEM_STAY	"Teilnehmen lassen"
-NETWORK_YOU_ARE_NOW_HOST	"Sie sind jetzt der Host dieses Spiels."
-NETWORK_NEW_HOST	"{action[0].name} ist jetzt der Host dieses Spiels."
-NETWORK_YOU_ARE_NOW_HOST	"Sie sind jetzt der Host dieses Spiels."
+NETWORK_YOU_ARE_NOW_HOST	"Ihr seid nun der Host dieses Spiels."
 NETWORK_NEW_HOST	"{action[0].name} ist jetzt der Host dieses Spiels."
 NETWORK_SESSION_LOST	"Die Verbindung wurde abgebrochen, kehre zur Lobby zurück."
 NETWORK_WAITING_ON_PLAYERS	"Warte auf Spieler"
@@ -186,7 +184,7 @@ NETWORK_RESYNCING	"Resynchronisierung"
 NETWORK_SENDER_SYSTEM "System"
 
 str_ldl_AddStuff "H I N Z U F Ü G E N"
-str_ldl_SelectCity "Wählen Sie eine Stadt!"
+str_ldl_SelectCity "Wählt eine Stadt!"
 str_ldl_AddPW "Staatl. Bautrupps:"
 str_ldl_AddGold "Gold:"
 
@@ -337,14 +335,14 @@ str_SE_GenerateGoods "Handelsgüter zur Karte hinzufügen"
 QUICKSAVE_NAME "SCHNELLSPEICHERN"
 
 # Scenario editor <CHANGEME>
-str_ldl_Confirm_Restart		"Wollen Sie das Spiel wirklich neu starten?"
+str_ldl_Confirm_Restart		"Wollt Ihr das Spiel wirklich neu starten?"
 REGARD_EVENT_WONDER "Die {player[0].civ_name_plural} sind angesichts unserer imposanten Weltwunder stark beeindruckt."
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Erweiterte Optionen"
 
 # Added for network games, there are more restrictions on when you can initiate diplomacy
-str_code_CantInitiateDiplomacyNow "Sie können kein neues Gesuch absenden, solange Sie nicht am Zug sind oder solange noch eine Antwort auf ein früheres Gesuch aussteht."
+str_code_CantInitiateDiplomacyNow "Ihr könnt kein neues Gesuch absenden, solange Ihr nicht am Zug seid oder solange noch eine Antwort auf ein früheres Gesuch aussteht."
 
 # Status text for minimize button on radar map
 STATUSBAR_MINIMAP_MINIMIZE "Fenster minimieren"
@@ -361,7 +359,7 @@ str_ldl_Settlers "Siedler"
 str_ldl_MultiplayerDisclaimer	"Der Mehrspieler-Modus von Activisions Call To Power 2 eignet sich für maximal 4 Spieler."
 
 # When units will be disbanded due to a government change, ask first:
-str_code_GovernmentChangeDisbandsUnits "Durch den bevorstehenden Regierungswechsel werden einige Einheiten aufgelöst. Wollen Sie diese Regierung einsetzen?"
+str_code_GovernmentChangeDisbandsUnits "Durch den bevorstehenden Regierungswechsel werden einige Einheiten aufgelöst. Wollt Ihr dennoch diese Regierung einsetzen?"
 
 # For the science picker
 ADVANCE_GIVES_GOVS "Regierungsformen:"

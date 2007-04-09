@@ -33,6 +33,7 @@
 //   string loading. (Jan 30th 2006 Martin Gühmann)
 // - Added export method so that the string database in the system can be 
 //   written to one textfile. Only experiental. (Jan 30th 2006 Martin Gühmann)
+// - Loading of default strings ignores now scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -613,6 +614,7 @@ bool StringDB::Parse(MBCHAR * filename)
 
 	if(g_load_defaults){
 		strToken = new Token("Strings.txt", C3DIR_GAMEDATA);
+		strToken->SetCheckScenario(false);
 		while (ParseAStringEntryNoDuplicates(strToken))
 		{
 			// No action: ParseAStringEntry fills m_head and m_all.

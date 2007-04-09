@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _WIN32		
 // - Microsoft Windows version
 //
@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - 
+// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ template <class T> class PointerList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-FILE*		c3files_fopen(C3DIR dirID, MBCHAR const *, MBCHAR const *);
+FILE*		c3files_fopen(C3DIR dirID, MBCHAR const *, MBCHAR const *, bool checkScenario = true);
 FILE*		c3files_freopen(const MBCHAR *, const MBCHAR *, FILE *);
 sint32		c3files_fclose(FILE *);
 

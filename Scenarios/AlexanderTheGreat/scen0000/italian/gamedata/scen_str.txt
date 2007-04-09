@@ -1,23 +1,73 @@
-#### Message strings for the Alexander the Great scenario ######## Button text
-AG_BUTTON_OK 			"OK"
-AG_BUTTON_YES 			"Sì"
-AG_BUTTON_NO 			"No"
-AG_BUTTON_NEXT		 	"Avanti->"
-AG_BUTTON_BACK	 		"<-Indietro"
-AG_BUTTON_EXECUTE			"Giustiziate Parmenione!"
-AG_BUTTON_DISAGREE		"Rifiuta"
-AG_BUTTON_WIFE			"Moglie"
-AG_BUTTON_MISTRESS		"Amante"
-AG_BUTTON_PAMPER			"Trattali bene"
-AG_BUTTON_KILL			"Uccidili"
-AG_BUTTON_MARRY			"Sposala"
-AG_BUTTON_WAIT			"Attendi"
-AG_BUTTON_RULES			"Regole Scenario"
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Meassage strings for the Alexander the Great scenario in Italian
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contain all the message strings for the Alexander the Great 
+#   scenario. It contains nothing else.
+# - The order of the strings has been synchronized in the English, German
+#   and Italian version. This has not been done for the French, Spanish and 
+#   Japanese version, since those files are missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages keep make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last time of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Synchronized the string sequenze between the English, German and Italian
+#   of that file.
+# - Removed Christain propaganda about Babylon.
+# - German version only: Replaced formal addressing by Sie by King's and 
+#   Queen's formal addressing of Ihr.
+#
+#----------------------------------------------------------------------------
+
+#### Message strings for the Alexander the Great scenario ####
+
+#### Button text
+
+AG_BUTTON_OK		"OK"
+AG_BUTTON_YES		"Sì"
+AG_BUTTON_NO		"No"
+AG_BUTTON_NEXT		"Avanti->"
+AG_BUTTON_BACK		"<-Indietro"
+AG_BUTTON_EXECUTE	"Giustiziate Parmenione!"
+AG_BUTTON_DISAGREE	"Rifiuta"
+AG_BUTTON_WIFE		"Moglie"
+AG_BUTTON_MISTRESS	"Amante"
+AG_BUTTON_PAMPER	"Trattali bene"
+AG_BUTTON_KILL		"Uccidili"
+AG_BUTTON_MARRY		"Sposala"
+AG_BUTTON_WAIT		"Attendi"
+AG_BUTTON_RULES		"Regole Scenario"
 
 #### Message box text
 
 # Start game strings
-AG_START_TITLE	"Alessandro il Grande"
+AG_START_TITLE		"Alessandro il Grande"
 AG_START_A		"È il maggio del 334 a.C. Tu sei Alessandro, re di Macedonia, e ti trovi presso le coste dell'Asia, pronto a irrompere nell'impero persiano. Tuo padre Filippo ha trasformato la Macedonia in una potente nazione, ma è morto prima di poter invadere la Persia. La sua fine ti ha consentito di salire al trono a soli 21 anni di età, ereditando un esercito di veterani pronti a tutto."
 AG_START_B		"Hai trascorso due anni a consolidare il tuo potere e ora è tempo di continuare ciò che tuo padre Filippo ha lasciato incompiuto. Alla Persia è rimasto solo il ricordo delle sue antiche glorie, ma un tuo attacco sarà ancora paragonabile a quello di una mosca che tenti di insidiare un elefante. Le probabilità di successo sono poche, ma il mondo non ha mai visto nessuno con il tuo talento e il tuo potenziale."
 AG_START_C		"I tuoi eserciti ti attendono a sud e a sudest, pronti a invadere la Persia al tuo comando. Prima di dare inizio all'invasione, ti raccomandiamo la lettura delle cronache della Grande Biblioteca sulla Macedonia, sulla Persia e sulle altre nazioni confinanti con la tua. Assicurati anche di acquisire familiarità con le regole speciali di questo scenario."
@@ -34,31 +84,30 @@ AG_REGARD_EVENT		"Il popolo disapprova certe tue azioni."
 AG_REGARD_EVENT_POS	"Le tue gesta hanno impressionato molte persone."
 
 # General strings
-AG_PARMENION_PLOT		"È stata scoperta una congiura per ucciderti! L'assassino è stato eliminato. In ogni caso, si è saputo che Filota, il figlio del generale Parmenione, sapeva dei piani dell'assassino e non ne ha parlato con nessuno. Potrebbe trattarsi di una congiura ancor più vasta, che alla fine conduca al generale Parmenione, too miglior generale e intimo amico. Cosa decidi?"
+AG_PARMENION_PLOT	"È stata scoperta una congiura per ucciderti! L'assassino è stato eliminato. In ogni caso, si è saputo che Filota, il figlio del generale Parmenione, sapeva dei piani dell'assassino e non ne ha parlato con nessuno. Potrebbe trattarsi di una congiura ancor più vasta, che alla fine conduca al generale Parmenione, too miglior generale e intimo amico. Cosa decidi?"
 AG_PARMENION_DEFECT	"Spedisci subito un messaggio a Parmenione, spiegando che ti fidi ancora di lui, qualunque cosa accada. Ma il generale non crede in questa fiducia e ritiene che tu sia semplicemente in attesa di un'occasione migliore per sbarazzarti di lui. Impaurito dalla morte, fugge senza parlarti. Nessun dubbio sul fatto che le sue capacità saranno al servizio di uno dei tuoi nemici."
 AG_PARMENION_TRAIT	"Un messaggero segreto viene inviato presso gli altri comandanti agli ordini di Parmenione. Devono scegliere tra il loro diretto superiore e Alessandro. Scelgono te senza alcuna esitazione e uccidono Parmenione prima che riesca ad accorgersi dell'accaduto. Benché egli non fosse colpevole, non sarebbe stato più possibile fidarsi di lui e le conclusioni sono state tratte senza indugio."
 AG_PARMENION_LOYAL	"Un messaggero viene inviato subito a Parmenione, allo scopo di fargli sapere cosa sia accaduto. Nel messaggio, fai notare che avresti potuto ucciderlo prima che egli potesse aver modo di apprendere la notizia, ma che non avresti mai potuto fare qualcosa di simile a un amico così vicino e fedele. Impressionato, ma rassicurato, Parmenione si libera di qualsiasi pensiero di tradimento."
-AG_PARMENION_OLD		"Già da tempo superati i sessant'anni, se non di più, il generale Parmenione alla fine muore di vecchiaia. Il fatto che sia vissuto così a lungo è rimarchevole, considerato che aveva combattuto con re Filippo molte decadi prima della tua nascita e che aveva condotto eserciti fin da allora. Molti hanno affermato che Parmenione sia stato il miglior generale macedone di sempre, a parte te."
+AG_PARMENION_OLD	"Già da tempo superati i sessant'anni, se non di più, il generale Parmenione alla fine muore di vecchiaia. Il fatto che sia vissuto così a lungo è rimarchevole, considerato che aveva combattuto con re Filippo molte decadi prima della tua nascita e che aveva condotto eserciti fin da allora. Molti hanno affermato che Parmenione sia stato il miglior generale macedone di sempre, a parte te."
 AG_PARMENION_BATTLE	"Il generale Parmenione va a combattere in battaglia! Anche se aveva superato da tempo la sessantina, era un uomo eccezionalmente arzillo per la sua età, ma non abbastanza rapido da deviare la spada che lo uccise. Molti hanno affermato che Parmenione sia stato il miglior generale macedone di sempre, naturalmente a parte te."
-AG_ANTIPATER_OLD		"Il generale Antipatro non è più tra noi! Aveva quasi sessant'anni all'epoca della tua ascesa al trono e gli dei hanno deciso che la sua ora era giunta. È morto nel sonno dopo una vita di combattimenti nel nome della Macedonia. Un uomo di esperienza e abilità simili sarà difficile da sostituire."
+AG_ANTIPATER_OLD	"Il generale Antipatro non è più tra noi! Aveva quasi sessant'anni all'epoca della tua ascesa al trono e gli dei hanno deciso che la sua ora era giunta. È morto nel sonno dopo una vita di combattimenti nel nome della Macedonia. Un uomo di esperienza e abilità simili sarà difficile da sostituire."
 AG_ANTIPATER_BATTLE	"Il generale Antipatro è morto in battaglia! Aveva quasi sessant'anni all'epoca della tua ascesa al trono e gli dei hanno deciso che la sua ora era giunta. Un uomo di esperienza e abilità simili sarà difficile da sostituire."
 AG_CRATERUS_OLD		"Il generale Cratero è morto! Era un uomo molto intenso: intensamente fedele, intensamente emotivo, ma sfortunatamente era anche un intenso bevitore. È stato trovato morto durante il mattino, dopo una lunga notte di baldoria. La mancanza di un generale così capace e di un amico così vicino sarà sentita."
 AG_CRATERUS_BATTLE	"Il generale Cratero subisce un colpo mortale in battaglia! Cratero era un uomo passionale e testardo. Benché tu abbia avuto frequenti discussioni con lui, egli era uno dei tuoi compagni più stretti e dei tuoi generali più fedeli. La mancanza di un generale così capace e di un amico così vicino sarà sentita."
 AG_HEPHAESTION		"Anche se hai perso un grande generale, non temere: il tuo intimo partner Efestione è pronto per sostituirlo degnamente. In ogni caso, fai attenzione: non sono poi così tanti coloro che possiedono le doti per guidare con perizia i tuoi uomini."
-AG_PTOLEMY			"Anche se un altro generale è morto, esiste un uomo pronto a ricoprire i suoi incarichi immediatamente. Il tuo amico d'infanzia Tolomeo, benché ancora molto giovane, è all'altezza del compito. In ogni caso, fai attenzione: uomini del suo calibro sono difficili da trovare."
-AG_SELEUCUS			"Hai perduto un altro generale. Ancora una volta, però, esiste un abile sostituto. Seleuco, un amico d'infanzia, è pronto a diventare uno dei tuoi principali generali. Sfortunatamente, hai esaurito la tua riserva di condottieri capaci. In futuro, non potranno esserci altre sostituzioni nei ranghi dei generali."
+AG_PTOLEMY		"Anche se un altro generale è morto, esiste un uomo pronto a ricoprire i suoi incarichi immediatamente. Il tuo amico d'infanzia Tolomeo, benché ancora molto giovane, è all'altezza del compito. In ogni caso, fai attenzione: uomini del suo calibro sono difficili da trovare."
+AG_SELEUCUS		"Hai perduto un altro generale. Ancora una volta, però, esiste un abile sostituto. Seleuco, un amico d'infanzia, è pronto a diventare uno dei tuoi principali generali. Sfortunatamente, hai esaurito la tua riserva di condottieri capaci. In futuro, non potranno esserci altre sostituzioni nei ranghi dei generali."
 AG_HEPHAESTION_OLD	"Il generale Efestione è morto! Come tanti altri soldati, nel corso delle tue campagne svoltesi presso terre sconosciute è stato sorpreso quasi subito da una malattia. Era il tuo più intimo amico e tu sei distrutto dal dolore. Giuri solennemente di edificare un giorno il più grande mausoleo della storia a onore della sua memoria."
 AG_HEPHAESTION_BATTLE	"Il generale Efestione è stato ucciso in battaglia! Efestione era più di un amico, era il tuo mentore. Saresti morto volentieri al suo posto e giuri solennemente di edificare un giorno il più grande mausoleo della storia a onore della sua memoria. Ma oggi il tuo obiettivo è di vendicarti su coloro che si sono resi responsabili del suo assassinio!"
 AG_PTOLEMY_OLD		"Una malattia improvvisa ha ucciso il generale Tolomeo! Era un caro amico sin dai tempi dell'infanzia e, quasi certamente, tuo fratellastro. È molto probabile che fosse il più intelligente dei tuoi compagni. Sarà impossibile sostituire un amico di talento e fedele come lui."
-AG_PTOLEMY_BATTLE		"Il generale Tolomeo è morto in combattimento! Era il più intelligente dei tuoi compagni, ma questa volta la sua intelligenza non lo ha aiutato: un'audace manovra dei suoi soldati è stata scoperta e respinta. Sarà difficile da sostituire."
+AG_PTOLEMY_BATTLE	"Il generale Tolomeo è morto in combattimento! Era il più intelligente dei tuoi compagni, ma questa volta la sua intelligenza non lo ha aiutato: un'audace manovra dei suoi soldati è stata scoperta e respinta. Sarà difficile da sostituire."
 AG_SELEUCUS_OLD		"Il generale Seleuco è morto! Dopo una notte di baldoria trascorsa a bere, si è ammalato di polmonite ed è morto pochi giorni più tardi. Sono periti talmente tanti dei tuoi migliori soldati e amici, lasciandoti sempre più solo."
 AG_SELEUCUS_BATTLE	"Il generale Seleuco è morto! Il tuo amico d'infanzia era coraggioso in battaglia, ma oggi la fortuna degli dei non è stata con lui. Sono morti talmente tanti dei tuoi migliori soldati e amici, lasciandoti sempre più solo."
+AG_GENERAL_DROWN	"{drownedGeneral.name} è scomparso in mare! Per diversi giorni, hai incubi terribili sull'annegamento, nei quali il mare è un'entità maligna che ti stringe nel suo abbraccio gelato, riempiendoti d'acqua la gola sino all'esplosione dei polmoni. Per il momento, ti auguri di poter evitare i viaggi per mare."
 
 # Endgame-related strings
-#		 		--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-AG_ALEX_DEFEAT_A		"Cadi sul campo di battaglia, con il tuo esercito che si sgretola attorno a te. Un messaggero particolarmente perspicace carica il tuo corpo privo di sensi sulla sua cavalcatura e fugge in direzione della tua città più vicina. Trascorri giorni di sofferenza tra la vita e la morte, ma alla fine le tue condizioni migliorano quanto basta per mostrarti ai tuoi compagni."
-AG_ALEX_DEFEAT_B		"Ti sei miracolosamente salvato dalla morte, ma il tuo corpo non sarà mai più lo stesso. Non potrai più lanciarti nei combattimenti alla guida delle tue truppe, il solo presentarti sul campo di battaglia sarebbe uno sforzo particolarmente doloroso. Cerca di badare alla tua salute: tutte le speranze dell'impero sono riposte nella tua sopravvivenza!"
+AG_ALEX_DEFEAT_A	"Cadi sul campo di battaglia, con il tuo esercito che si sgretola attorno a te. Un messaggero particolarmente perspicace carica il tuo corpo privo di sensi sulla sua cavalcatura e fugge in direzione della tua città più vicina. Trascorri giorni di sofferenza tra la vita e la morte, ma alla fine le tue condizioni migliorano quanto basta per mostrarti ai tuoi compagni."
+AG_ALEX_DEFEAT_B	"Ti sei miracolosamente salvato dalla morte, ma il tuo corpo non sarà mai più lo stesso. Non potrai più lanciarti nei combattimenti alla guida delle tue truppe, il solo presentarti sul campo di battaglia sarebbe uno sforzo particolarmente doloroso. Cerca di badare alla tua salute: tutte le speranze dell'impero sono riposte nella tua sopravvivenza!"
 AG_ALEX_DEAD		"La tua fortuna si è esaurita; sei stato ucciso in battaglia! Lanciandoti in maniera spericolata nel cuore della battaglia come fai sempre, combatti coraggiosamente, ma una spada non vista nella confusione ti colpisce in pieno. Altri macedoni potrebbero essere in grado di realizzare i tuoi sogni di conquista del mondo, ma per ciò che ti riguarda il gioco finisce qui."
 AG_ALEX_SHIP_A		"Intrappolato su una nave, non sei in grado di far valere le tue qualità di combattente per salvarti! Man mano che la nave affonda, cadi nell'acqua senza poter fare nulla. Ma non è così facile uccidere il grande Alessandro: riesci a stare a galla abbastanza a lungo da essere tratto in salvo da un'altra nave e vieni immediatamente portato a {city[0].name}"
 AG_ALEX_SHIP_B		"Non tutto va per il verso giusto, comunque. La caduta di alcune travi di legno ti ha causato fratture multiple in vari punti del corpo, mentre la tua nave andava in pezzi. Grazie agli dei sei ancora vivo, ma il tuo corpo non sarà mai più come prima. Cerca di badare a te stesso! Da ora in avanti, la più piccola ferita riportata in battaglia potrebbe significare la tua fine e la tua debolezza significa anche vulnerabilità verso le malattie."
@@ -68,13 +117,13 @@ AG_ALEX_STAGE2		"Hai perduto un po' più della vitalità della tua giovinezza."
 AG_ALEX_STAGE3		"Stai diventando sempre più debole."
 AG_ALEX_STAGE4		"La tua salute è precaria. Il tuo corpo debole è ora sempre più esposto alle malattie. Puoi evitare di morire in questo modo circondandoti dei migliori medici esistenti. Questo comunque comporterà la spesa di 1.000 unità d'oro per turno. Hai intenzione di convocarli?"
 AG_ALEX_DISEASE		"Nelle condizioni precarie in cui ti trovi, ti ammali di polmonite e muori. L'ultima cosa alla quale pensi prima che la tua mente sia avvolta dalle tenebre è che avresti preferito morire con una spada in mano."
-AG_ALEX_DISEASE2		"Nonostante le tue precauzioni e le cure dei migliori medici, la polmonite ti è letale. L'ultima cosa alla quale pensi prima che la tua mente sia avvolta dalle tenebre è che avresti preferito morire con una spada in mano."
+AG_ALEX_DISEASE2	"Nonostante le tue precauzioni e le cure dei migliori medici, la polmonite ti è letale. L'ultima cosa alla quale pensi prima che la tua mente sia avvolta dalle tenebre è che avresti preferito morire con una spada in mano."
 
 # Persian strings
-AG_SCOUT_REPORT_A		"Sulla penisola dell'Asia Minore (Turchia), sono situate le città più importanti della Persia. Sono i centri di etnia greca della costa occidentale, dove la Persia addestra la gran parte dei suoi opliti. In ogni caso, la maggior parte di queste città è ribelle e attende con impazienza la liberazione per mezzo del tuo esercito."
-AG_SCOUT_REPORT_B		"L'altra sorgente principale del potere persiano risiede in Fenicia (Tiro, Sidone e Arado). I Fenici si occupano dell'equipaggiamento dell'imponente flotta persiana. Gli esploratori hanno localizzato un vasto esercito persiano vicino a Dascylium, guidato dal generale Memnone. Per fortuna, gran parte della flotta persiana sta sedando le rivolte in Egitto."
-AG_SCOUT_REPORT_C		"La tua prima preoccupazione dovrebbe essere quella di controllare le coste meridionali e occidentali dell'Asia Minore prima che la flotta persiana vi faccia ritorno e ti attacchi."
-AG_TYRE_APPROACH		"Il controllo di Tiro è la chiave per ottenere quello dell'intera regione. Gli abitanti di questo importante centro però non sono in allarme; la loro città è costruita su una collina e dispone di risorse difensive assai efficaci, al punto che nessuno è mai riuscito a prenderla. Un successo simile significherebbe dare uno slancio decisivo alla tua reputazione."
+AG_SCOUT_REPORT_A	"Sulla penisola dell'Asia Minore (Turchia), sono situate le città più importanti della Persia. Sono i centri di etnia greca della costa occidentale, dove la Persia addestra la gran parte dei suoi opliti. In ogni caso, la maggior parte di queste città è ribelle e attende con impazienza la liberazione per mezzo del tuo esercito."
+AG_SCOUT_REPORT_B	"L'altra sorgente principale del potere persiano risiede in Fenicia (Tiro, Sidone e Arado). I Fenici si occupano dell'equipaggiamento dell'imponente flotta persiana. Gli esploratori hanno localizzato un vasto esercito persiano vicino a Dascylium, guidato dal generale Memnone. Per fortuna, gran parte della flotta persiana sta sedando le rivolte in Egitto."
+AG_SCOUT_REPORT_C	"La tua prima preoccupazione dovrebbe essere quella di controllare le coste meridionali e occidentali dell'Asia Minore prima che la flotta persiana vi faccia ritorno e ti attacchi."
+AG_TYRE_APPROACH	"Il controllo di Tiro è la chiave per ottenere quello dell'intera regione. Gli abitanti di questo importante centro però non sono in allarme; la loro città è costruita su una collina e dispone di risorse difensive assai efficaci, al punto che nessuno è mai riuscito a prenderla. Un successo simile significherebbe dare uno slancio decisivo alla tua reputazione."
 AG_TYRE_BESIDE		"Gli esploratori riferiscono che Tiro è difesa in maniera imponente! Un assalto diretto in questo momento avrebbe probabilmente come risultato ingenti perdite nei ranghi del tuo esercito. Un bombardamento prolungato utilizzando molte catapulte è altamente raccomandato per indebolire le difese nemiche."
 AG_TYRE_CONQUER		"Hai compiuto l'impossibile e hai espugnato Tiro! Nessuno pensava che una città difesa in maniera così imponente potesse essere mai conquistata. La tua reputazione migliora enormemente presso le nazioni confinanti. Le città della Lega di Corinto non hanno alcuna intenzione di infastidirti. Capiscono che se tu sei in grado di conquistare Tiro, sei certamente capace di riservare la stessa sorte anche a loro."
 
@@ -82,7 +131,7 @@ AG_TYRE_CONQUER		"Hai compiuto l'impossibile e hai espugnato Tiro! Nessuno pensa
 AG_PHOEN_ENTER		"Ti trovi presso uno snodo importante. A nordest si procede verso l'Asia Minore, a est è situata la Mesopotamia, centro dell'impero persiano, mentre andando verso sud puoi raggiungere le città costiere della Fenicia. Controlla le città fenicie e la Persia non avrà molte possibilità di costruire navi. È probabile che si uniranno liberamente a te, ma solo dopo la morte di Dario."
 AG_PHOEN_ENTER2		"Ti trovi presso uno snodo importante. A nordest si procede verso l'Asia Minore, a est è situata la Mesopotamia, centro dell'impero persiano, mentre andando verso sud puoi raggiungere le città costiere della Fenicia. Ora che Dario è stato sconfitto, i Fenici sono pronti a unirsi a te e attendono solo il tuo arrivo. Senza la Fenicia, la Persia non potrà avere una flotta navale temibile."
 AG_PHOEN_ARADUS		"Gli abitanti di Aradus sarebbero ben lieti di arrendersi a te, ma benché essi odino Dario, lo temono ancora. Torna qui per goderti un'accoglienza trionfale, quando Dario sarà stato sconfitto."
-AG_PHOEN_ARADUS2		"Gli abitanti di Aradus spalancano le loro porte e ti accolgono in maniera calorosa: sei il loro nuovo eroe! Poco più di dieci anni fa Aradus e Sidon si ribellarono, ma i tumulti furono sedati dai Persiani. Questi cittadini accolgono con gioia chiunque li aiuti a liberarsi dal giogo persiano."
+AG_PHOEN_ARADUS2	"Gli abitanti di Aradus spalancano le loro porte e ti accolgono in maniera calorosa: sei il loro nuovo eroe! Poco più di dieci anni fa Aradus e Sidon si ribellarono, ma i tumulti furono sedati dai Persiani. Questi cittadini accolgono con gioia chiunque li aiuti a liberarsi dal giogo persiano."
 AG_PHOEN_SIDON		"Gli abitanti di Sidon sarebbero ben lieti di arrendersi a te, ma benché essi odino Dario, lo temono ancora. Torna qui per goderti un'accoglienza trionfale, quando Dario sarà stato sconfitto."
 AG_PHOEN_SIDON2		"Sidon si consegna spontaneamente ai Macedoni! Prima della sua recente ribellione, era la più vasta e importante città di questa regione. Ora la Persia ha fatto in modo che Tiro ne rilevasse la posizione. Così, mentre Sidon ti accoglie con gioia, la sua rivale Tiro ti combatterà sino all'ultimo."
 
@@ -91,55 +140,58 @@ AG_GAZA_BESIDE		"Benché molte città di questa regione siano ansiose di consegnar
 AG_GAZA_CONQUER		"La città di Gaza è tua! Hai veramente mostrato a te stesso di essere abile a conquistare città ben difese. Presso la casa del governatore, troverai inoltre un tesoro di 1.500 unità d'oro."
 AG_EGYPT_CNT_DEFECT	"Gli esploratori riferiscono che gli Egiziani sono pronti ad arrendersi ai Macedoni, ma solo se Alessandro apparirà in persona."
 AG_EGYPT_DEFECT		"I nativi dell'Egitto festeggiano gioiosamente l'arrivo del grande Alessandro! Gli Egiziani si sono ripetutamente ribellati ai Persiani, ma solo per essere riconquistati ogni volta. Ti vedono come la loro salvezza da questo ciclo di miseria e si liberano dal giogo persiano in tutta la nazione! I soldati persiani fuggono, lasciandoti una terra da ricostruire."
-AG_EGYPT_TYRE		" Gli esploratori riferiscono che gli Egiziani sono pronti ad arrendersi ai Macedoni, ma che hanno anche paura di rappresaglie da parte della flotta persiana. Conquista Tiro e gli Egiziani ti accoglieranno con gioia."
-	# Barsine and first Darius defeat
+AG_EGYPT_TYRE		"Gli esploratori riferiscono che gli Egiziani sono pronti ad arrendersi ai Macedoni, ma che hanno anche paura di rappresaglie da parte della flotta persiana. Conquista Tiro e gli Egiziani ti accoglieranno con gioia."
+
+# Barsine and first Darius defeat
 AG_DARIUS_DEFEAT_OTHER	"Gli esploratori riferiscono che l'esercito di Dario è stato sconfitto ad opera {player[0].civ_name_plural#PREPOSITION}. Lo stesso Dario, osservando l'andamento della battaglia, è fuggito come un vigliacco ben prima della sua conclusione. Quantomeno il suo comportamento da codardo ti ha offerto l'opportunità di liberare personalmente il mondo dalla sua presenza."
 AG_DARIUS_DEFEAT_A	"L'esercito di Dario è stato sconfitto in battaglia! Lo stesso despota, osservando l'andamento della battaglia, è fuggito come un vigliacco ben prima della sua conclusione. La sua guardia del corpo è stata uccisa, ma Dario si è salvato portando con sé il suo cavallo e poco altro. Il tuo esercito devasta l'accampamento del nemico."
 AG_DARIUS_DEFEAT_B	"Dario viaggia con tutto il lusso che ci si aspetterebbe dal Re dei Re. Non hai trovato solo gioielli e tesori per un valore di 30.000 unità d'oro, ma anche diverse personalità importanti abbandonate al loro destino. Tra i nobili e i parenti esclusi dalla fuga di Dario c'è Barsine, moglie di Memnone e tua amica d'infanzia."
 AG_BARSINE_A		"Ti senti fortemente attratto da Barsine. Lei è giovane, bella, vivace e ha amicizie potenti sia in Persia, sia in Grecia. Essendo stata sposata con Memnone, un greco che combatte per la Persia, conosce bene sia il greco sia il persiano, ed entrambi i tipi di società."
 AG_BARSINE_B		"Dovresti sposare questa donna? Il suo defunto marito era tuo nemico. Inoltre, si tratta di una prigioniera di guerra! Puoi fidarti di lei? La tua reputazione ne risentirebbe senza alcun dubbio, considerato che il popolo penserebbe che tu la voglia sposare per ricordare a tutti il volto dei tuoi nemici. Vuoi prenderla in moglie subito o fare di lei, per il momento, la tua amante?"
 AG_BARSINE2_B		"Capisci di essere interessato a sposare una donna così eccezionale. In ogni caso, si tratta della moglie di Memnone, il tuo nemico traditore! Decidi quindi di fare di lei la tua amante, per il momento, aspettando un'occasione migliore come la morte di Memnone o la sua sconfitta. Se il matrimonio avverrà nella maniera più consona, lei sarà in grado di dare alla luce un tuo erede legittimamente riconosciuto da tutti."
-AG_BARSINE_MARRY		"In seguito a un matrimonio coatto avvenuto a pochi giorni dalla sua cattura, sposi Barsine, per giunta a poca distanza dal campo di battaglia. Sia i Persiani, sia i Greci sono scandalizzati dal tuo comportamento arrogante. Questo atto avrà certamente ripercussioni sulle relazioni diplomatiche con la Grecia. Per lo meno, la luna di miele servirà a distrarti da simili preoccupazioni."
-AG_BARSINE_MARRY2		"Solamente poche settimane dopo il funerale di Memnone, sposi sua moglie Barsine. Sia i Persiani, sia i Greci sono scandalizzati dal tuo comportamento arrogante. Questo atto avrà certamente ripercussioni sulle relazioni diplomatiche con la Grecia. Per lo meno, la luna di miele servirà a distrarti da simili preoccupazioni."
-AG_BARSINE_POISON		"Qualcuno ha tentato di assassinarti avvelenando le tue bevande! Per fortuna non hai bevuto tanto da rendere la dose letale. Scopri che il misfatto è stato ordinato dal fratello di Barsine, un comandante dell'esercito persiano. Egli considera che nessun sistema sia del tutto soddisfacente per sbarazzarsi dell'uomo che ha costretto sua sorella al matrimonio."
-AG_BARSINE_2YEARS		"La cattura di Barsine, la vedova di Memnone, risale ormai a due anni fa. Lei è felice di essere la tua amante e nessuno penserebbe male di te se la sposassi in questo momento. Desideri dunque prenderla in moglie?"
+AG_BARSINE_MARRY	"In seguito a un matrimonio coatto avvenuto a pochi giorni dalla sua cattura, sposi Barsine, per giunta a poca distanza dal campo di battaglia. Sia i Persiani, sia i Greci sono scandalizzati dal tuo comportamento arrogante. Questo atto avrà certamente ripercussioni sulle relazioni diplomatiche con la Grecia. Per lo meno, la luna di miele servirà a distrarti da simili preoccupazioni."
+AG_BARSINE_MARRY2	"Solamente poche settimane dopo il funerale di Memnone, sposi sua moglie Barsine. Sia i Persiani, sia i Greci sono scandalizzati dal tuo comportamento arrogante. Questo atto avrà certamente ripercussioni sulle relazioni diplomatiche con la Grecia. Per lo meno, la luna di miele servirà a distrarti da simili preoccupazioni."
+AG_BARSINE_POISON	"Qualcuno ha tentato di assassinarti avvelenando le tue bevande! Per fortuna non hai bevuto tanto da rendere la dose letale. Scopri che il misfatto è stato ordinato dal fratello di Barsine, un comandante dell'esercito persiano. Egli considera che nessun sistema sia del tutto soddisfacente per sbarazzarsi dell'uomo che ha costretto sua sorella al matrimonio."
+AG_BARSINE_2YEARS	"La cattura di Barsine, la vedova di Memnone, risale ormai a due anni fa. Lei è felice di essere la tua amante e nessuno penserebbe male di te se la sposassi in questo momento. Desideri dunque prenderla in moglie?"
 AG_BARSINE_2YEARS2	"Memnone è morto due anni fa, lasciando vedova la moglie Barsine. Lei è felice di essere la tua amante e nessuno penserebbe male di te se la sposassi in questo momento. Desideri dunque prenderla in moglie?"
-AG_BARSINE_MARRY3	" Congratulazioni per il tuo matrimonio con Barsine! Decidi di rimandare tutti gli impegni ufficiali in modo da goderti una piacevole cerimonia nuziale e una altrettanto piacevole luna di miele."
+AG_BARSINE_MARRY3	"Congratulazioni per il tuo matrimonio con Barsine! Decidi di rimandare tutti gli impegni ufficiali in modo da goderti una piacevole cerimonia nuziale e una altrettanto piacevole luna di miele."
 AG_BARSINE_WIDOW_A	"Ora che Memnone è morto, ti trovi a dover decidere cosa fare di sua moglie, Barsine. È stata la tua amante dall'epoca della sua cattura, avvenuta nell'accampamento di Dario. Avete entrambi gradito la compagnia dell'altro durante le rare occasioni che avete avuto per vedervi."
 AG_BARSINE_WIDOW_B	"Che sia tempo per te di sposare Barsine? Molti diranno che tu hai permesso la morte di Memnone solo per prenderne la moglie. E puoi fidarti di lei oppure si sta comportando in maniera amichevole solo per poi vendicarsi in nome del marito? Sposerai Barsine?"
-	# Statiera and second Darius defeat
+
+# Statiera and second Darius defeat
 AG_DARIUS_DEAD_OTHER	"Gli esploratori riferiscono che Dario è stato ucciso in battaglia ad opera {player[0].civ_name_plural#PREPOSITION}. Il fatto di non aver potuto sconfiggerlo di persona ti infastidisce, ma il mondo è almeno libero dalla sua presenza."
 AG_DARIUS_DEAD_A	"Il tuo esercito ha ucciso Dario! Conoscendo la sua propensione alla fuga, hai ordinato alle tue truppe di realizzare un'audace manovra di accerchiamento per impedirgli di dileguarsi per la seconda volta. Questa strategia ha funzionato, ma Dario, incapace di trovare una via d'uscita,  viene coinvolto nei combattimenti corpo a corpo e viene ucciso da una lancia vagante."
-AG_DARIUS_DEAD_B		"Ancora una volta, il bottino abbandonato presso l'accampamento di Dario incredibile: 20.000 unità d'oro! Come se non bastasse, hai catturato l'intera sua famiglia illesa, inclusi sua madre, sua moglie e numerosi bambini. La cattura della famiglia reale persiana ti mette a disposizione diverse possibilità..."
-AG_DARIUS_DEAD_C		"Considerato che i Persiani hanno una lunga tradizione per ciò che riguarda gli ostaggi reali, puoi permetterti di trattarli generosamente, il che ti costerà 250 unità d'oro per turno. Oppure, in alternativa, puoi ucciderli. Sicuro, una soluzione crudele, ma non senza precedenti. Se dovessero rimanere in vita, i bambini potrebbero prima o poi ribellarsi e causare problemi. Che cosa hai intenzione di fare?"
+AG_DARIUS_DEAD_B	"Ancora una volta, il bottino abbandonato presso l'accampamento di Dario incredibile: 20.000 unità d'oro! Come se non bastasse, hai catturato l'intera sua famiglia illesa, inclusi sua madre, sua moglie e numerosi bambini. La cattura della famiglia reale persiana ti mette a disposizione diverse possibilità..."
+AG_DARIUS_DEAD_C	"Considerato che i Persiani hanno una lunga tradizione per ciò che riguarda gli ostaggi reali, puoi permetterti di trattarli generosamente, il che ti costerà 250 unità d'oro per turno. Oppure, in alternativa, puoi ucciderli. Sicuro, una soluzione crudele, ma non senza precedenti. Se dovessero rimanere in vita, i bambini potrebbero prima o poi ribellarsi e causare problemi. Che cosa hai intenzione di fare?"
 AG_PERSIAN_KILL		"È stata una scelta dolorosa, ma molti altri capi hanno fatto lo stesso. Uccidi l'intera famiglia reale persiana, sostenendo che si sia trattato della vendetta per tutte le atrocità che la Persia ha commesso ai danni della Grecia nel corso degli anni. La reazione in Grecia è largamente positiva, considerato che molti sono felici di assistere alle sofferenze dei Persiani."
-AG_PERSIAN_PAMPER		"I membri della famiglia reale persiana ti esprimono tutta la loro riconoscenza per la gentilezza che stai dimostrando nei loro confronti e sembrano essere molto felici del loro nuovo ruolo di prigionieri viziati."
-AG_STAT_A			"La cattura della famiglia di Dario potrebbe risultare favorevole anche perché potresti aver trovato una donna da sposare. La figlia primogenita di Dario, Stateira, sta per diventare maggiorenne ed è sempre più bella. Il beneficio politico di un simile matrimonio è ovvio: sposare un membro della famiglia reale può contribuire enormemente ad acquisire popolarità presso i Persiani."
-AG_STAT_B			"D'altra parte, si tratta di una prigioniera di guerra e non le piaci. Inoltre, la tua reputazione presso i Greci sarebbe destinata a precipitare. Molti lamentano che la tua conquista di terre straniere ti stia facendo somigliare sempre meno a un greco: un atto simile confermerebbe i loro timori."
-AG_STAT_C			"In aggiunta, la celebrazione del matrimonio costerà 5.000 unità d'oro. Per sposare un membro della famiglia reale persiana, sei obbligato ad attenerti al rito comandato e alle esigenze della mondanità. Che cosa farai?"
+AG_PERSIAN_PAMPER	"I membri della famiglia reale persiana ti esprimono tutta la loro riconoscenza per la gentilezza che stai dimostrando nei loro confronti e sembrano essere molto felici del loro nuovo ruolo di prigionieri viziati."
+AG_STAT_A		"La cattura della famiglia di Dario potrebbe risultare favorevole anche perché potresti aver trovato una donna da sposare. La figlia primogenita di Dario, Stateira, sta per diventare maggiorenne ed è sempre più bella. Il beneficio politico di un simile matrimonio è ovvio: sposare un membro della famiglia reale può contribuire enormemente ad acquisire popolarità presso i Persiani."
+AG_STAT_B		"D'altra parte, si tratta di una prigioniera di guerra e non le piaci. Inoltre, la tua reputazione presso i Greci sarebbe destinata a precipitare. Molti lamentano che la tua conquista di terre straniere ti stia facendo somigliare sempre meno a un greco: un atto simile confermerebbe i loro timori."
+AG_STAT_C		"In aggiunta, la celebrazione del matrimonio costerà 5.000 unità d'oro. Per sposare un membro della famiglia reale persiana, sei obbligato ad attenerti al rito comandato e alle esigenze della mondanità. Che cosa farai?"
 AG_STAT_MARRY_A		"Non perdi tempo a organizzare il tuo matrimonio con Stateira. In quella che sarà ricordata come una grandiosa cerimonia matrimoniale, non solo si assiste alla fusione delle stirpi reali macedone e persiana, ma anche a quelle della gran parte dei tuoi alti ufficiali con la nobiltà persiana. Si può dire che la fusione delle due culture sia veramente iniziata."
 AG_STAT_MARRY_B		"Sfortunatamente, la maggioranza dei Greci in patria non scorge alcuna saggezza nell'aiutare i 'barbari' persiani. La tua popolarità in Grecia precipita. Seguiranno sicuramente regressi diplomatici."
 AG_STAT_WAIT		"Non c'è dubbio che il tempo e la tua fama crescente faranno cambiare opinione a Stateira. Non ha davvero altra scelta, considerato che tu sei l'artefice del suo destino. Alla fine, dovrà cedere alla tua grandezza."
 AG_STAT_MARRY2		"Buone notizie! Stateira è pronta ed è desiderosa di diventare tua moglie. Per sposare un membro della famiglia reale persiana, devi attenerti al rito comandato e alle esigenze della mondanità, che ti costeranno 5000 unità d'oro. Il tempo ha contribuito a ridurre l'opposizione verso il matrimonio in Grecia, ma ci saranno comunque ancora critiche... La sposerai?"
 AG_STAT_MARRY3		"Stateira ti fa osservare che il suo orologio biologico sta ticchettando. Hai le 5.000 unità d'oro necessarie per la cerimonia nuziale. La sposerai?"	
-	# Bessus Uprising
-AG_BESSUS			"Nonostante l'assenza di qualunque traccia di sangue reale nelle vene, il generale persiano Besso si è dichiarato il nuovo imperatore della Persia. Aggiunge che darà disposizioni per continuare la resistenza persiana e giura di essere assetato di vendetta per la morte di Dario."
-AG_BESSUS2			"Nonostante l'assenza di qualunque traccia di sangue reale nelle vene, il generale persiano Besso si è dichiarato il nuovo imperatore della Persia. Aggiunge che darà disposizioni per continuare la resistenza persiana e giura di essere assetato di vendetta per la morte di Dario e della sua famiglia."
+
+# Bessus Uprising
+AG_BESSUS		"Nonostante l'assenza di qualunque traccia di sangue reale nelle vene, il generale persiano Besso si è dichiarato il nuovo imperatore della Persia. Aggiunge che darà disposizioni per continuare la resistenza persiana e giura di essere assetato di vendetta per la morte di Dario."
+AG_BESSUS2		"Nonostante l'assenza di qualunque traccia di sangue reale nelle vene, il generale persiano Besso si è dichiarato il nuovo imperatore della Persia. Aggiunge che darà disposizioni per continuare la resistenza persiana e giura di essere assetato di vendetta per la morte di Dario e della sua famiglia."
 
 # Arabia Strings
 AG_ARABIA_ROAD		"Viaggia percorrendo sino alla fine questo sentiero dissestato e raggiungerai le terre dell'Arabia meridionale, rese ricche dal commercio di spezie. In ogni caso, il viaggio su strade come questa è pericoloso per coloro che non abbiano familiarità con i percorsi accidentati del deserto. Inoltre, fai attenzione ai barbari solitari e crudelmente violenti che battono la zona."
-AG_MARIB			"Hai trovato la leggendaria città di Marib! La posizione esatta di questo centro del commercio di spezie era ignoto agli stranieri. Il benessere ha permesso a una cittadina sorprendentemente estesa di esistere ai margini di un deserto ostile. L'Arabia meridionale è l'unica fonte esistente di erbe per la produzione di incenso, così la città ne ha tratto enormi vantaggi."
-AG_MARIB_CONQUER		"Hai conquistato Marib! Secoli di profitti commerciali sono stati accumulati per ottenere le più disparate forme di benessere. 10.000 unità d'oro e tutto questo ora ti appartiene!"
+AG_MARIB		"Hai trovato la leggendaria città di Marib! La posizione esatta di questo centro del commercio di spezie era ignoto agli stranieri. Il benessere ha permesso a una cittadina sorprendentemente estesa di esistere ai margini di un deserto ostile. L'Arabia meridionale è l'unica fonte esistente di erbe per la produzione di incenso, così la città ne ha tratto enormi vantaggi."
+AG_MARIB_CONQUER	"Hai conquistato Marib! Secoli di profitti commerciali sono stati accumulati per ottenere le più disparate forme di benessere. 10.000 unità d'oro e tutto questo ora ti appartiene!"
 AG_SHABWAH_CONQUER	"Hai conquistato Shabwah! Anche se non è grande né tantomeno ricca come la leggendaria Marib, Shabwah dispone di significative risorse segrete legate ai profitti commerciali che ora ti appartengono. Sei più ricco di 6.000 unità d'oro!"
-AG_DHUFAR_CONQUER		"Hai conquistato Dhufar! Anche se non è grande né tantomeno ricca come la leggendaria Marib, dispone comunque di ricchezze derivate dai profitti commerciali. Hai trovato 3.000 unità d'oro!"
+AG_DHUFAR_CONQUER	"Hai conquistato Dhufar! Anche se non è grande né tantomeno ricca come la leggendaria Marib, dispone comunque di ricchezze derivate dai profitti commerciali. Hai trovato 3.000 unità d'oro!"
 
 # Carthaginian Strings
-AG_CARTHAGE			"I tuoi eserciti si trovano in prossimità della città di Cartagine, l'unico agglomerato urbano importante dell'impero cartaginese. Il resto è costituito da semplici divisioni commerciali dipendenti da questa potente città. In ogni caso, è difesa tanto quanto le altre. Potrebbe essere necessario un lungo assedio per riuscire a conquistarla."
+AG_CARTHAGE		"I tuoi eserciti si trovano in prossimità della città di Cartagine, l'unico agglomerato urbano importante dell'impero cartaginese. Il resto è costituito da semplici divisioni commerciali dipendenti da questa potente città. In ogni caso, è difesa tanto quanto le altre. Potrebbe essere necessario un lungo assedio per riuscire a conquistarla."
 AG_CARTHAGE_CONQUER	"La grande città di Cartagine è stata conquistata! Ora che controlli questo centro situato in posizione strategica, sicuramente il resto del Mediterraneo si sbriciolerà nelle tue mani come una zolla di terra arida. È stato rinvenuto un tesoro di 3.000 unità d'oro!"
 
 # Seres Strings
-AG_SERES			"Hai fatto il tuo ingresso a Seres, la terra della seta. I Greci non hanno mai neppure sospettato l'esistenza di questa zona favolosa sino alla sua localizzazione da parte del tuo esercito. Ci sono alcune città-oasi vicine, ma il cuore di Seres (che in seguito sarà chiamata Cina) si trova molto più a est, oltre deserti e montagne invalicabili."
-AG_SERES2			"Stai lasciando le prosperose città-oasi per metterti alla ricerca del cuore di Seres. Torna indietro adesso: non ce la farai mai. I deserti sono troppo aridi per rifornire un esercito. Solo piccole bande di audaci mercanti riescono a portare a termine il viaggio e a tornare indietro vivi... a volte."
+AG_SERES		"Hai fatto il tuo ingresso a Seres, la terra della seta. I Greci non hanno mai neppure sospettato l'esistenza di questa zona favolosa sino alla sua localizzazione da parte del tuo esercito. Ci sono alcune città-oasi vicine, ma il cuore di Seres (che in seguito sarà chiamata Cina) si trova molto più a est, oltre deserti e montagne invalicabili."
+AG_SERES2		"Stai lasciando le prosperose città-oasi per metterti alla ricerca del cuore di Seres. Torna indietro adesso: non ce la farai mai. I deserti sono troppo aridi per rifornire un esercito. Solo piccole bande di audaci mercanti riescono a portare a termine il viaggio e a tornare indietro vivi... a volte."
 
 # India Strings
 AG_INDIA_ROUTE		"Hai trovato la rotta meridionale tra India e Persia. Sarebbe sensato poter veleggiare da qui ai mari vicini a Babilonia o persino direttamente fino all'Egitto, ma simili rotte sono state da tempo dimenticate. Forse una delle tue più grandi eredità sarà il ripristino del commercio oceanico tra l'India e l'Occidente."
@@ -152,32 +204,35 @@ AG_TAKSASILA_B		"Sfortunatamente, altre città vicine non sono così ricettive. Pr
 AG_TAKSASILA2_A		"La popolazione amichevole di Tassila ha molte informazioni da comunicarti riguardo la natura della parte rimanente dell'India. Il fiume che scorre giusto a ovest di Tassila è chiamato Indo e dopo aver attraversato i deserti, sfocia in mare. Esistono molte città-stato indipendenti sulle sue rive e su quelle dei suoi affluenti. Ciascuna di esse agisce separatamente rispetto alle altre."
 AG_TAKSASILA2_B		"Procedendo in direzione sudest rispetto alla città, arriverai alla fine presso un altro importante fiume con numerosi affluenti, il Gange. Ci sono diverse grandi città situate nella fertile pianura vicina, ma sono tutte controllate dall'impero magadano."
 AG_TAKSASILA2_C		"Gli eserciti indiani sono ovunque conosciuti per due motivi: i loro arcieri e i loro elefanti. Fai particolare attenzione a questi animali. Non esiste alcuna forza militare al mondo dalla potenza paragonabile a quella di un esercito con un vasto numero di enormi elefanti!"
-AG_MAGADHAN			"Il tuo esercito viene a sapere dell'esistenza di un vasto territorio situato a est e governato dai Magadani. Fiumi enormi scorrono anch'essi verso est sino al Grande Mare Circolare. Seguendo questi fiumi arriverai alla capitale, Pataliputra, ricca di beni oltre ogni immaginazione. L'esercito magadano è altrettanto leggendario, con un numero incalcolabile di elefanti da guerra."
+AG_MAGADHAN		"Il tuo esercito viene a sapere dell'esistenza di un vasto territorio situato a est e governato dai Magadani. Fiumi enormi scorrono anch'essi verso est sino al Grande Mare Circolare. Seguendo questi fiumi arriverai alla capitale, Pataliputra, ricca di beni oltre ogni immaginazione. L'esercito magadano è altrettanto leggendario, con un numero incalcolabile di elefanti da guerra."
 AG_MAGADHAN2		"Ora che stai entrando nel cuore dell'impero magadano, ti giungono voci che stia attraversando un periodo di crisi. L'imperatore Dhana Nanda è un semplice cittadino che ha usurpato il trono ed è odiato da quasi tutto il suo popolo. Apparentemente, l'impero ha solo un pallido ricordo della sua antica gloria. In ogni caso, dispone ancora di abbondanti risorse sotto il suo controllo."
 AG_SOUTH_INDIA		"Gli esploratori riferiscono che ti stai attualmente inoltrando nell'India meridionale. Questa è una terra dalla configurazione assai irregolare, con poche strade. Contiene numerosissime città-stato indipendenti che non sono mai state conquistate da alcun impero."
 AG_MAGADHAN_FLEE	"Vedendoti arrivare in persona per conquistare la loro città, la guarnigione magadana capisce di non poter competere con la tua potenza e i soldati decidono di fuggire nelle campagne."
-AG_KAUSAMBI			" Con la conquista di Kausambi, altre città vicine prendono rapidamente le distanze dall'impero magadano ormai in frantumi e si uniscono ai vincitori."
-AG_UJJAYINI			"Con la conquista del centro regionale di Ujjayini, la città di Bharuch è rapida nel prendere le distanze dall'impero magadano ormai in frantumi e si unisce ai vincitori."
-AG_PATALIPUTRA_A		"Hai conquistato la capitale magadana! L'imperatore Dhana Nanda si rifugia nei recessi del suo, un tempo, grande impero. Ma sicuramente la spina dorsale dell'impero magadano è stata spezzata. Dhana Nanda era noto per derubare il suo stesso popolo e, in effetti, trovi un enorme tesoro: 8.000 unità d'oro."
-AG_PATALIPUTRA_B		"Con la conquista di Pataliputra, senza dubbio non ci vorrà molto per assistere alla caduta di tutto l'impero magadano per mano del tuo esercito e alla sua annessione ai tuoi domini. Le città vicine si arrendono, la loro fede nel potere magadano è ormai tramontata."
+AG_KAUSAMBI		" Con la conquista di Kausambi, altre città vicine prendono rapidamente le distanze dall'impero magadano ormai in frantumi e si uniscono ai vincitori."
+AG_UJJAYINI		"Con la conquista del centro regionale di Ujjayini, la città di Bharuch è rapida nel prendere le distanze dall'impero magadano ormai in frantumi e si unisce ai vincitori."
+AG_PATALIPUTRA_A	"Hai conquistato la capitale magadana! L'imperatore Dhana Nanda si rifugia nei recessi del suo, un tempo, grande impero. Ma sicuramente la spina dorsale dell'impero magadano è stata spezzata. Dhana Nanda era noto per derubare il suo stesso popolo e, in effetti, trovi un enorme tesoro: 8.000 unità d'oro."
+AG_PATALIPUTRA_B	"Con la conquista di Pataliputra, senza dubbio non ci vorrà molto per assistere alla caduta di tutto l'impero magadano per mano del tuo esercito e alla sua annessione ai tuoi domini. Le città vicine si arrendono, la loro fede nel potere magadano è ormai tramontata."
 AG_KASI			"Hai conquistato una delle città più sacre del mondo. Un uomo santo di nome Buddha ha tenuto qui il suo primo sermone. La città ha un numero sterminato di templi dedicati sia a lui dedicati sia alla religione bramanica. Ordini ai filosofi greci di venire qui e di ascoltare le lezioni dei numerosi saggi di questa città."
-AG_CHANDRA_RUMOR		"C'è fermento nella regione di Pataliputra. Voci insistenti riguardano un giovane capo carismatico che starebbe organizzando una rivoluzione. Dobbiamo stare in guardia per fronteggiare possibili sommosse."
-AG_CHANDRA			"È nata una nuova forza in India! Chandragupta, un generale giovane e brillante, ha messo insieme {action[0].text}! Il suo desiderio di grandi conquiste proviene da ciò che ha imparato dalle tue imprese. {action[1].text}"
+AG_CHANDRA_RUMOR	"C'è fermento nella regione di Pataliputra. Voci insistenti riguardano un giovane capo carismatico che starebbe organizzando una rivoluzione. Dobbiamo stare in guardia per fronteggiare possibili sommosse."
+AG_CHANDRA		"È nata una nuova forza in India! Chandragupta, un generale giovane e brillante, ha messo insieme {action[0].text}! Il suo desiderio di grandi conquiste proviene da ciò che ha imparato dalle tue imprese. {action[1].text}"
 AG_CHANDRA_PT1A		"un esercito per dare il colpo di grazia all'impero magadano"
 AG_CHANDRA_PT2A		"un esercito ribelle per liberare l'India da tutti i Macedoni"
 AG_CHANDRA_PT2B		"La tua guarnigione di Pataliputra è colta di sorpresa e annientata."
+AG_CHANDRA_OLD		"Il grande generale Chandragupta è morto a causa di una malattia tropicale! Con lui, muoiono le migliori speranze di unificazione di tutta l'India per mano di un indiano. Per un breve periodo, ha incantato il suo popolo con una combinazione di visione e azione. Quest'uomo brillante avrebbe potuto essere l'Alessandro indiano se solo fosse vissuto."
 AG_CHANDRA_DEAD		"Il grande generale Chandragupta è stato ucciso in battaglia! Con lui, muoiono le migliori speranze di unificazione di tutta l'India per mano di un indiano. Per un breve periodo, ha incantato il suo popolo con una combinazione di visione e azione. Questo uomo brillante avrebbe potuto essere l'Alessandro indiano, se solo fosse vissuto."	
-	# Sindu
-AG_SINDU			"La tua recente vittoria ha incoraggiato alcuni reali magadani a stipulare un patto segreto. Desiderano offrirti Sindu, la bellissima figlia dell'imperatore detronizzato da Dhana Nanda. Sposala, ripristina la vera stirpe reale e molte persone di questa terra accetteranno il tuo governo. Chiedono 6.000 unità d'oro per suggellare il patto."
+
+# Sindu
+AG_SINDU		"La tua recente vittoria ha incoraggiato alcuni reali magadani a stipulare un patto segreto. Desiderano offrirti Sindu, la bellissima figlia dell'imperatore detronizzato da Dhana Nanda. Sposala, ripristina la vera stirpe reale e molte persone di questa terra accetteranno il tuo governo. Chiedono 6.000 unità d'oro per suggellare il patto."
 AG_SINDU_MARRY		"Sposi subito Sindu cosicché il popolo magadano passerà immediatamente dalla tua parte. Lo splendore del matrimonio è incredibile. Il patto che hai stipulato è assai costoso, ma i parenti di Sindu promettono di assicurare la fedeltà della gente promuovendo campagne di propaganda a favore dei Macedoni presso tutte le città magadane che conquisti."
-AG_SINDU_NOMONEY		"I parenti di Sindu dicono: 'Le tue parole sono grandi, ma tu non possiedi evidentemente l'oro per avvalorarle. Non sei affidabile. Il patto matrimoniale è sciolto!"
-AG_SINDU_NOMARRY		"Non hai bisogno del loro aiuto a quel prezzo. Il popolo magadano dovrà accettarti come nuovo sovrano, con chiunque tu sia sposato."
+AG_SINDU_NOMONEY	"I parenti di Sindu dicono: 'Le tue parole sono grandi, ma tu non possiedi evidentemente l'oro per avvalorarle. Non sei affidabile. Il patto matrimoniale è sciolto!"
+AG_SINDU_NOMARRY	"Non hai bisogno del loro aiuto a quel prezzo. Il popolo magadano dovrà accettarti come nuovo sovrano, con chiunque tu sia sposato."
 
 # Sogdia Strings
 AG_SOGDIA_ENTER		"Stai facendo il tuo ingresso a Sogdia, una lingua di terra fertile che si trova tra desolati deserti da un lato e una vasta catena montuosa dall'altro. La gente del luogo è molto ardita, battagliera e ribelle. La Persia ha avuto diversi problemi a mantenere il controllo della zona. I barbari sono una minaccia costante da queste parti."
 AG_SOGDIA_REBEL		"Il popolo di Sogdia si ribella! Temendo giustamente che i Macedoni li obbligheranno a eseguire i loro ordini, i capi di Sogdia comprendono che la loro unica possibilità sia quella di colpire prima che i tuoi eserciti abbiano completamente consolidato il controllo della regione. Essi riescono a sorprendere e sconfiggere le guarnigioni delle città che hai occupato."
-AG_SOGDIA_REPORT		"I Sogdiani sembrano avere illimitate capacità di ribellarsi. L'unico modo di porre definitivamente fine ai tumulti è sconfiggere i capi ribelli. Gli esploratori hanno recentemente scoperto che il controllo dei disordini è appena stato trasferito alla città nordorientale di Kyreskhata."
-	# Roxane
+AG_SOGDIA_REPORT	"I Sogdiani sembrano avere illimitate capacità di ribellarsi. L'unico modo di porre definitivamente fine ai tumulti è sconfiggere i capi ribelli. Gli esploratori hanno recentemente scoperto che il controllo dei disordini è appena stato trasferito alla città nordorientale di Kyreskhata."
+
+# Roxane
 AG_SOGDIA_DEFEAT_A	"La base della resistenza sogdiana è stata catturata! Tutti gli ultimi capi ribelli superstiti e le loro famiglie si stavano nascondendo qui e sono stati catturati vivi. Queste famiglie sono praticamente tutto ciò che rimane della nobiltà di Sogdia."
 AG_SOGDIA_DEFEAT_B	"La conquista di Kyreskhata ha rappresentato un colpo mortale alla ribellione sogdiana, ma esiste la possibilità che questi personaggi possano tornare alla ribalta ancora una volta. Il metodo più sicuro sarebbe quello di uccidere la nobiltà di Sogdia rimanente, cosicché nessuno possa guidare la prossima rivolta."
 AG_SOGDIA_DEFEAT_C	"Un sistema alternativo di risolvere il problema è sposare un membro della famiglia reale di Sogdia. Una delle figlie dei ribelli si chiama Roxane. È una delle donne più belle che tu abbia mai visto. Sarebbe ideale per il matrimonio, ma basterebbe questo a soddisfare i Sogdiani inquieti? Che cosa farai?"
@@ -189,102 +244,98 @@ AG_SOGDIA_BRIBE_NO	"Ora non c'è alcuna soluzione in vista per questa orribile ri
 AG_SOGDIA_BRIBE_NSF	"Spiacente, non possiedi 1.000 unità d'oro da offrire! Ora non c'è alcuna soluzione in vista per questa orribile ribellione sogdiana. Le tue uniche possibilità di scelta di mantenere la pace consistono nel far presidiare permanentemente le città sogdiane dai generali oppure nel loro abbattimento senza alcuna pietà."
 
 # Wife and procreation related strings
-AG_WIFE1			"Barsine"
-AG_WIFE2			"Roxane"
-AG_WIFE3			"Sindu"
-AG_WIFE4			"Stateira"
-AG_PREGNANT			"Ti giunge notizia che tua moglie {action[0].text} sia incinta. Ti auguri che si tratti di un maschio, che possa essere il tuo erede al trono."
+AG_WIFE1		"Barsine"
+AG_WIFE2		"Roxane"
+AG_WIFE3		"Sindu"
+AG_WIFE4		"Stateira"
+AG_PREGNANT		"Ti giunge notizia che tua moglie {action[0].text} sia incinta. Ti auguri che si tratti di un maschio, che possa essere il tuo erede al trono."
 AG_PREGNANT2		"Ti giunge notizia che tua moglie {action[0].text} sia incinta. Ti auguri di nuovo che si tratti di un maschio, considerata la reale necessità di un erede e la frequente moria di bambini causata da malattie."
 AG_ITS_A_GIRL		"Tua moglie {action[0].text} ha concluso la gravidanza e ha dato alla luce una bambina. Questa creatura sarà fonte di gioia negli anni a venire, ma non potrà soddisfare l'élite macedone che accetterà solo un maschio come tuo erede al trono. Mascheri il tuo disappunto e concludi che, per tutto il tempo che sarà necessario, cercherai di generare un maschio."
-AG_ITS_A_GIRL2		" Tua moglie {action[0].text} ha concluso la gravidanza e ha dato alla luce una bambina. Questa creatura sarà fonte di gioia negli anni a venire, ma non avrà alcuna rilevanza politica considerato che una donna non potrà mai regnare in Macedonia."
+AG_ITS_A_GIRL2		"Tua moglie {action[0].text} ha concluso la gravidanza e ha dato alla luce una bambina. Questa creatura sarà fonte di gioia negli anni a venire, ma non avrà alcuna rilevanza politica considerato che una donna non potrà mai regnare in Macedonia."
 AG_ITS_A_BOY		"Tua moglie {action[0].text} ha dato alla luce un bambino! Considerato che tu sei il terzo re di Macedonia di nome Alessandro, decidi di chiamarlo Alessandro IV. Con il diffondersi della notizia della nascita del nuovo erede attraverso il tuo impero, aumentano i festeggiamenti e l'esultanza. Preghi gli dei affinché tu possa vivere abbastanza a lungo da assistere alla sua ascesa al trono."
 AG_ITS_A_BOY2		"Tua moglie {action[0].text} ha dato alla luce un bambino! Decidi di chiamarlo Efestione II, in onore del tuo più caro amico. Con il diffondersi della notizia della nascita del nuovo erede attraverso il tuo impero, aumentano i festeggiamenti e l'esultanza. Preghi gli dei affinché egli possa vivere abbastanza a lungo da fare onore al nome della tua famiglia."
 AG_ITS_A_BOY3		"Tua moglie {action[0].text} ha dato alla luce un bambino! Decidi di chiamarlo Filippo II, in onore del tuo grande padre. Con il diffondersi della notizia della nascita del nuovo erede attraverso il tuo impero, aumentano i festeggiamenti e l'esultanza. Preghi gli dei affinché egli possa vivere abbastanza a lungo da fare onore al nome della tua famiglia."
 AG_STILLBORN		"Cattive notizie! Tua moglie {action[0].text} ha dato alla luce un bambino nato morto! Per fortuna, lei è sopravvissuta. Ti riprometti di duplicare gli sforzi per generare un erede."
 AG_SON_BIRTHDAY		"Tuo figlio Alessandro IV oggi compie {sonAge[0]} anni. Diventa più grande e più forte giorno dopo giorno."
-AG_SON2_BIRTHDAY		"Tuo figlio Efestione II oggi compie {sonAge[1]} anni. Dopo la morte del primogenito Alessandro IV, tutte le speranze per il futuro sono riposte in lui."
-AG_SON3_BIRTHDAY		"Tuo figlio Filippo II oggi compie {sonAge[2]} anni. Dopo la morte di Alessandro IV e quella di Efestione II, preghi affinché il crudele destino non colpisca per la terza volta."
+AG_SON2_BIRTHDAY	"Tuo figlio Efestione II oggi compie {sonAge[1]} anni. Dopo la morte del primogenito Alessandro IV, tutte le speranze per il futuro sono riposte in lui."
+AG_SON3_BIRTHDAY	"Tuo figlio Filippo II oggi compie {sonAge[2]} anni. Dopo la morte di Alessandro IV e quella di Efestione II, preghi affinché il crudele destino non colpisca per la terza volta."
 AG_SON1_DISEASE		"Un araldo porta notizie tragiche: tuo figlio Alessandro IV è appena morto a causa di una febbre alta e improvvisa. Tu sei inconsolabile e piangi come un bambino. Le speranze di avere un erede dovranno essere riposte in un fratello più piccolo."
 AG_SON2_DISEASE		"Un araldo porta notizie tragiche: il tuo secondogenito Efestione II è appena morto dopo un'improvvisa malattia. Questo è un duro colpo, ma ti consola in parte il fatto che suo fratello maggiore ed erede al trono, Alessandro IV, sia ancora in vita."
-AG_SON1_2_DISEASE		"Un araldo porta notizie tragiche: il tuo secondogenito  Efestione II è appena morto dopo un'improvvisa malattia. Questo è un duro colpo, considerata la precedente scomparsa di Alessandro IV in circostanze analoghe. Perché gli dei ti affliggono e crudelmente ti negano un erede?"
+AG_SON1_2_DISEASE	"Un araldo porta notizie tragiche: il tuo secondogenito  Efestione II è appena morto dopo un'improvvisa malattia. Questo è un duro colpo, considerata la precedente scomparsa di Alessandro IV in circostanze analoghe. Perché gli dei ti affliggono e crudelmente ti negano un erede?"
 AG_SON_TWELVE_A		"Oggi tuo figlio Alessandro IV compie dodici anni! Molti bambini muoiono a causa di qualche malattia durante i primi anni di vita, ma è chiaro che tuo figlio è ora abbastanza grande e forte. I potenti macedoni, che hanno segretamente coltivato il desiderio di succederti, ora vedono sfumare i loro sogni, ma giurano eterna fedeltà a te e a tuo figlio."
 AG_SON_TWELVE_B		"I festeggiamenti per il dodicesimo compleanno di tuo figlio fanno impallidire qualsiasi celebrazione mai vista dai Greci. Il tuo cuore è gonfio di orgoglio mentre lo guardi tenere un discorso ai soldati, con il quale ringrazia per i doni ricevuti nonché per la loro fedeltà e per il loro coraggio. Ecco un figlio che è degno di diventare imperatore!{action[0].text}"
-AG_SON2_TWELVE_A		"Oggi tuo figlio Efestione II compie dodici anni! Sei stato a lungo preoccupato per la possibilità che morisse come suo fratello, ma è chiaro che ora è abbastanza grande e forte. I potenti macedoni che hanno segretamente coltivato il desiderio di succederti, ora vedono sfumare i loro sogni, ma giurano eterna fedeltà a te e a tuo figlio."
+AG_SON2_TWELVE_A	"Oggi tuo figlio Efestione II compie dodici anni! Sei stato a lungo preoccupato per la possibilità che morisse come suo fratello, ma è chiaro che ora è abbastanza grande e forte. I potenti macedoni che hanno segretamente coltivato il desiderio di succederti, ora vedono sfumare i loro sogni, ma giurano eterna fedeltà a te e a tuo figlio."
 AG_SON3_TWELVE_A	"Oggi tuo figlio Filippo II compie dodici anni! Sei stato a lungo preoccupato per la possibilità che morisse come i suoi fratelli, ma è chiaro che ora è abbastanza grande e forte. I potenti macedoni che hanno segretamente coltivato il desiderio di succederti, ora vedono sfumare i loro sogni, ma giurano eterna fedeltà a te e a tuo figlio."
 AG_SON_WORTHY		"Un figlio degno del nome Alessandro!"
-AG_BLANK			" "
+AG_BLANK		" "
 
 # Conquest Strings
 AG_LEAD_DEFEAT		"I barbari di tutto il mondo battono sui propri scudi in segno di lutto: uno dei loro più grandi capi è stato sconfitto. Il loro numero si è dunque ridotto a {barbNum}."
 AG_BARB_DEFEAT		"L'ultimo dei grandi capi barbari, coloro che hanno tormentato il mondo civilizzato con scorribande e saccheggi, è stato sconfitto. Senza capi, questi barbari non rappresenteranno più una minaccia."
 AG_CL_DEFEAT		"La Lega di Corinto ha dimenticato le lezioni del passato e ha pagato la sua stoltezza con il sangue e subendo sconfitte. Considerato che i suoi membri non sarebbero stati felici di accettare la tua guida come alleati, è stato necessario obbligarli a farlo."
 AG_GREEK_DEFEAT		"Tutte le città indipendenti greche sono state conquistate! L'idea della città-stato indipendente greca non ha più senso. Le singole comunità infatti non hanno alcuna probabilità di resistere contro imperi vasti come il tuo."
-AG_PERSIA_DEFEAT		"L'impero persiano è stato completamente sottomesso al tuo controllo. Stai ardendo di orgoglio per il fatto di essere finalmente riuscito a trasformare il sogno di tuo padre in realtà. La Persia ti appartiene e sembra che nessuno sia in grado di sfidare il tuo potere."
+AG_PERSIA_DEFEAT	"L'impero persiano è stato completamente sottomesso al tuo controllo. Stai ardendo di orgoglio per il fatto di essere finalmente riuscito a trasformare il sogno di tuo padre in realtà. La Persia ti appartiene e sembra che nessuno sia in grado di sfidare il tuo potere."
 AG_CARTHAGE_DEFEAT	"La civiltà cartaginese è stata distrutta! Hai conquistato l'intera zona occidentale del Mediterraneo. Giuri che, in un futuro assai prossimo, farai costruire una strada lungo la linea costiera nordafricana, dall'Egitto sino ai margini dell'immenso oceano. Forse un giorno i tuoi marinai esploreranno quell'oceano e conquisteranno terre ignote."
 AG_ROMAN_DEFEAT		"La civiltà romana è stata sconfitta. Prima del tuo avvento i Romani primeggiavano su tutti a causa della loro grandezza, ma ora rappresenteranno semplicemente una provincia in più del tuo sterminato impero. Nessuno potrà mai dire cosa sarebbe potuto accadere se tu avessi lasciato questo forte popolo libero di badare al suo sviluppo."
 AG_MAGADHAN_DEFEAT	"Hai distrutto l'impero magadano! L'imperatore Dhana Nanda viene decapitato dal suo stesso popolo per punire il suo ingiusto governo. Dhana Nanda ha derubato come un rapace i suoi sudditi. Saresti molto amato se ne restituissi almeno una parte. 5.000 unità d'oro soddisferebbero tutti e ti esprimerebbero con gioia la loro riconoscenza."
-AG_MAGADHAN_MONEY		"Quello che è stato il popolo magadano apprezza la tua generosità. Nelle città più grandi, valutano il tuo governo in maniera molto favorevole."
+AG_MAGADHAN_MONEY	"Quello che è stato il popolo magadano apprezza la tua generosità. Nelle città più grandi, valutano il tuo governo in maniera molto favorevole."
 AG_MAGADHAN_NOMONEY	"Spiacente, la gente non è stupida. Le tue promesse sono vuote come i tuoi forzieri. Dov'è il denaro che hai promesso loro?"
 AG_INDEP_DEFEAT		"Sei finalmente riuscito a conquistare tutti i lontanissimi stati indipendenti. L'unico serio ostacolo verso la sconfitta di questi piccoli stati è stato la distanza, ma nemmeno quella è riuscita a fermarti. La nozione stessa di stato indipendente è datata: tutti i popoli civilizzati vivranno in armonia sotto un unico governo - il tuo."
 
 # Endgame ranking strings
 AG_GAMEOVER		"Hai guadagnato {totalScore} punti su 60 possibili.\n\n{cityScore} - Città controllate\n{civScore} - Civiltà conquistate\n{heirScore} - Bonus erede\n------------------------\n{totalScore} Totale"
 AG_UNWORTHY		"Un'opportunità mancata; la civiltà macedone sembrava pronta per fare grandi cose. E nonostante ciò, non sei riuscito ad approfittarne. Gli storici si domanderanno cosa sarebbe accaduto se Alessandro fosse stato un uomo migliore. Il tuo nome passerà alla storia come quello di Alessandro l'Indegno!"
-AG_GOOD		"Sei riuscito ad ampliare un po' la civiltà macedone, ma è talmente tanto ciò che avresti potuto fare! E inoltre, cosa ancor più importante, hai trascurato la possibilità di generare un erede durante i primi anni del tuo regno. I libri di storia non ti chiameranno Alessandro il Grande, ma semplicemente Alessandro il Buono."
+AG_GOOD			"Sei riuscito ad ampliare un po' la civiltà macedone, ma è talmente tanto ciò che avresti potuto fare! E inoltre, cosa ancor più importante, hai trascurato la possibilità di generare un erede durante i primi anni del tuo regno. I libri di storia non ti chiameranno Alessandro il Grande, ma semplicemente Alessandro il Buono."
 AG_MIGHTY		"I tuoi adempimenti sono stati numerosi, ma non sei riuscito a mantenere i territori abbastanza a lungo da creare un impero veramente duraturo. Il tuo lavoro sarà rovinato dai tuoi successori meno capaci. In ogni caso, hai cambiato drasticamente il corso della storia mondiale e il tuo operato sarà apprezzato a lungo. Gli storici ti chiameranno Alessandro il Forte."
 AG_GREAT		"Congratulazioni! Hai dimostrato a te stesso di essere all'altezza del paragone con il vero Alessandro il Grande. Ma egli morì assai giovane e non riuscì a nominare un successore. Il tuo impero ha migliori speranze di sopravvivere alla tua morte rispetto al suo. Per i tuoi numerosissimi adempimenti, gli storici si riferiranno a te chiamandoti Alessandro il Grande."
-AG_MAGNIFICENT	"Hai superato il vero Alessandro Magno! Hai fatto più di lui per cercare di avere un erede. Grazie alla tua straordinaria reputazione, il tuo impero sopravviverà alla tua morte. Una successione di Alessandri seguirà le tue orme. Gli storici si riferiranno a te chiamandoti Alessandro il Magnifico."
+AG_MAGNIFICENT		"Hai superato il vero Alessandro Magno! Hai fatto più di lui per cercare di avere un erede. Grazie alla tua straordinaria reputazione, il tuo impero sopravviverà alla tua morte. Una successione di Alessandri seguirà le tue orme. Gli storici si riferiranno a te chiamandoti Alessandro il Magnifico."
 AG_DEMIGOD		"I tuoi adempimenti fanno impallidire di gran lunga quelli del vero Alessandro! Hai conquistato quasi tutto il mondo conosciuto e hai generato un erede. Migliaia di anni più tardi, sei ancora considerato una figura cardine della storia, l'uomo che ha creato un impero mondiale duraturo. Alcuni si spingono anche oltre e ti venerano come un semi-dio."
-AG_GOD		"Incredibile: hai conquistato l'intero mondo conosciuto! nel corso delle future generazioni, altri Alessandri assisteranno all'estensione del tuo impero su tutto il pianeta e nello spazio entro 1000 anni. Sei considerato qualcosa di molto superiore ad un fondatore di imperi: sei assiduamente venerato su tutte le stelle come un dio venuto sulla Terra!"
+AG_GOD			"Incredibile: hai conquistato l'intero mondo conosciuto! nel corso delle future generazioni, altri Alessandri assisteranno all'estensione del tuo impero su tutto il pianeta e nello spazio entro 1000 anni. Sei considerato qualcosa di molto superiore ad un fondatore di imperi: sei assiduamente venerato su tutte le stelle come un dio venuto sulla Terra!"
 
 # Various extra strings
 AG_PERSEP_ROAD 		"Gli esploratori riferiscono che ti trovi ora sulla strada tra Susa e Persepoli, le capitali invernale ed estiva dell'impero persiano."
 AG_MACEDHAPPY 		"La notizia della sconfitta di Dario si è diffusa tra la popolazione macedone che si trova in patria. La tua popolarità aumenta a Pella e presso le città vicine, mentre la portata di ciò che hai fatto viene lentamente compresa."
-AG_NEAR_CROSSROAD		"Ti trovi a un importante incrocio. Andando a nord, oltre le montagne, arriverai a Sogdia, la tradizionale frontiera nordoccidentale dell'impero persiano. Andando verso sud, sempre oltre le montagne, troverai una serie di città-oasi; alla fine porteranno alla strada principale che prosegue in direzione ovest. Procedendo a est, entrerai invece nelle favolose terre dell'India."
+AG_NEAR_CROSSROAD	"Ti trovi a un importante incrocio. Andando a nord, oltre le montagne, arriverai a Sogdia, la tradizionale frontiera nordoccidentale dell'impero persiano. Andando verso sud, sempre oltre le montagne, troverai una serie di città-oasi; alla fine porteranno alla strada principale che prosegue in direzione ovest. Procedendo a est, entrerai invece nelle favolose terre dell'India."
 AG_CASPIAN_GATE		"Stai attraversando the le porte del Caspio. Questo passaggio tra montagne e deserti segna la frontiera tra le terre più civilizzate dell'ovest e quelle desolate e selvagge dell'est. In quest'ultima direzione, le terre fertili sono poche e distanti tra loro, sino a quando la strada giunge alla fine presso la lontana India."
-AG_ETHIOPIA			"Il fiume Nilo scorre a sud verso il ricco regno di Meroe e gli altipiani dell'Etiopia."
-AG_MEROE			"Hai conquistato Meroe! Quest'area è stata una delle maggiori produttrici di oro del mondo. 5.000 unità d'oro ti spettano per il successo dell'impresa."
-AG_ARABIA_BY_SEA1		"Le tue navi hanno scoperto le acque costiere dell'Arabia. Questa terra deserta è completamente in mano a barbari solitari e crudelmente violenti. Ma varrebbe certamente la pena di conquistare le città commerciali straordinariamente ricche dell'Arabia meridionale. Un viaggio oceanico lungo la costa araba ti porterebbe alla fine in Egitto."
-AG_ARABIA_BY_SEA2		"Le tue navi si trovano all'imboccatura del Golfo Arabo. A est, troverai l'Arabia. Questa terra deserta è completamente in mano a barbari solitari e crudelmente violenti. Ma varrebbe certamente la pena di conquistare le città commerciali straordinariamente ricche dell'Arabia meridionale. Un viaggio oceanico lungo la costa araba ti porterebbe alla fine in Persia."
-AG_ROAD_TO_MARIB1		"Le carovane dei commercianti di spezie seguono questa pista verso l'interno della regione sino alla città di Marib, che alcuni dicono sia la più ricca città del mondo."
-AG_ROAD_TO_MARIB2		"C'è un sentiero che si snoda tra le montagne e conduce alla magnifica città di Marib, centro del commercio di spezie."
-AG_EGYPT_DEFECT_A		"Gli Egiziani festeggiano gioiosamente l'arrivo di Alessandro Magno! Si sono ripetutamente ribellati ai Persiani nel corso dell'ultimo secolo, ma solo per essere riconquistati ogni volta. Gli Egiziani ti vedono come la loro salvezza e si liberano dal giogo persiano! I soldati persiani fuggono, lasciandoti una terra quasi distrutta dalle innumerevoli ribellioni."
-AG_EGYPT_DEFECT_B		"Gli Egiziani accetteranno solo faraoni come propri  leader. Se vai a Menfi per farti incoronare faraone, riuscirai a controllare l'Egitto in maniera assai più semplice."
+AG_ETHIOPIA		"Il fiume Nilo scorre a sud verso il ricco regno di Meroe e gli altipiani dell'Etiopia."
+AG_MEROE		"Hai conquistato Meroe! Quest'area è stata una delle maggiori produttrici di oro del mondo. 5.000 unità d'oro ti spettano per il successo dell'impresa."
+AG_ARABIA_BY_SEA1	"Le tue navi hanno scoperto le acque costiere dell'Arabia. Questa terra deserta è completamente in mano a barbari solitari e crudelmente violenti. Ma varrebbe certamente la pena di conquistare le città commerciali straordinariamente ricche dell'Arabia meridionale. Un viaggio oceanico lungo la costa araba ti porterebbe alla fine in Egitto."
+AG_ARABIA_BY_SEA2	"Le tue navi si trovano all'imboccatura del Golfo Arabo. A est, troverai l'Arabia. Questa terra deserta è completamente in mano a barbari solitari e crudelmente violenti. Ma varrebbe certamente la pena di conquistare le città commerciali straordinariamente ricche dell'Arabia meridionale. Un viaggio oceanico lungo la costa araba ti porterebbe alla fine in Persia."
+AG_ROAD_TO_MARIB1	"Le carovane dei commercianti di spezie seguono questa pista verso l'interno della regione sino alla città di Marib, che alcuni dicono sia la più ricca città del mondo."
+AG_ROAD_TO_MARIB2	"C'è un sentiero che si snoda tra le montagne e conduce alla magnifica città di Marib, centro del commercio di spezie."
+AG_EGYPT_DEFECT_A	"Gli Egiziani festeggiano gioiosamente l'arrivo di Alessandro Magno! Si sono ripetutamente ribellati ai Persiani nel corso dell'ultimo secolo, ma solo per essere riconquistati ogni volta. Gli Egiziani ti vedono come la loro salvezza e si liberano dal giogo persiano! I soldati persiani fuggono, lasciandoti una terra quasi distrutta dalle innumerevoli ribellioni."
+AG_EGYPT_DEFECT_B	"Gli Egiziani accetteranno solo faraoni come propri  leader. Se vai a Menfi per farti incoronare faraone, riuscirai a controllare l'Egitto in maniera assai più semplice."
 AG_EGYPT_HAPPY		"Durante una cerimonia solenne, sei vestito come un antico faraone e vieni proclamato dio-re. Gli Egiziani credono che Ammon-Ra sia tuo padre e la tua popolarità qui diventa altissima. Al di fuori dell'Egitto, sei ancora considerato solo un re macedone."
-AG_BABYLON			"Babilonia è una delle quattro tradizionali case reali degli imperatori persiani. Ma solo grazie alle sue enormi dimensioni e alla sua ricchezza; il popolo qui non nutre alcuna simpatia per i Persiani."
-AG_ECBATANA			"Ecbatana è una delle quattro tradizionali case reali degli imperatori persiani. Così, esiste un ricco tesoro per mantenere alto il tenore di vita dell'imperatore."
-AG_SYRACUSE			"Molti hanno provato a conquistare Siracusa e tutti hanno fallito. Atene è stata una grande potenza sino all'epoca della distruzione del suo esercito nel tentativo di conquistare Siracusa. Alte mura cittadine e una posizione molto ben difendibile sono ciò che rende questa città così difficile da conquistare."
-AG_ATHENS			"Atene è probabilmente la più meravigliosa città del mondo. L'acutezza scientifica degli Ateniesi è rappresentata dalla meraviglia del Liceo di Aristotele. Le difese della città sono assai solide."
-AG_SPARTA			"Sparta è stata l'unica città della Grecia a riderti in faccia e a decidere di star fuori dalla Lega di Corinto. Si trova su un territorio montagnoso ed è protetta da alte mura cittadine: non ha paura di nessuno, neppure di Alessandro."
+AG_BABYLON		"Babilonia è una delle quattro tradizionali case reali degli imperatori persiani. Ma solo grazie alle sue enormi dimensioni e alla sua ricchezza; il popolo qui non nutre alcuna simpatia per i Persiani."
+AG_ECBATANA		"Ecbatana è una delle quattro tradizionali case reali degli imperatori persiani. Così, esiste un ricco tesoro per mantenere alto il tenore di vita dell'imperatore."
+AG_SYRACUSE		"Molti hanno provato a conquistare Siracusa e tutti hanno fallito. Atene è stata una grande potenza sino all'epoca della distruzione del suo esercito nel tentativo di conquistare Siracusa. Alte mura cittadine e una posizione molto ben difendibile sono ciò che rende questa città così difficile da conquistare."
+AG_ATHENS		"Atene è probabilmente la più meravigliosa città del mondo. L'acutezza scientifica degli Ateniesi è rappresentata dalla meraviglia del Liceo di Aristotele. Le difese della città sono assai solide."
+AG_SPARTA		"Sparta è stata l'unica città della Grecia a riderti in faccia e a decidere di star fuori dalla Lega di Corinto. Si trova su un territorio montagnoso ed è protetta da alte mura cittadine: non ha paura di nessuno, neppure di Alessandro."
 AG_PERSEPOLIS		"Persepoli è una delle quattro tradizionali case reali degli imperatori persiani. È anche il centro della patria originaria persiana e, di conseguenza, contiene i più vasti e lussuosi palazzi e tesori di qualsiasi altra città della Persia."
 AG_SUSA			"Susa è una delle quattro case reali degli imperatori persiani. Così, esiste un ricco tesoro per mantenere alto il tenore di vita dell'imperatore. Questo è anche il punto di partenza per la famosa Strada Reale Persiana, rappresentata dalla meravigliosa Via Appia."
 AG_ROME			"Nonostante la sfavorevole posizione strategica, Roma è diventata una città sorprendentemente grande. Un governo saggio sta rendendo questa città grandiosa. Le mura cittadine sono state trasformate in una barriera formidabile."
 AG_PERSEPOLIS2		"La conquista della madrepatria dei Persiani rappresenta certamente una perdita ingente per il loro impero. I Persiani sono impressionati dal fatto che tu renda omaggio alla tomba di Ciro il Grande, fondatore della Persia, ma non altrettanto dalla confisca del tesoro cittadino che ammonta a 15.000 unità d'oro! Questa deve essere la più consistente quantità di oro mai raccolta nel mondo intero!"
-AG_SUSA2			" Quale residenza degli imperatori persiani, Susa dispone di una vasto deposito d'oro. Si tratta di 4.000 unità d'oro che sono ora nelle tue mani!"
+AG_SUSA2		"Quale residenza degli imperatori persiani, Susa dispone di una vasto deposito d'oro. Si tratta di 4.000 unità d'oro che sono ora nelle tue mani!"
 AG_ECBATANA2		"Quale residenza degli imperatori persiani, Ecbatana dispone di una vasto deposito d'oro. Si tratta di 4.000 unità d'oro che sono ora nelle tue mani! Il motivo per il quale i Persiani non abbiano impiegato queste ricchezze per pagare più soldati rimane misterioso."
-AG_BABYLON2			"La grande Babilonia, città del peccato, ora ti appartiene! Qui si trova l'immensa fortuna di 5.000 unità d'oro, depositate per mantenere i lussi dei reali persiani. La posizione centrale fa di Babilonia il centro più adatto dal quale governare le terre conquistate."
-AG_ATHENS2			"La potente città di Atene è ora sotto il tuo controllo! In ogni caso, il fatto che tu abbia dovuto conquistarla usando la forza e danneggiando i suoi innumerevoli tesori, invece di mantenere l'alleanza della Lega di Corinto, causa un peggioramento della tua reputazione presso le nazioni confinanti."
-AG_PERSIANS_DEAD		"Ora che hai completamente conquistato l'impero persiano, non esiste più alcuna speranza per qualsiasi eventuale pretendente al ruolo di imperatore. Il popolo della Persia è pronto a proclamarti suo nuovo sovrano e attende il tuo ritorno a Babilonia per la cerimonia di incoronazione."
+AG_BABYLON2		"La grande Babilonia ora ti appartiene! Qui si trova l'immensa fortuna di 5.000 unità d'oro, depositate per mantenere i lussi dei reali persiani. La posizione centrale fa di Babilonia il centro più adatto dal quale governare le terre conquistate."
+AG_ATHENS2		"La potente città di Atene è ora sotto il tuo controllo! In ogni caso, il fatto che tu abbia dovuto conquistarla usando la forza e danneggiando i suoi innumerevoli tesori, invece di mantenere l'alleanza della Lega di Corinto, causa un peggioramento della tua reputazione presso le nazioni confinanti."
+AG_PERSIANS_DEAD	"Ora che hai completamente conquistato l'impero persiano, non esiste più alcuna speranza per qualsiasi eventuale pretendente al ruolo di imperatore. Il popolo della Persia è pronto a proclamarti suo nuovo sovrano e attende il tuo ritorno a Babilonia per la cerimonia di incoronazione."
 AG_HAPPY_EMPIRE		"Durante una cerimonia solenne, proclami l'eterna unità dei mondi greco e persiano e ti dichiari imperatore della Persia, il Re dei Re! Presso le città controllate a lungo dalla Persia, la tua popolarità diventa altissima, ma i Greci sono scettici a proposito di questa idea dell'unità e disprezzano la tua amicizia con qualsiasi 'barbaro' non greco."
-AG_SPARTA_DEFECT	      "La tua reputazione presso i Greci è precipitata. Anche se ciò non significa entrare in conflitto con la civiltà greca nel suo complesso, gli Spartani decidono di appoggiare la causa persiana, nella speranza che altre città greche seguano il loro esempio! Sparta è ora essenzialmente una parte della Persia ed è pronta ad attaccare la Lega di Corinto."
+AG_SPARTA_DEFECT	"La tua reputazione presso i Greci è precipitata. Anche se ciò non significa entrare in conflitto con la civiltà greca nel suo complesso, gli Spartani decidono di appoggiare la causa persiana, nella speranza che altre città greche seguano il loro esempio! Sparta è ora essenzialmente una parte della Persia ed è pronta ad attaccare la Lega di Corinto."
 AG_REALLY_HAPPY_EMPIRE	"Il tuo impero ora si estende da Cartagine a Roma, da ovest sino all'India! La comprensione da parte dei popoli che tu sia già il più grande conquistatore di tutti i tempi aumenta vertiginosamente la tua popolarità in tutte le città!"
 AG_PERSIAN_FLEE		"La semplice presenza di Alessandro presso gli ingressi delle città causa la fuga dei difensori, che abbandonano così le proprie postazioni."
 
 # Additional leader death strings
 AG_PORUS_OLD		"Gli esploratori riferiscono che il generale indiano  Poros è morto, anche se non si sa come. Pazienza - un uomo così famoso avrebbe potuto essere un utile alleato oppure un valoroso avversario."
 AG_PORUS_BATTLE		"Hai sconfitto il grande generale Poros! Per molti anni ha rappresentato la risorsa bellica indiana più potente al di fuori del vasto impero magadano, ma non era comunque paragonabile al tuo genio militare. Pazienza - quest'uomo era tuo nemico perché combatteva in maniera brillante. Rifiutando di morire, è riuscito ad abbattere molti dei tuoi uomini prima che le numerose ferite riportate si rivelassero letali."
-AG_CHANDRA_OLD		"Il grande generale Chandragupta è morto a causa di una malattia tropicale! Con lui, muoiono le migliori speranze di unificazione di tutta l'India per mano di un indiano. Per un breve periodo, ha incantato il suo popolo con una combinazione di visione e azione. Quest'uomo brillante avrebbe potuto essere l'Alessandro indiano se solo fosse vissuto."
 AG_MEMNON_OLD		"I Persiani hanno perduto Memnone, il loro miglior generale. È stato rapidamente ucciso da una malattia. Devi considerarti molto fortunato per il fatto di non aver avuto occasione di affrontarlo in battaglia."
-AG_MEMNON_BATTLE		" I Persiani hanno perduto Memnone, il loro miglior generale. È stato assalito in battaglia dai Greci furiosi e ansiosi di uccidere il traditore che ha combattuto contro la sua gente. Con la sua morte, le tue conquiste dovrebbero ora essere molto più agevoli."
+AG_MEMNON_BATTLE	"I Persiani hanno perduto Memnone, il loro miglior generale. È stato assalito in battaglia dai Greci furiosi e ansiosi di uccidere il traditore che ha combattuto contro la sua gente. Con la sua morte, le tue conquiste dovrebbero ora essere molto più agevoli."
 AG_BESSUS_OLD		"Il generale persiano Besso è stato assassinato dai suoi stessi uomini! Al contrario di Dario non aveva le adeguate credenziali e alcuni hanno pensato di poter far meglio di lui, cercando quindi di prendere il comando. Ma l'unico risultato è stato l'ulteriore frammentazione della leadership persiana."
-AG_BESSUS_BATTLE		"Il generale persiano Besso muore in battaglia! Con la sua morte, non esiste più nessuno che possa nutrire speranze di rianimare il popolo persiano per cercare di sconfiggerti."
-AG_REGARD_EVENT_NEG     "Un odio antico serpeggia presso il tuo popolo."
-AG_REGARD_EVENT         "Il popolo dubita della saggezza delle tue azioni."
-AG_REGARD_EVENT_POS     "Le tue imprese hanno impressionato molte persone."
-AG_GENERAL_DROWN        "{drownedGeneral.name} è scomparso in mare! Per diversi giorni, hai incubi terribili sull'annegamento, nei quali il mare è un'entità maligna che ti stringe nel suo abbraccio gelato, riempiendoti d'acqua la gola sino all'esplosione dei polmoni. Per il momento, ti auguri di poter evitare i viaggi per mare."
+AG_BESSUS_BATTLE	"Il generale persiano Besso muore in battaglia! Con la sua morte, non esiste più nessuno che possa nutrire speranze di rianimare il popolo persiano per cercare di sconfiggerti."
 
-#	The string of hyphens below represents the amount of text that will fit in a message box. The second line is for alert boxes.
-#		 			 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# 					 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# The string of hyphens below represents the amount of text that will fit in a message box. The second line is for alert boxes.
+#			 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#			 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 AG_TEMP			"Alessandro si trova a {alexUnit.location}."
-AG_TEMP2			"Ci siamo"
+AG_TEMP2		"Ci siamo"

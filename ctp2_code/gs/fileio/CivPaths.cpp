@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : File paths
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -24,6 +26,7 @@
 //
 // - Added option to use multiple data directories.
 // - Memory leak/crash fix
+// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -331,7 +334,7 @@ MBCHAR *CivPaths::MakeAssetPath
 
 
 MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
-                           BOOL silent, BOOL check_prjfile)
+                           bool silent, bool check_prjfile, bool checkScenario)
 {
 	MBCHAR			fullPath[_MAX_PATH];	
 
@@ -353,39 +356,39 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 	}
 
 	
-	if (m_curScenarioPath) {
+	if(checkScenario){
+		if (m_curScenarioPath) {
 		
-		sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP, m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
-		if (c3files_PathIsValid(fullPath)) {
-			
-			strcpy(path, fullPath);
-			return path;
-		}
-		sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
-		
-		if (c3files_PathIsValid(fullPath)) {
-			
-			strcpy(path, fullPath);
-			return path;
-		}
-	}
+			sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP, m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
+			if (c3files_PathIsValid(fullPath)) {
+	
+				strcpy(path, fullPath);
+				return path;
+			}
+			sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
 
-	
-	
-	if (m_curScenarioPackPath) {
-		
-		sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP, m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
-		if (c3files_PathIsValid(fullPath)) {
+			if (c3files_PathIsValid(fullPath)) {
 			
-			strcpy(path, fullPath);
-			return path;
+				strcpy(path, fullPath);
+				return path;
+			}
 		}
-		sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
+
+		if (m_curScenarioPackPath) {
 		
-		if (c3files_PathIsValid(fullPath)) {
+			sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP, m_localizedPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
+			if (c3files_PathIsValid(fullPath)) {
+
+				strcpy(path, fullPath);
+				return path;
+			}
+			sprintf(fullPath, "%s%s%s%s%s%s%s", m_curScenarioPackPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir], FILE_SEP, filename);
+		
+			if (c3files_PathIsValid(fullPath)) {
 			
-			strcpy(path, fullPath);
-			return path;
+				strcpy(path, fullPath);
+				return path;
+			}
 		}
 	}
 
@@ -442,7 +445,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
         ((dir == C3DIR_PATTERNS) || 
 			(dir == C3DIR_PICTURES))) {
         
-		int len = strlen(filename);
+		uint32 len = strlen(filename);
 
         if (len > 3) {
 			

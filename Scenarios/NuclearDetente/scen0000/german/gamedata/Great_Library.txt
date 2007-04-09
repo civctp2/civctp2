@@ -9378,20 +9378,20 @@ Im späten 20. Jahrhundert war die Gesellschaft der westlichen Welt regelrecht pr
 NUKLEARE BEDROHUNG - SZENARIO-REGELN 
 
 DER WEG ZUM SIEG
- - Setzen Sie Spione ein und kundschaften Sie alle acht feindlichen Städte aus, bevor neue Abschusscodes festgelegt werden.
- - Vernichten Sie alle Atom-U-Boote der Vendikari binnen einer Runde.
- - Errichten Sie das Weltwunder Nanitenentschärfer.
- - Bringen Sie die Vendikari mit diplomatischen Mitteln dazu, alle ihre Nuklearraketen abzurüsten.
+ - Setzt Spione ein und kundschaftet alle acht feindlichen Städte aus, bevor neue Abschusscodes festgelegt werden.
+ - Vernichtet alle Atom-U-Boote der Vendikari binnen einer Runde.
+ - Errichtet das Weltwunder Nanitenentschärfer.
+ - Bringt die Vendikari mit diplomatischen Mitteln dazu, alle ihre Nuklearraketen zu vernichten.
 
-IHRE NIEDERLAGE IST BESIEGELT, WENN ... 
+EURE NIEDERLAGE IST BESIEGELT, WENN ... 
  - der Kriegszustand (bzw. eine gegenseitige Offensive) über den Zeitraum von 12 Runden anhält. Auf diese Weise werden alle Vendikari- und Eminiari-Städte durch Nuklearraketen vernichtet.
- - Sie ein Atom-U-Boot der Vendikari zerstören oder eine ihrer Städte erobern. In der darauf folgenden Runde kommt es dann zu einem gegenseitigen Angriff, bei dem alle Vedikari- und Eminiari-Städte durch Nuklearraketen vernichtet werden und das Spiel endet.
- - Sie alle Ihre Nuklearraketen abrüsten. In diesem Fall haben Sie verloren.
- - Ihr Gegner das Weltwunder Nanitenentschärfer errichtet. In diesem Fall haben Sie verloren.
+ - Ihr ein Atom-U-Boot der Vendikari zerstört oder eine ihrer Städte erobert. In der darauf folgenden Runde kommt es dann zu einem gegenseitigen Angriff, bei dem alle Vedikari- und Eminiari-Städte durch Nuklearraketen vernichtet werden und das Spiel endet.
+ - Ihr alle Eure Nuklearraketen vernichtet. In diesem Falle habt Ihr verloren.
+ - Ihr Gegner das Weltwunder Nanitenentschärfer errichtet. In diesem Falle habt Ihr verloren.
 
 SONDERREGELN
- - Weder Sie selbst noch die Vendikari können ihre Atom-U-Boote fortbewegen.
- - Weder Sie selbst noch die Vendikari können Nuklearraketen aus Atom-U-Booten entladen.
+ - Weder Ihr selbst noch die Vendikari können ihre Atom-U-Boote fortbewegen.
+ - Weder Ihr selbst noch die Vendikari können Nuklearraketen aus Atom-U-Booten entladen.
  - Es können keine Atom-U-Boote, Nuklearraketen oder Ansiedelungseinheiten errichtet werden.
  - Die Abschusscodes werden alle 6 Runden neu eingestellt.
 [END]

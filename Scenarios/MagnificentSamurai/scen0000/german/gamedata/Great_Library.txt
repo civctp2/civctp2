@@ -9378,15 +9378,15 @@ Im späten 20. Jahrhundert war die Gesellschaft der westlichen Welt regelrecht pr
 SIEBEN SAMURAI - SZENARIO-REGELN 
 
 HINTERGRUND
-- In diesem Szenario übernehmen Sie die Rolle des Kimbei Shamada, eines einsamen, umherziehenden Kriegers, der sein Dasein während der kriegerischen Tokugowa-Ära in Südjapan fristet. Ziel des Spiels ist es, die Inseln zu bereisen und bis zu sechs andere Samurai zu rekrutieren, die bereit sind, Ihnen bei der Verteidigung des Dorfes Shichinen gegen plündernde Banditen zu helfen.
-- Dieses Abenteuer besitzt Rollenspielcharakter, das heißt, es werden keine Städte angesiedelt, keine Ressourcen abgebaut und es wird auch keine wissenschaftliche Forschung betrieben. Selbst die Diplomatie wird Ihnen in diesem Fall nicht weiterhelfen, denn Sie werden es mit brutalen Schlägern zu tun bekommen, die einzig und allein die Sprache des Kampfes verstehen.
+- In diesem Szenario übernehmt Ihr die Rolle des Kimbei Shamada, eines einsamen, umherziehenden Kriegers, der sein Dasein während der kriegerischen Tokugowa-Ära in Südjapan fristet. Ziel des Spiels ist es, die Inseln zu bereisen und bis zu sechs andere Samurai zu rekrutieren, die bereit sind, Euch bei der Verteidigung des Dorfes Shichinen gegen plündernde Banditen zu helfen.
+- Dieses Abenteuer besitzt Rollenspielcharakter, das heißt, es werden keine Städte gegründet, keine Ressourcen abgebaut und es wird auch keine wissenschaftliche Forschung betrieben. Selbst die Diplomatie wird Euchn in diesem Falle nicht weiterhelfen, denn Ihr werdet es mit brutalen Schlägern zu tun bekommen, die einzig und allein die Sprache des Kampfes verstehen.
 
 SIEG/NIEDERLAGE 
-- Sie haben das Spiel gewonnen, sobald der Banditenanführer geschlagen ist.  
-- Sie haben das Spiel verloren, wenn Kimbei vernichtet wird oder der Banditenanführer nach Ablauf von anderthalb Jahren noch nicht geschlagen ist.
+- Ihr habt das Spiel gewonnen, sobald der Banditenanführer geschlagen ist.  
+- Ihr habt das Spiel verloren, wenn Kimbei vernichtet wird oder der Banditenanführer nach Ablauf von anderthalb Jahren noch nicht geschlagen ist.
 
 ERFAHRUNG
-- Um Erfahrung zu sammeln, müssen Kimbei und die anderen Samurai viele Kämpfe austragen, wobei stärkere Gegner auch höhere Erfahrungswerte bringen. Sobald genügend Erfahrung gesammelt wurde, erreicht der betreffende Samurai die nächste Stufe und verbessert damit seine Kampfleistung. Kimbei beginnt auf Stufe 1, während die anderen Samurai, denen Sie unterwegs begegnen, bereits höhere Erfahrungsstufen besitzen. Die höchste Stufe in diesem Szenario ist 9.
+- Um Erfahrung zu sammeln, müssen Kimbei und die anderen Samurai viele Kämpfe austragen, wobei stärkere Gegner auch höhere Erfahrungswerte bringen. Sobald genügend Erfahrung gesammelt wurde, erreicht der betreffende Samurai die nächste Stufe und verbessert damit seine Kampfleistung. Kimbei beginnt auf Stufe 1, während die anderen Samurai, denen Ihr unterwegs begegnet, bereits höhere Erfahrungsstufen besitzen. Die höchste Stufe in diesem Szenario ist 9.
 [END]
 
 [CONCEPT_SCENARIO_RULES_GAMEPLAY]

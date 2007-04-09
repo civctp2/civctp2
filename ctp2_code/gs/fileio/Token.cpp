@@ -37,6 +37,11 @@
 // - Load default strings if they are missing in the database so that mods
 //   also have a full set of strings. (Jan 30th 2006 Martin Gühmann)
 // - Removed unused tokens. (July 15th 2006 Martin Gühmann)
+// - Added new token so that the loading of default strings in scenarios
+//   can be skipped. (9-Apr-2007 Martin Gühmann)
+// - Old default string skip token does not prevent loading default strings
+//   in scenarios anymore. (9-Apr-2007 Martin Gühmann)
+// - Scenario path can now be ignored. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,6 +53,7 @@
 #include "ErrMsg.h"
 #include "Globals.h"
 #include "StrDB.h"              // g_theStringDB
+#include "CivPaths.h"           // g_CivPaths
 #ifndef __MAKESPR__
 #include "AdvanceRecord.h"
 #include "BuildingRecord.h"
@@ -158,16 +164,13 @@ TokenData   g_allTokens [] =
 
 	{TOKEN_TILESET_END,				"TILESET_END"},
 
-	//
+	// Color database
 	{TOKEN_COLORSET,				"COLORSET"},
 	{TOKEN_COLORSET_COLOR,			"COLORSET_COLOR"},
 
-	// Concept database
-	{TOKEN_CONCEPT_DEFAULT_ICON,		"CONCEPT_DEFAULT_ICON"},
-	{TOKEN_NO_INDEX, "NO_INDEX"},
-
 	// For string database mod compatibility
 	{TOKEN_DO_NOT_IMPORT_DEFAULTS,			"DoNotImportDefaults"},
+	{TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS,	"ScenarioDoNotImportDefaults"},
 	{TOKEN_MAX,								"TOKEN_MAX_DO_NOT_USE"},
 	
 };
@@ -212,7 +215,8 @@ Token::Token
     m_dir               (dir),
     m_importFile		(NULL),
     m_savedLineNumber   (0),
-    m_savedFin          (NULL)
+    m_savedFin          (NULL),
+	m_checkScenario     (true)
 {
 	Assert(ValidateAllTokens()); 
 	
@@ -252,7 +256,8 @@ Token::Token
     m_dir               (dir),
     m_importFile		(NULL),
     m_savedLineNumber   (0),
-    m_savedFin          (NULL)
+    m_savedFin          (NULL),
+	m_checkScenario     (true)
 {
 	Assert(ValidateAllTokens()); 
 	
@@ -376,7 +381,7 @@ bool Token::HandleImport(void)
 	strcpy(m_filename, fileName);
 
 	m_savedFin = m_fin;
-	m_importFile = c3files_fopen(m_dir, fileName, "r");
+	m_importFile = c3files_fopen(m_dir, fileName, "r", m_checkScenario);
 	
 	if (!m_importFile) 
     { 
@@ -549,9 +554,15 @@ sint32 Token::Next()
 		return Next();
 	}
 
-	if (GetType() == TOKEN_DO_NOT_IMPORT_DEFAULTS) 
-    {
-		g_load_defaults = false;
+	if(GetType() == TOKEN_DO_NOT_IMPORT_DEFAULTS
+	|| GetType() == TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS
+	){
+		if(g_civPaths->GetCurScenarioPath()     == NULL        // Load only defaults if this isn't a scenario
+		&& g_civPaths->GetCurScenarioPackPath() == NULL
+		|| GetType() == TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS  // But not if you have this token
+		){
+			g_load_defaults = false;
+		}
 
 		return Next();
 	}

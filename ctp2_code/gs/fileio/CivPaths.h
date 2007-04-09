@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : File paths
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Added option to use multiple data directories.
+// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -95,7 +97,7 @@ public:
 	
 	
 	MBCHAR *FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
-                     BOOL silent=0, BOOL check_prjfile=1);
+                     bool silent = false, bool check_prjfile = true, bool checkScenario = true);
 	
 	
 	MBCHAR *GetSpecificPath(C3DIR dir, MBCHAR *path, BOOL local);

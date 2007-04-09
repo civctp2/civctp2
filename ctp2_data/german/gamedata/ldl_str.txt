@@ -29,7 +29,7 @@
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-00
-str_ldl_Already_Offer	"Sie bieten dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
+str_ldl_Already_Offer	"Ihr bietet dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
 
 ##That one last change 03-07-99
 ENDGAME_WON_OTHER	"Die übrigen Nationen verneigen sich vor ihrem neuen Staatsoberhaupt: {player[0].leader_name} hat das Projekt Außerirdisches Leben erfolgreich abgeschlossen!"
@@ -57,7 +57,7 @@ AGE_NAME_DIAMOND		"Diamantene Ära"
 YOU_BROKE_ALLIANCE "Wir haben gegen unsere Allianzvereinbarung mit den {player[0].civ_name_plural#DAT} verstoßen."
 YOU_BROKE_CEASE_FIRE "Wir haben unser Friedensabkommen mit den {player[0].civ_name_plural#DAT} gebrochen."
 DIPxxx3_AGREEMENT_END_POLLUTION "Öko-Pakt"
-CANT_ATTACK_ALLIES "Wir haben eine Allianz mit den {player[0].civ_name_plural#DAT} geschlossen und können daher nicht angreifen, ohne dieses Bündnis vorher aufzulösen. Wollen Sie die Allianz jetzt beenden?"
+CANT_ATTACK_ALLIES "Wir haben eine Allianz mit den {player[0].civ_name_plural#DAT} geschlossen und können daher nicht angreifen, ohne dieses Bündnis vorher aufzulösen. Wollt Ihr die Allianz jetzt beenden?"
 X_LAB "X-Labor"
 GENE_SEQUENCER "Genteiler"
  ###END EX_JUNK STRINGS###
@@ -82,7 +82,7 @@ str_ldl_mp_dbase_out_of_synch	"Fehlerhafte Daten. Kehre zur Lobby zurück."
 str_ldl_TILE_RESOURCES_Colon	"Feldressourcen:"
 str_ldl_TOTAL_GOLD_FROM_TRADE	"Handelseinnahmen"
 str_ldl_Waiting_For_Servers	"Warte auf Server"
-str_ldl_nodialup	"Sie müssen sich zunächst einwählen, um eine Verbindung zum Internet herzustellen"
+str_ldl_nodialup	"Ihr müsst Euch zunächst einwählen,\n um eine Verbindung zum Internet herzustellen"
 str_ldl_connectionerr	"Fehler beim Verbindungsaufbau"
 str_ldl_Enemy_Moves_Off	"Feindbewegungen aus"
 str_ldl_Enemy_Moves_On	"Feindbewegungen ein"
@@ -94,7 +94,7 @@ KEY_NAME_TAB	"Tab"
 KEY_NAME_ENTER	"Eingabe"
 KEY_NAME_SPACE	"Leertaste"
 KEY_NAME_BACKSPACE	"Rücktaste"
-QUEUE_OVERWRITE	"Die gespeicherte Liste wird überschrieben.\nWollen Sie fortfahren?"
+QUEUE_OVERWRITE	"Die gespeicherte Liste wird überschrieben.\nWollt Ihr fortfahren?"
 str_ldl_Base_Pollution	"Allg. Umweltverschm." 
 
 
@@ -111,7 +111,7 @@ str_tbl_ldl_Open_Monuments	"Monumentansicht"
 str_tbl_ldl_Open_Chat	"Chat-Fenster"
 str_tbl_ldl_Toggle_Space	"Weltraum ein/aus"
 str_tbl_ldl_Open_Network_Screen	"Netzwerk-Fenster"
-str_tbl_ldl_Civ_Tab	"Nationsregister"
+str_tbl_ldl_Civ_Tab	"Reichsregister"
 str_tbl_ldl_Max_Tab	"Max-Register"
 str_tbl_ldl_Pop_Tab	"Arbeitsregister"
 str_tbl_ldl_Prod_Tab	"Produktionsregister"
@@ -129,7 +129,7 @@ str_tbl_ldl_Load_World	"Sofort laden"
 
 
 
-SAVE_OVERWRITE	"Der gespeicherte Spielstand wird überschrieben.\nWollen Sie fortfahren?"
+SAVE_OVERWRITE	"Der gespeicherte Spielstand wird überschrieben.\nWollt Ihr fortfahren?"
 
 str_ldl_Expectations	"Erwartungen"
 
@@ -143,35 +143,25 @@ str_ldl_Total_City_Pollution	"Verschm. Gesamt"
 str_ldl_Pollution_Level	"Verschm.-Niveau:"
 
 
-
-CANT_ATTACK_HAVE_TREATY	"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollen Sie wirklich fortfahren?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir ihre Truppen so schnell wie möglich vertreiben."
-# New Messages # Belong to somewhere else
-ATTACK_WARNING "Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[0].civ_name_plural#DAT} den Krieg erklären?"
-CIV2DOVES "Die Tauben haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
-CIV2HAWKs "Die Falken verlanegen nach Krieg gegen diese Achse des Bösen!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
-
-
 str_ldl_RES_CHANGE_BUTTON	"Auflösung"
 str_ldl_RES_TITLE	"Auflösung"
-str_ldl_RES_REBOOT_WARNING	"Bitte starten Sie Call To Power II neu!"
+str_ldl_RES_REBOOT_WARNING	"Bitte startet Call To Power II neu!"
 
 DIP_EXCHANGE_ADVANCE_NONE	"Austausch von Neuerungen nicht möglich."
 str_ldl_Cant_disband_city	"Städte mit einer Bevölkerungsgröße von 4 und mehr können nicht aufgelöst werden."
-DELETE_SAVE_CONFIRM	"Sind Sie sicher?"
+DELETE_SAVE_CONFIRM	"Seid Ihr sicher?"
 
 str_ldl_CAPS_TARGET	"Zielobjekt"
 str_ldl_Cheat_Tile	"Geländefeld"
 str_ldl_AFB_SPLICER	"Genteiler (Optional):"
 str_ldl_Show_Map	"Karte zeigen"
 str_ldl_Hide_Map	"Karte verd."
-str_ldl_Cheat_gold	"Geben Sie den gewünschten Goldbetrag ein:"
-str_ldl_Cheat_pw	"Geben Sie den gewünschten Betrag für die staatl. Bautrupps ein:"
+str_ldl_Cheat_gold	"Gebt den gewünschten Goldbetrag ein:"
+str_ldl_Cheat_pw	"Gebt den gewünschten Betrag für die staatl. Bautrupps ein:"
 str_ldl_unitpad_Space	"Weltraum"
 
 str_ldl_ready_to_launch	"Fertig! Warte auf Startbereitschaft der anderen Spieler."
-str_ldl_dont_have_cd	"Bitte legen Sie Ihre Call To Power II-CD ein und klicken Sie erneut auf 'OK'."
+str_ldl_dont_have_cd	"Bitte legt Eure Call To Power II-CD ein und klickt erneut auf 'OK'."
 str_ldl_connectionlost	"Die Verbindung wurde abgebrochen."
 str_ldl_Pw	"Siedler"
 
@@ -185,7 +175,7 @@ str_ldl_PRODUCTIONTURN	"Produktion/Runde:"
 
 str_ldl_Turns	"Runden"
 
-DELETE_QUEUE	"Wollen Sie diese Bauliste wirklich löschen?"
+DELETE_QUEUE	"Wollt Ihr diese Bauliste wirklich löschen?"
 str_tbl_ldl_Ongoing	"Wird durchgef."
 BUTTON_CONTINUE	"Fortfahren"
 BUTTON_END_GAME	"Spiel beenden"
@@ -201,7 +191,7 @@ str_tbl_ldl_Toxic	"Giftig"
 ##
 
 ## rsh012899 - added for 'Q' press
-QUIT_DIALOG	"Wollen Sie das Spiel wirklich beenden?"
+QUIT_DIALOG	"Wollt Ihr das Spiel wirklich beenden?"
 ##
 
 
@@ -254,18 +244,18 @@ str_ldl_Message	"Nachricht"
 
 ## rsh012199 - added for instant action popups
 str_ldl_CAPS_PIRATE	"Piraterie"
-str_ldl_Whose_Trade_Route	"Auf wessen Handelsweg möchten Sie Piraterie betreiben?"
-str_ldl_What_course_of	"Wie wollen Sie weiter \nvorgehen?"
+str_ldl_Whose_Trade_Route	"Auf wessen Handelsweg wollt Ihr Piraterie betreiben?"
+str_ldl_What_course_of	"Wie wollt Ihr weiter \nvorgehen?"
 str_ldl_CAPS_ATTACK	"Angreifen"
 str_ldl_CAPS_EXPEL	"Vertreiben"
 str_ldl_CAPS_CANCEL_MOVE	"Zug stornieren"
 str_ldl_END_TUTORIAL	"Einführung beenden"
 
 
-CANT_ATTACK_ALLIES_CAN_EXPEL	"Wollen Sie wirklich das mit den {player[0].civ_name_plural#DAT} geschlossene Abkommen brechen? Sie können die Einheiten auch vertreiben, ohne gegen das Abkommen zu verstoßen."
+CANT_ATTACK_ALLIES_CAN_EXPEL	"Wollt Ihr wirklich das mit den {player[0].civ_name_plural#DAT} geschlossene Abkommen brechen? Ihr könnt die Einheiten auch vertreiben, ohne gegen das Abkommen zu verstoßen."
 
 
-str_tbl_ldl_You_Need_Embassy_To_Demand	"Sie müssen eine Botschaft in der betreffenden Nation besitzen, um Neuerungen fordern zu können."
+str_tbl_ldl_You_Need_Embassy_To_Demand	"Ihr müsst eine Botschaft in der betreffenden Nation besitzen, um Neuerungen fordern zu können."
 str_tbl_ldl_GIFT_MAP	"Kartenschenkung"
 
 ## rsh011899 - for government rankings
@@ -350,7 +340,7 @@ str_ldl_Scorewarn	"Der Punktestand des aktuellen \nSpiels wird nicht gespeichert
 ##End missing##
 
 
-str_tbl_ldl_You_Need	"Sie müssen eine Botschaft in der betreffenden Nation besitzen, um Neuerungen austauschen zu können."
+str_tbl_ldl_You_Need	"Ihr müsst eine Botschaft in der betreffenden Nation besitzen, um Neuerungen austauschen zu können."
 
 str_tbl_ldl_Very_Weak	"Minimal"
 str_tbl_ldl_Weak	"Schwach"
@@ -358,7 +348,7 @@ str_tbl_ldl_Average	"Durchschn."
 str_tbl_ldl_Strong	"Stark"
 str_tbl_ldl_Very_Strong	"Sehr stark"
 
-str_tbl_ldl_You_Dont_Have_Enough_Gold	"Sie besitzen nicht genug Gold."
+str_tbl_ldl_You_Dont_Have_Enough_Gold	"Euch mangelt es an Gold."
 
 str_ldl_CAPS_TARGET_CITY	"Zielstadt"
 str_ldl_CAPS_TYPE	"Typ"
@@ -408,28 +398,28 @@ str_ldl_AdvisorTurn "Runde"
 #Delete
 
 #### TILE IMPROVEMENT DESCRIPTIONS #######
-DESCRIPTION_TILEIMP_FARMS	"Farmen - Kosten: 200 SB."
+DESCRIPTION_TILEIMP_FARMS		"Farmen - Kosten: 200 SB."
 DESCRIPTION_TILEIMP_ADVANCED_FARMS	"Großfarmen - Kosten: 500 SB."
 DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"Hydroponische Farmen - Kosten: 1400 SB."
-DESCRIPTION_TILEIMP_MINES	"Bergwerke - Mindestkosten: 300 SB."
+DESCRIPTION_TILEIMP_MINES		"Bergwerke - Mindestkosten: 300 SB."
 DESCRIPTION_TILEIMP_ADVANCED_MINES	"Große Bergwerke - Mindestkosten: 800 SB."
-DESCRIPTION_TILEIMP_MEGA_MINES	"Megabergwerke - Mindestkosten: 1600 SB."
+DESCRIPTION_TILEIMP_MEGA_MINES		"Megabergwerke - Mindestkosten: 1600 SB."
 DESCRIPTION_TILEIMP_UNDERSEA_MINES	"Tiefseebergwerke - Mindestkosten: 400 SB."
 DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"Große Tiefseebergwerke - Mindestkosten: 1000 SB."
 DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"Megatiefseebergwerke - Mindestkosten: 2200 SB."
-DESCRIPTION_TILEIMP_NETS	"Fischereien - Mindestkosten: 200 SB."
-DESCRIPTION_TILEIMP_FISHERIES	"Tiefseefischereien - Mindestkosten: 500 SB."
+DESCRIPTION_TILEIMP_NETS		"Fischereien - Mindestkosten: 200 SB."
+DESCRIPTION_TILEIMP_FISHERIES		"Tiefseefischereien - Mindestkosten: 500 SB."
 DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"Automatisierte Tiefseefischereien - Mindestkosten: 1400 SB."
 DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"Produktionshangars - Kosten: 600 SB."
 DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"Großproduktionshangars -  Kosten: 1400 SB."
 DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"Megaproduktionshangars - Kosten: 2200 SB."
-DESCRIPTION_TILEIMP_FOOD_PODS	"Nahrungsspeicher - Kosten: 600 SB."
+DESCRIPTION_TILEIMP_FOOD_PODS		"Nahrungsspeicher - Kosten: 600 SB."
 DESCRIPTION_TILEIMP_FOOD_MODULES	"Nahrungslager - Kosten: 1400 SB."
-DESCRIPTION_TILEIMP_FOOD_TANKS	"Nahrungssilos - Kosten: 2200 SB."
-DESCRIPTION_TILEIMP_RUINS	"Ruinen"
-DESCRIPTION_TILEIMP_ROAD	"Straßen - Mindestkosten: 60 SB."
-DESCRIPTION_TILEIMP_RAILROAD	"Schienen - Mindestkosten: 120 SB."
-DESCRIPTION_TILEIMP_MAGLEV	"Schwebebahnen - Mindestkosten: 240 SB."
+DESCRIPTION_TILEIMP_FOOD_TANKS		"Nahrungssilos - Kosten: 2200 SB."
+DESCRIPTION_TILEIMP_RUINS		"Ruinen"
+DESCRIPTION_TILEIMP_ROAD		"Straßen - Mindestkosten: 60 SB."
+DESCRIPTION_TILEIMP_RAILROAD		"Schienen - Mindestkosten: 120 SB."
+DESCRIPTION_TILEIMP_MAGLEV		"Schwebebahnen - Mindestkosten: 240 SB."
 DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"Tiefseetunnel - Mindestkosten: 1200 SB."
 
 
@@ -483,11 +473,11 @@ str_tbl_ldl_Civ_Score_Colon	"Punkte:"
 UNIT_ORDER_TRANSPORTED	"Wird transportiert"
 TITLE_CITY_BUILD_QUEUE_IS_EMPTY	"{city[0].name}"
 
-str_tbl_ldl_The_Diplomats	"Unsere Staatsoberhäupter sind beschäftigt. Wir haben zurzeit \nkein Interesse daran, mit Ihnen zu verhandeln."
-str_tbl_ldl_Select_a_new	"Wählen Sie die nächste zu erforschende Neuerung aus."
+str_tbl_ldl_The_Diplomats	"Unsere Staatsoberhäupter sind beschäftigt. Wir haben zurzeit \nkein Interesse daran, mit Euch zu verhandeln."
+str_tbl_ldl_Select_a_new	"Wählt das nächste Forschungsziel."
 str_ldl_Review_Tutorial_Messages	"Hilfemeldungen einblenden"
 str_ldl_END	"Runde"
-str_ldl_End_Tutorial_Dialog	"Wollen Sie dieses Einführungsspiel wirklich beenden?"
+str_ldl_End_Tutorial_Dialog	"Wollt Ihr dieses Einführungsspiel wirklich beenden?"
 str_ldl_Skill_Level	"Schwierigkeitsgrad"
 str_ldl_Barbarian_Threat	"Barbarenüberfall"
 str_ldl_LAUNCH	"Starten"
@@ -506,7 +496,7 @@ str_ldl_Turns_to_Next_Disaster	"Runden bis Katastrophe"
 str_ldl_CAPS_MAKE_QUEUE	"Liste anlegen"
 str_ldl_CAPS_LOAD_QUEUE	"Liste laden"
 str_ldl_CAPS_DELETE_QUEUE	"Liste löschen"
-str_tbl_ldl_Your_queue_has_been_saved	"Ihre Liste wurde gespeichert."
+str_tbl_ldl_Your_queue_has_been_saved	"Eure Liste wurde gespeichert."
 str_ldl_LOAD	"Laden"
 str_ldl_CAPS_ASSIGN	"Zuweisen"
 str_ldl_CAPS_CONTENTS	"Inhalt"
@@ -521,12 +511,13 @@ str_ldl_CAPS_FOREIGN	"Ausland"
 str_ldl_NEXT	"Weiter"
 
 # strings for victory window
-str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"Ihr Punktestand beträgt:"
-str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"Sie werden in die Annalen der Geschichte eingehen als"
+str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"Euer Punktestand beträgt:"
+str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"Ihr werdet in die Annalen der Geschichte eingehen als"
 str_ldl_POPULATION_COLON	"Bevölkerung:"
 str_ldl_CIV_SCORE	"Punkte"
 str_ldl_POWER_GRAPH	"Stärkediagramm"
 str_ldl_DEFEAT	"Niederlage"
+# So we offend female leaders
 str_ldl_THE_DESTITUTE	"DER DÄMLICHE"
 str_ldl_THE_SQUIRREL_HEARTED	"DER ÄNGSTLICHE"
 str_ldl_THE_RED_FACED	"DER BLAMIERTE"
@@ -561,7 +552,7 @@ NETWORK_PLAYER_JOINED	"{action[1].name} hat die Kontrolle über die {player[1].ci
 NETWORK_DIFFERENT_PLAYER_JOINED	"{action[1].name} will als die {player[1].civ_name_plural} am Spiel teilnehmen, diese Nation war \naber ursprünglich einem anderen Spieler zugeordnet. \nRauswerfen?"
 BUTTON_EJECT	"Raus"
 BUTTON_LET_THEM_STAY	"Teilnehmen lassen"
-NETWORK_YOU_ARE_NOW_HOST	"Sie sind jetzt der Host dieses Spiels."
+NETWORK_YOU_ARE_NOW_HOST	"Ihr seid nun der Host dieses Spiels."
 NETWORK_NEW_HOST	"{action[1].name} ist jetzt der Host dieses Spiels."
 NETWORK_SESSION_LOST	"Die Verbindung wurde abgebrochen, kehre zur Lobby zurück."
 NETWORK_WAITING_ON_PLAYERS	"Warte auf Spieler"
@@ -935,8 +926,8 @@ str_ldl_HISTORICAL	"Historisches"
 str_ldl_Homogeneous	"Einheitlich"
 str_ldl_Host_changed_game_setup	"Achtung: Spiel-Setup wurde vom Host geändert!"
 str_ldl_HOT_KEY	"Kurzwahltaste"
-str_ldl_How_much_for_good	"Wie viel wollen Sie für dieses Gut bieten?"
-str_ldl_How_much_gold	"Wie viel verlangen Sie dafür?"
+str_ldl_How_much_for_good	"Wie viel wollt Ihr für dieses Gut bieten?"
+str_ldl_How_much_gold	"Wie viel verlangt Ihr dafür?"
 str_ldl_Impatient	"Ungeduldig"
 str_ldl_IMPROVE	"Modernis."
 str_ldl_Improvements	"Modernisier."
@@ -959,13 +950,13 @@ str_ldl_Joining_Lobby	"Eintritt in Lobby ..."
 str_ldl_KEYBOARD	"Tastatur"
 str_ldl_KEYBOARD_MAPPING	"Tastaturbelegung"
 str_ldl_Kick	"Raus"
-str_ldl_kicked_you_out	"Der Host hat Sie leider aus dem Spiel geworfen."
+str_ldl_kicked_you_out	"Der Host hat Euch leider aus dem Spiel geworfen."
 str_ldl_King	"Schwierig"
 str_ldl_Knowledge	"Wissen"
 str_ldl_Knowledge_Bar	"Wissensanzeige"
 str_ldl_KNOWN	"Bekannt"
-str_ldl_Known_Only_To_You	"Nur Ihnen bekannt"
-str_ldl_Known_To_You_And_Others	"Ihnen und anderen bekannt"
+str_ldl_Known_Only_To_You	"Nur Euch bekannt"
+str_ldl_Known_To_You_And_Others	"Euch und anderen bekannt"
 str_ldl_LABORERS	"Fabrikarbeiter"
 str_ldl_Land	"Land"
 str_ldl_Land_Grabber	"Grundbesitzer"
@@ -1066,7 +1057,7 @@ str_ldl_Pairah	"Pariah"
 str_ldl_Paradrop	"Abspringen"
 str_ldl_PARANTHESIS_Team	"(Team)"
 str_ldl_PARATHESIS_Private	"(Privat)"
-str_ldl_password	"Möchten Sie ein Passwort benutzen?"
+str_ldl_password	"Möchtet Ihr ein Passwort benutzen?"
 str_ldl_Password_required_to_join	"Passworteingabe erforderlich."
 str_ldl_PEACE	"Frieden   Alarmbereit   Krieg"
 str_ldl_Peace_Maker	"Friedensstifter"
@@ -1302,8 +1293,8 @@ str_ldl_Warm	"Warm"
 str_ldl_Water_Animation	"Animiertes Wasser"
 str_ldl_Welcome_to_the_City_Square	"Willkommen in der Stadtkaserne"
 str_ldl_Wet	"Feucht"
-str_ldl_Which_advance	"Welche Neuerung wollen Sie fordern?"
-str_ldl_Who_will_you_attack	"Wen wollen Sie angreifen?"
+str_ldl_Which_advance	"Welche Neuerung wollt Ihr fordern?"
+str_ldl_Who_will_you_attack	"Wen wollt Ihr angreifen?"
 str_ldl_Wonder	"Weltwunder"
 str_ldl_Wonders	"Weltwunder"
 str_ldl_Workday	"Arbeitstag"
@@ -1314,10 +1305,10 @@ str_ldl_WORLD_SIZE	"Kartengröße"
 str_ldl_WORLD_TYPE	"Benutzerdef. Karte"
 str_ldl_X	"X"
 str_ldl_Yes	"Ja"
-str_ldl_You_have_become_the_host_of_this_game	"Sie sind jetzt der Host dieses Spiels"
+str_ldl_You_have_become_the_host_of_this_game	"Ihr seid nun der Host dieses Spiels"
 str_ldl_You_have_created_Game	"Das Spiel wurde erstellt."
-str_ldl_You_have_entered_Lobby	"Sie sind in die Lobby eingetreten."
-str_ldl_You_have_joined_Game	"Sie nehmen an dem Spiel teil"
+str_ldl_You_have_entered_Lobby	"Ihr seid in die Lobby eingetreten."
+str_ldl_You_have_joined_Game	"Ihr nehmt an dem Spiel teil"
 
 #Keeper 3#
 
@@ -1405,7 +1396,7 @@ str_tbl_ldl_LOAD_MP_GAME	"MS-Spiel laden"
 str_tbl_ldl_Load_Now	"Jetzt laden"
 str_tbl_ldl_LOAD_PBEM_GAME	"Szenarios"
 str_tbl_ldl_LOAD_TEMPLATE	"Vorlage laden"
-str_tbl_ldl_load_without_saving	"Wenn Sie den Ladevorgang durchführen, ohne zuvor zu speichern, \nverlieren Sie Ihren aktuellen Punktestand."
+str_tbl_ldl_load_without_saving	"Wenn Ihr den Ladevorgang durchführt, ohne zuvor zu speichern, \nverliert Ihr Ihren aktuellen Punktestand."
 str_tbl_ldl_Lock_Unit_Stack	"Einheiten gruppieren"
 str_tbl_ldl_MAKE_DEMAND	"Fordern"
 str_tbl_ldl_Male	"Männlich"
@@ -1464,7 +1455,7 @@ str_tbl_ldl_Private	"Privat"
 str_tbl_ldl_Public	"Öffentlich"
 str_tbl_ldl_QUEUE	"Bauliste"
 str_tbl_ldl_Quit_Now	"Jetzt beenden"
-str_tbl_ldl_quit_without_saving	"Wenn Sie das Spiel beenden, ohne zuvor zu speichern, \nverlieren Sie Ihren aktuellen Punktestand."
+str_tbl_ldl_quit_without_saving	"Wenn Ihr das Spiel beendet, ohne zuvor zu speichern, \nverliert Ihr Euren aktuellen Punktestand."
 str_tbl_ldl_Random	"Zufällig"
 str_tbl_ldl_REQUEST	"Tauschhandel"
 str_tbl_ldl_RESPONSE	"Antwort"
@@ -1515,7 +1506,7 @@ str_tbl_ldl_Very_Large	"Riesig"
 str_tbl_ldl_Warlord	"Leicht"
 str_tbl_ldl_Wonder	"Weltwunder"
 str_tbl_ldl_You_will_receive	"Ihr erhaltet "
-str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"Ihr Kaufangebot wurde übermittelt."
+str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"Euer Kaufangebot wurde übermittelt."
 str_tbl_ldl_Zoom_in_one_level	"Um eine Stufe vergrößern"
 str_tbl_ldl_Zoom_out_one_level	"Um eine Stufe verkleinern"
 str_ldl_CAPS_MUSIC	"Musik"
@@ -1582,7 +1573,7 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES	"{player[0].leader_name} gehört zu Ihrem Team. Mitglieder des eigenen Teams können nicht angegriffen werden."
+CANT_ATTACK_TEAMMATES	"{player[0].leader_name} gehört zu Eurem Team. Mitglieder des eigenen Teams können nicht angegriffen werden."
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -1706,7 +1697,7 @@ str_ldl_Elite_Corps	"Eliteeinheit"
 str_ldl_Email_COLON	"E-Mail:"
 str_ldl_Embassies_With_These_Civilizations	"Botschaften in diesen Nationen"
 str_ldl_Enter_Text	"Text eingeben"
-str_ldl_Estimated_Power_COLON	"Machteinschätzung: Sie stecken tief in der $@^&*("
+str_ldl_Estimated_Power_COLON	"Machteinschätzung: Ihr steckt tief in der $@^&*("
 str_ldl_F	"v"
 str_ldl_Exit	"OK"
 str_ldl_Flat_World	"Flache Welt"
@@ -1770,7 +1761,7 @@ str_ldl_Patrol	"Patrouille"
 str_ldl_Obj_Editor	"Obj-Editor"
 str_ldl_Pay	"Zahlen"
 str_ldl_Player_3_Caesar	"Spieler 3 -- Caesar"
-str_ldl_Please_choose_connection	"Bitte wählen Sie eine Verbindungsart für die Kontaktierung andere Spieler in einem Mehrspieler-Spiel."
+str_ldl_Please_choose_connection	"Bitte wählt eine Verbindungsart für die Kontaktierung andere Spieler in einem Mehrspieler-Spiel."
 str_ldl_PLUS	"-"
 str_ldl_PLUS_10_PERCENT_Food	"+10% Nahrung"
 str_ldl_PLUS_10_PERCENT_Gold	"+10% Gold"
@@ -1828,20 +1819,20 @@ str_ldl_Turn_PERCENTd	"Runde %d"
 str_ldl_Rustle	"Viehdiebstahl"
 str_ldl_Style	"Stil"
 str_ldl_ug029_tga	"ug029.tga"
-str_ldl_Type_Player_Info	"Geben Sie hier alles an, was die anderen Spieler über Sie erfahren sollen. Hinweis: DIESE INFORMATIONEN KÖNNEN VON ANDEREN ONLINE-SPIELERN EINGESEHEN WERDEN! Stellen Sie bitte sicher, dass diese Informationen öffentlich zugänglich sein sollen."
+str_ldl_Type_Player_Info	"Gebt hier alles an, was die anderen Spieler über Euch erfahren sollen. Hinweis: DIESE INFORMATIONEN KÖNNEN VON ANDEREN ONLINE-SPIELERN EINGESEHEN WERDEN! Stellt bitte sicher, dass diese Informationen öffentlich zugänglich sind."
 str_ldl_Unhappiness_Effect	"Unzufriedenheitsauswirkungen"
 str_ldl_Unhappy	"Unzufriedenh."
 str_ldl_UNIT_HAPPINESS_EFFECTS	"Zufriedenheitsausw. bei Einheiten"
 str_ldl_Start_End_Ages	"Zeitalter beginnen/beenden"
-str_ldl_Sorry_the_tribe_you_selected_is_already_taken	"Das von Ihnen gewählte Volk ist schon vergeben."
+str_ldl_Sorry_the_tribe_you_selected_is_already_taken	"Das von Euch erwählte Volk ist schon vergeben."
 str_ldl_Unit_Lost_Warning	"Einheitenverlust melden"
 str_ldl_UV	"UV"
 str_ldl_V	"S"
 str_ldl_Weakly_Modal	"Schwach modal"
-str_ldl_Which_city	"Welche Stadt wollen Sie fordern?"
-str_ldl_You_have_launched_the_Game	"Sie haben das Spiel gestartet"
-str_ldl_Youve_been_denied	"Sie wurden abgewiesen."
-str_ldl_Youve_either_won_or_lost	"Sie haben entweder gewonnen oder verloren!"
+str_ldl_Which_city	"Welche Stadt wollt Ihr fordern?"
+str_ldl_You_have_launched_the_Game	"Ihr habt das Spiel gestartet"
+str_ldl_Youve_been_denied	"Ihr wurdet abgewiesen."
+str_ldl_Youve_either_won_or_lost	"Ihr habt entweder gewonnen oder verloren!"
 str_tbl_ldl_0	""
 str_tbl_ldl_9	"9"
 str_tbl_ldl_10	"10"
@@ -1868,7 +1859,7 @@ str_tbl_ldl_BombardButton	"BombardButton"
 str_tbl_ldl_BombCabinetButton	"BombCabinetButton"
 str_tbl_ldl_AdvertiseButton	"AdvertiseButton"
 str_tbl_ldl_AidUprisingButton	"AidUprisingButton"
-str_tbl_ldl_Are_you_sure	"Wollen Sie das wirklich tun?"
+str_tbl_ldl_Are_you_sure	"Wollt Ihr das wirklich tun?"
 str_tbl_ldl_CaptureSlavesButton	"CaptureSlavesButton"
 str_tbl_ldl_Cecilias_Blade_Runner	"Cecilias Blade Runner"
 str_tbl_ldl_Center_Map_on_UnitCity	"Karte zentrieren"
@@ -2218,8 +2209,8 @@ str_ldl_SP_SCENARIO_STATIC_TEXT		"Szenario:"
 str_ldl_SCENARIO_PICKER_TITLE		"Szenarioauswahl"
 str_ldl_PACK_INSTRUCTIONS		"Activision übernimmt keinen technischen Kundendienst für Tools bzw. Spielelemente, die mit den Bearbeitungstools erschaffen wurden."
 str_ldl_AVAILABLE_SCEN_PACK		"Verfügbare Szenario-Sets"
-#str_ldl_PACK_INSTRUCTIONS		"Wählen Sie ein Szenario-Set:"
-str_ldl_SCEN_INSTRUCTIONS		"Wählen Sie das gewünschte Szenario und klicken Sie auf OK."
+#str_ldl_PACK_INSTRUCTIONS		"Wählt ein Szenario-Set:"
+str_ldl_SCEN_INSTRUCTIONS		"Wählt das gewünschte Szenario und klickt auf OK."
 str_ldl_LOAD_SCENARIO_GAME		"Szenario laden"
 str_ldl_SAVE_SCENARIO			"Szenario speichern"
 str_ldl_SAVE_SCENARIO_AS		"Szenario speichern unter"
@@ -2307,7 +2298,7 @@ str_ldl_OptimizeSpecialists 		"Optimiere Spezialisten"
 
 str_ldl_Costs 				"Kosten"
 str_ldl_Gives 				"Schenkungen"
-str_ldl_YouHave 			"Sie haben "
+str_ldl_YouHave 			"Ihr habt "
 
 str_ldl_RushBuy 			"Sofortkauf"
 str_ldl_Sell 				"Verkaufen"
@@ -2353,7 +2344,7 @@ str_ldl_DipTone2 			"Unterwürfig/Devot"
 str_ldl_DipTone3 			"Arrogant/Herablassend"
 str_ldl_DipTone4 			"Feindselig/Aggressiv"
 
-str_dip_InvalidProposal 		"Wählen Sie ein Gesuch aus der Liste"
+str_dip_InvalidProposal 		"Wählt Sie ein Gesuch aus der Liste"
 
 str_ldl_Threaten 			"Drohen"
 
@@ -2362,7 +2353,7 @@ str_ldl_Threaten 			"Drohen"
 # New Control Panel Strings
 #
 
-str_ldl_CivTabTitle 			"Nation"
+str_ldl_CivTabTitle 			"Reich"
 str_ldl_MsgTabTitle 			"Nachr."
 str_ldl_CityTabTitle 			"Stadt"
 str_ldl_UnitTabTitle 			"Einheit"
@@ -2372,7 +2363,7 @@ str_ldl_TileTabTitle 			"Feld"
 # Menu Bar Strings
 #
 
-str_ldl_CivMenuTitle 			"Nation"
+str_ldl_CivMenuTitle 			"Reich"
 str_ldl_CitiesMenuTitle			"Städte"
 str_ldl_UnitsMenuTitle			"Einheiten"
 str_ldl_DiplomacyMenuTitle		"Diplomatie"
@@ -2391,7 +2382,7 @@ str_ldl_Gaia				"Gaia-Controller"
 
 # Cities Menu Strings
 str_ldl_CityManagement			"Stadtmanager"
-str_ldl_NatlManager			"Nationsmanager"	 
+str_ldl_NatlManager			"Reichssmanager"	 
 str_ldl_BuildQueue			"Baumanager"    
 
 
@@ -2668,7 +2659,7 @@ str_ldl_DD_GOV_ANTI_POLLUTION		"Umweltschutz:"
 str_ldl_ASP_GOAL			"Ziel"
 
 # National Management
-str_ldl_NATIONAL_DIALOG_TITLE		"N A T I O N S M A N A G E R"
+str_ldl_NATIONAL_DIALOG_TITLE		"R E I C H S M A N A G E R"
 str_ldl_ND_ADVICE			"Ratschlag"
 str_ldl_ND_BUILD_QUEUE			"Bauliste ..."
 str_ldl_ND_DISBAND			"Auflösen"
@@ -2687,7 +2678,7 @@ str_ldl_ND_ON				"EIN"
 str_ldl_ND_OFF				"AUS"
 str_ldl_ND_EMPTY			"LEER"
 str_ldl_ND_NA				"ENTFÄLLT"
-str_ldl_ND_VERIFY_DISBAND		"Wollen Sie die markierten Städte wirklich auflösen?"
+str_ldl_ND_VERIFY_DISBAND		"Wollt Ihr die markierten Städte wirklich auflösen?"
 
 # Science Management
 str_ldl_SCIENCE_DIALOG_TITLE		"W I S S E N S C H A F T S M A N A G E R"
@@ -2731,15 +2722,15 @@ str_ldl_DipWizardOffer 			"Angebot"
 str_ldl_DipWizardTreaty 		"Abkommen"
 str_ldl_DipWizSelectNation 		"Empfänger wählen:"
 str_ldl_DipWizSelectTone 		"Umgangston wählen:"
-str_ldl_DipWizSelectRequestOfferTreaty 	"Bitte wählen Sie:"
-str_ldl_DipWizSelectRequestTreaty 	"Bitte wählen Sie:"
-str_ldl_DipWizSelectOfferTreaty 	"Bitte wählen Sie:"
-str_ldl_DipWizSelectRequestOffer 	"Bitte wählen Sie:"
+str_ldl_DipWizSelectRequestOfferTreaty 	"Bitte wählt:"
+str_ldl_DipWizSelectRequestTreaty 	"Bitte wählt:"
+str_ldl_DipWizSelectOfferTreaty 	"Bitte wählt:"
+str_ldl_DipWizSelectRequestOffer 	"Bitte wählt:"
 
-str_ldl_DipWizSelectRequestOfferTreatyForCounter 	"Bitte wählen Sie:"
-str_ldl_DipWizSelectRequestTreaty 			"Bitte wählen Sie:"
-str_ldl_DipWizSelectOfferTreaty 			"Bitte wählen Sie:"
-str_ldl_DipWizSelectRequestOffer 			"Bitte wählen Sie:"
+str_ldl_DipWizSelectRequestOfferTreatyForCounter 	"Bitte wählt:"
+str_ldl_DipWizSelectRequestTreaty 			"Bitte wählt:"
+str_ldl_DipWizSelectOfferTreaty 			"Bitte wählt:"
+str_ldl_DipWizSelectRequestOffer 			"Bitte wählt:"
 
 str_ldl_DipWizYear 			"Jahr: {g.year_str}"
 str_ldl_DipWizRecipient 		"An: {player[0].leader_name} {player[0].country_name#OF_POSSESSIVE}"
@@ -2791,8 +2782,8 @@ str_ldl_Insert 				"Einfügen"
 str_ldl_Append 				"Anfügen"
 str_ldl_Overwrite 			"Ersetzen"
 
-str_ldl_EditQueueMustEnterName 		"Sie müssen einen Namen für diese Bauliste eingeben."
-str_ldl_EditQueueReallyOverwrite 	"Wollen Sie die eigene Bauliste %s überschreiben?"
+str_ldl_EditQueueMustEnterName 		"Ihr müsst einen Namen für diese Bauliste eingeben."
+str_ldl_EditQueueReallyOverwrite 	"Wollt Ihr die eigene Bauliste %s überschreiben?"
 str_ldl_EditQueueReallyLoad 		"Soll die Bauliste %s für die Stadt %s geladen werden?"
 str_ldl_EditQueueReallyLoadMulti 	"Soll die Bauliste %s für alle markierten Städte aktiviert werden?"
 
@@ -2816,7 +2807,7 @@ str_ldl_Polluters			"Negativ"
 str_ldl_Cleaners 			"Positiv"
 
 str_ldl_CityWinCrimeFormat 		"Kriminalität: %d%%"
-str_ldl_IW_CONFIRM_WAR 			"Wollen Sie {player[0].country_name#DAT} wirklich den Krieg erklären?"
+str_ldl_IW_CONFIRM_WAR 			"Wollt Ihr {player[0].country_name#DAT} wirklich den Krieg erklären?"
 
 # General
 str_ldl_Building_Nothing_Label 		"Nichts"
@@ -3195,28 +3186,26 @@ str_profile_EndTurnWithEmptyBuildQueues         "Rundenende mit leerer Bauliste"
 str_profile_RunInBackground                     "Rundenende im Hintergrund"
 str_profile_Upgrade                             "Einheiten aufrüsten"
 str_profile_SmoothBorders                       "Reichsgrenzen glätten"
-str_profile_CivFlags                       	"Show Civilization Unit flags"
-str_profile_NoAIProductionDeficit 		"AI No Production Deficit"	
-str_profile_NoAIGoldDeficit			"No negative Gold for AI Cities"					# AI cities don't go negative in gold
-str_profile_AICityDefenderBonus 		"AI City Defense bonus"					# AI population adds to city defenses
-str_profile_BarbarianCities			"Entrenched Barbarians settle cities"					# Entrenched barbarians create a city
-str_profile_SectarianHappiness 			"Conflicting citystyle unhappiness"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_profile_RevoltCasualties 			"Revolting Cities lose Population"					# Revolting city loses 1/3 of population
-str_profile_RevoltInsurgents 			"Revolting cities create barbarians"					# Revolting city creates barbarians
-str_profile_BarbarianCamps			"Entrenched Barbarians create Tile Imps"		# Entrenched barbarians create an imp
-str_profile_BarbarianSpawnsBarbarian 		"Entrenched Barbarians spawn Barbarians"			# Entrenched barbs create more barbs
-str_profile_AINoSinking 			"AI ships don't sink"							# AI ships don't sink
-str_profile_AINoCityLimit 			"AI No City LImit"						# AI not affected by city limit
-str_profile_GoldPerUnitSupport 			"1 Gold Per Unit Cost"					# all pay thins int times unit support calculation
-str_profile_GoldPerCity 			"2 Gold Per City x City Limit"						# everyone pays gold amount per city
-str_profile_AINoShieldHunger 			"AI doesn't pay Shield Hunger"					# AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger			"AI doesn't pay Unit Gold"						# AI doesnt pay unit gold hunger
-str_profile_AIFreeUpgrade 			"AI Free Upgrades"						# AI doesn't pay goldfor upgrades
-str_profile_AIMilitiaUnit 			"AI Free Militia Unit"						#If city is empty at turn start AI gets cheapest unit
-str_profile_OneCityChallenge 			"One City Challenge"						#If city is empty at turn start AI gets cheapest unit
-str_profile_CityCaptureOptions 			"City Capture Options"						#If city is empty at turn start AI gets cheapest unit
-
-
+str_profile_CivFlags                            "Show Civilization Unit flags"
+str_profile_NoAIProductionDeficit               "AI No Production Deficit"
+str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"          # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI City Defense bonus"                   # AI population adds to city defenses
+str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"     # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"       # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Revolting Cities lose Population"        # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Revolting cities create barbarians"      # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"  # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"  # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI ships don't sink"                     # AI ships don't sink
+str_profile_AINoCityLimit                       "AI No City LImit"                        # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                    # all pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Gold Per City x City Limit"            # everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"            # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI Free Upgrades"                        # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                    #If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                      #If city is empty at turn start AI gets cheapest unit
+str_profile_CityCaptureOptions                  "City Capture Options"                    #If city is empty at turn start AI gets cheapest unit
 
 str_ldl_Pw_COLON_	"Siedler:"
 
@@ -3234,7 +3223,7 @@ str_tbl_ldl_Rand_Test			"Zufallstest (Playtest)"
 str_tbl_ldl_Command_Enter		"Kommando eingeben (Playtest)"
 str_tbl_ldl_Command_Enter_Alternate	"Alternativkommando eingeben (Playtest)"
 
-# New gamesetting options
+# New gamesetting options # Who needs this stuff?
 #implemented
 str_ldl_Army_Names_Off			"Army Names Off"
 str_ldl_Army_Names_On			"Army Names On"

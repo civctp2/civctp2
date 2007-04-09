@@ -28,6 +28,8 @@
 // - Added new token so that the loading of default strings can be 
 //   prevented. (Jan 30th 2006 Martin Gühmann)
 // - Removed unused tokens. (July 15th 2006 Martin Gühmann)
+// - Added new token so that the loading of default strings in scenarios
+//   can be skipped. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -131,10 +133,8 @@ enum TOKEN_TYPES
 	TOKEN_COLORSET,
 	TOKEN_COLORSET_COLOR,
 
-	TOKEN_CONCEPT_DEFAULT_ICON,
-	TOKEN_NO_INDEX,
-
 	TOKEN_DO_NOT_IMPORT_DEFAULTS,
+	TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS,
 	TOKEN_MAX
 };
 
@@ -172,7 +172,8 @@ public:
 	sint32 Next();
 	void GetString(char *str);
 	void GetNumber(sint32 &n); 
-	void GetFloat(double &n); 
+	void GetFloat(double &n);
+	void SetCheckScenario(bool checkScenario){ m_checkScenario = checkScenario; };
 	
 	char const * ErrStr(); 
 	
@@ -198,6 +199,7 @@ private:
 	MBCHAR			m_savedFilename[_MAX_PATH];
 	sint32			m_savedLineNumber;
 	FILE			*m_savedFin;
+	bool			m_checkScenario;
 	
 	
 	friend bool token_ParseValNext(Token *aToken, sint32 t, sint32 &val);

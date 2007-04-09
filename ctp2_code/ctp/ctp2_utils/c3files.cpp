@@ -31,6 +31,7 @@
 // - Added some casts. (Aug 7th 2005 Martin Gühmann)
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Improved CTP2 disk detection.
+// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -72,11 +73,11 @@ namespace
 
 #define k_CTP_CD_VOLUME_NAME		"CTP2"
 
-FILE* c3files_fopen(C3DIR dirID, MBCHAR const * s1, MBCHAR const * s2)
+FILE* c3files_fopen(C3DIR dirID, MBCHAR const * s1, MBCHAR const * s2, bool checkScenario)
 {
 	MBCHAR  s[_MAX_PATH];
 
-	return g_civPaths->FindFile(dirID, s1, s) ? fopen(s, s2) : NULL;
+	return g_civPaths->FindFile(dirID, s1, s, false, true, checkScenario) ? fopen(s, s2) : NULL;
 }
 
 FILE* c3files_freopen(const MBCHAR *s1, const MBCHAR *s2, FILE *file)

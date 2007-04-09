@@ -1,27 +1,73 @@
-#### Message strings for the Alexander the Great scenario ####
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Meassage strings for the Alexander the Great scenario in English
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contain all the message strings for the Alexander the Great 
+#   scenario. It contains nothing else.
+# - The order of the strings has been synchronized in the English, German
+#   and Italian version. This has not been done for the French, Spanish and 
+#   Japanese version, since those files are missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages keep make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last time of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Synchronized the string sequenze between the English, German and Italian
+#   of that file.
+# - Removed Christain propaganda about Babylon.
+# - German version only: Replaced formal addressing by Sie by King's and 
+#   Queen's formal addressing of Ihr.
+#
+#----------------------------------------------------------------------------
 
+#### Message strings for the Alexander the Great scenario ####
 
 #### Button text
 
-AG_BUTTON_OK 			"OK"
-AG_BUTTON_YES 			"Yes"
-AG_BUTTON_NO 			"No"
-AG_BUTTON_NEXT		 	"Next->"
-AG_BUTTON_BACK	 		"<-Back"
-AG_BUTTON_EXECUTE		"Execute Parmenion!"
-AG_BUTTON_DISAGREE		"Disagree"
-AG_BUTTON_WIFE			"Wife"
-AG_BUTTON_MISTRESS		"Mistress"
-AG_BUTTON_PAMPER		"Pamper them"
-AG_BUTTON_KILL			"Kill them"
-AG_BUTTON_MARRY			"Marry her"
-AG_BUTTON_WAIT			"Wait"
-AG_BUTTON_RULES			"Scenario Rules"
+AG_BUTTON_OK		"OK"
+AG_BUTTON_YES		"Yes"
+AG_BUTTON_NO		"No"
+AG_BUTTON_NEXT		"Next->"
+AG_BUTTON_BACK		"<-Back"
+AG_BUTTON_EXECUTE	"Execute Parmenion!"
+AG_BUTTON_DISAGREE	"Disagree"
+AG_BUTTON_WIFE		"Wife"
+AG_BUTTON_MISTRESS	"Mistress"
+AG_BUTTON_PAMPER	"Pamper them"
+AG_BUTTON_KILL		"Kill them"
+AG_BUTTON_MARRY		"Marry her"
+AG_BUTTON_WAIT		"Wait"
+AG_BUTTON_RULES		"Scenario Rules"
 
 #### Message box text
 
 # Start game strings
-AG_START_TITLE	"Alexander the Great"
+AG_START_TITLE		"Alexander the Great"
 AG_START_A		"It is May, 334 B.C. You are Alexander, King of Macedonia. You stand on the shores of Asia, ready to plunge into the Persian Empire. Your father Philip forged Macedonia into a powerful nation, but died before he could invade Persia. His death left you king at only 21 years of age. He also left you with a veteran army ready for anything."
 AG_START_B		"You have spent two years consolidating your power, and now its time to continue where your father Philip left off. Persia is a shadow of its former glory, but still you will be like a fly attacking an elephant. The odds are against you, but the world has never seen anyone with your talent and potential."
 AG_START_C		"Your armies await you to the South and Southeast, ready to invade Persia at your command. Before you launch your invasion, it is recommended you read the reports in the Great Library on Macedonia, Persia, and your other neighboring countries. Also be sure to familiarize yourself with the special rules of this scenario."
@@ -49,8 +95,8 @@ AG_ANTIPATER_BATTLE	"General Antipater dies in battle! Almost sixty when you bec
 AG_CRATERUS_OLD		"General Craterus is dead! Craterus was a very intense man: intensely loyal, intensely emotional, but unfortunately he was also an intense drinker. He was found dead in the morning, after a long night of revelry. Such a good general and close friend will be sorely missed."
 AG_CRATERUS_BATTLE	"General Craterus suffers a mortal blow in battle! Craterus was a passionate, and headstrong man. Though you often argued with him, he was one of your closest companions and most loyal generals. Such a good general and close friend will be sorely missed."
 AG_HEPHAESTION		"Though you have lost a great general, fear not. Your close partner Hephaestion is ready as an equally capable replacement. Be careful however: there are only so many men who have the skill to masterfully lead your men."
-AG_PTOLEMY			"Although another general has died, there is a man ready to resume his duties immediately. Your childhood friend Ptolemy, while still very young like you, is up to the task. Be careful however: men of his caliber are hard to find."
-AG_SELEUCUS			"You have lost another general. Once again, there is an able replacement. Seleucus, a childhood friend, is ready to become a leading general. Unfortunately, you have used up your reserve of capable leaders. In the future there will be no more general replacements."
+AG_PTOLEMY		"Although another general has died, there is a man ready to resume his duties immediately. Your childhood friend Ptolemy, while still very young like you, is up to the task. Be careful however: men of his caliber are hard to find."
+AG_SELEUCUS		"You have lost another general. Once again, there is an able replacement. Seleucus, a childhood friend, is ready to become a leading general. Unfortunately, you have used up your reserve of capable leaders. In the future there will be no more general replacements."
 AG_HEPHAESTION_OLD	"General Hephaestion has died! Like so many soldiers on your campaigns into strange lands, he was swiftly taken by disease. He was your close friend, and you are inconsolable with grief. You vow to one day make the greatest mausoleum in history to honor his memory."
 AG_HEPHAESTION_BATTLE	"General Hepheastion is killed in battle! Hephaestion was more than a friend, he was your mentor. You would have gladly died in his place. You vow to one day make the greatest mausoleum in history to honor his memory. But today your goal is to seek revenge upon those who killed him!"
 AG_PTOLEMY_OLD		"A sudden plague has killed General Ptolemy! Ptolemy was a close childhood friend, and most likely your half-brother. He was quite possibly the cleverest of your comrades. It will be impossible to replace a talented, loyal friend like him."
@@ -80,20 +126,23 @@ AG_SCOUT_REPORT_C	"Your first major task should be to control the southern and w
 AG_TYRE_APPROACH	"Control of Tyre is the key to controlling this entire region. But the people of Tyre aren't worried; their city is build on a hill and has very tough defenses. No one has ever successfully stormed this city. If you can, it would be a big boost to your reputation."
 AG_TYRE_BESIDE		"Scouts report that Tyre is heavily defended! A direct assault now will likely result in many deaths on your side. A prolonged bombardment with many Catapults is highly advised to soften up the defenses."
 AG_TYRE_CONQUER		"You have done the impossible and conquered Tyre! None thought that such a strongly defended city could be conquered by anyone. Your reputation is greatly boosted amongst nearby nations. The cities of the Corinithian League are especially less likely to cross you. They see that if you can conquer Tyre, you can conquer them."
-	# Phoenican Strings
+
+# Phoenican Strings
 AG_PHOEN_ENTER		"You are at an important junction. To the northwest is Asia Minor, to the east is Mesopotamia, center of the Persian Empire, and to the south are the coastal cities of Phoenicia. Control the Phoenician cities and Persia will not have much ability to build ships. It is likely they will freely join you, but only after Darius is dead."
 AG_PHOEN_ENTER2		"You are at an important junction. To the northwest is Asia Minor, to the east is Mesopotamia, center of the Persian Empire, and to the south are the coastal cities of Phoenicia. Now that Darius is defeated, the Phoenicians are ready to join you, and only wait for you in person. Without Phoenicia, Persia will not have much of a navy."
 AG_PHOEN_ARADUS		"The citizens of Aradus would gladly surrender to you, but while they hate Darius, they still fear him. Come back for a friendly reception once Darius has been defeated."
 AG_PHOEN_ARADUS2	"The citizens of Aradus throw open their gates and warmly greet you, their new hero! About a dozen years ago, Aradus and Sidon rebelled, but the rebellion was crushed by the Persians. They welcome anyone who helps them throw off the Persian yoke."
 AG_PHOEN_SIDON		"The citizens of Sidon would gladly surrender to you, but while they hate Darius, they still fear him. Come back for a friendly reception once Darius has been defeated."
 AG_PHOEN_SIDON2		"Sidon turns itself over to the Macedonians! Before its recent rebellion, Sidon was the largest and most important city in this region. Now, Persia has let Tyre take over Sidon's position. So while Sidon gladly welcomes you, its rival Tyre will fight you to the last."
-	# Egypt strings
+
+# Egypt strings
 AG_GAZA_BESIDE		"Although many cities in this region are eager to surrender to you, Gaza isn't one of them. This city has built up a large fortune as the end point of a caravan route to and from Southern Arabia, and they don't want to give up their treasures. They also believe their walls are impregnable."
 AG_GAZA_CONQUER		"The city of Gaza is yours! You have truly shown yourself to be skilled at conquering well defended cities. In the governor's house you find an additional treasure of 1500 gold."
 AG_EGYPT_CNT_DEFECT	"Scouts report that the Egyptians are ready to give themselves over to the Macedonians, but only if Alexander appears in person."
 AG_EGYPT_DEFECT		"The natives of Egypt joyously celebrate the arrival of the great Alexander! The Egyptians have repeatedly rebelled against the Persians, only to be reconquered each time. Egyptians see you as their salvation from this cycle of misery, and throw off the Persian yoke from all of Egypt! Persian soldiers flee, leaving you with a ruined land."
 AG_EGYPT_TYRE		"Scouts report that the Egyptians are ready to give themselves over to the Macedonians, but they are afraid of retribution from the Persian navy. Conquer Tyre, and the Egyptians will accept you gladly."
-	# Barsine and first Darius defeat
+
+# Barsine and first Darius defeat
 AG_DARIUS_DEFEAT_OTHER	"Scouts report that Darius' army was defeated by the {player[0].civ_name_plural}. Darius himself, seeing how the battle was shaping up, cowardly fled well before the battle was over. At least his craven maneuver has left you the opportunity to personally rid the world of Darius."
 AG_DARIUS_DEFEAT_A	"Darius' army has been defeated in battle! Darius himself, seeing how the battle was shaping up, cowardly fled well before the battle was over. So while his personal guard was killed, Darius escaped with little more than his horse surviving with him. Your army overruns Darius' camp."
 AG_DARIUS_DEFEAT_B	"Darius travels with all the splendor expected of the King of Kings. Not only have you found jewels and treasures worth 30,000 gold, but many important people have been left behind. Among the nobles and relatives stranded by Darius' flight is Barsine, Memnon's wife. She was a childhood friend of yours."
@@ -108,39 +157,41 @@ AG_BARSINE_2YEARS2	"It has been two years since Memnon died, leaving Barsine a w
 AG_BARSINE_MARRY3	"Congratulations on your marriage with Barsine. You take a break from your official duties to have a pleasant marriage ceremony and honeymoon."
 AG_BARSINE_WIDOW_A	"Now that Memnon is dead, you face the decision on what to do with his wife, Barsine. She has been your mistress since you captured her in Darius' war camp. The two of you have enjoyed each other's company on the rare occasions you've had time to see her."
 AG_BARSINE_WIDOW_B	"Is it time for you to marry Barsine? Many will say that you've allowed Memnon to die only so you could steal his wife away. And can you trust her, or is she acting friendly only to get revenge in Memnon's name, later? Will you marry Barsine?"
-	# Statiera and second Darius defeat
+
+# Statiera and second Darius defeat
 AG_DARIUS_DEAD_OTHER	"Scouts report that Darius has been killed in battle by the {player[0].civ_name_plural}. You are bitter that you did not get to defeat him personally, but the world is better off with him dead."
 AG_DARIUS_DEAD_A	"Your army has killed Darius! Knowing his tendency to flee, you order troops to perform a daring encirclement maneuver to prevent him from getting away a second time. In this you are successful. But trapped from fleeing, Darius gets caught up in hand to hand fighting and is killed by a stray spear."
 AG_DARIUS_DEAD_B	"Once again, the booty left behind in Darius' camp is incredible: 20,000 gold! In addition, you have captured Darius' entire family unharmed, including Darius' mother, wife and many children. The capture of the Persian royal family presents you with important choices..."
 AG_DARIUS_DEAD_C	"Since the Persians have a long tradition of respecting royal hostages, you can treat them generously, which will cost you 250 Gold per turn. Or alternately, you may kill them. Cruel, yes, but not unprecedented. Alive, the children may one day rebel and cause trouble. What will you do?"
 AG_PERSIAN_KILL		"It was a painful choice, but many other leaders have done the same. You kill the entire Persian royal family, saying it is revenge for all the atrocities Persia has committed against Greece over the years. Reaction in Greece is mostly positive, since many are happy to see the Persians suffer."
 AG_PERSIAN_PAMPER	"The Persian royal family is very grateful to you for your kindness, and appear to be very content in their new role as pampered prisoners."
-AG_STAT_A			"When you captured Darius' family, you may also have found yourself a wife. Darius' eldest daughter Stateira is coming of age, and is increasingly beautiful. The political benefit of such a marriage is obvious: marrying into the Persian royal family may greatly increase your acceptance amongst the Persians."
-AG_STAT_B			"On the other hand, she is a prisoner of war and does not like you. Plus, your reputation amongst Greeks will plummet. Many complain that your conquest of foreign lands is turning you into more of a foreigner than a Greek--this will confirm their fears."
-AG_STAT_C			"Additionally, the wedding ceremony will cost 5000 gold. To marry into the Persian royal family you must follow the proper ritual and spectacle. What will you do?"
+AG_STAT_A		"When you captured Darius' family, you may also have found yourself a wife. Darius' eldest daughter Stateira is coming of age, and is increasingly beautiful. The political benefit of such a marriage is obvious: marrying into the Persian royal family may greatly increase your acceptance amongst the Persians."
+AG_STAT_B		"On the other hand, she is a prisoner of war and does not like you. Plus, your reputation amongst Greeks will plummet. Many complain that your conquest of foreign lands is turning you into more of a foreigner than a Greek--this will confirm their fears."
+AG_STAT_C		"Additionally, the wedding ceremony will cost 5000 gold. To marry into the Persian royal family you must follow the proper ritual and spectacle. What will you do?"
 AG_STAT_MARRY_A		"You waste no time preparing for your wedding with Stateira. In a huge wedding ceremony, not only do the Macedonian and Persian royal lines merge, but you also marry most of your top officers to Persian nobility and royalty. A merging of the Persian and Greek cultures has truly begun."
 AG_STAT_MARRY_B		"Unfortunately, most Greeks back home don't see the wisdom of befriending the Persian 'barbarians'. Your popularity in Greece plummets. Diplomatic setbacks there will surely follow."
 AG_STAT_WAIT		"There is no doubt that time and your growing fame will change Stateira's mind. She really has no other choice, since you control her fate. Eventually she will signal a newfound love of your greatness."
 AG_STAT_MARRY2		"Good news! Stateira is ready and willing to be your wife. To marry into the Persian royal family, you must follow the proper ritual and spectacle, which will cost 5000 gold. Time has reduced opposition to the marriage in Greece, but there still will be critics... Will you marry her?"
 AG_STAT_MARRY3		"Statiera complains that her biological clock is ticking. You have the 5000 gold required for the wedding ceremony. Will you marry her?"
-	# Bessus Uprising
-AG_BESSUS			"Despite the lack of any royal blood in his veins, the Persian General Bessus has declared himself to be the new Emperor of Persia. He declares that he will continue the Persian resistance and vows to seek revenge for Darius' death."
-AG_BESSUS2			"Despite the lack of any royal blood in his veins, the Persian General Bessus has declared himself to be the new Emperor of Persia. He declares that he will continue the Persian resistance and vows to seek revenge for the death of Darius and his family."
+
+# Bessus Uprising
+AG_BESSUS		"Despite the lack of any royal blood in his veins, the Persian General Bessus has declared himself to be the new Emperor of Persia. He declares that he will continue the Persian resistance and vows to seek revenge for Darius' death."
+AG_BESSUS2		"Despite the lack of any royal blood in his veins, the Persian General Bessus has declared himself to be the new Emperor of Persia. He declares that he will continue the Persian resistance and vows to seek revenge for the death of Darius and his family."
 
 # Arabia Strings
 AG_ARABIA_ROAD		"Travel far down this broken trail and you will reach the lands of Southern Arabia, made rich from the spice trade. However, the journey down this road is dangerous for those not used to the rough ways of the desert. Also, be wary of the fiercely independent and violent barbarians found here."
-AG_MARIB			"You have found the legendary city of Marib! The exact location of this spice center was never known to outsiders. Trade wealth has allowed a surprisingly large town to exist on the edge of a hostile desert. Southern Arabia is the only source in the world for incense spices, so the town has profited greatly."
+AG_MARIB		"You have found the legendary city of Marib! The exact location of this spice center was never known to outsiders. Trade wealth has allowed a surprisingly large town to exist on the edge of a hostile desert. Southern Arabia is the only source in the world for incense spices, so the town has profited greatly."
 AG_MARIB_CONQUER	"You have conquered Marib! Centuries of trade profits have been piled into great hordes of wealth. 10,000 gold, and all of this is now yours!"
 AG_SHABWAH_CONQUER	"You have conquered Shabwah! While not as big or rich as legendary Marib, Shabwah has significant secret stores of trade profits that are now yours. You are 6,000 gold richer!"
 AG_DHUFAR_CONQUER	"You have conquered Dhufar! While not as big or rich as legendary Marib, Dhufar also has a significant treasury from trade profits. You find 3,000 gold!"
 
 # Carthaginian Strings
-AG_CARTHAGE			"Your armies are nearing the city of Carthage, the only important city in the Carthaginian empire. The rest are mere trading arms of this mighty city. The city is defended as well as any, however. It might take a long siege to win here."
+AG_CARTHAGE		"Your armies are nearing the city of Carthage, the only important city in the Carthaginian empire. The rest are mere trading arms of this mighty city. The city is defended as well as any, however. It might take a long siege to win here."
 AG_CARTHAGE_CONQUER	"The great city of Carthage has been conquered! Now that you control this strategically located city, surely the rest of the Western Mediterrean Sea will crumble in your hands like dried sod. A trove of 3000 gold has been found!"
 
 # Seres Strings
-AG_SERES			"You have entered Seres, the land of silk. This fabulous land has never even been guessed at by Greeks until your armies found it. There are a few nearby oasis towns, but the heart of Seres (what history will later call China) lies far to the east, over many forbidding deserts and mountains."
-AG_SERES2			"You are leaving the prosperous oasis towns to search for the heart of Seres. Turn back now: you will never make it. The deserts are too barren to supply an army. Only small bands of daring merchants make the journey there and back alive... sometimes."
+AG_SERES		"You have entered Seres, the land of silk. This fabulous land has never even been guessed at by Greeks until your armies found it. There are a few nearby oasis towns, but the heart of Seres (what history will later call China) lies far to the east, over many forbidding deserts and mountains."
+AG_SERES2		"You are leaving the prosperous oasis towns to search for the heart of Seres. Turn back now: you will never make it. The deserts are too barren to supply an army. Only small bands of daring merchants make the journey there and back alive... sometimes."
 
 # India Strings
 AG_INDIA_ROUTE		"You have found the southern route between India and Persia. It would make sense that one could sail from here to the seas near Bablyon or even all the way to Egypt, but such routes have been long forgotten. Perhaps one of your greatest legacies will be restarting the ocean trade between India and the West."
@@ -153,22 +204,25 @@ AG_TAKSASILA_B		"Unfortunately, other nearby cities are not so receptive. Just b
 AG_TAKSASILA2_A		"The friendly people of Taksasila have much information to share with you about what the rest of India is like. The river just to the west of Taksasila is called the Indus. It flows through deserts down into the sea. Many independent city states exist along it and its branches. Each one acts independent of the others."
 AG_TAKSASILA2_B		"If you head southeast out of the city, you will eventually come to another large river with many branches, called the Ganges. There are many large cities in the fertile Ganges river plain, but they are all controlled by the Magadhan Empire."
 AG_TAKSASILA2_C		"Indian armies everywhere are known for two things: their archers, and their elephants. Beware especially of the elephants. There is no military force in the world as strong as an army with many giant elephants!"
-AG_MAGADHAN			"Your army hears reports of a vast land to the east ruled by the Magadhans. Massive rivers run east into the Great Circling Sea. If you follow these rivers you will come to the capital of Pataliputra, filled with wealth beyond imagining. The Magadhan army is also legendary, with countless war elephants."
+AG_MAGADHAN		"Your army hears reports of a vast land to the east ruled by the Magadhans. Massive rivers run east into the Great Circling Sea. If you follow these rivers you will come to the capital of Pataliputra, filled with wealth beyond imagining. The Magadhan army is also legendary, with countless war elephants."
 AG_MAGADHAN2		"Now that you are entering the heart of the Magadhan Empire, you hear rumors all is not well there. The Emperor Dhana Nanda is a commoner who stole the throne, and is widely hated by his people. Apparently the Empire is a hollow echo of its former glory. It still has vast resources at its command, however."
 AG_SOUTH_INDIA		"Scouts report you are now entering Southern India. This is a very rugged land, with few roads. It is filled with independent city states that have never been conquered by any empire."
 AG_MAGADHAN_FLEE	"Seeing you come to in person to conquer their city, the Magadhan garrison realizes it is no match for your might and they flee into the countryside."
-AG_KAUSAMBI			"With the conquest of Kausambi, other nearby cities are quick to detach themselves from the crumbling Magadhan Empire, and join the winning side."
-AG_UJJAYINI			"With the conquest of the regional center of Ujjayini, the city of Bharuch is quick to detach itself from the crumbling Magadhan Empire, and join the winning side."
+AG_KAUSAMBI		"With the conquest of Kausambi, other nearby cities are quick to detach themselves from the crumbling Magadhan Empire, and join the winning side."
+AG_UJJAYINI		"With the conquest of the regional center of Ujjayini, the city of Bharuch is quick to detach itself from the crumbling Magadhan Empire, and join the winning side."
 AG_PATALIPUTRA_A	"You have conquered the Magadhan capital! Emperor Dhana Nanda flees to the remnants of his once great empire. But surely the back of the Magadhan Empire has been broken. Dhana Nanda was notorious for stealing from his own people, and indeed you find a huge treasure: 8000 gold."
 AG_PATALIPUTRA_B	"With the conquest of Pataliputra, surely it won't be long until all of the Magadhan Empire has fallen under your sway. Nearby cities desert to you, their faith in Magadhan power long gone."
-AG_KASI				"You have conquered one of the most sacred cities in the world. A very holy man named Buddha gave his first sermon here. The city has countless temples dedicated to him and the religion of the Brahamans. You command philosophers from Greece to come here and learn from the many wise men of this city."
+AG_KASI			"You have conquered one of the most sacred cities in the world. A very holy man named Buddha gave his first sermon here. The city has countless temples dedicated to him and the religion of the Brahamans. You command philosophers from Greece to come here and learn from the many wise men of this city."
 AG_CHANDRA_RUMOR	"There is unrest in the region of Pataliputra. Rumors tell of a charismatic young leader organizing a revolution. We'd best be on our guard for a possible uprising."
-AG_CHANDRA			"A new force has arisen in India! Chandragupta, a brilliant young general, has raised {action[0].text}! His desire for great conquest comes from what he has learned of your exploits. {action[1].text}"
+AG_CHANDRA		"A new force has arisen in India! Chandragupta, a brilliant young general, has raised {action[0].text}! His desire for great conquest comes from what he has learned of your exploits. {action[1].text}"
 AG_CHANDRA_PT1A		"an army and plans to finish off the Magadhan Empire"
 AG_CHANDRA_PT2A		"a rebel army and vows to rid India of all Macedonians"
 AG_CHANDRA_PT2B		"Your garrison in Pataliputra is taken by surprise and massacred."
-	# Sindu
-AG_SINDU			"Your recent victory encouraged some Magadhan royalty to make a secret deal. They wish to offer you Sindu, the beautiful daughter of the former Emperor ousted by Dhana Nanda. Marry her, restore the true royal line, and many people in this land will accept your rule. They want 6000 Gold to seal the deal."
+AG_CHANDRA_OLD		"The great General Chandragupta has died of a tropical disease! With him die the best hopes for a unification of all India by an Indian. For a short time he electrified his people with vision and action. This brilliant man could have been the Indian Alexander had he lived."
+AG_CHANDRA_DEAD		"The great General Chandragupta has been killed in battle! With him die the best hopes for a unification of all India by an Indian. For a short time he electrified his people with vision and action. This brilliant man could have been the Indian Alexander had he lived."
+
+# Sindu
+AG_SINDU		"Your recent victory encouraged some Magadhan royalty to make a secret deal. They wish to offer you Sindu, the beautiful daughter of the former Emperor ousted by Dhana Nanda. Marry her, restore the true royal line, and many people in this land will accept your rule. They want 6000 Gold to seal the deal."
 AG_SINDU_MARRY		"You marry Sindu now so Magadhan people will immediately come to your side. The splendor of the wedding is beyond belief. The deal you've made is very expensive, but Sindu's relatives promise to ensure the peoples' loyalty by spreading pro-Macedonian propaganda through the Magadhan cities you conquer."
 AG_SINDU_NOMONEY	"Sindu's relatives say: 'Your words are big, but you obviously don't have the gold to back it up. You cannot be trusted. The marriage deal is off!"
 AG_SINDU_NOMARRY	"You don't need their help for that price. The Magadhan people will have to accept you as their new ruler, regardless of who you are married to."
@@ -177,7 +231,8 @@ AG_SINDU_NOMARRY	"You don't need their help for that price. The Magadhan people 
 AG_SOGDIA_ENTER		"You are now entering Sogdia, a strip of fertile land caught between desolate deserts on one side, and a large mountain range in the other. The people in this land are very hardy, warlike and rebellious. Persia had a difficult time maintaining control here. Barbarians are a constant threat in this difficult land."
 AG_SOGDIA_REBEL		"The people of Sogdia rebel! Rightly fearing that the Macedonians will force them to adopt their ways, the leaders of Sogdia decide their only chance is to strike before your armies have completely consolidated control of the region. They surprise and slaughter the garrisons in the cities you control."
 AG_SOGDIA_REPORT	"The Sogdians seem to have an endless capacity to rebel. The only way to end the rebellion for certain is to defeat the rebel leaders. Scouts recently discovered that control of the rebellion has just been transferred to the northeastern city of Kyreskhata."
-	# Roxane 
+
+# Roxane
 AG_SOGDIA_DEFEAT_A	"The Sogdian resistance base has been captured! All of the last surviving rebels leaders and their families were hiding here and have been captured alive. These families are virtually all that remains of the Sogdian nobility."
 AG_SOGDIA_DEFEAT_B	"Conquering Kyreskhata has been a deadly blow to the Sogdian rebellion, but there is still a chance these people may rise again. The most certain method would be to kill the remaining Sogdian nobility so no one can lead the next rebellion."
 AG_SOGDIA_DEFEAT_C	"Alternately, you can solve the problem by marrying into Sogdian royalty. One of the rebel's daughters is named Roxane. She is one of the most beautiful women you've ever seen. She would be the one to marry, but would that satisfy the restless Sogdians?  What will you do?"
@@ -189,11 +244,11 @@ AG_SOGDIA_BRIBE_NO	"There is now no end in sight to this horrible Sogdian rebell
 AG_SOGDIA_BRIBE_NSF	"Sorry, you don't have 1000 gold to give! There is now no end in sight to this horrible Sogdian rebellion. Your only choices in keeping the peace are permanently stationing Generals in the Sogdian cities, or tearing the cities down."
 
 # Wife and procreation related strings
-AG_WIFE1			"Barsine"
-AG_WIFE2			"Roxane"
-AG_WIFE3			"Sindu"
-AG_WIFE4			"Stateira"
-AG_PREGNANT			"You receive word that your wife {action[0].text} is pregnant. You are hoping for a boy, to be your heir to the throne."
+AG_WIFE1		"Barsine"
+AG_WIFE2		"Roxane"
+AG_WIFE3		"Sindu"
+AG_WIFE4		"Stateira"
+AG_PREGNANT		"You receive word that your wife {action[0].text} is pregnant. You are hoping for a boy, to be your heir to the throne."
 AG_PREGNANT2		"You receive word that your wife {action[0].text} is pregnant. You are hoping for a boy again, since you badly need an heir, and children can so easily die of disease."
 AG_ITS_A_GIRL		"Your wife {action[0].text} has come to term and given birth to a daughter. While your new child will bring you much joy in the years to come, she will not satisfy the Macedonian elite, who will only accept a boy as your royal heir. You mask your disappointment and resolve to try as many times as necessary to produce a son."
 AG_ITS_A_GIRL2		"Your wife {action[0].text} has come to term and given birth to a daughter. While your new child will bring you much joy in the years to come, she does not matter politically since a female could never become king in Macedonia."
@@ -211,8 +266,8 @@ AG_SON_TWELVE_A		"Today your son Alexander IV turns twelve years old! Many child
 AG_SON_TWELVE_B		"The celebration of your son's twelfth birthday outshines any celebration ever seen by the Greeks. Your heart swells with pride as you watch him give a speech to the soldiers thanking them for their gifts and for their loyalty and bravery. Here is a son who is worthy to be Emperor!{action[0].text}"
 AG_SON2_TWELVE_A	"Today your son Hephaestion II turns twelve years old! It was a great worry that he would die young like his brother, but it is clear he is now old enough and strong enough to grow into manhood. Powerful Macedonians who secretly harbored the desire to succeed you now throw away their dreams, and pledge eternal loyalty to you and your son."
 AG_SON3_TWELVE_A	"Today your son Philip II turns twelve years old! It was a great worry that he would die like his brothers before him, but it is clear he is now old enough and strong enough to grow into manhood. Powerful Macedonians who secretly harbored the desire to succeed you now throw away their dreams, and pledge eternal loyalty to you and your son."
-AG_SON_WORTHY		" A son worthy of the name Alexander!"
-AG_BLANK			" "
+AG_SON_WORTHY		"A son worthy of the name Alexander!"
+AG_BLANK		" "
 
 # Conquest Strings
 AG_LEAD_DEFEAT		"Barbarians across the world beat on their shields to mourn the defeat of one of the great Barbarian Leaders. The number of Barbarian Leaders has been reduced to {barbNum}."
@@ -233,7 +288,7 @@ AG_UNWORTHY		"So much opportunity; the Macedonian civilization seemed ready to d
 AG_GOOD			"You have managed to enlarge the Macedonian civilization some, but there is so much more you could have done!  Most importantly, you did not give enough thought to creating an heir early in your career. History books will call you not Alexander the Great, but merely Alexander the Good."
 AG_MIGHTY		"Your accomplishments are many, but you didn't hold enough territory long enough to create a truly lasting empire. Your work will be undone by your less competent successors. Still, you have changed world history dramatically, and your works will be long remembered. Historians will call you Alexander the Mighty."
 AG_GREAT		"Congratulations! You proved yourself to be a worthy match to the real Alexander the Great. But the real Alexander died so young and failed to provide for a sucesssor. Your empire is more likely to survive your death than his. For your many accomplishments, historians will refer to you as Alexander the Great."
-AG_MAGNIFICENT	"You have outdone the real Alexander the Great! You did more than him to provide an heir. Because of your great reputation, your empire will survive your death. A succession of Alexanders will follow in your footsteps. Historians will refer to you as Alexander the Magnificent."
+AG_MAGNIFICENT		"You have outdone the real Alexander the Great! You did more than him to provide an heir. Because of your great reputation, your empire will survive your death. A succession of Alexanders will follow in your footsteps. Historians will refer to you as Alexander the Magnificent."
 AG_DEMIGOD		"Your accomplishments far outshine those of the real Alexander! You have conquered nearly all of the known world and provided for an heir. Thousands of years later, you're still considered a pivotal figure in history, the man who created a lasting world empire. Some go even further and worship you as part god."
 AG_GOD			"Unbelievable: you have conquered the entire known world! In future generations other Alexanders will see your empire spread across the entire world, and into space within 1000 years. You are looked upon as more than an empire founder, but are widely worshipped throughout the stars as a God who came to Earth!"
 
@@ -242,8 +297,8 @@ AG_PERSEP_ROAD 		"Scouts report you are now on the road between Susa and Persepo
 AG_MACEDHAPPY 		"Word of your defeat of Darius has spread amongst the people back in the Macedonian homeland. Your popularity soars in Pella and nearby cities, as the magnitude of what you've done sinks in."
 AG_NEAR_CROSSROAD	"You stand at a major crossroad. Go north over high mountains, and you will enter Sogdia, the traditional northwestern frontier of the Persian Empire. Go south over high mountains, and you will find a series of oasis towns that eventually connect to the main road leading west. Go east, and you will enter the fabled land of India."
 AG_CASPIAN_GATE		"You are crossing the Caspian Gate. This passage between mountain and desert marks the boundary between the more civilized lands to the west and the wild, desolate lands to the east. In the east, fertile lands are few and far between, until this road eventually comes to distant India."
-AG_ETHIOPIA			"The river Nile flows south to the rich kingdom of Meroe, and the highlands of Ethiopia."
-AG_MEROE			"You have conquered Meroe! This area has been one of the world's largest producers of gold. 5000 gold is yours for the taking."
+AG_ETHIOPIA		"The river Nile flows south to the rich kingdom of Meroe, and the highlands of Ethiopia."
+AG_MEROE		"You have conquered Meroe! This area has been one of the world's largest producers of gold. 5000 gold is yours for the taking."
 AG_ARABIA_BY_SEA1	"Your ships have discovered the coastal waters of Arabia. This desert land is filled with fiercely independent and violent barbarians. But it would certainly be worth conquering the fantastically rich trade cities of Southern Arabia. An ocean voyage along Arabia's coast would eventually bring you to Egypt."
 AG_ARABIA_BY_SEA2	"Your ships are at the mouth of the Arabian Gulf. To the east you will find Arabia. This desert land is filled with fiercely independent and violent barbarians. But it would certainly be worth conquering the fantastically rich trade cities of Southern Arabia. An ocean voyage along Arabia's coast would eventually bring you to Persia."
 AG_ROAD_TO_MARIB1	"Spice caravans follow this trail inland to the city of Marib, which some say is the richest city in the world."
@@ -251,19 +306,19 @@ AG_ROAD_TO_MARIB2	"There is a trail leading over mountains to the magnificent ci
 AG_EGYPT_DEFECT_A	"The natives of Egypt joyously celebrate the arrival of the great Alexander! The Egyptians had repeatedly rebelled against the Persians in the last century, only to be reconquered. Egyptians now look to you as their salvation, and throw off the Persian yoke! Persian soldiers flee, leaving you with a land nearly destroyed by so many rebellions."
 AG_EGYPT_DEFECT_B	"The Egyptians will only accept Pharohs as their leaders. If you go Memphis and take part in a coronation as Pharoh there, you will find the job of controlling Egypt much easier."
 AG_EGYPT_HAPPY		"In a massive ceremony, you are dressed like an ancient Pharoh and proclaimed to be a God-king. Common Egyptians believe Ammon-Ra is your father and your popularity here is boosted. Outside Egypt you are still regarded as only a Macedonian king."
-AG_BABYLON			"Babylon is one of the four traditional royal homes of the Persian Emperors. But only because of its large size and wealth; people here have no love for the Persians."
-AG_ECBATANA			"Ecbatana is one of the four traditional royal homes of the Persian Emperors. As a result, there is a large treasure there to pay for the Emperor's luxurious living." 
-AG_SYRACUSE			"Many have tried to conquer Syracuse, and all have failed. Athens was a great power until its military was destroyed trying to conquer Syracuse. High city walls and a very defensible location are what makes this city so hard to conquer." 
-AG_ATHENS			"Athens is possibly the most wonderous city in the world. The scientific acumen of the Athenians is represented by the Aristotle's Lyceum wonder. The city's defenses are very tough." 
-AG_SPARTA			"Sparta has been the only city in Greece to laugh in your face, and stay out of the Corinithian League. Because of Sparta's mountainous terrain and high city walls, they have no fear of anyone, not even Alexander." 
+AG_BABYLON		"Babylon is one of the four traditional royal homes of the Persian Emperors. But only because of its large size and wealth; people here have no love for the Persians."
+AG_ECBATANA		"Ecbatana is one of the four traditional royal homes of the Persian Emperors. As a result, there is a large treasure there to pay for the Emperor's luxurious living." 
+AG_SYRACUSE		"Many have tried to conquer Syracuse, and all have failed. Athens was a great power until its military was destroyed trying to conquer Syracuse. High city walls and a very defensible location are what makes this city so hard to conquer." 
+AG_ATHENS		"Athens is possibly the most wonderous city in the world. The scientific acumen of the Athenians is represented by the Aristotle's Lyceum wonder. The city's defenses are very tough." 
+AG_SPARTA		"Sparta has been the only city in Greece to laugh in your face, and stay out of the Corinithian League. Because of Sparta's mountainous terrain and high city walls, they have no fear of anyone, not even Alexander." 
 AG_PERSEPOLIS		"Persepolis is one of the four traditional royal homes of the Persian Emperors. It is also the center of the original Persian homeland, and therefore has the largest and most luxurious palaces and treasures of any Persian city." 
-AG_SUSA				"Susa is one of the four royal homes of the Persian Emperors. As a result, there is a large treasure there to pay for the Emperor's luxurious living. This is also the starting point for the famous Persian Royal Road, represented by the Appian Way wonder." 
-AG_ROME				"Despite a poor strategic location, Rome has grown into a surprisingly large city. Wise government is making this city great. The city's leadership has also developed the city walls into a formidable barrier." 
+AG_SUSA			"Susa is one of the four royal homes of the Persian Emperors. As a result, there is a large treasure there to pay for the Emperor's luxurious living. This is also the starting point for the famous Persian Royal Road, represented by the Appian Way wonder." 
+AG_ROME			"Despite a poor strategic location, Rome has grown into a surprisingly large city. Wise government is making this city great. The city's leadership has also developed the city walls into a formidable barrier." 
 AG_PERSEPOLIS2		"The conquest of the homeland of the Persians certainly spells doom for the Persian Empire. The Persians are impressed that you pay homage at the tomb of Cyrus the Great, founder of Persia, but not so impressed that you're confiscating the 15,000 gold treasure in the city! This must be the largest gold horde ever amassed in the whole world!"
-AG_SUSA2			"As one of the homes of Persian Emperors, Susa has a large gold horde. The treasure of 4000 gold is now yours to spend!"
+AG_SUSA2		"As one of the homes of Persian Emperors, Susa has a large gold horde. The treasure of 4000 gold is now yours to spend!"
 AG_ECBATANA2		"As one of the homes of Persian Emperors, Ecbatana has a large gold horde. 4000 gold is now yours! Why the Persians didn't spend this money to pay for more soldiers is a mystery."
-AG_BABYLON2			"The great Babylon, city of sin, is now yours! So is the large gold fortune of 5000 gold, amassed here to pay for the luxuries of the Persian royalty. The central position of Bablyon makes it the natural location from which to rule your conquests."
-AG_ATHENS2			"The mighty city of Athens is now under your control! However, the fact that you had to conquer this city with brute force and damage its many treasures instead of holding the Corinthian League alliance lowers your reputation amongst neighboring countries." 
+AG_BABYLON2		"The great Babylon is now yours! So is the large gold fortune of 5000 gold, amassed here to pay for the luxuries of the Persian royalty. The central position of Bablyon makes it the natural location from which to rule your conquests."
+AG_ATHENS2		"The mighty city of Athens is now under your control! However, the fact that you had to conquer this city with brute force and damage its many treasures instead of holding the Corinthian League alliance lowers your reputation amongst neighboring countries." 
 AG_PERSIANS_DEAD	"Now that you have completely conquered the Persian Empire, there is no hope for any would be pretender Persian Emperors. The people of Persia are ready to proclaim you their new emperor once you return to Bablyon for the coronation ceremony."
 AG_HAPPY_EMPIRE		"In a massive ceremony, you declare the eternal unity of the Greek and Persian worlds, and declare yourself the Emperor of Persia, the King of Kings! In cities long held by Persia, your popularity is boosted, but the Greeks are skeptical of this unity idea, and dislike your friendship with any non-Greek 'barbarians'."
 AG_SPARTA_DEFECT	"Your reputation amongst the Greeks has been falling. Though this isn't enough to cause trouble with the Greek civilization as a whole, the Spartans decide to join the Persian side, hoping other Greek cities will follow their example! Sparta is now essentially a part of Persia, and ready to attack the Corinthian League."
@@ -273,16 +328,14 @@ AG_PERSIAN_FLEE		"The mere presence of Alexander at their gates causes the city'
 # Additional leader death strings
 AG_PORUS_OLD		"Scouts report that the Indian General Porus has died, though it is not known how. Too bad- such a famous man could have been a useful ally or worthy adversary."
 AG_PORUS_BATTLE		"You have defeated the great General Porus! For many years he was the strongest Indian military power outside of the large Magadhan Empire, but he was no match for your military genious. Too bad this man was your enemy because he fought brilliantly. Refusing to die, he cut down dozens of your men before many wounds finally finished him off."
-AG_CHANDRA_OLD		"The great General Chandragupta has died of a tropical disease! With him die the best hopes for a unification of all India by an Indian. For a short time he electrified his people with vision and action. This brilliant man could have been the Indian Alexander had he lived."
-AG_CHANDRA_DEAD		"The great General Chandragupta has been killed in battle! With him die the best hopes for a unification of all India by an Indian. For a short time he electrified his people with vision and action. This brilliant man could have been the Indian Alexander had he lived."
 AG_MEMNON_OLD		"The Persians have lost Memnon, their best general. He was quickly wiped out by disease. You should consider yourself very lucky to have him die before having to face him in battle."
 AG_MEMNON_BATTLE	"The Persians have lost Memnon, their best general. He was struck down in battle by angry Greeks, eager to kill the traitor who fought against his own people. With his death, your conquests should now be much easier."
 AG_BESSUS_OLD		"The Persian general Bessus has been killed by his own men! Because Bessus did not have the proper royal credentials like Darius did, others thought they could do better than him and tried to take over. But Persian leadership is only more divided now."
 AG_BESSUS_BATTLE	"The Persian general Bessus dies in battle! With his death, there is no single person remaining with any hopes of rallying the Persian people to defeat you."
 
-#	The string of hyphens below represents the amount of text that will fit in a message box. The second line is for alert boxes.
-#		 			 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# 					 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# The string of hyphens below represents the amount of text that will fit in a message box. The second line is for alert boxes.
+#			 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#			 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 AG_TEMP			"dariusBattle = {dariusBattle} dariusValid = {dariusUnit.valid}, Location = {location[1].x},{location[1].y}\nAlexander valid = {alexUnit.valid}\n Location = {location[0].x},{location[0].y}\nSon Birthday Countdowns:{sonBday[0]}, {sonBday[0]}, {sonBday[0]}\nSon ages: {sonAge[0]}, {sonAge[1]}, {sonAge[2]} - oldest son: {oldestSon}, heirScore: {heirScore}"
 AG_TEMP2		""
