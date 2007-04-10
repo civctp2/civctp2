@@ -484,7 +484,9 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
     m_tempGoodAdder                     (NULL),
     m_tempGood                          (-1), 
     m_tempGoodCount                     (0),
-	m_sentInefficientMessageAlready     (false)
+	m_sentInefficientMessageAlready     (false),
+	m_culture							(0),  //emod
+	m_secthappy							(0) //emod
 #ifdef _DEBUG
   , m_ignore_happiness                  (false) 
 #endif
@@ -521,6 +523,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_merchantsEff      = new double[g_theCitySizeDB->NumRecords()];
 	m_scientistsEff     = new double[g_theCitySizeDB->NumRecords()];
 #endif
+	m_secthappy = 0; //emod does this initalize it? - no
 }
 
 CityData::~CityData()
@@ -763,6 +766,8 @@ void CityData::Initialize(sint32 settlerType)
 	}
 
 	FindBestSpecialists();
+	//SectarianHappiness(); //emod  - does this initialize it?
+	m_secthappy = 0;
 
 	sint32 martialLaw;
 	m_happy->CalcHappiness(*this, false, martialLaw, true);
@@ -943,6 +948,8 @@ CityData::CityData(CivArchive &archive)
 
 	m_sentInefficientMessageAlready = false;
 	Serialize(archive) ;
+
+	m_secthappy = 0; //emod
 }
 
 CityData::CityData(CityData *copy)
@@ -961,6 +968,14 @@ CityData::CityData(CityData *copy)
 	m_merchantsEff  = new double[g_theCitySizeDB->NumRecords()];
 	m_scientistsEff = new double[g_theCitySizeDB->NumRecords()];
 #endif
+
+	m_secthappy = 0; //emod - this set all sectarian happiness to 0 this is initializer?
+	if(
+	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
+	||(g_theProfileDB->IsSectarianHappiness())
+	) {
+		ProcessSectarianHappiness(m_secthappy);
+	}
 
 	Copy(copy);
 }
@@ -1034,6 +1049,8 @@ void CityData::Copy(CityData *copy)
 
 	memcpy(&m_max_processed_terrain_food, &copy->m_max_processed_terrain_food, (uint32)&copy->m_science_lost_to_crime + sizeof(copy->m_science_lost_to_crime) - (uint32)&copy->m_max_processed_terrain_food);
 #endif
+
+	//m_secthappy->Copy(copy->m_secthappy); //emod
 
 	if(this == m_home_city.CD()) {
 		if(g_network.IsHost()) {
@@ -4196,8 +4213,6 @@ bool CityData::BeginTurn()
 		}
 
 	}
-
-
 
 
 	//END EMOD
@@ -9867,29 +9882,28 @@ bool CityData::IsBuildingOperational(sint32 type) const
 	return true;
 }
 
-sint32 CityData::SectarianHappiness() const  //EMOD
+void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
+//void CityData::SectarianHappiness() const  //EMOD
 // This code creates a happiness modifier based off of the factors of:
+// utilizes ProcessSectarianHappiness(m_secthappy);  so doesn't randomize eash turn
 {
-	sint32 SectarianHappiness = 0;
+	//secthappy = 0;
+	//sint32 third = (PopCount() / 3) * -1;
+	//sint32 SectarianHappiness = 0;
 
 	// Checks if a city has a buildng that conflicts with 
 	// another (mosques, churches, synagogues, etc)
 	// randomized to add unpredictable realism
-	if(
-	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
-	||(g_theProfileDB->IsSectarianHappiness())
-	) {
 
-		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 			if(m_built_improvements & ((uint64)1 << b)){
 				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
 
-				sint32 i;
 				// Checks if a city has a buildng that conflicts with 
 				// another (mosques, churches, synagogues, etc)
-				for(i = 0; i < rec->GetNumConflictsWithBuilding(); i++) {
+				for(sint32 i = 0; i < rec->GetNumConflictsWithBuilding(); i++) {
 					if((rec->GetNumConflictsWithBuilding()) && HaveImprovement(rec->GetConflictsWithBuildingIndex(i))) {
-						SectarianHappiness -= g_rand->Next(PopCount() / 3);
+						secthappy -= g_rand->Next(PopCount() / 3);
 					}
 				
 					// Checks if ANY city has a building that conflicts 
@@ -9899,40 +9913,46 @@ sint32 CityData::SectarianHappiness() const  //EMOD
 					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
 						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
 						if(aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i))){
-							SectarianHappiness -= g_rand->Next(PopCount() / 3);
+							secthappy -= g_rand->Next(PopCount() / 3);
 						}
 					}
+
 				}
 
 				//checks if govt conflicts prereqgovt
-				for(i = 0; i < rec->GetNumGovernmentType(); i++) {
-					if(rec->GetGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
-						SectarianHappiness -= g_rand->Next(PopCount() / 3);
+				for(sint32 g = 0; g < rec->GetNumGovernmentType(); g++) {
+					if(rec->GetGovernmentTypeIndex(g) != g_player[m_owner]->GetGovernmentType()) {
+						secthappy -= g_rand->Next(PopCount() / 3);
 					}
 				}
 
 				//checks if cultureonly conflicts
-				for(i = 0; i < rec->GetNumCultureOnly(); i++) {
-					if(rec->GetCultureOnlyIndex(i) != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-						SectarianHappiness -= g_rand->Next(PopCount() / 3);
+				for(sint32 u = 0; u < rec->GetNumCultureOnly(); u++) {
+					if(rec->GetCultureOnlyIndex(u) != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+						secthappy -= g_rand->Next(PopCount() / 3);
 					}
 				}
 				//end Buildings
 			}
-		}
-
+	}
 
 		// Checks if the citystle of the city is different than the person that owns it for cultural/ethnic strife
-		if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-			SectarianHappiness -= g_rand->Next(PopCount() / 3);
+	if( g_player[m_owner] != NULL) { //this didn't fix it
+		if( g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle ) { //TODO this line causes the crash
+				secthappy -= 2; //g_rand->Next(PopCount() / 3);
 		}
+	}
+		
+		 //if ((secthappy < PopCount()) || (secthappy > PopCount()) ) { //added for a cap because it was still randomizing and at values over a million since rev710
+		//	secthappy = PopCount();
+		//}
 
 		// Checks if the original owner of the city has a different govt than the occupier for political strife
 		//if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
-		//	SectarianHappiness -= g_rand->Next(PopCount() / 3);
+		//	secthappy -= g_rand->Next(PopCount() / 3);
 		//}
-	}
-	return SectarianHappiness;
+	
+//	return SectarianHappiness; //no longer a sint32
 }
 
 //----------------------------------------------------------------------------

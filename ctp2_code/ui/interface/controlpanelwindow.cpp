@@ -44,6 +44,8 @@
 // - Restored Fifth Tileimp Button Bank by E 2-27-2007
 // - TODO fix obsolete tileimp defect
 // - TODO add buttons for orders button bank
+// - TODO create scroll bar like CityStyles in Scenario Editor for
+//   Orders and tileimprovements so they are not limited
 //
 //----------------------------------------------------------------------------
 //
@@ -56,6 +58,7 @@
 //   constructor. Maybe this is some leftover of the CTP1 code?
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standatized code (May 21st 2006 Martin Gühmann)
+// - none of the unit or order stuff is used here? see UnitControlPanel.cpp
 //
 //----------------------------------------------------------------------------
 
@@ -458,7 +461,7 @@ TerraformToggleCallback(aui_Control *control, uint32 action, uint32 data, void *
 
 
 void 
-TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *cookie)
+TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *cookie)  //emod1 tileimps
 {
 	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1817,7 +1820,7 @@ void ControlPanelWindow::PerformOrderAfterConfirmation(bool response, void *user
 
 
 void	
-ControlPanelWindow::BeginImprovementCycle(void *rawrec)
+ControlPanelWindow::BeginImprovementCycle(void *rawrec)  //emod2 what does this do?
 {
 
 
@@ -1827,7 +1830,7 @@ ControlPanelWindow::BeginImprovementCycle(void *rawrec)
 
 
 void	
-ControlPanelWindow::BeginImprovementCycle(TerrainImprovementRecord *rec)
+ControlPanelWindow::BeginImprovementCycle(TerrainImprovementRecord *rec) //emod3 is this the check? i think it misses obsoletes here
 {
 	
 	if ((rec==NULL)||(g_selected_item==NULL))
@@ -1956,7 +1959,7 @@ ControlPanelWindow::OrderDeliveryUpdate()
 
 
 void	
-ControlPanelWindow::TileImpUpdate()
+ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schould it look like sce
 {
 	
 	if ((m_currentTerrainImpRec==NULL)||(g_selected_item==NULL))
@@ -2020,7 +2023,7 @@ ControlPanelWindow::TileImpUpdate()
 
 
 void	
-ControlPanelWindow::TerraFormUpdate()
+ControlPanelWindow::TerraFormUpdate() //emod5
 {
 	if ((m_currentTerrainRec==NULL)||(g_selected_item==NULL))
 		return;
@@ -2083,7 +2086,7 @@ ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 	{
 		
 		if (army->RetPos() == pos && 
-			( m_currentOrder->GetTargetPretestTerrainImprovement() ||
+			( m_currentOrder->GetTargetPretestTerrainImprovement() ||  //emod6
 			  m_currentOrder->GetTargetPretestTradeRoute() ||
 			  m_currentOrder->GetTargetPretestAdjacentPosition() ) )
 		{
@@ -2165,7 +2168,7 @@ ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 
 
 bool 
-ControlPanelWindow::TileImpClick(const MapPoint &pos)
+ControlPanelWindow::TileImpClick(const MapPoint &pos) //emod7
 {
 	
 	if ((m_currentTerrainImpRec==NULL)||(g_selected_item==NULL))
@@ -2593,15 +2596,8 @@ void ControlPanelWindow::InitUnitTab(void)
 
 
 void ControlPanelWindow::InitTileImpTab(void)
-{
-
-
-	
+{	
 	CreateTileImpBanks   ();
-
-	
-
-
 	
 	m_currentTerrainSelection = CP_TILEIMP_LAND;
 	m_activatorButtons[m_currentTerrainSelection]->SetToggleState(TRUE);

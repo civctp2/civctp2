@@ -107,7 +107,8 @@
 // - Moved the upgrade stuff into its own methods, however more work is needed.
 //   (Dec 24th 2006 Martin Gühmann)
 // - Added message for hostile terrain and guerrilla spawn
-// - readded message for ship sinking
+// - readded message for ship sinking (removed later)
+// - Added new limits for BarbarianSpawnBarbarian
 //
 //----------------------------------------------------------------------------
 
@@ -1544,12 +1545,12 @@ void ArmyData::BeginTurn()
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	MapPoint epos = map.GetNearestForeigner(PLAYER_INDEX_VANDALS, m_pos);
 	Cell *cell = g_theWorld->GetCell(epos);
-	sint32 meat = cell->GetOwner();
+	sint32 meat = PLAYER_UNASSIGNED;
 	//PLAYER_INDEX meat = CellOwner;
 
 	// EMOD Barbarian Camps
 	// This should be risk level depending  //EMOD added Risk 10-05-2006
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
+	if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
 	{
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 			for(i = 0; i < m_nElements; i++) {
@@ -1570,22 +1571,29 @@ void ArmyData::BeginTurn()
 	}
 	//Barbarian leader spawn
 	// This should be risk level depending ADDED EMOD 10-05-2006
-	if(
-		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-	||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
-	){
-		//Cell *cell = g_theWorld->GetCell(m_pos);
-		//if cell->GetNumUnits() < 2;  //limits spawn amounts?
-		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-		//	for(i = 0; i < m_nElements; i++) {
-//				const UnitRecord *rec = m_array[i].GetDBRec();
-				if(m_owner == PLAYER_INDEX_VANDALS
-				){
-				Barbarians::AddBarbarians(m_pos, meat, FALSE);
-		//		}
+	if(m_owner == PLAYER_INDEX_VANDALS) {
+		sint32 barbmax = g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians(); 
+		sint32 barbhorde = g_player[PLAYER_INDEX_VANDALS]->m_all_units->Num();
+		
+		if(
+			(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
+		||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+		){
+
+			if ( (barbhorde) >= (barbmax^2) ) {
+				return;
+			}
+		
+			if (//new limits to prevent barbarian spam
+				(barbhorde) <= (barbmax^2) // create some kind of max  
+			){
+				if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) { 
+					Barbarians::AddBarbarians(m_pos, meat, TRUE);
+				}
 			}
 		}
 	}
+
 
 	// END EMOD barb camps
 	// This should be risk level depending  //this was for special forces to raise Guerrillas
@@ -1617,21 +1625,23 @@ void ArmyData::BeginTurn()
 	sint32 hpcost;
 	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) //add AI immunity?
 	{ 
-		for(sint32 u = 0; u < m_nElements; u++) {
-			const UnitRecord *urec = m_array[u].GetDBRec();
-			if(!urec->GetImmuneToHostileTerrain()
-			&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
-			){
-				m_array[u].DeductHP(hpcost);
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+			for(sint32 u = 0; u < m_nElements; u++) {
+				const UnitRecord *urec = m_array[u].GetDBRec();
+				if(!urec->GetImmuneToHostileTerrain()
+				&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
+				){
+					m_array[u].DeductHP(hpcost);
 #if 0 // Unused, memory leak
 			    //SlicObject *so = new SlicObject("999HostileTerrain");
 				//so->AddRecipient(m_owner);
 				//so->AddUnit(m_array[i]);
 #endif
-			}
+				}
 
-			if (m_array[u].GetHP() < 0.999) {
+				if (m_array[u].GetHP() < 0.999) {
 				m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+				}
 			}
 		}
 	}
@@ -8679,8 +8689,11 @@ void ArmyData::Disband()
 	sint32 CellOwner = cell->GetOwner();	
 	Diplomat & cell_diplomat = Diplomat::GetDiplomat(CellOwner);
 
+	
+
 	Unit city = g_theWorld->GetCity(m_pos);
-	for (sint32 i = m_nElements - 1; i >= 0; i--) {
+	for (sint32 i = 0; i < m_nElements; i++ ) { 
+//	for (sint32 i = m_nElements - 1; i >= 0; i--) { //old code i think was causing the gameobj problem
 //		const UnitRecord *rec = m_array[i].GetDBRec();
 		if (city.IsValid()) 
         {
@@ -8693,7 +8706,15 @@ void ArmyData::Disband()
 //				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 //			} else {
 			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2); // Shield cost should be difficulty dependent
+			//m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			//return;
 		}
+
+		if (cell->GetOwner() == -1) { //fixes bug where you cant disband in neutral territory
+			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			return;
+		}
+
 
 		// Should be moved into own method and own event
 //EMOD Gift Units for Human Player 4-12-2006
@@ -8704,7 +8725,7 @@ void ArmyData::Disband()
 				if((g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) && (CellOwner > 0)) {
 					StringId strId;
 					g_theStringDB->GetStringID("REGARD_EVENT_UNITS_GIFTED", strId);
-		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 					g_player[CellOwner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
 					cell_diplomat.LogRegardEvent(m_owner, regardcost, REGARD_EVENT_GOLD, strId);
 				} else {

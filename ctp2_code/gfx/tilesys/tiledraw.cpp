@@ -4617,6 +4617,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
 				Assert(borderIcon); 
 				if (!borderIcon) return;
+
+				//DrawDitheredOverlay(NULL, borderIcon,iconRect.left, iconRect.top,color);
+				//AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
 				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
 				AddDirtyRectToMix(iconRect);
 
@@ -4873,9 +4876,9 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		{
 			if(cityData->GetImprovements() & ((uint64)1 << rb))
 			{
-				//DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-				//AddDirtyRectToMix(iconRect);
-				DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
+				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
+				//DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
 				iconRect.left += iconRect.right;
 				iconRect.right += iconRect.left + iconRect.right;
 			}
@@ -4889,13 +4892,10 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		{
 			if(cityData->GetBuiltWonders() & (uint64)1 << (uint64)rw)
 			{
-				DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
+				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				AddDirtyRectToMix(iconRect);
 				iconRect.left += iconRect.right;
 				iconRect.right += iconRect.left + iconRect.right;
-				//DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-				//AddDirtyRectToMix(iconRect);
-				//iconRect.left += iconDim.x;
-				//iconRect.right += iconDim.x;
 			}
 		}
 	}

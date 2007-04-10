@@ -47,6 +47,7 @@
 //   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - added debugai profile switch - E 4-3-2007
 //
 //----------------------------------------------------------------------------
 
@@ -2450,8 +2451,10 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 			AddDirtyRectToMix(rect);
 		}
 
-		if (g_graphicsOptions && g_graphicsOptions->IsArmyTextOn()) 
-        {
+		if (
+		   (g_graphicsOptions && g_graphicsOptions->IsArmyTextOn())
+        || (g_theProfileDB->GetDebugAI()) //emod
+		){
 			Unit	u = actor->GetUnitID();
 				
 			if (u.IsValid()) 

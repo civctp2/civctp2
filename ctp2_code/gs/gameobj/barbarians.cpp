@@ -152,6 +152,9 @@ sint32 Barbarians::ChooseUnitType()
 BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 							   BOOL fromGoodyHut)
 {
+	//add spontaneous barb bool?
+	//add bools for barbarian spawn?
+	//and sint for # of barbs if all bools are false?
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
 		return FALSE;
 

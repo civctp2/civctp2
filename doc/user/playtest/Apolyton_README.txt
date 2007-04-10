@@ -40,62 +40,106 @@ http://apolyton.net/forums/showthread.php?threadid=127059
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
 Playtesting would be most useful if it tests the most recent changes, which
-are described briefly below, and in more detail in ChangeLog.txt (note havily outdated)
+are described briefly below, and in more detail in ChangeLog.txt 
+(note heavily outdated)
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-03-22
-Fixed: Rules screen so it works
-Added: Rules Screen Options: 
-       One City Challenge, City Capture Options, Revolt Insurgents, RevoltCasualties
-       BarbarianSpawnBarbarian, SectarianHappiness
-Added: Graphics Screen: Smooth Borders
-Added: Gameplay Options: City Capture Options
-Fixed: Crash for Alex Scenario caused by Special Icons
-Added: 'BreadBasket code'  Tile imps with BonusFoodExport now randomly generate a food value
-       this total value is then divided by totalpopulation and then added by population size 
-       to your cities
-Added: 'Commodity code'  Tile imps with BonusGoldExport now randomly generate a gold value
-       this total value is added to your total wonder gold
-Added: SectarianHappiness value to CityWindow
+2007-03-30
+Fixed:   Bug that made human units automatically upgrade
+Fixed:   Crash caused by Cargo
+Added:   Replaced old concept DB with new one
+Changed: BarbarianSpawnBarbarian only applies to cells with 1 unit
 
-2007-03-12
-Fixed: Crash caused by SectarianHappiness because the founder civ was destroyed
-Fixed: Crash caused by Sink code
-Added: GovtIcon DB flag (future use)
-Added: ShowCityIcon for Wonders and buildings (uses mapicons in concepticon.txt)
-Added: IsReligionIcon to wonders and buildings (uses mapicons in concepticon.txt)
-Added: Graphic window option to show/hide Army Names
-Added: Graphics window option to show/hide nation flags
-Added: New strategies.txt that emphasizes more city captures
-Fixed: Location of Nation Flag is now right of the herald
-Fixed: Army stack now done by drawingstring not icons
+2007-03-22 (revision 707)
+Fixed:   Rules screen so it works
+Added:   New Options
+Fixed:   Crash for Alex Scenario caused by Special Icons
+Added:   Affects of SectarianHappiness value displays in CityWindow
+- Rules Screen
+   One City Challenge - Human player can't build settlers
+   City Capture Options - slic message with option on/off
+   Revolt Insurgents - revolting cities spawn barbarians 
+   RevoltCasualties - revolting cities lose random population
+   BarbarianSpawnBarbarian - risk dependent barbarians spawn more
+   SectarianHappiness - more unhappiness in cities of a different style
+
+- Graphics screen
+   Smooth Borders - show original or icon
+
+- Gameplay Screen 
+   City Capture Options - slic message with option on/off
+
+Added:    New database flags for modders:
+- TerrainImprovementDB
+   BonusFoodExport now randomly generate a food value to every city
+   BonusGoldExport now randomly generate a gold value to every city
+
+
+2007-03-12 (revision 705)
+Fixed:   Crash caused by SectarianHappiness because the founder civ was destroyed
+Fixed:   Crash caused by Sink code
+Added:   GovtIcon database flag (future use)
+Added:   ShowCityIcon for Wonders and buildings (uses mapicons in concepticon.txt)
+Added:   IsReligionIcon to wonders and buildings (uses mapicons in concepticon.txt)
+Added:   Graphic window option to show/hide Army Names
+Added:   Graphics window option to show/hide nation flags
+Added:   New strategies.txt that emphasizes more city captures
+Fixed:   Location of Nation Flag is now right of the herald
+Fixed:   Army stack now done by drawingstring not icons
 Deleted: Old IsReligion# system
-2007-02-28
-Added: Risk dependency for hostile terrain
-Added: SpawnBarbarian code for entrenched units that can spawnbarbarians
-Added: EnergySupply and Demand Concept
-Added: Energy Profile option to make it optional
-Fixed: Number of flags (restored them)
-Added: Profile option to have civflag graphics show up under the playercolor flag
-Fixed: Civ flags to be below player color flag
-Added: TerraformOcean button in tile bank (restored it) this allows modders up to 60 of the 64 
-       available tileimp slots (previously only 48/60 available)
-Added: Slic messages for sinking ship (again), hostile terrain, insurgent spawn, guerrilla spawn
-Added: additional but not implemented userprofile options
+Added:   New database flags for modders:
+- GovernmentDB
+   GovtIcon - future use to diplay government icons on map
+- WonderDB
+   ShowCityIcon - flag displays a map icon behind the city
+   IsReligionIcon - flag displays a map icon under city name
+- BuildingDB
+   ShowCityIcon - flag displays a map icon behind the city
+   IsReligionIcon - flag displays a map icon under city name
 
-2007-02-22
-Fixed: Goal text from appearing inside the science box in the english/science.ldl
-Added: Civilization Flags to Units (most artwork from Civ2 modders Michael D McCart & Michael D Raney)
-Added: Hidden Nationality flag to Units implemented. Units with this flag use the barbarian
-       color, have barbarian in the info bar and use the barbarian flag
+2007-03-01 (Revision 693)
+Added:   Hostile terrain hp cost is now based on barbarian risk 
+Fixed:   SpawnBarbarian code for entrenched units that can spawnbarbarians
 
-2007-02-01
-Added:	Religious City Icons (up to 10 Religions)
-Added:	National Borders are now displayed with icons.
-Changed: Cityname. population rectangle, and turns to population growth are all aligned.
+Fixed:   Number of flags (restored them)
+Added:   Profile option to show/hide civflag graphics show up under the playercolor flag
+Fixed:   Civ flags to be below player color flag
+Added:   TerraformOcean button in tile bank (restored it) this allows modders up to 60 of the 64 
+          available tileimp slots (previously only 48/60 available)
+Added:   Slic messages for sinking ship (again), hostile terrain, insurgent spawn, guerrilla spawn
+Added:   additional but not implemented userprofile options
+Added:   EnergySupply and Demand Concept calculates a percentage used as modifier for gold and production
+Added:   Energy Profile option to make it optional 
+Added:   New database flags for modders:
+- TerrainImprovementDB
+   ProducesEnergy - creates an energy point (supply)
+   EnergyHunger - subtracts an energy point (demand)
+- BuildingDB
+   ProducesEnergy - creates an energy point (supply)
+   EnergyHunger - subtracts an energy point (demand)
+   EnergyHungerPerPop - creates an energy point (supply) per person in city
+   ProducesEnergyPerPop - subtracts an energy point (demand) per person in city
+- WonderDB
+   ProducesEnergy - creates an energy point (supply)
+   EnergyHunger - subtracts an energy point (demand)
+   EnergyHungerPerPop - creates an energy point (supply) per person in city
+   ProducesEnergyPerPop - subtracts an energy point (demand) per person in city
+- UnitDB
+   ProducesEnergy - creates an energy point (supply)
+   EnergyHunger - subtracts an energy point (demand)
+
+2007-02-22 (Revision 692)
+Fixed:   Moved Goal text from appearing inside the science box in the english/science.ldl
+Added:   Civilization Flags for Units (most artwork from Civ2 modders Michael D McCart & Michael D Raney)
+Added:   Implemented Unit Hidden Nationality - these units are displayed as barbarians 
+
+2007-02-01 (Revision 687)
+Added:	  Religious City Icons (up to 10 Religions) appear if building has IsReligion1(or 2 up to 10)
+Added:	  National Borders are now displayed with icons for smooth appearance.
+Changed: Aligned Cityname, population rectangle, and turns to population growth rectangle.
 Changed: Next Pop rectangle is now black like the city name to differentiate it from City Population.
 Added:	Player Capitols now have a star Icon.
 Fixed: Implemented HasAirport Icon.
@@ -119,7 +163,7 @@ Added:    New database flags for modders:
 2006-09-09 (Revision 634)
 Fixed:    AI slider handling
 Added:    For modders: STRATEGY_TOO_MANY_CITIES and STRATEGY_NO_REVOLUTON are
-          loaded automaticly if present in startegies.txt and not present in
+          loaded automaticaly if present in startegies.txt and not present in
           personalities.txt. This way modders have less work if they want to
           make the AI respect the city limit.
 
@@ -193,7 +237,7 @@ Added:    New database flags for modders:
    TreasuryInterest     Building gives a percentage of treasury of their 
                         civivilisation to their civilisation.
 
-2006-06-07
+2006-06-07 (Revision 586)
 Changed:  CanExportTileValue now works as a radius if you want only one radius
           IntBorderRadius should be 0
 Added:    New database flags for modders:
@@ -207,7 +251,7 @@ Added:    New database flags for modders:
    BarabariansSpawnBarbarians Difficulty makes Barbarian units to spawn more 
                               Barbarian units.
 
-2006-05-27
+2006-05-27 (Revision 577)
 Cahnged:  Reform City destroys a building if you have a building that conflicts
           with settlebuilding of the reforming unit
 Added:    New database flags for modders:
@@ -227,7 +271,7 @@ Added:    New database flags for modders:
    IsXenophobic         Government reduces population of foreign cities by one 
                         each turn.
 
-2006-05-24
+2006-05-24 (Revision 576)
 Changed:  Removed War from slave attacks now just regardcost (Must be modified)
 Fixed:    No more war popups for attacking Babarian units.
 Fixed:    Pillage of tile improvements in unowned territory.
@@ -242,14 +286,14 @@ Added:    New database flags for modders:
    Barbariancamps       Diff. makes an entrenching Barb. unit to create a city.
    SectarianHappiness   Difficulty reduces city happiness in conquered cities.
 
-2006-05-16
+2006-05-16 (Revision 574)
 Added:    Tileimps with colony and BonusProductionExport, BonusGoldExport, 
           CanExportTileValue flags can add shields outside player radius.
 Added:    New database flags for modders:
 - UnitDB:
    CanHarvest           Unit that can entrench adds terrain gold to treasury.
 
-2006-05-13
+2006-05-13 (Revision 572)
 Added:    New database flags for modders:
 - DifficultyDB:
    AICityDefenderBonus  Difficulty gives AI cities a adefence population bonus.
@@ -270,7 +314,7 @@ Added:    New database flags for modders:
                         city. Actually it is a stupid idea, because soon your
                         city is full of slaves.
 
-2006-05-03
+2006-05-03 (Revision 571)
 Added:    New database flags for modders:
 - UnitDB:
    UpgradeTo            Unit can be upgraded to given unit with enough gold.
@@ -280,7 +324,7 @@ Added:    New database flags for modders:
    NoAIGoldDeficit      AI does not pay for gold deficits. (Optional AI cheat)
    NoAIProductionDeficit AI does not pay for prod. deficits. (Opt. AI cheat)
 
-2006-04-29
+2006-04-29 (Revision 567)
 Added:    New database flags for modders:
 - UnitDB:
    TargetsCivilians     Unit bombard civilians instead other units.
@@ -292,7 +336,7 @@ Added:    New database flags for modders:
    CantTrade            Good cannot be traded. It acts like a bonus.
    HappyInc             Good increases city happiness if it is traded.
 
-2006-04-14
+2006-04-14 (Revision 560)
 Added:    Pirates, unlike in Civ2 only boats with attack, no transports.
 Fixed:    Disbanding a settler in a city does not disband all other units there.
 Fixed:    Goodyhut crash occuring if UnitDB is bigger than AdvanceDB.
@@ -306,7 +350,7 @@ Added:    New database flags for modders:
 - TerrainImprovementDB:
    DeniedToEnemy        TerrainImprovement does not give move boni to enemies.
 
-2006-04-01
+2006-03-31 (Revision 559)
 Added:    New database flags for modders:
 - UnitDB:
    ObsoleteUnit         Unit it is obsolete by another unit instead by a tech.
@@ -317,7 +361,7 @@ Added:    New database flags for modders:
 - WonderDB:
    BorderRadius         Wonder increases the border radius of the civ's cities
 
-2006-03-22
+2006-03-22 (Revision 554)
 Added:    Accidental move into an enemy or city causes a popup message for war 
           declaration confirmation. For now war must be declared from the 
           diplomacy screen. (To be fixed)
@@ -325,7 +369,7 @@ Added:    New database flags for modders:
 - AdvanceDB:
    GoodyHutExcluded     Advance cannot be obtained froma goody hut.
 
-2006-03-11
+2006-03-11 (Revision 553)
 Added:    New database flags for modders:
 - UnitDB:
    GoodyHutExcluded     Unit cannot be gained from a goody hut.
@@ -333,7 +377,7 @@ Added:    New database flags for modders:
    TerrainEffect
       EnablesGood       Tileimp on a certain terrain gives a good.
 
-2006-03-02
+2006-03-03 (Revision 552)
 Added:    New database flags for modders:
 - BuildingDB:
    EnablesVeterans      Building makes city to build veteran units only.
@@ -341,7 +385,7 @@ Added:    New database flags for modders:
    PopCostsToBuild      Unit costs a city these number of population points.
                         A city disband warning is still missing.
 
-2006-03-01
+2006-03-01 (Revision 551)
 Added:    Building upkeep is now affected by readiness.
 Added:    New database flags for modders:
 - BuildingDB:
@@ -371,7 +415,7 @@ Added:    New database flags for modders:
    BonusProduction      AgeCityStyle gives a production bonus.
    BonusScience         AgeCityStyle gives a science bonus.
 
-2006-02-15
+2006-02-15 (Revision 543)
 Fixed:    Mistake in tileset.cpp which prevented loading of tile file
 Fixed:    Rreport start of wonder when deleting the first item and the second 
           item is a wonder
@@ -444,7 +488,7 @@ Added:    DebugSlic option to the advance options.
 Added:    Animated good option to the advanced options.
 Added:    Two more colour sets
 
-2005-09-12
+2005-09-12 (Revision 453)
 Fixed:    Bug with gold income
 Added:    City limit to domestic control panel
 Changed:  Information window remains open across turns
@@ -461,7 +505,7 @@ Added:    Option for female leader pictures
 Fixed:    Age display in MP summary
 Fixed:    Colors used on single player selection screen
 
-2005-08-02
+2005-08-02 (Revision 434)
 Fixed:    Bugs with /importmap
 Fixed:    Misc crashes
 Fixed:    Updating of values caused by alteration of sliders on national 
@@ -470,7 +514,7 @@ Fixed:    Bug preventing rush buying an item inserted before Capitalization
           or Infrastructure
 Added:    Buttons linking the National, City and Build Managers
 
-2005-06-28
+2005-06-28 (Revision 403)
 Fixed:    Crash caused by loading savegames with the wrong number of goods
 Fixed:    Misc crashes
 Added:    More AOM support
@@ -481,13 +525,13 @@ Removed:  Automatic tutorial advice on low difficulty levels, since it breaks
           mods and generally causes problems (we have a specific tutorial 
           button now on the main menu for those that want one)
 
-2005-05-23
+2005-05-23 (Revision 368)
 Added:    Brief changelog to playtest readme
 Fixed:    Incorrect bonuses from goods
 Fixed:    Misc crashes
 Added:    Some more credits
 
-2005-05-17
+2005-05-17 (Revision 354)
 Added: /debugai and /debugcells commands in chat window
 Changed: Some diplomatic agreements to have limited duration
 Added: New restriction fields to buildings and tile improvements
@@ -515,7 +559,7 @@ Changed: Method of caravan cost fix - now mods should have reasonable caravan co
 Changed: Default colour scheme to get player 1 blue by default
 Added: Detailed changelog to playtest version
 
-2005-03-05
+2005-03-05 
 Disabled: AI unit text, so that you don't see the AI goals.
 Fixed: Crashes and memory leaks.
 Fixed: Minor translation problems with the French and German string files.

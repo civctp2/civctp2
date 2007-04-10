@@ -52,8 +52,9 @@
 // - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
 // - Spinner callbacks are added at the end so that they aren't called due to
 //   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin Gühmann)
-// - Switing between players now updates the city list of the main control 
+// - Switching between players now updates the city list of the main control 
 //   panel city tab. (Feb 4th 2007 Martin Gühmann)
+// - TODO add show Enemy Health and Debug AI buttons to Unit Tab
 //
 //----------------------------------------------------------------------------
 
@@ -75,6 +76,7 @@
 #include "ctp2_Static.h"
 #include "ctp2_Switch.h"
 #include "ctp2_spinner.h"
+#include "aui_switch.h" //emod
 
 #include "StrDB.h"
 
@@ -215,6 +217,10 @@ static char *s_modeSwitchNames[SCEN_START_LOC_MODE_MAX] = {
 	"TabGroup.Civ.JustCivSwitch"
 };
 
+//emod
+//static aui_Switch		*s_ShowEnemyHealth			= NULL,
+//						*s_NULL				= NULL;
+
 
 sint32 g_isCheatModeOn = FALSE;
 
@@ -238,8 +244,11 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 	}
 }
 
-ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
+ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does same as initialize in other files
 :
+
+
+
 	m_window                    (NULL),
 	m_terrainSwitches           (NULL),
 	m_terrainImpSwitches        (NULL),
@@ -256,10 +265,8 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
     m_paintTerrainImprovement   (-1),
     m_brushSize                 (1),
     m_unitIndex                 (-1),
-    m_cityStyle                 (CITY_STYLE_EDITOR),
-	//Added by Martin Gühmann to add the pop number 
-	//displayed in the CityPopSpinner to new created cities.
-	m_newPopSize                (1),
+    m_cityStyle                 (CITY_STYLE_EDITOR), 	//displayed in the CityPopSpinner to new created cities.
+ 	m_newPopSize                (1), 	//Added by Martin Gühmann to add the pop number
     m_startLocMode              (SCEN_START_LOC_MODE_NONE),
     m_haveRegion                (false),
     m_mapMode                   (SCEN_MAP_NONE),
@@ -342,6 +349,11 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 									UnitTabButton, (void *)SCEN_UNIT_CAT_AIR);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.SpecialButton", 
 									UnitTabButton, (void *)SCEN_UNIT_CAT_SPECIAL);
+	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod
+	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI", DebugAI, NULL); //emod
+	//s_ShowEnemyHealth		= spNew_aui_Switch(err, s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod5
+	//ctp2_Switch *s_ShowEnemyHealth = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth");
+    //s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "UnitControls.LabelToggle", ToggleLabels, NULL);
 
@@ -589,7 +601,7 @@ AUI_ERRCODE ScenarioEditor::Display()
 		s_scenarioEditor->PopulateCityList();
 
 		
-		s_scenarioEditor->PopulateTerrainImprovementList();
+		s_scenarioEditor->PopulateTerrainImprovementList();  //emod5 defientely need something to populate it
 
 		s_scenarioEditor->SetupGlobalControls();
 		s_scenarioEditor->Update();
@@ -973,7 +985,7 @@ void ScenarioEditor::PopulateCityList()
 }
 
 
-void ScenarioEditor::PopulateTerrainImprovementList()
+void ScenarioEditor::PopulateTerrainImprovementList()  //emod1 note  use this format instead of current switches but add item populating checks?
 {
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.City.TerrainImprovementList");
@@ -1077,7 +1089,7 @@ void ScenarioEditor::RehideUnitSwitches()
 	}
 }
 
-bool ScenarioEditor::HandleClicks()
+bool ScenarioEditor::HandleClicks() //emod2 need these?
 {
 	
 	return PaintTerrainMode() || PaintTerrainImprovementMode() || PlaceUnitsMode() || PlaceCityMode() || 
@@ -1094,7 +1106,7 @@ sint32 ScenarioEditor::PaintTerrain()
 	if(!s_scenarioEditor) return -1;
 	return s_scenarioEditor->m_paintTerrain;
 }
-bool ScenarioEditor::PaintTerrainImprovementMode()
+bool ScenarioEditor::PaintTerrainImprovementMode() //emod3 need this?
 {
 	if(!s_scenarioEditor) return false;
 	return s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAINIMP;
@@ -1196,7 +1208,7 @@ sint32 ScenarioEditor::PaintGood()
 }
 
 void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
+{//emod4 need this functionality should be there
 	Assert(s_scenarioEditor);
 	if(!s_scenarioEditor)
 		return;
@@ -3470,3 +3482,35 @@ bool ScenarioEditor::IsGivingAdvances()
 {
 	return s_scenarioEditor && s_scenarioEditor->m_isGivingAdvances;
 }
+
+
+// EMOD adding function for new cheat options
+/*
+void ScenarioEditor::ShowEnemyHealth(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_SWITCH_ACTION_PRESS) return;
+
+
+	void (ProfileDB::*func)(BOOL) = 0;
+	uint32 state = data;
+
+	func = &ProfileDB::SetEnemyHealth;  //emod
+
+	if(func)
+		(g_theProfileDB->*func)(state ? FALSE : TRUE); 
+}
+
+void ScenarioEditor::DebugAI(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_SWITCH_ACTION_PRESS) return;
+
+	void (ProfileDB::*func)(BOOL) = 0;
+	uint32 state = data;
+
+	func = &ProfileDB::SetDebugAI;  //emod
+
+	if(func)
+		(g_theProfileDB->*func)(state ? FALSE : TRUE); 
+}
+
+*/

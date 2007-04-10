@@ -315,6 +315,10 @@ private:
 	SlicObject *m_tempGoodAdder;
 	sint32    m_tempGood, m_tempGoodCount;
 	bool      m_sentInefficientMessageAlready;
+//emod
+    sint32	  m_culture;
+	sint32	  m_secthappy;								
+
 	
 	
 
@@ -983,12 +987,13 @@ public:
 #endif
 
 	sint32 StyleHappinessIncr() const;
-	sint32 GoodHappinessIncr() const;              //EMOD 4-27-2006
-	bool CanCollectGood(sint32 good) const;        //EMOD 4-27-2006 
-	bool IsBuildingOperational(sint32 type) const; //EMOD 5-15-2006
-	sint32 SectarianHappiness() const;             //EMOD 5-24-2006
-//	sint32 AddGoodToCity (sint32 good) const;      //EMOD 5-31-2006
-	sint32 TileImpHappinessIncr() const;		   //EMOD 10-05-2006
+	sint32 GoodHappinessIncr() const;									//EMOD 4-27-2006
+	bool CanCollectGood(sint32 good) const;        						//EMOD 4-27-2006 
+	bool IsBuildingOperational(sint32 type) const; 						//EMOD 5-15-2006
+	sint32 SectarianHappiness() const { return m_secthappy; }      		//EMOD 5-24-2006
+//	sint32 AddGoodToCity (sint32 good) const;      						//EMOD 5-31-2006
+	sint32 TileImpHappinessIncr() const;		   						//EMOD 10-05-2006
+	void ProcessSectarianHappiness(sint32 &secthappy) const; 			//EMOD 4-9-2007
 
 	sint32 ConsumeEnergy();
 	sint32 ProduceEnergy();

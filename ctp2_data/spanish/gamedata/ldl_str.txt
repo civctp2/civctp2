@@ -3231,3 +3231,12 @@ str_tbl_ldl_AINoShieldHunger_On "AI doesn't pay Shield Hunger - On"					# AI doe
 str_tbl_ldl_AINoGoldHunger_On "AI doesn't pay Unit Gold - On"						# AI doesnt pay unit gold hunger
 str_tbl_ldl_AIFreeUpgrade_On "AI Free Upgrades - On"						# AI doesn't pay goldfor upgrades
 str_tbl_ldl_AIMilitiaUnit_On "AI Free Militia Unit - On"
+
+str_ldl_DebugAI "Debug AI"
+str_ldl_ShowEnemyHealth_On "Show Enemy Health"
+str_ldl_ShowEnemyHealth_On "Hide Enemy Health"
+str_tbl_ldl_NonRandomCivs_On  "Non Random Civs"
+str_tbl_ldl_NonRandomCivs_Off "Random Civs"
+
+str_SE_DebugAI "debug"
+str_SE_ShowEnemyHealth "show"

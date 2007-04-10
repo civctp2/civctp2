@@ -316,6 +316,9 @@ class ScenarioEditor {
 	static void AddGold(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ResetButts();
 	static void FindPosNow(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	//emod
+	static void ShowEnemyHealth(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void DebugAI(aui_Control *control, uint32 action, uint32 data, void *cookie);
 };
 
 #endif

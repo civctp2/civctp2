@@ -186,7 +186,8 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 		m_transportSelectionHealth[transIndex] = (ctp2_Static *)m_transportSelectionButton[transIndex]->GetChildByIndex(0);
 	}
 
-	
+//// this gets all the buttons and limits it to the 12 you see in game...change to a list box like in scenario editor?
+//emod1	
 	for(int orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
 		
 		MBCHAR orderButtonName[128];
@@ -203,7 +204,7 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 		
 		m_orderButton[orderIndex]->Enable(false);
 	}
-
+/////////////////////end note
 	
 	m_unitListPreviousButton->SetActionFuncAndCookie(
 		PrevUnitButtonActionCallback, this);
@@ -248,7 +249,7 @@ void UnitControlPanel::Update()
 	}
 
 	
-	UpdateOrderButtons();
+	UpdateOrderButtons();  //emod2 - check how to use this method
 }
 
 
@@ -677,7 +678,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 }
 
 
-void UnitControlPanel::UpdateOrderButtons()
+void UnitControlPanel::UpdateOrderButtons()  //emod3 this is the method
 {
 	
 	
@@ -772,16 +773,16 @@ void UnitControlPanel::UpdateOrderButtons()
 						(orderTest == ORDER_TEST_NO_MOVEMENT) ||
 						(orderTest == ORDER_TEST_INVALID_TARGET)) {
 						
-						m_orderPair[orderButtonIndex].first = this;
-						m_orderPair[orderButtonIndex].second =
+						m_orderPair[orderButtonIndex].first = this; //change the index to a list?
+						m_orderPair[orderButtonIndex].second = //change the index to a list?
 							const_cast<OrderRecord*>(orderRecord);
 
 						
-						m_orderButton[orderButtonIndex]->SetActionFuncAndCookie(
+						m_orderButton[orderButtonIndex]->SetActionFuncAndCookie(  //change the index to a list?
 							OrderButtonActionCallback, &m_orderPair[orderButtonIndex]);
 
 						
-						enableState[orderButtonIndex] = true;
+						enableState[orderButtonIndex] = true; //change the index to a list?
 					}
 				}
 			}
@@ -789,7 +790,7 @@ void UnitControlPanel::UpdateOrderButtons()
 	}
 
 	
-	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
+	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) { //change the index to a list?
 		if(m_orderButton[orderIndex]->IsDisabled()) {
 			if(enableState[orderIndex])	
 				m_orderButton[orderIndex]->Enable(true);
@@ -846,7 +847,7 @@ Army UnitControlPanel::GetSelectedArmy()
 }
 
 
-void UnitControlPanel::GiveOrder(OrderRecord *order)
+void UnitControlPanel::GiveOrder(OrderRecord *order)  //emod4 this needs to work from selectinga list
 {
 	
 	

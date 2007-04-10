@@ -3270,9 +3270,9 @@ void UnitData::EndTurn()
     /// Creating a SlicObject without handling it causes a memory leak, and does not do anything.
 #if 0	// Not used, memory leak.
 			//added since army data doesn't do the slic?
-			SlicObject *so = new SlicObject("999GuerrillaSpawn");
-			so->AddRecipient(m_owner);
-            so->AddUnit(m_id);
+			//SlicObject *so = new SlicObject("999GuerrillaSpawn");
+			//so->AddRecipient(m_owner);
+            //so->AddUnit(m_id);
 #endif
 		}
 //end emod
@@ -4900,6 +4900,7 @@ void UnitData::SetType(sint32 type)
 	m_actor->ChangeType(m_sprite_state, m_type, Unit(m_id), true);
 
 	// Maybe more stuff has to be done.
+	//4-8-2007 may have to add a reset movement here?
 
 	// Synchronize MP
 	ENQUEUE();

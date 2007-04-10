@@ -1174,9 +1174,21 @@ SPNewGameRulesScreen {
 	}
 
 #EMOD
-	CityCapture:GAMEPLAY_CHECKBOX { 
+	NonRandomCivs:GAMEPLAY_CHECKBOX { 
 
 		int	ypix	80
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NonRandomCivs_Off"
+			string	string1	"str_tbl_ldl_NonRandomCivs_On"
+		}
+	}
+
+	CityCapture:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	110
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1188,7 +1200,7 @@ SPNewGameRulesScreen {
 
 	RevoltInsurgents:GAMEPLAY_CHECKBOX { 
 
-		int	ypix	110
+		int	ypix	140
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1200,7 +1212,7 @@ SPNewGameRulesScreen {
 
 	BarbSpawn:GAMEPLAY_CHECKBOX { 
 
-		int	ypix	140
+		int	ypix	170
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -1210,6 +1222,10 @@ SPNewGameRulesScreen {
 		}
 	}
 
+#Add Settler Cheat?
+#Add City Maintenance
+#Add GoldHunger
+#Add Production Cheat
 
 ############## COLUMN #2
 

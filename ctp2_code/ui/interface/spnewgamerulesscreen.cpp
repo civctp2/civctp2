@@ -35,6 +35,7 @@
 //   but appears to have no affect
 // - changed whole file to look more like gameplayoptions 3.21.2007
 // - added revoltinsurgents option 3.22.2007
+// - added NoRandomCivs option
 //
 //----------------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ static aui_Switch		*s_genocide			= NULL,
 						*s_revoltcasualty   = NULL,
 						*s_barbspawn		= NULL,
 						*s_secthappy		= NULL,
+						*s_NonRandomCivs		= NULL,
 
 						*s_NULL				= NULL;
 
@@ -86,6 +88,8 @@ enum
 	R_CASUALTY,
 	R_BARBSPAWN,
 	R_SECTHAPPY,
+	R_NonRandomCivs,
+
 	GP_TOTAL
 };
 
@@ -99,6 +103,8 @@ static uint32 check[] =
 	R_CASUALTY,
 	R_BARBSPAWN,
 	R_SECTHAPPY,
+	R_NonRandomCivs,
+
 	GP_TOTAL
 };
 
@@ -115,6 +121,7 @@ sint32 spnewgamerulesscreen_updateData()
 	s_revoltcasualty->SetState( g_theProfileDB->IsRevoltCasualties() ); //emod4
 	s_barbspawn->SetState( g_theProfileDB->IsBarbarianSpawnsBarbarian() );
 	s_secthappy->SetState( g_theProfileDB->IsSectarianHappiness() );
+	s_NonRandomCivs->SetState( g_theProfileDB->IsNonRandomCivs() );
 	return 1;
 }
 
@@ -181,6 +188,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	s_revoltcasualty	= spNew_aui_Switch(&errcode, windowBlock, "RevoltCasualties", spnewgamerulesscreen_checkPress, &check[R_CASUALTY]); //emod5
 	s_barbspawn			= spNew_aui_Switch(&errcode, windowBlock, "BarbSpawn", spnewgamerulesscreen_checkPress, &check[R_BARBSPAWN]); //emod5
 	s_secthappy			= spNew_aui_Switch(&errcode, windowBlock, "SectHappy", spnewgamerulesscreen_checkPress, &check[R_SECTHAPPY]); //emod5
+	s_NonRandomCivs		= spNew_aui_Switch(&errcode, windowBlock, "NonRandomCivs", spnewgamerulesscreen_checkPress, &check[R_NonRandomCivs]); //emod5
 
 
 	spnewgamerulesscreen_updateData();
@@ -214,6 +222,7 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	mycleanup(s_revoltcasualty); //emod6
 	mycleanup(s_barbspawn); //emod6
 	mycleanup(s_secthappy); //emod6
+	mycleanup(s_NonRandomCivs);
 	delete s_spNewGameRulesScreen;
 	s_spNewGameRulesScreen = NULL;
 
@@ -239,6 +248,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 	case R_CASUALTY: func = &ProfileDB::SetRevoltCasualties; break; //emod7
 	case R_BARBSPAWN: func = &ProfileDB::SetBarbarianSpawnsBarbarian; break; //emod7
 	case R_SECTHAPPY: func = &ProfileDB::SetSectarianHappiness; break; //emod7
+	case R_NonRandomCivs: func = &ProfileDB::SetNonRandomCivs; break;
 	default:  Assert(0); break;
 	};
 

@@ -29,6 +29,8 @@
 //
 // Modifications from the original Activision code:
 //
+// - You need to make 3 changes here for a new profile option
+//
 // - Microsoft extensions removed.
 // - Import order modified to enable GCC compilation (no functional change).
 // - Option added to enable viewing info on actions that are too expensive.
@@ -55,7 +57,7 @@
 // - Made city capture options an option.
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 // - Added Army Names and Civflags options
-// - YOu need to make 3 changes here for a new profile option
+// - Added DebugAI option and SetEnemyHealth to add sceanrio editor options
 //
 //----------------------------------------------------------------------------
 
@@ -237,7 +239,7 @@ private:
     sint32	m_zoomedCombatAlways;
 
     sint32    m_attackEveryone;
-    sint32    m_nonRandomCivs;
+    sint32    m_nonRandomCivs; //1
 
     MBCHAR	m_gameWatchDirectory[_MAX_PATH];
 
@@ -290,7 +292,8 @@ private:
 
     sint32 m_battleSpeed;
 
-    sint32 m_showEnemyHealth;
+    sint32 m_showEnemyHealth;  //emod1 - already here but implementing a scenario editor switch
+	sint32 m_debugai;   //emod1
     sint32 m_scrollDelay;
 
     sint32 m_autoRenameCities;
@@ -353,7 +356,7 @@ private:
     /// Enable city capture options pop-up
     sint32 m_cityCaptureOptions;  //emod1
     /// Enable unit upgrade
-    sint32 m_upgrade;
+    sint32 m_upgrade; 
     /// Smooth the borders instead of diplaying square borders
     sint32 m_smoothBorders;
 	/// emod new profile options
@@ -459,7 +462,7 @@ public:
     void SetRiskLevel(uint32 x)					{ Assert((x>=0) && (x<5)); m_risklevel = x; }
     void SetPowerPoints(sint32 powerPoints)		{ m_powerPoints = powerPoints; }
 
-    void SetGenocideRule(BOOL rule)				{ m_genocide = rule; }
+    void SetGenocideRule(BOOL rule)				{ m_genocide = rule; } 
     void SetTradeRule(BOOL rule)				{ m_trade = rule; }
     void SetSimpleCombatRule(BOOL rule)			{ m_simplecombat = rule; }
     void SetPollutionRule(BOOL rule);
@@ -520,7 +523,7 @@ public:
     void SetAutoSelectFirstUnit(BOOL on)        { m_autoSelectFirstUnit = on; }
     void SetGameWatchDirectory(MBCHAR *dir)		{ strcpy(m_gameWatchDirectory, dir); }
     void SetAutoTurnCycle(BOOL on)              { m_autoTurnCycle = on; }
-    void SetNonRandomCivs(BOOL on)              { m_nonRandomCivs = on; }
+    void SetNonRandomCivs(BOOL on)              { m_nonRandomCivs = on; } //2
 
     void SetZoomedCombatAlways(BOOL on)			{ m_zoomedCombatAlways = on; }
     void SetAutoEndMultiple(BOOL on)            { m_autoEndMultiple = on; }
@@ -592,6 +595,8 @@ public:
 	void SetAIFreeUpgrade(BOOL on) 	{ m_AIFreeUpgrade = on; }
 	void SetAIMilitiaUnit(BOOL on)	{ m_AIMilitiaUnit = on; }
 	void SetNRG(BOOL on) 	{ m_NRG = on; }
+	void SetEnemyHealth(BOOL on)  { m_showEnemyHealth = on; }  //emod2 - implementing a scenario editor switch
+    void SetDebugAI(BOOL on) { m_debugai = on; }   //emod2
 
 
     sint32		GetNPlayers() const				{ return m_nPlayers; }
@@ -701,7 +706,7 @@ public:
     BOOL        IsAttackEveryone() const        { return m_attackEveryone; }
     BOOL        IsAutoSelectFirstUnit() const   { return m_autoSelectFirstUnit; }
     BOOL        IsAutoTurnCycle() const         { return m_autoTurnCycle; }
-    BOOL        IsNonRandomCivs() const         { return m_nonRandomCivs; }
+    BOOL        IsNonRandomCivs() const         { return m_nonRandomCivs; } //3
     BOOL		IsZoomedCombatAlways() const	{ return m_zoomedCombatAlways; }
     BOOL        IsAutoEndMulitpleTurns() const  { return m_autoEndMultiple; }
     const double     *GetMapSettings(sint32 pass, sint32 &count);
@@ -767,7 +772,8 @@ public:
     BOOL GetShowPoliticalBorders() { return m_showPoliticalBorders; }
 
     sint32 GetScrollDelay() { return m_scrollDelay; }
-    BOOL GetShowEnemyHealth() { return m_showEnemyHealth; }
+    BOOL GetShowEnemyHealth() { return m_showEnemyHealth; } //emod3
+	BOOL GetDebugAI() { return m_debugai; }   //emod3
 
     BOOL GetAutoRenameCities() { return m_autoRenameCities; }
     BOOL GetAutoOpenCityWindow() { return m_autoOpenCityWindow; }

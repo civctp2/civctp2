@@ -24,6 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
+// - You need two changes here for a profile option
+//
 // - Option added to enable viewing info on actions that are too expensive.
 // - Option added to close a messagebox automatically on eyepoint clicking.
 // - Option added to choose a color set.
@@ -45,7 +47,7 @@
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 // - Added additional options, most to be implemented later
 // - Implemented NRG - option to ccalculate energy ratio affecting production and demand
-// - You need two changes here for a profile option
+// - added DebugAI option
 //
 //----------------------------------------------------------------------------
 
@@ -236,6 +238,7 @@ ProfileDB::ProfileDB()
 	m_AIMilitiaUnit 					(FALSE),
 	m_OneCityChallenge 					(FALSE),
 	m_NRG			 					(FALSE),
+	m_debugai							(FALSE),
 	//end emod
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -376,7 +379,8 @@ ProfileDB::ProfileDB()
 	Var("AutoRenameCities"           , PV_BOOL  , &m_autoRenameCities           , NULL, false);
 	Var("AutoOpenCityWindow"         , PV_BOOL  , &m_autoOpenCityWindow         , NULL);
 
-	Var("ShowEnemyHealth"            , PV_BOOL  , &m_showEnemyHealth            , NULL);
+	Var("ShowEnemyHealth"            , PV_BOOL  , &m_showEnemyHealth            , NULL); //used
+
 	Var("ShowCityInfluence"          , PV_BOOL  , &m_showCityInfluence          , NULL);
 	Var("ShowPoliticalBorders"       , PV_BOOL  , &m_showPoliticalBorders       , NULL);
 
@@ -423,6 +427,7 @@ ProfileDB::ProfileDB()
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false); //used
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
+	Var("ShowDebugAI"	             , PV_BOOL  , &m_debugai					, NULL); //used   //emod2
 
 }
 

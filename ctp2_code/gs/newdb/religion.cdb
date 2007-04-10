@@ -21,52 +21,6 @@
 # 
 #-----------------------------------------------------------------------------
 Religion {
-	Float PositiveWorkdayCoef
-	Float NegativeWorkdayCoef
-	Int WorkdayExpectation
-
-	Float PositiveWagesCoef
-	Float NegativeWagesCoef
-	Int WagesExpectation
-
-	Float PositiveRationsCoef
-    Float NegativeRationsCoef
-	Int RationsExpectation
-
-	Float KnowledgeCoef
-	Float PollutionCoef
-	Float PollutionUnhappyCoef
-
-	Float ConquestDistress
-	Float ConquestDistressDecay
-	Float EmpireDistanceScale
-	Int MinEmpireDistance
-	Int MaxEmpireDistance
-	Int TooManyCitiesThreshold
-	Float TooManyCitiesCoefficient
-	Int MaxMartialLawUnits
-	Float MartialLawEffect
-	Int MartialLawThreshold
-
-	Int AtHomeRadius
-	Float OverseasCoef
-
-	Float OverseasDefeatDecay
-	Float OverseasDefeatCoef
-	Float HomeDefeatDecay
-	Float HomeDefeatCoef
-
-	Float CrimeCoef
-	Int CrimeOffset
-
-	Int ProfessionalUnits
-	Int TurnsToNewReadiness
-	Float ReadyPeaceCoef
-	Float ReadyPeaceHP
-	Float ReadyAlertCoef
-	Float ReadyAlertHP
-	Float ReadyWarCoef
-	Float ReadyWarHP
 
 Float FoodCoef
 Float GoldCoef
@@ -102,10 +56,6 @@ Float CapitalizationCoefficient
 Int WarDiscontentMaxUnits
 Float WarDiscontentPerUnit
 
-	Bit IsEcotopia
-      Bit IsParliamentary //added for future use
-	Bit IsAnarchy //added for future use
-	Bit IsXenophobia //added for future use
 	Bit GLHidden
 
 	// The discovery of Religions of the same rank 
