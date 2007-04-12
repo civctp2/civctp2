@@ -49,10 +49,10 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 				yyterminate();
             } else {
 
-				char buf[MAX_PATH];
-				char filename[MAX_PATH];
+				char buf[MAX_PATH] = { 0 };
+				char filename[MAX_PATH] = { 0 };
 				strcpy(filename, yytext);
-				filename[strlen(filename)-1] = 0; /* Strip trailing quote */
+                                filename[strlen(filename)-1] = 0; /* Strip trailing quote */
 				if(!ldlif_find_file(filename, buf)) {
 					ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
 					yyterminate();

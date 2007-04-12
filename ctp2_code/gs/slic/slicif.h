@@ -3,7 +3,7 @@
  * Project      : Call To Power 2
  * File type    : C/C++ header
  * Description  : SLIC interpreter functions
- * Id           : $Id:$
+ * Id           : $Id$
  *
  *----------------------------------------------------------------------------
  *

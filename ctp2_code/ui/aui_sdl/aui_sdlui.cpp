@@ -56,6 +56,7 @@ extern sint32				g_ScreenWidth;
 extern sint32				g_ScreenHeight;
 extern DisplayDevice		g_displayDevice;
 
+extern BOOL g_SDL_flags;
 
 aui_SDLUI::aui_SDLUI
 (
@@ -139,7 +140,7 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, SDL_SWSURFACE);
+       	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
 	if (!m_lpdds) {
 		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
 	}

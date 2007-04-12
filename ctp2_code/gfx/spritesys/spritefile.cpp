@@ -1154,8 +1154,7 @@ SPRITEFILEERR SpriteFile::Write(SpriteGroup *s, Anim *anim)
 
 
 
-SPRITEFILEERR 
-SpriteFile::Write_v13(UnitSpriteGroup *s)
+SPRITEFILEERR SpriteFile::Write_v13(UnitSpriteGroup *s)
 {
 	uint16		i;
 	uint32		offset[UNITACTION_MAX];
@@ -1224,8 +1223,7 @@ SpriteFile::Write_v13(UnitSpriteGroup *s)
 
 
 
-SPRITEFILEERR 
-SpriteFile::Write_v20(UnitSpriteGroup *s)
+SPRITEFILEERR SpriteFile::Write_v20(UnitSpriteGroup *s)
 {
 	uint16		i;
 	int  		offset[ACTION_MAX+1];
@@ -1296,77 +1294,6 @@ SPRITEFILEERR SpriteFile::Write(UnitSpriteGroup *s)
 	
 	return SPRITEFILEERR_OK;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 SPRITEFILEERR SpriteFile::Write(EffectSpriteGroup *s)
 {
@@ -1554,7 +1481,7 @@ SPRITEFILEERR SpriteFile::Read(FacedSprite **s, Anim **anim)
 	err = ReadData((void *)&aoffset, sizeof(aoffset));			
 
 	
-	*s = new FacedSprite;
+	*s = new FacedSprite;  //**s should be used?
 	ReadFacedSpriteDataFull(*s);
 
 	*anim = new Anim;
@@ -1588,15 +1515,7 @@ SPRITEFILEERR SpriteFile::Read(SpriteGroup **s, Anim **anim)
 }
 
 
-
-
-
-
-
-
-
-SPRITEFILEERR 
-SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
+SPRITEFILEERR SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
 {
 	uint16	i;
 	uint32	data32;
@@ -1654,28 +1573,14 @@ SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
 
 					s->SetGroupAnim((GAME_ACTION)i, anim);
 				}
-			} else {
+                            } 
+                        else { 
+                            SkipSpriteDataGeneral();
+                            s->SetGroupSprite((GAME_ACTION)i, NULL);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-				
-				SkipSpriteDataGeneral();
-				s->SetGroupSprite((GAME_ACTION)i, NULL);
-
-				SkipAnimData();
-				s->SetGroupAnim((GAME_ACTION)i, NULL);
-			}
+                            SkipAnimData();
+                            s->SetGroupAnim((GAME_ACTION)i, NULL);
+                            }
 		}
 	}
 
@@ -1726,8 +1631,7 @@ SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
 
 
 
-SPRITEFILEERR 
-SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
+SPRITEFILEERR SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
 {
 	int		i;
 	uint16	data16;
@@ -1814,23 +1718,20 @@ SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
 	return SPRITEFILEERR_OK;
 }
 
-SPRITEFILEERR 
-SpriteFile::ReadBasic(UnitSpriteGroup *s)
-{
-	switch(m_version)
-	{
-	case	k_SPRITEFILE_VERSION1:
-	case	k_SPRITEFILE_VERSION2:
-			return ReadBasic_v20(s); 
-			break;
+SPRITEFILEERR SpriteFile::ReadBasic(UnitSpriteGroup *s){
+    switch(m_version) {
+        case	k_SPRITEFILE_VERSION1:
+        case	k_SPRITEFILE_VERSION2:
+            return ReadBasic_v20(s); 
+            break;
 
-	case	k_SPRITEFILE_VERSION0:
-	default:
-			return ReadBasic_v13(s);
-	}
+        case	k_SPRITEFILE_VERSION0:
+        default:
+            return ReadBasic_v13(s);
+        }
 	
-	return SPRITEFILEERR_OK;
-}
+    return SPRITEFILEERR_OK;
+    }
 
 
 SPRITEFILEERR SpriteFile::ReadFull_v13(UnitSpriteGroup *s)

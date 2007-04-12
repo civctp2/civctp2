@@ -16,7 +16,6 @@
 #include "aui_base.h"
 #include "aui_memmap.h"
 
-
 #define  k_DEFAULT_CHROMA_RED	255
 #define  k_DEFAULT_CHROMA_GREEN	0
 #define  k_DEFAULT_CHROMA_BLUE	255
@@ -52,7 +51,6 @@ public:
 	
 	
 	void SetChromakey(sint32 r, sint32 g, sint32 b);
-
 
 protected:
 	aui_Image() : aui_Base() {}

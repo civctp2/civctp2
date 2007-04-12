@@ -209,6 +209,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 	Assert( filename != NULL );
 	Assert( image != NULL );
+        
 
 #ifdef WIN32	
 	uint8 *filebits = g_ui->TheMemMap()->GetFileBits( filename );
@@ -383,23 +384,48 @@ AUI_ERRCODE aui_BmpImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 
 	return retcode;
 #elif defined(__AUI_USE_SDL__)
+        printf("%s L%d: image %s!\n", __FILE__, __LINE__, filename); //is this ever called?
 	assert(0);
 	SDL_Surface *bmp = SDL_LoadBMP(filename);
 	SDL_Surface *surf = NULL;
 	SDL_PixelFormat fmt = { 0 };
-#if 0
-	if (aui_image_SDLPixelFormat(image, &fmt)) {
-		surf = SDL_ConvertSurface(bmp, &fmt, 0);
-	}
-#endif
+//#if 0
+//	if (aui_image_SDLPixelFormat(image, &fmt)) {
+//		surf = SDL_ConvertSurface(bmp, &fmt, 0);
+//	}
+//#endif
+        
+        printf("%s L%d: image %s!\n", __FILE__, __LINE__, filename);
+        if (g_ui->Primary()->BitsPerPixel() != 16)
+            printf("%s L%d: bpp %d", __FILE__, __LINE__,  g_ui->Primary()->BitsPerPixel());
+        if (bmp->format->Gmask >> bmp->format->Gshift == 0x3F)
+            printf("%s L%d: 565 image!\n", __FILE__, __LINE__);
+        if (bmp->format->Gmask >> bmp->format->Gshift == 0x1F)
+            printf("%s L%d: 555 image!\n", __FILE__, __LINE__);
 	if (NULL == surf) {
 		surf = SDL_DisplayFormat(bmp);
 	}
 	SDL_FreeSurface(bmp);
 	if (NULL == surf)
 		return AUI_ERRCODE_LOADFAILED;
-	
-	if (image->TheSurface()) {
+	//surface = image->TheSurface();
+	//image->AttachSurface(surf);
+        //The new surface should be assinged to the image-surfec but how???
+        //conversion needed from SDL_Surface to aui_Surface
+        //also using SDL_BlitSurface might be good in case surf 565 and img 555
+        /* //this part doesn't create a visible effect:
+        AUI_ERRCODE *retval;
+        
+        if (m_surface) {
+            delete m_surface;
+            }
+        
+        m_surface = new aui_Surface(retval, s->w, s->h, s->format->BitsPerPixel, s->pitch, (uint8 *) s->pixels); 
+        Assert( AUI_SUCCESS(*retval) );
+        if ( !AUI_SUCCESS(*retval) ) return;
+        */
+ 
+        if (image->TheSurface()) {
 	} else {		
 	}
 	return retcode;
@@ -407,7 +433,6 @@ AUI_ERRCODE aui_BmpImageFormat::Load( const MBCHAR *filename, aui_Image *image )
 	return AUI_ERRCODE_LOADFAILED;
 #endif
 }
-
 
 void aui_Image::SetChromakey(sint32 r, sint32 g, sint32 b)
 {

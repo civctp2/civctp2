@@ -31,6 +31,8 @@ extern sint32				g_ScreenHeight;
 extern BOOL					g_exclusiveMode;
 extern BOOL					g_createDirectDrawOnSecondary;
 
+extern BOOL g_SDL_flags;
+
 #include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 
@@ -113,9 +115,8 @@ HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam
 
 	if (legalSize) {
 		if (width < 1024 || height < 768) {
-			if (
-				!(width == 800 && height == 600))
-				legalSize = FALSE;
+			if (!(width == 800 && height == 600))
+                            legalSize = FALSE;
 		}
 	}
 
@@ -123,8 +124,7 @@ HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam
 		CTPDisplayMode *mode = new CTPDisplayMode;
 		mode->width = width;
 		mode->height = height;
-
-		g_displayModes->AddTail(mode);
+    		g_displayModes->AddTail(mode);
 	}
 
     
@@ -147,11 +147,23 @@ void display_EnumerateDisplayModes(void)
 		return;
 	}
 #else
-	SDL_PixelFormat fmt = { 0 };
-	fmt.BitsPerPixel = 16;
-	
-	SDL_Rect **modes = SDL_ListModes(&fmt, SDL_FULLSCREEN);
-	
+ 
+	SDL_Rect **modes = SDL_ListModes(NULL, g_SDL_flags);
+
+        if(modes == (SDL_Rect **)0){
+            printf("No modes available!\n");
+            return;
+            }
+	if(modes == (SDL_Rect **)-1){
+            printf("All resolutions available.\n");
+            }
+        else{
+            /* Print valid modes */
+            printf("Available Modes\n");
+            for(int i=0;modes[i];++i)
+                printf("  %d x %d\n", modes[i]->w, modes[i]->h);
+            }
+
 	g_displayModes = new PointerList<CTPDisplayMode>;
 	
 	if (0 == modes) {
@@ -334,11 +346,8 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 #endif
 	display_EnumerateDisplayModes();
 
-	
-	
-	
-	BOOL foundRes = FALSE;
-
+        BOOL foundRes = FALSE;
+        
 	if (g_theProfileDB->IsTryWindowsResolution()) {
 		if (display_IsLegalResolution(g_ScreenWidth, g_ScreenHeight))
 			foundRes = TRUE;
@@ -357,8 +366,8 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 				g_ScreenWidth = mode->width;
 				g_ScreenHeight = mode->height;
 			} else {
-				g_ScreenWidth = 800;
-				g_ScreenHeight = 600;
+                            g_ScreenWidth = 800;
+                            g_ScreenHeight = 600;
 			}
 		}
 	}

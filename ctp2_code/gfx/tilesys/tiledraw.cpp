@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Tile drawing.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -1356,13 +1356,17 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 
 	if (!surface) surface = m_surface;
 
-ypos+=k_TILE_PIXEL_HEADROOM;
+        ypos+=k_TILE_PIXEL_HEADROOM;
 
 
-if (xpos < 0) return 0;
-if (xpos >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-if (ypos < 0) return 0;
-if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
+        if (xpos < 0) 
+            return 0;
+        if (xpos >= surface->Width() - k_TILE_PIXEL_WIDTH) 
+            return 0;
+        if (ypos < 0) 
+            return 0;
+        if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) 
+            return 0;
 
 	tileInfo = GetTileInfo(pos);
 	Assert(tileInfo != NULL);
@@ -1371,8 +1375,8 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 	index = tileInfo->GetTileNum();
 
 	baseTile = m_tileSet->GetBaseTile(index); 
-
-	if (baseTile == NULL) return 0;
+	if (baseTile == NULL) 
+            return 0;
 
 
 
@@ -1386,10 +1390,6 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 	uint16 tilesetIndex_short = (uint16) tilesetIndex;
 
 #ifdef _DEBUG
-	
-	
-	
-	
 	Assert(tilesetIndex == ((sint32) tilesetIndex_short));
 #endif
 
@@ -1417,18 +1417,6 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-
-
-
-
-
-
-
-
-
-
-
-	
 	Pixel16 srcPixel, transPixel = 0;
 	uint16 *pDestPixel;
 
@@ -1500,12 +1488,6 @@ if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 			}
 		}
 	}
-
-
-
-
-
-
 	return 0;
 }
 
@@ -4043,6 +4025,12 @@ void TiledMap::SlowDrawText(aui_Surface *surface, char *buf, sint32 color, sint3
 
 }
 
+
+// It seems the transition Pixels were originally calculated in asm-syntax for M$ Windows.
+// This didn't work with gcc under linux because it uses __asm__ and at&t syntax
+// so the code got translated step by step to C but still in assembly stile. I didn't go through that to find the blending bug but copied code of TiledMap::DrawBlendedTile
+// and adjusted it a little bit. Would be nice though if someone once would tranlate the intel asm to at&t for linux;)
+
 void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sint32 xpos, sint32 ypos)
 {
 
@@ -4071,7 +4059,6 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 		return;
 
 	tileInfo = GetTileInfo(pos);
-
 	Assert(tileInfo != NULL);
 	if (tileInfo == NULL) 
 		return;
@@ -4121,10 +4108,12 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-	Pixel16 srcPixel;
-
-	uint16 *pDestPixel = (Pixel16 *)(pSurfBase + ypos * surfPitch + 2 * xpos);
-
+	Pixel16 srcPixel, transPixel = 0;
+#ifdef _MSC_VER 
+        uint16 *pDestPixel = (Pixel16 *)(pSurfBase + ypos * surfPitch + 2 * xpos);
+#else  //use this if __asm__ is NOT used
+	uint16 *pDestPixel = (Pixel16 *)(pSurfBase + (y+ypos) * surfPitch + 2 * (x+xpos));
+#endif
 	{
 		for (y=0; y<k_TILE_PIXEL_HEIGHT; y++) {
 			if (y<=23) {
@@ -4134,10 +4123,11 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 				startX = (y-24)*2;
 				endX = k_TILE_PIXEL_WIDTH - startX;
 			}
-
+#ifdef _MSC_VER             //use this if __asm__ is NOT used
 			if (transDataPtr)
 			{
-#ifdef _MSC_VER
+//#ifdef _MSC_VER             //use this if __asm__ is used
+                        //printf("tiledraw.cpp L4141: assambly used!\n");
 				_asm {
 					mov edx, endX
 					mov edi, pDestPixel
@@ -4171,38 +4161,60 @@ L1:
 					mov transDataPtr, ebx
 					mov dataPtr, esi
 				}
-#else
-				Pixel16* pedx;
-                                int edx = endX;
-                                uint16* edi = pDestPixel;
-                                Pixel16* esi = dataPtr;
-                                int ecx = startX;
-                                edi += edx;
-                                ecx -= edx;
-                                Pixel16* ebx = transDataPtr;
-L0:
-                                Pixel16 dx = *esi;
-                                ++esi;
-                                Pixel16 ax = dx;
-                                if (ax >= 4)
-                                    goto L1;
-                                pedx = tileData[ax];
-                                if (pedx == 0)
-                                    goto L2;
-                                tileData[ax] = pedx;
-                                dx = pedx[-1];
-                                goto L1;
-L2:
-                                dx = *ebx;
-L1:
-                                ++ebx;
-                                edi[ecx] = dx;
-                                ++ecx;
-                                if (ecx != 0)
-                                    goto L0;
-                                transDataPtr = ebx;
-                                dataPtr = esi;
+//#else             //use this if __asm__ is used
+/*                 
+                                printf("%s L%d: Using __asm__ tile blending!\n", __FILE__, __LINE__);
+                                __asm__ (
+//                                "movl $endX, %edx            \n\t" //done by gcc!
+//                                "movl $pDestPixel, %edi      \n\t" //done by gcc!
+//                                "movl $dataPtr, %esi         \n\t" //done by gcc!
+//                                "movl $startX, %ecx          \n\t" //done by gcc!
+                                    "leal (%2,%3,2),%2     \n\t"//load value %0 + %1 * s is pointing to
+                                    "subl %3,%4              \n\t" //%1 is now reuseable
+//                                "movl $transDataPtr, %ebx    \n\t" //done by gcc!
+
+                                    ".L0:                        \n\t"
+                                    "movw (%1),%w3             \n\t" //reusing edx (%3)
+                                    "addl $2,%1                \n\t"
+//                                    "movl %%eax, %4                  \n\t"
+                                    "pushl %%ebx     \n\t"  // save reg for PIC!
+//                                    "pushl %%ebp     \n\t"  // save ebp, NEVER! use -fomit-frame-pointer
+                                    //even if ebp is in clobberlist gcc uses it here to reference memory!
+                                    "movl %0, %%ebp                  \n\t"
+                                    "xorl %%ebx,%%ebx              \n\t" //make %eax = 0, see below, we use ebx
+                                    "movw %w3,%%bx            \n\t" //because of this ebx has to be static
+                                    "cmpl $4,%%ebx             \n\t" //because of above line eax may be != 0
+                                    "jge .L1                     \n\t"
+                                    "movl (%7,%%ebx,4), %3 \n\t"  // ** tileData can't be passed as "m"!
+                                    "testl %3,%3             \n\t"  //check if %3 is zero, set Z-bit
+                                    "jz .L2                      \n\t"
+                                    "addl $2,%3            \n\t"
+                                    "movl %3, (%7,%%ebx,4) \n\t" // (%eax + %ebx * 4) = %3
+                                    "movw -2(%3),%w3           \n\t"
+                                    "jmp .L1                     \n\t"
+                                    ".L2:                        \n\t"
+                                    "movw (%%ebp),%w3             \n\t"//movw (%3),%%dx
+                                    ".L1:                        \n\t"
+                                    "addl $2,%%ebp                \n\t"
+                                    "movw %w3,(%2,%4,2)      \n\t"
+                                    "incl %4                   \n\t"
+                                    "jnz .L0                     \n\t"
+                                    "movl %%ebp, %0    \n\t"// this wouldn't work without -fomit-frame-pointer
+//                                    "popl %%ebp     \n\t"// restore ebp, NEVER use this!
+                                    "popl %%ebx     \n\t"// restore reg for PIC!
+//                                        "movl %esi, $dataPtr         \n\t" //does gcc
+                                    : "=g" (transDataPtr), "=r" (dataPtr) // "=D" (pDestPixel)
+
+                                    : "r" (pDestPixel), "r" (endX), "r" (startX), "0" (transDataPtr), "1" (dataPtr), "r" (tileData)
+
+                                    : "%ebp", "cc"
+#if !defined(PIC) && !defined(__PIC__) //don't tell gcc about what was done to ebx!!!
+                                    , "%ebx" //but do, if PIC is not enabled! It might use it else wise!!!
 #endif
+                                    );
+
+*/
+//#endif             //use this if __asm__ is used
 			}
 			else
 			{
@@ -4226,13 +4238,73 @@ L1:
 				}
 			}
 			pDestPixel += (surfPitch>>1);
+#else
+
+
+
+
+
+                        for (x = startX; x<endX; x++) {
+				srcPixel = *dataPtr++;
+				if(transDataPtr)
+					transPixel = *transDataPtr++;
+
+				switch (srcPixel) {
+				case 0x0000 : 
+					{
+						if (tileData[0]) {
+							srcPixel = *tileData[0]++;
+						} else if(transDataPtr) {
+							srcPixel = transPixel;
+						} else {
+							srcPixel = 0xF800;
+						}
+					}
+					break;
+				case 0x0001 : 
+					{
+						if (tileData[1]) {
+							srcPixel = *tileData[1]++;
+						} else if(transDataPtr) {
+							srcPixel = transPixel;
+						} else {
+							srcPixel = 0x07E0;
+						}
+					}
+					break;
+				case 0x0002 : 
+					{
+						if (tileData[2]) {
+							srcPixel = *tileData[2]++;
+						} else if(transDataPtr) {
+							srcPixel = transPixel;
+						} else {
+							srcPixel = 0x001F; 
+						}
+					}
+					break;
+				case 0x0003 : 
+					{
+						if (tileData[3]) {
+							srcPixel = *tileData[3]++;
+						} else if(transDataPtr) {
+							srcPixel = transPixel;
+						} else {
+							srcPixel = 0xF81F;
+						}
+					}
+					break;
+				}
+				pDestPixel = (Pixel16 *)(pSurfBase + ((y+ypos) * surfPitch) + ((x+xpos) << 1));
+
+
+				*pDestPixel = srcPixel;
+                                //pDestPixel[x] = srcPixel;
+			}
+
+#endif             //use this if __asm__ is NOT used
 		}
 	}
-
-
-
-
-
 }
 
 void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)

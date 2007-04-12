@@ -135,95 +135,96 @@ SpriteGroupList::~SpriteGroupList()
 #define _BASIC_SPRITE_LOAD_
 
 SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action)
-{
-	char			inFile[_MAX_PATH];
-	SpriteGroup		*newSpriteGroup=m_spriteList[index];
+    {
+    char			inFile[_MAX_PATH];
+    SpriteGroup		*newSpriteGroup=m_spriteList[index];
 
 	
-	switch (type) 
+    switch (type) 
 	{
-    case GROUPTYPE_UNIT : 
-	if(newSpriteGroup==NULL)
+        case GROUPTYPE_UNIT : 
+            if(newSpriteGroup==NULL)
 		newSpriteGroup = new UnitSpriteGroup(type);
 
-        // A unit sprite file may have 3 or 2 digits in the name. 
-	sprintf(inFile, "GU%.3d.SPR", index);
+            // A unit sprite file may have 3 or 2 digits in the name. 
+            sprintf(inFile, "GU%.3d.SPR", index);
 		 
-	MBCHAR fullPath[_MAX_PATH];
-        if (!g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE))
-        {
+            MBCHAR fullPath[_MAX_PATH];
+            if (!g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE))
+                {
 		// No 3 digit version found: try the 2 digit version.
 		sprintf(inFile, "GU%.2d.SPR", index);
-	}
-	break;
+                }
+            //printf("%s L%d: SpriteGroupList::LoadSprite %s\n", __FILE__, __LINE__, inFile);	
+            break;
 
 	case GROUPTYPE_PROJECTILE : 
-		 Assert("Projectile Actors Removed From Game - CJI"==NULL);
-		 return SPRITELISTERR_NOTFOUND;
+            Assert("Projectile Actors Removed From Game - CJI"==NULL);
+            return SPRITELISTERR_NOTFOUND;
 
 	case GROUPTYPE_EFFECT : 
-		 if(newSpriteGroup==NULL)
-		    newSpriteGroup = new EffectSpriteGroup(type);
-		 sprintf(inFile, "GX%.2d.SPR", index);
+            if(newSpriteGroup==NULL)
+                newSpriteGroup = new EffectSpriteGroup(type);
+            sprintf(inFile, "GX%.2d.SPR", index);
 	  
-		 break;
+            break;
 	case GROUPTYPE_CITY:
-		 if(newSpriteGroup==NULL)
-		    newSpriteGroup = new UnitSpriteGroup(type);
-		 sprintf(inFile, "GC%.3d.SPR", index);
-		 break;
+            if(newSpriteGroup==NULL)
+                newSpriteGroup = new UnitSpriteGroup(type);
+            sprintf(inFile, "GC%.3d.SPR", index);
+            break;
 	case GROUPTYPE_GOOD:
-		 if(newSpriteGroup==NULL)
-		    newSpriteGroup = new GoodSpriteGroup(type);
-		 sprintf(inFile, "GG%.3d.SPR", index);
-		 break;
+            if(newSpriteGroup==NULL)
+                newSpriteGroup = new GoodSpriteGroup(type);
+            sprintf(inFile, "GG%.3d.SPR", index);
+            break;
 	default:
-		Assert(type > GROUPTYPE_GROUP && type < GROUPTYPE_MAX);
-		return SPRITELISTERR_BADTYPE;
+            Assert(type > GROUPTYPE_GROUP && type < GROUPTYPE_MAX);
+            return SPRITELISTERR_BADTYPE;
 	}
 
 	
-	Assert(newSpriteGroup != NULL);
+    Assert(newSpriteGroup != NULL);
 
 	
-	if(newSpriteGroup==NULL) 
-	   return SPRITELISTERR_NOTFOUND;
+    if(newSpriteGroup==NULL) 
+        return SPRITELISTERR_NOTFOUND;
 
 	
-	switch(loadType)
+    switch(loadType)
 	{
 	case LOADTYPE_BASIC:
-		 newSpriteGroup->LoadBasic(inFile);
-		 break;
+            newSpriteGroup->LoadBasic(inFile);
+            break;
 	case LOADTYPE_FULL:
-		 newSpriteGroup->LoadFull(inFile);
-		 break;
+            newSpriteGroup->LoadFull(inFile);
+            break;
 	case LOADTYPE_INDEXED:
-		 newSpriteGroup->LoadIndexed(inFile,action);
-		 break;
+            newSpriteGroup->LoadIndexed(inFile,action);
+            break;
 	default:
-		 Assert(FALSE);
-		 return SPRITELISTERR_NOTFOUND;
+            Assert(FALSE);
+            return SPRITELISTERR_NOTFOUND;
 	};
 
 	
     m_spriteList[index] = newSpriteGroup;
 
-	return SPRITELISTERR_OK;
-}
+    return SPRITELISTERR_OK;
+    }
 
 
 
 SPRITELISTERR SpriteGroupList::PurgeSprite(uint32 index)
-{
-	if (m_spriteList[index] != NULL) 
+    {
+    if (m_spriteList[index] != NULL) 
 	{
-		delete m_spriteList[index];
-		m_spriteList[index] = NULL;
+        delete m_spriteList[index];
+        m_spriteList[index] = NULL;
 	}
 	
-	return SPRITELISTERR_OK;
-}
+    return SPRITELISTERR_OK;
+    }
 
 
 

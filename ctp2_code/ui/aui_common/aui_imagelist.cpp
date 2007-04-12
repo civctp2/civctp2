@@ -137,13 +137,12 @@ void aui_ImageList::SetImage(sint32 state, sint32 imageIndex, AUI_IMAGEBASE_BLTT
 	info->m_chromaGreen = chromaGreen;
 	info->m_chromaBlue = chromaBlue;
 
-	
+
 	ExchangeImage(state, imageIndex, imageFileName);
 }
 
 
-void aui_ImageList::ExchangeImage(sint32 state, sint32 imageIndex,
-								  const MBCHAR *imageFileName)
+void aui_ImageList::ExchangeImage(sint32 state, sint32 imageIndex, const MBCHAR *imageFileName)
 {
 	
 	if(!VerifyRange(state, imageIndex))
@@ -154,8 +153,8 @@ void aui_ImageList::ExchangeImage(sint32 state, sint32 imageIndex,
 
 	
 	aui_Image *oldImage = info->m_image;
-	info->m_image = NULL;
 
+        info->m_image = NULL; //seems that rest ist done by aui_UI::UnloadImage
 	
 	if(info->m_imageName) {
 		delete [] info->m_imageName;
@@ -181,18 +180,16 @@ void aui_ImageList::ExchangeImage(sint32 state, sint32 imageIndex,
 		if(theImage) {
 			
 			if(info->m_rect.right < 0)
-				info->m_rect.right = info->m_rect.left +
-				theImage->TheSurface()->Width();
+				info->m_rect.right = info->m_rect.left + theImage->TheSurface()->Width();
 			if(info->m_rect.bottom < 0)
-				info->m_rect.bottom = info->m_rect.top +
-				theImage->TheSurface()->Height();
+				info->m_rect.bottom = info->m_rect.top + theImage->TheSurface()->Height();
 
 		
 		info->m_image = theImage;
 
-		
-		info->m_image->SetChromakey(info->m_chromaRed,
-			info->m_chromaGreen, info->m_chromaBlue);
+                //printf("%s L%d: filename %s, chroma %d, %d, %d\n", __FILE__, __LINE__, imageFileName,info->m_chromaRed,info->m_chromaGreen,info->m_chromaBlue);
+                //printf("%s L%d: surf chroma %#X\n",__FILE__, __LINE__, theImage->TheSurface()->SetChromaKey(0));
+                info->m_image->SetChromakey(info->m_chromaRed, info->m_chromaGreen, info->m_chromaBlue); //this sets chroma from info also in m_image!
 		}
 		else
 		{
@@ -277,7 +274,7 @@ AUI_ERRCODE aui_ImageList::DrawImages(aui_Surface *destSurf, RECT *destRect)
 			info->m_rect.bottom + destRect->top
 		};
 
-		
+		//printf("%s L%d: image %s m_bltFlag %d m_bltType %d\n", __FILE__, __LINE__, info->m_image->GetFilename(), info->m_bltFlag, info->m_bltType);
 		uint32 flag = 0;
 		switch ( info->m_bltFlag )
 		{
@@ -303,9 +300,9 @@ AUI_ERRCODE aui_ImageList::DrawImages(aui_Surface *destSurf, RECT *destRect)
 				break;
 					
 			case AUI_IMAGEBASE_BLTTYPE_STRETCH:
-				err = g_ui->TheBlitter()->StretchBlt(destSurf, &subDestRect,
-					srcSurf, &srcRect, flag);
-				break;
+                            //printf("%s L%d: image %s m_bltFlag %d m_bltType %d\n", __FILE__, __LINE__, info->m_image->GetFilename(), info->m_bltFlag, info->m_bltType);
+                            err = g_ui->TheBlitter()->StretchBlt(destSurf, &subDestRect, srcSurf, &srcRect, flag);
+                            break;
 			case AUI_IMAGEBASE_BLTTYPE_TILE:
 				err = g_ui->TheBlitter()->TileBlt(destSurf, &subDestRect,
 					srcSurf, &srcRect, 0, 0, flag );

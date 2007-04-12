@@ -330,7 +330,10 @@ BOOL g_noAssertDialogs = FALSE;
 BOOL g_runInBackground = FALSE;
 BOOL g_eventLog = FALSE;
 
-
+Uint32 g_SDL_flags = SDL_DOUBLEBUF; //0; //See ctp2_code/ui/aui_common/aui_ui.cpp
+sint32 g_bpp = k_SHARED_SURFACE_BPP;//this is ment for bpp passed to functions 
+                                    //idea was to set this with an option
+                                    //sadly most calls have 16 hardcoded!
 
 BOOL g_use_profile_process = FALSE;
 
@@ -367,7 +370,7 @@ int ui_Initialize(void)
 		gHwnd,
 		g_ScreenWidth,
 		g_ScreenHeight,
-		16,
+		g_bpp,
 		ldlfile,
 		g_exclusiveMode );
 	Assert( AUI_NEWOK(g_c3ui,auiErr) );
@@ -379,12 +382,12 @@ int ui_Initialize(void)
 	if (!g_exclusiveMode)
 		main_HideTaskBar();
 
-	
-	if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) {
+     	if (g_c3ui->Primary()->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) {
+           //g_c3ui->Primary()->PixelFormat() set in aui_sdlsurface.cpp
 		g_is565Format = FALSE;
 	} else {
 		g_is565Format = TRUE;
-	}
+                }
 
 	
 	g_colorSet->Initialize();
@@ -839,44 +842,6 @@ BOOL ui_CheckForScroll(void)
 			}
 		}
 	}
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 	if (scrolled) 
 	{
@@ -968,11 +933,6 @@ int ui_Process(void)
 			
 			g_tiledMap->CopyMixDirtyRects(g_background->GetDirtyList());
 
-			
-			
-			
-			
-			
 			g_c3ui->Draw();
 		} while (ui_CheckForScroll());
 
@@ -1310,6 +1270,13 @@ void ParseCommandLine(MBCHAR *szCmdLine)
 	g_noAssertDialogs = (NULL != strstr(szCmdLine, "noassertdialogs"));
 	g_runInBackground = (NULL != strstr(szCmdLine, "runinbackground"));
 	
+        if (strstr(szCmdLine, "fullscreen"))
+            g_SDL_flags = g_SDL_flags|SDL_FULLSCREEN;
+        if (strstr(szCmdLine, "hwsurface"))
+            g_SDL_flags = g_SDL_flags|SDL_HWSURFACE;
+        else g_SDL_flags = g_SDL_flags|SDL_SWSURFACE;
+        //g_bpp = ....
+
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
 
 	

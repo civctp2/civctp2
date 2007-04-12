@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Sprite editor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -107,7 +107,7 @@
 #include "Actor.h"
 
 
-
+extern g_bpp;
 
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
@@ -264,7 +264,7 @@ int SpriteEditWindow_Initialize( void )
 
 	strcpy(windowBlock, "SpriteEditor");
 
-	g_spriteEditWindow = new SpriteEditWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
+	g_spriteEditWindow = new SpriteEditWindow(&errcode, aui_UniqueId(), windowBlock, g_bpp );
    
 	Assert( AUI_NEWOK(g_spriteEditWindow, errcode));
 	if ( !AUI_NEWOK(g_spriteEditWindow, errcode) ) return -1;
@@ -495,7 +495,7 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 	m_facingMinus	->SetActionFuncAndCookie(FacingCallback	,(void *)-1);
 
 	
-	m_largeImage = new C3Window(errcode, aui_UniqueId(),"STLargeImage", 16 );
+	m_largeImage = new C3Window(errcode, aui_UniqueId(),"STLargeImage", g_bpp );
 
 	g_c3ui->AddWindow( m_largeImage );
 
@@ -690,7 +690,7 @@ SpriteEditWindow::LoadSprite(char *name)
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	
-	m_spriteSurface=new aui_Surface(&errcode,m_spriteRect.right,m_spriteRect.bottom,16);
+	m_spriteSurface=new aui_Surface(&errcode,m_spriteRect.right,m_spriteRect.bottom,g_bpp);
 
 	
 	m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source file
 // Description  : Tribe relations handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

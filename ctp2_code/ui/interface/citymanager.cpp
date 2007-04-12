@@ -125,10 +125,10 @@ AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	AddControl(m_cancel);
 
 	
-	
+
 	m_bg = g_ui->LoadImage("CM.tga");
 
-	Assert(m_bg);
+       	Assert(m_bg);
 	if(m_bg) {
 		Resize(m_bg->TheSurface()->Width(), m_bg->TheSurface()->Height());
 	}

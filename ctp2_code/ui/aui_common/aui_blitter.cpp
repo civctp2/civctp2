@@ -307,252 +307,256 @@ AUI_ERRCODE aui_Blitter::Blt8To8(
 
 
 AUI_ERRCODE aui_Blitter::Blt16To16(
-	aui_Surface *destSurf,
-	RECT *destRect,
-	aui_Surface *srcSurf,
-	RECT *srcRect,
-	uint32 flags )
-{
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-	AUI_ERRCODE errcode;
+    aui_Surface *destSurf,
+    RECT *destRect,
+    aui_Surface *srcSurf,
+    RECT *srcRect,
+    uint32 flags ) {
+
+    //printf("%s L%d: Using aui_Blitter::Blt16To16!\n", __FILE__, __LINE__);	
+    AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+    AUI_ERRCODE errcode;
 
 	
-	const sint32 destPitch = destSurf->Pitch() / 2;
-	const sint32 srcPitch = srcSurf->Pitch() / 2;
+    const sint32 destPitch = destSurf->Pitch() / 2;
+    const sint32 srcPitch = srcSurf->Pitch() / 2;
 			
 	
-	BOOL wasDestLocked;
-	uint16 *destBuf = (uint16 *)destSurf->Buffer();
-	if ((wasDestLocked = destBuf != NULL))
+    BOOL wasDestLocked;
+    uint16 *destBuf = (uint16 *)destSurf->Buffer();
+    if ((wasDestLocked = destBuf != NULL))
 	{
-		destBuf += destRect->top * destPitch + destRect->left;
+        destBuf += destRect->top * destPitch + destRect->left;
 	}
-	else if ( destSurf->Lock(
-		destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
+    else if ( destSurf->Lock(
+                  destRect, (LPVOID *)&destBuf, 0 ) != AUI_ERRCODE_OK )
 	{
-		destBuf = NULL;
+        destBuf = NULL;
 		
-		retcode = AUI_ERRCODE_SURFACELOCKFAILED;
+        retcode = AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
 	
-	if ( destBuf )
+    if ( destBuf )
 	{
 		
-		uint16 *origDestBuf = destBuf;
+        uint16 *origDestBuf = destBuf;
 
 		
-		BOOL wasSrcLocked;
-		uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
-		if ((wasSrcLocked = srcBuf != NULL))
-		{
-			srcBuf += srcRect->top * srcPitch + srcRect->left;
-		}
-		else if ( srcSurf->Lock(
-			srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
-		{
-			srcBuf = NULL;
+        BOOL wasSrcLocked;
+        uint16 *srcBuf = (uint16 *)srcSurf->Buffer();
+        if ((wasSrcLocked = srcBuf != NULL))
+            {
+            srcBuf += srcRect->top * srcPitch + srcRect->left;
+            }
+        else if ( srcSurf->Lock(
+                      srcRect, (LPVOID *)&srcBuf, 0 ) != AUI_ERRCODE_OK )
+            {
+            srcBuf = NULL;
 			
-			retcode = AUI_ERRCODE_SURFACELOCKFAILED;
-		}
+            retcode = AUI_ERRCODE_SURFACELOCKFAILED;
+            }
 
 		
-		if ( srcBuf )
-		{
+        if ( srcBuf )
+            {
 			
-			uint16 *origSrcBuf = srcBuf;
+            uint16 *origSrcBuf = srcBuf;
 
-			if ( flags & k_AUI_BLITTER_FLAG_COPY )
-			{
-				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
+            if ( flags & k_AUI_BLITTER_FLAG_COPY )
+                {
+                //printf("%s L%d: Using aui_Blitter::Blt16To16 and k_AUI_BLITTER_FLAG_COPY!\n", __FILE__, __LINE__);
+                const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
 
 				
-				const uint16 *stop = srcBuf +
-					srcPitch * ( srcRect->bottom - srcRect->top );
-				destBuf -= destPitch;
+                const uint16 *stop = srcBuf +
+                    srcPitch * ( srcRect->bottom - srcRect->top );
+                destBuf -= destPitch;
 
 				
-				do
-				{
+                do
+                    {
 					
-					memcpy( destBuf += destPitch, srcBuf, scanWidth );
-				} while ( (srcBuf += srcPitch) != stop );
-			}
-			else if ( (flags & k_AUI_BLITTER_FLAG_CHROMAKEY)
-					  && (flags & k_AUI_BLITTER_FLAG_BLEND) )
-			{
-				const sint32 scanWidth = srcRect->right - srcRect->left;
+                    memcpy( destBuf += destPitch, srcBuf, scanWidth );
+                    } while ( (srcBuf += srcPitch) != stop );
+                }
+            else if ( (flags & k_AUI_BLITTER_FLAG_CHROMAKEY)
+                      && (flags & k_AUI_BLITTER_FLAG_BLEND) )
+                {
+                const sint32 scanWidth = srcRect->right - srcRect->left;
 
 				
-				const sint32 destDiff = destPitch - scanWidth;
-				const sint32 srcDiff = srcPitch - scanWidth;
+                const sint32 destDiff = destPitch - scanWidth;
+                const sint32 srcDiff = srcPitch - scanWidth;
 
 				
-				uint16 *stopHorizontal = srcBuf + scanWidth;
-				const uint16 *stopVertical = srcBuf +
-					srcPitch * ( srcRect->bottom - srcRect->top );
+                uint16 *stopHorizontal = srcBuf + scanWidth;
+                const uint16 *stopVertical = srcBuf +
+                    srcPitch * ( srcRect->bottom - srcRect->top );
 
 				
-				const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
+                const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
 				
-				const uint32 blend = 16;
+                const uint32 blend = 16;
 
-				if ( destSurf->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
-				{
-					do
-					{
-						do
-						{
+                if ( destSurf->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
+                    {
+                    printf("%s L%d: AUI_SURFACE_PIXELFORMAT_555!\n", __FILE__, __LINE__);
+                    do
+                        {
+                        do
+                            {
 							
-							if ( *srcBuf != chromakey )
-							{
-								*destBuf = aui_Pixel::Blend555(
-									*destBuf, *srcBuf, blend );
-							}
-							destBuf++;
-						} while ( ++srcBuf != stopHorizontal );
+                            if ( *srcBuf != chromakey )
+                                {
+                                *destBuf = aui_Pixel::Blend555(
+                                    *destBuf, *srcBuf, blend );
+                                }
+                            destBuf++;
+                            } while ( ++srcBuf != stopHorizontal );
 
-						stopHorizontal += srcPitch;
+                        stopHorizontal += srcPitch;
 
-						destBuf += destDiff;
-					} while ( (srcBuf += srcDiff) != stopVertical );
-				}
-				else 
-				{
-					do
-					{
-						do
-						{
+                        destBuf += destDiff;
+                        } while ( (srcBuf += srcDiff) != stopVertical );
+                    }
+                else 
+                    {
+                    do
+                        {
+                        do
+                            {
 							
-							if ( *srcBuf != chromakey )
-							{
-								*destBuf = aui_Pixel::Blend565(
-									*destBuf, *srcBuf, blend );
-							}
-							destBuf++;
-						} while ( ++srcBuf != stopHorizontal );
+                            if ( *srcBuf != chromakey )
+                                {
+                                *destBuf = aui_Pixel::Blend565(
+                                    *destBuf, *srcBuf, blend );
+                                }
+                            destBuf++;
+                            } while ( ++srcBuf != stopHorizontal );
 
-						stopHorizontal += srcPitch;
+                        stopHorizontal += srcPitch;
 
-						destBuf += destDiff;
-					} while ( (srcBuf += srcDiff) != stopVertical );
-				}
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY )
-			{
-				const sint32 scanWidth = srcRect->right - srcRect->left;
-
-				
-				const sint32 destDiff = destPitch - scanWidth;
-				const sint32 srcDiff = srcPitch - scanWidth;
+                        destBuf += destDiff;
+                        } while ( (srcBuf += srcDiff) != stopVertical );
+                    }
+                }
+            else if ( flags & k_AUI_BLITTER_FLAG_CHROMAKEY ) {
+                //printf("%s L%d: Using aui_Blitter::Blt16To16 and chromakey!\n", __FILE__, __LINE__);
+                const sint32 scanWidth = srcRect->right - srcRect->left;
 
 				
-				uint16 *stopHorizontal = srcBuf + scanWidth;
-				const uint16 *stopVertical = srcBuf +
-					srcPitch * ( srcRect->bottom - srcRect->top );
-				destBuf--;
+                const sint32 destDiff = destPitch - scanWidth;
+                const sint32 srcDiff = srcPitch - scanWidth;
 
 				
-				const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
+                uint16 *stopHorizontal = srcBuf + scanWidth;
+                const uint16 *stopVertical = srcBuf +
+                    srcPitch * ( srcRect->bottom - srcRect->top );
+                destBuf--;
 
-				do
-				{
-					do
-					{
+				
+                const uint16 chromakey = (uint16)srcSurf->GetChromaKey();
+
+                do
+                    {
+                    do
+                        {
 						
-						if ( *srcBuf != chromakey )
-							*++destBuf = *srcBuf;
-						else
-							destBuf++;
-					} while ( ++srcBuf != stopHorizontal );
+                        if ( *srcBuf != chromakey )
+                            *++destBuf = *srcBuf;
+                        else
+                            destBuf++;
+                        } while ( ++srcBuf != stopHorizontal );
 
-					stopHorizontal += srcPitch;
+                    stopHorizontal += srcPitch;
 
-					destBuf += destDiff;
-				} while ( (srcBuf += srcDiff) != stopVertical );
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
-			{
-				const sint32 scanWidth = srcRect->right - srcRect->left;
-
-				
-				const sint32 destDiff = destPitch - scanWidth;
-				const sint32 srcDiff = srcPitch - scanWidth;
+                    destBuf += destDiff;
+                    } while ( (srcBuf += srcDiff) != stopVertical );
+                }
+            else if ( flags & k_AUI_BLITTER_FLAG_BLEND )
+                {
+                const sint32 scanWidth = srcRect->right - srcRect->left;
 
 				
-				uint16 *stopHorizontal = srcBuf + scanWidth;
-				const uint16 *stopVertical = srcBuf +
-					srcPitch * ( srcRect->bottom - srcRect->top );
+                const sint32 destDiff = destPitch - scanWidth;
+                const sint32 srcDiff = srcPitch - scanWidth;
 
 				
-				const uint32 blend = 16;
+                uint16 *stopHorizontal = srcBuf + scanWidth;
+                const uint16 *stopVertical = srcBuf +
+                    srcPitch * ( srcRect->bottom - srcRect->top );
 
-				if ( destSurf->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
-				{
-					do
-					{
-						do
-						{
-							*destBuf =
-								aui_Pixel::Blend555( *destBuf, *srcBuf, blend );
-							destBuf++;
-						} while ( ++srcBuf != stopHorizontal );
+				
+                const uint32 blend = 16;
 
-						stopHorizontal += srcPitch;
+                if ( destSurf->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555 )
+                    {
+                    printf("%s L%d: AUI_SURFACE_PIXELFORMAT_555!\n", __FILE__, __LINE__);
+                    do
+                        {
+                        do
+                            {
+                            *destBuf =
+                                aui_Pixel::Blend555( *destBuf, *srcBuf, blend );
+                            destBuf++;
+                            } while ( ++srcBuf != stopHorizontal );
 
-						destBuf += destDiff;
-					} while ( (srcBuf += srcDiff) != stopVertical );
-				}
-				else 
-				{
-					do
-					{
-						do
-						{
-							*destBuf =
-								aui_Pixel::Blend565( *destBuf, *srcBuf, blend );
-							destBuf++;
-						} while ( ++srcBuf != stopHorizontal );
+                        stopHorizontal += srcPitch;
 
-						stopHorizontal += srcPitch;
+                        destBuf += destDiff;
+                        } while ( (srcBuf += srcDiff) != stopVertical );
+                    }
+                else 
+                    {
+                    do
+                        {
+                        do
+                            {
+                            *destBuf =
+                                aui_Pixel::Blend565( *destBuf, *srcBuf, blend );
+                            destBuf++;
+                            } while ( ++srcBuf != stopHorizontal );
 
-						destBuf += destDiff;
-					} while ( (srcBuf += srcDiff) != stopVertical );
-				}
-			}
-			else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
-			{
+                        stopHorizontal += srcPitch;
+
+                        destBuf += destDiff;
+                        } while ( (srcBuf += srcDiff) != stopVertical );
+                    }
+                }
+            else if ( flags & k_AUI_BLITTER_FLAG_STIPPLE )
+                {
 				
 				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
-			else
-			{
+                retcode = AUI_ERRCODE_INVALIDPARAM;
+                }
+            else
+                {
 				
 				
-				retcode = AUI_ERRCODE_INVALIDPARAM;
-			}
+                retcode = AUI_ERRCODE_INVALIDPARAM;
+                }
 			
-			if ( !wasSrcLocked )
-			{
-				errcode = srcSurf->Unlock( (LPVOID)origSrcBuf );
+            if ( !wasSrcLocked )
+                {
+                errcode = srcSurf->Unlock( (LPVOID)origSrcBuf );
 				
-				if ( !AUI_SUCCESS(errcode) )
-					retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
-			}
-		}
+                if ( !AUI_SUCCESS(errcode) )
+                    retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
+                }
+            }
 
-		if ( !wasDestLocked )
-		{
-			errcode = destSurf->Unlock( (LPVOID)origDestBuf );
+        if ( !wasDestLocked )
+            {
+            errcode = destSurf->Unlock( (LPVOID)origDestBuf );
 			
-			if ( !AUI_SUCCESS(errcode) )
-				retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
-		}
+            if ( !AUI_SUCCESS(errcode) )
+                retcode = AUI_ERRCODE_SURFACEUNLOCKFAILED;
+            }
 	}
 
-	return retcode;
-}
+    return retcode;
+    }
 
 
 
@@ -2364,16 +2368,56 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 
 
 
-void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength)
-{
+void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength){
+//#ifndef WIN32
+//	memcpy(pDst, pSrc, copylength * sizeof(uint16));
+    if (((uint32 )pDst) & 2) {
+        *pDst = *pSrc;
+        pDst++, pSrc++, copylength--;
+        }
 #ifndef WIN32
-	memcpy(pDst, pSrc, copylength * sizeof(uint16));
+    //printf("%s L%d: BlockCopy16 with asm used!\n", __FILE__, __LINE__);
+    __asm__ (
+        //"movl            $copylength, %ecx \n\t"
+        //"movl            $pSrc, %esi \n\t"
+        "movl    %0,%3           \n\t"
+        "shrl    $2,%0             \n\t"
+        //"movl            $pDst, %2 \n\t"
+        "testl   %0,%0           \n\t"
+        "jz .L3                      \n\t"
+
+        ".L0:                                             \n\t"
+        "movl            (%1),%4 \n\t"
+        "movl            4(%1),%5 \n\t"
+        "movl            %4,(%2) \n\t"
+        "movl            %5,4(%2) \n\t"
+        "addl            $8,%1     \n\t"
+        "addl            $8,%2     \n\t"
+        "decl            %0        \n\t"
+        "jnz .L0                     \n\t"
+        ".L3:                        \n\t"
+
+        "testl   $2,%3             \n\t"
+        "jz .L1                      \n\t"
+
+        "movl            (%1),%4 \n\t"
+        "movl            %4,(%2) \n\t"
+        "addl            $4,%1     \n\t"
+        "addl            $4,%2     \n\t"
+        ".L1:                        \n\t"
+
+        "testl   $1,%3             \n\t"
+        "jz .L2                      \n\t"
+        "movw            (%1),%w4  \n\t"
+        "movw            %w4,(%2)  \n\t"
+        ".L2:                        \n\t"
+
+        : 
+        : "q" (copylength), "r" (pSrc), "r" (pDst), "r" (0), "r" (0), "r" (0)
+        : "cc"
+        );
+
 #else
-	if (((uint32 )pDst) & 2)
-	{
-		*pDst = *pSrc;
-		pDst++, pSrc++, copylength--;
-	}
 __asm 
 	{
 		mov		ecx, copylength

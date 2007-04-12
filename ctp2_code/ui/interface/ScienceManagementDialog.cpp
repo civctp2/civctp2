@@ -503,7 +503,7 @@ AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control
 
 	
 	return(g_c3ui->TheBlitter()->ColorBlt16(surface, &colorRect,
-		g_colorSet->GetPlayerColor(*reinterpret_cast<sint32 *>(cookie)), 0));
+		g_colorSet->GetPlayerColor(reinterpret_cast<sint32 >(cookie)), 0));
 }
 
 
@@ -518,7 +518,7 @@ AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *contr
 	colorRect.bottom	-= 1;
 
 	
-	sint32 index = *reinterpret_cast<sint32 *>(cookie);
+	sint32 index = reinterpret_cast<sint32 >(cookie);
 
 	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -543,11 +543,10 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	const AdvanceRecord *advance1 = g_theAdvanceDB->Get(
-		*reinterpret_cast<sint32 *>(item1->GetUserData()));
+		reinterpret_cast<sint32 >(item1->GetUserData()));
 	const AdvanceRecord *advance2 = g_theAdvanceDB->Get(
-		*reinterpret_cast<sint32 *>(item2->GetUserData()));
+		reinterpret_cast<sint32 >(item2->GetUserData()));
 
 	
 	

@@ -2085,6 +2085,7 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		} else {
 			strcpy(dammit, icon->GetLargeIcon());
 		}
+                
 		if(imageBox) {
 			imageBox->SetImage(dammit);
 			imageBox->ShouldDraw(TRUE);

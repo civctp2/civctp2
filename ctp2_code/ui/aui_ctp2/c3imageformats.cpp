@@ -133,7 +133,10 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
-#ifndef __AUI_USE_SDL__
+//#ifndef __AUI_USE_SDL__
+        //OK, SDL part here causes the green artefacts!!!!!!!!!!!!!!!!
+        //so use orig code which calls Load_TGA_File that converts 555to565!!!!!!
+
 	errcode = image->LoadEmpty( width, height, 16 );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) {
@@ -167,25 +170,22 @@ AUI_ERRCODE TargaImageFormat::Load(const MBCHAR *filename, aui_Image *image)
             retcode = AUI_ERRCODE_LOADFAILED;
         }
 	}
-#else // !__AUI_USE_SDL__
-	SDL_Surface *s = IMG_Load(filename);
+/*#else // !__AUI_USE_SDL__
+        //OK, this here causes the green artefacts!!!!!!!!!!!!!!!!
+        //so use orig code which calls Load_TGA_File that converts 555to565!!!!!!
+	SDL_Surface *s = IMG_Load(filename); 
+        printf("%s %dL: Loaded tga %s\n", __FILE__, __LINE__, filename);
 	if (s != NULL) {
-		aui_Surface *as = new aui_SDLSurface(&retcode,
-		                                     0,
-						     0,
-						     0,
-						     s,
-						     FALSE,
-						     FALSE,
-						     TRUE);
+		aui_Surface *as = new aui_SDLSurface(&retcode, 0, 0, 0, s, FALSE, FALSE, TRUE);
 		Assert ( AUI_NEWOK(as, retcode));
 		image->AttachSurface(as);
-	} else {
+	} 
+        else {
 		fprintf(stderr, "aui_Image: Failed to load %s\n", filename);
 		retcode = AUI_ERRCODE_LOADFAILED;
-	}
-	
+                }
 #endif
+*/
 
 	return retcode;
 }

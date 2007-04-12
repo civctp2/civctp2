@@ -11,6 +11,7 @@
 #include "ctp2_listitem.h"
 
 
+    
 
 ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	:
@@ -30,10 +31,15 @@ ctp2_ListItem::ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	if ( !AUI_SUCCESS(*retval) ) return;	
 }
 
+/*
+ctp2_ListItem::ctp2_ListItem() : aui_Item() {
+	m_userData = NULL;
+	m_compareCallback = NULL;
+        printf("ctp2_listitem.cpp L38: Standard constructor called!!!\n");
+    }
+*/
 
-
-
-ctp2_ListItem::~ctp2_ListItem()
+ctp2_ListItem::~ctp2_ListItem()  
 {
 	DeleteChildren();
 }

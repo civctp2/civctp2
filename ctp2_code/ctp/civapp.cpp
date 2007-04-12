@@ -595,16 +595,16 @@ void SelectColorSet(void)
 //----------------------------------------------------------------------------
 namespace Os
 {
-	inline uint32 GetTicks()
-	{
+inline uint32 GetTicks()
+    {
 #if defined(USE_SDL)
-		return SDL_GetTicks();
+        return SDL_GetTicks();
 #else
-		return GetTickCount();
+        return GetTickCount();
 #endif
-	}
+    }
 
-	inline void Sleep(uint32 milliSeconds)
+inline void Sleep(uint32 milliSeconds)
 	{
 #ifdef HAVE_UNISTD_H
 		usleep(milliSeconds);
@@ -867,9 +867,8 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 70 );
 
 	if(g_theSpriteDB) {
-		
 		if(!g_theSpriteDB->Parse(C3DIR_GAMEDATA, "newsprite.txt"))
-			return FALSE;
+                    return FALSE;
 	}
 
 	g_theProgressWindow->StartCountingTo( 80 );
@@ -911,8 +910,8 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 130 );
 
 	if (g_theUnitDB) {
-		if (!g_theUnitDB->Parse(C3DIR_GAMEDATA, g_unitdb_filename)) 
-			return FALSE;
+            if (!g_theUnitDB->Parse(C3DIR_GAMEDATA, g_unitdb_filename)) 
+                return FALSE;
 	}
 
 	g_theProgressWindow->StartCountingTo( 140 );
@@ -1398,7 +1397,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	CoInitialize(NULL);
 #endif
 #ifdef __AUI_USE_SDL__
-	Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTTHREAD) & ~SDL_INIT_AUDIO;
+	Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTTHREAD) & ~SDL_INIT_AUDIO; //why no audio?
 #if defined(_DEBUG) || defined(DEBUG)
 	flags |= SDL_INIT_NOPARACHUTE;
 #endif// _DEBUG || DEBUG
@@ -2985,7 +2984,7 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 					// Because of the way keyboard events are handled in SDL, we
 					// need to escape this loop if there are any SDL_KeyEvents pending
 					
-					if (0 != SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT,
+					if (SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT,
 							SDL_EVENTMASK(SDL_KEYUP) | SDL_EVENTMASK(SDL_KEYDOWN))) {
 						break;
 					}
@@ -3211,7 +3210,7 @@ sint32 CivApp::Process(void)
 #elif defined(LINUX)
 		struct timespec backgroundSleepTime;
 		backgroundSleepTime.tv_sec=0;
-		backgroundSleepTime.tv_nsec=50000000;
+		backgroundSleepTime.tv_nsec=50000000; //50000ns == 50us!
 		nanosleep(&backgroundSleepTime, NULL);
 #endif
 		return 0;

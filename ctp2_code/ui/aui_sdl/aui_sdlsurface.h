@@ -31,12 +31,11 @@ protected:
         AUI_ERRCODE InitCommon( void );
 
 public:
-	virtual BOOL IsThisA( uint32 classId )
-	{
-		return (classId == m_SDLSurfaceClassId)
-		                  || aui_Surface::IsThisA( classId )
-		                  || aui_SDL::IsThisA( classId );
-        }
+	virtual BOOL IsThisA( uint32 classId ) {
+            return ((classId == m_SDLSurfaceClassId)
+                    || aui_Surface::IsThisA( classId )
+                    || aui_SDL::IsThisA( classId ));
+            }
 
 	virtual uint32 SetChromaKey( uint32 color );
 

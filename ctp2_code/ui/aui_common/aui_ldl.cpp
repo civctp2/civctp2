@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Activision User Interface - ldl handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -67,7 +67,7 @@
 #include "linegraph.h"
 #include "AvlTree.h"
 
-
+extern g_bpp;
 
 
 ldl *aui_Ldl::m_ldl = NULL;
@@ -847,7 +847,7 @@ AUI_ERRCODE aui_Ldl::BuildObjectFromType(MBCHAR *typeString,
 	
 	
 	if (!stricmp(typeString, "C3Window")) {
-		region = (aui_Region *) new C3Window(&retval, aui_UniqueId(), ldlName, 16);
+		region = (aui_Region *) new C3Window(&retval, aui_UniqueId(), ldlName, g_bpp); //here second bpp initialization!
 	} else
 	if(!stricmp(typeString, "ctp2_Window")) {
 		region = (aui_Region *) new ctp2_Window(&retval, aui_UniqueId(), ldlName, 16);

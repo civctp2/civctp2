@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Targa file format utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -280,8 +280,7 @@ bool Load_TGA_File(const char *fname,
 
 	FILE *fp;
 	fp = fopen(fname, "rb");
-
-	if (fp == NULL)
+ 	if (fp == NULL)
 	{
 		char	Str[128];
 
@@ -309,6 +308,7 @@ bool Load_TGA_File(const char *fname,
 		fclose(fp);
 		return(0);
 	}
+        //printf("%s L%d: tga %s bpp %d\n",__FILE__,__LINE__, fname, head.PixelDepth);
 
 	width  = head.ImageWidth;
 	height = head.ImageHeight;
@@ -342,10 +342,12 @@ bool Load_TGA_File(const char *fname,
 
 				extern sint32		g_is565Format;
 				if (g_is565Format)
-				{
-					Pixel16 *pixelPtr = (Pixel16 *)dataPtr;
-					for (sint32 p=0; p<width; p++)
-						pixelPtr[p] = pixelutils_Convert555to565(pixelPtr[p]);
+                                    {
+                                    //printf("%s L%d: pixelutils_Convert555to565 for %s\n",__FILE__,__LINE__, fname);
+                                    //this happens quite often. Called from c3imageformats.cpp
+                                    Pixel16 *pixelPtr = (Pixel16 *)dataPtr;
+                                    for (sint32 p=0; p<width; p++)
+                                        pixelPtr[p] = pixelutils_Convert555to565(pixelPtr[p]);
 				}
 			}
 
@@ -400,9 +402,10 @@ bool Load_TGA_File(const char *fname,
 
 	if ((BYTES_PER_PIXEL == 3) && (bpp == 4))
 	{
-		unsigned char *fp = data;
-		unsigned char *tp = tmpbuf1;
-		int count = (width * height);
+        Assert(tmpbuf1);
+        unsigned char *fp = data;
+        unsigned char *tp = tmpbuf1;
+        int count = (width * height);
 
 		while(count--)
 		{
@@ -413,8 +416,9 @@ bool Load_TGA_File(const char *fname,
 		}
 	}
 
-	if ((BYTES_PER_PIXEL == 2) && (bpp==4))
+	else if ((BYTES_PER_PIXEL == 2) && (bpp==4))
 	{
+        Assert(tmpbuf1);
 		unsigned char *fp = tmpbuf1;
 		unsigned char *fp1= tmpbuf1 + 1;
 		unsigned char *fp2= tmpbuf1 + 2;

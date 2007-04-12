@@ -18,14 +18,11 @@ public:
 	void *m_userData;
 	CTP2ItemCompareCallback *m_compareCallback;
 
-	
 	ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
 
 	
 	virtual ~ctp2_ListItem();
 
-	
-	
 	
 	
 	
@@ -49,9 +46,17 @@ public:
 	
 	
 	void SetUserData(void *data) { m_userData = data; }
-	void *GetUserData() { return m_userData; }
+	void *GetUserData() {
+            if (!m_userData)
+                printf("ctp2_listitem.h L54: m_userData == NULL!\n");
+            return m_userData; 
+            }
 	
-	void SetCompareCallback(CTP2ItemCompareCallback *cb) { m_compareCallback = cb; }
+	void SetCompareCallback(CTP2ItemCompareCallback *cb) {
+            if (!cb) 
+                printf("ctp2_listitem.h L56: cb is NULL!\n)");
+            m_compareCallback = cb; 
+            }
 
 protected:
 	

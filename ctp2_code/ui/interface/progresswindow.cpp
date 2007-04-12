@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The progress window displays the progress at loading and saving
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 
 extern C3UI *g_c3ui;
 extern sint32 g_ScreenWidth;
+extern g_bpp;
 
 void ProgressWindow::BeginProgress(
 	ProgressWindow *&progwin,
@@ -143,7 +144,7 @@ ProgressWindow::ProgressWindow(
 	c3_PopupWindow(
 		retval,
 		aui_UniqueId(),
-		ldlBlock, 16,
+		ldlBlock, g_bpp, //here first bpp initialization!
 		AUI_WINDOW_TYPE_FLOATING,
 		FALSE )
 {

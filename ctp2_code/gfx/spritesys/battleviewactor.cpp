@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Battle view actor handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -402,8 +402,7 @@ void BattleViewActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 		g_tiledMap->DrawOverlay(surf, fortifiedImage, x + k_ACTOR_CENTER_OFFSET_X-48,  y+k_ACTOR_CENTER_OFFSET_Y-48);
 	}
 
-	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 
-							1, m_transparency, color, flags, m_curUnitAction == UNITACTION_IDLE, directionAttack);
+	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y, m_facing, 1, m_transparency, color, flags, m_curUnitAction == UNITACTION_IDLE, directionAttack); //battlebug
 
 	DrawHealthBar(surf);
 }

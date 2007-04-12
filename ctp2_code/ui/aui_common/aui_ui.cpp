@@ -1237,7 +1237,7 @@ AUI_ERRCODE aui_UI::Draw( void )
 	}
 
 #ifdef __AUI_USE_SDL__
-	if (SDL_Flip(SDL_GetVideoSurface()) < 0) {
+  if (SDL_Flip(SDL_GetVideoSurface()) < 0) { //SDL_Flip only works if SDL_DOUBLEBUF was used for surface!
 		fprintf(stderr, "Flip failed: %s\n", SDL_GetError());
 	}
 #endif

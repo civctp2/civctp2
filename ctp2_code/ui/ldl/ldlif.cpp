@@ -54,7 +54,7 @@ ldl_datablock *ldlif_find_block(char *name)
 
 int ldlif_find_file(const char *filename, char *fullpath)
 {
-	if(!g_civPaths->FindFile(C3DIR_LAYOUT, (char *)filename, fullpath))
+	if(!g_civPaths->FindFile(C3DIR_LAYOUT, filename, fullpath))
 		return 0;
 	return 1;
 }

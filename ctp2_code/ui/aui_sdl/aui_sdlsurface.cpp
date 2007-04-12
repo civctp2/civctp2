@@ -37,11 +37,10 @@ aui_SDLSurface::aui_SDLSurface(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
+        SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
 	if ( !(m_lpdds = lpdds) )
 	{
-		SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
-		m_lpdds = SDL_CreateRGBSurface(0, width, height, fmt->BitsPerPixel,
-					   fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+		m_lpdds = SDL_CreateRGBSurface(0, width, height, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
 		if ( m_lpdds == NULL )
 		{
 			*retval = AUI_ERRCODE_MEMALLOCFAILED;
@@ -55,20 +54,21 @@ aui_SDLSurface::aui_SDLSurface(
 		}
 	}
 	else
-	{
+            {
 	    m_allocated = takeOwnership;
-	}
+            }
 	
-	
-	if ( bpp == 16 )
-	{
-		if ( /*pixelFormat.dwRBitMask ==*/ 0xF800 )
-			m_pixelFormat = AUI_SURFACE_PIXELFORMAT_565;
-		else
-			m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
-	}
+	//just checking (fmt->Gmask >> fmt->Gshift == 0x3F) should be enough
+        //but save is save...
+	if ((fmt->Rmask >> fmt->Rshift == 0x1F) && (fmt->Gmask >> fmt->Gshift == 0x3F) && (fmt->Bmask >> fmt->Bshift == 0x1F)) {
+            m_pixelFormat = AUI_SURFACE_PIXELFORMAT_565;
+            //printf("%s L%d: AUI_SURFACE_PIXELFORMAT_565\n", __FILE__, __LINE__);
+            }
+        if ((fmt->Rmask >> fmt->Rshift == 0x1F) && (fmt->Gmask >> fmt->Gshift == 0x1F) && (fmt->Bmask >> fmt->Bshift == 0x1F)) {
+            m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
+            //printf("%s L%d: AUI_SURFACE_PIXELFORMAT_555\n", __FILE__, __LINE__);
+            }
 
-	
 	m_pitch = m_lpdds->pitch;
 	m_size = m_pitch * m_height;
 }
@@ -97,15 +97,18 @@ aui_SDLSurface::~aui_SDLSurface()
 
 
 
-uint32 aui_SDLSurface::SetChromaKey( uint32 color )
-{
-	int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, color);
-	
-	if ( hr == 0 )
-		return aui_Surface::SetChromaKey( color );
-	
-	return AUI_ERRCODE_OK;
-}
+uint32 aui_SDLSurface::SetChromaKey( uint32 color ) {
+    int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, color); //|SDL_RLEACCEL ?
+    //hr == 0 if succeded!
+    //printf("%s L%d: SDL_SRCCOLORKEY set to %#X\n", __FILE__, __LINE__, color);
+    
+    if ( hr == 0 )
+        return aui_Surface::SetChromaKey( color ); //sets aui_Surface.m_chromaKey and returns last value!
+    
+    //return AUI_ERRCODE_OK;  //this is not sensible, should retrun last color key!?!
+    printf("%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);
+    return (uint32)-1; //better?
+    }
 
 
 
@@ -117,29 +120,31 @@ BOOL aui_SDLSurface::IsOK( void ) const
 
 
 
-AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
-{
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags ){ 
 
-	// must lock the mutex first!
-	SDL_LockMutex(m_bltMutex);
-	if (SDL_MUSTLOCK(m_lpdds)) {
-		if (SDL_LockSurface(m_lpdds) < 0) {
-			fprintf(stderr, "Cannot lock surface: %s\n", SDL_GetError());
-			return AUI_ERRCODE_SURFACELOCKFAILED;
-		}
-	}
-	// return a buffer pointer that points to the rectangle
-	*buffer = m_lpdds->pixels;
-	m_saveBuffer = static_cast<uint8*>(*buffer);
-	if (rect != NULL)
+    AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+
+    // must lock the mutex first!
+    SDL_LockMutex(m_bltMutex);
+    //printf("%s L%d: Locking mutex!\n", __FILE__, __LINE__);
+    if (SDL_MUSTLOCK(m_lpdds)) {
+        printf("%s L%d: Locking surface! Check this!\n", __FILE__, __LINE__);
+        if (SDL_LockSurface(m_lpdds) < 0) {
+            fprintf(stderr, "Cannot lock surface: %s\n", SDL_GetError());
+            return AUI_ERRCODE_SURFACELOCKFAILED;
+            }
+        }
+    // return a buffer pointer that points to the rectangle
+    *buffer = m_lpdds->pixels;
+    m_saveBuffer = static_cast<uint8*>(*buffer);
+    if (rect != NULL)
 	{
-		*buffer = static_cast<char*>(*buffer) +
-		rect->top * m_lpdds->pitch +
-		rect->left * m_Bpp;
+        *buffer = static_cast<char*>(*buffer) +
+            rect->top * m_lpdds->pitch +
+            rect->left * m_Bpp;
 	}
-	return ManipulateLockList( rect, buffer, AUI_SURFACE_LOCKOP_ADD );
-}
+    return ManipulateLockList( rect, buffer, AUI_SURFACE_LOCKOP_ADD );
+    }
 
 
 

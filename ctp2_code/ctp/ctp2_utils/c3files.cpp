@@ -386,23 +386,22 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHA
 
 	FindClose(lpFileList);
 #else
-	DIR *dir = opendir(path);
+        DIR *dir = opendir(path);
 	if (!dir)
 		return FALSE;
 	struct dirent *dent = NULL;
 	
 	while ((dent = readdir(dir)))
 	{
-		char *p = strrchr(dent->d_name, '.');
+                char *p = strrchr(dent->d_name, '.');
 		if (NULL == p) {
 			continue;
 		}
 		if (1 == strlen(p)) {
 			continue;
 		}
-		p++;
-		
-		if (0 != strcasecmp(p, ext)) {
+                p++;
+                if (ext != NULL && 0 != strcasecmp(p, ext)) {
 			continue;
 		}
 		lpFileName = new char[NAME_MAX];

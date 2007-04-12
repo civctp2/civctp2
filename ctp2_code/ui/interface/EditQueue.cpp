@@ -1599,7 +1599,7 @@ void EditQueue::ShowSelectedInfo()
 		s_editQueue->m_itemCategory = -1;
 		s_editQueue->m_itemType = -1;
 		CityWindow::SetItemDescription(NULL, sc, NULL, s_editQueue->m_itemDescription,
-									   s_editQueue->m_window, s_editQueue->m_itemImageButton);
+                                               s_editQueue->m_window, s_editQueue->m_itemImageButton);
 		return;
 	}
 
@@ -1641,7 +1641,7 @@ void EditQueue::ShowSelectedInfo()
 	s_editQueue->m_itemType = type;
 
 	CityWindow::SetItemDescription(icon, sc, NULL, s_editQueue->m_itemDescription,
-								   s_editQueue->m_window, s_editQueue->m_itemImageButton);
+                                       s_editQueue->m_window, s_editQueue->m_itemImageButton);
 }
 
 void EditQueue::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)

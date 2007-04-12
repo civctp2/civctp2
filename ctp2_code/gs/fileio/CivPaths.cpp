@@ -412,7 +412,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 	
 	Assert(filename != NULL);
 
-	
+        	
 	if (dir == C3DIR_DIRECT) {
 		strcpy(path, filename);
 
@@ -476,6 +476,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 	}
 
 	// When not found in the new data, try the original directories
+        
 	if (MakeAssetPath(fullPath, m_hdPath, m_dataPath, m_localizedPath, m_assetPaths[dir], filename)) {
 		
 		strcpy(path, fullPath);

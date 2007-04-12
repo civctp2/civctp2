@@ -149,10 +149,11 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 
 	if ( bpp == 16 ) 
 		if (g_is565Format) {
-			m_pixelFormat = AUI_SURFACE_PIXELFORMAT_565;
-		} else {
-			m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
-		}
+                    m_pixelFormat = AUI_SURFACE_PIXELFORMAT_565;
+                    } 
+                else {
+                    m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
+                    }
 
 
 	return AUI_ERRCODE_OK;
@@ -204,10 +205,12 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 {
 	sint32 r = red, g = green, b = blue;
 
+        //printf("%s L%d: m_Bpp %d\n", __FILE__, __LINE__, m_Bpp);
+
 	switch ( m_Bpp )
 	{
 	case 1:
-		
+		printf("%s L%d: AUI_SURFACE_PIXELFORMAT_332 m_bpp %d\n",__FILE__, __LINE__, m_bpp);
 		return SetChromaKey(
 			m_pixelFormat == AUI_SURFACE_PIXELFORMAT_332
 			?
@@ -221,31 +224,32 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 		switch ( m_pixelFormat )
 		{
 		case AUI_SURFACE_PIXELFORMAT_555:
-			
+                    printf("%s L%d: AUI_SURFACE_PIXELFORMAT_555 m_bpp %d\n",__FILE__, __LINE__, m_bpp);
 			return SetChromaKey(	((r & 0xF8) << 7) |
-									((g & 0xF8) << 2) |
-									((b & 0xF8) >> 3));
+                                                ((g & 0xF8) << 2) |
+                                                ((b & 0xF8) >> 3));
 
 
 
 
 		case AUI_SURFACE_PIXELFORMAT_565:
-			
+                    //printf("%s L%d: AUI_SURFACE_PIXELFORMAT_565 m_bpp %d\n",__FILE__, __LINE__, m_bpp);
 			return SetChromaKey(	((r & 0xF8) << 8) |
-									((g & 0xF8) << 3) |
-									((b & 0xF8) >> 3));
+                                                ((g & 0xFC) << 3) | //pixbug FC
+                                                ((b & 0xF8) >> 3));
 
 
 
 
 		default:
-			
+			printf("%s L%d: AUI_SURFACE_PIXELFORMAT_... NOT SET!!! m_bpp %d\n",__FILE__, __LINE__, m_bpp);
 			Assert( FALSE );
 			break;
 		}
 		break;
 
 	case 3:
+            printf("%s L%d: AUI_SURFACE_PIXELFORMAT_888 m_bpp %d\n",__FILE__, __LINE__, m_bpp);
 		Assert( m_pixelFormat == AUI_SURFACE_PIXELFORMAT_888 );
 
 		
@@ -393,7 +397,7 @@ AUI_ERRCODE aui_Surface::BlankRGB(const uint8 &red, const uint8 &green, const ui
 		              ((blue & 0xF8) >> 3));
 	case AUI_SURFACE_PIXELFORMAT_565:
 		return Blank( ((red & 0xF8) << 8) |
-		              ((green & 0xF8) << 3) |
+		              ((green & 0xFC) << 3) | //pixbug FC
 		              ((blue & 0xF8) >> 3));
 	default:
 		Assert( FALSE );

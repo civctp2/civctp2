@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -667,483 +667,401 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 
 
 
-void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
-							 uint16 transparency, Pixel16 outlineColor, uint16 flags)
-{
-	uint8			*surfBase;
+void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height, uint16 transparency, Pixel16 outlineColor, uint16 flags) {
+    uint8			*surfBase;
 
 	
-	sint32 surfWidth = m_surfWidth;
-	sint32 surfHeight= m_surfHeight;
-	sint32 surfPitch = m_surfPitch;
-
+    sint32 surfWidth = m_surfWidth;
+    sint32 surfHeight= m_surfHeight;
+    sint32 surfPitch = m_surfPitch;
 	
-	
-	
-	
-	
-	
-
-	
-	
-	if ((drawX < 0) || 
-		(drawY < 0) || 
-		(drawX >= (surfWidth - width)) || 
-		(drawY >= (surfHeight-height))) 
-	{
+    if ((drawX < 0) || 
+        (drawY < 0) || 
+        (drawX >= (surfWidth - width)) || 
+        (drawY >= (surfHeight-height))) 
+        {
 		
-		if (drawX <= 0 - width)  return;
-		if (drawY <= 0 - height) return;
-		if (drawX >= surfWidth)  return;
-		if (drawY >= surfHeight) return;
+        if (drawX <= 0 - width)  return;
+        if (drawY <= 0 - height) return;
+        if (drawX >= surfWidth)  return;
+        if (drawY >= surfHeight) return;
 
-		(this->*_DrawLowReversedClipped)(frame, drawX, drawY, width, height, transparency, outlineColor, flags);
-		return;
-	}
-
-	
-	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
+        (this->*_DrawLowReversedClipped)(frame, drawX, drawY, width, height, transparency, outlineColor, flags);
+        return;
+        }
 
 	
-	Pixel16		*table = frame+1;
-	Pixel16		*dataStart = table + height;
+    surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
+  
+    Pixel16		*table = frame+1;
+    Pixel16		*dataStart = table + height;
 
-	PixelAddress  destAddr;
-	PixelAddress  rowAddr;
-	Pixel16		  tag;
+    PixelAddress  destAddr;
+    PixelAddress  rowAddr;
+    Pixel16		  tag;
 
-	register	sint32 len;
-	sint32		j;
+    register	sint32 len;
+    sint32		j;
 
 	
-	for(j=0; j < height; j++) 
-	{
-		if (table[j] != k_EMPTY_TABLE_ENTRY) 
-		{		
-			destAddr.w_ptr = (Pixel16 *)(surfBase + j * surfPitch + (width * 2));
-			rowAddr.w_ptr  = dataStart + table[j];
+    for(j=0; j < height; j++) 
+        {
+        if (table[j] != k_EMPTY_TABLE_ENTRY) 
+            {		
+            destAddr.w_ptr = (Pixel16 *)(surfBase + j * surfPitch + (width * 2));
+            rowAddr.w_ptr  = dataStart + table[j];
 			
-			tag = *rowAddr.w_ptr++;
-			tag = tag & 0x0FFF;	
+            tag = *rowAddr.w_ptr++;
+            tag = tag & 0x0FFF;	
 
-			while ((tag & 0xF000) == 0) 
-			{
-				switch ((tag & 0x0F00) >> 8) 
-				{
-					case k_CHROMAKEY_RUN_ID	:
-						 destAddr.w_ptr -= (tag & 0x00FF);
-						 break;
+            while ((tag & 0xF000) == 0) {
+                switch ((tag & 0x0F00) >> 8) {
+
+                case k_CHROMAKEY_RUN_ID	:
+                    destAddr.w_ptr -= (tag & 0x00FF);
+                    break;
 					
-					case k_COPY_RUN_ID			: 
+                case k_COPY_RUN_ID			: 
+                    len = (tag & 0x00FF);
+                    if(flags&k_BIT_DRAWFLAGS_SPECIAL1){
+                        if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                            __BlendFast_565_16(destAddr,rowAddr,-1,1,len,transparency);
+                            break; 
+                            }
+                        if (flags & k_BIT_DRAWFLAGS_FOGGED) {
+                            __Shadow_565_16(destAddr,rowAddr,-1,1,len);
+                            break; 
+                            }
+                        __Desaturate_565_16(destAddr,rowAddr,-1,1,len);
+                        break; 
+                        }
+                    __Copy_16(destAddr,rowAddr,-1,1,len);
+                    break;
+
+                case k_SHADOW_RUN_ID		: 
 						 
-						 
-						 len = (tag & 0x00FF);
+                    len = (tag & 0x00FF);
+                    __Shadow_565_32(destAddr,-1,len>>1);
+                    __Shadow_565_16(destAddr,-1,len&0x01);
 
-						 
-						 if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
-						 {
-							
-							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
-							{
-								__BlendFast_565_16(destAddr,rowAddr,-1,1,len,transparency);
-								break; 
-							}
-							
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) 
-							{
-								__Shadow_565_16(destAddr,rowAddr,-1,1,len);
-								break; 
-							}
-							
-							__Desaturate_565_16(destAddr,rowAddr,-1,1,len);
-						 	
-							break; 
-						 }
+                    break;
 
-						 
-						 
-						 
-						 __Copy_16(destAddr,rowAddr,-1,1,len);
-						
-						 break;
+                case k_FEATHERED_RUN_ID	:
 
-
-				
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					case k_SHADOW_RUN_ID		: 
-						 
-						 len = (tag & 0x00FF);
-
-						 
-						 
-						 __Shadow_565_32(destAddr,-1,len>>1);
-						 __Shadow_565_16(destAddr,-1,len&0x01);
-
-						 break;
-
-					case k_FEATHERED_RUN_ID	:
-
-					 
-
-					 
-
-						
-
-						if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) 
-						{
-								*destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, (uint16)transparency);
-								destAddr.w_ptr--;
-								rowAddr.w_ptr++;
-						} 
-						else 
-						{
-							Pixel16 pixel = *rowAddr.w_ptr;
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-								pixel = pixelutils_Shadow_565(pixel);
-							}
-							if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
-								pixel = pixelutils_Desaturate_565(pixel);
-							}
-							if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-								uint16 alpha = (tag & 0x00FF);
-								if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
-									pixel = pixelutils_Desaturate_565(pixel);
-								}
-								*destAddr.w_ptr = pixelutils_BlendFast_565(pixel, *destAddr.w_ptr, (uint16)alpha>>3);
-								destAddr.w_ptr--;
-								rowAddr.w_ptr++;
-							} else {
-								*destAddr.w_ptr-- = pixel;
-								rowAddr.w_ptr++;
-							}
-						}
-	 
-				}
-				tag = *rowAddr.w_ptr++;
-			}
-		}
-	}
-}
+                    if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                        *destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, (uint16)transparency);
+                        destAddr.w_ptr--;
+                        rowAddr.w_ptr++;
+                        } 
+                    else {
+                        Pixel16 pixel = *rowAddr.w_ptr;
+                        if (flags & k_BIT_DRAWFLAGS_FOGGED) {
+                            pixel = pixelutils_Shadow_565(pixel);
+                            }
+                        if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
+                            pixel = pixelutils_Desaturate_565(pixel);
+                            }
+                        if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
+                            uint16 alpha = (tag & 0x00FF);
+                            if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
+                                pixel = pixelutils_Desaturate_565(pixel);
+                                }
+                            *destAddr.w_ptr = pixelutils_BlendFast_565(pixel, *destAddr.w_ptr, (uint16)alpha>>3);
+                            destAddr.w_ptr--;
+                            rowAddr.w_ptr++;
+                            } 
+                        else {
+                            *destAddr.w_ptr-- = pixel;
+                            rowAddr.w_ptr++;
+                            }
+                        }
+                    }
+                tag = *rowAddr.w_ptr++;
+                }
+            }
+        }
+    }
 
 #define k_MEDIUM_KEY	0x4208
 
 
 
 
-void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,
-							 uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL reverse)
-{
-	uint8			*surfBase;
+void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL reverse){
+    uint8			*surfBase;
 
 	
-	Pixel16		emptyRow[2];
+    Pixel16		emptyRow[2];
 
-	emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
-	emptyRow[1] = (Pixel16)(k_EOLN_ID << 8);
+    emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
+    emptyRow[1] = (Pixel16)(k_EOLN_ID << 8);
 
-	RECT destRect = { x, y, x + destWidth, y + destHeight };
-
-	
-	sint32 surfWidth = m_surfWidth;
-	sint32 surfHeight = m_surfHeight;
-	sint32 surfPitch = m_surfPitch;
-
-	surfBase = m_surfBase + (y * surfPitch) + (x * sizeof(Pixel16));
-
-	if (destRect.left < 0) return;
-	if (destRect.top < 0) return;
-	if (destRect.right > surfWidth) return;
-	if (destRect.bottom > surfHeight) return;
+    RECT destRect = { x, y, x + destWidth, y + destHeight };
 
 	
-	Pixel16			*destPixel;
+    sint32 surfWidth = m_surfWidth;
+    sint32 surfHeight = m_surfHeight;
+    sint32 surfPitch = m_surfPitch;
 
-	Pixel16			*table = data+1;
-	Pixel16			*dataStart = table + m_height;
+    surfBase = m_surfBase + (y * surfPitch) + (x * sizeof(Pixel16));
 
-	
-	sint32				vaccum;
-	sint32				vincx, vincxy;
-	sint32				vend;
-	sint32				vdestpos;
-	sint32				vpos1, vpos2;
-
-	vaccum = destHeight*2 - m_height;
-	vincx = destHeight*2;
-	vincxy = (destHeight - m_height) * 2 ;
-
-	vpos1 = 0;
-	vpos2 = (sint32)((double)(m_height - destHeight) / (double)destHeight);
-
-	vdestpos = y;
-	vend = m_height - 1;
+    if (destRect.left < 0) return;
+    if (destRect.top < 0) return;
+    if (destRect.right > surfWidth) return;
+    if (destRect.bottom > surfHeight) return;
 
 	
-	while ( vpos1 < vend) {
-		if (vaccum < 0) {
-			vaccum += vincx;
-		} else {
+    Pixel16			*destPixel;
+
+    Pixel16			*table = data+1;
+    Pixel16			*dataStart = table + m_height;
+
+	
+    sint32				vaccum;
+    sint32				vincx, vincxy;
+    sint32				vend;
+    sint32				vdestpos;
+    sint32				vpos1, vpos2;
+
+    vaccum = destHeight*2 - m_height;
+    vincx = destHeight*2;
+    vincxy = (destHeight - m_height) * 2 ;
+
+    vpos1 = 0;
+    vpos2 = (sint32)((double)(m_height - destHeight) / (double)destHeight);
+
+    vdestpos = y;
+    vend = m_height - 1;
+
+	
+    while ( vpos1 < vend) {
+        if (vaccum < 0) {
+            vaccum += vincx;
+            } else {
 			
-			Pixel16		*rowData1, *rowData2;
-			Pixel16		pixel1, pixel2, pixel3, pixel4;
-			Pixel16		pixel;
+                Pixel16		*rowData1, *rowData2;
+                Pixel16		pixel1, pixel2, pixel3, pixel4;
+                Pixel16		pixel;
 
-			sint32		haccum;
-			sint32		hincx, hincxy;
-			sint32		hend;
-			sint32		hpos;
-			sint32		hdestpos;
+                sint32		haccum;
+                sint32		hincx, hincxy;
+                sint32		hend;
+                sint32		hpos;
+                sint32		hdestpos;
 
 			
-			if (table[vpos1] == k_EMPTY_TABLE_ENTRY) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1];	
-			if (table[vpos2] == k_EMPTY_TABLE_ENTRY) rowData2 = emptyRow;
-			else rowData2 = dataStart + table[vpos2];
+                if (table[vpos1] == k_EMPTY_TABLE_ENTRY) rowData1 = emptyRow;
+                else rowData1 = dataStart + table[vpos1];	
+                if (table[vpos2] == k_EMPTY_TABLE_ENTRY) rowData2 = emptyRow;
+                else rowData2 = dataStart + table[vpos2];
 
-			haccum = destWidth*2 - m_width;
-			hincx = destWidth*2;
-			hincxy = (destWidth - m_width) * 2;
+                haccum = destWidth*2 - m_width;
+                hincx = destWidth*2;
+                hincxy = (destWidth - m_width) * 2;
 			
-			hpos = 0;
-			if (reverse) hdestpos = x + destWidth;
-			else hdestpos = x;
-			hend = m_width-1;
+                hpos = 0;
+                if (reverse) hdestpos = x + destWidth;
+                else hdestpos = x;
+                hend = m_width-1;
 
-			sint32		mode1;
-			sint32		mode2;
-			sint32		pos1 = 0;
-			sint32		pos2 = 0;
-			sint32		end1, 
-						end2;
-			sint32		alpha1, 
-						alpha2;
-			sint32		oldend1 = 0, 
-						oldend2 = 0;
+                sint32		mode1;
+                sint32		mode2;
+                sint32		pos1 = 0;
+                sint32		pos2 = 0;
+                sint32		end1, 
+                    end2;
+                sint32		alpha1, 
+                    alpha2;
+                sint32		oldend1 = 0, 
+                    oldend2 = 0;
 
-			Pixel16			firstPixel  = 0, 
-							secondPixel = 0;
+                Pixel16			firstPixel  = 0, 
+                    secondPixel = 0;
 
-			end1 = ReadTag(&mode1, &rowData1, &alpha1);
-			end2 = ReadTag(&mode2, &rowData2, &alpha2);
+                end1 = ReadTag(&mode1, &rowData1, &alpha1);
+                end2 = ReadTag(&mode2, &rowData2, &alpha2);
 
-			pixel1 = k_MEDIUM_KEY;
-			pixel2 = k_MEDIUM_KEY;
+                pixel1 = k_MEDIUM_KEY;
+                pixel2 = k_MEDIUM_KEY;
 
-			while (hpos < hend) {
-				if (haccum < 0) {
-					haccum += hincx;
-				} else {
-					haccum += hincxy;
+                while (hpos < hend) {
+                    if (haccum < 0) {
+                        haccum += hincx;
+                        } 
+                    else {
+                        haccum += hincxy;
 
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
+                        destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 
 					
-					while (pos1 <= hpos) {
-						switch (mode1) {
-							case k_CHROMAKEY_RUN_ID	:
-									firstPixel = k_MEDIUM_KEY;
-								break;
-							case k_COPY_RUN_ID			:
-									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-										firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, transparency);
-									} else 
-									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-										firstPixel = pixelutils_Shadow_565(*rowData1);
-									} else 
-									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
-										firstPixel = pixelutils_Desaturate_565(*rowData1);
-									} else {
-										firstPixel = *rowData1;
-									}
-									rowData1++;
-								break;
-							case k_SHADOW_RUN_ID		:
-									firstPixel = pixelutils_Shadow_565(*destPixel);
-								break;			
-							case k_FEATHERED_RUN_ID	:
-									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
-										firstPixel = outlineColor;
-									} else {
-										if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-											firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, (uint16)transparency);
-										} else {
-											Pixel16 pixel = *rowData1;
-											if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-												pixel = pixelutils_Shadow_565(pixel);
-											}
-											if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
-												pixel = pixelutils_Desaturate_565(pixel);
-											}
-											if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-												pixel = pixelutils_Blend_565(pixel, *destPixel, (uint16)alpha1>>3);
-											}
-											firstPixel = pixel;
-										}
-									}
-									rowData1++;
-								break;
-							default:
-								Assert(mode1 == k_CHROMAKEY_RUN_ID || mode1 == k_COPY_RUN_ID || mode1 == k_SHADOW_RUN_ID || mode1 == k_FEATHERED_RUN_ID);
-						}
+                        while (pos1 <= hpos) {
+                            switch (mode1) {
+                            case k_CHROMAKEY_RUN_ID	:
+                                firstPixel = k_MEDIUM_KEY;
+                                break;
+                            case k_COPY_RUN_ID			:
+                                if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                                    firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, transparency);
+                                    } else 
+                                        if (flags & k_BIT_DRAWFLAGS_FOGGED) {
+                                            firstPixel = pixelutils_Shadow_565(*rowData1);
+                                            } else 
+                                                if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
+                                                    firstPixel = pixelutils_Desaturate_565(*rowData1);
+                                                    } else {
+                                                        firstPixel = *rowData1;
+                                                        }
+                                rowData1++;
+                                break;
+                            case k_SHADOW_RUN_ID		:
+                                firstPixel = pixelutils_Shadow_565(*destPixel);
+                                break;			
+                            case k_FEATHERED_RUN_ID	:
+                                if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
+                                    firstPixel = outlineColor;
+                                    } else {
+                                        if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                                            firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, (uint16)transparency);
+                                            } else {
+                                                Pixel16 pixel = *rowData1;
+                                                if (flags & k_BIT_DRAWFLAGS_FOGGED) {
+                                                    pixel = pixelutils_Shadow_565(pixel);
+                                                    }
+                                                if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
+                                                    pixel = pixelutils_Desaturate_565(pixel);
+                                                    }
+                                                if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
+                                                    pixel = pixelutils_Blend_565(pixel, *destPixel, (uint16)alpha1>>3);
+                                                    }
+                                                firstPixel = pixel;
+                                                }
+                                        }
+                                rowData1++;
+                                break;
+                            default:
+                                Assert(mode1 == k_CHROMAKEY_RUN_ID || mode1 == k_COPY_RUN_ID || mode1 == k_SHADOW_RUN_ID || mode1 == k_FEATHERED_RUN_ID);
+                                }
 						
-						pos1++;
+                            pos1++;
 
-						if (pos1 >= end1) {
-							oldend1 = end1;
-							end1 = oldend1 + ReadTag(&mode1, &rowData1, &alpha1);
-						}
-					}
-
-					
-					while (pos2 <= hpos) {
-					
-						switch (mode2) {
-							case k_CHROMAKEY_RUN_ID	:
-									secondPixel = k_MEDIUM_KEY;
-								break;
-							case k_COPY_RUN_ID			:
-									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-										secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, transparency);
-									} else
-									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-										secondPixel = pixelutils_Shadow_565(*rowData2);
-									} else
-									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
-										secondPixel = pixelutils_Desaturate_565(*rowData2);
-									} else {
-										secondPixel = *rowData2;
-									}
-
-									rowData2++;
-								break;
-							case k_SHADOW_RUN_ID		:
-									secondPixel = pixelutils_Shadow_565(*destPixel);
-								break;
-							case k_FEATHERED_RUN_ID	:
-									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
-										secondPixel = outlineColor;
-									} else {
-										if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-											secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, (uint16)transparency);
-										} else {
-											Pixel16 pixel = *rowData2;
-											if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-												pixel = pixelutils_Shadow_565(pixel);
-											}
-											if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
-												pixel = pixelutils_Desaturate_565(pixel);
-											}
-											if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-												pixel = pixelutils_Blend_565(pixel, *destPixel, (uint16)alpha2>>3);
-											}
-											secondPixel = pixel;
-										}
-									}
-									rowData2++;
-								break;
-							default : 
-								Assert(mode2 == k_CHROMAKEY_RUN_ID || mode2 == k_COPY_RUN_ID || mode2 == k_SHADOW_RUN_ID || mode2 == k_FEATHERED_RUN_ID);
-						}
-
-						pos2++;
-
-						if (pos2 >= end2) {
-							oldend2 = end2;
-							end2 = oldend2 + ReadTag(&mode2, &rowData2, &alpha2);
-						}
-					}
-
-					pixel3 = firstPixel;
-					pixel4 = secondPixel;
-
-
-
-
+                            if (pos1 >= end1) {
+                                oldend1 = end1;
+                                end1 = oldend1 + ReadTag(&mode1, &rowData1, &alpha1);
+                                }
+                            }
 
 					
-					if (flags & k_BIT_DRAWFLAGS_AA) {
-						if (flags & k_BIT_DRAWFLAGS_AA_4_WAY) {
-							if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
-								pixel =	average_565(pixel1, pixel2, pixel3, pixel4);
+                        while (pos2 <= hpos) {
+					
+                            switch (mode2) {
+                            case k_CHROMAKEY_RUN_ID	:
+                                secondPixel = k_MEDIUM_KEY;
+                                break;
+                            case k_COPY_RUN_ID			:
+                                if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                                    secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, transparency);
+                                    } else
+                                        if (flags & k_BIT_DRAWFLAGS_FOGGED) {
+                                            secondPixel = pixelutils_Shadow_565(*rowData2);
+                                            } else
+                                                if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
+                                                    secondPixel = pixelutils_Desaturate_565(*rowData2);
+                                                    } else {
+                                                        secondPixel = *rowData2;
+                                                        }
+
+                                rowData2++;
+                                break;
+                            case k_SHADOW_RUN_ID		:
+                                secondPixel = pixelutils_Shadow_565(*destPixel);
+                                break;
+                            case k_FEATHERED_RUN_ID	:
+                                if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
+                                    secondPixel = outlineColor;
+                                    } else {
+                                        if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                                            secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, (uint16)transparency);
+                                            } else {
+                                                Pixel16 pixel = *rowData2;
+                                                if (flags & k_BIT_DRAWFLAGS_FOGGED) {
+                                                    pixel = pixelutils_Shadow_565(pixel);
+                                                    }
+                                                if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
+                                                    pixel = pixelutils_Desaturate_565(pixel);
+                                                    }
+                                                if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
+                                                    pixel = pixelutils_Blend_565(pixel, *destPixel, (uint16)alpha2>>3);
+                                                    }
+                                                secondPixel = pixel;
+                                                }
+                                        }
+                                rowData2++;
+                                break;
+                            default : 
+                                Assert(mode2 == k_CHROMAKEY_RUN_ID || mode2 == k_COPY_RUN_ID || mode2 == k_SHADOW_RUN_ID || mode2 == k_FEATHERED_RUN_ID);
+                                }
+
+                            pos2++;
+
+                            if (pos2 >= end2) {
+                                oldend2 = end2;
+                                end2 = oldend2 + ReadTag(&mode2, &rowData2, &alpha2);
+                                }
+                            }
+
+                        pixel3 = firstPixel;
+                        pixel4 = secondPixel;
+
+
+
+
+
+					
+                        if (flags & k_BIT_DRAWFLAGS_AA) {
+                            if (flags & k_BIT_DRAWFLAGS_AA_4_WAY) {
+                                if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
+                                    pixel =	average_565(pixel1, pixel2, pixel3, pixel4);
 								
-								if (pixel == 0) 
-									pixel = 0x0001;
-								*destPixel = pixel;
-							}
-						} else {
-							if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY) {
-								pixel = average_565(pixel2, pixel3);
-								if (pixel == 0) 
-									pixel = 0x0001;
+                                    if (pixel == 0) 
+                                        pixel = 0x0001;
+                                    *destPixel = pixel;
+                                    }
+                                } else {
+                                    if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY) {
+                                        pixel = average_565(pixel2, pixel3);
+                                        if (pixel == 0) 
+                                            pixel = 0x0001;
 								
-								*destPixel = pixel;
-							}
-						}
-					} else {
-						if (pixel3 == 0) 
-							pixel3 = 0x0001;
+                                        *destPixel = pixel;
+                                        }
+                                    }
+                            } else {
+                                if (pixel3 == 0) 
+                                    pixel3 = 0x0001;
 						
-						if (pixel3 != k_MEDIUM_KEY) 
-							*destPixel = pixel3;
-					}
-					pixel1 = pixel3;
-					pixel2 = pixel4;
+                                if (pixel3 != k_MEDIUM_KEY) 
+                                    *destPixel = pixel3;
+                                }
+                        pixel1 = pixel3;
+                        pixel2 = pixel4;
 
-					if (reverse) hdestpos--;
-					else hdestpos++;
-				}
-				hpos++;
-			}
+                        if (reverse) hdestpos--;
+                        else hdestpos++;
+                        }
+                    hpos++;
+                    }
 
-			vaccum += vincxy;
-			vdestpos++;
-		} 
-		vpos1++;
-		vpos2++;
-	}
+                vaccum += vincxy;
+                vdestpos++;
+                } 
+        vpos1++;
+        vpos2++;
+        }
 
 	
 
 
-}
+    }
 
 
 

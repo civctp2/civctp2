@@ -146,6 +146,7 @@ public:
 						Pixel16 outlineColor, uint16 flags);
 
 	virtual uint16	GetNumFrames(void) const { return m_numFrames; };
+    
 	virtual void	SetNumFrames(uint16 num) { m_numFrames = num; }
 
 	sint32			GetCurrentFrame(void) { return m_currentFrame; };

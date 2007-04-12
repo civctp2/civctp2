@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit & city sprite handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -66,7 +66,7 @@ UnitSpriteGroup::UnitSpriteGroup(GROUPTYPE type)
 {
 	POINT const	thePoint	= {24, 24};
 	POINT const	emptyPoint	= {0, 0};
-
+        //printf("%s L%d: UnitSpriteGroup::UnitSpriteGroup \n", __FILE__, __LINE__);
 	for (sint32 j = 0; j < k_NUM_FACINGS; j++) 
 	{
 		m_moveOffsets[j]			= emptyPoint;
@@ -112,8 +112,7 @@ void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 	}
 }
 
-void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
+void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
 {
 	
 	
@@ -123,26 +122,6 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 	Assert(action >= UNITACTION_MOVE &&
 			action <= UNITACTION_WORK);
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
 	if (specialDelayProcess 
 		|| (action == UNITACTION_IDLE && m_sprites[action] == NULL)
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
@@ -247,7 +226,9 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 	
     	if (!directionalAttack)
 	    {
-			m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);
+            //printf("%s L%d: m_sprites[action]->DrawDirect \n", __FILE__, __LINE__);
+            m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);//battlebug
+            //m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags); //not visible!
 	    }
 	}
 }
@@ -256,104 +237,7 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 
 void UnitSpriteGroup::RunBenchmark(aui_Surface *surf)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	exit(0);
+exit(0);
 }
 
 
@@ -494,7 +378,6 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 	char			prefixStr[80];
 
-	
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
 		for (i=0; i<k_MAX_NAMES; i++) 
@@ -567,9 +450,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 					GetImageFileName(facedImageNames[j][i] , "%sGU%#.2dMA%d.%d", prefixStr, id,  j+1, i+moveSprite->GetFirstFrame());
 			}
 		}
-
-		
-		moveSprite->Import(moveSprite->GetNumFrames(), facedImageNames, facedShadowNames);
+                moveSprite->Import(moveSprite->GetNumFrames(), facedImageNames, facedShadowNames);
 
 		
 		m_sprites[UNITACTION_MOVE] = (Sprite *)moveSprite;

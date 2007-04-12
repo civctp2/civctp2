@@ -4,7 +4,7 @@
 // File type    : C++ source
 // Description  : Dialog for altering map properties
 //                (dry/wet, ocean/land, etc.)
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

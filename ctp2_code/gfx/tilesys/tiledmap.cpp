@@ -332,10 +332,16 @@ TiledMap::TiledMap(MapPoint &size)
 		fontNameString = stringTable->GetString(0);
 		fontSizeString = stringTable->GetString(1);
 		fontSize = atoi(fontSizeString);
-
+                Assert(g_c3ui);
+                if (!g_c3ui) 
+                    {
+                    c3errors_ErrorDialog ("TileMap","Don't have initialized g_c3ui!\n"); 
+                    return;
+                    }
+    
 		m_font = g_c3ui->LoadBitmapFont(fontNameString);
 		Assert(m_font);
-
+                
 		m_font->SetPointSize(fontSize);
 
 		MBCHAR *fString = stringTable->GetString(2);
@@ -1914,54 +1920,36 @@ sint32 TiledMap::CalculateWrap(
 	
 
 	
-	if (m_zoomLevel == k_ZOOM_LARGEST) 
-	{
-		
+	if (m_zoomLevel == k_ZOOM_LARGEST) {
 		if (!fog) {
-			
-
-			
-			DrawTransitionTile(surface, pos, x, y);
-
-			
-			if (river != -1)
-				DrawOverlay(surface, m_tileSet->GetRiverData(river), x, y);
-		} else {
-			
-			if (g_isFastCpu) {
-				
-				DrawBlendedTile(surface, pos,x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
-				if (river != -1)
-					DrawBlendedOverlay(surface, m_tileSet->GetRiverData(river),x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
-			} else {
-				
-				DrawDitheredTile(surface, x,y,k_FOW_COLOR);
-
-				if (river != -1)
-					DrawDitheredOverlay(surface, m_tileSet->GetRiverData(river),x,y,k_FOW_COLOR);
+                    DrawTransitionTile(surface, pos, x, y); 
+                    if (river != -1)
+                        DrawOverlay(surface, m_tileSet->GetRiverData(river), x, y);
+                    }
+                else {
+                    if (g_isFastCpu) {
+                        DrawBlendedTile(surface, pos,x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
+                        if (river != -1)
+                            DrawBlendedOverlay(surface, m_tileSet->GetRiverData(river),x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
+			} 
+                    else {
+                        DrawDitheredTile(surface, x,y,k_FOW_COLOR);
+                        if (river != -1)
+                            DrawDitheredOverlay(surface, m_tileSet->GetRiverData(river),x,y,k_FOW_COLOR);
 			}
-		}
-
-		
+                    }
 		if (g_isGridOn)
-			DrawTileBorder(surface, x,y,0xffff);
-
-
-
+                    DrawTileBorder(surface, x,y,0xffff);
 		AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
-		
-	} else {
+	} 
+        else {
 		
 		if (!fog) {
 			
 			
-			DrawTransitionTileScaled(surface, pos, x, y, GetZoomTilePixelWidth(), 
-														GetZoomTilePixelHeight());
-
-			
+			DrawTransitionTileScaled(surface, pos, x, y, GetZoomTilePixelWidth(), GetZoomTilePixelHeight());
 			if (river != -1)
-				DrawScaledOverlay(surface, m_tileSet->GetRiverData(river), 
-									x, y, GetZoomTilePixelWidth(), GetZoomTileGridHeight());
+				DrawScaledOverlay(surface, m_tileSet->GetRiverData(river), x, y, GetZoomTilePixelWidth(), GetZoomTileGridHeight());
 		} else {
 			
 			if (g_isFastCpu) {
@@ -2167,56 +2155,25 @@ TiledMap::CalculateWrapClipped(
 	
 	if (m_zoomLevel == k_ZOOM_LARGEST) 
 	{
-		
 		if (!fog) 
 		{
-			
-
-			
-		   	DrawTransitionTileClipped(surface, pos, drawx, drawy);
-
-			
-		   
-		   
+                DrawTransitionTileClipped(surface, pos, drawx, drawy);
 		} 
 		else 
 		{
-			
 			if (g_isFastCpu) 
 			{
-				
-			 
-			
-			
-			
 			} 
 			else 
 			{
-				
-			  
-
-			  
-			  
 			}
 		}
-
-		
-	   
-	   
-
-		
 		AddDirtyToMap(drawx, drawy, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
 	} 
 	else 
 	{ 
-		
 		if (!fog) 
 		{
-			
-			
-		  
-
-			
 			if (river != -1)
 				DrawScaledOverlay(surface, m_tileSet->GetRiverData(river), 
 									drawx, drawy, GetZoomTilePixelWidth(), GetZoomTileGridHeight());
@@ -2352,7 +2309,7 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 	{
 		
 		if(DrawImprovementsLayer(surface, pos, x, y,clip)) {
-			AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
+                    AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
 		}
 	} 
 	else 
@@ -2512,7 +2469,7 @@ sint32 TiledMap::CalculateHatWrap(
 	if (m_zoomLevel == k_ZOOM_LARGEST) {
 		
 		if (!fog) {
-			DrawOverlay(surface, baseTile->GetHatData(), x, y);
+                    DrawOverlay(surface, baseTile->GetHatData(), x, y);
 		} else {
 			if (g_isFastCpu) 
 				DrawBlendedOverlay(surface, baseTile->GetHatData(),x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
@@ -5071,7 +5028,7 @@ sint32 TiledMap::RedrawHat(
 	{
 		
 		if (!fog) 
-			DrawOverlayClipped(surface, baseTile->GetHatData(), drawx, drawy);
+                    DrawOverlayClipped(surface, baseTile->GetHatData(), drawx, drawy);
 		else 
 		{
 			if (g_isFastCpu) 
@@ -5703,44 +5660,6 @@ UnitActor *TiledMap::GetClickedUnit(aui_MouseEvent *data)
 
 BOOL TiledMap::PointInMask(POINT hitPt)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	sint32		x, y;
 
 
@@ -5882,19 +5801,6 @@ void TiledMap::HandleCheat(MapPoint &pos)
 	TileInfo *tileinfo;
 	BOOL river = FALSE;
 	GoodyHut *hut = NULL;
-
-	
-
-
-	
-	
-	
-	
-
-
-
-
-
 	
 	extern sint32 g_isStartingPadOn;
 
@@ -6133,55 +6039,6 @@ void TiledMap::HandleCheat(MapPoint &pos)
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -6270,13 +6127,6 @@ void TiledMap::Click(aui_MouseEvent *data, BOOL doubleClick)
 
 	if (MousePointToTilePos(point, pos)) {
 		
-		
-		
-		
-		
-		
-
-		
 		if (data->lbutton && !data->rbutton) {
 			
 			if (g_isCheatModeOn || ScenarioEditor::HandleClicks()) {	
@@ -6301,14 +6151,6 @@ void TiledMap::Click(aui_MouseEvent *data, BOOL doubleClick)
 				
 			}
 			else
-
-
-
-
-
-
-
-			
 			{
 				g_selected_item->RegisterClick(pos, data, doubleClick, 
 											   false, false); 
@@ -6316,23 +6158,6 @@ void TiledMap::Click(aui_MouseEvent *data, BOOL doubleClick)
 		} else {
 			if (data->rbutton && !data->lbutton) {
 				
-				
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				if ( g_tileImprovementMode ) {
 					g_selected_item->Deselect( g_selected_item->GetVisiblePlayer() );
 				} 
@@ -6534,17 +6359,6 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 	if (data == NULL) 
 		return 0;
 
-	
-
-	
-	
-
-
-	
-
-
-
-	
 	if (surface) 
 	{
 		errcode = surface->Lock(NULL, (LPVOID *)&surfBase, 0);
@@ -6715,17 +6529,6 @@ TiledMap::DrawTransitionTileClipped(aui_Surface *surface, MapPoint &pos, sint32 
 
 	ypos+=k_TILE_PIXEL_HEADROOM;
 
-	
-
-	
-	
-
-
-	
-
-
-
-	
 	if (xpos > (surfWidth-k_TILE_PIXEL_WIDTH)) 
 		return;
 	if (ypos > (surfPitch-k_TILE_PIXEL_HEIGHT)) 
@@ -6848,8 +6651,7 @@ void TiledMap::SetZoomLevel(sint32 level)
 	
 	m_zoomLevel = level;
 
-	
-	m_scale = m_zoomTileScale[m_zoomLevel];
+        m_scale = m_zoomTileScale[m_zoomLevel];
 
 	
 	if(m_zoomCallback)
