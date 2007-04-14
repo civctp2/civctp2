@@ -2057,56 +2057,48 @@ void CtpAi::BombardAdjacentEnemies(const Army & army)
 	
 	
 	for (dir = 0; dir < (sint8) NOWHERE; dir++)
+	{
+		if(pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj))
 		{
-			if(pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj))
-				{
-					city = g_theWorld->GetCity(adj);
-			
-					if (city.m_id != 0x0 &&
-						army->CanBombard(adj) &&
-						AgreementMatrix::s_agreements.
-						  HasAgreement(playerId, 
-									   city.GetOwner(), 
-									   PROPOSAL_TREATY_DECLARE_WAR))	
-						{
-							g_gevManager->AddEvent( GEV_INSERT_Tail, 
-													GEV_BombardOrder,
-													GEA_Army, army.m_id,
-													GEA_MapPoint, adj,
-													GEA_End);
+			city = g_theWorld->GetCity(adj);
+
+			if(city.m_id != 0x0
+			&& army->CanBombard(adj)
+			&& g_player[playerId]->HasWarWith(city.GetOwner())
+			){
+				g_gevManager->AddEvent( GEV_INSERT_Tail, 
+										GEV_BombardOrder,
+										GEA_Army, army.m_id,
+										GEA_MapPoint, adj,
+										GEA_End);
 							
-							return;
-						}
-				}
+				return;
+			}
 		}
+	}
 
 	
 	CellUnitList enemy_army;
 	for (dir = 0; dir < (sint8) NOWHERE; dir++)
+	{
+		if(pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj))
 		{
-			if(pos.GetNeighborPosition((WORLD_DIRECTION)dir, adj))
-				{
-					g_theWorld->GetArmy(adj, enemy_army);
-					if (enemy_army.Num() > 0 &&
-						army->CanBombard(adj) &&
-						
-						enemy_army.IsVisible(army.GetOwner()) &&
-						AgreementMatrix::s_agreements.
-						  HasAgreement(playerId, 
-									   enemy_army[0].GetOwner(), 
-									   PROPOSAL_TREATY_DECLARE_WAR))
-						{
-							g_gevManager->AddEvent( GEV_INSERT_Tail, 
-													GEV_BombardOrder,
-													GEA_Army, army.m_id,
-													GEA_MapPoint, adj,
-													GEA_End);
-	
-							
-							return;
-						}
-				}
+			g_theWorld->GetArmy(adj, enemy_army);
+			if(enemy_army.Num() > 0
+			&& army->CanBombard(adj)
+			&& enemy_army.IsVisible(army.GetOwner())
+			&& g_player[playerId]->HasWarWith(enemy_army[0].GetOwner())
+			){
+				g_gevManager->AddEvent( GEV_INSERT_Tail, 
+										GEV_BombardOrder,
+										GEA_Army, army.m_id,
+										GEA_MapPoint, adj,
+										GEA_End);
+
+				return;
+			}
 		}
+	}
 }
 
 

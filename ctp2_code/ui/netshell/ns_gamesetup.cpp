@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Corrected strange access of non-static members from static data.
-// - removed new rules attempt - E 12.27.2006
+// - Removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
@@ -43,7 +46,7 @@
 	Bit					AINoShieldHunger					# AI doesn't pay shield hunger (gets lots of units)
 	Bit					AINoGoldHunger						# AI doesnt pay unit gold hunger
 	Bit					AIFreeUpgrade						# AI doesn't pay goldfor upgrades
-	Bit					AIMilitiaUnit						#If city is empty at turn start AI gets cheapest unit
+	Bit					AIMilitiaUnit						# If city is empty at turn start AI gets cheapest unit
 
   ADD -----> OCC One City Change option -> if enable human cant build unit type IsSettler.
 */

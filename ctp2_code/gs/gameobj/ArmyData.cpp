@@ -107,7 +107,7 @@
 // - Moved the upgrade stuff into its own methods, however more work is needed.
 //   (Dec 24th 2006 Martin Gühmann)
 // - Added message for hostile terrain and guerrilla spawn
-// - readded message for ship sinking (removed later)
+// - Readded message for ship sinking (removed later)
 // - Added new limits for BarbarianSpawnBarbarian
 //
 //----------------------------------------------------------------------------
@@ -1296,7 +1296,7 @@ void ArmyData::CityRadiusFunc(const MapPoint &pos)
 //
 // Name       : ArmyData::GetActiveDefenders
 //
-// Description: .
+// Description: 
 //
 // Parameters : UnitDynamicArray &input  : possibleDefenders
 //              UnitDynamicArray &output : activeDefenders
@@ -1306,7 +1306,7 @@ void ArmyData::CityRadiusFunc(const MapPoint &pos)
 //
 // Returns    : -
 //
-// Remark(s)  :	see CheckActiveDefenders. The defenders must be at war with this army.
+// Remark(s)  : See CheckActiveDefenders. The defenders must be at war with this army.
 //
 //----------------------------------------------------------------------------
 void ArmyData::GetActiveDefenders(UnitDynamicArray &input,
@@ -1329,7 +1329,7 @@ void ArmyData::GetActiveDefenders(UnitDynamicArray &input,
                 continue;
         }
 
-        if (!AgreementMatrix::s_agreements.HasAgreement(input[i].GetOwner(), owner, PROPOSAL_TREATY_DECLARE_WAR))
+        if (!g_player[owner]->HasWarWith(input[i].GetOwner()))
             continue;
 
         if(input[i].Flag(k_UDF_USED_ACTIVE_DEFENSE))
@@ -1564,7 +1564,7 @@ void ArmyData::BeginTurn()
 			}
 		}
 	}
-	//Barbarian leader spawn
+	// Barbarian leader spawn
 	// This should be risk level depending ADDED EMOD 10-05-2006
 	if(m_owner == PLAYER_INDEX_VANDALS) {
 		sint32 barbmax = g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians(); 
@@ -1614,31 +1614,37 @@ void ArmyData::BeginTurn()
 
 
 	// END EMOD barb spawn units
-	//TODO: EMOD  make terrain hostility resk dependent? 1-2-2007
-	//EMOD: If Hostileterrain and not fort than deduct HP from the unit
+	// TODO: EMOD  make terrain hostility resk dependent? 1-2-2007
+	// EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;
-	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) //add AI immunity?
-	{ 
-		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-		for(sint32 u = 0; u < m_nElements; u++) {
-			const UnitRecord *urec = m_array[u].GetDBRec();
-			if(!urec->GetImmuneToHostileTerrain()
-			&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
-			){
-				m_array[u].DeductHP(hpcost);
+	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) // Add AI immunity?
+	{
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000)
+		{
+			for(sint32 u = 0; u < m_nElements; u++)
+			{
+				const UnitRecord *urec = m_array[u].GetDBRec();
+				if(!urec->GetImmuneToHostileTerrain()
+				&& !terrainutil_HasFort(m_pos)
+				&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006
+				){
+					m_array[u].DeductHP(hpcost);
 #if 0 // Unused, memory leak
-			    //SlicObject *so = new SlicObject("999HostileTerrain");
-				//so->AddRecipient(m_owner);
-				//so->AddUnit(m_array[i]);
+					// #if 0 is like outcommenting!
+					// So now decide whether you really want to use it.
+					SlicObject *so = new SlicObject("999HostileTerrain");
+					so->AddRecipient(m_owner);
+					so->AddUnit(m_array[i]);
 #endif
-			}
+				}
 
-			if (m_array[u].GetHP() < 0.999) {
-				m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+				if (m_array[u].GetHP() < 0.999)
+				{
+					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+				}
 			}
 		}
-	}
 	}
 
 	//EMOD If tile has tileimp that is a minefield then deduct HP
@@ -3551,10 +3557,7 @@ ORDER_RESULT ArmyData::EstablishEmbassy(const MapPoint &point)
 	if(c.GetOwner() == m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-	
-	
-	
-	if (AgreementMatrix::s_agreements.HasAgreement(m_owner, c.GetOwner(), PROPOSAL_TREATY_DECLARE_WAR))
+	if (g_player[m_owner]->HasWarWith(c.GetOwner()))
 		return ORDER_RESULT_ILLEGAL;
 
 	if(wonderutil_GetCloseEmbassies(g_player[c.GetOwner()]->m_builtWonders)) {
@@ -3634,7 +3637,7 @@ ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 	if(c.GetOwner() == m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-	if (AgreementMatrix::s_agreements.HasAgreement(m_owner, c.GetOwner(), PROPOSAL_TREATY_DECLARE_WAR))
+	if (g_player[m_owner]->HasWarWith(c.GetOwner()))
 		return ORDER_RESULT_ILLEGAL;
 
 	
@@ -8251,7 +8254,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 	double cost = g_theWorld->GetMoveCost(pos);   //GetEnvBase()->GetMovement() non imps for Denyenemy
 	sint32  movebonus; // = g_theUnitDB->Get()->GetMoveBonus();
 	double c;
-//EMOD
+	// EMOD
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 CellOwner = cell->GetOwner();
 	sint32 j = 0;
@@ -8259,43 +8262,64 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 
 
 	// End EMOD
-	for(i = m_nElements - 1; i >= 0; i--) {
-		if(m_array[i].GetMovementTypeAir()) {
+	for(i = m_nElements - 1; i >= 0; i--)
+	{
+		if(m_array[i].GetMovementTypeAir())
+		{
 			c = k_MOVE_AIR_COST;
 		// EMOD - this code may no longer be necessay since I 
 		// think this code only gets the cost of the pos and 
 		// unitdata is used for the unit deduct cost
-		} else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus)) {
-					c = movebonus;
+		}
+		else if(m_array[i].GetDBRec()->GetMoveBonus(movebonus))
+		{
+			c = movebonus;
 		//end EMOD
-		} else if(g_theWorld->IsTunnel(pos)) {
-			if(!m_array[i].GetMovementTypeLand()) {
-				sint32	icost;
+		}
+		else if(g_theWorld->IsTunnel(pos))
+		{
+			if(!m_array[i].GetMovementTypeLand())
+			{
+				sint32 icost;
 				g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 				c = icost;
 			} else {
 				c = cost;
 			}
-		}else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN)) {  // Add Blitz/multiple attacks here?
-//EMOD			
-			if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {					
-			c = m_array[i].GetMovementPoints();
-		}else {
-			c = cost;
 		}
-			// EMOD for having some tileimps not allowed for enemy 
-			// movement like railroads 4-12-2006
-		} else if((m_array[i].GetOwner() != CellOwner) && (CellOwner > 0) && (cell->GetDBImprovement(j) > 0)) {  //this denies all?
+		else if(m_array[i].Flag(k_UDF_FOUGHT_THIS_TURN))
+		{  // Add Blitz/multiple attacks here?
+			if(!m_array[i].GetDBRec()->GetMultipleAttacks())
+			{
+				c = m_array[i].GetMovementPoints();
+			}
+			else
+			{
+				c = cost;
+			}
+		}
+		// EMOD for having some tileimps not allowed for enemy 
+		// movement like railroads 4-12-2006
+		else if(m_array[i].GetOwner() != CellOwner
+		     && CellOwner > 0
+		     && cell->GetDBImprovement(j) > 0
+		){  //this denies all?
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-			if (AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && trec->GetDeniedToEnemy()){  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
+			if(g_player[m_owner]->HasWarWith(CellOwner)
+			&& trec->GetDeniedToEnemy())
+			{  //i.e. RailRoads see Cell::CalcTerrainMoveCost?
 				sint32 enemycost;
 				g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(enemycost);
 				c = enemycost;
-		}else {
-			c = cost;
+			}
+			else
+			{
+				c = cost;
+			}
+			//end EMOD
 		}
-//end EMOD
-		}else {
+		else
+		{
 			c = cost;
 		}
 //end EMOD
@@ -8678,48 +8702,53 @@ void ArmyData::Disband()
 	Cell *      cell            = g_theWorld->GetCell(m_pos);
 	sint32      cellOwner       = cell->GetOwner();	
 	Diplomat &  cell_diplomat   = Diplomat::GetDiplomat
-        ((PLAYER_UNASSIGNED == cellOwner) ? PLAYER_INDEX_VANDALS : cellOwner);
+	    ((PLAYER_UNASSIGNED == cellOwner) ? PLAYER_INDEX_VANDALS : cellOwner);
 
-    // Usually, "for (int i = 0; i < n; ++i)" expresses more clearly that you 
-    // are going through all items of an array. But when killing/removing items,
-    // it is safer to start from the end, otherwise indices may get shifted 
-    // while you are busy, and half of the items will not be removed.
+	// Usually, "for (int i = 0; i < n; ++i)" expresses more clearly that you 
+	// are going through all items of an array. But when killing/removing items,
+	// it is safer to start from the end, otherwise indices may get shifted 
+	// while you are busy, and half of the items will not be removed.
 	for (sint32 i = m_nElements - 1; i >= 0; i--) 
-    {
+	{
 		if (city.IsValid()) 
-        {
-            // Shield cost should be difficulty dependent
+		{
+			// Shield cost should be difficulty dependent
 			city.AccessData()->GetCityData()->AddShields
-                (m_array[i].GetDBRec()->GetShieldCost() / 2); 
+			    (m_array[i].GetDBRec()->GetShieldCost() / 2); 
 		}
 
 		// Should be moved into own method and own event
-//EMOD Gift Units for Human Player 4-12-2006
+		// EMOD Gift Units for Human Player 4-12-2006
 		if (    (cellOwner != m_owner)
-             && (cellOwner != PLAYER_UNASSIGNED)
-             && !AgreementMatrix::s_agreements.HasAgreement
-                    (cellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) 
-             && (m_array[i].GetDBRec()->GetCanBeGifted())
-             && (!g_player[m_owner]->IsRobot())
-           )
-        {
-	        sint32 newunit      = m_array[i].GetType();
-		    sint32 regardcost   = (m_array[i].GetDBRec()->GetAttack()) / 5;
+		     && (cellOwner != PLAYER_UNASSIGNED)
+		     && !g_player[m_owner]->HasWarWith(cellOwner)
+		     && (m_array[i].GetDBRec()->GetCanBeGifted())
+		     && (!g_player[m_owner]->IsRobot())
+		   )
+		{
+			sint32 newunit      = m_array[i].GetType();
+			sint32 regardcost   = (m_array[i].GetDBRec()->GetAttack()) / 5;
 
-	        m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-            /// @todo Check if this works when disbanding an army consisting
-            ///       of multiple units. Does the game engine allow creation of 
-            ///       units of 2 players at the same location?
+			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+			/// @todo Check if this works when disbanding an army consisting
+			///       of multiple units. Does the game engine allow creation of 
+			///       units of 2 players at the same location?
+			///       Indeed this does support the game engine, you can have
+			///       two unit at the same location and even group them into
+			///       one army, but then you should not try to move it,
+			///       otherwise the game will crash. Actually it would be 
+			///       cleaner to have the position empty before adding any
+			///       foreign units.
 			g_player[cellOwner]->CreateUnit
-                (newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+			    (newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
 
 			StringId strId;
 			g_theStringDB->GetStringID("REGARD_EVENT_UNITS_GIFTED", strId);
 			cell_diplomat.LogRegardEvent
-                (m_owner, regardcost, REGARD_EVENT_GOLD, strId);
-		} 
-        else 
-        {
+			    (m_owner, regardcost, REGARD_EVENT_GOLD, strId);
+		}
+		else
+		{
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
 	}

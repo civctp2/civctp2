@@ -659,23 +659,23 @@ void ProfileDB::SetMusicVolume(sint32 vol)
 }
 
 void ProfileDB::SetDifficulty(uint32 x)
-{ 
+{
 	Assert((x>=0) && (x<7));
-	if(x >= 0 && x < 7) 
-    {
+	if(x >= 0 && x < 7)
+	{
 		m_difficulty = x;
-		if (g_player) 
-        {
-			for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
-            {
-				if (g_player[p]) 
-                {
+		if (g_player)
+		{
+			for (sint32 p = 0; p < k_MAX_PLAYERS; p++)
+			{
+				if (g_player[p])
+				{
 					delete g_player[p]->m_difficulty;
 					g_player[p]->m_difficulty = 
-                        new Difficulty(*g_theDifficultyDB->Get(x), 
-                                       p, 
-                                       !g_player[p]->IsRobot()
-                                      );
+					    new Difficulty(x,
+					                   p,
+					                   !g_player[p]->IsRobot()
+					                  );
 				}
 			}
 		}

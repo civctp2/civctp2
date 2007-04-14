@@ -3214,18 +3214,23 @@ void DiplomacyWindow::EnableButtons(BOOL enable, sint32 player)
 	sm_detailsButton->Enable(enable);
 	sm_messageButton->Enable(enable);
 	
-	if ( enable && AgreementMatrix::s_agreements.HasAgreement(g_selected_item->GetVisiblePlayer(),
-			player, PROPOSAL_TREATY_DECLARE_WAR) )
-	{
+	if(enable
+	&& g_player[g_selected_item->GetVisiblePlayer()]->HasWarWith(player)
+	){
 		sm_warButton->Enable(FALSE);
-	} else {
+	}
+	else
+	{
 		sm_warButton->Enable(enable);
 	}
 
-	if ( enable && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).GetEmbargo(player) )
-	{
+	if(enable
+	&& Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).GetEmbargo(player)
+	){
 		sm_embargoButton->Enable(FALSE);
-	} else {
+	}
+	else
+	{
 		sm_embargoButton->Enable(enable);
 	}
 

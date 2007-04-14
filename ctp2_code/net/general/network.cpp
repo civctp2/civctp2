@@ -2551,11 +2551,12 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 								continue;
 							
 							char name[256];
-							char *n, *ln;
+							const char *ln;
+							char *n;
 							
 							for(n = &name[0], ln = g_player[p]->m_civilisation->GetLeaderName(); 
 							*ln && !isspace(*ln); ln++, n++)
-								*n = *ln;					   						
+								*n = *ln;
 							*n = 0;
 							
 							if(g_player[p] && 
@@ -3755,7 +3756,7 @@ void Network::SendWrongPlayerJoinedMessage(MBCHAR *name, sint32 player)
 	}
 }
 
-void Network::SendLeftMessage(MBCHAR *name, sint32 player)
+void Network::SendLeftMessage(const MBCHAR *name, sint32 player)
 {
 	if(g_slicEngine) {
 		SlicObject *so;

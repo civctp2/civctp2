@@ -6308,32 +6308,25 @@ void Player::DumpMessages(void)
 
 
 void Player::SendTestMessage(void)
-	{
+{
 	SlicObject *so = new SlicObject("pact fulfilled city captured") ;
 	so->AddCity(m_all_cities->Get(0)) ;
 	so->AddCivilisation(m_owner) ;
 	so->AddCivilisation(m_owner+1) ;
-	}
+}
 
-	
-
-
-
-
-
-
-
-
-
-
-MBCHAR *Player::GetLeaderName(void)
+const MBCHAR *Player::GetLeaderName(void)
 {
-    if (!g_network.IsActive() && !g_slicEngine->GetTutorialActive() &&
-		g_theProfileDB->GetPlayerIndex() == m_owner) {
-        return (g_theProfileDB->GetLeaderName());
-    } else {
-        return (m_civilisation->GetLeaderName());
-    }
+	if(!g_network.IsActive()
+	&& !g_slicEngine->GetTutorialActive()
+	&& g_theProfileDB->GetPlayerIndex() == m_owner
+	){
+		return g_theProfileDB->GetLeaderName();
+	}
+	else
+	{
+		return m_civilisation->GetLeaderName();
+	}
 }
 
 
@@ -6347,11 +6340,11 @@ MBCHAR *Player::GetLeaderName(void)
 
 
 void Player::GetPluralCivName(MBCHAR *s)
-	{
+{
 	m_civilisation->GetPluralCivName(s) ;
-	}
+}
 
-	
+
 
 
 
@@ -7815,11 +7808,10 @@ bool Player::HasEmbassyWith(sint32 player)
 		return true;
 
 	
-	if(wonderutil_GetEmbassy(m_builtWonders, g_player[player]->m_builtWonders)) {
-		
-		
-		
-		if (!AgreementMatrix::s_agreements.HasAgreement(player, m_owner, PROPOSAL_TREATY_DECLARE_WAR)) {
+	if(wonderutil_GetEmbassy(m_builtWonders, g_player[player]->m_builtWonders))
+	{
+		if(!g_player[m_owner]->HasWarWith(player))
+		{
 			return true;
 		}
 
@@ -9825,8 +9817,8 @@ void Player::ThisMeansWAR(PLAYER_INDEX defense_owner)
 	PLAYER_INDEX attack_owner = m_owner;
 
 
-	if ((attack_owner != 0) && (defense_owner != 0) && 
-		!AgreementMatrix::s_agreements.HasAgreement(attack_owner, defense_owner, PROPOSAL_TREATY_DECLARE_WAR)) { 
+	if(!g_player[attack_owner]->HasWarWith(defense_owner))
+	{
 		
 		SlicObject *so = new SlicObject("128CivStartedWar");
 		so->AddCivilisation(attack_owner);

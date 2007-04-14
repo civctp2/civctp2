@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : part of the World class implementation
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // Generate debug version when set.
 //
@@ -987,59 +988,59 @@ BOOL World::CanBeIrrigated(const MapPoint &point)
 	return m_tempIrrigation;
 }
 
-sint32 World::IsNextToCity(const MapPoint &pos)
+bool World::IsNextToCity(const MapPoint &pos) const
 {
-    MapPoint n; 
-       
-    if(pos.GetNeighborPosition(NORTH, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
+	MapPoint n;
 
-    if(pos.GetNeighborPosition(NORTHWEST, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(NORTHEAST, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTH, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTHWEST, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(SOUTHEAST, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(WEST, n)) {
-		if (IsCity(n)) { 
-			return TRUE; 
-		}
-	}
-
-    if(pos.GetNeighborPosition(EAST, n)) {
+	if(pos.GetNeighborPosition(NORTH, n)) {
 		if (IsCity(n)) {
-			return TRUE; 
+			return true;
 		}
 	}
 
-    return FALSE; 
+	if(pos.GetNeighborPosition(NORTHWEST, n)) {
+		if (IsCity(n)) {
+			return true;
+		}
+	}
+
+	if(pos.GetNeighborPosition(NORTHEAST, n)) {
+		if (IsCity(n)) {
+			return true;
+		}
+	}
+
+	if(pos.GetNeighborPosition(SOUTH, n)) {
+		if (IsCity(n)) {
+			return true;
+		}
+	}
+
+	if(pos.GetNeighborPosition(SOUTHWEST, n)) {
+		if (IsCity(n)) {
+			return true;
+		}
+	}
+
+	if(pos.GetNeighborPosition(SOUTHEAST, n)) {
+		if (IsCity(n)) { 
+			return true;
+		}
+	}
+
+	if(pos.GetNeighborPosition(WEST, n)) {
+		if (IsCity(n)) {
+			return true;
+		}
+	}
+
+	if(pos.GetNeighborPosition(EAST, n)) {
+		if (IsCity(n)) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void World::RegisterPlayerDead(sint32 owner)

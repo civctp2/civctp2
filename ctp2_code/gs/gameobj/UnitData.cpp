@@ -5495,9 +5495,9 @@ bool UnitData::CheckForRefuel()
 		return true;
 	}
 	
-	Unit c = g_theWorld->GetCity(m_pos);	
+	Unit c = g_theWorld->GetCity(m_pos);
 	if (c.IsValid()) 
-    { 
+	{
 		m_fuel = rec->GetMaxFuel();
 		m_movement_points = 0;
 		return true;
@@ -5505,10 +5505,10 @@ bool UnitData::CheckForRefuel()
 	
 	if (g_theWorld->IsInstallation(m_pos)) {
 	//	Cell *cell = g_theWorld->GetCell(m_pos);
-	//sint32 CellOwner = cell->GetOwner();
+	//	sint32 CellOwner = cell->GetOwner();
 
 		if( terrainutil_HasAirfield(m_pos) &&
-			g_theWorld->GetOwner(m_pos) == m_owner) { //add (!IsEnemy(CellOwner) || if((!AgreementMatrix::s_agreements.HasAgreement(defense_owner, m_owner, PROPOSAL_TREATY_DECLARE_WAR))
+			g_theWorld->GetOwner(m_pos) == m_owner) { //add (!IsEnemy(CellOwner) || g_player[m_owner]->HasWarWith(defense_owner))
 			m_fuel = rec->GetMaxFuel();
 			m_movement_points = 0;
 			return true;
