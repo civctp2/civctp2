@@ -56,18 +56,19 @@
 
 #include "AgreementData.h"      // k_EXPIRATION_NEVER
 #include "c3errors.h"
-#include "Token.h"
-#include "Globals.h"
-#include "StrDB.h"              // g_theStringDB
 #include "Civilisation.h"
-#include "GameSettings.h"       // g_theGameSettings
-#include "soundmanager.h"       // g_soundManager
 #include "CivPaths.h"           // g_civPaths
-#include "player.h"             // g_player
 #include "Diffcly.h"
+#include "DifficultyRecord.h"   // g_theDifficultyDB
 #include "Diplomacy_Log.h"
+#include "GameSettings.h"       // g_theGameSettings
+#include "Globals.h"
+#include "player.h"             // g_player
+#include "soundmanager.h"       // g_soundManager
+#include "StrDB.h"              // g_theStringDB
+#include "Token.h"
 
-extern Diplomacy_Log        *g_theDiplomacyLog; 
+extern Diplomacy_Log *      g_theDiplomacyLog; 
 
 namespace
 {
@@ -404,7 +405,7 @@ ProfileDB::ProfileDB()
 	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL, false);
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false); //used emod2
-	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
+	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, false);
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
 	// emod new profile flags // Please make sure that only those show up which are used.
 	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL); //used
@@ -660,16 +661,21 @@ void ProfileDB::SetMusicVolume(sint32 vol)
 void ProfileDB::SetDifficulty(uint32 x)
 { 
 	Assert((x>=0) && (x<7));
-	if(x >= 0 && x < 7) {
+	if(x >= 0 && x < 7) 
+    {
 		m_difficulty = x;
-		if(g_player) {
-			sint32 p;
-			for(p = 0; p < k_MAX_PLAYERS; p++) {
-				if(g_player[p]) {
+		if (g_player) 
+        {
+			for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
+            {
+				if (g_player[p]) 
+                {
 					delete g_player[p]->m_difficulty;
-					g_player[p]->m_difficulty = new Difficulty(m_difficulty,
-					                                           p,
-					                                           g_player[p]->m_playerType != PLAYER_TYPE_ROBOT);
+					g_player[p]->m_difficulty = 
+                        new Difficulty(*g_theDifficultyDB->Get(x), 
+                                       p, 
+                                       !g_player[p]->IsRobot()
+                                      );
 				}
 			}
 		}

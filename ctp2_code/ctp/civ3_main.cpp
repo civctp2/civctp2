@@ -120,7 +120,6 @@
 #include "MainControlPanel.h"
 #include "messagewin.h"
 #include "network.h"
-#include <new>                          // std::bad_alloc, std::set_new_handler
 #include "pattern.h"
 #include "picture.h"
 #include "pixelutils.h"
@@ -287,15 +286,6 @@ bool g_autoAltTab = false;
 
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
 
-#if defined(_MSC_VER)
-/// Throw an exception (when new fails)
-/// \remarks MSVC has a non-standard nothrow new operator as default.
-void ThrowBadAlloc()
-{
-    throw std::bad_alloc();
-}
-#endif // _MSC_VER
-
 namespace Os
 {
     /// Get the name of the executable
@@ -348,20 +338,6 @@ namespace Os
 #endif  // WIN32
 
         return exeVersion.str();
-    }
-
-    /// Make OS or compiler behave as compatible as possible
-    void Initialize(void)
-    {
-#if defined(_MSC_VER)
-
-#if (_MSC_VER >= 1400)
-        std::set_new_handler(ThrowBadAlloc);
-#else
-        set_new_handler(ThrowBadAlloc);
-#endif
-
-#endif // _MSC_VER
     }
 }
 
@@ -1360,8 +1336,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 {
 	// This stuff will have to be moved into a new int main(int argc, char **argv)
 	// once graphics are also ported to SDL
-
-	Os::Initialize();
 
 #if defined(WIN32) || defined(_WINDOWS)
 

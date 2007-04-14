@@ -309,7 +309,7 @@ AUI_ERRCODE aui_Surface::GetDC(HDC * hdc)
 	bih.biWidth = m_width;
 	bih.biHeight = -m_height;
 	bih.biPlanes = 1;
-	bih.biBitCount = GetDeviceCaps( m_hdc, BITSPIXEL );
+	bih.biBitCount = static_cast<WORD>(GetDeviceCaps(m_hdc, BITSPIXEL));
 	bih.biCompression = BI_RGB;
 
 	SetDIBits(
@@ -340,7 +340,7 @@ AUI_ERRCODE aui_Surface::ReleaseDC(HDC hdc)
 	bih.biWidth = m_width;
 	bih.biHeight = -m_height;
 	bih.biPlanes = 1;
-	bih.biBitCount = GetDeviceCaps( m_hdc, BITSPIXEL );
+	bih.biBitCount = static_cast<WORD>(GetDeviceCaps(m_hdc, BITSPIXEL));
 	bih.biCompression = BI_RGB;
 
 	GetDIBits(

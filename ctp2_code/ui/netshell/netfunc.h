@@ -1026,7 +1026,7 @@ public:
 	
 	void SetBlob(char *b);
 	
-	void SetBlob(void *b, unsigned char s);
+	void SetBlob(void *b, size_t s);
 	
 	void SetBlobLen(unsigned char l);
 	
@@ -1218,7 +1218,7 @@ public:
 	
 	void SetUserField(char *u);
 	
-	void SetUserField(void *u, short s);
+	void SetUserField(void *u, size_t s);
 	
 	void SetSyncLaunch(bool s);
 	

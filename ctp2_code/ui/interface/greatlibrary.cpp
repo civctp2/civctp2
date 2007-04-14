@@ -171,9 +171,6 @@ void GreatLibrary::Load_Great_Library()
 
 	
 	{
-		char ch;
-		
-		
 		const int MAX_NAME = 1024;
 		const int MAX_ENTRY	= k_MAX_GL_ENTRY;
 		char the_name[MAX_NAME];
@@ -193,7 +190,7 @@ void GreatLibrary::Load_Great_Library()
 		while (!feof(great_library))
 		{
 			
-			ch = fgetc(great_library);
+			int ch = fgetc(great_library);
 
 			
 			switch (reading_what)
@@ -234,7 +231,7 @@ void GreatLibrary::Load_Great_Library()
 					else
 					{
 						
-						the_name[name_pos++] = ch;
+						the_name[name_pos++] = static_cast<char>(ch);
 
 						
 						Assert(name_pos < MAX_NAME);
@@ -268,8 +265,8 @@ void GreatLibrary::Load_Great_Library()
 						
 						end_ptr = &(the_entry[entry_pos]);
 
-						
-						the_entry[entry_pos++] = ch;
+						Assert(ch == '[');
+						the_entry[entry_pos++] = static_cast<char>(ch);
 
 						
 						reading_what = IN_END;
@@ -280,7 +277,7 @@ void GreatLibrary::Load_Great_Library()
 					else
 					{
 						
-						the_entry[entry_pos++] = ch;
+						the_entry[entry_pos++] = static_cast<char>(ch);
 
 						
 						
@@ -296,8 +293,8 @@ void GreatLibrary::Load_Great_Library()
 								ch = fgetc(great_library);
 							}
 
-							
-							the_entry[entry_pos++] = ch;
+							Assert(ch == '[');
+							the_entry[entry_pos++] = static_cast<char>(ch);
 
 							
 							reading_what = IN_END;
@@ -312,7 +309,7 @@ void GreatLibrary::Load_Great_Library()
 			case IN_END:
 				{
 					
-					the_entry[entry_pos++] = ch;
+					the_entry[entry_pos++] = static_cast<char>(ch);
 
 #if defined(_JAPANESE)
 					end_pos ++;
@@ -370,7 +367,7 @@ void GreatLibrary::Load_Great_Library()
 
 int GreatLibrary::Get_Database_From_Name
 (
-	char * database_name
+	char const * database_name
 )
 {
 	for (int i = 0; i < DATABASE_MAX; i++)
@@ -387,18 +384,20 @@ int GreatLibrary::Get_Database_From_Name
 
 int GreatLibrary::Get_Object_Index_From_Name
 (
-	int     which_database,					
-	char *  object_name
+	int             which_database,					
+	char const *    object_name
 )
 {
 	int     index;
-	char *  db_item_name = NULL;
 	
-	// By truning which_database into a CTPDatabase<T> pointer we could even 
+	// By turning which_database into a CTPDatabase<T> pointer we could even 
 	// simplify this code more, only problem would be the search database, 
 	// which could be a NULL pointer then.
 	switch (which_database) 
     {
+	default:
+        index = CTPRecord::INDEX_INVALID;
+        break;
 	case DATABASE_UNITS:
 		index = g_theUnitDB->FindRecordNameIndex(object_name);
 		break;
@@ -431,17 +430,16 @@ int GreatLibrary::Get_Object_Index_From_Name
 	case DATABASE_TILE_IMPROVEMENTS:
 		index = g_theTerrainImprovementDB->FindRecordNameIndex(object_name);
 		break;
-	default:
-		bool InvalidDatabase = FALSE;
-		DPRINTF(k_DBG_GAMESTATE, ("DB: %i\n", which_database));
-		Assert(InvalidDatabase);
-        return CTPRecord::INDEX_INVALID;
 	}
 
-	if(index == CTPRecord::INDEX_INVALID){
-		bool bad_object_name = false;
-		DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
-		Assert(bad_object_name);
+    Assert(index != CTPRecord::INDEX_INVALID);
+	if (index == CTPRecord::INDEX_INVALID)
+    {
+		DPRINTF(k_DBG_GAMESTATE, ("Bad database object name: %s, DB: %i\n", 
+                                  object_name, 
+                                  which_database
+                                 )
+               );
 	}
 	
 	return index;
@@ -608,10 +606,8 @@ void TechListItem::Update(void)
 	
 	if (m_database == DATABASE_SEARCH)
 	{
-		
 		real_database   = g_greatLibrary->m_search_results[m_index].m_database;
 		real_index      = g_greatLibrary->m_search_results[m_index].m_item;
-
 	} 
 
 	switch ( real_database ) {
@@ -663,18 +659,15 @@ void TechListItem::Update(void)
 
 sint32 TechListItem::Compare(ctp2_ListItem *item2, uint32 column)
 {
-	sint32	val1, val2;
-
-	if (column < 0) return 0;
-
-	switch (column) {
+	switch (column) 
+    {
 	case 0:
-		val1 = m_index; 
-		val2 = ((TechListItem *)item2)->GetIndex();
-		if (val1 < val2) return -1;
-		else if (val1 > val2) return 1;
-		else return 0;
-
+        {
+		    sint32 val2 = ((TechListItem *)item2)->GetIndex();
+		    if (m_index < val2) return -1;
+		    else if (val2 < m_index) return 1;
+            else return 0;
+        }
 		break;
 	}
 
@@ -689,7 +682,10 @@ sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
 			g_greatLibrary->SetLibrary( theMode, DATABASE_ADVANCES );
 		}
 		else {
-			g_greatLibrary->SetLibrary(g_greatLibrary->m_window->GetTechMode(), g_greatLibrary->m_window->GetTechDatabase() );
+			g_greatLibrary->SetLibrary
+                (g_greatLibrary->m_window->GetTechMode(), 
+                 g_greatLibrary->m_window->GetTechDatabase() 
+                );
 		}
 		g_greatLibrary->SetSci( sci );
 		g_greatLibrary->GetWindow()->MoveOG();
@@ -788,12 +784,12 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 
  	
 	m_window->LoadGameplayText( so );
-	if(m_window->LoadHistoricalText( so ) == GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK) {
-		m_historicalTab->Enable(FALSE);
-	} else {
-		m_historicalTab->Enable(TRUE);
-	}
-	FixTabs();
+	m_historicalTab->Enable
+        (GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK !=
+            m_window->LoadHistoricalText(so)
+        );
+
+    FixTabs();
 	m_window->LoadRequirementsText( so );
 	m_window->LoadVariablesText( so );
 
@@ -882,24 +878,19 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 
 	m_techStillShot = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "TechStillShot");
 
-
-
-	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	sprintf( controlBlock, "LibraryStrings" );
-
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	m_string = new aui_StringTable( &errcode, controlBlock );
+	m_string = new aui_StringTable( &errcode, "LibraryStrings");
 
 	ctp2_Static *control = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Tabs.TechTreeTab.TabPanel");
 	m_techTree = new Chart(&errcode, aui_UniqueId(), "TechTree", NULL, NULL);
 	control->AddChild(m_techTree);
 
 	sint32 i;
-	for ( i = 0;i < 4 ;i++ ) {
+	for ( i = 0;i < k_MAX_PREREQ ;i++ ) {
 		m_techTree->GetPreReqButton(i)->SetActionFuncAndCookie( greatlibrary_PrereqActionCallback, m_techTree );
 	}
 
-	for ( i = 0;i < 4 ;i++ ) {
+	for ( i = 0;i < k_MAX_LEADS_TO ;i++ ) {
 		m_techTree->GetLeadsToButton(i)->SetActionFuncAndCookie( greatlibrary_LeadsToActionCallback, m_techTree );
 	}
 
@@ -917,8 +908,9 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	m_topics_list = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, "IndexSheet");
 	m_topics_list->SetActionFuncAndCookie( GreatLibrary_Topics_List_Callback, NULL );
 
-	sprintf( controlBlock, "%s", "IndexButtonSwitchGroup" );
-	ctp2_Static *switchGroup = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, controlBlock);
+    MBCHAR const    controlBlock[]  = "IndexButtonSwitchGroup";
+	ctp2_Static *   switchGroup = static_cast<ctp2_Static *>
+        (aui_Ldl::GetObject(windowBlock, controlBlock));
 	switchGroup->SetBlindness( TRUE );
 
 	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1016,12 +1008,6 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	enum DATABASE real_database = theDatabase;
 	int real_index = theMode;
-#if 0   // unused	
-	sint32 videoWidth = 242;
-	sint32 videoHeight = 182;
-	sint32 videoX = 382;
-	sint32 videoY = 316;
-#endif
 	
 	SetCategoryName(theDatabase);
 
@@ -2105,9 +2091,6 @@ void GreatLibrary::Add_Item_To_Topics_List
 	int index
 )
 {
-	
-	void *cookie = (void *) index;
-	
 	Assert(m_topics_list);
 	if(!m_topics_list) return;
 
@@ -2116,15 +2099,11 @@ void GreatLibrary::Add_Item_To_Topics_List
 	if(!item) return;
 
 	ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
-
 	Assert(box);
 	if(!box) return;
 
 	box->SetText(name);
-	
-	
-	item->SetUserData(cookie);
-
+	item->SetUserData((void *) index);
 	m_topics_list->AddItem(item);
 }
 
@@ -2134,14 +2113,10 @@ void GreatLibrary::Add_Item_To_Topics_List
 
 void GreatLibrary::FixTabs()
 {
-	
-	ctp2_Tab *curTab=m_tabGroup->GetCurrentTab();
-	m_tabGroup->SelectTab( m_historicalTab );
-	m_tabGroup->SelectTab( m_gameplayTab );
+	ctp2_Tab *curTab = m_tabGroup->GetCurrentTab();
 
-	if(curTab->IsDisabled()) {
-		m_tabGroup->SelectTab(m_gameplayTab);
-	} else {
-		m_tabGroup->SelectTab( curTab );
-	}
+	m_tabGroup->SelectTab(m_historicalTab);
+	m_tabGroup->SelectTab(m_gameplayTab);
+
+    m_tabGroup->SelectTab(curTab->IsDisabled() ? m_gameplayTab : curTab);
 }

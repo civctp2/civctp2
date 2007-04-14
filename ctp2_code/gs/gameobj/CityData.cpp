@@ -7699,28 +7699,20 @@ void CityData::AdjustSizeIndices()
 
 void CityData::ChangePopulation(sint32 delta)
 {
-	m_population += delta;
-	m_numSpecialists[POP_WORKER] += (sint16)delta;
+    m_population                 += delta;
+    m_numSpecialists[POP_WORKER] += (sint16) delta;
 	
-	if (delta < 0) 
+    for (int i = 0; (i < POP_MAX) && (m_numSpecialists[POP_WORKER] < 0); ++i) 
     {
-		m_numSpecialists[POP_WORKER] += (sint16)delta;
-		if(m_numSpecialists[POP_WORKER] < 0) {
-			sint32 needToRemove = -m_numSpecialists[POP_WORKER];
-			m_numSpecialists[POP_WORKER] = 0;
-
-			for (sint32 i = 0; i < POP_MAX && needToRemove > 0; i++) 
-            {
-				if(m_numSpecialists[i] >= (sint16)needToRemove) {
-					m_numSpecialists[i] -= (sint16)needToRemove;
-					needToRemove = 0;
-				} else if(m_numSpecialists[i] >= 0) {
-					needToRemove -= m_numSpecialists[i];
-					m_numSpecialists[i] = 0;
-				}
-			}
-		}
-	}
+        if (m_numSpecialists[i] > 0)
+        {
+            sint16 convertCount = std::min<sint16>
+                                      (m_numSpecialists[i], -m_numSpecialists[POP_WORKER]);
+            m_numSpecialists[i]          -= convertCount;
+            m_numSpecialists[POP_WORKER] += convertCount;
+        }
+    }
+    Assert(m_numSpecialists[POP_WORKER] >= 0);
 
 	AdjustSizeIndices();
 	UpdateSprite();
@@ -7735,7 +7727,7 @@ void CityData::ChangePopulation(sint32 delta)
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillCity,
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_Int, CAUSE_REMOVE_CITY_UNKNOWN,
-		                       GEA_Player, -1,
+		                       GEA_Player, PLAYER_UNASSIGNED,
 		                       GEA_End);
 	}
 }

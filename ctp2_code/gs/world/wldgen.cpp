@@ -49,6 +49,7 @@
 
 #include "A_Star_Heuristic_Cost.h"
 #include "AICause.h"
+#include <algorithm>
 #if defined(DUMP_TERRAIN_HEIGHT_MAPS)
 #include "bmp_io.h"
 #endif
@@ -180,12 +181,15 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 				worldIsGood = false;
 			} else {
 				Assert(g_theProfileDB->PercentLand() < 1.0);
-				if(g_theProfileDB->PercentLand() < 1.0) {
-					g_theProfileDB->SetPercentLand(g_theProfileDB->PercentLand() + 0.1);
-					if(g_theProfileDB->PercentLand() > 1.0) {
-						g_theProfileDB->SetPercentLand(1.0);
-					}
-					Reset(m_size.x, m_size.y, m_isYwrap, m_isXwrap);
+				if (g_theProfileDB->PercentLand() < 1.0) 
+                {
+					g_theProfileDB->SetPercentLand
+                        (std::min<double>(1.0, 
+                                          g_theProfileDB->PercentLand() + 0.1
+                                         )
+                        );
+
+                    Reset(m_size.x, m_size.y, m_isYwrap, m_isXwrap);
 					ignoreTutorialRules = false;
 					worldIsGood = false;
 				}
@@ -470,14 +474,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		for(x = 0; x < m_size.x; x++) {
 			MapPoint from(x,y);
 			MapPoint to;
-			
-			{
-				to.y = from.y;
-				to.x = from.x - from.y/2;
-				while(to.x<0)
-					to.x+=m_size.x;
-			}
-			
+            FlatToIso(from, to);
 
 			m_map[to.x][to.y]->m_env = 0;
 			if(map[from.y * m_size.x + from.x] >= mountainLevel) {
@@ -584,14 +581,7 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 		for(x = 0; x < m_size.x; x++) {
 			MapPoint from(x,y);
 			MapPoint to;
-			
-			{
-				to.y = from.y;
-				to.x = from.x - from.y/2;
-				while(to.x<0)
-					to.x+=m_size.x;
-			}
-			
+            FlatToIso(from, to);
 
 			if(m_map[to.x][to.y]->m_terrain_type == TERRAIN_PLAINS) {
 				if(wetmap[from.y * m_size.x + from.x] >= forestLevel) {
@@ -667,16 +657,9 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 			
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
-			MapPoint from(x,y);
+			MapPoint from(x, y);
 			MapPoint to;
-			
-			{
-				to.y = from.y;
-				to.x = from.x - from.y/2;
-				while(to.x<0)
-					to.x+=m_size.x;
-			}
-			
+            FlatToIso(from, to);
 
 			if(temperatureMap[y * m_size.x + x] <= whiteLevel) {
 				sint32 tt = m_map[to.x][to.y]->m_terrain_type;
@@ -2737,63 +2720,64 @@ void World::FlatToIso(const MapPoint &flat, MapPoint &iso)
 {
 	iso.y = flat.y;
 	iso.x = flat.x - flat.y / 2;
-	while(iso.x < 0)
+	while (iso.x < 0)
+    {
 		iso.x += m_size.x;
+    }
 }
 
 
 
-BOOL World::IsNextToOldRiver(const MapPoint &newpoint, const MapPoint &lastpoint)
+bool World::IsNextToOldRiver
+(
+    const MapPoint &    newpoint, 
+    const MapPoint &    lastpoint
+) const
 {
-	sint32 xc, yc;
-	sint32 left;
-	if(newpoint.y & 1) { 
-		left = newpoint.x;
-	} else { 
-		left = newpoint.x - 1;
-	}
-	for(xc = left; xc < left+2; xc++) {
+    sint32 left = (newpoint.y & 1) ? newpoint.x : (newpoint.x - 1);
+
+    for (sint32 xc = left; xc < left+2; xc++) 
+    {
 		if(xc < 0 || xc >= m_size.x)
 			continue;
-		for(yc = newpoint.y-1; yc < newpoint.y + 2; yc+=2) {
+
+		for (sint32 yc = newpoint.y-1; yc < newpoint.y + 2; yc+=2) 
+        {
 			if(yc < 0 || yc >= m_size.y)
 				continue;
+
 			MapPoint chk(xc, yc);
 			if(chk == lastpoint)
 				continue;
 			if(s_visited->IsPresent(chk))
-				return TRUE;
+				return true;
 		}
 	}
 
-	return FALSE;	
+	return false;	
 }
 
 void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 {
 	s_visited = new DynamicArray<MapPoint>;
 	sint32 x, y;
-	sint32 xcell, ycell;
-	sint32 cellwidth, cellheight;
 	sint32 maxheight;
-	sint32 xsrch, ysrch;
-	sint32 xend, yend;
-	sint32 maxx = 0, maxy = 0;
-
-	BOOL atMouth;
-	
-	cellwidth = g_theConstDB->RiverCellWidth();
-	cellheight = g_theConstDB->RiverCellHeight();
+	sint32  cellwidth   = g_theConstDB->RiverCellWidth();
+	sint32  cellheight  = g_theConstDB->RiverCellHeight();
+	sint32  maxx        = 0;
+    sint32  maxy        = 0;
 
 #define CHKPOINT(p) Assert(p.x >= 0 && p.x < m_size.x && p.y >= 0 && p.y < m_size.y)
 #define CHKCOORD(xxx,yyy) Assert(xxx >= 0 && xxx < m_size.x && yyy >= 0 && yyy < m_size.y)
 			
-	for(xcell = 0; xcell < cellwidth; xcell++) {
-		for(ycell = 0; ycell < cellheight; ycell++) {
-			xsrch = xcell * (m_size.x / cellwidth);
-			ysrch = ycell * (m_size.y / cellheight);
-			xend = (xcell + 1) * (m_size.x / cellwidth);
-			yend = (ycell + 1) * (m_size.y / cellheight);
+	for (sint32 xcell = 0; xcell < cellwidth; xcell++) 
+    {
+		for (sint32 ycell = 0; ycell < cellheight; ycell++) 
+        {
+			sint32  xsrch   = xcell * (m_size.x / cellwidth);
+			sint32  ysrch   = ycell * (m_size.y / cellheight);
+			sint32  xend    = (xcell + 1) * (m_size.x / cellwidth);
+			sint32  yend    = (ycell + 1) * (m_size.y / cellheight);
 			maxheight = -1000;
 			for(; xsrch < xend; xsrch++) {
 				if(xsrch >= m_size.x)
@@ -2834,24 +2818,27 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 			}
 		
 			SetRiver(to);
-			atMouth = FALSE;
+			bool atMouth = false;
 
 			s_visited->Clear();
 
 			while(!atMouth) {
-				sint32 xc, yc;
-				sint32 lowest = 0x7fffffff;
-				sint32 lowx = 0x7fffffff, lowy = 0x7fffffff;
+				sint32 lowest   = 0x7fffffff;
+				sint32 lowx     = 0x7fffffff;
+                sint32 lowy     = 0x7fffffff;
 				CHKCOORD(x, y);
 
-                sint32 left = (y & 1) ? x : x -1;
+                sint32 left = (y & 1) ? x : x - 1;
 
-                for(xc = left; xc < left+2; xc++) {
+                for (sint32 xc = left; xc < left+2; xc++) 
+                {
 					if(xc < 0 || xc >= m_size.x)
 						continue;
-					for(yc = y-1; yc < y + 2; yc+=2) {
+
+					for(sint32 yc = y-1; yc < y + 2; yc+=2) {
 						if(yc < 0 || yc >= m_size.y)
 							continue;
+
 						MapPoint c(xc, yc);
 						MapPoint from(x,y);
 						CHKPOINT(c);
@@ -2876,33 +2863,32 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 						if(checkheight > lowest)
 							continue;
 						lowest = checkheight;
-						lowx = ax; lowy = ay;
+						lowx = ax; 
+                        lowy = ay;
 					}
 				}
 				if(lowest >= 0x7fffffff) {
-					lowx = x; lowy = y;
+					lowx = x; 
+                    lowy = y;
 				}
 				MapPoint v(lowx, lowy);
 				CHKPOINT(v);
 				s_visited->Insert(v);
-				x = lowx; y = lowy;
+				x = lowx; 
+                y = lowy;
 				MapPoint checkfrom(lowx, lowy);
 				MapPoint checkto;
-				{
-					checkto.y = checkfrom.y;
-					checkto.x = checkfrom.x - checkfrom.y / 2;
-					while(checkto.x<0)
-						checkto.x += m_size.x;
-				}
+				FlatToIso(checkfrom, checkto);
+
 				CHKPOINT(checkto);
 				CHKPOINT(checkfrom);
 				if(lowest < 0x7fffffff) {
 					if(m_map[checkto.x][checkto.y]->m_terrain_type == TERRAIN_WATER_BEACH || IsRiver(checkto)) {
-						atMouth = TRUE;
+						atMouth = true;
 					}
 					SetRiver(checkto);
 				} else {
-					atMouth = TRUE;
+					atMouth = true;
 					m_map[checkto.x][checkto.y]->m_terrain_type = TERRAIN_WATER_BEACH;
 					SetMovementType(checkto.x, checkto.y, k_MOVEMENT_TYPE_WATER | k_MOVEMENT_TYPE_SHALLOW_WATER);
 				}
@@ -2921,10 +2907,10 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 			if(IsSurroundedByWater(x,y)) {
 				GetCell(x,y)->m_env &= ~(k_BIT_ENV_RIV_CUR);
 			} else {
-				sint32 d;
 				bool nextToRiver = false;
-				MapPoint cp(x,y), n;
-				for(d = 0; d < sint32(NOWHERE); d++) {
+				MapPoint cp(x,y);
+                MapPoint n;
+				for (sint32 d = 0; d < sint32(NOWHERE); d++) {
 					if(cp.GetNeighborPosition((WORLD_DIRECTION)d, n)) {
 						if(IsRiver(n.x, n.y)) {
 							nextToRiver = true;
@@ -3024,11 +3010,13 @@ void World::ClearScratch()
 
 void World::RemoveIsolatedWater()
 {
-	sint32 x, y;
-	for(x = 0; x < m_size.x; x++) {
-		for(y = 0; y < m_size.y; y++) {
+	for (sint32 x = 0; x < m_size.x; x++) 
+    {
+		for (sint32 y = 0; y < m_size.y; y++) 
+        {
 			if(IS_SHALLOW(m_map[x][y]->m_terrain_type) &&
-			   !IsNextToWaterNotDiagonals(x,y)) {
+			   !IsNextToWaterNotDiagonals(x,y)) 
+            {
 				MapPoint n, p;
 				WORLD_DIRECTION d;
 				sint32 count = 0;
@@ -3048,6 +3036,7 @@ void World::RemoveIsolatedWater()
 					p.Set(x,y);
 					count++;
 				} while (!p.GetNeighborPosition((WORLD_DIRECTION)d, n) && count < 10);
+
 				if(count < 10) {
 					m_map[x][y]->m_terrain_type = m_map[n.x][n.y]->m_terrain_type;
 					m_map[x][y]->m_env &= ~(k_MASK_ENV_MOVEMENT_TYPE);
@@ -3118,14 +3107,14 @@ void World::DeleteStartingPoint(sint32 index)
 
 
 
-BOOL World::ExportMap(MBCHAR *filename)
+bool World::ExportMap(MBCHAR const *filename)
 {
 	Assert(filename && (strlen(filename) > 0));
-	if (!filename || (0 == strlen(filename))) return FALSE;
+	if (!filename || (0 == strlen(filename))) return false;
 
 	FILE * outfile = fopen(filename, "wt");
 	Assert(outfile);
-	if (!outfile) return FALSE;
+	if (!outfile) return false;
 
 	fprintf(outfile, "%d,%d\n", m_size.x, m_size.y);
 
@@ -3154,25 +3143,25 @@ BOOL World::ExportMap(MBCHAR *filename)
 
 	fclose(outfile);
 
-	return TRUE;
+	return true;
 }
 
-BOOL World::ImportMap(MBCHAR *filename)
+bool World::ImportMap(MBCHAR const * filename)
 {
 	Assert(filename && (strlen(filename) > 0));
-	if (!filename || (0 == strlen(filename))) return FALSE;
+	if (!filename || (0 == strlen(filename))) return false;
 
 	FILE * infile = fopen(filename, "rt");
 	Assert(infile);
-	if (!infile) return FALSE;
+	if (!infile) return false;
 
 	sint32 width,height;
 	fscanf(infile, "%d,%d\n", &width, &height);
-	MapPoint size ((sint16)width, (sint16)height);
+	MapPoint size (width, height);
 
 	if (size != m_size) {
 		fclose(infile);
-		return FALSE;
+		return false;
 	}
 
 	sint32		x, y;
@@ -3188,8 +3177,6 @@ BOOL World::ImportMap(MBCHAR *filename)
 
 	for (y=0; y<m_size.y; y++) {
 		for (x=0; x<m_size.x; x++) {
-			Cell	*   cell;
-			MapPoint	pos(x, y);
 		
 			BOOL hasHut;
 			BOOL hasRiver;
@@ -3204,7 +3191,6 @@ BOOL World::ImportMap(MBCHAR *filename)
 					&hasGood,
 					&env);
 			
-			cell = GetCell(pos);
 
 			
 
@@ -3215,10 +3201,11 @@ BOOL World::ImportMap(MBCHAR *filename)
 				terrainType = 0;
 
 			
+			MapPoint	pos     (x, y);
+			Cell *      cell    = GetCell(pos);
 			cell->SetEnvFast(env);
 			cell->SetTerrain(terrainType);
 
-			
 			cell->DeleteGoodyHut();
 			if (hasHut) {
 				cell->CreateGoodyHut();
@@ -3258,7 +3245,7 @@ BOOL World::ImportMap(MBCHAR *filename)
 	CalcChokePoints();
 	ClearScratch();
 
-	return TRUE;
+	return true;
 }
 
 #define k_SMART_SET_HIT 1
@@ -3525,23 +3512,15 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 	
 #ifdef _DEBUG
 
-
-
-
-
-
-
-
-void World::WholePlayerLandArea(int *array) const
+void World::WholePlayerLandArea(int * a_Array) const
 {
-	memset(array,0,(k_MAX_PLAYERS+1)*sizeof(int));
+    std::fill(a_Array, a_Array + k_MAX_PLAYERS + 1, 0);
 
 	Cell* const pLastCell = &m_cellArray[m_size.x * m_size.y - 1];
-	Cell *pCurCell = &m_cellArray[0];
-
-	while (pCurCell <= pLastCell) {
-		array[pCurCell->GetOwner()+1]++;
-		pCurCell++;
+	for (Cell * pCurCell = m_cellArray; pCurCell <= pLastCell; ++pCurCell)
+    {
+		a_Array[pCurCell->GetOwner() + 1]++;
 	}
 }
+
 #endif

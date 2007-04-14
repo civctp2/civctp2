@@ -31,8 +31,8 @@
 #pragma once
 #endif
 
-#ifndef __CIVILISATION_H__
-#define __CIVILISATION_H__
+#ifndef CIVILISATION_H__
+#define CIVILISATION_H__
 
 class Civilisation;
 
@@ -76,17 +76,16 @@ public:
 	CivilisationData *AccessData() const;
 	const CivilisationRecord *GetDBRec() const;
 
-	void Castrate() {} ;
 	PLAYER_INDEX GetOwner(void) const { return (GetData()->GetOwner()) ; }
 	CIV_INDEX GetCivilisation(void) const { return (GetData()->GetCivilisation()) ; }
 	GENDER GetGender(void) const { return (GetData()->GetGender()); }
 
-	MBCHAR *GetLeaderName(void) { return (AccessData()->GetLeaderName()) ; }
+	MBCHAR const * GetLeaderName(void) const { return (GetData()->GetLeaderName()) ; }
 	void GetPluralCivName(MBCHAR *s) { AccessData()->GetPluralCivName(s) ; }
 	void GetCountryName(MBCHAR *s) { AccessData()->GetCountryName(s) ; }
 	void GetSingularCivName(MBCHAR *s) { AccessData()->GetSingularCivName(s) ; }
 
-	sint32 GetCityStyle( void ) { return AccessData()->GetCityStyle(); }
+	sint32 GetCityStyle( void ) const { return GetData()->GetCityStyle(); }
 
    	//EMOD
 	//sint32 GetProductionBonus( void ) { return AccessData()->GetProductionBonus(); }

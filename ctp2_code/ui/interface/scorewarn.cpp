@@ -32,36 +32,32 @@
 #include "scorewarn.h"
 
 #include "aui.h"
-#include "aui_uniqueid.h"
-#include "aui_ldl.h"
-#include "c3ui.h"
 #include "aui_action.h"
 #include "aui_control.h"
-
+#include "aui_ldl.h"
+#include "aui_uniqueid.h"
 #include "c3_popupwindow.h"
-#include "optionswindow.h"
-#include "keypress.h"
-#include "ctp2_button.h"
 #include "c3_static.h"
-#include "UIUtils.h"
+#include "c3ui.h"
+#include "ctp2_button.h"
 #include "ctp2_hypertextbox.h"
-
-#include "scenarioeditor.h"
-
-#include "StrDB.h"
-#include "profileDB.h"
-#include "SelItem.h"
 #include "GameSettings.h"
+#include "keypress.h"
+#include "optionswindow.h"
+#include "profileDB.h"
+#include "scenarioeditor.h"
+#include "SelItem.h"
+#include "StrDB.h"
+#include "UIUtils.h"
 
 
-extern C3UI				*g_c3ui;
+extern C3UI	*       g_c3ui;
+extern BOOL         g_launchIntoCheatMode;
+
 
 c3_PopupWindow	*   g_scorewarn = NULL;
 
 static c3_Static *  s_message   = NULL;
-
-
-
 
 
 void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -107,14 +103,12 @@ void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, 
 
 sint32 scorewarn_Initialize( void )
 {
-	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
 	if (g_scorewarn) return 0;	
 
+	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "Scorewarn");
 
+	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	g_scorewarn = new c3_PopupWindow(
 		&errcode,
 		aui_UniqueId(),
@@ -130,11 +124,9 @@ sint32 scorewarn_Initialize( void )
 	g_scorewarn->AddOk( scorewarn_OkButtonActionCallback, NULL, "c3_PopupOk" );
 	g_scorewarn->AddCancel( scorewarn_CancelButtonActionCallback );
 
+	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf(buttonBlock, "%s.%s", windowBlock, "Message");
-	s_message = new c3_Static(
-		&errcode,
-		aui_UniqueId(),
-		buttonBlock );
+	s_message = new c3_Static(&errcode,	aui_UniqueId(),	buttonBlock);
 	Assert(AUI_NEWOK(s_message, errcode));
 	if (!AUI_NEWOK(s_message, errcode)) return -1;
 
@@ -156,11 +148,6 @@ void scorewarn_Cleanup(void)
     }
 }
 
-
-
-
-
-
 static c3_PopupWindow	*s_disclaimerWindow = NULL;
 static c3_Static		*s_disclaimerLabel = NULL;
 static ctp2_Button		*s_disclaimerAcceptButton = NULL;
@@ -168,7 +155,6 @@ static ctp2_Button		*s_disclaimerDeclineButton = NULL;
 static aui_Control::ControlActionCallback *s_disclaimerCallback = NULL;
 static ctp2_HyperTextBox	*s_disclaimerTextBox = NULL;
 
-extern BOOL g_launchIntoCheatMode;
 
 void DisclaimerCloseAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
@@ -201,8 +187,6 @@ void disclaimer_DeclineButtonActionCallback(aui_Control *control, uint32 action,
 sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if (s_disclaimerWindow) {
 		errcode = g_c3ui->AddWindow( s_disclaimerWindow );
@@ -215,6 +199,7 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 		return 0;	
 	}
 	
+	MBCHAR			windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	strcpy(windowBlock, "DisclaimerScreen");
 
 	s_disclaimerWindow = new c3_PopupWindow(
@@ -232,6 +217,7 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 
 
 
+	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	
 	sprintf(buttonBlock, "%s.%s", windowBlock, "TitleLabel");
 	s_disclaimerLabel = new c3_Static(&errcode, aui_UniqueId(), buttonBlock);
@@ -296,26 +282,12 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 	if (!f) 
 		goto Error;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	c3files_fread( message, 1, filesize, f );
 
 	fclose(f);
 
 	s_disclaimerTextBox->SetHyperText(message);
-	delete message;
+	delete [] message;
 
 	s_disclaimerCallback = callback;
 

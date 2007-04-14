@@ -181,13 +181,13 @@ public:
 
 	static int Get_Database_From_Name
 	(
-		char * database_name
+		char const *    database_name
 	);
 
 	static int Get_Object_Index_From_Name
 	(
-		int which_database,				
-		char * object_name
+		int             which_database,				
+		char const *    object_name
 	);
 
 	static Text_Hasher<char *> * s_great_library_info;

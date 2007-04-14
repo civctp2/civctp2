@@ -203,7 +203,7 @@ void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 	char str[] = "% ";
 
 	for(int i = 1; i <= c; i++) {
-		str[1] = '0' + i;
+		str[1] = static_cast<char>('0' + i);
 
 		char * next = strstr(mix, str);
 		if(next) {
@@ -991,7 +991,7 @@ void NETFunc::AIPlayer::Pack(void) {
 void NETFunc::AIPlayer::Unpack(void) {
 	first = body;
 	Pop(key.buf);
-	key.len = strlen(key.buf);
+	key.len = static_cast<short>(strlen(key.buf));
 	Pop(name);
 	Pop(group);
 }
@@ -1411,10 +1411,10 @@ void NETFunc::PlayerSetup::SetBlob(char *b) {
 	SetBlob((void *)b, strlen(b) + 1);
 }
 
-void NETFunc::PlayerSetup::SetBlob(void *b, unsigned char s) {
-	s = s < dp_MAX_PLAYERBLOB_LEN ? s : dp_MAX_PLAYERBLOB_LEN - 1;
+void NETFunc::PlayerSetup::SetBlob(void *b, size_t s) {
+    s = std::min<size_t>(s, dp_MAX_PLAYERBLOB_LEN - 1);
 	memcpy(&player.blob[1], b, s);
-	player.bloblen = s + 1;
+	player.bloblen = static_cast<unsigned char>(s + 1);
 }
 
 void NETFunc::PlayerSetup::SetBlobLen(unsigned char l) {
@@ -1527,7 +1527,7 @@ void NETFunc::Session::SetKey() {
 	int i;
 	dpGetSessionId(dp, &session, &key.buf[0], &i);
 
-	key.len = i;
+	key.len = static_cast<short>(i);
 }
 
 NETFunc::Session::Session(void) {
@@ -1855,9 +1855,8 @@ void NETFunc::GameSetup::SetUserField(char *u) {
 	SetUserField((void *)u, strlen(u) + 1);
 }
 
-void NETFunc::GameSetup::SetUserField(void *u, short s) {
-	s = s > dp_USERFIELDLEN ? dp_USERFIELDLEN : s;
-	memcpy(session.szUserField, u, s);
+void NETFunc::GameSetup::SetUserField(void *u, size_t s) {
+	memcpy(session.szUserField, u, std::min<size_t>(s, dp_USERFIELDLEN));
 }
 
 void NETFunc::GameSetup::SetLaunched(bool b) {
@@ -2073,7 +2072,7 @@ char NETFunc::Players::FindSmallestGroup(void) {
 		gc[(*i)->GetGroup()]++;
 	char sg = 0;
 	int sn = 255;
-	for(int g = 1; g <= gameSetup.GetGroups(); g++) {
+	for(char g = 1; g <= gameSetup.GetGroups(); g++) {
 		if(gc[g] < sn) {
 			sn = gc[g];
 			sg = g;
@@ -3006,13 +3005,13 @@ bool NETFunc::Handle(Message *m) {
 				Player t = Player(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
 				if(p->flags & dp_OBJECTDELTA_FLAG_INOPENSESS) {
 					if(p->status == dp_RES_DELETED || p->status == dp_RES_CREATED) {
-						gameSetup.SetGroups(players.size() + aiPlayers ? aiPlayers->size() : 0);
+						gameSetup.SetGroups(players.size() + (aiPlayers ? aiPlayers->size() : 0));
 						SetGameSetupSession(&gameSetup);
 					}
 				}
 			}
 		} else if(m->GetCode() == Message::ADDAIPLAYER || m->GetCode() == Message::CHGAIPLAYER || m->GetCode() == Message::DELAIPLAYER) {
-			gameSetup.SetGroups(players.size() + aiPlayers ? aiPlayers->size() : 0);
+			gameSetup.SetGroups(players.size() + (aiPlayers ? aiPlayers->size() : 0));
 			SetGameSetupSession(&gameSetup);
 		}
 

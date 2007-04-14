@@ -7,11 +7,14 @@
 
 
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef NETSHELL_H__
+#define NETSHELL_H__
 
-#ifndef __NETSHELL_H__
-#define __NETSHELL_H__
-
+class NetShell;
 
 #include "aui_shell.h"
 #include "aui_action.h"
@@ -24,7 +27,6 @@
 class aui_Screen;
 class aui_Window;
 class NetShell;
-
 class ns_Tribes;
 
 
@@ -76,19 +78,9 @@ enum CustomCode
 class NetShell : public aui_Shell
 {
 public:
-	
-	NetShell(
-		AUI_ERRCODE *retval );
+	NetShell();
 	virtual ~NetShell();
 
-protected:
-	NetShell() : aui_Shell() {}
-	AUI_ERRCODE	InitCommon( void );
-	AUI_ERRCODE	CreateScreens( void );
-	void		DestroyScreens( void );
-	static void	DestroyNETFunc( void );
-
-public:
 	enum SCREEN
 	{
 		SCREEN_FIRST = 0,
@@ -112,8 +104,6 @@ public:
 		WINDOW_SERVERSELECT,
 		WINDOW_PLAYERSELECT,
 		WINDOW_PLAYEREDIT,
-
-
 		WINDOW_LOBBY,
 		WINDOW_LOBBYCHANGE,
 		WINDOW_STARTSELECTING,
@@ -138,9 +128,16 @@ public:
 
 	AUI_ACTION_BASIC(DestroyAction);
 
-	MBCHAR *GetTrueBmp( void ) { return m_truebmp->GetString(); }
+	MBCHAR *GetTrueBmp( void ) { return m_truebmp ? m_truebmp->GetString() : NULL; }
 
 protected:
+	static void	DestroyNETFunc( void );
+
+	AUI_ERRCODE	CreateScreens( void );
+	void		DestroyScreens( void );
+	void MoveButton(aui_Window *window, const MBCHAR *parentBlock, const MBCHAR *regionBlock, BOOL left);
+
+private:
 	aui_Screen *m_screens[ SCREEN_MAX ];
 	aui_Window *m_windows[ WINDOW_MAX ];
 
@@ -153,18 +150,6 @@ protected:
 	ns_Wonders *m_wonders;
 
 	aui_Control *m_bg; 
-
-	
-	
-	void MoveButton(aui_Window *window, const MBCHAR *parentBlock, const MBCHAR *regionBlock, BOOL left);
-
 };
-
-
-
-void EnterMainMenu( void );
-void LeaveMainMenu( void );
-void LaunchGame( void );
-
 
 #endif 

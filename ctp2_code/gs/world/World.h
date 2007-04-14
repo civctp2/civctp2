@@ -630,10 +630,14 @@ public:
     void GetMapAndHistogram(IMapGenerator *gen, sint8 *&map, sint32 *&histogram,
 							const double *settings, sint32 numSettings);
     void FlatToIso(const MapPoint &flat, MapPoint &iso);
-    BOOL IsNextToOldRiver(const MapPoint &newpoint, const MapPoint &lastpoint);
+    bool IsNextToOldRiver
+    (
+        const MapPoint &    newpoint, 
+        const MapPoint &    lastpoint
+    ) const;
     void NewGenerateRivers(sint8 *map, sint8 *wetmap);
     
-    sint32 IsNextToCity(const MapPoint &pos);
+    bool IsNextToCity(const MapPoint &pos) const;
 
     void GWPhase(const sint32 phase);
 
@@ -685,9 +689,8 @@ public:
     void ShowCellOwners();
 #endif
 
-	
-	BOOL ExportMap(MBCHAR *filename);
-	BOOL ImportMap(MBCHAR *filename);
+	bool ExportMap(MBCHAR const * filename);
+	bool ImportMap(MBCHAR const * filename);
 
 	void SmartSetTerrain(const MapPoint &pos, sint32 terr, sint32 radius);
 	void SmartSetOneCell(const MapPoint &pos, sint32 terr);

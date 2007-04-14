@@ -119,7 +119,7 @@ public:
 	void ReleaseCityName(const sint32 name);
 	sint32 GetUseCount(const sint32 name) const;
 
-	MBCHAR *GetLeaderName(void) ;
+	MBCHAR const * GetLeaderName(void) const;
 	void SetLeaderName(const MBCHAR *s);
 
 	void SetPersonalityDescription(const MBCHAR* s);

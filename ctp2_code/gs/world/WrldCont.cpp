@@ -90,7 +90,7 @@ struct Old_Cont_Node
     Old_Cont_Node * m_next; 
 };
 
-Old_Cont_Node *g_tunnel_list; 
+Old_Cont_Node * g_tunnel_list   = NULL; 
 
 void World::NumberContinents()
 {
@@ -260,8 +260,12 @@ bool World::NextPoint
 
 void World::ResetCanalsTunnels()
 {
-    /// @todo Repair leak
-    g_tunnel_list = NULL; 
+    while (g_tunnel_list)
+    {
+        Old_Cont_Node * oldFirst    = g_tunnel_list;
+        g_tunnel_list               = g_tunnel_list->m_next;
+        delete oldFirst;
+    }
 
     MapPoint pos; 
     

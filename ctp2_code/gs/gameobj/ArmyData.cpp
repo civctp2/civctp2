@@ -214,6 +214,8 @@ BOOL    g_useOrderQueues    = TRUE;
 namespace
 {
 
+uint32 const    MOVEMENT_ANYWHERE   = 0xffffffffu;
+
 //----------------------------------------------------------------------------
 //
 // Name       : CityReport
@@ -655,7 +657,7 @@ bool ArmyData::Insert(const Unit &id)
 
 uint32 ArmyData::GetMovementType() const
 {
-    uint32 tmp = 0xffffffff;
+    uint32 tmp = MOVEMENT_ANYWHERE;
 
     for (int i = 0; i < m_nElements; i++) {
         tmp &= m_array[i].GetMovementType();
@@ -666,12 +668,13 @@ uint32 ArmyData::GetMovementType() const
 
 uint32 ArmyData::GetCargoMovementType() const
 {
-    uint32 tmp = 0xffffffff;
+    uint32 tmp = MOVEMENT_ANYWHERE;
 
     for (int i = 0; i < m_nElements; i++)
     {
         const UnitDynamicArray * cargo = 
             m_array[i].AccessData()->GetCargoList();
+
         if (cargo)
         {
             for (int j = 0; j < cargo->Num(); j++) {
@@ -823,19 +826,6 @@ bool ArmyData::CargoCanEnter(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 size_t ArmyData::CountMovementTypeSea() const
 {
-#if 0
-	// Here is what I get:
-	// \ctp2_code\gs\gameobj\ArmyData.cpp(826) : error C2664: 'mem_fun_ref' : 
-	// cannot convert parameter 1 from 'bool (__thiscall Unit::*)(void) const' 
-	//                              to 'bool (__thiscall Unit::*)(void)'
-    return std::count_if(m_array, m_array + m_nElements, 
-                         std::mem_fun_ref<bool, Unit>(&Unit::GetMovementTypeSea)
-                        );
-/// @todo Verify that the above works with MSVC6. If not, replace with the
-///       the following:
-///       Doesn't work on MSVC6. Maybe another workaround has to be added for that.
-#endif
-
     size_t count = 0;
 
     for (int i = 0; i < m_nElements; ++i)
@@ -895,12 +885,17 @@ bool ArmyData::CanSettle() const
     for (int i = 0; i < m_nElements; i++) 
     {
         Assert(m_array[i].IsValid());
-        if (m_array[i].IsValid()
-        &&(m_array[i].GetDBRec()->GetSettle()
-        || m_array[i].GetDBRec()->GetNumCanSettleOn() > 0)
-        && m_array[i].CanPerformSpecialAction())
+        if (    m_array[i].IsValid()
+             && (   m_array[i].GetDBRec()->GetSettle()
+                 || m_array[i].GetDBRec()->GetNumCanSettleOn() > 0
+                )
+             && m_array[i].CanPerformSpecialAction()
+           )
+        {
             return true;
+        }
     }
+
     return false;
 }
 
@@ -1550,7 +1545,7 @@ void ArmyData::BeginTurn()
 
 	// EMOD Barbarian Camps
 	// This should be risk level depending  //EMOD added Risk 10-05-2006
-	if (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
 	{
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 			for(i = 0; i < m_nElements; i++) {
@@ -1575,10 +1570,10 @@ void ArmyData::BeginTurn()
 		sint32 barbmax = g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians(); 
 		sint32 barbhorde = g_player[PLAYER_INDEX_VANDALS]->m_all_units->Num();
 		
-		if(
-			(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-		||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
-		){
+	if(
+		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
+	||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+	){
 
 			if ( (barbhorde) >= (barbmax^2) ) {
 				return;
@@ -1587,11 +1582,11 @@ void ArmyData::BeginTurn()
 			if (//new limits to prevent barbarian spam
 				(barbhorde) <= (barbmax^2) // create some kind of max  
 			){
-				if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) { 
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 					Barbarians::AddBarbarians(m_pos, meat, TRUE);
-				}
 			}
 		}
+	}
 	}
 
 
@@ -1626,24 +1621,24 @@ void ArmyData::BeginTurn()
 	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) //add AI immunity?
 	{ 
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-			for(sint32 u = 0; u < m_nElements; u++) {
-				const UnitRecord *urec = m_array[u].GetDBRec();
-				if(!urec->GetImmuneToHostileTerrain()
-				&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
-				){
-					m_array[u].DeductHP(hpcost);
+		for(sint32 u = 0; u < m_nElements; u++) {
+			const UnitRecord *urec = m_array[u].GetDBRec();
+			if(!urec->GetImmuneToHostileTerrain()
+			&& !terrainutil_HasFort(m_pos) && !terrainutil_HasAirfield(m_pos) //added by E 5-28-2006
+			){
+				m_array[u].DeductHP(hpcost);
 #if 0 // Unused, memory leak
 			    //SlicObject *so = new SlicObject("999HostileTerrain");
 				//so->AddRecipient(m_owner);
 				//so->AddUnit(m_array[i]);
 #endif
-				}
+			}
 
-				if (m_array[u].GetHP() < 0.999) {
+			if (m_array[u].GetHP() < 0.999) {
 				m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
-				}
 			}
 		}
+	}
 	}
 
 	//EMOD If tile has tileimp that is a minefield then deduct HP
@@ -5745,14 +5740,14 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 ///////////////Used in Unitdata::bombard is it necessary here? m_array and defender both us .bombard so why is it killing?   
     for (i = m_nElements - 1; 0 <= i; i--) { 
         if (m_array[i].GetHP() < 0.999) {
-			    m_array[i].KillUnit(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
+			    m_array[i].Kill(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
 			}
 		}
     
     //kill off defending units that were newly damaged
     for (i = defender.Num() - 1; 0 <= i; i--) { 
         if (defender[i].GetHP() < 0.999) {
-				defender[i].KillUnit(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
+				defender[i].Kill(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
 			}
 		}
 ////////////////
@@ -6448,26 +6443,20 @@ bool ArmyData::ExecuteOrders(bool propagate)
 	}
 
 	
-	PLAYER_INDEX player;
-	ID id;
-	SELECT_TYPE type;
+	if (g_selected_item) 
+    {
+	    PLAYER_INDEX    player;
+	    ID              id;
+	    SELECT_TYPE     type;
 
-	if ( g_selected_item ) {
 		g_selected_item->GetTopCurItem(player, id, type);
-		if ( id == me ) {
+		if (id == me) 
+        {
 			g_selected_item->Refresh();
 		}
 	}
 
 	return true;
-	
-#if 0
-	if(g_theArmyPool->IsValid(me)) {
-		return m_orders->GetHead() != NULL;
-	} else {
-		return false;
-	}
-#endif
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -8685,73 +8674,54 @@ void ArmyData::Disband()
 	    g_player[m_owner]->m_all_cities->Num() < 1)
 		return;
 	
-	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();	
-	Diplomat & cell_diplomat = Diplomat::GetDiplomat(CellOwner);
+	Unit        city            = g_theWorld->GetCity(m_pos);
+	Cell *      cell            = g_theWorld->GetCell(m_pos);
+	sint32      cellOwner       = cell->GetOwner();	
+	Diplomat &  cell_diplomat   = Diplomat::GetDiplomat
+        ((PLAYER_UNASSIGNED == cellOwner) ? PLAYER_INDEX_VANDALS : cellOwner);
 
-	
-
-	Unit city = g_theWorld->GetCity(m_pos);
-	for (sint32 i = 0; i < m_nElements; i++ ) { 
-//	for (sint32 i = m_nElements - 1; i >= 0; i--) { //old code i think was causing the gameobj problem
-//		const UnitRecord *rec = m_array[i].GetDBRec();
+    // Usually, "for (int i = 0; i < n; ++i)" expresses more clearly that you 
+    // are going through all items of an array. But when killing/removing items,
+    // it is safer to start from the end, otherwise indices may get shifted 
+    // while you are busy, and half of the items will not be removed.
+	for (sint32 i = m_nElements - 1; i >= 0; i--) 
+    {
 		if (city.IsValid()) 
         {
-//			if(rec->GetIsGreatBuilder() {
-//				city.AccessData()->GetCityData()->AddShields(CURRENT ITEM Shields);
-//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//			} else {
-//			if(rec->GetIsGreatArtist() {
-//				city.AccessData()->GetCityData()->AddInfluence(rec->GetInfluencePoints());
-//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//			} else {
-			city.AccessData()->GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2); // Shield cost should be difficulty dependent
-			//m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			//return;
+            // Shield cost should be difficulty dependent
+			city.AccessData()->GetCityData()->AddShields
+                (m_array[i].GetDBRec()->GetShieldCost() / 2); 
 		}
-
-		if (cell->GetOwner() == -1) { //fixes bug where you cant disband in neutral territory
-			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			return;
-		}
-
 
 		// Should be moved into own method and own event
 //EMOD Gift Units for Human Player 4-12-2006
-		if (!AgreementMatrix::s_agreements.HasAgreement(CellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) && (CellOwner != m_owner)){
-			if(m_array[i].GetDBRec()->GetCanBeGifted()){ // Without this, unit isn't gifted but this flag is superflous if this is an order of its own
-			sint32 newunit = m_array[i].GetType();
-				sint32 regardcost = (m_array[i].GetDBRec()->GetAttack()) / 5;
-				if((g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) && (CellOwner > 0)) {
-					StringId strId;
-					g_theStringDB->GetStringID("REGARD_EVENT_UNITS_GIFTED", strId);
-					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-					g_player[CellOwner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-					cell_diplomat.LogRegardEvent(m_owner, regardcost, REGARD_EVENT_GOLD, strId);
-				} else {
-					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-	}
-				// Kill missing here or you creaty magically for the receiver a new unit
-//EMOD merchant code
-		//	}else if(rec->GetMerchantGold()) {
-		//		sint32 capdis = m_owner->GetDistanceToCapitol();
-		//		sint32 merchantgold = capdis * rec->GetMerchantGold();
-//				g_player[m_owner]->m_gold->AddGold(merchantgold);
-//				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//			} else {
-		//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-			}
-		} else {
+		if (    (cellOwner != m_owner)
+             && (cellOwner != PLAYER_UNASSIGNED)
+             && !AgreementMatrix::s_agreements.HasAgreement
+                    (cellOwner, m_owner, PROPOSAL_TREATY_DECLARE_WAR) 
+             && (m_array[i].GetDBRec()->GetCanBeGifted())
+             && (!g_player[m_owner]->IsRobot())
+           )
+        {
+	        sint32 newunit      = m_array[i].GetType();
+		    sint32 regardcost   = (m_array[i].GetDBRec()->GetAttack()) / 5;
+
+	        m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+            /// @todo Check if this works when disbanding an army consisting
+            ///       of multiple units. Does the game engine allow creation of 
+            ///       units of 2 players at the same location?
+			g_player[cellOwner]->CreateUnit
+                (newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+
+			StringId strId;
+			g_theStringDB->GetStringID("REGARD_EVENT_UNITS_GIFTED", strId);
+			cell_diplomat.LogRegardEvent
+                (m_owner, regardcost, REGARD_EVENT_GOLD, strId);
+		} 
+        else 
+        {
 			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
-		// End EMOD
-//		m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); // Can go - already in else statement above
-	}
-
-
-	
-	if ( g_selected_item->GetSelectedCity(city) ) {
-		
 	}
 }
 
@@ -9717,63 +9687,67 @@ void ArmyData::GetArmyStrength( sint32 & hitpoints,
 							    sint32 & ranged_strength,
 						        sint32 & total_value ) const
 {
-	double fire_power;
+	hitpoints           = 0;
+	defense_count       = 0;
+	ranged_count        = 0;
+	attack_strength     = 0;
+	defense_strength    = 0;
+	ranged_strength     = 0;
+	total_value         = 0;
 
-	hitpoints = 0;
-	defense_count = 0;
-	ranged_count = 0;
-	attack_strength = 0;
-	defense_strength = 0;
-	ranged_strength = 0;
-	total_value = 0;
-
-	UnitDynamicArray* cargo_list;
-	int j;
-
-	for(sint32 i = 0; i < m_nElements; i++)
+	for (sint32 i = 0; i < m_nElements; i++)
 	{   
 		// if this unit is a cargo carrying transport, add its cargo in
-		cargo_list = m_array[i]->GetCargoList();
+		UnitDynamicArray * cargo_list = m_array[i]->GetCargoList();
 		if (cargo_list && (cargo_list->Num() > 0))
 		{
-			for (j = 0; j < cargo_list->Num(); j++)
+			for (int j = 0; j < cargo_list->Num(); j++)
 			{
-				const UnitRecord *rec = cargo_list->Access(j).GetDBRec();
-				
-				
-				hitpoints = (sint16)m_array[i].GetHP();
-				fire_power = rec->GetFirepower();
+				hitpoints = static_cast<sint32>(m_array[i].GetHP());
 
-				if (rec->GetDefense() > 0)
-					defense_count++;
+				const UnitRecord *  rec = cargo_list->Access(j).GetDBRec();
+				if (rec)
+                {
+    				
+                    double fire_power = rec->GetFirepower();
 
-				if (rec->GetZBRangeAttack() > 0)
-					ranged_count++;
+				    if (rec->GetDefense() > 0)
+					    defense_count++;
 
-				attack_strength += (sint32) (rec->GetAttack() * hitpoints * fire_power);
-				defense_strength += (sint32) (rec->GetDefense() * hitpoints * fire_power);
-				ranged_strength += (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
-				total_value += (sint32) (rec->GetShieldCost()); 
+				    if (rec->GetZBRangeAttack() > 0)
+					    ranged_count++;
+
+				    attack_strength += (sint32) (rec->GetAttack() * hitpoints * fire_power);
+				    defense_strength += (sint32) (rec->GetDefense() * hitpoints * fire_power);
+				    ranged_strength += (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
+				    total_value += (sint32) (rec->GetShieldCost()); 
+                }
 			}
 		}
 		// otherwise sum in the unit's data
 		else 
 		{
-			const UnitRecord *rec = m_array[i].GetDBRec();
+			hitpoints = static_cast<sint32>(m_array[i].GetHP());
 
-			hitpoints = (sint32)m_array[i].GetHP();
-			fire_power = rec->GetFirepower();
+			const UnitRecord *  rec = m_array[i].GetDBRec();
+            if (rec)
+            {
+			    if (m_array[i].GetDefense() > 0)
+				    defense_count++;
 
-			if (m_array[i].GetDefense() > 0)
-				defense_count++;
+    			if (rec->GetZBRangeAttack() > 0)
+				    ranged_count++;
 
-			if (rec->GetZBRangeAttack() > 0)
-				ranged_count++;
-
-			attack_strength += (sint32) (m_array[i].GetAttack() * hitpoints * fire_power);
-			defense_strength += (sint32) (m_array[i].GetDefense() * hitpoints * fire_power);
-			ranged_strength += (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
-			total_value += m_array[i].GetShieldCost(); 
+                double  fire_power  = rec->GetFirepower();
+            
+			    attack_strength    += 
+                    (sint32) (m_array[i].GetAttack() * hitpoints * fire_power);
+			    defense_strength   += 
+                    (sint32) (m_array[i].GetDefense() * hitpoints * fire_power);
+			    ranged_strength    += 
+                    (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
+			    total_value        += m_array[i].GetShieldCost(); 
+            }
 		}
 	}
 }
@@ -9796,8 +9770,7 @@ void ArmyData::GetArmyStrength( sint32 & hitpoints,
 //---------------------------------------------------------------------------- 
 bool ArmyData::CanPerformSpecialAction() const
 {
-	sint32 i;
-	for(i = 0; i < m_nElements; i++) {
+	for (sint32 i = 0; i < m_nElements; i++) {
 		if(!m_array[i].CanPerformSpecialAction())
 			return false;
 	}
@@ -9884,13 +9857,9 @@ bool ArmyData::CheckValidDestination(const MapPoint &dest) const
 			order->m_path->RestoreIndexAndCurrentPos(order->m_path->GetNextIndex());
 	}
 
-	if ((order) &&
-		(order->m_order == UNIT_ORDER_MOVE) &&
-		(order->m_path) &&
-		(order->m_path->GetEnd() == dest))
-		return true;
-	
-	return false;
+	return (order) && (order->m_order == UNIT_ORDER_MOVE) 
+                   && (order->m_path) 
+                   && (order->m_path->GetEnd() == dest);
 }
 
 // returns true if this army's current order is UNIT_ORDER_MOVE and the army already is where it was ordered to go
@@ -9898,13 +9867,9 @@ bool ArmyData::AtEndOfPath() const
 {
 	Order *order = m_orders->GetHead();
 	
-	if ((order) &&
-		(order->m_order == UNIT_ORDER_MOVE) &&
-		(order->m_path) &&
-		(order->m_path->GetEnd() == m_pos))
-		return true;
-
-	return false;
+	return (order) && (order->m_order == UNIT_ORDER_MOVE) 
+                   && (order->m_path) 
+                   && (order->m_path->GetEnd() == m_pos);
 }
 
 // Returns true if this army's current order is UNIT_ORDER_MOVE and it hasn't reached the end of its path.

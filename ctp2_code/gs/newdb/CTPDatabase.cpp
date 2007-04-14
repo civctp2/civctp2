@@ -405,9 +405,9 @@ template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
+template <class T> bool CTPDatabase<T>::Parse(DBLexer *lex)
 {
-	sint32 isOk = 1;
+	bool isOk = true;
 
 	while (!lex->EndOfInput())
 	{
@@ -420,7 +420,7 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 		else
 		{
 			delete obj;
-			isOk = 0;
+			isOk = false;
 		}
 	}
 
@@ -434,7 +434,8 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 
 	// A merge sort algorithm is of course better, but the complexity
 	// is the same as for the old databases even the constant is the same.
-	for(sint32 i = 0; i < m_numRecords; ++i){
+	for (sint32 i = 0; i < m_numRecords; ++i)
+    {
 		const MBCHAR *str = m_records[i]->GetNameText();
 		sint32 a;
 		for (a = 0; a < i; ++a)
@@ -462,13 +463,13 @@ template <class T> sint32 CTPDatabase<T>::Parse(DBLexer *lex)
 	return isOk;
 }
 
-template <class T> sint32 CTPDatabase<T>::Parse(const C3DIR & c3dir, const char *filename)
+template <class T> bool CTPDatabase<T>::Parse(const C3DIR & c3dir, const char *filename)
 {
 	DBLexer lex = DBLexer(c3dir, filename);
 	return Parse(&lex);
 }
 
-template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer *lex, sint32 &index)
+template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer * lex, sint32 & index)
 {
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {

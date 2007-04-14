@@ -47,24 +47,26 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef __CTPDATABASE_H__
-#define __CTPDATABASE_H__
+#ifndef CTPDATABASE_H__
+#define CTPDATABASE_H__
 
-#include "c3files.h"
-#include "civarchive.h"
 #include <vector>
 
-class DBLexer;
-
-template <class T> class PointerList;
+template <class T> class CTPDatabase;
 
 #define DBERROR(x) { lex->ReportError x; }
 
-enum DBPARSE_ERROR {
+enum DBPARSE_ERROR 
+{
 	DBPARSE_OK,
 	DBPARSE_DEFER,
 	DBPARSE_OTHER,
 };
+
+#include "c3files.h"
+#include "civarchive.h"
+class DBLexer;
+template <class T> class PointerList;
 
 class GovernmentModifiedRecordNode
 {
@@ -113,12 +115,9 @@ public:
 
 	void Serialize(CivArchive &archive);
 
-	sint32 Parse(DBLexer *lex);
-	sint32 Parse(const C3DIR & c3dir, const char *filename);
+	bool Parse(DBLexer *lex);
+	bool Parse(const C3DIR & c3dir, const char *filename);
 
-	
-	
-	
 	const T *Get(sint32 index)
 	{
 		Assert(index < m_numRecords);
@@ -133,7 +132,7 @@ public:
 	const T *Get(sint32 index, sint32 govIndex);
 
 	sint32 GetName(sint32 index);
-	const char *GetNameStr(sint32 index);
+	const char * GetNameStr(sint32 index);
 	void Add(T *obj);
 	sint32 NumRecords() const 
 	{ 

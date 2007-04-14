@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Civilisation data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -346,14 +346,9 @@ sint32 CivilisationData::GetUseCount(const sint32 name) const
 }
 
 
-MBCHAR *CivilisationData::GetLeaderName(void)
+MBCHAR const * CivilisationData::GetLeaderName(void) const
 {
-	if (m_leader_name[0]) {
-		return (m_leader_name);
-	} else {
-		
-		return (g_theProfileDB->GetLeaderName());
-	}
+    return (m_leader_name[0]) ? m_leader_name : g_theProfileDB->GetLeaderName();
 }
 
 

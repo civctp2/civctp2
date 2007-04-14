@@ -40,6 +40,7 @@
 
 #include "AgeRecord.h"
 #include "agesscreen.h"
+#include <algorithm>
 #include "aui_blitter.h"
 #include "aui_ldl.h"
 #include "aui_radio.h"
@@ -53,7 +54,7 @@
 #include "c3textfield.h"
 #include "CivilisationPool.h"
 #include "CivilisationRecord.h"
-#include "CivPaths.h"
+#include "CivPaths.h"                      // g_civPaths
 #include "civscenarios.h"
 #include "ctp2_dropdown.h"
 #include "ctp2_spinner.h"
@@ -79,27 +80,24 @@
 #include "playereditwindow.h"
 #include "playerselectwindow.h"
 #include "primitives.h"
-#include "profileDB.h"
+#include "profileDB.h"                     // g_theProfileDB
 #include "spnewgamediffscreen.h"
 #include "spnewgamemapsizescreen.h"
 #include "spnewgamemapshapescreen.h"
 #include "spnewgametribescreen.h"
 #include "spnewgamewindow.h"
-#include "StrDB.h"
+#include "StrDB.h"                         // g_theStringDB
 #include "textradio.h"
 #include "textswitch.h"
 #include "texttab.h"
 
 
-extern CivPaths *g_civPaths;
 extern CivScenarios *g_civScenarios;
-
-extern StringDB *g_theStringDB;
 extern Exclusions *g_exclusions;
-
 extern sint32 g_is565Format;
 extern Network g_network;
-extern ProfileDB *g_theProfileDB;
+extern LoadSaveWindow *g_loadsaveWindow;
+extern aui_Radio *s_maleRadio;
 
 
 static DialogBoxWindow *s_dbw = NULL;
@@ -107,10 +105,6 @@ AllinoneWindow *g_allinoneWindow = NULL;
 DialogBoxWindow *g_rulesWindow = NULL;
 DialogBoxWindow *g_exclusionsWindow = NULL;
 
-
-extern LoadSaveWindow *g_loadsaveWindow;
-
-extern aui_Radio *s_maleRadio;
 
 #ifdef _DEBUG
 #define DEBUG_PushChatMessage(arg) (g_netfunc->PushChatMessage("DEBUG: " arg))
@@ -129,6 +123,16 @@ extern aui_Radio *s_maleRadio;
 
 void AllinoneWindow_SetupGameForLaunch( void );
 
+namespace
+{
+
+bool IsValidTribeIndex(sint32 a_Index)
+{
+    Assert((a_Index >= 0) && (a_Index < k_TRIBES_MAX));
+    return (a_Index >= 0) && (a_Index < k_TRIBES_MAX);
+}
+
+} // namespace
 
 AllinoneWindow::AllinoneWindow(
 	AUI_ERRCODE *retval )
@@ -159,11 +163,9 @@ AUI_ERRCODE AllinoneWindow::InitCommon( void )
     {
 	    g_allinoneWindow = this;
     }
-
-	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
-	Assert( m_controls != NULL );
-	if ( !m_controls ) return AUI_ERRCODE_MEMALLOCFAILED;
-	memset( m_controls, 0, m_numControls * sizeof( aui_Control *) );
+	m_numControls = CONTROL_MAX;
+	m_controls = new aui_Control *[CONTROL_MAX];
+	std::fill(m_controls, m_controls + CONTROL_MAX, (aui_Control *) NULL);
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	g_rulesWindow = new DialogBoxWindow(
@@ -218,8 +220,6 @@ AUI_ERRCODE AllinoneWindow::InitCommon( void )
 	if ( !AUI_SUCCESS(errcode) ) return AUI_ERRCODE_HACK;
 
 	m_dbActionArray[ 0 ] = new DialogBoxPopDownAction;
-	Assert( m_dbActionArray[ 0 ] != NULL );
-	if ( !m_dbActionArray[ 0 ] ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	agesscreen_Initialize( AllinoneAgesCallback );
 	spnewgamemapsizescreen_Initialize( AllinoneMapSizeCallback );
@@ -360,21 +360,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	m_controls[ CONTROL_ADDAIBUTTON ] = control;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	control = spNew_ctp2_Button(
 		&errcode,
 		"allinonewindow",
@@ -445,31 +430,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_INFOBUTTON ] = control;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	control = new aui_Static(
@@ -561,21 +521,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	m_controls[ CONTROL_DYNAMICJOINSWITCH ] = control;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	control = new aui_Switch(
 		&errcode,
 		aui_UniqueId(),
@@ -583,13 +528,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_HANDICAPPINGSWITCH ] = control;
-
-
-
-
-
-
-
 
 
 	control = new aui_Switch(
@@ -601,29 +539,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	m_controls[ CONTROL_BLOODLUSTSWITCH ] = control;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	control = new aui_Switch(
 		&errcode,
 		aui_UniqueId(),
@@ -631,29 +546,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_POLLUTIONSWITCH ] = control;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	control = new c3_Static(
@@ -774,92 +666,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	control = new aui_Button(
 		&errcode,
 		aui_UniqueId(),
@@ -876,248 +682,39 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
-	
-
 	aui_Ldl::SetupHeirarchyFromRoot( "allinonewindow" );
 	aui_Ldl::SetupHeirarchyFromRoot( "ruleswindow" );
 	aui_Ldl::SetupHeirarchyFromRoot( "exclusionswindow" );
 
-
-	
-
-	aui_Action *action;
-
-
-
-
-
-
-	action = new GameNameTextFieldAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_GAMENAMETEXTFIELD ]->SetAction( action );
-
-	action = new PPTSwitchAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_PPTSWITCH ]->SetAction( action );
-
-	action = new KickButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_KICKBUTTON ]->SetAction( action );
-
-	action = new InfoButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_INFOBUTTON ]->SetAction( action );
-
-	action = new OKButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_OKBUTTON ]->SetAction( action );
-
-	action = new ReviewButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_REVIEWBUTTON ]->SetAction( action );
-
-
-
-
-
-
-
-	action = new RulesButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_RULESBUTTON ]->SetAction( action );
-
-	action = new ExclusionsButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_EXCLUSIONSBUTTON ]->SetAction( action );
-
-
-
-
-
-
-	action = new RulesOKButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_RULESOKBUTTON ]->SetAction( action );
-
-	action = new ExclusionsOKButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_EXCLUSIONSOKBUTTON ]->SetAction( action );
-
-
-	action = new LockSwitchAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_LOCKSWITCH ]->SetAction( action );
-
-	action = new AddAIButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_ADDAIBUTTON ]->SetAction( action );
-
-
-
-
-
-
-	action = new CancelButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_CANCELBUTTON ]->SetAction( action );
-
-	action = new PlayersListBoxAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_HPLAYERSLISTBOX ]->SetAction( action );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	action = new PlayStyleDropDownAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_PLAYSTYLEDROPDOWN ]->SetAction( action );
-
-
-
-
-
-
-
-
-
+	m_controls[ CONTROL_GAMENAMETEXTFIELD ]->SetAction(new GameNameTextFieldAction);
+	m_controls[ CONTROL_PPTSWITCH ]->SetAction(new PPTSwitchAction);
+	m_controls[ CONTROL_KICKBUTTON ]->SetAction(new KickButtonAction);
+	m_controls[ CONTROL_INFOBUTTON ]->SetAction(new InfoButtonAction);
+	m_controls[ CONTROL_OKBUTTON ]->SetAction(new OKButtonAction);
+	m_controls[ CONTROL_REVIEWBUTTON ]->SetAction(new ReviewButtonAction);
+	m_controls[ CONTROL_RULESBUTTON ]->SetAction(new RulesButtonAction);
+	m_controls[ CONTROL_EXCLUSIONSBUTTON ]->SetAction(new ExclusionsButtonAction);
+	m_controls[ CONTROL_RULESOKBUTTON ]->SetAction(new RulesOKButtonAction);
+	m_controls[ CONTROL_EXCLUSIONSOKBUTTON ]->SetAction(new ExclusionsOKButtonAction);
+	m_controls[ CONTROL_LOCKSWITCH ]->SetAction(new LockSwitchAction);
+	m_controls[ CONTROL_ADDAIBUTTON ]->SetAction(new AddAIButtonAction);
+	m_controls[ CONTROL_CANCELBUTTON ]->SetAction(new CancelButtonAction);
+	m_controls[ CONTROL_HPLAYERSLISTBOX ]->SetAction(new PlayersListBoxAction);
+	m_controls[ CONTROL_PLAYSTYLEDROPDOWN ]->SetAction(new PlayStyleDropDownAction);
 
 	((ctp2_Spinner *)m_controls[CONTROL_PLAYSTYLEVALUESPINNER])->SetSpinnerCallback(PlayStyleValueSpinnerCallback, NULL);
 
-	action = new DynamicJoinSwitchAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_DYNAMICJOINSWITCH ]->SetAction( action );
+	m_controls[ CONTROL_DYNAMICJOINSWITCH ]->SetAction(new DynamicJoinSwitchAction);
+	m_controls[ CONTROL_HANDICAPPINGSWITCH ]->SetAction(new HandicappingSwitchAction);
+	m_controls[ CONTROL_BLOODLUSTSWITCH ]->SetAction(new BloodlustSwitchAction);
+	m_controls[ CONTROL_POLLUTIONSWITCH ]->SetAction(new PollutionSwitchAction);
+	m_controls[ CONTROL_AGESBUTTON ]->SetAction(new AgesButtonAction);
+	m_controls[ CONTROL_MAPSIZEBUTTON ]->SetAction(new MapSizeButtonAction);
+	m_controls[ CONTROL_WORLDTYPEBUTTON ]->SetAction(new WorldTypeButtonAction);
+	m_controls[ CONTROL_WORLDSHAPEBUTTON ]->SetAction(new WorldShapeButtonAction);
+	m_controls[ CONTROL_DIFFICULTYBUTTON ]->SetAction(new DifficultyButtonAction);
 
 
-
-
-
-
-
-
-
-
-
-	action = new HandicappingSwitchAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_HANDICAPPINGSWITCH ]->SetAction( action );
-
-
-
-
-
-
-	action = new BloodlustSwitchAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_BLOODLUSTSWITCH ]->SetAction( action );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	action = new PollutionSwitchAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_POLLUTIONSWITCH ]->SetAction( action );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	action = new AgesButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_AGESBUTTON ]->SetAction( action );
-
-	action = new MapSizeButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_MAPSIZEBUTTON ]->SetAction( action );
-
-	action = new WorldTypeButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_WORLDTYPEBUTTON ]->SetAction( action );
-
-	action = new WorldShapeButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_WORLDSHAPEBUTTON ]->SetAction( action );
-
-	action = new DifficultyButtonAction;
-	Assert( action != NULL );
-	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-	m_controls[ CONTROL_DIFFICULTYBUTTON ]->SetAction( action );
-
-
-	
-
-
-
-
-
-
-	
 	((aui_ListBox *)m_controls[ CONTROL_HPLAYERSLISTBOX ])->GetHeader()->
 		Enable( FALSE );
 
@@ -1383,21 +980,17 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		m_createdExclusions = false;
 	}
 
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	aui_Action *action;
-
-	
-
 	aui_ListBox *listbox =
 		(aui_ListBox *)m_controls[ CONTROL_UNITSLISTBOX ];
 	listbox->SetAbsorbancy( FALSE );
 	sint32 height = listbox->Height();
 
-	aui_Switch *item = NULL;
-	tech_WLList<aui_Switch *> unitList;
-
 	m_numAvailUnits = g_nsUnits->GetStrings()->GetNumStrings();
 	g_gamesetup.SetNumAvailUnits( m_numAvailUnits );
+
+	aui_Switch *item = NULL;
+	tech_WLList<aui_Switch *> unitList;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	sint32 i;
 	for ( i = 0; i < m_numAvailUnits; i++ )
 	{
@@ -1411,11 +1004,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 			item->SetText( g_nsUnits->GetStrings()->GetString( i ) );
-
-			action = new UnitExclusionAction( i );
-			Assert( action != NULL );
-			if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-			item->SetAction( action );
+			item->SetAction(new UnitExclusionAction(i));
 
 			m_units[ i ] = item;
 
@@ -1442,11 +1031,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 			item->SetText( g_nsUnits->GetStrings()->GetString( i ) );
-
-			action = new UnitExclusionAction( i );
-			Assert( action != NULL );
-			if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-			item->SetAction( action );
+			item->SetAction(new UnitExclusionAction(i));
 
 			m_units[ i ] = item;
 
@@ -1481,11 +1066,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		item->SetText( g_nsImprovements->GetStrings()->GetString( i ) );
-
-		action = new ImprovementExclusionAction( i );
-		Assert( action != NULL );
-		if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-		item->SetAction( action );
+		item->SetAction(new ImprovementExclusionAction(i));
 
 		m_improvements[ i ] = item;
 
@@ -1509,11 +1090,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		item->SetText( g_nsImprovements->GetStrings()->GetString( i ) );
-
-		action = new ImprovementExclusionAction( i );
-		Assert( action != NULL );
-		if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-		item->SetAction( action );
+		item->SetAction(new ImprovementExclusionAction(i));
 
 		m_improvements[ i ] = item;
 
@@ -1547,11 +1124,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		item->SetText( g_nsWonders->GetStrings()->GetString( i ) );
-
-		action = new WonderExclusionAction( i );
-		Assert( action != NULL );
-		if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-		item->SetAction( action );
+		item->SetAction(new WonderExclusionAction(i));
 
 		m_wonders[ i ] = item;
 
@@ -1575,11 +1148,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		item->SetText( g_nsWonders->GetStrings()->GetString( i ) );
-
-		action = new WonderExclusionAction( i );
-		Assert( action != NULL );
-		if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
-		item->SetAction( action );
+		item->SetAction(new WonderExclusionAction(i));
 
 		m_wonders[ i ] = item;
 
@@ -1835,10 +1404,10 @@ BOOL AllinoneWindow::WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, B
 
 	*curIsFemale = FALSE;
 
-	
-	Assert( 0 <= index && index < k_TRIBES_MAX );
-	if ( 0 > index || index >= k_TRIBES_MAX ) return FALSE;
-
+	if (!IsValidTribeIndex(index))
+	{
+		return FALSE;
+	}
 	
 	Assert( g_netfunc->IsHost() );
 	if ( !g_netfunc->IsHost() ) return FALSE;
@@ -1856,7 +1425,7 @@ BOOL AllinoneWindow::WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, B
 	}
 
 	TribeSlot *tribeSlots = g_gamesetup.GetTribeSlots();
-	for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
+	for (int i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
 		if ( tribeSlots[ i ].tribe == index )
 		{
@@ -1883,7 +1452,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 	{
 		TribeSlot *tribeSlots = g_gamesetup.GetTribeSlots();
 
-		for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
+		for (int i = 0; i < k_NS_MAX_PLAYERS; i++ )
 			if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == isAI )
 			{
 				if ( isFemale ) *isFemale = tribeSlots[ i ].isFemale;
@@ -1995,11 +1564,11 @@ BOOL AllinoneWindow::AssignTribe(
 	Assert( index != 1 );
 	if ( index == 1 ) return FALSE;
 
-	
-	Assert( 0 <= index && index < k_TRIBES_MAX );
-	if ( 0 > index || index >= k_TRIBES_MAX ) return FALSE;
+	if (!IsValidTribeIndex(index))
+	{
+		return FALSE;
+	}
 
-	
 	Assert( g_netfunc->IsHost() );
 	if ( !g_netfunc->IsHost() ) return FALSE;
 
@@ -2116,10 +1685,7 @@ BOOL AllinoneWindow::AssignTribe(
 		}
 	}
 
-	
 	UpdateTribeSwitches();
-
-	
 	UpdateGameSetup();
 
 	return TRUE;
@@ -2133,9 +1699,7 @@ void AllinoneWindow::RequestTribe( sint32 index )
 	Assert( index != 1 );
 	if ( index == 1 ) return;
 
-	
-	Assert( 0 <= index && index < k_TRIBES_MAX );
-	if ( 0 > index || index >= k_TRIBES_MAX ) return;
+	if (!IsValidTribeIndex(index)) return;
 
 	
 	Assert( !g_netfunc->IsHost() );
@@ -2151,7 +1715,6 @@ void AllinoneWindow::RequestTribe( sint32 index )
 		&message,
 		0 ); 
 	Assert( err == NETFunc::OK );
-	if ( err != NETFunc::OK ) return;
 }
 
 
