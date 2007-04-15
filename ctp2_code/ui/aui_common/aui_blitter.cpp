@@ -2384,9 +2384,9 @@ void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength){
         "shrl    $2,%0             \n\t"
         //"movl            $pDst, %2 \n\t"
         "testl   %0,%0           \n\t"
-        "jz .L3                      \n\t"
+        "jz .lable3                      \n\t"
 
-        ".L0:                                             \n\t"
+        ".lable0:                                             \n\t"
         "movl            (%1),%4 \n\t"
         "movl            4(%1),%5 \n\t"
         "movl            %4,(%2) \n\t"
@@ -2394,23 +2394,23 @@ void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength){
         "addl            $8,%1     \n\t"
         "addl            $8,%2     \n\t"
         "decl            %0        \n\t"
-        "jnz .L0                     \n\t"
-        ".L3:                        \n\t"
+        "jnz .lable0                     \n\t"
+        ".lable3:                        \n\t"
 
         "testl   $2,%3             \n\t"
-        "jz .L1                      \n\t"
+        "jz .lable1                      \n\t"
 
         "movl            (%1),%4 \n\t"
         "movl            %4,(%2) \n\t"
         "addl            $4,%1     \n\t"
         "addl            $4,%2     \n\t"
-        ".L1:                        \n\t"
+        ".lable1:                        \n\t"
 
         "testl   $1,%3             \n\t"
-        "jz .L2                      \n\t"
+        "jz .lable2                      \n\t"
         "movw            (%1),%w4  \n\t"
         "movw            %w4,(%2)  \n\t"
-        ".L2:                        \n\t"
+        ".lable2:                        \n\t"
 
         : 
         : "q" (copylength), "r" (pSrc), "r" (pDst), "r" (0), "r" (0), "r" (0)

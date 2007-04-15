@@ -4173,7 +4173,7 @@ L1:
                                     "subl %3,%4              \n\t" //%1 is now reuseable
 //                                "movl $transDataPtr, %ebx    \n\t" //done by gcc!
 
-                                    ".L0:                        \n\t"
+                                    ".lable0:                        \n\t"
                                     "movw (%1),%w3             \n\t" //reusing edx (%3)
                                     "addl $2,%1                \n\t"
 //                                    "movl %%eax, %4                  \n\t"
@@ -4184,21 +4184,21 @@ L1:
                                     "xorl %%ebx,%%ebx              \n\t" //make %eax = 0, see below, we use ebx
                                     "movw %w3,%%bx            \n\t" //because of this ebx has to be static
                                     "cmpl $4,%%ebx             \n\t" //because of above line eax may be != 0
-                                    "jge .L1                     \n\t"
+                                    "jge .lable1                     \n\t"
                                     "movl (%7,%%ebx,4), %3 \n\t"  // ** tileData can't be passed as "m"!
                                     "testl %3,%3             \n\t"  //check if %3 is zero, set Z-bit
-                                    "jz .L2                      \n\t"
+                                    "jz .lable2                      \n\t"
                                     "addl $2,%3            \n\t"
                                     "movl %3, (%7,%%ebx,4) \n\t" // (%eax + %ebx * 4) = %3
                                     "movw -2(%3),%w3           \n\t"
-                                    "jmp .L1                     \n\t"
-                                    ".L2:                        \n\t"
+                                    "jmp .lable1                     \n\t"
+                                    ".lable2:                        \n\t"
                                     "movw (%%ebp),%w3             \n\t"//movw (%3),%%dx
-                                    ".L1:                        \n\t"
+                                    ".lable1:                        \n\t"
                                     "addl $2,%%ebp                \n\t"
                                     "movw %w3,(%2,%4,2)      \n\t"
                                     "incl %4                   \n\t"
-                                    "jnz .L0                     \n\t"
+                                    "jnz .lable0                     \n\t"
                                     "movl %%ebp, %0    \n\t"// this wouldn't work without -fomit-frame-pointer
 //                                    "popl %%ebp     \n\t"// restore ebp, NEVER use this!
                                     "popl %%ebx     \n\t"// restore reg for PIC!
