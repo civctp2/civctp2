@@ -461,6 +461,34 @@ NANO_TERROR_COMPLETE_VICTIM		"Dei cani stranieri hanno liberato un virus nanotec
 NANO_TERROR_FAILED_AGRESSOR		"La tua battaglia per salvare la Terra sta attraversando un brutto momento. La tua nanoinfezione è fallita."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Nonostante il tuo impegno, il nemico ha previsto tutto. La città che hai scelto come obiettivo per la nanoinfezione ne è immune."
 
+########################################
+### New City Capture Option strings 2.0
+########################################
+
+DESTROY_CITY_TITLE			"Annetti la città al tuo impero o la distruggi?"
+DESTROY_CITY				"{player[0].leader_name#SIR_CAP}, abbiamo conquistato la città di {city[0].name}. Migliaia di cittadini attendono le tue decisioni con terrore: puoi ridurre in schiavitù la popolazione locale e radere al suolo la città, puoi saccheggiarla (il che provocherebbe un bagno di sangue tra la popolazione locale ed abbasserebbe la nostra reputazione) oppure puoi accogliere i cittadini e la loro città nel tuo Impero."
+DESTROY_CITY2				"{player[0].leader_name#SIR_CAP}, abbiamo conquistato la città di {city[0].name}. Migliaia di cittadini attendono le tue decisioni con terrore: puoi spostare la popolazione locale e radere al suolo la città, puoi saccheggiarla (il che provocherebbe un bagno di sangue tra la popolazione locale ed abbasserebbe la nostra reputazione) oppure puoi accogliere i cittadini e la loro città nel tuo Impero."
+EXTEND_EMPIRE				"Estendi Impero"
+BLOODBATH				"Bagno Di Sangue"
+REGARD_EVENT_BLOODBATH			"L'Impero {player[0].civ_name_singular} ci considera dei crudeli assassini a causa del bagno di sangue che abbiamo scatenato con la conquista dell'ultima città."
+ENSLAVE					"Riduci In Schiavitù"
+REGARD_EVENT_ENSLAVE			"L'Impero {player[0].civ_name_singular} non crede alle nostre parole, perchè abbiamo schiavizzato i cittadini catturati nell'ultima battaglia."
+EVACUATE				"Evacua Cittadini"
+BLOODBATH_MSG_TITLE			"C'è stato un bagno di sangue!"
+BLOODBATH_MSG				"Dopo la cattura della città di {city[0].name} ad opera dell'Impero {player[0].civ_name_singular} enormi fiumi di sangue sono corsi lungo le strade. Poche persone sono riuscite a sfuggire al massacro."
+ENSLAVE_MSG_TITLE			"C'è stata una deportazione di schiavi!"
+ENSLAVE_MSG				"Ci è giunta la terribile notizia che l'Impero {player[0].civ_name_singular} ha ridotto in schiavitù tutti i cittadini di {city[0].name} dopo aver raso al suolo la città."
+EVACUATE_MSG_TITLE			"Una città è stata evacuata!"
+EVACUATE_MSG				"Dopo la cattura della città di {city[0].name} da parte dell'Impero {player[0].civ_name_singular} l'intera popolazione è stata evacuata."
+HUGE_SLAVE_UPRISING_TITLE		"Gli schiavi insorgono!"
+HUGE_SLAVE_UPRISING			"{player[0].leader_name#SIR_CAP}, gli schiavi che abbiamo recentemante catturato sono insorti e la città di {city[0].name} è ora nelle loro mani."
+HUGE_SLAVE_UPRISING_OTHERS_TITLE	"Gli schiavi insorgono!"
+HUGE_SLAVE_UPRISING_OTHERS		"Gli schiavi recentemente catturati dall'Impero {player[0].civ_name_plural} sono insorti e la città di {city[0].name} è ora nelle loro mani."
+EVACUATE_UNHAPPINESS_TITLE		"I nuovi cittadini fanno diminuire il benessere!"
+EVACUATE_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, i cittadini che abbiamo importato dalla città che abbiamo raso al suolo diffondono il malcontento tra la popolazione. D'ora in poi nelle città in cui vanno a insediarsi dovremo fare i conti con una maggiore infelicità."
+BLOODBATH_UNHAPPINESS_TITLE		"Il bagno di sangue fa diminuire il benessere!"
+BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, le notizie sul bagno di sangue che abbiamo causato nella città di {city[0].name} sono giunte rapidamente alle orecchie dei nostri cittadini; ciò ha causato un generale sentimento di insicurezza e paura tra la popolazione che si risolve in un calo della felicità. Il bagno di sangue ha inoltre intaccato la nostra reputazione agli occhi delle altre nazioni."
+
 #New Messages#
 CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
 LOST_AT_SEA				"Our {unit[0].name} has been lost at Sea! Remember some units may sink and lose all cargo on board!"
@@ -468,3 +496,13 @@ UNIT_UPGRADED				"Our {unit[0].name} has been rearmed and trained as a {unit[1].
 HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unit[0].name}!"
 INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}"
 GUERRILLA_SPAWN				"Our {unit[0].name} has raised guerrillas to aid our cause!"
+
+CANT_ATTACK_HAVE_TREATY			"Quest'azione romperà il nostro trattato con {player[0].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[0].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."
+
+# New Messages # Belong to somewhere else
+# Doves and hawks there are better names for them
+ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES				"The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 

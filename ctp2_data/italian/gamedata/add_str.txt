@@ -46,12 +46,6 @@ str_ldl_ShowTradeRoutes_Off			"Nascondi le rotte commerciali"
 # Got lost somehow, City manager button.
 str_ldl_DisbandUnit                 "Congeda"
 
-	
-
-# Feats (feat_str.txt)
-# changeme
-FEAT_RECAPTURED_CITY "Riprendendoti ciò che era tuo, hai risollevato il morale della tua gente."
-
 # City advisor
 str_ldl_CityAdvisor "Consigliere cittadino"
 

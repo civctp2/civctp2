@@ -145,17 +145,6 @@ POLLUTION_TOXIC		"Toxique"
 str_ldl_Total_City_Pollution	"Pollution de la ville"
 str_ldl_Pollution_Level		"Niveau de pollution"
 
-
-
-CANT_ATTACK_HAVE_TREATY	"Cette action rompra notre traité avec les {player[0].civ_name_plural}. Voulez-vous poursuivre ?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Les {player[0].civ_name_plural} n'ont pas réussi à loger toutes leurs forces sur notre territoire. Ils ont promis de les retirer dès que possible."
-#New Messages
-ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
-CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
-CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
-
-
 str_ldl_RES_CHANGE_BUTTON	"Résolution"
 str_ldl_RES_TITLE		"Résolution"
 str_ldl_RES_REBOOT_WARNING	"Ce changement prendra effet quand vous relancerez Call to Power II."
@@ -2971,7 +2960,7 @@ INFOBAR_UNITS 				"Unités : "
 INFOBAR_CITY 				"Ville : "
 INFOBAR_UNEXPLORED 			"Inexploré"
 
-UNIT_HOPLITE_NEW 			"Hoplite"
+# UNIT_HOPLITE_NEW 			"Hoplite" # Unused to be removed
 
 MOVED_ALL_ARMIES_GENIUS 		"Vous avez déplacé toutes vos armées, vous devez être un génie !"
 

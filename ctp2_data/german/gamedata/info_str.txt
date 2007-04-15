@@ -460,6 +460,34 @@ NANO_TERROR_COMPLETE_VICTIM		"Fremde Übeltäter haben in der Stadt {city[0].name}
 NANO_TERROR_FAILED_AGRESSOR		"Euer Plan zur Rettung der Welt scheint noch nicht so schnell aufzugehen: Euer Nanoviren-Angriff ist fehlgeschlagen."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Trotz Euer Vertuschungsversuche wurden Eure Absichten durchschaut: Eine weitere feindliche Stadt wurde gegen Nanoviren-Angriffe immunisiert."
 
+########################################
+### New City Capture Option strings 2.0
+########################################
+
+DESTROY_CITY_TITLE			"Stadt eingliedern oder zerstören?"
+DESTROY_CITY				"{player[0].leader_name#SIR_CAP}, wir haben die Stadt {city[0].name} erobert. Tausende verängstigte Bürger erwarten mit Furcht Eure Entscheidung: Entweder gliedert Ihr die Stadt {city[0].name} in das Reich ein oder plündert, brandschatzt und richtet ein Blutbad unter der Zivilbevölkerung an. Aber Vorsicht ein Blutbad wird unseren Ruf schädigen. Alternativ könnt Ihr die Bevölkerung verklaven und die Stadt {city[0].name} dem Erdboden gleichmachen."
+DESTROY_CITY2				"{player[0].leader_name#SIR_CAP}, wir haben die Stadt {city[0].name} erobert. Tausende verängstigte Bürger erwarten mit Furcht Eure Entscheidung: Entweder gliedert Ihr die Stadt {city[0].name} in das Reich ein oder plündert, brandschatzt und richtet ein Blutbad unter der Zivilbevölkerung an. Aber Vorsicht ein Blutbad wird unseren Ruf schädigen. Alternativ könnt Ihr die Bevölkerung einfach umsiedeln und die Stadt {city[0].name} dem Erdboden gleichmachen."
+EXTEND_EMPIRE				"Erweitere Reich"
+BLOODBATH				"Blutbad"
+REGARD_EVENT_BLOODBATH			"Die {player[0].civ_name_plural} halten uns für grausame Mörder, da es bei unseren letzer Stadteroberung zu einem Blutbad gekommen ist."
+ENSLAVE					"Verklaven"
+REGARD_EVENT_ENSLAVE			"Die {player[0].civ_name_plural} trauen uns nicht, da wir die letzten Staderoberungen zur billigen Sklavenbeschaffung benutzt haben."
+EVACUATE				"Umsiedeln"
+BLOODBATH_MSG_TITLE			"Ein Blutbad ist geschehen!"
+BLOODBATH_MSG				"Nach der Eroberung der Stadt {city[0].name} durch die {player[0].civ_name_plural} flossen massive rote Ströme von Blut durch die Straßen. So weit bekannt konnte kein Einwohner der Stadt diesem Gemetzel entkommen."
+ENSLAVE_MSG_TITLE			"Massive Sklavenbeschaffung!"
+ENSLAVE_MSG				"Nach neusten Meldungen haben die {player[0].civ_name_plural} nach Eroberung und Plünderung der Stadt {city[0].name} alle Einwohner in die Sklaverei verkauft."
+EVACUATE_MSG_TITLE			"Stadträumung!"
+EVACUATE_MSG				"Nach der Eroberung der Stadt {city[0].name} haben die {player[0].civ_name_plural} die Stadt geräumt und die Bevölkerung umgesiedelt."
+HUGE_SLAVE_UPRISING_TITLE		"Großer Sklavenaufstand!"
+HUGE_SLAVE_UPRISING			"{player[0].leader_name#SIR_CAP}, unser jüngstes Sklavenbeschaffungsprogramm hat auf Grund der ungeheuren Anzahl der beschafften Sklaven größte Probleme in der Stadt {city[0].name} verursacht. Viele Sklaven konnten im Chaos fliehen, überraschten und töteten unsere Truppen im Schlaf und haben sich unsere Ausrüstung bemächtig."
+HUGE_SLAVE_UPRISING_OTHERS_TITLE	"Großer Sklavenaufstand!"
+HUGE_SLAVE_UPRISING_OTHERS		"Anscheinend gab es wohl ein paar Probleme beim jüngsten Sklavenbeschaffungsprogramm der {player[0].civ_name_plural}, die Stadt {city[0].name} und die Umgebung sind in die Hände der kürzlich beschafften Sklaven gefallen."
+EVACUATE_UNHAPPINESS_TITLE		"Stimmungseinbruch wegen Umsiedlungen!"
+EVACUATE_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, durch die jüngsten Umsiedelungsmaßnahmen konnten unsere Städte einen Bevölkerungszuwachstum verzeichnen. Leider sind die Neubürger verärgert darüber, dass sie ihr Hab und Gut aufgeben und ihre Heimat verlassen mussten. Wir müssen in nächster Zeit mit gedämpfter Stimmung in den Städten unserer Neubürger rechnen."
+BLOODBATH_UNHAPPINESS_TITLE		"Stimmungseinbruch wegen Blutbads!"
+BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, die Nachrichten vom Blutbad in der Stadt {city[0].name} haben die Einwohner unseres Reiches tief verunsichert, wir müssen mit einem Stimmungseinbruch rechnen. Außerdem haben wir an Ansehen bei allen anderen Zivilisationen verloren."
+
 #New Messages#
 CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
 LOST_AT_SEA				"Our {unit[0].name} has been lost at Sea! Remember some units may sink and lose all cargo on board!"
@@ -474,6 +502,6 @@ AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für
 # New Messages # Belong to somewhere else
 # Doves and hawks there are better names for them
 ATTACK_WARNING				"Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[0].civ_name_plural#DAT} den Krieg erklären?"
-CIV2DOVES				"Die Tauben haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
-CIV2HAWKS				"Die Falken verlanegen nach Krieg gegen diese Achse des Bösen!"
+CIV2DOVES				"Die Parzifisten haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
+CIV2HAWKS				"Die Kriegstreiber verlanegen nach Krieg gegen diese Achse des Bösen!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 

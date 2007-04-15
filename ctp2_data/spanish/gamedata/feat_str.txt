@@ -1,3 +1,46 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains feat messages (Spanish)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the feat message strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None
+#
+#----------------------------------------------------------------------------
+
 ## FEATS OF WONDER STRINGS
 
 FEAT_ACCOMPISHED_TITLE		"PROEZA DE MARAVILLA"
@@ -21,6 +64,5 @@ FEAT_BUILT_ORBITAL_LABS		"Has creado una red de laboratorios orbitales, así como
 ## ACTION-RELATED FEATS
 FEAT_SAILED_AROUND_THE_WORLD	"¡Has logrado dar la vuelta al mundo en barco! Tu experta armada conoce muy bien los mares y dispone de mapas precisos de muchas rutas marinas. En consecuencia, todas tus unidades navales gozarán de un aumento en sus desplazamientos de +{FeatDB(Value[0]).EffectBoatMovement} durante los próximos {FeatDB(Value[0]).Duration} turnos." 
 FEAT_CONQUERED_BY_FORCE		"¡Eres todo un conquistador! ¡A través de proezas militares, agallas y determinación has conquistado una poderosa nación!" 
-
-FEAT_RECAPTURED_CITY 		"¡Has reconquistado una ciudad que en otros tiempos era parte de tu imperio! Al reclamar lo que un día fue tuyo, se ha levantado el ánimo de tu pueblo y les has dado esperanzas frente a agresiones extranjeras. Habrá un incremento de +{FeatDB(Value[0]).EffectIncreaseHappiness} en la felicidad de todo tu imperio durante los próximos {FeatDB(Value[0]).Duration} turnos." 
+FEAT_RECAPTURED_CITY		"¡Has reconquistado una ciudad que en otros tiempos era parte de tu imperio! Al reclamar lo que un día fue tuyo, se ha levantado el ánimo de tu pueblo y les has dado esperanzas frente a agresiones extranjeras. Habrá un incremento de +{FeatDB(Value[0]).EffectIncreaseHappiness} en la felicidad de todo tu imperio durante los próximos {FeatDB(Value[0]).Duration} turnos." 
 

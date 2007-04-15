@@ -18,7 +18,7 @@
 #
 # Remarks
 #
-# - This file contain all the message strings for the Alexander the Great 
+# - This file contains all the message strings for the Alexander the Great 
 #   scenario. It contains nothing else.
 # - The order of the strings has been synchronized in the English, German
 #   and Italian version. This has not been done for the French, Spanish and 
@@ -26,11 +26,11 @@
 #   code project.
 # - If you add new strings make sure that you add them at the same location
 #   in every language version you have.
-# - For easy comparison between the languages keep make sure that the number
+# - For easy comparison between the languages make sure that the number
 #   of lines in each language file version is the same and that also the
 #   comments are at the same place.
 # - Keep also the indentation the same.
-# - You may add comments after the last time of strings that are specific to 
+# - You may add comments after the last line of strings that are specific to 
 #   one language only.
 #
 #----------------------------------------------------------------------------

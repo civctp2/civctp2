@@ -16,6 +16,25 @@
 #
 #----------------------------------------------------------------------------
 #
+# Remarks
+#
+# - This file contains all the localized names of the database records.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
 # Modifications from the original Activision code:
 #
 # - Added CityMod2 age concept strings.
@@ -246,6 +265,7 @@ UNIT_MOBILE_SAM					"Lanciamissili mobile"
 UNIT_MARINE					"Marine"
 UNIT_PARATROOPER				"Paracadutista"
 UNIT_URBAN_PLANNER				"Urbanista"
+UNIT_Z_FREIGHT_TRANSPORT			"Trasporto merci"
 UNIT_INTERCEPTOR				"Intercettore"
 UNIT_CRUISE_MISSILE				"Missile da crociera"
 UNIT_NUCLEAR_SUBMARINE				"Sottomarino nucleare"
@@ -275,8 +295,6 @@ UNIT_DREADNAUGHT				"Proteus"
 UNIT_CITY					"Città"
 UNIT_OCEAN_CITY					"Colonia marina"
 UNIT_SPACE_CITY					"Colonia spaziale"
-
-UNIT_Z_FREIGHT_TRANSPORT			"Trasporto merci"
 UNIT_ELEPHANT_WARRIOR				"Elephant Warrior"
 UNIT_SCOUT					"Scout"
 UNIT_LEGION					"Legion"
@@ -285,7 +303,6 @@ UNIT_SWORDSMAN					"Swordsman"
 UNIT_PIRATE_SHIP				"Pirate Ship"
 UNIT_TRADER					"Trader"
 UNIT_LONGBOWMAN 				"Longbowman"
-
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarchia"

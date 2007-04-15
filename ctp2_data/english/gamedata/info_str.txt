@@ -460,7 +460,33 @@ NANO_TERROR_COMPLETE_VICTIM		"Foreign dogs have unleashed a nanological virus on
 NANO_TERROR_FAILED_AGRESSOR		"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."
 
+########################################
+### New City Capture Option strings 2.0
+########################################
 
+DESTROY_CITY_TITLE			"Incorporate or destroy city?"
+DESTROY_CITY				"{player[0].leader_name#SIR_CAP}, we conquered the city {city[0].name}. Thousands of citizens await your decision with fear: You can enslave the local population and raze the city to the ground, or pillage it, sack it and cause a bloodbath to the civil population. But note a bloodbath will lower our regard. Alternatively you can welcome the citizens and their city into your Empire."
+DESTROY_CITY2				"{player[0].leader_name#SIR_CAP}, we conquered the city {city[0].name}. Thousands of citizens await your decision with fear: You can move the local population and raze the city to the ground, or pillage it, sack it and cause a bloodbath to the civil population. But note a bloodbath will lower our regard. Alternatively you can welcome the citizens and their city into our Empire."
+EXTEND_EMPIRE				"Extend Empire"
+BLOODBATH				"Bloodbath"
+REGARD_EVENT_BLOODBATH			"The {player[0].civ_name_plural} take us for cruel murderers, as at our last city capture happend a bloothbath."
+ENSLAVE					"Enslave"
+REGARD_EVENT_ENSLAVE			"The {player[0].civ_name_plural} do not trust us, because we used the last city captures for cheap slave gaining."
+EVACUATE				"Move Citizens" 
+BLOODBATH_MSG_TITLE			"A bloodbath happened!"
+BLOODBATH_MSG				"After the capture of the city {city[0].name} by the {player[0].civ_name_plural} massive red streams of blood flowed through the streets. As far as known no citizien was able to escape from this slaugter."
+ENSLAVE_MSG_TITLE			"Massive Enslaving!"
+ENSLAVE_MSG				"According to the latest reports the {player[0].civ_name_plural} have enslaved all the citizens of the {city[0].name} after pillaging and sacking it."
+EVACUATE_MSG_TITLE			"City Evacuation!"
+EVACUATE_MSG				"After the capture of the city {city[0].name} the {player[0].civ_name_plural} evacuated the city and resettled the population."
+HUGE_SLAVE_UPRISING_TITLE		"Huge Slave Uprising!"
+HUGE_SLAVE_UPRISING			"{player[0].leader_name#SIR_CAP}, our latest enslavement program caused some serious problems in the city {city[0].name}, because of the huge number of new slaves. Many slaves were able to flee in the chaos, they surprised our troop while they slept, killed them and took our equipment."
+HUGE_SLAVE_UPRISING_OTHERS_TITLE	"Huge Slave Uprising!"
+HUGE_SLAVE_UPRISING_OTHERS		"Apparently there were probably a few problems during the lastest enslavement program of the {player[0].civ_name_plural}, the city {city[0].name} and the environs fell into the hands of the recent captured slaves."
+EVACUATE_UNHAPPINESS_TITLE		"Decrease of Happiness because of Resettlements!"
+EVACUATE_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, due to the latest evacuations our cities were able to note a  growth of the population. Unfortunatly the new citizens are angered about the fact that they had to give up their possessions and belongings and had to leave their home. We have to reckon with a lower happiness in the cities of our new citizens in the next time."
+BLOODBATH_UNHAPPINESS_TITLE		"Decrease of Happiness because of Bloodbath!"
+BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, the news from the bloodbath in the city {city[0].name} made unshure the inhabitants of our empire, we have to expect a drop of happiness. In addition we lost some reputation at the other civilisations."
 
 #New Messages#
 CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
@@ -469,3 +495,13 @@ UNIT_UPGRADED				"Our {unit[0].name} has been rearmed and trained as a {unit[1].
 HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unit[0].name}!"
 INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}"
 GUERRILLA_SPAWN				"Our {unit[0].name} has raised guerrillas to aid our cause!"
+
+CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
+
+# New Messages # Belong to somewhere else
+# Doves and hawks there are better names for them
+ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES				"The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR					"These savages threaten our citizens. Pacification operations have begun!"

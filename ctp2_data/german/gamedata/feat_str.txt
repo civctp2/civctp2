@@ -1,3 +1,46 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains feat messages (German)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the feat message strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None
+#
+#----------------------------------------------------------------------------
+
 ## FEATS OF WONDER STRINGS
 
 FEAT_ACCOMPISHED_TITLE		"EINE MEISTERLEISTUNG!"
@@ -21,5 +64,5 @@ FEAT_BUILT_ORBITAL_LABS		"Ihr habt ein Netz von Orbitallaborien errichtet und da
 ## ACTION-RELATED FEATS
 FEAT_SAILED_AROUND_THE_WORLD	"Es ist Euch gelungen, die Welt zu umsegeln! Euer emsigen Flotte, die die Weltmeere nunmehr wie ihre Westentasche kennt, ist es zu verdanken, dass viele Wasserwege ordentlich kartografiert sind. In Anerkennung ihrer Leistungen erhalten sämtliche Marineeinheiten Euer Nation während der nächsten {FeatDB(Value[0]).Duration} Runden ein Fortbewegungsbonus von +{FeatDB(Value[0]).EffectBoatMovement/100}."  
 FEAT_CONQUERED_BY_FORCE		"Ihr seid ein wahrer Eroberer! Mit Durchhaltevermögen, Entschlossenheit und militärischer Überlegenheit ist es Euch gelungen, eine nun einstmals mächtige Nation zu unterwerfen!"
-FEAT_RECAPTURED_CITY 		"Ihr habt eine Stadt zurückerobert, die früher einmal zu Euerm Reiche gehört hatte! Ihr habt Euren Bürgern durch diese Tat große Freude bereitet und sie angesichts der Bedrohung durch fremde Länder mit neuer Hoffnung erfüllt, so dass sich die Zufriedenheit während der nächsten {FeatDB(Value[0]).Duration} Runden um +{FeatDB(Value[0]).EffectIncreaseHappiness} erhöht."
+FEAT_RECAPTURED_CITY		"Ihr habt eine Stadt zurückerobert, die früher einmal zu Euerm Reiche gehört hatte! Ihr habt Euren Bürgern durch diese Tat große Freude bereitet und sie angesichts der Bedrohung durch fremde Länder mit neuer Hoffnung erfüllt, so dass sich die Zufriedenheit während der nächsten {FeatDB(Value[0]).Duration} Runden um +{FeatDB(Value[0]).EffectIncreaseHappiness} erhöht."
 

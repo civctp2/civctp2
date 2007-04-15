@@ -17,6 +17,26 @@
 #
 #----------------------------------------------------------------------------
 #
+# Remarks
+#
+# - This file contains all the civilisation related strings like civilisation
+#   names, city names, emissary photos and diplomacy flags.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
 # Modifications from the original Activision code:
 #
 # - Moved back diplomacy photo strings from add_str.txt.
@@ -35,7 +55,7 @@ PERSONALITY_DESCRIPTION_WAR_MANY	"Militant"
 PERSONALITY_DESCRIPTION_WAR_FEW		"Aggressive"
 PERSONALITY_DESCRIPTION_SCI_MANY	"Peaceful"
 PERSONALITY_DESCRIPTION_SCI_FEW		"Agreeable"
-######
+#####
 
 # SAM100798
 #
@@ -68,7 +88,6 @@ PRONOUN_HIM_FEMALE_CAP 	"Her"
 PRONOUN_HIS_MALE_CAP 	"His"
 PRONOUN_HIS_FEMALE_CAP 	"Her"
 
-
 # emissary flags
 #
 ABORIGINE_DIPLOMAT_FLAG			"aborigine-diploflag.tga"
@@ -76,7 +95,7 @@ AFRICAN_MAN_FLAG			"barbarian-diploflag.tga"
 AMERICAN_DIPLOMAT_FLAG			"US-diploflag.tga"
 ARABIAN_DIPLOMAT_FLAG			"arab-diploflag.tga"
 ARGENTINIAN_DIPLOMAT_FLAG		"argentina-diploflag.tga"
-ASSYRIAN_DIPLOMAT_FLAG			"assyria2-diploflag.tga"
+ASSYRIAN_DIPLOMAT_FLAG			"Assyria2-diploflag.tga"
 AUSTRALIAN_DIPLOMAT_FLAG		"australia-diploflag.tga"
 AUSTRIAN_DIPLOMAT_FLAG			"austria-diploflag.tga"
 AZTEC_DIPLOMAT_FLAG			"aztec-diploflag.tga"
@@ -89,7 +108,7 @@ CANADIAN_DIPLOMAT_FLAG			"canada-diploflag.tga"
 CARTHAGINIAN_DIPLOMAT_FLAG		"carthage-diploflag.tga"
 CELTIC_DIPLOMAT_FLAG			"celt-diploflag.tga"
 CHINESE_DIPLOMAT_FLAG			"china-diploflag.tga"
-CONFEDERATE_DIPLOMAT_FLAG      		"confederate-diploflag.tga"
+CONFEDERATE_DIPLOMAT_FLAG		"confederate-diploflag.tga"
 CUBAN_DIPLOMAT_FLAG			"cuba-diploflag.tga"
 DUTCH_DIPLOMAT_FLAG			"dutch-diploflag.tga"
 EGYPTIAN_DIPLOMAT_FLAG			"egypt-diploflag.tga"
@@ -137,6 +156,7 @@ TURKISH_DIPLOMAT_FLAG			"turkey-diploflag.tga"
 VIKING_DIPLOMAT_FLAG			"norway-diploflag.tga"
 WELSH_DIPLOMAT_FLAG			"welsh-diploflag.tga"
 ZULU_DIPLOMAT_FLAG			"zimbabwe-diploflag.tga"
+
 # emissary photos
 #
 GREEK_DIPLOMAT_PHOTO		"updp023.tga"

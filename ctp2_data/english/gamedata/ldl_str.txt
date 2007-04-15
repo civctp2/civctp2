@@ -143,14 +143,6 @@ POLLUTION_TOXIC	"Toxic"
 str_ldl_Total_City_Pollution	"Total City Pollution"
 str_ldl_Pollution_Level	"Pollution Level"
 
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
-#New Messages
-ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
-CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
-CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
-
 str_ldl_RES_CHANGE_BUTTON	"Screen Size"
 str_ldl_RES_TITLE			"Screen Size"
 str_ldl_RES_REBOOT_WARNING	"This change will take effect when you restart Call to Power II."
@@ -2969,22 +2961,7 @@ INFOBAR_UNITS "Units: "
 INFOBAR_CITY "City: "
 INFOBAR_UNEXPLORED "Unexplored"
 
-UNIT_HOPLITE_NEW "Hoplite"
-
-BUILD_LIST_SEQUENCE_PRODUCTION			"Production"
-BUILD_LIST_SEQUENCE_GROWTH			"Growth"
-BUILD_LIST_SEQUENCE_OFFENSE			"Offense"
-BUILD_LIST_SEQUENCE_DEFENSE			"Defense"
-BUILD_LIST_SEQUENCE_SCIENCE			"Science"
-BUILD_LIST_SEQUENCE_GOLD			"Gold"
-BUILD_LIST_SEQUENCE_WONDERS			"Wonders"
-BUILD_LIST_SEQUENCE_HAPPINESS			"Happiness"
-BUILD_LIST_SEQUENCE_DEFAULT			"Default"
-BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"Wonders (Sci.)"
-BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"Wonders (Mil.)"
-BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"Wonders (Econ.)"
-BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"Wonders (Ecot.)"
-BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
+# UNIT_HOPLITE_NEW "Hoplite" # Unused: To be removed
 
 MOVED_ALL_ARMIES_GENIUS "You have moved all of your armies, you must be some kind of genius!"
 
