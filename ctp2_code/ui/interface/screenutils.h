@@ -84,8 +84,8 @@ void    close_Diplomacy( void );
 sint32  open_InfoScreen( void );
 void    close_InfoScreen( void );
 
-sint32  open_GreatLibrary( sint32 index, BOOL sci = FALSE );
-sint32  open_GreatLibrary( void );
+bool    open_GreatLibrary( sint32 index, bool sci = false );
+bool    open_GreatLibrary( void );
 void    close_GreatLibrary( void );
 
 sint32  open_OptionsScreen( sint32 fromWhichScreen );

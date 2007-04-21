@@ -52,7 +52,7 @@ namespace Shortcuts {
 	ShortcutPad::ShortcutCallback<AUI_ERRCODE> UnitManagementCallback(UnitManager::Display);
 	ShortcutPad::ShortcutCallback<sint32> DiplomacyCallback(open_Diplomacy);
 	ShortcutPad::ShortcutCallback<sint32> ScienceCallback(open_ScienceStatus);
-	ShortcutPad::ShortcutCallback<sint32> GreatLibraryCallback(open_GreatLibrary);
+	ShortcutPad::ShortcutCallback<bool> GreatLibraryCallback(open_GreatLibrary);
 	ShortcutPad::ShortcutCallback<AUI_ERRCODE> TradeCallback(TradeManager::Display);
 };
 

@@ -3284,3 +3284,15 @@ STRATEGY_MAXIMUM_NUKES {
     SpecialUnitsCount       50
 }
 
+STRATEGY_TOO_MANY_CITIES {
+    SettlerUnitsCount       0
+
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec  0 }
+}
+
+STRATEGY_NO_REVOLUTON {
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+}

@@ -227,8 +227,8 @@ public:
 
 	void UpdateList(DATABASE database);
 
-	BOOL GetSci( void ) const { return m_sci; }
-	void SetSci( BOOL sci ) { m_sci = sci; }
+	bool GetSci( void ) const { return m_sci; }
+	void SetSci( bool sci ) { m_sci = sci; }
 
 	ctp2_Button *GetAdvancesButton( void ) const { return m_advancesButton; }
 
@@ -256,12 +256,13 @@ public:
 	void FixTabs();
 	sint32 GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const;
 	sint32 GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const;
+	bool IsHidden(sint32 index, DATABASE theDatabase) const;
 
 private:
     void Initialize(MBCHAR const * windowBlock);
 
     friend void TechListItem::Update(void);
-    friend sint32 greatlibrary_Initialize(sint32 theMode, BOOL sci);
+    friend bool greatlibrary_Initialize(sint32 theMode, bool sci);
 
 	ctp2_Button		*m_setGoalButton;
 
@@ -322,13 +323,13 @@ private:
 	ctp2_Static		*m_indexRight;
 
 	sint32			m_page;
-	BOOL			m_maxPage;
+	bool			m_maxPage;
 	DATABASE		m_database;
 	DATABASE    m_listDatabase; 
 	sint32			m_selectedIndex;
 	sint32			m_maxIndex;
 
-	BOOL			m_sci;
+	bool			m_sci;
 
 	ctp2_Static *m_itemLabel;
 
@@ -345,7 +346,7 @@ private:
 };
 
 const MBCHAR *  glutil_LoadText(const char * filename, SlicContext & so);
-sint32          greatlibrary_Initialize(sint32 theMode, BOOL sci = FALSE);
+bool            greatlibrary_Initialize(sint32 theMode, bool sci = false);
 void            greatlibrary_Cleanup(void);
 
 extern GreatLibrary	*   g_greatLibrary;

@@ -321,7 +321,7 @@ void close_InfoScreen( void )
 //              set, it will open with the indicated advance.
 //
 //----------------------------------------------------------------------------
-sint32 open_GreatLibrary(sint32 index, BOOL sci)
+bool open_GreatLibrary(sint32 index, bool sci)
 {
 #ifdef _DEBUG
 	SET_TIME
@@ -357,7 +357,7 @@ sint32 open_GreatLibrary(sint32 index, BOOL sci)
 //              advance that is being researched by the current player.
 //
 //----------------------------------------------------------------------------
-sint32 open_GreatLibrary( void )
+bool open_GreatLibrary( void )
 {
 	sint32 const		player	= g_selected_item->GetVisiblePlayer();
 	AdvanceType const	advance	= g_player[player]->m_advances->GetResearching();

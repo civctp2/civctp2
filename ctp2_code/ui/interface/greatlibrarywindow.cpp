@@ -27,6 +27,7 @@
 // - Memory leaks repaired in LoadText by Martin Gühmann.
 // - Added variable and requirement retriever methods. (Sep 13th 2005 Martin Gühmann)
 // - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
+// - Fixed terrain database item mismatch. (21-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -312,7 +313,6 @@ sint32 GreatLibraryWindow::SetTechMode ( sint32 theMode, DATABASE theDatabase )
 		break;
 
 	case DATABASE_TERRAIN:
-		theMode = g_theTerrainDB->m_alphaToIndex[ theMode ];
 		iconRec = g_theTerrainDB->Get(theMode)->GetIcon();
 		break;
 

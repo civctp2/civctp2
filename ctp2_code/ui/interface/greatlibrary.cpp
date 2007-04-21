@@ -42,6 +42,7 @@
 //   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
 // - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
 // - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
+// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -674,7 +675,7 @@ sint32 TechListItem::Compare(ctp2_ListItem *item2, uint32 column)
 	return 0;
 }
 
-sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
+bool greatlibrary_Initialize( sint32 theMode, bool sci )
 {
     if (g_greatLibrary)
     {
@@ -696,7 +697,7 @@ sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
         g_greatLibrary->SetSci( sci );
     }
 
-    return 0;
+    return false;
 }
 
 void greatlibrary_Cleanup(void)
@@ -1679,6 +1680,53 @@ void GreatLibrary::HandleListButton
 
 //----------------------------------------------------------------------------
 //
+// Name       : GreatLibrary::IsHidden
+//
+// Description: Figures out whether a given item in a given database should
+//              not be displayed in the Great Library
+//
+// Parameters : sint32 index:         An index into the given database
+//              DATABASE theDatabase: Database index
+//
+// Globals    : g_the<whatever>DB
+//
+// Returns    : Whether the given item in the given database has the GLHidden
+//              attribute.
+//
+// Remark(s)  : If database is invalid or search false is returned.
+//
+//----------------------------------------------------------------------------
+bool GreatLibrary::IsHidden(sint32 index, DATABASE theDatabase) const
+{
+	switch ( theDatabase ) 
+	{
+		case DATABASE_UNITS:
+			return g_theUnitDB->Get(index)->GetGLHidden();
+		case DATABASE_BUILDINGS:
+			return g_theBuildingDB->Get(index)->GetGLHidden();
+		case DATABASE_WONDERS:
+			return g_theWonderDB->Get(index)->GetGLHidden();
+		case DATABASE_ADVANCES:
+			return g_theAdvanceDB->Get(index)->GetGLHidden();
+		case DATABASE_TERRAIN:
+			return g_theTerrainDB->Get(index)->GetGLHidden();
+		case DATABASE_CONCEPTS:
+			return g_theConceptDB->Get(index)->GetGLHidden();
+		case DATABASE_GOVERNMENTS:
+			return g_theGovernmentDB->Get(index)->GetGLHidden();
+		case DATABASE_TILE_IMPROVEMENTS:
+			return g_theTerrainImprovementDB->Get(index)->GetGLHidden();
+		case DATABASE_ORDERS:
+			return g_theOrderDB->Get(index)->GetGLHidden();
+		case DATABASE_RESOURCE:
+			return g_theResourceDB->Get(index)->GetGLHidden();
+		default:
+			return false;
+	}
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : GreatLibrary::UpdateList
 //
 // Description: Fills the topic listbox.
@@ -1731,7 +1779,10 @@ void GreatLibrary::UpdateList( DATABASE database )
 			int real_index = m_search_results[index].m_item;
 			enum DATABASE real_database = m_search_results[index].m_database;
 
+			if(IsHidden(real_index, real_database)) continue;
+
 			real_index = GetAlphaFromIndex(real_index, real_database);
+			
 			Add_Item_To_Topics_List(GetItemName(real_database, real_index), index);
 
 		}

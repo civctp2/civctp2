@@ -3420,7 +3420,7 @@ STRATEGY_ND_SCENARIO_DEFAULT {
     GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   440000  MaxEval   5  MaxExec   3 }
-	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority   430000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_INVESTIGATE_CITY    Priority   430000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority   460000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
@@ -3676,4 +3676,17 @@ STRATEGY_ND_SCENARIO_DEFAULT {
 
 	// make sure to target our missles (so that we'll MAD launch automatically)
 	NuclearTargeting: Enabled
+}
+
+STRATEGY_TOO_MANY_CITIES {
+    SettlerUnitsCount       0
+
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec  0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec  0 }
+}
+
+STRATEGY_NO_REVOLUTON {
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
 }
