@@ -212,7 +212,7 @@ Alchemy allows the construction of the <L:DATABASE_UNITS,UNIT_FIRE_TRIREME>Fire 
 [END]
 
 [ADVANCE_ALCHEMY_HISTORICAL]
-Alchemy was a science fused of many disparate sources, including Chinese, Egyptian and Islamic concepts that flowed into Western Europe via the Silk Road during the middle ages.  The primary objective of alchemy was the discovery of a method to turn base metals into precious ones.  Though this quest proved futile, its pursuit contributed to a deeper understanding of the nature and composition of many elements.  Early metallurgy benefited from the results of alchemic experiments.
+Alchemy was a science fused of many disparate sources, including Chinese, Egyptian and Islamic concepts that flowed into Western Europe via the Silk Road during the Middle Ages.  The primary objective of alchemy was the discovery of a method to turn base metals into precious ones.  Though this quest proved futile, its pursuit contributed to a deeper understanding of the nature and composition of many elements.  Early metallurgy benefited from the results of alchemic experiments.
 [END]
 
 [ADVANCE_ARCOLOGIES_PREREQ]
@@ -869,7 +869,7 @@ The Gaia Controller was the greatest scientific achievement of the 23rd century.
 
 The Solaris Project was the experiment that proved that safe conversion from matter to energy was possible.  A highly secretive endeavor, its primary research took place on a satellite laboratory.  By sending a probe into the center of the sun, Solaris Project scientists were able to unlock the secrets of converting matter into energy back into matter.  Soon after this discovery, they began construction on the Gaia Controller, a global matter converter that would provide limitless non-polluting energy.
 
-The Gaia Controller was comprised of three distinct groups of componentry.  A system of small satellites circled the planet, collecting space debris, solar energy and various other sources of matter.  Once collected the satellites converted the matter to energy, periodically beaming it down to obelisks placed at regular intervals on the surface.  The obelisks were the primary matter collecting entities in the system, sending out vast groups of nanites designed to hunt out polluting agents in the air, water and earth.  They also acted as receptacles for energy collected from satellites.  Obelisks distributed energy to the various Gaia controller cores in cities around the world.  The controller cores enabled operators to oversee the system, distribute and control energy and provide cities with a limitless supply of energy for the creation of new matter.
+The Gaia Controller was comprised of three distinct groups of components.  A system of small satellites circled the planet, collecting space debris, solar energy and various other sources of matter.  Once collected the satellites converted the matter to energy, periodically beaming it down to obelisks placed at regular intervals on the surface.  The obelisks were the primary matter collecting entities in the system, sending out vast groups of nanites designed to hunt out polluting agents in the air, water and earth.  They also acted as receptacles for energy collected from satellites.  Obelisks distributed energy to the various Gaia controller cores in cities around the world.  The controller cores enabled operators to oversee the system, distribute and control energy and provide cities with a limitless supply of energy for the creation of new matter.
 [END]
 
 [ADVANCE_GAIA_THEORY_PREREQ]
@@ -1656,7 +1656,7 @@ The <L:DATABASE_BUILDINGS,IMPROVE_VR_AMUSEMENT_PARK>VR Amusement Park<e> is an e
 [END]
 
 [ADVANCE_NEURAL_INTERFACE_HISTORICAL]
-The genetics research of the early 21st century unconcealed many of the mysteries surrounding the human central nervous system.  Although doctors and scientists were well aware of its electrical nature, they could only speculate on the way in which they could enable the nervous system to intelligently interact with other electrical systems.
+The genetics research of the early 21st century revealed many of the mysteries surrounding the human central nervous system.  Although doctors and scientists were well aware of its electrical nature, they could only speculate on the way in which they could enable the nervous system to intelligently interact with other electrical systems.
 
 In 2016, the genetics research firm, Intrinsic Systems, headed by artificial intelligence expert and geneticist Richard Myers, created the first functional prototype for a neural interface.  The test subjects were able to manipulate a pointer device on a computer screen by thinking of where they wanted it to go.  The neural interface interpreted the electrochemical impulses in their brains and translated them into commands the computer could understand.  
 
@@ -1683,7 +1683,7 @@ The <L:DATABASE_BUILDINGS,IMPROVE_BEHAVIORAL_MOD_CENTER>Behavior Modification Ce
 [ADVANCE_NEURAL_REPROGRAMMING_HISTORICAL]
 In the year 2020, neurologists and genetics experts teamed up to develop a reliable system for replacing damaged brain cells with healthy, normal cells.  The applications of this system were enormously successful, enabling doctors to treat brain disorders, restore aneurysm victims to full functionality and repair damage from hereditary brain defects.
 
-Later in the 21st century, law enforcement organizations capitalized on the behavioral modification potential of neural reprogramming.  With the Behavioral Modification Center, criminals could be reprogrammed to reenter society, the parts of their brain compelling them to commit crimes replaced with socially acceptable impulses.
+Later in the 21st century, law enforcement organizations capitalized on the behavioral modification potential of neural reprogramming.  With the Behavioral Modification Center, criminals could be reprogrammed to re-enter society, the parts of their brain compelling them to commit crimes replaced with socially acceptable impulses.
 [END]
 
 [ADVANCE_NUCLEAR_POWER_PREREQ]
@@ -2091,7 +2091,7 @@ The <L:DATABASE_BUILDINGS,IMPROVE_ORBITAL_LABORATORY>Orbital Laboratory<e> gives
 [ADVANCE_SPACE_FLIGHT_HISTORICAL]
 On October 4, 1957, the Soviet Union launched the satellite Sputnik 1 into orbit.  This action intensified an already heated rivalry between United States and Soviet space programs.  The U.S. launched their first satellite, Explorer 1, on January 31, 1958, a little less than four months after Sputnik 1.  Over the next decades, over 5,000 successful launches of satellites and space probes of various functions:  scientific, communications, meteorological, reconnaissance and navigation satellites as well as manned and unmanned lunar and planetary probes.  The Soviet Union launched the first man into Earth orbit on April 12, 1961.  The United States landed two men on the surface of the Moon on July 20, 1969.
 
-On April 21, 1981, the 20th anniversary of manned space flight, the U.S. launched the Space Shuttle.  This date represented a major milestone in the history of space flight, for the Space Shuttle was the first reusable manned space vehicle.  It could be launched into space via rocket engines and could reenter the atmosphere and land in much the same way as an airplane.  Many Space Shuttles were launched over the next two decades on scientific research missions.
+On April 21, 1981, the 20th anniversary of manned space flight, the U.S. launched the Space Shuttle.  This date represented a major milestone in the history of space flight, for the Space Shuttle was the first reusable manned space vehicle.  It could be launched into space via rocket engines and could re-enter the atmosphere and land in much the same way as an airplane.  Many Space Shuttles were launched over the next two decades on scientific research missions.
 
 In 2047, scientists at the National Aeronautical and Space Administration launched the first orbital transport vehicle.  Primarily envisioned as a commercial and industrial cargo and transport craft, it was designed to launch into orbit and touch down within a few days.  Based on many of the design principles of the space shuttle, the Space Plane employed advanced composites to shield it against the friction and intense heat of atmospheric breach and fuel cell technology to propel its giant rocket engines.
 [END]
@@ -3171,9 +3171,9 @@ Although elephant meat and skin have never been very valuable, the elephant tusk
 [TERRAIN_MOUNTAIN_GOOD_TWO_PREREQ]
 Location:
 
-<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
 <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
-<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountain<e>
 <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
 <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
 [END]
@@ -3183,7 +3183,7 @@ Location:
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
-Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
+Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_HISTORICAL]
@@ -3544,7 +3544,7 @@ Uranium is a dense, radioactive, silvery metal that is found on <L:DATABASE_TERR
 [END]
 
 [TERRAIN_HILL_GOOD_THREE_HISTORICAL]
-In 1789, the German chemist Martin Klaproth discovered the chemical element Uranium. For about 150 years following its discovery, uranium was found to have some of the most wide-reaching effects of any element. Uranium is present in only two to four parts per million in the earth's crust. Few deposits contain uranium in amounts greater the 0.2 percent. Hundreds of minerals, however, contain uranium. For example, uraninite and carnotite are abundant minerals that contain relatively high concentrations of uranium. Pitchblende, known for its use in the early research of radioactive elements, is a variety of uraninite. The U.S. and Canada contain large deposits of uranium. Auatralia has rich deposits of uranium in its Northern Territory. South Africa and Canada have been the chief suppliers of uranium.
+In 1789, the German chemist Martin Klaproth discovered the chemical element Uranium. For about 150 years following its discovery, uranium was found to have some of the most wide-reaching effects of any element. Uranium is present in only two to four parts per million in the earth's crust. Few deposits contain uranium in amounts greater the 0.2 percent. Hundreds of minerals, however, contain uranium. For example, uraninite and carnotite are abundant minerals that contain relatively high concentrations of uranium. Pitchblende, known for its use in the early research of radioactive elements, is a variety of uraninite. The U.S. and Canada contain large deposits of uranium. Australiahas rich deposits of uranium in its Northern Territory. South Africa and Canada have been the chief suppliers of uranium.
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_THREE_PREREQ]
@@ -3703,7 +3703,7 @@ Apples are the tree (and the fruit) of the genus Malus from the ROSE family. Sin
 [END]
 
 [TERRAIN_FOREST_GOOD_THREE_HISTORICAL]
-Apples are any tree (and its fruit) of the genus Malus of the rose family. The common apple (M. sylvestris) is the best known and the most important commercial temperate fruit. It is native to Western Asia, but has been widely cultivated since prehistoric times. Thousands of varieties of apples exist, such as Golden Delicious, Winesap, Jonathan, and McIntosh. The fruit is consumed fresh or cooked, or is used for juice. Partial fermentation of apple juice (sweet cider) produces hard cider (from which applejack liquor is made); fully fermented juice yields vinegar. The hardwood is used in cabinetmaking and as fuel. The fruit of crab apple trees (which are cultivated as ornamentals) is used for preserves and jellies.
+Apples are any tree (and its fruit) of the genus Malus of the rose family. The common apple (M. sylvestris) is the best known and the most important commercial temperate fruit. It is native to Western Asia, but has been widely cultivated since prehistoric times. Thousands of varieties of apples exist, such as Golden Delicious, Winesap, Jonathan, and McIntosh. The fruit is consumed fresh or cooked, or is used for juice. Partial fermentation of apple juice (sweet cider) produces hard cider (from which applejack liquor is made); fully fermented juice yields vinegar. The hardwood is used in cabinet making and as fuel. The fruit of crab apple trees (which are cultivated as ornamentals) is used for preserves and jellies.
 [END]
 
 [TERRAIN_JUNGLE_GOOD_THREE_PREREQ]
@@ -3786,9 +3786,9 @@ Lobsters are a large marine crustacean with five pairs of jointed legs - the fir
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_PREREQ]
 Location:
 
-<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montain<e>
-<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Montain<e>
-<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountain<e>
 <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
 <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
 [END]
@@ -3798,7 +3798,7 @@ Location:
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
-Emeralds are valuable gems that can be found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcanos<e> .
+Emeralds are valuable gems that can be found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcanos<e> .
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_HISTORICAL]
@@ -3964,9 +3964,9 @@ Sapphires are precious gems, a transparent blue variety of corundum. Sapphires a
 [TERRAIN_WHITE_HILL_GOOD_TWO_PREREQ]
 Location:
 
-<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
 <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
-<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Montain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountain<e>
 <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
 <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
 [END]
@@ -3976,7 +3976,7 @@ Location:
 [END]
 
 [TERRAIN_WHITE_HILL_GOOD_TWO_GAMEPLAY]
-Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Montains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
+Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
 [END]
 
 [TERRAIN_WHITE_HILL_GOOD_TWO_HISTORICAL]
@@ -4034,8 +4034,8 @@ Location:
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_STATISTICS]
-+10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
-+5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commercet<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
@@ -4755,7 +4755,7 @@ Gives:
 +{BuildingDB(Building[0]).OffenseBonusWater / 100} Attack vs. Sea Units
 
 Location:
-In Costial Cities only
+In coastal Cities only
 [END]
 
 [IMPROVE_BATTLEMENTS_GAMEPLAY]
@@ -4763,7 +4763,7 @@ Battlements are heavily fortified gun emplacements placed along coastlines near 
 [END]
 
 [IMPROVE_BATTLEMENTS_HISTORICAL]
-In the 15th century, the Turks became the first military power to employ coastal artillery emplacements, called battlements, when they positioned their guns to defend the Dardenelles.  By the 19th century, most major powers used battlements to protect coastal cities, harbors and strategic waterways.  Although battlement technology reached its peak in the first part of the 20th century, by World War II advancement in aircraft and infantry tactics rendered battlements obsolete, and they were abandoned in favor of surface-to-air missiles and antiaircraft guns.
+In the 15th century, the Turks became the first military power to employ coastal artillery emplacements, called battlements, when they positioned their guns to defend the Dardanelles.  By the 19th century, most major powers used battlements to protect coastal cities, harbors and strategic waterways.  Although battlement technology reached its peak in the first part of the 20th century, by World War II advancement in aircraft and infantry tactics rendered battlements obsolete, and they were abandoned in favor of surface-to-air missiles and antiaircraft guns.
 [END]
 
 [IMPROVE_BAZAAR_PREREQ]
@@ -4839,7 +4839,7 @@ Soon after genetic tailoring enabled people to customize the lives of their offs
 [IMPROVE_BROKERAGE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ECONOMICS>Economics<e>
-<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>bazaar<e>
 <L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
@@ -5029,7 +5029,7 @@ In 1841, the Pharmaceutical Society of Great Britain was founded, with intent to
 [IMPROVE_E_BANK_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_DIGITAL_ENCRYPTION>Digital Encryption<e>
-<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>bazaar<e>
 <L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
 <L:DATABASE_BUILDINGS,IMPROVE_BROKERAGE>Brokerage<e>
 
@@ -5167,7 +5167,7 @@ The rapid development of weapons and vehicle technology throughout the modern an
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 <L:DATABASE_BUILDINGS,IMPROVE_OIL_REFINERY>Oil Refinery<e>
-<L:DATABASE_BUILDINGS,IMPROVE_NUCLEAR_PLANT>Kernkraftwerk<e>
+<L:DATABASE_BUILDINGS,IMPROVE_NUCLEAR_PLANT>Nuclear Plant<e>
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
@@ -5362,7 +5362,7 @@ The lavish motion picture palaces of the early 20th century, which later spawned
 
 Films began to catch the attention of upper class audiences when "big-time" vaudeville operators began including them on the bill.  When Adolph Zukor showed the film Queen Elizabeth at the Lyceum Theater in New York in 1912, audiences enjoyed the dramatic, stage-like presentation of the subject matter, and, particularly, the appearance of Sarah Bernhardt, a noted stage actor, in the title role.  Filmmakers began to produce movies consisting of little more than filmed productions of staged theater in an attempt to improve the industry's image.  The first feature length films, including D.W. Griffith's twelve-reel Birth of a Nation in 1915, transformed movies into narrative vehicles, rather than mere technological curiosities.  
 
-The vaudeville houses of the same period fused highbrow and popular cultural influences in their architecture and decor.  Patrons entered though lavish, often oriental-themed facades festooned with flashing lights and marquees into marble-floored, mirrored-wall foyers, decked out with oil paintings, plush furniture and smartly dressed personal attendants.  They attempted to mimic the grandeur of New York's opera houses, and offered extra amenities.  Proctor's Pleasure Palace, built in 1895, offered a roof garden restaurant, library, barbershop, and a Turkish bath housed in a Romanesque facade.  As films gained prominence and legitimacy, movie palaces sought to provide the same experience as the best vaudeville houses.  The Regent, American's first motion picture palace, opened in New York in 1913.  Although it was located in a working class district, uptown from the legitimate theater district, its opening night audience consisted of many of the same patrons of New York's toniest opera houses and theaters.  Movie palaces, such as the Strand, the Rialto and the Rivoli, soon took their place along legitimate theaters on Broadway.
+The vaudeville houses of the same period fused highbrow and popular cultural influences in their architecture and decor.  Patrons entered though lavish, often oriental-themed facades festooned with flashing lights and marquees into marble-floored, mirrored-wall foyers, decked out with oil paintings, plush furniture and smartly dressed personal attendants.  They attempted to mimic the grandeur of New York's opera houses, and offered extra amenities.  Proctor's Pleasure Palace, built in 1895, offered a roof garden restaurant, library, barbershop, and a Turkish bath housed in a Romanesque facade.  As films gained prominence and legitimacy, movie palaces sought to provide the same experience as the best vaudeville houses.  The Regent, American's first motion picture palace, opened in New York in 1913.  Although it was located in a working class district, uptown from the legitimate theater district, its opening night audience consisted of many of the same patrons of New York's tiniest opera houses and theaters.  Movie palaces, such as the Strand, the Rialto and the Rivoli, soon took their place along legitimate theaters on Broadway.
 
 Samuel L. Rothapfel, also known as "Roxy," was, more than anyone else, responsible for the increasing opulence of these movie houses.  He presided over the openings of many movie palaces, and instituted practices distinct from traditional theaters, namely, unreserved seating and low admission prices.  What perhaps contributed to the success and allure of movie palaces was that they were designed to make the average citizen feel like royalty.  Movie palaces gave people an opportunity to step into a world of fantasy and, for the pioneers of the movie industry, many of whom were first generation Americans, this was the fulfillment of the American dream.
 [END]
@@ -5370,7 +5370,7 @@ Samuel L. Rothapfel, also known as "Roxy," was, more than anyone else, responsib
 [IMPROVE_NANITE_FACTORY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nano-Assembly<e>
-<L:DATABASE_BUILDINGS,IMPROVE_FACTORY>Fabrik<e>
+<L:DATABASE_BUILDINGS,IMPROVE_FACTORY>Factory<e>
 <L:DATABASE_BUILDINGS,IMPROVE_ROBOTIC_PLANT>Robotic Plant<e>
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
@@ -5409,7 +5409,7 @@ Nuclear Plants provide enormous amounts of power for <L:DATABASE_CONCEPTS,CONCEP
 [END]
 
 [IMPROVE_NUCLEAR_PLANT_HISTORICAL]
-In 1938, the German chemists Otto Hahn and Fritz Strassmann discovered nuclear fission.  By bombarding uranium with neutrons in an attempt to create elements heavier than uranium, they unwittingly induced a fission reaction.  When a particle such as a neuron hit the nucleus of a uranium atom, it caused it to split into two fission fragments of roughly the same atomic composition.  This process released a large amount of thermal energy, as well as gamma rays and a few free neutrons, which in turn fissioned other uranium nuclei.  This series of fissions constituted a chain reaction, which yielded a constant supply of nuclear energy.  If these reactions could be controlled, scientists theorized, then one would have a supply of energy much cleaner than conventional oil, gas and coal-burning power plants.  In the late 1950s an early '60s, a few commercial nuclear power plants were built.  The most successful of these used water as a cooling system for reactors.  The demand for nuclear plants skyrocketed in the mid-1960s and early '70s but dropped off in the later part of the decade, due to a decline in need, coupled with public fears about the danger of nuclear meltdown.
+In 1938, the German chemists Otto Hahn and Fritz Strassmann discovered nuclear fission.  By bombarding uranium with neutrons in an attempt to create elements heavier than uranium, they unwittingly induced a fission reaction.  When a particle such as a neuron hit the nucleus of a uranium atom, it caused it to split into two fission fragments of roughly the same atomic composition.  This process released a large amount of thermal energy, as well as gamma rays and a few free neutrons, which in turn split other uranium nuclei.  This series of fissions constituted a chain reaction, which yielded a constant supply of nuclear energy.  If these reactions could be controlled, scientists theorized, then one would have a supply of energy much cleaner than conventional oil, gas and coal-burning power plants.  In the late 1950s an early '60s, a few commercial nuclear power plants were built.  The most successful of these used water as a cooling system for reactors.  The demand for nuclear plants skyrocketed in the mid-1960s and early '70s but dropped off in the later part of the decade, due to a decline in need, coupled with public fears about the danger of nuclear meltdown.
 
 In a nuclear reactor, the chain reaction produced a tremendous amount of radiation and thermal energy.  Some of the thermal energy was used to heat water and create steam.  The steam drove a turbine, and the turbine's mechanical energy was converted to energy by means of a generator.  Despite the relative cleanliness of nuclear power, nuclear meltdowns at Three Mile Island near Harrisburg, Pennsylvania, in 1979 and at Chernobyl, Soviet Union in 1986 became iconic reminders of the catastrophic power of uncontrolled fission reactions.  Despite these incidents, nuclear plants continued to operate in Europe, Japan and various other countries for many years. 
 [END]
@@ -5438,7 +5438,7 @@ Oil Refineries make available refined fossil fuels for consumption by machines. 
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SPACE_FLIGHT>Space Flight<e>
 <L:DATABASE_BUILDINGS,IMPROVE_ACADEMY>Academy<e>
-<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>Universität<e>
+<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>University<e>
 <L:DATABASE_BUILDINGS,IMPROVE_PUBLISHING_HOUSE>Publishing House<e>
 <L:DATABASE_BUILDINGS,IMPROVE_COMPUTER_CENTER>Computer Center<e>
 
@@ -6307,7 +6307,7 @@ Commerce: 15
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>
-<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Saphires<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>sapphires<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>
 [END]
 
@@ -6321,7 +6321,7 @@ Submarine Volcanoes are the greatest source of <L:DATABASE_CONCEPTS,CONCEPT_PROD
 
 One can build <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Undersea Tunnels<e>, but not <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Nets<e> or <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Fisheries<e>.
 
-<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Saphires<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>,  though rare, are Goods found on Submarine Volcanoes.
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>sapphires<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>,  though rare, are Goods found on Submarine Volcanoes.
 [END]
 
 [TERRAIN_WATER_VOLCANO_HISTORICAL]
@@ -7391,7 +7391,7 @@ The Cleric is a particularly insidious <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNIT
 [END]
 
 [UNIT_CLERIC_HISTORICAL]
-The cleric was a kind of religious crusader that flourished during the middle ages.  Many types of clergy, such as monks, friars and priests, often led a life of itinerant austerity, traveling from town to town, preaching in exchange for charitable contributions and shelter.  Though these men were often solitary crusaders, orders of clergy began taking it upon themselves to spread their teachings across the land.  In 1214, Saint Dominic, along with 16 of his disciples, founded the Roman Catholic religious order known as the Dominicans at Toulouse, France for the purpose of combating the heresies of the time with preaching and teaching.  In 1216, Pope Honorius III granted the Dominicans papal confirmation, and granted them special privileges, including the right to preach and hear confessions anywhere without obtaining local authorization.  Dominicans were unflaggingly devoted to the evangelization of the heretical and uneducated.  During the crusades, a series of military invasions organized by Western Christians against Muslim powers, clerics often accompanied soldiers to help maintain their morale.  They also took the opportunity to teach, preach to and convert non-Christians.
+The cleric was a kind of religious crusader that flourished during the Middle Ages.  Many types of clergy, such as monks, friars and priests, often led a life of itinerant austerity, traveling from town to town, preaching in exchange for charitable contributions and shelter.  Though these men were often solitary crusaders, orders of clergy began taking it upon themselves to spread their teachings across the land.  In 1214, Saint Dominic, along with 16 of his disciples, founded the Roman Catholic religious order known as the Dominicans at Toulouse, France for the purpose of combating the heresies of the time with preaching and teaching.  In 1216, Pope Honorius III granted the Dominicans papal confirmation, and granted them special privileges, including the right to preach and hear confessions anywhere without obtaining local authorization.  Dominicans were unflaggingly devoted to the evangelization of the heretical and uneducated.  During the crusades, a series of military invasions organized by Western Christians against Muslim powers, clerics often accompanied soldiers to help maintain their morale.  They also took the opportunity to teach, preach to and convert non-Christians.
 [END]
 
 [UNIT_CORPORATE_BRANCH_PREREQ]
@@ -8600,7 +8600,7 @@ The <L:DATABASE_UNITS,UNIT_FRIGATE>PT Boat<e> is the only <L:DATABASE_CONCEPTS,C
 [UNIT_NUCLEAR_SUBMARINE_HISTORICAL]
 With the commission of the first nuclear powered submarine, the USS Nautilus, in 1954, the nature of naval combat and, particularly, submarine tactics, was forever altered.  Before this, conventional, diesel-electric submarines approached their target on the surface to avoid draining their batteries.  They submerged only when just out of sight of their target and could only approach at very low speeds.  Commanders did this to conserve battery power for after their attack when they would have to use full underwater power to evade counterattack.  Even after this, a full battery charge would last only an hour or two at top underwater speed.  This limitation suited submarines to attacking slower, less defended ships, and meant that they could not engage fast surface warships, such as battleships and aircraft carriers.
 
-Nuclear submarines, by contrast, had a single power supply for both surface and submerged operation.  Powered by the small amount of enriched uranium fuel in its reactor, a nuclear sub could operate fully submerged at full speed indefinitely.  They could operate freely before and after attacking, keeping up with the fastest of surface ships.  In the Falkland Islands conflict of 1982, the British nuclear submarine, HMS Conqueror, demonstrated its revolutionary new power by tracking the swift Argentinian cruiser General Belgrano for more than 48 hours before closing in to sink it.  For the first time, fast warships were vulnerable to submarine attack.
+Nuclear submarines, by contrast, had a single power supply for both surface and submerged operation.  Powered by the small amount of enriched uranium fuel in its reactor, a nuclear sub could operate fully submerged at full speed indefinitely.  They could operate freely before and after attacking, keeping up with the fastest of surface ships.  In the Falkland Islands conflict of 1982, the British nuclear submarine, HMS Conqueror, demonstrated its revolutionary new power by tracking the swift Argentinean cruiser General Belgrano for more than 48 hours before closing in to sink it.  For the first time, fast warships were vulnerable to submarine attack.
 
 Although major world powers continued to develop both diesel-electric and nuclear vessels concurrently, some abandoned the old technology altogether.  Over the course of the next four decades, nuclear submarines gradually took over in the navies of the United States, Britain, France, the Soviet Union and China.
 [END]
@@ -10546,7 +10546,7 @@ Costs:
 
 [WONDER_GALILEOS_TELESCOPE_STATISTICS]
 Gives:
-Increases <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE>Scienceratr<e> of scientists in host city by {WonderDB(Wonder[0]).IncreaseScientists}
+Increases <L:DATABASE_CONCEPTS,CONCEPT_SCIENCE>Science rate<e> of scientists in host city by {WonderDB(Wonder[0]).IncreaseScientists}
 [END]
 
 [WONDER_GALILEOS_TELESCOPE_GAMEPLAY]
@@ -10574,7 +10574,7 @@ Gives:
 [END]
 
 [WONDER_GENOME_PROJECT_GAMEPLAY]
-The Genome Project unconceals many of the mysteries behind human genetics.  This insight enables medical science to begin developing genetic solutions to common ailments, making people stronger and healthier.  Units gain a health bonus and citizens become more <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Productive<e>.
+The Genome Project reveals many of the mysteries behind human genetics.  This insight enables medical science to begin developing genetic solutions to common ailments, making people stronger and healthier.  Units gain a health bonus and citizens become more <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Productive<e>.
 [END]
 
 [WONDER_GENOME_PROJECT_HISTORICAL]
@@ -10900,7 +10900,7 @@ Discovery of the Solaris Project allows the beginning of the <L:DATABASE_CONCEPT
 [WONDER_THE_SOLARIS_PROJECT_HISTORICAL]
 The Solaris Project was the most ambitious scientific undertaking in the history of humankind.  Conducted under a veil of secrecy to rival the Manhattan Project of the mid-20th century, it originally set out to prove that the conversion of matter to energy to new matter was possible.  Primary research, which began in 2268, was conducted in one of the first nanite-constructed space stations.  The project took a little over ten years to complete.  Using their knowledge of unified field theory, nanotechnology and smart materials, Solaris Project scientists designed a small probe to launch into the center of the sun.  They believed the secrets to energy to matter conversion lied in the massive fusion reactions of stars.  The probe returned with a staggering array of new data that led researchers to finally reproduce a controlled energy-to-matter conversion in 2274.  The final piece of the puzzle involved designing a system that would perform this entire process, providing a limitless supply of raw materials with which to build and create things.
 
-The Gaia Controller was the application of this technology.  It was comprised of three distinct groups of componentry.  A system of small satellites circled the planet, collecting space debris, solar energy and various other sources of matter.  Once collected the satellites converted the matter to energy, periodically beaming it down to obelisks placed at regular intervals on the surface.  The obelisks were the primary matter collecting entities in the system, sending out vast groups of nanites designed to hunt out polluting agents in the air, water and earth.  They also acted as receptacles for energy collected from satellites.  Obelisks distributed energy to the various Gaia controller cores in cities around the world.  The controller cores enabled operators to oversee the system, distribute and control energy and provide cities with a limitless supply of energy for the creation of new matter.
+The Gaia Controller was the application of this technology.  It was comprised of three distinct groups of components.  A system of small satellites circled the planet, collecting space debris, solar energy and various other sources of matter.  Once collected the satellites converted the matter to energy, periodically beaming it down to obelisks placed at regular intervals on the surface.  The obelisks were the primary matter collecting entities in the system, sending out vast groups of nanites designed to hunt out polluting agents in the air, water and earth.  They also acted as receptacles for energy collected from satellites.  Obelisks distributed energy to the various Gaia controller cores in cities around the world.  The controller cores enabled operators to oversee the system, distribute and control energy and provide cities with a limitless supply of energy for the creation of new matter.
 [END]
 
 [WONDER_ZERO_CRIME_BILL_PREREQ]
@@ -10941,7 +10941,7 @@ The rise of the information age was made possible through the development of the
 [END]
 
 [CONCEPT_INDUSTRIAL_AGE_HISTORICAL]
-The Industrial Revolution ushered in a new age of commerce, discovery, and production. Driven by steam the steam engine and the railway a brought a never seen before productivity and a never known before growth. The Industrial Revolution turned up the society radically. Corporate monopolies and a new underclass - the worker class were. Soon the board masses of the population belonged to the worker class. Beside the rapidly rising pollution the acceleration of live appeared, not only in production but also in the live of the single persion. Instead of nature the machinery determined the rhythm of life.
+The Industrial Revolution ushered in a new age of commerce, discovery, and production. Driven by steam the steam engine and the railway a brought a never seen before productivity and a never known before growth. The Industrial Revolution turned up the society radically. Corporate monopolies and a new underclass - the worker class were. Soon the broad masses of the population belonged to the worker class. Beside the rapidly rising pollution the acceleration of life appeared, not only in production but also in the lives of individuals. Instead of nature the machinery determined the rhythm of life.
 [END]
 
 [CONCEPT_FUTURE_AGE_GAMEPLAY]
@@ -10955,6 +10955,60 @@ The future is unknown, we know not what it will bring. Be it good or bad. Nobody
 [END]
 
 [CONCEPT_MEDIEVAL_AGE_HISTORICAL]
-The Middle Ages the age between the classical antiquity and the Renaissance. But it is little a more: It came out from the fall of the Roman Empire. Christianity lured with the promise of the release in the paradise after death and after the end of the world: Because the world was terrible the barbarians brought disaster and poverty over the Roman Empire. It was no miracle that the back was turned on polytheism and surrendered themselves to christianity. The epoch is defined by deep religiousness and devoutness. In addition, by fanatisicm and intollerance. These are one of the reasons for the crusades. To the end this  epoch the curches grew into the sky. The building of such a church took centuries. For example the Cologne Cathedral was finished only after well over half a millenium.
+The Middle Ages the age between the classical antiquity and the Renaissance. But it is little a more: It came out from the fall of the Roman Empire. Christianity lured with the promise of the release in the paradise after death and after the end of the world: Because the world was terrible the barbarians brought disaster and poverty over the Roman Empire. It was no miracle that the back was turned on polytheism and surrendered themselves to Christianity. The epoch is defined by deep religiousness and devoutness. In addition, by fanatisicm and intolerance. These are one of the reasons for the crusades. To the end this epoch the churches grew into the sky. The building of such a church took centuries. For example the Cologne Cathedral was finished only after well over half a millennium.
+[END]
+
+########################  AE MOD  Entries
+
+[ORDER_UPGRADE_ARMY_PREREQ]
+Requires:
+Any unit
+[END]
+
+[ORDER_UPGRADE_ARMY_STATISTICS]
+Effect:
+Permanently deletes the old unit and replaces it with a new unit
+Units must be upgraded in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> 
+<L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> cost is based on the difference in unit shield value multplied by your government's Unit rush modifier
+[END]
+
+[ORDER_UPGRADE_ARMY_GAMEPLAY]
+A player may want to upgrade a unit for a variety of reasons.  Older and obsolete units are often too weak to be much of an asset in combat.  In some rules setting the AI player is able to upgrade without a gold cost. Often the gold costs can be quite exppensive preventing a player from upgrading an entire military in a single turn.
+
+[END]
+
+[ORDER_UPGRADE_ARMY_HISTORICAL]
+[END]
+
+[UNIT_LONGBOWMAN_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_FEUDALISM><e>
+[END]
+
+[UNIT_LONGBOWMAN_STATISTICS]
+Attack: {UnitDB(UnitRecord[0]).Attack / 100}
+Ranged: {UnitDB(UnitRecord[0]).ZBRangeAttack}
+Defense: {UnitDB(UnitRecord[0]).Defense / 100}
+Armor: {UnitDB(UnitRecord[0]).Armor / 100}
+Damage: {UnitDB(UnitRecord[0]).Firepower}
+Vision: {UnitDB(UnitRecord[0]).VisionRange}
+Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+[END]
+
+[UNIT_LONGBOWMAN_SUMMARY]
+Ancient <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged<e> unit
+[END]
+
+[UNIT_LONGBOWMAN_GAMEPLAY]
+Improvements in bow design give the Longbowman a stronger offense and defense than the <L:DATABASE_UNITS,UNIT_ARCHER>Archer<e> with stronger offense and defense. Like its predecessor the Longbowman is an excellent unit to support slower moving footsoldiers by providing ranged attack.
+[END]
+
+[UNIT_LONGBOWMAN_HISTORICAL]
+The English longbow was originally developed in Wales during the early Medieval period. By increasing the length of the bow to around six feet and using high quality yew the longbow was able to have a range of up around 200m and a rate of up to 20 aimed shots per minute. An army of longbowmen could thus create a cloud of arrows, inflicting massive casualty rates on their targets. This tactic was most famously used by the English against French at Crecy, Poitiers and Agincourt during the Hundred Years' War and the longbow became one of the most feared weapons of the period. To become effective, however, a longbowman needed years of training leading to its being replaced in the 16th century by the less effective, but easier to use, musket.
 [END]
 

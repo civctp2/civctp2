@@ -42,6 +42,11 @@
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 // - added CanBuildAlly and CanBuildWasteland checks
 // - added outcommented infrastructure flags
+// - added IsWonder Check to specialbuildat
+// - added HasIrrigation method
+// - added HasWonder method
+// - FINALLY got contiguous irrigation to work 4.12.2007
+// - City Radius tileimps
 //
 //----------------------------------------------------------------------------
 
@@ -71,6 +76,13 @@
 #include "AdvanceRecord.h"
 #include "network.h"
 #include "Civilisation.h"
+#include "citydata.h"  //for wonder tileimps located in city radius
+#include "installation.h"
+#include "installationpool.h"
+#include "installationtree.h"           // g_theInstallationTree
+#include "UnitData.h"
+#include "UnitPool.h"
+#include "UnitRecord.h"
 
 extern QuadTree<Unit> *g_theUnitTree;
 #endif
@@ -772,27 +784,119 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 				return false;
 			}
 		}
+// EMOD for river only like dams and mills 4.30.2007
+		if(eff->GetRiverOnly()) {
+			bool canbuild = false;
+			if(g_theWorld->IsRiver(pos)){
 
-// EMOD for contiguous irrigation
-//		if(rec->GetNeedsIrrigation()) {
-//			bool haswater = false;
-//			RadiusIterator it(pos, 1);
-//			for(it.Start(); !it.End(); it.Next()) {
-//				Cell *icell = g_theWorld->GetCell(it.Pos());
-//				for(sint32 ti = 0; ti < icell->GetNumDBImprovements(); ti++) {
-//					sint32 ti;
-//					sint32 imp = icell->GetDBImprovement(ti);
-//					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-//				
-//				if(g_theWorld->IsRiver(it.Pos()) || !trec->GetNeedsIrrigation()){  
-//						haswater = true;
-//						break;
-//					}
-//				}
-//			}
-//			if(!haswater)
-//				return false;
-//		}
+					canbuild = true;
+					//	break;
+			}
+
+			if(!canbuild)
+					return false;
+		}
+
+// EMOD for contiguous city tiles 4.30.2007
+		if(eff->GetNextToUrban()) {
+			CityInfluenceIterator it(pos, 1);
+			bool canbuild = false;
+			for(it.Start(); !it.End(); it.Next()) {
+				if( (g_theWorld->HasCity(it.Pos())) || (terrainutil_HasUrban(it.Pos())) ){
+					canbuild = true;
+						break;
+				}
+
+			}
+				if(!canbuild)
+					return false;
+		}
+// EMOD for contiguous city tiles 4.30.2007
+		if(eff->GetNextToCity()) {
+			CityInfluenceIterator it(pos, 1);
+			bool canbuild = false;
+			for(it.Start(); !it.End(); it.Next()) {
+				if( g_theWorld->HasCity(it.Pos()) ){
+					canbuild = true;
+						break;
+				}
+
+			}
+				if(!canbuild)
+					return false;
+		}
+
+// EMOD for contiguous irrigation //finally works 4.12.2007
+		if(eff->GetNeedsIrrigation()) {
+			CityInfluenceIterator it(pos, 1);
+			bool canbuild = false;
+			for(it.Start(); !it.End(); it.Next()) {
+				if( (g_theWorld->IsRiver(it.Pos())) || (terrainutil_HasIrrigation(it.Pos())) ){
+					canbuild = true;
+						break;
+				}
+
+			}
+				if(!canbuild)
+					return false;
+		}
+// emod - the tileimp can only be built in the radius of the city with the wonder
+//  need to add a start building check to prevent multiple instances
+		if(eff->GetNumIsWonder() > 0) {
+			sint32 g;
+			for(sint32 won = 0; won < eff->GetNumIsWonder(); won++) {
+				if(eff->GetIsWonderIndex(won)) { 
+					Unit cellcity = cell->GetCityOwner();
+					CityData *wondercity = cellcity.GetData()->GetCityData();
+					if (cellcity.GetOwner() != pl)
+						return false;
+			//if the player has the wonder - might be extra?
+			//for (sint32 w =0; w < g_player[pl]->GetBuiltWonders(); w++) {
+			//	if (w != won) 
+			//		return false;
+			//}
+			//only build in a cell owned by a city with the wonder
+			//  from trncount.cpp
+			//for (i=0; i< g_player[pl]->GetAllCitiesList()->Num(); i++) { 
+			//double tmp;
+			//Unit *unit = &(player->GetAllCitiesList()->Access(i));
+			//if (!(unit->IsCity()))
+			//
+					for (sint32 w =0; w < wondercity->GetBuiltWonders(); w++) {
+						if (w != won) 
+							return false;
+					}
+			//check to see if a wonder tileimp is already building
+			//for(i = 0; i < g_player[pl]->GetAllTileimpsList()->Num(); i++) { //can be an installation
+			//	sint32 w2;
+			//	const TerrainImprovementRecord *wrec = g_player[pl]->GetAllTileimpsList()->Access(i).GetDBRec();
+			//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(g_player[pl]->GetAllTileimpsList()->Access(i).GetDBRec(), pos);
+			//	if( (g_player[pl]->GetAllTileimpsList()->Access(i).IsBuilding()) && (effect->GetIsWonderIndex(w2) == won)) {
+			//		return false;
+			//	}
+			//} //end isbuilding loop
+			//for(sint32 b = 0; b < g_player[pl]->GetAllInstallationsList()->Num(); b++) { //can be an installation
+			//	sint32 w2;
+			//	Installation inst = g_player[pl]->GetAllInstallationsList()->Access(b);
+			//	const TerrainImprovementRecord *rec = inst.GetDBRec();
+			//	const TerrainImprovementRecord *wrec = g_player[pl]->GetAllInstallationsList()->Access(i).GetDBRec();
+			//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(wrec, pos);
+			//	if( (g_player[pl]->GetAllInstallationsList()->Access(i).IsBuilding()) && (effect->GetIsWonderIndex(w2) == won) {
+			//		return false;
+
+				}
+			} //end isbuilding loop
+
+		//end wonder check
+		}
+
+
+
+
+		
+
+
+
 
 //for PrerequisiteTileImp
 		if(rec->GetNumPrerequisiteTileImp() > 0) {
@@ -833,6 +937,11 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 	Assert(cell);
 	if(!cell)
 		return false;
+	
+	const TerrainImprovementRecord::Effect *eff;
+	eff = terrainutil_GetTerrainEffect(rec, cell->GetTerrain());
+		if(!eff)
+			return false;
 
 //	if(cell->GetOwner() == -1) {
 //		if(rec->GetIntBorderRadius()) {
@@ -885,8 +994,13 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 				return false;
 			}
 		}
+	if(eff->GetNumIsWonder() > 0) {  //added for show on map code
+		if(terrainutil_HasWonder(pos)) {
+			return false;
+		}
+	}
 
-	
+
 	return true;
 }
 
@@ -1467,3 +1581,72 @@ sint32 terrainutil_GetEndgameTileImpIndex()
     return CTPRecord::INDEX_INVALID;
 }
 			
+bool terrainutil_HasIrrigation(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
+
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetIsIrrigation())
+				return true;
+		}
+	}
+	return false;
+}
+
+bool terrainutil_HasUrban(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
+
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetIsUrban())
+				return true;
+		}
+	}
+	return false;
+}
+
+
+bool terrainutil_HasWonder(const MapPoint & pos)
+{
+	Cell *cell = g_theWorld->GetCell(pos);
+
+	
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+
+		
+		sint32 imp = cell->GetDBImprovement(i);
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+
+		Assert(rec);
+		if(rec) {
+			
+			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
+			
+			if(eff && eff->GetNumIsWonder() > 0)
+				return true;
+		}
+	}
+	return false;
+}

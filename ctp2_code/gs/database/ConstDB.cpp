@@ -21,10 +21,13 @@
 //
 // Modifications from the original Activision code:
 //
+// - 7 changes are required to add a Const.txt item (and 2 in h file)
+//
 // - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
 //   modifiable in const.txt.
 // - Added compatibility handling to solve database out of synch problems.
 // - Removed temporary compatibility, to force const.txt cleanup.
+// - Added Const for Max_City_Wonders and Max_City_Buildings - E 5-1-07
 //
 //----------------------------------------------------------------------------
 
@@ -49,6 +52,9 @@ namespace
 
 int const	DEFAULT_MAX_MATCH_LIST_CYCLES		= 6;
 int const	DEFAULT_MIN_TURNS_BETWEEN_REVOLT	= 1;
+//city limits //emod1
+int const	DEFAULT_MAX_CITY_WONDERS			= 1000;
+int const	DEFAULT_MAX_CITY_BUILDINGS			= 1000;
 
 //----------------------------------------------------------------------------
 //
@@ -152,6 +158,9 @@ ConstDB::ConstDB ()
 	m_caravan_coef = 0.02;
 	m_max_match_list_cycles		= DEFAULT_MAX_MATCH_LIST_CYCLES;
 	m_min_turns_between_revolt	= DEFAULT_MIN_TURNS_BETWEEN_REVOLT;
+//emod2
+	m_max_city_wonders			= DEFAULT_MAX_CITY_WONDERS;
+	m_max_city_buildings		= DEFAULT_MAX_CITY_BUILDINGS;
 	} 
 
 
@@ -469,8 +478,11 @@ void ConstDB::Serialize(CivArchive &archive)
 	archive.PutDoubleString( m_ai_cheat_eco_pact_max);
 	
 	archive << m_riot_level;
-	if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) &&
-		(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
+	if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) 
+	&&	(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
+	//emod3
+	&&  (DEFAULT_MAX_CITY_WONDERS == m_max_city_wonders)
+	&&  (DEFAULT_MAX_CITY_BUILDINGS == m_max_city_buildings)
        )
 	{
 		// No action, to keep compatibility with the original patch.
@@ -480,6 +492,10 @@ void ConstDB::Serialize(CivArchive &archive)
 		// Modified by kaan to address bug # 12
 		archive << m_min_turns_between_revolt;
 		archive << m_max_match_list_cycles;
+		//emod4
+		archive <<  m_max_city_wonders;
+		archive <<  m_max_city_buildings;
+		
 	}
 		}
 	else
@@ -824,6 +840,9 @@ enum TOKEN_CONST {
 	TOKEN_MAX_MATCH_LIST_CYCLES, // added DWT
 	// Modified by kaan to address bug # 12
 	TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+	//emod5
+	TOKEN_MAX_CITY_WONDERS,
+	TOKEN_MAX_CITY_BUILDINGS,
 
     TOKEN_CONST_MAX 
 
@@ -1115,6 +1134,9 @@ TokenData g_const_token_data [] = {
 	{TOKEN_MAX_MATCH_LIST_CYCLES, "MAX_MATCH_LIST_CYCLES"}, // added DWT
 	// Modified by kaan to address bug # 12
 	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
+	//emod6
+	{TOKEN_MAX_CITY_WONDERS, "MAX_CITY_WONDERS"},
+	{TOKEN_MAX_CITY_BUILDINGS, "MAX_CITY_BUILDINGS" },
 };
 	
 
@@ -1824,6 +1846,19 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 				         m_min_turns_between_revolt,
 					     DEFAULT_MIN_TURNS_BETWEEN_REVOLT
 					    );
+	//emod7
+	(void) ParseOptional(const_token, 
+		        		 TOKEN_MAX_CITY_WONDERS,
+				         m_max_city_wonders,
+					     DEFAULT_MAX_CITY_WONDERS
+					    );
+	(void) ParseOptional(const_token, 
+		        		 TOKEN_MAX_CITY_BUILDINGS,
+				         m_max_city_buildings,
+					     DEFAULT_MAX_CITY_BUILDINGS
+					    );
+
+
 
 	return TRUE; 	
 }

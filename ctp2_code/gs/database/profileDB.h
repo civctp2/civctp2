@@ -116,6 +116,7 @@ enum WORLD_SHAPE
 #include "MapPoint.h"			// MapPoint
 #include "pointerlist.h"		// PointerList
 #include "SimpleDynArr.h"		// SimpleDynamicArray
+#include "gfx_options.h"		// for debugai
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -401,6 +402,7 @@ private:
 	sint32 m_OneCityChallenge; 
 		/// energy demand-supply ratio affects production and gold
 	sint32 m_NRG; 
+	sint32 m_ruin;
  
 
 
@@ -596,8 +598,18 @@ public:
 	void SetAIMilitiaUnit(BOOL on)	{ m_AIMilitiaUnit = on; }
 	void SetNRG(BOOL on) 	{ m_NRG = on; }
 	void SetEnemyHealth(BOOL on)  { m_showEnemyHealth = on; }  //emod2 - implementing a scenario editor switch
-    void SetDebugAI(BOOL on) { m_debugai = on; }   //emod2
-
+	void SetCityLeavesRuins(BOOL on) { m_ruin = on; }
+	void SetDebugAI(BOOL on) { m_debugai = on; }
+/*
+    void SetDebugAI(BOOL on)   //emod2
+	{
+		if(on) {
+			g_graphicsOptions->ArmyTextOn();
+        }
+		else
+            g_graphicsOptions->ArmyTextOff();
+	}
+*/
 
     sint32		GetNPlayers() const				{ return m_nPlayers; }
 
@@ -842,6 +854,7 @@ public:
 	BOOL	IsAIMilitiaUnit()	{ return m_AIMilitiaUnit; }
 	BOOL	IsOneCityChallenge() 	{ return m_OneCityChallenge; }
 	BOOL	IsNRG() 	{ return m_NRG; }
+	BOOL	GetCityLeavesRuins() 	{ return m_ruin; }
 
 //later add start age and end age?
 

@@ -174,6 +174,10 @@
 // - outcomment founder code in insurgents b/c it may cause same crash as
 //   sectarianhappiness
 // - implemented RevoltInsurgents Rules/Profile option
+// - added profile check for AImilitia, gold deficit, gold per city, 
+//   gold per unit, aicitydefense
+// - added GetNumCityWonders and GetNumCityBuildings methods
+// - added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
 //
 //----------------------------------------------------------------------------
 
@@ -500,7 +504,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	if (g_player[owner] && g_player[owner]->GetCivilisation())
 	{
 		m_cityStyle = g_player[owner]->GetCivilisation()->GetCityStyle();
-	}
+	} //for citystyle
 
 	for (size_t i = 0; i < POP_MAX; ++i) 
     {
@@ -523,7 +527,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_merchantsEff      = new double[g_theCitySizeDB->NumRecords()];
 	m_scientistsEff     = new double[g_theCitySizeDB->NumRecords()];
 #endif
-	m_secthappy = 0; //emod does this initalize it? - no
+//	m_secthappy = 0; //emod does this initalize it? - no
 }
 
 CityData::~CityData()
@@ -767,7 +771,7 @@ void CityData::Initialize(sint32 settlerType)
 
 	FindBestSpecialists();
 	//SectarianHappiness(); //emod  - does this initialize it?
-	m_secthappy = 0;
+	//m_secthappy = 0; //did not initialize
 
 	sint32 martialLaw;
 	m_happy->CalcHappiness(*this, false, martialLaw, true);
@@ -949,7 +953,7 @@ CityData::CityData(CivArchive &archive)
 	m_sentInefficientMessageAlready = false;
 	Serialize(archive) ;
 
-	m_secthappy = 0; //emod
+	//m_secthappy = 0; //emod  - didnot initialize
 }
 
 CityData::CityData(CityData *copy)
@@ -969,13 +973,7 @@ CityData::CityData(CityData *copy)
 	m_scientistsEff = new double[g_theCitySizeDB->NumRecords()];
 #endif
 
-	m_secthappy = 0; //emod - this set all sectarian happiness to 0 this is initializer?
-	if(
-	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
-	||(g_theProfileDB->IsSectarianHappiness())
-	) {
-		ProcessSectarianHappiness(m_secthappy);
-	}
+	//m_secthappy = 0; //emod - this set all sectarian happiness to 0 this is initializer?
 
 	Copy(copy);
 }
@@ -1050,7 +1048,7 @@ void CityData::Copy(CityData *copy)
 	memcpy(&m_max_processed_terrain_food, &copy->m_max_processed_terrain_food, (uint32)&copy->m_science_lost_to_crime + sizeof(copy->m_science_lost_to_crime) - (uint32)&copy->m_max_processed_terrain_food);
 #endif
 
-	//m_secthappy->Copy(copy->m_secthappy); //emod
+	m_secthappy = 0; //emod - didn't crash but always set to 0 at -1 it showed up but begin turn didn't work nor did it process
 
 	if(this == m_home_city.CD()) {
 		if(g_network.IsHost()) {
@@ -3895,6 +3893,7 @@ void CityData::InitBeginTurnVariables()
 
 	m_alreadySoldABuilding = FALSE;
 	m_walls_nullified = FALSE;
+	//m_secthappy = 0;
 
 }
 
@@ -3996,6 +3995,7 @@ bool CityData::BeginTurn()
 	DoSupport(false);
 #else
 
+	sint32 temper = g_rand->Next(50);
 	TryToBuild(); // Deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
 	//TryToBuild must before capitalisation computation and after production computation
 
@@ -4144,8 +4144,10 @@ bool CityData::BeginTurn()
 		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
 	
 		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
-		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT
+		if(
+			((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit())
+		|| 	(g_theProfileDB->IsAIMilitiaUnit()))
+		&& (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
 		){
 				g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
 		}
@@ -4213,6 +4215,13 @@ bool CityData::BeginTurn()
 		}
 
 	}
+
+	//if(
+	//  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
+	//||(g_theProfileDB->IsSectarianHappiness())
+	//) {
+	//	m_secthappy = ProcessSectarianHappiness(m_secthappy, m_owner, m_cityStyle);
+	//}
 
 
 	//END EMOD
@@ -4686,8 +4695,11 @@ double CityData::GetDefendersBonus() const
 
 {
 // EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
-			if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus()
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+			if(
+			  ((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus())
+			|| (g_theProfileDB->IsAICityDefenderBonus()))
+			  && (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+			  ){
 			return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
 
 		} else {
@@ -5597,7 +5609,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	}
 
 	m_lastCelebrationMsg = -1;
-
+//emod TODO maybe borders should be set to zero once captured and restored after conquestdistress?
 	GenerateBorders(m_home_city.RetPos(), m_owner, g_theConstDB->GetBorderIntRadius(), g_theConstDB->GetBorderSquaredRadius());
 
 	if(m_owner == m_founder) {
@@ -6425,6 +6437,10 @@ bool CityData::CanBuildBuilding(sint32 type) const
 			return false;
 		}
 	}
+	//emod to let modders limit the number of buildings in a city
+	if (GetNumCityBuildings() >= g_theConstDB->GetMaxCityBuildings()) {
+		return false;
+	}
 
 	///END CONDITIONS
 	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex()) != FALSE;
@@ -6701,6 +6717,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 		}
 		if(!found)
 			return false;
+	}
+
+	//emod to limit number of wonders in a city
+	if (GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders()) {
+		return false;
 	}
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type) != FALSE;
@@ -8525,6 +8546,7 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
 	gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
 	
+
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
 	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings());
@@ -8540,7 +8562,6 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings());
 	gold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
-	//Not calculating goldhunger see calctotalupkeep?
 
 	double interest;
 	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
@@ -8556,8 +8577,11 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 	//EMOD to assist AI
 	if(gold < 0){
-		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit()
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT){
+		if(
+		  ((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit())
+		|| (g_theProfileDB->IsNoAIGoldDeficit()) )
+		&& (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+		){
 			gold = 0;
 		}
 	}
@@ -9874,14 +9898,25 @@ bool CityData::IsBuildingOperational(sint32 type) const
 	return true;
 }
 
-void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
+sint32 CityData::SectarianHappiness() const
+{
+	if(
+	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
+	||(g_theProfileDB->IsSectarianHappiness())
+	) {
+		ProcessSectarianHappiness(m_secthappy, m_owner, m_cityStyle);
+	}
+
+	return m_secthappy;
+}
+sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, sint32 citystyle) const
 //void CityData::SectarianHappiness() const  //EMOD
 // This code creates a happiness modifier based off of the factors of:
 // utilizes ProcessSectarianHappiness(m_secthappy);  so doesn't randomize eash turn
 {
 	//secthappy = 0;
 	//sint32 third = (PopCount() / 3) * -1;
-	//sint32 SectarianHappiness = 0;
+	//sint32 newsecthappy = secthappy;
 
 	// Checks if a city has a buildng that conflicts with 
 	// another (mosques, churches, synagogues, etc)
@@ -9889,13 +9924,13 @@ void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
 
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
 			if(m_built_improvements & ((uint64)1 << b)){
-				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[owner]->GetGovernmentType());
 
 				// Checks if a city has a buildng that conflicts with 
 				// another (mosques, churches, synagogues, etc)
 				for(sint32 i = 0; i < rec->GetNumConflictsWithBuilding(); i++) {
 					if((rec->GetNumConflictsWithBuilding()) && HaveImprovement(rec->GetConflictsWithBuildingIndex(i))) {
-						secthappy -= g_rand->Next(PopCount() / 3);
+						newsecthappy -= g_rand->Next(PopCount() / 3);
 					}
 				
 					// Checks if ANY city has a building that conflicts 
@@ -9905,7 +9940,7 @@ void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
 					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
 						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
 						if(aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i))){
-							secthappy -= g_rand->Next(PopCount() / 3);
+							newsecthappy -= g_rand->Next(PopCount() / 3);
 						}
 					}
 
@@ -9913,15 +9948,15 @@ void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
 
 				//checks if govt conflicts prereqgovt
 				for(sint32 g = 0; g < rec->GetNumGovernmentType(); g++) {
-					if(rec->GetGovernmentTypeIndex(g) != g_player[m_owner]->GetGovernmentType()) {
-						secthappy -= g_rand->Next(PopCount() / 3);
+					if(rec->GetGovernmentTypeIndex(g) != g_player[owner]->GetGovernmentType()) {
+						newsecthappy -= g_rand->Next(PopCount() / 3);
 					}
 				}
 
 				//checks if cultureonly conflicts
 				for(sint32 u = 0; u < rec->GetNumCultureOnly(); u++) {
-					if(rec->GetCultureOnlyIndex(u) != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-						secthappy -= g_rand->Next(PopCount() / 3);
+					if(rec->GetCultureOnlyIndex(u) != g_player[owner]->GetCivilisation()->GetCityStyle()) {
+						newsecthappy -= g_rand->Next(PopCount() / 3);
 					}
 				}
 				//end Buildings
@@ -9929,12 +9964,20 @@ void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
 	}
 
 		// Checks if the citystle of the city is different than the person that owns it for cultural/ethnic strife
-	if( g_player[m_owner] != NULL) { //this didn't fix it
-		if( g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle ) { //TODO this line causes the crash
-				secthappy -= 2; //g_rand->Next(PopCount() / 3);
-		}
+	//if( (g_player[owner] != NULL) && (g_player[owner] > 0) && (g_player[owner]->GetCivilisation() != NULL) && (g_player[owner]->GetCivilisation() > 0)
+	//	&& (g_player[owner]->GetCivilisation()->GetCityStyle() > 0) && (owner != PLAYER_UNASSIGNED) && (citystyle > 0) && (citystyle != NULL)
+	//){ //this STILL didn't fix it
+	//	if(citystyle != g_player[owner]->GetCivilisation()->GetCityStyle()) { //TODO this line causes the crash
+	//			secthappy -= 2; //g_rand->Next(PopCount() / 3);
+	//	}
+	//}
+
+	if (
+	   (m_cityStyle >= 0) && (m_cityStyle < g_theCityStyleDB->NumRecords())
+	&& (g_player[m_owner] && g_player[m_owner]->GetCivilisation())
+	){
+		newsecthappy -= 2;
 	}
-		
 		 //if ((secthappy < PopCount()) || (secthappy > PopCount()) ) { //added for a cap because it was still randomizing and at values over a million since rev710
 		//	secthappy = PopCount();
 		//}
@@ -9943,7 +9986,9 @@ void CityData::ProcessSectarianHappiness(sint32 &secthappy) const
 		//if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
 		//	secthappy -= g_rand->Next(PopCount() / 3);
 		//}
-	
+	//m_secthappy += newsecthappy;
+
+	return newsecthappy;
 //	return SectarianHappiness; //no longer a sint32
 }
 
@@ -10126,6 +10171,30 @@ sint32 CityData::ConsumeEnergy()
 	energy += Wenergyperbldg;
 
 	return energy;
+}
+
+sint32 CityData::GetNumCityWonders() const
+{
+	sint32 citywon = 0;
+	uint64 wonders = m_builtWonders;
+	for (sint32 i = 0; wonders; ++i) 
+    {
+		citywon++;
+	}
+
+	return citywon;
+}
+
+sint32 CityData::GetNumCityBuildings() const
+{
+	sint32 citybld = 0;
+	uint64 bld = m_built_improvements;
+	for (sint32 i = 0; bld; ++i) 
+    {
+		citybld++;
+	}
+
+	return citybld;
 }
 
 

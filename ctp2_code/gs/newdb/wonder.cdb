@@ -29,6 +29,8 @@
 #  - EnablesPunativeAirstrikes //added by E(1-14-2006) allows airstrikes without war
 #  - Added OnePerCiv for Small Wonders
 #  - ObsoleteGovernmenttype //added by E obsoletes wonders only if player switches to govt
+#  - Added BuildingEffectEverywhere to better flag than BuildingEverywhere based on code
+#  - ActualBuildingEverywhere was added and implemented a long time ago
 # 
 #-----------------------------------------------------------------------------
 
@@ -131,6 +133,7 @@ Wonder {
     Bit(struct BuildingGold) BuildingGold
 	Bit(Record Building) BuildingEverywhere
 	Bit(Record Building) ActualBuildingEverywhere
+	Bit(Record Building) BuildingEffectEverywhere  #This would be a better name for BuildingEverywhere
 	Bit(Record Building) ConflictsWithBuilding
 
 	##Bit(Record Building) BuildingAnywhere

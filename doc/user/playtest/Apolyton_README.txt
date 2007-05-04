@@ -47,102 +47,153 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-03-30
-Fixed:   Bug that made human units automatically upgrade
-Fixed:   Crash caused by Cargo
-Added:   Replaced old concept DB with new one
-Changed: BarbarianSpawnBarbarian only applies to cells with 1 unit
+2007-05-01  (revision 726)
+Fixed:    Barbarian player cannot decalre war from diplomanager
+Fixed:    Disband Assert errors in Debug version
+Changed:  (Alex Scenario) now uses improved AI strategies
+Fixed:    (Alex scenario) building tileimps now have sound
+Fixed:    (Samurai Scenario) Scenario shold now be playable
+Fixed:    Unit Upgrading
+Fixed:    Search error showing hidden entried in the Great Library
+Fixed:    Error reading the incorrect entry in the Great Library
+Fixed:    Bug causing two workers to be subtracted from a city when settler built
+Added:    Ruins Tileimp to be used with profile option of razed cities leaving a ruin on the map
+Added:    New Database Flags
+- ConstDB
+  MAX_CITY_WONDERS      modders can specify the number of wonders a city can build
+  MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build
+- WonderDB
+BuildingEffectEverywhere same as BuildingEverywhere but flag is more explanatory
+- TerrainImprovementDB
+   RiverOnly            tileimp can only be build on a river
+   IsUrban              tileimp is considered urban
+   IsIrrigation         tileimp is considered irrigation
+   NeedsIrrigation      tileimp must be build one square from IsIrrigation tileimps or a river
+   NextToCity           tileimp must be built 1 square next to city
+   IsWonder             tileimp is a wonder and can only be built if a player has a wonder
+                        tileimp can only be built once
+                        tileimp must be built in a square owned by the cit that built the tileimp
+Added:    New Options
+- Rules Screen
+   AImilitia            Empty AI cities generate a cheap unit at the beginning of a turn
+   No City Limit        Government City Limit happiness effect can be toggled on/off
+   No AI gold deficit   AI ctites don't drop below 0 
+   No AI production deficit  AI production never drops below 0  
+   Gold per city        cities cost gold multiplied by the number of city limit
+   Gold per unit        units cost gold each turn multiplied by wage rate
+   Aicitydefense        AI cities have a defense increase based on population size
+- Scenario Editor
+   DebugAI Button       toggles showing the AI unit's goals
+- Gameplay Screen
+   ShowEnemyHealth      toggles shoowing AI health bar
+   ShowDebugAI          toggles showing the AI unit's goals
+
+
+2007-04-09 (revision 719)
+Fixed:    Bug that made human units automatically upgrade
+Fixed:    Bug that prevent the disbanding of units in neutral territory
+Fixed:    Diplomacy screen size that was too large
+Added:    Nation Flags to replace diploamt flags for diplomacy
+Added:    Religion Database for future use
+Changed:  BarbarianSpawnBarbarian code to limit Barbarians overrunning
+          the entire map
+Added:    DebugAI profile option - display AI goals for units
+
+
 
 2007-03-22 (revision 707)
-Fixed:   Rules screen so it works
-Added:   New Options
-Fixed:   Crash for Alex Scenario caused by Special Icons
-Added:   Affects of SectarianHappiness value displays in CityWindow
+Fixed:    Rules screen so it works
+Fixed:    Crash for Alex Scenario caused by Special Icons
+Added:    Affects of SectarianHappiness value displays in CityWindow
+Added:    New Options
 - Rules Screen
-   One City Challenge - Human player can't build settlers
-   City Capture Options - slic message with option on/off
-   Revolt Insurgents - revolting cities spawn barbarians 
-   RevoltCasualties - revolting cities lose random population
-   BarbarianSpawnBarbarian - risk dependent barbarians spawn more
-   SectarianHappiness - more unhappiness in cities of a different style
+   One City Challenge 	Human player can't build settlers
+   City Capture Options slic message with option on/off
+   Revolt Insurgents    revolting cities spawn barbarians 
+   RevoltCasualties     revolting cities lose random population
+   BarbarianSpawnBarbarian risk dependent barbarians spawn more
+   SectarianHappiness   more unhappiness in cities of a different style
 
 - Graphics screen
-   Smooth Borders - show original or icon
+   Smooth Borders 	show original or icon
 
 - Gameplay Screen 
-   City Capture Options - slic message with option on/off
+   City Capture Options slic message with option on/off
 
-Added:    New database flags for modders:
+Chnaged:    Database flags for modders:
 - TerrainImprovementDB
-   BonusFoodExport now randomly generate a food value to every city
-   BonusGoldExport now randomly generate a gold value to every city
+   BonusFoodExport	now randomly generate a food value to every city
+   BonusGoldExport	now randomly generate a gold value to every city
 
 
 2007-03-12 (revision 705)
-Fixed:   Crash caused by SectarianHappiness because the founder civ was destroyed
-Fixed:   Crash caused by Sink code
-Added:   GovtIcon database flag (future use)
-Added:   ShowCityIcon for Wonders and buildings (uses mapicons in concepticon.txt)
-Added:   IsReligionIcon to wonders and buildings (uses mapicons in concepticon.txt)
-Added:   Graphic window option to show/hide Army Names
-Added:   Graphics window option to show/hide nation flags
-Added:   New strategies.txt that emphasizes more city captures
-Fixed:   Location of Nation Flag is now right of the herald
-Fixed:   Army stack now done by drawingstring not icons
-Deleted: Old IsReligion# system
-Added:   New database flags for modders:
+Fixed:    Crash caused by SectarianHappiness because the founder civ was destroyed
+Fixed:    Crash caused by Sink code
+Added:    GovtIcon database flag (future use)
+Added:    ShowCityIcon for Wonders and buildings (uses mapicons in concepticon.txt)
+Added:    IsReligionIcon to wonders and buildings (uses mapicons in concepticon.txt)
+Added:    Graphic window option to show/hide Army Names
+Added:    Graphics window option to show/hide nation flags
+Added:    New strategies.txt that emphasizes more city captures
+Fixed:    Location of Nation Flag is now right of the herald
+Fixed:    Army stack now done by drawingstring not icons
+Deleted:  Old IsReligion# system
+Added:    New database flags for modders:
 - GovernmentDB
-   GovtIcon - future use to diplay government icons on map
+   GovtIcon             Future use to diplay government icons on map
 - WonderDB
-   ShowCityIcon - flag displays a map icon behind the city
-   IsReligionIcon - flag displays a map icon under city name
+   ShowCityIcon         Flag displays a map icon behind the city
+   IsReligionIcon       Flag displays a map icon under city name
 - BuildingDB
-   ShowCityIcon - flag displays a map icon behind the city
-   IsReligionIcon - flag displays a map icon under city name
+   ShowCityIcon         Flag displays a map icon behind the city
+   IsReligionIcon       Flag displays a map icon under city name
 
 2007-03-01 (Revision 693)
-Added:   Hostile terrain hp cost is now based on barbarian risk 
-Fixed:   SpawnBarbarian code for entrenched units that can spawnbarbarians
+Added:    Hostile terrain hp cost is now based on barbarian risk 
+Fixed:    SpawnBarbarian code for entrenched units that can spawnbarbarians
 
-Fixed:   Number of flags (restored them)
-Added:   Profile option to show/hide civflag graphics show up under the playercolor flag
-Fixed:   Civ flags to be below player color flag
-Added:   TerraformOcean button in tile bank (restored it) this allows modders up to 60 of the 64 
+Fixed:    Number of flags (restored them)
+Added:    New userprofile option option to show/hide civflag graphics show up under the playercolor flag
+Fixed:    Civ flags located below player color flag
+Added:    TerraformOcean button in tile bank (restored it) this allows modders up to 60 of the 64 
           available tileimp slots (previously only 48/60 available)
-Added:   Slic messages for sinking ship (again), hostile terrain, insurgent spawn, guerrilla spawn
-Added:   additional but not implemented userprofile options
-Added:   EnergySupply and Demand Concept calculates a percentage used as modifier for gold and production
-Added:   Energy Profile option to make it optional 
-Added:   New database flags for modders:
+Added:    Slic messages for sinking ship (again), hostile terrain, insurgent spawn, guerrilla spawn
+Added:    Additional but not implemented userprofile options
+Added:    New concept of energy supply and demand. It calculates a ratio used as a modifier for 
+          gold and production.
+Added:    New userprofile option to disable the new energy supply/demand concept.
+Added:    New database flags for modders to enable the new energy supply/demand concept:
+
 - TerrainImprovementDB
-   ProducesEnergy - creates an energy point (supply)
-   EnergyHunger - subtracts an energy point (demand)
+   ProducesEnergy       TerrainImprovement generates energy
+   EnergyHunger         TerrainImprovement consumes energy
 - BuildingDB
-   ProducesEnergy - creates an energy point (supply)
-   EnergyHunger - subtracts an energy point (demand)
-   EnergyHungerPerPop - creates an energy point (supply) per person in city
-   ProducesEnergyPerPop - subtracts an energy point (demand) per person in city
+   ProducesEnergy       Building generates energy
+   EnergyHunger         Building consumes energy
+   ProducesEnergyPerPop Building generates energy per citizen
+   EnergyHungerPerPop   Building generates energy per citizen
 - WonderDB
-   ProducesEnergy - creates an energy point (supply)
-   EnergyHunger - subtracts an energy point (demand)
-   EnergyHungerPerPop - creates an energy point (supply) per person in city
-   ProducesEnergyPerPop - subtracts an energy point (demand) per person in city
+   ProducesEnergy       Wonder generates energy
+   EnergyHunger         Wonder consumes energy
+   ProducesEnergyPerPop Wonder generates energy per citizen
+   EnergyHungerPerPop   Wonder generates energy per citizen
 - UnitDB
-   ProducesEnergy - creates an energy point (supply)
-   EnergyHunger - subtracts an energy point (demand)
+   ProducesEnergy       Unit generates energy
+   EnergyHunger         Unit consumes energy
+
 
 2007-02-22 (Revision 692)
-Fixed:   Moved Goal text from appearing inside the science box in the english/science.ldl
-Added:   Civilization Flags for Units (most artwork from Civ2 modders Michael D McCart & Michael D Raney)
-Added:   Implemented Unit Hidden Nationality - these units are displayed as barbarians 
+Fixed:     Moved Goal text from appearing inside the science box in the advance research screen
+Added:     Civilization Flags for Units (most artwork from Civ2 modders Michael D McCart & Michael D Raney)
+Added:     Implemented Unit Hidden Nationality - these units are displayed as barbarians 
 
 2007-02-01 (Revision 687)
-Added:	  Religious City Icons (up to 10 Religions) appear if building has IsReligion1(or 2 up to 10)
-Added:	  National Borders are now displayed with icons for smooth appearance.
-Changed: Aligned Cityname, population rectangle, and turns to population growth rectangle.
-Changed: Next Pop rectangle is now black like the city name to differentiate it from City Population.
-Added:	Player Capitols now have a star Icon.
-Fixed: Implemented HasAirport Icon.
+Added:	   Religious City Icons (up to 10 Religions) appear if building has IsReligion1(or 2 up to 10)
+Added:	   National Borders are now displayed with icons for smooth appearance.
+Changed:   Aligned Cityname, population rectangle, and turns to population growth rectangle.
+Changed:   Next Pop rectangle is now black like the city name to differentiate it from City Population.
+Added:	   Player Capitols now have a star Icon.
+Fixed:     Implemented HasAirport Icon.
 
 
 2006-10-05 (Revision 647)
@@ -152,13 +203,14 @@ Added:    New database flags for modders:
    BonusScience         TerrainImprovement gives bonus science to its city.
    HappyInc             TerraubImprovement increases happiness of its city.
 - WonderDB
-   ActualBuildingEverywhere Wonder creates this building everywhere.
+   ActualBuildingEverywhere  
+                        Wonder creates this building everywhere.
 - BuildingDB
    CreatesMiltiaUnit    Building creates militia unit.
 - DifficultyDB
    AIMilitiaUnit        Difficulty creates militia units in empty AI cities.
    RevoltInsurgents     Difficulty creates Barbarians around rioting cities in
-                         dependence on RiskDB BabarianChance.
+                        dependence on RiskDB BabarianChance.
 
 2006-09-09 (Revision 634)
 Fixed:    AI slider handling
@@ -204,7 +256,7 @@ Added:    New database flags for modders:
    EitherPrerequisite   Advance just needs one of the prerequisites to be 
                         researched. This allows a fluid tech tree like Civ4.
 - TerrainImprovementDB:
-   PrerequisiteTileImp  TerrainImprovement needs another T.Imp. to be built.
+   PrerequisiteTileImp  TerrainImprovement needs another tileimp to be built.
 - WonderDB:
    EnablesPunativeAirstrikes Wonder allows bombardment without war declaration.
 - CivilisationDB:

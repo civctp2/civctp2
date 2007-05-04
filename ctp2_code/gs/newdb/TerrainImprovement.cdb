@@ -146,6 +146,16 @@ TerrainImprovement {
 		#not implemented by maybe later
 		Int   EnergyHunger = 0
 		Int   ProducesEnergy = 0
+		//Bit IsWonder  //remove?
+		Record Wonder[]	IsWonder			// ties this tileimp to a wonder that must be built
+		Bit NeedsIrrigation                     // Can only be built on rivers or adjacent to rivers or other tileimps with flag IsIrrigation
+		Bit IsIrrigation                     // 
+		Bit NextToCity                     // Can only be built on next to Cities or other NextToCity flags
+		Bit RiverOnly                     // Can only be built on rivers
+		Bit Obstacle                     // FU makes cell impassable
+		Bit IsUrban
+		Bit NextToUrban
+
 	}
 
 	#Added Sound by Martin Gühmann
@@ -185,7 +195,7 @@ TerrainImprovement {
 	//Bit(Int) BonusProductionExport          // Installation Gives PW
 	//Bit(Int) BonusGoldExport                // Installation gives Gold
 	//Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 
-	Bit NeedsIrrigation                     // FU Can only be build on rivers or adjacent to rivers or other tileimps with flag IsWaterSupply
+
 
 	Bit GLHidden
 
@@ -197,6 +207,8 @@ TerrainImprovement {
 	Bit CanBuildAlly						// can be built in ally territory
 	Bit CanBuildWasteland					// can be nuilt in unclaimed land, to connect cities
 	Bit CanUpgrade
+	Bit IsCityRuin							//left when cities are destroyed
+
 
 		#Energy Code
 	Int   EnergyHunger = 0

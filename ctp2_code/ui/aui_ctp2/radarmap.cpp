@@ -40,6 +40,7 @@
 //   is on, even if the there is no contact to that civilisation.
 //   - Mar. 4th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - TODO add player colored terrain maps (like civ3)
 //
 //----------------------------------------------------------------------------
 

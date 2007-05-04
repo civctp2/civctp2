@@ -175,6 +175,8 @@ BOOL TerrainImprovementData::AddTurn(sint32 turns)
 		
 		return FALSE;
 
+// add turn here can be used to make tile imps grow?
+
 	m_turnsToComplete -= turns;
 	g_network.Block(m_owner);
 	ENQUEUE();

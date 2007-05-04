@@ -990,15 +990,16 @@ public:
 	sint32 GoodHappinessIncr() const;									//EMOD 4-27-2006
 	bool CanCollectGood(sint32 good) const;        						//EMOD 4-27-2006 
 	bool IsBuildingOperational(sint32 type) const; 						//EMOD 5-15-2006
-	sint32 SectarianHappiness() const { return m_secthappy; }      		//EMOD 5-24-2006
+	sint32 SectarianHappiness() const; //{ return m_secthappy; }      		//EMOD 5-24-2006
 //	sint32 AddGoodToCity (sint32 good) const;      						//EMOD 5-31-2006
 	sint32 TileImpHappinessIncr() const;		   						//EMOD 10-05-2006
-	void ProcessSectarianHappiness(sint32 &secthappy) const; 			//EMOD 4-9-2007
+	sint32 ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, sint32 citystyle) const; 			//EMOD 4-9-2007
 
 	sint32 ConsumeEnergy();
 	sint32 ProduceEnergy();
 
-	
+	sint32 GetNumCityBuildings() const;
+	sint32 GetNumCityWonders() const;
 	
 	
 	

@@ -9332,3 +9332,58 @@ The future is unknown, we know not what it will bring. Be it good or bad. Nobody
 [CONCEPT_MEDIEVAL_AGE_HISTORICAL]
 The Middle Ages the age between the classical antiquity and the Renaissance. But it is little a more: It came out from the fall of the Roman Empire. Christianity lured with the promise of the release in the paradise after death and after the end of the world: Because the world was terrible the barbarians brought disaster and poverty over the Roman Empire. It was no miracle that the back was turned on polytheism and surrendered themselves to christianity. The epoch is defined by deep religiousness and devoutness. In addition, by fanatisicm and intollerance. These are one of the reasons for the crusades. To the end this  epoch the curches grew into the sky. The building of such a church took centuries. For example the Cologne Cathedral was finished only after well over half a millenium.
 [END]
+
+########################  AE MOD  Entries
+
+[ORDER_UPGRADE_ARMY_PREREQ]
+Requires:
+Any unit
+[END]
+
+[ORDER_UPGRADE_ARMY_STATISTICS]
+Effect:
+Permanently deletes the old unit and replaces it with a new unit
+Units must be upgraded in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> 
+<L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> cost is based on the difference in unit shield value multplied by your government's Unit rush modifier
+[END]
+
+[ORDER_UPGRADE_ARMY_GAMEPLAY]
+A player may want to upgrade a unit for a variety of reasons.  Older and obsolete units are often too weak to be much of an asset in combat.  In some rules setting the AI player is able to upgrade without a gold cost. Often the gold costs can be quite exppensive preventing a player from upgrading an entire military in a single turn.
+
+[END]
+
+[ORDER_UPGRADE_ARMY_HISTORICAL]
+[END]
+
+[UNIT_LONGBOWMAN_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_FEUDALISM><e>
+[END]
+
+[UNIT_LONGBOWMAN_STATISTICS]
+Attack: {UnitDB(UnitRecord[0]).Attack / 100}
+Ranged: {UnitDB(UnitRecord[0]).ZBRangeAttack}
+Defense: {UnitDB(UnitRecord[0]).Defense / 100}
+Armor: {UnitDB(UnitRecord[0]).Armor / 100}
+Damage: {UnitDB(UnitRecord[0]).Firepower}
+Vision: {UnitDB(UnitRecord[0]).VisionRange}
+Movement: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
+[END]
+
+[UNIT_LONGBOWMAN_SUMMARY]
+Ancient <L:DATABASE_ORDERS,ORDER_RANGED_ATTACK>Ranged<e> unit
+[END]
+
+[UNIT_LONGBOWMAN_GAMEPLAY]
+Improvements in bow design give the Longbowman a stronger offense and defense than the <L:DATABASE_UNITS,UNIT_ARCHER>Archer<e> with stronger offense and defense. Like its predecessor the Longbowman is an excellent unit to support slower moving footsoldiers by providing ranged attack.
+[END]
+
+[UNIT_LONGBOWMAN_HISTORICAL]
+The English longbow was originally developed in Wales during the early Medieval period. By increasing the length of the bow to around six feet and using high quality yew the longbow was able to have a range of up around 200m and a rate of up to 20 aimed shots per minute. An army of longbowmen could thus create a cloud of arrows, inflicting massive casualty rates on their targets. This tactic was most famously used by the English against French at Crecy, Poitiers and Agincourt during the Hundred Years' War and the longbow became one of the most feared weapons of the period. To become effective, however, a longbowman needed years of training leading to its being replaced in the 16th century by the less effective, but easier to use, musket.
+[END]
+

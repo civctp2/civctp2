@@ -484,12 +484,15 @@ public:
 	UnitDynamicArray *GetTradersList() { return m_traderUnits; }
 	DynamicArray<TradeOffer>* GetTradeOffersList() { return m_tradeOffers; }
 	DynamicArray<Army> *GetAllArmiesList() { return m_all_armies; }
+	DynamicArray<TerrainImprovement> *GetAllTileimpsList() { return m_terrainImprovements; } //emod
+	DynamicArray<Installation> *GetAllInstallationsList() { return 	m_allInstallations; } //emod
 
 	Unit GetTopSelectedArmy(const sint32 selected_army);
 
 	sint32  GetNumUnits() const;   //EMOD
 	sint32  GetNumCities() const;
 	sint32  GetMaxCityCount() const;
+	sint32  GetNumTileimps() const; //emod
 	bool    GetNearestCity(const MapPoint &pos, Unit &nearest, double &distance,
 	                       bool butNotThisOne = false, const sint32 continent = -1);
 	bool    GetSlaveCity(const MapPoint &pos, Unit &city);
@@ -745,6 +748,7 @@ public:
 
 	void BeginTurnWonders();
 	sint32 CalcWonderGold();
+	sint32 CalcSupportGold();  //emod - for profile options		
 	sint32 CalcTotalBuildingUpkeep();
 	void BuildUnit(sint32 type, Unit city);
 	void BuildImprovement(sint32 type, Unit city);

@@ -36,6 +36,13 @@
 // - changed whole file to look more like gameplayoptions 3.21.2007
 // - added revoltinsurgents option 3.22.2007
 // - added NoRandomCivs option
+// - added aifreeupgrades
+// - added unit gold support
+// - added city gold support
+// - added no gold deficit for cities
+// - added no production deficit for cities
+// - added no gold hunger for ai
+// - added no shield hunger for ai
 //
 //----------------------------------------------------------------------------
 
@@ -74,7 +81,15 @@ static aui_Switch		*s_genocide			= NULL,
 						*s_revoltcasualty   = NULL,
 						*s_barbspawn		= NULL,
 						*s_secthappy		= NULL,
-						*s_NonRandomCivs		= NULL,
+						*s_NonRandomCivs	= NULL,
+
+						*s_UNITGOLD			= NULL,
+						*s_CITYGOLD			= NULL,
+						*s_FREEUPGRADE		= NULL,
+						*s_NOSHIELD			= NULL,
+						*s_NOGOLD			= NULL,
+						*s_NOPDEFICIT		= NULL,
+						*s_NOGDEFICIT		= NULL,
 
 						*s_NULL				= NULL;
 
@@ -89,7 +104,13 @@ enum
 	R_BARBSPAWN,
 	R_SECTHAPPY,
 	R_NonRandomCivs,
-
+	R_UNITGOLD,
+	R_CITYGOLD,
+	R_FREEUPGRADE,
+	R_NOSHIELD,
+	R_NOGOLD,
+	R_NOPDEFICIT,
+	R_NOGDEFICIT,
 	GP_TOTAL
 };
 
@@ -104,6 +125,13 @@ static uint32 check[] =
 	R_BARBSPAWN,
 	R_SECTHAPPY,
 	R_NonRandomCivs,
+	R_UNITGOLD,
+	R_CITYGOLD,
+	R_FREEUPGRADE,
+	R_NOSHIELD,
+	R_NOGOLD,
+	R_NOPDEFICIT,
+	R_NOGDEFICIT,
 
 	GP_TOTAL
 };
@@ -122,6 +150,14 @@ sint32 spnewgamerulesscreen_updateData()
 	s_barbspawn->SetState( g_theProfileDB->IsBarbarianSpawnsBarbarian() );
 	s_secthappy->SetState( g_theProfileDB->IsSectarianHappiness() );
 	s_NonRandomCivs->SetState( g_theProfileDB->IsNonRandomCivs() );
+
+	s_UNITGOLD->SetState( g_theProfileDB->IsGoldPerUnitSupport() );
+	s_CITYGOLD->SetState( g_theProfileDB->IsGoldPerCity() );
+	s_FREEUPGRADE->SetState( g_theProfileDB->IsAIFreeUpgrade() );
+	s_NOSHIELD->SetState( g_theProfileDB->IsAINoShieldHunger() );
+	s_NOGOLD->SetState( g_theProfileDB->IsAINoGoldHunger() );
+	s_NOPDEFICIT->SetState( g_theProfileDB->IsNoAIProductionDeficit() );
+	s_NOGDEFICIT->SetState( g_theProfileDB->IsNoAIGoldDeficit() );
 	return 1;
 }
 
@@ -190,6 +226,13 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	s_secthappy			= spNew_aui_Switch(&errcode, windowBlock, "SectHappy", spnewgamerulesscreen_checkPress, &check[R_SECTHAPPY]); //emod5
 	s_NonRandomCivs		= spNew_aui_Switch(&errcode, windowBlock, "NonRandomCivs", spnewgamerulesscreen_checkPress, &check[R_NonRandomCivs]); //emod5
 
+	s_UNITGOLD			= spNew_aui_Switch(&errcode, windowBlock, "UnitGold", spnewgamerulesscreen_checkPress, &check[R_UNITGOLD]); //emod5
+	s_CITYGOLD			= spNew_aui_Switch(&errcode, windowBlock, "CityGold", spnewgamerulesscreen_checkPress, &check[R_CITYGOLD]); //emod5
+	s_FREEUPGRADE		= spNew_aui_Switch(&errcode, windowBlock, "freeupgrade", spnewgamerulesscreen_checkPress, &check[R_FREEUPGRADE]); //emod5
+	s_NOSHIELD			= spNew_aui_Switch(&errcode, windowBlock, "noshield", spnewgamerulesscreen_checkPress, &check[R_NOSHIELD]); //emod5
+	s_NOGOLD			= spNew_aui_Switch(&errcode, windowBlock, "nogold", spnewgamerulesscreen_checkPress, &check[R_NOGOLD]); //emod5
+	s_NOPDEFICIT		= spNew_aui_Switch(&errcode, windowBlock, "nop", spnewgamerulesscreen_checkPress, &check[R_NOPDEFICIT]); //emod5
+	s_NOGDEFICIT		= spNew_aui_Switch(&errcode, windowBlock, "nog", spnewgamerulesscreen_checkPress, &check[R_NOGDEFICIT]); //emod5
 
 	spnewgamerulesscreen_updateData();
 
@@ -223,6 +266,14 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	mycleanup(s_barbspawn); //emod6
 	mycleanup(s_secthappy); //emod6
 	mycleanup(s_NonRandomCivs);
+	mycleanup(s_UNITGOLD);
+	mycleanup(s_CITYGOLD);
+	mycleanup(s_FREEUPGRADE);
+	mycleanup(s_NOSHIELD);
+	mycleanup(s_NOGOLD);
+	mycleanup(s_NOPDEFICIT);
+	mycleanup(s_NOGDEFICIT);
+
 	delete s_spNewGameRulesScreen;
 	s_spNewGameRulesScreen = NULL;
 
@@ -249,6 +300,15 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 	case R_BARBSPAWN: func = &ProfileDB::SetBarbarianSpawnsBarbarian; break; //emod7
 	case R_SECTHAPPY: func = &ProfileDB::SetSectarianHappiness; break; //emod7
 	case R_NonRandomCivs: func = &ProfileDB::SetNonRandomCivs; break;
+
+	case R_UNITGOLD: func = &ProfileDB::SetGoldPerUnitSupport; break;
+	case R_CITYGOLD: func = &ProfileDB::SetGoldPerCity; break;
+	case R_FREEUPGRADE: func = &ProfileDB::SetAIFreeUpgrade; break;
+	case R_NOSHIELD: func = &ProfileDB::SetAINoShieldHunger; break;
+	case R_NOGOLD: func = &ProfileDB::SetAINoGoldHunger; break;
+	case R_NOPDEFICIT: func = &ProfileDB::SetNoAIProductionDeficit; break;
+	case R_NOGDEFICIT: func = &ProfileDB::SetNoAIGoldDeficit; break;
+
 	default:  Assert(0); break;
 	};
 

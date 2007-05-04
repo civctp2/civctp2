@@ -1,3 +1,9 @@
+###############
+#
+# - Added Ruins Tileimp for cityruins option
+#
+################
+
 TILEIMP_ADVANCED_FARMS {
    Icon ICON_TILEIMP_ADVANCED_FARMS
    Tooltip TOOLTIP_TILEIMP_SELECT_FARM2_BUTTON
@@ -2331,4 +2337,73 @@ TILEIMP_UNDERSEA_TUNNEL {
    }
 }
 
+TILEIMP_RUINS {
+   Icon ICON_TILEIMP_ADVANCED_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_MINE2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_MINE2_BUTTON
+   Sound SOUND_ID_MINE_2
+   Level 5
+   GLHidden
+   IsCityRuin
+   Class:Mine
+
+   ConstructionTiles 15
+   ConstructionTiles 16
+   ConstructionTiles 16
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusProduction 0
+      BonusGold 0
+      EnableAdvance ADVANCE_SUBNEURAL_ADS
+      ProductionCost 1000
+      TilesetIndex 150
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_WHITE_HILL
+
+      BonusProduction 0
+      BonusGold 0
+      EnableAdvance ADVANCE_SUBNEURAL_ADS
+      ProductionCost 1000
+      TilesetIndex 150
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      BonusProduction 0
+      BonusGold 0
+      EnableAdvance ADVANCE_SUBNEURAL_ADS
+      ProductionCost 1000
+      TilesetIndex 151
+   }
+}
 ## End ##########################################################

@@ -109,6 +109,7 @@
 // - Added message for hostile terrain and guerrilla spawn
 // - Readded message for ship sinking (removed later)
 // - Added new limits for BarbarianSpawnBarbarian
+// - outcomment SetType and put Kill-Create code in Upgrade (for now) - E 5-1-07
 //
 //----------------------------------------------------------------------------
 
@@ -10871,7 +10872,10 @@ void ArmyData::Upgrade()
 			sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
 			if(upgradeType > -1)
 			{
-				m_array[i].SetType(upgradeType);
+				//emod (5-1-07) added these two lines of code to fix upgrading because SetType only changes the sprite
+				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+				g_player[m_owner]->CreateUnit(upgradeType, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+				//m_array[i].SetType(upgradeType);
 			}
 		}
 	}
@@ -10886,7 +10890,10 @@ void ArmyData::Upgrade()
 
 					if(g_player[m_owner]->m_gold->GetLevel() > upgradeCost)
 					{
-						m_array[i].SetType(upgradeType);
+						//emod (5-1-07) added these two lines of code to fix upgrading because SetType only changes the sprite
+						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+						g_player[m_owner]->CreateUnit(upgradeType, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
+						//m_array[i].SetType(upgradeType);
 						g_player[m_owner]->m_gold->SubGold(upgradeCost);
 					}
 				}

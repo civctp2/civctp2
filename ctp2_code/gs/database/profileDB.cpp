@@ -240,6 +240,7 @@ ProfileDB::ProfileDB()
 	m_OneCityChallenge 					(FALSE),
 	m_NRG			 					(FALSE),
 	m_debugai							(FALSE),
+	m_ruin								(FALSE),
 	//end emod
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -429,7 +430,7 @@ ProfileDB::ProfileDB()
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false); //used
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
 	Var("ShowDebugAI"	             , PV_BOOL  , &m_debugai					, NULL); //used   //emod2
-
+	Var("CitiesLeaveRuins"			 , PV_BOOL  , &m_ruin                        , NULL, false); //used
 }
 
 void ProfileDB::DefaultSettings(void)

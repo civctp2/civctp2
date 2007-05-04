@@ -1,28 +1,28 @@
 # Microsoft Developer Studio Project File - Name="dbgen" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
 CFG=dbgen - Win32 Debug Browse
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "dbgen.mak".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "dbgen.mak" CFG="dbgen - Win32 Debug Browse"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "dbgen - Win32 Release" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - Win32 Final" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - Win32 Debug" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - Win32 Debug Browse" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - SDL Debug" (basierend auf  "Win32 (x86) Console Application")
-!MESSAGE "dbgen - SDL Final" (basierend auf  "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Final" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - Win32 Debug Browse" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - SDL Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "dbgen - SDL Final" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project

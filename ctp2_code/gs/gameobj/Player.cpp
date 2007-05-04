@@ -95,6 +95,8 @@
 // - Added Commodity Market Code gold adds with CalcWonderGold 3-14-2007
 // - Added BreadBasket Code 3-14-2007
 // - implemented One City Challenge Option in CanBuildUnit 3.21.2007
+// - implemented freAIupgrades profile option
+// - added GetNumTileimps 4.21.2007
 //
 //----------------------------------------------------------------------------
 
@@ -2146,6 +2148,8 @@ void Player::BeginTurnWonders()
 	m_gold->AddGold(CalcWonderGold());
 
 	m_gold->AddGold(CommodityMarket());  //emod for calculating commodities should it be in profileDB?
+
+	m_gold->AddGold(CalcSupportGold());
 	
 	g_theWonderTracker->RecomputeIsBuilding(m_owner);
 }
@@ -2260,10 +2264,21 @@ sint32 Player::CalcWonderGold()
 	return totalWonderGold;
 }
 
+//emod
+sint32 Player::CalcSupportGold()
+{
+	sint32 gold = 0;
 
+	if (g_theProfileDB->IsGoldPerUnitSupport()) { 
+		gold -= static_cast<double>(1 * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
+	}
 
+	if (g_theProfileDB->IsGoldPerCity()) { 
+		gold -= static_cast<double>(2 * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+	}
 
-
+return gold;
+}
 
 
 
@@ -6579,7 +6594,8 @@ TerrainImprovement Player::CreateSpecialImprovement(sint32 dbIndex,
 		}
 		m_terrainImprovements->Insert(theImprovement);
 		if(theImprovement.GetMaterialCost() <= m_materialPool->GetMaterials()) {
-			theImprovement.StartBuilding();
+			theImprovement.Complete();
+		//	theImprovement.StartBuilding(); //this was the problem
 		}
 	}
 
@@ -6981,6 +6997,13 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 			}
 		}
 	}
+//emod to allow for a name change
+	
+	sint32 buildingIndex2;
+	if(wrec->GetBuildingEffectEverywhereIndex(buildingIndex2)) {
+		m_wonderBuildings |= ((uint64)1 << buildingIndex2);
+	}
+
 //end EMOD	
 }
 
@@ -7100,7 +7123,10 @@ sint32 Player::GetNumUnits() const  //EMOD
 	return m_all_units->Num(); 
 }
 
-
+sint32 Player::GetNumTileimps() const  //EMOD
+{
+	return m_terrainImprovements->Num();
+}
 sint32 Player::GetMaxCityCount() const 
 {
 	return m_maxCityCount; 
@@ -10178,8 +10204,11 @@ void Player::SetPlayerType(PLAYER_TYPE pt)
 
 bool Player::HasFreeUnitUpgrades() const
 {
-	return g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade()
-	    && IsRobot();
+	return (
+		    (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade())
+			|| (g_theProfileDB->IsAIFreeUpgrade())
+			)
+	        && IsRobot();
 //	    || HasFreeUpgradeWonder like Civ2's Leonardo's workshop
 //	    || FreeUpgradeFeat
 //	    || Whatever

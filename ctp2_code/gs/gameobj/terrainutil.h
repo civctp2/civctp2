@@ -46,7 +46,9 @@ bool terrainutil_HasUpgrader(const MapPoint & pos); //EMOD 5-30-2006
 bool terrainutil_CanBeCaptured(const MapPoint & pos); //EMOD 5-30-2006
 bool terrainutil_HasColony(const MapPoint & pos); //EMOD 5-30-2006
 bool terrainutil_HasMinefield(const MapPoint & pos); //EMOD 5-30-2006
-
+bool terrainutil_HasIrrigation(const MapPoint & pos); //EMOD 4-30-2007
+bool terrainutil_HasWonder(const MapPoint & pos); //EMOD 4-30-2007
+bool terrainutil_HasUrban(const MapPoint & pos); //EMOD 4-30-2007
 double terrainutil_GetMaxVisionRange();
 double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint & pos);
 

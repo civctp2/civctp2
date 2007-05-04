@@ -27,6 +27,7 @@
 // - Fixed gold support cost so that it does not break the save game format. (April 29th 2006 Martin Gühmann)
 // - Added difficulty dependent AI keep units over budget cheat. (April 29th 2006 Martin Gühmann)
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - added profile options for nogoldhunger, noshieldhinger, and noproduction deficit
 //
 //----------------------------------------------------------------------------
 
@@ -54,6 +55,7 @@
 #include "wonderutil.h"
 #include "DifficultyRecord.h"
 #include "GameSettings.h"
+#include "profileDB.h"
 
 MilitaryReadiness::MilitaryReadiness(sint32 a_Owner)
 :
@@ -180,8 +182,13 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 
 	unitCost *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
 //EMOD for AI
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoShieldHunger()
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+	if(
+	  (
+	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoShieldHunger())
+	|| (g_theProfileDB->IsAINoShieldHunger())
+	  )
+	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT
+	){
 			unitCost -= unitCost;
 	}
 
@@ -216,8 +223,11 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 	}
 
 	//EMOD for AI
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger()
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+	if((
+	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger())
+	|| (g_theProfileDB->IsAINoGoldHunger())
+	   )
+	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
 			unitCostGold -= unitCostGold;
 	}
 
@@ -318,7 +328,10 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
         return; 
 
 //EMOD  AI can run deficit? but cant build production?
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIProductionDeficit()
+	if((
+	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIProductionDeficit())
+	|| (g_theProfileDB->IsAINoShieldHunger())
+	   )
 	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
         return; 
 

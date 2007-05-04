@@ -380,3 +380,5 @@ POLLUTION_CAUSED_BY_NUKE 1000000
 # Apolyton changes
 MAX_MATCH_LIST_CYCLES 6 # Amount of AI match list cycles
 MIN_TURNS_BETWEEN_REVOLT 1 # minimum number of turns from a city revolts until it is possible to revolt again
+MAX_CITY_WONDERS    1000  #1000 is source code default; modifying this will limit how many wonders a city can have
+MAX_CITY_BUILDINGS  1000  #1000 is source code default; modifying this will limit how many buildings a city can have

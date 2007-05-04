@@ -31,6 +31,8 @@
 // - Corrected memory leaks for city captures.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
 // - Corrected message recipients for the Gaia Controller messages.
+// - added check to make sure city pop is greater than 1 before city capture options
+// - added city leaves ruins options
 //
 //----------------------------------------------------------------------------
 
@@ -76,6 +78,10 @@
 
 #include "AdvanceRecord.h"
 #include "Happy.h" //EMOD
+#include "TerrainImprovementRecord.h"
+#include "TerrainRecord.h"
+#include "terrainutil.h"
+#include "TerrImprovePool.h"
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -117,6 +123,15 @@ STDEHANDLER(CaptureCityEvent)
 			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED, 
 			GEA_Player, newOwner, 
 			GEA_End);
+			if (g_theProfileDB->GetCityLeavesRuins()){
+				for (sint32 imp = 0; imp < g_theTerrainImprovementDB->NumRecords(); imp++) {
+					const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
+					if (rec->GetIsCityRuin()){
+						g_player[newOwner]->CreateSpecialImprovement(imp, pos, 0);
+					}
+				}
+			}
+
 	} 
     else if (city.IsValid())
     {
@@ -139,9 +154,11 @@ STDEHANDLER(CaptureCityEvent)
 		}
 
 
-        if (g_theProfileDB->GetValueByName("CityCaptureOptions"))
-//		if (g_theProfileDB->IsCityCaptureOn())
-        {
+        if (
+			(g_theProfileDB->IsCityCaptureOptions())
+			//(g_theProfileDB->GetValueByName("CityCaptureOptions"))
+		&& (city.GetData()->GetCityData()->PopCount() > 0)
+		){
 //EMOD Capture city options
             /// @todo Check impact: this could be considered a human cheat.
             ///       The AI is unable to select raze (when over the city cap).

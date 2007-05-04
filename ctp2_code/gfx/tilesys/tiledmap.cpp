@@ -48,6 +48,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 // - added debugai profile switch - E 4-3-2007
+// - When yes the debugai switch causes a crash
 //
 //----------------------------------------------------------------------------
 
@@ -2444,21 +2445,28 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 	{
 		
-		if (actor->Draw(fog)) 
-        {
+		if (actor->Draw(fog)) {
+			
 			RECT rect;
+
 			actor->GetBoundingRect(&rect);
 			AddDirtyRectToMix(rect);
+		} else {
+			
+			
+
+			
+			
 		}
 
 		if (
 		   (g_graphicsOptions && g_graphicsOptions->IsArmyTextOn())
         || (g_theProfileDB->GetDebugAI()) //emod
 		){
-			Unit	u = actor->GetUnitID();
+				Unit	u = actor->GetUnitID();
 				
-			if (u.IsValid()) 
-            {
+				if (u.IsValid() && u.GetArmy().m_id != 0) {
+
 				Army		a = u.GetArmy();
 
 				sint32		tx = actor->GetX() + GetZoomTilePixelWidth()/2;
@@ -2472,6 +2480,7 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 				COLORREF    bgColor = RGB(0,0,0);
 
 				DrawSomeText(true, a.GetData()->GetDebugString(), tx, ty, fgColor, bgColor);
+				
 			}
 		}
 //EMOD to allow option for army names
@@ -2501,34 +2510,54 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 			
 		}
 //end emod
-
-		
-		
 		if (g_show_ai_dbg || (g_isScenario && g_showUnitLabels) )
 		{
 			MapPoint pos = actor->GetPos();
 
+			char text[80]; 
+			text[0] = '\0';
+			
 			sint32	tx = (sint32)(actor->GetX()+(k_TILE_PIXEL_WIDTH*m_scale)/2),
 					ty = (sint32)(actor->GetY()+(k_TILE_PIXEL_HEIGHT*m_scale));
 
 			Cell *c = g_theWorld->GetCell(pos); 
 			Unit city = c->GetCity(); 
 
+			
 			if ((city != Unit()) && g_show_ai_dbg)
 			{               
-				DrawSomeText(true, city.GetName(), tx, ty+10, 
-							 g_colorSet->GetColorRef(COLOR_YELLOW),
-							 g_colorSet->GetColorRef(COLOR_PURPLE)
-                            );
+
+
+
+
+
+
+
+				
+				
+				strcpy(text, city.GetName());
+
+				DrawSomeText(TRUE, text, tx, ty+10, 
+								g_colorSet->GetColorRef(COLOR_YELLOW),
+								g_colorSet->GetColorRef(COLOR_PURPLE));
 			} 
 				
 			CellUnitList *al = c->UnitArmy(); 
-			if (al) 
-            { 
-				DrawSomeText(true, al->Access(0).GetName(), tx, ty,
-					         g_colorSet->GetColorRef(COLOR_BLACK),
-					         g_colorSet->GetColorRef(COLOR_WHITE)
-                            );
+			if (al) { 
+
+
+
+
+
+
+
+				
+				
+				strcpy(text, al->Access(0).GetName()); 
+
+				DrawSomeText(TRUE, text, tx, ty,
+					g_colorSet->GetColorRef(COLOR_BLACK),
+					g_colorSet->GetColorRef(COLOR_WHITE));
 			}
 
 		}

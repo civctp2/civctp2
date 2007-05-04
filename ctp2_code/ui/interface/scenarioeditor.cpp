@@ -155,6 +155,7 @@
 #include "cursormanager.h"
 #include "network.h"
 #include "AttractWindow.h"
+#include "gfx_options.h"
 
 extern C3UI *               g_c3ui;
 extern sint32               g_fog_toggle;
@@ -350,7 +351,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.SpecialButton", 
 									UnitTabButton, (void *)SCEN_UNIT_CAT_SPECIAL);
 	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod
-	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI", DebugAI, NULL); //emod
+	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI", DebugAI, NULL); //emod
 	//s_ShowEnemyHealth		= spNew_aui_Switch(err, s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod5
 	//ctp2_Switch *s_ShowEnemyHealth = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth");
     //s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
@@ -3499,18 +3500,15 @@ void ScenarioEditor::ShowEnemyHealth(aui_Control *control, uint32 action, uint32
 	if(func)
 		(g_theProfileDB->*func)(state ? FALSE : TRUE); 
 }
+*/
 
 void ScenarioEditor::DebugAI(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
-	if(action != AUI_SWITCH_ACTION_PRESS) return;
+    {
+		
+        if(g_graphicsOptions->IsArmyTextOn()){
+			g_graphicsOptions->ArmyTextOff();
+        }
+		else
+            g_graphicsOptions->ArmyTextOn();
+	}
 
-	void (ProfileDB::*func)(BOOL) = 0;
-	uint32 state = data;
-
-	func = &ProfileDB::SetDebugAI;  //emod
-
-	if(func)
-		(g_theProfileDB->*func)(state ? FALSE : TRUE); 
-}
-
-*/

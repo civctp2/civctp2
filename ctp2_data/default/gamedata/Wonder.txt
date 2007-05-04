@@ -1,3 +1,8 @@
+###########################################################
+#
+# - Rev726 changed BuildEverywhere to ActualBuildingEverywhere
+###########################################################
+
 WONDER_ARISTOTLES_LYCEUM {
    DefaultIcon ICON_WONDER_ARISTOTLES_LYCEUM
    Description DESCRIPTION_WONDER_ARISTOTLES_LYCEUM
@@ -181,7 +186,9 @@ WONDER_HAGIA_SOPHIA {
    Movie MOVIE_WONDER_HAGIA_SOPHIA
    EnableAdvance ADVANCE_THEOLOGY
    ProductionCost 3240
-   BuildingEverywhere IMPROVE_SHRINE
+   #BuildingEverywhere IMPROVE_SHRINE #Removed because only effect appears
+   #BuildingEffectEverywhere IMPROVE_SHRINE #New flag that does same as old flag above
+   ActualBuildingEverywhere IMPROVE_SHRINE #added to actual build the buildings
 }
 
 ############################################################
@@ -203,7 +210,8 @@ WONDER_INTERNET {
    Movie MOVIE_WONDER_INTERNET
    EnableAdvance ADVANCE_COMPUTER
    ProductionCost 8600
-   BuildingEverywhere IMPROVE_COMPUTER_CENTER
+   #BuildingEverywhere IMPROVE_COMPUTER_CENTER
+   ActualBuildingEverywhere IMPROVE_COMPUTER_CENTER
 }
 
 ############################################################
@@ -236,7 +244,8 @@ WONDER_NATIONAL_SHIELD {
    Movie MOVIE_WONDER_NATIONAL_SHIELD
    EnableAdvance ADVANCE_UNIFIED_PHYSICS
    ProductionCost 20000
-   BuildingEverywhere IMPROVE_FORCEFIELD
+   #BuildingEverywhere IMPROVE_FORCEFIELD
+   ActualBuildingEverywhere IMPROVE_FORCEFIELD
 }
 
 ############################################################

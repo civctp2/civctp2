@@ -22,6 +22,8 @@
 //
 // Modifications from the original Activision code:
 //
+// - 2 modification required to add a const.txt item (and in cpp)
+//
 // - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
 //   modifiable in const.txt.
 //
@@ -362,6 +364,9 @@ private:
 	sint32 m_max_match_list_cycles;
 	// Modified by kaan to address bug # 12
 	sint32 m_min_turns_between_revolt;
+	//emod1
+	sint32 m_max_city_wonders;
+	sint32 m_max_city_buildings;
 	
 	
 	
@@ -757,6 +762,9 @@ public:
 	double GetCaravanCoef() {return m_caravan_coef;}
 
 	sint32 GetPollutionCausedByNuke() { return m_pollution_caused_by_nuke;}
+	//emod2
+	sint32 GetMaxCityWonders() const { return m_max_city_wonders; }
+	sint32 GetMaxCityBuildings() const { return m_max_city_buildings; }
 
 	void Serialize(CivArchive &archive) ; 
 }; 
