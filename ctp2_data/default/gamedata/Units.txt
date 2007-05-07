@@ -1,4 +1,12 @@
+######################################################################
+#
 # added GoldHunger flag but its only activated by the userprofile.txt or in-game rules screen 
+# changed cargohelicopter to carry small
+# change tank to medium
+# outcomment but note that catamaran should carry more and move farther
+######################################################################
+
+
 ## UNIT 0
 UNIT_ABOLITIONIST {
    Description DESCRIPTION_UNIT_ABOLITIONIST
@@ -530,7 +538,7 @@ UNIT_CARGO_HELICOPTER {
    CanAttack: Air
    CanAttack: Land
    CanAttack: Mountain
-   CanCarry: MedLand
+   CanCarry: SmallLand
    CanSee: Standard
    MovementType: Air
    Size: Large
@@ -618,7 +626,7 @@ UNIT_CATAMARAN {
    ShieldHunger 2
    GoldHunger 5
    FoodHunger 0
-   MaxMovePoints 200
+   MaxMovePoints 200 #300 would be better
    VisionRange 1
    EnableAdvance ADVANCE_SHIP_BUILDING
    ObsoleteAdvance ADVANCE_HULL_MAKING
@@ -657,7 +665,7 @@ UNIT_CATAMARAN {
    }
 
    CargoData {
-      MaxCargo 1
+      MaxCargo 1  #2 for usual civ?
       Load SOUND_ID_TRIREME_LOAD
       Unload SOUND_ID_TRIREME_UNLOAD
    }
@@ -3946,7 +3954,7 @@ UNIT_TANK {
    CanAttack: Land
    CanSee: Standard
    MovementType: Land
-   Size: Small
+   Size: Medium #Small
    VisionClass: Standard
 
    CanReform {
