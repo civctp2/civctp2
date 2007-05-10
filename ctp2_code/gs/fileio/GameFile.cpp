@@ -1657,7 +1657,8 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		
 		n = c3files_fread(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
 		if(n != k_MAX_PLAYERS) {
-			return FALSE;
+                    c3files_fclose(saveFile);
+                    return FALSE;
 		}
 	}
 
@@ -2091,7 +2092,7 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 	sint32		n;
 
 	sprintf(filepath, "%s%s%s", path, FILE_SEP, info->fileName);
-
+        //printf("%s %dL: filepath %s", __FILE__, __LINE__, filepath);
 	saveFile = c3files_fopen(C3DIR_DIRECT, (MBCHAR *)filepath, "rb");
 	if (saveFile == NULL) 
 		return FALSE;
@@ -2126,8 +2127,8 @@ BOOL GameFile::ValidateGameFile(MBCHAR *path, SaveInfo *info)
 
 
 	BOOL success = LoadBasicGameInfo(saveFile, info);
-
-	c3files_fclose(saveFile);
+        if (success)
+            c3files_fclose(saveFile);
 
 	return success;
 
