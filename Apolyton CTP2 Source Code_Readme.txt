@@ -28,7 +28,7 @@ CTP2_EULA.doc                            <- End User Licensing Agreement
 Information:
 ============
 
-This is the Apolyton version of Call to Power II source code based on the released source code of Call to Power II, without the patch. It has been stripped of comments, but is otherwise complete as far as Activision code goes. It was originally built using Microsoft Visual Studio 6.0. In the mean time the Apolyton code was modified so that works with the .NET compiler as well.  
+This is the Apolyton version of Call to Power II source code based on the released source code of Call to Power II, without the patch. It has been stripped of comments, but is otherwise complete as far as Activision code goes. It was originally built using Microsoft Visual Studio 6.0. In the mean time the Apolyton code was modified so that it works with the .NET compiler as well.  
 
 Beware that not everything you need to build the game is here!
 
@@ -44,10 +44,11 @@ C:\DXSDK\Samples\C++\DirectShow\BaseClasses
 to your include directories path, and
 
 C:\DXSDK\Lib
+C:\DXSDK\Samples\C++\DirectShow\BaseClasses\Debug_Unicode
 
 to your lib directories path. 
 
-Note that the project files have been updated to link the code with DirectX 9.0. It has not been tested whether this may break linkage to older version of DirectX.
+Note that the project files have been updated to link the code with DirectX 9.0. It has not been tested whether this may break linkage to older versions of DirectX.
 
 In order to build, you need an environment variable named CDKDIR on your computer. In Windows XP/2000, go to Control
 Panel->System->Environment Variables, and add it, with it's value set to <your source path>/ctp2/bin, the directory with bison, flex, and other miscellaneous utilities in it.

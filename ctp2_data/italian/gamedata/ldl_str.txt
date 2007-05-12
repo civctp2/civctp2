@@ -140,14 +140,6 @@ POLLUTION_TOXIC	"Tossico"
 str_ldl_Total_City_Pollution	"Inquinamento tot. città"
 str_ldl_Pollution_Level	"Livello inquinamento"
 
-CANT_ATTACK_HAVE_TREATY	"Quest'azione romperà il nostro trattato con {player[0].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[0].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."
-#New Messages
-ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
-CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
-CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!" 
-
 str_ldl_RES_CHANGE_BUTTON	"Risoluzione video"
 str_ldl_RES_TITLE	"Risoluzione video"
 str_ldl_RES_REBOOT_WARNING	"Questo cambiamento verrà applicato quando riavvierai Call to Power II."

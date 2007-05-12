@@ -2959,7 +2959,7 @@ SFN_ERROR Slic_IsHumanPlayer::Call(SlicArgList *args)
 
 		}
 	} else {
-		if(!g_player[player] || g_player[player]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+		if(!g_player[player] || g_player[player]->IsRobot()) {
 			m_result.m_int = 0;
 		} else {
 			m_result.m_int = 1;

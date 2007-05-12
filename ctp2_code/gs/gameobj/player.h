@@ -743,7 +743,7 @@ public:
 		Assert(p < k_MAX_PLAYERS);
 		Assert(g_player);
 		Assert(g_player[p]);
-		return (g_player[p]->GetPlayerType() == PLAYER_TYPE_ROBOT);
+		return (g_player[p]->IsRobot());
 	}
 
 	void BeginTurnWonders();

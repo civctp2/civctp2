@@ -784,7 +784,8 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 				return false;
 			}
 		}
-// EMOD for river only like dams and mills 4.30.2007
+
+		// EMOD for river only like dams and mills 4.30.2007
 		if(eff->GetRiverOnly()) {
 			bool canbuild = false;
 			if(g_theWorld->IsRiver(pos)){
@@ -797,7 +798,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 					return false;
 		}
 
-// EMOD for contiguous city tiles 4.30.2007
+		// EMOD for contiguous city tiles 4.30.2007
 		if(eff->GetNextToUrban()) {
 			CityInfluenceIterator it(pos, 1);
 			bool canbuild = false;
@@ -811,7 +812,8 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 				if(!canbuild)
 					return false;
 		}
-// EMOD for contiguous city tiles 4.30.2007
+
+		// EMOD for contiguous city tiles 4.30.2007
 		if(eff->GetNextToCity()) {
 			CityInfluenceIterator it(pos, 1);
 			bool canbuild = false;
@@ -826,7 +828,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 					return false;
 		}
 
-// EMOD for contiguous irrigation //finally works 4.12.2007
+		// EMOD for contiguous irrigation //finally works 4.12.2007
 		if(eff->GetNeedsIrrigation()) {
 			CityInfluenceIterator it(pos, 1);
 			bool canbuild = false;
@@ -837,68 +839,35 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 				}
 
 			}
-				if(!canbuild)
-					return false;
+			if(!canbuild)
+				return false;
 		}
-// emod - the tileimp can only be built in the radius of the city with the wonder
-//  need to add a start building check to prevent multiple instances
-		if(eff->GetNumIsWonder() > 0) {
-			sint32 g;
-			for(sint32 won = 0; won < eff->GetNumIsWonder(); won++) {
-				if(eff->GetIsWonderIndex(won)) { 
+
+		// Emod - the tileimp can only be built in the radius of the city with the wonder
+		// need to add a start building check to prevent multiple instances
+		if(eff->GetNumIsWonder() > 0)
+		{
+			for(sint32 won = 0; won < eff->GetNumIsWonder(); won++)
+			{
+				if(eff->GetIsWonderIndex(won))
+				{
 					Unit cellcity = cell->GetCityOwner();
 					CityData *wondercity = cellcity.GetData()->GetCityData();
 					if (cellcity.GetOwner() != pl)
 						return false;
-			//if the player has the wonder - might be extra?
-			//for (sint32 w =0; w < g_player[pl]->GetBuiltWonders(); w++) {
-			//	if (w != won) 
-			//		return false;
-			//}
-			//only build in a cell owned by a city with the wonder
-			//  from trncount.cpp
-			//for (i=0; i< g_player[pl]->GetAllCitiesList()->Num(); i++) { 
-			//double tmp;
-			//Unit *unit = &(player->GetAllCitiesList()->Access(i));
-			//if (!(unit->IsCity()))
-			//
-					for (sint32 w =0; w < wondercity->GetBuiltWonders(); w++) {
-						if (w != won) 
+
+					for (sint32 w =0; w < wondercity->GetBuiltWonders(); w++)
+					{
+						if (w != won)
 							return false;
 					}
-			//check to see if a wonder tileimp is already building
-			//for(i = 0; i < g_player[pl]->GetAllTileimpsList()->Num(); i++) { //can be an installation
-			//	sint32 w2;
-			//	const TerrainImprovementRecord *wrec = g_player[pl]->GetAllTileimpsList()->Access(i).GetDBRec();
-			//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(g_player[pl]->GetAllTileimpsList()->Access(i).GetDBRec(), pos);
-			//	if( (g_player[pl]->GetAllTileimpsList()->Access(i).IsBuilding()) && (effect->GetIsWonderIndex(w2) == won)) {
-			//		return false;
-			//	}
-			//} //end isbuilding loop
-			//for(sint32 b = 0; b < g_player[pl]->GetAllInstallationsList()->Num(); b++) { //can be an installation
-			//	sint32 w2;
-			//	Installation inst = g_player[pl]->GetAllInstallationsList()->Access(b);
-			//	const TerrainImprovementRecord *rec = inst.GetDBRec();
-			//	const TerrainImprovementRecord *wrec = g_player[pl]->GetAllInstallationsList()->Access(i).GetDBRec();
-			//	const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(wrec, pos);
-			//	if( (g_player[pl]->GetAllInstallationsList()->Access(i).IsBuilding()) && (effect->GetIsWonderIndex(w2) == won) {
-			//		return false;
-
 				}
 			} //end isbuilding loop
 
 		//end wonder check
 		}
 
-
-
-
-		
-
-
-
-
-//for PrerequisiteTileImp
+		// for PrerequisiteTileImp
 		if(rec->GetNumPrerequisiteTileImp() > 0) {
 			bool hasCorrectImp = false;
 			for(i = 0; i < rec->GetNumPrerequisiteTileImp(); i++) {

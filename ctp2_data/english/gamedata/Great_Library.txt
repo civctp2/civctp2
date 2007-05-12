@@ -3544,7 +3544,7 @@ Uranium is a dense, radioactive, silvery metal that is found on <L:DATABASE_TERR
 [END]
 
 [TERRAIN_HILL_GOOD_THREE_HISTORICAL]
-In 1789, the German chemist Martin Klaproth discovered the chemical element Uranium. For about 150 years following its discovery, uranium was found to have some of the most wide-reaching effects of any element. Uranium is present in only two to four parts per million in the earth's crust. Few deposits contain uranium in amounts greater the 0.2 percent. Hundreds of minerals, however, contain uranium. For example, uraninite and carnotite are abundant minerals that contain relatively high concentrations of uranium. Pitchblende, known for its use in the early research of radioactive elements, is a variety of uraninite. The U.S. and Canada contain large deposits of uranium. Australiahas rich deposits of uranium in its Northern Territory. South Africa and Canada have been the chief suppliers of uranium.
+In 1789, the German chemist Martin Klaproth discovered the chemical element Uranium. For about 150 years following its discovery, uranium was found to have some of the most wide-reaching effects of any element. Uranium is present in only two to four parts per million in the earth's crust. Few deposits contain uranium in amounts greater the 0.2 percent. Hundreds of minerals, however, contain uranium. For example, uraninite and carnotite are abundant minerals that contain relatively high concentrations of uranium. Pitchblende, known for its use in the early research of radioactive elements, is a variety of uraninite. The U.S. and Canada contain large deposits of uranium. Australia has rich deposits of uranium in its Northern Territory. South Africa and Canada have been the chief suppliers of uranium.
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_THREE_PREREQ]
@@ -3976,7 +3976,7 @@ Location:
 [END]
 
 [TERRAIN_WHITE_HILL_GOOD_TWO_GAMEPLAY]
-Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
+Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
 [END]
 
 [TERRAIN_WHITE_HILL_GOOD_TWO_HISTORICAL]
@@ -4839,7 +4839,7 @@ Soon after genetic tailoring enabled people to customize the lives of their offs
 [IMPROVE_BROKERAGE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ECONOMICS>Economics<e>
-<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>bazaar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazaar<e>
 <L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
 
 Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
@@ -5029,7 +5029,7 @@ In 1841, the Pharmaceutical Society of Great Britain was founded, with intent to
 [IMPROVE_E_BANK_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_DIGITAL_ENCRYPTION>Digital Encryption<e>
-<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>bazaar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazaar<e>
 <L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
 <L:DATABASE_BUILDINGS,IMPROVE_BROKERAGE>Brokerage<e>
 
@@ -6307,7 +6307,7 @@ Commerce: 15
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>
-<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>sapphires<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e>
 <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>
 [END]
 
@@ -6321,7 +6321,7 @@ Submarine Volcanoes are the greatest source of <L:DATABASE_CONCEPTS,CONCEPT_PROD
 
 One can build <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>Undersea Tunnels<e>, but not <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>Nets<e> or <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>Fisheries<e>.
 
-<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>sapphires<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>,  though rare, are Goods found on Submarine Volcanoes.
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>,  though rare, are Goods found on Submarine Volcanoes.
 [END]
 
 [TERRAIN_WATER_VOLCANO_HISTORICAL]

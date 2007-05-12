@@ -220,13 +220,14 @@ bool CTPAgent::IsArmyPosFilled() const
 
 bool CTPAgent::CanMove() const
 {
-    return m_army.IsValid() && m_army->GetFirstMoveThisTurn();
+	// Maybe m_army->GetFirstMoveThisTurn() should be replaced by m_army->CanMove()
+	return m_army.IsValid() && m_army->GetFirstMoveThisTurn();
 }
 
 
 MapPoint CTPAgent::Get_Pos() const
 {
-    return m_army.IsValid() ? m_army->RetPos() : MapPoint();
+	return m_army.IsValid() ? m_army->RetPos() : MapPoint();
 }
 
 
@@ -242,7 +243,7 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 	sint32 ranged_count;
 	
 
-    Assert(m_army.IsValid());
+	Assert(m_army.IsValid());
 
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);

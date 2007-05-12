@@ -402,7 +402,7 @@ Agent_ptr CTPGoal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 {
 	Assert(agent_iter != m_agents.end());
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) (*agent_iter);
-    Assert(ctpagent_ptr);
+	Assert(ctpagent_ptr);
 
 #ifdef _DEBUG_SCHEDULER
 	if (ctpagent_ptr->Get_Army().IsValid())
@@ -412,15 +412,12 @@ Agent_ptr CTPGoal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	}
 #endif // _DEBUG_SCHEDULER
 
-	
-	
-	
-	if (ctpagent_ptr->Get_Is_Dead() == false &&
-		g_player[m_playerId] && 
-		g_player[m_playerId]->m_playerType == PLAYER_TYPE_ROBOT)
-    {
+	if(!ctpagent_ptr->Get_Is_Dead()
+	&&  g_player[m_playerId]
+	&&  g_player[m_playerId]->IsRobot()
+	){
 		ctpagent_ptr->Get_Army()->ClearOrders();
-    }
+	}
 
 	return Goal::Rollback_Agent(agent_iter);
 }

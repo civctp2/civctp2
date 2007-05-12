@@ -142,14 +142,6 @@ POLLUTION_TOXIC	"Giftig"
 str_ldl_Total_City_Pollution	"Verschm. Gesamt"
 str_ldl_Pollution_Level	"Verschm.-Niveau:"
 
-CANT_ATTACK_HAVE_TREATY	"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollen Sie wirklich fortfahren?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir ihre Truppen so schnell wie möglich vertreiben."
-# New Messages # Belong to somewhere else
-ATTACK_WARNING "Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[0].civ_name_plural#DAT} den Krieg erklären?"
-CIV2DOVES "Die Tauben haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
-CIV2HAWKs "Die Falken verlanegen nach Krieg gegen diese Achse des Bösen!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!"
-
 
 str_ldl_RES_CHANGE_BUTTON	"Auflösung"
 str_ldl_RES_TITLE	"Auflösung"

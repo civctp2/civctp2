@@ -412,13 +412,12 @@ void SlicObject::Finish()
 					if(!g_player[m_recipientList[i]])
 						continue;
 
-					if(g_player[m_recipientList[i]]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-					   *m_request == ID()
+					if(g_player[m_recipientList[i]]->IsRobot()
+					&& *m_request == ID()
 #ifdef _DEBUG
-					   && !g_robotMessages
+					&& !g_robotMessages
 #endif
-						) 
-                    {
+					){
 						continue;
 					}
 

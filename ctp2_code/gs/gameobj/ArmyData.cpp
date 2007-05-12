@@ -109,7 +109,6 @@
 // - Added message for hostile terrain and guerrilla spawn
 // - Readded message for ship sinking (removed later)
 // - Added new limits for BarbarianSpawnBarbarian
-// - outcomment SetType and put Kill-Create code in Upgrade (for now) - E 5-1-07
 //
 //----------------------------------------------------------------------------
 
@@ -1917,8 +1916,10 @@ ORDER_RESULT ArmyData::StealTechnology(const MapPoint &point)
                                                                        num);
             if(num > 0) {
 
-                if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-                   (!g_network.IsClient() || !g_network.IsLocalPlayer(m_owner))) {
+                if(g_player[m_owner]->IsRobot()
+                &&(!g_network.IsClient()
+                || !g_network.IsLocalPlayer(m_owner))
+                ){
                     return m_array[i].StealTechnology(c, -1);
                 }
 
@@ -1959,9 +1960,9 @@ ORDER_RESULT ArmyData::StealTechnology(const MapPoint &point)
 //
 // Globals    : g_gevManager            :
 //
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Returns    : ORDER_RESULT            : attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::InciteRevolution(const MapPoint &point)
@@ -2018,9 +2019,9 @@ ORDER_RESULT ArmyData::InciteRevolution(const MapPoint &point)
 // Globals    : g_gevManager
 //            : g_slicEngine
 //
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Returns    : ORDER_RESULT            : attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::AssassinateRuler(const MapPoint &point)
@@ -2043,12 +2044,12 @@ ORDER_RESULT ArmyData::AssassinateRuler(const MapPoint &point)
 								   GEA_Unit, m_array[i].m_id,
 								   GEA_City, c.m_id,
 								   GEA_End);
-	        Unit u = m_array[i];         
-            
+			Unit u = m_array[i];         
+
 			g_slicEngine->Execute
-                (new CityReport("911ConductHitCompleteVictim", c));
+			    (new CityReport("911ConductHitCompleteVictim", c));
 			g_slicEngine->Execute
-                (new AggressorReport("911ConductHitCompleteAttacker", u, c));
+			    (new AggressorReport("911ConductHitCompleteAttacker", u, c));
 
 			return ORDER_RESULT_INCOMPLETE;
 		}
@@ -2083,11 +2084,11 @@ Unit ArmyData::GetAdjacentCity(const MapPoint &point) const
 	Cell *  cell = g_theWorld->GetCell(point);
 
 	if (cell && ((point == m_pos) || point.IsNextTo(m_pos))) 
-    {
-        return cell->GetCity();
-    }
-    else
-    {
+	{
+		return cell->GetCity();
+	}
+	else
+	{
 		return Unit();
 	}
 }
@@ -2176,7 +2177,7 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 	if(!CanFranchise(chance, uindex))
 		return ORDER_RESULT_ILLEGAL;
 
-    Unit u      = m_array[uindex];
+	Unit u      = m_array[uindex];
 	Unit city   = g_theWorld->GetCity(point);
 	
 	if(city.m_id == 0) {
@@ -2190,7 +2191,7 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 	if(city.GetData()->GetCityData()->GetFranchiseOwner() == m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-    //InformAI(UNIT_ORDER_FRANCHISE, point);//does nothing here but could be implemented 
+	//InformAI(UNIT_ORDER_FRANCHISE, point);//does nothing here but could be implemented 
 
 	AddSpecialActionUsed(u);
 
@@ -2207,14 +2208,14 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 		
 		DPRINTF(k_DBG_GAMESTATE, ("Franchise established\n"));
 		ActionSuccessful(SPECATTACK_CREATEFRANCHISE, u, city);
-        g_slicEngine->Execute(new CityReport("193BranchCompleteVictim", city));
+		g_slicEngine->Execute(new CityReport("193BranchCompleteVictim", city));
 		g_player[city.GetOwner()]->ContactMade(m_owner);
 		return ORDER_RESULT_SUCCEEDED;
 	} 
-    else 
-    {
+	else 
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Franchise attempt failed\n"));
-        g_slicEngine->Execute(new CityReport("195BranchFailedVictim", city));
+		g_slicEngine->Execute(new CityReport("195BranchFailedVictim", city));
 		return ORDER_RESULT_FAILED;
 	}
 }
@@ -4886,17 +4887,14 @@ ORDER_RESULT ArmyData::CreatePark(const MapPoint &point)
 	if(c.GetOwner() == m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-	   g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+	if(!g_player[m_owner]->IsRobot()
+	||  g_network.IsClient()
+	&& g_network.IsLocalPlayer(m_owner))
 		if(!VerifyAttack(UNIT_ORDER_CREATE_PARK, point,
 						 c.GetOwner()))
 			return ORDER_RESULT_ILLEGAL;
-	
-	
-    
-    
 
-    //InformAI(UNIT_ORDER_CREATE_PARK, point); //does nothing here but could be implemented
+	//InformAI(UNIT_ORDER_CREATE_PARK, point); //does nothing here but could be implemented
 
 	ActionSuccessful(SPECATTACK_CREATEPARK, m_array[uindex], c);
 	AddSpecialActionUsed(m_array[uindex]);
@@ -4905,7 +4903,6 @@ ORDER_RESULT ArmyData::CreatePark(const MapPoint &point)
 						   GEA_Unit, m_array[uindex].m_id,
 						   GEA_City, c.m_id,
 						   GEA_End);
-    
 
 	return ORDER_RESULT_SUCCEEDED;
 }
@@ -4919,16 +4916,13 @@ bool ArmyData::CanPillage(uint32 & uindex) const
 
 	sint32 num_improvements = cell->GetNumDBImprovements();
 	if (num_improvements <= 0) {
-		
-			return false;
-		
+		return false;
 	}
 
 	sint32 i;
 	for(i = 0; i < m_nElements; i++) {
 		const UnitRecord *rec = m_array[i].GetDBRec();
 		if(rec->GetMovementTypeAir()) {
-			
 			continue;
 		}
 
@@ -5005,9 +4999,9 @@ ORDER_RESULT ArmyData::Pillage(bool test_ownership)
     
 
 
-	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT
-	||(g_network.IsClient() 
-	&& g_network.IsLocalPlayer(m_owner))
+	if(!g_player[m_owner]->IsRobot()
+	|| (g_network.IsClient() 
+	&&  g_network.IsLocalPlayer(m_owner))
 	)
 		if(test_ownership 
 		&& !VerifyAttack(UNIT_ORDER_PILLAGE_UNCONDITIONALLY, m_pos, cellOwner)
@@ -5015,51 +5009,52 @@ ORDER_RESULT ArmyData::Pillage(bool test_ownership)
 			return ORDER_RESULT_ILLEGAL;
 
 
-//InformAI(UNIT_ORDER_PILLAGE, m_pos); //does nothing here but could be implemented
+	//InformAI(UNIT_ORDER_PILLAGE, m_pos); //does nothing here but could be implemented
 
 	AddSpecialActionUsed(m_array[uindex]);
 
 //	bool CanPillageTileImp = true;
 
-		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-			if(trec->GetCantPillage()){
-				return ORDER_RESULT_ILLEGAL;
-				//CanPillageTileImp = false;
-				//break;
-			}
+		if(trec->GetCantPillage()){
+			return ORDER_RESULT_ILLEGAL;
+			//CanPillageTileImp = false;
+			//break;
 		}
-//EMOD to allow units to take a tile if they have a flag instead of pillging, 
+	}
+
+	// EMOD to allow units to take a tile if they have a flag instead of pillging, 
 	// sometimes it good to take a fortress use will probably go to lawyers 
 	// or diplomats this us temporary until i can make it an order that costs gold
 	//			sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();	
 	//			sint32 impgold = cell->AccessImprovement(i).GetMaterialCost();
-		for(sint32 j = 0; j < m_nElements; j++) {
+	for(sint32 j = 0; j < m_nElements; j++) {
 		sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetWonderRushModifier();
 		sint32 goldcost = (cell->GetGoldProduced() * cell->GetNumDBImprovements()) * rushmod;
 		if((m_array[j].GetDBRec()->GetCanCaptureTile()) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){ // && (terrainutil_CanBeCaptured(m_pos))) {
-				if (cellOwner != m_owner) {
-					cell->SetOwner(m_owner);
-					g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
+			if (cellOwner != m_owner) {
+				cell->SetOwner(m_owner);
+				g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
 				g_player[cellOwner]->m_gold->AddGold(goldcost); //may crash because of barbs?
 				g_player[m_owner]->m_gold->SubGold(goldcost);
-					return ORDER_RESULT_SUCCEEDED;
-				}
+				return ORDER_RESULT_SUCCEEDED;
 			}
 		}
+	}
 	
 
 
-//		if(!CanPillageTileImp){
-//			return ORDER_RESULT_ILLEGAL;
-//		}	
+//	if(!CanPillageTileImp){
+//		return ORDER_RESULT_ILLEGAL;
+//	}
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_PillageUnit,
 						   GEA_Unit, m_array[uindex],
 						   GEA_End);
 
-    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CutImprovements,
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CutImprovements,
 						   GEA_MapPoint, pos,
 						   GEA_End);
 
@@ -5432,11 +5427,14 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 
 			// Removed Verify because the player shouldn't accidentally 
 			// bombard since its a button and aim
-			// Don not remove this, there are always people who do not 
+			// Do not remove this, there are always people who do not 
 			// know what there are doing.
-			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-			  (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-				if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, c.GetOwner())) {
+			if(!g_player[m_owner]->IsRobot()
+			|| (g_network.IsClient()
+			&&  g_network.IsLocalPlayer(m_owner))
+			){
+				if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, c.GetOwner())
+				){
 					return false;
 				}
 			}
@@ -5447,17 +5445,21 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 			if(doAnimations) {
 				
 				g_director->AddAttackPos(m_array[i], nonConstPos);				
-		//why is the following subject to doAnimations being true?		
 				bool out_of_fuel;
 
-//EMOD Multiple Attacks/Blitz removed it from only Air to a separate flag - 2-24-2006
+				//EMOD Multiple Attacks/Blitz removed it from only Air to a separate flag - 2-24-2006
 				//if(!m_array[i].GetDBRec()->GetMovementTypeAir()) {  //this allowed for multiple air bombard
 				//4-28-2006 EMOD changed to allow fighters to move after attack but not attack again
-				if(m_array[i].GetDBRec()->GetMultipleAttacks()) {					
+				if(m_array[i].GetDBRec()->GetMultipleAttacks())
+				{
 					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
-				} else if(m_array[i].GetDBRec()->GetMovementTypeAir()) {
+				}
+				else if(m_array[i].GetDBRec()->GetMovementTypeAir())
+				{
 					m_array[i].DeductMoveCost(k_MOVE_COMBAT_COST, out_of_fuel);
-				} else {
+				}
+				else
+				{
 					m_array[i].SetMovementPoints(0.0);
 				}
 
@@ -5468,46 +5470,53 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 			DPRINTF(k_DBG_GAMESTATE, ("Bombarding 0x%lx: r1 = %d\n", c.m_id, r));
 
 			prob = static_cast<sint32>(rec->GetZBRangeAttack() - buildingutil_GetCityWallsDefense(c.GetCityData()->GetImprovements()));
-			if(prob<0) 
+			if(prob < 0)
 			{
-				prob=0;
+				prob = 0;
 			}
 
 			// Add precision strike flag
 
-			if(m_array[i].GetDBRec()->GetPrecisionStrike()) {
-				c.DestroyRandomBuilding();
-			} else {
-			
-			if(r < g_theConstDB->BombardDestroyBuildingChance() * prob) {
+			if(m_array[i].GetDBRec()->GetPrecisionStrike())
+			{
 				c.DestroyRandomBuilding();
 			}
+			else
+			{
+				if(r < g_theConstDB->BombardDestroyBuildingChance() * prob)
+				{
+					c.DestroyRandomBuilding();
+				}
 			}
 			
 
 			// Add Targets Civilian Flag
-
-			if(m_array[i].GetDBRec()->GetTargetsCivilians()) {
-				c.CD()->ChangePopulation(-1);
-			} else {
-
-			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->BombardKillPopChance() * prob)) {
-				DPRINTF(k_DBG_GAMESTATE, ("Removing one pop from 0x%lx\n", c.m_id));
+			if(m_array[i].GetDBRec()->GetTargetsCivilians())
+			{
 				c.CD()->ChangePopulation(-1);
 			}
+			else
+			{
+				if(c.PopCount() > 1
+				&&(g_rand->Next(100) < g_theConstDB->BombardKillPopChance() * prob)
+				){
+					DPRINTF(k_DBG_GAMESTATE, ("Removing one pop from 0x%lx\n", c.m_id));
+					c.CD()->ChangePopulation(-1);
+				}
 			}
 
-//EMOD
-			
-// Add wondercheck for EnablesPunativeAirstrikes	5 JUL 2006
-////////////////////////
+			// EMOD
+			// Add wondercheck for EnablesPunativeAirstrikes	5 JUL 2006
+			////////////////////////
 			bool Punstrike = true;
 			if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
 				Punstrike = false;
 			}
-//END EMOD
+			// END EMOD
 
-			if(!m_array[i].GetDBRec()->GetSneakBombard() && !Punstrike) {  //EMOD added by E for sneak bombarding
+			if(!m_array[i].GetDBRec()->GetSneakBombard()
+			&& !Punstrike
+			){ //EMOD added by E for sneak bombarding
 				Diplomat & defending_diplomat = Diplomat::GetDiplomat(c.GetOwner());
 				defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 			}
@@ -5545,53 +5554,70 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 	g_theWorld->GetArmy(point, defender);
 	sint32 i;
 	
-	if(point == m_pos) {
+	if(point == m_pos)
+	{
 		return ORDER_RESULT_ILLEGAL;
-	} else {
+	}
+	else
+	{
 		//PFT 30 mar 05, bombard from distance
 		sint32 dist = m_pos.NormalizedDistance(point);
 		sint32 min_rge, max_rge;
-		if(GetBombardRange(min_rge,max_rge)){
+		if(GetBombardRange(min_rge,max_rge))
+		{
 
-DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge, dist));
+			DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge, dist));
 
-			if(dist > max_rge) {//the target is out of this army's bombarding range 
+			if(dist > max_rge)
+			{//the target is out of this army's bombarding range 
 				return ORDER_RESULT_ILLEGAL;
 			}
 		}
-        else//army can't bombard
-            return ORDER_RESULT_ILLEGAL;
+		else //army can't bombard
+			return ORDER_RESULT_ILLEGAL;
 	}
 
-	if (defender.Num() < 1) { // No defenders
-		if(BombardCity(point, true)) {//so if there's a city, bombard it
+	if (defender.Num() < 1)
+	{ // No defenders
+		if(BombardCity(point, true))
+		{//so if there's a city, bombard it
 			return ORDER_RESULT_SUCCEEDED;
-		} else {
-// EMOD Bombard tile Imps  by E	20-JAN-2006
-			for (i = 0; i< m_nElements; i++) { 
-				if (m_array[i].GetDBRec()->GetCanBombardTiles()) { 
+		}
+		else
+		{
+			// EMOD Bombard tile Imps  by E	20-JAN-2006
+			for (i = 0; i< m_nElements; i++)
+			{
+				if (m_array[i].GetDBRec()->GetCanBombardTiles())
+				{
 					Cell *cell = g_theWorld->GetCell(point);
 					sint32 cellOwner = cell->GetOwner();
-					for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
-					sint32 imp = cell->GetDBImprovement(ti);
-					const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-						if(trec->GetCantPillage() == 0){
-							for(i = 0; i < m_nElements; i++) {
-								if(!m_array[i].GetDBRec()->GetSneakBombard()){
+					for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++)
+					{
+						sint32 imp = cell->GetDBImprovement(ti);
+						const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+						if(trec->GetCantPillage() == 0)
+						{
+							for(i = 0; i < m_nElements; i++)
+							{
+								if(!m_array[i].GetDBRec()->GetSneakBombard())
+								{
 									Diplomat & defending_diplomat = Diplomat::GetDiplomat(cellOwner);
 									defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
 									g_theWorld->CutImprovements(point);
-											return ORDER_RESULT_SUCCEEDED;
-										}
-									}
+									
+									return ORDER_RESULT_SUCCEEDED;
 								}
 							}
 						}
 					}
-			return ORDER_RESULT_ILLEGAL; // Or allow bombarding tile improvements?  NOW ADDED by E
-			//end EMOD
 				}
 			}
+			
+			return ORDER_RESULT_ILLEGAL; // Or allow bombarding tile improvements?  NOW ADDED by E
+			// end EMOD
+		}
+	}
 
 
 
@@ -5609,8 +5635,9 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 	// accidentally bombard since its a button and aim
 	// Do not remove: There are always people who do not
 	// know what they are doing.
-	if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-	  (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
+	if(!g_player[m_owner]->IsRobot()
+	|| (g_network.IsClient()
+	&&  g_network.IsLocalPlayer(m_owner)))
 		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))
 			return ORDER_RESULT_ILLEGAL;
 
@@ -5619,11 +5646,11 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 
 
 
-    sint32 numAttacks = 0;
+	sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
 	bool out_of_fuel;
-    
-    for (i = m_nElements - 1; i>= 0; i--) { 
+
+	for (i = m_nElements - 1; i>= 0; i--) { 
 		if(!m_array[i].CanPerformSpecialAction())
 			continue;
 		
@@ -5638,23 +5665,21 @@ DPRINTF(k_DBG_GAMESTATE, ("Getting BombardRange max_rge %d, dist %d\n", max_rge,
 			
 
 
-        if (m_array[i].CanBombard(defender)) { 
+		if (m_array[i].CanBombard(defender)) { 
 
-DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].CanBombard(defender)));
+			DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].CanBombard(defender)));
 
 			if(m_array[i].Bombard(defender, FALSE)) {//this unit tries to bombard a random member of defender 
 				numAttacks++;
-				if(numAttacks == 1){
-                    // Inform defender 
+				if(numAttacks == 1)
+				{
+					// Inform defender
+				}
 
-
-
-
- 
-					}
 				// * Added auto-center for bombardment
-                if (defender.GetOwner() == g_selected_item->GetVisiblePlayer())
-                     g_director->AddCenterMap(point);
+				if(defender.GetOwner() == g_selected_item->GetVisiblePlayer())
+					g_director->AddCenterMap(point);
+				
 				g_director->AddAttackPos(m_array[i], point);
 				
 				AddSpecialActionUsed(m_array[i]);
@@ -5679,16 +5704,16 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 //				} 
 			}
 		}
-    }
-//emod
-    
+	}
+	//emod
+
 	PLAYER_INDEX  defense_owner; 
-    defense_owner = defender.GetOwner(); 
+	defense_owner = defender.GetOwner(); 
 	
 
 	bool AlltaSneakBombard = true;
 
-    for (i = m_nElements - 1; i>= 0; i--) { 
+	for (i = m_nElements - 1; i>= 0; i--) { 
 			if(!m_array[i].GetDBRec()->GetSneakBombard()){
 				AlltaSneakBombard = false;
 				break;
@@ -5723,9 +5748,9 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 	if(!AlltaSneakBombard && !AllDefSneakAttack && !Punstrike){
 		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 		defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
-	} 
+	}
 
-//end EMOD
+	//end EMOD
 
 
 
@@ -5734,12 +5759,12 @@ DPRINTF(k_DBG_GAMESTATE, ("unit i=%d, CanBombard(defender)=%d\n", i, m_array[i].
 
 	if(numAlive < 1)
 		return ORDER_RESULT_SUCCEEDED;//a Pyrrhic victory, these were our guys
-    //do counterbombarding and kill off attacking units
-    for (i = 0; i<defender.Num(); i++) { 
-        if (defender[i].CanCounterBombard(*this)) { 
+	//do counterbombarding and kill off attacking units
+	for (i = 0; i<defender.Num(); i++) { 
+		if (defender[i].CanCounterBombard(*this)) { 
 			defender[i].Bombard(*this, TRUE); 
-        } 
-    }
+		}
+	}
 ////////////////ORIGINAL CODE  
 ///////////////Used in Unitdata::bombard is it necessary here? m_array and defender both us .bombard so why is it killing?   
     for (i = m_nElements - 1; 0 <= i; i--) { 
@@ -5836,26 +5861,27 @@ ORDER_RESULT ArmyData::InterceptTrade()
 	sint32 effectId = g_theSpecialEffectDB->Get(typeIndex)->GetValue();
 	sint32 soundId = g_theSoundDB->FindTypeIndex("SOUND_ID_SLAVE_RAIDS");
 
-    for (sint32 i = m_nElements - 1; i>= 0; i--) 
-    { 
-        if (m_array[i].CanInterceptTrade() &&
+	for (sint32 i = m_nElements - 1; i>= 0; i--) 
+	{
+		if (m_array[i].CanInterceptTrade() &&
 			m_array[i].CanPerformSpecialAction())
 		{
-			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-			   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) 
-            {
+			if(!g_player[m_owner]->IsRobot()
+			||(g_network.IsClient()
+			&& g_network.IsLocalPlayer(m_owner))
+			){
 				Cell *cell = g_theWorld->GetCell(m_pos);
 				for (sint32 j = 0; j < cell->GetNumTradeRoutes(); j++) 
-                {
+				{
 					sint32 route_owner = cell->GetTradeRoute(j).GetOwner();
 					if (AgreementMatrix::s_agreements.HasAgreement(
 						route_owner, 
 						m_owner, 
 						PROPOSAL_OFFER_STOP_PIRACY))
 					{
-                        /// @todo Check what is missing here. turnBuf is never
-                        ///       initialised, so the effect of so->AddAction
-                        ///       is unpredictable.
+						/// @todo Check what is missing here. turnBuf is never
+						///       initialised, so the effect of so->AddAction
+						///       is unpredictable.
 						char turnBuf[32];
 						
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
@@ -5886,8 +5912,8 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				if (g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)) 
 				{
 					g_director->AddCenterMap(m_pos);
-                    g_director->AddSpecialEffect(m_pos, effectId, soundId);
-				}	
+					g_director->AddSpecialEffect(m_pos, effectId, soundId);
+				}
 				AddSpecialActionUsed(m_array[i]);
 				m_isPirating = true;
 			}
@@ -6716,13 +6742,18 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 
 				g_player[m_owner]->ContactMade(defender->GetOwner());
 
-				if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-					if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+				if(g_player[m_owner]->IsRobot())
+				{
+					if(g_network.IsClient()
+					&& g_network.IsLocalPlayer(m_owner)
+					){
 						
 						return false;
 					}
 
-				} else {
+				}
+				else
+				{
 					g_selected_item->ForceDirectorSelect(Army(m_id));
 					return false;
 				}
@@ -6766,10 +6797,8 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 				g_network.SyncRand();
 				g_network.Unblock(m_owner);
 			}
-			if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-				
-				
-				
+			if(g_player[m_owner]->IsRobot())
+			{
 				sint32 defOwner = defender->GetOwner();
 				if(g_player[m_owner]->WillViolateCeaseFire(defOwner) ||
 				   g_player[m_owner]->WillViolatePact(defOwner)) {
@@ -6897,8 +6926,9 @@ bool ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
 	
 				if(m_array[i].GetDBRec()->HasNuclearAttack()) {
 
-					if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-					   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
+					if(!g_player[m_owner]->IsRobot()
+					||(g_network.IsClient()
+					&& g_network.IsLocalPlayer(m_owner)))
 						if(!VerifyAttack(UNIT_ORDER_MOVE_TO, pos,
 										 city.GetOwner()))
 							return true;
@@ -6991,8 +7021,9 @@ bool ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
 						return true;
 					}
 
-					if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-					   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)))
+					if(!g_player[m_owner]->IsRobot()
+					||(g_network.IsClient()
+					&& g_network.IsLocalPlayer(m_owner)))
 						if(!VerifyAttack(UNIT_ORDER_MOVE_TO, pos,
 										 defender->GetOwner()))
 							return true;
@@ -7244,7 +7275,7 @@ bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 	{
 		so = new SlicObject("Civ2Doves");
 	}
-	else if (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+	else if (!g_player[m_owner]->IsRobot())
 	{
 		so = new SlicObject("999AttackWarning");
 	}
@@ -7478,20 +7509,8 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 
 		}
 	
-		//  add PWMoveCost
-//		sint32 PWFuel;
-//		sint32 PWFuelNeg;
-//		for (sint32 i = m_nElements - 1; i>= 0; i--) { 
-//			if (m_array[0].GetDBRec->GetPWMoveCost(PWFuel)) {
-//				if ((g_player[m_owner]->m_materialPool->GetMaterials() >= PWFuel) && (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)) 
-//					PWFuelNeg = PWFuel * -1;
-//					g_player[m_owner]->m_materialPool->AddMaterials(PWFuelNeg);
-//				}
-//			}
-//		}
-//		end EMOD
-		if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-	
+		if(g_player[m_owner]->IsRobot())
+		{
 			CtpAi::HandleMoveFailure(Army(m_id), pos); 
 		}
 
@@ -8830,43 +8849,24 @@ void ArmyData::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to
     }
 }
 
-
-
-
-bool ArmyData::CanMove()     //Not used?
+bool ArmyData::CanMove()
 {
 	sint32 i;
-//	BOOL PWMove = TRUE;
-	BOOL noneMoved = TRUE;
-	BOOL allOverSpecialCost = TRUE;
+	bool noneMoved = true;
+	bool allOverSpecialCost = true;
 	for(i = 0; i < m_nElements; i++) {
-	//	if(m_array[i].GetMovementPoints() < 1) {  //how come this doesnt affect roads? does it affect MoveBonus - E
-	//		return FALSE;
-	//	}
 		if(!m_array[i].GetFirstMoveThisTurn())
-			noneMoved = FALSE;
+			noneMoved = false;
 		if(!m_array[i].CanPerformSpecialAction())
-			allOverSpecialCost = FALSE;
-	//  add PWMoveCost
-//		sint32 PWFuel;
-//		if (m_array[i].GetDBRec->GetPWMoveCost(PWFuel)) {
-//			if ((g_player[m_owner]->m_materialPool->GetMaterials() >= PWFuel) && (g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT)) 
-//				PWMove = FALSE;
-//		}
+			allOverSpecialCost = false;
 	}
-//	if(PWMove) {
-//		return true;
-//	}
 
-	if(noneMoved) {
-		
+	if(noneMoved)
+	{
 		return true;
 	}
-	if(allOverSpecialCost) {
-		
-		
-		
-		
+	if(allOverSpecialCost)
+	{
 		return true;
 	}
 	
@@ -9558,8 +9558,10 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 			if(g_theAgreementPool->IsValid(ag) && ag.GetRecipient() == m_owner) {
 				
 				
-				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
-				   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
+				if(!g_player[m_owner]->IsRobot()
+				|| (g_network.IsClient()
+				&&  g_network.IsLocalPlayer(m_owner))
+				){
 					char turnBuf[32];
 					sprintf(turnBuf, "%d", ag.GetTurns() + 1);
 					SlicObject *so = new SlicObject("13IAEnteringLands");
@@ -9573,8 +9575,9 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 					g_selected_item->ForceDirectorSelect(Army(m_id));
 					g_slicEngine->Execute(so);
 					return true;
-				} else {
-					
+				}
+				else
+				{
 					ag.AccessData()->RecipientIsViolating(cell->GetOwner(), true);
 				}
 			}
@@ -10872,10 +10875,7 @@ void ArmyData::Upgrade()
 			sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
 			if(upgradeType > -1)
 			{
-				//emod (5-1-07) added these two lines of code to fix upgrading because SetType only changes the sprite
-				m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-				g_player[m_owner]->CreateUnit(upgradeType, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-				//m_array[i].SetType(upgradeType);
+				m_array[i].SetType(upgradeType);
 			}
 		}
 	}
@@ -10890,10 +10890,7 @@ void ArmyData::Upgrade()
 
 					if(g_player[m_owner]->m_gold->GetLevel() > upgradeCost)
 					{
-						//emod (5-1-07) added these two lines of code to fix upgrading because SetType only changes the sprite
-						m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-						g_player[m_owner]->CreateUnit(upgradeType, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-						//m_array[i].SetType(upgradeType);
+						m_array[i].SetType(upgradeType);
 						g_player[m_owner]->m_gold->SubGold(upgradeCost);
 					}
 				}

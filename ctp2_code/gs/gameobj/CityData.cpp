@@ -170,14 +170,14 @@
 // - Added Insurgent Spawn slic message
 // - added BreadBasket modifier so you can have food producing areas i.e.
 //   America's midwest or Rome's Egypt
-// - outcommented extra insurgent code in riot
-// - outcomment founder code in insurgents b/c it may cause same crash as
+// - Outcommented extra insurgent code in riot
+// - Outcomment founder code in insurgents b/c it may cause same crash as
 //   sectarianhappiness
-// - implemented RevoltInsurgents Rules/Profile option
-// - added profile check for AImilitia, gold deficit, gold per city, 
+// - Implemented RevoltInsurgents Rules/Profile option
+// - Added profile check for AImilitia, gold deficit, gold per city, 
 //   gold per unit, aicitydefense
-// - added GetNumCityWonders and GetNumCityBuildings methods
-// - added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
+// - Added GetNumCityWonders and GetNumCityBuildings methods
+// - Added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
 //
 //----------------------------------------------------------------------------
 
@@ -4144,12 +4144,11 @@ bool CityData::BeginTurn()
 		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
 	
 		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
-		if(
-			((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit())
-		|| 	(g_theProfileDB->IsAIMilitiaUnit()))
-		&& (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
+		|| 	g_theProfileDB->IsAIMilitiaUnit())
+		&& g_player[m_owner]->IsRobot()
 		){
-				g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
+			g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
 		}
 
 		// If city has a buiding that gives it a militia then if 
@@ -4692,21 +4691,17 @@ void CityData::NewGovernment(sint32 government_type)
 
 
 double CityData::GetDefendersBonus() const
-
 {
-// EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
-			if(
-			  ((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus())
-			|| (g_theProfileDB->IsAICityDefenderBonus()))
-			  && (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
-			  ){
-			return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
+	// EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
+	if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus()
+	||  g_theProfileDB->IsAICityDefenderBonus())
+	&& g_player[m_owner]->IsRobot()
+	){
+		return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
 
-		} else {
-			return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef();
-
-		}
-	//return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef();
+	} else {
+		return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef();
+	}
 }
 
 double CityData::GetDefendersBonusNoWalls() const
@@ -4716,8 +4711,6 @@ double CityData::GetDefendersBonusNoWalls() const
 
 // EMOD - add influence or culture defese bonus here?
 // EMOD - compute reductions in defense by siege units here?
-
-
 
 	return b;
 }
@@ -7840,7 +7833,7 @@ void CityData::FindBestSpecialists()
 
 bool CityData::GetUseGovernor() const
 {
-	return m_useGovernor || (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT);
+	return m_useGovernor || (g_player[m_owner]->IsRobot());
 }
 
 void CityData::SetUseGovernor(const bool &value)
@@ -8577,10 +8570,9 @@ void CityData::ProcessGold(sint32 &gold, bool considerOnlyFromTerrain) const
 
 	//EMOD to assist AI
 	if(gold < 0){
-		if(
-		  ((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit())
-		|| (g_theProfileDB->IsNoAIGoldDeficit()) )
-		&& (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIGoldDeficit()
+		||  g_theProfileDB->IsNoAIGoldDeficit() )
+		&& g_player[m_owner]->IsRobot()
 		){
 			gold = 0;
 		}
