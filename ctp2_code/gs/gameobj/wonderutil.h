@@ -41,6 +41,7 @@ bool wonderutil_GetCloseEmbassies(const uint64 builtWonders);
 bool wonderutil_GetReformCities(const uint64 builtWonders);
 bool wonderutil_GetFreeSlaves(const uint64 builtWonders);
 bool wonderutil_GetGlobalRadar(const uint64 builtWonders);
+bool wonderutil_GetProhibitSlavers(const uint64 builtWonders);
 bool wonderutil_GetSpiesEverywhere(const uint64 builtWonders);
 bool wonderutil_GetFreeSpaceTransport(const uint64 builtWonders);
 bool wonderutil_GetProtectFromBiologicalWarfare(const uint64 builtWonders);

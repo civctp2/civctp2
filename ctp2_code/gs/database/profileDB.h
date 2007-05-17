@@ -403,6 +403,7 @@ private:
 		/// energy demand-supply ratio affects production and gold
 	sint32 m_NRG; 
 	sint32 m_ruin;
+	sint32 m_NoCityLimit; 
  
 
 
@@ -600,6 +601,7 @@ public:
 	void SetEnemyHealth(BOOL on)  { m_showEnemyHealth = on; }  //emod2 - implementing a scenario editor switch
 	void SetCityLeavesRuins(BOOL on) { m_ruin = on; }
 	void SetDebugAI(BOOL on) { m_debugai = on; }
+	void SetNoCityLimit(BOOL on) 	{ m_NoCityLimit = on; }
 /*
     void SetDebugAI(BOOL on)   //emod2
 	{
@@ -855,6 +857,7 @@ public:
 	BOOL	IsOneCityChallenge() 	{ return m_OneCityChallenge; }
 	BOOL	IsNRG() 	{ return m_NRG; }
 	BOOL	GetCityLeavesRuins() 	{ return m_ruin; }
+	BOOL	IsNoCityLimit() 	{ return m_NoCityLimit; }
 
 //later add start age and end age?
 

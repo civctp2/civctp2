@@ -1256,6 +1256,18 @@ SPNewGameRulesScreen {
 			string	string1	"str_tbl_ldl_NoAIProductionDeficit_On"
 		}
 	}
+	noaicitylimit:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	290
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoAICityLimit_Off"
+			string	string1	"str_tbl_ldl_NoAICityLimit_On"
+		}
+	}
+
 
 #Add Settler Cheat?
 
@@ -1351,6 +1363,17 @@ SPNewGameRulesScreen {
 		stringtable {
 			string	string0	"str_tbl_ldl_NoAIGoldDeficit_Off"
 			string	string1	"str_tbl_ldl_NoAIGoldDeficit_On"
+		}
+	}
+	nocitylimit:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	290
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoCityLimit_Off"
+			string	string1	"str_tbl_ldl_NoCityLimit_On"
 		}
 	}
 

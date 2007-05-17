@@ -90,6 +90,8 @@ static aui_Switch		*s_genocide			= NULL,
 						*s_NOGOLD			= NULL,
 						*s_NOPDEFICIT		= NULL,
 						*s_NOGDEFICIT		= NULL,
+						*s_NOAICITYLIMIT	= NULL,
+						*s_NOCITYLIMIT		= NULL,
 
 						*s_NULL				= NULL;
 
@@ -111,6 +113,8 @@ enum
 	R_NOGOLD,
 	R_NOPDEFICIT,
 	R_NOGDEFICIT,
+	R_NOCITYLIMIT,
+	R_NOAICITYLIMIT,
 	GP_TOTAL
 };
 
@@ -132,6 +136,8 @@ static uint32 check[] =
 	R_NOGOLD,
 	R_NOPDEFICIT,
 	R_NOGDEFICIT,
+	R_NOCITYLIMIT,
+	R_NOAICITYLIMIT,
 
 	GP_TOTAL
 };
@@ -158,6 +164,8 @@ sint32 spnewgamerulesscreen_updateData()
 	s_NOGOLD->SetState( g_theProfileDB->IsAINoGoldHunger() );
 	s_NOPDEFICIT->SetState( g_theProfileDB->IsNoAIProductionDeficit() );
 	s_NOGDEFICIT->SetState( g_theProfileDB->IsNoAIGoldDeficit() );
+	s_NOAICITYLIMIT->SetState( g_theProfileDB->IsAINoCityLimit() );
+	s_NOCITYLIMIT->SetState( g_theProfileDB->IsNoCityLimit() );
 	return 1;
 }
 
@@ -234,6 +242,9 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	s_NOPDEFICIT		= spNew_aui_Switch(&errcode, windowBlock, "nop", spnewgamerulesscreen_checkPress, &check[R_NOPDEFICIT]); //emod5
 	s_NOGDEFICIT		= spNew_aui_Switch(&errcode, windowBlock, "nog", spnewgamerulesscreen_checkPress, &check[R_NOGDEFICIT]); //emod5
 
+	s_NOAICITYLIMIT		= spNew_aui_Switch(&errcode, windowBlock, "noaicitylimit", spnewgamerulesscreen_checkPress, &check[R_NOAICITYLIMIT]); //emod5
+	s_NOCITYLIMIT		= spNew_aui_Switch(&errcode, windowBlock, "nocitylimit", spnewgamerulesscreen_checkPress, &check[R_NOCITYLIMIT]); //emod5
+
 	spnewgamerulesscreen_updateData();
 
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -273,6 +284,8 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	mycleanup(s_NOGOLD);
 	mycleanup(s_NOPDEFICIT);
 	mycleanup(s_NOGDEFICIT);
+	mycleanup(s_NOAICITYLIMIT);
+	mycleanup(s_NOCITYLIMIT);
 
 	delete s_spNewGameRulesScreen;
 	s_spNewGameRulesScreen = NULL;
@@ -308,6 +321,8 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 	case R_NOGOLD: func = &ProfileDB::SetAINoGoldHunger; break;
 	case R_NOPDEFICIT: func = &ProfileDB::SetNoAIProductionDeficit; break;
 	case R_NOGDEFICIT: func = &ProfileDB::SetNoAIGoldDeficit; break;
+	case R_NOAICITYLIMIT: func = &ProfileDB::SetAINoCityLimit; break;
+	case R_NOCITYLIMIT: func = &ProfileDB::SetNoCityLimit; break;
 
 	default:  Assert(0); break;
 	};

@@ -178,6 +178,8 @@
 //   gold per unit, aicitydefense
 // - Added GetNumCityWonders and GetNumCityBuildings methods
 // - Added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
+// - outcommented maxcity stuff
+// - TODO: Is there an intitalization problem???????????????????????????????????????
 //
 //----------------------------------------------------------------------------
 
@@ -6431,9 +6433,9 @@ bool CityData::CanBuildBuilding(sint32 type) const
 		}
 	}
 	//emod to let modders limit the number of buildings in a city
-	if (GetNumCityBuildings() >= g_theConstDB->GetMaxCityBuildings()) {
-		return false;
-	}
+	//if (GetNumCityBuildings() >= g_theConstDB->GetMaxCityBuildings()) {
+	//	return false;
+	//}
 
 	///END CONDITIONS
 	return g_slicEngine->CallMod(mod_CanCityBuildBuilding, TRUE, m_home_city.m_id, rec->GetIndex()) != FALSE;
@@ -6713,9 +6715,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 
 	//emod to limit number of wonders in a city
-	if (GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders()) {
-		return false;
-	}
+	//causes delay/crash because m_builtwonders not initialized?
+	//if (GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders()) {
+	//	return false;
+	//}
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type) != FALSE;
 }

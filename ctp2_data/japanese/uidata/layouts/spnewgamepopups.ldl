@@ -20,6 +20,7 @@
 #  - Set the minimum number of players from 3 to 1.
 #  - Removed references to non-existing files upba5700.tga and upba5701.tga.
 #  - Uranus world shape added
+#  - CityCapture button added to rules screen it now works 3-21-2007
 # 
 ################################################################################
 
@@ -1117,9 +1118,9 @@ SPNewGameRulesScreen {
 
 	string	yanchor		"center"
 
-	int	widthpix	250
+	int	widthpix	650 #250
 
-	int	heightpix	160
+	int	heightpix	450 #160
 
 	Name:CTP_GREY_TITLE_FONT {
 
@@ -1158,11 +1159,13 @@ SPNewGameRulesScreen {
 
 		string	text	"str_ldl_BACK"
 	}
-
-	RuleOne:POPUP_TOGGLESWITCH {
+############## COLUMN #1
+	RuleOne:GAMEPLAY_CHECKBOX { #POPUP_TOGGLESWITCH
 
 		string	pattern	"uptg20e.tga"
 		int	ypix	50
+		int	xpix	30 #emod
+		int	widthpix	275
 
 		stringtable {
 			string	string0	"str_tbl_ldl_Bloodlust_Off"
@@ -1170,13 +1173,207 @@ SPNewGameRulesScreen {
 		}
 	}
 
-	RuleTwo:POPUP_TOGGLESWITCH {
+#EMOD
+	NonRandomCivs:GAMEPLAY_CHECKBOX { 
 
 		int	ypix	80
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NonRandomCivs_Off"
+			string	string1	"str_tbl_ldl_NonRandomCivs_On"
+		}
+	}
+
+	CityCapture:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	110
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_CityCaptureOptions_Off"
+			string	string1	"str_tbl_ldl_CityCaptureOptions_On"
+		}
+	}
+
+	RevoltInsurgents:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	140
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_RevoltInsurgents_Off"
+			string	string1	"str_tbl_ldl_RevoltInsurgents_On"
+		}
+	}
+
+	BarbSpawn:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	170
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_BarbarianSpawnsBarbarian_Off"
+			string	string1	"str_tbl_ldl_BarbarianSpawnsBarbarian_On"
+		}
+	}
+
+	CityGold:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	200
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_GoldPerCity_Off"
+			string	string1	"str_tbl_ldl_GoldPerCity_On"
+		}
+	}
+
+	noshield:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	230
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_AINoShieldHunger_Off"
+			string	string1	"str_tbl_ldl_AINoShieldHunger_On"
+		}
+	}
+	nop:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	260
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoAIProductionDeficit_Off"
+			string	string1	"str_tbl_ldl_NoAIProductionDeficit_On"
+		}
+	}
+	noaicitylimit:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	290
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoAICityLimit_Off"
+			string	string1	"str_tbl_ldl_NoAICityLimit_On"
+		}
+	}
+
+
+#Add Settler Cheat?
+
+############## COLUMN #2
+
+
+	RuleTwo:GAMEPLAY_CHECKBOX { #POPUP_TOGGLESWITCH
+
+		int	ypix	50
+		int	xpix	325 #emod
+		int	widthpix	275
 
 		stringtable {
 			string	string0	"str_tbl_ldl_Pollution_Off"
 			string	string1	"str_tbl_ldl_Pollution_On"
+		}
+	}
+
+	OneCity:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	80
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_OneCityChallenge_Off"
+			string	string1	"str_tbl_ldl_OneCityChallenge_On"
+		}
+	}
+
+	RevoltCasualties:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	110
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_RevoltCasualties_Off"
+			string	string1	"str_tbl_ldl_RevoltCasualties_On"
+		}
+	}
+	SectHappy:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	140
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_SectarianHappiness_Off"
+			string	string1	"str_tbl_ldl_SectarianHappiness_On"
+		}
+	}
+	freeupgrade:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	170
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_AIFreeUpgrade_Off"
+			string	string1	"str_tbl_ldl_AIFreeUpgrade_On"
+		}
+	}
+
+	UnitGold:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	200
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_GoldPerUnitSupport_Off"
+			string	string1	"str_tbl_ldl_GoldPerUnitSupport_On"
+		}
+	}
+	nogold:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	230
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_AINoGoldHunger_Off"
+			string	string1	"str_tbl_ldl_AINoGoldHunger_On"
+		}
+	}
+	nog:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	260
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoAIGoldDeficit_Off"
+			string	string1	"str_tbl_ldl_NoAIGoldDeficit_On"
+		}
+	}
+	nocitylimit:GAMEPLAY_CHECKBOX { 
+
+		int	ypix	290
+		int	xpix	325 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_NoCityLimit_Off"
+			string	string1	"str_tbl_ldl_NoCityLimit_On"
 		}
 	}
 

@@ -33,6 +33,7 @@
 //   if there is no valid unit type available. (April 29th 2006 Martin Gühmann)
 // - Added but not implemented AddInsurgent Code it maynot be necessary
 // - Added but outcommented Barbarian Special Forces difficulty code
+// - added outcomment for disaster/random event code
 //
 //----------------------------------------------------------------------------
 
@@ -80,6 +81,24 @@ BOOL SomeoneCanHave(const UnitRecord *rec)
 	}
 	return FALSE;
 }
+
+/*
+//Disaster code?  use feat but create a feat flag that IsDisaster
+//Golden Age and good events too?
+//How do I get it so feat only affects one player?
+
+		sint32 feat;
+		if(!g_network.IsNetworkLaunch() 
+		&& g_player[g_selected_item->GetCurPlayer()]
+		&& advRec->GetTriggerFeatIndex(feat)
+		){
+			if(!g_network.IsActive() || g_network.ReadyToStart()) {
+				g_featTracker->AddFeat(feat, m_owner);
+			}
+		}
+	}
+*/
+
 
 sint32 Barbarians::ChooseUnitType()
 {

@@ -47,6 +47,23 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2007-05-16
+Disabled: MaxCityWonders because it caused crash 
+Disabled: MaxCityBuildings because it caused crash
+Changed:  NeedsFeatToBuild now only sees if player has feat not all players
+Added:    NeedsAnyPlayerFeatToBuild to allow construction regardless which player achieved feat
+Added:    New Options
+- Rules Screen
+   No AI City Limit     Government City Limit happiness effect for AI can be toggled on/off
+   No City Limit        Government City Limit happiness effect can be toggled on/off
+Added:    New Database Flags
+- ConstDB
+  MAX_CITY_WONDERS      modders can specify the number of wonders a city can build
+  MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build
+- WonderDB
+  ProhibtSlavers	this wonder flag prevents addition slavers
+
+
 2007-05-01  (revision 726)
 Fixed:    Barbarian player cannot decalre war from diplomanager
 Fixed:    Disband Assert errors in Debug version
@@ -76,7 +93,6 @@ BuildingEffectEverywhere same as BuildingEverywhere but flag is more explanatory
 Added:    New Options
 - Rules Screen
    AImilitia            Empty AI cities generate a cheap unit at the beginning of a turn
-   No City Limit        Government City Limit happiness effect can be toggled on/off
    No AI gold deficit   AI ctites don't drop below 0 
    No AI production deficit  AI production never drops below 0  
    Gold per city        cities cost gold multiplied by the number of city limit

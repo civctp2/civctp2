@@ -31,6 +31,7 @@
 #  - ObsoleteGovernmenttype //added by E obsoletes wonders only if player switches to govt
 #  - Added BuildingEffectEverywhere to better flag than BuildingEverywhere based on code
 #  - ActualBuildingEverywhere was added and implemented a long time ago
+#  - Added ProhibitsSlavers
 # 
 #-----------------------------------------------------------------------------
 
@@ -57,6 +58,8 @@ Wonder {
 	Record TerrainImprovement[] ShowOnMapRadius //FU
 	Record Civilisation[] CivilisationOnly 
 	Record Feat[] NeedsFeatToBuild				// implemented by E
+	Record Feat[] NeedsAnyPlayerFeatToBuild				// implemented by E
+	
 	Bit(Record MapIcon)   ShowCityIcon			// Like show on map but put on city?
 
 	Bit(Int) SquaredBorderRadius 				//FU added by E
@@ -74,6 +77,7 @@ Wonder {
 	Bit CloseEmbassies
 	Bit ReformCities
 	Bit FreeSlaves
+	Bit ProhibitSlavers  //splits emancipation code
 	Bit(Int) IncConvertedCitiesFeePercent
 	Bit(Int) GoldPerWaterTradeRoute
 	Bit(Int) GoldPerTelevision

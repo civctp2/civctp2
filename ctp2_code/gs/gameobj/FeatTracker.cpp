@@ -410,7 +410,18 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 				case FEAT_EFFECT_INCREASE_SCIENCE:            rec->GetEffectIncreaseScience(sub);break;
 				
 				case FEAT_EFFECT_INCREASE_HIT_POINTS:         rec->GetEffectIncreaseHitPoints(sub);break;
-				
+				//increase food
+				//increase citylimit
+				//increasepopulation
+				//increase armysize
+				//increase land move
+				//increase land vision - C4ISR
+				//increase airmove
+				//increase attack for unit?
+				//increase defense for unit?
+				//increase move for unit?
+				//increase vision for unit?
+				//add other civ4 like promotions - but unit wide
 				
 				default:
 					Assert(FALSE);
@@ -555,6 +566,23 @@ bool FeatTracker::HasFeat(sint32 type) const
 	return m_achieved[type]; 
 }
 
+//EMOD added to check if a player achieved a feat 5-11-2006
+bool FeatTracker::PlayerHasFeat(sint32 type, sint32 player) const
+{
+	PointerList<Feat>::Walker walk(m_activeList);
+	while(walk.IsValid()) {
+		Feat *feat = walk.GetObj();
+		if(feat->GetPlayer() != player) {
+			return false;
+		}
+	
+		if(feat->GetType() != type ){ //g_theFeatDB->Get(type)) {
+			return false;
+		}
+	}
+
+	return true;
+}
 //----------------------------------------------------------------------------
 //
 // Name       : AccomplishFeat::GEVHookCallback

@@ -3180,6 +3180,10 @@ str_ldl_Debug_AI_On "Show Debug AI Text"
 str_ldl_Debug_AI_Off "Hide Debug AI Text"
 str_tbl_ldl_NonRandomCivs_On  "Non-Random AI Nations"
 str_tbl_ldl_NonRandomCivs_Off "Random AI Nations"
+str_tbl_ldl_AINoCityLimit_On "AI Has No City Limit"						# AI not affected by city limit
+str_tbl_ldl_AINoCityLimit_Off "AI Has City Limits"						# AI not affected by city limit
+str_tbl_ldl_NoCityLimit_On "All Players No City Limit"						# AI not affected by city limit
+str_tbl_ldl_NoCityLimit_Off "Normal City Limits"						# AI not affected by city limit
 
 
 # Not Implemented
@@ -3188,10 +3192,8 @@ str_SE_ShowEnemyHealth "show"
 str_tbl_ldl_AICityDefenderBonus_Off "No AI City Defense Bonus"					# AI population adds to city defenses
 str_tbl_ldl_BarbarianCities_Off	"Entrenched Barbarians settle cities - Off"					# Entrenched barbarians create a city
 str_tbl_ldl_BarbarianCamps_Off	"Entrenched Barbarians create Tile Imps - Off"		# Entrenched barbarians create an imp
-str_tbl_ldl_AINoSinking_Off "AI ships can sink"							# AI ships don't sink
-str_tbl_ldl_AINoCityLimit_Off "AI Has City LImits"						# AI not affected by city limit
 str_tbl_ldl_AICityDefenderBonus_On "AI City Defense bonus - On"					# AI population adds to city defenses
 str_tbl_ldl_BarbarianCities_On	"Entrenched Barbarians settle cities - On"					# Entrenched barbarians create a city
 str_tbl_ldl_BarbarianCamps_On	"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
 str_tbl_ldl_AINoSinking_On "AI ships don't sink"							# AI ships don't sink
-str_tbl_ldl_AINoCityLimit_On "AI Has No City Limit"						# AI not affected by city limit
+str_tbl_ldl_AINoSinking_Off "AI ships can sink"							# AI ships don't sink

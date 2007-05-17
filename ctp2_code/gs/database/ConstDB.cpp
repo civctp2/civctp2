@@ -28,6 +28,7 @@
 // - Added compatibility handling to solve database out of synch problems.
 // - Removed temporary compatibility, to force const.txt cleanup.
 // - Added Const for Max_City_Wonders and Max_City_Buildings - E 5-1-07
+// - TODO - add map coefficient for city thresholds?
 //
 //----------------------------------------------------------------------------
 

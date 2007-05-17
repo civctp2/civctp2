@@ -97,6 +97,8 @@
 // - implemented One City Challenge Option in CanBuildUnit 3.21.2007
 // - implemented freAIupgrades profile option
 // - added GetNumTileimps 4.21.2007
+// - Added ProhibitSlavers Wonder Check
+// - Added NeedsAnyPlayerFeatToBuild
 //
 //----------------------------------------------------------------------------
 
@@ -6819,7 +6821,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 			delete [] ua;
 		}
 	}
-
+//one time affect
 	if(wonderutil_GetFreeSlaves((uint64)1 << wonder)) {
 		sint32 i, n = m_all_cities->Num();
 		for(i = 0; i < n; i++) {
@@ -9569,7 +9571,21 @@ bool Player::CanBuildUnit(const sint32 type) const
 		sint32 f;
 		bool found = false;
 		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
-			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(f), m_owner)) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	//Any player must have feat to build
+		if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(f))) {
 				found = true;
 				break;
 			}
@@ -9625,7 +9641,8 @@ bool Player::CanBuildUnit(const sint32 type) const
 
 	if(rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids() ||
 	   rec->HasSlaveUprising()) {
-		if(wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders())) {
+		//if(wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders())) { //original
+	   if(wonderutil_GetProhibitSlavers(g_theWonderTracker->GetBuiltWonders())) {
 			return false;
 		}
 	}

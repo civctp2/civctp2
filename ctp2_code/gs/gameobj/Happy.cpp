@@ -34,6 +34,8 @@
 //   is buying or collecting then it will add to that city's happiness (4-27-2006 by E)
 // - Aded SectarianHappiness modifier by E 5-24-2006
 // - added difficulty setting eliminating unhappiness for ai cities overlimit
+// - added profile option for NoAICityLimit and NoCityLimit
+// - added comment for wonders
 //
 //----------------------------------------------------------------------------
 
@@ -71,6 +73,7 @@
 #include "FeatTracker.h"
 #include "DifficultyRecord.h"   //EMOD
 #include "GameSettings.h"
+#include "profileDB.h"
 
 
 
@@ -236,7 +239,14 @@ double Happy::CalcTooManyCities(Player *p)
 		res = 0.0;
 	//EMOD
 	} else if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() && p->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-		res = 0.0;				
+		res = 0.0;
+	} else if(g_theProfileDB->IsAINoCityLimit() && p->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+		res = 0.0;	
+	} else if(g_theProfileDB->IsNoCityLimit()) {
+		res = 0.0;
+//add option for flexible city limits (set to map size?)
+//add wonder that reduces coefficient?
+//add wonder that increases threshold?		
 	} else {
 		res = -s * (num_cities - t);
 

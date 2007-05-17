@@ -115,6 +115,11 @@ bool wonderutil_GetFreeSlaves(const uint64 builtWonders)
 	BOOL_WNDR(GetFreeSlaves);
 }
 
+bool wonderutil_GetProhibitSlavers(const uint64 builtWonders)
+{
+	BOOL_WNDR(GetProhibitSlavers);
+}
+
 bool wonderutil_GetGlobalRadar(const uint64 builtWonders)
 {
 	BOOL_WNDR(GetGlobalRadar);

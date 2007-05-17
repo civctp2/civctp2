@@ -118,6 +118,7 @@ Unit {
 	Record Resource[] NeedsCityGoodCapitol	// not implemented
 	Record Resource[] NeedsCityGoodAnyCity	// must have a good in any city to build
 	Record Feat[] NeedsFeatToBuild			// Feat must have occured for unit to be built
+	Record Feat[] NeedsAnyPlayerFeatToBuild				// implemented by E
 	Record Wonder[] PrerequisiteWonder		// Added by E to limit units to cities with certain wonders
 	Record Wonder[] ExcludedByWonder		// to prevent some units being built
 

@@ -128,6 +128,7 @@ class FeatTracker {
 	void CheckBuildingFeat(Unit &city, sint32 building);
 	void CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom);
 	bool HasFeat(sint32 type) const;			//EMOD
+	bool PlayerHasFeat(sint32 type, sint32 player) const;			//EMOD
 
 	static void InitializeEvents();
 	static void CleanupEvents();
