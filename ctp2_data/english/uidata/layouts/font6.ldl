@@ -1,0 +1,138 @@
+# template for our font settings
+template T_FONT6_12 {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				10
+}
+
+template T_FONT6_10 {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				7
+}
+
+template T_FONT6_9 {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				6
+}
+
+template T_FONT6_UNITLIST {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				8
+}
+
+
+template T_FONT6_8 {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				5
+}
+
+template T_FONT6_CHEAT {
+	string fontname 			"arialbd.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				8
+}
+
+
+template T_FONT6_CITYLIST {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				8
+}
+
+
+template T_FONT6_TRADE {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				8
+}
+
+template T_FONT6_7 {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				4
+}
+
+template T_FONT6_SCITEXT {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				7
+}
+
+
+template T_FONT6_6 {
+	string fontname 			"arial.ttf"
+
+	int fontcolorred			24
+	int fontcolorgreen			2
+	int fontcolorblue			2
+	int fontshadowcolorred 		255			
+	int fontshadowcolorgreen 	255
+	int fontshadowcolorblue 	255
+	int fontsize				3
+}
+
+$

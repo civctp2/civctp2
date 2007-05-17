@@ -1,0 +1,184 @@
+CityEspionage:CTP2_WINDOW {
+
+	string title "str_ldl_CityEspionageTitle"
+	# Center on screen.
+	string	xanchor		"center"
+	string	yanchor		"center"
+
+	# Size.
+	int	widthpix	364
+	int	heightpix	348
+
+	# Background art.
+	DialogBackground:CTP2_STATIC_BACKGROUND {	
+		# Size.
+		int	widthpix	364
+		int	heightpix	348
+
+		# Image layout.
+		int		numberoflayers		1
+		int		imagesperlayer		9
+
+		# Background.
+		bool	layeralways0		true
+		string	image00				"uptg03a.tga"
+		bool	imagestretchx01		true
+		string	image01				"uptg03b.tga"
+		string	image02				"uptg03c.tga"
+		bool	imagenextrow03		true
+		bool	imagestretchy03		true
+		string	image03				"uptg03d.tga"
+		bool	imagestretchx04		true
+		bool	imagestretchy04		true
+		string	image04				"uptg20e.tga"
+		bool	imagestretchy05		true
+		string	image05				"uptg03f.tga"
+		bool	imagenextrow06		true
+		string	image06				"uptg03g.tga"
+		bool	imagestretchx07		true
+		string	image07				"uptg03h.tga"
+		string	image08				"uptg03i.tga"
+
+		CancelButton:CTP2_STANDARD_CLOSE { 
+			string text "str_ldl_Cancel"
+			int		xpix		250
+			int		ypix		300
+		}
+		CityLabel:CTP2_STATIC_BASE {
+			int xpix 25
+			int ypix 25
+			string just "left"
+			string text "str_ldl_Espionage_City_Label"
+		}
+		PopulationLabel:CTP2_STATIC_BASE {
+			int xpix 25
+			int ypix 45
+			string just "left"
+			string text "str_ldl_Espionage_Population_Label"
+		}
+		HapinessLabel:CTP2_STATIC_BASE {
+			int xpix 230
+			int ypix 45
+			int	widthpix 80
+			string just "left"
+			string text "str_ldl_Espionage_Happiness_Label"
+		}
+		Building:CTP2_STATIC_BASE {
+			int xpix 25
+			int ypix 65
+			int	widthpix 80
+			string just "left"
+			string text "str_ldl_Espionage_Building_Label"
+		}
+		CompleteIn:CTP2_STATIC_BASE {
+			int xpix 25
+			int ypix 85
+			int	widthpix 80
+			string just "left"
+			string text "str_ldl_Espionage_CompleteIn_Label"
+		}
+		CityIncome:CTP2_STATIC_BASE {
+			int xpix 230
+			int ypix 120
+			int	widthpix 80
+			string just "left"
+			string text "str_ldl_Espionage_CityIncome_Label"
+		}
+		GoldFromTrade:CTP2_STATIC_BASE {
+			int xpix 230
+			int ypix 140
+			int	widthpix 80
+			string just "left"
+			string text "str_ldl_Espionage_GoldInTrade_Label"
+		}
+		InventoryList:CTP2_LISTBOX {
+			int	xpix	25
+			int	ypix	120
+			int	widthpix	170
+			int	heightpix	160
+#			bool 	alwaysranger TRUE
+		}
+
+		FortifiedUnitsBox {
+			string	objecttype	"ctp2_static"
+			int	xpix	225
+			int	ypix	160
+			int	heightpix	124
+			int	widthpix	116
+			int	bevelwidth	1
+			int 	beveltype	1
+			# Unit buttons.
+			Unit0:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	5
+				int ypix	5
+			}
+			Unit1:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	40
+				int ypix	5
+			}
+			Unit2:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	75
+				int ypix	5
+			}
+			Unit3:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	5
+				int ypix	35
+			}
+			Unit4:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	40
+				int ypix	35
+			}
+			Unit5:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	75
+				int ypix	35
+			}
+			Unit6:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	5
+				int ypix	65
+			}
+			Unit7:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	40
+				int ypix	65
+			}
+			Unit8:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	75
+				int ypix	65
+			}
+			Unit9:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	5
+				int ypix	95
+			}
+			Unit10:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	40
+				int ypix	95
+			}
+			Unit11:UNIT_BUTTON_SMALL_SIZE {
+				int	xpix	75
+				int ypix	95
+			}
+		}
+	}
+}
+
+ce_InventoryListItem:CTP2_LIST_ITEM {
+	int	widthpix	170
+	int	heightpix	16
+	string	just	"left"
+#	StaticThing:CTP2_STATIC_BASE {
+#		int xpix 4
+#		Label:CTP2_STATIC_BASE {
+#			int	xpix	0
+#			bool	vertcenter	TRUE
+#			int	widthpix	162
+#			int	heightpix	16
+#		}
+#		Turns:CTP2_STATIC_BASE {
+#			int xpix 276
+#			string just "right"
+#			int widthpix 36
+#			int heightpix 16
+#			string text "str_ldl_0"
+#		}
+#	}
+}
+

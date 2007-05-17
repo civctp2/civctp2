@@ -1,0 +1,18 @@
+# Intro Movie LDL
+
+
+IntroMovieWindow {
+#	string	pattern	"upba3010.tga"
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	640
+	int	heightpix	384
+	MovieButton {
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	640
+		int	heightpix	384
+	}
+}
+
+$

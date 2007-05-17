@@ -1,0 +1,129 @@
+#
+
+# FLI Window Stuff
+
+#
+
+
+
+FLIWindow {
+
+	int	xpix	0
+
+	int	ypix	0
+
+	int	widthpix	640
+
+	int	heightpix	480
+
+	string	pattern	"upba0104.tga"
+
+
+
+	ExitButton:CTP2_STANDARD_FONT {
+
+		int	xpix	540
+
+		int	ypix	430
+
+		int	widthpix	100
+
+		int	heightpix	20		
+
+		string	text	"str_ldl_Exit"
+		string	pattern	"upba0104.tga"
+
+	}
+
+	
+
+	GraphUpButton:CTP2_STANDARD_FONT {
+
+		int	xpix	5
+
+		int	ypix	430
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Last_Graph"
+		string	pattern	"upba0104.tga"
+
+	}
+
+	
+
+	GraphDownButton:CTP2_STANDARD_FONT {
+
+		int	xpix	110
+
+		int	ypix	430
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Next_Graph"
+		string	pattern	"upba0104.tga"
+
+	}
+
+	
+
+	SectionUpButton:CTP2_STANDARD_FONT {
+
+		int	xpix	5
+
+		int	ypix	455
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Last_Section"
+		string	pattern	"upba0104.tga"
+
+	}
+
+	
+
+	SectionDownButton:CTP2_STANDARD_FONT {
+
+		int	xpix	110
+
+		int	ypix	455
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Next_Section"
+		string	pattern	"upba0104.tga"
+
+	}
+
+	
+
+	ReloadButton:CTP2_STANDARD_FONT {
+
+		int	xpix	220
+
+		int	ypix	455
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Reload_FLI"
+		string	pattern	"upba0104.tga"
+
+	}
+
+	
+
+}
+
+
+
+$
