@@ -65,11 +65,11 @@
 #include "soundmanager.h"
 #include "Diplomat.h"
 #include "CriticalMessagesPrefs.h"
-#include "Barbarians.h" //EMOD
-#include "RiskRecord.h"  //add for barb code
-#include "GameSettings.h" //EMOD
-#include "GovernmentRecord.h"   //EMOD to access government data
-#include "DifficultyRecord.h"   //EMOD
+#include "Barbarians.h"			// EMOD
+#include "RiskRecord.h"			// Add for barb code
+#include "GameSettings.h"		// EMOD
+#include "GovernmentRecord.h"   // EMOD to access government data
+#include "DifficultyRecord.h"   // EMOD
 #include "CivilisationPool.h"
 #include "Happy.h"
 
@@ -128,12 +128,13 @@ STDEHANDLER(ArmyVictoryMoveOrderEvent)
 
 STDEHANDLER(ArmyMovePathOrderEvent)
 {
-	Army army; //changed from a to army for consistency
+	Army army; // Changed from a to army for consistency. // Why consitency? Half of them are a and the other half of them are army in this file.
 	MapPoint p;
 
 	if(!args->GetArmy(0, army)) return GEV_HD_Continue;
 	if(!args->GetPos(0, p)) return GEV_HD_Continue;
-/*EMOD add rebase here? just set pos as p?
+	/// @todo Finish code or remove it.
+/*	// EMOD add rebase here? just set pos as p?
 
 	bool rebase = false;
 	for(i = 0; i < army.Num(); i++) {
@@ -159,7 +160,7 @@ STDEHANDLER(ArmyMovePathOrderEvent)
 
 		return GEV_HD_Continue;
 
-end EMOD	*/
+	end EMOD	*/
 	
 	g_selected_item->EnterMovePath(army.GetOwner(), army, army->RetPos(), p);
 	return GEV_HD_Continue;
@@ -174,10 +175,10 @@ STDEHANDLER(ArmyUnloadOrderEvent)
 
 	UNIT_ORDER_TYPE ord = UNIT_ORDER_UNLOAD; 
 	if (a.GetOwner() == g_selected_item->GetVisiblePlayer()) 
-    {
+	{
 		CellUnitList cargoToUnload;
 		if (MainControlPanel::GetSelectedCargo(cargoToUnload)) 
-        {
+		{
 			ord = UNIT_ORDER_UNLOAD_SELECTED_STACK;
 		}
 	}
@@ -703,11 +704,11 @@ STDEHANDLER(ArmyMoveEvent)
 	MapPoint    oldPos;
 	army.GetPos(oldPos);
 
-    MapPoint    newPos; 
+	MapPoint    newPos;
 	if (!oldPos.GetNeighborPosition(dir, newPos))
 		return GEV_HD_Continue;
 
-    ArmyData *  armyData    = army.AccessData();
+	ArmyData *  armyData    = army.AccessData();
 	if (armyData->CheckSpecialUnitMove(newPos)) {
 		return GEV_HD_Continue;
 	}
@@ -715,7 +716,8 @@ STDEHANDLER(ArmyMoveEvent)
 	armyData->CheckLoadSleepingCargoFromCity(NULL);
 
 	if (armyData->IsMovePointsEnough(newPos)) 
-    {
+	{
+		/// @todo finish this code or remove it
 /*EMOD for rebasing? this just moves it to newpos maybe do pathing order? or move to? and then set newpos as endpos?
 		if (order == UNIT_ORDER_MOVE_TO
 
@@ -738,23 +740,23 @@ STDEHANDLER(ArmyMoveEvent)
 
  
 
-*/ //end EMOD
+*/		//end EMOD
 		if (armyData->IsOccupiedByForeigner(newPos)) 
-        {
+		{
 			CellUnitList * defender = g_theWorld->GetCell(newPos)->UnitArmy();
 
 			for (sint32 d = 0; d < defender->Num(); ++d) 
-            {
+			{
 				if (defender->Access(d).Flag(k_UDF_CANT_BE_ATTACKED))
 					return GEV_HD_Continue;
 			}
 
 			
 	
-	        PLAYER_INDEX owner = army.GetOwner();
+			PLAYER_INDEX owner = army.GetOwner();
 			if ((owner == PLAYER_INDEX_VANDALS) && 
-                wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders)) 
-            {
+				wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders)) 
+			{
 				return GEV_HD_Continue;
 			}
 
@@ -770,8 +772,8 @@ STDEHANDLER(ArmyMoveEvent)
 			}
 
 			if (order == UNIT_ORDER_MOVE || 
-                ((order == UNIT_ORDER_MOVE_TO) && !wasVisible)) 
-            {
+			    ((order == UNIT_ORDER_MOVE_TO) && !wasVisible)) 
+			{
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 									   GEV_ClearOrders,
 									   GEA_Army, army,
@@ -788,11 +790,11 @@ STDEHANDLER(ArmyMoveEvent)
 				return GEV_HD_Continue;
 
 			for (sint32 i = 0; i < army.Num(); i++) 
-            {
+			{
 				if ((*armyData)[i].Flag(k_UDF_FOUGHT_THIS_TURN) ||
 				    (*armyData)[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN)
-                   )
-                {
+				   )
+				{
 					return GEV_HD_Continue;
 				}
 			}
@@ -808,19 +810,19 @@ STDEHANDLER(ArmyMoveEvent)
 								   GEA_Army, army,
 								   GEA_End);
 		}
-        else
-        {
-		    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+		else
+		{
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 							       GEV_FinishMove,
 							       GEA_Army, army,
 							       GEA_Direction, dir,
 							       GEA_MapPoint, newPos,
 							       GEA_Int, order,
 							       GEA_End);
-        }
+		}
 	}
-    else 
-    {
+	else
+	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 							   GEV_CantMoveYet,
 							   GEA_Army, army,
@@ -836,9 +838,9 @@ STDEHANDLER(ClearOrdersEvent)
 {
 	Army army;
 	if (args->GetArmy(0, army))
-    {
+	{
 		army.ClearOrders();
-    }
+	}
 
 	return GEV_HD_Continue;
 }
@@ -848,12 +850,12 @@ STDEHANDLER(FinishAttackEvent)
 	Army        a;
 	MapPoint    pos;
 	if (    args->GetArmy(0, a)     // May return false when the whole army
-                                    // has been destroyed during the attack.
-         && args->GetPos(0, pos)
-       ) 
+	                                // has been destroyed during the attack.
+	     && args->GetPos(0, pos)
+	   )
 	{
-    	a.AddOrders(UNIT_ORDER_FINISH_ATTACK, NULL, pos, 0);
-    }
+		a.AddOrders(UNIT_ORDER_FINISH_ATTACK, NULL, pos, 0);
+	}
 
 	return GEV_HD_Continue;
 }
@@ -1488,9 +1490,9 @@ STDEHANDLER(ArmyBeginTurnExecuteEvent)
 {
 	Army a;
 	if (args->GetArmy(0, a))
-    {
-    	a->ExecuteOrders();
-    }
+	{
+		a->ExecuteOrders();
+	}
 
 	return GEV_HD_Continue;
 }

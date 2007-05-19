@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Unit utilities
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +26,8 @@
 //
 // - Added unitutil_GetSmallCityMaxSize to figure out the maximum population
 //   size a ring one city. - Oct. 6th 2004 Martin Gühmann
+// - Added function to compare unit type quality, based on unit cargo capacity
+//   or on the units statistics like attack, defense and range. (19-May-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -51,6 +54,7 @@ const SpecialAttackInfoRecord *unitutil_GetSpecialAttack(SPECATTACK attack);
 
 void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers, const CellUnitList &defenders, double & city_bonus, double & entrenched_bonus);
 bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index);
+bool unitutil_IsUnitBetterThan(sint32 type1, sint32 type2, sint32 gov);
 
 
 void unitutil_ExecuteMadLaunch(Unit & unit);

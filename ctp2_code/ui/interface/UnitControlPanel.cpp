@@ -609,11 +609,11 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 	if(m_transportSelectionDisplay->IsHidden())
 		return;
 
-	Army army = GetSelectedArmy();	
+	Army army = GetSelectedArmy();
 	Unit unit;
 
 	if (army.IsValid()) 
-    {
+	{
 		if(m_armySelectionUnit >= 0 && m_armySelectionUnit < army.Num()) {
 			unit.m_id = army[m_armySelectionUnit].m_id;
 		} else {

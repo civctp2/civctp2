@@ -168,7 +168,7 @@
 //   units, buildings, wonders, and tileimps must have energy flags for 
 //   calculation - by E 2-28-2007
 // - Added Insurgent Spawn slic message
-// - added BreadBasket modifier so you can have food producing areas i.e.
+// - Added BreadBasket modifier so you can have food producing areas i.e.
 //   America's midwest or Rome's Egypt
 // - Outcommented extra insurgent code in riot
 // - Outcomment founder code in insurgents b/c it may cause same crash as
@@ -179,7 +179,6 @@
 // - Added GetNumCityWonders and GetNumCityBuildings methods
 // - Added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
 // - outcommented maxcity stuff
-// - TODO: Is there an intitalization problem???????????????????????????????????????
 //
 //----------------------------------------------------------------------------
 
@@ -10134,11 +10133,14 @@ sint32 CityData::ConsumeEnergy()
 {
 	sint32 energy = 0;
 	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
+	/// @todo Use standart use standard index variable names
+	//        i usually denotes a variable used as index, you can use j
+	//        if you already have an i. k would be the next in the alphabet.
+	//        But don not use l (el) since it looks like 1 (one).
 	for (sint32 tgood = 0; tgood < g_theResourceDB->NumRecords(); ++tgood) 
 	{
 		if(HasNeededGood(tgood))
 		{
-			//sint32 e;
 			ResourceRecord const * tgoodData = g_theResourceDB->Get(tgood);
 			if (tgoodData)
 			{
@@ -10147,21 +10149,24 @@ sint32 CityData::ConsumeEnergy()
 		}
 	}
 
-	//energy produced per person
+	// Energy produced per person
 	sint32 energyPerCitizen = buildingutil_GetEnergyHungerPerPop(GetEffectiveBuildings());
 	energy += energyPerCitizen * PopCount();
 
-	//energy produced per person
+	// Energy produced per person
 	sint32 energyperbldg = buildingutil_GetEnergyHunger(GetEffectiveBuildings());
 	energy += energyperbldg;
 
-	//energy produced per person
+	// Energy produced per person
 	sint32 WenergyPerCitizen = wonderutil_GetEnergyHungerPerPop(GetEffectiveBuildings());
 	energy += WenergyPerCitizen * PopCount();
 
-	//energy produced per person
-    /// @todo Use better identifiers: I don't even know how to pronounce
-    //        Wenergyperbldg 
+	// Energy produced per person
+	/// @todo Use better identifiers: I don't even know how to pronounce
+	//        Wenergyperbldg
+	/// @todo Use standart camel casing, local variables start with a 
+	//        lower case letter, each new word starts with an uper case letter,
+	//        no hyphes or underscores
 	sint32 Wenergyperbldg = wonderutil_GetEnergyHunger(GetEffectiveBuildings());
 	energy += Wenergyperbldg;
 
@@ -10171,24 +10176,38 @@ sint32 CityData::ConsumeEnergy()
 sint32 CityData::GetNumCityWonders() const
 {
 	sint32 citywon = 0;
+#if 0
+	/// @todo Use a way to figure that out.
+	//        Endless loops are no solution
+	//        The second statement of the for 
+	//        loop must be bool and must change
+	//        with i. Or the loop need a break 
+	//        condition.
 	uint64 wonders = m_builtWonders;
 	for (sint32 i = 0; wonders; ++i) 
-    {
+	{
 		citywon++;
 	}
-
+#endif
 	return citywon;
 }
 
 sint32 CityData::GetNumCityBuildings() const
 {
 	sint32 citybld = 0;
+#if 0
+	/// @todo Use a way to figure that out.
+	//        Endless loops are no solution
+	//        The second statement of the for 
+	//        loop must be bool and must change
+	//        with i. Or the loop need a break 
+	//        condition.
 	uint64 bld = m_built_improvements;
 	for (sint32 i = 0; bld; ++i) 
-    {
+	{
 		citybld++;
 	}
-
+#endif
 	return citybld;
 }
 

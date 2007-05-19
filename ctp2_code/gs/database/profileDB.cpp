@@ -18,7 +18,7 @@
 //
 // Compiler flags
 //
-// - None
+// - _DEBUG
 //
 //----------------------------------------------------------------------------
 //
@@ -47,7 +47,8 @@
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 // - Added additional options, most to be implemented later
 // - Implemented NRG - option to ccalculate energy ratio affecting production and demand
-// - added DebugAI option
+// - Added DebugAI option
+// - Made the upgrade option show up in the debug version. (19-May-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -407,7 +408,12 @@ ProfileDB::ProfileDB()
 	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL, false);
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false); //used emod2
+#if defined(_DEBUG)
+	/// @todo Move this to the scenario editor
+	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
+#else
 	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, false);
+#endif
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL);
 	// emod new profile flags // Please make sure that only those show up which are used.
 	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL); //used
@@ -430,9 +436,9 @@ ProfileDB::ProfileDB()
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false); //used
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false); //used
-	Var("ShowDebugAI"	             , PV_BOOL  , &m_debugai					, NULL); //used   //emod2
-	Var("CitiesLeaveRuins"			 , PV_BOOL  , &m_ruin                        , NULL, false); //used
-	Var("NoCityLimit"              , PV_BOOL  , &m_NoCityLimit              , NULL, false);
+	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL);        //used //emod2 // Should go into the scenario editor
+	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false); //used
+	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
 }
 
 void ProfileDB::DefaultSettings(void)
@@ -728,22 +734,22 @@ void ProfileDB::Save()
 sint32 ProfileDB::GetValueByName(const char * name) const
 {
 	for
-    (
-        PointerList<ProfileVar>::Walker walk(m_vars);
+	(
+	    PointerList<ProfileVar>::Walker walk(m_vars);
 	    walk.IsValid();
-        walk.Next()
-    ) 
-    {
+	    walk.Next()
+	)
+	{
 		ProfileVar *    var = walk.GetObj();
-		if (stricmp(var->m_name, name) == 0) 
-        {
-			if (var->m_type == PV_BOOL || var->m_type == PV_NUM) 
-            {
+		if (stricmp(var->m_name, name) == 0)
+		{
+			if (var->m_type == PV_BOOL || var->m_type == PV_NUM)
+			{
 				return *var->m_numValue;
-			} 
-            else 
-            {
-                // This function only works for boolean or integer values
+			}
+			else
+			{
+				// This function only works for boolean or integer values
 				return 0;
 			}
 		}

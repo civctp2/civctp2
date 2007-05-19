@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit utilities
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -26,6 +27,8 @@
 // - Added unitutil_GetSmallCityMaxSize to figure out the maximum population
 //   size a ring one city. - Oct. 6th 2004 Martin Gühmann
 // - EMOD TO DO add check for buildings and wonder for ring size
+// - Added function to compare unit type quality, based on unit cargo capacity
+//   or on the units statistics like attack, defense and range. (19-May-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -312,4 +315,48 @@ void unitutil_ExecuteMadLaunch(Unit & unit)
 			GEA_Unit, unit.m_id,
 			GEA_End);
 	}
+}
+
+bool unitutil_IsUnitBetterThan(sint32 type1, sint32 type2, sint32 gov)
+{
+	if(type2 <= -1) return true;
+	if(type1 <= -1) return false;
+	const UnitRecord* unitRec1 = g_theUnitDB->Get(type1, gov);
+	const UnitRecord* unitRec2 = g_theUnitDB->Get(type2, gov);
+
+	// Transport units should always be bigger:
+	const UnitRecord::CargoData* cargo1 = unitRec1->GetCargoDataPtr();
+	const UnitRecord::CargoData* cargo2 = unitRec2->GetCargoDataPtr();
+	if(cargo1 && cargo2){
+		if(cargo1->GetMaxCargo() > cargo2->GetMaxCargo())
+		{
+			return true;
+		}
+		else if(cargo1->GetMaxCargo() < cargo2->GetMaxCargo())
+		{
+			return false;
+		}
+	}
+
+	// Equal transport strength or just one a transporter or none a transporter:
+	// Test the battle strength
+
+	// Attack difference
+	double const attack_cpr  = (unitRec1->GetAttack()         - unitRec2->GetAttack());
+	// Defense difference
+	double const defense_cpr = (unitRec1->GetDefense()        - unitRec2->GetDefense());
+	// ranged difference
+	double const ranged_cpr  = (unitRec1->GetZBRangeAttack()  - unitRec2->GetZBRangeAttack());
+
+	double const battle_cpr  = attack_cpr + defense_cpr + ranged_cpr;
+	if (battle_cpr > 0)
+	{
+		return true;
+	}
+	else if (battle_cpr < 0)
+	{
+		return false;
+	}
+
+	return false;
 }

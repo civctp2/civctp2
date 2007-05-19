@@ -40,8 +40,11 @@
 // - Added GetAllTerrainAsImp by E 2-24-2006
 // - Corrected pollution handling.
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
-// - added IsReligion bools 1-23-2007
+// - Added IsReligion bools 1-23-2007
 // - Added IsHiddenNationality bool 2-7-2007
+// - The upgrade function now selects the best unit type for upgrading 
+//   according to the unit transport capacity or the unit attack, defense and 
+//   range statitics. (19-May-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2556,9 +2559,11 @@ void Unit::Sink(sint32 chance)
 			// or it least call it diferently
 			KillUnit(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 #if 0 // Not used: memory leak + crash
-		//	SlicObject *so = new SlicObject("999LostAtSea");
-		//	so->AddRecipient(GetOwner());
-		//	so->AddUnit(*this);
+			// Don't outcomment but fix it! But maybe this isn't 
+			// a good idea for every unit in your army.
+			SlicObject *so = new SlicObject("999LostAtSea");
+			so->AddRecipient(GetOwner());
+			so->AddUnit(*this);
 #endif
 		}
 	}
@@ -2575,11 +2580,9 @@ sint32 Unit::GetBestUpgradeUnitType() const
 		{
 			sint32 currentType = rec->GetUpgradeToIndex(i);
 			if(g_player[GetOwner()]->CanBuildUnit(currentType)
-		//	&& i is better than best unit
+			&& unitutil_IsUnitBetterThan(currentType, bestUnit, g_player[GetOwner()]->GetGovernmentType())
 			){
-				// For now just return the first builtable unit
-				return currentType;
-		//		bestUnit = currentType;
+				bestUnit = currentType;
 			}
 		}
 	}

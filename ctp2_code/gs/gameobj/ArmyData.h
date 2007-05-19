@@ -596,11 +596,6 @@ public:
 	bool NearestUnexplored(MapPoint &pos) const;
 
 	void Upgrade();
-	//EMOD
-//	void UpgradeNoGold();
-//	void Upgrade();
-//	bool CanUpgradeNoGold(const sint32 i);
-//	bool CanUpgrade(const sint32 i);
 
     static void DisassociateEventsFromOrdersDB(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
     static void AssociateEventsWithOrdersDB();

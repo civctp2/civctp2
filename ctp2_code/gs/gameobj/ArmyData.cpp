@@ -1652,11 +1652,11 @@ void ArmyData::BeginTurn()
 	){
 		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
 		double hpcost2;
+		/// @todo use standard identifiers for index variables like i and j
 		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){
 			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
 			for(sint32 u = 0; u < m_nElements; u++) {
-//				const UnitRecord *urec = m_array[u].GetDBRec();
 				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir()) { //EMOD
 					m_array[u].DeductHP(hpcost2); // This should go into the MoveUnits event
 				}
@@ -7475,34 +7475,31 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 			
 			Unit city = g_theWorld->GetCity(pos);
 			//EMOD to allow for sneak attacks without popup	
-		Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+			Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 
-	
-		if (ta.m_id == 0) {
-			ta = m_array[0];
-		}
-
-
-		
-		bool AlltaSneakAttack = true;
-		sint32 i;
-		for (i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
-			if(!m_array[i].GetDBRec()->GetSneakAttack()){
-				AlltaSneakAttack = false;
-				break;
+			if (ta.m_id == 0) {
+				ta = m_array[0];
 			}
-		}
-	
-	
-		if (ta.m_id == 0) {
-			if(!m_array[0].GetDBRec()->GetSneakAttack()){
-				AlltaSneakAttack = false;
-			}
-		}
 
-		if(!AlltaSneakAttack){
-				// What is the purpose of this?
-			VerifyAttack(UNIT_ORDER_MOVE_TO, pos, city.GetOwner());
+			bool AlltaSneakAttack = true;
+			sint32 i;
+			for (i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
+				if(!m_array[i].GetDBRec()->GetSneakAttack()){
+					AlltaSneakAttack = false;
+					break;
+				}
+			}
+
+			if (ta.m_id == 0) {
+				if(!m_array[0].GetDBRec()->GetSneakAttack()){
+					AlltaSneakAttack = false;
+				}
+			}
+
+			if(!AlltaSneakAttack){
+				/// @todo Explain: What is the purpose of this?
+				//        Or fix it.
+				VerifyAttack(UNIT_ORDER_MOVE_TO, pos, city.GetOwner());
 				return false;
 			}
 			return true;
@@ -7538,14 +7535,11 @@ void ArmyData::MoveActors(const MapPoint &pos,
 						  UnitDynamicArray &revealedUnits,
 						  bool teleport)
 {
-//	BOOL theTileIsVisible = g_tiledMap->TileIsCompletelyVisible(pos.x, pos.y);
-
-	
 	if(g_selected_item->GetPlayerOnScreen() < 0
 	&& g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer())
-			return;
+		return;
 
-	Unit top_src = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());    
+	Unit top_src = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 	if (top_src.m_id == 0)
 		top_src = m_array[0];
 
@@ -10897,92 +10891,6 @@ void ArmyData::Upgrade()
 			}
 		}
 	}
+
+	UpdateMoveIntersection();
 }
-
-//bool ArmyData::CanUpgrade(sint32 i)
-//{
-
-//	sint32 s;
-//	Unit city = g_theWorld->GetCity(m_pos);
-//	const UnitRecord *rec = m_array[i].GetDBRec();
-//	if(rec->GetNumUpgradeTo() > 0){ 
-//		if(city.IsValid() || terrainutil_HasUpgrader(m_pos)) { //added tileimps that upgrade 5-30-2006
-		//if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
-//			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-//				sint32 oldshield = rec->GetShieldCost();
-//				sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
-//				sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-//				sint32 goldcost = (newshield - oldshield) * rushmod;
-//				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s)) && (g_player[m_owner]->m_gold->GetLevel() > goldcost)){
-//					return true;
-//				}
-//			}
-//		}
-//	}
-//	return false;
-//}
-
-//void ArmyData::Upgrade()
-//{
-
-//	sint32 s;
-//	sint32 i;
-//	Unit city = g_theWorld->GetCity(m_pos);
-//	const UnitRecord *rec = m_array[i].GetDBRec();
-//	for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-//		sint32 oldshield = rec->GetShieldCost();
-//		sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
-//		sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-//		sint32 goldcost = (newshield - oldshield) * rushmod;
-//		sint32 newunit = rec->GetUpgradeToIndex(s);
-//		if (CanUpgrade(i)){
-//			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//			g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-//			g_player[m_owner]->m_gold->SubGold(goldcost);
-//			SlicObject *so = new SlicObject("999UnitUpgraded");
-  //              so->AddRecipient(m_owner);
-//                so->AddUnit(m_array[i]);
-//		}
-//	}
-//}
-
-//bool ArmyData::CanUpgradeNoGold(const sint32 i)
-//{
-
-//	sint32 s;
-//	Unit city = g_theWorld->GetCity(m_pos);
-//
-//	const UnitRecord *rec = m_array[i].GetDBRec();
-//		if((rec->GetNumUpgradeTo() > 0) && (city.m_id != 0)) {
-//			for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-//				//sint32 oldshield = rec->GetShieldCost();
-				//sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
-				//sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-				//sint32 goldcost = (newshield - oldshield) * rushmod;
-//				if(city.AccessData()->GetCityData()->CanBuildUnit(rec->GetUpgradeToIndex(s))){
-//					return true;
-//				}
-//			}
-//		}
-//	}
-//	return false;
-//}
-
-//void ArmyData::UpgradeNoGold()
-//{
-//	sint32 s;
-//	Unit city = g_theWorld->GetCity(m_pos);
-//	const UnitRecord *rec = m_array[i].GetDBRec();
-	//const UnitRecord *rec = g_theUnitDB->Get(t);
-//	for(s = 0; s < rec->GetNumUpgradeTo(); s++) {
-		//sint32 oldshield = rec->GetShieldCost();
-		//sint32 newshield = g_theUnitDB->Get(rec->GetUpgradeToIndex(s), g_player[m_owner]->m_government_type)->GetShieldCost();
-		//sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-		//sint32 goldcost = (newshield - oldshield) * rushmod;
-//		sint32 newunit = rec->GetUpgradeToIndex(s);
-//		if (CanUpgrade(i)){
-//			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-//			g_player[m_owner]->CreateUnit(newunit, m_pos, Unit(), FALSE, CAUSE_NEW_ARMY_INITIAL);
-//		}
-//	}
-//}
