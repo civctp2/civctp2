@@ -1,17 +1,13 @@
-###########################################################
-#
-# - Rev726 changed BuildEverywhere to ActualBuildingEverywhere
-# - added ProhibitSlavers to Emancipation to keep same power
-#
-###########################################################
-
 WONDER_ARISTOTLES_LYCEUM {
    DefaultIcon ICON_WONDER_ARISTOTLES_LYCEUM
    Description DESCRIPTION_WONDER_ARISTOTLES_LYCEUM
    Movie MOVIE_WONDER_ARISTOTLES_LYCEUM
    EnableAdvance ADVANCE_PHILOSOPHY
+
+   ObsoleteAdvance ADVANCE_CLASSICAL_EDUCATION
+
    ProductionCost 3240
-   IncKnowledgePercent 20
+   IncKnowledgePercent 10
 }
 
 ############################################################
@@ -21,7 +17,7 @@ WONDER_CENTRAL_MATTER_DECOMPILER {
    Description DESCRIPTION_WONDER_GLOBAL_NANO_CLEANER
    Movie MOVIE_WONDER_GLOBAL_NANO_CLEANER
    EnableAdvance ADVANCE_ECOTOPIA
-   ProductionCost 20000
+   ProductionCost 30000
    BuildingEverywhere IMPROVE_MATTER_DECOMPILER
 }
 
@@ -32,6 +28,9 @@ WONDER_CHICHEN_ITZA {
    Description DESCRIPTION_WONDER_CHICHEN_ITZA
    Movie MOVIE_WONDER_CHICHEN_ITZA
    EnableAdvance ADVANCE_JURISPRUDENCE
+
+   ObsoleteAdvance ADVANCE_THEOLOGY
+
    ProductionCost 2160
    DecCrimePercent 30
 }
@@ -83,7 +82,6 @@ WONDER_EMANCIPATION_PROCLAMATION {
    EnableAdvance ADVANCE_AGE_OF_REASON
    ProductionCost 5760
    FreeSlaves
-   ProhibitSlavers
 }
 
 ############################################################
@@ -105,7 +103,7 @@ WONDER_FIELD_DYNAMICS_LABORATORY {
    Movie MOVIE_WONDER_FIELD_DYNAMICS_LABORATORY
    EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
    ProductionCost 15200
-   IncKnowledgePercent 35
+   IncKnowledgePercent 10
 }
 
 ############################################################
@@ -128,7 +126,6 @@ WONDER_GENOME_PROJECT {
    EnableAdvance ADVANCE_GENETICS
    ProductionCost 15200
    IncreaseHp 1
-   IncreaseProduction 10
 }
 
 ############################################################
@@ -149,7 +146,7 @@ WONDER_GLOBESAT {
    Description DESCRIPTION_WONDER_GLOBESAT
    Movie MOVIE_WONDER_GLOBESAT
    EnableAdvance ADVANCE_GLOBAL_COMMUNICATIONS
-   ProductionCost 12400
+   ProductionCost 18600
    GlobalRadar
 }
 
@@ -176,7 +173,6 @@ WONDER_GUTTENBERGS_BIBLE {
    Movie MOVIE_WONDER_GUTTENBERGS_BIBLE
    EnableAdvance ADVANCE_PRINTING_PRESS
    ProductionCost 3240
-   IncHappinessEmpire 2
    ReformCities
    PreventConversion
 }
@@ -189,9 +185,7 @@ WONDER_HAGIA_SOPHIA {
    Movie MOVIE_WONDER_HAGIA_SOPHIA
    EnableAdvance ADVANCE_THEOLOGY
    ProductionCost 3240
-   #BuildingEverywhere IMPROVE_SHRINE #Removed because only effect appears
-   #BuildingEffectEverywhere IMPROVE_SHRINE #New flag that does same as old flag above
-   ActualBuildingEverywhere IMPROVE_SHRINE #added to actual build the buildings
+   ActualBuildingEverywhere IMPROVE_SHRINE
 }
 
 ############################################################
@@ -212,9 +206,11 @@ WONDER_INTERNET {
    Description DESCRIPTION_WONDER_INTERNET
    Movie MOVIE_WONDER_INTERNET
    EnableAdvance ADVANCE_COMPUTER
+
+   ObsoleteAdvance ADVANCE_SPACE_FLIGHT
+
    ProductionCost 8600
-   #BuildingEverywhere IMPROVE_COMPUTER_CENTER
-   ActualBuildingEverywhere IMPROVE_COMPUTER_CENTER
+   IncKnowledgePercent 20
 }
 
 ############################################################
@@ -247,8 +243,7 @@ WONDER_NATIONAL_SHIELD {
    Movie MOVIE_WONDER_NATIONAL_SHIELD
    EnableAdvance ADVANCE_UNIFIED_PHYSICS
    ProductionCost 20000
-   #BuildingEverywhere IMPROVE_FORCEFIELD
-   ActualBuildingEverywhere IMPROVE_FORCEFIELD
+   BuildingEverywhere IMPROVE_FORCEFIELD
 }
 
 ############################################################
@@ -270,7 +265,7 @@ WONDER_PYRAMIDS {
    Movie MOVIE_WONDER_PYRAMIDS
    EnableAdvance ADVANCE_STONE_WORKING
    ProductionCost 2160
-   BonusGold 100
+   BonusGold 300
 }
 
 ############################################################
@@ -281,7 +276,7 @@ WONDER_RAMAYANA {
    Movie MOVIE_WONDER_RAMAYANA
    EnableAdvance ADVANCE_RELIGION
    ProductionCost 2160
-   IncHappinessEmpire 3
+   IncHappinessEmpire 1
 }
 
 ############################################################
@@ -354,8 +349,11 @@ WONDER_ZERO_CRIME_BILL {
    Description DESCRIPTION_WONDER_INTERNATIONAL_HUMAN_RIGHTS
    Movie MOVIE_WONDER_INTERNATIONAL_HUMAN_RIGHTS
    EnableAdvance ADVANCE_CRIMINAL_CODE
+
+   ObsoleteAdvance ADVANCE_NEURAL_REPROGRAMMING
+
    ProductionCost 8600
-   DecCrimePercent 60
+   DecCrimePercent 30
 }
 
 ############################################################

@@ -204,6 +204,129 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 		
 		m_orderButton[orderIndex]->Enable(false);
 	}
+/*
+#define k_TERRAINIMP_COLS_PER_ROW 6
+	m_terrainImpSwitches        (NULL),
+new and delete in constructor/dest
+  		s_scenarioEditor->PopulateTerrainImprovementList();  //emod5 defientely need something to populate it
+
+
+void ScenarioEditor::PopulateTerrainImprovementList()  //emod1 note  use this format instead of current switches but add item populating checks?
+{
+
+	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.City.TerrainImprovementList");
+	Assert(lb);
+	if(!lb)	return;
+
+	lb->SetAbsorbancy(FALSE);
+	lb->Clear();
+
+	sint32 col = 0;
+	ctp2_ListItem *curItem = NULL;
+	ctp2_Static *curItemBox = NULL;
+
+	delete [] m_terrainImpSwitches;
+	m_terrainImpSwitches = new ctp2_Switch *[g_theTerrainImprovementDB->NumRecords()];
+
+	for (sint32 t = 0; t < g_theTerrainImprovementDB->NumRecords(); t++) {
+		if(col == 0) {
+			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenTerrainImprovementItem");
+			Assert(curItem);
+			if(!curItem)
+				break;
+
+			curItemBox = (ctp2_Static *)curItem->GetChildByIndex(0);
+			Assert(curItemBox);
+			if(!curItemBox)
+				break;
+
+			lb->AddItem(curItem);
+		}
+		
+		Assert(curItem && curItemBox);
+		if(!curItem || !curItemBox)
+			break;
+
+		ctp2_Switch *sw = (ctp2_Switch *)curItemBox->GetChildByIndex(col);
+		Assert(sw);
+		if(!sw)
+			break;
+
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(t);
+		Assert(rec);
+		if(!rec)
+			break;
+
+		const MBCHAR *iconname = rec->GetIcon()->GetIcon();
+		Assert(iconname);
+		if(iconname) {
+			sw->SetImage((char *)iconname, 0);
+			sw->SetImage((char *)iconname, 1);
+		}
+		
+		m_terrainImpSwitches[t] = sw;
+
+		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainImprovementSwitch, (void *)t);
+		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
+
+		col++;
+		if(col >= k_TERRAINIMP_COLS_PER_ROW) {
+			col = 0;
+			curItem = NULL;
+			curItemBox = NULL;
+		}
+	}
+
+	
+	if(col > 0) {
+		Assert(curItem && curItemBox);
+		for (sint32 dis = col; dis < k_TERRAINIMP_COLS_PER_ROW; dis++) {
+			ctp2_Switch *sw = (ctp2_Switch *)curItemBox->GetChildByIndex(dis);
+			Assert(sw);
+			if(sw)
+				sw->Enable(FALSE);
+		}
+	}
+}
+
+void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{//emod4 need this functionality should be there
+	Assert(s_scenarioEditor);
+	if(!s_scenarioEditor)
+		return;
+
+	if(action == 0) {
+		
+		return;
+	}
+
+	if (action == AUI_SWITCH_ACTION_PRESS)
+		DisableErase();
+
+	sint32 ter = (sint32)cookie;
+
+	if(s_scenarioEditor->m_terrainImpSwitches[ter]->GetState() == 0) {
+		s_scenarioEditor->m_paintTerrainImprovement = -1;
+		if(s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAINIMP) {
+			s_scenarioEditor->m_mapMode = SCEN_MAP_NONE;
+		}
+		
+		return;
+	}
+
+	for (sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+		if(i == ter)
+			continue;
+		if(s_scenarioEditor->m_terrainImpSwitches[i]) {
+			s_scenarioEditor->m_terrainImpSwitches[i]->SetState(0);
+		}
+	}
+
+	s_scenarioEditor->m_paintTerrainImprovement = ter;
+	s_scenarioEditor->m_mapMode = SCEN_MAP_TERRAINIMP;
+}
+
+*/
 /////////////////////end note
 	
 	m_unitListPreviousButton->SetActionFuncAndCookie(

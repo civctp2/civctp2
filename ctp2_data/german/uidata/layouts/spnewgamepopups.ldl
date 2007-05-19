@@ -1263,8 +1263,8 @@ SPNewGameRulesScreen {
 		int	widthpix	275
 
 		stringtable {
-			string	string0	"str_tbl_ldl_NoAICityLimit_Off"
-			string	string1	"str_tbl_ldl_NoAICityLimit_On"
+			string	string0	"str_tbl_ldl_AINoCityLimit_Off"
+			string	string1	"str_tbl_ldl_AINoCityLimit_On"
 		}
 	}
 

@@ -47,63 +47,75 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-05-16                                                                            # What revision is this.
+2007-05-19 (revision 735)
+Fixed:    MaxCityWonders, it now works as intended
+Fixed:    MaxCityBuildings, it now works as intended 
+Disabled: Sectarian happiness functionality has been removed
+Fixed:    Unit Upgrading now updates the unit's attributes
+
+2007-05-16 (revision 732)                                                                           
 Disabled: MaxCityWonders because it caused crash
 Disabled: MaxCityBuildings because it caused crash
 Changed:  NeedsFeatToBuild now only sees if player has feat not all players
-Added:    NeedsAnyPlayerFeatToBuild to allow construction regardless which player achieved feat    # That are a lot of characters.
+Added:    NeedsAnyPlayerFeatToBuild to allow construction regardless which 
+          player achieved feat
+Added:    ProhibtSlavers this wonder flag prevents addition slavers 
 Added:    New Options
 - Rules Screen
-   No AI City Limit     Government City Limit happiness effect for AI can be toggled on/off        # That are a lot of characters.
-   No City Limit        Government City Limit happiness effect can be toggled on/off               # That are a lot of characters.
-Added:    New Database Flags
-- ConstDB                                                                             # That are a lot of databases ConstDB, MAX_CITY_WONDERS etc.
-  MAX_CITY_WONDERS      modders can specify the number of wonders a city can build    # That are a lot of characters.
-  MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build
-- WonderDB
-  ProhibtSlavers	this wonder flag prevents addition slavers                    # Afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood. And I thought we are talking about wonders, aren't we?
-                                                                                      # That's a lot of space here.
+   No AI City Limit     Government City Limit happiness effect for AI can 
+                        be toggled on/off
+   No City Limit        Government City Limit happiness effect can be 
+                        toggled on/off
+                   
 
 2007-05-01  (revision 726)
 Fixed:    Barbarian player cannot declare war from diplomanager
-Fixed:    Disband Assert errors in Debug version                                      # And that is part of the playtest version?
-Changed:  (Alex Scenario) now uses improved AI strategies                             # So that it is part of the Alexander scenario is totally unimprtant? Don't put it into parentheses.
-Fixed:    (Alex scenario) building tileimps now have sound                            # So that it is part of the Alexander scenario is totally unimprtant? Don't put it into parentheses.
-Fixed:    (Samurai Scenario) Scenario shold now be playable                           # So that it is part of the Seven Samurai scenario is totally unimprtant? Don't put it into parentheses.
-Fixed:    Unit Upgrading                                                              # Oh really?
-Fixed:    Search error showing hidden entried in the Great Library                    # What about active voice and a whole sentence?
+Changed:  Alex Scenario - now uses improved AI strategies                             
+Fixed:    Alex scenario - building tileimps now have sound                            
+Fixed:    Samurai Scenario - Scenario shold now be playable                           
+                                                         
+Fixed:    Search error showing hidden entry in the Great Library                    # What about active voice and a whole sentence?
 Fixed:    Error reading the incorrect entry in the Great Library                      # Be a little bit more specific.
-Fixed:    Bug causing two workers to be subtracted from a city when settler built     # More than 80 characters.
-Added:    Ruins Tileimp to be used with profile option of razed cities leaving a ruin on the map        # Even more characters than in the previous line.
-Added:    New Database Flags
+Fixed:    Bug causing two workers to be subtracted from a city when 
+          settler built 
+Added:    Ruins Tileimp to be used with profile option of razed cities 
+          leaving a ruin on the map  
+Added:    New ConstDB Properties
 - ConstDB
-  MAX_CITY_WONDERS      modders can specify the number of wonders a city can build    # Aren't we talking about const properties, are we?
-  MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build       # Aren't we talking about const properties, are we?
+  MAX_CITY_WONDERS      modders can specify the number of wonders a city can 
+                        build    
+  MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build       
+Added:    New Database Flags
 - WonderDB
-BuildingEffectEverywhere same as BuildingEverywhere but flag is more explanatory      # This does not have the same effect.
+BuildingEffectEverywhere same as BuildingEverywhere but flag is more 
+                        explanatory      # This does not have the same effect. - Its a copy of it. ActualBuildingEverywhere is the other one
 - TerrainImprovementDB
-   RiverOnly            tileimp can only be build on a river                          # Actually this is called a TerrainImprovement
-   IsUrban              tileimp is considered urban                                   # Probably this works to if I declare an area in the middle of no-where to an urban area. :D Or do you mean can only be built with an urban area nearby?
-   IsIrrigation         tileimp is considered irrigation
-   NeedsIrrigation      tileimp must be build one square from IsIrrigation tileimps or a river             # That are a lot of characters.
-   NextToCity           tileimp must be built 1 square next to city
-   IsWonder             tileimp is a wonder and can only be built if a player has a wonder                 # That are a lot of characters.
-                        tileimp can only be built once                                                     # And what is the property of the TerrainImprovement in question?
-                        tileimp must be built in a square owned by the cit that built the tileimp          # That are a lot of characters. And what is the property of the TerrainImprovement in question?
+   RiverOnly            TerrainImprovement can only be built on a river                          
+   IsUrban              TerrainImprovement is considered urban                                   # Probably this works to if I declare an area in the middle of no-where to an urban area. :D Or do you mean can only be built with an urban area nearby? - Just an identifier to be used with NextToCity
+   IsIrrigation         TerrainImprovement is considered irrigation
+   NeedsIrrigation      TerrainImprovement must be build one square from 
+                        IsIrrigation TerrainImprovements or a river
+   NextToCity           TerrainImprovement must be built 1 square next to city
+   IsWonder             TerrainImprovement is a wonder and can only be built if 
+                        a player has a wonder
+   IsWonder             TerrainImprovement can only be built once                                                    
+   IsWonder             TerrainImprovement must be built in a square owned by 
+                        the city that built the tileimp          
 Added:    New Options
 - Rules Screen
-   AImilitia            Empty AI cities generate a cheap unit at the beginning of a turn                   # That are a lot of characters.
+   AImilitia            Empty AI cities generate a cheap unit at the 
+                        beginning of a turn
    No AI gold deficit   AI ctites don't drop below 0 
    No AI production deficit  AI production never drops below 0
    Gold per city        cities cost gold multiplied by the number of city limit
    Gold per unit        units cost gold each turn multiplied by wage rate
-   Aicitydefense        AI cities have a defense increase based on population size    # That are a lot of characters.
+   Aicitydefense        AI cities have a defense increase based on population 
+                        size
 - Scenario Editor
    DebugAI Button       toggles showing the AI unit's goals
 - Gameplay Screen
    ShowEnemyHealth      toggles shoowing AI health bar
    ShowDebugAI          toggles showing the AI unit's goals
-                                                                                      # That's a lot of space here.
 
 2007-04-09 (revision 719)
 Fixed:    Bug that made human units automatically upgrade
@@ -114,8 +126,6 @@ Added:    Religion Database for future use
 Changed:  BarbarianSpawnBarbarian code to limit Barbarians overrunning
           the entire map
 Added:    DebugAI profile option - display AI goals for units
-                                                                                      # That's a lot of space here.
-                                                                                      # That's a lot of space here.
 
 2007-03-22 (revision 707)
 Fixed:    Rules screen so it works
@@ -123,31 +133,29 @@ Fixed:    Crash for Alex Scenario caused by Special Icons
 Added:    Affects of SectarianHappiness value displays in CityWindow
 Added:    New Options
 - Rules Screen
-   One City Challenge 	Human player can't build settlers                             # Afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood.
-   City Capture Options slic message with option on/off
+   One City Challenge   Human player can't build settlers                            
+   City Capture Options rlic message with option on/off
    Revolt Insurgents    revolting cities spawn barbarians 
    RevoltCasualties     revolting cities lose random population
    BarbarianSpawnBarbarian risk dependent barbarians spawn more
    SectarianHappiness   more unhappiness in cities of a different style
-                                                                                      # That's a lot of space here.
 - Graphics screen
-   Smooth Borders 	show original or icon                                         # Afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood. And very brief description.
-                                                                                      # That's a lot of space here.
+   Smooth Borders       show original or icon                                         
 - Gameplay Screen 
-   City Capture Options slic message with option on/off
-                                                                                      # That's a lot of space here.
-Chnaged:    Database flags for modders:
+   City Capture Options slic message with can be toggled on/off
+Changed:    Database flags for modders:
 - TerrainImprovementDB
-   BonusFoodExport	now randomly generate a food value to every city              # Afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood.
-   BonusGoldExport	now randomly generate a gold value to every city              # Afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood.
-                                                                                      # That's a lot of space here.
+   BonusFoodExport      now randomly generate a food value to every city              
+   BonusGoldExport      now randomly generate a gold value to every city              
 
 2007-03-12 (revision 705)
-Fixed:    Crash caused by SectarianHappiness because the founder civ was destroyed
+Fixed:    Crash caused by SectarianHappiness because the founder civ was 
+          destroyed
 Fixed:    Crash caused by Sink code
-Added:    GovtIcon database flag (future use)                                         # And this is now important if neither the player nor the modder can use it.
-Added:    ShowCityIcon for Wonders and buildings (uses mapicons in concepticon.txt)
-Added:    IsReligionIcon to wonders and buildings (uses mapicons in concepticon.txt)
+Added:    ShowCityIcon for Wonders and buildings (uses mapicons in 
+          concepticon.txt)
+Added:    IsReligionIcon to wonders and buildings (uses mapicons in 
+          concepticon.txt)
 Added:    Graphic window option to show/hide Army Names
 Added:    Graphics window option to show/hide nation flags
 Added:    New strategies.txt that emphasizes more city captures
@@ -155,31 +163,32 @@ Fixed:    Location of Nation Flag is now right of the herald
 Fixed:    Army stack now done by drawingstring not icons
 Deleted:  Old IsReligion# system
 Added:    New database flags for modders:
-- GovernmentDB
-   GovtIcon             Future use to diplay government icons on map                  # And this is now important if neither the player nor the modder can use it.
 - WonderDB
-   ShowCityIcon         Flag displays a map icon behind the city                      # Actually you aren't talking about a flag but about a wonder and what it does with the property in question.
-   IsReligionIcon       Flag displays a map icon under city name                      # Actually you aren't talking about a flag but about a wonder and what it does with the property in question.
+   ShowCityIcon         displays a map icon behind the city                      
+   IsReligionIcon       displays a map icon under city name                      
 - BuildingDB
-   ShowCityIcon         Flag displays a map icon behind the city                      # Actually you aren't talking about a flag but about a building and what it does with the property in question.
-   IsReligionIcon       Flag displays a map icon under city name                      # Actually you aren't talking about a flag but about a building and what it does with the property in question.
+   ShowCityIcon         displays a map icon behind the city                      
+   IsReligionIcon       displays a map icon under city name                     
 
 2007-03-01 (Revision 693)
 Added:    Hostile terrain hp cost is now based on barbarian risk 
 Fixed:    SpawnBarbarian code for entrenched units that can spawnbarbarians
-#                                                                                                                 # That's a lot of space here.
 Fixed:    Number of flags (restored them)
-Added:    New userprofile option option to show/hide civflag graphics show up under the playercolor flag          # That are a lot of characters.
+Added:    New userprofile option option to show/hide civflag graphics show up
+          under the playercolor flag   
 Fixed:    Civ flags located below player color flag
-Added:    TerraformOcean button in tile bank (restored it) this allows modders up to 60 of the 64                 # That are a lot of characters.
-          available tileimp slots (previously only 48/60 available)
-Added:    Slic messages for sinking ship (again), hostile terrain, insurgent spawn, guerrilla spawn               # That are a lot of characters.
+Added:    TerraformOcean button in tile bank (restored it) this allows modders 
+          up to 60 of the 64 available tileimp slots (previously only 48/60 
+          available)
+Added:    Slic messages for sinking ship (again), hostile terrain, insurgent 
+          spawn, guerrilla spawn
 Added:    Additional but not implemented userprofile options
-Added:    New concept of energy supply and demand. It calculates a ratio used as a modifier for                   # That are a lot of characters.
-          gold and production.
-Added:    New userprofile option to disable the new energy supply/demand concept.                                 # That are a lot of characters.
-Added:    New database flags for modders to enable the new energy supply/demand concept:                          # That are a lot of characters.
-                                                                                                                  # That's a lot of space here.
+Added:    New concept of energy supply and demand. It calculates a ratio used 
+          as a modifier for gold and production.
+Added:    New userprofile option to disable the new energy supply/demand 
+          concept.
+Added:    New database flags for modders to enable the new energy 
+          supply/demand concept:
 - TerrainImprovementDB
    ProducesEnergy       TerrainImprovement generates energy
    EnergyHunger         TerrainImprovement consumes energy
@@ -196,21 +205,24 @@ Added:    New database flags for modders to enable the new energy supply/demand 
 - UnitDB
    ProducesEnergy       Unit generates energy
    EnergyHunger         Unit consumes energy
-                                                                                                                  # That's a lot of space here.
 
 2007-02-22 (Revision 692)
-Fixed:     Moved Goal text from appearing inside the science box in the advance research screen                   # More than 80 characters in consecutive lines.
-Added:     Civilization Flags for Units (most artwork from Civ2 modders Michael D McCart & Michael D Raney)       # More than 80 characters in consecutive lines.
-Added:     Implemented Unit Hidden Nationality - these units are displayed as barbarians                          # More than 80 characters in consecutive lines.
+Fixed:     Moved Goal text from appearing inside the science box in the advance
+           research screen
+Added:     Civilization Flags for Units (most artwork from Civ2 modders Michael 
+           D McCart & Michael D Raney)
+Added:     Unit Hidden Nationality - these units are displayed as barbarians
 
 2007-02-01 (Revision 687)
-Added:	   Religious City Icons (up to 10 Religions) appear if building has IsReligion1(or 2 up to 10)            # More than 80 characters in consecutive lines, afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood.
-Added:	   National Borders are now displayed with icons for smooth appearance.                                   # More than 80 characters in consecutive lines, afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood.
-Changed:   Aligned Cityname, population rectangle, and turns to population growth rectangle.                      # More than 80 characters in consecutive lines.
-Changed:   Next Pop rectangle is now black like the city name to differentiate it from City Population.           # More than 80 characters in consecutive lines.
-Added:	   Player Capitols now have a star Icon.                                                                  # Afterwards I made my editor to display tabs with a length of more than four spaces this line looks ood.
+Added:     Religious City Icons (up to 10 Religions) appear if building has 
+           IsReligion1(or 2 up to 10)            
+Added:	   National Borders are now displayed with icons for smooth appearance.       
+Changed:   Aligned Cityname, population rectangle, and turns to population 
+           growth rectangle.
+Changed:   Next Pop rectangle is now black like the city name to differentiate
+           it from City Population.
+Added:     Player Capitols now have a star Icon.
 Fixed:     Implemented HasAirport Icon.
-                                                                                                                  # That's a lot of space here.
 
 2006-10-05 (Revision 647)
 Fixed:    No new civ message if the city in questions joins another civ.

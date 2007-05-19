@@ -31,7 +31,7 @@
 #  - ObsoleteGovernmenttype //added by E obsoletes wonders only if player switches to govt
 #  - Added BuildingEffectEverywhere to better flag than BuildingEverywhere based on code
 #  - ActualBuildingEverywhere was added and implemented a long time ago
-#  - Added ProhibitsSlavers
+#  - Added ProhibitSlavers
 # 
 #-----------------------------------------------------------------------------
 

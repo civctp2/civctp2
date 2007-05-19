@@ -47,6 +47,7 @@
 // - added HasWonder method
 // - FINALLY got contiguous irrigation to work 4.12.2007
 // - City Radius tileimps
+// - prevent barbarians from building tileimp 5-18-2007
 //
 //----------------------------------------------------------------------------
 
@@ -538,6 +539,12 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 	Assert(rec != NULL);
 	if(rec == NULL)
 		return false;
+
+	//barbarians shouldn't improve cities by E 5-18-2007
+	// modders can do it via strategies.txt
+	//if(pl == PLAYER_INDEX_VANDALS) {
+	//	return false;
+	//}
 
 	Assert(pl >= 0);
 	Assert(pl < k_MAX_PLAYERS);

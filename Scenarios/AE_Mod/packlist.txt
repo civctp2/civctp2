@@ -1,3 +1,3 @@
 AE Mod
-A E mod <insert better description here>.
+AE mod is the combined efforts of the posters at the Apolyton CtP2 sourcecode forum to rebalance, restructure, and generally improve the experience of playing CtP2.
 1

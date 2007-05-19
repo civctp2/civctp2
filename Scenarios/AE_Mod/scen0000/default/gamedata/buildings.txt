@@ -27,8 +27,7 @@ IMPROVE_ACADEMY {
    Description DESCRIPTION_IMPROVE_ACADEMY
    EnableAdvance ADVANCE_PHILOSOPHY
    ProductionCost 540
-   EnablesGood TERRAIN_FOREST_GOOD_THREE
-   Upkeep 5
+   Upkeep 1
    SciencePercent 0.1
 }
 
@@ -43,7 +42,7 @@ IMPROVE_AIRPORT {
    PrerequisiteBuilding IMPROVE_BAZAAR
 
    ProductionCost 3000
-   Upkeep 100
+   Upkeep 8
    CommercePercent 0.2
    Airport
    CantBuildInSea
@@ -56,7 +55,7 @@ IMPROVE_ANTI_BALLISTIC_MISSILES {
    Description DESCRIPTION_IMPROVE_ANTI_BALLISTIC_MISSILES
    EnableAdvance ADVANCE_GLOBAL_COMMUNICATIONS
    ProductionCost 5000
-   Upkeep 75
+   Upkeep 15
    ProtectFromNukes
 }
 
@@ -71,9 +70,9 @@ IMPROVE_AQUA_FILTER {
    PrerequisiteBuilding IMPROVE_ARCOLOGIES
 
    ProductionCost 8000
-   Upkeep 90
+   Upkeep 18
    RaiseOvercrowdingLevel 6
-   RaiseMaxPopulation 14
+   RaiseMaxPopulation 10
 }
 
 ############################################################
@@ -83,7 +82,7 @@ IMPROVE_AQUEDUCT {
    Description DESCRIPTION_IMPROVE_AQUEDUCT
    EnableAdvance ADVANCE_MASONRY
    ProductionCost 875
-   Upkeep 40
+   Upkeep 4
    RaiseOvercrowdingLevel 6
    RaiseMaxPopulation 14
 }
@@ -98,9 +97,9 @@ IMPROVE_ARCOLOGIES {
    PrerequisiteBuilding IMPROVE_AQUEDUCT
 
    ProductionCost 5000
-   Upkeep 160
+   Upkeep 12
    RaiseOvercrowdingLevel 8
-   RaiseMaxPopulation 14
+   RaiseMaxPopulation 10
 }
 
 ############################################################
@@ -110,7 +109,7 @@ IMPROVE_ARENA {
    Description DESCRIPTION_IMPROVE_ARENA
    EnableAdvance ADVANCE_CONCRETE
    ProductionCost 675
-   Upkeep 40
+   Upkeep 2
    HappyInc 2
 }
 
@@ -121,7 +120,7 @@ IMPROVE_BALLISTA_TOWERS {
    Description DESCRIPTION_IMPROVE_BALLISTA_TOWERS
    EnableAdvance ADVANCE_BALLISTICS
    ProductionCost 525
-   Upkeep 20
+   Upkeep 2
    CantBuildInSea
    OffenseBonusLand 20
 }
@@ -136,7 +135,7 @@ IMPROVE_BANK {
    PrerequisiteBuilding IMPROVE_BAZAAR
 
    ProductionCost 1225
-   Upkeep 40
+   Upkeep 4
    CommercePercent 0.15
 }
 
@@ -150,7 +149,7 @@ IMPROVE_BASCILICA {
    PrerequisiteBuilding IMPROVE_SHRINE
 
    ProductionCost 1450
-   Upkeep 40
+   Upkeep 4
    HappyInc 3
    IsReligious
    Cathedral
@@ -163,7 +162,7 @@ IMPROVE_BATTLEMENTS {
    Description DESCRIPTION_IMPROVE_BATTLEMENTS
    EnableAdvance ADVANCE_NAVAL_TACTICS
    ProductionCost 1800
-   Upkeep 50
+   Upkeep 5
    CoastalBuilding
    OffenseBonusWater 25
 }
@@ -175,7 +174,7 @@ IMPROVE_BAZAAR {
    Description DESCRIPTION_IMPROVE_BAZAAR
    EnableAdvance ADVANCE_TRADE
    ProductionCost 525
-   Upkeep 10
+   Upkeep 1
    CommercePercent 0.1
 }
 
@@ -190,7 +189,7 @@ IMPROVE_BEHAVIORAL_MOD_CENTER {
    PrerequisiteBuilding IMPROVE_COURTHOUSE
 
    ProductionCost 4500
-   Upkeep 180
+   Upkeep 18
    LowerCrime -0.3
 }
 
@@ -206,7 +205,7 @@ IMPROVE_BODY_EXCHANGE {
    PrerequisiteBuilding IMPROVE_INCUBATION_CENTER
 
    ProductionCost 7500
-   Upkeep 150
+   Upkeep 15
    RaiseOvercrowdingLevel 12
 }
 
@@ -221,7 +220,7 @@ IMPROVE_BROKERAGE {
    PrerequisiteBuilding IMPROVE_BAZAAR
 
    ProductionCost 1600
-   Upkeep 40
+   Upkeep 4
    CommercePercent 0.2
    Brokerage
 }
@@ -245,7 +244,7 @@ IMPROVE_CITY_WALLS {
    Description DESCRIPTION_IMPROVE_CITY_WALLS
    EnableAdvance ADVANCE_STONE_WORKING
    ProductionCost 450
-   Upkeep 20
+   Upkeep 2
    DefendersPercent 15
    PreventConversion 0.5
    PreventSlavery 0.5
@@ -265,7 +264,7 @@ IMPROVE_COMPUTER_CENTER {
    PrerequisiteBuilding IMPROVE_UNIVERSITY
 
    ProductionCost 2400
-   Upkeep 60
+   Upkeep 6
    SciencePercent 0.2
 }
 
@@ -280,7 +279,7 @@ IMPROVE_CORNUCOPIC_VAT {
    PrerequisiteBuilding IMPROVE_GRANARY
 
    ProductionCost 3500
-   Upkeep 150
+   Upkeep 15
    FoodVat 1
 }
 
@@ -294,7 +293,7 @@ IMPROVE_CORRECTIONAL_FACILITY {
    PrerequisiteBuilding IMPROVE_COURTHOUSE
 
    ProductionCost 1400
-   Upkeep 50
+   Upkeep 5
    LowerCrime -0.2
 }
 
@@ -305,9 +304,7 @@ IMPROVE_COURTHOUSE {
    Description DESCRIPTION_IMPROVE_COURTHOUSE
    EnableAdvance ADVANCE_JURISPRUDENCE
    ProductionCost 330
-   Upkeep 10
-   SquaredBorderRadius	 13
-   IntBorderRadius	 3
+   Upkeep 1
    LowerCrime -0.1
 }
 
@@ -318,7 +315,7 @@ IMPROVE_DRUG_STORE {
    Description DESCRIPTION_IMPROVE_DRUG_STORE
    EnableAdvance ADVANCE_PHARMACEUTICALS
    ProductionCost 1400
-   Upkeep 50
+   Upkeep 5
    RaiseOvercrowdingLevel 4
 }
 
@@ -334,7 +331,7 @@ IMPROVE_E_BANK {
    PrerequisiteBuilding IMPROVE_BROKERAGE
 
    ProductionCost 4000
-   Upkeep 120
+   Upkeep 12
    CommercePercent 0.25
 }
 
@@ -348,7 +345,7 @@ IMPROVE_ECO_TRANSIT {
    PrerequisiteBuilding IMPROVE_PUBLIC_TRANSPORTATION
 
    ProductionCost 3500
-   Upkeep 100
+   Upkeep 10
    PopulationPollutionPercent -0.5
 }
 
@@ -359,7 +356,7 @@ IMPROVE_FACTORY {
    Description DESCRIPTION_IMPROVE_FACTORY
    EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    ProductionCost 2025
-   Upkeep 80
+   Upkeep 8
    ProductionPercent 0.15
    AllowGrunts
 }
@@ -371,7 +368,7 @@ IMPROVE_FLAK_TOWERS {
    Description DESCRIPTION_IMPROVE_FLAK_TOWERS
    EnableAdvance ADVANCE_RADAR
    ProductionCost 2500
-   Upkeep 80
+   Upkeep 8
    OffenseBonusAir 40
 }
 
@@ -385,9 +382,10 @@ IMPROVE_FOOD_SILO {
    PrerequisiteBuilding IMPROVE_GRANARY
 
    ProductionCost 1200
-   Upkeep 40
+   Upkeep 4
    FoodPercent 0.15
    StarvationProtection 5
+   RaiseMaxPopulation 8
 }
 
 ############################################################
@@ -397,10 +395,8 @@ IMPROVE_FORCEFIELD {
    Description DESCRIPTION_IMPROVE_FORCEFIELD
    EnableAdvance ADVANCE_UNIFIED_PHYSICS
 
-   PrerequisiteBuilding IMPROVE_CITY_WALLS
-
    ProductionCost 10000
-   Upkeep 200
+   Upkeep 20
    DefendersPercent 80
    ForceField
 }
@@ -416,7 +412,7 @@ IMPROVE_FUSION_PLANT {
    PrerequisiteBuilding IMPROVE_OIL_REFINERY
 
    ProductionCost 10000
-   Upkeep 200
+   Upkeep 20
    ProductionPercent 0.25
 }
 
@@ -427,7 +423,7 @@ IMPROVE_GAIA_COMPUTER {
    Description DESCRIPTION_IMPROVE_GAIA_COMPUTER
    EnableAdvance ADVANCE_GAIA_CONTROLLER
    ProductionCost 7500
-   Upkeep 250
+   Upkeep 25
 }
 
 ############################################################
@@ -437,7 +433,7 @@ IMPROVE_GRANARY {
    Description DESCRIPTION_IMPROVE_GRANARY
    EnableAdvance ADVANCE_AGRICULTURE
    ProductionCost 300
-   Upkeep 10
+   Upkeep 1
    FoodPercent 0.1
    StarvationProtection 2
 }
@@ -452,7 +448,7 @@ IMPROVE_HOSPITAL {
    PrerequisiteBuilding IMPROVE_DRUG_STORE
 
    ProductionCost 2375
-   Upkeep 80
+   Upkeep 8
    RaiseOvercrowdingLevel 8
 }
 
@@ -467,7 +463,7 @@ IMPROVE_INCUBATION_CENTER {
    PrerequisiteBuilding IMPROVE_HOSPITAL
 
    ProductionCost 5500
-   Upkeep 150
+   Upkeep 15
    RaiseOvercrowdingLevel 12
 }
 
@@ -481,7 +477,7 @@ IMPROVE_MATTER_DECOMPILER {
    PrerequisiteBuilding IMPROVE_RECYCLING_PLANT
 
    ProductionCost 4500
-   Upkeep 150
+   Upkeep 15
    ProductionPollutionPercent -0.5
 }
 
@@ -492,7 +488,7 @@ IMPROVE_MICRO_DEFENSE {
    Description DESCRIPTION_IMPROVE_MICRO_DEFENSE
    EnableAdvance ADVANCE_NANO_WARFARE
    ProductionCost 8500
-   Upkeep 180
+   Upkeep 18
    ProtectFromBioAgents 0.5
    ProtectFromNanoVirus 0.5
 }
@@ -504,7 +500,7 @@ IMPROVE_MILL {
    Description DESCRIPTION_IMPROVE_MILL
    EnableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    ProductionCost 1125
-   Upkeep 40
+   Upkeep 4
    ProductionPercent 0.1
 }
 
@@ -518,7 +514,7 @@ IMPROVE_MOVIE_PALACE {
    PrerequisiteBuilding IMPROVE_ARENA
 
    ProductionCost 1500
-   Upkeep 50
+   Upkeep 5
    LowerPeaceMovement -0.2
    Television
 }
@@ -534,7 +530,7 @@ IMPROVE_NANITE_FACTORY {
    PrerequisiteBuilding IMPROVE_ROBOTIC_PLANT
 
    ProductionCost 8000
-   Upkeep 180
+   Upkeep 18
    ProductionPercent 0.25
 }
 
@@ -548,7 +544,7 @@ IMPROVE_NUCLEAR_PLANT {
    PrerequisiteBuilding IMPROVE_OIL_REFINERY
 
    ProductionCost 4500
-   Upkeep 120
+   Upkeep 12
    ProductionPercent 0.2
    NuclearPlant
 }
@@ -560,8 +556,7 @@ IMPROVE_OIL_REFINERY {
    Description DESCRIPTION_IMPROVE_OIL_REFINERY
    EnableAdvance ADVANCE_OIL_REFINING
    ProductionCost 3500
-   NeedsCityGood TERRAIN_DESERT_GOOD_TWO
-   Upkeep 80
+   Upkeep 8
    ProductionPercent 0.15
 }
 
@@ -578,7 +573,7 @@ IMPROVE_ORBITAL_LABORATORY {
    PrerequisiteBuilding IMPROVE_UNIVERSITY
 
    ProductionCost 3000
-   Upkeep 100
+   Upkeep 10
    SciencePercent 0.3
 }
 
@@ -589,7 +584,7 @@ IMPROVE_POWER_SATELLITE {
    Description DESCRIPTION_IMPROVE_POWER_SATELLITE
    EnableAdvance ADVANCE_GAIA_CONTROLLER
    ProductionCost 3500
-   Upkeep 100
+   Upkeep 0
 }
 
 ############################################################
@@ -599,7 +594,7 @@ IMPROVE_PUBLIC_TRANSPORTATION {
    Description DESCRIPTION_IMPROVE_PUBLIC_TRANSPORTATION
    EnableAdvance ADVANCE_MASS_TRANSIT
    ProductionCost 2400
-   Upkeep 60
+   Upkeep 6
    PopulationPollutionPercent -0.3
 }
 
@@ -614,7 +609,7 @@ IMPROVE_PUBLISHING_HOUSE {
    PrerequisiteBuilding IMPROVE_UNIVERSITY
 
    ProductionCost 1375
-   Upkeep 30
+   Upkeep 3
    SciencePercent 0.15
 }
 
@@ -625,7 +620,7 @@ IMPROVE_RECYCLING_PLANT {
    Description DESCRIPTION_IMPROVE_RECYCLING_PLANT
    EnableAdvance ADVANCE_CONSERVATION
    ProductionCost 3000
-   Upkeep 80
+   Upkeep 8
    ProductionPollutionPercent -0.3
 }
 
@@ -639,7 +634,7 @@ IMPROVE_ROBOTIC_PLANT {
    PrerequisiteBuilding IMPROVE_FACTORY
 
    ProductionCost 5500
-   Upkeep 150
+   Upkeep 15
    ProductionPercent 0.2
 }
 
@@ -654,8 +649,8 @@ IMPROVE_SECURITY_MONITOR {
    PrerequisiteBuilding IMPROVE_COURTHOUSE
 
    ProductionCost 4000
-   Upkeep 120
-   HappyInc -3
+   Upkeep 12
+   HappyInc -1
    LowerCrime -0.3
 }
 
@@ -666,7 +661,7 @@ IMPROVE_SHRINE {
    Description DESCRIPTION_IMPROVE_SHRINE
    EnableAdvance ADVANCE_RELIGION
    ProductionCost 270
-   Upkeep 10
+   Upkeep 1
    HappyInc 1
    IsReligious
    Cathedral
@@ -684,7 +679,7 @@ IMPROVE_TELEVISION {
 
    ProductionCost 2500
    Upkeep 5
-   HappyInc 10
+   HappyInc 1
    DoubleTelevangelists
    GoldPerCitizen 5
    Television
@@ -697,7 +692,7 @@ IMPROVE_THEATER {
    Description DESCRIPTION_IMPROVE_THEATER
    EnableAdvance ADVANCE_DRAMA
    ProductionCost 495
-   Upkeep 10
+   Upkeep 1
    HappyInc 2
 }
 
@@ -711,7 +706,7 @@ IMPROVE_UNIVERSITY {
    PrerequisiteBuilding IMPROVE_ACADEMY
 
    ProductionCost 1350
-   Upkeep 30
+   Upkeep 3
    SciencePercent 0.15
 }
 
@@ -726,7 +721,7 @@ IMPROVE_VR_AMUSEMENT_PARK {
    PrerequisiteBuilding IMPROVE_MOVIE_PALACE
 
    ProductionCost 3500
-   Upkeep 100
+   Upkeep 10
    HappyInc 5
 }
 

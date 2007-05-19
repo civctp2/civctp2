@@ -130,7 +130,6 @@ TERRAIN_TUNDRA {
    Icon ICON_TERRAIN_TUNDRA
    InternalType: Tundra
    CanDie
-   HostileTerrainCost 2
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
@@ -189,7 +188,6 @@ TERRAIN_GLACIER {
    HutTilesetIndexB 151
    Icon ICON_TERRAIN_GLACIERS
    InternalType: Glacier
-   HostileTerrainCost 3
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
@@ -293,7 +291,7 @@ TERRAIN_GRASSLAND {
 
    Resources TERRAIN_GRASSLAND_GOOD_TWO
    Resources TERRAIN_GRASSLAND_GOOD_ONE
-   Resources TERRAIN_GRASSLAND_GOOD_HORSE	
+   Resources TERRAIN_GRASSLAND_GOOD_THREE	
    Resources TERRAIN_GRASSLAND_GOOD_FOUR
 
    MovementType: Air
@@ -309,7 +307,6 @@ TERRAIN_DESERT {
    Icon ICON_TERRAIN_DESERTS
    InternalType: Desert
    CanDie
-   HostileTerrainCost 1
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
@@ -372,7 +369,6 @@ TERRAIN_SWAMP {
    Icon ICON_TERRAIN_SWAMPS
    InternalType: Swamp
    CanDie
-   HostileTerrainCost 1
 
    AddAdvance ADVANCE_SUBNEURAL_ADS
    TransformAdd {
@@ -435,7 +431,6 @@ TERRAIN_JUNGLE {
    Icon ICON_TERRAIN_JUNGLES
    InternalType: Jungle
    CanDie
-   HostileTerrainCost 2
 
    AddAdvance ADVANCE_CONSERVATION
    TransformAdd {
@@ -693,7 +688,6 @@ TERRAIN_WATER_VOLCANO {
    HutTilesetIndexB 151
    Icon ICON_TERRAIN_VOLCANO
    InternalType: WaterVolcano
-   HostileTerrainCost 5
 
    EnvBase {
       Score 90
@@ -1152,7 +1146,6 @@ TERRAIN_WATER_KELP {
    HutTilesetIndexB 151
    Icon ICON_TERRAIN_KELP_BED
    InternalType: WaterKelp
-   HostileTerrainCost 2
 
    EnvBase {
       Score 80
@@ -1190,7 +1183,6 @@ TERRAIN_WATER_REEF {
    HutTilesetIndexB 151
    Icon ICON_TERRAIN_CORAL_REEF
    InternalType: WaterReef
-   HostileTerrainCost 1
 
    EnvBase {
       Score 80

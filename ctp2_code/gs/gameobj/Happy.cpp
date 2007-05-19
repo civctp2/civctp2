@@ -36,6 +36,7 @@
 // - added difficulty setting eliminating unhappiness for ai cities overlimit
 // - added profile option for NoAICityLimit and NoCityLimit
 // - added comment for wonders
+// - outcommented sectarian happiness
 //
 //----------------------------------------------------------------------------
 
@@ -600,7 +601,7 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 	m_happiness += p->CityHappinessIncrease();
 	m_happiness += cd.StyleHappinessIncr();
 	m_happiness += cd.GoodHappinessIncr();		//EMOD 4-27-2006 to allow for luxury goods
-	m_happiness += cd.SectarianHappiness();		//EMOD 5-26-2006 affects of religious and ethnic violence
+	//m_happiness += cd.SectarianHappiness();		//EMOD 5-26-2006 affects of religious and ethnic violence
 	m_happiness += cd.TileImpHappinessIncr();	//EMOD 8-29-2006 tileimps can give happiness
 
 	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
@@ -704,7 +705,7 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 	m_happiness += m_timed;
  
 	m_tracker->SetHappiness(HAPPY_REASON_ASSASSINATION, p->GetTimedHappiness());
-	m_tracker->SetHappiness(HAPPY_REASON_SECTHAPPY, cd.SectarianHappiness());
+	//m_tracker->SetHappiness(HAPPY_REASON_SECTHAPPY, cd.SectarianHappiness());
 	
 	
 	

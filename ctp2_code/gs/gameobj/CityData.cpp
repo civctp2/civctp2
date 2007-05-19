@@ -179,6 +179,7 @@
 // - Added GetNumCityWonders and GetNumCityBuildings methods
 // - Added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
 // - outcommented maxcity stuff
+// - Prevented barbarians from building tileimps - E 5-18-2007
 //
 //----------------------------------------------------------------------------
 
@@ -4086,10 +4087,15 @@ bool CityData::BeginTurn()
 		}
 	}
 
+	//kills barbarian cities 5-18-2007
+	//if((m_owner == PLAYER_INDEX_VANDALS) && (PopCount() > 1)) {
+	//	ChangePopulation(-1);
+	//}
+
 	//EMOD Fascist governments now kill off alien populations
 	// What an idea to kill the whole city at least in the long run.
 	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsXenophobic()) {
-		if(g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle) {
+		if((g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle) && (PopCount() > 1)) {
 			ChangePopulation(-1);
 		}
 	}
@@ -6473,6 +6479,11 @@ bool CityData::CanBuildBuilding(sint32 type) const
 //----------------------------------------------------------------------------
 bool CityData::CanBuildWonder(sint32 type) const
 {
+	//added to prevent barabarians from building wonders, they shouldn't do it 5-18-2007
+	// no loner needed modders can do it in build list
+	//if(m_owner == PLAYER_INDEX_VANDALS) {
+	//	return false;
+	//}
 
 	// Added Wonder database 
 	const WonderRecord* rec = wonderutil_Get(type);
@@ -6515,12 +6526,7 @@ bool CityData::CanBuildWonder(sint32 type) const
 //	}
 // emd EMOD
 
-////////////////////////////////////////////////////////////
-// EMOD TODO: count up the number of wonders in a city and 
-// compare it to the difficultydb wondercitylimit and add 
-// to a buildingflag additional wonder to city and a govt 
-// modifier?
-////////////////////////////////////////////////////////////
+
 	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
@@ -6712,12 +6718,17 @@ bool CityData::CanBuildWonder(sint32 type) const
 		if(!found)
 			return false;
 	}
-
+////////////////////////////////////////////////////////////
+// EMOD TODO: count up the number of wonders in a city and 
+// compare it to the difficultydb wondercitylimit and add 
+// to a buildingflag additional wonder to city and a govt 
+// modifier?
+////////////////////////////////////////////////////////////
 	//emod to limit number of wonders in a city
 	//causes delay/crash because m_builtwonders not initialized?
-	//if (GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders()) {
-	//	return false;
-	//}
+	if (GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders()) {
+		return false;
+	}
 
 	return g_slicEngine->CallMod(mod_CanCityBuildWonder, TRUE, m_home_city.m_id, type) != FALSE;
 }
@@ -10176,38 +10187,26 @@ sint32 CityData::ConsumeEnergy()
 sint32 CityData::GetNumCityWonders() const
 {
 	sint32 citywon = 0;
-#if 0
-	/// @todo Use a way to figure that out.
-	//        Endless loops are no solution
-	//        The second statement of the for 
-	//        loop must be bool and must change
-	//        with i. Or the loop need a break 
-	//        condition.
+
 	uint64 wonders = m_builtWonders;
-	for (sint32 i = 0; wonders; ++i) 
+	for (sint32 i = 0; i < wonders; ++i) 
 	{
 		citywon++;
 	}
-#endif
+
 	return citywon;
 }
 
 sint32 CityData::GetNumCityBuildings() const
 {
 	sint32 citybld = 0;
-#if 0
-	/// @todo Use a way to figure that out.
-	//        Endless loops are no solution
-	//        The second statement of the for 
-	//        loop must be bool and must change
-	//        with i. Or the loop need a break 
-	//        condition.
+
 	uint64 bld = m_built_improvements;
-	for (sint32 i = 0; bld; ++i) 
+	for (sint32 i = 0; i < bld; ++i) 
 	{
 		citybld++;
 	}
-#endif
+
 	return citybld;
 }
 
