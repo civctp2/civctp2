@@ -117,10 +117,10 @@ TerrainImprovement {
 		Bit Urban                           // FU
 		Bit Installation                    // FU
 		Bit DeniedToEnemy                   // FU
-		Bit(Int) BonusFoodExport                // installation gives a food modifier
-		Bit(Int) BonusProductionExport          // Installation Gives PW
-		Bit(Int) BonusGoldExport                // Installation gives Gold
-		Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 		
+		Bit(Int) BonusFoodExport            // Installation gives a food modifier
+		Bit(Int) BonusProductionExport      // Installation Gives PW
+		Bit(Int) BonusGoldExport            // Installation gives Gold
+		Bit(Int) FranchiseProduction        // Exports production value as a franchise to pay mil costs 		
 		Bit CanBeCaptured                   // FU
 		Bit CanUpgrade                      // FU
 		Bit(Float) Minefield                // FU
@@ -147,12 +147,12 @@ TerrainImprovement {
 		Int   EnergyHunger = 0
 		Int   ProducesEnergy = 0
 		//Bit IsWonder  //remove?
-		Record Wonder[]	IsWonder			// ties this tileimp to a wonder that must be built
-		Bit NeedsIrrigation                     // Can only be built on rivers or adjacent to rivers or other tileimps with flag IsIrrigation
-		Bit IsIrrigation                     // 
-		Bit NextToCity                     // Can only be built on next to Cities or other NextToCity flags
-		Bit RiverOnly                     // Can only be built on rivers
-		Bit Obstacle                     // FU makes cell impassable
+		Record Wonder[] IsWonder            // ties this tileimp to a wonder that must be built
+		Bit NeedsIrrigation                 // Can only be built on rivers or adjacent to rivers or other tileimps with flag IsIrrigation
+		Bit IsIrrigation                    // 
+		Bit NextToCity                      // Can only be built on next to Cities or other NextToCity flags
+		Bit RiverOnly                       // Can only be built on rivers
+		Bit Obstacle                        // FU makes cell impassable
 		Bit IsUrban
 		Bit NextToUrban
 
@@ -173,7 +173,7 @@ TerrainImprovement {
 	Bit CanExportGood                       // New Colony code (E)
 	Bit CanExportTileValueRadius
 	Record TerrainImprovement[]     PrerequisiteTileImp
-	Bit IsCanal								//FU
+	Bit IsCanal                             // FU
 
 	Record Icon Icon
 	#MDS 090800 not sure about this, trying to add 2 new fields...
@@ -190,12 +190,6 @@ TerrainImprovement {
 	Bit(Int) SquaredBorderRadius
 	Bit(Int) MoveBonus
 	Bit      Colony                         // sends good every turn to a city
-	// moved to effects
-	//Bit(Int) BonusFoodExport                // not implemented
-	//Bit(Int) BonusProductionExport          // Installation Gives PW
-	//Bit(Int) BonusGoldExport                // Installation gives Gold
-	//Bit(Int) FranchiseProduction			// Exports production value as a franchise to pay mil costs 
-
 
 	Bit GLHidden
 
@@ -204,13 +198,13 @@ TerrainImprovement {
 	# Pillage prevention
 	Bit CantPillage                         // Tileimp cannot be pillaged (E)
 	Bit SpawnsBarbarians                    // Spawns Barbarians
-	Bit CanBuildAlly						// can be built in ally territory
-	Bit CanBuildWasteland					// can be nuilt in unclaimed land, to connect cities
+	Bit CanBuildAlly                        // can be built in ally territory
+	Bit CanBuildWasteland                   // can be nuilt in unclaimed land, to connect cities
 	Bit CanUpgrade
-	Bit IsCityRuin							//left when cities are destroyed
+	Bit IsCityRuin                          //left when cities are destroyed
 
 
-		#Energy Code
+	#Energy Code
 	Int   EnergyHunger = 0
 	Int   ProducesEnergy = 0
 }

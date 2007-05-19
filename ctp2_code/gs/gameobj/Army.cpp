@@ -77,7 +77,7 @@ void Army::RemoveAllReferences()
 void Army::FastKill()
 {
 	if (IsValid()) 
-    {
+	{
 		g_theArmyPool->Del(*this);
 	}
 }

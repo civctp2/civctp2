@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The wonder tab of the info window.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 #include "ctp2_button.h"
 #include "ctp2_listbox.h"
 #include "ctp2_listitem.h"
+#include "ctp2_TabGroup.h"
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
 #include "Diffcly.h"
@@ -224,7 +225,10 @@ void WonderTab::UpdateList()
 		}
 	}
 
-	m_list->Show();
-	
+	ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject("InfoDialog.TabGroup");
+	if(tabGroup->GetCurrentTab() == (ctp2_Tab *)aui_Ldl::GetObject("InfoDialog.TabGroup.Tab2"))
+	{
+		m_list->Show();
+	}
 }
 

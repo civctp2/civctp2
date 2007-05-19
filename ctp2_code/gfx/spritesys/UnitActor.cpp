@@ -2540,7 +2540,7 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	}
 
 
-  	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
+	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
 		if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
 		
