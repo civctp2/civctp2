@@ -443,30 +443,30 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
 		if (facing < 4 && facing > 0) 
 		{
-			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+			(this->*_DrawLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
 		} 
 		else if (facing == 4 || facing == 0)
 		{
-			(this->*_DrawLowReversed)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+			(this->*_DrawLowReversed)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
 		else
 		{
-			(this->*_DrawLowReversed)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+			(this->*_DrawLowReversed)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
 			if (facing < 4 && facing > 0)
 			{
-				(this->*_DrawLow)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLow)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 			else if (facing == 4 || facing == 0)
 			{
-				(this->*_DrawLowReversed)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 			else
 			{
-				(this->*_DrawLowReversed)(m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
 		} else {
 			
@@ -475,17 +475,17 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 
 			if (facing < 4 && facing > 0)
 			{
-				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
+				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
 			} 
 			else if(facing == 4 || facing == 0)
 			{
-				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
+				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
 			} 
 			else
 			{
-				(this->*_DrawScaledLow)((Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
+				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, TRUE);
 			}
 		}
