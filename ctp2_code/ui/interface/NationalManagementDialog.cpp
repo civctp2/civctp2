@@ -1185,8 +1185,8 @@ sint32 NationalManagementDialog::CompareResources(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
-	city1.m_id = *reinterpret_cast<uint32 *>(item1->GetUserData());
-	city2.m_id = *reinterpret_cast<uint32 *>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uint32 >(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint32 >(item2->GetUserData());
 
 	
 	Assert(city1.IsValid());
@@ -1272,8 +1272,8 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
-	city1.m_id = *reinterpret_cast<uint32 *>(item1->GetUserData());
-	city2.m_id = *reinterpret_cast<uint32 *>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uint32 >(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint32 >(item2->GetUserData());
 
 	
 	Assert(city1.IsValid());
@@ -1341,8 +1341,8 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 {
 	
 	Unit city1, city2;
-	city1.m_id = *reinterpret_cast<uint32 *>(item1->GetUserData());
-	city2.m_id = *reinterpret_cast<uint32 *>(item2->GetUserData());
+	city1.m_id = reinterpret_cast<uint32 >(item1->GetUserData());
+	city2.m_id = reinterpret_cast<uint32 >(item2->GetUserData());
 
 	
 	Assert(city1.IsValid());
@@ -1561,7 +1561,7 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 
 			
 			Unit city;
-			city.m_id = *reinterpret_cast<uint32 *>(item->GetUserData());
+			city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
 
 			
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
@@ -1616,7 +1616,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(item->GetUserData());
+		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
 
 		
 		city.GetCityData()->SetUseGovernor(!governorStatus);
@@ -1654,7 +1654,7 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(item->GetUserData());
+		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
 
 		
 		city.GetCityData()->SetBuildListSequenceIndex(
@@ -1708,7 +1708,7 @@ void NationalManagementDialog::SelectBuildItemActionCallback(aui_Control *contro
 
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(item->GetUserData());
+		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
 
 		
 		city.GetCityData()->InsertBuildItem(
@@ -1745,7 +1745,7 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(item->GetUserData());
+		city.m_id = reinterpret_cast<uint32 >(item->GetUserData());
 
 		// JJB removed the following:
 		// and replaced it with the following:
