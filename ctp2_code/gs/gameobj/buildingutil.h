@@ -104,7 +104,6 @@ bool buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvement
 sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements); //EMOD 5-27-2006
 bool buildingutil_GetTreasuryInterest(const uint64 built_improvements,
                                       double &percent, sint32 owner);
-//EMOD Religion Flags to give Civ4 MAPICONS
 
 sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements);
 sint32 buildingutil_GetEnergyHungerPerPop(const uint64 built_improvements);

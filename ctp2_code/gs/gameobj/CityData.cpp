@@ -10188,12 +10188,20 @@ sint32 CityData::GetNumCityWonders() const
 {
 	sint32 citywon = 0;
 
+#if 0
+	/// @todo figure out what m_builtWonders is.
+	//        And it is not the number of wonders
+	//        you can build you find that in the
+	//        wonder database
+	/// @todo Figure out which wonder has been built
+	//        and count the built wonders.
+	/// @todo Test your code. (Actually I shouldn't need to say this.)
 	uint64 wonders = m_builtWonders;
 	for (sint32 i = 0; i < wonders; ++i) 
 	{
 		citywon++;
 	}
-
+#endif
 	return citywon;
 }
 
@@ -10201,12 +10209,20 @@ sint32 CityData::GetNumCityBuildings() const
 {
 	sint32 citybld = 0;
 
+#if 0
+	/// @todo figure out what m_built_improvements is.
+	//        And it is not the number of buildings
+	//        you can build you find that in the
+	//        building database.
+	/// @todo Figure out which building has been built
+	//        and count the built buildings.
+	/// @todo Test your code. (Actually I shouldn't need to say this.)
 	uint64 bld = m_built_improvements;
 	for (sint32 i = 0; i < bld; ++i) 
 	{
 		citybld++;
 	}
-
+#endif
 	return citybld;
 }
 

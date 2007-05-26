@@ -3,18 +3,19 @@
 #  Project      : Call To Power 2
 #  File type    : dbgen input
 #  Description  : Wonder type descriptor
-# 
-# ----------------------------------------------------------------------------
-# 
+#  Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
 #  Disclaimer
 # 
 #  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 # 
 #  This material has been developed at apolyton.net by the Apolyton CtP2 
 #  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
+#
 #-----------------------------------------------------------------------------
-# 
+#
 #  Modifications from the original Activision code:
 #
 #  - FU: designates Future Use / To Be Implemented / not coded yet
@@ -32,7 +33,7 @@
 #  - Added BuildingEffectEverywhere to better flag than BuildingEverywhere based on code
 #  - ActualBuildingEverywhere was added and implemented a long time ago
 #  - Added ProhibitSlavers
-# 
+#
 #-----------------------------------------------------------------------------
 
 WonderMovie : File
@@ -129,15 +130,15 @@ Wonder {
 
 	Bit(struct BuildingFeat) BuildingFeat		// From feats implemented by E 2-24-2006
 
-    Struct BuildingGold {
-        	Record Building Building
-        	Bit(Int) Gold 
-    	}
+	Struct BuildingGold {
+		Record Building Building
+		Bit(Int) Gold 
+	}
 
-    Bit(struct BuildingGold) BuildingGold
+	Bit(struct BuildingGold) BuildingGold
 	Bit(Record Building) BuildingEverywhere
 	Bit(Record Building) ActualBuildingEverywhere
-	Bit(Record Building) BuildingEffectEverywhere  #This would be a better name for BuildingEverywhere
+	Bit(Record Building) BuildingEffectEverywhere  #This would be a better name for BuildingEverywhere # But there is no need to have a copy of this in.
 	Bit(Record Building) ConflictsWithBuilding
 
 	##Bit(Record Building) BuildingAnywhere
@@ -150,7 +151,7 @@ Wonder {
 	Record Building[]    ExcludedByBuilding 
 	Record Wonder[]      ExcludedByWonder 
 
-		#Energy Code
+	#Energy Code
 	Bit(Int)   EnergyHunger 
 	Bit(Int)   ProducesEnergy
 	Bit(Int)   EnergyHungerPerPop

@@ -2483,22 +2483,21 @@ void UnitActor::TerminateLoopingSound(uint32 sound_type)
 //
 // Description: Draw wonders and buildings on city graphics
 //
-// Parameters : fogged	: city is under fog of war
+// Parameters : fogged  : city is under fog of war
 //
 // Globals    : g_tiledMap
-//				g_theCityStyleDB
-//				g_player
-//				g_theTerrainDB
-//				g_theWorld
+//              g_theCityStyleDB
+//              g_player
+//              g_theTerrainDB
+//              g_theWorld
 //
 // Returns    : -
 //
 // Remark(s)  : Assumption: checks for icons
-//				Replaced dithered with overlay to make it work better
-//				Places wonder "behind" the city and city name
-//				Looks a lot nicer
+//              Replaced dithered with overlay to make it work better
+//              Places wonder "behind" the city and city name
+//              Looks a lot nicer
 //----------------------------------------------------------------------------
-
 void UnitActor::DrawCityImprovements(bool fogged)
 {
 	TileSet	*   tileSet = g_tiledMap->GetTileSet();
