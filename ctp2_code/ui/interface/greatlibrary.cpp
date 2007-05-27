@@ -1212,31 +1212,34 @@ void GreatLibrary::ClearHistory( void )
 //----------------------------------------------------------------------------
 void GreatLibrary::HandleSetGoal( void )
 {
-	const MBCHAR * selection_name = GetItemName(m_database, m_window->GetTechMode());
+	const MBCHAR * selection_name = GetObjectName(m_database, m_window->GetTechMode());
 	
 	if (selection_name)
-    {
-    	MBCHAR goal_set_message[500];
-    	int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
+	{
+		MBCHAR goal_set_message[500];
+		int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
 
-	    if(tmp == 1){
-		    const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
-		    if (!fmt) fmt = "Goal set to: %s";
-		    sprintf(goal_set_message, fmt, selection_name);
-	    }
-	    else if(tmp == 0){
-		    const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalKnown");
-		    if (!fmt) fmt = "%s is already known. No goal was set.";
-		    sprintf(goal_set_message, fmt, selection_name);
-	    }
-	    else{
-		    const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryNoGoalPossible");
-		    if (!fmt) fmt = "%s cannot be researched.";
-		    sprintf(goal_set_message, fmt, selection_name);
-	    }
+		if(tmp == 1)
+		{
+			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
+			if (!fmt) fmt = "Goal set to: %s";
+			sprintf(goal_set_message, fmt, selection_name);
+		}
+		else if(tmp == 0)
+		{
+			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalKnown");
+			if (!fmt) fmt = "%s is already known. No goal was set.";
+			sprintf(goal_set_message, fmt, selection_name);
+		}
+		else
+		{
+			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryNoGoalPossible");
+			if (!fmt) fmt = "%s cannot be researched.";
+			sprintf(goal_set_message, fmt, selection_name);
+		}
 
 		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
-    }
+	}
 }
 
 //----------------------------------------------------------------------------
