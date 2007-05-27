@@ -69,12 +69,12 @@ namespace
 	sint32 const    NODE_VISIT_COUNT_LIMIT  = 2000000000;
 }
 
-sint32 CityAstar::EntryCost
+bool CityAstar::EntryCost
 (
     MapPoint const &    prev,
     MapPoint const &    pos,
     float &             cost,
-    BOOL &              is_zoc,
+    bool &              is_zoc,
     ASTAR_ENTRY_TYPE &  entry
 ) 
 {
@@ -85,14 +85,14 @@ sint32 CityAstar::EntryCost
 		{
 			cost = k_ASTAR_BIG; 
 			entry = ASTAR_BLOCKED; 
-			return FALSE;
+			return false;
 		}
 		
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
 		if(!effect){
 			cost = k_ASTAR_BIG; 
 			entry = ASTAR_BLOCKED; 
-			return FALSE;
+			return false;
 		}
 
 //		cost = float(g_theWorld->GetMoveCost(pos) * effect->GetProductionCost());
@@ -147,7 +147,7 @@ sint32 CityAstar::EntryCost
 		entry = ASTAR_CAN_ENTER;
 	}
 
-	return TRUE;
+	return true;
 }
 
 sint32 CityAstar::GetMaxDir(MapPoint &pos) const

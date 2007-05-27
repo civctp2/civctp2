@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star pathfinding for City
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -39,8 +40,8 @@ class CityAstar : public Astar {
     PLAYER_INDEX m_owner; 
     uint32 m_alliance_mask; 
 
-	sint32 EntryCost(const MapPoint &prev, const MapPoint &pos,                           
-                            float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry);
+	bool EntryCost(const MapPoint &prev, const MapPoint &pos,                           
+                            float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
     sint32 GetMaxDir(MapPoint &pos) const;
 
      

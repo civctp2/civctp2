@@ -1,16 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : A* algorithm path object
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -168,8 +184,7 @@ void Path::JustSetStart(const MapPoint &p)
     m_start = p; 
 } 
 
-sint32 Path::IsEnd() const
-
+bool Path::IsEnd() const
 {
     return (m_start.x == -1) || (m_step.Num() <= m_next); 
 }
@@ -238,7 +253,7 @@ void Path::GetCurrentDir(WORLD_DIRECTION &d)
     d = WORLD_DIRECTION(m_step[m_next_dir].dir);
 }
 
-sint32  Path::IsEndDir()
+bool Path::IsEndDir()
 {
     return (m_start.x == -1) || (m_step.Num() <= m_next_dir); 
 }
@@ -249,7 +264,7 @@ void Path::IncDir()
 	if(m_current.GetNeighborPosition(WORLD_DIRECTION(m_step[m_next_dir].dir), p)) {
 		m_current = p;         
 	} else {
-		Assert(FALSE); 
+		Assert(false); 
 	}
 	m_next++;
 	m_next_dir++; 

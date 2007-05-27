@@ -18,7 +18,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generates debug information when set.
 //
@@ -1631,7 +1631,7 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 
 		float total_cost; 
 		Assert(g_theUnitAstar); 
-		sint32 r = g_theUnitAstar->FindPath(a, start,
+		bool r = g_theUnitAstar->FindPath(a, start,
 											player, m_cur_mouse_tile, 
 											*m_good_path, m_is_broken_path, 
 											m_bad_path, 
@@ -2425,7 +2425,7 @@ void SelectedItem::EnterMovePath(sint32 owner, Army &army,
 								 MapPoint const & src, MapPoint const & dest)
 {
 	Path *good_path = new Path, bad_path;
-	sint32 is_broken;
+	bool is_broken;
 	float cost;
 	sint32 r = g_theUnitAstar->FindPath(army, src,
 										owner, dest,
@@ -2452,12 +2452,12 @@ void SelectedItem::EnterMovePath(sint32 owner, Army &army,
 
 void SelectedItem::EntrenchArmy(sint32 owner, sint32 index)
 {
-	Assert(FALSE);
+	Assert(false);
 }
 
 void SelectedItem::SleepArmy(sint32 owner, sint32 index)
 {
-	Assert(FALSE);
+	Assert(false);
 }
 
 void SelectedItem::InterceptTrade(void)

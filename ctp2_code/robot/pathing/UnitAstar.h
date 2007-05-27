@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star pathfinding for Units
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -84,43 +84,43 @@ public:
 
     BOOL CheckUnexplored(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
-        float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
     BOOL CheckUnits(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
-        float &cost, BOOL &is_zoc, BOOL &can_be_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, BOOL &can_be_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
     BOOL CheckHisCity(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
         CityData *the_pos_city, 
-        float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
     BOOL CheckHeight(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
-        float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
     BOOL CheckMyCity(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
         CityData *the_pos_city, 
-        float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
     BOOL CheckMoveUnion(const MapPoint &prev, const MapPoint &pos,
         Cell *the_prev_cell, Cell *the_pos_cell, 
-        float &cost, BOOL &is_zoc, const BOOL can_be_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, const BOOL can_be_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
     BOOL CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,                           
         Cell *the_prev_cell, Cell *the_pos_cell, 
-        float &cost, BOOL &is_zoc, const BOOL can_be_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter);
+        float &cost, bool &is_zoc, const BOOL can_be_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter);
 
-    virtual sint32 EntryCost(const MapPoint &prev, const MapPoint &pos,
-       float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry);        
+    virtual bool EntryCost(const MapPoint &prev, const MapPoint &pos,
+       float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);        
 
-    sint32 InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
+    bool InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
         const float pc, const MapPoint &dest);
 	bool CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian);
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost, 
-        BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
+        bool &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
 
     sint32 GetMaxDir(MapPoint &pos) const;
     BOOL CanMoveIntoTransports(const MapPoint &pos);
@@ -136,7 +136,7 @@ public:
 
 
     void InitSearch( const MapPoint &start, const PLAYER_INDEX owner, 
-    const MapPoint &dest, Path &good_path, sint32 &is_broken_path, Path &bad_path);
+    const MapPoint &dest, Path &good_path, bool &is_broken_path, Path &bad_path);
 
     BOOL EnterPathPoints(Path &a_path, MapPoint &old);
     BOOL FindVisionEdge(Path &a_path, MapPoint &old);
@@ -154,19 +154,19 @@ public:
         Path &bad_path, float &total_cost);
 
     sint32 FindStraightPath(const MapPoint &start, const MapPoint &dest, Path &good_path, 
-                           sint32 &is_broken_path, Path &bad_path, 
+                           bool &is_broken_path, Path &bad_path, 
                            float &total_cost, BOOL no_bad_path, 
                            const sint32 cutoff, sint32 &nodes_opened);
 
-    sint32 FindPath(Army &army, MapPoint const & start,
+    bool FindPath(Army &army, MapPoint const & start,
 		  const PLAYER_INDEX owner, MapPoint const & dest, Path &new_path, 
-          sint32 &is_broken_path, Path &bad_path,  
+          bool &is_broken_path, Path &bad_path,  
          float &total_cost);
 
-    sint32 FindPath(Army army, sint32 nUnits, uint32 move_intersetion, 
+    bool FindPath(Army army, sint32 nUnits, uint32 move_intersetion, 
         uint32 move_union, const MapPoint &start,
         const PLAYER_INDEX owner, const MapPoint &dest, Path &good_path, 
-        sint32 &is_broken_path, Path &bad_path, 
+        bool &is_broken_path, Path &bad_path, 
         float &total_cost, const BOOL no_bad_path, 
         const BOOL check_rail_launcher, 
         const BOOL pretty_path, const sint32 cutoff, sint32 &nodes_opened,

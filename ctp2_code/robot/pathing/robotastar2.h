@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : A-star AI pathing algorithm
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #pragma once
 #ifndef __ROBOT_ASTAR2_H__
@@ -17,7 +46,7 @@ public:
 
 	static RobotAstar2 s_aiPathing;
 
-    RobotAstar2(); 
+	RobotAstar2();
 
 	bool FindPath(const PathType & pathType, 
 				  const Army & army,
@@ -48,11 +77,11 @@ private:
 	
 	
 	
-    sint32 EntryCost(const MapPoint & prev, const MapPoint & pos,
-					 float &cost, BOOL & is_zoc, ASTAR_ENTRY_TYPE & entry);
+	bool EntryCost(const MapPoint & prev, const MapPoint & pos,
+					 float &cost, bool & is_zoc, ASTAR_ENTRY_TYPE & entry);
 
 	void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, 
-						 float &new_entry_cost, BOOL &new_is_zoc, 
+						 float &new_entry_cost, bool &new_is_zoc, 
 						 ASTAR_ENTRY_TYPE &new_entry);
 
 

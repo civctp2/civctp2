@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A-star pathfinding
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -68,24 +69,9 @@ void Astar_Init()
 
 void Astar_Cleanup()
 
-{ 
-    g_astar_mem.CleanUp(); 
+{
+	g_astar_mem.CleanUp(); 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #define k_MIN_MOVE_COST 10.0 
 
@@ -99,11 +85,11 @@ float g_cost_factor = k_MIN_MOVE_COST;
 
 #ifdef TRACK_ASTAR_NODES
 
-float g_nodes_opened = 0;
-float g_nodes_inserted = 0;
-int g_paths_found = 0;
-long int g_paths_lengths = 0;
-long int g_closed_nodes = 0;
+float    g_nodes_opened   = 0;
+float    g_nodes_inserted = 0;
+int      g_paths_found    = 0;
+long int g_paths_lengths  = 0;
+long int g_closed_nodes   = 0;
 #endif 
 
 extern void WhackScreen(); 
@@ -118,22 +104,8 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 
 	float best_heuristic;
 
-
-
-
-
-
-
-
-
-
-
-
-
-    sint32 dist = pos.NormalizedDistance(dest); 
-
-	{ 
-		
+	sint32 dist = pos.NormalizedDistance(dest); 
+	{
 		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(
 				MapPointData(pos));
 
@@ -177,9 +149,9 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 		} else
 #endif
 			return best_heuristic * dist;
-    }
+	}
 }
-  
+
 void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point, 
       float &new_entry_cost)
 {  
@@ -211,18 +183,18 @@ void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point,
 
 
 
-sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point, 
+bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point, 
     const MapPoint &pos, const float pc, const MapPoint &dest) 
 
 { 
     AstarPoint *d = point;
     ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER; 
-    BOOL is_zoc=FALSE;
+    bool is_zoc = false;
 
     d->m_flags = 0; 
 	d->SetEntry(ASTAR_CAN_ENTER); 
     d->SetZoc(FALSE); 
-    d->SetExpanded(FALSE); 
+    d->SetExpanded(false); 
     d->m_pos = pos; 
     d->m_parent = parent; 
     d->m_queue_idx = -1; 
@@ -238,7 +210,7 @@ sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 			g_theWorld->SetColor(pos,  d->m_total_cost); 
 #endif 
 
-       return TRUE; 
+       return true; 
     } else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry)){         
 
         d->SetEntry(entry); 
@@ -254,10 +226,10 @@ sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 			g_theWorld->SetColor(pos,  d->m_total_cost); 
 #endif 
 
-        return TRUE; 
+        return true; 
     } else {  
             
-        d->SetExpanded(TRUE); 
+        d->SetExpanded(true); 
         d->SetEntry(entry); 
         d->SetZoc(is_zoc); 
 
@@ -274,12 +246,12 @@ sint32 Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
  #ifdef PRINT_COSTS
 			g_theWorld->SetColor(pos,  d->m_total_cost); 
 #endif 
-       return FALSE;
+       return false;
     }
 }
 
 void Astar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entry_cost, 
-    BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
+    bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
 {
 
     Assert(parent); 
@@ -342,7 +314,7 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
 
     AstarPoint *dead = NULL;
     float new_past_cost, new_entry_cost, new_total_cost;
-    sint32 reset = FALSE;
+    bool reset = false;
     sint32 d=0; 
     
     if (node->m_parent == NULL) { 
@@ -356,12 +328,12 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
     
     
     
-    BOOL new_is_zoc; 
+    bool new_is_zoc; 
 	ASTAR_ENTRY_TYPE new_entry; 
     if (node->m_parent != parent) { 
         
         new_past_cost = parent->m_past_cost + parent->m_entry_cost;
-        new_is_zoc = FALSE;
+        new_is_zoc = false;
         new_entry = ASTAR_CAN_ENTER; 
 
         RecalcEntryCost(parent, node, new_entry_cost, new_is_zoc, new_entry); 
@@ -372,7 +344,7 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
 		
         if ((new_entry == ASTAR_CAN_ENTER) && (new_total_cost < k_ASTAR_BIG) && ((new_total_cost+0.8) < node->m_total_cost) && (new_is_zoc == FALSE))
         { 
-            reset = TRUE; 
+            reset = true; 
             node->m_parent = parent;
         }      
     }
@@ -416,7 +388,7 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
             
 				if (c->m_point != NULL)  { 
 					if ((c->m_search_count == g_search_count) && 
-						(c->m_point->GetZoc() == FALSE)) {
+						(!c->m_point->GetZoc())) {
 
 						g_propagate_depth++;
 
@@ -435,7 +407,7 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
     } 
     
 }
-#endif	
+#endif
 
 
 
@@ -470,7 +442,7 @@ bool Astar::FindPath
     MapPoint const &    dest, 
     Path &              a_path, 
     float &             total_cost, 
-    const sint32        isunit, 
+    const bool          isunit, 
     const sint32        cutoff, 
     sint32 &            nodes_opened
 )
@@ -512,7 +484,7 @@ bool Astar::FindPath
 #ifdef TRACK_ASTAR_NODES
 	g_nodes_inserted++;
 	g_nodes_opened++;
-#endif 
+#endif
 
     c->m_point = g_astar_mem.GetNew();
     c->m_search_count = g_search_count; 
@@ -538,12 +510,12 @@ bool Astar::FindPath
         
         sint32 max_dir = GetMaxDir(best->m_pos);
 
-        for (sint32 i = 0; i <= max_dir; ++i) 
-        { 
-            static MapPoint next_pos;
-            if (!best->m_pos.GetNeighborPosition(WORLD_DIRECTION(i), next_pos)) continue;	
+		for (sint32 i = 0; i <= max_dir; ++i)
+		{
+			static MapPoint next_pos;
+			if (!best->m_pos.GetNeighborPosition(WORLD_DIRECTION(i), next_pos)) continue;
 
-            c = g_theWorld->GetCell(next_pos);  
+			c = g_theWorld->GetCell(next_pos);  
 
 			if (c->m_point && (c->m_search_count == g_search_count))
 			{
@@ -552,7 +524,7 @@ bool Astar::FindPath
 				// than the G value of the old path.
 
 				float				bMove;		// entry cost from best
-				BOOL				bZoc;		// zone of control from best
+				bool				bZoc;		// zone of control from best
 				ASTAR_ENTRY_TYPE	bType;		// entry type from best
 
 				if (EntryCost(best->m_pos, next_pos, bMove, bZoc, bType))
@@ -667,7 +639,7 @@ bool Astar::FindPath
             { 
                 float               cost; 
                 ASTAR_ENTRY_TYPE    entry   = ASTAR_CAN_ENTER;
-                BOOL                is_zoc  = FALSE; 
+                bool                is_zoc  = false; 
 
                 if (EntryCost(best->m_parent->m_pos, best->m_pos,                        
                               cost, is_zoc, entry
@@ -700,9 +672,12 @@ bool Astar::FindPath
     return r; 
 }
 
-bool Astar::Cleanup (const MapPoint &dest, Path &a_path, 
-                       float &total_cost, const sint32 isunit, 
-                       AstarPoint *best, AstarPoint *cost_tree)
+bool Astar::Cleanup(const MapPoint &dest,
+                    Path &a_path,
+                    float &total_cost,
+                    const bool isunit,
+                    AstarPoint *best,
+                    AstarPoint *cost_tree)
 {
     if ((best == NULL) ||
         (best->m_pos != dest)) 

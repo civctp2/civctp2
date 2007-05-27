@@ -1859,7 +1859,7 @@ messagebox '120NoSupport' {
 }
 
 messagebox '123CitiesCapturedVictim' {
-	Text(ID_CITIES_CAPTURED_VICTIM) ;
+	Text(ID_CITIES_CAPTURED_VICTIM);
 	MessageType("MILITARY");
 }
 
@@ -1869,13 +1869,13 @@ messagebox '126CapitalCityCapturedAttacker' {
 }
 
 messagebox '127CapitalCityCapturedVictim' {
-	Text(ID_CAPITAL_CITY_CAPTURED_VICTIM) ;
+	Text(ID_CAPITAL_CITY_CAPTURED_VICTIM);
 	MessageType("MILITARY");
 }
 
-messagebox  '128CivStartedWar' {
+messagebox '128CivStartedWar' {
 	Show();
-	Text(ID_CIV_STARTED_WAR) ;
+	Text(ID_CIV_STARTED_WAR);
 	MessageType("MILITARY");
 }
 

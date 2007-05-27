@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 //
 // PRINT_COSTS
@@ -282,7 +282,7 @@ BOOL UnitAstar::CanSpaceLand()
 
 BOOL UnitAstar::CheckUnexplored(const MapPoint &prev, const MapPoint &pos,   
      Cell *the_prev_cell, Cell *the_pos_cell,                                 
-    float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter)
+    float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
      if (m_no_bad_path) 
         return FALSE; 
@@ -294,7 +294,7 @@ BOOL UnitAstar::CheckUnexplored(const MapPoint &prev, const MapPoint &pos,
         if ((g_player[m_owner]->IsExplored(prev) == FALSE) &&
             (g_player[m_owner]->IsExplored(pos) == FALSE)) { 
             cost = 100; 
-            can_enter = TRUE;
+            can_enter = true;
             return TRUE; 
         }
      }
@@ -313,8 +313,8 @@ BOOL UnitAstar::CheckUnexplored(const MapPoint &prev, const MapPoint &pos,
 
 BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,                           
     Cell* the_prev_cell, Cell* the_pos_cell, 
-    float &cost, BOOL &is_zoc, BOOL &can_be_zoc, ASTAR_ENTRY_TYPE &entry, 
-	BOOL &can_enter)
+    float &cost, bool &is_zoc, BOOL &can_be_zoc, ASTAR_ENTRY_TYPE &entry, 
+	bool &can_enter)
 {     
     if (the_pos_cell->GetCity().m_id != 0) { 
         if (the_pos_cell->GetCity().GetOwner() != m_owner) {
@@ -336,14 +336,14 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
                         return FALSE; 
                     } else { 
 					    cost = k_ASTAR_BIG; 
-					    can_enter = FALSE;
+					    can_enter = false;
 					    entry = ASTAR_BLOCKED;
 					    
                         return TRUE; 
                     }
                 } else  if (m_is_zero_attack) { 
 					cost = k_ASTAR_BIG; 
-					can_enter = FALSE;
+					can_enter = false;
 					entry = ASTAR_BLOCKED;
 					
                     return TRUE; 
@@ -357,14 +357,14 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
     				if (CanMoveIntoTransports(pos)) { 
 	    				cost = k_MOVE_ENTER_TRANSPORT_COST; 
                         entry = ASTAR_CAN_ENTER; 
-		    			can_enter = TRUE;
+		    			can_enter = true;
                         return TRUE; 
 			    	}
 				} 
 
 				if ((m_check_dest || (!m_check_dest && (pos != m_dest)))&& (k_MAX_ARMY_SIZE - dest_army->Num()) < m_nUnits) {   
 					cost = k_ASTAR_BIG; 
-					can_enter = FALSE;
+					can_enter = false;
 					entry = ASTAR_BLOCKED; 
                     return TRUE; 
 				}
@@ -384,7 +384,7 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 		{
 			if (cost < 1) cost = 1;
 			cost *= k_MOVE_ISDANGER_COST; 
-			can_enter = TRUE;
+			can_enter = true;
 			entry = ASTAR_CAN_ENTER; 
 			return TRUE; 
 		}
@@ -399,7 +399,7 @@ BOOL UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 
 BOOL UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,                           
     Cell *the_prev_cell, Cell *the_pos_cell, CityData *the_pos_city, 
-    float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter)
+    float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
     if (the_pos_city) { 
         if (the_pos_city->GetOwner() != m_owner) { 
@@ -409,21 +409,21 @@ BOOL UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,
 						(m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
 						(m_move_intersection & k_Unit_MovementType_ShallowWater_Bit)) {  
 						cost = ComputeValidMovCost(pos, the_pos_cell);
-						can_enter = TRUE; 
+						can_enter = true; 
 						return TRUE; 
 					} else if (m_is_zero_attack) { 
 						cost = k_ASTAR_BIG; 
-						can_enter = FALSE;
+						can_enter = false;
 						entry = ASTAR_BLOCKED; 
 						return TRUE; 
 					} else { 
 						cost = ComputeValidMovCost(pos, the_pos_cell);
-						can_enter = TRUE; 
+						can_enter = true;
 						return TRUE; 
                     } 
                 } else { 
                     cost = k_ASTAR_BIG; 
-					can_enter = FALSE;
+					can_enter = false;
 					entry = ASTAR_BLOCKED; 
                     return TRUE; 
                 }
@@ -435,7 +435,7 @@ BOOL UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,
 
 
 BOOL UnitAstar::CheckHeight(const MapPoint &prev, const MapPoint &pos, Cell *the_prev_cell, 
-    Cell *the_pos_cell, float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter)
+    Cell *the_pos_cell, float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
 
 
@@ -445,14 +445,14 @@ BOOL UnitAstar::CheckHeight(const MapPoint &prev, const MapPoint &pos, Cell *the
 
 BOOL UnitAstar::CheckMyCity(const MapPoint &prev, const MapPoint &pos,                           
     Cell *the_prev_cell, Cell *the_pos_cell, CityData *the_pos_city, 
-    float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry, BOOL &can_enter)
+    float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
     if (!the_pos_city) 
         return FALSE; 
 
     if (the_pos_city->GetOwner() == m_owner) {
 		cost = ComputeValidMovCost(pos, the_pos_cell);
-		can_enter = TRUE; 
+		can_enter = true; 
         return TRUE; 
 	}
     return FALSE; 
@@ -463,20 +463,20 @@ BOOL UnitAstar::CheckMyCity(const MapPoint &prev, const MapPoint &pos,
 
 
 BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *the_prev_cell, 
-    Cell *the_pos_cell, float &cost, BOOL &is_zoc, const BOOL can_be_zoc,  
-    ASTAR_ENTRY_TYPE &entry, BOOL &can_enter)
+    Cell *the_pos_cell, float &cost, bool &is_zoc, const BOOL can_be_zoc,  
+    ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
     if (m_army.m_id != 0) 
     { 
         if (m_army.CanEnter(pos)) 
         { 
             cost = ComputeValidMovCost(pos, the_pos_cell);
-            can_enter = TRUE; 
+            can_enter = true; 
         } 
         else 
         { 
             cost = k_ASTAR_BIG; 
-            can_enter = FALSE; 
+            can_enter = false; 
             entry = ASTAR_BLOCKED; 
         }
     } 
@@ -489,7 +489,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
                 (!the_pos_cell->CanEnter(k_Unit_MovementType_Mountain_Bit))) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE; 
+                can_enter = false; 
 			    entry = ASTAR_BLOCKED; 
                 return TRUE;
             }
@@ -499,7 +499,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
             if (!the_pos_cell->CanEnter(k_Unit_MovementType_Land_Bit)) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE; 
+                can_enter = false; 
 			    entry = ASTAR_BLOCKED; 
                 return TRUE;
             }
@@ -509,7 +509,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
             if (!the_pos_cell->CanEnter(k_Unit_MovementType_Mountain_Bit)) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE; 
+                can_enter = false; 
 			    entry = ASTAR_BLOCKED; 
                 return TRUE;
             }
@@ -523,7 +523,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
                 (!the_pos_cell->CanEnter(k_Unit_MovementType_ShallowWater_Bit))) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE;
+                can_enter = false;
 			    entry = ASTAR_BLOCKED; 
                 return TRUE;
             }
@@ -533,7 +533,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
             if (!the_pos_cell->CanEnter(k_Unit_MovementType_Sea_Bit)) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE;
+                can_enter = false;
 			    entry = ASTAR_BLOCKED; 
                 return TRUE;
             }
@@ -543,7 +543,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
             if (!the_pos_cell->CanEnter(k_Unit_MovementType_ShallowWater_Bit)) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE;
+                can_enter = false;
 			    entry = ASTAR_BLOCKED; 
                 return TRUE;
             }
@@ -555,7 +555,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
             if (!the_pos_cell->CanEnter(k_Unit_MovementType_Space_Bit)) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE; 
+                can_enter = false; 
 			    entry = ASTAR_BLOCKED; 
                 return TRUE; 
             }
@@ -567,7 +567,7 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
             if (!the_pos_cell->CanEnter(k_Unit_MovementType_Trade_Bit)) 
             { 
                 cost = k_ASTAR_BIG; 
-                can_enter = FALSE; 
+                can_enter = false; 
 			    entry = ASTAR_BLOCKED; 
                 return TRUE; 
             }
@@ -579,16 +579,16 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
 			!IsBeachLanding(prev,pos,m_move_intersection)
            ) 
         {
-            is_zoc = TRUE; 
+            is_zoc = true;
             cost = k_ASTAR_BIG; 
-            can_enter = FALSE; 
+            can_enter = false; 
 		    entry = ASTAR_RETRY_DIRECTION; 
         } 
         else 
         { 
-            is_zoc = FALSE; 
+            is_zoc = false;
             cost = ComputeValidMovCost(pos, the_pos_cell);
-            can_enter = TRUE;
+            can_enter = true;
         }
     }
 
@@ -597,45 +597,44 @@ BOOL UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
 
 
 BOOL UnitAstar::CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,                           
-    Cell *the_prev_cell, Cell *the_pos_cell, float &cost, BOOL &is_zoc, const BOOL can_be_zoc, 
-    ASTAR_ENTRY_TYPE &entry, BOOL &can_enter)
+    Cell *the_prev_cell, Cell *the_pos_cell, float &cost, bool &is_zoc, const BOOL can_be_zoc, 
+    ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
 	if (m_move_intersection & k_Unit_MovementType_Air_Bit) 
     {
 		cost = k_MOVE_AIR_COST; 
-		can_enter = TRUE;
+		can_enter = true;
 	} 
     else if (the_pos_cell->CanEnter(m_move_intersection)) 
     { 
 		if (can_be_zoc && g_theWorld->IsMoveZOC (m_owner, prev, pos, TRUE) &&
 			!IsBeachLanding(prev,pos,m_move_intersection)) 
         {  
-			is_zoc = TRUE; 
+			is_zoc = true;
 			cost = k_ASTAR_BIG; 
-			can_enter = FALSE; 
+			can_enter = false; 
 			entry = ASTAR_RETRY_DIRECTION; 
 		} 
         else 
         { 
-			is_zoc = FALSE; 
+			is_zoc = false;
 			cost = ComputeValidMovCost(pos, the_pos_cell);
-			can_enter = TRUE; 
+			can_enter = true; 
 		}
 	} 
     else 
     {
 		cost = k_ASTAR_BIG; 
-		can_enter = FALSE;
+		can_enter = false;
 		entry = ASTAR_BLOCKED; 
 	}
 
     return TRUE; 
 }
 
-sint32 UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,                           
-    float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry) 
-                            
-{        
+bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
+    float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry) 
+{
 
 
 
@@ -643,9 +642,9 @@ sint32 UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 
 
 
-entry = ASTAR_CAN_ENTER; 
+	entry = ASTAR_CAN_ENTER; 
 
-    BOOL can_be_zoc = TRUE; 
+	BOOL can_be_zoc = TRUE;
 	if(m_ignore_zoc)
 		can_be_zoc = FALSE;
 	
@@ -660,7 +659,7 @@ entry = ASTAR_CAN_ENTER;
 		   (adjX2 == 0 && adjX1 == (w - 1))) {
 			cost = k_ASTAR_BIG;
 			entry = ASTAR_BLOCKED;
-			return FALSE;
+			return false;
 		}
 	}
 	
@@ -669,11 +668,11 @@ entry = ASTAR_CAN_ENTER;
 	{
         cost = 10; 
 		entry = ASTAR_CAN_ENTER; 
-		return TRUE;
+		return true;
 	}
 
-    is_zoc = FALSE; 
-    BOOL can_enter = FALSE; 
+    is_zoc = false; 
+    bool can_enter = false;
     Cell *the_prev_cell = g_theWorld->AccessCell(prev);
     Assert(the_prev_cell);
     Cell *the_pos_cell = g_theWorld->AccessCell(pos);
@@ -695,14 +694,14 @@ entry = ASTAR_CAN_ENTER;
 #define RESTORE if(restore) {the_pos_cell->SetEnvFast(origEnv); the_pos_cell->SetMoveCost(double(origMove)); }
 
     
-    if (CheckUnexplored(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, entry, can_enter)) return can_enter; 
+    if (CheckUnexplored(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, entry, can_enter)) return can_enter;
     
     
     if (m_check_units_in_cell) { 
         if (CheckUnits(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, can_be_zoc, entry, 
             can_enter)) { 
             RESTORE; 
-            return can_enter; 
+            return can_enter;
         }
     }
 
@@ -743,18 +742,18 @@ entry = ASTAR_CAN_ENTER;
     
     cost = k_ASTAR_BIG;
 	entry = ASTAR_BLOCKED; 
-    return FALSE; 
+    return false;
 }
 
 
 
-sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point, 
+bool UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point, 
                       const MapPoint &pos, 
                       const float pc, const MapPoint &dest) 
 
 { 
     AstarPoint *d = point; 
-    BOOL is_zoc=FALSE; 
+    bool is_zoc = false;
     ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER; 
 
     d->m_flags = 0; 
@@ -774,7 +773,7 @@ sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
 #ifdef PRINT_COSTS
 			g_theWorld->SetColor(pos,  d->m_total_cost); 
 #endif 
-       return TRUE; 
+       return true;
 
     } else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry)){
 
@@ -782,7 +781,7 @@ sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
 
 #ifdef _DEBUG
 if (entry == ASTAR_RETRY_DIRECTION) { 
-    is_zoc=FALSE; 
+    is_zoc = false;
     entry=ASTAR_CAN_ENTER; 
 
     d->m_flags = 0; 
@@ -822,8 +821,8 @@ if (entry == ASTAR_RETRY_DIRECTION) {
 
 
 
-        return TRUE; 
-    } else {  
+        return true;
+    } else {
             
 
 
@@ -841,7 +840,7 @@ if (entry == ASTAR_RETRY_DIRECTION) {
 #ifdef PRINT_COSTS
 			g_theWorld->SetColor(pos,  d->m_total_cost); 
 #endif 
-        return FALSE;
+        return false;
     }
 }
 
@@ -867,15 +866,15 @@ float UnitAstar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 
 
 void UnitAstar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entry_cost, 
-    BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
+    bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
 {
 
     
     
 
    
-    BOOL can_be_zoc = TRUE; 
-    BOOL can_enter; 
+    BOOL can_be_zoc = TRUE;
+    bool can_enter;
     Cell *the_prev_cell = g_theWorld->AccessCell(parent->m_pos); 
     Cell *the_pos_cell = g_theWorld->AccessCell(node->m_pos);
     if (CheckMoveIntersection(parent->m_pos, node->m_pos, 
@@ -978,34 +977,34 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
 }
 
 void UnitAstar::InitSearch(const MapPoint &start, const PLAYER_INDEX owner, 
-    const MapPoint &dest, Path &good_path, sint32 &is_broken_path, Path &bad_path)
+    const MapPoint &dest, Path &good_path, bool &is_broken_path, Path &bad_path)
 {
 
-    bad_path.Clear(); 
-    good_path.Clear(); 
-    
-    is_broken_path = FALSE; 
+    bad_path.Clear();
+    good_path.Clear();
+
+    is_broken_path = false;
 
     
-    m_owner = owner; 
+    m_owner = owner;
     m_is_robot = Player::IsThisPlayerARobot(owner);
-    m_dest = dest; 
+    m_dest = dest;
     m_start = start;
 
     m_mask_alliance = g_player[owner]->GetMaskAlliance(); 
 
     
-    m_max_dir = NOWHERE; 
+    m_max_dir = NOWHERE;
     
 }
 
- 
+
 
 BOOL UnitAstar::EnterPathPoints(Path &a_path, MapPoint &old)
 {
     static MapPoint pos; 
     float cost; 
-    BOOL is_zoc; 
+    bool is_zoc;
 	ASTAR_ENTRY_TYPE entry;
 
     a_path.Start(old); 
@@ -1137,7 +1136,7 @@ sint32 UnitAstar::GetMaxDir(MapPoint &pos) const
 
 sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest, 
                            Path &good_path, 
-                           sint32 &is_broken_path, Path &bad_path, 
+                           bool &is_broken_path, Path &bad_path, 
                            float &total_cost, BOOL no_bad_path, 
                            const sint32 cutoff, sint32 &nodes_opened)
 {            
@@ -1164,7 +1163,7 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
               return FALSE; 
           } else { 
                good_path.Clear();
-               is_broken_path = TRUE; 
+               is_broken_path = true;
                StraightLine(start, dest, bad_path);
                return TRUE; 
           } 
@@ -1181,7 +1180,7 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
                } else if (no_bad_path) {  
                    return FALSE; 
                } else { 
-                   is_broken_path=TRUE; 
+                   is_broken_path = true;
                    good_path.Clear(); 
                    StraightLine(start, dest, bad_path);
                    return TRUE; 
@@ -1195,7 +1194,7 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
                } else if (no_bad_path) {  
                    return FALSE; 
                } else { 
-                   is_broken_path=TRUE; 
+                   is_broken_path = true;
                    good_path.Clear(); 
                    StraightLine(start, dest, bad_path);
                    return TRUE; 
@@ -1207,7 +1206,7 @@ sint32 UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
     } else { 
         
   
-       is_broken_path = TRUE;                    
+       is_broken_path = true;
        StraightLine(start, dest, bad_path);
 
        static MapPoint  vision_edge;
@@ -1469,9 +1468,9 @@ BOOL UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 }
 
 
-sint32 UnitAstar::FindPath(Army &army,  MapPoint const & start,
+bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
     const PLAYER_INDEX owner, MapPoint const & dest, Path &good_path, 
-    sint32 &is_broken_path, Path &bad_path, float &total_cost)
+    bool &is_broken_path, Path &bad_path, float &total_cost)
                            
 {
     sint32 nUnits; 
@@ -1487,7 +1486,7 @@ sint32 UnitAstar::FindPath(Army &army,  MapPoint const & start,
 
     sint32 cutoff       = 2000000000;
     sint32 nodes_opened = 0;
-    sint32 result = FindPath(army, nUnits, move_intersection, move_union,  
+    bool result = FindPath(army, nUnits, move_intersection, move_union,  
        start, owner, dest, good_path, is_broken_path, bad_path, 
        total_cost, FALSE, FALSE, m_pretty_path, cutoff, nodes_opened, 
        TRUE, FALSE, TRUE);
@@ -1498,11 +1497,11 @@ sint32 UnitAstar::FindPath(Army &army,  MapPoint const & start,
 
 }
 
-sint32 UnitAstar::FindPath(Army army, sint32 nUnits, 
+bool UnitAstar::FindPath(Army army, sint32 nUnits, 
     uint32 move_intersection, 
     uint32 move_union,  const MapPoint & start,
     const PLAYER_INDEX owner, const MapPoint & dest, Path &good_path, 
-    sint32 &is_broken_path, Path &bad_path, 
+    bool &is_broken_path, Path &bad_path, 
     float &total_cost, const BOOL no_bad_path, 
     const BOOL check_rail_launcher, const BOOL pretty_path,     
     const sint32 cutoff, sint32 &nodes_opened,
@@ -1511,7 +1510,7 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
 
 {
     if (start == dest) { 
-        return FALSE; 
+        return false; 
     }
 
 
@@ -1541,7 +1540,7 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
             return FALSE; 
         } else { 
             BOOL find_ok =  FindBrokenPath(start, dest, good_path, bad_path, total_cost);
-            is_broken_path = TRUE; 
+            is_broken_path = true;
             ClearMem();                         
             return find_ok; 
         }
@@ -1552,7 +1551,7 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
     static MapPoint tmpa, tmpb;
     static MapPoint no_enter_pos; 
 
-    BOOL r; 
+    bool r;
 
             
     
@@ -1562,10 +1561,10 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
        
         if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
             ClearMem(); 
-            return TRUE; 
+            return true; 
         } else if (no_bad_path) { 
             ClearMem(); 
-            return FALSE;
+            return false;
         }
 
     } else {
@@ -1601,23 +1600,23 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
                     StraightLine(start, dest, good_path);
                     if (EnterPathPoints(good_path, no_enter_pos)) {   
                         ClearMem(); 
-                        return TRUE; 
+                        return true; 
                     } 
                 }
 
                 if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
                     ClearMem();
-                    return TRUE; 
+                    return true;
                 } else if (no_bad_path) { 
                     ClearMem(); 
-                    return FALSE;
+                    return false;
                 }
             } else if (no_bad_path) { 
                 ClearMem(); 
-                return FALSE;
+                return false;
             }
 
-            is_broken_path = TRUE; 
+            is_broken_path = true;
             r = FindBrokenPath(start, dest, good_path, bad_path, total_cost);
             ClearMem(); 
             return r; 
@@ -1637,21 +1636,21 @@ sint32 UnitAstar::FindPath(Army army, sint32 nUnits,
     
         if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
             ClearMem(); 
-            return TRUE; 
+            return true; 
         } else if (no_bad_path) { 
             ClearMem(); 
-            return FALSE;
+            return false;
         }
     } else if (no_bad_path) { 
         ClearMem(); 
-        return FALSE;
+        return false;
     }
 
-    is_broken_path = TRUE;  
+    is_broken_path = true;
  
 
     r = FindBrokenPath(start, dest, good_path, bad_path, total_cost);
-    is_broken_path = TRUE; 
+    is_broken_path = true; // That should depend on r
 
     ClearMem(); 
     return r; 

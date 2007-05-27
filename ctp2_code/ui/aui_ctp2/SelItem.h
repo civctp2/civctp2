@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// File name    : ui\aui_ctp2\SetItem.h
+// Description  : Handles stuff about selected items.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -62,7 +93,7 @@ class SelectedItem {
 												BOOL doubleClick);
 
 
-
+	// Serialized
 	SELECT_TYPE m_select_state[k_MAX_PLAYERS];
     sint32 m_is_at_start[k_MAX_PLAYERS];
     PLAYER_INDEX m_next_player[k_MAX_PLAYERS];
@@ -71,16 +102,14 @@ class SelectedItem {
   	PLAYER_INDEX m_current_player;
 	Army m_selected_army[k_MAX_PLAYERS];
 	Unit m_selected_city[k_MAX_PLAYERS];
+	// End of serialied members
+
 	DynamicArray<Army> m_select_cycle;
 
-
-
-
-    
     sint32 m_is_pathing;
     MapPoint m_cur_mouse_tile;
     Path *m_good_path, m_bad_path;
-    sint32 m_is_broken_path; 
+    bool m_is_broken_path; 
 	DynamicArray<MapPoint> m_waypoints;
 	PLAYER_INDEX m_player_on_screen;
     BOOL m_auto_unload;

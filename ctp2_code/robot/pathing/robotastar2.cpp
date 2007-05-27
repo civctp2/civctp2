@@ -58,7 +58,7 @@
 uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
 
 RobotAstar2 RobotAstar2::s_aiPathing;
-  
+
 RobotAstar2::RobotAstar2()
 {
 	m_pathType = PATH_TYPE_DEFAULT;
@@ -194,7 +194,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	sint32 nodes_opened = 0;
 	const BOOL no_straight_lines = FALSE;
 	const BOOL check_units_in_cell = TRUE;
-    sint32 is_broken_path = FALSE; 
+    bool is_broken_path = false;
 	const BOOL pretty_path = FALSE;
 	Path bad_path;
 
@@ -247,15 +247,15 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 			m_army_minmax_move);        
 	}
 	
-	if (UnitAstar::FindPath(army, nUnits, move_intersection, move_union, 
+	if(!UnitAstar::FindPath(army, nUnits, move_intersection, move_union, 
 		start, army.GetOwner(), dest, new_path, 
 		is_broken_path, bad_path, total_cost, TRUE,
 		false, pretty_path, cutoff, nodes_opened, 
 		check_dest, no_straight_lines, 
-		check_units_in_cell) == FALSE)  { 
+		check_units_in_cell)){
 		
-		return FALSE; 
-	}  
+		return false;
+	}
 	
 	return !is_broken_path;
 }
@@ -264,17 +264,17 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 
 
 
-sint32 RobotAstar2::EntryCost( const MapPoint &prev, 
+bool RobotAstar2::EntryCost( const MapPoint &prev, 
 							   const MapPoint &pos,
 							   float & cost, 
-							   BOOL &is_zoc, 
+							   bool &is_zoc, 
 							   ASTAR_ENTRY_TYPE &entry )
 {
-	BOOL r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
+	bool r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
 
-	if (r)  
-    { 
-	    switch (m_pathType) 
+	if (r)
+	{
+		switch (m_pathType) 
 		{
 		case PATH_TYPE_TRANSPORT:
 			r = TransportPathCallback(r, prev, pos, is_zoc, cost, entry);
@@ -284,22 +284,22 @@ sint32 RobotAstar2::EntryCost( const MapPoint &prev,
 			break;
 		}
 
-        if (cost < 1.0)
-        { 
-            cost = 1.0; 
-        }
-        else if ((k_ASTAR_BIG <= cost) && (entry != ASTAR_RETRY_DIRECTION)) 
-        { 
-		    return FALSE;
-	    }
-    }
+		if (cost < 1.0)
+		{
+			cost = 1.0; 
+		}
+		else if ((k_ASTAR_BIG <= cost) && (entry != ASTAR_RETRY_DIRECTION)) 
+		{
+			return false;
+		}
+	}
 
-    return r; 
-}      
+	return r;
+}
 
 void RobotAstar2::RecalcEntryCost(AstarPoint *parent, 
     AstarPoint *node, float &new_entry_cost, 
-    BOOL &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
+    bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
 {
 	new_entry = ASTAR_CAN_ENTER; 
 	UnitAstar::RecalcEntryCost(parent, 
