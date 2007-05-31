@@ -109,6 +109,11 @@
 // - Added message for hostile terrain and guerrilla spawn
 // - Readded message for ship sinking (removed later)
 // - Added new limits for BarbarianSpawnBarbarian
+// - Changed HostileTerain to only be in affect if you are at war with the owner
+//   or it is unassigned
+// - added Slic execute commands
+// - modified sink to send the unit type 5-24-2007
+// - cleaned up beginturn moving stuff to ArmyData
 //
 //----------------------------------------------------------------------------
 
@@ -1480,193 +1485,28 @@ void ArmyData::BeginTurn()
 /// @bug  This will cause problems when units are being airlifted 
 ///       (k_CULF_IN_SPACE), and do not have a valid location on the map.
 /// @todo Convert the loops to procedures, to reduce the length of the BeginTurn 
-///       method. 250 lines is way too long. 
+///       method. 250 lines is way too long. //moved some
 ///       Move stuff to UnitData, when it only concerns units, not armies.
 ///       Efficiency note: do not compute cell/terrain stuff inside the loop - all 
 ///       units of the army are supposed to be at the same location. 
-///       Remove or do something with the Slic objects that were created.
+///       Remove or do something with the Slic objects that were created. //done.
 ///       Define a better cause than CAUSE_REMOVE_ARMY_DISBANDED when the army is
 ///       not disbanded at all.
 
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();
+	
+	//EMODs
+	CheckHostileTerrain();
+	CheckMineField();
+	CheckSink();
+	BarbarianSpawning();
+	//Upgrade AI
+	if (g_player[m_owner]->IsRobot() ) { //added so human units don't automatically upgrade 3-27-2007
+		Upgrade();
 
-	sint32 i;
-	for(i = 0; i < m_nElements; i++) {
-		Cell *cell = g_theWorld->GetCell(m_pos);
-		sint32 shields = cell->GetShieldsProduced();
-		const UnitRecord *rec = m_array[i].GetDBRec();
-		if((m_array[i].IsEntrenched()) && (rec->GetCanHarvest()) && (cell->GetShieldsProduced() > 0)) {
-			g_player[m_owner]->m_gold->AddGold(cell->GetGoldProduced());
-			g_player[m_owner]->m_materialPool->AddMaterials(shields);
-		}
 	}
-
-	for(i = 0; i < m_nElements; i++) {
-		const UnitRecord *urec = m_array[i].GetDBRec();
-		if(m_array[i].IsEntrenched()
-		&& urec->GetNumSettleImprovement()
-		){ //Added to allow units settle improvements
-			for(sint32 j = 0; j < urec->GetNumSettleImprovement(); j++) {
-				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(j);
-				sint32 newimp = urec->GetSettleImprovementIndex(j);
-				if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, m_pos)) {
-					g_player[m_owner]->CreateSpecialImprovement(newimp, m_pos, 0);
-					m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-				}
-			}
-		}
-	}
-
-	// EMOD Barbarian Cities
-	// This should be risk level depending //EMOD added Risk 10-25-2006
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCities())
-	{
-		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-			for(i = 0; i < m_nElements; i++) {
-				if(m_array[i].IsEntrenched()
-				&&!g_theWorld->GetCity(m_pos)
-				&& m_owner == PLAYER_INDEX_VANDALS
-				){
-					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateCity,
-						GEA_Player, PLAYER_INDEX_VANDALS,
-						GEA_MapPoint, m_pos,
-						GEA_Int, CAUSE_NEW_CITY_GOODY_HUT,
-						GEA_Int, -1,
-						GEA_End);
-				}
-			}
-		}
-	}
-	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
-	MapPoint epos = map.GetNearestForeigner(PLAYER_INDEX_VANDALS, m_pos);
-	Cell *cell = g_theWorld->GetCell(epos);
-	sint32 meat = PLAYER_UNASSIGNED;
-	//PLAYER_INDEX meat = CellOwner;
-
-	// EMOD Barbarian Camps
-	// This should be risk level depending  //EMOD added Risk 10-05-2006
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
-	{
-		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-			for(i = 0; i < m_nElements; i++) {
-//				Cell *cell = g_theWorld->GetCell(m_pos);
-				const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty());
-				//sint32 j;
-				//sint32 newimp = drec->GetBarbarianCampsIndex(j);
-				if(m_array[i].IsEntrenched()
-				&& drec->GetNumBarbarianCamps()
-				&& m_owner == PLAYER_INDEX_VANDALS
-				){
-					for(sint32 j = 0; j < drec->GetNumBarbarianCamps(); j++) {
-						g_player[m_owner]->CreateSpecialImprovement(drec->GetBarbarianCampsIndex(j), m_pos, 0);
-					}
-				}
-			}
-		}
-	}
-	// Barbarian leader spawn
-	// This should be risk level depending ADDED EMOD 10-05-2006
-	if(m_owner == PLAYER_INDEX_VANDALS) {
-		sint32 barbmax = g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians(); 
-		sint32 barbhorde = g_player[PLAYER_INDEX_VANDALS]->m_all_units->Num();
-		
-	if(
-		(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-	||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
-	){
-
-			if ( (barbhorde) >= (barbmax^2) ) {
-				return;
-			}
-		
-			if (//new limits to prevent barbarian spam
-				(barbhorde) <= (barbmax^2) // create some kind of max  
-			){
-		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-					Barbarians::AddBarbarians(m_pos, meat, TRUE);
-			}
-		}
-	}
-	}
-
-
-	// END EMOD barb camps
-	// This should be risk level depending  //this was for special forces to raise Guerrillas
-	//if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
-// MOVED TO ENDTURN UNITDATA
-//	for(i = 0; i < m_nElements; i++) {
-//		Cell *cell = g_theWorld->GetCell(m_pos);
-//		sint32 CellOwner = cell->GetOwner();
-//		const UnitRecord *urec = m_array[i].GetDBRec();
-//		if(m_array[i].IsEntrenched()
-//		&& urec->GetSpawnsBarbarians()
-//		&& CellOwner != m_owner
-//		){ 
-//			Barbarians::AddBarbarians(m_pos, meat, FALSE);
-//			m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-#if 0 // Unused, memory leak
-		//	SlicObject *so = new SlicObject("999GuerrillaSpawn");
-		//	so->AddRecipient(m_owner);
-        //        so->AddUnit(m_array[i]);
-#endif
-//		}
-//	}
-
-
-	// END EMOD barb spawn units
-	// TODO: EMOD  make terrain hostility resk dependent? 1-2-2007
-	// EMOD: If Hostileterrain and not fort than deduct HP from the unit
-	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
-	sint32 hpcost;
-	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) // Add AI immunity?
-	{
-		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000)
-		{
-			for(sint32 u = 0; u < m_nElements; u++)
-			{
-				const UnitRecord *urec = m_array[u].GetDBRec();
-				if(!urec->GetImmuneToHostileTerrain()
-				&& !terrainutil_HasFort(m_pos)
-				&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006
-				){
-					m_array[u].DeductHP(hpcost);
-#if 0 // Unused, memory leak
-					// #if 0 is like outcommenting!
-					// So now decide whether you really want to use it.
-					SlicObject *so = new SlicObject("999HostileTerrain");
-					so->AddRecipient(m_owner);
-					so->AddUnit(m_array[i]);
-#endif
-				}
-
-				if (m_array[u].GetHP() < 0.999)
-				{
-					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
-				}
-			}
-		}
-	}
-
-	//EMOD If tile has tileimp that is a minefield then deduct HP
-	if(terrainutil_HasMinefield(m_pos)  
-	){
-		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
-		double hpcost2;
-		/// @todo use standard identifiers for index variables like i and j
-		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){
-			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
-			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
-			for(sint32 u = 0; u < m_nElements; u++) {
-				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir()) { //EMOD
-					m_array[u].DeductHP(hpcost2); // This should go into the MoveUnits event
-				}
-				if(m_array[u].GetHP() < 0.999){
-					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-				}
-			}
-		}
-	}
-
 	
 //If diff->chokeunit and unit is surrounded
 //	RadiusIterator it(cityPos, m_sizeIndex);
@@ -1675,27 +1515,6 @@ void ArmyData::BeginTurn()
 //			m_array[i].DeductHP(1);
 
 
-	// Lost at sea random chance
-	// Maybe move this code into an event
-	sint32 chance = g_theConstDB->PercentLostAtSea();
-	if( chance > 0
-	&&(!g_player[m_owner]->IsRobot()
-	|| !g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking())
-	){
-		for(i = 0; i < m_nElements; i++) 
-		{
-			m_array[i].Sink(chance);
-#if 0 // Unused, memory leak
-		//	SlicObject *so = new SlicObject("999LostAtSea");
-		//	so->AddRecipient(m_owner);
-        //  so->AddUnit(m_array[i]);
-#endif
-		}
-	}
-	if (g_player[m_owner]->IsRobot()) { //added so human units don't automatically upgrade 3-27-2007
-		Upgrade();
-
-	}
 //END EMOD
 
     m_flags &= ~(k_CULF_EXECUTED_THIS_TURN);
@@ -10884,6 +10703,14 @@ void ArmyData::Upgrade()
 
 					if(g_player[m_owner]->m_gold->GetLevel() > upgradeCost)
 					{
+					//notify player of upgrades
+						SlicObject *so = new SlicObject("999UnitUpgraded");
+						so->AddRecipient(m_owner);
+						so->AddUnit(m_array[i]);
+						so->AddUnit(upgradeType);
+						//was this the missing part? - E 5-24-2007
+						g_slicEngine->Execute(so);
+
 						m_array[i].SetType(upgradeType);
 						g_player[m_owner]->m_gold->SubGold(upgradeCost);
 					}
@@ -10893,4 +10720,164 @@ void ArmyData::Upgrade()
 	}
 
 	UpdateMoveIntersection();
+}
+
+void ArmyData::CheckHostileTerrain()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();
+	// EMOD: If Hostileterrain and not fort than deduct HP from the unit
+	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
+	sint32 hpcost;
+	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) // Add AI immunity?
+	{
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000)
+		{
+			for(sint32 u = 0; u < m_nElements; u++)
+			{
+				const UnitRecord *urec = m_array[u].GetDBRec();
+				if(!urec->GetImmuneToHostileTerrain()
+				&& !terrainutil_HasFort(m_pos)
+				&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006
+				&& g_player[m_owner]->HasWarWith(CellOwner)  //added 5-24-2007 so your and friendly territory isn't hostile
+				|| CellOwner == PLAYER_UNASSIGNED //added 5-24-2007 wastelands should be hostile
+				){
+					m_array[u].DeductHP(hpcost);
+					SlicObject *so = new SlicObject("999HostileTerrain");
+					so->AddRecipient(m_owner);
+					so->AddUnit(m_array[u]);
+					//this was the missing part - E 5-24-2007
+					g_slicEngine->Execute(so);
+				}
+
+				if (m_array[u].GetHP() < 0.999)
+				{
+					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+				}
+			}
+		}
+	}
+}
+
+void ArmyData::CheckMineField()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();
+		//EMOD If tile has tileimp that is a minefield then deduct HP
+	if(terrainutil_HasMinefield(m_pos)  
+	){
+		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
+		double hpcost2;
+		/// @todo use standard identifiers for index variables like i and j
+		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){
+			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
+			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
+			for(sint32 u = 0; u < m_nElements; u++) {
+				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir()) { //EMOD
+					m_array[u].DeductHP(hpcost2); // This should go into the MoveUnits event
+				}
+				if(m_array[u].GetHP() < 0.999){
+					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+				}
+			}
+		}
+	}
+}
+
+void ArmyData::CheckSink()
+{
+	
+	// Lost at sea random chance
+	// Maybe move this code into an event
+	sint32 chance = g_theConstDB->PercentLostAtSea();
+	if( chance > 0
+	&&(!g_player[m_owner]->IsRobot()
+	|| !g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking())
+	){
+		for(sint32 i = 0; i < m_nElements; i++) 
+		{
+			m_array[i].Sink(chance, m_array[i]);
+		}
+	}
+
+}
+
+void ArmyData::BarbarianSpawning()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	sint32 i;
+	//const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
+	//MapPoint epos = map.GetNearestForeigner(PLAYER_INDEX_VANDALS, m_pos);
+	//Cell *ecell = g_theWorld->GetCell(epos);
+	sint32 meat = PLAYER_UNASSIGNED;
+	//PLAYER_INDEX meat = CellOwner;
+
+	// EMOD Barbarian Camps
+	// This should be risk level depending  //EMOD added Risk 10-05-2006
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNumBarbarianCamps())
+	{
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+			for(i = 0; i < m_nElements; i++) {
+//				Cell *cell = g_theWorld->GetCell(m_pos);
+				const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty());
+				//sint32 j;
+				//sint32 newimp = drec->GetBarbarianCampsIndex(j);
+				if(m_array[i].IsEntrenched()
+				&& drec->GetNumBarbarianCamps()
+				&& m_owner == PLAYER_INDEX_VANDALS
+				){
+					for(sint32 j = 0; j < drec->GetNumBarbarianCamps(); j++) {
+						g_player[m_owner]->CreateSpecialImprovement(drec->GetBarbarianCampsIndex(j), m_pos, 0);
+					}
+				}
+			}
+		}
+	}
+
+	// This should be risk level depending //EMOD added Risk 10-25-2006
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianCities())
+	{
+		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+			for(i = 0; i < m_nElements; i++) {
+				if(m_array[i].IsEntrenched()
+				&&!g_theWorld->GetCity(m_pos)
+				&& m_owner == PLAYER_INDEX_VANDALS
+				){
+					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreateCity,
+						GEA_Player, PLAYER_INDEX_VANDALS,
+						GEA_MapPoint, m_pos,
+						GEA_Int, CAUSE_NEW_CITY_GOODY_HUT,
+						GEA_Int, -1,
+						GEA_End);
+				}
+			}
+		}
+	}
+		// Barbarian leader spawn
+	// This should be risk level depending ADDED EMOD 10-05-2006
+	if(m_owner == PLAYER_INDEX_VANDALS) {
+		sint32 barbmax = g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians(); 
+		sint32 barbhorde = g_player[PLAYER_INDEX_VANDALS]->m_all_units->Num();
+		
+		if(
+			(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
+		||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+		){
+
+			if ( (barbhorde) >= (barbmax^2) ) {
+				return;
+			}
+		
+			if (//new limits to prevent barbarian spam
+				(barbhorde) <= (barbmax^2) // create some kind of max  
+			){
+				if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+					Barbarians::AddBarbarians(m_pos, meat, TRUE);
+				}
+			}
+		}
+	}
+	
 }

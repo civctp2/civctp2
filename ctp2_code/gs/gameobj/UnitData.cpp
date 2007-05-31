@@ -70,6 +70,7 @@
 // - Completed SetType() method. (Dec 24th 2006 Martin Gühmann)
 // - added IsReligion bools 1-23-2007
 // - Added SpawnsBarbarian code from ArmyData
+// - Moved Harvest to BeginTurn from ArmyData 5-24-2007
 //
 //----------------------------------------------------------------------------
 
@@ -128,9 +129,10 @@
 #include "SpriteRecord.h"
 #include "SpriteState.h"
 #include "StrDB.h"
-#include "TerrainImprovementRecord.h"
+#include "TerrainImprovementRecord.h" 
 #include "TerrainRecord.h"
 #include "terrainutil.h"
+#include "TerrImprovePool.h" 
 #include "tiledmap.h"
 #include "TradeBids.h"
 #include "TradeOfferPool.h"
@@ -3180,10 +3182,11 @@ void UnitData::BeginTurn()
 
 	if(g_theWorld->IsInstallation(m_pos)) {
 
-		if (rec->GetNoFuelThenCrash() && 
-			terrainutil_HasAirfield(m_pos) &&
-			g_theWorld->GetOwner(m_pos) == m_owner &&    //EMOD TODO add treaty?
-			m_fuel < rec->GetMaxFuel()) {
+		if (rec->GetNoFuelThenCrash() 
+		&&  terrainutil_HasAirfield(m_pos) 
+		&&	g_theWorld->GetOwner(m_pos) == m_owner     
+		// || (!g_player[m_owner]->HasWarWith(CellOwner)) //EMOD TODO add treaty?
+		&&	m_fuel < rec->GetMaxFuel()) {
 			m_fuel = rec->GetMaxFuel();
 			needsEnqueue = true;
 		}
@@ -3203,6 +3206,23 @@ void UnitData::BeginTurn()
 		ENQUEUE();
 		g_network.Unblock(m_owner);
 	}
+
+	//moved Harvest here since it should be only one unit doing it
+	Cell *cell = g_theWorld->GetCell(m_pos);
+	sint32 CellOwner = cell->GetOwner();
+	if(
+	    (Flag(k_UDF_IS_ENTRENCHED)) 
+	&&  (rec->GetCanHarvest()) 
+	&&  (CellOwner != m_owner)
+	&&  (cell->GetNumUnits() < 2)  //cant double 
+	&&  (cell->GetShieldsProduced() > 0)
+	&&  (cell->GetShieldsProduced() > 0)
+		){ 
+			g_player[m_owner]->m_gold->AddGold(cell->GetGoldProduced());
+			g_player[m_owner]->m_materialPool->AddMaterials(cell->GetShieldsProduced());
+		}
+
+//end EMOD
 }
 
 void UnitData::EndTurn()
@@ -3261,20 +3281,35 @@ void UnitData::EndTurn()
 	}
 //emod adding guerrilla SF code here 2-22-2007
 
-	if((Flag(k_UDF_IS_ENTRENCHED) && rec->GetSpawnsBarbarians() && CellOwner != m_owner) 
-
+	if(Flag(k_UDF_IS_ENTRENCHED)) { 
+		if(
+   		  (rec->GetSpawnsBarbarians() && CellOwner != m_owner) 
 		){ 
 			g_director->AddCenterMap(m_pos);
 			Barbarians::AddBarbarians(m_pos, CellOwner, FALSE);
-    /// @todo Educate E. 
-    /// Creating a SlicObject without handling it causes a memory leak, and does not do anything.
-#if 0	// Not used, memory leak.
 			//added since army data doesn't do the slic?
-			//SlicObject *so = new SlicObject("999GuerrillaSpawn");
-			//so->AddRecipient(m_owner);
-            //so->AddUnit(m_id);
-#endif
+			SlicObject *so = new SlicObject("999GuerrillaSpawn");
+			so->AddRecipient(m_owner);
+            so->AddUnit(m_id);
+			g_slicEngine->Execute(so);  //this needed for handling?
 		}
+
+	    if (rec->GetNumSettleImprovement())
+		{ //Added to allow units settle improvements
+			for(sint32 j = 0; j < rec->GetNumSettleImprovement(); j++) {
+				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(j);
+				sint32 newimp = rec->GetSettleImprovementIndex(j);
+				if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, m_pos)) {
+					g_player[m_owner]->CreateSpecialImprovement(newimp, m_pos, 0);
+					Unit me(m_id);
+					me.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+					//slic message?
+				}
+			}
+		}
+	//end entrench check
+	}
+
 //end emod
 }
 

@@ -32,6 +32,7 @@
 // - Added checks for advances requiring goods, cultureonly, govt only
 // - Added EitherPreRequisite to allow flexible tech tree like civ4
 // - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
+// - Added commodityGold and GoldSupport to projected science
 //
 //----------------------------------------------------------------------------
 
@@ -1229,7 +1230,12 @@ sint32 Advances::GetProjectedScience() const
 	}
 
 	totalTrade += g_player[m_owner]->CalcWonderGold();
-
+//added these two from player to be more accurate
+/*
+	totalTrade += g_player[m_owner]->CommodityMarket();  //emod for calculating commodities should it be in profileDB?
+	totalTrade -= g_player[m_owner]->	CalcUnitSupportGold();
+	totalTrade -= g_player[m_owner]->	CalcCitySupportGold();
+*/
 	if(totalTrade - wages - totalUpkeep > 0) {
 		g_player[m_owner]->m_gold->SetConsiderForScience(double(totalTrade - wages - totalUpkeep) / double(totalGrossGold));
 

@@ -1001,7 +1001,10 @@ public:
 	sint32 GetNumCityBuildings() const;
 	sint32 GetNumCityWonders() const;
 	
-	
+	void RiotCasualties();
+	void InsurgentSpawn();
+	void CityGovernmentModifiers();
+	void Militia();
 	
 	void ProcessAllResources();
 

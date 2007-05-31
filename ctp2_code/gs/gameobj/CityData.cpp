@@ -180,6 +180,10 @@
 // - Added check to ConstDB of MaxCityWonders and MaxCityBuildings for modders by E
 // - outcommented maxcity stuff
 // - Prevented barbarians from building tileimps - E 5-18-2007
+// - NeedsAnyPlayerFeatToBuild implemented for Wonders and Buildings
+// - MaxCityWonders and MaxCityBuildings implemented
+// - Added Slic execute
+// - Added RiotCasualties and InsurgentSpawn methods to clean up BeginTurn
 //
 //----------------------------------------------------------------------------
 
@@ -4092,143 +4096,16 @@ bool CityData::BeginTurn()
 	//	ChangePopulation(-1);
 	//}
 
-	//EMOD Fascist governments now kill off alien populations
-	// What an idea to kill the whole city at least in the long run.
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsXenophobic()) {
-		if((g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle) && (PopCount() > 1)) {
-			ChangePopulation(-1);
-		}
-	}
-	//end EMOD
-	// Doing this means to add each turn slaves until the whole city is full of slaves.
-	// Welcome to slave uprising.
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasGulags()) {
-		if(PopCount() > SlaveCount() * 3) {
-			ChangeSpecialists(POP_SLAVE, +1);
-		}
-	}
-
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsCapitalist()) {
-		if(PopCount() > (MerchantCount() * 2)) {
-			ChangeSpecialists(POP_MERCHANT, +1);
-		}
-	}
-
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsTechnocracy()) {
-		if(PopCount() > (ScientistCount() * 3)) {
-			ChangeSpecialists(POP_SCIENTIST, +1);
-		}
-	}
-	
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsAgrarian()) {
-		if(PopCount() > FarmerCount()) {
-			ChangeSpecialists(POP_FARMER, +1);
-		}
-	}
-	
-	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasMindlessTelevision()) {
-		if(PopCount() > EntertainerCount() * 2) {
-			ChangeSpecialists(POP_ENTERTAINER, +1);
-		}
-	}
-	//EMOD if Player PrereqBuilding is different than the government than destroy it 
-	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-		if(m_built_improvements & ((uint64)1 << b)){
-			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-			for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++) {
-				if(rec->GetExcludedByGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
-					DestroyImprovement(b);
-				}
-			}
-		}
-	}
-
-	//EMOD Militia code diffdb and building
-	MapPoint cpos = m_home_city.RetPos();
-
-	if(g_theWorld->GetCell(cpos)->GetNumUnits() <= 0)
-	{
-		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
-	
-		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
-		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
-		|| 	g_theProfileDB->IsAIMilitiaUnit())
-		&& g_player[m_owner]->IsRobot()
-		){
-			g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
-		}
-
-		// If city has a buiding that gives it a militia then if 
-		// empty creates cheapest unit could be human exploit though.
-		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
-		{
-			if(m_built_improvements & ((uint64)1 << b))
-			{
-				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
-				
-				if(HaveImprovement(b)
-				&& rec->GetCreatesMiltiaUnit()
-				){
-					g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
-				}
-			}
-		}
-	}
 
 	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
-	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	// added methods for insurgents and riot casualties
 	if(m_is_rioting) {
-		if (
-		   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents())
-		|| (g_theProfileDB->IsRevoltInsurgents())
-		){
-		double barbchance   = risk->GetBarbarianChance();
-		double notFounder   = 0.0;
-		double notCityStyle = 0.0;
-
-		// If the city has a diffferent culture more likely to have insurgents
-			if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
-				notCityStyle = barbchance * 3.0;
-			}
-		// If the revolting city is because of an occupation more likely to revolt
-		//if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
-		//	notFounder = barbchance * 2.0;
-		//}  //this may cause a crash if founder is already dead
-
-		//TODO: Technology modifier from the founder that increases insurgents
-		//TODO: Technology modifier that allows for more suppression
-		//TODO: Govt modifier that allows for more suppression
-			barbchance += notFounder;
-			barbchance += notCityStyle;
-
-
-			if(g_rand->Next(10000) < static_cast<sint32>(barbchance * 10000.0)) {
-				// Add some Barbarians nearby cpos.
-				Barbarians::AddBarbarians(cpos, m_owner, false);
-				SlicObject *so = new SlicObject("999InsurgentSpawn");
-				so->AddRecipient(m_owner);
-				so->AddCity(m_home_city);
-			}
-		}
-	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
-		if (
-		   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
-		|| (g_theProfileDB->IsRevoltCasualties())
-		&& (PopCount() > 1)
-		){
-			sint32 casualties = (g_rand->Next(PopCount() / 2)) * -1 ; //random number of caualties
-			ChangePopulation(casualties);
-		}
-
+		RiotCasualties();
+		InsurgentSpawn();
 	}
 
-	//if(
-	//  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
-	//||(g_theProfileDB->IsSectarianHappiness())
-	//) {
-	//	m_secthappy = ProcessSectarianHappiness(m_secthappy, m_owner, m_cityStyle);
-	//}
-
+	CityGovernmentModifiers();
+	Militia();
 
 	//END EMOD
 
@@ -6409,12 +6286,26 @@ bool CityData::CanBuildBuilding(sint32 type) const
 
 	//End Resources Code
 
-	// Added by E - Compares NeedsFeatToBuild to the FeatTracker	5-11-2006	
+	// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006	
 	if(rec->GetNumNeedsFeatToBuild() > 0) {
 		sint32 f;
 		bool found = false;
 		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
-			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(f), m_owner)) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	//Any player must have feat to build
+		if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(f))) {
 				found = true;
 				break;
 			}
@@ -6706,11 +6597,27 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 	//End Resources Code
 
+	// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006
+	// changed so player has to have achieved feat
 	if(rec->GetNumNeedsFeatToBuild() > 0) {
 		sint32 f;
 		bool found = false;
 		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
-			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(f), m_owner)) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	//Any player must have feat to build 5-18-2007
+		if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(f))) {
 				found = true;
 				break;
 			}
@@ -10226,4 +10133,161 @@ sint32 CityData::GetNumCityBuildings() const
 	return citybld;
 }
 
+void CityData::InsurgentSpawn()
+{
+	MapPoint cpos = m_home_city.RetPos();
 
+	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+
+	if (
+		   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents())
+		|| (g_theProfileDB->IsRevoltInsurgents())
+		){
+		double barbchance   = risk->GetBarbarianChance();
+		double notFounder   = 0.0;
+		double notCityStyle = 0.0;
+
+		// If the city has a diffferent culture more likely to have insurgents
+			if(m_cityStyle != g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+				notCityStyle = barbchance * 3.0;
+			}
+		// If the revolting city is because of an occupation more likely to revolt
+		//if(g_player[m_founder]->GetGovernmentType() == g_player[m_owner]->GetGovernmentType()) {
+		//	notFounder = barbchance * 2.0;
+		//}  //this may cause a crash if founder is already dead
+
+		//TODO: Technology modifier from the founder that increases insurgents
+		//TODO: Technology modifier that allows for more suppression
+		//TODO: Govt modifier that allows for more suppression
+			barbchance += notFounder;
+			barbchance += notCityStyle;
+
+
+			if(g_rand->Next(10000) < static_cast<sint32>(barbchance * 10000.0)) {
+				// Add some Barbarians nearby cpos.
+				Barbarians::AddBarbarians(cpos, m_owner, false);
+				SlicObject *so = new SlicObject("999InsurgentSpawn");
+				so->AddRecipient(m_owner);
+				so->AddCity(m_home_city);
+				g_slicEngine->Execute(so);  //forgot this?
+			}
+		}
+}
+
+
+void CityData::RiotCasualties()
+{
+	MapPoint pos;
+	m_home_city.GetPos(pos); // See CityInfluenceIterator below
+
+	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
+	if (
+	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
+	|| (g_theProfileDB->IsRevoltCasualties())
+	&& (PopCount() > 1)
+	){
+			sint32 casualties = (g_rand->Next(PopCount() / 2)) * -1 ; //random number of caualties
+			ChangePopulation(casualties);
+			//so = new SlicObject("999RiotCasulaties");
+			//Blood stains the streets of {city}. All the lawlessness has the cost the lives of {gold} citizens! Can't we all just get along?
+			//so->AddRecipient(m_owner);
+			//so->AddCity(m_home_city);
+			//so->AddGold(casulaties) ;  
+			//g_slicEngine->Execute(so) ;
+	}
+
+}
+
+void CityData::CityGovernmentModifiers()
+{
+	//EMOD Fascist governments now kill off alien populations
+	// What an idea to kill the whole city at least in the long run.
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsXenophobic()) {
+		if((g_player[m_owner]->GetCivilisation()->GetCityStyle() != m_cityStyle) && (PopCount() > 1)) {
+			ChangePopulation(-1);
+		}
+	}
+	//end EMOD
+	// Doing this means to add each turn slaves until the whole city is full of slaves.
+	// Welcome to slave uprising.
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasGulags()) {
+		if(PopCount() > SlaveCount() * 3) {
+			ChangeSpecialists(POP_SLAVE, +1);
+		}
+	}
+
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsCapitalist()) {
+		if(PopCount() > (MerchantCount() * 2)) {
+			ChangeSpecialists(POP_MERCHANT, +1);
+		}
+	}
+
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsTechnocracy()) {
+		if(PopCount() > (ScientistCount() * 3)) {
+			ChangeSpecialists(POP_SCIENTIST, +1);
+		}
+	}
+	
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetIsAgrarian()) {
+		if(PopCount() > FarmerCount()) {
+			ChangeSpecialists(POP_FARMER, +1);
+		}
+	}
+	
+	if(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetHasMindlessTelevision()) {
+		if(PopCount() > EntertainerCount() * 2) {
+			ChangeSpecialists(POP_ENTERTAINER, +1);
+		}
+	}
+	//EMOD if Player PrereqBuilding is different than the government than destroy it 
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
+		if(m_built_improvements & ((uint64)1 << b)){
+			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+			for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++) {
+				if(rec->GetExcludedByGovernmentTypeIndex(i) != g_player[m_owner]->GetGovernmentType()) {
+					DestroyImprovement(b);
+				}
+			}
+		}
+	}
+//end
+}
+
+void CityData::Militia()
+{
+	//EMOD Militia code diffdb and building
+	MapPoint cpos = m_home_city.RetPos();
+
+	if(g_theWorld->GetCell(cpos)->GetNumUnits() <= 0)
+	{
+		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+	
+		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
+		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
+		|| 	g_theProfileDB->IsAIMilitiaUnit())
+		&& g_player[m_owner]->IsRobot()
+		){
+			g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
+		}
+
+		// If city has a buiding that gives it a militia then if 
+		// empty creates cheapest unit could be human exploit though.
+		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
+		{
+			if(m_built_improvements & ((uint64)1 << b))
+			{
+				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
+				
+				if(HaveImprovement(b)
+				&& rec->GetCreatesMiltiaUnit()
+				){
+					g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
+				}
+			}
+		}
+	}
+//end
+}

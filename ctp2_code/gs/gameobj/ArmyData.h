@@ -600,6 +600,11 @@ public:
     static void DisassociateEventsFromOrdersDB(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
     static void AssociateEventsWithOrdersDB();
 	static sint32 OrderToEvent(sint32 order) { return s_orderDBToEventMap[order]; };
+	
+	void CheckHostileTerrain();
+	void CheckMineField();
+	void CheckSink();	
+	void BarbarianSpawning();
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;

@@ -45,6 +45,7 @@
 // - The upgrade function now selects the best unit type for upgrading 
 //   according to the unit transport capacity or the unit attack, defense and 
 //   range statitics. (19-May-2007 Martin Gühmann)
+// - modified sink to display the sink message and the unit type
 //
 //----------------------------------------------------------------------------
 
@@ -2546,10 +2547,11 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	return order_valid;
 }
 
-void Unit::Sink(sint32 chance)
+void Unit::Sink(sint32 chance, Unit &unit)
 {
 	const UnitRecord *urec = GetDBRec();
 	const TerrainRecord * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(RetPos()));
+
 	if(urec->GetCanSinkInSea()
 	&& trec->GetMovementTypeSea()
 	){
@@ -2557,14 +2559,12 @@ void Unit::Sink(sint32 chance)
 		{
 			// Maybe something else than CAUSE_REMOVE_ARMY_DISBANDED
 			// or it least call it diferently
-			KillUnit(CAUSE_REMOVE_ARMY_DISBANDED, -1);
-#if 0 // Not used: memory leak + crash
-			// Don't outcomment but fix it! But maybe this isn't 
-			// a good idea for every unit in your army.
+
 			SlicObject *so = new SlicObject("999LostAtSea");
 			so->AddRecipient(GetOwner());
-			so->AddUnit(*this);
-#endif
+            so->AddUnit(unit);
+			g_slicEngine->Execute(so); //i forgot this?
+			KillUnit(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 		}
 	}
 }

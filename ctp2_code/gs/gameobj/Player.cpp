@@ -99,6 +99,7 @@
 // - added GetNumTileimps 4.21.2007
 // - Added ProhibitSlavers Wonder Check
 // - Added NeedsAnyPlayerFeatToBuild
+// - Moved CalcSupportGold and CommodityGold to BeginTurn
 //
 //----------------------------------------------------------------------------
 
@@ -2149,9 +2150,9 @@ void Player::BeginTurnWonders()
 {
 	m_gold->AddGold(CalcWonderGold());
 
-	m_gold->AddGold(CommodityMarket());  //emod for calculating commodities should it be in profileDB?
-
-	m_gold->AddGold(CalcSupportGold());
+//  moved these to beginturn since they weren't calculated
+//	m_gold->AddGold(CommodityMarket());  //emod for calculating commodities should it be in profileDB?
+// 	m_gold->SubGold(CalcSupportGold()); //changed
 	
 	g_theWonderTracker->RecomputeIsBuilding(m_owner);
 }
@@ -2258,7 +2259,15 @@ sint32 Player::CalcWonderGold()
 			totalWonderGold += goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold();
 	
 	}
-//EMOD 
+
+
+	//moved from beginturn wonders
+			totalWonderGold += CommodityMarket();  //emod for calculating commodities should it be in profileDB?
+
+			totalWonderGold -= CalcCitySupportGold(); //changed - move an divide by city and add to city wonder or wonder gold?
+
+			totalWonderGold -= CalcUnitSupportGold(); //changed
+//EMOD - should i have the calc support here its not called elsewhere?
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;
@@ -2267,21 +2276,28 @@ sint32 Player::CalcWonderGold()
 }
 
 //emod
-sint32 Player::CalcSupportGold()
+sint32 Player::CalcCitySupportGold()
 {
 	sint32 gold = 0;
 
-	if (g_theProfileDB->IsGoldPerUnitSupport()) { 
-		gold -= static_cast<double>(1 * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type));
-	}
-
 	if (g_theProfileDB->IsGoldPerCity()) { 
-		gold -= static_cast<double>(2 * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+		gold += g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold();
 	}
 
 return gold;
 }
 
+sint32 Player::CalcUnitSupportGold()
+{
+	sint32 gold = 0;
+
+	if (g_theProfileDB->IsGoldPerUnitSupport()) { 
+		gold += g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	}
+
+
+return gold;
+}
 
 
 #if 0

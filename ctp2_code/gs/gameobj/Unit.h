@@ -37,6 +37,7 @@
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+// - modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
 //
 //----------------------------------------------------------------------------
 
@@ -783,7 +784,7 @@ public:
 	bool UnitValidForOrder(const OrderRecord * order_rec) const;
 
 	void SetType(const sint32 type);
-	void Sink(sint32 chance);
+	void Sink(sint32 chance, Unit &unit);
 	sint32 GetBestUpgradeUnitType() const;
 	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 

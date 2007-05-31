@@ -748,7 +748,8 @@ public:
 
 	void BeginTurnWonders();
 	sint32 CalcWonderGold();
-	sint32 CalcSupportGold();  //emod - for profile options		
+	sint32 CalcCitySupportGold();  //emod - for profile options	
+	sint32 CalcUnitSupportGold();  //emod - for profile options		
 	sint32 CalcTotalBuildingUpkeep();
 	void BuildUnit(sint32 type, Unit city);
 	void BuildImprovement(sint32 type, Unit city);
