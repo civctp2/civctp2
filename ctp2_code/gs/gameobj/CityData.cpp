@@ -10095,7 +10095,6 @@ sint32 CityData::GetNumCityWonders() const
 {
 	sint32 citywon = 0;
 
-#if 0
 	/// @todo figure out what m_builtWonders is.
 	//        And it is not the number of wonders
 	//        you can build you find that in the
@@ -10103,33 +10102,28 @@ sint32 CityData::GetNumCityWonders() const
 	/// @todo Figure out which wonder has been built
 	//        and count the built wonders.
 	/// @todo Test your code. (Actually I shouldn't need to say this.)
-	uint64 wonders = m_builtWonders;
-	for (sint32 i = 0; i < wonders; ++i) 
-	{
-		citywon++;
+	//uint64 wonders = m_builtWonders;
+	//for (sint32 i = 0; i < wonders; ++i) 
+	//{
+	// - ok I tested this by: setting limit to 2, after giving age of reason a city having no wonders can build any wonders
+	// I gave a city one wonder and it can still build; I gave it two and it couldn't build any so I assume it works - now 6-3-2007
+	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++) {
+		if(GetBuiltWonders() & (uint64(1) << (uint64)i) ) {
+			citywon++;
+		}
 	}
-#endif
+
 	return citywon;
 }
 
 sint32 CityData::GetNumCityBuildings() const
 {
 	sint32 citybld = 0;
-
-#if 0
-	/// @todo figure out what m_built_improvements is.
-	//        And it is not the number of buildings
-	//        you can build you find that in the
-	//        building database.
-	/// @todo Figure out which building has been built
-	//        and count the built buildings.
-	/// @todo Test your code. (Actually I shouldn't need to say this.)
-	uint64 bld = m_built_improvements;
-	for (sint32 i = 0; i < bld; ++i) 
-	{
+	for(sint32 i=0; i<g_theBuildingDB->NumRecords(); i++) {
+		if(GetEffectiveBuildings() & (uint64(1) << (uint64)i) ) {
 		citybld++;
+		}
 	}
-#endif
 	return citybld;
 }
 
@@ -10192,10 +10186,10 @@ void CityData::RiotCasualties()
 			sint32 casualties = (g_rand->Next(PopCount() / 2)) * -1 ; //random number of caualties
 			ChangePopulation(casualties);
 			//so = new SlicObject("999RiotCasulaties");
-			//Blood stains the streets of {city}. All the lawlessness has the cost the lives of {gold} citizens! Can't we all just get along?
+			//Blood stains the streets of {city}. All this lawlessness has cost the lives of {gold} citizens! Can't we all just get along?
 			//so->AddRecipient(m_owner);
 			//so->AddCity(m_home_city);
-			//so->AddGold(casulaties) ;  
+			//so->AddGold(casualties) ;  
 			//g_slicEngine->Execute(so) ;
 	}
 
