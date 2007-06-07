@@ -63,8 +63,8 @@ Wonder {
 	
 	Bit(Record MapIcon)   ShowCityIcon			// Like show on map but put on city?
 
-	Bit(Int) SquaredBorderRadius 				//FU added by E
-	Bit(Int) IntBorderRadius    				//FU added by E
+	Bit(Int) SquaredBorderRadius 				// added by E
+	Bit(Int) IntBorderRadius    				// added by E
 	Bit		 OnePerCiv							//EMOD implement 5-12-2006
 	Bit(Record MapIcon)			IsReligionIcon	// Displays city religion icon - can be used for Holy Cities
 	
@@ -103,10 +103,10 @@ Wonder {
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
 	Bit(Int) BonusGold
-	Bit CantBuildInSea							// FU Added by E to restrict some wonders to Land
-	Bit CantBuildOnLand							// FU Added by E to restrict some wonders to Sea				
-	Bit CoastalBuilding 						// FU Added by E to restrict some wonders to the Coast
-	Bit EnablesPunativeAirstrikes				// FU Added by E Air Bombard without War 
+	Bit CantBuildInSea							// Added by E to restrict some wonders to Land
+	Bit CantBuildOnLand							// Added by E to restrict some wonders to Sea				
+	Bit CoastalBuilding 						// Added by E to restrict some wonders to the Coast
+	Bit EnablesPunativeAirstrikes				// Added by E Air Bombard without War 
 
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness
@@ -156,5 +156,11 @@ Wonder {
 	Bit(Int)   ProducesEnergy
 	Bit(Int)   EnergyHungerPerPop
 	Bit(Int)   ProducesEnergyPerPop 
+
+    #Future Use
+	Bit(Int)   TooManyCitiesThresholdModifier     #To give a bonus to a player's govt like additional cities about Threshold
+	Bit(Float) TooManyCitiesCoefficientModifier   #To lessen (or increase) the coefficient impact of over the limit
+	Bit(Int)   RiotLevelModifier			      #Some wonders could lower or raise Riot Levels for cities
+	Bit(Int)   OtherPlayerRiotLevelModifier		   #Some wonders could lower or raise Riot Levels for other player cities
 }
 

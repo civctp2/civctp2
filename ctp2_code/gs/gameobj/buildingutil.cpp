@@ -34,6 +34,9 @@
 // - buildingutil_GetEmbassiesEverywhereEvenAtWar (E)
 // - buildingutil_GetIncreaseHP (E)
 // - buildingutil_GetTreasuryInterest (E 6.8.2006)
+// - added buildingutil_DesigatesOnePerCiv (E 6.4.2007)
+// - added buildingutil_IsReligious (E 6.4.2007)
+// - added buildingutil_HasReligionIcon (E 6.4.2007)
 //
 //----------------------------------------------------------------------------
 
@@ -689,4 +692,26 @@ sint32 buildingutil_GetProducesEnergyPerPop(const uint64 built_improvements)
 		e += mod;
 	}
 	return e;
+}
+
+bool buildingutil_GetDesignatesOnePerCiv(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetOnePerCiv) {
+		return true;
+	}
+	return false;
+}
+bool buildingutil_GetHasReligionIcon(const uint64 built_improvements)
+{
+	FOREACH_BUILT(HasIsReligionIcon) {
+		return true;
+	}
+	return false;
+}
+bool buildingutil_GetIsReligious(const uint64 built_improvements)
+{
+	FOREACH_BUILT(GetIsReligious) {
+		return true;
+	}
+	return false;
 }

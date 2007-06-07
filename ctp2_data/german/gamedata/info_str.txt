@@ -505,3 +505,7 @@ ATTACK_WARNING				"Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[
 CIV2DOVES				"Die Parzifisten haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
 CIV2HAWKS				"Die Kriegstreiber verlanegen nach Krieg gegen diese Achse des Bösen!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 
+#New Messages#
+UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
+UNIT_LEADER				"Out of our victory, {unit[0].name} has risen to be a great leader."
+RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"

@@ -71,6 +71,9 @@
 // - added IsReligion bools 1-23-2007
 // - Added SpawnsBarbarian code from ArmyData
 // - Moved Harvest to BeginTurn from ArmyData 5-24-2007
+// - Added DestroyOnePerCiv to ResetCityOwner 6-4-2007
+// - Added Elite Bonus 6-6-2007
+// - Added LeaderBonus if in Stack - Like Cradle 6-6-2007
 //
 //----------------------------------------------------------------------------
 
@@ -1416,7 +1419,9 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 	sint32 p = sint32(prob * 100);
 
 	double dmr = 1.0/defender.GetHPModifier(); 
-	if (IsVeteran()) 
+	if (IsVeteran())  //copy and make for elite units
+		p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
+	if (IsElite())  //just an increase in veteran coefficient-- for now
 		p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
 	
 	for (sint32 i = 0; i < n; ++i) 
@@ -1451,11 +1456,14 @@ void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender,
     sint32 f = rec->GetZBRangeAttack(); 
     double hp = defender.GetHP(); 
 
-    if (IsVeteran()) 
+    if (IsVeteran())  //copy and make for elite units
     {
         p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
     }
-
+    if (IsElite())  //copy and make for elite units
+    {
+        p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
+    }
 
     p  = int (p *(1.0 + dbonus)); 
 
@@ -1552,7 +1560,10 @@ void UnitData::FightOneRound(Unit did, double defenders_bonus,
 	double d = did.GetDefense(Unit(this->m_id)); 
 	double a = GetAttack(GetDBRec(), did);
 	
-	if (IsVeteran()) { 
+	if (IsVeteran()) {  //copy and make for elite units
+		a += a * g_theConstDB->GetVetCoef(); 
+	} 
+	if (IsElite()) {  //copy and make for elite units
 		a += a * g_theConstDB->GetVetCoef(); 
 	} 
 	
@@ -2018,6 +2029,8 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    
    
    m_city_data->DestroyCapitol();
+   //emod - destroy oneperciv buildings
+      m_city_data->DestroyOnePerCiv();
  
 #if 0
 	double oldVisionRange = (GetDBRec()->m_vision_range);
@@ -3304,6 +3317,11 @@ void UnitData::EndTurn()
 					Unit me(m_id);
 					me.Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 					//slic message?
+					//SlicObject *so = new SlicObject("999TileImpFounded");
+					//so->AddRecipient(m_owner);
+					//so->AddUnit(m_id);
+					//so->TileImp????????????
+					//g_slicEngine->Execute(so);  //this needed for handling?
 				}
 			}
 		}
@@ -3431,7 +3449,7 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 				def=(def+wallval);
 			}
 //			double deductwall;
-//			deductwall = myRec->GetReducesDefensesBonus ();
+//			deductwall = myRec->GetReducesDefensesBonus();
 //			if(deductwall)
 //			{
 //				def -= deductwall;
@@ -3459,6 +3477,13 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 		def += basedef * terrain_bonus;
 	}
 
+//added for Leaders to double defense - EMOD 6-6-2007
+   for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+	   if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			def += def;
+			//def += LEADERBONUS? UnitDB or ConstDB?
+		}
+   }
 	return def;
 }
 
@@ -3472,6 +3497,15 @@ double UnitData::GetOffense(const Unit &defender) const
 	if(city.IsValid()) {
 		base += city.CD()->GetOffenseBonus(defender);
 	}
+//added for Leaders to double defense
+   Cell *cell = g_theWorld->GetCell(m_pos);
+   for (sint32 i = 0; i < cell->GetNumUnits(); i++) {
+	   if(cell->AccessUnit(i).GetDBRec()->GetLeader()) {
+			base += base;
+			//base += LEADERBONUS? UnitDB or ConstDB?
+		}
+   }
+
 
 	sint32 intAttack = (sint32)base;
 	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
@@ -4992,7 +5026,7 @@ bool UnitData::GetUsedFuel (sint32 &fuel_remaining, sint32 &max_fuel) const
     return true; 
 }
 
-void UnitData::SetVeteran()
+void UnitData::SetVeteran() //copy and make for elite units
 { 
     if (!Flag(k_UDF_IS_VET)) { 
         SetFlag(k_UDF_IS_VET);
@@ -5003,7 +5037,7 @@ void UnitData::SetVeteran()
     }
 }
 
-void UnitData::UnVeteran()
+void UnitData::UnVeteran()  //copy and make for elite units
 { 
     if (Flag(k_UDF_IS_VET)) 
         ClearFlag(k_UDF_IS_VET);
@@ -5822,3 +5856,19 @@ const UnitRecord * UnitData::GetDBRec(void) const
 	}
 }
 
+void UnitData::SetElite() //copy and make for elite units SetVeteran
+{ 
+    if (!Flag(k_UDF_IS_ELITE)) { 
+        SetFlag(k_UDF_IS_ELITE);
+        SlicObject *so = new SlicObject("999UnitGainedEliteStatus");
+        so->AddUnit(Unit(m_id));
+        so->AddRecipient(m_owner);
+        g_slicEngine->Execute(so);
+    }
+}
+
+void UnitData::UnElite()  //copy and make for elite units  UnVeteran
+{ 
+    if (Flag(k_UDF_IS_ELITE)) 
+        ClearFlag(k_UDF_IS_ELITE);
+}

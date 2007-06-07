@@ -549,6 +549,7 @@ public:
 	uint64 GetBuiltWonders() const { return m_builtWonders; }
 
 	void DestroyCapitol(); 
+	void DestroyOnePerCiv(); //emod destroy small wonders
 	void SetCapitol();
 	void DestroyImprovement(sint32 type);
 	void NewGovernment(sint32 government_type);
@@ -1007,6 +1008,8 @@ public:
 	void Militia();
 	
 	void ProcessAllResources();
+	bool HasReligionIcon() const;
+	bool IsReligious() const;
 
 private:
 	bool    IsBankrupting(void) const;

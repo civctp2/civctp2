@@ -2913,7 +2913,7 @@ messagebox '911ImminentFlood' {
 	Text(ID_WORLD_POLLUTION_FLOODING_IMMINENT);
 	MessageType("POLLUTION");
 }
-
+//AE messages
 alertBox '999CITYCAPTUREOPTIONS' {
 	MessageClass(420);
 	Text(ID_CAPTURED_CITY_OPTIONS);
@@ -2991,7 +2991,20 @@ messagebox  '999GuerrillaSpawn' {
 	Text(ID_GUERRILLA_SPAWN) ;
 	MessageType("MILITARY");
 }
-
+messagebox '999UnitGainedEliteStatus' {
+	Text(ID_UNIT_ELITE);
+	EyePoint(unit[0]);
+	MessageType("MILITARY");
+}
+messagebox '999GreatLeaderSpawn' {
+	Text(ID_UNIT_LEADER);
+	EyePoint(unit[0]);
+	MessageType("MILITARY");
+}
+messagebox '999RiotCasulaties'{
+	Text(ID_RIOT_CASUALTIES);
+	MessageType("INCITE");
+}
 #include "feats.slc"
 
 // #including scenario.slc here will pick up the empty scenario.slc in

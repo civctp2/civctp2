@@ -391,8 +391,8 @@ public:
 	bool GetUsedFuel (sint32 &fuel_remaining, sint32 &max_fuel) const;
 
 	sint32 IsVeteran() const;
-	void SetVeteran();
-	void UnVeteran();
+	void SetVeteran();  //copy and make for elite units
+	void UnVeteran();  //copy and make for elite units
 	void GetPosInArmy(MapPoint &p) const;
 	void SetPosInArmy(const MapPoint &p);
 	void GetDesiredPosInArmy(MapPoint &p) const;
@@ -789,6 +789,15 @@ public:
 	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 
 	bool IsHiddenNationality() const;  //emod for barb color 2-7-2009
+	sint32 IsElite() const;
+	void SetElite();  
+	void UnElite(); 
+	sint32 IsConscript() const;
+	void SetConscript();  
+	void UnConscript(); 
+	sint32 IsMercenary() const;
+	void SetMercenary();  
+	void UnMercenary(); 
 };
 
 uint32 Unit_Unit_GetVersion(void);

@@ -26,6 +26,7 @@
 //
 // - Do not generate an Assert popup when slaves revolt and take over a city.
 // - Do not generate an Assert popup when an army is destroyed in an attack.
+// - Added Elite and Leader Chance 6-4-2007
 //
 //----------------------------------------------------------------------------
 
@@ -1033,36 +1034,7 @@ STDEHANDLER(AftermathEvent)
 			}
 		}
 
-		//add insurgency here?
-		const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-		if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
-		){ 
-			sint32 chance = 0;
-			sint32 barbchance = risk->GetBarbarianChance();
-			sint32 NotFounder = 0;
-			sint32 NotCityStyle = 0;
-
-			// if the city has a diffferent culture more likely to have insurgents
-			if(c.CD()->GetCityStyle() != g_player[attack_owner]->GetCivilisation()->GetCityStyle()) {
-				NotCityStyle = barbchance * 2;
-			}
-		// if the revolting city is because of an occupation more likely to revolt
-			if(g_player[defense_owner]->GetGovernmentType() == g_player[attack_owner]->GetGovernmentType()) {
-				NotFounder = barbchance * 2;
-			}
-
-		//TODO: technology modifier from the founder that increases insurgents
-		//TODO: technology modifier that allows for more suppression
-		//TODO: govt modifier that allows for more suppression
-				chance += barbchance;
-				chance += NotFounder;
-				chance += NotCityStyle;
-
-			if(g_rand->Next(10000) < chance * 10000) {
-				Barbarians::AddBarbarians(pos, attack_owner, FALSE);
-			}
-		}
-		//end partisians //make it a tech? enablesguerrillas?
+//removed unsurgency code
 
 
 //end emod
@@ -1130,6 +1102,21 @@ STDEHANDLER(AftermathEvent)
 			   g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0)) {
 				army[i].SetVeteran();
 			}
+			//elite code - Emod 6-5-2007
+			if( (army[i].GetAttack() > 0) 
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatEliteChance() * 100.0))
+			&&  (army[i].IsVeteran())
+			){
+				army[i].SetElite();
+			}
+			//Great Leader Code - Emod 6-5-2007
+			if( (army[i].GetAttack() > 0) 
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatLeaderChance() * 100.0))
+			&&  (army[i].IsElite())
+			){
+				g_player[attack_owner]->CreateLeader();
+			}
+			//end emod
 			army[i].WakeUp();
 			army[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);
 			army[i].SetFlag(k_UDF_FIRST_MOVE);
@@ -1146,6 +1133,21 @@ STDEHANDLER(AftermathEvent)
 		   g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0)) {
 			defender[i].SetVeteran();
 		}
+		if( (defender[i].GetAttack() > 0) 
+		&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatEliteChance() * 100.0))
+		&&  (defender[i].IsVeteran())
+		){
+			defender[i].SetElite();
+		}
+		//Great Leader Code - Emod 6-5-2007
+		if( (defender[i].GetAttack() > 0) 
+		&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatLeaderChance() * 100.0))
+		&&  (defender[i].IsElite())
+		){
+			g_player[defense_owner]->CreateLeader();
+		}
+		 //copy and make for elite units
+		 //add great leader chance but only if veteran and/or elite
 		defender[i].WakeUp();
 		defender[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);
 	}

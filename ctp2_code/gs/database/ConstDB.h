@@ -26,6 +26,8 @@
 //
 // - Exported MAX_MATCH_LIST_CYCLES and MIN_TURNS_BETWEEN_REVOLT to be 
 //   modifiable in const.txt.
+// - Added Elite  ANd Leader CHance
+// - TODO make k_MAX_ARMY_SIZE in gs/utility/gstypes.h a ConstDB?
 //
 //----------------------------------------------------------------------------
 
@@ -367,7 +369,8 @@ private:
 	//emod1
 	sint32 m_max_city_wonders;
 	sint32 m_max_city_buildings;
-	
+	double m_combat_elite_chance;
+	double m_combat_leader_chance;
 	
 	
 	
@@ -765,6 +768,8 @@ public:
 	//emod2
 	sint32 GetMaxCityWonders() const { return m_max_city_wonders; }
 	sint32 GetMaxCityBuildings() const { return m_max_city_buildings; }
+	double CombatEliteChance() const { return m_combat_elite_chance; }
+	double CombatLeaderChance() const { return m_combat_leader_chance; }
 
 	void Serialize(CivArchive &archive) ; 
 }; 

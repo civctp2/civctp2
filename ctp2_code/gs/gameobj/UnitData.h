@@ -155,7 +155,7 @@ private:
 #define k_UDF_IS_PROFESSIONAL                        0x00000100
 #define k_UDF_IS_CLOAKED                             0x00000200
 #define k_UDF_FOUGHT_THIS_TURN                       0x00000400
-
+#define k_UDF_IS_ELITE                               0x00000800 //added by E - maybe use professional for elite?
 
 #define k_UDF_HAS_LEFT_MAP                           0x00001000
 #define k_UDF_ALREADY_PERFORMED_SPACE_TRANSITION     0x00002000
@@ -719,6 +719,10 @@ public:
 	sint32 CalculateTotalHP() const;
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
+//emod
+	sint32 IsElite() const { return Flag(k_UDF_IS_ELITE); }; 
+	void SetElite();
+	void UnElite();
 
 private:
     bool CanExecuteNextTo

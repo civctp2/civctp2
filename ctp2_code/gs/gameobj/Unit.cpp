@@ -838,9 +838,9 @@ sint32 Unit::IsVeteran() const
 	return GetData()->IsVeteran();
 }
 
-void Unit::SetVeteran()
+void Unit::SetVeteran()  //copy and make for elite units
 {
-	AccessData()->SetVeteran();
+	AccessData()->SetVeteran();  //copy and make for elite units
 }
 
 void Unit::UnVeteran()
@@ -2606,5 +2606,19 @@ bool Unit::IsHiddenNationality() const //emod to map to unit actor andmake color
 {
 	return GetDBRec()->GetHiddenNationality();
 }
+//elite units 6-5-2007
+sint32 Unit::IsElite() const
+{
+	return GetData()->IsElite();
+}
 
+void Unit::SetElite()  
+{
+	AccessData()->SetElite();  
+}
+
+void Unit::UnElite()
+{
+	AccessData()->UnElite();
+}
 

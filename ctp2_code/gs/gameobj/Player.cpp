@@ -100,6 +100,7 @@
 // - Added ProhibitSlavers Wonder Check
 // - Added NeedsAnyPlayerFeatToBuild
 // - Moved CalcSupportGold and CommodityGold to BeginTurn
+// - Added CreateLeader method by E 6.4.2007
 //
 //----------------------------------------------------------------------------
 
@@ -9536,8 +9537,8 @@ bool Player::CanBuildUnit(const sint32 type) const
 	if(g_exclusions->IsUnitExcluded(type))
 		return false;
 
-	if(rec->GetCantBuild()) {
-		
+	//if(rec->GetCantBuild()) {   //original code changed for great leaders
+	if( (rec->GetCantBuild()) && (!rec->GetLeader()) ){	
 		return false;
 	}
 
@@ -10454,3 +10455,45 @@ bool Player::HasInstallation (sint32 type)
 	return false;
 }
 */
+
+void Player::CreateLeader()
+{
+//take from the unused player giveunit diplomacy code
+	MapPoint	pos ;
+	GetCapitolPos(pos) ;
+//based off disband city code
+	sint32 i;
+	sint32 leader = -1;
+	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+		if(g_theUnitDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetLeader()) {
+			if(!g_player[m_owner]->CanBuildUnit(i)) {
+				leader = i;
+				//break;
+			}
+		}
+	}
+//from disband city code	
+	Assert(leader >= 0);
+	if(leader >= 0) {
+		Unit ldr = g_player[m_owner]->CreateUnit(leader, pos,
+		                                       Unit(), false,
+		                                       CAUSE_NEW_ARMY_BUILT);
+		if(g_theUnitPool->IsValid(ldr)) {
+			ldr.ClearFlag(k_UDF_FIRST_MOVE);
+			ldr.SetMovementPoints(0);
+			SlicObject *so = new SlicObject("999GreatLeaderSpawn");
+			so->AddUnit(Unit(leader));
+			so->AddRecipient(m_owner);
+			g_slicEngine->Execute(so);
+			if (g_network.IsHost()) 
+			{
+				g_network.Block(ldr.GetOwner());
+				g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADD_ARMY, ldr.m_id));
+				g_network.Unblock(ldr.GetOwner());
+			}
+		}
+	}
+
+}
+
+

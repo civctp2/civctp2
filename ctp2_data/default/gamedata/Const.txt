@@ -382,3 +382,5 @@ MAX_MATCH_LIST_CYCLES 6 # Amount of AI match list cycles
 MIN_TURNS_BETWEEN_REVOLT 1 # minimum number of turns from a city revolts until it is possible to revolt again
 MAX_CITY_WONDERS    1000  #1000 is source code default; modifying this will limit how many wonders a city can have
 MAX_CITY_BUILDINGS  1000  #1000 is source code default; modifying this will limit how many buildings a city can have
+COMBAT_ELITE_CHANCE 0.0 #Like veteran by zeroed out, possible for mods
+COMBAT_LEADER_CHANCE 0.0 #Like Civ3 leaders but zeroed out, possible for mods

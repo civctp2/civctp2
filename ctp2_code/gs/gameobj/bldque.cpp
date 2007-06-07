@@ -1655,6 +1655,8 @@ bool BuildQueue::InsertBefore(BuildNode *old,
 void BuildQueue::FinishCreatingUnit(Unit &u)
 {
 	CityData *cd = m_city.CD();
+	const UnitRecord *rec = g_theUnitDB->Get(u.m_id, g_player[m_owner]->GetGovernmentType()); //emod
+
 
 	if(u.m_id != (0)) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ZeroProduction,
@@ -1695,12 +1697,40 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		uint64 i;
 		uint64 buildings = cd->GetEffectiveBuildings();
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesVeterans()) {
+			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesAllVeterans()) {
 				if((buildings & ((uint64)1 << uint64(i)))) {
 					u.SetVeteran();
 				}
 			}
+			if(
+			  (g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesLandVeterans()) 
+			&&(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) 
+			){
+				if((buildings & ((uint64)1 << uint64(i)))) {
+					u.SetVeteran();
+				}
+			}
+
+			if(
+			  (g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesSeaVeterans()) 
+			&&(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) 
+			){
+				if((buildings & ((uint64)1 << uint64(i)))) {
+					u.SetVeteran();
+				}
+			}
+			//Air Veterans
+			if(
+			  (g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetEnablesAirVeterans()) 
+			&&(rec->GetMovementTypeAir()) 
+			){
+				if((buildings & ((uint64)1 << uint64(i)))) {
+					u.SetVeteran();
+				}
+			}
+			//end special veterans
 		}
+		//add sea and air veterans
 		
 		//end EMOD
 		FinishBuildFront(u);

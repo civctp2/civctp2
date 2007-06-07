@@ -1054,6 +1054,7 @@ public:
 	double EnergySupply(); //EMOD
 	sint32 CommodityMarket(); //EMOD
 	sint32 BreadBasket(); //EMOD
+	void CreateLeader(); //EMOD
 
 
 

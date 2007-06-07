@@ -184,6 +184,7 @@
 // - MaxCityWonders and MaxCityBuildings implemented
 // - Added Slic execute
 // - Added RiotCasualties and InsurgentSpawn methods to clean up BeginTurn
+// - Added DestroyOnePerCiv, IsReligious, HasReligionIcon 6-4-2007
 //
 //----------------------------------------------------------------------------
 
@@ -10183,14 +10184,16 @@ void CityData::RiotCasualties()
 	|| (g_theProfileDB->IsRevoltCasualties())
 	&& (PopCount() > 1)
 	){
-			sint32 casualties = (g_rand->Next(PopCount() / 2)) * -1 ; //random number of caualties
-			ChangePopulation(casualties);
-			//so = new SlicObject("999RiotCasulaties");
-			//Blood stains the streets of {city}. All this lawlessness has cost the lives of {gold} citizens! Can't we all just get along?
-			//so->AddRecipient(m_owner);
-			//so->AddCity(m_home_city);
-			//so->AddGold(casualties) ;  
-			//g_slicEngine->Execute(so) ;
+			sint32 casualties = (g_rand->Next(PopCount() / 10)); 
+			if (casualties > 1) { 
+				casualties *= -1 ; //random number of caualties
+				ChangePopulation(casualties);
+				SlicObject *so = new SlicObject("999RiotCasulaties");
+				so->AddRecipient(m_owner);
+				so->AddCity(m_home_city);
+				so->AddGold(casualties) ;  
+				g_slicEngine->Execute(so) ;
+			}
 	}
 
 }
@@ -10284,4 +10287,27 @@ void CityData::Militia()
 		}
 	}
 //end
+}
+
+void CityData::DestroyOnePerCiv()
+
+{
+	if(buildingutil_GetDesignatesOnePerCiv(m_built_improvements)) {
+		uint64 i;
+		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i) &&
+			   m_built_improvements & uint64((uint64)1 << i)) {
+				m_built_improvements &= ~((uint64)1 << i);
+			}
+		}
+	}
+}
+bool CityData::HasReligionIcon() const
+{
+	return buildingutil_GetHasReligionIcon(GetEffectiveBuildings());
+}
+
+bool CityData::IsReligious() const
+{
+	return buildingutil_GetIsReligious(GetEffectiveBuildings());
 }

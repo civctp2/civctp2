@@ -36,6 +36,7 @@
 #  - TreasuryInterest     : Based on stored gold
 #  - ExcludedByWonder	  : Prevents bldgs being built in cities with wonder
 #  - PrerequisiteWonder   : Needs bldgs in city to be built
+#  - EnablesVeterans	  : Spllitinto All, Land, Sea, and Air
 #
 #-----------------------------------------------------------------------------
 
@@ -137,7 +138,10 @@ Building {
 	Bit        CoastalBuilding            // DW - Added to fix bug #895
 	Bit        OnePerCiv                  // EMOD implement 2-14-2006
 	Bit(Int)   IncreaseHP                 // EMOD - increase HP of all current units
-	Bit        EnablesVeterans            // EMOD - makes units veterans 
+	Bit        EnablesAllVeterans         // EMOD - makes any unit veteran 6-5-2007
+	Bit        EnablesLandVeterans        // EMOD - makes land units veterans 6-5-2007
+	Bit        EnablesSeaVeterans         // EMOD - makes sea units veterans 6-5-2007
+	Bit        EnablesAirVeterans         // EMOD - makes air units veterans 6-5-2007 
 
 	Struct BuildingFeat {                 // From feats implemented by E 2-24-2006
 		Record Building Building

@@ -634,6 +634,23 @@ Unit {
 	Bit CanSinkInSea				// to implement ConstDb Chance_lost_at_sea
 
 	Bit Leader						// Special "king" unit
+//Great Leader Bonuses - these flags are to empower the entire stack - Or should I just use the usual bonuses?
+	Bit(Float) ArmyMountedBonus
+	Bit(Float) ArmyAirBonus
+	Bit(Float) ArmyWoodenShipBonus
+	Bit(Float) ArmyAttackCityBonus
+	Bit(Float) ArmyAttackBonusSubmarine
+	Bit(Float) ArmyFootBonus				
+	Bit(Float) ArmySiegeBonus				
+	Bit(Float) ArmyWheeledBonus				
+	Bit(Float) ArmyMechanizedBonus			
+	Bit(Float) ArmyHelicopterBonus			
+	Bit(Float) ArmySpecialForcesBonus		
+	Bit(Float) ArmyCivilianBonus			
+	Bit(Float) ArmyGuerrillaBonus			
+	Bit(Float) ArmyAgainstMountedBonus
+	Bit(Float) ArmyAirDefenseBonus
+
 
 	#Energy Code
 	Int   EnergyHunger = 0

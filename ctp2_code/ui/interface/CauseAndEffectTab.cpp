@@ -34,6 +34,8 @@
 //   This means all the values are modified even if only a single slider
 //   is moved. Jul 7th 2005 Martin Gühmann
 // - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
+// - Added SupportGold and CommodityGold to totalsaving calculation
+// - TODO: need to expand this window and break down income (add franchises, advertsing etc)
 //
 //----------------------------------------------------------------------------
 
@@ -553,8 +555,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
 		
-		sint32 commerce =
-			static_cast<sint32>(cityData->GetGrossCityGold());
+		sint32 commerce = static_cast<sint32>(cityData->GetGrossCityGold()); //why is this citydata and not player?
 
 		
 		sint32 commerceCrime = cityData->GetTradeCrime();
@@ -569,13 +570,19 @@ void CauseAndEffectTab::UpdateCommerceValues()
 			wonderutil_GetDecreaseMaintenance(player->m_builtWonders), player->GetOwner());
 
 		
-		
-		
+		commerceWages += player->CalcUnitSupportGold();  //calculates Unit GoldHunger
+		commerceBuildingUpkeep += player->CalcCitySupportGold();  //calculates city maintenance
 		
 		sint32 commerceScience = cityData->GetScience();
 
 		
 		sint32 commerceSavings = cityData->GetNetCityGold();
+
+		commerce += player->CalcWonderGold();
+		commerce += player->CommodityMarket(); 
+
+		//totalCommerceSavings += player->CalcWonderGold();
+		//totalCommerceSavings += player->CommodityMarket();  
 
 		
 		totalCommerce += commerce;
@@ -591,8 +598,8 @@ void CauseAndEffectTab::UpdateCommerceValues()
 //		totalCommerceBuildingUpkeep;
 
 	
-	totalCommerceSavings += player->CalcWonderGold();
 
+ 
 	
 	static char stringBuffer[16];
 	static char formatBuffer[64];

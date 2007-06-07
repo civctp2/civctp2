@@ -496,6 +496,7 @@ HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unit[0].name}!"
 INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}"
 GUERRILLA_SPAWN				"Our {unit[0].name} has raised guerrillas to aid our cause!"
 
+
 CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED	"The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
 
@@ -505,3 +506,9 @@ ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare w
 CIV2DOVES				"The Dove Party dominates parliament! They have vetoed this aggression."
 CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!"
+
+#New Messages#
+UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
+UNIT_LEADER				"Out of our victory, {unit[0].name} has risen to be a great leader."
+RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
+

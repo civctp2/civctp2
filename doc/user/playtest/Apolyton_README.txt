@@ -47,66 +47,92 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-05-19 (revision 735)
-Fixed:    MaxCityWonders, it now works as intended                               # No, you haven't fixed it.
-Fixed:    MaxCityBuildings, it now works as intended                             # No, you haven't fixed it.
-Disabled: Sectarian happiness functionality has been removed
-Fixed:    Unit Upgrading now updates the unit's attributes                       # No, it doesn't update the unit's attributes, it updates something else.
+2007-06-06
+Added:    OnePerCiv buildings are destroyed if city owning it is captured
+Added:	  Elite Status, a promotion above Veteran Status, has double
+          Veteran coefficient in combat
+Added:    Leaders in a stack double defense or offensive boni
+Added:    Chance for a Leader to appear if an elite unit wins a battle
+Fixed:    Slic Messages for Guerrilla Spawn
+Fixed:    Slic Messages for Insurgent Spawn
+Fixed:    Slic Messages for Sinking Ships
+Fixed:    MaxCityWonders, it now works as intended                               
+Fixed:    MaxCityBuildings, it now works as intended
+Added:    New ConstDB Properties                                                      
+- ConstDB
+   COMBAT_ELITE_CHANCE      modders can specify the chance a veteran unit          
+                           will be promoted to elite status
+   COMBAT_LEADER_CHANCE    modders can specify the chance a leader will appear
+			  if elite unit is victorious in combat
+Added:    New Database Flags
+- BuildingDB
+   EnablesAllVeterans      Any units built in a city with a building having 
+                          this flag will have Veteran status
+   EnablesSeaVeterans      Any Sea units built in a city with a building having 
+                          this flag will have Veteran status
+   EnablesLandVeterans     Any Land units built in a city with a building having 
+                          this flag will have Veteran status
+   EnablesAirVeterans      Any Air units built in a city with a building having 
+                          this flag will have Veteran status
 
-2007-05-16 (revision 732)                                                                           # That are a lot of spaces here
+2007-05-19 (revision 735)
+Disabled: Sectarian happiness functionality has been removed
+Fixed:    Unit Upgrading now updates the unit type                     
+
+2007-05-16 (revision 732)
 Disabled: MaxCityWonders because it caused crash
 Disabled: MaxCityBuildings because it caused crash
-Changed:  NeedsFeatToBuild now only sees if player has feat not all players          # That belongs into the database part
-Added:    NeedsAnyPlayerFeatToBuild to allow construction regardless which           # That belongs into the database part
-          player achieved feat
-Added:    ProhibtSlavers this wonder flag prevents addition slavers                  # What does this mean?
+Added:    New Database Flags
+- WonderDB, UnitDB, BuildingDB
+   NeedsFeatToBuild      Now only checks if player has feat not all players     
+   NeedsAnyPlayerFeatToBuild 
+                        Allows construction regardless which player achieved 
+		        feat
+- WonderDB
+   ProhibtSlavers        Prevents addition slaving units to be built 
 Added:    New Options
 - Rules Screen
    No AI City Limit     Government City Limit happiness effect for AI can 
                         be toggled on/off
    No City Limit        Government City Limit happiness effect can be 
                         toggled on/off
-                                                                                     # That's a lot of space here
 
 2007-05-01  (revision 726)
-Fixed:    Barbarian player cannot declare war from diplomanager                       # Of course you mean human Barbarian players. ;)
-Changed:  Alex Scenario - now uses improved AI strategies                             # Alex Scenario is still not part of the sentence.
-Fixed:    Alex scenario - building tileimps now have sound                            # Alex Scenario is still not part of the sentence.
-Fixed:    Samurai Scenario - Scenario shold now be playable                           # Samurai Scenario is still not part of the sentence. And what means shold?
-                                                                                      # That's a lot of space here
-Fixed:    Search error showing hidden entry in the Great Library                      # What about active voice and a whole sentence?
-Fixed:    Error reading the incorrect entry in the Great Library                      # Be a little bit more specific. # cap601 told you what it is.
-Fixed:    Bug causing two workers to be subtracted from a city when                   # Have you really to talk about a bug and not about the matter.
-          settler built 
+Fixed:    Humans playing as Barbarians cannot declare war from diplomanager 
+Changed:  Alex Scenario now uses improved AI strategies         
+Fixed:    Alex scenario building tileimps now have sound          
+Fixed:    Samurai Scenario -should now be playable       
+Fixed:    Hidden entries are no longer displayed in the Great Library                     
+Fixed:    Error where the next entry would be displayed  
+Fixed:    Only one worker is subtracted when a settler is built (instead of two) 
 Added:    Ruins Tileimp to be used with profile option of razed cities 
           leaving a ruin on the map  # So many spaces here
-Added:    New ConstDB Properties                                                      # That's actually a database and belongs to the other database stuff
+Added:    New ConstDB Properties                                                      
 - ConstDB
-  MAX_CITY_WONDERS      modders can specify the number of wonders a city can          # Even putting this on the same indent level like a database doens't turn this into a database.
+   MAX_CITY_WONDERS      modders can specify the number of wonders a city can          
                         build    # So many spaces here
-  MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build       # Even putting this on the same indent level like a database doens't turn this into a database.
+   MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build       # Even putting this on the same indent level like a database doens't turn this into a database. #Not sure what you are getting at, what do you want to do with it?
 Added:    New Database Flags
 - WonderDB
-BuildingEffectEverywhere same as BuildingEverywhere but flag is more                  # So it is a plain simple copy of it? It's even not a synonym for the same flag. For some reason I added that aka (as known as) keyword to *.cdb files.
-                        explanatory      # This does not have the same effect. - Its a copy of it. ActualBuildingEverywhere is the other one
+BuildingEffectEverywhere same as BuildingEverywhere but flag is more                  # So it is a plain simple copy of it? It's even not a synonym for the same flag. For some reason I added that aka (as known as) keyword to *.cdb files. #this flag help distinguish it from ACtualBuildingEverywhere. So should I delete this then?
+                        explanatory      # This does not have the same effect. - Its a copy of it. ActualBuildingEverywhere is the other one #
 - TerrainImprovementDB
-   RiverOnly            TerrainImprovement can only be built on a river                          # That are a lot of spaces here.
-   IsUrban              TerrainImprovement is considered urban                                   # Probably this works to if I declare an area in the middle of no-where to an urban area. :D Or do you mean can only be built with an urban area nearby? - Just an identifier to be used with NextToCity
-   IsIrrigation         TerrainImprovement is considered irrigation                              # We have really consider this as irrigation or is it an irrigation or does it provide irrigation?
+   RiverOnly            TerrainImprovement can only be built on a river 
+   IsUrban              TerrainImprovement is identified as urban                                
+   IsIrrigation         TerrainImprovement is identified as irrigation                            
    NeedsIrrigation      TerrainImprovement must be build one square from 
                         IsIrrigation TerrainImprovements or a river
    NextToCity           TerrainImprovement must be built 1 square next to city
-   IsWonder             TerrainImprovement is a wonder and can only be built if                  # No a wonder is something else
-                        a player has a wonder                                                    # Yeah that's a wonder
-   IsWonder             TerrainImprovement can only be built once                                # And that is another flag, But with the same name than the previous one?
-   IsWonder             TerrainImprovement must be built in a square owned by                    # If you have multiple multiple assertions of the same thing you may refer to it with a personal pronoun. In this case it would be it.
-                        the city that built the tileimp          # So many spaces here
+   IsWonder             TerrainImprovement can only be built once                                
+                        It must be built in a square owned by                    
+                        the city that built the wonder          
 Added:    New Options
 - Rules Screen
    AImilitia            Empty AI cities generate a cheap unit at the 
                         beginning of a turn
    No AI gold deficit   AI ctites don't drop below 0 
-   No AI production deficit  AI production never drops below 0
+   No AI production deficit  
+                        AI production never drops below 0
    Gold per city        cities cost gold multiplied by the number of city limit
    Gold per unit        units cost gold each turn multiplied by wage rate
    Aicitydefense        AI cities have a defense increase based on population 
@@ -122,53 +148,41 @@ Fixed:    Bug that made human units automatically upgrade
 Fixed:    Bug that prevent the disbanding of units in neutral territory
 Fixed:    Diplomacy screen size that was too large
 Added:    Nation Flags to replace diploamt flags for diplomacy
-Added:    Religion Database for future use                                           # So in other words you have added nothing for the modder and the player.
 Changed:  BarbarianSpawnBarbarian code to limit Barbarians overrunning
           the entire map
 Added:    DebugAI profile option - display AI goals for units
 
 2007-03-22 (revision 707)
-Fixed:    Rules screen so it works                                                   # Very informative
-Fixed:    Crash for Alex Scenario caused by Special Icons                            # What about a whole sentence?
+Fixed:    Rules screen enabled with new play options                                                 
 Added:    Affects of SectarianHappiness value displays in CityWindow
 Added:    New Options
 - Rules Screen
-   One City Challenge   Human player can't build settlers                            # Here are a lot of spaces.
-   City Capture Options rlic message with option on/off                              # What is rlic?
+   One City Challenge   Human player can't build settlers
+   City Capture Options slic message with option on/off
    Revolt Insurgents    revolting cities spawn barbarians 
    RevoltCasualties     revolting cities lose random population
    BarbarianSpawnBarbarian risk dependent barbarians spawn more
    SectarianHappiness   more unhappiness in cities of a different style
 - Graphics screen
-   Smooth Borders       show original or icon                                         # Here are a lot of spaces. And what does this mean?
+   Smooth Borders       show original pixel line or border icon  
 - Gameplay Screen 
    City Capture Options slic message with can be toggled on/off
 Changed:    Database flags for modders:
 - TerrainImprovementDB
-   BonusFoodExport      now randomly generate a food value to every city              # Here are a lot of spaces. And what kind of thing are we talking? (wonder, unit, building, etc?)
-   BonusGoldExport      now randomly generate a gold value to every city              # Here are a lot of spaces. And what kind of thing are we talking? (wonder, unit, building, etc?)
+   BonusFoodExport      TerrainImprovement randomly generates a food value that
+                        is divided equally to each city
+   BonusGoldExport      TerrainImprovement randomly generates a gold value that
+                        is divided equally to each city
 
 2007-03-12 (revision 705)
 Fixed:    Crash caused by SectarianHappiness because the founder civ was 
           destroyed
 Fixed:    Crash caused by Sink code
-Added:    ShowCityIcon for Wonders and buildings (uses mapicons in               # That's database stuff. And there is no ConceptIcon database. Even if the file is called like this.
-          concepticon.txt)
-Added:    IsReligionIcon to wonders and buildings (uses mapicons in              # That's database stuff. And there is no ConceptIcon database. Even if the file is called like this.
-          concepticon.txt)
 Added:    Graphic window option to show/hide Army Names
 Added:    Graphics window option to show/hide nation flags
 Added:    New strategies.txt that emphasizes more city captures
 Fixed:    Location of Nation Flag is now right of the herald
-Fixed:    Army stack now done by drawingstring not icons                         # What is a drawingstring? And why do you dare to release unfinish stuff? You must have seen that you still need to scale and center the text.
 Deleted:  Old IsReligion# system
-Added:    New database flags for modders:
-- WonderDB
-   ShowCityIcon         displays a map icon behind the city                      # Here are a lot of spaces. And are we talking about units, orders or whatever?
-   IsReligionIcon       displays a map icon under city name                      # Here are a lot of spaces. And are we talking about units, orders or whatever?
-- BuildingDB
-   ShowCityIcon         displays a map icon behind the city                      # Here are a lot of spaces. And are we talking about units, orders or whatever?
-   IsReligionIcon       displays a map icon under city name                      # Here are a lot of spaces. And are we talking about units, orders or whatever?
 
 2007-03-01 (Revision 693)
 Added:    Hostile terrain hp cost is now based on barbarian risk 
@@ -182,7 +196,6 @@ Added:    TerraformOcean button in tile bank (restored it) this allows modders
           available)
 Added:    Slic messages for sinking ship (again), hostile terrain, insurgent 
           spawn, guerrilla spawn
-Added:    Additional but not implemented userprofile options                     # And a playtester needs to know what he can't use?
 Added:    New concept of energy supply and demand. It calculates a ratio used 
           as a modifier for gold and production.
 Added:    New userprofile option to disable the new energy supply/demand 
@@ -215,8 +228,8 @@ Added:     Unit Hidden Nationality - these units are displayed as barbarians
 
 2007-02-01 (Revision 687)
 Added:     Religious City Icons (up to 10 Religions) appear if building has 
-           IsReligion1(or 2 up to 10)            # Here are a lot of spaces
-Added:	   National Borders are now displayed with icons for smooth appearance.       # Here are a lot of spaces and still a tab.
+           IsReligion1(or 2 up to 10)
+Added:     National Borders are now displayed with icons for smooth appearance. 
 Changed:   Aligned Cityname, population rectangle, and turns to population 
            growth rectangle.
 Changed:   Next Pop rectangle is now black like the city name to differentiate
@@ -422,7 +435,7 @@ Fixed:    Disbanding a settler in a city does not disband all other units there.
 Fixed:    Goodyhut crash occuring if UnitDB is bigger than AdvanceDB.
 Added:    New database flags for modders:
 - UnitDB:
-   CanCaptureTile       Unit captures an enemy tile instead of pillaging it. (Should be seperated)
+   CanCaptureTile       Unit captures an enemy tile instead of pillaging it. 
    CanBeGifted          Unit can be gifted to a non-enemy player. A diplomatic
                         regard bonus is awarded. It is based on attack devided
                         by five. (The five should go to ConstDB or DiffDB or 

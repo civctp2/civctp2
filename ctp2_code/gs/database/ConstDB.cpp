@@ -29,6 +29,7 @@
 // - Removed temporary compatibility, to force const.txt cleanup.
 // - Added Const for Max_City_Wonders and Max_City_Buildings - E 5-1-07
 // - TODO - add map coefficient for city thresholds?
+// - TODO make k_MAX_ARMY_SIZE in gs/utility/gstypes.h a ConstDB?
 //
 //----------------------------------------------------------------------------
 
@@ -56,6 +57,9 @@ int const	DEFAULT_MIN_TURNS_BETWEEN_REVOLT	= 1;
 //city limits //emod1
 int const	DEFAULT_MAX_CITY_WONDERS			= 1000;
 int const	DEFAULT_MAX_CITY_BUILDINGS			= 1000;
+//new random chance
+double const	DEFAULT_COMBAT_ELITE_CHANCE		= 0.0;
+double const	DEFAULT_COMBAT_LEADER_CHANCE	= 0.0;
 
 //----------------------------------------------------------------------------
 //
@@ -162,6 +166,8 @@ ConstDB::ConstDB ()
 //emod2
 	m_max_city_wonders			= DEFAULT_MAX_CITY_WONDERS;
 	m_max_city_buildings		= DEFAULT_MAX_CITY_BUILDINGS;
+	m_combat_elite_chance		= DEFAULT_COMBAT_ELITE_CHANCE;
+	m_combat_leader_chance		= DEFAULT_COMBAT_LEADER_CHANCE;
 	} 
 
 
@@ -484,6 +490,8 @@ void ConstDB::Serialize(CivArchive &archive)
 	//emod3
 	&&  (DEFAULT_MAX_CITY_WONDERS == m_max_city_wonders)
 	&&  (DEFAULT_MAX_CITY_BUILDINGS == m_max_city_buildings)
+	&&  (DEFAULT_COMBAT_ELITE_CHANCE == m_combat_elite_chance)
+	&&  (DEFAULT_COMBAT_LEADER_CHANCE == m_combat_leader_chance)
        )
 	{
 		// No action, to keep compatibility with the original patch.
@@ -496,7 +504,8 @@ void ConstDB::Serialize(CivArchive &archive)
 		//emod4
 		archive <<  m_max_city_wonders;
 		archive <<  m_max_city_buildings;
-		
+		archive <<  m_combat_elite_chance;
+		archive <<  m_combat_leader_chance;		
 	}
 		}
 	else
@@ -844,6 +853,8 @@ enum TOKEN_CONST {
 	//emod5
 	TOKEN_MAX_CITY_WONDERS,
 	TOKEN_MAX_CITY_BUILDINGS,
+	TOKEN_COMBAT_ELITE_CHANCE,
+	TOKEN_COMBAT_LEADER_CHANCE,	
 
     TOKEN_CONST_MAX 
 
@@ -1138,6 +1149,8 @@ TokenData g_const_token_data [] = {
 	//emod6
 	{TOKEN_MAX_CITY_WONDERS, "MAX_CITY_WONDERS"},
 	{TOKEN_MAX_CITY_BUILDINGS, "MAX_CITY_BUILDINGS" },
+	{TOKEN_COMBAT_ELITE_CHANCE, "COMBAT_ELITE_CHANCE" },
+	{TOKEN_COMBAT_LEADER_CHANCE, "COMBAT_LEADER_CHANCE" }
 };
 	
 

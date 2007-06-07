@@ -18,10 +18,11 @@
 #
 #  Modifications from the original Activision code:
 #
-#  - IsAnarchy       : This creates barbarian rebels during anarchy. (FutureUse)(E)
-#  - IsXenophobic    : Reduces the population of a city with a certain city style. (FutureUse)(E)
+#  - IsAnarchy       : This creates barbarian rebels during anarchy. (E)
+#  - IsXenophobic    : Reduces the population of a city with a certain city style. (E)
 #  - CultureOnly     : Government only available if civ has certain citystyle. (E)
-#  - IsParliamentary : Government vetoes war like in Civ2. (FutureUse)(E)
+#  - IsParliamentary : Government vetoes war like in Civ2. (E)
+#  - RiotLevelModifier : Some Govts could have varying riot levels (E) (FU)
 #
 #-----------------------------------------------------------------------------
 
@@ -117,8 +118,9 @@ Government {
 	Bit   IsTechnocracy               // Adds scientists each turn
 	Bit   IsAgrarian                  // Adds farmers each turn
 	Bit   HasMindlessTelevision       // Adds entertainers each turn
+	Bit(Int)   RiotLevelModifier			  //Some govts could have lower or higher Riot Thresholds
 	Bit   GLHidden                    // Makes the db record disappear from the GL
-
+	
 
 	// The discovery of governments of the same rank 
 	// trigger different advice than higher ranked ones

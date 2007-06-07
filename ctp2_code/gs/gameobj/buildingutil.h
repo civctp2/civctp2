@@ -59,13 +59,7 @@ double buildingutil_GetPreventConversion(const uint64 built_improvements);
 double buildingutil_GetPreventSlavery(const uint64 built_improvements);
 double buildingutil_GetLowerPeaceMovement(const uint64 built_improvements);
 sint32 buildingutil_GetGoldPerCitizen(const uint64 built_improvements);
-sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements); // EMOD
-sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements); // EMOD
-sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements); // EMOD
-sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements); // EMOD
-sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements); // EMOD
-sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements); // EMOD
-sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements); // EMOD
+
 bool buildingutil_GetProtectFromNukes(const uint64 built_improvements);
 double buildingutil_GetProtectFromBioAgents(const uint64 built_improvements);
 double buildingutil_GetProtectFromNanoVirus(const uint64 built_improvements);
@@ -99,15 +93,26 @@ double buildingutil_GetOffenseBonusLand(const uint64 built_improvements);
 double buildingutil_GetOffenseBonusWater(const uint64 built_improvements);
 double buildingutil_GetOffenseBonusAir(const uint64 built_improvements);
 
+
+//EMODs
+sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements);
+sint32 buildingutil_GetEnergyHungerPerPop(const uint64 built_improvements);
+sint32 buildingutil_GetProducesEnergy(const uint64 built_improvements);
+sint32 buildingutil_GetProducesEnergyPerPop(const uint64 built_improvements);
 bool buildingutil_IsObsolete(sint32 building_type); //EMOD 4-28-2006
 bool buildingutil_GetEmbassiesEverywhereEvenAtWar(const uint64 built_improvements); //EMOD 4-28-2006
 sint32 buildingutil_GetIncreaseHP(const uint64 built_improvements); //EMOD 5-27-2006
 bool buildingutil_GetTreasuryInterest(const uint64 built_improvements,
                                       double &percent, sint32 owner);
+sint32 buildingutil_GetUpkeepPerCity(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetUpkeepPerUnit(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetUpkeepPerUnitWagesReadiness(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetGoldPerCity(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetGoldPerUnitSupport(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetGoldPerUnit(const uint64 built_improvements); // EMOD
+sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements); // EMOD
 
-sint32 buildingutil_GetEnergyHunger(const uint64 built_improvements);
-sint32 buildingutil_GetEnergyHungerPerPop(const uint64 built_improvements);
-sint32 buildingutil_GetProducesEnergy(const uint64 built_improvements);
-sint32 buildingutil_GetProducesEnergyPerPop(const uint64 built_improvements);
-
+bool buildingutil_GetDesignatesOnePerCiv(const uint64 built_improvements);
+bool buildingutil_GetHasReligionIcon(const uint64 built_improvements);
+bool buildingutil_GetIsReligious(const uint64 built_improvements);
 #endif

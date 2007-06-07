@@ -71,7 +71,9 @@ bool CellUnitList::Insert(Unit id)
 }
 
 bool CellUnitList::CanEnter(const MapPoint &point) const
-{
+{   //emod?
+	//TODO - add impassable terrain
+	//TODO - add impassable tileimp
     /// @todo Check next if: ghost army?
 	if (m_nElements < 1) {
 		
@@ -118,6 +120,7 @@ bool CellUnitList::CanEnter(const MapPoint &point) const
 			if((env & (moveType << k_SHIFT_ENV_MOVEMENT_TYPE)) ||
 			   ((moveType & k_BIT_MOVEMENT_TYPE_AIR)) ||
 			   ((moveType & k_BIT_MOVEMENT_TYPE_LAND) && (env & k_MASK_ENV_ROAD))) {
+				// wonderutil_GetAllBoatsDeepWater(g_player[GetOwner()]->m_builtWonders)) { //add allunits beach or land wonder option?
 				
 				continue;
 			} else {
