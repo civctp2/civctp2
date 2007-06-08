@@ -4857,7 +4857,7 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 
 	CityData *cityData = unit.GetData()->GetCityData();
 
-	iconRect.left   = rect.left - 5;
+	iconRect.left   = rect.left;
 	iconRect.right  = iconRect.left + iconDim.x + 1;
 	iconRect.top    = rect.bottom;
 	iconRect.bottom = rect.top + iconDim.y + 1;
@@ -4876,9 +4876,9 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		{
 			if(cityData->GetImprovements() & ((uint64)1 << rb))
 			{
-				DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
+				//DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+				//AddDirtyRectToMix(iconRect);
+				DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), iconRect.left, iconRect.top, color);
 				iconRect.left += iconRect.right;
 				iconRect.right += iconRect.left + iconRect.right;
 			}

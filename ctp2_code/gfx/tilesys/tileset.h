@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Tile set
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -176,6 +176,7 @@ enum MAPICON {
 	MAPICON_ARMY,      //upc046.rim   star
 	MAPICON_VETERAN,
 
+
 	MAPICON_TARGET,
 	MAPICON_HERALD10,
 	MAPICON_HERALD11,
@@ -187,8 +188,9 @@ enum MAPICON {
 	MAPICON_POLBORDERNE, //54
 	MAPICON_POLBORDERSW,  //55
 	MAPICON_POLBORDERSE, //upc056.tga
+	MAPICON_ELITE,
 //religions
-
+/*
 	MAPICON_RELIGION1,	//upc057.tga  //judaism
 	MAPICON_RELIGION2,	//58 buhddism
 	MAPICON_RELIGION3,	//59 islam
@@ -273,7 +275,7 @@ enum MAPICON {
 	MAPICON_CIVFLAG_69,
 	MAPICON_CIVFLAG_70,		//137
 
-/*
+
 //city expansion?
 	MAPICON_URBANANC,
 	MAPICON_URBANMED,

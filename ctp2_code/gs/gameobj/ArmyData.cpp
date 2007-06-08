@@ -10881,3 +10881,14 @@ void ArmyData::BarbarianSpawning()
 	}
 	
 }
+
+bool ArmyData::HasElite() const
+{
+	for (int i = 0; i < m_nElements; i++) 
+    {
+		if (m_array[i]->IsElite())
+			return true;
+	}
+
+	return false;
+}

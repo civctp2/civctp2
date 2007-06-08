@@ -1055,7 +1055,7 @@ public:
 	sint32 CommodityMarket(); //EMOD
 	sint32 BreadBasket(); //EMOD
 	void CreateLeader(); //EMOD
-
+	bool CanBuildLeader(const sint32 type) const;
 
 
 };

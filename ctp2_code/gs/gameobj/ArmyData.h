@@ -605,6 +605,7 @@ public:
 	void CheckMineField();
 	void CheckSink();	
 	void BarbarianSpawning();
+	bool HasElite() const;
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;

@@ -9519,6 +9519,7 @@ bool Player::CanBuildCapitalization() const { return m_can_build_capitalization 
 //-----------------------------------------------------------------------------
 bool Player::CanBuildUnit(const sint32 type) const
 {
+	//emod - TODO combine some of these into bool methods so CanBuildLeader is smaller
 	const UnitRecord *rec = g_theUnitDB->Get(type, m_government_type);
 
 	Assert(rec);
@@ -9537,8 +9538,7 @@ bool Player::CanBuildUnit(const sint32 type) const
 	if(g_exclusions->IsUnitExcluded(type))
 		return false;
 
-	//if(rec->GetCantBuild()) {   //original code changed for great leaders
-	if( (rec->GetCantBuild()) && (!rec->GetLeader()) ){	
+	if(rec->GetCantBuild()) {  
 		return false;
 	}
 
@@ -10466,7 +10466,7 @@ void Player::CreateLeader()
 	sint32 leader = -1;
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
 		if(g_theUnitDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetLeader()) {
-			if(!g_player[m_owner]->CanBuildUnit(i)) {
+			if(!g_player[m_owner]->CanBuildLeader(i)) {
 				leader = i;
 				//break;
 			}
@@ -10497,3 +10497,186 @@ void Player::CreateLeader()
 }
 
 
+bool Player::CanBuildLeader(const sint32 type) const
+{
+	const UnitRecord *rec = g_theUnitDB->Get(type, m_government_type);
+
+	Assert(rec);
+	if(rec == NULL)
+		return false;
+
+	if (!HasAdvance(rec->GetEnableAdvanceIndex()))
+		return false;
+
+	sint32 o;
+	for(o = rec->GetNumObsoleteAdvance() - 1; o >= 0; o--) {
+		if(HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
+			return false;
+	}
+
+	if(g_exclusions->IsUnitExcluded(type))
+		return false;
+///removed cantbuild
+/*
+	//if(rec->GetCantBuild()) {   //original code changed for great leaders
+	if( (rec->GetCantBuild()) && (!rec->GetLeader()) ){	
+		return false;
+	}
+*/
+	if(rec->GetNumGovernmentType() > 0) {
+		sint32 i;
+		bool found = false;
+		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
+			if(rec->GetGovernmentTypeIndex(i) == m_government_type) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	// Added by E - Compares Unit CultureOnly to the Player's CityStyle
+	if(rec->GetNumCultureOnly() > 0) {
+		sint32 s;
+		bool found = false;
+		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
+			if(rec->GetCultureOnlyIndex(s) == GetCivilisation()->GetCityStyle()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	// Added by E - Compares Unit CivilisationOnly to the Player's Civilisation	5-11-2006
+	if(rec->GetNumCivilisationOnly() > 0) {
+		sint32 c;
+		bool found = false;
+		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
+			if(rec->GetCivilisationOnlyIndex(c) == m_civilisation->GetCivilisation()) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006	
+	if(rec->GetNumNeedsFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
+			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(f), m_owner)) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+
+	//Any player must have feat to build
+		if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0) {
+		sint32 f;
+		bool found = false;
+		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
+			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(f))) {
+				found = true;
+				break;
+			}
+		}
+		if(!found)
+			return false;
+	}
+	
+	// Added by E - checks if capitol for buying or colecting
+	// a good and makes availble in all cities, not optimized
+	if(rec->GetNumNeedsCityGoodCapitol()) {
+		
+		sint32 i, g, n = m_all_cities->Num();
+		for(g = 0; g < rec->GetNumNeedsCityGoodCapitol(); g++) {
+			for(i = 0; i < n; i++) {
+				if(m_all_cities->Access(i)->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodCapitolIndex(g)))
+				return false;
+			}
+		}
+	}
+
+
+	// Added by E - checks all cities for buying or collecting
+	// a good and makes availble in all cities, but its 
+	// either/or not AND
+	if(rec->GetNumNeedsCityGoodAnyCity()) {
+		
+		sint32 i, g;
+		bool goodavail = false;
+
+		for(i = 0; i < m_all_cities->Num(); i++) {
+			for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+				if(m_all_cities->Access(i)->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+					goodavail = true;
+					break;
+				}
+			}
+			if(goodavail){
+				break;
+			}
+		}
+		if(!goodavail)
+			return false;
+	}
+
+	// End resources
+	
+
+	if(rec->HasNuclearAttack() &&
+	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders())) {
+		return false;
+	}
+
+	if(rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids() ||
+	   rec->HasSlaveUprising()) {
+		//if(wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders())) { //original
+	   if(wonderutil_GetProhibitSlavers(g_theWonderTracker->GetBuiltWonders())) {
+			return false;
+		}
+	}
+
+	if(rec->HasSlaveRaids() || rec->HasSettlerSlaveRaids()) {
+		sint32 i, n = m_all_units->Num();
+		for(i = 0; i < n; i++) {
+			if(m_all_units->Access(i).GetDBRec()->GetNoSlaves())
+				return false;
+		}
+	}
+
+	if(rec->GetNoSlaves()) {
+		
+		sint32 i, n = m_all_cities->Num();
+		for(i = 0; i < n; i++) {
+			if(m_all_cities->Access(i).CountSlaves() > 0)
+				return false;
+		}
+
+		n = m_all_units->Num();
+		for(i = 0; i < n; i++) {
+			if(m_all_units->Access(i).GetDBRec()->HasSlaveRaids())
+				return false;
+		}
+	}
+
+	if(rec->HasCreateParks() && 
+	   !wonderutil_GetParkRangersEnabled(g_theWonderTracker->GetBuiltWonders())) {
+		return false;
+	}
+	//OneCityChallenge Option - emod 3-21-2007
+	if((rec->GetSettleLand()) || (rec->GetSettleWater())) {  //so far it makes all units unavailable?
+		if ( (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) && (g_theProfileDB->IsOneCityChallenge()) ) {
+			return false;
+		}
+	}
+	return true;
+}

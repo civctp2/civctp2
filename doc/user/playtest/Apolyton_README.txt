@@ -47,7 +47,8 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-06-06
+2007-06-09
+Changed:  The Army stacking flag is no displayed above the health bar
 Added:    OnePerCiv buildings are destroyed if city owning it is captured
 Added:	  Elite Status, a promotion above Veteran Status, has double
           Veteran coefficient in combat
@@ -60,20 +61,20 @@ Fixed:    MaxCityWonders, it now works as intended
 Fixed:    MaxCityBuildings, it now works as intended
 Added:    New ConstDB Properties                                                      
 - ConstDB
-   COMBAT_ELITE_CHANCE      modders can specify the chance a veteran unit          
-                           will be promoted to elite status
-   COMBAT_LEADER_CHANCE    modders can specify the chance a leader will appear
-			  if elite unit is victorious in combat
+   COMBAT_ELITE_CHANCE  modders can specify the chance a veteran unit          
+                        will be promoted to elite status
+   COMBAT_LEADER_CHANCE modders can specify the chance a leader will appear
+			if elite unit is victorious in combat
 Added:    New Database Flags
 - BuildingDB
-   EnablesAllVeterans      Any units built in a city with a building having 
-                          this flag will have Veteran status
-   EnablesSeaVeterans      Any Sea units built in a city with a building having 
-                          this flag will have Veteran status
-   EnablesLandVeterans     Any Land units built in a city with a building having 
-                          this flag will have Veteran status
-   EnablesAirVeterans      Any Air units built in a city with a building having 
-                          this flag will have Veteran status
+   EnablesAllVeterans   Any units built in a city with a building having 
+                        this flag will have Veteran status
+   EnablesSeaVeterans   Any Sea units built in a city with a building having 
+                        this flag will have Veteran status
+   EnablesLandVeterans  Any Land units built in a city with a building having 
+                        this flag will have Veteran status
+   EnablesAirVeterans   Any Air units built in a city with a building having 
+                        this flag will have Veteran status
 
 2007-05-19 (revision 735)
 Disabled: Sectarian happiness functionality has been removed
@@ -84,12 +85,12 @@ Disabled: MaxCityWonders because it caused crash
 Disabled: MaxCityBuildings because it caused crash
 Added:    New Database Flags
 - WonderDB, UnitDB, BuildingDB
-   NeedsFeatToBuild      Now only checks if player has feat not all players     
+   NeedsFeatToBuild     Now only checks if player has feat not all players     
    NeedsAnyPlayerFeatToBuild 
                         Allows construction regardless which player achieved 
 		        feat
 - WonderDB
-   ProhibtSlavers        Prevents addition slaving units to be built 
+   ProhibtSlavers       Prevents addition slaving units to be built 
 Added:    New Options
 - Rules Screen
    No AI City Limit     Government City Limit happiness effect for AI can 
@@ -109,9 +110,9 @@ Added:    Ruins Tileimp to be used with profile option of razed cities
           leaving a ruin on the map  # So many spaces here
 Added:    New ConstDB Properties                                                      
 - ConstDB
-   MAX_CITY_WONDERS      modders can specify the number of wonders a city can          
+   MAX_CITY_WONDERS     modders can specify the number of wonders a city can          
                         build    # So many spaces here
-   MAX_CITY_BUILDINGS    modders can specify how many buildings a city may build       # Even putting this on the same indent level like a database doens't turn this into a database. #Not sure what you are getting at, what do you want to do with it?
+   MAX_CITY_BUILDINGS   modders can specify how many buildings a city may build       # Even putting this on the same indent level like a database doens't turn this into a database. #Not sure what you are getting at, what do you want to do with it?
 Added:    New Database Flags
 - WonderDB
 BuildingEffectEverywhere same as BuildingEverywhere but flag is more                  # So it is a plain simple copy of it? It's even not a synonym for the same flag. For some reason I added that aka (as known as) keyword to *.cdb files. #this flag help distinguish it from ACtualBuildingEverywhere. So should I delete this then?

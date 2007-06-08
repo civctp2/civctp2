@@ -50,6 +50,9 @@
 // - Added MapIcon database (3-Mar-2007 Martin Gühmann)
 // - Implemented but then outcomment DrawCityImps just didn't come out right
 //   maybe revisit
+// - Made DrawStackingIndicator only the stack sized moved the rest to DrawIndicators
+// - Made StackingIndicator above the healthbar per Maquiladora's design
+// - Move Civ flag underneath the healthbar
 //
 //----------------------------------------------------------------------------
 
@@ -1754,22 +1757,11 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
     {   
         displayedOwner  = m_playerNum;
     }
-
+	sint32 x2 = x;
+	sint32 y2 = y + iconDim.y;
+	sint32 w = iconDim.x;
+	sint32 h = iconDim.y;
     Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
-
-	if (g_theProfileDB->IsCivFlags())
-    {
-	    // Add civilization flags here - moved flags here and edited the 
-	    // heralds to put numbers on national flags emod 2-21-2007
-        sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
-	    sint32  civicon = 0;
-
-        if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
-	    {
-			sint32 xf = x + iconDim.x;
-		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
-	    }
-    }
 
 // Remove the next line when the scaling and centering of the text has been implemented
 // properly - or you want to test its operation. Currently, the generated text looks too
@@ -1810,44 +1802,6 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
         DrawText(x, y, strn);
     }
 #endif
-
-	sint32 x2 = x;
-	sint32 y2 = y + iconDim.y;
-	sint32 w = iconDim.x;
-	sint32 h = iconDim.y;
-
-	if(m_unitID.IsValid() && m_unitID->GetArmy().IsValid()) {
-		
-		if(m_unitID->GetArmy()->HasCargo()) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
-				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
-				y2 += iconDim.y;
-				h += iconDim.y;
-                w = std::max<sint32>(w, iconDim.x);
-			}
-		}
-
-		if(m_unitID->GetArmy()->Num() > 1) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ARMY), x2, y2, displayedColor);
-				iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
-				y2 += iconDim.y;
-				h += iconDim.y;
-                w = std::max<sint32>(w, iconDim.x);
-			}
-		}
-
-		if(m_unitID->GetArmy()->HasVeterans()) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_VETERAN), x2, y2, displayedColor);
-				iconDim = tileSet->GetMapIconDimensions(MAPICON_VETERAN);
-				y2 += iconDim.y;
-				h += iconDim.y;
-                w = std::max<sint32>(w, iconDim.x);
-			}
-		}			
-	}
 	
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
 }
@@ -1944,6 +1898,7 @@ void UnitActor::DrawHealthBar(void)
 
 	RECT	iconRect = {0, 0, iconDim.x, iconDim.y};
 
+
 	UNITACTION		unitAction = m_curUnitAction;
 	if (m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) unitAction) == NULL)
 		unitAction = UNITACTION_IDLE;
@@ -1976,8 +1931,9 @@ void UnitActor::DrawHealthBar(void)
 	if (iconRect.top < 0) return;
 	if (iconRect.bottom >= g_screenManager->GetSurfHeight()) return;
 
-	DrawStackingIndicator(iconRect.left, iconRect.top, stackSize);
-
+	//DrawStackingIndicator(iconRect.left, iconRect.top, stackSize);
+	DrawIndicators(iconRect.left, iconRect.top, stackSize);
+    DrawStackingIndicator(iconRect.left, iconRect.top - 16, stackSize);
 	RECT tempRect = iconRect;
 	InflateRect(&tempRect, 2, 2);
 	tempRect.top -= 8;
@@ -2615,3 +2571,101 @@ void UnitActor::DumpActor(void)
 	DPRINTF(k_DBG_UI, (" ------------------\n"));		
 }
 #endif
+
+
+void UnitActor::DrawIndicators(sint32 x, sint32 y, sint32 stack)
+{
+#ifndef _TEST
+	STOMPCHECK();
+#endif
+
+	if (!g_showHeralds) return;
+	if (x < 0) return;
+	if (y < 0) return;
+
+	TileSet	*   tileSet = g_tiledMap->GetTileSet();
+	POINT	    iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
+	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
+	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
+
+    sint32      displayedOwner;
+    if (    m_unitID.IsValid() 
+         && m_unitID.IsHiddenNationality()
+         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
+       ) 
+    {
+        // Display unit as barbarians
+        displayedOwner  = PLAYER_INDEX_VANDALS;
+    }
+    else
+    {   
+        displayedOwner  = m_playerNum;
+    }
+
+    Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
+
+	if (g_theProfileDB->IsCivFlags())
+    {
+	    // Add civilization flags here - moved flags here and edited the 
+	    // heralds to put numbers on national flags emod 2-21-2007
+        sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
+	    sint32  civicon = 0;
+
+        if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
+	    {
+			sint32 xf = x; // + iconDim.x;
+		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
+	    }
+    }
+
+	sint32 x2 = x;
+	sint32 y2 = y + iconDim.y;
+	sint32 w = iconDim.x;
+	sint32 h = iconDim.y;
+
+	if(m_unitID.IsValid() && m_unitID->GetArmy().IsValid()) {
+		
+		if(m_unitID->GetArmy()->HasCargo()) {
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
+				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
+				y2 += iconDim.y;
+				h += iconDim.y;
+                w = std::max<sint32>(w, iconDim.x);
+			}
+		}
+
+		if(m_unitID->GetArmy()->Num() > 1) {
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ARMY), x2, y2, displayedColor);
+				iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
+				y2 += iconDim.y;
+				h += iconDim.y;
+                w = std::max<sint32>(w, iconDim.x);
+			}
+		}
+
+		if(m_unitID->GetArmy()->HasVeterans()) {
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_VETERAN), x2, y2, displayedColor);
+				iconDim = tileSet->GetMapIconDimensions(MAPICON_VETERAN);
+				//y2 += iconDim.y; //original but not necessary since elite overlaps
+				//h += iconDim.y;  //original but not necessary since elite overlaps
+                w = std::max<sint32>(w, iconDim.x);
+			}
+		}	
+		// emod -  TODO why does it still look to tileset.h for mapicons?
+		if(m_unitID->GetArmy()->HasElite()) {
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ELITE), x2, y2, displayedColor);
+				iconDim = tileSet->GetMapIconDimensions(MAPICON_ELITE);
+				y2 += iconDim.y;
+				h += iconDim.y;
+                w = std::max<sint32>(w, iconDim.x);
+			}
+		}
+		
+	}
+	
+	g_tiledMap->AddDirtyToMix(x, y, w, h);
+}

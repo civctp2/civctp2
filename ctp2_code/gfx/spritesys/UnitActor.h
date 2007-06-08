@@ -111,6 +111,7 @@ public:
 	void			DrawSelectionBrackets(void);
 	void			DrawHealthBar(void);
 	void			DrawStackingIndicator(sint32 x, sint32 y, sint32 stackSize);
+	void			DrawIndicators(sint32 x, sint32 y, sint32 stackSize);
 	void			DrawText(sint32 x, sint32 y, MBCHAR *unitText);
 
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
