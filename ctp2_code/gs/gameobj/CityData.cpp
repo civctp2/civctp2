@@ -6388,6 +6388,7 @@ bool CityData::CanBuildWonder(sint32 type) const
 	if(!wonderutil_IsAvailable(type, m_owner))
 		return false;
 
+	/// todo remove outcomented code, outcomented code has nothing to do here.
 // took data from wonderutil_IsAvailable to keep same checks but allow some flexibility
 
 //	if(rec->GetOnePerCiv == 0) {  //added as a new check to allow regular wonders to be OnePerCiv
@@ -6426,6 +6427,9 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Added PrerequisiteBuilding checks if city has building to build wonder 
 	if(rec->GetNumPrerequisiteBuilding() > 0) {
 		sint32 o;
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called o.
+		//        Especially not o this may be misread as 0.
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
 			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
 			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
@@ -6436,6 +6440,8 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// EMOD reverse of prereq - this wonder prevented by other buildings
 	// from being be built. (good for state religion etc)
 	if(rec->GetNumExcludedByBuilding() > 0) {
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called e.
 		sint32 e;
 		for(e = 0; e < rec->GetNumExcludedByBuilding(); e++) {
 			sint32 b = rec->GetExcludedByBuildingIndex(e);
@@ -6448,6 +6454,8 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// EMOD this wonder is prevented by other wonders 
 	// to be built. (good for state religion etc)
 	if(rec->GetNumExcludedByWonder() > 0) {
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called ew.
 		sint32 ew;
 		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
 			sint32 b = rec->GetExcludedByWonderIndex(ew);
@@ -6485,6 +6493,8 @@ bool CityData::CanBuildWonder(sint32 type) const
 	if(rec->GetBuildingFeat(bf)) {
 		if(bf->GetBuildingIndex()) {
 			sint32 numCities = 0;
+			/// @todo use standart identifier names for index variables.
+			//        First of them is called i. Second one is called j. None of them is called c.
 			sint32 c;
 			for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
 				Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
@@ -6512,7 +6522,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 
 
 	// Added by E - Compares Wonder CityStyle to the CityStyle of the City
-	if(rec->GetNumCityStyleOnly() > 0) {
+	if(rec->GetNumCityStyleOnly() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called s.
 		sint32 s;
 		bool found = false;
 		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
@@ -6526,7 +6539,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 
 	// Added by E - Compares Wonder CultureOnly to the Player's CityStyle
-	if(rec->GetNumCultureOnly() > 0) {
+	if(rec->GetNumCultureOnly() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called s.
 		sint32 s;
 		bool found = false;
 		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
@@ -6540,7 +6556,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 
 	// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
-	if(rec->GetNumCivilisationOnly() > 0) {
+	if(rec->GetNumCivilisationOnly() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called c.
 		sint32 c;
 		bool found = false;
 		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
@@ -6553,8 +6572,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 			return false;
 	}
 
-	if(rec->GetNumNeedsCityGoodAnyCity()) {
-		
+	if(rec->GetNumNeedsCityGoodAnyCity())
+	{	
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called g.
 		sint32 i, g;
 		bool goodavail = false;
 
@@ -6575,7 +6596,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 
 	// Start Resources section - more to add later 
 	// Added by E - Compares Unit NeedsCityGood to the resources collected or bought by the city, can be either/or
-	if(rec->GetNumNeedsCityGood() > 0) {
+	if(rec->GetNumNeedsCityGood() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called g.
 		sint32 g;
 		bool found = false;
 		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
@@ -6589,7 +6613,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 
 	// Added by E - Compares Wonder NeedsCityGoodAll to the resources collected or bought by the city, must be all listed
-	if(rec->GetNumNeedsCityGoodAll() > 0) {
+	if(rec->GetNumNeedsCityGoodAll() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called g.
 		sint32 g;
 		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
 			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
@@ -6600,7 +6627,10 @@ bool CityData::CanBuildWonder(sint32 type) const
 
 	// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006
 	// changed so player has to have achieved feat
-	if(rec->GetNumNeedsFeatToBuild() > 0) {
+	if(rec->GetNumNeedsFeatToBuild() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called f.
 		sint32 f;
 		bool found = false;
 		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
@@ -6613,8 +6643,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 			return false;
 	}
 
-	//Any player must have feat to build 5-18-2007
-		if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0) {
+	// Any player must have feat to build 5-18-2007
+	if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0)
+	{
+		/// @todo use standart identifier names for index variables.
+		//        First of them is called i. Second one is called j. None of them is called f.
 		sint32 f;
 		bool found = false;
 		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
@@ -6626,15 +6659,17 @@ bool CityData::CanBuildWonder(sint32 type) const
 		if(!found)
 			return false;
 	}
-////////////////////////////////////////////////////////////
-// EMOD TODO: count up the number of wonders in a city and 
-// compare it to the difficultydb wondercitylimit and add 
-// to a buildingflag additional wonder to city and a govt 
-// modifier?
-////////////////////////////////////////////////////////////
-	//emod to limit number of wonders in a city
-	//causes delay/crash because m_builtwonders not initialized?
-	if (GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders()) {
+
+	////////////////////////////////////////////////////////////
+	// EMOD TODO: count up the number of wonders in a city and 
+	// compare it to the difficultydb wondercitylimit and add 
+	// to a buildingflag additional wonder to city and a govt 
+	// modifier?
+	////////////////////////////////////////////////////////////
+	// emod to limit number of wonders in a city
+	// causes delay/crash because m_builtwonders not initialized?
+	if(GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders())
+	{
 		return false;
 	}
 
@@ -10102,7 +10137,6 @@ sint32 CityData::GetNumCityWonders() const
 	//        wonder database
 	/// @todo Figure out which wonder has been built
 	//        and count the built wonders.
-	/// @todo Test your code. (Actually I shouldn't need to say this.)
 	//uint64 wonders = m_builtWonders;
 	//for (sint32 i = 0; i < wonders; ++i) 
 	//{
@@ -10122,7 +10156,7 @@ sint32 CityData::GetNumCityBuildings() const
 	sint32 citybld = 0;
 	for(sint32 i=0; i<g_theBuildingDB->NumRecords(); i++) {
 		if(GetEffectiveBuildings() & (uint64(1) << (uint64)i) ) {
-		citybld++;
+			citybld++;
 		}
 	}
 	return citybld;

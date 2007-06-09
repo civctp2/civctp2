@@ -593,18 +593,18 @@ public:
 
 
     bool HasVeterans() const;
-	bool NearestUnexplored(MapPoint &pos) const;
+    bool NearestUnexplored(MapPoint &pos) const;
 
-	void Upgrade();
+    void Upgrade();
 
     static void DisassociateEventsFromOrdersDB(){ delete[] s_orderDBToEventMap; s_orderDBToEventMap = NULL; };
     static void AssociateEventsWithOrdersDB();
-	static sint32 OrderToEvent(sint32 order) { return s_orderDBToEventMap[order]; };
-	
-	void CheckHostileTerrain();
-	void CheckMineField();
-	void CheckSink();	
-	void BarbarianSpawning();
+    static sint32 OrderToEvent(sint32 order) { return s_orderDBToEventMap[order]; };
+    
+    void CheckHostileTerrain();
+    void CheckMineField();
+    bool CheckSink();
+    void BarbarianSpawning();
 	bool HasElite() const;
 
 private:

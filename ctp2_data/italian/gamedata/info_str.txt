@@ -490,12 +490,12 @@ BLOODBATH_UNHAPPINESS_TITLE		"Il bagno di sangue fa diminuire il benessere!"
 BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, le notizie sul bagno di sangue che abbiamo causato nella città di {city[0].name} sono giunte rapidamente alle orecchie dei nostri cittadini; ciò ha causato un generale sentimento di insicurezza e paura tra la popolazione che si risolve in un calo della felicità. Il bagno di sangue ha inoltre intaccato la nostra reputazione agli occhi delle altre nazioni."
 
 #New Messages#
-CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders? "
-LOST_AT_SEA				"Our {unit[0].name} has been lost at Sea! Remember some units may sink and lose all cargo on board!"
-UNIT_UPGRADED				"Our {unit[0].name} has been rearmed and trained as a {unit[1].name}! "
-HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unit[0].name}!"
-INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}"
-GUERRILLA_SPAWN				"Our {unit[0].name} has raised guerrillas to aid our cause!"
+CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders?"
+LOST_AT_SEA				"Our {unitrecord[0].name} has been lost at Sea! Remember some units may sink easily on the high seas and pull down with them all onboard units into the deepth!"
+UNIT_UPGRADED				"Our {unitrecord[0].name} has been rearmed and trained as a {unitrecord[1].name}! "
+HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unitrecord[0].name}!"
+INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}."
+GUERRILLA_SPAWN				"Our {unitrecord[0].name} has raised guerrillas to aid our cause!"
 
 CANT_ATTACK_HAVE_TREATY			"Quest'azione romperà il nostro trattato con {player[0].civ_name_plural#ARTICLE}. Sei sicuro di voler continuare?"
 AT_LEAST_ONE_COULDNT_BE_EXPELLED	"{player[0].civ_name_plural#ARTICLE_CAP} non sono riusciti a togliere tutte le loro armate dal nostro territorio. Si impegnano a rimuovere le loro unità al più presto."

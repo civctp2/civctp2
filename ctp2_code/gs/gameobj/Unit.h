@@ -784,7 +784,8 @@ public:
 	bool UnitValidForOrder(const OrderRecord * order_rec) const;
 
 	void SetType(const sint32 type);
-	void Sink(sint32 chance, Unit &unit);
+	bool Sink(sint32 chance);
+	void Upgrade(const sint32 type);
 	sint32 GetBestUpgradeUnitType() const;
 	sint32 GetUpgradeCosts(sint32 upgradeType) const;
 

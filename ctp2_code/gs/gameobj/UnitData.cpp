@@ -3220,38 +3220,40 @@ void UnitData::BeginTurn()
 		g_network.Unblock(m_owner);
 	}
 
-	//moved Harvest here since it should be only one unit doing it
+	// Moved Harvest here since it should be only one unit doing it
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();
+	sint32 CellOwner = cell->GetOwner();       /// @todo local variables start with a lower case letter
+	
 	if(
-	    (Flag(k_UDF_IS_ENTRENCHED)) 
-	&&  (rec->GetCanHarvest()) 
-	&&  (CellOwner != m_owner)
-	&&  (cell->GetNumUnits() < 2)  //cant double 
-	&&  (cell->GetShieldsProduced() > 0)
-	&&  (cell->GetShieldsProduced() > 0)
-		){ 
-			g_player[m_owner]->m_gold->AddGold(cell->GetGoldProduced());
-			g_player[m_owner]->m_materialPool->AddMaterials(cell->GetShieldsProduced());
-		}
+	    Flag(k_UDF_IS_ENTRENCHED) 
+	&&  rec->GetCanHarvest()
+	&&  CellOwner != m_owner
+	&&  cell->GetNumUnits() < 2  //cant double 
+	&&  cell->GetShieldsProduced() > 0
+	&&  cell->GetShieldsProduced() > 0
+	  )
+	{ 
+		g_player[m_owner]->m_gold->AddGold(cell->GetGoldProduced());
+		g_player[m_owner]->m_materialPool->AddMaterials(cell->GetShieldsProduced());
+	}
 
-//end EMOD
+	// End EMOD
 }
 
 void UnitData::EndTurn()
 {
 	const UnitRecord *rec = GetDBRec();
 
-//emod adding cellowner
+	// Emod adding cellowner
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();
-//EMOD add civbonus
+	sint32 CellOwner = cell->GetOwner();      /// @todo local variables start with a lower case letter
+	// EMOD add civbonus
 
 	sint32     wonderBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	double          origHP  = m_hp;
 	double const	maxHp	= rec->GetMaxHP() + wonderBonus;
 
-    // PFT added: heal immobile units also, 17 Mar 05
+	// PFT added: heal immobile units also, 17 Mar 05
 	if ((Flag(k_UDF_FIRST_MOVE) || IsImmobile() ) && (m_hp < maxHp))
 	{
 		if (g_theWorld->HasCity(m_pos) || 
@@ -3265,14 +3267,13 @@ void UnitData::EndTurn()
 			m_hp += maxHp * g_theConstDB->NormalHealRate();
 		}
 
-        m_hp = std::min(m_hp, maxHp);
+		m_hp = std::min(m_hp, maxHp);
 	}
 
 	if(rec->GetNoFuelThenCrash()) {
 		if(!CheckForRefuel() && !Flag(k_UDF_IN_SPACE)) {
 			m_fuel -= g_theConstDB->NonSpaceFuelCost() * sint32(m_movement_points / 100.0);
 
-			
 			if(m_fuel <= 0) {
 				Unit me(m_id);
 				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
@@ -3292,22 +3293,22 @@ void UnitData::EndTurn()
 			g_network.Unblock(m_owner);
 		}
 	}
-//emod adding guerrilla SF code here 2-22-2007
+	// Emod adding guerrilla SF code here 2-22-2007
 
 	if(Flag(k_UDF_IS_ENTRENCHED)) { 
-		if(
-   		  (rec->GetSpawnsBarbarians() && CellOwner != m_owner) 
+		if(rec->GetSpawnsBarbarians() 
+		&& CellOwner != m_owner
 		){ 
 			g_director->AddCenterMap(m_pos);
 			Barbarians::AddBarbarians(m_pos, CellOwner, FALSE);
-			//added since army data doesn't do the slic?
+			// Added since army data doesn't do the slic?
 			SlicObject *so = new SlicObject("999GuerrillaSpawn");
 			so->AddRecipient(m_owner);
-            so->AddUnit(m_id);
-			g_slicEngine->Execute(so);  //this needed for handling?
+			so->AddUnitRecord(GetType());
+			g_slicEngine->Execute(so);
 		}
 
-	    if (rec->GetNumSettleImprovement())
+		if (rec->GetNumSettleImprovement())
 		{ //Added to allow units settle improvements
 			for(sint32 j = 0; j < rec->GetNumSettleImprovement(); j++) {
 				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(j);

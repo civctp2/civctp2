@@ -664,7 +664,7 @@ uint32 ArmyData::GetMovementType() const
 {
     uint32 tmp = MOVEMENT_ANYWHERE;
 
-    for (int i = 0; i < m_nElements; i++) {
+    for(sint32 i = 0; i < m_nElements; i++) {
         tmp &= m_array[i].GetMovementType();
     }
 
@@ -675,14 +675,14 @@ uint32 ArmyData::GetCargoMovementType() const
 {
     uint32 tmp = MOVEMENT_ANYWHERE;
 
-    for (int i = 0; i < m_nElements; i++)
+    for(sint32 i = 0; i < m_nElements; i++)
     {
         const UnitDynamicArray * cargo = 
             m_array[i].AccessData()->GetCargoList();
 
         if (cargo)
         {
-            for (int j = 0; j < cargo->Num(); j++) {
+            for(sint32 j = 0; j < cargo->Num(); j++) {
                 tmp &= cargo->Access(j).GetMovementType();
             }
         }
@@ -708,7 +708,7 @@ uint32 ArmyData::GetCargoMovementType() const
 //----------------------------------------------------------------------------
 bool ArmyData::HasCargo() const
 {
-    for (int i = 0; i < m_nElements; ++i)
+    for(sint32 i = 0; i < m_nElements; ++i)
     {
         UnitDynamicArray const * cargo = 
             m_array[i].AccessData()->GetCargoList();
@@ -794,14 +794,14 @@ bool ArmyData::CargoCanEnter(const MapPoint &pos) const
 {
     Cell *cell = g_theWorld->GetCell(pos);
 
-    for (int i = 0; i < m_nElements; i++)
+    for(sint32 i = 0; i < m_nElements; i++)
     {
         const UnitDynamicArray * cargo = 
             m_array[i].AccessData()->GetCargoList();
 
         if (cargo)
         {
-            for (int j = 0; j < cargo->Num(); j++) 
+            for(sint32 j = 0; j < cargo->Num(); j++) 
             {
                 if (cell->CanEnter(cargo->Access(j).GetMovementType())) 
                 {
@@ -833,7 +833,7 @@ size_t ArmyData::CountMovementTypeSea() const
 {
     size_t count = 0;
 
-    for (int i = 0; i < m_nElements; ++i)
+    for(sint32 i = 0; i < m_nElements; ++i)
     {
         if (m_array[i].GetMovementTypeSea())
         {
@@ -861,7 +861,7 @@ size_t ArmyData::CountMovementTypeSea() const
 //----------------------------------------------------------------------------
 bool ArmyData::CanSettle(const MapPoint &pos) const
 {
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         if (m_array[i].CanSettle(pos))
             return true;
@@ -887,7 +887,7 @@ bool ArmyData::CanSettle(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 bool ArmyData::CanSettle() const
 {
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         Assert(m_array[i].IsValid());
         if (    m_array[i].IsValid()
@@ -921,7 +921,7 @@ bool ArmyData::CanSettle() const
 //----------------------------------------------------------------------------
 bool ArmyData::CanTransport() const
 {
-    for (int i = 0; i < m_nElements; ++i)
+    for(sint32 i = 0; i < m_nElements; ++i)
     {
         sint32 const	cargo = m_array[i].GetData()->GetCargoCapacity();
         if (cargo > 0)
@@ -934,7 +934,7 @@ bool ArmyData::CanTransport() const
 // not used
 bool ArmyData::CanPatrol() const
 {
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         if(m_array[i].GetDBRec()->GetCanPatrol())
             return true;
@@ -963,7 +963,7 @@ void ArmyData::Sleep()
 // Activate this army from sentinal duty.
 void ArmyData::WakeUp()
 {
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_WakeUnit,
                                GEA_Unit, m_array[i],
@@ -987,7 +987,7 @@ bool ArmyData::IsEntrenching() const
 // Returns true if each member of this army can entrench
 bool ArmyData::CanEntrench() const
 {
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         if (!m_array[i].CanEntrench())
             return false;
@@ -998,7 +998,7 @@ bool ArmyData::CanEntrench() const
 // Entrench (fortify) this army
 void ArmyData::Entrench()
 {
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_EntrenchUnit,
                                GEA_Unit, m_array[i],
@@ -1010,7 +1010,7 @@ void ArmyData::Entrench()
 // Detrench (unfortify) this army
 void ArmyData::Detrench()
 {
-    for(int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_DetrenchUnit,
                                GEA_Unit, m_array[i],
@@ -1031,7 +1031,7 @@ void ArmyData::GetActors(Unit &excludeMe, UnitActor **restOfStack)
 {
     sint32			n = 0;
 
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     {
         UnitActor * a = m_array[i].GetActor();
         if (a != excludeMe.GetActor()) {
@@ -1048,8 +1048,8 @@ void ArmyData::GetActors(Unit &excludeMe, UnitActor **restOfStack)
 //
 // Parameters : Army &army      : the incoming army
 //
-// Globals    : g_gevManager	:
-//              g_player	    : player array
+// Globals    : g_gevManager    :
+//              g_player        : player array
 //
 // Returns    : -
 //
@@ -1122,7 +1122,7 @@ void ArmyData::GroupArmy(Army &army)
 // Parameters : -
 //
 // Globals    : g_theUnitPool       :
-//	            g_network	        : multiplayer manager
+//              g_network           : multiplayer manager
 //              g_theWorld          : the map
 //              g_gevManager        :
 //
@@ -1184,7 +1184,7 @@ void ArmyData::GroupAllUnits()
 // Parameters : -
 //
 // Globals    : g_theUnitPool   :
-//            :	g_network       : multiplayer manager
+//            : g_network       : multiplayer manager
 //            : g_player        : player array [see Player::InitPlayer for initialized player data]
 //
 // Returns    : -
@@ -1215,7 +1215,7 @@ void ArmyData::GroupUnit(Unit unit)
     {
         return;
     }
-    for (int j = 0; j < m_nElements; ++j)
+    for(sint32 j = 0; j < m_nElements; ++j)
     {
         if (IsSolist(m_array[j]))
         {
@@ -1267,7 +1267,7 @@ void ArmyData::GroupUnit(Unit unit)
 // Ungroup this army into it's constituent units
 void ArmyData::UngroupUnits()
 {
-    for(int i = m_nElements - 1; i > 0; i--) 
+    for(sint32 i = m_nElements - 1; i > 0; i--) 
     {
         Army newArmy = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING_ORDER);
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
@@ -1488,26 +1488,26 @@ void ArmyData::BeginTurn()
 ///       method. 250 lines is way too long. //moved some
 ///       Move stuff to UnitData, when it only concerns units, not armies.
 ///       Efficiency note: do not compute cell/terrain stuff inside the loop - all 
-///       units of the army are supposed to be at the same location. 
-///       Remove or do something with the Slic objects that were created. //done.
+///       units of the army are supposed to be at the same location.
 ///       Define a better cause than CAUSE_REMOVE_ARMY_DISBANDED when the army is
 ///       not disbanded at all.
-
-	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();
 	
-	//EMODs
+	// EMODs
+	if(CheckSink())
+	{
+		return;
+	}
+
 	CheckHostileTerrain();
 	CheckMineField();
-	CheckSink();
 	BarbarianSpawning();
 	//Upgrade AI
-	if (g_player[m_owner]->IsRobot() ) { //added so human units don't automatically upgrade 3-27-2007
+	if(g_player[m_owner]->IsRobot()) // Added so human units don't automatically upgrade 3-27-2007
+	{
 		Upgrade();
-
 	}
 	
+	/// @todo remove this or implement this
 //If diff->chokeunit and unit is surrounded
 //	RadiusIterator it(cityPos, m_sizeIndex);
 //	for(it.Start(); !it.End(); it.Next()) {
@@ -1631,13 +1631,13 @@ bool ArmyData::CanFight(CellUnitList &defender)
 //
 // Description: Order this army to investigate a city at MapPoint point.
 //
-// Parameters : MapPoint	  point
+// Parameters : MapPoint      point
 //
 // Globals    : -
 //
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Returns    : ORDER_RESULT          : attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::InvestigateCity(const MapPoint &point)
@@ -1674,9 +1674,9 @@ ORDER_RESULT ArmyData::InvestigateCity(const MapPoint &point)
 //
 // Globals    : -
 //
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Returns    : ORDER_RESULT            : attempt success/failure indication
 //
-// Remark(s)  :	calls UnitData::NullifyWalls, which is zeroed out
+// Remark(s)  : calls UnitData::NullifyWalls, which is zeroed out
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::NullifyWalls(const MapPoint &point)
@@ -1710,13 +1710,13 @@ ORDER_RESULT ArmyData::NullifyWalls(const MapPoint &point)
 // Parameters : MapPoint
 //
 // Globals    : g_player                : player array
-//            : g_network	            :
+//            : g_network               :
 //            : g_theAdvanceDB
 //            : g_slicEngine
 //
-// Returns    : ORDER_RESULT			: attempt success/failure indication
+// Returns    : ORDER_RESULT            : attempt success/failure indication
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT ArmyData::StealTechnology(const MapPoint &point)
@@ -2252,7 +2252,7 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 //
 // Globals    : g_theWorld
 //            : g_gevManager
-//            : g_player	            : player array 
+//            : g_player                : player array 
 //
 // Returns    : ORDER_RESULT            : attempt success/failure indication
 //
@@ -2515,7 +2515,7 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 //              double &escape_chance,
 //              sint32 &uindex
 //
-// Globals    : g_player	     : player array 
+// Globals    : g_player         : player array 
 //
 // Returns    : bool
 //
@@ -2686,8 +2686,8 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 	GetPos(opos);
 	bool revealed_unexplored;
 
-	for(int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		g_theWorld->RemoveUnitReference(opos, m_array[i]);
 		m_array[i].SetPosition(p, revealedUnits, revealed_unexplored);
 	}
@@ -2797,7 +2797,7 @@ bool ArmyData::CanSlaveRaid(double &success, double &death,
 //              Otherwise, double &success, double &death, sint32 &timer, and
 //              sint32 &amount, are filled in from the unit's UnitRecord.
 //
-// Parameters : double &success, 
+// Parameters : double &success,
 //              double &death,
 //              sint32 &timer
 //              sint32 &amount
@@ -2985,7 +2985,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 //              Unit &home_city         : destination city for slave
 //
 // Globals    : g_theWorld
-//            : g_player	            : player array [see Player::InitPlayer for initialized player data]
+//            : g_player                : player array [see Player::InitPlayer for initialized player data]
 //
 // Returns    : bool
 //
@@ -3098,12 +3098,12 @@ bool ArmyData::CanEnslaveSettler(sint32 &uindex) const
 // Parameters : MapPoint point  : a point adjacent to this army's location (which should contain exactly one settler).
 //              Unit home_city  : the destination city for the captured slave.
 //
-// Globals    : g_player	    : player array
+// Globals    : g_player        : player array
 //            : g_theWorld
 //            : g_gevManager
 //            : g_slicEngine
 //
-// Returns    : ORDER_RESULT	: attempt success/failure indication
+// Returns    : ORDER_RESULT    : attempt success/failure indication
 //
 // Remark(s)  : -
 //
@@ -3294,24 +3294,24 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 	MapPoint    start;
 
 	if (p->GetCapitolPos(start)) 
-    {
-        MapPoint    dest;
+	{
+		MapPoint    dest;
 		c.GetPos(dest);
-        distanceCost += 100.0 * start.NormalizedDistance(dest);
+		distanceCost += 100.0 * start.NormalizedDistance(dest);
 	} 
-    else 
-    {
+	else 
+	{
 		distanceCost += p->GetMaxEmpireDistance(); 
 	}
 	
 	double const    baseCost        = 
-        (g_player[c.GetOwner()]->m_gold->GetLevel() + 5000) *
-		static_cast<double>(c.PopCount()) * 
-        (1 / distanceCost) *
-		g_theConstDB->InciteUprisingGoldCoefficient();
-    double const    capitolPenalty  = c.IsCapitol() ? g_theConstDB->InciteUprisingCapitolPenalty() : 0.0;
+	    (g_player[c.GetOwner()]->m_gold->GetLevel() + 5000) *
+	    static_cast<double>(c.PopCount()) * 
+	    (1 / distanceCost) *
+	    g_theConstDB->InciteUprisingGoldCoefficient();
+	double const    capitolPenalty  = c.IsCapitol() ? g_theConstDB->InciteUprisingCapitolPenalty() : 0.0;
 
-    sint32 const    cost            = static_cast<sint32>(baseCost + capitolPenalty);
+	sint32 const    cost            = static_cast<sint32>(baseCost + capitolPenalty);
 
 	DPRINTF(k_DBG_GAMESTATE, ("Cost to incite uprising: %ld\n", cost));
 
@@ -3330,10 +3330,10 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 	AddSpecialActionUsed(m_array[uindex]);
 	
 
-    so = new SlicObject("208UprisingCompleteVictim") ;
-    so->AddRecipient(cityOwner) ;
-    so->AddCity(c) ;
-    g_slicEngine->Execute(so) ;
+	so = new SlicObject("208UprisingCompleteVictim") ;
+	so->AddRecipient(cityOwner) ;
+	so->AddCity(c) ;
+	g_slicEngine->Execute(so) ;
 
 	ActionSuccessful(SPECATTACK_SLAVEUPRISING, m_array[uindex], c);
 
@@ -3921,7 +3921,7 @@ bool ArmyData::CanConvertCity(const MapPoint &point) const
 //            : g_slicEngine
 //            : g_theWonderDB
 //
-// Returns    : ORDER_RESULT	: attempt success/failure indication
+// Returns    : ORDER_RESULT    : attempt success/failure indication
 //
 // Remark(s)  : -
 //
@@ -4485,10 +4485,10 @@ void ArmyData::Reenter()
 	} else {
 		m_flags &= ~(k_CULF_IN_SPACE);
 		MapPoint oldPos = m_pos;
-	    UnitDynamicArray revealedUnits;
+		UnitDynamicArray revealedUnits;
 
 		for (i = 0; i < m_nElements; i++) 
-        {
+		{
 			m_array[i]->ClearFlag(k_UDF_HAS_LEFT_MAP);
 			m_array[i]->ClearFlag(k_UDF_IN_SPACE);
 			
@@ -4502,7 +4502,7 @@ void ArmyData::Reenter()
 		ResetPos();
 		FixActors(oldPos, m_pos, revealedUnits);
 		for (i = 0; i < m_nElements; i++) 
-        {
+		{
 			g_director->AddShow(m_array[i]);
 		}
 	}
@@ -4774,11 +4774,11 @@ bool ArmyData::CanPillage() const
 		}
 	}
 
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		if (!m_array[i].GetDBRec()->GetCanPillage() ||
 		    !m_array[i].CanPerformSpecialAction()
-           )
+		   )
 		{
 			return false;
 		}
@@ -4963,8 +4963,8 @@ bool ArmyData::GetFirstMoveThisTurn() const
 
 bool ArmyData::HasLeftMap() const
 {
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		if (!m_array[i].HasLeftMap())
 			return false;
 	}
@@ -4973,8 +4973,8 @@ bool ArmyData::HasLeftMap() const
 
 bool ArmyData::CanNukeCity() const
 {
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		if (m_array[i].GetDBRec()->HasNuclearAttack())
 			return true;
 	}
@@ -5001,7 +5001,7 @@ void ArmyData::CurMinMovementPoints(double &cur) const
 {
     cur = 10000000.0; 
 
-    for (int i = 0; i < m_nElements; i++) 
+    for(sint32 i = 0; i < m_nElements; i++) 
     { 
         cur = std::min<double>(cur, m_array[i].GetMovementPoints());
     } 
@@ -5362,7 +5362,7 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 //
 // Returns    : ORDER_RESULT            : attempt success/failure indication
 //
-// Remark(s)  : No special effects. 
+// Remark(s)  : No special effects.
 //
 //
 //----------------------------------------------------------------------------
@@ -5634,10 +5634,10 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 // Parameters : uint32 &uindex   : 
 //
 // Globals    : -
-//				
+//              
 // Returns    : bool
 //
-// Remark(s)  :	-
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CanInterceptTrade(uint32 &uindex) const
@@ -6058,7 +6058,7 @@ void ArmyData::ClearOrders()
 // Globals    : g_theUnitPool
 //            : g_theArmyPool
 //            : g_theDiplomacyLog
-//            : g_player	         : player array
+//            : g_player             : player array
 //            : g_selected_item
 //            : g_network
 //
@@ -6314,15 +6314,16 @@ bool ArmyData::ExecuteOrders(bool propagate)
 //
 // Description: If a unit is ordered to steal technology log the regard cost
 //
-// Parameters : UNIT_ORDER_TYPE order_type 
-//              MapPoint &pos  
+// Parameters : UNIT_ORDER_TYPE order_type
+//              MapPoint &pos
 //
 // Globals    : g_theStringDB
 //
 // Returns    : -
 //
 // Remark(s)  : Only defined for UNIT_ORDER_STEAL_TECHNOLOGY, but not called for it.
-//              All other calls do nothing. Probably did more originally, there are lots of dud calls.
+//              All other calls do nothing. Probably did more originally, there are
+//              lots of dud calls.
 //
 //--------------------------------------------------------------------------------------------------------- 
 void ArmyData::InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos)
@@ -6366,7 +6367,7 @@ void ArmyData::ForgetPatrol()
 //
 // Name       : ArmyData::ExecuteMoveOrder
 //
-// Description: Returns TRUE if army is at or (if appropriate) next to it's destination. (?)
+// Description: Returns true if army is at or (if appropriate) next to it's destination. (?)
 //              Otherwise it inserts a MoveArmy event after the current event in the event queue.
 //
 // Parameters : Order *order
@@ -6376,7 +6377,7 @@ void ArmyData::ForgetPatrol()
 // Returns    : bool
 //
 // Remark(s)  : Called by ExecuteOrders (whose switch defines the move orders).
-//              If this returns FALSE then completed_order = FALSE in the above switch.
+//              If this returns false then completed_order = false in the above switch.
 //
 //----------------------------------------------------------------------------
 bool ArmyData::ExecuteMoveOrder(Order *order)
@@ -6441,7 +6442,7 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 //
 // Name       : ArmyData::IsOccupiedByForeigner
 //
-// Description: Returns TRUE if there is at least one foreign unit in MapPoint &pos
+// Description: Returns true if there is at least one foreign unit in MapPoint &pos
 //
 // Parameters : MapPoint &point
 //
@@ -6485,10 +6486,10 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 		terrainutil_HasAirfield(m_pos) == false)
 		return;
 	
-	if(cell->UnitArmy()->Num() < 1)		
+	if(cell->UnitArmy()->Num() < 1)
 		return;
 
-	for (int i = 0; i < m_nElements; i++) {
+	for(sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetCargoCapacity() > 0) {
 			for (int j = cell->UnitArmy()->Num() - 1; j >= 0; j--) {
 				Unit u = cell->UnitArmy()->Access(j);
@@ -6503,7 +6504,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 					u.RemoveUnitVision();
 					m_array[i].InsertCargo(u);
 					g_player[m_owner]->RegisterInsertCargo
-                        (m_array[i].GetArmy(), u.GetType(), (sint32)u.GetHP());
+					    (m_array[i].GetArmy(), u.GetType(), (sint32)u.GetHP());
 				}
 				if(m_array[i].GetCargoCapacity() < 1)
 					break;
@@ -6521,18 +6522,18 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 // Parameters : WORLD_DIRECTION d  :
 //              Order *order       :
 //
-// Globals    : g_player	: player array 
+// Globals    : g_player           : player array 
 //
 // Returns    : bool
 //
 // Remark(s)  : Actually, not used. Must be left over from CTP1
 //
-//---------------------------------------------------------------------------- 					
+//----------------------------------------------------------------------------
 bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 {
 	MapPoint oldPos = m_pos;
 
-    MapPoint newPos;
+	MapPoint newPos;
 	sint32 r = oldPos.GetNeighborPosition(d, newPos);
 
 	if(!r)
@@ -6726,11 +6727,11 @@ bool ArmyData::FinishAttack(Order *order)
 //
 // Parameters : MapPoint &pos       :
 //
-// Globals    : g_player	        : player array
+// Globals    : g_player            : player array
 //
 // Returns    : bool
 //
-// Remark(s)  :	Deals with Nuke attacks.
+// Remark(s)  : Deals with Nuke attacks.
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
@@ -6890,7 +6891,7 @@ bool ArmyData::CheckSpecialUnitMove(const MapPoint &pos)
 //
 // Parameters : MapPoint &point 
 //
-// Globals    : g_player	: player array
+// Globals    : g_player    : player array
 //
 // Returns    : bool
 //
@@ -7054,7 +7055,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 //            : MapPoint &point
 //            : sint32 defense_owner 
 //
-// Globals    : g_player	: player array
+// Globals    : g_player    : player array
 //            : g_network
 //
 // Returns    : bool
@@ -7118,9 +7119,9 @@ bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 //
 // Name       : ArmyData::ExertsZOC
 //
-// Description: Returns true if some unit in this army exerts a zone of control 
+// Description: Returns true if some unit in this army exerts a zone of control
 //
-// Parameters : - 
+// Parameters : -
 //
 // Globals    : -
 //
@@ -7131,8 +7132,8 @@ bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 //---------------------------------------------------------------------------- 
 bool ArmyData::ExertsZOC() const
 {
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		if (!m_array[i].IsNoZoc())
 			return true;
 	}
@@ -7144,10 +7145,10 @@ bool ArmyData::ExertsZOC() const
 //
 // Name       : ArmyData::UpdateZOCForMove
 //
-// Description: 
+// Description: -
 //
 // Parameters : MapPoint &point
-//            : WORLD_DIRECTION d 
+//            : WORLD_DIRECTION d
 //
 // Globals    : -
 //
@@ -7264,7 +7265,7 @@ void ArmyData::RevealZOCUnits(const MapPoint &pos)
 //            : UNIT_ORDER_TYPE order
 //            : WORLD_DIRECTION d
 //
-// Globals    : g_player	            : player array
+// Globals    : g_player                : player array
 //              g_selectedItem          : selected unit or city
 //              g_theWorld              : the map
 //              g_gevManager
@@ -7474,24 +7475,22 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		}
 
 		anyVisible = anyVisible || (m_array[i].GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
- // EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
-//city to another city anywhere in the world and costing that unit 1 move.
-      
+		// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
+		//city to another city anywhere in the world and costing that unit 1 move.
+
 		//UnitDynamicArray revealedUnits;
 		//bool revealedUnexplored = false;
-		//for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
-			if(m_array[i].GetDBRec()->GetCanRebase()){
-				if (!IsOccupiedByForeigner(pos)){
-					if (g_theWorld->HasCity(pos) || terrainutil_HasAirfield(pos)) {  //add unit later?
- 						m_array[i].SetPosition(pos, revealedUnits, revealedUnexplored);
-						//return true;
-					}
+		if(m_array[i].GetDBRec()->GetCanRebase()){
+			if (!IsOccupiedByForeigner(pos)){
+				if (g_theWorld->HasCity(pos) || terrainutil_HasAirfield(pos)) {  //add unit later?
+					m_array[i].SetPosition(pos, revealedUnits, revealedUnexplored);
+					//return true;
 				}
-				//return false;
 			}
-		//}
+			//return false;
+		}
+		//end EMOD
 
- //end EMOD
 		if(g_theWorld->GetCell(pos)->GetNumUnits() >= k_MAX_ARMY_SIZE) {
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i],
@@ -7580,9 +7579,10 @@ void ArmyData::CheckTerrainEvents()
 	if(cell->GetGoodyHut()) {
 		cell->GetGoodyHut()->OpenGoody(m_owner, m_pos);
 	
-        if (cell->GetGoodyHut()) { 
-            cell->DeleteGoodyHut();
-        }
+		if(cell->GetGoodyHut())
+		{
+			cell->DeleteGoodyHut();
+		}
 
 		MapPoint pos2;
 		g_tiledMap->RedrawTile(&m_pos);
@@ -8541,7 +8541,7 @@ void ArmyData::Disband()
 	// are going through all items of an array. But when killing/removing items,
 	// it is safer to start from the end, otherwise indices may get shifted 
 	// while you are busy, and half of the items will not be removed.
-	for (sint32 i = m_nElements - 1; i >= 0; i--) 
+	for(sint32 i = m_nElements - 1; i >= 0; i--) 
 	{
 		if (city.IsValid()) 
 		{
@@ -8598,7 +8598,7 @@ void ArmyData::Disband()
 //
 // Globals    : -
 //
-// Returns    : sint32 
+// Returns    : sint32
 //
 // Remark(s)  : -
 //
@@ -8664,10 +8664,9 @@ void ArmyData::CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to
 
 bool ArmyData::CanMove()
 {
-	sint32 i;
 	bool noneMoved = true;
 	bool allOverSpecialCost = true;
-	for(i = 0; i < m_nElements; i++) {
+	for(sint32 i = 0; i < m_nElements; i++) {
 		if(!m_array[i].GetFirstMoveThisTurn())
 			noneMoved = false;
 		if(!m_array[i].CanPerformSpecialAction())
@@ -8682,12 +8681,9 @@ bool ArmyData::CanMove()
 	{
 		return true;
 	}
-	
-	
-	
-	sint32 d;
+
 	MapPoint neighbor;
-	for(d = 0; d < (sint32)NOWHERE; d++) {
+	for(sint32 d = 0; d < (sint32)NOWHERE; d++) {
 		if(m_pos.GetNeighborPosition((WORLD_DIRECTION)d, neighbor)) {
 			if(IsMovePointsEnough(neighbor)) {
 				bool zocViolation;
@@ -9217,7 +9213,7 @@ bool ArmyData::IsWounded() const
 	sint32 totalHP = 0;
 
 	GetCurrentHP(nb, unittypes, unithp);
-	for (int i = 0 ; i < nb ; i ++)
+	for(sint32 i = 0 ; i < nb ; i ++)
 	{
 		totalcurrentHP += unithp[i];
 		totalHP+= g_theUnitDB->Get(unittypes[i], g_player[GetOwner()]->GetGovernmentType())->GetMaxHP();
@@ -9277,11 +9273,11 @@ bool ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 	if(!p)
 		return false;
 
-    double      distcost = g_theConstDB->InciteRevolutionCapitolPenalty();
-    MapPoint    start;
-    if (p->GetCapitolPos(start) && p->GetMaxEmpireDistance()) 
-    {
-        MapPoint    dest;
+	double      distcost = g_theConstDB->InciteRevolutionCapitolPenalty();
+	MapPoint    start;
+	if (p->GetCapitolPos(start) && p->GetMaxEmpireDistance()) 
+	{
+		MapPoint    dest;
 		c.GetPos(dest);
 		double const distanceFromCapitol = 
 			sqrt(static_cast<double>(MapPoint::GetSquaredDistance(start, dest)));
@@ -9311,7 +9307,7 @@ bool ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 	}
 
 	MapPoint start, dest;
-    PLAYER_INDEX city_owner = c.GetOwner();
+	PLAYER_INDEX city_owner = c.GetOwner();
 	Player *p = g_player[city_owner];
 	double distcost;
 
@@ -9542,32 +9538,32 @@ void ArmyData::GetArmyStrength( sint32 & hitpoints,
 	total_value         = 0;
 
 	for (sint32 i = 0; i < m_nElements; i++)
-	{   
+	{
 		// if this unit is a cargo carrying transport, add its cargo in
 		UnitDynamicArray * cargo_list = m_array[i]->GetCargoList();
-		if (cargo_list && (cargo_list->Num() > 0))
+		if(cargo_list && (cargo_list->Num() > 0))
 		{
-			for (int j = 0; j < cargo_list->Num(); j++)
+			for(sint32 j = 0; j < cargo_list->Num(); j++)
 			{
 				hitpoints = static_cast<sint32>(m_array[i].GetHP());
 
 				const UnitRecord *  rec = cargo_list->Access(j).GetDBRec();
 				if (rec)
-                {
+				{
     				
-                    double fire_power = rec->GetFirepower();
+					double fire_power = rec->GetFirepower();
 
-				    if (rec->GetDefense() > 0)
+					if (rec->GetDefense() > 0)
 					    defense_count++;
 
-				    if (rec->GetZBRangeAttack() > 0)
+					if (rec->GetZBRangeAttack() > 0)
 					    ranged_count++;
 
-				    attack_strength += (sint32) (rec->GetAttack() * hitpoints * fire_power);
-				    defense_strength += (sint32) (rec->GetDefense() * hitpoints * fire_power);
-				    ranged_strength += (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
-				    total_value += (sint32) (rec->GetShieldCost()); 
-                }
+					attack_strength += (sint32) (rec->GetAttack() * hitpoints * fire_power);
+					defense_strength += (sint32) (rec->GetDefense() * hitpoints * fire_power);
+					ranged_strength += (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
+					total_value += (sint32) (rec->GetShieldCost()); 
+				}
 			}
 		}
 		// otherwise sum in the unit's data
@@ -9576,24 +9572,24 @@ void ArmyData::GetArmyStrength( sint32 & hitpoints,
 			hitpoints = static_cast<sint32>(m_array[i].GetHP());
 
 			const UnitRecord *  rec = m_array[i].GetDBRec();
-            if (rec)
-            {
-			    if (m_array[i].GetDefense() > 0)
-				    defense_count++;
+			if (rec)
+			{
+				if (m_array[i].GetDefense() > 0)
+					defense_count++;
 
-    			if (rec->GetZBRangeAttack() > 0)
-				    ranged_count++;
+				if (rec->GetZBRangeAttack() > 0)
+					ranged_count++;
 
-                double  fire_power  = rec->GetFirepower();
-            
-			    attack_strength    += 
-                    (sint32) (m_array[i].GetAttack() * hitpoints * fire_power);
-			    defense_strength   += 
-                    (sint32) (m_array[i].GetDefense() * hitpoints * fire_power);
-			    ranged_strength    += 
-                    (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
-			    total_value        += m_array[i].GetShieldCost(); 
-            }
+				double  fire_power  = rec->GetFirepower();
+
+				attack_strength    += 
+				    (sint32) (m_array[i].GetAttack() * hitpoints * fire_power);
+				defense_strength   += 
+				    (sint32) (m_array[i].GetDefense() * hitpoints * fire_power);
+				ranged_strength    += 
+				    (sint32) (rec->GetZBRangeAttack() * hitpoints * fire_power);
+				total_value        += m_array[i].GetShieldCost(); 
+			}
 		}
 	}
 }
@@ -9682,13 +9678,13 @@ void ArmyData::IncrementOrderPath()
 //
 // Returns    : bool
 //
-// Remark(s)  : - 
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
 bool ArmyData::CheckValidDestination(const MapPoint &dest) const
 {
 	Order *order = m_orders->GetHead();
-    // not clear on what's going on in this part
+	// not clear on what's going on in this part
 	if (order && order->m_order== UNIT_ORDER_MOVE && order->m_path)
 	{
 		
@@ -9740,7 +9736,7 @@ bool ArmyData::GetNextPathPoint(MapPoint & next_pos) const
 //
 // Description: Test whether all units are capable of performing an order.
 //
-// Parameters : order_rec	: the order to test
+// Parameters : order_rec   : the order to test
 //
 // Globals    : -
 //
@@ -9788,9 +9784,9 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 //
 // Description: Test whether some unit is capable of performing an order.
 //
-// Parameters : order_rec	: the order to test
+// Parameters : order_rec   : the order to test
 //
-// Globals    : g_player	: player (capabilities)
+// Globals    : g_player    : player (capabilities)
 //
 // Returns    : bool        : at least one unit in the army is capable of 
 //                            performing the order.
@@ -9828,7 +9824,7 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 //
 // Description: Test whether a unit is capable of performing an order.
 //
-// Parameters : order_rec	: the order to test
+// Parameters : order_rec   : the order to test
 //              unit_index  : the unit to test
 //
 // Globals    : g_player	: player array [see Player::InitPlayer for initialized player data]
@@ -9854,11 +9850,11 @@ bool ArmyData::TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) co
 //
 // Description: Test whether this army is capable of performing an order.
 //
-// Parameters : order_rec	: the order to test
+// Parameters : order_rec   : the order to test
 //
 // Globals    : -
 //
-// Returns    : ORDER_TEST	: legality result
+// Returns    : ORDER_TEST  : legality result
 //
 // Remark(s)  : - 
 //
@@ -9875,12 +9871,12 @@ ORDER_TEST ArmyData::TestOrder(const OrderRecord * order_rec) const
 //
 // Description: Test whether this army is capable of performing an order at a position.
 //
-// Parameters : order_rec	: the order to test
+// Parameters : order_rec   : the order to test
 //              pos         : the position to test
 //
-// Globals    : g_player	: player array [see Player::InitPlayer for initialized player data]
+// Globals    : g_player    : player array [see Player::InitPlayer for initialized player data]
 //
-// Returns    : ORDER_TEST	: legality result
+// Returns    : ORDER_TEST  : legality result
 //
 // Remark(s)  : used mainly in ControlPanelWindow
 //
@@ -9895,10 +9891,10 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 	(void) order_rec->GetRange(range);
 
 	bool        target_valid    = (order_rec->GetIsTeleport() && pos == m_pos) 
-                                  ? false
-                                  : TargetValidForOrder(order_rec, pos);
+	                              ? false
+	                              : TargetValidForOrder(order_rec, pos);
 
-    //true if order is to be executed at this army's m_pos
+	//true if order is to be executed at this army's m_pos
 	bool        cur_pos_valid   = (range == 0) && TargetValidForOrder(order_rec, m_pos);
 
 	if(order_rec->GetTargetPretestAttackPosition() && (target_valid || cur_pos_valid))
@@ -9930,38 +9926,38 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 		cur_pos_valid = CanMoveIntoTransport(m_pos, transports) != 0;
 		target_valid = CanMoveIntoTransport(pos, transports) != 0;
 	} 
-    else if ((range <= 0) && !CanEnter(pos))
-    {
+	else if ((range <= 0) && !CanEnter(pos))
+	{
 		target_valid = false;
 	}
 
 	ORDER_TEST  best_result     = 	ORDER_TEST_ILLEGAL;
 	
 	for (sint32 army_index = 0; army_index < m_nElements; ++army_index) 
-    {
+	{
 		if (m_array[army_index].UnitValidForOrder(order_rec)) 
-        {
+		{
 			// Order is valid
 
 			if (!target_valid && !cur_pos_valid)
 			{
 				return (range > 0) ? ORDER_TEST_NEEDS_TARGET : ORDER_TEST_INVALID_TARGET;
 			}
-			else if (order_rec->GetTargetPretestAdjacentPosition() && 
+			else if (order_rec->GetTargetPretestAdjacentPosition() &&
 					!m_pos.IsNextTo(pos) && (m_pos != pos))
 			{
 				return ORDER_TEST_INVALID_TARGET;
 			}
-			else if (!can_afford) 
-            {
+			else if (!can_afford)
+			{
 				return ORDER_TEST_LACKS_GOLD;
 			}
 			else if (m_array[army_index].CanPerformSpecialAction()) 
-            {
+			{
 				return ORDER_TEST_OK;
 			}
-			else 
-            {
+			else
+			{
 				best_result = ORDER_TEST_NO_MOVEMENT;
 			}
 		} 
@@ -9980,7 +9976,7 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 //  Parameters : const OrderRecord * order_rec : the order 
 //               const MapPoint & pos          : the location
 //
-//  Globals    : g_player	  : player array 
+//  Globals    : g_player     : player array 
 //
 //  Returns    : ORDER_TEST   : legality result
 //
@@ -10057,7 +10053,7 @@ ORDER_TEST ArmyData::CargoTestOrderHere(const OrderRecord * order_rec, const Map
 //  Parameters : const OrderRecord * order_rec, 
 //               const MapPoint & pos,
 //
-//  Globals    : g_theWorld		
+//  Globals    : g_theWorld
 //
 //  Returns    : bool   : true if whatever is at MapPoint &pos passes OrderRecord * order_rec's TargetPretest
 //
@@ -10635,8 +10631,8 @@ sint16 ArmyData::DisbandNanoUnits(const sint16 count)
 
 bool ArmyData::HasVeterans() const
 {
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		if (m_array[i]->IsVeteran())
 			return true;
 	}
@@ -10688,7 +10684,7 @@ void ArmyData::Upgrade()
 			sint32 upgradeType = m_array[i].GetBestUpgradeUnitType();
 			if(upgradeType > -1)
 			{
-				m_array[i].SetType(upgradeType);
+				m_array[i].Upgrade(upgradeType);
 			}
 		}
 	}
@@ -10703,15 +10699,7 @@ void ArmyData::Upgrade()
 
 					if(g_player[m_owner]->m_gold->GetLevel() > upgradeCost)
 					{
-					//notify player of upgrades
-						SlicObject *so = new SlicObject("999UnitUpgraded");
-						so->AddRecipient(m_owner);
-						so->AddUnit(m_array[i]);
-						so->AddUnit(upgradeType);
-						//was this the missing part? - E 5-24-2007
-						g_slicEngine->Execute(so);
-
-						m_array[i].SetType(upgradeType);
+						m_array[i].Upgrade(upgradeType);
 						g_player[m_owner]->m_gold->SubGold(upgradeCost);
 					}
 				}
@@ -10726,27 +10714,27 @@ void ArmyData::CheckHostileTerrain()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();
+	sint32 CellOwner = cell->GetOwner(); /// @todo local variabled start with a lower case letter 
 	// EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;
-	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) // Add AI immunity?
+	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) // Add AI immunity? No cheats, E!
 	{
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000)
 		{
-			for(sint32 u = 0; u < m_nElements; u++)
+			for(sint32 u = 0; u < m_nElements; u++)                        /// @todo use i instead of u
 			{
 				const UnitRecord *urec = m_array[u].GetDBRec();
 				if(!urec->GetImmuneToHostileTerrain()
-				&& !terrainutil_HasFort(m_pos)
-				&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006
-				&& g_player[m_owner]->HasWarWith(CellOwner)  //added 5-24-2007 so your and friendly territory isn't hostile
+				&& !terrainutil_HasFort(m_pos)                             /// @todo compute this outside the loop
+				&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006 /// @todo compute this outside the loop
+				&& g_player[m_owner]->HasWarWith(CellOwner)  //added 5-24-2007 so your and friendly territory isn't hostile /// @todo compute this outside the loop
 				|| CellOwner == PLAYER_UNASSIGNED //added 5-24-2007 wastelands should be hostile
 				){
 					m_array[u].DeductHP(hpcost);
 					SlicObject *so = new SlicObject("999HostileTerrain");
 					so->AddRecipient(m_owner);
-					so->AddUnit(m_array[u]);
+					so->AddUnitRecord(m_array[u].GetType());
 					//this was the missing part - E 5-24-2007
 					g_slicEngine->Execute(so);
 				}
@@ -10771,10 +10759,10 @@ void ArmyData::CheckMineField()
 		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
 		double hpcost2;
 		/// @todo use standard identifiers for index variables like i and j
-		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){
+		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){ /// @todo use i instead of ti
 			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
-			for(sint32 u = 0; u < m_nElements; u++) {
+			for(sint32 u = 0; u < m_nElements; u++) { /// @todo use j instead of u
 				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir()) { //EMOD
 					m_array[u].DeductHP(hpcost2); // This should go into the MoveUnits event
 				}
@@ -10786,8 +10774,9 @@ void ArmyData::CheckMineField()
 	}
 }
 
-void ArmyData::CheckSink()
+bool ArmyData::CheckSink()
 {
+	sint32 numSunken = 0;
 	
 	// Lost at sea random chance
 	// Maybe move this code into an event
@@ -10798,10 +10787,13 @@ void ArmyData::CheckSink()
 	){
 		for(sint32 i = 0; i < m_nElements; i++) 
 		{
-			m_array[i].Sink(chance, m_array[i]);
+			if(m_array[i].Sink(chance)){
+				numSunken++;
+			}
 		}
 	}
 
+	return numSunken == m_nElements;
 }
 
 void ArmyData::BarbarianSpawning()
@@ -10855,7 +10847,7 @@ void ArmyData::BarbarianSpawning()
 			}
 		}
 	}
-		// Barbarian leader spawn
+	// Barbarian leader spawn
 	// This should be risk level depending ADDED EMOD 10-05-2006
 	if(m_owner == PLAYER_INDEX_VANDALS) {
 		sint32 barbmax = g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians(); 
@@ -10884,8 +10876,8 @@ void ArmyData::BarbarianSpawning()
 
 bool ArmyData::HasElite() const
 {
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
 		if (m_array[i]->IsElite())
 			return true;
 	}

@@ -46,6 +46,8 @@
 //   according to the unit transport capacity or the unit attack, defense and 
 //   range statitics. (19-May-2007 Martin Gühmann)
 // - modified sink to display the sink message and the unit type
+// - If a unit dies it now uses the value of LaunchPollution if present
+//   to polute the environment, instead of using a value of 1. (9-Jun-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -100,18 +102,22 @@ extern Pollution *  g_thePollution;
 
 namespace
 {
-    size_t const    DISTANCE_NOT_ON_MAP = 0xffffffffu;
+	size_t const    DISTANCE_NOT_ON_MAP = 0xffffffffu;
 }
 
 void Unit::KillUnit(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
-{ 
-    sint32  pollution;
-    if (GetDBRec()->GetDeathPollution(pollution))
-    {
-	    g_player[GetOwner()]->AdjustEventPollution(pollution);
-    }
-	g_player[GetOwner()]->AdjustEventPollution(GetDBRec()->HasLaunchPollution());
-	
+{
+	sint32  pollution;
+	if(GetDBRec()->GetDeathPollution(pollution))
+	{
+		g_player[GetOwner()]->AdjustEventPollution(pollution);
+	}
+
+	if(GetDBRec()->GetLaunchPollution(pollution))
+	{
+		g_player[GetOwner()]->AdjustEventPollution(pollution);
+	}
+
 	Unit tmp(m_id);
 	tmp.RemoveAllReferences(cause, killedBy);
 }
@@ -125,7 +131,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 	if (IsCity()) {
 		AccessData()->GetCityData()->PrepareToRemove(cause, killedBy);
-    }
+	}
 
 	if(GetArmy().IsValid()) {
 		GetArmy().SetRemoveCause(cause);
@@ -165,7 +171,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 	
 	if (GetActor()) 
-    {
+	{
 		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE 
 			|| IsBeingTransported()
 			|| cause == CAUSE_REMOVE_ARMY_DIED_IN_ATTACK
@@ -256,14 +262,14 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		g_theTradeBids->CancelBidsWithCity(*this);
 
 		if (cell->UnitArmy()) 
-        {
+		{
 			if (cause != CAUSE_REMOVE_ARMY_NUKE) 
-            {
+			{
 				for (sint32 i = cell->UnitArmy()->Num() - 1; i >= 0; --i) 
-                {
-                    Unit    u = cell->UnitArmy()->Access(i);
+				{
+					Unit    u = cell->UnitArmy()->Access(i);
 					if (u.IsValid() && !g_theWorld->CanEnter(pos, u.GetMovementType())) 
-                    {
+					{
 						u.Kill(CAUSE_REMOVE_ARMY_ILLEGAL_CELL, -1);
 					}
 				}
@@ -2547,7 +2553,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	return order_valid;
 }
 
-void Unit::Sink(sint32 chance, Unit &unit)
+bool Unit::Sink(sint32 chance)
 {
 	const UnitRecord *urec = GetDBRec();
 	const TerrainRecord * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(RetPos()));
@@ -2562,11 +2568,42 @@ void Unit::Sink(sint32 chance, Unit &unit)
 
 			SlicObject *so = new SlicObject("999LostAtSea");
 			so->AddRecipient(GetOwner());
-            so->AddUnit(unit);
-			g_slicEngine->Execute(so); //i forgot this?
+			so->AddUnitRecord(GetType());
+			g_slicEngine->Execute(so);
 			KillUnit(CAUSE_REMOVE_ARMY_DISBANDED, -1);
+
+			return true;
 		}
 	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Unit::Upgrade
+//
+// Description: Upgrades a unit to the given type and displays a slic message.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Like SetType but displays an upgrade slic message.
+//
+//----------------------------------------------------------------------------
+void Unit::Upgrade(const sint32 type)
+{
+	// Notify player of upgrades
+	SlicObject *so = new SlicObject("999UnitUpgraded");
+	so->AddRecipient(GetOwner());
+	so->AddUnitRecord(GetType());
+	so->AddUnitRecord(type);
+	g_slicEngine->Execute(so);
+
+	SetType(type);
 }
 
 sint32 Unit::GetBestUpgradeUnitType() const
@@ -2601,6 +2638,8 @@ sint32 Unit::GetUpgradeCosts(sint32 upgradeType) const
 
 	return static_cast<sint32>((newshield - oldshield) * rushmod);
 }
+
+
 
 bool Unit::IsHiddenNationality() const //emod to map to unit actor andmake color same as barbarians
 {
