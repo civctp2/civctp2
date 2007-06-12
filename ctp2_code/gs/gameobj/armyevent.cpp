@@ -1098,8 +1098,9 @@ STDEHANDLER(AftermathEvent)
 				continue;
 			}
 
-			if(army[i].GetAttack() > 0 &&
-			   g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0)) {
+			if( (army[i].GetAttack() > 0)
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0))
+			){
 				army[i].SetVeteran();
 			}
 			//elite code - Emod 6-5-2007

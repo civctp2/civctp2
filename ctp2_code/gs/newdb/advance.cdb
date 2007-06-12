@@ -73,6 +73,9 @@ Advance {
 
 	Bit(Record Feat) TriggerFeat
 
+	Bit IsMassMedia
+	Bit EnablesGuerrillas
+
 	# advice string for why this is a key advance
 	Bit (StringId) KeyAdvanceAdvice
 }

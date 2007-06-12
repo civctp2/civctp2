@@ -1011,6 +1011,10 @@ public:
 	bool HasReligionIcon() const;
 	bool IsReligious() const;
 
+	bool CityIsOnTradeRoute();
+	void GiveTradeRouteGold();
+
+
 private:
 	bool    IsBankrupting(void) const;
 	bool    PayWages(bool projectedOnly);

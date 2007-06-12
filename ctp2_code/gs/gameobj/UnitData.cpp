@@ -3222,12 +3222,12 @@ void UnitData::BeginTurn()
 
 	// Moved Harvest here since it should be only one unit doing it
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();       /// @todo local variables start with a lower case letter
+	sint32 cellowner = cell->GetOwner();       /// @todo local variables start with a lower case letter
 	
 	if(
 	    Flag(k_UDF_IS_ENTRENCHED) 
 	&&  rec->GetCanHarvest()
-	&&  CellOwner != m_owner
+	&&  cellowner != m_owner
 	&&  cell->GetNumUnits() < 2  //cant double 
 	&&  cell->GetShieldsProduced() > 0
 	&&  cell->GetShieldsProduced() > 0
@@ -3246,7 +3246,7 @@ void UnitData::EndTurn()
 
 	// Emod adding cellowner
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();      /// @todo local variables start with a lower case letter
+	sint32 cellowner = cell->GetOwner();      
 	// EMOD add civbonus
 
 	sint32     wonderBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
@@ -3256,17 +3256,17 @@ void UnitData::EndTurn()
 	// PFT added: heal immobile units also, 17 Mar 05
 	if ((Flag(k_UDF_FIRST_MOVE) || IsImmobile() ) && (m_hp < maxHp))
 	{
-		if (g_theWorld->HasCity(m_pos) || 
-			(g_theWorld->IsInstallation(m_pos) && terrainutil_HasFort(m_pos))
-		   ) 
-		{
+		if( (g_theWorld->HasCity(m_pos))
+		||  (g_theWorld->IsInstallation(m_pos) && terrainutil_HasFort(m_pos))
+        // || (PositionHasHealingUnit -> for supply trucks, but AI needs to learn
+		){
 			m_hp += maxHp * g_theConstDB->CityHealRate();
 		} 
 		else 
 		{
 			m_hp += maxHp * g_theConstDB->NormalHealRate();
 		}
-
+		
 		m_hp = std::min(m_hp, maxHp);
 	}
 
@@ -3297,11 +3297,10 @@ void UnitData::EndTurn()
 
 	if(Flag(k_UDF_IS_ENTRENCHED)) { 
 		if(rec->GetSpawnsBarbarians() 
-		&& CellOwner != m_owner
+		&& cellowner != m_owner
 		){ 
 			g_director->AddCenterMap(m_pos);
-			Barbarians::AddBarbarians(m_pos, CellOwner, FALSE);
-			// Added since army data doesn't do the slic?
+			Barbarians::AddBarbarians(m_pos, cellowner, FALSE);
 			SlicObject *so = new SlicObject("999GuerrillaSpawn");
 			so->AddRecipient(m_owner);
 			so->AddUnitRecord(GetType());

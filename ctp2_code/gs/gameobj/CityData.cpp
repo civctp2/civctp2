@@ -185,6 +185,9 @@
 // - Added Slic execute
 // - Added RiotCasualties and InsurgentSpawn methods to clean up BeginTurn
 // - Added DestroyOnePerCiv, IsReligious, HasReligionIcon 6-4-2007
+// - Added code so cities with a trade route through them can collect some gold
+//   this could be implemented by a wonder of feat (in the future) or should it
+//   be standard? it would add value to cities. - E 6.10.2007 
 //
 //----------------------------------------------------------------------------
 
@@ -4108,6 +4111,11 @@ bool CityData::BeginTurn()
 	CityGovernmentModifiers();
 	Militia();
 
+
+	//Cities that have trade routes pass through them should make money like along the Silkroad or mediterreanen trade
+	if(CityIsOnTradeRoute()) {
+		GiveTradeRouteGold();
+	}
 	//END EMOD
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
@@ -6388,39 +6396,7 @@ bool CityData::CanBuildWonder(sint32 type) const
 	if(!wonderutil_IsAvailable(type, m_owner))
 		return false;
 
-	/// todo remove outcomented code, outcomented code has nothing to do here.
-// took data from wonderutil_IsAvailable to keep same checks but allow some flexibility
 
-//	if(rec->GetOnePerCiv == 0) {  //added as a new check to allow regular wonders to be OnePerCiv
-//		if(g_theWonderTracker->HasWonderBeenBuilt(type)) {
-//			return false;
-//		}
-//	}
-//
-	//EMOD OnePerCiv allows for buildings to be Small Wonders
-//	if(rec->GetOnePerCiv()) {
-//		for(o = 0; o < g_player[m_owner]->m_all_cities->Num(); o++) {
-//			if(!(g_player[m_owner]->m_all_cities->Access(o).AccessData()->GetCityData()->GetEffectiveBuildings() & ((uint64)1 << (uint64)type))){ 
-//				return false;
-//			}
-//		}
-//	}
-
-//	if(rec->GetEnableAdvanceIndex() >= 0 && 
-//	   !g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
-//		return false;
-
-	
-//	if(wonderutil_IsObsolete(type))
-//		return false;
-	
-//	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
-//		return false;
-//	}
-// emd EMOD
-
-
-	
 	MapPoint pos;
 	m_home_city.GetPos(pos);
 
@@ -10130,16 +10106,6 @@ sint32 CityData::ConsumeEnergy()
 sint32 CityData::GetNumCityWonders() const
 {
 	sint32 citywon = 0;
-
-	/// @todo figure out what m_builtWonders is.
-	//        And it is not the number of wonders
-	//        you can build you find that in the
-	//        wonder database
-	/// @todo Figure out which wonder has been built
-	//        and count the built wonders.
-	//uint64 wonders = m_builtWonders;
-	//for (sint32 i = 0; i < wonders; ++i) 
-	//{
 	// - ok I tested this by: setting limit to 2, after giving age of reason a city having no wonders can build any wonders
 	// I gave a city one wonder and it can still build; I gave it two and it couldn't build any so I assume it works - now 6-3-2007
 	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++) {
@@ -10344,4 +10310,42 @@ bool CityData::HasReligionIcon() const
 bool CityData::IsReligious() const
 {
 	return buildingutil_GetIsReligious(GetEffectiveBuildings());
+}
+
+bool CityData::CityIsOnTradeRoute()
+{
+	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
+	Assert(cell);
+	if(cell) {
+		sint32 i;
+		for(i = 0; i < cell->GetNumTradeRoutes(); i++) {
+			if(cell->GetTradeRoute(i).IsValid()) {
+				return true;
+			}
+        }
+    }
+	return false;
+}
+
+void CityData::GiveTradeRouteGold()
+{
+	//if SilkRoad wonder?
+	//if Trade feat?
+	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
+	Assert(cell);
+	if(cell) {
+		sint32 i;
+		for(i = 0; i < cell->GetNumTradeRoutes(); i++) {
+			if(cell->GetTradeRoute(i).IsValid()) {
+				TradeRoute route = cell->GetTradeRoute(i);
+				if((route.GetSource().GetOwner() != m_owner)
+				&&(route.GetDestination().GetOwner() != m_owner)
+				){
+					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetPiracyWasteCoefficient()));
+				//g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetCaravanCoef()));
+				//make a new ConstDB? 
+				}
+			}
+        }
+    }
 }

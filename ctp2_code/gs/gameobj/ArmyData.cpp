@@ -5296,7 +5296,7 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 
 			// Add precision strike flag
 
-			if(m_array[i].GetDBRec()->GetPrecisionStrike())
+			if( (m_array[i].GetDBRec()->GetPrecisionStrike()) && (r < prob))
 			{
 				c.DestroyRandomBuilding();
 			}
@@ -5307,12 +5307,19 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 					c.DestroyRandomBuilding();
 				}
 			}
-			
-
+//regard impacts of killing civilians
+		Diplomat &  cell_diplomat   = Diplomat::GetDiplomat
+	    ((PLAYER_UNASSIGNED == c.GetOwner()) ? PLAYER_INDEX_VANDALS : c.GetOwner());
+		sint32 regardcost   = ( ((m_array[i].GetDBRec()->GetAttack()) / 5) * -1);
+// if (player has advance->IsMassMedia()){
 			// Add Targets Civilian Flag
-			if(m_array[i].GetDBRec()->GetTargetsCivilians())
+			if(m_array[i].GetDBRec()->GetTargetsCivilians()&& (r < prob))
 			{
 				c.CD()->ChangePopulation(-1);
+				StringId strId;
+				g_theStringDB->GetStringID("REGARD_EVENT_ATTACKED_CIVILIANS", strId);
+				cell_diplomat.LogRegardEvent
+			    (m_owner, regardcost, REGARD_EVENT_MILITARY_POWER, strId);		
 			}
 			else
 			{
@@ -7319,6 +7326,7 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 			if(!AlltaSneakAttack){
 				/// @todo Explain: What is the purpose of this?
 				//        Or fix it.
+				// emod - this is to prevent sneakattack units that walk into an occupied cell from starting a war
 				VerifyAttack(UNIT_ORDER_MOVE_TO, pos, city.GetOwner());
 				return false;
 			}
@@ -10714,34 +10722,33 @@ void ArmyData::CheckHostileTerrain()
 {
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner(); /// @todo local variabled start with a lower case letter 
+	sint32 cellowner = cell->GetOwner(); 
 	// EMOD: If Hostileterrain and not fort than deduct HP from the unit
 	TerrainRecord const * trec = g_theTerrainDB->Get(g_theWorld->GetTerrainType(m_pos));
 	sint32 hpcost;
 	if(trec->GetHostileTerrainCost(hpcost) && m_owner > 0) // Add AI immunity? No cheats, E!
 	{
 		if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000)
-		{
-			for(sint32 u = 0; u < m_nElements; u++)                        /// @todo use i instead of u
-			{
-				const UnitRecord *urec = m_array[u].GetDBRec();
-				if(!urec->GetImmuneToHostileTerrain()
-				&& !terrainutil_HasFort(m_pos)                             /// @todo compute this outside the loop
-				&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006 /// @todo compute this outside the loop
-				&& g_player[m_owner]->HasWarWith(CellOwner)  //added 5-24-2007 so your and friendly territory isn't hostile /// @todo compute this outside the loop
-				|| CellOwner == PLAYER_UNASSIGNED //added 5-24-2007 wastelands should be hostile
-				){
-					m_array[u].DeductHP(hpcost);
-					SlicObject *so = new SlicObject("999HostileTerrain");
-					so->AddRecipient(m_owner);
-					so->AddUnitRecord(m_array[u].GetType());
-					//this was the missing part - E 5-24-2007
-					g_slicEngine->Execute(so);
-				}
+		{	
 
-				if (m_array[u].GetHP() < 0.999)
-				{
-					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+			if( !terrainutil_HasFort(m_pos)                             
+			&& !terrainutil_HasAirfield(m_pos) // Added by E 5-28-2006 
+			&& g_player[m_owner]->HasWarWith(cellowner)  //added 5-24-2007 so your and friendly territory isn't hostile 
+			|| cellowner == PLAYER_UNASSIGNED //added 5-24-2007 wastelands should be hostile
+			){
+				for(sint32 i = 0; i < m_nElements; i++) {                     
+					const UnitRecord *urec = m_array[i].GetDBRec();
+					if(!urec->GetImmuneToHostileTerrain()) {
+						m_array[i].DeductHP(hpcost);
+						SlicObject *so = new SlicObject("999HostileTerrain");
+						so->AddRecipient(m_owner);
+						so->AddUnitRecord(m_array[i].GetType());
+						g_slicEngine->Execute(so);
+							
+						if (m_array[i].GetHP() < 0.999) {
+							m_array[i].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1); 
+						}
+					}
 				}
 			}
 		}

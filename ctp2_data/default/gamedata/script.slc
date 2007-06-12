@@ -2968,17 +2968,20 @@ messagebox '999CivStartedWarWithUs' {
 messagebox '999LostAtSea' {
 	Show();
 	Text(ID_LOST_AT_SEA) ;
+	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 
 messagebox '999UnitUpgraded' {
 	Text(ID_UNIT_UPGRADED) ;
+	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 
 messagebox '999HostileTerrain' {
 	Show();
 	Text(ID_HOSTILE_TERRAIN) ;
+	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 messagebox '999InsurgentSpawn' {
@@ -2989,6 +2992,7 @@ messagebox '999InsurgentSpawn' {
 messagebox '999GuerrillaSpawn' {
 	Show();
 	Text(ID_GUERRILLA_SPAWN) ;
+	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 messagebox '999UnitGainedEliteStatus' {
