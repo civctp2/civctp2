@@ -1025,12 +1025,21 @@ STDEHANDLER(AftermathEvent)
 
 		//end EMOD
 		if(g_rand->Next(100) < g_theConstDB->AssaultDestroyBuildingChance() * 100) {
+			//shouldn't constDB allow players to set how many buildings be destroyed? 
 			c.DestroyRandomBuilding();
 		}
-
+		//this code actually isn't used...
 		if(defender.Num() > 0) {
 			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->AssaultKillPopChance() * 100)) {
-				c.CD()->ChangePopulation(-1);
+				//emod allows for differnt city casualty rates instead of just one  6.22.2007
+				sint32 casualties = 0;
+				if (g_theConstDB->KillPopCasualties() < 0) {
+					casualties = g_rand->Next(c.PopCount()) * -1 ;
+				} else {
+					casualties = g_theConstDB->KillPopCasualties() * -1;
+				}
+
+				c.CD()->ChangePopulation(casualties);  //Why is this hard coded? should be in ConstDB and should allow for random value
 			}
 		}
 
@@ -1097,26 +1106,29 @@ STDEHANDLER(AftermathEvent)
 			if(army[i].GetHP() < 0.5) {
 				continue;
 			}
-
-			if( (army[i].GetAttack() > 0)
-			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0))
-			){
-				army[i].SetVeteran();
-			}
-			//elite code - Emod 6-5-2007
-			if( (army[i].GetAttack() > 0) 
-			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatEliteChance() * 100.0))
-			&&  (army[i].IsVeteran())
-			){
-				army[i].SetElite();
-			}
-			//Great Leader Code - Emod 6-5-2007
+			//TODO find out why its not running the leader & elite code
+			// apparently a '#' outcomented the value in constDB.txt
 			if( (army[i].GetAttack() > 0) 
 			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatLeaderChance() * 100.0))
-			&&  (army[i].IsElite())
+			&&  (army[i].IsElite()) //IsElite
 			){
-				g_player[attack_owner]->CreateLeader();
+				g_player[attack_owner]->CreateLeader(); //Great Leader Code - Emod 6-5-2007
 			}
+			
+			if( (army[i].GetAttack() > 0) 
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatEliteChance() * 100.0))
+			&&  (army[i].IsVeteran()) 
+			){
+				army[i].SetElite(); //elite code - Emod 6-5-2007
+			}
+			
+			if( (army[i].GetAttack() > 0)
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0))
+			&&  (!army[i].IsVeteran())
+			){
+				army[i].SetVeteran();
+			} 	
+
 			//end emod
 			army[i].WakeUp();
 			army[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);

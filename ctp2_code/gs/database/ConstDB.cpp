@@ -30,6 +30,8 @@
 // - Added Const for Max_City_Wonders and Max_City_Buildings - E 5-1-07
 // - TODO - add map coefficient for city thresholds?
 // - TODO make k_MAX_ARMY_SIZE in gs/utility/gstypes.h a ConstDB?
+// - added city on trade rout percentage to not use piracy
+// - added killpop on city capture option
 //
 //----------------------------------------------------------------------------
 
@@ -60,6 +62,9 @@ int const	DEFAULT_MAX_CITY_BUILDINGS			= 1000;
 //new random chance
 double const	DEFAULT_COMBAT_ELITE_CHANCE		= 0.0;
 double const	DEFAULT_COMBAT_LEADER_CHANCE	= 0.0;
+//new variables
+int const		DEFAULT_KILLPOP					= 1;
+double const	DEFAULT_CITY_ON_TRADE_ROUTE		= 0.0;
 
 //----------------------------------------------------------------------------
 //
@@ -168,6 +173,8 @@ ConstDB::ConstDB ()
 	m_max_city_buildings		= DEFAULT_MAX_CITY_BUILDINGS;
 	m_combat_elite_chance		= DEFAULT_COMBAT_ELITE_CHANCE;
 	m_combat_leader_chance		= DEFAULT_COMBAT_LEADER_CHANCE;
+	m_kill_pop					= DEFAULT_KILLPOP;
+	m_city_trade				= DEFAULT_CITY_ON_TRADE_ROUTE;
 	} 
 
 
@@ -492,6 +499,8 @@ void ConstDB::Serialize(CivArchive &archive)
 	&&  (DEFAULT_MAX_CITY_BUILDINGS == m_max_city_buildings)
 	&&  (DEFAULT_COMBAT_ELITE_CHANCE == m_combat_elite_chance)
 	&&  (DEFAULT_COMBAT_LEADER_CHANCE == m_combat_leader_chance)
+	&&  (DEFAULT_KILLPOP ==	m_kill_pop)
+	&&  (DEFAULT_CITY_ON_TRADE_ROUTE ==	m_city_trade)
        )
 	{
 		// No action, to keep compatibility with the original patch.
@@ -504,8 +513,12 @@ void ConstDB::Serialize(CivArchive &archive)
 		//emod4
 		archive <<  m_max_city_wonders;
 		archive <<  m_max_city_buildings;
-		archive <<  m_combat_elite_chance;
-		archive <<  m_combat_leader_chance;		
+		
+		archive.PutDoubleString( m_combat_elite_chance);
+		archive.PutDoubleString( m_combat_leader_chance);
+		archive.PutDoubleString( m_city_trade);
+
+		archive <<  	m_kill_pop;
 	}
 		}
 	else
@@ -855,6 +868,8 @@ enum TOKEN_CONST {
 	TOKEN_MAX_CITY_BUILDINGS,
 	TOKEN_COMBAT_ELITE_CHANCE,
 	TOKEN_COMBAT_LEADER_CHANCE,	
+	TOKEN_KILLPOP,
+	TOKEN_CITY_ON_TRADE_ROUTE,
 
     TOKEN_CONST_MAX 
 
@@ -1150,7 +1165,9 @@ TokenData g_const_token_data [] = {
 	{TOKEN_MAX_CITY_WONDERS, "MAX_CITY_WONDERS"},
 	{TOKEN_MAX_CITY_BUILDINGS, "MAX_CITY_BUILDINGS" },
 	{TOKEN_COMBAT_ELITE_CHANCE, "COMBAT_ELITE_CHANCE" },
-	{TOKEN_COMBAT_LEADER_CHANCE, "COMBAT_LEADER_CHANCE" }
+	{TOKEN_COMBAT_LEADER_CHANCE, "COMBAT_LEADER_CHANCE" },
+	{TOKEN_KILLPOP, "CAPTURED_CITY_KILL_POP" },
+	{TOKEN_CITY_ON_TRADE_ROUTE, "CITY_ON_TRADE_ROUTE_BONUS" }
 };
 	
 
@@ -1871,8 +1888,36 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 				         m_max_city_buildings,
 					     DEFAULT_MAX_CITY_BUILDINGS
 					    );
+	(void) ParseOptional(const_token, 
+		        		 TOKEN_KILLPOP,
+				         m_kill_pop,
+					     DEFAULT_KILLPOP
+					    );
 
-
+	if(!token_ParseFloatNext(const_token, TOKEN_COMBAT_ELITE_CHANCE,
+							 m_combat_elite_chance)) return FALSE;
+		if(!token_ParseFloatNext(const_token, TOKEN_COMBAT_LEADER_CHANCE,
+							 m_combat_leader_chance)) return FALSE;
+			if(!token_ParseFloatNext(const_token, TOKEN_CITY_ON_TRADE_ROUTE,
+							 m_city_trade)) return FALSE;
+/*
+	
+	(void) ParseOptional(const_token, 
+		        		 TOKEN_COMBAT_ELITE_CHANCE,
+				         m_combat_elite_chance,
+					     DEFAULT_COMBAT_ELITE_CHANCE
+					    );
+	(void) ParseOptional(const_token, 
+		        		 TOKEN_COMBAT_LEADER_CHANCE,
+				         m_combat_leader_chance,
+					     DEFAULT_COMBAT_LEADER_CHANCE
+					    );
+	(void) ParseOptional(const_token, 
+		        		 TOKEN_CITY_ON_TRADE_ROUTE,
+				         m_city_trade,
+					     DEFAULT_CITY_ON_TRADE_ROUTE
+					    );
+*/
 
 	return TRUE; 	
 }

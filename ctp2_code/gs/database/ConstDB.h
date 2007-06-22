@@ -371,6 +371,8 @@ private:
 	sint32 m_max_city_buildings;
 	double m_combat_elite_chance;
 	double m_combat_leader_chance;
+	sint32 m_kill_pop;
+	double m_city_trade;
 	
 	
 	
@@ -770,7 +772,8 @@ public:
 	sint32 GetMaxCityBuildings() const { return m_max_city_buildings; }
 	double CombatEliteChance() const { return m_combat_elite_chance; }
 	double CombatLeaderChance() const { return m_combat_leader_chance; }
-
+	sint32 KillPopCasualties() const { return m_kill_pop; }
+	double CityOnTradeRouteCoefficient() const { return m_city_trade; }
 	void Serialize(CivArchive &archive) ; 
 }; 
 

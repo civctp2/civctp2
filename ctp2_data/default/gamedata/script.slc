@@ -2965,34 +2965,30 @@ messagebox '999CivStartedWarWithUs' {
 	MessageType("MILITARY");
 }
 
-messagebox '999LostAtSea' {
+messagebox  '999LostAtSea' {
 	Show();
 	Text(ID_LOST_AT_SEA) ;
-	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 
-messagebox '999UnitUpgraded' {
+messagebox  '999UnitUpgraded' {
 	Text(ID_UNIT_UPGRADED) ;
-	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 
-messagebox '999HostileTerrain' {
+messagebox  '999HostileTerrain' {
 	Show();
 	Text(ID_HOSTILE_TERRAIN) ;
-	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
-messagebox '999InsurgentSpawn' {
+messagebox  '999InsurgentSpawn' {
 	Show();
 	Text(ID_INSURGENT_SPAWN) ;
 	MessageType("MILITARY");
 }
-messagebox '999GuerrillaSpawn' {
+messagebox  '999GuerrillaSpawn' {
 	Show();
 	Text(ID_GUERRILLA_SPAWN) ;
-	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 messagebox '999UnitGainedEliteStatus' {
@@ -3002,7 +2998,6 @@ messagebox '999UnitGainedEliteStatus' {
 }
 messagebox '999GreatLeaderSpawn' {
 	Text(ID_UNIT_LEADER);
-	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 messagebox '999RiotCasulaties'{

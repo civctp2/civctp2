@@ -4548,6 +4548,22 @@ void CityData::DestroyCapitol()
 	}
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 }
+/*
+void CityData::RemoveCapitol()
+
+{
+	if(buildingutil_GetDesignatesCapitol(m_built_improvements)) {
+		uint64 i;
+		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i) &&
+			   m_built_improvements & uint64((uint64)1 << i)) {
+				m_built_improvements &= ~((uint64)1 << i);
+			}
+		}
+	}
+	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
+}
+*/
 
 void CityData::DestroyImprovement(sint32 imp)
 {
@@ -10341,7 +10357,7 @@ void CityData::GiveTradeRouteGold()
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){
-					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetPiracyWasteCoefficient()));
+					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->CityOnTradeRouteCoefficient()));
 				//g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetCaravanCoef()));
 				//make a new ConstDB? 
 				}

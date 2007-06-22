@@ -462,10 +462,10 @@ public:
 								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful, BOOL isCapitol //added capitol
+								BOOL isWatchful, BOOL isCapitol//added capitol
 								); 
 	//EMOD to add Civ4 Style Icons
-	void        DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &rect, Unit unit);
+	void        DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon );
 
 	void		Serialize(CivArchive &archive);
 

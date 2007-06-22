@@ -28,6 +28,7 @@
 //   This allows better mod compatibility. - May 7th 2005 Martin Gühmann
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
 // - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
+// - added note that trade pact deals shouldn't be hardcoded 6.13.2007
 //
 //----------------------------------------------------------------------------
 
@@ -65,7 +66,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sin
                 (owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT)
        )
     {
-		totalValue = (sint32) (totalValue * 1.05);
+		totalValue = (sint32) (totalValue * 1.05); //- shouldn't trade pact values be set in the ConstDB instead of 1.05? - E 6.13.2007
 	}
 
 	return totalValue;

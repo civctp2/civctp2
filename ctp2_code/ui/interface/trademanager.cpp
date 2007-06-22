@@ -80,7 +80,7 @@ static TradeManager *   s_tradeManager      = NULL;
 static MBCHAR *         s_tradeManagerBlock = "TradeManager";
 static MBCHAR *         s_tradeAdviceBlock  = "TradeAdvice";
 
-#define k_MAX_CITIES_PER_GOOD 5
+#define k_MAX_CITIES_PER_GOOD 5 //make this a constDB? - it should be 6.12.2007
 
 #define k_CITY_COL_INDEX 0
 #define k_GOODICON_COL_INDEX 1
@@ -353,7 +353,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					city.CD()->IsSellingResourceTo(g, curDestCity) ) {
 					sellingPrice = tradeutil_GetTradeValue(player_id, curDestCity, g);
 
-					
+				//need to add something here where cities that have an improvement that needs a good will demand the good. May be increase the value of selling that good?	
 					
 
 					

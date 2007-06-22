@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map fog of war visibility handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -243,7 +243,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 			SetHasSleepingUnits(cityData->HasSleepingUnits());
 			SetIsWatchful(cityData->IsWatchful());
 			SetIsCapitol(cityData->IsCapitol());
-
+			SetIsReligionIcon(cityData->HasReligionIcon()); //emod
 			m_bioInfectedOwner = (sint8)cityData->GetOwner();
 			m_nanoInfectedOwner = (sint8)cityData->GetOwner();
 			m_convertedOwner = (sint8)cityData->IsConvertedTo();

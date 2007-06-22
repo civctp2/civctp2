@@ -18,7 +18,7 @@
 //
 // Compiler flags
 //
-// CTP1_TRADE
+// CTP1_TRADE!
 // - Creates an executable with trade like in CTP1. Currently broken.
 //
 // BATTLE_FLAGS
@@ -10466,7 +10466,7 @@ void Player::CreateLeader()
 	sint32 leader = -1;
 	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
 		if(g_theUnitDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetLeader()) {
-			if(!g_player[m_owner]->CanBuildLeader(i)) {
+			if(g_player[m_owner]->CanBuildLeader(i)) {
 				leader = i;
 				//break;
 			}
