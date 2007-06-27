@@ -27,6 +27,7 @@
 // - wonderutil_IsObsolete now has two new checks GovernmentType and 
 //   ObsoleteGovernmentType switching from or two these obsoletes your wonder (E 5-27-2006)
 // - wonderutil_GetGoldPerBuildingAnywhere (E 5-27-2006)
+// - added hasreligionicon bool 6.25.2007
 //
 //----------------------------------------------------------------------------
 
@@ -483,4 +484,9 @@ sint32 wonderutil_GetProducesEnergy(const uint64 builtWonders)
 sint32 wonderutil_GetProducesEnergyPerPop(const uint64 builtWonders)
 {
 	INT_WNDR(HasProducesEnergyPerPop, GetProducesEnergyPerPop);
+}
+
+bool wonderutil_GetHasReligionIcon(uint64 builtWonders)
+{
+	BOOL_WNDR(HasIsReligionIcon);
 }

@@ -60,6 +60,7 @@
 // - Moved citypop box to the left name in the center and turns until next pop 
 //   to the right for cleaner interface 1-13-2007 EMOD 
 // - Allowed to select between smooth and square borders. (Feb 4th 2007 Martin Gühmann)
+// - Fixed Religion Icon displays - E 6.25.2007
 //
 //----------------------------------------------------------------------------
 
@@ -4842,6 +4843,7 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 
 	Pixel16     color       = GetPlayerColor(owner, fog);
 	Pixel16 *   cityIcon;
+	Pixel16 *   WonderIcon;
 
 	if (HasReligionIcon) {
 		POINT       iconDim2     = tileSet->GetMapIconDimensions(MAPICON_HERALD);
@@ -4851,21 +4853,35 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		iconRect.bottom = popRect.top + iconDim.y + 1;
 		sint32  cityIcon = 0;
 		CityData *cityData = unit.GetData()->GetCityData();
-		for(sint32 rb = 0; rb < g_theBuildingDB->NumRecords(); rb++){
-			if (g_theBuildingDB->Get(rb, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++){
+			if (g_theBuildingDB->Get(i, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(cityIcon))
 			{
-				if(cityData->GetImprovements() & ((uint64)1 << rb))
+				if(cityData->GetImprovements() & ((uint64)1 << i))
 				{
 					//tileSet->GetMapIconData(cityIcon);
 					color = GetPlayerColor(owner, fog);  //optional
 					DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
 					AddDirtyRectToMix(iconRect);
+					iconRect.left += iconDim.x;
+					iconRect.right += iconDim.x;
 				}
 			}
 		}
-
-		iconRect.left += iconDim.x;
-		iconRect.right += iconDim.x;
+		sint32  WonderIcon = 0;
+		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++){
+			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(WonderIcon))
+			{
+				if(cityData->GetImprovements() & ((uint64)1 << j))
+				{
+					//tileSet->GetMapIconData(cityIcon);
+					color = GetPlayerColor(owner, fog);  //optional
+					DrawColorizedOverlay(tileSet->GetMapIconData(WonderIcon), surf, iconRect.left, iconRect.top, color);
+					AddDirtyRectToMix(iconRect);
+					iconRect.left += iconDim.x;
+					iconRect.right += iconDim.x;
+				}
+			}
+		}
 	}
 
 	if (iconRect.left < 0 || iconRect.top < 0 || 

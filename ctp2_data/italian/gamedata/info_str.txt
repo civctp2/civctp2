@@ -508,5 +508,5 @@ CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 
 #New Messages#
 UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
-UNIT_LEADER				"Out of our victory, {unit[0].name} has risen to be a great leader."
+UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."
 RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"

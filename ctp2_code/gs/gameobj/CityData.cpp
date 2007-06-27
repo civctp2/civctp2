@@ -4548,7 +4548,7 @@ void CityData::DestroyCapitol()
 	}
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 }
-/*
+
 void CityData::RemoveCapitol()
 
 {
@@ -4563,7 +4563,7 @@ void CityData::RemoveCapitol()
 	}
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
 }
-*/
+
 
 void CityData::DestroyImprovement(sint32 imp)
 {
@@ -10320,7 +10320,14 @@ void CityData::DestroyOnePerCiv()
 }
 bool CityData::HasReligionIcon() const
 {
-	return buildingutil_GetHasReligionIcon(GetEffectiveBuildings());
+	if (buildingutil_GetHasReligionIcon(GetEffectiveBuildings())) {
+		return true;
+	}
+	if (wonderutil_GetHasReligionIcon(GetBuiltWonders())) {
+		return true;
+	}
+
+	return false;
 }
 
 bool CityData::IsReligious() const

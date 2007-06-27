@@ -549,6 +549,7 @@ public:
 	uint64 GetBuiltWonders() const { return m_builtWonders; }
 
 	void DestroyCapitol(); 
+	void RemoveCapitol(); 
 	void DestroyOnePerCiv(); //emod destroy small wonders
 	void SetCapitol();
 	void DestroyImprovement(sint32 type);
