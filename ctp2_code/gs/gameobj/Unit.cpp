@@ -1177,6 +1177,11 @@ void Unit::DestroyCapitol()
 	AccessData()->DestroyCapitol();
 }
 
+void Unit::RemoveCapitol()
+{
+	AccessData()->RemoveCapitol();
+}
+
 void Unit::DestroyImprovement(sint32 type)
 {
 	AccessData()->DestroyImprovement(type);

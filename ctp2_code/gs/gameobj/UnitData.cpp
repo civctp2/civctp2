@@ -2258,6 +2258,16 @@ void UnitData::DestroyCapitol()
     }
 }
 
+void UnitData::RemoveCapitol()
+
+{
+    Assert(m_city_data); 
+    if (m_city_data)
+    {
+        m_city_data->RemoveCapitol(); 
+    }
+}
+
 void UnitData::DestroyImprovement(sint32 type)
 {
     Assert(m_city_data);
