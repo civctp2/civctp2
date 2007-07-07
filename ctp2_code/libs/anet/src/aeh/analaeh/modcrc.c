@@ -127,7 +127,7 @@ void test_addmod(char *fpath, modcrc_mapfilecat_t *files_seen, FILE *fp)
 	} else
 		pbuf = mappath;
 
-	this_fnamecrc = dp_crc32(pbuf, strlen(pbuf));
+	this_fnamecrc = dp_crc32((unsigned char*)pbuf, strlen(pbuf));
 	
 	/* check to see if fnamecrc (the crc of the filename) is already in 
 	 * modcrc.txt.  If so, skip this file.
@@ -232,7 +232,7 @@ int test_getfilesseen(modcrc_mapfilecat_t *files_seen, FILE *fp)
 
 	while (fgets(buf, modcrc_MAX_LINE_LENGTH, fp) != NULL)
 		if (sscanf(buf, "%lx %[^\n\r\f]", &crc, path) == 2) {
-			fnamecrc = dp_crc32(path, strlen(path));
+			fnamecrc = dp_crc32((unsigned char *)path, strlen(path));
 			files_seen->n++;
 			aehDPRINT(("read %s, now seen\n", path));
 			if ((temp = (unsigned long *)realloc(files_seen->fnamecrc, files_seen->n * sizeof(long))) == NULL) {

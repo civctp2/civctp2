@@ -1716,6 +1716,7 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 {
 	int err, err1;
 	unsigned int i;
+	aeh_info_t *aehit;
 	const unsigned char *pread, *pend;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !aehbuf) {
@@ -1908,7 +1909,8 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 					pread += aeh_NINSTB;
 					break;
 				case aeh_COMMENT_ID:
-					if ((err = getCharStream(&pread, (char **)&aeh->info[i].data, pend))) {
+					aehit = &aeh->info[i];
+					if ((err = getCharStream(&pread, (char **)aehit->data, pend))) {
 						aeh_SetCurrent(__LINE__, __FILE__);
 						if (err == aeh_RES_NOMEM) return err;
 						return err1;

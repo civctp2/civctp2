@@ -28,8 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "assoctab.h"
 #include "crypttab.h"
 #include "mywcs.h"     /* extra wcs functions */
-#include "3rdparty/md5/global.h"  /* for md5 */ 
-#include "3rdparty/md5/md5.h"
+#include "../3rdparty/md5/global.h"  /* for md5 */ 
+#include "../3rdparty/md5/md5.h"
 
 #ifdef _DEBUG
 const char *tcapw_u2ascii(const dp_netchar_t *ncs, int maxlen)
