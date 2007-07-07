@@ -93,6 +93,7 @@ TileSet::TileSet()
     m_quick                 (false),
 	m_mapped                (false),
 	m_mapIcons              (NULL),
+	m_mapIconDimensions     (NULL),
 #ifdef WIN32
 	m_fileHandle            (INVALID_HANDLE_VALUE),
 	m_mappedFileHandle      (INVALID_HANDLE_VALUE)
@@ -138,12 +139,12 @@ TileSet::~TileSet()
 	Cleanup();
 }
 
-// ToDo: Merge the comon parts of CleanuoQuick and CleanupMapped
+// ToDo: Merge the comon parts of CleanupQuick and CleanupMapped
 
 void TileSet::CleanupQuick(void)
 {
-    delete[] m_transforms;
-	m_transforms = 0;
+	delete[] m_transforms;
+	m_transforms = NULL;
 	m_numTransforms = 0;
 
 	delete[] m_riverTransforms;
@@ -166,6 +167,8 @@ void TileSet::CleanupQuick(void)
 	}
 	delete[] m_mapIcons;
 	m_mapIcons = NULL;
+	delete[] m_mapIconDimensions;
+	m_mapIconDimensions = NULL;
 
 	delete[] m_tileSetData;
 	m_tileSetData = NULL;
@@ -174,7 +177,7 @@ void TileSet::CleanupQuick(void)
 void TileSet::CleanupMapped(void)
 {
 	delete[] m_transforms;
-	m_transforms = 0;
+	m_transforms = NULL;
 	m_numTransforms = 0;
 
 	delete[] m_riverTransforms;
@@ -198,6 +201,8 @@ void TileSet::CleanupMapped(void)
 	}
 	delete[] m_mapIcons;
 	m_mapIcons = NULL;
+	delete[] m_mapIconDimensions;
+	m_mapIconDimensions = NULL;
 
 #ifdef WIN32
 	UnmapViewOfFile(m_tileSetData);
@@ -279,7 +284,7 @@ void TileSet::LoadBaseTiles(FILE *file)
 
 	for (uint32 i = 0; i < baseTileCount; ++i) 
 	{
-	    BaseTile *  baseTile = new BaseTile();
+		BaseTile *  baseTile = new BaseTile();
 		baseTile->Read(file);
 		m_baseTiles[baseTile->GetTileNum()] = baseTile;
 	}
@@ -440,7 +445,7 @@ uint8 TileSet::ReverseDirection(sint32 dir)
 	case k_MEGATILE_DIRECTION_W	: return k_MEGATILE_DIRECTION_E;
 	default:
 		Assert(FALSE);
-        break;
+		break;
 	}
 
 	return DIRECTION_INVALID;
@@ -455,8 +460,9 @@ void TileSet::LoadMapIcons(void)
 	Pixel16		*tga;
 	Pixel16		*data;
 
-	m_mapIcons = new Pixel16*[g_theMapIconDB->NumRecords()];
-	for (int i = 0; i < g_theMapIconDB->NumRecords(); ++i) 
+	m_mapIcons          = new Pixel16*[g_theMapIconDB->NumRecords()];
+	m_mapIconDimensions = new POINT[g_theMapIconDB->NumRecords()];
+	for (sint32 i = 0; i < g_theMapIconDB->NumRecords(); ++i) 
 	{
 
 		sprintf(name, g_theMapIconDB->Get(i)->GetValue());

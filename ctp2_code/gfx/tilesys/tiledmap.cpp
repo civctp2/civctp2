@@ -221,7 +221,7 @@ TiledMap::TiledMap(MapPoint &size)
 	m_one_over_gridHeight   (1.0f),
 	m_gridRects             (NULL),
 	m_chatRect              (RECT_INVISIBLE)
-{	
+{
     std::fill(m_fortifyString, m_fortifyString + 4, 0);
     std::copy(s_zoomTilePixelWidth, s_zoomTilePixelWidth + k_MAX_ZOOM_LEVELS, 
               m_zoomTilePixelWidth
@@ -1556,33 +1556,33 @@ extern uint16 myRGB(sint32 r,  sint32 g, sint32 b);
 sint32 TiledMap::CalculateWrap
 (
     aui_Surface *   surface,
-    sint32          i,	
+    sint32          i,
     sint32          j
 )
 {
-    Assert(m_localVision != NULL);
+	Assert(m_localVision != NULL);
 
 	maputils_WrapPoint(j, i, &j, &i);
 	MapPoint tempPos    = MapPoint(maputils_TileX2MapX(j, i), i);
 
 	if (!ReadyToDraw() || !m_localVision->IsExplored(tempPos)) 
-    {
+	{
 		BlackTile(surface, &tempPos);
 		return 0;
 	}
 
 	MapPoint	pos = tempPos;
 	sint32		x;
-    sint32      y;
+	sint32      y;
 	maputils_MapXY2PixelXY(pos.x,pos.y,&x,&y);
 	
 	if (    (x < m_surfaceRect.left) 
-         || (x > (m_surfaceRect.right - GetZoomTilePixelWidth())) 
-         || (y < m_surfaceRect.top)
-         || (y > (m_surfaceRect.bottom - (GetZoomTilePixelHeight() + GetZoomTileHeadroom())))
-       )
-    {
-        // Outside displayed surface
+	     || (x > (m_surfaceRect.right - GetZoomTilePixelWidth())) 
+	     || (y < m_surfaceRect.top)
+	     || (y > (m_surfaceRect.bottom - (GetZoomTilePixelHeight() + GetZoomTileHeadroom())))
+	   )
+	{
+		// Outside displayed surface
 		return 0;
 	}
 
@@ -1592,22 +1592,22 @@ sint32 TiledMap::CalculateWrap
 	BaseTile * baseTile = m_tileSet->GetBaseTile(tileInfo->GetTileNum());
 	if (baseTile == NULL) return -1;
 
-    sint32  terrainType;
+	sint32  terrainType;
 	bool    fog = !m_localVision->IsVisible(tempPos);
-	if (fog) 
-    {
+	if (fog)
+	{
 		UnseenCellCarton ucell;
 		if (m_localVision->GetLastSeen(tempPos, ucell)) 
-        {
+		{
 			terrainType = ucell.m_unseenCell->GetTerrainType();
-		} 
-        else 
-        {
+		}
+		else
+		{
 			terrainType = g_theWorld->GetTerrain(tempPos.x,tempPos.y);
 		}
-	} 
-    else 
-    {
+	}
+	else
+	{
 		terrainType = g_theWorld->GetTerrain(tempPos.x, tempPos.y);
 	}
 	
@@ -1616,14 +1616,14 @@ sint32 TiledMap::CalculateWrap
 	if (m_zoomLevel == k_ZOOM_LARGEST) 
 	{
 		if (!fog) 
-        {
-			DrawTransitionTile(surface, pos, x, y); //crash
+		{
+			DrawTransitionTile(surface, pos, x, y);
 
 			if (river != -1)
 				DrawOverlay(surface, m_tileSet->GetRiverData(river), x, y);
-		} 
-        else 
-        {
+		}
+		else
+		{
 			if (g_isFastCpu) {
 				
 				DrawBlendedTile(surface, pos,x,y,k_FOW_COLOR,k_FOW_BLEND_VALUE);
@@ -1696,7 +1696,7 @@ sint32 TiledMap::CalculateWrap
 		if (g_graphicsOptions->IsCellTextOn()) {
 			CellText *cellText = g_graphicsOptions->GetCellText(pos);
 			if (cellText != NULL) 
-            {
+			{
 				sint32 r,g,b;
 				ColorMagnitudeToRGB(cellText->m_color, &r, &g, &b);
 
@@ -1709,54 +1709,38 @@ sint32 TiledMap::CalculateWrap
 							 y + GetZoomTilePixelHeight(),
 							 bgColor, 
 							 fgColor
-                            );	
+							);
 			}
 		}
 	}
 
 #ifdef _DEBUG
 	
-    if (g_is_debug_map_color) { 
+	if (g_is_debug_map_color)
+	{
+		sint32 color = g_theWorld->GetColor(pos);
+		if (0 < color)
+		{
+			sint32 r=0,g=0, b;
+			b = color * 2;
+			if (127 < b) {
+				g = b - 127;
+				b = 0;
+			}
+			if (127 < g) {
+				r = g - 127;
+				g = 0;
+			}
 
-        sint32 color = g_theWorld->GetColor(pos); 
-        if (0 < color) { 
-
-            
-            
-            
-	        
-
-            
-            sint32 r=0,g=0, b;
-            b = color * 2;
-            if (127 < b) { 
-                g = b - 127; 
-                b = 0; 
-            } 
-            if (127 < g) { 
-                r = g - 127; 
-                g = 0; 
-            } 
-
-            uint16 c = myRGB(r, g, b); 
-            DrawNumber(surface, color, 
-	             c, 
-				(sint32)(x+(k_TILE_PIXEL_WIDTH*m_scale)/2), 
-				(sint32)(y+(k_TILE_PIXEL_HEIGHT*m_scale)));
-        }
-        
-
-
-
-
-
-
-
-
-
-       
-
-    }
+			uint16 c = myRGB(r, g, b);
+			DrawNumber(surface,
+			           color,
+			           c,
+			           (sint32)(x+(k_TILE_PIXEL_WIDTH*m_scale)/2),
+			           (sint32)(y+(k_TILE_PIXEL_HEIGHT*m_scale))
+			          );
+		}
+	}
 #endif
 
 	return 0;

@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Base Tile
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE 
 #pragma once
@@ -34,8 +53,6 @@ public:
 
 	uint8	GetBaseType(void) const { return m_baseType; }
 	void	SetBaseType(uint8 type) { m_baseType = type; }
-
-
 
 	BOOL	GetTransitionFlag(sint16 flagNum) 
 	{
@@ -70,23 +87,12 @@ public:
 			break;
 		}
 	}
-	
-
-
-
 
 	void	SetTileDataLen(uint16 len) { m_tileDataLen = len; }
 	uint16	GetTileDataLen(void) const { return m_tileDataLen; }
 
 	Pixel16 *GetTileData(void) const { return m_tileData; }
 	void	SetTileData(Pixel16 *data) { m_tileData = data; }
-
-
-
-
-
-
-
 
 	void	SetHatDataLen(uint16 dataLen) { m_hatDataLen = dataLen; }
 	uint16	GetHatDataLen(void) const { return m_hatDataLen; }
@@ -99,20 +105,12 @@ public:
 	BOOL	WasQuickLoaded(void) { return m_flags & k_BTF_QUICKLOADED; }
 private:
 
-
-
-
-
 	uint8		m_flags;
 	uint8		m_baseType;
 	uint16		m_tileNum;
 
 	uint16		m_tileDataLen;
 	uint16		m_hatDataLen;
-
-
-
-
 
 	Pixel16		*m_tileData;
 	Pixel16		*m_hatData;

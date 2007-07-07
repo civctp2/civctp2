@@ -407,7 +407,7 @@ private:
 	MegaTileStep	m_megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
 	
 	Pixel16			**m_mapIcons;
-	POINT			m_mapIconDimensions[MAPICON_MAX];
+	POINT			*m_mapIconDimensions;
 
 	BOOL			m_quick;
 	BOOL			m_mapped;
