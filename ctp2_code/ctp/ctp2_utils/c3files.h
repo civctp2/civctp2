@@ -155,6 +155,6 @@ const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size, int cdIndex);
 BOOL		c3files_HasCD(void);
 void		c3files_GetCDDrives(void);
 const MBCHAR		*c3files_GetVolumeName(int cdIndex);
-BOOL		c3files_FindCDByName(const CHAR *name, BOOL findDriveLetter);
+BOOL		c3files_FindCDByName(const CHAR *name);
 
 #endif

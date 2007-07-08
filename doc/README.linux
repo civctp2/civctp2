@@ -199,6 +199,16 @@ So, let's start:
    Pay attention to the cases of the file names ! They must be lower case. If
    they contain uppercase characters you must rename them.
 
+9. Install texture.dat
+
+   Copy /media/cdrom/Setup/data/ctp2_program/ctp/texture.dat to the directory
+   where the ctp2 binary is installed (/home/foo/CTP2/ctp2_program/ctp).
+
+   shll> /media/cdrom/Setup/data/ctp2_program/ctp/texture.dat \
+         /home/foo/CTP2/ctp2_program/ctp
+
+   This file is used to determine a legal CD, and ctp2 will not start a
+   game without it.
 
 
 

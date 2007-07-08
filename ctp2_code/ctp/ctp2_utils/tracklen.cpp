@@ -85,9 +85,11 @@ char *tracklen_cryptAscii(char *s)
 
 static void DMCIError(int error)
 {
+#ifdef WIN32 
 	char szScratch[ MAX_PATH ];
 	mciGetErrorString( error, szScratch, MAX_PATH );
 	tracklen_DPRINT((tracklen_buf,  "last MCI error = %s\n", szScratch ));
+#endif
 }
 
 

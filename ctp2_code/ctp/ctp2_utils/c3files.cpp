@@ -29,8 +29,8 @@
 // Modifications from the original Activision code:
 //
 // - added linux specific code
-// - Added some casts. (Aug 7th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added some casts. (Aug 7th 2005 Martin Gï¿½hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -535,18 +535,20 @@ BOOL c3files_HasLegalCD()
 
 	while (!success) {
 
-		success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
+		success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME);
 
-		
+
 		if (success && g_theProfileDB->IsProtected()) {		
-			BOOL		valid;
-
-			valid = tracklen_CheckTrackLengths();
-
-			if (!valid) 
-				success = TRUE;
-			else
-				success = FALSE;
+success = (_TRACKLEN_OK == tracklen_CheckTrackLengths());
+printf("Success: %d\n", success);
+//			BOOL		valid;
+//
+//			valid = tracklen_CheckTrackLengths();
+//
+//			if (!valid) 
+//				success = TRUE;
+//			else
+//				success = FALSE;
 		}
 
 		if (!success) {
@@ -594,7 +596,7 @@ void c3files_InitializeCD(void)
 	}
 #endif
 	c3files_GetCDDrives();
-	c3files_FindCDByName(k_CTP_CD_VOLUME_NAME, TRUE);
+	(void) c3files_FindCDByName(k_CTP_CD_VOLUME_NAME);
 }
 
 int c3files_GetCDDriveCount(void)
@@ -883,24 +885,20 @@ const MBCHAR *c3files_GetVolumeName(int cdIndex)
 #endif
 }
 
-BOOL c3files_FindCDByName(const CHAR *name, BOOL findDriveNum)
+BOOL c3files_FindCDByName(const CHAR *name)
 {
 	sint32	i;
 	BOOL	found = FALSE;
 	const MBCHAR *cdName;
 
 	CDIndex = 0;
-
-	if (findDriveNum)
-		WhichCD = -1;
+	WhichCD = -1;
 
 	if (!g_theProfileDB->IsRequireCD()) {
 		for (i=0; i < CDDrivesCnt; i++) {
-			if (findDriveNum) {
-				cdName = c3files_GetVolumeName(i);
-				if (cdName && !strnicmp(cdName, name, strlen(name)))
-					WhichCD = i;
-			}
+			cdName = c3files_GetVolumeName(i);
+			if (cdName && !strnicmp(cdName, name, strlen(name)))
+				WhichCD = i;
 			g_hasCD = TRUE;
 		}
 		return TRUE;
@@ -910,15 +908,13 @@ BOOL c3files_FindCDByName(const CHAR *name, BOOL findDriveNum)
 			cdName = c3files_GetVolumeName(i);
 			if (cdName && !strnicmp(cdName, name, strlen(name)))
 			{
-				if (findDriveNum)
-					WhichCD = i;
-				
+				WhichCD = i;
 				found = TRUE;
 				g_hasCD = TRUE;
 			}
 		}
 
-		if (!found && findDriveNum)
+		if (!found)
 			found = (WhichCD >= 0);
 
 		return (found);
