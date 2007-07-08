@@ -64,10 +64,10 @@ RobotAstar2::RobotAstar2()
 	m_pathType = PATH_TYPE_DEFAULT;
 }
 
-BOOL RobotAstar2::TransportPathCallback (const BOOL & can_enter, 
+bool RobotAstar2::TransportPathCallback (const bool & can_enter, 
 										 const MapPoint & prev,  
 									     const MapPoint & pos, 
-										 const BOOL & is_zoc, 
+										 const bool & is_zoc, 
 									     float & cost, 
 									     ASTAR_ENTRY_TYPE & entry )
 { 
@@ -76,8 +76,8 @@ BOOL RobotAstar2::TransportPathCallback (const BOOL & can_enter,
 			
 			
 			sint32 cont; 
-			BOOL is_land; 
-			BOOL wrong_cont;
+			bool is_land; 
+			bool wrong_cont;
     
 			cont = g_theWorld->GetContinent(pos);
 			is_land = ( g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos) );
@@ -85,13 +85,13 @@ BOOL RobotAstar2::TransportPathCallback (const BOOL & can_enter,
 			
 			
 			wrong_cont = ( cont != m_transDestCont ) && 
-				(g_theWorld->IsCity(pos) == false);
+				(!g_theWorld->IsCity(pos));
 
 			
 			
 			
 
-			BOOL occupied = FALSE; 
+			bool occupied = false; 
 
 			
 			occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(prev, pos, FALSE)));
@@ -107,7 +107,7 @@ BOOL RobotAstar2::TransportPathCallback (const BOOL & can_enter,
 						{ 
 							cost = k_ASTAR_BIG;
 							entry = ASTAR_RETRY_DIRECTION; 
-							return FALSE;
+							return false;
 						}
 				}
 		
@@ -126,20 +126,20 @@ BOOL RobotAstar2::TransportPathCallback (const BOOL & can_enter,
 			
 			
 		
-			return TRUE; 
+			return true;
 		} 
 	else 
 		{ 
-			cost = k_ASTAR_BIG; 
-			entry = ASTAR_BLOCKED; 
-			return FALSE;
+			cost = k_ASTAR_BIG;
+			entry = ASTAR_BLOCKED;
+			return false;
 		} 
 }
 
-BOOL RobotAstar2::DefensivePathCallback (const BOOL & can_enter,  
+bool RobotAstar2::DefensivePathCallback (const bool & can_enter,  
 									     const MapPoint & prev,  
 									     const MapPoint & pos, 
-										 const BOOL & is_zoc, 
+										 const bool & is_zoc, 
 									     float & cost, 
 									     ASTAR_ENTRY_TYPE & entry)
 { 
@@ -150,7 +150,7 @@ BOOL RobotAstar2::DefensivePathCallback (const BOOL & can_enter,
     if (can_enter) { 
 		
 		if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
-			return TRUE;
+			return true;
 			
 		
 		
@@ -159,14 +159,14 @@ BOOL RobotAstar2::DefensivePathCallback (const BOOL & can_enter,
 			!(m_incursionPermission & (0x1 << prev_owner)))
 		{
 			cost += k_MOVE_TREASPASSING_COST;
-			return TRUE; 
+			return true; 
 		} 
     }
 
 	
 	cost = k_ASTAR_BIG; 
 	entry = ASTAR_ENTRY_TYPE(0); 
-	return FALSE;
+	return false;
 }
 
 
@@ -182,20 +182,13 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 							float & total_cost ) 
 						   
 { 
-	sint32 cutoff;
-	
-	
-	
-	
-	
-	
-		cutoff = 20000;
+	sint32 cutoff = 20000;
 
 	sint32 nodes_opened = 0;
-	const BOOL no_straight_lines = FALSE;
-	const BOOL check_units_in_cell = TRUE;
-    bool is_broken_path = false;
-	const BOOL pretty_path = FALSE;
+	const bool no_straight_lines = false;
+	const bool check_units_in_cell = true;
+    bool is_broken_path = false; 
+	const bool pretty_path = false;
 	Path bad_path;
 
     m_pathType = pathType; 
@@ -206,7 +199,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
     sint32 nUnits; 
     uint32 move_intersection; 
     uint32 move_union; 
-    m_is_robot = TRUE; 
+    m_is_robot = true; 
 	
 	
 	bool isspecial, cancapture, haszoc, canbombard;
@@ -238,21 +231,34 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 		move_intersection = army_move_type; 
 		move_union = 0; 
 		m_army_minmax_move = 300.0; 
-		m_army_can_expel_stealth = FALSE; 
+		m_army_can_expel_stealth = false;
 	}
 	else
 	{
 		
 		UnitAstar::InitArmy (army, nUnits, move_intersection, move_union,  
-			m_army_minmax_move);        
+			m_army_minmax_move);
 	}
 	
-	if(!UnitAstar::FindPath(army, nUnits, move_intersection, move_union, 
-		start, army.GetOwner(), dest, new_path, 
-		is_broken_path, bad_path, total_cost, TRUE,
-		false, pretty_path, cutoff, nodes_opened, 
-		check_dest, no_straight_lines, 
-		check_units_in_cell)){
+	if(!UnitAstar::FindPath(army,
+	                        nUnits,
+	                        move_intersection,
+	                        move_union,
+	                        start,
+	                        army.GetOwner(),
+	                        dest, new_path,
+	                        is_broken_path,
+	                        bad_path,
+	                        total_cost,
+	                        true,
+	                        false,
+	                        pretty_path,
+	                        cutoff,
+	                        nodes_opened,
+	                        check_dest,
+	                        no_straight_lines,
+	                        check_units_in_cell)
+	){
 		
 		return false;
 	}
@@ -313,11 +319,11 @@ void RobotAstar2::RecalcEntryCost(AstarPoint *parent,
 			switch (m_pathType) 
 				{
 				case PATH_TYPE_TRANSPORT:
-					TransportPathCallback(TRUE, parent->m_pos, node->m_pos, new_is_zoc, 
+					TransportPathCallback(true, parent->m_pos, node->m_pos, new_is_zoc, 
 										  new_entry_cost, new_entry);
 					break;
 				case PATH_TYPE_DEFENSIVE:
-					DefensivePathCallback(TRUE, parent->m_pos, node->m_pos, new_is_zoc, 
+					DefensivePathCallback(true, parent->m_pos, node->m_pos, new_is_zoc, 
 										  new_entry_cost, new_entry);
 					break;
 				}

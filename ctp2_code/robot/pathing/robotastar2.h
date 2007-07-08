@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : A-star AI pathing algorithm
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -60,18 +60,18 @@ public:
 				  float & total_cost);
 private:
 
-	BOOL TransportPathCallback (const BOOL & can_enter, 
-											 const MapPoint & prev,  
-											 const MapPoint & pos, 
-											 const BOOL & is_zoc, 
-											 float & cost, 
-											 ASTAR_ENTRY_TYPE & entry );
+	bool TransportPathCallback (const bool & can_enter,
+								const MapPoint & prev,
+								const MapPoint & pos,
+								const bool & is_zoc,
+								float & cost,
+								ASTAR_ENTRY_TYPE & entry);
 
-	BOOL DefensivePathCallback (const BOOL & can_enter,  
-								const MapPoint & prev,  
-								const MapPoint & pos, 
-								const BOOL & is_zoc, 
-								float & cost, 
+	bool DefensivePathCallback (const bool & can_enter,
+								const MapPoint & prev,
+								const MapPoint & pos,
+								const bool & is_zoc,
+								float & cost,
 								ASTAR_ENTRY_TYPE & entry);
 
 	
@@ -80,12 +80,12 @@ private:
 	bool EntryCost(const MapPoint & prev, const MapPoint & pos,
 					 float &cost, bool & is_zoc, ASTAR_ENTRY_TYPE & entry);
 
-	void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, 
-						 float &new_entry_cost, bool &new_is_zoc, 
+	void RecalcEntryCost(AstarPoint *parent, AstarPoint *node,
+						 float &new_entry_cost, bool &new_is_zoc,
 						 ASTAR_ENTRY_TYPE &new_entry);
 
 
-    PathType m_pathType;
+	PathType m_pathType;
 	sint32 m_transDestCont;
 	float m_transMaxR;
 	uint32 m_incursionPermission;
