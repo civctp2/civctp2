@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Debugging
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG                      (automatically set when choosing the Debug configuration)
+// _NO_GAME_WATCH
+// USE_LOGGING         Enable logging for the release/final version.
+//                  The debug version has logging enabled always.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// -
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #ifdef _DEBUG
@@ -37,7 +69,8 @@ MBCHAR	s_logFileName[20];
 sint32	s_logFileNumber=0;
 sint32	s_logLinesThisFile=0;
 
-MBCHAR *c3debug_GetLogFileName(void)
+#if 0
+MBCHAR const * c3debug_GetLogFileName(void)
 {
 	return s_logFileName;
 }
@@ -51,6 +84,7 @@ sint32 *c3debug_GetLogLinesThisFile(void)
 {
 	return &s_logLinesThisFile;
 }
+#endif
 
 int c3debug_InitDebugLog()
 {
@@ -272,16 +306,12 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 
 void c3debug_ExceptionExecute(CivExceptionFunction function)
 {
-	
 	__try
 	{
 		function();
 	}
-
-	
 	__except (c3debug_CivExceptionHandler(GetExceptionInformation()))
 	{
-		
 		DoFinalCleanup();
 	}
 }

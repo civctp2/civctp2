@@ -42,10 +42,8 @@
 #ifdef _PLAYTEST
 #include "c3cmdline.h"
 
-
 #include "CivilisationRecord.h"
 #include "ConstDB.h"
-
 #include "c3ui.h"
 #include "debugmemory.h"
 #include "log.h"
@@ -55,7 +53,6 @@
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
-#include "c3ui.h"
 #include "background.h"
 #include "statuswindow.h"
 #include "civ3_main.h"
@@ -64,7 +61,6 @@
 #include "TradePool.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImprove.h"
 #include "Readiness.h"
@@ -86,14 +82,12 @@
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
-
 #include "statswindow.h"
 #include "controlpanelwindow.h"
-
 #include "chatbox.h"
+
 #include "Score.h"
 #include "Happy.h"
-
 
 #include "debugwindow.h"
 
@@ -108,11 +102,11 @@
 #endif
 
 #include "watchlist.h"
+
 #include "UnitRecord.h"
 #include "DBLexer.h"
 #include "TerrainRecord.h"
 #include "ResourceRecord.h"
-
 
 #include "GoalRecord.h"
 #include "UnitBuildListRecord.h"
@@ -175,7 +169,6 @@ extern sint32               g_check_mem;
 extern sint32               g_robotMessages;
 
 
-
 #include "aui.h"
 #include "aui_surface.h"
 #include "primitives.h"
@@ -196,16 +189,12 @@ extern sint32               g_robotMessages;
 #include "SpriteFile.h"
 
 #include "gameinit.h"
-
 #include "AICause.h"
 #include "TurnCnt.h"
 
-
 #include "civapp.h"
-#include "TurnCnt.h"
 
 #include "AttractWindow.h"
-
 #include "screenutils.h"
 
 #include "UnitPool.h"
@@ -264,7 +253,6 @@ extern Director *g_director;
 
 
 extern BOOL	g_drawArmyClumps;
-
 
 #include "sciencewin.h"
 #include "greatlibrary.h"
@@ -589,6 +577,7 @@ CommandLine g_commandLine;
 
                                  ToggleCellText g_toggleCellText;
                                  ToggleArmyText g_toggleArmyText;
+                                 ToggleArmyText g_toggleArmyName;
 
 
                                      ArmyClumps g_armyClumps;
@@ -1160,6 +1149,8 @@ CommandRecord commands[] = {
 	"celltext - toggle the displaying of AI debug text for Cells on and off"},
 	{"armytext", &g_toggleArmyText,
 	"armytext - toggle the displaying of AI debug text for Armies on and off"},
+	{"armyname", &g_toggleArmyName,
+	"armyname - toggle the displaying of name for Armies on and off"},
 
 	
 	{"armyclumps", &g_armyClumps,
@@ -1479,12 +1470,10 @@ void ShowDiplomacyCommand::Execute(sint32 argc, char **argv) {
 
 void NextStateCommand::Execute(sint32 argc, char **argv) {
 
-	sint32 playerId;
+	sint32 playerId     = PLAYER_INDEX_VANDALS;
 	sint32 foreignerId;
 	if(argc >= 2 ) {
 		playerId = atoi(argv[1]);
-
-		
 		Diplomat::GetDiplomat(playerId).NextStrategicState();
 	}
 
@@ -1493,14 +1482,11 @@ void NextStateCommand::Execute(sint32 argc, char **argv) {
 		Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);		
 	}
 	else {
-		
 		for(foreignerId=0; foreignerId < k_MAX_PLAYERS; foreignerId++) {
-			
 			if (foreignerId != playerId)
 				Diplomat::GetDiplomat(playerId).NextDiplomaticState(foreignerId);
 		}
 	}
-
 }
 
 void SetPersonalityCommand::Execute(sint32 argc, char **argv) {
@@ -1594,6 +1580,14 @@ void ToggleArmyText::Execute(sint32 argc, char **argv)
 	}
 }
 
+void ToggleArmyName::Execute(sint32 argc, char **argv)
+{
+	if (g_graphicsOptions->IsArmyNameOn()) {
+		g_graphicsOptions->ArmyNameOff();
+	} else {
+		g_graphicsOptions->ArmyNameOn();
+	}
+}
 
 void ArmyClumps::Execute(sint32 argc, char **argv)
 {
@@ -2163,9 +2157,9 @@ void SendSlaveCommand::Execute(sint32 argc, char **argv)
 		g_tiledMap->GetMouseTilePos(pos);
 		Cell *cell = g_theWorld->GetCell(pos);
 		Unit toCity = cell->GetCity();
-		Assert(toCity != Unit(0));
+		Assert(toCity != Unit());
 		
-		if(toCity != Unit(0)) {
+		if(toCity != Unit()) {
 			Assert(toCity.GetOwner() == fromCity.GetOwner());
 			if(toCity.GetOwner() != fromCity.GetOwner())
 				return;
@@ -2212,7 +2206,7 @@ void ForceRevoltCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(point);
 
 	Cell *cell = g_theWorld->GetCell(point);
-	if(cell->GetCity() != Unit(0)) {
+	if(cell->GetCity() != Unit()) {
 		cell->GetCity().AccessData()->GetCityData()->Revolt(g_player[cell->GetCity().GetOwner()]->m_civRevoltingCitiesShouldJoin, TRUE);
 	}
 }
@@ -2282,17 +2276,13 @@ void FliLogCommand::Execute(sint32 argc, char **argv)
 }
 
 void ReloadFliCommand::Execute (sint32 argc, char **argv)
-
 { 
+#if 0   /// @todo Find out what this code was supposed to do
     Assert(argc == 2) 
     if (argc != 2) return; 
 
     PLAYER_INDEX p = atoi (argv[1]); 
-    
-    
-    
-    
-    
+#endif
 }
 
 void RobotMessagesCommand::Execute(sint32 argc, char **argv)
@@ -2449,16 +2439,12 @@ void ZBCommand::Execute(sint32 argc, char **argv)
 
 void ShowPopCommand::Execute(sint32 argc, char **argv)
 {
-#ifdef _DEBUG
-	g_tiledMap->m_showPopHack = TRUE;
-#endif
+    // Didn't do anything
 }
 
 void HidePopCommand::Execute(sint32 argc, char **argv)
 {
-#ifdef _DEBUG
-	g_tiledMap->m_showPopHack = FALSE;
-#endif
+    // Didn't do anything
 }
 
 void AddPopCommand::Execute(sint32 argc, char **argv)
@@ -2649,7 +2635,7 @@ void PacCommand::Execute(sint32 argc, char **argv)
 	g_tiledMap->GetMouseTilePos(pos);
 
 	Unit newu = g_player[player]->CreateUnit(g_theUnitDB->NumRecords() - 1, 
-											 pos, Unit(0), 
+											 pos, Unit(), 
 											 FALSE, CAUSE_NEW_ARMY_INITIAL);
 	newu.AccessData()->SetPacMan();
 }
@@ -2921,12 +2907,14 @@ void HearGossipCommand::Execute(sint32 argc, char **argv)
 	BOOL DontUseThisCommandItSucks = FALSE;
 	Assert(DontUseThisCommandItSucks);
 	return;
+#if 0   // Unreachable
 	Assert(argc == 2);
 	if(argc != 2)
 		return;
 
 	g_player[g_selected_item->GetVisiblePlayer()]->m_all_units->Access(0).AccessData()->HearGossip(
 		g_player[atoi(argv[1])]->m_all_units->Access(0));
+#endif
 }
 
 void BombardCommand::Execute(sint32 argc, char **argv)
@@ -3205,7 +3193,9 @@ void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
 
+#if 0   // Unused
 	sint32 vplayer = g_selected_item->GetVisiblePlayer();
+#endif
 
 	Cell *cell = g_theWorld->GetCell(point);
 	
@@ -3627,14 +3617,14 @@ void DumpFZRegardCommand::Execute(sint32 argc, char **argv)
 
 void SetFZRegardCommand::Execute(sint32 argc, char **argv) 
 { 
+#if 0   /// @todo Find out what this code is supposed to do
     Assert(argc == 4)
     if (argc != 4) return; 
 
     sint32 me = atoi(argv[1]); 
     sint32 him = atoi(argv[2]); 
     sint32 r = atoi(argv[3]); 
-
-    
+#endif
 }
 
 void TotalWarCommand::Execute(sint32 argc, char **argv)
@@ -5578,8 +5568,7 @@ void BuildCommand::Execute(sint32 argc, char** argv)
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
 		sint32 type = atoi(argv[1]);
-		Unit unit = Unit(item);
-		g_player[player]->BuildUnit(type, unit);
+		g_player[player]->BuildUnit(type, Unit(item));
 	}
 }
 
@@ -5654,7 +5643,7 @@ void CreateCommand::Execute(sint32 argc, char** argv)
         if(unitList->Num() > 0) {
 	        city = unitList->Get(city_idx);
         } else {
-	        city = Unit(0);
+	        city = Unit();
         }
 
         Unit newu = g_player[player]->CreateUnit(type, pos, city, 
@@ -5717,22 +5706,11 @@ void LoadAIPCommand::Execute(sint32 argc, char **argv)
 
 void WhoAmICommand::Execute(sint32 argc, char **argv)
 { 
+#if 0   /// @todo Find out what this was supposed to do
     Assert(argc==1)
 
 	char *aipName = NULL;
-	
-        
-        
-
-       
-		
-        
-        
-        
-         
-        
-       
-	
+#endif
 }
 
 void LogAICommand::Execute(sint32 argc, char **argv)
@@ -5764,7 +5742,7 @@ void DipLogOnCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]); 
         g_theDiplomacyLog->LogPlayer(p);
     } 
-#endif // _DEBUG
+#endif _DEBUG
 } 
 
 void DipLogOffCommand::Execute (sint32 argc, char** argv)
@@ -5780,7 +5758,7 @@ void DipLogOffCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]); 
         g_theDiplomacyLog->UnlogPlayer(p);
     } 
-#endif // _DEBUG
+#endif _DEBUG
 } 
 
 
@@ -5924,6 +5902,8 @@ extern BOOL g_letUIProcess;
 
 void FastRoundCommand::Execute(sint32 argc, char **argv) 
 { 
+
+
 	if(g_doingFastRounds)
 		return;
 

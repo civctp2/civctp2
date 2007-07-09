@@ -29,27 +29,22 @@
 // Modifications from the original Activision code:
 //
 // - added linux specific code
-// - Added some casts. (Aug 7th 2005 Martin G�hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin G�hmann)
+// - Added some casts. (Aug 7th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-#include "CivPaths.h"
 #include "c3files.h"
-#include "c3errors.h"
-#include "pointerlist.h"
-#include "profileDB.h"
-
-
-#include "c3ui.h"
-
-#include "tracklen.h"
 
 #include "appstrings.h"
-
 #include "civ3_main.h"
+#include "CivPaths.h"
+#include "c3errors.h"
+#include "c3ui.h"
+#include "pointerlist.h"
+#include "profileDB.h"
+#include "tracklen.h"
 
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
@@ -227,7 +222,7 @@ sint32 c3files_fflush(FILE *file)
 
 
 
-sint32 c3files_getfilesize(C3DIR dir, const MBCHAR *filename)
+sint32 c3files_getfilesize(C3DIR dir, MBCHAR const *filename)
 {
 	sint32 filesize = 0;
 
@@ -250,7 +245,7 @@ sint32 c3files_getfilesize(C3DIR dir, const MBCHAR *filename)
 
 
 
-uint8 *c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size)
+uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR const * filename, sint32 *size)
 {
 	if ( size ) *size = 0;
 
@@ -284,9 +279,7 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size)
 
 	if (c3files_fread( bits, 1, filesize, f ) != filesize) {
 		delete[] bits;
-		
 		c3files_fclose(f);
-
 		return NULL;
 	}
 
@@ -297,7 +290,7 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size)
 	return bits;
 }
 
-BOOL c3files_PathIsValid(const MBCHAR *path)
+bool c3files_PathIsValid(MBCHAR *path)
 {
 #if defined(WIN32)
 	struct _stat tmpstat;
@@ -316,7 +309,7 @@ BOOL c3files_PathIsValid(const MBCHAR *path)
 	else return FALSE;
 }
 
-BOOL c3files_CreateDirectory(const MBCHAR *path)
+bool c3files_CreateDirectory(const MBCHAR *path)
 {
 #if defined(WIN32)
 	return CreateDirectory((const LPCSTR *) path, NULL);
@@ -348,7 +341,7 @@ void c3files_StripSpaces(MBCHAR *s)
 
 
 
-sint32 c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHAR> *list)
+bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list)
 {
 #ifdef WIN32
 	MBCHAR strbuf[256];
@@ -416,31 +409,28 @@ sint32 c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHA
 }
 
 #if defined(WIN32)
-sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
+bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
 {
 	MBCHAR strbuf[256];
 	MBCHAR path[_MAX_PATH];
 
-	WIN32_FIND_DATA *lpFileData;
-	HANDLE lpFileList;
-
-	
 	g_civPaths->GetSavePath(dirID, path);
 
-	
 	if (ext) sprintf(strbuf,"*.%s",ext);
 	else strcpy(strbuf, "*.*");
 		
 	strcat(path,strbuf);
 
 	
-	lpFileData = new WIN32_FIND_DATA;
-	lpFileList = FindFirstFile(path,lpFileData);
-
+	WIN32_FIND_DATA *   lpFileData  = new WIN32_FIND_DATA;
+	HANDLE              lpFileList  = FindFirstFile(path, lpFileData);
 	
-	if (lpFileList ==  INVALID_HANDLE_VALUE) return FALSE;
+	if (lpFileList == INVALID_HANDLE_VALUE)
+    {
+        delete lpFileData;
+        return false;
+    }
 
-	
 	list->AddTail(lpFileData);
 	
 	lpFileData = new WIN32_FIND_DATA;
@@ -449,10 +439,11 @@ sint32 c3files_getfilelist_ex(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<WI
 		list->AddTail(lpFileData);
 		lpFileData = new WIN32_FIND_DATA;
 	}
+    delete lpFileData;
 
 	FindClose(lpFileList);
 
-	return TRUE;
+	return true;
 }
 #endif
 
@@ -525,7 +516,7 @@ const MBCHAR *c3files_GetCTPHomeDir()
 		return NULL;
 }
 
-BOOL c3files_HasLegalCD()
+bool c3files_HasLegalCD()
 {
 	BOOL success = FALSE;
 
@@ -540,15 +531,6 @@ BOOL c3files_HasLegalCD()
 
 		if (success && g_theProfileDB->IsProtected()) {		
 success = (_TRACKLEN_OK == tracklen_CheckTrackLengths());
-printf("Success: %d\n", success);
-//			BOOL		valid;
-//
-//			valid = tracklen_CheckTrackLengths();
-//
-//			if (!valid) 
-//				success = TRUE;
-//			else
-//				success = FALSE;
 		}
 
 		if (!success) {
@@ -614,7 +596,21 @@ BOOL c3files_HasCD(void)
 	return g_hasCD;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : c3files_GetCDDrives
+//
+// Description: Determine the CD drives of the PC
+//
+// Parameters : -
+//
+// Globals    : IsCD    : filled
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void c3files_GetCDDrives(void)
 {
 #if defined(USE_SDL)
@@ -813,7 +809,22 @@ const MBCHAR *c3files_GetCDDriveName(int cdIndex)
 #endif
 }
 
-const MBCHAR *c3files_GetVolumeName(int cdIndex)
+//----------------------------------------------------------------------------
+//
+// Name       : c3files_GetVolumeName
+//
+// Description: Determine the name of a CD in a drive
+//
+// Parameters : id              : the drive id
+//
+// Globals    : VolumeName      : filled when found
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+MBCHAR const * c3files_GetVolumeName(int cdIndex)
 {
 #if defined(WIN32)
 	if (cdIndex < 0)
@@ -885,7 +896,24 @@ const MBCHAR *c3files_GetVolumeName(int cdIndex)
 #endif
 }
 
-BOOL c3files_FindCDByName(const CHAR *name)
+//----------------------------------------------------------------------------
+//
+// Name       : c3files_FindCDByName
+//
+// Description: Determine whether a named disk is in some CD drive.
+//
+// Parameters : name            : the name of the disk to look for
+//
+// Globals    : g_theProfileDB  : CD is required
+//              g_hasCD         : updated
+//              WhichCD         : updated
+//
+// Returns    : bool            : CD has been found (or is not required yet)
+//
+// Remark(s)  : Assumption      : name is non-NULL, name is zero-terminated
+//
+//----------------------------------------------------------------------------
+bool c3files_FindCDByName(MBCHAR const * name)
 {
 	sint32	i;
 	BOOL	found = FALSE;

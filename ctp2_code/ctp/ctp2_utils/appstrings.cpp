@@ -1,10 +1,8 @@
 /**
  * $Id$
  */
-#include "ctp2_config.h"
-#include "c3types.h"
-
 #include "c3.h"
+#include "appstrings.h"
 
 #if defined(HAVE_SYS_TYPES_H)
 #include <sys/types.h>
@@ -16,18 +14,16 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "appstrings.h"
 #include "c3errors.h"
+#include "ctp2_config.h"
+#include "c3types.h"
 
-static MBCHAR **s_appStrings;
-static sint32	s_numAppStrings;
+
+static MBCHAR **    s_appStrings        = NULL;
+static size_t      s_numAppStrings     = 0;
 
 void appstrings_Initialize(void)
 {
-	s_appStrings = NULL;
-	s_numAppStrings = 0;
-
-	
 	FILE *inFile = fopen("appstr.txt", "rt");
 	if (!inFile) {
 		c3errors_FatalDialog("appstr.txt", "Unable to open appstr.txt. Terminating app.");
@@ -62,11 +58,13 @@ void appstrings_Cleanup(void)
 	}
 	
 	delete[] s_appStrings;
+	s_appStrings    = NULL;
+	s_numAppStrings = 0;
 }
 
 MBCHAR *appstrings_GetString(APPSTR stringID)
 {
-	if (stringID >= 0 && stringID < s_numAppStrings) {
+	if (stringID >= 0 && static_cast<size_t>(stringID) < s_numAppStrings) {
 		return s_appStrings[stringID];
 	} else {
 		return NULL;

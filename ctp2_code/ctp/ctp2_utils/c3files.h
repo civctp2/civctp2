@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header file
-// Description  :
+// File type    : C++ header
+// Description  : File handling
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -18,15 +18,20 @@
 //
 // Compiler flags
 //
+// _WIN32
+// - Microsoft Windows version
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __C3FILES_H__
 #define __C3FILES_H__
 
@@ -89,18 +94,18 @@ sint32		c3files_ferror(FILE *);
 void		c3files_clearerr(FILE *);
 sint32		c3files_fflush(FILE *);
 
-sint32		c3files_getfilesize(C3DIR dir, const MBCHAR *filename);
-uint8		*c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size);
+sint32		c3files_getfilesize(C3DIR dir, MBCHAR const * filename);
+uint8 *      c3files_loadbinaryfile(C3DIR dir, MBCHAR const *filename, sint32 *size);
 
-BOOL		c3files_PathIsValid(const MBCHAR *path);
-BOOL		c3files_CreateDirectory(const MBCHAR *path);
+bool		c3files_PathIsValid(MBCHAR *path);
+bool		c3files_CreateDirectory(MBCHAR const *path);
 
 void		c3files_StripSpaces(MBCHAR *s);
 
 
-sint32		c3files_getfilelist(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<MBCHAR> *plist);
+bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
 #if defined WIN32
-sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
+bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
 
 /** Returns the users CTP2 directory within his/her home.
@@ -114,7 +119,7 @@ sint32		c3files_getfilelist_ex(C3SAVEDIR dirID, const MBCHAR *ext, PointerList<W
 const MBCHAR * c3files_GetCTPHomeDir();
 
 
-BOOL		c3files_HasLegalCD(void);
+bool		c3files_HasLegalCD(void);
 void		c3files_InitializeCD(void);
 /** Returns the count of CD drives installed on the system.
  * On error, -1 is returned.
@@ -155,6 +160,6 @@ const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size, int cdIndex);
 BOOL		c3files_HasCD(void);
 void		c3files_GetCDDrives(void);
 const MBCHAR		*c3files_GetVolumeName(int cdIndex);
-BOOL		c3files_FindCDByName(const CHAR *name);
+bool		c3files_FindCDByName(MBCHAR const * name);
 
 #endif

@@ -29,7 +29,7 @@
 #ifndef AVL_H
 #define AVL_H
 
-
+#include <algorithm>
 #include <iostream>
 #include <utility>
 #include <ostream>
@@ -320,19 +320,6 @@ public:
 
 
 
-   
-inline static int
-MIN(int a, int b) {
-   return  (a < b) ? a : b;
-}
-
-   
-inline static int
-MAX(int a, int b) {
-   return  (a > b) ? a : b;
-}
-
-   
 enum balance_t { LEFT_HEAVY = -1, BALANCED = 0, RIGHT_HEAVY = 1 };
 
    
@@ -414,8 +401,8 @@ AvlNode<KeyType>::RotateTwice(AvlNode<KeyType> * & root, dir_t dir)
    root->mySubtree[otherDir] = oldOtherDirSubtree;
 
       
-   root->mySubtree[LEFT]->myBal  = -MAX(root->myBal, 0);
-   root->mySubtree[RIGHT]->myBal = -MIN(root->myBal, 0);
+   root->mySubtree[LEFT]->myBal  = - std::max<short>(root->myBal, 0);
+   root->mySubtree[RIGHT]->myBal = - std::min<short>(root->myBal, 0);
    root->myBal = 0;
 
       
@@ -576,22 +563,6 @@ AvlNode<KeyType>::Delete(KeyType              key,
    } else  {   
       found = root->myData;  
 
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-
       if ((root->mySubtree[LEFT] == NULL) &&
           (root->mySubtree[RIGHT] == NULL)) {
              
@@ -618,16 +589,6 @@ AvlNode<KeyType>::Delete(KeyType              key,
    }
 
    root->myBal -= decrease;       
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
    if (decrease) {
       if (root->myBal) {
          change = ReBalance(root);  
@@ -648,7 +609,7 @@ int
 AvlNode<KeyType>::Height() const {
    int  leftHeight  = (mySubtree[LEFT])  ? mySubtree[LEFT]->Height()  : 0;
    int  rightHeight = (mySubtree[RIGHT]) ? mySubtree[RIGHT]->Height() : 0;
-   return  (1 + MAX(leftHeight, rightHeight));
+   return  (1 + std::max(leftHeight, rightHeight));
 }
 
 template <class KeyType>

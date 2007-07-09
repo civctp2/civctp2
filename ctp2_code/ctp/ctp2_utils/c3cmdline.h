@@ -9,9 +9,9 @@
 #ifndef _C3CMDLINE_H_
 #define _C3CMDLINE_H_
 
-class aui_Surface; 
-
 class Command;
+
+class aui_Surface; 
 
 struct CommandRecord
 {
@@ -335,7 +335,7 @@ COMMAND(SetGovernorPwReserveCommand);
 
 COMMAND(ToggleCellText);
 COMMAND(ToggleArmyText);
-
+COMMAND(ToggleArmyName);
 
 COMMAND(ArmyClumps);
 

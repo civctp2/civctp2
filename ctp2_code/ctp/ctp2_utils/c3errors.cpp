@@ -35,14 +35,13 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 #include "c3errors.h"
-#include "StrDB.h"
 
 #include "aui_ui.h"
-extern aui_UI *g_ui;
+#include "StrDB.h"      // g_theStringDB
 
 extern StringDB *g_theStringDB ;
+extern aui_UI *g_ui;
 
 void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 {
@@ -104,10 +103,12 @@ void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 	
 	Report("Fatal error.  Aborting.\n");
 
+#if defined(WIN32)
 #ifndef _DEBUG
 #ifndef _BFR_
 	sint32 *s = 0;
 	*s = 0;
+#endif
 #endif
 #endif
 

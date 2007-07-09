@@ -498,13 +498,13 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 	{
 		
 		min_cost = sint32(proposal_sender_result.science * 0.5);
-		max_cost = sint32(MIN(max_cost, proposal_sender_result.science * 3.0));
+	max_cost = std::min(max_cost, proposal_sender_result.science * 3);
 	}
 	else
 	{
 		
 		min_cost = sint32(proposal_sender_result.science * 0.8);
-		max_cost = sint32(MIN(max_cost, proposal_sender_result.science * 2.0));
+		max_cost = std::min(max_cost, proposal_sender_result.science * 2);
 	}
 	sint32 desired_advance = receiver_diplomat.GetDesiredAdvanceFrom(sender, min_cost, max_cost);
 	
