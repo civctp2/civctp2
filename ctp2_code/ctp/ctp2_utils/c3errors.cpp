@@ -58,7 +58,7 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 	
 	Report("Fatal error.  Aborting.\n");
 
-#if defined(WIN32)
+#ifdef WIN32
 #ifndef _DEBUG
 #ifndef _BFR_
 	sint32 *s = 0;

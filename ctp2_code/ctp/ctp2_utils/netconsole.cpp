@@ -1,8 +1,35 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 #include "netconsole.h"
 #include "c3cmdline.h"
+#if defined(WIN32)
 #include <winsock.h>
+#endif
 
 static int s_winsockInitialized = 0;
 
@@ -38,19 +65,10 @@ static void initWinsock()
 	nErrorStatus = WSAStartup(wVersionRequested, &wsaData);
 
 	if(nErrorStatus != 0) {
-		
-		
-
 		return;
 	}
 
-	
-	
 	if( LOBYTE(wsaData.wVersion) != LOBYTE(wVersionRequested) ||  HIBYTE(wsaData.wVersion) != HIBYTE(wVersionRequested) ) {
-		
-		
-		
-		
 		WSACleanup();   
 		return;
 	}
@@ -60,7 +78,6 @@ static void initWinsock()
 
 static void cleanupWinsock()
 {
-
 	if(!s_winsockInitialized)
 		return;
 
@@ -71,8 +88,10 @@ static void cleanupWinsock()
 
 NetConsole::NetConsole(uint16 port)
 {
+#if defined(WIN32)
 	initWinsock();
 	Assert(s_winsockInitialized);
+#endif
 
 	m_listenSock = -1;
 	sint32 i;
@@ -118,7 +137,9 @@ NetConsole::~NetConsole()
 		}
 	}
 
+#if defined(WIN32)
 	cleanupWinsock();
+#endif
 }
 
 void NetConsole::Idle()

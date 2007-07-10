@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -67,7 +58,9 @@ COMMAND(FloodCommand);
 COMMAND(OzoneCommand);
 COMMAND(ToggleFogCommand);
 COMMAND(ToggleSmoothScrollCommand);
+#ifdef WIN32
 COMMAND(DumpCallStackCommand);
+#endif
 COMMAND(ToggleQuitFastCommand);
 COMMAND(ToggleGridCommand);
 COMMAND(ToggleHeraldCommand);

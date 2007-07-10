@@ -78,7 +78,7 @@
 #include "Regard.h"
 
 #include "profileDB.h"
-#include "order.h"
+#include "Order.h"
 
 #include "SlicObject.h"
 #include "SlicEngine.h"
@@ -94,7 +94,12 @@
 #include "SlicSymbol.h"
 #include "SlicNamedSymbol.h"
 #include "sliccmd.h"
+/** \todo Unique header names */
+#ifndef WIN32
+#include "ysc.tab.h"
+#else
 #include "sc.tab.h"
+#endif
 
 #include "watchlist.h"
 
@@ -120,7 +125,7 @@
 #include "Diplomat.h"
 #include "AgreementMatrix.h"
 
-#include "globals.h"
+#include "Globals.h"
 #include "cellunitlist.h"
 #include "ctpaidebug.h"
 
@@ -184,7 +189,7 @@ extern sint32               g_robotMessages;
 #include "SpriteFile.h"
 
 #include "gameinit.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "TurnCnt.h"
 
 #include "civapp.h"
@@ -349,7 +354,9 @@ CommandLine g_commandLine;
                             GrantAdvanceCommand g_grantAdvanceCommand;
                             DumpMessagesCommand g_dumpMessagesCommand;
                             DumpChecksumCommand g_dumpChecksumCommand;
+#ifdef WIN32
                            DumpCallStackCommand g_dumpCallStackCommand;
+#endif
                            MakeCeaseFireCommand g_makeCeaseFireCommand;
                            SetGovernmentCommand g_setGovernmentCommand;
                            CityResourcesCommand g_cityResourcesCommand;
@@ -665,8 +672,10 @@ CommandRecord commands[] = {
 	"tfog - toggle to fog off and on"},
 	{"tsmooth", &g_toggleSmoothScrollCommand,
 	"tsmooth - toggle smooth scroll on and off"},
+#ifdef WIN32
 	{"dumpcallstack", &g_dumpCallStackCommand,
 	"dumpcallstack - test callstack dumpage to file callstack.txt"},
+#endif
 	{"tquitfast", &g_toggleQuitFastCommand,
 	"tquitfast - turn this on to NOT log memory at quit"},
 	{"timprove", &g_terrainImprovementCommand,
@@ -1463,18 +1472,15 @@ void NextStateCommand::Execute(sint32 argc, char **argv)
 {
 	sint32 playerId     = PLAYER_INDEX_VANDALS;
 
-	if (argc >= 2) 
-    {
+	if (argc >= 2) {
 		playerId = atoi(argv[1]);
 		Diplomat::GetDiplomat(playerId).NextStrategicState();
 	}
 
-	if (argc == 3) 
-    {
+	if (argc == 3) {
 		Diplomat::GetDiplomat(playerId).NextDiplomaticState(atoi(argv[2]));		
 	}
-	else 
-    {
+	else {
 		for (sint32 foreignerId = 0; foreignerId < k_MAX_PLAYERS; ++foreignerId) 
         {
 			if (foreignerId != playerId)
@@ -5382,7 +5388,7 @@ void ToggleSmoothScrollCommand::Execute(sint32 argc, char **)
     g_smoothScroll = !g_smoothScroll;
 }
 
-
+#ifdef WIN32
 void DumpCallStackCommand::Execute(sint32 argc, char **)
 
 {
@@ -5399,12 +5405,11 @@ void DumpCallStackCommand::Execute(sint32 argc, char **)
 	
 	fclose(callstack_file);
 }
-
+#endif
 
 void ToggleQuitFastCommand::Execute(sint32 argc, char **)
 {
-#ifdef _DEBUG
-	
+#if defined(_DEBUG) && defined(WIN32)
 	extern bool g_quitfast;
 
     g_quitfast = !g_quitfast;
@@ -5945,8 +5950,6 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 		} while ((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) &&
 			    !gDone); 
 		
-        
-        
     } 
 
 	t = GetTickCount() - t;
@@ -6479,29 +6482,10 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
 		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
-#else
-#ifdef _DEBUG
+#elif defined(_DEBUG) && defined(WIN32)
 		
 		_CrtMemState new_state; 
        _CrtMemCheckpoint(&new_state);
-
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
        l = 0;
        sprintf (buf, "call count %d", new_state.lCounts[1]);       
@@ -6540,7 +6524,6 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
                 k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 									(MBCHAR *)buf, color , 0);
 #endif
-#endif
     }
 
 	g_tiledMap->InvalidateMix();
@@ -6571,7 +6554,7 @@ void CommandLine::DisplayMem()
 	m_displayOffers = FALSE;
     m_display_mem = !m_display_mem; 
 
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(WIN32)
     if (m_display_mem) { 
         _CrtMemState new_state; 
         _CrtMemCheckpoint(&new_state);

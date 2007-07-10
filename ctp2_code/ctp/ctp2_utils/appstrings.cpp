@@ -25,15 +25,16 @@ static size_t	    s_numAppStrings     = 0;
 void appstrings_Initialize(void)
 {
 	FILE *inFile = fopen("appstr.txt", "rt");
-	if (!inFile) return;
+	if (!inFile) {
+		c3errors_FatalDialog("appstr.txt", "Unable to open appstr.txt. Terminating app.");
+	}
 
 	s_appStrings = new MBCHAR *[APPSTR_MAX];
 	s_numAppStrings = APPSTR_MAX;
 
 	MBCHAR inStr[_MAX_PATH];
 
-	for (size_t i = 0; i < s_numAppStrings; ++i) 
-    {
+	for (size_t i = 0; i < s_numAppStrings; ++i) {
 		if (!fgets(inStr, _MAX_PATH, inFile)) {
 			c3errors_FatalDialog("appstr.txt", "Error in appstr.txt.  Terminating app.");
 		}
@@ -41,6 +42,7 @@ void appstrings_Initialize(void)
 		s_appStrings[i] = new MBCHAR[sizeof(inStr) + 1];
 		strcpy(s_appStrings[i], inStr);
 	}
+
 }
 
 void appstrings_Cleanup(void)

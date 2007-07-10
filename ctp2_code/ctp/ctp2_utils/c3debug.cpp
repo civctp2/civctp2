@@ -111,16 +111,6 @@ int c3debug_InitDebugLog()
 		FindClose(lpFileList);
 	}
 
-
-
-
-
-
-
-
-
-
-
 	s_logFileNumber = 0;
 	s_logLinesThisFile = 0;
 
@@ -132,17 +122,14 @@ int c3debug_InitDebugLog()
 	return 0;
 }
 
-int c3debug_dprintfPrefix
-(
-    int             mask, 
-	char const *    file, 
-	int             line
-) 
+int
+c3debug_dprintfPrefix(int mask,
+			   char* file,
+			   int line)
 {
 	g_useMask = mask;
 
-	if (mask & g_debug_mask) 
-    {
+	if (mask & g_debug_mask) {
 		FILE* f = fopen(s_logFileName, "a");
 		
 		

@@ -500,8 +500,9 @@ AvlNode<KeyType>::Insert(Comparable<KeyType> *   item,
                          AvlNode<KeyType>    * & root,
                          int                   & change)
 {
-    if (root == NULL) 
-    {
+
+    if (root == NULL) {
+
         root    = new AvlNode<KeyType>(item);
         change  = HEIGHT_CHANGE;
         return  NULL;
@@ -539,11 +540,13 @@ AvlNode<KeyType>::Delete(KeyType              key,
                          int                & change,
                          cmp_t                cmp)
 {
-    if (root == NULL) 
-    {
+
+    if (root == NULL) {
+
         change = HEIGHT_NOCHANGE;
         return NULL;
     }
+
 
     Comparable<KeyType> * found = NULL;
     int  decrease = 0;
@@ -552,29 +555,22 @@ AvlNode<KeyType>::Delete(KeyType              key,
     cmp_t  result = root->Compare(key, cmp);
     dir_t  dir = (result == MIN_CMP) ? LEFT : RIGHT;
 
-    if (result != EQ_CMP) 
-    {
+    if (result != EQ_CMP) {
+
         found = Delete(key, root->mySubtree[dir], change, cmp);
         if (!found) return found;   
         decrease = result * change;    
-    } 
-    else  
-    {   
+    } else  {   
         found = root->myData;  
 
         if ((root->mySubtree[LEFT] == NULL) &&
-            (root->mySubtree[RIGHT] == NULL)
-           ) 
-        {
+            (root->mySubtree[RIGHT] == NULL)) {
             delete root;
             root = NULL;
             change = HEIGHT_CHANGE;    
             return found;
-        } 
-        else if ((root->mySubtree[LEFT] == NULL) ||
-                 (root->mySubtree[RIGHT] == NULL)
-                ) 
-        {
+        } else if ((root->mySubtree[LEFT] == NULL) ||
+                   (root->mySubtree[RIGHT] == NULL)) {
              AvlNode<KeyType> * toDelete = root;
              root = root->mySubtree[(root->mySubtree[RIGHT]) ? RIGHT : LEFT];
              change = HEIGHT_CHANGE;    
@@ -582,9 +578,9 @@ AvlNode<KeyType>::Delete(KeyType              key,
              toDelete->mySubtree[LEFT] = toDelete->mySubtree[RIGHT] = NULL;
              delete  toDelete;
              return  found;
-        } 
-        else 
-        {
+        } else {
+
+
             root->myData = Delete(key, root->mySubtree[RIGHT],
                                decrease, MIN_CMP);
         }
@@ -596,14 +592,10 @@ AvlNode<KeyType>::Delete(KeyType              key,
         if (root->myBal) 
         {
             change = ReBalance(root);  
-        } 
-        else 
-        {
+        } else {
             change = HEIGHT_CHANGE;   
         }
-    } 
-    else 
-    {
+    } else {
         change = HEIGHT_NOCHANGE;
     }
 

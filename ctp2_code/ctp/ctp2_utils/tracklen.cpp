@@ -1,51 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  :
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - added linux specific code
+//
+//----------------------------------------------------------------------------
 #include "c3.h"
 
 #include <stdio.h>
@@ -62,10 +41,6 @@
 FILE *tracklen_fp = NULL;
 
 char tracklen_buf[512];
-
-
-
-
 
 
 char *tracklen_cryptAscii(char *s)
@@ -95,10 +70,6 @@ char *tracklen_cryptAscii(char *s)
 #define tracklen_DPRINT(ss) fprintf(tracklen_fp, "%s:%d ", "tar", 1000+__LINE__); sprintf ss; fprintf(tracklen_fp, "%s", tracklen_buf)
 #endif
 
-
-
-
-
 static void DMCIError(int error)
 {
 	char szScratch[ MAX_PATH ];
@@ -124,17 +95,6 @@ void tracklen_cryptBinary(char *data, size_t len)
 		data[ index ] ^= p[ index % 400 ];
 }
 
-
-
-
-
-
-
-
-
-
-
-
 static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int wDeviceID )
 {
 	MCI_STATUS_PARMS msp;
@@ -143,7 +103,6 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	long totalLen_ms;
 	int iRet;
 
-	
 	memset(&mp, 0, sizeof(mp));
 	mp.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
 	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD)&mp);
@@ -157,7 +116,6 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	
 	memset(&msp, 0, sizeof(msp));
 	msp.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
-
 	iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&msp );
     if (iRet) 
     {
@@ -172,7 +130,6 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		return __LINE__;
 	}
 
-	
 	for (i = 1; i <= trackLenBuf[0]; i++) {
 		memset(&msp, 0, sizeof(msp));
 		msp.dwItem = MCI_STATUS_LENGTH;
@@ -187,8 +144,6 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		trackLenBuf[i] = msp.dwReturn;
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: track %d len %d\n", i, trackLenBuf[i]));
 	}
-
-	
 	msp.dwItem = MCI_STATUS_LENGTH;
 	iRet = mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD)&msp);
 	if( iRet ) {
@@ -199,11 +154,6 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	totalLen_ms = msp.dwReturn;
 	tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: got disc len %d\n", totalLen_ms ));
 
-	
-	
-	
-
-	
 	if (totalLen_ms < ((74 * 60 + 30) * 1000)) {
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: disc is too short\n"));
 		return __LINE__;
@@ -213,19 +163,8 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		return __LINE__;
 	}
 
-	
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 {
@@ -236,8 +175,6 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	if (!tracklen_fp) tracklen_fp = fopen(tracklen_LOGFILE, "w");
 #endif
 
-
-	
 	memset(&mop, 0, sizeof(mop));
 	mop.lpstrDeviceType = (LPCSTR)(MCI_DEVTYPE_CD_AUDIO);
 	mop.lpstrAlias = NULL;
@@ -271,16 +208,6 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	return iRet;
 }
 
-
-
-
-
-
-
-
-
-
-
 static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 {
 	if( !trackLenBuf )
@@ -288,8 +215,7 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 
 	tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: begin\n" ));
 
-	
-	int i;
+	int i = 0;
 	HWND hCD;
 	for (i=0; (hCD=FindWindow( "SJE_CdPlayerClass",NULL)) && i<100; i++) {
 		tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: Shutting down CD player\n" ));
@@ -345,12 +271,6 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 	tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: failure!\n"));
 	return __LINE__;
 }
-
-
-
-
-
-
 
 DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 {
@@ -414,24 +334,6 @@ char *GetVersionInfo( DWORD *trackLenBuffer )
 
 	return( szVersionPtr );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
 {
@@ -498,11 +400,7 @@ BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
 #define AUTORUN_DISABLE 0xff
 
 
-
-
 static ULONG s_oldAutoRunValue = AUTORUN_UNKNOWN;
-
-
 
 
 void tracklen_AutoPlay_Disable()
@@ -510,17 +408,9 @@ void tracklen_AutoPlay_Disable()
 	int res;
 	HKEY hkey;
 
-	
-
-
-
 	hkey = NULL;
 	res = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_ALL_ACCESS, &hkey);
 	if (res == ERROR_SUCCESS) {	
-		
-		
-		
-		
 		if (s_oldAutoRunValue == AUTORUN_UNKNOWN) {
 			unsigned long ulDataSize = sizeof(s_oldAutoRunValue);
 			res = RegQueryValueEx(hkey, "NoDriveTypeAutoRun", 0, NULL, (unsigned char*)&s_oldAutoRunValue, &ulDataSize);
@@ -535,9 +425,6 @@ void tracklen_AutoPlay_Disable()
 	 }
 }
 
-
-
-
 void tracklen_AutoPlay_Restore()
 {	
 	int res;
@@ -548,7 +435,6 @@ void tracklen_AutoPlay_Restore()
 		return;
 	}
 
-	
 	res = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 0, KEY_ALL_ACCESS, &hkey);
 	if (res == ERROR_SUCCESS) {	
 		RegSetValueEx(hkey, "NoDriveTypeAutoRun", 0, REG_BINARY, (const unsigned char*)&s_oldAutoRunValue, 4);
