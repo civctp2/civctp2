@@ -353,7 +353,6 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 	}
 
 	tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: failure!\n"));
-
 	return __LINE__;
 }
 

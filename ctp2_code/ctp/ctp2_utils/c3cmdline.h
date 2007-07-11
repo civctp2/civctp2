@@ -10,6 +10,7 @@
 #define _C3CMDLINE_H_
 
 class Command;
+class CommandLine;
 
 class aui_Surface; 
 

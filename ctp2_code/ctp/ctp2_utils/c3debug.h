@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header file
+// File type    : C++ header
 // Description  :
 // Id           : $Id$
 //

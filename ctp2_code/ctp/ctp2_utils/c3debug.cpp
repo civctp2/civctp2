@@ -176,9 +176,7 @@ c3debug_dprintfPrefix(int mask,
 	return 0;
 }
 
-int
-c3debug_dprintf(char* format, 
-		...) 
+int c3debug_dprintf(char const * format, ...) 
 {
 	va_list list;
 	if(g_debug_mask & g_useMask) {
@@ -317,7 +315,7 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 }
 #endif // WIN32
 
-void c3debug_Assert(char *s, char *file, int line)
+void c3debug_Assert(char const *s, char const * file, int line)
 {
 	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line));
 

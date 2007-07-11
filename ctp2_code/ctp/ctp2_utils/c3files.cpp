@@ -44,6 +44,7 @@
 #include "c3ui.h"
 #include "pointerlist.h"
 #include "profileDB.h"
+#include "soundmanager.h"
 #include "tracklen.h"
 
 #ifdef HAVE_SYS_STAT_H
@@ -364,7 +365,7 @@ bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list
 
 	lpFileList = FindFirstFile(path,&fileData);
 	
-	if (lpFileList ==  INVALID_HANDLE_VALUE) return FALSE;
+	if (lpFileList ==  INVALID_HANDLE_VALUE) return false;
 	
 	lpFileName = new MBCHAR[256];
 	strcpy(lpFileName,fileData.cFileName);
@@ -518,7 +519,7 @@ const MBCHAR *c3files_GetCTPHomeDir()
 
 bool c3files_HasLegalCD()
 {
-	BOOL success = FALSE;
+	bool success = false;
 
 	if (g_soundManager) {
 		g_soundManager->CleanupRedbook();
@@ -527,7 +528,6 @@ bool c3files_HasLegalCD()
 	while (!success) {
 
 		success = c3files_FindCDByName(k_CTP_CD_VOLUME_NAME);
-
 
 		if (success && g_theProfileDB->IsProtected()) {		
 success = (_TRACKLEN_OK == tracklen_CheckTrackLengths());

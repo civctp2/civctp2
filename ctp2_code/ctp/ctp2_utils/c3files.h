@@ -35,7 +35,16 @@
 #ifndef __C3FILES_H__
 #define __C3FILES_H__
 
-template <class T> class PointerList;
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// typename FILE;
+// typename MBCHAR;
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 enum C3DIR {
 	C3DIR_DIRECT	= -1,	
@@ -69,6 +78,18 @@ enum C3SAVEDIR {
 
 	C3SAVEDIR_MAX
 };
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
+
+#include "ctp2_inttypes.h"     // uint8, sint32
+
+template <class T> class PointerList;
+
+//----------------------------------------------------------------------------
+// Class declarations
+//----------------------------------------------------------------------------
 
 FILE*		c3files_fopen(C3DIR dirID, const MBCHAR *, const MBCHAR *);
 FILE*		c3files_freopen(const MBCHAR *, const MBCHAR *, FILE *);

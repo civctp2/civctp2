@@ -501,11 +501,8 @@ AvlNode<KeyType>::Insert(Comparable<KeyType> *   item,
       return  NULL;
    }
 
-      
    Comparable<KeyType> * found = NULL;
    int  increase = 0;
-
-      
    cmp_t  result = root->Compare(item->Key());
    dir_t  dir = (result == MIN_CMP) ? LEFT : RIGHT;
 
@@ -521,10 +518,6 @@ AvlNode<KeyType>::Insert(Comparable<KeyType> *   item,
 
    root->myBal += increase;    
 
-  
-  
-  
-  
 
    change =  (increase && root->myBal)
                   ? (1 - ReBalance(root))
@@ -565,14 +558,12 @@ AvlNode<KeyType>::Delete(KeyType              key,
 
       if ((root->mySubtree[LEFT] == NULL) &&
           (root->mySubtree[RIGHT] == NULL)) {
-             
          delete  root;
          root = NULL;
          change = HEIGHT_CHANGE;    
          return  found;
       } else if ((root->mySubtree[LEFT] == NULL) ||
                  (root->mySubtree[RIGHT] == NULL)) {
-            
          AvlNode<KeyType> * toDelete = root;
          root = root->mySubtree[(root->mySubtree[RIGHT]) ? RIGHT : LEFT];
          change = HEIGHT_CHANGE;    

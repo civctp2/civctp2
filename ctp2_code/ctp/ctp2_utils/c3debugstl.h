@@ -64,8 +64,13 @@ public:
 	    }
 	};
 	
-	void deallocate(void _FARQ *_P, size_type)
-		{if (_P) operator delete(_P); }
+       void deallocate(void _FARQ *_P, size_type _N)
+       {
+        if (_P)
+        {
+            BaseAllocator::deallocate(_P, _N);
+        }
+    }
 };
 #else
 // TODO: Make the debug allocator std::allocator compliant.

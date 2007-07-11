@@ -195,7 +195,7 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 	}
 #endif
 
-	if(result == IDNO){
+	if(result == IDNO) {
 		exit(1);
 	}
 

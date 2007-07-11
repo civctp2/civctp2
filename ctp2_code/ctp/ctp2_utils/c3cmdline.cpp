@@ -3108,7 +3108,8 @@ void BuildWonderCommand::Execute(sint32 argc, char **argv)
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
-		g_player[player]->BuildWonder(atoi(argv[1]), item);
+		g_player[player]->BuildWonder(atoi(argv[1]),
+						Unit(item));
 	}
 }
 
@@ -5783,8 +5784,7 @@ void ImproveCommand::Execute(sint32 argc, char** argv)
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if(state == SELECT_TYPE_LOCAL_CITY) {
-		Unit unit = Unit(item);
-		g_player[player]->BuildImprovement(atoi(argv[1]), unit);
+		g_player[player]->BuildImprovement(atoi(argv[1]), Unit(item));
 	}
 }
 
@@ -6405,7 +6405,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 
 
 		}
-		if(commands[i].m_name != NULL) {
+		if(commands[i].m_name) {
 			
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
 			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,

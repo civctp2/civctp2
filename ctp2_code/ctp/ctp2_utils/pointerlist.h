@@ -77,34 +77,33 @@ public:
 		PointerListNode* m_prev;
 	};
 
-	PointerList(const bool deleteObjs = false)
-	:	m_head(NULL), 
+	PointerList() : m_head(NULL),
 		m_tail(NULL),
-		m_count(0),
-		m_deleteObjs(deleteObjs)
-	{ }
+				m_count(0)
+    { ; };
 
-	~PointerList() 
+	virtual ~PointerList() 
 	{
-		DeleteAll(m_deleteObjs);
+		while (m_head)
+        {
+			PointerListNode * node = m_head;
+			m_head = m_head->m_next;
+			delete node;
 	}
+	};
 
-	void DeleteAll(const bool deleteObjs = true)
+	void DeleteAll()
 	{
 		while (m_head) 
 		{
 			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
-			if (m_deleteObjs)
 				delete node->m_obj;
-			node->m_next = NULL;
-			node->m_obj = NULL;
-			node->m_prev = NULL;
 			delete node;
 		}
 		m_tail = NULL;
 		m_count = 0;
-	}
+	};
 
 	void AddTail(T* obj);
 	void AddHead(T* obj);
@@ -192,26 +191,22 @@ public:
 
 	class Walker {
 	public:
-		Walker(PointerList* list) :
-			m_node(list->m_head),
+		Walker(PointerList * list = NULL)
+        :
+            m_node  (list ? list->m_head : NULL),
 			m_list(list)
 		{
 		};
 
-		Walker() :
-			m_node(NULL),
-			m_list(NULL)
+		void SetList(PointerList *list)
 		{
-		}
-
-		void SetList(PointerList *list) {
-			m_node = list->m_head;
+           m_node = list ? list->m_head : NULL;
 			m_list = list;
 		}
 		void Next() { Assert(m_node); m_node = m_node->GetNext(); }
 		void Prev() { Assert(m_node); m_node = m_node->GetPrev(); }
-		int IsValid() { return m_node != NULL; }
-		T *GetObj() { return m_node->GetObj(); }
+		bool IsValid() { return m_node != NULL; }
+		T *GetObj() { Assert(m_node); return m_node->GetObj(); }
 		T *Remove() 
 		{ 
 			T *obj = m_node->GetObj();
@@ -255,12 +250,10 @@ private:
 
 	sint32 m_count;
 
-	bool m_deleteObjs;
-
 	friend class Walker;
 };
 
-template <class T> inline void PointerList<T>::AddTail(T *obj)
+template <class T> void PointerList<T>::AddTail(T *obj)
 {
 	PointerListNode* node = new PointerListNode(obj);
 	if(m_tail) {
@@ -272,7 +265,7 @@ template <class T> inline void PointerList<T>::AddTail(T *obj)
 	m_count++;
 }
 
-template <class T> inline void PointerList<T>::AddHead(T *obj)
+template <class T> void PointerList<T>::AddHead(T *obj)
 {
 	PointerListNode* node = new PointerListNode(obj);
 	if(m_head) {
@@ -284,7 +277,7 @@ template <class T> inline void PointerList<T>::AddHead(T *obj)
 	m_count++;
 }
 
-template <class T> inline T* PointerList<T>::RemoveHead()
+template <class T> T* PointerList<T>::RemoveHead()
 {
 	if(!m_head)
 		return NULL;
@@ -307,21 +300,21 @@ template <class T> inline T* PointerList<T>::RemoveHead()
 	return obj;
 }
 
-template <class T> inline T* PointerList<T>::GetHead()
+template <class T> T* PointerList<T>::GetHead()
 {
 	if(!m_head)
 		return NULL;
 	return m_head->m_obj;
 }
 
-template <class T> inline T* PointerList<T>::GetTail()
+template <class T> T* PointerList<T>::GetTail()
 {
 	if(!m_tail)
 		return NULL;
 	return m_tail->m_obj;
 }
 
-template <class T> inline T* PointerList<T>::RemoveTail()
+template <class T> T* PointerList<T>::RemoveTail()
 {
 	if(!m_tail)
 		return NULL;
@@ -344,7 +337,7 @@ template <class T> inline T* PointerList<T>::RemoveTail()
 	return obj;
 }
 
-template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
+template <class T> void PointerList<T>::Remove(PointerListNode* node)
 {
 	if (!node)
 		return;
@@ -390,7 +383,7 @@ template <class T> inline void PointerList<T>::Remove(PointerListNode* node)
 }
 
 
-template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
+template <class T> void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
 {
 	if (node) 
     {
@@ -414,7 +407,7 @@ template <class T> inline void PointerList<T>::InsertAt(PointerListNode *node, T
 	} 
 }
 
-template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
+template <class T> void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
 {
     if (node)
     {
@@ -440,12 +433,14 @@ template <class T> inline void PointerList<T>::InsertBefore(PointerListNode *nod
 	
 template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
 {
-	PointerListNode *search = m_head;
-	while(search) {
+	for (PointerListNode * search = m_head; search; search = search->m_next)
+    {
 		if(search->m_obj == obj)
+         {
 			return search;
-		search = search->m_next;
 	}
+	}
+
 	return NULL;
 }
 
