@@ -32,6 +32,8 @@
 
 #if defined(WIN32)
 #include <windows.h>
+#else
+#include "windows.h"
 #endif
 
 #ifdef __cplusplus

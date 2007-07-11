@@ -1,6 +1,9 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
+#include "ctp2_config.h"
+
 #ifdef _PLAYTEST
 
 #ifndef _C3CMDLINE_H_
@@ -405,6 +408,7 @@ private:
 };
 
 extern CommandLine g_commandLine;
-
+#else
+class CommandLine;
 #endif
 #endif

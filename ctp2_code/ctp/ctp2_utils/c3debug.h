@@ -26,15 +26,17 @@
 //
 // - Marked MS specific pragma
 // - Corrected include dependency.
+// - Report for !WIN32 on stderr
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef C3DEBUG_H__
-#define C3DEBUG_H__
+#ifndef __C3DEBUG_H__
+#define __C3DEBUG_H__
 
+#include "ctp2_config.h"
 #include "c3.h"	
 #undef Assert	
 

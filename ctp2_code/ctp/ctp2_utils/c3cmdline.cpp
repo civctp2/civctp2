@@ -1468,8 +1468,8 @@ void ShowDiplomacyCommand::Execute(sint32 argc, char **argv) {
 }
 
 
-void NextStateCommand::Execute(sint32 argc, char **argv) 
-{
+void NextStateCommand::Execute(sint32 argc, char **argv) {
+
 	sint32 playerId     = PLAYER_INDEX_VANDALS;
 
 	if (argc >= 2) {
@@ -3263,7 +3263,7 @@ void SaveBuildQueueCommand::Execute(sint32 argc, char **argv)
 		return;
 
 	Assert(argv[1] != NULL);
-	Assert(argv[1][0] != NULL);
+	Assert(argv[1][0] != '\0');
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if (state != SELECT_TYPE_LOCAL_CITY)
@@ -3434,7 +3434,7 @@ void LoadBuildQueueCommand::Execute(sint32 argc, char **argv)
 		return;
 
 	Assert(argv[1] != NULL);
-	Assert(argv[1][0] != NULL);
+	Assert(argv[1][0] != '\0');
 
 	g_selected_item->GetTopCurItem(player, item, state);
 	if (state != SELECT_TYPE_LOCAL_CITY)
@@ -5917,7 +5917,11 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
     n = atoi(argv[1]); 
 
 	sint32 t = GetTickCount();
-	MSG	msg;
+#ifdef __AUI_USE_SDL__
+	SDL_Event event;
+#else
+	MSG     msg;
+#endif
 
 	g_doingFastRounds = TRUE;
 
@@ -5932,10 +5936,29 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
             if (g_civApp)
     			g_civApp->Process();
 
+#if __AUI_USE_SDL__
+			while (1) {
+				int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
+						~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
+							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+				if (0 > n) {
+					fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed: %s\n",
+					    SDL_GetError());
+					break;
+				}
+				if (0 == n) {
+					// other events are handled in other threads
+					// or no more events
+					break;
+				}
+				if (SDL_QUIT == event.type)
+#else
           	while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
-			    if (msg.message == WM_QUIT)
-				    gDone = TRUE;
 
+			    if (msg.message == WM_QUIT)
+#endif
+				    gDone = TRUE;
+#ifndef __AUI_USE_SDL__
 			    TranslateMessage(&msg);
 				
 				if (msg.message == WM_CHAR) {
@@ -5944,6 +5967,14 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 				}
 
 			    DispatchMessage(&msg);
+#else
+				if (SDL_KEYDOWN == event.type)
+				{
+					SDL_KeyboardEvent key = event.key;
+					if (SDLK_ESCAPE == key.keysym.sym)
+						i = n;
+					}
+#endif
     		}
        		g_letUIProcess = FALSE;
 
@@ -6311,8 +6342,9 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 
 	MBCHAR filename[_MAX_PATH];
 	g_civPaths->FindFile(C3DIR_SOUNDS, "pct.wav", filename);
+#ifdef WIN32
     PlaySound (filename, NULL, SND_ASYNC | SND_FILENAME);
-
+#endif
 	return;
 }
 
@@ -6378,8 +6410,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 
 
 		}
-		if (commands[i].m_name) 
-		{
+		if (commands[i].m_name) {
 			
 			sprintf(buf, "[~help %d] for next page", (m_helpStart / k_HELP_LINES) + 1);
 			primitives_DrawText(surf, k_LEFT_EDGE, (k_TOP_EDGE + k_TEXT_SPACING) + (i - m_helpStart) * k_TEXT_SPACING,

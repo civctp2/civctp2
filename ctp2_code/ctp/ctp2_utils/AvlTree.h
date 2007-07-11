@@ -284,7 +284,7 @@ private:
 public:
       
    AvlTree() : myRoot(NULL) {};
-   ~AvlTree() { delete myRoot; }
+   ~AvlTree() { if (myRoot)  delete myRoot; }
 
       
    void

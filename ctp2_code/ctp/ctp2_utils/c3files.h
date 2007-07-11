@@ -47,8 +47,7 @@
 // Export overview
 //----------------------------------------------------------------------------
 
-enum C3DIR 
-{
+enum C3DIR {
 	C3DIR_DIRECT	= -1,	
 
 	C3DIR_GAMEDATA,			
@@ -70,8 +69,7 @@ enum C3DIR
 	C3DIR_MAX
 };
 
-enum C3SAVEDIR 
-{
+enum C3SAVEDIR {
 	C3SAVEDIR_GAME,
 	C3SAVEDIR_QUEUES,
 	C3SAVEDIR_MP,

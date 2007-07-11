@@ -34,11 +34,16 @@
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
+#include <sys/types.h>
+#if !defined(WIN32)
+#include <dirent.h>
+#endif
+
 #include "aui.h"
 #include "debugwindow.h"
 #include "civ3_main.h"
 #include "netconsole.h"
-
+#include "c3files.h"
 
 #ifndef _NO_GAME_WATCH
 
@@ -218,6 +223,7 @@ c3debug_SetDebugMask(int mask, int set)
 }
 
 
+#ifdef WIN32
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers)
 {
 	MBCHAR *s;
@@ -301,6 +307,7 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 		DoFinalCleanup();
 	}
 }
+#endif
 
 void c3debug_Assert(char const *s, char const * file, int line)
 {
