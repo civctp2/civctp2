@@ -1,15 +1,6 @@
-
-
-
-
-
-
-
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifde HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
 #ifndef _NET_UNIT_H_
 #define _NET_UNIT_H_
 

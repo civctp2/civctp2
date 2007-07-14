@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generates debug information when set.
 //
@@ -39,10 +39,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "network.h"
-
 #include "Cell.h"
+
 #include "net_types.h"
+#include "network.h"
 #include "net_io.h"
 #include "net_anet.h"
 #include "net_thread.h"
@@ -164,7 +164,7 @@ extern CivApp *g_civApp;
 
 #include "controlpanelwindow.h"
 #include "MainControlPanel.h"
-extern ControlPanelWindow		*g_controlPanel;
+extern ControlPanelWindow     *g_controlPanel;
 
 #include "RandGen.h"
 #include "stringutils.h"
@@ -233,7 +233,7 @@ namespace
 		};
 	
 	private:
-		Packetizer *	m_Packet;
+		Packetizer * m_Packet;
 	};
 
 } // namespace
@@ -564,29 +564,29 @@ void Network::InitFromNetFunc()
 				strcpy(nonConstStr, "Waiting on data");
 		}
 			c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
-	}
+		}
 }
 }
 
 void Network::SetNSPlayerInfo(uint16 id,
-							  char const *name,
-							  int civ,
-							  int group,
-							  int civpoints,
-							  int settlers)
+                              char const *name,
+                              int civ,
+                              int group,
+                              int civpoints,
+                              int settlers)
 {
 	if(group > 0) {
 		m_teamsEnabled = TRUE;
 	}
 
 	m_nsPlayerInfo->AddTail(new NSPlayerInfo(id, name, civ, group, civpoints,
-											 settlers));
+                                              settlers));
 }
 
 void Network::SetNSAIPlayerInfo(int civ,
-								int group,
-								int civpoints,
-								int settlers)
+                                int group,
+                                int civpoints,
+                                int settlers)
 {
 	m_nsAIPlayerInfo->AddTail(new NSAIPlayerInfo(civ, group, civpoints, settlers));
 }
@@ -782,12 +782,9 @@ Network::Process()
 	}
 
 	if(m_gameStyle & k_GAME_STYLE_TOTAL_TIME) {
-		if (    IsMyTurn() 
-             && (m_totalTimeUsed + static_cast<sint32>(time(0) - m_turnStartedAt) > 
-                 m_totalStartTime
-                )
-           ) 
-        {
+		if (IsMyTurn() &&
+		    (m_totalTimeUsed + static_cast<sint32>(time(0) - m_turnStartedAt) > m_totalStartTime)) {
+
 			g_player[g_selected_item->GetCurPlayer()]->
 				GameOver(GAME_OVER_LOST_OUT_OF_TIME, -1);
 		}
@@ -922,9 +919,9 @@ void Network::Join(sint32 index )
 
 void
 Network::EnumTransport(NET_ERR result, 
-					   sint32 index,      
-					   const char* transname, 
-					   void* transdata) 
+                       sint32 index,      
+                       const char* transname, 
+                       void* transdata) 
 {
 	DPRINTF(k_DBG_NET, ("Transport %d: %s\n", index, transname));
 
@@ -943,9 +940,9 @@ Network::EnumTransport(NET_ERR result,
 
 void
 Network::EnumSession(NET_ERR result, 
-					 sint32 index,      
-					 const char* sessionName, 
-					 void* sessionData) 
+                     sint32 index,      
+                     const char* sessionName, 
+                     void* sessionData) 
 {
 	if(result == NET_ERR_OK) {
 		DPRINTF(k_DBG_NET, ("Session %d: %s\n", index, sessionName));
@@ -1052,9 +1049,9 @@ Network::GetHandler(uint8* buf,
 }
 
 
-void Network::PacketReady(sint32 from, 
-						  uint8* buf, 
-						  sint32 size) 
+void Network::PacketReady(sint32 from,
+                          uint8* buf, 
+                          sint32 size) 
 {
 	if(m_deleting)
 		return;
@@ -1075,8 +1072,8 @@ void Network::PacketReady(sint32 from,
 }
 
 
-void Network::AddPlayer(uint16 id, 
-						char* name) 
+void Network::AddPlayer(uint16 id,
+                        char* name) 
 {
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
@@ -1085,7 +1082,7 @@ void Network::AddPlayer(uint16 id,
 	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 		if(m_playerData[i] && m_playerData[i]->m_id == id) {
 			DPRINTF(k_DBG_NET, ("AddPlayer(%d) but already have that player.\n",
-								id));
+			                     id));
 			return;
 		}
 	}
@@ -1094,7 +1091,7 @@ void Network::AddPlayer(uint16 id,
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_id == id) {
 			DPRINTF(k_DBG_NET, ("AddPlayer(%d), but player %d (%s) is already in the new player list\n",
-								id, name));
+			                    id, name));
 			return;
 		}
 		walk.Next();
@@ -1254,7 +1251,7 @@ void Network::ChangeHost(uint16 id)
 		strcpy(nonConstStr, str);
 	} else {
 		strcpy(nonConstStr, "Waiting on data");
-}
+	}
 	c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback );
 }
 
@@ -1297,12 +1294,12 @@ void Network::SetReady(uint16 id)
 	QueuePacket(player->m_id, new NetCRC());
 
 	QueuePacket(player->m_id, new NetGameSettings(size->x, size->y,
-												  g_theProfileDB->GetNPlayers(),
-												  m_gameStyle,
-												  m_unitMovesPerSlice,
-												  m_totalStartTime,
-												  m_turnStartTime,
-												  m_extraTimePerCity));
+						      g_theProfileDB->GetNPlayers(),
+						      m_gameStyle,
+						      m_unitMovesPerSlice,
+						      m_totalStartTime,
+						      m_turnStartTime,
+						      m_extraTimePerCity));
 
 	
 	NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX, 

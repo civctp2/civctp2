@@ -92,24 +92,24 @@ private:
 									void* context);
 
 	sint32 SessionCallback(dp_session_t* sDesc,
-						   long * pTimeout,
-						   long flags);
+						  long * pTimeout,
+						  long flags);
 	friend int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
 									 long * pTimeout,
 									 long flags,
 									 void* context);
 
 	sint32 SessionReadyCallback(dp_session_t* ps,
-							    long * pTimeout,
-							    long flags);
+							   long * pTimeout,
+							   long flags);
 	friend int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
-												 long *pTimeout,
-												 long flags,
+							 long *pTimeout,
+							 long flags,
 							 void* context);
 
 	void PlayerReady(dpid_t id, dp_char_t *name, sint32 flags);
 	friend void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, dp_char_t *name,
-												long flags, void *context);
+							long flags, void *context);
 
 
 	void PlayerCallback(dpid_t id, dp_char_t *name,	long flags);

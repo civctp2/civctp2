@@ -33,11 +33,11 @@
 
 #include "c3.h"
 #include "net_thread.h"
-
 #include "net_types.h"
 #include "net_util.h"
 #include "SimpleDynArr.h"
 #include "zlib.h"
+
 #if defined(_DEBUG)
 #include "debug.h"  // Os::SetThreadName
 #endif
@@ -161,7 +161,13 @@ NetThread::~NetThread()
 	}
 }
 
+#ifdef USE_SDL
+static int NetThread_StartThread(void *obj)
+#elif defined(WIN32)
 DWORD WINAPI NetThread_StartThread(LPVOID obj)
+#else
+#error "Threading not implemented."
+#endif
 {
 	NetThread *threadObj = (NetThread*)obj;
 	threadObj->Run();
@@ -181,7 +187,11 @@ NetThread::NetThread()
 	m_anet = NULL;
 	m_exit = m_exited = FALSE;
 
+#ifdef USE_SDL
+	m_mutex = SDL_CreateMutex();
+#elif defined(WIN32)
 	InitializeCriticalSection(&m_mutex);
+#endif
 	m_setMaxPlayers = -1;
 	m_kickPlayers = new SimpleDynamicArray<uint16>;
 }
@@ -190,12 +200,16 @@ NET_ERR NetThread::Init(NetIOResponse *response)
 {
 	NetIO::Init(response);
 
+#ifdef USE_SDL
+	if ((m_thread = SDL_CreateThread(NetThread_StartThread, this)) == NULL) {
+#elif defined(WIN32)
 	if((m_threadHandle = CreateThread(NULL,
 									  0,
 									  NetThread_StartThread,
 									  this,
 									  0,
 									  &m_threadId)) == NULL) {
+#endif
 		DPRINTF(k_DBG_NET, ("Failed to start thread\n"));
 	}
 	return NET_ERR_OK;
@@ -206,11 +220,17 @@ void NetThread::Run()
 	TPacketData *packet;
 
 #if defined(_DEBUG)
+#ifndef USE_SDL
 	Os::SetThreadName("NetThread::Run");
+#endif
 #endif
 
 	while(!m_exit) {
+#ifdef WIN32
 		Sleep(100);
+#else
+		usleep(100);
+#endif
 		if(m_anet) {
 			if(m_dp) {
 				
@@ -285,7 +305,11 @@ void NetThread::Run()
 
 void NetThread::Lock()
 {
+#ifdef USE_SDL
+	SDL_mutexP(m_mutex);
+#else
 	EnterCriticalSection(&m_mutex);
+#endif
 }
 
 void NetThread::Unlock()

@@ -28,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifde HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __NET_CRC_H__

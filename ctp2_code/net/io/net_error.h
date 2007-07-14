@@ -1,4 +1,7 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
+
 #if 0
 #ifndef _NET_ERROR_H_
 #define _NET_ERROR_H_

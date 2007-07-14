@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer feat packet handler.
-// Id           : $Id:$
+// Id           : $Id net_feat.cpp 442 2005-08-28 18:05:04Z Martin Gühmann $
 //
 //----------------------------------------------------------------------------
 //

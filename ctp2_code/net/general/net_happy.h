@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_SHINY_HAPPY_CODE_H__
 #define __NET_SHINY_HAPPY_CODE_H__
 

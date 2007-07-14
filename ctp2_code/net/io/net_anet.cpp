@@ -51,8 +51,7 @@ ActivNetIO::~ActivNetIO()
 		dpDestroy(m_dp, 0);
 	}
 
-	while (!m_playerList.IsEmpty()) 
-    {
+	while (!m_playerList.IsEmpty()) {
 		delete m_playerList.RemoveHead();
 	}
 
@@ -244,10 +243,11 @@ ActivNetIO::SetTransport(sint32 trans_id)
 	return NET_ERR_ALREADYOPEN;
 }
 
+
 int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
-									  long *pTimeout,
-									  long flags,
-									  void* context)
+					long *pTimeout,
+					long flags,
+					void* context)
 {
 	
 	return ((ActivNetIO*)context)->SessionReadyCallback(ps, pTimeout, flags);
@@ -255,7 +255,7 @@ int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
 
 
 void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, dp_char_t *name,
-									long flags, void *context)
+					long flags, void *context)
 {
 	
 	((ActivNetIO*)context)->PlayerReady(id, name, flags);
@@ -275,15 +275,11 @@ ActivNetIO::PlayerReady(dpid_t id, dp_char_t * name, sint32 flags)
 
 sint32
 ActivNetIO::SessionReadyCallback(dp_session_t *ps,
-								 long * pTimeout,
-								 long flags)
+				  long * pTimeout,
+				  long flags)
 {
 	if(ps) {
 		m_session = *ps;
-
-		
-		
-		
 		
 		m_sessionState = SESSION_STATE_CREATE_PLAYER;
 	} else {
@@ -331,9 +327,9 @@ ActivNetIO::Host(char* sessionName)
 
 
 int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
-										long *pTimeout,
-										long flags,
-										void* context)
+					long *pTimeout,
+					long flags,
+					void* context)
 {
 	
 	return ((ActivNetIO*)context)->SessionCallback(sDesc, pTimeout, flags);
@@ -342,8 +338,8 @@ int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
 
 sint32
 ActivNetIO::SessionCallback(dp_session_t *sDesc, 
-							 long *pTimeout, 
-							 long flags)
+			long *pTimeout, 
+			long flags)
 {
 	if(sDesc) {
 		

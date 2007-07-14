@@ -1,4 +1,6 @@
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_ACHIEVEMENT_H__
 #define __NET_ACHIEVEMENT_H__
 

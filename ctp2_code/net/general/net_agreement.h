@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#igdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef _NET_AGREEMENT_H_
 #define _NET_AGREEMENT_H_
 

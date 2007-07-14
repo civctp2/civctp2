@@ -1,7 +1,8 @@
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __NET_THREAD_H__
 #define __NET_THREAD_H__
 
@@ -10,7 +11,10 @@
 #include "net_array.h"
 #include "pointerlist.h"
 #include "net_anet.h"
-
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
 
 #define k_MAX_NETWORK_PLAYERS 32
 	
@@ -62,9 +66,15 @@ private:
 	PointerList<TPacketData> *m_outgoing[k_MAX_NETWORK_PLAYERS];
 	uint16 m_ids[k_MAX_NETWORK_PLAYERS];
 	PointerList<TPacketData> *m_incoming;
++#ifndef USE_SDL
 	DWORD m_threadId;
 	HANDLE m_threadHandle;
 	CRITICAL_SECTION m_mutex;
+#else
+	Uint32 m_threadId;
+	SDL_Thread *m_thread;
+	SDL_mutex *m_mutex;
+#endif
 	dp_t *m_dp;
 	dp_t *m_origDP;
 	volatile BOOL m_exit, m_exited;
