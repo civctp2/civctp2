@@ -66,7 +66,7 @@ private:
 	PointerList<TPacketData> *m_outgoing[k_MAX_NETWORK_PLAYERS];
 	uint16 m_ids[k_MAX_NETWORK_PLAYERS];
 	PointerList<TPacketData> *m_incoming;
-+#ifndef USE_SDL
+#ifndef USE_SDL
 	DWORD m_threadId;
 	HANDLE m_threadHandle;
 	CRITICAL_SECTION m_mutex;
