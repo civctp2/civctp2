@@ -1,8 +1,56 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Network framework
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+// _PLAYTEST
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef _NETWORK_H_
 #define _NETWORK_H_
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// None
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
+
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
 #include "net_io.h"
 #include "net_const.h"
@@ -49,7 +97,7 @@ struct Response;
 class ChatList;
 class CellUnitList;
 
-#include "player.h"
+#include "player.h" // PLAYER_INDEX
 
 #ifdef _DEBUG
 class aui_Surface;
@@ -436,7 +484,7 @@ public:
 	uint32 m_sentPacketBytes[k_NUM_PACKET_TYPES];
 	uint32 m_blockedPackets;
 
-#endif
+#endif // _DEBUG
 
 private:
 	void Init();

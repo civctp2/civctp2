@@ -41,7 +41,6 @@
 #include "c3.h"
 #include "Cell.h"
 
-
 #include "net_types.h"
 #include "network.h"
 #include "net_io.h"
@@ -92,7 +91,6 @@
 #include "net_cheat.h"
 #endif
 
-
 #include "UnitData.h"
 #include "player.h"
 #include "XY_Coordinates.h"
@@ -123,61 +121,40 @@
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "Exclusions.h"
-
-
-
 #include "profileDB.h"
 #include "pointerlist.h"
-
 #include "c3_utilitydialogbox.h"
-
-
 #include "netfunc.h"
 #include "netshell.h"
-
 #include "civapp.h"
-
 #include "StrDB.h"
-extern StringDB               *g_theStringDB;
+extern StringDB			*g_theStringDB;
 
 #include "GameSettings.h"
 #include "AgeRecord.h"
 #include "CivilisationRecord.h"
-
 #include "GameEventManager.h"
-
 #include "ctpai.h"
 #include "chatlist.h"
-
 #include "soundmanager.h"
 #include "gamesounds.h"
-
 #include "progresswindow.h"
-extern ProgressWindow         *g_theProgressWindow;
+extern ProgressWindow		*g_theProgressWindow;
 
-extern TurnCount              *g_turn;
-extern TiledMap               *g_tiledMap;
-extern RadarMap               *g_radarMap;
-extern ProfileDB              *g_theProfileDB;
-extern NETFunc                *g_netfunc;
-extern DiplomaticRequestPool  *g_theDiplomaticRequestPool;
-extern CivApp                 *g_civApp;
-
+extern TurnCount		*g_turn;
+extern TiledMap			*g_tiledMap;
+extern RadarMap			*g_radarMap;
+extern ProfileDB		*g_theProfileDB;
+extern NETFunc			*g_netfunc;
+extern DiplomaticRequestPool	*g_theDiplomaticRequestPool;
+extern CivApp			*g_civApp;
 
 #include "SelItem.h"
-
-
 #include "resource.h"
-
 #include "director.h"
-
-//#include "GameOver.h"
 #include "civ3_main.h"
-
 #include "sci_advancescreen.h"
-
 #include "c3_utilitydialogbox.h"
-
 #include "aui_button.h"
 #ifdef _DEBUG
 #include "aui.h"
@@ -190,19 +167,13 @@ extern CivApp                 *g_civApp;
 extern ControlPanelWindow     *g_controlPanel;
 
 #include "RandGen.h"
-
 #include "stringutils.h"
-
 #include "screenutils.h"
-
 #include "battleviewwindow.h"
 #include "c3ui.h"
-
 #include "sci_advancescreen.h"
-
 #include "dipwizard.h"
 #include "Diplomat.h"
-
 #include "CTP2Combat.h"
 #include "Strengths.h"
 
@@ -216,10 +187,10 @@ extern ChatBox *g_chatBox;
 
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;
 
-void battleview_ExitButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
 
-void network_AbortCallback(sint32 type )
+void network_AbortCallback( sint32 type )
 {
 	
 
@@ -1021,69 +992,69 @@ Network::GetHandler(uint8* buf,
 {
 	Packetizer *handler = NULL;
 	switch(MAKE_CIV3_ID(buf[0], buf[1])) {
-		case k_PACKET_CELL_ID:                 handler = new NetCellData;           break;
-		case k_PACKET_CELL_LIST_ID:            handler = new NetCellList;           break;
-		case k_PACKET_UNIT_ID:                 handler = new NetUnit;               break;
-		case k_PACKET_ACTION_ID:               handler = new NetAction;             break;
-		case k_PACKET_INFO_ID:                 handler = new NetInfo;               break;
-		case k_PACKET_CITY_ID:                 handler = new NetCity;               break;
-		case k_PACKET_DIFFICULTY_ID:           handler = new NetDifficulty;         break;
-		case k_PACKET_PLAYER_ID:               handler = new NetPlayer;             break;
-		case k_PACKET_TRADE_ROUTE_ID:          handler = new NetTradeRoute;         break;
-		case k_PACKET_TRADE_OFFER_ID:          handler = new NetTradeOffer;         break;
-		case k_PACKET_RAND_ID:                 handler = new NetRand;               break;
+		case k_PACKET_CELL_ID:                 handler = new NetCellData; break;
+		case k_PACKET_CELL_LIST_ID:            handler = new NetCellList; break;
+		case k_PACKET_UNIT_ID:                 handler = new NetUnit; break;
+		case k_PACKET_ACTION_ID:               handler = new NetAction; break;
+		case k_PACKET_INFO_ID:                 handler = new NetInfo; break;
+		case k_PACKET_CITY_ID:                 handler = new NetCity; break;
+		case k_PACKET_DIFFICULTY_ID:           handler = new NetDifficulty; break;
+		case k_PACKET_PLAYER_ID:               handler = new NetPlayer; break;
+		case k_PACKET_TRADE_ROUTE_ID:          handler = new NetTradeRoute; break;
+		case k_PACKET_TRADE_OFFER_ID:          handler = new NetTradeOffer; break;
+		case k_PACKET_RAND_ID:                 handler = new NetRand; break;
 		case k_PACKET_TERRAIN_ID:              handler = new NetTerrainImprovement; break;
-		case k_PACKET_INSTALLATION_ID:         handler = new NetInstallation;       break;
-		case k_PACKET_CHAT_ID:                 handler = new NetChat;               break;
-		case k_PACKET_READINESS_ID:            handler = new NetReadiness;          break;
-		case k_PACKET_HAPPY_ID:                handler = new NetHappy;              break;
-		case k_PACKET_PLAYER_HAPPY_ID:         handler = new NetPlayerHappy;        break;
-		case k_PACKET_REPORT_ID:               handler = new NetReport;             break;
-		case k_PACKET_UNIT_MOVE_ID:            handler = new NetUnitMove;           break;
-		case k_PACKET_UNIT_ORDER_ID:           handler = new NetOrder;              break;
-		case k_PACKET_AGREEMENT_ID:            handler = new NetAgreement;          break;
-		case k_PACKET_CIVILIZATION_ID:         handler = new NetCivilization;       break;
-		case k_PACKET_CITY_NAME_ID:            handler = new NetCityName;           break;
-		case k_PACKET_DIP_PROPOSAL_ID:         handler = new NetDipProposal;        break;
-		case k_PACKET_DIP_RESPONSE_ID:         handler = new NetDipResponse;        break;
-		case k_PACKET_MESSAGE_ID:              handler = new NetMessage;            break;
-		case k_PACKET_CITY2_ID:                handler = new NetCity2;              break;
-		case k_PACKET_POLLUTION_ID:            handler = new NetPollution;          break;
-		case k_PACKET_CITY_BQ_ID:              handler = new NetCityBuildQueue;     break;
-		case k_PACKET_KEYS_ID:                 handler = new NetKeys;               break;
-		case k_PACKET_GAME_SETTINGS_ID:        handler = new NetGameSettings;       break;
-		case k_PACKET_NEW_ARMY_ID:             handler = new NetNewArmy;            break;
-		case k_PACKET_REMOVE_ARMY_ID:          handler = new NetRemoveArmy;         break;
-		case k_PACKET_CRC_ID:                  handler = new NetCRC;                break;
-		case k_PACKET_ARMY_ID:                 handler = new NetArmy;               break;
-		case k_PACKET_WONDER_TRACKER_ID:       handler = new NetWonderTracker;      break;
+		case k_PACKET_INSTALLATION_ID:         handler = new NetInstallation; break;
+		case k_PACKET_CHAT_ID:                 handler = new NetChat; break;
+		case k_PACKET_READINESS_ID:            handler = new NetReadiness; break;
+		case k_PACKET_HAPPY_ID:                handler = new NetHappy; break;
+		case k_PACKET_PLAYER_HAPPY_ID:         handler = new NetPlayerHappy; break;
+		case k_PACKET_REPORT_ID:               handler = new NetReport; break;
+		case k_PACKET_UNIT_MOVE_ID:            handler = new NetUnitMove; break;
+		case k_PACKET_UNIT_ORDER_ID:           handler = new NetOrder; break;
+		case k_PACKET_AGREEMENT_ID:            handler = new NetAgreement; break;
+		case k_PACKET_CIVILIZATION_ID:         handler = new NetCivilization; break;
+		case k_PACKET_CITY_NAME_ID:            handler = new NetCityName; break;
+		case k_PACKET_DIP_PROPOSAL_ID:         handler = new NetDipProposal; break;
+		case k_PACKET_DIP_RESPONSE_ID:         handler = new NetDipResponse; break;
+		case k_PACKET_MESSAGE_ID:              handler = new NetMessage; break;
+		case k_PACKET_CITY2_ID:                handler = new NetCity2; break;
+		case k_PACKET_POLLUTION_ID:            handler = new NetPollution; break;
+		case k_PACKET_CITY_BQ_ID:              handler = new NetCityBuildQueue; break;
+		case k_PACKET_KEYS_ID:                 handler = new NetKeys; break;
+		case k_PACKET_GAME_SETTINGS_ID:        handler = new NetGameSettings; break;
+		case k_PACKET_NEW_ARMY_ID:             handler = new NetNewArmy; break;
+		case k_PACKET_REMOVE_ARMY_ID:          handler = new NetRemoveArmy; break;
+		case k_PACKET_CRC_ID:                  handler = new NetCRC; break;
+		case k_PACKET_ARMY_ID:                 handler = new NetArmy; break;
+		case k_PACKET_WONDER_TRACKER_ID:       handler = new NetWonderTracker; break;
 		case k_PACKET_ACHIEVEMENT_TRACKER_ID:  handler = new NetAchievementTracker; break;
-		case k_PACKET_VISION_ID:               handler = new NetVision;             break;
-		case k_PACKET_UNSEEN_CELL_ID:          handler = new NetUnseenCell;         break;
-		case k_PACKET_EXCLUSIONS_ID:           handler = new NetExclusions;         break;
-		case k_PACKET_RESOURCES_ID:            handler = new NetCityResources;      break;
-		case k_PACKET_UNIT_HP_ID:              handler = new NetUnitHP;             break;
-		case k_PACKET_CELL_UNIT_ORDER_ID:      handler = new NetCellUnitOrder;      break;
-		case k_PACKET_ADD_PLAYER_ID:           handler = new NetAddPlayer;          break;
-		case k_PACKET_RESEARCH_ID:             handler = new NetResearch;           break;
-		case k_PACKET_GUID_ID:                 handler = new NetGuid;               break;
-		case k_PACKET_STRENGTH_ID:             handler = new NetStrengths;          break;
-		case k_PACKET_FULL_STRENGTHS_ID:       handler = new NetFullStrengths;      break;
-		case k_PACKET_NET_INFO_MESSAGE_ID:     handler = new NetInfoMessage;        break;
-		case k_PACKET_ENDGAME_ID:              handler = new NetEndGame;            break;
-		case k_PACKET_WORMHOLE_ID:             handler = new NetWormhole;           break;
-		case k_PACKET_SET_PLAYER_GUID_ID:      handler = new NetSetPlayerGuid;      break;
-		case k_PACKET_SET_LEADER_NAME_ID:      handler = new NetSetLeaderName;      break;
-		case k_PACKET_WORLD_ID:                handler = new NetWorld;              break;
-		case k_PACKET_DIP_AGREEMENT_MATRIX_ID: handler = new NetAgreementMatrix;    break;
-		case k_PACKET_GROUP_REQUEST_ID:        handler = new NetGroupRequest;       break;
-		case k_PACKET_UNGROUP_REQUEST_ID:      handler = new NetUngroupRequest;     break;
-		case k_PACKET_SCORES_ID:               handler = new NetScores;             break;
+		case k_PACKET_VISION_ID:               handler = new NetVision; break;
+		case k_PACKET_UNSEEN_CELL_ID:          handler = new NetUnseenCell; break;
+		case k_PACKET_EXCLUSIONS_ID:           handler = new NetExclusions; break;
+		case k_PACKET_RESOURCES_ID:            handler = new NetCityResources; break;
+		case k_PACKET_UNIT_HP_ID:              handler = new NetUnitHP; break;
+		case k_PACKET_CELL_UNIT_ORDER_ID:      handler = new NetCellUnitOrder; break;
+		case k_PACKET_ADD_PLAYER_ID:           handler = new NetAddPlayer; break;
+		case k_PACKET_RESEARCH_ID:             handler = new NetResearch; break;
+		case k_PACKET_GUID_ID:                 handler = new NetGuid; break;
+		case k_PACKET_STRENGTH_ID:             handler = new NetStrengths; break;
+		case k_PACKET_FULL_STRENGTHS_ID:       handler = new NetFullStrengths; break;
+		case k_PACKET_NET_INFO_MESSAGE_ID:     handler = new NetInfoMessage; break;
+		case k_PACKET_ENDGAME_ID:              handler = new NetEndGame; break;
+		case k_PACKET_WORMHOLE_ID:             handler = new NetWormhole; break;
+		case k_PACKET_SET_PLAYER_GUID_ID:      handler = new NetSetPlayerGuid; break;
+		case k_PACKET_SET_LEADER_NAME_ID:      handler = new NetSetLeaderName; break;
+		case k_PACKET_WORLD_ID:                handler = new NetWorld; break;
+		case k_PACKET_DIP_AGREEMENT_MATRIX_ID: handler = new NetAgreementMatrix; break;
+		case k_PACKET_GROUP_REQUEST_ID:        handler = new NetGroupRequest; break;
+		case k_PACKET_UNGROUP_REQUEST_ID:      handler = new NetUngroupRequest; break;
+		case k_PACKET_SCORES_ID:               handler = new NetScores; break;
 
-		case k_PACKET_FEAT_TRACKER_ID:         handler = new NetFeatTracker();      break;
+		case k_PACKET_FEAT_TRACKER_ID:         handler = new NetFeatTracker(); break;
 
 #ifdef _DEBUG
-		case k_PACKET_CHEAT_ID:                handler = new NetCheat;              break;
+		case k_PACKET_CHEAT_ID:                handler = new NetCheat; break;
 #endif
 	}
 	if(handler) {
@@ -1341,16 +1312,16 @@ void Network::SetReady(uint16 id)
 	QueuePacket(player->m_id, new NetCRC());
 
 	QueuePacket(player->m_id, new NetGameSettings(size->x, size->y,
-	                                              g_theProfileDB->GetNPlayers(),
-	                                              m_gameStyle,
-	                                              m_unitMovesPerSlice,
-	                                              m_totalStartTime,
-	                                              m_turnStartTime,
-	                                              m_extraTimePerCity));
+						      g_theProfileDB->GetNPlayers(),
+						      m_gameStyle,
+						      m_unitMovesPerSlice,
+						      m_totalStartTime,
+						      m_turnStartTime,
+						      m_extraTimePerCity));
 
 	
 	NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX, 
-	                               index, player->m_id);
+				       index, player->m_id);
 	QueuePacket(player->m_id, netInfo);
 		
 	SetupPlayerFromNSPlayerInfo(player->m_id, index);
@@ -3344,13 +3315,11 @@ void Network::SetSetupArea(PLAYER_INDEX player, const MapPoint &center,
 	g_player[player]->m_setupCenter = center;
 	g_player[player]->m_setupRadius = radius;
 
-	
+
 	g_player[player]->AddUnitVision(center, radius, revealed);
 
-	
 	g_player[player]->OwnExploredArea();
 
-	
 	g_player[player]->RemoveUnitVision(center, radius);
 
 	if(player == g_selected_item->GetVisiblePlayer()) {

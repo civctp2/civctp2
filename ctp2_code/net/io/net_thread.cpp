@@ -39,7 +39,7 @@
 #include "zlib.h"
 
 #if defined(_DEBUG)
-#include "debug.h"  // SetThreadName
+#include "debug.h"  // Os::SetThreadName
 #endif
 
 TPacketData::TPacketData(uint16 id, sint32 flags, uint8 *buf, sint32 len,
@@ -228,7 +228,7 @@ void NetThread::Run()
 
 #if defined(_DEBUG)
 #ifndef USE_SDL
-	SetThreadName("NetThread::Run");
+	Os::SetThreadName("NetThread::Run");
 #endif
 #endif
 
@@ -240,6 +240,7 @@ void NetThread::Run()
 #endif
 		if(m_anet) {
 			if(m_dp) {
+				
 				dpSetActiveThread(m_dp);
 				m_anet->SetDP(m_dp);
 				m_origDP = m_dp;
@@ -440,7 +441,7 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 
 NET_ERR NetThread::SendCompressed(uint16 id, sint32 flags, uint8 *buf, sint32 len)
 {
-	uLong cbufsize = (uint32)(((double)len * 1.01) + 12.5);
+	uLong  cbufsize = (uint32)(((double)len * 1.01) + 12.5);
 	uint8 *cbuf = new uint8[cbufsize + 5];
 
 	cbuf[0] = k_COMPRESSED_PACKET;
@@ -593,7 +594,9 @@ TPacketData *NetThread::FindSplitStart(uint16 from)
 void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 {
 	Lock();
+#if 0
 	TPacketData *currentTail = m_incoming->GetTail();
+#endif
 	if(buf[0] == k_SPLIT_PACKET_HEAD && m_incoming->GetCount() > 0) {
 		
 		TPacketData *splitStart = FindSplitStart((uint16)from);

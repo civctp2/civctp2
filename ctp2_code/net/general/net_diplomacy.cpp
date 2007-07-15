@@ -1,13 +1,36 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer diplomacy handling
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Corrected agreement index computation in NetAgreementMatrix::Unpacketize.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "network.h"
 #include "net_diplomacy.h"
+
+#include "network.h"
 #include "net_packet.h"
 #include "net_info.h"
 #include "net_util.h"
-#include "player.h"
-#include "SelItem.h"
+#include "player.h"             // g_player
+#include "SelItem.h"             // g_selected_item
 #include "Diplomat.h"
 #include "diplomattypes.h"
 #include "GameEventManager.h"

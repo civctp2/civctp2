@@ -48,14 +48,10 @@ ActivNetIO::~ActivNetIO()
 		Idle();
 		dpClose(m_dp);
 		
-		
-		
-
 		int start = time(0);
 		do {
 			Idle();
 		} while(time(0) < start + 3);
-
 
 		dpDestroy(m_dp, 0);
 		m_dp = NULL;
@@ -291,8 +287,8 @@ ActivNetIO::PlayerReady(dpid_t id, char_t *name, sint32 flags)
 
 sint32
 ActivNetIO::SessionReadyCallback(dp_session_t *ps,
-				   long *pTimeout,
-				   long flags)
+				  long *pTimeout,
+				  long flags)
 {
 	if(ps) {
 		m_session = *ps;
@@ -359,8 +355,8 @@ int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
 
 sint32
 ActivNetIO::SessionCallback(dp_session_t *sDesc, 
-			 long *pTimeout, 
-			 long flags)
+			long *pTimeout, 
+			long flags)
 {
 	if(sDesc) {
 		

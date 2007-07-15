@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Multiplayer unit packet handling.
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "network.h"
@@ -13,15 +34,15 @@
 #include "net_util.h"
 
 #include "UnitData.h"
-#include "UnitPool.h"
+#include "UnitPool.h"           // g_theUnitPool
 #include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
+#include "World.h"              // g_theWorld
+#include "player.h"              // g_player
 
 #include "DB.h"
 #include "UnitRec.h"
-#include "SelItem.h"
-#include "director.h"
+#include "SelItem.h"            // g_selected_item
+#include "director.h"            // g_director
 #include "tech_wllist.h"
 
 #include "Cell.h"
@@ -35,7 +56,22 @@ extern Player   **g_player;
 extern SelectedItem *g_selected_item; 
 extern Director *g_director;
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : NetUnit::NetUnit
+//
+// Description: Constructor
+//
+// Parameters : UnitData * unit:  Unit data to send through the network
+//              Unit useActor:    According unit actor
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 NetUnit::NetUnit(UnitData* unit, Unit useActor) : 
 	m_unitData(unit) 
 {
@@ -43,7 +79,21 @@ NetUnit::NetUnit(UnitData* unit, Unit useActor) :
 	m_actorId = useActor;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : NetUnit::Packetize
+//
+// Description: Generate an application data packet to transmit.
+//
+// Parameters : buf         : buffer to store the message
+//
+// Globals    : -
+//
+// Returns    : size        : number of bytes stored in buf
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetUnit::Packetize(uint8* buf, uint16& size)
 {
 	size = 0;
@@ -56,7 +106,23 @@ void NetUnit::Packetize(uint8* buf, uint16& size)
 	size += unitSize;
 }
 
-
+//----------------------------------------------------------------------------
+//
+// Name       : NetUnit::Unpacketize
+//
+// Description: Retrieve the data from a received application data packet.
+//
+// Parameters : id          : Sender identification?
+//              buf         : Buffer with received message
+//              size        : Length of received message (in bytes)
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 {
 	uint16 packid;
@@ -90,13 +156,13 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Net: Unit %lx moved to %d,%d via unit packet\n",
 								m_unitData->m_id, newPos.x, newPos.y));
 			m_unitData->m_pos = pnt;
-			BOOL addVision = FALSE;
+			bool addVision = false;
 			if(!(oldFlags & k_UDF_TEMP_SLAVE_UNIT)) {
 				g_theWorld->RemoveUnitReference(pnt, m_unitData->m_id);
 				addVision = (m_unitData->m_flags & k_UDF_VISION_ADDED) != 0;
 				m_unitData->RemoveUnitVision();
 			} else if(!(m_unitData->m_flags & k_UDF_TEMP_SLAVE_UNIT)) {
-				addVision = TRUE;
+				addVision = true;
 			}
 			m_unitData->m_pos = newPos;
 

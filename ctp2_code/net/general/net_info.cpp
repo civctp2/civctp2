@@ -3,7 +3,8 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : net_info is used to propagate misc information from host to 
-//				  player(s).
+//		  player(s).
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -99,7 +100,6 @@ extern C3UI					*g_c3ui;
 #include "soundmanager.h"
 #include "gamesounds.h"
 #include "AICause.h"
-
 #include "HappyTracker.h"
 #include "WonderTracker.h"
 #include "AchievementTracker.h"

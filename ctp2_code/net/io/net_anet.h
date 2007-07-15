@@ -92,15 +92,15 @@ private:
 									void* context);
 
 	sint32 SessionCallback(dp_session_t* sDesc,
-						  long* pTimeout,
+						  long * pTimeout,
 						  long flags);
 	friend int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,
-									 long* pTimeout,
+									 long * pTimeout,
 									 long flags,
 									 void* context);
 
 	sint32 SessionReadyCallback(dp_session_t* ps,
-							   long* pTimeout,
+							   long * pTimeout,
 							   long flags);
 	friend int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
 							 long *pTimeout,

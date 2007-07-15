@@ -2,6 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
+// Description  :
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,12 +26,13 @@
 //   the city to another player (bug #26)
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
+#include "net_action.h"
 
 #include "Cell.h"
 
 #include "network.h"
-#include "net_action.h"
 #include "net_util.h"
 #include "net_info.h"
 #include "net_rand.h"
@@ -38,9 +41,9 @@
 #include "net_unit.h"
 
 #include "XY_Coordinates.h"
-#include "World.h"
-#include "player.h"
-#include "SelItem.h"
+#include "World.h"                      // g_theWorld
+#include "player.h"                     // g_player
+#include "SelItem.h"                    // g_selected_item
 #include "TradeOffer.h"
 #include "Readiness.h"
 #include "installation.h"
@@ -53,31 +56,29 @@
 #include "MessagePool.h"
 #include "UnitData.h"
 #include "citydata.h"
-#include "TurnCnt.h"
+#include "TurnCnt.h"                    // g_turn
 #include "AICause.h"
 #include "Advances.h"
 #include "MaterialPool.h"
 #include "TerrImprovePool.h"
 #include "net_playerdata.h"
-#include "UnitPool.h"
+#include "UnitPool.h"                   // g_theUnitPool
 #include "Order.h"
 #include "ArmyPool.h"
-#include "tiledmap.h"
-#include "radarmap.h"
+#include "tiledmap.h"                   // g_tiledMap
+#include "radarmap.h"                   // g_radarMap
 #include "ArmyData.h"
-#include "TradeOfferPool.h"
+#include "TradeOfferPool.h"             // g_theTradeOfferPool
 #include "Agreement.h"
-#include "AgreementPool.h"
+#include "AgreementPool.h"              // g_theAgreementPool
 #include "AdvanceRecord.h"
 #include "TradePool.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "newturncount.h"
-
 #include "GameEventManager.h"
 #include "director.h"
 #include "Diplomat.h"
-
 #include "battleviewwindow.h"
 #include "c3ui.h"
 #include "aui_button.h"
@@ -320,8 +321,7 @@ NetAction::NetAction()
 }
 
 
-void
-NetAction::Packetize(uint8* buf, uint16& size)
+void NetAction::Packetize(uint8* buf, uint16& size)
 {
 	buf[0] = 'A';
 	buf[1] = 'A';

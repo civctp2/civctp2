@@ -29,11 +29,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "net_terrain.h"
 
 #include "network.h"
-#include "net_terrain.h"
 #include "net_util.h"
-
 #include "TerrImprove.h"
 #include "TerrImprovePool.h"
 #include "XY_Coordinates.h"

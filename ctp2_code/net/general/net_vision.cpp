@@ -32,18 +32,16 @@
 #include "net_vision.h"
 #include "net_util.h"
 #include "Vision.h"
-#include "player.h"
-#include "tiledmap.h"
-#include "radarmap.h"
+#include "player.h"         // g_player
+#include "tiledmap.h"       // g_tiledMap
+#include "radarmap.h"       // g_radarMap
 #include "UnseenCell.h"
 #include "TileInfo.h"
 #include "Vision.h"
 #include "TerrImprove.h"
 #include "pointerlist.h"
-
 #include "UnitActor.h"
 #include "SpriteState.h"
-
 #include "UnitRecord.h"
 
 extern Player **g_player;
@@ -97,9 +95,6 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 	PUSHSHORT(m_row);
 	PUSHBYTE(m_numRows);
 
-	
-	
-	
 	uint8 *ptr = NULL;
 	sint32 x, y;
 	uint8 bitPos = 0;
@@ -135,7 +130,7 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NetFeatTracker::Unpacketize
+// Name       : NetVision::Unpacketize
 //
 // Description: Retrieve the data from a received application data packet.
 //
@@ -161,9 +156,6 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLSHORT(m_row);
 	PULLBYTE(m_numRows);
 
-	
-	
-	
 	uint8 *ptr = NULL;
 	sint32 x, y;
 	uint8 bitPos = 0;
@@ -199,7 +191,7 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NetVision::NetVision
+// Name       : NetUnseenCell::NetVision
 //
 // Description: Constructor
 //
