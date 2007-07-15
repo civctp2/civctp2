@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Network framework
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -131,8 +131,7 @@ public:
 		strcpy(m_name, name);
 	}
 
-	~SessionData() 
-    {
+	~SessionData() {
 		delete [] m_name;
 	}
 
@@ -168,8 +167,7 @@ public:
 		m_settlers = settlers;
 	}
 
-	~NSPlayerInfo() 
-    {
+	~NSPlayerInfo() {
 		delete [] m_name;
 	}
 };

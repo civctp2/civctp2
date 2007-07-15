@@ -27,8 +27,7 @@
 // - Increased k_MAX_DBS to reflect the actual number of databases to check
 //
 //----------------------------------------------------------------------------
-
-#ifde HAVE_PRAGMA_ONCE
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __NET_CRC_H__

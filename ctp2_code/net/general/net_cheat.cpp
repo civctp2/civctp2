@@ -13,7 +13,7 @@
 #include "MaterialPool.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "gold.h"
+#include "Gold.h"
 #include "Advances.h"
 #include "AdvanceRecord.h"
 #include "UnitData.h"

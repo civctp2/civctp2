@@ -1,4 +1,4 @@
-#ifde HAVE_PRAGMA_ONCE
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef _NET_UNIT_H_

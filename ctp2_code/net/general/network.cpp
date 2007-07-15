@@ -128,7 +128,7 @@
 #include "netshell.h"
 #include "civapp.h"
 #include "StrDB.h"
-extern StringDB					*g_theStringDB;
+extern StringDB			*g_theStringDB;
 
 #include "GameSettings.h"
 #include "AgeRecord.h"
@@ -139,15 +139,15 @@ extern StringDB					*g_theStringDB;
 #include "soundmanager.h"
 #include "gamesounds.h"
 #include "progresswindow.h"
-extern ProgressWindow *g_theProgressWindow;
+extern ProgressWindow		*g_theProgressWindow;
 
-extern TurnCount *g_turn;
-extern TiledMap *g_tiledMap;
-extern RadarMap     *g_radarMap;
-extern ProfileDB *g_theProfileDB;
-extern NETFunc *g_netfunc;
-extern DiplomaticRequestPool *g_theDiplomaticRequestPool;
-extern CivApp *g_civApp;
+extern TurnCount		*g_turn;
+extern TiledMap			*g_tiledMap;
+extern RadarMap			*g_radarMap;
+extern ProfileDB		*g_theProfileDB;
+extern NETFunc			*g_netfunc;
+extern DiplomaticRequestPool	*g_theDiplomaticRequestPool;
+extern CivApp			*g_civApp;
 
 #include "SelItem.h"
 #include "resource.h"
@@ -562,10 +562,10 @@ void Network::InitFromNetFunc()
 				strcpy(nonConstStr, str);
 			} else {
 				strcpy(nonConstStr, "Waiting on data");
-		}
+			}
 			c3_AbortMessage(nonConstStr, k_UTILITY_PROGRESS_ABORT, network_AbortCallback);
 		}
-}
+	}
 }
 
 void Network::SetNSPlayerInfo(uint16 id,
@@ -580,7 +580,7 @@ void Network::SetNSPlayerInfo(uint16 id,
 	}
 
 	m_nsPlayerInfo->AddTail(new NSPlayerInfo(id, name, civ, group, civpoints,
-                                              settlers));
+                                             settlers));
 }
 
 void Network::SetNSAIPlayerInfo(int civ,
@@ -918,10 +918,10 @@ void Network::Join(sint32 index )
 
 
 void
-Network::EnumTransport(NET_ERR result, 
-                       sint32 index,      
-                       const char* transname, 
-                       void* transdata) 
+Network::EnumTransport(NET_ERR result,
+                       sint32 index,
+                       const char* transname,
+                       void* transdata)
 {
 	DPRINTF(k_DBG_NET, ("Transport %d: %s\n", index, transname));
 
@@ -939,10 +939,10 @@ Network::EnumTransport(NET_ERR result,
 
 
 void
-Network::EnumSession(NET_ERR result, 
-                     sint32 index,      
-                     const char* sessionName, 
-                     void* sessionData) 
+Network::EnumSession(NET_ERR result,
+                     sint32 index,
+                     const char* sessionName,
+                     void* sessionData)
 {
 	if(result == NET_ERR_OK) {
 		DPRINTF(k_DBG_NET, ("Session %d: %s\n", index, sessionName));
@@ -1050,8 +1050,8 @@ Network::GetHandler(uint8* buf,
 
 
 void Network::PacketReady(sint32 from,
-                          uint8* buf, 
-                          sint32 size) 
+                          uint8* buf,
+                          sint32 size)
 {
 	if(m_deleting)
 		return;
@@ -1073,7 +1073,7 @@ void Network::PacketReady(sint32 from,
 
 
 void Network::AddPlayer(uint16 id,
-                        char* name) 
+                        char* name)
 {
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
@@ -1082,7 +1082,7 @@ void Network::AddPlayer(uint16 id,
 	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 		if(m_playerData[i] && m_playerData[i]->m_id == id) {
 			DPRINTF(k_DBG_NET, ("AddPlayer(%d) but already have that player.\n",
-			                     id));
+			                    id));
 			return;
 		}
 	}
@@ -1303,7 +1303,7 @@ void Network::SetReady(uint16 id)
 
 	
 	NetInfo* netInfo = new NetInfo(NET_INFO_CODE_PLAYER_INDEX, 
-								   index, player->m_id);
+				       index, player->m_id);
 	QueuePacket(player->m_id, netInfo);
 		
 	SetupPlayerFromNSPlayerInfo(player->m_id, index);
@@ -1326,8 +1326,8 @@ void Network::SetReady(uint16 id)
 		}
 		if(g_tiledMap) {
 			g_tiledMap->NextPlayer();
-            g_tiledMap->CopyVision();
-            g_tiledMap->InvalidateMix();
+			g_tiledMap->CopyVision();
+			g_tiledMap->InvalidateMix();
 			g_tiledMap->InvalidateMap();
 			g_tiledMap->Refresh();
 		}
@@ -1424,7 +1424,7 @@ void Network::SetReady(uint16 id)
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
 		if(!g_player[p]) continue;
 		
-		chunkPackets.AddTail( new NetSetPlayerGuid(p));
+		chunkPackets.AddTail(new NetSetPlayerGuid(p));
 
 		
 		UnitDynamicArray *unitList = g_player[p]->GetAllCitiesList();
@@ -1436,11 +1436,11 @@ void Network::SetReady(uint16 id)
 			chunkPackets.AddTail( new NetUnit(unitData));
 
 			
-			chunkPackets.AddTail( new NetCity(unitData, TRUE));
-			chunkPackets.AddTail( new NetCityName(unitData->GetCityData()));
-			chunkPackets.AddTail( new NetCity2(unitData->GetCityData(), TRUE));
-			chunkPackets.AddTail( new NetCityBuildQueue(unitData->GetCityData()));
-			chunkPackets.AddTail( 
+			chunkPackets.AddTail(new NetCity(unitData, TRUE));
+			chunkPackets.AddTail(new NetCityName(unitData->GetCityData()));
+			chunkPackets.AddTail(new NetCity2(unitData->GetCityData(), TRUE));
+			chunkPackets.AddTail(new NetCityBuildQueue(unitData->GetCityData()));
+			chunkPackets.AddTail(
 						new NetHappy(unitList->Get(n), 
 									 unitData->GetCityData()->GetHappy(),
 									 TRUE));
@@ -1529,11 +1529,11 @@ void Network::SetReady(uint16 id)
 		g_player[p]->m_vision->GetUnseenCellList(array);
 		n = array.Num();
 		for(i = 0; i < n; i++) {
-			chunkPackets.AddTail( new NetUnseenCell(array[i].m_unseenCell,
+			chunkPackets.AddTail(new NetUnseenCell(array[i].m_unseenCell,
 														p));
 		}
 
-		chunkPackets.AddTail( new NetEndGame(p));
+		chunkPackets.AddTail(new NetEndGame(p));
 
 		playerPercent += percentPerPlayer;
 		CPROGRESS(55 + static_cast<uint32>(playerPercent * 30));
@@ -1543,19 +1543,19 @@ void Network::SetReady(uint16 id)
 
 	PROGRESS(85);
 
-	chunkPackets.AddTail( new NetWormhole());
+	chunkPackets.AddTail(new NetWormhole());
 
-	chunkPackets.AddTail( new NetPollution());
+	chunkPackets.AddTail(new NetPollution());
 
-	chunkPackets.AddTail( new NetWonderTracker());
-	chunkPackets.AddTail( new NetAchievementTracker());
-	chunkPackets.AddTail( new NetFeatTracker());
-	chunkPackets.AddTail( new NetExclusions());
+	chunkPackets.AddTail(new NetWonderTracker());
+	chunkPackets.AddTail(new NetAchievementTracker());
+	chunkPackets.AddTail(new NetFeatTracker());
+	chunkPackets.AddTail(new NetExclusions());
 
-	chunkPackets.AddTail( new NetWorld());
+	chunkPackets.AddTail(new NetWorld());
 	n = g_theTradePool->m_all_routes->Num();
 	for(i = 0; i < n; i++) {
-		chunkPackets.AddTail( new NetTradeRoute(g_theTradePool->m_all_routes->Access(i).AccessData(), false));
+		chunkPackets.AddTail(new NetTradeRoute(g_theTradePool->m_all_routes->Access(i).AccessData(), false));
 	}
 
 	PROGRESS(90);
@@ -1564,24 +1564,24 @@ void Network::SetReady(uint16 id)
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			if(g_theWorld->GetCell(x, y)->GetNumUnits() >= 2) {
-				chunkPackets.AddTail( new NetCellUnitOrder(x, y));
+				chunkPackets.AddTail(new NetCellUnitOrder(x, y));
 			}
 		}
 	}
 
 	
-	chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_END_UNITS, 
+	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_END_UNITS, 
 										  g_theUnitPool->HackGetKey(),
 										  g_theArmyPool->HackGetKey()));
 	
 	PROGRESS(95);
 
-	chunkPackets.AddTail( new NetAgreementMatrix);
+	chunkPackets.AddTail(new NetAgreementMatrix);
 
-	chunkPackets.AddTail( new NetRand());
+	chunkPackets.AddTail(new NetRand());
 
-	chunkPackets.AddTail( new NetKeys());
-	chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_YEAR,
+	chunkPackets.AddTail(new NetKeys());
+	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_YEAR,
 										  g_turn->GetRound(),
 										  g_turn->GetYear()));
 
@@ -1594,24 +1594,24 @@ void Network::SetReady(uint16 id)
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_SETUP_MODE,
 											  m_setupMode));
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_SETUP_AREA,
-											  index,
-											  center.x, center.y,
-											  g_player[index]->m_setupRadius));
+						      index,
+						      center.x, center.y,
+						      g_player[index]->m_setupRadius));
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_POWER_POINTS,
-											  index,
-											  g_player[index]->m_powerPoints));
+						      index,
+						      g_player[index]->m_powerPoints));
 	}
 
 	PROGRESS(100);
 
 	SendJoinedMessage(player->m_name, index);
 	QueuePacket(player->m_id, new NetInfoMessage(NET_MSG_PLAYER_JOINED,
-												 m_playerData[m_playerIndex]->m_name,
-												 m_playerIndex));
+						     m_playerData[m_playerIndex]->m_name,
+						     m_playerIndex));
 
 	
 	QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_TURN,
-										  g_selected_item->GetCurPlayer()));
+					      g_selected_item->GetCurPlayer()));
 
 	if(index == g_selected_item->GetCurPlayer()) {
 		player->m_ackBeginTurn = TRUE;
@@ -1917,16 +1917,16 @@ Network::SendActionBookmark(NetAction* netAction)
 
 void
 Network::SendOrder(sint32 owner, const Army &army, UNIT_ORDER_TYPE o,
-				   Path *a_path, const MapPoint &point, sint32 arg,
-				   GAME_EVENT event)
+		   Path *a_path, const MapPoint &point, sint32 arg,
+		   GAME_EVENT event)
 {
 	if(m_hostId == 0) {
 		m_netIO->GetHostId(m_hostId);
 	}
 
 	QueuePacket(m_hostId, new NetOrder(owner, army, 
-									   o, a_path, point,
-									   arg, event));
+					   o, a_path, point,
+					   arg, event));
 }
 
 void Network::SendToServer(Packetizer *packet)
@@ -1940,9 +1940,9 @@ void Network::SendToServer(Packetizer *packet)
 
 void
 Network::QueuePacket(uint16 id, 
-					 Packetizer* packet) 
+		     Packetizer* packet) 
 {
-	PacketManager	l_AutoRelease(packet);
+	PacketManager l_AutoRelease(packet);
 
 	if(m_iAmClient && m_waitingOnResync)
 		return;
@@ -1973,7 +1973,7 @@ Network::QueuePacket(uint16 id,
 		}
 		packet->AddRef();
 	}
-	ProcessSends(); 
+	ProcessSends();
 }
 
 
@@ -2058,7 +2058,7 @@ Network::QueuePacketToAll(Packetizer* packet)
 			}
 		}
 	}
-	ProcessSends(); 
+	ProcessSends();
 
 }
 
@@ -2400,8 +2400,8 @@ Network::ProcessNewPlayer(uint16 id)
 				g_director->NextPlayer();
 			}
 			if(g_tiledMap) {
-                g_tiledMap->NextPlayer();
-                g_tiledMap->CopyVision();
+				g_tiledMap->NextPlayer();
+				g_tiledMap->CopyVision();
 				g_tiledMap->InvalidateMix();
 				g_tiledMap->InvalidateMap();
 				g_tiledMap->Refresh();
@@ -2587,7 +2587,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 
 	NetChat *chatPacket = new NetChat(m_chatMask, str, (sint16)len);
 	chatPacket->AddRef();
-    if (IsActive()) {
+	if (IsActive()) {
 #if 0
 		MBCHAR tempStr[_MAX_PATH];
 		memcpy(tempStr, str, len);
@@ -3637,7 +3637,7 @@ void Network::SetProgress(sint32 progress)
 		return;
 
 	m_progress = progress;
-	c3_AbortUpdateData( NULL, (progress > 100 ? 100 : progress) );
+	c3_AbortUpdateData(NULL, (progress > 100 ? 100 : progress) );
 	if(m_progress >= 100) {
 		const char *str = g_theStringDB->GetNameStr("NETWORK_WAITING_ON_PLAYERS");
 		
@@ -3837,7 +3837,9 @@ void Network::Resync(sint32 playerIndex)
 		QueuePacket(id, new NetInfo(NET_INFO_CODE_RESYNC));
 		SetReady(id);
 	}
+#ifdef WIN32
 	DPRINTF(k_DBG_NET, ("Resync stack trace: %s\n", c3debug_StackTrace()));
+#endif
 }
 
 void Network::StartResync()
@@ -3921,7 +3923,9 @@ void Network::RequestResync(RESYNC_REASON reason)
 	if(m_waitingOnResync)
 		return;
 
+#ifdef WIN32
 	DPRINTF(k_DBG_NET, ("RequestResync(%d) stack trace: %s\n", reason, c3debug_StackTrace()));
+#endif
 
 	m_readyToStart = FALSE;
 	const char *str = g_theStringDB->GetNameStr("NETWORK_RESYNCING");
