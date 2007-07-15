@@ -314,7 +314,11 @@ void NetThread::Lock()
 
 void NetThread::Unlock()
 {
+#ifdef USE_SDL
+	SDL_mutexV(m_mutex);
+#else
 	LeaveCriticalSection(&m_mutex);
+#endif
 }
 
 void NetThread::SetDP(dp_t *dp)

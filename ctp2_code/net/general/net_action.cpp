@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -482,8 +482,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				if(g_theTradePool->IsValid(otherRoute))
 					g_network.QueuePacket(id, new NetTradeRoute(otherRoute.AccessData(), true));
 
-				if (route.IsValid()) 
-                {
+				if (route.IsValid()) {
 					g_network.QueuePacket(id, new NetTradeRoute(route.AccessData(), true));
 				}
 			} else {

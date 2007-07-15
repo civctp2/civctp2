@@ -1321,14 +1321,10 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		case NET_INFO_CODE_DETACH_ROBOT:
 		{
 			DPRINTF(k_DBG_NET, ("Player %d is a non-robot\n", m_data));
-			if (g_player[m_data]) 
-            {
-				if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex()) 
-                {
+			if (g_player[m_data]) {
+				if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex()) {
 					g_player[m_data]->m_playerType = PLAYER_TYPE_HUMAN;
-				} 
-                else 
-                {
+				} else {
 					g_player[m_data]->m_playerType = PLAYER_TYPE_NETWORK;
 				}
 			}

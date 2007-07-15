@@ -1433,7 +1433,7 @@ void Network::SetReady(uint16 id)
                 g_theUnitPool->GetUnit(unitList->Get(n).m_id);
 
 			
-			chunkPackets.AddTail( new NetUnit(unitData));
+			chunkPackets.AddTail(new NetUnit(unitData));
 
 			
 			chunkPackets.AddTail(new NetCity(unitData, TRUE));
@@ -1454,16 +1454,16 @@ void Network::SetReady(uint16 id)
 		
 		unitList = g_player[p]->GetAllUnitList();
 		for(n = 0; n < unitList->Num(); n++) {
-			chunkPackets.AddTail( new NetUnit(g_theUnitPool->GetUnit(unitList->Get(n).m_id)));
+			chunkPackets.AddTail(new NetUnit(g_theUnitPool->GetUnit(unitList->Get(n).m_id)));
 		}
 
 		
 		for(n = 0; n < g_player[p]->m_all_armies->Num(); n++) {
 			Army army = g_player[p]->m_all_armies->Access(n);
-			chunkPackets.AddTail( 
+			chunkPackets.AddTail(
 						new NetArmy(g_theArmyPool->AccessArmy(army)));
 
-			chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_ADD_ARMY,
+			chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_ADD_ARMY,
 												  p,
 												  CAUSE_NEW_ARMY_INITIAL,
 												  g_player[p]->m_all_armies->Access(n)));
@@ -1473,7 +1473,7 @@ void Network::SetReady(uint16 id)
 				const Order *order = army.GetOrder(m);
 				Assert(order);
 				if(order) {
-					chunkPackets.AddTail( new NetOrder(p,
+					chunkPackets.AddTail(new NetOrder(p,
 														   army,
 														   order->m_order,
 														   order->m_path,
@@ -1490,32 +1490,32 @@ void Network::SetReady(uint16 id)
 		for(n = 0; n < traderList->Num(); n++) {
 			UnitData * unitData = 
                 g_theUnitPool->GetUnit(traderList->Get(n).m_id);
-			chunkPackets.AddTail( new NetUnit(unitData));
+			chunkPackets.AddTail(new NetUnit(unitData));
 		}
 
 		
 		n = g_player[p]->m_terrainImprovements->Num();
 		for(i = 0; i < n; i++) {
-			chunkPackets.AddTail( new NetTerrainImprovement(g_player[p]->m_terrainImprovements->Access(i).AccessData()));
+			chunkPackets.AddTail(new NetTerrainImprovement(g_player[p]->m_terrainImprovements->Access(i).AccessData()));
 		}
 
 		
 		n = g_player[p]->m_allInstallations->Num();
 		for(i = 0; i < n; i++) {
-			chunkPackets.AddTail( new NetInstallation(g_player[p]->m_allInstallations->Access(i).AccessData()));
+			chunkPackets.AddTail(new NetInstallation(g_player[p]->m_allInstallations->Access(i).AccessData()));
 		}
 
 		
 		chunkPackets.AddTail( new NetInfo(NET_INFO_CODE_GOLD,
 											  p, g_player[p]->m_gold->GetLevel()));
 		
-		chunkPackets.AddTail( new NetReadiness(g_player[p]->m_readiness));
+		chunkPackets.AddTail(new NetReadiness(g_player[p]->m_readiness));
 
 		
-		chunkPackets.AddTail( new NetPlayerHappy((uint8)p, g_player[p]->m_global_happiness, TRUE));
+		chunkPackets.AddTail(new NetPlayerHappy((uint8)p, g_player[p]->m_global_happiness, TRUE));
 		
 		
-		chunkPackets.AddTail( new NetCivilization(g_player[p]->m_civilisation->AccessData()));
+		chunkPackets.AddTail(new NetCivilization(g_player[p]->m_civilisation->AccessData()));
 
 		
 		
@@ -1530,7 +1530,7 @@ void Network::SetReady(uint16 id)
 		n = array.Num();
 		for(i = 0; i < n; i++) {
 			chunkPackets.AddTail(new NetUnseenCell(array[i].m_unseenCell,
-														p));
+                                                               p));
 		}
 
 		chunkPackets.AddTail(new NetEndGame(p));
@@ -1582,8 +1582,8 @@ void Network::SetReady(uint16 id)
 
 	chunkPackets.AddTail(new NetKeys());
 	chunkPackets.AddTail(new NetInfo(NET_INFO_CODE_YEAR,
-										  g_turn->GetRound(),
-										  g_turn->GetYear()));
+	                                 g_turn->GetRound(),
+	                                 g_turn->GetYear()));
 
 	ChunkList(player->m_id, &chunkPackets);
 	Assert(!chunkPackets.GetHead());
@@ -1592,7 +1592,7 @@ void Network::SetReady(uint16 id)
 		sint32 index = IdToIndex(player->m_id);
 		MapPoint center = g_player[index]->m_setupCenter;
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_SETUP_MODE,
-											  m_setupMode));
+	                                              m_setupMode));
 		QueuePacket(player->m_id, new NetInfo(NET_INFO_CODE_SET_SETUP_AREA,
 						      index,
 						      center.x, center.y,
