@@ -1315,7 +1315,7 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 	if ( maxY > m_numRows ) maxY = m_numRows;
 	maxY *= m_maxItemHeight;
 
-	sint32 itemIndex;
+	sint32 itemIndex = 0;
 	if ( y < 0 )
 		itemIndex = m_verticalRanger->GetValueY();
 	else if ( y < maxY )
@@ -1355,7 +1355,7 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 	else
 	{
 		
-		if ( !m_multiSelect && m_visualSelectedList->L() )
+		if (!m_forceSelect && !m_multiSelect && m_visualSelectedList->L() )
 			m_visualSelectedList->RemoveHead();
 
 		if ( m_selectStatus == AUI_LISTBOX_SELECTSTATUS_SELECTING )
@@ -2149,10 +2149,6 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 //----------------------------------------------------------------------------
 void aui_ListBox::BuildListStart(void)
 {
-	
-	
-	
-	
 	m_savedForceSelect = IsForceSelect();
 	
 	SetForceSelect(FALSE);

@@ -385,9 +385,9 @@ SPNewGameDiffScreen {
 
 	string	pattern	"uptg20e.tga"
 
-#	int 	xpix		46
+#	int	xpix		46
 
-#	int 	ypix		180
+#	int	ypix		180
 
 	string	xanchor		"center"
 
@@ -470,92 +470,32 @@ SPNewGameDiffScreen {
 
 		string	text	"str_ldl_BACK"
 	}
-
-	Group {
-
-		DiffOne:POPUP_CHECKBOX3 {
-
-			string	text	"str_ldl_Chieftain"
-			int	ypix	60
-
-		}
-
-		DiffTwo:POPUP_CHECKBOX3 {
-
-			string	text	"str_ldl_Warlord"
-			int	ypix	90
-
-		}
-
-		DiffThree:POPUP_CHECKBOX3 {
-
-			string	text	"str_ldl_Prince"
-			int	ypix	120
-
-		}
-
-		DiffFour:POPUP_CHECKBOX3 {
-
-			string	text	"str_ldl_King"
-			int	ypix	150
-
-		}
-
-		DiffFive:POPUP_CHECKBOX3 {
-
-			string	text	"str_ldl_Emperor"
-			int	ypix	180
-
-		}
-
-		DiffSix:POPUP_CHECKBOX3 {
-
-			string	text	"str_ldl_Deity"
-			int	ypix	210
-
-		}
-
+	DiffBox:CTP2_LISTBOX {
+		int xpix 30
+		int ypix 70
+		int widthpix 135
+		int heightpix 150
+		int focusindex 1
 	}
-
-	GroupTwo {
-
-		RiskOne:POPUP_CHECKBOX2 {
-
-			string	text	"str_ldl_Villages_Only"
-			int	ypix	60
-
-		}
-
-		RiskTwo:POPUP_CHECKBOX2 {
-
-			string	text	"str_ldl_Roving_Bands"
-			int	ypix	90
-
-		}
-
-		RiskThree:POPUP_CHECKBOX2 {
-
-			string	text	"str_ldl_Restless_Tribes"
-			int	ypix	120
-
-		}
-
-		RiskFour:POPUP_CHECKBOX2 {
-
-			string	text	"str_ldl_Raging_Hordes"
-			int	ypix	150
-
-		}
-
-		RiskFive:POPUP_CHECKBOX2 {
-
-			string	text	"str_ldl_No_Danger_Here"
-			int	ypix	180
-
-		}
-
+	RiskBox:CTP2_LISTBOX {
+		int xpix 200
+		int ypix 70
+		int widthpix 135
+		int heightpix 150
+		int focusindex 2
 	}
+}
 
+DiffRiskItem:CTP2_LIST_ITEM {
+	int widthpix 130
+	int heightpix 22
+	label:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		string just "left"
+		bool vertcenter TRUE
+		int widthpix 115
+		int heightpix 20
+	}
 }
 
 

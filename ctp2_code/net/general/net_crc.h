@@ -27,6 +27,7 @@
 // - Increased k_MAX_DBS to reflect the actual number of databases to check
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif

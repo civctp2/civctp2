@@ -1,6 +1,7 @@
 /**
  * $Id$
  */
+
 #include "c3.h"
 #include "appstrings.h"
 
@@ -34,7 +35,7 @@ void appstrings_Initialize(void)
 
 	MBCHAR inStr[_MAX_PATH];
 
-	for (sint32 i=0; i<s_numAppStrings; i++) {
+	for (size_t i=0; i<s_numAppStrings; i++) {
 		if (!fgets(inStr, _MAX_PATH, inFile)) {
 			c3errors_FatalDialog("appstr.txt", "Error in appstr.txt.  Terminating app.");
 		}
@@ -49,12 +50,12 @@ void appstrings_Cleanup(void)
 {
 	if (!s_appStrings) return;
 
-	for (sint32 i=0; i<s_numAppStrings; i++) {
+	for (size_t i=0; i<s_numAppStrings; i++) {
 		if (s_appStrings[i])
 		delete [] s_appStrings[i];
 	}
-    s_appStrings    = NULL;
-    s_numAppStrings = 0;
+	s_appStrings    = NULL;
+	s_numAppStrings = 0;
 }
 
 MBCHAR *appstrings_GetString(APPSTR stringID)

@@ -1842,6 +1842,7 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 			so->AddAllRecipients();
 			g_slicEngine->Execute(so);
 		}
+
 		break;
 	case PROPOSAL_TREATY_TRADE_PACT:
 		break;
@@ -1899,7 +1900,7 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 			
 			so = new SlicObject((MBCHAR *)"DIPLOMACY_POPUP_DECLARE_WAR");
 			so->AddRecipient(foreignerId);
-			so->AddCivilisation(foreignerId) ;		
+			so->AddCivilisation(foreignerId) ;
 			so->AddCivilisation(m_playerId) ;
 			g_slicEngine->Execute(so);
 
@@ -1907,7 +1908,7 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 			so = new SlicObject((MBCHAR *)"128CivStartedWar");
 			so->AddAllRecipientsBut(m_playerId, foreignerId);
 			so->AddCivilisation(m_playerId) ;
-			so->AddCivilisation(foreignerId) ;		
+			so->AddCivilisation(foreignerId) ;
 			g_slicEngine->Execute(so);
 		}
 		
@@ -1917,7 +1918,7 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 			so = new SlicObject((MBCHAR *)"128CivStartedWar");
 			so->AddAllRecipientsBut(m_playerId);
 			so->AddCivilisation(m_playerId) ;
-			so->AddCivilisation(foreignerId) ;		
+			so->AddCivilisation(foreignerId) ;
 			g_slicEngine->Execute(so);
 		}
 	}

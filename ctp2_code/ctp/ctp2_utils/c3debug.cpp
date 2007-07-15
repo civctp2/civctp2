@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Debugging
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,17 +17,17 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _DEBUG			(automatically set when choosing the Debug configuration)
+//
+// _DEBUG           (automatically set when choosing the Debug configuration)
 // _NO_GAME_WATCH
-// USE_LOGGING		Enable logging for the release/final version.
+// USE_LOGGING      Enable logging for the release/final version.
 //                  The debug version has logging enabled always.
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - 
+// - None
 //
 //----------------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ extern DebugWindow *g_debugWindow;
 #endif
 
 #define k_FILENAME				"logs" FILE_SEP "civ3log%#.2d.txt"
-#define k_MAX_LOG_FILE_LINES	10000		
+#define k_MAX_LOG_FILE_LINES	10000
 
 MBCHAR	s_logFileName[20];
 sint32	s_logFileNumber=0;
@@ -129,8 +130,8 @@ int c3debug_InitDebugLog()
 
 int
 c3debug_dprintfPrefix(int mask,
-			   char* file,
-			   int line)
+                      char const* file,
+                      int line)
 {
 	g_useMask = mask;
 
@@ -149,15 +150,15 @@ c3debug_dprintfPrefix(int mask,
 			fprintf(f, "[Continued from Part %#.2d]\n\n", s_logFileNumber-1);
 		}
 
-	    char const * filename = strrchr(file, FILE_SEPC);
+		char const * filename = strrchr(file, FILE_SEPC);
 		if (filename)
-        {
-            filename++;
-        }
-        else
-        {
+		{
+			filename++;
+		}
+		else
+		{
 			filename = file;
-        }
+		}
 		
 		fprintf(f, "%15.15s@%-4d: ", filename, line);
 		
@@ -312,18 +313,18 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 void c3debug_Assert(char const *s, char const * file, int line)
 {
 	DPRINTF(k_DBG_FIX, ("Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line)); 
- 	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", c3debug_StackTrace()));
+	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", c3debug_StackTrace()));
 
 #if defined(_DEBUG)
-    do 
-    { 
+	do
+	{
 		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1) 
-        {
-            _CrtDbgBreak(); 
-        }
-	} 
-    while (0);
+		{
+			_CrtDbgBreak(); 
+		}
+	}
+	while (0);
 #endif
-}	
+}
 
-#endif 
+#endif

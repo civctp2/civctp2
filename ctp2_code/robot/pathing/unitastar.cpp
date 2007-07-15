@@ -88,8 +88,10 @@
 
 namespace
 {
+#pragma warning(disable:4309)
     // Will generate a truncation warning, but only once.
     sint16 const    MARK_UNUSED16   = static_cast<sint16>(MARK_UNUSED);
+#pragma warning(default:4309)
 }
 
 UnitAstar::UnitAstar() 

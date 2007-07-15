@@ -524,7 +524,6 @@ ScenarioEditor::~ScenarioEditor()
 		aui_Ldl::DeleteHierarchyFromRoot(s_scenarioAddStuffBlock);
 	}
 
-	//Added by Martin Gühmann
 	delete [] m_terrainSwitches;
 	delete [] m_terrainImpSwitches;
 
@@ -2806,7 +2805,7 @@ void ScenarioEditor::SetupGlobalControls()
 	m_initializing=true;
 
 	ctp2_DropDown * dd = (ctp2_DropDown *)
-        aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
+	    aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
 
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	aui_StringTable *table = new aui_StringTable(&err, "SPMapSizeStringTable");
@@ -2814,11 +2813,11 @@ void ScenarioEditor::SetupGlobalControls()
 	Assert(err == AUI_ERRCODE_OK);
 	Assert(dd);
 
-    if(dd && (err == AUI_ERRCODE_OK)) {
-	    dd->Clear();
+	if(dd && (err == AUI_ERRCODE_OK)) {
+		dd->Clear();
 
 		for (sint32 i = MAPSIZE_SMALL; i <= MAPSIZE_GIGANTIC; i++) 
-        {
+		{
 			AddDropDownItem(dd, "ScenMapSizeItem", table->GetString(i));
 			dd->SetSelectedItem(g_theProfileDB->GetMapSize());
 		}
@@ -2828,37 +2827,32 @@ void ScenarioEditor::SetupGlobalControls()
 
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.Barbarians");
 	Assert(dd);
-	table = new aui_StringTable(&err, "SPRiskLevelStringTable");
-	if (dd) 
-    {
-	    dd->Clear();
-		for (sint32 i = 0; i < g_theRiskDB->NumRecords(); i++) {
-			// Should be taken from the string database directly
-			AddDropDownItem(dd, "ScenBarbarianItem", table->GetString(i));	
+	if (dd)
+	{
+		dd->Clear();
+		for (sint32 i = 0; i < g_theRiskDB->NumRecords(); i++)
+		{
+			AddDropDownItem(dd, "ScenBarbarianItem", g_theRiskDB->Get(i)->GetNameText());
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetRiskLevel());
 	}
 
-	delete table;
-
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.Difficulty");
 	Assert(dd);
-	table = new aui_StringTable(&err, "SPNewGameStrings");
-	Assert(err == AUI_ERRCODE_OK);
-	if (dd && (err == AUI_ERRCODE_OK)) 
-    {
-	    dd->Clear();
-		for (sint32 i = 0; i < g_theDifficultyDB->NumRecords(); i++) {
+	if (dd)
+	{
+		dd->Clear();
+		for (sint32 i = 0; i < g_theDifficultyDB->NumRecords(); i++)
+		{
 			AddDropDownItem(dd, "ScenDifficultyItem", g_theDifficultyDB->Get(i)->GetNameText());
 		}
 		dd->SetSelectedItem(g_theProfileDB->GetDifficulty());
 	}
 
-	delete table;
-
 	ctp2_Switch *pollSwitch = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.World.Pollution");
 	Assert(pollSwitch);
-	if(pollSwitch) {
+	if(pollSwitch)
+	{
 		pollSwitch->SetState(g_theProfileDB->IsPollutionRule() ? 1 : 0);
 	}
 
@@ -3056,7 +3050,7 @@ void ScenarioEditor::SetGovernment(aui_Control *control, uint32 action, uint32 d
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
 	g_player[g_selected_item->GetVisiblePlayer()]->ActuallySetGovernment
-        (dd->GetSelectedItem());
+	    (dd->GetSelectedItem());
 }
 
 void ScenarioEditor::Difficulty(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3069,7 +3063,6 @@ void ScenarioEditor::Difficulty(aui_Control *control, uint32 action, uint32 data
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
 	g_theProfileDB->SetDifficulty(dd->GetSelectedItem());
 }
-
 
 void ScenarioEditor::SetXWrap(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -3208,7 +3201,7 @@ void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 
 
 	if(sw->GetState() != 0) {
 		if(s_scenarioEditor->m_mapMode == SCEN_MAP_TERRAIN) 
-        {
+		{
 			for(sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++) {
 				if(s_scenarioEditor->m_terrainSwitches[i]) {
 					s_scenarioEditor->m_terrainSwitches[i]->SetState(0);
@@ -3444,39 +3437,51 @@ void ScenarioEditor::FindPosNow(aui_Control *control, uint32 action, uint32 data
 	uint32 posY = 0;
 
 	ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
-	if(!tf->GetFieldText(Xtext, MAX_CHARS)) {
+	if(!tf->GetFieldText(Xtext, MAX_CHARS))
+	{
 		return;
-	} else if (atoi(Xtext) < g_theWorld->GetXWidth() && atoi(Xtext) >= 0) { 
+	}
+	else if (atoi(Xtext) < g_theWorld->GetXWidth() && atoi(Xtext) >= 0)
+	{
 		posX = atoi(Xtext);
 	}
 
 	tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosYField");
-	if(!tf->GetFieldText(Ytext, MAX_CHARS)) {
+	if(!tf->GetFieldText(Ytext, MAX_CHARS))
+	{
 		return;
-	} else if (atoi(Ytext) < g_theWorld->GetYHeight() && atoi(Ytext) >= 0) { 
+	}
+	else if (atoi(Ytext) < g_theWorld->GetYHeight() && atoi(Ytext) >= 0)
+	{
 		posY = atoi(Ytext);
-	} 
+	}
 
-	if(posX >= 0 && posY >= 0) {
+	if(posX >= 0 && posY >= 0)
+	{
 		MapPoint pos(posX, posY);
-		if(!g_fog_toggle) {
+		if(!g_fog_toggle)
+		{
 			g_fog_toggle = !g_fog_toggle;
 			WhackScreen();
 		}
 		g_tiledMap->SetHiliteMouseTile(pos);
 		g_tiledMap->DrawHilite(TRUE);
 		g_director->AddCenterMap(pos);
-	} else {
+	}
+	else
+	{
 		tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
 			tf->SetFieldText("");
 		tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosYField");
 			tf->SetFieldText("");
 		return;
 	}
-		tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
-			tf->SetFieldText("");
-		tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosYField");
-			tf->SetFieldText("");
+
+	tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
+	tf->SetFieldText("");
+
+	tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosYField");
+	tf->SetFieldText("");
 }
 
 bool ScenarioEditor::IsGivingAdvances()
@@ -3503,12 +3508,14 @@ void ScenarioEditor::ShowEnemyHealth(aui_Control *control, uint32 action, uint32
 */
 
 void ScenarioEditor::DebugAI(aui_Control *control, uint32 action, uint32 data, void *cookie)
-    {
-		
-        if(g_graphicsOptions->IsArmyTextOn()){
-			g_graphicsOptions->ArmyTextOff();
-        }
-		else
-            g_graphicsOptions->ArmyTextOn();
+{
+	if(g_graphicsOptions->IsArmyTextOn())
+	{
+		g_graphicsOptions->ArmyTextOff();
 	}
+	else
+	{
+		g_graphicsOptions->ArmyTextOn();
+	}
+}
 

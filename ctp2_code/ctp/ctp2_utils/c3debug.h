@@ -29,6 +29,7 @@
 // - Report for !WIN32 on stderr
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -37,8 +38,8 @@
 #define __C3DEBUG_H__
 
 #include "ctp2_config.h"
-#include "c3.h"	
-#undef Assert	
+#include "c3.h"
+#undef Assert
 
 #ifdef _DEBUG
 
@@ -50,7 +51,7 @@
 #endif
 
 #else
-#define Assert(x)				
+#define Assert(x)
 #endif
 
 #if defined(WIN32)
@@ -106,7 +107,7 @@ void	c3debug_Assert(char const * s, char const * file, int line);
 #ifdef _DEBUG
 	#define DPRINTF(mask, x) { c3debug_dprintfPrefix(mask, __FILE__, __LINE__); c3debug_dprintf x;}
 #else
-	#define DPRINTF(mask, x)	;
+	#define DPRINTF(mask, x);
 #endif
 
 #endif

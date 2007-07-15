@@ -3949,7 +3949,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 {
 	TileSet	*   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-    RECT		iconRect;
+	RECT		iconRect;
 	iconRect.left   = popRect.right + 3;
 	iconRect.right  = iconRect.left + iconDim.x + 1;
 	iconRect.top    = popRect.top;
@@ -4085,7 +4085,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 			Assert(cityIcon);
 			if (!cityIcon) return;
 
-            color = GetPlayerColor(i, fog);
+			color = GetPlayerColor(i, fog);
 			DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
 			AddDirtyRectToMix(iconRect);
@@ -4140,6 +4140,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
 	}
+
 	//emod. this bool is in he function line but never called and there is an icon so its a possible oversight/defect
 	if (hasAirport) {  
 		cityIcon = tileSet->GetMapIconData(MAPICON_AIRPORT);
@@ -4155,6 +4156,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		iconRect.left += iconDim.x;
 		iconRect.right += iconDim.x;
 	}
+
 	//emod to add an icon for the city capitol like civ3/4
 	if (isCapitol) {
 		POINT       iconDim2     = tileSet->GetMapIconDimensions(MAPICON_CAPITOL);
@@ -4182,13 +4184,6 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		return;
 
 }
-
-
-
-
-
-
-
 
 sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color, sint32 blendValue)
 {
@@ -4825,7 +4820,6 @@ void TiledMap::AddChatDirtyRectToMap()
 
 //new DrawCityReligionIcons to allow for multiple religions bound only to the number of mapicons 
 // changed from religion to just special icons to cover both types
-
 void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon)
 {
 	TileSet	*   tileSet     = GetTileSet();
@@ -4842,11 +4836,8 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		return;
 
 	Pixel16     color       = GetPlayerColor(owner, fog);
-	Pixel16 *   cityIcon;
-	Pixel16 *   WonderIcon;
 
 	if (HasReligionIcon) {
-		POINT       iconDim2     = tileSet->GetMapIconDimensions(MAPICON_HERALD);
 		iconRect.left   = popRect.left;
 		iconRect.right  = iconRect.left + iconDim.x + 1;
 		iconRect.top    = popRect.bottom;
@@ -4888,7 +4879,5 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
-
-
 }
 
