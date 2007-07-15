@@ -309,7 +309,7 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	if(num != remoteNum) {
 		// No idea what this should do, this can only happen if the 
-		// remote executable is compiled from a different bversion 
+		// remote executable is compiled from a different version 
 		// of the source code.
 		Error("Number of databases doesn't even match, sheesh!");
 		return;

@@ -191,7 +191,7 @@ void NetVision::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 //----------------------------------------------------------------------------
 //
-// Name       : NetUnseenCell::NetVision
+// Name       : NetUnseenCell::NetUnseenCell
 //
 // Description: Constructor
 //

@@ -30,7 +30,7 @@
 #include "net_info.h"
 #include "net_util.h"
 #include "player.h"             // g_player
-#include "SelItem.h"             // g_selected_item
+#include "SelItem.h"            // g_selected_item
 #include "Diplomat.h"
 #include "diplomattypes.h"
 #include "GameEventManager.h"

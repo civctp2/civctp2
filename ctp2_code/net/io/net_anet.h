@@ -74,7 +74,7 @@ private:
 	dpid_t m_hostId;
 	sint32 m_isHost;
 	sint32 m_broadcastAddMessage;
-	sint32 m_broadcastAddMessageTime;
+	time_t m_broadcastAddMessageTime;
 
 	dp_session_t m_session;
 
@@ -107,8 +107,8 @@ private:
 							 long flags,
 							 void* context);
 
-	void PlayerReady(dpid_t id, char_t *name, sint32 flags);
-	friend void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, char_t *name,
+	void PlayerReady(dpid_t id, dp_char_t *name, sint32 flags);
+	friend void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, dp_char_t *name,
 							long flags, void *context);
 
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Network framework
-// Id           : $Id:$
+// Id           : $Id network.h 763 2007-07-15 13:21:26Z richardh $
 //
 //----------------------------------------------------------------------------
 //
@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2
+// This material has been developed at apolyton.net by the Apolyton CtP2 
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-//
+// 
 // _DEBUG
 // - Generates debug information when set.
 //
@@ -47,6 +47,20 @@
 // Export overview
 //----------------------------------------------------------------------------
 
+class Network;
+typedef enum {
+	NETSTATE_READY,
+	NETSTATE_HOSTING,
+	NETSTATE_JOINING,
+	NETSTATE_SHOWSESSIONS,
+} NETSTATE;
+
+#define k_GAME_STYLE_UNIT_MOVES 0x01
+#define k_GAME_STYLE_TOTAL_TIME 0x02
+#define k_GAME_STYLE_SPEED  0x04
+#define k_GAME_STYLE_SIMULTANEOUS 0x08
+#define k_GAME_STYLE_CARRYOVER 0x10
+#define k_GAME_STYLE_SPEED_CITIES 0x20
 
 //----------------------------------------------------------------------------
 // Project dependencies
@@ -86,7 +100,6 @@ class NetGameObj;
 class GAMEOBJ;
 class MapPoint;
 class NetHash;
-typedef sint32 PLAYER_INDEX;
 class UnitDynamicArray;
 class NetOrder;
 class Army;
@@ -105,13 +118,6 @@ class aui_Surface;
 
 
 #define ENQUEUE() { if(g_network.IsActive() && g_network.IsHost()) g_network.Enqueue(this); }
-
-typedef enum {
-	NETSTATE_READY,
-	NETSTATE_HOSTING,
-	NETSTATE_JOINING,
-	NETSTATE_SHOWSESSIONS,
-} NETSTATE;
 
 #define k_GAME_STYLE_UNIT_MOVES 0x01
 #define k_GAME_STYLE_TOTAL_TIME 0x02
@@ -448,7 +454,7 @@ public:
 	void SetDynamicJoin(BOOL on);
 	BOOL GetDynamicJoin() { return m_dynamicJoin; }
 
-	void ChunkList(uint16 id, PointerList<Packetizer> *list);
+	void ChunkList(uint16 id, PointerList<Packetizer> *a_Lst);
 	void DechunkList(sint32 from, uint8 *buf, sint32 len);
 
 	void SetCRCError();
@@ -534,7 +540,7 @@ private:
 	sint32 m_totalStartTime;
 	sint32 m_totalTimeUsed;
 	sint32 m_turnStartTime;
-	sint32 m_turnStartedAt;
+	time_t m_turnStartedAt;
 	sint32 m_bonusTime;
 	sint32 m_turnEndsAt;
 	sint32 m_extraTimePerCity;
@@ -596,6 +602,5 @@ private:
 };
 
 extern Network g_network;
-#else
-class Network;
+
 #endif

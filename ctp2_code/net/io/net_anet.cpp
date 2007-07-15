@@ -48,7 +48,7 @@ ActivNetIO::~ActivNetIO()
 		Idle();
 		dpClose(m_dp);
 		
-		int start = time(0);
+		time_t start = time(0);
 		do {
 			Idle();
 		} while(time(0) < start + 3);
@@ -266,7 +266,7 @@ int dp_PASCAL anet_CreateSessionCallback(dp_session_t *ps,
 }
 
 
-void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, char_t *name,
+void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, dp_char_t *name,
 					long flags, void *context)
 {
 	
@@ -275,7 +275,7 @@ void dp_PASCAL anet_PlayerReadyCallback(dpid_t id, char_t *name,
 
 
 void
-ActivNetIO::PlayerReady(dpid_t id, char_t *name, sint32 flags)
+ActivNetIO::PlayerReady(dpid_t id, dp_char_t *name, sint32 flags)
 {
 	
 	m_pid = id;
@@ -287,7 +287,7 @@ ActivNetIO::PlayerReady(dpid_t id, char_t *name, sint32 flags)
 
 sint32
 ActivNetIO::SessionReadyCallback(dp_session_t *ps,
-				  long *pTimeout,
+				  long * pTimeout,
 				  long flags)
 {
 	if(ps) {
@@ -315,7 +315,7 @@ ActivNetIO::Host(char* sessionName)
 
 	
 	if(m_state == ANET_STATE_CONTACTING_LOBBY) {
-		sint32 t = time(0) + 3;
+		time_t t = time(0) + 3;
 		while(time(0) < t) {
 			Idle();
 		}
@@ -392,7 +392,7 @@ ActivNetIO::EnumSessions()
 
 	
 	if(m_state == ANET_STATE_CONTACTING_LOBBY) {
-		sint32 t = time(0) + 3;
+		time_t t = time(0) + 3;
 		while(time(0) < t) {
 			Idle();
 		}

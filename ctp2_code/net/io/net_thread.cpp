@@ -441,12 +441,12 @@ NET_ERR NetThread::Send(uint16 id, sint32 flags, uint8* buf, sint32 len)
 
 NET_ERR NetThread::SendCompressed(uint16 id, sint32 flags, uint8 *buf, sint32 len)
 {
-	uLong  cbufsize = (uint32)(((double)len * 1.01) + 12.5);
-	uint8 *cbuf = new uint8[cbufsize + 5];
+	uLongf  cbufsize = (uint32)(((double)len * 1.01) + 12.5);
+	uint8 * cbuf = new uint8[cbufsize + 5];
 
 	cbuf[0] = k_COMPRESSED_PACKET;
 	int err;
-	err = compress2(&cbuf[5], &cbufsize, buf, (uLong)len, Z_DEFAULT_COMPRESSION);
+	err = compress2(&cbuf[5], &cbufsize, buf, len, Z_DEFAULT_COMPRESSION);
 	if(err == Z_OK) {
 		putlong(&cbuf[1], len);
 		return Send(id, flags, cbuf, cbufsize + 5);
@@ -510,7 +510,7 @@ NET_ERR NetThread::Idle()
 			}
 		} else {
 			if(packet->m_buf[0] == k_COMPRESSED_PACKET) {
-				uLong uSize = getlong(&packet->m_buf[1]);
+				uLongf uSize = getlong(&packet->m_buf[1]);
 
 				uint8 *uBuf = new uint8[uSize];
 				int err;

@@ -737,7 +737,7 @@ Network::Process()
 			return;
 	}
 
-	static sint32 battleEndedTime = -1;
+	static time_t battleEndedTime = -1;
 
 	
 	if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id()) && (!g_theCurrentBattle || g_theCurrentBattle->IsDone())) {
@@ -754,7 +754,7 @@ Network::Process()
 		
 	if(m_gameStyle & (k_GAME_STYLE_SPEED | k_GAME_STYLE_SPEED_CITIES)) {
 
-		sint32 timeNow = time(0); 
+		time_t timeNow = time(0); 
 
 		bool diplomacyShouldPause = false;
 		if(!DipWizard::CanInitiateRightNow() && IsMyTurn()) {
@@ -1051,10 +1051,10 @@ Network::GetHandler(uint8* buf,
 		case k_PACKET_UNGROUP_REQUEST_ID:      handler = new NetUngroupRequest; break;
 		case k_PACKET_SCORES_ID:               handler = new NetScores; break;
 
-		case k_PACKET_FEAT_TRACKER_ID:         handler = new NetFeatTracker(); break;
+		case k_PACKET_FEAT_TRACKER_ID:	handler = new NetFeatTracker(); break;
 
 #ifdef _DEBUG
-		case k_PACKET_CHEAT_ID:                handler = new NetCheat; break;
+		case k_PACKET_CHEAT_ID:         handler = new NetCheat; break;
 #endif
 	}
 	if(handler) {
@@ -4047,13 +4047,13 @@ void Network::SetDynamicJoin(BOOL on)
 	}
 }
 
-void Network::ChunkList(uint16 id, PointerList<Packetizer> *list)
+void Network::ChunkList(uint16 id, PointerList<Packetizer> *a_List)
 {
-	Assert(list);
-	if(!list)
+	Assert(a_List);
+	if(!a_List)
 		return;
 
-	sint32 mapBufSize = list->GetCount() * 258 + 16384;
+	sint32 mapBufSize = a_List->GetCount() * 258 + 16384;
 	uint8 *mapBuf = new uint8[mapBufSize];
 	
 	mapBuf[0] = k_CHUNK_HEAD;
@@ -4061,9 +4061,9 @@ void Network::ChunkList(uint16 id, PointerList<Packetizer> *list)
 	sint32 size = 2;
 
 	
-	while(list->GetHead()) {
+	while(a_List->GetHead()) {
 		uint16 len = 0;
-		Packetizer *packet = list->RemoveHead();
+		Packetizer *packet = a_List->RemoveHead();
 		packet->Packetize(&mapBuf[size + 2], len);
 		Assert(len < 16384); 
 		                   

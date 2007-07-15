@@ -37,12 +37,12 @@
 #include "UnitPool.h"           // g_theUnitPool
 #include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
-#include "player.h"              // g_player
+#include "player.h"             // g_player
 
 #include "DB.h"
 #include "UnitRec.h"
 #include "SelItem.h"            // g_selected_item
-#include "director.h"            // g_director
+#include "director.h"           // g_director
 #include "tech_wllist.h"
 
 #include "Cell.h"
