@@ -24,7 +24,7 @@
 // - corrected wrong defined name for multiple include prevention
 //
 //----------------------------------------------------------------------------
-#ifdef HAVE_PLASMA_ONCE
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
