@@ -39,9 +39,10 @@
 #include "noCOMBase.h"
 #endif
 
-#include "PlasmaGen2.h"
-#include <stdlib.h>
+#include <algorithm>
+#include <cstdlib>
 #include "IC3Rand.h"
+#include "PlasmaGen2.h"
 
 #if defined(USE_COM_REPLACEMENT)
 extern "C" IMapGenerator *CoCreateMapGenerator()
@@ -121,59 +122,44 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
                                 const double *settings, sint32 numSettings)
 #endif
 {
-	double roughness;
-	if(numSettings >= 1)
-		roughness = settings[0];
-	else
-		roughness = 0.75;
+    double  roughness = (numSettings > 0) ? settings[0] : 0.75;
 
-	int i,j,i2,j2,i3,j3,h,delta,a,b,c,d,w;
-	int width, height;
-
+	int     i;
 	for(i = 1; i < 9 ; i++) {
 		if((1 << i) >= outwidth)
 			break;
 	}
-	width = 1 << i;
+	int     width   = 1 << i;
+
 	for(i = 1; i < 9; i++) {
 		if((1 << i) >= outheight)
 			break;
 	}
-	height = 1 << i;
-	sint8 *map = new sint8 [width * height];
-
+	int     height  = 1 << i;
 	
-	
-	for (i=0;i<height;i++) 
-		for (j=0;j<width;j++) 
-			map[i * width + j]=0;
+	sint8 * map = new sint8 [width * height];
+    std::fill(map, map + (width * height), 0);
 
-	sint32 bigside = (width > height) ? width : height;
-
-	h = height;
-	w = width;
-	delta = bigside;
+    int     bigside = std::max(width, height);
+	int     h       = height;
+	int     w       = width;
+	sint16  delta   = static_cast<sint16>(bigside);
 		
 	while(bigside > 1) {
-		h = h / 2;
-		w = w / 2;
-		if(h < 2)
-			h = 2;
-		if(w < 2)
-			w = 2;
-
+	h = std::max(h / 2, 2);
+	w = std::max(w / 2, 2);
 		bigside = bigside / 2;
-		for(i = 0; i < height; i += h) {
-			for(j = 0; j < width; j += w) {
 
-				i2 = (i + h) % height;
-				i3 = (i + h/2) % height;
-				j2 = (j + w) % width;
-				j3 = (j + w/2) % width;
-				a = map[i * width + j];
-				b = map[i2 * width + j];
-				c = map[i * width + j2];
-				d = map[i2 * width + j2];
+		for (i = 0; i < height; i += h) {
+			for (int j = 0; j < width; j += w) {
+				int     i2  = (i + h) % height;
+				int     i3  = (i + h/2) % height;
+				int     j2  = (j + w) % width;
+				int     j3  = (j + w/2) % width;
+				sint8   a   = map[i * width + j];
+				sint8   b   = map[i2 * width + j];
+				sint8   c   = map[i * width + j2];
+				sint8   d   = map[i2 * width + j2];
 				map[i3 * width + j3] = Rand1(randgen, (a+b+c+d)/4, delta);
 				if(i == 0)
 					map[i3 * width + j] = Rand1(randgen, (a+b)/2, delta);
@@ -185,13 +171,12 @@ void PlasmaGenerator2::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight
 				map[i3*width+j2]=Rand1(randgen, (c+d)/2,delta);
 			}
 		}
-		delta = int(double(delta) * roughness);
-		if(delta < 1)
-			delta = 1;
+
+        delta = std::max<sint16>(1, static_cast<sint16>(delta * roughness));
 	}
 
-	for(i = 0 ; i < outheight ; i++) {
-		for(j = 0; j < outwidth; j++) {
+	for (i = 0 ; i < outheight ; i++) {
+		for (int j = 0; j < outwidth; j++) {
 			outmap[i * outwidth + j] = map[((height * i)/outheight) * width + ((width * j)/outwidth)];
 		}
 	}
