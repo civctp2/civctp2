@@ -17,6 +17,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
+/*----------------------------------------------------------------------------
+ *
+ * Disclaimer
+ *
+ * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+ *
+ * This material has been modified by the Apolyton CtP2 Source Code Project.
+ * Contact the authors at ctp2source@apolyton.net.
+ *
+ * Modifications from the Activision Anet 0.10 code:
+ *
+ * - 2005/03/11: Modified uid assignment to prevent a compiler complaint.
+ *
+ *----------------------------------------------------------------------------
+ */
+
 /*--------------------------------------------------------------------------
  Server side code to authenticate clients and keep clients up to date
  on which of their friends are logged in.

@@ -239,7 +239,7 @@ dp_dprintf(
     #ifdef	_M_ALPHA
 	va_list argptr = { NULL , 0 };
     #else
-	va_list argptr;
+	va_list argptr = NULL;
     #endif
 	int		atomic = FALSE;
 	int		len = 0;
