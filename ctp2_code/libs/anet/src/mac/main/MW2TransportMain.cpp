@@ -35,7 +35,7 @@ void __myterminate(CFragInitBlockPtr ibp) {
 	
 	//__terminate();
 }
-void *operator new(size_t size) {
+void *operator new(unsigned long size) {
 	return NewPtrSys(size);
 }
 void operator delete(void *ptr) {

@@ -16,13 +16,14 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
+
 /*----------------------------------------------------------------------------
  *
  * Disclaimer
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been modified by the Apolyton CtP2 Source Code Project.
+ * This material has been modified by the Apolyton CtP2 Source Code Project. 
  * Contact the authors at ctp2source@apolyton.net.
  *
  * Modifications from the Activision Anet 0.10 code:
