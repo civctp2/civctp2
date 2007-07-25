@@ -9,7 +9,7 @@
 PACK=__attribute__ ((packed))
 OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../h -I../../utils
 COPT = $(FLAGS) $(OPT)
-OBJ_FILES = gtest.o raw.o avgstat.o /usr/lib/libbsd.a ../../../linux86/lib/$(dp_LIB)
+OBJ_FILES = gtest.o raw.o avgstat.o libbsd.a ../../../linux86/lib/$(dp_LIB)
 
 default: ../../../linux86/bin/$(DEST)
 
@@ -27,6 +27,9 @@ raw.o: ../../utils/raw.c ../../utils/raw.h
 	gcc -c $(COPT) ../../utils/raw.c
 avgstat.o: ../../utils/avgstat.c ../../utils/avgstat.h
 	gcc -c $(COPT) ../../utils/avgstat.c
+
+libbsd.a: /usr/lib/libbsd*.a
+	cp -p $< $@
 
 clean:
 	rm -f *.err

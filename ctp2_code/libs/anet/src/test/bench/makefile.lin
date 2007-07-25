@@ -3,7 +3,7 @@
 PACK=__attribute__ ((packed))
 OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../../h -I../../../../demo/utils -I..
 COPT = $(FLAGS) $(OPT)
-OBJ_FILES = bench.o prog.o raw.o /usr/lib/libm.a /usr/lib/libbsd.a ../../../../linux86/lib/$(dp_LIB)
+OBJ_FILES = bench.o prog.o raw.o libbsd.a /usr/lib/libm.a ../../../../linux86/lib/$(dp_LIB)
 
 default: ../../../../linux86/bin/$(DEST) 
 
@@ -21,5 +21,8 @@ prog.o: ../prog.c ../prog.h
 	gcc -c $(COPT) ../prog.c
 raw.o: ../../../../demo/utils/raw.c ../../../../demo/utils/raw.h
 	gcc -c $(COPT) ../../../../demo/utils/raw.c
+
+libbsd.a: /usr/lib/libbsd*.a
+	cp -p $< $@
 
 # end of MAKEFILE
