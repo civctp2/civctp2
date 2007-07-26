@@ -363,9 +363,9 @@ dp_result_t dpSendObjectDelta(
 	size_t datalen;
 	dp_result_t err;
 	struct {
-		dp_packetType_t   tag PACK;
- 		dp_objectDelta_packet_t body PACK;
-	} pkt;
+		dp_packetType_t   tag;
+ 		dp_objectDelta_packet_t body;
+	} PACK pkt;
 
 	precondition(dp);
 	precondition(data);

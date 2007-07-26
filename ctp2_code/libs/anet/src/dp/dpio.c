@@ -2930,8 +2930,8 @@ static dp_result_t dpio_sendAck(dpio_t *dpio, dpio_conn_t *conn, playerHdl_t h, 
 #include "dppack1.h"
 	struct {
 		dp_packetType_t tag;
-		dpio_ack_packet_t body PACK;
-	} ackbuf;
+		dpio_ack_packet_t body;
+	} PACK ackbuf;
 #include "dpunpack.h"
 	dpio_window_t *rxw = &conn->rx;
 
@@ -3305,8 +3305,8 @@ dp_result_t dpio_get(
 #include "dppack1.h"
 	struct {
 		dp_packetType_t tag;
-		dpio_ack_packet_t body PACK;
-	} ackbuf;
+		dpio_ack_packet_t body;
+	} PACK ackbuf;
 #include "dpunpack.h"
 	dpio_window_t *pw;
 	dpio_conn_t *pc;

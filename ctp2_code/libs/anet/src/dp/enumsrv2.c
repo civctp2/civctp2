@@ -83,17 +83,17 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 {
 	dp_result_t err;
 	struct {
-		dp_packetType_t tag PACK;
-		dp_ping_packet_t body PACK;
-	} pkt;
+		dp_packetType_t tag;
+		dp_ping_packet_t body;
+	} PACK pkt;
 	playerHdl_t h;
 	dp_species_t sessbuf;
 	
 	/* Note: fields of ping packet are:
-		dp_karma_t	karma PACK;
-		unsigned short	pktnum PACK;
-		unsigned char	len PACK;
-		unsigned char	data[dp_MAXLEN_UNRELIABLE-5] PACK;	// 0..len-1 
+		dp_karma_t	karma;
+		unsigned short	pktnum;
+		unsigned char	len;
+		unsigned char	data[dp_MAXLEN_UNRELIABLE-5];	// 0..len-1 
 	 * We will store the current time in the data field.
 	*/
 
@@ -738,9 +738,9 @@ dp_result_t dpHandleServerPingResponsePacket(
 	size_t serverlen;
 
 	struct dpHSPRP_pkt_s {
-		dp_packetType_t tag PACK;
-		dp_ping_packet_t body PACK;
-	} *pkt = (struct dpHSPRP_pkt_s *)buf;
+		dp_packetType_t tag;
+		dp_ping_packet_t body;
+	} PACK *pkt = (struct dpHSPRP_pkt_s *)buf;
 	clock_t tStart;
 	unsigned char adrbuf[dp_MAX_ADR_LEN];
 	dp_result_t err;

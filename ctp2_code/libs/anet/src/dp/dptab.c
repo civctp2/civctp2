@@ -1109,9 +1109,9 @@ DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, int keyl
 {
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	struct {
-		dp_packetType_t   tag PACK;
-		dptab_subscribe_packet_t body PACK;
-	} *pkt = (void *)buf;
+		dp_packetType_t   tag;
+		dptab_subscribe_packet_t body;
+	} PACK *pkt = (void *)buf;
 	dp_result_t err;
 
 	(void) cb;
@@ -1147,9 +1147,9 @@ DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int ke
 {
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	struct {
-		dp_packetType_t   tag PACK;
-		dptab_unsubscribe_packet_t body PACK;
-	} *pkt = (void *)buf;
+		dp_packetType_t   tag;
+		dptab_unsubscribe_packet_t body;
+	} PACK *pkt = (void *)buf;
 	dp_result_t err;
 
 	dptab_assertValid(dptab);

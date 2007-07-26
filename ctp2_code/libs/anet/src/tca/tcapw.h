@@ -60,15 +60,15 @@ typedef struct {
  * trailing-zero-padded out or truncated to tcapw_LEN_PW chars, as needed.
  */
 typedef struct {
-	dp_netchar_t pw[tcapw_LEN_PW] PACK;
-} tcapw_pw_t;
+	dp_netchar_t pw[tcapw_LEN_PW];
+} PACK tcapw_pw_t;
 
 /* A user's hashed password, computed as the MD5 hash of the tcapw_pw_t
  * representation of a user's password.
  */
 typedef struct {
-	char hpw[tcapw_LEN_HASHPW] PACK;
-} tcapw_hpw_t;
+	char hpw[tcapw_LEN_HASHPW];
+} PACK tcapw_hpw_t;
 
 /* Hashed passwords are stored on disk as an encrypted array of this
  * structure.
@@ -80,18 +80,18 @@ typedef struct {
  */
 #define tcapw_entry_CLIENT_SET_FLAGS (tcapw_entry_FLAGS_EMAIL_PRIVATE)
 typedef struct {
-	tcapw_uid_t uid PACK;
-	tcapw_uname_t uname PACK;
-	tcapw_hpw_t hpw PACK;
-	char email[tcapw_MAXLEN_EMAIL] PACK;		/* User's email address */
+	tcapw_uid_t uid;
+	tcapw_uname_t uname;
+	tcapw_hpw_t hpw;
+	char email[tcapw_MAXLEN_EMAIL];		/* User's email address */
 	int flags PACK;				/* Bitwise OR of tcapw_entry_FLAGS_* */
-	unsigned short int secretcode PACK;
+	unsigned short int secretcode;
                              	/* A secret code emailed to the user
 								 * to validate their email address.
 								 */
-	time_t created PACK;		/* time() when account created */
-	time_t lastlogin PACK;		/* time() when account last logged in */
-} tcapw_entry_t;
+	time_t created;		/* time() when account created */
+	time_t lastlogin;		/* time() when account last logged in */
+} PACK tcapw_entry_t;
 
 #include "dpunpack.h"
 

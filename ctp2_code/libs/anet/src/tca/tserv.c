@@ -81,12 +81,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Their length varies, though, and sizeof(this type) isn't very useful.
  */
 typedef struct {
-	dp_packetType_t type PACK;
+	dp_packetType_t type;
 	union {
 		tserv_packet_t tserv;
 		char buf[dpio_MAXLEN_UNRELIABLE];
-	} u PACK;
-} tserv_wrappedPacket_t;
+	} u;
+} PACK tserv_wrappedPacket_t;
 
 #include "dpunpack.h"
 
@@ -820,9 +820,9 @@ static dp_result_t tserv_send_credentials1(tserv_t *tserv, playerHdl_t hFrom, pl
 {
 #include "dppack1.h"
 	struct {
-		dp_packetType_t	tag  PACK;
-		tserv_packet_t  body PACK;
-	} pkt;
+		dp_packetType_t	tag;
+		tserv_packet_t  body;
+	} PACK pkt;
 #include "dpunpack.h"
 
 	int len;
