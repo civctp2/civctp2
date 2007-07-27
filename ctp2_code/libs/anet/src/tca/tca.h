@@ -74,8 +74,8 @@ typedef struct {
 	unsigned char emaillen;
 	char storage[tcapw_LEN_USERNAME*sizeof(short) + tcapw_MAXLEN_EMAIL];
 	/* VARIABLE LENGTH USERNAME AND EMAIL EMBEDDED IN storage:
-	 * short uname[unamelen] PACK;
-	 * char email[emaillen] PACK;
+	 * short uname[unamelen];
+	 * char email[emaillen];
 	 */
 } PACK tca_newuser_t;
 
