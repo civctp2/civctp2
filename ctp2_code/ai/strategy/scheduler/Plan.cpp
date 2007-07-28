@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Plan object (association Goal <-> squad)
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //

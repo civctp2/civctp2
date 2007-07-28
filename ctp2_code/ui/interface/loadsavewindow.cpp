@@ -946,26 +946,11 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 #endif
 	c3files_StripSpaces(civName);
 
-	MBCHAR		theYear[k_MAX_NAME_LEN];
-	if (g_useCustomYear && g_pTurnLengthOverride)
-	{
-        uint32 const    round = 
-            std::min<uint32>(NewTurnCount::GetCurrentRound(), g_turnLengthOverrideSize);
-		strcpy(theYear, g_pTurnLengthOverride[round].text);
-	}
-	else
-	{
-		AUI_ERRCODE			errcode         = AUI_ERRCODE_OK;
-		aui_StringTable	*   table           = new aui_StringTable(&errcode, "YearStrings");
-		sint32 const        year            = g_turn->GetYear();
-        sint32 const        yearStringIndex = (year < 0) ? 0 : 1;
-		sprintf(theYear, "%ld%s", abs(year), table->GetString(yearStringIndex));
-		delete table;
-	}
+	const MBCHAR* theYear = TurnYearStatus::GetCurrentYear();
 
 	MBCHAR		theGameName[_MAX_PATH];
 	if (gameName == NULL) 
-    {
+	{
 		if (g_startInfoType == STARTINFOTYPE_CIVS ||
 			g_startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
 			strcpy(theGameName, g_theProfileDB->GetGameName());
@@ -981,9 +966,9 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 	c3files_StripSpaces(theGameName);
 
 	if (gameName == NULL)
-    {
+	{
 		SetGameName(theGameName);
-    }
+	}
 
 	MBCHAR		saveName[_MAX_PATH];
 	if (g_startInfoType == STARTINFOTYPE_CIVS ||

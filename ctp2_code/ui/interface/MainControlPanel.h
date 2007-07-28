@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Collection of control panels during actual play.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
+// _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
@@ -32,7 +33,7 @@
 //
 // - Microsoft C++ extensions marked for future GCC compilation.
 // - Blank function added to hide the data of the previous player for hotseat
-//   games.  
+//   games.
 //
 //----------------------------------------------------------------------------
 
@@ -47,7 +48,7 @@
 // Library imports
 //----------------------------------------------------------------------------
 
-#include <memory>				// std::auto_ptr
+#include <memory>               // std::auto_ptr
 
 //----------------------------------------------------------------------------
 // Exported names
@@ -59,15 +60,15 @@ class MainControlPanel;
 // Project imports
 //----------------------------------------------------------------------------
 
-#include "aui_progressbar.h"	// aui_ProgressBar
-#include "c3types.h"			// MBCHAR
-#include "cellunitlist.h"		// CellUnitList
-#include "ControlTabPanel.h"	// ControlTabPanel
-#include "EndTurnButton.h"		// EndTurnButton
-#include "player.h"				// PLAYER_INDEX
-#include "ShortcutPad.h"		// ShortCutPad
-#include "StatusBar.h"			// StatusBar
-#include "TurnYearStatus.h"		// TurnYearStatus
+#include "aui_progressbar.h"    // aui_ProgressBar
+#include "c3types.h"            // MBCHAR
+#include "cellunitlist.h"       // CellUnitList
+#include "ControlTabPanel.h"    // ControlTabPanel
+#include "EndTurnButton.h"      // EndTurnButton
+#include "player.h"             // PLAYER_INDEX
+#include "ShortcutPad.h"        // ShortCutPad
+#include "StatusBar.h"          // StatusBar
+#include "TurnYearStatus.h"     // TurnYearStatus
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -111,15 +112,15 @@ public:
 	static void SwitchToTransportView();
 
 	static aui_ProgressBar* GetProgressBar();
-	
+
 private:
-	std::auto_ptr<ControlTabPanel>	m_controlTabPanel;	
-	std::auto_ptr<EndTurnButton>	m_endTurnButton;	
-	std::auto_ptr<ShortcutPad>		m_shortcutPad;		
-	std::auto_ptr<StatusBar>		m_statusBar;		
-	std::auto_ptr<TurnYearStatus>	m_turnYearStatus;	
+	std::auto_ptr<ControlTabPanel>  m_controlTabPanel;
+	std::auto_ptr<EndTurnButton>    m_endTurnButton;
+	std::auto_ptr<ShortcutPad>      m_shortcutPad;
+	std::auto_ptr<StatusBar>        m_statusBar;
+	std::auto_ptr<TurnYearStatus>   m_turnYearStatus;
 };
 
 extern MainControlPanel *g_mainControlPanel;
 
-#endif 
+#endif

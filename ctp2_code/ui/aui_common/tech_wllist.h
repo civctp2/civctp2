@@ -235,14 +235,7 @@ inline void tech_WLList< T >::SetAt( ListPos position, const T &newElement )
 
 
 template< class T >
-#if defined(NON_STANDART_C_PLUS_PLUS)
-//Removed by Martin Gühmann
-tech_WLList< T >::Link *tech_WLList< T >::NewLink(
-#else
-//Added by Martin Gühmann to allow compiling on compilers
-//that require standart C++ code.
 typename tech_WLList< T >::Link *tech_WLList< T >::NewLink(
-#endif
 	Link *pPrevLink,
 	Link *pNextLink )
 {

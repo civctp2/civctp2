@@ -2509,7 +2509,7 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 
 			
 			if ((city != Unit()) && g_show_ai_dbg)
-			{               
+			{
 
 
 

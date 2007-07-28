@@ -19,7 +19,7 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -681,7 +681,7 @@ void CityWindow::Update()
 	}
 
 	sint32 i;
-   
+
 	for(i = 0; i < CW_RES_MAX; i++) {
 		
 		if(m_resVal[i]) {
@@ -757,7 +757,6 @@ void CityWindow::Update()
 		m_happinessBar->ShouldDraw(TRUE);
 	}
 
-
 	if(m_happinessValue) {
 		sprintf(buf, "%d", static_cast<sint32>(m_cityData->GetHappiness()));	
 		m_happinessValue->SetText(buf);
@@ -784,7 +783,7 @@ void CityWindow::Update()
 		sprintf(buf, "%d", m_cityData->GetNetCityProduction());
 		m_globalProduction->SetText(buf);
 	}
-				
+
 	if(m_globalPopulation) {
 		sprintf(buf, "%d", m_cityData->PopCount() * k_PEOPLE_PER_POPULATION + m_cityData->GetPartialPopulation());
 		m_globalPopulation->SetText(buf);
@@ -2075,10 +2074,10 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 			
 			size_t      size = 0;
 			MBCHAR *    fileText = reinterpret_cast<MBCHAR *>
-                (g_GreatLibPF->getData(statText, size, C3DIR_GL));
+			    (g_GreatLibPF->getData(statText, size, C3DIR_GL));
 			
 			if (fileText) 
-            {
+			{
 				allocatedText = new MBCHAR[size + 1];
 				memcpy(allocatedText, fileText, size * sizeof(MBCHAR));
 				allocatedText[size] = 0;

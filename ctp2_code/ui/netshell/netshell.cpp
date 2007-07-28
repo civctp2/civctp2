@@ -201,12 +201,12 @@ void NetShell::Leave( uint32 flags, BOOL safe )
 
 NetShell::NetShell()
 :
-	aui_Shell            (),
-	m_wasMinimizing      (false),
-	m_truebmp            (NULL),
-	m_tribes             (NULL),
-      m_wonders            (NULL),
-	m_bg                 (NULL) 
+    aui_Shell            (),
+    m_wasMinimizing      (false),
+    m_truebmp            (NULL),
+    m_tribes             (NULL),
+    m_wonders            (NULL),
+    m_bg                 (NULL) 
 {
 	std::fill(m_screens, m_screens + SCREEN_MAX, (aui_Screen *) NULL);
 	std::fill(m_windows, m_windows + WINDOW_MAX, (aui_Window *) NULL);
@@ -214,7 +214,7 @@ NetShell::NetShell()
 	m_truebmp = new ns_String( "strings.truebmp" );
 	m_tribes  = new ns_Tribes;
 
-      AUI_ERRCODE	errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE	errcode = AUI_ERRCODE_OK;
 	m_bg      = new aui_Control(&errcode, aui_UniqueId(), "nsbackground");
 	Assert( AUI_NEWOK(m_bg, errcode) );
 
@@ -228,7 +228,7 @@ NetShell::NetShell()
 		g_nsUnits = new ns_Units;
 		g_nsImprovements = new ns_Improvements;
 		g_nsWonders = new ns_Wonders;
-            strncpy( g_serverName, "", 100 );
+		strncpy( g_serverName, "", 100 );
 	}
 
 }

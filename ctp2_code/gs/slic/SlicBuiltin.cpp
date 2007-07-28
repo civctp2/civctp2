@@ -119,27 +119,22 @@ class GlobalSymbol_Player : public SlicStructMemberData {
 		return TRUE;
 	};
 
-    BOOL GetIntValue(sint32 &value) const 
-    {
-        return GetPlayer(value);
-    };
+	BOOL GetIntValue(sint32 &value) const 
+	{
+		return GetPlayer(value);
+	};
 };
-
-//Added by Martin Gühmann
 
 class GlobalSymbol_NumOfPlayers : public SlicStructMemberData {
 	DEF_MAKECOPY(GlobalSymbol_NumOfPlayers);
 
 	BOOL GetIntValue(sint32 &value) const {
-	//	sint32 players = 0;
 		value = 0;
 		sint32 i;
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i])
-	//			players++;
 				value++;
 		}
-	//	value = players;
 		return TRUE;
 	}
 };
@@ -148,23 +143,19 @@ class GlobalSymbol_LastPlayer : public SlicStructMemberData {
 	DEF_MAKECOPY(GlobalSymbol_LastPlayer);
 
 	BOOL GetPlayer(sint32 &player) const {
-	//	sint32 players = 0;
 		player = 0;
 		sint32 i;
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i])
 				player = i;
-	//			players = i;
 		}
-	//	value = players;
-	//	player = players;
 		return TRUE;
 	}
 
 	BOOL GetIntValue(sint32 &value) const 
-    {
-        return GetPlayer(value);
-    };
+	{
+		return GetPlayer(value);
+	};
 };
 
 class GlobalSymbol_MaxPlayers : public SlicStructMemberData {

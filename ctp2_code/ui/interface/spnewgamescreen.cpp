@@ -92,13 +92,10 @@ BOOL                        g_launchIntoCheatMode = FALSE;
 void spnewgamescreen_SetupHotseatOrEmail();
 
 
-sint32	spnewgamescreen_displayMyWindow()
+sint32 spnewgamescreen_displayMyWindow()
 {
 	
 	g_launchIntoCheatMode = FALSE;
-	g_useCustomYear = false;
-	delete [] g_pTurnLengthOverride;
-	g_pTurnLengthOverride = NULL;
 
 	sint32 retval = g_spNewGameWindow ? 0 : spnewgamescreen_Initialize();
 	
@@ -124,7 +121,7 @@ sint32	spnewgamescreen_displayMyWindow()
 
 		if (g_slicEngine)
 		{
-            SlicEngine::Reload(g_slic_filename);
+			SlicEngine::Reload(g_slic_filename);
 		}
 
 		g_spNewGameWindow->Update();
@@ -150,23 +147,23 @@ sint32 spnewgamescreen_removeMyWindow(uint32 action)
 
 AUI_ERRCODE spnewgamescreen_Initialize( void )
 {
-    AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-    if (!g_spNewGameWindow)
-    {
-        MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-        strcpy(windowBlock, "SPNewGameWindow");
+	if (!g_spNewGameWindow)
+	{
+		MBCHAR windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
+		strcpy(windowBlock, "SPNewGameWindow");
 
-        g_spNewGameWindow= new SPNewGameWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
-        Assert(AUI_NEWOK(g_spNewGameWindow, errcode));
-        if (AUI_NEWOK(g_spNewGameWindow, errcode)) 
-        {
-            errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
-            Assert(AUI_SUCCESS(errcode));
-        }
-    }
+		g_spNewGameWindow= new SPNewGameWindow(&errcode, aui_UniqueId(), windowBlock, 16 );
+		Assert(AUI_NEWOK(g_spNewGameWindow, errcode));
+		if (AUI_NEWOK(g_spNewGameWindow, errcode)) 
+		{
+			errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
+			Assert(AUI_SUCCESS(errcode));
+		}
+	}
 
-    return errcode;
+	return errcode;
 }
 
 //----------------------------------------------------------------------------
@@ -178,7 +175,7 @@ AUI_ERRCODE spnewgamescreen_Initialize( void )
 // Parameters : -
 //
 // Globals    : g_spNewGameWindow
-//				g_c3ui
+//              g_c3ui
 //
 // Returns    : -
 //
@@ -205,7 +202,7 @@ void spnewgamescreen_Cleanup(void)
 	{
 		g_c3ui->RemoveWindow(g_spNewGameWindow->Id());
 		allocated::clear(g_spNewGameWindow);
-    }
+	}
 }
 
 
@@ -267,17 +264,17 @@ spnewgamescreen_startPress(aui_Control *control, uint32 action, uint32 data, voi
 			g_theProfileDB->SetLeaderName(fieldText);
 
 			if (g_startEmailGame || g_startHotseatGame) 
-            {
+			{
 				spnewgamescreen_SetupHotseatOrEmail();
-            }
-            else
+			}
+			else
 			{
 				spnewgamescreen_removeMyWindow(action);
 
-                g_theProfileDB->SetSaveNote("");
+				g_theProfileDB->SetSaveNote("");
 				g_theProfileDB->SetTutorialAdvice(FALSE);
 				g_civApp->PostStartGameAction();
-			} 
+			}
 		}
 	}
 }
@@ -299,7 +296,7 @@ spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, vo
 	g_civPaths->ClearCurScenarioPackPath();
 
 	if (spnewgamescreen_removeMyWindow(action)) 
-    {
+	{
 		// In the new interface there is no SP window
 		initialplayscreen_displayMyWindow();
 	}
@@ -401,15 +398,12 @@ void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 da
 
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
-
 	MBCHAR	tempPath[_MAX_PATH];
 	sprintf(tempPath, "%s%s%s", 
-			g_civPaths->GetCurScenarioPath(), 
-            FILE_SEP, 
-            k_SCENARIO_DEFAULT_SAVED_GAME_NAME
-           );
+	        g_civPaths->GetCurScenarioPath(), 
+	        FILE_SEP, 
+	        k_SCENARIO_DEFAULT_SAVED_GAME_NAME
+	       );
 
 	if (c3files_PathIsValid(tempPath)) {
 		if(!c3files_HasLegalCD())
@@ -436,10 +430,6 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 		return;
 	}
 
-	
-	
-
-	
 	g_spNewGameWindow->Update();
 }
 
@@ -451,13 +441,13 @@ void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 d
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	if (g_civPaths->GetCurScenarioPath()) 
-    {
+	if (g_civPaths->GetCurScenarioPath())
+	{
 		g_civPaths->ClearCurScenarioPath();
 		g_spNewGameWindow->Update();
-	} 
-    else 
-    {
+	}
+	else
+	{
 		scenarioscreen_displayMyWindow();
 		scenarioscreen_SetExitCallback(spnewgamescreen_scenarioExitCallback);
 	}
@@ -745,11 +735,11 @@ void spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *m
 void spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable, MBCHAR *listitemparent, MBCHAR *listitemme)
 {
 	for (sint32 i = 0; i < mytable->GetNumStrings(); i++) 
-    {
+		{
 		mylist->AddItem
 		    (new SPDropDownListItem
-                (retval, listitemparent, listitemme, mytable->GetString(i))
-            );
+		        (retval, listitemparent, listitemme, mytable->GetString(i))
+		    );
 	}
 }
 

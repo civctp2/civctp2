@@ -38,14 +38,14 @@
 
 Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 {
-	m_pad = 0; 
-	m_owner = owner;
+	m_pad                        = 0;
+	m_owner                      = owner;
 
-	m_max_martial_law_units=0;
-	m_martial_law_effect=0;
+	m_max_martial_law_units      = 0;
+	m_martial_law_effect         = 0;
 
-	m_content_in_the_field=0;
-	m_in_the_field_effect=0;
+	m_content_in_the_field       = 0;
+	m_in_the_field_effect        = 0;
 
 	m_base_contentment =           g_theDifficultyDB->Get(diff_level)->GetBaseContentment();
 
@@ -63,9 +63,9 @@ Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 	m_wonders_factor =             g_theDifficultyDB->Get(diff_level)->GetWondersFactor();
 	m_cities0to30_factor =         g_theDifficultyDB->Get(diff_level)->GetCities0To3Factor();
 	m_cities30to100_factor =       g_theDifficultyDB->Get(diff_level)->GetCities3To10Factor();
-	m_cities100to500_factor =      g_theDifficultyDB->Get(diff_level)->GetCities10To50Factor();
-	m_cities500plus_factor =       g_theDifficultyDB->Get(diff_level)->GetCities50PlusFactor();
-	m_cities_recaptured_factor =   g_theDifficultyDB->Get(diff_level)->GetCitiesRecapturedFactor();
+	m_cities100to500_factor      = g_theDifficultyDB->Get(diff_level)->GetCities10To50Factor();
+	m_cities500plus_factor       = g_theDifficultyDB->Get(diff_level)->GetCities50PlusFactor();
+	m_cities_recaptured_factor   = g_theDifficultyDB->Get(diff_level)->GetCitiesRecapturedFactor();
 	m_population_factor =          g_theDifficultyDB->Get(diff_level)->GetPopulationFactor();
 	m_rank_factor =                g_theDifficultyDB->Get(diff_level)->GetRankFactor();
 	m_allies_factor =              g_theDifficultyDB->Get(diff_level)->GetAlliesFactor();
@@ -84,17 +84,6 @@ Difficulty::Difficulty(sint32 diff_level, PLAYER_INDEX owner, BOOL isHuman)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void Difficulty::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
@@ -110,7 +99,7 @@ double diffutil_GetAiAdjustment(const sint32 diff,
                                 const double & min_behind_value,
                                 const double &  max_ahead_value,
                                 const double &  min_ahead_value
-                                )
+                               )
 {
 	const DifficultyRecord *rec = g_theDifficultyDB->Get(diff);
 	double const	rank_percent		= 
@@ -244,28 +233,7 @@ sint32 diffutil_GetYearIncrementFromTurn(sint32 diff, sint32 turn)
 
 const char *diffutil_GetYearStringFromTurn(sint32 diff, sint32 turn)
 {
-	static char buf[k_MAX_NAME_LEN];
-
-	if (g_useCustomYear && g_pTurnLengthOverride) 
-    {
-        size_t  index = std::min<size_t>(static_cast<size_t>(turn), g_turnLengthOverrideSize - 1);
-		strcpy(buf, g_pTurnLengthOverride[index].text);
-	} 
-    else 
-    {
-		sint32 year = diffutil_GetYearFromTurn(diff, turn);
-		if (year == 0) 
-        {
-			year = 1;
-		}
-
-		sprintf(buf, "%d %s", 
-                abs(year),
-                g_theStringDB->GetNameStr((year < 0) ? "str_tbl_ldl_BC" : "str_tbl_ldl_AD")
-               );
-	}
-
-	return buf;
+	return TurnYearStatus::GetCurrentYear();
 }
 
 

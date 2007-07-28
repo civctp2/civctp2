@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Collection of control panels during actual play.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Blank function added to hide the data of the previous player for hotseat
-//   games.  
+//   games.
 //
 //----------------------------------------------------------------------------
 
@@ -45,71 +48,32 @@
 #include "UnitControlPanel.h"
 #include "ZoomPad.h"
 
-MainControlPanel *  g_mainControlPanel = NULL;
+MainControlPanel *       g_mainControlPanel = NULL;
 
-
-
-static aui_ProgressBar	*s_progressBar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+static aui_ProgressBar * s_progressBar;
 
 STDEHANDLER(MainControlPanel_BeginTurn)
 {
 	PLAYER_INDEX player = 0;
 	if (args->GetPlayer(0, player))
-    {
-	    MainControlPanel::UpdatePlayer(player);
-    }
-	
+	{
+		MainControlPanel::UpdatePlayer(player);
+	}
+
 	return GEV_HD_Continue;
 }
-
 
 void MainControlPanel::InitializeEvents()
 {
 	g_gevManager->AddCallback(GEV_BeginTurn, GEV_PRI_Post, &s_MainControlPanel_BeginTurn);
 }
 
-
 void MainControlPanel::Initialize(MBCHAR *ldlBlock)
 {
 	if (!g_mainControlPanel)
-    {
-    	g_mainControlPanel = new MainControlPanel(ldlBlock);
-    }
+	{
+		g_mainControlPanel = new MainControlPanel(ldlBlock);
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -138,49 +102,36 @@ void MainControlPanel::Blank()
 
 void MainControlPanel::CleanUp()
 {
-    allocated::clear(g_mainControlPanel);
+	allocated::clear(g_mainControlPanel);
 }
-
 
 void MainControlPanel::Update()
 {
-	
 	if(g_mainControlPanel) {
 		g_mainControlPanel->m_controlTabPanel->Update();
 	}
 }
 
-
 void MainControlPanel::UpdateCityList()
 {
-	
 	if(g_mainControlPanel) {
 		g_mainControlPanel->m_controlTabPanel->UpdateCityList();
 	}
 }
 
-
 void MainControlPanel::UpdatePlayer(PLAYER_INDEX player)
 {
-	
 	if(g_mainControlPanel) {
 		
 		g_mainControlPanel->m_endTurnButton->UpdatePlayer(player);
 		g_mainControlPanel->m_turnYearStatus->UpdatePlayer(player);
 	}
 }
-	
 
 void MainControlPanel::UpdateZoom()
 {
-
-
-
-
-
-
+	// Does nothing but could be reimplemented
 }
-
 
 void MainControlPanel::SelectedCity()
 {
@@ -188,7 +139,6 @@ void MainControlPanel::SelectedCity()
 		g_mainControlPanel->m_controlTabPanel->SelectedCity();
 	}
 }
-
 
 void MainControlPanel::SelectedUnit()
 {
@@ -216,26 +166,26 @@ aui_ProgressBar* MainControlPanel::GetProgressBar()
 	return s_progressBar;
 }
 
-
-MainControlPanel::MainControlPanel(MBCHAR *ldlBlock) 
+MainControlPanel::MainControlPanel(MBCHAR *ldlBlock)
 :
     m_controlTabPanel   (new ControlTabPanel(ldlBlock)),
     m_endTurnButton     (new EndTurnButton(ldlBlock)),
     m_shortcutPad       (new ShortcutPad(ldlBlock)),
     m_statusBar         (new StatusBar(ldlBlock)),
     m_turnYearStatus    (new TurnYearStatus(ldlBlock))
-{	
+{
+	TurnYearStatus::BuildTurnLengthOverride();
 }
 
 MainControlPanel::~MainControlPanel()
 {
-    // Nothing to do: only auto_ptr members
+	TurnYearStatus::CleanupTurnLengthOverride();
 }
 
 bool MainControlPanel::GetSelectedCargo(CellUnitList &cargo)
 {
 	return g_mainControlPanel && 
-           g_mainControlPanel->m_controlTabPanel->GetSelectedCargo(cargo);
+	       g_mainControlPanel->m_controlTabPanel->GetSelectedCargo(cargo);
 }
 
 void MainControlPanel::SwitchToTransportView()

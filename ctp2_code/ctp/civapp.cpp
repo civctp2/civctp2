@@ -1582,9 +1582,6 @@ void CivApp::CleanupAppDB(void)
     allocated::clear(g_theDiplomacyThreatDB);
     allocated::clear(g_theMapIconDB);
 
-    delete [] g_pTurnLengthOverride;
-    g_pTurnLengthOverride = NULL;
-
     m_dbLoaded = FALSE;
 }
 

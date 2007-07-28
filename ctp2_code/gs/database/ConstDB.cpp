@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game constants database
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -72,19 +75,18 @@ double const	DEFAULT_CITY_ON_TRADE_ROUTE		= 0.0;
 //
 // Description: Parse an optional element from the input file
 //
-// Parameters : a_Token			: current token pointer
-//				t				: token to look for
-//				defaultVal		: value to return when the token is not found
+// Parameters : a_Token         : current token pointer
+//              t               : token to look for
+//              defaultVal      : value to return when the token is not found
 //
-// Globals    : g_abort_parse	: set when a parsing error occurs
+// Globals    : g_abort_parse   : set when a parsing error occurs
 //
-// Returns    : bool			: set when the token was read from the file
-//				val				: value (from file or default)
+// Returns    : bool            : set when the token was read from the file
+//              val             : value (from file or default)
 //
 // Remark(s)  : Modified version of token_ParseValNext
 //
 //----------------------------------------------------------------------------
-
 bool ParseOptional
 (
 	Token *			aToken, 
@@ -112,11 +114,54 @@ bool ParseOptional
 	return false;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : ParseOptionalDouble
+//
+// Description: Parse an optional element from the input file
+//
+// Parameters : a_Token         : current token pointer
+//              t               : token to look for
+//              defaultVal      : value to return when the token is not found
+//
+// Globals    : g_abort_parse   : set when a parsing error occurs
+//
+// Returns    : bool            : set when the token was read from the file
+//              val             : value (from file or default)
+//
+// Remark(s)  : Modified version of token_ParseFloatNext
+//
+//----------------------------------------------------------------------------
+bool ParseOptionalDouble
+(
+	Token *			aToken, 
+	sint32 const	t, 
+	double &		val, 
+	double const	defaultVal
+)
+{
+	if ((aToken->GetType() == t) || (aToken->Next() == t))
+	{
+		// Keyword found: the number has to be valid
+		if (aToken->Next() == TOKEN_NUMBER)
+		{
+			aToken->GetFloat(val);
+			return true;
+		}
+		else
+		{ 
+			c3errors_ErrorDialog(aToken->ErrStr(), "Expected number not found");
+			g_abort_parse = TRUE; 
+		} 
+	} 
+
+	val = defaultVal; 
+	return false;
+}
 
 } // namespace
 
 ConstDB::ConstDB ()
-
 { 
 	memset(this, 0, sizeof(*this));
 
@@ -145,9 +190,9 @@ ConstDB::ConstDB ()
 
 	m_discoveries_pollution_size_modifier=0.0 ;
 	m_discoveries_pollution_production_modifier=0.0 ;
-    m_base_workday = 0.0; 
-    m_base_rations = 0.0; 
-    m_base_wages = 0.0; 
+	m_base_workday = 0.0; 
+	m_base_rations = 0.0; 
+	m_base_wages = 0.0; 
 	m_no_piracy_expires=0;
 	m_end_of_game_year_early_warning = 0 ;
 	m_end_of_game_year = 0 ;
@@ -175,23 +220,12 @@ ConstDB::ConstDB ()
 	m_combat_leader_chance		= DEFAULT_COMBAT_LEADER_CHANCE;
 	m_kill_pop					= DEFAULT_KILLPOP;
 	m_city_trade				= DEFAULT_CITY_ON_TRADE_ROUTE;
-	} 
-
-
-
-
-
-
-
-
-
-
-
+}
 
 ConstDB::ConstDB(CivArchive &archive)
-	{
-	Serialize(archive) ;
-	}
+{
+	Serialize(archive);
+}
 
 //----------------------------------------------------------------------------
 //
@@ -212,324 +246,322 @@ ConstDB::ConstDB(CivArchive &archive)
 //              verification is based on a CRC over the data.
 //
 //----------------------------------------------------------------------------
-
 void ConstDB::Serialize(CivArchive &archive)
-	{
+{
     CHECKSERIALIZE
 
 #define CONSTDB_MAGIC 0x00FE7987
 	if (archive.IsStoring())
-		{
+	{
 		archive.PerformMagic(CONSTDB_MAGIC) ;
-	archive.PutDoubleString(	m_land); 
-	archive.PutDoubleString(	m_continent); 
-	archive.PutDoubleString(	m_homogenous); 
-	archive.PutDoubleString(	m_mountain); 
-	archive.PutDoubleString(	m_hills); 
-	archive <<	m_mountain_spread; 
-	archive <<	m_mountain_length;
-	archive <<	m_glacier;
-	archive <<	m_volcano; 
-	archive.PutDoubleString(	m_trench); 
-	archive <<	m_mount_cell; 
-	archive <<  m_forest; 
-	archive <<  m_grass;  
-	archive <<  m_plains; 
-	archive <<  m_desert; 
-	archive <<  m_whitePercent;
-	archive <<  m_brownPercent;
-	archive <<  m_temperatureRangeAdjust;
+		archive.PutDoubleString(	m_land); 
+		archive.PutDoubleString(	m_continent); 
+		archive.PutDoubleString(	m_homogenous); 
+		archive.PutDoubleString(	m_mountain); 
+		archive.PutDoubleString(	m_hills); 
+		archive <<	m_mountain_spread; 
+		archive <<	m_mountain_length;
+		archive <<	m_glacier;
+		archive <<	m_volcano; 
+		archive.PutDoubleString(	m_trench); 
+		archive <<	m_mount_cell; 
+		archive <<  m_forest; 
+		archive <<  m_grass;  
+		archive <<  m_plains; 
+		archive <<  m_desert; 
+		archive <<  m_whitePercent;
+		archive <<  m_brownPercent;
+		archive <<  m_temperatureRangeAdjust;
 	
-	archive.StoreArray(m_merid, k_NUM_MERIDIANS);
-	 archive.StoreArrayString(m_meridf, k_NUM_MERIDIANS);
+		archive.StoreArray(m_merid, k_NUM_MERIDIANS);
+		archive.StoreArrayString(m_meridf, k_NUM_MERIDIANS);
 	
-	 archive.StoreArrayString(m_hlevelf, 4);
+		archive.StoreArrayString(m_hlevelf, 4);
 	
-	archive <<	m_forestWet;
-	archive <<	m_forestDry;
-	archive <<	m_grassWet;
-	archive <<	m_grassDry;
-	archive <<	m_plainsWet;
-	archive <<	m_plainsDry;
-	archive <<	m_desertWet;
-	archive <<	m_desertDry;
+		archive <<	m_forestWet;
+		archive <<	m_forestDry;
+		archive <<	m_grassWet;
+		archive <<	m_grassDry;
+		archive <<	m_plainsWet;
+		archive <<	m_plainsDry;
+		archive <<	m_desertWet;
+		archive <<	m_desertDry;
 
-	archive <<	m_whiteWarm;
-	archive <<	m_whiteCold;
-	archive <<	m_brownWarm;
-	archive <<	m_brownCold;
-	archive <<	m_temperatureRangeAdjustWarm;
-	archive <<	m_temperatureRangeAdjustCold;
+		archive <<	m_whiteWarm;
+		archive <<	m_whiteCold;
+		archive <<	m_brownWarm;
+		archive <<	m_brownCold;
+		archive <<	m_temperatureRangeAdjustWarm;
+		archive <<	m_temperatureRangeAdjustCold;
 
-	archive <<	m_richnessFewgoods;
-	archive <<	m_richnessManygoods;
-	archive <<	m_riverCellWidthFewgoods;
-	archive <<	m_riverCellWidthManygoods;
-	archive <<	m_riverCellHeightFewgoods;
-	archive <<	m_riverCellHeightManygoods;
+		archive <<	m_richnessFewgoods;
+		archive <<	m_richnessManygoods;
+		archive <<	m_riverCellWidthFewgoods;
+		archive <<	m_riverCellWidthManygoods;
+		archive <<	m_riverCellHeightFewgoods;
+		archive <<	m_riverCellHeightManygoods;
 
-	archive <<	m_nice_r; 
-	archive.PutDoubleString(	m_river);
-	archive <<	m_river_len;
-	archive <<	m_richness; 
-	archive <<	m_lost_at_sea;
-	archive.PutDoubleString(	m_vet_coef); 
+		archive <<	m_nice_r; 
+		archive.PutDoubleString(	m_river);
+		archive <<	m_river_len;
+		archive <<	m_richness; 
+		archive <<	m_lost_at_sea;
+		archive.PutDoubleString(	m_vet_coef); 
 	
-	archive <<	m_average_pollution_turns ;
+		archive <<	m_average_pollution_turns ;
 	
-	archive <<	m_revolution_level ;
-	archive <<	m_tariff_reduction <<
-		m_revolt_influence_distance ;
+		archive <<	m_revolution_level ;
+		archive <<	m_tariff_reduction <<
+			m_revolt_influence_distance ;
 	
 
 
-	archive.PutDoubleString(	m_discoveries_pollution_size_modifier );
-	archive.PutDoubleString(	m_discoveries_pollution_production_modifier );
+		archive.PutDoubleString(	m_discoveries_pollution_size_modifier );
+		archive.PutDoubleString(	m_discoveries_pollution_production_modifier );
 	
-    archive.PutDoubleString(	m_max_empire_dist_cost);
-    archive.PutDoubleString(	m_happiness_launch_cost);
+		archive.PutDoubleString(	m_max_empire_dist_cost);
+		archive.PutDoubleString(	m_happiness_launch_cost);
 	
-    archive.PutDoubleString(	m_unit_workday);
-    archive.PutDoubleString(  m_base_workday);
-    archive.PutDoubleString(	m_unit_wages);
-    archive.PutDoubleString(  m_base_wages);
-    archive.PutDoubleString(	m_unit_rations);
-    archive.PutDoubleString(  m_base_rations); 
-	archive.PutDoubleString(	m_food_to_pollution_coef );
+		archive.PutDoubleString(	m_unit_workday);
+		archive.PutDoubleString(  m_base_workday);
+		archive.PutDoubleString(	m_unit_wages);
+		archive.PutDoubleString(  m_base_wages);
+		archive.PutDoubleString(	m_unit_rations);
+		archive.PutDoubleString(  m_base_rations); 
+		archive.PutDoubleString(	m_food_to_pollution_coef );
 
-	archive <<	m_monopolyThreshold <<
-		m_veryHappyThreshold <<									
-		m_populationPollutionWarningThreshold <<
-		m_industrialPollutionWarningThreshold <<
-		m_pact_capture_city_expires <<
+		archive <<	m_monopolyThreshold <<
+			m_veryHappyThreshold <<									
+			m_populationPollutionWarningThreshold <<
+			m_industrialPollutionWarningThreshold <<
+			m_pact_capture_city_expires <<
 		
-		m_cease_fire_expires <<
-		m_short_cease_fire_expires <<
-		m_pact_end_pollution_expires <<
-		m_leave_our_lands_expires <<
-		m_reduce_pollution_expires <<
+			m_cease_fire_expires <<
+			m_short_cease_fire_expires <<
+			m_pact_end_pollution_expires <<
+			m_leave_our_lands_expires <<
+			m_reduce_pollution_expires <<
 		
-		m_capture_city_for_gold_multiplier <<
-		m_patience_lost_per_request <<
-		m_patience_regained_per_round <<
-		m_patience_lost_threshold <<
-		m_end_of_game_year_early_warning <<
-		m_end_of_game_year ;
+			m_capture_city_for_gold_multiplier <<
+			m_patience_lost_per_request <<
+			m_patience_regained_per_round <<
+			m_patience_lost_threshold <<
+			m_end_of_game_year_early_warning <<
+			m_end_of_game_year ;
 	
 
-	archive <<	m_pollution_forces_government_collapse ;
+		archive <<	m_pollution_forces_government_collapse ;
 	
-	archive.PutDoubleString(	m_patience_regain_probability );
-	
-    archive << m_goal_time_slice; 
-    archive << m_max_time_slice; 
-    archive << m_total_time_slice; 
-	
-	archive.PutDoubleString( m_entrenchment_bonus);
-	archive << m_paradrop_distance;
-	archive << m_paradrop_success_percentage;
-	archive.PutDoubleString( m_elite_spy_bonus);
-	archive.PutDoubleString( m_city_second_attempt_spy_bonus);
-	
-	archive << m_assasination_happiness_effect;
-	archive << m_assasination_happiness_effect_timer;
-	
-	archive << m_spied_upon_wariness_timer;
-	archive << m_maximum_party_cost;
-	archive.PutDoubleString( m_maximum_party_chance);
-	archive << m_gossip_map_radius;
-	archive.PutDoubleString( m_hear_gossip_chance);
-	
-	archive.PutDoubleString( m_franchise_effect);
-	archive <<	m_turns_to_sue_franchise;
-	
-	archive.PutDoubleString(	m_elite_slaver_bonus);
-	archive.PutDoubleString(	m_slaver_elite_chance);
-	
-	archive.PutDoubleString(m_elite_abolitionist_bonus);
-	archive.PutDoubleString(m_abolitionist_elite_chance);
-	archive.PutDoubleString(m_watchful_city_success_modifier);
-	archive.PutDoubleString(m_watchful_city_death_modifier);
-	archive <<	m_watchful_city_turns;
-	archive <<	m_bio_infection_turns;
-	archive <<	m_nano_infection_turns;
-	archive.PutDoubleString(m_bio_infection_spread_chance);
-	archive.PutDoubleString(m_nano_infection_spread_chance);
-	
-	archive.PutDoubleString( m_elite_terrorist_bonus);
-	archive.PutDoubleString( m_terrorist_elite_chance);
-	archive.PutDoubleString( m_nuke_population_percentage);
-	archive.PutDoubleString( m_bio_terror_kill_percentage);
-	
-	archive.PutDoubleString( m_special_action_move_cost);
-	
-	archive.PutDoubleString( m_cleric_conversion_factor);
-	archive.PutDoubleString( m_televangelist_conversion_factor);
-	
-	archive.PutDoubleString(m_reformation_chance);
-	archive.PutDoubleString(m_reformation_death_chance);
-	archive.PutDoubleString(m_reformation_happiness_time);
-	archive.PutDoubleString(m_reformation_happiness_amount);
-
-	archive << m_unconverted_indulgence_gold << m_unconverted_indulgence_happiness <<
-		m_converted_indulgence_gold << m_converted_indulgence_happiness <<
-		m_other_faith_indulgence_gold << m_other_faith_indulgence_happiness;
-	archive << m_soothsay_happy_amount;
-	
-	archive << m_hut_box_width << m_hut_box_height;
-	archive.PutDoubleString( m_hut_chance_per_box);
-	archive << m_max_goody_hut_gold;
-	archive << m_max_goody_hut_advance;
-	archive << m_max_goody_hut_unit;
-	
-	archive.PutDoubleString( m_unit_rush_modifier);
-	archive.PutDoubleString( m_improvement_rush_modifier);
-	archive.PutDoubleString( m_wonder_rush_modifier);
-
-    archive.PutDoubleString( m_change_currently_building_item_penalty); 
-	archive.PutDoubleString( m_building_production_to_value_modifier);
-	
-	archive.PutDoubleString( m_city_growth_coefficient);
-	archive.PutDoubleString( m_power_points_to_materials);
-	archive << m_max_airlift_stack_size;
-	archive << m_river_cell_width;
-	archive << m_river_cell_height;
-	archive << m_gold_from_piracy;
-	archive << m_no_piracy_expires;
-	archive.PutDoubleString(m_space_launch_cost);
-	archive.PutDoubleString(m_space_land_cost);
-	archive << m_wormhole_orbit_height_percentage;
-	archive << m_wormhole_speed;
-	archive << m_wormhole_return_time;
-	archive << m_wormhole_visible_to_all_turns;
-	archive << m_max_government_change_turns;
-
-	archive << m_emancipation_unhappiness_turns;
-	archive.PutDoubleString( m_emancipation_unhappiness_amount);
-	archive.PutDoubleString( m_capture_city_advance_chance);
-
-	archive.PutDoubleString( m_city_heal_rate);
-	archive.PutDoubleString( m_normal_heal_rate);
-	archive.PutDoubleString( m_local_pollution_level);
-	archive.PutDoubleString( m_local_pollution_chance);
-	archive << m_cityPopulationProducesPollutionThreshold ;
-	archive << m_cityProductionProducesPollutionThreshold ;
-
-	archive.PutDoubleString( m_assault_destroy_building_chance);
-	archive.PutDoubleString( m_bombard_destroy_building_chance);
-
-	archive << m_advance_choices_min << m_advance_choices_max;
-
-	archive << m_attack_converter_unhappiness_turns;
-	archive.PutDoubleString( m_attack_converter_unhappiness_amount);
-
-	archive.PutDoubleString( m_min_start_distance_coefficient);
-	archive.PutDoubleString( m_max_start_distance_coefficient);
-	archive << m_max_same_tiles;
-	archive.PutDoubleString( m_combat_veteran_chance);
-
-	archive << m_stop_trade_rounds <<
-		m_leave_our_lands_rounds <<
-		m_reduce_pollution_rounds <<
-		m_capture_city_rounds <<
-		m_end_pollution_rounds <<
-		m_attack_enemy_rounds;
-
-	archive << m_min_continent_start_size;
-
-	archive.PutDoubleString(m_bombard_kill_pop_chance);
-	archive.PutDoubleString(m_assault_kill_pop_chance);
-	archive.PutDoubleString(m_capture_kill_pop_chance);
-
-	archive.StoreArray(m_scaled_pop, 5);
-
-	archive << m_piracy_kills_trader_chance;
-
-	archive << m_uprising_chance_per_unguarded_slave;
-
-	archive << m_max_disband_size;
-
-	archive << m_max_requests_per_player_per_turn;
-
-	archive << m_slaves_per_military_unit;
-
-	archive << m_min_absolute_start_distance;
-
-	MapPoint	m_small_map_size;
-	MapPoint	m_medium_map_size;
-	MapPoint	m_large_map_size;
-	MapPoint	m_gigantic_map_size;
-
-	archive.PutDoubleString( m_rail_launch_pollution);
-
-	archive << m_space_fuel_cost;
-	archive << m_non_space_fuel_cost;
-
-    archive << m_starvation_warning_fudge_factor;
-    archive << m_maintenance_warning_fudge_factor;
-    archive << m_support_warning_fudge_factor;
-
-	archive.PutDoubleString( m_relative_ai_production_cheat_coef);
-	archive.PutDoubleString( m_relative_ai_science_cheat_coef);
-
-	archive.PutDoubleString( m_incite_revolution_gold_coefficient);
-	archive.PutDoubleString( m_incite_revolution_capitol_penalty);
-	archive.PutDoubleString( m_incite_uprising_gold_coefficient);
-	archive.PutDoubleString( m_incite_uprising_capitol_penalty);
-
-	archive << m_nuke_kill_tiles;
-
-	archive << m_bio_infection_unhappiness;
-
-	archive << m_min_eco_pact_violation_level;
-
-	archive.PutDoubleString( m_nano_infection_terrorist_death_chance);
-	archive.PutDoubleString( m_bio_infection_terrorist_death_chance);
-
-	archive.PutDoubleString( m_flood_changes_coast_to_water_chance);
-
-	archive.PutDoubleString( m_ai_cheat_eco_pact_min);
-	archive.PutDoubleString( m_ai_cheat_eco_pact_max);
-	
-	archive << m_riot_level;
-	if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) 
-	&&	(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
-	//emod3
-	&&  (DEFAULT_MAX_CITY_WONDERS == m_max_city_wonders)
-	&&  (DEFAULT_MAX_CITY_BUILDINGS == m_max_city_buildings)
-	&&  (DEFAULT_COMBAT_ELITE_CHANCE == m_combat_elite_chance)
-	&&  (DEFAULT_COMBAT_LEADER_CHANCE == m_combat_leader_chance)
-	&&  (DEFAULT_KILLPOP ==	m_kill_pop)
-	&&  (DEFAULT_CITY_ON_TRADE_ROUTE ==	m_city_trade)
-       )
-	{
-		// No action, to keep compatibility with the original patch.
-	}
-	else
-	{
-		// Modified by kaan to address bug # 12
-		archive << m_min_turns_between_revolt;
-		archive << m_max_match_list_cycles;
-		//emod4
-		archive <<  m_max_city_wonders;
-		archive <<  m_max_city_buildings;
+		archive.PutDoubleString(	m_patience_regain_probability );
 		
-		archive.PutDoubleString( m_combat_elite_chance);
-		archive.PutDoubleString( m_combat_leader_chance);
-		archive.PutDoubleString( m_city_trade);
+	    archive << m_goal_time_slice; 
+		archive << m_max_time_slice; 
+		archive << m_total_time_slice; 
+	
+		archive.PutDoubleString( m_entrenchment_bonus);
+		archive << m_paradrop_distance;
+		archive << m_paradrop_success_percentage;
+		archive.PutDoubleString( m_elite_spy_bonus);
+		archive.PutDoubleString( m_city_second_attempt_spy_bonus);
+	
+		archive << m_assasination_happiness_effect;
+		archive << m_assasination_happiness_effect_timer;
+	
+		archive << m_spied_upon_wariness_timer;
+		archive << m_maximum_party_cost;
+		archive.PutDoubleString( m_maximum_party_chance);
+		archive << m_gossip_map_radius;
+		archive.PutDoubleString( m_hear_gossip_chance);
+	
+		archive.PutDoubleString( m_franchise_effect);
+		archive <<	m_turns_to_sue_franchise;
+	
+		archive.PutDoubleString(	m_elite_slaver_bonus);
+		archive.PutDoubleString(	m_slaver_elite_chance);
+	
+		archive.PutDoubleString(m_elite_abolitionist_bonus);
+		archive.PutDoubleString(m_abolitionist_elite_chance);
+		archive.PutDoubleString(m_watchful_city_success_modifier);
+		archive.PutDoubleString(m_watchful_city_death_modifier);
+		archive <<	m_watchful_city_turns;
+		archive <<	m_bio_infection_turns;
+		archive <<	m_nano_infection_turns;
+		archive.PutDoubleString(m_bio_infection_spread_chance);
+		archive.PutDoubleString(m_nano_infection_spread_chance);
+	
+		archive.PutDoubleString( m_elite_terrorist_bonus);
+		archive.PutDoubleString( m_terrorist_elite_chance);
+		archive.PutDoubleString( m_nuke_population_percentage);
+		archive.PutDoubleString( m_bio_terror_kill_percentage);
+	
+		archive.PutDoubleString( m_special_action_move_cost);
+	
+		archive.PutDoubleString( m_cleric_conversion_factor);
+		archive.PutDoubleString( m_televangelist_conversion_factor);
+	
+		archive.PutDoubleString(m_reformation_chance);
+		archive.PutDoubleString(m_reformation_death_chance);
+		archive.PutDoubleString(m_reformation_happiness_time);
+		archive.PutDoubleString(m_reformation_happiness_amount);
 
-		archive <<  	m_kill_pop;
-	}
-		}
-	else
+		archive << m_unconverted_indulgence_gold << m_unconverted_indulgence_happiness <<
+			m_converted_indulgence_gold << m_converted_indulgence_happiness <<
+			m_other_faith_indulgence_gold << m_other_faith_indulgence_happiness;
+		archive << m_soothsay_happy_amount;
+	
+		archive << m_hut_box_width << m_hut_box_height;
+		archive.PutDoubleString( m_hut_chance_per_box);
+		archive << m_max_goody_hut_gold;
+		archive << m_max_goody_hut_advance;
+		archive << m_max_goody_hut_unit;
+	
+		archive.PutDoubleString( m_unit_rush_modifier);
+		archive.PutDoubleString( m_improvement_rush_modifier);
+		archive.PutDoubleString( m_wonder_rush_modifier);
+
+		archive.PutDoubleString( m_change_currently_building_item_penalty); 
+		archive.PutDoubleString( m_building_production_to_value_modifier);
+	
+		archive.PutDoubleString( m_city_growth_coefficient);
+		archive.PutDoubleString( m_power_points_to_materials);
+		archive << m_max_airlift_stack_size;
+		archive << m_river_cell_width;
+		archive << m_river_cell_height;
+		archive << m_gold_from_piracy;
+		archive << m_no_piracy_expires;
+		archive.PutDoubleString(m_space_launch_cost);
+		archive.PutDoubleString(m_space_land_cost);
+		archive << m_wormhole_orbit_height_percentage;
+		archive << m_wormhole_speed;
+		archive << m_wormhole_return_time;
+		archive << m_wormhole_visible_to_all_turns;
+		archive << m_max_government_change_turns;
+
+		archive << m_emancipation_unhappiness_turns;
+		archive.PutDoubleString( m_emancipation_unhappiness_amount);
+		archive.PutDoubleString( m_capture_city_advance_chance);
+
+		archive.PutDoubleString( m_city_heal_rate);
+		archive.PutDoubleString( m_normal_heal_rate);
+		archive.PutDoubleString( m_local_pollution_level);
+		archive.PutDoubleString( m_local_pollution_chance);
+		archive << m_cityPopulationProducesPollutionThreshold ;
+		archive << m_cityProductionProducesPollutionThreshold ;
+
+		archive.PutDoubleString( m_assault_destroy_building_chance);
+		archive.PutDoubleString( m_bombard_destroy_building_chance);
+
+		archive << m_advance_choices_min << m_advance_choices_max;
+
+		archive << m_attack_converter_unhappiness_turns;
+		archive.PutDoubleString( m_attack_converter_unhappiness_amount);
+
+		archive.PutDoubleString( m_min_start_distance_coefficient);
+		archive.PutDoubleString( m_max_start_distance_coefficient);
+		archive << m_max_same_tiles;
+		archive.PutDoubleString( m_combat_veteran_chance);
+
+		archive << m_stop_trade_rounds <<
+			m_leave_our_lands_rounds <<
+			m_reduce_pollution_rounds <<
+			m_capture_city_rounds <<
+			m_end_pollution_rounds <<
+			m_attack_enemy_rounds;
+
+		archive << m_min_continent_start_size;
+
+		archive.PutDoubleString(m_bombard_kill_pop_chance);
+		archive.PutDoubleString(m_assault_kill_pop_chance);
+		archive.PutDoubleString(m_capture_kill_pop_chance);
+
+		archive.StoreArray(m_scaled_pop, 5);
+
+		archive << m_piracy_kills_trader_chance;
+
+		archive << m_uprising_chance_per_unguarded_slave;
+
+		archive << m_max_disband_size;
+
+		archive << m_max_requests_per_player_per_turn;
+
+		archive << m_slaves_per_military_unit;
+
+		archive << m_min_absolute_start_distance;
+
+		MapPoint	m_small_map_size;
+		MapPoint	m_medium_map_size;
+		MapPoint	m_large_map_size;
+		MapPoint	m_gigantic_map_size;
+
+		archive.PutDoubleString( m_rail_launch_pollution);
+
+		archive << m_space_fuel_cost;
+		archive << m_non_space_fuel_cost;
+
+		archive << m_starvation_warning_fudge_factor;
+		archive << m_maintenance_warning_fudge_factor;
+		archive << m_support_warning_fudge_factor;
+
+		archive.PutDoubleString( m_relative_ai_production_cheat_coef);
+		archive.PutDoubleString( m_relative_ai_science_cheat_coef);
+
+		archive.PutDoubleString( m_incite_revolution_gold_coefficient);
+		archive.PutDoubleString( m_incite_revolution_capitol_penalty);
+		archive.PutDoubleString( m_incite_uprising_gold_coefficient);
+		archive.PutDoubleString( m_incite_uprising_capitol_penalty);
+
+		archive << m_nuke_kill_tiles;
+
+		archive << m_bio_infection_unhappiness;
+
+		archive << m_min_eco_pact_violation_level;
+
+		archive.PutDoubleString( m_nano_infection_terrorist_death_chance);
+		archive.PutDoubleString( m_bio_infection_terrorist_death_chance);
+
+		archive.PutDoubleString( m_flood_changes_coast_to_water_chance);
+
+		archive.PutDoubleString( m_ai_cheat_eco_pact_min);
+		archive.PutDoubleString( m_ai_cheat_eco_pact_max);
+	
+		archive << m_riot_level;
+		if ((DEFAULT_MAX_MATCH_LIST_CYCLES == m_max_match_list_cycles) 
+		&&	(DEFAULT_MIN_TURNS_BETWEEN_REVOLT == m_min_turns_between_revolt)
+		//emod3
+		&&  (DEFAULT_MAX_CITY_WONDERS == m_max_city_wonders)
+		&&  (DEFAULT_MAX_CITY_BUILDINGS == m_max_city_buildings)
+		&&  (DEFAULT_COMBAT_ELITE_CHANCE == m_combat_elite_chance)
+		&&  (DEFAULT_COMBAT_LEADER_CHANCE == m_combat_leader_chance)
+		&&  (DEFAULT_KILLPOP ==	m_kill_pop)
+		&&  (DEFAULT_CITY_ON_TRADE_ROUTE ==	m_city_trade)
+		   )
 		{
+		// No action, to keep compatibility with the original patch.
 		}
+		else
+		{
+			// Modified by kaan to address bug # 12
+			archive << m_min_turns_between_revolt;
+			archive << m_max_match_list_cycles;
+			//emod4
+			archive <<  m_max_city_wonders;
+			archive <<  m_max_city_buildings;
+		
+			archive.PutDoubleString( m_combat_elite_chance);
+			archive.PutDoubleString( m_combat_leader_chance);
+			archive.PutDoubleString( m_city_trade);
 
+			archive <<  	m_kill_pop;
+		}
 	}
+	else
+	{
+	}
+
+}
 
 
 void ConstDB::y2meridian(const sint32 j, sint32 &k) const
-
 {
    sint32 i; 
 
@@ -544,7 +576,6 @@ void ConstDB::y2meridian(const sint32 j, sint32 &k) const
 }
 
 void ConstDB::CalcMer(sint32 v) 
-
 {  sint32 i; 
    for (i=0; i<k_NUM_MERIDIANS; i++) { 
       m_merid[i] = sint32 (m_meridf[i] * double(v)); 
@@ -867,15 +898,13 @@ enum TOKEN_CONST {
 	TOKEN_MAX_CITY_WONDERS,
 	TOKEN_MAX_CITY_BUILDINGS,
 	TOKEN_COMBAT_ELITE_CHANCE,
-	TOKEN_COMBAT_LEADER_CHANCE,	
+	TOKEN_COMBAT_LEADER_CHANCE,
 	TOKEN_KILLPOP,
 	TOKEN_CITY_ON_TRADE_ROUTE,
 
-    TOKEN_CONST_MAX 
+	TOKEN_CONST_MAX
 
 };
-
-
 
 TokenData g_const_token_data [] = { 
 	{TOKEN_CONST_FIRST, "CONST_DO_NOT_USE_FIRST"},
@@ -960,14 +989,14 @@ TokenData g_const_token_data [] = {
 	{TOKEN_CONST_UNIT_WAGES, "UNIT_WAGES"},
 	{TOKEN_CONST_UNIT_RATIONS,"UNIT_RATIONS"},
 
-    {TOKEN_CONST_BASE_WORKDAY, "BASE_WORKDAY"}, 
-    {TOKEN_CONST_BASE_WAGES, "BASE_WAGES"}, 
-    {TOKEN_CONST_BASE_RATIONS, "BASE_RATIONS"}, 
+	{TOKEN_CONST_BASE_WORKDAY, "BASE_WORKDAY"}, 
+	{TOKEN_CONST_BASE_WAGES, "BASE_WAGES"}, 
+	{TOKEN_CONST_BASE_RATIONS, "BASE_RATIONS"}, 
 
 	{TOKEN_CONST_POPULATION_PRODUCES_POLLUTION_THRESHOLD, "POPULATION_PRODUCES_POLLUTION_THRESHOLD"},
 	{TOKEN_CONST_PRODUCTION_PRODUCES_POLLUTION_THRESHOLD, "PRODUCTION_PRODUCES_POLLUTION_THRESHOLD"},
 
-    {TOKEN_CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY, "CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY" }, 
+	{TOKEN_CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY, "CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY" }, 
 
 	{TOKEN_CONST_PACT_CAPTURE_CITY_EXPIRES, "PACT_CAPTURE_CITY_EXPIRES"},
 
@@ -1145,19 +1174,19 @@ TokenData g_const_token_data [] = {
 	{TOKEN_AI_CHEAT_ECO_PACT_MIN, "AI_CHEAT_ECO_PACT_MIN"},
 	{TOKEN_AI_CHEAT_ECO_PACT_MAX, "AI_CHEAT_ECO_PACT_MAX"},
 
-    {TOKEN_MAX_ABSOLUTE_GROWTH_RATE, "MAX_ABSOLUTE_GROWTH_RATE"},
-    {TOKEN_TRADE_DISTANCE_COEFFICIENT, "TRADE_DISTANCE_COEFFICIENT"},
-    {TOKEN_MIN_LIKE_TILES_FOR_GOOD, "MIN_LIKE_TILES_FOR_GOOD"},
-    {TOKEN_MIN_GOOD_VALUE, "MIN_GOOD_VALUE"},
-    {TOKEN_MAX_GOOD_VALUE, "MAX_GOOD_VALUE"},
-    {TOKEN_PIRACY_WASTE_COEFFICIENT, "PIRACY_WASTE_COEFFICIENT"},
-    {TOKEN_BORDER_INT_RADIUS, "BORDER_INT_RADIUS"},
-    {TOKEN_BORDER_SQUARED_RADIUS, "BORDER_SQUARED_RADIUS"},
-    {TOKEN_BIO_INFECTION_PRODUCTION_COEF, "BIO_INFECTION_PRODUCTION_COEF"},
-    {TOKEN_NANO_BUILDING_KILL_PERCENTAGE, "NANO_BUILDING_KILL_PERCENTAGE"},
-    {TOKEN_BASE_STARVATION_PROTECTION, "BASE_STARVATION_PROTECTION"},
-    {TOKEN_CARAVAN_COEF, "CARAVAN_COEF"},
-    {TOKEN_POLLUTION_CAUSED_BY_NUKE, "POLLUTION_CAUSED_BY_NUKE"},
+	{TOKEN_MAX_ABSOLUTE_GROWTH_RATE, "MAX_ABSOLUTE_GROWTH_RATE"},
+	{TOKEN_TRADE_DISTANCE_COEFFICIENT, "TRADE_DISTANCE_COEFFICIENT"},
+	{TOKEN_MIN_LIKE_TILES_FOR_GOOD, "MIN_LIKE_TILES_FOR_GOOD"},
+	{TOKEN_MIN_GOOD_VALUE, "MIN_GOOD_VALUE"},
+	{TOKEN_MAX_GOOD_VALUE, "MAX_GOOD_VALUE"},
+	{TOKEN_PIRACY_WASTE_COEFFICIENT, "PIRACY_WASTE_COEFFICIENT"},
+	{TOKEN_BORDER_INT_RADIUS, "BORDER_INT_RADIUS"},
+	{TOKEN_BORDER_SQUARED_RADIUS, "BORDER_SQUARED_RADIUS"},
+	{TOKEN_BIO_INFECTION_PRODUCTION_COEF, "BIO_INFECTION_PRODUCTION_COEF"},
+	{TOKEN_NANO_BUILDING_KILL_PERCENTAGE, "NANO_BUILDING_KILL_PERCENTAGE"},
+	{TOKEN_BASE_STARVATION_PROTECTION, "BASE_STARVATION_PROTECTION"},
+	{TOKEN_CARAVAN_COEF, "CARAVAN_COEF"},
+	{TOKEN_POLLUTION_CAUSED_BY_NUKE, "POLLUTION_CAUSED_BY_NUKE"},
 	{TOKEN_MAX_MATCH_LIST_CYCLES, "MAX_MATCH_LIST_CYCLES"}, // added DWT
 	// Modified by kaan to address bug # 12
 	{TOKEN_MIN_TURNS_BETWEEN_REVOLT, "MIN_TURNS_BETWEEN_REVOLT"},
@@ -1169,43 +1198,11 @@ TokenData g_const_token_data [] = {
 	{TOKEN_KILLPOP, "CAPTURED_CITY_KILL_POP" },
 	{TOKEN_CITY_ON_TRADE_ROUTE, "CITY_ON_TRADE_ROUTE_BONUS" }
 };
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 sint32 ConstDB::ParseConstDB(Token *const_token)
-{ 
-	
-	Assert(const_token); 	
-	sint32 tmp; 
+{
+	Assert(const_token);
+	sint32 tmp;
 	
 	if (const_token->GetType() != TOKEN_CONST_PERCENT_LAND) { 
 		c3errors_ErrorDialog  (const_token->ErrStr(), "Expected a value");
@@ -1867,59 +1864,49 @@ sint32 ConstDB::ParseConstDB(Token *const_token)
 	if(!token_ParseValNext(const_token, TOKEN_POLLUTION_CAUSED_BY_NUKE,
 						   m_pollution_caused_by_nuke)) return FALSE;
 
-	(void) ParseOptional(const_token, 
-		                 TOKEN_MAX_MATCH_LIST_CYCLES, 
-		                 m_max_match_list_cycles, 
-                         DEFAULT_MAX_MATCH_LIST_CYCLES
-					    );
-    (void) ParseOptional(const_token, 
-		        		 TOKEN_MIN_TURNS_BETWEEN_REVOLT,
-				         m_min_turns_between_revolt,
-					     DEFAULT_MIN_TURNS_BETWEEN_REVOLT
-					    );
-	//emod7
-	(void) ParseOptional(const_token, 
-		        		 TOKEN_MAX_CITY_WONDERS,
-				         m_max_city_wonders,
-					     DEFAULT_MAX_CITY_WONDERS
-					    );
-	(void) ParseOptional(const_token, 
-		        		 TOKEN_MAX_CITY_BUILDINGS,
-				         m_max_city_buildings,
-					     DEFAULT_MAX_CITY_BUILDINGS
-					    );
-	(void) ParseOptional(const_token, 
-		        		 TOKEN_KILLPOP,
-				         m_kill_pop,
-					     DEFAULT_KILLPOP
-					    );
+	(void) ParseOptional(const_token,
+	                     TOKEN_MAX_MATCH_LIST_CYCLES, 
+	                     m_max_match_list_cycles, 
+	                     DEFAULT_MAX_MATCH_LIST_CYCLES
+	                    );
+	(void) ParseOptional(const_token,
+	                     TOKEN_MIN_TURNS_BETWEEN_REVOLT,
+	                     m_min_turns_between_revolt,
+	                     DEFAULT_MIN_TURNS_BETWEEN_REVOLT
+	                    );
+	(void) ParseOptional(const_token,
+	                     TOKEN_MAX_CITY_WONDERS,
+	                     m_max_city_wonders,
+	                     DEFAULT_MAX_CITY_WONDERS
+	                    );
+	(void) ParseOptional(const_token,
+	                     TOKEN_MAX_CITY_BUILDINGS,
+	                     m_max_city_buildings,
+	                     DEFAULT_MAX_CITY_BUILDINGS
+	                    );
+	(void) ParseOptional(const_token,
+	                     TOKEN_KILLPOP,
+	                     m_kill_pop,
+	                     DEFAULT_KILLPOP
+	                    );
 
-	if(!token_ParseFloatNext(const_token, TOKEN_COMBAT_ELITE_CHANCE,
-							 m_combat_elite_chance)) return FALSE;
-		if(!token_ParseFloatNext(const_token, TOKEN_COMBAT_LEADER_CHANCE,
-							 m_combat_leader_chance)) return FALSE;
-			if(!token_ParseFloatNext(const_token, TOKEN_CITY_ON_TRADE_ROUTE,
-							 m_city_trade)) return FALSE;
-/*
-	
-	(void) ParseOptional(const_token, 
-		        		 TOKEN_COMBAT_ELITE_CHANCE,
-				         m_combat_elite_chance,
-					     DEFAULT_COMBAT_ELITE_CHANCE
-					    );
-	(void) ParseOptional(const_token, 
-		        		 TOKEN_COMBAT_LEADER_CHANCE,
-				         m_combat_leader_chance,
-					     DEFAULT_COMBAT_LEADER_CHANCE
-					    );
-	(void) ParseOptional(const_token, 
-		        		 TOKEN_CITY_ON_TRADE_ROUTE,
-				         m_city_trade,
-					     DEFAULT_CITY_ON_TRADE_ROUTE
-					    );
-*/
+	(void) ParseOptionalDouble(const_token,
+	                           TOKEN_COMBAT_ELITE_CHANCE,
+	                           m_combat_elite_chance,
+	                           DEFAULT_COMBAT_ELITE_CHANCE
+	                          );
+	(void) ParseOptionalDouble(const_token,
+	                           TOKEN_COMBAT_LEADER_CHANCE,
+	                           m_combat_leader_chance,
+	                           DEFAULT_COMBAT_LEADER_CHANCE
+	                          );
+	(void) ParseOptionalDouble(const_token,
+	                           TOKEN_CITY_ON_TRADE_ROUTE,
+	                           m_city_trade,
+	                           DEFAULT_CITY_ON_TRADE_ROUTE
+	                          );
 
-	return TRUE; 	
+	return TRUE;
 }
 
 sint32 ConstDB::ParseMapSize(Token *const_token, MapPoint &size)

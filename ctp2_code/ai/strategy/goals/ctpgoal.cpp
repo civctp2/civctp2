@@ -21,7 +21,7 @@
 // _DEBUG_SCHEDULER
 // _DEBUG
 // - Generate debug version
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -96,9 +96,9 @@
 
 
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
-extern MapPoint g_mp_size;
-extern UnitPool         *g_theUnitPool;
-extern ArmyPool			*g_theArmyPool;
+extern MapPoint                 g_mp_size;
+extern UnitPool                 *g_theUnitPool;
+extern ArmyPool                 *g_theArmyPool;
 
 
 CTPGoal::CTPGoal()
@@ -875,7 +875,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 
-	//alway compute a foreign center (even if the target if owned by the player
+	//alway compute a foreign center (even if the target is owned by the player
 	// otherwise it compute with coords (0,0) !!
 	MapPoint empire_center;
 	MapPoint foreign_empire_center;
@@ -889,8 +889,8 @@ Utility CTPGoal::Compute_Raw_Priority()
 	Assert(strategy.GetGoalElement(m_goal_type) != NULL);
 	
 	double cell_value = (m_goal_type < strategy.GetNumGoalElement())
-                        ? strategy.GetGoalElement(m_goal_type)->GetPriority()
-                        : 0.0;
+	                    ? strategy.GetGoalElement(m_goal_type)->GetPriority()
+	                    : 0.0;
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	double report_cell_value            = cell_value;

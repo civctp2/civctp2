@@ -593,11 +593,14 @@ void CityData::Serialize(CivArchive &archive)
 {
 	CHECKSERIALIZE
 
-	if (archive.IsStoring()) {
+	if (archive.IsStoring())
+	{
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_is_rioting)+sizeof(m_is_rioting));
-
-	} else
+	}
+	else
+	{
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_is_rioting)+sizeof(m_is_rioting));
+	}
 
 	// Create and read files in the format as created with the Activision 1.1 patch.
 	// Used to prevent cities revolting twice in the same turn.
@@ -628,14 +631,17 @@ void CityData::Serialize(CivArchive &archive)
 	m_happy->Serialize(archive);
 
 	sint32 len;
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		len = strlen(m_name) + 1;
 		archive << len;
 		archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
 		
 		archive.Store((uint8*)m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 		archive.Store((uint8*)&m_defensiveBonus, sizeof(double));
-	} else {
+	}
+	else
+	{
 		archive >> len;
 		archive.Load((uint8*)m_name, len * sizeof(MBCHAR));
 
@@ -644,11 +650,14 @@ void CityData::Serialize(CivArchive &archive)
 		// TODO: Clean up this mess later, and test what would happen when the good 
 		// database size would decrease, instead of increase.
 
-		if(ressourceNum == g_theResourceDB->NumRecords()){
+		if(ressourceNum == g_theResourceDB->NumRecords())
+		{
 			m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
 			archive.Load((uint8*)m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 		}
-		else{ // Fix trade if the good database was increased in size.
+		else
+		{ // Fix trade if the good database was increased in size.
+
 			sint32 *tmpDistanceToGood = new sint32[ressourceNum];
 			archive.Load((uint8*)tmpDistanceToGood, sizeof(sint32) * ressourceNum);
 
@@ -665,9 +674,12 @@ void CityData::Serialize(CivArchive &archive)
 			Resources copyBuyingResources(m_buyingResources);
 			Resources copySellingResources(m_sellingResources);
 			sint32 i, j;
-			for(j = 0; j < ressourceNum; ++j){
-				for(i = 0; i < g_theResourceDB->NumRecords(); ++i){
-					if(tmpDistanceToGood[j] > 0 && tmpDistanceToGood[j] == m_distanceToGood[i]){
+			for(j = 0; j < ressourceNum; ++j)
+			{
+				for(i = 0; i < g_theResourceDB->NumRecords(); ++i)
+				{
+					if(tmpDistanceToGood[j] > 0 && tmpDistanceToGood[j] == m_distanceToGood[i])
+					{
 						m_collectingResources.AddResource(i, +copyCollectingResources[j]);
 						m_collectingResources.AddResource(j, -copyCollectingResources[j]);
 						m_buyingResources.AddResource(i, +copyBuyingResources[j]);
@@ -679,13 +691,17 @@ void CityData::Serialize(CivArchive &archive)
 				}
 			}
 
-			if(g_newGoods == NULL){
+			if(g_newGoods == NULL)
+			{
 				// Needs only be done once per reload
 				g_newGoods = new sint32[ressourceNum]; // Deleted in gameinit_Initialize
 				memset(g_newGoods, 0, ressourceNum * sizeof(sint32));
-				for(j = 0; j < ressourceNum; ++j){
-					for(i = 0; i < g_theResourceDB->NumRecords(); ++i){
-						if(tmpDistanceToGood[j] > 0 && tmpDistanceToGood[j] == m_distanceToGood[i]){
+				for(j = 0; j < ressourceNum; ++j)
+				{
+					for(i = 0; i < g_theResourceDB->NumRecords(); ++i)
+					{
+						if(tmpDistanceToGood[j] > 0 && tmpDistanceToGood[j] == m_distanceToGood[i])
+						{
 							g_newGoods[j] = i;
 							break;
 						}

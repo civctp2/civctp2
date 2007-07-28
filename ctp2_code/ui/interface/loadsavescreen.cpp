@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
 //
 //----------------------------------------------------------------------------
@@ -28,6 +28,12 @@
 // - Updated tribe index check.
 // - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gühmann)
 // - Standardized code (May 21st 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+//
+// Remarks
+//
+// - This is the only file with some Activision comments left.
 //
 //----------------------------------------------------------------------------
 
@@ -694,14 +700,14 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		
 		
 		strcpy(s_tempPath, path);
-        allocated::reassign(s_tempSaveInfo, new SaveInfo(saveInfo));
+		allocated::reassign(s_tempSaveInfo, new SaveInfo(saveInfo));
 
 		if (s_tempSaveInfo->numPositions <= 3 || saveInfo->startInfoType == STARTINFOTYPE_NOLOCS) 
-        {
+		{
 			loadsavescreen_PlayersScreenActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-		} 
-        else 
-        {
+		}
+		else
+		{
 			spnewgameplayersscreen_Cleanup();
 			spnewgameplayersscreen_Initialize( loadsavescreen_PlayersScreenActionCallback );
 			spnewgameplayersscreen_SetMaxPlayers(s_tempSaveInfo->numPositions);
@@ -711,66 +717,6 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		
 		
 		g_civApp->PostLoadSaveGameAction(path);
-	}
-
-
-	
-	
-	if (g_isScenario || (saveInfo->scenarioName && *saveInfo->scenarioName))
-	{
-		delete [] g_pTurnLengthOverride;
-		g_pTurnLengthOverride = NULL;
-		
-		MBCHAR overridePath[_MAX_PATH];
-		sprintf(overridePath, "%s%s%s", g_civPaths->GetCurScenarioPath(), FILE_SEP, "turnlength.txt");
-
-		g_useCustomYear = false;
-
-		FILE *fp = fopen(overridePath, "r");
-		if (fp)
-		{
-			
-			int count = 0;
-
-			while (!feof(fp))
-			{
-				
-
-				char dummy[256];
-				if (fscanf(fp, "%[^'\n']\n", dummy))
-				{
-					count++;
-				}
-				else
-				{
-					break;
-				}
-			}
-
-			if (count)
-			{
-				MBCHAR dummy[1024];
-				g_pTurnLengthOverride = new sTurnLengthOverride[count];
-				g_turnLengthOverrideSize = count;
-				rewind(fp);
-				for (int i = 0; i < count; i++)
-				{
-					fscanf(fp, "%d,%[^'\n']\n", &(g_pTurnLengthOverride[i].turn), &dummy);
-					memset(g_pTurnLengthOverride[i].text, 0, 32);
-					strncpy(g_pTurnLengthOverride[i].text, dummy, 31);
-				}
-			}
-
-			g_useCustomYear = true;
-
-			fclose(fp);
-		}
-	}
-	else
-	{
-		g_useCustomYear = false;
-		delete [] g_pTurnLengthOverride;
-		g_pTurnLengthOverride = NULL;
 	}
 }
 
@@ -785,12 +731,12 @@ void loadsavescreen_LoadGame(void)
 	if (!c3files_HasLegalCD()) return;
 
 	if (SaveInfo * saveInfo = g_loadsaveWindow->GetSaveInfo()) 
-    {
-	    loadsavescreen_BeginLoadProcess(saveInfo, gameInfo->path);
-    }	
-    else
-    {
-        loadsavescreen_displayMyWindow(0);
+	{
+		loadsavescreen_BeginLoadProcess(saveInfo, gameInfo->path);
+	}
+	else
+	{
+		loadsavescreen_displayMyWindow(0);
 	}
 }
 

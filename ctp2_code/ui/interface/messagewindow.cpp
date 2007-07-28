@@ -266,28 +266,14 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 	
 	MBCHAR	copyBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if(m_message.AccessData()->GetTitle()) {
+	if(m_message.AccessData()->GetTitle())
+	{
 		m_turnText->SetTextFontSize(16);
 		strcpy(copyBlock, m_message.AccessData()->GetTitle());
-	} else {
-		
-		if(g_useCustomYear && g_pTurnLengthOverride)
-		{
-			copyBlock[0]=0;
-		}
-		else
-		{
-			sint32 year = m_message.AccessData()->GetTimeStamp();
-
-			if ( year < 0 ) {	
-				year *= -1;
-				sprintf( copyBlock, "%d %s", year, g_theStringDB->GetNameStr("str_tbl_ldl_BC") );
-			}
-			else {				
-				sprintf( copyBlock, "%d %s", year, g_theStringDB->GetNameStr("str_tbl_ldl_AD") );
-			}
-		}
-
+	}
+	else
+	{
+		sprintf( copyBlock, "%s", TurnYearStatus::GetCurrentYear());
 	}
 
 	errcode = ((aui_TextBase *)m_turnText)->SetText( copyBlock );
