@@ -1,7 +1,6 @@
-
- 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __SCIENCEWINDOW_H__
 #define __SCIENCEWINDOW_H__
 

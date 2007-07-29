@@ -9,6 +9,11 @@
 #include "ctp2_Static.h"
 #include "ctp2_button.h"
 #include "ctp2_textfield.h"
+#ifndef WIN32
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#endif
 
 static MBCHAR *s_block = "GenericFileDialog";
 extern C3UI *g_c3ui;

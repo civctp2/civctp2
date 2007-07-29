@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __WONDERMOVIEWINDOW_H__
 #define __WONDERMOVIEWINDOW_H__
 

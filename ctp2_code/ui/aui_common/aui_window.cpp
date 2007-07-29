@@ -34,6 +34,9 @@
 #ifdef __AUI_USE_DIRECTX__
 #include "aui_directui.h"
 #include "aui_directsurface.h"
+#else
+#include "aui_sdlui.h"
+#include "aui_sdlsurface.h"
 #endif 
 
 #include "aui_blitter.h"

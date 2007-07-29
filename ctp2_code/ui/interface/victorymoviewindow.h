@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __VICTORYMOVIEWINDOW_H__
 #define __VICTORYMOVIEWINDOW_H__
 

@@ -36,6 +36,11 @@
 #include "aui_input.h"
 #include "tech_wllist.h"
 
+#ifdef USE_SDL
+#include <SDL.h>
+#include <SDL_thread.h>
+#endif
+
 class aui_Cursor;
 class aui_Surface;
 class aui_Window;

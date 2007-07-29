@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_BLITTER_H__
 #define __AUI_BLITTER_H__
 

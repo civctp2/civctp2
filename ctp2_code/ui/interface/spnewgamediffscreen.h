@@ -1,7 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __SPNEWGAMEDIFFSCREEN_H__
 #define __SPNEWGAMEDIFFSCREEN_H__
 

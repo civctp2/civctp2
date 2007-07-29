@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __SPNEWGAMERANDOMCUSTOMSCREEN_H__
 #define __SPNEWGAMERANDOMCUSTOMSCREEN_H__

@@ -11,8 +11,8 @@
 #pragma once
 #endif
 
-#ifndef AUI_DIRECTMOVIEMANAGER_H__
-#define AUI_DIRECTMOVIEMANAGER_H__
+#ifndef __AUI_DIRECTMOVIEMANAGER_H__
+#define __AUI_DIRECTMOVIEMANAGER_H__
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 

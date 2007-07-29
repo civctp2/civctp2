@@ -1,8 +1,9 @@
 
 // edit rulesscreen code to be more like gameplay options
 // now it works
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-
+#endif
 #ifndef __SPNEWGAMERULESSCREEN_H__
 #define __SPNEWGAMERULESSCREEN_H__
 

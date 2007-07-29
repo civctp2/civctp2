@@ -6,9 +6,8 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
-#ifndef SPRITEEDITOR_H__
-#define SPRITEEDITOR_H__
+#ifndef __SPRITEEDITOR_H__
+#define __SPRITEEDITOR_H__
 
 class SpriteEditWindow;
 

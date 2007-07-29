@@ -1,10 +1,10 @@
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef LINEGRAPH_H__
-#define LINEGRAPH_H__
+#ifndef __LINEGRAPH_H__
+#define __LINEGRAPH_H__
 
 enum GRAPH_TYPE
 {

@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __STATICTEXT_H__
 #define __STATICTEXT_H__
 

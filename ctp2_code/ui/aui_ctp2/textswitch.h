@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TEXTSWITCH_H__
 #define __TEXTSWITCH_H__
 

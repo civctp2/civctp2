@@ -1,10 +1,9 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef C3_LISTITEM_H__
-#define C3_LISTITEM_H__
+#ifndef __C3_LISTITEM_H__
+#define __C3_LISTITEM_H__
 
 class c3_ListItem;
 class SingleListItem;

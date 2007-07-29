@@ -1,14 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __CITYINVENTORYLISTBOX_H__
 #define __CITYINVENTORYLISTBOX_H__
 

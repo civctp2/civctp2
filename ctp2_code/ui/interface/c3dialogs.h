@@ -3,8 +3,8 @@
 #pragma once
 #endif
 
-#ifndef C3DIALOGS_H__
-#define C3DIALOGS_H__
+#ifndef __C3DIALOGS_H__
+#define __C3DIALOGS_H__
 
 class ForeignTradeBidInfo;
 

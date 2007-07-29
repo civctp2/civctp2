@@ -1,16 +1,9 @@
-
-
-
-
-
-
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef MESSAGE_RESPONSE_H__
-#define MESSAGE_RESPONSE_H__
+#ifndef __MESSAGE_RESPONSE_H__
+#define __MESSAGE_RESPONSE_H__
 
 class MessageResponseListItem;
 class MessageResponseStandard;

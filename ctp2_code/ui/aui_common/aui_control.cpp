@@ -35,7 +35,11 @@
 
 
 #include <string>
+#ifndef WIN32
+#include <sstream>
+#else
 #include <strstream>
+#endif
 
 
 #include "aui_ui.h"

@@ -1,16 +1,8 @@
-
-
-
-
-
-
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
-#ifndef MESSAGE_EYEPOINT_H__
-#define MESSAGE_EYEPOINT_H__
+#ifndef __MESSAGE_EYEPOINT_H__
+#define __MESSAGE_EYEPOINT_H__
 
 class MessageEyePointDropdown;
 class MessageEyePointListbox;

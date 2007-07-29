@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Call to Power 2 user interface spinner
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,7 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef CTP2_SPINNER_H__
 #define CTP2_SPINNER_H__
 

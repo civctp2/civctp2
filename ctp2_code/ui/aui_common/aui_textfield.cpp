@@ -22,6 +22,9 @@
 #include "gamesounds.h"
 #include "chatbox.h"
 
+#ifdef __AUI_USE_SDL__
+#include "aui_sdlsurface.h"
+#endif
 
 WNDPROC aui_TextField::m_windowProc = NULL;
 

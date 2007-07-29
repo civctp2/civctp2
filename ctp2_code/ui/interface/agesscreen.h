@@ -1,10 +1,9 @@
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef AGESSCREEN_H__
-#define AGESSCREEN_H__
+#ifndef __AGESSCREEN_H__
+#define __AGESSCREEN_H__
 
 #include "aui_control.h"        // aui_Control
 #include "auitypes.h"           // AUI_ERRCODE

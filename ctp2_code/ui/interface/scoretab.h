@@ -1,13 +1,8 @@
-
-
-
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
-#ifndef SCORETAB_H__
-#define SCORETAB_H__
+#ifndef __SCORETAB_H__
+#define __SCORETAB_H__
 
 class ScoreTab;
 

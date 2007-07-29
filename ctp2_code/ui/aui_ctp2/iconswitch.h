@@ -1,16 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ICONSWITCH_H__
 #define __ICONSWITCH_H__
 
@@ -53,4 +43,5 @@ protected:
 	uint16 m_color;
 };
 
-#endif 
+#endif
+

@@ -1,17 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __ctp2_TEXTFIELD_H__
 #define __ctp2_TEXTFIELD_H__
 

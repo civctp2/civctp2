@@ -1,21 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef C3MEMMAP_H__
-#define C3MEMMAP_H__
+#ifndef __C3MEMMAP_H__
+#define __C3MEMMAP_H__
 
 class C3MemMap;
 

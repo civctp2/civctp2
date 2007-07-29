@@ -1,7 +1,6 @@
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __CHART_H__
 #define __CHART_H__

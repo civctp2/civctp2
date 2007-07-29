@@ -35,7 +35,11 @@
 #include "c3.h"
 #include "DomesticControlPanel.h"
 
+#ifndef WIN32
+#include <sstream>
+#else
 #include <strstream>
+#endif
 #include "AdvanceRecord.h"
 #include "aui_ldl.h"
 #include "ctp2_button.h"

@@ -30,12 +30,12 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
-#endif
+#endif 
 
-#ifndef INFOWINDOW_H__
-#define INFOWINDOW_H__
+#ifndef __INFOWINDOW_H__
+#define __INFOWINDOW_H__
 
 class InfoWindow;
 

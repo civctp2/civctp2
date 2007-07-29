@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : CTP2 drop down menu
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -28,7 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 
 #ifndef __CTP2_DROPDOWN_H__
 #define __CTP2_DROPDOWN_H__

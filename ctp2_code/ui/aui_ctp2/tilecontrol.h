@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __TILECONTROL_H__
 #define __TILECONTROL_H__
 

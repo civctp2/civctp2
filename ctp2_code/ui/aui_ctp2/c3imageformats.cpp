@@ -29,10 +29,28 @@
 #include "c3.h"                     // Pre-compiled header
 #include "c3imageformats.h"         // Own declarations: consistency check
 
+#ifdef _WIN32
+#include <io.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#if defined(_MSC_VER)
+#define _stat stat
+#endif// _MSC_VER
+
+#endif
+
+#if defined(__AUI_USE_SDL__)
+#include <SDL.h>
+#include <SDL_image.h>
+#include "aui_sdlsurface.h"
+#endif
+
 #include "aui.h"
 #include "aui_image.h"
 #include "aui_surface.h"
-#include <io.h>
+
 #include "pixelutils.h"
 #include "prjfile.h"
 #include "rimutils.h"

@@ -137,7 +137,7 @@ void aui_ImageList::SetImage(sint32 state, sint32 imageIndex, AUI_IMAGEBASE_BLTT
 	info->m_chromaGreen = chromaGreen;
 	info->m_chromaBlue = chromaBlue;
 
-	
+
 	ExchangeImage(state, imageIndex, imageFileName);
 }
 

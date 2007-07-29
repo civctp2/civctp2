@@ -186,7 +186,9 @@ AUI_ERRCODE musicscreen_Cleanup()
 }
 
 
-
+#ifdef WIN32
+static
+#endif
 void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	c3_Switch *musicSwitch = (c3_Switch *)control;

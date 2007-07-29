@@ -37,6 +37,9 @@
 #ifdef __AUI_USE_DIRECTX__
 #include "aui_directui.h"
 #include "aui_directsurface.h"
+#elif defined(__AUI_USE_SDL__)
+#include "aui_sdlui.h"
+#include "aui_sdlsurface.h"
 #else
 #include "aui_ui.h"
 #include "aui_surface.h"

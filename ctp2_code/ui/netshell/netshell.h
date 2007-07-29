@@ -1,18 +1,9 @@
-
-
-
-
-
-
-
-
-
-#if defined(HAVE_PRAGMA_ONCE)
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifndef NETSHELL_H__
-#define NETSHELL_H__
+#ifndef __NETSHELL_H__
+#define __NETSHELL_H__
 
 class NetShell;
 

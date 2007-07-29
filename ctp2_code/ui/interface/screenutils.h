@@ -34,9 +34,8 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-
-#ifndef SCREENUTILS_H__
-#define SCREENUTILS_H__
+#ifndef __SCREENUTILS_H__
+#define __SCREENUTILS_H__
 
 #ifdef _DEBUG
 

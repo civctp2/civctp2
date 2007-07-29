@@ -29,7 +29,9 @@
 //
 //----------------------------------------------------------------------------
 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __GREATLIBRARYWINDOW_H__
 #define __GREATLIBRARYWINDOW_H__
 
@@ -39,7 +41,9 @@
 
 class aui_SwitchGroup;
 class aui_Static;
+#ifdef WIN32
 class DirectVideo;
+#endif
 class Chart;
 class ctp2_Static;
 class ctp2_HyperTextBox;

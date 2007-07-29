@@ -4,8 +4,9 @@
 
 
 
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef CTP2_TAB_BUTTON_H__
 #define CTP2_TAB_BUTTON_H__
 
