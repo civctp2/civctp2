@@ -179,7 +179,7 @@ sint32 DBLexer::GetToken()
 	m_whichTokenText++;
 	m_whichTokenText %= k_TOKEN_HISTORY_SIZE;
 	
-	m_currentToken = m_nextToken;	
+	m_currentToken = m_nextToken;
 
 	
 	m_nextToken = dbllex();

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Database lexer (Lexical Analyzer Generator) token header
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,12 +33,14 @@
 //   * Added Modified and Modified delimiter tokens (chars '>' and ',') to
 //     assist in lexical analysis of new additional GovernmentsModified
 //     record syntax
+// - Added k_Token_Undefined. (29-Jul-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #ifndef __DB_TOKENS_H__
 #define __DB_TOKENS_H__
 
+#define k_Token_Undefined    0
 #define k_Token_Equals      '='
 #define k_Token_OpenBrace   '{'
 #define k_Token_CloseBrace  '}'

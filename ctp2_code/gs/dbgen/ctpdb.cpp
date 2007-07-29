@@ -39,6 +39,7 @@
 // - Added method to determine the number of entries that should be parsed
 //   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
+// - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -142,6 +143,11 @@ void db_start_record(char *name)
 	g_record = new RecordDescription(name);
 }
 
+void db_start_record_allows_single(char *name)
+{
+	delete g_record;
+	g_record = new RecordDescription(name, true);
+}
 
 FILE *db_open_file(const char *filename)
 {

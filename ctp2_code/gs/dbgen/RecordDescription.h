@@ -38,6 +38,7 @@
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
+// - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ class   RecordDescription;
 class RecordDescription
 {
 public:
-	RecordDescription(char const * name);
+	RecordDescription(char const * name, bool allowsSingleRecord = false);
 	~RecordDescription();
 
 	void SetBaseType(DATUM_TYPE type);
@@ -108,8 +109,9 @@ private:
 	bool                        m_addingToMemberClass;
 	DATUM_TYPE                  m_baseType;
 
-	sint32                      m_parseNum; // Unimplemented; Only implemented in MemberClass
-	bool                        m_preBody;
+	sint32                      m_parseNum;           // Unimplemented; Only implemented in MemberClass
+	bool                        m_preBody;            // To support the MapDB
+	bool                        m_allowsSingleRecord; // To support the ConstDB
 };
 
 #endif

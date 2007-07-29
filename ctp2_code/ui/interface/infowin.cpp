@@ -66,7 +66,6 @@
 #include "workmap.h"
 
 #include "StrDB.h"                  // g_theStringDB
-#include "ConstDB.h"                // g_theConstDB
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "Advances.h"

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A-star pathfinding
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -54,7 +54,6 @@
 
 extern World *g_theWorld; 
 extern RandomGenerator *g_rand; 
-extern ConstDB *g_theConstDB; 
 
 sint32 g_search_count; 
 

@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // - None
 //
 //----------------------------------------------------------------------------
@@ -66,7 +66,6 @@
 
 extern Player **g_player;
 extern RandomGenerator *g_rand;
-extern ConstDB *g_theConstDB;
 extern TiledMap		*g_tiledMap;
 
 extern SelectedItem	*g_selected_item;

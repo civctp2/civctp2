@@ -29,6 +29,7 @@
  * - Added method to determine the number of entries that should be parsed
  *   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
  * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
+ * - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -96,6 +97,7 @@ struct namevalueflags {
 #define k_MAX_SIZE_VARIABLE (0x7fffffff)
 
 void db_start_record(char *name);
+void db_start_record_allows_single(char *name);
 void db_end_record(char *name);
 
 void db_make_int_db(char *name);

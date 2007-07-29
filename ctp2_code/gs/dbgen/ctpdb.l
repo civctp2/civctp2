@@ -28,6 +28,7 @@ stringid      { return STRINGID; }
 aka           { return AKA; }
 parsenum      { return PARSENUM; }
 prebody       { return PREBODY; }
+alsire        { return ALLOWS_SINGLE_RECORD; }
 
 {name}        {
 			      yylval.name = (char*)strdup(yytext);

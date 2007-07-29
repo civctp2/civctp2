@@ -63,6 +63,7 @@
 //   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
+// - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -100,7 +101,7 @@ namespace
     }
 }
 
-RecordDescription::RecordDescription(char const * name)
+RecordDescription::RecordDescription(char const * name, bool allowsSingleRecord)
 :
 	m_datumList                 (),
 	m_memberClasses             (),
@@ -109,7 +110,8 @@ RecordDescription::RecordDescription(char const * name)
 	m_addingToMemberClass       (false),
 	m_baseType                  (DATUM_NONE),
 	m_parseNum                  (0),
-	m_preBody                   (false)
+	m_preBody                   (false),
+	m_allowsSingleRecord        (allowsSingleRecord)
 {
 	strncpy(m_name, name, k_MAX_RECORD_NAME);
 }
@@ -973,21 +975,36 @@ void RecordDescription::ExportParser(FILE *outfile)
 		ExportPreBodyTokens(outfile);
 
 		fprintf(outfile, "    if(tok != k_Token_OpenBrace) {\n");
-		fprintf(outfile, "        DBERROR((\"Missing open brace\"));\n");
-		fprintf(outfile, "        return 0;\n");
+		if(!m_allowsSingleRecord)
+		{
+			fprintf(outfile, "        DBERROR((\"Missing open brace\"));\n");
+			fprintf(outfile, "        return 0;\n");
+		}
+		else
+		{
+			fprintf(outfile, "        // Well if you have more time, you may find something better\n");
+			fprintf(outfile, "        goto BypassToken;\n");
+		}
+
 		fprintf(outfile, "    }\n");
 		fprintf(outfile, "\n");
 		fprintf(outfile, "    while(!done) {\n");
 		fprintf(outfile, "        tok = lex->GetToken();\n");
+		if(m_allowsSingleRecord)
+		{
+			fprintf(outfile, "        BypassToken:\n");
+		}
 		fprintf(outfile, "        if(tok >= k_Token_Custom_Base && tok < k_Token_%s_Max) {\n", m_name);
 		fprintf(outfile, "            s_ParsedTokens.SetBit(tok - k_Token_Custom_Base);\n");
 		fprintf(outfile, "        }\n");
 		fprintf(outfile, "        switch(tok) {\n");
 		
-		
 		ExportTokenCases(outfile);
 		
-		
+		if(m_allowsSingleRecord)
+		{
+			fprintf(outfile, "            case k_Token_Undefined:\n");
+		}
 		fprintf(outfile, "            case k_Token_CloseBrace:\n");
 		fprintf(outfile, "                done = true;\n");
 		fprintf(outfile, "                result = 1;\n");

@@ -23,6 +23,7 @@
  *   the old database format. (Aug 26th 2005 Martin Gühmann)
  * - Added the possibility of a default value from another entry. (Aug 26th 2005 Martin Gühmann)
  * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
+.* - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -85,7 +86,7 @@ int g_generateRequirementWarnings = 0;
 }
 
 %token INT FLOAT RECORD STRUCT BIT BITS EXCLUSIVEBITS NAME NUMBER STRING STRINGID
-%token FILENAME FLOATVALUE STRINGVALUE RANGE AKA PARSENUM PREBODY
+%token FILENAME FLOATVALUE STRINGVALUE RANGE AKA PARSENUM PREBODY ALLOWS_SINGLE_RECORD
 
 %%
 databases: records { s_done = 1; }
@@ -95,6 +96,7 @@ records: records record
        ;
 
 record: NAME '{' { db_start_record($1.name); } data '}' { db_end_record($1.name); }
+		| NAME ':' ALLOWS_SINGLE_RECORD '{' { db_start_record_allows_single($1.name); } data '}' { db_end_record($1.name); }
 		| name '>' names '{' { db_start_record($1.name); } data '}' { db_end_record($1.name); }
 		| NAME ':' INT { db_make_int_db($1.name); }
 		| NAME ':' FLOAT { db_make_float_db($1.name); }

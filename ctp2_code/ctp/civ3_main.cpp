@@ -94,7 +94,6 @@
 #include "civscenarios.h"               // g_civScenarios
 #include <clocale>
 #include "colorset.h"
-#include "ConstDB.h"                    // g_theConstDB
 #include "controlpanelwindow.h"         // g_controlPanel
 #include "ctp2_listbox.h"
 #include "ctp2_menubar.h"

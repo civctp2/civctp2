@@ -1,0 +1,339 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Const type descriptor
+#  Id           : $Id:$
+#
+#-----------------------------------------------------------------------------
+#
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+#  - Created file (29-Jul-2007 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+Const : alsire {
+	Int    PercentLand                            aka PERCENT_LAND
+	Int    PercentContinent                       aka PERCENT_CONTINENT
+	Int    PercentHomogenious                     aka PERCENT_HOMOGENOUS
+
+	Int    MeridianA                              aka MERIDIANA
+	Int    MeridianB                              aka MERIDIANB
+	Int    MeridianC                              aka MERIDIANC
+	Int    MeridianD                              aka MERIDIAND
+	Int    MeridianE                              aka MERIDIANE
+	Int    MeridianF                              aka MERIDIANF
+
+	Int    HLevelA                                aka HLEVELA
+	Int    HLevelB                                aka HLEVELB
+	Int    HLevelC                                aka HLEVELC
+	Int    HLevelD                                aka HLEVELD
+
+	Int    ForestWet                              aka FORESTWET
+	Int    GrassWet                               aka GRASSWET
+	Int    PlainsWet                              aka PLAINSWET
+	Int    DesertWet                              aka DESERTWET
+
+	Int    ForestDry                              aka FORESTDRY
+	Int    GrassDry                               aka GRASSDRY
+	Int    PlainsDry                              aka PLAINSDRY
+	Int    DesertDry                              aka DESERTDRY
+
+	Int    WhiteWarm                              aka WHITEWARM
+	Int    BrownWarm                              aka BROWNWARM
+	Int    TemperatureRangeAdjustWarm             aka TEMPERATURERANGEADJUSTWARM
+
+	Int    WhiteCold                              aka WHITECOLD
+	Int    BrownCold                              aka BROWNCOLD
+	Int    TemperatureRangeAdjustCold             aka TEMPERATURERANGEADJUSTCOLD
+
+	Int    RichnessFewGoods                       aka RICHNESSFEWGOODS
+	Int    RiverCellWidthFewGoods                 aka RIVERCELLWIDTHFEWGOODS
+	Int    RiverCellHeightFewGoods                aka RIVERCELLHEIGHTFEWGOODS
+
+	Int    RichnessManyGoods                      aka RICHNESSMANYGOODS
+	Int    RiverCellWidthManyGoods                aka RIVERCELLWIDTHMANYGOODS
+	Int    RiverCellHeightManyGoods               aka RIVERCELLHEIGHTMANYGOODS
+
+	Int    PercentMountain                        aka PERCENT_MOUNTAIN
+	Int    MountainCell                           aka MOUNTAIN_CELL
+
+	Int    PercentHills                           aka PERCENT_HILLS
+	Int    MountainSpread                         aka MOUNTAIN_SPREAD
+	Int    MountainLength                         aka MOUNTAIN_LENGTH
+
+	Int    GlacierExtend                          aka GLACIER_EXTENT
+	Int    PercentVolcano                         aka PERCENT_VOLCANO
+	Int    PercentTrench                          aka PERCENT_TRENCH
+
+	Int    PercentForest                          aka PERCENT_FOREST
+	Int    PercentGras                            aka PERCENT_GRASS
+	Int    PercentPlains                          aka PERCENT_PLAINS
+	Int    PercentDesert                          aka PERCENT_DESERT
+	Int    PercentWhite                           aka PERCENT_WHITE
+	Int    PercentBrown                           aka PERCENT_BROWN
+
+	Int    TemperatureRangeAdjust                 aka TEMPERATURE_RANGE_ADJUST
+	Int    NiceRadius                             aka NICE_RADIUS
+
+	Int    PercentRiver                           aka PERCENT_RIVER
+	Int    RiverLength                            aka RIVER_LENGTH
+	Int    RiverCellWidth                         aka RIVER_CELL_WIDTH
+	Int    RiverCellHeight                        aka RIVER_CELL_HEIGHT
+
+	Int    Richness                               aka RICHNESS
+
+	Int    ChanceLostAtSea                        aka CHANCE_LOST_AT_SEA
+	Int    VeteranCoef                            aka VETERAN_COEF
+	Int    RevolutionLevel                        aka REVOLUTION_LEVEL
+	Int    DiscoveriesPollutionSizeModifier       aka DISCOVERIES_POLLUTION_SIZE_MODIFIER
+	Int    DiscoveriesPollutionProductionModifier aka DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER
+	Int    AveragePollutionTurns                  aka AVERAGE_POLLUTION_TURNS
+	Int    PopulationProducesPollutionThreshold   aka POPULATION_PRODUCES_POLLUTION_THRESHOLD
+	Int    ProductionProducesPollutionThreshold   aka PRODUCTION_PRODUCES_POLLUTION_THRESHOLD
+
+	Float  MaxEmpireDistCost                      aka MAX_EMPIRE_DIST_COST
+	Float  HappinessLaunchCost                    aka HAPPINESS_LAUNCH_COST
+
+	Float  UnitWorkday                            aka UNIT_WORKDAY
+	Float  BaseWorkday                            aka BASE_WORKDAY
+	Float  UnitWages                              aka UNIT_WAGES
+	Float  BaseWages                              aka BASE_WAGES
+	Float  UnitRations                            aka UNIT_RATIONS
+	Float  BaseRations                            aka BASE_RATIONS
+
+	Int    ChangeCurrentlyBuildingItemPenalty     aka CHANGE_CURRENTLY_BUILDING_ITEM_PENALTY
+
+	Int    TariffReduction                        aka TARIFF_REDUCTION
+	Int    RevoltInfluenceDistance                aka REVOLT_INFLUENCE_DISTANCE
+	Int    PactCaptureCityExpires                 aka PACT_CAPTURE_CITY_EXPIRES
+	Int    RewardCaptureCityExpires               aka REWARD_CAPTURE_CITY_EXPIRES
+	Int    CeaseFireExpires                       aka CEASE_FIRE_EXPIRES
+	Int    ShortCeaseFireExpires                  aka SHORT_CEASE_FIRE_EXPIRES
+	Int    EndOfGameYearEarlyWarning              aka END_OF_GAME_YEAR_EARLY_WARNING
+	Int    EndOfGameYear                          aka END_OF_GAME_YEAR
+	Int    CaptureCityForGoldMultiplyer           aka CAPTURE_CITY_FOR_GOLD_MULTIPLIER
+	Int    PactEndPollutionExpires                aka PACT_END_POLLUTION_EXPIRES
+	Int    LeaveOurLandsExpires                   aka LEAVE_OUR_LANDS_EXPIRES
+	Int    ReducePollutionExpires                 aka REDUCE_POLLUTION_EXPIRES
+	Int    DestroyEnemyForRewardExpires           aka DESTROY_ENEMY_FOR_REWARD_EXPIRES
+	Int    PatienceLostPerRequest                 aka PATIENCE_LOST_PER_REQUEST
+	Int    PatienceRegainedPerRound               aka PATIENCE_REGAINED_PER_ROUND
+	Int    RegainPatienceProbability              aka REGAIN_PATIENCE_PROBABILITY
+	Int    PatienceLostThreshold                  aka PATIENCE_LOST_THRESHOLD
+
+	Int    AIGoalTimeSlice                        aka AI_GOAL_TIME_SLICE
+	Int    AIMaxTimeSlice                         aka AI_MAX_TIME_SLICE
+	Int    AITotalTimeSlice                       aka AI_TOTAL_TIME_SLICE
+
+	Float  EntrenchmentBonus                      aka ENTRENCHMENT_BONUS
+	Int    ParadropDistance                       aka PARADROP_DISTANCE
+	Int    ParadropSuccessPercent                 aka PARADROP_SUCCESS_PERCENT
+
+	Float  EliteSpyBonus                          aka ELITE_SPY_BONUS
+	Float  CitySecondAttemptSpyBonus              aka CITY_SECOND_ATTEMPT_SPY_BONUS
+	Int    AssasinationHappinessEffect            aka ASSASINATION_HAPPINESS_EFFECT
+	Int    AssasinationHappinessEffectTimer       aka ASSASINATION_HAPPINESS_EFFECT_TIMER
+	Int    SpiedUponWarinessTimer                 aka SPIED_UPON_WARINESS_TIMER
+
+	Int    MaxPartyCost                           aka MAX_PARTY_COST
+	Float  MaxPartyChance                         aka MAX_PARTY_CHANCE
+	Int    GossipMapRadius                        aka GOSSIP_MAP_RADIUS
+	Float  HearGossipChance                       aka HEAR_GOSSIP_CHANCE
+	Float  FranchiseEffect                        aka FRANCHISE_EFFECT
+	Int    TurnToSueFranchise                     aka TURNS_TO_SUE_FRANCHISE
+
+	Float  SlaverEliteChance                      aka SLAVER_ELITE_CHANCE
+	Float  EliteSlaverBonus                       aka ELITE_SLAVER_BONUS
+
+	Float  AbolitionistEliteChance                aka ABOLITIONIST_ELITE_CHANCE
+	Float  EliteAbolitionistBonus                 aka ELITE_ABOLITIONIST_BONUS
+	Float  WatchfulCitySuccessModifier            aka WATCHFUL_CITY_SUCCESS_MODIFIER
+	Float  WatchfulCityDeathModifier              aka WATCHFUL_CITY_DEATH_MODIFIER
+	Int    WatchfulCityTurns                      aka WATCHFUL_CITY_TURNS
+
+	Int    BioInfectionTurns                      aka BIO_INFECTION_TURNS
+	Int    NanoInfectionTurns                     aka NANO_INFECTION_TURNS
+	Float  BioInfectionSpreadChance               aka BIO_INFECTION_SPREAD_CHANCE
+	Float  NanoInfectionSpreadChance              aka NANO_INFECTION_SPREAD_CHANCE
+	Float  PlagueKillPercentage                   aka PLAGUE_KILL_PERCENTAGE
+
+	Float  EliteTerroristBonus                    aka ELITE_TERRORIST_BONUS
+	Float  TerroistEliteChance                    aka TERRORIST_ELITE_CHANCE
+	Float  NukePopulationPercentage               aka NUKE_POPULATION_PERCENTAGE
+
+	Float  SpecialActionMoveCost                  aka SPECIAL_ACTION_MOVE_COST
+	Float  ClericConversionFactor                 aka CLERIC_CONVERSION_FACTOR
+	Float  TelevangelistConversionFactor          aka TELEVANGELIST_CONVERSION_FACTOR
+
+	Float  ReformationChance                      aka REFORMATION_CHANCE
+	Float  ReformationDeathChance                 aka REFORMATION_DEATH_CHANCE
+	Int    ReformationHappinessTime               aka REFORMATION_HAPPINESS_TIME
+	Int    ReformationHappinessAmount             aka REFORMATION_HAPPINESS_AMOUNT
+
+	Int    UnconvertedIndulgenceGold              aka UNCONVERTED_INDULGENCE_GOLD
+	Int    UnconvertedIndulgenceHappiness         aka UNCONVERTED_INDULGENCE_HAPPINESS
+	Int    ConvertedIndulgenceGold                aka CONVERTED_INDULGENCE_GOLD
+	Int    ConvertedIndulgenceHappiness           aka CONVERTED_INDULGENCE_HAPPINESS
+	Int    OtherFaithIndulgenceGold               aka OTHER_FAITH_INDULGENCE_GOLD
+	Int    OtherFaithIndulgenceHappiness          aka OTHER_FAITH_INDULGENCE_HAPPINESS
+	Int    SoothsayHappyAmount                    aka SOOTHSAY_HAPPY_AMOUNT
+
+	Int    RuinsBoxWidth                          aka RUINS_BOX_WIDTH
+	Int    RuinsBoxHeight                         aka RUINS_BOX_HEIGHT
+	Float  RuinsChancePerBox                      aka RUINS_CHANCE_PER_BOX
+	Int    MaxRuinsGold                           aka MAX_RUINS_GOLD
+	Int    MaxRuinsAdvance                        aka MAX_RUINS_ADVANCE
+	Int    MaxRuinsUnit                           aka MAX_RUINS_UNIT
+
+	Int    UnitRushModifier                       aka UNIT_RUSH_MODIFIER
+	Int    BuildingRushModifier                   aka IMPROVEMENT_RUSH_MODIFIER
+	Int    WonderRushModifier                     aka WONDER_RUSH_MODIFIER
+	Float  BuildingProductionToValueModifier      aka BUILDING_PRODUCTION_TO_VALUE_MODIFIER
+
+	Int    MonopolyThreshold                      aka MONOPOLY_THRESHOLD
+	Int    PopulationPollutionWarningThreshold    aka POPULATION_POLLUTION_WARNING_THRESHOLD
+	Int    IndustrialPollutionWarningThreshold    aka INDUSTRIAL_POLLUTION_WARNING_THRESHOLD
+	Int    VerayHappyThreshold                    aka VERY_HAPPY_THRESHOLD
+	Int    CityGrowthCoefficient                  aka CITY_GROWTH_COEFFICIENT
+	Int    RiotLevel                              aka RIOT_LEVEL
+	Int    PowerPointsToMaterials                 aka POWER_POINTS_TO_MATERIALS
+	Int    MaxAirliftStackSize                    aka MAX_AIRLIFT_STACK_SIZE
+	Int    GoldFromPiracy                         aka GOLD_FROM_PIRACY
+	Int    NoPiracyExpires                        aka NO_PIRACY_EXPIRES
+	Int    SpaceLaunchCost                        aka SPACE_LAUNCH_COST
+	Int    SpaceLandCost                          aka SPACE_LAND_COST
+
+	Int    WormholeOrbitHeightPercentage          aka WORMHOLE_ORBIT_HEIGHT_PERCENTAGE
+	Int    WormholeSpeed                          aka WORMHOLE_SPEED
+	Int    WormholeReturnTime                     aka WORMHOLE_RETURN_TIME
+	Int    WormholeVisibleToAllTurns              aka WORMHOLE_VISIBLE_TO_ALL_TURNS
+	Int    MaxGovernmentChangeTurns               aka MAX_GOVERNMENT_CHANGE_TURNS
+
+	Int    PollutionForcesAnarchy                 aka POLLUTION_FORCES_ANARCHY
+	Float  FoodToPollutionCoef                    aka FOOD_TO_POLLUTION_COEF
+
+	Int    EmancipationUnhappinessTurns           aka EMANCIPATION_UNHAPPINESS_TURNS
+	Int    EmancippationUnhappinessAmount         aka EMANCIPATION_UNHAPPINESS_AMOUNT
+
+	Float  CaptureCityAdvanceChance               aka CAPTURE_CITY_ADVANCE_CHANCE
+
+	Float  CityHealRate                           aka CITY_HEAL_RATE
+	Float  NormalHealRate                         aka NORMAL_HEAL_RATE
+
+
+	Int    LocalPollutionLevel                    aka LOCAL_POLLUTION_LEVEL
+	Float  LocalPollutionChance                   aka LOCAL_POLLUTION_CHANCE
+
+	Float  AssaultDestroyBuildingChance           aka ASSAULT_DESTROY_BUILDING_CHANCE
+	Float  BombardDestroyBuildingChance           aka BOMBARD_DESTROY_BUILDING_CHANCE
+	Int    AdvanceChoicesMin                      aka ADVANCE_CHOICES_MIN
+	Int    AdvanceChoicesMax                      aka ADVANCE_CHOICES_MAX
+
+	Int    AttackConverterUnhappinessTurns        aka ATTACK_CONVERTER_UNHAPPINESS_TURNS
+	Float  AttackConverterUnhappinessAmount       aka ATTACK_CONVERTER_UNHAPPINESS_AMOUNT
+
+	Float  MinStartDistanceCoefficient            aka MIN_START_DISTANCE_COEFFICIENT
+	Float  MaxStartDistanceCoefficient            aka MAX_START_DISTANCE_COEFFICIENT
+	Int    MaxSameTiles                           aka MAX_SAME_TILES
+	Float  CombatVeteranChance                    aka COMBAT_VETERAN_CHANCE
+
+	Int    StopTradeRounds                        aka STOP_TRADE_ROUNDS
+	Int    LeaveOurLandsRounds                    aka LEAVE_OUR_LANDS_ROUNDS
+	Int    ReducePollutionRounds                  aka REDUCE_POLLUTION_ROUNDS
+	Int    CaptureCityRounds                      aka CAPTURE_CITY_ROUNDS
+	Int    EndPollutionRounds                     aka END_POLLUTION_ROUNDS
+	Int    AttackEnemyRounds                      aka ATTACK_ENEMY_ROUNDS
+
+	Int    MinContinentStartSize                  aka MIN_CONTINENT_START_SIZE
+
+	Float  BombardKillPopChance                   aka BOMBARD_KILL_POP_CHANCE
+	Float  AssaultKillPopChance                   aka ASSAULT_KILL_POP_CHANCE
+	Float  CaptureKillPopChance                   aka CAPTURE_KILL_POP_CHANCE
+
+	Int    ScaledPopAncient                       aka SCALED_POP_ANCIENT
+	Int    ScaledPopRenaissance                   aka SCALED_POP_RENAISSANCE
+	Int    ScaledPopModern                        aka SCALED_POP_MODERN
+	Int    ScaledPopGenetic                       aka SCALED_POP_GENETIC
+	Int    ScaledPopDiamond                       aka SCALED_POP_DIAMOND
+
+	Int    PiracyKillsTraderChance                aka PIRACY_KILLS_TRADER_CHANCE
+	Int    UprisingChancePerUnguaredSlave         aka UPRISING_CHANCE_PER_UNGUARDED_SLAVE
+	Int    MaxDisbandSize                         aka MAX_DISBAND_SIZE
+	Int    MaxRequestsPerPlayerPerTurn            aka MAX_REQUESTS_PER_PLAYER_PER_TURN
+	Int    SlavesPerMilitaryUnit                  aka SLAVES_PER_MILITARY_UNIT
+	Int    MinAbsoluteStartDistance               aka MIN_ABSOLUTE_START_DISTANCE
+
+	Int[3] MapSizeSmall                           aka MAP_SIZE_SMALL
+	Int[3] MapSizeMedium                          aka MAP_SIZE_MEDIUM
+	Int[3] MapSizeLarge                           aka MAP_SIZE_LARGE
+	Int[3] MapSizeGigantic                        aka MAP_SIZE_GIGANTIC
+
+	Int    RailLaunchPollution                    aka RAIL_LAUNCH_POLLUTION
+	Int    SpaceFuelCost                          aka SPACE_FUEL_COST
+	Int    NonSpaceFuelCost                       aka NON_SPACE_FUEL_COST
+
+	Int    StarvationWarningFudgeFactor           aka STARVATION_WARNING_FUDGE_FACTOR
+	Int    MaintenanceWarningFudgeFactor          aka MAINTENANCE_WARNING_FUDGE_FACTOR
+	Int    SupportWarningFudgeFactor              aka SUPPORT_WARNING_FUDGE_FACTOR
+
+	Float  RelativeAIProductionCheatCoef          aka RELATIVE_AI_PRODUCTION_CHEAT_COEF
+	Float  RelativeAIScienceCheatCoef             aka RELATIVE_AI_SCIENCE_CHEAT_COEF
+
+	Int    NukeKillsTiles                         aka NUKE_KILL_TILES
+
+	Float  InciteRevolutionGoldCoefficient        aka INCITE_REVOLUTION_GOLD_COEFFICIENT
+	Float  InciteRevolutionCapitolPenalty         aka INCITE_REVOLUTION_CAPITOL_PENALTY
+
+	Float  InciteUprisingGoldCoefficient          aka INCITE_UPRISING_GOLD_COEFFICIENT
+	Float  InciteUprisingCapitolPenalty           aka INCITE_UPRISING_CAPITOL_PENALTY
+
+	Int    BioInfectionUnhappiness                aka BIO_INFECTION_UNHAPPINESS
+
+	Int    MinEcoPactViolationLevel               aka MIN_ECO_PACT_VIOLATION_LEVEL
+	Float  NanoInfectionTerroristDeathChance      aka NANO_INFECTION_TERRORIST_DEATH_CHANCE
+	Float  BioInfectionTerroristDeathChance       aka BIO_INFECTION_TERRORIST_DEATH_CHANCE
+	Float  FloodChangesCoastToWaterChance         aka FLOOD_CHANGES_COAST_TO_WATER_CHANCE
+	Int    AICheatEcoPactMin                      aka AI_CHEAT_ECO_PACT_MIN
+	Int    AICheatEcoPactMax                      aka AI_CHEAT_ECO_PACT_MAx
+
+	Int    MaxAbsoluteGrowthRate                  aka MAX_ABSOLUTE_GROWTH_RATE
+	Int    TradeDistanceCoefficient               aka TRADE_DISTANCE_COEFFICIENT
+	Int    MinLikeTilesForGood                    aka MIN_LIKE_TILES_FOR_GOOD
+	Float  MinGoodValue                           aka MIN_GOOD_VALUE
+	Float  MaxGoodValue                           aka MAX_GOOD_VALUE
+
+	Float  PiracyWasteCoefficient                 aka PIRACY_WASTE_COEFFICIENT
+
+	Int    BorderIntRadius                        aka BORDER_INT_RADIUS
+	Int    BorderSquaredRadius                    aka BORDER_SQUARED_RADIUS
+
+	Float  BioInfectionProductionCoef             aka BIO_INFECTION_PRODUCTION_COEF
+	Float  NanoBuildingKillPercentage             aka NANO_BUILDING_KILL_PERCENTAGE
+	Int    BaseStarvationProtection               aka BASE_STARVATION_PROTECTION
+
+	Float  CaravanCoef                            aka CARAVAN_COEF
+
+	Int    PollutionCausedNyNuke                  aka POLLUTION_CAUSED_BY_NUKE
+
+	Int    MaxMatchListCycles     =    6          aka MAX_MATCH_LIST_CYCLES
+	Int    MinTurnsBetweenRevolts =    1          aka MIN_TURNS_BETWEEN_REVOLT
+
+	Int    MaxCityWonders         = 1000          aka MAX_CITY_WONDERS
+	Int    MaxCityBuildings       = 1000          aka MAX_CITY_BUILDINGS
+	Int    CapturedCityKillPop    =    1          aka CAPTURED_CITY_KILL_POP
+
+	Float  CombatEliteChance      = 0.05          aka COMBAT_ELITE_CHANCE
+	Float  CombatLeaderChance     = 0.01          aka COMBAT_LEADER_CHANCE
+	Float  CityOnTradeRouteBonus  = 0.3           aka CITY_ON_TRADE_ROUTE_BONUS
+}
