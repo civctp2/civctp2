@@ -27,7 +27,7 @@ class aui_DirectSound : public aui_Sound
 public:
 	aui_DirectSound(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL );
+		MBCHAR const * filename = NULL );
 	virtual ~aui_DirectSound();
 
 	virtual AUI_ERRCODE Load(
@@ -39,7 +39,7 @@ public:
 	virtual AUI_ERRCODE Unload ( void );
 	virtual void Play( void );
 	virtual void Stop( void );
-	void GetStatus( uint32 *dwStatus );
+	void GetStatus( DWORD * dwStatus );
 	void SetPlayFlag( int flag );
 
 protected:

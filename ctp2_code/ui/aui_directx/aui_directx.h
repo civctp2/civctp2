@@ -41,7 +41,7 @@ public:
 
 	static uint32 m_directXClassId;
 
-	BOOL GetExclusiveMode(void) { return m_exclusiveMode; }
+	BOOL GetExclusiveMode(void) const { return m_exclusiveMode; }
 
 protected:
 	static LPDIRECTDRAW		m_lpdd;
@@ -56,6 +56,7 @@ private:
 };
 
 typedef aui_DirectX aui_Native;
+
 
 
 #ifndef DDLOCK_NOSYSLOCK

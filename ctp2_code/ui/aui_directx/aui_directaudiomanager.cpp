@@ -146,7 +146,7 @@ BOOL aui_DirectAudioManager::CreatePrimaryBuffer()
 }
 
 
-BOOL aui_DirectAudioManager::SetDSoundRate( uint32 newRate )
+BOOL aui_DirectAudioManager::SetDSoundRate(DWORD newRate)
 {
 	PCMWAVEFORMAT	pcmwf;
 

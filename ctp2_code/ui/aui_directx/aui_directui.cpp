@@ -71,35 +71,12 @@ aui_DirectUI::aui_DirectUI
 	MBCHAR *ldlFilename,
 	BOOL useExclusiveMode 
 )
-:   aui_UI              (),
+:   
+    aui_UI              (retval, hinst, hwnd, width, height, bpp, ldlFilename),
     aui_DirectX         (),
     m_lpdds             (NULL),
     m_isCoinitialized   (false)
 {
-	
-	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
-
-	
-
-	
-	
-
-	
-	
-	
-
-	
-
-	
-	
-	Assert( aui_Base::GetBaseRefCount() == 2 );
-	g_ui = aui_Base::GetBaseRefCount() == 2 ? this : NULL;
-
-	
-	*retval = aui_UI::InitCommon( hinst, hwnd, bpp, ldlFilename );
-	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = InitCommon();
@@ -108,7 +85,6 @@ aui_DirectUI::aui_DirectUI
 
 	*retval = CreateNativeScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 
@@ -159,7 +135,7 @@ AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 
 	HRESULT hr;
 
-	
+	 // Unchanged if command line argument: nonexclusive is present
 	uint32 coopFlags = DDSCL_NORMAL;
 	if ( m_exclusiveMode )
 		coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
@@ -177,7 +153,7 @@ AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 
-	
+	// With nonexclusive windows collor depth must be 16 bit otherwise the game will crash.
 	hr = m_lpdd->SetDisplayMode( m_width, m_height, m_bpp );
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;
@@ -212,7 +188,7 @@ AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 	else
 		m_lpdds = lpdds;
 
-	
+	delete m_primary;
 	m_primary = new aui_DirectSurface(
 		&errcode,
 		m_width,

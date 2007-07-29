@@ -17,6 +17,7 @@
 #include "aui_directblitter.h"
 
 
+
 AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 	aui_Surface *destSurf,
 	RECT *destRect,
@@ -265,4 +266,5 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 	return retcode;
 }
 
-#endif // __AUI_USE_DIRECTX__
+#endif
+
