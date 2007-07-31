@@ -68,8 +68,7 @@ public:
 protected:
 	aui_TextField	*m_inputField;
 
-	class InputFieldAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
+	AUI_ACTION_BASIC(InputFieldAction);
 };
 
 

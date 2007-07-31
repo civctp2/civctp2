@@ -112,20 +112,13 @@ private:
 };
 
 
-class StartGameAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
-
-
-
-
-class SpriteTestAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(EndGameAction);
+AUI_ACTION_BASIC(QuitToSPShellAction);
+AUI_ACTION_BASIC(QuitToLobbyAction);
+AUI_ACTION_BASIC(RestartGameAction);
+AUI_ACTION_BASIC(RestartGameSameMapAction);
+AUI_ACTION_BASIC(StartGameAction);
+AUI_ACTION_BASIC(SpriteTestAction);
 
 
 
@@ -136,7 +129,12 @@ public:
 	
 	LoadSaveGameAction() : aui_Action() {}
 	LoadSaveGameAction(MBCHAR *name) : aui_Action() { strncpy(m_filename,name,k_AUI_LDL_MAXBLOCK );}
-	virtual ActionCallback Execute;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
 };
 
 
@@ -147,43 +145,24 @@ public:
 	
 	LoadSaveGameMapAction() : aui_Action() {}
 	LoadSaveGameMapAction(MBCHAR *name) : aui_Action() { strncpy(m_filename,name,k_AUI_LDL_MAXBLOCK );}
-	virtual ActionCallback Execute;
-};
-
-class RestartGameAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
-
-
-class RestartGameSameMapAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
-class QuitToSPShellAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
-class QuitToLobbyAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
-
-class EndGameAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
 };
 
 class LoadScenarioGameAction : public aui_Action
 {
 public:
 	LoadScenarioGameAction(MBCHAR *name) : aui_Action() { strncpy(m_filename, name, _MAX_PATH); }
-	virtual ActionCallback Execute;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
 
 	MBCHAR m_filename[_MAX_PATH];
 };

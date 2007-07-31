@@ -229,7 +229,7 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 
 AUI_ERRCODE custommapscreen_Cleanup()
 {
-#define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
+#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 
 	if ( !s_customMapWindow  ) return AUI_ERRCODE_OK; 
 
@@ -268,11 +268,10 @@ AUI_ERRCODE custommapscreen_Cleanup()
 
 
 
-class SetupMapEditorAction : public aui_Action
-{ public: virtual ActionCallback Execute; };
-void SetupMapEditorAction::Execute( aui_Control *a, uint32 b, uint32 c )
-{
-}
+AUI_ACTION_BASIC(SetupMapEditorAction);
+
+void SetupMapEditorAction::Execute(aui_Control *, uint32, uint32)
+{ ; }
 
 void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
@@ -469,12 +468,13 @@ void custommapscreen_setValues(
 	sint32 richness =
 		(sint32)g_theConstDB->RichnessManygoods() * goodcount +
 		(sint32)g_theConstDB->RichnessFewgoods() * ( 10 - goodcount );
+#if 0   // Unused
 	sint32 riverCellWidth =
 		(sint32)g_theConstDB->RiverCellWidthManygoods() * goodcount +
 		(sint32)g_theConstDB->RiverCellWidthFewgoods() * ( 10 - goodcount );
 	sint32 riverCellHeight =
 		(sint32)g_theConstDB->RiverCellHeightManygoods() * goodcount +
 		(sint32)g_theConstDB->RiverCellHeightFewgoods() * ( 10 - goodcount );
-
+#endif
 	g_theProfileDB->SetPercentRichness( sint32(richness / 10) );
 }

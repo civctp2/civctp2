@@ -52,16 +52,9 @@ public:
 	};
 
 protected:
-	
-
-	class OKButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class CancelButtonAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
-
-	class LobbyListBoxAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
+    AUI_ACTION_BASIC(OKButtonAction);
+	AUI_ACTION_BASIC(CancelButtonAction);
+    AUI_ACTION_BASIC(LobbyListBoxAction);
 };
 
 

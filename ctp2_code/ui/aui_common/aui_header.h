@@ -59,8 +59,17 @@ protected:
 class aui_HeaderSwitchAction : public aui_Action
 {
 public:
-	aui_HeaderSwitchAction( sint32 column ) : m_column( column ) {}
-	virtual ActionCallback Execute;
+	aui_HeaderSwitchAction(sint32 column) 
+    :   aui_Action  (),
+        m_column    (column) 
+    { ; };
+
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
 
 protected:
 	sint32 m_column;

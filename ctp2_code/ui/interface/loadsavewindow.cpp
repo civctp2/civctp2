@@ -123,7 +123,7 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
 }
 
 
-AUI_ERRCODE LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
+bool LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
 	MBCHAR			tabGroupBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -611,7 +611,7 @@ void LoadSaveWindow::SetType(uint32 type)
 }
 
 
-BOOL LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
+bool LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 {
 	if ( info == NULL) {
 		info = new SaveInfo();
@@ -1257,7 +1257,7 @@ void LoadSaveWindow::EnableFields( BOOL enable )
 }
 
 
-BOOL LoadSaveWindow::NoName( void )
+bool LoadSaveWindow::NoName( void )
 {
 	MBCHAR s[_MAX_PATH];
 	

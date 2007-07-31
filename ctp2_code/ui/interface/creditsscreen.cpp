@@ -110,11 +110,7 @@ CreditsWindow*			g_creditsWindow = NULL;
 C3Window *GetInitialPlayScreen();
 
 
-class RemoveCreditsAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(RemoveCreditsAction);
 
 
 void RemoveCreditsAction::Execute(aui_Control *control, uint32 action, uint32 data)
@@ -193,10 +189,10 @@ sint32 creditsscreen_Initialize()
 }
 
 
-sint32 creditsscreen_Cleanup()
+void creditsscreen_Cleanup()
 {
 	
-	if(!g_creditsWindow) return(0);
+	if(!g_creditsWindow) return;
 
 	
 	g_c3ui->RemoveWindow(g_creditsWindow->Id());
@@ -204,9 +200,6 @@ sint32 creditsscreen_Cleanup()
 	
 	delete g_creditsWindow;
 	g_creditsWindow = NULL;
-
-	
-	return(0);
 }
 
 

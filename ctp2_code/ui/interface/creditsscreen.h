@@ -4,6 +4,7 @@
 #ifndef _BMH_CREDITS_SCREEN_H_
 #define _BMH_CREDITS_SCREEN_H_
 
+class CreditsWindow;
 
 #include "c3window.h"
 
@@ -20,11 +21,8 @@ class c3_CreditsText;
 
 
 
-
-extern sint32 creditsscreen_Initialize();
-
-
-extern sint32 creditsscreen_Cleanup();
+sint32  creditsscreen_Initialize(void);
+void    creditsscreen_Cleanup(void);
 
 
 class CreditsWindow : public C3Window {

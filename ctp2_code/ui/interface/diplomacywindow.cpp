@@ -2115,7 +2115,12 @@ class DiplomacyWindowChangeModeAction : public aui_Action
 	DiplomacyWindowChangeModeAction(DW_CREATE_MODE mode) {
 		m_mode = mode;
 	}
-	virtual ActionCallback Execute;
+	virtual void Execute
+    (
+	aui_Control *   control,
+		uint32		action,
+		uint32		data
+    );
 
   protected:
 	DW_CREATE_MODE m_mode;

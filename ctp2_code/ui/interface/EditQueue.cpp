@@ -2376,7 +2376,12 @@ class ConfirmOverwriteQueueAction:public aui_Action
   public:
 	ConfirmOverwriteQueueAction(MBCHAR *saveFileName, const MBCHAR *text) { m_saveFileName = saveFileName; strncpy(m_text, text, 256); m_text[256] = 0; }
 
-	virtual ActionCallback Execute;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
 
   private:
 	MBCHAR m_text[257];
@@ -2393,12 +2398,7 @@ void ConfirmOverwriteQueueAction::Execute(aui_Control *control, uint32 action, u
 	MessageBoxDialog::Query(buf, "QueryOverwiteQueue", EditQueue::SaveQueryCallback, (void *)m_saveFileName);
 };
 
-class MustEnterNameAction : public aui_Action
-{
-  public:
-	  MustEnterNameAction() {};
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(MustEnterNameAction);
 
 void MustEnterNameAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {

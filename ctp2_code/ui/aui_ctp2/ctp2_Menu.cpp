@@ -42,21 +42,30 @@ ctp2_Menu::ctp2_Menu(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 
 class CleanupMenuWindowAction : public aui_Action
 {
-  public:
-	CleanupMenuWindowAction(aui_Window *window) : m_window(window) {}
-	virtual ActionCallback Execute;
-  protected:
-	aui_Window *m_window;
+public:
+	CleanupMenuWindowAction(aui_Window * window) 
+    :   aui_Action  (),
+        m_window    (window) 
+    { ; };
+
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	)
+    {
+        if (m_window)
+        {
+            delete m_window->GetChildByIndex(0);
+            delete m_window;
+        }
+    };
+
+protected:
+	aui_Window *    m_window;
 };
 
-void CleanupMenuWindowAction::Execute(aui_Control *control, uint32 action, uint32 data)
-{
-	
-	
-	
-	delete m_window->GetChildByIndex(0);
-	delete m_window;
-}
 
 ctp2_Menu::~ctp2_Menu()
 {

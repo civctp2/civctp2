@@ -136,13 +136,7 @@ public:
 
 	BOOL &WasMinimizing( void ) { return m_wasMinimizing; }
 
-
-
-
-
-	
-	class DestroyAction : public aui_Action
-	{ public: virtual ActionCallback Execute; };
+	AUI_ACTION_BASIC(DestroyAction);
 
 	MBCHAR *GetTrueBmp( void ) { return m_truebmp->GetString(); }
 

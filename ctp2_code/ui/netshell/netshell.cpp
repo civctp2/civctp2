@@ -158,14 +158,16 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 class EnterMainMenuAction:public aui_Action
 {
   public:
-	virtual ActionCallback Execute;
-};
-
-void EnterMainMenuAction::Execute(aui_Control *control, uint32 action, uint32 data)
-{
+	virtual void    Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	)
+    {
 	EnterMainMenu();
-}
-
+    };
+};
 
 void NetShell::Leave( uint32 flags, BOOL safe )
 {

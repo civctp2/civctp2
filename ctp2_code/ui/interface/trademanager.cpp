@@ -1106,12 +1106,7 @@ STDEHANDLER(TradeManagerSendGoodEvent)
 	return GEV_HD_Continue;
 }
 
-class UpdateTradeAction : public aui_Action
-{
-  public:
-	UpdateTradeAction() {}
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(UpdateTradeAction);
 
 void UpdateTradeAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {

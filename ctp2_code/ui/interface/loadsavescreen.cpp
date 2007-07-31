@@ -228,17 +228,15 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 
 
 
-AUI_ERRCODE loadsavescreen_Cleanup()
+void loadsavescreen_Cleanup()
 {
-	if ( !g_loadsaveWindow  ) return AUI_ERRCODE_OK; 
+	if ( !g_loadsaveWindow  ) return; 
 
 	g_c3ui->RemoveWindow( g_loadsaveWindow->Id() );
 	keypress_RemoveHandler(g_loadsaveWindow);
 
 	delete g_loadsaveWindow;
 	g_loadsaveWindow = NULL;
-
-	return AUI_ERRCODE_OK;
 }
 
 void loadsavescreen_PostCleanupAction(void)

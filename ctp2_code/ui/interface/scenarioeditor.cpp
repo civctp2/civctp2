@@ -2941,22 +2941,14 @@ void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data,
 	g_theProfileDB->SetPollutionRule(!g_theProfileDB->IsPollutionRule());
 }
 
-class ReopenEditorAction : public aui_Action
-{
-  public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(ReopenEditorAction);
 
 void ReopenEditorAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {
 	ScenarioEditor::Display();
 }
 
-class PostReopenEditorActionAction : public aui_Action
-{
-  public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(PostReopenEditorActionAction);
 
 void PostReopenEditorActionAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {

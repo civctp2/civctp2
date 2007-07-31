@@ -1479,7 +1479,7 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	return 0;
 }
 
-sint32 ScienceWin::UpdateList( void )
+void ScienceWin::UpdateList( void )
 {
 	AUI_ERRCODE errcode;
 	MBCHAR		ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1510,8 +1510,6 @@ sint32 ScienceWin::UpdateList( void )
 			}
 		}
 	}
-
-	return 0;
 }
 
 

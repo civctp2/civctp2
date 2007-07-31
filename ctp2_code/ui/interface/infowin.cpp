@@ -483,55 +483,11 @@ sint32 infowin_Initialize( void )
 
 }
 
-sint32 infowin_Cleanup( void )
+void infowin_Cleanup( void )
 {
-	return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-sint32 infowin_Cleanup_Controls( void )
+void infowin_Cleanup_Controls( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -590,8 +546,6 @@ sint32 infowin_Cleanup_Controls( void )
 	mycleanup( s_labButton );
 	mycleanup( s_throneButton );
 	mycleanup( s_pollutionButton );
-
-	return 0;
 
 #undef mycleanup
 }

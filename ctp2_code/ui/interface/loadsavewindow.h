@@ -2,8 +2,11 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef LOADSAVEWINDOW_FLAG
-#define LOADSAVEWINDOW_FLAG
+
+#ifndef LOADSAVEWINDOW_H
+#define LOADSAVEWINDOW_H
+
+class LoadSaveWindow;
 
 #include "pointerlist.h"
 #include "gamefile.h"
@@ -26,7 +29,7 @@ sint32 loadsavescreen_displayMyWindow(uint32 type);
 sint32 loadsavescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback
 									   *callback = NULL );
-AUI_ERRCODE loadsavescreen_Cleanup();
+void loadsavescreen_Cleanup(void);
 
 void loadsavescreen_SaveGame(MBCHAR *usePath = NULL, MBCHAR *useName = NULL);
 
@@ -53,7 +56,8 @@ void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 d
 void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-typedef enum { 
+enum LSS_TYPE
+{ 
 	LSS_FIRST=0, 
 
 	LSS_LOAD_GAME=0, 
@@ -67,7 +71,7 @@ typedef enum {
 	LSS_SAVE_SCEN,
 
 	LSS_TOTAL
-} LSS_TYPE;
+};
 
 class LoadSaveWindow : public c3_PopupWindow
 {
@@ -80,7 +84,7 @@ public:
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	bool InitCommonLdl(MBCHAR *ldlBlock);
 
 	virtual ~LoadSaveWindow();
 
@@ -139,12 +143,10 @@ public:
 	c3_ListBox *GetListOne( void ) const { return m_listOne; }
 	c3_ListBox *GetListTwo( void ) const { return m_listTwo; }
 
-	BOOL NoName( void );
+	bool NoName( void );
 
 private:
-	
-	
-	BOOL CreateSaveInfoIfNeeded( SaveInfo *&info );
+	bool        CreateSaveInfoIfNeeded(SaveInfo *& info);
 
 	uint32			 m_type;
 	aui_StringTable *m_nameString;
@@ -251,10 +253,7 @@ private:
 };
 
 
-class LSCleanupAction : public aui_Action
-{
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(LSCleanupAction);
 
 extern LoadSaveWindow				*g_loadsaveWindow;
 

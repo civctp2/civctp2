@@ -592,19 +592,9 @@ sint32 open_CreditsScreen()
 }
 
 
-sint32 close_CreditsScreen( void )
+void close_CreditsScreen(void)
 {
-	
-	
-	
-	sint32 err = creditsscreen_Cleanup();
-
-	
-	Assert(!err);
-	if(err) return(-1);
-
-	
-	return(0);
+	creditsscreen_Cleanup();
 }
 
 

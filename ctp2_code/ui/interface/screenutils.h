@@ -48,7 +48,7 @@
 class Sequence;
 
 sint32 open_CreditsScreen( void );
-sint32 close_CreditsScreen( void );
+void close_CreditsScreen( void );
 
 sint32 open_WorkView( void );
 sint32 close_WorkView( void );

@@ -5,7 +5,8 @@
 #ifndef __WONDERMOVIEWIN__
 #define __WONDERMOVIEWIN__
 
-#include "aui_action.h"
+#include "aui_action.h"     // aui_Action
+#include "ctp2_inttypes.h"  // sint32, uint32
 
 class Sequence;
 
@@ -16,9 +17,6 @@ void wondermoviewin_Cleanup();
 
 void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
 
-class CloseMovieAction : public aui_Action
-{
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(CloseMovieAction);
 
 #endif

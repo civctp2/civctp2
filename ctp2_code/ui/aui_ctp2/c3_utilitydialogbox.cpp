@@ -485,7 +485,7 @@ c3_UtilityCityListPopup::~c3_UtilityCityListPopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityCityListPopup::Cleanup( void )
+void c3_UtilityCityListPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -499,8 +499,6 @@ sint32 c3_UtilityCityListPopup::Cleanup( void )
 
 	delete m_window;
 	m_window = NULL;
-
-	return 0 ;
 
 #undef mycleanup
 }
@@ -628,7 +626,7 @@ c3_PiracyPopup::~c3_PiracyPopup( void )
 	Cleanup();
 }
 
-sint32 c3_PiracyPopup::Cleanup( void )
+void c3_PiracyPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -642,8 +640,6 @@ sint32 c3_PiracyPopup::Cleanup( void )
 
 	delete m_window;
 	m_window = NULL;
-
-	return 0 ;
 
 #undef mycleanup
 }
@@ -770,7 +766,7 @@ c3_ExpelPopup::~c3_ExpelPopup( void )
 	Cleanup();
 }
 
-sint32 c3_ExpelPopup::Cleanup( void )
+void c3_ExpelPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -785,8 +781,6 @@ sint32 c3_ExpelPopup::Cleanup( void )
 
 	delete m_window;
 	m_window = NULL;
-
-	return 0 ;
 
 #undef mycleanup
 }
@@ -925,7 +919,7 @@ c3_UtilityTextFieldPopup::~c3_UtilityTextFieldPopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityTextFieldPopup::Cleanup( void )
+void c3_UtilityTextFieldPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -941,7 +935,6 @@ sint32 c3_UtilityTextFieldPopup::Cleanup( void )
 	m_window = NULL;
 
 #undef mycleanup
-	return 0;
 }
 
 void c3_UtilityTextFieldPopup::DisplayWindow( void )
@@ -980,7 +973,7 @@ sint32 c3_UtilityTextFieldPopup::UpdateData( void )
 
 
 
-c3_UtilityTextMessagePopup::c3_UtilityTextMessagePopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback* callback,  MBCHAR *ldlBlock )
+c3_UtilityTextMessagePopup::c3_UtilityTextMessagePopup( MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallback* callback,  MBCHAR const *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1078,7 +1071,7 @@ c3_UtilityTextMessagePopup::~c3_UtilityTextMessagePopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityTextMessagePopup::Cleanup( void )
+void c3_UtilityTextMessagePopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -1095,10 +1088,9 @@ sint32 c3_UtilityTextMessagePopup::Cleanup( void )
 	m_window = NULL;
 
 #undef mycleanup
-	return 0;
 }
 
-void c3_UtilityTextMessagePopup::DisplayWindow( MBCHAR *text )
+void c3_UtilityTextMessagePopup::DisplayWindow( MBCHAR const *text )
 {
 	AUI_ERRCODE auiErr;
 
@@ -1125,7 +1117,7 @@ void c3_UtilityTextMessagePopup::RemoveWindow( void )
 	keypress_RemoveHandler(m_window);
 }
 
-sint32 c3_UtilityTextMessagePopup::UpdateData( MBCHAR *text )
+sint32 c3_UtilityTextMessagePopup::UpdateData( MBCHAR const *text )
 {
 	
 	if (text)
@@ -1147,7 +1139,7 @@ void c3_UtilityTextMessageCleanupAction::Execute(aui_Control *control,
 	g_utilityTextMessage = NULL;
 }
 
-c3_UtilityTextMessageCreateAction::c3_UtilityTextMessageCreateAction( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback *callback, MBCHAR *ldlBlock )
+c3_UtilityTextMessageCreateAction::c3_UtilityTextMessageCreateAction( MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallback *callback, MBCHAR const *ldlBlock )
 {
 	m_text = text;
 	m_type = type;
@@ -1178,7 +1170,7 @@ void c3_UtilityAbortCleanupAction::Execute(aui_Control *control,
 
 
 
-void c3_TextMessage(MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback *callback, MBCHAR *ldlBlock )
+void c3_TextMessage(MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallback *callback, MBCHAR const *ldlBlock )
 {
 	
 	if (g_utilityTextMessage) return;
@@ -1237,7 +1229,7 @@ void c3_RemoveAbortMessage( void )
 
 
 
-c3_UtilityAbortPopup::c3_UtilityAbortPopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback* callback,  MBCHAR *ldlBlock )
+c3_UtilityAbortPopup::c3_UtilityAbortPopup( MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallback* callback,  MBCHAR const *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1306,7 +1298,7 @@ c3_UtilityAbortPopup::~c3_UtilityAbortPopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityAbortPopup::Cleanup( void )
+void c3_UtilityAbortPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -1321,10 +1313,9 @@ sint32 c3_UtilityAbortPopup::Cleanup( void )
 	m_window = NULL;
 
 #undef mycleanup
-	return 0;
 }
 
-void c3_UtilityAbortPopup::DisplayWindow( MBCHAR *text, sint32 percentFilled )
+void c3_UtilityAbortPopup::DisplayWindow( MBCHAR const *text, sint32 percentFilled )
 {
 	AUI_ERRCODE auiErr;
 
@@ -1355,7 +1346,7 @@ void c3_UtilityAbortPopup::RemoveWindow( void )
 
 }
 
-sint32 c3_UtilityAbortPopup::UpdateData( MBCHAR *text )
+sint32 c3_UtilityAbortPopup::UpdateData( MBCHAR const *text )
 {
 	
 	if (text)
@@ -1461,7 +1452,7 @@ c3_UtilityPlayerListPopup::~c3_UtilityPlayerListPopup( void )
 	Cleanup();
 }
 
-sint32 c3_UtilityPlayerListPopup::Cleanup( void )
+void c3_UtilityPlayerListPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -1477,8 +1468,6 @@ sint32 c3_UtilityPlayerListPopup::Cleanup( void )
 
 	delete m_window;
 	m_window = NULL;
-
-	return 0 ;
 
 #undef mycleanup
 }
@@ -1695,7 +1684,7 @@ void c3Expel_Cleanup( void )
 static c3_UtilityTextFieldPopup	*s_nameTheCityPopup;
 static Unit						s_unit;
 
-void NameTheCityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data)
+void NameTheCityDialogBoxCallback(MBCHAR const *text, sint32 val2, void *data)
 {
 	if (!val2) return; 
 

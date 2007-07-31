@@ -14,9 +14,6 @@ void intromoviewin_Cleanup();
 
 void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
 
-class CloseIntroMovieAction : public aui_Action
-{
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(CloseIntroMovieAction);
 
 #endif

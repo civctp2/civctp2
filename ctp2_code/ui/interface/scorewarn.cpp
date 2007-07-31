@@ -147,9 +147,9 @@ sint32 scorewarn_Initialize( void )
 	return 0;
 }
 
-sint32 scorewarn_Cleanup( void )
+void scorewarn_Cleanup( void )
 {
-	if (!g_scorewarn) return 0;	
+	if (!g_scorewarn) return;	
 
 	g_c3ui->RemoveWindow( g_scorewarn->Id() );
 	keypress_RemoveHandler(g_scorewarn);
@@ -157,8 +157,6 @@ sint32 scorewarn_Cleanup( void )
 	RemoveControl ( s_message );
 
 	RemoveControl ( g_scorewarn );
-
-	return 0;
 }
 
 

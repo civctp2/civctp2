@@ -1,6 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __C3_UTILITYDIALOGBOX_H__
 #define __C3_UTILITYDIALOGBOX_H__
 
@@ -38,7 +39,7 @@ enum EXPEL_ACTION {
 typedef void (c3_UtilityCityListCallback)(Unit city, sint32 val2);
 typedef void (c3_PiracyCallback)(sint32 player, sint32 val2);
 typedef void (c3_ExpelCallback)(sint32 val);
-typedef void (c3_UtilityTextFieldCallback)(MBCHAR *text, sint32 accepted, void *data);
+typedef void (c3_UtilityTextFieldCallback)(MBCHAR const *text, sint32 accepted, void *data);
 typedef void (c3_UtilityTextMessageCallback)(sint32 val);
 typedef void (c3_AbortMessageCallback)(sint32 val);
 typedef void (c3_UtilityPlayerListCallback)(sint32 player, sint32 val2, PLAYER_ACTION action);
@@ -64,9 +65,9 @@ public:
 	c3_UtilityCityListCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
+	sint32  UpdateData(void);
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -94,9 +95,9 @@ public:
 	c3_PiracyCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
+	sint32  UpdateData(void);
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -124,8 +125,8 @@ public:
 	c3_ExpelCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -165,11 +166,11 @@ public:
 	bool            m_wantEmpties;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( void );
+	sint32  Initialize(MBCHAR * ldlBlock);
+	void    Cleanup(void);
+	sint32  UpdateData(void);
 	
-	void *GetData(void) const { return m_data; }
+	void *  GetData(void) const { return m_data; }
 
 	void RemoveWindow( void );
 	void DisplayWindow( void );
@@ -188,50 +189,64 @@ public:
 class c3_UtilityTextMessagePopup
 {
 public:
-	c3_UtilityTextMessagePopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+	c3_UtilityTextMessagePopup
+    (
+        MBCHAR const *                  text, 
+        sint32                          type, 
+        c3_UtilityTextMessageCallback * callback = NULL, 
+        MBCHAR const *                  ldlBlock = NULL
+    );
 	~c3_UtilityTextMessagePopup( void );
 
+	void    Cleanup(void);
+	sint32  UpdateData(MBCHAR const * text);
+
+	void RemoveWindow( void );
+	void DisplayWindow( MBCHAR const *text );
+
 	c3_PopupWindow	*m_window;
+	c3_UtilityTextMessageCallback *m_callback;
+	sint32			m_type;
+
+private:
+	sint32 Initialize ( MBCHAR *ldlBlock );
+
 
 	c3_Static		*m_title_label;
 	c3_Static		*m_text;
 
 	c3_Button		*m_ok;
 	c3_Button		*m_cancel;
-
-	sint32			m_type;
-
-	c3_UtilityTextMessageCallback *m_callback;
-
-public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( MBCHAR *text );
-
-	void RemoveWindow( void );
-	void DisplayWindow( MBCHAR *text );
 };
 
-class c3_UtilityTextMessageCleanupAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(c3_UtilityTextMessageCleanupAction);
 
 class c3_UtilityTextMessageCreateAction : public aui_Action
 {
 public:
-	c3_UtilityTextMessageCreateAction( MBCHAR *text, sint32 type = 0, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+	c3_UtilityTextMessageCreateAction
+    ( 
+        MBCHAR const *                  text        = NULL, 
+        sint32                          type        = 0, 
+        c3_UtilityTextMessageCallback * callback    = NULL, 
+        MBCHAR const *                  ldlBlock    = NULL 
+    );
 
-	virtual ActionCallback Execute;
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
+
 protected:
-	MBCHAR *m_text;
-	sint32 m_type;
-	c3_UtilityTextMessageCallback *m_callback;
-	MBCHAR *m_ldlBlock;
+	MBCHAR const *                  m_text;
+	sint32                          m_type;
+	c3_UtilityTextMessageCallback * m_callback;
+	MBCHAR const *                  m_ldlBlock;
 };
 
-void c3_TextMessage( MBCHAR *text, sint32 type = 0, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+void c3_TextMessage( MBCHAR const *text, sint32 type = 0, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR const * ldlBlock = NULL );
 void c3_KillTextMessage( void );
 
 
@@ -246,7 +261,7 @@ void c3_KillTextMessage( void );
 class c3_UtilityAbortPopup : public KeyboardHandler
 {
 public:
-	c3_UtilityAbortPopup( MBCHAR *text, sint32 type, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+	c3_UtilityAbortPopup( MBCHAR const *text, sint32 type, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR const *ldlBlock = NULL );
 	virtual ~c3_UtilityAbortPopup( void );
 
 	c3_PopupWindow	*m_window;
@@ -262,21 +277,17 @@ public:
 
 public:
 	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
-	sint32 UpdateData ( MBCHAR *text );
+	void Cleanup ( void );
+	sint32 UpdateData ( MBCHAR const *text );
 	sint32 UpdateMeter( sint32 percentFilled );
 
 	void RemoveWindow( void );
-	void DisplayWindow( MBCHAR *text = NULL, sint32 percentFilled  = 0);
+	void DisplayWindow( MBCHAR const *text = NULL, sint32 percentFilled  = 0);
 
 	void kh_Close();
 };
 
-class c3_UtilityAbortCleanupAction : public aui_Action
-{
-public:
-	virtual ActionCallback Execute;
-};
+AUI_ACTION_BASIC(c3_UtilityAbortCleanupAction);
 
 void c3_AbortMessage( MBCHAR *text = NULL, sint32 type = 0, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
 void c3_AbortUpdateData( MBCHAR *text, sint32 percentFilled );
@@ -306,7 +317,7 @@ public:
 
 public:
 	sint32 Initialize ( MBCHAR *ldlBlock );
-	sint32 Cleanup ( void );
+	void Cleanup ( void );
 	sint32 UpdateData ( void );
 
 	sint32 EnableButtons( void );

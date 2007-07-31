@@ -10,17 +10,23 @@
 class c3_UpdateAction;
 
 
-
 class c3_UpdateAction : public aui_Action
 {
 public:
-	c3_UpdateAction();
+	c3_UpdateAction()
+    :   aui_Action  ()
+    { ; };
 
-	virtual ~c3_UpdateAction();
+	virtual ~c3_UpdateAction(void);
 
-	virtual c3_UpdateAction *CopyMe(void);
+	virtual void	Execute
+	(
+		aui_Control	*	control,
+		uint32			action,
+		uint32			data
+	);
 
-	virtual ActionCallback Execute;
+	virtual c3_UpdateAction * CopyMe(void);
 };
 
 

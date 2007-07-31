@@ -45,7 +45,7 @@ void c3dialogs_PostForeignTradeBidDialog(sint32 player, Unit &fromCity, Unit &to
 	pop->DisplayWindow();
 }
 
-void c3dialogs_ForeignTradeBidDialogCallback(MBCHAR *text, sint32 accepted, void *data)
+void c3dialogs_ForeignTradeBidDialogCallback(MBCHAR const *text, sint32 accepted, void *data)
 {
 	ForeignTradeBidInfo	*info = (ForeignTradeBidInfo *)data;
 

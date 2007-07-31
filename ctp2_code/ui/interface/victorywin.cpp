@@ -355,12 +355,12 @@ sint32 victorywin_RemoveWindow( void )
 	return 1;
 }
 
-sint32 victorywin_Cleanup( void )
+void victorywin_Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 	sint32 i = 0;
 
-	if ( !g_victoryWindow ) return 0; 
+	if ( !g_victoryWindow ); 
 
 
 
@@ -397,8 +397,6 @@ sint32 victorywin_Cleanup( void )
 
 	delete g_victoryWindow;
 	g_victoryWindow = NULL;
-
-	return 0;
 
 #undef mycleanup
 }
@@ -955,7 +953,7 @@ HighScoreWindowPopup::~HighScoreWindowPopup( void )
 	Cleanup();
 }
 
-sint32 HighScoreWindowPopup::Cleanup( void )
+void HighScoreWindowPopup::Cleanup( void )
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -971,8 +969,6 @@ sint32 HighScoreWindowPopup::Cleanup( void )
 
 	delete m_window;
 	m_window = NULL;
-
-	return 0 ;
 
 #undef mycleanup
 }
@@ -1358,13 +1354,8 @@ sint32 victorywin_GetRankName( sint32 player, MBCHAR *name, sint32 gameResult )
 
 
 
-sint32 victorywin_IsOnScreen()
+bool victorywin_IsOnScreen()
 {
-	if(!g_victoryWindow || !g_c3ui->GetWindow(g_victoryWindow->m_window->Id())) {
-		if(s_highScoreWin && g_c3ui->GetWindow(s_highScoreWin->GetWindow()->Id())) {
-			return 1;
-		}
-		return 0;
-	}
-	return 1;
+    return  (g_victoryWindow && g_c3ui->GetWindow(g_victoryWindow->m_window->Id())) ||
+            (s_highScoreWin  && g_c3ui->GetWindow(s_highScoreWin->GetWindow()->Id()));
 }
