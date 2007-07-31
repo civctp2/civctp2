@@ -1,9 +1,0 @@
-[ActiveNet]
-Cmdline=
-Name=Chat
-Run=chat.exe
-SessionType=65
-Platform=1
-Language=1
-Version=0.9
-ShellOpts=/NEWCONSOLE

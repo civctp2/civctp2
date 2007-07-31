@@ -1,4 +1,0 @@
-LIBRARY Fault
-DESCRIPTION "Fault Generator"
-EXPORTS
-	CoCreateMapGenerator @1

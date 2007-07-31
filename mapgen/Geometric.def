@@ -1,4 +1,0 @@
-LIBRARY Geometric
-DESCRIPTION "Geometric Generator"
-EXPORTS
-	CoCreateMapGenerator @1

@@ -1,4 +1,0 @@
-LIBRARY Crater
-DESCRIPTION "Crater Generator"
-EXPORTS
-	CoCreateMapGenerator @1
