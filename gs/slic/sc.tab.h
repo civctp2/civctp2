@@ -1,0 +1,24 @@
+#define NAME 257
+#define DBREF 258
+#define STRINGID 259
+#define IDENTIFIER 260
+#define NUMBER 261
+#define GT 262
+#define LT 263
+#define GTE 264
+#define LTE 265
+#define EQ 266
+#define REF 267
+#define AND 268
+#define OR 269
+#define STRING 270
+#define SLICCMD_WATCH 271
+#define SLICCMD_ASSN 272
+#define SLICCMD_EVAL 273
+#define SLICCMD_REPLACE 274
+#define NEQ 275
+#define UMINUS 276
+typedef union {
+	struct sliccmdExpValue v;
+} YYSTYPE;
+extern YYSTYPE yylval;

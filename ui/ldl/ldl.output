@@ -1,0 +1,281 @@
+   0  $accept : ldl $end
+
+   1  ldl : blocks END_OF_INPUT
+
+   2  blocks : blocks block
+   3         | block
+
+   4  $$1 :
+
+   5  block : blocknames '{' $$1 attributes '}'
+   6        | blocknames '{' '}'
+
+   7  blocknames : VNAME ':' blocknames
+   8             | VNAME
+
+   9  attributes : attributes attribute
+  10             | attribute
+
+  11  attribute : block
+  12            | TBOOL VNAME bool
+  13            | TINT VNAME VINT
+  14            | TDOUBLE VNAME VFLOAT
+  15            | TSTRING VNAME VSTRING
+
+  16  bool : VTRUE
+  17       | VFALSE
+
+state 0
+	$accept : . ldl $end  (0)
+
+	VNAME  shift 1
+	.  error
+
+	ldl  goto 2
+	blocks  goto 3
+	block  goto 4
+	blocknames  goto 5
+
+
+state 1
+	blocknames : VNAME . ':' blocknames  (7)
+	blocknames : VNAME .  (8)
+
+	':'  shift 6
+	'{'  reduce 8
+
+
+state 2
+	$accept : ldl . $end  (0)
+
+	$end  accept
+
+
+state 3
+	ldl : blocks . END_OF_INPUT  (1)
+	blocks : blocks . block  (2)
+
+	VNAME  shift 1
+	END_OF_INPUT  shift 7
+	.  error
+
+	block  goto 8
+	blocknames  goto 5
+
+
+state 4
+	blocks : block .  (3)
+
+	.  reduce 3
+
+
+state 5
+	block : blocknames . '{' $$1 attributes '}'  (5)
+	block : blocknames . '{' '}'  (6)
+
+	'{'  shift 9
+	.  error
+
+
+state 6
+	blocknames : VNAME ':' . blocknames  (7)
+
+	VNAME  shift 1
+	.  error
+
+	blocknames  goto 10
+
+
+state 7
+	ldl : blocks END_OF_INPUT .  (1)
+
+	.  reduce 1
+
+
+state 8
+	blocks : blocks block .  (2)
+
+	.  reduce 2
+
+
+state 9
+	block : blocknames '{' . $$1 attributes '}'  (5)
+	block : blocknames '{' . '}'  (6)
+	$$1 : .  (4)
+
+	'}'  shift 11
+	VNAME  reduce 4
+	TINT  reduce 4
+	TDOUBLE  reduce 4
+	TBOOL  reduce 4
+	TSTRING  reduce 4
+
+	$$1  goto 12
+
+
+state 10
+	blocknames : VNAME ':' blocknames .  (7)
+
+	.  reduce 7
+
+
+state 11
+	block : blocknames '{' '}' .  (6)
+
+	.  reduce 6
+
+
+state 12
+	block : blocknames '{' $$1 . attributes '}'  (5)
+
+	VNAME  shift 1
+	TINT  shift 13
+	TDOUBLE  shift 14
+	TBOOL  shift 15
+	TSTRING  shift 16
+	.  error
+
+	block  goto 17
+	blocknames  goto 5
+	attributes  goto 18
+	attribute  goto 19
+
+
+state 13
+	attribute : TINT . VNAME VINT  (13)
+
+	VNAME  shift 20
+	.  error
+
+
+state 14
+	attribute : TDOUBLE . VNAME VFLOAT  (14)
+
+	VNAME  shift 21
+	.  error
+
+
+state 15
+	attribute : TBOOL . VNAME bool  (12)
+
+	VNAME  shift 22
+	.  error
+
+
+state 16
+	attribute : TSTRING . VNAME VSTRING  (15)
+
+	VNAME  shift 23
+	.  error
+
+
+state 17
+	attribute : block .  (11)
+
+	.  reduce 11
+
+
+state 18
+	block : blocknames '{' $$1 attributes . '}'  (5)
+	attributes : attributes . attribute  (9)
+
+	VNAME  shift 1
+	TINT  shift 13
+	TDOUBLE  shift 14
+	TBOOL  shift 15
+	TSTRING  shift 16
+	'}'  shift 24
+	.  error
+
+	block  goto 17
+	blocknames  goto 5
+	attribute  goto 25
+
+
+state 19
+	attributes : attribute .  (10)
+
+	.  reduce 10
+
+
+state 20
+	attribute : TINT VNAME . VINT  (13)
+
+	VINT  shift 26
+	.  error
+
+
+state 21
+	attribute : TDOUBLE VNAME . VFLOAT  (14)
+
+	VFLOAT  shift 27
+	.  error
+
+
+state 22
+	attribute : TBOOL VNAME . bool  (12)
+
+	VTRUE  shift 28
+	VFALSE  shift 29
+	.  error
+
+	bool  goto 30
+
+
+state 23
+	attribute : TSTRING VNAME . VSTRING  (15)
+
+	VSTRING  shift 31
+	.  error
+
+
+state 24
+	block : blocknames '{' $$1 attributes '}' .  (5)
+
+	.  reduce 5
+
+
+state 25
+	attributes : attributes attribute .  (9)
+
+	.  reduce 9
+
+
+state 26
+	attribute : TINT VNAME VINT .  (13)
+
+	.  reduce 13
+
+
+state 27
+	attribute : TDOUBLE VNAME VFLOAT .  (14)
+
+	.  reduce 14
+
+
+state 28
+	bool : VTRUE .  (16)
+
+	.  reduce 16
+
+
+state 29
+	bool : VFALSE .  (17)
+
+	.  reduce 17
+
+
+state 30
+	attribute : TBOOL VNAME bool .  (12)
+
+	.  reduce 12
+
+
+state 31
+	attribute : TSTRING VNAME VSTRING .  (15)
+
+	.  reduce 15
+
+
+16 terminals, 9 nonterminals
+18 grammar rules, 32 states

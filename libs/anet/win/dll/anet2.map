@@ -1,0 +1,952 @@
+ anet2
+
+ Timestamp is 3726ece8 (Wed Apr 28 04:11:36 1999)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00021390H .text                   CODE
+ 0002:00000000 00000078H .rdata                  DATA
+ 0002:00000080 00000b99H .edata                  DATA
+ 0003:00000000 00000004H .CRT$XCA                DATA
+ 0003:00000004 00000004H .CRT$XCZ                DATA
+ 0003:00000008 00000004H .CRT$XIA                DATA
+ 0003:0000000c 00000004H .CRT$XIZ                DATA
+ 0003:00000010 000021ccH .data                   DATA
+ 0003:000021e0 00000db0H .bss                    DATA
+ 0004:00000000 00000064H .idata$2                DATA
+ 0004:00000064 00000014H .idata$3                DATA
+ 0004:00000078 0000014cH .idata$4                DATA
+ 0004:000001c4 0000014cH .idata$5                DATA
+ 0004:00000310 00000462H .idata$6                DATA
+
+  Address         Publics by Value              Rva+Base   Lib:Object
+
+ 0001:00000000       _aeh_SetCurrent            10001000 f aeh.obj
+ 0001:00000030       _aeh_GetCurrent            10001030 f aeh.obj
+ 0001:00000060       _MemoryAccessExceptionFilter 10001060 f aeh.obj
+ 0001:000000e0       _aehmod_Destroy            100010e0 f aeh.obj
+ 0001:000001b0       _aeh_Create                100011b0 f aeh.obj
+ 0001:00001200       _aeh_Destroy               10002200 f aeh.obj
+ 0001:00001400       _aeh_writeOutputStream     10002400 f aeh.obj
+ 0001:00001fb0       _aehlog_Create             10002fb0 f aehlog.obj
+ 0001:000020c0       _aehlog_close              100030c0 f aehlog.obj
+ 0001:00002100       _aehlog_delete             10003100 f aehlog.obj
+ 0001:00002130       _aehlog_writetobuf         10003130 f aehlog.obj
+ 0001:000022c0       _aehlog_readExceptionRecord 100032c0 f aehlog.obj
+ 0001:00002340       _assoctab_create           10003340 f assoctab.obj
+ 0001:00002360       _assoctab_destroy          10003360 f assoctab.obj
+ 0001:00002380       _assoctab_subscript_grow   10003380 f assoctab.obj
+ 0001:000023d0       _assoctab_subscript_insert 100033d0 f assoctab.obj
+ 0001:00002400       _assoctab_subscript        10003400 f assoctab.obj
+ 0001:00002430       _assoctab_subscript_delete 10003430 f assoctab.obj
+ 0001:000024a0       _dynatab_freeze_encrypted  100034a0 f crypttab.obj
+ 0001:000025e0       _dynatab_thaw_encrypted    100035e0 f crypttab.obj
+ 0001:00002780       _deskey                    10003780 f d3des.obj
+ 0001:00002980       _cpkey                     10003980 f d3des.obj
+ 0001:000029a0       _usekey                    100039a0 f d3des.obj
+ 0001:000029c0       _des                       100039c0 f d3des.obj
+ 0001:00002d00       _des2key                   10003d00 f d3des.obj
+ 0001:00002d50       _Ddes                      10003d50 f d3des.obj
+ 0001:00002db0       _D2des                     10003db0 f d3des.obj
+ 0001:00002e80       _delay_setBytesPerSec      10003e80 f delay.obj
+ 0001:00002eb0       _delay_setDelayMillisec    10003eb0 f delay.obj
+ 0001:00002f00       _delay_create              10003f00 f delay.obj
+ 0001:00002f40       _delay_destroy             10003f40 f delay.obj
+ 0001:00002f50       _delay_avail               10003f50 f delay.obj
+ 0001:00002f70       _delay_put                 10003f70 f delay.obj
+ 0001:000030a0       _delay_get                 100040a0 f delay.obj
+ 0001:00003120       _dp_rplayers_cb@48         10004120 f deltas.obj
+ 0001:000031c0       _dp_rplayers_enumEx_cb@20  100041c0 f deltas.obj
+ 0001:00003210       _dpRequestObjectDeltas     10004210 f deltas.obj
+ 0001:00003660       _dpGetSessionId            10004660 f deltas.obj
+ 0001:00003750       _dpSendObjectDelta         10004750 f deltas.obj
+ 0001:00003a40       _GetPrimaryDisplayDesc     10004a40 f detect.obj
+ 0001:00003cb0       _FindDeviceInRegistry      10004cb0 f detect.obj
+ 0001:00003e10       _FindRendition@0           10004e10 f detect.obj
+ 0001:00003e60       _FindATI@0                 10004e60 f detect.obj
+ 0001:00003eb0       _FindMystique@0            10004eb0 f detect.obj
+ 0001:00003f00       _FindMonster3D@0           10004f00 f detect.obj
+ 0001:00003f20       _FindS3ViRGE@0             10004f20 f detect.obj
+ 0001:00003f70       _FindSTB@0                 10004f70 f detect.obj
+ 0001:00003fc0       _FindOrchid@0              10004fc0 f detect.obj
+ 0001:00003fe0       _FindPowerVR@0             10004fe0 f detect.obj
+ 0001:00004010       _Get3DHardware             10005010 f detect.obj
+ 0001:000042b0       _DllMain@12                100052b0 f dllmain.obj
+ 0001:00004370       _dpid2commHdl              10005370 f dp2.obj
+ 0001:000043b0       _dp_commHdl2dpid           100053b0 f dp2.obj
+ 0001:00004410       _commHdl4dpid              10005410 f dp2.obj
+ 0001:00004460       _dp_pack_session           10005460 f dp2.obj
+ 0001:000045b0       _dp_unpack_session         100055b0 f dp2.obj
+ 0001:000047f0       _dp_sessions_cb@48         100057f0 f dp2.obj
+ 0001:000049f0       _dp_unpack_playerId        100059f0 f dp2.obj
+ 0001:00004a90       _dp_playervars_cb@48       10005a90 f dp2.obj
+ 0001:00004bc0       _dp_hosts_cb@48            10005bc0 f dp2.obj
+ 0001:00005410       _dp_myplayers_cb@48        10006410 f dp2.obj
+ 0001:000055a0       _dp_players_cb@48          100065a0 f dp2.obj
+ 0001:00005840       _dp_groups_cb@48           10006840 f dp2.obj
+ 0001:00005980       _dp_group_players_cb@48    10006980 f dp2.obj
+ 0001:00005ae0       _dp_sessionContext_freeze  10006ae0 f dp2.obj
+ 0001:00005cb0       _dp_sessionContext_thaw    10006cb0 f dp2.obj
+ 0001:00005f30       _dpFreeze                  10006f30 f dp2.obj
+ 0001:00006520       _dpCommThaw                10007520 f dp2.obj
+ 0001:00006f70       __daoot                    10007f70 f dp2.obj
+ 0001:00006fb0       _dpCreate                  10007fb0 f dp2.obj
+ 0001:00007e90       _dpDestroy                 10008e90 f dp2.obj
+ 0001:00007f70       _dpCloseGameServer         10008f70 f dp2.obj
+ 0001:00008070       _dpResolveHostname         10009070 f dp2.obj
+ 0001:00008260       _dpSetGameServer           10009260 f dp2.obj
+ 0001:000082a0       _dpSetGameServerEx         100092a0 f dp2.obj
+ 0001:00008560       _dpGetGameServerEx         10009560 f dp2.obj
+ 0001:00008620       _dpGetSessionDesc          10009620 f dp2.obj
+ 0001:00008740       _dpGetSessionDescById      10009740 f dp2.obj
+ 0001:00008950       _dpSetSessionDesc          10009950 f dp2.obj
+ 0001:00008a10       _dpGetCaps                 10009a10 f dp2.obj
+ 0001:00008b10       _dpGetPlayerCaps           10009b10 f dp2.obj
+ 0001:00008c30       __daC                      10009c30 f dp2.obj
+ 0001:00008d10       _dpOpen                    10009d10 f dp2.obj
+ 0001:0000a630       _dpClose                   1000b630 f dp2.obj
+ 0001:0000aea0       _dpCastoffSession          1000bea0 f dp2.obj
+ 0001:0000b090       _dpEnumSessions            1000c090 f dp2.obj
+ 0001:0000b2d0       _dpDeclareLobby            1000c2d0 f dp2.obj
+ 0001:0000b320       _dpPrunePlayerSubscriptions 1000c320 f dp2.obj
+ 0001:0000b420       _dpPruneSessionSubscription 1000c420 f dp2.obj
+ 0001:0000b490       _dpCreatePlayer            1000c490 f dp2.obj
+ 0001:0000b630       _dpDestroyPlayer           1000c630 f dp2.obj
+ 0001:0000b680       _dpNumPlayers              1000c680 f dp2.obj
+ 0001:0000b6a0       _dpGetCurrentHostId        1000c6a0 f dp2.obj
+ 0001:0000b6e0       _dpGetPlayerName           1000c6e0 f dp2.obj
+ 0001:0000b840       _dpSetPlayerName           1000c840 f dp2.obj
+ 0001:0000b990       _dpGetPlayerBlob           1000c990 f dp2.obj
+ 0001:0000ba90       _dpSetPlayerBlob           1000ca90 f dp2.obj
+ 0001:0000bc10       _dpEnumPlayers             1000cc10 f dp2.obj
+ 0001:0000bf60       _dpEnumPlayersEx           1000cf60 f dp2.obj
+ 0001:0000c280       _dpEnableNewPlayers        1000d280 f dp2.obj
+ 0001:0000d040       _dp_sessid4uid             1000e040 f dp2.obj
+ 0001:0000d120       _dpReceive                 1000e120 f dp2.obj
+ 0001:0000e920       _dpSend                    1000f920 f dp2.obj
+ 0001:0000ea90       _dpFlush                   1000fa90 f dp2.obj
+ 0001:0000eac0       _dpSetPingIntervals        1000fac0 f dp2.obj
+ 0001:0000eb90       _dpPingUser                1000fb90 f dp2.obj
+ 0001:0000ec60       _dpCreateGroup             1000fc60 f dp2.obj
+ 0001:0000ed80       _dpDestroyGroup            1000fd80 f dp2.obj
+ 0001:0000eed0       _dpAddPlayerToGroup        1000fed0 f dp2.obj
+ 0001:0000f0d0       _dpDeletePlayerFromGroup   100100d0 f dp2.obj
+ 0001:0000f1f0       _dpEnumGroups              100101f0 f dp2.obj
+ 0001:0000f300       _dpEnumGroupPlayers        10010300 f dp2.obj
+ 0001:0000f4e0       _dpSetPlayerData           100104e0 f dp2.obj
+ 0001:0000f620       _dpSendPlayerData          10010620 f dp2.obj
+ 0001:0000f7a0       _dpGetPlayerData           100107a0 f dp2.obj
+ 0001:0000f8d0       _dpReadyToFreeze           100108d0 f dp2.obj
+ 0001:0000f950       _dpSetConnCallback         10010950 f dp2.obj
+ 0001:0000f990       _dpGetParameterLong        10010990 f dp2.obj
+ 0001:0000fa60       _dpGetCurrentTransportInfo 10010a60 f dp2.obj
+ 0001:0000fb10       _dpTurnInit                10010b10 f dp2.obj
+ 0001:0000fb20       _dpTurnFinish              10010b20 f dp2.obj
+ 0001:0000fb30       _dpTurnPutMove             10010b30 f dp2.obj
+ 0001:0000fb40       _dpTurnGetMove             10010b40 f dp2.obj
+ 0001:0000fb50       _dpTurnPoll                10010b50 f dp2.obj
+ 0001:0000fb60       _dpGetStats                10010b60 f dp2.obj
+ 0001:0000fbf0       _dp_crc32_inc              10010bf0 f dpcrc32.obj
+ 0001:0000fc80       _dp_crc32                  10010c80 f dpcrc32.obj
+ 0001:0000fca0       _dp_fil_crc32              10010ca0 f dpcrc32.obj
+ 0001:0000fd10       _commInit                  10010d10 f dpdllwin.obj
+ 0001:0000fd30       _commTerm                  10010d30 f dpdllwin.obj
+ 0001:0000fd50       _commDriverInfo            10010d50 f dpdllwin.obj
+ 0001:0000fd70       _commPlayerInfo            10010d70 f dpdllwin.obj
+ 0001:0000fd90       _commTxPkt                 10010d90 f dpdllwin.obj
+ 0001:0000fdb0       _commRxPkt                 10010db0 f dpdllwin.obj
+ 0001:0000fdd0       _commScanAddr              10010dd0 f dpdllwin.obj
+ 0001:0000fdf0       _commPrintAddr             10010df0 f dpdllwin.obj
+ 0001:0000fe10       _commSetParam              10010e10 f dpdllwin.obj
+ 0001:0000fe30       _commSayHi                 10010e30 f dpdllwin.obj
+ 0001:0000fe50       _commSayBye                10010e50 f dpdllwin.obj
+ 0001:0000fe70       _commEnumPorts             10010e70 f dpdllwin.obj
+ 0001:0000fe90       _dpGetTransportInfo        10010e90 f dpdllwin.obj
+ 0001:0000ff60       _dpEnumTransports          10010f60 f dpdllwin.obj
+ 0001:00010110       _dpLoadDLL                 10011110 f dpdllwin.obj
+ 0001:000101b0       _dpUnloadDLL               100111b0 f dpdllwin.obj
+ 0001:000101d0       _dpEnumPorts               100111d0 f dpdllwin.obj
+ 0001:00010250       _dp_publishExceptions      10011250 f dpexcept.obj
+ 0001:000104b0       _dp_subscribeExceptions    100114b0 f dpexcept.obj
+ 0001:000104f0       _StupidExceptionFilter     100114f0 f dpexcept.obj
+ 0001:00010500       _dpReportCrash             10011500 f dpexcept.obj
+ 0001:00010520       _dpReportCrashEx           10011520 f dpexcept.obj
+ 0001:00010e00       _dpReportAssertionFailure  10011e00 f dpexcept.obj
+ 0001:00010e10       _dpio_dprintAdr            10011e10 f dpio.obj
+ 0001:00010e80       _dpio_get_latency          10011e80 f dpio.obj
+ 0001:00010ed0       _dpio_get_player_latency   10011ed0 f dpio.obj
+ 0001:00010f40       _dpio_setIncomingCallback  10011f40 f dpio.obj
+ 0001:00010f70       _dpio_setMaxPlayerHdls     10011f70 f dpio.obj
+ 0001:00010f90       __dpbs                     10011f90 f dpio.obj
+ 0001:00010ff0       _dpio_printAdr             10011ff0 f dpio.obj
+ 0001:00011050       _dpio_openHdlRaw           10012050 f dpio.obj
+ 0001:00011070       _dpio_openHdlRaw2          10012070 f dpio.obj
+ 0001:00011120       _dpio_closeHdlRaw          10012120 f dpio.obj
+ 0001:00011160       _dpio_freezeHdl            10012160 f dpio.obj
+ 0001:00011330       _dpio_thawHdl              10012330 f dpio.obj
+ 0001:00011540       _dpio_freeze               10012540 f dpio.obj
+ 0001:00011770       _dpio_setPingIntervals     10012770 f dpio.obj
+ 0001:00011810       _dpio_set_clocks           10012810 f dpio.obj
+ 0001:000118b0       _dpio_hdl2adr2             100128b0 f dpio.obj
+ 0001:00011970       _dpio_hdl2name             10012970 f dpio.obj
+ 0001:00011a20       _dpio_destroy              10012a20 f dpio.obj
+ 0001:00011ab0       _dpio_create               10012ab0 f dpio.obj
+ 0001:00012350       _dpio_q_packet             10013350 f dpio.obj
+ 0001:00012510       _dpio_getHdlTxPktsFree     10013510 f dpio.obj
+ 0001:00012580       _dpio_getHdlState          10013580 f dpio.obj
+ 0001:000125d0       _dpio_getHdlAge            100135d0 f dpio.obj
+ 0001:00012630       _dpio_getHdlRemoteCapabilities 10013630 f dpio.obj
+ 0001:00012660       _dpio_openHdl              10013660 f dpio.obj
+ 0001:00012680       _dpio_openHdl2             10013680 f dpio.obj
+ 0001:00012930       _dpio_closeHdl             10013930 f dpio.obj
+ 0001:00012a80       _dpio_closeHdlImmed        10013a80 f dpio.obj
+ 0001:00012b60       _dpio_ReadyToFreeze        10013b60 f dpio.obj
+ 0001:00012e80       _dpio_flush                10013e80 f dpio.obj
+ 0001:00012ff0       _dpio_get                  10013ff0 f dpio.obj
+ 0001:00014480       _dpio_put_unreliable       10015480 f dpio.obj
+ 0001:00014530       _dpio_put_reliable2        10015530 f dpio.obj
+ 0001:00014740       _dpio_localQ_npkts         10015740 f dpio.obj
+ 0001:00014770       _dpio_findTimedOutHost     10015770 f dpio.obj
+ 0001:00014a60       _dpio_setHandleOptions     10015a60 f dpio.obj
+ 0001:00014b40       _dpio_update               10015b40 f dpio.obj
+ 0001:00014d70       _getTempDir                10015d70 f dpprivy.obj
+ 0001:00014da0       _writeSwap                 10015da0 f dpprivy.obj
+ 0001:00014dd0       _readSwap                  10015dd0 f dpprivy.obj
+ 0001:00014e00       _dp_flushLog               10015e00 f dprint.obj
+ 0001:00014e10       _dp_enableDebugPrint       10015e10 f dprint.obj
+ 0001:00014e20       _dp_setLogFname            10015e20 f dprint.obj
+ 0001:00014e30       _dp_dprintf                10015e30 f dprint.obj
+ 0001:00014e40       _dp_getLogFP               10015e40 f dprint.obj
+ 0001:00014e50       _dp_setLogFP               10015e50 f dprint.obj
+ 0001:00014e60       _dpscore_client_init       10015e60 f dpscore.obj
+ 0001:00014ec0       _dpscore_client_cleanup    10015ec0 f dpscore.obj
+ 0001:00014f20       _dpscore_client_playerLeaving 10015f20 f dpscore.obj
+ 0001:00015080       _dpReportScore             10016080 f dpscore.obj
+ 0001:00015090       __dax7                     10016090 f dpscore.obj
+ 0001:000150c0       __dax8                     100160c0 f dpscore.obj
+ 0001:00015180       _dpReportScoreBuf          10016180 f dpscore.obj
+ 0001:00015280       __dax9                     10016280 f dpscore.obj
+ 0001:000152b0       _dpscores_cb@48            100162b0 f dpscore.obj
+ 0001:000152f0       _dpscore_client_subscribe  100162f0 f dpscore.obj
+ 0001:00015380       _dpGetMyId                 10016380 f dpscore.obj
+ 0001:000153d0       _dpShutdown                100163d0 f dpshutdn.obj
+ 0001:000156a0       __dad                      100166a0 f dptab.obj
+ 0001:00015760       __dam                      10016760 f dptab.obj
+ 0001:00015810       __dag                      10016810 f dptab.obj
+ 0001:000158b0       __daa                      100168b0 f dptab.obj
+ 0001:00015980       __dae                      10016980 f dptab.obj
+ 0001:00015b00       __dav                      10016b00 f dptab.obj
+ 0001:00015ba0       __daw                      10016ba0 f dptab.obj
+ 0001:00015c20       _dptab_getTableContext     10016c20 f dptab.obj
+ 0001:00015c90       __daj                      10016c90 f dptab.obj
+ 0001:00015e80       __dao                      10016e80 f dptab.obj
+ 0001:00015ed0       __dac                      10016ed0 f dptab.obj
+ 0001:00015f90       __dai                      10016f90 f dptab.obj
+ 0001:00015fc0       _dptab_handleSubscriptionRequest 10016fc0 f dptab.obj
+ 0001:00016030       _dptab_handleUnsubscriptionRequest 10017030 f dptab.obj
+ 0001:00016090       __darr                     10017090 f dptab.obj
+ 0001:00016100       _dptab_requestUnsubscription 10017100 f dptab.obj
+ 0001:00016190       _dptab_shutdownMatchingSubscription 10017190 f dptab.obj
+ 0001:00016260       __dab                      10017260 f dptab.obj
+ 0001:000162b0       __dah                      100172b0 f dptab.obj
+ 0001:00016300       _dptab_changePublisher     10017300 f dptab.obj
+ 0001:00016500       __dau                      10017500 f dptab.obj
+ 0001:000167b0       __daf                      100177b0 f dptab.obj
+ 0001:00016a20       _dptab_deleteIfSrc         10017a20 f dptab.obj
+ 0001:00016a70       __dal                      10017a70 f dptab.obj
+ 0001:00016bc0       __dak                      10017bc0 f dptab.obj
+ 0001:00016d10       __daq                      10017d10 f dptab.obj
+ 0001:00016e90       __dap                      10017e90 f dptab.obj
+ 0001:00016fd0       __dax                      10017fd0 f dptab.obj
+ 0001:00016ff0       __das                      10017ff0 f dptab.obj
+ 0001:00017280       __dat                      10018280 f dptab.obj
+ 0001:00017350       __daz                      10018350 f dptab.obj
+ 0001:00017f40       __dar                      10018f40 f dptab.obj
+ 0001:00018450       _dptab_tableRef_freeze     10019450 f dptab.obj
+ 0001:00018500       _dptab_tableRef_thaw       10019500 f dptab.obj
+ 0001:000185f0       __darz                     100195f0 f dptab.obj
+ 0001:00018860       __dars                     10019860 f dptab.obj
+ 0001:00018b70       __dan                      10019b70 f dptab.obj
+ 0001:000191b0       __day                      1001a1b0 f dptab.obj
+ 0001:000198e0       __dalw                     1001a8e0 f dpuser.obj
+ 0001:00019920       __dala                     1001a920 f dpuser.obj
+ 0001:00019960       __daaw                     1001a960 f dpuser.obj
+ 0001:000199a0       __daaa                     1001a9a0 f dpuser.obj
+ 0001:000199e0       _dpRequestEmail            1001a9e0 f dpuser.obj
+ 0001:00019a20       _dpGetPlayerUid            1001aa20 f dpuser.obj
+ 0001:00019af0       _dynatab_create            1001aaf0 f dynatab.obj
+ 0001:00019b20       _dynatab_destroy           1001ab20 f dynatab.obj
+ 0001:00019b50       _dynatab_remove            1001ab50 f dynatab.obj
+ 0001:00019ba0       _dynatab_subscript_grow    1001aba0 f dynatab.obj
+ 0001:00019c50       _dynatab_subscript_insert  1001ac50 f dynatab.obj
+ 0001:00019d40       _dynatab_find              1001ad40 f dynatab.obj
+ 0001:00019d80       _dynatab_freeze            1001ad80 f dynatab.obj
+ 0001:00019de0       _dynatab_thaw              1001ade0 f dynatab.obj
+ 0001:00019e80       _eclock_win32              1001ae80 f eclock.obj
+ 0001:00019f00       _dp_freezeAppsList         1001af00 f enumapp.obj
+ 0001:0001a040       _dp_createAppsList         1001b040 f enumapp.obj
+ 0001:0001a140       _dp_subscribeAppsList      1001b140 f enumapp.obj
+ 0001:0001a1e0       _dpCheckAppVersion         1001b1e0 f enumapp.obj
+ 0001:0001a300       _dpGetAppVersion           1001b300 f enumapp.obj
+ 0001:0001a470       _dpDownloadUpdate          1001b470 f enumapp.obj
+ 0001:0001a550       _dpEnumApp                 1001b550 f enumapp.obj
+ 0001:0001a8e0       _dp_servers_cb@48          1001b8e0 f enumsrv2.obj
+ 0001:0001aba0       _dp_serverpings_cb@48      1001bba0 f enumsrv2.obj
+ 0001:0001abe0       _dp_initEnumServers        1001bbe0 f enumsrv2.obj
+ 0001:0001b0b0       _dp_saveServerList         1001c0b0 f enumsrv2.obj
+ 0001:0001b100       _dp_endEnumServers         1001c100 f enumsrv2.obj
+ 0001:0001b130       _dpEnumServers             1001c130 f enumsrv2.obj
+ 0001:0001b1d0       _dpEnumServersEx           1001c1d0 f enumsrv2.obj
+ 0001:0001b3a0       _dpEnumServersPoll         1001c3a0 f enumsrv2.obj
+ 0001:0001b440       _dpHandleServerPingResponsePacket 1001c440 f enumsrv2.obj
+ 0001:0001b610       _hkeytab_create            1001c610 f hkeytab.obj
+ 0001:0001b630       _hkeytab_destroy           1001c630 f hkeytab.obj
+ 0001:0001b650       _hkeytab_subscript_grow    1001c650 f hkeytab.obj
+ 0001:0001b6f0       _hkeytab_subscript         1001c6f0 f hkeytab.obj
+ 0001:0001b750       _hkeytab_subscript_delete  1001c750 f hkeytab.obj
+ 0001:0001b7f0       _dpini_SetFile             1001c7f0 f ini.obj
+ 0001:0001b820       _dpini_GetFile             1001c820 f ini.obj
+ 0001:0001b830       _dpini_findSection         1001c830 f ini.obj
+ 0001:0001b9e0       _dpini_readParameter       1001c9e0 f ini.obj
+ 0001:0001bb10       _dpReadAnetInf             1001cb10 f ini.obj
+ 0001:0001c040       _dpLaunchApp               1001d040 f launchap.obj
+ 0001:0001c060       _dpLaunchApp2              1001d060 f launchap.obj
+ 0001:0001c340       _dp_launchParams_parse     1001d340 f launchparams.obj
+ 0001:0001c790       _MD5Init                   1001d790 f md5c.obj
+ 0001:0001c7c0       _MD5Update                 1001d7c0 f md5c.obj
+ 0001:0001c870       _MD5Final                  1001d870 f md5c.obj
+ 0001:0001d2b0       _mywcs_wchar2netchar       1001e2b0 f mywcs.obj
+ 0001:0001d310       _mywcs_lenn                1001e310 f mywcs.obj
+ 0001:0001d340       _mywcs_ncpy0               1001e340 f mywcs.obj
+ 0001:0001d390       _mywcs_swabncpy0           1001e390 f mywcs.obj
+ 0001:0001d3f0       _mywcs_frommbs             1001e3f0 f mywcs.obj
+ 0001:0001d450       _mywcs_ncmp                1001e450 f mywcs.obj
+ 0001:0001d4a0       _q_create                  1001e4a0 f q.obj
+ 0001:0001d4d0       _q_destroy                 1001e4d0 f q.obj
+ 0001:0001d500       _q_put                     1001e500 f q.obj
+ 0001:0001d590       _q_get                     1001e590 f q.obj
+ 0001:0001d5e0       _q_nfree                   1001e5e0 f q.obj
+ 0001:0001d600       _q_freeze                  1001e600 f q.obj
+ 0001:0001d790       _q_thaw                    1001e790 f q.obj
+ 0001:0001d9d0       _scorerep_create           1001e9d0 f scorerep.obj
+ 0001:0001da00       _scorerep_setSelf          1001ea00 f scorerep.obj
+ 0001:0001da20       _scorerep_setLeaver        1001ea20 f scorerep.obj
+ 0001:0001da40       _scorerep_set              1001ea40 f scorerep.obj
+ 0001:0001dae0       _scorerep_toBuf            1001eae0 f scorerep.obj
+ 0001:0001df50       _tca_create                1001ef50 f tca.obj
+ 0001:0001df90       _tca_openpw                1001ef90 f tca.obj
+ 0001:0001dfc0       _tca_destroy               1001efc0 f tca.obj
+ 0001:0001e020       _tca_Freeze                1001f020 f tca.obj
+ 0001:0001e0b0       _tca_Thaw                  1001f0b0 f tca.obj
+ 0001:0001e150       _tca_challenge_generate    1001f150 f tca.obj
+ 0001:0001e230       _tca_response_validate     1001f230 f tca.obj
+ 0001:0001e340       _tca_response_generate     1001f340 f tca.obj
+ 0001:0001e3f0       _tca_pwchange_generate     1001f3f0 f tca.obj
+ 0001:0001e500       _tca_pwchange_validate     1001f500 f tca.obj
+ 0001:0001e690       _tca_newuser_generate      1001f690 f tca.obj
+ 0001:0001e7d0       _tca_newuser_validate      1001f7d0 f tca.obj
+ 0001:0001e940       _tca_secretcode_validate   1001f940 f tca.obj
+ 0001:0001ea40       _tcapw_create              1001fa40 f tcapw.obj
+ 0001:0001ea80       _tcapw_destroy             1001fa80 f tcapw.obj
+ 0001:0001eab0       _tcapw_open                1001fab0 f tcapw.obj
+ 0001:0001eb50       _tcapw_close               1001fb50 f tcapw.obj
+ 0001:0001ebc0       _tcapw_password_hash       1001fbc0 f tcapw.obj
+ 0001:0001ec40       _tcapw_entry_create        1001fc40 f tcapw.obj
+ 0001:0001edb0       _tcapw_entry_change        1001fdb0 f tcapw.obj
+ 0001:0001ee20       _tcapw_entry_find_byid     1001fe20 f tcapw.obj
+ 0001:0001ee70       _tcapw_entry_find_byname   1001fe70 f tcapw.obj
+ 0001:0001ef00       _tcapw_get_secretcode      1001ff00 f tcapw.obj
+ 0001:0001ef80       _InitSnapshot              1001ff80 f tlstuff.obj
+ 0001:0001f030       _tserv_create              10020030 f tserv.obj
+ 0001:0001f0e0       _tserv_destroy             100200e0 f tserv.obj
+ 0001:0001f120       _tserv_Freeze              10020120 f tserv.obj
+ 0001:0001f500       _tserv_Thaw                10020500 f tserv.obj
+ 0001:0001f8d0       _tserv_uid2hdl             100208d0 f tserv.obj
+ 0001:0001f950       _tserv_hdl2uid             10020950 f tserv.obj
+ 0001:0001f9a0       _tserv_uid2info            100209a0 f tserv.obj
+ 0001:0001fbc0       _tserv_client_delete       10020bc0 f tserv.obj
+ 0001:0001fc20       _tserv_poll                10020c20 f tserv.obj
+ 0001:000202d0       _tserv_send_credentials    100212d0 f tserv.obj
+ 0001:000203c0       _tserv_handle_packet       100213c0 f tserv.obj
+ 0001:00020d40       _tserv_server_add          10021d40 f tserv.obj
+ 0001:00020de0       _tserv_account_loginW      10021de0 f tserv.obj
+ 0001:00020ee0       _tserv_account_activateW   10021ee0 f tserv.obj
+ 0001:00020f80       _tserv_request_email       10021f80 f tserv.obj
+ 0001:00021040       _tserv_account_loginA      10022040 f tserva.obj
+ 0001:000210c0       _tserv_account_activateA   100220c0 f tserva.obj
+ 0001:00021110       __except_handler3          10022110 f MSVCRT:MSVCRT.dll
+ 0001:00021120       __alloca_probe             10022120   MSVCRT:chkstk.obj
+ 0001:00021120       __chkstk                   10022120   MSVCRT:chkstk.obj
+ 0001:00021150       __CRT_INIT@12              10022150 f MSVCRT:crtdll.obj
+ 0001:000212c0       __DllMainCRTStartup@12     100222c0 f MSVCRT:crtdll.obj
+ 0001:00021380       __initterm                 10022380 f MSVCRT:MSVCRT.dll
+ 0002:00000050       _newuser_magic             10023050   tca.obj
+ 0002:00000060       _newuser_magic2            10023060   tca.obj
+ 0002:00000070       _freezekey                 10023070   tcapw.obj
+ 0003:00000000       ___xc_a                    10024000   MSVCRT:cinitexe.obj
+ 0003:00000004       ___xc_z                    10024004   MSVCRT:cinitexe.obj
+ 0003:00000008       ___xi_a                    10024008   MSVCRT:cinitexe.obj
+ 0003:0000000c       ___xi_z                    1002400c   MSVCRT:cinitexe.obj
+ 0003:00000010       ??_C@_0BB@JCMH@?$CIaddr?5too?5large?$CJ?$AA@ 10024010   aeh.obj
+ 0003:00000024       ??_C@_09DPKL@?$CIunknown?$CJ?$AA@ 10024024   aeh.obj
+ 0003:00000030       ??_C@_08IOOL@?$CIkernel?$CJ?$AA@ 10024030   aeh.obj
+ 0003:00000050       ??_C@_0BA@BDHH@?4?4?2?4?4?2aeh?2aeh?4c?$AA@ 10024050   aeh.obj
+ 0003:00000060       ??_C@_06KEEJ@?$CFx?5?$CFs?6?$AA@ 10024060   aeh.obj
+ 0003:00000068       ??_C@_02JKAF@rb?$AA@       10024068   aeh.obj
+ 0003:0000006c       ??_C@_04JCNL@?$EA?$EA?$CD?$CD?$AA@ 1002406c   aeh.obj
+ 0003:00000074       ??_C@_0M@FHKA@atvilog?4bin?$AA@ 10024074   aehlog.obj
+ 0003:00000080       ??_C@_0BD@MCJL@?4?4?2?4?4?2aeh?2aehlog?4c?$AA@ 10024080   aehlog.obj
+ 0003:00000094       ??_C@_01LHO@r?$AA@         10024094   aehlog.obj
+ 0003:00000098       ??_C@_02DILL@?$CFs?$AA@    10024098   aehmap.obj
+ 0003:0000009c       ??_C@_02NGAF@wb?$AA@       1002409c   aehmap.obj
+ 0003:000000a0       ??_C@_01PJCK@?4?$AA@       100240a0   aehmap.obj
+ 0003:00000b28       ??_C@_0CB@PFHA@keylen?5?$DN?$DN?5dp?9?$DOdpio?9?$DOmyAdrLen?5?$CL?53@ 10024b28   deltas.obj
+ 0003:00000b4c       ??_C@_0CB@DIJP@?$CIkeylen?5?$DO?50?$CJ?5?$CG?$CG?5?$CIkeylen?5?$DM?$DN?512?$CL1?$CJ@ 10024b4c   deltas.obj
+ 0003:00000b70       ??_C@_03DCHJ@key?$AA@      10024b70   deltas.obj
+ 0003:00000b74       ??_C@_0BC@DGDP@?4?4?2?4?4?2dp?2deltas?4c?$AA@ 10024b74   deltas.obj
+ 0003:00000b88       ??_C@_02HLAN@dp?$AA@       10024b88   deltas.obj
+ 0003:00000b8c       ??_C@_06DBPM@pidlen?$AA@   10024b8c   deltas.obj
+ 0003:00000b94       ??_C@_02IBHF@id?$AA@       10024b94   deltas.obj
+ 0003:00000b98       ??_C@_04JGGL@sess?$AA@     10024b98   deltas.obj
+ 0003:00000ba0       ??_C@_08KIK@dp?9?$DOdpio?$AA@ 10024ba0   deltas.obj
+ 0003:00000bac       ??_C@_09EBKC@subkeylen?$AA@ 10024bac   deltas.obj
+ 0003:00000bb8       ??_C@_03GFBM@tab?$AA@      10024bb8   deltas.obj
+ 0003:00000bbc       ??_C@_04OMKF@data?$AA@     10024bbc   deltas.obj
+ 0003:00000bc4       ??_C@_0L@LLAF@DeviceDesc?$AA@ 10024bc4   detect.obj
+ 0003:00000bd0       ??_C@_07LGIJ@DISPLAY?$AA@  10024bd0   detect.obj
+ 0003:00000bd8       ??_C@_06LCIG@Driver?$AA@   10024bd8   detect.obj
+ 0003:00000be0       ??_C@_0M@EKBF@HardwareKey?$AA@ 10024be0   detect.obj
+ 0003:00000bec       ??_C@_07LGAE@Problem?$AA@  10024bec   detect.obj
+ 0003:00000bf4       ??_C@_04KFCP@Enum?$AA@     10024bf4   detect.obj
+ 0003:00000bfc       ??_C@_0BE@GNNP@Config?5Manager?2Enum?$AA@ 10024bfc   detect.obj
+ 0003:00000c10       ??_C@_05KEJO@?$CFs?2?$CFs?$AA@ 10024c10   detect.obj
+ 0003:00000c18       ??_C@_0BG@FGCM@Rendition?5Verite?51000?$AA@ 10024c18   detect.obj
+ 0003:00000c30       ??_C@_0M@LNCE@ATI?53D?5RAGE?$AA@ 10024c30   detect.obj
+ 0003:00000c3c       ??_C@_0BE@EJGH@Matrox?5MGA?5Mystique?$AA@ 10024c3c   detect.obj
+ 0003:00000c50       ??_C@_08DOHP@Enum?2PCI?$AA@ 10024c50   detect.obj
+ 0003:00000c5c       ??_C@_0L@HPOO@Monster?53D?$AA@ 10024c5c   detect.obj
+ 0003:00000c68       ??_C@_08PJKG@S3?5ViRGE?$AA@ 10024c68   detect.obj
+ 0003:00000c74       ??_C@_0N@NLMC@STB?5Bitro?53D?$AA@ 10024c74   detect.obj
+ 0003:00000c84       ??_C@_0N@KJON@Righteous?53D?$AA@ 10024c84   detect.obj
+ 0003:00000c94       ??_C@_0O@OEBD@Apocalypse?53D?$AA@ 10024c94   detect.obj
+ 0003:00000ca4       ??_C@_09ODNL@Midas?5PCI?$AA@ 10024ca4   detect.obj
+ 0003:00000cb0       ??_C@_0BL@MKOL@Midas?5PCI?5or?5Apocalypse?53D?$AA@ 10024cb0   detect.obj
+ 0003:00000ccc       ??_C@_07DLKH@S3ViRGE?$AA@  10024ccc   detect.obj
+ 0003:00000cdc       ??_C@_0BI@KNMH@Bug?5?9?5negative?5threads?$DP?$AA@ 10024cdc   dllmain.obj
+ 0003:00000cf4       ??_C@_0CK@GPKA@Bug?5?9?5too?5many?5processes?5trying?5@ 10024cf4   dllmain.obj
+ 0003:00000d20       ??_C@_0BK@OLJL@Bug?5?9?5negative?5processes?$DP?$AA@ 10024d20   dllmain.obj
+ 0003:00000d3c       ??_C@_0N@DKIN@DP?5DLL?5Error?$AA@ 10024d3c   dllmain.obj
+ 0003:00000d4c       ??_C@_0BC@LLHH@fp?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024d4c   dp2.obj
+ 0003:00000d60       ??_C@_0P@CCM@?4?4?2?4?4?2dp?2dp2?4c?$AA@ 10024d60   dp2.obj
+ 0003:00000d70       ??_C@_0BF@OHJI@pSess?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024d70   dp2.obj
+ 0003:00000d88       ??_C@_0BC@FDDE@dp?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024d88   dp2.obj
+ 0003:00000d9c       ??_C@_0BF@NBNC@fname?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024d9c   dp2.obj
+ 0003:00000db4       ??_C@_07CLAB@session?$AA@  10024db4   dp2.obj
+ 0003:00000dbc       ??_C@_01PIHH@?$CB?$AA@     10024dbc   dp2.obj
+ 0003:00000dc0       ??_C@_0N@BOIE@launchParams?$AA@ 10024dc0   dp2.obj
+ 0003:00000dd0       ??_C@_00A@?$AA@            10024dd0   dp2.obj
+ 0003:00000dd4       ??_C@_0DM@OKMB@?$CItransport?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$CJ?5?$HM?$HM?5?$CIt@ 10024dd4   dp2.obj
+ 0003:00000e10       ??_C@_0BD@MPPK@pdp?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024e10   dp2.obj
+ 0003:00000e24       ??_C@_0CB@CMIG@masterHostNameBuf?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ@ 10024e24   dp2.obj
+ 0003:00000e48       ??_C@_0BD@NFMI@buf?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024e48   dp2.obj
+ 0003:00000e5c       ??_C@_0BE@BFGJ@info?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024e5c   dp2.obj
+ 0003:00000e70       ??_C@_0CE@CBBL@dp?9?$DOdpio?9?$DOdriverinfo?5?$CB?$DN?5?$CI?$CIvoid?5?$CK@ 10024e70   dp2.obj
+ 0003:00000e94       ??_C@_0BI@NDMP@dp?9?$DOdpio?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024e94   dp2.obj
+ 0003:00000eac       ??_C@_0BP@OBDL@dp?9?$DOdpio?9?$DOconns?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10024eac   dp2.obj
+ 0003:00000ecc       ??_C@_0CO@FFGM@dp?9?$DOhGameServer?5?$CB?$DN?5?$CI?$CIplayerHdl_t@ 10024ecc   dp2.obj
+ 0003:00000efc       ??_C@_0GF@FPFN@?$CIs?9?$DOflags?5?$CG?50x01?$CJ?5?$HM?$HM?5?$CI?$CB?$CIdp?9?$DOdpio@ 10024efc   dp2.obj
+ 0003:00000f64       ??_C@_0BF@MHCC@dp?9?$DOdpio?9?$DOdriverinfo?$AA@ 10024f64   dp2.obj
+ 0003:00000f7c       ??_C@_0KH@BEHO@?$CIreqlen?5?$DN?$DN?52?5?$CK?5sizeof?$CIdp_karma_t@ 10024f7c   dp2.obj
+ 0003:00001024       ??_C@_0BD@DBPB@req?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025024   dp2.obj
+ 0003:00001038       ??_C@_0BO@BFOF@dp?9?$DOmysessions?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025038   dp2.obj
+ 0003:00001058       ??_C@_0BM@GDBE@dp?9?$DOsessions?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025058   dp2.obj
+ 0003:00001074       ??_C@_0BG@DEBL@dp?9?$DOdt?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025074   dp2.obj
+ 0003:0000108c       ??_C@_0BC@MAHO@cb?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 1002508c   dp2.obj
+ 0003:000010a0       ??_C@_0BF@CEIG@sDesc?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 100250a0   dp2.obj
+ 0003:000010b8       ??_C@_0BB@JNHB@dp?9?$DOdpid2commHdl?$AA@ 100250b8   dp2.obj
+ 0003:000010cc       ??_C@_0BB@GNLM@s?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 100250cc   dp2.obj
+ 0003:000010e0       ??_C@_0CN@PKEM@?$CIidFrom?5?$CB?$DN?5?$CI64000?$CL1?$CJ?$CJ?5?$CG?$CG?5?$CIidTo?5?$CB@ 100250e0   dp2.obj
+ 0003:00001110       ??_C@_0P@PHOI@dp?5?$CG?$CG?5dp?9?$DOdpio?$AA@ 10025110   dp2.obj
+ 0003:00001120       ??_C@_0BE@NJJB@name?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025120   dp2.obj
+ 0003:00001134       ??_C@_0DK@CCOM@?$CIidGroup?5?$DO?$DN?5dp?9?$DOfirstGId?$CJ?5?$CG?$CG?5?$CIid@ 10025134   dp2.obj
+ 0003:00001170       ??_C@_09GGKM@pparamVal?$AA@ 10025170   dp2.obj
+ 0003:0000117c       ??_C@_04LEMN@info?$AA@     1002517c   dp2.obj
+ 0003:00001184       ??_C@_04NCOD@path?$AA@     10025184   dp2.obj
+ 0003:00001468       ??_C@_07BJAA@AVKEGL8?$AA@  10025468   dpdllwin.obj
+ 0003:00001470       ??_C@_05LELA@?$CFs?1?$CFs?$AA@ 10025470   dpdllwin.obj
+ 0003:00001478       ??_C@_01FDHG@?$CK?$AA@     10025478   dpdllwin.obj
+ 0003:0000147c       ??_C@_03NDIP@DLL?$AA@      1002547c   dpdllwin.obj
+ 0003:00001480       ??_C@_08HNAH@?$CFs?1?$CK?4dll?$AA@ 10025480   dpdllwin.obj
+ 0003:000018a0       ??_C@_0O@ONKO@nouploadcrash?$AA@ 100258a0   dpexcept.obj
+ 0003:000018b0       ??_C@_05FPNF@Debug?$AA@    100258b0   dpexcept.obj
+ 0003:000018b8       ??_C@_0BE@IK@?4?4?2?4?4?2dp?2dpexcept?4c?$AA@ 100258b8   dpexcept.obj
+ 0003:000018cc       ??_C@_01FAJB@?$DL?$AA@     100258cc   dpexcept.obj
+ 0003:000018d0       ??_C@_08GAII@SENDCRSH?$AA@ 100258d0   dpexcept.obj
+ 0003:000018dc       ??_C@_01PCJP@Y?$AA@        100258dc   dpexcept.obj
+ 0003:000018e0       ??_C@_09BJLC@?$CFs?5?$CFs?5?$CFd?5?$AA@ 100258e0   dpexcept.obj
+ 0003:000018ec       ??_C@_0BD@LKCN@aeh?4activision?4com?$AA@ 100258ec   dpexcept.obj
+ 0003:00001900       ??_C@_0N@GNMJ@sendcrsh?4exe?$AA@ 10025900   dpexcept.obj
+ 0003:00001910       ??_C@_04OBKB@?$CF02x?$AA@  10025910   dpexcept.obj
+ 0003:00001918       ??_C@_05EGOH@?$CF02x?3?$AA@ 10025918   dpio.obj
+ 0003:00001920       ??_C@_0BE@HCLO@file?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025920   dpio.obj
+ 0003:00001934       ??_C@_0BA@FDBE@?4?4?2?4?4?2dp?2dpio?4c?$AA@ 10025934   dpio.obj
+ 0003:00001944       ??_C@_0BE@CLE@dpio?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025944   dpio.obj
+ 0003:00001958       ??_C@_0BD@KKCM@hdl?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025958   dpio.obj
+ 0003:0000196c       ??_C@_06MPBL@?$AH?$AEdpio?$AA@ 1002596c   dpio.obj
+ 0003:00001974       ??_C@_06HEJL@dpio?$AB?$AD?$AA@ 10025974   dpio.obj
+ 0003:0000197c       ??_C@_07OGDM@timeout?$AA@  1002597c   dpio.obj
+ 0003:00001984       ??_C@_0M@DGLL@backbone_ms?$AA@ 10025984   dpio.obj
+ 0003:00001990       ??_C@_0L@MKNG@bitsPerSec?$AA@ 10025990   dpio.obj
+ 0003:0000199c       ??_C@_05IOOI@fault?$AA@    1002599c   dpio.obj
+ 0003:000019a4       ??_C@_02MECO@?$CFd?$AA@    100259a4   dpio.obj
+ 0003:000019a8       ??_C@_07PJKI@pktloss?$AA@  100259a8   dpio.obj
+ 0003:000019b0       ??_C@_02JDLK@?$CFx?$AA@    100259b0   dpio.obj
+ 0003:000019b4       ??_C@_0N@LOHF@thisDPSTUBID?$AA@ 100259b4   dpio.obj
+ 0003:000019c4       ??_C@_07DHBF@portnum?$AA@  100259c4   dpio.obj
+ 0003:000019cc       ??_C@_03GOIM@FIN?$AA@      100259cc   dpio.obj
+ 0003:000019d0       ??_C@_0BD@OINN@?4?4?2?4?4?2dp?2dpscore?4c?$AA@ 100259d0   dpscore.obj
+ 0003:000019e4       ??_C@_0BE@ILPH@?4?4?2?4?4?2dp?2dpshutdn?4c?$AA@ 100259e4   dpshutdn.obj
+ 0003:000019f8       ??_C@_0BB@OHMN@?4?4?2?4?4?2dp?2dptab?4c?$AA@ 100259f8   dptab.obj
+ 0003:00001a0c       ??_C@_0BF@MKAA@dptab?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025a0c   dptab.obj
+ 0003:00001a24       ??_C@_0BG@LFIL@ptable?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025a24   dptab.obj
+ 0003:00001a3c       ??_C@_0BD@ODCD@tab?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025a3c   dptab.obj
+ 0003:00001a50       ??_C@_02OGAG@cb?$AA@       10025a50   dptab.obj
+ 0003:00001a54       ??_C@_0BL@NMJA@table?9?$DOvars?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025a54   dptab.obj
+ 0003:00001a70       ??_C@_0BF@KJDE@table?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025a70   dptab.obj
+ 0003:00001a88       ??_C@_0CB@OPHO@subkeylen?5?$DO?50?5?$CG?$CG?5subkeylen?5?$DM?$DN?512@ 10025a88   dptab.obj
+ 0003:00001aac       ??_C@_0BE@HDFE@pbuf?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025aac   dptab.obj
+ 0003:00001ac0       ??_C@_0BE@OMME@plen?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025ac0   dptab.obj
+ 0003:00001ad4       ??_C@_0BH@GBNM@psubkey?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025ad4   dptab.obj
+ 0003:00001aec       ??_C@_0BC@DDDL@?$CI?$CKpNpktsfree?$CJ?5?$DO?50?$AA@ 10025aec   dptab.obj
+ 0003:00001b00       ??_C@_0BK@OMGF@pNpktsfree?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025b00   dptab.obj
+ 0003:00001b1c       ??_C@_0BI@BODB@peer?9?$DOtx?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025b1c   dptab.obj
+ 0003:00001b34       ??_C@_0BE@MDKE@peer?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025b34   dptab.obj
+ 0003:00001b48       ??_C@_0HJ@IFOM@?$CI?$CI?$CI?$CIsizeof?$CIdp_packetType_t?$CJ?$CL4?$CJ?5?$CL@ 10025b48   dptab.obj
+ 0003:00001bc4       ??_C@_0BL@EIFC@xfer?9?$DOtable?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025bc4   dptab.obj
+ 0003:00001be0       ??_C@_0BE@NBH@xfer?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025be0   dptab.obj
+ 0003:00001bf4       ??_C@_0BE@IDPL@xbuf?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025bf4   dptab.obj
+ 0003:00001c08       ??_C@_0L@CAAL@varlen?5?$DO?50?$AA@ 10025c08   dptab.obj
+ 0003:00001c14       ??_C@_0BG@DBPB@varbuf?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025c14   dptab.obj
+ 0003:00001c2c       ??_C@_07HJA@dptab?52?$AA@  10025c2c   dptab.obj
+ 0003:00001c34       ??_C@_07PICJ@dptab?51?$AA@ 10025c34   dptab.obj
+ 0003:00001c3c       ??_C@_0BM@OPJC@dptab?9?$DOpeers?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025c3c   dptab.obj
+ 0003:00001c58       ??_C@_0BN@JEJF@dptab?9?$DOtables?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025c58   dptab.obj
+ 0003:00001c78       ??_C@_0BL@LEKC@dptab?9?$DOdpio?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025c78   dptab.obj
+ 0003:00001c94       ??_C@_0BK@FEGL@peer?9?$DOpubs?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025c94   dptab.obj
+ 0003:00001cb0       ??_C@_0BI@CGPF@peer?9?$DOrx?5?$CB?$DN?5?$CI?$CIvoid?5?$CK?$CJ0?$CJ?$AA@ 10025cb0   dptab.obj
+ 0003:00001cc8       ??_C@_0BC@IOKB@?4?4?2?4?4?2dp?2dpuser?4c?$AA@ 10025cc8   dpuser.obj
+ 0003:00001ce0       ??_C@_08DJEI@feif?4dat?$AA@ 10025ce0   enumapp.obj
+ 0003:00001cec       ??_C@_09KIKD@enumapp?4c?$AA@ 10025cec   enumapp.obj
+ 0003:00001cf8       ??_C@_03NOGH@app?$AA@      10025cf8   enumapp.obj
+ 0003:00001cfc       ??_C@_08HBKF@?$CFd?4?$CFd?4?$CFd?$AA@ 10025cfc   enumapp.obj
+ 0003:00001d08       ??_C@_0P@FANP@DownloadPatch4?$AA@ 10025d08   enumapp.obj
+ 0003:00001d18       ??_C@_0O@GFKH@dkupddlld?4dll?$AA@ 10025d18   enumapp.obj
+ 0003:00001d28       ??_C@_0N@FDFK@dkupddll?4dll?$AA@ 10025d28   enumapp.obj
+ 0003:00001d38       ??_C@_03BIDD@cwd?$AA@      10025d38   enumapp.obj
+ 0003:00001d3c       ??_C@_0CL@EEIK@SOFTWARE?2Activision?2Activenet?2Ap@ 10025d3c   enumapp.obj
+ 0003:00001d68       ??_C@_0BF@NCGD@uk1?4activision?4co?4uk?$AA@ 10025d68   enumsrv2.obj
+ 0003:00001d80       ??_C@_0N@HBMB@194?4131?48?412?$AA@ 10025d80   enumsrv2.obj
+ 0003:00001d90       ??_C@_0BJ@GEAN@us2?4alink?4activision?4com?$AA@ 10025d90   enumsrv2.obj
+ 0003:00001dac       ??_C@_0P@JKIO@192?4215?4160?472?$AA@ 10025dac   enumsrv2.obj
+ 0003:00001dbc       ??_C@_0BJ@LLN@us1?4alink?4activision?4com?$AA@ 10025dbc   enumsrv2.obj
+ 0003:00001dd8       ??_C@_0P@GFDH@192?4215?4160?471?$AA@ 10025dd8   enumsrv2.obj
+ 0003:00001e10       ??_C@_0M@HGMP@servers?4dat?$AA@ 10025e10   enumsrv2.obj
+ 0003:00001e1c       ??_C@_05JKGE@?$CFs?5?$CFs?$AA@ 10025e1c   enumsrv2.obj
+ 0003:00001e24       ??_C@_0N@HAGK@bootserv?4txt?$AA@ 10025e24   enumsrv2.obj
+ 0003:00001ec0       ??_C@_02CLHN@?5?7?$AA@     10025ec0   ini.obj
+ 0003:00001ec4       ??_C@_02MMAH@rt?$AA@       10025ec4   ini.obj
+ 0003:00001ec8       ??_C@_08DFDG@Language?$AA@ 10025ec8   ini.obj
+ 0003:00001ed4       ??_C@_02MHMJ@?$CFu?$AA@    10025ed4   ini.obj
+ 0003:00001ed8       ??_C@_08KFCA@Platform?$AA@ 10025ed8   ini.obj
+ 0003:00001ee4       ??_C@_07NHPM@?$CFd?$CF?$CKc?$CFd?$AA@ 10025ee4   ini.obj
+ 0003:00001eec       ??_C@_07MNFD@Version?$AA@  10025eec   ini.obj
+ 0003:00001ef4       ??_C@_0M@ELFJ@SessionType?$AA@ 10025ef4   ini.obj
+ 0003:00001f00       ??_C@_09HLCD@ShellOpts?$AA@ 10025f00   ini.obj
+ 0003:00001f0c       ??_C@_07OHOF@Cmdline?$AA@  10025f0c   ini.obj
+ 0003:00001f14       ??_C@_03FFJ@Run?$AA@       10025f14   ini.obj
+ 0003:00001f18       ??_C@_04EFNI@Name?$AA@     10025f18   ini.obj
+ 0003:00001f20       ??_C@_09PJAB@ActiveNet?$AA@ 10025f20   ini.obj
+ 0003:00001f2c       ??_C@_08NNKK@anet?4inf?$AA@ 10025f2c   ini.obj
+ 0003:00001f38       ??_C@_01FDLN@?1?$AA@       10025f38   ini.obj
+ 0003:00001f3c       ??_C@_0M@FPA@?1OLDCONSOLE?$AA@ 10025f3c   launchap.obj
+ 0003:00001f48       ??_C@_0M@KB@?1NEWCONSOLE?$AA@ 10025f48   launchap.obj
+ 0003:00001f54       ??_C@_01FCOA@?5?$AA@       10025f54   launchap.obj
+ 0003:00001f58       ??_C@_0BA@EMPA@thisDPSTUBWPIPE?$AA@ 10025f58   launchap.obj
+ 0003:00001f68       ??_C@_0L@CDAO@thisDPSTUB?$AA@ 10025f68   launchap.obj
+ 0003:00001f74       ??_C@_0BB@PKKL@bcfidqJnspamguzo?$AA@ 10025f74   launchparams.obj
+ 0003:00001fc8       ??_C@_084overflow?$AA@     10025fc8   scorerep.obj
+ 0003:00001fd4       ??_C@_0N@JGGI@rep?9?$DOplayers?$AA@ 10025fd4   scorerep.obj
+ 0003:00001fe4       ??_C@_06BJLJ@repbuf?$AA@   10025fe4   scorerep.obj
+ 0003:00001fec       ??_C@_0BH@LCIP@?4?4?2?4?4?2score?2scorerep?4c?$AA@ 10025fec   scorerep.obj
+ 0003:00002004       ??_C@_03CPJP@rep?$AA@      10026004   scorerep.obj
+ 0003:00002008       ??_C@_02FGFI@fp?$AA@       10026008   tca.obj
+ 0003:0000200c       ??_C@_0BA@CJOI@?4?4?2?4?4?2tca?2tca?4c?$AA@ 1002600c   tca.obj
+ 0003:0000201c       ??_C@_03LHPA@tca?$AA@      1002601c   tca.obj
+ 0003:00002020       ??_C@_08ODFF@n?$HMjB?$FOd7?$DP?$AA@ 10026020   tca.obj
+ 0003:0000202c       ??_C@_0N@ENGB@Module32Next?$AA@ 1002602c   tlstuff.obj
+ 0003:0000203c       ??_C@_0O@PKHO@Module32First?$AA@ 1002603c   tlstuff.obj
+ 0003:0000204c       ??_C@_0BJ@OKNM@CreateToolhelp32Snapshot?$AA@ 1002604c   tlstuff.obj
+ 0003:00002068       ??_C@_0N@MMAA@KERNEL32?4DLL?$AA@ 10026068   tlstuff.obj
+ 0003:00002078       ??_C@_0BE@IBCI@?4?4?2?4?4?2aeh?2tlstuff?4c?$AA@ 10026078   tlstuff.obj
+ 0003:0000208c       ??_C@_0BC@NKAH@?4?4?2?4?4?2tca?2tserv?4c?$AA@ 1002608c   tserv.obj
+ 0003:000020a0       ??_C@_05PDE@tserv?$AA@     100260a0   tserv.obj
+ 0003:000020a8       ??_C@_05BAMO@entry?$AA@    100260a8   tserv.obj
+ 0003:000020b0       ??_C@_0L@LEPM@tserv?9?$DOtca?$AA@ 100260b0   tserv.obj
+ 0003:000020bc       ??_C@_0CA@FPKO@h?5?$CB?$DN?5?$CI?$CIplayerHdl_t?$CJ?50xfffffffc?$CJ?$AA@ 100260bc   tserv.obj
+ 0003:000020dc       ??_C@_03KLBC@pci?$AA@      100260dc   tserv.obj
+ 0003:000020e0       ??_C@_0M@FLON@tserv?9?$DOdpio?$AA@ 100260e0   tserv.obj
+ 0003:000020ec       ??_C@_0DN@MOAG@?$CB?$CItserv?9?$DOplease_send_response?5?$CG?$CG@ 100260ec   tserv.obj
+ 0003:0000212c       ??_C@_0CC@CDJE@src?5?$CB?$DN?5?$CI?$CIplayerHdl_t?$CJ?50xfffffffc@ 1002612c   tserv.obj
+ 0003:00002150       ??_C@_06NMEN@result?$AA@   10026150   tserv.obj
+ 0003:00002158       ??_C@_03ODEF@pkt?$AA@      10026158   tserv.obj
+ 0003:0000215c       ??_C@_0CG@JMMG@hServer?5?$CB?$DN?5?$CI?$CIplayerHdl_t?$CJ?50xffff@ 1002615c   tserv.obj
+ 0003:00002184       ??_C@_0BA@IBHB@tserv?9?$DOtca?9?$DOtdb?$AA@ 10026184   tserv.obj
+ 0003:00002194       ??_C@_0L@FLEJ@secretcode?$AA@ 10026194   tserv.obj
+ 0003:000021a0       ??_C@_0CN@IAHJ@tserv?9?$DOhServer?5?$CB?$DN?5?$CI?$CIplayerHdl_t?$CJ@ 100261a0   tserv.obj
+ 0003:000021d4       ___win32sflag              100261d4   MSVCRT:atonexit.obj
+ 0003:00002f80       __adjust_fdiv              10026f80   <common>
+ 0003:00002f84       ___onexitend               10026f84   <common>
+ 0003:00002f88       ___onexitbegin             10026f88   <common>
+ 0003:00002f8c       __pRawDllMain              10026f8c   <common>
+ 0004:00000000       __IMPORT_DESCRIPTOR_KERNEL32 10027000   kernel32:KERNEL32.dll
+ 0004:00000014       __IMPORT_DESCRIPTOR_USER32 10027014   user32:USER32.dll
+ 0004:00000028       __IMPORT_DESCRIPTOR_ADVAPI32 10027028   advapi32:ADVAPI32.dll
+ 0004:0000003c       __IMPORT_DESCRIPTOR_VERSION 1002703c   version:VERSION.dll
+ 0004:00000050       __IMPORT_DESCRIPTOR_MSVCRT 10027050   MSVCRT:MSVCRT.dll
+ 0004:00000064       __NULL_IMPORT_DESCRIPTOR   10027064   kernel32:KERNEL32.dll
+ 0004:000001c4       __imp__RegQueryInfoKeyA@48 100271c4   advapi32:ADVAPI32.dll
+ 0004:000001c8       __imp__RegEnumKeyA@16      100271c8   advapi32:ADVAPI32.dll
+ 0004:000001cc       __imp__RegQueryValueExA@24 100271cc   advapi32:ADVAPI32.dll
+ 0004:000001d0       __imp__RegEnumValueA@32    100271d0   advapi32:ADVAPI32.dll
+ 0004:000001d4       __imp__RegOpenKeyExA@20    100271d4   advapi32:ADVAPI32.dll
+ 0004:000001d8       __imp__RegCloseKey@4       100271d8   advapi32:ADVAPI32.dll
+ 0004:000001dc       __imp__RegEnumKeyExA@32    100271dc   advapi32:ADVAPI32.dll
+ 0004:000001e0       \177ADVAPI32_NULL_THUNK_DATA 100271e0   advapi32:ADVAPI32.dll
+ 0004:000001e4       __imp__GetProcAddress@8    100271e4   kernel32:KERNEL32.dll
+ 0004:000001e8       __imp__LoadLibraryA@4      100271e8   kernel32:KERNEL32.dll
+ 0004:000001ec       __imp__CreateProcessA@40   100271ec   kernel32:KERNEL32.dll
+ 0004:000001f0       __imp__LocalFree@4         100271f0   kernel32:KERNEL32.dll
+ 0004:000001f4       __imp__FreeLibrary@4       100271f4   kernel32:KERNEL32.dll
+ 0004:000001f8       __imp__FormatMessageA@28   100271f8   kernel32:KERNEL32.dll
+ 0004:000001fc       __imp__GetLastError@0      100271fc   kernel32:KERNEL32.dll
+ 0004:00000200       __imp__SetEnvironmentVariableA@8 10027200   kernel32:KERNEL32.dll
+ 0004:00000204       __imp__GetModuleHandleA@4  10027204   kernel32:KERNEL32.dll
+ 0004:00000208       __imp__GetEnvironmentVariableA@12 10027208   kernel32:KERNEL32.dll
+ 0004:0000020c       __imp__FindNextFileA@8     1002720c   kernel32:KERNEL32.dll
+ 0004:00000210       __imp__GetModuleFileNameA@12 10027210   kernel32:KERNEL32.dll
+ 0004:00000214       __imp__GetSystemTime@4     10027214   kernel32:KERNEL32.dll
+ 0004:00000218       __imp__WriteFile@20        10027218   kernel32:KERNEL32.dll
+ 0004:0000021c       __imp__DuplicateHandle@28  1002721c   kernel32:KERNEL32.dll
+ 0004:00000220       __imp__GetCurrentProcess@0 10027220   kernel32:KERNEL32.dll
+ 0004:00000224       __imp__MultiByteToWideChar@24 10027224   kernel32:KERNEL32.dll
+ 0004:00000228       __imp__GetVersion@0        10027228   kernel32:KERNEL32.dll
+ 0004:0000022c       __imp__CloseHandle@4       1002722c   kernel32:KERNEL32.dll
+ 0004:00000230       __imp__FindFirstFileA@8    10027230   kernel32:KERNEL32.dll
+ 0004:00000234       __imp__GetCurrentThreadId@0 10027234   kernel32:KERNEL32.dll
+ 0004:00000238       __imp__FindClose@4         10027238   kernel32:KERNEL32.dll
+ 0004:0000023c       __imp__GetTickCount@0      1002723c   kernel32:KERNEL32.dll
+ 0004:00000240       __imp__GlobalAlloc@8       10027240   kernel32:KERNEL32.dll
+ 0004:00000244       __imp__Sleep@4             10027244   kernel32:KERNEL32.dll
+ 0004:00000248       __imp__GlobalFree@4        10027248   kernel32:KERNEL32.dll
+ 0004:0000024c       __imp__GetTempPathA@8      1002724c   kernel32:KERNEL32.dll
+ 0004:00000250       __imp__GlobalReAlloc@12    10027250   kernel32:KERNEL32.dll
+ 0004:00000254       \177KERNEL32_NULL_THUNK_DATA 10027254   kernel32:KERNEL32.dll
+ 0004:00000258       __imp__free                10027258   MSVCRT:MSVCRT.dll
+ 0004:0000025c       __imp__memmove             1002725c   MSVCRT:MSVCRT.dll
+ 0004:00000260       __imp__time                10027260   MSVCRT:MSVCRT.dll
+ 0004:00000264       __imp__stricmp             10027264   MSVCRT:MSVCRT.dll
+ 0004:00000264       __imp___stricmp            10027264   MSVCRT:MSVCRT.dll
+ 0004:00000268       __imp___strupr             10027268   MSVCRT:MSVCRT.dll
+ 0004:00000268       __imp__strupr              10027268   MSVCRT:MSVCRT.dll
+ 0004:0000026c       __imp__strncpy             1002726c   MSVCRT:MSVCRT.dll
+ 0004:00000270       __imp___except_handler3    10027270   MSVCRT:MSVCRT.dll
+ 0004:00000274       __imp__malloc              10027274   MSVCRT:MSVCRT.dll
+ 0004:00000278       __imp__realloc             10027278   MSVCRT:MSVCRT.dll
+ 0004:0000027c       __imp__fprintf             1002727c   MSVCRT:MSVCRT.dll
+ 0004:00000280       __imp__fclose              10027280   MSVCRT:MSVCRT.dll
+ 0004:00000284       __imp__fopen               10027284   MSVCRT:MSVCRT.dll
+ 0004:00000288       __imp__sprintf             10027288   MSVCRT:MSVCRT.dll
+ 0004:0000028c       __imp__strchr              1002728c   MSVCRT:MSVCRT.dll
+ 0004:00000290       __imp__strstr              10027290   MSVCRT:MSVCRT.dll
+ 0004:00000294       __imp__sscanf              10027294   MSVCRT:MSVCRT.dll
+ 0004:00000298       __imp__remove              10027298   MSVCRT:MSVCRT.dll
+ 0004:0000029c       __imp__ftell               1002729c   MSVCRT:MSVCRT.dll
+ 0004:000002a0       __imp__fseek               100272a0   MSVCRT:MSVCRT.dll
+ 0004:000002a4       __imp__fread               100272a4   MSVCRT:MSVCRT.dll
+ 0004:000002a8       __imp__fwrite              100272a8   MSVCRT:MSVCRT.dll
+ 0004:000002ac       __imp__fgets               100272ac   MSVCRT:MSVCRT.dll
+ 0004:000002b0       __imp__strdup              100272b0   MSVCRT:MSVCRT.dll
+ 0004:000002b0       __imp___strdup             100272b0   MSVCRT:MSVCRT.dll
+ 0004:000002b4       __imp___getcwd             100272b4   MSVCRT:MSVCRT.dll
+ 0004:000002b4       __imp__getcwd              100272b4   MSVCRT:MSVCRT.dll
+ 0004:000002b8       __imp___isctype            100272b8   MSVCRT:MSVCRT.dll
+ 0004:000002bc       __imp__rewind              100272bc   MSVCRT:MSVCRT.dll
+ 0004:000002c0       __imp__rand                100272c0   MSVCRT:MSVCRT.dll
+ 0004:000002c4       __imp__getc                100272c4   MSVCRT:MSVCRT.dll
+ 0004:000002c8       __imp___makepath           100272c8   MSVCRT:MSVCRT.dll
+ 0004:000002cc       __imp___splitpath          100272cc   MSVCRT:MSVCRT.dll
+ 0004:000002d0       __imp__atoi                100272d0   MSVCRT:MSVCRT.dll
+ 0004:000002d4       __imp__strncat             100272d4   MSVCRT:MSVCRT.dll
+ 0004:000002d8       __imp___strlwr             100272d8   MSVCRT:MSVCRT.dll
+ 0004:000002dc       __imp__strspn              100272dc   MSVCRT:MSVCRT.dll
+ 0004:000002e0       __imp____p__pctype         100272e0   MSVCRT:MSVCRT.dll
+ 0004:000002e4       __imp___initterm           100272e4   MSVCRT:MSVCRT.dll
+ 0004:000002e8       __imp____p___mb_cur_max    100272e8   MSVCRT:MSVCRT.dll
+ 0004:000002ec       __imp__strcspn             100272ec   MSVCRT:MSVCRT.dll
+ 0004:000002f0       __imp__strtol              100272f0   MSVCRT:MSVCRT.dll
+ 0004:000002f4       __imp__strtok              100272f4   MSVCRT:MSVCRT.dll
+ 0004:000002f8       __imp___adjust_fdiv        100272f8   MSVCRT:MSVCRT.dll
+ 0004:000002fc       \177MSVCRT_NULL_THUNK_DATA 100272fc   MSVCRT:MSVCRT.dll
+ 0004:00000300       __imp__MessageBoxA@16      10027300   user32:USER32.dll
+ 0004:00000304       __imp__GetForegroundWindow@0 10027304   user32:USER32.dll
+ 0004:00000308       \177USER32_NULL_THUNK_DATA 10027308   user32:USER32.dll
+ 0004:0000030c       \177VERSION_NULL_THUNK_DATA 1002730c   version:VERSION.dll
+
+ entry point at        0001:000212c0
+
+ Static symbols
+
+ 0001:0001faa0       _tserv_send_challenge      10020aa0 f tserv.obj
+ 0001:0001fd00       _tserv_send_response       10020d00 f tserv.obj
+ 0001:0001ffc0       _tserv_send_pwchange       10020fc0 f tserv.obj
+ 0001:00020120       _tserv_send_validate       10021120 f tserv.obj
+ 0001:00020200       _tserv_send_pwvalidate     10021200 f tserv.obj
+ 0001:00020310       _tserv_send_credentials1   10021310 f tserv.obj
+ 0001:00020c10       _tserv_hdl2pci             10021c10 f tserv.obj
+ 0001:00020c70       _tserv_handle_credentials1 10021c70 f tserv.obj
+ 0001:0001d730       _freeze_element            1001e730 f q.obj
+ 0001:0001d960       _thaw_element              1001e960 f q.obj
+ 0001:0001c8f0       _MD5Transform              1001d8f0 f md5c.obj
+ 0001:0001d1a0       _Encode                    1001e1a0 f md5c.obj
+ 0001:0001d1f0       _Decode                    1001e1f0 f md5c.obj
+ 0001:0001d240       _MD5_memcpy                1001e240 f md5c.obj
+ 0001:0001d270       _MD5_memset                1001e270 f md5c.obj
+ 0001:0001c240       _notifystub                1001d240 f launchap.obj
+ 0001:0001b920       _stripSurroundingWhiteSpace 1001c920 f ini.obj
+ 0001:0001be20       _reltoabspath              1001ce20 f ini.obj
+ 0001:0001a9b0       _sendServerPing            1001b9b0 f enumsrv2.obj
+ 0001:0001aad0       _addServer                 1001bad0 f enumsrv2.obj
+ 0001:0001ae50       _get_bootstrap_list        1001be50 f enumsrv2.obj
+ 0001:0001b010       _dp_subscribeServerList    1001c010 f enumsrv2.obj
+ 0001:0001b180       _serversEx_cb@24           1001c180 f enumsrv2.obj
+ 0001:0001b320       _calc_delay                1001c320 f enumsrv2.obj
+ 0001:0001a280       _getLatest                 1001b280 f enumapp.obj
+ 0001:000163e0       _dptab_changeSrc           100173e0 f dptab.obj
+ 0001:00016740       _dptab_varCreate           10017740 f dptab.obj
+ 0001:000169d0       _dptab_varDelete           100179d0 f dptab.obj
+ 0001:00016df0       _dptab_get_bykey2          10017df0 f dptab.obj
+ 0001:000170f0       _dptab_xfer_insert         100180f0 f dptab.obj
+ 0001:000171e0       _compare_xfer_keys         100181e0 f dptab.obj
+ 0001:00017440       _dptab_update_destination  10018440 f dptab.obj
+ 0001:00017730       _dptab_update_send_delete  10018730 f dptab.obj
+ 0001:00017810       _dptab_xferBuffer_init     10018810 f dptab.obj
+ 0001:00017840       _dptab_xferBuffer_flush    10018840 f dptab.obj
+ 0001:00017990       _dptab_update_send_small   10018990 f dptab.obj
+ 0001:00017c10       _dptab_update_send_large   10018c10 f dptab.obj
+ 0001:00017f20       _dprint_buf                10018f20 f dptab.obj
+ 0001:000183f0       _dptab_mapIncomingTable    100193f0 f dptab.obj
+ 0001:00018d50       _dptab_peer_freeze         10019d50 f dptab.obj
+ 0001:00019030       _dptab_xfer_freeze         1001a030 f dptab.obj
+ 0001:000193c0       _dptab_peer_thaw           1001a3c0 f dptab.obj
+ 0001:000196b0       _dptab_xfer_thaw           1001a6b0 f dptab.obj
+ 0001:000116e0       _dpio_pc                   100126e0 f dpio.obj
+ 0001:00011710       _dpio_pw                   10012710 f dpio.obj
+ 0001:00011720       _dpio_print                10012720 f dpio.obj
+ 0001:000120d0       _dpio_thaw1                100130d0 f dpio.obj
+ 0001:000121f0       _dpio_thaw2                100131f0 f dpio.obj
+ 0001:000124d0       _dpio_setNextTxTime        100134d0 f dpio.obj
+ 0001:00012a40       _dpio_countHdlClosing      10013a40 f dpio.obj
+ 0001:00012be0       _dpio_gotAck               10013be0 f dpio.obj
+ 0001:00012e10       _dpio_update_RTT           10013e10 f dpio.obj
+ 0001:00012f50       _dpio_sendAck              10013f50 f dpio.obj
+ 0001:00013b60       _dpio_window_get           10014b60 f dpio.obj
+ 0001:00013c10       _dpio_handle_ping_response 10014c10 f dpio.obj
+ 0001:00013ce0       _dpio_sendAckLater         10014ce0 f dpio.obj
+ 0001:00013d00       _dpio_getReliable          10014d00 f dpio.obj
+ 0001:00013e80       _dpio_getRaw               10014e80 f dpio.obj
+ 0001:00014120       _dpio_flushPacketsForHandle 10015120 f dpio.obj
+ 0001:000142b0       _dpio_current_pingInterval 100152b0 f dpio.obj
+ 0001:00014310       _dpio_put_unreliable_unbuffered 10015310 f dpio.obj
+ 0001:00014380       _dpio_put_unreliable_buffered 10015380 f dpio.obj
+ 0001:00010380       _getExceptionTable         10011380 f dpexcept.obj
+ 0001:000103e0       _dp_makeExceptionRecords   100113e0 f dpexcept.obj
+ 0001:000107a0       _getAppParam               100117a0 f dpexcept.obj
+ 0001:000108a0       _getSystemInfo             100118a0 f dpexcept.obj
+ 0001:00010bb0       _sendtoserver              10011bb0 f dpexcept.obj
+ 0001:00010db0       _buf2hex                   10011db0 f dpexcept.obj
+ 0001:0000fc40       _init_crc32                10010c40 f dpcrc32.obj
+ 0001:000050e0       _dpOpenLocalResult         100060e0 f dp2.obj
+ 0001:000051d0       _dp_unpack_host            100061d0 f dp2.obj
+ 0001:00005260       _dp_player_notify          10006260 f dp2.obj
+ 0001:000053c0       _dp_getDesiredHandleOptions 100063c0 f dp2.obj
+ 0001:00005530       _dp_pack_playerId          10006530 f dp2.obj
+ 0001:00006e10       _open_sess_cb@16           10007e10 f dp2.obj
+ 0001:00006e40       _listSessions_cb@16        10007e40 f dp2.obj
+ 0001:00006ef0       _create_player_cb@16       10007ef0 f dp2.obj
+ 0001:00006f10       _chopnl                    10007f10 f dp2.obj
+ 0001:00006f40       _allzeros                  10007f40 f dp2.obj
+ 0001:00007320       _dp_openHdl_cb             10008320 f dp2.obj
+ 0001:000075a0       _dpThaw                    100085a0 f dp2.obj
+ 0001:00008170       _dp_setSessionTablePeer    10009170 f dp2.obj
+ 0001:00008850       _dp_setSessionDesc         10009850 f dp2.obj
+ 0001:00009150       _dpSendJoinSession         1000a150 f dp2.obj
+ 0001:000092a0       _dpHandleJoinSession       1000a2a0 f dp2.obj
+ 0001:000098a0       _dpSendErrorPacket         1000a8a0 f dp2.obj
+ 0001:000098f0       _dp_pack_host              1000a8f0 f dp2.obj
+ 0001:00009960       _dp_subscribe_client       1000a960 f dp2.obj
+ 0001:00009ae0       _dp_selectSessionForHost   1000aae0 f dp2.obj
+ 0001:00009d10       _dpSendIndirectJoin        1000ad10 f dp2.obj
+ 0001:00009d90       _initOpenSession           1000ad90 f dp2.obj
+ 0001:0000a550       _dp_subscribe_host         1000b550 f dp2.obj
+ 0001:0000a5d0       _findSessionWithKarma      1000b5d0 f dp2.obj
+ 0001:0000a620       _dpOpen_dummy_cb@16        1000b620 f dp2.obj
+ 0001:0000abc0       _dpSendLeaveSession        1000bbc0 f dp2.obj
+ 0001:0000ac50       _dpHandleLeaveSession      1000bc50 f dp2.obj
+ 0001:0000bd90       _dpRemoteEnumPlayers       1000cd90 f dp2.obj
+ 0001:0000c0c0       _dpRemoteEnumPlayersEx     1000d0c0 f dp2.obj
+ 0001:0000c2e0       _dp_election_start         1000d2e0 f dp2.obj
+ 0001:0000c3e0       _dp_election_end           1000d3e0 f dp2.obj
+ 0001:0000c470       _dp_election_peer_deleted  1000d470 f dp2.obj
+ 0001:0000c4b0       _dpHandleVote              1000d4b0 f dp2.obj
+ 0001:0000c730       _dp_election_set_master    1000d730 f dp2.obj
+ 0001:0000c7f0       _dp_election_register_vote 1000d7f0 f dp2.obj
+ 0001:0000c820       _dp_election_tally         1000d820 f dp2.obj
+ 0001:0000c940       _dp_election_inaugerate_winner 1000d940 f dp2.obj
+ 0001:0000caa0       _dp_election_become_master 1000daa0 f dp2.obj
+ 0001:0000cd50       _dpSendVote                1000dd50 f dp2.obj
+ 0001:0000ce50       _dpSendVictory             1000de50 f dp2.obj
+ 0001:0000cf10       _dpElectMaster             1000df10 f dp2.obj
+ 0001:0000cf90       _dp_findLowestHost         1000df90 f dp2.obj
+ 0001:0000d1d0       _dp_receive                1000e1d0 f dp2.obj
+ 0001:0000dd10       _dpSendSessionLostPacket   1000ed10 f dp2.obj
+ 0001:0000dd70       _dpHandleSelectedSession   1000ed70 f dp2.obj
+ 0001:0000dee0       _dpSetPlayerUid            1000eee0 f dp2.obj
+ 0001:0000dfc0       _dpHandleVictory           1000efc0 f dp2.obj
+ 0001:0000e0e0       _dpPoll                    1000f0e0 f dp2.obj
+ 0001:0000e420       _dp_election_poll          1000f420 f dp2.obj
+ 0001:0000e480       _dpHandlePingPacket        1000f480 f dp2.obj
+ 0001:0000e4d0       _dpPollPing                1000f4d0 f dp2.obj
+ 0001:0000e630       _dp_sendLatencyDelta       1000f630 f dp2.obj
+ 0001:0000e6d0       _dp_getBroadcastHdls       1000f6d0 f dp2.obj
+ 0001:0000e790       _dp_getHdls                1000f790 f dp2.obj
+ 0001:0000e7f0       _dp_getGroupHdls           1000f7f0 f dp2.obj
+ 0001:000028c0       _cookey                    100038c0 f d3des.obj
+ 0001:00002a00       _scrunch                   10003a00 f d3des.obj
+ 0001:00002a70       _unscrun                   10003a70 f d3des.obj
+ 0001:00002ac0       _desfunc                   10003ac0 f d3des.obj
+ 0001:00002090       _aehlog_clear              10003090 f aehlog.obj
+ 0001:000021e0       _aehlog_readfromfile       100031e0 f aehlog.obj
+ 0001:00000760       _aehmod_Create             10001760 f aeh.obj
+ 0001:00000900       _aehmod_add                10001900 f aeh.obj
+ 0001:00000ab0       _aeh_StackandModDump       10001ab0 f aeh.obj
+ 0001:00000d30       _aehmod_PosGet             10001d30 f aeh.obj
+ 0001:00000ed0       _aehmod_NameGet            10001ed0 f aeh.obj
+ 0001:00000f50       _aeh_setStackandModInfo    10001f50 f aeh.obj
+ 0001:00001e30       _putStream                 10002e30 f aeh.obj
+ 0001:00001ea0       _putCharStream             10002ea0 f aeh.obj
+ 0001:00001f70       _putStreamErrFull          10002f70 f aeh.obj
+
+FIXUPS: 2e77 16 2e 4b 30 1b 2d 1f 1f293 e6 1d 14 11 fffe0735 25 25 25 25
+FIXUPS: 2b46 25 25 25 25 25 25 25 31 16 d 48 29 1c 1b d 19 d 19 d 19 d
+FIXUPS: 2ddd d 19 3b 27 fffff923 16 d 19 12 d 14 13 11 19 1e 16 d 1a 16
+FIXUPS: 28b2 1a 16 d 1a 16 d 1a 16 d 31 43 1a d 1a 25 25 fffffa01 27 15
+FIXUPS: 24bb d 23 1b 13 1b 1b 1f 15 16 d 19 19 16 d 14 2c 24 21 19 16 d
+FIXUPS: 26d5 12 d 14 2c 1c 21 fffff68c 1e 2e 9 28 20 1a 2b 3f 1a 51 57
+FIXUPS: 2005 2f 1f 5d 6b 3b 69 17 3d 74 49 23 23 25 59 2c 1f 35 32 16 fffff3f8
+FIXUPS: 1874 34 22 22 25 45 19 1b 3f 1c 57 20 19 1c 5f 49 31 14 30 34 25
+FIXUPS: 1c3b 14 2a 78 c 14 55 3f 17 21 fffff46d 1b 25 10 1a 1e 48 2b 56
+FIXUPS: 13d0 3b 17a 1b a a 19 1b 47 38 1e 1b 20 22 19 15 35 32 16 18 29
+FIXUPS: 17f6 3c 1b1a 1d 46 2e fffffbe1 4a 52 f 32 31 20 20 c 62 12 12 97
+FIXUPS: 3247 12 8d 41 ffffdd44 16 1e 1d 11 4a 52 27 34 19 2b 2d2a 4c fffff928
+FIXUPS: 3964 6c 11 10 329 d a d 22 11 11 11 10 1d 10 11 11 1d 11 1d 11
+FIXUPS: 3e5e 10 fffff6a8 8c a1 3b 7b 5a bcf 22 18 9 3a 3b 14 29 35 26 1a
+FIXUPS: 449b 9f 24 23 f 2f 53 6b 27 27 27 27 5a 29 29 29 e3 18 54 c4 fffff526
+FIXUPS: 1092e 3d 44 28 64 42 27 27 ffff42d3 8e 50 50 3f 31 50 3f 20 16
+FIXUPS: 502d 4d 4d 4d 4d 4d 4d 4d ffffef23 2a 65 33 27 b0 bd7c 2e 41 49
+FIXUPS: 1017d 2c 22 7c 27 b2 29 83 39 1f 24 25 5d 35 19 20 4d 71 4d 22
+FIXUPS: 10695 21 4f 76 46 4a 22 5c fffff02e 8c 84 25 25 2b 1b 20 25 50
+FIXUPS: fb2a 1c 11 25 36 cd 29 b0 48 7d 13 21 19 3d 7d 33 1e 23 39 2c 27
+FIXUPS: 1005d fffff132 16 1d 28 1a 29 7b 25 24 c 20 21 38 30 28 1c 12 12
+FIXUPS: f450 1e 4d 148 3f 35 20 29 eb 11 1a 7d 21 24 fffff165 42 39 32
+FIXUPS: eb17 1b 87 39 a3 a9 1c 35 7a 14 2a f 41 f 5c 40 20 2a 25 2e 4b
+FIXUPS: f033 d 11 33 38 a8 9 ffffee84 10 1a 88 5a 47 5d 53 9 65 32 1e 30
+FIXUPS: e2f4 1f c 26b 3c 31 35 26 132 38 66 2d 80 24 30 1f 29 2d 24 fffff136
+FIXUPS: db1b e 19 14 28 2b 13 18 3a 89 72 19 19 38 2c 34 2c 1b 1d 3b 2b
+FIXUPS: dec0 f 1d 37 19 25 14 c 29 26 fffff64e 23 1b 29 16 22 26 37 28
+FIXUPS: d75d 33 14 34 2c 28 53 38 1d 18 2b 3c 12 27 28 24 19 2a 13 26 20
+FIXUPS: da81 58 fffff62e 1f 28 15 24 1f 2f 2a 26 80 1f 6e 4d 22 20 56 1b
+FIXUPS: d446 46 13 30 2b 36 1c 13 22 12 12 e 28 1e d fffff3ab 65 21 7c
+FIXUPS: cb40 24 3e 25 2e 3b 29 4c 33 24 26 96 1f 1f 28 15 24 1f 46 27 26
+FIXUPS: cf80 29 27 35 24 26 99 fffff095 47 5e 1e 21 34 4d 1a 13 90 16 17
+FIXUPS: c453 20 96 d c6 22 10 61 25 29 44 6c 60 21 75 67 21 38 25 2e fffff2fa
+FIXUPS: bcb1 29 29 3b 2e 2c 21 11 14 13 1d 11 14 13 3b 88 12 c 24 38 12
+FIXUPS: bfa9 18 3c 12 6c 35 29 29 29 29 fffff624 20 1d 32 33 28 24 20 17
+FIXUPS: b8af 12 12 49 23 58 1f 1e 22 1c 1a 22 41 16 1b 19 10 4c 47 15 a
+FIXUPS: bc1f 22 fffff5c5 d 34 f 3b d 42 d 34 f 55 46 65 55 f 12 15 12 3c
+FIXUPS: b51f 15 2c 14 14 1f b0 27 3d 1d 1f 32 37 fffff287 1c 1c 25 40 35
+FIXUPS: aaf5 8c f 1e 14f 51 20 e9 19 8d 23 90 20 25 14 4e 7e 12 23 14 28
+FIXUPS: b155 32 12 23 14 fffff269 22 14 17 21 24 2f 15 35 21 29 24 28 1b
+FIXUPS: a638 26 e 21 72 8f 33 21 1c 23 13 24 27 5c a5 11 d 2d fffff337
+FIXUPS: 9d30 2a 2d 43 29 107 23 14 39 17 68 42 33 35 1d 9 3f 19 29 36 da
+FIXUPS: a26a 22 37 29 35 32 50 26 1d 25 fffff355 29 6c 23 21 3a 2a 4d 23
+FIXUPS: 993d 33 2a 1b 44 34 27 29 27 57 35 2a 29 2c 2a 1a 17 d 31 25 4d
+FIXUPS: 9cd4 1d fffff50e 15 12 13 3b 1b 31 5c 20 f 12 4a 49 50 f 1a 10
+FIXUPS: 9492 13 1e f 19 f 11 11 19 49 28 9a 29 6e 36 fffff69a 56 26 19
+FIXUPS: 8eac 12 f 9 13 19 16 10 f 11 18 2f 14 19 c 17 20 15 d 13 19 43
+FIXUPS: 90b5 27 33 3c 44 1b fffff6fd 1f 1f 22 1f 28 22 1c 14 4d 49 18 3f
+FIXUPS: 8aa0 76 1a 1a 1e 2a 1a 1e 2b 24 26 3a f 2c 1f 34 26 37 18 fffff430
+FIXUPS: 81cc 3a 2e 22 1b f ca 25 1a 19 2f 9 14 14 13 30 16 18 1a 1b 13
+FIXUPS: 84ce 4f 21 d 77 29 58 23 1fb 24 ffffef33 35 3d 61 63 28 55 d6 5e
+FIXUPS: 7aee 6b 4e 3e 77 65 65 1a 63 1e8 44 30 49 f 4e 28 11 22 1b 1b 16
+FIXUPS: 8167 28 ffffeaf2 52 29 2a bf 32 32 32 2c 1d 26 6d 2a 3a 51 1e5
+FIXUPS: 721d 25 25 25 25 25 25 28 e0 a8 1b 178 49 1d 2b ae ffffec32 de
+FIXUPS: 64b7 19 17 26 11e 3f 16 16 16 4b f 37 22 2d 47 31 18 fa 41 9e 7f
+FIXUPS: 6ab8 4c 2a ba 1b 1b 17 11 1a ffffed0e 1b7 7d 93 4e 24 10 70 14
+FIXUPS: 5d48 14 1c 6d 63 1f 2c 3b 36 1e 12 1e 36 65 36 36 38 ab 78 c8 7c
+FIXUPS: 6323 46 b545 82 19 f 43 ae 12c 77 13 14 2f 69 25 c3 fffff337 114
+FIXUPS: 11229 12 fffff9c4 90 1a 11 34 ffff46a9 a1 b 156 2a6 2e 1f 20 a9
+FIXUPS: 11396 24 4f 31 12 15 36 29 22 29 8d c 51 19 19 c 12 18 12 39 29
+FIXUPS: 116e5 28 c 14 c 19 17 49 7b 13 45 393b c5 c0 98 5c 2c 64 3f 15
+FIXUPS: 15539 98 78 8f 7d 83 16b a 13a 1a 23d 52 ffffb529 d f 42 15 c 16
+FIXUPS: 11311 14 28 f 2ea6 5c 3a 31 8f 8a ab 14 22 ab 7f 151 19 13 51 1a
+FIXUPS: 14833 22 2e 9b 22 47 16 a6 88 1fd da 42 20 144 91 2b ffffe329 fa
+FIXUPS: 134b4 80 70 56 4a 2b 2d 36 61 16 14 156 1e 87 1c 1d 27 dd 44 6b
+FIXUPS: 13b4e 142 258 21 c0 5e 77 46 2c b1 ffffeaf6 1a 11 c3 1c 27 19 24
+FIXUPS: 12e34 22 2e 13 11 16 f 45 32 f 46 57 2b 13 3e 1b 68 2a f7 2a 4a
+FIXUPS: 13298 23 25 fffff06f 2a 2a fb 29 16 83 29 15 c6 10 2e 47 f 5b 103
+FIXUPS: 12865 7a 75 4b a1 9 13 10 13 92 66 f 30 1d 10 46 34dc 3a 24 3d
+FIXUPS: 161b9 20 22 1a 14 11 20 40 33 57 1e 1e 40 ffffbb43 ea 67 2d 49
+FIXUPS: 120be 14 22 14 38 44 2a 6d ba 19 8198 66 e2 1d 29 23 1a 7e 2a 2a
+FIXUPS: 1a821 81 ffffbb4a 57 5a 21 28 29 3b 49 4f fffff8a5 1e 34 2d 3d
+FIXUPS: 15f5c 5a 2b 7e 4b 34 3aaf 27 26 27 28 92 42 7a 28 29 29 2a 2a 3d
+FIXUPS: 19f83 50 37 4d 2a bf 90 29 28 29 29 9b 26 ac 29 2a 39 d ffffebe6
+FIXUPS: 19089 102 68 1d 5f 1c 40 76 4b 38 41 15 18 3e b0 2a 86 47 29 2a
+FIXUPS: 19731 b7 3e 5a 29 2a f7 17 94 7b 17 ffffea47 3d 75 2c 2f 13 41
+FIXUPS: 186d7 2e be 1e 16 87 1e 9e 42 49 29 2d 9c 137 45 29 29 29 86 28
+FIXUPS: 18e8b 62 72 1f 18 ffffedbf 28 1d 71 1b 8b 29 29 2a e3 2a 2e 14
+FIXUPS: 180ac 25 a6 1d 109 28 26 29 23 40 7f 1f 34 1d 2a 28 29 2b 1f ffffee5e
+FIXUPS: 173a8 18 3f 2a 29 12d 4a 1b 118 59 7a 2a 3d 1a 75 54 f 5e 2d 32
+FIXUPS: 17a0e 30 1b 3d 29 2c 97 64 29 c0 5e ffffeeb5 5a 23 50 22 83 c 71
+FIXUPS: 16e0d 17 2b 65 31 33 44 44 43 1d b 46 1a 87 65 1e 47 7a 3a 1f 31
+FIXUPS: 172df 37 23 3788 ffffbc22 d 2c f 70 36 13 e 30 1b c c f 37 34 1b
+FIXUPS: 16903 d 26 10 56 27 20 1d 49 56 1b 26 3c 27 79 45a2 1c 2f 1e 35
+FIXUPS: 1b222 12 74 3b 3f 2a a4 6e 137 54 1c 252 1c fffff5b1 37 fffffa9d
+FIXUPS: 1a916 22 1e 22 1a 26 1a 29 16 2e 66 132b 19 2f 20 220 1d 1e 58
+FIXUPS: 1c14e 27 85 9 2f 2d 31 1f 19 2b 13b 9f d2 2b ffffe955 26 23 7a
+FIXUPS: 1b060 66 16 16 a 2e 1bc3 31 1d 48 30 42 f fffff818 1d 75 fffff261
+FIXUPS: 1b938 2c 2b dd 2d 21 4d 83 3c 62 16 16 1c 27 1c 21 2d 5a 20 30
+FIXUPS: 1bdc8 271f 1ae 3c 2d 13e 67 32 ffffef38 d 19 25 2e 2c f f d 39
+FIXUPS: 1e189 ffffeec2 ec d9 fffff660 5b 15c 61 62 111 31 d 22 30 31 2a9a
+FIXUPS: 1f766 e d 11 85 16 12 13 1e d 18 35 53 67 1b 13 e d f 15 16 fffff073
+FIXUPS: 1eaa0 5f 29 2d 37 c2 f7 82 11e 3ba 19 10 f 15 16 7b d c 12 d f
+FIXUPS: 1f46f 10 f 15 13 d 10 75 19 d f 15 13 2a 1c 70 1b 76 45 13 34e
+FIXUPS: 1fb24 7a 43 26 f d 71 59 25 2e 4b 4c 69 7d 9a fffff010 40 32 1d
+FIXUPS: 1f03b 26 37 39 28 41 42 4a 12 13 10 8b 26eb 22 15 33 17 233 22
+FIXUPS: 21cc7 20 74 27 3f 3d 28 26 41 12 16 13 33 26 3c 13 31 28 26 32
+FIXUPS: 1ff8e 33 45 16 fffffa50 1885 f 5a e 33 5b 29 29 79 1f 2a 38 2f
+FIXUPS: 215be 17 41 3b 29 46 17 41 6b 40 12 20 3a 24 33 27 17 41 45 fffff291
+FIXUPS: 20c01 14 11 44 9 56 f f 3c 28 36 7e 65 69 2f 30 18 9e 3b 29 50
+FIXUPS: 210dd 18 4d 27 28 4d 44 27 28 45 da5 26 28 32 21 ffffdf85 f 63
+FIXUPS: 20140 2a 76 cc 215 5f 2a 50 18 c3 219 c e1 47 28 28 2e 16 6d 28
+FIXUPS: 20b14 2a 1c 42

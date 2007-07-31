@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctp2", "civctp.vcproj", "{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Browse|Win32 = Debug Browse|Win32
+		Debug|Win32 = Debug|Win32
+		Final|Win32 = Final|Win32
+		NDebug|Win32 = NDebug|Win32
+		Optimized Test|Win32 = Optimized Test|Win32
+		Release|Win32 = Release|Win32
+		Test|Win32 = Test|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Debug Browse|Win32.ActiveCfg = Debug Browse|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Debug Browse|Win32.Build.0 = Debug Browse|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Debug|Win32.Build.0 = Debug|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Final|Win32.ActiveCfg = Final|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Final|Win32.Build.0 = Final|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.NDebug|Win32.ActiveCfg = NDebug|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.NDebug|Win32.Build.0 = NDebug|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Optimized Test|Win32.ActiveCfg = Optimized Test|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Optimized Test|Win32.Build.0 = Optimized Test|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Release|Win32.ActiveCfg = Release|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Release|Win32.Build.0 = Release|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Test|Win32.ActiveCfg = Test|Win32
+		{527C90D8-7E52-41A0-A38D-21DADC6CF6B5}.Test|Win32.Build.0 = Test|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

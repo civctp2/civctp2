@@ -1,0 +1,23 @@
+/AiCell.cpp/1.1.1.1/Thu Sep 02 22:33:34 1999//Tcrc2_3
+/AiMap.cpp/1.2/Mon Jan 03 19:54:30 2000//Tcrc2_3
+/AiMap.h/1.4/Sat Nov 13 19:34:22 1999//Tcrc2_3
+/CityEdge.cpp/1.1.1.1/Thu Sep 02 22:33:34 1999//Tcrc2_3
+/CityEdge.h/1.1.1.1/Thu Sep 02 22:33:34 1999//Tcrc2_3
+/CityTree.cpp/1.1.1.1/Thu Sep 02 22:33:34 1999//Tcrc2_3
+/CityTree.h/1.1.1.1/Thu Sep 02 22:33:34 1999//Tcrc2_3
+/CityTreeQueue.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/CityTreeQueue.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/CityVertex.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/CityVertex.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/Cont.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/Cont.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/Delaunay.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/Delaunay.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/MST.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/MST.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/aicell.h/1.4/Fri Nov 12 20:54:44 1999//Tcrc2_3
+/geom2d.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/geom2d.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/strategic_map.cpp/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+/strategic_map.h/1.1.1.1/Thu Sep 02 22:33:36 1999//Tcrc2_3
+D

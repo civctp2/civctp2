@@ -1,0 +1,44 @@
+
+Advance {
+	Int Cost
+	Record Advance[0..4] Prerequisites
+	Record Advance[] Dependencies
+	Record Advance[] LeadsTo
+	Record Icon Icon
+	Record AdvanceBranch Branch
+	Record Age Age
+
+	Bit DeepOcean
+	Bit Capitalization
+	Bit Infrastructure
+	Bit Transform
+	Bit RequiresProbeRecovery
+	Bit Genetic
+	Bit PlantNuke
+	Bit NoIndex
+	Bit Roads
+	Bit Railroads
+	Bit AlienLife
+	Bit MagLev
+	Bit Tunnels
+	Bit GLHidden
+
+    Int PowerPoints = 0
+	Bit(Float) PollutionSizeModifier
+	Bit(Float) PollutionProductionModifier
+
+	Bit(Record Feat) TriggerFeat
+
+	# advice string for why this is a key advance
+	Bit (StringId) KeyAdvanceAdvice
+}
+
+
+AdvanceBranch : Int
+
+Age {
+	Int Age
+	Int StartingRound
+	Int NeedAdvances
+	String SlicObject
+}

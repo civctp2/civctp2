@@ -1,0 +1,20 @@
+/IC3Trade.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3BlgDB.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3CivArchive.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3DipReq.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3ErrorReport.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3GameState.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3Government.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3InstDB.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3Population.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3Rand.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3RobotAstar.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3Science.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3String.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3TerrDB.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3UnitDB.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3Wonder.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3endgamedb.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3player.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+/ic3world.h/1.1.1.1/Thu Sep 02 22:34:22 1999//Tcrc2_3
+D
