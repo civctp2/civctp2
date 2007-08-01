@@ -34,6 +34,9 @@
 
 #include "aui_ui.h"
 #include "aui_sdl.h"
+#if defined(HAVE_X11)
+#include <X11/Xlib.h>
+#endif
 
 class aui_SDLUI : public aui_UI, public aui_SDL
 {
@@ -52,8 +55,7 @@ public:
 protected:
 	aui_SDLUI() 
     :   aui_UI              (),
-        aui_SDL             (),
-        m_isCoinitialized   (false)
+        aui_SDL             ()
     { ; };
 
 	AUI_ERRCODE InitCommon( void );
@@ -62,20 +64,26 @@ public:
 	
 	virtual AUI_ERRCODE AltTabOut( void );
 	virtual AUI_ERRCODE AltTabIn( void );
-	AUI_ERRCODE CreateDirectScreen( BOOL useExclusiveMode );
-	AUI_ERRCODE DestroyDirectScreen(void);
+	AUI_ERRCODE CreateNativeScreen( BOOL useExclusiveMode );
+	AUI_ERRCODE DestroyNativeScreen(void);
 	AUI_ERRCODE TearDownMouse(void);
 	AUI_ERRCODE RestoreMouse(void);
 
 	void SetWidth(sint32 width) { m_width = width; }
 	void SetHeight(sint32 height) { m_height = height; }
 
+#if defined(HAVE_X11)
+	Display *getDisplay();
+#endif
+
 protected:
-   //LPDIRECTDRAWSURFACE m_lpdds; 
-   bool                m_isCoinitialized;
+#if defined(HAVE_X11)
+	Display *           m_X11Display;
+#endif
 	SDL_Surface        *m_lpdds;
 };
 
+typedef aui_SDLUI aui_NativeUI;
 
 #endif 
 

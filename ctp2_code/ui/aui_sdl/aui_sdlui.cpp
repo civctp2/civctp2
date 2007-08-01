@@ -56,6 +56,7 @@ extern sint32				g_ScreenWidth;
 extern sint32				g_ScreenHeight;
 extern DisplayDevice		g_displayDevice;
 
+extern BOOL g_SDL_flags;
 
 aui_SDLUI::aui_SDLUI
 (
@@ -89,7 +90,7 @@ aui_SDLUI::aui_SDLUI
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = CreateScreen( useExclusiveMode );
+	*retval = CreateNativeScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -119,7 +120,7 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 
 
 
-AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
+AUI_ERRCODE aui_SDLUI::DestroyNativeScreen(void)
 {
 	if (m_primary)
 	{
@@ -132,23 +133,27 @@ AUI_ERRCODE aui_SDLUI::DestroyScreen(void)
 }
 
 
-AUI_ERRCODE aui_SDLUI::CreateScreen( BOOL useExclusiveMode )
+AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 {
-	
 	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
+	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, SDL_SWSURFACE);
+       	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
+	if (!m_lpdds) {
+		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
+	}
 	
 	m_primary = new aui_SDLSurface(
 		&errcode,
 		m_width,
 		m_height,
 		m_bpp,
-		m_lpdd,
+		m_lpdds,
 		TRUE );
 	Assert( AUI_NEWOK(m_primary,errcode) );
+	assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_pixelFormat = m_primary->PixelFormat();
@@ -239,7 +244,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 
 AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 {
-
+	assert(0);
 
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
@@ -259,7 +264,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 	if ( m_minimize || m_exclusiveMode )
 	{
-		DestroyScreen();
+		DestroyNativeScreen();
 	}
 
 #if 0
@@ -284,9 +289,9 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
+	assert(0);
 
-
-	if ( !m_primary ) CreateScreen( m_exclusiveMode );
+	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 
 #if 0
 	if ( m_minimize || m_exclusiveMode )
