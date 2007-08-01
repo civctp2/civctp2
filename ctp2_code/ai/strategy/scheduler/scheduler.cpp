@@ -568,6 +568,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 	Plan_List::iterator tmp_plan_iter;
 	Sorted_Goal_Iter goal_ptr_iter;
 	bool match_added;
+	bool out_of_transports = false; // this tells us if we have run out of available transports or not
 
 #if 0
 	// This does nothing but waste time. AreAllGoalsSatisfied is never used.
@@ -701,28 +702,33 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		case GOAL_NEEDS_TRANSPORT:
 
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-				("\t\tGOAL_NEEDS_TRANSPORT (goal: %x squad: %x)\n", goal_ptr, squad_ptr));
+		        // optimization: If we have previously failed to get a transport, then skip trying to get a transport now:
+			if (!out_of_transports) {
 
-			tmp_plan_iter = plan_iter;
-			tmp_plan_iter++;
-
-			match_added = Add_Transport_Matches_For_Goal(goal_ptr, tmp_plan_iter);
-
-			if(!match_added)
-			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-					("\t\t **NO transports found. Failing.\n"));
-			}
-			else
-			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-					("\t\t Transports found.\n"));
+					("\t\tGOAL_NEEDS_TRANSPORT (goal: %x squad: %x)\n", goal_ptr, squad_ptr));
 
-				plan_iter++;
+				tmp_plan_iter = plan_iter;
+				tmp_plan_iter++;
 
-				break;
-			}
+				match_added = Add_Transport_Matches_For_Goal(goal_ptr, tmp_plan_iter);
+
+				if(!match_added)
+				{
+					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+						("\t\t **NO transports found. Failing.\n"));
+					out_of_transports = true; // record the fact we could not find a transport
+				}
+				else
+				{
+					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
+						("\t\t Transports found.\n"));
+
+					plan_iter++;
+	
+					break;
+				}
+			} // if out_of_transports is true, we just fail like in the original code
 
 		case GOAL_FAILED:
 

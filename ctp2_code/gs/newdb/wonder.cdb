@@ -61,7 +61,8 @@ Wonder {
 	Record Feat[] NeedsFeatToBuild				// implemented by E
 	Record Feat[] NeedsAnyPlayerFeatToBuild				// implemented by E
 	
-	Bit(Record MapIcon)   ShowCityIcon			// Like show on map but put on city?
+	Bit(Record MapIcon)   ShowCityIconTop			// Like show on map but put on top of city like icons
+	Bit(Record MapIcon)   ShowCityIconBottom		// Like show on map but puts the graphic behind the city 
 
 	Bit(Int) SquaredBorderRadius 				// added by E
 	Bit(Int) IntBorderRadius    				// added by E

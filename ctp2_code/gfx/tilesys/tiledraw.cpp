@@ -3893,7 +3893,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
 								isWatchful, isCapitol);
 					//if (CityIcons) {
-					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit, HasReligionIcon);
+					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, unit, HasReligionIcon);
+					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit);
 					//}
 
 				}
@@ -4820,7 +4821,7 @@ void TiledMap::AddChatDirtyRectToMap()
 
 //new DrawCityReligionIcons to allow for multiple religions bound only to the number of mapicons 
 // changed from religion to just special icons to cover both types
-void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon)
+void TiledMap::DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon)
 {
 	TileSet	*   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
@@ -4881,3 +4882,62 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		return;
 }
 
+void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit)
+{
+	TileSet	*   tileSet     = GetTileSet();
+	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
+    RECT		iconRect;
+	iconRect.left   = popRect.right + 3;
+	iconRect.right  = iconRect.left + iconDim.x + 1;
+	iconRect.top    = popRect.top;
+	iconRect.bottom = iconRect.top + iconDim.y + 1;
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+
+	Pixel16     color       = GetPlayerColor(owner, fog);
+
+		iconRect.left   = popRect.left;
+		iconRect.right  = iconRect.left + iconDim.x + 1;
+		iconRect.top    = popRect.bottom;
+		iconRect.bottom = popRect.top + iconDim.y + 1;
+		sint32  cityIcon = 0;
+		CityData *cityData = unit.GetData()->GetCityData();
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++){
+			if (g_theBuildingDB->Get(i, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(cityIcon))
+			{
+				if(cityData->GetImprovements() & ((uint64)1 << i))
+				{
+					//tileSet->GetMapIconData(cityIcon);
+					color = GetPlayerColor(owner, fog);  //optional
+					DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
+					AddDirtyRectToMix(iconRect);
+					iconRect.left += iconDim.x;
+					iconRect.right += iconDim.x;
+				}
+			}
+		}
+		sint32  WonderIcon = 0;
+		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++){
+			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(WonderIcon))
+			{
+				if(cityData->GetImprovements() & ((uint64)1 << j))
+				{
+					//tileSet->GetMapIconData(cityIcon);
+					color = GetPlayerColor(owner, fog);  //optional
+					DrawColorizedOverlay(tileSet->GetMapIconData(WonderIcon), surf, iconRect.left, iconRect.top, color);
+					AddDirtyRectToMix(iconRect);
+					iconRect.left += iconDim.x;
+					iconRect.right += iconDim.x;
+				}
+			}
+		}
+
+
+	if (iconRect.left < 0 || iconRect.top < 0 || 
+		iconRect.right >= surf->Width() ||
+		iconRect.bottom >= surf->Height())
+		return;
+}

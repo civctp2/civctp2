@@ -1589,8 +1589,8 @@ bool UnitActor::Draw(bool fogged)
 
 	if (m_unitSpriteGroup && m_unitID.IsValid())
 	{
-	//	if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007  
-	//		DrawCityImprovements(fogged); 
+		if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007  
+			DrawCityImprovements(fogged); 
 
 		if (IsFortified())
 			DrawFortified(fogged);
@@ -2574,7 +2574,7 @@ void UnitActor::DrawCityImprovements(bool fogged)
 	sint32  cityIcon = 0;
 	if (unit.IsValid() && unit.IsCity()) {
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-		if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+		if (g_theBuildingDB->Get(b, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconBottomIndex(cityIcon))
 		
 		{
 			if(unit.CD()->GetImprovements() & ((uint64)1 << b)) 
@@ -2602,7 +2602,7 @@ void UnitActor::DrawCityImprovements(bool fogged)
 
 	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
-		if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconIndex(cityIcon))
+		if(g_theWonderDB->Get(i, g_player[m_playerNum]->GetGovernmentType())->GetShowCityIconBottomIndex(cityIcon))
 		
 		{
 			 if(unit.CD()->GetBuiltWonders() & (uint64)1 << (uint64)i)

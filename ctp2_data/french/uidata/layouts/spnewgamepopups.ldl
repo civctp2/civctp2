@@ -221,11 +221,11 @@ SPNewGameTribeScreen {
 
 	string	yanchor	"center"
 
-	int	widthpix	650
+	int	widthpix	380 #from 650
 
-	int	heightpix	600 # LOQ 2004-10-12: from 465
+	int	heightpix	475 #600 # LOQ 2004-10-12: from 465
 
-
+		
 
 	Name:CTP_GREY_TITLE_FONT {
 
@@ -248,7 +248,7 @@ SPNewGameTribeScreen {
 
 	BackButton:CTP2_STANDARD_FONT {
 
-		int	xpix	550
+		int	xpix	475 #550
 
 		int	ypix	345
 
@@ -265,45 +265,13 @@ SPNewGameTribeScreen {
 		string	text	"str_ldl_BACK"
 	}
 
-	Group {
-
-		TribeOne:TRIBE_CHECKBOX1 {
-
-			string	text	"str_ldl_col1"
-			int	ypix	45
-
-		}
-
-		TribeTwo:TRIBE_CHECKBOX2 {
-
-			string	text	"str_ldl_col2"
-			int	ypix	45
-
-		}
-
-		TribeThree:TRIBE_CHECKBOX3 {
-
-			string	text	"str_ldl_col3"
-			int	ypix	45
-
-		}
-
-		TribeFour:TRIBE_CHECKBOX4 {
-
-			string	text	"str_ldl_col4"
-			int	ypix	45
-
-		}
-
-	}
-
 	leadernamestatic:CTP2_STANDARD_FONT {
 
 		string	yanchor	"bottom"
 
 		int	xpix	20
 
-		int	ypix	42
+		int	ypix	92 #42
 
 		int	widthpix	100
 
@@ -316,18 +284,13 @@ SPNewGameTribeScreen {
 		string	text	"str_ldl_Leader_Name_COLON"
 	}
 
-	leadernametextfield {
 
+    leadernametextfield {
 		string	yanchor	"bottom"
-
-		int	ypix	30
-
+		int	ypix	80 #30
 		int	xpix	120
-
-		int	widthpix	180
-
+		int	widthpix	220 #180
 		int	heightpix	30
-
 		int	maxfieldlen	23
 
 	}
@@ -336,9 +299,11 @@ SPNewGameTribeScreen {
 
 		string	yanchor	"bottom"
 
-		int	xpix	327
 
-		int	ypix	42
+		int	xpix	40
+		int	ypix	60
+		#int	xpix	327
+		#int	ypix	42
 #		int	ypix	396
 
 		int	widthpix	320
@@ -367,7 +332,7 @@ SPNewGameTribeScreen {
 			string	image1	"upba2318.tga"
 			string	disabledimage0	"upba2323.tga"
 			string	disabledimage1	"upba2324.tga"
-			int	xpix		151
+			int	xpix		155 #151
 			int	widthpix	146
 			int	heightpix	24
 
@@ -377,6 +342,28 @@ SPNewGameTribeScreen {
 
 	}
 
+	CivBox:CTP2_LISTBOX {
+		int xpix 45
+		int ypix 75
+		int widthpix 275
+		int heightpix 275
+		int focusindex 1
+	}
+
+}
+
+CivItem:CTP2_LIST_ITEM {
+	int widthpix 190
+	int heightpix 35
+	label:CTP2_HEADER_FONT {
+	    int fontsize				14
+		string objecttype "ctp2_Static"
+		string just "left"
+		bool vertcenter TRUE
+	    int xpix 10
+		int widthpix 115
+		int heightpix 20
+	}
 }
 
 

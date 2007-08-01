@@ -47,8 +47,34 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-06-09
-Changed:  The Army stacking flag is no displayed above the health bar
+2007-07-25 (revision 773)
+Deleted:  ShowCityIcon from Building and Wonder DB replaced with new flags
+Changed:  TargetCivilians flag now uses a probability like normal bombard
+Changed:  PrecisionStrike flag now uses a probability like normal bombard
+Added:    Cities on a trade route that does not belong to the city owner
+          or the route destination is not the city owner receives gold
+Changed:  Byzantine diploflag and unit flag
+Fixed:    Error in implementation of Elite and Leader code
+Added:    Additional religion icons for modders
+Fixed:    crash caused by unused memory
+Added:    Japanese missing LDLs
+Changed:  Difficulty and Risk level new game pop-up is now a listbox
+Added:    New ConstDB Properties                                                      
+- ConstDB
+   CITY_ON_TRADE_ROUTE_BONUS  modders can specify what percent of trade          
+                        route goes to a city that it passes through
+   CAPTURED_CITY_KILL_POP modders can specify how many civilians killed 
+                        when city is captured
+Added:    New Database Flags
+- BuildingDB
+   ShowCityIconTop      Displays this icon on top of a city graphic
+   ShowCityIconBottom   Icon displayed under city graphic
+- WonderDB
+   ShowCityIconTop      Displays this icon on top of a city graphic
+   ShowCityIconBottom   Icon displayed under city graphic
+
+2007-06-09 (revision 745)
+Changed:  The Army stacking flag is no longer displayed above the health bar
 Added:    OnePerCiv buildings are destroyed if city owning it is captured
 Added:	  Elite Status, a promotion above Veteran Status, has double
           Veteran coefficient in combat

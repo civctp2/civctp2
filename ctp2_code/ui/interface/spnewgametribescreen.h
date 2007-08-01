@@ -54,10 +54,11 @@ extern sint32 const         INDEX_TRIBE_INVALID;
 sint32 spnewgametribescreen_displayMyWindow(
 	void *cookie = NULL,
 	BOOL edit = FALSE );
-sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname = NULL);
+sint32 spnewgametribescreen_removeMyWindow(uint32 action, MBCHAR *lname = NULL);
+//sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname = NULL);
 
 AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
-void spnewgametribescreen_Cleanup();
+AUI_ERRCODE spnewgametribescreen_Cleanup();
 
 
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
@@ -81,3 +82,23 @@ void spnewgametribescreen_disableTribe( sint32 tribe );
 void spnewgametribescreen_enableTribe( sint32 tribe );
 
 #endif
+
+/*
+//diff.h
+#pragma once
+
+#ifndef __SPNEWGAMEDIFFSCREEN_H__
+#define __spnewgametribescreen_H__
+
+sint32 spnewgametribescreen_displayMyWindow(BOOL viewMode = FALSE,BOOL reinit=FALSE);
+sint32 spnewgametribescreen_removeMyWindow(uint32 action);
+AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
+AUI_ERRCODE spnewgametribescreen_Cleanup();
+
+void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+
+sint32 spnewgametribescreen_getTribeIndex( void );
+void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname );
+
+#endif
+*/

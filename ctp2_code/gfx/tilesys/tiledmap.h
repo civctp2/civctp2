@@ -465,7 +465,8 @@ public:
 								BOOL isWatchful, BOOL isCapitol//added capitol
 								); 
 	//EMOD to add Civ4 Style Icons
-	void        DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon );
+	void        DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon );
+	void        DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit);
 
 	void		Serialize(CivArchive &archive);
 
