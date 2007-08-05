@@ -40,6 +40,7 @@
 //   to be deleted - 2005-07-01 Shaun Dove
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,7 +59,7 @@
 #include "cellunitlist.h"
 #include "citydata.h"
 #include "civarchive.h"
-#include "ConstDB.h"                // g_theConstDB
+#include "ConstRecord.h"            // g_theConstDB
 #include "dynarr.h"
 #include "gamefile.h"
 #include "Globals.h"
@@ -77,6 +78,7 @@
 #include "TileInfo.h"
 #include <vector>
 #include "WorldDistance.h"
+#include "tradeutil.h"              // constutil_GetMapSizeMapPoint
 
 #if defined(USE_COM_REPLACEMENT)
 #include <ltdl.h>
@@ -432,8 +434,8 @@ void World::GenerateRandMap(MapPoint player_start_list[k_MAX_PLAYERS])
 	GetHistogram(map, histogram);
 	sint32 landPercent = sint32(g_theProfileDB->PercentLand() * 100);
 	sint32 waterPercent = 100 - landPercent;
-	sint32 mountainPercent = sint32(g_theConstDB->PercentMountains() * 100);
-	sint32 hillPercent = sint32(g_theConstDB->PercentHills() * 100);
+	sint32 mountainPercent = sint32(g_theConstDB->Get(0)->GetPercentMountain() * 100);
+	sint32 hillPercent = sint32(g_theConstDB->Get(0)->GetPercentHills() * 100);
 	hillPercent += mountainPercent;
 
 	sint32 waterLevel=0, hillLevel=80, mountainLevel=100;
@@ -811,7 +813,7 @@ void World::GenerateGoods()
    
 	sint32 c = b + a; 
 
-	sint32 minAdjacent = g_theConstDB->GetMinLikeTilesForGood();
+	sint32 minAdjacent = g_theConstDB->Get(0)->GetMinLikeTilesForGood();
 
     sint32 ox, oy;
 	for (ox = b; ox + a < m_size.x ; ox += c) {
@@ -907,20 +909,20 @@ void World::ComputeGoodsValues()
 	}
 
 	double valueDiff = 
-        g_theConstDB->GetMaxGoodValue() - g_theConstDB->GetMinGoodValue();
+        g_theConstDB->Get(0)->GetMaxGoodValue() - g_theConstDB->Get(0)->GetMinGoodValue();
 
 	for (i = 0; i < newGoodCount; i++) 
     {
 		if (goodCounts[i] <= 0) 
         {
-			m_goodValue[i] = g_theConstDB->GetMaxGoodValue() + 1;
+			m_goodValue[i] = g_theConstDB->Get(0)->GetMaxGoodValue() + 1;
 		} 
         else 
         {
             // goodCounts[i] > 0 => maxCount > 0, so division by maxCount is OK
 			double percent = double(goodCounts[i]) / double(maxCount);
 			
-			m_goodValue[i] = g_theConstDB->GetMinGoodValue() +
+			m_goodValue[i] = g_theConstDB->Get(0)->GetMinGoodValue() +
 				                ((1.0 - percent) * valueDiff);
 		}
 
@@ -1150,8 +1152,8 @@ void World::GenerateDeepWater()
 	sint32 minx = 0, miny = 0, rmin, ocount, dcount, k; 
 	sint32 radius       = 2; 
 	sint32 delta        = 1; 
-	sint32 cellWidth    = g_theConstDB->RiverCellWidth();
-    sint32 cellHeight   = g_theConstDB->RiverCellHeight();
+	sint32 cellWidth    = g_theConstDB->Get(0)->GetRiverCellWidth();
+    sint32 cellHeight   = g_theConstDB->Get(0)->GetRiverCellHeight();
 
 	for(i = 0; i < cellWidth; i++) {
 		for(j = 0; j < cellHeight; j++) {
@@ -1276,7 +1278,7 @@ void World::GenerateTrenches()
 {
     sint32 i, j;
     sint32 tcount = 0;
-    sint32 m = sint32(g_theConstDB->PercentTrench() * m_size.x * m_size.y); 
+    sint32 m = sint32(g_theConstDB->Get(0)->GetPercentTrench() * m_size.x * m_size.y); 
 
     if (m < 1) 
         return ; 
@@ -1465,7 +1467,7 @@ void World::GenerateVolcano()
 	for (i=0; i<m_size.x; i++) { 
 		for (j=0; j<m_size.y; j++) {
 			if(m_map[i][j]->m_terrain_type == TERRAIN_WATER_DEEP) {
-				if (g_rand->Next(100) < g_theConstDB->PercentVolcano()) { 
+				if (g_rand->Next(100) < g_theConstDB->Get(0)->GetPercentVolcano()) { 
 					m_map[i][j]->m_terrain_type = TERRAIN_WATER_VOLCANO; 
 				}
 			}
@@ -1606,7 +1608,7 @@ void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y,
 	for(i = 0; i < TERRAIN_MAX; i++) {
 		numCounted[i] = 0;
 	}
-	sint32 maxToCount = g_theConstDB->MaxSameTiles();
+	sint32 maxToCount = g_theConstDB->Get(0)->GetMaxSameTiles();
 
 	MapPoint pos(x, y);   
 	sint32 cont;
@@ -1778,10 +1780,10 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
         maxContinentSize = std::max(m_land_size->Access(i), maxContinentSize);
 	}
 
-	if (maxContinentSize < g_theConstDB->MinContinentStartSize()) {
+	if (maxContinentSize < g_theConstDB->Get(0)->GetMinContinentStartSize()) {
 		s_actualMinContinentStartSize = 2;
 	} else {
-		s_actualMinContinentStartSize = g_theConstDB->MinContinentStartSize();
+		s_actualMinContinentStartSize = g_theConstDB->Get(0)->GetMinContinentStartSize();
 	}
 
     float ** raw_score = new float*[m_size.x]; 
@@ -1816,10 +1818,10 @@ void World::FindPlayerStart(MapPoint player_start[k_MAX_PLAYERS],
 		sqrt(static_cast<double>(maxSize * maxSize) / 
 			 (2 * g_theProfileDB->GetNPlayers())
 			);
-	sint32 minDistance = sint32(g_theConstDB->MinStartDistanceCoefficient() * someNumber);
-	sint32 maxDistance = sint32(g_theConstDB->MaxStartDistanceCoefficient() * someNumber);
-	if(minDistance < g_theConstDB->MinAbsoluteStartDistance())
-		minDistance = g_theConstDB->MinAbsoluteStartDistance();
+	sint32 minDistance = sint32(g_theConstDB->Get(0)->GetMinStartDistanceCoefficient() * someNumber);
+	sint32 maxDistance = sint32(g_theConstDB->Get(0)->GetMaxStartDistanceCoefficient() * someNumber);
+	if(minDistance < g_theConstDB->Get(0)->GetMinAbsoluteStartDistance())
+		minDistance = g_theConstDB->Get(0)->GetMinAbsoluteStartDistance();
 	if(maxDistance < minDistance)
 		maxDistance = minDistance;
 
@@ -2570,9 +2572,9 @@ void World::GenerateGoodyHuts()
 	}
 
 	MapPoint hutBoxSize;
-	hutBoxSize.x = sint16(g_theConstDB->HutBoxWidth());
-	hutBoxSize.y = sint16(g_theConstDB->HutBoxHeight());
-	double hutChance = g_theConstDB->HutChancePerBox();
+	hutBoxSize.x = sint16(g_theConstDB->Get(0)->GetRuinsBoxWidth());
+	hutBoxSize.y = sint16(g_theConstDB->Get(0)->GetRuinsBoxHeight());
+	double hutChance = g_theConstDB->Get(0)->GetRuinsChancePerBox();
 
 	sint32 x, y;
 	sint32 w = m_size.x / hutBoxSize.x;
@@ -2762,8 +2764,8 @@ void World::NewGenerateRivers(sint8 *map, sint8 *wetmap)
 	s_visited = new DynamicArray<MapPoint>;
 	sint32 x, y;
 	sint32 maxheight;
-	sint32  cellwidth   = g_theConstDB->RiverCellWidth();
-	sint32  cellheight  = g_theConstDB->RiverCellHeight();
+	sint32  cellwidth   = g_theConstDB->Get(0)->GetRiverCellWidth();
+	sint32  cellheight  = g_theConstDB->Get(0)->GetRiverCellHeight();
 	sint32  maxx        = 0;
     sint32  maxy        = 0;
 
@@ -2935,7 +2937,7 @@ void TemperatureFilter(sint8 *map, sint32 *histogram)
 
 
 	MapPoint	mapSize;
-	g_theConstDB->GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
+	constutil_GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
 
 	
 	

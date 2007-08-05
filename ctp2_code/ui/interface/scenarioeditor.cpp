@@ -55,6 +55,7 @@
 // - Switching between players now updates the city list of the main control 
 //   panel city tab. (Feb 4th 2007 Martin Gühmann)
 // - TODO add show Enemy Health and Debug AI buttons to Unit Tab
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -84,9 +85,7 @@
 #include "citydata.h"
 #include "UnitData.h"
 
-//Added by Martin Gühmann to have the appropiate number 
-//on the city style tab 
-#include "CityStyleRecord.h"
+#include "CityStyleRecord.h"    // To have the appropiate number on the city style tab
 #include "DifficultyRecord.h"   // g_theDifficultyDB
 
 #include "BuildingRecord.h"
@@ -133,7 +132,6 @@
 #include "Cell.h"
 #include "aicause.h"
 #include "TerrImprove.h"
-#include "ConstDB.h"
 #include "civapp.h"
 
 #include "ctp2_textfield.h"

@@ -26,6 +26,7 @@
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Replaced old GlobalWarming database by new one. (July 9th 2005 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@
 #include "UVDB.h"
 #include "RandGen.h"
 #include "citydata.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "network.h"
 #include "GoodyHuts.h"
 #include "tiledmap.h"
@@ -65,6 +66,7 @@
 #include "SlicObject.h"
 
 #include "terrainutil.h"
+#include "tradeutil.h"
 
 extern	OzoneDatabase	*g_theUVDB ;
 extern	RadarMap	*g_radarMap;
@@ -446,7 +448,7 @@ void World::GWPhase(const sint32 phase)
 			for(y = 0; y < m_size.y; y++) {
 				if(IsLand(x,y) && !IsMountain(x,y) &&
 				   IsNextToWaterNotDiagonals(x,y)) {
-					if(g_rand->Next(100) < sint32(g_theConstDB->GetFloodChangesCoastToWaterChance() * 100.0)) {
+					if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetFloodChangesCoastToWaterChance() * 100.0)) {
 						GetCell(x,y)->m_search_count = -3;
 					}
 				}
@@ -665,15 +667,15 @@ void World::FloodRivers(void)
 
 
 void World::OzoneDepletion(void)
-	{
+{
 	sint32	i,
-			m,														
+			m,
 			x, y;
 
 	Cell	*c ;
 	
 	if(g_network.IsHost()) {
-        sint32  phase   = 0;
+		sint32  phase   = 0;
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_OZONE_DEPLETION,
 									  phase));
@@ -688,37 +690,30 @@ void World::OzoneDepletion(void)
 	RemoveBeaches() ;
 	sint32 const    w = GetWidth();
 	sint32 const    h = GetHeight();
-    MapPoint pos; 
+	MapPoint pos; 
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
-			{
-			c = GetCell(x, y) ;
+		{
+			c = GetCell(x, y);
 
 			
-			g_theConstDB->y2meridian(y, m) ;
+			constutil_y2meridian(y, m);
 
 			
-			Assert(k_NUM_MERIDIANS == 6) ;
-			Assert(m<=k_NUM_MERIDIANS) ;
-			double flip_prob = g_theUVDB->GetProb(m) ;
+			Assert(k_NUM_MERIDIANS == 6);
+			Assert(m<=k_NUM_MERIDIANS);
+			double flip_prob = g_theUVDB->GetProb(m);
 			if ((c->GetCanDie()) && (g_rand->NextF() < flip_prob))
-				{
-
-                
-                pos.Set(x, y); 
+			{
+				pos.Set(x, y);
 
 
-				c->Kill() ;
-				ClearGoods(x, y) ;
+				c->Kill();
+				ClearGoods(x, y);
 				CutImprovements(pos);
-				
-				
-				
-				
-				
-				}
-
 			}
+
+		}
 
 
 	MakeBeaches() ;
@@ -727,7 +722,7 @@ void World::OzoneDepletion(void)
 	g_tiledMap->Refresh() ;
 	g_radarMap->Update();
 	g_radarMap->ShouldDraw();
-	}
+}
 
 void World::RegenerateRivers()
 {

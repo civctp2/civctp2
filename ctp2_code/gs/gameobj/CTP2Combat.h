@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Combat handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,12 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// TEST_APP
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Veteran effect added.
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -34,7 +38,7 @@ typedef long sint32;
 typedef unsigned long uint32;
 #else
 
-#include "ConstDB.h"	// g_theConstDB
+#include "ConstRecord.h"	// g_theConstDB
 #include "Unit.h"
 #include "MapPoint.h"
 #include "battle.h"
@@ -104,7 +108,7 @@ public:
 	double GetOffense() const
 	{
 		return (m_isVeteran) 
-			   ? m_offense + (m_offense * g_theConstDB->GetVetCoef())
+			   ? m_offense + (m_offense * g_theConstDB->Get(0)->GetVeteranCoef())
 			   : m_offense;
 	}
 	double GetDefense() { return m_defense; }
@@ -113,7 +117,7 @@ public:
 	double GetRangedAttack() const
 	{
 		return (m_isVeteran) 
-			   ? m_ranged + (m_ranged * g_theConstDB->GetVetCoef())
+			   ? m_ranged + (m_ranged * g_theConstDB->Get(0)->GetVeteranCoef())
 			   : m_ranged;
 	}
 	UNIT_TYPE GetCombatType() { return m_type; }

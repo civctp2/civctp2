@@ -81,6 +81,7 @@
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
 // - Added new map database. (27-Mar-2007 Martin Gühmann)
 // - Added new concept database. (31-Mar-2007 Martin Gühmann)
+// - Added new const database. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -844,4 +845,7 @@ template class CTPDatabase<MapRecord>;
 
 #include "ConceptRecord.h" // 42
 template class CTPDatabase<ConceptRecord>;
+
+#include "ConstRecord.h" // 42
+template class CTPDatabase<ConstRecord>;
 #endif // __TILETOOL__

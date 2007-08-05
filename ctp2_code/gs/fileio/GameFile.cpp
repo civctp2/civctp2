@@ -35,6 +35,7 @@
 // - Removed old pollution database. (July 15th 2006 Martin Gühmann)
 // - Removed old gobal warming database. (July 15th 2006 Martin Gühmann)
 // - Removed old concept database. (31-Mar-2007 Martin Gühmann)
+// - Removed old const database. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -61,7 +62,6 @@
 #include "CivilisationRecord.h"
 #include "CivPaths.h"               // g_civPaths
 #include "civscenarios.h"
-#include "ConstDB.h"                // g_theConstDB
 #include "ctpai.h"
 #include "Diffcly.h"
 #include "DiplomaticRequestPool.h"  // g_theDiplomaticRequestPool
@@ -253,7 +253,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo(180);
 
-	g_theConstDB->Serialize(archive);
+//	g_theConstDB->Serialize(archive);
 
 	g_theProgressWindow->StartCountingTo(190);
 	g_theProgressWindow->StartCountingTo(200);

@@ -45,6 +45,7 @@
 // - Add PopCostsToBuild to allow for Units with higher than 1 (BuildingRemovesaPop) 
 //   population cost to be removed from a city.
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -69,7 +70,7 @@
 #include "network.h"
 #include "net_info.h"
 #include "net_action.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "QuickSlic.h"
@@ -1680,13 +1681,13 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner) ||
 			(!g_network.IsActive() && !g_theProfileDB->AIPopCheat()))) {
 			if(u.GetDBRec()->GetBuildingRemovesAPop()) {
-				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
+				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient()));
 				cd->ChangePopulation(-1);
 			}
 			// EMOD
 			sint32 pop;
 			if(u.GetDBRec()->GetPopCostsToBuild(pop)) {
-				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->CityGrowthCoefficient()));
+				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient()));
 				cd->ChangePopulation(-pop);
 		}
 		}

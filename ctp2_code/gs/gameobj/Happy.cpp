@@ -33,10 +33,11 @@
 // - Added GoodHappinessIncrease if a good give a happy bonus then if the city 
 //   is buying or collecting then it will add to that city's happiness (4-27-2006 by E)
 // - Aded SectarianHappiness modifier by E 5-24-2006
-// - added difficulty setting eliminating unhappiness for ai cities overlimit
-// - added profile option for NoAICityLimit and NoCityLimit
-// - added comment for wonders
-// - outcommented sectarian happiness
+// - Added difficulty setting eliminating unhappiness for ai cities overlimit
+// - Added profile option for NoAICityLimit and NoCityLimit
+// - Added comment for wonders
+// - Outcommented sectarian happiness
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,7 +46,7 @@
 
 #include "CivArchive.h"
 #include "Player.h"             // g_player
-#include "ConstDB.h"            // g_theConstDB
+#include "ConstRecord.h"        // g_theConstDB
 #include "UnitPool.h"
 #include "citydata.h"
 #include "SelItem.h"            // g_theSelectedItem
@@ -890,7 +891,7 @@ void HappyTimer::Serialize(CivArchive &archive)
 
 bool Happy::ShouldRevolt(const sint32 incite_bonus) const
 {
-	return m_happiness < (g_theConstDB->GetRevolutionLevel() + incite_bonus);
+	return m_happiness < (g_theConstDB->Get(0)->GetRevolutionLevel() + incite_bonus);
 }
 
 
@@ -908,7 +909,7 @@ bool Happy::ShouldRevolt(const sint32 incite_bonus) const
 
 bool Happy::IsVeryHappy(void) const
 {
-	return m_happiness >= g_theConstDB->GetVeryHappyThreshold();
+	return m_happiness >= g_theConstDB->Get(0)->GetVeryHappyThreshold();
 }
 
 
@@ -924,7 +925,7 @@ bool Happy::IsVeryHappy(void) const
 
 void Happy::ForceRevolt(void)
 {
-	m_happiness = g_theConstDB->GetRevolutionLevel()-10 ;
+	m_happiness = g_theConstDB->Get(0)->GetRevolutionLevel()-10 ;
 }
 
 

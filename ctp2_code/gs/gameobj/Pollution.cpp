@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Pollution handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 // - Do not trigger disaster warnings when there is no pollution at all.
 // - Memory leak repaired.
 // - Improved pollution warning recipient handling.
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,7 +49,7 @@
 #include "profileDB.h"
 #include "GameSettings.h"
 #include "Cell.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "RandGen.h"
 
 #include "installationtree.h"
@@ -634,7 +635,7 @@ void Pollution::AddNukePollution(const MapPoint &cpos)
 		
 	}
 
-	for (sint32 i = 0; i < g_theConstDB->NukeKillTiles(); i++) {
+	for (sint32 i = 0; i < g_theConstDB->Get(0)->GetNukeKillsTiles(); i++) {
 		if(cpos.GetNeighborPosition((WORLD_DIRECTION)g_rand->Next(sint32(NOWHERE)), pos)) {
 //			Cell *cell = g_theWorld->GetCell(pos);
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
@@ -644,7 +645,7 @@ void Pollution::AddNukePollution(const MapPoint &cpos)
 			
 		}
 	}
-	m_history[0]+=g_theConstDB->GetPollutionCausedByNuke();
+	m_history[0]+=g_theConstDB->Get(0)->GetPollutionCausedByNuke();
 }
 
 

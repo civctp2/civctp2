@@ -33,6 +33,7 @@
 // - Corrected message recipients for the Gaia Controller messages.
 // - added check to make sure city pop is greater than 1 before city capture options
 // - added city leaves ruins options
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,7 +53,7 @@
 #include "SelItem.h"
 #include "SlicObject.h"
 #include "RandGen.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "gamesounds.h"
 #include "UnitData.h"
 #include "citydata.h"
@@ -179,7 +180,7 @@ STDEHANDLER(CaptureCityEvent)
         }
 
 		if(g_rand->Next(100) < 
-		   g_theConstDB->CaptureCityAdvanceChance() * 100) {
+		   g_theConstDB->Get(0)->GetCaptureCityAdvanceChance() * 100) {
 //Added by Martin Gühmann to allow city advance gaining from
 //a captured city.
 

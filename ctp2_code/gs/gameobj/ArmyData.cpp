@@ -111,9 +111,10 @@
 // - Added new limits for BarbarianSpawnBarbarian
 // - Changed HostileTerain to only be in affect if you are at war with the owner
 //   or it is unassigned
-// - added Slic execute commands
-// - modified sink to send the unit type 5-24-2007
-// - cleaned up beginturn moving stuff to ArmyData
+// - Added Slic execute commands
+// - Modified sink to send the unit type 5-24-2007
+// - Cleaned up beginturn moving stuff to ArmyData
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -134,7 +135,7 @@
 #include "buildingutil.h"
 #include "Cell.h"
 #include "cellunitlist.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "CTP2Combat.h"
 #include "ctpagent.h"
 #include "ctpai.h"
@@ -1468,7 +1469,7 @@ bool ArmyData::CheckActiveDefenders(MapPoint &pos, bool cargoPodCheck)
 // Parameters : -
 //
 // Globals    : g_theWorld:             World properties
-//              g_player:	            List of players
+//              g_player:               List of players
 //              g_theConstDB:           The const database
 //              g_network
 //              g_gevManager
@@ -1527,7 +1528,7 @@ void ArmyData::BeginTurn()
             for(i = 0; i < cell->GetNumTradeRoutes(); i++) {
                 TradeRoute route = cell->GetTradeRoute(i);
                 if(route->GetPiratingArmy().m_id == m_id) {
-                    g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetPiracyWasteCoefficient()));
+                    g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetPiracyWasteCoefficient()));
 					//added pirated strategic good? 
                     piratedByMe++;
                 }
@@ -2893,14 +2894,14 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	}
 
 	if(m_array[uindex].IsVeteran()) {
-		success += g_theConstDB->EliteSlaverBonus();
+		success += g_theConstDB->Get(0)->GetEliteSlaverBonus();
 	}
 
 	target_city.CD()->ModifySpecialAttackChance(UNIT_ORDER_SLAVE_RAID, success);
 
 	if(target_city.IsWatchful()) {
 		
-		death *= g_theConstDB->WatchfulCityDeathModifier();
+		death *= g_theConstDB->Get(0)->GetWatchfulCityDeathModifier();
 	}
 
 	target_city.SetWatchful();
@@ -3217,12 +3218,12 @@ ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
     //InformAI(UNIT_ORDER_UNDERGROUND_RAILWAY, point); //does nothing here but could be implemented
 
 	if(m_array[uindex].IsVeteran()) {
-		success += g_theConstDB->EliteAbolitionistBonus();
+		success += g_theConstDB->Get(0)->GetEliteAbolitionistBonus();
 	}
 
 	if(c.IsWatchful()) {
-		success *= g_theConstDB->WatchfulCitySuccessModifier();
-		death *= g_theConstDB->WatchfulCityDeathModifier();
+		success *= g_theConstDB->Get(0)->GetWatchfulCitySuccessModifier();
+		death *= g_theConstDB->Get(0)->GetWatchfulCityDeathModifier();
 	}
 
 	c.SetWatchful();
@@ -3308,8 +3309,8 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 	    (g_player[c.GetOwner()]->m_gold->GetLevel() + 5000) *
 	    static_cast<double>(c.PopCount()) * 
 	    (1 / distanceCost) *
-	    g_theConstDB->InciteUprisingGoldCoefficient();
-	double const    capitolPenalty  = c.IsCapitol() ? g_theConstDB->InciteUprisingCapitolPenalty() : 0.0;
+	    g_theConstDB->Get(0)->GetInciteUprisingGoldCoefficient();
+	double const    capitolPenalty  = c.IsCapitol() ? g_theConstDB->Get(0)->GetInciteUprisingCapitolPenalty() : 0.0;
 
 	sint32 const    cost            = static_cast<sint32>(baseCost + capitolPenalty);
 
@@ -3440,7 +3441,7 @@ ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 	sint32 uindex;
 
 	sint32 cost = 100;
-	cost = g_theConstDB->GetMaximumPartyCost();
+	cost = g_theConstDB->Get(0)->GetMaxPartyCost();
 
 	if(g_player[m_owner]->m_gold->GetLevel() < cost) {
 		return ORDER_RESULT_ILLEGAL;
@@ -3533,7 +3534,7 @@ ORDER_RESULT ArmyData::BioInfect(const MapPoint &point)
     //InformAI(UNIT_ORDER_BIO_INFECT, point); //does nothing here but could be implemented
 
 	if(m_array[uindex].IsVeteran()) {
-		chance += g_theConstDB->EliteTerroristBonus();
+		chance += g_theConstDB->Get(0)->GetEliteTerroristBonus();
 	}
 
 	SlicObject * so = NULL;
@@ -3576,7 +3577,7 @@ ORDER_RESULT ArmyData::BioInfect(const MapPoint &point)
 		so->AddCity(c) ;
 		g_slicEngine->Execute(so) ;
 
-		if(g_rand->Next(100) < sint32(g_theConstDB->BioInfectionTerroristDeathChance() * 100.0))
+		if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetBioInfectionTerroristDeathChance() * 100.0))
 			m_array[uindex].Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
 
 		
@@ -3634,7 +3635,7 @@ ORDER_RESULT ArmyData::Plague(const MapPoint &point)
     //InformAI(UNIT_ORDER_NANO_INFECT, point); //does nothing here but could be implemented 
 
 	if(m_array[uindex].IsVeteran()) {
-		chance += g_theConstDB->EliteTerroristBonus();
+		chance += g_theConstDB->Get(0)->GetEliteTerroristBonus();
 	}
 
 	if(c.IsBioImmune()) {
@@ -3675,7 +3676,7 @@ ORDER_RESULT ArmyData::Plague(const MapPoint &point)
 		so->AddCity(c) ;
 		g_slicEngine->Execute(so) ;
 
-		if(g_rand->Next(100) < sint32(g_theConstDB->BioInfectionTerroristDeathChance() * 100.0))
+		if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetBioInfectionTerroristDeathChance() * 100.0))
 			m_array[uindex].Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
 
 		
@@ -3735,7 +3736,7 @@ ORDER_RESULT ArmyData::NanoInfect(const MapPoint &point)
     InformAI(UNIT_ORDER_NANO_INFECT, point); 
 
 	if(m_array[uindex].IsVeteran()) {
-		chance += g_theConstDB->EliteTerroristBonus();
+		chance += g_theConstDB->Get(0)->GetEliteTerroristBonus();
 	}
 
 	AddSpecialActionUsed(m_array[uindex]);
@@ -3785,7 +3786,7 @@ ORDER_RESULT ArmyData::NanoInfect(const MapPoint &point)
 		so->AddCity(c) ;
 		g_slicEngine->Execute(so) ;
 
-		if(g_rand->Next(100) < sint32(g_theConstDB->NanoInfectionTerroristDeathChance() * 100.0))
+		if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetNanoInfectionTerroristDeathChance() * 100.0))
 			m_array[uindex].Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
 
 		return ORDER_RESULT_FAILED;
@@ -4092,7 +4093,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 
 	AddSpecialActionUsed(m_array[uindex]);
 
-	if(g_rand->Next(100) < sint32(g_theConstDB->ReformationChance() * 100.0)) {
+	if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetReformationChance() * 100.0)) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ReformCityUnit,
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c.m_id,
@@ -4118,7 +4119,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 	} else {
 		DPRINTF(k_DBG_GAMESTATE, ("Reformation failed\n"));
 		
-		if(g_rand->Next(100) < sint32(g_theConstDB->ReformationDeathChance() * 100.0)) {
+		if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetReformationDeathChance() * 100.0)) {
 			DPRINTF(k_DBG_GAMESTATE, ("And inquisitor died.\n"));
 			
 			m_array[uindex].Kill(CAUSE_REMOVE_ARMY_DIED_IN_REFORMATION, -1);
@@ -4180,20 +4181,20 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 		
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SubGold,
 							   GEA_Player, c.GetOwner(),
-							   GEA_Int, g_theConstDB->UnconvertedIndulgenceGold(),
+							   GEA_Int, g_theConstDB->Get(0)->GetUnconvertedIndulgenceGold(),
 							   GEA_End);
 		
 
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddGold,
 							   GEA_Player, m_owner,
-							   GEA_Int, g_theConstDB->UnconvertedIndulgenceGold(),
+							   GEA_Int, g_theConstDB->Get(0)->GetUnconvertedIndulgenceGold(),
 							   GEA_End);
 
 		
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddHappyTimer,
 							   GEA_City, c.m_id,
 							   GEA_Int, 1,
-							   GEA_Int, g_theConstDB->UnconvertedIndulgenceHappiness(),
+							   GEA_Int, g_theConstDB->Get(0)->GetUnconvertedIndulgenceHappiness(),
 							   GEA_Int, HAPPY_REASON_INDULGENCES,
 							   GEA_End);
 		
@@ -4202,16 +4203,16 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 		
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SubGold,
 							   GEA_Player, c.GetOwner(),
-							   GEA_Int, g_theConstDB->ConvertedIndulgenceGold(),
+							   GEA_Int, g_theConstDB->Get(0)->GetConvertedIndulgenceGold(),
 							   GEA_End);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddGold,
 							   GEA_Player, m_owner,
-							   GEA_Int, g_theConstDB->ConvertedIndulgenceGold(),
+							   GEA_Int, g_theConstDB->Get(0)->GetConvertedIndulgenceGold(),
 							   GEA_End);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddHappyTimer,
 							   GEA_City, c.m_id,
 							   GEA_Int, 1,
-							   GEA_Int, g_theConstDB->ConvertedIndulgenceHappiness(),
+							   GEA_Int, g_theConstDB->Get(0)->GetConvertedIndulgenceHappiness(),
 							   GEA_Int, HAPPY_REASON_INDULGENCES,
 							   GEA_End);
 		
@@ -4219,16 +4220,16 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 		
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SubGold,
 							   GEA_Player, c.GetOwner(),
-							   GEA_Int, g_theConstDB->OtherFaithIndulgenceGold(),
+							   GEA_Int, g_theConstDB->Get(0)->GetOtherFaithIndulgenceGold(),
 							   GEA_End);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddGold,
 							   GEA_Player, m_owner,
-							   GEA_Int, g_theConstDB->OtherFaithIndulgenceGold(),
+							   GEA_Int, g_theConstDB->Get(0)->GetOtherFaithIndulgenceGold(),
 							   GEA_End);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddHappyTimer,
 							   GEA_City, c.m_id,
 							   GEA_Int, 1,
-							   GEA_Int, g_theConstDB->OtherFaithIndulgenceHappiness(),
+							   GEA_Int, g_theConstDB->Get(0)->GetOtherFaithIndulgenceHappiness(),
 							   GEA_Int, HAPPY_REASON_INDULGENCES,
 							   GEA_End);
 	}
@@ -5271,7 +5272,7 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 				//4-28-2006 EMOD changed to allow fighters to move after attack but not attack again
 				if(m_array[i].GetDBRec()->GetMultipleAttacks())
 				{
-					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
+					m_array[i].DeductMoveCost(g_theConstDB->Get(0)->GetSpecialActionMoveCost(), out_of_fuel);
 				}
 				else if(m_array[i].GetDBRec()->GetMovementTypeAir())
 				{
@@ -5302,7 +5303,7 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 			}
 			else
 			{
-				if(r < g_theConstDB->BombardDestroyBuildingChance() * prob)
+				if(r < g_theConstDB->Get(0)->GetBombardDestroyBuildingChance() * prob)
 				{
 					c.DestroyRandomBuilding();
 				}
@@ -5324,7 +5325,7 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 			else
 			{
 				if(c.PopCount() > 1
-				&&(g_rand->Next(100) < g_theConstDB->BombardKillPopChance() * prob)
+				&&(g_rand->Next(100) < g_theConstDB->Get(0)->GetBombardKillPopChance() * prob)
 				){
 					DPRINTF(k_DBG_GAMESTATE, ("Removing one pop from 0x%lx\n", c.m_id));
 					c.CD()->ChangePopulation(-1);
@@ -5516,7 +5517,7 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 				//if(!m_array[i].GetDBRec()->GetMovementTypeAir()) {  //this allowed for multiple air bombard
 
 				if(m_array[i].GetDBRec()->GetMultipleAttacks()) {					
-					m_array[i].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
+					m_array[i].DeductMoveCost(g_theConstDB->Get(0)->GetSpecialActionMoveCost(), out_of_fuel);
 				} else if(m_array[i].GetDBRec()->GetMovementTypeAir()) {
 					m_array[i].DeductMoveCost(k_MOVE_COMBAT_COST, out_of_fuel);
 				} else {
@@ -9281,7 +9282,7 @@ bool ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 	if(!p)
 		return false;
 
-	double      distcost = g_theConstDB->InciteRevolutionCapitolPenalty();
+	double      distcost = g_theConstDB->Get(0)->GetInciteRevolutionCapitolPenalty();
 	MapPoint    start;
 	if (p->GetCapitolPos(start) && p->GetMaxEmpireDistance()) 
 	{
@@ -9294,9 +9295,9 @@ bool ArmyData::GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCos
 
 	distcost = std::max<double>(1.0, distcost);
 
-	double capitolPenalty = c.IsCapitol() ? g_theConstDB->InciteRevolutionCapitolPenalty() : 0.0;
+	double capitolPenalty = c.IsCapitol() ? g_theConstDB->Get(0)->GetInciteRevolutionCapitolPenalty() : 0.0;
 	double goldcost = p->m_gold->GetLevel();
-	double popcost = c.PopCount() * g_theConstDB->InciteRevolutionGoldCoefficient();
+	double popcost = c.PopCount() * g_theConstDB->Get(0)->GetInciteRevolutionGoldCoefficient();
 
 	attackCost = static_cast<sint32>(goldcost + popcost + distcost + capitolPenalty);
 
@@ -9338,11 +9339,11 @@ bool ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 
 	sint32 capitolPenalty = 0;
 	if(c.IsCapitol()) {
-		capitolPenalty = sint32(g_theConstDB->InciteUprisingCapitolPenalty());
+		capitolPenalty = sint32(g_theConstDB->Get(0)->GetInciteUprisingCapitolPenalty());
 	}
 	double cost = (g_player[c.GetOwner()]->m_gold->GetLevel() + 5000) *
 		static_cast<double>(c.PopCount()) * (1.0 / distcost) *
-		 g_theConstDB->InciteUprisingGoldCoefficient() +
+		 g_theConstDB->Get(0)->GetInciteUprisingGoldCoefficient() +
 		 capitolPenalty;
 
 	attackCost = static_cast<sint32>(cost);
@@ -10787,7 +10788,7 @@ bool ArmyData::CheckSink()
 	
 	// Lost at sea random chance
 	// Maybe move this code into an event
-	sint32 chance = g_theConstDB->PercentLostAtSea();
+	sint32 chance = g_theConstDB->Get(0)->GetChanceLostAtSea();
 	if( chance > 0
 	&&(!g_player[m_owner]->IsRobot()
 	|| !g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoSinking())

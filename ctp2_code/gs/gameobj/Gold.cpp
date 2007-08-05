@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Gold
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Do not trigger a warning when rushbuying causes a negative cashflow.
 // - Merged the constructors.
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -32,7 +36,7 @@
 #include "civarchive.h"
 #include "network.h"
 
-#include "ConstDB.h"
+#include "ConstRecord.h"
 
 #include "gstypes.h"
 
@@ -273,7 +277,7 @@ BOOL Gold::BankruptcyImminent() const
 
 	// Not needed: m_lost_to_rushbuy is already included through DeltaThisTurn.
 
-    double fudge = (double)(g_theConstDB->MaintenanceWarningFudgeFactor()) / 100.0;
+    double fudge = (double)(g_theConstDB->Get(0)->GetMaintenanceWarningFudgeFactor()) / 100.0;
     sint32 f_level = (sint32)((double)m_level * fudge);
 
     if (-delta >= f_level)

@@ -1,12 +1,32 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The material pool
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "MaterialPool.h"
@@ -15,10 +35,9 @@
 #include "net_action.h"
 #include "net_info.h"
 #include "player.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 
 extern Player **g_player;
-extern ConstDB *g_theConstDB;
 
 extern BOOL g_powerPointsMode;
 
@@ -51,7 +70,7 @@ void MaterialPool::AddMaterials(sint32 amt)
 void MaterialPool::CheatAddMaterials(sint32 amt)
 {
 	if((g_network.IsActive() && g_network.SetupMode()) || g_powerPointsMode) {
-		sint32 pointCost = sint32(double(amt) * g_theConstDB->PowerPointsToMaterialsConversion());
+		sint32 pointCost = sint32(double(amt) * g_theConstDB->Get(0)->GetPowerPointsToMaterials());
 		if(g_player[m_owner]->GetPoints() < pointCost)
 			return;
 		g_player[m_owner]->DeductPoints(pointCost);
@@ -71,7 +90,7 @@ void MaterialPool::CheatAddMaterials(sint32 amt)
 sint32 MaterialPool::CheatSubtractMaterials(sint32 amt)
 {
 	if((g_network.IsActive() && g_network.SetupMode()) | g_powerPointsMode) {
-		sint32 pointCost = sint32(double(amt) * g_theConstDB->PowerPointsToMaterialsConversion());
+		sint32 pointCost = sint32(double(amt) * g_theConstDB->Get(0)->GetPowerPointsToMaterials());
 		g_player[m_owner]->AddPoints(pointCost);
 
 		if(g_network.IsHost()) {

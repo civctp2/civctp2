@@ -27,6 +27,7 @@
 // - Do not generate an Assert popup when slaves revolt and take over a city.
 // - Do not generate an Assert popup when an army is destroyed in an attack.
 // - Added Elite and Leader Chance 6-4-2007
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@
 #include "WonderRecord.h"
 #include "player.h"
 #include "AICause.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "RandGen.h"
 #include "UnitPool.h"
 #include "director.h"
@@ -977,7 +978,7 @@ STDEHANDLER(BattleEvent)
 	{
 		for (sint32 k = 0; k < army.Num(); k++) {
 			bool out_of_fuel;
-			army[k].DeductMoveCost(g_theConstDB->SpecialActionMoveCost(),
+			army[k].DeductMoveCost(g_theConstDB->Get(0)->GetSpecialActionMoveCost(),
 								   out_of_fuel);
 		}
 	}
@@ -1024,19 +1025,19 @@ STDEHANDLER(AftermathEvent)
 		//add civil war here?  no because its in MoveEvent? Why?  EMOD
 
 		//end EMOD
-		if(g_rand->Next(100) < g_theConstDB->AssaultDestroyBuildingChance() * 100) {
+		if(g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultDestroyBuildingChance() * 100) {
 			//shouldn't constDB allow players to set how many buildings be destroyed? 
 			c.DestroyRandomBuilding();
 		}
 		//this code actually isn't used...
 		if(defender.Num() > 0) {
-			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->AssaultKillPopChance() * 100)) {
+			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultKillPopChance() * 100)) {
 				//emod allows for differnt city casualty rates instead of just one  6.22.2007
 				sint32 casualties = 0;
-				if (g_theConstDB->KillPopCasualties() < 0) {
+				if (g_theConstDB->Get(0)->GetCapturedCityKillPop() < 0) {
 					casualties = g_rand->Next(c.PopCount()) * -1 ;
 				} else {
-					casualties = g_theConstDB->KillPopCasualties() * -1;
+					casualties = g_theConstDB->Get(0)->GetCapturedCityKillPop() * -1;
 				}
 
 				c.CD()->ChangePopulation(casualties);  //Why is this hard coded? should be in ConstDB and should allow for random value
@@ -1109,21 +1110,21 @@ STDEHANDLER(AftermathEvent)
 			//TODO find out why its not running the leader & elite code
 			// apparently a '#' outcomented the value in constDB.txt
 			if( (army[i].GetAttack() > 0) 
-			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatLeaderChance() * 100.0))
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatLeaderChance() * 100.0))
 			&&  (army[i].IsElite()) //IsElite
 			){
 				g_player[attack_owner]->CreateLeader(); //Great Leader Code - Emod 6-5-2007
 			}
 			
 			if( (army[i].GetAttack() > 0) 
-			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatEliteChance() * 100.0))
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatEliteChance() * 100.0))
 			&&  (army[i].IsVeteran()) 
 			){
 				army[i].SetElite(); //elite code - Emod 6-5-2007
 			}
 			
 			if( (army[i].GetAttack() > 0)
-			&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0))
+			&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatVeteranChance() * 100.0))
 			&&  (!army[i].IsVeteran())
 			){
 				army[i].SetVeteran();
@@ -1143,18 +1144,18 @@ STDEHANDLER(AftermathEvent)
 	
 	for(i = 0; i < defender.Num() ; i++) {
 		if(defender[i].GetAttack() > 0 &&
-		   g_rand->Next(100) < sint32(g_theConstDB->CombatVeteranChance() * 100.0)) {
+		   g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatVeteranChance() * 100.0)) {
 			defender[i].SetVeteran();
 		}
 		if( (defender[i].GetAttack() > 0) 
-		&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatEliteChance() * 100.0))
+		&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatEliteChance() * 100.0))
 		&&  (defender[i].IsVeteran())
 		){
 			defender[i].SetElite();
 		}
 		//Great Leader Code - Emod 6-5-2007
 		if( (defender[i].GetAttack() > 0) 
-		&&  (g_rand->Next(100) < sint32(g_theConstDB->CombatLeaderChance() * 100.0))
+		&&  (g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatLeaderChance() * 100.0))
 		&&  (defender[i].IsElite())
 		){
 			g_player[defense_owner]->CreateLeader();
@@ -1280,7 +1281,7 @@ STDEHANDLER(MoveUnitsEvent)
 						
 
 
-						if(g_rand->Next(100) < g_theConstDB->CaptureKillPopChance() * 100) {
+						if(g_rand->Next(100) < g_theConstDB->Get(0)->GetCaptureKillPopChance() * 100) {
 							g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillPop,
 												   GEA_City, c.m_id,
 												   GEA_End);
@@ -1429,7 +1430,7 @@ STDEHANDLER(RemoveFranchiseEvent)
 	if(!args->GetUnit(0, lawyer)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, city)) return GEV_HD_Continue;
 
-	city.SetFranchiseTurnsRemaining(g_theConstDB->TurnsToSueFranchise());
+	city.SetFranchiseTurnsRemaining(g_theConstDB->Get(0)->GetTurnsToSueFranchise());
 	return GEV_HD_Continue;
 }
 

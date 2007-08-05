@@ -33,6 +33,7 @@
 // - Added EitherPreRequisite to allow flexible tech tree like civ4
 // - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
 // - Added commodityGold and GoldSupport to projected science
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -62,7 +63,7 @@
 #include "DifficultyRecord.h"   // g_theDifficultyDB
 #include "Diffcly.h"
 #include "profileDB.h"          // g_theProfileDB
-#include "ConstDB.h"            // g_theConstDB
+#include "ConstRecord.h"        // g_theConstDB
 #include "RandGen.h"            // g_rand
 #include "statswindow.h"
 #include "CivilisationPool.h"   // g_theCivilisationPool
@@ -75,33 +76,33 @@
 #include "buildingutil.h"
 #include "wonderutil.h"
 #include "MainControlPanel.h"
-#include <stdexcept>	        // overflow_error
+#include <stdexcept>            // overflow_error
 
 namespace
 {
-	char const	REPORT_ADVANCE_LOOP[]	= "Advance loop detected";
+    char const  REPORT_ADVANCE_LOOP[]   = "Advance loop detected";
     char const  REPORT_ADVANCE_SELF[]   = "Advance undiscoverable";
 }
 
 
 #define k_MAX_ADVANCE_TURNS 1000
 
-#define k_ADVANCES_VERSION_MAJOR	0								
-#define k_ADVANCES_VERSION_MINOR	0								
+#define k_ADVANCES_VERSION_MAJOR	0
+#define k_ADVANCES_VERSION_MINOR	0
 
 
 Advances::Advances(size_t a_Count)
 :
     m_owner                                 (PLAYER_UNASSIGNED),
-    m_size                                  (a_Count),    
-	m_researching                           (-1),
+    m_size                                  (a_Count),
+    m_researching                           (-1),
     m_age                                   (0),
     m_theLastAdvanceEnabledThisManyAdvances (0), 
-	m_total_cost                            (0),
-	m_discovered                            (0), 
-	m_hasAdvance                            (NULL),
-	m_canResearch                           (NULL),
-	m_turnsSinceOffered                     (NULL)
+    m_total_cost                            (0),
+    m_discovered                            (0), 
+    m_hasAdvance                            (NULL),
+    m_canResearch                           (NULL),
+    m_turnsSinceOffered                     (NULL)
 {
     Assert(m_size);
 	m_hasAdvance        = new uint8[m_size];
@@ -627,7 +628,7 @@ void Advances::ResetCanResearch(sint32 justGot)
 		}
 	}
 
-	sint32 minChoices = g_theConstDB->AdvanceChoicesMin();
+	sint32 minChoices = g_theConstDB->Get(0)->GetAdvanceChoicesMin();
 	sint32 numOffered = 0;
 	sint32 turnCutoff = 0xffff;
 	sint32 total = 0;

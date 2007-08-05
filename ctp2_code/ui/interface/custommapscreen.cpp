@@ -30,6 +30,7 @@
 //   problems, but I'm not sure what it did, so I don't know...)
 //   (JJB)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -47,7 +48,7 @@
 #include "aui_stringtable.h"
 #include "aui_action.h"
 
-#include "ConstDB.h"
+#include "ConstRecord.h"
 
 #include "civapp.h"
 #include "profileDB.h"
@@ -60,7 +61,6 @@
 #include "keypress.h"
 
 extern C3UI					*g_c3ui;
-extern ConstDB				*g_theConstDB;
 
 extern ProfileDB			*g_theProfileDB;
 extern CivApp				*g_civApp;
@@ -409,17 +409,17 @@ void custommapscreen_setValues(
 	
 	
 	sint32 forest =
-		(sint32)g_theConstDB->ForestDry() * wetdry +
-		(sint32)g_theConstDB->ForestWet() * ( 10 - wetdry );
+		(sint32)g_theConstDB->Get(0)->GetForestDry() * wetdry +
+		(sint32)g_theConstDB->Get(0)->GetForestWet() * ( 10 - wetdry );
 	sint32 grass =
-		(sint32)g_theConstDB->GrassDry() * wetdry +
-		(sint32)g_theConstDB->GrassWet() * ( 10 - wetdry );
+		(sint32)g_theConstDB->Get(0)->GetGrassDry() * wetdry +
+		(sint32)g_theConstDB->Get(0)->GetGrassWet() * ( 10 - wetdry );
 	sint32 plains =
-		(sint32)g_theConstDB->PlainsDry() * wetdry +
-		(sint32)g_theConstDB->PlainsWet() * ( 10 - wetdry );
+		(sint32)g_theConstDB->Get(0)->GetPlainsDry() * wetdry +
+		(sint32)g_theConstDB->Get(0)->GetPlainsWet() * ( 10 - wetdry );
 	sint32 desert =
-		(sint32)g_theConstDB->DesertDry() * wetdry +
-		(sint32)g_theConstDB->DesertWet() * ( 10 - wetdry );
+		(sint32)g_theConstDB->Get(0)->GetDesertDry() * wetdry +
+		(sint32)g_theConstDB->Get(0)->GetDesertWet() * ( 10 - wetdry );
 	
 
 	g_theProfileDB->SetPercentForest( sint32(forest / 10) );
@@ -431,14 +431,14 @@ void custommapscreen_setValues(
 	
 
 	sint32 white =
-		(sint32)g_theConstDB->WhiteCold() * warmcold +
-		(sint32)g_theConstDB->WhiteWarm() * ( 10 - warmcold );
+		(sint32)g_theConstDB->Get(0)->GetWhiteCold() * warmcold +
+		(sint32)g_theConstDB->Get(0)->GetWhiteWarm() * ( 10 - warmcold );
 	sint32 brown =
-		(sint32)g_theConstDB->BrownCold() * warmcold +
-		(sint32)g_theConstDB->BrownWarm() * ( 10 - warmcold );
+		(sint32)g_theConstDB->Get(0)->GetBrownCold() * warmcold +
+		(sint32)g_theConstDB->Get(0)->GetBrownWarm() * ( 10 - warmcold );
 	sint32 temperatureRangeAdjust =
-		(sint32)g_theConstDB->TemperatureRangeAdjustCold() * warmcold +
-		(sint32)g_theConstDB->TemperatureRangeAdjustWarm() * ( 10 - warmcold );
+		(sint32)g_theConstDB->Get(0)->GetTemperatureRangeAdjustCold() * warmcold +
+		(sint32)g_theConstDB->Get(0)->GetTemperatureRangeAdjustWarm() * ( 10 - warmcold );
 		
 	g_theProfileDB->SetPercentWhite( sint32(white / 10) );
 	g_theProfileDB->SetPercentBrown( sint32(brown / 10) );
@@ -466,15 +466,15 @@ void custommapscreen_setValues(
 	
 
 	sint32 richness =
-		(sint32)g_theConstDB->RichnessManygoods() * goodcount +
-		(sint32)g_theConstDB->RichnessFewgoods() * ( 10 - goodcount );
+		(sint32)g_theConstDB->Get(0)->GetRichnessManyGoods() * goodcount +
+		(sint32)g_theConstDB->Get(0)->GetRichnessFewGoods() * ( 10 - goodcount );
 #if 0   // Unused
 	sint32 riverCellWidth =
-		(sint32)g_theConstDB->RiverCellWidthManygoods() * goodcount +
-		(sint32)g_theConstDB->RiverCellWidthFewgoods() * ( 10 - goodcount );
+		(sint32)g_theConstDB->Get(0)->GetRiverCellWidthManyGoods() * goodcount +
+		(sint32)g_theConstDB->Get(0)->GetRiverCellWidthFewGoods() * ( 10 - goodcount );
 	sint32 riverCellHeight =
-		(sint32)g_theConstDB->RiverCellHeightManygoods() * goodcount +
-		(sint32)g_theConstDB->RiverCellHeightFewgoods() * ( 10 - goodcount );
+		(sint32)g_theConstDB->Get(0)->GetRiverCellHeightManyGoods() * goodcount +
+		(sint32)g_theConstDB->Get(0)->GetRiverCellHeightFewGoods() * ( 10 - goodcount );
 #endif
 	g_theProfileDB->SetPercentRichness( sint32(richness / 10) );
 }

@@ -48,6 +48,7 @@
 // - National Manager window will always be displayed on top of other 
 //   windows when activated. - July 24th 2005 Martin Gühmann
 // - Corrected crashes with mods.
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -80,9 +81,10 @@
 #include "citywindow.h"
 
 #include "colorset.h"                   // g_colorSet
-#include "ConstDB.h"                    // g_theConstDB
+#include "ConstRecord.h"                // g_theConstDB
 #include "director.h"
 #include "network.h"
+#include "Globals.h"
 
 extern C3UI *g_c3ui;
 
@@ -740,7 +742,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		sint32 happiness = static_cast<sint32>(cityData->GetHappiness());
 		sprintf(stringBuffer, "%d", happiness);
 		column->SetText(stringBuffer);
-		if (happiness < g_theConstDB->GetRiotLevel()) {
+		if (happiness < g_theConstDB->Get(0)->GetRiotLevel()) {
 			column->SetTextColor(colorCritical);
 			cityCritical = true;
 		} else
@@ -792,7 +794,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		sint32 pollution = cityData->GetPollution();
 		sprintf(stringBuffer, "%d", pollution);
 		column->SetText(stringBuffer);
-		if (pollution > g_theConstDB->LocalPollutionLevel()) {
+		if (pollution > g_theConstDB->Get(0)->GetLocalPollutionLevel()) {
 			column->SetTextColor(colorCritical);
 			cityCritical = true;
 		} else

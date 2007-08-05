@@ -32,6 +32,7 @@
 // - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
 // - Added sync check for the new map icon database. (27-Mar-2007 Martin Gühmann)
 // - Added sync check for the new map database. (27-Mar-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,7 +59,7 @@
 #include "CitySizeRecord.h"
 #include "CityStyleRecord.h"
 #include "CivilisationRecord.h"
-#include "ConstDB.h"                   // Old database
+#include "ConstRecord.h"
 #include "DifficultyRecord.h"
 #include "DiplomacyRecord.h"
 #include "DiplomacyProposalRecord.h"
@@ -114,8 +115,7 @@ extern  RandomGenerator         *g_rand;
 
 // The Databases
 extern  ProfileDB               *g_theProfileDB;
-extern  StringDB    *g_theStringDB ;
-extern  ConstDB                 *g_theConstDB ;
+extern  StringDB                *g_theStringDB ;
 extern  OzoneDatabase           *g_theUVDB ;
 
 // The Pools

@@ -74,6 +74,7 @@
 // - Added DestroyOnePerCiv to ResetCityOwner 6-4-2007
 // - Added Elite Bonus 6-6-2007
 // - Added LeaderBonus if in Stack - Like Cradle 6-6-2007
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -99,7 +100,7 @@
 #include "citydata.h"
 #include "citywindow.h"
 #include "CivilisationPool.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "Diffcly.h"
 #include "director.h"
 #include "FeatTracker.h"
@@ -498,7 +499,7 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
     out_of_fuel = false;
     if (rec->GetNoFuelThenCrash())
     {
-		m_fuel -= g_theConstDB->NonSpaceFuelCost();
+		m_fuel -= g_theConstDB->Get(0)->GetNonSpaceFuelCost();
 
 		if (m_fuel <= 0) {
 			CheckForRefuel();//refuel the unit if it's in a city, airbase, or being transported
@@ -1149,7 +1150,7 @@ bool UnitData::CanRustle(CellUnitList const & defender) const
 	if (defender.GetOwner() == GetOwner())
 		return false;
 
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
+	if (GetMovementPoints() < g_theConstDB->Get(0)->GetSpecialActionMoveCost())
 		return false;
 
 	const UnitRecord *attack_rec = GetDBRec();
@@ -1174,7 +1175,7 @@ bool UnitData::CanRustle(CellUnitList const & defender) const
 bool UnitData::CanConvertCity(Unit city) const 
 {
     return (city.GetOwner() != GetOwner()) 
-        && (GetMovementPoints() >= g_theConstDB->SpecialActionMoveCost());
+        && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
 }
 
 //----------------------------------------------------------------------------
@@ -1403,7 +1404,7 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 	sint32 f = (sint32)(rec->GetFirepower() /  
 		defender.GetDBRec()->GetArmor()); 
 	sint32 n;
-	bool canBombard = rec->GetBombRounds(n);			
+	bool canBombard = rec->GetBombRounds(n);
 	Assert(canBombard);
 	if(!canBombard)
 		n = 0;
@@ -1420,9 +1421,9 @@ void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 
 	double dmr = 1.0/defender.GetHPModifier(); 
 	if (IsVeteran())  //copy and make for elite units
-		p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
+		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
 	if (IsElite())  //just an increase in veteran coefficient-- for now
-		p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
+		p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
 	
 	for (sint32 i = 0; i < n; ++i) 
     { 
@@ -1458,11 +1459,11 @@ void UnitData::BombardOneRound(const UnitRecord *rec, Unit &defender,
 
     if (IsVeteran())  //copy and make for elite units
     {
-        p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
+        p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
     }
     if (IsElite())  //copy and make for elite units
     {
-        p += sint32(double(p) * g_theConstDB->GetVetCoef()); 
+        p += sint32(double(p) * g_theConstDB->Get(0)->GetVeteranCoef()); 
     }
 
     p  = int (p *(1.0 + dbonus)); 
@@ -1561,10 +1562,10 @@ void UnitData::FightOneRound(Unit did, double defenders_bonus,
 	double a = GetAttack(GetDBRec(), did);
 	
 	if (IsVeteran()) {  //copy and make for elite units
-		a += a * g_theConstDB->GetVetCoef(); 
+		a += a * g_theConstDB->Get(0)->GetVeteranCoef(); 
 	} 
 	if (IsElite()) {  //copy and make for elite units
-		a += a * g_theConstDB->GetVetCoef(); 
+		a += a * g_theConstDB->Get(0)->GetVeteranCoef(); 
 	} 
 	
 	Assert(0.00001f < a+d); 
@@ -1853,9 +1854,9 @@ bool UnitData::Settle()
 		return false;
 	}
 
-	if(m_movement_points < g_theConstDB->SpecialActionMoveCost() &&
+	if(m_movement_points < g_theConstDB->Get(0)->GetSpecialActionMoveCost() &&
 	   !Flag(k_UDF_FIRST_MOVE)) {
-		DPRINTF(k_DBG_GAMESTATE, ("No movement (%lf < %lf), FirstMove: %d\n", m_movement_points, g_theConstDB->SpecialActionMoveCost(),
+		DPRINTF(k_DBG_GAMESTATE, ("No movement (%lf < %lf), FirstMove: %d\n", m_movement_points, g_theConstDB->Get(0)->GetSpecialActionMoveCost(),
 								  Flag(k_UDF_FIRST_MOVE)));
 
 		if(!g_theProfileDB->AllowAISettleMoveCheat()) {
@@ -2523,7 +2524,7 @@ bool UnitData::CanInterceptTrade() const
 	if (!GetDBRec()->GetCanPirate())
 		return false;
 
-	if (GetMovementPoints() < g_theConstDB->SpecialActionMoveCost())
+	if (GetMovementPoints() < g_theConstDB->Get(0)->GetSpecialActionMoveCost())
 		return false;
 
     for (sint32 i = cell->GetNumTradeRoutes() - 1; i >= 0; i--) 
@@ -3143,8 +3144,8 @@ void UnitData::CityRadiusFunc(const MapPoint &pos)
 	if(cell->GetCity().m_id != (0) &&
 	   cell->GetCity().GetOwner() != m_owner &&
 	   cell->GetCity().IsCapitol() &&
-	   g_rand->Next(100) < sint32(g_theConstDB->HearGossipChance() * 100.0)) {
-	   	Unit unit = cell->GetCity();
+	   g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetHearGossipChance() * 100.0)) {
+		Unit unit = cell->GetCity();
 		HearGossip(unit);
 	}
 }
@@ -3270,11 +3271,11 @@ void UnitData::EndTurn()
 		||  (g_theWorld->IsInstallation(m_pos) && terrainutil_HasFort(m_pos))
         // || (PositionHasHealingUnit -> for supply trucks, but AI needs to learn
 		){
-			m_hp += maxHp * g_theConstDB->CityHealRate();
+			m_hp += maxHp * g_theConstDB->Get(0)->GetCityHealRate();
 		} 
 		else 
 		{
-			m_hp += maxHp * g_theConstDB->NormalHealRate();
+			m_hp += maxHp * g_theConstDB->Get(0)->GetNormalHealRate();
 		}
 		
 		m_hp = std::min(m_hp, maxHp);
@@ -3282,7 +3283,7 @@ void UnitData::EndTurn()
 
 	if(rec->GetNoFuelThenCrash()) {
 		if(!CheckForRefuel() && !Flag(k_UDF_IN_SPACE)) {
-			m_fuel -= g_theConstDB->NonSpaceFuelCost() * sint32(m_movement_points / 100.0);
+			m_fuel -= g_theConstDB->Get(0)->GetNonSpaceFuelCost() * sint32(m_movement_points / 100.0);
 
 			if(m_fuel <= 0) {
 				Unit me(m_id);
@@ -3468,7 +3469,7 @@ double UnitData::GetPositionDefense(const Unit &attacker) const
 	} 
 
 	if(Flag(k_UDF_IS_ENTRENCHED)) {
-		def += basedef * g_theConstDB->GetEntrenchmentBonus();
+		def += basedef * g_theConstDB->Get(0)->GetEntrenchmentBonus();
 	}
 
 	double terrain_bonus = 0.0;
@@ -3834,7 +3835,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 
 	if (Flag(k_UDF_IS_VET)) 
     {
-		successRate += g_theConstDB->EliteSpyBonus();
+		successRate += g_theConstDB->Get(0)->GetEliteSpyBonus();
 	}
 	c.ModifySpecialAttackChance(UNIT_ORDER_STEAL_TECHNOLOGY, successRate);
 	c.SetWatchful();
@@ -4238,7 +4239,7 @@ void UnitData::HearGossip(Unit c)
 
 			g_player[m_owner]->m_vision->CopyCircle(g_player[oplayer]->m_vision,
 													center,
-													g_theConstDB->GossipMapRadius());
+													g_theConstDB->Get(0)->GetGossipMapRadius());
 				
 			break;
 		case 1:
@@ -4481,14 +4482,14 @@ bool UnitData::IsCloaked() const
 void UnitData::Cloak()
 {
     bool out_of_fuel; 
-	DeductMoveCost(Unit(m_id), g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
+	DeductMoveCost(Unit(m_id), g_theConstDB->Get(0)->GetSpecialActionMoveCost(), out_of_fuel);
 	SetFlag(k_UDF_IS_CLOAKED);
 }
 
 void UnitData::Uncloak()
 {
     bool out_of_fuel; 
-	DeductMoveCost(Unit(m_id), g_theConstDB->SpecialActionMoveCost(), out_of_fuel);
+	DeductMoveCost(Unit(m_id), g_theConstDB->Get(0)->GetSpecialActionMoveCost(), out_of_fuel);
 	ClearFlag(k_UDF_IS_CLOAKED);
 }
 
@@ -5395,7 +5396,7 @@ bool UnitData::CanExecuteNextTo
 {
     return (GetDBRec()->*a_HasFunction)()
         && m_pos.IsNextTo(a_Position)
-        && (GetMovementPoints() >= g_theConstDB->SpecialActionMoveCost());
+        && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
 }
 
 sint32 UnitData::CanPlantNuke(const MapPoint &pos) const 
@@ -5474,7 +5475,7 @@ sint32 UnitData::CanExpel(const MapPoint &pos) const
 {
     return (GetDBRec()->GetAttack() > 0.0)
         && m_pos.IsNextTo(pos)
-        && (GetMovementPoints() >= g_theConstDB->SpecialActionMoveCost());
+        && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
 }
 
 void UnitData::AddEndGameObject(sint32 type)
@@ -5704,7 +5705,7 @@ bool UnitData::CanPerformSpecialAction() const
 	if(GetFirstMoveThisTurn())
 		return true;
 
-	if(m_movement_points < g_theConstDB->SpecialActionMoveCost())
+	if(m_movement_points < g_theConstDB->Get(0)->GetSpecialActionMoveCost())
 		return false;
 
 	if(Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN))

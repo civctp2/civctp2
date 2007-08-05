@@ -40,13 +40,14 @@
 //   terrainutil_HasColony by E (4-25-2006) fo future use
 // - implemented above and added HasMinefield by E 5-30-2006
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-// - added CanBuildAlly and CanBuildWasteland checks
-// - added outcommented infrastructure flags
-// - added IsWonder Check to specialbuildat
-// - added HasIrrigation method
-// - added HasWonder method
+// - Added CanBuildAlly and CanBuildWasteland checks
+// - Added outcommented infrastructure flags
+// - Added IsWonder Check to specialbuildat
+// - Added HasIrrigation method
+// - Added HasWonder method
 // - FINALLY got contiguous irrigation to work 4.12.2007
 // - City Radius tileimps
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -69,7 +70,7 @@
 #include "MaterialPool.h"
 #include "gaiacontroller.h"
 #include "AgreementMatrix.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "installation.h"
 #include "CityInfluenceIterator.h"
 #include "tiledmap.h"
@@ -1342,7 +1343,7 @@ bool terrainutil_GetSomethingOwnsCell(MapPoint const & pos, sint32 owner, Unit i
 		Unit city = g_player[owner]->m_all_cities->Access(i);
 		if(ignoreCity.m_id != 0 && city.m_id == ignoreCity.m_id) continue;
 		
-		if(MapPoint::GetSquaredDistance(pos, city.RetPos()) <= g_theConstDB->GetBorderSquaredRadius()) {
+		if(MapPoint::GetSquaredDistance(pos, city.RetPos()) <= g_theConstDB->Get(0)->GetBorderSquaredRadius()) {
 			return true;
 		}
 	}

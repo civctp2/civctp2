@@ -28,6 +28,7 @@
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
 //   - April 24th 2005 Martin Gühmann
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -64,7 +65,7 @@
 #include "net_rand.h"
 #include "net_ready.h"
 
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "Score.h"
 #include "GameOver.h"
 #include "GameSettings.h"
@@ -316,7 +317,7 @@ sint32 NewTurnCount::GetCurrentRound()
 void NewTurnCount::RunNewYearMessages(void)
 {
 	
-	if (GetCurrentYear() >= g_theConstDB->GetEndOfGameYearEarlyWarning()) 
+	if (GetCurrentYear() >= g_theConstDB->Get(0)->GetEndOfGameYearEarlyWarning()) 
 	{
 		if(!m_sentGameAlmostOverMessage) 
 		{
@@ -326,7 +327,7 @@ void NewTurnCount::RunNewYearMessages(void)
 		}
 	}
 
-	if(GetCurrentYear() >= g_theConstDB->GetEndOfGameYear()) 
+	if(GetCurrentYear() >= g_theConstDB->Get(0)->GetEndOfGameYear()) 
 	{
 		if(!m_sentGameOverMessage) 
 		{
@@ -484,7 +485,7 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 			int i;
 			int n = player->GetAllCitiesList()->Num(); 
 			double prod_total = 0.0;
-			double fudge = (double)(g_theConstDB->SupportWarningFudgeFactor()) / 100.0;
+			double fudge = (double)(g_theConstDB->Get(0)->GetSupportWarningFudgeFactor()) / 100.0;
 			for (i=0; i<n; i++) { 
 				Unit *unit = &(player->GetAllCitiesList()->Access(i));
 				if (!(unit->IsCity()))

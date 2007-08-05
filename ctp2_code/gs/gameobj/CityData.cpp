@@ -188,6 +188,7 @@
 // - Added code so cities with a trade route through them can collect some gold
 //   this could be implemented by a wonder of feat (in the future) or should it
 //   be standard? it would add value to cities. - E 6.10.2007 
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -217,7 +218,7 @@
 #include "civarchive.h"
 #include "CivilisationPool.h"
 #include "colorset.h"
-#include "ConstDB.h"                    // g_theConstDB
+#include "ConstRecord.h"                    // g_theConstDB
 #include "DB.h"
 #include "DifficultyRecord.h"
 #include "Diplomat.h"                   // To be able to retrieve the current strategy
@@ -678,6 +679,8 @@ void CityData::Serialize(CivArchive &archive)
 			{
 				for(i = 0; i < g_theResourceDB->NumRecords(); ++i)
 				{
+					// This does not work for the nuclear detente scenario
+		//			DPRINTF(k_DBG_GAMESTATE, ("%s: GoodDistNew: %i, GoodDistOld: \t%i, \t%i, \t%i\n", m_name, tmpDistanceToGood[j], m_distanceToGood[i], j, i));
 					if(tmpDistanceToGood[j] > 0 && tmpDistanceToGood[j] == m_distanceToGood[i])
 					{
 						m_collectingResources.AddResource(i, +copyCollectingResources[j]);
@@ -945,7 +948,7 @@ void CityData::Initialize(sint32 settlerType)
 
 	FindGoodDistances();
 
-	GenerateBorders(center_point, m_owner, g_theConstDB->GetBorderIntRadius(), g_theConstDB->GetBorderSquaredRadius());
+	GenerateBorders(center_point, m_owner, g_theConstDB->Get(0)->GetBorderIntRadius(), g_theConstDB->Get(0)->GetBorderSquaredRadius());
 
 	UpdateSprite();
 
@@ -1395,7 +1398,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 
 	// Modified by kaan to address bug # 12
 	// Prevent city from revolting twice in the same turn.
-	m_min_turns_revolt = static_cast<uint8>(g_theConstDB->GetMinTurnsBetweenRevolt()); 
+	m_min_turns_revolt = static_cast<uint8>(g_theConstDB->Get(0)->GetMinTurnsBetweenRevolts());
 }
 
 //----------------------------------------------------------------------------
@@ -1669,11 +1672,11 @@ void CityData::DoLocalPollution()
 	if(!g_theGameSettings->GetPollution())
 		return;
 
-	if(m_total_pollution < g_theConstDB->LocalPollutionLevel())
+	if(m_total_pollution < g_theConstDB->Get(0)->GetLocalPollutionLevel())
 		return;
 
-	double diff = double(m_total_pollution) - g_theConstDB->LocalPollutionLevel();
-	double chance = diff * g_theConstDB->LocalPollutionChance();
+	double diff = double(m_total_pollution) - g_theConstDB->Get(0)->GetLocalPollutionLevel();
+	double chance = diff * g_theConstDB->Get(0)->GetLocalPollutionChance();
 
 	
 	if ((chance > 0.10) &&
@@ -1850,7 +1853,7 @@ sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_
 {
 
 	if(m_bioInfectionTurns > 0){
-		gross_production -= static_cast<sint32>(ceil(gross_production * g_theConstDB->GetBioInfectionProductionCoef()));
+		gross_production -= static_cast<sint32>(ceil(gross_production * g_theConstDB->Get(0)->GetBioInfectionProductionCoef()));
 	}
 
 	crime_loss = CrimeLoss(static_cast<sint32>(gross_production));
@@ -1858,7 +1861,7 @@ sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_
 	double net_production = gross_production - crime_loss;
 
 	if(m_franchise_owner >= 0)
-		franchise_loss = static_cast<sint32>(ceil(net_production * g_theConstDB->GetFranchiseEffect()));
+		franchise_loss = static_cast<sint32>(ceil(net_production * g_theConstDB->Get(0)->GetFranchiseEffect()));
 	else
 		franchise_loss = 0;
 
@@ -3181,8 +3184,8 @@ void CityData::CalculateGrowthRate(){
 
 	if(m_food_delta >= 0) {
 		m_growth_rate = static_cast<sint32>(baseRate * m_growth_rate);
-		if(m_growth_rate > g_theConstDB->GetMaxAbsoluteGrowthRate())
-			m_growth_rate = g_theConstDB->GetMaxAbsoluteGrowthRate();
+		if(m_growth_rate > g_theConstDB->Get(0)->GetMaxAbsoluteGrowthRate())
+			m_growth_rate = g_theConstDB->Get(0)->GetMaxAbsoluteGrowthRate();
 
 		if(m_population > g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords() - 1)->GetPopulation())
 			m_growth_rate = 0;
@@ -4179,8 +4182,8 @@ void CityData::CheckRiot()
 	   m_owner == g_slicEngine->GetTutorialPlayer())
 		return;
 
-	if(m_happy->GetHappiness() < g_theConstDB->GetRiotLevel()) {
-		if(g_rand->Next(100) < ((g_theConstDB->GetRiotLevel() - m_happy->GetHappiness()) * 
+	if(m_happy->GetHappiness() < g_theConstDB->Get(0)->GetRiotLevel()) {
+		if(g_rand->Next(100) < ((g_theConstDB->Get(0)->GetRiotLevel() - m_happy->GetHappiness()) * 
 								g_player[m_owner]->GetRiotChance())) {
 			m_is_rioting = TRUE;
 			
@@ -4545,7 +4548,7 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	if(category == m_build_category_at_begin_turn) {
 		m_shieldstore = m_shieldstore_at_begin_turn;
 	} else {
-		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * g_theConstDB->GetChangeCurrentlyBuildingItemPenalty());
+		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 	}
 	return true;
 }
@@ -4859,7 +4862,7 @@ void CityData::GetNuked(UnitDynamicArray &killList)
 	
 	
 	sint32 pn = PopCount();
-	sint32 kill = sint32(double(pn) * g_theConstDB->NukePopulationPercentage());
+	sint32 kill = sint32(double(pn) * g_theConstDB->Get(0)->GetNukePopulationPercentage());
 
 	if(pn >= 3) {
 		sint32 i;
@@ -4924,7 +4927,7 @@ bool CityData::HasBeenSpiedUpon() const
 
 void CityData::SetSpiedUpon()
 {
-	m_spied_upon = g_theConstDB->GetSpiedUponWarinessTimer();
+	m_spied_upon = g_theConstDB->Get(0)->GetSpiedUponWarinessTimer();
 }
 
 //see ORDER_RESULT UnitData::NullifyWalls
@@ -4998,14 +5001,14 @@ bool CityData::IsWatchful() const
 
 void CityData::SetWatchful()
 {
-	m_watchfulTurns = g_theConstDB->WatchfulCityTurns();
+	m_watchfulTurns = g_theConstDB->Get(0)->GetWatchfulCityTurns();
 }
 
 void CityData::ModifySpecialAttackChance(UNIT_ORDER_TYPE attack,
                                          double &chance)
 {
 	if(IsWatchful()) {
-		chance *= g_theConstDB->WatchfulCitySuccessModifier();
+		chance *= g_theConstDB->Get(0)->GetWatchfulCitySuccessModifier();
 	}
 	switch(attack) {
 		case UNIT_ORDER_BIO_INFECT:
@@ -5221,7 +5224,7 @@ void CityData::CleanupUprising(Army &sa)
 void CityData::Plague(sint32 player)
 {
 	sint32 pn = PopCount();
-	sint32 kill = sint32(double(pn) * g_theConstDB->BioTerrorKillPercentage());
+	sint32 kill = sint32(double(pn) * g_theConstDB->Get(0)->GetPlagueKillPercentage());
 
 	if(kill < 1 && pn > 1) {
 		kill = 1;
@@ -5241,21 +5244,21 @@ void CityData::BioInfect( sint32 player )
 {
 
 	m_bioInfectedBy = player;
-	m_bioInfectionTurns = g_theConstDB->BioInfectionTurns();
-	AddHappyTimer(g_theConstDB->BioInfectionTurns(),
-	              g_theConstDB->BioInfectionUnhappiness(), 
+	m_bioInfectionTurns = g_theConstDB->Get(0)->GetBioInfectionTurns();
+	AddHappyTimer(g_theConstDB->Get(0)->GetBioInfectionTurns(),
+	              g_theConstDB->Get(0)->GetBioInfectionUnhappiness(), 
 	              HAPPY_REASON_BIO_INFECTION);
 }
 
 void CityData::NanoInfect( sint32 player )
 {
 	m_nanoInfectedBy = player;
-	m_nanoInfectionTurns = g_theConstDB->NanoInfectionTurns();
+	m_nanoInfectionTurns = g_theConstDB->Get(0)->GetNanoInfectionTurns();
 	DPRINTF(k_DBG_GAMESTATE, ("City %lx: all buildings and wonders destroyed\n", uint32(m_home_city)));
 	
 	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(m_built_improvements & ((uint64)1 << i)) {
-			if(g_rand->Next(100) < (g_theConstDB->GetNanoBuildingKillPercentage() * 100.0)) {
+			if(g_rand->Next(100) < (g_theConstDB->Get(0)->GetNanoBuildingKillPercentage() * 100.0)) {
 				DestroyImprovement(i);
 			}
 		}
@@ -5278,7 +5281,7 @@ void CityData::SpreadBioTerror()
 		if ((c.IsBioImmune()) || (c.IsBioInfected()))
 			continue;
 
-		if(g_rand->Next(100) < sint32(g_theConstDB->BioInfectionSpreadChance()
+		if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetBioInfectionSpreadChance()
 			                          * 100.0)) {
 			c.BioInfect(0);
 			SlicObject *so = new SlicObject("047InfectedViaTrade");
@@ -5300,7 +5303,7 @@ void CityData::SpreadNanoTerror()
 		if ((c.IsNanoImmune()) || (c.IsNanoInfected()))
 			continue;
 
-		if(g_rand->Next(100) < sint32(g_theConstDB->NanoInfectionSpreadChance()
+		if(g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetNanoInfectionSpreadChance()
 			                          * 100.0)) {
 			c.NanoInfect(0);
 			SlicObject *so = new SlicObject("047InfectedViaTrade");
@@ -5348,8 +5351,8 @@ void CityData::Unconvert(bool makeUnhappy)
 	m_convertedTo = -1;
 	m_convertedGold = 0;
 	if(makeUnhappy) {
-		AddHappyTimer(g_theConstDB->ReformationHappinessTime(),
-		              g_theConstDB->ReformationHappinessAmount(),
+		AddHappyTimer(g_theConstDB->Get(0)->GetReformationHappinessTime(),
+		              g_theConstDB->Get(0)->GetReformationHappinessAmount(),
 		              HAPPY_REASON_REFORMATION);
 	}
 }
@@ -5528,7 +5531,7 @@ void CityData::ResetCityOwner(sint32 owner)
 
 	m_lastCelebrationMsg = -1;
 //emod TODO maybe borders should be set to zero once captured and restored after conquestdistress?
-	GenerateBorders(m_home_city.RetPos(), m_owner, g_theConstDB->GetBorderIntRadius(), g_theConstDB->GetBorderSquaredRadius());
+	GenerateBorders(m_home_city.RetPos(), m_owner, g_theConstDB->Get(0)->GetBorderIntRadius(), g_theConstDB->Get(0)->GetBorderSquaredRadius());
 
 	if(m_owner == m_founder) {
 		g_player[m_owner]->m_score->AddCityRecaptured();
@@ -5764,7 +5767,7 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 			m_alreadySoldABuilding = TRUE;
 		}
 		sint32 gold = sint32(double(g_theBuildingDB->Get(which, g_player[m_owner]->GetGovernmentType())->GetProductionCost()) * 
-			g_theConstDB->BuildingProductionToValueModifier());
+			g_theConstDB->Get(0)->GetBuildingProductionToValueModifier());
 		if(byChoice)
 			g_player[m_owner]->m_gold->AddGold(gold);
 		else
@@ -6676,7 +6679,7 @@ bool CityData::CanBuildWonder(sint32 type) const
 	////////////////////////////////////////////////////////////
 	// emod to limit number of wonders in a city
 	// causes delay/crash because m_builtwonders not initialized?
-	if(GetNumCityWonders() >= g_theConstDB->GetMaxCityWonders())
+	if(GetNumCityWonders() >= g_theConstDB->Get(0)->GetMaxCityWonders())
 	{
 		return false;
 	}
@@ -7058,8 +7061,8 @@ void CityData::AddConversionUnhappiness(sint32 who)
 		
 		m_happy->RemoveTimerReason(HAPPY_REASON_ATTACKED_CONVERTER);
 
-		m_happy->AddTimer(g_theConstDB->AttackConverterUnhappinessTurns(),
-		                  g_theConstDB->AttackConverterUnhappinessAmount(),
+		m_happy->AddTimer(g_theConstDB->Get(0)->GetAttackConverterUnhappinessTurns(),
+		                  g_theConstDB->Get(0)->GetAttackConverterUnhappinessAmount(),
 		                  HAPPY_REASON_ATTACKED_CONVERTER);
 	}
 }
@@ -7197,13 +7200,13 @@ void CityData::CheckForSlaveUprising()
 		}
 	}
 	if (double(numMilitaryUnits) >= 
-	        (double(numSlaves) / double(g_theConstDB->SlavesPerMilitaryUnit()))
+	        (double(numSlaves) / double(g_theConstDB->Get(0)->GetSlavesPerMilitaryUnit()))
        )
 		return;
-	sint32 over = numSlaves - (numMilitaryUnits * g_theConstDB->SlavesPerMilitaryUnit());
+	sint32 over = numSlaves - (numMilitaryUnits * g_theConstDB->Get(0)->GetSlavesPerMilitaryUnit());
 
 	
-	sint32 chance = over * g_theConstDB->UprisingChancePerUnguardedSlave();
+	sint32 chance = over * g_theConstDB->Get(0)->GetUprisingChancePerUnguardedSlave();
 
 	if(g_rand->Next(100) < chance) {
 		
@@ -7218,7 +7221,7 @@ bool CityData::NeedToDoUprising() const
 
 void CityData::Disband()
 {
-	if(PopCount() > g_theConstDB->MaxDisbandSize()) {
+	if(PopCount() > g_theConstDB->Get(0)->GetMaxDisbandSize()) {
 		
 		return;
 	}
@@ -7337,7 +7340,7 @@ sint32 CityData::CityGrowthCoefficient()
 	double value = 0.0;
 	m_home_city.GetDBRec()->GetCityGrowthCoefficient(value);
 
-	return static_cast<sint32>(g_theConstDB->CityGrowthCoefficient() * value);
+	return static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient() * value);
 }
 
 void CityData::DestroyWonder(sint32 which)
@@ -8098,7 +8101,7 @@ void CityData::FindGoodDistances()
 	sint32 goodsToFind = 0;
 	sint32 specialdistance = 0;		//EMOD
 	for(i = 0; i < g_theResourceDB->NumRecords(); i++) {
-		if(g_theWorld->GetGoodValue(i) <= g_theConstDB->GetMaxGoodValue()) {
+		if(g_theWorld->GetGoodValue(i) <= g_theConstDB->Get(0)->GetMaxGoodValue()) {
 			goodsToFind++;
 		}
 //EMOD for special goods		
@@ -8129,14 +8132,14 @@ sint32 CityData::GetDistanceToGood(sint32 good)
 void CityData::RemoveBorders()
 {
 	terrainutil_RemoveBorders(m_home_city.RetPos(), m_owner,
-	                          g_theConstDB->GetBorderIntRadius(),
-	                          g_theConstDB->GetBorderSquaredRadius(),
+	                          g_theConstDB->Get(0)->GetBorderIntRadius(),
+	                          g_theConstDB->Get(0)->GetBorderSquaredRadius(),
 	                          m_home_city);
 }
 
 void CityData::ResetStarvationTurns()
 {
-	m_starvation_turns = g_theConstDB->GetBaseStarvationProtection();
+	m_starvation_turns = g_theConstDB->Get(0)->GetBaseStarvationProtection();
 	m_starvation_turns += buildingutil_GetStarvationProtection(GetEffectiveBuildings());	
 }
 
@@ -8144,7 +8147,7 @@ sint32 CityData::GetStarvationProtection()
 {
 	sint32 turns;
 
-	turns = g_theConstDB->GetBaseStarvationProtection();
+	turns = g_theConstDB->Get(0)->GetBaseStarvationProtection();
 	turns += buildingutil_GetStarvationProtection(GetEffectiveBuildings());	
 
 	return turns;
@@ -8594,12 +8597,12 @@ void CityData::CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &conv
 
 	if(m_convertedTo >= 0) {
 		if(m_convertedBy == CONVERTED_BY_CLERIC) {
-			convertedGold = static_cast<sint32>(gold * g_theConstDB->ClericConversionFactor());
+			convertedGold = static_cast<sint32>(gold * g_theConstDB->Get(0)->GetClericConversionFactor());
 		} else if(m_convertedBy == CONVERTED_BY_TELEVANGELIST) {
 			if(buildingutil_GetDoubleTelevangelism(GetEffectiveBuildings())) {
-				convertedGold = static_cast<sint32>(gold * g_theConstDB->TelevangelistConversionFactor());
+				convertedGold = static_cast<sint32>(gold * g_theConstDB->Get(0)->GetTelevangelistConversionFactor());
 			} else {
-				convertedGold = static_cast<sint32>(gold * g_theConstDB->ClericConversionFactor());
+				convertedGold = static_cast<sint32>(gold * g_theConstDB->Get(0)->GetClericConversionFactor());
 			}
 		} else {
 			Assert(false);
@@ -10380,11 +10383,9 @@ void CityData::GiveTradeRouteGold()
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){
-					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->CityOnTradeRouteCoefficient()));
-				//g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->GetCaravanCoef()));
-				//make a new ConstDB? 
+					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff()));
 				}
 			}
-        }
-    }
+		}
+	}
 }

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Trade utilities
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -46,7 +47,6 @@
 #include "colorset.h"               // g_colorSet
 #include "network.h"
 #include "ResourceRecord.h"
-#include "ConstDB.h"
 #include "UnitData.h"
 #include "radarmap.h"
 #include "tradeutil.h"

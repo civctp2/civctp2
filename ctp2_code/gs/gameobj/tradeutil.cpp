@@ -29,6 +29,7 @@
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
 // - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
 // - added note that trade pact deals shouldn't be hardcoded 6.13.2007
+// - Added some functionality from the old const database. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -41,6 +42,7 @@
 #include "TradeAstar.h"
 #include "Path.h"
 #include "AgreementMatrix.h"
+#include "ConstRecord.h"
 
 extern TradeAstar g_theTradeAstar; 
 
@@ -94,4 +96,55 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
                     (source.RetPos().NormalizedDistance(destination.RetPos()));
 	
     return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
+}
+
+void constutil_y2meridian(const sint32 y, sint32 &k)
+{
+	// Actually, the values from the ConstDB are unsued
+	for (sint32 i = 0; i < k_NUM_MERIDIANS; i++)
+	{
+		if (y < 11 * (i + 1))
+		{
+			k = i;
+			return;
+		}
+	}
+	k = i;
+}
+
+void constutil_GetMapSizeMapPoint(MAPSIZE size, MapPoint &mapPoint)
+{
+	// Can be removed, when the map size only depends on the map database
+	switch (size) {
+	case MAPSIZE_SMALL:
+		mapPoint.x = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeSmall(0));
+		mapPoint.y = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeSmall(1));
+#if !defined(_SMALL_MAPPOINTS)
+		mapPoint.z = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeSmall(2));
+#endif
+		break;
+	case MAPSIZE_MEDIUM:
+		mapPoint.x = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeMedium(0));
+		mapPoint.y = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeMedium(1));
+#if !defined(_SMALL_MAPPOINTS)
+		mapPoint.z = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeMedium(2));
+#endif
+		break;
+	case MAPSIZE_LARGE:
+		mapPoint.x = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeLarge(0));
+		mapPoint.y = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeLarge(1));
+#if !defined(_SMALL_MAPPOINTS)
+		mapPoint.z = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeLarge(2));
+#endif
+		break;
+	case MAPSIZE_GIGANTIC:
+		mapPoint.x = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeGigantic(0));
+		mapPoint.y = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeGigantic(1));
+#if !defined(_SMALL_MAPPOINTS)
+		mapPoint.z = static_cast<sint32>(g_theConstDB->Get(0)->GetMapSizeGigantic(2));
+#endif
+		break;
+	default :
+		Assert(FALSE);
+	}
 }

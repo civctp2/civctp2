@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +29,7 @@
 // - EMOD TO DO add check for buildings and wonder for ring size
 // - Added function to compare unit type quality, based on unit cargo capacity
 //   or on the units statistics like attack, defense and range. (19-May-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,7 +44,7 @@
 #include "Army.h"
 #include "cellunitlist.h"
 #include "UnitData.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "GameEventUser.h"
 #include "player.h"
 #include "AICause.h"
@@ -236,7 +237,7 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 
 	for (i=0; i < defenders.Num(); i++) {
 		if(defenders[i].IsEntrenched()) {
-			entrenched_bonus += g_theConstDB->GetEntrenchmentBonus();
+			entrenched_bonus += g_theConstDB->Get(0)->GetEntrenchmentBonus();
 		}
 	}
 

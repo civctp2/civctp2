@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World distance
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -39,7 +39,6 @@
 #include "UnitData.h"
 #include "citydata.h"
 #include "Happy.h"
-#include "ConstDB.h"
 #include "directions.h"
 
 extern Player **g_player;

@@ -26,6 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -49,7 +50,7 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 
 #include "Agreement.h"
 
@@ -61,8 +62,7 @@
 extern	Player	**g_player ;
 extern	TurnCount	*g_turn ;
 extern UnitPool *g_theUnitPool;
-extern World *g_theWorld; 
-extern ConstDB *g_theConstDB;
+extern World *g_theWorld;
 
 extern AgreementPool *g_theAgreementPool;
 
@@ -1124,7 +1124,7 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 	switch(m_agreement) {
 		case AGREEMENT_TYPE_DEMAND_STOP_TRADE:
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->StopTradeRounds()) {
+			if(rounds > g_theConstDB->Get(0)->GetStopTradeRounds()) {
 				sendMessage = TRUE;
 				sprintf(objName, "008StopTradeWithBroken");
 				otherCiv = m_thirdParty;
@@ -1132,14 +1132,14 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 			break;
 		case AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS:
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->LeaveOurLandsRounds() || force) {
+			if(rounds > g_theConstDB->Get(0)->GetLeaveOurLandsRounds() || force) {
 				sendMessage = TRUE;
 				sprintf(objName, "260LeaveOurLandsBroken");
 			}
 			break;
 		case AGREEMENT_TYPE_REDUCE_POLLUTION:			
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->ReducePollutionRounds()) {
+			if(rounds > g_theConstDB->Get(0)->GetReducePollutionRounds()) {
 				sendMessage = TRUE;
 				sprintf(objName, "261ReducePollutionBroken");
 			}
@@ -1147,7 +1147,7 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 #if 0
 		case AGREEMENT_TYPE_PACT_CAPTURE_CITY:
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->CaptureCityRounds()) {
+			if(rounds > g_theConstDB->Get(0)->GetCaptureCityRounds()) {
 				sendMessage = TRUE;
 				sprintf(objName, "262CaptureCityBroken");
 				addCity = TRUE;
@@ -1156,14 +1156,14 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 #endif
 		case AGREEMENT_TYPE_PACT_END_POLLUTION:
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->EndPollutionRounds()) {
+			if(rounds > g_theConstDB->Get(0)->GetEndPollutionRounds()) {
 				sendMessage = TRUE;
 				sprintf(objName, "263EndPollutionBroken");
 			}
 			break;
 		case AGREEMENT_TYPE_DEMAND_ATTACK_ENEMY:
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->AttackEnemyRounds()) {
+			if(rounds > g_theConstDB->Get(0)->GetAttackEnemyRounds()) {
 				sendMessage = TRUE;
 				sprintf(objName, "264AttackEnemyBroken");
 				otherCiv = m_thirdParty;
@@ -1236,7 +1236,7 @@ void AgreementData::OwnerIsViolating(PLAYER_INDEX curPlayer)
 		case AGREEMENT_TYPE_PACT_END_POLLUTION:
 			
 			tellAi = TRUE;
-			if(rounds > g_theConstDB->EndPollutionRounds()) {
+			if(rounds > g_theConstDB->Get(0)->GetEndPollutionRounds()) {
 				sendMessage = TRUE;
 				sprintf(objName, "263EndPollutionBroken");
 			}
@@ -1359,14 +1359,14 @@ void AgreementData::BeginTurnOwner()
 				sint32 rounds = now - m_round;
 				Agreement me(m_id);
 				if(g_player[m_owner]->GetCurrentPollution() > m_ownerPollution &&
-				   g_player[m_owner]->GetCurrentPollution() > uint32(g_theConstDB->MinEcoPactViolationLevel())) {
+				   g_player[m_owner]->GetCurrentPollution() > uint32(g_theConstDB->Get(0)->GetMinEcoPactViolationLevel())) {
 					OwnerIsViolating(m_owner);
 				}
 
 				
 				
 				if(g_theAgreementPool->IsValid(me)) {
-					if(rounds > g_theConstDB->EndPollutionRounds()) {
+					if(rounds > g_theConstDB->Get(0)->GetEndPollutionRounds()) {
 						m_ownerPollution = g_player[m_owner]->GetCurrentPollution();
 						if(g_player[m_recipient]) {
 							m_recipientPollution = g_player[m_recipient]->GetCurrentPollution();

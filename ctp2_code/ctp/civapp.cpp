@@ -91,6 +91,7 @@
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
 // - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
 // - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -138,7 +139,7 @@
 #include "CivPaths.h"
 #include "civscenarios.h"
 #include "ConceptRecord.h"
-#include "ConstDB.h"                    // g_theConstDB
+#include "ConstRecord.h"                    // g_theConstDB
 #include "controlpanelwindow.h"
 #include "ctpai.h"
 #include "ctp_finger.h"
@@ -695,6 +696,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	g_theUnitDB               = new CTPDatabase<UnitRecord>;
 	g_theDifficultyDB         = new CTPDatabase<DifficultyRecord>;
 	g_theIconDB               = new CTPDatabase<IconRecord>;
+	g_theConstDB              = new CTPDatabase<ConstRecord>;
 	g_theAdvanceDB            = new CTPDatabase<AdvanceRecord>;
 	g_theSpriteDB             = new CTPDatabase<SpriteRecord>;
 	g_theSoundDB              = new CTPDatabase<SoundRecord>;
@@ -756,7 +758,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	}
 
 	if(g_theMapIconDB) {
-		if(!g_theMapIconDB ->Parse(C3DIR_GAMEDATA, g_mapicondb_filename))
+		if(!g_theMapIconDB->Parse(C3DIR_GAMEDATA, g_mapicondb_filename))
 			return FALSE;
 	}
 
@@ -769,9 +771,11 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 30 );
 
-	if (!ConstDB_Parse (g_constdb_filename, C3DIR_GAMEDATA)) {
-		return FALSE; 
+	if(g_theConstDB) {
+		if(!g_theConstDB->Parse(C3DIR_GAMEDATA, g_constdb_filename))
+			return FALSE;
 	}
+
 	Assert(g_theConstDB); 
 
 	g_theProgressWindow->StartCountingTo( 40 );
@@ -1175,6 +1179,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	if(!g_theUnitDB->ResolveReferences())               return FALSE;
 	if(!g_theAdvanceDB->ResolveReferences())            return FALSE;
 	if(!g_theIconDB->ResolveReferences())               return FALSE;
+	if(!g_theConstDB->ResolveReferences())              return FALSE;
 	if(!g_theSpriteDB->ResolveReferences())             return FALSE;
 	if(!g_theSoundDB->ResolveReferences())              return FALSE;
 	if(!g_theSpecialEffectDB->ResolveReferences())      return FALSE;
@@ -1378,13 +1383,6 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
-	g_theConstDB = new ConstDB();
-	if (!ConstDB_Parse(g_constdb_filename, C3DIR_GAMEDATA)) 
-    {
-		ExitGame();
-		return -1;
-	}
-
 	g_theProgressWindow->StartCountingTo( 540 );
 
 	sint32  success = InitializeAppDB((*(CivArchive *)(NULL)));
@@ -1581,6 +1579,7 @@ void CivApp::CleanupAppDB(void)
     allocated::clear(g_theDiplomacyProposalDB);
     allocated::clear(g_theDiplomacyThreatDB);
     allocated::clear(g_theMapIconDB);
+    allocated::clear(g_theConstDB);
 
     m_dbLoaded = FALSE;
 }
@@ -1604,7 +1603,6 @@ void CivApp::CleanupApp(void)
 		SoundManager::Cleanup();
 
         allocated::clear(g_theProfileDB); 
-        allocated::clear(g_theConstDB);
 
 		gameinit_Cleanup();
 		events_Cleanup();
@@ -1772,6 +1770,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
         // InitialiazeGameUI will take care of this by closing most windows, but 
         // the progress window stays open. It has to be handled manually to 
         // prevent a possible corruption of its background pattern.
+		/// ToDo: Handle coruption of progress window background.
         Pattern *   progressBackground  = g_theProgressWindow->ThePattern();
         std::string fileName            = progressBackground->GetFilename();
         progressBackground->Unload();

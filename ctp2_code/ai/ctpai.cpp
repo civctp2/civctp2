@@ -54,6 +54,7 @@
 // - Improved AI sliders optimization. - Jul 18th 2005 Martin Gühmann
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Moved settle_water check inside the GetSettleTargets method. (May 20th 2006 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -121,8 +122,7 @@
 #include "settlemap.h"
 #include "ctpaidebug.h"
 #include "TurnCnt.h"                        // g_turn
-//Added by Martin Gühmann to access the ConstDB
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "DifficultyRecord.h"
 
 
@@ -733,7 +733,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 		diff_cycles = 2;
 
 	// Modified by Martin Gühmann so that this can be exposed to const.txt
-	if ( cycle < g_theConstDB->GetMaxMatchListCycles() + diff_cycles)
+	if ( cycle < g_theConstDB->Get(0)->GetMaxMatchListCycles() + diff_cycles)
 	{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 								   GEA_Player, playerId,

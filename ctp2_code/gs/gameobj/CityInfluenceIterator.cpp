@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : City influence handling.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -41,7 +44,6 @@
 
 #include "network.h"
 
-#include "ConstDB.h"
 #include "tiledmap.h"
 
 namespace

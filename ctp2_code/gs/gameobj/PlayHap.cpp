@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Player Happiness
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "Globals.h"
 
@@ -5,7 +35,7 @@
 #include "player.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "aui.h"
 #include "aui_surface.h"
 #include "primitives.h"
@@ -33,13 +63,13 @@ PlayerHappiness::PlayerHappiness()
 {
     m_pad = 0; 
 
-    m_workday_per_person = g_theConstDB->GetBaseWorkday(); 
+    m_workday_per_person = g_theConstDB->Get(0)->GetBaseWorkday(); 
     m_unitless_workday = 0;
 
-    m_rations_per_person = g_theConstDB->GetBaseRations(); 
+    m_rations_per_person = g_theConstDB->Get(0)->GetBaseRations(); 
     m_unitless_rations = 0; 
 
-    m_wages_per_person = g_theConstDB->GetBaseWages(); 
+    m_wages_per_person = g_theConstDB->Get(0)->GetBaseWages(); 
     m_unitless_wages = 0; 
 
     m_raw_overseas_defeat = 0.0;
@@ -146,13 +176,7 @@ void PlayerHappiness::CalcPeaceMovement(Player *p,
 
 void PlayerHappiness::SetWorkdayLevel (sint32 h)
 {
-   
-    
-    
-
-    m_workday_per_person = - h * g_theConstDB->GetUnitWorkday() + g_theConstDB->GetBaseWorkday() ;
-
-    
+    m_workday_per_person = - h * g_theConstDB->Get(0)->GetUnitWorkday() + g_theConstDB->Get(0)->GetBaseWorkday();
     m_unitless_workday = h;
 }
 
@@ -168,29 +192,24 @@ sint32 PlayerHappiness::GetUnitlessWorkday ()
 
 void PlayerHappiness::SetWagesLevel (sint32 w)
 {
-    
-    m_wages_per_person = w * g_theConstDB->GetUnitWages() + g_theConstDB->GetBaseWages();
-
-    
+    m_wages_per_person = w * g_theConstDB->Get(0)->GetUnitWages() + g_theConstDB->Get(0)->GetBaseWages();
     m_unitless_wages = w;
 }
 
 double PlayerHappiness::GetWagesPerPerson ()
-{   return m_wages_per_person; 
+{
+	return m_wages_per_person; 
 }
 
 sint32 PlayerHappiness::GetUnitlessWages ()
 {
-    return m_unitless_wages; 
+	return m_unitless_wages; 
 }
 
 
 void PlayerHappiness::SetRationsLevel (sint32 r)
 {
-    
-    m_rations_per_person = r * g_theConstDB->GetUnitRations() + g_theConstDB->GetBaseRations();
-
-    
+    m_rations_per_person = r * g_theConstDB->Get(0)->GetUnitRations() + g_theConstDB->Get(0)->GetBaseRations();
     m_unitless_rations = r;
 }
 
@@ -213,7 +232,7 @@ void PlayerHappiness::DisplayWWR()
 	g_debugWindow->AddText(str);
 	
 	
-	sprintf(str, "rations %d  rations per person:%f ", m_unitless_rations, m_rations_per_person * g_theConstDB->GetBaseRations()); 
+	sprintf(str, "rations %d  rations per person:%f ", m_unitless_rations, m_rations_per_person * g_theConstDB->Get(0)->GetBaseRations()); 
 	g_debugWindow->AddText(str);
 	
 	

@@ -99,6 +99,7 @@
 // - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
 // - Allow spending all unused freight
 // - Improved handling when no suitable item of a category is available
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -119,7 +120,7 @@
 #include "citydata.h"
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "ctpai.h"
 #include "ctpgoal.h"
 #include "Diplomat.h"
@@ -2677,8 +2678,8 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 		return;
     }
 
-	sint32 needed = g_theConstDB->GetRiotLevel();
-	sint32 maximum = g_theConstDB->GetVeryHappyThreshold();
+	sint32 needed = g_theConstDB->Get(0)->GetRiotLevel();
+	sint32 maximum = g_theConstDB->Get(0)->GetVeryHappyThreshold();
 	sint32 current = static_cast<sint32>(city->GetHappiness());
 
 

@@ -47,7 +47,8 @@
 //   range statitics. (19-May-2007 Martin Gühmann)
 // - modified sink to display the sink message and the unit type
 // - If a unit dies it now uses the value of LaunchPollution if present
-//   to polute the environment, instead of using a value of 1. (9-Jun-2007 Martin Gühmann)
+//   to pollute the environment, instead of using a value of 1. (9-Jun-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -56,7 +57,7 @@
 
 #include "Globals.h"
 #include "GWRecord.h"
-#include "ConstDB.h"            // g_theConstDB
+#include "ConstRecord.h"        // g_theConstDB
 #include "StrDB.h"              // g_theStringDB
 #include "DB.h"
 #include "UnitRec.h"
@@ -2431,7 +2432,7 @@ CityData *Unit::GetCityData() const
 //----------------------------------------------------------------------------
 bool Unit::NeedsRefueling() const
 {
-	return GetFuel() <= g_theConstDB->NonSpaceFuelCost() * (GetMovementPoints() / 100.0);
+	return GetFuel() <= g_theConstDB->Get(0)->GetNonSpaceFuelCost() * (GetMovementPoints() / 100.0);
 }
 
 //----------------------------------------------------------------------------

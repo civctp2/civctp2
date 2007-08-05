@@ -44,7 +44,7 @@
 // - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
 // - Reused obsolate concept icon database slot for new map icon database. (3-Mar-2007 Martin Gühmann)
 // - Removed old concept database. (31-Mar-2007 Martin Gühmann)
-
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@
 #include "Cell.h"
 #include "civ3_main.h"
 #include "CivilisationPool.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "controlpanelwindow.h"
 #include "CriticalMessagesPrefs.h"
 #include "ctp2_Window.h"
@@ -133,6 +133,7 @@
 #include "TradeBids.h"
 #include "TradeOfferPool.h"
 #include "TradePool.h"
+#include "tradeutil.h"           // constutil_GetMapSizeMapPoint
 #include "TurnCnt.h"
 #include "UnitActor.h"
 #include "UnitData.h"
@@ -172,7 +173,6 @@ extern sint32 g_cheat_age;
 
 StringDB                    *g_theStringDB=NULL;
 OzoneDatabase               *g_theUVDB=NULL;
-ConstDB                     *g_theConstDB=NULL;
 ThroneDB                    *g_theThroneDB = NULL;
 PlayListDB                  *g_thePlayListDB = NULL;
 World                       *g_theWorld=NULL;
@@ -1130,7 +1130,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	                          g_theProfileDB->GetGoodCount());
 
 	MapPoint	mapSize;
-	g_theConstDB->GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
+	constutil_GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
 
 	
 	g_theWorld = new World(mapSize,
@@ -1571,7 +1571,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		                          g_theProfileDB->GetGoodCount());
 
 		MapPoint	mapSize;
-		g_theConstDB->GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
+		constutil_GetMapSizeMapPoint(g_theProfileDB->GetMapSize(), mapSize);
 
 		
 		g_theWorld = new World(mapSize,

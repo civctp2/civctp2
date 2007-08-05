@@ -46,6 +46,8 @@
 // - TODO add buttons for orders button bank
 // - TODO create scroll bar like CityStyles in Scenario Editor for
 //   Orders and tileimprovements so they are not limited
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +60,7 @@
 //   constructor. Maybe this is some leftover of the CTP1 code?
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standatized code (May 21st 2006 Martin Gühmann)
-// - none of the unit or order stuff is used here? see UnitControlPanel.cpp
+// - None of the unit or order stuff is used here? see UnitControlPanel.cpp
 //
 //----------------------------------------------------------------------------
 
@@ -196,7 +198,7 @@
 #include "km_screen.h"
 #include "keymap.h"
 
-#include "ConstDB.h"
+#include "ConstRecord.h"
 
 #include "profileDB.h"
 #include "helptile.h"
@@ -652,7 +654,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			break;
 		case k_CONTEXT_CITY_DISBAND:
 			{
-				if(city->PopCount() > g_theConstDB->MaxDisbandSize()) 
+				if(city->PopCount() > g_theConstDB->Get(0)->GetMaxDisbandSize()) 
 				{
 					
 					MessageBoxDialog::Information("str_ldl_CantDisbandCitySize", "InfoCantDisCitySz");

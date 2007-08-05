@@ -101,6 +101,7 @@
 // - Added NeedsAnyPlayerFeatToBuild
 // - Moved CalcSupportGold and CommodityGold to BeginTurn
 // - Added CreateLeader method by E 6.4.2007
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -138,7 +139,7 @@
 #include "civarchive.h"
 #include "CivilisationPool.h"           // g_theCivilisationPool
 #include "CivPaths.h"                   // g_civPaths
-#include "ConstDB.h"                    // g_theConstDB
+#include "ConstRecord.h"                // g_theConstDB
 #include "controlpanelwindow.h"         // g_controlPanel
 #include "CreateUnit.h"
 #include "ctpai.h"
@@ -3010,7 +3011,7 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 				numMilitaryUnits++;
 			}
 		}
-		if(numMilitaryUnits * g_theConstDB->SlavesPerMilitaryUnit() <=
+		if(numMilitaryUnits * g_theConstDB->Get(0)->GetSlavesPerMilitaryUnit() <=
 		   c.CountSlaves()) {
 			continue;
 		}
@@ -4157,10 +4158,10 @@ uint32 Player::GetAverageEventPollution(void)
 	uint32	average ;
 
 	average = 0 ;
-	for (i=0; i<g_theConstDB->AveragePollutionTurns(); i++)
+	for (i=0; i<g_theConstDB->Get(0)->GetAveragePollutionTurns(); i++)
 		average += m_event_pollution[i] ;
 
-	average /= g_theConstDB->AveragePollutionTurns() ;
+	average /= g_theConstDB->Get(0)->GetAveragePollutionTurns() ;
 
 	return (average) ;
 	}
@@ -4221,7 +4222,7 @@ void Player::AttemptRevolt(void)
 						u = m_all_cities->Get(j) ;
 						u.GetPos(neighbourPos) ;
 						cityData = u.GetData()->GetCityData() ;
-                        inciteBonus = g_theConstDB->GetRevoltInfluenceDistance() - 
+                        inciteBonus = g_theConstDB->Get(0)->GetRevoltInfluenceDistance() - 
                                         std::max(abs(cityPos.x - neighbourPos.x), abs(cityPos.y - neighbourPos.y));
 						if (inciteBonus >= 0)						
 							{
@@ -4737,7 +4738,7 @@ Agreement Player::MakeEndPollutionPact(PLAYER_INDEX player)
 	if (a==Agreement())
 		c3errors_FatalDialogFromDB("DIPLOMACY_ERROR", "DIPLOMACY_INVALID_AGREEMENT_ID") ;
 
-	a.SetExpires(g_theConstDB->GetPactEndPollutionExpires()) ;
+	a.SetExpires(g_theConstDB->Get(0)->GetPactEndPollutionExpires()) ;
 	DPRINTF(k_DBG_INFO, ("Player #%d agrees with Player #%d to end pollution as part of a pact\n", m_owner, player)) ;
 
 	return a;
@@ -4754,7 +4755,7 @@ Agreement Player::MakeLeaveOurLands(PLAYER_INDEX player)
     
     
 
-	a.SetExpires(g_theConstDB->GetLeaveOurLandsExpires()) ;
+	a.SetExpires(g_theConstDB->Get(0)->GetLeaveOurLandsExpires()) ;
 	DPRINTF(k_DBG_INFO, ("Player #%d agrees to leave the lands of Player #%d\n", player, m_owner)) ;
 
 	if(g_player[player]) {
@@ -4819,7 +4820,7 @@ Agreement Player::MakeReducePollution(PLAYER_INDEX player)
 	if (a==Agreement())
 		c3errors_FatalDialogFromDB("DIPLOMACY_ERROR", "DIPLOMACY_INVALID_AGREEMENT_ID") ;
 
-	a.SetExpires(g_theConstDB->GetReducePollutionExpires()) ;
+	a.SetExpires(g_theConstDB->Get(0)->GetReducePollutionExpires()) ;
 	DPRINTF(k_DBG_INFO, ("Player #%d agrees to leave the lands of Player #%d\n", player, m_owner)) ;
 
 	return a;
@@ -4844,7 +4845,7 @@ Agreement Player::MakeCaptureCityPact(PLAYER_INDEX player, Unit &city)
 	if (a==Agreement())
 		c3errors_FatalDialogFromDB("DIPLOMACY_ERROR", "DIPLOMACY_INVALID_AGREEMENT_ID") ;
 
-	a.SetExpires(g_theConstDB->GetPactCaptureCityExpires()) ;
+	a.SetExpires(g_theConstDB->Get(0)->GetPactCaptureCityExpires()) ;
 	a.SetTarget(city) ;
 	DPRINTF(k_DBG_INFO, ("Player #%d agrees with Player #%d to capture city id %d as part of a pact\n", m_owner, player, city)) ;
 
@@ -4935,7 +4936,7 @@ void Player::MakeNoPiracyPact(PLAYER_INDEX other_player)
 	if (a==Agreement())
 		c3errors_FatalDialogFromDB("DIPLOMACY_ERROR", "DIPLOMACY_INVALID_AGREEMENT_ID") ;
 
-	a.SetExpires(g_theConstDB->GetNoPiracyExpires()) ;
+	a.SetExpires(g_theConstDB->Get(0)->GetNoPiracyExpires()) ;
 	DPRINTF(k_DBG_INFO, ("Player #%d establishes a \"No Piracy\" agreement with Player #%d\n", m_owner, other_player)) ;
 }
 
@@ -4975,7 +4976,7 @@ void Player::MakeShortCeaseFire(PLAYER_INDEX other_player, AGREEMENT_TYPE agreem
 		}
 	}
 
-	a.SetExpires(g_theConstDB->GetShortCeaseFireExpires()) ;
+	a.SetExpires(g_theConstDB->Get(0)->GetShortCeaseFireExpires()) ;
 	DPRINTF(k_DBG_INFO, ("Player #%d establishes a \"Cease Fire\" with Player #%d\n", m_owner, other_player)) ;
 	
 	if(GetDiplomaticState(other_player) != DIPLOMATIC_STATE_ALLIED)
@@ -5010,7 +5011,7 @@ void Player::MakeCeaseFire(PLAYER_INDEX other_player)
 	    if (a==Agreement())
 		    c3errors_FatalDialogFromDB("DIPLOMACY_ERROR", "DIPLOMACY_INVALID_AGREEMENT_ID") ;
 
-	    a.SetExpires(g_theConstDB->GetCeaseFireExpires()) ;
+	    a.SetExpires(g_theConstDB->Get(0)->GetCeaseFireExpires()) ;
 	    DPRINTF(k_DBG_INFO, ("Player #%d establishes a \"Cease Fire\" with Player #%d\n", m_owner, other_player)) ;
 
 	    if(GetDiplomaticState(other_player) != DIPLOMATIC_STATE_ALLIED)
@@ -7640,7 +7641,7 @@ bool Player::SetGovernmentType(sint32 type)
 		return true;
 	} else if(!m_changed_government_this_turn) {
 		m_set_government_type = type;
-		sint32 turns = g_rand->Next(g_theConstDB->MaxGovernmentChangeTurns()) + 1;
+		sint32 turns = g_rand->Next(g_theConstDB->Get(0)->GetMaxGovernmentChangeTurns()) + 1;
 		m_change_government_turn = GetCurRound() + turns;
 		return ActuallySetGovernment(0);
 	} else {
@@ -7810,8 +7811,8 @@ void Player::RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_p
 
 void Player::AssasinateRuler()
 {
-	m_assasinationModifier = g_theConstDB->AssasinationHappinessEffect();
-	m_assasinationTimer = g_theConstDB->AssasinationHappinessEffectTimer();
+	m_assasinationModifier = g_theConstDB->Get(0)->GetAssasinationHappinessEffect();
+	m_assasinationTimer = g_theConstDB->Get(0)->GetAssasinationHappinessEffectTimer();
 }
 
 sint32 Player::GetTimedHappiness()
@@ -9043,7 +9044,7 @@ void Player::TradeImprovementsForPoints(const MapPoint &pnt)
 
 	for(i = cell->GetNumImprovements() - 1; i >= 0; i--) {
 		sint32 materialCost = cell->AccessImprovement(i).GetMaterialCost();
-		sint32 pointsBack = sint32(double(materialCost) * g_theConstDB->PowerPointsToMaterialsConversion());
+		sint32 pointsBack = sint32(double(materialCost) * g_theConstDB->Get(0)->GetPowerPointsToMaterials());
 		AddPoints(pointsBack);
 		cell->AccessImprovement(i).Kill();
 	}
@@ -9454,8 +9455,8 @@ void Player::Emancipate()
 			GetBuildQueue()->RemoveIllegalItems();
 		if(numFreed > 0) {
 			m_all_cities->Access(i).AccessData()->GetCityData()->GetHappy()->AddTimer(
-				g_theConstDB->EmancipationUnhappinessTurns(),
-				g_theConstDB->EmancipationUnhappinessAmount(),
+				g_theConstDB->Get(0)->GetEmancipationUnhappinessTurns(),
+				g_theConstDB->Get(0)->GetEmancipationUnhappinessAmount(),
 				HAPPY_REASON_EMANCIPATION);
 		}
 	}
@@ -9745,7 +9746,7 @@ sint32 Player::GetLastAttacked(PLAYER_INDEX player)
 
 bool Player::CanStillSendRequestsTo(PLAYER_INDEX otherPlayer)
 {
-	return m_sent_requests_this_turn[otherPlayer] < g_theConstDB->MaxRequestsPerPlayerPerTurn();
+	return m_sent_requests_this_turn[otherPlayer] < g_theConstDB->Get(0)->GetMaxRequestsPerPlayerPerTurn();
 }
 
 void Player::IncrementSentRequests(PLAYER_INDEX otherPlayer)

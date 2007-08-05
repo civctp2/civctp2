@@ -58,6 +58,7 @@
 // - Standartized code (May 21st 2006 Martin Gühmann)
 // - Made appear the progress bar of the build item icon button. (Feb 4th 2007 Martin Gühmann)
 // - Pressing the build item icon button opens now the build manager. (Feb 4th 2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -95,7 +96,7 @@
 #include "CitySizeRecord.h"
 
 #include "StrDB.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "colorset.h"               // g_colorSet
 
 #include "BldQue.h"
@@ -1016,7 +1017,7 @@ void CityWindow::UpdateCostsGives()
 				} else {
 					MBCHAR buf[20];
 					sprintf(buf, "%d", sint32(double(g_theBuildingDB->Get(info->m_type)->GetProductionCost()) *
-							g_theConstDB->BuildingProductionToValueModifier()));
+							g_theConstDB->Get(0)->GetBuildingProductionToValueModifier()));
 					givesValue->SetText(buf);
 				}
 			} else {
@@ -1766,7 +1767,7 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 		
 		
 		
-		sint32 maxAbsoluteGrowthRate = g_theConstDB->GetMaxAbsoluteGrowthRate();
+		sint32 maxAbsoluteGrowthRate = g_theConstDB->Get(0)->GetMaxAbsoluteGrowthRate();
 		sint32 actualGrowthRate = cd->GetGrowthRate();
 		double growthRatio = 0;
 		if(actualGrowthRate >= maxAbsoluteGrowthRate) {
@@ -1813,7 +1814,7 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 	destRect.right = destRect.left + static_cast<sint32>((happiness * width) / 100);
 
 	uint32 color;
-	if(happiness < g_theConstDB->GetRiotLevel()) {
+	if(happiness < g_theConstDB->Get(0)->GetRiotLevel()) {
 		color = RGB(255,0,0); 
 	} else if(cd->IsCelebratingHappiness()) {
 		color = RGB(0,255,0); 

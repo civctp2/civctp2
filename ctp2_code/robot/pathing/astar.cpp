@@ -47,7 +47,6 @@
 #include "World.h"
 #include "RandGen.h"
 #include "Cell.h"
-#include "ConstDB.h"
 #include "priorityqueue.h"
 #include "A_Star_Heuristic_Cost.h"
 

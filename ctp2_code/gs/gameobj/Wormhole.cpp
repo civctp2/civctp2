@@ -28,6 +28,7 @@
 //   the good's sprite state database. However this file isn't used as the
 //   wormhole has been removed from the game, but maybe there is someone
 //   who whishes to put it back into the game. (Aug 29th 2005 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -38,7 +39,7 @@
 #include "civarchive.h"
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "pointerlist.h"
 #include "RandGen.h"
 #include "UnitRec.h"
@@ -62,7 +63,7 @@ Wormhole::Wormhole(sint32 discoverer)
 	m_discoverer = discoverer;
 
 	sint16 centerY = static_cast<sint16>(g_theWorld->GetYHeight() / 2);
-	sint32 orbitHeight = (g_theWorld->GetYHeight() * g_theConstDB->WormholeOrbitHeightPercentage()) / 100;
+	sint32 orbitHeight = (g_theWorld->GetYHeight() * g_theConstDB->Get(0)->GetWormholeOrbitHeightPercentage()) / 100;
 	m_topY = centerY - orbitHeight / 2;
 	m_bottomY = centerY + orbitHeight / 2;
 	m_pos.y = centerY;
@@ -81,7 +82,7 @@ Wormhole::Wormhole(sint32 discoverer, MapPoint &startPos)
 {
 	m_discoverer = discoverer;
 	sint16 centerY =  static_cast<sint16>(g_theWorld->GetYHeight() / 2);
-	sint32 orbitHeight = (g_theWorld->GetYHeight() * g_theConstDB->WormholeOrbitHeightPercentage()) / 100;
+	sint32 orbitHeight = (g_theWorld->GetYHeight() * g_theConstDB->Get(0)->GetWormholeOrbitHeightPercentage()) / 100;
 	m_topY = centerY - orbitHeight / 2;
 	m_bottomY = centerY + orbitHeight / 2;
 	m_pos.y = startPos.y;
@@ -195,7 +196,7 @@ void Wormhole::BeginTurn(sint32 player)
 void Wormhole::Move()
 {
 	sint32 i;
-	sint32 speed = g_theConstDB->WormholeSpeed();
+	sint32 speed = g_theConstDB->Get(0)->GetWormholeSpeed();
 	for(i = 0; i < speed; i++) {
 		if((m_curDir == EAST || m_curDir == NORTHEAST) && 
 		   !g_theWorld->IsXwrap()) {
@@ -234,7 +235,7 @@ void Wormhole::Move()
 
 BOOL Wormhole::IsVisible(sint32 player)
 {
-	if(m_discoveredAt + g_theConstDB->WormholeVisibleToAllTurns() <= g_turn->GetRound()) {
+	if(m_discoveredAt + g_theConstDB->Get(0)->GetWormholeVisibleToAllTurns() <= g_turn->GetRound()) {
 		return TRUE;
 	} else if(player == m_discoverer) {
 		return TRUE;

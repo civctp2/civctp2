@@ -29,6 +29,7 @@
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
 //   - April 24th 2005 Martin Gühmann
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,7 +46,7 @@
 #include "citydata.h"
 #include "civarchive.h"
 #include "CivPaths.h"               // g_civPaths
-#include "ConstDB.h"                // g_theConstDB 
+#include "ConstRecord.h"            // g_theConstDB 
 #include "DB.h"
 #include "debugmemory.h"
 #include "Diffcly.h"
@@ -688,7 +689,7 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 			if (buildingutil_HaveFoodVat(unit->GetImprovements(), tmp))
 				continue;
 			CityData *city = unit->GetData()->GetCityData();
-			double fudge = (double)(g_theConstDB->StarvationWarningFudgeFactor()) / 100.0;
+			double fudge = (double)(g_theConstDB->Get(0)->GetStarvationWarningFudgeFactor()) / 100.0;
 			if ((city->GetProducedFood() < city->GetConsumedFood()) &&
 				((fudge * (city->GetStoredCityFood() + city->GetProducedFood())) <
 				 city->GetConsumedFood())) {
@@ -718,7 +719,7 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 		int i;
 		int n = player->GetAllCitiesList()->Num();
 		double prod_total = 0.0;
-		double fudge = (double)(g_theConstDB->SupportWarningFudgeFactor()) / 100.0;
+		double fudge = (double)(g_theConstDB->Get(0)->GetSupportWarningFudgeFactor()) / 100.0;
 		for (i=0; i<n; i++) { 
 			Unit *unit = &(player->GetAllCitiesList()->Access(i));
 			if (!(unit->IsCity()))
@@ -801,7 +802,7 @@ void TurnCount::NetworkEndTurn(BOOL force)
 void TurnCount::RunNewYearMessages(void)
 {
 	
-	if (GetYear() >= g_theConstDB->GetEndOfGameYearEarlyWarning()) {
+	if (GetYear() >= g_theConstDB->Get(0)->GetEndOfGameYearEarlyWarning()) {
 		if(!m_sentGameAlmostOverMessage) {
 			m_sentGameAlmostOverMessage = TRUE;
 			
@@ -809,7 +810,7 @@ void TurnCount::RunNewYearMessages(void)
 		}
 	}
 
-	if(GetYear() >= g_theConstDB->GetEndOfGameYear()) {
+	if(GetYear() >= g_theConstDB->Get(0)->GetEndOfGameYear()) {
 		if(!m_sentGameOverMessage) {
 			sint32 i;
 			sint32 highScore = -1;

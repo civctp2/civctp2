@@ -58,6 +58,7 @@
 // - Removed the old endgame database. (Aug 29th 2005 Martin Gühmann)
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 // - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -150,7 +151,7 @@
 #include "SpecialEffectRecord.h"
 #include "Globals.h"
 #include "wonderutil.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "FeatTracker.h"
 #include "FeatRecord.h"
 #include "Gold.h"
@@ -3942,7 +3943,7 @@ SFN_ERROR Slic_HasGood::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetRiotLevel::Call(SlicArgList *args)
 {
-	m_result.m_int = g_theConstDB->GetRiotLevel();
+	m_result.m_int = g_theConstDB->Get(0)->GetRiotLevel();
 	
 	return SFN_ERROR_OK;
 }
@@ -3950,7 +3951,7 @@ SFN_ERROR Slic_GetRiotLevel::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetRevolutionLevel::Call(SlicArgList *args)
 {
-	m_result.m_int = g_theConstDB->GetRevolutionLevel();
+	m_result.m_int = g_theConstDB->Get(0)->GetRevolutionLevel();
 	
 	return SFN_ERROR_OK;
 }

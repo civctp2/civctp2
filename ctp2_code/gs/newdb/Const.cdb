@@ -19,6 +19,7 @@
 #  Modifications from the original Activision code:
 #
 #  - Created file (29-Jul-2007 Martin Gühmann)
+#  - Fixed some problems, so that the old database can be parsed. (5-Aug-2007 Martin Gühmann)
 #
 #-----------------------------------------------------------------------------
 
@@ -96,8 +97,8 @@ Const : alsire {
 	Int    ChanceLostAtSea                        aka CHANCE_LOST_AT_SEA
 	Int    VeteranCoef                            aka VETERAN_COEF
 	Int    RevolutionLevel                        aka REVOLUTION_LEVEL
-	Int    DiscoveriesPollutionSizeModifier       aka DISCOVERIES_POLLUTION_SIZE_MODIFIER
-	Int    DiscoveriesPollutionProductionModifier aka DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER
+	Float  DiscoveriesPollutionSizeModifier       aka DISCOVERIES_POLLUTION_SIZE_MODIFIER
+	Float  DiscoveriesPollutionProductionModifier aka DISCOVERIES_POLLUTION_PRODUCTION_MODIFIER
 	Int    AveragePollutionTurns                  aka AVERAGE_POLLUTION_TURNS
 	Int    PopulationProducesPollutionThreshold   aka POPULATION_PRODUCES_POLLUTION_THRESHOLD
 	Int    ProductionProducesPollutionThreshold   aka PRODUCTION_PRODUCES_POLLUTION_THRESHOLD
@@ -117,7 +118,7 @@ Const : alsire {
 	Int    TariffReduction                        aka TARIFF_REDUCTION
 	Int    RevoltInfluenceDistance                aka REVOLT_INFLUENCE_DISTANCE
 	Int    PactCaptureCityExpires                 aka PACT_CAPTURE_CITY_EXPIRES
-	Int    RewardCaptureCityExpires               aka REWARD_CAPTURE_CITY_EXPIRES
+	Int    RewardCaptureCityExpires        = 10   aka REWARD_CAPTURE_CITY_EXPIRES
 	Int    CeaseFireExpires                       aka CEASE_FIRE_EXPIRES
 	Int    ShortCeaseFireExpires                  aka SHORT_CEASE_FIRE_EXPIRES
 	Int    EndOfGameYearEarlyWarning              aka END_OF_GAME_YEAR_EARLY_WARNING
@@ -126,7 +127,7 @@ Const : alsire {
 	Int    PactEndPollutionExpires                aka PACT_END_POLLUTION_EXPIRES
 	Int    LeaveOurLandsExpires                   aka LEAVE_OUR_LANDS_EXPIRES
 	Int    ReducePollutionExpires                 aka REDUCE_POLLUTION_EXPIRES
-	Int    DestroyEnemyForRewardExpires           aka DESTROY_ENEMY_FOR_REWARD_EXPIRES
+	Int    DestroyEnemyForRewardExpires    = 10   aka DESTROY_ENEMY_FOR_REWARD_EXPIRES
 	Int    PatienceLostPerRequest                 aka PATIENCE_LOST_PER_REQUEST
 	Int    PatienceRegainedPerRound               aka PATIENCE_REGAINED_PER_ROUND
 	Int    RegainPatienceProbability              aka REGAIN_PATIENCE_PROBABILITY
@@ -151,7 +152,7 @@ Const : alsire {
 	Int    GossipMapRadius                        aka GOSSIP_MAP_RADIUS
 	Float  HearGossipChance                       aka HEAR_GOSSIP_CHANCE
 	Float  FranchiseEffect                        aka FRANCHISE_EFFECT
-	Int    TurnToSueFranchise                     aka TURNS_TO_SUE_FRANCHISE
+	Int    TurnsToSueFranchise                    aka TURNS_TO_SUE_FRANCHISE
 
 	Float  SlaverEliteChance                      aka SLAVER_ELITE_CHANCE
 	Float  EliteSlaverBonus                       aka ELITE_SLAVER_BONUS
@@ -204,7 +205,7 @@ Const : alsire {
 	Int    MonopolyThreshold                      aka MONOPOLY_THRESHOLD
 	Int    PopulationPollutionWarningThreshold    aka POPULATION_POLLUTION_WARNING_THRESHOLD
 	Int    IndustrialPollutionWarningThreshold    aka INDUSTRIAL_POLLUTION_WARNING_THRESHOLD
-	Int    VerayHappyThreshold                    aka VERY_HAPPY_THRESHOLD
+	Int    VeryHappyThreshold                     aka VERY_HAPPY_THRESHOLD
 	Int    CityGrowthCoefficient                  aka CITY_GROWTH_COEFFICIENT
 	Int    RiotLevel                              aka RIOT_LEVEL
 	Int    PowerPointsToMaterials                 aka POWER_POINTS_TO_MATERIALS
@@ -224,7 +225,7 @@ Const : alsire {
 	Float  FoodToPollutionCoef                    aka FOOD_TO_POLLUTION_COEF
 
 	Int    EmancipationUnhappinessTurns           aka EMANCIPATION_UNHAPPINESS_TURNS
-	Int    EmancippationUnhappinessAmount         aka EMANCIPATION_UNHAPPINESS_AMOUNT
+	Int    EmancipationUnhappinessAmount          aka EMANCIPATION_UNHAPPINESS_AMOUNT
 
 	Float  CaptureCityAdvanceChance               aka CAPTURE_CITY_ADVANCE_CHANCE
 
@@ -268,7 +269,7 @@ Const : alsire {
 	Int    ScaledPopDiamond                       aka SCALED_POP_DIAMOND
 
 	Int    PiracyKillsTraderChance                aka PIRACY_KILLS_TRADER_CHANCE
-	Int    UprisingChancePerUnguaredSlave         aka UPRISING_CHANCE_PER_UNGUARDED_SLAVE
+	Int    UprisingChancePerUnguardedSlave         aka UPRISING_CHANCE_PER_UNGUARDED_SLAVE
 	Int    MaxDisbandSize                         aka MAX_DISBAND_SIZE
 	Int    MaxRequestsPerPlayerPerTurn            aka MAX_REQUESTS_PER_PLAYER_PER_TURN
 	Int    SlavesPerMilitaryUnit                  aka SLAVES_PER_MILITARY_UNIT
@@ -324,7 +325,7 @@ Const : alsire {
 
 	Float  CaravanCoef                            aka CARAVAN_COEF
 
-	Int    PollutionCausedNyNuke                  aka POLLUTION_CAUSED_BY_NUKE
+	Int    PollutionCausedByNuke                  aka POLLUTION_CAUSED_BY_NUKE
 
 	Int    MaxMatchListCycles     =    6          aka MAX_MATCH_LIST_CYCLES
 	Int    MinTurnsBetweenRevolts =    1          aka MIN_TURNS_BETWEEN_REVOLT
@@ -335,5 +336,5 @@ Const : alsire {
 
 	Float  CombatEliteChance      = 0.05          aka COMBAT_ELITE_CHANCE
 	Float  CombatLeaderChance     = 0.01          aka COMBAT_LEADER_CHANCE
-	Float  CityOnTradeRouteBonus  = 0.3           aka CITY_ON_TRADE_ROUTE_BONUS
+	Float  CityOnTradeRouteCoeff  = 0.3           aka CITY_ON_TRADE_ROUTE_BONUS
 }

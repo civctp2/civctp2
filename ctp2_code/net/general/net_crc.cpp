@@ -30,6 +30,7 @@
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
 // - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -55,7 +56,7 @@
 #include "CitySizeRecord.h"
 #include "CityStyleRecord.h"
 #include "CivilisationRecord.h"
-#include "ConstDB.h"                   // Old database
+#include "ConstRecord.h"
 #include "DifficultyRecord.h"
 #include "DiplomacyRecord.h"
 #include "DiplomacyProposalRecord.h"
@@ -94,7 +95,6 @@
 extern StringDB                *g_theStringDB;
 extern ProfileDB               *g_theProfileDB;
 
-extern ConstDB                 *g_theConstDB;
 extern OzoneDatabase           *g_theUVDB;
 
 extern CivApp                  *g_civApp;

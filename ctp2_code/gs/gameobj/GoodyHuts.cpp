@@ -39,7 +39,6 @@
 #include "player.h"
 #include "RandGen.h"
 #include "AICause.h"
-#include "ConstDB.h"
 #include "Unit.h"
 #include "civarchive.h"
 #include "Advances.h"

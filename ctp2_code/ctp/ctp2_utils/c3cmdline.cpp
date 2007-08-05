@@ -35,6 +35,7 @@
 // - Removed non-standard include file <iostream.h>.
 // - Standardised min/max usage.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,7 +44,7 @@
 #include "c3cmdline.h"
 
 #include "CivilisationRecord.h"
-#include "ConstDB.h"
+#include "ConstRecord.h"
 #include "c3ui.h"
 #include "debugmemory.h"
 #include "log.h"
@@ -155,9 +156,6 @@ extern MBCHAR g_building_buildlist_db_filename[_MAX_PATH];
 extern MBCHAR g_improvement_list_db_filename[_MAX_PATH];
 extern MBCHAR g_diplomacy_db_filename[_MAX_PATH];
 extern MBCHAR g_advance_list_db_filename[_MAX_PATH];
-
-extern ConstDB              *g_theConstDB;
-
 
 extern Background           *g_background;
 extern ChatBox              *g_chatBox;
@@ -6165,12 +6163,14 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 	if (!strcmp(argv[1], "const")) {
 		
 		delete g_theConstDB;
-        g_theConstDB = new ConstDB();
+        g_theConstDB = new CTPDatabase<ConstRecord>;
+
 		if (g_theConstDB) {
-			if (!ConstDB_Parse (g_constdb_filename, C3DIR_GAMEDATA)) {
+			if(!g_theConstDB->Parse(C3DIR_GAMEDATA, g_constdb_filename)) {
 				Assert(FALSE);
 				return;
 			}
+
 		} else {
 			return;
 		}
