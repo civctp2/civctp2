@@ -218,8 +218,8 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  20  MaxExec   3 }
-    GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  20  MaxExec  15 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
@@ -250,7 +250,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority   450000  MaxEval   5  MaxExec   2 }
-    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_REFORM              Priority   450000  MaxEval   1  MaxExec 0.5 PerCity}
@@ -268,7 +268,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval  15  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   405000  MaxEval  25  MaxExec   5 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   5 } //MG added
 
     // multiplied by #rounds to target
     DistanceModifierFactor  -50
@@ -295,7 +295,7 @@ STRATEGY_DEFAULT {
     RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.15
+    UnitSupportPercent      0.50
 
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.20
@@ -702,7 +702,7 @@ STRATEGY_SEIGE {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent 0.35
+    UnitSupportPercent 0.50
 
     // Types of special units that should be built
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
@@ -720,11 +720,12 @@ STRATEGY_SEIGE {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec   5 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   600000  MaxEval   3  MaxExec   1 }
     GoalElement { Goal GOAL_ATTACK              Priority   600000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS              Priority   595000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_BOMBARD             Priority   597000  MaxEval  25  MaxExec   4 }
+    GoalElement { Goal Goal_NUKE_CITY           Priority   650000  MaxEval  10  MaxExec   2 }
 
     // multiplied by #rounds to target
 	DistanceModifierFactor		     -150
@@ -783,7 +784,7 @@ STRATEGY_ATTACK {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent 0.35
+    UnitSupportPercent 0.50
 
 
     // Unit Percents must total to 1 (100%)
@@ -804,8 +805,8 @@ STRATEGY_ATTACK {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
 
     GoalElement { Goal GOAL_DEFEND              Priority   507000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec   3 }
-    GoalElement { Goal GOAL_ATTACK              Priority   605000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_BOMBARD             Priority   607000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   595000  MaxEval  25  MaxExec  10 }
@@ -815,7 +816,7 @@ STRATEGY_ATTACK {
     // multiplied by #rounds to target
 	DistanceModifierFactor		     -150
 
-	NuclearFirstStrike: Disabled
+	NuclearFirstStrike: Enabled
 	NuclearTargeting: Enabled
 
 	// do not perform first strike if our regard is above some limit
@@ -885,7 +886,7 @@ STRATEGY_DEFEND {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent 0.35
+    UnitSupportPercent 0.60
 
     // Types of special units that should be built
     AirTransportUnitList UNIT_BUILD_LIST_AIR
@@ -894,7 +895,7 @@ STRATEGY_DEFEND {
     OffensiveUnitsPercent 0.10
     DefensiveUnitsPercent 0.40
     RangedUnitsPercent    0.40
-    SeaUnitsPercent       0.10
+    SeaUnitsPercent       0.0
     AirUnitsPercent       0.10
 
     GoalElement { Goal GOAL_DEFEND              Priority   657000  MaxEval   2  MaxExec   1 PerCity }
@@ -946,8 +947,8 @@ STRATEGY_CAREFUL_START {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
 
 	// Set so early cities will build offensive units to explore with after a granary
     BuildListSequenceElement {
@@ -966,8 +967,8 @@ STRATEGY_AGRESSIVE_START {
 
     // same as careful start, but with no garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
 
     // Set so early cities will build offensive units to explore before a granary
     BuildListSequenceElement {
@@ -1221,8 +1222,8 @@ STRATEGY_SCIENTIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
-    GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
@@ -1253,7 +1254,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_REFORM              Priority   450000  MaxEval   1  MaxExec 0.5 PerCity}
@@ -1271,7 +1272,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval  15  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   505000  MaxEval  25  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   3 } //MG added
 
     // multiplied by #rounds to target
     DistanceModifierFactor  -50
@@ -1298,7 +1299,7 @@ STRATEGY_SCIENTIST_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.10
+    UnitSupportPercent      0.50
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -1338,9 +1339,9 @@ STRATEGY_SCIENTIST_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -1685,9 +1686,9 @@ STRATEGY_MILITARIST_DEFAULT {
     // GOALS
     //
 
-    GoalElement { Goal GOAL_DEFEND              Priority   257000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   3 }
-    GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
@@ -1718,7 +1719,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_REFORM              Priority   450000  MaxEval   1  MaxExec 0.5 PerCity}
@@ -1736,13 +1737,13 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   465000  MaxEval  15  MaxExec  15 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   505000  MaxEval  25  MaxExec   5 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   5 } //MG added
 
     // multiplied by #rounds to target
     DistanceModifierFactor  -50
 
     // number of armies to try and disband units from per round
-    DisbandArmyCount    10
+    DisbandArmyCount    8
 
 	// minimum distance between settled cities 
 	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
@@ -1763,7 +1764,7 @@ STRATEGY_MILITARIST_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.25
+    UnitSupportPercent      0.50
 
 	// Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.25
@@ -1803,9 +1804,9 @@ STRATEGY_MILITARIST_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -2158,8 +2159,8 @@ STRATEGY_ECONOMIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
-    GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2190,7 +2191,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_REFORM              Priority   450000  MaxEval   1  MaxExec 0.5 PerCity}
@@ -2208,7 +2209,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   575000  MaxEval  25  MaxExec  15 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   509000  MaxEval  25  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   609000  MaxEval  25  MaxExec   3 } //MG added
 
     // multiplied by #rounds to target
     DistanceModifierFactor  -50
@@ -2235,7 +2236,7 @@ STRATEGY_ECONOMIC_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.20
+    UnitSupportPercent      0.50
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -2275,9 +2276,9 @@ STRATEGY_ECONOMIC_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -2620,9 +2621,9 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     // GOALS
     //
 
-    GoalElement { Goal GOAL_DEFEND              Priority   657000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
-    GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2653,7 +2654,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_REFORM              Priority   450000  MaxEval   1  MaxExec 0.5 PerCity}
@@ -2671,7 +2672,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   445000  MaxEval  15  MaxExec   7 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   506000  MaxEval  25  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   606000  MaxEval  25  MaxExec   3 } //MG added
 
     // multiplied by #rounds to target
     DistanceModifierFactor  -50
@@ -2698,7 +2699,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.20
+    UnitSupportPercent      0.50
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -2738,9 +2739,9 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -3084,8 +3085,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   405000  MaxEval  20  MaxExec   4 }
-    GoalElement { Goal GOAL_ATTACK              Priority   405000  MaxEval  25  MaxExec  25 }
+    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_SETTLE_SEA          Priority   900000  MaxEval  25  MaxExec  15 }
@@ -3116,7 +3117,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_INJOIN              Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_ASSASSINATE         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   1 }
     GoalElement { Goal GOAL_REFORM              Priority   450000  MaxEval   1  MaxExec 0.5 PerCity}
@@ -3134,7 +3135,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   440000  MaxEval   5  MaxExec   3 } //MG added
-    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   505000  MaxEval  25  MaxExec   4 } //MG added
+    GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   4 } //MG added
 
     // multiplied by #rounds to target
     DistanceModifierFactor  -50
@@ -3161,7 +3162,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.20
+    UnitSupportPercent      0.50
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -3201,9 +3202,9 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
-    RangedGarrisonCount     0
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
     // first sequence that applies
@@ -3395,7 +3396,7 @@ STRATEGY_DEFENSE_NONE {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     0
 }
 
@@ -3403,40 +3404,40 @@ STRATEGY_DEFENSE_VERY_LOW {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     0
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_LOW {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     2
 }
 
 STRATEGY_DEFENSE_MEDIUM {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  3
     RangedGarrisonCount     2
 }
 
 STRATEGY_DEFENSE_HIGH {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     1
+    OffensiveGarrisonCount  2
+    DefensiveGarrisonCount  3
+    RangedGarrisonCount     3
 }
 
 STRATEGY_DEFENSE_VERY_HIGH {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    OffensiveGarrisonCount  3
+    DefensiveGarrisonCount  3
+    RangedGarrisonCount     3
 }
 
 ////////////////////////////////////////

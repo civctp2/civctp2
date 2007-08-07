@@ -3648,7 +3648,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							happinessAttackOwner = cityData->GetOwner();
 							HasReligionIcon = cityData->HasReligionIcon();
 							slaveBits = cityData->GetSlaveBits();
-							
+							//hasSpecialIcon = cityData->HasSpecialIcon();
 							isRioting = cityData->GetIsRioting();
 							hasAirport = cityData->HasAirport();
 							if (owner == g_selected_item->GetVisiblePlayer())
@@ -3894,7 +3894,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								isWatchful, isCapitol);
 					//if (CityIcons) {
 					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, unit, HasReligionIcon);
-					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit);
+					//need to fix this.
+					//DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit);
 					//}
 
 				}

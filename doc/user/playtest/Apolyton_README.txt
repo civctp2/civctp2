@@ -47,8 +47,31 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-2007-07-25 (revision 773)
+207-08-07 (revision 787)
+Changed:  ConstDB replaced with a new one
+Changed:  Harappan flag now is pakistan's flag
+Changed:  Jamaica headers that mapped to POland are now labeled as Poland
+Added:    Jamaica is now a civ (as it was in CTP1)
+Fixed:    Crash caused by CitySpecialIcons (will rework)
+Fixed:    Tribe screen no longer shows barbarians and works
+Changed:  Greek flag is now from the 19th century (easier to see)
+Changed:  STrategies and Goals.txt now use Protra's update
+
+2007-08-02 (revision 785)
+Changed:  Empire selection start up now a list box
+Fixed:    Const.txt compatibility for scenarios
+Fixed:    Multiplayer window loads (but lobby cant be reached)
+Fixed:    Turn year length mechanism for scenarios
 Deleted:  ShowCityIcon from Building and Wonder DB replaced with new flags
+Added:    New Database Flags
+- BuildingDB
+   ShowCityIconTop      Displays this icon on top of a city graphic
+   ShowCityIconBottom   Icon displayed under city graphic
+- WonderDB
+   ShowCityIconTop      Displays this icon on top of a city graphic
+   ShowCityIconBottom   Icon displayed under city graphic
+
+2007-07-25 (revision 773)
 Changed:  TargetCivilians flag now uses a probability like normal bombard
 Changed:  PrecisionStrike flag now uses a probability like normal bombard
 Added:    Cities on a trade route that does not belong to the city owner
@@ -65,13 +88,7 @@ Added:    New ConstDB Properties
                         route goes to a city that it passes through
    CAPTURED_CITY_KILL_POP modders can specify how many civilians killed 
                         when city is captured
-Added:    New Database Flags
-- BuildingDB
-   ShowCityIconTop      Displays this icon on top of a city graphic
-   ShowCityIconBottom   Icon displayed under city graphic
-- WonderDB
-   ShowCityIconTop      Displays this icon on top of a city graphic
-   ShowCityIconBottom   Icon displayed under city graphic
+
 
 2007-06-09 (revision 745)
 Changed:  The Army stacking flag is no longer displayed above the health bar

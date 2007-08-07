@@ -87,6 +87,8 @@
 //end includes
 
 
+#define k_NUM_MAX_TRIBES 1;
+
 extern C3UI             *g_c3ui;
 extern ProfileDB        *g_theProfileDB;
 extern sint32               g_isCheatModeOn;
@@ -102,10 +104,11 @@ static aui_SwitchGroup		*s_maleFemaleSwitchGroup = NULL;
 //sint32						civ = g_theCivilisationDB->NumRecords();
 static GENDER				s_gender;
 //sint32 const                INDEX_TRIBE_INVALID = 0;
-sint32  const                    INDEX_TRIBE_INVALID = 0; //the original code set this to the number of boxes but it won't take number of civs
+sint32  const               INDEX_TRIBE_INVALID = k_NUM_MAX_TRIBES; //the original code set this to the number of boxes but it won't take number of civs
 aui_Radio					*s_maleRadio = NULL;
 aui_Radio					*s_femaleRadio = NULL;
 sint32						s_tribeIndex    = INDEX_TRIBE_INVALID;
+sint32						s_skipIndex = 0;
 
 sint32 spnewgametribescreen_getTribeIndex( void )
 {
@@ -114,17 +117,14 @@ sint32 spnewgametribescreen_getTribeIndex( void )
 
 void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 {
-	Assert( index >= 0 && index < g_theCivilisationDB->NumRecords() );
-	if ( index < 0 || index >= g_theCivilisationDB->NumRecords() )
+
+	if (index < 0)
 	{
-		s_tribeIndex = (s_tribeIndex >= 0 && s_tribeIndex < g_theCivilisationDB->NumRecords()) ? s_tribeIndex : 0;
-		s_CivListBox->SelectItem(s_tribeIndex);
+        s_tribeIndex = INDEX_TRIBE_INVALID;
 		return;
 	}
 
-	Assert( index >= 0 && index < g_theCivilisationDB->NumRecords() );
-
-	s_CivListBox->SelectItem(index);
+	//s_CivListBox->SelectItem(index);
 
 	s_tribeIndex = index;
 
@@ -163,15 +163,15 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 	}
 	else
 	{
+
+		StringId nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
 		
-		StringId nameString;
 		if ( s_maleRadio->GetState() )
 			nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
 		else
 			nameString = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
 
-		s_leaderNameTextField->SetFieldText(
-			g_theStringDB->GetNameStr(nameString) );
+		s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString) );
 
 		if (shouldSetProfileDB)
 			g_theProfileDB->
@@ -199,8 +199,21 @@ sint32	spnewgametribescreen_displayMyWindow( void *cookie, BOOL edit )
 	else
 		s_leaderNameTextField->Enable( FALSE );
 
-	
-	
+
+	//this needed to be added to make the first civ (greeks) work...nope this does nothing
+/*
+	sint32 index = g_theProfileDB->GetCivIndex();
+	//if (s_CivListBox->GetSelectedItemIndex()){
+	//	index = s_CivListBox->GetSelectedItemIndex();
+	//}
+    s_CivListBox->SelectItem(index);
+  
+	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
+	StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
+	s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
+	*/
+	//end
+
 	g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie( g_spNewGameTribeScreen->Ok()->GetActionFunc(), cookie );
 
 	return retval;
@@ -212,10 +225,8 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action, MBCHAR *lname)
 
 	sint32 index   = INDEX_TRIBE_INVALID;
 	if (s_CivListBox->GetSelectedItemIndex()){
-		index = s_CivListBox->GetSelectedItemIndex();
+		index = s_CivListBox->GetSelectedItemIndex() + 1;
 	}
-
-	spnewgametribescreen_setTribeIndex(s_CivListBox->GetSelectedItemIndex());
 
 	if ( lname )
 		s_leaderNameTextField->GetFieldText( lname, 100 );
@@ -237,7 +248,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
+	s_tribeIndex = INDEX_TRIBE_INVALID;	
 	if ( g_spNewGameTribeScreen ) {
 		if(callback) {
 			g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
@@ -270,9 +281,17 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	Assert(s_CivListBox);
 	s_CivListBox->SetForceSelect(TRUE);
 
+
 	uint32 i;
 	for(i = 0; i < g_theCivilisationDB->NumRecords(); ++i){  //avoids 0?
+		//CIV_INDEX const ind = static_cast<CIV_INDEX>(g_theCivilisationDB->Get(i));
 
+		if (PLAYER_INDEX_VANDALS == i)
+		{
+			s_skipIndex = i;
+		}
+		else {
+		
 		//need to add enable and disable stuff here
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("CivItem");
 		Assert(item);
@@ -285,65 +304,29 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 		Assert(text);
 		if(!text)
 			break;
-		text->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetSingularCivName()));
+		text->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetPluralCivName()));  //singular?
+			s_CivListBox->AddItem(item);
+		}
 
-		s_CivListBox->AddItem(item);
 	}
-	sint32 index = s_tribeIndex;
-
-	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
-	sint32 const    playerIndex         = 
-        g_selected_item ? g_selected_item->GetVisiblePlayer() : 1;
-
-		//StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
-		//s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
-    
-		bool const      shouldSetProfileDB  =
-        !g_isCheatModeOn || 
-		 (g_player[playerIndex] && 
-		  g_player[playerIndex]->GetPlayerType() == PLAYER_TYPE_HUMAN
-         );
-
-	if (shouldSetProfileDB)
-		g_theProfileDB->SetCivIndex(civ);
-
 
 //from original code
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "leadernamestatic" );
-	s_leaderNameStatic = new c3_Static(
-		&errcode,
-		aui_UniqueId(),
-		controlBlock );
+	s_leaderNameStatic = new c3_Static(&errcode, aui_UniqueId(), controlBlock );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "leadernametextfield" );
-	s_leaderNameTextField = new C3TextField(
-		&errcode,
-		aui_UniqueId(),
-		controlBlock );
+	s_leaderNameTextField = new C3TextField(&errcode, aui_UniqueId(), controlBlock );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "malefemaleswitchgroup" );
-	s_maleFemaleSwitchGroup = new aui_SwitchGroup(
-		&errcode,
-		aui_UniqueId(),
-		controlBlock );
+	s_maleFemaleSwitchGroup = new aui_SwitchGroup( &errcode, aui_UniqueId(), controlBlock );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "malefemaleswitchgroup.maleradio" );
-	s_maleRadio = new aui_Radio(
-		&errcode,
-		aui_UniqueId(),
-		controlBlock,
-		spnewgametribescreen_malePress );
+	s_maleRadio = new aui_Radio(&errcode, aui_UniqueId(), controlBlock, spnewgametribescreen_malePress );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "malefemaleswitchgroup.femaleradio" );
-	s_femaleRadio = new aui_Radio(
-		&errcode,
-		aui_UniqueId(),
-		controlBlock,
-		spnewgametribescreen_femalePress );
+	s_femaleRadio = new aui_Radio(&errcode, aui_UniqueId(), controlBlock, spnewgametribescreen_femalePress );
 
-	
-	
 	if(g_isScenario && g_startInfoType == STARTINFOTYPE_NOLOCS)
 	{
 		s_leaderNameTextField->Enable(FALSE);
@@ -359,12 +342,22 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 //end original code
 
 
-	s_CivListBox->SelectItem(g_theProfileDB->GetCivIndex());
+
+//original code
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
-//since no select press
-
+//since no select press...
+	//adding this here disables the first civ's leader names
+	/*sint32 index = s_tribeIndex;
+	if (s_CivListBox->GetSelectedItemIndex()){
+		sint32 index = s_CivListBox->GetSelectedItemIndex();
+	
+	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
+	StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
+	s_leaderNameTextField->SetFieldText(g_theStringDB->GetNameStr(nameString));
+	}
+  */
 	return AUI_ERRCODE_OK;
 }
 
@@ -449,8 +442,12 @@ void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 
 	
 	spnewgametribescreen_removeMyWindow(action, lname);
 }
+
+//this function s not used but i cant find a way to replicate updating the set field when you select an item, it should automatically update
 void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
+
+	//this is for the text boxes and updated once selected
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	if ( (sint32) cookie < 0 ) return;
@@ -471,7 +468,8 @@ void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 	sint32 index = s_tribeIndex;
     if (s_CivListBox->GetSelectedItemIndex()){
-		index = s_CivListBox->GetSelectedItemIndex();
+		index = s_CivListBox->GetSelectedItemIndex() + 1; //needed to add +1 so the count isn't off when barbs are subtracted
+//GetSelectedItem() - cannot convert from 'class aui_Item *' to 'int'
 	}
 
 	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
@@ -484,7 +482,7 @@ void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint3
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 	sint32 index = s_tribeIndex;
     if (s_CivListBox->GetSelectedItemIndex()){
-		index = s_CivListBox->GetSelectedItemIndex();
+		index = s_CivListBox->GetSelectedItemIndex() + 1; //needed to add +1 so the count isn't off when barbs are subtracted
 	}
 	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
 		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();

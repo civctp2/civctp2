@@ -17,26 +17,6 @@
 #
 #----------------------------------------------------------------------------
 #
-# Remarks
-#
-# - This file contains all the civilisation related strings like civilisation
-#   names, city names, emissary photos and diplomacy flags.
-#   It contains nothing else.
-# - The order of the strings has been synchronized in the English, French, 
-#   German, Italian and Spanish version. This has not been done for the 
-#   Japanese version, since that file is missing from the CTP2 source 
-#   code project.
-# - If you add new strings make sure that you add them at the same location
-#   in every language version you have.
-# - For easy comparison between the languages make sure that the number
-#   of lines in each language file version is the same and that also the
-#   comments are at the same place.
-# - Keep also the indentation the same.
-# - You may add comments after the last line of strings that are specific to 
-#   one language only.
-#
-#----------------------------------------------------------------------------
-#
 # Modifications from the original Activision code:
 #
 # - Moved back diplomacy photo strings from add_str.txt.
@@ -55,7 +35,7 @@ PERSONALITY_DESCRIPTION_WAR_MANY	"Militant"
 PERSONALITY_DESCRIPTION_WAR_FEW		"Aggressive"
 PERSONALITY_DESCRIPTION_SCI_MANY	"Peaceful"
 PERSONALITY_DESCRIPTION_SCI_FEW		"Agreeable"
-#####
+######
 
 # SAM100798
 #
@@ -88,6 +68,7 @@ PRONOUN_HIM_FEMALE_CAP 	"Her"
 PRONOUN_HIS_MALE_CAP 	"His"
 PRONOUN_HIS_FEMALE_CAP 	"Her"
 
+
 # emissary flags
 #
 ABORIGINE_DIPLOMAT_FLAG			"aborigine-diploflag.tga"
@@ -95,7 +76,7 @@ AFRICAN_MAN_FLAG			"barbarian-diploflag.tga"
 AMERICAN_DIPLOMAT_FLAG			"US-diploflag.tga"
 ARABIAN_DIPLOMAT_FLAG			"arab-diploflag.tga"
 ARGENTINIAN_DIPLOMAT_FLAG		"argentina-diploflag.tga"
-ASSYRIAN_DIPLOMAT_FLAG			"Assyria2-diploflag.tga"
+ASSYRIAN_DIPLOMAT_FLAG			"assyria2-diploflag.tga"
 AUSTRALIAN_DIPLOMAT_FLAG		"australia-diploflag.tga"
 AUSTRIAN_DIPLOMAT_FLAG			"austria-diploflag.tga"
 AZTEC_DIPLOMAT_FLAG			"aztec-diploflag.tga"
@@ -108,7 +89,7 @@ CANADIAN_DIPLOMAT_FLAG			"canada-diploflag.tga"
 CARTHAGINIAN_DIPLOMAT_FLAG		"carthage-diploflag.tga"
 CELTIC_DIPLOMAT_FLAG			"celt-diploflag.tga"
 CHINESE_DIPLOMAT_FLAG			"china-diploflag.tga"
-CONFEDERATE_DIPLOMAT_FLAG		"confederate-diploflag.tga"
+CONFEDERATE_DIPLOMAT_FLAG      		"confederate-diploflag.tga"
 CUBAN_DIPLOMAT_FLAG			"cuba-diploflag.tga"
 DUTCH_DIPLOMAT_FLAG			"dutch-diploflag.tga"
 EGYPTIAN_DIPLOMAT_FLAG			"egypt-diploflag.tga"
@@ -118,7 +99,7 @@ ETRUSCAN_DIPLOMAT_FLAG			"etruscan-diploflag.tga"
 FRENCH_DIPLOMAT_FLAG			"france-diploflag.tga"
 GERMAN_DIPLOMAT_FLAG			"german-diploflag.tga"
 GREEK_DIPLOMAT_FLAG			"greece-diploflag.tga"
-HARAPPAN_DIPLOMAT_FLAG			"jamaica-diploflag.tga"
+HARAPPAN_DIPLOMAT_FLAG			"pakistanflag.tga"
 HEBREW_DIPLOMAT_FLAG			"israel-diploflag.tga"
 HITTITE_DIPLOMAT_FLAG			"hittite-diploflag.tga"
 INCAN_DIPLOMAT_FLAG			"peru-diploflag.tga"
@@ -156,7 +137,6 @@ TURKISH_DIPLOMAT_FLAG			"turkey-diploflag.tga"
 VIKING_DIPLOMAT_FLAG			"norway-diploflag.tga"
 WELSH_DIPLOMAT_FLAG			"welsh-diploflag.tga"
 ZULU_DIPLOMAT_FLAG			"zimbabwe-diploflag.tga"
-
 # emissary photos
 #
 GREEK_DIPLOMAT_PHOTO		"updp023.tga"
@@ -1948,44 +1928,45 @@ INDONESIAN_CITY_49		"Mataram"
 INDONESIAN_CITY_50		"Tarakan"
 
 
-JAMAICA				"Poland"
+POLAND				"Poland"
 
-JAMAICAN_LEADERM_NAME		"Lech Walesa"
-JAMAICAN_LEADERF_NAME		"Queen Jadwiga"
-JAMAICAN_COUNTRY_NAME		"Poland"
-JAMAICAN_SINGULAR		"Polish"
-JAMAICAN_PLURAL			"Poles"
+POLAND_LEADERM_NAME		"Lech Walesa"
+POLAND_LEADERF_NAME		"Queen Jadwiga"
+POLAND_COUNTRY_NAME		"Poland"
+POLAND_SINGULAR		"Polish"
+POLAND_PLURAL			"Poles"
 
-JAMAICAN_CITY_1			"Warsaw"
-JAMAICAN_CITY_2			"Krakow"
-JAMAICAN_CITY_3			"Gniezno"
-JAMAICAN_CITY_4			"Gdansk"
-JAMAICAN_CITY_5			"Katowice"
-JAMAICAN_CITY_6			"Wroclaw"
-JAMAICAN_CITY_7			"Czestochowa"
-JAMAICAN_CITY_8			"Gdynia"
-JAMAICAN_CITY_9			"Szczecin"
-JAMAICAN_CITY_10		"Poznan"
-JAMAICAN_CITY_11		"Lodz"
-JAMAICAN_CITY_12		"Bydgoszcz"
-JAMAICAN_CITY_13		"Radom"
-JAMAICAN_CITY_14		"Lublin"
-JAMAICAN_CITY_15		"Bialystok"
-JAMAICAN_CITY_16		"Ustka"
-JAMAICAN_CITY_17		"Kolobrzeg"
-JAMAICAN_CITY_18		"Torun"
-JAMAICAN_CITY_19		"Zakopane"
-JAMAICAN_CITY_20		"Olsztyn"
-JAMAICAN_CITY_21		"Opole"
-JAMAICAN_CITY_22		"Kutno"
-JAMAICAN_CITY_23		"Slubice"
-JAMAICAN_CITY_24		"Wadowice"
-JAMAICAN_CITY_25		"Walbrzych"
-JAMAICAN_CITY_26		"Sycewice"
-JAMAICAN_CITY_27		"Bielsko-Biala"
-JAMAICAN_CITY_28		"Wolin"
-JAMAICAN_CITY_29		"Malbork"
-JAMAICAN_CITY_30		"Rzeszow"
+POLAND_CITY_1			"Warsaw"
+POLAND_CITY_2			"Krakow"
+POLAND_CITY_3			"Gniezno"
+POLAND_CITY_4			"Gdansk"
+POLAND_CITY_5			"Katowice"
+POLAND_CITY_6			"Wroclaw"
+POLAND_CITY_7			"Czestochowa"
+POLAND_CITY_8			"Gdynia"
+POLAND_CITY_9			"Szczecin"
+POLAND_CITY_10		"Poznan"
+POLAND_CITY_11		"Lodz"
+POLAND_CITY_12		"Bydgoszcz"
+POLAND_CITY_13		"Radom"
+POLAND_CITY_14		"Lublin"
+POLAND_CITY_15		"Bialystok"
+POLAND_CITY_16		"Ustka"
+POLAND_CITY_17		"Kolobrzeg"
+POLAND_CITY_18		"Torun"
+POLAND_CITY_19		"Zakopane"
+POLAND_CITY_20		"Olsztyn"
+POLAND_CITY_21		"Opole"
+POLAND_CITY_22		"Kutno"
+POLAND_CITY_23		"Slubice"
+POLAND_CITY_24		"Wadowice"
+POLAND_CITY_25		"Walbrzych"
+POLAND_CITY_26		"Sycewice"
+POLAND_CITY_27		"Bielsko-Biala"
+POLAND_CITY_28		"Wolin"
+POLAND_CITY_29		"Malbork"
+POLAND_CITY_30		"Rzeszow"
+
 
 
 INCAN				"Incan"
@@ -3753,3 +3734,41 @@ MALIAN_CITY_48			"Bamako"
 MALIAN_CITY_49			"Nouakchott"
 MALIAN_CITY_50			"Kayes"
 
+JAMAICA "Jamaica"
+
+JAMAICAN_LEADERM_NAME 	"Percival James Patterson"
+JAMAICAN_LEADERF_NAME 	"Elizabeth II "
+JAMAICAN_COUNTRY_NAME 	"Jamaica"
+JAMAICAN_SINGULAR 	"Jamaican"
+JAMAICAN_PLURAL 	"Jamaicans"
+
+JAMAICAN_CITY_1 	"Kingston"
+JAMAICAN_CITY_2 	"Montego Bay"
+JAMAICAN_CITY_3 	"Falmouth"
+JAMAICAN_CITY_4 	"Port Maria"
+JAMAICAN_CITY_5 	"Morant Bay"
+JAMAICAN_CITY_6 	"Port Antonia"
+JAMAICAN_CITY_7 	"Mandeville"
+JAMAICAN_CITY_8 	"Half Way Tree"
+JAMAICAN_CITY_9 	"St. Ann's Bay"
+JAMAICAN_CITY_10 	"Luces"
+JAMAICAN_CITY_11 	"Bluefields Bay"
+JAMAICAN_CITY_12 	"Ocho Rios"
+JAMAICAN_CITY_13 	"Discovery Bay"
+JAMAICAN_CITY_14 	"Hope Wharf Beach"
+JAMAICAN_CITY_15 	"Long Bay"
+JAMAICAN_CITY_16 	"Mavis Bank"
+JAMAICAN_CITY_17 	"Whitehouse"
+JAMAICAN_CITY_18 	"Priory"
+JAMAICAN_CITY_19 	"Oracabessa"
+JAMAICAN_CITY_20 	"Silver Sands"
+JAMAICAN_CITY_21 	"Negril"
+JAMAICAN_CITY_22 	"Savanna la Mar"
+JAMAICAN_CITY_23 	"Runaway Bay"
+JAMAICAN_CITY_24 	"Freetown"
+JAMAICAN_CITY_25 	"Moneague"
+JAMAICAN_CITY_26 	"Hopewell"
+JAMAICAN_CITY_27 	"The Alley"
+JAMAICAN_CITY_28 	"Golden Grove"
+JAMAICAN_CITY_29 	"Duncans"
+JAMAICAN_CITY_30 	"Alligator Pond"

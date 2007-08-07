@@ -45,9 +45,11 @@ GOAL_SEIGE {
   SquadClass:CanDefend
   SquadClass:HasZoc
   SquadClass:CanCaptureCity
-
+  
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:Neutral
+  TargerOwner:ColdEnemy
 
   Execute	ORDER_ATTACK
 
@@ -84,21 +86,22 @@ GOAL_ATTACK {
   TargetType:AttackUnit
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
 
   Execute	ORDER_ATTACK
  
-  ThreatBonus			  100
+  ThreatBonus			  500
   EnemyValueBonus		 -250
   AlliedValueBonus		 1500
-  PowerBonus			  500
-  DistanceToHomeBonus	  -10
+  PowerBonus			10000
+  DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0  
   InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0 
   WoundedArmyBonus     -10000 
   NotVisibleBonus       -1000     
-  ChokePointBonus		   50
+  ChokePointBonus		  250
   UnexploredBonus	  -999999 
   ObsoleteArmyBonus		  100
   TreaspassingArmyBonus     0
@@ -1774,13 +1777,16 @@ GOAL_RANGED_ATTACK {
   TargetType:AttackUnit
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+
+
 
   Execute	ORDER_RANGED_ATTACK
  
-  ThreatBonus		  100
+  ThreatBonus		  500
   EnemyValueBonus		 -250
   AlliedValueBonus		 1000
-  PowerBonus			  500
+  PowerBonus			15000
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
