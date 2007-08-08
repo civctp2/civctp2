@@ -11,8 +11,8 @@
 #pragma once
 #endif
 
-#ifndef AUI_STRINGTABLE_H__
-#define AUI_STRINGTABLE_H__
+#ifndef __AUI_STRINGTABLE_H__
+#define __AUI_STRINGTABLE_H__
 
 #include <vector>           // std::vector
 

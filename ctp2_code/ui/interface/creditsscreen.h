@@ -21,7 +21,6 @@ class c3_CreditsText;
 
 
 
-
 sint32  creditsscreen_Initialize(void);
 void    creditsscreen_Cleanup(void);
 

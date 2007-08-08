@@ -11,8 +11,8 @@
 #pragma once
 #endif
 
-#ifndef C3_BUTTON_H__
-#define C3_BUTTON_H__
+#ifndef __C3_BUTTON_H__
+#define __C3_BUTTON_H__
 
 class c3_Button;
 class c3_EditButton;

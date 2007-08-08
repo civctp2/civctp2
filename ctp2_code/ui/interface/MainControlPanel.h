@@ -41,8 +41,8 @@
 #pragma once
 #endif
 
-#ifndef MAIN_CONTROL_PANEL_H__
-#define MAIN_CONTROL_PANEL_H__
+#ifndef __BMH_MAIN_CONTROL_PANEL_HEADER__
+#define __BMH_MAIN_CONTROL_PANEL_HEADER__
 
 //----------------------------------------------------------------------------
 // Library imports

@@ -1,6 +1,6 @@
-
-
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
+#endif
 #ifndef __INTROMOVIEWINDOW_H__
 #define __INTROMOVIEWINDOW_H__
 
@@ -47,3 +47,4 @@ private:
 
 
 #endif
+

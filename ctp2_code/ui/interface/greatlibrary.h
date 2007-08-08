@@ -40,8 +40,8 @@
 #pragma once
 #endif
 
-#ifndef GREATLIBRARY_H__
-#define GREATLIBRARY_H__
+#ifndef __GREATLIBRARY_H__
+#define __GREATLIBRARY_H__
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -114,7 +114,9 @@ enum LIB_STRING {
 
 class Chart;
 class ctp2_HyperTextBox;
+#ifdef WIN32
 class DirectVideo;
+#endif
 class ctp2_Static;
 class aui_StringTable;
 class ctp2_Button;

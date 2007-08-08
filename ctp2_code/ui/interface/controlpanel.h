@@ -1,4 +1,4 @@
-#define HAVE_PRAGMA_ONCE
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 

@@ -2,8 +2,8 @@
 #pragma once
 #endif
 
-#ifndef C3SCROLLER_H__
-#define C3SCROLLER_H__
+#ifndef __C3SCROLLER_H__
+#define __C3SCROLLER_H__
 
 class C3Scroller;
 

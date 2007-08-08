@@ -35,8 +35,8 @@
 #pragma once
 #endif
 
-#ifndef AUI_WINDOW_H
-#define AUI_WINDOW_H
+#ifndef __AUI_WINDOW_H
+#define __AUI_WINDOW_H
 
 class aui_Window;
 
