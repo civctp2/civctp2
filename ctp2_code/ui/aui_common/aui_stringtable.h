@@ -6,8 +6,9 @@
 
 
 
-
-
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __AUI_STRINGTABLE_H__
 #define __AUI_STRINGTABLE_H__

@@ -356,30 +356,6 @@ protected:
 
 	bool        m_sendRightClicks;
 	
-#if defined(_MSC_VER)	
-	virtual MouseEventCallback PreChildrenCallback;
-	virtual MouseEventCallback PostChildrenCallback;
-
-	
-	virtual MouseEventCallback MouseMoveOver;
-	virtual MouseEventCallback MouseMoveInside;
-
-	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-	virtual MouseEventCallback MouseLDragInside;
-	virtual MouseEventCallback MouseLDragOutside;
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-
-	virtual MouseEventCallback MouseLDoubleClickInside;
-
-	virtual MouseEventCallback MouseRGrabInside;
-	virtual MouseEventCallback MouseRDropInside;
-#else
 	virtual void	PreChildrenCallback	(aui_MouseEvent * mouseData);
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
@@ -399,7 +375,6 @@ protected:
 	
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-#endif
 };
 
 

@@ -25,6 +25,7 @@
 // - Moved CalculateHash() from aui_UI
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "aui_base.h"
 

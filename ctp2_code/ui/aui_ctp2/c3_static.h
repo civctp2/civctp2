@@ -78,19 +78,11 @@ public:
 
 protected:
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDropInside;
-
-	virtual MouseEventCallback MouseRGrabInside;
-	virtual MouseEventCallback MouseRDropInside;
-#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 
-#endif
 
 	uint32 m_bevelWidth;
 	uint32 m_bevelType;

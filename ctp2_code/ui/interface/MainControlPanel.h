@@ -44,13 +44,11 @@
 #ifndef __BMH_MAIN_CONTROL_PANEL_HEADER__
 #define __BMH_MAIN_CONTROL_PANEL_HEADER__
 
-
-
 //----------------------------------------------------------------------------
 // Library imports
 //----------------------------------------------------------------------------
 
-#include <memory>				// std::auto_ptr
+#include <memory>               // std::auto_ptr
 
 //----------------------------------------------------------------------------
 // Exported names

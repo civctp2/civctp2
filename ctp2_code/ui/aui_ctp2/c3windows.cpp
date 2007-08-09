@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 base window
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //

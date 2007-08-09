@@ -121,17 +121,6 @@ protected:
 	SwitchDrawCallback *m_drawFunc;
 	void *m_drawCookie;
 
-#if defined(_MSC_VER)	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-
-	virtual MouseEventCallback MouseRDropInside;
-#else
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
 
@@ -140,7 +129,6 @@ protected:
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-#endif
 };
 
 

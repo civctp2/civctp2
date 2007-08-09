@@ -1,13 +1,6 @@
-
-
-
-
-
-
-
-
-
-
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
 
 #ifndef __NETSHELL_H__
 #define __NETSHELL_H__
@@ -24,7 +17,6 @@
 class aui_Screen;
 class aui_Window;
 class NetShell;
-
 class ns_Tribes;
 
 

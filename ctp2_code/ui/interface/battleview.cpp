@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed refference to outdated special effect database. (Aug 26th 2005 Martin Gühmann)
+// - Removed reference to outdated special effect database. (Aug 26th 2005 Martin Gühmann)
 // - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------

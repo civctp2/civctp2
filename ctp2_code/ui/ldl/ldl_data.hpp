@@ -24,6 +24,11 @@
 //
 //
 //----------------------------------------------------------------------------
+
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
+
 #ifndef LDL_DATA_HPP
 #define LDL_DATA_HPP
 

@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +25,10 @@
 // - Event handlers declared in a notation that is more standard C++.
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __AUI_REGION_H__
 #define __AUI_REGION_H__

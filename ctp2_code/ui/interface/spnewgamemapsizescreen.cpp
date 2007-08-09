@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game map size selection screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //

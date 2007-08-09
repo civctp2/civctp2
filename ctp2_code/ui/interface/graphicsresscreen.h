@@ -1,3 +1,6 @@
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 
 #ifndef __GRAPHICSRESSCREEN_H__

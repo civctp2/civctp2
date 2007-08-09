@@ -30,10 +30,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "aui_imagebase.h"
-
 
 #include "aui_blitter.h"
 #include "aui_ldl.h"

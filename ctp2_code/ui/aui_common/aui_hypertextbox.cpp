@@ -19,10 +19,6 @@
 
 #include "aui_hypertextbox.h"
 
-#ifdef _MSC_VER
-#pragma optimize ("", off)
-#endif
-
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,

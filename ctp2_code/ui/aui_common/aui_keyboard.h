@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  :
+// Description  : User interface: keyboard handling
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -24,6 +24,11 @@
 //
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __AUI_KEYBOARD_H__
 #define __AUI_KEYBOARD_H__
 

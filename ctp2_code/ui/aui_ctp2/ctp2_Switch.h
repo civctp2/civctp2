@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -78,11 +75,7 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLDoubleClickInside;
-#else
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
-#endif
 
 private:
 	sint32	m_bevelWidth;

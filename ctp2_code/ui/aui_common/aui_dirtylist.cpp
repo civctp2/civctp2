@@ -1,13 +1,32 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Activision User Interface dirty list (whatever this is)
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Standardized code (May 21th 2006 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -306,13 +325,6 @@ AUI_ERRCODE aui_DirtyList::ComputeSpans( RECT *newRect )
 	if (newRect->left < 0) newRect->left = 0;
 	if (newRect->bottom >= m_height) newRect->bottom = m_height-1;
 	if (newRect->right >= m_width) newRect->right = m_width-1;
-
-
-
-
-
-
-
 
 
 

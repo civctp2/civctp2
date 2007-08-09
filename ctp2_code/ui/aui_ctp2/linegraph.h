@@ -2,6 +2,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __LINEGRAPH_H__
 #define __LINEGRAPH_H__
 

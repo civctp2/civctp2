@@ -1,8 +1,9 @@
 //----------------------------------------------------------------------------
 //
 // Project      : Call To Power 2
-// File type    : C++ header
+// File type    : C++ source
 // Description  : Science Manager Dialog
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,10 +31,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "ScienceManagementDialog.h"
-
 
 #include "AdvanceRecord.h"
 #include "aui_blitter.h"

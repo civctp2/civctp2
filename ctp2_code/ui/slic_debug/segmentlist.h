@@ -1,6 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __SEGMENT_LIST_H__
 #define __SEGMENT_LIST_H__
 

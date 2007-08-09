@@ -1,7 +1,6 @@
 
 
 #include "c3.h"
-
 #include "scoretab.h"
 
 #include "aui_ldl.h"

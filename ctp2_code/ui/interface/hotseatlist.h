@@ -17,6 +17,7 @@
 //
 // Compiler flags
 // 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

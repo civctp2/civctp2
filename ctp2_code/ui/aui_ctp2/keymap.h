@@ -25,9 +25,11 @@
 //   of the missing orders in the keyboard mapping options 
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __KEYMAP_H__
 #define __KEYMAP_H__ 1
 

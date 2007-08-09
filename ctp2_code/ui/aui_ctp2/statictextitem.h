@@ -1,6 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __STATICTEXTITEM_H__
 #define __STATICTEXTITEM_H__
 

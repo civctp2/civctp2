@@ -24,6 +24,11 @@
 //
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __AUI_MOVIEMANAGER_H__
 #define __AUI_MOVIEMANAGER_H__
 

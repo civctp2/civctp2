@@ -1,25 +1,40 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Network (multiplayer) user interface
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Made default constructor work probably. (21-Jul-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_SHELL_H__
 #define __AUI_SHELL_H__
 
-
 #include "aui_base.h"
 #include "tech_wllist.h"
 
-
 class aui_Screen;
-
-
 
 class aui_Shell : public aui_Base
 {
@@ -48,4 +63,4 @@ protected:
 };
 
 
-#endif 
+#endif

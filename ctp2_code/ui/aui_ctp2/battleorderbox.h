@@ -1,6 +1,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __BATTLEORDERBOX_H__
 #define __BATTLEORDERBOX_H__
 

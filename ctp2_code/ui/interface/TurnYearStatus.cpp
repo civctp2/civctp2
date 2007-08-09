@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Turn display
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -27,23 +29,16 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "TurnYearStatus.h"
 
-
 #include <sstream>
-
-
 #include "aui_ldl.h"
 #include "ctp2_button.h"
 #include "newturncount.h"
 #include "StrDB.h"
 #include "ctp2_Static.h"
-
 #include "SelItem.h"
 #include "player.h"
-
 #include "primitives.h"
 #include "colorset.h"
 extern ColorSet *g_colorSet;

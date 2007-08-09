@@ -43,6 +43,9 @@
 // - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+//
+/// \file   greatlibrary.cpp
+/// \brief  Great library handling
 
 #include "c3.h"
 #include "greatlibrary.h"

@@ -30,6 +30,10 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __AUI_WINDOW_H__
 #define __AUI_WINDOW_H__
 

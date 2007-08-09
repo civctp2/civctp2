@@ -64,13 +64,8 @@ protected:
 
 protected:
 	
-#if defined(_MSC_VER)	
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseRDropInside;
-#else
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-#endif
 };
 
 

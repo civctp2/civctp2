@@ -31,6 +31,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+
 #include "c3.h"
 
 #ifdef __AUI_USE_DIRECTX__

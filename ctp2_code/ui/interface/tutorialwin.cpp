@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The tutorial window
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //

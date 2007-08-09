@@ -71,7 +71,6 @@ public:
 protected:
 	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
-
 };
 
 

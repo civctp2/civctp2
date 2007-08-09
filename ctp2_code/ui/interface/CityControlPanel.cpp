@@ -4,6 +4,7 @@
 // File type    : C++ source
 // File name    : \UI\Interface\CityControlPanel.cpp
 // Description  : Handling for the city tab of the control panel 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -37,13 +40,9 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "CityControlPanel.h"
 
-
 #include <sstream>
-
 
 #include "aui_ldl.h"
 #include "BuildingRecord.h"
@@ -410,10 +409,9 @@ CityData *CityControlPanel::GetSelectedCity()
 // Name       : CityControlPanel::CitySelectActionCallback
 //
 // Description: Will be called when a city is selected on the control panel 
-//              city list.  
-//              
+//              city list.
+//
 //----------------------------------------------------------------------------
-
 void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 												uint32 action, uint32 data, void *cookie)
 {

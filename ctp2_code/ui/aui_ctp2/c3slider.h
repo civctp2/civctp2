@@ -86,11 +86,7 @@ public:
 	BOOL	IsVertical( void ) const
 	{ return m_orientation == AUI_RANGER_ORIENTATION_VERTICAL; }
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseRGrabInside;
-#else
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
-#endif
 
 protected:
 	sint32 m_ticks;

@@ -1,3 +1,7 @@
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
+
 #ifndef __NETFUNC_H__
 #define __NETFUNC_H__
 
@@ -9,6 +13,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <list>
+
 #ifdef USE_SDL
 #include <SDL.h>
 #include <SDL_thread.h>

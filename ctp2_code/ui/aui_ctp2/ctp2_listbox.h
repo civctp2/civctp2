@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -101,17 +98,6 @@ protected:
 
 	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);		
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseMoveOver;
-	virtual MouseEventCallback MouseMoveInside;
-	virtual MouseEventCallback MouseMoveOutside;
-	virtual MouseEventCallback MouseMoveAway;
-
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-	virtual MouseEventCallback MouseRDragOver;
-	virtual MouseEventCallback MouseRDragAway;
-#else
 	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData);
@@ -121,7 +107,6 @@ protected:
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
-#endif
 
 public:
 	

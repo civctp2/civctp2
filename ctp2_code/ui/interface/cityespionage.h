@@ -1,3 +1,39 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : The city espionage screen
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved cleanup and structure.
+//
+//----------------------------------------------------------------------------
+//
+/// \file   CityEspionage.h
+/// \brief  City espionage screen display (declarations)
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef CITYESPIONAGE_H__
 #define CITYESPIONAGE_H__

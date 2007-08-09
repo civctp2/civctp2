@@ -4,6 +4,7 @@
 // File type    : C++ source
 // File name    : ui\aui_ctp2\SetItem.cpp
 // Description  : Handles stuff about selected items.
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +18,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generates debug information when set.
 //

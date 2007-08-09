@@ -6,8 +6,9 @@
 
 
 
-
-
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __C3_BUTTON_H__
 #define __C3_BUTTON_H__

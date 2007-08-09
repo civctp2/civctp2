@@ -27,10 +27,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "ControlTabPanel.h"
-
 
 #include "CityControlPanel.h"
 #include "DomesticControlPanel.h"

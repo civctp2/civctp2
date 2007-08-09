@@ -27,8 +27,8 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 #include "aui_Factory.h"
+
 #include "aui_directsurface.h"
 #include "aui_sdlsurface.h"
 

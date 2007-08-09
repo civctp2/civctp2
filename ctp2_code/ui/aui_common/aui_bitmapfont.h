@@ -1,22 +1,51 @@
-/*
-	fixed for japanese by t.s. 2003.12
-		add uint16 GlyphInfo->c2
-			BOOL IsCached( uint16 c )
-		extract GlyphInfo m_glyphs
-
-*/
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// Generate extra debug output
+//
+// _JAPANESE
+// Support SJIS characters
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added support for Japanese characters (by t.s. 2003-12)
+//
+//----------------------------------------------------------------------------
+//
+/// \file  aui_bitmapfont.h
+/// \brief Font handling
 
 #ifndef __AUI_BITMAPFONT_H__
 #define __AUI_BITMAPFONT_H__
+
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// #include <>
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 
 #include "aui_base.h"

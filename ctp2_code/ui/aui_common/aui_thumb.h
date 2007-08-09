@@ -82,20 +82,6 @@ public:
 protected:
 	POINT	m_grabPoint;	
 
-#if defined(_MSC_VER)	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-	virtual MouseEventCallback MouseLDragInside;
-	virtual MouseEventCallback MouseLDragOutside;
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseRGrabInside {} 
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-
-	virtual MouseEventCallback MouseRDropInside;
-#else
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
@@ -107,7 +93,6 @@ protected:
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-#endif
 };
 
 

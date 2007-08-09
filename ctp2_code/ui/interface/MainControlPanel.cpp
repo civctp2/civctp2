@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Collection of control panels during actual play.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,10 +30,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
-
 #include "MainControlPanel.h"
-
 
 #include "CityControlPanel.h"
 #include "ControlTabPanel.h"
@@ -52,45 +51,7 @@
 
 
 MainControlPanel *g_mainControlPanel = NULL;
-
-
-
 static aui_ProgressBar	*s_progressBar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 STDEHANDLER(MainControlPanel_BeginTurn)
 {

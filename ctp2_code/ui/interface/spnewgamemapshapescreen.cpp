@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Handling of user preferences.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //

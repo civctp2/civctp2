@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -65,15 +62,9 @@ private:
 
 protected:
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseRGrabInside;
-	virtual MouseEventCallback MouseRDropInside;
-	virtual MouseEventCallback MouseRDropOutside;
-#else
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
     virtual void	MouseRDropInside(aui_MouseEvent * data);
     virtual void	MouseRDropOutside(aui_MouseEvent * data);
-#endif
 
 };
 

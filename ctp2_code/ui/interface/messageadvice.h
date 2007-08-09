@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -63,13 +60,8 @@ public:
 	AUI_ERRCODE AppendText( MBCHAR *text );
 
 protected:
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDragAway;
-#else
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseLDragAway(aui_MouseEvent * data);
-#endif
 
 	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
 	AUI_ERRCODE CreateTextBox( MBCHAR *ldlBlock );
