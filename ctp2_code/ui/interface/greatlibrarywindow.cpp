@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Memory leaks repaired in LoadText by MartinGühmann.
+// - Memory leaks repaired in LoadText by Martin Gühmann.
 // - Added variable and requirement retriever methods. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------

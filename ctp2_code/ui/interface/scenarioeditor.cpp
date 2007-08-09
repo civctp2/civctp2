@@ -25,26 +25,26 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent, by MartinGühmann.
+//   dependent, by Martin Gühmann.
 // - Make sure that newly created cities have the size as displayed in the 
-//   CityPopSpinner, by MartinGühmann.
+//   CityPopSpinner, by Martin Gühmann.
 // - Corrected wrap handling, by Fromafar.
-// - Fixed Auto-Turn-Off-Pollution-Bug, by MartinGühmann.
-// - Memory leaks fixed, by MartinGühmann and Fromafar.
+// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
+// - Memory leaks fixed, by Martin Gühmann and Fromafar.
 // - Fixed switch to player 1 bug when the scenario editor is loaded for the
-//   first time in a game session, by MartinGühmann.
-// - Added GetLastPlayer() to get the last player in the game, by MartinGühmann.
+//   first time in a game session, by Martin Gühmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
 // - Fixed player spinners in the scenario editor so that the last player
 //   is still accessable even if players before in the row were killed,
-//   by MartinGühmann. 
+//   by Martin Gühmann. 
 //   Unfortunatly it looks like here are more problems. Soon after some turns
 //   with the dead player I got Asserts when I try to access the dead player.
-// - Fix of a crash by MartinGühmann. If you selected a city changed the 
+// - Fix of a crash by Martin Gühmann. If you selected a city changed the 
 //   player, the city was destroyed by in game events, conquest, starvation
 //   slic and you switch back via the Scenario Editor to that player the game
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
-// - Added icons and tooltips to city style buttons, by MartinGühmann.
+// - Added icons and tooltips to city style buttons, by Martin Gühmann.
 // - Repaired backwards compatibility and possible crashes.
 // - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
@@ -77,7 +77,7 @@
 #include "citydata.h"
 #include "UnitData.h"
 
-//Added by MartinGühmann to have the appropiate number 
+//Added by Martin Gühmann to have the appropiate number 
 //on the city style tab 
 #include "CityStyleRecord.h"
 
@@ -282,14 +282,14 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin) {
 
-			//Added by MartinGühmann to amke sure that the Scenario Editor 
+			//Added by Martin Gühmann to amke sure that the Scenario Editor 
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
 			spin->SetSpinnerCallback(PlayerSpinner, NULL);
 
 			spin->SetMinimum(0, 0);
-			//Added by MartinGühmann
+			//Added by Martin Gühmann
 			spin->SetMaximum(GetLastPlayer(), 0);
 		}
 	}

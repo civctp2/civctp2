@@ -1,54 +1,13 @@
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __Text_Hasher_h__
 #define __Text_Hasher_h__
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const int MAX_KEY_CHARS = 40;
-
-
-
-
-
-
-
-
 template <class DATA_TYPE> class Translation;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 template <class DATA_TYPE> 
 class Translation
@@ -93,62 +52,35 @@ template <class DATA_TYPE>
 class Text_Hasher
 {
 public:
-
-	
-	
-	
-	
 	Text_Hasher
 	(
 		int size,						
 		DATA_TYPE untranslated_value	
 	);
 
-	
-	
-	
-	
 	~Text_Hasher();
 
-	
-	
-	
-	
-	
 	DATA_TYPE Look_Up_Data
 	(
 		const _TCHAR *key
 	);
 
-	
-	
-	
-	
 	void Add_To_Hash_Table
 	(
 		_TCHAR *key,
 		DATA_TYPE the_data
 	);
 
-
 protected:
 
-	
 	Translation<DATA_TYPE> ** m_hash_table;
 
-	
 	int m_data_count;
 
-	
 	int m_hash_table_size;
 
-	
 	DATA_TYPE m_untranslated;
 
-	
-	
-	
-	
 	int Hash_The_String
 	(
 		const _TCHAR *key

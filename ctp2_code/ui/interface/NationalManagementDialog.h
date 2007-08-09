@@ -31,7 +31,7 @@
 //----------------------------------------------------------------------------
 
 
-#ifdef HAVE_PRAGMA_ONCE
+#ifdef HAVE_PRAGMA_ONCE 
 #pragma once
 #endif
 #ifndef ___BMH_NATIONAL_MANAGEMENT_DIALOG_HEADER

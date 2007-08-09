@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Single player new game random/custom screen (seems to be unused, but should be used)
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

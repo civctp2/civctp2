@@ -30,6 +30,10 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef CITY_WINDOW_H__
 #define CITY_WINDOW_H__
 

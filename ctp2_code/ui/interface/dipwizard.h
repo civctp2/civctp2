@@ -22,6 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Added emissary photo to the diplomatic manager by Martin Gühmann
+// - removed new diplo attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 

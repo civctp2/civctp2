@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Single player tribe selection screen.
+// Description  : Single player new game difficulty screen
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------

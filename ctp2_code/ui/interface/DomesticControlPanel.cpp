@@ -25,9 +25,9 @@
 // Modifications from the original Activision code:
 //
 // - Blank function added to hide the data of the previous player for hotseat
-//   games. 
+//   games.
 // - Use the same science percentage everywhere.
-// - Domestic control panel shows now city limit. (Aug 7th 2005 Martin Gühmann)
+// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 

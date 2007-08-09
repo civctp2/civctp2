@@ -2,6 +2,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef __KM_SCREEN_H__
 #define __KM_SCREEN_H__
 

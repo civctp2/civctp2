@@ -32,6 +32,9 @@
 // - Added alpha <-> index functions. (Sep 13th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+//
+/// \file   GreatLibrary.h
+/// \brief  Great library handling
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -40,12 +43,21 @@
 #ifndef __GREATLIBRARY_H__
 #define __GREATLIBRARY_H__
 
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
 #include "ctp2_enums.h"
 #include <vector>	// std::vector
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 class GreatLibrary;
 class Great_Library_Item;
 class TechListItem;
+
 #define k_GL_TREE_LEFT		5
 #define k_GL_TREE_TOP		40
 #define k_GL_TREE_WIDTH		750
@@ -56,11 +68,6 @@ class TechListItem;
 
 #define k_GL_TITLE_WIDTH	340
 #define k_GL_TITLE_HEIGHT	30
-
-
-
-
-
 
 #define k_VIDEO_X		239
 #define k_VIDEO_Y		184
@@ -81,6 +88,10 @@ enum LIB_STRING {
 	LIB_STRING_INDEX,
 	LIB_STRING_TREE
 };
+
+//----------------------------------------------------------------------------
+// Project dependencies
+//----------------------------------------------------------------------------
 
 #include "ctp2_listitem.h"
 #include "keyboardhandler.h"
@@ -106,9 +117,8 @@ class ctp2_Window;
 template <class DATA_TYPE> class Text_Hasher;
 class SlicContext;
 
-
-
-
+//----------------------------------------------------------------------------
+// Declarations
 
 class Great_Library_Item
 {
@@ -125,57 +135,22 @@ class GreatLibrary : public KeyboardHandler {
 public:
 	GreatLibrary( sint32 theMode );
 	virtual ~GreatLibrary( void );
-
 	sint32 Initialize( MBCHAR *windowBlock );
-
-	
 	static Text_Hasher<char *> * m_great_library_info;
-
-	
-	
-	
-	
-	
 	static void Initialize_Great_Library_Data();
-
-	
-	
-	
-	
-	
 	static void Shutdown_Great_Library_Data();
-
-	
-	
-	
-	
-	
 	static void Load_Great_Library();
-
-	
-	
-	
-	
 	static int Get_Database_From_Name
 	(
 		char * database_name
 	);
 
-
-	
-	
-	
-	
-	
 	static int Get_Object_Index_From_Name
 	(
 		int which_database,				
 		char * object_name
 	);
 
-
-	
-	
 	ctp2_Button		*m_setGoalButton;
 
 protected:

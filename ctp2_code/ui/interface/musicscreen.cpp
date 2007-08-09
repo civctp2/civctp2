@@ -186,7 +186,6 @@ AUI_ERRCODE musicscreen_Cleanup()
 }
 
 
-
 #ifdef WIN32
 static
 #endif

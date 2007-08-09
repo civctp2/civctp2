@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit tab of the control panel
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

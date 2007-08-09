@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed refferences to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Removed references to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------

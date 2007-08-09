@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Collection of control panels during actual play.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -22,7 +23,7 @@
 // Modifications from the original Activision code:
 //
 // - Blank function added to hide the data of the previous player for hotseat
-//   games.  
+//   games.
 //
 //----------------------------------------------------------------------------
 

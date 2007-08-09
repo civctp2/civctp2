@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// File name    : \UI\Interface\CityControlPanel.h
+// Description  : Handling for the city tab of the control panel 
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -91,21 +122,21 @@ private:
 	void UpdateGovernor();
 
 	
-	ctp2_Static *m_buildItemLabel;		
-	ctp2_Button *m_buildItemIconButton;	
-	ctp2_Button *m_buildItemTurnButton;	
-	ctp2_Button *m_buildRushBuy;		
-	ctp2_Static *m_buildItemProgressBar; 
+	ctp2_Static *m_buildItemLabel;
+	ctp2_Button *m_buildItemIconButton;
+	ctp2_Button *m_buildItemTurnButton;
+	ctp2_Button *m_buildRushBuy;
+	ctp2_Static *m_buildItemProgressBar;
 	ctp2_Static *m_rushBuyCost;
 
 	
-	ctp2_Button *m_cityListPreviousButton;	
-	ctp2_DropDown *m_cityListDropDown;		
-	ctp2_Button *m_cityListNextButton;		
+	ctp2_Button *m_cityListPreviousButton;
+	ctp2_DropDown *m_cityListDropDown;
+	ctp2_Button *m_cityListNextButton;
 
 	
-	ctp2_Button *m_governorToggleButton;	
-	ctp2_DropDown *m_governorDropDown;		
+	ctp2_Button *m_governorToggleButton;
+	ctp2_DropDown *m_governorDropDown;
 
 	
 	Unit m_currentCity;

@@ -26,13 +26,17 @@
 //   (JJB)
 //
 //----------------------------------------------------------------------------
+
+/// \file   InitialPlayWindow.h
+/// \brief  The first window to display (declarations).
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef INITIALPLAYWINDOW_FLAG
-#define INITIALPLAYWINDOW_FLAG
 
 #include "c3window.h"
+#ifndef INITIALPLAYWINDOW_H
+#define INITIALPLAYWINDOW_H
 
 class c3_Static;
 class c3_Button;

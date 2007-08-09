@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Fixed crash when the game tries to display invalid text strings, 
-//   by MartinGühmann.
+//   by Martin Gühmann.
 // - Tribe index check updated.
 // - Allowed for a number of players less than 3 to be displayed
 //   - JJB 2005/06/28

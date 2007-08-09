@@ -17,9 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -72,13 +69,8 @@ public:
 		sint32 y = 0 );
 
 protected:
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseMoveInside;
-	virtual MouseEventCallback MouseMoveAway;
-#else
 	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
-#endif
 
 };
 
