@@ -161,13 +161,8 @@ public:
 	HFONT	m_holdfont;
 #endif
 
-#if defined(_MSC_VER)	
-	virtual MouseEventCallback PostChildrenCallback;
-	virtual MouseEventCallback MouseLGrabOutside;
-#else
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
-#endif
 };
 
 

@@ -116,13 +116,8 @@ public:
 	
 	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback	MouseLGrabInside;
-	virtual MouseEventCallback	MouseRGrabInside;
-#else
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
-#endif
 
 	virtual AUI_ERRCODE			Idle( void );
 

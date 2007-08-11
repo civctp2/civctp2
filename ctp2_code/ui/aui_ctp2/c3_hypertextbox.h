@@ -91,15 +91,9 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE CreateRanger( MBCHAR *ldlBlock = NULL );
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-	virtual MouseEventCallback MouseLGrabInside;
-#else
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
-#endif
 
 public:
 	void RemoveHyperLinks( void );

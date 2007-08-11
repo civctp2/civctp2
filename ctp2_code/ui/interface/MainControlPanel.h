@@ -116,13 +116,8 @@ public:
 	
 	MainControlPanel(MBCHAR *ldlBlock);
 
-	
-#if defined(_MSC_VER)
-	MainControlPanel::~MainControlPanel();
-#else
 	virtual ~MainControlPanel();
-#endif
-
+	
 private:
 	
 	std::auto_ptr<ControlTabPanel>	m_controlTabPanel;	

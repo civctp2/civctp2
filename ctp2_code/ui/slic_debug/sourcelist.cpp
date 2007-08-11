@@ -86,13 +86,9 @@ public:
 		m_item = item;
 	}
 
-#ifdef _MSC_VER
-	aui_Action::ActionCallback Execute
-#else
 	virtual void Execute(aui_Control* control,
 	                     uint32 action,
 	                     uint32 data)
-#endif
 	{
 		m_item->Continue();
 	}
@@ -543,13 +539,9 @@ static c3_UtilityTextFieldPopup *s_conditionalPopup = NULL;
 class KillConditionalPopupAction : public aui_Action
 {
 public:
-#ifdef _MSC_VER
-        virtual ActionCallBack Execute
-#else
 	virtual void Execute(aui_Control* control,
 	                     uint32 action,
 	                     uint32 data)
-#endif
 	{
 		if(s_conditionalPopup) {
 			delete s_conditionalPopup;

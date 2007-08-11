@@ -74,21 +74,13 @@ protected:
 		{
 			if ( used )
 			{
-#if defined(_MSC_VER) && 0
-				delete[ usedSize ] used;
-#else
             delete[] used;
-#endif
 				used = 0;
 			}
 
 			if ( data )
 			{
-#if defined(_MSC_VER)
-				delete[ dataSize ] data;
-#else
             delete[] data;
-#endif
 				data = 0;
 			}
 		}

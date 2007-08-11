@@ -73,13 +73,8 @@ public:
 
 protected:
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLDragAway;
-#else
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseLDragAway(aui_MouseEvent * data);
-#endif
 
 private:
 	

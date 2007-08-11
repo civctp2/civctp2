@@ -241,21 +241,6 @@ protected:
 	aui_Control *m_focusControl;
 	tech_WLList<aui_Region *> *m_focusList;
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback PostChildrenCallback;
-
-	
-	virtual MouseEventCallback MouseLDragOver;
-	virtual MouseEventCallback MouseLDragAway;
-	virtual MouseEventCallback MouseLDragInside;
-	virtual MouseEventCallback MouseLDragOutside;
-
-	
-	virtual MouseEventCallback MouseLGrabInside;
-	virtual MouseEventCallback MouseLGrabOutside;
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-#else
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);	
@@ -265,7 +250,6 @@ protected:
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);	
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);	
-#endif
 
 	friend class aui_UI;
 };

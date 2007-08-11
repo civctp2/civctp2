@@ -180,40 +180,7 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 		(aui_Ldl::GetObject(s_initplayWindowLDLBlock, "VersionString"));
 	if (versionText)
 	{
-#if defined(_MSC_VER)
-		MBCHAR		exePath[MAX_PATH];
-		DWORD const	exePathSize	= GetModuleFileName(NULL, exePath, MAX_PATH);
-		HANDLE		fileHandle	= CreateFile(exePath, 
-											 GENERIC_READ,
-			                                 FILE_SHARE_READ, 
-											 NULL, 
-											 OPEN_ALWAYS, 
-											 FILE_ATTRIBUTE_NORMAL, 
-											 NULL
-											);
-
-		if (fileHandle != INVALID_HANDLE_VALUE) 
-		{
-			FILETIME	lastWrite;
-			SYSTEMTIME	systemTime;
-
-			if (GetFileTime(fileHandle, NULL, NULL, &lastWrite)		&&
-				FileTimeToSystemTime(&lastWrite, &systemTime)
-			   ) 
-			{
-				MBCHAR	displayDate[4 + 1 + 2 + 1 + 2 + 1];	// YYYY-MM-DD\0
-				sprintf(displayDate, 
-						"%#.4d-%#.2d-%#.2d", 
-						systemTime.wYear, 
-						systemTime.wMonth, 
-						systemTime.wDay
-					   );
- 				versionText->SetText(displayDate);
-			}
-
-			CloseHandle(fileHandle);
-		}
-#endif  // _MSC_VER
+// This was completely excised by _MSV_VER anyway, and no longer exists.
 	}
 
 

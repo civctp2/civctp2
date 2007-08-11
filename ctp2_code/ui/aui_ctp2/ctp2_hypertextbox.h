@@ -17,14 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are active for _MSC_VER value 1200 are the original 
-//       Activision code.
 //
 //----------------------------------------------------------------------------
 //
@@ -36,7 +28,7 @@
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -95,15 +87,9 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE CreateRanger( MBCHAR *ldlBlock = NULL );
 
-#if defined(_MSC_VER)
-	virtual MouseEventCallback MouseLDropInside;
-	virtual MouseEventCallback MouseLDropOutside;
-	virtual MouseEventCallback MouseLGrabInside;
-#else
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
-#endif
 
 public:
 	void RemoveHyperLinks( void );

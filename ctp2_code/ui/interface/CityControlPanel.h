@@ -4,6 +4,7 @@
 // File type    : C++ header
 // File name    : \UI\Interface\CityControlPanel.h
 // Description  : Handling for the city tab of the control panel 
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //

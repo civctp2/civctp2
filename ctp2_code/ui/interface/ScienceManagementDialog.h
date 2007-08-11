@@ -3,7 +3,6 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Science Manager Dialog
-// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //

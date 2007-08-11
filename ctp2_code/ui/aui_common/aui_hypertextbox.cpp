@@ -557,7 +557,4 @@ void HyperTextBoxRangerActionCallback(
 		hypertextbox->RangerMoved();
 	}
 }
-#ifdef _MSC_VER
-#pragma optimize ("", on)
-#endif
 
