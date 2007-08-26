@@ -124,7 +124,7 @@ LineGraph::LineGraph
 	m_enableYLabel      (true),
 	m_enableYNumber     (true),
 	m_enablePrecision   (true),
-    m_graphType         (GRAPH_TYPE_NONE)
+    m_graphType         (GRAPH_TYPE_LINE)
 {
 	InitCommon();	
 }
@@ -379,6 +379,10 @@ void LineGraph::DrawLines(int eventsOfset)
 				currentEventNum++;
 			}
 		}
+	}
+	else
+	{
+		Assert(false);
 	}
 }
 
