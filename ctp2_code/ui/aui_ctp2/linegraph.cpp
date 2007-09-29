@@ -28,6 +28,7 @@
 // - Resolved ambigious calls of std::max.
 // - Removed all warnings on .NET
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Moved graph functionality from other places (30-Sep-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -37,6 +38,7 @@
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_directsurface.h"
+#include "aui_stringtable.h"
 #include "aui_window.h"
 
 #include "c3ui.h"
@@ -44,14 +46,109 @@
 
 #include "pixelutils.h"
 #include "colorset.h"               // g_colorSet
+#include "gstypes.h"                // PLAYER_INDEX_VANDALS
+#include "player.h"                 // k_MAX_PLAYERS
 #include "primitives.h"
 #include "textutils.h"
+#include "TurnCnt.h"                // g_turn
 
 #include "EventTracker.h"
+#include "Strengths.h"
 
+extern C3UI                    *g_c3ui;
+extern PointerList<Player>     *g_deadPlayer;
 
-extern C3UI			*g_c3ui;
+static sint32                   s_minRound = 0;
 
+namespace
+{
+
+/// Evaluate a combined "strength" value at a given turn
+/// @param  a_Strengths Information per category and turn
+/// @param  a_Turn      The turn
+/// @param  a_Category  A strength category
+/// @return The combined "strength" value 
+sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 a_Category)
+{
+	switch(a_Category)
+	{
+		case kRankingScientific:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_KNOWLEDGE,   a_Turn);
+		}
+		case kRankingMilitary:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_MILITARY,     a_Turn);
+		}
+		case kRankingPollution:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_POLLUTION,    a_Turn);
+		}
+		case kRankingTrade:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_TRADE,        a_Turn);
+		}
+		case kRankingGold:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,         a_Turn);
+		}
+		case kRankingCities:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_CITIES,       a_Turn);
+		}
+		case kRankingGeographical:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_GEOGRAPHICAL, a_Turn);
+		}
+		case kRankingSpace:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_SPACE,        a_Turn);
+		}
+		case kRankingUndersea:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_UNDERSEA,     a_Turn);
+		}
+		case kRankingUnits:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_UNITS,        a_Turn);
+		}
+		case kRankingBuildings:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,    a_Turn);
+		}
+		case kRankingWonders:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,   a_Turn);
+		}
+		case kRankingEconomic:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,         a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,    a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,      a_Turn);
+		}
+		case kRankingOverall:
+		{
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_MILITARY,     a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,         a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,    a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,      a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,   a_Turn);
+		}
+		default:
+		{
+			Assert(false);
+			return a_Strengths.GetTurnStrength(STRENGTH_CAT_UNITS,       a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,        a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_BUILDINGS,   a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_WONDERS,     a_Turn)
+			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,  a_Turn);
+		}
+	}
+
+	return 0;
+}
+
+} // namespace
 
 LineGraph::LineGraph
 (
@@ -144,11 +241,10 @@ LineGraph::LineGraph
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 LineGraph::~LineGraph()
 {
 	delete [] m_xAxisName;
-    delete [] m_yAxisName;
+	delete [] m_yAxisName;
 	delete m_surface;
 	delete [] m_data;
 
@@ -494,5 +590,112 @@ void LineGraph::SetYAxisName(MBCHAR *name)
 	delete[] m_yAxisName;
 	m_yAxisName = new MBCHAR[strlen(name)+1];
 	strcpy(m_yAxisName, name);
+}
+
+void LineGraph::GenrateGraph(sint32     &infoXCount,
+                             sint32     &infoYCount,
+                             double ***  infoGraphData,
+                             sint32      category)
+{
+	infoYCount = 0;
+	infoXCount = 0;
+
+	AUI_ERRCODE                     errcode     = AUI_ERRCODE_OK;
+	std::auto_ptr<aui_StringTable>  stringTable (new aui_StringTable(&errcode, "InfoStrings"));
+
+	SetXAxisName(stringTable->GetString(6));
+	SetYAxisName("Power");
+
+	double minRound = s_minRound;
+	double curRound = g_turn->GetRound();
+	double minPower = 0;
+	double maxPower = 10;
+	
+	SetGraphBounds(minRound, curRound, minPower, maxPower);
+	HasIndicator(false);
+
+	sint32 color[k_MAX_PLAYERS];
+
+	sint32 i;
+	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
+	{
+		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
+		{
+			color[infoYCount++] = g_colorSet->ComputePlayerColor(i);
+		}
+	}
+	
+	for
+	(
+	    PointerList<Player>::Walker walk(g_deadPlayer);
+	    walk.IsValid();
+	    walk.Next()
+	)
+	{
+		color[infoYCount++] = g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
+	}
+
+
+	infoXCount = static_cast<sint32>(curRound) - static_cast<sint32>(minRound);
+	if (infoXCount == 0)
+	{
+		RenderGraph();
+		return;
+	}
+
+	infoXCount = std::max<sint32>(1, infoXCount);
+	infoYCount = std::max<sint32>(1, infoYCount);
+
+	Assert(!*infoGraphData);
+	*infoGraphData = new double *[infoYCount];
+
+	for (i = 0 ; i < infoYCount; i++)
+	{
+		(*infoGraphData)[i] = new double[infoXCount];
+		std::fill((*infoGraphData)[i], (*infoGraphData)[i] + infoXCount, 0.0);
+	}
+
+	sint32 playerCount = 0;
+	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
+	{
+		if (g_player[i] && (i != PLAYER_INDEX_VANDALS)) 
+		{
+			for (sint32 round = 0 ; round < infoXCount ; ++round)
+			{
+				sint32 strValue = GetCombinedStrength(*g_player[i]->m_strengths, round, category);
+				(*infoGraphData)[playerCount][round] = strValue;
+
+				while (strValue > maxPower)
+					maxPower += 10.0;
+			}
+			
+			playerCount++;
+		}
+	}
+
+	for
+	(
+	    PointerList<Player>::Walker walk2(g_deadPlayer);
+	    walk2.IsValid();
+	    walk2.Next()
+	)
+	{
+		for (sint32 round = 0 ; round < infoXCount ; ++round)
+		{
+			sint32 strValue = GetCombinedStrength(*walk2.GetObj()->m_strengths, round, category);
+			(*infoGraphData)[playerCount][round] = strValue;
+
+			while (strValue > maxPower)
+				maxPower += 10.0;
+		}
+		
+		playerCount++;
+	}
+
+	Assert(playerCount == infoYCount);
+
+	SetLineData(infoYCount, infoXCount, (*infoGraphData), color);
+	SetGraphBounds(minRound, curRound, minPower, maxPower);
+	RenderGraph();
 }
 

@@ -47,7 +47,6 @@
 #include "workwin.h"
 #include "sciencewin.h"
 #include "infowindow.h"
-#include "infowin.h"
 #include "victorywindow.h"
 #include "victorywin.h"
 #include "greatlibrary.h"
@@ -95,8 +94,6 @@ extern WorkWindow           *g_workWindow;
 extern GreatLibrary         *g_greatLibrary;
 
 extern ScienceWin           *g_scienceWin;
-
-extern InfoWindow           *g_infoWindow;
 
 extern DebugWindow          *g_debugWindow;
 

@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Line graph
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Moved graph functionality from other places (30-Sep-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -12,6 +40,26 @@ enum GRAPH_TYPE
 	GRAPH_TYPE_LINE,
 	GRAPH_TYPE_ZEROSUM,
 	GRAPH_TYPE_MAX
+};
+
+enum eRankingCategories
+{
+	kRankingScientific,
+	kRankingMilitary,
+	kRankingPollution,
+	kRankingTrade,
+	kRankingGold,
+	kRankingPopulation,
+	kRankingCities,
+	kRankingGeographical,
+	kRankingSpace,
+	kRankingUndersea,
+	kRankingUnits,
+	kRankingBuildings,
+	kRankingWonders,
+	kRankingEconomic,
+	kRankingProduction,
+	kRankingOverall
 };
 
 class  LineGraph;
@@ -28,7 +76,7 @@ struct LineGraphData
 {
 	double *    array;
 	double *    topArray;
-    double *    bottomArray;
+	double *    bottomArray;
 	sint32      index;
 	sint32      color;
 };
@@ -38,19 +86,19 @@ class LineGraph : public aui_Control
 public:
 
 	LineGraph(AUI_ERRCODE *retval, 
-					sint32 id, 
-					MBCHAR *ldlBlock,
-					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL,
-					EventTracker *events = NULL);
+	                sint32 id, 
+	                MBCHAR *ldlBlock,
+	                ControlActionCallback *ActionFunc = NULL,
+	                void *cookie = NULL,
+	                EventTracker *events = NULL);
 	LineGraph(AUI_ERRCODE *retval,
-					uint32 id,
-					sint32 x,
-					sint32 y,
-					sint32 width,
-					sint32 height,
-					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL);
+	                uint32 id,
+	                sint32 x,
+	                sint32 y,
+	                sint32 width,
+	                sint32 height,
+	                ControlActionCallback *ActionFunc = NULL,
+	                void *cookie = NULL);
 	virtual ~LineGraph();
 
 	void		SetXBounds(double min, double max) { m_xmin = min; m_xmax = max; }
@@ -60,7 +108,7 @@ public:
 	void		SetLineData(sint32 numLines, sint32 numSamples, double **data, sint32 *color = NULL);
 
 	void		SetIndicator(double val) { m_indicatorValue = val; }
-	void		HasIndicator(BOOL has) { m_hasIndicator = has; }
+	void		HasIndicator(bool has) { m_hasIndicator = has; }
 
 	void		SetXAxisName(MBCHAR *name);
 	void		SetYAxisName(MBCHAR *name);
@@ -90,6 +138,11 @@ public:
 
 	aui_Surface	*   GetGraphSurface(void) const { return m_surface; }
 
+	void LineGraph::GenrateGraph(sint32     &infoXCount,
+	                             sint32     &infoYCount,
+	                             double ***  infoGraphData,
+	                             sint32      category);
+
 private:
 	void		InitCommon(void);
 	void		InitCommonLdl(MBCHAR *ldlBlock);
@@ -103,7 +156,7 @@ private:
 	sint32			m_numSamples;
 	double			**m_lineData;
 
-	BOOL			m_hasIndicator;
+	bool			m_hasIndicator;
 	double			m_indicatorValue;
 
 	MBCHAR			*m_xAxisName;

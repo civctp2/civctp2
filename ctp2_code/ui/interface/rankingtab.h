@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,19 +44,6 @@ class ctp2_Window;
 class ctp2_DropDown;
 class ctp2_ListBox;
 class LineGraph;
-
-enum eRankingCategories
-{
-	kRankingMilitary,
-	kRankingEconomic,
-	kRankingScientific,
-	kRankingPollution,
-	kRankingOverall,
-};
-
-extern sint32 SetupRankingGraph(LineGraph *pLineGraph, double ***pGraphData, sint32 category);
-
-
 
 class RankingTab
 {

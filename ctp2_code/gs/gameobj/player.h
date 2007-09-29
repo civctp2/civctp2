@@ -108,7 +108,6 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 
 #define k_ANNOUNCE_TRADE_MESSAGES       1
 #define k_SQUELCH_TRADE_MESSAGES        0
-#define k_MAX_PLAYERS                   32
 
 //----------------------------------------------------------------------------
 // Project dependencies
@@ -120,6 +119,7 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 #include "directions.h"         // WORLD_DIRECTION
 #include "GameObj_types.h"      // CIV_INDEX, GENDER
 #include "GameOver.h"           // GAME_OVER
+#include "gstypes.h"            // k_MAX_PLAYERS
 #include "MapPoint.h"           // MapPoint
 #include "PollutionConst.h"     // k_MAX_EVENT_POLLUTION_TURNS, etc.
 #include "TradeRoute.h"         // TradeRoute, ROUTE_TYPE

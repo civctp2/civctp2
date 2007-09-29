@@ -29,6 +29,7 @@
 // - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standartized code (May 2006 Martin Gühmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -61,7 +62,6 @@
 #include "TurnCnt.h"                // g_turn
 #include "spnewgamewindow.h" 
 #include "linegraph.h"
-#include "infowin.h"
 #include "radarmap.h"
 #include "pixelutils.h"
 #include "SelItem.h"                // g_selected_item
@@ -530,11 +530,6 @@ void LoadSaveWindow::CleanUpSaveInfo( void )
 	m_gameInfo = NULL;
 }
 
-
-
-
-
-
 void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 {
 	AUI_ERRCODE	    errcode = AUI_ERRCODE_OK;
@@ -548,11 +543,13 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 
 	double **   graphData = NULL;
 	sint32		xCount, yCount;
-	if (infowin_UpdateGraph(myGraph, xCount, yCount, &graphData)) return;
+
+	myGraph->GenrateGraph(xCount, yCount, &graphData, kRankingOverall);
+	if(yCount <= 0) return;
 
 	if (info->powerGraphWidth > 0 && 
 		info->powerGraphHeight > 0) 
-    {
+	{
 		delete [] info->powerGraphData;
 	}
 

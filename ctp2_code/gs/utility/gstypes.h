@@ -41,7 +41,7 @@ typedef sint32 PLAYER_INDEX;
 #define PLAYER_INDEX_0 0
 #define PLAYER_INDEX_INVALID 32
 
-#define k_MAX_PLAYERS 32 
+#define k_MAX_PLAYERS 32
 
 #define TERRAIN_MAX 32
 

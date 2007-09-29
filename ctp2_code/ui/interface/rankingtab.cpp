@@ -28,6 +28,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Redesigned constructor, fixed possible crash. (June 5th 2006 Martin Gühmann)
 // - Repaired crashes and memory leaks
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -49,7 +50,7 @@
 #include "ctp2_Static.h"
 #include "ctp2_Window.h"
 #include "gstypes.h"
-#include "infowin.h"
+#include "infowin.h"            // InfoPlayerListItem should be moved to somewhere else so that infowin.h can be removed
 #include "linegraph.h"
 #include <memory>               // std::auto_ptr
 #include "player.h"
@@ -251,7 +252,8 @@ void RankingTab::UpdateGraph()
 	else if (category == m_rankingPollution)
 		category = kRankingPollution;
 
-	m_infoYCount = SetupRankingGraph(m_infoGraph, &m_infoGraphData, category);
+	sint32 infoXCount = 0;
+	m_infoGraph->GenrateGraph(infoXCount, m_infoYCount, &m_infoGraphData, category);
 
 	ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject("InfoDialog.TabGroup");
 	if(tabGroup->GetCurrentTab() == (ctp2_Tab *)aui_Ldl::GetObject("InfoDialog.TabGroup.Tab3"))
@@ -259,217 +261,6 @@ void RankingTab::UpdateGraph()
 		m_info_window->Draw();
 	}
 }
-
-
-sint32 SetupRankingGraph
-(
-	LineGraph * pInfoGraph, 
-	double ***  pInfoGraphData,
-	sint32      category
-)
-{
-	if (!pInfoGraph) return 0;
-
-	AUI_ERRCODE                     errcode     = AUI_ERRCODE_OK;
-	std::auto_ptr<aui_StringTable>  stringTable (new aui_StringTable(&errcode, "InfoStrings"));
-
-	pInfoGraph->SetXAxisName(stringTable->GetString(6));	
-	pInfoGraph->SetYAxisName("Power");
-
-	double minRound = s_minRound;
-	double curRound = g_turn->GetRound();
-	double minPower = 0;
-	double maxPower = 10;
-	pInfoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
-
-	pInfoGraph->HasIndicator(FALSE);
-	
-
-	sint32      maxPlayers      = k_MAX_PLAYERS + g_deadPlayer->GetCount();
-	sint32 *    color       = new sint32[maxPlayers];
-
-	sint32      infoYCount  = 0;
-	sint32      i;
-	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
-	{
-		if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
-		{
-			color[infoYCount++] = g_colorSet->ComputePlayerColor(i);
-		}
-	}
-	
-	for
-	(
-	    PointerList<Player>::Walker walk(g_deadPlayer);
-	    walk.IsValid();
-	    walk.Next()
-	)
-	{
-		color[infoYCount++] = g_colorSet->ComputePlayerColor(walk.GetObj()->GetOwner());
-	}
-
-
-	sint32 infoXCount = (sint32)curRound - (sint32)minRound;
-	if (infoXCount == 0) 
-	{
-		pInfoGraph->RenderGraph();
-
-		delete [] color;
-
-		return infoYCount;
-	}
-	else
-	{
-		infoXCount = std::max<sint32>(1, infoXCount);
-	}
-
-	infoYCount = std::max<sint32>(1, infoYCount);
-
-	double **infoGraphData = new double *[infoYCount];
-	*pInfoGraphData = infoGraphData;
-
-	for (i = 0 ; i < infoYCount; i++)
-	{
-		infoGraphData[i] = new double[infoXCount];
-		std::fill(infoGraphData[i], infoGraphData[i] + infoXCount, 0);
-	}
-
-	sint32 playerCount = 0;
-	sint32 strValue = 0;
-	for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
-	{
-		if (g_player[i] && (i != PLAYER_INDEX_VANDALS)) 
-		{
-			for (int j = 0 ; j < infoXCount ; j++ )
-			{
-				strValue = 0;
-
-				
-
-				sint32 round =  j;
-#ifdef OLD_GRAPHS
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-				strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, round);
-
-#else
-				
-				if (category == kRankingMilitary)
-				{
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
-				}
-				else if (category == kRankingEconomic)
-				{
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-				}
-				else if (category == kRankingScientific)
-				{
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_KNOWLEDGE, round);
-				}
-				else if (category == kRankingPollution)
-				{
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_POLLUTION, round);
-				}
-				else 
-				{
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-					strValue += g_player[i]->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, round);
-				}
-#endif
-
-				infoGraphData[playerCount][j] = (double)strValue;
-
-				
-				while (strValue > maxPower)
-					maxPower += 10;
-			}
-			
-			playerCount++;
-		}
-	}
-
-	
-	for
-	(
-	    PointerList<Player>::Walker walk2(g_deadPlayer);
-	    walk2.IsValid();
-	    walk2.Next()
-	)
-	{
-		for (int j = 0 ; j < infoXCount ; j++ )
-		{
-			strValue = 0;
-
-			
-			
-			sint32 round =  j;
-#ifdef OLD_GRAPHS
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-			strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, round);
-
-#else
-			
-			if (category == kRankingMilitary)
-			{
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
-			}
-			else if (category == kRankingEconomic)
-			{
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-			}
-			else if (category == kRankingScientific)
-			{
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_KNOWLEDGE, round);
-			}
-			//Added by Martin Gühmann
-			else if (category == kRankingPollution)
-			{
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_POLLUTION, round);
-			}
-			else 
-			{
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_MILITARY, round);
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_GOLD, round);
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_BUILDINGS, round);
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS, round);
-				strValue += walk2.GetObj()->m_strengths->GetTurnStrength(STRENGTH_CAT_PRODUCTION, round);
-			}
-#endif
-			infoGraphData[playerCount][j] = (double)strValue;
-
-			
-			while (strValue > maxPower)
-				maxPower += 10;
-		}
-		
-		playerCount++;
-	}
-
-	
-	Assert(playerCount == infoYCount);
-
-	pInfoGraph->SetLineData(infoYCount, infoXCount, infoGraphData, color);
-	pInfoGraph->SetGraphBounds(minRound, curRound, minPower, maxPower);
-
-	pInfoGraph->RenderGraph();
-
-	delete [] color;
-
-	return infoYCount;
-}
-
 
 void RankingTab::UpdatePlayerList( void )
 {

@@ -1,7 +1,7 @@
 
 
 
-
+// Looks like this is dead file, should be removed
 
 
 
@@ -161,7 +161,8 @@ void TimelineTab::CleanupGraph()
 void TimelineTab::UpdateGraph()
 {
 	CleanupGraph();
-	m_infoYCount = SetupRankingGraph(m_infoGraph, &m_infoGraphData, kRankingOverall);
+	sint32 xCount = 0;
+	m_infoGraph->GenrateGraph(xCount, m_infoYCount, &m_infoGraphData, kRankingOverall);
 	m_info_window->Draw();
 }
 
