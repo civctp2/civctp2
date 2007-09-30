@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map point handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -1034,7 +1034,6 @@ MapPoint SquareIterator::Pos() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size)
 :	SquareIterator  (center, size),
 	m_squaredRadius (static_cast<double>(size * size))

@@ -3315,7 +3315,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 	const TerrainRecord *neighborRec;
 	if(rec->GetMovementTypeLand() || rec->GetMovementTypeMountain()) {
 		
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2.0);
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
 
@@ -3331,7 +3331,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 		}
 	} else if(rec->GetMovementTypeShallowWater()) {
 		
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2.0);
 		bool nextToLand = false;
 		for(it.Start(); !it.End(); it.Next()) {
 			if(it.Pos() == pos) continue;
@@ -3382,7 +3382,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 			terr = TERRAIN_WATER_SHALLOW;
 		}
 	} else if(rec->GetMovementTypeSea()) {
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2.0);
 		bool nextToLand = false;
 		bool nextToShallow = false;
 		bool nextToBeach = false;
@@ -3500,7 +3500,7 @@ void World::SmartSetOneCell(const MapPoint &pos, sint32 terr)
 
 		
 		
-		RadiusIterator it(pos, 1);
+		RadiusIterator it(pos, 1, 2.0);
 		for(it.Start(); !it.End(); it.Next()) {
 			Cell *cell = GetCell(it.Pos());
 			if(cell) {
