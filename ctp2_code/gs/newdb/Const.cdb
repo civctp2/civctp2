@@ -330,11 +330,12 @@ Const : alsire {
 	Int    MaxMatchListCycles     =    6          aka MAX_MATCH_LIST_CYCLES
 	Int    MinTurnsBetweenRevolts =    1          aka MIN_TURNS_BETWEEN_REVOLT
 
-	Int    MaxCityWonders         = 1000          aka MAX_CITY_WONDERS
-	Int    MaxCityBuildings       = 1000          aka MAX_CITY_BUILDINGS
+	Int    MaxCityWonders         =  100          aka MAX_CITY_WONDERS
+	Int    MaxCityBuildings       =  100          aka MAX_CITY_BUILDINGS
 	Int    CapturedCityKillPop    =    1          aka CAPTURED_CITY_KILL_POP
 
 	Float  CombatEliteChance      = 0.05          aka COMBAT_ELITE_CHANCE
 	Float  CombatLeaderChance     = 0.01          aka COMBAT_LEADER_CHANCE
 	Float  CityOnTradeRouteCoeff  = 0.3           aka CITY_ON_TRADE_ROUTE_BONUS
+	Int	   CityExpansionDenominator = 0			  aka CITY_EXPANSION_DENOMINATOR
 }

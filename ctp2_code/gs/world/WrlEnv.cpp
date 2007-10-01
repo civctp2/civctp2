@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : part of the World class implementation
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -895,28 +895,18 @@ bool World::IsListeningPost(const MapPoint &point) const
 	return terrainutil_HasListeningPost(point);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bool World::IsFort(const MapPoint &point) const
 {
 	return terrainutil_HasFort(point);
+}
+//added by E
+bool World::IsUrban(const MapPoint &point) const
+{
+	return terrainutil_HasUrban(point);
+}
+bool World::IsWonder(const MapPoint &point) const
+{
+	return terrainutil_HasWonder(point);
 }
 
 

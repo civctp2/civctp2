@@ -189,6 +189,7 @@
 //   this could be implemented by a wonder of feat (in the future) or should it
 //   be standard? it would add value to cities. - E 6.10.2007 
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added CityExpansion and CitySlum code
 //
 //----------------------------------------------------------------------------
 
@@ -844,7 +845,8 @@ void CityData::Initialize(sint32 settlerType)
 		}
 	}
 
-	
+	//add 	DynamicArray<Religion> ReligionArray; //why doesn't cities use like player.cpp -> m_allInstallations = new DynamicArray<Installation>; ????
+
 	Cell *cell = g_theWorld->GetCell(center_point);
 	if(cell->GetEnv() & k_BIT_ENV_INSTALLATION) {
 		DynamicArray<Installation> instArray;
@@ -947,7 +949,7 @@ void CityData::Initialize(sint32 settlerType)
 	CalculateGrowthRate();
 
 	FindGoodDistances();
-
+	//this uses the ConstDB as the starting citysize. should this look to citysize instead? - E Aug 30, 2007
 	GenerateBorders(center_point, m_owner, g_theConstDB->Get(0)->GetBorderIntRadius(), g_theConstDB->Get(0)->GetBorderSquaredRadius());
 
 	UpdateSprite();
@@ -4135,6 +4137,11 @@ bool CityData::BeginTurn()
 	if(CityIsOnTradeRoute()) {
 		GiveTradeRouteGold();
 	}
+
+	//added city expanision code - 31 Aug 2007   requires Urban and Slum TileImps
+	AddCityExpansion();
+	AddCitySlum();
+
 	//END EMOD
 
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus);
@@ -4361,53 +4368,47 @@ void CityData::AddWonder(sint32 type)
 	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) {
 		GenerateBorders(point, m_owner, intRad, sqRad);
 	}
+// EMOD add HolyCity...need to link to religion DB (once Religion DB is done)
+//	if (wonderutil_GetDesignatesHolyCity((uint64)1 << (uint64)type)) {
+//		g_player[m_owner]->SetHolyCity(m_home_city); 
+//		g_player[m_owner]->RegisterNewHolyCity(m_home_city);
+//	}
 	// End Emod
 
 	// EMOD Visible wonders 4-25-2006
-	// How does the default constructor initialize MapPoint?
-	// Does the default constructor create a valid MapPoint?
-	// If not yes, how to create an invalid MapPoint?
 	MapPoint SpotFound;
 	CityInfluenceIterator it(point, GetVisionRadius());  //m_sizeIndex 
 	
 	sint32 s;
 	for(s = 0; s < rec->GetNumShowOnMap(); s++) {
 	const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
-	
-
 		for(it.Start(); !it.End(); it.Next()) {
 			Cell *ncell = g_theWorld->GetCell(it.Pos());
 			Cell *ocell = g_theWorld->GetCell(SpotFound);
 			if(point == it.Pos())
 				continue;
 
+			if(terrainutil_HasUrban(it.Pos()))
+				continue;
+			
+			if(terrainutil_HasWonder(it.Pos()))
+				continue;
+			
 			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos()) 
 			){
-				SpotFound = it.Pos();
-			}
+			//	SpotFound = it.Pos();
+			//}
 			
 				if ((!SpotFound.IsValid())
-				|| ((ncell->GetNumDBImprovements() > ocell->GetNumDBImprovements())  
-				&& (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) 
+				|| ((ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements())  
+				|| (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) 
 				){
 					SpotFound = it.Pos(); 
 				}
-			//}
+			}
 		}
 		g_player[m_owner]->CreateSpecialImprovement(rec->GetShowOnMapIndex(s), SpotFound, 0);
 	}
-
-//for all tiles in the city radius do
-//    if current tile allows building of wonder imp do
-//        if no good tile has been found yet
-//        or current tile is better than found tile do
-//            foundTile := currentTile
-//        end
-//    end
-//end
-
-//place wonder improvement on foundTile
-
 
 		// EMOD - FU 4-1-2006 visible tileimps, but it builds 
 		// them all around the radius i.e. GreatWall builds Great walls
@@ -4422,11 +4423,7 @@ void CityData::AddWonder(sint32 type)
 
 
 
-// EMOD add HolyCity...need to link to religion DB (once Religion DB is done)
-//	if (wonderutil_GetDesignatesHolyCity((uint64)1 << (uint64)type)) {
-//		g_player[m_owner]->SetHolyCity(m_home_city); 
-//		g_player[m_owner]->RegisterNewHolyCity(m_home_city);
-//	}
+
 }
 
 bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
@@ -8020,7 +8017,12 @@ void CityData::AddImprovement(sint32 type)
 	for(it.Start(); !it.End(); it.Next()) {
 //		Cell *cell = g_theWorld->GetCell(it.Pos());
 		if(point == it.Pos())
-				continue;
+			continue;
+		if(terrainutil_HasUrban(it.Pos()))
+			continue;
+		if(terrainutil_HasWonder(it.Pos()))
+			continue;
+
 		sint32 s;
 		for(s = 0; s < rec->GetNumShowOnMap(); s++) {
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
@@ -10385,6 +10387,156 @@ void CityData::GiveTradeRouteGold()
 				){
 					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff()));
 				}
+			}
+		}
+	}
+}
+
+bool CityData::HasSpecialIcon() const
+{
+//may add more to this bool so I can reuse the unseencell stuff and then break down the icon calls
+	if (buildingutil_GetShowCityIconTop(GetEffectiveBuildings())) {
+		return true;
+	}
+	if (wonderutil_GetShowCityIconTop(GetBuiltWonders())) {
+		return true;
+	}
+
+	return false;
+}
+
+void CityData::AddCityExpansion()
+{
+
+	MapPoint point(m_home_city.RetPos());
+	MapPoint SpotFound(m_home_city.RetPos());
+	CityInfluenceIterator it(point, GetVisionRadius()); 
+
+	if (g_theConstDB->Get(0)->GetCityExpansionDenominator() > 0) //this checks if its specified in constDB 
+
+	{
+		sint32 UrbanTile = PopCount()/(g_theConstDB->Get(0)->GetCityExpansionDenominator());
+		if(GetNumUrbanTile(m_home_city.RetPos()) >= UrbanTile)
+			return;
+		
+		sint32 UrbanImp = GetUrbanTileAvailable(m_home_city.RetPos());
+
+		for(it.Start(); !it.End(); it.Next()) {
+			Cell *ncell = g_theWorld->GetCell(it.Pos());
+			Cell *ocell = g_theWorld->GetCell(SpotFound);
+			UrbanImp = GetUrbanTileAvailable(it.Pos()); //includes advance check
+			if (UrbanImp < 0)
+				return;
+
+			if(point == it.Pos())
+				continue;
+
+			if(terrainutil_HasUrban(it.Pos()))
+				continue;
+			
+			if(terrainutil_HasWonder(it.Pos()))
+				continue;
+			
+			if(terrainutil_CanPlayerSpecialBuildAt(UrbanImp, m_owner, it.Pos()) 
+			){
+			//	SpotFound = it.Pos();
+			//}
+			
+				if ((!SpotFound.IsValid())
+				|| ((ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements())  
+				|| (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) 
+				){
+					SpotFound = it.Pos(); 
+				}
+			}
+			
+		}
+		g_player[m_owner]->CreateSpecialImprovement(UrbanImp, SpotFound, 0);
+
+	}
+}
+
+sint32 CityData::GetNumUrbanTile(const MapPoint pos) const
+{
+	CityInfluenceIterator it(pos, GetVisionRadius()); 
+	sint32 UrbanImp = 0;
+	for(it.Start(); !it.End(); it.Next()) {
+		if(terrainutil_HasUrban(it.Pos())) {
+			UrbanImp++;
+		}
+	}
+	return UrbanImp;
+}
+
+sint32 CityData::GetUrbanTileAvailable(const MapPoint pos) const
+{
+	sint32 UrbanImp = -1;
+	for (sint32 imp = 0; imp < g_theTerrainImprovementDB->NumRecords(); imp++) {
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+		const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(trec, pos);
+		if( (eff && eff->GetIsUrban()) && (terrainutil_CanPlayerBuild(trec, m_owner, true))
+		){
+			UrbanImp = imp;
+		}
+	}
+	return UrbanImp;
+}
+
+sint32 CityData::GetSlumTileAvailable(const MapPoint pos) const
+{
+	sint32 UrbanImp = -1;
+	for (sint32 imp = 0; imp < g_theTerrainImprovementDB->NumRecords(); imp++) {
+		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+		const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(trec, pos);
+		if( (eff && eff->GetSlum()) && (terrainutil_CanPlayerBuild(trec, m_owner, true)) //<-but this makes it availbale in game
+		){
+			UrbanImp = imp;
+		}
+	}
+	return UrbanImp;
+}
+
+void CityData::AddCitySlum()
+{
+
+	MapPoint point(m_home_city.RetPos());
+	MapPoint SpotFound;
+	CityInfluenceIterator it(point, GetVisionRadius()); 
+
+	if (g_theConstDB->Get(0)->GetCityExpansionDenominator() > 0) //this checks if its specified in constDB 
+	{
+
+		sint32 UrbanTile = PopCount()/(g_theConstDB->Get(0)->GetCityExpansionDenominator());
+		
+		if(GetNumUrbanTile(m_home_city.RetPos()) < UrbanTile)
+			return;
+		
+		for(it.Start(); !it.End(); it.Next()) {
+			Cell *ncell = g_theWorld->GetCell(it.Pos());
+			Cell *ocell = g_theWorld->GetCell(SpotFound);
+			sint32 UrbanImp = GetSlumTileAvailable(it.Pos());
+			if (UrbanImp < 0)
+				return;
+
+			if(point == it.Pos())
+				continue;
+
+			if(terrainutil_HasWonder(it.Pos()))
+				continue;
+			
+			if(terrainutil_CanPlayerSpecialBuildAt(UrbanImp, m_owner, it.Pos()) 
+			){
+			
+				if (
+				   (!SpotFound.IsValid())
+				&& (terrainutil_HasUrban(it.Pos())) 
+				){
+					SpotFound = it.Pos(); 
+				}
+			}
+			if(GetNumUrbanTile(m_home_city.RetPos()) > UrbanTile) {
+				g_player[m_owner]->CreateSpecialImprovement(UrbanImp, SpotFound, 0);
+		
 			}
 		}
 	}

@@ -604,7 +604,8 @@ public:
     bool IsRadar(const MapPoint &point) const;
     bool IsHealUnits(const MapPoint &point) const;
     bool IsFort(const MapPoint &point) const;
-
+	bool IsUrban(const MapPoint &point) const; //added by E
+	bool IsWonder(const MapPoint &point) const; //added by E
     
     void Serialize(CivArchive &archive) ;
     void SerializeJustMap(CivArchive &archive);

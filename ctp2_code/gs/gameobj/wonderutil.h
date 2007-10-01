@@ -110,6 +110,5 @@ sint32 wonderutil_GetEnergyHungerPerPop(const uint64 builtWonders);
 sint32 wonderutil_GetProducesEnergy(const uint64 builtWonders);
 sint32 wonderutil_GetProducesEnergyPerPop(const uint64 builtWonders);
 bool wonderutil_GetHasReligionIcon(uint64 builtWonders); 
-
-
+bool wonderutil_GetShowCityIconTop(uint64 builtWonders); 
 #endif

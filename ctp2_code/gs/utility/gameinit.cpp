@@ -476,7 +476,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 				}
 
 				if (g_player_start_score[which] < sint32(drec->GetExtraSettlerChance()))
-
+//add additional free start units here
 				{
 					nUnits++;
 				}

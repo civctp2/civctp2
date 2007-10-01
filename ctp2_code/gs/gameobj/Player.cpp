@@ -487,6 +487,8 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 		startAge = g_network.GetStartingAge();
 	}
 
+//add startAge option here for profile or pull down? ------EMOD
+
 	sint32 someAdvanceIHave = -1;
 	if(startAge == 0) {
 		sint32 granted = 0;
@@ -647,6 +649,7 @@ Player::Player(CivArchive &archive)
 #endif
 	m_materialPool = new MaterialPool(0);
 	m_civilisation = new Civilisation ;
+	//m_leader = new Leader;   //need to figure out how this is done - E 14 Sep 2007
 	m_unitRequestList = NULL;
 	m_score = new Score(PLAYER_INDEX(0));
 	
@@ -10674,10 +10677,60 @@ bool Player::CanBuildLeader(const sint32 type) const
 		return false;
 	}
 	//OneCityChallenge Option - emod 3-21-2007
-	if((rec->GetSettleLand()) || (rec->GetSettleWater())) {  //so far it makes all units unavailable?
+	if((rec->GetSettleLand()) || (rec->GetSettleWater())) {  
 		if ( (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) && (g_theProfileDB->IsOneCityChallenge()) ) {
 			return false;
 		}
 	}
 	return true;
 }
+
+
+void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gaining cities and Mergee is the loser
+{
+	//should it be PLAYER_INDEX?
+	sint32 c;
+
+	for(sint32 i = 0; i < g_player[Mergee]->m_all_cities->Num(); i++) {
+		Unit	c = g_player[Mergee]->m_all_cities->Get(i).m_id ;
+
+		CityData	*cityData = m_all_cities->Get(c).GetData()->GetCityData() ;
+
+		MapPoint newPos ;
+		double dist;
+		Unit city;
+		MapPoint oldPos;
+		c.GetPos(oldPos);
+
+		GetNearestCity(oldPos, city, dist, true);
+		city.GetPos(newPos);
+
+		bool revealed_foreign_units; 
+		bool revealed_unexplored; 
+
+	//reset unit owner as well
+
+		Cell * cell = g_theWorld->GetCell(oldPos);
+		for (sint32 j = 0; j < cell->GetNumUnits(); j++) {
+			UnitDynamicArray    revealed;
+			Unit u = cell->AccessUnit(j);
+			u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
+			u.SetPosition(oldPos, revealed, revealed_unexplored) ;
+	//cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored) ;
+		}
+		c.ResetCityOwner(Merger, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY) ;
+	}
+}
+
+/*
+void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
+{
+	UnitDynamicArray    revealed;
+	MapPoint	p ;
+	bool revealed_unexplored; 
+	Unit	u = m_all_units->Get(unit_idx).m_id ;
+
+	GetCapitolPos(p) ;
+	u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
+	u.SetPosition(p, revealed, revealed_unexplored) ;
+*/

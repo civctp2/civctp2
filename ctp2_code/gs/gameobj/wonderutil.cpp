@@ -490,3 +490,7 @@ bool wonderutil_GetHasReligionIcon(uint64 builtWonders)
 {
 	BOOL_WNDR(HasIsReligionIcon);
 }
+bool wonderutil_GetShowCityIconTop(uint64 builtWonders)
+{
+	BOOL_WNDR(HasShowCityIconTop);
+}

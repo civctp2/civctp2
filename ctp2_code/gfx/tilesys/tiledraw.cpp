@@ -3569,7 +3569,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						isWatchful = FALSE, //emod ; to ,
 						CityIcons = FALSE,
 						isCapitol = FALSE, //emod
-						HasReligionIcon = FALSE;
+						HasReligionIcon = FALSE,
+						HasSpecialIcon = FALSE;
 				sint32	bioInfectedOwner=0, 
 						nanoInfectedOwner=0, 
 						convertedOwner=0, 
@@ -3599,8 +3600,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						hasSleepingUnits = FALSE;
 					
 					isWatchful = ucell.m_unseenCell->IsWatchful();
-					isCapitol = ucell.m_unseenCell->IsCapitol(); //emod
-					HasReligionIcon = ucell.m_unseenCell->IsReligionIcon(); //emod
+
 					
 					bioInfectedOwner = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
 					nanoInfectedOwner = ucell.m_unseenCell->m_nanoInfectedOwner;
@@ -3610,7 +3610,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
 
 					slaveBits = ucell.m_unseenCell->GetSlaveBits();
-					CityIcons = FALSE;
+					isCapitol = ucell.m_unseenCell->IsCapitol(); //emod
+					HasReligionIcon = ucell.m_unseenCell->IsReligionIcon(); //emod
+					HasSpecialIcon = ucell.m_unseenCell->IsSpecialIcon(); //emod
 					
 					if (pop > 0)
 						drawCity = TRUE;
@@ -3646,9 +3648,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							franchiseOwner = cityData->GetFranchiseOwner();
 							injoinedOwner = cityData->GetOwner();
 							happinessAttackOwner = cityData->GetOwner();
-							HasReligionIcon = cityData->HasReligionIcon();
 							slaveBits = cityData->GetSlaveBits();
-							//hasSpecialIcon = cityData->HasSpecialIcon();
 							isRioting = cityData->GetIsRioting();
 							hasAirport = cityData->HasAirport();
 							if (owner == g_selected_item->GetVisiblePlayer())
@@ -3659,7 +3659,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							if(owner == g_selected_item->GetVisiblePlayer() &&
 							   !cityData->GetBuildQueue()->GetHead()) {
 								drawQueueEmpty = true;
-							CityIcons = TRUE;
+							HasReligionIcon = cityData->HasReligionIcon();
+							HasSpecialIcon = cityData->HasSpecialIcon();
 							}
 						}
 					}
@@ -3895,7 +3896,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					//if (CityIcons) {
 					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, unit, HasReligionIcon);
 					//need to fix this.
-					//DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit);
+					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit, HasSpecialIcon);
 					//}
 
 				}
@@ -4883,8 +4884,9 @@ void TiledMap::DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, s
 		return;
 }
 
-void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit)
+void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasSpecialIcon)
 {
+//Future Use - use special icon for everything else and just position the icons elsewhere
 	TileSet	*   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
     RECT		iconRect;
@@ -4906,6 +4908,7 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 		iconRect.bottom = popRect.top + iconDim.y + 1;
 		sint32  cityIcon = 0;
 		CityData *cityData = unit.GetData()->GetCityData();
+	if (HasSpecialIcon) {
 		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++){
 			if (g_theBuildingDB->Get(i, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(cityIcon))
 			{
@@ -4935,10 +4938,12 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 				}
 			}
 		}
-
+	}
 
 	if (iconRect.left < 0 || iconRect.top < 0 || 
 		iconRect.right >= surf->Width() ||
 		iconRect.bottom >= surf->Height())
 		return;
+
+	//Add Corporation Icons?
 }

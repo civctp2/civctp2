@@ -115,6 +115,8 @@
 // - Modified sink to send the unit type 5-24-2007
 // - Cleaned up beginturn moving stuff to ArmyData
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - changed settlebuilding for convert to estabvlish building since it isn't settling
+// - added establishbuilding check to advertise, makes it more worthwhile - by E 27 Aug 2007
 //
 //----------------------------------------------------------------------------
 
@@ -4000,13 +4002,13 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 							   GEA_City, city,
 							   GEA_End);
 		
-		// EMOD - if city can convert building & settlebuilding it builds
+		// EMOD - if city can convert building & establishbuilding it builds
 		// that building there. Used to spread religions
 	    for (i = m_nElements - 1; i>= 0; i--) { 
 			const UnitRecord *urec = m_array[i].GetDBRec();
-			if(m_array[i].GetDBRec()->GetNumSettleBuilding()) {
-				for(sint32 b = 0; b < urec->GetNumSettleBuilding(); b++) {
-					sint32 bi = urec->GetSettleBuildingIndex(b);
+			if(m_array[i].GetDBRec()->GetNumEstablishBuilding()) {
+				for(sint32 b = 0; b < urec->GetNumEstablishBuilding(); b++) {
+					sint32 bi = urec->GetEstablishBuildingIndex(b);
 					Assert(bi >= 0);
 					Assert(bi < g_theBuildingDB->NumRecords());
 					if(bi >= 0 && bi < g_theBuildingDB->NumRecords()) {
@@ -4102,9 +4104,9 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 		// religious buildings, if they can build there own
 		for (sint32 i = m_nElements - 1; i >= 0; i--) {
 			const UnitRecord *urec = m_array[i].GetDBRec();
-			if(m_array[i].GetDBRec()->GetNumSettleBuilding()) {
-				for(sint32 b = 0; b < urec->GetNumSettleBuilding(); b++) {
-					const BuildingRecord *brec = g_theBuildingDB->Get(urec->GetSettleBuildingIndex(b));
+			if(m_array[i].GetDBRec()->GetNumEstablishBuilding()) {
+				for(sint32 b = 0; b < urec->GetNumEstablishBuilding(); b++) {
+					const BuildingRecord *brec = g_theBuildingDB->Get(urec->GetEstablishBuildingIndex(b));
 					if(brec->GetNumConflictsWithBuilding()) {
 						for(sint32 conflictb = 0; conflictb < brec->GetNumConflictsWithBuilding(); conflictb++) {
 							if(c.CD()->HaveImprovement(brec->GetConflictsWithBuildingIndex(conflictb))) {
@@ -4345,6 +4347,25 @@ ORDER_RESULT ArmyData::Advertise(const MapPoint &point)
 	so->AddRecipient(u.GetOwner());
 	so->AddCity(c);
 	g_slicEngine->Execute(so);
+
+	// establish that building there. Used to spread corporations
+	for (sint32 i = m_nElements - 1; i>= 0; i--) { 
+		const UnitRecord *urec = m_array[i].GetDBRec();
+		if(m_array[i].GetDBRec()->GetNumEstablishBuilding()) {
+			for(sint32 b = 0; b < urec->GetNumEstablishBuilding(); b++) {
+				sint32 bi = urec->GetEstablishBuildingIndex(b);
+				Assert(bi >= 0);
+				Assert(bi < g_theBuildingDB->NumRecords());
+				if(bi >= 0 && bi < g_theBuildingDB->NumRecords()) {
+					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateBuilding,
+			                       GEA_City, c,
+			                       GEA_Int, bi,
+			                       GEA_End);
+				}
+			}
+		}
+	}
+// end EMOD
 
 	return CauseUnhappiness(point, uindex);
 }

@@ -1680,7 +1680,7 @@ void UnitActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)
 		m_unitSpriteGroup->DrawText(x, y, unitText);
 	}
 }
-
+//it doesn't look like this is used. I did create a drawstackingindicator that is used - E
 void UnitActor::DrawHerald(void)
 {
 #ifndef _TEST
@@ -1862,8 +1862,9 @@ void UnitActor::DrawHealthBar(void)
 	if (flagRect.bottom >= g_screenManager->GetSurfHeight()) return;
 */
 	//DrawStackingIndicator(iconRect.left, iconRect.top, stackSize);
-    DrawStackingIndicator(iconRect.left, iconRect.top, stackSize); //DrawStackingIndicator(iconRect.left, iconRect.top - 16, stackSize); //subtraction appears to call the TransitionTile crash 7.5.2007 emod
- 	DrawIndicators(iconRect.left, iconRect.top + 16, stackSize);
+    DrawStackingIndicator(iconRect.left, iconRect.top + 16, stackSize); //DrawStackingIndicator(iconRect.left, iconRect.top - 16, stackSize); //subtraction appears to call the TransitionTile crash 7.5.2007 emod
+ 	DrawIndicators(iconRect.left, iconRect.top + 30, stackSize);
+ 	DrawSpecialIndicators(iconRect.left, iconRect.top, stackSize);
 	RECT tempRect = iconRect;
 	InflateRect(&tempRect, 2, 2);
 	tempRect.top -= 8;
@@ -2038,20 +2039,6 @@ void UnitActor::DrawIndicators(sint32 x, sint32 y, sint32 stack)
 
     Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
 
-	if (g_theProfileDB->IsCivFlags())
-    {
-	    // Add civilization flags here - moved flags here and edited the 
-	    // heralds to put numbers on national flags emod 2-21-2007
-        sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
-	    sint32  civicon = 0;
-
-        if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
-	    {
-			sint32 xf = x; // + iconDim.x;
-		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
-	    }
-    }
-
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
 	sint32 w = iconDim.x;
@@ -2103,6 +2090,65 @@ void UnitActor::DrawIndicators(sint32 x, sint32 y, sint32 stack)
 	
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
 }
+
+void UnitActor::DrawSpecialIndicators(sint32 x, sint32 y, sint32 stack) //identifier for religious unit or national flag
+{
+#ifndef _TEST
+	STOMPCHECK();
+#endif
+
+	if (!g_showHeralds) return;
+	if (x < 0) return;
+	if (y < 0) return;
+
+	TileSet	*   tileSet = g_tiledMap->GetTileSet();
+	POINT	    iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
+	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
+	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
+
+    sint32      displayedOwner;
+    if (    m_unitID.IsValid() 
+         && m_unitID.IsHiddenNationality()
+         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
+       ) 
+    {
+        // Display unit as barbarians
+        displayedOwner  = PLAYER_INDEX_VANDALS;
+    }
+    else
+    {   
+        displayedOwner  = m_playerNum;
+    }
+
+    Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
+	sint32 x2 = x;
+	sint32 y2 = y + iconDim.y;
+	sint32 w = iconDim.x;
+	sint32 h = iconDim.y;
+	
+	//If religious unit it shows the religion icon else it shows the national flag - E Aug 27 2007
+	
+	sint32  religionicon = 0;
+	if (m_unitID.GetDBRec()->GetHasReligionIconIndex(religionicon)) {
+			sint32 xf = x; // + iconDim.x;
+		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(religionicon), xf, y, displayedColor);
+	} else if (g_theProfileDB->IsCivFlags())  {
+	    // Add civilization flags here - moved flags here and edited the 
+	    // heralds to put numbers on national flags emod 2-21-2007
+        sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
+	    sint32  civicon = 0;
+
+        if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
+	    {
+			sint32 xf = x; // + iconDim.x;
+		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
+	    }
+    }
+
+	
+	g_tiledMap->AddDirtyToMix(x, y, w, h);
+}
+
 //end emod
 
 void UnitActor::DrawSelectionBrackets(void)

@@ -242,7 +242,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 			SetHasAirport(cityData->HasAirport());
 			SetHasSleepingUnits(cityData->HasSleepingUnits());
 			SetIsWatchful(cityData->IsWatchful());
-			SetIsCapitol(cityData->IsCapitol());
+			SetIsCapitol(cityData->IsCapitol()); //emod
 			SetIsReligionIcon(cityData->HasReligionIcon()); //emod
 			m_bioInfectedOwner = (sint8)cityData->GetOwner();
 			m_nanoInfectedOwner = (sint8)cityData->GetOwner();
@@ -251,6 +251,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 			m_injoinedOwner = (sint8)cityData->GetOwner();
 			m_happinessAttackOwner = (sint8)cityData->GetOwner();
 			m_slaveBits = cityData->GetSlaveBits();
+			SetIsSpecialIcon(cityData->HasSpecialIcon()); //emod
 
 		} // city.IsValid
 	} // cell

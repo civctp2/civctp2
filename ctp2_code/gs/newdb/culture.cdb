@@ -2,7 +2,7 @@
 #
 #  Project      : Call To Power 2
 #  File type    : dbgen input
-#  Description  : Wonder type descriptor
+#  Description  : Culture type descriptor
 #  Id           : $Id:$
 #
 #----------------------------------------------------------------------------
@@ -18,58 +18,37 @@
 #
 #  Modifications from the original Activision code:
 #
-#  - FU: designates Future Use / To Be Implemented / not coded yet
-#  - Governmenttype //added by E limiting wonders to certain governments
-#  - CultureOnly //added by E -- can only build wonders if civ has certain citystyle
-#  - CityStyleOnly //added by E -- can only build wonders at cities with certain citystyle 
-#  - PrerequisiteBuilding  // Added by E to limit wonders to cities with certain buildings
-#  - EnablesGood //added by E allows a wonder to give a city a good 
-#  - NeedsCityGood - requires a good to build wonder
-#  - NeedsCityGoodAll - requires a 1 or more good to build wonder
-#  - NeedsCityGoodAnyCity - requires any city to have good to build wonder
-#  - EnablesPunativeAirstrikes //added by E(1-14-2006) allows airstrikes without war
-#  - Added OnePerCiv for Small Wonders
-#  - ObsoleteGovernmenttype //added by E obsoletes wonders only if player switches to govt
-#  - Added BuildingEffectEverywhere to better flag than BuildingEverywhere based on code
-#  - ActualBuildingEverywhere was added and implemented a long time ago
-#  - Added ProhibitSlavers
+#  - created file. August 21st 2007 by E
+#  - Intent is to add culture to ctp2 but instead of just expanding borders
+#	 it can be used like promotions but for cities, and some as civilisation
+#    wide bonuses.
 #
 #-----------------------------------------------------------------------------
 
-WonderMovie : File
-
-Wonder {
-	Int ProductionCost
-	Record Icon DefaultIcon
-	Record WonderMovie Movie
+Culture {
+	Int CultureCost
 	StringId Description
+	Bit IsCityBonus
+	Bit IsCivilizationBonus
 	Record Advance EnableAdvance
 	Record Advance [0..5] ObsoleteAdvance
-	Record Building[] PrerequisiteBuilding		// Added by E to limit wonders to cities with certain buildings
-	Record Government[] GovernmentsModified		// Added by MrBaggins
-	Record CityStyle[] CultureOnly				//added by E -- can only build wonders if civ has certain citystyle
-	Record Government[] GovernmentType			//added by E --- a copy of unit Government type code
-	Record Government[] ObsoleteGovernmentType	//added by E --- switching to this obsoletes your imp
-	Record CityStyle[] CityStyleOnly			//added by E--can only build wonders at cities with certain citystyle 
-	Record Resource[] NeedsCityGood				// must have good in radius of city or buying resource to build 
-	Record Resource[] NeedsCityGoodAll			//a city must have all resource to build wonder
-	Record Resource[] NeedsCityGoodAnyCity		//FU
-    Record Resource[] EnablesGood				//added by E -- having a TI gives a city a good
-	Record TerrainImprovement[] ShowOnMap		//FU
-	Record TerrainImprovement[] ShowOnMapRadius //FU
+	Record Building[] PrerequisiteBuilding		
+	Record CityStyle[] CultureOnly				
+	Record Government[] GovernmentType			
+	Record Government[] ObsoleteGovernmentType	
+	Record CityStyle[] CityStyleOnly			 
+	Record Resource[] NeedsCityGood				
+	Record Resource[] NeedsCityGoodAll			
+	Record Resource[] NeedsCityGoodAnyCity		
+    Record Resource[] EnablesGood				
 	Record Civilisation[] CivilisationOnly 
-	Record Feat[] NeedsFeatToBuild				// implemented by E
-	Record Feat[] NeedsAnyPlayerFeatToBuild				// implemented by E
+	Record Feat[] NeedsFeatToBuild				
+	Record Feat[] NeedsAnyPlayerFeatToBuild				
 	
-	Bit(Record MapIcon)   ShowCityIconTop			// Like show on map but put on top of city like icons
-	Bit(Record MapIcon)   ShowCityIconBottom		// Like show on map but puts the graphic behind the city 
-
-	Bit(Int) SquaredBorderRadius 				// added by E
-	Bit(Int) IntBorderRadius    				// added by E
-	Bit		 OnePerCiv							//EMOD implement 5-12-2006
-	Bit(Record MapIcon)			IsReligionIcon	// Displays city religion icon - can be used for Holy Cities
-//	Bit(Record Religion)        IsReligion		          // Identifies religion
-	Bit IsHolyCity
+ 
+//this will be used like civ3/civ4 culture
+	Bit(Int) SquaredBorderRadius 				
+	Bit(Int) IntBorderRadius    				
 	
 	# Flags
 	Bit(Int) ReduceReadinessCost
@@ -106,10 +85,10 @@ Wonder {
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
 	Bit(Int) BonusGold
-	Bit CantBuildInSea							// Added by E to restrict some wonders to Land
-	Bit CantBuildOnLand							// Added by E to restrict some wonders to Sea				
-	Bit CoastalBuilding 						// Added by E to restrict some wonders to the Coast
-	Bit EnablesPunativeAirstrikes				// Added by E Air Bombard without War 
+	Bit CantBuildInSea							
+	Bit CantBuildOnLand											
+	Bit CoastalBuilding 						
+	Bit EnablesPunativeAirstrikes				 
 
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness

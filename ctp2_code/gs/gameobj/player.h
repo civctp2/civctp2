@@ -1056,6 +1056,7 @@ public:
 	sint32 BreadBasket(); //EMOD
 	void CreateLeader(); //EMOD
 	bool CanBuildLeader(const sint32 type) const;
+	void MergeCivs(sint32 Merger, sint32 Mergee);
 
 
 };

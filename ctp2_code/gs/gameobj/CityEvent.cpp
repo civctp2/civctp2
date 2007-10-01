@@ -124,6 +124,7 @@ STDEHANDLER(CaptureCityEvent)
 			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED, 
 			GEA_Player, newOwner, 
 			GEA_End);
+	//added cities leaving ruin options requires a tileimp with the flag IsCityRuin to be placed
 			if (g_theProfileDB->GetCityLeavesRuins()){
 				for (sint32 imp = 0; imp < g_theTerrainImprovementDB->NumRecords(); imp++) {
 					const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);

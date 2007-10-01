@@ -575,41 +575,17 @@ bool terrainutil_CanPlayerBuild(const TerrainImprovementRecord *rec, sint32 pl, 
 		}
 		if(!found)
 			return false;
-//	} else {
-//  See Use of ELSE below for how effect is implemented 
-//	Added by E - Compares Improvement's CultureOnly to the Player's CityStyle for terrain effects
-//		for(sint32 b = 0; b < g_theTerrainDB->NumRecords(); b++) {
-//		const TerrainImprovementRecord::Effect *eff;
-//		sint32 t;
-//		bool found = false;
-//		eff = terrainutil_GetTerrainEffect(rec, b);
-//			if(eff) {
-			//	if(eff->GetNumCultureOnly() > 0) {
-//					for(t = 0; t < eff->GetNumCultureOnly(); t++) {
-//						if(eff->GetCultureOnlyIndex(t) == g_player[pl]->GetCivilisation()->GetCityStyle()) {
-//							found = true;
-//							break;
-//						}
-//					}
-//			//	}
-//			}
-//		if(!found)
-//			return false;
-//		}		
+	
 	}
 
+	//if(rec->GetOnlySpecialBuild()) {
+	//	return false;
+	//}
 
-
-
-
-
-	
 	if(terrainutil_PlayerHasAdvancesFor(rec, pl)) {
 		
 		if(!checkMaterials)
 			return true;
-
-
 
 		sint32 i;
 		for(i = 0; i < g_theTerrainDB->NumRecords(); i++) {
@@ -1619,4 +1595,85 @@ bool terrainutil_HasWonder(const MapPoint & pos)
 		}
 	}
 	return false;
+}
+
+bool terrainutil_CanPlayerSpecialBuildAt(sint32 impType, sint32 pl, const MapPoint &pos)
+{
+	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(impType);
+	Assert(rec);
+	if(!rec)
+		return false;
+	sint32 i;
+
+	Assert(rec != NULL);
+	if(rec == NULL)
+		return false;
+
+	Assert(pl >= 0);
+	Assert(pl < k_MAX_PLAYERS);
+	if(pl < 0 || pl >= k_MAX_PLAYERS)
+		return false;
+
+	Assert(g_player[pl]);
+	if(!g_player[pl])
+		return false;
+
+	Cell *cell = g_theWorld->GetCell(pos);
+	Assert(cell);
+	if(!cell)
+		return false;
+	
+	const TerrainImprovementRecord::Effect *eff;
+	eff = terrainutil_GetTerrainEffect(rec, cell->GetTerrain());
+		if(!eff)
+			return false;
+
+	if(cell->GetOwner() >= 0 && cell->GetOwner() != pl)
+	{
+		bool const haveAlliance	= 
+			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
+		if(cell->GetOwner() > 0 && haveAlliance) {
+			if(rec->GetClassRoad() ||
+				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
+				
+				
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+
+	if(g_theWorld->GetCity(pos).IsValid())
+		return false;
+
+
+		if(rec->GetNumIsRestrictedToGood () == 0) {
+			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
+				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
+					return false;
+				}
+			}
+		}
+		else {
+			sint32 good;
+			if (g_theWorld->GetGood(pos, good)) {
+				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
+					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
+						return true; 
+					}
+				}
+				return false;
+			}
+		}
+	if(eff->GetNumIsWonder() > 0) {  //added for show on map code
+		if(terrainutil_HasWonder(pos)) {
+			return false;
+		}
+	}
+
+
+	return true;
 }

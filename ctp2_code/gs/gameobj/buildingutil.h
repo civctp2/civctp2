@@ -115,4 +115,5 @@ sint32 buildingutil_GetGoldPerUnitReadiness(const uint64 built_improvements); //
 bool buildingutil_GetDesignatesOnePerCiv(const uint64 built_improvements);
 bool buildingutil_GetHasReligionIcon(const uint64 built_improvements);
 bool buildingutil_GetIsReligious(const uint64 built_improvements);
+bool buildingutil_GetShowCityIconTop(const uint64 built_improvements);
 #endif

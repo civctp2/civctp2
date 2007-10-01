@@ -1014,7 +1014,12 @@ public:
 
 	bool CityIsOnTradeRoute();
 	void GiveTradeRouteGold();
-
+	bool HasSpecialIcon() const;
+	void AddCitySlum();
+	void AddCityExpansion();
+	sint32 GetNumUrbanTile(const MapPoint pos) const;
+	sint32 GetSlumTileAvailable(const MapPoint pos) const;
+	sint32 GetUrbanTileAvailable(const MapPoint pos) const;
 
 private:
 	bool    IsBankrupting(void) const;

@@ -168,5 +168,6 @@ Building {
 	Bit(Int)   EnergyHungerPerPop
 	Bit(Int)   ProducesEnergyPerPop
 
+//	Bit(Record Religion)        IsReligion		          // Identifies religion
 	Bit GLHidden
 }

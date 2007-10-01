@@ -715,3 +715,10 @@ bool buildingutil_GetIsReligious(const uint64 built_improvements)
 	}
 	return false;
 }
+bool buildingutil_GetShowCityIconTop(const uint64 built_improvements)
+{
+	FOREACH_BUILT(HasShowCityIconTop) {
+		return true;
+	}
+	return false;
+}
