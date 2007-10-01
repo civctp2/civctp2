@@ -728,3 +728,181 @@ IMPROVE_VR_AMUSEMENT_PARK {
 
 ############################################################
 
+#AE RELIGION BUILDINGS
+
+IMPROVE_SHRINE_B {
+   DefaultIcon ICON_IMPROVE_SHRINE_B
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_BUDDHISM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_C {
+   DefaultIcon ICON_IMPROVE_SHRINE_C
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_CHRISTENDOM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_E {
+   DefaultIcon ICON_IMPROVE_SHRINE_E
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_PHAROAHISM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_G {
+   DefaultIcon ICON_IMPROVE_SHRINE_G
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_HELLENISM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_H {
+   DefaultIcon ICON_IMPROVE_SHRINE_H
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_HINDUISM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_I {
+   DefaultIcon ICON_IMPROVE_SHRINE_I
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_ISLAM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_J {
+   DefaultIcon ICON_IMPROVE_SHRINE_J
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_JUDAISM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################
+IMPROVE_SHRINE_Z {
+   DefaultIcon ICON_IMPROVE_SHRINE_Z
+   Description DESCRIPTION_IMPROVE_SHRINE
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
+   ProductionCost 270
+   Upkeep 0
+   CantSell
+   IsReligionIcon MAPICON_ZORASTORISM
+   ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
+   ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
+   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_G
+   ConflictsWithBuilding IMPROVE_SHRINE_H
+   ConflictsWithBuilding IMPROVE_SHRINE_I
+   ConflictsWithBuilding IMPROVE_SHRINE_J
+   ConflictsWithBuilding IMPROVE_SHRINE_B
+   HappyInc 0
+   IsReligious
+   Cathedral
+}
+############################################################

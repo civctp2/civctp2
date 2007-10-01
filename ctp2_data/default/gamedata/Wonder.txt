@@ -360,3 +360,28 @@ WONDER_ZERO_CRIME_BILL {
 
 ############################################################
 
+#AE HOLY CITIES
+
+############################################################
+WONDER_SHRINE_Z {
+   DefaultIcon ICON_IMPROVE_SHRINE_Z
+   Description DESCRIPTION_IMPROVE_SHRINE
+   Movie MOVIE_WONDER_HAGIA_SOPHIA
+   ObsoleteGovernmentType GOVERNMENT_COMMUNISM
+   #EnableAdvance ADVANCE_SUBNEURAL_ADS
+   NeedsFeatToBuild FEAT_ADVANCE_HINDU
+   ProductionCost 1000
+   IsHolyCity
+   IsReligionIcon MAPICON_BUDDHISM
+   ExcludedByWonder WONDER_SHRINE_C
+   ExcludedByWonder WONDER_SHRINE_E
+   ExcludedByWonder WONDER_SHRINE_G
+   ExcludedByWonder WONDER_SHRINE_H
+   ExcludedByWonder WONDER_SHRINE_I
+   ExcludedByWonder WONDER_SHRINE_J
+   ExcludedByWonder WONDER_SHRINE_B
+   IncHappinessEmpire 0
+   ActualBuildingEverywhere IMPROVE_SHRINE_Z
+   GoldPerBuildingAnywhere 0
+}
+############################################################
