@@ -33,27 +33,34 @@ http://www.microsoft.com/downloads/details.aspx?displaylang=en&familyid=9909BA22
 
 for DirectX Media SDK should work.
 
+1) 
 Make sure you add the Include and Lib and classes/base directories from those SDKs to Tools->Options->Directories from Visual Studio, if they aren't there already.  If you installed them to default locations, that means you need to add:
 
-C:\DXMEDIA\Classes\Base
+
+
+to your include directories path these directories:  
+C:\DXMEDIA\Classes\Base		-doesn't appear?
 C:\DXMEDIA\Include
-c:\DXSDK\Samples\C++\DirectShow\BaseClasses
-c:\DXSDK\Include
+c:\DXSDK\Samples\C++\DirectShow\BaseClasses     (this may be DX90SDK directory instead of DXSDK)
+c:\DXSDK\Include				(this may be DX90SDK directory instead of DXSDK)
 c:\Program Files\Direct X\Include
 [directory] svncode\trunk\ctp2_code\compiler\msvc6
 
-to your include directories path, and
+to your lib directories path these directories:  
+C:\DXMEDIA\Lib  
+C:\DXSDK\Samples\C++\DirectShow\BaseClasses     (this may be DX90SDK directory instead of DXSDK)
+C:\DXSDK\Lib                                    (this may be DX90SDK directory instead of DXSDK)
 
-C:\DXMEDIA\Lib
-C:\DXSDK\Samples\C++\DirectShow\BaseClasses
-C:\DXSDK\Lib
 
 
-to your lib directories path. 
-
+2)
 In order to build, you need an environment variable named CDKDIR on your computer.  In Windows XP/2000, go to Control
 Panel->System->Environment Variables, and add it, with it's value set to <your source path>/ctp2/bin, the directory with bison, flex, and other miscellaneous utilities in it.
 
+3)
+The tmp has to be created in the root directory of the hard drive.  If your sourcecode repository is on the C: then add C:\tmp. If you are doing it on an external it should be that root directory like E:\tmp
+
+4)
 Lastly, YOU NEED THE DATA DIRECTORY FROM THE ORIGINAL SHIPPING GAME.  All the graphics, sounds, and other data files needed to actually run the game are not included here.  Place the ctp2_data directory from the game install directory at the same directory level as ctp2_code in this archive to run an executable built from DevStudio.
 
 That's the basics.  For the most part, you are on your own from here on out.  Good luck!
