@@ -774,7 +774,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				break;
 
 			if(g_player[m_data[0]]) {
-				Assert(g_player[m_data[0]]->GetPlayerType() == PLAYER_TYPE_ROBOT);
+				Assert(g_player[m_data[0]]->IsRobot());
 			}
 			break;
 		case NET_ACTION_CREATE_DIP_REQUEST:

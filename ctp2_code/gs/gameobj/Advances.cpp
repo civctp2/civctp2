@@ -947,7 +947,7 @@ sint32 Advances::GetCost(const AdvanceType adv) const
 	sint32 cost = g_player[m_owner]->GetScienceHandicap() * m_discovered + 
 		g_theAdvanceDB->Get(adv)->GetCost();
 
-	if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
+	if(g_player[m_owner]->IsRobot() &&
 	   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 		sint32 age = 0; 
 		cost = static_cast<sint32>(ceil(static_cast<double>(cost) * 

@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Network events
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -88,7 +117,7 @@ STDEHANDLER(NetStartMovePhaseEvent)
 			if(p == g_network.GetPlayerIndex())
 				continue;
 
-			if(g_player[p]->m_playerType != PLAYER_TYPE_NETWORK)
+			if(!g_player[p]->IsNetwork())
 				continue;
 
 			uint16 id = g_network.IndexToId(p);
@@ -133,7 +162,7 @@ STDEHANDLER(NetAIFinishBeginTurnEvent)
 
 	if(g_network.IsHost() && !g_network.IsLocalPlayer(pl)) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_FINISH_AI_TURN, pl));
-	} else if(g_network.IsClient() && g_network.IsLocalPlayer(pl) && g_player[pl]->m_playerType == PLAYER_TYPE_ROBOT) {
+	} else if(g_network.IsClient() && g_network.IsLocalPlayer(pl) && g_player[pl]->IsRobot()) {
 		
 	}
 
@@ -182,7 +211,7 @@ STDEHANDLER(NetEndAIClientTurnEvent)
 	if(!g_network.IsLocalPlayer(p))
 		return GEV_HD_Continue;
 
-	if(g_player[p]->m_playerType == PLAYER_TYPE_ROBOT) {
+	if(g_player[p]->IsRobot()) {
 		DPRINTF(k_DBG_NET, ("NetEndAIClientTurnEvent, %d\n", p));
 		g_director->AddEndTurn();
 		

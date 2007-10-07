@@ -613,10 +613,6 @@ SOURCE=.\civapp.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ctp2_enums.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\display.cpp
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
@@ -4574,11 +4570,47 @@ SOURCE=..\gs\newdb\culture.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
 
@@ -4593,11 +4625,47 @@ InputPath=..\gs\newdb\culture.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\culture.cdb
+
+"$(ProjDir)\..\gs\newdb\CultureRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ENDIF 
 
@@ -5718,11 +5786,47 @@ SOURCE=..\gs\newdb\Leader.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
 
@@ -5737,11 +5841,47 @@ InputPath=..\gs\newdb\Leader.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\Leader.cdb
+
+"$(ProjDir)\..\gs\newdb\LeaderRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ENDIF 
 
@@ -6860,11 +7000,47 @@ SOURCE=..\gs\newdb\unitpromotion.cdb
 
 !IF  "$(CFG)" == "ctp2 - Win32 Release"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Test"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 NDebug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Final"
 
@@ -6879,11 +7055,47 @@ InputPath=..\gs\newdb\unitpromotion.cdb
 
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Debug Browse"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - Win32 Optimized Test"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Debug"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "ctp2 - SDL Final"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=..\gs\newdb\unitpromotion.cdb
+
+"$(ProjDir)\..\gs\newdb\UnitpromotionRecord.stamp" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	$(ProjDir)\..\gs\dbgen\ctpdb.exe $(ProjDir)\..\gs\newdb < $(InputPath)
+
+# End Custom Build
 
 !ENDIF 
 

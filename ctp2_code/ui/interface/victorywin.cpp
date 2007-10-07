@@ -203,7 +203,6 @@ void LineOrZeroSumButtonActionCallback(aui_Control *control, uint32 action, uint
 
 void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	
 	HighScoreWindowPopup *popup = (HighScoreWindowPopup *)cookie;
@@ -214,13 +213,18 @@ void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint
 		
 		popup->RemoveWindow();
 		
-		if(g_turn->IsHotSeat() || g_turn->IsEmail()) {
-			if(!g_player[g_selected_item->GetVisiblePlayer()] ||
-				g_player[g_selected_item->GetVisiblePlayer()]->m_isDead) {
-				if(g_player[g_selected_item->GetCurPlayer()]->
-				   GetPlayerType() == PLAYER_TYPE_ROBOT) {
+		if(g_turn->IsHotSeat() || g_turn->IsEmail())
+		{
+			Player* player = g_player[g_selected_item->GetVisiblePlayer()];
+			if(!player
+			||  player->m_isDead
+			){
+				if(player->IsRobot())
+				{
 					g_turn->EndThisTurnBeginNewTurn(FALSE);
-				} else {
+				}
+				else
+				{
 					g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
 				}
 			}
@@ -228,16 +232,18 @@ void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint
 	}
 	else if ((ctp2_Button*)control == popup->m_creditsButton)
 	{
-		
 		open_CreditsScreen();
 	}
 	else if ((ctp2_Button*)control == popup->m_quitButton)
 	{
-		
 		popup->RemoveWindow();
-		if (g_network.IsActive() || g_network.IsNetworkLaunch()) {
+		if(g_network.IsActive()
+		|| g_network.IsNetworkLaunch()
+		){
 			g_civApp->PostQuitToLobbyAction();
-		} else {
+		}
+		else
+		{
 			g_civApp->PostEndGameAction();
 		}
 	}
@@ -247,25 +253,16 @@ sint32 victorywin_SetLineGraph( BOOL lineGraph)
 {
 	s_lineGraph = lineGraph;
 
-	
 	if (s_lineGraph)
 	{
-		
 		s_graph->SetGraphType(GRAPH_TYPE_LINE);
-
-		
 		s_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_ZEROSUM_BUTTON"));
-
-	} 
+	}
 	else
 	{
-		
 		s_graph->SetGraphType(GRAPH_TYPE_ZEROSUM);
-
-		
 		s_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_LINE_BUTTON"));
-
-	} 
+	}
 
 	return 0;
 }
@@ -629,20 +626,26 @@ sint32 victorywin_UpdateData( sint32 type )
 	if(!pl)
 		return 0;
 
-	BOOL disableContinue = (type == k_VICWIN_DEFEAT);
-	if(disableContinue && (g_turn->IsHotSeat() || g_turn->IsEmail())) {
-		sint32 i;
-		for(i = 1; i < k_MAX_PLAYERS; i++) {
-			if(i != curPlayer &&
-			   g_player[i] && 
-			   g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
-				disableContinue = FALSE;
+	bool disableContinue = (type == k_VICWIN_DEFEAT);
+	if(disableContinue
+	&&(g_turn->IsHotSeat()
+	|| g_turn->IsEmail())
+	){
+		for(sint32 i = 1; i < k_MAX_PLAYERS; i++)
+		{
+			if(i != curPlayer
+			&& g_player[i]
+			&& g_player[i]->IsHuman()
+			){
+				disableContinue = false;
 			}
 		}
-	} else if(disableContinue && g_player[curPlayer] && !g_player[curPlayer]->m_isDead) {
-		
-		
-		disableContinue = FALSE;
+	}
+	else if(disableContinue
+	     && g_player[curPlayer]
+	     &&!g_player[curPlayer]->m_isDead
+	     ){
+		disableContinue = false;
 	}
 
 	
@@ -657,19 +660,20 @@ sint32 victorywin_UpdateData( sint32 type )
 	
 	if (disableContinue)
 	{
-		
 		s_highScoreWin->m_continueButton->Enable(FALSE);
 
-	}	
-	else 
+	}
+	else
 	{
-		if((g_player[g_selected_item->GetVisiblePlayer()] &&
-			!g_player[g_selected_item->GetVisiblePlayer()]->m_isDead) ||
-		   g_turn->IsEmail() || g_turn->IsHotSeat()) {
+		if((g_player[g_selected_item->GetVisiblePlayer()]
+		&& !g_player[g_selected_item->GetVisiblePlayer()]->m_isDead)
+		||  g_turn->IsEmail()
+		||  g_turn->IsHotSeat()
+		){
 			s_highScoreWin->m_continueButton->Enable(TRUE);
-		} else {
-			
-			
+		}
+		else
+		{
 			s_highScoreWin->m_continueButton->Enable(FALSE);
 		}
 	}

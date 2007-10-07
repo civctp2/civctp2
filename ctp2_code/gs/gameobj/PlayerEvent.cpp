@@ -352,8 +352,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 	// JJB added the following to save in a PBEM game:
 	// moved from newturncount.cpp where it was too early
 	if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
-	  g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
-	  PLAYER_TYPE_ROBOT) {
+	   !g_player[g_selected_item->GetCurPlayer()]->IsRobot()) {
 		g_turn->SendNextPlayerMessage();
 	}
 	
@@ -380,8 +379,8 @@ STDEHANDLER(FinishBeginTurnEvent)
 		g_network.Unblock(p->m_owner);
 	}
 
-	if((p->m_playerType == PLAYER_TYPE_HUMAN ||
-	    p->m_playerType == PLAYER_TYPE_NETWORK && g_network.IsLocalPlayer(p->m_owner)) &&
+	if((p->IsHuman() ||
+	    p->IsNetwork() && g_network.IsLocalPlayer(p->m_owner)) &&
 	    p->m_owner == g_selected_item->GetVisiblePlayer() &&
 	    g_theProfileDB->IsAutoSelectFirstUnit()) {
 		if(g_selected_item->GetState() == SELECT_TYPE_NONE) {
@@ -676,7 +675,7 @@ STDEHANDLER(StartMovePhaseEvent)
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
-	if(g_player[pl]->m_playerType == PLAYER_TYPE_ROBOT &&
+	if(g_player[pl]->IsRobot() &&
 	   (!g_network.IsActive() || g_network.IsHost())) {
 		
 		

@@ -179,16 +179,16 @@ STDEHANDLER(Accept_ProposalResponseEvent)
 		Response response;
 
 		
-		response.priority = 50;    
+		response.priority = 50;    // Why is this hard coded?
 		response.type = RESPONSE_ACCEPT;		
-		response.counter.tone = DIPLOMATIC_TONE_EQUAL;	   
+		response.counter.tone = DIPLOMATIC_TONE_EQUAL;	   // Why is this always the same?
 
 		
 		response.senderId = sender;				
 		response.receiverId = receiver;			
 
 		
-		g_theStringDB->GetStringID("EXPLAIN_GENERIC_ACCEPT",response.explainStrId);
+		g_theStringDB->GetStringID("EXPLAIN_GENERIC_ACCEPT",response.explainStrId); // Which of them is used?
 		g_theStringDB->GetStringID("ADVICE_GENERIC_ACCEPT",response.adviceStrId);
 		g_theStringDB->GetStringID("NEWS_GENERIC_ACCEPT",response.newsStrId);
 

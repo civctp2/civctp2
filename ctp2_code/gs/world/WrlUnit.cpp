@@ -220,7 +220,7 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 	}
 
 	
-	if((g_player[owner]->GetPlayerType() == PLAYER_TYPE_ROBOT && 
+	if((g_player[owner]->IsRobot() && 
 		!(g_network.IsClient() && g_network.IsLocalPlayer(owner))) ||
 	   !is_check_only_visible) {
 		

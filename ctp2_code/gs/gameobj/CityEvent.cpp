@@ -106,14 +106,14 @@ STDEHANDLER(CaptureCityEvent)
     city.GetPos(pos);
 
 	//EMOD capitol stuff is in army event shouldn't it go here?
-		if (city.CD()->IsCapitol()) {
-			sint32 sep = (g_player[originalOwner]->m_all_cities->Num()) / 2;
-			for (sint32 j = 0; j < sep; ++j) {
-				Unit revcity = g_player[originalOwner]->m_all_cities->Get(j) ;
-				CityData	*revcityData = revcity.AccessData()->GetCityData() ;
-				revcityData->GetHappy()->ForceRevolt() ;
-			}
+	if (city.CD()->IsCapitol()) {
+		sint32 sep = (g_player[originalOwner]->m_all_cities->Num()) / 2;
+		for (sint32 j = 0; j < sep; ++j) {
+			Unit revcity = g_player[originalOwner]->m_all_cities->Get(j) ;
+			CityData	*revcityData = revcity.AccessData()->GetCityData() ;
+			revcityData->GetHappy()->ForceRevolt() ;
 		}
+	}
 
 	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY) cause); //this is where capitol is destroyed. unitdata::resetcityowner
 	
@@ -182,8 +182,8 @@ STDEHANDLER(CaptureCityEvent)
 
 		if(g_rand->Next(100) < 
 		   g_theConstDB->Get(0)->GetCaptureCityAdvanceChance() * 100) {
-//Added by Martin Gühmann to allow city advance gaining from
-//a captured city.
+			//Added by Martin Gühmann to allow city advance gaining from
+			//a captured city.
 
 			//Check if there are any advances to steal:
 			sint32 num;

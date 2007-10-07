@@ -19,7 +19,7 @@
 //
 // Compiler flags
 //
-//  - None
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -1683,7 +1683,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Server says all initial city states sent for player %d\n", m_data));
 			if(g_network.IsLocalPlayer(m_data)) {
-				if(g_player[m_data]->m_playerType == PLAYER_TYPE_ROBOT) {
+				if(g_player[m_data]->IsRobot()) {
 					CtpAi::NetworkClientBeginTurn(m_data);
 				}
 				else

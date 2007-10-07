@@ -187,7 +187,7 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoShieldHunger())
 	|| (g_theProfileDB->IsAINoShieldHunger())
 	  )
-	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT
+	&& g_player[m_owner]->IsRobot()
 	){
 			unitCost -= unitCost;
 	}
@@ -227,7 +227,7 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger())
 	|| (g_theProfileDB->IsAINoGoldHunger())
 	   )
-	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+	&& g_player[m_owner]->IsRobot()) {
 			unitCostGold -= unitCostGold;
 	}
 
@@ -332,7 +332,7 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIProductionDeficit())
 	|| (g_theProfileDB->IsAINoShieldHunger())
 	   )
-	&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+	&& g_player[m_owner]->IsRobot())
         return; 
 
 

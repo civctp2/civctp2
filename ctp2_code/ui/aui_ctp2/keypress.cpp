@@ -791,7 +791,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		if(g_network.IsActive()) {
 			if(g_network.IsMyTurn() ||
 			   (g_network.IsHost() && 
-				g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_ROBOT)) {
+				g_player[g_selected_item->GetCurPlayer()]->IsRobot())) {
 				g_turn->EndThisSliceBeginNewSlice();
 			}
 		} else {

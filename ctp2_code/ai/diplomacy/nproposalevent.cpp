@@ -101,12 +101,12 @@ STDEHANDLER(NewProposalEvent)
 			if(g_network.IsActive() && !g_network.IsLocalPlayer(sender)) {
 				execute = false;
 			} else if(g_network.IsActive()) {
-				execute = g_player[sender]->m_playerType == PLAYER_TYPE_ROBOT && g_network.IsLocalPlayer(sender);
+				execute = g_player[sender]->IsRobot() && g_network.IsLocalPlayer(sender);
 			} else {
 				execute = true;
 			}
 		}
-		if((!execute) && (g_player[sender]->m_playerType == PLAYER_TYPE_ROBOT)) {
+		if(!execute && g_player[sender]->IsRobot()) {
 			if(!g_network.IsActive() || g_network.IsLocalPlayer(sender)) {
 				execute = true;
 			}

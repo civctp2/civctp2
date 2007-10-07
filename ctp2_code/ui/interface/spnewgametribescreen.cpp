@@ -130,12 +130,12 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 
 	CIV_INDEX const civ                 = static_cast<CIV_INDEX>(index);
 	sint32 const    playerIndex         = 
-        g_selected_item ? g_selected_item->GetVisiblePlayer() : 1;
-    bool const      shouldSetProfileDB  =
-        !g_isCheatModeOn || 
-		 (g_player[playerIndex] && 
-		  g_player[playerIndex]->GetPlayerType() == PLAYER_TYPE_HUMAN
-         );
+	    g_selected_item ? g_selected_item->GetVisiblePlayer() : 1;
+	bool const      shouldSetProfileDB  =
+	    !g_isCheatModeOn || 
+	     (g_player[playerIndex] && 
+	      g_player[playerIndex]->IsHuman()
+	     );
 
 	if (shouldSetProfileDB)
 		g_theProfileDB->SetCivIndex(civ);

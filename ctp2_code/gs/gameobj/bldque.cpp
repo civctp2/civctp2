@@ -420,9 +420,9 @@ bool BuildQueue::BuildFrontUnit(bool forceFinish)
 		&& cd->PopCount() < 2
 		&&!forceFinish
 		){
-			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT
-			||(g_network.IsClient() 
-			&& g_network.IsLocalPlayer(m_owner))
+			if(!g_player[m_owner]->IsRobot()
+			|| (g_network.IsClient() 
+			&&  g_network.IsLocalPlayer(m_owner))
 			){
 				m_settler_pending = true;   // This gets "sent" to CityEvent::CityBuildFrontEvent and all it does is trigger a slic object, why doesn't just work like above?
 				return false;
@@ -435,9 +435,9 @@ bool BuildQueue::BuildFrontUnit(bool forceFinish)
 		&& cd->PopCount() <= unitpop
 		&&!forceFinish
 		){
-			if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT
-			||(g_network.IsClient() 
-			&& g_network.IsLocalPlayer(m_owner))
+			if(!g_player[m_owner]->IsRobot()
+			|| (g_network.IsClient() 
+			&&  g_network.IsLocalPlayer(m_owner))
 			){
 				m_popcoststobuild_pending  = true;
 				return false;
@@ -1088,7 +1088,7 @@ void BuildQueue::RawInsertTail(sint32 cat, sint32 t, sint32 cost)
 				return;
 		}
 		sint32 o = m_city.GetOwner();
-		if(g_player[o]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
+		if(g_player[o]->IsRobot() &&
 			!(g_network.IsClient() && g_network.IsLocalPlayer(o))) {
 			sint32 age = 0; 
 			cost = static_cast<sint32>(static_cast<double>(cost) * 
@@ -1115,7 +1115,7 @@ void BuildQueue::ReplaceHead(sint32 cat, sint32 t, sint32 cost)
 		oldHead->m_type     = t; 
 
 		sint32 o = m_city.GetOwner();
-		if(g_player[o]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
+		if(g_player[o]->IsRobot() &&
 			!(g_network.IsClient() && g_network.IsLocalPlayer(o))) {
 			sint32 age = 0; 
 			cost = static_cast<sint32>(static_cast<double>(cost) * 
@@ -1677,19 +1677,27 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 			}
 		}
 
-		if((g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) ||
-		   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner) ||
-			(!g_network.IsActive() && !g_theProfileDB->AIPopCheat()))) {
-			if(u.GetDBRec()->GetBuildingRemovesAPop()) {
+		if(  !g_player[m_owner]->IsRobot()
+		|| (  g_network.IsClient()
+		&&    g_network.IsLocalPlayer(m_owner)
+		||  (!g_network.IsActive()
+		&&   !g_theProfileDB->AIPopCheat()
+		    )
+		   )
+		  )
+		{
+			if(u.GetDBRec()->GetBuildingRemovesAPop())
+			{
 				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient()));
 				cd->ChangePopulation(-1);
 			}
 			// EMOD
 			sint32 pop;
-			if(u.GetDBRec()->GetPopCostsToBuild(pop)) {
+			if(u.GetDBRec()->GetPopCostsToBuild(pop))
+			{
 				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient()));
 				cd->ChangePopulation(-pop);
-		}
+			}
 		}
 		
 		

@@ -7312,10 +7312,12 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 	bool ignoreZoc = (order == UNIT_ORDER_FINISH_ATTACK || order == UNIT_ORDER_VICTORY_MOVE);
 
 	if(!CanMoveIntoCell(pos, zocViolation, ignoreZoc, alliedCity)) {
-		if(zocViolation && 
-		   g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
+		if(zocViolation
+		&& g_player[m_owner]->IsHuman()
+		){
 			RevealZOCUnits(pos);
-			if(m_owner == g_selected_item->GetVisiblePlayer()) {
+			if(m_owner == g_selected_item->GetVisiblePlayer())
+			{
 				g_selected_item->ForceDirectorSelect(Army(m_id));
 			}
 		}
@@ -7488,19 +7490,17 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		return;
 	}
 
-	sint32 i, r; 
-
 	WakeUp();
 
-	
 	UnitDynamicArray revealedUnits;
 	bool revealedUnexplored = false;
 
 	MapPoint oldPos = m_pos;
 	bool anyVisible = false;
-	for(i = 0; i < m_nElements; i++) {
-
-		if(m_array[i].IsEntrenching() || m_array[i].IsEntrenched()) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i].IsEntrenching() || m_array[i].IsEntrenched())
+		{
 			Detrench();
 		}
 
@@ -7510,27 +7510,32 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 		//UnitDynamicArray revealedUnits;
 		//bool revealedUnexplored = false;
-		if(m_array[i].GetDBRec()->GetCanRebase()){
-			if (!IsOccupiedByForeigner(pos)){
-				if (g_theWorld->HasCity(pos) || terrainutil_HasAirfield(pos)) {  //add unit later?
+		if(m_array[i].GetDBRec()->GetCanRebase())
+		{
+			if (!IsOccupiedByForeigner(pos))
+			{
+				if(g_theWorld->HasCity(pos)
+				|| terrainutil_HasAirfield(pos)
+				){  //add unit later?
 					m_array[i].SetPosition(pos, revealedUnits, revealedUnexplored);
-					//return true;
 				}
 			}
-			//return false;
 		}
 		//end EMOD
 
-		if(g_theWorld->GetCell(pos)->GetNumUnits() >= k_MAX_ARMY_SIZE) {
+		if(g_theWorld->GetCell(pos)->GetNumUnits() >= k_MAX_ARMY_SIZE)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i],
 								   GEA_Int, CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES,
 								   GEA_Player, -1,
 								   GEA_End);
 			m_array[i].SetFlag(k_UDF_TELEPORT_DEATH);
-		} else {
+		}
+		else
+		{
 			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
-			r = m_array[i].MoveToPosition(pos, revealedUnits, revealedUnexplored);
+			bool r = m_array[i].MoveToPosition(pos, revealedUnits, revealedUnexplored);
 
 			if(m_array[i].GetNumCarried() > 0){
 				sint32 j;
@@ -7538,47 +7543,57 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 				m_array[i].GetData()->GetCargoList()->Access(j).SetPosAndNothingElse(pos);
 			}
 			
-			if(revealedUnits.Num() > 0 && !m_array[i].GetDBRec()->GetSingleUse()) {
+			if( revealedUnits.Num() > 0
+			&& !m_array[i].GetDBRec()->GetSingleUse()
+			){
 #ifdef _DEBUG
 				DPRINTF(k_DBG_GAMESTATE, ("Army %lx revealed %d units during move:\n", m_id, revealedUnits.Num()));
-				sint32 uu;
-				for(uu = 0; uu < revealedUnits.Num(); uu++) {
+				for(sint32 uu = 0; uu < revealedUnits.Num(); uu++)
+				{
 					DPRINTF(k_DBG_GAMESTATE, ("  Unit %lx\n", revealedUnits[uu].m_id));
 				}
 #endif
-				if((!g_network.IsActive() && g_player[m_owner]->m_playerType == PLAYER_TYPE_HUMAN)) {
+				if( !g_network.IsActive()
+				&&  g_player[m_owner]->IsHuman()
+				){
 					ClearOrders();
-				} else if(g_network.IsHost()) {
-					
-					
-					if(!g_network.IsLocalPlayer(m_owner) || m_owner == g_selected_item->GetVisiblePlayer()) {
+				}
+				else if(g_network.IsHost())
+				{
+					if( !g_network.IsLocalPlayer(m_owner)
+					||  m_owner == g_selected_item->GetVisiblePlayer()
+					){
 						ClearOrders();
 					}
-				} else if(g_network.IsClient()) {
-					
-					
-					if(g_network.IsLocalPlayer(m_owner)) {
+				}
+				else if(g_network.IsClient())
+				{
+					if(g_network.IsLocalPlayer(m_owner))
+					{
 						ClearOrders();
 					}
 				}
 			}
-			if(m_array[i].HasLeftMap()) {
-				
-				Assert(FALSE);
+
+			if(m_array[i].HasLeftMap())
+			{	
+				Assert(false);
 			}
 		}
 	}
-	if(anyVisible && g_radarMap) {
+	if(anyVisible && g_radarMap)
+	{
 		g_radarMap->RedrawTile(&oldPos); // oldPos only used here
-		g_radarMap->RedrawTile(&m_pos); // m_pos hasn't been modified so oldPos and m_pos are still identical
-	}
+		g_radarMap->RedrawTile(&m_pos);  // m_pos hasn't been modified so oldPos and m_pos are still identical
+	} 
 
-	if(HasLeftMap()) {
+	if(HasLeftMap())
+	{
 		g_selected_item->RegisterRemovedArmy(m_owner, Army(m_id));
 	}
 
 		
-//original	
+	//original	
 	DeductMoveCost(pos);
 
 	m_pos = pos;
@@ -8285,8 +8300,12 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 
     Unit c = g_theWorld->GetCity(pos);
         
-	if((g_turn->IsHotSeat() || g_turn->IsEmail() || g_theProfileDB->GetUseAttackMessages()) &&
-	   g_player[defender.GetOwner()]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
+	if( (g_turn->IsHotSeat()
+	||   g_turn->IsEmail()
+	||   g_theProfileDB->GetUseAttackMessages()
+	    )
+	&&   g_player[defender.GetOwner()]->IsHuman()
+	){
 		SlicObject *so = NULL;
 		if (c.IsValid()) 
         {

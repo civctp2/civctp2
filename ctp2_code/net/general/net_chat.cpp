@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : net_chat allow MP players to chat whith each other 
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "net_chat.h"
@@ -71,7 +92,7 @@ NetChat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 			if(m_destmask & (1 << p) && p != g_network.GetPlayerIndex() &&
 			   p != g_network.IdToIndex(id) && 
-			   g_player[p]->m_playerType == PLAYER_TYPE_NETWORK) {
+			   g_player[p]->IsNetwork()) {
 				g_network.QueuePacket(g_network.IndexToId(p), this);
 			}
 		}

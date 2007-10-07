@@ -470,7 +470,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 				nUnits = 1;
 			} 
 			else 
-				if (g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
+				if (g_player[i]->IsRobot())
 				{
 					nUnits = drec->GetAIStartUnits();
 				}
@@ -1327,7 +1327,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 		sint32 next = 0;
 		
 		for (i=0; i< k_MAX_PLAYERS; i++) 
-			if(g_player[i] && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) 
+			if(g_player[i] && g_player[i]->IsRobot())
 				ai_players[next++] = PLAYER_INDEX(i);
 		
 		if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch()) 
@@ -2216,7 +2216,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 			sint32 next = 0;
 		
 			for (i=0; i< k_MAX_PLAYERS; i++) { 
-				if(g_player[i] && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+				if(g_player[i] && g_player[i]->IsRobot()) {
 					ai_players[next++] = PLAYER_INDEX(i);
 				}
 			}
@@ -2376,7 +2376,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			
 			if(g_player[i]) {
-				if(g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN) {
+				if(g_player[i]->IsHuman()) {
 					g_player[i]->RecreateMessageIcons();
 				}
 				if(g_player[i]->m_isDead) {
@@ -2472,16 +2472,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(!g_player[i])
 				continue;
-			
-			
-			
+
 			g_player[i]->m_playerType = PLAYER_TYPE_ROBOT;
 		}
 		
 		g_player[g_scenarioUsePlayerNumber]->m_playerType = PLAYER_TYPE_HUMAN;
 		g_selected_item->SetPlayerOnScreen(g_scenarioUsePlayerNumber);
 
-	//Added by Martin Gühmann
 		//Set current player the selected player so that the 
 		//game starts with the first turn and the correct player.
 		g_selected_item->SetCurPlayer(g_scenarioUsePlayerNumber);
@@ -2493,45 +2490,38 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_scenarioUsePlayerNumber = 0;
 	}
 
-
-
-
-
-
-
-
 	if (!(&archive) || g_isScenario) 
-    {
+	{
 		if (g_startHotseatGame || g_startEmailGame) 
-        {
+		{
 			bool foundFirstHuman = false;
 
 			for(i = 1; i < g_theProfileDB->GetNPlayers(); i++) 
-            {
+			{
 				Assert(g_player[i]);
 				if(!g_player[i])
 					continue;
 
 				if (g_hsPlayerSetup[i].isHuman && !foundFirstHuman) 
-                {
+				{
 					NewTurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 					g_selected_item->SetPlayerOnScreen(i);
 					foundFirstHuman = true;
 				}
 
-				if(g_hsPlayerSetup[i].isHuman && g_player[i]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+				if(g_hsPlayerSetup[i].isHuman && g_player[i]->IsRobot())
 					g_player[i]->m_playerType = PLAYER_TYPE_HUMAN;
-				else if(!g_hsPlayerSetup[i].isHuman && g_player[i]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+				else if(!g_hsPlayerSetup[i].isHuman && !g_player[i]->IsRobot())
 					g_player[i]->m_playerType = PLAYER_TYPE_ROBOT;
 
 				g_player[i]->m_civilisation->ResetCiv((CIV_INDEX)g_hsPlayerSetup[i].civ, g_player[i]->m_civilisation->GetGender());
-				if(g_player[i]->GetPlayerType() == PLAYER_TYPE_HUMAN) 
-                {
+				if(g_player[i]->IsHuman())
+				{
 					if(strlen(g_hsPlayerSetup[i].name) > 0)
 						g_player[i]->m_civilisation->AccessData()->SetLeaderName(g_hsPlayerSetup[i].name);
 
 					if (i == 1) 
-                    {
+					{
 						g_theProfileDB->SetLeaderName(g_hsPlayerSetup[i].name);
 					}
 					g_player[i]->m_email = new MBCHAR[strlen(g_hsPlayerSetup[i].email) + 1];

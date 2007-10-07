@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Player Happiness
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -153,7 +153,7 @@ void PlayerHappiness::CalcPeaceMovement(Player *p,
 	}
 
 
-	if(p->m_playerType == PLAYER_TYPE_ROBOT &&
+	if(p->IsRobot() &&
 	   !(g_network.IsClient() && g_network.IsLocalPlayer(p->m_owner))) {
 		militaryUnitsOutOfCities = 0;
 	}

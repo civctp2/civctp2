@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Combat handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -947,11 +950,11 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 	Assert(g_player[m_defender]);
 	if (g_player[m_attacker] &&
 		g_player[m_defender] &&
-		g_player[m_attacker]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-		g_player[m_defender]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+		g_player[m_attacker]->IsRobot() &&
+		g_player[m_defender]->IsRobot())
 		return;
 
-	m_roundsSinceUpdate = 0x7ffffffe;  
+	m_roundsSinceUpdate = 0x7ffffffe;
 
 	
 	m_attackers.StartRound();

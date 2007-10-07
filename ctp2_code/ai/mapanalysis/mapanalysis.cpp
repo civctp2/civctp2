@@ -1056,10 +1056,9 @@ void MapAnalysis::ComputeAllianceSize(const PLAYER_INDEX playerId, PLAYER_INDEX 
             allies++;
 
 
-					
-            if ((g_player[foreignerId]->m_playerType != PLAYER_TYPE_ROBOT) &&
-            (m_totalPopulation[foreignerId] > max_population))
-            {
+            if(!g_player[foreignerId]->IsRobot()
+            &&  m_totalPopulation[foreignerId] > max_population
+            ){
                 max_population = m_totalPopulation[foreignerId];
                 leaderId = foreignerId;
             }
@@ -1095,7 +1094,7 @@ void MapAnalysis::ComputeHandicapRatios()
             continue;
 
 
-        if (g_player[player]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+        if (g_player[player]->IsRobot())
             continue;
 
 
@@ -1142,7 +1141,7 @@ void MapAnalysis::ComputeHandicapRatios()
             continue;
 
 
-        if (g_player[player]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+        if (!g_player[player]->IsRobot())
             continue;
 
 

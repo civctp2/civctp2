@@ -1507,12 +1507,12 @@ uint32 Director::KillAllActiveEffects()
 
 	return 0;
 }
- 
+
 void Director::NextPlayer(BOOL forcedUpdate)
-{ 
+{
 #ifdef _DEBUG
 	if (!g_doingFastRounds &&
-		(!g_network.IsActive() || (g_player[g_selected_item->GetVisiblePlayer()]->m_playerType == PLAYER_TYPE_ROBOT))) {
+		(!g_network.IsActive() || g_player[g_selected_item->GetVisiblePlayer()]->IsRobot())) {
 		return;
 	}
 #else
@@ -1520,14 +1520,14 @@ void Director::NextPlayer(BOOL forcedUpdate)
 #endif
 	m_nextPlayer = TRUE; 
 	
-    UnitActor * actor;
-    ListPos     actorPos;
-    ListPos     pos = m_activeUnitList->GetHeadPosition();
+	UnitActor * actor;
+	ListPos     actorPos;
+	ListPos     pos = m_activeUnitList->GetHeadPosition();
 
 	if (pos) 
-    {
+	{
 		do 
-        {
+		{
 			actorPos = pos;
 			actor    = m_activeUnitList->GetNext(pos);
 
@@ -2743,7 +2743,7 @@ void Director::ReloadAllSprites()
 		if(!g_player[p]) continue;
         //PFT  29 mar 05
 		//cycle through human players' cities
-        if(g_player[g_selected_item->GetVisiblePlayer()]->m_playerType == PLAYER_TYPE_HUMAN){
+        if(g_player[g_selected_item->GetVisiblePlayer()]->IsHuman()){
 			for(i = 0; i < g_player[p]->m_all_cities->Num(); i++) {
 				Unit u = g_player[p]->m_all_cities->Access(i);
 

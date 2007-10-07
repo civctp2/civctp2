@@ -266,28 +266,30 @@ STDEHANDLER(CtpAi_SettleEvent)
 	Army army;
 	if (!args->GetArmy(0, army))
 		return GEV_HD_Continue;
-    
-    PLAYER_INDEX const  owner       = army->GetOwner();
+
+	PLAYER_INDEX const  owner       = army->GetOwner();
 	Player *            player_ptr  = g_player[owner];
 	Assert(player_ptr != NULL);	
- 	
-    static sint32 last_settle = NewTurnCount::GetCurrentRound();
+
+	static sint32 last_settle = NewTurnCount::GetCurrentRound();
 	static sint32 last_player = PLAYER_UNASSIGNED;
 	
 	if (!g_network.IsActive()) 
-    {
-		if (player_ptr->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-			!(g_network.IsClient() && g_network.IsLocalPlayer(owner)) &&
-			!(g_network.IsHost() && owner == g_selected_item->GetVisiblePlayer()) &&
-			last_settle == NewTurnCount::GetCurrentRound() &&
-			(last_player == owner)
-           )
+	{
+		if( player_ptr->IsRobot()
+		&&!(g_network.IsClient()
+		&&  g_network.IsLocalPlayer(owner))
+		&&!(g_network.IsHost()
+		&&  owner == g_selected_item->GetVisiblePlayer())
+		&&  last_settle == NewTurnCount::GetCurrentRound()
+		&& last_player == owner
+		  )
 		{
 			return GEV_HD_Stop;
 		}
 	}
 
-    last_settle = NewTurnCount::GetCurrentRound();
+	last_settle = NewTurnCount::GetCurrentRound();
 	last_player = owner;
 
 	return GEV_HD_Continue;
@@ -565,15 +567,17 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 
 	
 	
-	if((g_turn->IsHotSeat() || g_turn->IsEmail()) && 
-		g_player[playerId]->m_playerType != PLAYER_TYPE_ROBOT)
+	if(
+	   (  g_turn->IsHotSeat()
+	||    g_turn->IsEmail()
+	   )
+	&&   !g_player[playerId]->IsRobot()
+	  )
 	{
-		
-		
 		for (sint32 foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++) 
 		{
 			if (g_player[foreignerId] &&
-				g_player[foreignerId]->m_playerType == PLAYER_TYPE_ROBOT)
+				g_player[foreignerId]->IsRobot())
 			{
 				
 				Diplomat::GetDiplomat(foreignerId).StartNegotiations(playerId);
@@ -609,7 +613,7 @@ STDEHANDLER(CtpAi_ConsiderNuclearWar)
 
 	Player *player_ptr = g_player[playerId];
 	
-	if(player_ptr->m_playerType != PLAYER_TYPE_ROBOT ||
+	if(!player_ptr->IsRobot() ||
 	   (g_network.IsActive() && playerId == g_selected_item->GetVisiblePlayer())) {
 		return GEV_HD_Continue;
 	}
@@ -721,7 +725,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 
 	
 	Scheduler::GetScheduler(playerId).
-		Match_Resources((player_ptr->m_playerType == PLAYER_TYPE_ROBOT));
+		Match_Resources(player_ptr->IsRobot());
 	
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
@@ -740,9 +744,9 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 								   GEA_Int, cycle, 
 								   GEA_End);
 	}
-	else 
+	else
 	{
-		if ( player_ptr->m_playerType == PLAYER_TYPE_ROBOT )
+		if(player_ptr->IsRobot())
 		{
 			CtpAi::ExecuteOpportunityActions(playerId);
 
@@ -766,12 +770,11 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 		
 		
 		
-		sint32 i;
-		if(player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
-		   (!g_network.IsClient() || g_network.IsLocalPlayer(playerId))) 
-        {
-			for(i = 0; i < player_ptr->m_all_armies->Num(); i++) 
-            {
+		if(player_ptr->IsRobot() &&
+		   (!g_network.IsClient() || g_network.IsLocalPlayer(playerId)))
+		{
+			for(sint32 i = 0; i < player_ptr->m_all_armies->Num(); i++) 
+			{
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, player_ptr->m_all_armies->Access(i).m_id,
 									   GEA_End);
@@ -785,7 +788,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 			if (playerId == g_selected_item->GetCurPlayer()) {
 				if(!g_network.IsActive() || g_network.IsLocalPlayer(playerId)) {
 					if(!g_network.IsClient() || 
-						(g_network.IsClient() && player_ptr->m_playerType == PLAYER_TYPE_ROBOT)) {
+						(g_network.IsClient() && player_ptr->IsRobot())) {
 						DPRINTF(k_DBG_GAMESTATE, ("AI End turn, %d\n", playerId));
 						g_director->AddEndTurn(); 
 					}
@@ -1198,7 +1201,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 
 	
 	if (player_ptr != NULL && 
-		player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
+		player_ptr->IsRobot() &&
 		!g_network.IsClient()) 
 	{
 		sint32 government_type = Governor::GetGovernor(player).ComputeBestGovernment();
@@ -1219,7 +1222,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 
 	
 	if (player_ptr &&
-		player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
+		player_ptr->IsRobot() &&
 		!g_network.IsClient()) 
 	{
 		sint32 pw_percent   = 0;
@@ -1286,7 +1289,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 
 	
 	GaiaController *gaia_controller = player_ptr->GetGaiaController();
-	if (player_ptr->m_playerType == PLAYER_TYPE_ROBOT &&
+	if (player_ptr->IsRobot() &&
 		gaia_controller && gaia_controller->CanBuildTowers(false))
 	{
 		t1 = GetTickCount();
@@ -1314,7 +1317,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	}
 	
 	
-	if (player_ptr->m_playerType == PLAYER_TYPE_ROBOT && !g_network.IsClient()) 
+	if (player_ptr->IsRobot() && !g_network.IsClient()) 
 	{
 		t1 = GetTickCount();
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
@@ -1362,7 +1365,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	AddMiscMapTargets(player);
 
 	
-	if (player == 0 && player_ptr->m_playerType == PLAYER_TYPE_ROBOT)
+	if (player == 0 && player_ptr->IsRobot())
 	{
 		Player * player_ptr = g_player[player];
 		Assert(player_ptr != NULL);
@@ -1388,8 +1391,8 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 // Parameters : playerId	: index of - computer - player
 //
 // Globals    : g_player
-//				g_theWorld
-//				g_gevManager
+//              g_theWorld
+//              g_gevManager
 //
 // Returns    : -
 //

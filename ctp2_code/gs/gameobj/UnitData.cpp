@@ -507,7 +507,7 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 			if(m_fuel <= 0) { //refuelling failed, it's NoFuelThenCrash
 				out_of_fuel = true;
 			
-				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+				if(!g_player[m_owner]->IsRobot() ||
 				  (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 					m_army.AddDeath(Unit(m_id), CAUSE_REMOVE_ARMY_OUTOFFUEL, -1);
 				}
@@ -1864,7 +1864,7 @@ bool UnitData::Settle()
 			return false;
 		}
 
-		if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
+		if(!g_player[m_owner]->IsRobot()) {
 			g_slicEngine->RunCantSettleMovementTriggers(Unit(m_id));
 			return false;
 		} else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
@@ -2039,7 +2039,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    
    
    
-   if (g_player[newo]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
+   if (g_player[newo]->IsRobot() &&
 	   (!g_network.IsClient() || !g_network.IsLocalPlayer(newo)))
    {
 	   
@@ -2169,7 +2169,7 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 
 	
 	
-	if (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
+	if (g_player[m_owner]->IsRobot() &&
 		(!g_network.IsClient() || !g_network.IsLocalPlayer(m_owner)))
 	{
 		
@@ -2535,7 +2535,7 @@ bool UnitData::CanInterceptTrade() const
 		if ( source_owner == m_owner )
 			continue;
 
-		if(g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
+		if(g_player[m_owner]->IsRobot() &&
 		   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 		   
 			if(AgreementMatrix::s_agreements.HasAgreement(
@@ -3287,7 +3287,7 @@ void UnitData::EndTurn()
 
 			if(m_fuel <= 0) {
 				Unit me(m_id);
-				if(g_player[m_owner]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+				if(!g_player[m_owner]->IsRobot() ||
 				   (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 					me.Kill(CAUSE_REMOVE_ARMY_OUTOFFUEL, -1);
 					return;

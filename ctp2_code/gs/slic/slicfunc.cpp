@@ -2940,29 +2940,42 @@ SFN_ERROR Slic_IsHumanPlayer::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(g_network.IsNetworkLaunch() && !g_network.IsActive()) {
+	if(g_network.IsNetworkLaunch()
+	&&!g_network.IsActive()
+	){
 		m_result.m_int = 0;
-	} else if(g_network.IsActive()) {
-		if(player == g_network.GetPlayerIndex() ||
-		   (g_network.IsHost() && g_player[player]->GetPlayerType() == PLAYER_TYPE_NETWORK)) {
+	}
+	else if(g_network.IsActive())
+	{
+		if( player == g_network.GetPlayerIndex()
+		|| (g_network.IsHost()
+		&&  g_player[player]->IsNetwork())
+		){
 			m_result.m_int = 1;
-		} else {
-				if(args->Count() != 2)
-		return SFN_ERROR_NUM_ARGS;
-
-	sint32 index;
-	if(!args->GetInt(0, index))
-		return SFN_ERROR_TYPE_ARGS;
-	
-	char *keystring;
-	if(!args->GetString(1, keystring))
-		return SFN_ERROR_TYPE_ARGS;
-
 		}
-	} else {
-		if(!g_player[player] || g_player[player]->IsRobot()) {
+		else
+		{
+			if(args->Count() != 2)
+				return SFN_ERROR_NUM_ARGS;
+
+			sint32 index;
+			if(!args->GetInt(0, index))
+				return SFN_ERROR_TYPE_ARGS;
+	
+			char *keystring;
+			if(!args->GetString(1, keystring))
+				return SFN_ERROR_TYPE_ARGS;
+		}
+	}
+	else
+	{
+		if(!g_player[player]
+		||  g_player[player]->IsRobot()
+		){
 			m_result.m_int = 0;
-		} else {
+		}
+		else
+		{
 			m_result.m_int = 1;
 		}
 	}
@@ -3430,7 +3443,10 @@ SFN_ERROR Slic_DetachRobot::Call(SlicArgList *args)
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(!g_network.IsActive() || (g_network.IsHost() && g_player[index]->m_playerType != PLAYER_TYPE_NETWORK)) {
+	if(!g_network.IsActive()
+	|| (g_network.IsHost() 
+	&& !g_player[index]->IsNetwork())
+	){
 		g_player[index]->m_playerType = PLAYER_TYPE_HUMAN;
 	}
 
@@ -3445,7 +3461,10 @@ SFN_ERROR Slic_AttachRobot::Call(SlicArgList *args)
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(!g_network.IsActive() || (g_network.IsHost() && g_player[index]->m_playerType != PLAYER_TYPE_NETWORK)) {
+	if(!g_network.IsActive()
+	|| (g_network.IsHost()
+	&& !g_player[index]->IsNetwork())
+	){
 		g_player[index]->m_playerType = PLAYER_TYPE_ROBOT;
 	}
 

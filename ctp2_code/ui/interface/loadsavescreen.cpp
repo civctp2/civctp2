@@ -781,7 +781,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 			ts.key = 0;
 
 #if you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
-			ts.isAI = g_player[ i ]->GetPlayerType() == PLAYER_TYPE_ROBOT;
+			ts.isAI = g_player[ i ]->IsRobot();
 #else
 			ts.isAI = 0;
 #endif 

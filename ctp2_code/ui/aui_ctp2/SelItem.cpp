@@ -614,13 +614,16 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 	sint32 player = GetVisiblePlayer();
 	Player *p = g_player[player];
 
-	if(!g_network.IsActive()) {
-		if(g_player[GetCurPlayer()]->GetPlayerType() != PLAYER_TYPE_HUMAN)
+	if(!g_network.IsActive())
+	{
+		if(!g_player[GetCurPlayer()]->IsHuman())
 			return;
-	} else {
-		if((!g_network.IsLocalPlayer(GetCurPlayer())) ||
-			!g_network.ReadyToStart() ||
-			g_player[GetCurPlayer()]->m_playerType == PLAYER_TYPE_ROBOT) {
+	}
+	else{
+		if(!g_network.IsLocalPlayer(GetCurPlayer())
+		|| !g_network.ReadyToStart()
+		||  g_player[GetCurPlayer()]->IsRobot()
+		){
 			return;
 		}
 	}
@@ -673,7 +676,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 					// But apart from that this code doesn't seem to do the 
 					// desired effect on the auto end turn code, either.
 					if(!g_theProfileDB->GetValueByName("EndTurnWithEmptyBuildQueues")
-					&& g_player[GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_HUMAN
+					&& g_player[GetCurPlayer()]->IsHuman()
 					){
 						return;
 					}
@@ -690,10 +693,6 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		){
 			endTurn = FALSE;
 		}
-			
-		
-		
-		
 
 		if(endTurn && !isFirst) {
 			
@@ -740,22 +739,22 @@ void SelectedItem::NextPlayer()
 }
 
 sint32 SelectedItem::GetPlayerAfterThis(const sint32 p)
-{ 
-    Assert(0 <= p); 
-    Assert(p < k_MAX_PLAYERS); 
+{
+	Assert(0 <= p); 
+	Assert(p < k_MAX_PLAYERS); 
 
-    Assert(0 <= m_next_player[p]);
-    Assert(m_next_player[p] < k_MAX_PLAYERS);
+	Assert(0 <= m_next_player[p]);
+	Assert(m_next_player[p] < k_MAX_PLAYERS);
 
-    return m_next_player[p]; 
-} 
+	return m_next_player[p]; 
+}
 
 PLAYER_INDEX SelectedItem::GetNextHumanPlayer()
 {
 	PLAYER_INDEX chk = m_current_player;
 	do {
 		chk = m_next_player[chk];
-		if(g_player[chk]->GetPlayerType() == PLAYER_TYPE_HUMAN)
+		if(g_player[chk]->IsHuman())
 			return chk;
 	} while(chk != m_current_player);
 	return m_current_player;
@@ -777,31 +776,31 @@ void SelectedItem::SetCurPlayer(PLAYER_INDEX p)
 	Assert(m_next_player[p] != PLAYER_INDEX_INVALID); 
 	Assert(PLAYER_INDEX_0 <= p); 
 	Assert(p < k_MAX_PLAYERS); 
-    m_auto_unload = FALSE;
+	m_auto_unload = FALSE;
 	m_current_player = p;
-	if(g_network.IsActive()) {
-		if(g_network.GetPlayerIndex() == p ||
-		   (g_network.IsHost() && g_player[p]->GetPlayerType() != PLAYER_TYPE_NETWORK)) {
-			
-		} else {
+	
+	if(g_network.IsActive())
+	{
+		if(g_network.GetPlayerIndex() == p
+		||(g_network.IsHost()
+		&& !g_player[p]->IsNetwork())
+		){
+			// Do nothing for whatever reason
+		}
+		else
+		{
 			g_network.SetMyTurn(FALSE);
 		}
 	}
 	ClearCycle();
 
-	if(visPlayer != GetVisiblePlayer()) {
-		
-		
-
-		
-		
-		
-
-		
-		
-
+	if(visPlayer != GetVisiblePlayer())
+	{
 		g_turn->InformMessages();
-	} else if(GetVisiblePlayer() == m_current_player) {
+	}
+	else if(GetVisiblePlayer() == m_current_player)
+	{
+		// Do nothing for whatever reason
 	}
 }
 
@@ -809,24 +808,21 @@ void SelectedItem::NextRound()
 {
 	SetCurPlayer(0);
 }
-		   	
-void SelectedItem::RegisterCreatedUnit(const PLAYER_INDEX owner)
 
+void SelectedItem::RegisterCreatedUnit(const PLAYER_INDEX owner)
 {
-    
+	// Do nothing for whatever reason
 }
 
 void SelectedItem::RegisterCreatedCity(const PLAYER_INDEX owner)
-
 {
-    
+	// Do nothing for whatever reason
 }
 
 void SelectedItem::RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army)
-
 {
-    if (m_select_state[owner] == SELECT_TYPE_LOCAL_ARMY) {
-        if (m_selected_army[owner] == dead_army) {
+	if (m_select_state[owner] == SELECT_TYPE_LOCAL_ARMY) {
+		if (m_selected_army[owner] == dead_army) {
 			Deselect(owner);
 			m_selected_army[owner].m_id = (0);
 		}
@@ -834,21 +830,19 @@ void SelectedItem::RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dea
 }
 
 void SelectedItem::RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dead_city)
-
 {
-    if (m_select_state[owner] == SELECT_TYPE_LOCAL_CITY) { 
-        if (m_selected_city[owner] == dead_city) {
+	if (m_select_state[owner] == SELECT_TYPE_LOCAL_CITY) { 
+		if (m_selected_city[owner] == dead_city) {
 			Deselect(owner);
 			m_selected_city[owner].m_id = (0);
-        }
-    }
+		 }
+	}
 }
 
 
 extern sint32 g_keypress_stop_player;
 
 void SelectedItem::RemovePlayer(PLAYER_INDEX p)
-
 {
     sint32 i; 
 
@@ -1057,7 +1051,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		army = g_theWorld->GetCell(pos)->UnitArmy();
 
 		
-		if ( all && g_player[o]->GetPlayerType() == PLAYER_TYPE_HUMAN &&
+		if ( all && g_player[o]->IsHuman() &&
 			 (g_theProfileDB->IsAutoGroup() || isDoubleClick)) {
 			sint32 i;
 			BOOL selectedCombatUnits = FALSE;
@@ -1558,30 +1552,35 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 
 sint32 SelectedItem::GetVisiblePlayer() const 
 {
-	
-	
-	
-
-    
-    
-    
-    if (m_player_on_screen != -1 && !g_network.IsActive()) 
+	if (m_player_on_screen != -1 && !g_network.IsActive()) 
 		return m_player_on_screen;
 
-	if(!g_network.IsActive()) {
+	if(!g_network.IsActive())
+	{
 		return m_current_player;
-	} else {
-		if(g_network.IsClient()) {
+	}
+	else
+	{
+		if(g_network.IsClient())
+		{
 			return g_network.GetPlayerIndex();
-		} else {
-			if(0 && g_player[m_current_player] && 
-			   g_player[m_current_player]->GetPlayerType() ==
-			   PLAYER_TYPE_HUMAN) {
+		}
+		else
+		{
+			if(0 // Never used
+			&& g_player[m_current_player]
+			&& g_player[m_current_player]->IsHuman()
+			){
 				return m_current_player;
-			} else {
-				if(!g_player[g_network.GetPlayerIndex()]) {
+			}
+			else
+			{
+				if(!g_player[g_network.GetPlayerIndex()])
+				{
 					return m_current_player;
-				} else {
+				}
+				else
+				{
 					return g_network.GetPlayerIndex();
 				}
 			}
@@ -1591,7 +1590,7 @@ sint32 SelectedItem::GetVisiblePlayer() const
 
 void SelectedItem::AddWaypoint(const MapPoint &pos)
 {
-    m_waypoints.Insert(pos);
+	m_waypoints.Insert(pos);
 }
 
 void SelectedItem::SetDrawablePathDest(MapPoint &dest)

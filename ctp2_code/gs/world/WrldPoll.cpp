@@ -364,7 +364,7 @@ void world_AddUnseenForHumans(sint32 x, sint32 y)
 	sint32 i;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		if(!g_player[i]) continue;
-		if(g_player[i]->GetPlayerType() != PLAYER_TYPE_ROBOT ||
+		if(!g_player[i]->IsRobot() ||
 		   (g_network.IsClient() && g_network.IsLocalPlayer(i))) {
 			MapPoint pos(x, y);
 			g_player[i]->m_vision->AddUnseen(pos);

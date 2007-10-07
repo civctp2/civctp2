@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Types of diplomacy objects
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -558,6 +559,13 @@ struct OldNegotiationEvent {
 };
 
 struct NegotiationEvent {
+	NegotiationEvent()
+	: proposal   (),
+	  response   (),
+	  agreement  (),
+	  threat     (),
+	  round      (-1)
+	{}
 	NewProposal proposal;
 	Response response;
 	ai::Agreement agreement;

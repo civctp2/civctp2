@@ -3676,7 +3676,7 @@ void Governor::FillEmptyBuildQueues()
 
 		if (city->GetBuildQueue()->GetLen() > 0)
 		{
-			if (first_turn_of_war && (PLAYER_TYPE_ROBOT == g_player[m_playerId]->GetPlayerType()))
+			if (first_turn_of_war && g_player[m_playerId]->IsRobot())
             {
                 // Reconsider AI production at the start of a war
 				city->GetBuildQueue()->Clear();
@@ -3809,10 +3809,10 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 
 	StringId advice;
 	const BuildListSequenceRecord *build_list_sequence = 
-		GetMatchingSequence(city, (g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT), advice);
+		GetMatchingSequence(city, !g_player[m_playerId]->IsRobot(), advice);
 
 	
-	if((g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT))
+	if(!g_player[m_playerId]->IsRobot())
 	{
 		if(city->GetUseGovernor())
 		{
@@ -3823,7 +3823,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 
 	
 	
-	if(!city->GetUseGovernor() || g_player[m_playerId]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+	if(!city->GetUseGovernor() || g_player[m_playerId]->IsRobot())
 	{
 		sint32 suggested_sequence = build_list_sequence->GetIndex();
 		if (suggested_sequence >= 0)
@@ -4069,7 +4069,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 	for (list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
 		
-		if ( ( g_player[m_playerId]->GetPlayerType() != PLAYER_TYPE_ROBOT ) &&
+		if ( (!g_player[m_playerId]->IsRobot() ) &&
 			( ( (BUILD_UNIT_LIST) list_num == BUILD_UNIT_LIST_SETTLER ) ||
 			( (BUILD_UNIT_LIST) list_num == BUILD_UNIT_LIST_SPECIAL) ||
 			( (BUILD_UNIT_LIST) list_num == BUILD_UNIT_LIST_SEA_TRANSPORT ) ||
@@ -4697,7 +4697,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 				
 				
-				if (player_ptr->m_playerType != PLAYER_TYPE_ROBOT)
+				if (!player_ptr->IsRobot())
 					continue;
 
 				
