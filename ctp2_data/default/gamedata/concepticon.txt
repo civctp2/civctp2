@@ -198,6 +198,8 @@ MAPICON_SO_VIETNAM_FLAG		"upc147.tga"
 MAPICON_PRUSSIA_FLAG		"upc148.tga"
 MAPICON_GERMAN_IMP_FLAG		"upc149.tga"
 MAPICON_RUSSIAN_IMP_FLAG	"upc150.tga"
+MAPICON_LYCIAN_FLAG		"upc150.tga"	# Get the right flag
+
 #
 MAPICON_ELITE			"upc057.tga"
 # City expansion?
@@ -241,4 +243,4 @@ MAPICON_ELITE			"upc057.tga"
 #MAPICON_WONDER33
 #MAPICON_WONDER34
 #MAPICON_WONDER35
-#MAPICON_MAX      # This returns the total number or Icons
+#MAPICON_MAX

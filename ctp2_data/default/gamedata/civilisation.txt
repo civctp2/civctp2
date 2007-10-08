@@ -26,13 +26,13 @@
 # - Added EmissaryPhotoFemale default value is taken from 
 #   EmissaryPhotoMale. (Aug 26th 2005 Martin Gühmann)
 # - Added new NationUnitFlag for each civilisation. (3-mar-2007 Martin Gühmann)
-# - Changed Diplomat_Photo to Diplomat_flag for flags in dipwizard (match unit flags)
-# - added Jamaican civ
+# - Changed Diplomat_Photo to Diplomat_flag for flags in dipwizard (match unit flags) Actually this is a diplomat photo and not a flag, so change it back to a photo, actually this was a missing feature of the original game.
+# - Added Jamaican civ
 #
 #----------------------------------------------------------------------------
 
 #	##    Civilisation.txt	
-#63	## Number of Civs in list (add as grows) (Not needed anymore, but doesn't harm)
+# 70	## Number of Civs in list (add as grows) (Not needed anymore, but doesn't harm)
 # City styles: 0)mediterranean=6 1)middle eastern=9 2)far eastern=5 3)MA pyramid=6 4)european=7 5)Egyptian=2 6)Palace=10
 
 BARBARIAN	#1
@@ -3637,7 +3637,7 @@ HITTITE	#57
 	CityName		HITTITE_CITY_38
 }
 
-SHANG 	#58
+SHANG	#58
 {
 	LeaderNameMale		SHANG_LEADERM_NAME
 	LeaderNameFemale	SHANG_LEADERF_NAME
@@ -4048,289 +4048,289 @@ JAMAICA	#64
 	CityName		JAMAICAN_CITY_30
 }
 
-YAMATO	#65	
-	{	
-	LeaderNameMale YAMATO_LEADERM_NAME	
-	LeaderNameFemale YAMATO_LEADERF_NAME	
-	PersonalityMale "PERSONALITY_CEASAR"
-	PersonalityFemale "PERSONALITY_STALIN"
-	PersonalityDescription PERSONALITY_DESCRIPTION_WAR_FEW
-	CountryName YAMATO_COUNTRY_NAME	
-	SingularCivName YAMATO_SINGULAR	
-	PluralCivName YAMATO_PLURAL	
+YAMATO	#65
+{
+	LeaderNameMale		YAMATO_LEADERM_NAME
+	LeaderNameFemale	YAMATO_LEADERF_NAME
+	PersonalityMale		PERSONALITY_CEASAR
+	PersonalityFemale	PERSONALITY_STALIN
+	PersonalityDescription	PERSONALITY_DESCRIPTION_WAR_FEW
+	CountryName		YAMATO_COUNTRY_NAME
+	SingularCivName		YAMATO_SINGULAR
+	PluralCivName		YAMATO_PLURAL
 	EmissaryPhotoMale	JAPANESE_DIPLOMAT_FLAG
-	EmissaryPhotoFemale	JAPANESE_DIPLOMAT_FLAG	
-    	Parchment 21	
-	CityStyle		CITY_STYLE_ASIAN	
+	EmissaryPhotoFemale	JAPANESE_DIPLOMAT_FLAG
+	Parchment		21
+	CityStyle		CITY_STYLE_ASIAN
 	NationUnitFlag		MAPICON_YAMATO_FLAG
-	CityName YAMATO_CITY_1
-	CityName YAMATO_CITY_2	
-	CityName YAMATO_CITY_3	
-	CityName YAMATO_CITY_4	
-	CityName YAMATO_CITY_5	
-	CityName YAMATO_CITY_6	
-	CityName YAMATO_CITY_7	
-	CityName YAMATO_CITY_8	
-	CityName YAMATO_CITY_9	
-	CityName YAMATO_CITY_10	
-	CityName YAMATO_CITY_11	
-	CityName YAMATO_CITY_12	
-	CityName YAMATO_CITY_13	
-	CityName YAMATO_CITY_14	
-	CityName YAMATO_CITY_15	
-	CityName YAMATO_CITY_16	
-	CityName YAMATO_CITY_17	
-	CityName YAMATO_CITY_18	
-	CityName YAMATO_CITY_19	
-	CityName YAMATO_CITY_20	
-	CityName YAMATO_CITY_21	
-	CityName YAMATO_CITY_22	
-	CityName YAMATO_CITY_23	
-	CityName YAMATO_CITY_24	
-	CityName YAMATO_CITY_25	
-	CityName YAMATO_CITY_26	
-	CityName YAMATO_CITY_27	
-	CityName YAMATO_CITY_28	
-	CityName YAMATO_CITY_29	
-	CityName YAMATO_CITY_30	
-	CityName YAMATO_CITY_31	
-	CityName YAMATO_CITY_32	
-	CityName YAMATO_CITY_33	
-	CityName YAMATO_CITY_34	
-	CityName YAMATO_CITY_35
-	}	
-		
-HAN	#66	
-	{	
-	LeaderNameMale HAN_LEADERM_NAME	
-	LeaderNameFemale HAN_LEADERF_NAME	
-	PersonalityMale "PERSONALITY_TELLER"
-	PersonalityFemale "PERSONALITY_MEDICI"
-	PersonalityDescription PERSONALITY_DESCRIPTION_SCI_FEW
-	CountryName HAN_COUNTRY_NAME	
-	SingularCivName HAN_SINGULAR	
-	PluralCivName HAN_PLURAL	
+	CityName		YAMATO_CITY_1
+	CityName		YAMATO_CITY_2
+	CityName		YAMATO_CITY_3
+	CityName		YAMATO_CITY_4
+	CityName		YAMATO_CITY_5
+	CityName		YAMATO_CITY_6
+	CityName		YAMATO_CITY_7
+	CityName		YAMATO_CITY_8
+	CityName		YAMATO_CITY_9
+	CityName		YAMATO_CITY_10
+	CityName		YAMATO_CITY_11
+	CityName		YAMATO_CITY_12
+	CityName		YAMATO_CITY_13
+	CityName		YAMATO_CITY_14
+	CityName		YAMATO_CITY_15
+	CityName		YAMATO_CITY_16
+	CityName		YAMATO_CITY_17
+	CityName		YAMATO_CITY_18
+	CityName		YAMATO_CITY_19
+	CityName		YAMATO_CITY_20
+	CityName		YAMATO_CITY_21
+	CityName		YAMATO_CITY_22
+	CityName		YAMATO_CITY_23
+	CityName		YAMATO_CITY_24
+	CityName		YAMATO_CITY_25
+	CityName		YAMATO_CITY_26
+	CityName		YAMATO_CITY_27
+	CityName		YAMATO_CITY_28
+	CityName		YAMATO_CITY_29
+	CityName		YAMATO_CITY_30
+	CityName		YAMATO_CITY_31
+	CityName		YAMATO_CITY_32
+	CityName		YAMATO_CITY_33
+	CityName		YAMATO_CITY_34
+	CityName		YAMATO_CITY_35
+}
+
+HAN	#66
+{
+	LeaderNameMale		HAN_LEADERM_NAME
+	LeaderNameFemale	HAN_LEADERF_NAME
+	PersonalityMale		PERSONALITY_TELLER
+	PersonalityFemale	PERSONALITY_MEDICI
+	PersonalityDescription	PERSONALITY_DESCRIPTION_SCI_FEW
+	CountryName		HAN_COUNTRY_NAME
+	SingularCivName		HAN_SINGULAR
+	PluralCivName		HAN_PLURAL
 	EmissaryPhotoMale	SHANG_DIPLOMAT_FLAG
 	EmissaryPhotoFemale	SHANG_DIPLOMAT_FLAG
 	Parchment		25
 	CityStyle		CITY_STYLE_ASIAN
-	NationUnitFlag		MAPICON_HAN_FLAG	
-	CityName HAN_CITY_1	
-	CityName HAN_CITY_2	
-	CityName HAN_CITY_3	
-	CityName HAN_CITY_4	
-	CityName HAN_CITY_5	
-	CityName HAN_CITY_6	
-	CityName HAN_CITY_7	
-	CityName HAN_CITY_8	
-	CityName HAN_CITY_9	
-	CityName HAN_CITY_10	
-	CityName HAN_CITY_11	
-	CityName HAN_CITY_12	
-	CityName HAN_CITY_13	
-	CityName HAN_CITY_14	
-	CityName HAN_CITY_15	
-	CityName HAN_CITY_16	
-	CityName HAN_CITY_17	
-	CityName HAN_CITY_18	
-	CityName HAN_CITY_19	
-	CityName HAN_CITY_20	
-	CityName HAN_CITY_21	
-	CityName HAN_CITY_22	
-	CityName HAN_CITY_23	
-	CityName HAN_CITY_24	
-	CityName HAN_CITY_25	
-	CityName HAN_CITY_26	
-	CityName HAN_CITY_27	
-	CityName HAN_CITY_28	
-	CityName HAN_CITY_29	
-	CityName HAN_CITY_30
-	}			
-		
-SUMERIAN	#67	
-	{	
-	LeaderNameMale SUMERIAN_LEADERM_NAME	
-	LeaderNameFemale SUMERIAN_LEADERF_NAME	
-	PersonalityMale "PERSONALITY_DEGAULLE"
-	PersonalityFemale "PERSONALITY_GHANDI"
-	PersonalityDescription PERSONALITY_DESCRIPTION_SCI_MANY
-	CountryName SUMERIAN_COUNTRY_NAME	
-	SingularCivName SUMERIAN_SINGULAR	
-	PluralCivName SUMERIAN_PLURAL	
+	NationUnitFlag		MAPICON_HAN_FLAG
+	CityName		HAN_CITY_1
+	CityName		HAN_CITY_2
+	CityName		HAN_CITY_3
+	CityName		HAN_CITY_4
+	CityName		HAN_CITY_5
+	CityName		HAN_CITY_6
+	CityName		HAN_CITY_7
+	CityName		HAN_CITY_8
+	CityName		HAN_CITY_9
+	CityName		HAN_CITY_10
+	CityName		HAN_CITY_11
+	CityName		HAN_CITY_12
+	CityName		HAN_CITY_13
+	CityName		HAN_CITY_14
+	CityName		HAN_CITY_15
+	CityName		HAN_CITY_16
+	CityName		HAN_CITY_17
+	CityName		HAN_CITY_18
+	CityName		HAN_CITY_19
+	CityName		HAN_CITY_20
+	CityName		HAN_CITY_21
+	CityName		HAN_CITY_22
+	CityName		HAN_CITY_23
+	CityName		HAN_CITY_24
+	CityName		HAN_CITY_25
+	CityName		HAN_CITY_26
+	CityName		HAN_CITY_27
+	CityName		HAN_CITY_28
+	CityName		HAN_CITY_29
+	CityName		HAN_CITY_30
+}
+
+SUMERIAN	#67
+{
+	LeaderNameMale		SUMERIAN_LEADERM_NAME
+	LeaderNameFemale	SUMERIAN_LEADERF_NAME
+	PersonalityMale		PERSONALITY_DEGAULLE
+	PersonalityFemale	PERSONALITY_GHANDI
+	PersonalityDescription	PERSONALITY_DESCRIPTION_SCI_MANY
+	CountryName		SUMERIAN_COUNTRY_NAME
+	SingularCivName		SUMERIAN_SINGULAR
+	PluralCivName		SUMERIAN_PLURAL
 	EmissaryPhotoMale	BABYLONIAN_DIPLOMAT_FLAG
 	EmissaryPhotoFemale	BABYLONIAN_DIPLOMAT_FLAG
 	Parchment		25
 	CityStyle		CITY_STYLE_ARAB
 	NationUnitFlag		MAPICON_SUMER_FLAG
-	CityName SUMERIAN_CITY_1	
-	CityName SUMERIAN_CITY_2	
-	CityName SUMERIAN_CITY_3	
-	CityName SUMERIAN_CITY_4	
-	CityName SUMERIAN_CITY_5	
-	CityName SUMERIAN_CITY_6	
-	CityName SUMERIAN_CITY_7	
-	CityName SUMERIAN_CITY_8	
-	CityName SUMERIAN_CITY_9	
-	CityName SUMERIAN_CITY_10	
-	CityName SUMERIAN_CITY_11	
-	CityName SUMERIAN_CITY_12	
-	CityName SUMERIAN_CITY_13	
-	CityName SUMERIAN_CITY_14	
-	CityName SUMERIAN_CITY_15	
-	CityName SUMERIAN_CITY_16	
-	CityName SUMERIAN_CITY_17	
-	CityName SUMERIAN_CITY_18	
-	CityName SUMERIAN_CITY_19	
-	CityName SUMERIAN_CITY_20	
-	CityName SUMERIAN_CITY_21	
-	CityName SUMERIAN_CITY_22	
-	CityName SUMERIAN_CITY_23	
-	CityName SUMERIAN_CITY_24	
-	CityName SUMERIAN_CITY_25	
-	CityName SUMERIAN_CITY_26	
-	CityName SUMERIAN_CITY_27	
-	CityName SUMERIAN_CITY_28	
-	CityName SUMERIAN_CITY_29	
-	CityName SUMERIAN_CITY_30	
-	}	
+	CityName		SUMERIAN_CITY_1
+	CityName		SUMERIAN_CITY_2
+	CityName		SUMERIAN_CITY_3
+	CityName		SUMERIAN_CITY_4
+	CityName		SUMERIAN_CITY_5
+	CityName		SUMERIAN_CITY_6
+	CityName		SUMERIAN_CITY_7
+	CityName		SUMERIAN_CITY_8
+	CityName		SUMERIAN_CITY_9
+	CityName		SUMERIAN_CITY_10
+	CityName		SUMERIAN_CITY_11
+	CityName		SUMERIAN_CITY_12
+	CityName		SUMERIAN_CITY_13
+	CityName		SUMERIAN_CITY_14
+	CityName		SUMERIAN_CITY_15
+	CityName		SUMERIAN_CITY_16
+	CityName		SUMERIAN_CITY_17
+	CityName		SUMERIAN_CITY_18
+	CityName		SUMERIAN_CITY_19
+	CityName		SUMERIAN_CITY_20
+	CityName		SUMERIAN_CITY_21
+	CityName		SUMERIAN_CITY_22
+	CityName		SUMERIAN_CITY_23
+	CityName		SUMERIAN_CITY_24
+	CityName		SUMERIAN_CITY_25
+	CityName		SUMERIAN_CITY_26
+	CityName		SUMERIAN_CITY_27
+	CityName		SUMERIAN_CITY_28
+	CityName		SUMERIAN_CITY_29
+	CityName		SUMERIAN_CITY_30
+}
 
-KUSH	#68	
-	{	
-	LeaderNameMale KUSH_LEADERM_NAME	
-	LeaderNameFemale KUSH_LEADERF_NAME	
-	PersonalityMale "PERSONALITY_STRANGELOVE"
-	PersonalityFemale "PERSONALITY_CEASAR"
-	PersonalityDescription PERSONALITY_DESCRIPTION_WAR_MANY
-	CountryName KUSH_COUNTRY_NAME	
-	SingularCivName KUSH_SINGULAR	
-	PluralCivName KUSH_PLURAL	
+KUSH	#68
+{
+	LeaderNameMale		KUSH_LEADERM_NAME
+	LeaderNameFemale	KUSH_LEADERF_NAME
+	PersonalityMale		PERSONALITY_STRANGELOVE
+	PersonalityFemale	PERSONALITY_CEASAR
+	PersonalityDescription	PERSONALITY_DESCRIPTION_WAR_MANY
+	CountryName		KUSH_COUNTRY_NAME
+	SingularCivName		KUSH_SINGULAR
+	PluralCivName		KUSH_PLURAL
 	EmissaryPhotoMale	HARAPPAN_DIPLOMAT_FLAG
 	EmissaryPhotoFemale	HARAPPAN_DIPLOMAT_FLAG
 	Parchment		25
 	NationUnitFlag		MAPICON_KUSH_FLAG
-	CityStyle		CITY_STYLE_ARAB	
-	CityName KUSH_CITY_1	
-	CityName KUSH_CITY_2	
-	CityName KUSH_CITY_3	
-	CityName KUSH_CITY_4	
-	CityName KUSH_CITY_5	
-	CityName KUSH_CITY_6	
-	CityName KUSH_CITY_7	
-	CityName KUSH_CITY_8	
-	CityName KUSH_CITY_9	
-	CityName KUSH_CITY_10	
-	CityName KUSH_CITY_11	
-	CityName KUSH_CITY_12	
-	CityName KUSH_CITY_13	
-	CityName KUSH_CITY_14	
-	CityName KUSH_CITY_15	
-	CityName KUSH_CITY_16	
-	CityName KUSH_CITY_17	
-	CityName KUSH_CITY_18	
-	CityName KUSH_CITY_19	
-	CityName KUSH_CITY_20	
-	CityName KUSH_CITY_21	
-	CityName KUSH_CITY_22	
-	CityName KUSH_CITY_23	
-	CityName KUSH_CITY_24	
-	CityName KUSH_CITY_25	
-	CityName KUSH_CITY_26	
-	CityName KUSH_CITY_27	
-	CityName KUSH_CITY_28	
-	CityName KUSH_CITY_29	
-	CityName KUSH_CITY_30	
-	}
+	CityStyle		CITY_STYLE_ARAB
+	CityName		KUSH_CITY_1
+	CityName		KUSH_CITY_2
+	CityName		KUSH_CITY_3
+	CityName		KUSH_CITY_4
+	CityName		KUSH_CITY_5
+	CityName		KUSH_CITY_6
+	CityName		KUSH_CITY_7
+	CityName		KUSH_CITY_8
+	CityName		KUSH_CITY_9
+	CityName		KUSH_CITY_10
+	CityName		KUSH_CITY_11
+	CityName		KUSH_CITY_12
+	CityName		KUSH_CITY_13
+	CityName		KUSH_CITY_14
+	CityName		KUSH_CITY_15
+	CityName		KUSH_CITY_16
+	CityName		KUSH_CITY_17
+	CityName		KUSH_CITY_18
+	CityName		KUSH_CITY_19
+	CityName		KUSH_CITY_20
+	CityName		KUSH_CITY_21
+	CityName		KUSH_CITY_22
+	CityName		KUSH_CITY_23
+	CityName		KUSH_CITY_24
+	CityName		KUSH_CITY_25
+	CityName		KUSH_CITY_26
+	CityName		KUSH_CITY_27
+	CityName		KUSH_CITY_28
+	CityName		KUSH_CITY_29
+	CityName		KUSH_CITY_30
+}
 
-MACEDONIAN	#69	
-	{	
-	LeaderNameMale MACEDONIAN_LEADERM_NAME	
-	LeaderNameFemale MACEDONIAN_LEADERF_NAME	
-	PersonalityMale "PERSONALITY_STALIN"
-	PersonalityFemale "PERSONALITY_CALLENBACH"
-	PersonalityDescription PERSONALITY_DESCRIPTION_WAR_FEW
-	CountryName MACEDONIAN_COUNTRY_NAME	
-	SingularCivName MACEDONIAN_SINGULAR	
-	PluralCivName MACEDONIAN_PLURAL	
+MACEDONIAN	#69
+{
+	LeaderNameMale		MACEDONIAN_LEADERM_NAME
+	LeaderNameFemale	MACEDONIAN_LEADERF_NAME
+	PersonalityMale		PERSONALITY_STALIN
+	PersonalityFemale	PERSONALITY_CALLENBACH
+	PersonalityDescription	PERSONALITY_DESCRIPTION_WAR_FEW
+	CountryName		MACEDONIAN_COUNTRY_NAME
+	SingularCivName		MACEDONIAN_SINGULAR
+	PluralCivName		MACEDONIAN_PLURAL
 	EmissaryPhotoMale	MACEDONIAN_DIPLOMAT_FLAG
 	EmissaryPhotoFemale	MACEDONIAN_DIPLOMAT_FLAG
 	Parchment		14
 	CityStyle		CITY_STYLE_ROMAN
-	NationUnitFlag		MAPICON_MACEDONIAN_FLAG	
-	CityName MACEDONIAN_CITY_1	
-	CityName MACEDONIAN_CITY_2	
-	CityName MACEDONIAN_CITY_3	
-	CityName MACEDONIAN_CITY_4	
-	CityName MACEDONIAN_CITY_5	
-	CityName MACEDONIAN_CITY_6	
-	CityName MACEDONIAN_CITY_7	
-	CityName MACEDONIAN_CITY_8	
-	CityName MACEDONIAN_CITY_9	
-	CityName MACEDONIAN_CITY_10	
-	CityName MACEDONIAN_CITY_11	
-	CityName MACEDONIAN_CITY_12	
-	CityName MACEDONIAN_CITY_13	
-	CityName MACEDONIAN_CITY_14	
-	CityName MACEDONIAN_CITY_15	
-	CityName MACEDONIAN_CITY_16	
-	CityName MACEDONIAN_CITY_17	
-	CityName MACEDONIAN_CITY_18	
-	CityName MACEDONIAN_CITY_19	
-	CityName MACEDONIAN_CITY_20	
-	CityName MACEDONIAN_CITY_21	
-	CityName MACEDONIAN_CITY_22	
-	CityName MACEDONIAN_CITY_23	
-	CityName MACEDONIAN_CITY_24	
-	CityName MACEDONIAN_CITY_25	
-	CityName MACEDONIAN_CITY_26	
-	CityName MACEDONIAN_CITY_27	
-	CityName MACEDONIAN_CITY_28	
-	CityName MACEDONIAN_CITY_29	
-	CityName MACEDONIAN_CITY_30	
-	}
+	NationUnitFlag		MAPICON_MACEDONIAN_FLAG
+	CityName		MACEDONIAN_CITY_1
+	CityName		MACEDONIAN_CITY_2
+	CityName		MACEDONIAN_CITY_3
+	CityName		MACEDONIAN_CITY_4
+	CityName		MACEDONIAN_CITY_5
+	CityName		MACEDONIAN_CITY_6
+	CityName		MACEDONIAN_CITY_7
+	CityName		MACEDONIAN_CITY_8
+	CityName		MACEDONIAN_CITY_9
+	CityName		MACEDONIAN_CITY_10
+	CityName		MACEDONIAN_CITY_11
+	CityName		MACEDONIAN_CITY_12
+	CityName		MACEDONIAN_CITY_13
+	CityName		MACEDONIAN_CITY_14
+	CityName		MACEDONIAN_CITY_15
+	CityName		MACEDONIAN_CITY_16
+	CityName		MACEDONIAN_CITY_17
+	CityName		MACEDONIAN_CITY_18
+	CityName		MACEDONIAN_CITY_19
+	CityName		MACEDONIAN_CITY_20
+	CityName		MACEDONIAN_CITY_21
+	CityName		MACEDONIAN_CITY_22
+	CityName		MACEDONIAN_CITY_23
+	CityName		MACEDONIAN_CITY_24
+	CityName		MACEDONIAN_CITY_25
+	CityName		MACEDONIAN_CITY_26
+	CityName		MACEDONIAN_CITY_27
+	CityName		MACEDONIAN_CITY_28
+	CityName		MACEDONIAN_CITY_29
+	CityName		MACEDONIAN_CITY_30
+}
 
-LYCIAN	#70	
-	{	
-	LeaderNameMale LYCIAN_LEADERM_NAME	
-	LeaderNameFemale LYCIAN_LEADERF_NAME	
-	PersonalityMale "PERSONALITY_STALIN"
-	PersonalityFemale "PERSONALITY_CALLENBACH"
-	PersonalityDescription PERSONALITY_DESCRIPTION_WAR_FEW
-	CountryName LYCIAN_COUNTRY_NAME	
-	SingularCivName LYCIAN_SINGULAR	
-	PluralCivName LYCIAN_PLURAL	
+LYCIAN	#70
+{
+	LeaderNameMale		LYCIAN_LEADERM_NAME
+	LeaderNameFemale	LYCIAN_LEADERF_NAME
+	PersonalityMale		PERSONALITY_STALIN
+	PersonalityFemale	PERSONALITY_CALLENBACH
+	PersonalityDescription	PERSONALITY_DESCRIPTION_WAR_FEW
+	CountryName		LYCIAN_COUNTRY_NAME
+	SingularCivName		LYCIAN_SINGULAR
+	PluralCivName		LYCIAN_PLURAL
 	EmissaryPhotoMale	LYCIAN_DIPLOMAT_FLAG
 	EmissaryPhotoFemale	LYCIAN_DIPLOMAT_FLAG
 	Parchment		14
 	CityStyle		CITY_STYLE_ROMAN
-	NationUnitFlag		MAPICON_LYCIAN_FLAG	
-	CityName LYCIAN_CITY_1	
-	CityName LYCIAN_CITY_2	
-	CityName LYCIAN_CITY_3	
-	CityName LYCIAN_CITY_4	
-	CityName LYCIAN_CITY_5	
-	CityName LYCIAN_CITY_6	
-	CityName LYCIAN_CITY_7	
-	CityName LYCIAN_CITY_8	
-	CityName LYCIAN_CITY_9	
-	CityName LYCIAN_CITY_10	
-	CityName LYCIAN_CITY_11	
-	CityName LYCIAN_CITY_12	
-	CityName LYCIAN_CITY_13	
-	CityName LYCIAN_CITY_14	
-	CityName LYCIAN_CITY_15	
-	CityName LYCIAN_CITY_16	
-	CityName LYCIAN_CITY_17	
-	CityName LYCIAN_CITY_18	
-	CityName LYCIAN_CITY_19	
-	CityName LYCIAN_CITY_20	
-	CityName LYCIAN_CITY_21	
-	CityName LYCIAN_CITY_22	
-	CityName LYCIAN_CITY_23	
-	CityName LYCIAN_CITY_24	
-	CityName LYCIAN_CITY_25	
-	CityName LYCIAN_CITY_26	
-	CityName LYCIAN_CITY_27	
-	CityName LYCIAN_CITY_28	
-	CityName LYCIAN_CITY_29	
-	CityName LYCIAN_CITY_30	
-	}
+	NationUnitFlag		MAPICON_LYCIAN_FLAG
+	CityName		LYCIAN_CITY_1
+	CityName		LYCIAN_CITY_2
+	CityName		LYCIAN_CITY_3
+	CityName		LYCIAN_CITY_4
+	CityName		LYCIAN_CITY_5
+	CityName		LYCIAN_CITY_6
+	CityName		LYCIAN_CITY_7
+	CityName		LYCIAN_CITY_8
+	CityName		LYCIAN_CITY_9
+	CityName		LYCIAN_CITY_10
+	CityName		LYCIAN_CITY_11
+	CityName		LYCIAN_CITY_12
+	CityName		LYCIAN_CITY_13
+	CityName		LYCIAN_CITY_14
+	CityName		LYCIAN_CITY_15
+	CityName		LYCIAN_CITY_16
+	CityName		LYCIAN_CITY_17
+	CityName		LYCIAN_CITY_18
+	CityName		LYCIAN_CITY_19
+	CityName		LYCIAN_CITY_20
+	CityName		LYCIAN_CITY_21
+	CityName		LYCIAN_CITY_22
+	CityName		LYCIAN_CITY_23
+	CityName		LYCIAN_CITY_24
+	CityName		LYCIAN_CITY_25
+	CityName		LYCIAN_CITY_26
+	CityName		LYCIAN_CITY_27
+	CityName		LYCIAN_CITY_28
+	CityName		LYCIAN_CITY_29
+	CityName		LYCIAN_CITY_30
+}
