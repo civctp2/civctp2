@@ -255,7 +255,7 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 
 	
 	if (strlen(str) == 0 || !strcmp(str, "\n")) 
-    {
+	{
 		chatWindow->GetChatBox()->SetActive(FALSE);
 		return;
 	}
@@ -293,16 +293,21 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 
 BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 {
+	// Does nothing
 	if (!strcmp(s, "pacman")) 
-    {
+	{
 		return TRUE;
-	} 
-    else if (!strcmp(s, "toe")) 
-    {
+	}
+
+	// Does nothing
+	else if (!strcmp(s, "toe")) 
+	{
 		return TRUE;
-	} 
-    else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) 
-    {
+	}
+
+	// Sets the game on auto-endturn for the given number of turns
+	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) 
+	{
 		extern BOOL gDone;
 		MSG	msg;
 
@@ -313,16 +318,16 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		sint32 n = atoi(temp);
 		
 		for (sint32 i = 0; i < n && !gDone; i++) 
-        {
+		{
 			NewTurnCount::StartNextPlayer(false);
 			
 			g_director->NextPlayer();
 			do {
 				g_controlPanel->Idle();
 				if (g_civApp)
-    				g_civApp->Process();
+					g_civApp->Process();
 
-          		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
+				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
 					if (msg.message == WM_QUIT)
 						gDone = TRUE;
 
@@ -334,15 +339,15 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					}
 
 					DispatchMessage(&msg);
-    			}
-	       		g_letUIProcess = FALSE;
+				}
+				g_letUIProcess = FALSE;
 
 			} while (((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())) &&
 				!gDone); 
 
 
 
-		} 
+		}
 
 		return TRUE;
     }
@@ -378,58 +383,68 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		return TRUE;
 	} 
 #endif
-    else if (!strcmp(s, "/resetlos") && !g_network.IsActive()) 
-    {
+
+	// Sets the whole world for all players unexplored
+	else if (!strcmp(s, "/resetlos") && !g_network.IsActive()) 
+	{
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
-        {
+		{
 			if (g_player[i]) 
-            {
+			{
 				g_player[i]->m_vision->SetTheWholeWorldUnexplored();
 			}
 		}
 		g_director->AddCopyVision();
-    }
+	}
 #if 0
 	else if(!strcmp(s, "/goodmode") && !g_network.IsActive()) 
-    {
+	{
 		extern sint32 g_placeGoodsMode;
 		g_placeGoodsMode = !g_placeGoodsMode;
 	}
 #endif
+
+	// Removes all the messages of a player and reloads the slic engine
 	else if (!strcmp(s, "/reloadslic") && !g_network.IsActive()) 
-    {
+	{
 		for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
-        {
+		{
 			if (g_player[p]) 
-            {
+			{
 				g_player[p]->m_messages->KillList();
 			}
 		}
-        
-        SlicEngine::Reload(g_slic_filename);
+
+		SlicEngine::Reload(g_slic_filename);
 	}
+
+	// Exports the current map to a text file
 	else if (!strncmp(s, "/exportmap", 10)) 
-    {
+	{
 		g_theWorld->ExportMap(s + 11);
 		return TRUE;
-	} 
-    else if (!strncmp(s, "/importmap", 10)) 
-    {
+	}
+
+	// imports the current map from a text file
+	else if (!strncmp(s, "/importmap", 10)) 
+	{
 		if (g_theWorld->ImportMap(s + 11)) 
-        {
+		{
 			g_tiledMap->PostProcessMap();
 			g_tiledMap->Refresh();
 		}
 		return TRUE;
-	}  
-    else if(!strncmp(s, "/attach", 7) && !g_network.IsActive()) 
-    {
+	}
+	
+	// Turns the given player into a robot player
+	else if(!strncmp(s, "/attach", 7) && !g_network.IsActive()) 
+	{
 		MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
 
 		if (isdigit(*arg)) 
-        {
+		{
 			sint32 player = atoi(arg);
 			if(g_network.IsActive()) {
 				Assert(g_network.IsLocalPlayer(player));
@@ -443,24 +458,26 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (g_player[player])
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
 		}
-	} 
-    else if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) 
-    {
+	}
+
+	// Turns the given player into a human player
+	else if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) 
+	{
 		MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
 
 		if (isdigit(*arg)) 
-        {
+		{
 			sint32 player = atoi(arg);
 			if (g_network.IsActive()) 
-            {
+			{
 				Assert(g_network.IsLocalPlayer(player));
 				if(!g_network.IsLocalPlayer(player))
 					return FALSE;
 
-                g_player[player]->m_playerType = 
-                    g_network.IsHost() ? PLAYER_TYPE_HUMAN : PLAYER_TYPE_NETWORK;
+				g_player[player]->m_playerType = 
+				    g_network.IsHost() ? PLAYER_TYPE_HUMAN : PLAYER_TYPE_NETWORK;
 			} else {
 				if(g_player[player])
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
@@ -524,40 +541,49 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		return TRUE;
 	} 
 #endif
+
+	// Sets the names of the leader, the country 
+	// and the personal discription, to the names from the databas
 	else if(!strncmp(s, "/resetstrings", 13)) 
-    {
+	{
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
-        {
+		{
 			if (g_player[i]) 
-            {
+			{
 				g_player[i]->m_civilisation->AccessData()->ResetStrings();
 			}
 		}
 	}
-    else if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive()) 
-    {
-        if(g_graphicsOptions->IsArmyNameOn()){
+
+	// Displays the army names on the map
+	else if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive()) 
+	{
+		if(g_graphicsOptions->IsArmyNameOn()){
 			g_graphicsOptions->ArmyNameOff();
-        }
+		}
 		else
-            g_graphicsOptions->ArmyNameOn();
+			g_graphicsOptions->ArmyNameOn();
 	}
-    else if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) 
-    {
+
+	// Displays the army goals on the map
+	else if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) 
+	{
 		
-        if(g_graphicsOptions->IsArmyTextOn()){
+		if(g_graphicsOptions->IsArmyTextOn()){
 			g_graphicsOptions->ArmyTextOff();
-        }
+		}
 		else
-            g_graphicsOptions->ArmyTextOn();
+			g_graphicsOptions->ArmyTextOn();
 	}
-    else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) 
-    {
+
+	// Displays the AI settle value of a cell on the map
+	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) 
+	{
 		if(g_graphicsOptions->IsCellTextOn()){
 			g_graphicsOptions->CellTextOff();
-        }
+		}
 		else
-            g_graphicsOptions->CellTextOn();
+			g_graphicsOptions->CellTextOn();
 	}
 
 	return FALSE;

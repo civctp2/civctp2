@@ -3540,127 +3540,130 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 			mapX = maputils_TileX2MapX(tileX,tileY);
 			
 			MapPoint pos(mapX,mapY);
-			
-			
-			Unit unit;
-			
-			fog = m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
 
+			fog = m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
 
 			if(m_localVision->IsExplored(pos) || g_fog_toggle || g_god) {
 				
-				BOOL		drawCity = FALSE;
-				bool        drawQueueEmpty = false;
-				sint32		pop = 0;
-				sint32      nextpop = 0;//PFT
-				MBCHAR		*name = NULL;
+				bool    drawCity             = false;
+				bool    drawQueueEmpty       = false;
+				sint32  pop                  = 0;
+				sint32  nextpop              = 0;
+				MBCHAR *name                 = NULL;
 
-				sint32		owner = 0;
+				sint32  owner = 0;
 
-				BOOL	isBioInfected = FALSE, 
-						isNanoInfected = FALSE, 
-						isConverted = FALSE, 
-						isFranchised = FALSE, 
-						isInjoined = FALSE, 
+				BOOL	isBioInfected        = FALSE,
+						isNanoInfected       = FALSE,
+						isConverted          = FALSE,
+						isFranchised         = FALSE,
+						isInjoined           = FALSE,
 						wasHappinessAttacked = FALSE,
-						isRioting = FALSE,
-						hasAirport = FALSE,
-						hasSleepingUnits = FALSE,
-						isWatchful = FALSE, //emod ; to ,
-						CityIcons = FALSE,
-						isCapitol = FALSE, //emod
-						HasReligionIcon = FALSE,
-						HasSpecialIcon = FALSE;
-				sint32	bioInfectedOwner=0, 
-						nanoInfectedOwner=0, 
-						convertedOwner=0, 
-						franchiseOwner=0, 
-						injoinedOwner=0, 
-						happinessAttackOwner=0;
+						isRioting            = FALSE,
+						hasAirport           = FALSE,
+						hasSleepingUnits     = FALSE,
+						isWatchful           = FALSE,
+						isCapitol            = FALSE,
+						HasReligionIcon      = FALSE,
+						HasSpecialIcon       = FALSE;
+				sint32	bioInfectedOwner     = 0,
+						nanoInfectedOwner    = 0,
+						convertedOwner       = 0,
+						franchiseOwner       = 0,
+						injoinedOwner        = 0,
+						happinessAttackOwner = 0;
 
 				UnseenCellCarton	ucell;
 				// Don't forget if fog was toggled
-				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle) {
-
-					pop = ucell.m_unseenCell->GetCitySize();
-					name = (MBCHAR *)ucell.m_unseenCell->GetCityName();
-					//IsBuilding = GetCurrentBuildQueue //emod
-					owner = ucell.m_unseenCell->GetCityOwner();
-					isBioInfected = ucell.m_unseenCell->IsBioInfected();
-					isNanoInfected = ucell.m_unseenCell->IsNanoInfected();
-					isConverted = ucell.m_unseenCell->IsConverted();
-					isFranchised = ucell.m_unseenCell->IsFranchised();
-					isInjoined = ucell.m_unseenCell->IsInjoined();
+				if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle)
+				{
+					pop                  = ucell.m_unseenCell->GetCitySize();
+					name                 = (MBCHAR *)ucell.m_unseenCell->GetCityName();
+					owner                = ucell.m_unseenCell->GetCityOwner();
+					isBioInfected        = ucell.m_unseenCell->IsBioInfected();
+					isNanoInfected       = ucell.m_unseenCell->IsNanoInfected();
+					isConverted          = ucell.m_unseenCell->IsConverted();
+					isFranchised         = ucell.m_unseenCell->IsFranchised();
+					isInjoined           = ucell.m_unseenCell->IsInjoined();
 					wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
-					isRioting = ucell.m_unseenCell->IsRioting();
-					hasAirport = ucell.m_unseenCell->HasAirport();
+					isRioting            = ucell.m_unseenCell->IsRioting();
+					hasAirport           = ucell.m_unseenCell->HasAirport();
 					if (owner == g_selected_item->GetVisiblePlayer())
 						hasSleepingUnits = ucell.m_unseenCell->HasSleepingUnits();
 					else
 						hasSleepingUnits = FALSE;
 					
-					isWatchful = ucell.m_unseenCell->IsWatchful();
+					isWatchful           = ucell.m_unseenCell->IsWatchful();
 
 					
-					bioInfectedOwner = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
-					nanoInfectedOwner = ucell.m_unseenCell->m_nanoInfectedOwner;
-					convertedOwner = ucell.m_unseenCell->m_convertedOwner;
-					franchiseOwner = ucell.m_unseenCell->m_franchiseOwner;
-					injoinedOwner = ucell.m_unseenCell->m_injoinedOwner;
+					bioInfectedOwner     = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
+					nanoInfectedOwner    = ucell.m_unseenCell->m_nanoInfectedOwner;
+					convertedOwner       = ucell.m_unseenCell->m_convertedOwner;
+					franchiseOwner       = ucell.m_unseenCell->m_franchiseOwner;
+					injoinedOwner        = ucell.m_unseenCell->m_injoinedOwner;
 					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
 
-					slaveBits = ucell.m_unseenCell->GetSlaveBits();
-					isCapitol = ucell.m_unseenCell->IsCapitol(); //emod
-					HasReligionIcon = ucell.m_unseenCell->IsReligionIcon(); //emod
-					HasSpecialIcon = ucell.m_unseenCell->IsSpecialIcon(); //emod
+					slaveBits            = ucell.m_unseenCell->GetSlaveBits();
+					isCapitol            = ucell.m_unseenCell->IsCapitol(); //emod
+					HasReligionIcon      = ucell.m_unseenCell->IsReligionIcon(); //emod
+					HasSpecialIcon       = ucell.m_unseenCell->IsSpecialIcon(); //emod
 					
 					if (pop > 0)
-						drawCity = TRUE;
-				}else{
+						drawCity = true;
+				}
+				else
+				{
+					Unit unit;
 					// if there's a unit at pos
 					if (g_theWorld->GetTopVisibleUnit(pos,unit)) {
 						//and it's a city visible to the current player
-						if (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()) && unit.IsCity()) {
-							CityData *cityData = unit.GetData()->GetCityData();
+						if (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()) && unit.IsCity())
+						{
+							CityData *cityData   = unit.GetData()->GetCityData();
 							
-							if (!unit.GetActor()) {
-								pop = cityData->PopCount();
-								nextpop = cityData->TurnsToNextPop();
-								owner = cityData->GetOwner();
-							} else {
-								pop = unit.GetActor()->GetSize();
-								nextpop = unit.GetActor()->GetNextPop();
-								owner = unit.GetActor()->GetPlayerNum();
+							if (!unit.GetActor())
+							{
+								pop              = cityData->PopCount();
+								nextpop          = cityData->TurnsToNextPop();
+								owner            = cityData->GetOwner();
+							}
+							else
+							{
+								pop              = unit.GetActor()->GetSize();
+								nextpop          = unit.GetActor()->GetNextPop();
+								owner            = unit.GetActor()->GetPlayerNum();
 							}
 							
-							name = cityData->GetName();
-							isBioInfected = cityData->IsBioInfected();
-							isNanoInfected = cityData->IsNanoInfected();
-							isConverted = cityData->IsConverted();
-							isFranchised = cityData->IsFranchised();
-							isInjoined = cityData->IsInjoined();
+							name                 = cityData->GetName();
+							isBioInfected        = cityData->IsBioInfected();
+							isNanoInfected       = cityData->IsNanoInfected();
+							isConverted          = cityData->IsConverted();
+							isFranchised         = cityData->IsFranchised();
+							isInjoined           = cityData->IsInjoined();
 							wasHappinessAttacked = cityData->WasHappinessAttacked();
-							isWatchful = cityData->IsWatchful();
-							isCapitol = cityData->IsCapitol();
-							bioInfectedOwner = cityData->GetOwner();
-							nanoInfectedOwner = cityData->GetOwner();
-							convertedOwner = cityData->IsConvertedTo();
-							franchiseOwner = cityData->GetFranchiseOwner();
-							injoinedOwner = cityData->GetOwner();
+							isWatchful           = cityData->IsWatchful();
+							isCapitol            = cityData->IsCapitol();
+							bioInfectedOwner     = cityData->GetOwner();
+							nanoInfectedOwner    = cityData->GetOwner();
+							convertedOwner       = cityData->IsConvertedTo();
+							franchiseOwner       = cityData->GetFranchiseOwner();
+							injoinedOwner        = cityData->GetOwner();
 							happinessAttackOwner = cityData->GetOwner();
-							slaveBits = cityData->GetSlaveBits();
-							isRioting = cityData->GetIsRioting();
-							hasAirport = cityData->HasAirport();
+							slaveBits            = cityData->GetSlaveBits();
+							isRioting            = cityData->GetIsRioting();
+							hasAirport           = cityData->HasAirport();
+
 							if (owner == g_selected_item->GetVisiblePlayer())
 								hasSleepingUnits = cityData->HasSleepingUnits();
 							else
 								hasSleepingUnits = FALSE;
-							drawCity = TRUE;
+
+							drawCity = true;
 							if(owner == g_selected_item->GetVisiblePlayer() &&
 							   !cityData->GetBuildQueue()->GetHead()) {
-								drawQueueEmpty = true;
-							HasReligionIcon = cityData->HasReligionIcon();
-							HasSpecialIcon = cityData->HasSpecialIcon();
+								drawQueueEmpty   = true;
+								HasReligionIcon  = cityData->HasReligionIcon();
+								HasSpecialIcon   = cityData->HasSpecialIcon();
 							}
 						}
 					}
@@ -3689,7 +3692,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							
 							Pixel16 pixelColor = GetPlayerColor(owner, fog);
 
-                            //define rect's screen co-ordinates
+							//define rect's screen co-ordinates
 							rect.left = x;
 							rect.top = y;
 							rect.right = rect.left + widthname;
@@ -3856,7 +3859,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 								//draw the nextpop number in black
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
-									0, 
+									0,
 									GetColorRef(COLOR_BLACK),
 									0);
 
@@ -3864,7 +3867,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								OffsetRect(&rect, 2, 0);
 								clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
-									0, 
+									0,
 									GetColorRef(COLOR_BLACK),
 									0);
 
@@ -3872,7 +3875,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 								clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
 								m_font->DrawString(surf, &rect, &clipRect, strn, 
-									0, 
+									0,
 									GetColorRef(COLOR_WHITE, fog),
 									0);
 
@@ -3882,7 +3885,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								AddDirtyRectToMix(rect);
 
 							}
-						} else 
+						}
+						else
 							continue;
 					}
 					rect.right = right;
@@ -3894,9 +3898,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
 								isWatchful, isCapitol);
 					//if (CityIcons) {
-					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, unit, HasReligionIcon);
+					DrawCityReligionIcons(surf, pos, owner, fog, boxRect, HasReligionIcon);
 					//need to fix this.
-					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, unit, HasSpecialIcon);
+					DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, HasSpecialIcon);
 					//}
 
 				}
@@ -4190,32 +4194,32 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 
 sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, Pixel16 color, sint32 blendValue)
 {
-    if (!data || (x < 0) || (y < 0)) return 0;
+	if (!data || (x < 0) || (y < 0)) return 0;
 
 	uint8 * surfBase;
 	sint32	surfWidth;
 	sint32	surfHeight;
 	sint32	surfPitch;
 
-    SurfaceLock lock    = SurfaceLock(surface);
+	SurfaceLock lock    = SurfaceLock(surface);
 
 	if (!surface) 
-    {
+	{
 		surfBase    = m_surfBase;
 		surfWidth   = m_surfWidth;
 		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
-    }
-    else if (lock.IsValid())
-    {
+	}
+	else if (lock.IsValid())
+	{
 		surfBase    = lock.Base();
 		surfWidth   = surface->Width();
 		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
-	} 
-    else 
-    {
-        return AUI_ERRCODE_SURFACELOCKFAILED;
+	}
+	else
+	{
+		return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 	
 	if (!surfBase) return 0;
@@ -4235,12 +4239,12 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 	sint32 len;
 
 	for (sint32 j = start; j <= end; j++) 
-    {
+	{
 		if ((y+j) >= surfHeight) continue;
 		if ((sint16)table[j-start] == -1) continue;
 
 		unsigned short * destPixel = (unsigned short *)
-            (surfBase + ((y + j) * surfPitch) + (x * 2));
+		    (surfBase + ((y + j) * surfPitch) + (x * 2));
 
 		Pixel16 *   rowData = dataStart + table[j-start];
 		Pixel16		tag;
@@ -4288,25 +4292,25 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 	sint32	surfHeight;
 	sint32	surfPitch;
 
-    SurfaceLock lock    = SurfaceLock(surface);
+	SurfaceLock lock    = SurfaceLock(surface);
 
 	if (!surface) 
-    {
+	{
 		surfBase    = m_surfBase;
 		surfWidth   = m_surfWidth;
 		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
-    }
-    else if (lock.IsValid())
-    {
+	}
+	else if (lock.IsValid())
+	{
 		surfBase    = lock.Base();
 		surfWidth   = surface->Width();
 		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
-	} 
-    else 
-    {
-        return;
+	}
+	else
+	{
+		return;
 	}
 	
 	if (!surface ||
@@ -4405,7 +4409,7 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 
 
-void			
+void
 TiledMap::SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 color)
 {
 	m_overlayActive	=true;
@@ -4417,7 +4421,7 @@ TiledMap::SetTerrainOverlay(TerrainImprovementRecord *rec,MapPoint &pos,Pixel16 
 
 
 
-void			
+void
 TiledMap::DrawTerrainOverlay(aui_Surface *surf)
 {
 	if (!m_overlayActive)
@@ -4791,7 +4795,7 @@ void TiledMap::DrawChatText()
 			for(; walk.IsValid() && c < k_NUM_CHAT_LINES; walk.Next(), c++) 
 			{
 				rect.right = rect.left + m_font->GetStringWidth(walk.GetObj()->m_text);
-                m_chatRect.right = std::max(m_chatRect.right, rect.right);
+				m_chatRect.right = std::max(m_chatRect.right, rect.right);
 				rect.top -= height;
 				m_chatRect.top -= height;
 				COLOR      color = g_colorSet->ComputePlayerColor(walk.GetObj()->m_sender);
@@ -4823,11 +4827,24 @@ void TiledMap::AddChatDirtyRectToMap()
 
 //new DrawCityReligionIcons to allow for multiple religions bound only to the number of mapicons 
 // changed from religion to just special icons to cover both types
-void TiledMap::DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon)
+void TiledMap::DrawCityReligionIcons
+	(
+		aui_Surface *       surf,
+		MapPoint const &    pos,
+		sint32              owner,
+		bool                fog,
+		RECT &              popRect,
+		BOOL                HasReligionIcon
+	)
 {
-	TileSet	*   tileSet     = GetTileSet();
+	Unit unit;
+	if(!g_theWorld->GetTopVisibleUnit(pos,unit))
+		return;
+
+	TileSet *   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-    RECT		iconRect;
+	RECT        iconRect;
+
 	iconRect.left   = popRect.right + 3;
 	iconRect.right  = iconRect.left + iconDim.x + 1;
 	iconRect.top    = popRect.top;
@@ -4861,15 +4878,15 @@ void TiledMap::DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, s
 				}
 			}
 		}
-		sint32  WonderIcon = 0;
+		sint32  wonderIcon = 0;
 		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++){
-			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(WonderIcon))
+			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetIsReligionIconIndex(wonderIcon))
 			{
-				if(cityData->GetImprovements() & ((uint64)1 << j))
+				if(cityData->GetBuiltWonders() & ((uint64)1 << j))
 				{
 					//tileSet->GetMapIconData(cityIcon);
 					color = GetPlayerColor(owner, fog);  //optional
-					DrawColorizedOverlay(tileSet->GetMapIconData(WonderIcon), surf, iconRect.left, iconRect.top, color);
+					DrawColorizedOverlay(tileSet->GetMapIconData(wonderIcon), surf, iconRect.left, iconRect.top, color);
 					AddDirtyRectToMix(iconRect);
 					iconRect.left += iconDim.x;
 					iconRect.right += iconDim.x;
@@ -4884,12 +4901,25 @@ void TiledMap::DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, s
 		return;
 }
 
-void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasSpecialIcon)
+void TiledMap::DrawCitySpecialIcons
+	(
+		aui_Surface *      surf,
+		MapPoint const &   pos,
+		sint32             owner,
+		bool               fog,
+		RECT &             popRect,
+		BOOL               HasSpecialIcon
+	)
 {
-//Future Use - use special icon for everything else and just position the icons elsewhere
-	TileSet	*   tileSet     = GetTileSet();
+	Unit unit;
+	if(!g_theWorld->GetTopVisibleUnit(pos,unit))
+		return;
+
+	//Future Use - use special icon for everything else and just position the icons elsewhere
+	TileSet *   tileSet     = GetTileSet();
 	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-    RECT		iconRect;
+	RECT        iconRect;
+
 	iconRect.left   = popRect.right + 3;
 	iconRect.right  = iconRect.left + iconDim.x + 1;
 	iconRect.top    = popRect.top;
@@ -4902,12 +4932,13 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 
 	Pixel16     color       = GetPlayerColor(owner, fog);
 
-		iconRect.left   = popRect.left;
-		iconRect.right  = iconRect.left + iconDim.x + 1;
-		iconRect.top    = popRect.bottom;
-		iconRect.bottom = popRect.top + iconDim.y + 1;
-		sint32  cityIcon = 0;
-		CityData *cityData = unit.GetData()->GetCityData();
+	iconRect.left   = popRect.left;
+	iconRect.right  = iconRect.left + iconDim.x + 1;
+	iconRect.top    = popRect.bottom;
+	iconRect.bottom = popRect.top + iconDim.y + 1;
+	sint32  cityIcon = 0;
+	CityData *cityData = unit.GetData()->GetCityData();
+	
 	if (HasSpecialIcon) {
 		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++){
 			if (g_theBuildingDB->Get(i, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(cityIcon))
@@ -4923,15 +4954,15 @@ void TiledMap::DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, si
 				}
 			}
 		}
-		sint32  WonderIcon = 0;
+		sint32 wonderIcon = 0;
 		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++){
-			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(WonderIcon))
+			if (g_theWonderDB->Get(j, g_player[owner]->GetGovernmentType())->GetShowCityIconTopIndex(wonderIcon))
 			{
-				if(cityData->GetImprovements() & ((uint64)1 << j))
+				if(cityData->GetBuiltWonders() & ((uint64)1 << j))
 				{
 					//tileSet->GetMapIconData(cityIcon);
 					color = GetPlayerColor(owner, fog);  //optional
-					DrawColorizedOverlay(tileSet->GetMapIconData(WonderIcon), surf, iconRect.left, iconRect.top, color);
+					DrawColorizedOverlay(tileSet->GetMapIconData(wonderIcon), surf, iconRect.left, iconRect.top, color);
 					AddDirtyRectToMix(iconRect);
 					iconRect.left += iconDim.x;
 					iconRect.right += iconDim.x;

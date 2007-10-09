@@ -463,17 +463,18 @@ public:
 								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
 								BOOL isWatchful, BOOL isCapitol//added capitol
-								); 
+								);
+
 	//EMOD to add Civ4 Style Icons
-	void        DrawCityReligionIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasReligionIcon );
-	void		DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, Unit unit, BOOL HasSpecialIcon);
+	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasReligionIcon );
+	void		DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasSpecialIcon);
 
 	void		Serialize(CivArchive &archive);
 
 	void		NextPlayer(void);
-	void        CopyVision();
+	void		CopyVision();
 	Vision		*GetLocalVision(void) { return m_localVision; }
-	void        ReallocateVision();
+	void		ReallocateVision();
 
 	aui_Surface *GetSurface(void) { return m_surface; } 
 
