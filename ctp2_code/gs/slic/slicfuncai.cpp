@@ -39,6 +39,8 @@
 //   - INT GetStopResearchingAdvance(player,foreigner)
 //   - INT GetMostAtRiskCity(player, foreigner, &cityvar)
 //   These functions compile but still need to be tested. (April 22nd 2006 Martin Gühmann)
+// - Provided a default tone to ParseNewProposalSlicArgs 
+//   if no tone is provided. (11-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -317,6 +319,10 @@ bool ParseNewProposalSlicArgs(SlicArgList *args, sint32 &argNum, NewProposal &ne
 	{
 		Assert((tone >= DIPLOMATIC_TONE_NOT_CHOSEN) && (tone < DIPLOMATIC_TONE_MAX));
 		new_proposal.detail.tone = static_cast<DIPLOMATIC_TONE>(tone);
+	}
+	else
+	{
+		new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL; // Be nice, but not too nice
 	}
 
 	return true;

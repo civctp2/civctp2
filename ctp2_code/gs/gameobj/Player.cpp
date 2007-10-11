@@ -104,6 +104,14 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+//
+// Notes
+//
+// - g_player[m_owner] is identical to the this-pointer in methods of Player.
+//   Therefore I removed it except were it constrats with other accesses of
+//   of g_player.
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "player.h"
@@ -311,10 +319,10 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 
 	m_playerType = pt;
 
-	BOOL treatAsRobot = m_playerType == PLAYER_TYPE_ROBOT;
+	bool treatAsRobot = IsRobot();
 	if(treatAsRobot && (g_startHotseatGame || g_startEmailGame) &&
 	   g_hsPlayerSetup[m_owner].isHuman)
-		treatAsRobot = FALSE;
+		treatAsRobot = false;
 
 	m_all_armies = new DynamicArray<Army>;
 
@@ -446,10 +454,10 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_pop_science = 0;
 
 #ifdef _DEBUG
-    if (0 == m_owner)
-    {
-	m_advances->DebugDumpTree();
-    }
+	if (0 == m_owner)
+	{
+		m_advances->DebugDumpTree();
+	}
 #endif
 
 	m_mask_hostile = 0;
@@ -706,7 +714,7 @@ Player::~Player()
 
 //----------------------------------------------------------------------------
 //
-// Name       : CityData::Serialize
+// Name       : Player::Serialize
 //
 // Description: Store/Load CityData
 //
@@ -863,7 +871,7 @@ void Player::Serialize(CivArchive &archive)
 	if(!archive.IsStoring()) {
 		
 		
-		if(m_playerType == PLAYER_TYPE_NETWORK) {
+		if(IsNetwork()) {
 			m_playerType = PLAYER_TYPE_HUMAN;
 		}
 	}
@@ -1005,7 +1013,7 @@ Unit Player::CreateUnit(const sint32 t,
 		}
 	}
 
-	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK && !g_network.SetupMode()) {
+	if(g_network.IsHost() && IsNetwork() && !g_network.SetupMode()) {
 		if(cause != CAUSE_NEW_ARMY_INITIAL) {
 			
 			
@@ -1020,7 +1028,7 @@ Unit Player::CreateUnit(const sint32 t,
 	
 	Unit u = g_theUnitPool->Create (t, m_owner, pos, hc, NULL);
 
-	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
+	if(g_network.IsHost() && IsNetwork() &&
 	   cause != CAUSE_NEW_ARMY_INITIAL && !g_network.SetupMode()) {
 		g_network.Unblock(m_owner);
 	}
@@ -1031,7 +1039,7 @@ Unit Player::CreateUnit(const sint32 t,
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.AddCreatedObject(u.AccessData());
 		g_network.SendAction(new NetAction(NET_ACTION_CREATED_UNIT, (uint32)u));
-	} else if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
+	} else if(g_network.IsHost() && IsNetwork() &&
 			  cause != CAUSE_NEW_ARMY_INITIAL && !g_network.SetupMode()) {
 		g_network.AddNewUnit(m_owner, u);
 	}
@@ -1135,11 +1143,11 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 								   GEA_End);
 
 #if 0
-			if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
+			if(g_network.IsHost() && IsNetwork() &&
 			   cause != CAUSE_NEW_ARMY_INITIAL && !g_network.SetupMode()) {
 				g_network.AddNewArmy(m_owner, army);
 				g_network.Unblock(m_owner);
-			} else if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
+			} else if(g_network.IsHost() && IsNetwork() &&
 					  cause == CAUSE_NEW_ARMY_INITIAL) {
 				
 				g_network.Enqueue(army.AccessData());
@@ -1167,7 +1175,7 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 
 Army Player::GetNewArmy(CAUSE_NEW_ARMY cause)
 {
-	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK && 
+	if(g_network.IsHost() && IsNetwork() && 
 	   ((cause != CAUSE_NEW_ARMY_INITIAL) && 
 		(cause != CAUSE_NEW_ARMY_REMOTE_GROUPING) &&
 		(cause != CAUSE_NEW_ARMY_REMOTE_UNGROUPING)) &&
@@ -1178,14 +1186,14 @@ Army Player::GetNewArmy(CAUSE_NEW_ARMY cause)
 	Army army = g_theArmyPool->Create();
 	army.SetOwner(m_owner);
 	
-	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
+	if(g_network.IsHost() && IsNetwork() &&
 	   cause != CAUSE_NEW_ARMY_INITIAL && 
 	   cause != CAUSE_NEW_ARMY_REMOTE_GROUPING && 
 	   cause != CAUSE_NEW_ARMY_REMOTE_UNGROUPING &&
 	   !g_network.SetupMode()) {
 		g_network.AddNewArmy(m_owner, army);
 		g_network.Unblock(m_owner);
-	} else if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK &&
+	} else if(g_network.IsHost() && IsNetwork() &&
 			  (cause == CAUSE_NEW_ARMY_INITIAL || 
 			   cause == CAUSE_NEW_ARMY_REMOTE_GROUPING || 
 			   cause == CAUSE_NEW_ARMY_REMOTE_UNGROUPING)) {
@@ -1200,7 +1208,7 @@ Army Player::GetNewArmy(CAUSE_NEW_ARMY cause)
 			army.m_id, cause));
 	}
 #if 0
-	if(g_network.IsHost() && m_playerType == PLAYER_TYPE_NETWORK) {
+	if(g_network.IsHost() && IsNetwork()) {
 		g_network.AddNewArmy(m_owner, army);
 		g_network.Unblock(m_owner);
 	} else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
@@ -1607,12 +1615,12 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 
 	}
 
-	if (m_playerType != PLAYER_TYPE_ROBOT)
+	if(!IsRobot())
 	{
 		MainControlPanel::UpdateCityList();
 	}
 
-    m_maxCityCount = std::max(m_maxCityCount, m_all_cities->Num());
+	m_maxCityCount = std::max(m_maxCityCount, m_all_cities->Num());
 
 	return true;
 }
@@ -2251,28 +2259,31 @@ sint32 Player::CalcWonderGold()
 	}
 	//end EMOD
 
-//EMOD to make unit maintenance and city maintenance a difficulty option instead of a building option
+	//EMOD to make unit maintenance and city maintenance a difficulty option instead of a building option
 	sint32 goldPerUnitSupport;
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerUnitSupport(goldPerUnitSupport)
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
-			totalWonderGold += goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	&& IsHuman()
+	){
+		totalWonderGold += goldPerUnitSupport * m_readiness->TotalUnitGoldSupport() * GetWagesPerPerson()
+			                                  * m_readiness->GetSupportModifier(m_government_type);
 	}
 
 	sint32 goldPerCity;
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetGoldPerCity(goldPerCity)
-		&& g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN){
-			totalWonderGold += goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold();
-	
+	&& IsHuman()
+	){
+		totalWonderGold += goldPerCity * m_all_cities->Num()
+		                               * g_theGovernmentDB->Get(m_government_type)->GetTooManyCitiesThreshold();
 	}
 
 
 	//moved from beginturn wonders
-			totalWonderGold += CommodityMarket();  //emod for calculating commodities should it be in profileDB?
+	totalWonderGold += CommodityMarket();  //emod for calculating commodities should it be in profileDB?
 
-			totalWonderGold -= CalcCitySupportGold(); //changed - move an divide by city and add to city wonder or wonder gold?
+	totalWonderGold -= CalcCitySupportGold(); //changed - move an divide by city and add to city wonder or wonder gold?
 
-			totalWonderGold -= CalcUnitSupportGold(); //changed
-//EMOD - should i have the calc support here its not called elsewhere?
+	totalWonderGold -= CalcUnitSupportGold(); //changed
+	//EMOD - should i have the calc support here its not called elsewhere?
 
 	sint32 wonderBonusGold = wonderutil_GetBonusGold(m_builtWonders);
 	totalWonderGold += wonderBonusGold;
@@ -2286,10 +2297,10 @@ sint32 Player::CalcCitySupportGold()
 	sint32 gold = 0;
 
 	if (g_theProfileDB->IsGoldPerCity()) { 
-		gold += g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold();
+		gold += m_all_cities->Num() * g_theGovernmentDB->Get(m_government_type)->GetTooManyCitiesThreshold();
 	}
 
-return gold;
+	return gold;
 }
 
 sint32 Player::CalcUnitSupportGold()
@@ -2297,15 +2308,15 @@ sint32 Player::CalcUnitSupportGold()
 	sint32 gold = 0;
 
 	if (g_theProfileDB->IsGoldPerUnitSupport()) { 
-		gold += g_player[m_owner]->m_readiness->TotalUnitGoldSupport() * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+		gold += m_readiness->TotalUnitGoldSupport() * GetWagesPerPerson() * m_readiness->GetSupportModifier(m_government_type);
 	}
 
 
-return gold;
+	return gold;
 }
 
 
-#if 0
+#if 0 // The following is removed by the precompiler, just a note for you, E. ;)
 
 
 void Player::BeginTurn()
@@ -2378,7 +2389,8 @@ void Player::BeginTurn()
 		
 		BeginTurnPollution();
 
-		//BeginTurnAllCities();  //2-27-2007  the intro says this method was removed  
+		//BeginTurnAllCities();  //2-27-2007  the intro says this method was removed
+		// Read the precompiler derectives and you see that this code is not used at all.
 
 		g_thePollution->BeginTurn() ;
 
@@ -2403,9 +2415,9 @@ void Player::BeginTurn()
 		m_home_lost_unit_count = 0; 
 
 		
-		#ifdef _DEBUG
-		if (m_playerType != PLAYER_TYPE_ROBOT || g_ai_revolt)
-		#endif
+#ifdef _DEBUG
+		if (!IsRobot() || g_ai_revolt)
+#endif
 			
 			AttemptRevolt() ;
 
@@ -2449,8 +2461,9 @@ void Player::BeginTurn()
 			g_network.SyncRand();
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_TURN_SYNC));
 
-			if(m_playerType == PLAYER_TYPE_HUMAN) {
-				
+			if(IsHuman())
+			{
+				// Does nothing here				
 			}
 		}		
 	} else {
@@ -2474,8 +2487,8 @@ void Player::BeginTurn()
 				break;
 			}
 #if 0
-			if(!g_player[m_owner]->WillViolatePact(i) &&
-			   !g_player[m_owner]->WillViolateCeaseFire(i)) {
+			if(!WillViolatePact(i) &&
+			   !WillViolateCeaseFire(i)) {
 				atPeace = FALSE;
 				break;
 			}
@@ -2506,7 +2519,7 @@ void Player::BeginTurn()
 	if ( m_owner == g_selected_item->GetVisiblePlayer() ) {
 
 
-		if ( g_player[m_owner]->m_can_use_space_button ) {
+		if ( m_can_use_space_button ) {
 			g_controlPanel->ShowSpaceButton();
 		}
 
@@ -2528,8 +2541,8 @@ void Player::BeginTurn()
 		g_network.Unblock(m_owner);
 	}
 
-	if((m_playerType == PLAYER_TYPE_HUMAN ||
-		m_playerType == PLAYER_TYPE_NETWORK && g_network.IsLocalPlayer(m_owner)) &&
+	if((IsHuman() ||
+		IsNetwork() && g_network.IsLocalPlayer(m_owner)) &&
 	   m_owner == g_selected_item->GetVisiblePlayer() &&
 	   g_theProfileDB->IsAutoSelectFirstUnit()) {
 		if(g_selected_item->GetState() == SELECT_TYPE_NONE) {
@@ -2776,7 +2789,7 @@ void Player::EndTurnPollution(void)
 	
 	
 	
-	if(GetPlayerType() == PLAYER_TYPE_ROBOT) {
+	if(IsRobot()) {
 		uint32 target_pollution;
 		sint32 foreigner_pollution;
 		const double max_difference = 0.75;
@@ -3529,10 +3542,12 @@ void Player::AcceptTradeOffer(TradeOffer offer, Unit &sourceCity, Unit &destCity
 		g_network.Unblock(m_owner);
 	}
 
-	if(g_player[sender]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
-		
-		
-	} else {
+	if(g_player[sender]->IsRobot())
+	{
+		// Do nothing, because of whatever reason
+	}
+	else
+	{
 		SlicObject *so = NULL;
 		if(offer.GetOfferType() == ROUTE_TYPE_RESOURCE) {
 			so = new SlicObject("90AcceptTradeOffer");
@@ -3975,20 +3990,20 @@ void Player::BuildResearchDialog(AdvanceType advance)
 	const MBCHAR *dstring;
 	MBCHAR text[1024];
 
-    
-	if(m_playerType == PLAYER_TYPE_ROBOT)
+
+	if(IsRobot())
 		return;
-  
+
 	if (g_network.IsActive() && !(g_network.IsLocalPlayer(m_owner)))
 		return;
 
 	if(m_disableChooseResearch)
 		return;
 
-  dstring = g_theStringDB->GetNameStr("PICK_NEW_DISCOVERY");
-  
+	dstring = g_theStringDB->GetNameStr("PICK_NEW_DISCOVERY");
+
 	if (dstring) {
-    sc.AddAdvance(advance);
+	sc.AddAdvance(advance);
 
 		MBCHAR	tempStr[1024], 
 				messageStr[1024]; 
@@ -4068,12 +4083,12 @@ void Player::SetResearching(AdvanceType advance)
 	
 	
 	if(!g_network.IsActive() || g_network.IsHost() || g_network.IsLocalPlayer(m_owner)) {
-		if(m_playerType == PLAYER_TYPE_HUMAN || m_playerType == PLAYER_TYPE_NETWORK ||
+		if(IsHuman() || IsNetwork() ||
 			(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 			
 			
 			
-			if(m_playerType != PLAYER_TYPE_ROBOT) {
+			if(!IsRobot()) {
 				Assert(canResearch[advance]);
 			}
 			if(!canResearch[advance]) {
@@ -4666,6 +4681,8 @@ Agreement Player::FindAgreement(const PLAYER_INDEX otherParty) const
 // Removed return statement at the beginning
 // Code is now executed but might be buggy
 // Cause for the return statement unknown
+// m_agreed is not used, its functionality is found in the Aggreement matrix
+/// @ToDo check whether the code does what it promises.
 bool Player::FulfillCaptureCityAgreement(Unit city)
 {
 	AgreementDynamicArray	killList ;
@@ -6159,10 +6176,10 @@ void Player::GiveCity(const PLAYER_INDEX recipient, Unit city)
 
 
 void Player::ExchangeCity(const PLAYER_INDEX recipient, const sint32 cityA, const sint32 cityB)
-	{
+{
 	g_player[m_owner]->GiveCity(recipient, cityA) ;
 	g_player[recipient]->GiveCity(m_owner, cityB) ;
-	}
+}
 
 
 
@@ -6176,10 +6193,10 @@ void Player::ExchangeCity(const PLAYER_INDEX recipient, const sint32 cityA, cons
 
 
 void Player::ExchangeCity(const PLAYER_INDEX recipient, const Unit &cityA, const Unit &cityB)
-	{
+{
 	g_player[m_owner]->GiveCity(recipient, cityA) ;
 	g_player[recipient]->GiveCity(m_owner, cityB) ;
-	}
+}
 
 
 
@@ -6200,7 +6217,7 @@ void Player::AddMessage(Message &msg)
 	{
 	if(!g_network.IsActive() || 
 	   g_network.GetPlayerIndex() == m_owner ||
-	   m_playerType != PLAYER_TYPE_NETWORK )
+	   !IsNetwork())
 	{
 		m_messages->Insert(msg) ;
 #ifdef _DEBUG
@@ -6224,7 +6241,7 @@ void Player::AddMessage(Message &msg)
 			}
 		}
 #endif
-		if(m_playerType != PLAYER_TYPE_ROBOT
+		if(!IsRobot()
 #ifdef _DEBUG
 		   || g_robotMessages
 #endif
@@ -7859,7 +7876,7 @@ bool Player::HasEmbassyWith(sint32 player)
 	
 	if(wonderutil_GetEmbassy(m_builtWonders, g_player[player]->m_builtWonders))
 	{
-		if(!g_player[m_owner]->HasWarWith(player))
+		if(!HasWarWith(player))
 		{
 			return true;
 		}
@@ -8165,7 +8182,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 	}
 
 	
-	if (m_playerType != PLAYER_TYPE_ROBOT && m_owner == g_selected_item->GetVisiblePlayer() &&
+	if (!IsRobot() && m_owner == g_selected_item->GetVisiblePlayer() &&
 		(!g_slicEngine->GetTutorialActive() || g_slicEngine->GetTutorialPlayer() == m_owner)) 
 	{
 		close_AllScreens();
@@ -8660,7 +8677,7 @@ ATTITUDE_TYPE Player::GetAttitude(PLAYER_INDEX him) const
         break;
     } 
    
-	if(m_playerType != PLAYER_TYPE_ROBOT || g_network.IsClient()) {
+	if(!IsRobot() || g_network.IsClient()) {
 		switch(m_diplomatic_state[him]) {
 			case DIPLOMATIC_STATE_WAR:
 				if(is_weak) {
@@ -9104,11 +9121,11 @@ void Player::ContactMade(PLAYER_INDEX with)
 				{
 					
 					if (g_selected_item->GetVisiblePlayer() == m_owner &&
-						m_playerType != PLAYER_TYPE_ROBOT) {
+						!IsRobot()) {
 						Diplomat::GetDiplomat(with).SendGreeting(m_owner);
 					}
 					else if (g_selected_item->GetVisiblePlayer() == with &&
-						g_player[with]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
+						!g_player[with]-IsRobot()) {
 						Diplomat::GetDiplomat(m_owner).SendGreeting(with);
 					}
 				}
@@ -9695,9 +9712,14 @@ bool Player::CanBuildUnit(const sint32 type) const
 	   !wonderutil_GetParkRangersEnabled(g_theWonderTracker->GetBuiltWonders())) {
 		return false;
 	}
+	
 	//OneCityChallenge Option - emod 3-21-2007
-	if((rec->GetSettleLand()) || (rec->GetSettleWater())) {  //so far it makes all units unavailable?
-		if ( (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) && (g_theProfileDB->IsOneCityChallenge()) ) {
+	if(rec->GetSettleLand() 
+	|| rec->GetSettleWater()
+	){  //so far it makes all units unavailable? And Why don't you check for the settling attributes like beeing able to build cities?
+		if(IsHuman()
+		&& g_theProfileDB->IsOneCityChallenge()
+		){
 			return false;
 		}
 	}
@@ -9805,7 +9827,7 @@ void Player::RecreateMessageIcons()
 		Message msg = messages.Access(m);
 		
 		if(g_theMessagePool->IsValid(msg)) {
-			if(m_playerType != PLAYER_TYPE_ROBOT) {				
+			if(!IsRobot()) {
 				if(messages.Access(m).IsAlertBox()) {
 					
 					
@@ -10226,9 +10248,9 @@ bool Player::RecursivelyStartResearching(sint32 advance)
 
 void Player::SetPlayerType(PLAYER_TYPE pt)
 { 
-	m_playerType = pt; 
+	m_playerType = pt;
 	if(g_network.IsHost()) {
-		if(pt == PLAYER_TYPE_ROBOT) {
+		if(IsRobot()) {
 			if(m_owner != g_network.GetPlayerIndex()) {
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_ATTACH_ROBOT, m_owner));
 			} else {
@@ -10243,9 +10265,9 @@ void Player::SetPlayerType(PLAYER_TYPE pt)
 bool Player::HasFreeUnitUpgrades() const
 {
 	return (
-		    (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade())
-			|| (g_theProfileDB->IsAIFreeUpgrade())
-			)
+	        (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIFreeUpgrade())
+	     || (g_theProfileDB->IsAIFreeUpgrade())
+	       )
 	        && IsRobot();
 //	    || HasFreeUpgradeWonder like Civ2's Leonardo's workshop
 //	    || FreeUpgradeFeat
@@ -10462,34 +10484,40 @@ bool Player::HasInstallation (sint32 type)
 
 void Player::CreateLeader()
 {
-//take from the unused player giveunit diplomacy code
+	//taken from the unused player giveunit diplomacy code
 	MapPoint	pos ;
 	GetCapitolPos(pos) ;
-//based off disband city code
-	sint32 i;
+	//based off disband city code
 	sint32 leader = -1;
-	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
-		if(g_theUnitDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetLeader()) {
-			if(g_player[m_owner]->CanBuildLeader(i)) {
+	for(sint32 i = 0; i < g_theUnitDB->NumRecords(); i++) {
+		if(g_theUnitDB->Get(i, GetGovernmentType())->GetLeader()) {
+			if(CanBuildLeader(i)) {
 				leader = i;
 				//break;
 			}
 		}
 	}
-//from disband city code	
+	
+	//from disband city code
 	Assert(leader >= 0);
-	if(leader >= 0) {
-		Unit ldr = g_player[m_owner]->CreateUnit(leader, pos,
-		                                       Unit(), false,
-		                                       CAUSE_NEW_ARMY_BUILT);
-		if(g_theUnitPool->IsValid(ldr)) {
+	if(leader >= 0)
+	{
+		Unit ldr = CreateUnit(leader,
+		                      pos,
+		                      Unit(),
+		                      false,
+		                      CAUSE_NEW_ARMY_BUILT);
+	
+		if(g_theUnitPool->IsValid(ldr))
+		{
 			ldr.ClearFlag(k_UDF_FIRST_MOVE);
 			ldr.SetMovementPoints(0);
 			SlicObject *so = new SlicObject("999GreatLeaderSpawn");
 			so->AddUnit(Unit(leader));
 			so->AddRecipient(m_owner);
 			g_slicEngine->Execute(so);
-			if (g_network.IsHost()) 
+		
+			if (g_network.IsHost())
 			{
 				g_network.Block(ldr.GetOwner());
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADD_ARMY, ldr.m_id));
@@ -10676,9 +10704,14 @@ bool Player::CanBuildLeader(const sint32 type) const
 	   !wonderutil_GetParkRangersEnabled(g_theWonderTracker->GetBuiltWonders())) {
 		return false;
 	}
+
 	//OneCityChallenge Option - emod 3-21-2007
-	if((rec->GetSettleLand()) || (rec->GetSettleWater())) {  
-		if ( (g_player[m_owner]->GetPlayerType() == PLAYER_TYPE_HUMAN) && (g_theProfileDB->IsOneCityChallenge()) ) {
+	if(rec->GetSettleLand()
+	|| rec->GetSettleWater()
+	){
+		if(IsHuman()
+		&& g_theProfileDB->IsOneCityChallenge()
+		){
 			return false;
 		}
 	}
@@ -10688,9 +10721,6 @@ bool Player::CanBuildLeader(const sint32 type) const
 
 void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gaining cities and Mergee is the loser
 {
-	//should it be PLAYER_INDEX?
-	sint32 c;
-
 	for(sint32 i = 0; i < g_player[Mergee]->m_all_cities->Num(); i++) {
 		Unit	c = g_player[Mergee]->m_all_cities->Get(i).m_id ;
 
@@ -10705,10 +10735,9 @@ void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gainin
 		GetNearestCity(oldPos, city, dist, true);
 		city.GetPos(newPos);
 
-		bool revealed_foreign_units; 
 		bool revealed_unexplored; 
 
-	//reset unit owner as well
+		//reset unit owner as well
 
 		Cell * cell = g_theWorld->GetCell(oldPos);
 		for (sint32 j = 0; j < cell->GetNumUnits(); j++) {
@@ -10716,7 +10745,7 @@ void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gainin
 			Unit u = cell->AccessUnit(j);
 			u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
 			u.SetPosition(oldPos, revealed, revealed_unexplored) ;
-	//cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored) ;
+			//cityData->TeleportUnits(newPos, revealed_foreign_units, revealed_unexplored) ;
 		}
 		c.ResetCityOwner(Merger, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY) ;
 	}

@@ -1655,10 +1655,6 @@ bool BuildQueue::InsertBefore(BuildNode *old,
 
 void BuildQueue::FinishCreatingUnit(Unit &u)
 {
-	CityData *cd = m_city.CD();
-	const UnitRecord *rec = g_theUnitDB->Get(u.m_id, g_player[m_owner]->GetGovernmentType()); //emod
-
-
 	if(u.m_id != (0)) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ZeroProduction,
 							   GEA_City, m_city,
@@ -1677,6 +1673,9 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 			}
 		}
 
+		CityData *cd = m_city.CD();
+		const UnitRecord *rec = u.GetDBRec();
+
 		if(  !g_player[m_owner]->IsRobot()
 		|| (  g_network.IsClient()
 		&&    g_network.IsLocalPlayer(m_owner)
@@ -1686,21 +1685,20 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		   )
 		  )
 		{
-			if(u.GetDBRec()->GetBuildingRemovesAPop())
+			if(rec->GetBuildingRemovesAPop())
 			{
 				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient()));
 				cd->ChangePopulation(-1);
 			}
 			// EMOD
 			sint32 pop;
-			if(u.GetDBRec()->GetPopCostsToBuild(pop))
+			if(rec->GetPopCostsToBuild(pop))
 			{
 				cd->SubtractAccumulatedFood(static_cast<sint32>(g_theConstDB->Get(0)->GetCityGrowthCoefficient()));
 				cd->ChangePopulation(-pop);
 			}
 		}
-		
-		
+
 		// If cd had building enables veterans
 		// then u.SetVeteran();
 		uint64 i;

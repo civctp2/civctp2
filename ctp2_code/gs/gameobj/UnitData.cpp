@@ -3389,7 +3389,7 @@ void UnitData::CityToPark(sint32 agressor)
 
 void UnitData::RebuildQuadTree()
 {
-    UnitRecord const * rec = g_theUnitDB->Get(m_type);
+    UnitRecord const * rec = GetDBRec();
     if (    Flag(k_UDF_IS_IN_TRANSPORT) 
          || Flag(k_UDF_HAS_LEFT_MAP) 
          || !rec
@@ -5378,7 +5378,6 @@ void UnitData::AddWonderHPBonus(sint32 amt)
 //              a_HasFunction   The function (property) to perform
 //
 // Globals    : g_theConstDB
-//              g_theUnitDB
 //
 // Returns    : bool        It can be done
 //

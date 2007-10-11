@@ -194,7 +194,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		}
 	}
 	
-	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader()) {
+	if(!GetDBRec()->GetIsTrader()) {
 		AccessData()->KillVision();
 	}
 	
@@ -203,7 +203,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	PLAYER_INDEX    owner   = GetOwner(); 
 	sint32          r       = TRUE;
 	
-	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader() && !IsTempSlaveUnit() &&
+	if(!GetDBRec()->GetIsTrader() && !IsTempSlaveUnit() &&
 		!IsBeingTransported() && !HasLeftMap()) {
 		
 		r = g_theWorld->RemoveUnitReference(pos, *this);
@@ -292,7 +292,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 	
 
-	if(!g_theUnitDB->Get(GetType())->GetIsTrader(), g_player[GetOwner()]->GetGovernmentType()) {
+	if(!GetDBRec()) { // Maybe something is missing here
 		UpdateZOCForRemoval();
 	}
 
@@ -2455,7 +2455,7 @@ bool Unit::NeedsRefueling() const
 //----------------------------------------------------------------------------
 bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 {
-	const UnitRecord *unit_rec = g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType());
+	const UnitRecord *unit_rec = GetDBRec();
 
 	const UnitRecord::ChanceEffect *chance_data;
 	const UnitRecord::InvestigateCityData *investigate_data;

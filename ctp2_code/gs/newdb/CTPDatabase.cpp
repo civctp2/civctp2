@@ -366,7 +366,10 @@ template <class T> T *CTPDatabase<T>::Access(sint32 index)
 	Assert(index >= 0);
 	Assert(index < m_numRecords);
 	if((index < 0) || (index >= m_numRecords))
+	{
+		DPRINTF(k_DBG_GAMESTATE, ("CTPDatabase::Access: index: %i, numRecords: %i\n", index, m_numRecords));
 		return NULL;
+	}
 
 	return m_records[index];
 }
