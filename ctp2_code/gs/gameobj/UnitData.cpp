@@ -5854,11 +5854,10 @@ double UnitData::CalculateTotalMovePoints() const
 
 const UnitRecord * UnitData::GetDBRec(void) const
 {
-	Player *    player  = g_player[m_owner];
-
-	if (player)
-	{
-		return g_theUnitDB->Get(m_type, player->GetGovernmentType());
+	if(g_player
+	&& g_player[m_owner]
+	){
+		return g_theUnitDB->Get(m_type, g_player[m_owner]->GetGovernmentType());
 	}
 	else
 	{
