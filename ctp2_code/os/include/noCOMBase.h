@@ -8,7 +8,7 @@
 #ifndef __os__include__noCOMBase_h__
 #define __os__include__noCOMBase_h__ 1
 
-class ICTP2Unknown {
+class IUnknown {
 public:
 	virtual uint32 AddRef() = 0;
 	virtual uint32 Release() = 0;

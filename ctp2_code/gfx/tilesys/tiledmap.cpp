@@ -2818,7 +2818,8 @@ void TiledMap::PaintUnitActor(UnitActor *actor, BOOL fog)
 				if (g_theUnitPool->IsValid(u) && u.GetArmy().m_id != 0) {
 					Army		a = u.GetArmy();
 
-					MBCHAR		*s = a.GetData()->GetDebugString();
+					
+					MBCHAR          *s = (tchar *) a.GetData()->GetDebugString();
 
 					sint32		tx = (sint32)(actor->GetX()+GetZoomTilePixelWidth()/2),
 								ty = (sint32)(actor->GetY()+GetZoomTileHeadroom());

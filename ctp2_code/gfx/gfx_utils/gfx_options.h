@@ -1,77 +1,60 @@
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __GFX_OPTIONS_H__
 #define __GFX_OPTIONS_H__
 
+class CellText;
+class GraphicOptions;
+
+#include "Army.h"             // Army
+#include "ctp2_inttypes.h"    // uintN
 class MapPoint;
-class Army;
 template <class T> class AvlTree;
 
-class CellText {
+class CellText 
+{
 public:
-	uint32		m_key;
-	uint8		m_color;
-	MBCHAR		*m_text;
+    uint32        m_key;
+    uint8	      m_color;
+    MBCHAR *      m_text;
 };
 
-class GraphicsOptions {
+class GraphicsOptions 
+{
 public:
 	GraphicsOptions();
 	~GraphicsOptions();
 
-	
 	static void Initialize(void);
 	static void Cleanup(void);
 
-	
-	
-	
-	
-	
-
-	
-	bool IsArmyTextOn(void) { return m_armyTextOn; }
-
+	bool IsArmyTextOn(void) const { return m_armyTextOn; }
 	void ArmyTextOn(void);
 	void ArmyTextOff(void);
 
-	
-	bool AddTextToArmy(const Army &army, const char *text, const uint8 &colorMagnitude);
-	
-	
-	void ResetArmyText(const Army &army);
-	
-	
-	
-	
-	inline bool IsCellTextOn(void) { return m_cellTextOn; }
-	
-	uint32 PackCellAVLKey(MapPoint &pos);
+	bool AddTextToArmy(Army army, const char *text, const uint8 &colorMagnitude);
+	void ResetArmyText(Army army);
 
-	
-	
-	CellText *GetCellText(MapPoint &pos);
+	uint32 PackCellAVLKey(MapPoint const & pos);
 
+	bool IsCellTextOn(void) const { return m_cellTextOn; }
 	void CellTextOn(void);
 	void CellTextOff(void);
 
-	
-	bool AddTextToCell(const MapPoint &pos, const char *text, const uint8 &colorMagnitude);
-	
-	
+	CellText * GetCellText(MapPoint const & pos);
+	bool AddTextToCell(const MapPoint &pos, const char * text, const uint8 & colorMagnitude);
 	void ResetCellText(const MapPoint &pos);
 
-	
-
 private:
-
-	uint32					m_armyTextOn:1,
-							m_cellTextOn:1,
-							fill:30;
-
-	AvlTree<CellText *>		*m_cellAVL;
+    bool                      m_armyTextOn;
+    bool                      m_cellTextOn;
+    bool                      m_armyNameOn;
+    AvlTree<CellText *> *     m_cellAVL;
 };
 
-extern GraphicsOptions		*g_graphicsOptions;
+extern GraphicsOptions *      g_graphicsOptions;
 
 #endif

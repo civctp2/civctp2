@@ -22,6 +22,7 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef GLOBALS_H
 #define GLOBALS_H 1
 
@@ -42,6 +43,15 @@
 #define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB  15U
 
 
+//----------------------------------------------------------------------------
+// Library dependencies
+//----------------------------------------------------------------------------
+
+// None
+
+//----------------------------------------------------------------------------
+// Export overview
+//----------------------------------------------------------------------------
 
 #define k_GAME_OBJ_TYPE_CAPITALIZATION          16U
 #define k_GAME_OBJ_TYPE_INFRASTRUCTURE          17U
@@ -51,10 +61,6 @@
 #define k_MAX_CIVILISATIONS	64
 #define k_MAP_WRAPAROUND 5
 
-
-#ifdef _MSC_VER
-#pragma warning (disable: 4661)
-#endif
 
 #include "gstypes.h"
 #include "directions.h"
@@ -77,5 +83,33 @@ enum MAPSIZE {
 	MAPSIZE_LARGE,
 	MAPSIZE_GIGANTIC
 };
+
+
+/// Global utilities for allocated object pointers
+namespace allocated
+{
+
+/// Reassign an allocated object
+/// \param      a_Pointer      Pointer to reassign to
+/// \param      a_NewPointer  New value to assign
+/// \remarks    The pointer shall have been allocated with new (or be
+///             NULL, in which case this function is an assignment).
+template <typename T> void reassign(T * & a_Pointer, T * a_NewPointer)
+{
+    delete a_Pointer;
+    a_Pointer = a_NewPointer;
+}
+
+/// Clear an allocated object
+/// \param      a_Pointer      Pointer to clear
+/// \remarks    The pointer shall have been allocated with new (or be
+///             NULL, in which case this function has no effect).
+template <typename T> void clear(T * & a_Pointer)
+{
+    delete a_Pointer;
+    a_Pointer = NULL;
+}
+
+} // global
 
 #endif

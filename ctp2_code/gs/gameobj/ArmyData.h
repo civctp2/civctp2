@@ -527,8 +527,8 @@ public:
 
 
 
-    MBCHAR *GetDebugString(void) const { return m_debugString; }
-    void SetDebugString(MBCHAR *string) { m_debugString = string; }
+    MBCHAR const * GetDebugString(void) const;
+    void SetDebugString(MBCHAR const * string);
     uint8 GetDebugStringColor(void) const { return m_debugStringColor; }
     void SetDebugStringColor(uint8 color) { m_debugStringColor = color; }
 

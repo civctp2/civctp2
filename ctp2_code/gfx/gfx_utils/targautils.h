@@ -1,28 +1,62 @@
-#ifdef HAVE_PRAGMA_ONCE
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+//----------------------------------------------------------------------------
+///
+/// \file   targautils.h
+/// \brief  Targa (.tga) file support
+
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
-#ifndef __TARGAUTILS_H__
-#define __TARGAUTILS_H__
 
+#ifndef TARGAUTILS_H__
+#define TARGAUTILS_H__
 
+//----------------------------------------------------------------------------
+//
+// Library imports
+//
+//----------------------------------------------------------------------------
 
+#include "windows.h"    // BYTE, WORD
 
-#pragma pack(1) 
+//----------------------------------------------------------------------------
+//
+// Exported names
+//
+//----------------------------------------------------------------------------
+
+// The following is supported by MSVC and GCC 4.1 and higher.
+#pragma pack(push, 1)
 
 typedef struct _TgaHeader
 {                           
     BYTE   IdLength;            
     BYTE   CmapType;            
     BYTE   ImageType;           
-    
-
-
     WORD   CmapIndex;           
     WORD   CmapLength;          
     BYTE   CmapEntrySize;       
-    
-
-
     WORD   X_Origin;            
     WORD   Y_Origin;            
     WORD   ImageWidth;          
@@ -31,17 +65,59 @@ typedef struct _TgaHeader
     BYTE   ImagDesc;            
 } TGAHEADER;
 
-#pragma pack() 
+// The following is supported by MSVC and GCC 4.1 and higher.
+#pragma pack(pop) 
 
-extern bool Get_TGA_Dimension (const char *fname,int &Width,int &Height,int &Bpp);
-extern bool Load_TGA_File(const char *fname,unsigned char *data,int Buffer_Width,int width, 
-					int height,void *Pixel_Format, BOOL convertToNative);
+//----------------------------------------------------------------------------
+//
+// Project imports
+//
+//----------------------------------------------------------------------------
 
-extern bool Load_TGA_File_Simple(const char *fname,unsigned char *data,int Buffer_Width,int width,int height);
+#include "pixeltypes.h" // Pixel32
 
-extern void TGA2RGB32(Pixel32 *data,int datasize);
+//----------------------------------------------------------------------------
+//
+// Declarations
+//
+//----------------------------------------------------------------------------
 
-extern int write_tga(const char *fname, int width, int height,
-                     unsigned char *data);
+bool Get_TGA_Dimension 
+(
+    char const *            fname, 
+    int &                   Width,
+    int &                   Height,
+    int &                   Bpp
+);
+bool Load_TGA_File
+(
+    char const *            fname,
+    unsigned char *         data,
+    int                     Buffer_Width,
+    int                     width, 
+    int                     height,
+    void *                  Pixel_Format, 
+    bool                    convertToNative
+);
+bool Load_TGA_File_Simple
+(
+    char const *            fname,
+    unsigned char *         data,
+    int                     Buffer_Width,
+    int                     width,
+    int                     height
+);
+void TGA2RGB32
+(
+    Pixel32 *               data, 
+    int                     datasize
+);
+bool write_tga
+(
+    char const *            fname, 
+    int                     width, 
+    int                     height,
+    unsigned char const *   data
+);
 
 #endif

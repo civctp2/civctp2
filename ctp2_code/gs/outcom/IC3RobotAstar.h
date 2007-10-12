@@ -47,7 +47,7 @@ DECLARE_INTERFACE_(IC3RobotAstar, IUnknown)
 {
 	STDMETHOD_ (BOOL,  FindPath) (
 #else
-class IC3RobotAstar : public ICTP2Unknown {
+class IC3RobotAstar : public IUnknown {
 public:
 	virtual BOOL FindPath(
 #endif

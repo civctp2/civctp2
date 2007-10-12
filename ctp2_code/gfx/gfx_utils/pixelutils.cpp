@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
 #include "c3.h"
 
 #include "pixelutils.h"
@@ -97,10 +111,17 @@ void RGB32Info(Pixel32 pixel, Pixel16 *outPixel, unsigned char *alpha)
 
 void pixelutils_ComputeRGBTable(void)
 {
-	for (int r=0;r < 32;r++)
-		for (int g=0;g < 32;g++)
-			for (int b=0;b < 32;b++)
-				gRGBTable[(r<<10) | (g<<5) | b] = (r<<10) | (g<<5) |b;
+	for (int r = 0; r < 32; r++)
+    {
+		for (int g = 0; g < 32; g++)
+        {
+			for (int b = 0; b < 32; b++)
+            {
+                Pixel16 rgb555 = (r << 10) | (g << 5) | b;
+				gRGBTable[rgb555] = rgb555;
+            }
+        }
+    }
 }
 
 Pixel16 pixelutils_RGB(int r,int g,int b)

@@ -36,7 +36,7 @@ DECLARE_INTERFACE_(IMapGenerator, IUnknown)
 
 class IC3Rand;
 
-class IMapGenerator : public ICTP2Unknown {
+class IMapGenerator : public IUnknown {
 public:
 	virtual void Generate(sint8 *map, sint32 width, sint32 height,
                               IC3Rand *randgen,

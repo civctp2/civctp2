@@ -9941,7 +9941,24 @@ void ArmyData::SetName(const MBCHAR *name)
 	}
 }
 
+const MBCHAR * ArmyData::GetDebugString() const
+{
+    return m_debugString;
+}
 
+void ArmyData::SetDebugString(const MBCHAR * name)
+{
+    delete [] m_debugString;
+    if (name)
+    {
+        m_debugString = new MBCHAR[strlen(name) + 1];
+        strcpy(m_debugString, name);
+    }
+    else
+    {
+        m_debugString = NULL;
+    }
+}
 bool ArmyData::PlayerCanSee(const PLAYER_INDEX playerId) const
 {
     for (sint32 i = 0; i < Num() ; i++) { 

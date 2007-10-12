@@ -1,16 +1,17 @@
 
 
 #include "c3.h"
+#include "gfx_options.h"
 
 #include "AvlTree.h"
 
 #include "Army.h"
 #include "ArmyData.h"
 #include "ArmyPool.h"
+#include "Globals.h"
 
-#include "gfx_options.h"
 
-GraphicsOptions		*g_graphicsOptions;
+GraphicsOptions * g_graphicsOptions = NULL;
 
 
 static cmp_t CellAVLCompare(CellText *obj1, CellText *obj2)
@@ -24,18 +25,18 @@ static cmp_t CellAVLCompare(CellText *obj1, CellText *obj2)
 
 
 GraphicsOptions::GraphicsOptions()
+:
+    m_armyTextOn              (false),
+    m_cellTextOn              (false),
+    m_cellAVL                 (new AvlTree<CellText *>())
 {
-	m_armyTextOn = false;
-	m_cellTextOn = false;
-
-	m_cellAVL = new AvlTree<CellText *>;
 }
 
 
 
 GraphicsOptions::~GraphicsOptions()
 {
-	delete m_cellAVL;
+    delete m_cellAVL;
 }
 
 
@@ -43,30 +44,19 @@ GraphicsOptions::~GraphicsOptions()
 
 void GraphicsOptions::Initialize(void)
 {
-	if (g_graphicsOptions)
-		delete g_graphicsOptions;
-
-	g_graphicsOptions = new GraphicsOptions;
+    allocated::reassign(g_graphicsOptions, new GraphicsOptions());
 }
 
 
 void GraphicsOptions::Cleanup(void)
 {
-	if (g_graphicsOptions)
-		delete g_graphicsOptions;
-
-	g_graphicsOptions = NULL;
+    allocated::clear(g_graphicsOptions);
 }
-
-
-
-
 
 void GraphicsOptions::ArmyTextOn(void)
 {
 	m_armyTextOn = true;
 }
-
 
 void GraphicsOptions::ArmyTextOff(void)
 {
@@ -75,42 +65,24 @@ void GraphicsOptions::ArmyTextOff(void)
 
 
 
-bool GraphicsOptions::AddTextToArmy(const Army &army, const char *text, const uint8 &colorMagnitude) 
+bool GraphicsOptions::AddTextToArmy(Army army, const char *text, const uint8 &colorMagnitude) 
 {
-	
-	if (!g_theArmyPool->IsValid(army)) 
-		return FALSE;
+	if (!army.IsValid()) 
+		return false;
 
-	ResetArmyText(army);
-
-	if (text == NULL)
-		return FALSE;
-
-	MBCHAR *myString = new MBCHAR [strlen(text) + 1];
-	memset(myString, 0, strlen(text) + 1);
-	strcpy(myString, text);
-
-	army.AccessData()->SetDebugString(myString);
+	army.AccessData()->SetDebugString(text);
 	army.AccessData()->SetDebugStringColor(colorMagnitude);
-
-	return TRUE;
+	return true;
 }
 
 
 
-void GraphicsOptions::ResetArmyText(const Army &army)
+void GraphicsOptions::ResetArmyText(Army army)
 {
-	
-	if (!g_theArmyPool->IsValid(army)) 
-		return;
-
-	
-	
-	MBCHAR *string = army.GetData()->GetDebugString();
-	if (string != NULL) {
-		delete string;
-		army.AccessData()->SetDebugString(NULL);
-	}
+    if (army.IsValid()) 
+    {
+        army.AccessData()->SetDebugString(NULL);
+    }
 }
 
 
@@ -130,32 +102,20 @@ void GraphicsOptions::CellTextOff(void)
 }
 
 
-uint32 GraphicsOptions::PackCellAVLKey(MapPoint &pos)
+uint32 GraphicsOptions::PackCellAVLKey(MapPoint const &pos)
 {
 	return (pos.x << 16 | pos.y);
 }
 
 
 
-CellText *GraphicsOptions::GetCellText(MapPoint &pos)
+CellText *GraphicsOptions::GetCellText(MapPoint const &pos)
 {
+    CellText dummyCellText;
+    dummyCellText.m_key = PackCellAVLKey(pos);
 	
-	uint32	key = PackCellAVLKey(pos);
-
-	
-	Comparable<CellText *>	*avlObject = NULL;
-
-	
-	CellText		dummyCellText;
-	dummyCellText.m_key = key;
-	
-	
-	avlObject = m_cellAVL->Search(&dummyCellText);
-	if (avlObject) {
-		return avlObject->Key();
-	} else {
-		return NULL;
-	}
+    Comparable<CellText *> * avlObject = m_cellAVL->Search(&dummyCellText);
+    return (avlObject) ? avlObject->Key() : NULL;
 }
 
 
@@ -163,60 +123,44 @@ CellText *GraphicsOptions::GetCellText(MapPoint &pos)
 bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text, 
 									const uint8 &colorMagnitude)
 {
-	if(!m_cellTextOn) return FALSE;
+    if (!m_cellTextOn) return false;
 
-	
-	CellText *cellText = GetCellText((MapPoint &)pos);
-	if (cellText != NULL) {
-		
-		if (cellText->m_text) {
-			delete cellText->m_text;
-			cellText->m_text = NULL;
-		}
-	}
+    CellText * cellText = GetCellText(pos);
+    if (cellText) 
+    {
+        delete cellText->m_text;
+        cellText->m_text = NULL;
+    }
 
-	if (text == NULL) 
-		return TRUE;
+    if (text) 
+    {
+        MBCHAR * newText = new MBCHAR[strlen(text) + 1];
+        strcpy(newText, text);
 
-	MBCHAR		*newText = new MBCHAR[strlen(text) + 1];
-
-	memset(newText, 0, strlen(text) + 1);
-	strcpy(newText, text);
-
-	
-	if (cellText == NULL) {
-		
+	  if (!cellText) 
+        {
 		cellText = new CellText;
-		cellText->m_key = PackCellAVLKey((MapPoint &)pos);
-
-		
-		Comparable<CellText *> *avlObject = 
-							new Comparable<CellText *>(cellText, CellAVLCompare);
-		m_cellAVL->Insert(avlObject);
-	}
+		cellText->m_key = PackCellAVLKey(pos);
+		m_cellAVL->Insert(new Comparable<CellText *>(cellText, CellAVLCompare));
+        }
 	
-	
-	cellText->m_text = newText;
-	cellText->m_color = colorMagnitude;
+        cellText->m_text = newText;
+        cellText->m_color = colorMagnitude;
+    }
 
-	return TRUE;
+    return true;
 }
 
 
 
 void GraphicsOptions::ResetCellText(const MapPoint &pos)
 {
-	
-	CellText *cellText = GetCellText((MapPoint &)pos);
-	if (cellText != NULL) {
-		
-		if (cellText->m_text != NULL) {
-			delete cellText->m_text;
-		}
-
+    CellText *cellText = GetCellText(pos);
+    if (cellText) 
+    {
+		delete cellText->m_text;
 		m_cellAVL->Delete(cellText);
-
 		delete cellText;
-	}
+    }
 }
 
