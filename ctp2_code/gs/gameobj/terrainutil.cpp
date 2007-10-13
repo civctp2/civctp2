@@ -362,7 +362,7 @@ void terrainutil_DoVision(const MapPoint &point)
 	sint32 myrsq = sint32((myVisionRange+0.5)*(myVisionRange+0.5));
 
 	
-	BOOL revealedUnexplored = FALSE;
+	bool revealedUnexplored = false;
 	if(cell->GetOwner() >= 0) {
 		g_player[cell->GetOwner()]->AddUnitVision(point, myVisionRange, revealedUnexplored);
 

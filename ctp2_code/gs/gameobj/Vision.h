@@ -130,7 +130,7 @@ public:
 
 	void AddRadar(MapPoint pos, double radius);
 
-	void AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored, 
+	void AddVisible(MapPoint pos, double radius, bool &revealed_unexplored, 
 					DynamicArray<MapPoint> *removeadd = NULL);
 	void RemoveVisible(MapPoint pos, double radius,
 					   DynamicArray<MapPoint> *removeadd = NULL);

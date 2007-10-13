@@ -2604,7 +2604,7 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 	UnitDynamicArray revealedUnits;
 	MapPoint opos;
 	GetPos(opos);
-	BOOL revealed_unexplored;
+	bool revealed_unexplored;
 
 	for(i = 0; i < m_nElements; i++) {
 		g_theWorld->RemoveUnitReference(opos, m_array[i]);
@@ -4400,7 +4400,7 @@ void ArmyData::Reenter()
 			
 			m_array[i]->SetPosAndNothingElse(m_reentryPos);
 			g_theWorld->InsertUnit(m_reentryPos, m_array[i], revealedUnits);
-			BOOL revealed;
+			bool revealed;
 			m_array[i]->AddUnitVision(revealed);
 		}
 
@@ -7070,7 +7070,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 	
 	UnitDynamicArray revealedUnits;
-	BOOL revealedUnexplored = FALSE;
+	bool revealedUnexplored = false;
 
 	MapPoint oldPos = m_pos;
 	bool anyVisible = false;

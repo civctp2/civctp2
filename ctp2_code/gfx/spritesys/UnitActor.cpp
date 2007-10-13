@@ -178,7 +178,7 @@ void UnitActor::AddVision(void)
 #if !defined(_TEST) && defined(WIN32)
 	STOMPCHECK();
 #endif
-	BOOL revealedUnexplored = FALSE;
+	bool revealedUnexplored = false;
 	
 	if(!m_isUnseenCellActor && m_playerNum == g_selected_item->GetVisiblePlayer()) {
 		g_tiledMap->GetLocalVision()->AddVisible(m_pos, m_unitVisionRange, revealedUnexplored);

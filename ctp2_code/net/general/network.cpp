@@ -3310,7 +3310,7 @@ BOOL Network::SetupMode() const
 void Network::SetSetupArea(PLAYER_INDEX player, const MapPoint &center,
 						   sint32 radius)
 {
-	BOOL revealed;
+	bool revealed;
 
 	g_player[player]->m_setupCenter = center;
 	g_player[player]->m_setupRadius = radius;

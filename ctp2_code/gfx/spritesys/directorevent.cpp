@@ -63,7 +63,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 
 	if(a.Num() <= 0) return GEV_HD_Continue;
 
-	BOOL theTileIsVisible = g_tiledMap->TileIsCompletelyVisible(to.x, to.y);
+//	BOOL theTileIsVisible = g_tiledMap->TileIsCompletelyVisible(to.x, to.y);
 
 	
 	if (g_selected_item->GetPlayerOnScreen() != -1 &&

@@ -47,6 +47,11 @@ protected:
 public:
 	StringId m_name;
 
+#if defined(HAVE_STATIC_CONST_INIT_DECL_BUG)
+    enum { INDEX_INVALID = -1 }; // Compiler bug workaround
+#else
+    static sint32 const INDEX_INVALID   = -1;
+#endif
 	CTPRecord() { m_index = -1; m_textName = NULL; m_name = -1;}
 	virtual ~CTPRecord() { if(m_textName) delete [] m_textName; }
 

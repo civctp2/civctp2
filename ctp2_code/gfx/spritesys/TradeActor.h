@@ -41,7 +41,7 @@ public:
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
-	Anim			*GetAnim(GOODACTION action);
+	Anim *          CreateAnim(GOODACTION action);
 
 	void			Draw(Vision *tileLocalVision);
 	void			DrawText(sint32 x, sint32 y, MBCHAR *goodText);

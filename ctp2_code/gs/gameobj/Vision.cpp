@@ -183,13 +183,13 @@ BOOL Vision::IsExplored(MapPoint pos) const
 	return (m_array[pos.x][pos.y] & k_EXPLORED_BIT) ? TRUE : FALSE;
 }
 
-void Vision::AddVisible(MapPoint pos, double radius, BOOL &revealed_unexplored,
+void Vision::AddVisible(MapPoint pos, double radius, bool &revealed_unexplored,
 						DynamicArray<MapPoint> *removeadd)
 {
-	m_revealedUnexplored	= FALSE;
+	m_revealedUnexplored	= false;
 	FillCircle(pos, radius, CIRCLE_OP_ADD, removeadd);
 	if(m_revealedUnexplored)
-		revealed_unexplored = TRUE;
+		revealed_unexplored = true;
 
 	if(removeadd) {
 		for(sint32 i = 0; i < removeadd->Num(); i++) {

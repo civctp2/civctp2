@@ -172,9 +172,9 @@ public:
 	void GetPos(MapPoint &pos) const;
 	MapPoint RetPos(void) const;
 	sint32 MoveToPosition(const MapPoint &p, UnitDynamicArray &revealedUnits,
-	BOOL &revealed_unexplored);
+	bool &revealed_unexplored);
 	sint32 SetPosition(const MapPoint &p, UnitDynamicArray &revealedUnits,
-	BOOL &revealed_unexplored);
+	bool &revealed_unexplored);
 	void SetPosAndNothingElse(const MapPoint &p);
 
 	void Launch(void);
@@ -333,7 +333,7 @@ public:
 
 	
 	void RemoveUnitVision();
-	void AddUnitVision(BOOL &revealed);
+	void AddUnitVision(bool &revealed);
 	void DoVision(UnitDynamicArray &revealedUnits);
 	void UndoVision();
 	uint32 GetVisibility() const;

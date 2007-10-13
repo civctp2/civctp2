@@ -635,7 +635,7 @@ void Unit::Launch()
 
 
 sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed, 
-                            BOOL &revealed_unexplored)
+                            bool &revealed_unexplored)
 {
 
 
@@ -661,7 +661,7 @@ sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed,
 
 
 sint32 Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed, 
-                         BOOL &revealed_unexplored)
+                         bool &revealed_unexplored)
 
 {
 	BOOL left_map;
@@ -1451,7 +1451,7 @@ void Unit::RemoveUnitVision()
 	AccessData()->RemoveUnitVision();
 }
 
-void Unit::AddUnitVision(BOOL &revealed)
+void Unit::AddUnitVision(bool &revealed)
 {
 	AccessData()->AddUnitVision(revealed);
 }

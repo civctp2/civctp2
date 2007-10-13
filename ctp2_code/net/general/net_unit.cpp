@@ -148,7 +148,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		
 		UnpacketizeUnit(&buf[pos], unitSize, m_unitData);
 		pos += unitSize;
-		BOOL revealed_unexplored;
+		bool revealed_unexplored;
 
 		if(pnt != m_unitData->m_pos) {
 			UnitDynamicArray revealed;
@@ -479,7 +479,7 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	g_theWorld->RemoveUnitReference(ud->m_pos, u);
 	g_player[ud->GetOwner()]->RemoveUnitVision(ud->m_pos, ud->GetVisionRange());
 	ud->m_pos = m_point;
-	BOOL revealed_unexplored;
+	bool revealed_unexplored;
 	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange(),
 											revealed_unexplored);
 	g_theWorld->InsertUnit(ud->m_pos, u, revealed);

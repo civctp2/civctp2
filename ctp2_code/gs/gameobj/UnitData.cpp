@@ -262,7 +262,7 @@ void UnitData::Place(const MapPoint &center_pos)
 	m_pos = center_pos;
 
 	if(!g_theUnitDB->Get(m_type)->GetIsTrader()) {
-		BOOL revealedUnexplored = FALSE;
+		bool revealedUnexplored = FALSE;
 		SetVisible(m_owner);
 		AddUnitVision(revealedUnexplored);
 
@@ -457,7 +457,7 @@ void UnitData::SetPosAndNothingElse(const MapPoint &p)
 	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
 
-void UnitData::SetPos(const MapPoint &p, BOOL &revealed_unexplored,
+void UnitData::SetPos(const MapPoint &p, bool &revealed_unexplored,
                       BOOL &left_map)
 
 {
@@ -1112,7 +1112,7 @@ BOOL UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
  		    passenger .UnsetIsInTransport(); 
   
 			static UnitDynamicArray revealedUnits;
-			BOOL revealedUnexplored;
+			bool revealedUnexplored;
 			revealedUnits.Clear();
 			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
 
@@ -1179,7 +1179,7 @@ BOOL UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
  		    passenger .UnsetIsInTransport(); 
   
 			static UnitDynamicArray revealedUnits;
-			BOOL revealedUnexplored;
+			bool revealedUnexplored;
 			revealedUnits.Clear();
 			g_theWorld->InsertUnit(m_pos, passenger,
 											revealedUnits);
@@ -2000,7 +2000,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
    
    m_city_data->DestroyCapitol();
  
-   BOOL revealedUnexplored;
+   bool revealedUnexplored;
 #if 0
 	double oldVisionRange = (g_theUnitDB->Get(m_type)->m_vision_range);
    m_vision_range = g_theUnitDB->Get(m_type)->m_vision_range;
@@ -2112,7 +2112,7 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 		}
 	}
 
-	BOOL revealedUnexplored;
+	bool revealedUnexplored;
 	g_player[m_owner]->RemoveUnitReference(Unit(m_id), rem_cause, -1) ;
 
 	if(m_army.IsValid()) {
@@ -5543,7 +5543,7 @@ void UnitData::RemoveOldUnitVision(double oldRadius)
 	}
 }
 
-void UnitData::AddUnitVision(BOOL &revealed)
+void UnitData::AddUnitVision(bool &revealed)
 {
 	Assert(!Flag(k_UDF_VISION_ADDED));
 	if(!Flag(k_UDF_VISION_ADDED)) {

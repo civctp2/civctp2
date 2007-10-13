@@ -264,7 +264,7 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			g_network.RequestResync(RESYNC_CITY_STATS);
 		else if (oldVision != cityData->GetVisionRadius()) {
 			unitData->RemoveOldUnitVision(oldVision);
-			BOOL revealed;
+			bool revealed;
 			unitData->AddUnitVision(revealed);
 		}
 	}

@@ -1103,7 +1103,7 @@ Unit Player::CreateUnit(const sint32 t,
 		g_network.AddNewUnit(m_owner, u);
 	}
 
-	BOOL revealed_unexplored; 
+	bool revealed_unexplored; 
 	if(rec->GetIsTrader()) {
 		m_traderUnits->Insert(u);
 		AddTransportPoints((sint32)g_theUnitDB->Get(t)->GetMaxMovePoints());
@@ -4109,7 +4109,7 @@ void Player::SetResearching(AdvanceType advance)
 }
 
 void Player::AddUnitVision(const MapPoint &pnt, double range,
-						   BOOL &revealed_unexplored)
+						   bool &revealed_unexplored)
 {
 	m_vision->AddVisible(pnt, range, revealed_unexplored);
 }
@@ -4355,7 +4355,7 @@ void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 	{
     UnitDynamicArray    revealed;
 	MapPoint	p;
-    BOOL revealed_unexplored; 
+    bool revealed_unexplored; 
 	Unit	u = m_all_units->Get(unit_idx).m_id;
 
 	GetCapitolPos(p);
@@ -7233,7 +7233,7 @@ void Player::AddInstallation(const Installation &inst)
 
 	if(visionRange > 0) {
 		if(g_selected_item->GetVisiblePlayer() == m_owner) {
-			BOOL revealedUnexplored = FALSE;
+			bool revealedUnexplored = FALSE;
 			g_tiledMap->GetLocalVision()->AddVisible(pos, visionRange, revealedUnexplored);
 		}
 	}
@@ -10421,7 +10421,7 @@ void Player::ResetVision()
 
 	for(j = 0; j < m_all_units->Num(); j++) {
 		if(m_all_units->Access(j).Flag(k_UDF_VISION_ADDED)) {
-			BOOL revealed;
+			bool revealed;
 			m_all_units->Access(j).ClearFlag(k_UDF_VISION_ADDED);
 			m_all_units->Access(j).AddUnitVision(revealed);
 		}
@@ -10429,7 +10429,7 @@ void Player::ResetVision()
 	
 	for(j = 0; j < m_all_cities->Num(); j++) {
 		if(m_all_cities->Access(j).Flag(k_UDF_VISION_ADDED)) {
-			BOOL revealed;
+			bool revealed;
 			m_all_cities->Access(j).ClearFlag(k_UDF_VISION_ADDED);
 			m_all_cities->Access(j).AddUnitVision(revealed);
 			m_all_cities->Access(j).CD()->AdjustSizeIndices();
@@ -10449,7 +10449,7 @@ void Player::ResetVision()
 			terrainutil_GetVisionRange(inst.GetType(), pos);
 		if(vision_range <= 0)
 			continue;
-		BOOL revealed;
+		bool revealed;
 		AddUnitVision(pos, vision_range, revealed);
 	}
 }

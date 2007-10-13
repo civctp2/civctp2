@@ -1390,7 +1390,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					g_network.RequestResync(RESYNC_BAD_PLAYER);
 					break;
 				}
-				BOOL revealed;
+				bool revealed;
 				unit.SetTempSlaveUnit(FALSE);
 				unit.AddUnitVision(revealed);
 				MapPoint pos;
