@@ -72,7 +72,7 @@ static void initWinsock()
 	if(nErrorStatus != 0) {
 		return;
 	}
-	
+
 	if( LOBYTE(wsaData.wVersion) != LOBYTE(wVersionRequested) ||  HIBYTE(wsaData.wVersion) != HIBYTE(wVersionRequested) ) {
 		WSACleanup();   
 		return;
@@ -142,7 +142,7 @@ NetConsole::~NetConsole()
 #if defined(WIN32)
 		closesocket(m_listenSock);
 #else
-		close(m_listenSock);
+				close(m_listenSock);
 #endif
 		m_listenSock = -1;
 	}
@@ -153,7 +153,7 @@ NetConsole::~NetConsole()
 #if defined(WIN32)
 			closesocket(m_connections[i]);
 #else
-			close(m_listenSock);
+				close(m_listenSock);
 #endif
 			m_connections[i] = -1;
 		}

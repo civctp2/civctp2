@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
@@ -86,7 +84,7 @@ public:
 		if (rhs.m_data)
         {
             m_data = new sint32[m_total_len];
-            std::copy(rhs.m_data, rhs.m_data + m_total_len, m_data);
+            std::copy(rhs.m_data, rhs.m_data + static_cast<size_t>(m_total_len), m_data);
         }
 	};
 
@@ -104,6 +102,16 @@ public:
     { 
 		delete [] m_data; 
     } 
+
+	void Cleanup()
+	{
+		delete[] m_data;
+		m_data      = NULL;
+		y_col_len   = 0;
+		m_total_len = 0;
+		max_x       = 0;
+		max_y       = 0;
+	}
 
 	void Resize(const sint32 mx, const sint32 my, const BOOL start_val)
 	{

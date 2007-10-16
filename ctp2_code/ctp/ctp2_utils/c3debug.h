@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  :
+// Description  : 
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,13 +17,19 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
+// _MSC_VER		
+// - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
+//
+// - Marked MS specific pragma
+// - Corrected include dependency.
 // - Report for !WIN32 on stderr
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -101,7 +107,7 @@ void	c3debug_Assert(char const * s, char const * file, int line);
 #ifdef _DEBUG
 	#define DPRINTF(mask, x) { c3debug_dprintfPrefix(mask, __FILE__, __LINE__); c3debug_dprintf x;}
 #else
-	#define DPRINTF(mask, x)	;
+	#define DPRINTF(mask, x);
 #endif
 
 #endif

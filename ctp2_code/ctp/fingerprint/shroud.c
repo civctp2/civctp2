@@ -169,7 +169,7 @@ shroud_t *shroud_updateopen( char *filename )
  Uses fread().
  Returns the number of bytes successfully read.
 --------------------------------------------------------------------------*/
-size_t shroud_read( shroud_t *sfile, char *buffer, size_t length )
+size_t shroud_read( shroud_t *sfile, unsigned char * buffer, size_t length )
 {
 	size_t size; /* Number of bytes successfully read. */
 
@@ -177,7 +177,7 @@ size_t shroud_read( shroud_t *sfile, char *buffer, size_t length )
 	size = fread( buffer, 1, length, sfile->file );
 
 	/* Decode the bytes in 'buffer.' */
-	shroud_decode( (unsigned char*) buffer, size, sfile->curpos );
+	shroud_decode( buffer, size, sfile->curpos );
 
 	/* Update 'curpos.' */
 	sfile->curpos += size;
@@ -192,7 +192,7 @@ size_t shroud_read( shroud_t *sfile, char *buffer, size_t length )
  The elements of 'buffer' will remain unaltered.
  Returns the number of bytes successfully written.
 --------------------------------------------------------------------------*/
-size_t shroud_write( shroud_t *sfile, char *buffer, size_t length )
+size_t shroud_write( shroud_t *sfile, unsigned char *buffer, size_t length )
 {
 	size_t bytecount = 0;										/* Number of bytes successfully written. */
 	unsigned char encodedbuffer[ shroud_BLOCKSIZE ];			/* temporary buffer to store encoded blocks of 'buffer.' */

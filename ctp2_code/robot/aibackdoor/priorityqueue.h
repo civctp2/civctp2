@@ -17,26 +17,17 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - When defined, allows Microsoft C++ extensions.
-// - When not defined, generates standard C++.
-//
-// Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
-//       between #if and #else are the original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - #pragma once marked as Microsoft specific.
 // - Priority queue index used.
 // - Incorrect Asserts corrected.
+// - Crash corrected.
 //
 //----------------------------------------------------------------------------
 
-#ifdef HAVE_PRAGMA_ONCE
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -44,9 +35,6 @@
 #define __DA_PRIORITY_QUEUE__ 1
 
 #include "dynarr.h"
-#ifdef _DEBUG
-#include "World.h"
-#endif
 
 template <class T> class DAPriorityQueue { 
 	DynamicArray<T*> m_queue; 
@@ -91,10 +79,8 @@ public:
 
 
 template <class T> DAPriorityQueue<T>::DAPriorityQueue()
+:   m_queue	(1024)
 {
-    m_queue.ResizeFlat(1024); 
-	
-    m_queue.InsertFlat((T*)NULL); 
 }
 
 template <class T> DAPriorityQueue<T>::~DAPriorityQueue()

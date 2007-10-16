@@ -1,98 +1,92 @@
 
 
 #include "c3.h"
-#include "aui.h"
-
-#include "aui_directsurface.h"
-
-#include "c3ui.h"
-
-#include "pixelutils.h"
-#include "primitives.h"
-#include "colorset.h"
-
 #include "splash.h"
 
+#include "aui.h"
+#include "aui_directsurface.h"
+#include "c3ui.h"
+#include "colorset.h"               // g_colorSet
+#include "Globals.h"
+#include "pixelutils.h"
+#include "primitives.h"
+
 extern C3UI			*g_c3ui;
-Splash				*g_splash;
-extern ColorSet		*g_colorSet;
+
+Splash *        g_splash    = NULL;
 
 void Splash::Initialize(void)
 {
-	g_splash = new Splash();
+    allocated::reassign(g_splash, new Splash());
 }
 
 void Splash::Cleanup(void)
 {
-	if (g_splash)
-		delete g_splash;
-	
-	g_splash = NULL;
+    allocated::clear(g_splash);
 }
 
 
 
 Splash::Splash()
+:
+    m_textX     (k_SPLASH_FIRST_X),
+    m_textY     (k_SPLASH_FIRST_Y)
 {
-	m_textX = k_SPLASH_FIRST_X;
-	m_textY = k_SPLASH_FIRST_Y;
 }
 
 
 
-Splash::~Splash()
+void Splash::AddText(MBCHAR const * text)
 {
-	
+       if (g_c3ui)
+    {
+       primitives_DrawText(g_c3ui->Primary(),
+                            m_textX, m_textY,
+                            text,
+                            g_colorSet->GetColorRef(COLOR_WHITE),
+                            true
+                           );
+    }
 }
 
 
 
-void Splash::AddText(MBCHAR *text)
+void Splash::AddTextNL(MBCHAR const * text)
 {
-	aui_Surface		*surface;
+       if (g_c3ui)
+    {
+           aui_Surface * surface = g_c3ui->Primary();
+           if (!surface) return;
 
-	if (!g_c3ui) return;
-	
-	surface = (aui_Surface *)g_c3ui->Primary();
+           primitives_DrawText(surface,
+                            m_textX + 325, m_textY,
+                            text,
+                            g_colorSet->GetColorRef(COLOR_WHITE),
+                            true
+                           );
 
-	if (!surface) return;
-
-	primitives_DrawText(surface, m_textX, m_textY, text, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
+           m_textY += k_SPLASH_TEXT_INC;
+           if (m_textY >= surface->Height()) m_textY = k_SPLASH_FIRST_Y;
+    }
 }
 
-void Splash::AddTextNL(MBCHAR *text)
+void Splash::AddHilitedTextNL(MBCHAR const *text)
 {
-	
-	aui_Surface		*surface;
+       if (g_c3ui)
+    {
+           aui_Surface * surface = g_c3ui->Primary();
 
-	if (!g_c3ui) return;
-	
-	surface = (aui_Surface *)g_c3ui->Primary();
+	   if (!surface) return;
 
-	if (!surface) return;
+	   primitives_DrawText(surface,
+                            m_textX, m_textY,
+                            text,
+                            g_colorSet->GetColorRef(COLOR_YELLOW),
+                            true
+                           );
 
-	primitives_DrawText(surface, m_textX + 325, m_textY, text, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
-
-	m_textY += k_SPLASH_TEXT_INC;
-
-	if (m_textY >= surface->Height()) m_textY = k_SPLASH_FIRST_Y;
-}
-
-void Splash::AddHilitedTextNL(MBCHAR *text)
-{
-	
-	aui_Surface		*surface;
-
-	if (!g_c3ui) return;
-	
-	surface = (aui_Surface *)g_c3ui->Primary();
-
-	if (!surface) return;
-
-	primitives_DrawText(surface, m_textX, m_textY, text, g_colorSet->GetColorRef(COLOR_YELLOW), TRUE);
-
-	m_textY += k_SPLASH_TEXT_INC;
-
-	if (m_textY >= surface->Height()) m_textY = k_SPLASH_FIRST_Y;
+	   m_textY += k_SPLASH_TEXT_INC;
+	   if (m_textY >= surface->Height()) m_textY = k_SPLASH_FIRST_Y;
+    }
 }
 

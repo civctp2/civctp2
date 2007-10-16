@@ -28,11 +28,20 @@
 //   compile it
 //
 //----------------------------------------------------------------------------
+
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef __DISPLAY_H__
 #define __DISPLAY_H__
 
-#ifndef WIN32
+#if defined(WIN32)
+#include <windows.h>    // BOOL, LPSTR, GUID, HMONITOR, RECT, etc.
+#include <ddraw.h>      // LPDDSURFACEDESC, etc.
+#else
 #include "windows.h"
+#endif // WIN32
 
 struct DisplayDevice {
 	LPSTR		szName;
@@ -40,7 +49,6 @@ struct DisplayDevice {
 	GUID*		lpGUID;
 	GUID	DisplayGUID;
 	HMONITOR	hMon;
-#endif
 	RECT		rect;
 };
 

@@ -1,14 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : A* algorithm path object
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -22,17 +40,15 @@
 
 struct Direction { 
 
-sint8 dir; 
+sint8 dir;
 
-Direction () { dir = sint8(NOWHERE); }
-
-Direction (WORLD_DIRECTION val) { dir = val; } 
+Direction (WORLD_DIRECTION val = NOWHERE) { dir = static_cast<sint8>(val); }
 
 void Castrate() {}
-void DelPointers() {}  
+void DelPointers() {}
 
-sint8 operator=(sint8 val) { return dir = val; } 
-sint8 operator=(WORLD_DIRECTION val) { return dir = sint8(val); } 
+sint8 operator=(sint8 val) { return dir = val; }
+sint8 operator=(WORLD_DIRECTION val) { return dir = sint8(val); }
 
 void Serialize(CivArchive &archive); 
 };
@@ -79,19 +95,19 @@ public:
     void JustSetStart(const MapPoint &p);
 
 
-    sint32 IsEnd() const; 
+    bool IsEnd() const;
     sint32 Next(MapPoint &p); 
     void GetCurrentPoint(MapPoint &p) const; 
     void ClipStartToCurrent();
 
-    void GetStartPoint(MapPoint &pos) const;
+    void GetStartPoint(MapPoint &pos) const; 
     void StartDir(WORLD_DIRECTION &d);
     void GetCurrentDir(WORLD_DIRECTION &d);
-    sint32 IsEndDir();
+    bool IsEndDir();
     void IncDir();
 
 	void ConcatReturnPath();
-	void Concat(const Path &otherpath);
+	void Concat(Path const & otherpath);
 
     void Serialize(CivArchive &archive); 
     void InsertFront(const MapPoint &pos);

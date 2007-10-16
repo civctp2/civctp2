@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : declarations for the Plan class
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -28,28 +31,24 @@
 // - Cleaned up the code somewhat (removed sint16 conversions, removed Init)
 //
 //----------------------------------------------------------------------------
-#ifdef HAVE_PRAGMA_ONCE
+ 
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __PLAN_H__
-#define __PLAN_H__ 1
+#ifndef PLAN_H__
+#define PLAN_H__ 1
 
+#include <list>
 
+class Plan;
 
 #include "scheduler_types.h"
-#include <list>
 
 class Plan
 { 
-
 public:
 
-  	
-  	
-  	
-  	
-  	
     struct Agent_Match {
         Utility value;
         Agent_List::const_iterator squad_index;
@@ -67,26 +66,15 @@ public:
 
 
     Plan();
-
-	
-    virtual ~Plan(); 
-
-	
 	Plan(const Plan &plan);
-	
+
+    virtual ~Plan(); 
 	
 	Plan& operator= (const Plan &plan);
 
-	
 	bool operator< (const Plan &plan) const;
-
-    
 	bool operator> (const Plan &plan) const;
-
-	
 	bool operator== (const Plan &plan) const;
-
-	
 	bool operator!= (const Plan &plan) const;
 
 
@@ -157,4 +145,4 @@ protected:
 };
 
 
-#endif // __PLAN_H__
+#endif // PLAN_H__
