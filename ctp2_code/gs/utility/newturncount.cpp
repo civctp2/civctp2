@@ -149,8 +149,8 @@ void NewTurnCount::StartNextPlayer(bool stop)
 #if 0
 	
 	
-	if((g_player[current_player]->GetPlayerType() == PLAYER_TYPE_HUMAN
-	|| (g_player[current_player]->GetPlayerType() == PLAYER_TYPE_NETWORK
+	if((g_player[current_player]->IsHuman()
+	|| (g_player[current_player]->IsNetwork()
 	&&  g_network.IsLocalPlayer(current_player)))
 	&&  g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()
 	){
@@ -171,18 +171,13 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	PLAYER_INDEX next_player = g_selected_item->GetCurPlayer();
 	sint32 next_round = g_player[next_player]->GetCurRound() + 1;
 	
-	if(g_turn->IsHotSeat() || g_turn->IsEmail()) {
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() != PLAYER_TYPE_ROBOT) {
+	if(g_turn->IsHotSeat() || g_turn->IsEmail())
+	{
+		if(!g_player[g_selected_item->GetCurPlayer()]->IsRobot())
+		{
 			stop = true;
 		}
 
-		// JJB cut out the following and moved
-		// to PlayerEvent.cpp
-		//if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
-		//   PLAYER_TYPE_ROBOT) {
-		//	g_turn->SendNextPlayerMessage();
-		//}
-		
 		g_director->NextPlayer();
 		
 		g_director->AddCopyVision();
@@ -201,15 +196,16 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	
 	if (stop ||
 		(g_network.IsActive() &&
-		 (g_network.IsClient() || g_player[next_player]->GetPlayerType() != PLAYER_TYPE_ROBOT)))
+		 (g_network.IsClient() || !g_player[next_player]->IsRobot())))
 	{
 		NewTurnCount::SetStopPlayer(next_player);
 		g_director->NextPlayer();
 	}
 
-	if(g_network.IsHost() && GetStopPlayer() == next_player) {
-		
-		if(g_player[next_player]->GetPlayerType() == PLAYER_TYPE_ROBOT) {
+	if(g_network.IsHost() && GetStopPlayer() == next_player)
+	{
+		if(g_player[next_player]->IsRobot())
+		{
 			SetStopPlayer(g_selected_item->GetVisiblePlayer());
 		}
 	}
@@ -224,10 +220,9 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	}
 	
 	if (next_player == 0)
-		{
-			
-			NewTurnCount::StartNewYear();
-		}
+	{
+		NewTurnCount::StartNewYear();
+	}
 
 	if(g_network.IsHost()) {
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_BEGIN_TURN, next_player));
@@ -405,7 +400,8 @@ BOOL NewTurnCount::VerifyEndTurn(BOOL force)
 	Player *player = g_player[g_selected_item->GetCurPlayer()];
 
 
-	if (player->GetPlayerType() != PLAYER_TYPE_HUMAN) {
+	if (!player->IsHuman())
+	{
 		return(TRUE);
 	}
 

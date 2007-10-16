@@ -201,8 +201,8 @@ void TurnCount::InformNetwork()
 
 		m_lastBeginTurn = g_selected_item->GetCurPlayer();
 
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
-		    PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			g_network.QueuePacket(g_network.IndexToId(g_selected_item->
 			                                          GetCurPlayer()),
 			                                          new NetRand());
@@ -225,10 +225,12 @@ void TurnCount::InformNetwork()
 		NetInfo* netInfo = new NetInfo(NET_INFO_CODE_BEGIN_TURN, 
 		                               g_selected_item->GetCurPlayer());
 		g_network.QueuePacketToAll(netInfo);          
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
-		   PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			g_network.SetMyTurn(FALSE);
-		} else {
+		}
+		else
+		{
 			g_network.SetMyTurn(TRUE);
 		}
 	}
@@ -242,18 +244,20 @@ void TurnCount::InformMessages()
 void TurnCount::SliceInformNetwork()
 {
 	if(g_network.IsHost()) {
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
-		   PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			g_network.QueuePacket(g_network.IndexToId(g_selected_item->
 													  GetCurPlayer()),
 								  new NetRand());
 		}
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_BEGIN_SLICE,
 											   g_selected_item->GetCurPlayer()));
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
-		   PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			g_network.SetMyTurn(FALSE);
-		} else {
+		}
+		else
+		{
 			g_network.SetMyTurn(TRUE);
 		}
 	}
@@ -453,9 +457,10 @@ void TurnCount::BeginNewTurn(BOOL clientVerification)
 		if(!clientVerification) {
 			InformNetwork();
 		}
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			if(!clientVerification)
-				return;	
+				return;
 			DPRINTF(k_DBG_NET, ("Client %d acknowledes begin turn %d\n", g_selected_item->GetCurPlayer(),
 								m_round));
 		}
@@ -556,28 +561,31 @@ BOOL TurnCount::BeginNewSlice()
 	}
 
 	if(m_simultaneousMode) {
-		if((g_network.IsHost() && g_player[curPlayer]->GetPlayerType() != PLAYER_TYPE_NETWORK) || 
+		if((g_network.IsHost() && !g_player[curPlayer]->IsNetwork()) ||
 		   g_network.GetPlayerIndex() == curPlayer) {
 			g_player[curPlayer]->ProcessUnitOrders(TRUE);
 		}
 	}
 
 	if(g_network.IsHost()) {
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
-		   PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			g_network.QueuePacket(g_network.IndexToId(g_selected_item->
 													  GetCurPlayer()),
 								  new NetRand());
 		}
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_BEGIN_SLICE,
 											   g_selected_item->GetCurPlayer()));
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() ==
-		   PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			g_network.SetMyTurn(FALSE);
-		} else {
+		}
+		else
+		{
 			g_network.SetMyTurn(TRUE);
 		}
-		if(m_sliceList->Num() > 0) {
+		if(m_sliceList->Num() > 0)
+		{
 			g_network.QueuePacket(g_network.IndexToId(
 				g_selected_item->GetCurPlayer()),
 								  new NetInfo(NET_INFO_CODE_REQUEST_SLICE));
@@ -647,7 +655,8 @@ BOOL TurnCount::VerifyEndTurn(BOOL force)
 	Player *player = g_player[g_selected_item->GetCurPlayer()];
 
 
-	if (player->GetPlayerType() != PLAYER_TYPE_HUMAN) {
+	if (!player->IsHuman())
+	{
 		return(TRUE);
 	}
 
@@ -765,9 +774,10 @@ void TurnCount::NetworkEndTurn(BOOL force)
 	return;	
 #if 0 // Unreachable
 	{
-		if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() == PLAYER_TYPE_NETWORK) {
+		if(g_player[g_selected_item->GetCurPlayer()]->IsNetwork())
+		{
 			for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
-				if(g_player[i] && g_player[i]->GetPlayerType() != PLAYER_TYPE_NETWORK) {
+				if(g_player[i] && !g_player[i]->IsNetwork()) {
 					if(!g_player[i]->IsTurnOver() && g_player[i]->GetCurRound() == m_round) {
 						g_player[i]->EndTurnSoon();
 					}
@@ -914,69 +924,6 @@ BOOL TurnCount::IsEmail()
 	return m_isEmail;
 }
 
-BOOL useProfileNextRound = FALSE;
-
-void TurnCount::ProfileNextRound()
-{
-
-	Assert(0); 
-	
-	g_selected_item->SetPlayerOnScreen(g_selected_item->GetVisiblePlayer());
-
-	sint32 oldPlayer = g_selected_item->GetCurPlayer();
-	sint32 j;
-	extern sint32 g_keypress_stop_player;
-
-	if(m_isHotSeat || m_isEmail) {
-		g_keypress_stop_player = g_selected_item->GetNextHumanPlayer();
-	} else {
-
-		g_keypress_stop_player = g_selected_item->GetCurPlayer();
-	}
-	
-	BOOL once_around = FALSE;
-	for (j=0; j<(k_MAX_PLAYERS+1); j++) {
-		EndThisTurnBeginNewTurn();
-		if (g_selected_item->GetCurPlayer() == g_keypress_stop_player) {
-			once_around = TRUE;
-			break;
-		} 
-	}
-	Assert(once_around);
-
-	if(m_isHotSeat || m_isEmail) {
-		if(m_isEmail) {
-			
-			
-			g_isScenario = FALSE;
-
-			GameFile::SaveGame("egame.ctp", NULL);
-		}
-		
-		SlicObject *so;
-		if(m_isHotSeat) {
-			so = new SlicObject("104NextHotSeatPlayer");
-		} else {
-			so = new SlicObject("105NextEmailPlayer");
-		}
-
-		so->AddRecipient(g_selected_item->GetVisiblePlayer());
-		so->AddCivilisation(oldPlayer);
-		so->AddCivilisation(g_selected_item->GetVisiblePlayer());
-		g_slicEngine->Execute(so);
-
-	}
-
-	
-	g_tiledMap->InvalidateMix();
-	g_tiledMap->InvalidateMap();
-	g_tiledMap->Refresh();
-	g_radarMap->Update();
-
-	g_selected_item->SetPlayerOnScreen((PLAYER_INDEX)-1);
-}
-
-
 sint32 g_noai_stop_player = 1;
 
 void TurnCount::NextRound(BOOL fromDirector, BOOL force)
@@ -1016,8 +963,8 @@ sint32 finite_count=0;
 
 
 		sint32 curPlayer = g_selected_item->GetCurPlayer();
-		if((g_player[curPlayer]->GetPlayerType() == PLAYER_TYPE_HUMAN ||
-			(g_player[curPlayer]->GetPlayerType() == PLAYER_TYPE_NETWORK &&
+		if((g_player[curPlayer]->IsHuman() ||
+			(g_player[curPlayer]->IsNetwork() &&
 			 g_network.IsLocalPlayer(curPlayer))) &&
 		   g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
 			g_player[g_selected_item->GetCurPlayer()]->ProcessUnitOrders();
@@ -1054,18 +1001,18 @@ sint32 finite_count=0;
 		EndThisTurnBeginNewTurn();
 
 		if(m_isHotSeat || m_isEmail) {
-			if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
-			   PLAYER_TYPE_ROBOT) {
+			if(!g_player[g_selected_item->GetCurPlayer()]->IsRobot())
+			{
 				g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
 				
-				
+				// Maybe this is a site where to add HotSeat and Email game human-human diplomacy support
 				
 				TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 			}
 
 			
-			if(g_player[g_selected_item->GetCurPlayer()]->GetPlayerType() !=
-			   PLAYER_TYPE_ROBOT) {
+			if(!g_player[g_selected_item->GetCurPlayer()]->IsRobot())
+			{
 				SendNextPlayerMessage();
 			}
 
@@ -1124,7 +1071,7 @@ void TurnCount::ChooseHappinessPlayer()
 
 		if(!g_player[m_happinessPlayer])
 			continue;
-		if(g_player[m_happinessPlayer]->GetPlayerType() != PLAYER_TYPE_ROBOT)
+		if(!g_player[m_happinessPlayer]->IsRobot())
 			continue;
 		break;
 	}
@@ -1262,7 +1209,9 @@ void TurnCount::SendNextPlayerMessage()
 	if(!m_isHotSeat && !m_isEmail)
 		return;
 
-	if(!g_player[g_selected_item->GetCurPlayer()])
+	sint32 player = g_selected_item->GetCurPlayer();
+
+	if(!g_player[player])
 		return;
 
 	if(m_isEmail) {
@@ -1275,7 +1224,7 @@ void TurnCount::SendNextPlayerMessage()
 		// JJB changed this from CTP to CTP2 to avoid confusion between the two games
 		strcat(fullPath, "\\CTP2 Email To ");
 		
-		startc = g_player[g_selected_item->GetCurPlayer()]->m_email;
+		startc = g_player[player]->m_email;
 		c = startc;
 		fc = &fullPath[strlen(fullPath)];
 		while(*c && ((c - startc) < (_MAX_PATH - 50))) {
@@ -1301,10 +1250,11 @@ void TurnCount::SendNextPlayerMessage()
 
     SlicObject * so = 
         new SlicObject(m_isHotSeat ? "104NextHotSeatPlayer" : "105NextEmailPlayer");
-	so->AddRecipient(g_selected_item->GetCurPlayer());
-	so->AddCivilisation(g_selected_item->GetCurPlayer());
+	so->AddRecipient(player);
+	so->AddCivilisation(player);
 	if(m_isEmail)
-		so->AddAction(g_player[g_selected_item->GetCurPlayer()]->m_email);
+		so->AddAction(g_player[player]->m_email);
 
 	g_slicEngine->Execute(so);
+
 }
