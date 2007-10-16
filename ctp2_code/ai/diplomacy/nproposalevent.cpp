@@ -24,7 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Seperated the NewProposal event from the Response event so that the 
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
 
@@ -56,7 +57,7 @@
 
 
 
-STDEHANDLER(NewProposalEvent)
+STDEHANDLER(General_NewProposalEvent)
 {
 	PLAYER_INDEX sender;
 	PLAYER_INDEX receiver;	
@@ -2292,7 +2293,7 @@ void NewProposalEventCallbacks::AddCallbacks()
 	
 	g_gevManager->AddCallback(GEV_ReactionMotivation,
 							  GEV_PRI_Primary, 
-							  &s_NewProposalEvent);
+							  &s_General_NewProposalEvent);
 
 	
 

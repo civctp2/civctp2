@@ -27,6 +27,7 @@
 // - Marked MS version specific code.
 // - Standardised <list> import.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -36,6 +37,7 @@
 #include "player.h"
 #include "Army.h"
 #include "ArmyData.h"
+#include "Diplomat.h"               // For human-human Email and HotSeat diplomacy
 #include "World.h"
 #include "newturncount.h"
 
@@ -51,15 +53,15 @@ extern sint32 g_saveFileVersion;
 
 namespace
 {
-    sint32 const            NEVER   = -1;
+	sint32 const            NEVER   = -1;
 };
 
-Foreigner::Foreigner() 
+Foreigner::Foreigner()
 :
-    m_hasInitiative                 (false),
+	m_hasInitiative                 (false),
 	m_regardTotal                   (NEUTRAL_REGARD),
-    m_bestRegardExplain             (-1),	  
-	m_effectiveRegardModifier       (0), 
+	m_bestRegardExplain             (-1),
+	m_effectiveRegardModifier       (0),
 	m_trustworthiness               (NEUTRAL_REGARD),
 	m_myLastNewProposal             (),
 	m_myLastResponse                (),
@@ -69,21 +71,20 @@ Foreigner::Foreigner()
 	m_lastNegotiatedProposalResult  (RESPONSE_INVALID),
 	m_lastNegotiatedProposal        (),
 	m_negotiationEvents             (),
-	m_hotwarAttackedMe              (NEVER),  
-	m_coldwarAttackedMe             (NEVER), 
-	m_greetingTurn                  (NEVER),		
+	m_hotwarAttackedMe              (NEVER),
+	m_coldwarAttackedMe             (NEVER),
+	m_greetingTurn                  (NEVER),
 	m_embargo                       (false)
 {
-    std::fill(m_regard, m_regard + REGARD_EVENT_ALL, NEUTRAL_REGARD);
-    std::fill(m_regardEventList, m_regardEventList + REGARD_EVENT_ALL, 
-              RegardEventList()
-             );
+	std::fill(m_regard, m_regard + REGARD_EVENT_ALL, NEUTRAL_REGARD);
+	std::fill(m_regardEventList, m_regardEventList + REGARD_EVENT_ALL,
+	          RegardEventList()
+	         );
 }
-
 
 void Foreigner::Initialize()
 {
-    std::fill(m_regard, m_regard + REGARD_EVENT_ALL, NEUTRAL_REGARD);
+	std::fill(m_regard, m_regard + REGARD_EVENT_ALL, NEUTRAL_REGARD);
 
 	m_regardTotal = NEUTRAL_REGARD;
 	m_bestRegardExplain = -1;
@@ -97,7 +98,6 @@ void Foreigner::Initialize()
 	m_greetingTurn = -1;
 	m_embargo = false;
 }
-
 
 void Foreigner::Load(CivArchive & archive)
 {
@@ -113,23 +113,19 @@ void Foreigner::Load(CivArchive & archive)
 	m_hasInitiative = (val?true:false);
 	archive >> m_lastIncursion;
 
-	
-	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) 
+	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++)
 	{
 		m_regardEventList[type].clear();
 
-		
 		archive >> size;
 
-		
 		for (i = 0; i < size; i++)
 		{
-			
 			if (g_saveFileVersion >= 57)
 			{
 				archive >> event.regard;	
 				archive >> event.turn;		
-				archive >> event.duration;  
+				archive >> event.duration;
 
 				archive >> buf_size;
 				if (buf_size > 0)
@@ -145,28 +141,24 @@ void Foreigner::Load(CivArchive & archive)
 			}
 			else
 			{
-				
 				archive.Load((uint8 *) &event, sizeof(RegardEvent));
 				event.explainStrId = -1;
 			}
 			m_regardEventList[type].push_back(event);
-		} 
-
-	} 
+		}
+	}
 
 	archive >> size;
 	NegotiationEvent negotiation;
 	m_negotiationEvents.clear();
 	for (i = 0; i < size; i++)
 	{
-		
 		if (g_saveFileVersion >= 60)
 		{
 			archive.Load((uint8 *) &negotiation, sizeof(NegotiationEvent));
 		}
 		else
 		{
-			
 			OldNegotiationEvent oldnegotiation;
 			archive.Load((uint8 *) &oldnegotiation, sizeof(OldNegotiationEvent));
 			negotiation.proposal = oldnegotiation.proposal;
@@ -190,7 +182,6 @@ void Foreigner::Load(CivArchive & archive)
 	else
 		m_embargo = false;
 }
-
 
 void Foreigner::Save(CivArchive & archive) const
 {
@@ -248,29 +239,22 @@ void Foreigner::Save(CivArchive & archive) const
 	archive << (sint8)(m_embargo?1:0);
 }
 
-
 void Foreigner::BeginTurn() 
 {
-	
-    m_goldFromTrade = 0;
+	m_goldFromTrade = 0;
 	m_goldFromTribute = 0;
 }
-
-
-
-
-
 
 ai::Regard Foreigner::GetEffectiveRegard() const 
 {
 	ai::Regard effectiveRegard = m_regardTotal + m_effectiveRegardModifier;
 	
-    if (effectiveRegard > MAX_REGARD)
+	if (effectiveRegard > MAX_REGARD)
 		effectiveRegard = MAX_REGARD;
 	else if (effectiveRegard < MIN_REGARD)
 		effectiveRegard = MIN_REGARD;
 
-    return effectiveRegard;
+	return effectiveRegard;
 }
 
 
@@ -375,7 +359,7 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 					else
 						event_iter->regard *= regard_decay->GetNegativeDecay();
 				}
- 				
+				
 				else if ((sint32) event_iter->turn + (sint32) event_iter->duration < decayRound) {
 					event_iter = m_regardEventList[type].erase(event_iter);
 					continue;
@@ -408,15 +392,10 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 				max_regard_delta = abs(event_iter->regard);
 			}
 			++event_iter;
-		} 
+		}
 
-		
-		
-		
-        m_regardEventList[type].sort(std::greater<RegardEvent>());
-
-	} 
-
+		m_regardEventList[type].sort(std::greater<RegardEvent>());
+	}
 }
 
 
@@ -427,27 +406,23 @@ const StringId & Foreigner::GetBestRegardExplain(const REGARD_EVENT_TYPE &type) 
 		return m_regardEventList[type].begin()->explainStrId;
 }
 
-
-
-
-
-
-void Foreigner::ConsiderResponse( const Response & response ) {
-
-	
-	
-	if (m_myLastResponse.priority < response.priority) {
+void Foreigner::ConsiderResponse( const Response & response )
+{
+	if (m_myLastResponse.priority < response.priority)
+	{
 		m_myLastResponse = response;
 	}
 }
 
 
-const Response & Foreigner::GetMyLastResponse() const {
+const Response & Foreigner::GetMyLastResponse() const
+{
 	return m_myLastResponse;
 }
 
 
-void Foreigner::SetMyLastResponse(const Response & response) {
+void Foreigner::SetMyLastResponse(const Response & response)
+{
 	m_myLastResponse = response;
 }
 
@@ -486,20 +461,13 @@ void Foreigner::ConsiderNewProposal(const NewProposal & newProposal ) {
 	}
 }
 
-
 const NewProposal & Foreigner::GetMyLastNewProposal() const {
 	return m_myLastNewProposal;
 }
 
-
-
-
-
-
 void Foreigner::SetMyLastNewProposal(const NewProposal & newProposal) {
 	m_myLastNewProposal = newProposal;
 }
-
 
 NegotiationEventList::const_iterator Foreigner::GetNegotiationEventIndex
 (
@@ -513,14 +481,12 @@ NegotiationEventList::const_iterator Foreigner::GetNegotiationEventIndex
         ++iter
     )
 	{
-		if ((iter->proposal.senderId == newProposal.senderId) &&
-			(iter->proposal.detail.first_type == newProposal.detail.first_type) &&
-			(iter->proposal.detail.second_type ==
-			    newProposal.detail.second_type 
-            ) 
-           )
-		{
-			return iter;
+		if(iter->proposal.senderId           == newProposal.senderId
+		&& iter->proposal.detail.first_type  == newProposal.detail.first_type
+		&& iter->proposal.detail.second_type == newProposal.detail.second_type 
+		){
+			if (iter->round >= 0)
+				return iter;
 		}
 	}
 
@@ -537,7 +503,6 @@ bool Foreigner::GetNewProposalTimeout(const NewProposal & newProposal,
 	if (iter == m_negotiationEvents.end())
 		return false;
 
-	
 	if (iter->round + timeout_period < NewTurnCount::GetCurrentRound())
 		return false;
 
@@ -551,9 +516,26 @@ void Foreigner::AddNewNegotiationEvent(const NegotiationEvent & event)
 	
 	m_negotiationEvents.push_front(event);
 
-	
-	if (m_negotiationEvents.size() > 3)
-		m_negotiationEvents.pop_back();
+	sint32 numberOfNegotiatedEvents = 0;
+	for(sint32 i = 0; i < m_negotiationEvents.size(); ++i)
+	{
+		if(m_negotiationEvents[i].round >= 0)
+			numberOfNegotiatedEvents++;
+	}
+
+	if(numberOfNegotiatedEvents > 3)
+	{
+		Assert(numberOfNegotiatedEvents <= 4);
+
+		for(sint32 i = m_negotiationEvents.size() - 1; i >= 0; --i)
+		{
+			if(m_negotiationEvents[i].round >= 0)
+			{
+				m_negotiationEvents.erase(m_negotiationEvents.begin() + i);
+				break;
+			}
+		}
+	}
 }
 
 
@@ -562,10 +544,53 @@ const NegotiationEventList & Foreigner::GetNegotiationEvents() const
 	return m_negotiationEvents;
 }
 
+void Foreigner::ExecuteDelayedNegotiations()
+{
+	// Reverse the loop direction
+	for(sint32 i = 0; i < m_negotiationEvents.size() ; ++i)
+	{
+		if(m_negotiationEvents[i].round < 0)
+		{
+			NegotiationEvent & negoEvent = m_negotiationEvents[i];
+			NewProposal & proposal = negoEvent.proposal;
+			Response & response = negoEvent.response;
+			if(proposal.id >= 0
+			&& response.id < 0
+			)
+			{
+				Diplomat::GetDiplomat(proposal.senderId).ExecuteNewProposal(proposal);
+			}
+			else if(response.id >= 0)
+			{
+				if((response.type != RESPONSE_ACCEPT
+				&&  response.type != RESPONSE_THREATEN
+				&&  response.threat.type == THREAT_NONE)
+				|| (response.type == RESPONSE_ACCEPT
+				&&  response.counter.first_type != PROPOSAL_NONE)
+				){
+					Diplomat::GetDiplomat(response.receiverId).SetMyLastResponse(response.senderId, response);
+					Diplomat::GetDiplomat(response.senderId).SetReceiverHasInitiative(response.receiverId, false);
+					Diplomat::GetDiplomat(response.senderId).SetMyLastNewProposal(response.receiverId, proposal);
+					Diplomat::GetDiplomat(response.senderId).ExecuteResponse(response, false);
+				}
+				else
+				{
+					Diplomat::GetDiplomat(response.senderId).SetMyLastResponse(response.receiverId, response);
+					Diplomat::GetDiplomat(response.senderId).SetReceiverHasInitiative(response.receiverId, true);
+					Diplomat::GetDiplomat(response.senderId).SetMyLastNewProposal(response.receiverId, proposal);
+					Diplomat::GetDiplomat(response.receiverId).ExecuteResponse(response, false);
+				}
+			}
+			else
+			{
+				Assert(false);
+			}
+			m_negotiationEvents.erase(m_negotiationEvents.begin() + i);
 
-
-
-
+			break;
+		}
+	}
+}
 
 void Foreigner::SetLastIncursion(const sint32 last_incursion)
 {

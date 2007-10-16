@@ -46,6 +46,9 @@
 // - Standardized code (May 21st 2006 Martin Gühmann)
 // - Made limited duration optional.
 // - Added war over message. (Feb 4th 2007 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Seperated the NewProposal event from the Response event so that the 
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann) 
 //
 //----------------------------------------------------------------------------
 
@@ -295,7 +298,7 @@ void Diplomat::DebugStatusAll()
 
 		    printf("Player %d: ",diplomat.GetPlayerId());
 
-		    if (g_player[diplomat.GetPlayerId()]->m_playerType == PLAYER_TYPE_ROBOT) 
+		    if (g_player[diplomat.GetPlayerId()]->IsRobot())
 			    printf("(AI)");
 		    printf("\n");
 
@@ -328,9 +331,18 @@ void Diplomat::AddDiplomacyArgToSlicContext(SlicContext & sc, const DiplomacyArg
 }
 
 
-
-
-
+void Diplomat::ExecuteDelayedNegotiations(const sint32 receiverID)
+{
+	// Add on screen check
+	// Add last tested player check
+	for(sint32 i = 0; i < k_MAX_PLAYERS; ++i)
+	{
+		if(g_player[i])
+		{
+			s_theDiplomats[i].m_foreigners[receiverID].ExecuteDelayedNegotiations();
+		}
+	}
+}
 
 sint32 Diplomat::GetNextId() {
 	return s_nextId++;
@@ -1578,7 +1590,7 @@ bool Diplomat::CanAfford( const PLAYER_INDEX senderId,
 						  const PLAYER_INDEX receiverId,
 						  const ProposalData & proposal ) const
 {
-	
+	// Only gold is checked, and it is not generic
 	if (senderId != -1 &&
 		proposal.first_type == PROPOSAL_OFFER_GIVE_GOLD &&
 		proposal.first_arg.gold > g_player[senderId]->m_gold->GetLevel())
@@ -2694,60 +2706,78 @@ void Diplomat::SetMyLastResponse( const PLAYER_INDEX & foreignId,
 								  const Response & response ) {
 	m_foreigners[foreignId].SetMyLastResponse(response);	
 
-	DPRINTF(k_DBG_DIPLOMACY,("  Player %d set Response: %s for player %d.\n",
+	DPRINTF(k_DBG_DIPLOMACY,("  Player %d sets Response: %s for player %d.\n",
 			m_playerId, s_responseNames[response.type].c_str(), foreignId));
 
 	if (response.type == RESPONSE_COUNTER)
 	{
-		DPRINTF(k_DBG_DIPLOMACY,("  Counter Proposal first = %s.\n", s_proposalNames[response.counter.first_type].c_str() ));
+		DPRINTF(k_DBG_DIPLOMACY,("  Counter Proposal first  = %s.\n", s_proposalNames[response.counter.first_type].c_str() ));
 		DPRINTF(k_DBG_DIPLOMACY,("                   second = %s.\n", s_proposalNames[response.counter.second_type].c_str() ));
 	}
 }
 
 
 void Diplomat::ExecuteResponse( const PLAYER_INDEX sender,
-								const PLAYER_INDEX receiver ) {
-	
-	
-
+								const PLAYER_INDEX receiver )
+{
 	Response response;
-	PROPOSAL_TYPE proposal_type;
 	RESPONSE_TYPE other_response;
 	THREAT_TYPE threat_type;
 	PLAYER_INDEX other_player;
 
 	
-	if (m_playerId == sender) {
-		
+	if (m_playerId == sender)
+	{
 		response = GetMyLastResponse(receiver);
 
-		
-		proposal_type = Diplomat::GetDiplomat(receiver).GetMyLastResponse(sender).counter.second_type;
 		other_player = receiver;
 		other_response = Diplomat::GetDiplomat(receiver).GetMyLastResponse(sender).type;
 	}
-	else {
-		
+	else
+	{
 		response = GetMyLastResponse(sender);
 
-		
-		proposal_type = Diplomat::GetDiplomat(sender).GetMyLastNewProposal(receiver).detail.first_type;
 		threat_type = Diplomat::GetDiplomat(sender).GetMyLastResponse(receiver).threat.type;
 		other_player = sender;
 		other_response = Diplomat::GetDiplomat(sender).GetMyLastResponse(receiver).type;
 	}
 
-	
 	response.id = GetNextId();
 
 #ifndef _BFR_
 	gslog_dipprint("Player %d responds:\n", m_playerId);
 
 	if(g_theProfileDB->GetEnableLogs())
-	  {
-	    ProposalAnalysis::LogDebugResult(response);
-	  }
+	{
+		ProposalAnalysis::LogDebugResult(response);
+	}
 #endif // _BFR_
+
+	// Added for PBEM and HotSeat human-human diplomacy support support.
+	if(g_turn->IsEmail()
+	|| g_turn->IsHotSeat()
+	){
+		if(g_player[sender]->IsHuman()
+		&& g_selected_item->GetVisiblePlayer() != sender
+		){
+			NegotiationEvent negotiation_event;
+			negotiation_event.proposal = s_theDiplomats[sender].GetMyLastNewProposal(receiver);
+			negotiation_event.response = response;
+			negotiation_event.response.threat = Diplomat::GetDiplomat(sender).GetMyLastResponse(receiver).threat;
+			negotiation_event.round = -1;
+			AddNewNegotiationEvent(sender, negotiation_event);
+		}
+		else if(g_player[receiver]->IsHuman()
+		&&      g_selected_item->GetVisiblePlayer() != receiver
+		){
+			NegotiationEvent negotiation_event;
+			negotiation_event.proposal = s_theDiplomats[sender].GetMyLastNewProposal(receiver);
+			negotiation_event.response = response;
+			negotiation_event.response.counter = Diplomat::GetDiplomat(receiver).GetMyLastResponse(sender).counter;
+			negotiation_event.round = -1;
+			AddNewNegotiationEvent(receiver, negotiation_event);
+		}
+	}
 
 	Assert(response.type != RESPONSE_INVALID);
 	if (response.type == RESPONSE_INVALID)
@@ -2850,28 +2880,8 @@ void Diplomat::ExecuteResponse( const PLAYER_INDEX sender,
 
 		return;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	
-	
-	
-
-	
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ToggleInitiative, 
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ToggleInitiative,
 						   GEA_Player, sender,
 						   GEA_Player, receiver,
 						   GEA_End);
@@ -2952,77 +2962,59 @@ const Response & Diplomat::GetResponse(const PLAYER_INDEX foreignerId) const
 }
 	
 
-void Diplomat::ExecuteResponse(const Response & response)
+void Diplomat::ExecuteResponse(const Response & response, bool runAI)
 {
 	if (response.senderId == m_playerId)
 	{
 		SetMyLastResponse(response.receiverId, response);
 
-		
 		Assert(GetReceiverHasInitiative(response.receiverId) == false);
-
-		
 		Assert(GetMyLastNewProposal(response.receiverId) != s_badNewProposal);
-
-		
 		Assert(Diplomat::GetDiplomat(response.receiverId).GetMyLastResponse(response.senderId) != s_badResponse);
 	}
 	else if (response.receiverId == m_playerId)
 	{
 		SetMyLastResponse(response.senderId, response);
 
-		
 		Assert(Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId) == true);
-
-		
 		Assert(Diplomat::GetDiplomat(response.senderId).GetMyLastNewProposal(response.receiverId) != s_badNewProposal);
 	}
 	else
 	{
-		
 		Assert(0);
 		return;
 	}
 
-	
-	ExecuteResponse(response.senderId, response.receiverId);
+	if(runAI)
+	{
+		ExecuteResponse(response.senderId, response.receiverId);
+	}
+	else
+	{
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResponseReady, 
+							   GEA_Player, response.senderId,
+							   GEA_Player, response.receiverId,
+							   GEA_End);
+	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-void Diplomat::ConsiderMotivation(const Motivation & motivation) {
-
-	
+void Diplomat::ConsiderMotivation(const Motivation & motivation)
+{
 	m_motivations.push_back(motivation);
 	DPRINTF(k_DBG_DIPLOMACY,(" Player %d consider motivation: %s.\n",
 			m_playerId, s_motivationNames[motivation.type].c_str()));
-
 } 
-
 
 sint32 Diplomat::GetMotivationCount() const 
 {
 	return (m_motivations.size());
 }
 
-
 void Diplomat::SortMotivations() 
 {
 	
 	m_motivations.sort();
 }
-
 
 const Motivation & Diplomat::GetCurrentMotivation() const
 {
@@ -3031,8 +3023,6 @@ const Motivation & Diplomat::GetCurrentMotivation() const
 
 	return s_badMotivation;
 }
-
-
 
 StringId Diplomat::GetDiplomacyAdvice(SlicContext & sc, const PLAYER_INDEX & foreignerId) const
 {
@@ -3164,24 +3154,19 @@ void Diplomat::ContinueDiplomacy(const PLAYER_INDEX & foreignerId) {
 	
 	if (end_diplomacy)
 	{
-		
-		
-		
-		if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
-			g_player[foreignerId] &&
-			g_player[foreignerId]->GetPlayerType() != PLAYER_TYPE_ROBOT &&
-			g_player[m_playerId] &&
-			g_player[m_playerId]->GetPlayerType() == PLAYER_TYPE_ROBOT)
+		if((g_turn->IsHotSeat()
+		||  g_turn->IsEmail())
+		&&  g_player[foreignerId]
+		&& !g_player[foreignerId]->IsRobot()
+		&&  g_player[m_playerId]
+		&&  g_player[m_playerId]->IsRobot()
+		  )
 		{
 			return;
 		}
 
-		
 		if (m_outstandingProposals == 0)
 		{
-			
-			
-			
 			if(!g_network.IsActive() ||
 			   (g_network.IsHost() && g_network.IsLocalPlayer(m_playerId))) {
 				g_director->AddBeginScheduler(m_playerId);
@@ -3190,11 +3175,6 @@ void Diplomat::ContinueDiplomacy(const PLAYER_INDEX & foreignerId) {
 	}
 	else
 	{
-	
-		
-		
-		
-
 		ChooseNewProposal(foreignerId);
 	}
 }
@@ -3240,7 +3220,7 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 				if (hotseat_foreignerId != foreignerId)
 					continue;
 			}
-			else if (g_player[foreignerIndex]->m_playerType != PLAYER_TYPE_ROBOT)
+			else if (!g_player[foreignerIndex]->IsRobot())
 				continue;
 		}
 
@@ -3248,7 +3228,7 @@ bool Diplomat::StartNegotiations(const PLAYER_INDEX hotseat_foreignerId)
 	//	Modification by Peter Triggs
 	//	from >=0 pt: 
 	//	if player has contact with foreignerId, 
-    //	set m_lastMotivation[foreignerId] = the player's top motivation 
+	//	set m_lastMotivation[foreignerId] = the player's top motivation 
 	//	and choose a new proposal for foreignerId
 		if (m_foreigners[foreignerIndex].GetTurnsSinceGreeting() >= -1 &&
 			g_player[m_playerId] && g_player[m_playerId]->HasContactWith(foreignerId))
@@ -3526,9 +3506,9 @@ void Diplomat::ConsiderNewProposal( const PLAYER_INDEX & foreignerId,
 	
 	m_foreigners[foreignerId].ConsiderNewProposal(newProposal);
 
-	DPRINTF(k_DBG_DIPLOMACY,("  Player %d considers New Proposal for player %d: first = %s .\n",
+	DPRINTF(k_DBG_DIPLOMACY,("  Player %d considers New Proposal for player %d: first  = %s .\n",
 			m_playerId, foreignerId, s_proposalNames[newProposal.detail.first_type].c_str()));
-	DPRINTF(k_DBG_DIPLOMACY,("                                                  second = %s.\n",
+	DPRINTF(k_DBG_DIPLOMACY,("                                                second = %s.\n",
 			s_proposalNames[newProposal.detail.second_type].c_str()));
 
 }
@@ -3543,20 +3523,43 @@ void Diplomat::SetMyLastNewProposal( const PLAYER_INDEX & foreignerId,
 									 const NewProposal & newProposal ) {
 	m_foreigners[foreignerId].SetMyLastNewProposal(newProposal);
 
-	DPRINTF(k_DBG_DIPLOMACY,("  Player %d sets New Proposal for player %d: first = %s .\n",
+	DPRINTF(k_DBG_DIPLOMACY,("  Player %d sets New Proposal for player %d: first  = %s.\n",
 			m_playerId, foreignerId, s_proposalNames[newProposal.detail.first_type].c_str()));
-	DPRINTF(k_DBG_DIPLOMACY,("                                                  second = %s.\n",
+	DPRINTF(k_DBG_DIPLOMACY,("                                           second = %s.\n",
 			s_proposalNames[newProposal.detail.second_type].c_str()));
 
 }
 
+void Diplomat::ExecuteNewProposal(const NewProposal & proposal)
+{
+	if (proposal.senderId == m_playerId)
+	{
+		SetMyLastNewProposal(proposal.receiverId, proposal);
+	}
+	else if (proposal.receiverId == m_playerId)
+	{
+		Assert(0);
+	}
+	else
+	{
+		Assert(0);
+		return;
+	}
 
-void Diplomat::ExecuteNewProposal( const PLAYER_INDEX & receiver ) {
+	ExecuteNewProposal(proposal.receiverId);
+}
 
-	
-	
+void Diplomat::ExecuteNewProposal( const PLAYER_INDEX & receiver )
+{
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NewProposal,
+	                       GEA_Player, m_playerId,
+	                       GEA_Player, receiver,
+	                       GEA_End);
+}
 
-	
+// Only called by the event
+void Diplomat::ExecuteEventNewProposal( const PLAYER_INDEX & receiver )
+{
 	SetMyLastResponse( receiver, Diplomat::s_badResponse );
 	GetDiplomat(receiver).SetMyLastResponse(m_playerId, Diplomat::s_badResponse );
 	
@@ -3568,16 +3571,30 @@ void Diplomat::ExecuteNewProposal( const PLAYER_INDEX & receiver ) {
 	proposal.id = GetNextId();
 	m_foreigners[receiver].SetMyLastNewProposal(proposal);
 
-	DPRINTF(k_DBG_DIPLOMACY,("  Player %d executes New Proposal for player %d: first = %s .\n",
+	DPRINTF(k_DBG_DIPLOMACY,("  Player %d executes New Proposal for player %d: first  = %s.\n",
 			m_playerId, receiver, s_proposalNames[GetMyLastNewProposal(receiver).detail.first_type].c_str()));
-	DPRINTF(k_DBG_DIPLOMACY,("                                                  second = %s.\n",
+	DPRINTF(k_DBG_DIPLOMACY,("                                               second = %s.\n",
 			s_proposalNames[GetMyLastNewProposal(receiver).detail.second_type].c_str()));
 
 	
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NewProposal,
-			GEA_Player, m_playerId,
-			GEA_Player, receiver,
-			GEA_End);
+	// Added for PBEM and HotSeat human-human diplomacy support.
+	if((g_turn->IsEmail()
+	||  g_turn->IsHotSeat())
+	&&  g_player[receiver]->IsHuman()
+	&&  g_selected_item->GetVisiblePlayer() != receiver
+	){
+		NegotiationEvent negotiation_event;
+		negotiation_event.proposal = proposal;
+		negotiation_event.round = -1;
+		AddNewNegotiationEvent(receiver, negotiation_event);
+	}
+	else if(g_player[receiver]->IsRobot()) // Maybe some condition are missing here
+	{
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProposalResponse,
+				GEA_Player, m_playerId,
+				GEA_Player, receiver,
+				GEA_End);
+	}
 
 #ifndef _BFR_
 	ProposalAnalysis::LogDebugResult(proposal);
@@ -3766,38 +3783,6 @@ const NewProposal & Diplomat::GetNewProposalAdvice(const PLAYER_INDEX foreignerI
 
 	return new_proposal;
 }
-
-
-void Diplomat::ExecuteNewProposal(const NewProposal & proposal)
-{
-	if (proposal.senderId == m_playerId)
-	{
-		SetMyLastNewProposal(proposal.receiverId, proposal);
-
-		
-		
-	}
-	else if (proposal.receiverId == m_playerId)
-	{
-		
-		Assert(0);
-	}
-	else
-	{
-		
-		Assert(0);
-		return;
-	}
-
-	
-	ExecuteNewProposal(proposal.receiverId);
-}
-
-
-
-
-
-
 
 void Diplomat::InitStrategicState() {
 
@@ -4076,9 +4061,13 @@ void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiStat
 	}
 
 	
-	if (g_player[m_playerId] && 
-		(g_player[m_playerId]->GetPlayerType() == PLAYER_TYPE_ROBOT &&
-		(!g_network.IsActive() || g_network.IsLocalPlayer(m_playerId))))
+	if(    g_player[m_playerId]
+	&& (   g_player[m_playerId]->IsRobot()
+	&&  ( !g_network.IsActive()
+	||     g_network.IsLocalPlayer(m_playerId)
+	    )
+	   )
+	  )
 	{
 		bool declare_war = true;
 		if (!AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
@@ -5904,7 +5893,7 @@ bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 	if (foreigner_ptr == NULL)
 		return false;
 
-	bool look_for_human = (foreigner_ptr->GetPlayerType() != PLAYER_TYPE_ROBOT);
+	bool look_for_human = !foreigner_ptr->IsRobot();
 
 	DIPLOMATIC_STRENGTH lowest_relative_strength    = DIPLOMATIC_STRENGTH_VERY_STRONG;
 	PLAYER_INDEX        weakest_enemy               = PLAYER_UNASSIGNED; 
@@ -5925,20 +5914,20 @@ bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 
 		if (look_for_human)
 		{
-			if (foreigner_ptr->GetPlayerType() == PLAYER_TYPE_ROBOT) 
+			if (foreigner_ptr->IsRobot())
 				continue;
 		}
 		else
 		{
-			if (foreigner_ptr->GetPlayerType() != PLAYER_TYPE_ROBOT) 
+			if (!foreigner_ptr->IsRobot())
 			{
-                /// @todo Check if this is deliberate: AIs after human are not considered?
+				/// @todo Check if this is deliberate: AIs after human are not considered?
 				return false;
 			}
 		}
 			
 		DIPLOMATIC_STRENGTH const   relative_strength = 
-            other_ptr->GetRelativeStrength(m_playerId);
+		    other_ptr->GetRelativeStrength(m_playerId);
 
 		if (relative_strength < lowest_relative_strength)
 		{
@@ -6084,7 +6073,7 @@ bool Diplomat::ReadyToParty() const
 bool Diplomat::ShouldEscortSettlers() const
 {
 	if (g_player[m_playerId] && 
-		g_player[m_playerId]->m_playerType == PLAYER_TYPE_HUMAN)
+		g_player[m_playerId]->IsHuman())
 		return false;
 
 	

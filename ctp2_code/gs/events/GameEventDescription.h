@@ -1,3 +1,35 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Declares all the slic events
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Seperated the NewProposal event from the Response event so that the 
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann) 
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -77,7 +109,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(BoardTransportOrder, "Move this army into a transport in the same cell.","%a")
 	EVENT(LaunchOrder, "Give a space launch order to this army", "%a%l")
 	EVENT(TargetOrder, "Give a nuclear missile a target", "%a%l")
-    EVENT(ClearTargetOrder, "Clear a nuclear missile's target", "%a")
+	EVENT(ClearTargetOrder, "Clear a nuclear missile's target", "%a")
 
 	EVENT(CityRiot, "A city riots", "%c")
 	EVENT(CalcScores, "Recalculate a player's scores", "%P")
@@ -298,7 +330,9 @@ GameEventDescription g_eventDescriptions[] =
 
 	EVENT(OpenInitialCityInterface, "Generated when a city is initialized, after all population is added.", "%c")
 
-	
+	EVENT(ResumeEmailAndHotSeatDiplomacy, "Continues human to human diplomacy in Email and HotSeat mode.", "%P")
+	EVENT(ProposalResponse, "A proposal response is been considered.", "%P%P")
+
 	EVENT(MAX, "This is not a real event, it marks the end of the list", "")
 };
 

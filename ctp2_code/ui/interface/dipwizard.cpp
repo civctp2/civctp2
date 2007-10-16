@@ -31,6 +31,7 @@
 // - Added female leader images. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - removed new diplo attempt - E 12.27.2006
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -356,7 +357,7 @@ AUI_ERRCODE DipWizard::Display()
 	
 
 	if(g_network.IsActive() && g_player[g_selected_item->GetVisiblePlayer()] &&
-	   g_player[g_selected_item->GetVisiblePlayer()]->m_playerType == PLAYER_TYPE_ROBOT) {
+	   g_player[g_selected_item->GetVisiblePlayer()]->IsRobot()) {
 		
 		
 		return AUI_ERRCODE_OK;
@@ -854,7 +855,12 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 			}
 			m_viewType = DIP_WIZ_VIEW_TYPE_THREAT;
 		} else {
-			if(resp.type == RESPONSE_ACCEPT || negotiationsComplete) {
+			if(  resp.type == RESPONSE_ACCEPT
+			||   negotiationsComplete
+			|| ( resp.type == RESPONSE_REJECT
+			&&  (resp.counter.first_type != PROPOSAL_NONE
+			||   resp.threat.type != THREAT_NONE))
+			){
 				m_viewType = DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE;
 			} else {
 				m_viewType = DIP_WIZ_VIEW_TYPE_RESPONSE;
@@ -863,7 +869,9 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 
 		Response senderResponse = useThreatResp ? *useThreatResp : sender_response;
 		if(senderResponse != Diplomat::s_badResponse) {
-			if(senderResponse.type == RESPONSE_THREATEN) {
+			if(senderResponse.type == RESPONSE_THREATEN
+			|| senderResponse.threat.type != THREAT_NONE
+			){
 				m_viewThreat = senderResponse.threat.type;
 				m_viewThreatArg = senderResponse.threat.arg;
 			}
@@ -872,12 +880,16 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 		const NewProposal & orig = Diplomat::GetDiplomat(sender).GetMyLastNewProposal(recipient);
 		if(orig == Diplomat::s_badNewProposal)
 		{
-			
-			Assert(0);
+			bool isBadProposal = false;
+			Assert(isBadProposal);
 			return;
 		}
 
-		if(resp.receiverId == g_selected_item->GetVisiblePlayer() && last_receiver_response.type == RESPONSE_COUNTER) {
+		if(  resp.receiverId == g_selected_item->GetVisiblePlayer()
+		&& ( last_receiver_response.type == RESPONSE_COUNTER
+		||  (last_receiver_response.counter.first_type != PROPOSAL_NONE
+		&&   sender_response.type != RESPONSE_THREATEN))
+		){
 			
 			
 			m_viewProposal = diplomacyutil_GetDBIndex(last_receiver_response.counter.first_type);
@@ -1646,6 +1658,7 @@ void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data,
 		Hide();
 	}
 }
+
 //----------------------------------------------------------------------------
 //
 // Name       : DipWizard::SendCallback
@@ -1657,9 +1670,9 @@ void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data,
 //            : data                      ?
 //            : cookie                    ?  
 //
-// Globals    : g_network				: multiplayer manager
-//				g_selectedItem			: selected player
-//				
+// Globals    : g_network               : multiplayer manager
+//              g_selectedItem          : selected player
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -1717,9 +1730,25 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 		if(g_network.IsActive()) {
 			SetStage(DIP_WIZ_STAGE_RECIPIENT);
 		}
+
+		if(g_player[resp.senderId]->IsHuman()
+		&& g_selected_item->GetVisiblePlayer() != resp.senderId
+		){
+			Hide();
+		}
+		else if(g_player[resp.receiverId]->IsHuman()
+		&&      g_selected_item->GetVisiblePlayer() != resp.receiverId
+		){
+			Hide();
+		}
+
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).ExecuteResponse(resp);
 	}
 
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
+						   GEA_Player,		g_selected_item->GetCurPlayer(),
+						   GEA_End
+						  );
 }
 
 
@@ -1777,9 +1806,18 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
 
-	if(m_viewType == DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE) {
+	if( m_viewType == DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE
+	|| (m_viewSender == g_selected_item->GetVisiblePlayer()
+	&&  m_viewResponseType != RESPONSE_COUNTER)
+	){
 		
 		Hide();
+
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
+							   GEA_Player,		g_selected_item->GetCurPlayer(),
+							   GEA_End
+							  );
+
 		return;
 	}
 
@@ -1804,6 +1842,10 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 		Diplomat::GetDiplomat(m_viewRecipient).ExecuteResponse(response);
 	}
 			
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
+						   GEA_Player,		g_selected_item->GetCurPlayer(),
+						   GEA_End
+						  );
 }
 
 void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1822,6 +1864,10 @@ void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data,
 	Hide();
 	Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).ExecuteResponse(response);
 
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
+						   GEA_Player,		g_selected_item->GetCurPlayer(),
+						   GEA_End
+						  );
 }
 
 void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2559,9 +2605,6 @@ void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 d
 	}
 }
 
-
-
-
 STDEHANDLER(DipWizResponseReady)
 {
 	sint32 p1, p2;
@@ -2589,6 +2632,7 @@ STDEHANDLER(DipWizNewProposalEvent)
 	return GEV_HD_Continue;
 }
 
+// Not called
 STDEHANDLER(DipWizContinueDiplomacyEvent)
 {
 	sint32 p1, p2;
@@ -2600,7 +2644,7 @@ STDEHANDLER(DipWizContinueDiplomacyEvent)
 		DipWizard::SetViewResponse(p1, p2, true);
 
 		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(p2).GetResponsePending(p1).type;
-        /// @todo Probably need to do something here - this doesn't make sense
+		/// @todo Probably need to do something here - this doesn't make sense
 	} else if(p2 == g_selected_item->GetVisiblePlayer()) {
 		
 		DipWizard::SetViewResponse(p1, p2, true);
@@ -2612,7 +2656,6 @@ void DipWizard::InitializeEvents()
 {
 	g_gevManager->AddCallback(GEV_ResponseReady, GEV_PRI_Post, &s_DipWizResponseReady);
 	g_gevManager->AddCallback(GEV_NewProposal, GEV_PRI_Post, &s_DipWizNewProposalEvent);
-	
 }
 
 void DipWizard::NotifyResponse(const Response &resp, sint32 responder, sint32 other_player)

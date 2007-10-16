@@ -18,12 +18,15 @@
 //
 // Compiler flags
 //
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Marked MS version specific code.
 // - Standardised <list> import.
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -72,14 +75,14 @@ class Diplomat
 {
 public:
 	struct PiracyHistory 
-    {
+	{
 		PiracyHistory()
-        :   
-            m_sourceCity        (),
-            m_destinationCity   (),
-            m_piratingPlayer    (PLAYER_UNASSIGNED),
-            m_accumEvents       (0),
-            m_lastTurn          (-1)
+		:   
+		    m_sourceCity        (),
+		    m_destinationCity   (),
+		    m_piratingPlayer    (PLAYER_UNASSIGNED),
+		    m_accumEvents       (0),
+		    m_lastTurn          (-1)
 		{ };
 
 		bool operator<(const PiracyHistory & rval) const
@@ -158,6 +161,7 @@ public:
 	
 	static void AddDiplomacyArgToSlicContext(SlicContext & sc, const DiplomacyArg & dip_arg);
 
+	static void ExecuteDelayedNegotiations(const sint32 receiverID);
 	
 	sint32 GetNextId();
 
@@ -169,8 +173,8 @@ public:
 	
 
 	Diplomat();
-    Diplomat(Diplomat const & a_Original);
-    ~Diplomat();
+	Diplomat(Diplomat const & a_Original);
+	~Diplomat();
 
 	Diplomat const & operator = (Diplomat const & a_Original);
 
@@ -379,7 +383,7 @@ public:
 	const Response & GetResponse(const PLAYER_INDEX foreignerId) const;
 
 	
-	void ExecuteResponse(const Response & response);
+	void ExecuteResponse(const Response & response, bool runAI = true);
 
 	
 	
@@ -439,10 +443,11 @@ public:
 	void SetMyLastNewProposal( const PLAYER_INDEX & foreignId, 
 							   const NewProposal & newProposal );
 
-	
-	void ExecuteNewProposal(const PLAYER_INDEX & receiver );
 
-	
+	void ExecuteNewProposal     (const NewProposal  & proposal);
+	void ExecuteNewProposal     (const PLAYER_INDEX & receiver);
+	void ExecuteEventNewProposal(const PLAYER_INDEX & receiver);
+
 	void SetMyLastNegotiatedProposal( const PLAYER_INDEX & foreignerId, const ProposalData & data, const RESPONSE_TYPE & response );
 	
 	
@@ -491,15 +496,7 @@ public:
 	
 	const NewProposal & GetNewProposalAdvice(const PLAYER_INDEX foreignerId) const;
 
-	
-	void ExecuteNewProposal(const NewProposal & proposal);
 
-
-	
-	
-	
-
-	
 	void InitStrategicState();
 
 	
