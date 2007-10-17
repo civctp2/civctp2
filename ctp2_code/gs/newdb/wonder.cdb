@@ -47,16 +47,16 @@ Wonder {
 	Record Advance [0..5] ObsoleteAdvance
 	Record Building[] PrerequisiteBuilding		// Added by E to limit wonders to cities with certain buildings
 	Record Government[] GovernmentsModified		// Added by MrBaggins
-	Record CityStyle[] CultureOnly				//added by E -- can only build wonders if civ has certain citystyle
-	Record Government[] GovernmentType			//added by E --- a copy of unit Government type code
-	Record Government[] ObsoleteGovernmentType	//added by E --- switching to this obsoletes your imp
-	Record CityStyle[] CityStyleOnly			//added by E--can only build wonders at cities with certain citystyle 
+	Record CityStyle[] CultureOnly				// Added by E -- can only build wonders if civ has certain citystyle
+	Record Government[] GovernmentType			// Added by E --- a copy of unit Government type code
+	Record Government[] ObsoleteGovernmentType	// Added by E --- switching to this obsoletes your imp
+	Record CityStyle[] CityStyleOnly			// Added by E--can only build wonders at cities with certain citystyle 
 	Record Resource[] NeedsCityGood				// must have good in radius of city or buying resource to build 
-	Record Resource[] NeedsCityGoodAll			//a city must have all resource to build wonder
-	Record Resource[] NeedsCityGoodAnyCity		//FU
-    Record Resource[] EnablesGood				//added by E -- having a TI gives a city a good
-	Record TerrainImprovement[] ShowOnMap		//FU
-	Record TerrainImprovement[] ShowOnMapRadius //FU
+	Record Resource[] NeedsCityGoodAll			// A city must have all resource to build wonder
+	Record Resource[] NeedsCityGoodAnyCity		// FU
+    Record Resource[] EnablesGood				// Added by E -- having a TI gives a city a good
+	Record TerrainImprovement[] ShowOnMap		// FU
+	Record TerrainImprovement[] ShowOnMapRadius // FU
 	Record Civilisation[] CivilisationOnly 
 	Record Feat[] NeedsFeatToBuild				// implemented by E
 	Record Feat[] NeedsAnyPlayerFeatToBuild				// implemented by E
@@ -135,11 +135,11 @@ Wonder {
 
 	Struct BuildingGold {
 		Record Building Building
-		Bit(Int) Gold 
+		Bit(Int) Gold
 	}
 
 	Bit(struct BuildingGold) BuildingGold
-	Bit(Record Building) BuildingEverywhere
+	Bit(Record Building) BuildingEverywhere        # Actually this should also remove the building in question from the built list.
 	Bit(Record Building) ActualBuildingEverywhere
 	Bit(Record Building) BuildingEffectEverywhere  #This would be a better name for BuildingEverywhere # But there is no need to have a copy of this in.
 	Bit(Record Building) ConflictsWithBuilding
@@ -160,10 +160,10 @@ Wonder {
 	Bit(Int)   EnergyHungerPerPop
 	Bit(Int)   ProducesEnergyPerPop 
 
-    #Future Use
-	Bit(Int)   TooManyCitiesThresholdModifier     #To give a bonus to a player's govt like additional cities about Threshold
-	Bit(Float) TooManyCitiesCoefficientModifier   #To lessen (or increase) the coefficient impact of over the limit
-	Bit(Int)   RiotLevelModifier			      #Some wonders could lower or raise Riot Levels for cities
-	Bit(Int)   OtherPlayerRiotLevelModifier		   #Some wonders could lower or raise Riot Levels for other player cities
+	#Future Use
+	Bit(Int)   TooManyCitiesThresholdModifier     # To give a bonus to a player's govt like additional cities about Threshold
+	Bit(Float) TooManyCitiesCoefficientModifier   # To lessen (or increase) the coefficient impact of over the limit
+	Bit(Int)   RiotLevelModifier                  # Some wonders could lower or raise Riot Levels for cities
+	Bit(Int)   OtherPlayerRiotLevelModifier       # Some wonders could lower or raise Riot Levels for other player cities
 }
 

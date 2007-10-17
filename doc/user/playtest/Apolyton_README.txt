@@ -29,237 +29,241 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?threadid=147969
+http://apolyton.net/forums/showthread.php?threadid=161726
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?threadid=103817
 http://apolyton.net/forums/showthread.php?threadid=115144
 http://apolyton.net/forums/showthread.php?threadid=127059
+http://apolyton.net/forums/showthread.php?threadid=147969
 
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
 
 Playtesting would be most useful if it tests the most recent changes, which
-are described briefly below, and in more detail in ChangeLog.txt 
-(note heavily outdated)
+are described briefly below.
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
-207-08-07 (revision 787)
-Changed:  ConstDB replaced with a new one
-Changed:  Harappan flag now is pakistan's flag
-Changed:  Jamaica headers that mapped to POland are now labeled as Poland
+
+2007-10-18 (Revision 810)
+Added:   HotSeat (tested) and PBEM (untested) human to human diplomacy support.
+Added:   The following civilisations: Han, Yamato, Sumer, Kush, and Macedonia
+Fixed:   The map editor genarates now the coast line again if needed.
+Fixed:   Savegame power graphs
+
+2007-08-07 (Revision 787)
+Changed:  Replaced the old ConstDB by a new one.
+Changed:  Harappan flag now is pakistan's flag.
+Changed:  Jamaica headers that mapped to Poland are now labeled as Poland
 Added:    Jamaica is now a civ (as it was in CTP1)
 Fixed:    Crash caused by CitySpecialIcons (will rework)
 Fixed:    Tribe screen no longer shows barbarians and works
 Changed:  Greek flag is now from the 19th century (easier to see)
-Changed:  STrategies and Goals.txt now use Protra's update
+Changed:  Strategies.txt and Goals.txt to modify the AI
 
-2007-08-02 (revision 785)
-Changed:  Empire selection start up now a list box
-Fixed:    Const.txt compatibility for scenarios
+2007-08-02 (Revision 785)
+Changed:  Empire selection start up now with a list box
 Fixed:    Multiplayer window loads (but lobby cant be reached)
-Fixed:    Turn year length mechanism for scenarios
-Deleted:  ShowCityIcon from Building and Wonder DB replaced with new flags
-Added:    New Database Flags
-- BuildingDB
-   ShowCityIconTop      Displays this icon on top of a city graphic
-   ShowCityIconBottom   Icon displayed under city graphic
-- WonderDB
-   ShowCityIconTop      Displays this icon on top of a city graphic
-   ShowCityIconBottom   Icon displayed under city graphic
+Fixed:    Custom scenario turns from turnlength.txt are shown again.
+Deleted:  ShowCityIcon from BuildingDB and WonderDB replaced with new flags
+Added:    New database flags for modders:
+- BuildingDB:
+   ShowCityIconTop      Building displays this icon on the map above its city
+   ShowCityIconBottom   Building displays this icon on the map below its city
+- WonderDB:
+   ShowCityIconTop      Wonder displays this icon on the map above its city
+   ShowCityIconBottom   Wonder displays this icon on the map below its city
 
-2007-07-25 (revision 773)
+2007-07-25 (Revision 773)
 Changed:  TargetCivilians flag now uses a probability like normal bombard
 Changed:  PrecisionStrike flag now uses a probability like normal bombard
-Added:    Cities on a trade route that does not belong to the city owner
-          or the route destination is not the city owner receives gold
+Added:    Cities on a trade route receive gold if neither the trade route
+          belongs to the city owner nor the destination city is owned by
+          the same civilisation
 Changed:  Byzantine diploflag and unit flag
 Fixed:    Error in implementation of Elite and Leader code
-Added:    Additional religion icons for modders
-Fixed:    crash caused by unused memory
-Added:    Japanese missing LDLs
+Added:    Religion icons for modders
 Changed:  Difficulty and Risk level new game pop-up is now a listbox
-Added:    New ConstDB Properties                                                      
-- ConstDB
-   CITY_ON_TRADE_ROUTE_BONUS  modders can specify what percent of trade          
-                        route goes to a city that it passes through
-   CAPTURED_CITY_KILL_POP modders can specify how many civilians killed 
+Added:    New database flags for modders:
+- ConstDB:
+   CITY_ON_TRADE_ROUTE_BONUS
+                        Const gives a city a trade route bonus if such a trade
+                        route passes through the city
+   CAPTURED_CITY_KILL_POP
+                        Const specifies how many civilians are killed
                         when city is captured
 
-
-2007-06-09 (revision 745)
+2007-06-09 (Revision 745)
 Changed:  The Army stacking flag is no longer displayed above the health bar
-Added:    OnePerCiv buildings are destroyed if city owning it is captured
-Added:	  Elite Status, a promotion above Veteran Status, has double
+Added:    OnePerCiv buildings are destroyed if their city is captured
+Added:    Elite Status, a promotion above Veteran Status, has double
           Veteran coefficient in combat
-Added:    Leaders in a stack double defense or offensive boni
-Added:    Chance for a Leader to appear if an elite unit wins a battle
-Fixed:    Slic Messages for Guerrilla Spawn
-Fixed:    Slic Messages for Insurgent Spawn
-Fixed:    Slic Messages for Sinking Ships
-Fixed:    MaxCityWonders, it now works as intended                               
-Fixed:    MaxCityBuildings, it now works as intended
-Added:    New ConstDB Properties                                                      
-- ConstDB
-   COMBAT_ELITE_CHANCE  modders can specify the chance a veteran unit          
-                        will be promoted to elite status
-   COMBAT_LEADER_CHANCE modders can specify the chance a leader will appear
-			if elite unit is victorious in combat
-Added:    New Database Flags
-- BuildingDB
-   EnablesAllVeterans   Any units built in a city with a building having 
-                        this flag will have Veteran status
-   EnablesSeaVeterans   Any Sea units built in a city with a building having 
-                        this flag will have Veteran status
-   EnablesLandVeterans  Any Land units built in a city with a building having 
-                        this flag will have Veteran status
-   EnablesAirVeterans   Any Air units built in a city with a building having 
-                        this flag will have Veteran status
+Added:    Stacked Leaders double defense or offensive boni
+Fixed:    Slic Message for Guerrilla Spawn
+Fixed:    Slic Message for Insurgent Spawn
+Fixed:    Slic Message for Sinking Ships
+Fixed:    MaxCityWonders works now as intended
+Fixed:    MaxCityBuildings works now as intended
+Added:    New database flags for modders:
+- ConstDB:
+   COMBAT_ELITE_CHANCE  Const gives a chance a veteran unit
+                        is promoted to elite status
+   COMBAT_LEADER_CHANCE Const gives a chance that a leader appears
+                        if an elite unit is victorious in combat
+- BuildingDB:
+   EnablesAllVeterans   Building makes any unit built in a city a veteran.
+   EnablesSeaVeterans   Building makes any sea unit built in a city a veteran.
+   EnablesLandVeterans  Building makes any land unit built in a city a veteran.
+   EnablesAirVeterans   Building makes any air unit built in a city a veteran.
 
-2007-05-19 (revision 735)
+2007-05-19 (Revision 735)
 Disabled: Sectarian happiness functionality has been removed
-Fixed:    Unit Upgrading now updates the unit type                     
+Fixed:    Unit Upgrading now updates the army movement type
 
-2007-05-16 (revision 732)
-Disabled: MaxCityWonders because it caused crash
-Disabled: MaxCityBuildings because it caused crash
-Added:    New Database Flags
-- WonderDB, UnitDB, BuildingDB
-   NeedsFeatToBuild     Now only checks if player has feat not all players     
-   NeedsAnyPlayerFeatToBuild 
-                        Allows construction regardless which player achieved 
-		        feat
-- WonderDB
-   ProhibtSlavers       Prevents addition slaving units to be built 
+2007-05-16 (Revision 732)
+Disabled: MaxCityWonders because it caused a crash
+Disabled: MaxCityBuildings because it caused a crash
+Added:    New database flags for modders:
+- BuildingDB:
+   NeedsFeatToBuild     Building needs feat achived by owner to be built.
+   NeedsAnyPlayerFeatToBuild
+                        Building needs feat achived by any player to be built.
+- UnitDB:
+   NeedsFeatToBuild     Unit needs feat achived by owner to be built.
+   NeedsAnyPlayerFeatToBuild
+                        Unit needs feat achived by any player to be built.
+- WonderDB:
+   NeedsFeatToBuild     Wonder needs feat achived by owner to be built.
+   NeedsAnyPlayerFeatToBuild
+                        Wonder needs feat achived by any player to be built.
+- WonderDB:
+   ProhibtSlavers       Wonder prevents building of additional slaver units.
 Added:    New Options
 - Rules Screen
-   No AI City Limit     Government City Limit happiness effect for AI can 
+   No AI City Limit     Government City Limit happiness effect for AI can
                         be toggled on/off
-   No City Limit        Government City Limit happiness effect can be 
+   No City Limit        Government City Limit happiness effect can be
                         toggled on/off
 
-2007-05-01  (revision 726)
-Fixed:    Humans playing as Barbarians cannot declare war from diplomanager 
-Changed:  Alex Scenario now uses improved AI strategies         
-Fixed:    Alex scenario building tileimps now have sound          
-Fixed:    Samurai Scenario -should now be playable       
-Fixed:    Hidden entries are no longer displayed in the Great Library                     
-Fixed:    Error where the next entry would be displayed  
-Fixed:    Only one worker is subtracted when a settler is built (instead of two) 
-Added:    Ruins Tileimp to be used with profile option of razed cities 
-          leaving a ruin on the map  # So many spaces here
-Added:    New ConstDB Properties                                                      
-- ConstDB
-   MAX_CITY_WONDERS     modders can specify the number of wonders a city can          
-                        build    # So many spaces here
-   MAX_CITY_BUILDINGS   modders can specify how many buildings a city may build       # Even putting this on the same indent level like a database doens't turn this into a database. #Not sure what you are getting at, what do you want to do with it?
-Added:    New Database Flags
-- WonderDB
-BuildingEffectEverywhere same as BuildingEverywhere but flag is more                  # So it is a plain simple copy of it? It's even not a synonym for the same flag. For some reason I added that aka (as known as) keyword to *.cdb files. #this flag help distinguish it from ACtualBuildingEverywhere. So should I delete this then?
+2007-05-01 (Revision 726)
+Fixed:    Humans playing as Barbarians cannot declare war from diplomanager.
+Changed:  The Alexander scenario now uses an improved AI strategies.txt.
+Fixed:    In the Alexander scenario TerrainImprovemnts have now a sound.
+Fixed:    The Samurai Scenario should now be playable.
+Fixed:    The Great Library search function does not find hidden database
+          records anymore.
+Fixed:    Only one worker is subtracted when a settler is built (instead of two)
+Added:    Profile option that make razed cities to leave a ruin
+          TerrainImprovement
+Added:    New database flags for modders:
+- ConstDB:
+   MAX_CITY_WONDERS     Const sets the max. number of wonders a city can build.
+   MAX_CITY_BUILDINGS   Const sets the max. number of buildings a city can build.
+- WonderDB:
+   BuildingEffectEverywhere
+                        same as BuildingEverywhere but flag is more                  # So it is a plain simple copy of it? It's even not a synonym for the same flag. For some reason I added that aka (as known as) keyword to *.cdb files. #this flag help distinguish it from ACtualBuildingEverywhere. So should I delete this then?
                         explanatory      # This does not have the same effect. - Its a copy of it. ActualBuildingEverywhere is the other one #
-- TerrainImprovementDB
-   RiverOnly            TerrainImprovement can only be built on a river 
-   IsUrban              TerrainImprovement is identified as urban                                
-   IsIrrigation         TerrainImprovement is identified as irrigation                            
-   NeedsIrrigation      TerrainImprovement must be build one square from 
-                        IsIrrigation TerrainImprovements or a river
-   NextToCity           TerrainImprovement must be built 1 square next to city
-   IsWonder             TerrainImprovement can only be built once                                
-                        It must be built in a square owned by                    
-                        the city that built the wonder          
+- TerrainImprovementDB:
+   RiverOnly            TerrainImprovement can only be built on a river.
+   IsUrban              TerrainImprovement is urban.
+   IsIrrigation         TerrainImprovement is irrigation.
+   NeedsIrrigation      TerrainImprovement must be build one square from
+                        IsIrrigation TerrainImprovements or a river.
+   NextToCity           TerrainImprovement must be built 1 square next to a city
+   IsWonder             TerrainImprovement can only be built once.
+                        It must be built in a square owned by
+                        the city that built the wonder.
 Added:    New Options
 - Rules Screen
-   AImilitia            Empty AI cities generate a cheap unit at the 
+   AImilitia            Empty AI cities generate a cheap unit at the
                         beginning of a turn
-   No AI gold deficit   AI ctites don't drop below 0 
-   No AI production deficit  
-                        AI production never drops below 0
-   Gold per city        cities cost gold multiplied by the number of city limit
-   Gold per unit        units cost gold each turn multiplied by wage rate
-   Aicitydefense        AI cities have a defense increase based on population 
+   No AI gold deficit   AI ctity gold imcome does not drop below 0
+   No AI production deficit
+                        AI city production does not drop below 0
+   Gold per city        City gold costs multiplied by the city limit
+   Gold per unit        Unit gold costs per turn multiplied by the wage rate
+   Aicitydefense        AI cities have a defense increase based on population
                         size
 - Scenario Editor
    DebugAI Button       toggles showing the AI unit's goals
 - Gameplay Screen
-   ShowEnemyHealth      toggles shoowing AI health bar
+   ShowEnemyHealth      toggles showing AI health bar
    ShowDebugAI          toggles showing the AI unit's goals
 
-2007-04-09 (revision 719)
+2007-04-09 (Revision 719)
 Fixed:    Bug that made human units automatically upgrade
-Fixed:    Bug that prevent the disbanding of units in neutral territory
-Fixed:    Diplomacy screen size that was too large
-Added:    Nation Flags to replace diploamt flags for diplomacy
+Fixed:    Bug that prevented disbanding of units in neutral territory
+Fixed:    Diplomacy screen size was reduced
+Added:    Nation Flags replaced diploamacy leader photographs
 Changed:  BarbarianSpawnBarbarian code to limit Barbarians overrunning
           the entire map
-Added:    DebugAI profile option - display AI goals for units
+Added:    DebugAI profile option - displays AI goals for units
 
-2007-03-22 (revision 707)
-Fixed:    Rules screen enabled with new play options                                                 
-Added:    Affects of SectarianHappiness value displays in CityWindow
+2007-03-22 (Revision 707)
+Fixed:    Rules screen enabled with new play options
+Added:    Effects of SectarianHappiness are displays in the CityWindow
 Added:    New Options
 - Rules Screen
-   One City Challenge   Human player can't build settlers
+   One City Challenge   Human player cannot build settlers
    City Capture Options slic message with option on/off
-   Revolt Insurgents    revolting cities spawn barbarians 
-   RevoltCasualties     revolting cities lose random population
-   BarbarianSpawnBarbarian risk dependent barbarians spawn more
-   SectarianHappiness   more unhappiness in cities of a different style
+   Revolt Insurgents    Revolting cities spawn Barbarians
+   RevoltCasualties     Revolting cities lose random population
+   BarbarianSpawnBarbarian
+                        Barbarian units spawn more Barbarian units (risk dependent)
+   SectarianHappiness   Causes more unhappiness in cities of a different style
 - Graphics screen
-   Smooth Borders       show original pixel line or border icon  
-- Gameplay Screen 
-   City Capture Options slic message with can be toggled on/off
+   Smooth Borders       Show original pixel line or border icons
+- Gameplay Screen
+   City Capture Options slic message can be toggled on/off
 Changed:    Database flags for modders:
-- TerrainImprovementDB
+- TerrainImprovementDB:
    BonusFoodExport      TerrainImprovement randomly generates a food value that
                         is divided equally to each city
    BonusGoldExport      TerrainImprovement randomly generates a gold value that
                         is divided equally to each city
 
-2007-03-12 (revision 705)
+2007-03-12 (Revision 705)
 Fixed:    Crash caused by SectarianHappiness because the founder civ was 
           destroyed
 Fixed:    Crash caused by Sink code
-Added:    Graphic window option to show/hide Army Names
-Added:    Graphics window option to show/hide nation flags
+Added:    Graphic window option to show army names
+Added:    Graphics window option to show civilisation flags
 Added:    New strategies.txt that emphasizes more city captures
 Fixed:    Location of Nation Flag is now right of the herald
 Deleted:  Old IsReligion# system
 
 2007-03-01 (Revision 693)
-Added:    Hostile terrain hp cost is now based on barbarian risk 
-Fixed:    SpawnBarbarian code for entrenched units that can spawnbarbarians
-Fixed:    Number of flags (restored them)
-Added:    New userprofile option option to show/hide civflag graphics show up
-          under the playercolor flag   
-Fixed:    Civ flags located below player color flag
-Added:    TerraformOcean button in tile bank (restored it) this allows modders 
-          up to 60 of the 64 available tileimp slots (previously only 48/60 
-          available)
-Added:    Slic messages for sinking ship (again), hostile terrain, insurgent 
+Added:    Hostile terrain healthpoint cost is now based on barbarian risk.
+Fixed:    SpawnBarbarian code for entrenched units that can spawnbarbarians.
+Added:    New userprofile option to show civflags under the player color flag.
+Fixed:    Civ flags moved below player color flag.
+Added:    TerraformOcean button in tile bank. This allows modders to use
+          up to 60 of the 64 available tileimp slots (previously only 48/60)
+Added:    Slic messages for sinking ship (again), hostile terrain, insurgent
           spawn, guerrilla spawn
-Added:    New concept of energy supply and demand. It calculates a ratio used 
+Added:    New concept of energy supply and demand. It calculates a ratio used
           as a modifier for gold and production.
-Added:    New userprofile option to disable the new energy supply/demand 
+Added:    New userprofile option to disable the new energy supply/demand
           concept.
-Added:    New database flags for modders to enable the new energy 
+Added:    New database flags for modders to enable the new energy
           supply/demand concept:
-- TerrainImprovementDB
+- TerrainImprovementDB:
    ProducesEnergy       TerrainImprovement generates energy
    EnergyHunger         TerrainImprovement consumes energy
-- BuildingDB
+- BuildingDB:
    ProducesEnergy       Building generates energy
    EnergyHunger         Building consumes energy
    ProducesEnergyPerPop Building generates energy per citizen
    EnergyHungerPerPop   Building generates energy per citizen
-- WonderDB
+- WonderDB:
    ProducesEnergy       Wonder generates energy
    EnergyHunger         Wonder consumes energy
    ProducesEnergyPerPop Wonder generates energy per citizen
    EnergyHungerPerPop   Wonder generates energy per citizen
-- UnitDB
+- UnitDB:
    ProducesEnergy       Unit generates energy
    EnergyHunger         Unit consumes energy
 
@@ -271,28 +275,28 @@ Added:     Civilization Flags for Units (most artwork from Civ2 modders Michael
 Added:     Unit Hidden Nationality - these units are displayed as barbarians
 
 2007-02-01 (Revision 687)
-Added:     Religious City Icons (up to 10 Religions) appear if building has 
+Added:     Religious City Icons (up to 10 Religions) appear if building has
            IsReligion1(or 2 up to 10)
-Added:     National Borders are now displayed with icons for smooth appearance. 
-Changed:   Aligned Cityname, population rectangle, and turns to population 
+Added:     National Borders are now displayed with icons for smooth appearance.
+Changed:   Aligned Cityname, population rectangle, and turns to population
            growth rectangle.
 Changed:   Next Pop rectangle is now black like the city name to differentiate
            it from City Population.
-Added:     Player Capitols now have a star Icon.
-Fixed:     Implemented HasAirport Icon.
+Added:     Player Capitals now have a star icon on the map.
+Fixed:     Implemented HasAirport icon.
 
 2006-10-05 (Revision 647)
 Fixed:    No new civ message if the city in questions joins another civ.
 Added:    New database flags for modders:
-- TerrainImprovementDB
+- TerrainImprovementDB:
    BonusScience         TerrainImprovement gives bonus science to its city.
    HappyInc             TerrainImprovement increases happiness of its city.
-- WonderDB
-   ActualBuildingEverywhere  
+- WonderDB:
+   ActualBuildingEverywhere
                         Wonder creates this building everywhere.
-- BuildingDB
+- BuildingDB:
    CreatesMiltiaUnit    Building creates militia unit.
-- DifficultyDB
+- DifficultyDB:
    AIMilitiaUnit        Difficulty creates militia units in empty AI cities.
    RevoltInsurgents     Difficulty creates Barbarians around rioting cities in
                         dependence on RiskDB BabarianChance.
@@ -309,15 +313,15 @@ Fixed:    Missing wonder started messages
 Fixed:    Broken city happiness display
 Fixed:    Autosave - Quicksave permutation
 Added:    New database flags for modders:
-- DifficuiltyDB
+- DifficuiltyDB:
    AIFreeUpgrade        Difficulty allows the AI to upgrade its units for free.
    AINoShieldHunger     Difficulty maintains AI armies without shields.
    AINoGoldHunger       Difficulty maintains AI armies without gold.
    GoldPerUnitSupport   Difficulty adds this * GoldHunger * wages * readiness per unit.
    GoldPerCity          Difficulty adds this * cities * CityLimit
-- TerrainImprovementDB
+- TerrainImprovementDB:
    CanBuildWasteland    TerrainImprovement can be built in unowned territory.
-   CanBuildAlly         TerrainImprovement can be built in terrotory of your 
+   CanBuildAlly         TerrainImprovement can be built in terrotory of your
                         allys. TerrainImprovements with move cost reduction do
                         not need this flag, because they can be built in ally
                         territory anyway.
@@ -326,7 +330,7 @@ Added:    New database flags for modders:
 Fixed:    Units can now sink by using the ConstDB chance value.
 Changed:  AIs war declaration messages have now pop-up status. (Pretty anoying)
 Added:    AutoExpireTreatyBase to userprofile.txt to set the turns when treaties
-          expire. Actually this is a cheat but necessary as long expiration is 
+          expire. Actually this is a cheat but necessary as long expiration is
           hard encoded.
 Fixed:    Crash in games with more players than governments is the GovernmentDB.
 Changed:  gw.txt has a new alternative format.
@@ -1000,7 +1004,7 @@ Added: MAX_MATCH_LIST_CYCLES flag to sonst.txt of the Magnificant Samurai Scenar
   it work with this version of CTP2.
 Possible crash fix: cpuinf32.dll is no longer used to examine the CPU, didn't work on non 
   intel CPUs anyway.
-Improvement: Have the great library start with something more useful than Advanced Infantry
+Improved: Have the great library start with something more useful than Advanced Infantry
   Tactics.
 Fixed: A number of SLIC functions that used calls with inappropriate arguments.
 Fixed: Great library data between players in hotseat games is now cleared.

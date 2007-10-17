@@ -367,11 +367,11 @@ WONDER_ZERO_CRIME_BILL {
 # actually move this to the religion stuff database.
 # We should not occupy a wonder slot.
 WONDER_SHRINE_Z {
-   DefaultIcon ICON_IMPROVE_SHRINE_Z
+   DefaultIcon ICON_IMPROVE_SHRINE
    Description DESCRIPTION_IMPROVE_SHRINE
    Movie MOVIE_WONDER_HAGIA_SOPHIA
    ObsoleteGovernmentType GOVERNMENT_COMMUNISM
-   #EnableAdvance ADVANCE_SUBNEURAL_ADS
+   EnableAdvance ADVANCE_SUBNEURAL_ADS
 #   NeedsFeatToBuild FEAT_ADVANCE_HINDU # Add this to feat database if you want to use it.
    ProductionCost 1000
    IsHolyCity
@@ -386,5 +386,6 @@ WONDER_SHRINE_Z {
    IncHappinessEmpire 0
    ActualBuildingEverywhere IMPROVE_SHRINE_Z
    GoldPerBuildingAnywhere 0
+   GLHidden
 }
 ############################################################

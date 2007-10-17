@@ -1142,7 +1142,7 @@ SpriteFile::Write_v20(UnitSpriteGroup *s)
 	fpos_t const    start_of_offsets = GetFilePos();
 
 	int  			offset[ACTION_MAX+1];
-    std::fill(offset, offset + ACTION_MAX + 1, -1);
+	std::fill(offset, offset + ACTION_MAX + 1, -1);
 	
 	WriteData((uint8*)offset, sizeof(int) * (ACTION_MAX+1));
 
@@ -1624,7 +1624,7 @@ SPRITEFILEERR
 SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
 {
 	int     offsets[ACTION_MAX+1];
-    ReadData((void *)offsets, sizeof(int) * (ACTION_MAX+1));
+	ReadData((void *)offsets, sizeof(int) * (ACTION_MAX+1));
 
 	int		i;
 	for (i=0; i<ACTION_MAX; i++) 
@@ -1796,10 +1796,10 @@ SPRITEFILEERR SpriteFile::ReadFull_v13(UnitSpriteGroup *s)
 
 SPRITEFILEERR SpriteFile::ReadFull_v20(UnitSpriteGroup *s)
 {
-	int     offsets[ACTION_MAX];
-    ReadData((void *)offsets, sizeof(int) * (ACTION_MAX+1));
+	int     offsets[ACTION_MAX+1];
+	ReadData((void *)offsets, sizeof(offsets));
 
-	uint16	i;
+	uint16 i;
 	for (i=0; i<ACTION_MAX; i++) 
 	{
 		if (offsets[i]>0) 
@@ -1807,7 +1807,7 @@ SPRITEFILEERR SpriteFile::ReadFull_v20(UnitSpriteGroup *s)
 			Sprite *    sprite  = s->GetGroupSprite((GAME_ACTION)i);
 
 			ReadSpriteDataGeneralFull(&sprite);
-		   
+
 			s->SetGroupSprite((GAME_ACTION)i, sprite);
 
 			Anim *      anim    = s->GetGroupAnim((GAME_ACTION)i);
@@ -1820,7 +1820,6 @@ SPRITEFILEERR SpriteFile::ReadFull_v20(UnitSpriteGroup *s)
 		}
 	}
 
-	
 	for (i=0; i<UNITACTION_MAX; i++) 
 		ReadData((void *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
 
@@ -2227,7 +2226,7 @@ SPRITEFILEERR SpriteFile::WriteData(uint32 data)
 	size_t	countWritten = c3files_fwrite((void *)&data, 1, 4, m_file);
 	Assert(countWritten == 4);
 
-    return (countWritten == 4) ? SPRITEFILEERR_OK : SPRITEFILEERR_WRITEERR;
+	return (countWritten == 4) ? SPRITEFILEERR_OK : SPRITEFILEERR_WRITEERR;
 }
 
 
@@ -2236,7 +2235,7 @@ SPRITEFILEERR SpriteFile::ReadData(void *data, size_t bytes)
 	size_t	countRead = c3files_fread(data, 1, bytes, m_file);
 	Assert(countRead == bytes);
 
-    return (countRead == bytes) ? SPRITEFILEERR_OK : SPRITEFILEERR_READERR;
+	return (countRead == bytes) ? SPRITEFILEERR_OK : SPRITEFILEERR_READERR;
 }
 
 fpos_t SpriteFile::GetFilePos(void)
