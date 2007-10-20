@@ -118,8 +118,8 @@ Sprite::~Sprite()
 
 
 
-void Sprite::Load(char *filename) {
-    printf("%s L%d: Doing nothing! Check it!\n", __FILE__, __LINE__);
+void Sprite::Load(char *filename)
+{
 }
 
 
@@ -145,8 +145,6 @@ void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData)
 {
 		
 		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height);
-                printf("%s L%d: StripTIF2Mem %s\n", __FILE__, __LINE__, imageFiles[0][0]);
-		return;
 #if 0
 		
 		if (tif) 

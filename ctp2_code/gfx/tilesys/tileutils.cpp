@@ -70,7 +70,9 @@ Pixel16		g_grayValueR = 0x0025;
 Pixel16		g_grayValueG = 0x0025;
 Pixel16		g_grayValueB = 0x0045;
 
-extern BOOL		g_is565Format;
+Pixel16	*   g_transitions[TERRAIN_MAX][TERRAIN_MAX][k_TRANSITIONS_PER_TILE];
+
+extern sint32		g_is565Format;
 
 Pixel32 *tileutils_LowPassFilter(Pixel32 *image, uint32 width, uint32 height)
 {
@@ -136,7 +138,6 @@ char *tileutils_StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
 Pixel16 *tileutils_TGA2mem(char *filename, uint16 *width, uint16 *height)
 {
 
-	uint16  *buffer;
 
 	int		bpp;
 	int		w, h;
@@ -148,11 +149,12 @@ Pixel16 *tileutils_TGA2mem(char *filename, uint16 *width, uint16 *height)
 		return NULL;
 	}
 
-	buffer = new Pixel16[w * h];
+	Pixel16 *   buffer = new Pixel16[w * h];
 	Load_TGA_File(filename, (uint8 *)buffer, (int)w*sizeof(Pixel16), w, h, NULL, FALSE);
 
 	*width = (uint16)w;
 	*height = (uint16)h;
+
 	return buffer;
 }
 
@@ -160,17 +162,13 @@ Pixel16 *tileutils_TGA2mem(char *filename, uint16 *width, uint16 *height)
 void tileutils_EncodeCopyRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr)
 {
 	Pixel16			pix16;
-	Pixel32			pix32;
 	unsigned char	alpha;
-	int				runLen = 0;
-	Pixel16			footer=0;
-	Pixel16			*headerPtr;
-
-	headerPtr = *outBufPtr;
+	int				runLen      = 0;
+	Pixel16	*       headerPtr   = *outBufPtr;
 	(*outBufPtr)++;
 
 	RGB32Info(**inBuf, &pix16, &alpha);
-	pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
+	Pixel32         pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
 
 	while (pix32 != k_32_BIT_SKIP_PIXEL 
 				&& pix32 != k_32_BIT_SHADOW_PIXEL 
@@ -196,7 +194,7 @@ void tileutils_EncodeCopyRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **out
 	}
 	
 	
-	footer = k_TILE_COPY_RUN_ID << 8 | runLen;
+	Pixel16			footer      = static_cast<Pixel16>(k_TILE_COPY_RUN_ID << 8 | runLen);
 
 	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
@@ -207,17 +205,13 @@ void tileutils_EncodeCopyRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **out
 void tileutils_EncodeColorizeRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr)
 {
 	Pixel16			pix16;
-	Pixel32			pix32;
 	unsigned char	alpha;
-	int				runLen = 0;
-	Pixel16			footer=0;
-	Pixel16			*headerPtr;
-
-	headerPtr = *outBufPtr;
+	int				runLen      = 0;
+	Pixel16	*       headerPtr   = *outBufPtr;
 	(*outBufPtr)++;
 
 	RGB32Info(**inBuf, &pix16, &alpha);
-	pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
+	Pixel32			pix32       = (**inBuf) & k_32_BIT_RGB_MASK;
 	while (pix32 == k_32_BIT_COLORIZE_PIXEL && (*pos < width)) {
 		
 		(*inBuf)++;
@@ -233,7 +227,7 @@ void tileutils_EncodeColorizeRun(Pixel32 **inBuf, int *pos, int width, Pixel16 *
 	}
 	
 	
-	footer = k_TILE_COLORIZE_RUN_ID << 8 | runLen;
+	Pixel16			footer      = static_cast<Pixel16>(k_TILE_COLORIZE_RUN_ID << 8 | runLen);
 
 	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
@@ -244,17 +238,13 @@ void tileutils_EncodeColorizeRun(Pixel32 **inBuf, int *pos, int width, Pixel16 *
 void tileutils_EncodeShadowRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr)
 {
 	Pixel16			pix16;
-	Pixel32			pix32;
 	unsigned char	alpha;
-	int				runLen = 0;
-	Pixel16			footer=0;
-	Pixel16			*headerPtr;
-
-	headerPtr = *outBufPtr;
+	int				runLen      = 0;
+	Pixel16	*       headerPtr   = *outBufPtr;
 	(*outBufPtr)++;
 
 	RGB32Info(**inBuf, &pix16, &alpha);
-	pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
+	Pixel32			pix32       = (**inBuf) & k_32_BIT_RGB_MASK;
 	while (pix32 == k_32_BIT_SHADOW_PIXEL && (*pos < width)) {
 		
 		(*inBuf)++;
@@ -270,7 +260,7 @@ void tileutils_EncodeShadowRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **o
 	}
 	
 	
-	footer = k_TILE_SHADOW_RUN_ID << 8 | runLen;
+    Pixel16         footer      = static_cast<Pixel16>(k_TILE_SHADOW_RUN_ID << 8 | runLen);
 
 	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
@@ -281,13 +271,11 @@ void tileutils_EncodeShadowRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **o
 char tileutils_EncodeSkipRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr)
 {
 	Pixel16			pix16;
-	Pixel32			pix32;
 	unsigned char	alpha;
 	int				runLen = 0;
-	Pixel16			footer=0;
 
 	RGB32Info(**inBuf, &pix16, &alpha);
-	pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
+	Pixel32			pix32   = (**inBuf) & k_32_BIT_RGB_MASK;
 
 	while (pix32 == k_32_BIT_SKIP_PIXEL && (*pos < width)) {
 		
@@ -306,7 +294,7 @@ char tileutils_EncodeSkipRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **out
 	
 	if (runLen < width) {
 		
-		footer = k_TILE_SKIP_RUN_ID << 8 | runLen;
+		Pixel16			footer = static_cast<Pixel16>(k_TILE_SKIP_RUN_ID << 8 | runLen);
 
 		
 		if (*pos >= width) footer |= k_EOLN_ID << 8;
@@ -314,28 +302,22 @@ char tileutils_EncodeSkipRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **out
 		
 		**outBufPtr = footer;
 		(*outBufPtr)++;
+	    return FALSE;
 	} else {
 		
 		return TRUE;
 	}
 
-	return FALSE;
 }
 
 char tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr)
 {
 	Pixel16			pix16;
 	Pixel32			pix32;
-	Pixel32			*scanPtr = scanline;
+	Pixel32	*       scanPtr    = scanline;
 	unsigned char	alpha;
-	int				pos;
-	Pixel16			*startPtr;
+	int				pos         = 0;
 	char			empty = FALSE;
-
-	pos = 0;
-
-	
-	startPtr = *outBufPtr;
 
 	while (scanPtr < (scanline + width)) {
 		pix32 = *scanPtr;
@@ -363,29 +345,25 @@ char tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr)
 
 Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 *size)
 {
-	Pixel32				*srcPixel = buf;
-	Pixel16				*outBuf = new Pixel16[width * height * 2];
-	Pixel16				*table =  new Pixel16[height + 2],
-						*tableStart;
-	Pixel16				*startOfData;
-	Pixel16				*dataPtr, *startDataPtr;
-	char				empty = FALSE;
-	int					firstNonEmpty=-1;
-	unsigned short int *firstNonEmptyPtr;
-	unsigned short int *endLinePtr;
-	int					lastNonEmpty = -1;
+	Pixel32	*               srcPixel            = buf;
+	Pixel16	*               outBuf              = new Pixel16[width * height * 2];
+	Pixel16	*               table               =  new Pixel16[height + 2];
+	Pixel16 *               startDataPtr;
+	char				    empty               = FALSE;
+	int					    lastNonEmpty        = -1;
 
-	
-	firstNonEmptyPtr = tableStart = table;
+    Pixel16 *               tableStart          = table;
+	unsigned short int *    firstNonEmptyPtr    = table;
 	table++;
-	endLinePtr = table;
+	unsigned short int *    endLinePtr          = table;
 	table++;
 
-	startOfData = outBuf;
-	dataPtr = startOfData;
+	Pixel16	*               startOfData         = outBuf;
+	Pixel16 *               dataPtr             = startOfData;
+	int                     firstNonEmpty       = -1;
 
-	firstNonEmpty = -1;
-	for(int y=0; y<height; y++) {
+	for (uint16 y = 0; y < height; y++) 
+    {
 		
 		srcPixel = buf + width * y;
 
@@ -408,7 +386,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 			
             
 			if (firstNonEmpty != -1)
-				*table++ = (unsigned) -1;
+				*table++ = (Pixel16) -1;
             
 		}
 	}
@@ -436,15 +414,11 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 void tileutils_EncodeCopyRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr,
 							   BOOL sourceDataIs565)
 {
-	Pixel16			pix16;
-	int				runLen = 0;
-	Pixel16			footer=0;
-	Pixel16			*headerPtr;
-
-	headerPtr = *outBufPtr;
+	int			runLen      = 0;
+	Pixel16	*   headerPtr   = *outBufPtr;
 	(*outBufPtr)++;
 
-	pix16 = (**inBuf);
+	Pixel16		pix16       = (**inBuf);
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 
@@ -473,7 +447,7 @@ void tileutils_EncodeCopyRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 	}
 	
 	
-	footer = k_TILE_COPY_RUN_ID << 8 | runLen;
+	Pixel16			footer  = static_cast<Pixel16>(k_TILE_COPY_RUN_ID << 8 | runLen);
 
 	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
@@ -484,15 +458,11 @@ void tileutils_EncodeCopyRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 void tileutils_EncodeColorizeRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr,
 								   BOOL sourceDataIs565)
 {
-	Pixel16			pix16;
-	int				runLen = 0;
-	Pixel16			footer=0;
-	Pixel16			*headerPtr;
-
-	headerPtr = *outBufPtr;
+	int			runLen      = 0;
+	Pixel16 *   headerPtr   = *outBufPtr;
 	(*outBufPtr)++;
 
-	pix16 = (**inBuf);
+	Pixel16		pix16       = (**inBuf);
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 
@@ -512,7 +482,7 @@ void tileutils_EncodeColorizeRun16(Pixel16 **inBuf, int *pos, int width, Pixel16
 	}
 	
 	
-	footer = k_TILE_COLORIZE_RUN_ID << 8 | runLen;
+	Pixel16		footer  = static_cast<Pixel16>(k_TILE_COLORIZE_RUN_ID << 8 | runLen);
 
 	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
@@ -523,15 +493,11 @@ void tileutils_EncodeColorizeRun16(Pixel16 **inBuf, int *pos, int width, Pixel16
 void tileutils_EncodeShadowRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr,
 								 BOOL sourceDataIs565)
 {
-	Pixel16			pix16;
-	int				runLen = 0;
-	Pixel16			footer=0;
-	Pixel16			*headerPtr;
-
-	headerPtr = *outBufPtr;
+	int			runLen      = 0;
+	Pixel16 *   headerPtr   = *outBufPtr;
 	(*outBufPtr)++;
 
-	pix16 = (**inBuf);
+	Pixel16		pix16       = (**inBuf);
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	while (pix16 == k_16_BIT_SHADOW_PIXEL && (*pos < width)) {
@@ -550,7 +516,7 @@ void tileutils_EncodeShadowRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 *
 	}
 	
 	
-	footer = k_TILE_SHADOW_RUN_ID << 8 | runLen;
+	Pixel16		footer      = static_cast<Pixel16>(k_TILE_SHADOW_RUN_ID << 8 | runLen);
 
 	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
@@ -561,11 +527,9 @@ void tileutils_EncodeShadowRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 *
 char tileutils_EncodeSkipRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr,
 							   BOOL sourceDataIs565)
 {
-	Pixel16			pix16;
 	int				runLen = 0;
-	Pixel16			footer=0;
 
-	pix16 = (**inBuf);
+	Pixel16			pix16   = (**inBuf);
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	while (pix16 == k_16_BIT_SKIP_PIXEL && (*pos < width)) {
@@ -586,7 +550,7 @@ char tileutils_EncodeSkipRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 	
 	if (runLen < width) {
 		
-		footer = k_TILE_SKIP_RUN_ID << 8 | runLen;
+	    Pixel16 footer  = static_cast<Pixel16>(k_TILE_SKIP_RUN_ID << 8 | runLen);
 
 		
 		if (*pos >= width) footer |= k_EOLN_ID << 8;
@@ -594,27 +558,21 @@ char tileutils_EncodeSkipRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 		
 		**outBufPtr = footer;
 		(*outBufPtr)++;
+	    return FALSE;
 	} else {
 		
 		return TRUE;
 	}
 
-	return FALSE;
 }
 
 char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPtr, 
 								BOOL sourceDataIs565)
 {
-	Pixel16			pix16;
-	Pixel16			*scanPtr = scanline;
-	int				pos;
-	Pixel16			*startPtr;
-	char			empty = FALSE;
-
-	pos = 0;
-
-	
-	startPtr = *outBufPtr;
+	Pixel16		pix16;
+	Pixel16	*   scanPtr     = scanline;
+	int			pos         = 0;
+	char		empty       = FALSE;
 
 	while (scanPtr < (scanline + width)) {
 		pix16 = *scanPtr;
@@ -643,17 +601,10 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 {
 	Pixel16				*srcPixel = buf;
 	Pixel16				*outBuf = new Pixel16[width * height * 2];
-	Pixel16				*table =  new Pixel16[height + 2],
-						*tableStart;
-	Pixel16				*startOfData;
-	Pixel16				*dataPtr, *startDataPtr;
+	Pixel16				*table =  new Pixel16[height + 2];
+	Pixel16				*startDataPtr;
 	char				empty = FALSE;
-	int					firstNonEmpty=-1;
-	unsigned short int *firstNonEmptyPtr;
-	unsigned short int *endLinePtr;
 	int					lastNonEmpty = -1;
-	
-	
 	
 	BOOL				sourceDataIs565 = FALSE;
 
@@ -665,16 +616,16 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 			sourceDataIs565 = TRUE;
 	}
 
-	
-	firstNonEmptyPtr = tableStart = table;
+	Pixel16 *               tableStart          = table;
+	unsigned short int *    firstNonEmptyPtr    = table;
 	table++;
-	endLinePtr = table;
+	unsigned short int *    endLinePtr          = table;
 	table++;
 
-	startOfData = outBuf;
-	dataPtr = startOfData;
+	Pixel16	*               startOfData         = outBuf;
+	Pixel16 *               dataPtr             = outBuf;
+	int                     firstNonEmpty       = -1;
 
-	firstNonEmpty = -1;
 	for(int y=0; y<height; y++) {
 		
 		srcPixel = buf + (pitch/2) * y;
@@ -683,7 +634,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 
 		
 		empty = tileutils_EncodeScanline16(srcPixel, width, &dataPtr, sourceDataIs565);
-	if (!empty) {
+	    if (!empty) {
 			if (firstNonEmpty == -1) {
 				
 				*firstNonEmptyPtr = y;
@@ -698,7 +649,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 			
             
 			if (firstNonEmpty != -1)
-				*table++ = (unsigned) -1;
+				*table++ = (Pixel16) -1;
             
 		}
 	}
@@ -736,13 +687,13 @@ sint32 tileutils_ConvertPixelFormatFrom565(Pixel16 *data)
 
 	
 	for(sint32 j=start; j<end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
 
 		if ((sint16)table[j-start] == -1) 
 			continue;
 
-		rowData = dataStart + table[j-start];		
+		Pixel16	*   rowData = dataStart + table[j-start];		
+		Pixel16		tag;
+
 		do {
 			tag = *rowData++;
 
@@ -780,13 +731,13 @@ sint32 tileutils_ConvertPixelFormatFrom555(Pixel16 *data)
 
 	
 	for(sint32 j=start; j<end; j++) {
-		Pixel16		*rowData;
-		Pixel16		tag;
 
 		if ((sint16)table[j-start] == -1) 
 			continue;
 
-		rowData = dataStart + table[j-start];		
+		Pixel16	*   rowData = dataStart + table[j-start];		
+		Pixel16		tag;
+
 		do {
 			tag = *rowData++;
 
@@ -827,15 +778,9 @@ void tileutils_DecodeToBuffer(Pixel16 *data, int width, int height)
 	
 	for(int j=start; j<72; j++) {
 		if (table[j-start] != k_EMPTY_TABLE_ENTRY) {		
-			Pixel16		*rowData;
-			Pixel16		tag;
-
-			rowData = dataStart + table[j-start];
+			Pixel16 *   rowData = dataStart + table[j-start];
+			Pixel16		tag     = *rowData++ & 0x0FFF;
 			
-			tag = *rowData++;
-			
-			tag = tag & 0x0FFF;	
-					
 			while ((tag & 0xF000) == 0) {
 				switch ((tag & 0x0F00) >> 8) {
 					case k_TILE_SKIP_RUN_ID	:
@@ -864,14 +809,8 @@ uint16 g_stencilSize = 0;
 
 sint32 tileutils_EncodeStencil(MBCHAR *filename)
 {
-	char	*tif;
 	uint16	width=0, height=0;
-	Pixel32	*ptr;
-	sint32	top, left, right, bottom;
-	sint32	i,j;
-
-	
-	tif = tileutils_TIF2mem(filename, &width, &height);
+	char	*tif    = tileutils_TIF2mem(filename, &width, &height);
 	Assert(tif != NULL);
 	if (tif == NULL) exit(-1);
 
@@ -885,11 +824,14 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 	}
 
 	
-	ptr = (Pixel32 *)tif;
-	top = 9999999;
-	bottom = -1;
-	left = 9999999;
-	right = -1;
+	Pixel32 *   ptr     = (Pixel32 *)tif;
+	sint32      top     = 9999999;
+	sint32      bottom  = -1;
+	sint32      left    = 9999999;
+	sint32      right   = -1;
+	
+	sint32	i,j;
+
 	
 	for (i=0; i<height; i++) {
 		for (j=0; j<width; j++) {
@@ -906,21 +848,16 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 		}
 	}
 
-	RECT stencilRect = {left, top, right, bottom};
+//	RECT stencilRect = {left, top, right, bottom};
 
 	printf("Stencil: left %d top %d right %d bottom %d\n", left, top, right, bottom);
 
 	uint32 accum = 0;
-	sint32 counter = 0;
+//	sint32 counter = 0;
 
-	
-	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) 
-		g_bitsTable[i] = 0;
-
-	
+    std::fill(g_bitsTable, g_bitsTable + k_TILE_PIXEL_HEIGHT, 0);
+    std::fill(g_offsets, g_offsets + k_TILE_PIXEL_HEIGHT * 32, (Pixel16) 0xFFFF); 
 	uint32	bit;
-
-	for (i=0; i<k_TILE_PIXEL_HEIGHT * 32; i++) g_offsets[i] = 0xFFFF;
 
 	uint16	index=0;
 
@@ -945,7 +882,6 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 		accum = 0;
 	}
 
-	FILE *file = NULL;
 
 
 
@@ -953,7 +889,7 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 
 	uint16 tableHeight = k_TILE_PIXEL_HEIGHT;
 
-	file = fopen("source" FILE_SEP "stencil" FILE_SEP "stencil.bin", "wb");
+	FILE *  file = fopen("source" FILE_SEP "stencil" FILE_SEP "stencil.bin", "wb");
 	if (file != NULL) {
 		fwrite((void *)&tableHeight, 1, sizeof(uint16), file);
 		fwrite((void *)g_bitsTable, 1, sizeof(sint32) * k_TILE_PIXEL_HEIGHT, file);
@@ -970,10 +906,7 @@ void tileutils_DumpStencil(MBCHAR *filename)
 	uint32		accum;
 	sint32		i,j;
 	sint32		nudge;
-	FILE		*file;
-
-	
-	file = fopen(filename, "w");
+	FILE *  file = fopen(filename, "w");
 
 	for (i=0; i<48; i++) {
 		accum = g_bitsTable[i];
@@ -1003,17 +936,15 @@ void tileutils_DumpStencil(MBCHAR *filename)
 
 void tileutils_LoadStencil(void)
 {
-	uint16		stencilLen = 0;
-	uint16		tableHeight = 0;
-	FILE		*file;
-
-	file = fopen("source" FILE_SEP "stencil" FILE_SEP "stencil.bin", "rb");
+	FILE *  file    = fopen("source" FILE_SEP "stencil" FILE_SEP "stencil.bin", "rb");
 
 	if (file != NULL) {
+	    uint16		tableHeight = 0;
 		fread((void *)&tableHeight, 1, sizeof(uint16), file);
 
 		fread((void *)g_bitsTable, 1, sizeof(sint32) * k_TILE_PIXEL_HEIGHT, file);
 
+	    uint16		stencilLen = 0;
 		fread((void *)&stencilLen, 1, sizeof(stencilLen), file);
 		g_stencilSize = stencilLen;
 
@@ -1165,12 +1096,9 @@ Pixel16 *tileutils_LoadStencilImage(uint16 from, uint16 to)
 {
 	Pixel16		*data = new Pixel16[g_stencilSize];
 	MBCHAR		fname[_MAX_PATH];
-	FILE		*file;
-
-
 	sprintf(fname, "output" FILE_SEP "xitions" FILE_SEP "gtft%.2d%.2d.bin", from, to);
 
-	file = fopen(fname, "rb");
+	FILE *      file = fopen(fname, "rb");
 	if (file != NULL) {
 		fread((void *)data, 1, g_stencilSize * sizeof(Pixel16), file);
 		fclose(file);
@@ -1182,19 +1110,14 @@ Pixel16 *tileutils_LoadStencilImage(uint16 from, uint16 to)
 Pixel16 *tileutils_MakeTransition1(Pixel16 *sourceStencil)
 {
 	sint32		i,j;
-	sint32		bottom;
 	Pixel16		pix;
-	Pixel16		*data, *dataPtr;
 	uint32		accum;
 	uint16		off;
 	sint32		rowIndex;
 
-	
-
-	data = new Pixel16[g_stencilSize];
-	dataPtr = data;
-
-	bottom = k_TILE_PIXEL_HEIGHT-1;
+	Pixel16 *   data    = new Pixel16[g_stencilSize];
+	Pixel16 *   dataPtr = data;
+	sint32      bottom  = k_TILE_PIXEL_HEIGHT-1;
 
 	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		accum = g_bitsTable[bottom-i];
@@ -1219,19 +1142,14 @@ Pixel16 *tileutils_MakeTransition1(Pixel16 *sourceStencil)
 Pixel16 *tileutils_MakeTransition2(Pixel16 *sourceStencil)
 {
 	sint32		i,j,k;
-	sint32		bottom;
 	Pixel16		pix;
-	Pixel16		*data, *dataPtr;
 	uint32		accum;
 	uint16		off;
 	sint32		rowIndex;
 
-	
-
-	data = new Pixel16[g_stencilSize];
-	dataPtr = data;
-
-	bottom = k_TILE_PIXEL_HEIGHT-1;
+	Pixel16	*   data    = new Pixel16[g_stencilSize];
+	Pixel16 *   dataPtr = data;
+	sint32      bottom  = k_TILE_PIXEL_HEIGHT-1;
 
 	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		accum = g_bitsTable[bottom-i];
@@ -1265,15 +1183,12 @@ Pixel16 *tileutils_MakeTransition3(Pixel16 *sourceStencil)
 {
 	sint32		i,j,k;
 	Pixel16		pix;
-	Pixel16		*data, *dataPtr;
 	uint32		accum;
 	uint16		off;
 	sint32		rowIndex;
 
-	
-
-	data = new Pixel16[g_stencilSize];
-	dataPtr = data;
+	Pixel16 *   data    = new Pixel16[g_stencilSize];
+	Pixel16 *   dataPtr = data;
 
 	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		accum = g_bitsTable[i];
@@ -1307,11 +1222,9 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 {
 	uint32		accum;
 	sint32		i,j;
-	FILE		*file;
 	sint32		index;
+	FILE *      file = fopen(filename, "w");
 
-	
-	file = fopen(filename, "w");
 
 	fprintf(file, "\n Transition 0\n\n");
 	for (i=0; i<48; i++) {
@@ -1377,7 +1290,6 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 	fclose(file);
 }
 
-Pixel16		*g_transitions[TERRAIN_MAX][TERRAIN_MAX][k_TRANSITIONS_PER_TILE];
 
 sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 {
@@ -1518,7 +1430,6 @@ BaseTile	*g_baseTiles[k_MAX_BASE_TILES];
 
 void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL useT0, BOOL useT1, BOOL useT2, BOOL useT3)
 {
-	Pixel16		*bork;
 	sint32		x,y;
 	sint32		startX, endX;
 
@@ -1528,18 +1439,15 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 	sint32		accumIndex = 0;
 	sint32		accumCount;
 	uint32		accum = 0;
-	Pixel16		*tileData;
-	Pixel16		*tileDataPtr;
-	Pixel16		*tileImage;
 	uint16		width, height;
 
-	char		*tif;
+
+	Pixel16 *   bork = tileutils_CreateBorkBork();
+
 	MBCHAR		filename[_MAX_PATH];
+	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%.4d.tif", ageChar, tileNum);
 
-	bork = tileutils_CreateBorkBork();
-
-	sprintf(filename, "source" FILE_SEP "basetiles" FILE_SEP "GT%cB%4d.tif", ageChar, tileNum);
-
+	char		*tif;
 	if (baseType == TERRAIN_WATER_BEACH) {
 		
 		tif = tileutils_StripTIF2Mem(filename, &width, &height);
@@ -1556,7 +1464,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 		exit(-1);
 	}
 
-	tileImage = RGB32ToRGB16(tif, width, height);
+	Pixel16 *   tileImage = RGB32ToRGB16(tif, width, height);
 
 	for (sint32 i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		accumList[i][0] = 0;
@@ -1564,9 +1472,9 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 		accumList[i][2] = 0;
 	}
 
-	uint32 tileDataLen = (k_TILE_PIXEL_WIDTH * k_TILE_PIXEL_HEIGHT)/2 + k_TILE_PIXEL_HEIGHT;
-	tileData = new Pixel16[tileDataLen];
-	tileDataPtr = tileData;
+	uint32      tileDataLen = (k_TILE_PIXEL_WIDTH * k_TILE_PIXEL_HEIGHT)/2 + k_TILE_PIXEL_HEIGHT;
+	Pixel16 *   tileData    = new Pixel16[tileDataLen];
+	Pixel16 *   tileDataPtr = tileData;
 
 	sint32 len = 0;
 	for (y=0; y<k_TILE_PIXEL_HEIGHT; y++) {
@@ -1652,8 +1560,8 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 
 
-	
-	baseTile->SetTileDataLen(len*2);
+	Assert(len >= 0);
+	baseTile->SetTileDataLen(static_cast<uint16>(len*2));
 
 	
 	Pixel16		*dataCopy = new Pixel16[len];
@@ -1793,7 +1701,6 @@ void tileutils_EncodeTileset(MBCHAR *filename)
 
 sint32 tileutils_ParseTileset(MBCHAR *filename)
 {
-	Token			*theToken=NULL; 
 	MBCHAR			scriptName[_MAX_PATH];
 	BOOL			done = FALSE;
 	sint16			*transforms[k_MAX_TRANSFORMS];
@@ -1803,7 +1710,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 	uint16			megaTileLengths[k_MAX_MEGATILES];
 	MegaTileStep	megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
 
-	sint32			i,j,k;
+	sint32			j,k;
 	MBCHAR			ageChar = 'f';
 	uint16			numRiverTransforms = 0;
 	uint16			numTransforms = 0;
@@ -1816,7 +1723,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 	printf("\nParsing Tileset Script: '%s'\n", scriptName);
 
-	theToken = new Token(scriptName, C3DIR_SPRITES); 
+	Token *         theToken = new Token(scriptName, C3DIR_SPRITES); 
 	Assert(theToken); 
 	
 	if (!theToken) return FALSE; 
@@ -1885,18 +1792,15 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				theToken->Next();
 				theToken->GetString(configStr);
 
-				uint16			len;
-				
-				len = strlen(configStr);
+                size_t len = strlen(configStr);
 
-				megaTileLengths[numMegaTiles] = len;
+				megaTileLengths[numMegaTiles] = static_cast<uint16>(len);
 
-				MegaTileStep	*steps = new MegaTileStep[len];
-
-				for (i=0; i<len; i++) {
-					uint8		dir = 0;
-
+				for (size_t i = 0; i < len; i++) 
+                {
 					if (!token_ParseKeywordNext(theToken, TOKEN_TILESET_MEGATILE_INFO)) return FALSE;
+
+					uint8		dir = 0;
 
 					switch (configStr[i]) {
 					case k_MEGATILE_DIRECTION_CHAR_X : dir = k_MEGATILE_DIRECTION_X; break;
@@ -1938,13 +1842,13 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 			{
 				theToken->Next();
 				theToken->GetNumber(tmp);
-				sint32 transformNum = tmp;
+//				sint32 transformNum = tmp;
 
 				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
 
-				sint16	*transform = new sint16[k_TRANSFORM_SIZE];
+				sint16	*   transform = new sint16[k_TRANSFORM_SIZE];
 
-				
+				size_t      i;
 				for (i=0; i<k_TRANSFORM_SIZE; i++) 
 					transform[i] = k_TRANSFORM_TO_LIST_ID;
 
@@ -2019,7 +1923,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 				sint16	*transform = new sint16[k_RIVER_TRANSFORM_SIZE];
-				for (i=0; i<k_RIVER_TRANSFORM_SIZE-1; i++) {
+				for (size_t i = 0; i<k_RIVER_TRANSFORM_SIZE-1; i++) {
 					theToken->Next();
 					theToken->GetNumber(tmp);
 					transform[i] = (sint16)tmp;
@@ -2061,7 +1965,6 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 	delete theToken;
 
 	
-	FILE	*tfile;
 	MBCHAR	fname[_MAX_PATH];
 
 	printf("\nWriting Tileset: ");
@@ -2072,7 +1975,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 		sprintf(fname, "output" FILE_SEP "gtset555.til");
 	}
 
-	tfile = fopen(fname, "wb");
+	FILE *  tfile = fopen(fname, "wb");
 	if (tfile) {
 		
 		fwrite((void *)&numTransforms, 1, sizeof(uint16), tfile);
@@ -2080,7 +1983,8 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 		
 		if (numTransforms > 0) {
 			
-			for (i=0; i<numTransforms; i++) {
+			for (size_t i = 0; i < numTransforms; i++) 
+            {
 				fwrite((void *)transforms[i], 1, sizeof(sint16)*k_TRANSFORM_SIZE, tfile);
 
 				delete[] transforms[i];
@@ -2095,9 +1999,8 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 		
 		if (numTransitions > 0) {
 			uint32		transitionCount = 0;
-			uint32		transitionSize = 0;
 
-			
+			size_t  i;
 			for (i=0; i<TERRAIN_MAX; i++) {
 				for (j=0; j<TERRAIN_MAX; j++) {
 					if (g_transitions[i][j][0] != NULL)
@@ -2109,7 +2012,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 			fwrite((void *)&transitionCount, 1, sizeof(uint32), tfile);
 
 			
-			transitionSize = g_stencilSize * sizeof(Pixel16);
+			uint32  transitionSize = g_stencilSize * sizeof(Pixel16);
 			fwrite((void *)&transitionSize, 1, sizeof(uint32), tfile);
 
 			
@@ -2137,7 +2040,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 		if (numBaseTiles > 0) {
 			uint32		baseTileCount = 0;
 
-			
+			size_t i;
 			for (i=0; i<k_MAX_BASE_TILES; i++) {
 				if (g_baseTiles[i] != NULL)
 					baseTileCount++;
@@ -2148,24 +2051,16 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 			for (i=0; i<k_MAX_BASE_TILES; i++) {
 				if (g_baseTiles[i] != NULL) {
 					uint16		tNum = (uint16)i;
-					uint8		baseType;
-					BOOL		use;
-
-					Pixel16		*tileData;
-
 					fwrite((void *)&tNum, 1, sizeof(uint16), tfile);
 
-					baseType = (uint8)g_baseTiles[i]->GetBaseType();
+					uint8   baseType = (uint8)g_baseTiles[i]->GetBaseType();
 					fwrite((void *)&baseType, 1, sizeof(uint8), tfile);
 
 					uint8 flag = 0;
-
-					
-					for(j=0; j<k_TRANSITIONS_PER_TILE; j++) {
-						use = (BOOL)g_baseTiles[i]->GetTransitionFlag((uint16)j);
-						if (use)
+					for (j = 0; j < k_TRANSITIONS_PER_TILE; j++) 
+                    {
+						if (g_baseTiles[i]->GetTransitionFlag((uint16)j))
 							flag |= (1 << j);
-
 					}
 
 					fwrite((void *)&flag, 1, sizeof(uint8), tfile);
@@ -2181,7 +2076,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 					fwrite((void *)&len16, 1, sizeof(uint16), tfile);
 
 					
-					tileData = g_baseTiles[i]->GetTileData();
+					Pixel16 * tileData = g_baseTiles[i]->GetTileData();
 					fwrite((void *)tileData, 1, len16, tfile);
 
 					
@@ -2221,7 +2116,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 		
 		if (numRiverTransforms > 0) {
 			
-			for (i=0; i<numRiverTransforms; i++) {
+			for (size_t i = 0; i < numRiverTransforms; i++) {
 				fwrite((void *)riverTransforms[i], 1, sizeof(sint16)*k_RIVER_TRANSFORM_SIZE, tfile);
 
 				fwrite((void *)&riverDataLen[i], 1, sizeof(uint32), tfile);
@@ -2250,7 +2145,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 			
 			fwrite((void *)&num, 1, sizeof(uint16), tfile);
-			for (i=0; i<numMegaTiles; i++) {
+			for (size_t i = 0; i < numMegaTiles; i++) {
 				uint16		len = megaTileLengths[i];
 
 				fwrite((void *)&len, 1, sizeof(uint16), tfile);

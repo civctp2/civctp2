@@ -18,10 +18,11 @@ sint32 g_ai_rand_test_max = 1000;
 sint32 g_ai_rand_test_total = 0; 
 
 void ai_rand_test()
+
 { 
 
     return; 
-#if 0
+#if 0 // CTP1?
     static count=0; 
     static total=0; 
 
@@ -51,5 +52,5 @@ void ai_rand_test()
        	PostMessage(gHwnd, WM_CHAR, 's', 0); 
    }
    PostMessage(gHwnd, WM_CHAR, '1' + g_rand->Next(9), 0); 
-#endif
+#endif   
 }

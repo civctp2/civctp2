@@ -24,6 +24,7 @@
 // - Added separate counters in Sprite-derived classes to prevent crashes.
 //
 //----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif

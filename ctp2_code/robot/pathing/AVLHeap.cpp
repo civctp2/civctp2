@@ -1,16 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : AVL-Heap
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -84,7 +100,7 @@ AstarPoint * AVLHeap::GetNew()
 	return tmp; 
 } 
 
-void AVLHeap::MassDelete(const sint32 isunit)
+void AVLHeap::MassDelete(const bool isunit)
 
 {
     sint32 c = pixelutils_RGB(0,0,30);

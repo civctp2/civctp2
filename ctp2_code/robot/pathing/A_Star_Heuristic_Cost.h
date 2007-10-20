@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Heuristic cost for the A* pathing algorithm
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -22,7 +23,6 @@
 // Modifications from the original Activision code:
 //
 // - X-wrap added, structure cleaned up 
-// - 
 //
 //----------------------------------------------------------------------------
 
@@ -147,35 +147,15 @@ public:
 	
 	
 	
-	inline double Get_Minimum_Nearby_Movement_Cost
+	double Get_Minimum_Nearby_Movement_Cost
 	(
-		const MapPointData &the_tile			
+		MapPointData const & the_tile			
 	)
 	{
-		
-
-
-
-
-		
-
-		
-		
-		
-
-		
-
-
-
-		
 		g_theWorld->XY_Coords.RC_to_XY(the_tile, xy_pos);
-
-		
 		relaxed_min_cost = Get_Relaxed_Cost_Grid_Pointer(xy_pos);
-
 		
 		return *relaxed_min_cost;
-
 	}
 
 
