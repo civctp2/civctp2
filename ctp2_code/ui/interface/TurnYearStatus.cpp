@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Turn display
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -50,19 +50,33 @@ bool                 TurnYearStatus::s_useCustomYear          = false;
 
 const MBCHAR *TurnYearStatus::GetCurrentYear()
 {
-	static MBCHAR buf[1024];
 	sint32 currentYear = NewTurnCount::GetCurrentYear(g_selected_item->GetVisiblePlayer());
-	sint32 round = g_player[g_selected_item->GetVisiblePlayer()] ?
-	                    g_player[g_selected_item->GetVisiblePlayer()]->m_current_round :
-	                    NewTurnCount::GetCurrentRound();
-	
+
+	sint32 round       = g_player[g_selected_item->GetVisiblePlayer()] ?
+	                     g_player[g_selected_item->GetVisiblePlayer()]->m_current_round :
+	                     NewTurnCount::GetCurrentRound();
+
+	return TurnYearStatus::GetYearString(currentYear, round);
+}
+
+const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
+{
+	static MBCHAR buf[1024];
+
 	if(s_useCustomYear && s_pTurnLengthOverride)
 	{
-		if((unsigned) round >= s_turnLengthOverrideSize)
+		if(round >= 0)
 		{
-			round = s_turnLengthOverrideSize - 1;
+			if((unsigned) round >= s_turnLengthOverrideSize)
+			{
+				round = s_turnLengthOverrideSize - 1;
+			}
+			strcpy(buf, s_pTurnLengthOverride[round].text);
 		}
-		strcpy(buf, s_pTurnLengthOverride[round].text);
+		else
+		{
+			buf[0] = 0;
+		}
 	}
 	else
 	{

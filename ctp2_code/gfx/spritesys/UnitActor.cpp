@@ -2129,10 +2129,14 @@ void UnitActor::DrawSpecialIndicators(sint32 x, sint32 y, sint32 stack) //identi
 	//If religious unit it shows the religion icon else it shows the national flag - E Aug 27 2007
 	
 	sint32  religionicon = 0;
-	if (m_unitID.GetDBRec()->GetHasReligionIconIndex(religionicon)) {
+	if(m_unitID.IsValid()
+	&& m_unitID.GetDBRec()->GetHasReligionIconIndex(religionicon)
+	){
 			sint32 xf = x; // + iconDim.x;
 		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(religionicon), xf, y, displayedColor);
-	} else if (g_theProfileDB->IsCivFlags())  {
+	} 
+	else if(g_theProfileDB->IsCivFlags())
+	{
 	    // Add civilization flags here - moved flags here and edited the 
 	    // heralds to put numbers on national flags emod 2-21-2007
         sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();

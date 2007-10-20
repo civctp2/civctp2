@@ -233,7 +233,9 @@ sint32 diffutil_GetYearIncrementFromTurn(sint32 diff, sint32 turn)
 
 const char *diffutil_GetYearStringFromTurn(sint32 diff, sint32 turn)
 {
-	return TurnYearStatus::GetCurrentYear();
+	sint32 year = diffutil_GetYearFromTurn(diff, turn);
+
+	return TurnYearStatus::GetYearString(year, turn);
 }
 
 

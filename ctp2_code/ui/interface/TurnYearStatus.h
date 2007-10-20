@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Turn display
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -51,6 +51,7 @@ public:
 
 	static const MBCHAR *GetCurrentYear();
 	static const MBCHAR *GetCurrentRound();
+	static const MBCHAR *GetYearString(sint32 currentYear, sint32 round);
 	static         void  BuildTurnLengthOverride();
 	static         void  CleanupTurnLengthOverride();
 

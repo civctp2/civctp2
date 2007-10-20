@@ -2672,11 +2672,12 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 		return;
 
 	sint32 per_pop_happiness = g_thePopDB->Get(entertainer_type)->GetHappiness();
-    if (per_pop_happiness <= 0)
-    {
+	if (per_pop_happiness <= 0)
+	{
+		DPRINTF(k_DBG_GAMESTATE, ("Entertainer pop type: %i, happines: %i\n", entertainer_type, per_pop_happiness));
 		Assert(0);
 		return;
-    }
+	}
 
 	sint32 needed = g_theConstDB->Get(0)->GetRiotLevel();
 	sint32 maximum = g_theConstDB->Get(0)->GetVeryHappyThreshold();
@@ -2684,9 +2685,9 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sin
 
 
 	double min_delta = static_cast<double>(needed - current) / 
-                         static_cast<double>(per_pop_happiness);
+	                     static_cast<double>(per_pop_happiness);
 	double max_delta = static_cast<double>(maximum - current) / 
-                         static_cast<double>(per_pop_happiness);	
+	                     static_cast<double>(per_pop_happiness);	
 	
 	if (min_delta < 0) {
 		min_delta = floor(min_delta);

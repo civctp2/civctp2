@@ -273,7 +273,7 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 	}
 	else
 	{
-		sprintf( copyBlock, "%s", TurnYearStatus::GetCurrentYear());
+		sprintf( copyBlock, "%s", TurnYearStatus::GetYearString(m_message.AccessData()->GetTimeStamp(), -1));
 	}
 
 	errcode = ((aui_TextBase *)m_turnText)->SetText( copyBlock );

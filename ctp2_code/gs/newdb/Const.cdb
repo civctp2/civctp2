@@ -20,6 +20,7 @@
 #
 #  - Created file (29-Jul-2007 Martin Gühmann)
 #  - Fixed some problems, so that the old database can be parsed. (5-Aug-2007 Martin Gühmann)
+#  - Restored mod compatibility
 #
 #-----------------------------------------------------------------------------
 
@@ -309,7 +310,7 @@ Const : alsire {
 	Int    AICheatEcoPactMax                      aka AI_CHEAT_ECO_PACT_MAx
 
 	Int    MaxAbsoluteGrowthRate                  aka MAX_ABSOLUTE_GROWTH_RATE
-	Int    TradeDistanceCoefficient               aka TRADE_DISTANCE_COEFFICIENT
+	Float  TradeDistanceCoefficient               aka TRADE_DISTANCE_COEFFICIENT             # Unused
 	Int    MinLikeTilesForGood                    aka MIN_LIKE_TILES_FOR_GOOD
 	Float  MinGoodValue                           aka MIN_GOOD_VALUE
 	Float  MaxGoodValue                           aka MAX_GOOD_VALUE
@@ -327,15 +328,15 @@ Const : alsire {
 
 	Int    PollutionCausedByNuke                  aka POLLUTION_CAUSED_BY_NUKE
 
-	Int    MaxMatchListCycles     =    6          aka MAX_MATCH_LIST_CYCLES
-	Int    MinTurnsBetweenRevolts =    1          aka MIN_TURNS_BETWEEN_REVOLT
+	Int    MaxMatchListCycles       =    6        aka MAX_MATCH_LIST_CYCLES
+	Int    MinTurnsBetweenRevolts   =    1        aka MIN_TURNS_BETWEEN_REVOLT
 
-	Int    MaxCityWonders         =  100          aka MAX_CITY_WONDERS
-	Int    MaxCityBuildings       =  100          aka MAX_CITY_BUILDINGS
-	Int    CapturedCityKillPop    =    1          aka CAPTURED_CITY_KILL_POP
+	Int    MaxCityWonders           =  100        aka MAX_CITY_WONDERS
+	Int    MaxCityBuildings         =  100        aka MAX_CITY_BUILDINGS
+	Int    CapturedCityKillPop      =    1        aka CAPTURED_CITY_KILL_POP
 
-	Float  CombatEliteChance      = 0.05          aka COMBAT_ELITE_CHANCE
-	Float  CombatLeaderChance     = 0.01          aka COMBAT_LEADER_CHANCE
-	Float  CityOnTradeRouteCoeff  = 0.3           aka CITY_ON_TRADE_ROUTE_BONUS
-	Int	   CityExpansionDenominator = 0			  aka CITY_EXPANSION_DENOMINATOR
+	Float  CombatEliteChance        = 0.05        aka COMBAT_ELITE_CHANCE
+	Float  CombatLeaderChance       = 0.01        aka COMBAT_LEADER_CHANCE
+	Float  CityOnTradeRouteCoeff    = 0.3         aka CITY_ON_TRADE_ROUTE_BONUS
+	Int    CityExpansionDenominator = 0           aka CITY_EXPANSION_DENOMINATOR
 }

@@ -48,7 +48,13 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
-2007-10-18 (Revision 810)
+2007-10-20 (Revision 812)
+Fixed:   The wonder tab of the info window shows again the right construction 
+         year of wonders, also the date of messages is shown correctly again.
+Fixed:   The diplomacy window cannot be closed by using hotkeys that open other
+         screens, so that you cannot close this screen without rejecting or 
+         accepting diplomatic proposals.
+Fixed:   The scenario editor cannot opened in PBEM mode per hotkey.
 Added:   HotSeat (tested) and PBEM (untested) human to human diplomacy support.
 Added:   The following civilisations: Han, Yamato, Sumer, Kush, and Macedonia
 Fixed:   The map editor genarates now the coast line again if needed.

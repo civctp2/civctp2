@@ -32,8 +32,10 @@
 // - Start the great library with the current research project of the player.
 // - Disabled restart key in network, hot seat and email gmase, by 
 //   Martin Gühmann.
-// - Opening the score tab of the info window doesn't close other windows
+// - Opening the score tab of the info window does not close other windows
 //   anymore like the other tabs. - Aug 7th 2005 Martin Gühmann
+// - Strongly modal windows like the DipWizzard cannot closed anymore by
+//   by keypresses that open other windows. (20-10-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -382,7 +384,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 	
 	if (g_slicEngine && g_slicEngine->RunKeyboardTrigger(static_cast<char>(wParam))) 
-    {
+	{
 		return 0;
 	}
 
@@ -390,14 +392,14 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		return TRUE;
 	}
 
-    KEY_FUNCTION	kf = theKeyMap->get_function(wParam); 
+	KEY_FUNCTION	kf = theKeyMap->get_function(wParam); 
 	if (kf != KEY_FUNCTION_NOOP) 
-    {
+	{
 		g_selected_item->RegisterUIClick();
 	}
 
-	if (topWindow->IsStronglyModal() && keypress_IsGameFunction(kf)) 
-    {
+	if (topWindow->IsStronglyModal() /*&& keypress_IsGameFunction(kf)*/) // I should not be able to open other windows if I have have open strongly modal windows like the DipWizzard
+	{
 		return 0;
 	}
 
@@ -406,7 +408,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	g_tiledMap->GetMouseTilePos(point);
 #endif
 
-    switch (kf) {
+	switch (kf) {
 #ifdef _PLAYTEST
 	case KEY_FUNCTION_ENTER_COMMAND: 
 		segmentlist_Display();
@@ -449,11 +451,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			g_controlPanel->BeginOrderDelivery(g_theOrderDB->Access(order));
 	}
 	break;
-  case KEY_FUNCTION_SETTLE:
+	case KEY_FUNCTION_SETTLE:
 	{
 		g_selected_item->Settle();
 		move = FALSE;
-        break;
+		break;
 	}
 	case KEY_FUNCTION_SPACE_LAUNCH:
 		if(isMyTurn) {
@@ -695,10 +697,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case KEY_FUNCTION_OPEN_SCENARIO_EDITOR:
-		if(!g_modalWindow) {
+		if(!g_modalWindow
+		&& !g_turn->IsEmail()
+		){
 			close_AllScreens();
 			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-			
 		}
 		break;
 		
@@ -1349,7 +1352,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 		
-// MUSIC added by ahenobarb
+	// MUSIC added by ahenobarb
 	case KEY_FUNCTION_MUSIC_OPTIONS:
 		if(!g_modalWindow) {
 			musicscreen_displayMyWindow();
