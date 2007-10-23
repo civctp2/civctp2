@@ -183,186 +183,183 @@ extern Player **    g_player;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class Player {
-
+class Player
+{
 private:
 
 	MBCHAR *GenerateDescriptionString(bool is_winner);
 
 public:
 
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
 
-	PLAYER_INDEX m_owner;
-	PLAYER_TYPE m_playerType;
+	PLAYER_INDEX     m_owner;
+	PLAYER_TYPE      m_playerType;
 
-	uint32 m_diplomatic_mute;
-	uint32 mask_alliance;
-	uint32 m_mask_hostile;
+	uint32           m_diplomatic_mute;
+	uint32           mask_alliance;
+	uint32           m_mask_hostile;
 	DIPLOMATIC_STATE m_diplomatic_state[k_MAX_PLAYERS];
 
-	sint32 m_government_type;
-	sint32 m_tradeTransportPoints;
-	sint32 m_usedTradeTransportPoints;
-	uint32 m_pollution_history[k_MAX_POLLUTION_HISTORY];
-	sint32	m_event_pollution[k_MAX_EVENT_POLLUTION_TURNS];
-	BOOL	m_terrainPollution ;
-	BOOL	m_deepOceanVisible;
-	sint32	m_patience[k_MAX_PLAYERS] ;
-	sint32  m_sent_requests_this_turn[k_MAX_PLAYERS];
+	sint32           m_government_type;
+	sint32           m_tradeTransportPoints;
+	sint32           m_usedTradeTransportPoints;
+	uint32           m_pollution_history[k_MAX_POLLUTION_HISTORY];
+	sint32           m_event_pollution[k_MAX_EVENT_POLLUTION_TURNS];
+	BOOL             m_terrainPollution ;
+	BOOL             m_deepOceanVisible;
+	sint32           m_patience[k_MAX_PLAYERS] ;
+	sint32           m_sent_requests_this_turn[k_MAX_PLAYERS];
 
 
-	double m_materialsTax;
+	double           m_materialsTax;
 
-	sint32 m_home_lost_unit_count;
-	sint32 m_oversea_lost_unit_count;
-	uint64 m_builtWonders;
-	uint64 m_wonderBuildings;
+	sint32           m_home_lost_unit_count;
+	sint32           m_oversea_lost_unit_count;
+	uint64           m_builtWonders;
+	uint64           m_wonderBuildings;
 
-	double m_income_Percent;
+	double           m_income_Percent;
 
-	uint32 m_embassies;
-	uint32 m_productionFromFranchises;
+	uint32           m_embassies;
+	uint32           m_productionFromFranchises;
 
-	sint32 m_assasinationModifier;
-	sint32 m_assasinationTimer;
-	BOOL   m_isDead;
-	BOOL   m_first_city;
-
-
-	sint32 m_totalArmiesCreated;
-	BOOL m_hasUsedCityView;
-	BOOL m_hasUsedWorkView;
-	BOOL m_hasUsedProductionControls;
+	sint32           m_assasinationModifier;
+	sint32           m_assasinationTimer;
+	BOOL             m_isDead;
+	BOOL             m_first_city;
 
 
-	sint32 m_total_production;
-	BOOL m_is_turn_over;
-	BOOL m_end_turn_soon;
-	sint32 m_powerPoints;
-	sint32 m_lastActionCost;
-	MapPoint m_setupCenter;
-	sint32 m_setupRadius;
-	BOOL m_doneSettingUp;
-
-	uint32 m_contactedPlayers;
-	BOOL m_endingTurn;
-	sint32 m_set_government_type;
-	sint32 m_change_government_turn;
-	BOOL m_changed_government_this_turn;
-	sint32 m_pop_science;
-	sint32 m_num_revolted;
-
-	BOOL m_can_build_capitalization;
-	BOOL m_can_build_infrastructure;
-
-	sint32 m_last_attacked[k_MAX_PLAYERS];
-
-	BOOL m_can_use_terra_tab;
-	BOOL m_can_use_space_tab;
-	BOOL m_can_use_sea_tab;
-	BOOL m_can_use_space_button;
-
-	GUID m_networkGuid;
-	uint16 m_networkId;
-	sint32 m_networkGroup;
-
-	sint32 m_civRevoltingCitiesShouldJoin;
-
-	BOOL m_hasWonTheGame;
-	BOOL m_hasLostTheGame;
-
-	BOOL m_disableChooseResearch;
-
-	BOOL m_openForNetwork;
-
-	sint32 m_virtualGoldSpent;
-
-	sint32 m_current_round;
-
-	sint32 m_maxCityCount;
-
-	sint32 m_age;
-
-	sint32 m_researchGoal;
+	sint32           m_totalArmiesCreated;
+	BOOL             m_hasUsedCityView;
+	BOOL             m_hasUsedWorkView;
+	BOOL             m_hasUsedProductionControls;
 
 
-	sint32 m_broken_alliances_and_cease_fires;
+	sint32           m_total_production;
+	BOOL             m_is_turn_over;                // Used
+	BOOL             m_end_turn_soon;               // Maybe unused
+	sint32           m_powerPoints;
+	sint32           m_lastActionCost;
+	MapPoint         m_setupCenter;
+	sint32           m_setupRadius;
+	BOOL             m_doneSettingUp;
+
+	uint32           m_contactedPlayers;
+	BOOL             m_endingTurn;                  // Unused
+	sint32           m_set_government_type;
+	sint32           m_change_government_turn;
+	BOOL             m_changed_government_this_turn;
+	sint32           m_pop_science;
+	sint32           m_num_revolted;
+
+	BOOL             m_can_build_capitalization;
+	BOOL             m_can_build_infrastructure;
+
+	sint32           m_last_attacked[k_MAX_PLAYERS];
+
+	BOOL             m_can_use_terra_tab;
+	BOOL             m_can_use_space_tab;
+	BOOL             m_can_use_sea_tab;
+	BOOL             m_can_use_space_button;
+
+	GUID             m_networkGuid;
+	uint16           m_networkId;
+	sint32           m_networkGroup;
+
+	sint32           m_civRevoltingCitiesShouldJoin;
+
+	BOOL             m_hasWonTheGame;
+	BOOL             m_hasLostTheGame;
+
+	BOOL             m_disableChooseResearch;
+
+	BOOL             m_openForNetwork;
+
+	sint32           m_virtualGoldSpent;
+
+	sint32           m_current_round;
+
+	sint32           m_maxCityCount;
+
+	sint32           m_age;
+
+	sint32           m_researchGoal;
 
 
+	sint32           m_broken_alliances_and_cease_fires;
 
+//----------------------------------------------------------------------------
+// Changing the order below this line should not break anything.
+//----------------------------------------------------------------------------
 
+	DynamicArray<Army>               *m_all_armies;               // Serialized
+	UnitDynamicArray                 *m_all_cities;               // Serialized
 
+	UnitDynamicArray                 *m_all_units;                // Serialized
+	UnitDynamicArray                 *m_traderUnits;              // Serialized
+	Unit                             *m_capitol;                  // Serialized
 
+	Regard                           *m_regard;                   // Serialized
+	Gold                             *m_gold;                     // Serialized
+	Science                          *m_science;                  // Serialized
+	TaxRate                          *m_tax_rate;                 // Serialized
+	Difficulty                       *m_difficulty;               // Serialized
+	Advances                         *m_advances;                 // Serialized
+	MaterialPool                     *m_materialPool;  
 
-	DynamicArray<Army> *m_all_armies;
-
-	UnitDynamicArray *m_all_cities;
-
-	UnitDynamicArray *m_all_units;
-	UnitDynamicArray *m_traderUnits;
-	Unit *m_capitol;
-
-	Regard	*m_regard ;
-	Gold *m_gold;
-	Science *m_science;
-	TaxRate *m_tax_rate;
-	Difficulty *m_difficulty;
-	Advances *m_advances;
-	MaterialPool *m_materialPool;
-
-	DynamicArray<TradeOffer> *m_tradeOffers;
+	DynamicArray<TradeOffer>         *m_tradeOffers;              // Serialized
 #ifdef BATTLE_FLAGS
-	DynamicArray<MapPoint> *m_battleFlags;
+	DynamicArray<MapPoint>           *m_battleFlags;              // Serialized
 #endif
 
-	DynamicArray<DiplomaticRequest> *m_requests;
-	DynamicArray<Agreement> *m_agreed;
-	DynamicArray<Message> *m_messages;
+	DynamicArray<DiplomaticRequest>  *m_requests;                 // Serialized
+	DynamicArray<Agreement>          *m_agreed;                   // Serialized
+	DynamicArray<Message>            *m_messages;                 // Serialized
 
-	Vision *m_vision;
+	Vision                           *m_vision;                   // Serialized
 
-	DynamicArray<TerrainImprovement> *m_terrainImprovements;
-	DynamicArray<Installation>       *m_allRadarInstallations;
-	DynamicArray<Installation>       *m_allInstallations;
+	DynamicArray<TerrainImprovement> *m_terrainImprovements;      // Serialized
+	DynamicArray<Installation>       *m_allRadarInstallations;    // Serialized
+	DynamicArray<Installation>       *m_allInstallations;         // Serialized
 
-	MilitaryReadiness *m_readiness;
-	PlayerHappiness   *m_global_happiness;
-	Civilisation      *m_civilisation;
+	MilitaryReadiness                *m_readiness;
+	PlayerHappiness                  *m_global_happiness;         // Serialized
+	Civilisation                     *m_civilisation;             // Serialized
 
-	Throne            *m_throne;
+	Throne                           *m_throne;                   // Not serialized
 
-	Strengths         *m_strengths;
-	Score             *m_score;
-	EndGame           *m_endGame;
-	sint32            *m_goodSalePrices;
-	MBCHAR            *m_email;
-	GaiaController    *m_gaiaController;
+	Strengths                        *m_strengths;                // Serialized
+	Score                            *m_score;                    // Serialized
+	EndGame                          *m_endGame;                  // Serialized
+	sint32                           *m_goodSalePrices;
+	MBCHAR                           *m_email;                    // Serialized
+	GaiaController                   *m_gaiaController;           // Serialized
 
-
-
-
+	CreateUnitRequest                *m_unitRequestList;
 
 
-	CreateUnitRequest *m_unitRequestList;
-
-
-	Unit *m_slic_special_city;
-	BOOL m_hasGlobalRadar;
+	Unit                             *m_slic_special_city;        // Not serialized
+	BOOL                              m_hasGlobalRadar;           // Not serialized and unused
 
 #ifdef _DEBUG_INCOMPATIBLE
 
-	ATTITUDE_TYPE	m_attitude[k_MAX_PLAYERS] ;
+	ATTITUDE_TYPE                     m_attitude[k_MAX_PLAYERS];  // Not serialized
 #endif
 
-	MBCHAR m_descrip_string[256];
+	MBCHAR                            m_descrip_string[256];      // Not serialized, maybe used
 
-	sint32 m_starting_index;
-
-
-	sint32 m_governorPwReserve;
+	sint32                            m_starting_index;           // Not serialzed and unused
 
 
-	sint16 m_cargoCapacity;
+	sint32                            m_governorPwReserve;        // Not serialied, maybe used
+
+
+	sint16                            m_cargoCapacity;            // Not serialized possibly used.
 
 
 
@@ -689,10 +686,10 @@ public:
 
 
 	bool CanCreateImprovement(sint32 type,
-							  const MapPoint &point,
-							  sint32 extraData,
-                              const bool check_materials,
-                              ERR_BUILD_INST &err);
+	                          const MapPoint &point,
+	                          sint32 extraData,
+	                          const bool check_materials,
+	                          ERR_BUILD_INST &err);
 	TerrainImprovement CreateImprovement(sint32 dbIndex, MapPoint const & point,
 										 sint32 extraData);
 	TerrainImprovement CreateSpecialImprovement(sint32 dbIndex, MapPoint const & point,
@@ -1057,8 +1054,6 @@ public:
 	void CreateLeader(); //EMOD
 	bool CanBuildLeader(const sint32 type) const;
 	void MergeCivs(sint32 Merger, sint32 Mergee);
-
-
 };
 
 #endif

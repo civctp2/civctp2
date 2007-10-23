@@ -2055,7 +2055,7 @@ void Player::BeginTurnImprovements()  //this might only be for tileimps under co
 
 		
 	}
-// EMOD - installations spawn barbarians	
+	// EMOD - installations spawn barbarians
 	if ((0 < m_allInstallations->Num()) && (0 < n)) {
 		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
 			Installation inst = m_allInstallations->Access(b);
@@ -2066,7 +2066,7 @@ void Player::BeginTurnImprovements()  //this might only be for tileimps under co
 			}
 		}
 	}
-//end EMOD
+	// end EMOD
 
 }
 
