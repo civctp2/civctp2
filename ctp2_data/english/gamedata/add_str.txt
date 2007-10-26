@@ -100,9 +100,6 @@ str_ldl_TradeManagerFriendlyCities "Friendly"
 str_ldl_TradeManagerAllCities "All"
 str_ldl_TradeManagerCitiesPerGood "Cities Per Good:"
 
-# Moved from info_str.txt, had an error (string[0] no good, need action[0])
-NEXT_EMAIL_PLAYER 			"Please mail the saved game on your desktop to {player[0].leader_name} ({action[0].name}) of the {player[0].civ_name_plural}."
-
 # Added strings for the science screen.
 str_ldl_ResearchGoal		"* Goal:"
 

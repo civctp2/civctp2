@@ -29,6 +29,7 @@
 //   - April 24th 2005 Martin Gühmann
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -122,7 +123,6 @@ void NewTurnCount::SetStopPlayer(const sint32 &player_index)
 	sm_the_stop_player = player_index; 
 }
 
-
 void NewTurnCount::StartNextPlayer(bool stop)
 {
 	DPRINTF(1, ("NewTurnCount::StartNextPlayer(%d), curPlayer: %d\n", stop, g_selected_item->GetCurPlayer()));
@@ -142,10 +142,8 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		return;
 	}
 
-	
 	g_player[current_player]->EndTurn();
 
-	
 #if 0
 	
 	
@@ -166,11 +164,10 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		Player::RemoveDeadPlayers();
 	}
 
-	
 	NewTurnCount::ChooseNextActivePlayer();
 	PLAYER_INDEX next_player = g_selected_item->GetCurPlayer();
 	sint32 next_round = g_player[next_player]->GetCurRound() + 1;
-	
+
 	if(g_turn->IsHotSeat() || g_turn->IsEmail())
 	{
 		if(!g_player[g_selected_item->GetCurPlayer()]->IsRobot())
@@ -179,9 +176,9 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		}
 
 		g_director->NextPlayer();
-		
+
 		g_director->AddCopyVision();
-		
+
 		g_tiledMap->InvalidateMix();
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->Refresh();
@@ -193,7 +190,6 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		close_AllScreens();
 	}
 
-	
 	if (stop ||
 		(g_network.IsActive() &&
 		 (g_network.IsClient() || !g_player[next_player]->IsRobot())))
@@ -210,38 +206,46 @@ void NewTurnCount::StartNextPlayer(bool stop)
 		}
 	}
 
-	
 	g_controlPanel->UpdatePlayerEndProgress(current_player);
 
 	sint32 oldVis = g_selected_item->GetVisiblePlayer();
 	g_selected_item->SetPlayerOnScreen(NewTurnCount::GetStopPlayer());
-	if(oldVis != g_selected_item->GetVisiblePlayer()) {
+
+	if(oldVis != g_selected_item->GetVisiblePlayer())
+	{
 		g_tiledMap->CopyVision();
 	}
-	
+
 	if (next_player == 0)
 	{
 		NewTurnCount::StartNewYear();
 	}
 
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_BEGIN_TURN, next_player));
 	}
 
-	if(!g_network.IsHost() || g_network.IsLocalPlayer(next_player)) {
+	if((g_turn->IsHotSeat() || g_turn->IsEmail())
+	&& !g_player[g_selected_item->GetCurPlayer()]->IsRobot()
+	){
+		g_turn->SendNextPlayerMessage();
+		return;
+	}
+
+	if(!g_network.IsHost() || g_network.IsLocalPlayer(next_player))
+	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 			GEV_BeginTurn,
 			GEA_Player, next_player,
 			GEA_Int, next_round,
 			GEA_End);
-	} else {
-
-		
-
-		
+	}
+	else
+	{
 		g_director->NextPlayer();
 	}
-	
+
 	g_thePollution->BeginTurn();
 }
 

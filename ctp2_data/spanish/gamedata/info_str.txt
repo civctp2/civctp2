@@ -431,7 +431,7 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"Hemos recibido noticias de que los {player[
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
 NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} de los {player[0].civ_name_plural}, es tu turno."
-NEXT_EMAIL_PLAYER			"Enviar por e-mail la partida guardada en tu escritorio a {player[0].leader_name} {action[0].name} de los {player[0].civ_name_plural}."
+NEXT_EMAIL_PLAYER			"Por favor, envía la partida guardada en tu escritorio a {player[0].leader_name} ({action[0].name}) de los {player[0].civ_name_plural}."
 HOTSEAT_CITY_ATTACKED			"Los {player[0].civ_name_plural} atacaron {city[0].name} con un {unit[0].name}."
 HOTSEAT_ARMY_ATTACKED			"Los {player[0].civ_name_plural} atacaron tu {unit[1].name} con un {unit[0].name}"
 

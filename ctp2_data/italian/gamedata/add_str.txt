@@ -94,9 +94,6 @@ str_ldl_TradeManagerFriendlyCities "Amiche"
 str_ldl_TradeManagerAllCities "Tutte"
 str_ldl_TradeManagerCitiesPerGood "Città per merci:"
 
-# Moved from info_str.txt, had an error (string[0] no good, need action[0])
-NEXT_EMAIL_PLAYER 			"Spedisci per posta elettronica la partita sul desktop a {player[0].leader_name} ({action[0].name}) {player[0].civ_name_plural#PREPOSITION}."
-
 # Added strings for the science screen.
 str_ldl_ResearchGoal		"* Obiettivo:"
 

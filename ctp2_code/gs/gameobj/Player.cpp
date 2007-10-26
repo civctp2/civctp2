@@ -443,7 +443,7 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	}
 
 	m_is_turn_over = FALSE;
-	m_current_round	= NewTurnCount::GetCurrentRound();
+	m_current_round = NewTurnCount::GetCurrentRound();
 	m_end_turn_soon = FALSE;
 
 	m_powerPoints = 0;

@@ -25,13 +25,13 @@
 //
 // Modifications from the original Activision code:
 //
-// - Moved PBEM save file generation to the FinishBeginTurn event (by JJB).
 // - Moved the autosave file generation to just before the StartMovePhase 
 //   event, to prevent losing the advance that just was completed.
 // - Corrected GrantAdvanceEvent input handling.
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
 // - Corrected recipients for Gaia Controller messages.
 // - Propagate PW each turn update
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -319,57 +319,41 @@ STDEHANDLER(FinishBeginTurnEvent)
 
 	Player *p = g_player[player];
 	
-	BOOL atPeace = TRUE;
+	bool atPeace = true;
 
-	sint32 i;
-
-	
-	for(i = 1; i < k_MAX_PLAYERS; i++) {
-		if(p->m_contactedPlayers & (1 << i) && g_player[i]) {
-			if(p->m_diplomatic_state[i] == DIPLOMATIC_STATE_WAR) {
-				atPeace = FALSE;
+	for(sint32 i = 1; i < k_MAX_PLAYERS; i++)
+	{
+		if(p->m_contactedPlayers & (1 << i) && g_player[i])
+		{
+			if(p->m_diplomatic_state[i] == DIPLOMATIC_STATE_WAR)
+			{
+				atPeace = false;
 				break;
 			}
 		}
 	}
 
-
-	if(atPeace) {
+	if(atPeace)
+	{
 		p->m_score->AddYearAtPeace();
 	}
 
-	if (!p->m_isDead) {
-		
-		
-		
-		
-		
+	if (!p->m_isDead)
+	{
+		// Something is missing here
 	}
+
 	DPRINTF(k_DBG_GAMESTATE, ("It's player %d's turn - year %d.\n", p->m_owner, p->GetCurRound()));
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
 	DPRINTF(k_DBG_GAMESTATE, ("Public Works: %d\n", p->m_materialPool->GetMaterials()));
 
-	// JJB added the following to save in a PBEM game:
-	// moved from newturncount.cpp where it was too early
-	if((g_turn->IsHotSeat() || g_turn->IsEmail()) &&
-	   !g_player[g_selected_item->GetCurPlayer()]->IsRobot()) {
-		g_turn->SendNextPlayerMessage();
-	}
-	
-
-
-	
-	if ( p->m_owner == g_selected_item->GetVisiblePlayer() ) {
-
-
-
+	if ( p->m_owner == g_selected_item->GetVisiblePlayer() )
+	{
 		g_c3ui->AddAction( new SW_UpdateAction );
-
-
-
 	}
 
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Block(p->m_owner);
 		g_network.QueuePacketToAll(new NetInfo(NET_INFO_CODE_GOLD,
 		                                       p->m_owner, p->m_gold->GetLevel()));
@@ -382,23 +366,26 @@ STDEHANDLER(FinishBeginTurnEvent)
 	if((p->IsHuman() ||
 	    p->IsNetwork() && g_network.IsLocalPlayer(p->m_owner)) &&
 	    p->m_owner == g_selected_item->GetVisiblePlayer() &&
-	    g_theProfileDB->IsAutoSelectFirstUnit()) {
-		if(g_selected_item->GetState() == SELECT_TYPE_NONE) {
+	    g_theProfileDB->IsAutoSelectFirstUnit())
+	{
+		if(g_selected_item->GetState() == SELECT_TYPE_NONE)
+		{
 			g_selected_item->NextUnmovedUnit(TRUE);
-		} else if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY) {
+		}
+		else if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY)
+		{
 			g_selected_item->MaybeAutoEndTurn(TRUE);
 		}
 	}
 
-	if(g_network.IsHost()) {
-		
-		
-		
+	if(g_network.IsHost())
+	{
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_TURN_SYNC));
 	}
 
-	if(!g_network.IsClient()) {
+	if(!g_network.IsClient())
+	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_FinishBuildPhase,
 		                       GEA_Player, player,
 		                       GEA_End);

@@ -92,6 +92,7 @@
 // - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
 // - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -213,6 +214,7 @@
 #include "player.h"                     // g_player
 #include "PlayListDB.h"
 #include "PollutionRecord.h"
+#include "pollution.h"                  // g_thePollution
 #include "PopRecord.h"
 #include "prjfile.h"
 #include "profileDB.h"                  // g_theProfileDB
@@ -280,27 +282,28 @@
 #include <time.h>
 #endif
 
-extern ScreenManager *          g_screenManager;
-extern sint32                   g_splash_old; 
+extern ScreenManager *           g_screenManager;
+extern sint32                    g_splash_old;
 extern OzoneDatabase            *g_theUVDB;
 extern MovieDB                  *g_theVictoryMovieDB;
 extern FilenameDB               *g_theMessageIconFileDB;
 extern PlayListDB               *g_thePlayListDB;
-extern C3UI                 *g_c3ui;
-extern Background           *g_background;
-extern StatsWindow          *g_statsWindow;
-extern StatusWindow         *g_statusWindow;
-extern ControlPanelWindow   *g_controlPanel;
-extern SpriteEditWindow     *g_spriteEditWindow;
-extern aui_Surface          *g_sharedSurface;
-extern TiledMap             *g_tiledMap;
-extern sint32               g_modalWindow;
-extern CivApp               *g_civApp;
-extern ChatBox              *g_chatBox;
-extern SlicEngine           *g_slicEngine;
-extern GameSettings         *g_theGameSettings;
-extern TutorialWin          *g_tutorialWin;
-extern SaveInfo *           g_savedGameRequest;
+extern C3UI                     *g_c3ui;
+extern Background               *g_background;
+extern StatsWindow              *g_statsWindow;
+extern StatusWindow             *g_statusWindow;
+extern ControlPanelWindow       *g_controlPanel;
+extern SpriteEditWindow         *g_spriteEditWindow;
+extern aui_Surface              *g_sharedSurface;
+extern TiledMap                 *g_tiledMap;
+extern sint32                    g_modalWindow;
+extern CivApp                   *g_civApp;
+extern ChatBox                  *g_chatBox;
+extern SlicEngine               *g_slicEngine;
+extern GameSettings             *g_theGameSettings;
+extern TutorialWin              *g_tutorialWin;
+extern SaveInfo *                g_savedGameRequest;
+extern Pollution                *g_thePollution;
 
 // User options
 extern sint32               g_fog_toggle;
@@ -1844,9 +1847,9 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 			}
 		}
 
-        allocated::reassign(g_theMessagePool, new MessagePool());
+		allocated::reassign(g_theMessagePool, new MessagePool());
 
-        SlicEngine::Reload(g_slic_filename);
+		SlicEngine::Reload(g_slic_filename);
 
 		if(g_scenarioUsePlayerNumber > 0 && g_player[g_scenarioUsePlayerNumber] &&
 		   g_player[g_scenarioUsePlayerNumber]->m_civilisation &&
@@ -1879,7 +1882,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	{
 		for (size_t p = 0; p < k_MAX_PLAYERS; ++p) 
 		{
-			if (g_player[p]) 
+			if (g_player[p])
 			{
 				g_player[p]->m_civilisation->ResetCiv
 					(g_player[p]->m_civilisation->GetCivilisation(),
@@ -1930,10 +1933,8 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 710 );
 
-	if(!g_network.IsActive() && !g_network.IsNetworkLaunch()) {
-		
-		
-
+	if(!g_network.IsActive() && !g_network.IsNetworkLaunch())
+	{
 		if ((&archive == NULL) ||										// launch button
 			((g_startInfoType != STARTINFOTYPE_NONE) && g_isScenario)	// scenario start
 		   )
@@ -1957,7 +1958,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS))) 
-        {
+		{
 			if (g_director)
 				g_director->AddCopyVision();
 		}
@@ -2000,7 +2001,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		g_turn->SendNextPlayerMessage();
 	}
 	else if (g_selected_item) 
-    {
+	{
 		g_selected_item->Refresh();
 		if (g_director)
 			g_director->AddCenterMap(g_selected_item->GetCurSelectPos());
@@ -2015,10 +2016,22 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		MainControlPanel::UpdatePlayer(g_selected_item->GetCurPlayer());
 	}
 
-    if (g_launchIntoCheatMode) 
-    {
-        ScenarioEditor::Display();
-    }
+	if (g_launchIntoCheatMode)
+	{
+		ScenarioEditor::Display();
+	}
+
+	if(g_turn->IsEmail()
+	&& g_player[g_selected_item->GetCurPlayer()]->IsTurnOver()
+	){
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+		                       GEV_BeginTurn,
+		                       GEA_Player, g_selected_item->GetCurPlayer(),
+		                       GEA_Int,    g_player[g_selected_item->GetCurPlayer()]->GetCurRound() + 1,
+		                       GEA_End);
+
+		g_thePollution->BeginTurn();
+	}
 
 	ProgressWindow::EndProgress( g_theProgressWindow );
 

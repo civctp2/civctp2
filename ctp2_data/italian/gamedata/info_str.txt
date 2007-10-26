@@ -432,7 +432,7 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"Ci è appena giunta voce che {player[0].civ_
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
 NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} {player[0].civ_name_plural#PREPOSITION}, è il tuo turno."
-NEXT_EMAIL_PLAYER			"Invia il salvataggio sul tuo desktop a {player[0].leader_name} ({string[0].name}) {player[0].civ_name_plural#PREPOSITION}."
+NEXT_EMAIL_PLAYER			"Spedisci per posta elettronica la partita sul desktop a {player[0].leader_name} ({action[0].name}) {player[0].civ_name_plural#PREPOSITION}."
 HOTSEAT_CITY_ATTACKED			"{player[0].civ_name_plural#ARTICLE_CAP} hanno attaccato {city[0].name} con {unit[0].name#ARTICLE_INDET}."
 HOTSEAT_ARMY_ATTACKED			"{player[0].civ_name_plural#ARTICLE_CAP} hanno attaccato {unit[1].name#ARTICLE_YOUR} con {unit[0].name#ARTICLE_INDET}"
 

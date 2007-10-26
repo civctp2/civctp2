@@ -1005,8 +1005,6 @@ sint32 finite_count=0;
 			{
 				g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
 				
-				// Maybe this is a site where to add HotSeat and Email game human-human diplomacy support
-				
 				TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());
 			}
 
@@ -1242,14 +1240,14 @@ void TurnCount::SendNextPlayerMessage()
 		MBCHAR turnString[_MAX_PATH];
 		// JJB changed this from m_round to GetRound()
 		// since m_round seems to always be zero
-		sprintf(turnString, " (Turn %d)", GetRound());
+		sprintf(turnString, " (Turn %d)", GetRound() + 1); // New turn is changed with the BeginTurn event, which still has to be executed.
 		strcat(fullPath, turnString);
 		strcat(fullPath, ".c2g");
 		GameFile::SaveGame(fullPath, NULL);
 	}
 
-    SlicObject * so = 
-        new SlicObject(m_isHotSeat ? "104NextHotSeatPlayer" : "105NextEmailPlayer");
+	SlicObject * so = 
+	    new SlicObject(m_isHotSeat ? "104NextHotSeatPlayer" : "105NextEmailPlayer");
 	so->AddRecipient(player);
 	so->AddCivilisation(player);
 	if(m_isEmail)
