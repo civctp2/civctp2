@@ -492,3 +492,23 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
 //  BuildListElement { Infrastructure }
 //  BuildListElement { Capitalization }
 }
+
+BUILD_LIST_SEQUENCE_BARBARIAN {
+  BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { AllUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+
+  // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
+}

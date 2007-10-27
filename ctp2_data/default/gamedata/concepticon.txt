@@ -198,10 +198,9 @@ MAPICON_SO_VIETNAM_FLAG		"upc147.tga"
 MAPICON_PRUSSIA_FLAG		"upc148.tga"
 MAPICON_GERMAN_IMP_FLAG		"upc149.tga"
 MAPICON_RUSSIAN_IMP_FLAG	"upc150.tga"
-MAPICON_LYCIAN_FLAG		"upc150.tga" // "upc151.tga" If you add files here, make sure that they are also in the respository
-MAPICON_ARMENIA_FLAG		"upc150.tga" // "upc153.tga" If you add files here, make sure that they are also in the respository
-#
-MAPICON_ELITE			"upc057.tga"
+MAPICON_LYCIAN_FLAG		"upc151.tga"
+MAPICON_ARMENIA_FLAG		"upc153.tga"
+
 # City expansion?
 #MAPICON_URBANANC
 #MAPICON_URBANMED

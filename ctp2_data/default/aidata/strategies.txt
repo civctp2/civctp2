@@ -653,7 +653,7 @@ STRATEGY_BARBARIAN {
 	// For each city with an empty build queue, build from first sequence that applies
 
     BuildListSequenceElement {
-        BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+        BuildListSequence BUILD_LIST_SEQUENCE_BARBARIAN
         Top 1.0 
         ProductionCities
         Advice BUILD_OFFENSE_ADVICE

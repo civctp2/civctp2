@@ -568,11 +568,15 @@ bool UnseenCell::IsHealUnits(void) const
 sint32 UnseenCell::GetFoodFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
-	
-	sint32 food = Terrain(rec).GetFood();
+
+	sint32 food = rec->GetEnvBase()->GetFood();
 
 	if(m_cityName != NULL && rec->HasEnvCity()) {
 		food += rec->GetEnvCityPtr()->GetFood();
+	}
+
+	if(HasRiver() && rec->HasEnvRiver()) {
+		food += rec->GetEnvRiverPtr()->GetFood();
 	}
 
 	sint32 good;
@@ -609,26 +613,26 @@ sint32 UnseenCell::GetFoodProduced() const
 			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
 	for ( ; walker.IsValid(); walker.Next())
-    {
+	{
 		sint32 percent	= walker.GetObj()->m_percentComplete;
 		if(percent < 100){
-			break;
+			continue;
 		}
 
 		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
-			g_theTerrainImprovementDB->Get(type);
+		    g_theTerrainImprovementDB->Get(type);
 		const TerrainImprovementRecord::Effect * effect = 
-            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
 		sint32 bonus;
 		if (effect && effect->GetBonusFood(bonus)) 
-        {
+		{
 			food += bonus;
 		}
 	}
 
-    return food; 
+	return food; 
 }
 
 //----------------------------------------------------------------------------
@@ -652,11 +656,14 @@ sint32 UnseenCell::GetShieldsFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
-	
-    sint32 shield = Terrain(rec).GetShield();
+	sint32 shield = rec->GetEnvBase()->GetShield();
 
 	if(m_cityName != NULL && rec->HasEnvCity()) {
 		shield += rec->GetEnvCityPtr()->GetShield();
+	}
+
+	if(HasRiver() && rec->HasEnvRiver()) {
+		shield += rec->GetEnvRiverPtr()->GetShield();
 	}
 
 	sint32 good;
@@ -693,25 +700,25 @@ sint32 UnseenCell::GetShieldsProduced() const
 			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
 	for ( ; walker.IsValid(); walker.Next())
-    {
+	{
 		sint32 percent	= walker.GetObj()->m_percentComplete;
 		if(percent < 100){
-			break;
+			continue;
 		}
 
 		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
 			g_theTerrainImprovementDB->Get(type);
 		const TerrainImprovementRecord::Effect * effect = 
-            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
 		if(effect && effect->GetBonusProduction(bonus)) 
-        {
+		{
 			shield += bonus;
 		}
 	}
 
-    return shield; 
+	return shield; 
 }
 
 
@@ -736,10 +743,14 @@ sint32 UnseenCell::GetGoldFromTerrain() const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 
-    sint32 gold = Terrain(rec).GetGold();
+	sint32 gold = rec->GetEnvBase()->GetGold();
 
 	if(m_cityName != NULL && rec->HasEnvCity()) {
 		gold += rec->GetEnvCityPtr()->GetGold();
+	}
+
+	if(HasRiver() && rec->HasEnvRiver()) {
+		gold += rec->GetEnvRiverPtr()->GetGold();
 	}
 
 	sint32 good;
@@ -776,24 +787,24 @@ sint32 UnseenCell::GetGoldProduced() const
 			PointerList<UnseenImprovementInfo>::Walker(m_improvements);
 
 	for ( ; walker.IsValid(); walker.Next())
-    {
+	{
 		sint32 percent	= walker.GetObj()->m_percentComplete;
 		if (percent < 100){
-			break;
+			continue;
 		}
 
 		sint32 type		= walker.GetObj()->m_type;
 		const TerrainImprovementRecord *impRec = 
-			g_theTerrainImprovementDB->Get(type);
+		    g_theTerrainImprovementDB->Get(type);
 		const TerrainImprovementRecord::Effect * effect = 
-            terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 		sint32 bonus;
 		if(effect && effect->GetBonusGold(bonus)) {
 			gold += bonus;
 		}
 	}
 
-    return gold; 
+	return gold;
 }
 
 
@@ -820,7 +831,6 @@ void UnseenCell::Serialize(CivArchive &archive)
 		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
 
 		{
-// Added by Martin Gühmann
 			// A dirty workaround in order not to change the save game format.
 			// UnseenInstallationInfo is now abused to store m_visibleCityOwner
 			// as visibility member. As both are of type uint32 it is not a 
@@ -849,13 +859,13 @@ void UnseenCell::Serialize(CivArchive &archive)
 
 
 		if (m_cityName) 
-        {
+		{
 			l = strlen(m_cityName) + 1;
 			archive << l;
 			archive.Store((uint8*)m_cityName, (strlen(m_cityName) + 1) * sizeof(MBCHAR));
 		}
-        else
-        {
+		else
+		{
 			l = 0;
 			archive << l;
 		} 
@@ -865,27 +875,26 @@ void UnseenCell::Serialize(CivArchive &archive)
 			m_actor->Serialize(archive);
 		}
 		m_tileInfo->Serialize(archive);
-	} 
-    else 
-    {
+	}
+	else
+	{
 		m_point.Serialize(archive);
 		archive.LoadChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
 
 		if (m_installations) 
-        {
+		{
 			m_installations->DeleteAll();
 		}
-        else
-        {
-            m_installations = new PointerList<UnseenInstallationInfo>;
-        }
+		else
+		{
+			m_installations = new PointerList<UnseenInstallationInfo>;
+		}
 
 		archive >> l;
 
-// Added by Martin Gühmann
 		UnseenInstallationInfo* tmpUII;
 		bool    vCityOwnerNotSet = true;
-        sint32  i;
+		sint32  i;
 		for(i = 0; i < l; i++) {
 			tmpUII = new UnseenInstallationInfo(archive);
 
@@ -903,14 +912,14 @@ void UnseenCell::Serialize(CivArchive &archive)
 		// Backwards compartibility: If this UnseenCell didn't have an m_visibleCityOwner
 		if(vCityOwnerNotSet) m_visibleCityOwner = g_theWorld->GetCell(m_point)->GetCityOwner().m_id;
 
-        if (m_improvements) 
-        {
+		if (m_improvements) 
+		{
 			m_improvements->DeleteAll();
 		}
-        else
-        {
-		    m_improvements = new PointerList<UnseenImprovementInfo>;
-        }
+		else
+		{
+			m_improvements = new PointerList<UnseenImprovementInfo>;
+		}
 
 		archive >> l;
 		for(i = 0; i < l; i++) {
@@ -919,13 +928,13 @@ void UnseenCell::Serialize(CivArchive &archive)
 		
 		delete [] m_cityName;
 		archive >> l;
-		if (l > 0) 
-        {
+		if (l > 0)
+		{
 			m_cityName = new MBCHAR[l];
 			archive.Load((uint8*)m_cityName, l * sizeof(MBCHAR));
-		} 
-        else 
-        {
+		}
+		else
+		{
 			m_cityName = NULL;
 		}
 
@@ -934,9 +943,9 @@ void UnseenCell::Serialize(CivArchive &archive)
 
 		ReleaseActor(m_actor);
 		if (hasActor) 
-        {
+		{
 			m_actor = new UnitActor(archive);
-        }
+		}
 
 		delete m_tileInfo;
 		m_tileInfo = new TileInfo(g_theWorld->GetTileInfo(m_point));
@@ -951,7 +960,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 //
 // Description: Constructor
 //
-// Parameters : archive			: The source archive
+// Parameters : archive         : The source archive
 //
 // Globals    : -
 //
@@ -971,7 +980,7 @@ UnseenInstallationInfo::UnseenInstallationInfo(CivArchive &archive)
 //
 // Description: Constructor
 //
-// Parameters : archive			: The source archive
+// Parameters : archive         : The source archive
 //
 // Globals    : -
 //

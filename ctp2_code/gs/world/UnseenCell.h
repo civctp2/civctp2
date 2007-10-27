@@ -88,7 +88,7 @@ class UnseenInstallationInfo;
 #include "MapPoint.h"         // MapPoint
 #include "player.h"           // PLAYER_INDEX
 #include "TerrImproveData.h"  // TERRAIN_IMPROVEMENT
-// MBCHAR
+#include "Cell.h"             // k_MASK_ENV_RIV_CUR
 
 template <class T> class PointerList;
 class TileInfo;
@@ -271,17 +271,19 @@ public:
 	bool    IsHealUnits     (void) const;
 	bool    IsFort          (void) const;
 
-	uint32 GetSlaveBits(void) const { return m_slaveBits; }
+	bool    HasRiver() const { return (m_env & k_MASK_ENV_RIV_CUR) != 0; }
 
-	sint32 GetFoodFromTerrain() const;
-	sint32 GetFoodProduced() const;
-	sint32 GetShieldsFromTerrain() const;
-	sint32 GetShieldsProduced() const;
-	sint32 GetGoldFromTerrain() const;
-	sint32 GetGoldProduced() const;
+	uint32  GetSlaveBits(void) const { return m_slaveBits; }
+
+	sint32  GetFoodFromTerrain     () const;
+	sint32  GetFoodProduced        () const;
+	sint32  GetShieldsFromTerrain  () const;
+	sint32  GetShieldsProduced     () const;
+	sint32  GetGoldFromTerrain     () const;
+	sint32  GetGoldProduced        () const;
 
 
-	void Serialize(CivArchive &archive);
+	void    Serialize(CivArchive &archive);
 };
 
 class UnseenCellCarton
@@ -298,11 +300,11 @@ public:
 		m_unseenCell->GetPos(pos);
 	}
 
-    // Stubs to enable use of QuadTree<UnseenCellCarton>
+	// Stubs to enable use of QuadTree<UnseenCellCarton>
 	void DelPointers() {}
-    sint32 GetOwner() const { return 0; }
+	sint32 GetOwner() const { return 0; }
 
-    UnseenCell *    m_unseenCell;
+	UnseenCell *    m_unseenCell;
 };
 
 #endif

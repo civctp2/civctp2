@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Everything about a terrain cell
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -298,10 +298,9 @@ bool Cell::GetCanDie(void) const
 	return (m_env & k_BIT_MOVEMENT_TYPE_LAND) != 0;
 }
 
-
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetFoodFromTerrain
+// Name       : Cell::GetFoodFromTerrain
 //
 // Description: Gets the food from the given cell with the given terrain.
 //
@@ -340,7 +339,7 @@ sint32 Cell::GetFoodFromTerrain(sint8 terrainType) const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetFoodFromTerrain
+// Name       : Cell::GetFoodFromTerrain
 //
 // Description: Gets the food from the given cell with the current terrain.
 //
@@ -362,7 +361,7 @@ sint32 Cell::GetFoodFromTerrain() const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetFoodProduced
+// Name       : Cell::GetFoodProduced
 //
 // Description: Gets the food from the given cell with the current terrain 
 //              including tile improvement.
@@ -393,14 +392,14 @@ sint32 Cell::GetFoodProduced() const
 				food += bonus;
 			}
 		}
-	}																					
-																					
-    return food; 
+	}
+
+	return food;
 }
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetShieldsFromTerrain
+// Name       : Cell::GetShieldsFromTerrain
 //
 // Description: Gets the shields from the given cell with the given terrain.
 //
@@ -419,8 +418,7 @@ sint32 Cell::GetShieldsFromTerrain(sint8 terrainType) const
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(terrainType);
 
-	
-    sint32 shield = rec->GetEnvBase()->GetShield();
+	sint32 shield = rec->GetEnvBase()->GetShield();
 
 	if(HasCity() && rec->HasEnvCity()) {
 		shield += rec->GetEnvCityPtr()->GetShield();
@@ -440,7 +438,7 @@ sint32 Cell::GetShieldsFromTerrain(sint8 terrainType) const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetShieldsFromTerrain
+// Name       : Cell::GetShieldsFromTerrain
 //
 // Description: Gets the shields from the given cell with the current terrain.
 //
@@ -462,7 +460,7 @@ sint32 Cell::GetShieldsFromTerrain() const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetShieldsProduced
+// Name       : Cell::GetShieldsProduced
 //
 // Description: Gets the shields from the given cell with the current terrain 
 //              including tile improvement.
@@ -494,15 +492,15 @@ sint32 Cell::GetShieldsProduced() const
 				shield += bonus;
 			}
 		}
-	}																					
-																					
-    return shield; 
+	}
+
+	return shield; 
 }
 
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetGoldFromTerrain
+// Name       : Cell::GetGoldFromTerrain
 //
 // Description: Gets the gold from the given cell with the given terrain.
 //
@@ -541,7 +539,7 @@ sint32 Cell::GetGoldFromTerrain(sint8 terrainType) const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetGoldFromTerrain
+// Name       : Cell::GetGoldFromTerrain
 //
 // Description: Gets the gold from the given cell with the current terrain.
 //
@@ -562,7 +560,7 @@ sint32 Cell::GetGoldFromTerrain() const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::GetGoldProduced
+// Name       : Cell::GetGoldProduced
 //
 // Description: Gets the gold from the given cell with the current terrain 
 //              including tile improvement.
@@ -632,7 +630,7 @@ void Cell::SetColor(sint32 c)
 #if 0   // unreachable
 #ifdef _DEBUG
     m_color = c; 
-    WhackScreen(); 
+    WhackScreen();
 #endif // _DEBUG
 #endif // unreachable
 }
