@@ -20,6 +20,9 @@
 #
 # - Converted to the new database format. The old format can still be parsed.
 #   (July 15th 2006 Martin Gühmann)
+# - White hills can become normal hills. (29-Oct-2007 Martin Gühmann)
+# - White mountains can become normal mountains. (29-Oct-2007 Martin Gühmann)
+# - Desert cannot become plains. (29-Oct-2007 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -29,7 +32,7 @@ GLOBAL_WARMING_TRIGGER
 	PollutionNeighbourBonus  5
 	PollutionMaxBonus       15
 
-	ChangeTypeProbability { FromType TERRAIN_DESERT            ToType TERRAIN_PLAINS            Probability 25 }
+	ChangeTypeProbability { FromType TERRAIN_DESERT            ToType TERRAIN_DESERT            Probability  0 }
 	ChangeTypeProbability { FromType TERRAIN_FOREST            ToType TERRAIN_JUNGLE            Probability 25 }
 	ChangeTypeProbability { FromType TERRAIN_FOREST            ToType TERRAIN_PLAINS            Probability  5 }
 	ChangeTypeProbability { FromType TERRAIN_GLACIER           ToType TERRAIN_TUNDRA            Probability 50 }
@@ -41,8 +44,8 @@ GLOBAL_WARMING_TRIGGER
 	ChangeTypeProbability { FromType TERRAIN_MOUNTAIN          ToType TERRAIN_MOUNTAIN          Probability  0 }
 	ChangeTypeProbability { FromType TERRAIN_BROWN_HILL        ToType TERRAIN_BROWN_HILL        Probability  0 }
 	ChangeTypeProbability { FromType TERRAIN_BROWN_MOUNTAIN    ToType TERRAIN_BROWN_MOUNTAIN    Probability  0 }
-	ChangeTypeProbability { FromType TERRAIN_WHITE_HILL        ToType TERRAIN_WHITE_HILL        Probability  0 }
-	ChangeTypeProbability { FromType TERRAIN_WHITE_MOUNTAIN    ToType TERRAIN_WHITE_MOUNTAIN    Probability  0 }
+	ChangeTypeProbability { FromType TERRAIN_WHITE_HILL        ToType TERRAIN_HILL              Probability  5 }
+	ChangeTypeProbability { FromType TERRAIN_WHITE_MOUNTAIN    ToType TERRAIN_MOUNTAIN          Probability  5 }
 	ChangeTypeProbability { FromType TERRAIN_PLAINS            ToType TERRAIN_GRASSLAND         Probability 25 }
 	ChangeTypeProbability { FromType TERRAIN_PLAINS            ToType TERRAIN_DESERT            Probability  5 }
 	ChangeTypeProbability { FromType TERRAIN_SWAMP             ToType TERRAIN_WATER_BEACH       Probability 25 }

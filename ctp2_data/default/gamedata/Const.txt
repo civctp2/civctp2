@@ -3,6 +3,7 @@
 # Project      : Call To Power 2
 # File type    : Text file
 # Description  : The data for constant things
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -21,6 +22,7 @@
 # - Added MIN_TURNS_BETWEEN_REVOLT
 # - Set back CARAVAN_COEF devision by 10 is now done inside the executable.
 #   - May 7th 2005 Martin Gühmann
+# - Made the meridians symetrical. (29-Oct-2007 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -34,11 +36,11 @@ PERCENT_HOMOGENOUS 55  ## how "clumpy" the land terrain is
 # and 100 is all the way south - 50 is the middle  - this works on a map of
 # any size
 
-MERIDIANA 5  # north of this is north pole
+MERIDIANA  5  # north of this is north pole
 MERIDIANB 25  # north of this is north mild
 MERIDIANC 35  # north of this is north deasert
-MERIDIAND 60  # north of this is the equatioral region
-MERIDIANE 70  # north of this is south desert
+MERIDIAND 65  # north of this is the equatioral region
+MERIDIANE 75  # north of this is south desert
 MERIDIANF 95  # north of this is the south mild, south is the south pole
 
 # the humidity controls the ditrabution of forest, jungle, swamp, grass, plains, desert

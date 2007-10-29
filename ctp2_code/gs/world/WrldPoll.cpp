@@ -27,6 +27,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Replaced old GlobalWarming database by new one. (July 9th 2005 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -67,26 +68,27 @@
 
 #include "terrainutil.h"
 #include "tradeutil.h"
+#include "GameEventManager.h"           // g_gevManager
 
-extern	OzoneDatabase	*g_theUVDB ;
-extern	RadarMap	*g_radarMap;
+extern  OzoneDatabase   *g_theUVDB ;
+extern  RadarMap        *g_radarMap;
 
-#define N_X(d)		(d)
-#define N_Y(d)		(d-1)
-#define NE_X(d)		(d+1)
-#define NE_Y(d)		(d-1)
-#define E_X(d)		(d+1)
-#define E_Y(d)		(d)
-#define SE_X(d)		(d+1)
-#define SE_Y(d)		(d+1)
-#define S_X(d)		(d)
-#define S_Y(d)		(d+1)
-#define SW_X(d)		(d-1)
-#define SW_Y(d)		(d+1)
-#define W_X(d)		(d-1)
-#define W_Y(d)		(d)
-#define NW_X(d)		(d-1)
-#define NW_Y(d)		(d-1)
+#define N_X(d)      (d)
+#define N_Y(d)      (d-1)
+#define NE_X(d)     (d+1)
+#define NE_Y(d)     (d-1)
+#define E_X(d)      (d+1)
+#define E_Y(d)      (d)
+#define SE_X(d)     (d+1)
+#define SE_Y(d)     (d+1)
+#define S_X(d)      (d)
+#define S_Y(d)      (d+1)
+#define SW_X(d)     (d-1)
+#define SW_Y(d)     (d+1)
+#define W_X(d)      (d-1)
+#define W_Y(d)      (d)
+#define NW_X(d)     (d-1)
+#define NW_Y(d)     (d-1)
 
 
 
@@ -383,7 +385,7 @@ void world_AddUnseenForHumans(sint32 x, sint32 y)
 
 void World::GWPhase(const sint32 phase)
 {
-	Cell	*c ;
+	Cell	*c;
 
 	sint32 x;
 	sint32 y;
@@ -393,7 +395,7 @@ void World::GWPhase(const sint32 phase)
 
 	const GlobalWarmingRecord* gwrec = GetGlobalWarmingDBRec();
 
-	double	baseProbability = 0.0;										
+	double	baseProbability = 0.0;
 	
 	sint32 const    w = GetWidth();
 	sint32 const    h = GetHeight();
@@ -424,7 +426,7 @@ void World::GWPhase(const sint32 phase)
 						if(g_theTerrainDB->Get(newtype)->GetMovementTypeSea()
 						&&!g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater()
 						){
-						    c->m_search_count = -3;
+							c->m_search_count = -3;
 							newtype = GetTerrainChangeType(&TerrainRecord::GetMovementTypeShallowWater);
 						}
 						
@@ -468,48 +470,62 @@ void World::GWPhase(const sint32 phase)
 
 
 
-
-
 void World::GlobalWarming(const sint32 phase)
+{
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GlobalWarming,
+	                       GEA_Int, phase,
+	                       GEA_End);
+}
+
+// Only called by the event
+void World::GlobalWarmingEvent(const sint32 phase)
+{
+	if(g_network.IsHost())
 	{
-	if(g_network.IsHost()) {
 		g_network.SyncRand();
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_GLOBAL_WARMING, phase));
 	}
 
-	InformPlayersOfFloodingCatastrophe() ;
-	RemoveBeaches() ;
-	GWPhase(phase) ;
-	RaiseWaters() ;
-	MakeBeaches() ;
+	InformPlayersOfFloodingCatastrophe();
+	RemoveBeaches();
+	GWPhase(phase);
+	RaiseWaters();
+	MakeBeaches();
 	RegenerateRivers();
-	MakeBeaches() ;
+	MakeBeaches();
 
-    for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
-    {
-		if (g_player[p]) 
-        {
+	for (sint32 p = 0; p < k_MAX_PLAYERS; p++)
+	{
+		if (g_player[p])
+		{
 			g_player[p]->RemoveEmptyCities(CAUSE_REMOVE_ARMY_FLOOD);
 		}
 	}
-	
-	
+
 	sint32 x, y;
-	for(x = 0; x < m_size.x; x++) {
-		for(y = 0; y < m_size.y; y++) {
+	for(x = 0; x < m_size.x; x++)
+	{
+		for(y = 0; y < m_size.y; y++)
+		{
 			Cell *theCell = GetCell(x,y);
 			MapPoint pos(x,y);
-			if(theCell->UnitArmy()) {
+			if(theCell->UnitArmy())
+			{
 				if(!theCell->UnitArmy()->CanEnter(pos))
 					theCell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_FLOOD, -1);
 			}
 			if (theCell->GetCity().IsValid()) {
-				if((IsWater(pos) || IsShallowWater(pos))) {
-					if(!theCell->GetCity().GetMovementTypeSea()) {
+				if((IsWater(pos) || IsShallowWater(pos)))
+				{
+					if(!theCell->GetCity().GetMovementTypeSea())
+					{
 						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
 					}
-				} else {
-					if(!theCell->GetCity().GetMovementTypeLand()) {
+				}
+				else
+				{
+					if(!theCell->GetCity().GetMovementTypeLand())
+					{
 						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
 					}
 				}
@@ -517,49 +533,46 @@ void World::GlobalWarming(const sint32 phase)
 		}
 	}
 
-	g_tiledMap->PostProcessMap() ;
-	g_tiledMap->Refresh() ;
+	g_tiledMap->PostProcessMap();
+	g_tiledMap->Refresh();
 	g_radarMap->Update();
 	g_radarMap->ShouldDraw();
-    
-	sint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
+
+	for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
+	{
 		if (g_player[i])
-        {
-		g_player[i]->m_vision->ClearUnseen();
-	}
+		{
+			g_player[i]->m_vision->ClearUnseen();
+		}
 	}
 
-	
-	
-	for(x = 0; x < m_size.x; x++) {
-		for(y = 0; y < m_size.y; y++) {
-			if(m_map[x][y]->GetCity().m_id != 0) {
+	for(x = 0; x < m_size.x; x++)
+	{
+		for(y = 0; y < m_size.y; y++)
+		{
+			if(m_map[x][y]->GetCity().m_id != 0)
+			{
 				world_AddUnseenForHumans(x,y);
 			}
 		}
 	}
 
-		
 	g_director->AddCopyVision();
-
-	
-	
 	g_director->CatchUp();
 
-    NumberContinents();
+	NumberContinents();
 	SetAllMoveCost();
-	ClearScratch();	
-	}
+	ClearScratch();
+}
 
 
 void World::InformPlayersOfFloodingCatastrophe(void)
-	{
+{
 	for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
-		{
+	{
 		if (g_player[i] && !g_player[i]->IsDead())
-        {
-			g_player[i]->IndicateTerrainPolluted() ;
+		{
+			g_player[i]->IndicateTerrainPolluted();
 		}
 	}
 }
@@ -575,7 +588,7 @@ void World::InformPlayersOfFloodingCatastrophe(void)
 
 
 void World::FloodRivers(void)
-	{
+{
 	static	sint32	offset_pass1[4][2] = { { -1, +1 }, { -1, 0 }, { -1, -1 }, { 0, -1 } },
 					offset_pass2[4][2] = { { +1, -1 }, { +1, 0 }, {+1, +1 }, { 0, +1 } } ;
 
@@ -587,11 +600,11 @@ void World::FloodRivers(void)
 	
 	for (y=0; y<h; y++)
 		for (x=0; x<w; x++)
-			{
+		{
 			if (!IsMountain(x, y))
-				{
+			{
 				for (o=0; o<4; o++)
-					{
+				{
 					static MapPoint pnt;
 					
 					pnt.x = sint16(x+offset_pass1[o][0]);
@@ -600,32 +613,28 @@ void World::FloodRivers(void)
 					if(pnt.x < 0 || pnt.x >= m_size.x || pnt.y < 0 || pnt.y >= m_size.y)
 						continue;  
 					if ((GetCell(pnt)->GetScratch()==-2) && IsRiver(x, y))
-						{
+					{
 						GetCell(x, y)->m_search_count = -3 ;
-						}
-					else if ((GetCell(pnt)->GetScratch()==-1) && IsRiver(x, y))
-						{
-						GetCell(x, y)->m_search_count = -2 ;
-						}
-					else if ((IsWater(pnt)))
-						{
-						GetCell(x, y)->m_search_count = -1 ;
-						}
-
 					}
-
-
+					else if ((GetCell(pnt)->GetScratch()==-1) && IsRiver(x, y))
+					{
+						GetCell(x, y)->m_search_count = -2 ;
+					}
+					else if ((IsWater(pnt)))
+					{
+						GetCell(x, y)->m_search_count = -1 ;
+					}
 				}
-
 			}
+		}
 
 	for (y=h-1; y>=0; y--)
 		for (x=w-1;x>=0; x--)
-			{
+		{
 			if (!IsMountain(x, y))
-				{
+			{
 				for (o=0; o<4; o++)
-					{
+				{
 					static MapPoint pnt;
 					
 					pnt.x = sint16(x+offset_pass2[o][0]);
@@ -634,39 +643,30 @@ void World::FloodRivers(void)
 					if(pnt.x < 0 || pnt.x >= m_size.x || pnt.y < 0 || pnt.y >= m_size.y)
 						continue;
 					if ((GetCell(pnt)->GetScratch()==-2) && IsRiver(x, y))
-						{
+					{
 						GetCell(x, y)->m_search_count = -3 ;
-						}
-					else if ((GetCell(pnt)->GetScratch()==-1) && IsRiver(x, y))
-						{
-						GetCell(x, y)->m_search_count = -2 ;
-						}
-					else if ((IsWater(pnt)))
-						{
-						GetCell(x, y)->m_search_count = -1 ;
-						}
-
 					}
-
-
+					else if ((GetCell(pnt)->GetScratch()==-1) && IsRiver(x, y))
+					{
+						GetCell(x, y)->m_search_count = -2 ;
+					}
+					else if ((IsWater(pnt)))
+					{
+						GetCell(x, y)->m_search_count = -1 ;
+					}
 				}
-
 			}
-
-	}
-
-
-
-
-
-
-
-
-
-
-
+		}
+}
 
 void World::OzoneDepletion(void)
+{
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_OzoneDepletion,
+	                       GEA_End);
+}
+
+// Only called by the event
+void World::OzoneDepletionEvent(void)
 {
 	sint32	i,
 			m,
@@ -684,7 +684,7 @@ void World::OzoneDepletion(void)
 
 	for (i=0;i<k_MAX_PLAYERS; i++) {
 		if (g_player[i])
-			g_player[i]->IndicateTerrainPolluted() ;
+			g_player[i]->IndicateTerrainPolluted();
 	}
 
 	RemoveBeaches() ;
@@ -712,14 +712,12 @@ void World::OzoneDepletion(void)
 				ClearGoods(x, y);
 				CutImprovements(pos);
 			}
-
 		}
 
-
-	MakeBeaches() ;
+	MakeBeaches();
 	SetAllMoveCost();
-	g_tiledMap->PostProcessMap() ;
-	g_tiledMap->Refresh() ;
+	g_tiledMap->PostProcessMap();
+	g_tiledMap->Refresh();
 	g_radarMap->Update();
 	g_radarMap->ShouldDraw();
 }
@@ -843,7 +841,8 @@ void World::RegenerateRivers()
 	delete [] wetmap;
 }
 
-const GlobalWarmingRecord* World::GetGlobalWarmingDBRec() const{
+const GlobalWarmingRecord* World::GetGlobalWarmingDBRec() const
+{
 	// Can be improvemed (more records, diff dependent)
 	return g_theGlobalWarmingDB->Get(0);
 }

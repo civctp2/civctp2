@@ -25,7 +25,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - PollutionBeginTurn is now triggered from PlayerBeginTurn if executed
+//   so that flood events make players invalid after all the player events. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,7 +53,7 @@
 #include "EndGame.h"
 #include "TurnCnt.h"
 #include "Score.h"
-
+#include "pollution.h"                  // g_thePollution
 
 #include "profileDB.h"
 #include "civapp.h"
@@ -72,35 +73,24 @@
 extern ControlPanelWindow       *g_controlPanel;
 extern sint32                   g_tileImprovementMode;
 extern TurnCount                *g_turn;
+extern Pollution                *g_thePollution;
 
 void Player::BeginTurn()
 
 {
 #ifdef _DEBUG
-	if(m_owner == 1) {
-		
+	if(m_owner == 1)
+	{
+		// Something is missing here
 	}
 #endif
 
-	
-	
-	
-	
-
-
-
-
-
-	
 	if (g_tileImprovementMode) 
 	{
 		g_tileImprovementMode = 0;
 		
 	}
 
-	
-
-	
 	if(g_controlPanel) 
 	{
 		g_controlPanel->UpdatePlayerBeginProgress(m_owner);
@@ -108,17 +98,13 @@ void Player::BeginTurn()
 	}
 
 	sint32 i;
-	for(i = m_messages->Num() - 1; i >= 0; i--) {
-		if(!g_theMessagePool->IsValid(m_messages->Access(i))) {
+	for(i = m_messages->Num() - 1; i >= 0; i--)
+	{
+		if(!g_theMessagePool->IsValid(m_messages->Access(i)))
+		{
 			m_messages->DelIndex(i);
 			continue;
 		}
-
-		
-		
-
-
-
 	}
 
 	
@@ -130,19 +116,21 @@ void Player::BeginTurn()
 	
 	m_end_turn_soon = FALSE;
 
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_SET_ROUND, m_owner, m_current_round));
 		g_network.Unblock(m_owner);
 	}
 
-	if(!g_network.IsActive() || g_network.IsHost() || (m_owner == g_network.GetPlayerIndex())) {
+	if(!g_network.IsActive() || g_network.IsHost() || (m_owner == g_network.GetPlayerIndex()))
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Player[%d]::BeginTurn: running\n", m_owner));
 
 		m_civRevoltingCitiesShouldJoin = -1;
 
-		sint32 p;
-		for(p = 0; p < k_MAX_PLAYERS; p++) {
+		for(sint32 p = 0; p < k_MAX_PLAYERS; p++)
+		{
 			m_sent_requests_this_turn[p] = 0;
 		}
 
@@ -156,18 +144,13 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_PeaceMovement,
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
-		m_gold->ClearStats(); 
+		m_gold->ClearStats();
 
-		
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_PollutionTurn,
 		                       GEA_Player, m_owner,
@@ -203,9 +186,6 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
-
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_BeginTurnImprovements,
 		                       GEA_Player, m_owner,
@@ -233,11 +213,6 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
-		
-		
-
 		BeginTurnUnits();
 
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
@@ -247,23 +222,27 @@ void Player::BeginTurn()
 
 		
 		m_strengths->Calculate();
-		if(g_network.IsHost()) {
+		if(g_network.IsHost())
+		{
 			g_network.Block(m_owner);
 			g_network.QueuePacketToAll(new NetStrengths(m_owner));
 			g_network.QueuePacketToAll(new NetScores(m_owner));
 			g_network.Unblock(m_owner);
 		}
-	} else {
+	}
+	else
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Player[%d]::BeginTurn: not running\n", m_owner));
 	}
 
 
-	if(!g_network.IsClient()) {
-		
-		
+	if(!g_network.IsClient())
+	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_FinishBeginTurn,
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 	}
+
+	g_thePollution->BeginTurn();
 }

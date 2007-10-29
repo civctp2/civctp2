@@ -697,7 +697,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	PLAYER_INDEX    playerId;
 	sint32          cycle;
 
-    if (!args->GetPlayer(0, playerId))
+	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 	
 	if (!args->GetInt(0, cycle))
@@ -715,8 +715,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	Scheduler::GetScheduler(playerId).Process_Squad_Changes();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-    
-	
 	t1 = GetTickCount();
 	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS MATCHES -- Turn %d\n", round));
@@ -2567,7 +2565,7 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 			Army def_army;
 			MapPoint def_pos;
 			sint32 i, dist = 0, min_dist = 0x7fffffff;
-            //bombard the first enemy army within range
+			//bombard the first enemy army within range
 			for(i = 0; i < num_armies; i++){
 				def_army = foreigner_ptr->m_all_armies->Access(i);
 

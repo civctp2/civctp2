@@ -255,8 +255,8 @@
 
 extern C3UI                     *g_c3ui;
 extern PointerList<Player>      *g_deadPlayer;
-extern Pollution                *g_thePollution ;
-extern TopTen                   *g_theTopTen ;
+extern Pollution                *g_thePollution;
+extern TopTen                   *g_theTopTen;
 extern MessageWindow            *g_currentMessageWindow;
 extern DebugWindow              *g_debugWindow;
 extern CivApp                   *g_civApp;
@@ -1905,8 +1905,11 @@ void Player::BeginTurnProduction()
 	}
 
     // EMOD New Version 5-16-2006; moved 8-2-2006 to allow for FranchiseProduction
-	if ((0 < m_allInstallations->Num()) && (0 < n)) {
-		for(sint32 b = 0; b < m_allInstallations->Num(); b++) {
+	if(0 < m_allInstallations->Num() // If we have any installations
+	&& 0 < n                         // If we have any cities
+	){
+		for(sint32 b = 0; b < m_allInstallations->Num(); b++)
+		{
 			Installation inst = m_allInstallations->Access(b);
 			const TerrainImprovementRecord *rec = inst.GetDBRec();
 			MapPoint pos;

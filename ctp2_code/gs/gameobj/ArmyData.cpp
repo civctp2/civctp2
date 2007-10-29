@@ -5467,8 +5467,6 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 		}
 	}
 
-
-
 	// Defenders present code starts here
 	for(i = 0; i < defender.Num(); i++) {//return illegal if at least one can't be attacked
 		if(defender[i].Flag(k_UDF_CANT_BE_ATTACKED))
@@ -5488,11 +5486,6 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 	&&  g_network.IsLocalPlayer(m_owner)))
 		if(!VerifyAttack(UNIT_ORDER_BOMBARD, point, defender.GetOwner()))
 			return ORDER_RESULT_ILLEGAL;
-
-
-
-
-
 
 	sint32 numAttacks = 0;
 	sint32 numAlive = m_nElements;
@@ -5561,38 +5554,45 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 
 	bool AlltaSneakBombard = true;
 
-	for (i = m_nElements - 1; i>= 0; i--) { 
-			if(!m_array[i].GetDBRec()->GetSneakBombard()){
-				AlltaSneakBombard = false;
-				break;
-			}
+	for (i = m_nElements - 1; i>= 0; i--) {
+		if(!m_array[i].GetDBRec()->GetSneakBombard())
+		{
+			AlltaSneakBombard = false;
+			break;
 		}
+	}
 
-		if(!m_array[0].GetDBRec()->GetSneakBombard()){
-				AlltaSneakBombard = false;
-		}
+	if(!m_array[0].GetDBRec()->GetSneakBombard())
+	{
+		AlltaSneakBombard = false;
+	}
 
 	//EMOD
 	// add WonderCheck for EnablesPunativeAirstrikes
 	bool Punstrike = true;
-	if((!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)) && (!m_array[i].GetMovementTypeAir())){ //(!m_array[i].GetDBRec()->GetMovementTypeAir())){ 
+	if(!wonderutil_GetEnablesPunativeAirstrikes(g_player[m_owner]->m_builtWonders)
+	&& !m_array[i].GetMovementTypeAir()
+//	&& !m_array[i].GetDBRec()->GetMovementTypeAir()
+	){
 		Punstrike = false;
 	}
 
 
 	bool AllDefSneakAttack = true;
-	for(i = 0; i < defender.Num(); i++) { 
-		if(!defender[i].GetDBRec()->GetSneakAttack()){
+	for(i = 0; i < defender.Num(); i++)
+	{
+		if(!defender[i].GetDBRec()->GetSneakAttack())
+		{
 			AllDefSneakAttack = false;
 			break;
 		}
-	} 
+	}
 
-		if(!defender[0].GetDBRec()->GetSneakAttack()){
-			AllDefSneakAttack = false;
-		}
-		
-	
+	if(!defender[0].GetDBRec()->GetSneakAttack())
+	{
+		AllDefSneakAttack = false;
+	}
+
 	if(!AlltaSneakBombard && !AllDefSneakAttack && !Punstrike){
 		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 		defending_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_CEASEFIRE);
@@ -5615,40 +5615,47 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 	}
 ////////////////ORIGINAL CODE  
 ///////////////Used in Unitdata::bombard is it necessary here? m_array and defender both us .bombard so why is it killing?   
-    for (i = m_nElements - 1; 0 <= i; i--) { 
-        if (m_array[i].GetHP() < 0.999) {
+	for (i = m_nElements - 1; 0 <= i; i--)
+	{
+		if (m_array[i].GetHP() < 0.999)
+		{
 			    m_array[i].Kill(CAUSE_REMOVE_ARMY_COUNTERBOMBARD, defender.GetOwner());  
-			}
 		}
-    
-    //kill off defending units that were newly damaged
-    for (i = defender.Num() - 1; 0 <= i; i--) { 
-        if (defender[i].GetHP() < 0.999) {
+	}
+
+	//kill off defending units that were newly damaged
+	for (i = defender.Num() - 1; 0 <= i; i--)
+	{
+		if (defender[i].GetHP() < 0.999) {
 				defender[i].Kill(CAUSE_REMOVE_ARMY_BOMBARD, GetOwner());  
-			}
 		}
+	}
 ////////////////
 
 //emod
 
-				for (i = 0; i< m_nElements; i++) { 
-					if (m_array[i].GetDBRec()->GetCollateralTileDamage()) { 
-						Cell *cell = g_theWorld->GetCell(point);
-//						sint32 cellOwner = cell->GetOwner();
-						for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++) {
-						sint32 imp = cell->GetDBImprovement(ti);
-						const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
-							if(trec->GetCantPillage() == 0){
-								for(i = 0; i < m_nElements; i++) {
+	for (i = 0; i< m_nElements; i++)
+	{
+		if (m_array[i].GetDBRec()->GetCollateralTileDamage())
+		{
+			Cell *cell = g_theWorld->GetCell(point);
+//			sint32 cellOwner = cell->GetOwner();
+			for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++)
+			{
+				sint32 imp = cell->GetDBImprovement(ti);
+				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
+				if(!trec->GetCantPillage())
+				{
+					for(i = 0; i < m_nElements; i++)
+					{
 						g_theWorld->CutImprovements(point);
-							
-									}
-								}
-							}
-						}
 					}
-    //if there's a city at point, try to destroy a building and kill a pop
-	BombardCity(point, FALSE);
+				}
+			}
+		}
+	}
+	//if there's a city at point, try to destroy a building and kill a pop
+	BombardCity(point, false);
 	return ORDER_RESULT_SUCCEEDED;
 }
 
@@ -5671,9 +5678,9 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 //----------------------------------------------------------------------------
 bool ArmyData::CanInterceptTrade(uint32 &uindex) const
 {
-    for (sint32 i = m_nElements - 1; i>= 0; i--) 
-    { 
-        if (m_array[i].CanInterceptTrade())
+	for (sint32 i = m_nElements - 1; i>= 0; i--)
+	{
+		if (m_array[i].CanInterceptTrade())
 		{
 			uindex = i;
 			return true;
@@ -10198,58 +10205,63 @@ void ArmyData::PerformOrder(const OrderRecord * order_rec)
 //---------------------------------------------------------------------------- 
 void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path)
 {
-    Assert(path != NULL);
-    if (path == NULL)
-	   return;
+	Assert(path != NULL);
+	if (path == NULL)
+		return;
 
-    if (m_flags & k_CULF_IN_SPACE)
-	   return;
+	if (m_flags & k_CULF_IN_SPACE)
+		return;
 
-    Path *      tmp_path            = new Path(path);
-    MapPoint    target_pos;
+	Path *      tmp_path            = new Path(path);
+	MapPoint    target_pos;
 
-    if (tmp_path->GetMovesRemaining() > 0)
-    {		
-	   target_pos = tmp_path->GetEnd();
-    }
-    else
-    {		
-       target_pos = m_pos;
-    }
-    if (s_orderDBToEventMap == NULL)
-	   AssociateEventsWithOrdersDB();
+	if (tmp_path->GetMovesRemaining() > 0)
+	{
+		target_pos = tmp_path->GetEnd();
+	}
+	else
+	{
+		target_pos = m_pos;
+	}
+	if (s_orderDBToEventMap == NULL)
+		AssociateEventsWithOrdersDB();
 
-    Assert(s_orderDBToEventMap != NULL);
-    sint32 game_event = s_orderDBToEventMap[order_rec->GetIndex()];
-    sint32 moves = tmp_path->GetMovesRemaining();
-    //order_rec: range = 0 (army must be on top of tile) or range = 1 (can execute order from adjacent tile)
-    sint32 range = 0;
-    if (order_rec->GetRange(range)) 
-    {
-		Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());            
-    }
+	Assert(s_orderDBToEventMap != NULL);
+	sint32 game_event = s_orderDBToEventMap[order_rec->GetIndex()];
+	sint32 moves = tmp_path->GetMovesRemaining();
+	//order_rec: range = 0 (army must be on top of tile) or range = 1 (can execute order from adjacent tile)
+	sint32 range = 0;
+	if (order_rec->GetRange(range))
+	{
+		Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());
+	}
 
-    sint32 min_rge, max_rge=0;
-    MapPoint move_pos = m_pos;//move_pos will become a position to move to if trying to bombard out of range
-    Path *move_path = tmp_path;//copy tmp_path
-    if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0){
-        if(GetBombardRange(min_rge, max_rge)){
-            sint32 dist = m_pos.NormalizedDistance(target_pos);
-            if(dist > max_rge){//target is out of range
-                for(sint32 i=0;i<moves;i++){//find a position in tmp_path to move to
+	sint32 min_rge, max_rge=0;
+	MapPoint move_pos = m_pos;//move_pos will become a position to move to if trying to bombard out of range
+	Path *move_path = tmp_path;//copy tmp_path
+	if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0)
+	{
+		if(GetBombardRange(min_rge, max_rge))
+		{
+			sint32 dist = m_pos.NormalizedDistance(target_pos);
+			if(dist > max_rge)
+			{//target is out of range
+				for(sint32 i=0;i<moves;i++)
+				{//find a position in tmp_path to move to
 
-DPRINTF(k_DBG_FILE, ("move_pos (%d,%d), target_pos (%d,%d), NormalizedDistance %d, i %d\n",
-		move_pos.x, move_pos.y, target_pos.x, target_pos.y, dist, i));
-               
-                    tmp_path->IncDir();			
-                    tmp_path->GetCurrentPoint(move_pos);
-                    dist = move_pos.NormalizedDistance(target_pos);
+					DPRINTF(k_DBG_FILE, ("move_pos (%d,%d), target_pos (%d,%d), NormalizedDistance %d, i %d\n",
+					                     move_pos.x, move_pos.y, target_pos.x, target_pos.y, dist, i));
+					tmp_path->IncDir();
+					tmp_path->GetCurrentPoint(move_pos);
+					dist = move_pos.NormalizedDistance(target_pos);
 
-                    if(dist <= max_rge){ //we're now within range
-DPRINTF(k_DBG_FILE, ("\n found move_pos: we're now within range\n"));
+					if(dist <= max_rge)
+					{ //we're now within range
+						DPRINTF(k_DBG_FILE, ("\n found move_pos: we're now within range\n"));
 
 						tmp_path->Start(m_pos);//reset tmp_path
-						for(sint32 j=1; j<moves-i; j++){//shorten move_path to end at move_pos 
+						for(sint32 j=1; j<moves-i; j++)
+						{//shorten move_path to end at move_pos 
 							move_path->SnipEnd();
 						}
 						i=moves;//exit the loop and continue
@@ -10263,77 +10275,86 @@ DPRINTF(k_DBG_FILE, ("\n found move_pos: we're now within range\n"));
 					 GEA_Army, Army(m_id), 
 					 GEA_MapPoint, target_pos, 
 					 GEA_End);
-        }
-    }
-    else{
-        for (sint32 i = 0; moves > 0 && i < range; i++){
+		}
+	}
+	else
+	{
+		for (sint32 i = 0; moves > 0 && i < range; i++)
+		{
 			tmp_path->SnipEnd();
 			moves--;
 		}
-    }
-    g_gevManager->Pause();
-    //insert order's game_event here	
-    if (game_event > 0)	{
+	}
+	g_gevManager->Pause();
+	//insert order's game_event here	
+	if (game_event > 0)
+	{
 		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
-			{
-	    	g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
+		{
+			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
 			static_cast<GAME_EVENT>(game_event), 
 			GEA_Army, Army(m_id), 
 			GEA_MapPoint, target_pos,
 			GEA_End);
 		}
-        else {
+		else
+		{
 			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
 			static_cast<GAME_EVENT>(game_event), 
 			GEA_Army, Army(m_id), 
 			GEA_End);
 		}
-    }
-    //insert GEV_MoveOrder here, i.e., move adjacent to target pos or within bombarding range of target pos	
-    if (tmp_path->GetMovesRemaining() > 0 && !order_rec->GetIsTeleport() && !order_rec->GetIsTarget()) {
-        if(max_rge){//max_rge >0 implys BombardOrder and army has bombarding units
+	}
+	//insert GEV_MoveOrder here, i.e., move adjacent to target pos or within bombarding range of target pos
+	if(tmp_path->GetMovesRemaining() > 0
+	&& !order_rec->GetIsTeleport()
+	&& !order_rec->GetIsTarget()
+	){
+		if(max_rge)
+		{//max_rge >0 implys BombardOrder and army has bombarding units
+			double cur_move_pts;
+			CurMinMovementPoints(cur_move_pts);
 
+			DPRINTF(k_DBG_FILE, ("army %lx, cur_move_pts=%f, move_pos=<%d,%d>\n",m_id,cur_move_pts,move_pos.x,move_pos.y));
 
-double cur_move_pts;
-CurMinMovementPoints(cur_move_pts);
+			if(move_pos != m_pos)
+			{//then first move army to move_pos
 
-DPRINTF(k_DBG_FILE, ("army %lx, cur_move_pts=%f, move_pos=<%d,%d>\n",m_id,cur_move_pts,move_pos.x,move_pos.y));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MoveOrder,
+				                       GEA_Army, Army(m_id),
+				                       GEA_Path, move_path,
+				                       GEA_MapPoint, move_pos,
+				                       GEA_Int, (game_event == -1),
+				                       GEA_End);
+			}
+			// bombard target_pos
 
-
-			if(move_pos != m_pos){//then first move army to move_pos
-
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MoveOrder, 
-					GEA_Army, Army(m_id),
-					GEA_Path, move_path,
-					GEA_MapPoint, move_pos,
-					GEA_Int, (game_event == -1),
-					GEA_End);
-			 }
-			 //bombard target_pos
-
-			 g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-				 static_cast<GAME_EVENT>(game_event), 
-			     GEA_Army, Army(m_id), 
-			     GEA_MapPoint, target_pos, 
-			     GEA_End);
-		 }
-		 else{//not a bombard order
-				 g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-				     GEV_MoveOrder, 
-					 GEA_Army, Army(m_id),			
-					 GEA_Path, tmp_path,		 
-					 GEA_MapPoint, target_pos, 
-					 GEA_Int, (game_event == -1), 
-					 GEA_End);
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, static_cast<GAME_EVENT>(game_event),
+			                       GEA_Army, Army(m_id),
+			                       GEA_MapPoint, target_pos,
+			                       GEA_End);
 		}
-    }
-    else {
-	     delete tmp_path;
-    }
-    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ClearOrders,
-	    GEA_Army, Army(m_id),
-	    GEA_End);
-    g_gevManager->Resume();
+		else
+		{//not a bombard order
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			                       GEV_MoveOrder,
+			                       GEA_Army, Army(m_id),
+			                       GEA_Path, tmp_path,
+			                       GEA_MapPoint, target_pos,
+			                       GEA_Int, (game_event == -1),
+			                       GEA_End);
+		}
+	}
+	else
+	{
+		delete tmp_path;
+	}
+
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ClearOrders,
+	                       GEA_Army, Army(m_id),
+	                       GEA_End);
+
+	g_gevManager->Resume();
 }
 
 //----------------------------------------------------------------------------

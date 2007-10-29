@@ -28,6 +28,7 @@
 // - Added second World::GetGood method, usefull if you already have a Cell
 //   pointer. - May 18th 2005 Martin Gühmann
 // - Moved some stuff from the old global earming database. (July 15th 2006 Martin Gühmann)
+// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -104,8 +105,8 @@ interface IMapGenerator;
 struct MapPointNode;
 
 
-template <class T> class DynamicArray; 
-typedef DynamicArray<sint32> DAsint32; 
+template <class T> class DynamicArray;
+typedef DynamicArray<sint32> DAsint32;
 
 class Terrain
 {
@@ -123,9 +124,10 @@ private:
     TerrainRecord const *   m_Terrain;
 };
 
-class World : public CityRadiusCallback { 
-    sint32 m_isYwrap; 
-    sint32 m_isXwrap;					
+class World : public CityRadiusCallback
+{
+    sint32 m_isYwrap;
+    sint32 m_isXwrap;
     BOOL m_continents_are_numbered; 
 
     MAP_GENERATOR m_mapGenerator;
@@ -379,15 +381,12 @@ public:
     
     void InsertWaterNextToLand(const sint32 waterc, const sint32 landc);    
     void InsertLandNextToWater(const sint32 landc, const sint32 waterc); 
-    
 
     bool IsWaterNextTooLand(const sint32 waterc, const sint32 landc) const;
     bool IsLandNextTooWater(const sint32 landc, const sint32 waterc) const;
 
-	
     bool LandShareWater(const sint32 land1, const sint32 land2) const;
 
-    
     bool GetIsChokePoint(MapPoint const & pos) const;
     
     void CalcChokePoints();
@@ -562,7 +561,7 @@ public:
     
     void GamestateDebug(); 
     void SetColor(const MapPoint &pos, sint32 c);
-    
+
     sint32 GetTopVisibleUnit (const MapPoint &pos, Unit &top) const;
     sint32 GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const;
     sint32 GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, BOOL includeCities = TRUE) const; 
@@ -570,8 +569,9 @@ public:
     sint32 GetTopRadarUnit(const MapPoint &pos, Unit &top) const;
     
     sint32 GetSecondUnit (const MapPoint &pos, Unit &second) const;
-    
-    void GlobalWarming(const sint32 phase) ;
+
+    void GlobalWarming     (const sint32 phase);
+    void GlobalWarmingEvent(const sint32 phase);
     void GWPhase0(void) ;
     void GWPhase1(void) ;
     void RaiseWaters(void) ;
@@ -585,12 +585,11 @@ public:
     void FloodArmies(Cell *c) ;
     void ConvertToShallowWater(sint32 x, sint32 y, Cell *c) ;
     void ConvertToBeach(sint32 x, sint32 y, Cell *c) ;
-    
+
     void RemoveBeaches(void) ;
     void FloodRivers(void) ;
-    void OzoneDepletion(const sint32 phase) ;
     void InformPlayersOfFloodingCatastrophe(void) ;
-    
+
     void ChangeOwner(const MapPoint &point, sint32 fromOwner, sint32 toOwner);
     void CutImprovements(const MapPoint &point);
     double GetDefenseBonus(const MapPoint &point) const;
@@ -637,14 +636,14 @@ public:
         const MapPoint &    lastpoint
     ) const;
     void NewGenerateRivers(sint8 *map, sint8 *wetmap);
-    
-    bool IsNextToCity(const MapPoint &pos) const;
 
-    void GWPhase(const sint32 phase);
+	bool IsNextToCity(const MapPoint &pos) const;
 
-    void GlobalWarming(void);
+	void GWPhase(const sint32 phase);
 
-    void OzoneDepletion(void);
+//	void OzoneDepletion     (const sint32 phase); // This should be reimplemented to use the phase dependent boni of the ozone database.
+	void OzoneDepletion     (void);
+	void OzoneDepletionEvent(void);
 
 	void AddZOC(const MapPoint &pos, sint32 player);
 	void RemoveZOC(const MapPoint &pos, sint32 player);
@@ -653,7 +652,7 @@ public:
 	BOOL AdjacentToZOCUnit(const MapPoint &pos, sint32 player, const Army &notThisArmy,
 						   const Unit &notThisCity);
 	void GetAdjacentUnits(UnitDynamicArray &units, const MapPoint &pnt);
-    void GetAdjacentCities(UnitDynamicArray &units, const MapPoint &cpos);
+	void GetAdjacentCities(UnitDynamicArray &units, const MapPoint &cpos);
 
 	void RegisterPlayerDead(sint32 owner);
 
@@ -686,8 +685,8 @@ public:
 	void DeleteStartingPoint(sint32 index);
 	
 #ifdef _DEBUG
-    void DebugUpdatePopColor(); 
-    void ShowCellOwners();
+	void DebugUpdatePopColor(); 
+	void ShowCellOwners();
 #endif
 
 	bool ExportMap(MBCHAR const * filename);

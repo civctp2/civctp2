@@ -1,7 +1,33 @@
-# 35
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The data for goals
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None or not known
+#
+#----------------------------------------------------------------------------
+
+# 51
 
 // Any changes made to the order, additions or subractions to this
 // file should be reflected in the strategies.txt file!!
+
+## 0 ##########################################################
 
 GOAL_DEFEND {
   ExecuteIncrementally
@@ -23,9 +49,9 @@ GOAL_DEFEND {
   DistanceToEnemyBonus	  -10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus      10000 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus      10000
+  NotVisibleBonus           0
   ChokePointBonus		  250
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		 -500
@@ -36,6 +62,8 @@ GOAL_DEFEND {
 
   ForceMatch:Defensive
 }
+
+## 1 ##########################################################
 
 GOAL_SEIGE {
   RallyFirst
@@ -57,13 +85,13 @@ GOAL_SEIGE {
   EnemyValueBonus		 -250
   AlliedValueBonus		 1000
   PowerBonus			  500
-  DistanceToHomeBonus	  -20  
-  DistanceToEnemyBonus	   10  
+  DistanceToHomeBonus	  -20
+  DistanceToEnemyBonus	   10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus     -10000 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus     -10000
+  NotVisibleBonus           0
   ChokePointBonus		  500
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  100
@@ -76,6 +104,8 @@ GOAL_SEIGE {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 2 ##########################################################
 
 GOAL_ATTACK {
   RallyFirst
@@ -95,12 +125,12 @@ GOAL_ATTACK {
   AlliedValueBonus		 1500
   PowerBonus			10000
   DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0  
+  DistanceToEnemyBonus	    0
   InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus     -10000 
-  NotVisibleBonus       -1000     
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus     -10000
+  NotVisibleBonus       -1000
   ChokePointBonus		  250
   UnexploredBonus	  -999999 
   ObsoleteArmyBonus		  100
@@ -113,6 +143,8 @@ GOAL_ATTACK {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 3 ##########################################################
 
 GOAL_HARASS {
   RallyFirst
@@ -130,14 +162,14 @@ GOAL_HARASS {
   ThreatBonus			  100
   EnemyValueBonus		 -500
   AlliedValueBonus		 1500
-  PowerBonus			  500    
+  PowerBonus			  500
   DistanceToHomeBonus	  -10
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus     -10000 
-  NotVisibleBonus       -1000 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus     -10000
+  NotVisibleBonus       -1000
   ChokePointBonus		   50
   UnexploredBonus	  -999999 
   ObsoleteArmyBonus		  100
@@ -150,6 +182,8 @@ GOAL_HARASS {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 4 ##########################################################
 
 GOAL_SETTLE_LAND {
   NeedsEscort
@@ -171,9 +205,9 @@ GOAL_SETTLE_LAND {
   DistanceToEnemyBonus     -2
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus		 -100
   ObsoleteArmyBonus		    0
@@ -184,6 +218,8 @@ GOAL_SETTLE_LAND {
 
   ForceMatch:Special
 }
+
+## 5 ##########################################################
 
 GOAL_SETTLE_SEA {
   NeedsEscort
@@ -204,9 +240,9 @@ GOAL_SETTLE_SEA {
   DistanceToEnemyBonus     15
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus		 -100
   ObsoleteArmyBonus		    0
@@ -217,6 +253,8 @@ GOAL_SETTLE_SEA {
 
   ForceMatch:Special
 }
+
+## 6 ##########################################################
 
 GOAL_EXPLORE {
   UnGroupFirst
@@ -243,8 +281,8 @@ GOAL_EXPLORE {
   InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus   100
   InEnemyTerritoryBonus  -100
-  WoundedArmyBonus       -100    
-  NotVisibleBonus        1000 
+  WoundedArmyBonus       -100
+  NotVisibleBonus        1000
   ChokePointBonus		   10
   UnexploredBonus		 1000
   ObsoleteArmyBonus		   10
@@ -256,10 +294,12 @@ GOAL_EXPLORE {
   ForceMatch:Special
 }
 
+## 7 ##########################################################
+
 GOAL_STEALTH_EXPLORE {
   UnGroupFirst
   
-  SquadClass:Stealth 
+  SquadClass:Stealth
   SquadClass:CanExplore
   
   TargetType:Unexplored
@@ -283,8 +323,8 @@ GOAL_STEALTH_EXPLORE {
   InHomeTerritoryBonus  -1000
   NoOwnerTerritoryBonus  1000
   InEnemyTerritoryBonus  1000
-  WoundedArmyBonus          0 
-  NotVisibleBonus        1000 
+  WoundedArmyBonus          0
+  NotVisibleBonus        1000
   ChokePointBonus		   10
   UnexploredBonus		 1000
   ObsoleteArmyBonus		   10
@@ -296,7 +336,7 @@ GOAL_STEALTH_EXPLORE {
   ForceMatch:Special
 }
 
-
+## 8 ##########################################################
 
 GOAL_ENSLAVE_SETTLER {
   UnGroupFirst
@@ -316,12 +356,12 @@ GOAL_ENSLAVE_SETTLER {
   AlliedValueBonus		  100
   PowerBonus			  100
   DistanceToHomeBonus	   -1
-  DistanceToEnemyBonus	   -1 
+  DistanceToEnemyBonus	   -1
   InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus  5000
-  InEnemyTerritoryBonus -1000 
-  WoundedArmyBonus          0 
-  NotVisibleBonus       -1000 
+  InEnemyTerritoryBonus -1000
+  WoundedArmyBonus          0
+  NotVisibleBonus       -1000
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -332,6 +372,8 @@ GOAL_ENSLAVE_SETTLER {
 
   ForceMatch:Special
 }
+
+## 9 ##########################################################
 
 GOAL_SLAVE_RAID {
   UnGroupFirst
@@ -354,9 +396,9 @@ GOAL_SLAVE_RAID {
   DistanceToEnemyBonus	   -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -367,6 +409,8 @@ GOAL_SLAVE_RAID {
 
   ForceMatch:Special
 }
+
+## 10 ##########################################################
 
 GOAL_CHOKEPOINT {
   RallyFirst
@@ -388,9 +432,9 @@ GOAL_CHOKEPOINT {
   DistanceToEnemyBonus	   -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus  1000
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus         100 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus         100
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  -50
@@ -402,8 +446,10 @@ GOAL_CHOKEPOINT {
   ForceMatch:Defensive
 }
 
+## 11 ##########################################################
+
 GOAL_PATROL {
-  NoTransport  
+  NoTransport
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -423,9 +469,9 @@ GOAL_PATROL {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -436,6 +482,8 @@ GOAL_PATROL {
 
   ForceMatch:Defensive
 }
+
+## 12 ##########################################################
 
 GOAL_CONVERT_CITY {
   AvoidWatchfulCity
@@ -473,6 +521,8 @@ GOAL_CONVERT_CITY {
   ForceMatch:Special
 }
 
+## 13 ##########################################################
+
 GOAL_BIOTERROR_CITY {
   AvoidWatchfulCity
 
@@ -492,9 +542,9 @@ GOAL_BIOTERROR_CITY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -504,7 +554,9 @@ GOAL_BIOTERROR_CITY {
   ThreatenBonus 5000
 
   ForceMatch:Special
-} 
+}
+
+## 14 ##########################################################
 
 GOAL_NANOATTACK_CITY {
   AvoidWatchfulCity
@@ -525,9 +577,9 @@ GOAL_NANOATTACK_CITY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -537,7 +589,9 @@ GOAL_NANOATTACK_CITY {
   ThreatenBonus 5000
 
   ForceMatch:Special
-} 
+}
+
+## 15 ##########################################################
 
 GOAL_HARASS_CITY {
   RallyFirst
@@ -561,9 +615,9 @@ GOAL_HARASS_CITY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  500
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  100
@@ -576,6 +630,8 @@ GOAL_HARASS_CITY {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 16 ##########################################################
 
 GOAL_BOMBARD {
   SquadClass:CanDefend
@@ -597,9 +653,9 @@ GOAL_BOMBARD {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus        -100 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus        -100
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -612,6 +668,8 @@ GOAL_BOMBARD {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 17 ##########################################################
 
 GOAL_EXPEL {
   SquadClass:CanAttack
@@ -631,9 +689,9 @@ GOAL_EXPEL {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus        -100 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus        -100
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -644,6 +702,8 @@ GOAL_EXPEL {
 
   ForceMatch:Special
 }
+
+## 18 ##########################################################
 
 GOAL_PILLAGE {
   NoTransport
@@ -663,9 +723,9 @@ GOAL_PILLAGE {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus       -1000 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus       -1000
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -678,6 +738,8 @@ GOAL_PILLAGE {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 19 ##########################################################
 
 GOAL_PIRATE {
   NoTransport
@@ -698,9 +760,9 @@ GOAL_PIRATE {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus       -1000 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus       -1000
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -711,6 +773,8 @@ GOAL_PIRATE {
 
   ForceMatch:Special
 }
+
+## 20 ##########################################################
 
 GOAL_COUNTER_STEALTH {
   NoTransport
@@ -730,9 +794,9 @@ GOAL_COUNTER_STEALTH {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -759,13 +823,13 @@ GOAL_GOODY_HUT {
   EnemyValueBonus		    0
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus	   -5 
+  DistanceToHomeBonus	   -5
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -777,10 +841,12 @@ GOAL_GOODY_HUT {
   ForceMatch:Special
 }
 
+## 21 ##########################################################
+
 GOAL_PLANT_NUKE {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -796,9 +862,9 @@ GOAL_PLANT_NUKE {
   DistanceToEnemyBonus	  -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -812,8 +878,10 @@ GOAL_PLANT_NUKE {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
+## 22 ##########################################################
+
 GOAL_CREATE_PARK {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -829,9 +897,9 @@ GOAL_CREATE_PARK {
   DistanceToEnemyBonus	  -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -845,10 +913,12 @@ GOAL_CREATE_PARK {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
+## 23 ##########################################################
+
 GOAL_SOOTHSAY {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -864,9 +934,9 @@ GOAL_SOOTHSAY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -878,10 +948,12 @@ GOAL_SOOTHSAY {
   ForceMatch:Special
 }
 
+## 24 ##########################################################
+
 GOAL_ESTABLISH_EMBASSY {
   NeedsEscort
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -897,13 +969,13 @@ GOAL_ESTABLISH_EMBASSY {
   EnemyValueBonus		    0
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus	   -1 
-  DistanceToEnemyBonus	    1 
+  DistanceToHomeBonus	   -1
+  DistanceToEnemyBonus	    1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	    -1500
   ObsoleteArmyBonus		    0
@@ -915,8 +987,10 @@ GOAL_ESTABLISH_EMBASSY {
   ForceMatch:Special
 }
 
+## 25 ##########################################################
+
 GOAL_FRANCHISING {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -934,9 +1008,9 @@ GOAL_FRANCHISING {
   DistanceToEnemyBonus	   10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -948,10 +1022,12 @@ GOAL_FRANCHISING {
   ForceMatch:Special
 }
 
+## 26 ##########################################################
+
 GOAL_STEAL_TECHNOLOGY {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -969,9 +1045,9 @@ GOAL_STEAL_TECHNOLOGY {
   DistanceToEnemyBonus	    1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -983,10 +1059,12 @@ GOAL_STEAL_TECHNOLOGY {
   ForceMatch:Special
 }
 
+## 27 ##########################################################
+
 GOAL_INVESTIGATE_CITY {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1004,9 +1082,9 @@ GOAL_INVESTIGATE_CITY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1018,10 +1096,12 @@ GOAL_INVESTIGATE_CITY {
   ForceMatch:Special
 }
 
+## 28 ##########################################################
+
 GOAL_INCITE_REVOLUTION {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1037,9 +1117,9 @@ GOAL_INCITE_REVOLUTION {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1051,8 +1131,10 @@ GOAL_INCITE_REVOLUTION {
   ForceMatch:Special
 }
 
+## 29 ##########################################################
+
 GOAL_INJOIN {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1069,9 +1151,9 @@ GOAL_INJOIN {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1083,10 +1165,12 @@ GOAL_INJOIN {
   ForceMatch:Special
 }
 
+## 30 ##########################################################
+
 GOAL_ASSASSINATE {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1102,9 +1186,9 @@ GOAL_ASSASSINATE {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1116,8 +1200,10 @@ GOAL_ASSASSINATE {
   ForceMatch:Special
 }
 
+## 31 ##########################################################
+
 GOAL_UNDERGROUND_RAILWAY {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1134,9 +1220,9 @@ GOAL_UNDERGROUND_RAILWAY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1148,8 +1234,10 @@ GOAL_UNDERGROUND_RAILWAY {
   ForceMatch:Special
 }
 
+## 32 ##########################################################
+
 GOAL_NUKE_CITY {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1165,9 +1253,9 @@ GOAL_NUKE_CITY {
   DistanceToEnemyBonus	  -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1180,6 +1268,8 @@ GOAL_NUKE_CITY {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 33 ##########################################################
 
 GOAL_WANDER {
   SquadClass:CanExplore
@@ -1194,7 +1284,7 @@ GOAL_WANDER {
 
   Execute	ORDER_MOVE
  
-  ThreatBonus			    0  
+  ThreatBonus			    0
   EnemyValueBonus		  100
   AlliedValueBonus		    0
   PowerBonus			    0
@@ -1202,9 +1292,9 @@ GOAL_WANDER {
   DistanceToEnemyBonus	  -10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
@@ -1215,6 +1305,8 @@ GOAL_WANDER {
 
   ForceMatch:Special
 }
+
+## 34 ##########################################################
 
 GOAL_SALLY {
   IsSally
@@ -1235,9 +1327,9 @@ GOAL_SALLY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1248,6 +1340,8 @@ GOAL_SALLY {
 
   ForceMatch:Offensive
 }
+
+## 35 ##########################################################
 
 GOAL_REFORM {
   SquadClass:CanAttack
@@ -1265,9 +1359,9 @@ GOAL_REFORM {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		  100
@@ -1279,8 +1373,10 @@ GOAL_REFORM {
   ForceMatch:Special
 }
 
+## 36 ##########################################################
+
 GOAL_SUE_FRANCHISE {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1296,9 +1392,9 @@ GOAL_SUE_FRANCHISE {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1309,6 +1405,8 @@ GOAL_SUE_FRANCHISE {
 
   ForceMatch:Special
 }
+
+## 37 ##########################################################
 
 // Cause military units to pullback towards our city
 //
@@ -1334,9 +1432,9 @@ GOAL_RETREAT {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus  1000 
-  WoundedArmyBonus     100000 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus  1000
+  WoundedArmyBonus     100000
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
@@ -1349,11 +1447,13 @@ GOAL_RETREAT {
   ForceMatch:Special 
 }
 
+## 38 ##########################################################
+
 // Cause special units to pullback if no other goal
 //
 GOAL_RETREAT_SPECIAL {
   UnGroupFirst
-  ExecuteIncrementally 
+  ExecuteIncrementally
 
   SquadClass:Special
 
@@ -1370,9 +1470,9 @@ GOAL_RETREAT_SPECIAL {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus  1000 
-  WoundedArmyBonus     100000 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus  1000
+  WoundedArmyBonus     100000
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus		    0
   ObsoleteArmyBonus		    0
@@ -1385,6 +1485,7 @@ GOAL_RETREAT_SPECIAL {
   ForceMatch:Special 
 }
 
+## 39 ##########################################################
 
 // Defend our endgame terrain improvements
 GOAL_PROTECT_ENDGAME
@@ -1408,9 +1509,9 @@ GOAL_PROTECT_ENDGAME
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  -10
@@ -1422,7 +1523,9 @@ GOAL_PROTECT_ENDGAME
   ForceMatch:Defensive
 }
 
-// Defend our endgame terrain improvements
+## 40 ##########################################################
+
+// Destroy other endgame terrain improvements
 GOAL_DESTROY_ENDGAME
 {
   NoTransport
@@ -1441,13 +1544,13 @@ GOAL_DESTROY_ENDGAME
   EnemyValueBonus		  100
   AlliedValueBonus		  100
   PowerBonus			  100
-  DistanceToHomeBonus	 -100   
+  DistanceToHomeBonus	 -100
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		   10
@@ -1459,10 +1562,12 @@ GOAL_DESTROY_ENDGAME
   ForceMatch:Offensive
 }
 
+## 41 ##########################################################
+
 GOAL_ADVERTISING {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1480,9 +1585,9 @@ GOAL_ADVERTISING {
   DistanceToEnemyBonus	  100
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1494,10 +1599,12 @@ GOAL_ADVERTISING {
   ForceMatch:Special
 }
 
+## 42 ##########################################################
+
 GOAL_INCITE_UPRISING {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1514,9 +1621,9 @@ GOAL_INCITE_UPRISING {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1527,6 +1634,8 @@ GOAL_INCITE_UPRISING {
 
   ForceMatch:Special
 }
+
+## 43 ##########################################################
 
 GOAL_POISON_CITY {
   AvoidWatchfulCity
@@ -1547,9 +1656,9 @@ GOAL_POISON_CITY {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1559,12 +1668,14 @@ GOAL_POISON_CITY {
   ThreatenBonus 5000
 
   ForceMatch:Special
-} 
+}
+
+## 44 ##########################################################
 
 GOAL_THROW_PARTY {
   NeedsEscort
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1580,13 +1691,13 @@ GOAL_THROW_PARTY {
   EnemyValueBonus		    0
   AlliedValueBonus		    0
   PowerBonus			    0
-  DistanceToHomeBonus	   -1 
-  DistanceToEnemyBonus	    1 
+  DistanceToHomeBonus	   -1
+  DistanceToEnemyBonus	    1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	    -1500
   ObsoleteArmyBonus		    0
@@ -1600,8 +1711,10 @@ GOAL_THROW_PARTY {
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
 
+## 45 ##########################################################
+
 GOAL_SUE {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:SpecialUnit
@@ -1620,9 +1733,9 @@ GOAL_SUE {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1634,10 +1747,12 @@ GOAL_SUE {
   ForceMatch:Special
 }
 
+## 46 ##########################################################
+
 GOAL_INDULGENCE {
   AvoidWatchfulCity
 
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1655,9 +1770,9 @@ GOAL_INDULGENCE {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1669,8 +1784,10 @@ GOAL_INDULGENCE {
   ForceMatch:Special
 }
 
+## 47 ##########################################################
+
 GOAL_FAITH_HEALING {
-  SquadClass:Special  
+  SquadClass:Special
   SquadClass:Stealth
 
   TargetType:City
@@ -1689,9 +1806,9 @@ GOAL_FAITH_HEALING {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  100
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1703,8 +1820,10 @@ GOAL_FAITH_HEALING {
   ForceMatch:Special
 }
 
+## 48 ##########################################################
+
 GOAL_REFUEL {
-  SquadClass:Special  
+  SquadClass:Special
 
   TargetType:City // Needs to be replaced by CanRefuel
   TargetOwner:Self
@@ -1719,9 +1838,9 @@ GOAL_REFUEL {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus     100000 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus     100000
+  NotVisibleBonus           0
   ChokePointBonus		    0
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		    0
@@ -1732,6 +1851,8 @@ GOAL_REFUEL {
 
   ForceMatch:Special
 }
+
+## 49 ##########################################################
 
 GOAL_PARADROP {
 
@@ -1753,9 +1874,9 @@ GOAL_PARADROP {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		  500
   UnexploredBonus	  -999999
   ObsoleteArmyBonus		  100
@@ -1768,6 +1889,8 @@ GOAL_PARADROP {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## 50 ##########################################################
 
 GOAL_RANGED_ATTACK {
   RallyFirst
@@ -1791,11 +1914,11 @@ GOAL_RANGED_ATTACK {
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
   ChokePointBonus		   50
-  UnexploredBonus	         -999999 
+  UnexploredBonus	         -999999
   ObsoleteArmyBonus		    100
   TreaspassingArmyBonus	  0
 
@@ -1806,3 +1929,5 @@ GOAL_RANGED_ATTACK {
 
   TargetProtectionWonder WONDER_THE_FORBIDDEN_CITY
 }
+
+## end ##########################################################

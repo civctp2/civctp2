@@ -574,7 +574,7 @@ STDEHANDLER(TradeBidEvent)
 
 STDEHANDLER(CreatedArmyEvent)
 {
-	
+	// Post army creation event doesn't do anything if you call it from slic.
 	
 	return GEV_HD_Continue;
 }

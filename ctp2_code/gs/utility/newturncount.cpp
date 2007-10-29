@@ -30,6 +30,8 @@
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
+// - PollutionBeginTurn is now triggered from PlayerBeginTurn if executed
+//   so that flood events make players invalid after all the player events. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -230,23 +232,25 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	&& !g_player[g_selected_item->GetCurPlayer()]->IsRobot()
 	){
 		g_turn->SendNextPlayerMessage();
-		return;
+
+		if(g_turn->IsEmail())
+		{
+			return;
+		}
 	}
 
 	if(!g_network.IsHost() || g_network.IsLocalPlayer(next_player))
 	{
-		g_gevManager->AddEvent(GEV_INSERT_Tail,
-			GEV_BeginTurn,
-			GEA_Player, next_player,
-			GEA_Int, next_round,
-			GEA_End);
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurn,
+		                       GEA_Player,      next_player,
+		                       GEA_Int,         next_round,
+		                       GEA_End);
 	}
 	else
 	{
 		g_director->NextPlayer();
+		g_thePollution->BeginTurn();
 	}
-
-	g_thePollution->BeginTurn();
 }
 
 

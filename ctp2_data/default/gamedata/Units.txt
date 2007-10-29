@@ -1,11 +1,32 @@
-######################################################################
+#----------------------------------------------------------------------------
 #
-# added GoldHunger flag but its only activated by the userprofile.txt or in-game rules screen 
-# changed cargohelicopter to carry small
-# change tank to medium
-# outcomment but note that catamaran should carry more and move farther
-######################################################################
-
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : Ozone depletion database
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added GoldHunger flag but its only activated by the userprofile.txt or 
+#    in-game rules screen
+# - Changed cargohelicopter to carry small
+# - Change tank to medium
+# - Outcomment but note that catamaran should carry more and move farther
+# - Made UNIT_MOBILE_SAM a full bormbard unit, it throws missiles so you can
+#    also attack land units with it. (29-Oct-2007 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
 
 ## UNIT 0
 UNIT_ABOLITIONIST {
@@ -2628,6 +2649,10 @@ UNIT_MOBILE_SAM {
    SoundDeath SOUND_DEATH_MOBILE_SAM
 
    CanAttack: Air
+   CanAttack: Land
+   CanAttack: Mountain
+   CanBombard: Land
+   CanBombard: Mountain
    CanBombard: Air
    CanSee: Standard
    Defend: Air

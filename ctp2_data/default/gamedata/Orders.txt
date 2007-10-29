@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : Text file
 // Description  : The data for orders
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -20,6 +21,7 @@
 // - UnitPretest of ORDER_REFUEL is now NoFuelThenCrash (outcommented until it works)
 // - UnitPretest of ORDER_PARADROP is now CanParadrop
 //   - April 24th 2005 Martin Gühmann
+// - Fixed targets of Sue and Injoin orders. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -669,7 +671,7 @@ ORDER_INJOIN {
   LocalizedName str_ldl_order_injoin
   StatusText str_ldl_order_injoin
 
-  TargetPretest:EnemyTradeUnit
+  TargetPretest:EnemyCity
   UnitPretest_CanInjoin
 
   Range 1
@@ -690,7 +692,7 @@ ORDER_SUE {
   LocalizedName str_ldl_order_sue
   StatusText str_ldl_order_sue
 
-  TargetPretest:EnemyCity
+  TargetPretest:EnemySpecialUnit
   UnitPretest_CanSue
 
   Range 1

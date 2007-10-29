@@ -56,9 +56,10 @@
 // - PopContext refills the builtins when it restores the old context so
 //   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin Gühmann)
 // - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
-// - Added slic database acces to the new map icon database. (27-Mar-2007 Martin Gühmann)
-// - Added slic database acces to the new map database. (27-Mar-2007 Martin Gühmann)
-// - Added slic database acces to the new concept database. (31-Mar-2007 Martin Gühmann)
+// - Added slic database access to the new map icon database. (27-Mar-2007 Martin Gühmann)
+// - Added slic database access to the new map database. (27-Mar-2007 Martin Gühmann)
+// - Added slic database access to the new concept database. (31-Mar-2007 Martin Gühmann)
+// - Added slic database access to the new const database. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -122,6 +123,7 @@
 #include "CitySizeRecord.h"
 #include "CityStyleRecord.h"
 #include "ConceptRecord.h"
+#include "ConstRecord.h"
 #include "DiplomacyProposalRecord.h"
 #include "DiplomacyThreatRecord.h"
 #include "EndGameObjectRecord.h"
@@ -3062,6 +3064,11 @@ void SlicEngine::AddDatabases()
 															   g_ConceptRecord_Accessors,
 															   g_Concept_Tokens,
 															   k_Num_ConceptRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<ConstRecord, 
+									ConstRecordAccessorInfo>("ConstDB", g_theConstDB,
+															   g_ConstRecord_Accessors,
+															   g_Const_Tokens,
+															   k_Num_ConstRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)

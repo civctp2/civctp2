@@ -28,8 +28,9 @@
 //   This allows better mod compatibility. - May 7th 2005 Martin Gühmann
 // - Removed .NET warnings - May 7th 2005 Martin Gühmann
 // - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
-// - added note that trade pact deals shouldn't be hardcoded 6.13.2007
+// - Added note that trade pact deals shouldn't be hardcoded 6.13.2007
 // - Added some functionality from the old const database. (5-Aug-2007 Martin Gühmann)
+// - Corrected meridian calculation. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,6 +44,7 @@
 #include "Path.h"
 #include "AgreementMatrix.h"
 #include "ConstRecord.h"
+#include "World.h"
 
 extern TradeAstar g_theTradeAstar; 
 
@@ -92,24 +94,48 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
-                  static_cast<double>
-                    (source.RetPos().NormalizedDistance(destination.RetPos()));
+	              static_cast<double>
+	                (source.RetPos().NormalizedDistance(destination.RetPos()));
 	
-    return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
+	return static_cast<sint32>(std::max(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
+
+// Maybe move the following to worldutils
 
 void constutil_y2meridian(const sint32 y, sint32 &k)
 {
-	// Actually, the values from the ConstDB are unsued
-	for (sint32 i = 0; i < k_NUM_MERIDIANS; i++)
+	k = 0;
+
+	sint32 relMapHeight = (y * 100) / g_theWorld->GetHeight();
+
+	if     (relMapHeight < g_theConstDB->Get(0)->GetMeridianA())
 	{
-		if (y < 11 * (i + 1))
-		{
-			k = i;
-			return;
-		}
+		k = 0;
 	}
-	k = i;
+	else if(relMapHeight < g_theConstDB->Get(0)->GetMeridianB())
+	{
+		k = 1;
+	}
+	else if(relMapHeight < g_theConstDB->Get(0)->GetMeridianC())
+	{
+		k = 2;
+	}
+	else if(relMapHeight < g_theConstDB->Get(0)->GetMeridianD())
+	{
+		k = 3;
+	}
+	else if(relMapHeight < g_theConstDB->Get(0)->GetMeridianE())
+	{
+		k = 4;
+	}
+	else if(relMapHeight < g_theConstDB->Get(0)->GetMeridianF())
+	{
+		k = 5;
+	}
+	else
+	{
+		k = 6;
+	}
 }
 
 void constutil_GetMapSizeMapPoint(MAPSIZE size, MapPoint &mapPoint)

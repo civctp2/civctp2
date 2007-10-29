@@ -1,10 +1,35 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : Ozone depletion database
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - The equatorial meridian now also suffers ozone depletion.
+#    Can set back if the bonus value works again. (29-Oct-2007 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
 OZONE_TRIGGER
 {
-NORTH_POLAR_PROB				15	10
-UPPER_NORTH_MERIDIAN_PROB		5	10
-LOWER_NORTH_MERIDIAN_PROB		5	10
-EQUATORIAL_PROB					-5	10
-UPPER_SOUTH_MERIDIAN_PROB		5	10
-LOWER_SOUTH_MERIDIAN_PROB		5	10
-SOUTH_POLAR_PROB				15	10
+	NORTH_POLAR_PROB               15       10
+	UPPER_NORTH_MERIDIAN_PROB       5       10
+	LOWER_NORTH_MERIDIAN_PROB       5       10
+	EQUATORIAL_PROB                 1       10
+	UPPER_SOUTH_MERIDIAN_PROB       5       10
+	LOWER_SOUTH_MERIDIAN_PROB       5       10
+	SOUTH_POLAR_PROB               15       10
 }

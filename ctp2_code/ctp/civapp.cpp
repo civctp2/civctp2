@@ -214,7 +214,6 @@
 #include "player.h"                     // g_player
 #include "PlayListDB.h"
 #include "PollutionRecord.h"
-#include "pollution.h"                  // g_thePollution
 #include "PopRecord.h"
 #include "prjfile.h"
 #include "profileDB.h"                  // g_theProfileDB
@@ -303,7 +302,6 @@ extern SlicEngine               *g_slicEngine;
 extern GameSettings             *g_theGameSettings;
 extern TutorialWin              *g_tutorialWin;
 extern SaveInfo *                g_savedGameRequest;
-extern Pollution                *g_thePollution;
 
 // User options
 extern sint32               g_fog_toggle;
@@ -1763,37 +1761,37 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 540 );
 
-    if (m_dbLoaded && g_theProfileDB->IsScenario()) 
-    {
-        CleanupAppDB();
-        InitializeAppDB((*(CivArchive *)(NULL)));
+	if (m_dbLoaded && g_theProfileDB->IsScenario())
+	{
+		CleanupAppDB();
+		InitializeAppDB((*(CivArchive *)(NULL)));
 
-        // The cached (background) patterns of the allocated windows
-        // have to be unloaded to be able to reinitialise the image maps safely.
-        // InitialiazeGameUI will take care of this by closing most windows, but 
-        // the progress window stays open. It has to be handled manually to 
-        // prevent a possible corruption of its background pattern.
+		// The cached (background) patterns of the allocated windows
+		// have to be unloaded to be able to reinitialise the image maps safely.
+		// InitialiazeGameUI will take care of this by closing most windows, but 
+		// the progress window stays open. It has to be handled manually to 
+		// prevent a possible corruption of its background pattern.
 		/// ToDo: Handle coruption of progress window background.
-        Pattern *   progressBackground  = g_theProgressWindow->ThePattern();
-        std::string fileName            = progressBackground->GetFilename();
-        progressBackground->Unload();
+		Pattern *   progressBackground  = g_theProgressWindow->ThePattern();
+		std::string fileName            = progressBackground->GetFilename();
+		progressBackground->Unload();
 
-        InitializeImageMaps();
-        InitializeSoundPF();
+		InitializeImageMaps();
+		InitializeSoundPF();
 
-        // Restore the progress window background
-        progressBackground->SetFilename(fileName.c_str());
-        progressBackground->Load();
+		// Restore the progress window background
+		progressBackground->SetFilename(fileName.c_str());
+		progressBackground->Load();
 
-        InitializeGameUI();
-        greatlibrary_Cleanup();
-        InitializeGreatLibrary();
-        GreatLibrary::Initialize_Great_Library_Data();
-    }
-    else
-    {
-    	InitializeGameUI();
-    }
+		InitializeGameUI();
+		greatlibrary_Cleanup();
+		InitializeGreatLibrary();
+		GreatLibrary::Initialize_Great_Library_Data();
+	}
+	else
+	{
+		InitializeGameUI();
+	}
 
 	g_theProgressWindow->StartCountingTo( 560 );
 
@@ -1900,9 +1898,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 650 );
 
-	
 	GraphicsOptions::Initialize();
-
 
 	SPLASH_STRING("Initializing Tile Engine...");
 	tile_Initialize(&archive != NULL);
@@ -1949,7 +1945,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 720 );
 
-	if(!g_network.IsActive()) { 
+	if(!g_network.IsActive()) {
 		if (NULL == &archive ||
 			(g_saveFileVersion >= 42 &&
 
@@ -1964,7 +1960,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		}
 	}
 
-	
 	g_theProgressWindow->StartCountingTo( 730 );
 	
 	g_director->ReloadAllSprites();
@@ -1990,7 +1985,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		MainControlPanel::UpdateCityList();
 	}
 
-	
 	g_scenarioUsePlayerNumber = 0;
 
 	g_theProgressWindow->StartCountingTo( 760 );
@@ -2000,7 +1994,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		// Indicate the resuming player when loading a saved hotseat game
 		g_turn->SendNextPlayerMessage();
 	}
-	else if (g_selected_item) 
+	else if (g_selected_item)
 	{
 		g_selected_item->Refresh();
 		if (g_director)
@@ -2029,8 +2023,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		                       GEA_Player, g_selected_item->GetCurPlayer(),
 		                       GEA_Int,    g_player[g_selected_item->GetCurPlayer()]->GetCurRound() + 1,
 		                       GEA_End);
-
-		g_thePollution->BeginTurn();
 	}
 
 	ProgressWindow::EndProgress( g_theProgressWindow );
