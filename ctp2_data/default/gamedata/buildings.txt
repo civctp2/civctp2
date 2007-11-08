@@ -19,6 +19,9 @@
 # 
 #  - IMPROVE_ARENA and IMPROVE_AQUADUCT EnableAdvance matched with entry in 
 #    the great library.
+#  - Added religious buildings. Will Only add Pharoahism/Egypt and Zoroastorism to 
+#    give example of religion in CTP2. Though they will have no bonuses to 
+#    not affect gameplay. So It will be graphical only.
 # 
 ################################################################################
 
@@ -752,7 +755,7 @@ IMPROVE_SHRINE_B {
    Cathedral
 }
 ############################################################
-IMPROVE_SHRINE_C {
+IMPROVE_SHRINE_CHRISTIAN {
    DefaultIcon ICON_IMPROVE_SHRINE_C
    Description DESCRIPTION_IMPROVE_SHRINE
    EnableAdvance ADVANCE_SUBNEURAL_ADS
@@ -774,7 +777,7 @@ IMPROVE_SHRINE_C {
    Cathedral
 }
 ############################################################
-IMPROVE_SHRINE_E {
+IMPROVE_SHRINE_EGYPT {
    DefaultIcon ICON_IMPROVE_SHRINE_E
    Description DESCRIPTION_IMPROVE_SHRINE
    EnableAdvance ADVANCE_SUBNEURAL_ADS
@@ -884,7 +887,7 @@ IMPROVE_SHRINE_J {
    Cathedral
 }
 ############################################################
-IMPROVE_SHRINE_Z {
+IMPROVE_SHRINE_ZOROASTER {
    DefaultIcon ICON_IMPROVE_SHRINE_Z
    Description DESCRIPTION_IMPROVE_SHRINE
    EnableAdvance ADVANCE_SUBNEURAL_ADS

@@ -66,3 +66,14 @@ FEAT_SAILED_AROUND_THE_WORLD	"Sei riuscito navigare intorno al mondo! I tuoi abi
 FEAT_CONQUERED_BY_FORCE		"Sei un conquistatore! Grazie al valore militare, al coraggio e alla determinazione, sei riuscito a soggiogare una nazione molto potente!"  
 FEAT_RECAPTURED_CITY		"Hai riconquistato una città che un tempo apparteneva al tuo impero! Riappropriandoti di ciò che un tempo era tuo, hai sollevato il morale del tuo popolo, ridandogli la forza di reagire alle aggressioni nemiche. Il tuo impero riceverà un bonus nel benessere pari a +{FeatDB(Value[0]).EffectIncreaseHappiness} per i prossimi {FeatDB(Value[0]).Duration} turni."
 
+#RELIGION FEATS
+FEAT_GOT_JUDAISM	"Moses had lead God's chosen people on a exodus to find a holy land!"  
+FEAT_GOT_CHRISTIANITY	"Disciples of a martyr called Jesus Christ have begun preaching a gospel!"  
+FEAT_GOT_ISLAM		"Muhammed has begun teaching the word of Allah!"  
+FEAT_GOT_HINDU		"Hinduism has grown rapidly among your people and is reaching the far corners of the planet!"  
+FEAT_GOT_BUDDHA		"The wisdom of Buddha has spread throughout beyond your empire!"
+FEAT_GOT_EGYPT		"You are seen as a living god!  This is part of the Apolyton Edition example of how religion can be added to the game. No bonuses will be given by the wonder, but the wonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+FEAT_GOT_ZOROASTER	"Zoroaster is preaching in our lands! This is part ofthe Apolyton Edition example of how religion can be added to the game. No bonuses will be given by the wonder, but the wonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+FEAT_GOT_EGYPT2		"The first civilization that builds the Pharoah shrine wonder will be seen as a living god!  This is part ofthe Apolyton Edition sample of how religion can be added to the game. No bonuses will be given to wonder. But thewonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+FEAT_GOT_ZOROASTER2	"The first civilization that builds the Zoroaster shrine wonder will be seen as a living god!  This is part ofthe Apolyton Edition sample of how religion can be added to the game. No bonuses will be given to wonder. But thewonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+

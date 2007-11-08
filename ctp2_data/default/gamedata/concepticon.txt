@@ -99,7 +99,7 @@ MAPICON_ELITE			"upc057.tga"
 # The mind virusses: The religions
 MAPICON_JUDAISM			"JudaismCI.tga"
 MAPICON_BUDDHISM		"BuddhismCI.tga"
-MAPICON_ISLAM			"IslamCI.tga"
+MAPICON_ISLAM			"Islam.tga" #"IslamCI.tga"
 MAPICON_TAOISM			"TaoismCI.tga"
 MAPICON_CHRISTENDOM		"ChristianityCI.tga"
 MAPICON_CONFUSCIANISM		"ConfucianismCI.tga"
@@ -107,9 +107,9 @@ MAPICON_HINDUISM		"HinduismCI.tga"
 MAPICON_COMMUNISM		"upc064.tga"
 MAPICON_UNICORNISM		"upc065.tga"
 MAPICON_PASTAFARIANISM		"upc066.tga"
-MAPICON_ZORASTORISM		"ZorastrianismCI.tga"
+MAPICON_ZORASTORISM		"Zorastrian.tga" #"ZorastrianismCI.tga"
 MAPICON_HELLENISM		"GreekCI.tga"
-MAPICON_PHAROAHISM		"EgyptianCI.tga"
+MAPICON_PHAROAHISM		"Egypt.tga"  #"EgyptianCI.tga"
 
 # Civilization flags
 # Names should be a little bit more descriptive

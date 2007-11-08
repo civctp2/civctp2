@@ -2,6 +2,9 @@
 #
 # - Rev726 changed BuildEverywhere to ActualBuildingEverywhere
 # - added ProhibitSlavers to Emancipation to keep same power
+#  - Added religious Wonder. Will Only add Pharoahism/Egypt and Zoroastorism to 
+#    give example of religion in CTP2. Though they will have no bonuses to 
+#    not affect gameplay. So It will be graphical only.
 #
 ###########################################################
 
@@ -366,17 +369,42 @@ WONDER_ZERO_CRIME_BILL {
 # ToDo give those shrines more descriptive names and 
 # actually move this to the religion stuff database.
 # We should not occupy a wonder slot.
-WONDER_SHRINE_Z {
-   DefaultIcon ICON_IMPROVE_SHRINE
+WONDER_SHRINE_ZOROASTER {
+   DefaultIcon ICON_WONDER_HOLYCITY_Z
    Description DESCRIPTION_IMPROVE_SHRINE
    Movie MOVIE_WONDER_HAGIA_SOPHIA
    ObsoleteGovernmentType GOVERNMENT_COMMUNISM
-   EnableAdvance ADVANCE_SUBNEURAL_ADS
-#   NeedsFeatToBuild FEAT_ADVANCE_HINDU # Add this to feat database if you want to use it.
+   #EnableAdvance ADVANCE_SUBNEURAL_ADS
+   NeedsFeatToBuild FEAT_ADVANCE_ZOROASTER 
+   #NeedsAnyPlayerFeatToBuild FEAT_ADVANCE_ZOROASTER #use this flag if you want a wonder race once feat is achieved (good for christianity and Islam)	
    ProductionCost 1000
    IsHolyCity
-   IsReligionIcon MAPICON_BUDDHISM
+   IsReligionIcon MAPICON_ZOROASTER
+   ExcludedByWonder WONDER_SHRINE_EGYPT    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_C    # Add this to wonder database if you want to use it.
+#   ExcludedByWonder WONDER_SHRINE_G    # Add this to wonder database if you want to use it.
+#   ExcludedByWonder WONDER_SHRINE_H    # Add this to wonder database if you want to use it.
+#   ExcludedByWonder WONDER_SHRINE_I    # Add this to wonder database if you want to use it.
+#   ExcludedByWonder WONDER_SHRINE_J    # Add this to wonder database if you want to use it.
+#   ExcludedByWonder WONDER_SHRINE_B    # Add this to wonder database if you want to use it.
+   IncHappinessEmpire 0
+   ActualBuildingEverywhere IMPROVE_SHRINE_ZOROASTER
+   GoldPerBuildingAnywhere 0
+   GLHidden
+}
+############################################################
+
+WONDER_SHRINE_EGYPT {
+   DefaultIcon ICON_WONDER_HOLYCITY_E
+   Description DESCRIPTION_IMPROVE_SHRINE
+   Movie MOVIE_WONDER_HAGIA_SOPHIA
+   ObsoleteGovernmentType GOVERNMENT_COMMUNISM
+   #EnableAdvance ADVANCE_SUBNEURAL_ADS
+   NeedsFeatToBuild FEAT_ADVANCE_EGYPT # Add this to feat database if you want to use it.
+   ProductionCost 1000
+   IsHolyCity
+   IsReligionIcon MAPICON_PHAROAHISM
+   ExcludedByWonder WONDER_SHRINE_ZOROASTER    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_E    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_G    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_H    # Add this to wonder database if you want to use it.
@@ -384,7 +412,7 @@ WONDER_SHRINE_Z {
 #   ExcludedByWonder WONDER_SHRINE_J    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_B    # Add this to wonder database if you want to use it.
    IncHappinessEmpire 0
-   ActualBuildingEverywhere IMPROVE_SHRINE_Z
+   ActualBuildingEverywhere IMPROVE_SHRINE_EGYPT
    GoldPerBuildingAnywhere 0
    GLHidden
 }
