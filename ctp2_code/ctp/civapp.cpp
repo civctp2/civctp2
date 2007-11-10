@@ -1597,13 +1597,13 @@ void CivApp::CleanupApp(void)
 		Splash::Cleanup();
 		messagewin_Cleanup();
 
-        allocated::clear(g_slicEngine);
-        allocated::clear(g_theMessagePool);
+		allocated::clear(g_slicEngine);
+		allocated::clear(g_theMessagePool);
 
 		CivScenarios::Cleanup();
 		SoundManager::Cleanup();
 
-        allocated::clear(g_theProfileDB); 
+		allocated::clear(g_theProfileDB); 
 
 		gameinit_Cleanup();
 		events_Cleanup();
@@ -1617,8 +1617,8 @@ void CivApp::CleanupApp(void)
 		CivPaths_CleanupCivPaths();
 		SlicSegment::Cleanup();
 
-#ifdef WIN32	
-        // COM needed for DirectX Moviestuff
+#ifdef WIN32
+		// COM needed for DirectX Moviestuff
 		CoUninitialize();
 #endif
 

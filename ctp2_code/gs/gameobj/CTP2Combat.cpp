@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Combat handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -137,11 +137,11 @@ static void combat_print(sint32 level, const char *fmt, ...)
 
 #ifdef TEST_APP
 CombatUnit::CombatUnit(double offense, double defense,
-		   double strength, double armor,
-		   double ranged, double hp,
-		   UNIT_TYPE type,
-		   bool const	isVeteran) :
-	m_offense(offense),
+                       double strength, double armor,
+                       double ranged, double hp,
+                       UNIT_TYPE type,
+                       bool const isVeteran)
+:	m_offense(offense),
 	m_defense(defense),
 	m_strength(strength),
 	m_armor(armor),
@@ -159,18 +159,16 @@ CombatUnit::CombatUnit(double offense, double defense,
 #else 
 
 CombatUnit::CombatUnit(double offense, double defense,
-					   double strength, double armor,
-					   double ranged, double hp,
-					   Unit &u) :
-	m_offense(offense),
+                       double strength, double armor,
+                       double ranged, double hp,
+                       Unit &u)
+:	m_offense(offense),
 	m_defense(defense),
 	m_strength(strength),
 	m_armor(armor),
 	m_ranged(ranged),
 	m_hp(hp),
-	// Using a silly ?:-construction to prevent a compiler warning. 
-	// TODO: make Unit::IsVeteran return bool.
-	m_isVeteran(u.IsVeteran() ? true : false),
+	m_isVeteran(u.IsVeteran()),
 	m_unit(u)
 {
 	m_valid = true;

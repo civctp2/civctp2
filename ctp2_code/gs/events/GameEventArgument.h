@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C/C++ header
+// Description  : Game event argument
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -5,6 +35,7 @@
 #define __GAME_EVENT_ARGUMENT_H__
 
 #include "GameEventTypes.h"
+#include "GameEvent.h"
 
 #include "ID.h"
 #include "MapPoint.h"
@@ -17,11 +48,13 @@ class TerrainImprovement;
 class CivArchive;
 class TradeRoute;
 
-struct SimpleMapPoint {
+struct SimpleMapPoint // And we have to redefine it here?
+{
 	sint16 x, y, z;
 };
 
-class GameEventArgument {
+class GameEventArgument
+{
 public:
 	GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl);
 	GameEventArgument(GAME_EVENT_ARGUMENT type, ...);
@@ -31,33 +64,36 @@ public:
 
 	void Init(GAME_EVENT_ARGUMENT type, va_list *vl);
 
-	GAME_EVENT_ARGUMENT GetType() { return m_type; }
+	GAME_EVENT_ARGUMENT GetType() const { return m_type; }
 
-	BOOL GetCity(Unit &c);
-	BOOL GetUnit(Unit &u);
-	BOOL GetArmy(Army &a);
+	bool GetCity(Unit &c) const;
+	bool GetUnit(Unit &u) const;
+	bool GetArmy(Army &a) const;
 
-	BOOL GetInt(sint32 &value);
-	BOOL GetPlayer(sint32 &player);
+	bool GetInt(sint32 &value) const;
+	bool GetPlayer(sint32 &player) const;
 
-	BOOL GetPos(MapPoint &pos);
+	bool GetPos(MapPoint &pos) const;
 
-	BOOL GetPath(Path *&path);
-	BOOL GetDirection(WORLD_DIRECTION &d);
+	bool GetPath(Path *&path) const;
+	bool GetDirection(WORLD_DIRECTION &d) const;
 
-	BOOL GetAdvance(sint32 &a);
-	BOOL GetWonder(sint32 &w);
+	bool GetAdvance(sint32 &a) const;
+	bool GetWonder(sint32 &w) const;
 
-	BOOL GetImprovement(TerrainImprovement &imp);
-	BOOL GetTradeRoute(TradeRoute &route);
+	bool GetImprovement(TerrainImprovement &imp) const;
+	bool GetTradeRoute(TradeRoute &route) const;
+
+	bool IsValid() const;
+	void NotifyArgIsInvalid(GAME_EVENT type, sint32 argIndex, GameEvent* event) const;
 
 private:
 	GAME_EVENT_ARGUMENT m_type;
 	union {
-		uint32 m_id;         
-		sint32 m_value;  
-		SimpleMapPoint m_pos;  
-		void *m_ptr;     
+		uint32 m_id;
+		sint32 m_value;
+		SimpleMapPoint m_pos;
+		void *m_ptr;
 	} m_data;
 };
 

@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C/C++ header
+// Description  : Game event argument list
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -5,6 +35,7 @@
 #define __GAME_EVENT_ARG_LIST_H__
 
 #include "GameEventTypes.h"
+#include "GameEvent.h"
 
 template <class T> class PointerList;
 
@@ -20,7 +51,8 @@ class TerrainImprovement;
 class TradeRoute;
 class CivArchive;
 
-class GameEventArgList {
+class GameEventArgList
+{
 public:
 	GameEventArgList(va_list * vl = NULL);
 	GameEventArgList(CivArchive &archive);
@@ -29,30 +61,33 @@ public:
 
 	void Add(GameEventArgument *arg);
 
-	GameEventArgument *GetArg(GAME_EVENT_ARGUMENT argType, sint32 index);
-	sint32 GetArgCount(GAME_EVENT_ARGUMENT argType);
+	GameEventArgument *GetArg(GAME_EVENT_ARGUMENT argType, sint32 index) const;
+	sint32 GetArgCount(GAME_EVENT_ARGUMENT argType) const;
 
-	BOOL GetCity(sint32 index, Unit &c);
-	BOOL GetUnit(sint32 index, Unit &u);
-	BOOL GetArmy(sint32 index, Army &a);
+	bool GetCity(sint32 index, Unit &c) const;
+	bool GetUnit(sint32 index, Unit &u) const;
+	bool GetArmy(sint32 index, Army &a) const;
 
-	BOOL GetInt(sint32 index, sint32 &value);
-	BOOL GetPlayer(sint32 index, sint32 &player);
+	bool GetInt(sint32 index, sint32 &value) const;
+	bool GetPlayer(sint32 index, sint32 &player) const;
 
-	BOOL GetPos(sint32 index, MapPoint &pos);
+	bool GetPos(sint32 index, MapPoint &pos) const;
 
-	BOOL GetPath(sint32 index, Path *&path);
-	BOOL GetDirection(sint32 index, WORLD_DIRECTION &d);
+	bool GetPath(sint32 index, Path *&path) const;
+	bool GetDirection(sint32 index, WORLD_DIRECTION &d) const;
 	
-	BOOL GetAdvance(sint32 index, sint32 &a);
-	BOOL GetWonder(sint32 index, sint32 &w);
+	bool GetAdvance(sint32 index, sint32 &a) const;
+	bool GetWonder(sint32 index, sint32 &w) const;
 
-	BOOL GetImprovement(sint32 index, TerrainImprovement &imp);
-	BOOL GetTradeRoute(sint32 index, TradeRoute &route);
+	bool GetImprovement(sint32 index, TerrainImprovement &imp) const;
+	bool GetTradeRoute(sint32 index, TradeRoute &route) const;
+
+	bool TestArgsOfType(GAME_EVENT type, GAME_EVENT_ARGUMENT argType, GameEvent* event = NULL) const;
+	bool TestArgs(GAME_EVENT type, GameEvent* event = NULL) const;
 
 private:
 
 	PointerList<GameEventArgument> *m_argLists[GEA_End];
 };
-	
+
 #endif

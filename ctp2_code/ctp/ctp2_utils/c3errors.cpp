@@ -165,11 +165,12 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 	sprintf(Tmp, "%s\n\nContinue?", szFmtTmp);
 	va_end(list);
 
+	DPRINTF(k_DBG_FIX, ("Error: %s, %s\n", szTitle, szFmtTmp));
+
 	// TODO: Make it work with LPTSTR szFmtTmp if it is worth the efforts at all.
 //	MessageBox(NULL, szFmtTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
 	sint32 result = MessageBox(NULL, Tmp, szTitle, MB_YESNO | MB_ICONEXCLAMATION);
-	
-	DPRINTF(k_DBG_FIX, ("Error: %s, %s\n", szTitle, szFmtTmp));
+
 
 #if defined(WIN32)
 	LocalFree(szTitle);

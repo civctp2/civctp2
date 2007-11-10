@@ -21,6 +21,12 @@
 // HAVE_PRAGMA_ONCE
 //
 //----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
@@ -57,20 +63,24 @@ class GameEventArgList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class GameEvent 
+class GameEvent
 {
 public:
 	GameEvent
-    (
-        GAME_EVENT          type, 
-        GameEventArgList *  args, 
-        sint32              serial,
-		GAME_EVENT          addedDuring
-    );
+	(
+	    GAME_EVENT          type, 
+	    GameEventArgList *  args, 
+	    sint32              serial,
+	    GAME_EVENT          addedDuring
+	);
 	~GameEvent();
 
-	sint32              GetSerial() const   { return m_serial; };
-	GAME_EVENT          GetType() const     { return m_type; };
+	sint32              GetSerial()      const   { return m_serial;      };
+	GAME_EVENT          GetType()        const   { return m_type;        };
+	sint32              GetLine()        const   { return m_line;        };
+	char *              GetFile()        const   { return m_file;        };
+	char *              GetContextName() const   { return m_contextName; };
+	GAME_EVENT          AddedDuring()    const   { return m_addedDuring; };
 
 	GAME_EVENT_ERR      Process();
 
@@ -80,6 +90,9 @@ private:
 	sint32              m_resumeIndex;
 	GAME_EVENT          m_addedDuring;
 	sint32              m_serial;
+	sint32              m_line;
+	char *              m_file;
+	char *              m_contextName;
 };
-	
+
 #endif

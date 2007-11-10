@@ -254,7 +254,7 @@ void SlicFrame::SetValue(SlicSymbolData *sym, SS_TYPE type, SlicStackValue value
 		case SS_TYPE_VAR:
 			getsym = g_slicEngine->GetSymbol(value.m_int);
 			if(!sym->SetValueFrom(getsym)) {
-				char buf[1024];			   
+				char buf[1024];
 				sprintf(buf, "In object %s, variables '%s' and '%s' are of different types", m_segment->GetName(), sym->GetName(), getsym->GetName());
 				if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 					c3errors_ErrorDialog("Slic", buf);

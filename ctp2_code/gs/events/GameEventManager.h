@@ -24,6 +24,12 @@
 // HAVE_PRAGMA_ONCE
 //
 //----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
@@ -57,9 +63,9 @@ class GameEventManager;
 #include "GameEventTypes.h"
 #include "GameEventDescription.h"
 #include "GameEventArgument.h"
+#include "pointerlist.h"
 
 class GameEvent;
-template <class T> class PointerList;
 class GameEventHookCallback;
 class GameEventArgList;
 class GameEventHook;
@@ -113,12 +119,12 @@ public:
 
 	
 	GAME_EVENT_ERR ActivateHook
-    (
-        GAME_EVENT          type, 
-        GameEventArgList *  args, 
-        sint32              startIndex, 
-        sint32 &            resumeIndex
-    );
+	(
+	    GAME_EVENT          type, 
+	    GameEventArgList *  args, 
+	    sint32              startIndex, 
+	    sint32 &            resumeIndex
+	);
 
 	
 	GAME_EVENT GetEventIndex(const MBCHAR *name) const;
@@ -159,20 +165,23 @@ public:
 	
 
 
-	static char * ArgCharToName(char want);
+	static char* ArgCharToName(char want);
+	static char* ArgToName(GAME_EVENT_ARGUMENT want);
 
 	void NotifyResync();
+	GAME_EVENT GetProcessingEvent() const { return m_processingEvent; };
 
+	GameEvent* GetHeadEvent(){ return m_eventList->GetHead(); };
 private:
-	BOOL CheckArg(sint32 num, char got, char want);
-	BOOL VerifyArgs(GAME_EVENT type, va_list *vl);
+	bool CheckArg(sint32 num, char got, char want);
+	bool VerifyArgs(GAME_EVENT type, va_list *vl);
 
 	/// Unhandled events
 	PointerList<GameEvent> *m_eventList;
 
 #ifdef _DEBUG
-    /// History of recently handled events
-    std::list<GameEvent*>   m_eventHistory;
+	/// History of recently handled events
+	std::list<GameEvent*>   m_eventHistory;
 #endif
 
 	

@@ -1,5 +1,33 @@
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit events
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - AddUnitToArmyEvent does not crash in the debug version if the unit to
+//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "UnitEvent.h"
@@ -104,6 +132,12 @@ STDEHANDLER(AddUnitToArmyEvent)
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetInt(0, (sint32 &)cause)) return GEV_HD_Continue;
+
+	// If transported: Unit has no army
+	if(u.Flag(k_UDF_IS_IN_TRANSPORT))
+	{
+		return GEV_HD_Continue;
+	}
 
 	u->ChangeArmy(a, cause);
 	

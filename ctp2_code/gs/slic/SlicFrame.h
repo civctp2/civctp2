@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Slic frame handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -105,6 +105,7 @@ public:
 	SlicStack *GetStack() { return m_stack; }
 
 	sint32 GetCurrentLine() { return m_currentLine; }
+	SlicSegment * GetSlicSegment() { return m_segment; }
 };
 
 #endif

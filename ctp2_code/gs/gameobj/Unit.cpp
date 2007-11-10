@@ -741,7 +741,7 @@ void Unit::UnsetIsInTransport()
 	AccessData()->UnsetIsInTransport();
 }
 
-sint32 Unit::IsBeingTransported() const
+bool Unit::IsBeingTransported() const
 {
 	return GetData()->IsBeingTransported();
 }
@@ -840,7 +840,7 @@ bool Unit::GetUsedFuel (sint32 &fuel_remaining, sint32 &max_fuel) const
 	return GetData()->GetUsedFuel(fuel_remaining, max_fuel);
 }
 
-sint32 Unit::IsVeteran() const
+bool Unit::IsVeteran() const
 {
 	return GetData()->IsVeteran();
 }
@@ -1017,10 +1017,9 @@ bool Unit::GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spri
 	return true;
 }
 
-sint32 Unit::CanCarry(Unit u) const
+bool Unit::CanCarry(Unit u) const
 {
 	return GetData()->CanCarry(u.GetType());
-
 }
 
 bool Unit::CanSettle(const MapPoint &pos) const
@@ -2140,61 +2139,61 @@ void Unit::AddWonderHPBonus(sint32 amt)
 
 
 
-sint32 Unit::CanPlantNuke(const MapPoint &pos) 
+bool Unit::CanPlantNuke(const MapPoint &pos) 
 {
 	return AccessData()->CanPlantNuke(pos);
 }
 
-sint32 Unit::CanMakePark(const MapPoint &pos)
+bool Unit::CanMakePark(const MapPoint &pos)
 {
 	return AccessData()->CanMakePark(pos);
 }
-sint32 Unit::CanUndergroundRailway(const MapPoint &pos)
+bool Unit::CanUndergroundRailway(const MapPoint &pos)
 {
 	return AccessData()->CanUndergroundRailway(pos);
 }
 
-sint32 Unit::CanConvert(const MapPoint &pos)
+bool Unit::CanConvert(const MapPoint &pos)
 {
 	return AccessData()->CanConvert(pos);
 }
 
-sint32 Unit::CanEstablishEmbassy(const MapPoint &pos)
+bool Unit::CanEstablishEmbassy(const MapPoint &pos)
 {
 	return AccessData()->CanEstablishEmbassy(pos);
 }
 
-sint32 Unit::CanCreateFranchise(const MapPoint &pos)
+bool Unit::CanCreateFranchise(const MapPoint &pos)
 {
 	return AccessData()->CanCreateFranchise(pos);
 }
 
-sint32 Unit::CanAssasinateRuler(const MapPoint &pos)
+bool Unit::CanAssasinateRuler(const MapPoint &pos)
 {
 	return AccessData()->CanAssasinateRuler(pos);
 }
 
-sint32 Unit::CanStealTechnology(const MapPoint &pos)
+bool Unit::CanStealTechnology(const MapPoint &pos)
 {
 	return AccessData()->CanStealTechnology(pos);
 }
 
-sint32 Unit::CanInjoin(const MapPoint &pos)
+bool Unit::CanInjoin(const MapPoint &pos)
 {
 	return AccessData()->CanInjoin(pos);
 }
 
-sint32 Unit::CanInciteRevolution(const MapPoint &pos)
+bool Unit::CanInciteRevolution(const MapPoint &pos)
 {
 	return AccessData()->CanInciteRevolution(pos);
 }
 
-sint32 Unit::CanCauseUnhappiness(const MapPoint &pos)
+bool Unit::CanCauseUnhappiness(const MapPoint &pos)
 {
 	return AccessData()->CanCauseUnhappiness(pos);
 }
 
-sint32 Unit::CanExpel(const MapPoint &pos)
+bool Unit::CanExpel(const MapPoint &pos)
 {
 	return AccessData()->CanExpel(pos);
 }
@@ -2204,7 +2203,7 @@ void Unit::AddEndGameObject(sint32 type)
 	AccessData()->AddEndGameObject(type);
 }
 
-BOOL Unit::SendSlaveTo(Unit dest)
+bool Unit::SendSlaveTo(Unit dest)
 {
 	return AccessData()->SendSlaveTo(dest);
 }

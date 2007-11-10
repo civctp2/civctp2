@@ -75,6 +75,8 @@
 // - Added Elite Bonus 6-6-2007
 // - Added LeaderBonus if in Stack - Like Cradle 6-6-2007
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - ChangeArmy has no effect if a unit and its new army do not share the 
+//   same tile. (7-Nov-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1174,8 +1176,8 @@ bool UnitData::CanRustle(CellUnitList const & defender) const
 
 bool UnitData::CanConvertCity(Unit city) const 
 {
-    return (city.GetOwner() != GetOwner()) 
-        && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
+	return (city.GetOwner() != GetOwner())
+	    && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
 }
 
 //----------------------------------------------------------------------------
@@ -5293,9 +5295,16 @@ void UnitData::ChangeArmy(const Army &army, CAUSE_NEW_ARMY cause)
 		}
 	}
 
-	
+	// Transported units belong to no army
 	Assert(!Flag(k_UDF_IS_IN_TRANSPORT));
 	if(Flag(k_UDF_IS_IN_TRANSPORT))
+		return;
+
+	// Group only units on the same tile
+	MapPoint armyPos;
+	army.GetPos(armyPos);
+	Assert(army.Num() <= 0 || m_pos == armyPos);
+	if(army.Num() > 0 && m_pos != armyPos)
 		return;
 
 	if(g_network.IsHost()) {
@@ -5393,60 +5402,60 @@ bool UnitData::CanExecuteNextTo
     UnitRecord::BoolAccessor    a_HasFunction
 ) const
 {
-    return (GetDBRec()->*a_HasFunction)()
-        && m_pos.IsNextTo(a_Position)
-        && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
+	return (GetDBRec()->*a_HasFunction)()
+	    && m_pos.IsNextTo(a_Position)
+	    && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
 }
 
-sint32 UnitData::CanPlantNuke(const MapPoint &pos) const 
+bool UnitData::CanPlantNuke(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasPlantNuke);
+	return CanExecuteNextTo(pos, &UnitRecord::HasPlantNuke);
 }
 
-sint32 UnitData::CanMakePark(const MapPoint &pos) const 
+bool UnitData::CanMakePark(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasCreateParks);
+	return CanExecuteNextTo(pos, &UnitRecord::HasCreateParks);
 }
 
-sint32 UnitData::CanUndergroundRailway(const MapPoint &pos) const 
+bool UnitData::CanUndergroundRailway(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasUndergroundRailway);
+	return CanExecuteNextTo(pos, &UnitRecord::HasUndergroundRailway);
 }
 
 // Returns true if this unit is next to pos and can convert a city there
-sint32 UnitData::CanConvert(const MapPoint &pos) const 
+bool UnitData::CanConvert(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasConvertCities);
+	return CanExecuteNextTo(pos, &UnitRecord::HasConvertCities);
 }
 
-sint32 UnitData::CanEstablishEmbassy(const MapPoint &pos) const 
+bool UnitData::CanEstablishEmbassy(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::GetEstablishEmbassy);
+	return CanExecuteNextTo(pos, &UnitRecord::GetEstablishEmbassy);
 }
 
-sint32 UnitData::CanCreateFranchise(const MapPoint &pos) const 
+bool UnitData::CanCreateFranchise(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasCreateFranchise);
+	return CanExecuteNextTo(pos, &UnitRecord::HasCreateFranchise);
 }
 
-sint32 UnitData::CanAssasinateRuler(const MapPoint &pos) const 
+bool UnitData::CanAssasinateRuler(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasAssasinateRuler);
+	return CanExecuteNextTo(pos, &UnitRecord::HasAssasinateRuler);
 }
 
-sint32 UnitData::CanStealTechnology(const MapPoint &pos) const 
+bool UnitData::CanStealTechnology(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasStealTechnology);
+	return CanExecuteNextTo(pos, &UnitRecord::HasStealTechnology);
 }
 
-sint32 UnitData::CanInjoin(const MapPoint &pos) const 
+bool UnitData::CanInjoin(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasCanInjoin);
+	return CanExecuteNextTo(pos, &UnitRecord::HasCanInjoin);
 }
 
-sint32 UnitData::CanInciteRevolution(const MapPoint &pos) const 
+bool UnitData::CanInciteRevolution(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasInciteRevolution);
+	return CanExecuteNextTo(pos, &UnitRecord::HasInciteRevolution);
 }
 
 //----------------------------------------------------------------------------
@@ -5465,16 +5474,16 @@ sint32 UnitData::CanInciteRevolution(const MapPoint &pos) const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 UnitData::CanCauseUnhappiness(const MapPoint &pos) const 
+bool UnitData::CanCauseUnhappiness(const MapPoint &pos) const 
 {
-    return CanExecuteNextTo(pos, &UnitRecord::HasCauseUnhappiness);
+	return CanExecuteNextTo(pos, &UnitRecord::HasCauseUnhappiness);
 }
 
-sint32 UnitData::CanExpel(const MapPoint &pos) const 
+bool UnitData::CanExpel(const MapPoint &pos) const 
 {
-    return (GetDBRec()->GetAttack() > 0.0)
-        && m_pos.IsNextTo(pos)
-        && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
+	return (GetDBRec()->GetAttack() > 0.0)
+	    && m_pos.IsNextTo(pos)
+	    && (GetMovementPoints() >= g_theConstDB->Get(0)->GetSpecialActionMoveCost());
 }
 
 void UnitData::AddEndGameObject(sint32 type)

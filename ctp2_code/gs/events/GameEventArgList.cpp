@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Game event argument list
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "GameEventArgList.h"
@@ -43,9 +71,9 @@ GameEventArgList::GameEventArgList(CivArchive &archive)
 GameEventArgList::~GameEventArgList()
 {
 	for (size_t arg = 0; arg < static_cast<size_t>(GEA_End); ++arg)
-    {
-        if (m_argLists[arg]) 
-        {
+	{
+		if (m_argLists[arg])
+		{
 			m_argLists[arg]->DeleteAll();
 			delete m_argLists[arg];
 		}
@@ -88,7 +116,7 @@ void GameEventArgList::Serialize(CivArchive &archive)
 				}
 			}
 		}
-	}				  
+	}
 }
 
 void GameEventArgList::Add(GameEventArgument *arg)
@@ -105,7 +133,7 @@ void GameEventArgList::Add(GameEventArgument *arg)
 
 
 GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType, 
-											sint32 index)
+											sint32 index) const
 {
 	Assert(argType > GEA_Null);
 	Assert(argType < GEA_End);
@@ -115,28 +143,76 @@ GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType,
 
 	if(!m_argLists[argType])
 		return NULL;
-	 
-    sint32  i = 0;
+
+	sint32  i = 0;
 
 	for 
-    (
-        PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
-        walk.IsValid();
-        walk.Next()
-    )
-    {
-        if (i == index)
-        {
-            return walk.GetObj();
-        }
+	(
+	    PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
+	    walk.IsValid();
+	    walk.Next()
+	)
+	{
+		if (i == index)
+		{
+			return walk.GetObj();
+		}
 
-        ++i;
-    }
+		++i;
+	}
 
 	return NULL;
 }
 
-sint32 GameEventArgList::GetArgCount(GAME_EVENT_ARGUMENT argType)
+bool GameEventArgList::TestArgs(GAME_EVENT type, GameEvent* event) const
+{
+	bool argsAreValid = true;
+	for(sint32 i = GEA_Army; i < GEA_End; ++i)
+	{
+		// Test all arguments for validity, in report if necessary
+		argsAreValid &= TestArgsOfType(type, (GAME_EVENT_ARGUMENT)i, event);
+	}
+
+	return argsAreValid;
+}
+
+bool GameEventArgList::TestArgsOfType(GAME_EVENT type, GAME_EVENT_ARGUMENT argType, GameEvent* event) const
+{
+	Assert(argType > GEA_Null);
+	Assert(argType < GEA_End);
+
+	if(argType <= GEA_Null || argType >= GEA_End)
+	{
+		// Per default invalid
+		Assert(false);
+		return false;
+	}
+
+	if(!m_argLists[argType])
+		return true; // Per default valid
+
+	bool valid = true;
+	sint32 i = 0;
+	for
+	(
+	    PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
+	    walk.IsValid();
+	    walk.Next()
+	)
+	{
+		if(!walk.GetObj()->IsValid())
+		{
+			walk.GetObj()->NotifyArgIsInvalid(type, i, event);
+			valid = false;
+		}
+
+		i++;
+	}
+
+	return valid;
+}
+
+sint32 GameEventArgList::GetArgCount(GAME_EVENT_ARGUMENT argType) const
 {
 	Assert(argType > GEA_Null);
 	Assert(argType < GEA_End);
@@ -151,36 +227,36 @@ sint32 GameEventArgList::GetArgCount(GAME_EVENT_ARGUMENT argType)
 }
 
 
-BOOL GameEventArgList::GetCity(sint32 index, Unit &c)
+bool GameEventArgList::GetCity(sint32 index, Unit &c) const
 {
 	GameEventArgument * arg = GetArg(GEA_City, index);
 
 	return arg && arg->GetCity(c) && c.IsValid();
 }
 
-BOOL GameEventArgList::GetUnit(sint32 index, Unit &u)
+bool GameEventArgList::GetUnit(sint32 index, Unit &u) const
 {
 	GameEventArgument * arg = GetArg(GEA_Unit, index);
 
 	return arg && arg->GetUnit(u) && u.IsValid();
 }
 
-BOOL GameEventArgList::GetArmy(sint32 index, Army &a)
+bool GameEventArgList::GetArmy(sint32 index, Army &a) const
 {
 	GameEventArgument * arg = GetArg(GEA_Army, index);
-    
-    return arg && arg->GetArmy(a) && a.IsValid();
+
+	return arg && arg->GetArmy(a) && a.IsValid();
 }
 
 
-BOOL GameEventArgList::GetInt(sint32 index, sint32 &value)
+bool GameEventArgList::GetInt(sint32 index, sint32 &value) const
 {
 	GameEventArgument * arg = GetArg(GEA_Int, index);
-	
-    return arg && arg->GetInt(value);
+
+	return arg && arg->GetInt(value);
 }
 
-BOOL GameEventArgList::GetPlayer(sint32 index, sint32 &player)
+bool GameEventArgList::GetPlayer(sint32 index, sint32 &player) const
 {
 	GameEventArgument * arg = GetArg(GEA_Player, index);
 
@@ -188,52 +264,52 @@ BOOL GameEventArgList::GetPlayer(sint32 index, sint32 &player)
 }
 
 
-BOOL GameEventArgList::GetPos(sint32 index, MapPoint & pos)
+bool GameEventArgList::GetPos(sint32 index, MapPoint & pos) const
 {
 	GameEventArgument * arg = GetArg(GEA_MapPoint, index);
 
-    return arg && arg->GetPos(pos); /// @todo Add && pos.IsValid()?
+	return arg && arg->GetPos(pos); /// @todo Add && pos.IsValid()?
 }
 
 
-BOOL GameEventArgList::GetPath(sint32 index, Path *&path)
+bool GameEventArgList::GetPath(sint32 index, Path *&path) const
 {
 	GameEventArgument * arg = GetArg(GEA_Path, index);
 
-    return arg && arg->GetPath(path);
+	return arg && arg->GetPath(path);
 }
 
-BOOL GameEventArgList::GetDirection(sint32 index, WORLD_DIRECTION &d)
+bool GameEventArgList::GetDirection(sint32 index, WORLD_DIRECTION &d) const
 {
 	GameEventArgument * arg = GetArg(GEA_Direction, index);
 		
-    return arg && arg->GetDirection(d);
+	return arg && arg->GetDirection(d);
 }
 
-BOOL GameEventArgList::GetAdvance(sint32 index, sint32 &a)
+bool GameEventArgList::GetAdvance(sint32 index, sint32 &a) const
 {
 	GameEventArgument * arg = GetArg(GEA_Advance, index);
 		
-    return arg && arg->GetAdvance(a);
+	return arg && arg->GetAdvance(a);
 }
 
-BOOL GameEventArgList::GetWonder(sint32 index, sint32 &w)
+bool GameEventArgList::GetWonder(sint32 index, sint32 &w) const
 {
 	GameEventArgument * arg = GetArg(GEA_Wonder, index);
 		
-    return arg && arg->GetWonder(w);
+	return arg && arg->GetWonder(w);
 }
 
-BOOL GameEventArgList::GetImprovement(sint32 index, TerrainImprovement &imp)
+bool GameEventArgList::GetImprovement(sint32 index, TerrainImprovement &imp) const
 {
 	GameEventArgument * arg = GetArg(GEA_Improvement, index);
 
-    return arg && arg->GetImprovement(imp) && imp.IsValid();
+	return arg && arg->GetImprovement(imp) && imp.IsValid();
 }
 
-BOOL GameEventArgList::GetTradeRoute(sint32 index, TradeRoute &route)
+bool GameEventArgList::GetTradeRoute(sint32 index, TradeRoute &route) const
 {
 	GameEventArgument * arg =GetArg(GEA_TradeRoute, index);
 
-    return arg && arg->GetTradeRoute(route) && route.IsValid();
+	return arg && arg->GetTradeRoute(route) && route.IsValid();
 }

@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Game event argument
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "GameEventArgument.h"
@@ -11,6 +39,15 @@
 #include "TerrImprove.h"
 #include "civarchive.h"
 #include "TradeRoute.h"
+#include "player.h"              // g_player
+#include "AdvanceRecord.h"       // g_theAdvanceDB
+#include "WonderRecord.h"        // g_theWonderDB
+#include "profileDB.h"           // g_theProfileDB
+#include "SlicEngine.h"
+#include "SlicObject.h"
+#include "SlicSegment.h"
+#include "SlicFrame.h"
+#include "GameEventManager.h"    // g_gevManager
 
 GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl)
 {
@@ -134,7 +171,7 @@ void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, va_list *vl)
 			break;
 
 		default:
-			Assert(FALSE);
+			Assert(false);
 	}
 }
 
@@ -152,122 +189,248 @@ GameEventArgument::~GameEventArgument()
 	}
 }
 
-BOOL GameEventArgument::GetCity(Unit &c)
+bool GameEventArgument::GetCity(Unit &c) const
 {
 	if(m_type != GEA_City)
-		return FALSE;
+		return false;
+
 	c.m_id = m_data.m_id;
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetUnit(Unit &u)
+bool GameEventArgument::GetUnit(Unit &u) const
 {
 	if(m_type != GEA_Unit)
-		return FALSE;
+		return false;
 
 	u.m_id = m_data.m_id;
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetArmy(Army &a)
+bool GameEventArgument::GetArmy(Army &a) const
 {
 	if(m_type != GEA_Army)
-		return FALSE;
+		return false;
 
 	a.m_id = m_data.m_id;
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetInt(sint32 &value)
+bool GameEventArgument::GetInt(sint32 &value) const
 {
 	switch(m_type) {
 		case GEA_Gold:
 		case GEA_Int:
 			value = m_data.m_value;
-			return TRUE;
+			return true;
 		default:
-			return FALSE;
+			return false;
 	}
 }
 
-BOOL GameEventArgument::GetPos(MapPoint &pos)
+bool GameEventArgument::GetPos(MapPoint &pos) const
 {
 	if(m_type != GEA_MapPoint)
-		return FALSE;
+		return false;
 
 	pos.x = m_data.m_pos.x;
 	pos.y = m_data.m_pos.y;
 
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetPath(Path *&path)
+bool GameEventArgument::GetPath(Path *&path) const
 {
 	if(m_type != GEA_Path)
-		return FALSE;
+		return false;
 
 	path = new Path((Path *)m_data.m_ptr);
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetPlayer(sint32 &player)
+bool GameEventArgument::GetPlayer(sint32 &player) const
 {
 	if(m_type != GEA_Player)
-		return FALSE;
+		return false;
 
 	player = m_data.m_value;
 
 	if(player < 0 || player >= k_MAX_PLAYERS)
-		return FALSE;
+		return false;
 
 	if(!g_player[player])
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetDirection(WORLD_DIRECTION &d)
+bool GameEventArgument::GetDirection(WORLD_DIRECTION &d) const
 {
 	if(m_type != GEA_Direction)
-		return FALSE;
+		return false;
 
 	d = (WORLD_DIRECTION)m_data.m_value;
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetAdvance(sint32 &a)
+bool GameEventArgument::GetAdvance(sint32 &a) const
 {
 	if(m_type != GEA_Advance)
-		return FALSE;
+		return false;
 
 	a = m_data.m_value;
-	return TRUE;
+	return true;
 }
 
 
-BOOL GameEventArgument::GetWonder(sint32 &w)
+bool GameEventArgument::GetWonder(sint32 &w) const
 {
 	if(m_type != GEA_Wonder)
-		return FALSE;
+		return false;
 
 	w = m_data.m_value;
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetImprovement(TerrainImprovement &imp)
+bool GameEventArgument::GetImprovement(TerrainImprovement &imp) const
 {
 	if(m_type != GEA_Improvement)
-		return FALSE;
+		return false;
 
 	imp.m_id = m_data.m_id;
-	return TRUE;
+	return true;
 }
 
-BOOL GameEventArgument::GetTradeRoute(TradeRoute &route)
+bool GameEventArgument::GetTradeRoute(TradeRoute &route) const
 {
 	if(m_type != GEA_TradeRoute)
-		return FALSE;
+		return false;
 
 	route.m_id = m_data.m_id;
-	return TRUE;
+	return true;
+}
+
+bool GameEventArgument::IsValid() const
+{
+	switch(m_type)
+	{
+		case GEA_Army:
+		{
+			Army army(m_data.m_id);
+			return army.IsValid();
+		}
+		case GEA_Unit:
+		case GEA_City:
+		{
+			Unit unit(m_data.m_id);
+			return unit.IsValid();
+		}
+		case GEA_Gold:
+		case GEA_Int:
+			return true; // All values should be valid
+		case GEA_Path:
+		//	Path* path = static_cast<Path*>(m_ptr);
+		//	return path->IsValid(); // Does not exist for now lets assume that all paths are valid
+			return true;
+		case GEA_MapPoint:
+		{
+			MapPoint pos(m_data.m_pos.x, m_data.m_pos.y);
+			return pos.IsValid();
+		}
+		case GEA_Player:
+		{
+			sint32 player = m_data.m_value;
+			return player == -1 || (player >= 0 && player < k_MAX_PLAYERS && g_player[player]);
+		}
+		case GEA_Direction:
+		{
+			sint32 direction = m_data.m_value;
+			return direction >= NORTH && direction < NOWHERE;
+		}
+		case GEA_Wonder:
+		{
+			sint32 wonder = m_data.m_value;
+			return wonder >= 0 && wonder < g_theWonderDB->NumRecords();
+		}
+		case GEA_Advance:
+		{
+			sint32 advance = m_data.m_value;
+			return advance >= 0 && advance < g_theAdvanceDB->NumRecords();
+		}
+		case GEA_Improvement:
+		{
+			TerrainImprovement imp(m_data.m_id);
+			return imp.IsValid();
+		}
+		case GEA_TradeRoute:
+		{
+			TradeRoute route(m_data.m_id);
+			return route.IsValid();
+		}
+		default:
+			Assert(false);
+	}
+
+	return false;
+}
+
+void GameEventArgument::NotifyArgIsInvalid(GAME_EVENT type, sint32 argIndex, GameEvent* event) const
+{
+	DPRINTF(k_DBG_GAMESTATE, ("Missing object id %lx\n", (uint32)m_data.m_id));
+
+	if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) // Maybe separate this to a DebugEventSlic
+	{
+		if(event != NULL
+		&& event->GetContextName() != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "Parameter #%i of type %s of event %s is invalid.\nThe event was called during execution of event %s.\nIt was called from object %s at line %i in file:\n%s\nPossible Explanation: Data became invlid during internal or slic code executation.",
+			             argIndex,
+			             g_gevManager->ArgToName(m_type),
+			             g_gevManager->GetEventName(type),
+			             g_gevManager->GetEventName(event->AddedDuring()),
+			             event->GetContextName(),
+			             event->GetLine(),
+			             event->GetFile());
+
+			c3errors_ErrorDialog("Slic Event Error", buf);
+		}
+		else if(g_slicEngine->GetContext())
+		{
+			char buf[1024];
+			sprintf(buf, "Parameter #%i of type %s of event %s is invalid, the argument is invalid at event call.\nThe event was called during execution of event %s\nThe event was called from object %s at line %i in file:\n%s\nThe argument was already invalid at event call time.",
+			             argIndex,
+			             g_gevManager->ArgToName(m_type),
+			             g_gevManager->GetEventName(type),
+			             g_gevManager->GetEventName(g_gevManager->GetProcessingEvent()),
+			             g_slicEngine->GetContext()->GetFrame()->GetSlicSegment()->GetName(),
+			             g_slicEngine->GetContext()->GetFrame()->GetCurrentLine(),
+			             g_slicEngine->GetContext()->GetFrame()->GetSlicSegment()->GetFilename());
+
+			c3errors_ErrorDialog("Slic Event Error", buf);
+		}
+		else
+		{
+			char buf[1024];
+
+			if(event != NULL)
+			{
+				sprintf(buf, "Parameter #%i of type %s of event %s is invalid.\nThe event was added during the event %s.\nIt was called from the executable and is a serious problem that needs to be fixed if it was not caused by slic interference.\nPossible reason for the problem: The data became invalid between event call and event execution.",
+				             argIndex,
+				             g_gevManager->ArgToName(m_type),
+				             g_gevManager->GetEventName(type),
+				             g_gevManager->GetEventName(event->AddedDuring()));
+			}
+			else
+			{
+				sprintf(buf, "Parameter #%i of type %s of event %s is invalid.The event was added during the event %s.\nIt was called from the executable and is a serious problem that needs to be fixed.\nThe data was already invalid at event call time.",
+				             argIndex,
+				             g_gevManager->ArgToName(m_type),
+				             g_gevManager->GetEventName(type),
+				             g_gevManager->GetEventName(g_gevManager->GetProcessingEvent()));
+			}
+
+			c3errors_ErrorDialog("Slic Event Source Error", buf);
+		}
+	}
 }

@@ -312,6 +312,10 @@ public:
 
     static bool Reload(std::basic_string<MBCHAR> const & a_File);
 
+	sint32 GetCurrentLine() const;
+	const char* GetSegmentName() const;
+	const char* GetFileName() const;
+
 private:
 	BOOL m_tutorialActive;
 	PLAYER_INDEX m_tutorialPlayer;

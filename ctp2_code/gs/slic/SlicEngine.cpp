@@ -3205,3 +3205,39 @@ sint32 SlicEngine::CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 playe
 
 	return result;
 }
+
+sint32 SlicEngine::GetCurrentLine() const
+{
+	if(m_context)
+	{
+		return m_context->GetFrame()->GetCurrentLine();
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+const char* SlicEngine::GetSegmentName() const
+{
+	if(m_context)
+	{
+		return m_context->GetFrame()->GetSlicSegment()->GetName();
+	}
+	else
+	{
+		return "";
+	}
+}
+
+const char* SlicEngine::GetFileName() const
+{
+	if(m_context)
+	{
+		return m_context->GetFrame()->GetSlicSegment()->GetFilename();
+	}
+	else
+	{
+		return "";
+	}
+}

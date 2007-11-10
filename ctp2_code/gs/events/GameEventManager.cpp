@@ -1,8 +1,37 @@
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Game event handler
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Enable logging when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
+// - Events that should go into the event queue are only added if all their
+//   arguments are valid. (7-Nov-2007 Martin Gühmann)
+// - Events whose arguments became invalid between call and execution are not
+//   executed and an error message is given. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "GameEventManager.h"
@@ -15,8 +44,6 @@
 #include "GameEventArgList.h"
 #include "GameEventArgument.h"
 #include "GameEvent.h"
-
-#include "pointerlist.h"
 
 #include "Army.h"
 #include "Unit.h"
@@ -153,8 +180,13 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 	Assert((type >= (GAME_EVENT) 0) && (type < GEV_MAX));
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
-	
-	
+
+	if(!argList->TestArgs(type))
+	{
+		delete argList;
+		return GEV_ERR_ArgsInvalid;
+	}
+
 	GameEvent *newEvent = new GameEvent(type, argList, m_serial++, m_processingEvent);
 
 	switch(insert) {
@@ -316,6 +348,27 @@ char *GameEventManager::ArgCharToName(char want)
 	}
 }
 
+char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
+{
+	switch(want) {
+		case GEA_Army: return "GEA_Army";
+		case GEA_Unit: return "GEA_Unit";
+		case GEA_City: return "GEA_City";
+		case GEA_Pop: return "GEA_Pop";
+		case GEA_Gold: return "GEA_Gold";
+		case GEA_Path: return "GEA_Path";
+		case GEA_MapPoint: return "GEA_MapPoint";
+		case GEA_Player: return "GEA_Player";
+		case GEA_Int: return "GEA_Int";
+		case GEA_Direction: return "GEA_Direction";
+		case GEA_Advance: return "GEA_Advance";
+		case GEA_Wonder: return "GEA_Wonder";
+		case GEA_Improvement: return "GEA_Improvement";
+		case GEA_TradeRoute: return "GEA_TradeRoute";
+		default: return "GEA_FixArgCharToNameDammit";
+	}
+}
+
 GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(char arg)
 {
 	switch(arg) {
@@ -348,7 +401,7 @@ const char *GameEventManager::GetArgString(GAME_EVENT ev) const
 	return g_eventDescriptions[ev].args;
 }
 
-BOOL GameEventManager::CheckArg(sint32 num, char got, char want)
+bool GameEventManager::CheckArg(sint32 num, char got, char want)
 {
 	EVENTLOG(("%s ", ArgCharToName(got)));
 
@@ -356,9 +409,9 @@ BOOL GameEventManager::CheckArg(sint32 num, char got, char want)
 #ifdef _DEBUG
 		c3errors_ErrorDialog("GameEventManager", "Argument %d should be of type %s.  Stack: %s", num, ArgCharToName(want), c3debug_StackTrace());
 #endif
-		return FALSE;
+		return false;
 	}
-	return TRUE;
+	return true;
 }
 
 char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
@@ -370,13 +423,13 @@ char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
 
 	size_t count = 0;
 
-	for 
-    (
-        char const * argString = g_eventDescriptions[type].args; 
-        *argString; 
-        ++argString
-    ) 
-    {
+	for
+	(
+	    char const * argString = g_eventDescriptions[type].args; 
+	    *argString; 
+	    ++argString
+	)
+	{
 		Assert(*argString == '%' || *argString == '&');
 		if(*argString != '%' && *argString != '&')
 			return '\0';
@@ -404,17 +457,17 @@ size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
 
     size_t count = 0;
 
-    for 
+    for
     (
         char const * argString = g_eventDescriptions[type].args; 
-        *argString; 
+        *argString;
         ++argString
     )
     {
         Assert(*argString == '%' || *argString == '&');
         if (*argString != '%') 
         {
-            break;	
+            break;
         }
 
         ++argString;
@@ -429,19 +482,19 @@ size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
 
     return count;
 }
-	
-	
-BOOL GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
+
+
+bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 {
 	Assert(type >= (GAME_EVENT)0);
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
-		return FALSE;
-	
+		return false;
+
 	GameEventDescription *desc = &g_eventDescriptions[type];
 	char *argString = desc->args;
 
-	BOOL done = FALSE;
+	bool done = false;
 	GAME_EVENT_ARGUMENT nextArg;
 
 	sint32 argNum = 0;
@@ -451,7 +504,7 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 		nextArg = va_arg(*vl, GAME_EVENT_ARGUMENT);
 
 		if(nextArg == GEA_End && *argString == 0)
-			return TRUE;
+			return true;
 
 		
 		
@@ -462,20 +515,20 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 			
 			Assert(*argString == '%' || *argString == '&');
 			if(*argString != '%' && *argString != '&')
-				return FALSE;
+				return false;
 			
 			if(*argString == '&')
 				isOptional = true;
 		} else {
 			Assert(*argString == '&');
 			if(*argString != '&')
-				return FALSE;
+				return false;
 		}
 
 		if(isOptional && nextArg == GEA_End) {
 			
 			
-			return TRUE;
+			return true;
 		}
 		
 		
@@ -505,68 +558,68 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 
 		switch(nextArg) {
 			case GEA_Army:
-				if(!CheckArg(argNum, *argString, GEAC_ARMY)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_ARMY)) return false;
 				a = va_arg(*vl, Army);
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", a.m_id);
 				break;
 			case GEA_Unit:
-				if(!CheckArg(argNum, *argString, GEAC_UNIT)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_UNIT)) return false;
 				u = va_arg(*vl, Unit);
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", u.m_id);
 				break;
 			case GEA_City:
-				if(!CheckArg(argNum, *argString, GEAC_CITY)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_CITY)) return false;
 				c = va_arg(*vl, Unit);
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", c.m_id);
 				break;
 			case GEA_Gold:
-				if(!CheckArg(argNum, *argString, GEAC_GOLD)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_GOLD)) return false;
 				value = va_arg(*vl, sint32);
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Path:
-				if(!CheckArg(argNum, *argString, GEAC_PATH)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_PATH)) return false;
 				path = va_arg(*vl, Path *);
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", path);
 				break;
 			case GEA_MapPoint:
-				if(!CheckArg(argNum, *argString, GEAC_MAPPOINT)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_MAPPOINT)) return false;
 				pos = va_arg(*vl, MapPoint);
 				EVENTLOG(("(%d,%d), ", pos.x, pos.y));
 				break;
 			case GEA_Player:
-				if(!CheckArg(argNum, *argString, GEAC_PLAYER)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_PLAYER)) return false;
 				value = va_arg(*vl, sint32);
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Int:
-				if(!CheckArg(argNum, *argString, GEAC_INT)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_INT)) return false;
 				value = va_arg(*vl, sint32);
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Direction:
-				if(!CheckArg(argNum, *argString, GEAC_DIRECTION)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_DIRECTION)) return false;
 				value = va_arg(*vl, sint32);
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 
 			case GEA_Wonder:
-				if(!CheckArg(argNum, *argString, GEAC_WONDER)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_WONDER)) return false;
 				value = va_arg(*vl, sint32);
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Advance:
-				if(!CheckArg(argNum, *argString, GEAC_ADVANCE)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_ADVANCE)) return false;
 				value = va_arg(*vl, sint32);
 				DG_PRINT(EVENTLOGNAME, "%d, ", value);
 				break;
 			case GEA_Improvement:
-				if(!CheckArg(argNum, *argString, GEAC_IMPROVEMENT)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_IMPROVEMENT)) return false;
 				imp = va_arg(*vl, TerrainImprovement);
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", imp.m_id);
 				break;
 			case GEA_TradeRoute:
-				if(!CheckArg(argNum, *argString, GEAC_TRADEROUTE)) return FALSE;
+				if(!CheckArg(argNum, *argString, GEAC_TRADEROUTE)) return false;
 				route = va_arg(*vl, TradeRoute);
 				DG_PRINT(EVENTLOGNAME, "0x%lx, ", route.m_id);
 				break;
@@ -575,16 +628,16 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 #ifdef _DEBUG
 					c3errors_ErrorDialog("GameEventManager", "Not enough arguments.  Stack: %s", c3debug_StackTrace());
 #endif
-					return FALSE;
+					return false;
 				}
-				return TRUE;
+				return true;
 			default:
-				Assert(FALSE);
-				return FALSE;
+				Assert(false);
+				return false;
 		}
 		argString++;
 	}
-	return FALSE;
+	return false;
 }
 
 #ifdef _DEBUG

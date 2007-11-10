@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C/C++ header
+// Description  : Game event types
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// HAVE_PRAGMA_ONCE
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added GEV_ERR_ArgsInvalid to GAME_EVENT_ERR. (7-Nov-2007 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -22,6 +52,7 @@ enum GAME_EVENT_ERR {
 	GEV_ERR_WrongArguments,
 	GEV_ERR_StopProcessing,
 	GEV_ERR_AtBreak,
+	GEV_ERR_ArgsInvalid
 };
 
 enum GAME_EVENT_HOOK_DISPOSITION {
@@ -50,7 +81,7 @@ enum GAME_EVENT_ARGUMENT {
 	GEA_Improvement,
 	GEA_TradeRoute,
 
-	GEA_End, 
+	GEA_End
 };
 
 

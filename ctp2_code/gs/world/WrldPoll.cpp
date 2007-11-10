@@ -112,7 +112,7 @@ extern  RadarMap        *g_radarMap;
 
 
 void World::RaiseWaters(void)
-	{
+{
 	Cell	*c ;
 
 	sint32	x, y;
@@ -154,26 +154,26 @@ void World::RaiseWaters(void)
 			}
 		}
 	}
-	}
+}
 
 
 
 void World::FloodCell(sint32 x, sint32 y, Cell *c)
-	{
-	Assert(c) ;
+{
+	Assert(c);
 
-	FloodEverythingInCell(x, y, c) ;
-	ConvertToShallowWater(x, y, c) ;
-	}
+	FloodEverythingInCell(x, y, c);
+	ConvertToShallowWater(x, y, c);
+}
 
 
 void World::FloodEverythingInCell(sint32 x, sint32 y, Cell *c)
-	{
-	FloodArmies(c) ;
-	FloodCity(c) ;
-	FloodGoodyHut(c) ;
-	FloodImprovements(x, y, c) ;
-	}
+{
+	FloodArmies(c);
+	FloodCity(c);
+	FloodGoodyHut(c);
+	FloodImprovements(x, y, c);
+}
 
 
 void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
@@ -182,20 +182,20 @@ void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 	Cell *cell = GetCell(x, y);
 	
 	if (cell->GetNumDBImprovements() > 0 || cell->GetNumImprovements() > 0)
-		{
+	{
 		g_theWorld->CutImprovements(pos);
 		if(g_network.IsHost())
-			{
-			g_network.Enqueue(c, pos.x, pos.y) ;
-			}
+		{
+			g_network.Enqueue(c, pos.x, pos.y);
+		}
 
 		DynamicArray<Installation> instArray;
-		g_theInstallationTree->GetAt(pos, instArray) ;
+		g_theInstallationTree->GetAt(pos, instArray);
 		instArray.KillList() ;
-		}
+	}
 		
-	if (GetCell(pos)->GetNumImprovements()) 
-    {
+	if (GetCell(pos)->GetNumImprovements())
+	{
 		Cell *cell = GetCell(pos);
 		for(sint32 i = cell->GetNumImprovements() - 1; i >= 0; i--)
 			cell->AccessImprovement(i).Kill();
@@ -212,61 +212,58 @@ void World::FloodGoodyHut(Cell *c)
 
 
 void World::FloodCity(Cell *c)
-	{
+{
 	Unit	u   = c->GetCity();
 
 	if (u.IsValid())
-		{
+	{
 		SlicObject *so = new SlicObject("04CitiesKilledByCalamity");
 		so->AddCity(u);
 		so->AddRecipient(u.GetOwner());
 		g_slicEngine->Execute(so);
 
 		u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);									
-		}
 	}
+}
 
 
 
 void World::FloodArmies(Cell *c)
-	{
-	Assert(c) ;
+{
+	Assert(c);
 
 	for (sint32 i = c->GetNumUnits() - 1; i >= 0; i--)
-		{
-        Unit u  = c->AccessUnit(i);
+	{
+		Unit u  = c->AccessUnit(i);
 		if (u.IsValid() && !u.GetMovementTypeSea())
-			{
-			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1) ;
-			}
+		{
+			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);
 		}
 	}
+}
 
 
 void World::ConvertToShallowWater(sint32 x, sint32 y, Cell *c)
-	{
-	Assert(c) ;
+{
+	Assert(c);
 
-	c->m_terrain_type = (sint8)TERRAIN_WATER_SHALLOW ;
-	SetMovementType(x, y, k_MOVEMENT_TYPE_SHALLOW_WATER) ;
-	c->m_search_count = 0 ;
-	
-	c->m_env &= ~k_MASK_ENV_RIV_CUR ;
-	c->m_env &= ~k_MASK_ENV_CANAL_TUNNEL ;
-	Assert(IsWater(x,y)) ;
-	}
+	c->m_terrain_type = (sint8)TERRAIN_WATER_SHALLOW;
+	SetMovementType(x, y, k_MOVEMENT_TYPE_SHALLOW_WATER);
+	c->m_search_count = 0;
+
+	c->m_env &= ~k_MASK_ENV_RIV_CUR;
+	c->m_env &= ~k_MASK_ENV_CANAL_TUNNEL;
+	Assert(IsWater(x,y));
+}
 
 
 void World::ConvertToBeach(sint32 x, sint32 y, Cell *c)
 {
-	Assert(c) ;
+	Assert(c);
 
-	c->m_terrain_type = (sint8)TERRAIN_WATER_BEACH ;
-	SetMovementType(x, y, k_MOVEMENT_TYPE_SHALLOW_WATER) ;
-	c->m_search_count = 0 ;
-	
-	c->m_env &= ~k_MASK_ENV_RIV_CUR ;
-	c->m_env &= ~k_MASK_ENV_CANAL_TUNNEL ;
+	c->m_terrain_type = (sint8)TERRAIN_WATER_BEACH;
+	SetMovementType(x, y, k_MOVEMENT_TYPE_SHALLOW_WATER);
+	c->m_search_count = 0;
 }
 
 
@@ -281,7 +278,7 @@ void World::ConvertToBeach(sint32 x, sint32 y, Cell *c)
 
 void World::MakeBeaches()
 {
-	Cell	*c ;
+	Cell	*c;
 
 	sint32	x, y;
 
@@ -313,12 +310,12 @@ void World::MakeBeaches()
 				if(c->GetCity().m_id != 0) {
 					if(!c->GetCity().GetDBRec()->GetMovementTypeSea()) {
 						c->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
-						Assert(c->GetCity().m_id==(0)) ;
+						Assert(c->GetCity().m_id==(0));
 					}
 				}
 				if (!IsSurroundedByWater(x, y)) {
 					
-					ConvertToBeach(x, y, c) ;
+					ConvertToBeach(x, y, c);
 				}
 			}
 		}
@@ -373,15 +370,6 @@ void world_AddUnseenForHumans(sint32 x, sint32 y)
 		}
 	}
 }
-			
-
-
-
-
-
-
-
-
 
 void World::GWPhase(const sint32 phase)
 {
@@ -862,16 +850,16 @@ sint32 World::ChangeType(const double baseProb, const sint32 terrain) const
 		sint32 fromType = -1;
 
 		if (ctprec->GetFromTypeIndex(fromType))
-        {
+		{
 			if (terrain == fromType)
-            {
+			{
 				double chanceProb = 0.0;
 				ctprec->GetProbability(chanceProb);
 
 				if (   chanceProb < lastChance
 				    && probability < (chanceProb + baseProb)
 				   )
-                {
+				{
 					lastChance      = chanceProb;
 					newTerrainType  = -1;
 					ctprec->GetToTypeIndex(newTerrainType);
@@ -879,7 +867,7 @@ sint32 World::ChangeType(const double baseProb, const sint32 terrain) const
 			}
 		}
 		else
-        {
+		{
 		    // Ugly but needed for backwards compatibility with MedPack2
 			double chanceProb = 0.0;
 
@@ -941,11 +929,11 @@ sint32 World::ChangeType(const double baseProb, const sint32 terrain) const
 			}
 
 			if (terrain == fromType)
-            {
+			{
 				if (chanceProb < lastChance
 				    && probability < (chanceProb + baseProb)
 				   )
-                {
+				{
 					lastChance = chanceProb;
 					newTerrainType = GetTerrainChangeToType(ctprec);
 				}

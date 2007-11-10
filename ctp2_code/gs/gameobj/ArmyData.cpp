@@ -1270,6 +1270,7 @@ void ArmyData::GroupUnit(Unit unit)
 // Ungroup this army into it's constituent units
 void ArmyData::UngroupUnits()
 {
+	// The first unit does not need to be ungrouped
     for(sint32 i = m_nElements - 1; i > 0; i--) 
     {
         Army newArmy = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING_ORDER);

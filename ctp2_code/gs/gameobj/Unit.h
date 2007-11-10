@@ -37,7 +37,7 @@
 //   CityData.. - Aug 6th 2005 Martin Gühmann
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
-// - modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
+// - Modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
 //
 //----------------------------------------------------------------------------
 
@@ -349,7 +349,7 @@ public:
 	            const sint32 is_manual);
 
 	void SetIsInTransport(const Unit &transport);
-	sint32 IsBeingTransported() const;
+	bool IsBeingTransported() const;
 	
 	bool CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & used_vision) const;
 
@@ -390,7 +390,7 @@ public:
 	void SetFuelToMax();
 	bool GetUsedFuel (sint32 &fuel_remaining, sint32 &max_fuel) const;
 
-	sint32 IsVeteran() const;
+	bool IsVeteran() const;
 	void SetVeteran();  //copy and make for elite units
 	void UnVeteran();  //copy and make for elite units
 	void GetPosInArmy(MapPoint &p) const;
@@ -417,7 +417,7 @@ public:
 
 	sint32 GetCargoCapacity() const;
 	sint32 GetNumCarried() const;
-	sint32 CanCarry(Unit u) const ;
+	bool CanCarry(Unit u) const ;
 	bool DeathEffectsHappy() const;
 
 	sint32 GetSelect1SoundID(void);
@@ -729,25 +729,25 @@ public:
 	void IndicateSpaceTransition();
 
 	void AddWonderHPBonus(sint32 amt);
-	sint32 CanPlantNuke(const MapPoint &pos);
-	sint32 CanMakePark(const MapPoint &pos);
-	sint32 CanUndergroundRailway(const MapPoint &pos);
-	sint32 CanConvert(const MapPoint &pos);
-	sint32 CanEstablishEmbassy(const MapPoint &pos);
-	sint32 CanCreateFranchise(const MapPoint &pos);
-	sint32 CanAssasinateRuler(const MapPoint &pos);
-	sint32 CanStealTechnology(const MapPoint &pos);
-	sint32 CanInjoin(const MapPoint &pos);
-	sint32 CanInciteRevolution(const MapPoint &pos);
-	sint32 CanCauseUnhappiness(const MapPoint &pos);
-	sint32 CanExpel(const MapPoint &pos);
+	bool CanPlantNuke(const MapPoint &pos);
+	bool CanMakePark(const MapPoint &pos);
+	bool CanUndergroundRailway(const MapPoint &pos);
+	bool CanConvert(const MapPoint &pos);
+	bool CanEstablishEmbassy(const MapPoint &pos);
+	bool CanCreateFranchise(const MapPoint &pos);
+	bool CanAssasinateRuler(const MapPoint &pos);
+	bool CanStealTechnology(const MapPoint &pos);
+	bool CanInjoin(const MapPoint &pos);
+	bool CanInciteRevolution(const MapPoint &pos);
+	bool CanCauseUnhappiness(const MapPoint &pos);
+	bool CanExpel(const MapPoint &pos);
 
 
 
 
 	void AddEndGameObject(sint32 type);
 
-	BOOL SendSlaveTo(Unit dest);
+	bool SendSlaveTo(Unit dest);
 
 	void SetFullHappinessTurns(sint32 turns);
 

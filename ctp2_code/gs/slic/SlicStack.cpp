@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Slic stack handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 #include "SlicSymbol.h"
 #include "SlicNamedSymbol.h"
 #include "Army.h"
+#include "ProfileDB.h"
 
 SlicStack::SlicStack()
 {
@@ -108,9 +109,18 @@ sint32 SlicStack::Eval(SS_TYPE type, SlicStackValue value)
 		{
 			return retValue;
 		}
+	
+		if(g_theProfileDB
+		&& g_theProfileDB->IsDebugSlic()
+		){
+			c3errors_ErrorDialog("Slic", "%s: is not an integer.\nLine: %i\nFile: %s",
+				                 sym->GetName(),
+								 g_slicEngine->GetCurrentLine(),
+								 g_slicEngine->GetFileName());
+		}
 	}
 
-	Assert(FALSE);	// Or issue a SLIC error?
+//	Assert(false);  // To heavy for debugung Cradle Frenzy
 	return 0;		// Questionable, but what else?
 }
 

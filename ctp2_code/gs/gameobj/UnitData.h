@@ -32,7 +32,7 @@
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Total fuel, total move points and total hp calculation moved into their own
 //   methods. (Dec 24th 2006 Martin Gühmann)
-// - added IsReligion bools
+// - Added IsReligion bools
 //
 //----------------------------------------------------------------------------
 
@@ -155,7 +155,7 @@ private:
 #define k_UDF_IS_PROFESSIONAL                        0x00000100
 #define k_UDF_IS_CLOAKED                             0x00000200
 #define k_UDF_FOUGHT_THIS_TURN                       0x00000400
-#define k_UDF_IS_ELITE                               0x00000800 //added by E - maybe use professional for elite?
+#define k_UDF_IS_ELITE                               0x00000800 // Added by E - maybe use professional for elite? Be carefull what you want to add you have only one bit left.
 
 #define k_UDF_HAS_LEFT_MAP                           0x00001000
 #define k_UDF_ALREADY_PERFORMED_SPACE_TRANSITION     0x00002000
@@ -174,7 +174,7 @@ private:
 #define k_UDF_IN_SPACE                               0x04000000
 #define k_UDF_HAS_TARGET                             0x08000000
 #define k_UDF_MAD_LAUNCHED                           0x10000000
-#define k_UDF_TELEPORT_DEATH                         0x20000000 
+#define k_UDF_TELEPORT_DEATH                         0x20000000
 #define k_UDF_BEACH_ASSAULT_LEGAL                    0x40000000
 
 class UnitData : public GAMEOBJ,
@@ -281,24 +281,24 @@ public:
 	                sint32 unit_hp[100]) const;
 
 	bool CanAtLeastOneCargoUnloadAt
-    (
-        MapPoint const &    old_pos, 
-        MapPoint const &    dest_pos, 
-        bool                use_vision
-    ) const;
+	(
+	    MapPoint const &    old_pos, 
+	    MapPoint const &    dest_pos, 
+	    bool                use_vision
+	) const;
 	bool CanThisCargoUnloadAt
-    (
-        Unit                the_cargo, 
-        MapPoint const &    old_pos, 
-        MapPoint const &    new_pos, 
-        bool                use_vision
-    ) const;
+	(
+	    Unit                the_cargo, 
+	    MapPoint const &    old_pos, 
+	    MapPoint const &    new_pos, 
+	    bool                use_vision
+	) const;
 	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
 	                 bool justOneUnit, const Unit &theUnit);
 	bool UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
 
 
-	sint32 IsBeingTransported() const { return Flag(k_UDF_IS_IN_TRANSPORT); };
+	bool IsBeingTransported() const { return Flag(k_UDF_IS_IN_TRANSPORT); };
 	void SetIsInTransport(const Unit &transport);
 	void UnsetIsInTransport();
 	bool IsMovePointsEnough(const MapPoint &pos) const;
@@ -318,14 +318,14 @@ public:
 	double GetMovementPoints() const { return m_movement_points; };
 	void   SetMovementPoints(double mp);
 
-	sint32 GetFirstMoveThisTurn()const { return Flag(k_UDF_FIRST_MOVE); }; 
+	bool GetFirstMoveThisTurn()const { return Flag(k_UDF_FIRST_MOVE); };
 	void SetFirstMoveThisTurn(sint32 fm);
 
 	sint32 GetFuel() const { return m_fuel; }
 	void SetFuel(sint32 fuel);
 	bool GetUsedFuel (sint32 &fuel_remaining, sint32 &max_fuel) const;
 
-	sint32 IsVeteran() const { return Flag(k_UDF_IS_VET); }; 
+	bool IsVeteran() const { return Flag(k_UDF_IS_VET); };
 	void SetVeteran();
 	void UnVeteran();
 	
@@ -668,18 +668,18 @@ public:
 
 	void AddWonderHPBonus(sint32 amt);
 
-	sint32 CanPlantNuke(const MapPoint &pos) const;
-	sint32 CanMakePark(const MapPoint &pos) const;
-	sint32 CanUndergroundRailway(const MapPoint &pos) const;
-	sint32 CanConvert(const MapPoint &pos) const;
-	sint32 CanEstablishEmbassy(const MapPoint &pos) const;
-	sint32 CanCreateFranchise(const MapPoint &pos) const;
-	sint32 CanAssasinateRuler(const MapPoint &pos) const;
-	sint32 CanStealTechnology(const MapPoint &pos) const;
-	sint32 CanInjoin(const MapPoint &pos) const;
-	sint32 CanInciteRevolution(const MapPoint &pos) const;
-	sint32 CanCauseUnhappiness(const MapPoint &pos) const;
-	sint32 CanExpel(const MapPoint &pos) const;
+	bool CanPlantNuke(const MapPoint &pos) const;
+	bool CanMakePark(const MapPoint &pos) const;
+	bool CanUndergroundRailway(const MapPoint &pos) const;
+	bool CanConvert(const MapPoint &pos) const;
+	bool CanEstablishEmbassy(const MapPoint &pos) const;
+	bool CanCreateFranchise(const MapPoint &pos) const;
+	bool CanAssasinateRuler(const MapPoint &pos) const;
+	bool CanStealTechnology(const MapPoint &pos) const;
+	bool CanInjoin(const MapPoint &pos) const;
+	bool CanInciteRevolution(const MapPoint &pos) const;
+	bool CanCauseUnhappiness(const MapPoint &pos) const;
+	bool CanExpel(const MapPoint &pos) const;
 
 
 	void AddEndGameObject(sint32 type);
@@ -721,14 +721,14 @@ public:
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
 //emod
-	sint32 IsElite() const { return Flag(k_UDF_IS_ELITE); }; 
+	bool IsElite() const { return Flag(k_UDF_IS_ELITE); };
 	void SetElite();
 	void UnElite();
 
 private:
     bool CanExecuteNextTo
     (
-        MapPoint const &            a_Position, 
+        MapPoint const &            a_Position,
         UnitRecord::BoolAccessor    a_Function
     ) const;
 

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Slic segment handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -104,7 +104,7 @@ public:
 	void *operator new(size_t size);
 	void operator delete(void *ptr);
 
-    void SetPoolIndex(int index) { m_poolIndex = index; }
+	void SetPoolIndex(int index) { m_poolIndex = index; }
 	int GetPoolIndex() const { return m_poolIndex; }
 
 	const char* GetName() const { return m_id; }
@@ -119,14 +119,14 @@ public:
 	sint32 GetFilenum() const { return m_fromFile; }
 	BOOL IsAlert() const { return m_isAlert; }
 	BOOL IsHelp() const { return m_isHelp; }
-    void SetLastShown(sint32 player, sint32 turn) { m_lastShown[player] = (turn | SLICLS_FLAG); }
-    sint32 GetLastShown(sint32 player) { return (m_lastShown[player] & ~SLICLS_FLAG); }
-    BOOL TestLastShown(sint32 player, sint32 turn);
-    BOOL HasBeenShown(sint32 player) {
-        Assert(m_lastShown); 
-        if (!m_lastShown) return FALSE; 
-        return(m_lastShown[player] != 0); 
-    }
+	void SetLastShown(sint32 player, sint32 turn) { m_lastShown[player] = (turn | SLICLS_FLAG); }
+	sint32 GetLastShown(sint32 player) { return (m_lastShown[player] & ~SLICLS_FLAG); }
+	BOOL TestLastShown(sint32 player, sint32 turn);
+	BOOL HasBeenShown(sint32 player) {
+	    Assert(m_lastShown); 
+	    if (!m_lastShown) return FALSE; 
+	    return(m_lastShown[player] != 0); 
+	}
 
 	const char *GetUIComponent() const { return m_uiComponent; }
 
