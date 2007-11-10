@@ -369,6 +369,7 @@ WONDER_ZERO_CRIME_BILL {
 # ToDo give those shrines more descriptive names and 
 # actually move this to the religion stuff database.
 # We should not occupy a wonder slot.
+
 WONDER_SHRINE_ZOROASTER {
    DefaultIcon ICON_WONDER_HOLYCITY_Z
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -379,7 +380,7 @@ WONDER_SHRINE_ZOROASTER {
    #NeedsAnyPlayerFeatToBuild FEAT_ADVANCE_ZOROASTER #use this flag if you want a wonder race once feat is achieved (good for christianity and Islam)	
    ProductionCost 1000
    IsHolyCity
-   IsReligionIcon MAPICON_ZOROASTER
+   IsReligionIcon MAPICON_ZORASTORISM
    ExcludedByWonder WONDER_SHRINE_EGYPT    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_C    # Add this to wonder database if you want to use it.
 #   ExcludedByWonder WONDER_SHRINE_G    # Add this to wonder database if you want to use it.
@@ -392,6 +393,7 @@ WONDER_SHRINE_ZOROASTER {
    GoldPerBuildingAnywhere 0
    GLHidden
 }
+
 ############################################################
 
 WONDER_SHRINE_EGYPT {
@@ -416,4 +418,5 @@ WONDER_SHRINE_EGYPT {
    GoldPerBuildingAnywhere 0
    GLHidden
 }
+
 ############################################################

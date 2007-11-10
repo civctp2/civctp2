@@ -743,13 +743,13 @@ IMPROVE_SHRINE_B {
    IsReligionIcon MAPICON_BUDDHISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_I
    ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -766,12 +766,12 @@ IMPROVE_SHRINE_CHRISTIAN {
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
    ConflictsWithBuilding IMPROVE_SHRINE_B
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_I
    ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -787,13 +787,13 @@ IMPROVE_SHRINE_EGYPT {
    IsReligionIcon MAPICON_PHAROAHISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
    ConflictsWithBuilding IMPROVE_SHRINE_B
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_I
    ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -809,13 +809,13 @@ IMPROVE_SHRINE_G {
    IsReligionIcon MAPICON_HELLENISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_B
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_I
    ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -831,13 +831,13 @@ IMPROVE_SHRINE_H {
    IsReligionIcon MAPICON_HINDUISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_B
    ConflictsWithBuilding IMPROVE_SHRINE_I
    ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -853,13 +853,13 @@ IMPROVE_SHRINE_I {
    IsReligionIcon MAPICON_ISLAM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_B
    ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -875,13 +875,13 @@ IMPROVE_SHRINE_J {
    IsReligionIcon MAPICON_JUDAISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_I
    ConflictsWithBuilding IMPROVE_SHRINE_B
-   ConflictsWithBuilding IMPROVE_SHRINE_Z
+   ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
@@ -897,8 +897,8 @@ IMPROVE_SHRINE_ZOROASTER {
    IsReligionIcon MAPICON_ZORASTORISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_C
-   ConflictsWithBuilding IMPROVE_SHRINE_E
+   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
    ConflictsWithBuilding IMPROVE_SHRINE_G
    ConflictsWithBuilding IMPROVE_SHRINE_H
    ConflictsWithBuilding IMPROVE_SHRINE_I
