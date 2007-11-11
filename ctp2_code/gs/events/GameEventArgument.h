@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C/C++ header
 // Description  : Game event argument
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -56,13 +56,13 @@ struct SimpleMapPoint // And we have to redefine it here?
 class GameEventArgument
 {
 public:
-	GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl);
+	GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid = false);
 	GameEventArgument(GAME_EVENT_ARGUMENT type, ...);
 	GameEventArgument(CivArchive &archive);
 	~GameEventArgument();
 	void Serialize(CivArchive &archive);
 
-	void Init(GAME_EVENT_ARGUMENT type, va_list *vl);
+	void Init(GAME_EVENT_ARGUMENT type, va_list *vl,  bool isAlwaysValid = false);
 
 	GAME_EVENT_ARGUMENT GetType() const { return m_type; }
 
@@ -95,6 +95,8 @@ private:
 		SimpleMapPoint m_pos;
 		void *m_ptr;
 	} m_data;
+
+	bool m_IsAlwaysValid;
 };
 
 #endif

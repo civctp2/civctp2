@@ -420,59 +420,23 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 
     return FALSE;
 #endif
-} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-sint32 World::GetTopVisibleUnit (const MapPoint &pos, Unit &top) const 
-
-{
-    sint32 looking_player = g_selected_item->GetVisiblePlayer(); 
-    return GetTopVisibleUnit (looking_player, pos, top, TRUE); 
 }
 
-sint32 World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, BOOL includeCities) const 
-
+sint32 World::GetTopVisibleUnit (const MapPoint &pos, Unit &top) const 
 {
-    Cell *c; 
+	sint32 looking_player = g_selected_item->GetVisiblePlayer();
+	return GetTopVisibleUnit (looking_player, pos, top, TRUE);
+}
 
-    top.m_id = (0); 
-    c = GetCell(pos);
+sint32 World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, BOOL includeCities) const
+{
+	Cell *c;
+
+	top.m_id = (0);
+	c = GetCell(pos);
 
 	if(includeCities) {
-		if (c->GetCity().IsValid()) { 
+		if (c->GetCity().IsValid()) {
 			top = c->GetCity();
 			return TRUE; 
 		} 
@@ -498,11 +462,11 @@ sint32 World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &po
 			}
 		}
 
-        top = c->UnitArmy()->GetTopVisibleUnit(looking_player); 
-        return top.IsValid(); 
-    } 
+		top = c->UnitArmy()->GetTopVisibleUnit(looking_player);
+		return top.IsValid();
+	}
 
-    return FALSE;
+	return FALSE;
 }
 
 sint32 World::GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const
@@ -555,53 +519,37 @@ sint32 World::GetTopRadarUnit(const MapPoint &pos, Unit &top) const
 
 
 sint32 World::GetSecondUnit (const MapPoint &pos, Unit &second) const 
-
 {
-    Cell *c; 
+	Cell *c = GetCell(pos);
 
-    c = GetCell(pos);
+	sint32 n = c->GetNumUnits();
+	if (n>1)
+	{
+		second = c->AccessUnit(n-2);
 
-    sint32 n = c->GetNumUnits();
-    if (n>1) { 
-        second = c->AccessUnit(n-2);
+		return TRUE; 
+	}
 
-        return TRUE; 
-    } 
-
-    return FALSE;
+	return FALSE;
 }
 
 CellUnitList * World::GetArmyPtr(const MapPoint &pos)
-{ 
+{
 	return (GetCell(pos)->UnitArmy()); 
 }
 
 #ifdef _DEBUG
 extern sint32 g_is_debug_map_color;
 #endif
+
 void World::AddZOC(const MapPoint &pos, sint32 player)
 {
 	GetCell(pos)->m_zoc |= (1 << player);
-
-
-
-
-
 }
 
 void World::RemoveZOC(const MapPoint &pos, sint32 player)
 {
-	Cell *cell = GetCell(pos);
-	cell->m_zoc &= ~(1 << player);
-
-
-
-
-
-
-
-
-
+	GetCell(pos)->m_zoc &= ~(1 << player);
 }
 
 void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
@@ -609,7 +557,7 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 {
 	Cell *cell = GetCell(pos);
 
-    if(cell->GetCity().m_id != 0 &&
+	if(cell->GetCity().m_id != 0 &&
 	   cell->GetCity().GetOwner() == player &&
 	   cell->GetCity().m_id != notThisCity.m_id) {
 		cell->m_zoc |= (1 << player);
@@ -619,16 +567,16 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 	
 	CellUnitList * cunits = cell->UnitArmy();
 	if (cunits && cunits->Access(0).IsValid()) 
-    {
+	{
 		if (    (cunits->CanEnter(pos)) 
-             && (cunits->GetOwner() == player) 
-           ) 
-        {
+		     && (cunits->GetOwner() == player) 
+		   ) 
+		{
 			for (sint32 i = cunits->Num() - 1; i >= 0; i--) 
-            {
+			{
 				if (    ((*cunits)[i].GetArmy() != a )
-                     && !(*cunits)[i].IsNoZoc()) 
-                {
+				     && !(*cunits)[i].IsNoZoc()) 
+				{
 					cell->m_zoc |= (1 << player);
 					return;
 				}
@@ -654,19 +602,18 @@ void World::AddOtherArmyZOC(const MapPoint &pos, sint32 player, const Army &a,
 // Description: Check whether a position is restricted by a ZoC 
 //              (zone of control) of a player.
 //
-// Parameters : cpos			: position to check
-//				player			: player to generate the ZoC
-//				notThisArmy		: army to skip when determining ZoC
-//				notThisCity		: city to skip when determining ZoC
+// Parameters : cpos            : position to check
+//              player          : player to generate the ZoC
+//              notThisArmy     : army to skip when determining ZoC
+//              notThisCity     : city to skip when determining ZoC
 //
 // Globals    : -
 //
-// Returns    : BOOL			: cpos is under ZoC by player
+// Returns    : BOOL            : cpos is under ZoC by player
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 BOOL World::AdjacentToZOCUnit(const MapPoint &cpos, sint32 player, const Army &notThisArmy, const Unit &notThisCity)
 {
 	for (int dir = 0; dir <= NOWHERE; ++dir)
@@ -709,16 +656,15 @@ BOOL World::AdjacentToZOCUnit(const MapPoint &cpos, sint32 player, const Army &n
 //
 // Description: Create a list of cities that are next to a position.
 //
-// Parameters : cpos		: position to check
+// Parameters : cpos        : position to check
 //
 // Globals    : -
 //
-// Returns    : city_list	: list of cities adjacent to cpos
+// Returns    : city_list   : list of cities adjacent to cpos
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void World::GetAdjacentCities(UnitDynamicArray &city_list, const MapPoint &cpos)
 {
 	city_list.Clear();
@@ -746,16 +692,15 @@ void World::GetAdjacentCities(UnitDynamicArray &city_list, const MapPoint &cpos)
 //
 // Description: Create a list of armies that are next to a position.
 //
-// Parameters : cpos		: position to check
+// Parameters : cpos        : position to check
 //
 // Globals    : -
 //
-// Returns    : units		: list of armies adjacent to cpos
+// Returns    : units       : list of armies adjacent to cpos
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-
 void World::GetAdjacentUnits(UnitDynamicArray &units, const MapPoint &cpos)
 {
 	units.Clear();

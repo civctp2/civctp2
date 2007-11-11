@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C/C++ header
 // Description  : Combat events
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -82,7 +82,7 @@ STDEHANDLER(RunCombatEvent)
 		                       GEA_Player, defender,
 		                       GEA_Int, 1,
 		                       GEA_End
-		                       );
+		                      );
 		g_theCurrentBattle->KillUnits();
 	}
 	else

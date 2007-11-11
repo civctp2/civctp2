@@ -1017,11 +1017,11 @@ STDEHANDLER(AftermathEvent)
 	if(!args->GetPlayer(1, defense_owner))
 		return GEV_HD_Continue;
 
-	Unit            c(g_theWorld->GetCell(pos)->GetCity().m_id);
+	Unit            c = g_theWorld->GetCell(pos)->GetCity();
 	CellUnitList    defender;
 	g_theWorld->GetArmy(pos, defender);
 
-	if(c.m_id != (0)) {
+	if(c.IsValid()) {
 		//add civil war here?  no because its in MoveEvent? Why?  EMOD
 
 		//end EMOD
@@ -1040,18 +1040,11 @@ STDEHANDLER(AftermathEvent)
 					casualties = g_theConstDB->Get(0)->GetCapturedCityKillPop() * -1;
 				}
 
-				c.CD()->ChangePopulation(casualties);  //Why is this hard coded? should be in ConstDB and should allow for random value
+				c.CD()->ChangePopulation(casualties);
 			}
 		}
-
-//removed unsurgency code
-
-
-//end emod
 	}
 
-	
-	
 	if (g_theUnitPool->IsValid(ta)) {
 		g_director->AddTerminateFaceoff(ta);
 	}
@@ -1074,7 +1067,7 @@ STDEHANDLER(AftermathEvent)
 		}
 	}
 
-    if (attackerWon) { 
+	if (attackerWon) {
 		if(defense_owner == g_selected_item->GetVisiblePlayer() && !c.m_id) {
 			g_soundManager->AddGameSound(GAMESOUNDS_VICTORY_FANFARE);
 		}
@@ -1088,7 +1081,7 @@ STDEHANDLER(AftermathEvent)
 		if(army.IsValid()) {
 			army.AccessData()->DoVictoryEnslavement(defense_owner);
 		}
-    } else {  
+	} else {
 		if(attack_owner == g_selected_item->GetVisiblePlayer() && !c.m_id) {
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
@@ -1098,8 +1091,8 @@ STDEHANDLER(AftermathEvent)
 		}
 
 		defender.DoVictoryEnslavement(attack_owner);
-    }
-    
+	}
+
 	if(attackerWon && army.IsValid() && army.Num() > 0) {
 		for(i = 0; i < army.Num(); i++) {
 			
@@ -1166,7 +1159,7 @@ STDEHANDLER(AftermathEvent)
 		defender[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);
 	}
 
-    return GEV_HD_Continue;
+	return GEV_HD_Continue;
 }
 	
 STDEHANDLER(CheckOrdersEvent)

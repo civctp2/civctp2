@@ -4,7 +4,7 @@
 // File type    : C++ header
 // File name    : ui\aui_ctp2\SetItem.h
 // Description  : Handles stuff about selected items.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -78,10 +78,10 @@ enum SELECT_MODE {
 #include "gstypes.h"
 
 class Unit;
-class CivArchive; 
-class NetUnit; 
+class CivArchive;
+class NetUnit;
 class ID;
-struct aui_MouseEvent; 
+struct aui_MouseEvent;
 class OrderRecord;
 
 #define k_SELECTED_ITEM_VERSION_MAJOR 0 
@@ -95,24 +95,24 @@ class SelectedItem {
 
 	// Serialized
 	SELECT_TYPE m_select_state[k_MAX_PLAYERS];
-    sint32 m_is_at_start[k_MAX_PLAYERS];
-    PLAYER_INDEX m_next_player[k_MAX_PLAYERS];
+	sint32 m_is_at_start[k_MAX_PLAYERS];
+	PLAYER_INDEX m_next_player[k_MAX_PLAYERS];
 	sint32 m_remote_owner[k_MAX_PLAYERS];
 	MapPoint m_select_pos[k_MAX_PLAYERS];
-  	PLAYER_INDEX m_current_player;
+	PLAYER_INDEX m_current_player;
 	Army m_selected_army[k_MAX_PLAYERS];
 	Unit m_selected_city[k_MAX_PLAYERS];
 	// End of serialied members
 
 	DynamicArray<Army> m_select_cycle;
 
-    sint32 m_is_pathing;
-    MapPoint m_cur_mouse_tile;
-    Path *m_good_path, m_bad_path;
-    bool m_is_broken_path; 
+	sint32 m_is_pathing;
+	MapPoint m_cur_mouse_tile;
+	Path *m_good_path, m_bad_path;
+	bool m_is_broken_path; 
 	DynamicArray<MapPoint> m_waypoints;
 	PLAYER_INDEX m_player_on_screen;
-    BOOL m_auto_unload;
+	BOOL m_auto_unload;
 	BOOL m_gotClickSinceLastAutoEnd;
 	BOOL m_selected_something_since_director_select;
 	Army m_force_select_army;
@@ -130,81 +130,80 @@ class SelectedItem {
 
 
 public:
-    friend class NetUnit;
+	friend class NetUnit;
 
-    SelectedItem(const sint32 nPlayers); 
-    SelectedItem(CivArchive &archive); 
+	SelectedItem(const sint32 nPlayers); 
+	SelectedItem(CivArchive &archive); 
 	~SelectedItem();
 
-    
-    void Serialize(CivArchive &archive); 
-    void Init();
 
-	
+	void Serialize(CivArchive &archive); 
+	void Init();
+
 	void Deselect(PLAYER_INDEX player);
 
 	void EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos);
 
-    void SetAutoUnload(BOOL a) { m_auto_unload = a; }
-    BOOL GetAutoUnload() { return(m_auto_unload); }
+	void SetAutoUnload(BOOL a) { m_auto_unload = a; }
+	BOOL GetAutoUnload() { return(m_auto_unload); }
 
 	void PlaySelectedSound(Unit &unit);
 	sint32 GetTopUnitOrCity(const MapPoint &pos, Unit &top);
 	sint32 GetTopUnit(const MapPoint &pos, Unit &top);
 
 	SELECT_TYPE GetClickedThing(const MapPoint &pos, bool click);
-    void RegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
+	void RegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
 					   bool leftDrag, bool leftDrop); 
 
-    void KeyboardSelectFirstUnit(); 
+	void KeyboardSelectFirstUnit(); 
 	void SelectFirstUnit(BOOL setSelect = TRUE);
 	void NextUnmovedUnit(BOOL isFirst = FALSE, BOOL manualNextUnit = FALSE);
 	void MaybeAutoEndTurn(BOOL isFirst = FALSE);
 
 	void Refresh();
-    void SetSelectCity(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
-    void SetSelectUnit(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
+	void SetSelectCity(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
+	void SetSelectUnit(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
 	void SetSelectGood(const MapPoint &pos);
 
-    SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; } 
+	SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; } 
 
-    void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
+	void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
 					   SELECT_TYPE &s_state);
 
-    MapPoint GetCurSelectPos(void) { return m_select_pos[GetVisiblePlayer()]; }
+	MapPoint GetCurSelectPos(void) { return m_select_pos[GetVisiblePlayer()]; }
 
 	void ClipCurrentItem();
-    void NextItem();
-    
-    void ClearWaypoints();
-    void NextPlayer();
-    sint32 GetPlayerAfterThis(const sint32 p);
+	void NextItem();
+
+	void ClearWaypoints();
+	void NextPlayer();
+	sint32 GetPlayerAfterThis(const sint32 p);
 
 	PLAYER_INDEX GetNextHumanPlayer();
 	void NextRound();
 
-    void RegisterCreatedUnit(const PLAYER_INDEX owner); 
-    void RegisterCreatedCity(const PLAYER_INDEX owner);
-    void RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army); 
-    void RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dead_city);
+	void RegisterCreatedUnit(const PLAYER_INDEX owner); 
+	void RegisterCreatedCity(const PLAYER_INDEX owner);
+	void RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army); 
+	void RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dead_city);
 
 
-    
-    void SetCurPlayer (PLAYER_INDEX p);
-    PLAYER_INDEX GetCurPlayer() const { return m_current_player; }; 
-    void RemovePlayer(PLAYER_INDEX p); 
+
+	void SetCurPlayer (PLAYER_INDEX p);
+	PLAYER_INDEX GetCurPlayer() const { return m_current_player; }; 
+	void RemovePlayer(PLAYER_INDEX p); 
 	void AddPlayer(PLAYER_INDEX p) ;
 	sint32 GetVisiblePlayer() const;
 	BOOL IsAutoCenterOn() const;
 	void SetAutoCenter(const BOOL on);
 
-    
-  	void AddWaypoint(const MapPoint &p);
-    sint32 GetIsPathing() const;
+
+	void AddWaypoint(const MapPoint &p);
+	sint32 GetIsPathing() const;
 	bool ShouldDrawPath();
-    void GetOldMouseTilePos(MapPoint &p) const { p = m_cur_mouse_tile; }
+	void GetOldMouseTilePos(MapPoint &p) const { p = m_cur_mouse_tile; }
 	void SetCurMouseTile(const MapPoint &p) { m_cur_mouse_tile = p; }
-    void SetDrawablePathDest(MapPoint &p); 
+	void SetDrawablePathDest(MapPoint &p); 
 	void ConstructPath(BOOL &isCircular, double &cost);
 
 	Path *GetGoodPath() { return m_good_path; }
@@ -213,16 +212,16 @@ public:
 	
 	void SelectTradeRoute(const MapPoint &p);
 
-    
-  	sint32 IsLocalArmy() const;
 
-  	void Patrol(const MapPoint &pos);
+	sint32 IsLocalArmy() const; // Should be bool
+
+	void Patrol(const MapPoint &pos);
 	BOOL ResumePatrol();
 	void ForgetPatrol();
 	void ProcessUnitOrders();
 
-    void GroupArmy(); 
-    void UngroupArmy(); 
+	void GroupArmy(); 
+	void UngroupArmy(); 
 
 	void Settle();
 	void Entrench();
@@ -292,7 +291,7 @@ public:
 
 	void DirectorUnitSelection(uint32 flags);
 	void ForceDirectorSelect(const Army &army);
-    void RegisterUIClick();
+	void RegisterUIClick();
 	void RegisterManualEndTurn();
 	void UpdateSelectedItem( void );
 

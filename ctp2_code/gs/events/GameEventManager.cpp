@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game event handler
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -166,7 +166,7 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
 
 	va_start(vl, type);
 
-	GameEventArgList *argList = new GameEventArgList(&vl);
+	GameEventArgList *argList = new GameEventArgList(&vl, type);
 
 	va_end(vl);
 
@@ -430,8 +430,8 @@ char GameEventManager::ArgChar(GAME_EVENT type, size_t index) const
 	    ++argString
 	)
 	{
-		Assert(*argString == '%' || *argString == '&');
-		if(*argString != '%' && *argString != '&')
+		Assert(*argString == '%' || *argString == '&' || *argString == '$');
+		if(*argString != '%' && *argString != '&' && *argString != '$')
 			return '\0';
 
 		++argString;
@@ -464,8 +464,8 @@ size_t GameEventManager::GetNumArgs(GAME_EVENT type) const
         ++argString
     )
     {
-        Assert(*argString == '%' || *argString == '&');
-        if (*argString != '%') 
+        Assert(*argString == '%' || *argString == '&' || *argString == '$');
+        if (*argString != '%' && *argString != '$')
         {
             break;
         }
@@ -513,8 +513,8 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, va_list *vl)
 		
 		if(!isOptional) {
 			
-			Assert(*argString == '%' || *argString == '&');
-			if(*argString != '%' && *argString != '&')
+			Assert(*argString == '%' || *argString == '&' || *argString == '$');
+			if(*argString != '%' && *argString != '&' && *argString != '$')
 				return false;
 			
 			if(*argString == '&')
@@ -677,7 +677,7 @@ void GameEventManager::Dump()
 
 		
 		while(*argString) {
-			Assert(*argString == '%' || *argString == '&');
+			Assert(*argString == '%' || *argString == '&' || *argString == '$');
 			
 			
 			BOOL  optional= *argString=='&';

@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C/C++ header
+// Description  : Slic object
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifndef __SLIC_OBJECT_H__
 #define __SLIC_OBJECT_H__
 
@@ -9,7 +40,6 @@ class SlicButton;
 class SlicEyePoint;
 class DiplomaticRequest;
 class SlicArgList;
-class GameEventArgList;
 
 typedef sint32 MESSAGE_TYPE;
 
@@ -61,7 +91,7 @@ public:
 	SlicObject(char const * id);
 	SlicObject(SlicSegment *segment);
 	SlicObject(SlicSegment *segment, SlicObject *copy);
-    SlicObject(char const * id, SlicContext *copy);
+	SlicObject(char const * id, SlicContext *copy);
 	SlicObject(CivArchive &archive) ;
 	virtual ~SlicObject();
 	void Serialize(CivArchive &archive) ;

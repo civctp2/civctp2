@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game event argument list
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -40,14 +40,17 @@
 #include "TerrImprove.h"
 #include "TradeRoute.h"
 #include "Unit.h"
+#include "GameEventDescription.h"
 
 
-GameEventArgList::GameEventArgList(va_list *vl)
+GameEventArgList::GameEventArgList(va_list *vl, GAME_EVENT eventType)
 {
-    std::fill(m_argLists, 
-              m_argLists + GEA_End, 
-              (PointerList<GameEventArgument> *) NULL
-             );
+	std::fill(m_argLists, 
+	          m_argLists + GEA_End, 
+	          (PointerList<GameEventArgument> *) NULL
+	         );
+
+	char *argString = g_eventDescriptions[eventType].args;
 
 	while(vl) {
 		GAME_EVENT_ARGUMENT arg = va_arg(*vl, GAME_EVENT_ARGUMENT);
@@ -59,8 +62,11 @@ GameEventArgList::GameEventArgList(va_list *vl)
 		if(!m_argLists[arg]) {
 			m_argLists[arg] = new PointerList<GameEventArgument>;
 		}
-		m_argLists[arg]->AddTail(new GameEventArgument(arg, vl));
-	}	
+		m_argLists[arg]->AddTail(new GameEventArgument(arg, vl, *argString == '$'));
+
+		argString++;
+		argString++;
+	}
 }
 
 GameEventArgList::GameEventArgList(CivArchive &archive)

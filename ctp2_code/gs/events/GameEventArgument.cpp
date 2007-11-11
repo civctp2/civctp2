@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game event argument
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -49,9 +49,9 @@
 #include "SlicFrame.h"
 #include "GameEventManager.h"    // g_gevManager
 
-GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl)
+GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid)
 {
-	Init(type, vl);
+	Init(type, vl, isAlwaysValid);
 }
 
 GameEventArgument::GameEventArgument(GAME_EVENT_ARGUMENT type, ...)
@@ -93,8 +93,9 @@ void GameEventArgument::Serialize(CivArchive &archive)
 	}
 }
 
-void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, va_list *vl)
+void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, va_list *vl, bool isAlwaysValid)
 {
+	m_IsAlwaysValid = isAlwaysValid;
 	m_type = type;
 	Assert(type >= (GAME_EVENT_ARGUMENT)0);
 	Assert(type < GEA_End);
@@ -312,6 +313,11 @@ bool GameEventArgument::GetTradeRoute(TradeRoute &route) const
 
 bool GameEventArgument::IsValid() const
 {
+	if(m_IsAlwaysValid)
+	{
+		return true;
+	}
+
 	switch(m_type)
 	{
 		case GEA_Army:

@@ -359,12 +359,12 @@ bool SlicArgList::GetStringId(sint32 arg, StringId & value) const
 {
 	Assert((arg >= 0) && (static_cast<size_t>(arg) < m_argValue.size()));
 
-    switch (m_argValue[arg].m_type)
-    {
-    default:
-        return false;
+	switch (m_argValue[arg].m_type)
+	{
+	default:
+		return false;
 
-    case SA_TYPE_STRING:
+	case SA_TYPE_STRING:
 		value = m_argValue[arg].m_int;
 		return true;
 	}
@@ -382,7 +382,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 	Assert(m_argValue.size() == g_gevManager->GetNumArgs(ev));
 
 	for (size_t i = 0; i < Count(); ++i) 
-    {
+	{
 		EVENTLOG(("%s ", g_gevManager->ArgCharToName(g_gevManager->ArgChar(ev, i))));
 		switch(g_gevManager->ArgChar(ev, i)) {
 			case GEAC_ARMY:
@@ -463,7 +463,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 		}
 
 		if (i + 1 < m_argValue.size()) 
-        {
+		{
 			EVENTLOG((", "));
 		}
 	}

@@ -125,7 +125,7 @@ GameEventDescription g_eventDescriptions[] =
 
 	EVENT(MoveIntoTransport,          "Move an army into a transport (or several transports)", "%a%l")
 	EVENT(Battle,                     "An army attacks a location", "%a%l")
-	EVENT(BattleAftermath,            "Clean up the battlefield", "%a%l%u%u%P%P%i")
+	EVENT(BattleAftermath,            "Clean up the battlefield", "%a%l$u$u%P%P%i")
 	EVENT(KillUnit,                   "Kill a unit", "%u%i%P")
 	EVENT(KillCity,                   "Kill a city", "%c%i%P")
 	

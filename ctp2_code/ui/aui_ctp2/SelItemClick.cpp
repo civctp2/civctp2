@@ -1138,10 +1138,9 @@ void SelectedItem::SelectGoodClick(const MapPoint &pos, const aui_MouseEvent *da
 
 void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
-	Army a;
-	GetSelectedArmy(a);
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, a, GEA_End);
+	Unit top;
+	GetTopUnit(pos, top);
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, top->GetArmy(), GEA_End);
 }
 
 void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
@@ -1179,9 +1178,9 @@ void SelectedItem::UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, 
 //
 // Description: Handle mouse click on an unoccupied tile.
 //
-// Parameters : pos			: position on the map
-//				data		: click properties (right, left, etc.)
-//              doubleClick	: is it a double click?
+// Parameters : pos         : position on the map
+//              data        : click properties (right, left, etc.)
+//              doubleClick : is it a double click?
 //
 // Returns    : -
 //
@@ -1201,9 +1200,9 @@ void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent
 //
 // Description: Handle mouse click on an army of our own.
 //
-// Parameters : pos			: position on the map
-//				data		: click properties (right, left, etc.)
-//              doubleClick	: is it a double click?
+// Parameters : pos         : position on the map
+//              data        : click properties (right, left, etc.)
+//              doubleClick : is it a double click?
 //
 // Returns    : -
 //
@@ -1223,9 +1222,9 @@ void SelectedItem::ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *d
 //
 // Description: Handle mouse click on a city of our own.
 //
-// Parameters : pos			: position on the map
-//				data		: click properties (right, left, etc.)
-//              doubleClick	: is it a double click?
+// Parameters : pos         : position on the map
+//              data        : click properties (right, left, etc.)
+//              doubleClick : is it a double click?
 //
 // Returns    : -
 //
@@ -1245,9 +1244,9 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 //
 // Description: Handle mouse click on an enemy city.
 //
-// Parameters : pos			: position on the map
-//				data		: click properties (right, left, etc.)
-//              doubleClick	: is it a double click?
+// Parameters : pos         : position on the map
+//              data        : click properties (right, left, etc.)
+//              doubleClick : is it a double click?
 //
 // Returns    : -
 //
@@ -1266,9 +1265,9 @@ void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEve
 //
 // Description: Handle mouse click on an enemy army.
 //
-// Parameters : pos			: position on the map
-//				data		: click properties (right, left, etc.)
-//              doubleClick	: is it a double click?
+// Parameters : pos         : position on the map
+//              data        : click properties (right, left, etc.)
+//              doubleClick : is it a double click?
 //
 // Returns    : -
 //
