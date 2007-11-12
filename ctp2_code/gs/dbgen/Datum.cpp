@@ -191,8 +191,8 @@ void Datum::ExportVariable(FILE *outfile, sint32 indent)
 		break;
 
 	case DATUM_BIT:
-		Assert(0);
-		break;			
+		Assert(false);
+		break;
 
 	case DATUM_RECORD:
 		sprintf(comment, " // Index into %s database", m_subType);

@@ -285,21 +285,22 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 	AccessData()->KillTransportedUnits();
 
-	if(GetArmy().IsValid()) {
+	if(GetArmy().IsValid())
+	{
 		GetArmy().SetKiller(killedBy);
 		GetArmy().Del(*this);
 	}
 
-	
-
-	if(!GetDBRec()) { // Maybe something is missing here
+	if(!GetDBRec()->GetIsTrader())
+	{
 		UpdateZOCForRemoval();
 	}
 
 	
 	g_theUnitPool->Del(m_id);
 
-	if (is_renumber_cont) {
+	if(is_renumber_cont)
+	{
 		g_theWorld->NumberContinents();
 	}
 }

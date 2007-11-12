@@ -1800,7 +1800,7 @@ SPRITEFILEERR SpriteFile::ReadFull_v20(UnitSpriteGroup *s)
 	ReadData((void *)offsets, sizeof(offsets));
 
 	uint16 i;
-	for (i=0; i<ACTION_MAX; i++) 
+	for(i = 0; i<ACTION_MAX; i++) 
 	{
 		if (offsets[i]>0) 
 		{
@@ -1823,7 +1823,7 @@ SPRITEFILEERR SpriteFile::ReadFull_v20(UnitSpriteGroup *s)
 	for (i=0; i<UNITACTION_MAX; i++) 
 		ReadData((void *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
 
-	uint16	data16;
+	uint16 data16;
 	ReadData((void *)&data16, sizeof(uint16));
 	s->SetHasDeath(0 != data16);
 

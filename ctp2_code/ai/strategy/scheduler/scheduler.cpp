@@ -1028,7 +1028,6 @@ bool Scheduler::Prioritize_Goals()
 	for(; goal_ptr_iter != m_new_goals.end(); goal_ptr_iter++)
 	{
 		goal_type    = (*goal_ptr_iter)->Get_Goal_Type();
-		sint32 count = m_goals_of_type[goal_type].size();
 	
 		CTPGoal_ptr goal2 = (CTPGoal_ptr) *goal_ptr_iter;
 
@@ -1072,9 +1071,8 @@ bool Scheduler::Prioritize_Goals()
 	t1 = GetTickCount();
 		 
 	sint16 committed_agents = 0;
-	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-	for (goal_type = 0;	goal_type < g_theGoalDB->NumRecords(); goal_type++) {
+	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++) {
 
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n\n "));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n"));
@@ -1205,7 +1203,6 @@ bool Scheduler::Prune_Goals()
 		goal_type = GetMaxEvalExec(goal_element_ptr, max_eval, max_exec);
 		pruned_goal_iter = m_goals_of_type[goal_type].end();
 
-		sint16 eval_count = 0;
 		goal_ptr_iter = m_goals_of_type[goal_type].begin();
 		while(goal_ptr_iter != pruned_goal_iter &&
 		      goal_ptr_iter != m_goals_of_type[goal_type].end()
