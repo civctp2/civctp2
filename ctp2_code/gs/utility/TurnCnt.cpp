@@ -30,6 +30,7 @@
 //   - April 24th 2005 Martin Gühmann
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Put SendNextPlayerMessage into its own event. (14-Nov-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1203,6 +1204,14 @@ void TurnCount::NotifyBecameHost()
 }
 
 void TurnCount::SendNextPlayerMessage()
+{
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendEmailAndHotSeatMessage,
+	                       GEA_End);
+
+}
+
+// Only called from the event:
+void TurnCount::SendNextPlayerMessageEvent()
 {
 	if(!m_isHotSeat && !m_isEmail)
 		return;

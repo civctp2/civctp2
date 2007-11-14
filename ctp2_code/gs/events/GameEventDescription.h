@@ -28,6 +28,8 @@
 // - Seperated the NewProposal event from the Response event so that the 
 //   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann) 
 // - Added GobalWarming and OzoneDepletion events. (29-Oct-2007 Martin Gühmann)
+// - Added SendEmailAndHotSeatMessage so that this is event driven and can
+//   be executed after all the other events. (14-Nov-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -117,7 +119,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(CaptureCity,                "Make a city change hands", "%c%P%i")
 	EVENT(MoveArmy,                   "Move an army one square", "%a%d%i%i%l")
 	EVENT(ContactMade,                "Contact between two players established", "%P%P")
-	EVENT(ClearOrders,                "Clear an army's orders", "%a")
+	EVENT(ClearOrders,                "Clear an army's orders", "$a")
 	EVENT(FinishAttack,               "An army attacks someone", "%a%l")
 	EVENT(FinishMove,                 "The last stage of an army moving before the MoveUnits event", "%a%d%l%i")
 	EVENT(CantMoveYet,                "Added when an army tries to move but is out of move points", "%a%d%l")
@@ -125,7 +127,7 @@ GameEventDescription g_eventDescriptions[] =
 
 	EVENT(MoveIntoTransport,          "Move an army into a transport (or several transports)", "%a%l")
 	EVENT(Battle,                     "An army attacks a location", "%a%l")
-	EVENT(BattleAftermath,            "Clean up the battlefield", "%a%l$u$u%P%P%i")
+	EVENT(BattleAftermath,            "Clean up the battlefield", "$a%l$u$u%P%P%i")
 	EVENT(KillUnit,                   "Kill a unit", "%u%i%P")
 	EVENT(KillCity,                   "Kill a city", "%c%i%P")
 	
@@ -335,6 +337,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(ProposalResponse,           "A proposal response is been considered.", "%P%P")
 	EVENT(GlobalWarming,              "Global warming causes the sea level to rise so that vast land is flooded.", "%i")
 	EVENT(OzoneDepletion,             "The ozone layer depletes so that the sun burns the world.", "")
+	EVENT(SendEmailAndHotSeatMessage, "Sends message to HotSeat and PBEM players.", "")
 
 	EVENT(MAX,                        "This is not a real event, it marks the end of the list", "")
 };

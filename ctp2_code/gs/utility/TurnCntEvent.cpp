@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The begin turn event, that is executed on every new turn.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,12 +25,15 @@
 // Modifications from the original Activision code:
 //
 // - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added Event for handling HotSeat and PBEM meassage and PBEM saving,
+//   so that PBEM saving can be done after all events have been executed. (14-Nov-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Events.h"
 #include "TurnCntEvent.h"
+#include "TurnCnt.h"
 #include "GameEventUser.h"
 
 #include "player.h"
@@ -89,11 +92,19 @@ STDEHANDLER(ResumeEmailAndHotSeatDiplomacy)
 	return GEV_HD_Continue;
 }
 
+STDEHANDLER(SendEmailAndHotSeatMessage)
+{
+	// So that the following code can be delayed until all events have been handled.
+	g_turn->SendNextPlayerMessageEvent();
+
+	return GEV_HD_Continue;
+}
+
 void turncountevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_BeginTurn, GEV_PRI_Primary, &s_BeginTurnEvent);
-
 	g_gevManager->AddCallback(GEV_ResumeEmailAndHotSeatDiplomacy, GEV_PRI_Primary, &s_ResumeEmailAndHotSeatDiplomacy);
+	g_gevManager->AddCallback(GEV_SendEmailAndHotSeatMessage, GEV_PRI_Primary, &s_SendEmailAndHotSeatMessage);
 }
 
 void turncountevent_Cleanup()

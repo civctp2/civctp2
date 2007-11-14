@@ -471,15 +471,15 @@ void Foreigner::SetMyLastNewProposal(const NewProposal & newProposal) {
 
 NegotiationEventList::const_iterator Foreigner::GetNegotiationEventIndex
 (
-    const NewProposal & newProposal 
+	const NewProposal & newProposal
 ) const
 {
 	for 
-    (
-        NegotiationEventList::const_iterator iter = m_negotiationEvents.begin();
-        iter != m_negotiationEvents.end();
-        ++iter
-    )
+	(
+	    NegotiationEventList::const_iterator iter = m_negotiationEvents.begin();
+	    iter != m_negotiationEvents.end();
+	    ++iter
+	)
 	{
 		if(iter->proposal.senderId           == newProposal.senderId
 		&& iter->proposal.detail.first_type  == newProposal.detail.first_type
@@ -546,8 +546,7 @@ const NegotiationEventList & Foreigner::GetNegotiationEvents() const
 
 void Foreigner::ExecuteDelayedNegotiations()
 {
-	// Reverse the loop direction
-	for(sint32 i = 0; i < m_negotiationEvents.size() ; ++i)
+	for(sint32 i = m_negotiationEvents.size() - 1; i >= 0; --i)
 	{
 		if(m_negotiationEvents[i].round < 0)
 		{
