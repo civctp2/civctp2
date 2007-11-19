@@ -29,13 +29,14 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?threadid=161726
+http://apolyton.net/forums/showthread.php?threadid=161726 "PROJECT: Playtest (Thread No. 5)"
 
 For further reading here are the previous playtest threads:
-http://apolyton.net/forums/showthread.php?threadid=103817
-http://apolyton.net/forums/showthread.php?threadid=115144
-http://apolyton.net/forums/showthread.php?threadid=127059
-http://apolyton.net/forums/showthread.php?threadid=147969
+http://apolyton.net/forums/showthread.php?threadid=103817 "PROJECT: Playtest"
+http://apolyton.net/forums/showthread.php?threadid=115144 "PROJECT: Playtest II"
+http://apolyton.net/forums/showthread.php?threadid=127059 "PROJECT: Playtest Thread III"
+http://apolyton.net/forums/showthread.php?threadid=147969 "PROJECT: Playtest (the 4th Thread)"
+http://apolyton.net/forums/showthread.php?threadid=161726 "PROJECT: Playtest (Thread No. 5)"
 
 
 Latest Source Code files can be found at: http://ctp2.darkdust.net/
@@ -48,6 +49,38 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 Brief Changelog:
 
+2007-11-19 (Revision 826)
+Fixed:   GetPersonalityType slic function
+Fixed:   PBEM terrain improvement construction
+Fixed:   Barbarians do not build wonders anymore
+Fixed:   Shadowed tiles are not displayed as they would have a river anymore
+Changed: Global Warming and Ozone Depletion code is now executed from events.
+Fixed:   World meridian calculation
+Fixed:   Made world meridians symmetrical.
+Fixed:   Global warming does not change deserts.
+Fixed:   Global warming makes snow on white mountains melting.
+Fixed:   The AI targets of the orders Sue and Injoin
+Fixed:   The equatorial meridian now also suffers ozone depletion.
+Fixed:   The unit mobile SAM is now a full bombard unit.
+Added:   Armenia and Kurdistan as civilisations
+Added:   Rudimentary religious feats wonders, buildings, and units.
+Fixed:   Unit grouping: Units have to be on the same tile to be grouped. This
+         fixes insecure slic code.
+Fixed:   River mouthes are not deleted due to global warming or ozone depletion.
+Changed: Increased richness of mountains and rivers on fresh created maps.
+Changed: Slic events are tested for valid arguments, if one argument is invalid
+         the event execution is stoped and an error message is displayed.
+Fixed:   ClickedArmy event has now a valid army if the clicked army is not
+         owned by the clicker.
+Fixed:   ZOCs are now cleared again.
+Changed: Revered the show order of diplomatic probosals in human-human
+         diplomacy in PBEM and HotSeat.
+Fixed:   Rush buy in PBEM.
+Changed: German grammar about civilisations, units, and goods.
+Fixed:   Diplomacy greetings are sent to all players also robot players. This
+         fixes a bug in PBEM and HotSeat that prevented the human player not
+         on screen to receive the greeting. (Fix is untested)
+
 2007-10-20 (Revision 812)
 Fixed:   The wonder tab of the info window shows again the right construction 
          year of wonders, also the date of messages is shown correctly again.
@@ -55,7 +88,7 @@ Fixed:   The diplomacy window cannot be closed by using hotkeys that open other
          screens, so that you cannot close this screen without rejecting or 
          accepting diplomatic proposals.
 Fixed:   The scenario editor cannot opened in PBEM mode per hotkey.
-Added:   HotSeat (tested) and PBEM (untested) human to human diplomacy support.
+Added:   HotSeat and PBEM human to human diplomacy support.
 Added:   The following civilisations: Han, Yamato, Sumer, Kush, and Macedonia
 Fixed:   The map editor genarates now the coast line again if needed.
 Fixed:   Savegame power graphs

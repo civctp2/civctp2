@@ -4400,6 +4400,7 @@ UNIT_LONGBOWMAN {
 }
 
 ############################################################
+
 ## UNIT 73
 UNIT_ELEPHANT_WARRIOR {
    Description DESCRIPTION_UNIT_KNIGHT
@@ -4456,8 +4457,10 @@ UNIT_ELEPHANT_WARRIOR {
       Effect SPECEFFECT_REFORMCITY
    }
 }
-###############################################
 
+############################################################
+
+## UNIT 73
 UNIT_CLERIC_EGYPT {
    # NEW FLAGS
    GovernmentType GOVERNMENT_THEOCRACY
@@ -4542,7 +4545,7 @@ UNIT_CLERIC_EGYPT {
    }
 }
 
-############################################
+############################################################
 
 UNIT_CLERIC_ZOROASTER {
    # NEW FLAGS
@@ -4627,3 +4630,5 @@ UNIT_CLERIC_ZOROASTER {
       Effect SPECEFFECT_INDULGENCE_SALES
    }
 }
+
+############################################################

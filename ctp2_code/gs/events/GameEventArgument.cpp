@@ -384,7 +384,7 @@ void GameEventArgument::NotifyArgIsInvalid(GAME_EVENT type, sint32 argIndex, Gam
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Missing object id %lx\n", (uint32)m_data.m_id));
 
-	if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) // Maybe separate this to a DebugEventSlic
+	if(g_theProfileDB && g_theProfileDB->IsDebugSlicEvents())
 	{
 		if(event != NULL
 		&& event->GetContextName() != NULL)

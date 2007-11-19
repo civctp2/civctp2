@@ -4730,7 +4730,7 @@ bool Player::FulfillCaptureCityAgreement(Unit city)
 				so->AddCivilisation(agree.GetRecipient()) ;
 
 			g_slicEngine->Execute(so) ;
-			killList.Insert(agree) ;								
+			killList.Insert(agree) ;
 		}
 		else
 		{
@@ -4951,7 +4951,7 @@ void Player::MakeNoPiracyPact(PLAYER_INDEX other_player)
 	{
 		DPRINTF(k_DBG_INFO, ("Player #%d already has a \"No Piracy\" agreement with Player #%d\n", m_owner, other_player)) ;
 
-		return;													
+		return;
 	}
 
 	
@@ -8978,7 +8978,7 @@ void Player::TradeUnitsForPoints(const MapPoint &pnt)
 	if(!(g_network.IsActive() && g_network.SetupMode()) &&
 	   !g_powerPointsMode)
 		return;
-	   
+
 	if(m_all_armies->Num() + m_all_cities->Num() < 2)
 		
 		return;
@@ -9012,7 +9012,7 @@ void Player::TradeUnitForPoints(Unit &unit)
 	if(!(g_network.IsActive() && g_network.SetupMode()) &&
 	   !g_powerPointsMode)
 		return;
-	   
+
 	if(m_all_armies->Num() + m_all_cities->Num() < 2)
 		return;
 
@@ -9036,7 +9036,7 @@ void Player::TradeCityForPoints(Unit &city)
 	if(!(g_network.IsActive() && g_network.SetupMode()) &&
 	   !g_powerPointsMode)
 		return;
-	   
+
 	if(m_all_armies->Num() + m_all_cities->Num() < 2)
 		return;
 
@@ -9063,9 +9063,7 @@ void Player::TradeImprovementsForPoints(const MapPoint &pnt)
 		return;
 	}
 
-	sint32 i;
-
-	for(i = cell->GetNumImprovements() - 1; i >= 0; i--) {
+	for(sint32 i = cell->GetNumImprovements() - 1; i >= 0; i--) {
 		sint32 materialCost = cell->AccessImprovement(i).GetMaterialCost();
 		sint32 pointsBack = sint32(double(materialCost) * g_theConstDB->Get(0)->GetPowerPointsToMaterials());
 		AddPoints(pointsBack);
@@ -9099,11 +9097,6 @@ void Player::RegisterAttack(PLAYER_INDEX against)
 		}
 	}
 #endif
-
-	
-	
-	
-	
 }
 
 void Player::ContactMade(PLAYER_INDEX with)
@@ -9111,34 +9104,19 @@ void Player::ContactMade(PLAYER_INDEX with)
 	if(with == m_owner)
 		return;
 
-	if(!(m_contactedPlayers & (1 << with))) {
+	if(!(m_contactedPlayers & (1 << with)))
+	{
 		m_contactedPlayers |= (1 << with);
 		Assert(g_player[with]);
-		if(g_player[with]) {
-			
-			
-			if(g_player[with]->m_contactedPlayers & (1 << m_owner)) {
-
-				
+		if(g_player[with])
+		{
+			if(g_player[with]->m_contactedPlayers & (1 << m_owner))
+			{
 				if (with != 0 && m_owner != 0)
 				{
-					
-					if (g_selected_item->GetVisiblePlayer() == m_owner &&
-						!IsRobot()) {
-						Diplomat::GetDiplomat(with).SendGreeting(m_owner);
-					}
-					else if (g_selected_item->GetVisiblePlayer() == with &&
-						!g_player[with]-IsRobot()) {
-						Diplomat::GetDiplomat(m_owner).SendGreeting(with);
-					}
+					Diplomat::GetDiplomat(with).SendGreeting(m_owner);
+					Diplomat::GetDiplomat(m_owner).SendGreeting(with);
 				}
-
-				
-				
-				
-				
-
-
 			}
 		}
 
@@ -9147,12 +9125,6 @@ void Player::ContactMade(PLAYER_INDEX with)
 		}
 	}
 }
-
-
-
-
-
-
 
 bool Player::HasContactWith(PLAYER_INDEX pl)
 {

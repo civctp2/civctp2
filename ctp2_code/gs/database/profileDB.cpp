@@ -165,6 +165,7 @@ ProfileDB::ProfileDB()
     m_unitCompleteMessages              (FALSE),
     m_nonContinuousUnitCompleteMessages (FALSE),
     m_debugSlic                         (FALSE),
+    m_debugSlicEvents                   (TRUE),
     m_dontKillMessages                  (FALSE),
     m_aiPopCheat                        (TRUE),
     m_showCityNames                     (TRUE),
@@ -351,6 +352,7 @@ ProfileDB::ProfileDB()
 	Var("UnitCompleteMessages"       , PV_BOOL  , &m_unitCompleteMessages       , NULL);
 	Var("NonContinuousUnitCompleteMessages", PV_BOOL  , &m_nonContinuousUnitCompleteMessages, NULL);
 	Var("DebugSlic"                  , PV_BOOL  , &m_debugSlic                  , NULL);
+	Var("DebugSlicEvents"            , PV_BOOL  , &m_debugSlicEvents            , NULL);
 	Var("DiplomacyLog"               , PV_BOOL  , &m_is_diplomacy_log_on        , NULL, false);
 	Var("CheatAge"                   , PV_NUM   , &m_cheat_age                  , NULL, false);
 	Var("DontKillMessages"           , PV_BOOL  , &m_dontKillMessages           , NULL, false);

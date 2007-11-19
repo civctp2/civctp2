@@ -23,7 +23,6 @@
 //
 // _DEBUG
 // - Allow the usage of "cheat age" for an excellerated start when set.
-// - removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 //
@@ -58,6 +57,7 @@
 // - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 // - Added Army Names and Civflags options
 // - Added DebugAI option and SetEnemyHealth to add sceanrio editor options
+// - Removed new rules attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
 
@@ -262,6 +262,7 @@ private:
     sint32 m_nonContinuousUnitCompleteMessages;
 
     sint32 m_debugSlic;
+    sint32 m_debugSlicEvents;
 
     sint32 m_dontKillMessages;
     sint32 m_aiPopCheat;
@@ -758,6 +759,7 @@ public:
     BOOL        IsNonContinuousUnitCompleteMessages() const { return m_nonContinuousUnitCompleteMessages; }
 
     BOOL        IsDebugSlic() const { return m_debugSlic; }
+    BOOL        IsDebugSlicEvents() const { return m_debugSlicEvents; }
 
     BOOL        DontKillMessages() const { return m_dontKillMessages; }
     BOOL        AIPopCheat() const { return m_aiPopCheat; }

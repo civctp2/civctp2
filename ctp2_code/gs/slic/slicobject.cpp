@@ -605,6 +605,7 @@ void SlicObject::Serialize(CivArchive &archive)
 			archive.Load((uint8 *)tmpID, l) ;
 			m_segment = g_slicEngine->GetSegment(tmpID) ;
 			delete [] tmpID;
+			m_frame = new SlicFrame(m_segment);
 		} else {
 			m_segment = NULL;
 		}
