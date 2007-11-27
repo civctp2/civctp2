@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Installation data
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -140,7 +140,7 @@ void InstallationData::DoVision()
 		m_visibility = 0;
 	}
 
-	topleft.x -= sint16(maxVisionRange);
+	topleft.x -= static_cast<sint16>(maxVisionRange);
 	DynamicArray<Installation> instArray;
 
 	g_theInstallationTree->SearchRect(instArray, topleft,
@@ -179,7 +179,7 @@ void InstallationData::DoVision()
 	}
 	maxrsq = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 	topleft = m_point;
-	topleft.x -= sint16(maxVisionRange);
+	topleft.x -= static_cast<sint16>(maxVisionRange);
 	DynamicArray<Unit> unitArray;
 
 	g_theUnitTree->SearchRect(unitArray, topleft,
@@ -219,7 +219,7 @@ void InstallationData::CheckVision(sint32 owner)
 	double maxVisionRange = terrainutil_GetMaxVisionRange();
 	sint32 maxrsq = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 
-	topleft.x -= sint16(maxVisionRange);
+	topleft.x -= static_cast<sint16>(maxVisionRange);
 	DynamicArray<Installation> instArray;
 
 	g_theInstallationTree->SearchRect(instArray, topleft,
@@ -251,7 +251,7 @@ void InstallationData::CheckVision(sint32 owner)
 		maxVisionRange = unitutil_GetMaxVisionRange();
 		maxrsq = sint32((maxVisionRange+0.5) * (maxVisionRange+0.5));
 		topleft = m_point;
-		topleft.x -= sint16(maxVisionRange);
+		topleft.x -= static_cast<sint16>(maxVisionRange);
 		DynamicArray<Unit> unitArray;
 		g_theUnitTree->SearchRect(unitArray, topleft,
 								  static_cast<sint16>(maxVisionRange) * 2 + 1,

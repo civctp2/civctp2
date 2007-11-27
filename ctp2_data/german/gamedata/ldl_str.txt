@@ -2344,7 +2344,7 @@ str_ldl_DipTone2 			"Unterwürfig/Devot"
 str_ldl_DipTone3 			"Arrogant/Herablassend"
 str_ldl_DipTone4 			"Feindselig/Aggressiv"
 
-str_dip_InvalidProposal 		"Wählt Sie ein Gesuch aus der Liste"
+str_dip_InvalidProposal 		"Wählt ein Gesuch aus der Liste"
 
 str_ldl_Threaten 			"Drohen"
 
@@ -3126,11 +3126,14 @@ str_ldl_RemoveAll "Alle austreten>>"
 # # END OF STUFF ADDED 9/5/00
 
 #Disbanding Cities Strings
-str_ldl_CantDisbandCitySize		"Städte mit einer Bevölkerungsgröße über 3 können nicht aufgelöst werden."
-str_ldl_CantDisbandLastCity		"Sie können Ihre letzte Stadt nicht auflösen."
+str_ldl_CantDisbandCitySize                     "Städte mit einer Bevölkerungsgröße über 3 können nicht aufgelöst werden."
+str_ldl_CantDisbandLastCity                     "Ihr könnt Eure letzte Stadt nicht auflösen."
+
+# Stuff added 20-Nov-2007 # I have no idea were else to put it
+str_FileDoesNotExist                            "Datei existiert nicht: "
+str_MapSizesDiffer                              "Die neue Karte hat nicht die selbe größe wie die geladene Karte.\n Die Kartengrößen müssem übereinstimmen. Kartengröße alt/neu: "
 
 # Profile strings (Advanced options list)
-
 str_profile_UnitAnim                            "Animierte Einheiten"
 str_profile_GoodAnim                            "Animierte Güter"
 str_profile_TradeAnim                           "Animierte Handelswege"
@@ -3188,24 +3191,24 @@ str_profile_Upgrade                             "Einheiten aufrüsten"
 str_profile_SmoothBorders                       "Reichsgrenzen glätten"
 str_profile_CivFlags                            "Show Civilization Unit flags"
 str_profile_NoAIProductionDeficit               "AI No Production Deficit"
-str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"          # AI cities don't go negative in gold
-str_profile_AICityDefenderBonus                 "AI City Defense bonus"                   # AI population adds to city defenses
-str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"     # Entrenched barbarians create a city
-str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"       # Conflicting religious, citystyles and city govts cause unhappiness
-str_profile_RevoltCasualties                    "Revolting Cities lose Population"        # Revolting city loses 1/3 of population
-str_profile_RevoltInsurgents                    "Revolting cities create barbarians"      # Revolting city creates barbarians
-str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"  # Entrenched barbarians create an imp
-str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"  # Entrenched barbs create more barbs
-str_profile_AINoSinking                         "AI ships don't sink"                     # AI ships don't sink
-str_profile_AINoCityLimit                       "AI No City LImit"                        # AI not affected by city limit
-str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                    # all pay thins int times unit support calculation
-str_profile_GoldPerCity                         "2 Gold Per City x City Limit"            # everyone pays gold amount per city
-str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"            # AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                # AI doesnt pay unit gold hunger
-str_profile_AIFreeUpgrade                       "AI Free Upgrades"                        # AI doesn't pay goldfor upgrades
-str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                    #If city is empty at turn start AI gets cheapest unit
-str_profile_OneCityChallenge                    "One City Challenge"                      #If city is empty at turn start AI gets cheapest unit
-str_profile_CityCaptureOptions                  "City Capture Options"                    #If city is empty at turn start AI gets cheapest unit
+str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI City Defense bonus"                         # AI population adds to city defenses
+str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Revolting cities create barbarians"            # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
+str_profile_AINoCityLimit                       "AI No City LImit"                              # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"                  # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                      # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                            # If city is empty at turn start AI gets cheapest unit
+str_profile_CityCaptureOptions                  "City Capture Options"                          # If city is empty at turn start AI gets cheapest unit
 
 str_ldl_Pw_COLON_	"Siedler:"
 

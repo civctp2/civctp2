@@ -79,6 +79,8 @@
 #include <vector>
 #include "WorldDistance.h"
 #include "tradeutil.h"              // constutil_GetMapSizeMapPoint
+#include "StrDB.h"
+#include "MessageBoxDialog.h"
 
 #if defined(USE_COM_REPLACEMENT)
 #include <ltdl.h>
@@ -3155,13 +3157,35 @@ bool World::ImportMap(MBCHAR const * filename)
 
 	FILE * infile = fopen(filename, "rt");
 	Assert(infile);
-	if (!infile) return false;
+	// Add here a file does not exist message
+	if (!infile)
+	{
+		const char *str = g_theStringDB->GetNameStr("str_FileDoesNotExist");
+		if(str == NULL)
+		{
+			str = "File does not exist: ";
+		}
+
+		char buff[1024];
+		sprintf(buff, "%s\n%s", str, filename);
+		MessageBoxDialog::Information(buff, "FileDoesNotExist");
+		return false;
+	}
 
 	sint32 width,height;
 	fscanf(infile, "%d,%d\n", &width, &height);
 	MapPoint size (width, height);
 
 	if (size != m_size) {
+		const char *str = g_theStringDB->GetNameStr("str_MapSizesDiffer");
+		if(str == NULL)
+		{
+			str = "The new map does not have the same size as the loaded map.\n The map sizes must fit. Map size old/new: ";
+		}
+
+		char buff[1024];
+		sprintf(buff, "%s(%i,%i)/(%i,%i)", str, m_size.x, m_size.y, size.x, size.y);
+		MessageBoxDialog::Information(buff, "MapSizesDiffer");
 		fclose(infile);
 		return false;
 	}

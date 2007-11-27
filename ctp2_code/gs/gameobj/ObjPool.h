@@ -77,9 +77,9 @@ uint32 const    k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB  =
 
 class CivArchive ;
 
-class ObjPool { 
+class ObjPool {
 
-	uint32 m_id_type; 
+	uint32 m_id_type;
 
 protected:
 	uint32 m_nObjs;
@@ -89,14 +89,14 @@ protected:
 private:
 	
 	uint32 Key(const ID &id) const 
-    {
-        return Key(id.m_id);	
+	{
+		return Key(id.m_id);
 	}
 	uint32 Key(uint32 id) const 
-    { 
+	{
 		Assert(id); 
-		Assert((id & k_ID_TYPE_MASK)== m_id_type); 
-   
+		Assert((id & k_ID_TYPE_MASK)== m_id_type);
+
 		return id & k_OBJ_POOL_TABLE_SIZE_MASK; 
 	}
 
@@ -107,9 +107,9 @@ public:
 
 	uint32  NewKey(uint32 t);
 	bool    IsValidKey (const ID &id, uint32 &val) const
-    {
-        return IsValidKey(id.m_id, val);
-    }
+	{
+		return IsValidKey(id.m_id, val);
+	}
 	bool    IsValidKey (uint32 id, uint32 &val) const;
 	
 	void    HackSetKey(uint32 k);
@@ -131,7 +131,7 @@ public:
 	}
 
 	bool IsValid(uint32 id) const
-	{	
+	{
 		uint32 val;
 		if(!IsValidKey(id, val))
 			return false;
@@ -140,12 +140,12 @@ public:
 	}
 
 	GameObj* Access(const ID &id) const
-	{ 
+	{
 		return Access(id.m_id); 
-	}	
+	}
 
 	GameObj* Access(uint32 id) const
-	{	
+	{
 		return GameObj_Access(m_table[Key(id)], id);
 	}
 
@@ -155,7 +155,7 @@ public:
 	sint32  Num(void) const;
 	virtual void Serialize(CivArchive &archive);
 
-}; 
+};
 
-uint32 ObjPool_ObjPool_GetVersion(void) ;
+uint32 ObjPool_ObjPool_GetVersion(void);
 #endif

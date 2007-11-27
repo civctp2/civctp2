@@ -18,7 +18,7 @@
 //
 // Compiler flags
 //
-// _DEBUG		
+// _DEBUG
 // - Generate debug version when set.
 // 
 // _DEBUG_SCHEDULER
@@ -425,7 +425,7 @@ std::list<Plan_List::iterator> & Squad::Get_Match_References()
 
 Agent_List & Squad::Get_Agent_List()
 {
-    return m_my_agents;
+	return m_my_agents;
 }
 const Agent_List & Squad::Get_Agent_List() const
 {
@@ -439,31 +439,32 @@ const Agent_List & Squad::Get_Agent_List() const
 
 void Squad::Set_Can_Be_Executed(const bool & can_be_executed)
 {
-    for
-    (
-        Agent_List::iterator agent_iter = m_my_agents.begin();
-        agent_iter != m_my_agents.end();
-        ++agent_iter
-    ) 
-    {
-        (*agent_iter)->Set_Can_Be_Executed(can_be_executed);
-    }
+	for
+	(
+	    Agent_List::iterator agent_iter = m_my_agents.begin();
+	    agent_iter != m_my_agents.end();
+	    ++agent_iter
+	)
+	{
+		(*agent_iter)->Set_Can_Be_Executed(can_be_executed);
+	}
 }
 
 
 sint32 Squad::DisbandObsoleteArmies() const
 {
-    sint32 total_count = 0;
+	sint32 total_count = 0;
 	
-    for
-    (
-        Agent_List::const_iterator agent_iter = m_my_agents.begin();
-        agent_iter != m_my_agents.end();
-        ++agent_iter
-    ) 
-    {
+	for
+	(
+	    Agent_List::const_iterator agent_iter = m_my_agents.begin();
+	    agent_iter != m_my_agents.end();
+	    ++agent_iter
+	)
+	{
 		CTPAgent * ctpagent_ptr = (CTPAgent *) (*agent_iter);
-            sint32 count = ctpagent_ptr->DisbandObsoleteUnits();
+		sint32 count = ctpagent_ptr->DisbandObsoleteUnits();
+		
 		if (count > 0)
 		{
 			DPRINTF(k_DBG_SCHEDULER, ("*** Disbanding Army:"));
@@ -471,9 +472,9 @@ sint32 Squad::DisbandObsoleteArmies() const
 		}
 
 		total_count += count;
-    }
+	}
 
-    return total_count;
+	return total_count;
 }
 
 

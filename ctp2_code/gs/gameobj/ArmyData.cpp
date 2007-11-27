@@ -6162,7 +6162,7 @@ bool ArmyData::ExecuteOrders(bool propagate)
 		}
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx Executing order %d @ (%d,%d), turn=%d\n", m_id, m_orders->GetHead()->m_order, m_pos.x, m_pos.y, g_player[m_owner]->m_current_round));
+	DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx Executing order %s @ (%d,%d), turn=%d\n", m_id, g_orderInfo[m_orders->GetHead()->m_order].m_name, m_pos.x, m_pos.y, g_player[m_owner]->m_current_round));
 
 	while(keepGoing && m_nElements > 0 &&
 		  (order = m_orders->GetHead()) != NULL) {
@@ -10409,16 +10409,16 @@ bool ArmyData::IsObsolete() const
 {
 	Assert(g_player[m_owner] != NULL);
 
-	for (sint32 i = 0; i < m_nElements; i++) 
-    { 
+	for (sint32 i = 0; i < m_nElements; i++)
+	{
 		const UnitRecord * rec = m_array[i].GetDBRec();
 		
-		for (sint32 a = 0; a < rec->GetNumObsoleteAdvance(); a++) 
-        {
+		for (sint32 a = 0; a < rec->GetNumObsoleteAdvance(); a++)
+		{
 			if (g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvance(a)->GetIndex()))
-            {
+			{
 				return true;
-            }
+			}
 		}
 	}
 
@@ -10432,18 +10432,18 @@ void ArmyData::StopPirating()
 	Cell *cell = g_theWorld->GetCell(m_pos);
 	Assert(cell);
 	if (cell) 
-    {
-		for(sint32 i = 0; i < cell->GetNumTradeRoutes(); ++i) 
-        {
+	{
+		for(sint32 i = 0; i < cell->GetNumTradeRoutes(); ++i)
+		{
 			TradeRoute route = cell->GetTradeRoute(i);
-			if (route->GetPiratingArmy().m_id == m_id) 
-            {
+			if (route->GetPiratingArmy().m_id == m_id)
+			{
 				g_gevManager->AddEvent
-                    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
-					 GEA_TradeRoute, m_array[i],
-					 GEA_Army, 0,
-					 GEA_End
-                    );
+				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
+				     GEA_TradeRoute, route,
+				     GEA_Army, 0,
+				     GEA_End
+				    );
 			}
 		}
 	}
@@ -10454,12 +10454,12 @@ void ArmyData::StopPirating()
 const MBCHAR * ArmyData::GetName() const
 {
 	if (m_name) 
-    {
-        return m_name;
-    }
-    else
-    {
-        /// @todo Check possible reentrancy problems
+	{
+		return m_name;
+	}
+	else
+	{
+		/// @todo Check possible reentrancy problems
 		static MBCHAR buf[40];
 		sprintf(buf, "%s%d", g_theStringDB->GetNameStr("ARMY_NAME_PREFIX"), m_id & (0x0fffffff));
 		return buf;

@@ -523,7 +523,8 @@ void Diplomat::Load(CivArchive & archive)
 	char * str  = new char [count+1];
 	archive.Load((uint8 *) str, count);
 	str[count] = '\0';
-	SetPersonalityName(str);
+	if(count > 0)
+		SetPersonalityName(str);
 	delete [] str;
 	 
 	archive >> count;
@@ -3958,7 +3959,8 @@ void Diplomat::InitDiplomaticState(const PLAYER_INDEX & foreignerId)
 	m_diplomaticStates[foreignerId] = s_badAiState;
 
 	
-	if (    g_player[foreignerId] 
+	if (    g_player[m_playerId]             // Maybe this should be caught earlier
+		 && g_player[foreignerId] 
          && !g_player[foreignerId]->IsDead()
          && (foreignerId != m_playerId)
        )

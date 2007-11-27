@@ -3142,7 +3142,7 @@ void ScenarioEditor::CityName(aui_Control *control, uint32 action, uint32 data, 
 void ScenarioEditor::LeaderName(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if( (action != AUI_TEXTFIELD_ACTION_EXECUTE) 
-		&& (action != 	AUI_TEXTFIELD_ACTION_DISMISS) )
+		&& (action != AUI_TEXTFIELD_ACTION_DISMISS) )
 		return;
 
 	ctp2_TextField *tf = (ctp2_TextField *)control;
@@ -3150,9 +3150,12 @@ void ScenarioEditor::LeaderName(aui_Control *control, uint32 action, uint32 data
 	MBCHAR newName[_MAX_PATH];
 	tf->GetFieldText(newName, _MAX_PATH);
 
-	if(g_player[g_selected_item->GetVisiblePlayer()]) {
+	if(g_player[g_selected_item->GetVisiblePlayer()]
+	&& newName[0] != 0
+	){
 		g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation->AccessData()->SetLeaderName(newName);
-		if(g_selected_item->GetVisiblePlayer() == g_theProfileDB->GetPlayerIndex()) {
+		if(g_selected_item->GetVisiblePlayer() == g_theProfileDB->GetPlayerIndex())
+		{
 			g_theProfileDB->SetLeaderName(newName);
 		}
 	}

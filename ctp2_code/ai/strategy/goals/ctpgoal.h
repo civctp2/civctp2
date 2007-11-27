@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  : declarations for the Goal class
+// Description  : CTP2 specific goal handling
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,12 +37,13 @@
 #pragma once
 #endif
 #ifndef __CTP_GOAL_H__
-    #define __CTP_GOAL_H__ 1
+#define __CTP_GOAL_H__ 1
 
-    #include "Goal.h"
-    #include "MapPoint.h"
-    #include "Army.h"
-    #include "Unit.h"
+#include "Goal.h"
+#include "MapPoint.h"
+#include "Army.h"
+#include "Unit.h"
+
 class CTPGoal;
 class CTPAgent;
 typedef CTPGoal * CTPGoal_ptr;
@@ -56,7 +58,7 @@ enum SUB_TASK_TYPE
     SUB_TASK_TRANSPORT_TO_BOARD,
     SUB_TASK_CARGO_TO_BOARD,
     SUB_TASK_AIRLIFT,
-	SUB_TASK_UNGROUP
+    SUB_TASK_UNGROUP
 };
 
 
@@ -197,13 +199,9 @@ protected:
 
     bool LoadTransport(CTPAgent_ptr agent_ptr, CTPAgent_ptr transport_ptr);
 
-
-    MapPoint m_target_pos;
-
-    Unit m_target_city;
-
-    Army m_target_army;
-
+    MapPoint      m_target_pos;
+    Unit          m_target_city;
+    Army          m_target_army;
     SUB_TASK_TYPE m_sub_task;
 };
 

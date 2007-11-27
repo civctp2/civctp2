@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : the Goal motherclass
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -242,8 +242,8 @@ bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & ag
 #ifdef _DEBUG_SCHEDULER
 		Assert(m_match_references.size() > 0);
 		CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
-		Assert(ctpagent_ptr->Get_Army().GetData()->m_theGoal == NULL);
-		ctpagent_ptr->Get_Army()->m_theGoal = (CTPGoal_ptr) this;
+//		Assert(ctpagent_ptr->Get_Army().GetData()->m_theGoal == NULL);
+//		ctpagent_ptr->Get_Army()->m_theGoal = (CTPGoal_ptr) this;
 
 		
 		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
@@ -278,19 +278,13 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	Agent_ptr agent_ptr = (*agent_iter);
 
 #ifdef _DEBUG_SCHEDULER
-	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
-	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
-		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
+//	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
+//	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
+//		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
 #endif // _DEBUG_SCHEDULER
 
-	
-
-	
-
-	
 	m_current_attacking_strength.Remove_Agent_Strength(agent_ptr);
 
-    
 	Agent_List::iterator next_agent_iter;
 	for (next_agent_iter = m_agents.begin();
 	next_agent_iter != m_agents.end();
@@ -314,13 +308,12 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	
 	
 #ifdef _DEBUG_SCHEDULER
-	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
-		ctpagent_ptr->Get_Army()->m_theGoal = NULL;
+//	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
+//		ctpagent_ptr->Get_Army()->m_theGoal = NULL;
 
 	Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 	if (m_current_attacking_strength.Get_Agent_Count() < m_agents.size())
 	{
-		
 		Assert(0);
 	}
 #endif // _DEBUG_SCHEDULER
@@ -425,22 +418,17 @@ bool Goal::Can_Be_Executed() const
 		can_be_executed |= (*agent_iter)->Get_Can_Be_Executed();
 	}
 
-    return can_be_executed;
+	return can_be_executed;
 }
-
 
 void Goal::Set_Can_Be_Executed(const bool & can_be_executed)
 {
-	
 	Agent_List::iterator agent_iter;
 	for (agent_iter = m_agents.begin(); agent_iter != m_agents.end();agent_iter++) 
 	{
 		(*agent_iter)->Set_Can_Be_Executed(can_be_executed);
 	}
-
 }
-
-
 
 
 
@@ -484,17 +472,17 @@ bool Goal::Validate() const
 				Goal_ptr tmp_goal_ptr = (*match_iter)->Get_Goal();
 				CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr)(*agent_iter);
 
-				if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
+//				if(g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
+				if(!ctpagent_ptr->Get_Is_Dead())
 				{
-					Assert(ctpagent_ptr->Get_Army()->m_theAgent == ctpagent_ptr);
-					Assert(ctpagent_ptr->Get_Army()->m_theGoal == tmp_goal_ptr);
+//					Assert(ctpagent_ptr->Get_Army()->m_theAgent == ctpagent_ptr);
+//					Assert(ctpagent_ptr->Get_Army()->m_theGoal == tmp_goal_ptr);
 				}
 				else
 				{
-					
-					Assert(0);
+					// Do nothing army might be dead and is going to be removed
 				}
-#endif _DEBUG_SCHEDULER
+#endif // _DEBUG_SCHEDULER
 
 				
 				break;
@@ -506,9 +494,9 @@ bool Goal::Validate() const
 		{
 
 #ifdef _DEBUG_SCHEDULER
-			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr)(*agent_iter);
-			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theAgent == ctpagent_ptr);
-			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theGoal != NULL);
+//			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr)(*agent_iter);
+//			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theAgent == ctpagent_ptr);
+//			Assert(ctpagent_ptr->Get_Army().AccessData()->m_theGoal != NULL);
 #endif // _DEBUG_SCHEDULER
 
 			

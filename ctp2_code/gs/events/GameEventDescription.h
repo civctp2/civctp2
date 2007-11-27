@@ -193,7 +193,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(SendGood,                   "Send a good from one city to another", "%i%c%c")
 	EVENT(TradeBid,                   "Bid on a foreign good", "%P%i%c%c")
 	EVENT(KillTradeRoute,             "Kill a trade route", "%t%i")
-	EVENT(SetPiratingArmy,            "Set army pirating trade route", "%t%a")
+	EVENT(SetPiratingArmy,            "Set army pirating trade route", "%t$a")
 
 	EVENT(CreatedArmy,                "An empty army was created", "%a")
 	EVENT(AddUnitToArmy,              "Insert a unit into an army", "%u%a%i")

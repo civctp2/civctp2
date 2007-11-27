@@ -490,7 +490,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 		}
 	
 	
-	if (min_army.m_id != 0x0)
+	if (min_army.IsValid())
 	{
 		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GroupUnitOrder, 
@@ -502,7 +502,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 
 
 void CtpAi::AddGoalsForArmy(const Army &army)
-{	
+{
 	PLAYER_INDEX    playerId = army.GetOwner();
 
 	CTPAgent *      new_agent = new CTPAgent();
@@ -514,7 +514,7 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 	Scheduler::GetScheduler(playerId).Add_New_Squad(new_squad);
 
 
-    for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+	for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
 		for (GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 		{
@@ -523,11 +523,11 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 			if (    goal
 			     && (   goal->GetTargetTypeAttackUnit() 
 			         || goal->GetTargetTypeSpecialUnit()
-                    )
+			        )
 			     && (goal->GetTargetOwnerSelf() == (foreignerId == playerId))
 			   )
-            {
-	            CTPGoal_ptr     goal_ptr = new CTPGoal();
+			{
+				CTPGoal_ptr     goal_ptr = new CTPGoal();
 				goal_ptr->Set_Type(goal_type);
 				goal_ptr->Set_Player_Index(foreignerId);
 				goal_ptr->Set_Target_Army(army);
@@ -668,8 +668,7 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS GOAL CHANGES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                         Player %d\n", playerId));
-       
-	
+
 	Scheduler::GetScheduler(playerId).Process_Goal_Changes();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
@@ -746,9 +745,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	{
 		if(player_ptr->IsRobot())
 		{
-			CtpAi::ExecuteOpportunityActions(playerId);
-
-			
 			if (player_ptr->GetGaiaController() && 
 				player_ptr->GetGaiaController()->CanStartCountdown())
 			{
@@ -764,6 +760,8 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 		
 			
 			Scheduler::GetScheduler(playerId).DisbandObsoleteArmies(count);
+
+			CtpAi::ExecuteOpportunityActions(playerId);
 		}
 		
 		
@@ -773,7 +771,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 		{
 			for(sint32 i = 0; i < player_ptr->m_all_armies->Num(); i++) 
 			{
-				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_BeginTurnExecute,
 									   GEA_Army, player_ptr->m_all_armies->Access(i).m_id,
 									   GEA_End);
 			}
@@ -2209,8 +2207,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 	MapPoint pos;
 	if (num_tiles_to_half > 0 && army->GetNextPathPoint(pos))
 		return;
-	
-	
+
 	MapPoint start_pos = army->RetPos();
 	Unit city = g_theWorld->GetCity(start_pos);
 	if (city.IsValid())
@@ -2220,9 +2217,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 	sint32 refueling_distance;
 	if (!CtpAi::GetNearestRefuel(army, start_pos, refueling_pos, refueling_distance))
 		return;
-	
-	
-	
+
 	float const trans_max_r = 0.8f;
 	Path new_path;
 	float total_cost;
@@ -2242,20 +2237,18 @@ void CtpAi::RefuelAirplane(const Army & army)
 		Assert(NO_REFUEL_PATH);
 		return;
 	}
-	
-	
+
 	Path *tmpPath = new Path(new_path);
 	MapPoint target_pos = tmpPath->GetEnd();
-	
-	
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder, 
-		GEA_Army, army,			
-		GEA_Path, tmpPath,		
+
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder,
+		GEA_Army, army,
+		GEA_Path, tmpPath,
 		GEA_MapPoint, target_pos,
-		GEA_Int, FALSE, 
+		GEA_Int, FALSE,
 		GEA_End);
 	
-	g_graphicsOptions->AddTextToArmy(army, "Refuel", 255);	
+	g_graphicsOptions->AddTextToArmy(army, "Refuel", 255);
 }
 
 
@@ -2275,18 +2268,18 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if ( !army.IsValid() )
 			continue;
 
-		//first get max bombard range
-		sint32 min_rge, max_rge = 0;
-        army->GetBombardRange(min_rge, max_rge);
+		// First get max bombard range
+		sint32 min_rge = 0;
+		sint32 max_rge = 0;
+		army->GetBombardRange(min_rge, max_rge);
 
-		if(max_rge && army->NumOrders() == 0){//army is available and can bombard, so find enemies
-
-            CtpAi::BombardNearbyEnemies(army, max_rge);
-
+		// Army is available and can bombard, so find enemies
+		if(max_rge && army->NumOrders() == 0)
+		{
+			CtpAi::BombardNearbyEnemies(army, max_rge);
 		}
 
-
-		
+		// If we don't have anything to do then we may refuel, otherwise we do something and crash
 		if (army->GetMinFuel() != 0x7fffffff &&
 			army->GetOrder(0) == NULL)
 		{
@@ -2297,12 +2290,13 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if (army->NumOrders() > 0)
 			continue;
 
-		//we need to find something more interesting to do here
-		g_gevManager->AddEvent( GEV_INSERT_Tail, 
+		// We need to find something more interesting to do here
+		g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
 								GEV_EntrenchOrder,
 								GEA_Army, army.m_id,
 								GEA_End);
 	}
+
 	CtpAi::SpendGoldToRushBuy(player);
 }
 
@@ -2450,15 +2444,15 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 	double reserve_percent = 0.0;
 	(void) strategy.GetRushBuyReservePercent(reserve_percent);
 
-    sint32 lost_to_cleric;
+	sint32 lost_to_cleric;
 	sint32 lost_to_crime;
 	sint32 maintenance;
 	sint32 wages; 
-    sint32 science; 
+	sint32 science; 
 	sint32 old_savings; 
 	sint32 current_savings;
 	sint32 income;
-    player_ptr->m_gold->
+	player_ptr->m_gold->
 		GetGoldLevels(&income, &lost_to_cleric, &lost_to_crime, &maintenance, 
 					  &wages, &science, &old_savings, &current_savings); 
 
@@ -2495,7 +2489,7 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 	
 	sint32 rush_buy_cost;
-    std::list< std::pair<sint32, Unit> >::iterator iter;
+	std::list< std::pair<sint32, Unit> >::iterator iter;
 	for (iter = rush_buy_list.begin(); iter != rush_buy_list.end(); iter++)
 	{
 		city = iter->second;
@@ -2549,13 +2543,11 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 	for(sint32 foreigner = 0; foreigner < CtpAi::s_maxPlayers; foreigner++) 
 	{
 		if(playerId != foreigner
+		&& g_player[foreigner]
 		&& g_player[playerId]->HasWarWith(foreigner)
 		){  //try to bombard one of his armies or cities within max range
 
 			Player *foreigner_ptr = g_player[foreigner];
-			Assert(foreigner_ptr);
-			if (foreigner_ptr == NULL)
-				return;
 
 			sint32 num_armies = foreigner_ptr->m_all_armies->Num();
 
@@ -2578,7 +2570,7 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 				dist = pos.NormalizedDistance(def_pos);
 				if(dist < min_dist){
 					min_dist = dist;
-				    if(min_dist <= max_rge){
+					if(min_dist <= max_rge){
 
 						g_gevManager->AddEvent( GEV_INSERT_Tail, 
 												GEV_BombardOrder,
@@ -2589,8 +2581,8 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 					}
 				}
 			}
-	/*
-	        if(min_dist <= max_rge){
+/*
+			if(min_dist <= max_rge){
 
 				g_gevManager->AddEvent( GEV_INSERT_Tail, 
 										GEV_BombardOrder,
@@ -2599,26 +2591,26 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 										GEA_End);
 				return;
 			}
-	*/		
-            //bombard the first enemy city within range
+*/
+			//bombard the first enemy city within range
 			Unit def_city;
-            sint32 num_cities = foreigner_ptr->m_all_cities ->Num();
-            dist = 0;
+			sint32 num_cities = foreigner_ptr->m_all_cities ->Num();
+			dist = 0;
 			min_dist = 0x7fffffff;
 
-            for(i = 0; i < num_cities; i++){
+			for(i = 0; i < num_cities; i++){
 
-                def_city = foreigner_ptr->m_all_cities->Access(i);
+				def_city = foreigner_ptr->m_all_cities->Access(i);
 
-               //should test if def_city is visible to player
-                if(!(def_city->GetVisibility() & (1 << playerId)))
+				//should test if def_city is visible to player
+				if(!(def_city->GetVisibility() & (1 << playerId)))
 					continue;
 
 				def_city->GetPos(def_pos);
-                dist = pos.NormalizedDistance(def_pos);
+				dist = pos.NormalizedDistance(def_pos);
 				if(dist < min_dist){
 					min_dist = dist;
-				    if(min_dist <= max_rge){
+					if(min_dist <= max_rge){
 
 						g_gevManager->AddEvent( GEV_INSERT_Tail, 
 												GEV_BombardOrder,
@@ -2630,5 +2622,5 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 				}
 			}
 		}
-    }
+	}
 }

@@ -34,37 +34,37 @@
 #include <algorithm>        // std::fill
 #include "civarchive.h"
 
-#define k_OBJPOOL_VERSION_MAJOR		0								
-#define k_OBJPOOL_VERSION_MINOR		0								
+#define k_OBJPOOL_VERSION_MAJOR		0
+#define k_OBJPOOL_VERSION_MINOR		0
 
 
 ObjPool::ObjPool(uint32 it) 
 :
     m_id_type   (it),
     m_nObjs     (0)
-{	
-    std::fill(m_table, m_table + k_OBJ_POOL_TABLE_SIZE, (GameObj *) NULL);
-} 
+{
+	std::fill(m_table, m_table + k_OBJ_POOL_TABLE_SIZE, (GameObj *) NULL);
+}
 
 ObjPool::~ObjPool()
 {
-	for (size_t i = 0 ; i < k_OBJ_POOL_TABLE_SIZE; ++i) 
-    {
-		while (m_table[i]) 
-        {
+	for (size_t i = 0 ; i < k_OBJ_POOL_TABLE_SIZE; ++i)
+	{
+		while (m_table[i])
+		{
 			Del(m_table[i]);
 		}
-	}	
+	}
 }
 
-uint32 ObjPool::NewKey(uint32 t) 
-{  
+uint32 ObjPool::NewKey(uint32 t)
+{
 	ID  tmpId;
 	
-    do 
-    {
+	do
+	{
 		tmpId.m_id = (t | (m_nObjs & k_ID_KEY_MASK));
-        ++m_nObjs;
+		++m_nObjs;
 	} while (IsValid(tmpId));   // exists already
 	
 	return tmpId.m_id;
@@ -86,19 +86,19 @@ void ObjPool::HackSetKey(uint32 k)
 
 bool ObjPool::IsValidKey(uint32 id, uint32 &val) const
 {
-  if (!id)
-     return false; 
+	if (!id)
+		return false;
 
-  if ((id & k_ID_TYPE_MASK) != m_id_type ) 
-     return false; 
+	if ((id & k_ID_TYPE_MASK) != m_id_type )
+		return false;
 
-  val = id & k_OBJ_POOL_TABLE_SIZE_MASK;
+	val = id & k_OBJ_POOL_TABLE_SIZE_MASK;
 
-  return true; 
+	return true;
 }
 
-void ObjPool::Insert(GameObj *p) 
-{ 
+void ObjPool::Insert(GameObj *p)
+{
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Inserting object id %lx\n", p->m_id));
 	Assert(p->m_id != 0);
 	GameObj_Insert(&m_table[Key(p->m_id)], p); 
@@ -111,15 +111,14 @@ void ObjPool::Insert(GameObj *p)
 
 
 
-void ObjPool::Del(GameObj *p) 
-{ 
+void ObjPool::Del(GameObj *p)
+{
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id %lx\n", p->m_id));
 	GameObj_Delete(&m_table[Key(p->m_id)], p->m_id); 
 }
 
 void ObjPool::Del(const ID &id) 
 {
-
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id %lx\n", (uint32)id));
 	GameObj_Delete(&m_table[Key(id.m_id)], id.m_id); 
 }
@@ -141,14 +140,14 @@ uint32 ObjPool_ObjPool_GetVersion(void)
 	return (k_OBJPOOL_VERSION_MAJOR<<16 | k_OBJPOOL_VERSION_MINOR);
 }
 
-void ObjPool::Serialize(CivArchive &archive) 
+void ObjPool::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring()) 
-    {
+	{
 		archive.StoreChunk((uint8 *)&m_id_type, ((uint8 *)&m_nObjs)+sizeof(m_nObjs));
-	} 
-    else 
-    {
+	}
+	else
+	{
 		archive.LoadChunk((uint8 *)&m_id_type, ((uint8 *)&m_nObjs)+sizeof(m_nObjs));
 	}
 }

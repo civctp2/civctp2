@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Goal handling
+// Description  : CTP2 specific Goal handling
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -407,8 +407,8 @@ Agent_ptr CTPGoal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 #ifdef _DEBUG_SCHEDULER
 	if (ctpagent_ptr->Get_Army().IsValid())
 	{
-		Assert(ctpagent_ptr->Get_Army()->m_theAgent == ctpagent_ptr);
-		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
+//		Assert(ctpagent_ptr->Get_Army()->m_theAgent == ctpagent_ptr);
+//		Assert(ctpagent_ptr->Get_Army()->m_theGoal == this);
 	}
 #endif // _DEBUG_SCHEDULER
 
@@ -429,8 +429,6 @@ bool CTPGoal::Is_Execute_Incrementally() const
 {
 	return g_theGoalDB->Get(m_goal_type)->GetExecuteIncrementally();
 }
-
-
 
 void CTPGoal::Compute_Needed_Troop_Flow()
 {
@@ -575,7 +573,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		break;
 	default:
 
-		Assert(0);
+		Assert(false);
 	}
 
 
@@ -1114,7 +1112,7 @@ GOAL_RESULT CTPGoal::Execute_Task()
 	if (Get_Totally_Complete())
 		return GOAL_COMPLETE;
 
-	if (Can_Be_Executed() == false)
+	if (!Can_Be_Executed())
 		return GOAL_ALREADY_MOVED;
 
     Assert(m_agents.begin() != m_agents.end());
@@ -1142,12 +1140,12 @@ GOAL_RESULT CTPGoal::Execute_Task()
                 Set_Sub_Task(SUB_TASK_RALLY);
             }
 			
-			if (Goal_Too_Expensive() == true)
+			if (Goal_Too_Expensive())
 				return GOAL_FAILED;
 
 			if ( Ok_To_Rally() )
 			{
-				if ( RallyTroops() == false)
+				if (!RallyTroops())
 					return GOAL_FAILED;
 
 				// If hastogowithoutgrouping is true, execute the goal 
@@ -1169,12 +1167,12 @@ GOAL_RESULT CTPGoal::Execute_Task()
 		else if (goal_record->GetUnGroupFirst()) 
 		{
 				Set_Sub_Task(SUB_TASK_UNGROUP);
-				if ( UnGroupTroops() == false)
+				if (!UnGroupTroops())
 				{
 					return GOAL_FAILED;
 				}
 
-				if (UnGroupComplete() == false)
+				if (!UnGroupComplete())
 				{
 					return GOAL_IN_PROGRESS;
 				}
@@ -2125,7 +2123,7 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		delete[] myString;
 		delete[] goalString;
 
-		if (first_army->Get_Can_Be_Executed() == true)
+		if (first_army->Get_Can_Be_Executed())
 		{
 			Assert(order_rec);
 			if (order_rec)
@@ -2462,7 +2460,7 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 			else
 			{
 				
-				if (the_army->Get_Army()->HasLeftMap() == FALSE)
+				if(!the_army->Get_Army()->HasLeftMap())
 				{
 					the_army->Get_Army()->
 						PerformOrderHere(space_launch_order_rec, (Path *) &found_path);
@@ -2711,7 +2709,7 @@ bool CTPGoal::RallyTroops()
 	bool agent2_is_partial;
 	bool partiality_found = false;
 	
-    Set_Sub_Task(SUB_TASK_RALLY);
+	Set_Sub_Task(SUB_TASK_RALLY);
 	Agent_List tmp_agents   = m_agents;
 	
 	CTPAgent_ptr ctpagent2_ptr;
@@ -2724,11 +2722,12 @@ bool CTPGoal::RallyTroops()
 	Agent_List::iterator agent1_iter = tmp_agents.begin(); 
 	while (agent1_iter != tmp_agents.end()) 
 	{
-	    CTPAgent_ptr ctpagent1_ptr = (CTPAgent_ptr) *agent1_iter;
-        Assert(ctpagent1_ptr);
+		CTPAgent_ptr ctpagent1_ptr = (CTPAgent_ptr) *agent1_iter;
+		Assert(ctpagent1_ptr);
 		
-		if (ctpagent1_ptr->Get_Is_Dead())
-		{
+		if( ctpagent1_ptr->Get_Is_Dead()
+		|| !ctpagent1_ptr->Get_Can_Be_Executed()
+		){
 			++agent1_iter;
 			continue;
 		}
@@ -2741,55 +2740,44 @@ bool CTPGoal::RallyTroops()
 		min_distance *= min_distance;
 		closest_agent_iter = tmp_agents.end();
 		partiality_found = false;
-		
-		
-		for (agent2_iter = tmp_agents.begin(); agent2_iter != tmp_agents.end(); agent2_iter++) 
+
+		for(agent2_iter = tmp_agents.begin(); agent2_iter != tmp_agents.end(); agent2_iter++) 
 		{
-			
 			ctpagent2_ptr = (CTPAgent_ptr) *agent2_iter;
-			
-			
-			if (ctpagent1_ptr == ctpagent2_ptr)
+
+			if(ctpagent1_ptr == ctpagent2_ptr)
 				continue;
 
-			
-			if (ctpagent2_ptr->Get_Is_Dead())
+			if(ctpagent2_ptr->Get_Is_Dead())
 				continue;
-			
-			
-			
 			agent2_is_partial = (ctpagent2_ptr->Get_Army().Num() < k_MAX_ARMY_SIZE);
-			if ( (partiality_found) &&
+			if( (partiality_found) &&
 				(agent2_is_partial != agent1_is_partial) )
 				continue;
-			
-			
-			sint32 const distance = 
-                MapPoint::GetSquaredDistance(ctpagent1_ptr->Get_Pos(), ctpagent2_ptr->Get_Pos());
 
-			if (distance < min_distance)
+			sint32 const distance = 
+			    MapPoint::GetSquaredDistance(ctpagent1_ptr->Get_Pos(), ctpagent2_ptr->Get_Pos());
+
+			if(distance < min_distance)
 			{
 				min_distance        = distance;
 				closest_agent_iter  = agent2_iter;
 			}
-			
-			
-			if ( agent1_is_partial == agent2_is_partial && 
+
+			if( agent1_is_partial == agent2_is_partial && 
 				partiality_found == false ) 
 			{
 				partiality_found = true;
 				min_distance = distance;
 				closest_agent_iter = agent2_iter;
 			}
-		} 
-		
-		if (min_distance < 1)
+		}
+
+		if(min_distance < 1)
 		{
-			
-			
 			ctpagent1_ptr->Group_With((CTPAgent_ptr) *closest_agent_iter);
 		}
-		else if ( closest_agent_iter != tmp_agents.end() )
+		else if( closest_agent_iter != tmp_agents.end() )
 		{
 			MapPoint closest_agent_pos;
 			
@@ -2797,77 +2785,78 @@ bool CTPGoal::RallyTroops()
 			
 			closest_agent_pos = closest_agent_ptr->Get_Pos();
 
-// To avoid Groups to be blocked when an unit is in a city 
-// (problem with garrison -> not enough room)
+			// To avoid Groups to be blocked when an unit is in a city 
+			// (problem with garrison -> not enough room)
 			sint32 cells;
 			if(!g_theWorld->GetCity(closest_agent_pos).IsValid() 
 			||  ctpagent1_ptr->GetRounds(closest_agent_pos, cells) > 2
 			){
-       			if (GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY) == false)
-	       			return false;
+				if (GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY) == false)
+					return false;
 			}
 			else
 			{
-                    uint8 magnitude = 220;
-                    MBCHAR * myString = new MBCHAR[40];
-					MapPoint goal_pos;
-					goal_pos = Get_Target_Pos(ctpagent1_ptr->Get_Army());
-                    sprintf(myString, "Waiting GROUP to GO (%d,%d)", goal_pos.x, goal_pos.y);
-				    g_graphicsOptions->AddTextToArmy(ctpagent1_ptr->Get_Army(), myString, magnitude);
-                    delete[] myString;	
+				uint8 magnitude = 220;
+				MBCHAR * myString = new MBCHAR[40];
+				MapPoint goal_pos;
+				goal_pos = Get_Target_Pos(ctpagent1_ptr->Get_Army());
+				sprintf(myString, "Waiting GROUP to GO (%d,%d)", goal_pos.x, goal_pos.y);
+				g_graphicsOptions->AddTextToArmy(ctpagent1_ptr->Get_Army(), myString, magnitude);
+				delete[] myString;
 			}
-				MapPoint agent1_pos;
-				agent1_pos = ctpagent1_ptr->Get_Pos();
-			if ( g_theWorld->GetCity(closest_agent_pos).IsValid() || closest_agent_ptr->GetRounds(agent1_pos, cells) > 2)
+
+			MapPoint agent1_pos;
+			agent1_pos = ctpagent1_ptr->Get_Pos();
+			if( g_theWorld->GetCity(closest_agent_pos).IsValid() || closest_agent_ptr->GetRounds(agent1_pos, cells) > 2)
 			{
 				
 				if (g_theWorld->GetCity(agent1_pos).IsValid() && g_theWorld->GetCity(closest_agent_pos).IsValid()) //two units are in another town
 				{
 					MapPoint tempPos;
 					sint32 i;
-     				sint32 result;
-					for (i = 0 ; i < SOUTH ; i++)
+					sint32 result;
+					for(i = 0 ; i < SOUTH ; i++)
 					{
 						result = closest_agent_pos.GetNeighborPosition(WORLD_DIRECTION(i),tempPos);
-					    if(result)
+						if(result)
 						{
-						   CellUnitList *the_army=NULL;
-						   the_army = g_theWorld->GetArmyPtr(tempPos);
-						   if (!the_army)
-						   {  //search for cell without army
+							CellUnitList *the_army=NULL;
+							the_army = g_theWorld->GetArmyPtr(tempPos);
+							if(!the_army)
+							{	//search for cell without army
 								agent1_pos = tempPos;
 								break;
-						   }						   
+							}
 						}
 					}
 				}
 
-				if (GotoGoalTaskSolution(closest_agent_ptr, agent1_pos, SUB_TASK_RALLY ) == false)
-				return false;
+				if(!GotoGoalTaskSolution(closest_agent_ptr, agent1_pos, SUB_TASK_RALLY))
+					return false;
 
 			}
 			else
 			{
 				CellUnitList *the_army=NULL;
 				the_army = g_theWorld->GetArmyPtr(closest_agent_pos);
-				if (static_cast<uint32>(the_army->Num()) >= m_agents.size() && m_agents.size() > k_MAX_ARMY_SIZE/2)
+				if(static_cast<uint32>(the_army->Num()) >= m_agents.size() && m_agents.size() > k_MAX_ARMY_SIZE/2)
 				{
 					MapPoint tempPos;
 					sint32 i;
-     				sint32 result;
-					for (i = 0 ; i < SOUTH ; i++)
+					sint32 result;
+					for(i = 0 ; i < SOUTH ; i++)
 					{
 						result = closest_agent_pos.GetNeighborPosition(WORLD_DIRECTION(i),tempPos);
-					    if(result)
+						if(result)
 						{
 							CellUnitList *the_army=NULL;
 							the_army = g_theWorld->GetArmyPtr(tempPos);
-							if (!the_army)
-							{  //search for cell without army
-								if (GotoGoalTaskSolution(closest_agent_ptr, tempPos, SUB_TASK_RALLY ) == false)
+							if(!the_army)
+							{	//search for cell without army
+								if(!GotoGoalTaskSolution(closest_agent_ptr, tempPos, SUB_TASK_RALLY ))
 									return false;
 								break;
-							}						   
+							}
 						}
 					}
 				}
@@ -2879,12 +2868,11 @@ bool CTPGoal::RallyTroops()
 		}
 		else
 		{
-			
 			Assert(false);
 		}
 
 		++agent1_iter;
-	} 
+	}
 	return true;
 }
 
@@ -3006,7 +2994,7 @@ bool CTPGoal::FindTransport(const CTPAgent_ptr & agent_ptr, CTPAgent_ptr & trans
 		if (possible_transport == agent_ptr)
 			continue;
 
-		if ( possible_transport->Get_Can_Be_Executed() == false)
+		if (!possible_transport->Get_Can_Be_Executed())
 		{
 			MapPoint target_pos = possible_transport->Get_Target_Pos();
 			MapPoint army_pos = agent_ptr->Get_Army()->RetPos();

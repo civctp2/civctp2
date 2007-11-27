@@ -754,7 +754,9 @@ IMPROVE_SHRINE_B {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_CHRISTIAN {
    DefaultIcon ICON_IMPROVE_SHRINE_C
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -776,7 +778,9 @@ IMPROVE_SHRINE_CHRISTIAN {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_EGYPT {
    DefaultIcon ICON_IMPROVE_SHRINE_E
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -798,7 +802,9 @@ IMPROVE_SHRINE_EGYPT {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_G {
    DefaultIcon ICON_IMPROVE_SHRINE_G
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -820,7 +826,9 @@ IMPROVE_SHRINE_G {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_H {
    DefaultIcon ICON_IMPROVE_SHRINE_H
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -842,7 +850,9 @@ IMPROVE_SHRINE_H {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_I {
    DefaultIcon ICON_IMPROVE_SHRINE_I
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -864,7 +874,9 @@ IMPROVE_SHRINE_I {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_J {
    DefaultIcon ICON_IMPROVE_SHRINE_J
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -886,7 +898,9 @@ IMPROVE_SHRINE_J {
    IsReligious
    Cathedral
 }
+
 ############################################################
+
 IMPROVE_SHRINE_ZOROASTER {
    DefaultIcon ICON_IMPROVE_SHRINE_Z
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -908,4 +922,5 @@ IMPROVE_SHRINE_ZOROASTER {
    IsReligious
    Cathedral
 }
+
 ############################################################

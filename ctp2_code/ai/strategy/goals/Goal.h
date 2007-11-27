@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : the Goal motherclass header
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -18,7 +18,7 @@
 //
 // Compiler flags
 //
-// None
+// - None
 //
 //----------------------------------------------------------------------------
 //

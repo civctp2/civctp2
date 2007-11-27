@@ -735,10 +735,8 @@ GAME_EVENT GameEventManager::GetEventIndex(const MBCHAR *name) const
 
 const char *GameEventManager::GetEventName(GAME_EVENT ev) const
 {
-	Assert(ev >= (GAME_EVENT)0);
-	Assert(ev < GEV_MAX);
 	if(ev < (GAME_EVENT)0 || ev >= GEV_MAX) {
-		return "";
+		return "EventNone";
 	}
 
 	return g_eventDescriptions[ev].name;

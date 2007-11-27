@@ -262,8 +262,8 @@ void Scheduler::Initialize()
 
 	Cleanup();
 
-	m_exec_goal_count.resize(g_theGoalDB->NumRecords(),0);		
-	m_pruned_goals_count.resize(g_theGoalDB->NumRecords(),0);		
+	m_exec_goal_count.resize(g_theGoalDB->NumRecords(),0);
+	m_pruned_goals_count.resize(g_theGoalDB->NumRecords(),0);
 	m_goals_of_type.resize(g_theGoalDB->NumRecords());
 	m_pruned_goals_of_type.resize(g_theGoalDB->NumRecords());
 	m_committed_agents = 0;
@@ -1072,15 +1072,15 @@ bool Scheduler::Prioritize_Goals()
 		 
 	sint16 committed_agents = 0;
 
-	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++) {
-
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n\n "));
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n"));
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// %s \n",g_theGoalDB->Get(goal_type)->GetNameText()));
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n\n"));
-	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
-	("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
-	this));
+	for (goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n\n "));
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n"));
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// %s \n",g_theGoalDB->Get(goal_type)->GetNameText()));
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+		("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
+		this));
 		
 		sorted_goal_iter = m_goals_of_type[goal_type].begin();
 		while(sorted_goal_iter != m_goals_of_type[goal_type].end())
@@ -1099,7 +1099,7 @@ bool Scheduler::Prioritize_Goals()
 
 				sorted_goal_iter = Remove_Goal(sorted_goal_iter);
 				continue;
-			} 
+			}
 
 			sorted_goal_iter->second->Set_Can_Be_Executed(true);
 			sorted_goal_iter->first =
@@ -1107,7 +1107,7 @@ bool Scheduler::Prioritize_Goals()
 
 			sorted_goal_iter->second->Compute_Needed_Troop_Flow();
 			sorted_goal_iter++;
-		} 
+		}
 
 		m_goals_of_type[goal_type].sort(std::greater<Sorted_Goal_ptr>());
 		
