@@ -780,7 +780,6 @@ IMPROVE_SHRINE_CHRISTIAN {
 }
 
 ############################################################
-
 IMPROVE_SHRINE_EGYPT {
    DefaultIcon ICON_IMPROVE_SHRINE_E
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -791,18 +790,17 @@ IMPROVE_SHRINE_EGYPT {
    IsReligionIcon MAPICON_PHAROAHISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
-   ConflictsWithBuilding IMPROVE_SHRINE_B
-   ConflictsWithBuilding IMPROVE_SHRINE_G
-   ConflictsWithBuilding IMPROVE_SHRINE_H
-   ConflictsWithBuilding IMPROVE_SHRINE_I
-   ConflictsWithBuilding IMPROVE_SHRINE_J
+   #ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   #ConflictsWithBuilding IMPROVE_SHRINE_B
+   #ConflictsWithBuilding IMPROVE_SHRINE_G
+   #ConflictsWithBuilding IMPROVE_SHRINE_H
+   #ConflictsWithBuilding IMPROVE_SHRINE_I
+   #ConflictsWithBuilding IMPROVE_SHRINE_J
    ConflictsWithBuilding IMPROVE_SHRINE_ZOROASTER
    HappyInc 0
    IsReligious
    Cathedral
 }
-
 ############################################################
 
 IMPROVE_SHRINE_G {
@@ -900,7 +898,6 @@ IMPROVE_SHRINE_J {
 }
 
 ############################################################
-
 IMPROVE_SHRINE_ZOROASTER {
    DefaultIcon ICON_IMPROVE_SHRINE_Z
    Description DESCRIPTION_IMPROVE_SHRINE
@@ -911,16 +908,15 @@ IMPROVE_SHRINE_ZOROASTER {
    IsReligionIcon MAPICON_ZORASTORISM
    ExcludedbyGovernmentType GOVERNMENT_COMMUNISM
    ExcludedbyGovernmentType GOVERNMENT_ECOTOPIA
-   ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
+   #ConflictsWithBuilding IMPROVE_SHRINE_CHRISTIAN
    ConflictsWithBuilding IMPROVE_SHRINE_EGYPT
-   ConflictsWithBuilding IMPROVE_SHRINE_G
-   ConflictsWithBuilding IMPROVE_SHRINE_H
-   ConflictsWithBuilding IMPROVE_SHRINE_I
-   ConflictsWithBuilding IMPROVE_SHRINE_J
-   ConflictsWithBuilding IMPROVE_SHRINE_B
+   #ConflictsWithBuilding IMPROVE_SHRINE_G
+   #ConflictsWithBuilding IMPROVE_SHRINE_H
+   #ConflictsWithBuilding IMPROVE_SHRINE_I
+   #ConflictsWithBuilding IMPROVE_SHRINE_J
+   #ConflictsWithBuilding IMPROVE_SHRINE_B
    HappyInc 0
    IsReligious
    Cathedral
 }
-
 ############################################################

@@ -376,8 +376,8 @@ WONDER_SHRINE_ZOROASTER {
    Movie MOVIE_WONDER_HAGIA_SOPHIA
    ObsoleteGovernmentType GOVERNMENT_COMMUNISM
    #EnableAdvance ADVANCE_SUBNEURAL_ADS
-   NeedsFeatToBuild FEAT_ADVANCE_ZOROASTER 
-   #NeedsAnyPlayerFeatToBuild FEAT_ADVANCE_ZOROASTER #use this flag if you want a wonder race once feat is achieved (good for christianity and Islam)	
+   #NeedsFeatToBuild FEAT_ADVANCE_ZOROASTER 
+   NeedsAnyPlayerFeatToBuild FEAT_ADVANCE_ZOROASTER #use this flag if you want a wonder race once feat is achieved (good for christianity and Islam)	
    ProductionCost 1000
    IsHolyCity
    IsReligionIcon MAPICON_ZORASTORISM
@@ -402,7 +402,7 @@ WONDER_SHRINE_EGYPT {
    Movie MOVIE_WONDER_HAGIA_SOPHIA
    ObsoleteGovernmentType GOVERNMENT_COMMUNISM
    #EnableAdvance ADVANCE_SUBNEURAL_ADS
-   NeedsFeatToBuild FEAT_ADVANCE_EGYPT # Add this to feat database if you want to use it.
+   NeedsAnyPlayerFeatToBuild FEAT_ADVANCE_EGYPT # Add this to feat database if you want to use it.
    ProductionCost 1000
    IsHolyCity
    IsReligionIcon MAPICON_PHAROAHISM

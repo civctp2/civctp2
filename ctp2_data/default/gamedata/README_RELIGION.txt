@@ -7,9 +7,12 @@ Add feat_str.txt in language folder
 Add wonder.txt a wonder that is triggered by feat 
      and its religion icon
      and the shrine that it puts in all of your cities
+add wonder to ai build list
 add building.txt the shrine from above with MAPICON for religion
 add Unit.txt to a cleric unit that can convertcity 
     add settlebuilding the religious building you added
     add prerequisite building so it can only be build with buildings of your religion
+add Unit to ai build list
+add icons and description if you wish
 
 that should do it!

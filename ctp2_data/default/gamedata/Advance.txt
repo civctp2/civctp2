@@ -4,8 +4,8 @@
 #
 ###########################################################################
 #
-#	- 11/08/07 Added Religious feats of Egypt(stone working) and 
-#	Zoroastorism (religion) for religion in CTP2.
+#	- 11/08/07 Added Religious feats of Egypt(jurisprudence) and 
+#	Zoroastorism (philosophy) for religion in CTP2.
 #
 #
 ###########################################################################
@@ -662,6 +662,8 @@ ADVANCE_JURISPRUDENCE {
    Icon ICON_ADVANCE_JURISPRUDENCE
    Branch 0
    Age AGE_TWO
+   # New
+   TriggerFeat FEAT_ADVANCE_EGYPT
 }
 
 ADVANCE_LIFE_EXTENSION {
@@ -927,6 +929,8 @@ ADVANCE_PHILOSOPHY {
    Icon ICON_ADVANCE_PHILOSOPHY
    Branch 0
    Age AGE_TWO
+   # New
+   TriggerFeat FEAT_ADVANCE_ZOROASTER
 
 }
 
@@ -1002,8 +1006,7 @@ ADVANCE_RELIGION {
    Icon ICON_ADVANCE_RELIGION
    Branch 0
    Age AGE_ONE
-   # New
-   TriggerFeat FEAT_ADVANCE_ZOROASTER
+
 }
 
 ADVANCE_ROBOTICS {
@@ -1063,8 +1066,7 @@ ADVANCE_STONE_WORKING {
    Icon ICON_ADVANCE_STONE_WORKING
    Branch 0
    Age AGE_ONE
-   # New
-   TriggerFeat FEAT_ADVANCE_EGYPT
+
 }
 
 ADVANCE_SUBNEURAL_ADS {
