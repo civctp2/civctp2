@@ -692,7 +692,7 @@ void Director::HandleNextAction(void)
 	if (m_paused) return;
 
 	while (m_itemQueue->GetCount() > 0 && GetActionFinished()) 
-    {
+	{
 		DQItem *    item        = m_itemQueue->RemoveHead();
 
 		Assert(item->m_handler != NULL);
@@ -3485,14 +3485,14 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 void dh_morphUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
-	DQActionMorph	*action = (DQActionMorph *)itemAction;
+	DQActionMorph   *action = (DQActionMorph *)itemAction;
 
-	UnitActor		*theActor = action->morphing_actor;
+	UnitActor       *theActor = action->morphing_actor;
 
 	Assert(theActor != NULL);
-	if (theActor) 
-    {
-    	theActor->ChangeType(action->ss, action->type, action->id, FALSE);	
+	if (theActor)
+	{
+		theActor->ChangeType(action->ss, action->type, action->id, FALSE);	
 	}
 
 	g_director->ActionFinished(seq);

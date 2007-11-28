@@ -66,6 +66,7 @@
 #include "BuildingRecord.h"
 #include "cellunitlist.h"
 #include "CityStyleRecord.h"
+#include "citywindow.h"         // s_cityWindow
 #include "Civilisation.h"
 #include "colorset.h"           // g_colorset
 #include "CTPRecord.h"
@@ -87,9 +88,9 @@
 #include "WonderRecord.h"
 #include "wonderutil.h"
 
-extern SpriteGroupList  *g_unitSpriteGroupList;
-extern SpriteGroupList  *g_citySpriteGroupList;
-extern ScreenManager    *g_screenManager;
+extern SpriteGroupList   *g_unitSpriteGroupList;
+extern SpriteGroupList   *g_citySpriteGroupList;
+extern ScreenManager     *g_screenManager;
 
 #define k_SHIELD_ON_TIME        650
 #define k_SHIELD_OFF_TIME       150
@@ -101,7 +102,7 @@ extern ScreenManager    *g_screenManager;
 #define STOMPCHECK() ;
 #endif
 
-BOOL                g_showHeralds   = true;
+bool                g_showHeralds   = true;
 
 namespace
 {
@@ -462,7 +463,19 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 {
 	if (id.IsValid() && id.IsCity()) {
 		id.GetPop(m_size);//put the city's pop into the actor's m_size
-		id.GetTurnsToNextPop(m_nextPop);//PFT, computes TurnsToNextPop and puts it into the actor's m_nextPop
+
+		CityWindow* cityWindow = CityWindow::GetCityWindow();
+		CityData* citaData = cityWindow ? cityWindow->GetCityData() : NULL;
+		if(citaData != NULL && citaData->GetHomeCity() == id)
+		{
+			m_nextPop = citaData->TurnsToNextPop();
+		}
+		else
+		{
+			// PFT, computes TurnsToNextPop and puts 
+			// it into the actor's m_nextPop
+			id.GetTurnsToNextPop(m_nextPop);
+		}
 	}
 
 	DumpAllActions();

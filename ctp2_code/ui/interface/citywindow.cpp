@@ -535,7 +535,6 @@ AUI_ERRCODE CityWindow::Display(CityData *city)
 
 AUI_ERRCODE CityWindow::Hide()
 {
-	
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
 
@@ -547,7 +546,6 @@ AUI_ERRCODE CityWindow::Hide()
 	}
 
 	return g_c3ui->RemoveWindow(s_cityWindow->m_window->Id());
-	
 }
 
 CityData *CityWindow::GetCityData(const Unit &city)
@@ -1074,6 +1072,10 @@ void CityWindow::UpdateInfoBoxes()
 void CityWindow::CopyCitiesBack()
 {
 	if(s_cityWindow) {
+		if(s_cityWindow->m_cityData)
+			s_cityWindow->m_cityData->UpdateSprite();
+
+
 		if(s_cityWindow->m_cities && s_cityWindow->m_cities->GetCount() > 0) {
 
 			PointerList<CityData>::Walker walk(s_cityWindow->m_cities);
@@ -1095,7 +1097,7 @@ void CityWindow::CopyCitiesBack()
 			if(g_nationalManagementDialog) {
 				g_nationalManagementDialog->Update();
 			}
-		}		
+		}
 	}
 }
 
@@ -1109,7 +1111,7 @@ void CityWindow::Close(aui_Control *control, uint32 action, uint32 data, void *c
 }
 
 void CityWindow::Cancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{	
+{
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
 
@@ -1277,7 +1279,7 @@ void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint
 	} else if(spinner == s_cityWindow->m_popSpinners[POP_MERCHANT]) {
 		popType = POP_MERCHANT;
 	} else {
-		Assert(FALSE);
+		Assert(false);
 	}
 	
 	if(popType != POP_MAX) {
@@ -2158,12 +2160,12 @@ void CityWindow::FillHappinessList()
 
 	ctp2_Static *happinessLabel = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Statistics.TabPanel.HappinessTotalLabel");
 	if (happinessLabel) 
-    {
+	{
 		const char *    format = g_theStringDB->GetNameStr("str_code_CityWinTotalHappinessFormat");
-        if (!format)
-        {
-            format  = "%d";
-        }
+		if (!format)
+		{
+			format  = "%d";
+		}
 
 		char buf[k_MAX_NAME_LEN];
 		sprintf(buf, format, (sint32)m_cityData->GetHappiness());
@@ -2172,12 +2174,12 @@ void CityWindow::FillHappinessList()
 	sint32 i;
 	sint32 numHappies = 0;
 	for (i = 0; i < HAPPY_REASON_MAX; i++) 
-    {
+	{
 		double      amount;
 		StringId    name;
 		ht->GetHappiness((HAPPY_REASON)i, amount, name);
 		
-        if (amount < 0.1 && amount > -0.1)
+		if (amount < 0.1 && amount > -0.1)
 			continue;
 
 		happies[numHappies].reason = (HAPPY_REASON)i;
@@ -2189,8 +2191,8 @@ void CityWindow::FillHappinessList()
 	qsort((void *)happies, numHappies, sizeof(cw_HappyData), cw_compareHappyValues);
 	
 	m_happinessList->Clear();
-    for (i = 0; i < numHappies; i++) 
-    {
+	for (i = 0; i < numHappies; i++) 
+	{
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_HappyListItem");
 		Assert(item);
 		if(!item) break;
@@ -2199,28 +2201,28 @@ void CityWindow::FillHappinessList()
 		ctp2_Static *   happyReason = (ctp2_Static *)box->GetChildByIndex(1);
 		happyReason->SetText(g_theStringDB->GetNameStr(happies[i].name));
 
-		if (happies[i].amount > 0) 
-        {
-		    ctp2_Static *   happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
+		if (happies[i].amount > 0)
+		{
+			ctp2_Static *   happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
 			happyAmount->SetDrawCallbackAndCookie
-                (DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
-		} 
-        else 
-        {
+			    (DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
+		}
+		else
+		{
 			ctp2_Static *   unhappyAmount = (ctp2_Static *)box->GetChildByIndex(0);
 			unhappyAmount->SetDrawCallbackAndCookie
-                (DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
 		}
 
 		char buf[20];
 		sprintf(buf, "%c%d", char(happies[i].amount > 0 ? '+' : ' '), (sint32)happies[i].amount);
 		ctp2_Static *numeric = (ctp2_Static *)box->GetChildByIndex(3);
 		if (numeric) 
-        {
+		{
 			numeric->SetText(buf);
 		}
 
-        m_happinessList->AddItem(item);
+		m_happinessList->AddItem(item);
 	}
 }
 
@@ -2634,4 +2636,9 @@ void CityWindow::NotifyCityCaptured(const Unit &c)
 	} else if(update && g_c3ui->GetWindow(s_cityWindow->m_window->Id())) {
 		s_cityWindow->Update();
 	}
+}
+
+CityWindow* CityWindow::GetCityWindow()
+{
+	return s_cityWindow;
 }

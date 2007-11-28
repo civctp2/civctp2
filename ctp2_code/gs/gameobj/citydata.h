@@ -316,14 +316,9 @@ private:
 	sint32    m_tempGood, m_tempGoodCount;
 	bool      m_sentInefficientMessageAlready;
 //emod
-    sint32	  m_culture;
-	sint32	  m_secthappy;								
+	sint32    m_culture;
+	sint32    m_secthappy;
 
-	
-	
-
-	
-	
 #ifdef _DEBUG
 	bool m_ignore_happiness; 
 #endif

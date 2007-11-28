@@ -670,6 +670,7 @@ void CauseAndEffectTab::UpdateCities()
 		CityData *cityData = (*cityList)[i].GetData()->GetCityData();
 
 		cityData->ProcessAllResources();
+		cityData->UpdateSprite();
 	}
 }
 

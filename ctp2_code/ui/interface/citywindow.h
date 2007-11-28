@@ -184,6 +184,7 @@ class CityWindow {
 									 void *cookie );
 
 	static CityData *GetCityData(const Unit &city);
+	CityData * GetCityData() const { return m_cityData; };
 	void SetCity(CityData *city);
 	void Update();
 	void UpdateBuildTabs();
@@ -230,6 +231,7 @@ class CityWindow {
 	static void ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void DisbandQuery(bool result, void *ud);
 	static void DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static CityWindow* GetCityWindow();
 };
 
 #endif

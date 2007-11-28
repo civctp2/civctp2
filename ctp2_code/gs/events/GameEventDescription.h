@@ -297,17 +297,17 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(DisbandUnit,                "Disband one unit", "%u")
 	EVENT(DisbandCity,                "Disband one city", "%c")
 
-	
+
 	EVENT(TimerExpired,               "Triggered when a timer expires.", "%i")
-	
-	
+
+
 	EVENT(ArmyClicked,                "Triggered when the user clicks an army with the mouse.", "%a")
-	EVENT(ArmySelected,               "Triggered when the user selects an army.", "%a")
-	EVENT(ArmyDeselected,             "Triggered when the user deselects an army.", "%a")
-	EVENT(CityClicked,                "Triggered when the user clicks a city with the mouse.", "%c")
-	EVENT(CitySelected,               "Triggered when the user selects a city.", "%c")
-	EVENT(CityDeselected,             "Triggered when the user deselects a city.", "%c")
-	
+	EVENT(ArmySelected,               "Triggered when the user selects an army.",               "%a")
+	EVENT(ArmyDeselected,             "Triggered when the user deselects an army.",             "$a")
+	EVENT(CityClicked,                "Triggered when the user clicks a city with the mouse.",  "%c")
+	EVENT(CitySelected,               "Triggered when the user selects a city.",                "%c")
+	EVENT(CityDeselected,             "Triggered when the user deselects a city.",              "$c")
+
 	EVENT(AccomplishFeat,             "Someone has accomplished a feat (int = feat DB index)", "%i%P")
 
 	EVENT(MADLaunch,                  "A targetted launches towards its target.", "%u")

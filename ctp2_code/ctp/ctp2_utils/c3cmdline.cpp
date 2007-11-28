@@ -222,7 +222,7 @@ extern BOOL           g_smoothScroll;
 extern sint32         g_god;
 
 extern sint32         g_isGridOn;
-extern BOOL           g_showHeralds;
+extern bool           g_showHeralds;
 
 
 extern BOOL           g_useDDBlit;

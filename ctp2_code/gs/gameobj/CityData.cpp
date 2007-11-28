@@ -6826,10 +6826,10 @@ sint32 CityData::TurnsToNextPop( void )
 	}
 
 	return static_cast<sint32>
-        (ceil(static_cast<double>(k_PEOPLE_PER_POPULATION - m_partialPopulation) 
-                / static_cast<double>(m_growth_rate)
-             )
-        );
+	    (ceil(static_cast<double>(k_PEOPLE_PER_POPULATION - m_partialPopulation) 
+	            / static_cast<double>(m_growth_rate)
+	         )
+	    );
 }
 
 sint32 CityData::FreeSlaves()
@@ -6989,7 +6989,7 @@ sint32 CityData::GetScienceFromPops(bool considerOnlyFromTerrain) const
 
 sint32 CityData::GetNumPop() const
 {
-    return std::max<sint32>(PopCount(), 1);
+	return std::max<sint32>(PopCount(), 1);
 }
 
 //how many trade routes come into this city

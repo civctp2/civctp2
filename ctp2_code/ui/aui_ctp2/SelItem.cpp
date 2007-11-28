@@ -1135,7 +1135,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			Army a;
 			if(GetSelectedArmy(a)) 
 			{
-				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmySelected, GEA_Army, a, GEA_End);
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ArmySelected, GEA_Army, a, GEA_End);
 				if(g_theProfileDB->GetAutoSwitchTabs())
 				{
 					g_controlPanel->SetTab(CP_TAB_UNIT);
