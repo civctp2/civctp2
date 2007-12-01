@@ -16,6 +16,25 @@
 #
 #----------------------------------------------------------------------------
 #
+# Remarks
+#
+# - This file contains all the localized strings for the messages.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
 # Modifications from the original Activision code:
 #
 # - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
@@ -505,6 +524,7 @@ ATTACK_WARNING				"Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[
 CIV2DOVES				"Die Parzifisten haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
 CIV2HAWKS				"Die Kriegstreiber verlanegen nach Krieg gegen diese Achse des Bösen!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 
+
 #New Messages#
 UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
 UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."

@@ -333,7 +333,6 @@ QUICKSAVE_NAME "SCHNELLSPEICHERN"
 
 # Scenario editor <CHANGEME>
 str_ldl_Confirm_Restart		"Wollt Ihr das Spiel wirklich neu starten?"
-REGARD_EVENT_WONDER "Die {player[0].civ_name_plural} sind angesichts unserer imposanten Weltwunder stark beeindruckt."
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Erweiterte Optionen"
@@ -379,10 +378,6 @@ str_profile_EndTurnSound "Signal Rundenende"
 
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Karteninfo"
-
-# One more reason for happiness display on city manager
-HAPPY_REASON_FEATS "Meisterleistung"
-
 
 str_ldl_EditQueueReallyDelete "Bauliste %s dauerhaft löschen?"
 

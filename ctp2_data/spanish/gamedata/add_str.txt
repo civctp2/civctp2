@@ -354,7 +354,6 @@ QUICKSAVE_NAME "GUARDADO RÁPIDO"
 
 # Scenario editor <CHANGEME>
 str_ldl_Confirm_Restart		"Esto reiniciará la partida. ¿Estás seguro?"
-REGARD_EVENT_WONDER "Los {player[0].civ_name_plural} están impresionados con las increíbles maravillas de nuestra nación."
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Opciones avanzadas"
@@ -404,8 +403,6 @@ str_profile_EndTurnSound "Sonido Finalizar turno"
 
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Información del mapa"
-
-HAPPY_REASON_FEATS "Proezas de marav."
 
 str_ldl_EditQueueReallyDelete "¿Eliminar de forma permanente la cola %s?"
 

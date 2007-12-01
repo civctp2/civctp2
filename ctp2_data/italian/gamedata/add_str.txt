@@ -341,7 +341,6 @@ QUICKSAVE_NAME "SALVATAGGIO RAPIDO"
 
 # Scenario editor <CHANGEME>
 str_ldl_Confirm_Restart		"Così facendo riavvierai la partita. Sei sicuro?"
-REGARD_EVENT_WONDER "{player[0].civ_name_plural#ARTICLE_CAP} sono impressionati per le incredibili meraviglie possedute dalla nostra nazione."
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Opzioni avanzate"
@@ -391,8 +390,6 @@ str_profile_EndTurnSound "Suono di fine turno"
 
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Info mappa"
-
-HAPPY_REASON_FEATS "Meraviglia costruita"
 
 str_ldl_EditQueueReallyDelete "Vuoi eliminare definitivamente la coda %s?"
 

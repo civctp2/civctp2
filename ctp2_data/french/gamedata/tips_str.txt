@@ -2,8 +2,8 @@
 #
 # Project      : Call To Power 2
 # File type    : String text file
-# Description  : Civ specific strings, e.g civ names, civ leaders,
-#                city names (French)
+# Description  : Tooltip and status bar strings (French)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -13,6 +13,25 @@
 #
 # This material has been developed at apolyton.net by the Apolyton CtP2 
 # Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized strings for tooltips and the status bar.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
 #
 #----------------------------------------------------------------------------
 #
@@ -486,13 +505,13 @@ STATUSBAR_CITYMAN_MAIN_BUILDQUEUE_DISPLAY		"Elément actuellement en construction
 TOOLTIP_CITYMAN_MAIN_BUILDQUEUE_DISPLAY			"En cours de construction"
 STATUSBAR_CITYMAN_MAIN_CURRITEM_DISPLAY			"Informations sur l'élément en cours de construction."
 TOOLTIP_CITYMAN_MAIN_CURRITEM_DISPLAY			"Info construction"
-STATUSBAR_CITYMAN_MAIN_UNITSAVAIL_BUTTON		"Cliquez ici pour afficher la liste de toutes les unités disponibles."	
+STATUSBAR_CITYMAN_MAIN_UNITSAVAIL_BUTTON		"Cliquez ici pour afficher la liste de toutes les unités disponibles."
 TOOLTIP_CITYMAN_MAIN_UNITSAVAIL_BUTTON			"Unités"
-STATUSBAR_CITYMAN_MAIN_IMPAVAIL_BUTTON			" Cliquez ici pour afficher la liste de tous les aménagements disponibles."	
+STATUSBAR_CITYMAN_MAIN_IMPAVAIL_BUTTON			" Cliquez ici pour afficher la liste de tous les aménagements disponibles."
 TOOLTIP_CITYMAN_MAIN_IMPAVAIL_BUTTON			"Aménagements"
-STATUSBAR_CITYMAN_MAIN_WONDERSAVAIL_BUTTON		"Cliquez ici pour afficher la liste de toutes les merveilles disponibles."	
+STATUSBAR_CITYMAN_MAIN_WONDERSAVAIL_BUTTON		"Cliquez ici pour afficher la liste de toutes les merveilles disponibles."
 TOOLTIP_CITYMAN_MAIN_WONDERSAVAIL_BUTTON		"Merveilles"
-STATUSBAR_CITYMAN_MAIN_ITEMSAVAIL_BUTTON		"Liste de tous les objets disponibles."	
+STATUSBAR_CITYMAN_MAIN_ITEMSAVAIL_BUTTON		"Liste de tous les objets disponibles."
 TOOLTIP_CITYMAN_MAIN_ITEMSAVAIL_BUTTON			"Objets disponibles"
 STATUSBAR_CITYMAN_MAIN_ADD_BUTTON			"Sélectionnez un objet de la colonne de gauche et ajoutez-le à la liste d'attente."
 TOOLTIP_CITYMAN_MAIN_ADD_BUTTON				"Ajouter à liste d'attente"

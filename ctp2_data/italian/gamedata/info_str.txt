@@ -16,6 +16,25 @@
 #
 #----------------------------------------------------------------------------
 #
+# Remarks
+#
+# - This file contains all the localized strings for the messages.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
 # Modifications from the original Activision code:
 #
 # - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
@@ -200,7 +219,6 @@ CITIES_CAPTURED_VICTIM			"{city[0].name} è caduta nelle mani di una forza nemica
 CAPITAL_CITY_CAPTURED_VICTIM		"La nostra capitale, {city[0].name} è stata catturata dalle forze nemiche!"
 CAPITAL_CITY_CAPTURED_ATTACKER		"Una vittoria decisiva! Abbiamo catturato la capitale {player[0].civ_name_plural#PREPOSITION}."
 CIV_STARTED_WAR				"{player[0].civ_name_plural#ARTICLE_CAP} sono entrati in guerra con {player[1].civ_name_plural#ARTICLE}."
-#ADVANCE_FROM_CAPTURING_CITY		"Saccheggiando la città di {city[0].name}, recentemente conquistata, scopri i segreti {advance[0].name#ARTICLED_PREPOSITION}." # old string
 ADVANCE_FROM_CAPTURING_CITY		"{player[0].sir_cap}, while looting the recently conquered city of {city[0].name}, our troops took the secret of {advance[0].name}."
 ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, we were horrified to discover that the {player[1].civ_name_plural} were able not only to take our city of {city[0].name}, but also to steal the secret of {advance[0].name}."
 
@@ -506,6 +524,7 @@ ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare w
 CIV2DOVES				"The Dove Party dominates parliament! They have vetoed this aggression."
 CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 
+
 #New Messages#
 UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
 UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."

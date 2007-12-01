@@ -346,7 +346,6 @@ QUICKSAVE_NAME "SAUV. RAPIDE"
 
 # Scenario editor <CHANGEME>
 str_ldl_Confirm_Restart		"Etes-vous sûr de vouloir recommencer ?"
-REGARD_EVENT_WONDER "Les {player[0].civ_name_plural} sont impressionnés par les merveilles que votre nation possède."
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Options avancées"
@@ -393,9 +392,6 @@ str_profile_EndTurnSound "Signal Fin de Tour"
 
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Info carte"
-
-# One more reason for happiness display on city manager
-HAPPY_REASON_FEATS "Exploits"
 
 # A different kind of disconnection message for network games
 NETWORK_ACTIVENET_LOST "Connexion au serveur Activenet perdue, retour à la salle d'attente."

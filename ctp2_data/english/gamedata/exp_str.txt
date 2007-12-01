@@ -1,54 +1,99 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Happy reasons and score catergory strings (English)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the happiness and score category related strings.
+#   names, city names, emissary photos and diplomacy flags.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved HAPPY_REASON_FEATS from add_str.txt.
+#
+#----------------------------------------------------------------------------
+
 ##Happiness Lines##
-HAPPY_REASON_CITY_SIZE "City Size"
-HAPPY_REASON_DISTANCE_FROM_CAPITOL "Capitol Distance"
+HAPPY_REASON_CITY_SIZE			"City Size"
+HAPPY_REASON_DISTANCE_FROM_CAPITOL	"Capitol Distance"
 
-HAPPY_REASON_ENEMY_ACTION "Enemy Action"
-HAPPY_REASON_POLLUTION "Pollution"
-HAPPY_REASON_STARVATION "Starvation"
-HAPPY_REASON_PEACE_MOVEMENT "War Discontent"
-HAPPY_REASON_WORKDAY "Workday"
-HAPPY_REASON_WAGES "Wages"
-HAPPY_REASON_RATIONS "Rations"
-HAPPY_REASON_MARTIAL_LAW "Martial Law"
-HAPPY_REASON_ENTERTAINERS "Entertainers"
-HAPPY_REASON_BUILDINGS "Buildings"
-HAPPY_REASON_WONDERS "Wonders"
-HAPPY_REASON_CRIME "Crime"
-HAPPY_REASON_HAPPINESS_ATTACK "Happiness Attacks"
-HAPPY_REASON_SLAVES_TAKEN "Slaves Taken"
-HAPPY_REASON_INDULGENCES "Indulgences"
-HAPPY_REASON_BIO_INFECTION "Bio-Infection"
-HAPPY_REASON_REFORMATION "Reformation"
-HAPPY_REASON_POP_TYPE_REMOVED "Population Removed"
-HAPPY_REASON_POP_TYPE_ADDED "Population Added"
-HAPPY_REASON_SOOTHSAY "Soothsayers"
-HAPPY_REASON_POST_REVOULTION_BLISS "Revolutionary Bliss"
-HAPPY_REASON_EMANCIPATION "Emancipation"
-HAPPY_REASON_WONDER_TURNS_REMAINING "Wonder turns left"
-HAPPY_REASON_ATTACKED_CONVERTER "Attacked converter"
-HAPPY_REASON_ASSASSINATION "Cabinet bombed"
-HAPPY_REASON_NUM_CITIES "Empire size"
-HAPPY_REASON_CONQUEST_DISTRESS "Conquest Distress"
-HAPPY_REASON_SECTHAPPY "Sectarian Happiness"
+HAPPY_REASON_ENEMY_ACTION		"Enemy Action"
+HAPPY_REASON_POLLUTION			"Pollution"
+HAPPY_REASON_STARVATION			"Starvation"
+HAPPY_REASON_PEACE_MOVEMENT		"War Discontent"
+HAPPY_REASON_WORKDAY			"Workday"
+HAPPY_REASON_WAGES			"Wages"
+HAPPY_REASON_RATIONS			"Rations"
+HAPPY_REASON_MARTIAL_LAW		"Martial Law"
+HAPPY_REASON_ENTERTAINERS		"Entertainers"
+HAPPY_REASON_BUILDINGS			"Buildings"
+HAPPY_REASON_WONDERS			"Wonders"
+HAPPY_REASON_CRIME			"Crime"
+HAPPY_REASON_HAPPINESS_ATTACK		"Happiness Attacks"
+HAPPY_REASON_SLAVES_TAKEN		"Slaves Taken"
+HAPPY_REASON_INDULGENCES		"Indulgences"
+HAPPY_REASON_BIO_INFECTION		"Bio-Infection"
+HAPPY_REASON_REFORMATION		"Reformation"
+HAPPY_REASON_POP_TYPE_REMOVED		"Population Removed"
+HAPPY_REASON_POP_TYPE_ADDED		"Population Added"
+HAPPY_REASON_SOOTHSAY			"Soothsayers"
+HAPPY_REASON_POST_REVOULTION_BLISS	"Revolutionary Bliss"
+HAPPY_REASON_EMANCIPATION		"Emancipation"
+HAPPY_REASON_WONDER_TURNS_REMAINING	"Wonder turns left"
+HAPPY_REASON_ATTACKED_CONVERTER		"Attacked converter"
+HAPPY_REASON_ASSASSINATION		"Cabinet bombed"
+HAPPY_REASON_NUM_CITIES			"Empire size"
+HAPPY_REASON_CONQUEST_DISTRESS		"Conquest Distress"
+HAPPY_REASON_SECTHAPPY			"Sectarian Happiness"
+HAPPY_REASON_FEATS			"Feats of Wonder"
 
-SCORE_CAT_FEATS "Feats:"
-SCORE_CAT_ADVANCES "Advances:"
-SCORE_CAT_WONDERS "Wonders:"
-SCORE_CAT_POPULATION "Population:"
-SCORE_CAT_RANK "Overall Ranking:"
-SCORE_CAT_OPPONENTS_CONQUERED "Empires Defeated:"
-SCORE_CAT_CITIES0TO30 "Cities < 30,000"
-SCORE_CAT_CITIES30TO100 "30,000 <= Cities < 100,000"
-SCORE_CAT_CITIES100TO500 "100,000 <= Cities < 500,000"
-SCORE_CAT_CITIES500PLUS "Cities > 500,000"
-SCORE_CAT_CITIES_RECAPTURED "Conquered Cities Recaptured:"
-SCORE_CAT_IN_PROGRESS "Game in progress:"
-SCORE_CAT_DEFEAT "Defeat!"
-SCORE_CAT_WONDER_VICTORY "Victory by Wonder!"
-SCORE_CAT_ALLIED_VICTORY "Allied Victory!"
-SCORE_CAT_SOLO_VICTORY "Solo Victory!"
-SCORE_CAT_UNKNOWN "***Unknown***"
+SCORE_CAT_FEATS				"Feats:"
+SCORE_CAT_ADVANCES			"Advances:"
+SCORE_CAT_WONDERS			"Wonders:"
+SCORE_CAT_POPULATION			"Population:"
+SCORE_CAT_RANK				"Overall Ranking:"
+SCORE_CAT_OPPONENTS_CONQUERED		"Empires Defeated:"
+SCORE_CAT_CITIES0TO30			"Cities < 30,000"
+SCORE_CAT_CITIES30TO100			"30,000 <= Cities < 100,000"
+SCORE_CAT_CITIES100TO500		"100,000 <= Cities < 500,000"
+SCORE_CAT_CITIES500PLUS			"Cities > 500,000"
+SCORE_CAT_CITIES_RECAPTURED		"Conquered Cities Recaptured:"
+SCORE_CAT_IN_PROGRESS			"Game in progress:"
+SCORE_CAT_DEFEAT			"Defeat!"
+SCORE_CAT_WONDER_VICTORY		"Victory by Wonder!"
+SCORE_CAT_ALLIED_VICTORY		"Allied Victory!"
+SCORE_CAT_SOLO_VICTORY			"Solo Victory!"
+SCORE_CAT_UNKNOWN			"***Unknown***"
 
 
 
-SET_PRICE "Set Price"
+SET_PRICE				"Set Price"
