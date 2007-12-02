@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : String table user interface object
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

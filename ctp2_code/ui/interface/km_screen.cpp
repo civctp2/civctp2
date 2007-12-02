@@ -56,8 +56,8 @@
 #include "controlpanelwindow.h"
 #include "ctp2_Static.h"
 
-extern C3UI			*g_c3ui;
-extern KEYMAP		*theKeyMap;
+extern C3UI         *g_c3ui;
+extern KEYMAP       *theKeyMap;
 extern StringDB     *g_theStringDB;
 
 namespace
@@ -66,13 +66,13 @@ namespace
     enum KM 
     {
         KM_BASIC,
-	    KM_UNIT,
-	    KM_SCREEN,
-	    KM_MAP,
-	    KM_GAME,
+        KM_UNIT,
+        KM_SCREEN,
+        KM_MAP,
+        KM_GAME,
 
         // placeholder, used as counter
-	    KM_MAX
+        KM_MAX
     };
 
     class TabDescriptor
@@ -112,7 +112,7 @@ namespace
             KEY_FUNCTION_NEXT_ITEM,
             KEY_FUNCTION_KEYBOARD_SELECT_UNIT,
             KEY_FUNCTION_NEXT_ROUND,
-//          KEY_FUNCTION_ENDTURN,           // CTP2: "--" placeholder in km_screen.ldl				
+//          KEY_FUNCTION_ENDTURN,           // CTP2: "--" placeholder in km_screen.ldl
         };
 
     TabDescriptor const TAB_BASIC 
@@ -136,10 +136,10 @@ namespace
             KEY_FUNCTION_CREATE_PARK,
             KEY_FUNCTION_SPACE_LAUNCH,
             // Apolyton additions
-            KEY_FUNCTION_DESCEND,           // CTP2: "--" placeholder in km_screen.ldl 
-            KEY_FUNCTION_PARADROP,          
-            KEY_FUNCTION_GROUP_ARMY, 
-            KEY_FUNCTION_UNGROUP_ARMY, 
+            KEY_FUNCTION_DESCEND,
+            KEY_FUNCTION_PARADROP,
+            KEY_FUNCTION_GROUP_ARMY,
+            KEY_FUNCTION_UNGROUP_ARMY,
             KEY_FUNCTION_MOVE_ORDER,
             KEY_FUNCTION_END_UNIT_TURN,
             KEY_FUNCTION_EXECUTE_ORDERS,
@@ -187,7 +187,7 @@ namespace
         {
             KEY_FUNCTION_TOGGLE_CITY_NAMES,
             KEY_FUNCTION_TOGGLE_TRADE_ROUTES,
-            KEY_FUNCTION_CENTER_MAP,				
+            KEY_FUNCTION_CENTER_MAP,
             KEY_FUNCTION_CLOSE,
             KEY_FUNCTION_TOGGLE_RADAR,
             KEY_FUNCTION_TOGGLE_CONTROL_PANEL,
@@ -210,9 +210,11 @@ namespace
 
     KEY_FUNCTION const  GAME_FUNCTION[]         =
         {
-            KEY_FUNCTION_REMAP_KEYBOARD,			
+            KEY_FUNCTION_REMAP_KEYBOARD,
             KEY_FUNCTION_OPEN_OPTIONS_SCREEN,
             KEY_FUNCTION_SOUND_OPTIONS,
+            // Apolyton addition (Ahenobarb)
+            KEY_FUNCTION_MUSIC_OPTIONS,
             KEY_FUNCTION_GRAPHICS_OPTIONS,
             KEY_FUNCTION_GAMEPLAY_OPTIONS,
             KEY_FUNCTION_ADVANCED_OPTIONS,
@@ -223,8 +225,6 @@ namespace
             KEY_FUNCTION_SAVE_WORLD,
             KEY_FUNCTION_LOAD_WORLD,
             KEY_FUNCTION_QUIT,
-            // Apolyton addition (Ahenobarb)
-            KEY_FUNCTION_MUSIC_OPTIONS,
         };
     TabDescriptor const TAB_GAME
         ("Game", sizeof(GAME_FUNCTION) / sizeof(GAME_FUNCTION[0]));
@@ -250,12 +250,12 @@ namespace
 //----------------------------------------------------------------------------
 
     ctp2_Static  *      s_groupStatic       = NULL;
-    c3_ListBox	*       s_keyList			= NULL;
-    c3_PopupWindow *    s_km_screen	        = NULL;
-    ctp2_Button	*       s_resetButton		= NULL;
+    c3_ListBox  *       s_keyList           = NULL;
+    c3_PopupWindow *    s_km_screen         = NULL;
+    ctp2_Button *       s_resetButton       = NULL;
     KM                  s_selected          = KM_BASIC;
-    aui_StringTable *   s_strings		    = NULL;
-    ctp2_Button	**      s_switch			= NULL;
+    aui_StringTable *   s_strings           = NULL;
+    ctp2_Button **      s_switch            = NULL;
 
 //----------------------------------------------------------------------------
 // Function definitions
@@ -333,7 +333,7 @@ void km_screen_loadKeyList(void)
             if (item->GetName())
             {
     		    s_keyList->AddItem(item);
-}
+			}
             else
             {
                 // Function not supported by this mod
@@ -455,19 +455,19 @@ sint32	g_isKMScreen = FALSE;
 
 
 
-sint32	km_screen_displayMyWindow()
+sint32 km_screen_displayMyWindow()
 {
 	g_isKMScreen = TRUE;
 
 	sint32 const    retval  = s_km_screen ? 0 : km_screen_Initialize();
 	km_screen_loadKeyList();
 
-    if (g_c3ui)
-    {
-	    AUI_ERRCODE const   auiErr = g_c3ui->AddWindow(s_km_screen);
-	    Assert(auiErr == AUI_ERRCODE_OK);
-        g_c3ui->RegisterCleanup(&km_screen_Cleanup);
-}
+	if (g_c3ui)
+	{
+		AUI_ERRCODE const   auiErr = g_c3ui->AddWindow(s_km_screen);
+		Assert(auiErr == AUI_ERRCODE_OK);
+		g_c3ui->RegisterCleanup(&km_screen_Cleanup);
+	}
 
 	return retval;
 }
@@ -480,8 +480,8 @@ sint32 km_screen_removeMyWindow(uint32 action)
 
 
 	if (g_c3ui && s_km_screen) 
-{
-	    AUI_ERRCODE const auiErr = g_c3ui->RemoveWindow(s_km_screen->Id());
+	{
+		AUI_ERRCODE const auiErr = g_c3ui->RemoveWindow(s_km_screen->Id());
 		Assert( auiErr == AUI_ERRCODE_OK );
 	}
 
@@ -499,26 +499,26 @@ sint32 km_screen_removeMyWindow(uint32 action)
 
 void km_screen_Cleanup()
 {
-    g_isKMScreen    = FALSE;
+	g_isKMScreen    = FALSE;
 
 #define mycleanup(mypointer) { delete mypointer; mypointer = NULL; };
 
 	if (g_c3ui && s_km_screen)
-    {
-    	g_c3ui->RemoveWindow(s_km_screen->Id());
-    }
+	{
+		g_c3ui->RemoveWindow(s_km_screen->Id());
+	}
 
 	mycleanup( s_groupStatic );
 
-    if (s_switch)
-    {
-	    for (size_t i = 0; i < KM_MAX; ++i) 
-        {
-		mycleanup( s_switch[i] );
+	if (s_switch)
+	{
+		for (size_t i = 0; i < KM_MAX; ++i) 
+		{
+			mycleanup( s_switch[i] );
+		}
+		delete [] s_switch;
+		s_switch = NULL;
 	}
-        delete [] s_switch;
-        s_switch = NULL;
-    }
 
 	mycleanup( s_resetButton );
 	mycleanup( s_keyList );
@@ -533,7 +533,8 @@ void km_screen_Cleanup()
 
 void km_screen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	if(km_screen_removeMyWindow(action)) {
+	if(km_screen_removeMyWindow(action))
+	{
 	}
 }
 
@@ -548,19 +549,19 @@ void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void
 
 void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	if (AUI_SWITCH_ACTION_ON == action) 
-    {
+	if (AUI_SWITCH_ACTION_ON == action)
+	{
 		s_switch[s_selected]->SetToggleState(false);
 
-		for (size_t i = 0; i < KM_MAX; ++i) 
-        {
-			if (control == s_switch[i]) 
-            {
+		for (size_t i = 0; i < KM_MAX; ++i)
+		{
+			if (control == s_switch[i])
+			{
 				s_switch[i]->SetToggleState(true);
 				s_selected = static_cast<KM>(i);
-		        km_screen_loadKeyList();
+				km_screen_loadKeyList();
 			}
-		}		
+		}
 	}
 }
 
@@ -628,7 +629,7 @@ AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldl
 
 	Update();
 
- 	return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 
 //----------------------------------------------------------------------------
@@ -663,13 +664,20 @@ MBCHAR const * km_GetKeyName(uint32 code)
 		case '!' + 128: strcpy(str, "F11"); break;
 		case '@' + 128: strcpy(str, "F12"); break;
 		default:
-			if(code >= ('1' | 0x80) && code <= ('9' | 0x80)) {
+			if(code >= ('1' | 0x80) && code <= ('9' | 0x80))
+			{
 				sprintf(str, "F%d", code & 0x7f - '1' + 1);
-			} else if(isprint(code)) {
+			}
+			else if(isprint(code))
+			{
 				sprintf(str, "%c", code);
-			} else if(code >= 1 && code <= 26) {
+			}
+			else if(code >= 1 && code <= 26)
+			{
 				sprintf(str, "%s + %c", ctrl, code + 'a' - 1);
-			} else {
+			}
+			else
+			{
 				sprintf(str, "%c", code); 
 			}
 			break;
@@ -681,10 +689,10 @@ MBCHAR const * km_GetKeyName(uint32 code)
 void KeyListItem::Update(void)
 {
 	c3_Static * subName = static_cast<c3_Static *>(GetChildByIndex(0));
-    subName->SetText(m_name);
+	subName->SetText(m_name);
 
-    c3_Static * subKey  = static_cast<c3_Static *>(GetChildByIndex(1));
-    subKey->SetText(km_GetKeyName(m_keycode));
+	c3_Static * subKey  = static_cast<c3_Static *>(GetChildByIndex(1));
+	subKey->SetText(km_GetKeyName(m_keycode));
 }
 
 void KeyListItem::UpdateKey( uint32 keycode )
@@ -723,18 +731,18 @@ MBCHAR const * KeyListItem::GetKeyFromKMScreen(uint32 keycode)
 sint32 KeyListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	switch (column) 
-    {
-    default:
-        break;
+	{
+		default:
+			break;
 
-	case 0:
-	case 1:
-        {
-		    c3_Static * i1 = (c3_Static *)this->GetChildByIndex(column);
-		    c3_Static * i2 = (c3_Static *)item2->GetChildByIndex(column);
+		case 0:
+		case 1:
+		{
+			c3_Static * i1 = (c3_Static *)this->GetChildByIndex(column);
+			c3_Static * i2 = (c3_Static *)item2->GetChildByIndex(column);
 
-		return strcmp(i1->GetText(), i2->GetText());
-	}
+			return strcmp(i1->GetText(), i2->GetText());
+		}
 	}
 
 	return 0;
