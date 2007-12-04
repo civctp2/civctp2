@@ -18,7 +18,7 @@
 #
 # Remarks
 #
-# - This file contains all the localized strings for the messages.
+# - This file contains all the localized strings for the messages including buttons.
 #   It contains nothing else.
 # - The order of the strings has been synchronized in the English, French, 
 #   German, Italian and Spanish version. This has not been done for the 
@@ -89,6 +89,12 @@ ALLIANCE_BROKEN				"Die ehrlosen {player[1].civ_name_plural} haben uns angegriff
 ALLIANCE_BROKEN_BY_YOU			"{player[0].leader_name#SIR_CAP}, wir haben entgegen unserer Bündnisvereinbarung mit den {player[1].civ_name_plural#DAT} gehandelt, so dass sie nun entsprechend schlecht auf uns zu sprechen sind! Auch andere Nationen werden diesen Vertrauensbruch nicht gutheißen!"
 ALLIANCE_BROKEN_BY_3RD			"{player[0].leader_name#SIR_CAP}, wir haben erfahren, dass die {player[1].civ_name_plural} gegen ihre Allianz mit den {player[2].civ_name_plural} verstoßen haben."
 ALL_AGREEMENTS_BROKEN_BY_AI		"{player[0].leader_name#SIR_CAP}, {player[1].leader_name} hat uns eine Nachricht zukommen lassen: Aufgrund äußerer Anlässe und Umstände {player[2].country_name#CAN_FRONT} die mit Euch getroffenen Vereinbarungen zukünftig nicht mehr einhalten. Betrachtet daher alle Abkommen und Bündnisse als null und nichtig."
+YOU_BROKE_ALLIANCE			"Wir haben gegen unsere Allianzvereinbarung mit den {player[0].civ_name_plural#DAT} verstoßen."
+YOU_BROKE_CEASE_FIRE			"Wir haben unser Friedensabkommen mit den {player[0].civ_name_plural#DAT} gebrochen."
+CANT_ATTACK_ALLIES			"Wir haben eine Allianz mit den {player[0].civ_name_plural#DAT} geschlossen und können daher nicht angreifen, ohne dieses Bündnis vorher aufzulösen. Wollt Ihr die Allianz jetzt beenden?"
+CANT_ATTACK_ALLIES_CAN_EXPEL		"Wollt Ihr wirklich das mit den {player[0].civ_name_plural#DAT} geschlossene Abkommen brechen? Ihr könnt die Einheiten auch vertreiben, ohne gegen das Abkommen zu verstoßen."
+CANT_ATTACK_HAVE_TREATY			"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollt Ihr wirklich fortfahren?"
+CANT_ATTACK_TEAMMATES			"{player[0].leader_name} gehört zu Eurem Team. Mitglieder des eigenen Teams können nicht angegriffen werden."
 
 ## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN			"Die ehrlosen {player[0].civ_name_plural} haben gegen unser Friedensabkommen verstoßen, indem sie uns grundlos angreifen."
@@ -108,6 +114,7 @@ ATTACK_ENEMY_BROKEN_BY_YOU		"Ihr habt Eure Vereinbarung mit den {player[0].civ_n
 UNIT_COMPLETED				"In {city[0].name} {unit[0].name#UNDEF_NEW_IS_READY} fertig gestellt."
 NEW_UNIT_COMPLETED			"In {city[0].name} {unit[0].name#UNDEF_NEW_IS_READY} fertig gestellt. Nächstes Bauprojekt: {action[0].name}."
 CITY_BUILD_QUEUE_IS_EMPTY		"Die Bauliste der Stadt {city[0].name} ist leer."
+TITLE_CITY_BUILD_QUEUE_IS_EMPTY		"{city[0].name}"
 UNIT_COMPLETED_QUEUE_EMPTY		"In {city[0].name} {unit[0].name#UNDEF_NEW_IS_READY} fertig gestellt. Die Bauliste der Stadt ist jetzt leer."
 BUILDING_BUILT				"In {city[0].name} {building[0].name#UNDEF_NEW_IS_READY} fertig gestellt. Nächstes Bauprojekt: {action[0].name}."
 BUILDING_BUILT_QUEUE_EMPTY		"In {city[0].name} {building[0].name#UNDEF_NEW_IS_READY} fertig gestellt. Die Bauliste der Stadt ist jetzt leer."
@@ -147,6 +154,7 @@ WAR_OVER				"Die {player[0].civ_name_plural} führen keinen Krieg mehr gegen die 
 TRADE_PIRATED				"{player[0].leader_name#SIR_CAP}, unser Handelsweg von {city[0].name} nach {city[1].name} wurde von den {player[1].civ_name_plural#DAT} überfallen."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].leader_name#SIR_CAP}, die {player[1].civ_name_plural} haben ein Handelsembargo gegen uns verhengt. Der Handel auf allen Handelswege {player[1].country_name#TOWARDS} wurde eingestellt! Außerdem haben wir alle Karawanen auf diesen Routen verloren."
 TRADE_ROUTES_BROKEN_BY_WAR		"Es gibt beunruhigende Neuigkeiten, {player[0].leader_name#SIR_CAP}. Wegen des zwischen uns und {player[1].country_name#DAT} entbrannten Konflikts wurde der Handel auf unseren Handelswegen, die in {player[1].civ_name_singular#UNDEF_PLURAL_ACC} Städte führen, eingestellt. Außerdem haben wir alle Karawanen, die dort unterwegs waren, verloren."
+SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} hat den Handelsweg für den Handel mit {good[0].name#PLURAL} von {city[0].name} nach {city[1].name} eingestellt."
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE			"Der Verkauf {good[0].name#OF_PLURAL} an {city[1].name} bringt uns einen Gewinn von {gold[0].value} Gold. Wir brauchen dafür {value[0].value} Karawanen."
@@ -213,6 +221,7 @@ UNIT_OBSOLETE_CIVWIDE			"Durch die Entdeckung {advance[0].name#ARTICLE_GEN} sind
 NO_SUPPORT				"Wegen mangelnder Unterhaltszahlungen mussten Einheiten aufgelöst werden."
 ONE_OR_MORE_UNITS_WILL_CRASH		"Wegen akuten Treibstoffmangels sollte {unit[1].name#PRONOUN_YOUR} bis zum Ende dieser Runde unbedingt eine Stadt oder auf einen Luftwaffenstützpunkt erreicht haben!"
 UNIT_EXPELLED				"Die {player[0].civ_name_plural} haben einige unserer Einheiten aus ihrem Territorium vertrieben."
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir Eure Truppen so schnell wie möglich vertreiben."
 
 ## Warfare ##
 CITIES_CAPTURED_VICTIM			"Die Stadt {city[0].name} ist von feindlichen Truppen erobert worden!"
@@ -276,6 +285,7 @@ SLAVE_FAILED_VICTIM			"Die Verteidigungseinheiten der Stadt {city[0].name} haben
 PROTECTED_FROM_SLAVERY_VICTIM		"Großartige Nachrichten: Die Stadtmauern haben die Bevölkerung von {city[0].name} vor der Sklaverei bewahrt!"
 PROTECTED_FROM_SLAVERY_ATTACKER		"Der Überfall unserer Sklavenhändler auf die Stadt {city[0].name} ist an den dort vorhandenen Stadtmauern gescheitert."
 SETTLER_SLAVED_VICTIM			"Es ist furchtbar!! Unser Siedler ist spurlos verschwunden. Vermutlich stecken feindliche Sklavenhändler hinter dieser mysteriösen Sache."
+VICTORY_ENSLAVEMENT_CITY		"{unit[0].name#PRONOUN_YOUR} hat einen neuen Sklaven gefangen genommen und ihn nach {city[0].name} geschickt."
 
 ## Establish Embassy ##
 ## Diplomat Action ##
@@ -449,10 +459,30 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"Wir haben soeben erfahren, dass die {player
 ### Multiplayer ###
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
+NETWORK_PLAYER_LEFT			"{action[0].name} hat das Spiel verlassen. Ein Computerspieler wird seine Nation übernehmen."
+NETWORK_PLAYER_JOINED			"{action[0].name} hat die Kontrolle über die {player[0].civ_name_plural} übernommen."
+NETWORK_DIFFERENT_PLAYER_JOINED		"{action[0].name} will als die {player[0].civ_name_plural} am Spiel teilnehmen, diese Nation war aber ursprünglich einem anderen Spieler zugeordnet. Sollen er/sie rausgeworfen werden?"
+NETWORK_YOU_ARE_NOW_HOST		"Ihr seid nun der Host dieses Spiels."
+NETWORK_NEW_HOST			"{action[0].name} ist jetzt der Host dieses Spiels."
+NETWORK_SESSION_LOST			"Die Verbindung wurde abgebrochen, kehre zur Lobby zurück."
+NETWORK_ACTIVENET_LOST			"Verbindung zum Activenet-Server abgebrochen, Rückkehrversuch zur Lobby."
+NETWORK_WAITING_ON_PLAYERS		"Warte auf Spieler"
+NETWORK_WAITING_FOR_DATA		"Warte auf Daten"
+NETWORK_RESYNCING			"Resynchronisierung"
+NETWORK_SENDER_SYSTEM			"System"			# Used as the "sender" of chat messages that are sent by the engine, not another player.
+NETWORK_TIME_LEFT			"Restzeit"
+NETWORK_CURRENT_PLAYER			"Akt. Spieler"
+NETWORK_PLAYER_STATUS_HUMAN		"Lokal"
+NETWORK_PLAYER_STATUS_CONNECTED		"Verbunden"
+NETWORK_PLAYER_STATUS_AI_OPEN		"KI (Offen)"
+NETWORK_PLAYER_STATUS_AI_CLOSED		"KI (Geschlossen)"
+
 NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} von den {player[0].civ_name_plural#DAT}, Ihr seid dran."
 NEXT_EMAIL_PLAYER			"Bitte mailt den auf Eurem Desktop gespeicherten Spielstand an {player[0].leader_name}, ({action[0].name}) {player[0].civ_name_plural#ARTICLE_GEN}."
 HOTSEAT_CITY_ATTACKED			"Die {player[0].civ_name_plural} haben die Stadt {city[0].name} mit {unit[0].name#UNDEF_DAT} angegriffen."
 HOTSEAT_ARMY_ATTACKED			"Die {player[0].civ_name_plural} haben {unit[1].name#PRONOUN_YOUR_ACC} mit {unit[0].name#UNDEF_DAT} angegriffen."
+HOTSEAT_HUMAN				"Mensch"
+HOTSEAT_AI				"Computer"
 
 ### Trust Warning Messages ###
 ### Global Trust Loss ###
@@ -478,6 +508,12 @@ NANO_TERROR_FAILED_VICTIM		"Unsere Wissenschaftler haben die feindliche Sabotage
 NANO_TERROR_COMPLETE_VICTIM		"Fremde Übeltäter haben in der Stadt {city[0].name} einen Nanovirus freigesetzt."
 NANO_TERROR_FAILED_AGRESSOR		"Euer Plan zur Rettung der Welt scheint noch nicht so schnell aufzugehen: Euer Nanoviren-Angriff ist fehlgeschlagen."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Trotz Euer Vertuschungsversuche wurden Eure Absichten durchschaut: Eine weitere feindliche Stadt wurde gegen Nanoviren-Angriffe immunisiert."
+
+### From the tutorial moved to the common game
+T_NO_KILL_CIVILIAN			"Ein Angriff auf {unitrecord[0].name#ARTICLE_ACC} {player[0].civ_name_plural#ARTICLE_GEN} führt zu diplomatischen Spannungen.\n\n Um dies zu vermeiden, könnt Ihr zivile Einheiten wie {unitrecord[0].name#PLURAL} vertreiben, indem Ihr eine Eurer Militäreinheiten aktiviert und <c:0,50,200>Vertreiben<e> wählt." 
+
+#Miscellaneous
+MOVED_ALL_ARMIES_GENIUS			"Ihr habt alle Eure Truppen bewegt: Ihr müsst ein Genie sein!"
 
 ########################################
 ### New City Capture Option strings 2.0
@@ -515,9 +551,6 @@ HOSTILE_TERRAIN				"Extremes Wetter beeinträchtigt die Gesundheit {unitrecord[0]
 INSURGENT_SPAWN				"Bewaffnete Rebellen sind vor unserer Stadt {city[0].name} aufgetaucht."
 GUERRILLA_SPAWN				"{unitrecord[0].name#OUR_SINGULAR_CAPS} konnte Partisanenkämpfer für unsere Sache anwerben!"
 
-CANT_ATTACK_HAVE_TREATY			"Mit dieser Aktion verstoßen wir gegen unser Abkommen mit den {player[0].civ_name_plural#DAT}. Wollt Ihr wirklich fortfahren?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"Unser Territorium bietet nicht genug Platz für alle Einheiten {player[0].civ_name_plural#ARTICLE_GEN}, daher bitten sie darum, dass wir Eure Truppen so schnell wie möglich vertreiben."
-
 # New Messages # Belong to somewhere else
 # Doves and hawks there are better names for them
 ATTACK_WARNING				"Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[0].civ_name_plural#DAT} den Krieg erklären?"
@@ -529,3 +562,52 @@ BARBWAR					"These savages threaten our citizens. Pacification operations have b
 UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
 UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."
 RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
+
+
+###############
+##           ##
+##  Buttons  ##
+##           ##
+###############
+
+# Common buttons
+BUTTON_ACCEPT				"Akzeptieren"
+BUTTON_CANCEL				"Zurück"
+BUTTON_CLOSE				"OK"
+BUTTON_GOAL				"Ziel"
+BUTTON_LIBRARY				"Große Bibliothek"
+BUTTON_MAYBE				"Vielleicht"
+BUTTON_YES				"Ja"
+BUTTON_NO				"Nein"
+BUTTON_OK				"OK"
+BUTTON_RANDOM				"Zufällig"
+BUTTON_READY				"OK"
+BUTTON_REJECT				"Ablehnen"
+BUTTON_RESEARCH				"Erforschen"
+BUTTON_SET_PRICE			"Preis festlegen"
+BUTTON_STEAL_THIS			"<- Stehlen"
+BUTTON_EXPEL				"Vertreiben"
+
+# Network buttons
+BUTTON_EJECT				"Rauswerfen"
+BUTTON_LET_THEM_STAY			"Teilnehmen lassen"
+
+# Buttons for quitting the game
+BUTTON_CONTINUE				"Fortfahren"
+BUTTON_END_GAME				"Spiel beenden"
+BUTTON_QUIT_GAME			"Spiel beenden"
+
+# Buttons razing, enslaving etc. of cities
+BUTTON_RAZE				"Schleifen"
+BUTTON_PLUNDER				"Plündern"
+BUTTON_PILLAGE				"Brandschatzen"
+BUTTON_LIBERATE				"Befreien"
+BUTTON_ENSLAVE				"Verklaven"
+BUTTON_FREESLAVES			"Sklaven freilassen"
+BUTTON_OCCUPY				"Besetzen"
+
+# Some odd buttons, are those used?
+ACCEPT					"Akzeptieren"
+REJECT					"Ablehnen"
+YES					"Ja"
+NO					"Nein"

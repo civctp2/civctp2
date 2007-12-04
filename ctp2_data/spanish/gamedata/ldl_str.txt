@@ -35,7 +35,13 @@ str_ldl_Already_Offer	"Ya estás ofreciendo esa mercancía. ¿Sustituyes la oferta 
 ENDGAME_WON_OTHER	"Todos los imperios tendrán ahora que rendir homenaje al nuevo señor, [player[0].leader_name], que ha completado el Proyecto de Vida Alienígena."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
-str_ldl_comma	"."
+str_ldl_comma		"."
+
+AGE_NAME_ANCIENT	"Edad Antigua"
+AGE_NAME_RENAISS	"Edad Renacimiento"
+AGE_NAME_MODERN		"Edad Moderna"
+AGE_NAME_GENETIC	"Edad Genética"
+AGE_NAME_DIAMOND	"Edad del Diamante"
 
 ##String added as per bug report USQA#24
 str_ldl_CreateProposal "Crear propos."
@@ -46,16 +52,7 @@ CAPITALIZATION	"Capitalización "
 INFRASTRUCTURE	"Infraestructura "
 
 
-AGE_NAME_ANCIENT	"Edad Antigua"
-AGE_NAME_RENAISS	"Edad Renacimiento"
-AGE_NAME_MODERN	"Edad Moderna"
-AGE_NAME_GENETIC	"Edad Genética"
-AGE_NAME_DIAMOND	"Edad del Diamante"
-
-YOU_BROKE_ALLIANCE	"Has incumplido una alianza con los {player[0].civ_name_plural}."
-YOU_BROKE_CEASE_FIRE	"Has roto un tratado de paz con los {player[0].civ_name_plural}."
 DIPxxx3_AGREEMENT_END_POLLUTION	"Ecopacto"
-CANT_ATTACK_ALLIES	"Tienes una alianza con los {player[0].civ_name_plural}; no puedes atacarles sin romper primero la alianza. ¿Quieres romper ahora la alianza?"
 X_LAB	"Laboratorio Xenoforma"
 GENE_SEQUENCER	"Secuenciador de genes"
 
@@ -73,7 +70,7 @@ str_ldl_No_caravans_available	"¡No hay caravanas disponibles!"
 str_ldl_CANCEL_OFFER_CAPS	"ANULAR OFERTA"
 str_ldl_No_item_selected_in_list	"¡No se ha seleccionado un objeto en la lista!"
 str_ldl_Foreign_Attitude	"Actitud extranjera"
- str_ldl_Local	"Local"
+str_ldl_Local	"Local"
 str_ldl_Neutral	"Neutral"
 str_ldl_mp_dbase_out_of_synch	"La base de datos no está sincronizada. Volviendo a la sala."
 
@@ -87,10 +84,6 @@ str_ldl_nodialup	"Necesitas marcar para usar INTERNET"
 str_ldl_connectionerr	"Error de conexión a la red"
 str_ldl_Enemy_Moves_Off	"Movimientos enemigos - No"
 str_ldl_Enemy_Moves_On	"Movimientos enemigos - Sí"
-NETWORK_PLAYER_STATUS_HUMAN	"Local"
-NETWORK_PLAYER_STATUS_CONNECTED	"Conectado"
-NETWORK_PLAYER_STATUS_AI_OPEN	"IA (Abierta)"
-NETWORK_PLAYER_STATUS_AI_CLOSED	"IA (Cerrada)"
 KEY_NAME_TAB	"Tabulador"
 KEY_NAME_ENTER	"Intro"
 KEY_NAME_SPACE	"Espacio"
@@ -182,8 +175,6 @@ str_ldl_Turns	"Turnos"
 
 DELETE_QUEUE	"¿Estás seguro de borrar esta cola?"
 str_tbl_ldl_Ongoing	"En progreso"
-BUTTON_CONTINUE	"Continuar"
-BUTTON_END_GAME	"Terminar juego"
 LOADING	"Cargando..."
 
 
@@ -226,9 +217,6 @@ str_ldl_AFB_ECD	"DCE construidos/necesarios:"
 str_ldl_AFB_FIELD	"Campos construidos/necesarios:"
 str_ldl_AFB_CHANCE	"Posibilidades de fallo:"
 
-BUTTON_EXPEL	"Expulsar"
-
-
 str_ldl_Monument_Title	"Monumentos"
 str_ldl_Monument_Upgrade_Available	"Selecciona un monumento para actualizar."
 
@@ -254,10 +242,6 @@ str_ldl_CAPS_ATTACK	"ATACAR"
 str_ldl_CAPS_EXPEL	"EXPULSAR"
 str_ldl_CAPS_CANCEL_MOVE	"ANULAR MOVIMIENTO"
 str_ldl_END_TUTORIAL	"TERMINAR TUTORIAL"
-
-
-CANT_ATTACK_ALLIES_CAN_EXPEL	"¿Quieres incumplir tu tratado con los {player[0].civ_name_plural}? Puedes expulsar a las unidades sin incumplir el tratado."
-
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Necesitas tener una embajada para exigir adelantos."
 str_tbl_ldl_GIFT_MAP	"MAPA DE REGALO"
@@ -303,7 +287,7 @@ str_ldl_Auto_Cycle_Units_Off	"Ciclos autom. unidades - No"
 str_ldl_Auto_Cycle_Units_On	"Ciclos autom. unidades - Sí"
 str_ldl_Battle_View_Off	"Vista de batalla - No"
 str_ldl_Battle_View_On	"Vista de batalla - Sí"
- str_ldl_Walk_Animation_Off	"Animaciones andar - No"
+str_ldl_Walk_Animation_Off	"Animaciones andar - No"
 str_ldl_Walk_Animation_On	"Animaciones andar - Sí"
 str_ldl_Animated_Goods_Off	"Mercancía animada - No"
 str_ldl_Animated_Goods_On	"Mercancía animada - Sí"
@@ -456,7 +440,6 @@ str_tbl_ldl_Total_Negative_Points_Colon	"Total puntos negativos:"
 str_tbl_ldl_Total_Points_Colon	"Puntos totales:"
 str_tbl_ldl_Civ_Score_Colon	"Puntuación Imp.:"
 UNIT_ORDER_TRANSPORTED	"En transporte"
-TITLE_CITY_BUILD_QUEUE_IS_EMPTY	"{city[0].name}"
 
 str_tbl_ldl_The_Diplomats	"Nuestros líderes están ocupados. - No estamos interesados en discutir nada con vosotros \nen estos momentos."
 str_tbl_ldl_Select_a_new	"Selecciona un nuevo adelanto para investigar."
@@ -527,48 +510,6 @@ str_tbl_ldl_From	"Desde"
 str_tbl_ldl_Destination	"Destino"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
-
-
-#NETWORK_PLAYER_LEFT	"[action.1.name] se ha marchado de la partida. El ordenador tomará el control de la civilización del jugador que se marcha."
-#NETWORK_PLAYER_JOINED	"[action.1.name] ha tomado control de los [player.1.civ_name_plural]"
-#NETWORK_DIFFERENT_PLAYER_JOINED	"[action.1.name] va a participar controlando a los [player.1.civ_name_plural], pero esa civilización originalmente era de otra persona. ¿Quieres expulsarle?"
-#BUTTON_EJECT	"Expulsarle"
-#BUTTON_LET_THEM_STAY	"Que se quede"
-#NETWORK_YOU_ARE_NOW_HOST	"Ahora eres el host de esta partida."
-#NETWORK_NEW_HOST	"[action.1.name] es ahora el host de esta partida."
-#NETWORK_SESSION_LOST	"Conexión con el host perdida, vuelve al lobby"
-#NETWORK_WAITING_ON_PLAYERS	"Esperando jugadores"
-#NETWORK_WAITING_FOR_DATA	"Esperando datos"
-#NETWORK_RESYNCING	"Resincronizando"
-
-
-
-BUTTON_ACCEPT	"Aceptar"
-BUTTON_CANCEL	"Cancelar"
-BUTTON_CLOSE	"Cerrar"
-BUTTON_GOAL	"Objetivo"
-BUTTON_LIBRARY	"Biblioteca"
-BUTTON_MAYBE	"Quizá"
-BUTTON_NO	"No"
-BUTTON_OK	"Cerrar"
-BUTTON_RANDOM	"Aleatorio"
-BUTTON_READY	"Listo"
-BUTTON_REJECT	"Rechazar"
-BUTTON_RESEARCH	"Investigar"
-BUTTON_SET_PRICE	"Fijar precio"
-BUTTON_STEAL_THIS	"<- Robar esto"
-BUTTON_YES	"Sí"
-ACCEPT	"Aceptar"
-REJECT	"Rechazar"
-YES	"Sí"
-NO	"No"
-BUTTON_RAZE       "Raze"
-BUTTON_PLUNDER    "Plunder"
-BUTTON_PILLAGE    "Pillage"
-BUTTON_LIBERATE   "Liberate"
-BUTTON_ENSLAVE	  "Enslave"
-BUTTON_FREESLAVES "Free Slaves"
-BUTTON_OCCUPY     "Occupy"
 
 str_ldl_Abort	"Cancelar"
 str_ldl_Open	"Abrir"
@@ -1534,7 +1475,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES	"[player.0.leader_name] es de tu equipo, con lo cual no puedes atacarle."
 
 
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -2854,46 +2794,34 @@ str_ldl_CityWinUnitsTab 		"Unidades"
 # autosave string
 AUTOSAVE_NAME				"AUTOSAVE"
 
-TRADE_ROUTE_RESET 			"¡Restablecer ruta comercial!"
+TRADE_ROUTE_RESET			"¡Restablecer ruta comercial!"
 
-VICTORY_ENSLAVEMENT_CITY 		"Tu {unit[0].name} ha capturado un nuevo esclavo y lo ha enviado a {city[0].name}."
+SHOW_ME						"Enséñamelo"
 
-HOTSEAT_HUMAN 				"Humano"
-HOTSEAT_AI 					"Ordenador"
+TEST_BEGIN_TURN				"El valor de mi valor es {myValue}"
+TEST_UNIT_KILLED			"Han asesinado a un {unit[0].name}"
 
-SHOW_ME 					"Enséñamelo"
-BUTTON_QUIT_GAME 				"Salir de la partida"
+INFOBAR_UNITS				"Unidades: "
+INFOBAR_CITY				"Ciudad: "
+INFOBAR_UNEXPLORED			"Inexplorado"
 
-TEST_BEGIN_TURN 				"El valor de mi valor es {myValue}"
-TEST_UNIT_KILLED 				"Han asesinado a un {unit[0].name}"
+# UNIT_HOPLITE_NEW			"Hoplita" # Unused to be removed
 
-INFOBAR_UNITS 				"Unidades: "
-INFOBAR_CITY 				"Ciudad: "
-INFOBAR_UNEXPLORED 			"Inexplorado"
+UNIT_CATEGORY_GENERIC			"Genérico"
+UNIT_CATEGORY_SETTLER			"Colono"
+UNIT_CATEGORY_AERIAL			"Aéreo"
+UNIT_CATEGORY_NAVAL			"Naval"
+UNIT_CATEGORY_UNDERSEA			"Submarino"
+UNIT_CATEGORY_ATTACK			"Ataque"
+UNIT_CATEGORY_DEFENSE			"Defensa"
+UNIT_CATEGORY_RANGED			"A distancia"
+UNIT_CATEGORY_FLANKER			"Lateral"
+UNIT_CATEGORY_SPECIAL			"Especial"
 
-# UNIT_HOPLITE_NEW 				"Hoplita" # Unused to be removed
+UNIT_LOCATION_IN_FIELD			"En el campo"
+UNIT_LOCATION_IN_SPACE			"En el espacio"
 
-MOVED_ALL_ARMIES_GENIUS 		"¡Has movido todos tus ejércitos, debes de ser un genio!"
-
-UNIT_CATEGORY_GENERIC 			"Genérico"
-UNIT_CATEGORY_SETTLER 			"Colono"
-UNIT_CATEGORY_AERIAL 			"Aéreo"
-UNIT_CATEGORY_NAVAL 			"Naval"
-UNIT_CATEGORY_UNDERSEA 			"Submarino"
-UNIT_CATEGORY_ATTACK 			"Ataque"
-UNIT_CATEGORY_DEFENSE 			"Defensa"
-UNIT_CATEGORY_RANGED 			"A distancia"
-UNIT_CATEGORY_FLANKER 			"Lateral"
-UNIT_CATEGORY_SPECIAL 			"Especial"
-
-UNIT_LOCATION_IN_FIELD 			"En el campo"
-UNIT_LOCATION_IN_SPACE 			"En el espacio"
-
-T_TURN0 					"Éste es el turno 0"
-
-T_CREATE_CITY 				"Se ha creado una ciudad"
-
-ARMY_NAME_PREFIX 				"Ejército #"
+ARMY_NAME_PREFIX				"Ejército #"
 
 #Context menu strings
 CONTEXT_CITY_VIEW 			"Administración de la ciudad"
@@ -3128,6 +3056,7 @@ str_profile_AutoOpenCityWindow                  "Abrir Cola de construc. al crea
 str_profile_ShowEnemyHealth                     "Mostrar Estado de salud enemigos"
 str_profile_ShowCityInfluence                   "Mostrar influencia ciudad"
 str_profile_ShowPoliticalBorders                "Mostrar fronteras nacionales"
+str_profile_EndTurnSound                        "Sonido Finalizar turno"
 str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
 str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 

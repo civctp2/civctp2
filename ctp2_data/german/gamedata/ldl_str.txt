@@ -29,35 +29,32 @@
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-00
-str_ldl_Already_Offer	"Ihr bietet dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
+str_ldl_Already_Offer		"Ihr bietet dieses Gut bereits zum Kauf an. Soll das vorangegangene Angebot ersetzt werden?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"Die übrigen Nationen verneigen sich vor ihrem neuen Staatsoberhaupt: {player[0].leader_name} hat das Projekt Außerirdisches Leben erfolgreich abgeschlossen!"
+ENDGAME_WON_OTHER		"Die übrigen Nationen verneigen sich vor ihrem neuen Staatsoberhaupt: {player[0].leader_name} hat das Projekt Außerirdisches Leben erfolgreich abgeschlossen!"
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
-str_ldl_comma	"."
+str_ldl_comma			"."
+
+#Age Names#	
+AGE_NAME_ANCIENT		"Antike"
+#AGE_NAME_CLASS			"Klassik"
+#AGE_NAME_MEDIEVAL		"Mittelalter"
+AGE_NAME_RENAISS		"Renaissance"
+#AGE_NAME_INDUST		"Industriezeitalter"
+AGE_NAME_MODERN			"Moderne"
+#AGE_NAME_COMPUTER		"Informationszeitalter"
+AGE_NAME_GENETIC		"Genetische Ära"
+AGE_NAME_DIAMOND		"Diamantene Ära"
+#AGE_NAME_FUTURE		"Die Zukunft"
 
 ###Strings Moved Over from Junk###
 
 CAPITALIZATION	"Kapitalisierung"
 INFRASTRUCTURE	"Infrastruktur"
 
-#Age Names#	
-AGE_NAME_ANCIENT		"Antike"
-#AGE_NAME_CLASS		"Klassik"
-#AGE_NAME_MEDIEVAL	"Mittelalter"
-AGE_NAME_RENAISS		"Renaissance"
-#AGE_NAME_INDUST		"Industriezeitalter"
-AGE_NAME_MODERN		"Moderne"
-#AGE_NAME_COMPUTER	"Informationszeitalter"
-AGE_NAME_GENETIC		"Genetische Ära"
-AGE_NAME_DIAMOND		"Diamantene Ära"
-#AGE_NAME_FUTURE		"Die Zukunft"
-
-YOU_BROKE_ALLIANCE "Wir haben gegen unsere Allianzvereinbarung mit den {player[0].civ_name_plural#DAT} verstoßen."
-YOU_BROKE_CEASE_FIRE "Wir haben unser Friedensabkommen mit den {player[0].civ_name_plural#DAT} gebrochen."
 DIPxxx3_AGREEMENT_END_POLLUTION "Öko-Pakt"
-CANT_ATTACK_ALLIES "Wir haben eine Allianz mit den {player[0].civ_name_plural#DAT} geschlossen und können daher nicht angreifen, ohne dieses Bündnis vorher aufzulösen. Wollt Ihr die Allianz jetzt beenden?"
 X_LAB "X-Labor"
 GENE_SEQUENCER "Genteiler"
  ###END EX_JUNK STRINGS###
@@ -86,10 +83,6 @@ str_ldl_nodialup	"Ihr müsst Euch zunächst einwählen,\n um eine Verbindung zum In
 str_ldl_connectionerr	"Fehler beim Verbindungsaufbau"
 str_ldl_Enemy_Moves_Off	"Feindbewegungen aus"
 str_ldl_Enemy_Moves_On	"Feindbewegungen ein"
-NETWORK_PLAYER_STATUS_HUMAN	"Lokal"
-NETWORK_PLAYER_STATUS_CONNECTED	"Verbunden"
-NETWORK_PLAYER_STATUS_AI_OPEN	"KI (Offen)"
-NETWORK_PLAYER_STATUS_AI_CLOSED	"KI (Geschlossen)"
 KEY_NAME_TAB	"Tab"
 KEY_NAME_ENTER	"Eingabe"
 KEY_NAME_SPACE	"Leertaste"
@@ -177,8 +170,6 @@ str_ldl_Turns	"Runden"
 
 DELETE_QUEUE	"Wollt Ihr diese Bauliste wirklich löschen?"
 str_tbl_ldl_Ongoing	"Wird durchgef."
-BUTTON_CONTINUE	"Fortfahren"
-BUTTON_END_GAME	"Spiel beenden"
 LOADING	"Spieldaten werden geladen ..."
 
 str_ldl_Server_Name_COLON	"Server-Name:"
@@ -220,9 +211,6 @@ str_ldl_AFB_ECD	"(Gebaut/Nächste Stufe/Fertigstellung):"
 str_ldl_AFB_FIELD	"Felder (Gebaut/Nächste Stufe/Fertigstellung):"
 str_ldl_AFB_CHANCE	"Fehlschlagrisiko:"  
 
-
-BUTTON_EXPEL	"Vertreiben"
-
 ## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title	"Monumente"
 str_ldl_Monument_Upgrade_Available	"Wählen Sie ein auszubauendes Monument aus."
@@ -250,10 +238,6 @@ str_ldl_CAPS_ATTACK	"Angreifen"
 str_ldl_CAPS_EXPEL	"Vertreiben"
 str_ldl_CAPS_CANCEL_MOVE	"Zug stornieren"
 str_ldl_END_TUTORIAL	"Einführung beenden"
-
-
-CANT_ATTACK_ALLIES_CAN_EXPEL	"Wollt Ihr wirklich das mit den {player[0].civ_name_plural#DAT} geschlossene Abkommen brechen? Ihr könnt die Einheiten auch vertreiben, ohne gegen das Abkommen zu verstoßen."
-
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Ihr müsst eine Botschaft in der betreffenden Nation besitzen, um Neuerungen fordern zu können."
 str_tbl_ldl_GIFT_MAP	"Kartenschenkung"
@@ -471,7 +455,6 @@ str_tbl_ldl_Civ_Score_Colon	"Punkte:"
 
 #Who knows where this goes?#
 UNIT_ORDER_TRANSPORTED	"Wird transportiert"
-TITLE_CITY_BUILD_QUEUE_IS_EMPTY	"{city[0].name}"
 
 str_tbl_ldl_The_Diplomats	"Unsere Staatsoberhäupter sind beschäftigt. Wir haben zurzeit \nkein Interesse daran, mit Euch zu verhandeln."
 str_tbl_ldl_Select_a_new	"Wählt das nächste Forschungsziel."
@@ -543,50 +526,6 @@ str_tbl_ldl_From	"Von"
 str_tbl_ldl_Destination	"Zielstadt"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
-
-
-##Network Game Messages##
-
-NETWORK_PLAYER_LEFT	"{action[1].name} hat das Spiel verlassen. Computerspieler wird die zugehörige Nation übernehmen."
-NETWORK_PLAYER_JOINED	"{action[1].name} hat die Kontrolle über die {player[1].civ_name_plural} übernommen."
-NETWORK_DIFFERENT_PLAYER_JOINED	"{action[1].name} will als die {player[1].civ_name_plural} am Spiel teilnehmen, diese Nation war \naber ursprünglich einem anderen Spieler zugeordnet. \nRauswerfen?"
-BUTTON_EJECT	"Raus"
-BUTTON_LET_THEM_STAY	"Teilnehmen lassen"
-NETWORK_YOU_ARE_NOW_HOST	"Ihr seid nun der Host dieses Spiels."
-NETWORK_NEW_HOST	"{action[1].name} ist jetzt der Host dieses Spiels."
-NETWORK_SESSION_LOST	"Die Verbindung wurde abgebrochen, kehre zur Lobby zurück."
-NETWORK_WAITING_ON_PLAYERS	"Warte auf Spieler"
-NETWORK_WAITING_FOR_DATA	"Warte auf Daten"
-NETWORK_RESYNCING	"Resynchronisierung"
-
-
-# Button label strings
-BUTTON_ACCEPT	"Akzeptieren"
-BUTTON_CANCEL	"Zurück"
-BUTTON_CLOSE	"OK"
-BUTTON_GOAL	"Ziel"
-BUTTON_LIBRARY	"Große Bibliothek"
-BUTTON_MAYBE	"Vielleicht"
-BUTTON_NO	"Nein"
-BUTTON_OK	"OK"
-BUTTON_RANDOM	"Zufällig"
-BUTTON_READY	"OK"
-BUTTON_REJECT	"Ablehnen"
-BUTTON_RESEARCH	"Erforschen"
-BUTTON_SET_PRICE	"Preis festlegen"
-BUTTON_STEAL_THIS	"<- Stehlen"
-BUTTON_YES	"Ja"
-ACCEPT	"Akzeptieren"
-REJECT	"Ablehnen"
-YES	"Ja"
-NO	"Nein"
-BUTTON_RAZE       "Schleifen"
-BUTTON_PLUNDER    "Plündern"
-BUTTON_PILLAGE    "Brandschatzen"
-BUTTON_LIBERATE   "Befreien"
-BUTTON_ENSLAVE	  "Verklaven"
-BUTTON_FREESLAVES "Sklaven freilassen"
-BUTTON_OCCUPY     "Besetzen"
 
 str_ldl_Abort	"Ende"
 str_ldl_Open	"Öffnen"
@@ -1573,7 +1512,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES	"{player[0].leader_name} gehört zu Eurem Team. Mitglieder des eigenen Teams können nicht angegriffen werden."
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -2920,26 +2858,18 @@ str_ldl_CityWinUnitsTab 		"Einheiten"
 # autosave string
 AUTOSAVE_NAME				"AUTOSAVE"
 
-TRADE_ROUTE_RESET 			"Handelsweg zurücksetzen!"
+TRADE_ROUTE_RESET			"Handelsweg zurücksetzen!"
 
-VICTORY_ENSLAVEMENT_CITY 		"{unit[0].name#PRONOUN_YOUR} hat einen neuen Sklaven gefangen genommen und ihn nach {city[0].name} geschickt."
+SHOW_ME					"Anzeigen"
 
-HOTSEAT_HUMAN "Mensch"
-HOTSEAT_AI "Computer"
+TEST_BEGIN_TURN				"myValue's value is {myValue}"
+TEST_UNIT_KILLED			"Es wurde {unit[0].name#UNDEF} vernichtet"
 
-SHOW_ME 				"Anzeigen"
-BUTTON_QUIT_GAME 			"Spiel beenden"
+INFOBAR_UNITS				"Einheiten: "
+INFOBAR_CITY				"Stadt: "
+INFOBAR_UNEXPLORED			"Unerforscht"
 
-TEST_BEGIN_TURN 			"myValue's value is {myValue}"
-TEST_UNIT_KILLED 			"Es wurde {unit[0].name#UNDEF} vernichtet"
-
-INFOBAR_UNITS 				"Einheiten: "
-INFOBAR_CITY 				"Stadt: "
-INFOBAR_UNEXPLORED 			"Unerforscht"
-
-UNIT_HOPLITE_NEW 			"Phalanx"
-
-MOVED_ALL_ARMIES_GENIUS 		"Sie haben alle Ihre Truppen bewegt: Sie müssen ein Genie sein!"
+UNIT_HOPLITE_NEW			"Phalanx"
 
 UNIT_CATEGORY_GENERIC 			"Typ"
 UNIT_CATEGORY_SETTLER 			"Siedler"
@@ -2954,10 +2884,6 @@ UNIT_CATEGORY_SPECIAL 			"Spezial"
 
 UNIT_LOCATION_IN_FIELD 			"Im Feld"
 UNIT_LOCATION_IN_SPACE 			"Im Weltraum"
-
-T_TURN0 				"Dies ist Runde 0"
-
-T_CREATE_CITY 				"Es wurde eine Stadt errichtet"
 
 ARMY_NAME_PREFIX 			"Truppe #"
 
@@ -3179,6 +3105,7 @@ str_profile_AutoOpenCityWindow                  "Baumanager bei Stadtgründung ei
 str_profile_ShowEnemyHealth                     "Lebenspunkte Feindeinheit ein"
 str_profile_ShowCityInfluence                   "Stadteinfluss ein"
 str_profile_ShowPoliticalBorders                "Politische Grenzen ein"
+str_profile_EndTurnSound                        "Signal Rundenende"
 str_profile_CloseOnEyepoint                     "Meldung schließ. bei Klick auf Auge"
 str_profile_ShowExpensive                       "Kosten für Terrainverbes. immer anzeigen"
 str_profile_ShowOrderUnion                      "Alle Armeebefehle anzeigen"
@@ -3290,4 +3217,3 @@ str_tbl_ldl_BarbarianCities_On	"Entrenched Barbarians settle cities - On"					# 
 str_tbl_ldl_BarbarianCamps_On	"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
 str_tbl_ldl_AINoSinking_On "AI ships don't sink"							# AI ships don't sink
 str_tbl_ldl_AINoSinking_Off "AI ships can sink"							# AI ships don't sink
-

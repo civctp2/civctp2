@@ -65,9 +65,6 @@ str_ldl_DipWizardCheckIntelligence "Check Intelligence"
 str_ldl_People_ "People:"
 str_ldl_Cities_ "Cities:"
 
-
-T_NO_KILL_CIVILIAN "Attacking the {player[0].civ_name_singular} {unitrecord[0].name} has caused diplomatic tension.\n\nIn the future, you can Expel civilian units like the {unitrecord[0].name} and not risk losing the trust of other nations.  Select any of your military units and use the <c:0,50,200>Expel<e> order." 
-
 # Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
 # here for someone who does.
 str_ldl_SCORE_VALUE "Calculation:"
@@ -168,26 +165,6 @@ str_ldl_GenerateGoods "Generate Goods"
 ## Strings above sent to be localized 9/26/00
 ##############################################
 
-#
-# Network strings: Commented out in ldl_str.txt, converted to ctp2 format
-#
-NETWORK_PLAYER_LEFT "{action[0].name} has left the game.  A computer player will take control of the exiting player's empire."
-NETWORK_PLAYER_JOINED "{action[0].name} has taken control of the {player[0].civ_name_plural}"
-NETWORK_DIFFERENT_PLAYER_JOINED "{action[0].name} is joining as the {player[0].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
-BUTTON_EJECT "Eject"
-BUTTON_LET_THEM_STAY "Let Them Stay"
-NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
-NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
-NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
-NETWORK_WAITING_ON_PLAYERS "Waiting on players"
-NETWORK_WAITING_FOR_DATA "Waiting for data"
-NETWORK_RESYNCING "Resynchronizing"
-
-# This one is new.  Used as the "sender" of chat messages that are sent by the engine, not another player.
-NETWORK_SENDER_SYSTEM "System"
-
 str_ldl_AddStuff "A D D  S T U F F"
 str_ldl_SelectCity "Select a City!"
 str_ldl_AddPW "Add Public Works:"
@@ -204,11 +181,6 @@ str_ldl_IntelligenceTitle "I N T E L L I G E N C E"
 ## Strings above sent to be localized 10/01/00
 ##############################################
 str_ldl_PosField "Pos:"
-
-
-#JBR1003 - moved from cut_str
-SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}."
-NETWORK_TIME_LEFT "Time Left"
 
 str_ldl_CityEspionage "City Espionage"
 str_ldl_NatlManagerHotKey "F1"
@@ -249,7 +221,6 @@ str_ldl_FindPosLabel "Find Pos:"
 str_ldl_CityManager "City Manager"
 
 # Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
-NETWORK_CURRENT_PLAYER "Current player"
 str_tbl_ldl_Open_City_Management "City Manager"
 str_tbl_ldl_Open_Build_Queue "City Build Queue"
 str_tbl_ldl_Open_Trade_Summary "Trade Summary"
@@ -386,12 +357,7 @@ STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"Click here to remove all units from this
 STATUSBAR_ARMYMAN_CLOSE_BUTTON					"Click here to close the army manager."
 STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Click here to create a new army."
 
-# Fix for localization
-str_profile_EndTurnSound "End Turn Sound"
-
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Map Info"
 
-# A different kind of disconnection message for network games
-NETWORK_ACTIVENET_LOST "Connection to Activenet server lost, attempting to return to lobby."
 

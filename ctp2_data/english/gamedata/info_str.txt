@@ -18,7 +18,7 @@
 #
 # Remarks
 #
-# - This file contains all the localized strings for the messages.
+# - This file contains all the localized strings for the messages including buttons.
 #   It contains nothing else.
 # - The order of the strings has been synchronized in the English, French, 
 #   German, Italian and Spanish version. This has not been done for the 
@@ -89,6 +89,12 @@ ALLIANCE_BROKEN				"The nefarious {player[1].civ_name_plural} have attacked us, 
 ALLIANCE_BROKEN_BY_YOU			"{player[0].sir_cap}, we have violated our Alliance with the {player[1].civ_name_plural}! They are deeply upset with us! It is doubtful that any nation will trust us after such an egregious violation of trust!"
 ALLIANCE_BROKEN_BY_3RD			"{player[0].sir_cap}, we have received word that the {player[1].civ_name_plural} have broken their alliance with the {player[2].civ_name_plural}."
 ALL_AGREEMENTS_BROKEN_BY_AI		"{player[1].leader_name} has a message for us, {player[0].sir}: Due to external forces and extenuating circumstances, {player[2].country_name} can no longer honor its agreements with you. Consider all Pacts, Treaties and Agreements with us null and void."
+YOU_BROKE_ALLIANCE			"You have broken an alliance with the {player[0].civ_name_plural}."
+YOU_BROKE_CEASE_FIRE			"You have broken a peace treaty with the {player[0].civ_name_plural}."
+CANT_ATTACK_ALLIES			"You have an alliance with the {player[0].civ_name_plural}, you cannot attack them without first breaking the alliance. Do you wish to break the alliance now?"
+CANT_ATTACK_ALLIES_CAN_EXPEL		"Do you wish to break your treaty with the {player[0].civ_name_plural}? You may expel the units without breaking the treaty."
+CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0].civ_name_plural}. Are you sure you wish to continue?"
+CANT_ATTACK_TEAMMATES			"{player[0].leader_name} is your teammate, you cannot attack him."
 
 ## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
@@ -108,6 +114,7 @@ ATTACK_ENEMY_BROKEN_BY_YOU		"You have violated your agreement with the {player[0
 UNIT_COMPLETED				"A new {unit[0].name} is ready in {city[0].name}."
 NEW_UNIT_COMPLETED			"A new {unit[0].name} is ready in {city[0].name}. Next item in queue: {action[0].name}."
 CITY_BUILD_QUEUE_IS_EMPTY		"The build queue for {city[0].name} is empty."
+TITLE_CITY_BUILD_QUEUE_IS_EMPTY		"{city[0].name}"
 UNIT_COMPLETED_QUEUE_EMPTY		"A new {unit[0].name} is ready in {city[0].name}. The queue for {city[0].name} is now empty."
 BUILDING_BUILT				"{city[0].name} has built a {building[0].name}. Next item in the queue: {action[0].name}."
 BUILDING_BUILT_QUEUE_EMPTY		"{city[0].name} has built a {building[0].name}. The queue for {city[0].name} is now empty."
@@ -147,6 +154,7 @@ WAR_OVER				"The {player[0].civ_name_plural} are no longer at war with the {play
 TRADE_PIRATED				"{player[0].sir_cap}, our trade route from {city[0].name} to {city[1].name} has been pirated by the {player[1].civ_name_plural]."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, the {player[1].civ_name_plural} have placed an embargo on all of our trade into their nations. All existing trade routes to {player[1].country_name} have been broken! We have lost all of the caravans on those routes as well."
 TRADE_ROUTES_BROKEN_BY_WAR		"Troubling news, {player[0].sir}. Due to the sparking of conflict between us and {player[1].country_name}, all of our trade routes to {player[1].civ_name_singular} cities have been broken. All caravans assigned to those routes have been lost as well."
+SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}."
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE			"Selling {good[0].name} to {city[1].name} will yield {gold[0].value} gold, and require {value[0].value} caravans."
@@ -213,6 +221,7 @@ UNIT_OBSOLETE_CIVWIDE			"The discovery of {advance[0].name} has rendered the fol
 NO_SUPPORT				"Units have been disbanded for lack of support."
 ONE_OR_MORE_UNITS_WILL_CRASH		"Your {unit[1].name} will run out of fuel if it does not end its turn in a city or an airbase."
 UNIT_EXPELLED				"The {player[0].civ_name_plural} have expelled some of our units from their land."
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory. They pledge to remove their units as soon as possible."
 
 ## Warfare ##
 CITIES_CAPTURED_VICTIM			"{city[0].name} has fallen into the hands of enemy forces!"
@@ -276,6 +285,7 @@ SLAVE_FAILED_VICTIM			"The defenders of {city[0].name} have caught foreign slave
 PROTECTED_FROM_SLAVERY_VICTIM		"Great news! City Walls have protected our people in the city of {city[0].name} from slavery."
 PROTECTED_FROM_SLAVERY_ATTACKER		"City walls have prevented our slavers from infiltrating the foreign city of {city[0].name}."
 SETTLER_SLAVED_VICTIM			"The horror!! Our Settler has disappeared without a trace. Foreign slavers are most likely responsible for this heinous act."
+VICTORY_ENSLAVEMENT_CITY		"Your {unit[0].name} has captured a new slave and sent it to {city[0].name}."
 
 ## Establish Embassy ##
 ## Diplomat Action ##
@@ -449,10 +459,30 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"We just received word that the {player[0].c
 ### Multiplayer ###
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
+NETWORK_PLAYER_LEFT			"{action[0].name} has left the game.  A computer player will take control of the exiting player's empire."
+NETWORK_PLAYER_JOINED			"{action[0].name} has taken control of the {player[0].civ_name_plural}"
+NETWORK_DIFFERENT_PLAYER_JOINED		"{action[0].name} is joining as the {player[0].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
+NETWORK_YOU_ARE_NOW_HOST		"You are now the host of this game."
+NETWORK_NEW_HOST			"{action[0].name} is now the host of this game."
+NETWORK_SESSION_LOST			"Connection to host lost, returning to lobby"
+NETWORK_ACTIVENET_LOST			"Connection to Activenet server lost, attempting to return to lobby."
+NETWORK_WAITING_ON_PLAYERS		"Waiting on players"
+NETWORK_WAITING_FOR_DATA		"Waiting for data"
+NETWORK_RESYNCING			"Resynchronizing"
+NETWORK_SENDER_SYSTEM			"System"			# Used as the "sender" of chat messages that are sent by the engine, not another player.
+NETWORK_TIME_LEFT			"Time Left"
+NETWORK_CURRENT_PLAYER			"Current player"
+NETWORK_PLAYER_STATUS_HUMAN		"Local"
+NETWORK_PLAYER_STATUS_CONNECTED		"Connected"
+NETWORK_PLAYER_STATUS_AI_OPEN		"AI (Open)"
+NETWORK_PLAYER_STATUS_AI_CLOSED		"AI (Closed)"
+
 NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} of the {player[0].civ_name_plural}, it is now your turn."
 NEXT_EMAIL_PLAYER			"Please mail the saved game on your desktop to {player[0].leader_name} ({action[0].name}) of the {player[0].civ_name_plural}."
 HOTSEAT_CITY_ATTACKED			"The {player[0].civ_name_plural} attacked {city[0].name} with a {unit[0].name}."
 HOTSEAT_ARMY_ATTACKED			"The {player[0].civ_name_plural} attacked your {unit[1].name} with a {unit[0].name}"
+HOTSEAT_HUMAN				"Human"
+HOTSEAT_AI				"Computer"
 
 ### Trust Warning Messages ###
 ### Global Trust Loss ###
@@ -478,6 +508,12 @@ NANO_TERROR_FAILED_VICTIM		"Our scientists have foiled an enemy plot to sabotage
 NANO_TERROR_COMPLETE_VICTIM		"Foreign dogs have unleashed a nanological virus on the city of {city[0].name}."
 NANO_TERROR_FAILED_AGRESSOR		"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
 IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."
+
+### From the tutorial moved to the common game
+T_NO_KILL_CIVILIAN			"Attacking the {player[0].civ_name_singular} {unitrecord[0].name} has caused diplomatic tension.\n\nIn the future, you can Expel civilian units like the {unitrecord[0].name} and not risk losing the trust of other nations.  Select any of your military units and use the <c:0,50,200>Expel<e> order." 
+
+#Miscellaneous
+MOVED_ALL_ARMIES_GENIUS			"You have moved all of your armies, you must be some kind of genius!"
 
 ########################################
 ### New City Capture Option strings 2.0
@@ -515,9 +551,6 @@ HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unitrecord[0].na
 INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}."
 GUERRILLA_SPAWN				"Our {unitrecord[0].name} has raised guerrillas to aid our cause!"
 
-CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED	"The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
-
 # New Messages # Belong to somewhere else
 # Doves and hawks there are better names for them
 ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
@@ -529,3 +562,52 @@ BARBWAR					"These savages threaten our citizens. Pacification operations have b
 UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
 UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."
 RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
+
+
+###############
+##           ##
+##  Buttons  ##
+##           ##
+###############
+
+# Common buttons
+BUTTON_ACCEPT				"Accept"
+BUTTON_CANCEL				"Cancel"
+BUTTON_CLOSE				"Close"
+BUTTON_GOAL				"Goal"
+BUTTON_LIBRARY				"Library"
+BUTTON_MAYBE				"Maybe"
+BUTTON_YES				"Yes"
+BUTTON_NO				"No"
+BUTTON_OK				"Close"
+BUTTON_RANDOM				"Random"
+BUTTON_READY				"Ready"
+BUTTON_REJECT				"Reject"
+BUTTON_RESEARCH				"Research"
+BUTTON_SET_PRICE			"Set Price"
+BUTTON_STEAL_THIS			"<- Steal This"
+BUTTON_EXPEL				"Expel"
+
+# Network buttons
+BUTTON_EJECT				"Eject"
+BUTTON_LET_THEM_STAY			"Let Them Stay"
+
+# Buttons for quitting the game
+BUTTON_CONTINUE				"Continue"
+BUTTON_END_GAME				"End Game"
+BUTTON_QUIT_GAME			"Quit Game"
+
+# Buttons razing, enslaving etc. of cities
+BUTTON_RAZE				"Raze"
+BUTTON_PLUNDER				"Plunder"
+BUTTON_PILLAGE				"Pillage"
+BUTTON_LIBERATE				"Liberate"
+BUTTON_ENSLAVE				"Enslave"
+BUTTON_FREESLAVES			"Free Slaves"
+BUTTON_OCCUPY				"Occupy"
+
+# Some odd buttons, are those actually used?
+ACCEPT					"Accept"
+REJECT					"Reject"
+YES					"Yes"
+NO 					"No"

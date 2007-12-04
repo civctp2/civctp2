@@ -18,44 +18,43 @@
 #
 # Modifications from the original Activision code:
 #
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
 # - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
-# - Moved build list sequence strings from add_str.txt.
+#
 #
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
-str_ldl_Already_Offer	"You are already offering that good. Replace old offer?"
+str_ldl_Already_Offer		"You are already offering that good. Replace old offer?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, {player[1].leader_name} has completed the Alien Life Project."
+ENDGAME_WON_OTHER		"All Civilizations will now bow to a new master, {player[1].leader_name} has completed the Alien Life Project."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
-str_ldl_comma	","
+str_ldl_comma			","
+
+#Age Names#	
+AGE_NAME_ANCIENT		"Ancient"
+#AGE_NAME_CLASS			"Classic"
+#AGE_NAME_MEDIEVAL		"Midieval"
+AGE_NAME_RENAISS		"Renaissance"
+#AGE_NAME_INDUST		"Industrial"
+AGE_NAME_MODERN			"Modern"
+#AGE_NAME_COMPUTER		"Computer"
+AGE_NAME_GENETIC		"Genetic"
+AGE_NAME_DIAMOND		"Diamond"
+#AGE_NAME_FUTURE		"The Future"
 
 ###Strings Moved Over from Junk###
 
 CAPITALIZATION	"Capitalization"
 INFRASTRUCTURE	"Infrastructure"
 
-#Age Names#	
-AGE_NAME_ANCIENT		"Ancient"
-#AGE_NAME_CLASS		"Classic"
-#AGE_NAME_MEDIEVAL	"Midieval"
-AGE_NAME_RENAISS		"Renaissance"
-#AGE_NAME_INDUST		"Industrial"
-AGE_NAME_MODERN		"Modern"
-#AGE_NAME_COMPUTER	"Computer"
-AGE_NAME_GENETIC		"Genetic"
-AGE_NAME_DIAMOND		"Diamond"
-#AGE_NAME_FUTURE		"The Future"
-
-YOU_BROKE_ALLIANCE "You have broken an alliance with the {player[0].civ_name_plural}."
-YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the {player[0].civ_name_plural}."
 DIPxxx3_AGREEMENT_END_POLLUTION "Eco Pact"
-CANT_ATTACK_ALLIES "You have an alliance with the {player[0].civ_name_plural}, you cannot attack them without first breaking the alliance.  Do you wish to break the alliance now?"
 X_LAB "X-lab"
 GENE_SEQUENCER "Gene Sequencer"
 
@@ -86,10 +85,6 @@ str_ldl_nodialup		"You need to dialup, to use internet"
 str_ldl_connectionerr	"Network connection error"
 str_ldl_Enemy_Moves_Off		"Show Enemy Moves Off"
 str_ldl_Enemy_Moves_On		"Show Enemy Moves On"
-NETWORK_PLAYER_STATUS_HUMAN "Local"
-NETWORK_PLAYER_STATUS_CONNECTED "Connected"
-NETWORK_PLAYER_STATUS_AI_OPEN "AI (Open)"
-NETWORK_PLAYER_STATUS_AI_CLOSED "AI (Closed)"
 KEY_NAME_TAB "Tab"
 KEY_NAME_ENTER "Enter"
 KEY_NAME_SPACE "Space"
@@ -143,14 +138,6 @@ POLLUTION_TOXIC	"Toxic"
 str_ldl_Total_City_Pollution	"Total City Pollution"
 str_ldl_Pollution_Level	"Pollution Level"
 
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the {player[0].civ_name_plural}.  Are you sure you wish to continue?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
-#New Messages
-ATTACK_WARNING "This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
-CIV2DOVES "The Dove Party dominates parliament! They have vetoed this aggression."
-CIV2HAWKs "The Hawk Party backs this war against this Axis of Evil!"
-BARBWAR "These savages threaten our citizens. Pacification operations have begun!"
-
 str_ldl_RES_CHANGE_BUTTON	"Screen Size"
 str_ldl_RES_TITLE			"Screen Size"
 str_ldl_RES_REBOOT_WARNING	"This change will take effect when you restart Call to Power II."
@@ -186,8 +173,6 @@ str_ldl_Turns	"Turns"
 
 DELETE_QUEUE	"Are you sure you want to delete this build queue?"
 str_tbl_ldl_Ongoing	"Ongoing"
-BUTTON_CONTINUE "Continue"
-BUTTON_END_GAME "End Game"
 LOADING	"Loading..."
 
 str_ldl_Server_Name_COLON "Server Name:"
@@ -229,9 +214,6 @@ str_ldl_AFB_ECD		"ECD's (Built/Next Stage/Final):"
 str_ldl_AFB_FIELD		"Fields (Built/Next Stage/Final):"
 str_ldl_AFB_CHANCE	"Chance of Failure:"
 
-
-BUTTON_EXPEL "Expel"
-
 ## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title			"Monuments"
 str_ldl_Monument_Upgrade_Available	"Select a monument to upgrade."
@@ -259,10 +241,6 @@ str_ldl_CAPS_ATTACK "ATTACK"
 str_ldl_CAPS_EXPEL "EXPEL"
 str_ldl_CAPS_CANCEL_MOVE "CANCEL MOVE"
 str_ldl_END_TUTORIAL "END TUTORIAL"
-
-
-CANT_ATTACK_ALLIES_CAN_EXPEL "Do you wish to break your treaty with the {player[0].civ_name_plural}?  You may expel the units without breaking the treaty."
-
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"You need to have an embassy to demand advances."
 str_tbl_ldl_GIFT_MAP	"GIFT MAP"
@@ -484,7 +462,6 @@ str_tbl_ldl_Civ_Score_Colon		"Score:"
 
 #Who knows where this goes?#
 UNIT_ORDER_TRANSPORTED "In Transport"
-TITLE_CITY_BUILD_QUEUE_IS_EMPTY "{city[0].name}"
 
 str_tbl_ldl_The_Diplomats	"Our leaders are busy. We are not interested in discussing anything with you at this time."
 str_tbl_ldl_Select_a_new	"Select a new Advance to research."
@@ -523,22 +500,6 @@ str_ldl_CAPS_FOREIGN	"FOREIGN"
 
 str_ldl_NEXT	"NEXT"
 
-# Age Names
-AGE_NAME_ANCIENT  "Ancient Age"
-AGE_NAME_RENAISS  "Renaissance Age"
-AGE_NAME_MODERN   "Modern Age"
-AGE_NAME_GENETIC  "Genetic Age"
-AGE_NAME_DIAMOND  "Diamond Age"
-
-
-
-
-
-
-
-
-
-
 # strings for victory window
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"YOUR SCORE IS:"
 str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"YOUR NAME WILL GO DOWN IN THE ANNALS OF HISTORY AS"
@@ -571,53 +532,6 @@ str_tbl_ldl_From				"From"
 str_tbl_ldl_Destination			"Destination"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
-
-
-##Network Game Messages##
-
-#NETWORK_PLAYER_LEFT "[action.1.name] has left the game.  A computer player will take control of the exiting player's empire."
-#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the {player[1].civ_name_plural}"
-#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the {player[1].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
-#BUTTON_EJECT "Eject"
-#BUTTON_LET_THEM_STAY "Let Them Stay"
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
-#NETWORK_WAITING_ON_PLAYERS "Waiting on players"
-#NETWORK_WAITING_FOR_DATA "Waiting for data"
-#NETWORK_RESYNCING "Resynchronizing"
-
-
-# Button label strings
-BUTTON_ACCEPT       "Accept"
-BUTTON_CANCEL       "Cancel"
-BUTTON_CLOSE        "Close"
-BUTTON_GOAL         "Goal"
-BUTTON_LIBRARY      "Library"
-BUTTON_MAYBE        "Maybe"
-BUTTON_NO           "No"
-BUTTON_OK           "Close"
-BUTTON_RANDOM       "Random"
-BUTTON_READY        "Ready"
-BUTTON_REJECT       "Reject"
-BUTTON_RESEARCH     "Research"
-BUTTON_SET_PRICE    "Set Price"
-BUTTON_STEAL_THIS          "<- Steal This"
-BUTTON_YES          "Yes"
-ACCEPT  "Accept"
-REJECT  "Reject"
-YES		"Yes"
-NO 		"No"
-BUTTON_RAZE       "Raze"
-BUTTON_PLUNDER    "Plunder"
-BUTTON_PILLAGE    "Pillage"
-BUTTON_LIBERATE   "Liberate"
-BUTTON_ENSLAVE	  "Enslave"
-BUTTON_FREESLAVES "Free Slaves"
-BUTTON_OCCUPY     "Occupy"
-
 
 str_ldl_Abort	"Abort"
 str_ldl_Open	"Open"
@@ -1605,7 +1519,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES "{player[0].leader_name} is your teammate, you cannot attack him."
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -2380,7 +2293,7 @@ str_dip_InvalidProposal 		"Select proposal from left-hand list"
 str_ldl_Threaten 			"Threaten"
 
 
-# 
+#
 # New Control Panel Strings
 #
 
@@ -2954,13 +2867,7 @@ AUTOSAVE_NAME				"AUTOSAVE"
 
 TRADE_ROUTE_RESET 			"Trade route reset!"
 
-VICTORY_ENSLAVEMENT_CITY 		"Your {unit[0].name} has captured a new slave and sent it to {city[0].name}."
-
-HOTSEAT_HUMAN "Human"
-HOTSEAT_AI "Computer"
-
 SHOW_ME "Show me"
-BUTTON_QUIT_GAME "Quit Game"
 
 TEST_BEGIN_TURN "myValue's value is {myValue}"
 TEST_UNIT_KILLED "A {unit[0].name} was killed"
@@ -2970,8 +2877,6 @@ INFOBAR_CITY "City: "
 INFOBAR_UNEXPLORED "Unexplored"
 
 # UNIT_HOPLITE_NEW "Hoplite" # Unused: To be removed
-
-MOVED_ALL_ARMIES_GENIUS "You have moved all of your armies, you must be some kind of genius!"
 
 UNIT_CATEGORY_GENERIC "Generic"
 UNIT_CATEGORY_SETTLER "Settler"
@@ -2986,10 +2891,6 @@ UNIT_CATEGORY_SPECIAL "Special"
 
 UNIT_LOCATION_IN_FIELD "In the field"
 UNIT_LOCATION_IN_SPACE "In space"
-
-T_TURN0 "This is Turn 0"
-
-T_CREATE_CITY "A city was created"
 
 ARMY_NAME_PREFIX "Army #"
 
@@ -3211,6 +3112,7 @@ str_profile_AutoOpenCityWindow                  "Open Build Manager When Creatin
 str_profile_ShowEnemyHealth                     "Show Enemy Unit Health Status"
 str_profile_ShowCityInfluence                   "Show City Influence"
 str_profile_ShowPoliticalBorders                "Show National Borders"
+str_profile_EndTurnSound                        "End Turn Sound"
 str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
 str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 

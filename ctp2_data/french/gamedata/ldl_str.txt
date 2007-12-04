@@ -37,11 +37,6 @@ ENDGAME_WON_OTHER		"Tous les empires s'inclineront dorénavant devant un nouveau 
 ##Comma is the separator in numbers.  In German this would be a period. (non breakable space in French)
 str_ldl_comma			" "
 
-###Strings Moved Over from Junk###
-
-CAPITALIZATION			"Capitalisation"
-INFRASTRUCTURE			"Infrastructure"
-
 #Age Names#	
 AGE_NAME_ANCIENT		"Antiquité"
 #AGE_NAME_CLASS			"Classique"
@@ -54,10 +49,12 @@ AGE_NAME_GENETIC		"Genetique"
 AGE_NAME_DIAMOND		"Diamant"
 #AGE_NAME_FUTURE		"Le Futur"
 
-YOU_BROKE_ALLIANCE		"Vous avez rompu une alliance avec les {player[0].civ_name_plural}."
-YOU_BROKE_CEASE_FIRE		"Vous avez rompu un traité de paix avec les {player[0].civ_name_plural}."
+###Strings Moved Over from Junk###
+
+CAPITALIZATION			"Capitalisation"
+INFRASTRUCTURE			"Infrastructure"
+
 DIPxxx3_AGREEMENT_END_POLLUTION "Ecopacte"
-CANT_ATTACK_ALLIES		"Vous avez signé une alliance avec les {player[0].civ_name_plural}. Vous devez rompre cette alliance si vous voulez les attaquer. Voulez-vous la rompre maintenant ?"
 X_LAB				"X-lab"
 GENE_SEQUENCER			"Sequenceur de gènes"
 
@@ -88,10 +85,6 @@ str_ldl_nodialup		"Vous devez vous connecter pour utiliser l'Internet"
 str_ldl_connectionerr		"Erreur de connexion au réseau"
 str_ldl_Enemy_Moves_Off		"Aff. déplac. ennemis désact."
 str_ldl_Enemy_Moves_On		"Aff. déplac. ennemis activé"
-NETWORK_PLAYER_STATUS_HUMAN	"Local"
-NETWORK_PLAYER_STATUS_CONNECTED	"Connecté"
-NETWORK_PLAYER_STATUS_AI_OPEN	"IA (activée)"
-NETWORK_PLAYER_STATUS_AI_CLOSED	"IA (désactivée)"
 KEY_NAME_TAB			"Tabulation"
 KEY_NAME_ENTER			"Entrée"
 KEY_NAME_SPACE			"Espace"
@@ -180,8 +173,6 @@ str_ldl_Turns		"Tours"
 
 DELETE_QUEUE		"Voulez-vous vraiment supprimer cette liste d'attente ?"
 str_tbl_ldl_Ongoing	"En cours"
-BUTTON_CONTINUE		"Continuer"
-BUTTON_END_GAME		"Fin de partie"
 LOADING			"Chargement en cours..."
 
 str_ldl_Server_Name_COLON	"Serveur :"
@@ -223,9 +214,6 @@ str_ldl_AFB_ECD		"SCE (cons./étape suiv./fin)"
 str_ldl_AFB_FIELD	"Champs (cons./ét. suiv./fin)"
 str_ldl_AFB_CHANCE	"Possibilité d'échec" 
 
-
-BUTTON_EXPEL		"Renvoyer"
-
 ## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title	"Monuments"
 str_ldl_Monument_Upgrade_Available	"Sélectionnez un monument à améliorer."
@@ -253,10 +241,6 @@ str_ldl_CAPS_ATTACK		"ATTAQUER"
 str_ldl_CAPS_EXPEL		"RENVOYER"
 str_ldl_CAPS_CANCEL_MOVE	"ANNULER COUP"
 str_ldl_END_TUTORIAL		"ARRETER DIDACTICIEL"
-
-
-CANT_ATTACK_ALLIES_CAN_EXPEL	"Voulez-vous rompre votre traité avec les {player[0].civ_name_plural} ? Vous pouvez renvoyer les unités sans passer par là."
-
 
 str_tbl_ldl_You_Need_Embassy_To_Demand	"Il vous faut une ambassade pour exiger des progrès."
 str_tbl_ldl_GIFT_MAP	"OFFRIR CARTE"
@@ -478,7 +462,6 @@ str_tbl_ldl_Civ_Score_Colon	"Score :"
 
 #Who knows where this goes?#
 UNIT_ORDER_TRANSPORTED	"En transfert"
-TITLE_CITY_BUILD_QUEUE_IS_EMPTY	"{city[0].name}"
 
 str_tbl_ldl_The_Diplomats	"Nos chefs sont occupés. Nous n'avons pas envie d'engager des pourparlers avec vous pour le moment."
 str_tbl_ldl_Select_a_new	"Sélectionnez un nouveau progrès sur lequel travailler."
@@ -517,22 +500,6 @@ str_ldl_CAPS_FOREIGN	"EXTERIEUR"
 
 str_ldl_NEXT	"SUIV."
 
-# Age Names
-AGE_NAME_ANCIENT	"Antiquité"
-AGE_NAME_RENAISS	"Renaissance"
-AGE_NAME_MODERN		"Ere moderne"
-AGE_NAME_GENETIC	"Ere génétique"
-AGE_NAME_DIAMOND	"Ere du diamant"
-
-
-
-
-
-
-
-
-
-
 # strings for victory window	
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"VOTRE SCORE EST :"
 str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"VOUS APPARAITREZ SOUS LE TITRE SUIVANT DANS LES ANNALES DE L'HISTOIRE :"
@@ -565,53 +532,6 @@ str_tbl_ldl_From	"Origine"
 str_tbl_ldl_Destination	"Destination"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
-
-
-##Network Game Messages##
-
-#NETWORK_PLAYER_LEFT	"[action.1.name] a quitté la partie. Un joueur informatique prendra le contrôle de l'empire de ce joueur."
-#NETWORK_PLAYER_JOINED	"[action.1.name] a pris le contrôle des [player.1.civ_name_plural]"
-#NETWORK_DIFFERENT_PLAYER_JOINED	"[action.1.name] rejoint la partie avec les [player.1.civ_name_plural], mais cet empire appartenait à quelqu'un d'autre. Voulez-vous le renvoyer ? "
-#BUTTON_EJECT	"Renvoyer"
-#BUTTON_LET_THEM_STAY	"Participation autorisée"
-#NETWORK_YOU_ARE_NOW_HOST	"Vous êtes maintenant l'hôte de la partie."
-#NETWORK_NEW_HOST	"[action.1.name] est maintenant l'hôte de la partie."
-#NETWORK_YOU_ARE_NOW_HOST "Vous êtes maintenant l'hôte de la partie."
-#NETWORK_NEW_HOST "[action.1.name] est maintenant l'hôte de la partie."
-#NETWORK_SESSION_LOST	"Connexion avec l'hôte perdue, retour salle d'attente"
-#NETWORK_WAITING_ON_PLAYERS	"Attente des joueurs"
-#NETWORK_WAITING_FOR_DATA	"Attente de données"
-#NETWORK_RESYNCING	"Nouv. synchronisation"
-
-
-# Button label strings	
-BUTTON_ACCEPT	"Accepter"
-BUTTON_CANCEL	"Annuler"
-BUTTON_CLOSE	"Fermer"
-BUTTON_GOAL	"Objectif"
-BUTTON_LIBRARY	"Bibliothèque"
-BUTTON_MAYBE	"Peut-être"
-BUTTON_NO	"Non"
-BUTTON_OK	"Fermer"
-BUTTON_RANDOM	"Aléatoire"
-BUTTON_READY	"Prêt"
-BUTTON_REJECT	"Refuser"
-BUTTON_RESEARCH	"Rechercher"
-BUTTON_SET_PRICE	"Définir prix"
-BUTTON_STEAL_THIS	"<- Voler ceci"
-BUTTON_YES	"Oui"
-ACCEPT	"Accepter"
-REJECT	"Refuser"
-YES	"Oui"
-NO	"Non"
-BUTTON_RAZE       "Raze"
-BUTTON_PLUNDER    "Plunder"
-BUTTON_PILLAGE    "Pillage"
-BUTTON_LIBERATE   "Liberate"
-BUTTON_ENSLAVE	  "Enslave"
-BUTTON_FREESLAVES "Free Slaves"
-BUTTON_OCCUPY     "Occupy"
-
 
 str_ldl_Abort	"Fin"
 str_ldl_Open	"Ouvrir"
@@ -1599,7 +1519,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES	"{player[0].leader_name} fait partie de votre équipe, vous ne pouvez pas l'attaquer."
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -2945,13 +2864,7 @@ AUTOSAVE_NAME				"AUTOSAVE"
 
 TRADE_ROUTE_RESET 			"Restaurer route commerciale !"
 
-VICTORY_ENSLAVEMENT_CITY 		"Votre {unit[0].name} a capturé un nouvel esclave et l'a envoyé à {city[0].name}."
-
-HOTSEAT_HUMAN 				"Humain"
-HOTSEAT_AI 				"Ordinateur"
-
 SHOW_ME 				"Moi"
-BUTTON_QUIT_GAME 			"Quitter partie"
 
 TEST_BEGIN_TURN 			"ma valeur est de {myValue}"
 TEST_UNIT_KILLED 			"L'unité {unit[0].name} a été tuée"
@@ -2961,8 +2874,6 @@ INFOBAR_CITY 				"Ville : "
 INFOBAR_UNEXPLORED 			"Inexploré"
 
 # UNIT_HOPLITE_NEW 			"Hoplite" # Unused to be removed
-
-MOVED_ALL_ARMIES_GENIUS 		"Vous avez déplacé toutes vos armées, vous devez être un génie !"
 
 UNIT_CATEGORY_GENERIC 			"Générique"
 UNIT_CATEGORY_SETTLER 			"Colonisation"
@@ -2977,10 +2888,6 @@ UNIT_CATEGORY_SPECIAL 			"Spéciale"
 
 UNIT_LOCATION_IN_FIELD 			"Sur le terrain"
 UNIT_LOCATION_IN_SPACE 			"Dans l'espace"
-
-T_TURN0 				"Il s'agit du tour 0"
-
-T_CREATE_CITY 				"Une ville a été créée"
 
 ARMY_NAME_PREFIX 			"Armée #"
 
@@ -3202,6 +3109,7 @@ str_profile_AutoOpenCityWindow                  "Ouvrir Gest. de construction qd
 str_profile_ShowEnemyHealth                     "Afficher santé unité ennemie"
 str_profile_ShowCityInfluence                   "Afficher influence ville"
 str_profile_ShowPoliticalBorders                "Afficher frontières nationales"
+str_profile_EndTurnSound                        "Signal Fin de Tour"
 str_profile_CloseOnEyePoint                     "Fermer les messages en cliquant sur l'oeil"
 str_profile_ShowExpensive                       "Afficher effets aménag. case trop coûteux"
 str_profile_ShowOrderUnion                      "Afficher les ordres pour les armées" 

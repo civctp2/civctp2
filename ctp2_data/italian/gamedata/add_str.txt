@@ -61,8 +61,6 @@ str_ldl_DipWizardCheckIntelligence "Controlla le informazioni"
 str_ldl_People_ "Persone:"
 str_ldl_Cities_ "Città:"
 
-T_NO_KILL_CIVILIAN "Attaccando {unitrecord[0].name#ARTICLE} {player[0].civ_name_plural#PREPOSITION}  si creerebbero tensioni diplomatiche.\n\nPuoi espellere le unità civili come {unitrecord[0].name#ARTICLE} senza modificare la tua posizione diplomatica.  Seleziona una delle tue unità militari e usa l'ordine <c:0,50,200>Espelli<e>." 
-
 # Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
 # here for someone who does.
 str_ldl_SCORE_VALUE "Calcolato:"
@@ -164,26 +162,6 @@ str_ldl_GenerateGoods "Genera merci"
 ## Strings above sent to be localized 9/29/00
 ##############################################
 
-#
-# Network strings: Commented out in ldl_str.txt, converted to ctp2 format
-#
-NETWORK_PLAYER_LEFT "{action[0].name} ha abbandonato la partita. Il controllo del suo impero passerà all'IA."
-NETWORK_PLAYER_JOINED "{action[0].name} ha assunto il controllo {player[0].civ_name_plural#PREPOSITION}"
-NETWORK_DIFFERENT_PLAYER_JOINED	"{action[0].name} si sta unendo al gioco con {player[0].civ_name_plural#ARTICLE}, ma la civiltà apparteneva in origine a qualcun altro. Vuoi espellerla dal gioco?"
-BUTTON_EJECT	"Espelli dal gioco"
-BUTTON_LET_THEM_STAY	"Lascia in gioco"
-NETWORK_YOU_ARE_NOW_HOST	"Adesso sei l'host di questa partita."
-NETWORK_NEW_HOST	"Adesso {action[0].name} è l'host di questa partita."
-NETWORK_YOU_ARE_NOW_HOST	"Adesso sei l'host di questa partita."
-NETWORK_NEW_HOST	"Adesso {action[0].name} è l'host di questa partita."
-NETWORK_SESSION_LOST	"Connessione all'host perduta, torno all'atrio"
-NETWORK_WAITING_ON_PLAYERS	"In attesa dei giocatori..."
-NETWORK_WAITING_FOR_DATA	"In attesa dei dati..."
-NETWORK_RESYNCING	"Risincronizzazione in corso"
-
-# This one is new.  Used as the "sender" of chat messages that are sent by the engine, not another player.
-NETWORK_SENDER_SYSTEM "Sistema"
-
 str_ldl_AddStuff "A G G I U N T E"
 str_ldl_SelectCity "Scegli una città!"
 str_ldl_AddPW "Aggiungi Lavori pubblici:"
@@ -199,10 +177,6 @@ str_ldl_IntelligenceTitle "I N F O R M A Z I O N I"
 ## PLEASE ENTER NEW STUFF BELOW THIS LINE
 ## Strings above sent to be localized 10/06/00
 ##############################################
-
-#JBR1003 - moved from cut_str
-SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name} ha chiuso la rotta commerciale che trasportava {good[0].name} da {city[0].name} a {city[1].name}."
-NETWORK_TIME_LEFT "Tempo rimasto"
 
 str_ldl_CityEspionage "Spionaggio in città"
 str_ldl_NatlManagerHotKey "F1"
@@ -243,7 +217,6 @@ str_ldl_FindPosLabel "Trova pos:"
 str_ldl_CityManager "Gestione cittadina"
 
 # Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
-NETWORK_CURRENT_PLAYER "Giocatore attuale"
 str_tbl_ldl_Open_City_Management "Gestione cittadina"
 str_tbl_ldl_Open_Build_Queue "Coda di produzione"
 str_tbl_ldl_Open_Trade_Summary "Sommario del commercio"
@@ -385,14 +358,9 @@ STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"Clicca qui per rimuovere tutte le unità 
 STATUSBAR_ARMYMAN_CLOSE_BUTTON					"Clicca qui per chiudere la Gestione armate."
 STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Clicca qui per creare una nuova armata."
 
-# Fix for localization
-str_profile_EndTurnSound "Suono di fine turno"
-
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Info mappa"
 
 str_ldl_EditQueueReallyDelete "Vuoi eliminare definitivamente la coda %s?"
 
-# A different kind of disconnection message for network games
-NETWORK_ACTIVENET_LOST "Connessione al server Activenet persa, tentativo di ritorno all'atrio in corso..."
 
