@@ -1,3 +1,48 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : CTP1 cheat editor strings (Spanish)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - Probably the content of this file is unused
+#
+# - This file contains all the CTP1 cheat editor strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None
+#
+#----------------------------------------------------------------------------
+
 #################################
 #
 # BETA PATCH CHEAT TOOLS STRINGS
@@ -13,15 +58,15 @@
 #
 # Single-Player Game Launch Screen
 #
-str_ldl_Editor					"Lanzar editor"
+str_ldl_Editor				"Lanzar editor"
 
 #
 # Cheat Toolbar
 #
-str_ldl_Tile_Pad				"Terreno"
-str_ldl_Civ						"Imp."
-str_ldl_Edit_City				"Editar ciudad"
-str_ldl_Unit_City				"Unidad/Ciudad"
+str_ldl_Tile_Pad			"Terreno"
+str_ldl_Civ				"Imp."
+str_ldl_Edit_City			"Editar ciudad"
+str_ldl_Unit_City			"Unidad/Ciudad"
 
 str_ldl_Toolbar_Title			"Modo Trampa Call to Power"
 str_ldl_World_Settings			"Configs mundo"
@@ -29,47 +74,47 @@ str_ldl_Player_Settings			"Configs jugador"
 str_ldl_Player_Static_Text		"Jugador:"
 str_ldl_Player_Name_Text		"TNJ"
 str_ldl_Year_Static_Text		"Año del juego:"
-str_ldl_Year_Text				"TA"
-str_ldl_Num_Players_Static_Text	"Nº jugadores:"
+str_ldl_Year_Text			"TA"
+str_ldl_Num_Players_Static_Text		"Nº jugadores:"
 str_ldl_Num_Players_Text		"TNJ"
-str_ldl_Map_Size_Static_Text	"Tamaño:"
+str_ldl_Map_Size_Static_Text		"Tamaño:"
 str_ldl_Map_Size_Text			"TTM"
-str_ldl_Difficulty_Static_Text	"Dificultad:"
+str_ldl_Difficulty_Static_Text		"Dificultad:"
 str_ldl_Difficulty_Text			"TD"
-str_ldl_Save_As_SP				"Guardar partida SP"
-str_ldl_Save_As_MP				"Guardar partida MP"
+str_ldl_Save_As_SP			"Guardar partida SP"
+str_ldl_Save_As_MP			"Guardar partida MP"
 
 # SAM041599 added ResetLOS button to cheat mode screen
-str_ldl_Reset_LOS				"Rest. visión"
+str_ldl_Reset_LOS			"Rest. visión"
 
 #
 # for Tile Pad
 #
-str_ldl_Forest					"Bosque"
-str_ldl_Plains					"Llanura"
-str_ldl_Tundra					"Tundra"
-str_ldl_Glacier					"Glaciar"
-str_ldl_Grassland				"Planicie"
-str_ldl_Desert					"Desierto"
-str_ldl_Swamp					"Ciénaga"
-str_ldl_Jungle					"Selva"
-str_ldl_Mountain				"Montaña"
-str_ldl_Hills					"Colinas"
+str_ldl_Forest				"Bosque"
+str_ldl_Plains				"Llanura"
+str_ldl_Tundra				"Tundra"
+str_ldl_Glacier				"Glaciar"
+str_ldl_Grassland			"Planicie"
+str_ldl_Desert				"Desierto"
+str_ldl_Swamp				"Ciénaga"
+str_ldl_Jungle				"Selva"
+str_ldl_Mountain			"Montaña"
+str_ldl_Hills				"Colinas"
 str_ldl_ShallowWater			"Agua poco profunda"
-str_ldl_DeepWater				"Agua profunda"
-str_ldl_Volcano					"Volcán submarino"
-str_ldl_Space					"Espacio"
-str_ldl_Beach					"Playa"
-str_ldl_Shelf					"Plataforma continental"
-str_ldl_Trench					"Sima"
-str_ldl_Rift					"Cañón submarino"
-str_ldl_Dead					"Tierra destruida"
-str_ldl_BrownHill				"Colina del desierto"
+str_ldl_DeepWater			"Agua profunda"
+str_ldl_Volcano				"Volcán submarino"
+str_ldl_Space				"Espacio"
+str_ldl_Beach				"Playa"
+str_ldl_Shelf				"Plataforma continental"
+str_ldl_Trench				"Sima"
+str_ldl_Rift				"Cañón submarino"
+str_ldl_Dead				"Tierra destruida"
+str_ldl_BrownHill			"Colina del desierto"
 str_ldl_BrownMountain			"Montaña del desierto"
-str_ldl_WhiteHill				"Colina ártica"
+str_ldl_WhiteHill			"Colina ártica"
 str_ldl_WhiteMountain			"Montaña ártica"
-str_ldl_Goody					"Ruinas"
-str_ldl_River					"Río"
+str_ldl_Goody				"Ruinas"
+str_ldl_River				"Río"
 
 #
 # for City Pad
@@ -81,17 +126,17 @@ str_ldl_City_Pad_Message		"Mientras esté abierta esta pantalla de ciudad, puedes
 #
 str_ldl_Global_Pollution		"Contaminación mundial"
 str_ldl_Ozone_Damage			"Daños al ozono"
-str_ldl_Flooding				"Inundaciones"
-str_ldl_never					"N/A"
-str_ldl_O						"O"
-str_ldl_F						"I"
+str_ldl_Flooding			"Inundaciones"
+str_ldl_never				"N/A"
+str_ldl_O				"O"
+str_ldl_F				"I"
 
 #
 # for Unit Pad
 #
-str_ldl_Kill					"Matar"
+str_ldl_Kill				"Matar"
 
 #
 # for Tile Improvements Pad
 #
-str_ldl_Tile_Imp_Pad_Message	"Mientras esté abierta esta pantalla de mejoras de casilla, puedes colocar libremente mejoras de casilla, instalaciones y terraformado permitidos utilizando la interfaz del panel de control."
+str_ldl_Tile_Imp_Pad_Message		"Mientras esté abierta esta pantalla de mejoras de casilla, puedes colocar libremente mejoras de casilla, instalaciones y terraformado permitidos utilizando la interfaz del panel de control."

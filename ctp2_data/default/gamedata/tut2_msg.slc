@@ -152,7 +152,7 @@ alertbox 'TAReselectUnit' {
 	Text(ID_T_RESELECT_UNIT);
 	Button(ID_T_BUTTON_OK) {
 		Kill();
-	}		
+	}
 }
 
 messagebox 'TMBuiltCityWall' {
@@ -186,11 +186,6 @@ messagebox 'TMBuiltMarketplace' {
 		MinimizeAction();
 	}
 }
-
-//messagebox 'TMFortifiedUnit' {
-//	Show();
-//	Text(ID_T_FORTIFIED_UNIT);
-//}
 
 messagebox 'TMBuildMoreUnits' {
 	Show();

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Hotseat (and e-mail) game setup screen
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,8 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -24,6 +26,7 @@
 //
 // - Code strucure improvements: multiple include guard added, cleanup in
 //   destructor.
+// - Increased the number of players in a HotSeat and PBEM game. (4-Dec-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,7 +51,7 @@ typedef void (HotseatListCallback)(sint32 launch,
 								   MBCHAR *name,
 								   MBCHAR *email);
 
-#define k_MAX_HOTSEAT_PLAYERS 8
+#define k_MAX_HOTSEAT_PLAYERS k_MAX_PLAYERS
 
 class HotseatListItem : public c3_ListItem
 {

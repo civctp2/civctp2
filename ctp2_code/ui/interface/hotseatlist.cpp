@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  : Hotseat (and e-mail) game setup screen
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------

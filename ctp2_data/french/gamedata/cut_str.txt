@@ -3,6 +3,7 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Contains strings that were supposed to be cut (French)
+# Id           : $Id:$
 #
 #----------------------------------------------------------------------------
 #
@@ -12,6 +13,25 @@
 #
 # This material has been developed at apolyton.net by the Apolyton CtP2 
 # Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains strings that should have been removed.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
 #
 #----------------------------------------------------------------------------
 #
