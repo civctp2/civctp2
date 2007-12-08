@@ -1167,21 +1167,22 @@ bool BuildQueue::DoInsertChecks(sint32 cat, sint32 t, sint32 cost)
 	switch(cat) 
 	{
 		
-	default:
-		// No insert checks
-		break;
+		default:
+			// No insert checks
+			break;
 
-        case k_GAME_OBJ_TYPE_UNIT:
+		case k_GAME_OBJ_TYPE_UNIT:
 		{
-            if(!m_city.CanBuildUnit(t)) { 
+			if(!m_city.CanBuildUnit(t))
+			{
 				return false;
-            }
+			}
 
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 			if (!m_list->GetHead())
 			{
 				SendMsgWormholeProbeStarted();
-				}
+			}
 #endif // CTP1_HAS_RISEN_FROM_THE_GRAVE
 
 		}

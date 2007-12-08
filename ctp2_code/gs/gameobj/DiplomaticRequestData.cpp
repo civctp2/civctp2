@@ -1,12 +1,32 @@
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Diplomatic request poll
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "DiplomaticRequestData.h"
@@ -60,7 +80,7 @@ extern TradePool *g_theTradePool;
 
 DiplomaticRequestData::DiplomaticRequestData(const ID id) 
 : 
-    GAMEOBJ             (id.m_id),
+    GameObj             (id.m_id),
 	m_round             (g_turn ? g_turn->GetRound() : 0),
     m_owner             (PLAYER_INDEX_INVALID),
 	m_recipient         (PLAYER_INDEX_INVALID),
@@ -78,7 +98,7 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id)
 
 DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX recipient, const REQUEST_TYPE request)
 : 
-    GAMEOBJ             (id.m_id),
+    GameObj             (id.m_id),
 	m_round             (g_turn ? g_turn->GetRound() : 0),
     m_owner             (owner),
 	m_recipient         (recipient),
@@ -87,7 +107,7 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX own
     m_response          (REQUEST_RESPONSE_TYPE_NULL),
     m_tone              (k_MESSAGE_TONE_NEUTRAL),
     m_advance           (9),
-    m_reciprocalAdvance (0),	
+    m_reciprocalAdvance (0),
     m_targetCity        (),
 	m_reciprocalCity    (),
 	m_amount            (0)
@@ -95,15 +115,15 @@ DiplomaticRequestData::DiplomaticRequestData(const ID id, const PLAYER_INDEX own
 
 
 void DiplomaticRequestData::Serialize(CivArchive &archive)
-	{
+{
 
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
-    GAMEOBJ::Serialize(archive); 
+	GameObj::Serialize(archive); 
 	uint8 hasChild;
 
 	if (archive.IsStoring())
-		{
+	{
 		archive<<m_round ;
 		archive.PutSINT32(m_owner) ;
 		archive.PutSINT32(m_recipient) ;
@@ -129,9 +149,9 @@ void DiplomaticRequestData::Serialize(CivArchive &archive)
 		if (m_greater)
 			((DiplomaticRequestData *)(m_greater))->Serialize(archive) ;
 
-		}
+	}
 	else
-		{
+	{
 		archive>>m_round ;
 
 		m_owner = (PLAYER_INDEX)(archive.GetSINT32()) ;
@@ -158,9 +178,9 @@ void DiplomaticRequestData::Serialize(CivArchive &archive)
 			m_greater = new DiplomaticRequestData(archive);
 		else
 			m_greater = NULL;
-		}
-
 	}
+
+}
 
 
 
@@ -174,10 +194,10 @@ void DiplomaticRequestData::Serialize(CivArchive &archive)
 
 
 void DiplomaticRequestData::SetThirdParty(const PLAYER_INDEX thirdParty)
-	{
+{
 	Assert(thirdParty >=0 && thirdParty<k_MAX_PLAYERS) ;
 	m_thirdParty = thirdParty ;
-	}
+}
 
 
 
@@ -191,9 +211,9 @@ void DiplomaticRequestData::SetThirdParty(const PLAYER_INDEX thirdParty)
 
 
 void DiplomaticRequestData::SetResponse(const REQUEST_RESPONSE_TYPE response)
-	{
+{
 	m_response = response ;
-	}
+}
 
 
 
@@ -208,9 +228,9 @@ void DiplomaticRequestData::SetResponse(const REQUEST_RESPONSE_TYPE response)
 
 
 void DiplomaticRequestData::SetTarget(const Unit &city)
-	{
+{
 	m_targetCity = city ;
-	}
+}
 
 
 
@@ -224,21 +244,21 @@ void DiplomaticRequestData::SetTarget(const Unit &city)
 
 
 void DiplomaticRequestData::SetGold(const Gold &amount)
-	{
+{
 	m_amount = amount ;
 #if 0
 	if(g_network.IsClient()) 
-		{
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_SET_REQUEST_GOLD,
 										   (uint32)m_id,
 										   (uint32)m_amount.GetLevel()));
-		} 
-	else 
-		{
-		g_network.Enqueue(this);
-	    }
-#endif
 	}
+	else
+	{
+		g_network.Enqueue(this);
+	}
+#endif
+}
 
 
 
@@ -251,9 +271,9 @@ void DiplomaticRequestData::SetGold(const Gold &amount)
 
 
 void DiplomaticRequestData::Dump(const sint32 i)
-	{
+{
 	switch (m_request)
-		{
+	{
 		case REQUEST_TYPE_GREETING :								
 			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : Greetings\n", i, m_owner, m_recipient)) ;
 			break ;
@@ -339,9 +359,9 @@ void DiplomaticRequestData::Dump(const sint32 i)
 			
 			break ;
 
-		}
-
 	}
+
+}
 
 
 
@@ -356,7 +376,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 
 
 void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
-	{
+{
 	SlicObject *so = NULL;
 
 #ifdef _DEBUG
@@ -660,12 +680,12 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
     } 
 #endif // _DEBUG
 
-		DiplomaticRequest me(m_id);
-		me.Kill();
+	DiplomaticRequest me(m_id);
+	me.Kill();
 
 
 
-	}
+}
 
 
 
@@ -679,14 +699,14 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 
 
 ATTITUDE_TYPE DiplomaticRequestData::GetAttitude(PLAYER_INDEX p1, PLAYER_INDEX p2)
-	{
+{
 	Assert((p1>=0) && (p1<k_MAX_PLAYERS)) ;
 	Assert((g_player[p1]) && (!g_player[p1]->IsDead())) ;
 	Assert((p2>=0) && (p2<k_MAX_PLAYERS)) ;
 	Assert((g_player[p2]) && (!g_player[p2]->IsDead())) ;
 
 	return (g_player[p1]->GetAttitude(p2)) ;
-	}
+}
 
 
 
@@ -701,7 +721,7 @@ ATTITUDE_TYPE DiplomaticRequestData::GetAttitude(PLAYER_INDEX p1, PLAYER_INDEX p
 
 
 void DiplomaticRequestData::Reject(BOOL fromServer)
-	{
+{
 	SlicObject	*so = NULL;
 
 	if(g_network.IsClient() && !fromServer) {

@@ -35,38 +35,39 @@
 #include "c3errors.h"
 #include "civarchive.h"
 
-GAMEOBJ::GAMEOBJ(uint32 i) 
+GameObj::GameObj(uint32 i) 
 :
     m_id            (i),
     m_lesser        (NULL),
     m_greater       (NULL),
-    m_isFromPool    (FALSE)
-{ 
+    m_isFromPool    (FALSE),
+    m_killMeSoon    (false)
+{
 }
 
-GAMEOBJ::~GAMEOBJ()
+GameObj::~GameObj()
 {
 	delete m_lesser;
 	delete m_greater;
 }
 
-void GAMEOBJ::operator delete(void *ptr)
+void GameObj::operator delete(void *ptr)
 {
-	GAMEOBJ *obj = (GAMEOBJ *)ptr;
+	GameObj *obj = (GameObj *)ptr;
 	if(!obj->m_isFromPool)
 		::delete obj;
 }
 
-void GAMEOBJ::operator delete(void *ptr, size_t size)
+void GameObj::operator delete(void *ptr, size_t size)
 {
-	GAMEOBJ *obj = (GAMEOBJ *)ptr;
+	GameObj *obj = (GameObj *)ptr;
 	if(!obj->m_isFromPool)
 		::delete obj;
 }
 
-void GAMEOBJ::operator delete[] (void *ptr, size_t size)
+void GameObj::operator delete[] (void *ptr, size_t size)
 {
-	::delete[] ((GAMEOBJ*)ptr);
+	::delete[] ((GameObj*)ptr);
 }
 
 GameObj * GameObj_Access

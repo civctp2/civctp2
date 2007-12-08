@@ -177,7 +177,7 @@ private:
 #define k_UDF_TELEPORT_DEATH                         0x20000000
 #define k_UDF_BEACH_ASSAULT_LEGAL                    0x40000000
 
-class UnitData : public GAMEOBJ,
+class UnitData : public GameObj,
                  public CityRadiusCallback
 {
 

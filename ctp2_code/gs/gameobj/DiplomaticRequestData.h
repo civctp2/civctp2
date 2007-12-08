@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Diplomatic request poll
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -27,7 +48,7 @@ class CivArchive;
 #include "player.h"
 
 
-class DiplomaticRequestData : public GAMEOBJ
+class DiplomaticRequestData : public GameObj
 	{
 	private:
 		
@@ -59,7 +80,7 @@ class DiplomaticRequestData : public GAMEOBJ
 
 	public:
 		DiplomaticRequestData(const ID id) ;
-		DiplomaticRequestData(CivArchive &archive) : GAMEOBJ(0) { Serialize(archive) ; }
+		DiplomaticRequestData(CivArchive &archive) : GameObj(0) { Serialize(archive) ; }
 		DiplomaticRequestData(const ID id, PLAYER_INDEX sender, PLAYER_INDEX recipient, REQUEST_TYPE request) ;
 
 		void MakeRequest(const PLAYER_INDEX owner, const PLAYER_INDEX recipient, const REQUEST_TYPE request) ;

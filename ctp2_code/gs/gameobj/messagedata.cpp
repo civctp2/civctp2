@@ -1,10 +1,32 @@
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Message data
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _BAD_BUTTON
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "MessageData.h"
@@ -66,8 +88,8 @@ extern MessageModal *g_modalMessage;
 
 MessageData::MessageData(CivArchive &archive) 
 : 
-    GAMEOBJ                 (0),
-	m_owner                 (PLAYER_INDEX_INVALID),									
+    GameObj                 (0),
+	m_owner                 (PLAYER_INDEX_INVALID),
 	m_sender                (PLAYER_INDEX_INVALID),
     m_isRead                (false),
 	m_msgType               (0),
@@ -100,8 +122,8 @@ MessageData::MessageData(CivArchive &archive)
 
 MessageData::MessageData(const ID id) 
 : 
-    GAMEOBJ                 (id.m_id),
-	m_owner                 (PLAYER_INDEX_INVALID),									
+    GameObj                 (id.m_id),
+	m_owner                 (PLAYER_INDEX_INVALID),
 	m_sender                (PLAYER_INDEX_INVALID),
     m_isRead                (false),
 	m_msgType               (0),
@@ -146,8 +168,8 @@ MessageData::MessageData(const ID id)
 
 MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_INDEX sender, const MESSAGE_TYPE type, MBCHAR *s)
 : 
-    GAMEOBJ                 (id.m_id),
-	m_owner                 (owner),									
+    GameObj                 (id.m_id),
+	m_owner                 (owner),
 	m_sender                (sender),
     m_isRead                (false),
 	m_msgType               (type),
@@ -187,8 +209,8 @@ MessageData::MessageData(const ID id, const PLAYER_INDEX owner, const PLAYER_IND
 /// @todo Replace with standard copy constructor	
 MessageData::MessageData(const ID id, MessageData *copy) 
 : 
-    GAMEOBJ                 (id.m_id),
-	m_owner                 (PLAYER_INDEX_INVALID),									
+    GameObj                 (id.m_id),
+	m_owner                 (PLAYER_INDEX_INVALID),
 	m_sender                (PLAYER_INDEX_INVALID),
     m_isRead                (false),
 	m_msgType               (0),
@@ -348,7 +370,7 @@ void MessageData::Serialize(CivArchive &archive)
 	sint32 count, i;
 	if (archive.IsStoring())
 	{
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_caption)+sizeof(m_caption));
 
@@ -398,7 +420,7 @@ void MessageData::Serialize(CivArchive &archive)
 		}
 	else 
 	{
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_caption)+sizeof(m_caption));
 

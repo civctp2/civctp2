@@ -17,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -67,7 +69,7 @@ class	CivilisationData;
 #define k_CAPITAL_UNDEFINED       -1 // From CivilisationRec.h
 #define k_CITY_NAME_UNDEFINED     -1 // From CivilisationRec.h
 
-class CivilisationData : public GAMEOBJ
+class CivilisationData : public GameObj
 {
 public:
 	

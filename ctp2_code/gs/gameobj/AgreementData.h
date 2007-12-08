@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Agreement data
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -20,7 +50,7 @@ typedef sint32 AdvanceType;
 	
 #include "AgreementTypes.h"
 
-class AgreementData : public GAMEOBJ
+class AgreementData : public GameObj
 {
 private:
 	
@@ -108,7 +138,7 @@ public:
 	sint32 DecrementTurns(void) ;
 	
 	
-	void EndTurn(void) ;							
+	void EndTurn(void) ;
 	
 	void ToString(MBCHAR *s) ;
 	

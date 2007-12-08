@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Trade Route Data
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -51,7 +52,7 @@ class TradeRouteData;
 
 class Path;
 
-class TradeRouteData : public GAMEOBJ,
+class TradeRouteData : public GameObj,
 					   public CityRadiusCallback
 {
 private:

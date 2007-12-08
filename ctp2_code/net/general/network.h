@@ -98,7 +98,7 @@ class Unit;
 template <class T> class PointerList;
 template <class T> class DynamicArray;
 class NetGameObj;
-class GAMEOBJ;
+class GameObj;
 class MapPoint;
 class NetHash;
 class UnitDynamicArray;
@@ -322,7 +322,7 @@ public:
 	void AddDeadUnit(sint32);
 	void ClearDeadUnits();
 
-	void AddCreatedObject(GAMEOBJ *obj);
+	void AddCreatedObject(GameObj *obj);
 	void HandleObjectACK(uint32 id);
 	void HandleObjectNAK(uint32 myId, uint32 realId);
 	void CheckReceivedObject(uint32 id);

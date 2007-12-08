@@ -134,7 +134,7 @@ TradeRouteData::TradeRouteData(TradeRouteData* copyme, uint32 new_id)
 
 
 TradeRouteData::TradeRouteData(const TradeRoute route) 
-	: GAMEOBJ(route.m_id)
+	: GameObj(route.m_id)
 {
 	m_astarPath = new Path;
 }

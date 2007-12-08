@@ -35,30 +35,30 @@
 #ifndef __GAME_OBJ_H__
 #define __GAME_OBJ_H__ 1
 
-class GAMEOBJ;
-typedef class GAMEOBJ GameObj; 
-
 class CivArchive;
 
 #define k_GAMEOBJ_VERSION_MAJOR	0									
 #define k_GAMEOBJ_VERSION_MINOR	0									
 
 
-class GAMEOBJ { 
-
+class GameObj
+{
 protected:
 	GameObj *m_lesser, *m_greater; 
+	bool m_killMeSoon;
 
 public:
-	uint32 m_id; 
-	uint8 m_isFromPool; 
+	uint32 m_id; // Only serialized member
+	uint8 m_isFromPool;
 
-	GAMEOBJ(uint32 h); 
-	virtual ~GAMEOBJ();
+	GameObj(uint32 h); 
+	virtual ~GameObj();
 	void operator delete(void *ptr);
 	void operator delete(void *ptr, size_t size);
 	void operator delete [] (void *ptr, size_t size);
 
+	void SetKillMeSoon(){ m_killMeSoon = true; };
+	bool KillMeSoon(){ return m_killMeSoon; };
 	virtual void Serialize(CivArchive &archive) ;
 
 	friend GameObj * GameObj_Access(GameObj *p, const uint32 i);

@@ -290,21 +290,22 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 		{
 			s_skipIndex = i;
 		}
-		else {
+		else
+		{
 		
-		//need to add enable and disable stuff here
-		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("CivItem");
-		Assert(item);
-		if(!item)
-			break;
+			//need to add enable and disable stuff here
+			ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("CivItem");
+			Assert(item);
+			if(!item)
+				break;
 		
-		item->SetUserData((void *)i);
+			item->SetUserData((void *)i);
 				
-		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
-		Assert(text);
-		if(!text)
-			break;
-		text->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetPluralCivName()));  //singular?
+			ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
+			Assert(text);
+			if(!text)
+				break;
+			text->SetText(g_theStringDB->GetNameStr(g_theCivilisationDB->Get(i)->GetPluralCivName()));  //singular?
 			s_CivListBox->AddItem(item);
 		}
 
@@ -388,15 +389,13 @@ AUI_ERRCODE spnewgametribescreen_Cleanup()
 		g_c3ui->RemoveWindow(g_spNewGameTribeScreen->Id());
 		keypress_RemoveHandler(g_spNewGameTribeScreen);
 
-#define mycleanup(mypointer) { delete mypointer; mypointer = NULL; }
-		mycleanup(s_CivListBox);
-		mycleanup(s_leaderNameStatic);
-		mycleanup(s_leaderNameTextField);
-		mycleanup(s_maleFemaleSwitchGroup);
-		mycleanup(s_maleRadio);
-		mycleanup(s_femaleRadio);
-		mycleanup(g_spNewGameTribeScreen);
-#undef mycleanup
+		allocated::clear(s_CivListBox);
+		allocated::clear(s_leaderNameStatic);
+		allocated::clear(s_leaderNameTextField);
+		allocated::clear(s_maleFemaleSwitchGroup);
+		allocated::clear(s_maleRadio);
+		allocated::clear(s_femaleRadio);
+		allocated::clear(g_spNewGameTribeScreen);
 	}
 
 	return AUI_ERRCODE_OK;

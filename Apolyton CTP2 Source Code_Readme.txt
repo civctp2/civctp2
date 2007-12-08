@@ -39,16 +39,20 @@ http://msdn.microsoft.com/directx/directxdownloads/
 Make sure you add the Include and Lib and BaseClasses directories from this SDK to Tools->Options->Directories from Visual Studio, if they are not there already. If you installed them to default locations, that means you need to add e.g. for DirectX 9.0:
 
 C:\DXSDK\Include
-C:\DXSDK\Samples\C++\DirectShow\BaseClasses 
+C:\DXSDK\Samples\C++\DirectShow\BaseClasses
 
 to your include directories path, and
 
 C:\DXSDK\Lib
 C:\DXSDK\Samples\C++\DirectShow\BaseClasses\Debug_Unicode
 
-to your lib directories path. 
+to your lib directories path.
 
 Note that the project files have been updated to link the code with DirectX 9.0. It has not been tested whether this may break linkage to older versions of DirectX.
+
+If you are using Visual Studio C++ 6.0 you need to add the following line to the list of include directories in front of the Microsoft standart directories, since MSVSC++ 6.0 comes with a defect standart library.
+
+C:\<your CTP2 directory>\ctp2_code\compiler\msvc6\stlfixes (if you use )
 
 In order to build, you need an environment variable named CDKDIR on your computer. In Windows XP/2000, go to Control
 Panel->System->Environment Variables, and add it, with it's value set to <your source path>/ctp2/bin, the directory with bison, flex, and other miscellaneous utilities in it.

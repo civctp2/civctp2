@@ -94,7 +94,7 @@ InstallationData::InstallationData(CivArchive &archive) : GameObj(0)
 void InstallationData::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_visibility)+sizeof(m_visibility));
 
 
@@ -107,7 +107,7 @@ void InstallationData::Serialize(CivArchive &archive)
 			((InstallationData *)(m_greater))->Serialize(archive) ;
 
 	} else {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_visibility)+sizeof(m_visibility));
 
 		uint32	hasOld;

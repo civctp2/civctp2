@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Trade Offer data
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -11,7 +41,7 @@
 
 class CivArchive;
 
-class TradeOfferData : public GAMEOBJ {
+class TradeOfferData : public GameObj {
 private:
 	
 	PLAYER_INDEX m_owner;
@@ -31,7 +61,7 @@ public:
 				   const ROUTE_TYPE offerType, const sint32 offerResource,
 				   const ROUTE_TYPE askingType, const sint32 askingResource,
 				   const Unit toCity)
-		: GAMEOBJ(id.m_id)
+		: GameObj(id.m_id)
 	{
 		m_owner = city.GetOwner();
 		m_fromCity = city;
@@ -43,9 +73,9 @@ public:
 		m_toCity = toCity;
 	}
 
-	TradeOfferData(const ID id) : GAMEOBJ(id.m_id) {}
+	TradeOfferData(const ID id) : GameObj(id.m_id) {}
 
-	TradeOfferData(CivArchive &archive) : GAMEOBJ(0) { Serialize(archive); };
+	TradeOfferData(CivArchive &archive) : GameObj(0) { Serialize(archive); };
 
 	
 	PLAYER_INDEX GetOwner() const { return m_owner; }

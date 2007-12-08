@@ -76,7 +76,7 @@ extern Diplomacy_Log *g_theDiplomacyLog;
 
 
 
-AgreementData::AgreementData(const ID id) : GAMEOBJ(id.m_id)
+AgreementData::AgreementData(const ID id) : GameObj(id.m_id)
 {
     Init(); 
 
@@ -100,7 +100,7 @@ AgreementData::AgreementData(const ID id) : GAMEOBJ(id.m_id)
 
 
 AgreementData::AgreementData(const ID id, const PLAYER_INDEX owner, 
-   const PLAYER_INDEX recipient, const AGREEMENT_TYPE agreement) : GAMEOBJ(id.m_id)
+   const PLAYER_INDEX recipient, const AGREEMENT_TYPE agreement) : GameObj(id.m_id)
 {
     Init(); 
 
@@ -128,7 +128,7 @@ AgreementData::AgreementData(const ID id, const PLAYER_INDEX owner,
 	ENQUEUE();
 }
 
-AgreementData::AgreementData(CivArchive &archive) : GAMEOBJ(0)
+AgreementData::AgreementData(CivArchive &archive) : GameObj(0)
 {
     Init(); 
     Serialize(archive); 
@@ -163,7 +163,7 @@ void AgreementData::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE 
 
-    GAMEOBJ::Serialize(archive); 
+    GameObj::Serialize(archive); 
 	uint8 hasChild;
 
 	if (archive.IsStoring())

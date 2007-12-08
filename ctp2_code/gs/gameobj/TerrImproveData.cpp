@@ -203,7 +203,7 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 	uint8 hasChild;
 
 	if(archive.IsStoring()) {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_isBuilding)+sizeof(m_isBuilding));
 
 		hasChild = m_lesser != NULL;
@@ -217,7 +217,7 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 			((TerrainImprovementData *)(m_greater))->Serialize(archive) ;
 
 	} else {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_isBuilding)+sizeof(m_isBuilding));
 
 		archive >> hasChild;

@@ -473,7 +473,7 @@ ArmyData::~ArmyData()
 
 void ArmyData::Serialize(CivArchive &archive)
 {
-    GAMEOBJ::Serialize(archive);
+    GameObj::Serialize(archive);
     CellUnitList::Serialize(archive);
     m_attackedByDefenders->Serialize(archive);
     m_pos.Serialize(archive);

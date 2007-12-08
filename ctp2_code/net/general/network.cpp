@@ -2219,7 +2219,7 @@ Network::ClearDeadUnits()
 	m_deadUnitList->Clear();
 }
 
-void Network::AddCreatedObject(GAMEOBJ *obj)
+void Network::AddCreatedObject(GameObj *obj)
 {
 	m_gameObjects->AddCreated(obj);
 }

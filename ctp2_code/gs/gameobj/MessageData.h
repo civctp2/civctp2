@@ -95,7 +95,7 @@ enum MESSAGE_RESPONSE_STYLE
 	} ;
 
 
-class MessageData : public GAMEOBJ
+class MessageData : public GameObj
 	{
 	private:
 		

@@ -93,7 +93,7 @@ public:
     }
 };
 
-class ArmyData : public GAMEOBJ,
+class ArmyData : public GameObj,
                  public CellUnitList,
                  public CityRadiusCallback
 {

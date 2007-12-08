@@ -71,7 +71,7 @@ extern	ProfileDB               *g_theProfileDB;
 //
 //----------------------------------------------------------------------------
 CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) 
-:	GAMEOBJ(id.m_id),
+:	GameObj(id.m_id),
 	m_owner(owner),
 	m_civ(civ),
 	m_gender(gender),
@@ -104,7 +104,7 @@ CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX c
 //
 //----------------------------------------------------------------------------
 CivilisationData::CivilisationData(const ID &id) 
-:	GAMEOBJ(id.m_id),
+:	GameObj(id.m_id),
 	m_owner(-1),
 	m_civ(CIV_INDEX_INVALID),
 	m_gender(GENDER_RANDOM),
@@ -126,7 +126,7 @@ CivilisationData::CivilisationData(const ID &id)
 
 
 
-CivilisationData::CivilisationData(CivArchive &archive) : GAMEOBJ(0)
+CivilisationData::CivilisationData(CivArchive &archive) : GameObj(0)
 {
 	Serialize(archive);
 }
@@ -149,7 +149,7 @@ void CivilisationData::Serialize(CivArchive &archive)
 
 	uint8 hasChild;
 	if (archive.IsStoring()) {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_singular_name)+sizeof(m_singular_name));
 
 		hasChild = m_lesser != NULL;
@@ -164,7 +164,7 @@ void CivilisationData::Serialize(CivArchive &archive)
 		}
 
 	} else {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_singular_name)+sizeof(m_singular_name));
 
 		archive >> hasChild;

@@ -472,6 +472,10 @@ bool Scheduler::Sort_Matches()
 
 #ifdef _DEBUG
 	Assert(m_matches.size() == size);
+	if(m_matches.size() != size)
+	{
+		c3errors_ErrorDialog("List Sort Error", "You compiled the game on MSVC++ 6.0 with the \ndefault standart library, please used the fixed version in your include directories from \n\\ctp2_code\\compiler\\msvc6\\stlfixes");
+	}
 #endif _DEBUG
 
 	t2 = GetTickCount();
@@ -1514,8 +1518,8 @@ bool Scheduler::Free_Undercommitted_Goal()
 				highest_goal_priority = goal_iter->second->Get_Raw_Priority();
 				highest_goal_iter     = goal_iter;
 			}
-		} 
-	} 
+		}
+	}
 
 	if (highest_goal_priority > Goal::BAD_UTILITY)
 	{
@@ -1528,7 +1532,7 @@ bool Scheduler::Free_Undercommitted_Goal()
 
 void Scheduler::Remove_Matches_For_Goal
 (
- const Goal_ptr & goal_ptr 
+    const Goal_ptr & goal_ptr
 )
 {
 	std::list<Plan_List::iterator> & match_refs = goal_ptr->Get_Match_References();
@@ -1546,7 +1550,9 @@ void Scheduler::Remove_Matches_For_Goal
 		rolled_back_agents += (*plan_ref_iter)->Rollback_All_Agents();
 
 		squad_ptr = (*plan_ref_iter)->Get_Squad();
-		squad_ptr->Remove_Match_Reference(*plan_ref_iter);
+		Assert(squad_ptr);
+		if(squad_ptr)
+			squad_ptr->Remove_Match_Reference(*plan_ref_iter);
 
 		Remove_Match(*plan_ref_iter);
 	}

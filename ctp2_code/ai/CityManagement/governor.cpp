@@ -3288,7 +3288,7 @@ void Governor::ComputeDesiredUnits()
 	sint32 best_unit_type;
 
 	sint32 total_unit_support_by_type;
-    sint32 city_index;
+	sint32 city_index;
 	Army army;
 	Unit unit;
 	double freight_per_unit;
@@ -3325,9 +3325,9 @@ void Governor::ComputeDesiredUnits()
 			unit = army.Get(unit_index);
 
 			if (unit.IsValid())
-            {
-    			m_currentUnitCount[unit.GetType()]++;
-            }
+			{
+				m_currentUnitCount[unit.GetType()]++;
+			}
 		}
 	} 
 	
@@ -3337,19 +3337,19 @@ void Governor::ComputeDesiredUnits()
 		unit = player_ptr->m_all_cities->Get(city_index);
 
 		if (unit.IsValid())
-        {
-            BuildQueue * buildQueue = 
-                unit->GetCityData() ? unit->GetCityData()->GetBuildQueue() : NULL;
-		    Assert(buildQueue);
-		    if (    buildQueue 
-                 && buildQueue->GetHead() 
-                 && (k_GAME_OBJ_TYPE_UNIT == buildQueue->GetHead()->m_category)
-               ) 
-		    {
-			    m_currentUnitCount[buildQueue->GetHead()->m_type]++;
-		    }
-        }
-	} 
+		{
+			BuildQueue * buildQueue = 
+			    unit->GetCityData() ? unit->GetCityData()->GetBuildQueue() : NULL;
+			Assert(buildQueue);
+			if (    buildQueue 
+			     && buildQueue->GetHead() 
+			     && (k_GAME_OBJ_TYPE_UNIT == buildQueue->GetHead()->m_category)
+			   )
+			{
+				m_currentUnitCount[buildQueue->GetHead()->m_type]++;
+			}
+		}
+	}
 
 	m_maximumUnitShieldCost = 0;
 	m_currentUnitShieldCost = 0;
@@ -3369,9 +3369,9 @@ void Governor::ComputeDesiredUnits()
 
 		build_list_rec = GetBuildListRecord(strategy, (BUILD_UNIT_LIST) list_num);
 
-        sint32 desired_count                        = 0;
-	    sint32 garrison_count                       = 0;
-	    double unit_support_percent_by_type         = 0.0;
+		sint32 desired_count                        = 0;
+		sint32 garrison_count                       = 0;
+		double unit_support_percent_by_type         = 0.0;
 		
 		switch (list_num)
 		{
@@ -3565,7 +3565,7 @@ void Governor::ComputeDesiredUnits()
 			Assert(false);
 			break;
 		}
-	} 
+	}
 
 	
 	
@@ -3597,13 +3597,13 @@ void Governor::ComputeDesiredUnits()
 
 		unit->GetPos(pos);
 		CellUnitList *  units_ptr   = g_theWorld->GetArmyPtr(pos);
-        sint32          unitCount   = units_ptr ? units_ptr->Num() : 0;
+		sint32          unitCount   = units_ptr ? units_ptr->Num() : 0;
 		for (sint32 unit_index = 0; unit_index < unitCount; unit_index++)
 		{
-		    Unit    armyUnit    = units_ptr->Get(unit_index);
+			Unit    armyUnit    = units_ptr->Get(unit_index);
 
-            if (armyUnit.IsValid())
-            {
+			if (armyUnit.IsValid())
+			{
 				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_bestType)
 					desired_offense--;
 
@@ -3612,7 +3612,7 @@ void Governor::ComputeDesiredUnits()
 
 				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_bestType)
 					desired_ranged--;
-            }
+			}
 		}
 
 		Assert(unit->GetCityData());
@@ -3624,7 +3624,6 @@ void Governor::ComputeDesiredUnits()
 		}
 		else
 		{
-				
 			unit->GetCityData()->SetGarrisonComplete(FALSE);
 		}
 
@@ -3647,13 +3646,13 @@ void Governor::ComputeDesiredUnits()
 			m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_garrisonCount +=
 				static_cast<sint16>(desired_ranged);
 		}
-	} 
+	}
 }
 
 
 void Governor::FillEmptyBuildQueues()
 {
-    Player *    player  = g_player[m_playerId];
+	Player *    player  = g_player[m_playerId];
 	Assert(player);
 	if (player == NULL)
 		return;
@@ -3670,7 +3669,7 @@ void Governor::FillEmptyBuildQueues()
 	for (sint32 i = 0; i < city_list->Num(); i++)
 	{
 		Unit        cityUnit    = city_list->Access(i);
-        if (!cityUnit.IsValid())
+		if (!cityUnit.IsValid())
 			continue;
 
 		CityData *  city        = cityUnit->GetCityData();
@@ -3678,49 +3677,49 @@ void Governor::FillEmptyBuildQueues()
 		if (city->GetBuildQueue()->GetLen() > 0)
 		{
 			if (first_turn_of_war && g_player[m_playerId]->IsRobot())
-            {
-                // Reconsider AI production at the start of a war
+			{
+				// Reconsider AI production at the start of a war
 				city->GetBuildQueue()->Clear();
-            }
-			else 
-            {
-                // Keep using the current build queue
+			}
+			else
+			{
+				// Keep using the current build queue
 				continue;
-            }
+			}
 		}
 
 		sint32  cat         = 0;
-        sint32  type        = CTPRecord::INDEX_INVALID;
-	    sint32  list_num    = BUILD_UNIT_LIST_MAX;
+		sint32  type        = CTPRecord::INDEX_INVALID;
+		sint32  list_num    = BUILD_UNIT_LIST_MAX;
 		ComputeNextBuildItem(city, cat, type, list_num);
 
-        if (!city->GetUseGovernor() || (CTPRecord::INDEX_INVALID == type))
+		if (!city->GetUseGovernor() || (CTPRecord::INDEX_INVALID == type))
 			continue;
 
 		bool insert_ok = false;
-		switch (cat) 
-		{ 
-		case k_GAME_OBJ_TYPE_UNIT:
-			insert_ok = city->BuildUnit(type);
-			if (insert_ok && list_num < BUILD_UNIT_LIST_MAX)
-				m_buildUnitList[list_num].m_desiredCount--;
-			break;
-		case k_GAME_OBJ_TYPE_WONDER:
-			insert_ok = city->BuildWonder(type);
-			break;
-		case k_GAME_OBJ_TYPE_IMPROVEMENT:
-			insert_ok = city->BuildImprovement(type);
-			break; 
-		case k_GAME_OBJ_TYPE_CAPITALIZATION:
-			insert_ok = true;
-//			city->InsertCapitalization(); // How is Capitalization removed?
-			city->BuildCapitalization();
-			break;
-		case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-			insert_ok = true;
-//			city->InsertInfrastructure(); // How is Infrastructure removed?
-			city->BuildInfrastructure();
-			break;
+		switch (cat)
+		{
+			case k_GAME_OBJ_TYPE_UNIT:
+				insert_ok = city->BuildUnit(type);
+				if (insert_ok && list_num < BUILD_UNIT_LIST_MAX)
+					m_buildUnitList[list_num].m_desiredCount--;
+				break;
+			case k_GAME_OBJ_TYPE_WONDER:
+				insert_ok = city->BuildWonder(type);
+				break;
+			case k_GAME_OBJ_TYPE_IMPROVEMENT:
+				insert_ok = city->BuildImprovement(type);
+				break; 
+			case k_GAME_OBJ_TYPE_CAPITALIZATION:
+				insert_ok = true;
+//				city->InsertCapitalization(); // How is Capitalization removed?
+				city->BuildCapitalization();
+				break;
+			case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
+				insert_ok = true;
+//				city->InsertInfrastructure(); // How is Infrastructure removed?
+				city->BuildInfrastructure();
+				break;
 		}
 		Assert(insert_ok);
 	}
@@ -4262,7 +4261,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 	if ( city->GetGarrisonComplete() && 
 		 city->GetGarrisonOtherCities() == FALSE)
-        return CTPRecord::INDEX_INVALID;
+		return CTPRecord::INDEX_INVALID;
 
 	BUILD_UNIT_LIST max_list = BUILD_UNIT_LIST_MAX;
 	sint32 max_production = 0;
@@ -4314,7 +4313,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 		}
 
 	
-    sint32 type = CTPRecord::INDEX_INVALID; 
+	sint32 type = CTPRecord::INDEX_INVALID; 
 
 	if (max_list != BUILD_UNIT_LIST_MAX )
 		{
@@ -4402,19 +4401,16 @@ sint32 Governor::ComputeBestUnitType(const UnitBuildListRecord *build_list_rec, 
 	Assert(g_player[m_playerId]);
 
 	for (int i = build_list_rec->GetNumUnit()-1; i >= 0; i--)
-		{
-			sint32 const unit_type = build_list_rec->GetUnit(i)->GetIndex();
+	{
+		sint32 const unit_type = build_list_rec->GetUnit(i)->GetIndex();
 
-			
-			if (city && !city->CanBuildUnit(unit_type))
-				continue;
+		if (city && !city->CanBuildUnit(unit_type))
+			continue;
 
-			
-			if ( g_player[m_playerId]->CanBuildUnit(unit_type) )
-				return unit_type;
-		}
+		if ( g_player[m_playerId]->CanBuildUnit(unit_type) )
+			return unit_type;
+	}
 
-	
 	return CTPRecord::INDEX_INVALID;
 }
 

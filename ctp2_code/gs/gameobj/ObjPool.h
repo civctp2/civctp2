@@ -77,7 +77,14 @@ uint32 const    k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB  =
 
 class CivArchive ;
 
-class ObjPool {
+class ObjPool
+{
+
+//----------------------------------------------------------------------------
+// Do not change anything in the types or order of the following variable 
+// declarations. Doing so will break reading in of save files.
+// See the Serialize implementation for more details.
+//----------------------------------------------------------------------------
 
 	uint32 m_id_type;
 
@@ -86,8 +93,12 @@ protected:
 	
 	GameObj *m_table[k_OBJ_POOL_TABLE_SIZE];
 	
+//----------------------------------------------------------------------------
+// Changing the order below this line should not break anything.
+//----------------------------------------------------------------------------
+
 private:
-	
+
 	uint32 Key(const ID &id) const 
 	{
 		return Key(id.m_id);

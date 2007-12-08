@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Miles Sound System library interface
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -64,7 +65,7 @@ enum    AudioStatus
 {
     QSTAT_ERROR                     = 0,
     QSTAT_DONE                      = 1,
-	QSTAT_BUSY						= 3		
+    QSTAT_BUSY                      = 3
 }; // S32
 
 enum    DigitalUsage
@@ -73,11 +74,11 @@ enum    DigitalUsage
     DONT_KNOW_WHAT_TO_CALL_THIS     = 1     // Release and Final
 }; // S32
 
-enum	RedbookStatus
+enum    RedbookStatus
 {
-    REDBOOK_ERROR					= 0,
-    REDBOOK_PLAYING					= 1, 
-	REDBOOK_STOPPED					= 3,
+    REDBOOK_ERROR                   = 0,
+    REDBOOK_PLAYING                 = 1, 
+    REDBOOK_STOPPED                 = 3,
     REDBOOK_PAUSED                          // value unknown
 }; // U32
 
@@ -130,9 +131,9 @@ MILES_API(void)     AIL_set_digital_master_volume
 
 //----------------------------------------------------------------------------
 
-MILES_API(void)		AIL_quick_handles
+MILES_API(void)     AIL_quick_handles
 (
-    HDIGDRIVER *      	a_pHandleDig,
+    HDIGDRIVER *        a_pHandleDig,
     HMDIDRIVER *        a_pHandleMdi,
     HDLSDEVICE *        a_pHandleDls
 )
@@ -247,8 +248,7 @@ MILES_API(void)     AIL_redbook_stop
 
 //----------------------------------------------------------------------------
 
-
-MILES_API(S32)		AIL_redbook_track
+MILES_API(S32)      AIL_redbook_track
 (
     HREDBOOK            a_Handle
 ) STUB( return 0; );

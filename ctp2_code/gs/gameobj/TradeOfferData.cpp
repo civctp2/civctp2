@@ -1,11 +1,32 @@
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Trade Offer data
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "TradeOfferData.h"
@@ -25,7 +46,7 @@ void TradeOfferData::Serialize(CivArchive &archive)
 	uint8 haveChild;
 
 	if(archive.IsStoring()) {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_toCity)+sizeof(m_toCity));
 
 		haveChild = (m_lesser != NULL);
@@ -39,7 +60,7 @@ void TradeOfferData::Serialize(CivArchive &archive)
 			((TradeOfferData *)(m_greater))->Serialize(archive) ;
 
 	} else {
-		GAMEOBJ::Serialize(archive);
+		GameObj::Serialize(archive);
 		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_toCity)+sizeof(m_toCity));
 		archive >> haveChild;
 		if(haveChild) {
