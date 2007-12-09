@@ -30,6 +30,8 @@
  *   in order to support the old pollution database. (July 15th 2006 Martin Gühmann)
  * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
  * - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
+ * - Added support for default values taken from other databases like the 
+ *   Const database. (9-Dec-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -63,12 +65,20 @@ union dbvalue {
 	char *textValue;
 };
 
+struct defaultDBField
+{
+	char* DBName;
+	int   DBIndex;
+	char* DBField;
+};
+
 struct namelist {
 	char *name;
 	char *akaName;
 	char *defaultName;
 	uint8 flags;
 	union dbvalue v;
+	struct defaultDBField d;
 	struct namelist *next;
 };
 
@@ -78,13 +88,14 @@ struct fieldsize {
 
 struct bitpairtype {
 	uint32 type;
-	void *extraData; 
+	void *extraData;
 };
 
 #define k_NAMEVALUE_HAS_VALUE 0x01
 #define k_NAMEVALUE_INT 0x02
 #define k_NAMEVALUE_FLOAT 0x04
 #define k_NAMEVALUE_STRING 0x08
+#define k_NAMEVALUE_DBREFVALUE 0x10
 
 struct namevalueflags {
 	char *name;
@@ -92,6 +103,7 @@ struct namevalueflags {
 	char *defaultName;
 	uint8 flags;
 	union dbvalue v;
+	struct defaultDBField d;
 };
 
 #define k_MAX_SIZE_VARIABLE (0x7fffffff)

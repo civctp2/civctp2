@@ -4457,3 +4457,178 @@ UNIT_ELEPHANT_WARRIOR {
       Effect SPECEFFECT_REFORMCITY
    }
 }
+
+############################################################
+
+## UNIT 73
+UNIT_CLERIC_EGYPT {
+   # NEW FLAGS
+   GovernmentType GOVERNMENT_THEOCRACY
+   GovernmentType GOVERNMENT_MONARCHY
+   GovernmentType GOVERNMENT_TYRANNY
+   GovernmentType GOVERNMENT_ANARCHY
+   GovernmentType GOVERNMENT_REPUBLIC
+   PrerequisiteBuilding IMPROVE_SHRINE_EGYPT
+   EstablishBuilding IMPROVE_SHRINE_EGYPT
+   HasReligionIcon MAPICON_PHAROAHISM
+   # END NEW FLAGS
+   Description DESCRIPTION_UNIT_CLERIC
+   DefaultIcon ICON_UNIT_CLERIC
+   DefaultSprite SPRITE_CLERIC
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 540
+   PowerPoints 200
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_THEOLOGY
+   ObsoleteAdvance ADVANCE_MASS_MEDIA
+   UpgradeTo UNIT_TELEVANGELIST
+   #GovernmentType GOVERNMENT_THEOCRACY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_CLERIC
+   SoundSelect2 SOUND_SELECT2_CLERIC
+   SoundMove SOUND_MOVE_CLERIC
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CLERIC
+   SoundCantMove SOUND_CANTMOVE_CLERIC
+   SoundAttack SOUND_ATTACK_CLERIC
+   SoundWork SOUND_WORK_CLERIC
+   SoundVictory SOUND_VICTORY_CLERIC
+   SoundDeath SOUND_DEATH_CLERIC
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   CanSoothsay {
+      Sound SOUND_ID_CAN_SOOTHSAY_CL
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   CauseUnhappiness {
+      Chance 1
+      Timer 1
+      Amount 5
+      Sound SOUND_ID_CAN_SOOTHSAY_CL
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   ConvertCities {
+      Chance 0.75
+      DeathChance 0.5
+      Sound SOUND_ID_CONVERT_CITIES_CL
+      Effect SPECEFFECT_CONVERT_CITIES
+   }
+
+   IndulgenceSales {
+      Sound SOUND_ID_INDULGENCE_SALES_CL
+      Effect SPECEFFECT_INDULGENCE_SALES
+   }
+}
+
+############################################################
+
+UNIT_CLERIC_ZOROASTER {
+   # NEW FLAGS
+   GovernmentType GOVERNMENT_THEOCRACY
+   GovernmentType GOVERNMENT_MONARCHY
+   GovernmentType GOVERNMENT_TYRANNY
+   GovernmentType GOVERNMENT_ANARCHY
+   GovernmentType GOVERNMENT_REPUBLIC
+   PrerequisiteBuilding IMPROVE_SHRINE_ZOROASTER
+   EstablishBuilding IMPROVE_SHRINE_ZOROASTER
+   HasReligionIcon MAPICON_ZORASTORISM
+   # END NEW FLAGS
+   Description DESCRIPTION_UNIT_CLERIC
+   DefaultIcon ICON_UNIT_CLERIC
+   DefaultSprite SPRITE_CLERIC
+   Category UNIT_CATEGORY_SPECIAL
+   Attack 0
+   Defense 10
+   ZBRangeAttack 0
+   Firepower 1
+   Armor 1
+   MaxHP 10
+   ShieldCost 540
+   PowerPoints 200
+   ShieldHunger 5
+   FoodHunger 0
+   MaxMovePoints 200
+   VisionRange 1
+   EnableAdvance ADVANCE_THEOLOGY
+   ObsoleteAdvance ADVANCE_MASS_MEDIA
+   UpgradeTo UNIT_TELEVANGELIST
+   #GovernmentType GOVERNMENT_THEOCRACY
+   ActiveDefenseRange 0
+   LossMoveToDmgNone
+   MaxFuel 0
+   IgnoreZOC
+   NoZoc
+   CanBeExpelled
+   CantCaptureCity
+   DeathEffectsHappy
+   IsSpecialForces
+   Civilian
+   SoundSelect1 SOUND_SELECT1_CLERIC
+   SoundSelect2 SOUND_SELECT2_CLERIC
+   SoundMove SOUND_MOVE_CLERIC
+   SoundAcknowledge SOUND_ACKNOWLEDGE_CLERIC
+   SoundCantMove SOUND_CANTMOVE_CLERIC
+   SoundAttack SOUND_ATTACK_CLERIC
+   SoundWork SOUND_WORK_CLERIC
+   SoundVictory SOUND_VICTORY_CLERIC
+   SoundDeath SOUND_DEATH_CLERIC
+
+   CanSee: Standard
+   CanSee: Stealth
+   MovementType: Land
+   MovementType: Mountain
+   Size: Small
+   VisionClass: Stealth
+
+   CanSoothsay {
+      Sound SOUND_ID_CAN_SOOTHSAY_CL
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   CauseUnhappiness {
+      Chance 1
+      Timer 1
+      Amount 5
+      Sound SOUND_ID_CAN_SOOTHSAY_CL
+      Effect SPECEFFECT_CAN_SOOTHSAY
+   }
+
+   ConvertCities {
+      Chance 0.75
+      DeathChance 0.5
+      Sound SOUND_ID_CONVERT_CITIES_CL
+      Effect SPECEFFECT_CONVERT_CITIES
+   }
+
+   IndulgenceSales {
+      Sound SOUND_ID_INDULGENCE_SALES_CL
+      Effect SPECEFFECT_INDULGENCE_SALES
+   }
+}
+
+############################################################

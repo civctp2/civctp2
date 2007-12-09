@@ -1,4 +1,4 @@
-
+// Added Religious Feats
 messagebox 'FeatGotConcrete' {
 	Show();
 	Title(ID_FEAT_ACCOMPISHED_TITLE);
@@ -81,4 +81,15 @@ messagebox 'FeatRecapturedCity' {
 	Show();
 	Title(ID_FEAT_ACCOMPISHED_TITLE);
 	Text(ID_FEAT_RECAPTURED_CITY);
+}
+// RELIGION FEATS
+messagebox 'FeatGotPharoahism' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_EGYPT);
+}
+messagebox 'FeatGotZoroaster' {
+	Show();
+	Title(ID_FEAT_ACCOMPISHED_TITLE);
+	Text(ID_FEAT_GOT_ZOROASTER);
 }

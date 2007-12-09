@@ -355,3 +355,6 @@ BASE_STARVATION_PROTECTION 3
 CARAVAN_COEF 0.04
 
 POLLUTION_CAUSED_BY_NUKE 1000000
+
+# Can be overwritten in strategies.txt for each strategy seperately
+TurnsAcceptedForOnePop 150

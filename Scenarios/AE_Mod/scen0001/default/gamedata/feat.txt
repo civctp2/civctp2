@@ -1,4 +1,13 @@
-
+###########################################################################
+#
+#    FEATS.TXT used in conjunction with Feats.slic, ADVANCE.TXT, 
+#
+###########################################################################
+#
+#	- 11/08/07 Added Religious feats of Egypt and Zoroastorism for religion in CTP2
+#
+#
+###########################################################################
 FEAT_ADVANCE_CONCRETE {
 	Duration 15
 	Description str_ldl_0
@@ -106,4 +115,20 @@ FEAT_CITY_RECAPTURED {
 	Description str_ldl_0
 	EffectIncreaseHappiness 1
 	SlicMessage "FeatRecapturedCity"
+}
+
+#RELIGION FEATS
+
+FEAT_ADVANCE_EGYPT {
+	Duration 150
+	Description str_ldl_0
+	EffectIncreaseHappiness 0 #1
+	SlicMessage "FeatGotPharoahism"
+}
+
+FEAT_ADVANCE_ZOROASTER {
+	Duration 150
+	Description str_ldl_0
+	EffectIncreaseHappiness 0 #1
+	SlicMessage "FeatGotZoroaster"
 }

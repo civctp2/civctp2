@@ -1988,17 +1988,13 @@ SLIC_PRI slicif_get_priority()
 
 void slicif_set_event_checking(char *eventname)
 {
-	
-	
-	
-	
 	s_event_checking = 1;
 	const char *argString = g_gevManager->GetArgString(g_gevManager->GetEventIndex(eventname));
 
 	memset(s_arg_counts, 0, sizeof(s_arg_counts));
 
 	while(*argString) {
-		Assert(*argString == '%' || *argString == '&');
+		Assert(*argString == '%' || *argString == '&' || *argString == '$');
 		argString++; 
 		if(!*argString)
 			break;

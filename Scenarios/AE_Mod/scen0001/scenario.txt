@@ -1,0 +1,2 @@
+AE Mod
+This scenario contains some experimental stuff concerning religions.

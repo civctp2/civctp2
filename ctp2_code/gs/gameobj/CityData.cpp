@@ -9457,12 +9457,12 @@ sint32 CityData::GetRing(MapPoint pos) const
 	MapPoint cityPos = m_home_city.RetPos();
 
 	for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
-    {
+	{
 		sint32 squaredRadius = g_theCitySizeDB->Get(i)->GetSquaredRadius();
 		sint32 squaredDistance = MapPoint::GetSquaredDistance(cityPos, pos);
 
 		if (squaredDistance <= squaredRadius)
-        {
+		{
 			return i;
 		}
 	
@@ -9493,14 +9493,14 @@ sint32 CityData::GetRing(MapPoint pos) const
 sint32 CityData::GetFoodFromRing(sint32 ring) const
 {
 	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
-    {
+	{
 		return m_ringFood[ring];
 	}
 	else
-    {
+	{
 		sint32 maxFood = 0;
 		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
-        {
+		{
 			maxFood += m_ringFood[i];
 		}
 		return maxFood;
@@ -9528,14 +9528,14 @@ sint32 CityData::GetFoodFromRing(sint32 ring) const
 sint32 CityData::GetProdFromRing(sint32 ring) const
 {
 	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
-    {
+	{
 		return m_ringProd[ring];
 	}
 	else
-    {
+	{
 		sint32 maxProd = 0;
 		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
-        {
+		{
 			maxProd += m_ringProd[i];
 		}
 		return maxProd;
@@ -9563,14 +9563,14 @@ sint32 CityData::GetProdFromRing(sint32 ring) const
 sint32 CityData::GetGoldFromRing(sint32 ring) const
 {
 	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
-    {
+	{
 		return m_ringGold[ring];
 	}
 	else
-    {
+	{
 		sint32 maxGold = 0;
 		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
-        {
+		{
 			maxGold += m_ringGold[i];
 		}
 		return maxGold;
@@ -9597,14 +9597,14 @@ sint32 CityData::GetGoldFromRing(sint32 ring) const
 sint32 CityData::GetRingSize(sint32 ring) const
 {
 	if (ring >= 0 && ring < g_theCitySizeDB->NumRecords())
-    {
+	{
 		return m_ringSizes[ring];
 	}
 	else
-    {
+	{
 		sint32 numTiles = 0;
 		for (sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
-        {
+		{
 			numTiles += m_ringSizes[i];
 		}
 		return numTiles;
@@ -9838,23 +9838,22 @@ bool CityData::IsBuildingOperational(sint32 type) const
 		sint32 i, g;
 		bool goodavail = false;
 
-			for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
-				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
-					if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
-						goodavail = true;
-						break;
-					}
-				}
-				if(goodavail){
+		for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
+			for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
+				if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+					goodavail = true;
 					break;
 				}
 			}
-			if(!goodavail)
-				return false;
+			if(goodavail){
+				break;
+			}
+		}
+		if(!goodavail)
+			return false;
 	}
 
 	//End Resources Code
-
 
 	return true;
 }
@@ -10021,10 +10020,10 @@ sint32 CityData::TileImpHappinessIncr() const
 
 	CityInfluenceIterator it(m_home_city.RetPos(), m_sizeIndex);
 	for (it.Start(); !it.End(); it.Next()) 
-    {
+	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 		for (sint32 t = 0; t < cell->GetNumDBImprovements(); t++)
-        {
+		{
 			sint32 timp = cell->GetDBImprovement(t);
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
@@ -10339,6 +10338,7 @@ void CityData::DestroyOnePerCiv()
 		}
 	}
 }
+
 bool CityData::HasReligionIcon() const
 {
 	if (buildingutil_GetHasReligionIcon(GetEffectiveBuildings())) {
@@ -10366,8 +10366,8 @@ bool CityData::CityIsOnTradeRoute()
 			if(cell->GetTradeRoute(i).IsValid()) {
 				return true;
 			}
-        }
-    }
+		}
+	}
 	return false;
 }
 
@@ -10407,26 +10407,25 @@ bool CityData::HasSpecialIcon() const
 
 void CityData::AddCityExpansion()
 {
-
-	MapPoint point(m_home_city.RetPos());
-	MapPoint SpotFound(m_home_city.RetPos());
-	CityInfluenceIterator it(point, GetVisionRadius()); 
-
 	if (g_theConstDB->Get(0)->GetCityExpansionDenominator() > 0) //this checks if its specified in constDB 
-
 	{
-		sint32 UrbanTile = PopCount()/(g_theConstDB->Get(0)->GetCityExpansionDenominator());
+		sint32 UrbanTile = PopCount()/(g_theConstDB->Get(0)->GetCityExpansionDenominator()); // No good idea to call something a denominator and give it the default value zero
 		if(GetNumUrbanTile(m_home_city.RetPos()) >= UrbanTile)
 			return;
-		
+
 		sint32 UrbanImp = GetUrbanTileAvailable(m_home_city.RetPos());
+
+		MapPoint point(m_home_city.RetPos());
+		MapPoint SpotFound(m_home_city.RetPos());
+		CityInfluenceIterator it(point, GetVisionRadius());
+		bool found = false;
 
 		for(it.Start(); !it.End(); it.Next()) {
 			Cell *ncell = g_theWorld->GetCell(it.Pos());
 			Cell *ocell = g_theWorld->GetCell(SpotFound);
 			UrbanImp = GetUrbanTileAvailable(it.Pos()); //includes advance check
 			if (UrbanImp < 0)
-				return;
+				continue;      // On the next tile an urban tilimp could be available
 
 			if(point == it.Pos())
 				continue;
@@ -10437,22 +10436,22 @@ void CityData::AddCityExpansion()
 			if(terrainutil_HasWonder(it.Pos()))
 				continue;
 			
-			if(terrainutil_CanPlayerSpecialBuildAt(UrbanImp, m_owner, it.Pos()) 
+			if(terrainutil_CanPlayerSpecialBuildAt(UrbanImp, m_owner, it.Pos())
 			){
-			//	SpotFound = it.Pos();
-			//}
-			
-				if ((!SpotFound.IsValid())
-				|| ((ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements())  
-				|| (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain())) 
-				){
-					SpotFound = it.Pos(); 
+				if(ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements()
+				|| ncell->GetGoldFromTerrain()   > ocell->GetGoldFromTerrain()
+				  )
+				{
+					found = true;
+					SpotFound = it.Pos();
 				}
 			}
 			
 		}
-		g_player[m_owner]->CreateSpecialImprovement(UrbanImp, SpotFound, 0);
-
+		if(found)
+		{
+			g_player[m_owner]->CreateSpecialImprovement(UrbanImp, SpotFound, 0);
+		}
 	}
 }
 
@@ -10498,7 +10497,6 @@ sint32 CityData::GetSlumTileAvailable(const MapPoint pos) const
 
 void CityData::AddCitySlum()
 {
-
 	MapPoint point(m_home_city.RetPos());
 	MapPoint SpotFound;
 	CityInfluenceIterator it(point, GetVisionRadius()); 

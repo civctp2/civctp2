@@ -969,18 +969,35 @@ void MemberClass::ExportDefaultToken(FILE *outfile, char *recordName)
 
 void MemberClass::ExportOtherRecordIncludes(FILE *outfile)
 {
-    for (PointerList<Datum>::Walker walk(&m_datumList); walk.IsValid(); walk.Next())
+	/// @todo Collect names in map to prevent multiple occurrences
+	for
+	(
+	    PointerList<Datum>::Walker walk(&m_datumList);
+	    walk.IsValid();
+	    walk.Next()
+	)
 	{
-		if(walk.GetObj()->m_type == DATUM_RECORD) {
-			
-			
-			
-			fprintf(outfile, "#include \"%sRecord.h\"\n", walk.GetObj()->m_subType);
+		Datum * dat = walk.GetObj();
+
+		if(dat->m_type == DATUM_RECORD)
+		{
+			fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_subType);
 		}
-		if(walk.GetObj()->m_type == DATUM_BIT_PAIR) {
-			
+		else if(dat->m_type == DATUM_BIT_PAIR)
+		{
 			if (walk.GetObj()->m_bitPairDatum->m_type == DATUM_RECORD)
-				fprintf(outfile, "#include \"%sRecord.h\"\n", walk.GetObj()->m_bitPairDatum->m_subType);
+			{
+				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_bitPairDatum->m_subType);
+			}
+			else if(dat->m_bitPairDatum->m_hasDBRefValue
+			     && strcmp(dat->m_bitPairDatum->drefval.DBName, m_name))
+			{
+				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_bitPairDatum->drefval.DBName);
+			}
+		}
+		else if (dat->m_hasDBRefValue)
+		{
+			fprintf(outfile, "#include \"%sRecord.h\"\n", dat->drefval.DBName);
 		}
 	}
 }

@@ -24,6 +24,8 @@
  * - Added the possibility of a default value from another entry. (Aug 26th 2005 Martin Gühmann)
  * - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 .* - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
+ * - Added support for default values taken from other databases like the 
+ *   Const database. (9-Dec-2007 Martin Gühmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -149,6 +151,7 @@ names: names ',' name
 			newnode->defaultName = $3.nameValue.defaultName;
 			newnode->flags = $3.nameValue.flags;
 			newnode->v = $3.nameValue.v;
+			newnode->d = $3.nameValue.d;
 			newnode->next = NULL;
 			if($$.list) {
 				find = $$.list;
@@ -168,6 +171,7 @@ names: names ',' name
 			newnode->defaultName = $1.nameValue.defaultName;
 			newnode->flags = $1.nameValue.flags;
 			newnode->v = $1.nameValue.v;
+			newnode->d = $1.nameValue.d;
 			newnode->next = NULL;
 			$$.list = newnode;
 		}
@@ -180,6 +184,7 @@ name: NAME
 		$$.nameValue.akaName = NULL;
 		$$.nameValue.defaultName = NULL;
 		$$.nameValue.flags = 0;
+		$$.nameValue.v.intValue = 0;
 	}
 	| NAME '=' NUMBER
 	{
@@ -206,45 +211,32 @@ name: NAME
 		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_STRING);
 		$$.nameValue.v.textValue = $3.name;
 	}
-
-	| NAME AKA NAME
-	{
-		$$.nameValue.name = $1.name;
-		$$.nameValue.akaName = $3.name;
-		$$.nameValue.defaultName = NULL;
-		$$.nameValue.flags = 0;
-	}
-	| NAME '=' NUMBER AKA NAME
-	{
-		$$.nameValue.name = $1.name;
-		$$.nameValue.akaName = $5.name;
-		$$.nameValue.defaultName = NULL;
-		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_INT);
-		$$.nameValue.v.intValue = $3.val;
-	}
-	| NAME '=' FLOATVALUE AKA NAME
-	{
-		$$.nameValue.name = $1.name;
-		$$.nameValue.akaName = $5.name;
-		$$.nameValue.defaultName = NULL;
-		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_FLOAT);
-		$$.nameValue.v.floatValue = $3.fval;
-	}
-		
-	| NAME '=' STRINGVALUE AKA NAME
-	{
-		$$.nameValue.name = $1.name;
-		$$.nameValue.akaName = $5.name;
-		$$.nameValue.defaultName = NULL;
-		$$.nameValue.flags = (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_STRING);
-		$$.nameValue.v.textValue = $3.name;
-	}
 	| NAME '=' NAME
 	{
 		$$.nameValue.name = $1.name;
 		$$.nameValue.akaName = NULL;
 		$$.nameValue.defaultName = $3.name;
 		$$.nameValue.flags = 0;
+		$$.nameValue.v.intValue = 0;
+	}
+	| name '&' RECORD NAME '[' NUMBER ']' '.' NAME
+	{
+		$$.nameValue.name = $1.name;
+		$$.nameValue.akaName = $1.akaName;
+		$$.nameValue.defaultName = $1.nameValue.defaultName;
+		$$.nameValue.flags = $1.nameValue.flags | (k_NAMEVALUE_HAS_VALUE) | (k_NAMEVALUE_DBREFVALUE);
+		$$.nameValue.v = $1.nameValue.v;
+		$$.nameValue.d.DBName  = $4.name;
+		$$.nameValue.d.DBIndex = $6.val;
+		$$.nameValue.d.DBField = $9.name;
+	}
+	| name AKA NAME
+	{
+		$$.nameValue.name = $1.name;
+		$$.nameValue.akaName = $3.name;
+		$$.nameValue.defaultName = $1.nameValue.defaultName;
+		$$.nameValue.flags = $1.nameValue.flags;
+		$$.nameValue.v = $1.nameValue.v;
 	}
 	;
 

@@ -64,6 +64,8 @@
 // - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
 // - Added map.txt support. (27-Mar-2007 Martin Gühmann)
 // - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
+// - Added support for default values taken from other databases like the 
+//   Const database. (9-Dec-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
@@ -338,6 +340,11 @@ void RecordDescription::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	else
 	{
 		dat->SetValue(nameInfo->v);
+
+		if((nameInfo->flags & k_NAMEVALUE_DBREFVALUE))
+		{
+			dat->SetDBRefValue(nameInfo->d);
+		}
 	}
 	m_datumList.AddTail(dat);
 
@@ -383,18 +390,23 @@ void RecordDescription::AddBitPair(struct namelist *nameInfo, sint32 minSize, si
 	|| (dat->m_maxSize > 0)
 	){
 		dat->SetValue(nameInfo->v);
+
+		if((nameInfo->flags & k_NAMEVALUE_DBREFVALUE))
+		{
+			dat->SetDBRefValue(nameInfo->d);
+		}
 	}
 	dat->m_bitNum = m_numBits;
 	m_numBits++;
 
-    char * nameValue = (char *) malloc(strlen(dat->m_name) + strlen("Value") + 1);
-    strcpy(nameValue, nameInfo->name);
-    strcat(nameValue, "Value");
+	char * nameValue = (char *) malloc(strlen(dat->m_name) + strlen("Value") + 1);
+	strcpy(nameValue, nameInfo->name);
+	strcat(nameValue, "Value");
 	Datum *pairDat = new Datum(nameValue, (DATUM_TYPE) pairtype->type);
 	pairDat->m_subType = (char *)pairtype->extraData;
 
 	dat->m_bitPairDatum = pairDat;
-    m_datumList.AddTail(dat);
+	m_datumList.AddTail(dat);
 }
 
 
@@ -607,38 +619,50 @@ void RecordDescription::ExportCode(FILE *outfile)
 
 void RecordDescription::ExportOtherRecordIncludes(FILE *outfile)
 {
-    /// @todo Collect names in map to prevent multiple occurrences
-	for 
-    (
-        PointerList<Datum>::Walker walk(&m_datumList); 
-        walk.IsValid(); 
-        walk.Next()
-    )
-    {
-        Datum * dat = walk.GetObj();
-		
-        if (DATUM_RECORD == dat->m_type) 
-        {
-            if (strcmp(dat->m_subType, m_name))  // already have own declarations at the top
-            {
-            	fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_subType);
-            }
+	/// @todo Collect names in map to prevent multiple occurrences
+	for
+	(
+	    PointerList<Datum>::Walker walk(&m_datumList); 
+	    walk.IsValid(); 
+	    walk.Next()
+	)
+	{
+		Datum * dat = walk.GetObj();
+
+		if (DATUM_RECORD == dat->m_type) 
+		{
+			if (strcmp(dat->m_subType, m_name))  // already have own declarations at the top
+			{
+				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_subType);
+			}
 		}
-        else if (DATUM_BIT_PAIR == dat->m_type) 
-        {
-            if (DATUM_RECORD == dat->m_bitPairDatum->m_type) 
-            {
-			    fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_bitPairDatum->m_subType);
-            }
+		else if (DATUM_BIT_PAIR == dat->m_type) 
+		{
+			if (DATUM_RECORD == dat->m_bitPairDatum->m_type) 
+			{
+				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->m_bitPairDatum->m_subType);
+			}
+			else if(dat->m_hasDBRefValue
+			     && strcmp(dat->drefval.DBName, m_name))
+			{
+				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->drefval.DBName);
+			}
+		}
+		else if (dat->m_hasDBRefValue)
+		{
+			if (strcmp(dat->drefval.DBName, m_name))  // already have own declarations at the top
+			{
+				fprintf(outfile, "#include \"%sRecord.h\"\n", dat->drefval.DBName);
+			}
 		}
 	}
 
-	for 
-    (
-        PointerList<MemberClass>::Walker membWalk(&m_memberClasses); 
-        membWalk.IsValid(); 
-        membWalk.Next()
-    )
+	for
+	(
+	    PointerList<MemberClass>::Walker membWalk(&m_memberClasses); 
+	    membWalk.IsValid(); 
+	    membWalk.Next()
+	)
 	{
 		membWalk.GetObj()->ExportOtherRecordIncludes(outfile);
 	}
@@ -665,8 +689,8 @@ void RecordDescription::ExportManagement(FILE *outfile)
 	fprintf(outfile, "    m_hasGovernmentsModified = %s;\n", AsString(m_hasGovernmentsModified));
 	fprintf(outfile, "}\n\n");
 
-    // Serialize()
-    fprintf(outfile, "void %sRecord::Serialize(CivArchive &archive)\n", m_name);
+	// Serialize()
+	fprintf(outfile, "void %sRecord::Serialize(CivArchive &archive)\n", m_name);
 	fprintf(outfile, "{\n");
 	fprintf(outfile, "    if(archive.IsStoring()) {\n");
 
@@ -678,11 +702,11 @@ void RecordDescription::ExportManagement(FILE *outfile)
 	fprintf(outfile, "            archive << static_cast<MBCHAR*>(NULL);\n");
 	fprintf(outfile, "        }\n");
 	for(i = 0; i  < FlagCount(); i++) 
-    {
+	{
 		fprintf(outfile, "        archive << m_flags%d;\n", i);
 	}
 	for (walk.SetList(&m_datumList); walk.IsValid(); walk.Next()) 
-    {
+	{
 		walk.GetObj()->ExportSerializationStoring(outfile);
 	}
 	fprintf(outfile, "    } else {\n");
@@ -1466,6 +1490,6 @@ void RecordDescription::ExportResolver(FILE *outfile)
 		}
 	}
 
-	fprintf(outfile, "}\n");
+	fprintf(outfile, "}\n\n");
 }
 

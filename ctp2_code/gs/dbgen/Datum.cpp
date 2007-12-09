@@ -36,6 +36,8 @@
 //   other entries. (Aug 26th 2005 Martin Gühmann)
 // - Modernised destructor code.
 // - Fixed operator equal generation for non-integer arrays. (Jan 3rd 2006 Martin Gühmann)
+// - Added support for default values taken from other databases like the 
+//   Const database. (9-Dec-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -137,6 +139,12 @@ void Datum::SetValue(union dbvalue &v)
 {
 	m_hasValue = true;
 	val = v;
+}
+
+void Datum::SetDBRefValue(struct defaultDBField &d)
+{
+	m_hasDBRefValue = true;
+	drefval = d;
 }
 
 void Datum::ExportBitGroupParser(FILE *outfile, char *recordName)
@@ -1015,8 +1023,10 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 
 void Datum::ExportResolver(FILE  *outfile)
 {
-	if(m_type == DATUM_RECORD) {
-		if(m_maxSize >= 0) {
+	if(m_type == DATUM_RECORD)
+	{
+		if(m_maxSize >= 0)
+		{
 			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        sint32 i;\n");
 			fprintf(outfile, "        for(i = 0; i < m_num%s; i++) {\n", m_name);
@@ -1031,7 +1041,9 @@ void Datum::ExportResolver(FILE  *outfile)
 			fprintf(outfile, "            }\n");
 			fprintf(outfile, "        }\n");
 			fprintf(outfile, "    }\n");
-		} else {
+		}
+		else
+		{
 			fprintf(outfile, "    if(m_%s & 0x80000000) {\n", m_name);
 			fprintf(outfile, "        sint32 id = m_%s & 0x7fffffff;\n", m_name);
 			fprintf(outfile, "        if(!g_the%sDB->GetNamedItem(id, m_%s)) {\n", m_subType, m_name);
@@ -1042,19 +1054,33 @@ void Datum::ExportResolver(FILE  *outfile)
 			fprintf(outfile, "        m_%s = -1;\n", m_name);
 			fprintf(outfile, "    }\n");
 		}
-	} else if(m_type == DATUM_STRUCT) {
-		if(m_maxSize >= 0) {
+	}
+	else if(m_type == DATUM_STRUCT)
+	{
+		if(m_maxSize >= 0)
+		{
 			fprintf(outfile, "    {\n");
 			fprintf(outfile, "        sint32 i;\n");
 			fprintf(outfile, "        for(i = 0; i < m_num%s; i++) {\n", m_name);
 			fprintf(outfile, "            m_%s[i].ResolveDBReferences();\n", m_name);
 			fprintf(outfile, "        }\n");
 			fprintf(outfile, "    }\n");
-		} else {
+		}
+		else
+		{
 			fprintf(outfile, "    m_%s.ResolveDBReferences();\n", m_name);
 		}
-	} else if(m_type == DATUM_BIT_PAIR) {
+	}
+	else if(m_type == DATUM_BIT_PAIR)
+	{
 		m_bitPairDatum->ExportResolver(outfile);
+	
+		if(m_hasDBRefValue)
+		{
+			fprintf(outfile, "    if(!Has%s()) {\n", m_name);
+			fprintf(outfile, "        m_%sValue = g_the%sDB->Get(%i)->Get%s();\n", m_name, drefval.DBName, drefval.DBIndex, drefval.DBField);
+			fprintf(outfile, "    }\n");
+		}
 	}
 }
 
