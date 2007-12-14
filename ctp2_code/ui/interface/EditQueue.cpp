@@ -660,7 +660,7 @@ void EditQueue::UpdateChoiceLists()
 		sint32 prodRemaining;
 
 		
-		for(i = 0; i < g_theUnitDB->NumRecords(); i++) {				
+		for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
 			
 			ctp2_ListBox *whichList = m_unitList;
 			
@@ -718,7 +718,7 @@ void EditQueue::UpdateChoiceLists()
 							  -1, 
 							  whichList);
 			} else if(m_cityData->CanBuildUnit(i)) {
-				prodRemaining = rec->GetShieldCost();				   					
+				prodRemaining = rec->GetShieldCost();
 				AddChoiceItem(buf,
 							  new EditItemInfo(k_GAME_OBJ_TYPE_UNIT, i),
 							  m_cityData->HowMuchLonger(prodRemaining),
@@ -1377,7 +1377,7 @@ void EditQueue::Remove()
 			}
 		}
 		Update();
-	}	
+	}
 }
 
 void EditQueue::Up()

@@ -29,7 +29,7 @@ open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this procedure once per save game.
 
 Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?threadid=161726 "PROJECT: Playtest (Thread No. 5)"
+http://apolyton.net/forums/showthread.php?threadid=172035 "PROJECT: Playtest (Thread No. 6)"
 
 For further reading here are the previous playtest threads:
 http://apolyton.net/forums/showthread.php?threadid=103817 "PROJECT: Playtest"
@@ -48,6 +48,29 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2007-12-14 (Revision 836)
+Fixed:   AI now bombards all nearby units if it has the opportunity.
+Fixed:   AI does not try to fortify units that are scheduled to be disbanded.
+Fixed:   AI does not try to initialize diplomatic state with dead players.
+Fixed:   AI now stops pirating trade routes properly.
+Fixed:   Removed some more events calls with invalid arguments.
+Changed: The chat window command /importmap reports if you try to import a map
+         from a not existing file and reports if the map size of the imported
+         map does not match the map size of the loaded map.
+Fixed:   The turns until a city grows are now correctly displayed on the map
+         when you modify the farmer assignement.
+Fixed:   The turns until a city grows are now correctly displayed on the map
+         when you modify the empire slider settings.
+Fixed:   The key mapping screen now displays the correct key.
+Changed: Increased the number of player in a PBEM or HotSeat game to 32.
+Changed: Moved the experimental relgion stuff to its own AE scenario.
+Fixed:   The city sprawl code should now work.
+Added:    New database flags for modders:
+- ConstDB:
+   TurnsAcceptedForOnePop Const makes the AI to add more farmers to a city if
+                          the city needs more than the specified number of turn.
+                          This flag provides the default value for those in
+                          the StrategiesDB.
 
 2007-11-19 (Revision 826)
 Fixed:   GetPersonalityType slic function

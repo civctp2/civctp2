@@ -57,6 +57,9 @@
 #include "GameSettings.h"
 #include "profileDB.h"
 
+#include "GameEventManager.h"   // g_gevManager
+
+
 MilitaryReadiness::MilitaryReadiness(sint32 a_Owner)
 :
     m_delta             (0.0),  
@@ -67,10 +70,10 @@ MilitaryReadiness::MilitaryReadiness(sint32 a_Owner)
     m_ignore_unsupport  (FALSE), 
     m_owner             (a_Owner),
     m_turnStarted       (-1),
-	m_costGold          (0)
+    m_costGold          (0)
 {
 }
-    
+
 double MilitaryReadiness::GetSupportModifier(sint32 gov) const
 {
     const GovernmentRecord *rec = g_theGovernmentDB->Get(gov); 
@@ -118,24 +121,24 @@ void MilitaryReadiness::BeginTurn(sint32 gov)
 
 double MilitaryReadiness::GetHPModifier() const
 {
-    Assert(0.00001 < m_hp_modifier); 
-    return m_hp_modifier; 
+	Assert(0.00001 < m_hp_modifier);
+	return m_hp_modifier;
 }
 
 double MilitaryReadiness::GetReadyHP(sint32 gov, READINESS_LEVEL level) 
 {
-    const GovernmentRecord *rec = g_theGovernmentDB->Get(gov); 
+    const GovernmentRecord *rec = g_theGovernmentDB->Get(gov);
 
-    switch (level) { 
-    case READINESS_LEVEL_PEACE: 
-        return rec->GetReadyPeaceHP(); 
+    switch (level) {
+    case READINESS_LEVEL_PEACE:
+        return rec->GetReadyPeaceHP();
     case READINESS_LEVEL_ALERT: 
-        return rec->GetReadyAlertHP(); 
+        return rec->GetReadyAlertHP();
     case READINESS_LEVEL_WAR: 
-        return rec->GetReadyWarHP(); 
+        return rec->GetReadyWarHP();
     default:
         Assert(0);
-        return 0.0; 
+        return 0.0;
     }
 }
 
@@ -237,14 +240,14 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 
 void MilitaryReadiness::UnsupportUnit(const Unit &u, sint32 gov)
 {
-   if (m_ignore_unsupport) 
-       return; 
+	if (m_ignore_unsupport)
+		return;
 
-   m_cost -= GetSupportCost(u);
+	m_cost -= GetSupportCost(u);
 
-   g_network.Block(m_owner);
-   ENQUEUE();
-   g_network.Unblock(m_owner);
+	g_network.Block(m_owner);
+	ENQUEUE();
+	g_network.Unblock(m_owner);
 }
 
 void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies, 
@@ -253,7 +256,7 @@ void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies,
 	if (level == m_readinessLevel)
 		return;
 
-    m_cost = 0.0; 
+	m_cost = 0.0; 
 
 	sint32 turns;
 
@@ -267,9 +270,9 @@ void MilitaryReadiness::SetLevel(sint32 gov, DynamicArray<Army> &all_armies,
 	}
 
 	READINESS_LEVEL oldLevel = m_readinessLevel;
-    m_readinessLevel = level; 
+	m_readinessLevel = level; 
 
-    m_delta = (GetReadyHP(gov, m_readinessLevel) - GetReadyHP(gov, oldLevel))/turns;
+	m_delta = (GetReadyHP(gov, m_readinessLevel) - GetReadyHP(gov, oldLevel))/turns;
 	RecalcCost();
 
 	g_slicEngine->RunTrigger(TRIGGER_LIST_READINESS,
@@ -281,14 +284,16 @@ void MilitaryReadiness::RecalcCost()
 {
 	m_cost = 0.0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-    int i, j; 
-    int const   n = all_armies->Num(); 
-    for (i=0; i<n; i++) { 
-        int const m =all_armies->Access(i).Num(); 
-        for (j=0; j<m; j++) { 
+
+	int const   n = all_armies->Num();
+	for(sint32 i = 0; i < n; i++)
+	{
+		int const m =all_armies->Access(i).Num(); 
+		for(sint32 j = 0; j < m; j++)
+		{
 			m_cost += GetSupportCost(all_armies->Access(i)[j]);
-        }
-    }
+		}
+	}
 }
 
 struct UnitCost { 
@@ -324,47 +329,47 @@ sint32 MilitaryReadiness::TotalUnitGoldSupport()
 void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total)
 // notgoing to do a gold one because it will cost economy not units, tougher for human and AI
 {
-    if (sint32(m_cost) <= mil_total) 
-        return; 
+	if (sint32(m_cost) <= mil_total) 
+		return; 
 
-//EMOD  AI can run deficit? but cant build production?
+//EMOD AI can run deficit? but cant build production?
 	if((
 	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIProductionDeficit())
 	|| (g_theProfileDB->IsAINoShieldHunger())
 	   )
 	&& g_player[m_owner]->IsRobot())
-        return; 
+		return;
 
 
 
-    sint32 n = m_all_armies.Num(); 
+	sint32 n = m_all_armies.Num();
 
-    if (n < 1) { 
-        return; 
-    } 
+	if (n < 1) {
+		return;
+	} 
 
-    sint32 i, j, m;
-    sint32 n_units = 0;
-    for (i=0; i<n; i++) { 
-        n_units += m_all_armies[i].Num(); 
-    }
-    
-    Assert(0 < n_units); 
-    UnitCost *all_units = new UnitCost[n_units]; 
+	sint32 i, j, m;
+	sint32 n_units = 0;
+	for (i=0; i<n; i++) { 
+		n_units += m_all_armies[i].Num(); 
+	}
+	
+	Assert(0 < n_units); 
+	UnitCost *all_units = new UnitCost[n_units]; 
 	UnitCost *prof_units = new UnitCost[n_units];
 
-    n_units = 0;
+	n_units = 0;
 	sint32 n_prof_units = 0;
-    for (i=0; i<n; i++) { 
-        m=m_all_armies[i].Num(); 
-        for (j=0; j<m; j++) { 
-            if (m_all_armies[i][j].GetNeedsNoSupport())
-                continue;
+	for (i=0; i<n; i++) { 
+		m=m_all_armies[i].Num(); 
+		for (j=0; j<m; j++) { 
+			if (m_all_armies[i][j].GetNeedsNoSupport())
+				continue;
 
 			if(m_all_armies[i][j].Flag(k_UDF_IN_WORMHOLE))
 				continue;
 
-            if (m_all_armies[i][j].GetIsProfessional()) {
+			if (m_all_armies[i][j].GetIsProfessional()) {
 				prof_units[n_prof_units].u = m_all_armies[i][j];
 				prof_units[n_prof_units].cost = GetSupportCost(m_all_armies[i][j]);
 				n_prof_units++;
@@ -374,82 +379,90 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 				all_units[n_units].cost = GetSupportCost(m_all_armies[i][j]);
 				n_units++; 
 			}
-        }
-    }
+		}
+	}
 
 
-    double tmpc; 
-    Unit tmpu; 
-    
-    for (i=0; i<(n_units-1); i++) { 
-        for (j=i+1; j<n_units; j++) { 
-            if (all_units[i].cost > all_units[j].cost) { 
-                tmpu = all_units[i].u; 
-                tmpc = all_units[i].cost; 
+	double tmpc;
+	Unit tmpu;
+	
+	for (i=0; i<(n_units-1); i++) {
+		for (j=i+1; j<n_units; j++) {
+			if (all_units[i].cost > all_units[j].cost) {
+				tmpu = all_units[i].u;
+				tmpc = all_units[i].cost;
 
-                all_units[i].u = all_units[j].u; 
-                all_units[i].cost = all_units[j].cost; 
+				all_units[i].u = all_units[j].u;
+				all_units[i].cost = all_units[j].cost;
 
-                all_units[j].u = tmpu; 
-                all_units[j].cost = tmpc; 
-            }
-        } 
-    } 
+				all_units[j].u = tmpu;
+				all_units[j].cost = tmpc;
+			}
+		}
+	}
 
 
-    m_ignore_unsupport = TRUE; 
-    for (i = n_units-1; 0 <= i; i--) { 
-        if (sint32(m_cost) <= mil_total) 
-            break; 
+	m_ignore_unsupport = TRUE;
+	for (i = n_units-1; 0 <= i; i--) {
+		if (sint32(m_cost) <= mil_total)
+			break;
 
-        m_cost -= all_units[i].cost; 
+		m_cost -= all_units[i].cost;
 
-        if (0 != m_owner) { 
-            if (g_slicEngine->GetSegment("120NoSupport")->TestLastShown(m_owner, 1)) {
-                SlicObject *so = new SlicObject("120NoSupport") ;
-                so->AddRecipient(m_owner) ;
-                g_slicEngine->Execute(so) ;
-            }
+		if (0 != m_owner) {
+			if (g_slicEngine->GetSegment("120NoSupport")->TestLastShown(m_owner, 1)) {
+				SlicObject *so = new SlicObject("120NoSupport");
+				so->AddRecipient(m_owner);
+				g_slicEngine->Execute(so);
+			}
 
-            all_units[i].u.Kill(CAUSE_REMOVE_ARMY_NO_MAT_SUPPORT, -1);
-        }
-    }
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillUnit,
+			                       GEA_Unit,        all_units[i].u,
+			                       GEA_Int,         CAUSE_REMOVE_ARMY_NO_MAT_SUPPORT,
+			                       GEA_Player,      -1,
+			                       GEA_End);
+		}
+	}
 
 	
 	
 	if(sint32(m_cost) > mil_total) {
-		for (i=0; i<(n_prof_units-1); i++) { 
-			for (j=i+1; j<n_prof_units; j++) { 
-				if (prof_units[i].cost < prof_units[j].cost) { 
-					tmpu = prof_units[i].u; 
-					tmpc = prof_units[i].cost; 
+		for (i=0; i<(n_prof_units-1); i++) {
+			for (j=i+1; j<n_prof_units; j++) {
+				if (prof_units[i].cost < prof_units[j].cost) {
+					tmpu = prof_units[i].u;
+					tmpc = prof_units[i].cost;
 
-					prof_units[i].u = prof_units[j].u; 
-					prof_units[i].cost = prof_units[j].cost; 
+					prof_units[i].u = prof_units[j].u;
+					prof_units[i].cost = prof_units[j].cost;
 
-					prof_units[j].u = tmpu; 
-					prof_units[j].cost = tmpc; 
+					prof_units[j].u = tmpu;
+					prof_units[j].cost = tmpc;
 				}
 			} 
 		} 
-		for (i = n_prof_units-1; 0 <= i; i--) { 
-			if (sint32(m_cost) <= mil_total) 
-				break; 
+		for (i = n_prof_units-1; 0 <= i; i--) {
+			if (sint32(m_cost) <= mil_total)
+				break;
 			
-			m_cost -= prof_units[i].cost; 
+			m_cost -= prof_units[i].cost;
 
-            if (g_slicEngine->GetSegment("120NoSupport")->TestLastShown(m_owner, 1)) {
-                SlicObject *so = new SlicObject("120NoSupport") ;
-                so->AddRecipient(m_owner) ;
-                g_slicEngine->Execute(so) ;
-            }
+			if (g_slicEngine->GetSegment("120NoSupport")->TestLastShown(m_owner, 1)) {
+				SlicObject *so = new SlicObject("120NoSupport");
+				so->AddRecipient(m_owner);
+				g_slicEngine->Execute(so);
+			}
 
-			prof_units[i].u.Kill(CAUSE_REMOVE_ARMY_NO_MAT_SUPPORT, -1); 
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillUnit,
+			                       GEA_Unit,        prof_units[i].u,
+			                       GEA_Int,         CAUSE_REMOVE_ARMY_NO_MAT_SUPPORT,
+			                       GEA_Player,      -1,
+			                       GEA_End);
 		}
 	}
-    m_ignore_unsupport = FALSE; 
+	m_ignore_unsupport = FALSE;
 
-    delete [] all_units; 
+	delete [] all_units;
 	delete [] prof_units;
 }
 
