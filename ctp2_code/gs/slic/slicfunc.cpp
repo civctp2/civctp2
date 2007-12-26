@@ -3336,8 +3336,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 	}
 
 	const UnitRecord *rec = g_theUnitDB->Get(type, g_player[owner]->GetGovernmentType());
-// Added by Martin Gühmann
-// Check if the function was called with a valid unit type.
+	// Check if the function was called with a valid unit type.
 	if(!rec) return SFN_ERROR_UNKNOWN_UNIT_TYPE;
 
 	sint32 x, y;

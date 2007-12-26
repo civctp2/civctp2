@@ -5981,7 +5981,7 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 			attackOrder->m_eventType = Order::OrderToEvent(order);
 		}
 		Assert(attackOrder->m_eventType < GEV_MAX && attackOrder->m_eventType >= 0);
-		DPRINTF(k_DBG_GAMESTATE, ("Adding event order for army 0x%lx, event=%d\n", m_id, attackOrder->m_eventType));
+		DPRINTF(k_DBG_GAMESTATE, ("Adding event order for army 0x%lx, event = %s\n", m_id, g_gevManager->GetEventName(attackOrder->m_eventType)));
 		attackOrder->m_gameEventArgs = args;
 		
 		m_orders->AddTail(attackOrder);
