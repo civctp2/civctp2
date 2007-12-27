@@ -16,6 +16,24 @@
 #
 #----------------------------------------------------------------------------
 #
+# Remarks
+#
+# - This file contains all the main strings.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
 # Modifications from the original Activision code:
 #
 # - Moved build list sequence strings to gl_str.txt.
@@ -68,7 +86,6 @@ str_ldl_CANCEL_OFFER_CAPS			"Angebot stornieren"
 str_ldl_No_item_selected_in_list		"Kein Objekt in der Liste gewählt!"
 str_ldl_Foreign_Attitude			"Gesinnung"
 str_ldl_Local					"Lokal"
-str_ldl_Neutral					"Neutral"
 str_ldl_mp_dbase_out_of_synch			"Fehlerhafte Daten. Kehre zur Lobby zurück."
 
 ##This is the latest batch from Add_str.txt 02-26-99##
@@ -223,7 +240,7 @@ str_tbl_ldl_FOOD_COLON				"Nahr.:"
 str_tbl_ldl_PROD_COLON				"Prod.:"
 str_tbl_ldl_GOLD_COLON				"Gold:"
 
-str_ldl_Message	"Nachricht"
+str_ldl_Message					"Nachricht"
 ##
 
 ## rsh012199 - added for instant action popups
@@ -235,7 +252,7 @@ str_ldl_CAPS_EXPEL				"Vertreiben"
 str_ldl_CAPS_CANCEL_MOVE			"Zug stornieren"
 str_ldl_END_TUTORIAL				"Einführung beenden"
 
-str_tbl_ldl_You_Need_Embassy_To_Demand	"Ihr müsst eine Botschaft in der betreffenden Nation besitzen, um Neuerungen fordern zu können."
+str_tbl_ldl_You_Need_Embassy_To_Demand		"Ihr müsst eine Botschaft in der betreffenden Nation besitzen, um Neuerungen fordern zu können."
 str_tbl_ldl_GIFT_MAP				"Kartenschenkung"
 
 ## rsh011899 - for government rankings
@@ -267,6 +284,7 @@ str_ldl_Config_Header				"Konfig."
 str_ldl_Game_Header				"Spiel"
 str_ldl_Map_Header				"Karte"
 str_ldl_QUITTOSHELL				"Spiel beenden"
+
 str_ldl_Tutorial_Advice_Off			"Hilfemeldungen aus"
 str_ldl_Tutorial_Advice_On			"Hilfemeldungen ein"
 str_ldl_Right_Click_Move			"Rechtsklick ein"
@@ -401,10 +419,6 @@ str_tbl_ldl_Total_Negative_Points_Colon		"Minuspunkte Gesamt:"
 str_tbl_ldl_Total_Points_Colon			"Punkte Gesamt:"
 str_tbl_ldl_Civ_Score_Colon			"Punkte:"
 
-
-#Who knows where this goes?#
-UNIT_ORDER_TRANSPORTED				"Wird transportiert"
-
 str_tbl_ldl_The_Diplomats			"Unsere Staatsoberhäupter sind beschäftigt. Wir haben zurzeit \nkein Interesse daran, mit Euch zu verhandeln."
 str_tbl_ldl_Select_a_new			"Wählt das nächste Forschungsziel."
 str_ldl_Review_Tutorial_Messages		"Hilfemeldungen einblenden"
@@ -422,8 +436,6 @@ str_ldl_Power_Graph				"Stärkediagr."
 str_ldl_Civ_Score				"Punkte"
 str_ldl_Year_Founded_COLON			"Gründungsjahr:"
 str_ldl_Turns_to_Next_Disaster			"Runden bis Katastrophe"
-
-
 
 str_ldl_CAPS_MAKE_QUEUE				"Liste anlegen"
 str_ldl_CAPS_LOAD_QUEUE				"Liste laden"
@@ -463,10 +475,9 @@ str_ldl_THE_LION_HEARTED			"DER FURCHTLOSE"
 str_ldl_THE_INDOMITABLE				"DER UNBEZWINGBARE"
 str_ldl_THE_CIV_LORD				"DER ALLMÄCHTIGE"	
 
-str_ldl_CAPS_TRADE				"Handel"
 str_ldl_Small_Type				"Art"
 str_ldl_Caravans_COLON				"Karawanen:"
-str_ldl_Gold_From_Trade_			COLON	"Gold d. Handel:"
+str_ldl_Gold_From_Trade_COLON			"Gold d. Handel:"
 str_tbl_ldl_Goods				"Güter"
 str_tbl_ldl_Exports				"Export"
 str_tbl_ldl_View_Goods				"Güter"
@@ -539,6 +550,7 @@ str_ldl_Buy_Now					"Jetzt kaufen"
 str_ldl_BY_YOU					"Von Ihnen"
 str_ldl_Cancel					"Zurück"
 str_ldl_Cancel_Route				"Handelsstopp"
+
 str_ldl_CAPS_ACTION				"Aktion"
 str_ldl_CAPS_ADVANCE				"Neuerung"
 str_ldl_CAPS_ADVANCES				"Neuerungen"
@@ -566,14 +578,12 @@ str_ldl_CAPS_GOLD2				"Netto-\ngold"
 str_ldl_CAPS_GOLD				"Gold"
 str_ldl_CAPS_GOLD_COLON				"Gold:"
 str_ldl_CAPS_GOODS				"Güter"
-str_ldl_CAPS_GREAT_LIBRARY			"Große Biobliothek"
 str_ldl_CAPS_HAPPINESS				"Zufriedenheit"
 str_ldl_CAPS_HAPPY				"Zufrieden."
 str_ldl_CAPS_HEALTH				"Lebensp."
 str_ldl_CAPS_INFO				"Rangliste"
 str_ldl_CAPS_INTELLIGENCE			"Geheimdienst"
 str_ldl_CAPS_LAND				"Land"
-str_ldl_CAPS_LOAD_QUEUE				"Liste laden"
 str_ldl_CAPS_LOCK				"Gruppieren"
 str_ldl_CAPS_MALE				"Männlich"
 str_ldl_CAPS_MAP				"Karte"
@@ -724,7 +734,7 @@ str_ldl_Emperor					"Sehr schwierig"
 str_ldl_ENACT					"Einsetzen"
 str_ldl_Enact_Government			"Regierung einsetzen"
 str_ldl_ENEMY					"Gegner"
-str_ldl_Enemy_Intrusion	"Feindl.		 Eindringen melden"
+str_ldl_Enemy_Intrusion				"Feindl. Eindringen melden"
 str_ldl_Enter_Password_COLON			"Passwort eingeben:"
 str_ldl_ENTERTAINERS				"Entertainer"
 str_ldl_Entrench				"Verschanzen"
@@ -747,7 +757,6 @@ str_ldl_Few_Goods				"Kaum Güter"
 str_ldl_File_Injunction				"Handelsembargo verhängen. Kosten: 300 Gold."
 str_ldl_Fog_Of_War_Off				"Nebel des Krieges ein"
 str_ldl_Folder_COLON				"Verz.:"
-str_ldl_Food					"Nahrung"
 str_ldl_Food_					"Nahrung "
 str_ldl_Food_COLON				"Nahrung:"
 str_ldl_Food_Eaten				"Verbrauchte Nahrung"
@@ -943,8 +952,8 @@ str_ldl_ORDERS					"Befehle"
 str_ldl_PAID					"Bezahlt"
 str_ldl_Pairah					"Pariah"
 str_ldl_Paradrop				"Abspringen"
-str_ldl_PARANTHESIS_Team			"(Team)"
-str_ldl_PARATHESIS_Private			"(Privat)"
+str_ldl_PARANTHESIS_Team			" (Team)"
+str_ldl_PARATHESIS_Private			" (Privat)"
 str_ldl_password				"Möchtet Ihr ein Passwort benutzen?"
 str_ldl_Password_required_to_join		"Passworteingabe erforderlich."
 str_ldl_PEACE					"Frieden   Alarmbereit   Krieg"
@@ -975,8 +984,8 @@ str_ldl_Power					"Macht"
 str_ldl_PRICE					"Preis"
 str_ldl_Prince					"Mittel"
 str_ldl_Private					"Privat"
-str_ldl_PROD2					"Netto-\nprod."
 str_ldl_PROD					"Prod."
+str_ldl_PROD2					"Netto-\nprod."
 str_ldl_PRODCUTIONTURN				"Produktion/Runde"
 str_ldl_PRODUCING				"Wird errichtet"
 str_ldl_Production				"Produktion"
@@ -1091,7 +1100,6 @@ str_ldl_SOUND					"Sound"
 str_ldl_SOUND_OPTIONS				"Sound"
 str_ldl_Music					"Musik"
 str_ldl_MUSIC_OPTIONS				"Musik"
-str_ldl_Space					"Weltraum"
 str_ldl_Special					"Spezial"
 str_ldl_SPECIAL_ABILITIES			"Spezialfähigkeiten"
 str_ldl_SPECIAL_ATTACKS				"Spezialangriffe"
@@ -1127,7 +1135,6 @@ str_ldl_This_is_a_scenario_game			"Dies ist ein Szenario-Spiel."
 str_ldl_This_is_not_a_scenario_game		"Dies ist kein Szenario-Spiel."
 str_ldl_This_is_the_continuation_of_a_saved_game	"Dies ist die Fortsetzung eines gespeicherten Spiels."
 str_ldl_Throw_Party				"Feiern"
-str_ldl_Tile					"Geländefeld"
 str_ldl_Tile_Imp				"Feld-Mod."
 str_ldl_To					"Nach"
 str_ldl_TO_COLON				"Nach:"
@@ -1207,7 +1214,6 @@ str_tbl_ldl_Arabian				"Arabisch"
 str_tbl_ldl_Asian				"Asiatisch"
 str_tbl_ldl_AT_PEACE				"Frieden"
 str_tbl_ldl_AT_WAR				"Kriegszustand"
-str_tbl_ldl_Average				"Durchschn."
 str_tbl_ldl_Bioinfect				"Stadt infizieren"
 str_tbl_ldl_Blow_Up_Cabinet			"Kabinett bombardieren"
 str_tbl_ldl_Bombard				"Bombardieren"
@@ -1276,7 +1282,7 @@ str_tbl_ldl_King				"Schwierig"
 str_tbl_ldl_Large				"Groß"
 str_tbl_ldl_Large_96x64				"Groß"
 str_tbl_ldl_Launch				"Starten"
-str_tbl_ldl_LEADERS_NAME			_COLON	"Herrscher:"
+str_tbl_ldl_LEADERS_NAME_COLON			"Herrscher:"
 str_tbl_ldl_Legal				"Zulässig"
 str_tbl_ldl_Load_Game				"Spiel laden"
 str_tbl_ldl_LOAD_MAP				"Karte laden"
@@ -1284,7 +1290,7 @@ str_tbl_ldl_LOAD_MP_GAME			"MS-Spiel laden"
 str_tbl_ldl_Load_Now				"Jetzt laden"
 str_tbl_ldl_LOAD_PBEM_GAME			"Szenarios"
 str_tbl_ldl_LOAD_TEMPLATE			"Vorlage laden"
-str_tbl_ldl_load_without_saving			"Wenn Ihr den Ladevorgang durchführt, ohne zuvor zu speichern, \nverliert Ihr Ihren aktuellen Punktestand."
+str_tbl_ldl_load_without_saving			"Wenn Ihr den Ladevorgang durchführt, ohne zuvor zu speichern, \nverliert Ihr Euren aktuellen Punktestand."
 str_tbl_ldl_Lock_Unit_Stack			"Einheiten gruppieren"
 str_tbl_ldl_MAKE_DEMAND				"Fordern"
 str_tbl_ldl_Male				"Männlich"
@@ -1315,7 +1321,7 @@ str_tbl_ldl_no_required_Advance			"Die Stadt besitzt die erforderliche Modernisi
 str_tbl_ldl_Normal				"Normal"
 str_tbl_ldl_North_South_and_East_West		"Nord-Süd- und Ost-West-Scrolling"
 str_tbl_ldl_Nothing_Building			"Kein Bauvorhaben"
-str_tbl_ldl_NP	"nm"
+str_tbl_ldl_NP					"nm"
 str_tbl_ldl_ON_ALERT				"Alarmbereitschaft"
 str_tbl_ldl_Open_City_Status			"Stadtstatus einsehen"
 str_tbl_ldl_Open_City_View			"Stadtübersicht öffnen"
@@ -1475,8 +1481,6 @@ str_tbl_ldl_upk108.tga				"upk108.tga"
 str_tbl_ldl_upk109.tga				"upk109.tga"
 str_tbl_ldl_upk110.tga				"upk110.tga"
 str_tbl_ldl_upk111.tga				"upk111.tga"
-
-
 
 
 # Junk 1 #
@@ -1654,7 +1658,7 @@ str_ldl_Treaty_Cease_Fire			"Friedensabkommen"
 str_ldl_Treaty_EcoPact				"Umweltschutzabkommen"
 str_ldl_Submit					"Senden"
 str_ldl_TEN_HYPHENS				"-----------"
-str_ldl_Time_					"Zeit"
+str_ldl_Time_					"Zeit "
 str_ldl_TITLE					"Titel"
 str_ldl_this_text_at_run_time			"Dieser Text wird zur Laufzeit festgelegt"
 str_ldl_TO_CAPITAL				"zur Hauptstadt"
@@ -1865,6 +1869,7 @@ str_tbl_ldl_Music_Track_8			"Shaolin San"
 str_tbl_ldl_Music_Track_9			"Quiet Outback"
 str_tbl_ldl_Music_Track_10			"Kali Dance"
 
+
 ###Grammar and Description Stuff###
 #GRAMMAR_MALE_LOSER_RANK_1			"the Destitute"
 #GRAMMAR_FEMALE_LOSER_RANK_1			"the Destitute"
@@ -1964,26 +1969,6 @@ str_SprEd_PlayOnce				" Einmal spielen"
 str_SprEd_Loop					" Loop"
 str_SprEd_FacingPlus				" Blickrichtung +"
 str_SprEd_FacingMinus				" Blickrichtung -"
-
-# MDS 091300
-# Added for Scenario Editor buttons
-#
-str_tbl_ldl_XWrap				"X-Scrolling"
-str_tbl_ldl_YWrap				"Y-Scrolling"
-str_tbl_ldl_Cut					"Markierte Region ausschneiden"
-str_tbl_ldl_Copy				"Markierte Region kopieren"
-str_tbl_ldl_Paste				"Region einfügen"
-str_tbl_ldl_SmallBrush				"Dünner Pinsel"
-str_tbl_ldl_MedBrush				"Mittlerer Pinsel"
-str_tbl_ldl_LargeBrush				"Dicker Pinsel"
-str_tbl_ldl_SaveClip				"Clip speichern"
-str_tbl_ldl_LoadClip				"Clip laden"
-str_tbl_ldl_Explore				"Erforschte Karte"
-str_tbl_ldl_Unexplore				"Unerforschte Karte"
-str_tbl_ldl_Fog					"Nebel des Krieges ein/aus"
-
-
-
 
 
 
@@ -2194,7 +2179,7 @@ str_dip_InvalidProposal				"Wählt ein Gesuch aus der Liste"
 str_ldl_Threaten				"Drohen"
 
 
-# 
+#
 # New Control Panel Strings
 #
 
@@ -2227,8 +2212,8 @@ str_ldl_Gaia					"Gaia-Controller"
 
 # Cities Menu Strings
 str_ldl_CityManagement				"Stadtmanager"
-str_ldl_NatlManager				"Reichssmanager"	 
-str_ldl_BuildQueue				"Baumanager"    
+str_ldl_NatlManager				"Reichssmanager"
+str_ldl_BuildQueue				"Baumanager"
 
 
 # Units Menu Strings
@@ -2241,7 +2226,7 @@ str_ldl_NewProposal				"Neues Gesuch"
 
 # Science Menu Strings
 str_ldl_ScienceScreen				"Wissenschaftsmenü"
-str_ldl_GreatLibrary				"Große Bibliothek" 
+str_ldl_GreatLibrary				"Große Bibliothek"
 
 # Trade Menu Strings
 str_ldl_TradeScreen				"Handelsmenü"
@@ -2264,7 +2249,7 @@ str_ldl_Advanced				"Erweitert"
 str_ldl_SaveGame				"Spiel speichern"
 str_ldl_LoadGame				"Spiel laden"
 str_ldl_Restart					"Neu starten"
-str_ldl_NewGame    "Neues Spiel" 
+str_ldl_NewGame					"Neues Spiel"
 str_ldl_Quit					"Beenden"
 
 # End of Menu Strings
@@ -2273,6 +2258,11 @@ str_ldl_NewArmy					"Neue Truppe"
 str_ldl_SingleUnits				"Andere Einheiten"
 str_ldl_ArmyCount				"In Truppe: %d"
 str_ldl_Armies					"Truppen"
+
+
+##
+## Scenario Editor strings
+##
 
 str_ldl_ScenYear				"Jahr"
 str_ldl_NumPlayers				"# Spieler"
@@ -2296,11 +2286,11 @@ str_ldl_ScenAir					"Luft"
 str_ldl_ScenSpecial				"Spez."
 
 str_ldl_LegalOnly				"Nur zulässige"
-str_ldl_ShowLabels "Labels zeigen"
+str_ldl_ShowLabels				"Labels zeigen"
 
 str_ldl_ShowStatistics				"Statistik ein"
 str_ldl_HideStatistics				"Statistik aus"
-str_ldl_Total "Total"
+str_ldl_Total					"Total"
 
 str_ldl_Exclude					"Ausschl."
 str_ldl_AddBuildings				"Geb. hinzuf."
@@ -2311,6 +2301,28 @@ str_ldl_FileName				"Datei:"
 
 str_ldl_Leader					"Herrschername: "
 str_ldl_CityName				"Stadtname: "
+
+# MDS 091300
+# Added for Scenario Editor buttons
+#
+str_tbl_ldl_XWrap				"X-Scrolling"
+str_tbl_ldl_YWrap				"Y-Scrolling"
+str_tbl_ldl_Cut					"Markierte Region ausschneiden"
+str_tbl_ldl_Copy				"Markierte Region kopieren"
+str_tbl_ldl_Paste				"Region einfügen"
+str_tbl_ldl_SmallBrush				"Dünner Pinsel"
+str_tbl_ldl_MedBrush				"Mittlerer Pinsel"
+str_tbl_ldl_LargeBrush				"Dicker Pinsel"
+str_tbl_ldl_SaveClip				"Clip speichern"
+str_tbl_ldl_LoadClip				"Clip laden"
+str_tbl_ldl_Explore				"Erforschte Karte"
+str_tbl_ldl_Unexplore				"Unerforschte Karte"
+str_tbl_ldl_Fog					"Nebel des Krieges ein/aus"
+
+
+##
+## Order Strings
+##
 
 str_ldl_order_attack				"Angreifen"
 str_ldl_order_move				"Fortbewegen"
@@ -2432,8 +2444,8 @@ str_ldl_READINESS_LEVEL_PEACE			"Frieden"
 str_ldl_READINESS_LEVEL_ALERT			"Alarmbereitschaft"
 str_ldl_READINESS_LEVEL_WAR			"Krieg"
 
-str_ldl_CheesyRightArrow "-->"
-str_ldl_CheesyLeftArrow "<--"
+str_ldl_CheesyRightArrow			"-->"
+str_ldl_CheesyLeftArrow				"<--"
 
 str_ldl_DeclareWar				"Krieg erklären"
 
@@ -2450,7 +2462,6 @@ str_ldl_CP_CUR_GOVT				"Regierung"
 str_ldl_CP_PUBLIC_WORKS				"Staatl. Bautrupps"
 str_ldl_CP_SCIENCE				"Wissenschaft"
 str_ldl_CP_POLLUTION				"Umweltverschmutzung"
-# end <changeme> block. The rest of these are old strings.
 str_ldl_CP_GOVERNOR				"Stadtrat"
 str_ldl_CP_IMPROVEMENTS				"Modernisierungen"
 str_ldl_CP_TERRAFORM				"Terraforming"
@@ -2612,8 +2623,7 @@ str_ldl_BuildManagerTitle			"B A U M A N A G E R"
 
 str_ldl_SendMessage				"Senden"
 str_ldl_CreateProposal				"Neues Gesuch"
-str_ldl_Details "Details"
-
+str_ldl_Details					"Details"
 
 str_ldl_QueueName				"Name der Bauliste"
 str_ldl_LoadQueue				"Spieldaten werden geladen ..."
@@ -2661,13 +2671,15 @@ str_ldl_Building_Nothing_Label 			"Nichts"
 str_ldl_EspionageMenuTitle			"Spionage"
 str_ldl_CityEspionageTitle			"Stadtspionage"
 str_ldl_Espionage_City_Label			"{player[0].civ_name_singular#UNDEF_PLURAL_CAPS} Stadt: {city[0].name}"
-str_ldl_Espionage_Population_Label		"Bevölkerung: {city[0].population}" str_ldl_Espionage_Happiness_Label	"Zufriedenheit: {city[0].happiness}"
+str_ldl_Espionage_Population_Label		"Bevölkerung: {city[0].population}"
+str_ldl_Espionage_Happiness_Label		"Zufriedenheit: {city[0].happiness}"
 str_ldl_Espionage_Building_Label		"Akt. Bauprojekt: {city[0].building}"
 str_ldl_Espionage_CompleteIn_Label		"Fertig in: {city[0].buildingtime}"
 str_ldl_Espionage_CityIncome_Label		"Stadteinnahmen: {city[0].netcitygold}"
 str_ldl_Espionage_GoldInTrade_Label		"Handelseinn.: {city[0].goldfromtraderoutes}"
 
 # Score dialog
+#below has been updated in add_str
 str_ldl_INFORMATION_DIALOG_TITLE		"Statistik"
 str_ldl_SCORE_TAB_TITLE				"Punkte"
 
@@ -2701,8 +2713,8 @@ str_ldl_RANKING_SCIENTIFIC			"Wissenschaft"
 str_ldl_RANKING_OVERALL				"Allgemein"
 str_ldl_RANKING_POLLUTION			"Verschmutzung"
 str_ldl_RANKING_WONDER				"Wunder"
-str_ldl_INFO_RANKING_TAB			"Übersicht"
 str_ldl_RANKING_RANK				"Bereich:"
+str_ldl_INFO_RANKING_TAB			"Übersicht"
 str_ldl_LINE_BUTTON				"Liniendiagramm"
 str_ldl_ZEROSUM_BUTTON				"Flächendiagramm"
 
@@ -2733,6 +2745,7 @@ str_ldl_DipDetails_LeaderPersonality		"Persönlichkeit: {player[0].leaderperonali
 str_ldl_DipDetails_EmbassyMsg			"*Botschaft erforderlich, um geheime Informationen abzurufen."
 str_ldl_DipDetails_NoEmbassy			"<Keine Info>"
 
+# Tile improvent panel
 str_ldl_ImproveLand				"Land"
 str_ldl_ImproveOcean				"Wasser"
 str_ldl_ImproveSpecial				"Spezial"
@@ -2753,7 +2766,7 @@ str_ldl_PollutionList_Production		"Verschmutzung durch Produktion"
 
 str_ldl_DisbandSelectedUnits			"Markierte Einheiten auflösen?"
 
-str_ldl_ShowLabels "Labels anzeigen"
+str_ldl_ShowLabels				"Labels anzeigen"
 
 str_ldl_CityWinProductionTab			"Produktion"
 str_ldl_CityWinInventoryTab			"Inventar"
@@ -2776,8 +2789,6 @@ INFOBAR_UNITS					"Einheiten: "
 INFOBAR_CITY					"Stadt: "
 INFOBAR_UNEXPLORED				"Unerforscht"
 
-UNIT_HOPLITE_NEW				"Phalanx"
-
 UNIT_CATEGORY_GENERIC				"Typ"
 UNIT_CATEGORY_SETTLER				"Siedler"
 UNIT_CATEGORY_AERIAL				"Luft"
@@ -2791,6 +2802,7 @@ UNIT_CATEGORY_SPECIAL				"Spezial"
 
 UNIT_LOCATION_IN_FIELD				"Im Feld"
 UNIT_LOCATION_IN_SPACE				"Im Weltraum"
+UNIT_ORDER_TRANSPORTED				"Wird transportiert"
 
 ARMY_NAME_PREFIX				"Truppe #"
 
@@ -3071,32 +3083,32 @@ str_tbl_ldl_CityCaptureOptions_On		"City Capture Options"
 str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
 str_tbl_ldl_OneCityChallenge_Off		"Normal City Expansion"
 str_tbl_ldl_OneCityChallenge_On			"One City Challenge"
-str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"					# Revolting city creates barbarians
-str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"			# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"			# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_On			"Revolting Cities lose Population"			# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On			"Revolting cities create barbarians"			# Revolting city creates barbarians
-str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"				# Entrenched barbs create more barbs
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"			# Entrenched barbs create more barbs
+str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"				# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"				# Revolting city creates barbarians
+str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_RevoltCasualties_On			"Revolting Cities lose Population"		# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"Revolting cities create barbarians"		# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"			# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# Entrenched barbs create more barbs
 
 
 str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"
-str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"				# AI cities don't go negative in gold
-str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"					# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"					# Everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"					# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"					# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"					# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"				# If city is empty at turn start AI gets cheapest unit
+str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities don't go negative in gold
+str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# Everyone pays gold amount per city
+str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI doesn't pay shield hunger (gets lots of units)
+str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI doesnt pay unit gold hunger
+str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI doesn't pay goldfor upgrades
+str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI gets cheapest unit
 
 str_tbl_ldl_NoAIProductionDeficit_On		"No AI Production Deficits"
-str_tbl_ldl_NoAIGoldDeficit_On			"AI Cities Gold always > 0"				# AI cities don't go negative in gold
-str_tbl_ldl_GoldPerUnitSupport_On		"1 Gold Per Unit Cost"					# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"					# Everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_On			"AI doesn't pay Shield Hunger"				# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_On			"AI doesn't pay Unit Gold Cost"				# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_On			"AI Free Upgrades"					# AI doesn't pay goldfor upgrades
+str_tbl_ldl_NoAIGoldDeficit_On			"AI Cities Gold always > 0"			# AI cities don't go negative in gold
+str_tbl_ldl_GoldPerUnitSupport_On		"1 Gold Per Unit Cost"				# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"				# Everyone pays gold amount per city
+str_tbl_ldl_AINoShieldHunger_On			"AI doesn't pay Shield Hunger"			# AI doesn't pay shield hunger (gets lots of units)
+str_tbl_ldl_AINoGoldHunger_On			"AI doesn't pay Unit Gold Cost"			# AI doesnt pay unit gold hunger
+str_tbl_ldl_AIFreeUpgrade_On			"AI Free Upgrades"				# AI doesn't pay goldfor upgrades
 str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"
 
 str_ldl_DebugAI					"Debug AI"
@@ -3106,20 +3118,20 @@ str_ldl_Debug_AI_On				"Show Debug AI Text"
 str_ldl_Debug_AI_Off				"Hide Debug AI Text"
 str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
 str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
-str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"					# AI not affected by city limit
-str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"					# AI not affected by city limit
-str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"				# AI not affected by city limit
-str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"					# AI not affected by city limit
+str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by city limit
+str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI not affected by city limit
+str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# AI not affected by city limit
+str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# AI not affected by city limit
 
 
 # Not Implemented
 str_SE_DebugAI					"debug"
 str_SE_ShowEnemyHealth				"show"
-str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"				# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_Off			"Entrenched Barbarians settle cities - Off"		# Entrenched barbarians create a city
-str_tbl_ldl_BarbarianCamps_Off			"Entrenched Barbarians create Tile Imps - Off"		# Entrenched barbarians create an imp
-str_tbl_ldl_AICityDefenderBonus_On		"AI City Defense bonus - On"				# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_On			"Entrenched Barbarians settle cities - On"		# Entrenched barbarians create a city
-str_tbl_ldl_BarbarianCamps_On			"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
-str_tbl_ldl_AINoSinking_On			"AI ships don't sink"					# AI ships don't sink
-str_tbl_ldl_AINoSinking_Off			"AI ships can sink"					# AI ships don't sink
+str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_Off			"Entrenched Barbarians settle cities - Off"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_Off			"Entrenched Barbarians create Tile Imps - Off"	# Entrenched barbarians create an imp
+str_tbl_ldl_AICityDefenderBonus_On		"AI City Defense bonus - On"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_On			"Entrenched Barbarians settle cities - On"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_On			"Entrenched Barbarians create Tile Imps - On"	# Entrenched barbarians create an imp
+str_tbl_ldl_AINoSinking_On			"AI ships don't sink"				# AI ships don't sink
+str_tbl_ldl_AINoSinking_Off			"AI ships can sink"				# AI ships don't sink

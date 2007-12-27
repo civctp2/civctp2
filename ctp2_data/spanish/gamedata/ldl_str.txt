@@ -16,6 +16,24 @@
 #
 #----------------------------------------------------------------------------
 #
+# Remarks
+#
+# - This file contains all the main strings.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
 # Modifications from the original Activision code:
 #
 # - Moved build list sequence strings to gl_str.txt.
@@ -68,7 +86,6 @@ str_ldl_CANCEL_OFFER_CAPS			"ANULAR OFERTA"
 str_ldl_No_item_selected_in_list		"¡No se ha seleccionado un objeto en la lista!"
 str_ldl_Foreign_Attitude			"Actitud extranjera"
 str_ldl_Local					"Local"
-str_ldl_Neutral					"Neutral"
 str_ldl_mp_dbase_out_of_synch			"La base de datos no está sincronizada. Volviendo a la sala."
 
 ##This is the latest batch from Add_str.txt 02-26-99##
@@ -207,24 +224,26 @@ str_ldl_AFB_ECD					"DCE construidos/necesarios:"
 str_ldl_AFB_FIELD				"Campos construidos/necesarios:"
 str_ldl_AFB_CHANCE				"Posibilidades de fallo:"
 
+## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title				"Monumentos"
 str_ldl_Monument_Upgrade_Available		"Selecciona un monumento para actualizar."
 
-
+## rsh011899 - added for civ status screen
 str_ldl_CAPS_GOVERNMENT				"GOBIERNO"
 str_ldl_SURPLUS					"EXCEDENTE"
 str_ldl_EQUAL					"="
 str_ldl_SAVINGS					"AHORROS"
+##
 
-
+## rsh012099 - added for work view
 str_tbl_ldl_FOOD_COLON				"ALIM:"
 str_tbl_ldl_PROD_COLON				"PROD:"
 str_tbl_ldl_GOLD_COLON				"ORO:"
 
 str_ldl_Message					"Mensaje"
+##
 
-
-
+## rsh012199 - added for instant action popups
 str_ldl_CAPS_PIRATE				"PIRATEAR"
 str_ldl_Whose_Trade_Route			"¿Qué ruta de comercio deseas piratear?"
 str_ldl_What_course_of				"¿Qué acción vas\na tomar?"
@@ -236,12 +255,13 @@ str_ldl_END_TUTORIAL				"TERMINAR TUTORIAL"
 str_tbl_ldl_You_Need_Embassy_To_Demand		"Necesitas tener una embajada para exigir adelantos."
 str_tbl_ldl_GIFT_MAP				"MAPA DE REGALO"
 
-
+## rsh011899 - for government rankings
 str_tbl_ldl_POOR				"HORRIBLE"
 str_tbl_ldl_FAIR				"MALO"
 str_tbl_ldl_AVERAGE				"REGULAR"
 str_tbl_ldl_GOOD				"BUENO"
 str_tbl_ldl_EXCELLENT				"EXCELENTE"
+##
 
 str_ldl_POPSCIENCE				"Oro transformado en Ciencia"
 str_ldl_POPPW					"Producción transformada en obras públicas"
@@ -252,9 +272,6 @@ str_ldl_PASSWORD				"Protegido con contraseña"
 str_ldl_GAMELOCK				"Juego bloqueado"
 str_ldl_GAMELAUNCH				"Juego en progreso"
 str_ldl_MUTED					"Jugador apagado"
-
-
-
 str_ldl_Back					"Atrás"
 str_ldl_Next					"Siguiente"
 str_ldl_worldtype1				"Húmedo: "
@@ -267,6 +284,7 @@ str_ldl_Config_Header				"CONFIG."
 str_ldl_Game_Header				"PARTIDA"
 str_ldl_Map_Header				"MAPA"
 str_ldl_QUITTOSHELL				"SALIR"
+
 str_ldl_Tutorial_Advice_Off			"Consejos tutorial - No"
 str_ldl_Tutorial_Advice_On			"Consejos tutorial - Sí"
 str_ldl_Right_Click_Move			"Mov. clic derecho"
@@ -306,7 +324,7 @@ str_ldl_Show_City_Inflence_On			"Mostrar influencia ciudad "
 str_ldl_Auto_Tab_Select_Off			"Selec. auto pestaña - No"
 str_ldl_Auto_Tab_Select_On			"Selec. auto pestaña - Sí"
 
-
+##Missing Stuff?###
 str_ldl_Monument_Screen_Off			"Pantalla monumentos - No"
 str_ldl_Monument_Screen_On			" Pantalla monumentos - Sí"
 str_ldl_Delete					"Eliminar"
@@ -317,7 +335,7 @@ str_tbl_ldl_Bloodlust_On			"A muerte"
 
 str_ldl_Scorewarn				"Ya no se llevará la puntuación para esta partida."
 
-
+##End missing##
 
 
 str_tbl_ldl_You_Need				"Necesitas tener una embajada para intercambiar adelantos."
@@ -333,6 +351,8 @@ str_tbl_ldl_You_Dont_Have_Enough_Gold		"No tienes suficiente oro para entregar."
 str_ldl_CAPS_TARGET_CITY			"CIUDAD OBJETIVO"
 str_ldl_CAPS_TYPE				"TIPO "
 str_ldl_CAPS_GAIN_LOSS				"GANAN/PERDIDA" 
+
+##New Pop Help##
 
 str_ldl_Alien					"Laboratorio Xenoforma"
 str_ldl_Mscreen					"Pantalla de Monumentos"
@@ -369,6 +389,16 @@ str_ldl_Supp					"Coste de apoyo"
 str_ldl_AdvisorYear				"Año"
 str_ldl_AdvisorTurn				"Turno"
 
+### New Stuff -Probably not implemented ###
+
+#Barbarian Threat
+#Rename City
+#Delete
+
+###Keeper Stuff###
+
+## KEEPER STUFF 1 ##
+
 str_ldl_ARDM_nospace				"A/T/D/M"
 str_ldl_UPKEEP					"MANTEN"
 str_tbl_ldl_Total_Upkeep			"Total mantenimiento"
@@ -378,15 +408,16 @@ str_tbl_ldl_S					"S"
 str_ldl_small_Disband				"Licenciar"
 str_tbl_ldl_DisbandButton			"DisbandButton"
 str_ldl_Cost_					"Coste "
-str_tbl_ldl_Speed_Cities			"Ciudad veloz" str_tbl_ldl_Seconds_Per_City_COLON	"Segundos por ciudad:"
+str_tbl_ldl_Speed_Cities			"Ciudad veloz"
+str_tbl_ldl_Seconds_Per_City_COLON		"Segundos por ciudad:"
 
+# strings for scoring list
 str_tbl_ldl_Positive_Points_For_Colon		"Puntos positivos por:"
 str_tbl_ldl_Negative_Points_For_Colon		"Puntos negativos por:"
 str_tbl_ldl_Total_Positive_Points_Colon		"Total puntos positivos:"
 str_tbl_ldl_Total_Negative_Points_Colon		"Total puntos negativos:"
 str_tbl_ldl_Total_Points_Colon			"Puntos totales:"
 str_tbl_ldl_Civ_Score_Colon			"Puntuación Imp.:"
-UNIT_ORDER_TRANSPORTED				"En transporte"
 
 str_tbl_ldl_The_Diplomats			"Nuestros líderes están ocupados. - No estamos interesados en discutir nada con vosotros \nen estos momentos."
 str_tbl_ldl_Select_a_new			"Selecciona un nuevo adelanto para investigar."
@@ -399,7 +430,7 @@ str_ldl_LAUNCH					"LANZAR"
 str_ldl_Random_Custom				"Aleat./Person"
 
 
-
+# additional Info screen strings
 str_ldl_Top_5_Cities				"Las 5 ciudades más importantes"
 str_ldl_Power_Graph				"Gráfico de poder"
 str_ldl_Civ_Score				"Puntos Imp."
@@ -423,15 +454,14 @@ str_ldl_CAPS_FOREIGN				"EXTRANJERA"
 
 str_ldl_NEXT					"Siguiente"
 
-
-
-
+# strings for victory window
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"TU PUNTUACIÓN EN IMPERIO ES:"
 str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"TU NOMBRE FIGURARÁ EN LOS ANALES DE LA HISTORIA COMO"
 str_ldl_POPULATION_COLON			"POBLACIÓN:"
 str_ldl_CIV_SCORE				"PUNTOS IMP."
 str_ldl_POWER_GRAPH				"GRÁFICO DE PODER"
 str_ldl_DEFEAT					"DERROTA"
+
 str_ldl_THE_DESTITUTE				"EL INDIGENTE"
 str_ldl_THE_SQUIRREL_HEARTED			"EL CORAZÓN DE ARDILLA"
 str_ldl_THE_RED_FACED				"EL AVERGONZADO"
@@ -445,11 +475,10 @@ str_ldl_THE_LION_HEARTED			"EL CORAZÓN DE LEÓN"
 str_ldl_THE_INDOMITABLE				"EL INDOMABLE"
 str_ldl_THE_CIV_LORD				"EL SEÑOR DEL IMPERIO"	
 
-str_ldl_CAPS_TRADE				"COMERCIO"
 str_ldl_Small_Type				"Tipo"
 str_ldl_Caravans_COLON				"Caravanas:"
 str_ldl_Gold_From_Trade_COLON			"Oro del comercio:"
-str_tbl_ldl_Goods				" Merc. "
+str_tbl_ldl_Goods				"Merc."
 str_tbl_ldl_Exports				"Export."
 str_tbl_ldl_View_Goods				"Ver mercancía"
 str_tbl_ldl_View_Exports			"Exportaciones"
@@ -521,6 +550,7 @@ str_ldl_Buy_Now					"Comprar ahora"
 str_ldl_BY_YOU					"POR TI"
 str_ldl_Cancel					"Cancelar"
 str_ldl_Cancel_Route				"Anular ruta"
+
 str_ldl_CAPS_ACTION				"ACCIÓN"
 str_ldl_CAPS_ADVANCE				"ADELANTO"
 str_ldl_CAPS_ADVANCES				"ADELANTOS"
@@ -548,7 +578,6 @@ str_ldl_CAPS_GOLD2				"TOT.\nORO"
 str_ldl_CAPS_GOLD				"ORO"
 str_ldl_CAPS_GOLD_COLON				"ORO:"
 str_ldl_CAPS_GOODS				"MERCAN"
-str_ldl_CAPS_GREAT_LIBRARY			"GRAN BIBLIOTECA"
 str_ldl_CAPS_HAPPINESS				"FELICIDAD"
 str_ldl_CAPS_HAPPY				"FELIZ"
 str_ldl_CAPS_HEALTH				"SALUD"
@@ -563,7 +592,8 @@ str_ldl_CAPS_MILITARY_READINESS			"ESTADO MILITAR"
 str_ldl_CAPS_NAME				"NOMBRE"
 str_ldl_CAPS_NAME_COLON				"NOMBRE:"
 str_ldl_CAPS_NO					"NO"
-str_ldl_CAPS_ON_ALERT				"EN ALERTA" str_ldl_CAPS_PER_TURN	"x TURNO"
+str_ldl_CAPS_ON_ALERT				"EN ALERTA"
+str_ldl_CAPS_PER_TURN				"x TURNO"
 str_ldl_CAPS_PLAYERS				"Nº DE IMPERIOS"
 str_ldl_CAPS_POLLUTION				"CONTAMIN."
 str_ldl_CAPS_POPULATION				"POBLACIÓN"
@@ -589,6 +619,7 @@ str_ldl_CAPS_STRENGTH				"ESTADO"
 str_ldl_CAPS_TILE_IMP				"MEJ. CASILLA"
 str_ldl_CAPS_TO					"A"
 str_ldl_CAPS_TOTAL_GOLD				"TOTAL ORO"
+str_ldl_CAPS_TRADE				"COMERCIO"
 str_ldl_CAPS_TRIBE				"IMPERIO"
 str_ldl_CAPS_UNHAPPY				"DESCONTENTO"
 str_ldl_CAPS_UNIT				"UNIDAD"
@@ -602,6 +633,7 @@ str_ldl_CAPS_WORLD_SHAPE			"FORMA DEL MUNDO"
 str_ldl_CAPS_YES				"SÍ"
 
 
+### Keeper Stuff 2 ###
 str_ldl_Capture_City				"Capturar ciudad"
 str_ldl_Capture_Slaves				"Capturar esclavos. Coste:250 de Oro"
 str_ldl_Cargo					"Carga"
@@ -689,7 +721,7 @@ str_ldl_Doughnut_World				"Mundo toroide"
 str_ldl_Dry					"Seco"
 str_ldl_Dynamic_Join				"Participación dinámica"
 str_ldl_Dynamic_Joining_On			"Participación dinámica en"
-str_ldl_Earth_World				"   Mundo terrestre"
+str_ldl_Earth_World				"Mundo terrestre"
 str_ldl_East_and_West_edges_of_the_map_connect	"Se unen los bordes Este y Oeste del mapa."
 str_ldl_EAST_WEST				"ESTE_OESTE"
 str_ldl_East_West_and_North_South_edges		"Se unen los bordes Este/Oeste y Norte/Sur del mapa."
@@ -725,7 +757,7 @@ str_ldl_Few_Goods				"- Mercancía"
 str_ldl_File_Injunction				"Pedir paralización. Coste: 300 de Oro"
 str_ldl_Fog_Of_War_Off				"Niebla de guerra desactivada"
 str_ldl_Folder_COLON				"Carpeta:"
-str_ldl_Food_					"Alimentos "
+str_ldl_Food_					"Alimentos"
 str_ldl_Food_COLON				"Alimentos:"
 str_ldl_Food_Eaten				"Alimentos consumidos"
 str_ldl_Food_Lost_to_Crime			"Alimentos perdidos por el crimen"
@@ -832,7 +864,7 @@ str_ldl_LEADER_NAME				"NOMBRE DE LÍDER"
 str_ldl_Leader_Name_COLON			"Líder: "
 str_ldl_LEAVE_OUR_LANDS				"ABANDONAR TIERRAS"
 str_ldl_Leaving_Lobby				"Saliendo del lobby..."
-str_ldl_Legal	"				Legal"
+str_ldl_Legal					"Legal"
 str_ldl_LIBRARY					"BIBLIOTECA"
 str_ldl_Line_Of_Sight				"Niebla de guerra"
 str_ldl_LOAD_GAME				"CARGAR"
@@ -890,6 +922,7 @@ str_ldl_Music_Volume				"Volumen de Música"
 str_ldl_Mute					"Silenciar"
 str_ldl_Name					"Nombre"
 str_ldl_Navy					"F. navales"
+str_ldl_Neutral					"Neutral"
 str_ldl_Never_Mind				"Cancelar"
 str_ldl_NEW_GAME				"NUEVA"
 str_ldl_NEXT_ADVANCE				"ADELANTO SIGUIENTE"
@@ -903,7 +936,13 @@ str_ldl_Offer					"Ofrecer"
 str_ldl_OFFER_A_GIFT				"OFRECER UN REGALO"
 str_ldl_OFFER_AN_EXCHANGE			"OFRECER UN INTERCAMBIO"
 str_ldl_Offer_Good				"Ofrecer mercancía "
+
+###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
+###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
 str_ldl_Ok					"OK"
+###
+###
+
 str_ldl_On_Alert				"En alerta"
 str_ldl_Only_Known_By_Others			"Conocido sólo por los demás"
 str_ldl_Open_Offers				"Ofertas abiertas"
@@ -979,6 +1018,8 @@ str_ldl_Reliable				"Fiable"
 str_ldl_Reload_FLI				"Cargar de nuevo FLI"
 str_ldl_REMOVE2					"Quitar"
 str_ldl_REMOVE					"ELIMINAR"
+
+
 str_ldl_RESEARCH_ADVANCE			"INVESTIGAR ADELANTO"
 str_ldl_RESEARCHING				"INVESTIGANDO"
 str_ldl_RESEARCHING_COLON			"INVESTIGANDO:"
@@ -1164,6 +1205,8 @@ str_ldl_You_have_created_Game			"Has creado [Game]"
 str_ldl_You_have_entered_Lobby			"Has entrado en [Lobby]"
 str_ldl_You_have_joined_Game			"Vas a participar en [Game]"
 
+#Keeper 3#
+
 str_tbl_ldl_Advance				"Adelanto"
 str_tbl_ldl_Airlift				"Aerotransportar"
 str_tbl_ldl_All_Tech				"Cualquiera"
@@ -1211,8 +1254,9 @@ str_tbl_ldl_East_West_Wrap_Only			"Unión Este-Oeste únicamente"
 str_tbl_ldl_Easy				"Fácil"
 str_tbl_ldl_Emperor				"Muy difícil"
 str_tbl_ldl_Entrench				"Atrincherar"
-str_tbl_ldl_EXCHANGE_ADVANCE			"INTERCAMBIAR ADELANTO "
-str_tbl_ldl_EXCHANGE_MAPS			"INTERCAMBIAR MAPAS" str_tbl_ldl_Expel	"Expulsar"
+str_tbl_ldl_EXCHANGE_ADVANCE			"INTERCAMBIAR ADELANTO"
+str_tbl_ldl_EXCHANGE_MAPS			"INTERCAMBIAR MAPAS"
+str_tbl_ldl_Expel				"Expulsar"
 str_tbl_ldl_Female				"Mujer"
 str_tbl_ldl_Fog_of_War_Off			"Niebla de Guerra - No"
 str_tbl_ldl_Fog_of_War_On			"Niebla de Guerra"
@@ -1419,11 +1463,12 @@ str_ldl_6					"6"
 str_ldl_7					"7"
 str_ldl_8					"8"
 
+
 str_tbl_ldl_upba5012_tga			"upba5012.tga"
 str_tbl_ldl_upba5013_tga			"upba5013.tga"
 str_tbl_ldl_upba5014_tga			"upba5014.tga"
 
-
+## branch icons
 str_tbl_ldl_upk100.tga				"upk100.tga"
 str_tbl_ldl_upk101.tga				"upk101.tga"
 str_tbl_ldl_upk102.tga				"upk102.tga"
@@ -1438,7 +1483,7 @@ str_tbl_ldl_upk110.tga				"upk110.tga"
 str_tbl_ldl_upk111.tga				"upk111.tga"
 
 
-
+# Junk 1 #
 str_ldl_Ai_Track				"Buscar AI"
 str_ldl_Accept					"Aceptar"
 str_ldl_AF					"AF"
@@ -1460,7 +1505,7 @@ str_ldl_CAPS_RETURN				"VOLVER"
 str_ldl_CAPS_SEARCH				"BUSCAR"
 str_ldl_CAPS_SPECIAL				"ESPECIAL"
 
-
+# Junk2 #
 str_ldl_Carbon_Dioxide				"Dióxido de Carbono"
 str_ldl_Cautious				"Cauto"
 str_ldl_Character				"Carácter"
@@ -1801,6 +1846,7 @@ str_tbl_ldl_upd002_tga				"upd002.tga"
 str_tbl_ldl_upd003_tga				"upd003.tga"
 str_tbl_ldl_upd004_tga				"upd004.tga"
 
+# stuff for 640 version
 str_tbl_ldl_upbb0515_tga			"upbb0515.tga"
 str_tbl_ldl_upbb0516_tga			"upbb0516.tga"
 str_tbl_ldl_upbb0517_tga			"upbb0517.tga"
@@ -1824,7 +1870,7 @@ str_tbl_ldl_Music_Track_9			"Territorio Interior"
 str_tbl_ldl_Music_Track_10			"La Danza de Kali"
 
 
-
+###Grammar and Description Stuff###
 #GRAMMAR_MALE_LOSER_RANK_1			"el Indigente"
 #GRAMMAR_FEMALE_LOSER_RANK_1			"la Indigente"
 #GRAMMAR_MALE_LOSER_RANK_2			"el Corazón de Ardilla"
@@ -1833,9 +1879,6 @@ str_tbl_ldl_Music_Track_10			"La Danza de Kali"
 #GRAMMAR_FEMALE_LOSER_RANK_3			"la Avergonzada"
 #GRAMMAR_MALE_LOSER_RANK_4			"el Cansado"
 #GRAMMAR_FEMALE_LOSER_RANK_4			"la Cansada"
-
-
-
 #GRAMMAR_MALE_LOSER_RANK_5			"el Humilde"
 #GRAMMAR_FEMALE_LOSER_RANK_5			"la Humilde"
 #GRAMMAR_MALE_LOSER_RANK_6			"el Incapaz"
@@ -1853,7 +1896,6 @@ str_tbl_ldl_Music_Track_10			"La Danza de Kali"
 #GRAMMAR_FEMALE_WINNER_RANK_5			"la Indomable"
 #GRAMMAR_MALE_WINNER_RANK_6			"el Señor del Imp."
 #GRAMMAR_FEMALE_WINNER_RANK_6			"la Señora del Imp."
-
 
 PLAYER_DESCRIPTION_LOSER_RANK_1			"{player[0].leader_name}"
 PLAYER_DESCRIPTION_LOSER_RANK_2			"{player[0].leader_name}"
@@ -1891,23 +1933,6 @@ str_ldl_Unit_Animation_Off			"Animación de unidades - No"
 str_ldl_Unit_Animation_On			"Animación de unidades - Sí"
 
 #
-# added on 260599
-#
-# for disclaimer window
-str_ldl_Disclaimer				"Limitación"
-str_ldl_I_Agree					"Estoy de acuerdo con los términos"
-str_ldl_I_Disagree				"No estoy de acuerdo"
- 
-#Netshell stuff
-str_ldl_No_Scenario				"Escenario no encontrado."
- 
-# SAM050399
-# naming the cities
-str_ldl_Name_City_Title				"Nombre de la ciudad"
-str_ldl_Name_City_Message			"¿Qué nombre quieres dar a tu nueva ciudad?"
-
-
-#
 # CJI021099 Added these for Civ panel
 #
 str_ldl_now_researching				"Investigando:"
@@ -1930,14 +1955,29 @@ str_ldl_ScenModePlayerWithCiv			"Jug c/ Imp."
 str_ldl_ScenModeJustCivs			"Por naciones"
 str_ldl_ScenMode				"Modo:"
 
-str_ldl_EmpireManager				"Administración del imperio"
+#
+# Sprite editor stuff
+#
+str_SprEd_Move					"  Move"
+str_SprEd_Attack				"  Atttack"
+str_SprEd_Idle					"  Idle"
+str_SprEd_Victory				"  Victory"
+str_SprEd_Work					"  Work"
+str_SprEd_StepPlus				" Step +"
+str_SprEd_StepMinus				" Step -"
+str_SprEd_PlayOnce				" Play Once"
+str_SprEd_Loop					" Loop"
+str_SprEd_FacingPlus				" Facing +"
+str_SprEd_FacingMinus				" Facing -"
+
+
 
 ################################
 # #                          # #
 # ##                        ## #
-# ###  ADD TO LDL_STR.TXT   ### #
-# ##     FROM ADD_STR       ## #
-# #                          # #
+# ###ADDED from add_str.txt### #
+# ##  by Jonathan           ## #
+# #   9/5/00                 # #
 ################################
 
 ## new keymap strings
@@ -2042,6 +2082,7 @@ str_ldl_Set_Conditional_Message			"Romper si esta expresión es verdad"
 
 str_ldl_CITY_MANAGER				"Administración de la ciudad"
 str_ldl_TILE_IMPROVEMENTS			"Mejoras de casillas"
+str_ldl_City_Manager_Title			"A D M I N I S T R A C I Ó N    D E   L A   C I U D A D"
 
 #City window strings
 
@@ -2138,7 +2179,7 @@ str_dip_InvalidProposal				"Selecciona una proposición del listado de la izquier
 str_ldl_Threaten				"Amenazar"
 
 
-# 
+#
 # New Control Panel Strings
 #
 
@@ -2163,7 +2204,7 @@ str_ldl_InfoMenuTitle				"Estadíst."
 str_ldl_OptionsMenuTitle			"Opciones"
 
 # Empire Menu Strings
-str_ldl_DomesticManager				"Administración nacional"
+str_ldl_EmpireManager				"Administración del imperio"
 str_ldl_ScienceManager				"Administración de ciencia"
 str_ldl_TradeOpenMarket				"Comercio: mercado libre"
 str_ldl_TradeSummary				"Comercio: resumen"
@@ -2173,6 +2214,7 @@ str_ldl_Gaia					"Controlador Gaia"
 str_ldl_CityManagement				"Admón. ciudad"
 str_ldl_NatlManager				"Admón. nacional"
 str_ldl_BuildQueue				"Cola de construcción"
+
 
 # Units Menu Strings
 str_ldl_UnitManager				"Admón. de unidades"
@@ -2184,7 +2226,7 @@ str_ldl_NewProposal				"Nueva proposición"
 
 # Science Menu Strings
 str_ldl_ScienceScreen				"Pantalla de ciencia"
-str_ldl_GreatLibrary				"Gran Biblioteca" 
+str_ldl_GreatLibrary				"Gran Biblioteca"
 
 # Trade Menu Strings
 str_ldl_TradeScreen				"Pantalla del comercio"
@@ -2217,6 +2259,11 @@ str_ldl_SingleUnits				"Otras unidades"
 str_ldl_ArmyCount				"En el ejército: %d"
 str_ldl_Armies					"Ejércitos"
 
+
+##
+## Scenario Editor strings
+##
+
 str_ldl_ScenYear				"Año"
 str_ldl_NumPlayers				"N.º jugad."
 
@@ -2243,7 +2290,7 @@ str_ldl_ShowLabels				"Mostrar etiquetas"
 
 str_ldl_ShowStatistics				"Mostrar estadísticas"
 str_ldl_HideStatistics				"Ocultar estadísticas"
-str_ldl_Total "Total"
+str_ldl_Total					"Total"
 
 str_ldl_Exclude					"Excluir"
 str_ldl_AddBuildings				"Añad. const."
@@ -2254,6 +2301,28 @@ str_ldl_FileName				"Archivo:"
 
 str_ldl_Leader					"Nombre del líder: "
 str_ldl_CityName				"Nombre ciudad: "
+
+# MDS 091300
+# Added for Scenario Editor buttons
+#
+str_tbl_ldl_XWrap				"XAjustar"
+str_tbl_ldl_YWrap				"YAjustar"
+str_tbl_ldl_Cut					"Cortar región seleccionada"
+str_tbl_ldl_Copy				"Copiar región seleccionada"
+str_tbl_ldl_Paste				"Pegar región"
+str_tbl_ldl_SmallBrush				"Pincel pequeño"
+str_tbl_ldl_MedBrush				"Pincel mediano"
+str_tbl_ldl_LargeBrush				"Pincel grande"
+str_tbl_ldl_SaveClip				"Guardar Clip"
+str_tbl_ldl_LoadClip				"Cargar Clip"
+str_tbl_ldl_Explore				"Determinar mapa explorado"
+str_tbl_ldl_Unexplore				"Determinar mapa por explorar"
+str_tbl_ldl_Fog					"Cambiar niebla de guerra"
+
+
+##
+## Order Strings
+##
 
 str_ldl_order_attack				"Atacar"
 str_ldl_order_move				"Mover"
@@ -2500,7 +2569,7 @@ str_ldl_MB_OK					"SÍ"
 str_ldl_MB_CANCEL				"Cancelar"
 
 # Army Management
-str_ldl_ArmyManagement 				"Administrador del ejército"
+str_ldl_ArmyManagement				"Administrador del ejército"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle			"E N V I A R   U N A   P R O P O S I C I Ó N"
@@ -2515,9 +2584,9 @@ str_ldl_DipWizSelectOfferTreaty			"Seleccionar una oferta o tratado"
 str_ldl_DipWizSelectRequestOffer		"Seleccionar una petición u oferta"
 
 str_ldl_DipWizSelectRequestOfferTreatyForCounter	"Seleccionar una petición, oferta o tratado para hacer una contraproposición"
-str_ldl_DipWizSelectRequestTreaty 			"Seleccionar una petición o tratado para hacer una contraproposición"
-str_ldl_DipWizSelectOfferTreaty 			"Seleccionar una oferta o tratado para hacer una contraproposición"
-str_ldl_DipWizSelectRequestOffer 			"Seleccionar una petición u oferta para hacer una contraproposición"
+str_ldl_DipWizSelectRequestTreaty			"Seleccionar una petición o tratado para hacer una contraproposición"
+str_ldl_DipWizSelectOfferTreaty				"Seleccionar una oferta o tratado para hacer una contraproposición"
+str_ldl_DipWizSelectRequestOffer			"Seleccionar una petición u oferta para hacer una contraproposición"
 
 str_ldl_DipWizYear				"Año: {g.year_str}"
 str_ldl_DipWizRecipient				"Para el líder {player[0].civ_name_singular}:"
@@ -2546,10 +2615,15 @@ str_ldl_CityWinInventory			"Inventario"
 str_ldl_CityWinEfficiency			"Eficacia"
 str_ldl_CityWinGrowth				"Crecim."
 str_ldl_BuildManagerTitle			"A D M I N I S T R A D O R   D E   C O N S T R U C C I Ó N"
-str_ldl_CityWinHappiness			"Felicidad"
-str_ldl_CityWinPollution			"Contaminación"
+
+###### Revised to add ':'
+#str_ldl_CityWinHappiness			"Felicidad"
+#str_ldl_CityWinPollution			"Contaminación"
+######
+
 str_ldl_SendMessage				"Enviar un mensaje "
-str_ldl_Details "Details"
+str_ldl_CreateProposal				"Crear propos."
+str_ldl_Details					"Details"
 
 str_ldl_QueueName				"Nombre de la cola"
 str_ldl_LoadQueue				"Cargar..."
@@ -2605,6 +2679,7 @@ str_ldl_Espionage_CityIncome_Label		"Ingresos de la ciudad: {city[0].netcitygold
 str_ldl_Espionage_GoldInTrade_Label		"Oro en comercio: {city[0].goldfromtraderoutes}"
 
 # Score dialog
+#below has been updated in add_str
 str_ldl_INFORMATION_DIALOG_TITLE		"Estadísticas"
 str_ldl_SCORE_TAB_TITLE				"Puntuación"
 
@@ -2636,10 +2711,10 @@ str_ldl_RANKING_MILITARY			"Militar"
 str_ldl_RANKING_ECONOMIC			"Económico"
 str_ldl_RANKING_SCIENTIFIC			"Científico"
 str_ldl_RANKING_OVERALL				"General"
-str_ldl_INFO_RANKING_TAB			"Ranking"
 str_ldl_RANKING_POLLUTION			"Contaminación"
 str_ldl_RANKING_WONDER				"Maravilla"
 str_ldl_RANKING_RANK				"Rango:"
+str_ldl_INFO_RANKING_TAB			"Ranking"
 str_ldl_LINE_BUTTON				"Gráfico lineal"
 str_ldl_ZEROSUM_BUTTON				"Gráfico de suma cero"
 
@@ -2670,6 +2745,7 @@ str_ldl_DipDetails_LeaderPersonality		"Personalidad del líder: {player[0].leader
 str_ldl_DipDetails_EmbassyMsg			"* Embajada necesaria para acceder a información privilegiada."
 str_ldl_DipDetails_NoEmbassy			"<Ninguna embajada>"
 
+# Tile improvent panel
 str_ldl_ImproveLand				"Tierra"
 str_ldl_ImproveOcean				"Océano"
 str_ldl_ImproveSpecial				"Especial"
@@ -2713,8 +2789,6 @@ INFOBAR_UNITS					"Unidades: "
 INFOBAR_CITY					"Ciudad: "
 INFOBAR_UNEXPLORED				"Inexplorado"
 
-# UNIT_HOPLITE_NEW				"Hoplita" # Unused to be removed
-
 UNIT_CATEGORY_GENERIC				"Genérico"
 UNIT_CATEGORY_SETTLER				"Colono"
 UNIT_CATEGORY_AERIAL				"Aéreo"
@@ -2728,6 +2802,7 @@ UNIT_CATEGORY_SPECIAL				"Especial"
 
 UNIT_LOCATION_IN_FIELD				"En el campo"
 UNIT_LOCATION_IN_SPACE				"En el espacio"
+UNIT_ORDER_TRANSPORTED				"En transporte"
 
 ARMY_NAME_PREFIX				"Ejército #"
 
@@ -2805,7 +2880,6 @@ EMPIRE_VALUE_DESC_COMMERCE_3			"Medio"
 EMPIRE_VALUE_DESC_COMMERCE_4			"Bajo"
 EMPIRE_VALUE_DESC_COMMERCE_5			"Muy bajo"
 
-
 EMPIRE_VALUE_DESC_MILITARY_0			"ANARQUÍA"
 EMPIRE_VALUE_DESC_MILITARY_1			"Caro"
 EMPIRE_VALUE_DESC_MILITARY_2			"Alto"
@@ -2842,9 +2916,9 @@ INFOBAR_BIO_INFECTION				" Bioinfectado"
 INFOBAR_NANO_INFECTION				" Nanoinfectado"
 INFOBAR_CONVERTED				" Convertido"
 INFOBAR_FRANCHISED				" Atrincherado"
-INFOBAR_INJOINED 				" Imposición"
-INFOBAR_RIOTING 				" Disturbios"
-INFOBAR_WATCHFUL 				" Vigilante"
+INFOBAR_INJOINED				" Imposición"
+INFOBAR_RIOTING					" Disturbios"
+INFOBAR_WATCHFUL				" Vigilante"
 
 CONTEXT_CITY_ACTIVATE				"  Activar todas las unidades"
 CONTEXT_CITY_MAYOR_OFF				"  Desactivar alcalde"
@@ -2877,7 +2951,8 @@ str_ldl_EditQueueMovement			"Mo"
 str_ldl_EditQueueGreatLibrary			"Gran Biblioteca"
 str_ldl_EditQueueConfirmOverwrite		"¿Sobrescribir cola en todas las ciudades seleccionadas?"
 
-str_code_TotalPollutionFormat			"Total: %d"
+#revised to eliminate phrase 'total:' Updated in add_str
+#str_code_TotalPollutionFormat			"Total: %d"
 str_code_SaveQueueAsColon			"Guardar cola como:"
 
 str_ldl_EditQueueAllItems			"Todos los objetos"
@@ -2893,26 +2968,8 @@ str_ldl_Remove					"Quitar >"
 str_ldl_AddAll					"<< Añadir todos"
 str_ldl_RemoveAll				"Quitar todos >>"
 
+# # END OF STUFF ADDED 9/5/00
 
-###Added 09/15/00###
-str_tbl_ldl_XWrap				"XAjustar"
-str_tbl_ldl_YWrap				"YAjustar"
-str_tbl_ldl_Cut					"Cortar región seleccionada"
-str_tbl_ldl_Copy				"Copiar región seleccionada"
-str_tbl_ldl_Paste				"Pegar región"
-str_tbl_ldl_SmallBrush				"Pincel pequeño"
-str_tbl_ldl_MedBrush				"Pincel mediano"
-str_tbl_ldl_LargeBrush				"Pincel grande"
-str_tbl_ldl_SaveClip				"Guardar Clip"
-str_tbl_ldl_LoadClip				"Cargar Clip"
-str_tbl_ldl_Explore				"Determinar mapa explorado"
-str_tbl_ldl_Unexplore				"Determinar mapa por explorar"
-str_tbl_ldl_Fog					"Cambiar niebla de guerra"
-
-##String added as per bug report USQA#24
-str_ldl_CreateProposal				"Crear propos."
-
-###Added 10/12/00###
 #Disbanding Cities Strings
 str_ldl_CantDisbandCitySize                     "No puedes disolver ciudades cuyo tamaño es mayor de 3."
 str_ldl_CantDisbandLastCity                     "No puedes disolver tu última ciudad."
@@ -3000,9 +3057,6 @@ str_profile_OneCityChallenge                    "One City Challenge"            
 str_profile_CityCaptureOptions                  "City Capture Options"                          # If city is empty at turn start AI gets cheapest unit
 
 
-
-str_ldl_City_Manager_Title  "A D M I N I S T R A C I Ó N    D E   L A   C I U D A D"
-
 # Añadido para extender las opciones del teclado. 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Opciones de Musica"
 str_tbl_ldl_Decend				"Descender"
@@ -3039,7 +3093,7 @@ str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"			# Entre
 str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# Entrenched barbs create more barbs
 
 
-str_tbl_ldl_NoAIProductionDeficit_Off "AI Has Production Deficits"
+str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"
 str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities don't go negative in gold
 str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
 str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# Everyone pays gold amount per city
