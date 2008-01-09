@@ -299,7 +299,7 @@ Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt)
 
 
 
-Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const CIV_INDEX civ, GENDER gender)
+Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const sint32 civ, GENDER gender)
 {
 	memset(this, 0, sizeof(*this));
 

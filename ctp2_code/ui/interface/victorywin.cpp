@@ -126,6 +126,7 @@
 #include "network.h"
 #include "TurnCnt.h"
 #include "wonderutil.h"
+#include "CivilisationPool.h"   // g_theCivilisationPool
 
 extern sint32                   g_ScreenWidth;
 extern sint32                   g_ScreenHeight;

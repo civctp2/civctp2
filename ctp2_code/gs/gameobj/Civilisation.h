@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  : Civilisation handling.
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,13 +17,16 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - pragma commented out
 // - Fixed city style enumeration removed. 
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -77,7 +80,7 @@ public:
 	const CivilisationRecord *GetDBRec() const;
 
 	PLAYER_INDEX GetOwner(void) const { return (GetData()->GetOwner()) ; }
-	CIV_INDEX GetCivilisation(void) const { return (GetData()->GetCivilisation()) ; }
+	sint32 GetCivilisation(void) const { return (GetData()->GetCivilisation()) ; }
 	GENDER GetGender(void) const { return (GetData()->GetGender()); }
 
 	MBCHAR const * GetLeaderName(void) const { return (GetData()->GetLeaderName()) ; }
@@ -96,7 +99,7 @@ public:
    	//sint32 GetIncreaseHp( void ) { return AccessData()->GetIncreaseHp(); }
 
 	
-	void ResetCiv(CIV_INDEX newCivIndex, GENDER gender) { AccessData()->ResetCiv(newCivIndex, gender); }
+	void ResetCiv(sint32 newCivIndex, GENDER gender) { AccessData()->ResetCiv(newCivIndex, gender); }
 } ;
 
 PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner);

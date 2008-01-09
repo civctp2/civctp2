@@ -106,8 +106,8 @@ template <class T> CTPDatabase<T>::CTPDatabase()
     m_alphaToIndex      (NULL),
     m_allocatedSize     (k_INITIAL_DB_SIZE)
 {
-    m_records       = new T *[m_allocatedSize];
-    m_modifiedList  = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
+	m_records       = new T *[m_allocatedSize];
+	m_modifiedList  = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];
 }
 
 
@@ -125,16 +125,16 @@ template <class T> CTPDatabase<T>::~CTPDatabase()
 	delete [] m_indexToAlpha;
 	delete [] m_alphaToIndex;
 
-    for 
-    (
-        std::vector<T *>::iterator p = m_modifiedRecords.begin();
-        p != m_modifiedRecords.end();
-        ++p
-    )
-    {
-        delete *p;
-    }
-    std::vector<T *>().swap(m_modifiedRecords);
+	for
+	(
+	    std::vector<T *>::iterator p = m_modifiedRecords.begin();
+	    p != m_modifiedRecords.end();
+	    ++p
+	)
+	{
+		delete *p;
+	}
+	std::vector<T *>().swap(m_modifiedRecords);
 
 	if (m_modifiedList) 
 	{
@@ -230,18 +230,18 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 ///          the generic entry is returned.
 template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 {
-    // Check validity of index
-    T * nonSpecific = Access(index);    
-    if (!nonSpecific) return NULL;
+	// Check validity of index
+	T * nonSpecific = Access(index);    
+	if (!nonSpecific) return NULL;
 
 	// Check for any government specific overrides
 	for 
-    (
+	(
 	    PointerList<GovernmentModifiedRecordNode>::Walker   walk = 
 	        PointerList<GovernmentModifiedRecordNode>::Walker(m_modifiedList[index]);
-        walk.IsValid(); 
-        walk.Next()
-    ) 
+	    walk.IsValid();
+	    walk.Next()
+	)
 	{
 		if (govIndex == walk.GetObj()->m_governmentModified)
 		{
@@ -261,22 +261,16 @@ template <class T> const T * CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
 
 template <class T> void CTPDatabase<T>::Grow()
 {
-
 	PointerList<GovernmentModifiedRecordNode> **oldList = m_modifiedList;
 	m_modifiedList = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize + k_GROW_DB_STEP];
 	memcpy(m_modifiedList, oldList, m_allocatedSize * sizeof(PointerList<GovernmentModifiedRecordNode> *));
 	delete [] oldList;	
-
-  
 
 	T **oldRecords = m_records;
 	m_records = new T *[m_allocatedSize + k_GROW_DB_STEP];
 	memcpy(m_records, oldRecords, m_allocatedSize * sizeof(T *));
 	delete [] oldRecords;
 	m_allocatedSize += k_GROW_DB_STEP;
-
-
-
 }
 
 
@@ -308,7 +302,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 				validIndex++;
 			}
 		}
-	  
+
 		sint32 mainRecord=FindRecordNameIndex(obj->GetIDText());
 		if ((mainRecord >= 0) && (validIndex > 0))
 		{
@@ -342,23 +336,18 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 			DPRINTF(k_DBG_FIX, ("GovMod- No main record, or no valid GovernmentsModified %s \n",obj->GetIDText()));
 		}
 	}
-	else 
+	else
 	{
-
 		if (m_numRecords >= m_allocatedSize)
 			Grow();
 		Assert(m_numRecords < m_allocatedSize);
 		obj->SetIndex(m_numRecords);
 		m_records[m_numRecords] = obj;
 
-
 		m_modifiedList[m_numRecords] = new PointerList<GovernmentModifiedRecordNode>();
 		m_modifiedList[m_numRecords]->AddHead(new GovernmentModifiedRecordNode());
 		m_numRecords++;
-		
-
 	}
-
 }
 
 template <class T> T *CTPDatabase<T>::Access(sint32 index)
@@ -383,7 +372,7 @@ template <class T> sint32 CTPDatabase<T>::GetName(sint32 index)
 
 	return m_records[index]->m_name;
 }
-	
+
 template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
 {
 	Assert(index >= 0);
@@ -439,7 +428,7 @@ template <class T> bool CTPDatabase<T>::Parse(DBLexer *lex)
 	// A merge sort algorithm is of course better, but the complexity
 	// is the same as for the old databases even the constant is the same.
 	for (sint32 i = 0; i < m_numRecords; ++i)
-    {
+	{
 		const MBCHAR *str = m_records[i]->GetNameText();
 		sint32 a;
 		for (a = 0; a < i; ++a)
@@ -849,6 +838,6 @@ template class CTPDatabase<MapRecord>;
 #include "ConceptRecord.h" // 42
 template class CTPDatabase<ConceptRecord>;
 
-#include "ConstRecord.h" // 42
+#include "ConstRecord.h" // 43
 template class CTPDatabase<ConstRecord>;
 #endif // __TILETOOL__

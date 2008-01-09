@@ -965,15 +965,13 @@ AUI_ERRCODE aui_Region::Draw( aui_Surface *surface, sint32 x, sint32 y )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	if ( !IsHidden() )
+	{
 		errcode = DrawThis( surface, x, y );
 
-	
-	
-	
-	if ( errcode == AUI_ERRCODE_OK )
-		DrawChildren( surface, x, y );
+		if ( errcode == AUI_ERRCODE_OK )
+			DrawChildren( surface, x, y );
+	}
 
 	
 	m_draw = 0;

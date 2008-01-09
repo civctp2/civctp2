@@ -97,7 +97,7 @@ void NetCivilization::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLBYTETYPE(m_data->m_owner, PLAYER_INDEX);
 	PULLBYTETYPE(m_data->m_gender, GENDER);
 	PULLSHORT(tmp) ;
-	m_data->m_civ = (CIV_INDEX)(tmp) ;
+	m_data->m_civ = static_cast<sint32>(tmp);
 	PULLSTRING(m_data->m_leader_name);
 	PULLSTRING(m_data->m_civilisation_name);
 	PULLSTRING(m_data->m_country_name);

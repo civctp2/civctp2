@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : CTP2 list item GUI component
+// Id           : $Id net_civ.cpp 442 2005-08-28 18:05:04Z Martin GÃ¼hmann $
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added own Draw method. (2-Jan-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "ctp2_listitem.h"
 
@@ -27,6 +57,26 @@ ctp2_ListItem::~ctp2_ListItem()
 }
 
 
+AUI_ERRCODE ctp2_ListItem::Draw(aui_Surface *surface, sint32 x, sint32 y)
+{
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+
+	sint32 test   = IsHidden();	
+	sint32 enable = IsDisabled();	
+	if(!IsHidden()
+	&& !IsDisabled()
+	){
+		errcode = DrawThis(surface, x, y);
+
+		if(errcode == AUI_ERRCODE_OK)
+			DrawChildren( surface, x, y );
+	}
+
+	
+	m_draw = 0;
+
+	return AUI_ERRCODE_OK;
+}
 
 sint32 ctp2_ListItem::Compare(ctp2_ListItem *item2, uint32 column)
 {

@@ -28,6 +28,7 @@
 // - Import structure modified to allow mingw compilation.
 // - Prevent crash when settling in the Alexander scenario.
 // - Replaced old civilsation databse by new one. (Aug 21st 2005 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -79,7 +80,7 @@ public:
 
 	uint8           m_cityname_count[k_MAX_CityName];
 	
-	CIV_INDEX       m_civ;
+	sint32          m_civ;
 
 	GENDER          m_gender;
 
@@ -104,13 +105,13 @@ public:
 
 public:
 	CivilisationData(const ID &id);
-	CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender);
+	CivilisationData(const ID &id, PLAYER_INDEX owner, sint32 civ, GENDER gender);
 	CivilisationData(CivArchive &archive);
 
 	void Serialize(CivArchive &archive);
 
-	PLAYER_INDEX GetOwner(void) const { return (m_owner) ; }
-	CIV_INDEX GetCivilisation(void) const { return (m_civ) ; }
+	PLAYER_INDEX GetOwner(void) const { return m_owner; }
+	sint32 GetCivilisation(void) const { return m_civ; }
 	GENDER GetGender(void) const { return m_gender; }
 
 	sint32 GetAnyCityName(void) const;
@@ -138,7 +139,7 @@ public:
 	void SetCityStyle( sint32 cityStyle ) { m_cityStyle = cityStyle; }
 
 	
-	void ResetCiv(CIV_INDEX newCivIndex, GENDER gender);
+	void ResetCiv(sint32 newCivIndex, GENDER gender);
 
 	void ResetStrings();
 };

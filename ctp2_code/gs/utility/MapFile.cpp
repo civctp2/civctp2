@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Map file handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 // - Replaced non-standard sizeof(enum) occurrences
 // - Corrected invalid index in LoadAdvances
 // - Repaired memory leaks
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -1246,7 +1247,7 @@ bool MapFile::LoadCivilizations(uint8 *buf, sint32 size)
 		PULLLONG(currNation);
 		if (g_player[i])
 		{
-			g_player[i]->m_civilisation->ResetCiv((CIV_INDEX)currNation, g_player[i]->m_civilisation->GetGender());
+			g_player[i]->m_civilisation->ResetCiv(currNation, g_player[i]->m_civilisation->GetGender());
 			MBCHAR name[k_MAPFILE_NAME_LEN];
 			for (int j = 0; j < k_MAPFILE_NAME_LEN; j++)
 			{

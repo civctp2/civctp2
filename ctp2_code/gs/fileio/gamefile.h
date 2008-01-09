@@ -1,3 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Game file handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _NO_GAME_WATCH
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -125,13 +155,13 @@ public:
 
 	
 	
-	CIV_INDEX		playerCivIndexList[k_MAX_PLAYERS];
+	sint32		playerCivIndexList[k_MAX_PLAYERS];
 
 	
 
 	
 	BOOL	showLabels;
-	sint32	startingPlayer;		
+	sint32	startingPlayer;
 };
 
 class GameInfo {

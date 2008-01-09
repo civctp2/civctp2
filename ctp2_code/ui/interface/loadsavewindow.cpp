@@ -30,6 +30,7 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standartized code (May 2006 Martin Gühmann)
 // - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -508,7 +509,7 @@ bool LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 			info->playerCivIndexList[j] = 
 				(g_player[j]) 
 				? g_player[j]->GetCivilisation()->GetCivilisation() 
-				: (CIV_INDEX) 0;
+				: 0;
 		}
 
 		return true;

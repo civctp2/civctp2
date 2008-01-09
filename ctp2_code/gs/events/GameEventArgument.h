@@ -39,6 +39,7 @@
 
 #include "ID.h"
 #include "MapPoint.h"
+#include "GameEventManager.h"    // g_gevManager
 
 class Unit;
 class MapPoint;

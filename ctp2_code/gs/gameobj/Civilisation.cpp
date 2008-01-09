@@ -121,8 +121,8 @@ PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner)
 	}
 
 	if (pi == PLAYER_INDEX_INVALID) 
-    {
-        // Maximum number of players reached: add as Barbarians.
+	{
+		// Maximum number of players reached: add as Barbarians.
 		pi = PLAYER_INDEX_VANDALS;
 	}
 
@@ -150,31 +150,31 @@ PLAYER_INDEX civilisation_NewCivilisationOrVandals(PLAYER_INDEX old_owner)
 //----------------------------------------------------------------------------
 void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 {
-    g_player[pi] = new Player
-        (PLAYER_INDEX(pi), 0, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM, GENDER_RANDOM);
+	g_player[pi] = new Player
+	    (PLAYER_INDEX(pi), 0, PLAYER_TYPE_ROBOT, CIV_INDEX_RANDOM, GENDER_RANDOM);
 
-    if (g_network.IsActive()) 
-    {
-        g_network.AddCivilization
-            (pi, PLAYER_TYPE_ROBOT, g_player[pi]->GetCivilisation()->GetCivilisation());
-    }
+	if (g_network.IsActive()) 
+	{
+		g_network.AddCivilization
+		    (pi, PLAYER_TYPE_ROBOT, g_player[pi]->GetCivilisation()->GetCivilisation());
+	}
 	
-    g_selected_item->AddPlayer(pi);
+	g_selected_item->AddPlayer(pi);
 	
-    if (pi != PLAYER_INDEX_VANDALS && 			// Barbarians do not inherit
+	if (pi != PLAYER_INDEX_VANDALS && 			// Barbarians do not inherit
 	    (old_owner >= 0) && g_player[old_owner]
-       ) 
-    {
-        delete g_player[pi]->m_advances;
+	   ) 
+	{
+	    delete g_player[pi]->m_advances;
 		g_player[pi]->m_advances = new Advances(*(g_player[old_owner]->m_advances));
 		g_player[pi]->m_advances->SetOwner(pi);
 		g_player[old_owner]->GiveMap(pi);
-    }
+	}
 
-    CtpAi::AddPlayer(pi);
+	CtpAi::AddPlayer(pi);
 
-    if (g_network.IsHost()) 
-    {
+	if (g_network.IsHost()) 
+	{
 		g_network.Block(old_owner);
 		g_network.QueuePacketToAll(new NetPlayer(g_player[pi]));
 		
@@ -184,7 +184,7 @@ void civilisation_CreateNewPlayer(sint32 pi, sint32 old_owner)
 		}
 
 		g_network.Unblock(old_owner);
-    }
+	}
 }
 
 const CivilisationRecord *Civilisation::GetDBRec() const

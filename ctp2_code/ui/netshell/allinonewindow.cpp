@@ -32,6 +32,7 @@
 // - The ages in the summary are now displayed correctly.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standardized code. (May 29th 2006 Martin Gühmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1667,7 +1668,7 @@ BOOL AllinoneWindow::AssignTribe(
 			Assert( index > 0 );
 			if ( index > 0 )
 			{
-				CIV_INDEX civ = CIV_INDEX(index - 1);
+				sint32 civ = index - 1;
 				StringId sid = isFemale ?
 					g_theCivilisationDB->Get(civ)->GetLeaderNameFemale():
 					g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
@@ -2940,37 +2941,30 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 		}
 	}
 
-	if(IsScenarioGame()) {
-		if(m_scenInfo.m_haveSavedGame) {
-			spnewgametribescreen_disableTribes();
-			for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
-				if(m_scenInfo.m_legalCivs[i] != 0) {
-					spnewgametribescreen_enableTribe((CIV_INDEX)m_scenInfo.m_legalCivs[i]);
+	spnewgametribescreen_clearTribes();
+	if(IsScenarioGame())
+	{
+		if(m_scenInfo.m_haveSavedGame)
+		{
+			for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
+			{
+				if(m_scenInfo.m_legalCivs[i] != 0)
+				{
+					spnewgametribescreen_addTribeNoDuplicate(m_scenInfo.m_legalCivs[i]);
 				}
 			}
 			return;
 		}
 	}
 
-	spnewgametribescreen_enableTribes();
+	spnewgametribescreen_addAllTribes();
 	sint32 i;
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
-		
 		if ( tribeSlots[ i ].tribe != g_playersetup.GetTribe() )
-			spnewgametribescreen_disableTribe( tribeSlots[ i ].tribe - 1 );
+			spnewgametribescreen_removeTribe( tribeSlots[ i ].tribe - 1 );
 	}
 
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
 
 	
 	if ( m_mode == CONTINUE_CREATE || m_mode == CONTINUE_JOIN)
@@ -3009,7 +3003,7 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 			}
 
 			if ( !found )
-				spnewgametribescreen_disableTribe( i - 1 );
+				spnewgametribescreen_removeTribe( i - 1 );
 		}
 	}
 }
@@ -3024,57 +3018,6 @@ void AllinoneWindow::UpdateConfig( void )
 	ns_HPlayerListBox *hplayerslistbox = (ns_HPlayerListBox *)
 		m_controls[ CONTROL_HPLAYERSLISTBOX ];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	aui_Switch *hand = (aui_Switch *)m_controls[ CONTROL_HANDICAPPINGSWITCH ];
 	aui_Control *cpspinner = m_controls[ CONTROL_CIVPOINTSBUTTON ];
 	aui_Control *pwspinner = m_controls[ CONTROL_PWPOINTSBUTTON ];
@@ -4300,7 +4243,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 			g_gamesetup.SetClosed( FALSE );
 			g_gamesetup.SetSize( k_NS_MAX_HUMANS );
 
-            /// @todo Use Os::Sleep
+			/// @todo Use Os::Sleep
 #ifdef WIN32			
 			Sleep( k_PACKET_DELAY );
 #else
@@ -5918,81 +5861,10 @@ void AllinoneWindow::AddAIButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
-
 	AllinoneWindow *w = g_allinoneWindow;
 
 	w->AddAIPlayer();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void TribesButtonCallback(
 	aui_Control *control,
@@ -6008,8 +5880,8 @@ void TribesButtonCallback(
 
 	if ( item->IsAI() )
 	{
-		spnewgametribescreen_disableTribe( g_playersetup.GetTribe() - 1 );
-		spnewgametribescreen_enableTribe( item->GetAIPlayer()->GetTribe() - 1 );
+		spnewgametribescreen_removeTribe( g_playersetup.GetTribe() - 1 );
+		spnewgametribescreen_addTribeNoDuplicate( item->GetAIPlayer()->GetTribe() - 1 );
 		spnewgametribescreen_setTribeIndex(item->GetAIPlayer()->GetTribe() - 1);
 	}
 	else

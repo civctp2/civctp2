@@ -28,6 +28,7 @@
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standartized code (May 21st 2006 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -76,11 +77,14 @@
 #include "civscenarios.h"			// g_civScenarios
 #include "gamefile.h"
 
-extern C3UI			*g_c3ui;
+extern C3UI *g_c3ui;
 
 HotseatList *g_hotseatList = NULL;
 
 
+sint32       s_hotseatCivList[k_MAX_PLAYERS];
+bool        *s_legalCivList = NULL;
+bool         s_playerCivsLocked;
 
 
 
@@ -238,6 +242,9 @@ HotseatList::~HotseatList()
 	}
 
 	delete m_window;
+
+	allocated::clear(s_legalCivList);
+
 }
 
 
@@ -326,7 +333,7 @@ sint32 HotseatList::DisableButtons( void )
 sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 {
 	sint32	i;
-	BOOL	found = FALSE, 
+	bool	found = false,
 			used;
 
 	sint32 realCiv = curCiv;
@@ -342,17 +349,17 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 		} while(g_theCivilisationDB->m_alphaToIndex[curCiv] == 0); 
 
 		realCiv = g_theCivilisationDB->m_alphaToIndex[curCiv];
-		used = FALSE;
+		used = false;
 
 		
-		if (!hotseatlist_CivEnabled((CIV_INDEX)realCiv)) {
+		if (!hotseatlist_CivEnabled(realCiv)) {
 			continue;
 		}
 
 		for(i = 0; i < g_theProfileDB->GetNPlayers() - 1; i++) {
 			HotseatListItem *item = (HotseatListItem *)m_list->GetItemByIndex(i);
 			if(item->GetCiv() == realCiv) {
-				used = TRUE;
+				used = true;
 
 				if (numEnabledCivs == g_theProfileDB->GetNPlayers()) {
 					
@@ -361,33 +368,21 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 					item->Update();
 					curItem->SetCiv(realCiv);
 					
-					found = TRUE;
+					found = true;
 					break;
 				}
 			}
 		}
 
 		if(!used) {
-			found = TRUE;
+			found = true;
 		}
 	}
 	return realCiv;
 }
 
-	
-
-
-
-
-
-
-
-
-
-
-
 HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-								 sint32 civ, BOOL isHuman, MBCHAR *email,
+								 sint32 civ, bool isHuman, MBCHAR *email,
 								 MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
@@ -401,7 +396,7 @@ HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
 
 	*retval = InitCommonLdl(civ, isHuman, email, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 void HotseatAIToggleCallback(aui_Control *control, uint32 action, uint32 data,
@@ -441,7 +436,7 @@ void HotseatNameCallback(aui_Control *control, uint32 action, uint32 data,
 }
 
 AUI_ERRCODE HotseatListItem::InitCommonLdl(sint32 civ,
-										   BOOL isHuman,
+										   bool isHuman,
 										   MBCHAR *email,
 										   MBCHAR *ldlBlock)
 {
@@ -498,9 +493,9 @@ void HotseatListItem::Update(void)
 
 	
 	if (hotseatlist_PlayerCivsLocked()) {
-		subButton->Enable(FALSE);
+		subButton->Enable(false);
 	} else {
-		subButton->Enable(TRUE);
+		subButton->Enable(true);
 	}
 
 	
@@ -515,17 +510,17 @@ void HotseatListItem::Update(void)
 		subText->GetFieldText(m_email, 255);
 
 		if(g_startEmailGame)
-			subText->Enable(TRUE);
+			subText->Enable(true);
 		else
-			subText->Enable(FALSE);
+			subText->Enable(false);
 	} else {
 		subButton->SetText(g_theStringDB->GetNameStr("HOTSEAT_AI"));
 		
 		subText = (C3TextField *)GetChildByIndex(2);
-		subText->Enable(FALSE);
+		subText->Enable(false);
 
 		subText = (C3TextField *)GetChildByIndex(3);
-		subText->Enable(FALSE);
+		subText->Enable(false);
 	}
 }
 
@@ -535,24 +530,24 @@ sint32 HotseatListItem::Compare(c3_ListItem *item2, uint32 column)
 }
 
 
-void HotseatListItem::SetHuman(BOOL human)
+void HotseatListItem::SetHuman(bool human)
 {
 	m_isHuman = human;
 	C3TextField *subText;
 	subText = (C3TextField *)GetChildByIndex(3);
 	if(m_isHuman && g_startEmailGame) {
-		subText->Enable(TRUE);
+		subText->Enable(true);
 	} else {
 		subText->SetFieldText("");
-		subText->Enable(FALSE);
+		subText->Enable(false);
 	}
 
 	subText = (C3TextField *)GetChildByIndex(2);
 	if(m_isHuman) {
-		subText->Enable(TRUE);
+		subText->Enable(true);
 	} else {
 		subText->SetFieldText("");
-		subText->Enable(FALSE);
+		subText->Enable(false);
 	}
 
 	Update();
@@ -575,41 +570,30 @@ void HotseatListItem::EnterEmail()
 	Update();
 }
 
-
-
-
-
-
-
-
-
-CIV_INDEX	s_hotseatCivList[k_MAX_PLAYERS];
-BOOL		s_legalCivList[CIV_INDEX_INVALID];
-BOOL		s_playerCivsLocked;
-
-
-
 void hotseatlist_ClearOptions(void)
 {
-	std::fill(s_hotseatCivList, s_hotseatCivList + k_MAX_PLAYERS, (CIV_INDEX) 0);
-	std::fill(s_legalCivList, s_legalCivList + CIV_INDEX_INVALID, FALSE);
-	s_playerCivsLocked = FALSE;
+	delete s_legalCivList;
+	s_legalCivList = new bool[g_theCivilisationDB->NumRecords()];
+
+	std::fill(s_hotseatCivList, s_hotseatCivList + k_MAX_PLAYERS, 0);
+	std::fill(s_legalCivList, s_legalCivList + g_theCivilisationDB->NumRecords(), false);
+	s_playerCivsLocked = false;
 }
 
 
 
-void hotseatlist_SetPlayerCiv(PLAYER_INDEX index, CIV_INDEX civ)
+void hotseatlist_SetPlayerCiv(PLAYER_INDEX index, sint32 civ)
 {
 }
 
 
 void hotseatlist_LockCivs(void)
 {
-	s_playerCivsLocked = TRUE;
+	s_playerCivsLocked = true;
 }
 
 
-BOOL hotseatlist_PlayerCivsLocked(void)
+bool hotseatlist_PlayerCivsLocked(void)
 {
 	return s_playerCivsLocked;
 }
@@ -618,31 +602,29 @@ BOOL hotseatlist_PlayerCivsLocked(void)
 
 void hotseatlist_EnableAllCivs(void)
 {
-	for (sint32 i=0; i<CIV_INDEX_INVALID; i++) {
-		s_legalCivList[i] = TRUE;
-	}
+	std::fill(s_legalCivList, s_legalCivList + g_theCivilisationDB->NumRecords(), true);
 }
 
 
 void hotseatlist_DisableAllCivs(void)
 {
-	std::fill(s_legalCivList, s_legalCivList + CIV_INDEX_INVALID, FALSE);
+	std::fill(s_legalCivList, s_legalCivList + g_theCivilisationDB->NumRecords(), false);
 }
 
 
-void hotseatlist_EnableCiv(CIV_INDEX civ)
+void hotseatlist_EnableCiv(sint32 civ)
 {
-	s_legalCivList[civ] = TRUE;
+	s_legalCivList[civ] = true;
 }
 
 
-void hotseatlist_DisableCiv(CIV_INDEX civ)
+void hotseatlist_DisableCiv(sint32 civ)
 {
-	s_legalCivList[civ] = FALSE;
+	s_legalCivList[civ] = false;
 }
 
 
-BOOL hotseatlist_CivEnabled(CIV_INDEX civ)
+bool hotseatlist_CivEnabled(sint32 civ)
 {
 	return s_legalCivList[civ];
 }
@@ -652,7 +634,8 @@ sint32 hotseatlist_NumEnabled(void)
 {
 	sint32 count = 0;
 
-	for (sint32 i=0; i<CIV_INDEX_INVALID; i++) {
+	for (sint32 i = 0; i < g_theCivilisationDB->NumRecords(); i++)
+	{
 		if (s_legalCivList[i])
 			count++;
 	}

@@ -2975,8 +2975,8 @@ str_ldl_CantDisbandCitySize                     "Les villes de plus de taille 3 
 str_ldl_CantDisbandLastCity                     "Vous ne pouvez pas démanteler votre dernière ville."
 
 # Stuff added 20-Nov-2007 # I have no idea were else to put it
-str_FileDoesNotExist                            "File does not exist: "
-str_MapSizesDiffer                              "The new map does not have the same size as the loaded map.\n The map sizes must fit. Map size old/new: "
+str_FileDoesNotExist                            "Fichier introuvable : "
+str_MapSizesDiffer                              "La nouvelle carte n'a pas la même taille que la carte qui a été chargée.\n La taille des cartes doit être similaire.\n Taille de la carte précédente/nouvelle : "
 
 # Profile strings (Advanced options list)
 str_profile_UnitAnim                            "Animation unités"

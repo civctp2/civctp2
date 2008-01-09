@@ -110,7 +110,6 @@ enum WORLD_SHAPE
 #include "c3types.h"			// MBCHAR, sint..., uint...
 #include "civarchive.h"			// CivArchive
 #include "Civilisation.h"		// GENDER
-#include "CivilisationPool.h"	// CIV_INDEX
 #include "Globals.h"            // MAPSIZE
 #include "gstypes.h"			// PLAYER_INDEX
 #include "MapPoint.h"			// MapPoint
@@ -194,7 +193,7 @@ private:
 
     PLAYER_INDEX	m_playerNumber;
 
-    CIV_INDEX		m_civIndex;
+    sint32		m_civIndex;
 
     MBCHAR	m_gameName[_MAX_PATH];
     MBCHAR	m_leaderName[k_MAX_NAME_LEN];
@@ -455,7 +454,7 @@ public:
     void SetIsSaved(BOOL isSaved)				{ m_isSaved = isSaved; }
     void SetGameName(MBCHAR const * name)		{ strcpy(m_gameName, name); }
 
-    void SetCivIndex(CIV_INDEX civ)				{ m_civIndex = civ; }
+    void SetCivIndex(sint32 civ)				{ m_civIndex = civ; }
     void SetPlayerIndex(PLAYER_INDEX index)		{ m_playerNumber = index; }
     void SetGender(GENDER gender)				{ m_gender = gender; }
 
@@ -625,7 +624,7 @@ public:
     MBCHAR		*GetSaveNote()					{ return m_saveNote; }
     BOOL		IsSaved() const					{ return m_isSaved; }
     MBCHAR		*GetGameName()					{ return m_gameName; }
-    CIV_INDEX		GetCivIndex() const				{ return m_civIndex; }
+    sint32		GetCivIndex() const				{ return m_civIndex; }
 
     PLAYER_INDEX	GetPlayerIndex() const		{ return m_playerNumber; }
     GENDER		GetGender() const				{ return m_gender; }

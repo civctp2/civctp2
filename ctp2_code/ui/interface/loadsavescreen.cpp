@@ -34,6 +34,7 @@
 // Remarks
 //
 // - This is the only file with some Activision comments left.
+// - Fixed scenarios so that the from the civ choser selected civ is used. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -305,87 +306,72 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 
 	spnewgametribescreen_removeMyWindow(action, tempNameStr );
 
+	sint32	tribeIndex = spnewgametribescreen_getTribeIndex();
 
-
-	CIV_INDEX	tribeIndex = (CIV_INDEX)spnewgametribescreen_getTribeIndex();
-
-	if ((tribeIndex < 0) || (tribeIndex >= INDEX_TRIBE_INVALID))
-    {
-		tribeIndex = CIV_INDEX_CIV_1;
-    }
+	if(tribeIndex < 0 || tribeIndex >= g_theCivilisationDB->NumRecords())
+	{
+		tribeIndex = 1;
+	}
 
 	g_theProfileDB->SetCivIndex(tribeIndex);
-	
-	
-	
-	
 
-
-
-
-
-
-
-	
-	if (s_tempSaveInfo && s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS) {
-		
-		
-		
-		BOOL noCivsInList = TRUE;
-		for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
-			if (s_tempSaveInfo->playerCivIndexList[i] > 0) {
-				noCivsInList = FALSE;
+	if(s_tempSaveInfo
+	&& s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS
+	){
+		bool noCivsInList = true;
+		for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
+		{
+			if(s_tempSaveInfo->playerCivIndexList[i] > 0)
+			{
+				noCivsInList = false;
 				break;
 			}
 		}
 
-		
-		if (noCivsInList) {
-			
-			
-			
- 			
-			BOOL foundOne = FALSE;
+		if(noCivsInList)
+		{
+			bool foundOne = false;
 
- 			for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
- 				MBCHAR		*civName;
- 				MBCHAR		*dbString;
+			for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
+			{
+				MBCHAR		*civName;
+				MBCHAR		*dbString;
 
- 				civName = s_tempSaveInfo->civList[i];
+				civName = s_tempSaveInfo->civList[i];
 				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(tribeIndex)->GetPluralCivName());
- 				if (strlen(civName) > 0) {
- 					if (!stricmp(dbString, civName)) {
- 						
- 						g_scenarioUsePlayerNumber = i;
-						foundOne = TRUE;
- 						break;
-	 				}
+				if(strlen(civName) > 0)
+				{
+					if(!stricmp(dbString, civName))
+					{
+						g_scenarioUsePlayerNumber = i;
+						foundOne = true;
+						break;
+					}
 				}
 			}
 
-			if (!foundOne) {
-				
+			if (!foundOne)
+			{
 				g_scenarioUsePlayerNumber = 1;
 			}
-		} else {
-			
-			for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
-				if (s_tempSaveInfo->playerCivIndexList[i] == tribeIndex) {
-					
+		}
+		else
+		{
+			for (sint32 i=0; i<k_MAX_PLAYERS; i++)
+			{
+				if (s_tempSaveInfo->playerCivIndexList[i] == tribeIndex)
+				{
 					g_scenarioUsePlayerNumber = i;
 					break;
 				}
 			}
 		}
 
-        allocated::clear(s_tempSaveInfo);
+		allocated::clear(s_tempSaveInfo);
 	}
 
-	
 	spnewgamediffscreen_Initialize(loadsavescreen_DifficultyScreenActionCallback);
 	spnewgamediffscreen_displayMyWindow();
-	
-	
 }
 
 
@@ -397,123 +383,98 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 
 	spnewgameplayersscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 
-	
-	
-	
 	g_useScenarioCivs = g_theProfileDB->GetNPlayers()-1;
 
-	
-	
-	
-	if (s_tempSaveInfo->startInfoType != STARTINFOTYPE_NOLOCS) {
-		if (g_useScenarioCivs > s_tempSaveInfo->numPositions) {
+	if (s_tempSaveInfo->startInfoType != STARTINFOTYPE_NOLOCS)
+	{
+		if (g_useScenarioCivs > s_tempSaveInfo->numPositions)
+		{
 			g_useScenarioCivs = s_tempSaveInfo->numPositions;
 
 			g_theProfileDB->SetNPlayers(g_useScenarioCivs+1);
 		}
 	}
 
-	
-	
-	
-	if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_CIVSFIXED) {
-		if (g_startEmailGame || g_startHotseatGame) {
-			
-			
+	if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_CIVSFIXED)
+	{
+		if (g_startEmailGame || g_startHotseatGame)
+		{
 			hotseatlist_ClearOptions();
-			for (sint32 i=0; i<g_theProfileDB->GetNPlayers(); i++) {
-				CIV_INDEX civIndex = s_tempSaveInfo->playerCivIndexList[i];
+			for (sint32 i=0; i<g_theProfileDB->GetNPlayers(); i++)
+			{
+				sint32 civIndex = s_tempSaveInfo->playerCivIndexList[i];
 				hotseatlist_SetPlayerCiv(i, civIndex);
 			}
 			hotseatlist_LockCivs();
 			loadsavescreen_SetupHotseatOrEmail();
-		} else {
-			
-
-			
+		}
+		else
+		{
 			spnewgamediffscreen_Initialize(loadsavescreen_DifficultyScreenActionCallback);
 			spnewgamediffscreen_displayMyWindow();
-
-
 		}
-	} else {
-		
-		
-		if (g_startEmailGame || g_startHotseatGame) {
-			
-			
-			
-			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
-				
-				
+	}
+	else
+	{
+		if (g_startEmailGame || g_startHotseatGame)
+		{
+			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED)
+			{
 				hotseatlist_ClearOptions();
 				hotseatlist_EnableAllCivs();
 				loadsavescreen_SetupHotseatOrEmail();
-			} else {
-				if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS) {
-					
-					
+			}
+			else
+			{
+				if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS)
+				{
 					hotseatlist_ClearOptions();
 					hotseatlist_LockCivs();
 
-					
-					
-					
-					for (sint32 i=0; i<k_MAX_PLAYERS; i++) {
-						hotseatlist_EnableCiv((CIV_INDEX)s_tempSaveInfo->playerCivIndexList[i]);
+					for (sint32 i=0; i<k_MAX_PLAYERS; i++)
+					{
+						hotseatlist_EnableCiv(s_tempSaveInfo->playerCivIndexList[i]);
 					}
 					loadsavescreen_SetupHotseatOrEmail();
-				} else {
-					
-					
+				}
+				else
+				{
 					hotseatlist_ClearOptions();
 					hotseatlist_DisableAllCivs();
-					for (sint32 i=0; i<s_tempSaveInfo->numPositions; i++) {
-						hotseatlist_EnableCiv((CIV_INDEX)s_tempSaveInfo->positions[i].civIndex);
+					for (sint32 i=0; i<s_tempSaveInfo->numPositions; i++)
+					{
+						hotseatlist_EnableCiv(s_tempSaveInfo->positions[i].civIndex);
 					}
 					loadsavescreen_SetupHotseatOrEmail();
 				}
 			}
-
-		} else {
-			
-			
-			
-
-			
+		}
+		else
+		{
 			spnewgametribescreen_Cleanup();
 			spnewgametribescreen_Initialize( loadsavescreen_TribeScreenActionCallback );
 			
-			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
-				
-				spnewgametribescreen_enableTribes();
+			if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_POSITIONSFIXED)
+			{
 				spnewgametribescreen_setTribeIndex(1 + rand() % (g_theCivilisationDB->NumRecords() - 1));
-			} else {
-				if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS) {
-					
-					
-					
-					spnewgametribescreen_disableTribes();
+			}
+			else
+			{
+				spnewgametribescreen_clearTribes();
 
-					
-					
-					
+				if (s_tempSaveInfo->startInfoType == STARTINFOTYPE_NOLOCS)
+				{
+
 					if (g_saveFileVersion >= 50 && s_tempSaveInfo->startingPlayer != -1)
 					{
-						
-						spnewgametribescreen_enableTribe((CIV_INDEX)s_tempSaveInfo->playerCivIndexList[s_tempSaveInfo->startingPlayer]);
-
-					} else						
+						// Only one player is enabled
+						spnewgametribescreen_addTribe(s_tempSaveInfo->playerCivIndexList[s_tempSaveInfo->startingPlayer]);
+					}
+					else
 					{
-						
 						s_tempSaveInfo->startingPlayer = -1;
 						s_tempSaveInfo->showLabels=FALSE;
-						
-						
-						
-						
-						
-						
+
 						BOOL noCivsInList = TRUE;
 						sint32 i;
 						for (i=0; i<k_MAX_PLAYERS; i++) {
@@ -522,75 +483,60 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 								break;
 							}
 						}
-						
-						
-						if (noCivsInList) {
-							
-							
-							
-							
+
+						if (noCivsInList)
+						{
 							BOOL foundOne = FALSE;
 							
-							for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
-                            {
+							for (size_t i = 0; i < k_MAX_PLAYERS; ++i)
+							{
 								MBCHAR *    civName = s_tempSaveInfo->civList[i];
 								
-								if (strlen(civName) > 0) 
-                                {
-									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++) 
-                                    {
+								if (strlen(civName) > 0)
+								{
+									for (sint32 j=0; j<g_theCivilisationDB->NumRecords(); j++)
+									{
 										MBCHAR const *  dbString = 
-                                            g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
+										    g_theStringDB->GetNameStr(g_theCivilisationDB->Get(j)->GetPluralCivName());
 										
-										if (!stricmp(dbString, civName)) {
-											
-											spnewgametribescreen_enableTribe((CIV_INDEX)j);
+										if (!stricmp(dbString, civName))
+										{
+											spnewgametribescreen_addTribeNoDuplicate(j);
 											foundOne = TRUE;
 											break;
 										}
 									}
 								}
 							}
-							
-							
-							
-							
-							if (!foundOne) {
+
+							if (!foundOne)
+							{
 								spnewgametribescreen_Cleanup();
-								
-								
-								
+
 								spnewgamediffscreen_Initialize(loadsavescreen_DifficultyScreenActionCallback);
 								spnewgamediffscreen_displayMyWindow();
-								
+
 								return;
 							}
-							
-						} 
-                        else 
-                        {
-							for (size_t i = 0; i < k_MAX_PLAYERS; ++i) 
-                            {
-								spnewgametribescreen_enableTribe(s_tempSaveInfo->playerCivIndexList[i]);
+						}
+						else
+						{
+							for (size_t i = 0; i < k_MAX_PLAYERS; ++i)
+							{
+								spnewgametribescreen_addTribeNoDuplicate(s_tempSaveInfo->playerCivIndexList[i]);
 							}
 						}
 					}
 					
 					spnewgametribescreen_displayMyWindow(NULL, TRUE);
 
-					
 					return;
-				} else {
-					
-					
-
-					
-					spnewgametribescreen_disableTribes();
-
-					
+				}
+				else
+				{
 					for ( sint32 i = 0; i < s_tempSaveInfo->numPositions; i++ )
 					{
-						spnewgametribescreen_enableTribe(s_tempSaveInfo->positions[i].civIndex);
+						spnewgametribescreen_addTribeNoDuplicate(s_tempSaveInfo->positions[i].civIndex);
 					}
 
 					sint32 index = rand() % s_tempSaveInfo->numPositions;
@@ -602,7 +548,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 		}
 	}
 
-    allocated::clear(s_tempSaveInfo);
+	allocated::clear(s_tempSaveInfo);
 }
 
 
@@ -873,7 +819,7 @@ void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
 	g_loadsaveWindow->GetRadarMap(saveInfo);
 
 	// SAM021899 changed to make a save request
-    allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
+	allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
 
 //	GameFile::SaveGame(saveInfo->pathName, saveInfo);
 }
@@ -979,7 +925,7 @@ void loadsavescreen_SaveMPGame(void)
 	g_loadsaveWindow->GetRadarMap(saveInfo);
 
 	// SAM021899 changed to make a save request
-    allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
+	allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
 
 //	GameFile::SaveGame(saveInfo->pathName, saveInfo);
 
@@ -1091,7 +1037,7 @@ void loadsavescreen_SaveSCENGame(void)
 	g_loadsaveWindow->GetRadarMap(saveInfo);
 
 	// SAM021899 changed to make a save request
-    allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
+	allocated::reassign(g_savedGameRequest, new SaveInfo(saveInfo));
 
 //	GameFile::SaveGame(saveInfo->pathName, saveInfo);
 }

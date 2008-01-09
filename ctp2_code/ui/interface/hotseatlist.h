@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Hotseat (and e-mail) game setup screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 // - Code strucure improvements: multiple include guard added, cleanup in
 //   destructor.
 // - Increased the number of players in a HotSeat and PBEM game. (4-Dec-2007 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ public:
 	
 	
 	HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-					sint32 civ, BOOL isHuman, MBCHAR *email,
+					sint32 civ, bool isHuman, MBCHAR *email,
 					MBCHAR *ldlBlock);
 
 	
@@ -70,12 +71,12 @@ public:
 	sint32  GetCiv() { return m_civ; }
 	void	SetCiv(sint32 civ) { m_civ = civ; }
 
-	BOOL IsHuman() { return m_isHuman; }
+	bool IsHuman() { return m_isHuman; }
 	MBCHAR	*GetEmail( void ) { return m_email; }
 	sint32  GetIndex() { return m_index; }
 	MBCHAR *GetName() { return m_name; }
 
-	void SetHuman(BOOL human);
+	void SetHuman(bool human);
 	void ChooseCiv();
 	void EnterEmail();
 
@@ -84,7 +85,7 @@ protected:
 
 	
 	
-	AUI_ERRCODE InitCommonLdl(sint32 civ, BOOL isHuman, MBCHAR *email, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 civ, bool isHuman, MBCHAR *email, MBCHAR *ldlBlock);
 	
 public:
 	
@@ -95,7 +96,7 @@ private:
 	MBCHAR			m_email[256];
 	MBCHAR          m_name[256];
 	sint32			m_civ;
-	BOOL            m_isHuman;
+	bool            m_isHuman;
 };
 
 class HotseatList : public KeyboardHandler
@@ -129,14 +130,14 @@ public:
 
 
 void hotseatlist_ClearOptions(void);
-void hotseatlist_SetPlayerCiv(PLAYER_INDEX index, CIV_INDEX civ);
+void hotseatlist_SetPlayerCiv(PLAYER_INDEX index, sint32 civ);
 void hotseatlist_LockCivs(void);
-BOOL hotseatlist_PlayerCivsLocked(void);
+bool hotseatlist_PlayerCivsLocked(void);
 void hotseatlist_EnableAllCivs(void);
 void hotseatlist_DisableAllCivs(void);
-void hotseatlist_EnableCiv(CIV_INDEX civ);
-void hotseatlist_DisableCiv(CIV_INDEX civ);
-BOOL hotseatlist_CivEnabled(CIV_INDEX civ);
+void hotseatlist_EnableCiv(sint32 civ);
+void hotseatlist_DisableCiv(sint32 civ);
+bool hotseatlist_CivEnabled(sint32 civ);
 sint32 hotseatlist_NumEnabled(void);
 
 

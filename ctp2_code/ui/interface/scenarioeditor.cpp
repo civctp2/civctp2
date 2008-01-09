@@ -3101,7 +3101,7 @@ void ScenarioEditor::SetPlayerNation(aui_Control *control, uint32 action, uint32
 		case SCEN_START_LOC_MODE_PLAYER_WITH_CIV:
 		{
 			if(!p) return;
-			p->m_civilisation->ResetCiv((CIV_INDEX)nation, p->m_civilisation->GetGender());
+			p->m_civilisation->ResetCiv(nation, p->m_civilisation->GetGender());
 			
 			ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivExtraControls.LeaderField");
 			Assert(tf);

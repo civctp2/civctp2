@@ -284,7 +284,7 @@ MBCHAR g_advance_list_db_filename[_MAX_PATH];
 MBCHAR g_diplomacy_proposal_filename[_MAX_PATH];
 MBCHAR g_diplomacy_threat_filename[_MAX_PATH];
 
-CIV_INDEX gameinit_GetCivForSlot(sint32 slot);
+sint32 gameinit_GetCivForSlot(sint32 slot);
 
 
 
@@ -373,11 +373,11 @@ void CreateInitialHuman
 (
 	sint32 const	diff,
 	sint32 const	index,
-	CIV_INDEX const	requestedCiv
+	sint32 const	requestedCiv
 
 )
 {
-	CIV_INDEX const civ = (CIV_INDEX_RANDOM == requestedCiv)
+	sint32 const civ = (static_cast<sint32>(CIV_INDEX_RANDOM) == requestedCiv)
 	                      ? g_theProfileDB->GetCivIndex()
 	                      : requestedCiv;
 
@@ -1266,7 +1266,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	CreateBarbarians(diff);
 
-	CIV_INDEX civ = g_theProfileDB->GetCivIndex();
+	sint32 civ = g_theProfileDB->GetCivIndex();
 	
 	// TODO: check if the fixed index 1 is correct here, 
 	//       and whether the start/stop player have to be set.
@@ -1426,7 +1426,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 	return 1;
 }
 
-CIV_INDEX gameinit_GetCivForSlot(sint32 slot)
+sint32 gameinit_GetCivForSlot(sint32 slot)
 {
 	
 
@@ -1436,13 +1436,13 @@ CIV_INDEX gameinit_GetCivForSlot(sint32 slot)
 			sint32 firstRobot = g_network.GetNumHumanPlayers() + 1;
 			NSAIPlayerInfo *nsaipi = g_network.GetNSAIPlayerInfo(slot - firstRobot);
 			if(nsaipi) {
-				return CIV_INDEX(nsaipi->m_civ);
+				return nsaipi->m_civ;
 			}
 		} else {
 			
 			NSPlayerInfo *nspi = g_network.GetNSPlayerInfo(slot - 1);
 			if(nspi)
-				return CIV_INDEX(nspi->m_civ);
+				return nspi->m_civ;
 		}
 	}
 
@@ -1459,7 +1459,7 @@ CIV_INDEX gameinit_GetCivForSlot(sint32 slot)
 			if (slot-1 >= g_theWorld->GetNumStartingPositions()) {
 				return CIV_INDEX_RANDOM;
 			} else {
-				return CIV_INDEX(g_theWorld->GetStartingPointCiv(slot - 1));
+				return g_theWorld->GetStartingPointCiv(slot - 1);
 			}
 		default:
 			return CIV_INDEX_RANDOM;
@@ -1912,7 +1912,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					
 					// Add the human player
 					sint32 const	humanIndex	= g_theProfileDB->GetPlayerIndex();
-					CIV_INDEX		civ			= gameinit_GetCivForSlot(humanIndex);
+					sint32		civ			= gameinit_GetCivForSlot(humanIndex);
 					if (civ == CIV_INDEX_RANDOM)
 					{
 						civ = g_theProfileDB->GetCivIndex();
@@ -1934,7 +1934,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					Assert(j < positionCount);
 					if (j >= positionCount) 
 					{
-						civ = static_cast<CIV_INDEX>(g_theWorld->GetStartingPointCiv(0));
+						civ = g_theWorld->GetStartingPointCiv(0);
 						usedPositions[0] = 1;
 						usedCivs++;
 						j = 0;
@@ -1978,7 +1978,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 									g_theWorld->GetStartingPointCiv(whichCiv);
 								civ	= (locationCiv < 0) 
 									  ? CIV_INDEX_RANDOM 
-									  : static_cast<CIV_INDEX>(locationCiv);
+									  : locationCiv;
 							}
 
 							g_player[i] = new Player(PLAYER_INDEX(i), 
@@ -2010,7 +2010,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 					// Add the human player first, to prevent civ reassignment.
 					sint32 const	humanIndex	= g_theProfileDB->GetPlayerIndex();
-					CIV_INDEX		civ			= gameinit_GetCivForSlot(humanIndex);
+					sint32		civ			= gameinit_GetCivForSlot(humanIndex);
 					CreateInitialHuman(diff, humanIndex, civ);
 
 					for (i = 1; i <= g_useScenarioCivs; ++i) 
@@ -2041,11 +2041,11 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 		sint32 netIndex = 0; 
 		NSPlayerInfo *nspi = NULL;
-		CIV_INDEX civ = g_theProfileDB->GetCivIndex();
+		sint32 civ = g_theProfileDB->GetCivIndex();
 		if(g_network.IsLaunchHost()) {
 			nspi = g_network.GetNSPlayerInfo(netIndex++);
 			if(nspi) {
-				civ = (CIV_INDEX)nspi->m_civ;
+				civ = nspi->m_civ;
 			}
 		}
 
@@ -2098,7 +2098,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 					g_player[i] = new Player(PLAYER_INDEX(i),
 											 diff,
 											 PLAYER_TYPE_ROBOT,
-											 (CIV_INDEX)nsaipi->m_civ,
+											 nsaipi->m_civ,
 											 GENDER_RANDOM);
 					g_player[i]->m_networkGroup = nsaipi->m_group;
 					g_player[i]->m_gold->SetLevel(nsaipi->m_civpoints);
@@ -2118,7 +2118,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				} else {
 					NSPlayerInfo *nspi = g_network.GetNSPlayerInfo(netIndex++);
 
-					civ = nspi ? (CIV_INDEX)nspi->m_civ : CIV_INDEX_RANDOM;
+					civ = nspi ? nspi->m_civ : CIV_INDEX_RANDOM;
 
 					
 					
@@ -2514,7 +2514,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 				else if(!g_hsPlayerSetup[i].isHuman && !g_player[i]->IsRobot())
 					g_player[i]->m_playerType = PLAYER_TYPE_ROBOT;
 
-				g_player[i]->m_civilisation->ResetCiv((CIV_INDEX)g_hsPlayerSetup[i].civ, g_player[i]->m_civilisation->GetGender());
+				g_player[i]->m_civilisation->ResetCiv(g_hsPlayerSetup[i].civ, g_player[i]->m_civilisation->GetGender());
 				if(g_player[i]->IsHuman())
 				{
 					if(strlen(g_hsPlayerSetup[i].name) > 0)

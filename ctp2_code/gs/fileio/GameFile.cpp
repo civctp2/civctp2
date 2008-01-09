@@ -36,6 +36,7 @@
 // - Removed old gobal warming database. (July 15th 2006 Martin Gühmann)
 // - Removed old concept database. (31-Mar-2007 Martin Gühmann)
 // - Removed old const database. (5-Aug-2007 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1228,7 +1229,7 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		
 		
 		
-		n = c3files_fread(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
+		n = c3files_fread(info->playerCivIndexList, sizeof(sint32), k_MAX_PLAYERS, saveFile);
 		if(n != k_MAX_PLAYERS) {
 			return false;
 		}
@@ -1437,7 +1438,7 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		
 		
 		
-		n = c3files_fread(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
+		n = c3files_fread(info->playerCivIndexList, sizeof(sint32), k_MAX_PLAYERS, saveFile);
 		if(n != k_MAX_PLAYERS) {
 			return false;
 		}
@@ -1647,7 +1648,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	
 	
 	
-	n = c3files_fwrite(info->playerCivIndexList, sizeof(CIV_INDEX), k_MAX_PLAYERS, saveFile);
+	n = c3files_fwrite(info->playerCivIndexList, sizeof(sint32), k_MAX_PLAYERS, saveFile);
 	if(n != k_MAX_PLAYERS) {
 		c3errors_FatalDialog(functionName, errorString);
 		return;
@@ -2109,7 +2110,7 @@ SaveInfo::SaveInfo()
 		memset(&networkGUID[i], 0, sizeof(CivGuid));
 		
 		
-		playerCivIndexList[i] = (CIV_INDEX)0;
+		playerCivIndexList[i] = 0;
 	}
 
 	

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Civilisation pool
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,6 +27,7 @@
 // - Prevent assigning the same civilisation index twice.
 // - Recycle civilisation indices to prevent a game crash.
 // - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ extern ProfileDB *g_theProfileDB;
 
 CivilisationPool::CivilisationPool(void) : ObjPool(k_BIT_GAME_OBJ_TYPE_CIVILISATION)
 {
-	m_usedCivs = new SimpleDynamicArray<CIV_INDEX>;
+	m_usedCivs = new SimpleDynamicArray<sint32>;
 }
 
 
@@ -76,7 +77,7 @@ CivilisationPool::CivilisationPool(void) : ObjPool(k_BIT_GAME_OBJ_TYPE_CIVILISAT
 
 CivilisationPool::CivilisationPool(CivArchive &archive) : ObjPool(k_BIT_GAME_OBJ_TYPE_CIVILISATION)
 {
-	m_usedCivs = new SimpleDynamicArray<CIV_INDEX>;
+	m_usedCivs = new SimpleDynamicArray<sint32>;
 	Serialize(archive) ;
 }
 
@@ -150,26 +151,26 @@ void CivilisationPool::Serialize(CivArchive &archive)
 
 
 
-Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requiredCiv, GENDER gender)
+Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, sint32 requiredCiv, GENDER gender)
 {
 	sint32 const	numCivs	= g_theCivilisationDB->NumRecords();
-	CIV_INDEX		civ		= requiredCiv;
+	sint32		civ		= requiredCiv;
 
 	if (CIV_INDEX_RANDOM == civ)
 	{
 		if (g_theProfileDB->IsNonRandomCivs())
 		{
-			civ = static_cast<CIV_INDEX>(owner);
+			civ = owner;
 		}
 		else
 		{
-			civ = static_cast<CIV_INDEX>(g_rand->Next(numCivs));
+			civ = g_rand->Next(numCivs);
 		}
 	}
 
 	for (sint32 c = 0; m_usedCivs->IsPresent(civ) && (c < numCivs); ++c)
 	{
-		civ = static_cast<CIV_INDEX>((civ + 1 < numCivs) ? civ + 1 : 1);
+		civ = (civ + 1 < numCivs) ? civ + 1 : 1;
 	}
 
 	if (civ >= numCivs)
@@ -178,7 +179,7 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 		civ = CIV_INDEX_VANDALS;
 	}
 
-	Assert((civ >= CIV_INDEX_CIV_0) && (civ < numCivs));
+	Assert((civ >= CIV_INDEX_VANDALS) && (civ < numCivs));
 
 	Civilisation newCivilisation(NewKey(k_BIT_GAME_OBJ_TYPE_CIVILISATION));
 
@@ -234,7 +235,7 @@ Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, CIV_INDEX requir
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CivilisationPool::Release(CIV_INDEX const & civ)
+void CivilisationPool::Release(sint32 const & civ)
 {
 	sint32 const	usedCount = m_usedCivs->Num();
 

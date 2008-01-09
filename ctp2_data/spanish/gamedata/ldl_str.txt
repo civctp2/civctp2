@@ -1414,26 +1414,26 @@ str_ldl_Fuel_COLON				"Fuel:"
 
 ### New World Shape Strings ###
 
-str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
-str_ldl_North_and_South_edges_of_the_map_connect	"Noth and South edges of the map connect."
-str_ldl_Uranus_World					"Uranus World"
-str_tbl_ldl_Uranus_World				"Uranus World"
+str_tbl_ldl_North_South_Wrap_Only			"Sólo se unen Norte y Sur"
+str_ldl_North_and_South_edges_of_the_map_connect	"Unir extremos Norte y Sur del mapa."
+str_ldl_Neptun_World					"Mundo Toroidal"
+str_tbl_ldl_Neptun_World				"Mundo Toroidal"
 
 ### New Single Player Game Player Screen Strings ###
 
-str_ldl_SPNGPS_NumPlayerSpinner			"Number of players"
-str_ldl_SPNGPS_MaxPlayerSpinner			"Maximum number of players"
+str_ldl_SPNGPS_NumPlayerSpinner			"Número de jugadores"
+str_ldl_SPNGPS_MaxPlayerSpinner			"Máximo número de jugadores"
 str_ldl_SPNGPS_PlayerSpinner			"Start player"
 
-str_ldl_SPNGPS_NumPlayerText			"Sets the number of players in the new game."
-str_ldl_SPNGPS_MaxPlayerText			"Sets the maximum number of civilizations that can be in the game at the same time."
-str_ldl_SPNGPS_PlayerText			"Sets the start player. Determines the civ color."
+str_ldl_SPNGPS_NumPlayerText			"Establece el número de jugadores en la nueva partida."
+str_ldl_SPNGPS_MaxPlayerText			"Establece el número máximo de jugadores que pueden participar en una partida."
+str_ldl_SPNGPS_PlayerText			"Establece el jugador inicial. Determina el color de la civilización. (Aún no disponible.)"
 
 ### Added Disclaimer Strings ###
 
-str_ldl_Disclaimer1				"THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
-str_ldl_Disclaimer2				"This version of Call To Power 2 was developed at http://apolyton.net"
-str_ldl_Disclaimer3				"Contact the authors at ctp2source@apolyton.net"
+str_ldl_Disclaimer1				"ESTE MATERIAL NO ESTÁ HECHO NI ESTÁ SOPORTADO POR ACTIVISION."
+str_ldl_Disclaimer2				"Esta versión de Call To Power 2 ha sido desarrollada en http://apolyton.net"
+str_ldl_Disclaimer3				"Contacte a los autores en ctp2source@apolyton.net"
 
 ### Version String ###
 
@@ -3025,8 +3025,8 @@ str_profile_ShowEnemyHealth                     "Mostrar Estado de salud enemigo
 str_profile_ShowCityInfluence                   "Mostrar influencia ciudad"
 str_profile_ShowPoliticalBorders                "Mostrar fronteras nacionales"
 str_profile_EndTurnSound                        "Sonido Finalizar turno"
-str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
-str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
+str_profile_CloseOnEyepoint                     "Cerrar mensaje al pinchar en la esfera"
+str_profile_ShowExpensive                       "Mostrar efectos caros de mejoras de casilla"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
 str_profile_RecentAtTop                         "Put New Messages At Top"
 str_profile_CityClick                           "Select City Instead Of Army"

@@ -985,7 +985,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 
 	// Fix the player index if it is out of range:
 	if(g_theProfileDB->GetCivIndex() >= g_theCivilisationDB->NumRecords())
-		g_theProfileDB->SetCivIndex((CIV_INDEX)1); // Set to first non-Barbarian civ
+		g_theProfileDB->SetCivIndex(1); // Set to first non-Barbarian civ
 
 	g_theProgressWindow->StartCountingTo( 260 );
 
@@ -1412,7 +1412,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 		// Maintain consistency between the CivIndex and CivName entries.
 		// When inconsistent, the CivIndex is leading.
 
-		CIV_INDEX const userCivIndex = g_theProfileDB->GetCivIndex();
+		sint32 const userCivIndex = g_theProfileDB->GetCivIndex();
 
 		if (static_cast<int>(userCivIndex) < g_theCivilisationDB->NumRecords())
 		{
@@ -1433,7 +1433,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 		else
 		{
 			// Possible after using a mod with less civilisations
-			g_theProfileDB->SetCivIndex(CIV_INDEX_CIV_1);
+			g_theProfileDB->SetCivIndex(1);
 			g_theProfileDB->DefaultSettings();
 		}
 	}

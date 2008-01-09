@@ -28,6 +28,7 @@
 // - Fixed number of city styles removed.
 // - Update city style when resetting civilisation.
 // - Replaced old civilsation databse by new one. (Aug 21st 2005 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,7 +71,7 @@ extern	ProfileDB               *g_theProfileDB;
 // Remark(s)  : Notifies other (network) players of its existence.
 //
 //----------------------------------------------------------------------------
-CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, CIV_INDEX civ, GENDER gender) 
+CivilisationData::CivilisationData(const ID &id, PLAYER_INDEX owner, sint32 civ, GENDER gender) 
 :	GameObj(id.m_id),
 	m_owner(owner),
 	m_civ(civ),
@@ -427,7 +428,7 @@ sint32 CivilisationData::GetCapitalName(void) const
 	}
 }
 
-void CivilisationData::ResetCiv(CIV_INDEX newCivIndex, GENDER gender) 
+void CivilisationData::ResetCiv(sint32 newCivIndex, GENDER gender) 
 {
 	StringId		strId;
 

@@ -371,7 +371,7 @@ public:
 	friend class SelectedItem;
 
 	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt);
-	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const CIV_INDEX civ, GENDER gender) ;
+	Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const sint32 civ, GENDER gender) ;
 	Player(CivArchive &archive) ;
 	~Player();
 
