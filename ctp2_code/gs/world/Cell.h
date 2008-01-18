@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Everything about a terrain cell
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -29,6 +29,8 @@
 //   with a hypothetical terrain type argument to check whether there is a 
 //   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
 // - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+// - Added methods to retrieve the future terrain move costs of tile
+//   improvments under construction. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -248,6 +250,7 @@ public:
 	sint32 GetTerrain() { return (sint32)m_terrain_type; }
 	void SetMoveCost(double cost) { m_move_cost = (sint16)cost; }
 	double GetMoveCost() const { return double(m_move_cost); }
+	double GetFutureTerrainMoveCost() const;
 
 	bool GetIsChokePoint() const { return m_gf != 0; }
 	sint16 GetContinent() const { return m_continent_number; }
@@ -261,7 +264,7 @@ public:
 
 
 	bool IsDead(void) const;
-	void Kill(void) ;
+	void Kill(void);
 
 	sint32 GetScratch(void) const { return (m_search_count) ; }
 	void SetScratch(sint32 s) { m_search_count = s; }
@@ -292,6 +295,7 @@ public:
 	void RemoveDBImprovement(sint32 dbType);
 	sint32 GetNumDBImprovements() const;
 	sint32 GetDBImprovement(sint32 index) const;
+	bool HasTerrainImprovementOrInFuture(sint32 type) const;
 
 #ifdef BATTLE_FLAGS
 	void AddBattleFlag(sint32 player);

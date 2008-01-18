@@ -340,4 +340,8 @@ Const : alsire {
 	Float  CityOnTradeRouteCoeff    = 0.3         aka CITY_ON_TRADE_ROUTE_BONUS
 	Int    CityExpansionDenominator = 0           aka CITY_EXPANSION_DENOMINATOR # Denominator is zero, this is not allowed
 	Int    TurnsAcceptedForOnePop   =   30        aka TURNS_ACCEPTED_FOR_ONE_POP
+	Int    UseBaseMoveCostsForRoads =    0
+	Float  RoadAlreadyThereCostsCoefficient = 0.5
+	Int    BuildRoadsToClosestCities        = 5
+	Float  BaseRoadPriorityVsThreatRank     = 0.01
 }

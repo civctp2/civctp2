@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ SELECT_TYPE_NONE,
 SELECT_TYPE_LOCAL_ARMY,
 SELECT_TYPE_LOCAL_ARMY_UNLOADING,
 SELECT_TYPE_REMOTE_ARMY,
-SELECT_TYPE_LOCAL_CITY, 
+SELECT_TYPE_LOCAL_CITY,
 SELECT_TYPE_REMOTE_CITY,
 SELECT_TYPE_TRADE_ROUTE,
 SELECT_TYPE_GOOD,
@@ -213,7 +213,8 @@ public:
 	void SelectTradeRoute(const MapPoint &p);
 
 
-	sint32 IsLocalArmy() const; // Should be bool
+	bool IsLocalArmy() const;
+	bool IsLocalCity() const;
 
 	void Patrol(const MapPoint &pos);
 	BOOL ResumePatrol();
@@ -229,7 +230,7 @@ public:
 	void Sleep();
 	void Disband();
 
-    void UnloadMode();
+	void UnloadMode();
 	void CancelUnload();
 
 	void Paradrop(const MapPoint &point);

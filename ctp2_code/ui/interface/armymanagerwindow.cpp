@@ -72,6 +72,7 @@
 #include "network.h"
 
 #include "UnitPool.h"
+#include "ProfileDB.h"          // g_theProfileDB
 
 extern C3UI *g_c3ui;
 
@@ -378,8 +379,9 @@ void ArmyManagerWindow::Update()
 
 	ctp2_Static *armyTextlabel = (ctp2_Static *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmyTextLabel");
 	if(armyTextlabel){
-		if(g_graphicsOptions
-		&& g_graphicsOptions->IsArmyTextOn()
+		if((g_graphicsOptions
+		&&  g_graphicsOptions->IsArmyTextOn()
+		||  g_theProfileDB->GetDebugAI())
 		&& m_army.IsValid()
 		&& m_army->GetDebugString()
 		){

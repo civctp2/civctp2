@@ -31,6 +31,7 @@
 //   on top of a city. (Oct 8th 2005 Martin Gühmann)
 // - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin Gühmann)
 // - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -687,14 +688,14 @@ void SelectedItem::SetupClickFunctions()
 	button = SELECT_BUTTON_LEFT_PATHING;
 	selected = SELECT_TYPE_LOCAL_CITY;
 
-	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_NONE]                [button][mode] = &SelectedItem::DeselectClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY]          [button][mode] = &SelectedItem::SelectArmyClick;
 	m_clickFunc[selected][SELECT_TYPE_LOCAL_ARMY_UNLOADING][button][mode] = &SelectedItem::ErrorClick;
-	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::ActionClick;
-	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::ActionClick;
+	m_clickFunc[selected][SELECT_TYPE_LOCAL_CITY]          [button][mode] = &SelectedItem::SelectCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_CITY]         [button][mode] = &SelectedItem::SelectEnemyCityClick;
+	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::SelectEnemyArmyClick;
+	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::SelectTradeRouteClick;
+	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::SelectGoodClick;
 
 	
 	mode = SELECT_MODE_CTP2;
@@ -968,10 +969,6 @@ void SelectedItem::SetupClickFunctions()
 	m_clickFunc[selected][SELECT_TYPE_REMOTE_ARMY]         [button][mode] = &SelectedItem::EnemyArmyContextClick;
 	m_clickFunc[selected][SELECT_TYPE_TRADE_ROUTE]         [button][mode] = &SelectedItem::TradeRouteContextClick;
 	m_clickFunc[selected][SELECT_TYPE_GOOD]                [button][mode] = &SelectedItem::GoodContextClick;
-	
-
-
-	
 }
 
 void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
@@ -1009,11 +1006,17 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 	SELECT_TYPE clickedThing = GetClickedThing(pos, button != SELECT_BUTTON_LEFT_DROP);
 
 	
-	if(mode == SELECT_MODE_CTP2) {
-		if(m_is_pathing || do_targeting_mode) {
-			if(button == SELECT_BUTTON_LEFT) {
+	if(mode == SELECT_MODE_CTP2)
+	{
+		if( (m_is_pathing
+		||   do_targeting_mode)
+		){
+			if(button == SELECT_BUTTON_LEFT)
+			{
 				button = SELECT_BUTTON_LEFT_PATHING;
-			} else if(button == SELECT_BUTTON_RIGHT) {
+			}
+			else if(button == SELECT_BUTTON_RIGHT)
+			{
 				button = SELECT_BUTTON_RIGHT_PATHING;
 			}
 		}
@@ -1070,12 +1073,11 @@ void SelectedItem::ErrorClick(const MapPoint &pos, const aui_MouseEvent *data, B
 
 void SelectedItem::NullClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
+	// Does nothing
 }
 
 void SelectedItem::SelectArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
 	Unit top;
 	GetTopUnit(pos, top);
 	SetSelectUnit(top);
@@ -1083,17 +1085,8 @@ void SelectedItem::SelectArmyClick(const MapPoint &pos, const aui_MouseEvent *da
 	if(doubleClick) {
 		ArmyManagerWindow::Display();
 	}
-	
-	
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, top.GetArmy(), GEA_End);
-
-
-
-	
-
-
-
-
 }
 
 
@@ -1109,8 +1102,12 @@ void SelectedItem::SelectArmyStartMoveClick(const MapPoint &pos, const aui_Mouse
 
 void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	
-	if(!GetIsPathing()){
+	if( !GetIsPathing()
+	|| ( IsLocalCity()
+	&&   g_theProfileDB->IsDebugCityAstar()
+	   )
+	  )
+	{
 		Unit top;
 		GetTopUnitOrCity(pos, top);
 		SetSelectCity(top);
@@ -1122,11 +1119,9 @@ void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *da
 		}
 	}
 
-	
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
-
 }
 
 void SelectedItem::SelectGoodClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
@@ -1255,7 +1250,7 @@ void SelectedItem::CityContextClick(const MapPoint &pos, const aui_MouseEvent *d
 //----------------------------------------------------------------------------
 void SelectedItem::EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
 {
-	// Report the underlying terrain information. This is just being useful. 
+	// Report the underlying terrain information. This is just being useful.
 	TerrainContextClick(pos, data, doubleClick);
 }
 
@@ -1357,37 +1352,37 @@ void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data
 	
 	if (army_pos == pos && 
 	    GetClickedThing(pos, true) == SELECT_TYPE_LOCAL_ARMY
-       ) 
-    {
-
-	} 
-    else 
-    {
+	   )
+	{
+		// Does nothing
+	}
+	else
+	{
 		Unit unit = m_selected_army[player][0];
 
 		if (m_good_path &&
 			unit.GetDBRec()->GetCanCarry() &&
 			(unit.GetNumCarried() > 0)
-           ) 
-        {
-            // Ask user confirmations about special situations when moving a 
-            // non-empty cargo unit
+		   )
+		{
+			// Ask user confirmations about special situations when moving a 
+			// non-empty cargo unit
 
 			if (unit.GetDBRec()->GetCargoPod() &&
 				unit.GetData()->CargoHasLandUnits() &&
 				g_theWorld->IsWater(pos)
-               ) 
-            {
-                // Dropping land units in a sea square could be lethal
+			   )
+			{
+				// Dropping land units in a sea square could be lethal
 				QuickSlic("15IALandInOcean", player);
 				return;
 			}
 
-            if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
+			if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
 				g_theWorld->IsLand(pos)
-               ) 
-            {
-                // Reaching a shore: unload units?
+			   ) 
+			{
+				// Reaching a shore: unload units?
 				SlicObject * so = new SlicObject("14IAAutoUnload");
 				so->AddLocation(pos);
 				so->AddCivilisation(player);
@@ -1471,34 +1466,23 @@ void SelectedItem::MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, BOO
 			m_justNowSelectedArmy = false;
 		}
 	}
-
-
-
-
-		
-
-
-
-
-
-
-
 }
 
 void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick)
-{	
+{
 	m_startDragPos = pos;
 
-	if(g_controlPanel->ExecuteTargetingModeClick(pos)) {
+	if(g_controlPanel->ExecuteTargetingModeClick(pos))
+	{
 		m_is_pathing = FALSE;
 		return;
 	}
 
-	if(!m_isDragging && !GetIsPathing()) {
-		
-		
-		if(m_select_pos[GetVisiblePlayer()] != pos) {
-			
+	if(!m_isDragging
+	&& !GetIsPathing()
+	){
+		if(m_select_pos[GetVisiblePlayer()] != pos)
+		{
 			DeselectClick(pos, data, doubleClick);
 		}
 		return;
@@ -1516,17 +1500,17 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 		m_is_pathing = FALSE;
 
 		if (army_pos != pos) 
-        {
+		{
 			Unit unit = m_selected_army[player][0];
 			if (m_good_path &&
 				(unit.GetDBRec()->GetCanCarry()) &&
 				(unit.GetNumCarried() > 0)
-               ) 
-            {
+			   )
+			{
 				if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
 					(g_theWorld->IsLand(pos))
-                   ) 
-                {
+				   )
+				{
 					SlicObject *so = new SlicObject("14IAAutoUnload");
 					so->AddLocation(pos);
 					so->AddCivilisation(player);

@@ -100,6 +100,7 @@
 // - Allow spending all unused freight
 // - Improved handling when no suitable item of a category is available
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - AIs now consider path between more than one city. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -171,6 +172,8 @@ namespace
 Governor const &            Governor::INVALID           = UniqueInvalidGovernor;
 Governor::GovernorVector    Governor::s_theGovernors;
 Governor::TiGoalQueue       Governor::s_tiQueue;
+Governor::CityDistQueue     Governor::s_CityDistQueue;
+Governor::CityPairList      Governor::s_CityPairList;
 
 //----------------------------------------------------------------------------
 //
@@ -1411,12 +1414,10 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	}
 }
 
-void Governor::AddRoadPriority(Path & path, const double & priority_delta)
+bool Governor::AddRoadPriority(Path & path, const double & priority_delta)
 {
-
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-	
 	double bonus;
 	TiGoal ti_goal;
 
@@ -1424,32 +1425,40 @@ void Governor::AddRoadPriority(Path & path, const double & priority_delta)
 	path.Start(old);
 	path.Next(pos);
 
+	bool addedRoadToQueue = false;
+
 	for ( ; !path.IsEnd(); path.Next(pos))
 	{
-		
 		ti_goal.type = GetBestRoadImprovement(pos);
 
-		
-		if ( ti_goal.type >= 0)
+		if ( ti_goal.type >= 0
+		&&  !g_theWorld->GetCell(pos)->HasTerrainImprovementOrInFuture(ti_goal.type))
 		{
-			
 			ti_goal.pos = pos;
 
-			
 			strategy.GetRoadUtilityBonus(bonus);
 			ti_goal.utility =  bonus * priority_delta;
 			s_tiQueue.push_back(ti_goal);
+			addedRoadToQueue = true;
 		}
 	}
+
+	return addedRoadToQueue;
 }
 
 
 void Governor::ComputeRoadPriorities()
 {
-    Player *            player_ptr  = g_player[m_playerId];
-    Assert(player_ptr);
-    UnitDynamicArray *  cityList    = player_ptr->GetAllCitiesList();
-    sint32 const        num_cities  = cityList ? cityList->Num() : 0;
+	Player *            player_ptr  = g_player[m_playerId];
+	Assert(player_ptr);
+	UnitDynamicArray *  cityList    = player_ptr->GetAllCitiesList();
+	sint32 const        num_cities  = cityList ? cityList->Num() : 0;
+
+	s_CityPairList.clear();
+
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+	sint32 max_eval = strategy.GetBuildRoadsToClosestCities();
+	double baseRoadPriority = strategy.GetBaseRoadPriorityVsThreatRank();
 
 	for (sint32 city_index = 0; city_index < num_cities; city_index++)
 	{
@@ -1458,50 +1467,91 @@ void Governor::ComputeRoadPriorities()
 		if (!city_unit.CD()->GetUseGovernor())
 			continue;
 
-		sint32  threat_rank = 
-			static_cast<sint32>(MapAnalysis::GetMapAnalysis().GetThreatRank(city_unit.CD()));
-		Unit    min_neighbor_unit;
-		sint32  min_dist    = MAX_DISTANCE;
+		double threat_rank = MapAnalysis::GetMapAnalysis().GetThreatRank(city_unit.CD());
+		threat_rank *= (1.0 - baseRoadPriority);
+		threat_rank += baseRoadPriority;
+
+		s_CityDistQueue.clear();
 
 		for (sint32 neighbor_index = 0; neighbor_index < num_cities; neighbor_index++)
 		{
-                  if (neighbor_index == city_index)
-                      continue;
-                  
+			if (neighbor_index == city_index)
+				continue;
+
 			Unit         neighbor_unit = cityList->Get(neighbor_index);
 			sint32 const neighbor_dist = MapPoint::GetSquaredDistance(neighbor_unit.RetPos(), city_unit.RetPos());
 
-			if (neighbor_dist < min_dist)
+			if(!IsInCityPairList(city_index, neighbor_index))
 			{
-				min_dist            = neighbor_dist;
-				min_neighbor_unit   = neighbor_unit;
+				s_CityDistQueue.push_back(CityDist(neighbor_unit, neighbor_dist));
+				s_CityPairList.push_back(CityPair(city_index, neighbor_index));
 			}
-		} 
+		}
 
-		if (min_neighbor_unit == Unit())
+		if (s_CityDistQueue.size() == 0)
 			continue;
 
-		float   total_cost = 0.0;
-		Path    found_path;
-			
-		if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
-			m_playerId,
-			found_path,
-			total_cost ))
+		CityDistQueue::iterator max_iter = s_CityDistQueue.begin() + std::min(static_cast<size_t>(max_eval),
+																	  s_CityDistQueue.size()
+																	 );
+
+		std::partial_sort(s_CityDistQueue.begin(), max_iter, s_CityDistQueue.end(), std::less<CityDist>());
+
+		for
+		(
+			CityDistQueue::const_iterator iter = s_CityDistQueue.begin(); 
+			iter != max_iter;
+			++iter
+		)
 		{
-			Assert(0 < found_path.Num());
-			AddRoadPriority(found_path, threat_rank);
+			float   total_cost = 0.0;
+			Path    found_path;
+
+			Unit    min_neighbor_unit = iter->m_city;
+
+			if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
+				m_playerId,
+				found_path,
+				total_cost ))
+			{
+				Assert(0 < found_path.Num());
+				if(AddRoadPriority(found_path, threat_rank))
+					break;
+			}
 		}
-	} 
+
+		s_CityDistQueue.clear();
+	}
+
+	s_CityPairList.clear();
 }
 
+bool Governor::IsInCityPairList(sint32 city, sint32 neighborCity) const
+{
+	for(sint32 i = 0; i < s_CityPairList.size(); ++i)
+	{
+		CityPair cityPair = s_CityPairList[i];
+
+		if( (cityPair.m_city         == city
+		&&   cityPair.m_neighborCity == neighborCity
+		    )
+		||  (cityPair.m_city         == neighborCity
+		&&   cityPair.m_neighborCity == city
+		    )
+		){
+			return true;
+		}
+	}
+
+	return false;
+}
 
 void Governor::PlaceTileImprovements()
 {
 	Player *                player_ptr  = g_player[m_playerId];
 	Assert(player_ptr);
 	StrategyRecord const &  strategy    = 
-        Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+	    Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	CityData *city;
 	Unit unit;
 	Cell *cell;
@@ -1534,7 +1584,7 @@ void Governor::PlaceTileImprovements()
 
 		CityInfluenceIterator it(unit.RetPos(), city->GetSizeIndex());
 
-//Added by Martin Gühmann to store in memory the added boni
+		// Added by Martin Gühmann to store in memory the added boni
 		bonusFood = 0;
 		bonusProduction = 0;
 		bonusCommerce = 0;
@@ -1557,8 +1607,8 @@ void Governor::PlaceTileImprovements()
 			{
 				s_tiQueue.push_back(ti_goal);
 			}
-		} 
-	} 
+		}
+	}
 
 	sint32 max_eval = 0;
 	(void) strategy.GetMaxEvalTileImprovements(max_eval);
@@ -1606,7 +1656,7 @@ void Governor::PlaceTileImprovements()
 // Parameters : pos:             Position of the tile on the map
 //
 // Globals    : g_player:        List of players in the game
-//				g_theWorld:      Map information
+//              g_theWorld:      Map information
 //
 // Returns    : bool:            The tile can be improved
 //              goal:            Type and priority value of the tile improvement 
@@ -1663,20 +1713,20 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	sint32 citySize;
 
 	if (!g_theWorld->IsGood(pos))
-    {
+	{
 		bool shouldTerraform = true;
 		for 
-        (
-            sint32 i = 0; 
-            i < g_theWorld->GetCell(pos)->GetNumDBImprovements() && shouldTerraform; 
-            ++i
-        )
-        {
+		(
+		    sint32 i = 0; 
+		    i < g_theWorld->GetCell(pos)->GetNumDBImprovements() && shouldTerraform; 
+		    ++i
+		)
+		{
 			rec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(pos)->GetDBImprovement(i));
 
 			effect = terrainutil_GetTerrainEffect(rec, pos);
 			if (effect)
-            {
+			{
 				shouldTerraform =  !effect->HasBonusFood()
 				                && !effect->HasBonusProduction()
 				                && !effect->HasBonusGold()
@@ -1685,7 +1735,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 
 		if (shouldTerraform)
-        {
+		{
 			GetBestTerraformImprovement(pos, food_ter, prod_ter, gold_ter, true);
 		}
 	}
@@ -1904,31 +1954,31 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 //----------------------------------------------------------------------------
 sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 {
-    Cell * cell = g_theWorld->GetCell(pos);
-    if (cell->HasCity())
-    {
-        return -1;
-    }
+	Cell * cell = g_theWorld->GetCell(pos);
+	if (cell->HasCity())
+	{
+		return -1;
+	}
 
-    TerrainImprovementRecord const * terr_imp_rec = 
+	TerrainImprovementRecord const * terr_imp_rec = 
 		terrainutil_GetBestRoad(m_playerId, pos);
-    if (terr_imp_rec == NULL)
+	if (terr_imp_rec == NULL)
 		return -1;
 
-    Player *player_ptr = g_player[m_playerId];
-    ERR_BUILD_INST err;
-    if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, 0, FALSE, err))
-        return -1;
+	Player *player_ptr = g_player[m_playerId];
+	ERR_BUILD_INST err;
+	if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, 0, FALSE, err))
+	    return -1;
 
-    sint32 const old_move_cost = static_cast<sint32>(cell->GetMoveCost());
-    TerrainImprovementRecord::Effect const * effect = 
-        terrainutil_GetTerrainEffect(terr_imp_rec, pos);
+	sint32 const old_move_cost = static_cast<sint32>(cell->GetMoveCost());
+	TerrainImprovementRecord::Effect const * effect = 
+	    terrainutil_GetTerrainEffect(terr_imp_rec, pos);
 
-    sint32 cost;
-    if (effect && effect->GetMoveCost(cost) && cost >= old_move_cost)
+	sint32 cost;
+	if (effect && effect->GetMoveCost(cost) && cost >= old_move_cost)
 		return -1;
 	
-    return terr_imp_rec->GetIndex();
+	return terr_imp_rec->GetIndex();
 }
 
 

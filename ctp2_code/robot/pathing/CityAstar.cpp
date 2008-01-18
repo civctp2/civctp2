@@ -37,11 +37,9 @@
 //   but on pw costs per tile.
 // - Road path may go through foreign territory but is even more expensive 
 //   in comparision to unexplored territory. - Oct. 6th 2004 Martin Gühmann
-// - Initialised roadCostsPercent, so it will have a proper value when not 
-//   set in the strategy.
-// - removed bool fix attempt; - E 12.27.2006 note: MArtin G reports that
-//   fixing this defect made the AI act "weird" even though the bool in ln198 
-//   causes an error.
+// - Road costs are now based on all the tile improvements a tile has,
+//   including those that are under construction. (17-Jan-2008 Martin Gühmann)
+// - A strategy option can also use to the base move costs of a tile. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -62,7 +60,7 @@
 #include "TerrImprove.h"
 #include "World.h"              // g_theWorld
 
-CityAstar g_city_astar; 
+CityAstar g_city_astar;
 
 namespace
 {
@@ -76,30 +74,59 @@ bool CityAstar::EntryCost
     float &             cost,
     bool &              is_zoc,
     ASTAR_ENTRY_TYPE &  entry
-) 
+)
 {
 	if (m_pathRoad)
 	{
 		const TerrainImprovementRecord *rec = terrainutil_GetBestRoad(m_owner, pos);
 		if (!rec || !g_player[m_owner]->IsExplored(pos))
 		{
-			cost = k_ASTAR_BIG; 
-			entry = ASTAR_BLOCKED; 
+			cost = k_ASTAR_BIG;
+			entry = ASTAR_BLOCKED;
 			return false;
 		}
 		
 		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
-		if(!effect){
-			cost = k_ASTAR_BIG; 
-			entry = ASTAR_BLOCKED; 
+		if(!effect)
+		{
+			cost = k_ASTAR_BIG;
+			entry = ASTAR_BLOCKED;
 			return false;
 		}
 
-//		cost = float(g_theWorld->GetMoveCost(pos) * effect->GetProductionCost());
-		cost = static_cast<float>(effect->GetProductionCost());
+		float prodCost = static_cast<float>(effect->GetProductionCost());
+
+		const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
 		Cell *  entryCell   = g_theWorld->GetCell(pos);
-		
+		bool useBaseMovement = strategy.GetUseBaseMoveCostsForRoads() != 0;
+
+		if(useBaseMovement)
+		{
+			cost = static_cast<float>(entryCell->GetBaseMoveCosts());
+		}
+		else
+		{
+			cost = static_cast<float>(entryCell->GetFutureTerrainMoveCost());
+		}
+
+		if(useBaseMovement
+		|| static_cast<float>(entryCell->GetBaseMoveCosts()) > cost
+		){
+			// We want to follow existing roads even if they run through mountains
+			prodCost = terrainutil_GetMinimumProductionCost(rec->GetIndex());
+
+			if(entryCell->HasTerrainImprovementOrInFuture(rec->GetIndex()))
+			{
+				float roadCostPercent = static_cast<float>(strategy.GetRoadAlreadyThereCostsCoefficient());
+
+				// Make roads of the same type slightly cheaper
+				prodCost *= roadCostPercent;
+			}
+		}
+
+		cost += prodCost;
+
 		if (entryCell->GetOwner() < 0)
 		{
 			// Unowned territory
@@ -113,37 +140,6 @@ bool CityAstar::EntryCost
 			cost *= 20000.0; // Should be calculated from most expensive tile improvement + 20 percent and everything times 2
 		}
 
-		sint32 type = rec->GetIndex();
-
-		const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
-		double roadCostsPercent = strategy.GetRoadAlreadyThereCostsCoefficient();
-
-		// Reconsider this. This doesn't look right
-		sint32 i;
-		for(i = 0; i < entryCell->GetNumDBImprovements(); ++i)
-		{
-			rec = g_theTerrainImprovementDB->Get(entryCell->GetDBImprovement(i));
-			if(rec){
-				effect = terrainutil_GetTerrainEffect(rec, pos);
-				if(effect && effect->HasMoveCost()){
-					// roadCostsPercent < 1.0 so that new roads are planned along old roads
-					cost *= static_cast<float>(roadCostsPercent);
-					break;
-				}
-			}
-		}
-
-		if(i == entryCell->GetNumDBImprovements()){
-			for(i = 0; i < entryCell->GetNumImprovements(); ++i)
-			{
-				// Double the bonus for the same road type
-				if (entryCell->AccessImprovement(i).GetType() == type){
-					cost *= static_cast<float>(roadCostsPercent);
-					break;
-				}
-			}
-		}
-
 		entry = ASTAR_CAN_ENTER;
 	}
 
@@ -155,8 +151,7 @@ sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 	return SOUTH;
 }
 
-
-
+// Don't use it, it needs the original CityAstar implementation, if you need it add a new DistanceAstar
 void CityAstar::FindCityDist
 (
     PLAYER_INDEX        owner,
@@ -172,9 +167,9 @@ void CityAstar::FindCityDist
 	Path    tmp_path; 
 	sint32  nodes_opened    = 0;
 
-	if (!FindPath(start, dest, tmp_path, cost, FALSE, NODE_VISIT_COUNT_LIMIT, nodes_opened)) 
+	if (!FindPath(start, dest, tmp_path, cost, FALSE, NODE_VISIT_COUNT_LIMIT, nodes_opened))
 	{
-		cost = static_cast<float>(g_player[m_owner]->GetMaxEmpireDistance()); 
+		cost = static_cast<float>(g_player[m_owner]->GetMaxEmpireDistance());
 	}
 }
 
@@ -193,7 +188,7 @@ bool CityAstar::FindRoadPath
 
 	total_cost          = 0.0;
 
-	sint32  nodes_opened    = 0;
+	sint32 nodes_opened = 0;
 
 	return FindPath(start, dest, new_path, total_cost, false, NODE_VISIT_COUNT_LIMIT, nodes_opened);
 }

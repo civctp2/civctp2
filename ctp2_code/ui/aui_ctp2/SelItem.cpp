@@ -36,6 +36,7 @@
 //   queues. (Oct. 22nd 2005 Martin Gühmann) Doesn't really work.
 // - Added option to allow end turn if the game runs in the background,
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -134,21 +135,22 @@
 #include "AttractWindow.h"
 #include "gamesounds.h"
 #include "soundmanager.h"
+#include "CityAstar.h"
 
+extern ControlPanelWindow       *g_controlPanel;
+extern WorkWindow               *g_workWindow;
+extern UnitAstar                *g_theUnitAstar; 
+extern Pollution                *g_thePollution ;
 
-extern ControlPanelWindow	*g_controlPanel;
-extern WorkWindow				*g_workWindow;
-extern UnitAstar				*g_theUnitAstar; 
-extern Pollution				*g_thePollution ;
+sint32                           g_tradeSelectedState = 0;
+extern GrabItem                 *g_grabbedItem;
+extern C3UI                     *g_c3ui;
 
-sint32					g_tradeSelectedState = 0;
-extern GrabItem					*g_grabbedItem;
-extern C3UI						*g_c3ui;
-
-extern ResourceMap					*g_resourceMap;
+extern ResourceMap              *g_resourceMap;
 extern RadarMap                 *g_radarMap;
 
-extern SoundManager				*g_soundManager;
+extern SoundManager             *g_soundManager;
+extern CityAstar                 g_city_astar;
 
 
 #define k_UNIT_SELECT_IS_FIRST  0x00000001
@@ -172,12 +174,11 @@ BOOL CanAutoSelect(const Army &army)
 	return FALSE;
 }
 SelectedItem::SelectedItem(sint32 nPlayers)
-
 {
-	int i, j; 
+	int i, j;
 
-    m_current_player = 1; 
-	
+	m_current_player = 1; 
+
 	if(g_player) {
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i]) {
@@ -318,9 +319,14 @@ void SelectedItem::Init()
 	}
 }
 
-sint32 SelectedItem::IsLocalArmy() const
-{ 
-	return m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY; 
+bool SelectedItem::IsLocalArmy() const
+{
+	return m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY;
+}
+
+bool SelectedItem::IsLocalCity() const
+{
+	return m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_CITY;
 }
 
 void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
@@ -1001,11 +1007,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 	if(!u.IsValid())
 		return;
 
-	if (u.IsCity()) {
-
-		if(o == u.GetOwner()) {
+	if (u.IsCity())
+	{
+		if(o == u.GetOwner())
+		{
 			m_select_state[o] = SELECT_TYPE_LOCAL_CITY;
-		} else {
+		}
+		else
+		{
 			m_select_state[o] = SELECT_TYPE_REMOTE_CITY;
 		}
 
@@ -1026,16 +1035,27 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		g_c3ui->AddAction( new WorkWinUpdateAction );
 
 		// Focus on city if option is activated  
-		if(IsAutoCenterOn()) { 
-			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
+		if(IsAutoCenterOn())
+		{
+			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y))
+			{
 				g_director->AddCenterMap(pos);
 			}
 		}
-	} else { 
 
-		if(o == u.GetOwner()) {
+		if(g_theProfileDB->IsDebugCityAstar())
+		{
+			SetDrawablePathDest(m_cur_mouse_tile);
+		}
+	}
+	else
+	{
+		if(o == u.GetOwner())
+		{
 			m_select_state[o] = SELECT_TYPE_LOCAL_ARMY;
-		} else {
+		}
+		else
+		{
 			m_select_state[o] = SELECT_TYPE_REMOTE_ARMY;
 		}
 
@@ -1091,8 +1111,8 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		
 		g_slicEngine->RunSelectedUnitTriggers(u);
 
-        didSelect = TRUE;		
-    }
+		didSelect = TRUE;
+	}
 
 	
 	if (g_controlPanel) {
@@ -1552,7 +1572,7 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 
 sint32 SelectedItem::GetVisiblePlayer() const 
 {
-	if (m_player_on_screen != -1 && !g_network.IsActive()) 
+	if (m_player_on_screen != -1 && !g_network.IsActive())
 		return m_player_on_screen;
 
 	if(!g_network.IsActive())
@@ -1594,11 +1614,11 @@ void SelectedItem::AddWaypoint(const MapPoint &pos)
 }
 
 void SelectedItem::SetDrawablePathDest(MapPoint &dest)
-
-{ 
+{
 	if (!g_theUnitAstar) return;
 
-	if(!ShouldDrawPath()) {
+	if(!ShouldDrawPath())
+	{
 		m_cur_mouse_tile = dest;
 		m_is_pathing = FALSE;
 		return;
@@ -1606,47 +1626,53 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 
 	PLAYER_INDEX player = GetVisiblePlayer();
 
-    if (m_select_state[player] == SELECT_TYPE_LOCAL_ARMY) {
+	if (m_select_state[player] == SELECT_TYPE_LOCAL_ARMY)
+	{
 		m_cur_mouse_tile = dest;
-    
+
 		Army a = m_selected_army[player];
-     
-		MapPoint start; 
-		if(m_waypoints.Num() <= 0) {
+
+		MapPoint start;
+		if(m_waypoints.Num() <= 0)
+		{
 			a.GetPos(start);
-		} else {
+		}
+		else
+		{
 			start = m_waypoints[m_waypoints.Num() - 1];
 		}
 
-		
-		if (start == dest) { 
-			m_is_pathing = FALSE; 
-			return; 
+		if (start == dest)
+		{
+			m_is_pathing = FALSE;
+			return;
 		}
-
 
 		if(!m_good_path)
 			m_good_path = new Path;
 
-		float total_cost; 
-		Assert(g_theUnitAstar); 
+		float total_cost;
+		Assert(g_theUnitAstar);
 		bool r = g_theUnitAstar->FindPath(a, start,
-											player, m_cur_mouse_tile, 
-											*m_good_path, m_is_broken_path, 
-											m_bad_path, 
+											player, m_cur_mouse_tile,
+											*m_good_path, m_is_broken_path,
+											m_bad_path,
 											total_cost);
-		Assert(r); 
+		Assert(r);
 
-		m_is_pathing = r; 
-	} else if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY_UNLOADING) {
+		m_is_pathing = r;
+	}
+	else if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY_UNLOADING)
+	{
 		m_cur_mouse_tile = dest;
 		Army a = m_selected_army[player];
 		MapPoint start;
 		a.GetPos(start);
-		if(start == dest ||
-		   a.Num() < 1 ||
-		   !a[0].GetData()->GetCargoList() ||
-		   a[0].GetData()->GetCargoList()->Num() < 1) {
+		if( start == dest
+		||  a.Num() < 1
+		|| !a[0].GetData()->GetCargoList()
+		||  a[0].GetData()->GetCargoList()->Num() < 1
+		){
 			m_is_pathing = FALSE;
 			return;
 		}
@@ -1656,34 +1682,72 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 		m_bad_path.Clear();
 
 		sint32 r;
-		if(!start.IsNextTo(dest)) {
+		if(!start.IsNextTo(dest))
+		{
 			r = g_theUnitAstar->StraightLine(start, dest, m_bad_path);
-		} else {
+		}
+		else
+		{
 			static CellUnitList units;
 			units.Clear();
-			if(a[0].GetData()->GetCargoList()) {
-				sint32 i;
-				for(i = 0; i < a[0].GetData()->GetCargoList()->Num(); i++) {
+			if(a[0].GetData()->GetCargoList())
+			{
+				for(sint32 i = 0; i < a[0].GetData()->GetCargoList()->Num(); i++)
+				{
 					units.Insert(a[0].GetData()->GetCargoList()->Access(i));
 				}
 			}
+
 			bool zocViolation;
 			bool alliedCity;
 			if(units.Num() > 0 && units.CanMoveIntoCell(dest,
 														zocViolation,
 														false,
-														alliedCity)) {
+														alliedCity)
+			){
 				if(!m_good_path)
 					m_good_path = new Path;
 				r = g_theUnitAstar->StraightLine(start, dest, *m_good_path);
-			} else {
+			}
+			else
+			{
 				r = g_theUnitAstar->StraightLine(start, dest, m_bad_path);
 			}
 		}
 		m_is_pathing = r;
 	}
+	else if(m_select_state[player] == SELECT_TYPE_LOCAL_CITY)
+	{
+		m_cur_mouse_tile = dest;
+
+		Unit c = m_selected_city[player];
+
+		MapPoint start;
+		if(m_waypoints.Num() <= 0)
+		{
+			c.GetPos(start);
+		}
+		else
+		{
+			start = m_waypoints[m_waypoints.Num() - 1];
+		}
+
+		if (start == dest)
+		{
+			m_is_pathing = FALSE;
+			return;
+		}
+
+		if(!m_good_path)
+			m_good_path = new Path;
+
+		float total_cost;
+		bool r = g_city_astar.FindRoadPath(start, m_cur_mouse_tile,player, *m_good_path, total_cost);
+
+		m_is_pathing = r;
+	}
 }
-	
+
 void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
@@ -2617,10 +2681,13 @@ void SelectedItem::RegisterManualEndTurn()
 }
 
 sint32 SelectedItem::GetIsPathing() const
-{ 
-	return m_is_pathing && 
-		((m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY) ||
-		 (m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY_UNLOADING));
+{
+	return m_is_pathing
+	    && ( m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY
+	    ||   m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY_UNLOADING
+	    ||  (g_theProfileDB->IsDebugCityAstar()
+	    &&   m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_CITY)
+	       );
 }
 
 void SelectedItem::UpdateSelectedItem( void )
@@ -2742,8 +2809,10 @@ void SelectedItem::ArmyMovedCallback(Army &a)
 bool SelectedItem::ShouldDrawPath()
 {
 	Assert(g_controlPanel != NULL);
-	if (g_theProfileDB->IsUseCTP2Mode() && 
-		(g_controlPanel->GetTargetingMode()!=CP_TARGETING_MODE_ORDER_PENDING))
+	if(( g_theProfileDB->IsUseCTP2Mode()
+	&&   g_controlPanel->GetTargetingMode() != CP_TARGETING_MODE_ORDER_PENDING)
+	&& (!IsLocalCity()
+	||  !g_theProfileDB->IsDebugCityAstar()))
 		return false;
 	else
 		return true;

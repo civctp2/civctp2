@@ -1,3 +1,34 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Terrain utilities
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added terrainutil_GetMinimumProductionCost to retrieve the minimum
+//   costs of a tile improvement. (17-Jan-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -118,4 +149,6 @@ sint32 terrainutil_GetTerraformForestImprovement();
 sint32 terrainutil_GetTerraformGrasslandImprovement();
 
 sint32 terrainutil_GetEndgameTileImpIndex();
+
+sint32 terrainutil_GetMinimumProductionCost(sint32 type);
 #endif

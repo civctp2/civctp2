@@ -48,6 +48,8 @@
 // - FINALLY got contiguous irrigation to work 4.12.2007
 // - City Radius tileimps
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added terrainutil_GetMinimumProductionCost to retrieve the minimum
+//   costs of a tile improvement. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1676,4 +1678,21 @@ bool terrainutil_CanPlayerSpecialBuildAt(sint32 impType, sint32 pl, const MapPoi
 
 
 	return true;
+}
+
+sint32 terrainutil_GetMinimumProductionCost(sint32 type)
+{
+	sint32 cost = 0x7fffffff;
+	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
+
+	for(sint32 i = 0; i < rec->GetNumTerrainEffect(); ++i) 
+	{
+		const TerrainImprovementRecord::Effect * effect = rec->GetTerrainEffect(i);
+
+		if(effect)
+		{
+			cost = std::min(cost, effect->GetProductionCost());
+		}
+	}
+	return cost;
 }

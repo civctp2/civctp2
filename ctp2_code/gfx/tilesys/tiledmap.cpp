@@ -2445,7 +2445,7 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 
 		if (
 		   (g_graphicsOptions && g_graphicsOptions->IsArmyTextOn())
-        || (g_theProfileDB->GetDebugAI()) //emod
+		|| (g_theProfileDB->GetDebugAI()) //emod
 		){
 				Unit	u = actor->GetUnitID();
 				
@@ -5368,7 +5368,7 @@ void TiledMap::MouseDrag(aui_MouseEvent *data)
 }
 
 void TiledMap::Click(aui_MouseEvent *data, BOOL doubleClick)
-{	
+{
 	MapPoint		pos;
 	POINT			point = data->position;
 

@@ -58,6 +58,7 @@
 // - Added Army Names and Civflags options
 // - Added DebugAI option and SetEnemyHealth to add sceanrio editor options
 // - Removed new rules attempt - E 12.27.2006
+// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -267,7 +268,7 @@ private:
     sint32 m_aiPopCheat;
 
     sint32 m_showCityNames;
-	sint32 m_showArmyNames; //emod1
+    sint32 m_showArmyNames; //emod1
     sint32 m_showTradeRoutes;
 
     sint32 m_unitSpeed;
@@ -294,7 +295,7 @@ private:
     sint32 m_battleSpeed;
 
     sint32 m_showEnemyHealth;  //emod1 - already here but implementing a scenario editor switch
-	sint32 m_debugai;   //emod1
+    sint32 m_debugai;   //emod1
     sint32 m_scrollDelay;
 
     sint32 m_autoRenameCities;
@@ -360,51 +361,52 @@ private:
     sint32 m_upgrade; 
     /// Smooth the borders instead of diplaying square borders
     sint32 m_smoothBorders;
-	/// emod new profile options
-	/// enables civ flags
-	sint32 m_CivFlags;   
-	/// bae=sed on diffdb gives ai no prod deficit
-	sint32 m_NoAIProductionDeficit;
-	/// based on diffdb ai doesn't get 0 as a city gold
-	sint32 m_NoAIGoldDeficit;
-	/// adds population defense to AI cities
-	sint32 m_AICityDefenderBonus; 
-	/// after entrenching chance barbs makes cities
-	sint32 m_BarbarianCities;
-	/// increased unhapiness for city's with differnt culture owners
-	sint32 m_SectarianHappiness; 
-	/// when city revolts population dies
-	sint32 m_RevoltCasualties;
-	/// when city revolts it may spawn barbarians
-	sint32 m_RevoltInsurgents; 
-	/// chance barabarians make a camp tileimp
-	sint32 m_BarbarianCamps;
-	/// chance barbarians will reproduce
-	sint32 m_BarbarianSpawnsBarbarian; 
-	/// sinking flag enabled?
-	/// ai ships don't sink
-	sint32 m_AINoSinking; 
-	/// based on diffdb AI has no city build limit
-	sint32 m_AINoCityLimit; 
-	/// gold unit support
-	sint32 m_GoldPerUnitSupport; 
-	//gold per city
-	sint32 m_GoldPerCity;
-	/// ai units dont cost shields
-	sint32 m_AINoShieldHunger; 
-	/// ai units gold hunger not calculated
-	sint32 m_AINoGoldHunger;
-	/// ai gets free upgrades
-	sint32 m_AIFreeUpgrade; 
-	/// empty ai units spawn cheapest unit
-	sint32 m_AIMilitiaUnit; 
-	/// human player cant create settlers
-	sint32 m_OneCityChallenge; 
-		/// energy demand-supply ratio affects production and gold
-	sint32 m_NRG; 
-	sint32 m_ruin;
-	sint32 m_NoCityLimit; 
- 
+    /// emod new profile options
+    /// enables civ flags
+    sint32 m_CivFlags;   
+    /// bae=sed on diffdb gives ai no prod deficit
+    sint32 m_NoAIProductionDeficit;
+    /// based on diffdb ai doesn't get 0 as a city gold
+    sint32 m_NoAIGoldDeficit;
+    /// adds population defense to AI cities
+    sint32 m_AICityDefenderBonus; 
+    /// after entrenching chance barbs makes cities
+    sint32 m_BarbarianCities;
+    /// increased unhapiness for city's with differnt culture owners
+    sint32 m_SectarianHappiness; 
+    /// when city revolts population dies
+    sint32 m_RevoltCasualties;
+    /// when city revolts it may spawn barbarians
+    sint32 m_RevoltInsurgents; 
+    /// chance barabarians make a camp tileimp
+    sint32 m_BarbarianCamps;
+    /// chance barbarians will reproduce
+    sint32 m_BarbarianSpawnsBarbarian; 
+    /// sinking flag enabled?
+    /// ai ships don't sink
+    sint32 m_AINoSinking; 
+    /// based on diffdb AI has no city build limit
+    sint32 m_AINoCityLimit; 
+    /// gold unit support
+    sint32 m_GoldPerUnitSupport; 
+    //gold per city
+    sint32 m_GoldPerCity;
+    /// ai units dont cost shields
+    sint32 m_AINoShieldHunger; 
+    /// ai units gold hunger not calculated
+    sint32 m_AINoGoldHunger;
+    /// ai gets free upgrades
+    sint32 m_AIFreeUpgrade; 
+    /// empty ai units spawn cheapest unit
+    sint32 m_AIMilitiaUnit; 
+    /// human player cant create settlers
+    sint32 m_OneCityChallenge; 
+    /// energy demand-supply ratio affects production and gold
+    sint32 m_NRG;
+    sint32 m_ruin;
+    sint32 m_NoCityLimit;
+    /// Shows the path along that a city governor would build a road
+    sint32 m_DebugCityAstar;
 
 
 
@@ -859,6 +861,7 @@ public:
 	BOOL	IsNRG() 	{ return m_NRG; }
 	BOOL	GetCityLeavesRuins() 	{ return m_ruin; }
 	BOOL	IsNoCityLimit() 	{ return m_NoCityLimit; }
+	BOOL	IsDebugCityAstar() 	{ return m_DebugCityAstar; }
 
 //later add start age and end age?
 

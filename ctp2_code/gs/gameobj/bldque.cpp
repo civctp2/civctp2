@@ -1839,23 +1839,26 @@ bool BuildQueue::IsItemInQueue(uint32 cat, sint32 type)
 //----------------------------------------------------------------------------
 BuildQueue & BuildQueue::operator = (BuildQueue const & copy)
 {
-    if (this != &copy)
-    {
-	memcpy(&m_owner, &copy.m_owner, (uint32)&m_wonderComplete + sizeof(m_wonderComplete) - (uint32)&m_owner);
-	m_list->DeleteAll();
+	if (this != &copy)
+	{
+		m_owner          = copy.m_owner;
+		m_city           = copy.m_city;
+		m_wonderStarted  = copy.m_wonderStarted;
+		m_wonderStopped  = copy.m_wonderStopped;
+		m_list->DeleteAll();
 
-        for 
-        (
-	PointerList<BuildNode>::Walker walk(copy.m_list);
-	        walk.IsValid();
-            walk.Next()
-        ) 
-        {
-		BuildNode* destBN = new BuildNode();
-		BuildNode* sourBN = walk.GetObj();
-		memcpy(destBN, sourBN, sizeof(BuildNode));
-		m_list->AddTail(destBN);
-	}
+		for
+		(
+		    PointerList<BuildNode>::Walker walk(copy.m_list);
+		                                   walk.IsValid();
+		                                   walk.Next()
+		)
+		{
+			BuildNode* destBN = new BuildNode();
+			BuildNode* sourBN = walk.GetObj();
+			memcpy(destBN, sourBN, sizeof(BuildNode));
+			m_list->AddTail(destBN);
+		}
 	}
 
 	return *this;

@@ -60,14 +60,14 @@ Strategy {
 		Float ScientistPercent
 
 		Bit (Float) Top
-        Bit (Float) Bottom
+		Bit (Float) Bottom
 		Bit ProductionCities
 		Bit GrowthCities
 		Bit GoldCities
 		Bit Default
 	}
 
-    // how to assign populations for cities meeting various criteria
+	// how to assign populations for cities meeting various criteria
 	struct PopAssignmentElement[] PopAssignmentElement
 
 	// 
@@ -75,7 +75,7 @@ Strategy {
 	//
 
 	// progression from most to least desired government
-    Record Government[] Government
+	Record Government[] Government
 
 	//
 	//  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
@@ -128,41 +128,41 @@ Strategy {
 	// only consider building best n tile improvements
 	Bit(Int) MaxEvalTileImprovements
 	
-    // rounds to wait before fixing roads
+	// rounds to wait before fixing roads
 	Bit(Int) TimeToFixRoads
 
-    // rounds to wait before fixing polluted tiles
+	// rounds to wait before fixing polluted tiles
 	Bit(Int) TimeToFixPollution
 
-    // stored PW must exceed cost to fix + threshold
+	// stored PW must exceed cost to fix + threshold
 	Bit(Int) FixPollutionThreshold
 
-    // bonus for building road improvements
+	// bonus for building road improvements
 	Bit(Float) RoadUtilityBonus
-      
-    // bonus for building production improvements
+
+	// bonus for building production improvements
 	Bit(Float) ImproveProductionBonus
 
-    // bonus for building growth improvements
+	// bonus for building growth improvements
 	Bit(Float) ImproveGrowthBonus
 
-    // bonus to apply to cells with goods
+	// bonus to apply to cells with goods
 	Bit(Float) ImproveGoodBonus
 
-    // bonus for growth improvements in smallest 20% of our cities
+	// bonus for growth improvements in smallest 20% of our cities
 	Bit(Float) ImproveSmallCityGrowthBonus   
 
-    // bonus for production improvements in largest 20% of our cities
+	// bonus for production improvements in largest 20% of our cities
 	Bit(Float) ImproveLargeCityProductionBonus
 
 	// ordered list of terrain improvements that increase growth
-    Record ImprovementList ImproveGrowthList
+	Record ImprovementList ImproveGrowthList
 
 	// ordered list of terrain improvements that increase production
-    Record ImprovementList ImproveProductionList
+	Record ImprovementList ImproveProductionList
 
 	// ordered list of terrain improvements to be randomly spread around
-    Record ImprovementList ImproveRandomList
+	Record ImprovementList ImproveRandomList
 
 	//
 	// GOALS
@@ -179,7 +179,7 @@ Strategy {
 	}
 	struct GoalElement[] GoalElement
 
-    // multiplied by #rounds to target
+	// multiplied by #rounds to target
 	Bit(Int) DistanceModifierFactor
 
 	// number of armies to try and disband units from per round
@@ -327,8 +327,8 @@ Strategy {
 	// force matching values
 	Bit (struct ForceMatch) Offensive
 	Bit (struct ForceMatch) Defensive
-    Bit (struct ForceMatch) StealthAttack
-    Bit (struct ForceMatch) Bombard
+	Bit (struct ForceMatch) StealthAttack
+	Bit (struct ForceMatch) Bombard
 	Bit (struct ForceMatch) Special
 	Bit (struct ForceMatch) Harass
 
@@ -370,6 +370,11 @@ Strategy {
 	// road improvement to force the road path along that tile
 	// Default value == 0.5 means that tile only has a road
 	// improvement costs of just 50% in comparision to the
-	// situation without roads. 
-	Bit (Float) RoadAlreadyThereCostsCoefficient = 0.5
+	// situation without roads.
+	// Actual value now set in Const.cdb
+	Bit (Float) RoadAlreadyThereCostsCoefficient = 0.5   & Record Const[0].RoadAlreadyThereCostsCoefficient
+
+	Bit (Int)   UseBaseMoveCostsForRoads         = 0     & Record Const[0].UseBaseMoveCostsForRoads
+	Bit (Int)   BuildRoadsToClosestCities        = 5     & Record Const[0].BuildRoadsToClosestCities
+	Bit (Float) BaseRoadPriorityVsThreatRank     = 0.01  & Record Const[0].BaseRoadPriorityVsThreatRank
 }

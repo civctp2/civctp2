@@ -39,6 +39,8 @@
 // - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
 // - Prevented crash with multiple instances of an improvement that is deleted.
 // - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+// - Added methods to retrieve the future terrain move costs of tile
+//   improvments under construction. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -598,11 +600,10 @@ sint32 Cell::GetGoldProduced() const
 }
 
 sint32 Cell::GetScore() const 
-
 {
 	const TerrainRecord *rec = g_theTerrainDB->Get(m_terrain_type);
 	
-    sint32 score = rec->GetEnvBase()->GetScore();
+	sint32 score = rec->GetEnvBase()->GetScore();
 
 	if(HasCity() && rec->HasEnvCity()) {
 		score += rec->GetEnvCityPtr()->GetScore();
@@ -619,7 +620,7 @@ sint32 Cell::GetScore() const
 		score += rec->GetEnvBase()->GetScore();
 	}
 
-    return score; 
+	return score; 
 }
 
 #ifdef CELL_COLOR
@@ -683,10 +684,10 @@ bool Cell::OwnsTradeRoute(const PLAYER_INDEX &owner) const
 	TradeRoute route;
 
 	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
-    {
+	{
 		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == 
 		    k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE
-           ) 
+		   ) 
 		{
 			route = m_objects->Access(i).m_id;
 			if (route.GetOwner() == owner ||
@@ -714,18 +715,18 @@ sint32 Cell::GetNumTradeRoutes() const
 TradeRoute Cell::GetTradeRoute(sint32 index) const
 {
 	if (m_objects)
-    {
-	    sint32 c = 0;
-	    for (sint32 i = 0; i < m_objects->Num(); ++i) 
-        {
-		    if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) 
-            {
-			    if (c == index)
-				    return TradeRoute(m_objects->Access(i).m_id);
-			    c++;
-		    }
-	    }
-    }
+	{
+		sint32 c = 0;
+		for (sint32 i = 0; i < m_objects->Num(); ++i) 
+		{
+			if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE) 
+			{
+				if (c == index)
+					return TradeRoute(m_objects->Access(i).m_id);
+				c++;
+			}
+		}
+	}
 
 	return TradeRoute();
 }
@@ -744,10 +745,10 @@ void Cell::RemoveImprovement(const TerrainImprovement &imp)
 {
 	if (m_objects)
 	{
-        while (m_objects->Del(imp))
-        {
-            // Check for and delete multiple instances
-        }
+		while (m_objects->Del(imp))
+		{
+			// Check for and delete multiple instances
+		}
 
 		size_t const	count	= m_objects->Num();
 		
@@ -1061,7 +1062,7 @@ void Cell::CalcTerrainMoveCost()
 
 	for (sint32 i =  GetNumObjects() - 1 ; i >= 0; --i) 
 	{
-		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) 
+		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 		{
 			const TerrainImprovementRecord *impRec = 
 			    g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
@@ -1087,16 +1088,93 @@ void Cell::CalcTerrainMoveCost()
 
 //----------------------------------------------------------------------------
 //
+// Name       : Cell::GetFutureTerrainMoveCost
+//
+// Description: Returns the terrain move cost including the tile improvements
+//              that are under construction and will be finished in the future.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : The future terrain move cost.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+double Cell::GetFutureTerrainMoveCost() const
+{
+	sint32 tmp = m_move_cost;
+
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	{
+		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
+		{
+			sint32 type = TerrainImprovement(m_objects->Access(i).m_id).GetType();
+			const TerrainImprovementRecord *impRec = g_theTerrainImprovementDB->Get(type);
+			const TerrainImprovementRecord::Effect *effect = 
+			    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
+
+			sint32 cost;
+			if (effect && effect->GetMoveCost(cost)) 
+			{
+				tmp = std::min(tmp, cost);
+			}
+		}
+	}
+
+	return static_cast<double>(tmp);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Cell::HasTerrainImprovementOrInFuture
+//
+// Description: Checks whether a TerrainImprovment of type is in Cell, whether
+//              complete or under construction
+//
+// Parameters : sint32 type                 : type of TerrainImprovement that
+//                                            is to checked whether it is there
+//                                            or under construction
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool Cell::HasTerrainImprovementOrInFuture(sint32 type) const
+{
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
+	{
+		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
+		{
+			if(TerrainImprovement(m_objects->Access(i).m_id).GetType() == type)
+				return true;
+		}
+		else if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
+		{
+			if((m_objects->Access(i).m_id & k_ID_KEY_MASK) == type)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : Cell::CalcTerrainFreightCost
 //
 // Description: Compute the freight cost of entering this cell.
 //
 // Parameters : -
 //
-// Globals    : g_theTerrainDB				: terrain properties
-//              g_theTerrainImprovementDB	: terrain improvement properties
+// Globals    : g_theTerrainDB              : terrain properties
+//              g_theTerrainImprovementDB   : terrain improvement properties
 //
-// Returns    : double	: freight cost of entering this cell
+// Returns    : double  : freight cost of entering this cell
 //
 // Remark(s)  : -
 //
@@ -1122,7 +1200,7 @@ double Cell::CalcTerrainFreightCost()
 	{
 		ID const &	object	= m_objects->Access(i);
 		if (k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB == (object.m_id & k_ID_TYPE_MASK)) 
-			{
+		{
 			TerrainImprovementRecord const *			impRec = 
 			    g_theTerrainImprovementDB->Get(object.m_id & k_ID_KEY_MASK);
 			TerrainImprovementRecord::Effect const *	effect =
@@ -1193,6 +1271,7 @@ void Cell::InsertDBImprovement(sint32 type)
 	}
 }
 
+// Seems to remove all tile improvements
 void Cell::RemoveDBImprovement(sint32 type)
 {
 	for (sint32 i = GetNumObjects() - 1; i >= 0; i--) 
@@ -1202,6 +1281,7 @@ void Cell::RemoveDBImprovement(sint32 type)
 	}
 }
 
+// All finished tile improvements?
 sint32 Cell::GetNumDBImprovements() const
 {
 	sint32 c = 0;

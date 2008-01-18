@@ -49,6 +49,7 @@
 // - Implemented NRG - option to ccalculate energy ratio affecting production and demand
 // - Added DebugAI option
 // - Made the upgrade option show up in the debug version. (19-May-2007 Martin Gühmann)
+// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -243,6 +244,7 @@ ProfileDB::ProfileDB()
     m_debugai                           (FALSE),
     m_ruin                              (FALSE),
     m_NoCityLimit                       (FALSE),
+    m_DebugCityAstar                    (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -440,6 +442,7 @@ ProfileDB::ProfileDB()
 	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL);        //used //emod2 // Should go into the scenario editor
 	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false); //used
 	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
+	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
 }
 
 void ProfileDB::DefaultSettings(void)

@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Background screen handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,7 +17,9 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
+// - None
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -347,59 +350,43 @@ void Background::MouseNoChange(aui_MouseEvent *data)
 
 
 void Background::ProcessLastMouseMoveThisFrame(aui_MouseEvent *data)
-
 {
-    Assert(data); 
-    MapPoint cur, old; 
+	Assert(data);
+	MapPoint cur, old;
 
-    if ((m_lbutton_isdown == FALSE || g_theProfileDB->IsUseCTP2Mode()) && 
-		(g_selected_item->IsLocalArmy() ||
-		 g_selected_item->GetState() == SELECT_TYPE_LOCAL_ARMY_UNLOADING)) { 
-
-		g_selected_item->GetOldMouseTilePos(old); 
-
-        if ((m_current_mouse_tile.x != -1) && (m_current_mouse_tile != old)) { 
-			g_selected_item->SetDrawablePathDest(m_current_mouse_tile); 
-			g_infoBar->SetTextFromMap(m_current_mouse_tile);
-
-			
-			
-			if(!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
-				StatusBar::SetText(g_infoBar->GetText());
-				
-				if(ScenarioEditor::IsShown()) {
-					sint32 x,y;
-					char lemurpoo[_MAX_PATH];
-					x = m_current_mouse_tile.x;
-					y = m_current_mouse_tile.y;
-					sprintf(lemurpoo, "x: %d, y: %d", x, y);
-					ctp2_Static *tf = (ctp2_Static *)aui_Ldl::GetObject("ScenarioEditor.WorldControls.PosField");
-					tf->SetText(lemurpoo);
-
-				}
+	g_selected_item->GetOldMouseTilePos(old);
+	if(m_current_mouse_tile.x != -1
+	&& m_current_mouse_tile   != old
+	){
+		if((   m_lbutton_isdown == FALSE
+		    || g_theProfileDB->IsUseCTP2Mode()
+		   )
+		&& (   g_selected_item->IsLocalArmy()
+		    || g_selected_item->GetState() == SELECT_TYPE_LOCAL_ARMY_UNLOADING
+		    ||(g_selected_item->IsLocalCity() && g_theProfileDB->IsDebugCityAstar())
+		   )
+		){
+			g_selected_item->SetDrawablePathDest(m_current_mouse_tile);
 		}
-	} else {
-		g_selected_item->GetOldMouseTilePos(old);
-		if(m_current_mouse_tile.x != -1 && m_current_mouse_tile != old) {
+		else
+		{
 			g_selected_item->SetCurMouseTile(m_current_mouse_tile);
-			g_infoBar->SetTextFromMap(m_current_mouse_tile);
+		}
+		
+		g_infoBar->SetTextFromMap(m_current_mouse_tile);
 
-			
-			
-			if(!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
-				StatusBar::SetText(g_infoBar->GetText());
-			
-			if(!ScenarioEditor::IsShown()) {
-				return;
-			} else {
-				sint32 x,y;
-				char lemurpoo[_MAX_PATH];
-				x = m_current_mouse_tile.x;
-				y = m_current_mouse_tile.y;
-				sprintf(lemurpoo, "x: %d, y: %d", x, y);
-				ctp2_Static *tf = (ctp2_Static *)aui_Ldl::GetObject("ScenarioEditor.WorldControls.PosField");
-				tf->SetText(lemurpoo);
-			}
+		if(!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
+			StatusBar::SetText(g_infoBar->GetText());
+
+		if(ScenarioEditor::IsShown())
+		{
+			sint32 x,y;
+			char lemurpoo[_MAX_PATH];
+			x = m_current_mouse_tile.x;
+			y = m_current_mouse_tile.y;
+			sprintf(lemurpoo, "x: %d, y: %d", x, y);
+			ctp2_Static *tf = (ctp2_Static *)aui_Ldl::GetObject("ScenarioEditor.WorldControls.PosField");
+			tf->SetText(lemurpoo);
 		}
 	}
 }

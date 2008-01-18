@@ -46,6 +46,7 @@
 //   optimisation. - Jul 18th 2005 Martin Gühmann
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
+// - AIs now consider path between more than one city. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -263,7 +264,7 @@ public:
 	
 
 	
-	void AddRoadPriority(Path & path, const double & priority_delta);
+	bool AddRoadPriority(Path & path, const double & priority_delta);
 
 	
 	void ComputeRoadPriorities();
@@ -430,21 +431,40 @@ private:
 	
 
 	
-	struct TiGoal {
+	struct TiGoal
+	{
 		TiGoal() { utility = -1.0; }
-		bool operator>(const TiGoal & rval) const { return ( utility > rval.utility ); }
+		bool operator>(const TiGoal & rval) const { return utility > rval.utility; }
 		MapPoint pos;
 		double utility;
 		sint32 type;
 	};
 
 	typedef std::vector<TiGoal> TiGoalQueue;
-	
-	
 	static TiGoalQueue s_tiQueue;
 
-	
-	
+	struct CityDist
+	{
+		CityDist(Unit city, sint32 dist) : m_city(city), m_dist(dist) {}
+		bool   operator<(const CityDist & rval) const { return m_dist < rval.m_dist; }
+		Unit   m_city;
+		sint32 m_dist;
+	};
+
+	typedef std::vector<CityDist> CityDistQueue;
+	static CityDistQueue s_CityDistQueue;
+
+	struct CityPair
+	{
+		CityPair(sint32 city, sint32 neighborCity) : m_city(city), m_neighborCity(neighborCity) {}
+		sint32 m_city;
+		sint32 m_neighborCity;
+	};
+
+	typedef std::vector<CityPair> CityPairList;
+	static CityPairList s_CityPairList;
+	bool IsInCityPairList(sint32 city, sint32 neighborCity) const;
+
 	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const;
 
 	

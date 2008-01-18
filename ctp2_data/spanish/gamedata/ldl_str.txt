@@ -1416,8 +1416,8 @@ str_ldl_Fuel_COLON				"Fuel:"
 
 str_tbl_ldl_North_South_Wrap_Only			"Sólo se unen Norte y Sur"
 str_ldl_North_and_South_edges_of_the_map_connect	"Unir extremos Norte y Sur del mapa."
-str_ldl_Neptun_World					"Mundo Toroidal"
-str_tbl_ldl_Neptun_World				"Mundo Toroidal"
+str_ldl_Uranus_World					"Mundo Toroidal"
+str_tbl_ldl_Uranus_World				"Mundo Toroidal"
 
 ### New Single Player Game Player Screen Strings ###
 

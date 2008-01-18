@@ -115,8 +115,8 @@
 // - Modified sink to send the unit type 5-24-2007
 // - Cleaned up beginturn moving stuff to ArmyData
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - changed settlebuilding for convert to estabvlish building since it isn't settling
-// - added establishbuilding check to advertise, makes it more worthwhile - by E 27 Aug 2007
+// - Changed settlebuilding for convert to estabvlish building since it isn't settling
+// - Added establishbuilding check to advertise, makes it more worthwhile - by E 27 Aug 2007
 //
 //----------------------------------------------------------------------------
 
@@ -6946,16 +6946,16 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	PLAYER_INDEX    defense_owner   = defender.GetOwner();
 	PLAYER_INDEX    attack_owner    = GetOwner();
 
-    if (defense_owner == attack_owner)
-    {
-        // No use attacking own troops
-        return false;
-    }
+	if (defense_owner == attack_owner)
+	{
+		// No use attacking own troops
+		return false;
+	}
 
 	if (    g_player[attack_owner]->HasWarWith(defense_owner)
 	     && CanFight(defender)
 	   )
-    { 
+	{
 		InformAI(UNIT_ORDER_FINISH_ATTACK, pos); 
 
 		sint32 numCloaked = 0;
@@ -7509,7 +7509,9 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	{
 		if(m_array[i].IsEntrenching() || m_array[i].IsEntrenched())
 		{
-			Detrench();
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_DetrenchUnit,
+			                       GEA_Unit, m_array[i],
+			                       GEA_End);
 		}
 
 		anyVisible = anyVisible || (m_array[i].GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
@@ -7584,7 +7586,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			}
 
 			if(m_array[i].HasLeftMap())
-			{	
+			{
 				Assert(false);
 			}
 		}
@@ -7593,7 +7595,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	{
 		g_radarMap->RedrawTile(&oldPos); // oldPos only used here
 		g_radarMap->RedrawTile(&m_pos);  // m_pos hasn't been modified so oldPos and m_pos are still identical
-	} 
+	}
 
 	if(HasLeftMap())
 	{
