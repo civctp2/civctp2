@@ -213,17 +213,35 @@ Plan::~Plan()
 //----------------------------------------------------------------------------
 bool Plan::operator < (Plan const & plan) const
 {
+#if 0
+    // Matching value is based on the average match value per agent.
+    return m_matching_value < plan.m_matching_value;
+#else
     Utility const   myPriority      = m_the_goal 
-                                      ? m_the_goal->Get_Raw_Priority() 
+                                      ? m_the_goal->Get_Raw_Priority()
                                       : Goal::BAD_UTILITY;
     Utility const   otherPriority   = plan.m_the_goal 
-                                      ? plan.m_the_goal->Get_Raw_Priority() 
+                                      ? plan.m_the_goal->Get_Raw_Priority()
                                       : Goal::BAD_UTILITY;
 
-    return (myPriority < otherPriority) ||
-           ((myPriority == otherPriority) && 
-            (m_matching_value < plan.m_matching_value)
-           );
+#if 0
+    sint16    myAgentCount =      m_the_goal->Get_Agent_Count();
+    sint16 otherAgentCount = plan.m_the_goal->Get_Agent_Count();
+
+    return(myAgentCount == otherAgentCount
+        && m_matching_value < plan.m_matching_value
+          )
+        ||(myPriority < otherPriority)
+        ||(myPriority == otherPriority
+        && m_matching_value < plan.m_matching_value
+          );
+#else
+    return(myPriority < otherPriority)
+        ||(myPriority == otherPriority
+        && m_matching_value < plan.m_matching_value
+          );
+#endif
+#endif
 }
 
 bool Plan::operator > (Plan const & plan) const
@@ -512,7 +530,7 @@ sint32 Plan::Commit_Agents()
 		
 		
 		DPRINTF(mask, ("\t\tEXECUTING GOAL: (goal: %x squad: %x)\n",stgoal_ptr, m_the_squad));
-		DPRINTF(mask, ("\t\t\t"));
+		DPRINTF(mask, ("\t\t\t\n"));
 		stgoal_ptr->Log_Debug_Info(mask);
 		
 		DPRINTF(mask, ("\t\tSquad:\n"));

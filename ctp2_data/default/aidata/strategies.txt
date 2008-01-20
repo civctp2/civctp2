@@ -218,7 +218,7 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  20  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  20  MaxExec  15 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -238,7 +238,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -295,7 +295,7 @@ STRATEGY_DEFAULT {
     RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.50
+    UnitSupportPercent      0.15
 
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.20
@@ -702,7 +702,7 @@ STRATEGY_SEIGE {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent 0.50
+    UnitSupportPercent 0.35
 
     // Types of special units that should be built
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
@@ -784,7 +784,7 @@ STRATEGY_ATTACK {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent 0.50
+    UnitSupportPercent 0.35
 
 
     // Unit Percents must total to 1 (100%)
@@ -886,7 +886,7 @@ STRATEGY_DEFEND {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent 0.60
+    UnitSupportPercent 0.35
 
     // Types of special units that should be built
     AirTransportUnitList UNIT_BUILD_LIST_AIR
@@ -1006,19 +1006,19 @@ STRATEGY_ISLAND_NATION {
 STRATEGY_EXPLORE_NEAR {
     GoalElement { Goal GOAL_EXPLORE             Priority    35000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority    35000  MaxEval  25  MaxExec   3 }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority    45000  MaxEval  25  MaxExec   5 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority    45000  MaxEval  25  MaxExec  10 }
 }
 
 STRATEGY_EXPLORE_FAR {
     GoalElement { Goal GOAL_EXPLORE             Priority    80000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority    80000  MaxEval  25  MaxExec   4 }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority    85000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority    85000  MaxEval  25  MaxExec  15 }
 }
 
 STRATEGY_EXPLORE_WIDE {
     GoalElement { Goal GOAL_EXPLORE             Priority   120000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_STEALTH_EXPLORE     Priority   120000  MaxEval  25  MaxExec   5 }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority   125000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority   125000  MaxEval  25  MaxExec  25 }
 }
 
 ////////////////////////////////////////
@@ -1222,7 +1222,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  12 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -1242,7 +1242,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -1299,7 +1299,7 @@ STRATEGY_SCIENTIST_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.50
+    UnitSupportPercent      0.10
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -1687,7 +1687,7 @@ STRATEGY_MILITARIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -1707,7 +1707,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -1764,7 +1764,7 @@ STRATEGY_MILITARIST_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.50
+    UnitSupportPercent      0.25
 
 	// Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.25
@@ -2159,7 +2159,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2179,7 +2179,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   593000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -2236,7 +2236,7 @@ STRATEGY_ECONOMIC_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.50
+    UnitSupportPercent      0.20
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -2622,7 +2622,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  15 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2642,7 +2642,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  15  MaxExec  15 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -2699,7 +2699,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.50
+    UnitSupportPercent      0.20
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -3085,7 +3085,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   605000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  12 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -3105,7 +3105,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_PILLAGE             Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_PIRATE              Priority   393000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_COUNTER_STEALTH     Priority   390000  MaxEval   0  MaxExec 0.1 PerCity }
-    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority     7800  MaxEval  15  MaxExec  10 }
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
@@ -3162,7 +3162,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 	RushBuyReservePercent 2.0
 
     // Percent of civilization support dedicated to units
-    UnitSupportPercent      0.50
+    UnitSupportPercent      0.20
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
@@ -3177,7 +3177,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     AirTransportUnitsCount  2
     SpecialUnitsCount       5
 
-	// Do not certain items in cities where if it takes too many turns
+	// Do not build certain items in cities where if it takes too many turns
 	MaxSettlerBuildTurns 30
 	MaxUnitBuildTurns 25
 	MaxWonderBuildTurns 35
@@ -3490,5 +3490,5 @@ STRATEGY_TOO_MANY_CITIES {
 }
 
 STRATEGY_NO_REVOLUTON {
-    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec  0 }
 }

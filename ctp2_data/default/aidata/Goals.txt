@@ -45,8 +45,8 @@ GOAL_DEFEND {
   EnemyValueBonus		    0
   AlliedValueBonus		 1000
   PowerBonus			 -100
-  DistanceToHomeBonus	  100
-  DistanceToEnemyBonus	  -10
+  DistanceToHomeBonus		  100
+  DistanceToEnemyBonus		  -10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
@@ -120,10 +120,10 @@ GOAL_ATTACK {
 
   Execute	ORDER_ATTACK
  
-  ThreatBonus			  500
+  ThreatBonus			  100
   EnemyValueBonus		 -250
   AlliedValueBonus		 1500
-  PowerBonus			10000
+  PowerBonus			  500
   DistanceToHomeBonus	    0
   DistanceToEnemyBonus	    0
   InHomeTerritoryBonus  10000
@@ -825,7 +825,7 @@ GOAL_GOODY_HUT {
   PowerBonus			    0
   DistanceToHomeBonus	   -5
   DistanceToEnemyBonus	    0
-  InHomeTerritoryBonus   1000
+  InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0

@@ -509,133 +509,8 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 												   uint16 index, BOOL fog, sint32 percentComplete)
 												   //Added sint32 percentComplete by Martin Gühmann
 {
-	
-
-
 	Pixel16		*data = NULL;
 
-#if 0
-	switch (type) 
-	{
-	case TERRAIN_IMPROVEMENT_IRRIGATION_1:
-		if (g_theWorld->EnvIsWater(env)) {
-			switch (index) {
-			case 0:
-				data = m_tileSet->GetImprovementData(50);
-				break;
-			case 1:
-				data = m_tileSet->GetImprovementData(61);
-				break;
-			case 2:
-				data = m_tileSet->GetImprovementData(62);
-				break;
-			default:
-				Assert(0);
-			}
-		} 
-		else 
-		if (g_theWorld->EnvIsSpace(env)) 
-		{
-			data = m_tileSet->GetImprovementData(111+index);
-		} 
-		else 
-		{
-			data = m_tileSet->GetImprovementData(3+index);
-		}
-
-		break;
-	case TERRAIN_IMPROVEMENT_IRRIGATION_2:
-		if (g_theWorld->EnvIsWater(env)) 
-		{
-			switch (index) 
-			{
-			case 0:
-			case 1:
-				data = m_tileSet->GetImprovementData(50);
-				break;
-			case 2:
-				data = m_tileSet->GetImprovementData(64);
-				break;
-			}
-		} 
-		else 
-		if (g_theWorld->EnvIsSpace(env)) 
-		{
-			data = m_tileSet->GetImprovementData(114+index);
-		} 
-		else 
-		{
-			data = m_tileSet->GetImprovementData(6+index);
-		}
-
-		break;
-	case TERRAIN_IMPROVEMENT_IRRIGATION_3:
-		if (g_theWorld->EnvIsWater(env)) {
-			switch (index) {
-			case 0:
-			case 1:
-				data = m_tileSet->GetImprovementData(50);
-				break;
-			case 2:
-				data = m_tileSet->GetImprovementData(67);
-				break;
-			}
-		} else 
-		if (g_theWorld->EnvIsSpace(env)) {
-			data = m_tileSet->GetImprovementData(117+index);
-		} else {
-			data = m_tileSet->GetImprovementData(9+index);
-		}
-		break;
-	case TERRAIN_IMPROVEMENT_MINE_1:
-		if (g_theWorld->EnvIsWater(env)) {
-			data = m_tileSet->GetImprovementData(52+index);
-		} else 
-		if (g_theWorld->EnvIsSpace(env)) {
-			data = m_tileSet->GetImprovementData(102+index);
-		} else {
-			data = m_tileSet->GetImprovementData(12+index);
-		}
-		break;
-	case TERRAIN_IMPROVEMENT_MINE_2:
-		if (g_theWorld->EnvIsWater(env)) 
-		{
-			data = m_tileSet->GetImprovementData(55+index);
-		} 
-		else 
-			if (g_theWorld->EnvIsSpace(env)) 
-			{
-				data = m_tileSet->GetImprovementData(105+index);
-			} 
-			else 
-			{
-				data = m_tileSet->GetImprovementData(15+index);
-			}
-		break;
-	case TERRAIN_IMPROVEMENT_MINE_3:
-		if (g_theWorld->EnvIsWater(env)) {
-			data = m_tileSet->GetImprovementData(58+index);
-		} else 
-		if (g_theWorld->EnvIsSpace(env)) {
-			data = m_tileSet->GetImprovementData(108+index);
-		} else {
-			data = m_tileSet->GetImprovementData(18+index);
-		}
-		break;
-	default:
-		
-		if (g_theWorld->EnvIsWater(env)) {
-			data = m_tileSet->GetImprovementData(50);
-		} else 
-		if (g_theWorld->EnvIsSpace(env)) {
-			data = m_tileSet->GetImprovementData(100);
-		} else {
-			data = m_tileSet->GetImprovementData(1);
-		}
-		break;
-	}
-
-#endif
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
 	if (rec->GetNumConstructionTiles() < 1) 
 	{
@@ -715,7 +590,7 @@ void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
 	sint32 tot = num;
 	sint32 row = 0;
 
-    extern BOOL g_killMode;
+	extern BOOL g_killMode;
 	Pixel16 selectColorPixel = GetColor(g_killMode ? COLOR_RED : g_curSelectColor);
 	
 	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;) 
@@ -1035,11 +910,12 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pix
 	}
 }
 
+// Unused
 void TiledMap::DrawPath(Path *path)
 {
-    MapPoint	pos; 
+	MapPoint	pos; 
 
-    for (path->Start(pos); !path->IsEnd(); path->Next(pos)) { 
+	for (path->Start(pos); !path->IsEnd(); path->Next(pos)) { 
 		sint32		x,y;
 		maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
@@ -1088,7 +964,7 @@ sint32 TiledMap::DrawBlackTile(aui_Surface *surface, sint32 x, sint32 y) //EMOD 
 	sint32 surfPitch = m_surfPitch;
 
 	for (sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) 
-    {
+	{
 		sint32  startX      = StartPixel(j);
 		sint32  endX        = k_TILE_PIXEL_WIDTH - startX;
 		unsigned short *    
@@ -3680,6 +3556,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					RECT rect;//the city name rectangle
 					RECT boxRect;//boxRect-rect will = the player colored border for the city name
 					RECT clipRect;//working surface
+
 					sint32 right = 0;
 
 					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight) {//it's on the screen
@@ -3768,7 +3645,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							width = m_font->GetStringWidth(str);
 							height = m_font->GetMaxHeight();
 							// This rect will be the inner rect that shows the pop number
-							RECT		rect = {0, 0, width, height};
+							RECT		rect = {0, 0, width, height}; // This shadows the outer rect
 
 							OffsetRect(&rect, popRect.left + (popRect.right-popRect.left)/2 -
 											width/2,
@@ -3848,7 +3725,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								height = m_font->GetMaxHeight();
 
 								//this rect will be the inner rect that shows the nextpop number
-								RECT		rect = {0, 0, width, height};
+								RECT		rect = {0, 0, width, height}; // This shadows the outer rect and the outer outer rect
 
 								OffsetRect(&rect, popRectn.left + (popRectn.right-popRectn.left)/2 -
 												width/2,
@@ -3881,15 +3758,19 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 								popRectn.bottom++;
 								popRectn.right++;
-								right = popRectn.right;
+
 								AddDirtyRectToMix(rect);
 
+								right = popRectn.right;
 							}
 						}
 						else
 							continue;
 					}
-					rect.right = right;
+
+					if(right > 0) // Actually this belongs under the ifs above, but since the stuff is shadowed it has to be this way
+						rect.right = right;
+
 					DrawCityIcons(surf, pos, owner, fog, rect,
 								isBioInfected, isNanoInfected, isConverted, 
 								isFranchised, isInjoined, wasHappinessAttacked,

@@ -1,7 +1,7 @@
 # 2
 
 DIPLOMACY_DEFAULT {
-    Threaten 50
+    Threaten 75
 
 	ScenarioEvent {
         PositiveDecay 0.9
@@ -52,8 +52,8 @@ DIPLOMACY_DEFAULT {
 	LawsuitRegardCost -30
 	ExpelUnitsRegardCost -10
 	NukeCityRegardCost -250
-	ConvertCityRegardCost -50
-	EnslaveSettlerRegardCost -60
+	ConvertCityRegardCost -25
+	EnslaveSettlerRegardCost -40
 	UndergroundRailwayRegardCost -60
 	InciteUprisingRegardCost -60
 	BioInfectedCityRegardCost -70
@@ -61,13 +61,13 @@ DIPLOMACY_DEFAULT {
 	NanoInfectCityRegardCost -100
 	CreateParkRegardCost -250
 	InjoinCityRegardCost -50
-	PillageRegardCost -50
+	PillageRegardCost -35
 
 	// how much regard from empathic diplomats holding receptions (once every 10 turns)
 	HoldReceptionRegardBonus 50
 
 	// every time a civilian is killed (settler, diplomat, cleric)
-	AttackCivilianRegardCost -50
+	AttackCivilianRegardCost -25
 
 	// every time we are attacked less than a round after war is declared
 	PreemptiveAttackRegardCost -10
@@ -79,13 +79,13 @@ DIPLOMACY_DEFAULT {
 	HasPactTrustBonus 2
 
     // every turn not at war, increase trust (up to 500 only)
-	NoWarTrustBonus 1
+	NoWarTrustBonus 2
 
 	// every time foreigner follows through with agreement, add trust
 	FollowThroughTrustBonus 10
 
 	// when they kill a non-combat unit all players trust them less
-	AttackCivilianTrustCost -50
+	AttackCivilianTrustCost -25
 
 	// when they attack with out declaring war the round before
 	PreemptiveAttackTrustCost -20
@@ -94,7 +94,7 @@ DIPLOMACY_DEFAULT {
 	UsedNukesTrustCost -100
 
 	// minimum time before wanting to see map again
-	WantMapTurns 50
+	WantMapTurns 25
 
 	// NOTE: SenderRegardResult is regard sender gains or loses from
 	// receiver; likewise, ReceiverRegardResult is regard receiver
@@ -102,9 +102,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement { 
 		Proposal PROPOSAL_OFFER_GIVE_CITY 
-		SendPriority 100 
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 75
+		AcceptPriority 150
+		RejectPriority 75
 	    SenderRegardResult 300
 	    ReceiverRegardResult 0
 		ViolationRegardCost 0
@@ -113,9 +113,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_GIVE_CITY
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 200
+		AcceptPriority 75
+		RejectPriority 125
 	    SenderRegardResult -50
 	    ReceiverRegardResult 300
 		ViolationRegardCost 0
@@ -146,9 +146,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_OFFER_STOP_PIRACY
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 75
+		AcceptPriority 150
+		RejectPriority 75
 		SenderRegardResult 50
 		ReceiverRegardResult 0
 		ViolationRegardCost -200
@@ -157,8 +157,8 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_STOP_PIRACY
-		SendPriority 100
-		AcceptPriority 110
+		SendPriority 200
+		AcceptPriority 75
 		RejectPriority 100
 		SenderRegardResult 0
 		ReceiverRegardResult 50
@@ -168,7 +168,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_OFFER_BREAK_AGREEMENT
-		SendPriority 100
+		SendPriority 0
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 50
@@ -179,7 +179,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_BREAK_AGREEMENT
-		SendPriority 100
+		SendPriority 0
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 0
@@ -201,7 +201,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_STOP_RESEARCH
-		SendPriority 100
+		SendPriority 200
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -50
@@ -223,7 +223,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS
-		SendPriority 100
+		SendPriority 200
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -10
@@ -245,7 +245,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS
-		SendPriority 100
+		SendPriority 200
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -10
@@ -267,7 +267,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS
-		SendPriority 100
+		SendPriority 200
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -10
@@ -279,9 +279,9 @@ DIPLOMACY_DEFAULT {
 	ProposalElement {
 		Proposal PROPOSAL_OFFER_GIVE_ADVANCE
 		SendPriority 100
-		AcceptPriority 120
+		AcceptPriority 150
 		RejectPriority 100
-		SenderRegardResult 100
+		SenderRegardResult 200
 		ReceiverRegardResult 0
 		ViolationRegardCost 0
 		ViolationTrustCost 0
@@ -289,11 +289,11 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_GIVE_ADVANCE
-		SendPriority 110
-		AcceptPriority 120
+		SendPriority 200
+		AcceptPriority 75
 		RejectPriority 100
 		SenderRegardResult -10
-		ReceiverRegardResult 100
+		ReceiverRegardResult 200
 		ViolationRegardCost 0
 		ViolationTrustCost 0
 	}
@@ -301,7 +301,7 @@ DIPLOMACY_DEFAULT {
 	ProposalElement {
 		Proposal PROPOSAL_OFFER_GIVE_GOLD
 		SendPriority 110
-		AcceptPriority 120
+		AcceptPriority 150
 		RejectPriority 100
 		SenderRegardResult 100
 		ReceiverRegardResult 0
@@ -311,7 +311,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_GIVE_GOLD
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -10
@@ -333,7 +333,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_POLLUTION
-		SendPriority 100
+		SendPriority 200
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 0
@@ -344,7 +344,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_OFFER_MAP
-		SendPriority 100
+		SendPriority 150
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 100
@@ -355,7 +355,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_MAP
-		SendPriority 100
+		SendPriority 150
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -10
@@ -377,7 +377,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT
-		SendPriority 100
+		SendPriority 150
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult -20
@@ -399,7 +399,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT
-		SendPriority 100
+		SendPriority 150
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 0
@@ -421,7 +421,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_END_EMBARGO
-		SendPriority 100
+		SendPriority 200
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 0
@@ -443,7 +443,7 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_CEASEFIRE
-		SendPriority 100
+		SendPriority 150
 		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 200
@@ -454,9 +454,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_PEACE
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 200
+		AcceptPriority 150
+		RejectPriority 75
 		SenderRegardResult 200
 		ReceiverRegardResult 200
 		ViolationRegardCost -100
@@ -465,9 +465,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_TRADE_PACT
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 200
+		AcceptPriority 150
+		RejectPriority 75
 		SenderRegardResult 200
 		ReceiverRegardResult 200
 		ViolationRegardCost -100
@@ -476,9 +476,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_RESEARCH_PACT
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 200
+		AcceptPriority 150
+		RejectPriority 75
 		SenderRegardResult 200
 		ReceiverRegardResult 200
 		ViolationRegardCost -100
@@ -487,9 +487,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_MILITARY_PACT
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 200
+		AcceptPriority 150
+		RejectPriority 75
 		SenderRegardResult 200
 		ReceiverRegardResult 200
 		ViolationRegardCost -100
@@ -498,8 +498,8 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_POLLUTION_PACT
-		SendPriority 100
-		AcceptPriority 110
+		SendPriority 200
+		AcceptPriority 150
 		RejectPriority 100
 		SenderRegardResult 200
 		ReceiverRegardResult 200
@@ -509,9 +509,9 @@ DIPLOMACY_DEFAULT {
 
 	ProposalElement {
 		Proposal PROPOSAL_TREATY_ALLIANCE
-		SendPriority 100
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 200
+		AcceptPriority 150
+		RejectPriority 75
 		SenderRegardResult 200
 		ReceiverRegardResult 200
 		ViolationRegardCost -100
@@ -522,7 +522,7 @@ DIPLOMACY_DEFAULT {
 DIPLOMACY_PROVOKE_WAR {
   Inherit DIPLOMACY_DEFAULT
 
-    Threaten 70
+    Threaten 95
 
 	MilitaryPowerEvent  {
         PositiveDecay 0.85
@@ -562,13 +562,13 @@ DIPLOMACY_PROVOKE_WAR {
 	NanoInfectCityRegardCost -200
 	CreateParkRegardCost -500
 	InjoinCityRegardCost -100
-	PillageRegardCost -100
+	PillageRegardCost -50
 
 	// how much regard from empathic diplomats holding receptions (once every 10 turns)
 	HoldReceptionRegardBonus 25
 
 	// every time a civilian is killed (settler, diplomat, cleric)
-	AttackCivilianRegardCost -100
+	AttackCivilianRegardCost -50
 
 	// every time we are attacked less than a round after war is declared
 	PreemptiveAttackRegardCost -20
@@ -580,13 +580,13 @@ DIPLOMACY_PROVOKE_WAR {
 	HasPactTrustBonus 1
 
     // every turn not at war, increase trust (up to 500 only)
-	NoWarTrustBonus 0
+	NoWarTrustBonus 1
 
 	// every time foreigner follows through with agreement, add trust
 	FollowThroughTrustBonus 10
 
 	// when they kill a non-combat unit all players trust them less
-	AttackCivilianTrustCost -100
+	AttackCivilianTrustCost -50
 
 	// when they attack with out declaring war the round before
 	PreemptiveAttackTrustCost -50
@@ -611,9 +611,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_GIVE_CITY
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 	    SenderRegardResult -50
 	    ReceiverRegardResult 300
 		ViolationRegardCost 0
@@ -633,9 +633,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_WITHDRAW_TROOPS
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 		SenderRegardResult -50
 		ReceiverRegardResult 200
 		ViolationRegardCost -250
@@ -655,9 +655,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_STOP_PIRACY
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 		SenderRegardResult 0
 		ReceiverRegardResult 50
 		ViolationRegardCost -200
@@ -677,9 +677,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_STOP_RESEARCH
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 		SenderRegardResult -50
 		ReceiverRegardResult 150
 		ViolationRegardCost 0
@@ -699,9 +699,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 		SenderRegardResult -10
 		ReceiverRegardResult 150
 		ViolationRegardCost -200
@@ -721,9 +721,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 		SenderRegardResult -10
 		ReceiverRegardResult 150
 		ViolationRegardCost -200
@@ -732,8 +732,8 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_OFFER_REDUCE_NANO_WEAPONS
-		SendPriority 100
-		AcceptPriority 0
+		SendPriority 0
+		AcceptPriority 110
 		RejectPriority 100
 		SenderRegardResult 150
 		ReceiverRegardResult 0
@@ -743,9 +743,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS
-		SendPriority 0
-		AcceptPriority 110
-		RejectPriority 100
+		SendPriority 250
+		AcceptPriority 0
+		RejectPriority 150
 		SenderRegardResult -10
 		ReceiverRegardResult 150
 		ViolationRegardCost -200
@@ -765,9 +765,9 @@ DIPLOMACY_PROVOKE_WAR {
 
 	ProposalElement {
 		Proposal PROPOSAL_REQUEST_GIVE_GOLD
-		SendPriority 100
+		SendPriority 250
 		AcceptPriority 0
-		RejectPriority 100
+		RejectPriority 150
 		SenderRegardResult -10
 		ReceiverRegardResult 100
 		ViolationRegardCost 0
@@ -833,7 +833,7 @@ DIPLOMACY_PROVOKE_WAR {
 DIPLOMACY_MAKE_FRIEND {
   Inherit DIPLOMACY_DEFAULT
 
-    Threaten 10
+    Threaten 50
 
 	MilitaryPowerEvent  {
         PositiveDecay 0.95

@@ -627,7 +627,6 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 
 Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 {
-	
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
 
 	Player *player_ptr = g_player[ m_playerId ];
@@ -707,8 +706,8 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	
 	Utility bonus = 0;
 
-//Set if unit is wounded and it is a retreat of defense goal, add bonus 
-//to goalpriority + matching
+	//Set if unit is wounded and it is a retreat of defense goal, add bonus 
+	//to goalpriority + matching
 
 	MapPoint armyPos = ctpagent_ptr->Get_Pos();	
 	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
@@ -818,22 +817,22 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
 	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8d \n",
-	this,
-	ctpagent_ptr,
-	ctpagent_ptr->Get_Pos().x,
-	ctpagent_ptr->Get_Pos().y,
-	g_theGoalDB->Get(m_goal_type)->GetNameText(),
-	this->Get_Target_Pos().x,
-	this->Get_Target_Pos().y,
-	match,
-	raw_priority,
-	cell_dist,
-	eta,
-	bonus,
-	report_wounded,
-	report_obsolete,
-	report_Treaspassing,
-	time_term));
+	this,                                          // This goal
+	ctpagent_ptr,                                  // The agent
+	ctpagent_ptr->Get_Pos().x,                     // Agent pos.x
+	ctpagent_ptr->Get_Pos().y,                     // Agent pos.y
+	g_theGoalDB->Get(m_goal_type)->GetNameText(),  // Goal name
+	this->Get_Target_Pos().x,                      // Target pos.x
+	this->Get_Target_Pos().y,                      // Target pos.y
+	match,                                         // Computed match value
+	raw_priority,                                  // Raw match value
+	cell_dist,                                     // Distance to target (Quare rooted quare distance), not identical with path distance
+	eta,                                           //
+	bonus,                                         //
+	report_wounded,                                //
+	report_obsolete,                               //
+	report_Treaspassing,                           //
+	time_term));                                   //
 #endif //_DEBUG
 
 	return match;
@@ -1839,81 +1838,71 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 	if ( !army->CanEnter(target_pos) )
 		return false;
 
-    return true;
+	return true;
 }
 
 
 void CTPGoal::Log_Debug_Info(const int &log) const
 {
 #ifdef _DEBUG
-    
-    int row = 0;
+
+	int row = 0;
 	int column = 0;
-
-	
-
-
-
-
 
 	const char *name = g_theGoalDB->Get(m_goal_type)->GetNameText();
 
-    Agent_List::const_iterator agent_iter;
+	Agent_List::const_iterator agent_iter;
 	CTPAgent_ptr stagent_ptr;
 	bool log_army = true;
 	bool log_goal = CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, -1);
 	MapPoint pos = Get_Target_Pos();
-	for (agent_iter = m_agents.begin(); agent_iter != m_agents.end(); agent_iter++) {
-		    log_army = false;
-			stagent_ptr = (CTPAgent_ptr) *agent_iter;
-			if (CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, stagent_ptr->Get_Army().m_id))
-			{
-				log_army = true;
-				
-				
-				pos = Get_Target_Pos(stagent_ptr->Get_Army());
-				break;
-			}
-    } 
+	for (agent_iter = m_agents.begin(); agent_iter != m_agents.end(); agent_iter++)
+	{
+		log_army = false;
+		stagent_ptr = (CTPAgent_ptr) *agent_iter;
+		if (CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, stagent_ptr->Get_Army().m_id))
+		{
+			log_army = true;
 
-	
+			pos = Get_Target_Pos(stagent_ptr->Get_Army());
+			break;
+		}
+	}
+
 	if (log_army == false || log_goal == false)
 	{
-		
-
 		return;
 	}
 
 	if (m_raw_priority > BAD_UTILITY)
 	{
 		DPRINTF(log, 
-        ("\t %9x,\t%s,\t%8d,\t(%3d,%3d)\n",
-			this,
-        name,
-			m_raw_priority, 
-	        pos.x,
-        pos.y));
+		("\t %9x,\t%s,\t%8d,\t(%3d,%3d)\n",
+		    this,
+		    name,
+		    m_raw_priority, 
+		    pos.x,
+		    pos.y));
 	}
 	else 
 	{
 		MapPoint pos = Get_Target_Pos();
-        DPRINTF(log, ("\t %9x,\t%s,\tBAD_UTILITY,\t(%d,%d)\n",
-			this,
-			name,
-			pos.x,
-        pos.y));
+		DPRINTF(log, ("\t %9x,\t%s,\tBAD_UTILITY,\t(%d,%d)\n",
+		    this,
+		    name,
+		    pos.x,
+		    pos.y));
 	}
 	if (m_agents.size() > 0)
 		DPRINTF(log,("\t\t\tCommitted Agents:\n"));
 
-	
-	for (agent_iter = m_agents.begin();
+	for( agent_iter  = m_agents.begin();
 		 agent_iter != m_agents.end();
-		 agent_iter++) {
-			
-			stagent_ptr = (CTPAgent_ptr) *agent_iter;
-            stagent_ptr->Log_Debug_Info(log);
-    } 
+		 agent_iter++
+	){
+		stagent_ptr = (CTPAgent_ptr) *agent_iter;
+		stagent_ptr->Log_Debug_Info(log);
+	}
 #endif // _DEBUG
 }
 
