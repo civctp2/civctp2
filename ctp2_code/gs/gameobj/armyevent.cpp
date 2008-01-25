@@ -28,6 +28,9 @@
 // - Do not generate an Assert popup when an army is destroyed in an attack.
 // - Added Elite and Leader Chance 6-4-2007
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - The FinishMoveEvent event now fills a transporter up to the transport
+//   capacy limit even if the army to be transported has more units than the
+//   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -725,7 +728,7 @@ STDEHANDLER(ArmyMoveEvent)
 
 // EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
 //city to another city anywhere in the world and costing that unit 1 move.
-      
+
 		UnitDynamicArray revealedUnits;
 		bool revealedUnexplored = false;
 		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
@@ -890,21 +893,36 @@ STDEHANDLER(FinishMoveEvent)
 		return GEV_HD_Continue;
 
 	CellUnitList transports;
-	if (g_theWorld->GetCity(pos).m_id == 0 && 
-        army.AccessData()->CanMoveIntoTransport(pos, transports)
-       ) 
-    {
+	sint32 canMoveIntoTransport = army.AccessData()->NumUnitsCanMoveIntoTransport(pos, transports);
+
+	if (g_theWorld->GetCity(pos).m_id == 0 &&
+	    army.AccessData()->Num() <= canMoveIntoTransport
+	   )
+	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 							   GEV_MoveIntoTransport,
 							   GEA_Army, army,
 							   GEA_MapPoint, pos,
 							   GEA_End);
 
-		
 		return GEV_HD_Continue;
-	} 
-    else 
-    {
+	}
+	else if (g_theWorld->GetCity(pos).m_id == 0 &&
+	         canMoveIntoTransport > 0
+	        )
+	{
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+							   GEV_MoveIntoTransport,
+							   GEA_Army, army,
+							   GEA_MapPoint, pos,
+							   GEA_End);
+
+		army->RemainNumUnits(canMoveIntoTransport);
+
+		return GEV_HD_Continue;
+	}
+	else
+	{
 		bool const  didMove = army.AccessData()->MoveIntoCell(pos, order, dir);
 
 		if (didMove) {
@@ -1225,7 +1243,7 @@ STDEHANDLER(MoveUnitsEvent)
 			!new_cell_diplomat.GetBorderIncursionBy(army_owner))
 		{
 			bool is_threat = (a->HasCargo() || !a->IsCivilian()) && 
-                             a->PlayerCanSee(new_cell_owner);
+			                 a->PlayerCanSee(new_cell_owner);
 
 			if (is_threat)
 			{

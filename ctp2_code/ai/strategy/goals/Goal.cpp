@@ -104,7 +104,7 @@ Goal& Goal::operator= (const Goal &goal)
 	
 	m_goal_type = goal.m_goal_type;
 
-    m_playerId = goal.m_playerId; 
+	m_playerId = goal.m_playerId; 
 
 	
 	m_raw_priority = goal.m_raw_priority;

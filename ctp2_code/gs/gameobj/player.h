@@ -37,6 +37,8 @@
 // - Removed unused void BeginTurnAllCities all cities method. - Aug. 7th 2005 Martin Gühmann
 // - Added civilisation specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 // - Added EnergySupply method 2-28-2007
+// - Slaves are distributed to more than just the closest city, the number
+//   of closest cities to them slaves are sent can be set in const.txt. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -167,7 +169,6 @@ class EndGame;
 class GaiaController;
 
 struct PSlicComplexRegion;
-
 
 //----------------------------------------------------------------------------
 // General declarations
@@ -1054,6 +1055,18 @@ public:
 	void CreateLeader(); //EMOD
 	bool CanBuildLeader(const sint32 type) const;
 	void MergeCivs(sint32 Merger, sint32 Mergee);
+
+private:
+	/// @ToDo: This is a copy from governor, merge both.
+	struct CityDist
+	{
+		CityDist(sint32 city, sint32 dist) : m_city(city), m_dist(dist) {}
+		bool   operator<(const CityDist & rval) const { return m_dist < rval.m_dist; }
+		sint32 m_city; // This has to be a sint32 otherwise MSVC6 refuses to compile the game.
+		sint32 m_dist; // This has to be a sint32 otherwise MSVC6 refuses to compile the game.
+	};
+
+	typedef std::vector<CityDist> CityDistQueue;
 };
 
 #endif

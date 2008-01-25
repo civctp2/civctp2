@@ -39,22 +39,22 @@ GOAL_DEFEND {
   TargetType:City
   TargetOwner:Self
 
-  Execute	ORDER_MOVE
+  Execute   ORDER_MOVE
 
-  ThreatBonus			 2000
-  EnemyValueBonus		    0
-  AlliedValueBonus		 1000
-  PowerBonus			 -100
-  DistanceToHomeBonus		  100
-  DistanceToEnemyBonus		  -10
+  ThreatBonus            2000
+  EnemyValueBonus           0
+  AlliedValueBonus       1000
+  PowerBonus             -100
+  DistanceToHomeBonus     100
+  DistanceToEnemyBonus    -10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus      10000
   NotVisibleBonus           0
-  ChokePointBonus		  250
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		 -500
+  ChokePointBonus         250
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus      -500
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -68,7 +68,7 @@ GOAL_DEFEND {
 GOAL_SEIGE {
   RallyFirst
   NeverSatisfied
-  
+
   SquadClass:CanAttack
   SquadClass:CanDefend
   SquadClass:HasZoc
@@ -79,23 +79,24 @@ GOAL_SEIGE {
   TargetOwner:Neutral
   TargerOwner:ColdEnemy
 
-  Execute	ORDER_ATTACK
+  Execute   ORDER_ATTACK
 
-  ThreatBonus			  500
-  EnemyValueBonus		 -250
-  AlliedValueBonus		 1000
-  PowerBonus			  500
-  DistanceToHomeBonus	  -20
-  DistanceToEnemyBonus	   10
+  ThreatBonus             500
+  EnemyValueBonus        -250
+  AlliedValueBonus       1000
+  PowerBonus              500
+  DistanceToHomeBonus     -20
+  DistanceToEnemyBonus     10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     -10000
   NotVisibleBonus           0
-  ChokePointBonus		  500
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		  100
+  ChokePointBonus         500
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
+  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -118,23 +119,24 @@ GOAL_ATTACK {
   TargetOwner:HotEnemy
   TargetOwner:ColdEnemy
 
-  Execute	ORDER_ATTACK
- 
-  ThreatBonus			  100
-  EnemyValueBonus		 -250
-  AlliedValueBonus		 1500
-  PowerBonus			  500
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_ATTACK
+
+  ThreatBonus             100
+  EnemyValueBonus        -250
+  AlliedValueBonus       1500
+  PowerBonus              500
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     -10000
   NotVisibleBonus       -1000
-  ChokePointBonus		  250
-  UnexploredBonus	  -999999 
-  ObsoleteArmyBonus		  100
+  ChokePointBonus         250
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
+  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -148,7 +150,6 @@ GOAL_ATTACK {
 
 GOAL_HARASS {
   RallyFirst
-  
 
   SquadClass:CanAttack
   SquadClass:CanBombard
@@ -157,23 +158,24 @@ GOAL_HARASS {
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
 
-  Execute	ORDER_ATTACK
- 
-  ThreatBonus			  100
-  EnemyValueBonus		 -500
-  AlliedValueBonus		 1500
-  PowerBonus			  500
-  DistanceToHomeBonus	  -10
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_ATTACK
+
+  ThreatBonus             100
+  EnemyValueBonus        -500
+  AlliedValueBonus       1500
+  PowerBonus              500
+  DistanceToHomeBonus     -10
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     -10000
   NotVisibleBonus       -1000
-  ChokePointBonus		   50
-  UnexploredBonus	  -999999 
-  ObsoleteArmyBonus		  100
-  TreaspassingArmyBonus     0 
+  ChokePointBonus          50
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       100
+  TreaspassingArmyBonus     0
+  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -187,7 +189,6 @@ GOAL_HARASS {
 
 GOAL_SETTLE_LAND {
   NeedsEscort
-  
 
   SquadClass:Special
 
@@ -195,22 +196,22 @@ GOAL_SETTLE_LAND {
   TargetOwner:Self
   TargetOwner:NoContact
 
-  Execute	ORDER_SETTLE
+  Execute   ORDER_SETTLE
 
-  ThreatBonus			 -100
-  EnemyValueBonus		 -100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	  -50
+  ThreatBonus            -100
+  EnemyValueBonus        -100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus     -50
   DistanceToEnemyBonus     -2
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus		 -100
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus        -100
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -230,22 +231,22 @@ GOAL_SETTLE_SEA {
   TargetOwner:Self
   TargetOwner:NoContact
 
-  Execute	ORDER_SETTLE
+  Execute   ORDER_SETTLE
 
-  ThreatBonus			 -100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	  -50
+  ThreatBonus            -100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus     -50
   DistanceToEnemyBonus     15
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus		 -100
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus        -100
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -258,7 +259,7 @@ GOAL_SETTLE_SEA {
 
 GOAL_EXPLORE {
   UnGroupFirst
-  
+
   SquadClass:CanExplore
 
   TargetType:Unexplored
@@ -268,14 +269,14 @@ GOAL_EXPLORE {
   TargetOwner:ColdEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_MOVE
-  
+  Execute   ORDER_MOVE
+
   // Try to explore away from home, but close
   // to enemies/foreigners.
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
   DistanceToHomeBonus     -10
   DistanceToEnemyBonus      0
   InHomeTerritoryBonus   1000
@@ -283,9 +284,9 @@ GOAL_EXPLORE {
   InEnemyTerritoryBonus  -100
   WoundedArmyBonus       -100
   NotVisibleBonus        1000
-  ChokePointBonus		   10
-  UnexploredBonus		 1000
-  ObsoleteArmyBonus		   10
+  ChokePointBonus          10
+  UnexploredBonus        1000
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus -10000
 
   ThreatenType:None
@@ -310,14 +311,14 @@ GOAL_STEALTH_EXPLORE {
   TargetOwner:Neutral
 
 
-  Execute	ORDER_MOVE
-  
+  Execute   ORDER_MOVE
+
   // Try to explore away from home, but close
   // to enemies/foreigners.
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
   DistanceToHomeBonus     100
   DistanceToEnemyBonus     -5
   InHomeTerritoryBonus  -1000
@@ -325,9 +326,9 @@ GOAL_STEALTH_EXPLORE {
   InEnemyTerritoryBonus  1000
   WoundedArmyBonus          0
   NotVisibleBonus        1000
-  ChokePointBonus		   10
-  UnexploredBonus		 1000
-  ObsoleteArmyBonus		   10
+  ChokePointBonus          10
+  UnexploredBonus        1000
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus   100
 
   ThreatenType:None
@@ -347,24 +348,24 @@ GOAL_ENSLAVE_SETTLER {
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
   TargetOwner:ColdEnemy
-  TargetOwner:NoContact  
+  TargetOwner:NoContact
 
-  Execute	ORDER_ENSLAVE_SETTLER
+  Execute   ORDER_ENSLAVE_SETTLER
 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	   -1
-  DistanceToEnemyBonus	   -1
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus      -1
+  DistanceToEnemyBonus     -1
   InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus  5000
   InEnemyTerritoryBonus -1000
   WoundedArmyBonus          0
   NotVisibleBonus       -1000
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -384,24 +385,25 @@ GOAL_SLAVE_RAID {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_SLAVE_RAID
+  Execute   ORDER_SLAVE_RAID
 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	   -1
-  DistanceToEnemyBonus	   -1
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus      -1
+  DistanceToEnemyBonus     -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -422,22 +424,22 @@ GOAL_CHOKEPOINT {
   TargetType:ChokePoint
   TargetOwner:Self
 
-  Execute	ORDER_MOVE
+  Execute   ORDER_MOVE
 
-  ThreatBonus			  100
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	 -100 
-  DistanceToEnemyBonus	   -1
+  ThreatBonus             100
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus    -100 
+  DistanceToEnemyBonus     -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus  1000
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus         100
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		  -50
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       -50
   TreaspassingArmyBonus   500
 
   ThreatenType:None
@@ -459,22 +461,22 @@ GOAL_PATROL {
   TargetType:Border
   TargetOwner:Self
 
-  Execute	ORDER_MOVE
+  Execute   ORDER_MOVE
 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			 -100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus             -100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus   500
 
   ThreatenType:None
@@ -497,22 +499,22 @@ GOAL_CONVERT_CITY {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_CONVERT
+  Execute   ORDER_CONVERT
 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0 
-  WoundedArmyBonus          0 
-  NotVisibleBonus           0 
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  InEnemyTerritoryBonus     0
+  WoundedArmyBonus          0
+  NotVisibleBonus           0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -532,22 +534,22 @@ GOAL_BIOTERROR_CITY {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_BIO_INFECT
+  Execute   ORDER_BIO_INFECT
 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -567,22 +569,22 @@ GOAL_NANOATTACK_CITY {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_NANO_INFECT
+  Execute   ORDER_NANO_INFECT
 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus              100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -605,23 +607,24 @@ GOAL_HARASS_CITY {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_ATTACK
- 
-  ThreatBonus			  500
-  EnemyValueBonus		 -500
-  AlliedValueBonus		 1000
-  PowerBonus			  500
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_ATTACK
+
+  ThreatBonus             500
+  EnemyValueBonus        -500
+  AlliedValueBonus       1000
+  PowerBonus              500
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  500
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		  100
+  ChokePointBonus         500
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
+  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -643,22 +646,22 @@ GOAL_BOMBARD {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_BOMBARD
- 
-  ThreatBonus			 -100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  150
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_BOMBARD
+
+  ThreatBonus            -100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              150
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus        -100
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -679,22 +682,22 @@ GOAL_EXPEL {
   TargetOwner:Neutral
   TargetOwner:ColdEnemy
 
-  Execute	ORDER_EXPEL
- 
-  ThreatBonus			 -100
-  EnemyValueBonus		    0
-  AlliedValueBonus		   50 
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_EXPEL
+
+  ThreatBonus            -100
+  EnemyValueBonus           0
+  AlliedValueBonus         50 
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus        -100
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -713,22 +716,22 @@ GOAL_PILLAGE {
   TargetType:Improvement
   TargetOwner:HotEnemy
 
-  Execute	ORDER_PILLAGE
- 
-  ThreatBonus			  -25
-  EnemyValueBonus		   25
-  AlliedValueBonus		    0
-  PowerBonus			  100
-  DistanceToHomeBonus	 -100
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_PILLAGE
+
+  ThreatBonus             -25
+  EnemyValueBonus          25
+  AlliedValueBonus          0
+  PowerBonus              100
+  DistanceToHomeBonus    -100
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus       -1000
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -750,22 +753,22 @@ GOAL_PIRATE {
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
 
-  Execute	ORDER_INTERCEPT_TRADE
- 
-  ThreatBonus			 -100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_INTERCEPT_TRADE
+
+  ThreatBonus            -100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus       -1000
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus     0
 
   ThreatenType:Pirate
@@ -784,22 +787,22 @@ GOAL_COUNTER_STEALTH {
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
 
-  Execute	ORDER_MOVE
- 
-  ThreatBonus			 -100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_MOVE
+
+  ThreatBonus            -100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -817,23 +820,26 @@ GOAL_GOODY_HUT {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_MOVE
+  Execute   ORDER_MOVE
 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	   -5
-  DistanceToEnemyBonus	    0
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus      -5
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus   500
+  InVisionRangeBonus   500000
+  NoBarbarianBonus     500000  # Only added if InVisionRangeBonus has been added, previously.
+  CanAttackBonus       500000  # Only added if InVisionRangeBonus has been added, previously.
 
   ThreatenType:None
   ThreatenBonus 0
@@ -852,22 +858,22 @@ GOAL_PLANT_NUKE {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_PLANT_NUKE
- 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  -30
-  PowerBonus			  -30
-  DistanceToHomeBonus	   10
-  DistanceToEnemyBonus	  -1
+  Execute   ORDER_PLANT_NUKE
+
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus        -30
+  PowerBonus              -30
+  DistanceToHomeBonus      10
+  DistanceToEnemyBonus     -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -887,22 +893,22 @@ GOAL_CREATE_PARK {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_CREATE_PARK
- 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  -30
-  PowerBonus			  -30
-  DistanceToHomeBonus	   10
-  DistanceToEnemyBonus	  -1
+  Execute   ORDER_CREATE_PARK
+
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus        -30
+  PowerBonus              -30
+  DistanceToHomeBonus      10
+  DistanceToEnemyBonus     -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -924,22 +930,22 @@ GOAL_SOOTHSAY {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_SOOTHSAY
- 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_SOOTHSAY
+
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -962,23 +968,23 @@ GOAL_ESTABLISH_EMBASSY {
   TargetOwner:ColdEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_ESTABLISH_EMBASSY
- 
+  Execute   ORDER_ESTABLISH_EMBASSY
+
   // just want to establish embassy at closest city.
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	   -1
-  DistanceToEnemyBonus	    1
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus      -1
+  DistanceToEnemyBonus      1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	    -1500
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus       -1500
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -998,22 +1004,22 @@ GOAL_FRANCHISING {
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
 
-  Execute	ORDER_FRANCHISE
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			   10
-  DistanceToHomeBonus	  -10
-  DistanceToEnemyBonus	   10
+  Execute   ORDER_FRANCHISE
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus               10
+  DistanceToHomeBonus     -10
+  DistanceToEnemyBonus     10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1035,22 +1041,22 @@ GOAL_STEAL_TECHNOLOGY {
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
 
-  Execute	ORDER_STEAL_TECHNOLOGY
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	   -1
-  DistanceToEnemyBonus	    1
+  Execute   ORDER_STEAL_TECHNOLOGY
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus      -1
+  DistanceToEnemyBonus      1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1072,22 +1078,22 @@ GOAL_INVESTIGATE_CITY {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_INVESTIGATE_CITY
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_INVESTIGATE_CITY
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1107,22 +1113,22 @@ GOAL_INCITE_REVOLUTION {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_INCITE_REVOLUTION
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_INCITE_REVOLUTION
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1141,22 +1147,22 @@ GOAL_INJOIN {
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
 
-  Execute	ORDER_INJOIN
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_INJOIN
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1176,22 +1182,22 @@ GOAL_ASSASSINATE {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_ASSASSINATE
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_ASSASSINATE
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1209,23 +1215,24 @@ GOAL_UNDERGROUND_RAILWAY {
   TargetType:City
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
+  TargetOwner:NoContact
 
-  Execute	ORDER_UNDERGROUND_RAILWAY
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_UNDERGROUND_RAILWAY
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1243,22 +1250,22 @@ GOAL_NUKE_CITY {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_ATTACK
+  Execute   ORDER_ATTACK
 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  -30
-  PowerBonus			  -30
-  DistanceToHomeBonus	   10
-  DistanceToEnemyBonus	  -1
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus        -30
+  PowerBonus              -30
+  DistanceToHomeBonus      10
+  DistanceToEnemyBonus     -1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -1282,22 +1289,22 @@ GOAL_WANDER {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_MOVE
- 
-  ThreatBonus			    0
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	  -10
+  Execute   ORDER_MOVE
+
+  ThreatBonus               0
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus    -10
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus		    0
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus           0
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1317,22 +1324,22 @@ GOAL_SALLY {
   TargetType:AttackUnit
   TargetOwner:HotEnemy
 
-  Execute	ORDER_ATTACK
- 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			  100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_ATTACK
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus              100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1349,22 +1356,22 @@ GOAL_REFORM {
   TargetType:City
   TargetOwner:Self
 
-  Execute	ORDER_REFORM
- 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_REFORM
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus		    0
-  ObsoleteArmyBonus		  100
+  ChokePointBonus           0
+  UnexploredBonus           0
+  ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1382,22 +1389,22 @@ GOAL_SUE_FRANCHISE {
   TargetType:City
   TargetOwner:Self
 
-  Execute	ORDER_SUE_FRANCHISE
- 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_SUE_FRANCHISE
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1422,22 +1429,22 @@ GOAL_RETREAT {
   TargetType:City
   TargetOwner:Self
 
-  Execute	ORDER_MOVE
- 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    1
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_MOVE
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       1
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus  1000
   WoundedArmyBonus     100000
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus		    0
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus           0
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus 50000
 
   ThreatenType:None
@@ -1460,22 +1467,22 @@ GOAL_RETREAT_SPECIAL {
   TargetType:City
   TargetOwner:Self
 
-  Execute	ORDER_MOVE
- 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_MOVE
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus  1000
   WoundedArmyBonus     100000
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus		    0
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus           0
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus   100
 
   ThreatenType:None
@@ -1499,22 +1506,22 @@ GOAL_PROTECT_ENDGAME
   TargetType:Endgame
   TargetOwner:Self
 
-  Execute	ORDER_MOVE
+  Execute   ORDER_MOVE
 
-  ThreatBonus			  100
-  EnemyValueBonus		    0
-  AlliedValueBonus		   50
-  PowerBonus			 -100
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             100
+  EnemyValueBonus           0
+  AlliedValueBonus         50
+  PowerBonus             -100
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		  -10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       -10
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1538,22 +1545,22 @@ GOAL_DESTROY_ENDGAME
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_PILLAGE
- 
-  ThreatBonus			 -100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			  100
-  DistanceToHomeBonus	 -100
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_PILLAGE
+
+  ThreatBonus            -100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus              100
+  DistanceToHomeBonus    -100
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		   10
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus        10
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1575,22 +1582,22 @@ GOAL_ADVERTISING {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_ADVERTISE
- 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	  -10
-  DistanceToEnemyBonus	  100
+  Execute   ORDER_ADVERTISE
+
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus     -10
+  DistanceToEnemyBonus    100
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1611,22 +1618,22 @@ GOAL_INCITE_UPRISING {
   TargetOwner:HotEnemy
   TargetOwner:ColdEnemy
 
-  Execute	ORDER_INCITE_UPRISING
- 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_INCITE_UPRISING
+
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1646,22 +1653,22 @@ GOAL_POISON_CITY {
   TargetType:City
   TargetOwner:HotEnemy
 
-  Execute	ORDER_PLAGUE
+  Execute   ORDER_PLAGUE
 
-  ThreatBonus			  -50
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             -50
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -1684,23 +1691,23 @@ GOAL_THROW_PARTY {
   TargetOwner:ColdEnemy  //WW added
   TargetOwner:NoContact
 
-  Execute	ORDER_THROW_PARTY
+  Execute   ORDER_THROW_PARTY
  
   // just want to establish embassy at closest city.
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	   -1
-  DistanceToEnemyBonus	    1
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus      -1
+  DistanceToEnemyBonus      1
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	    -1500
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus       -1500
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1723,22 +1730,22 @@ GOAL_SUE {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_SUE
- 
-  ThreatBonus			 -100
-  EnemyValueBonus		    0
-  AlliedValueBonus		   50
-  PowerBonus			    0
-  DistanceToHomeBonus	    2
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_SUE
+
+  ThreatBonus            -100
+  EnemyValueBonus           0
+  AlliedValueBonus         50
+  PowerBonus                0
+  DistanceToHomeBonus       2
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1760,22 +1767,22 @@ GOAL_INDULGENCE {
   TargetOwner:HotEnemy
   TargetOwner:NoContact
 
-  Execute	ORDER_INDULGENCE
- 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		    0
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_INDULGENCE
+
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus          0
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1796,22 +1803,22 @@ GOAL_FAITH_HEALING {
   TargetOwner:HotEnemy
   TargetOwner:NoContact //MG added
 
-  Execute	ORDER_FAITH_HEALING
- 
-  ThreatBonus			  100
-  EnemyValueBonus		  100
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_FAITH_HEALING
+
+  ThreatBonus             100
+  EnemyValueBonus         100
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  100
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus         100
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:SpecialAttackCity
@@ -1828,22 +1835,22 @@ GOAL_REFUEL {
   TargetType:City // Needs to be replaced by CanRefuel
   TargetOwner:Self
 
-  Execute	ORDER_REFUEL
- 
-  ThreatBonus			    0
-  EnemyValueBonus		    0
-  AlliedValueBonus		  100
-  PowerBonus			    0
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_REFUEL
+
+  ThreatBonus               0
+  EnemyValueBonus           0
+  AlliedValueBonus        100
+  PowerBonus                0
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     100000
   NotVisibleBonus           0
-  ChokePointBonus		    0
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		    0
+  ChokePointBonus           0
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
   ThreatenType:None
@@ -1864,22 +1871,22 @@ GOAL_PARADROP {
   TargetType:Improvement
   TargetOwner:HotEnemy
 
-  Execute	ORDER_PARADROP
- 
-  ThreatBonus			  500
-  EnemyValueBonus		 -500
-  AlliedValueBonus		 1000
-  PowerBonus			  500
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  Execute   ORDER_PARADROP
+
+  ThreatBonus             500
+  EnemyValueBonus        -500
+  AlliedValueBonus       1000
+  PowerBonus              500
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		  500
-  UnexploredBonus	  -999999
-  ObsoleteArmyBonus		  100
+  ChokePointBonus         500
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
@@ -1902,25 +1909,23 @@ GOAL_RANGED_ATTACK {
   TargetOwner:HotEnemy
   TargetOwner:ColdEnemy
 
+  Execute   ORDER_RANGED_ATTACK
 
-
-  Execute	ORDER_RANGED_ATTACK
- 
-  ThreatBonus		  500
-  EnemyValueBonus		 -250
-  AlliedValueBonus		 1000
-  PowerBonus			15000
-  DistanceToHomeBonus	    0
-  DistanceToEnemyBonus	    0
+  ThreatBonus             500
+  EnemyValueBonus        -250
+  AlliedValueBonus       1000
+  PowerBonus            15000
+  DistanceToHomeBonus       0
+  DistanceToEnemyBonus      0
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
   NotVisibleBonus           0
-  ChokePointBonus		   50
-  UnexploredBonus	         -999999
-  ObsoleteArmyBonus		    100
-  TreaspassingArmyBonus	  0
+  ChokePointBonus          50
+  UnexploredBonus     -999999
+  ObsoleteArmyBonus       100
+  TreaspassingArmyBonus     0
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000

@@ -49,6 +49,7 @@
 // - If a unit dies it now uses the value of LaunchPollution if present
 //   to pollute the environment, instead of using a value of 1. (9-Jun-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -445,6 +446,16 @@ bool Unit::IsIgnoresZOC() const
 	return GetDBRec()->GetIgnoreZOC();
 }
 
+bool Unit::IsInVisionRange(MapPoint &pos) const
+{
+	MapPoint here;
+	GetPos(here);
+	double distance    = MapPoint::GetSquaredDistance(here, pos);
+	double visionRange = GetVisionRange();
+
+	return distance <= visionRange;
+}
+
 bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 {
 	size_t  distance    = DISTANCE_NOT_ON_MAP;
@@ -452,21 +463,21 @@ bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 	GetPos(center);
 	CircleIterator it(center, searchRadius, GetVisionRange());
 	for (it.Start(); !it.End(); it.Next()) 
-    {
+	{
 		if (    !g_player[GetOwner()]->IsExplored(it.Pos()) 
-             && GetArmy()->CanEnter(it.Pos())
-             && g_theWorld->IsOnSameContinent(it.Pos(), center)
-           )
-        {
-            size_t  target_distance = static_cast<size_t>
-                (MapPoint::GetSquaredDistance(center, it.Pos()));
+		     && GetArmy()->CanEnter(it.Pos())
+		     && g_theWorld->IsOnSameContinent(it.Pos(), center)
+		   )
+		{
+			size_t  target_distance = static_cast<size_t>
+			    (MapPoint::GetSquaredDistance(center, it.Pos()));
 
-            if (target_distance < distance)
-            {
-                distance    = target_distance;
-                pos         = it.Pos();
-            }
-        }
+			if (target_distance < distance)
+			{
+				distance    = target_distance;
+				pos         = it.Pos();
+			}
+		}
 	}
 
 	return distance < DISTANCE_NOT_ON_MAP;
@@ -474,21 +485,21 @@ bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
 
 bool Unit::NearestFriendlyCity(MapPoint &p) const
 {
-    size_t	    closest_distance = DISTANCE_NOT_ON_MAP;
+	size_t	    closest_distance = DISTANCE_NOT_ON_MAP;
 	MapPoint    unit_pos;
 	GetPos(unit_pos);
 	p = unit_pos;
 
-    MapPoint    city_pos;
+	MapPoint    city_pos;
 	int const   n = g_player[GetOwner()]->m_all_cities->Num();
 
 	for (int i = 0; i < n; i++)
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-        size_t d = std::max(abs(city_pos.x - unit_pos.x), 
-                            abs(city_pos.y - unit_pos.y)
-                           );
+		size_t d = std::max(abs(city_pos.x - unit_pos.x), 
+		                    abs(city_pos.y - unit_pos.y)
+		                   );
 		if (d < closest_distance)
 		{
 			closest_distance = d;
@@ -508,14 +519,14 @@ bool Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 	GetPos(unit_pos);
 	p = unit_pos;
 
-    MapPoint    city_pos;
+	MapPoint    city_pos;
 	int const   n = g_player[GetOwner()]->m_all_cities->Num();
-    bool const  testWaterMove   = 
-        army.IsValid() &&
-		(army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater()); 
+	bool const  testWaterMove   = 
+	    army.IsValid() &&
+	   (army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater()); 
 
 	for (int i = 0; i < n; i++)	
-    {
+	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 		
 		if (g_theWorld->GetCell(city_pos)->GetNumUnits() + needRoom > k_MAX_ARMY_SIZE)

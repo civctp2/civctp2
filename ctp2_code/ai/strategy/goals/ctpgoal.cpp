@@ -41,14 +41,14 @@
 // - Correct the determination of Empire Center and foreign Empire center - Calvitix
 // - Invalid goals if in territory with nontrespassing treaty - Calvitix
 // - Allow incursion permission to stealth units
-// - Rollback the determination of check_dest (problem with special units that couldn't find 
+// - Rollback the determination of check_dest (problem with special units that couldn't find
 //   their path to goal anymore
-// - Added other conditions to determine the RETREAT goals (and set max of 2 units per city 
+// - Added other conditions to determine the RETREAT goals (and set max of 2 units per city
 //   for that goals, hardcoded (to not depend on threat)
 // - Forbid to army with settlers to perform ATTACK or SEIGE goals
 // - Allow Units that are grouping to both move (if they are far enough)
-// - Corrected condition to give unowned bonus in Compute_Raw_Priority, now it is 
-//   given if the according territory has owner -1 instead of 0 
+// - Corrected condition to give unowned bonus in Compute_Raw_Priority, now it is
+//   given if the according territory has owner -1 instead of 0
 //   - Feb. 21st 2005 Martin Gühmann
 // - Removed unnecessary reinitialization in Compute_Needed_Troop_Flow for trade
 //   routes and tileimps. - Feb. 21st 2005 Martin Gühmann
@@ -57,6 +57,10 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added checks and Asserts to try to prevent crashes.
 // - Improved AI debug goal report. (Jan 2nd 2007 Martin Gühmann)
+// - Matching value computation now uses the distance measurement from CTPAgent. (25-Jan-2008 Martin Gühmann)
+// - Added goody hut goal bonuses, so that there is a bonus if a goody hut is
+//   in vision range of the agent and whether there could Barbarians pop up from
+//   the goody hut and the goody hut opeing army can defend against such Barbarians. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -88,12 +92,7 @@
 #include "terrainutil.h"
 #include "WonderRecord.h"
 #include "advanceutil.h"
-
-
-
-
-
-
+#include "Barbarians.h"
 
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
 extern MapPoint                 g_mp_size;
@@ -637,24 +636,22 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 	if (ctpagent_ptr->Get_Is_Dead())
 	{
-		return BAD_UTILITY;
+		return Goal::BAD_UTILITY;
 	}
 
 	MapPoint dest_pos = Get_Target_Pos(ctpagent_ptr->Get_Army());
 
 	if (!Pretest_Bid(ctpagent_ptr, dest_pos))
 	{
-		return BAD_UTILITY;
+		return Goal::BAD_UTILITY;
 	}
 
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 
-
 	if( target_owner > 0 &&
 		(!diplomat.IncursionPermission(target_owner)))
 	{
-		
 		bool isspecial, cancapture, haszoc, canbombard;
 		bool isstealth;
 		sint32 maxattack, maxdefense;
@@ -667,20 +664,16 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 			canbombard);
 		if (!isspecial || maxattack > 0 || haszoc)
 		{
-			return BAD_UTILITY;
+			return Goal::BAD_UTILITY;
 		}
 	}
-
 
 	sint8 new_garrison = 0;
 	double new_garrison_strength = 0.0;
 	if (NeededForGarrison(ctpagent_ptr, dest_pos, new_garrison, new_garrison_strength))
 	{
-		return BAD_UTILITY;
+		return Goal::BAD_UTILITY;
 	}
-
-
-
 
 	sint32 transports, max,empty;
 	if (m_current_needed_strength.Get_Transport() > 0 &&
@@ -702,14 +695,13 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 		dest_pos = target_agent_ptr->Get_Pos();
 	}
-	
-	
+
 	Utility bonus = 0;
 
 	//Set if unit is wounded and it is a retreat of defense goal, add bonus 
 	//to goalpriority + matching
 
-	MapPoint armyPos = ctpagent_ptr->Get_Pos();	
+	MapPoint armyPos = ctpagent_ptr->Get_Pos();
 	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
 
 	if(g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity() 
@@ -726,7 +718,6 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		){
 			bonus+= g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 		}
-		
 	}
 	else if((g_theGoalDB->Get(m_goal_type)->GetTargetOwnerColdEnemy()
 	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetOwnerHotEnemy())
@@ -734,18 +725,20 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity())
 	     ){  //For Attack goals (unit or city)
 
-		if(ctpagent_ptr->Get_Army()->IsWounded() && !ctpagent_ptr->Get_Army()->IsObsolete()){
-				bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
+		if(ctpagent_ptr->Get_Army()->IsWounded() && !ctpagent_ptr->Get_Army()->IsObsolete())
+		{
+			bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
 		}
-		if(PosOwner != m_playerId && !diplomat.IncursionPermission(PosOwner)){
+		if(PosOwner != m_playerId && !diplomat.IncursionPermission(PosOwner))
+		{
 			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 		}
-		if(ctpagent_ptr->Get_Army()->CanSettle()){
-			// If there is a settler in the army... 
+		if(ctpagent_ptr->Get_Army()->CanSettle())
+		{
+			// If there is a settler in the army...
 			bonus = BAD_UTILITY;
 		}
 	}
-
 
 #if defined(_DEBUG)  // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_wounded = bonus;
@@ -757,45 +750,55 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 #if defined(_DEBUG)  // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_obsolete = bonus - report_wounded;
 #endif //_DEBUG
-	
-	double min_move;
-	double squared_distance = MapPoint::GetSquaredDistance(ctpagent_ptr->Get_Pos(), dest_pos);
-	ctpagent_ptr->Get_Army().MinMovementPoints(min_move);
-	double cell_dist = sqrt(squared_distance);
-	double eta = (cell_dist * 100) / min_move;
 
+	sint32 squared_distance = 0;
+	double eta = ctpagent_ptr->GetRoundsPrecise(dest_pos, squared_distance);
+	double cell_dist = sqrt(squared_distance);
 
 	Utility raw_priority = Get_Raw_Priority();
 
-	
 	if (g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus() > 0)
 	{
 		PLAYER_INDEX pos_owner = g_theWorld->GetCell(ctpagent_ptr->Get_Pos())->GetOwner();
-// Added by Calvitix
+
 		bool incursion_permissin = Diplomat::GetDiplomat(m_playerId).IncursionPermission(pos_owner);
 		if (pos_owner >= 0 && !(incursion_permissin))
 		{
 			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
-
 		}
 	}
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
-            double report_Treaspassing = bonus - report_obsolete;
+	double report_Treaspassing = bonus - report_obsolete;
 #endif //_DEBUG
 
-    
-    
 	sint32 distance_modifier;
 	strategy.GetDistanceModifierFactor(distance_modifier);
 	Utility time_term = static_cast<Utility>( (eta * distance_modifier) + cell_dist);
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
-            double report_time_term = time_term;
+	double report_time_term = time_term;
 #endif //_DEBUG
-	
+
+	if (ctpagent_ptr->Get_Army()->IsInVisionRangeAndCanEnter(dest_pos))
+	{
+		/// @ToDo: Use the actual path cost, to check whether the goody hut really so close.
+		bonus += g_theGoalDB->Get(m_goal_type)->GetInVisionRangeBonus();
+
+		if (!Barbarians::InBarbarianPeriod())
+		{
+			bonus += g_theGoalDB->Get(m_goal_type)->GetNoBarbarianBonus();
+		}
+		else if ((ctpagent_ptr->Get_Squad_Class() & k_Goal_SquadClass_CanAttack_Bit) != 0x0)
+		{
+			bonus += g_theGoalDB->Get(m_goal_type)->GetCanAttackBonus();
+		}
+	}
+#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
+	double report_InVisionRange  = bonus - report_Treaspassing;
+	double report_NoBarbsPresent = bonus - report_InVisionRange;
+#endif //_DEBUG
+
 	if (!ctpagent_ptr->Get_Army()->HasCargo())
 	{
-		
-		
 		sint32 army_cont, goal_cont;
 		bool is_land;
 		g_theWorld->GetContinent(dest_pos, goal_cont, is_land);
@@ -804,19 +807,15 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 			(ctpagent_ptr->Get_Army()->GetMovementTypeAir() == FALSE) &&
 			g_player[m_playerId]->GetCargoCapacity() <= 0)
 		{
-			
-			
-			
-			
 			return Goal::BAD_UTILITY;
 		}
 	}
 
 	Utility match = bonus + time_term + raw_priority;
-	
+
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
-	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8d \n",
+	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8d,\t%8d,\t%8d \n",
 	this,                                          // This goal
 	ctpagent_ptr,                                  // The agent
 	ctpagent_ptr->Get_Pos().x,                     // Agent pos.x
@@ -827,12 +826,14 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	match,                                         // Computed match value
 	raw_priority,                                  // Raw match value
 	cell_dist,                                     // Distance to target (Quare rooted quare distance), not identical with path distance
-	eta,                                           //
-	bonus,                                         //
-	report_wounded,                                //
-	report_obsolete,                               //
-	report_Treaspassing,                           //
-	time_term));                                   //
+	eta,                                           // Rounds to target
+	bonus,                                         // Total bonus
+	report_wounded,                                // Whether there wounded units
+	report_obsolete,                               // Whether there are obselete units
+	report_Treaspassing,                           // Whether we are treaspassing
+	time_term,                                     // Time needed to goal, if we would follow a bee line
+	report_InVisionRange,                          // In vision range bonus
+	report_NoBarbsPresent));                       // If no Barbarian are present bonus
 #endif //_DEBUG
 
 	return match;
@@ -948,11 +949,11 @@ Utility CTPGoal::Compute_Raw_Priority()
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
 	}
-	double maxPower = static_cast<double>(map.GetMaxPower(m_playerId));
+	double maxPower = static_cast<double>(map.GetMaxPower(m_playerId)); // Get Max Power of all Allies
 	if (maxPower > 0)
 	{
 		cell_value += 
-		( ( static_cast<double>(map.GetPower( m_playerId, target_pos)) /
+		( ( static_cast<double>(map.GetPower( m_playerId, target_pos)) /  // Allies' Power at target_pos
 		    maxPower ) * 
 		goal_rec->GetPowerBonus() );
 
@@ -1063,7 +1064,6 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 	m_raw_priority = (Utility) cell_value + threaten_bonus;
 
-	
 	Assert(m_raw_priority < Goal::MAX_UTILITY);
 	Assert(m_raw_priority >= Goal::BAD_UTILITY);
 	if (m_raw_priority > Goal::MAX_UTILITY)
@@ -1114,7 +1114,7 @@ GOAL_RESULT CTPGoal::Execute_Task()
 	if (!Can_Be_Executed())
 		return GOAL_ALREADY_MOVED;
 
-    Assert(m_agents.begin() != m_agents.end());
+	Assert(m_agents.begin() != m_agents.end());
 	
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *m_agents.begin();
 	MapPoint goto_pos = Get_Target_Pos(ctpagent_ptr->Get_Army());
@@ -1130,14 +1130,14 @@ GOAL_RESULT CTPGoal::Execute_Task()
 	// more than 2/3 left, if more than 8 units).
 	bool hastogowithoutgrouping = (goal_record->GetNeverSatisfied() && ctpagent_ptr->GetRounds(goto_pos,cells) <= 1)
 		                          && m_current_attacking_strength.Get_Agent_Count() > (2*k_MAX_ARMY_SIZE/3);
-    if (Is_Satisfied() || Is_Execute_Incrementally() || hastogowithoutgrouping) 
-    {
+	if (Is_Satisfied() || Is_Execute_Incrementally() || hastogowithoutgrouping) 
+	{
 		if (goal_record->GetRallyFirst()) 
 		{
 			if ( !RallyComplete() )
-            {
-                Set_Sub_Task(SUB_TASK_RALLY);
-            }
+			{
+				Set_Sub_Task(SUB_TASK_RALLY);
+			}
 			
 			if (Goal_Too_Expensive())
 				return GOAL_FAILED;
@@ -1181,12 +1181,12 @@ GOAL_RESULT CTPGoal::Execute_Task()
 				}
 		}
 /*		else
-        {
-            Set_Sub_Task(SUB_TASK_GOAL);
-        }*/
+		{
+			Set_Sub_Task(SUB_TASK_GOAL);
+		}*/
 
 		Agent_List::iterator agent_iter;
-        for (agent_iter = m_agents.begin(); agent_iter != m_agents.end();agent_iter++) 
+		for (agent_iter = m_agents.begin(); agent_iter != m_agents.end();agent_iter++) 
 		{
 			ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
 
@@ -1203,29 +1203,26 @@ GOAL_RESULT CTPGoal::Execute_Task()
 				else
 					return GOAL_FAILED;
 			}
-		} 
-    } 
+		}
+	}
 	
-    return GOAL_IN_PROGRESS;
-} 
+	return GOAL_IN_PROGRESS;
+}
 
 
 bool CTPGoal::Get_Totally_Complete() const
 {
-	
 	if (Get_Invalid())
 		return true;
 
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
-    Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
+	Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 	MapPoint target_pos = Get_Target_Pos();
 
 	Player *player_ptr = g_player[ m_playerId ];
 	Assert(player_ptr != NULL);
 
-	
-	
 	if (m_playerId > 0 && target_owner > 0 && goal_record->HasTargetProtectionWonder())
 	{
 		const WonderRecord *wonder_rec = goal_record->GetTargetProtectionWonderPtr();
@@ -1237,12 +1234,10 @@ bool CTPGoal::Get_Totally_Complete() const
 			return true;
 	}
 
-	
 	if (MapAnalysis::GetMapAnalysis().PlayerCanEnter(m_playerId, target_pos) == false)
 		return true;
 
-	
-	bool isspecial; 
+	bool isspecial;
 	bool isstealth = false;
 	sint32 maxattack = 0;
 	bool iscivilian = false;
@@ -1366,17 +1361,17 @@ bool CTPGoal::Get_Totally_Complete() const
 				 diplomat.GetPersonality()->GetAlignmentNeutral()))
 				 && !goal_record->GetSquadClassStealth())
 			{
-                AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-                ("GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+				    ("GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
 				return true;
 			}
 
 
 			if ( diplomacy_match == false )
 			{
-                          AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-                ("GOAL %x (%s) (%3d,%3d): Diplomacy match failed.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
-                
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+				    ("GOAL %x (%s) (%3d,%3d): Diplomacy match failed.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
+
 				return true;
 			}
 		}
@@ -1384,8 +1379,8 @@ bool CTPGoal::Get_Totally_Complete() const
 		{
 			
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-            ("GOAL %x (%s) (%3d,%3d): Target owner not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
-            
+			    ("GOAL %x (%s) (%3d,%3d): Target owner not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
+
 
 			
 			return true;
@@ -1437,9 +1432,9 @@ bool CTPGoal::Get_Totally_Complete() const
 	
 	if (g_player[m_playerId]->GetGold() < order_record->GetGold())
 	{
-            AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-        ("GOAL %x (%s): Not enough gold to perform goal.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
-        
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+		    ("GOAL %x (%s): Not enough gold to perform goal.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+
 		return true;
 	}
 
@@ -1620,7 +1615,7 @@ bool CTPGoal::Get_Invalid() const
 	if(goal_record->GetTargetTypeAttackUnit()
 	|| goal_record->GetTargetTypeSpecialUnit()
 	){
-		if(g_theArmyPool->IsValid(m_target_army) == FALSE)
+		if(!g_theArmyPool->IsValid(m_target_army))
 			return true;
 		else if(m_target_army->Num() == 0)
 			return true;
@@ -1633,7 +1628,7 @@ bool CTPGoal::Get_Invalid() const
 	|| goal_record->GetTargetTypeTradeRoute()
 	|| goal_record->GetTargetTypeImprovement()
 	){
-		if(g_theUnitPool->IsValid(m_target_city) == FALSE)
+		if(!g_theUnitPool->IsValid(m_target_city))
 			return true;
 
 		CityData *city = m_target_city->GetCityData();
@@ -1655,20 +1650,20 @@ bool CTPGoal::Get_Invalid() const
 	
 	if(goal_record->GetTargetTypeEndgame())
 	{
-		return(terrainutil_HasEndgame( Get_Target_Pos() ) == false);
+		return(!terrainutil_HasEndgame( Get_Target_Pos() ));
 	}
 
 	if (goal_record->GetTargetTypeUnexplored() )
-		return(g_player[m_playerId]->IsExplored(Get_Target_Pos()) == TRUE);
+		return(g_player[m_playerId]->IsExplored(Get_Target_Pos()));
 	
 	
 	if(goal_record->GetTargetTypeSettleLand()
 	|| goal_record->GetTargetTypeSettleSea()
 	){
-		if(SettleMap::s_settleMap.CanSettlePos(Get_Target_Pos()) == false)
+		if(!SettleMap::s_settleMap.CanSettlePos(Get_Target_Pos()))
 			return true;
 
-		if(g_theWorld->HasCity( Get_Target_Pos()))
+		if(g_theWorld->HasCity(Get_Target_Pos()))
 			return true;
 	}
 
@@ -1693,7 +1688,7 @@ bool CTPGoal::Get_Invalid() const
 				 &&  city->GetOwner() == m_playerId)
 				return true;
 		}
-//		else if(g_theArmyPool->IsValid(m_target_army)){ // Aircraft caries are missing
+//		else if(g_theArmyPool->IsValid(m_target_army)){ // Aircraft carriers are missing
 //			return Cannot carry aircrafts;
 //		}
 		return !g_theWorld->IsAirfield(Get_Target_Pos());
@@ -1704,7 +1699,7 @@ bool CTPGoal::Get_Invalid() const
 
 
 bool CTPGoal::Get_Removal_Time() const
-{ 
+{
 	if ( Get_Invalid() ||
 		 (g_theGoalDB->Get(m_goal_type)->GetRemoveWhenComplete() && 
 		  Get_Totally_Complete() ) )
@@ -1722,7 +1717,6 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr) const
 
 bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos) const
 {
-    
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
 	const Army & army = ctpagent_ptr->Get_Army();
 	
@@ -1969,9 +1963,9 @@ bool CTPGoal::NeededForGarrison(CTPAgent_ptr army,
 	sint32 total_value;
 	
 	
-	if (((army->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit) != 0x0 ) &&
-		((army->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit) == 0x0 ) &&
-		((army->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 ) )
+	if (((army->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit   ) != 0x0 ) &&
+		((army->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
+		((army->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 ))
 	{
 		army->Get_Army()->GetArmyStrength(hp,
 			defense_count,
@@ -2237,7 +2231,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 	case SUB_TASK_TRANSPORT_TO_BOARD:
 		
 		check_dest = false;
-        dest_pos = the_army->Get_Pos(); 
+		dest_pos = the_army->Get_Pos();
 
 		
 		if (the_transport->Get_Army()->CheckValidDestination(dest_pos))
@@ -2245,23 +2239,23 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 		
 		
-        move_intersection = 
+		move_intersection = 
 			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 		
-        
-        found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
+
+		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
 
 		if (!found)
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_transport->Get_Army().m_id,
-                    ("GOAL %x (%d):GotoTransportTaskSolution:: No path found from army to destination (x=%d,y=%d) (SUB_TASK_TRANSPORT_TO_BOARD):",
-                    this, m_goal_type, dest_pos.x, dest_pos.y));
+			        ("GOAL %x (%d):GotoTransportTaskSolution:: No path found from army to destination (x=%d,y=%d) (SUB_TASK_TRANSPORT_TO_BOARD):",
+			        this, m_goal_type, dest_pos.x, dest_pos.y));
 			the_transport->Log_Debug_Info(k_DBG_SCHEDULER);
-                    uint8 magnitude = 220;
-                    MBCHAR * myString = new MBCHAR[40];
-                    sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
-                    g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
-                    delete[] myString;
+			        uint8 magnitude = 220;
+			        MBCHAR * myString = new MBCHAR[40];
+			        sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
+			        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude);
+			        delete[] myString;
 		}
 		
 		
@@ -2780,7 +2774,7 @@ bool CTPGoal::RallyTroops()
 			if(!g_theWorld->GetCity(closest_agent_pos).IsValid() 
 			||  ctpagent1_ptr->GetRounds(closest_agent_pos, cells) > 2
 			){
-				if (GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY) == false)
+				if (!GotoGoalTaskSolution(ctpagent1_ptr, closest_agent_pos, SUB_TASK_RALLY))
 					return false;
 			}
 			else
@@ -3067,9 +3061,9 @@ bool CTPGoal::ArmiesAtGoal() const
 		 ++agent_iter) {
 			
 			ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
-            if (ctpagent_ptr->Get_Pos() != pos)
+			if (ctpagent_ptr->Get_Pos() != pos)
 				return false;
-    } 
+	}
 
 	return true;
 }
@@ -3090,7 +3084,7 @@ sint32 CTPGoal::GetThreatenBonus() const
 	{
 	
 	
-    case k_Goal_ThreatenType_DestroyCity_Bit:
+	case k_Goal_ThreatenType_DestroyCity_Bit:
 		if (diplomat.HasThreat(target_owner, THREAT_DESTROY_CITY, tmp_threat))
 		{
 			
@@ -3102,10 +3096,9 @@ sint32 CTPGoal::GetThreatenBonus() const
 	return 0;
 }
 
-
 bool CTPGoal::Goal_Too_Expensive() const
 {
-	return (m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE) 
+    return (m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE) 
         && (m_current_attacking_strength.Get_Value() > 
                 m_current_needed_strength.Get_Value() * 3
            );

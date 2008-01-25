@@ -38,6 +38,7 @@
 // - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 // - Modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
+// - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -284,6 +285,7 @@ public:
 	sint32 GetType() const;
 	
 	const MBCHAR * GetName() const;
+	bool IsInVisionRange(MapPoint &pos) const;
 	bool NearestUnexplored(sint32 searchRadius, MapPoint &pos) const;
 	bool NearestFriendlyCity(MapPoint &c) const;
 	bool NearestFriendlyCity(Unit &u) const;

@@ -33,6 +33,7 @@
 // - Added Cleanup. (Sep. 25th 2005 Martin Gühmann)
 // - Moved the upgrade stuff into its own methods, however more work is needed.
 //   (Dec 24th 2006 Martin Gühmann)
+// - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -184,6 +185,7 @@ public:
     void GroupAllUnits();
     void GroupUnit(Unit unit);
     void UngroupUnits();
+    void RemainNumUnits(sint32 remain);
 
     void FastKill();
 
@@ -368,6 +370,7 @@ public:
 
     bool IsOccupiedByForeigner(const MapPoint &pos);
 
+    sint32 NumUnitsCanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports) const;
     sint32 NumUnitsCanMoveIntoThisTransport(const CellUnitList &transports) const;
     bool CanMoveIntoTransport(const MapPoint &pos, CellUnitList &transports) const;
     bool CanMoveIntoThisTransport(const CellUnitList &transports) const;
@@ -605,7 +608,9 @@ public:
     void CheckMineField();
     bool CheckSink();
     void BarbarianSpawning();
-	bool HasElite() const;
+    bool HasElite() const;
+    bool IsInVisionRangeAndCanEnter(MapPoint &pos) const;
+
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;

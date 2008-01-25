@@ -70,6 +70,8 @@
 //   depending on NoRollback flag.
 // - Prevented crashes, and cleaned up the code somewhat.
 // - Deferred some derefences until used (hopefully preventing crashes).
+// - Restored old plan sorting and added a bonus for goals which may need many
+//   units. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -213,7 +215,7 @@ Plan::~Plan()
 //----------------------------------------------------------------------------
 bool Plan::operator < (Plan const & plan) const
 {
-#if 0
+#if 1
     // Matching value is based on the average match value per agent.
     return m_matching_value < plan.m_matching_value;
 #else
@@ -327,14 +329,15 @@ Utility Plan::Compute_Matching_Value()
 
 	if (found_agents > 0)
 	{
-		m_matching_value = accumulated_matching_value / found_agents;
+		m_matching_value  = accumulated_matching_value / found_agents;
+		m_matching_value += g_theGoalDB->Get(m_the_goal->Get_Goal_Type())->GetUnitCountBonus() * (found_agents - 1);
 		m_matches.sort(std::greater<Agent_Match>());
 	}
 	else
 	{
 		m_matching_value = Goal::BAD_UTILITY;
 	}
-	
+
 	return m_matching_value;
 }
 

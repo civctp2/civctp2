@@ -71,17 +71,17 @@ bool CellUnitList::Insert(Unit id)
 }
 
 bool CellUnitList::CanEnter(const MapPoint &point) const
-{   //emod?
+{	//emod?
 	//TODO - add impassable terrain
 	//TODO - add impassable tileimp
-    /// @todo Check next if: ghost army?
+	/// @todo Check next if: ghost army?
 	if (m_nElements < 1) {
 		
 		return true;
 	}
 
 	Cell * cell = g_theWorld->GetCell(point);
-      if (!cell) return false;
+	if (!cell) return false;
 
 	if (cell->GetCity().IsValid() &&
 	   cell->GetCity().GetOwner() == m_array[0].GetOwner()) {

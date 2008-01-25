@@ -34,6 +34,7 @@
 // - Added but not implemented AddInsurgent Code it maynot be necessary
 // - Added but outcommented Barbarian Special Forces difficulty code
 // - added outcomment for disaster/random event code
+// - Standardizes in Babarian period computation. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -64,22 +65,20 @@ extern World *g_theWorld;
 extern ProfileDB *g_theProfileDB;
 extern TurnCount *g_turn;
 
-struct BestUnit {
+struct BestUnit
+{
 	sint32 index;
 	sint32 attack;
 };
 
-BOOL SomeoneCanHave(const UnitRecord *rec)
+bool SomeoneCanHave(const UnitRecord *rec)
 {
-	sint32 p;
-
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		
-		
+	for(sint32 p = 0; p < k_MAX_PLAYERS; p++)
+	{
 		if(g_player[p] && g_player[p]->m_advances->HasAdvance(rec->GetEnableAdvanceIndex()))
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 /*
@@ -128,9 +127,6 @@ sint32 Barbarians::ChooseUnitType()
 			continue;
 		if(rec->GetNoBarbarian())
 			continue;
-	
-		
-		
 
 		if(SomeoneCanHave(rec)) {
 			for(j = 0; j < num_best_units; j++) {
@@ -168,28 +164,25 @@ sint32 Barbarians::ChooseUnitType()
 	return ret;
 }
 
-BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
-							   BOOL fromGoodyHut)
+bool Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
+                               bool fromGoodyHut)
 {
 	//add spontaneous barb bool?
 	//add bools for barbarian spawn?
 	//and sint for # of barbs if all bools are false?
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
-		return FALSE;
+		return false;
 
-
-	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
-	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
-		return FALSE;
-	}
+	if(!InBarbarianPeriod())
+		return false;
 
 	sint32 unitIndex = Barbarians::ChooseUnitType();
 
-	if(unitIndex < 0) return FALSE;
+	if(unitIndex < 0) return false;
 
 	sint32 d;
 	MapPoint neighbor;
-	BOOL tried[NOWHERE];
+	bool tried[NOWHERE];
 	sint32 triedCount = 0;
 
 	sint32 maxBarbarians;
@@ -201,7 +194,7 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 
 	sint32 count = 0;
 	for(d = sint32(NORTH); d < sint32(NOWHERE); d++) {
-		tried[d] = FALSE;
+		tried[d] = false;
 	}
 
 	for(count = 0; count < maxBarbarians && triedCount < 8;) {
@@ -212,7 +205,7 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 				use = NORTH;
 		}
 	
-		tried[use] = TRUE;
+		tried[use] = true;
 		triedCount++;
 		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
 			if(g_theWorld->IsLand(neighbor) &&
@@ -265,9 +258,6 @@ sint32 Barbarians::ChooseSeaUnitType()
 			continue;
 		if(rec->GetNoBarbarian())
 			continue;
-	
-		
-		
 
 		if(SomeoneCanHave(rec)) {
 			for(j = 0; j < num_best_units; j++) {
@@ -306,25 +296,22 @@ sint32 Barbarians::ChooseSeaUnitType()
 }
 
 //EMOD to add sea barbarians
-BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,  
-							   BOOL fromGoodyHut)
+bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,  
+                            bool fromGoodyHut)
 {
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
-		return FALSE;
+		return false;
 
-
-	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
-	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
-		return FALSE;
-	}
+	if(!InBarbarianPeriod())
+		return false;
 
 	sint32 unitIndex = Barbarians::ChooseSeaUnitType();
 
-	if(unitIndex < 0) return FALSE;
+	if(unitIndex < 0) return false;
 
 	sint32 d;
 	MapPoint neighbor;
-	BOOL tried[NOWHERE];
+	bool tried[NOWHERE];
 	sint32 triedCount = 0;
 
 	sint32 maxBarbarians;
@@ -336,7 +323,7 @@ BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 
 	sint32 count = 0;
 	for(d = sint32(NORTH); d < sint32(NOWHERE); d++) {
-		tried[d] = FALSE;
+		tried[d] = false;
 	}
 
 	for(count = 0; count < maxBarbarians && triedCount < 8;) {
@@ -347,7 +334,7 @@ BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 				use = NORTH;
 		}
 	
-		tried[use] = TRUE;
+		tried[use] = true;
 		triedCount++;
 		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
 			if(g_theWorld->IsWater(neighbor) &&
@@ -440,7 +427,7 @@ BOOL Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 }
 
 //EMOD to add special guerrilla barbarians; because guerrillas may go obsolete for normal players.  Eventually add this to insurgent code in citydata. but is it needed?
-BOOL Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,  
+bool Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,  
 							   BOOL fromGoodyHut)
 {
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
@@ -501,7 +488,7 @@ BOOL Barbarians::AddInsurgents(const MapPoint &point, PLAYER_INDEX meat,
 }
 
 
-BOOL Barbarians::AddFreeTraders(const MapPoint &point, PLAYER_INDEX meat,  
+bool Barbarians::AddFreeTraders(const MapPoint &point, PLAYER_INDEX meat,  
 							   BOOL fromGoodyHut)   //code for a random free trade unit that acts as a corporation?
 
 
@@ -510,9 +497,10 @@ BOOL Barbarians::AddFreeTraders(const MapPoint &point, PLAYER_INDEX meat,
 
 void Barbarians::BeginYear()
 {
-	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	if(g_turn->GetRound() < risk->GetBarbarianFirstTurn())
+	if(!InBarbarianPeriod())
 		return;
+
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
 	if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
 /// @todo Refactor this (extract functions/methods) to make the code cleaner.
@@ -604,4 +592,12 @@ void Barbarians::BeginYear()
 //end EMOD
 		
 	}
+}
+
+bool Barbarians::InBarbarianPeriod()
+{
+	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+
+	return g_turn->GetRound() >= risk->GetBarbarianFirstTurn() // First turn is included.
+	    && g_turn->GetRound() <= risk->GetBarbarianLastTurn(); // Last turn is included, too.
 }

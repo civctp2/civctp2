@@ -128,7 +128,7 @@ Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 sint32 Squad_Strength::Get_Agent_Count() const
 {
 	return m_agent_count;
-} 
+}
 
 
 void Squad_Strength::Set_Agent_Count(const sint32 & count)

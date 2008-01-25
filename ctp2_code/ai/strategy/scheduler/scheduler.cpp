@@ -1262,40 +1262,40 @@ bool Scheduler::Prune_Goals()
 			 goal_ptr_iter != m_goals_of_type[goal_type].end();
 			 goal_ptr_iter++
 		){
-			 if (count == 0)
-			 {
-				 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n\n"));
-				 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
-				 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n", 
-					 g_theGoalDB->Get(goal_type)->GetNameText(),
-					 goal_type));
-				 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-					 ("\t// max eval = %3.2f, max_exec = %3.2f", 
-					 goal_element_ptr->GetMaxEval(),
-					 goal_element_ptr->GetMaxExec()));
-				 if (goal_element_ptr->GetExecPerCity())
-					 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-					 (" (ExecPerCity)"));
-				 if (goal_element_ptr->GetEvalPerCity())
-					 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-					 (" (EvalPerCity)"));
-				 if (goal_element_ptr->GetPerCity())
-					 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-					 (" (PerCity)"));
-				 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-					 ("\n"));
-				 AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
-					 ("\t//\n\n"));
-			 }
+			if (count == 0)
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n\n"));
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n", 
+					g_theGoalDB->Get(goal_type)->GetNameText(),
+					goal_type));
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					("\t// max eval = %3.2f, max_exec = %3.2f",
+					goal_element_ptr->GetMaxEval(),
+					goal_element_ptr->GetMaxExec()));
+				if (goal_element_ptr->GetExecPerCity())
+					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					(" (ExecPerCity)"));
+				if (goal_element_ptr->GetEvalPerCity())
+					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					(" (EvalPerCity)"));
+				if (goal_element_ptr->GetPerCity())
+					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					(" (PerCity)"));
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					("\n"));
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					("\t//\n\n"));
+			}
 
-			 if (goal_ptr_iter->first > Goal::BAD_UTILITY + 0.5)
-			 {
-			/*		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, 
+			if (goal_ptr_iter->first > Goal::BAD_UTILITY + 0.5)
+			{
+					AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
 						("\t%3d: [%x]", count, goal_ptr_iter->second));
-					ctpgoal_ptr = (CTPGoal_ptr) goal_ptr_iter->second;
-					ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER_ALL);*/
-			 }
-			 count++;
+					CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) goal_ptr_iter->second;
+					ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
+			}
+			count++;
 		}
 #endif
 

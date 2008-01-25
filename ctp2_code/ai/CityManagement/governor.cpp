@@ -1475,7 +1475,7 @@ void Governor::ComputeRoadPriorities()
 
 		for
 		(
-			CityDistQueue::const_iterator iter = s_CityDistQueue.begin(); 
+			CityDistQueue::const_iterator iter = s_CityDistQueue.begin();
 			iter != max_iter;
 			++iter
 		)

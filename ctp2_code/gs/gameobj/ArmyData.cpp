@@ -117,6 +117,8 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Changed settlebuilding for convert to estabvlish building since it isn't settling
 // - Added establishbuilding check to advertise, makes it more worthwhile - by E 27 Aug 2007
+// - Units that are grouped into previously empty armies now show up on the map. (5-Aug-2007 Martin Gühmann)
+// - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -320,7 +322,7 @@ public:
 //----------------------------------------------------------------------------
 bool IsSolist(Unit const & u)
 {
-    return u.IsImmobile() || u.CantGroup();
+	return u.IsImmobile() || u.CantGroup();
 }
 
 
@@ -659,6 +661,10 @@ bool ArmyData::Insert(const Unit &id)
     CellUnitList::Insert(id);
     Unit u(id);
     u.SetArmy(Army(m_id));
+
+    if(m_nElements > 0) {
+        g_director->AddShow(id);
+    }
 
     return true;
 }
@@ -1270,16 +1276,22 @@ void ArmyData::GroupUnit(Unit unit)
 // Ungroup this army into it's constituent units
 void ArmyData::UngroupUnits()
 {
-	// The first unit does not need to be ungrouped
-    for(sint32 i = m_nElements - 1; i > 0; i--) 
-    {
-        Army newArmy = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING_ORDER);
-        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
-                               GEA_Unit, m_array[i],
-                               GEA_Army, newArmy,
-                               GEA_Int, CAUSE_NEW_ARMY_UNGROUPING_ORDER,
-                               GEA_End);
-    }
+	RemainNumUnits(0);
+}
+
+void ArmyData::RemainNumUnits(sint32 remain)
+{
+	remain = std::max(remain - 1, 0);
+	for(sint32 i = m_nElements - 1; i > remain; i--)
+	{
+		Army newArmy = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING_ORDER);
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
+		                       GEA_Unit, m_array[i],
+		                       GEA_Army, newArmy,
+		                       GEA_Int, CAUSE_NEW_ARMY_UNGROUPING_ORDER,
+		                       GEA_End);
+	}
+
 }
 
 // If this army has a m_tempKillList, insert all the units at MapPoint &pos into it.
@@ -2731,7 +2743,7 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray 
 			}
 		}
 	}
-    // else No action: revealedActors = NULL;
+	// else No action: revealedActors = NULL;
 
 	Unit top_src = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 	if(!top_src.IsValid())
@@ -3969,7 +3981,7 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 
 	const UnitRecord::SuccessDeathEffect *data;
 	
-    for (i = m_nElements - 1; i>= 0; i--) { 
+	for (i = m_nElements - 1; i>= 0; i--) { 
 		if(m_array[i].CanPerformSpecialAction()&&
 		   m_array[i].CanConvertCity(city)) {
 			m_array[i].GetDBRec()->GetConvertCities(data);
@@ -3992,7 +4004,7 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 	
 	AddSpecialActionUsed(u);
 
-     //InformAI(UNIT_ORDER_CONVERT, point);//does nothing here but could be implemented 
+	//InformAI(UNIT_ORDER_CONVERT, point);//does nothing here but could be implemented 
 
 	city.ModifySpecialAttackChance(UNIT_ORDER_CONVERT, best_chance);
 	city.SetWatchful();
@@ -4005,18 +4017,23 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 		
 		// EMOD - if city can convert building & establishbuilding it builds
 		// that building there. Used to spread religions
-	    for (i = m_nElements - 1; i>= 0; i--) { 
+		for (i = m_nElements - 1; i>= 0; i--)
+		{
 			const UnitRecord *urec = m_array[i].GetDBRec();
-			if(m_array[i].GetDBRec()->GetNumEstablishBuilding()) {
-				for(sint32 b = 0; b < urec->GetNumEstablishBuilding(); b++) {
+			if(m_array[i].GetDBRec()->GetNumEstablishBuilding())
+			{
+				for(sint32 b = 0; b < urec->GetNumEstablishBuilding(); b++)
+				{
 					sint32 bi = urec->GetEstablishBuildingIndex(b);
 					Assert(bi >= 0);
 					Assert(bi < g_theBuildingDB->NumRecords());
-					if(bi >= 0 && bi < g_theBuildingDB->NumRecords()) {
+
+					if(bi >= 0 && bi < g_theBuildingDB->NumRecords())
+					{
 						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateBuilding,
-				                       GEA_City, city,
-				                       GEA_Int, bi,
-				                       GEA_End);
+						                       GEA_City, city,
+						                       GEA_Int, bi,
+						                       GEA_End);
 					}
 				}
 			}
@@ -4490,12 +4507,12 @@ void ArmyData::Reenter()
 		return;
 	}
 
-    sint32 i;
+	sint32 i;
 	Unit city = g_theWorld->GetCity(m_reentryPos);
 	if(!city.IsValid() || city.GetOwner() != m_owner) {
 		
 		for (i = 0; i < m_nElements; i++) 
-        {
+		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i].m_id,
 								   GEA_Int, 0,
@@ -5981,7 +5998,7 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 			attackOrder->m_eventType = Order::OrderToEvent(order);
 		}
 		Assert(attackOrder->m_eventType < GEV_MAX && attackOrder->m_eventType >= 0);
-		DPRINTF(k_DBG_GAMESTATE, ("Adding event order for army 0x%lx, event = %s\n", m_id, g_gevManager->GetEventName(attackOrder->m_eventType)));
+		DPRINTF(k_DBG_GAMESTATE, ("Adding event order for army 0x%lx, event = %s, targetPos = (%i, %i)\n", m_id, g_gevManager->GetEventName(attackOrder->m_eventType), point.x, point.y));
 		attackOrder->m_gameEventArgs = args;
 		
 		m_orders->AddTail(attackOrder);
@@ -6105,7 +6122,7 @@ void ArmyData::ClearOrders()
 //
 //---------------------------------------------------------------------------- 
 bool ArmyData::ExecuteOrders(bool propagate)
-{	
+{
 	Assert(m_hasBeenAdded);
 	if(!m_hasBeenAdded)
 		return false;
@@ -6422,12 +6439,12 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 	WORLD_DIRECTION d = NOWHERE;
 
 	if ((order->m_order == UNIT_ORDER_MOVE) ||
-        (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
-       ) 
-    {
+	    (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
+	   )
+	{
 		if (order->m_path->IsEndDir() ||
 			(order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
-		   ) 
+		   )
 		{
 			if (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos)) 
 			{
@@ -6438,41 +6455,41 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 
 		// Keep moving along the assigned path
 		order->m_path->GetCurrentDir(d);
-	} 
+	}
 	else // UNIT_ORDER_MOVE_TO or UNIT_ORDER_VICTORY_MOVE
 	{
 		if (m_pos == order->m_point)
 			return true;
 	
-            // Move from m_pos in the direction of the target point
+		// Move from m_pos in the direction of the target point
 		d = m_pos.GetNeighborDirection(order->m_point);
 	}
 
-    if (NOWHERE == d) 
-    {
-        // Something is not right
-        if (g_network.IsClient()) 
-        {
-            g_network.RequestResync(RESYNC_ARMY_POS);
-        } 
-        else if (g_network.IsHost() && !g_network.IsLocalPlayer(m_owner)) 
-        {
-            g_network.Resync(m_owner);
-        }
-    }
-    else
-    {
-        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-						   GEV_MoveArmy,
-						   GEA_Army, m_id,
-						   GEA_Direction, d,
-						   GEA_Int, order->m_order,
-						   GEA_Int, order->m_argument,
-						   GEA_MapPoint, order->m_point,
-						   GEA_End);
-    }
+	if (NOWHERE == d) 
+	{
+		// Something is not right
+		if (g_network.IsClient()) 
+		{
+			g_network.RequestResync(RESYNC_ARMY_POS);
+		}
+		else if (g_network.IsHost() && !g_network.IsLocalPlayer(m_owner)) 
+		{
+			g_network.Resync(m_owner);
+		}
+	}
+	else
+	{
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+		                       GEV_MoveArmy,
+		                       GEA_Army, m_id,
+		                       GEA_Direction, d,
+		                       GEA_Int, order->m_order,
+		                       GEA_Int, order->m_argument,
+		                       GEA_MapPoint, order->m_point,
+		                       GEA_End);
+	}
 
-    return false;
+	return false;
 }
 
 //----------------------------------------------------------------------------
@@ -6492,10 +6509,10 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 //---------------------------------------------------------------------------- 
 bool ArmyData::IsOccupiedByForeigner(const MapPoint &pos)
 {
-    Cell * cell = g_theWorld->GetCell(pos);
+	Cell * cell = g_theWorld->GetCell(pos);
 
-    return (cell->GetNumUnits() > 0) 
-        && (cell->UnitArmy()->GetOwner() != m_owner);
+	return (cell->GetNumUnits() > 0) 
+	    && (cell->UnitArmy()->GetOwner() != m_owner);
 }
 
 //----------------------------------------------------------------------------
@@ -7658,7 +7675,7 @@ void ArmyData::CheckTerrainEvents()
 //
 // Name       : ArmyData::CanMoveIntoTransport
 //
-// Description: Returns TRUE if this army can move into some transports at MapPoint &pos
+// Description: Returns true if this army can move into some transports at MapPoint &pos
 //
 // Parameters : MapPoint &pos
 //              CellUnitList &transports
@@ -7677,6 +7694,31 @@ bool ArmyData::CanMoveIntoTransport(const MapPoint &pos,
 		return false;
 
 	return CanMoveIntoThisTransport(transports); // true if this army can be loaded onto those transports
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::CanMoveIntoTransport
+//
+// Description: Returns the number of units that will go into CellUnitList &transports
+//
+// Parameters : MapPoint &pos
+//              CellUnitList &transports
+//
+// Globals    : -
+//
+// Returns    : sint32
+//
+// Remark(s)  : May involve ungrouping the army.
+//
+//---------------------------------------------------------------------------- 
+sint32 ArmyData::NumUnitsCanMoveIntoTransport(const MapPoint &pos,
+											  CellUnitList &transports) const
+{
+	if(!g_theWorld->GetEmptyTransports(pos, transports)) // Make a list of the transports with empty slots at pos
+		return 0;
+
+	return NumUnitsCanMoveIntoThisTransport(transports); // true if this army can be loaded onto those transports
 }
 
 //----------------------------------------------------------------------------
@@ -7705,20 +7747,20 @@ sint32 ArmyData::NumUnitsCanMoveIntoThisTransport(const CellUnitList &transports
 
 	sint32 cargo_fits = 0;
 	bool searching;
-    for (i = 0; i<m_nElements; i++) {       
-        searching = true;
-        for (j=0; searching && (j<transports.Num()); j++) {
-            if ((0 < count[j]) && transports.Get(j).CanCarry(m_array[i])) {
-                count[j]--; 
-                searching = false;
-            }
-        }
-        
-        if (!searching) { 
-            cargo_fits++; 
-        } 
-    }  
-    return cargo_fits; 
+	for (i = 0; i<m_nElements; i++) {
+		searching = true;
+		for (j=0; searching && (j<transports.Num()); j++) {
+			if ((0 < count[j]) && transports.Get(j).CanCarry(m_array[i])) {
+				count[j]--;
+				searching = false;
+			}
+		}
+
+		if (!searching) {
+			cargo_fits++;
+		}
+	}
+	return cargo_fits;
 }
 
 //----------------------------------------------------------------------------
@@ -7746,19 +7788,19 @@ bool ArmyData::CanMoveIntoThisTransport(const CellUnitList &transports) const
 	}
 
 	bool searching;
-    for (i = 0; i<m_nElements; i++) {       
-        searching = true;
-        for (j=0; searching && (j<transports.Num()); j++) { 
-            if ((0 < count[j]) && transports.Get(j).CanCarry(m_array[i])) {
-                count[j]--; 
-                searching = false;
-            }
-        }
-        if (searching) { 
-            return false;
-        } 
-    }
-    return true;
+	for (i = 0; i<m_nElements; i++) {
+		searching = true;
+		for (j=0; searching && (j<transports.Num()); j++) { 
+			if ((0 < count[j]) && transports.Get(j).CanCarry(m_array[i])) {
+				count[j]--;
+				searching = false;
+			}
+		}
+		if (searching) {
+			return false;
+		}
+	}
+	return true;
 }
 
 //----------------------------------------------------------------------------
@@ -10723,6 +10765,32 @@ void ArmyData::DecrementDontKillCount()
 			me.Kill();
 		}			
 	}
+}
+
+bool ArmyData::IsInVisionRangeAndCanEnter(MapPoint &pos) const
+{
+	if(!CanEnter(pos))
+		return false;
+
+	MapPoint here;
+	GetPos(here);
+
+	if(!g_theWorld->IsOnSameContinent(pos, here))
+		return false;
+
+	sint32 visionRange = 0;
+	sint32 index = 0;
+
+	for (sint32 i = 0; i < m_nElements; i++)
+	{
+		if (m_array[i]->GetVisionRange() > visionRange)
+		{
+			visionRange = m_array[i]->GetVisionRange();
+			index = i;
+		}
+	}
+
+	return m_array[index].IsInVisionRange(pos);
 }
 
 bool ArmyData::NearestUnexplored(MapPoint &pos) const

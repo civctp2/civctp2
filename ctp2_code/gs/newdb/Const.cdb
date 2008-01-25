@@ -344,4 +344,5 @@ Const : alsire {
 	Float  RoadAlreadyThereCostsCoefficient = 0.5
 	Int    BuildRoadsToClosestCities        = 5
 	Float  BaseRoadPriorityVsThreatRank     = 0.01
+	Int    ConiderNumCitiesForSlaves        = 5
 }

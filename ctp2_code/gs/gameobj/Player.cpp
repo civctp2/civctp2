@@ -94,14 +94,16 @@
 // - TODO HasInstallation method for oneperciv and installation wonder
 // - Added Commodity Market Code gold adds with CalcWonderGold 3-14-2007
 // - Added BreadBasket Code 3-14-2007
-// - implemented One City Challenge Option in CanBuildUnit 3.21.2007
-// - implemented freAIupgrades profile option
-// - added GetNumTileimps 4.21.2007
+// - Implemented One City Challenge Option in CanBuildUnit 3.21.2007
+// - Implemented freAIupgrades profile option
+// - Added GetNumTileimps 4.21.2007
 // - Added ProhibitSlavers Wonder Check
 // - Added NeedsAnyPlayerFeatToBuild
 // - Moved CalcSupportGold and CommodityGold to BeginTurn
 // - Added CreateLeader method by E 6.4.2007
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Slaves are distributed to more than just the closest city, the number
+//   of closest cities to them slaves are sent can be set in const.txt. (25-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -253,15 +255,15 @@
 #include "World.h"
 #include "Wormhole.h"
 
-extern C3UI                     *g_c3ui;
-extern PointerList<Player>      *g_deadPlayer;
-extern Pollution                *g_thePollution;
-extern TopTen                   *g_theTopTen;
-extern MessageWindow            *g_currentMessageWindow;
-extern DebugWindow              *g_debugWindow;
-extern CivApp                   *g_civApp;
+extern C3UI                    *g_c3ui;
+extern PointerList<Player>     *g_deadPlayer;
+extern Pollution               *g_thePollution;
+extern TopTen                  *g_theTopTen;
+extern MessageWindow           *g_currentMessageWindow;
+extern DebugWindow             *g_debugWindow;
+extern CivApp                  *g_civApp;
 extern sint32                   g_numGoods; // To fix games with altered ressource database
-extern sint32                   *g_newGoods;
+extern sint32                  *g_newGoods;
 extern BOOL                     g_powerPointsMode;
 extern sint32                   g_tileImprovementMode;
 extern sint32                   g_isTileImpPadOn;
@@ -2991,14 +2993,10 @@ bool Player::GetNearestCity(const MapPoint &pos, Unit &nearest,
 				continue;
 		}
 
-		
-        
-        
-        
 		d = MapPoint::GetSquaredDistance(pos, cpos);
 
         if (distance == -1.0 || d < distance) 
-        { 
+        {
             distance = d; 
             nearest = m_all_cities->Get(j);
         }
@@ -3008,7 +3006,7 @@ bool Player::GetNearestCity(const MapPoint &pos, Unit &nearest,
 	if (distance > -1.0)
 		distance = sqrt(distance);
 
-    return nearest.m_id != (0);
+	return nearest.m_id != (0);
 }
 
 bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
@@ -3018,8 +3016,12 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 	sint32 i, j;
 
 	sint32 minDistance = 0x7fffffff;
+
+	CityDistQueue cityDistQueue;
+
 	city.m_id = (0);
-	for(i = m_all_cities->Num() - 1; i >= 0; i--) {
+	for(i = m_all_cities->Num() - 1; i >= 0; i--)
+	{
 		Unit c = m_all_cities->Access(i);
 
 		c.GetPos(cpos);
@@ -3036,15 +3038,44 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 		}
 		d = pos.NormalizedDistance(cpos);
 
-		if(d < minDistance) {
-			minDistance = d;
-			city = m_all_cities->Access(i);
-		}
-	}
-	if(city.m_id != (0))
-		return true;
+		cityDistQueue.push_back(CityDist( m_all_cities->Access(i).m_id, d));
 
-	
+	if (cityDistQueue.size() == 0)
+	{
+		double distance;
+		return GetNearestCity(pos, city, distance);
+	}
+
+	size_t max_eval = static_cast<size_t>(g_theConstDB->Get(0)->GetConiderNumCitiesForSlaves());
+	max_eval = std::min(max_eval, cityDistQueue.size());
+
+	CityDistQueue::iterator max_iter = cityDistQueue.begin() + max_eval;
+
+	std::sort(cityDistQueue.begin(), cityDistQueue.end(), std::less<CityDist>());
+
+	for(size_t t = 0; t < max_eval; ++t)
+	{
+		sint32 rand = g_rand->Next(max_eval - t);
+		city.m_id = cityDistQueue[rand].m_city;
+
+		if(city.m_id != (0))
+			return true;
+
+		cityDistQueue.erase(cityDistQueue.begin() + static_cast<size_t>(rand));
+	}
+
+	for
+	(
+		CityDistQueue::const_iterator iter = cityDistQueue.begin();
+		iter != cityDistQueue.end();
+		++iter
+	)
+	{
+		city.m_id = iter->m_city;
+		if(city.m_id != (0))
+			return true;
+	}
+
 	double distance;
 	return GetNearestCity(pos, city, distance);
 }
