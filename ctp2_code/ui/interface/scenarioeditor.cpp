@@ -634,7 +634,8 @@ AUI_ERRCODE ScenarioEditor::Hide()
 	if(g_theWorld)
 		g_theWorld->NumberContinents();
 	
-	ScenarioEditor::Reupdate();
+	if(s_scenarioEditor->IsShown())
+		ScenarioEditor::Reupdate();
 
 	return g_c3ui->RemoveWindow(s_scenarioEditor->m_window->Id());
 }

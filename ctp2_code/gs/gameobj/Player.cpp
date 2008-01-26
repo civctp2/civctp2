@@ -3039,6 +3039,7 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 		d = pos.NormalizedDistance(cpos);
 
 		cityDistQueue.push_back(CityDist( m_all_cities->Access(i).m_id, d));
+	}
 
 	if (cityDistQueue.size() == 0)
 	{
