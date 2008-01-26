@@ -19,6 +19,8 @@
 # Modifications from the original Activision code:
 #
 # - Moved the map icons from the source code to this file. (23-Feb-2007 Martin Gühmann)
+# - Replaced the city slave icon by one that shows the color of the player
+#   that lost the slaves. (26-Jan-2008 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -69,7 +71,7 @@ MAPICON_BUILDINGS2		"upc036.tga"
 MAPICON_WONDER2			"upc037.tga"
 MAPICON_UNITS2			"upc038.tga"
 
-MAPICON_SLAVE			"upc039.tga"
+MAPICON_SLAVE			"upc039a.tga"
 MAPICON_SLEEPINGUNITS		"upc040.tga"
 
 MAPICON_AIRPORT			"upc041.tga"

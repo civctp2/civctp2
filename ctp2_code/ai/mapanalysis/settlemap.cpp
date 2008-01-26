@@ -165,7 +165,7 @@ void SettleMap::Initialize()
 
 void SettleMap::HandleCityGrowth(const Unit & city)
 {
-	
+	/// @ToDo handle city shrinking
 	MapPoint pos = city.RetPos();
 	CityData *citydata = city.GetCityData();
 	Assert(citydata);

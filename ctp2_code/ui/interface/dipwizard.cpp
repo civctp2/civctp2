@@ -1671,7 +1671,7 @@ void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data,
 //            : cookie                    ?  
 //
 // Globals    : g_network               : multiplayer manager
-//              g_selectedItem          : selected player
+//              g_selected_item          : selected player
 //
 // Returns    : -
 //

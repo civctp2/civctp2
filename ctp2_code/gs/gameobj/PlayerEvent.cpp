@@ -32,6 +32,7 @@
 // - Corrected recipients for Gaia Controller messages.
 // - Propagate PW each turn update
 // - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
+// - An autosave is now created even if the visible player is a robot. (26-Jab-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -625,9 +626,10 @@ STDEHANDLER(FinishBuildPhaseEvent)
 	sint32 player;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
-	if (g_player[player] && !Player::IsThisPlayerARobot(player)) 
-	{
-		if (g_theProfileDB->IsAutoSave() && 
+	if((g_player[player] && !Player::IsThisPlayerARobot(player))
+	||  g_selected_item->GetVisiblePlayer() == player
+	){
+		if (g_theProfileDB->IsAutoSave() &&
 			(!g_network.IsActive() || g_network.IsHost())
 		   )
 		{
@@ -641,11 +643,10 @@ STDEHANDLER(FinishBuildPhaseEvent)
 			g_controlPanel->GetWindow()->ShouldDraw(TRUE);
 		}
 	}
-	
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartMovePhase,
-		                       GEA_Player, player,
-		                       GEA_End);
-	
+
+	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_StartMovePhase,
+	                       GEA_Player, player,
+	                       GEA_End);
 
 	if(g_network.IsActive()) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NetworkTurnSync,

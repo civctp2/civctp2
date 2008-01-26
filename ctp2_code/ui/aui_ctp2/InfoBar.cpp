@@ -44,6 +44,8 @@
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially 
 //   such code should only be put at one place. - April 12th 2005 Martin Gühmann 
 // - Added Hidden Nationality check to SetTextFromMap - by E 2-21-2007
+// - The tile coordinates are shown in the info bar if the army goal text is
+//   displayed. (26-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,10 +70,11 @@
 #include "TerrainImprovementRecord.h"
 #include "citydata.h"
 
-#include "ResourceRecord.h" //access g_theResourceDB for goods info, PFT 05 Mar 05
-// Added by Martin Gühmann
+#include "ResourceRecord.h"     // Access g_theResourceDB for goods info, PFT 05 Mar 05
 #include "UnitData.h"
-#include "UnseenCell.h" //Unseen cell info is needed
+#include "UnseenCell.h"         // Unseen cell info is needed
+#include "gfx_options.h"        // g_graphicsOptions
+#include "ProfileDB.h"          // g_theProfileDB
 
 extern sint32		g_fog_toggle;
 extern sint32		g_god;
@@ -203,14 +206,18 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		!g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(point)) {
 		Concat(g_theStringDB->GetNameStr("INFOBAR_UNEXPLORED"));
 
-#ifdef _DEBUG
-	MBCHAR buf[k_MAX_NAME_LEN];
-	sprintf(buf, " (%d, %d)", point.x, point.y);
-	Concat(buf);
+#ifndef _DEBUG
+	if((g_graphicsOptions
+	&&  g_graphicsOptions->IsArmyTextOn()
+	||  g_theProfileDB->GetDebugAI()))
 #endif // _DEBUG
+	{
+		MBCHAR buf[k_MAX_NAME_LEN];
+		sprintf(buf, " (%d, %d)", point.x, point.y);
+		Concat(buf);
+	}
 
 	} else {
-// Added by Martin Gühmann
 		// Use the information from the last visit of that cell
 		sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(point));
 
@@ -225,8 +232,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			Concat(buf);
 			Concat(" - ");
 		}
-		
-// Added by Martin Gühmann
+
 		UnseenCellCarton ucell;
 		BOOL hasUnseen = FALSE;
 		if(!g_tiledMap->GetLocalVision()->IsVisible(point) 
@@ -334,8 +340,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			wroteOwner = true;
 			Concat("     ");
 		} else {
-			sint32 i;
-// Added by Martin Gühmann
+
 			if(hasUnseen){
 				// Use hidden information if necessary
 
@@ -361,7 +366,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				delete walker;
 			}
 			else{
-				for(i = 0; i < cell->GetNumDBImprovements(); i++) {
+				for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 					Concat(" ");
 					Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(cell->GetDBImprovement(i))->GetName()));
 					if(i < cell->GetNumDBImprovements() - 1 || cell->HasRiver()) {

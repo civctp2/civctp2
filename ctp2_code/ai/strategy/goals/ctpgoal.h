@@ -30,6 +30,7 @@
 // - Changes the const attribute for Compute_Matching_Value 
 //   (Raw_Priority will be changed on wounded case) - Calvitix
 // - Removed Microsoft specific code.
+// - Fixed Goal subtask handling. (26-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -56,6 +57,7 @@ enum SUB_TASK_TYPE
     SUB_TASK_GOAL,
     SUB_TASK_RALLY,
     SUB_TASK_TRANSPORT_TO_BOARD,
+    SUB_TASK_TRANSPORT_TO_GOAL,
     SUB_TASK_CARGO_TO_BOARD,
     SUB_TASK_AIRLIFT,
     SUB_TASK_UNGROUP

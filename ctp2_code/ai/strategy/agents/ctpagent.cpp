@@ -30,6 +30,7 @@
 // - Changed the rounds calculation method (not based on default mouvement cost (100),
 //   but based on the minimum cost between start and destination points) - Calvitix
 // - Made FindPath and GetRounds methods more flexible. (25-Jan-2008 Martin Gühmann)
+// - Disband army text is also shown in the optimized version. (26-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -712,9 +713,7 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 			Set_Can_Be_Executed(false);
 			Set_Target_Order(order_rec->GetIndex());
 			Set_Target_Pos(found_path.GetEnd());
-#ifdef _DEBUG
 			g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
-#endif
 		}
 		return 0;
 	}

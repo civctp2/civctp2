@@ -307,7 +307,7 @@ public:
 	void ComputeDesiredUnits();
 
 	
-	void FillEmptyBuildQueues();
+	void FillEmptyBuildQueues(bool noWarChange = false);
 
 	
 	double PercentUnbuilt(const BUILD_UNIT_LIST unit_list) const;

@@ -190,6 +190,8 @@
 //   be standard? it would add value to cities. - E 6.10.2007 
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added CityExpansion and CitySlum code
+// - The CityInfluenceChanged event is now valid after conquest that destroyed
+//   the city. (26-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -7631,7 +7633,7 @@ void CityData::AdjustSizeIndices()
 	
 	if (m_sizeIndex == 0 || m_sizeIndex != oldSizeIndex)
 	{
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityInfluenceChanged,
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CityInfluenceChanged,
 								   GEA_City, m_home_city.m_id,
 								   GEA_Int, (oldSizeIndex - m_sizeIndex),
 								   GEA_End);
@@ -7702,7 +7704,7 @@ void CityData::ChangePopulation(sint32 delta)
 	}
 
 	if(m_population <= 0) {
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillCity,
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
 		                       GEA_City, m_home_city.m_id,
 		                       GEA_Int, CAUSE_REMOVE_CITY_UNKNOWN,
 		                       GEA_Player, PLAYER_UNASSIGNED,

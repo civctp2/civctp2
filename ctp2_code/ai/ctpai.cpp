@@ -300,7 +300,7 @@ STDEHANDLER(CtpAi_SettleEvent)
 STDEHANDLER(CtpAi_GrowCityEvent)
 {
 	Unit city;
-	if(!args->GetCity(0, city)) 
+	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
 	SettleMap::s_settleMap.HandleCityGrowth(city);
@@ -786,7 +786,7 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 					if(!g_network.IsClient() || 
 						(g_network.IsClient() && player_ptr->IsRobot())) {
 						DPRINTF(k_DBG_GAMESTATE, ("AI End turn, %d\n", playerId));
-						g_director->AddEndTurn(); 
+						g_director->AddEndTurn();
 					}
 				}
 			}
@@ -1410,14 +1410,14 @@ void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
 		MapPoint	pos(city.RetPos());
 		g_theWorld->GetArmy(pos, garrison);
 		
-        Army		move_army;
-        sint32		min_size	= k_MAX_ARMY_SIZE;
+		Army		move_army;
+		sint32		min_size	= k_MAX_ARMY_SIZE;
 
-        for (sint32 j = 0; j < garrison.Num(); ++j)
-        {
+		for (sint32 j = 0; j < garrison.Num(); ++j)
+		{
 			Unit const &	candidate	= garrison[j];
 
-            if (candidate.IsValid())
+			if (candidate.IsValid())
 			{
 				Army const &	candidateArmy	= candidate.GetArmy();
 				
@@ -1432,11 +1432,11 @@ void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
 			}
 		}
 
-        if (move_army.IsValid())
-        {
-	        bool found = false;
+		if (move_army.IsValid())
+		{
+			bool found = false;
 
-		    for (int dir = 0; !found && (dir < NOWHERE); ++dir)
+			for (int dir = 0; !found && (dir < NOWHERE); ++dir)
 			{
 				MapPoint	dest;
 
@@ -1458,13 +1458,11 @@ void CtpAi::MoveOutofCityTransportUnits(const PLAYER_INDEX playerId)
 										   GEA_End
 										  );
 
-#ifdef _DEBUG
-                    uint8 const	magnitude	= 255;
-                    g_graphicsOptions->AddTextToArmy
-						(move_army, "Transport OutOfCity", magnitude);
-#endif
-                    found = true;
-                }
+					g_graphicsOptions->AddTextToArmy
+						(move_army, "Transport OutOfCity", 255);
+
+					found = true;
+				}
 			} // for dir
 		}
 	} // for i
@@ -1591,10 +1589,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 							GEA_Int, FALSE, 
 							GEA_End);
 
-#ifdef _DEBUG
-	uint8 magnitude = 255;
-	g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", magnitude);
-#endif
+	g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", 255);
 
 						found = true;
 					}
@@ -1610,12 +1605,12 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 {
 	Assert(player < s_maxPlayers);
 	if (!g_player[player])
-        return;
+		return;
 
 	if (g_network.IsActive() && !g_network.IsLocalPlayer(player))
 		return;
 
-    sint32 round = g_player[player]->GetCurRound();
+	sint32 round = g_player[player]->GetCurRound();
 
 	time_t  t1 = GetTickCount();
 	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
@@ -1623,15 +1618,14 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
 	if (Player::IsThisPlayerARobot(player))
 	{
-		
-   	   CtpAi::MakeRoomForNewUnits(player);
+		CtpAi::MakeRoomForNewUnits(player);
 #if 0
 	   // No idea if this should be done like this, 
 	   // transport can also move out sleeping units
        //to execute the new action :
        CtpAi::MoveOutofCityTransportUnits(player);
 
-       CtpAi::UnGroupGarrisonUnits(player);	
+       CtpAi::UnGroupGarrisonUnits(player);
 #endif
 	}
 	
@@ -2425,9 +2419,8 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 
 void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 {
-	
-    std::list< std::pair<sint32, Unit> > rush_buy_list;
-    std::pair<sint32, Unit> rush_buy;
+	std::list< std::pair<sint32, Unit> > rush_buy_list;
+	std::pair<sint32, Unit> rush_buy;
 
 	Player *player_ptr = g_player[player];
 	Assert(player_ptr != NULL);

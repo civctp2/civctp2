@@ -104,6 +104,8 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Slaves are distributed to more than just the closest city, the number
 //   of closest cities to them slaves are sent can be set in const.txt. (25-Jan-2008 Martin Gühmann)
+// - Empty build queues will now also be filled at the end of the turn,
+//   to cover conquered cities and just founded cities. (26-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -254,6 +256,7 @@
 #include "wonderutil.h"
 #include "World.h"
 #include "Wormhole.h"
+#include "Governor.h"
 
 extern C3UI                    *g_c3ui;
 extern PointerList<Player>     *g_deadPlayer;
@@ -286,21 +289,6 @@ Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt)
 	InitPlayer(o, d, pt) ;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const sint32 civ, GENDER gender)
 {
 	memset(this, 0, sizeof(*this));
@@ -309,11 +297,8 @@ Player::Player(const PLAYER_INDEX o, sint32 d, PLAYER_TYPE pt, const sint32 civ,
 	*m_civilisation = g_theCivilisationPool->Create(m_owner, civ, gender);
 }
 
-
 void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 {
-
-
 	m_owner = o;
 
 
@@ -613,18 +598,6 @@ void Player::InitPlayer(const PLAYER_INDEX o, sint32 diff, PLAYER_TYPE pt)
 	m_researchGoal = -1;
 	m_endingTurn = FALSE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 Player::Player(CivArchive &archive)
 {
@@ -2583,74 +2556,54 @@ void Player::EndTurnSoon()
 #define _KILL_MESSAGES_EACH_TURN	1
 
 void Player::EndTurn()
-
 {
 	int i;
 	sint32 n;
 
-
-
-
-
-	
 	if(g_network.IsHost()) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_END_TURN_FOR,
 						              m_owner));
 	}
 
-	
-	
 	m_current_round = NewTurnCount::GetCurrentRound();
 
 	m_is_turn_over = TRUE;
 	m_end_turn_soon = FALSE;
 
-	
-
-	
 	if(g_controlPanel)
 	{
-		
-		
-		
 		g_controlPanel->GetWindow()->DrawChildren();
 	}
 
-	if (m_isDead) 
-		return; 
+	if (m_isDead)
+		return;
 
-	
 	if (g_tileImprovementMode) 
 	{
 		g_tileImprovementMode = 0;
 		g_debugWindow->AddText("Tile Improvement Mode - OFF");
-		
-		
 	}
 
-	if ( g_specialAttackMode ) {
+	if ( g_specialAttackMode )
+	{
 		g_specialAttackMode = 0;
-		
 	}
 
-	
 	if(g_network.IsClient() && m_owner != g_network.GetPlayerIndex())
 		return;
-	
-	
 
 	g_theDiplomaticRequestPool->EndTurn(m_owner) ;
 	m_terrainPollution = FALSE ;
-	
+
 	n = m_all_cities->Num();
-	for(i = 0; i < n; i++) {
+	for(i = 0; i < n; i++)
+	{
 		m_all_cities->Access(i).EndTurnCity();
 	}
 
-
-
 	if ((m_gold->GetLevel() < 50) && (m_gold->DeltaThisTurn() < 0) &&
-	    (g_slicEngine->GetSegment("027NotEnoughGold")->TestLastShown(m_owner, 10))) {
+	    (g_slicEngine->GetSegment("027NotEnoughGold")->TestLastShown(m_owner, 10)))
+	{
 		SlicObject *so = new SlicObject("027NotEnoughGold") ;
 		so->AddRecipient(m_owner) ;
 		so->AddPlayer(m_owner);
@@ -2663,117 +2616,45 @@ void Player::EndTurn()
 
 	UnitDynamicArray	tmpUnits(*m_all_units);
 	n = tmpUnits.Num();
-	for(i = 0; i < n; i++) {
-		
-		
-		
-		
-		if(g_theUnitPool->IsValid(tmpUnits[i])) {
+	for(i = 0; i < n; i++)
+	{
+		if(g_theUnitPool->IsValid(tmpUnits[i]))
+		{
 			tmpUnits[i].EndTurn();
 		}
 	}
 
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Unblock(m_owner);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-	
-	
-	if (!g_theProfileDB->DontKillMessages()) {
-		
+	if (!g_theProfileDB->DontKillMessages())
+	{
 		sint32 numMessages = m_messages->Num();
-		
-		if (numMessages > k_MAX_MESSAGES_KEPT) {
-			for (i=0; i< (numMessages - k_MAX_MESSAGES_KEPT); i++) {
+
+		if (numMessages > k_MAX_MESSAGES_KEPT)
+		{
+			for (i=0; i< (numMessages - k_MAX_MESSAGES_KEPT); i++)
+			{
 				m_messages->Access(0).Kill();
 			}
 		}
 	}
 
-	
 	EndTurnPollution();
 
-	
 	if (!g_network.IsActive() && GetGaiaController()->TurnsToComplete() == 0)
 	{
 		GameOver(GAME_OVER_WON_SCIENCE, -1);
 	}
+
+	// Fill empty build queues of cities that have been added during this turn
+	Governor::GetGovernor(m_owner).FillEmptyBuildQueues(true);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void Player::EndTurnPollution(void)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	Unit city;
 	sint32 i;
 	memmove(&m_pollution_history[1], &m_pollution_history[0], sizeof(m_pollution_history) - sizeof(m_pollution_history[0])) ;

@@ -10334,19 +10334,20 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	//insert order's game_event here	
 	if (game_event > 0)
 	{
+		// Change this if target is a transporter or target is to unload
 		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
 		{
-			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-			static_cast<GAME_EVENT>(game_event), 
-			GEA_Army, Army(m_id), 
+			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
+			static_cast<GAME_EVENT>(game_event),
+			GEA_Army, Army(m_id),
 			GEA_MapPoint, target_pos,
 			GEA_End);
 		}
 		else
 		{
-			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-			static_cast<GAME_EVENT>(game_event), 
-			GEA_Army, Army(m_id), 
+			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
+			static_cast<GAME_EVENT>(game_event),
+			GEA_Army, Army(m_id),
 			GEA_End);
 		}
 	}
@@ -10777,6 +10778,8 @@ bool ArmyData::IsInVisionRangeAndCanEnter(MapPoint &pos) const
 
 	if(!g_theWorld->IsOnSameContinent(pos, here))
 		return false;
+
+	// !CargoCanEnter(pos) add this
 
 	sint32 visionRange = 0;
 	sint32 index = 0;

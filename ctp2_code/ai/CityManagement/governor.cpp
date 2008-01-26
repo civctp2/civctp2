@@ -3686,7 +3686,7 @@ void Governor::ComputeDesiredUnits()
 	}
 }
 
-void Governor::FillEmptyBuildQueues()
+void Governor::FillEmptyBuildQueues(bool noWarChange)
 {
 	Player *    player  = g_player[m_playerId];
 	Assert(player);
@@ -3712,7 +3712,7 @@ void Governor::FillEmptyBuildQueues()
 
 		if (city->GetBuildQueue()->GetLen() > 0)
 		{
-			if (first_turn_of_war && g_player[m_playerId]->IsRobot())
+			if (!noWarChange && first_turn_of_war && g_player[m_playerId]->IsRobot())
 			{
 				// Reconsider AI production at the start of a war
 				city->GetBuildQueue()->Clear();
