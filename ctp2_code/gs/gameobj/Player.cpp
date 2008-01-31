@@ -106,6 +106,7 @@
 //   of closest cities to them slaves are sent can be set in const.txt. (25-Jan-2008 Martin Gühmann)
 // - Empty build queues will now also be filled at the end of the turn,
 //   to cover conquered cities and just founded cities. (26-Jan-2008 Martin Gühmann)
+// - Non-settlers cannot settle on cities anymore. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -3029,18 +3030,19 @@ bool Player::Settle(Army &settle_army)
 	Assert(0<n);
 
 	MapPoint pos;
+	settle_army.GetPos(pos);
+
+	bool hasCity = g_theWorld->HasCity(pos);
 	
 	bool searching = true;
-	sint32 i;
-	for(i = 0; i < n; i++)
+	for(sint32 i = 0; i < n; i++)
 	{
 //		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 //		BOOL isVisible = settle_army[0].GetVisibility() & (1 << visiblePlayer);
  		
-		settle_army.GetPos(pos);
-
-		if (g_theWorld->HasCity(pos))
-		{
+		if(hasCity
+		&& settle_army[i].CanSettle(pos)
+		){
 			DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
 
 			// EMOD  here for adding settler to a city?

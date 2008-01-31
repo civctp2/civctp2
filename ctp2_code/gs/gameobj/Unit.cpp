@@ -162,7 +162,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			break;
 	}
 	
-	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: %d",
+	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx",
 							  m_id));
 	if(g_network.IsActive()) {
 		if(g_network.IsHost()) {

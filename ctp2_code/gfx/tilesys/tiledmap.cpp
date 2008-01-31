@@ -49,6 +49,7 @@
 // - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
 // - added debugai profile switch - E 4-3-2007
 // - When yes the debugai switch causes a crash
+// - Full city radius is now drawn around settlers. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3519,22 +3520,22 @@ sint32 TiledMap::DrawCityRadius(const MapPoint &cpos, COLOR color, sint32 pop)
 //
 // Description: Draw a "colored hit mask" in a radius of 1 around a city.
 //
-// Parameters : cpos	: city location on the map
-//              color	: color to use when drawing
+// Parameters : cpos    : city location on the map
+//              color   : color to use when drawing
 //
 // Globals    : g_screenManager
 //
-// Returns    : sint32	: useless value, always 0
+// Returns    : sint32  : useless value, always 0
 //
 // Remark(s)  : The tile NORTH of the city is not drawn.
-//				The tile of the city itself is drawn.
+//              The tile of the city itself is drawn.
 //              TODO: check whether this is intentional, or the original code
 //                    was just wrong.
 //
 //----------------------------------------------------------------------------
 sint32 TiledMap::DrawCityRadius1(const MapPoint &cpos, COLOR color)
 {
-	for (int dir = NORTHEAST; dir <= NOWHERE; ++dir)
+	for (int dir = NORTH; dir <= NOWHERE; ++dir)
 	{
 		OrthogonalPoint	neighbour(cpos);
 		neighbour.Move(WORLD_DIRECTION(dir));

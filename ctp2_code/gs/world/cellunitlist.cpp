@@ -75,8 +75,8 @@ bool CellUnitList::CanEnter(const MapPoint &point) const
 	//TODO - add impassable terrain
 	//TODO - add impassable tileimp
 	/// @todo Check next if: ghost army?
-	if (m_nElements < 1) {
-		
+	if (m_nElements < 1)
+	{
 		return true;
 	}
 

@@ -62,6 +62,7 @@
 //   in vision range of the agent and whether there could Barbarians pop up from
 //   the goody hut and the goody hut opeing army can defend against such Barbarians. (25-Jan-2008 Martin Gühmann)
 // - Fixed Goal subtask handling. (26-Jan-2008 Martin Gühmann)
+// - Improved transporter cargo loading. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -720,6 +721,10 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 	Utility raw_priority = Get_Raw_Priority();
 
+	sint32 distance_modifier = 1;
+	strategy.GetDistanceModifierFactor(distance_modifier);
+	Utility time_term = static_cast<Utility>( (eta * distance_modifier) + cell_dist);
+
 	if (g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus() > 0)
 	{
 		PLAYER_INDEX pos_owner = g_theWorld->GetCell(ctpagent_ptr->Get_Pos())->GetOwner();
@@ -732,13 +737,6 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	}
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_Treaspassing = bonus - report_obsolete;
-#endif //_DEBUG
-
-	sint32 distance_modifier;
-	strategy.GetDistanceModifierFactor(distance_modifier);
-	Utility time_term = static_cast<Utility>( (eta * distance_modifier) + cell_dist);
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
-	double report_time_term = time_term;
 #endif //_DEBUG
 
 	if (ctpagent_ptr->Get_Army()->IsInVisionRangeAndCanEnter(dest_pos))
@@ -778,7 +776,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
-	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8d,\t%8d,\t%8d \n",
+	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f \n",
 	this,                                          // This goal
 	ctpagent_ptr,                                  // The agent
 	ctpagent_ptr->Get_Pos().x,                     // Agent pos.x
@@ -1025,9 +1023,10 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
-	("\t %9x,\t%s, rc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f \n",
+	("\t %9x,\t%s,\t%i,\t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f\n",
 	this,
 	goal_rec->GetNameText(),
+	m_raw_priority,
 	target_pos.x,
 	target_pos.y,
 	report_cell_value,
@@ -1883,14 +1882,14 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		{
 			test = first_army->Get_Army()->CargoTestOrderHere(order_rec, dest_pos );
 
-			if (first_army->Get_Army()->GetMovementTypeAir())
+			if(first_army->Get_Army()->GetMovementTypeAir())
 			{
 				order_rec = CtpAi::GetUnloadOrder();
 			}
 			
-			if (first_army->Get_Pos() == dest_pos &&
-				city.m_id != 0x0 )
-			{
+			if(first_army->Get_Pos() == dest_pos
+			&& city.m_id != 0x0
+			){
 				order_rec = CtpAi::GetUnloadOrder();
 			}
 		}
@@ -1925,19 +1924,19 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		switch (m_sub_task)
 		{
 			case SUB_TASK_RALLY:
-				sprintf(myString, "Group to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				sprintf(myString, "Group to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, m_target_pos.x, m_target_pos.y);
 				break;
 			case SUB_TASK_TRANSPORT_TO_BOARD:
-				sprintf(myString, "Boat to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				sprintf(myString, "Boat to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, m_target_pos.x, m_target_pos.y);
 				break;
 			case SUB_TASK_TRANSPORT_TO_GOAL:
-				sprintf(myString, "Transp. to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				sprintf(myString, "Transp. to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, m_target_pos.x, m_target_pos.y);
 				break;
 			case SUB_TASK_CARGO_TO_BOARD:
-				sprintf(myString, "Cargo. to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				sprintf(myString, "Cargo. to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, m_target_pos.x, m_target_pos.y);
 				break;
 			case SUB_TASK_AIRLIFT:
-				sprintf(myString, "Airlift to %s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				sprintf(myString, "Airlift to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, m_target_pos.x, m_target_pos.y);
 				break;
 			case SUB_TASK_GOAL:
 			default:
@@ -1953,7 +1952,16 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		{
 			Assert(order_rec);
 			if (order_rec)
-				first_army->Get_Army()->PerformOrderHere(order_rec, (Path *) &found_path);
+			{
+				if(m_sub_task != SUB_TASK_CARGO_TO_BOARD)
+				{
+					first_army->Get_Army()->PerformOrderHere(order_rec, (Path *) &found_path);
+				}
+				else
+				{
+					first_army->Get_Army()->PerformOrderHere(order_rec, (Path *) &found_path, GEV_INSERT_Tail);
+				}
+			}
 		}
 		else
 		{
@@ -1967,7 +1975,7 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		const char * myText = goal_rec->GetNameText();
 		MBCHAR * myString = new MBCHAR[strlen(myText) + 40];
 		memset(myString, 0, strlen(myText) + 40);
-		sprintf(myString, "%s faled at (%d, %d)", goal_rec->GetNameText(), dest_pos.x, dest_pos.y);
+		sprintf(myString, "%s failed at (%d, %d)", goal_rec->GetNameText(), dest_pos.x, dest_pos.y);
 
 		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), myString, 0);
 		delete[] myString;
@@ -2066,6 +2074,11 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		check_dest = false;
 		dest_pos = the_army->Get_Pos();
 
+		if(dest_pos == the_transport->Get_Pos())
+		{
+			return true;
+		}
+
 		if (the_transport->Get_Army()->CheckValidDestination(dest_pos))
 			return true;
 
@@ -2088,20 +2101,25 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		}
 		else
 		{
-			found_path.SnipEndUntilCanEnter(the_transport->Get_Army()->GetMovementType());
+			MapPoint last = found_path.SnipEndUntilCanEnter(the_transport->Get_Army()->GetMovementType());
 
 			if ( (found_path.GetMovesRemaining() > 0) &&
-				 !FollowPathToTask(the_transport, the_army, sub_task, dest_pos, found_path) )
+				 !FollowPathToTask(the_transport, the_army, sub_task, last, found_path) )
 				return false;
-			
+
+			// It would be cleaner to merge this with the next case statement
+			the_transport->Set_Target_Pos(last);
+
 			return true;
 		}
 
 		break;
 
 	case SUB_TASK_CARGO_TO_BOARD:
-		
-		dest_pos = the_transport->Get_Pos();
+
+		// A little dangerous since this requires that the code of the last
+		// case have had to be executed first.
+		dest_pos = the_transport->Get_Target_Pos();
 		start_pos = the_army->Get_Pos();
 
 		if (dest_pos == start_pos)
@@ -2165,7 +2183,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 	default:
 
-		Assert(false); 
+		Assert(false);
 	}
 
 	return false;
@@ -2790,7 +2808,7 @@ bool CTPGoal::LoadTransport(CTPAgent_ptr agent_ptr, CTPAgent_ptr transport_ptr)
 		transport_ptr->Get_Army()->CanSpaceLaunch())
 	{
 		Set_Sub_Task(SUB_TASK_AIRLIFT);
-		success = GotoTransportTaskSolution(agent_ptr, transport_ptr, SUB_TASK_AIRLIFT);
+		success = GotoTransportTaskSolution(agent_ptr, transport_ptr, m_sub_task);
 		if (success)
 		{
 			Set_Sub_Task(SUB_TASK_CARGO_TO_BOARD);
@@ -2799,12 +2817,12 @@ bool CTPGoal::LoadTransport(CTPAgent_ptr agent_ptr, CTPAgent_ptr transport_ptr)
 	else
 	{
 		Set_Sub_Task(SUB_TASK_TRANSPORT_TO_BOARD);
-		success = GotoTransportTaskSolution(agent_ptr, transport_ptr, SUB_TASK_TRANSPORT_TO_BOARD);
+		success = GotoTransportTaskSolution(agent_ptr, transport_ptr, m_sub_task);
 
 		if (success)
 		{
 			Set_Sub_Task(SUB_TASK_CARGO_TO_BOARD);
-			success = GotoTransportTaskSolution(agent_ptr, transport_ptr, SUB_TASK_CARGO_TO_BOARD);
+			success = GotoTransportTaskSolution(agent_ptr, transport_ptr, m_sub_task);
 
 			if (success)
 			{

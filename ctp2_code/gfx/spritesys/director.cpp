@@ -4219,7 +4219,7 @@ void dh_beginScheduler(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 #ifdef _DEBUG
 	static bool isCurrentPlayerOk = true; // static, to report the error only once
 	if (isCurrentPlayerOk)
-    {
+	{
 		isCurrentPlayerOk = action->player == g_selected_item->GetCurPlayer();
 		Assert(isCurrentPlayerOk);
 	}
@@ -4238,7 +4238,7 @@ void dh_beginScheduler(DQAction *itemAction, Sequence *seq, DHEXECUTE executeTyp
 	}
 
 	
-	g_gevManager->Pause(); 
+	g_gevManager->Pause();
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginScheduler,
 						   GEA_Player, action->player,
 						   GEA_End);

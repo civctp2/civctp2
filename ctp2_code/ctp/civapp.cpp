@@ -93,6 +93,7 @@
 // - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
+// - Games can now be saved if the visible player is a robot. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -491,7 +492,7 @@ void InitDataIncludePath(void)
 
 	std::vector<MBCHAR *>   pathStarts;
 	MBCHAR *                nextPath    = ruleSets;
-    size_t const            ruleSetSize = strlen(ruleSets);
+	size_t const            ruleSetSize = strlen(ruleSets);
 
 	for (size_t	toDo = ruleSetSize; toDo > 0; )
 	{
@@ -538,7 +539,7 @@ void InitDataIncludePath(void)
 //----------------------------------------------------------------------------
 void SelectColorSet(void)
 {
-    Assert(g_theProfileDB);
+	Assert(g_theProfileDB);
 	ColorSet::Initialize(g_theProfileDB->GetValueByName("ColorSet"));
 }
 
@@ -1328,7 +1329,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
 #ifdef WIN32
-    // COM needed for DirectX/Movies
+	// COM needed for DirectX/Movies
 	CoInitialize(NULL);
 #endif
 
@@ -1380,7 +1381,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	gameinit_InitializeGameFiles();
 
-    SPLASH_STRING(g_theProfileDB->IsAIOn() ? "AI is ON" : "AI is OFF");
+	SPLASH_STRING(g_theProfileDB->IsAIOn() ? "AI is ON" : "AI is OFF");
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
@@ -1461,7 +1462,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	g_theProgressWindow->StartCountingTo( 620 );
 
 	if (g_c3ui->TheMouse()) 
-    {
+	{
 		double const sensitivity = 0.25 * (1 + g_theProfileDB->GetMouseSpeed());
 		g_c3ui->TheMouse()->Sensitivity() = sensitivity;
 	}
@@ -1510,7 +1511,7 @@ void CivApp::CleanupAppUI(void)
 	graphicsresscreen_Cleanup();
 	km_screen_Cleanup();
 
-    allocated::clear(g_c3ui);
+	allocated::clear(g_c3ui);
 
 #if defined(_DEBUG) && !defined(__AUI_USE_SDL__)
 	sint32 const cleanBaseRefCount = aui_Base::GetBaseRefCount();
@@ -2678,7 +2679,7 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 
 	used_milliseconds = Os::GetTicks() - start_time_ms;
 	return 0; 
-} 
+}
 
 
 sint32 CivApp::ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds)
@@ -2702,15 +2703,15 @@ sint32 CivApp::ProcessSLIC(void)
 	g_slicEngine->ProcessUITriggers();
 
 	static time_t   lastRanSlicTimers   = 0;
-    time_t          now                 = time(0);
+	time_t          now                 = time(0);
 	if (now > lastRanSlicTimers + g_slicEngine->GetTimerGranularity()) 
-    {
+	{
 		g_slicEngine->RunTimerTriggers();
-        /// @todo Check lastRanSlicTimers = now;
+		/// @todo Check lastRanSlicTimers = now;
 	}
 
 	if (g_slicEngine->WaitingForLoad()) 
-    {
+	{
 		main_RestoreGame(g_slicEngine->GetLoadName());
 	}
 
@@ -2720,7 +2721,7 @@ sint32 CivApp::ProcessSLIC(void)
 
 sint32 CivApp::ProcessProfile(void)
 {
-    uint32 target_milliseconds = (g_no_timeslice) ? 10000000 : 30;
+	uint32 target_milliseconds = (g_no_timeslice) ? 10000000 : 30;
 	uint32 used_milliseconds;
 
 	ProcessNet(target_milliseconds, used_milliseconds);
@@ -2736,12 +2737,11 @@ sint32 CivApp::ProcessProfile(void)
 	if (g_soundManager)
 		g_soundManager->Process(target_milliseconds, used_milliseconds);
 
-    return 0;
+	return 0;
 }
 
 sint32 CivApp::Process(void)
 {
-	
 #ifdef _DEBUG
 	if(g_tempLeakCheck) {
 		_CrtMemState new_state; 
@@ -2776,22 +2776,12 @@ sint32 CivApp::Process(void)
 		return 0;
 	}
 
-    uint32 target_milliseconds = (g_no_timeslice) ? 10000000 : 30;
+	uint32 target_milliseconds = (g_no_timeslice) ? 10000000 : 30;
 	uint32 used_milliseconds;
 
 	ProcessNet(target_milliseconds, used_milliseconds);
 
 	ProcessUI(target_milliseconds, used_milliseconds);
-
-
-
-
-
-
-
-
-
-
 
 
 	if(g_attractWindow)
@@ -2812,17 +2802,18 @@ sint32 CivApp::Process(void)
 	
 	
 	if (m_gameLoaded && g_savedGameRequest && g_selected_item) 
-    {
-        Player *    p = g_player[g_selected_item->GetCurPlayer()];
-		if (p && !p->IsRobot()) 
-        {
+	{
+		Player *    p = g_player[g_selected_item->GetCurPlayer()];
+		if(p && !p->IsRobot()
+		|| g_selected_item->GetVisiblePlayer() == g_selected_item->GetCurPlayer()) 
+		{
 			if (g_director)
 				g_director->CatchUp();
 
 			if (g_launchIntoCheatMode)
 				g_theGameSettings->SetKeepScore(TRUE);
 
-    		GameFile::SaveGame(g_savedGameRequest->pathName, g_savedGameRequest);
+			GameFile::SaveGame(g_savedGameRequest->pathName, g_savedGameRequest);
 					
 			if (g_launchIntoCheatMode)
 				g_theGameSettings->SetKeepScore(FALSE);
@@ -2831,7 +2822,7 @@ sint32 CivApp::Process(void)
 		}
 	}
 
-    return 0;
+	return 0;
 }
 
 
@@ -2994,7 +2985,7 @@ sint32 CivApp::RestartGameSameMap(void)
 sint32 CivApp::QuitToSPShell(void)
 {
 	if (m_gameLoaded) 
-    {
+	{
 		CleanupGame(false);
 		StartMessageSystem();
 	}
@@ -3031,8 +3022,8 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	if ((g_network.IsActive() && !g_network.IsHost()) || g_network.IsNetworkLaunch())
 		return;
 
-    MBCHAR const *  autosaveItem    = (isQuickSave) ? "QUICKSAVE_NAME" : "AUTOSAVE_NAME";
-    MBCHAR const *  autosaveName    = g_theStringDB->GetNameStr(autosaveItem);
+	MBCHAR const *  autosaveItem    = (isQuickSave) ? "QUICKSAVE_NAME" : "AUTOSAVE_NAME";
+	MBCHAR const *  autosaveName    = g_theStringDB->GetNameStr(autosaveItem);
 
 	MBCHAR			leaderName[k_MAX_NAME_LEN];
 	strcpy(leaderName, g_theProfileDB->GetLeaderName());
@@ -3042,27 +3033,26 @@ void CivApp::AutoSave(PLAYER_INDEX player, bool isQuickSave)
 	MBCHAR			filename[_MAX_PATH];
 	sprintf(filename, "%s-%s", autosaveName, leaderName);
 
-    C3SAVEDIR       dir = (g_network.IsActive()) ? C3SAVEDIR_MP : C3SAVEDIR_GAME;
-    
-    MBCHAR			path[_MAX_PATH];
+	C3SAVEDIR       dir = (g_network.IsActive()) ? C3SAVEDIR_MP : C3SAVEDIR_GAME;
+
+	MBCHAR			path[_MAX_PATH];
 	g_civPaths->GetSavePath(dir, path);
 
 	MBCHAR			fullpath[_MAX_PATH];
 	sprintf(fullpath, "%s%s%s", path, FILE_SEP, leaderName);
 
 	if (c3files_PathIsValid(fullpath) || c3files_CreateDirectory(fullpath)) 
-    {
-	    strcat(fullpath, FILE_SEP);
-	    strcat(fullpath, filename);
+	{
+		strcat(fullpath, FILE_SEP);
+		strcat(fullpath, filename);
 
-        g_isScenario = FALSE;
-	    GameFile().Save(fullpath, NULL);
+		g_isScenario = FALSE;
+		GameFile().Save(fullpath, NULL);
 	}
-    else
-    {
-        Assert(false);
-    }
-
+	else
+	{
+		Assert(false);
+	}
 }
 
 void CivApp::RestoreAutoSave(PLAYER_INDEX player)
@@ -3094,10 +3084,10 @@ void CivApp::PostLoadSaveGameAction(MBCHAR const * name)
 
 void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 {
-    /// @todo Check g_network.IsHost? See AutoSave. Otherwise, the dir assignment
-    ///       becomes constant.
+	/// @todo Check g_network.IsHost? See AutoSave. Otherwise, the dir assignment
+	///       becomes constant.
 	if (g_network.IsActive()) 
-    {
+	{
 		return;
 	}
 
@@ -3109,7 +3099,7 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	MBCHAR			filename[_MAX_PATH];
 	sprintf(filename, "%s-%s", g_theStringDB->GetNameStr("QUICKSAVE_NAME"), leaderName);
 
-    C3SAVEDIR       dir = (g_network.IsActive()) ? C3SAVEDIR_MP : C3SAVEDIR_GAME;
+	C3SAVEDIR       dir = (g_network.IsActive()) ? C3SAVEDIR_MP : C3SAVEDIR_GAME;
 
 	MBCHAR			path[_MAX_PATH];
 	g_civPaths->GetSavePath(dir, path);
@@ -3118,19 +3108,19 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 	sprintf(fullpath, "%s%s%s", path, FILE_SEP, leaderName);
 
 	if (c3files_PathIsValid(fullpath) || c3files_CreateDirectory(fullpath)) 
-    {
-	    strcat(fullpath, FILE_SEP);
-	    strcat(fullpath, filename);
+	{
+		strcat(fullpath, FILE_SEP);
+		strcat(fullpath, filename);
 
-	    FILE * f = fopen(fullpath, "r");
-	    if (f)
-        {
-	        fclose(f);
-            PostLoadSaveGameAction(fullpath);
-        }
-    }
-    else
-    {
+		FILE * f = fopen(fullpath, "r");
+		if (f)
+		{
+			fclose(f);
+			PostLoadSaveGameAction(fullpath);
+		}
+	}
+	else
+	{
 		Assert(FALSE);
 	}
 }
@@ -3138,7 +3128,7 @@ void CivApp::PostLoadQuickSaveAction(PLAYER_INDEX player)
 #if 0   // never used
 void CivApp::PostLoadSaveGameMapAction(MBCHAR const * name)
 {
-    g_c3ui->AddAction(new LoadSaveGameMapAction(name));
+	g_c3ui->AddAction(new LoadSaveGameMapAction(name));
 }
 #endif
 
@@ -3152,9 +3142,9 @@ void CivApp::PostRestartGameSameMapAction(void)
 	Player * p = g_player[g_selected_item->GetVisiblePlayer()];
 
 	if (p && g_theProfileDB) 
-    {
+	{
 		g_theProfileDB->SetLeaderName(p->GetLeaderName());
-        g_theProfileDB->SetCivIndex(p->GetCivilisation()->GetCivilisation());
+		g_theProfileDB->SetCivIndex(p->GetCivilisation()->GetCivilisation());
 	}
 
 	g_c3ui->AddAction(new RestartGameSameMapAction());

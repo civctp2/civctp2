@@ -1083,7 +1083,7 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// %s \n",g_theGoalDB->Get(goal_type)->GetNameText()));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
-		("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
+		("\t %9x,\tGOAL\t\t,\tRAW_PRIORITY,\tCOORDS\t,\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t(   )\t,\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tTHREATEN\n",
 		this));
 		
 		sorted_goal_iter = m_goals_of_type[goal_type].begin();

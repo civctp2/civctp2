@@ -55,6 +55,8 @@
 // - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Moved settle_water check inside the GetSettleTargets method. (May 20th 2006 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - The AI checks now all cities for rush buying even if there was a city
+//   where the item to rush buy was to expensive. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -458,6 +460,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 	g_theWorld->GetArmy(army->RetPos(), candidate_units);
 	for (sint32 i = 0; i < candidate_units.Num(); i++)
 		{
+			// Do something here
 			tmp_army = candidate_units[i].GetArmy();
 			Assert(tmp_army.IsValid());
 
@@ -1048,7 +1051,7 @@ void CtpAi::Initialize()
 #ifdef _DEBUG
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(2); 
+	CtpAiDebug::SetDebugPlayer(8); 
 	CtpAiDebug::SetDebugGoalType(-1); 
 	CtpAiDebug::SetDebugArmies(unit_list); 
 #endif
@@ -1622,7 +1625,7 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 #if 0
 	   // No idea if this should be done like this, 
 	   // transport can also move out sleeping units
-       //to execute the new action :
+       // to execute the new action :
        CtpAi::MoveOutofCityTransportUnits(player);
 
        CtpAi::UnGroupGarrisonUnits(player);
@@ -1748,15 +1751,12 @@ void CtpAi::Resize()
 
 void CtpAi::HandleMoveFailure(const Army & army, const MapPoint & pos)
 {
-	
 	if ( army->CanAtLeastOneCargoUnloadAt(army->RetPos(), pos, false) )
 	{
-		
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UnloadOrder,
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UnloadOrder,
 							   GEA_Army, army,
 							   GEA_MapPoint, pos,
 							   GEA_End);
-
 	}
 }
 
@@ -2284,11 +2284,21 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if (army->NumOrders() > 0)
 			continue;
 
-		// We need to find something more interesting to do here
-		g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
-								GEV_EntrenchOrder,
-								GEA_Army, army.m_id,
-								GEA_End);
+	//	if(army.CanEntrench())
+	//	{
+			// We need to find something more interesting to do here
+			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
+									GEV_EntrenchOrder,
+									GEA_Army, army.m_id,
+									GEA_End);
+	/*	}
+		else
+		{
+			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
+									GEV_SleepOrder,
+									GEA_Army, army.m_id,
+									GEA_End);
+		}*/
 	}
 
 	CtpAi::SpendGoldToRushBuy(player);
@@ -2480,7 +2490,7 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 	
 	rush_buy_list.sort();
 
-	
+
 	sint32 rush_buy_cost;
 	std::list< std::pair<sint32, Unit> >::iterator iter;
 	for (iter = rush_buy_list.begin(); iter != rush_buy_list.end(); iter++)
@@ -2488,14 +2498,12 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 		city = iter->second;
 
 		rush_buy_cost = city.CD()->GetOvertimeCost();
-		
+
+		if (current_savings - rush_buy_cost < 0)
+			continue;
+
 		current_savings -= rush_buy_cost;
 
-		
-		if (current_savings < 0)
-			break;
-
-		
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BuyFront,
 			GEA_City, city,
 			GEA_End);
@@ -2574,17 +2582,7 @@ void CtpAi::BombardNearbyEnemies(Army army, sint32 max_rge)
 					}
 				}
 			}
-/*
-			if(min_dist <= max_rge){
 
-				g_gevManager->AddEvent( GEV_INSERT_Tail, 
-										GEV_BombardOrder,
-										GEA_Army, army.m_id,
-										GEA_MapPoint,def_pos,
-										GEA_End);
-				return;
-			}
-*/
 			//bombard the first enemy city within range
 			Unit def_city;
 			sint32 num_cities = foreigner_ptr->m_all_cities ->Num();

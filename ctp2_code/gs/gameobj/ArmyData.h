@@ -34,6 +34,8 @@
 // - Moved the upgrade stuff into its own methods, however more work is needed.
 //   (Dec 24th 2006 Martin Gühmann)
 // - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
+// - PerformOrderHere move to target order can now be inserted at tail into the
+//   event queue. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,6 +55,7 @@ class ArmyData;
 #include "CityRadius.h"
 #include "MapPoint.h"
 
+#include "GameEventTypes.h"
 #include "GameEventDescription.h"
 #include "UnitRecord.h"
 
@@ -559,7 +562,7 @@ public:
     void PerformOrder(const OrderRecord * order_rec);
 
 
-    void PerformOrderHere(const OrderRecord * order_rec, const Path * path);
+    void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
 
 
     bool IsObsolete() const;

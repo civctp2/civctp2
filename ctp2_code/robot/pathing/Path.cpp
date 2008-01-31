@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : A* algorithm path object
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,7 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - SnipEndUntilCanEnter now snips a path always to the MapPoint before the
+//   first non-enterable MapPoint comes. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -432,18 +433,30 @@ void Path::RestoreIndexAndCurrentPos(const sint32 & index)
 }
 
 
-void Path::SnipEndUntilCanEnter(const uint32 & movement_type)
+MapPoint Path::SnipEndUntilCanEnter(const uint32 & movement_type)
 {
 	sint32 i;
-	MapPoint end = m_start;
+	MapPoint end  = m_start;
+	MapPoint last = m_start;
 	MapPoint next;
 	sint32 last_can_enter = -1;
-	for(i = 0; i < m_step.Num(); i++) {
-		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next)) {
+	for(i = 0; i < m_step.Num(); i++)
+	{
+		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next))
+		{
 			end = next;
 			if (g_theWorld->GetCell(next)->CanEnter(movement_type) )
+			{
 				last_can_enter = i;
-		} else {
+				last = end;
+			}
+			else
+			{
+				break;
+			}
+		}
+		else
+		{
 			Assert(FALSE);
 		}
 	}
@@ -452,5 +465,7 @@ void Path::SnipEndUntilCanEnter(const uint32 & movement_type)
 	{
 		m_step.DelIndex(i);
 	}
+
+	return last;
 }
 

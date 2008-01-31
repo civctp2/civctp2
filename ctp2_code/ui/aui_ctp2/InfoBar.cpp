@@ -207,15 +207,15 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		Concat(g_theStringDB->GetNameStr("INFOBAR_UNEXPLORED"));
 
 #ifndef _DEBUG
-	if((g_graphicsOptions
-	&&  g_graphicsOptions->IsArmyTextOn()
-	||  g_theProfileDB->GetDebugAI()))
+		if((g_graphicsOptions
+		&&  g_graphicsOptions->IsArmyTextOn()
+		||  g_theProfileDB->GetDebugAI()))
 #endif // _DEBUG
-	{
-		MBCHAR buf[k_MAX_NAME_LEN];
-		sprintf(buf, " (%d, %d)", point.x, point.y);
-		Concat(buf);
-	}
+		{
+			MBCHAR buf[k_MAX_NAME_LEN];
+			sprintf(buf, " (%d, %d)", point.x, point.y);
+			Concat(buf);
+		}
 
 	} else {
 		// Use the information from the last visit of that cell
@@ -380,7 +380,6 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 			}
 
 			sint32 gold, food, prod;
-// Added by Martin Gühmann
 			if(hasUnseen){
 				// Use the values from the hidden info if the tile is hidden
 				// (Reminder: Goods don't change once seen. If we want to allow goods to be discovered or run out, 
@@ -394,11 +393,11 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				prod = cell->GetShieldsProduced();
 				gold = cell->GetGoldProduced();
 			}
-            //include good values if present. PFT 05 Mar 05
-            StringId	goodStrID = 0;
+			//include good values if present. PFT 05 Mar 05
+			StringId	goodStrID = 0;
 
 			if(g_theWorld->IsGood(point)) {
-                sint32 goods;
+				sint32 goods;
 				cell->GetGoodsIndex(goods);
 
 				goodStrID = g_theWorld->GetTerrain(point)->GetResources(goods)->GetName();
@@ -423,19 +422,23 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				Concat(numBuf);
 			}
 
-            if(goodStrID > 0){
-                Concat(", ");
-                Concat(g_theStringDB->GetNameStr(goodStrID));
-            }
+			if(goodStrID > 0){
+				Concat(", ");
+				Concat(g_theStringDB->GetNameStr(goodStrID));
+			}
 			Concat(")");
 		}
 		
-#ifdef _DEBUG
-		MBCHAR buf[k_MAX_NAME_LEN];
-		sprintf(buf, " (%d, %d) ", point.x, point.y);
-		Concat(buf);
+#ifndef _DEBUG
+		if((g_graphicsOptions
+		&&  g_graphicsOptions->IsArmyTextOn()
+		||  g_theProfileDB->GetDebugAI()))
 #endif // _DEBUG
-
+		{
+			MBCHAR buf[k_MAX_NAME_LEN];
+			sprintf(buf, " (%d, %d) ", point.x, point.y);
+			Concat(buf);
+		}
 
 		if(cell->GetNumUnits() > 0) {
 			if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer() ||

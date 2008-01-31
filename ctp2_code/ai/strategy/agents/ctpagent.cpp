@@ -31,6 +31,7 @@
 //   but based on the minimum cost between start and destination points) - Calvitix
 // - Made FindPath and GetRounds methods more flexible. (25-Jan-2008 Martin Gühmann)
 // - Disband army text is also shown in the optimized version. (26-Jan-2008 Martin Gühmann)
+// - Changed rounds calculation back to original method. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -425,8 +426,11 @@ double CTPAgent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 		///start and destination mappoints. - Calvitix
 		Cell *          myCell      = g_theWorld->GetCell(pos);
 		Cell *          otherCell   = g_theWorld->GetCell(Get_Pos());
-		double const    movement    = 
-		    std::min(myCell->GetMoveCost(), otherCell->GetMoveCost());
+		double const    movement    = 100.0;
+		// This does not do the trick, better avaerage 
+		// over all tiles from pos to target, unfortunately this
+		// is slow.
+		//  std::min(myCell->GetMoveCost(), otherCell->GetMoveCost());
 
 		//To DO : instead of 100.0, compute the min of terraint cost (with implementation)
 		move_point_cost = movement * sqrt(static_cast<double>(cells)); //original : 100.0

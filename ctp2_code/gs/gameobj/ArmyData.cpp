@@ -119,6 +119,7 @@
 // - Added establishbuilding check to advertise, makes it more worthwhile - by E 27 Aug 2007
 // - Units that are grouped into previously empty armies now show up on the map. (5-Aug-2007 Martin Gühmann)
 // - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
+// - Bombard order is not given twice anymore. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -7336,10 +7337,12 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 
 	bool ignoreZoc = (order == UNIT_ORDER_FINISH_ATTACK || order == UNIT_ORDER_VICTORY_MOVE);
 
-	if(!CanMoveIntoCell(pos, zocViolation, ignoreZoc, alliedCity)) {
-		if(zocViolation
-		&& g_player[m_owner]->IsHuman()
-		){
+	if(!CanMoveIntoCell(pos, zocViolation, ignoreZoc, alliedCity))
+	{
+		DPRINTF(k_DBG_GAMESTATE, ("Move Failure: Army 0x%lx Executing order %s @ (%d,%d) to (%d,%d), turn=%d\n", m_id, g_orderInfo[m_orders->GetHead()->m_order].m_name, m_pos.x, m_pos.y, pos.x, pos.y, g_player[m_owner]->m_current_round));
+
+		if(zocViolation)
+		{
 			RevealZOCUnits(pos);
 			if(m_owner == g_selected_item->GetVisiblePlayer())
 			{
@@ -7347,8 +7350,8 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 			}
 		}
 
-		if(alliedCity) {
-			
+		if(alliedCity)
+		{
 			Unit city = g_theWorld->GetCity(pos);
 			//EMOD to allow for sneak attacks without popup	
 			Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
@@ -7385,7 +7388,7 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 	
 		if(g_player[m_owner]->IsRobot())
 		{
-			CtpAi::HandleMoveFailure(Army(m_id), pos); 
+			CtpAi::HandleMoveFailure(Army(m_id), pos);
 		}
 
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ClearOrders,
@@ -10248,7 +10251,7 @@ void ArmyData::PerformOrder(const OrderRecord * order_rec)
 // Remark(s)  : actually perform the order
 //
 //---------------------------------------------------------------------------- 
-void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path)
+void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority)
 {
 	Assert(path != NULL);
 	if (path == NULL)
@@ -10315,7 +10318,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			}
 			//else bombard now?
 			else
-				g_gevManager->AddEvent( GEV_INSERT_AfterCurrent, 
+				g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
 					 static_cast<GAME_EVENT>(game_event), 
 					 GEA_Army, Army(m_id), 
 					 GEA_MapPoint, target_pos, 
@@ -10334,7 +10337,6 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	//insert order's game_event here	
 	if (game_event > 0)
 	{
-		// Change this if target is a transporter or target is to unload
 		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
 		{
 			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
@@ -10373,16 +10375,13 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 				                       GEA_Int, (game_event == -1),
 				                       GEA_End);
 			}
-			// bombard target_pos
+			// Bombard target_pos
+			// Nothing to do here since order has been already given.
 
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, static_cast<GAME_EVENT>(game_event),
-			                       GEA_Army, Army(m_id),
-			                       GEA_MapPoint, target_pos,
-			                       GEA_End);
 		}
 		else
 		{//not a bombard order
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,                     // Only for cargo movement
 			                       GEV_MoveOrder,
 			                       GEA_Army, Army(m_id),
 			                       GEA_Path, tmp_path,
