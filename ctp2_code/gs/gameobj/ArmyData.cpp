@@ -120,6 +120,8 @@
 // - Units that are grouped into previously empty armies now show up on the map. (5-Aug-2007 Martin Gühmann)
 // - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
 // - Bombard order is not given twice anymore. (30-Jan-2008 Martin Gühmann)
+// - The player's cargo capacity is now calculated before the AI uses its
+//   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1560,12 +1562,6 @@ void ArmyData::BeginTurn()
     {
         g_player[m_owner]->m_can_use_sea_tab = (CountMovementTypeSea() > 0);
     }
-
-    //Add any empty cargo slots in this army to it's owner's total cargo capacity
-    sint32 transports, max_slots, empty_slots;
-    GetCargo(transports, max_slots, empty_slots);
-    g_player[m_owner]->AddCargoCapacity(static_cast<sint16>(empty_slots));
-
 
     if(m_flags & k_CULF_IN_SPACE) {
         if(NewTurnCount::GetCurrentRound() >= m_reentryTurn) {

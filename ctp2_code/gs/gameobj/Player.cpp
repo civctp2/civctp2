@@ -107,6 +107,8 @@
 // - Empty build queues will now also be filled at the end of the turn,
 //   to cover conquered cities and just founded cities. (26-Jan-2008 Martin Gühmann)
 // - Non-settlers cannot settle on cities anymore. (30-Jan-2008 Martin Gühmann)
+// - The player's cargo capacity is now calculated before the AI uses its
+//   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -1009,7 +1011,7 @@ Unit Player::CreateUnit(const sint32 t,
 		g_network.Unblock(m_owner);
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("Player::CreateUnit(t=%d, pos=(%d,%d), hc=%d) : newunit=%d\n", 
+	DPRINTF(k_DBG_GAMESTATE, ("Player::CreateUnit(t=%d, pos=(%d,%d), hc=0x%x) : newunit=0x%x\n", 
 	                           u.GetType(), pos.x, pos.y, hc.m_id, u.m_id));
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
@@ -1363,8 +1365,8 @@ sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY 
 	return r;
 }
 
-void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos, 
-   const DEATH_EFFECT_MORALE mtype)
+void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
+                               const DEATH_EFFECT_MORALE mtype)
 {
 	Unit aCity;
 	double dist;
@@ -1385,7 +1387,7 @@ void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 				m_oversea_lost_unit_count += nUnits;
 			}
 		} else { 
-			m_home_lost_unit_count += nUnits; 
+			m_home_lost_unit_count += nUnits;
 		}
 		break;
 	default:
@@ -1395,45 +1397,12 @@ void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 
 void Player::RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp)
 {
-	
-
-	
-	
-
-    
-
-    
-	
-            
-            
-            
-	
-    
-    
-
-    
-    
+	// Edit this so that the cargo is registered
 }
 
 void Player::RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp)
 {
-	
-
-	
-	
-
-    
-
-    
-    
-    
-    
-    
-    
-	
-
-    
-    
+	// Edit this so that the cargo is registered
 }
 
 Unit Player::CreateCity(
@@ -2110,7 +2079,6 @@ void Player::BeginTurnUnits()
 	sint32 i;
 	
 	m_can_use_sea_tab = FALSE;
-	m_cargoCapacity = 0;
 
 	if(g_network.IsHost()) {
 		g_network.Block(m_owner);
@@ -6544,11 +6512,11 @@ TerrainImprovement Player::CreateSpecialImprovement(sint32 dbIndex,
 	if(g_theTerrainImprovementPool->IsValid(theImprovement.m_id)) {
 		if(g_network.IsClient()) {
 			g_network.AddCreatedObject(theImprovement.AccessData());
-			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT, 
-											   dbIndex, 
+			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT,
+											   dbIndex,
 											   (sint32)point.x, (sint32)point.y,
 											   extraData,
-											   theImprovement.m_id));											   
+											   theImprovement.m_id));
 		}
 		m_terrainImprovements->Insert(theImprovement);
 		if(theImprovement.GetMaterialCost() <= m_materialPool->GetMaterials()) {
@@ -6663,13 +6631,13 @@ void Player::BeginTurnBattleFlags()
 
 sint32 Player::GetReadinessLevel() const
 {
-    return m_readiness->GetLevel(); 
+	return m_readiness->GetLevel(); 
 }
 
 sint32 Player::GetReadinessCost() const
 {
-    return sint32(m_readiness->GetCost()); 
-} 
+	return sint32(m_readiness->GetCost()); 
+}
 
 
 void Player::SetReadinessLevel(READINESS_LEVEL level, bool immediate)
@@ -6677,13 +6645,7 @@ void Player::SetReadinessLevel(READINESS_LEVEL level, bool immediate)
 	m_readiness->SetLevel(m_government_type, *m_all_armies, level, immediate);
 	if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_SET_READINESS, (sint32)level, (BOOL)immediate));
-	} 
-	
-
-
-
-
-
+	}
 }
 
 double Player::GetHPModifier() const
@@ -6710,7 +6672,7 @@ void Player::BuildWonder(sint32 wonder, Unit city)
 	}
 #endif
 	BOOL b = city.BuildWonder(wonder);
-    Assert(b);
+	Assert(b);
 }
 
 void Player::BuildEndGame(sint32 type, Unit city)
@@ -6732,7 +6694,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		
 		
 		if(!g_network.IsClient() || g_network.IsLocalPlayer(m_owner)) 
-        {
+		{
 			Unit *ua = new Unit[polluters];
 			for(sint32 i = 0; i < polluters; i++) {
 				ua[i].m_id = (0);
@@ -6777,7 +6739,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 			delete [] ua;
 		}
 	}
-//one time affect
+	//one time affect
 	if(wonderutil_GetFreeSlaves((uint64)1 << wonder)) {
 		sint32 i, n = m_all_cities->Num();
 		for(i = 0; i < n; i++) {
@@ -6787,10 +6749,10 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		for(i = m_all_units->Num() - 1; i >= 0; i--) {
 			const UnitRecord *rec = m_all_units->Access(i).GetDBRec();
 			if (    rec->HasSlaveRaids() 
-                 || rec->HasSettlerSlaveRaids() 
-                 || rec->HasSlaveUprising()
-               ) 
-            {
+			     || rec->HasSettlerSlaveRaids() 
+			     || rec->HasSlaveUprising()
+			   )
+			{
 				m_all_units->Access(i).Kill(CAUSE_REMOVE_ARMY_EMANCIPATION, -1);
 			}
 		}
@@ -6819,10 +6781,6 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		}
 	}
 
-	
-	
-	
-	
 	sint32 readinessReduction = wonderutil_GetReadinessCostReduction((uint64)1 << wonder);
 	if(readinessReduction > 0) {
 		m_readiness->RecalcCost();
@@ -6969,23 +6927,23 @@ void Player::RemoveWonder(sint32 which, bool destroyed)
 {
 	m_builtWonders &= ~((uint64)1 << which);
 
-    if (!wonderutil_IsObsolete(which)) { 
-        /// @todo Find out what was supposed to happen here: this is doing nothing
-	    sint32 increaseRegard = wonderutil_GetIncreaseRegard((uint64)1 << which);
+	if (!wonderutil_IsObsolete(which)) { 
+		/// @todo Find out what was supposed to happen here: this is doing nothing
+		sint32 increaseRegard = wonderutil_GetIncreaseRegard((uint64)1 << which);
 		
-    }
+	}
 
 	if (destroyed) 
-    {
+	{
 		Unit c;
 		g_theWonderTracker->GetCityWithWonder(which, c);
 
 		SlicObject * so = new SlicObject("097WonderDestroyed");
-        so->AddAllRecipientsBut(PLAYER_INDEX_VANDALS);
-        so->AddWonder(which);
+		so->AddAllRecipientsBut(PLAYER_INDEX_VANDALS);
+		so->AddWonder(which);
 		so->AddCity(c);
-        g_slicEngine->Execute(so);
-    }
+		 g_slicEngine->Execute(so);
+	}
 
 	sint32 buildingIndex;
 	if(g_theWonderDB->Get(which)->GetBuildingEverywhereIndex(buildingIndex)) {
@@ -9967,14 +9925,21 @@ sint16 Player::GetCargoCapacity() const
 	return m_cargoCapacity;
 }
 
+void Player::CalcCargoCapacity()
+{
+	m_cargoCapacity = 0;
+
+	for(sint32 i = 0; i < m_all_units->Num(); ++i)
+	{
+		m_cargoCapacity += m_all_units->Get(i).GetCargoCapacity();
+	}
+}
 
 void Player::AddCargoCapacity(const sint16 delta_cargo_slots)
 {
 	m_cargoCapacity += delta_cargo_slots;
-	
 }
 
-	
 GaiaController *Player::GetGaiaController()
 {
 	return m_gaiaController;

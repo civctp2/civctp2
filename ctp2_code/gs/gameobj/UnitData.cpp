@@ -303,7 +303,7 @@ void UnitData::Create(const sint32 t,
 				 const Unit &i,
 				 const PLAYER_INDEX o)
 {
-	DPRINTF(k_DBG_GAMESTATE, ("Creating unit: id: %d, type: %d, owner: %d\n",
+	DPRINTF(k_DBG_GAMESTATE, ("Creating unit: id: 0x%x, type: %d, owner: %d\n",
 							  i.m_id, t, o));
 
 	m_flags = 0;

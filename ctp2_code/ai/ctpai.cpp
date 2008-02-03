@@ -57,6 +57,8 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - The AI checks now all cities for rush buying even if there was a city
 //   where the item to rush buy was to expensive. (30-Jan-2008 Martin Gühmann)
+// - The player's cargo capacity is now calculated before the AI uses its
+//   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -648,7 +650,7 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 #ifdef _DEBUG
 	static bool s_allOk = true;
 	if (s_allOk) 
-    {
+	{
 		s_allOk = (playerId == g_selected_item->GetCurPlayer());
 		Assert(s_allOk);
 	}
@@ -660,7 +662,8 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                          Player %d\n", playerId));
 
-	
+	g_player[playerId]->CalcCargoCapacity();
+
 	Scheduler::GetScheduler(playerId).Process_Squad_Changes();
 
 	Scheduler::GetScheduler(playerId).Reset_Squad_Execution();
@@ -1051,7 +1054,7 @@ void CtpAi::Initialize()
 #ifdef _DEBUG
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(8); 
+	CtpAiDebug::SetDebugPlayer(7); 
 	CtpAiDebug::SetDebugGoalType(-1); 
 	CtpAiDebug::SetDebugArmies(unit_list); 
 #endif

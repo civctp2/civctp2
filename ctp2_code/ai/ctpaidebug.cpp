@@ -1,14 +1,33 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Debug Ai File
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _PLAYTEST
+// - If defined allows extensive logging
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 
@@ -17,7 +36,7 @@
 
 #ifdef _PLAYTEST
 
-PLAYER_INDEX CtpAiDebug::s_debugPlayer = 2;
+PLAYER_INDEX CtpAiDebug::s_debugPlayer = 7;
 sint32 CtpAiDebug::s_debugGoalType = -1;
 sint32 CtpAiDebug::s_debugArmies[k_MAX_ARMY_SIZE];
 

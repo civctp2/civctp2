@@ -39,6 +39,8 @@
 // - Added EnergySupply method 2-28-2007
 // - Slaves are distributed to more than just the closest city, the number
 //   of closest cities to them slaves are sent can be set in const.txt. (25-Jan-2008 Martin Gühmann)
+// - The player's cargo capacity is now calculated before the AI uses its
+//   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1034,8 +1036,7 @@ public:
 	sint32 CivHpBonus() const;
 
 	sint16 GetCargoCapacity() const;
-
-
+	void Player::CalcCargoCapacity();
 	void AddCargoCapacity(const sint16 delta_cargo_slots);
 
 

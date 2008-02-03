@@ -300,6 +300,27 @@ bool Plan::Plan_Is_Needed_And_Valid() const
 	       m_the_squad && (m_the_squad->Get_Num_Agents() > 0);
 }
 
+sint32 Plan::Get_Free_Transport_Capacity() const
+{
+	sint32 transports;
+	sint32 max;
+	sint32 empty;
+	sint32 freeTransportCapacity = 0;
+
+	for
+	(
+	    Agent_Match_List::const_iterator match_iter = m_matches.begin();
+	    match_iter != m_matches.end();
+	    ++match_iter
+	)
+	{
+		CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(*(match_iter->squad_index));
+		agent_ptr->Get_Army()->GetCargo(transports, max, empty);
+		freeTransportCapacity += empty;
+	}
+
+	return freeTransportCapacity;
+}
 
 Utility Plan::Compute_Matching_Value()
 {
@@ -316,7 +337,7 @@ Utility Plan::Compute_Matching_Value()
 		    ++match_iter
 		)
 		{
-			Agent_ptr agent_ptr = *(match_iter->squad_index); 
+			Agent_ptr agent_ptr = *(match_iter->squad_index);
 			match_iter->value   = m_the_goal->Compute_Matching_Value(agent_ptr);
 
 			if (match_iter->value > Goal::BAD_UTILITY) 

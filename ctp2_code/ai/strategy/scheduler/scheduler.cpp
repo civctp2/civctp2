@@ -650,52 +650,10 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 			if (goal_ptr->Get_Removal_Time())
 			{
-#if defined(_NEW_EXPLORATION_STUFF) // We need a better exploration goal setter but this isn't the solution either.
-				if(g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetTargetTypeUnexplored())
-				{
-					Squad_List::iterator squad_ptr_iter = m_squads.begin();
-					bool found = false;
-					while(squad_ptr_iter != m_squads.end() && !found)
-					{
-						Agent_List & agent_list = (*squad_ptr_iter)->Get_Agent_List();
-
-						Agent_List::iterator agent_iter;
-						for(agent_iter  = agent_list.begin();
-						    agent_iter != agent_list.end();
-						    agent_iter++
-						){
-							CTPAgent_ptr ctp_agent = (CTPAgent_ptr)(*agent_iter);
-							MapPoint pos;
-							if(ctp_agent->Get_Army()->NearestUnexplored(pos))
-							{
-								reinterpret_cast<CTPGoal*>(goal_ptr)->Set_Target_Pos(pos);
-								found = true;
-								break;
-							}
-						}
-						squad_ptr_iter++;
-					}
-					if(!found){
-						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-							("\t\tGOAL_COMPLETE (goal: %x squad: %x) -- Removing matches for goal.\n",
-							goal_ptr, squad_ptr));
-						Remove_Matches_For_Goal(goal_ptr);
-					}
-					else{
-						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-							("\t\tGOAL_EXPLORATION_REPLACED (goal: %x squad: %x) -- Replacing matches for goal.\n",
-							goal_ptr, squad_ptr));
-					}
-				}
-				else{
-#endif // _NEW_EXPLORATION_STUFF
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
 						("\t\tGOAL_COMPLETE (goal: %x squad: %x) -- Removing matches for goal.\n",
 						goal_ptr, squad_ptr));
 					Remove_Matches_For_Goal(goal_ptr);
-#if defined(_NEW_EXPLORATION_STUFF)
-				}
-#endif // _NEW_EXPLORATION_STUFF
 			}
 			else
 			{
@@ -706,7 +664,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		case GOAL_NEEDS_TRANSPORT:
 
-		        // optimization: If we have previously failed to get a transport, then skip trying to get a transport now:
+			// optimization: If we have previously failed to get a transport, then skip trying to get a transport now:
 			if (!out_of_transports) {
 
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
@@ -1682,6 +1640,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
     Plan_List::iterator & plan_iter
 )
 {
+	Assert(goal_ptr->Get_Strength_Needed().Get_Transport() > 0);
 	Squad_List::iterator squad_iter;
 
 	std::list<Plan_List::iterator> & matches_to_goal = goal_ptr->Get_Match_References();
@@ -1694,8 +1653,11 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		if( (k_Goal_SquadClass_CanTransport_Bit & (*matches_to_goal_iter)->Get_Squad()->Get_Squad_Class()) != 
 		     k_Goal_SquadClass_CanTransport_Bit )
 			continue;
-	
-		(*matches_to_goal_iter)->Compute_Matching_Value();
+
+		if((*matches_to_goal_iter)->Get_Free_Transport_Capacity() > 0)
+		{
+			(*matches_to_goal_iter)->Compute_Matching_Value();
+		}
 	}
 
 	Plan_List tmp_list;
@@ -1729,13 +1691,35 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			}
 		}
 
-		if (hasMatch)
+		if (hasMatch) // If we have one transport we continue, but we don't care about the needed transport capacity
 			continue;
 
-		match_added |= Add_New_Match_For_Goal_And_Squad(
-			goal_ptr,
-			squad_iter,
-			plan_iter);
+		const Agent_List & agents = (*squad_iter)->Get_Agent_List();
+
+		sint32 transports;
+		sint32 max;
+		sint32 empty;
+		sint32 freeTransportCapacity = 0;
+
+		for
+		(
+		    Agent_List::const_iterator agent_iter = agents.begin();
+		    agent_iter != agents.end();
+		    ++agent_iter
+		)
+		{
+			CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(*agent_iter);
+			agent_ptr->Get_Army()->GetCargo(transports, max, empty);
+			freeTransportCapacity += empty;
+		}
+
+		if(freeTransportCapacity > 0)
+		{
+			match_added |= Add_New_Match_For_Goal_And_Squad(
+				goal_ptr,
+				squad_iter,
+				plan_iter);
+		}
 	}
 
 	return match_added;

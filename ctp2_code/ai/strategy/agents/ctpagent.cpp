@@ -463,7 +463,7 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 	sint32 my_continent;
 	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
 	
-	MapPoint trans_pos = transport->Get_Pos(); 
+	MapPoint trans_pos = transport->Get_Pos();
 	if (check_continents)
 	{
 		sint32 trans_cont;
@@ -491,6 +491,19 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 		transport->Get_Army()->CountMovementTypeSea() * 1000.0;
 
 	utility = move_type_bonus + (trans_rounds * -100.0) - tile_count;
+
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Army()->GetOwner(), -1, -1,
+	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8f,\t%8f,\t%8d,\t%8d\n",
+	this,                                          // This agent
+	this->Get_Pos().x,                             // Agent pos.x
+	this->Get_Pos().y,                             // Agent pos.y
+	transport,                                     // Found transport
+	transport->Get_Pos().x,                        // Transport pos.x
+	transport->Get_Pos().y,                        // Transport pos.y
+	utility,                                       // Transport utility
+	move_type_bonus,                               // Movement bonus of transporter type
+	trans_rounds,                                  // Distance to transporter (Quare rooted quare distance), not identical with path distance
+	tile_count));                                  // Rounds to target
 
 	return true;
 }

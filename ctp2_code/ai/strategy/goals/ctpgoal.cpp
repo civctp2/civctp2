@@ -63,6 +63,9 @@
 //   the goody hut and the goody hut opeing army can defend against such Barbarians. (25-Jan-2008 Martin Gühmann)
 // - Fixed Goal subtask handling. (26-Jan-2008 Martin Gühmann)
 // - Improved transporter cargo loading. (30-Jan-2008 Martin Gühmann)
+// - The AI does not use settlers for attack anymore. (3-Feb-2008 Martin Gühmann)
+// - The AI now uses the closest transport to the unit transported, even if
+//   there is only one army to be transported. (3-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -639,11 +642,15 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		return Goal::BAD_UTILITY;
 	}
 
+#if defined(_DEBUG)
+	bool is_transporter = false;
+#endif
+
 	sint32 transports, max,empty;
 	if (m_current_needed_strength.Get_Transport() > 0 &&
 		ctpagent_ptr->Get_Army()->GetCargo(transports, max, empty) &&
 		empty > 0 && 
-		m_agents.size() > 1)
+		m_agents.size() > 0)
 	{
 		CTPAgent const *target_agent_ptr = NULL;
 		
@@ -658,6 +665,10 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		Assert(ctpagent_ptr != target_agent_ptr);
 
 		dest_pos = target_agent_ptr->Get_Pos();
+
+#if defined(_DEBUG)
+		is_transporter = true;
+#endif
 	}
 
 	Utility bonus = 0;
@@ -700,7 +711,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		if(ctpagent_ptr->Get_Army()->CanSettle())
 		{
 			// If there is a settler in the army...
-			bonus = BAD_UTILITY;
+			return Goal::BAD_UTILITY;
 		}
 	}
 
@@ -762,7 +773,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	{
 		sint32 army_cont, goal_cont;
 		bool is_land;
-		g_theWorld->GetContinent(dest_pos, goal_cont, is_land);
+		g_theWorld->GetContinent(dest_pos, goal_cont, is_land); // Same continent problem
 		g_theWorld->GetContinent(ctpagent_ptr->Get_Pos(), army_cont, is_land);
 		if ( (goal_cont != army_cont) && 
 			(ctpagent_ptr->Get_Army()->GetMovementTypeAir() == FALSE) &&
@@ -776,7 +787,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
-	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f \n",
+	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d \n",
 	this,                                          // This goal
 	ctpagent_ptr,                                  // The agent
 	ctpagent_ptr->Get_Pos().x,                     // Agent pos.x
@@ -784,6 +795,8 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	g_theGoalDB->Get(m_goal_type)->GetNameText(),  // Goal name
 	this->Get_Target_Pos().x,                      // Target pos.x
 	this->Get_Target_Pos().y,                      // Target pos.y
+	dest_pos.x,                                    // Sub target pos.x
+	dest_pos.y,                                    // Sub target pos.y
 	match,                                         // Computed match value
 	raw_priority,                                  // Raw match value
 	cell_dist,                                     // Distance to target (Quare rooted quare distance), not identical with path distance
@@ -794,7 +807,8 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	report_Treaspassing,                           // Whether we are treaspassing
 	time_term,                                     // Time needed to goal, if we would follow a bee line
 	report_InVisionRange,                          // In vision range bonus
-	report_NoBarbsPresent));                       // If no Barbarian are present bonus
+	report_NoBarbsPresent,                         // If no Barbarian are present bonus
+	is_transporter));                              // Whether the agent is a transporter
 #endif //_DEBUG
 
 	return match;
@@ -1638,24 +1652,22 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 	}
 
 	if	(goal_rec->GetSquadClassCanBombard())
-		{
-			static CellUnitList defenders;
-			defenders.Clear();
-			g_theWorld->GetArmy(target_pos, defenders);
-			if (ctpagent_ptr->Get_Army()->CanBombardTargetType(defenders) == FALSE)
-				return false;
-		}
+	{
+		static CellUnitList defenders;
+		defenders.Clear();
+		g_theWorld->GetArmy(target_pos, defenders);
+		if (ctpagent_ptr->Get_Army()->CanBombardTargetType(defenders) == FALSE)
+			return false;
+	}
 
 	army->GetCargo(transports, max_cargo_slots, empty_cargo_slots);
 	needed_transports = (m_current_needed_strength.Get_Transport() - 
 						 m_current_attacking_strength.Get_Transport());
 
 	if (transports > 0 )
-	{ 
-		
+	{
 		if ((empty_cargo_slots < max_cargo_slots) || (army->HasCargo()))
 		{
-			
 			ORDER_TEST cargo_test = army->CargoTestOrderHere(order_rec, target_pos);
 			if ( cargo_test	== ORDER_TEST_ILLEGAL ||
 				 cargo_test == ORDER_TEST_INVALID_TARGET )
@@ -2289,7 +2301,7 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 		}
 	}
 
-	switch (sub_task) { 
+	switch (sub_task) {
 		case SUB_TASK_GOAL:
 			if (!found)
 			{
@@ -2307,7 +2319,7 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 
 			break;
 
-		case SUB_TASK_RALLY: 
+		case SUB_TASK_RALLY:
 
 			if (waiting_for_buddies)
 			{
@@ -2723,13 +2735,13 @@ bool CTPGoal::UnGroupComplete() const
 bool CTPGoal::TryTransport(CTPAgent_ptr agent_ptr, const MapPoint & goal_pos) 
 {
 	if (g_theGoalDB->Get(m_goal_type)->GetNoTransport())
-		return false; 
+		return false;
 
-	
+	// Not so easy, what if a tranport is a shortcut?
 	if ( g_theWorld->GetContinent( goal_pos ) == 
 		 g_theWorld->GetContinent(agent_ptr->Get_Pos()) )
 		return false;
-	
+
 	CTPAgent_ptr transport_ptr;
 
 	if ( FindTransport(agent_ptr, transport_ptr) )
@@ -2738,10 +2750,10 @@ bool CTPGoal::TryTransport(CTPAgent_ptr agent_ptr, const MapPoint & goal_pos)
 			return true;
 	}
 
-	return false; 
+	return false;
 }
 
-bool CTPGoal::FindTransport(const CTPAgent_ptr & agent_ptr, CTPAgent_ptr & transport_ptr) 
+bool CTPGoal::FindTransport(const CTPAgent_ptr & agent_ptr, CTPAgent_ptr & transport_ptr)
 {
 	transport_ptr = NULL;
 
@@ -2784,7 +2796,7 @@ bool CTPGoal::FindTransport(const CTPAgent_ptr & agent_ptr, CTPAgent_ptr & trans
 				continue;
 		}
 
-		double  utility         = Goal::BAD_UTILITY; 
+		double  utility         = Goal::BAD_UTILITY;
 		if (agent_ptr->EstimateTransportUtility(possible_transport, utility) )
 		{
 			if (max_utility < utility)

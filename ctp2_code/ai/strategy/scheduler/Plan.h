@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : declarations for the Plan class
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -110,22 +110,22 @@ public:
 	
 	sint32 Rollback_All_Agents();
 
- 	
- 	bool Commited_Agents_Need_Orders() const;
 
-    ///
-    /// Check if the agents can be rollbacked to eventually receive other priority 
-    /// (for example : not if they are too close to their goals and grouping)
-    ///
-    bool CanMatchesBeReevaluated() const;
+	bool Commited_Agents_Need_Orders() const;
+
+	///
+	/// Check if the agents can be rollbacked to eventually receive other priority 
+	/// (for example : not if they are too close to their goals and grouping)
+	 ///
+	bool CanMatchesBeReevaluated() const;
 	void Move_All_Agents(Squad_ptr new_squad);
 
 	
-    bool Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter);
+	bool Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter);
 
 	
 	bool Agent_Committed(const Agent_ptr agent_ptr) const;
-
+	sint32 Get_Free_Transport_Capacity() const;
 
 protected:
 
