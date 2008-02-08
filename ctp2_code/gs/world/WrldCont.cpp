@@ -405,30 +405,30 @@ void World::AddToLandSearch
 
 void World::FindContinentSize()
 {
-    m_water_size->ExtendNFlat(m_water_continent_max); 
+    m_water_size->ExtendNFlat(m_water_continent_max);
 
-    sint32 i; 
-    for (i=0; i<m_water_continent_max; i++) { 
-        m_water_size->Access(i) = 0; 
+    sint32 i;
+    for (i=0; i<m_water_continent_max; i++) {
+        m_water_size->Access(i) = 0;
     } 
 
-    sint32 diff =  m_land_continent_max - LAND_CONTINENT_START; 
+    sint32 diff =  m_land_continent_max - LAND_CONTINENT_START;
 
     m_land_size->ExtendNFlat(diff);
-    for (i=0; i<diff; i++) { 
-        m_land_size->Access(i) = 0; 
+    for (i=0; i<diff; i++) {
+        m_land_size->Access(i) = 0;
     } 
 
     bool is_land;
-    sint32 cont;
+    sint16 cont;
     MapPoint pos;
-    for (pos.x = 0; pos.x<m_size.x; pos.x++) { 
-        for (pos.y=0; pos.y<m_size.y; pos.y++) { 
+    for (pos.x = 0; pos.x<m_size.x; pos.x++) {
+        for (pos.y=0; pos.y<m_size.y; pos.y++) {
             GetContinent(pos, cont, is_land);
             if (is_land) {
-                m_land_size->Access(cont)++; 
-            } else { 
-                m_water_size->Access(cont)++; 
+                m_land_size->Access(cont)++;
+            } else {
+                m_water_size->Access(cont)++;
             } 
         } 
     } 
@@ -447,26 +447,27 @@ sint32 World::GetWaterContinentSize(sint32 cont_num) const
 
 
 
-void World::GetContinent(const MapPoint &pos, sint32 &cont_number, bool &is_land) const
+void World::GetContinent(const MapPoint &pos, sint16 &cont_number, bool &is_land) const
 {
-	static bool REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT  = false;
+	// E note: I got this error when I made Muntains air only.
+	// So this method only checks land and water
+	static bool REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT  = false; // Made static so it shows only once
 	is_land = !IsWater(pos); 
-	///E note: I got this error when I made Muntains air only. So this method only checks land and water
 	
 	cont_number = GetCell(pos)->m_continent_number;
-	if (is_land) { 
-		cont_number -= LAND_CONTINENT_START; 
-	} 
+	if (is_land)
+	{
+		cont_number -= LAND_CONTINENT_START;
+	}
 
 	if (    (cont_number < 0)
-           || (!is_land && (cont_number >= LAND_CONTINENT_START))
-
-         )
+	     || (!is_land && cont_number >= LAND_CONTINENT_START)
+	   )
 	{
 		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
-        REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
-        is_land = false; 
-        cont_number = 0; 
+		REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
+		is_land = false;
+		cont_number = 0;
 	}
 }
 
@@ -497,33 +498,33 @@ void World::AllocateNeighborMem()
 
 void World::FindContinentNeighbors()
 {
-    sint32 center_cont; 
-    MapPoint center; 
-    MapPoint test_cont; 
+    sint16 center_cont;
+    MapPoint center;
+    MapPoint test_cont;
     bool is_land = false;
 
     
     AllocateNeighborMem();
 
-    for(center.x=0; center.x<m_size.x; center.x++) { 
-        for(center.y=0; center.y<m_size.y; center.y++) { 
+    for(center.x=0; center.x<m_size.x; center.x++) {
+        for(center.y=0; center.y<m_size.y; center.y++) {
 			
             GetContinent(center, center_cont, is_land);
 
-            Assert(0 <= center_cont); 
-            if (center_cont < 0) continue; 
+            Assert(0 <= center_cont);
+            if (center_cont < 0) continue;
 
             if(center.GetNeighborPosition(NORTHWEST, test_cont))
-				FindAContinentNeighbor(center_cont, test_cont, is_land); 
+				FindAContinentNeighbor(center_cont, test_cont, is_land);
 
             if(center.GetNeighborPosition(WEST, test_cont))
-				FindAContinentNeighbor(center_cont, test_cont, is_land); 
+				FindAContinentNeighbor(center_cont, test_cont, is_land);
 
             if(center.GetNeighborPosition(SOUTHWEST, test_cont))
-				FindAContinentNeighbor(center_cont, test_cont, is_land); 
+				FindAContinentNeighbor(center_cont, test_cont, is_land);
 
             if(center.GetNeighborPosition(SOUTH, test_cont))
-				FindAContinentNeighbor(center_cont, test_cont, is_land); 
+				FindAContinentNeighbor(center_cont, test_cont, is_land);
         }
     }
 }
@@ -536,7 +537,7 @@ void World::FindAContinentNeighbor
 )  
 {
     bool is_neighbor_land = false; 
-    sint32 test_cont;
+    sint16 test_cont;
     
     GetContinent(test_point, test_cont, is_neighbor_land);
 

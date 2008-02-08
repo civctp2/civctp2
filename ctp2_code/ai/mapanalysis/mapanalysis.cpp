@@ -275,7 +275,7 @@ void MapAnalysis::BeginTurn()
             m_valueGrid[player].AddValue(pos, total_value);
 
             bool    is_land;
-            sint32  cont;
+            sint16  cont;
             g_theWorld->GetContinent(pos, cont, is_land);
 
             if (is_land)
@@ -391,7 +391,7 @@ void MapAnalysis::BeginTurn()
                 m_maxCityHappiness[player] = happiness;
 
             bool    is_land;
-            sint32  cont;
+            sint16  cont;
             g_theWorld->GetContinent(pos, cont, is_land);
             if (is_land)
             {
@@ -448,7 +448,7 @@ sint32 MapAnalysis::GetThreat(const PLAYER_INDEX & player, const MapPoint & pos)
 
     for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
     {
-        if (    (player == opponent) 
+        if (    (player == opponent)
              || !Scheduler::CachedHasContactWithExceptSelf(player, opponent)
            )
         {
@@ -471,7 +471,7 @@ sint32 MapAnalysis::GetMaxThreat(const PLAYER_INDEX & player) const
     {
         if (opponent != player &&
 			!Scheduler::CachedIsNeutralRegard(player, opponent)
-           ) 
+           )
         {
 			threat += m_threatGrid[opponent].GetMaxGridValue();
 		}

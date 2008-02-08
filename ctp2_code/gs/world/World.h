@@ -365,7 +365,7 @@ public:
     sint32 GetWaterContinentSize(sint32 cont_num) const; 
 
     
-    void GetContinent(const MapPoint &pos, sint32 &cont_number, 
+    void GetContinent(const MapPoint &pos, sint16 &cont_number, 
         bool &is_land) const;
     
     void AllocateNeighborMem();

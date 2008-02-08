@@ -513,7 +513,7 @@ bool Astar::FindPath
 			static MapPoint next_pos;
 			if (!best->m_pos.GetNeighborPosition(WORLD_DIRECTION(i), next_pos)) continue;
 
-			c = g_theWorld->GetCell(next_pos);  
+			c = g_theWorld->GetCell(next_pos);
 
 			if (c->m_point && (c->m_search_count == g_search_count))
 			{
@@ -549,7 +549,7 @@ bool Astar::FindPath
 							m_priority_queue.Insert(c->m_point);
 #ifdef TRACK_ASTAR_NODES
 							--g_closed_nodes;
-#endif 
+#endif
 						}
 						else
 						{
@@ -567,8 +567,7 @@ bool Astar::FindPath
 								++nodes_opened;
 #ifdef TRACK_ASTAR_NODES
 								++g_nodes_opened;
-
-#endif 
+#endif
 							}
 
 							// Insert at the new - better - position.
@@ -581,10 +580,10 @@ bool Astar::FindPath
 						// No action: the path via best is not better.
 					}
 				}
-            } 
-            else 
-            { 
-                nodes_opened++;
+			}
+			else
+			{
+				nodes_opened++;
 
 #ifdef TRACK_ASTAR_NODES
 				g_nodes_opened++;
@@ -639,7 +638,7 @@ bool Astar::FindPath
                 ASTAR_ENTRY_TYPE    entry   = ASTAR_CAN_ENTER;
                 bool                is_zoc  = false; 
 
-                if (EntryCost(best->m_parent->m_pos, best->m_pos,                        
+                if (EntryCost(best->m_parent->m_pos, best->m_pos,
                               cost, is_zoc, entry
                              )
                    ) 
@@ -654,7 +653,7 @@ bool Astar::FindPath
             searching = false; 
         }
         
-    } while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));   
+    } while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
 
 #ifdef SUPER_DEBUG_HEURISTIC
     WhackScreen();  

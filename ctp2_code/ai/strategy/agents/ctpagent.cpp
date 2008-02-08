@@ -32,6 +32,7 @@
 // - Made FindPath and GetRounds methods more flexible. (25-Jan-2008 Martin Gühmann)
 // - Disband army text is also shown in the optimized version. (26-Jan-2008 Martin Gühmann)
 // - Changed rounds calculation back to original method. (30-Jan-2008 Martin Gühmann)
+// - Agents used in now exclusively set here. (8-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -313,8 +314,8 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
 	{
 		found_path.Clear();
 		found_path.JustSetStart( start_pos );
-		found_path.Restart( start_pos ); 
-		return true; 
+		found_path.Restart( start_pos );
+		return true;
 	}
 
 	float total_cost;
@@ -333,15 +334,15 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
 										   cont,
 										   static_cast<float>(trans_max_r),
 										   found_path,
-										   total_cost ))	
+										   total_cost ))
 	{
 		Assert(0 < found_path.Num()); 
 		
 		found_path.Start(start_pos);
-		return true; 
+		return true;
 	}
 
-	return false; 
+	return false;
 }
 
 
@@ -460,13 +461,13 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 	bool check_continents = !transport->Get_Army().GetMovementTypeAir();
 	bool is_land;
 
-	sint32 my_continent;
+	sint16 my_continent;
 	g_theWorld->GetContinent( Get_Pos(), my_continent, is_land );
 	
 	MapPoint trans_pos = transport->Get_Pos();
 	if (check_continents)
 	{
-		sint32 trans_cont;
+		sint16 trans_cont;
 		
 		g_theWorld->GetContinent( trans_pos, trans_cont, is_land );
 
@@ -508,16 +509,10 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 	return true;
 }
 
-
-
-
-
-
 void CTPAgent::Set_Target_Order(const sint32 target_order)
 {
 	m_targetOrder = target_order;
 }
-
 
 void CTPAgent::Set_Target_Pos(const MapPoint &target_pos)
 {
@@ -533,7 +528,6 @@ const MapPoint & CTPAgent::Get_Target_Pos() const
 {
 	return m_targetPos;
 }
-
 
 bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 {
@@ -555,18 +549,21 @@ bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 		range--;
 	}
 	
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder,
-		GEA_Army, m_army,
-		GEA_Path, tmpPath,
-		GEA_MapPoint, target_pos,
-		GEA_Int, (order_type == -1),
-		GEA_End);
+	g_gevManager->AddEvent(GEV_INSERT_Tail,
+	                       GEV_MoveOrder,
+	                       GEA_Army, m_army,
+	                       GEA_Path, tmpPath,
+	                       GEA_MapPoint, target_pos,
+	                       GEA_Int, (order_type == -1),
+	                       GEA_End
+	                      );
 
+	Set_Target_Pos(target_pos);
+	Set_Target_Order(order_type);
 	Set_Can_Be_Executed(false);
 
 	return true;
 }
-
 
 bool CTPAgent::Can_Execute_Order(const sint32 & order_type) const
 {
@@ -577,14 +574,13 @@ bool CTPAgent::Can_Execute_Order(const sint32 & order_type) const
 	return can_execute;
 }
 
-
 void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_pos)
 {
-	m_targetPos = target_pos;
-	m_targetOrder = order_type;
-
 	if (order_type < 0)
+	{
+		Set_Target_Order(-1);
 		return;
+	}
 
 	Assert(order_type < g_theOrderDB->NumRecords());
 
@@ -599,27 +595,39 @@ void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_
 		                       static_cast<GAME_EVENT>(game_event),
 		                       GEA_Army, m_army,
 		                       GEA_MapPoint, target_pos,
-		                       GEA_End);
+		                       GEA_End
+		                      );
+
+		Set_Target_Pos(target_pos);
 	}
 	else
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       static_cast<GAME_EVENT>(game_event),
 		                       GEA_Army, m_army,
-		                       GEA_End);
+		                       GEA_End
+		                      );
+
+		MapPoint pos;
+		Get_Army()->GetPos(pos);
+		Set_Target_Pos(pos);
 	}
 
+	Set_Target_Order(order_type);
 	Set_Can_Be_Executed(false);
 }
 
-
 void CTPAgent::Group_Order()
 {
-	g_gevManager->AddEvent( GEV_INSERT_Tail, 
-		GEV_GroupOrder, 
-		GEA_Army, m_army, 
-		GEA_End);
+	g_gevManager->AddEvent(GEV_INSERT_Tail,
+	                       GEV_GroupOrder,
+	                       GEA_Army, m_army,
+	                       GEA_End
+	                      );
 
+	MapPoint pos;
+	Get_Army()->GetPos(pos);
+	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 }
 
@@ -634,35 +642,45 @@ void CTPAgent::Group_With( CTPAgent_ptr second_army )
 	{
 		const Unit & unit = army.Access(unit_num);
 
-		g_gevManager->AddEvent( GEV_INSERT_Tail, 
-			GEV_GroupUnitOrder, 
-			GEA_Army, m_army, 
-			GEA_Unit, unit, 
-			GEA_End);
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+		                       GEV_GroupUnitOrder,
+		                       GEA_Army, m_army,
+		                       GEA_Unit, unit,
+		                       GEA_End
+		                      );
 	}
 
+	MapPoint pos;
+	Get_Army()->GetPos(pos);
+	Set_Target_Pos(pos);
 	second_army->Set_Can_Be_Executed(false);
 }
 
-
 void CTPAgent::Ungroup_Order()
 {
-	g_gevManager->AddEvent( GEV_INSERT_Tail, 
-		GEV_UngroupOrder, 
-		GEA_Army, m_army, 
-		GEA_End);
+	g_gevManager->AddEvent(GEV_INSERT_Tail,
+	                       GEV_UngroupOrder,
+	                       GEA_Army, m_army,
+	                       GEA_End
+	                      );
 
+	MapPoint pos;
+	Get_Army()->GetPos(pos);
+	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 }
 
-
 void CTPAgent::MoveIntoTransport()
 {
-	g_gevManager->AddEvent( GEV_INSERT_Tail, 
-					   GEV_BoardTransportOrder, 
-					   GEA_Army, Get_Army(), 
-					   GEA_End);
+	g_gevManager->AddEvent(GEV_INSERT_Tail,
+	                       GEV_BoardTransportOrder,
+	                       GEA_Army, Get_Army(),
+	                       GEA_End
+	                      );
 
+	MapPoint pos;
+	Get_Army()->GetPos(pos);
+	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
 }
 
@@ -696,7 +714,6 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 	if ( (power > 0) && ((threat/(double)power) > 1.0))
 		return 0;
 
-	
 	Unit        city_unit   = g_theWorld->GetCity(pos);
 
 	if (city_unit.m_id == 0)
@@ -726,10 +743,7 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 		{
 			const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 
-			Get_Army()->PerformOrderHere(order_rec, &found_path);
-			Set_Can_Be_Executed(false);
-			Set_Target_Order(order_rec->GetIndex());
-			Set_Target_Pos(found_path.GetEnd());
+			PerformOrderHere(order_rec, &found_path);
 			g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
 		}
 		return 0;
@@ -748,9 +762,27 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 	const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 	if(order_rec)
 	{
-		Get_Army()->PerformOrder(order_rec);
-		Set_Can_Be_Executed(false);
+		PerformOrder(order_rec);
+		g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
 	}
 
 	return unit_count;
+}
+
+void CTPAgent::PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority)
+{
+	Get_Army()->PerformOrderHere(order_rec, path, priority);
+	Set_Target_Order(order_rec->GetIndex());
+	Set_Target_Pos(path->GetEnd());
+	Set_Can_Be_Executed(false);
+}
+
+void CTPAgent::PerformOrder(const OrderRecord * order_rec)
+{
+	MapPoint pos;
+	Get_Army()->GetPos(pos);
+	Get_Army()->PerformOrder(order_rec);
+	Set_Target_Order(order_rec->GetIndex());
+	Set_Target_Pos(pos);
+	Set_Can_Be_Executed(false);
 }

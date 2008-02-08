@@ -236,21 +236,25 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	sint32 i;
 
 	Assert(player_ptr->m_all_units);
-	for(i = 0; i < player_ptr->m_all_units->Num(); ++i){
+	for(i = 0; i < player_ptr->m_all_units->Num(); ++i)
+	{
 		unit = player_ptr->m_all_units->Access(i);
 		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
 		
 		Assert(rec);
 		if(!rec) continue;
 
-		if(rec->GetNumCanSettleOn() > 0){
+		if(rec->GetNumCanSettleOn() > 0)
+		{
 			for(sint32 j = 0; j < rec->GetNumCanSettleOn(); ++j){
 				settleTerrainTypes[rec->GetCanSettleOnIndex(j)] = true;
 				noSettleUnits = false;
 			}
 		}
-		else{
-			for(sint32 j = 0; j < numTerrain; ++j){
+		else
+		{
+			for(sint32 j = 0; j < numTerrain; ++j)
+			{
 				const TerrainRecord* trec = g_theTerrainDB->Get(j);
 				if(trec->GetMovementTypeLand()                                        && rec->GetSettleLand()
 				|| trec->GetMovementTypeMountain()                                    && rec->GetSettleMountain()
@@ -312,22 +316,22 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 
 	delete settleTerrainTypes;
 
-    if (targets.empty())
-    {
-        return;
-    }
+	if (targets.empty())
+	{
+		return;
+	}
 
 	targets.sort(std::greater<SettleTarget>());
 
 	
 	sint16 max_water_cont = g_theWorld->GetMaxWaterContinent() - g_theWorld->GetMinWaterContinent();
-	sint16 max_land_cont = g_theWorld->GetMaxLandContinent() - g_theWorld->GetMinLandContinent();
+	sint16 max_land_cont  = g_theWorld->GetMaxLandContinent () - g_theWorld->GetMinLandContinent ();
 
 	
 	std::vector<sint16> water_continent_count(max_water_cont, 0);
-	std::vector<sint16> land_continent_count(max_land_cont, 0);
-	bool is_land;
-	sint32 cont;
+	std::vector<sint16>  land_continent_count(max_land_cont,  0);
+	bool   is_land;
+	sint16 cont;
 
 	
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
@@ -360,20 +364,20 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		{
 			for (tmp_iter = targets.begin(); tmp_iter != iter; ++tmp_iter)
 			{
-               if (MapPoint::GetSquaredDistance(iter->m_pos, tmp_iter->m_pos) <
-                   (min_settle_distance * min_settle_distance) 
-                  )
-			   {
-				   break;
-			   }
+				if(MapPoint::GetSquaredDistance(iter->m_pos, tmp_iter->m_pos) <
+				   (min_settle_distance * min_settle_distance)
+				  )
+				{
+					break;
+				}
 			}
 
 			if (tmp_iter == iter)
-            {
+			{
 				++iter;
-            }
-			else 
-            {
+			}
+			else
+			{
 				iter = targets.erase(iter);
 				continue;
 			}

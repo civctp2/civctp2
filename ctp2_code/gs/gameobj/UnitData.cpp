@@ -77,6 +77,7 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - ChangeArmy has no effect if a unit and its new army do not share the 
 //   same tile. (7-Nov-2007 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -163,14 +164,6 @@
 
 extern bool UnitCanCarry(sint32 dest, sint32 src, sint32 government);
 
-
-
-
-
-
-
-
-
 UnitData::UnitData
 (
     const sint32        t,
@@ -180,8 +173,8 @@ UnitData::UnitData
     const MapPoint &    center_pos,
     const Unit          hc,
     UnitActor *         actor
-) 
-: 
+)
+:
     GameObj(i.m_id)
 {
 	m_pos = center_pos;
@@ -218,8 +211,8 @@ UnitData::UnitData
     const Unit &        i,
     const PLAYER_INDEX  o,
     const MapPoint &    actor_pos
-) 
-: 
+)
+:
     GameObj(i.m_id)
 {
 	Create(t, trans_t, i, o);
@@ -398,7 +391,7 @@ UnitData::~UnitData()
 //----------------------------------------------------------------------------
 void UnitData::SetPosAndNothingElse(const MapPoint &p)
 {
-	m_pos = p; 
+	m_pos = p;
 
 	Assert(g_player[m_owner]); 
 	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
@@ -408,18 +401,15 @@ void UnitData::SetPos(const MapPoint &p, bool &revealed_unexplored,
                       bool &left_map)
 
 {
-	
 	if(Flag(k_UDF_IS_ENTRENCHED)) {
 		ClearFlag(k_UDF_IS_ENTRENCHED);
 	}
 
-	
 	RemoveUnitVision();
 	
 	UndoVision();
 	m_pos = p;
 
-	
 	m_roundTheWorldMask->SetBit(m_pos.x);
 	const UnitRecord *rec = GetDBRec();
 	if(m_roundTheWorldMask->AllBitsSet() && (rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())) {
@@ -478,7 +468,6 @@ void UnitData::SetPos(const MapPoint &p, bool &revealed_unexplored,
 //----------------------------------------------------------------------------
 bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fuel)
 {
-
 	const UnitRecord *rec = GetDBRec();
 
 	// EMOD
@@ -498,9 +487,9 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 
 
 
-    out_of_fuel = false;
-    if (rec->GetNoFuelThenCrash())
-    {
+	out_of_fuel = false;
+	if (rec->GetNoFuelThenCrash())
+	{
 		m_fuel -= g_theConstDB->Get(0)->GetNonSpaceFuelCost();
 
 		if (m_fuel <= 0) {
@@ -531,7 +520,7 @@ bool UnitData::IsImmobile() const
 
 bool UnitData::CantGroup()const 
 {
-    return GetDBRec()->GetCantGroup();
+	return GetDBRec()->GetCantGroup();
 }
 
 //----------------------------------------------------------------------------
@@ -691,14 +680,14 @@ bool UnitData::InsertCargo(const Unit &addme)
 //----------------------------------------------------------------------------
 void UnitData::GetCargoHP(sint32 &count, sint32 unit_type[100], sint32 unit_hp[100]) const
 {
-    sint32 n = m_cargo_list ? m_cargo_list->Num() : 0; 
-    Assert(n < 100); 
+    sint32 n = m_cargo_list ? m_cargo_list->Num() : 0;
+    Assert(n < 100);
 
-    for (count = 0; count < n; ++count) 
-    { 
-        unit_type[count] = (*m_cargo_list)[count].GetType(); 
-        unit_hp[count]   = static_cast<sint32>((*m_cargo_list)[count].GetHP()); 
-    } 
+    for (count = 0; count < n; ++count)
+    {
+        unit_type[count] = (*m_cargo_list)[count].GetType();
+        unit_hp[count]   = static_cast<sint32>((*m_cargo_list)[count].GetHP());
+    }
 }
 
 sint32 UnitData::PayWages(sint32 w)
@@ -724,11 +713,10 @@ sint32 UnitData::PayWages(sint32 w)
 //----------------------------------------------------------------------------
 sint32 UnitData::GetWagesNeeded() const
 {
-
 	// EMOD - Add something like unit wages? each unit 
 	// has a citizen wage but can be multiplied?
 
-    return m_city_data ? m_city_data->GetWagesNeeded() : 0;
+	return m_city_data ? m_city_data->GetWagesNeeded() : 0;
 }
 
 //----------------------------------------------------------------------------
@@ -749,7 +737,7 @@ sint32 UnitData::GetWagesNeeded() const
 void UnitData::DelFromCargo(const Unit & delme)
 {
     if (m_cargo_list)
-    { 
+    {
         sint32 r = m_cargo_list->Del(delme); 
         Assert(r);
     }
@@ -840,17 +828,17 @@ sint32 UnitData::GetNumCarried() const
 //----------------------------------------------------------------------------
 bool UnitData::CargoHasLandUnits() const
 {
-    const sint32 n = GetNumCarried();
+	const sint32 n = GetNumCarried();
 
-    for (sint32 i = 0; i < n; i++) 
-    {
+	for (sint32 i = 0; i < n; i++) 
+	{
 		Unit *unit = &(m_cargo_list->Access(i));
 		if (unit->GetMovementTypeLand() || unit->GetMovementTypeMountain()) {
 			return true;
 		}
-    }
+	}
 
-    return false;
+	return false;
 }
 
 //----------------------------------------------------------------------------
@@ -912,27 +900,28 @@ bool UnitData::IsMovePointsEnough(const MapPoint &pos) const
 //
 // Returns    : bool
 //
-// Remark(s)  :
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 bool UnitData::CanAtLeastOneCargoUnloadAt
 (
-    MapPoint const &    old_pos, 
-    MapPoint const &    dest_pos, 
-    bool                use_vision
+    MapPoint const &    old_pos,
+    MapPoint const &    dest_pos,
+    bool                use_vision,
+    bool                check_move_points
 ) const
 {
-    sint32 cargo_num = GetNumCarried();
+	sint32 cargo_num = GetNumCarried();
 
-    for (sint32 cargo_idx = 0; cargo_idx < cargo_num; cargo_idx++) 
-    { 
-        if (CanThisCargoUnloadAt((*m_cargo_list)[cargo_idx], old_pos, dest_pos, use_vision)) 
-        {
-		   return true;
-        }
-    }
+	for (sint32 i = 0; i < cargo_num; i++)
+	{
+		if (CanThisCargoUnloadAt((*m_cargo_list)[i], old_pos, dest_pos, use_vision, check_move_points))
+		{
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 //----------------------------------------------------------------------------
@@ -950,67 +939,68 @@ bool UnitData::CanAtLeastOneCargoUnloadAt
 //
 // Returns    : bool
 //
-// Remark(s)  : 
+// Remark(s)  : -
 //
 //---------------------------------------------------------------------------- 
 bool UnitData::CanThisCargoUnloadAt
 (
-    Unit             the_cargo, 
-    MapPoint const & old_pos, 
-    MapPoint const & new_pos, 
-    bool             use_vision
+    Unit             the_cargo,
+    MapPoint const & old_pos,
+    MapPoint const & new_pos,
+    bool             use_vision,
+    bool             check_move_points
 ) const
-{ 
-    const UnitData * the_cargo_data = the_cargo.GetData(); 
-    Assert(the_cargo_data);
-    
-    if (!the_cargo_data->IsMovePointsEnough(new_pos)) 
+{
+	const UnitData * the_cargo_data = the_cargo.GetData(); 
+	Assert(the_cargo_data);
+
+	if(check_move_points && !the_cargo_data->IsMovePointsEnough(new_pos))
 		return false;
 
-    Cell *          the_dest        = g_theWorld->GetCell(new_pos); 
-    CellUnitList *  the_dest_army   = the_dest ? the_dest->UnitArmy() : NULL;
-    sint32          destUnitCount   = the_dest_army ? the_dest_army->Num() : 0;
+	Cell *          the_dest        = g_theWorld->GetCell(new_pos); 
+	CellUnitList *  the_dest_army   = the_dest ? the_dest->UnitArmy() : NULL;
+	sint32          destUnitCount   = the_dest_army ? the_dest_army->Num() : 0;
 
-    if (    (destUnitCount >= k_MAX_ARMY_SIZE) 
-         && (m_owner == the_dest_army->GetOwner())
-       )
-    {
-        // Insufficient space
-        return false;
-    }
-
-    bool check_baddies = !use_vision || g_player[m_owner]->IsVisible(new_pos); 
-
-    if (check_baddies) 
-    { 
-        if (    (0 < destUnitCount) 
-             && (the_dest_army->GetOwner() != m_owner)
-             && !the_cargo->CanBeachAssaultRightNow()
-           ) 
-        {
-            // Guarded beach
+	if (    (destUnitCount >= k_MAX_ARMY_SIZE) 
+	     && (m_owner == the_dest_army->GetOwner())
+	   )
+	{
+		// Insufficient space
 		return false;
-        }
+	}
 
-        if (    (m_pos != new_pos) 
-             && !the_cargo.IsIgnoresZOC()
-             && g_theWorld->IsMoveZOC(m_owner, m_pos, new_pos, false)
-           )
-        { 
-            // Zone of control violation
+	bool check_baddies = !use_vision || g_player[m_owner]->IsVisible(new_pos); 
+
+	if (check_baddies) 
+	{
+		if (    (0 < destUnitCount)
+		     && (the_dest_army->GetOwner() != m_owner)
+		     && !the_cargo->CanBeachAssaultRightNow()
+		   )
+		{
+			// Guarded beach
+			return false;
+		}
+
+		if (    (m_pos != new_pos) 
+		     && !the_cargo.IsIgnoresZOC()
+		     && g_theWorld->IsMoveZOC(m_owner, m_pos, new_pos, false)
+		   )
+		{
+			// Zone of control violation
+			return false;
+		}
+	}
+
+	if (    the_dest->HasCity() 
+	     && (the_dest->GetCity().GetOwner() != m_owner) 
+	     && the_cargo.GetDBRec()->GetCantCaptureCity()
+	   )
+	{
 		return false;
-        }
-    }
+	}
 
-    if (    the_dest->HasCity() 
-         && (the_dest->GetCity().GetOwner() != m_owner) 
-         && the_cargo.GetDBRec()->GetCantCaptureCity()
-       )
-    {
-        return false;
-    } 
-
-    return g_theWorld->CanEnter(new_pos, the_cargo.GetMovementType());
+	return g_theWorld->CanEnter(new_pos, the_cargo.GetMovementType());
 }
 
 //----------------------------------------------------------------------------

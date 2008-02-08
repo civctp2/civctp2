@@ -896,7 +896,7 @@ STDEHANDLER(FinishMoveEvent)
 	sint32 canMoveIntoTransport = army.AccessData()->NumUnitsCanMoveIntoTransport(pos, transports);
 
 	if (g_theWorld->GetCity(pos).m_id == 0 &&
-	    army.AccessData()->Num() <= canMoveIntoTransport
+	    canMoveIntoTransport > 0
 	   )
 	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
@@ -904,20 +904,6 @@ STDEHANDLER(FinishMoveEvent)
 							   GEA_Army, army,
 							   GEA_MapPoint, pos,
 							   GEA_End);
-
-		return GEV_HD_Continue;
-	}
-	else if (g_theWorld->GetCity(pos).m_id == 0 &&
-	         canMoveIntoTransport > 0
-	        )
-	{
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-							   GEV_MoveIntoTransport,
-							   GEA_Army, army,
-							   GEA_MapPoint, pos,
-							   GEA_End);
-
-		army->RemainNumUnits(canMoveIntoTransport);
 
 		return GEV_HD_Continue;
 	}
@@ -968,12 +954,28 @@ STDEHANDLER(MoveIntoTransportEvent)
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
 	CellUnitList transports;
+	sint32 canMoveIntoTransport = a.AccessData()->NumUnitsCanMoveIntoTransport(pos, transports);
 	
-	if(a.AccessData()->CanMoveIntoTransport(pos, transports)) {
+	if(a.AccessData()->Num() <= canMoveIntoTransport)
+	{
 		a.AccessData()->MoveIntoTransport(pos, transports);
-	} else {
+	}
+	// @ToDo merge this with the above when also the settler escord can find the goal without a settler
+	else if(canMoveIntoTransport > 0)
+	{
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+							   GEV_MoveIntoTransport,
+							   GEA_Army, a,
+							   GEA_MapPoint, pos,
+							   GEA_End);
+
+		a->RemainNumUnits(canMoveIntoTransport);
+	}
+	else
+	{
 		g_soundManager->AddGameSound(GAMESOUNDS_ILLEGAL_MOVE);
 	}
+
 	return GEV_HD_Continue;
 }
 

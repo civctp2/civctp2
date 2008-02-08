@@ -4079,6 +4079,16 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 	strategy.GetBuildTransportProductionLevel(build_transport_production_level);
 	strategy.GetBuildSettlerProductionLevel(build_settler_production_level);
 
+	bool canBuildSettlers  = static_cast<double>(m_currentUnitShieldCost) / 
+	                         static_cast<double>(m_maximumUnitShieldCost) > 
+	                                      build_settler_production_level;
+//	                      || city->GetNeededGarrisonStrength() * build_settler_production_level <= city->GetCurrentGarrisonStrength();
+
+	bool canBuildTransporters = static_cast<double>(m_currentUnitShieldCost) / 
+	                            static_cast<double>(m_maximumUnitShieldCost) > 
+	                                         build_settler_production_level;
+//	                      || city->GetNeededGarrisonStrength() * build_transport_production_level <= city->GetCurrentGarrisonStrength();
+
 	for (list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
 		if( !g_player[m_playerId]->IsRobot()
@@ -4121,40 +4131,34 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			needed_production *= list_ref.m_desiredCount;
 		}
 
-		if ( needed_production > 0 )
+		if(needed_production > 0)
 		{
 			if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 			|| static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
 			){
-				if( static_cast<double>(m_currentUnitShieldCost) / 
-				    static_cast<double>(m_maximumUnitShieldCost) > 
-				                           build_transport_production_level
-				){
+				if(canBuildTransporters)
+				{
 					max_list = static_cast<BUILD_UNIT_LIST>(list_num);
 					break;
 				}
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER)
 			{
-				if( static_cast<double>(m_currentUnitShieldCost) / 
-				    static_cast<double>(m_maximumUnitShieldCost) > 
-				                           build_settler_production_level
-				){
+				if(canBuildSettlers)
+				{
 					max_list = static_cast<BUILD_UNIT_LIST>(list_num);
 					break;
 				}
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL)
 			{
-				if( static_cast<double>(m_currentUnitShieldCost) / 
-				    static_cast<double>(m_maximumUnitShieldCost) > 
-				                           build_settler_production_level
-				){
+				if(canBuildSettlers)
+				{
 					max_list = static_cast<BUILD_UNIT_LIST>(list_num);
 					break;
 				}
 			}
-			else if( needed_production > max_production ) 
+			else if(needed_production > max_production)
 			{
 				max_production = needed_production;
 				max_list = static_cast<BUILD_UNIT_LIST>(list_num);

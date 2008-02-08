@@ -678,13 +678,13 @@ void Scheduler::Match_Resources(const bool move_armies)
 				if(!match_added)
 				{
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-						("\t\t **NO transports found. Failing.\n"));
+						("\t\t **NO transporters found. Failing.\n"));
 					out_of_transports = true; // record the fact we could not find a transport
 				}
 				else
 				{
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
-						("\t\t Transports found.\n"));
+						("\t\t Transporters found.\n"));
 
 					plan_iter++;
 	
@@ -1199,8 +1199,8 @@ bool Scheduler::Prune_Goals()
  				goal_ptr_iter++;
  			
 				m_goals_of_type[goal_type].splice(m_goals_of_type[goal_type].end(), 
-								  m_goals_of_type[goal_type],  
-								  tmp_goal_iter);		       
+								  m_goals_of_type[goal_type],
+								  tmp_goal_iter);
 
 				if (pruned_goal_iter == m_goals_of_type[goal_type].end()) 
 				{
@@ -1224,7 +1224,7 @@ bool Scheduler::Prune_Goals()
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n\n"));
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
-				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n", 
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n",
 					g_theGoalDB->Get(goal_type)->GetNameText(),
 					goal_type));
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
@@ -1257,7 +1257,7 @@ bool Scheduler::Prune_Goals()
 		}
 #endif
 
-	} 
+	}
 
 	DPRINTF(k_DBG_AI, ("//  PRUNE goals based on max eval and max exec:\n"));
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n\n", prune_time  ));
@@ -1869,7 +1869,7 @@ void Scheduler::SetIsNeutralRegardCache(int player)
 	if (player < 0) return;
 	m_neutralRegardCache = 0;
 	sint32 opponent;
-	Diplomat & diplomat = Diplomat::GetDiplomat(player);	
+	Diplomat & diplomat = Diplomat::GetDiplomat(player);
 	for(opponent = 0;
 	    opponent < AgreementMatrix::s_agreements.GetMaxPlayers();
 	  ++opponent
@@ -1908,7 +1908,7 @@ void Scheduler::SetIsAllyRegardCache(int player)
 	if (player < 0) return;
 	m_allyRegardCache = 0;
 	sint32 ally;
-	Diplomat & diplomat = Diplomat::GetDiplomat(player);	
+	Diplomat & diplomat = Diplomat::GetDiplomat(player);
 	for(ally = 0;
 	    ally < AgreementMatrix::s_agreements.GetMaxPlayers();
 	  ++ally

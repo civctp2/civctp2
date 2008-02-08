@@ -26,6 +26,8 @@
 //
 // - SnipEndUntilCanEnter now snips a path always to the MapPoint before the
 //   first non-enterable MapPoint comes. (30-Jan-2008 Martin Gühmann)
+// - SnipEndUntilCanEnter is now base on the army's ability to enter cell
+//   and not based on its movement type. (8-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -37,6 +39,7 @@
 #include "MapPoint.h"
 #include "Cell.h"
 #include "World.h"
+#include "Army.h"
 
 void Direction::Serialize(CivArchive &archive)
 
@@ -433,22 +436,25 @@ void Path::RestoreIndexAndCurrentPos(const sint32 & index)
 }
 
 
-MapPoint Path::SnipEndUntilCanEnter(const uint32 & movement_type)
+MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 {
-	sint32 i;
-	MapPoint end  = m_start;
-	MapPoint last = m_start;
+	sint32   i;
+	MapPoint end            = m_start;
+	MapPoint last           = m_start;
 	MapPoint next;
-	sint32 last_can_enter = -1;
+	MapPoint beforeLast     = m_start;
+	sint32   last_can_enter = -1;
+
 	for(i = 0; i < m_step.Num(); i++)
 	{
 		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next))
 		{
 			end = next;
-			if (g_theWorld->GetCell(next)->CanEnter(movement_type) )
+			if(army.CanEnter(next))
 			{
 				last_can_enter = i;
-				last = end;
+				beforeLast     = last;
+				last           = end;
 			}
 			else
 			{
@@ -457,11 +463,19 @@ MapPoint Path::SnipEndUntilCanEnter(const uint32 & movement_type)
 		}
 		else
 		{
-			Assert(FALSE);
+			Assert(false);
 		}
 	}
-	
-	for (i = m_step.Num() - 1; i > last_can_enter; i--)
+
+	if(!g_theWorld->GetCell(end)->CanEnter(army.GetMovementType()))
+	{
+		if(last_can_enter > 0)
+			last_can_enter--;
+
+		last = beforeLast;
+	}
+
+	for(i = m_step.Num() - 1; i > last_can_enter; i--)
 	{
 		m_step.DelIndex(i);
 	}

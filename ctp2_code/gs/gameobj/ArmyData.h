@@ -36,6 +36,7 @@
 // - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
 // - PerformOrderHere move to target order can now be inserted at tail into the
 //   event queue. (30-Jan-2008 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -431,7 +432,7 @@ public:
     void SetTurnOver();
     bool TurnOver();
 
-    bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & used_vision) const;
+    bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & used_vision, const bool check_move_points = true) const;
 
     static bool GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
     static bool GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );

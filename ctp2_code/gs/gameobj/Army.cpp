@@ -27,6 +27,7 @@
 // - Added option to reduce resync reporting.
 // - Added IsWounded method
 // - Added CanTransport and IsCivilian methods.
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -903,12 +904,13 @@ bool Army::IsWounded(void) const
 
 bool Army::CanAtLeastOneCargoUnloadAt
 (
-    MapPoint const &    old_pos, 
-    MapPoint const &    dest_pos, 
-    bool                use_vision
+    MapPoint const &    old_pos,
+    MapPoint const &    dest_pos,
+    bool                use_vision,
+    const bool          check_move_points
 ) const
 {
-	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
+	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision, check_move_points);
 }
 
 bool Army::ExecutedThisTurn() const

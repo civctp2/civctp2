@@ -50,6 +50,7 @@
 //   to pollute the environment, instead of using a value of 1. (9-Jun-2007 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -689,7 +690,6 @@ sint32 Unit::GetFirstMoveThisTurn() const
 uint32 Unit::GetMovementType() const
 {
 	return GetDBRec()->GetMovementType();
-
 }
 
 bool Unit::GetMovementTypeLand() const
@@ -765,9 +765,9 @@ void Unit::Transform()
 }
 #endif
 
-bool Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & use_vision) const
+bool Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & use_vision, bool check_move_points) const
 {
-	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
+	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision, check_move_points);
 }
 
 bool Unit::UnloadCargo(const MapPoint &new_pos, Army &debark,

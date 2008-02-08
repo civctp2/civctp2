@@ -59,6 +59,7 @@
 //   where the item to rush buy was to expensive. (30-Jan-2008 Martin Gühmann)
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
+// - Corrected unit garrison calculation for slave guarding. (8-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -593,7 +594,7 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 	
 	bool found = Diplomat::GetDiplomat(playerId).StartNegotiations();
 	
-	if (found == false)
+	if(!found)
 	{
 		
 		if(!g_network.IsClient()) {
@@ -1054,7 +1055,7 @@ void CtpAi::Initialize()
 #ifdef _DEBUG
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(7); 
+	CtpAiDebug::SetDebugPlayer(2); 
 	CtpAiDebug::SetDebugGoalType(-1); 
 	CtpAiDebug::SetDebugArmies(unit_list); 
 #endif
@@ -1595,7 +1596,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 							GEA_Int, FALSE, 
 							GEA_End);
 
-	g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", 255);
+						g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", 255);
 
 						found = true;
 					}
@@ -1839,15 +1840,15 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 
 	SettleMap::SettleTargetList targets;
 	SettleMap::s_settleMap.GetSettleTargets(playerId, targets);
-    if (targets.empty())
-    {
-        return;
-    }
+	if (targets.empty())
+	{
+		return;
+	}
 	
 	for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
 	{
 		const StrategyRecord::GoalElement *
-                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+		            goal_element_ptr    = strategy.GetGoalElement(goal_element);
 		GOAL_TYPE   goal_type           = static_cast<GOAL_TYPE>(goal_element_ptr->GetGoalIndex());
 		Assert(goal_type >= 0);
 
@@ -1856,13 +1857,13 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 			continue;
 
 		sint32  max_desired_goals   = static_cast<sint32>
-            (goal_element_ptr->GetMaxEval() - scheduler.CountGoalsOfType(goal_type));
+		    (goal_element_ptr->GetMaxEval() - scheduler.CountGoalsOfType(goal_type));
 		sint32  desired_goals       = max_desired_goals;
 
 		for (SettleMap::SettleTargetList::iterator iter = targets.begin(); 
 		     iter != targets.end() && (desired_goals > 0); 
-			 ++iter
-            )
+		     ++iter
+		    )
 		{
 			SettleMap::SettleTarget settle_target = *iter;
 
@@ -1879,7 +1880,7 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 				scheduler.Add_New_Goal( goal_ptr );
 
 				uint8   magnitude = (uint8) (((max_desired_goals - desired_goals) * 255) / max_desired_goals);
-	            char buf[10];
+				char buf[10];
 				sprintf(buf, "%4.0f", settle_target.m_value);
 				g_graphicsOptions->AddTextToCell(settle_target.m_pos, buf, magnitude);
 					
@@ -1899,10 +1900,10 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 	Player *player_ptr = g_player[playerId];
 	Assert(player_ptr);
 
-    for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
+	for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
 	{
 		const StrategyRecord::GoalElement *
-                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+		            goal_element_ptr    = strategy.GetGoalElement(goal_element);
 		GOAL_TYPE   goal_type           = static_cast<GOAL_TYPE>(goal_element_ptr->GetGoalIndex());
 		Assert(goal_type >= 0);
 
@@ -1910,10 +1911,10 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 			 !g_theGoalDB->Get(goal_type)->GetTargetTypeChokePoint())
 			 continue;
 
-        // Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
-        // it can freeze all the goals of this type) - Calvitix
+		// Add goals if there is only half or less goals remaining (and not just when there isn't anymore (if one goal remain and isn't satisfied,
+		// it can freeze all the goals of this type) - Calvitix
 		if (scheduler.CountGoalsOfType(goal_type) > (goal_element_ptr->GetMaxEval()/3))
-			continue;					
+			continue;
 
 		if (g_player[playerId]->m_civilisation->GetCivilisation() == 0)
 			continue;
@@ -1932,21 +1933,21 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 					goal_ptr->Set_Player_Index( playerId );
 					goal_ptr->Set_Target_Pos( pos );
 
-                    scheduler.Add_New_Goal( goal_ptr );
+					scheduler.Add_New_Goal( goal_ptr );
 				}
 
 				if (cell->GetGoodyHut())
 				{
 					CTPGoal * goal_ptr = new CTPGoal();
 					goal_ptr->Set_Type( goal_type );
-    				goal_ptr->Set_Player_Index( playerId );
+					goal_ptr->Set_Player_Index( playerId );
 					goal_ptr->Set_Target_Pos( pos );
 
 					scheduler.Add_New_Goal( goal_ptr );
 				}
-			} 
-		} 
-	} 
+			}
+		}
+	}
 }
 
 	
@@ -1976,15 +1977,15 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		Unit city = player_ptr->m_all_cities->Access(cityIndex);
 		Assert( city.IsValid() );
 
-        CityData *  cityData    = city->GetCityData();
+		CityData *  cityData    = city->GetCityData();
 		Assert( cityData );
 
 		MapPoint pos = city.RetPos();
 		double threat = MapAnalysis::GetMapAnalysis().GetThreat(playerId, pos) * threatFactor;
 		cityData->SetNeededGarrisonStrength(threat);
 
-		sint32 slave_garrison = cityData->SlaveCount() / 2;
-        cityData->SetNeededGarrison(std::max<sint32>(slave_garrison, min_garrison));
+		sint32 slave_garrison = cityData->SlaveCount() / g_theConstDB->Get(0)->GetSlavesPerMilitaryUnit();
+		cityData->SetNeededGarrison(std::max<sint32>(slave_garrison, min_garrison));
 
 		cityData->SetCurrentGarrisonStrength(0.0);
 		cityData->SetCurrentGarrison(0);

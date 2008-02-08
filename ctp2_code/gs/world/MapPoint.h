@@ -2,7 +2,8 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  :
+// Description  : Map point handling
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -15,8 +16,9 @@
 //
 //----------------------------------------------------------------------------
 //
-//
 // Compiler flags
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
@@ -150,7 +152,11 @@ public:
 
     double EuclidianLength () const
     {
+#ifdef _SMALL_MAPPOINTS
         double sum = x * x + y * y;
+#else
+        double sum = x * x + y * y + z * z;
+#endif
         return sqrt(sum);
     }
 

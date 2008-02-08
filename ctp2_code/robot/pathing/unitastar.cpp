@@ -93,10 +93,10 @@ namespace
 #pragma warning(default:4309)
 }
 
-UnitAstar::UnitAstar() 
-{ 
-    ClearMem(); 
-} 
+UnitAstar::UnitAstar()
+{
+    ClearMem();
+}
 
 //----------------------------------------------------------------------------
 //
@@ -307,61 +307,88 @@ bool UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 	bool &can_enter)
 {
 
-    if (the_pos_cell->GetCity().m_id != 0) { 
-        if (the_pos_cell->GetCity().GetOwner() != m_owner) {
-            return false;
-        } 
-    } 
+	if (the_pos_cell->GetCity().m_id != 0)
+	{
+		if (the_pos_cell->GetCity().GetOwner() != m_owner)
+		{
+			return false;
+		}
+	}
 
-    CellUnitList* dest_army = the_pos_cell->UnitArmy(); 
+	CellUnitList* dest_army = the_pos_cell->UnitArmy();
 
-    if (dest_army && (0 < dest_army->Num()))
-    {  
-		if(m_is_robot || dest_army->IsVisible(m_owner)) {
-			PLAYER_INDEX dest_owner = dest_army->GetOwner(); 
+	if (dest_army && (0 < dest_army->Num()))
+	{
+		if(m_is_robot || dest_army->IsVisible(m_owner))
+		{
+			PLAYER_INDEX dest_owner = dest_army->GetOwner();
 			if (dest_owner != m_owner) { 
 
-				if (pos != m_dest) { 
+				if (pos != m_dest)
+				{
+					if (m_is_robot && m_army_can_expel_stealth && dest_army->CanBeExpelled())
+					{
+						return false;
+					}
+					else
+					{
+						cost = k_ASTAR_BIG;
+						can_enter = false;
+						entry = ASTAR_BLOCKED;
 
-                    if (m_is_robot && m_army_can_expel_stealth && dest_army->CanBeExpelled()) { 
-                        return false;
-                    } else { 
-					    cost = k_ASTAR_BIG;
-					    can_enter = false;
-					    entry = ASTAR_BLOCKED;
-					    
-                        return true;
-                    }
-                } else  if (m_is_zero_attack) { 
-					cost = k_ASTAR_BIG; 
-					can_enter = false;
-					entry = ASTAR_BLOCKED;
-					
-                    return true;
-                } else { 
-					can_be_zoc = false;
-				} 
-			} else { 
-				can_be_zoc = false;
-				
-				if (pos == m_dest) {
-    				if (CanMoveIntoTransports(pos)) {
-	    				cost = k_MOVE_ENTER_TRANSPORT_COST;
-                        entry = ASTAR_CAN_ENTER;
-		    			can_enter = true;
-                        return true;
-			    	}
-				} 
-
-				if ((m_check_dest || (!m_check_dest && (pos != m_dest)))&& (k_MAX_ARMY_SIZE - dest_army->Num()) < m_nUnits) {
+						return true;
+					}
+				}
+				else if (m_is_zero_attack)
+				{
 					cost = k_ASTAR_BIG;
 					can_enter = false;
 					entry = ASTAR_BLOCKED;
-                    return true;
+					
+					return true;
+				}
+				else
+				{
+					can_be_zoc = false;
 				}
 			}
-        }
-    }
+			else
+			{
+				can_be_zoc = false;
+				
+				if (pos == m_dest)
+				{
+					if (CanMoveIntoTransports(pos))
+					{
+						cost = k_MOVE_ENTER_TRANSPORT_COST;
+						entry = ASTAR_CAN_ENTER;
+						can_enter = true;
+						return true;
+					}
+					else if(m_isTransporter)
+					{
+						return false;
+					}
+				}
+
+				if(
+				   (     m_check_dest
+				    || 
+				       (!m_check_dest
+				     &&  pos != m_dest
+				       )
+				   )
+				&&  k_MAX_ARMY_SIZE - dest_army->Num() < m_nUnits
+				  )
+				{
+					cost = k_ASTAR_BIG;
+					can_enter = false;
+					entry = ASTAR_BLOCKED;
+					return true;
+				}
+			}
+		}
+	}
 
 #if 0
 // Removed by Martin Gühmann should be reconsidered
@@ -377,12 +404,12 @@ bool UnitAstar::CheckUnits(const MapPoint &prev, const MapPoint &pos,
 			cost *= k_MOVE_ISDANGER_COST; 
 			can_enter = true;
 			entry = ASTAR_CAN_ENTER; 
-			return TRUE; 
+			return true; 
 		}
 	}
 #endif
-	
-    return false;
+
+	return false;
 }
 
 
@@ -392,10 +419,10 @@ bool UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,
     Cell *the_prev_cell, Cell *the_pos_cell, CityData *the_pos_city, 
     float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
-    if (the_pos_city) {
-        if (the_pos_city->GetOwner() != m_owner) {
-            if (m_is_robot || the_pos_cell->GetCity().GetVisibility() & (0x01 << m_owner)) {
-                if (pos == m_dest) {
+	if (the_pos_city) {
+		if (the_pos_city->GetOwner() != m_owner) {
+			if (m_is_robot || the_pos_cell->GetCity().GetVisibility() & (0x01 << m_owner)) {
+				if (pos == m_dest) {
 					if ((m_move_intersection & k_Unit_MovementType_Air_Bit) ||
 						(m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
 						(m_move_intersection & k_Unit_MovementType_ShallowWater_Bit)) {
@@ -411,17 +438,18 @@ bool UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,
 						cost = ComputeValidMovCost(pos, the_pos_cell);
 						can_enter = true;
 						return true;
-                    }
-                } else {
-                    cost = k_ASTAR_BIG;
+					}
+				} else {
+					cost = k_ASTAR_BIG;
 					can_enter = false;
 					entry = ASTAR_BLOCKED;
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 
@@ -458,50 +486,50 @@ bool UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
     ASTAR_ENTRY_TYPE &entry, bool &can_enter)
 {
 	if (m_army.m_id != 0)
-	{ 
+	{
 		if (m_army.CanEnter(pos))
-		{ 
+		{
 			cost = ComputeValidMovCost(pos, the_pos_cell);
 			can_enter = true;
-		} 
-		else 
-		{ 
+		}
+		else
+		{
 			cost = k_ASTAR_BIG;
 			can_enter = false;
 			entry = ASTAR_BLOCKED;
 		}
-	} 
-	else 
-	{ 
+	}
+	else
+	{
 		if( (m_move_union & k_Unit_MovementType_Land_Bit)
 		&&  (m_move_union & k_Unit_MovementType_Mountain_Bit)
 		){
 			if ((!the_pos_cell->CanEnter(k_Unit_MovementType_Land_Bit)) &&
 				(!the_pos_cell->CanEnter(k_Unit_MovementType_Mountain_Bit)))
 			{ 
+				cost = k_ASTAR_BIG;
+				can_enter = false;
+				entry = ASTAR_BLOCKED;
+				return true;
+			}
+		}
+		else if (m_move_union & k_Unit_MovementType_Land_Bit)
+		{
+			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Land_Bit))
+			{
 				cost = k_ASTAR_BIG; 
 				can_enter = false; 
 				entry = ASTAR_BLOCKED; 
 				return true;
 			}
-		} 
-		else if (m_move_union & k_Unit_MovementType_Land_Bit) 
-		{ 
-			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Land_Bit)) 
-			{ 
-				cost = k_ASTAR_BIG; 
-				can_enter = false; 
-				entry = ASTAR_BLOCKED; 
-				return true;
-			}
-		} 
-		else if (m_move_union & k_Unit_MovementType_Mountain_Bit) 
-		{ 
-			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Mountain_Bit)) 
-			{ 
-				cost = k_ASTAR_BIG; 
-				can_enter = false; 
-				entry = ASTAR_BLOCKED; 
+		}
+		else if (m_move_union & k_Unit_MovementType_Mountain_Bit)
+		{
+			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Mountain_Bit))
+			{
+				cost = k_ASTAR_BIG;
+				can_enter = false;
+				entry = ASTAR_BLOCKED;
 				return true;
 			}
 		}
@@ -509,7 +537,7 @@ bool UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
 	
 		if ((m_move_union & k_Unit_MovementType_Sea_Bit) ||
 			(m_move_union & k_Unit_MovementType_ShallowWater_Bit))
-		{ 
+		{
 			if ((!the_pos_cell->CanEnter(k_Unit_MovementType_Sea_Bit)) &&
 				(!the_pos_cell->CanEnter(k_Unit_MovementType_ShallowWater_Bit)))
 			{ 
@@ -518,72 +546,70 @@ bool UnitAstar::CheckMoveUnion(const MapPoint &prev, const MapPoint &pos, Cell *
 				entry = ASTAR_BLOCKED;
 				return true;
 			}
-		} 
-		else if (m_move_union & k_Unit_MovementType_Sea_Bit) 
-		{ 
-			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Sea_Bit)) 
-			{ 
+		}
+		else if (m_move_union & k_Unit_MovementType_Sea_Bit)
+		{
+			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Sea_Bit))
+			{
 				cost = k_ASTAR_BIG;
 				can_enter = false;
 				entry = ASTAR_BLOCKED;
 				return true;
 			}
-		} 
-		else if (m_move_union & k_Unit_MovementType_ShallowWater_Bit) 
-		{ 
-			if (!the_pos_cell->CanEnter(k_Unit_MovementType_ShallowWater_Bit)) 
-			{ 
-				cost = k_ASTAR_BIG; 
+		}
+		else if (m_move_union & k_Unit_MovementType_ShallowWater_Bit)
+		{
+			if (!the_pos_cell->CanEnter(k_Unit_MovementType_ShallowWater_Bit))
+			{
+				cost = k_ASTAR_BIG;
 				can_enter = false;
-				entry = ASTAR_BLOCKED; 
+				entry = ASTAR_BLOCKED;
 				return true;
 			}
 		}
 
 	
-		if (m_move_union & k_Unit_MovementType_Space_Bit) 
-		{ 
-			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Space_Bit)) 
-			{ 
-				cost = k_ASTAR_BIG; 
-				can_enter = false; 
-				entry = ASTAR_BLOCKED; 
-				return true; 
+		if (m_move_union & k_Unit_MovementType_Space_Bit)
+		{
+			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Space_Bit))
+			{
+				cost = k_ASTAR_BIG;
+				can_enter = false;
+				entry = ASTAR_BLOCKED;
+				return true;
 			}
 		}
 	
 	
-		if (m_move_union & k_Unit_MovementType_Trade_Bit) 
-		{ 
-			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Trade_Bit)) 
-			{ 
-				cost = k_ASTAR_BIG; 
-				can_enter = false; 
-				entry = ASTAR_BLOCKED; 
-				return true; 
+		if (m_move_union & k_Unit_MovementType_Trade_Bit)
+		{
+			if (!the_pos_cell->CanEnter(k_Unit_MovementType_Trade_Bit))
+			{
+				cost = k_ASTAR_BIG;
+				can_enter = false;
+				entry = ASTAR_BLOCKED;
+				return true;
 			}
 		}
-	
-	
-		
+
 		if (can_be_zoc && g_theWorld->IsMoveZOC (m_owner, prev, pos, true) &&
 		    !IsBeachLanding(prev,pos,m_move_intersection)
 		   )
 		{
 			is_zoc = true;
-			cost = k_ASTAR_BIG; 
-			can_enter = false; 
-			entry = ASTAR_RETRY_DIRECTION; 
-		} 
-		else 
-		{ 
+			cost = k_ASTAR_BIG;
+			can_enter = false;
+			entry = ASTAR_RETRY_DIRECTION;
+		}
+		else
+		{
 			is_zoc = false;
 			cost = ComputeValidMovCost(pos, the_pos_cell);
 			can_enter = true;
 		}
 	}
 
-	return true; 
+	return true;
 }
 
 
@@ -596,14 +622,14 @@ bool UnitAstar::CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,
 		cost = k_MOVE_AIR_COST;
 		can_enter = true;
 	}
-	else if (the_pos_cell->CanEnter(m_move_intersection)) 
+	else if (the_pos_cell->CanEnter(m_move_intersection))
 	{
 		if (can_be_zoc && g_theWorld->IsMoveZOC (m_owner, prev, pos, TRUE) &&
-			!IsBeachLanding(prev,pos,m_move_intersection)) 
+			!IsBeachLanding(prev,pos,m_move_intersection))
 		{
 			is_zoc = true;
-			cost = k_ASTAR_BIG; 
-			can_enter = false; 
+			cost = k_ASTAR_BIG;
+			can_enter = false;
 			entry = ASTAR_RETRY_DIRECTION;
 		}
 		else
@@ -615,9 +641,9 @@ bool UnitAstar::CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,
 	}
 	else
 	{
-		cost = k_ASTAR_BIG; 
+		cost = k_ASTAR_BIG;
 		can_enter = false;
-		entry = ASTAR_BLOCKED; 
+		entry = ASTAR_BLOCKED;
 	}
 
 	return true;
@@ -626,7 +652,7 @@ bool UnitAstar::CheckMoveIntersection(const MapPoint &prev, const MapPoint &pos,
 bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
                             float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry) 
 {
-	entry = ASTAR_CAN_ENTER; 
+	entry = ASTAR_CAN_ENTER;
 
 	bool can_be_zoc = !m_ignore_zoc;
 
@@ -648,7 +674,7 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		pos == m_dest)
 	{
 		cost = 10; 
-		entry = ASTAR_CAN_ENTER; 
+		entry = ASTAR_CAN_ENTER;
 		return true;
 	}
 
@@ -1249,12 +1275,6 @@ bool UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
     }
 }
 
-
-
-
-
-
-    
 bool UnitAstar::PretestDest_Enterable(const MapPoint &start, const MapPoint &dest)
 {
 	if (m_move_intersection) { 
@@ -1273,10 +1293,6 @@ bool UnitAstar::PretestDest_Enterable(const MapPoint &start, const MapPoint &des
     return true;
 }
 
-    
-    
-    
-	
 bool UnitAstar::PretestDest_HasRoom(const MapPoint &start, const MapPoint &dest)
 {
     CellUnitList *dest_army = g_theWorld->GetArmyPtr(dest);
@@ -1312,19 +1328,19 @@ bool UnitAstar::PretestDest_SameLandContinent(const MapPoint &start, const MapPo
          )
     )    
     { 
-        sint32  start_cont_number;
+        sint16  start_cont_number;
         bool    start_is_land;
         g_theWorld->GetContinent(start, start_cont_number, start_is_land);
 
-        sint32  dest_cont_number;
+        sint16  dest_cont_number;
         bool    dest_is_land;
         g_theWorld->GetContinent(dest, dest_cont_number, dest_is_land);
 
         /// @todo More logical to return FALSE when any of the 2 is not land?
         ///       How about cities?
-        if (start_is_land && dest_is_land) { 
-            if (start_cont_number != dest_cont_number) {
-                return false; 
+        if(start_is_land && dest_is_land) { 
+            if(start_cont_number != dest_cont_number) {
+                return false;
             }
         }
     }
@@ -1334,42 +1350,40 @@ bool UnitAstar::PretestDest_SameLandContinent(const MapPoint &start, const MapPo
 
 bool UnitAstar::PretestDest_SameWaterContinent(const MapPoint &start, const MapPoint &dest)
 {
-    bool start_is_land; 
-    sint32 start_cont_number;
-    bool dest_is_land; 
-    sint32 dest_cont_number;
+	if(
+	   (
+	    (m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
+	    (m_move_intersection & k_Unit_MovementType_Sea_Bit)
+	   )
+	   &&
+	   (FALSE == 
+	    (
+	     (m_move_intersection & k_Unit_MovementType_Air_Bit) ||
+	     (m_move_intersection & k_Unit_MovementType_Space_Bit) ||
+	     (m_move_intersection & k_Unit_MovementType_Land_Bit) ||
+	     (m_move_intersection & k_Unit_MovementType_Mountain_Bit)
+	    )
+	   )
+	  )
+	{
+		bool   start_is_land;
+		bool    dest_is_land;
+		sint16 start_cont_number;
+		sint16  dest_cont_number;
 
-    
-    if	( 
-			(
-				(m_move_intersection & k_Unit_MovementType_Sea_Bit) || 
-				(m_move_intersection & k_Unit_MovementType_Sea_Bit)
-			)					  &&  
-			(FALSE == 
-				(
-					(m_move_intersection & k_Unit_MovementType_Air_Bit) ||
-					(m_move_intersection & k_Unit_MovementType_Space_Bit) ||
-					(m_move_intersection & k_Unit_MovementType_Land_Bit) ||
-					(m_move_intersection & k_Unit_MovementType_Mountain_Bit)
-				)
-			)
-		)    
-    { 
-        
-		
-		
-        g_theWorld->GetContinent(start, start_cont_number, start_is_land);
+		g_theWorld->GetContinent(start, start_cont_number, start_is_land);
+		g_theWorld->GetContinent(dest, dest_cont_number, dest_is_land);
 
-        g_theWorld->GetContinent(dest, dest_cont_number, dest_is_land);
-
-        /// @todo More logical to return FALSE when any of the 2 is not water?
-        ///       How about cities?
-		if(!start_is_land && !dest_is_land && 
-            (start_cont_number != dest_cont_number)) {
-                return false;
-        }
-    }
-    return true; 
+		/// @todo More logical to return FALSE when any of the 2 is not water?
+		///       How about cities?
+		if(!start_is_land
+		&& !dest_is_land
+		&& (start_cont_number != dest_cont_number)
+		){
+			return false;
+		}
+	}
+	return true; 
 }
 
 bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &dest)
@@ -1384,7 +1398,7 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 
        
         if ((start.x == neighbor.x) && (start.y == neighbor.y)) { 
-            return TRUE; 
+            return true;
         } 
 
        
@@ -1419,30 +1433,27 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
            return true; 
        } 
 
-    }    
+    }
 
     return false; 
 }
 
 bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 {
-    if (!m_is_robot) {
-        if (!g_player[m_owner]->IsExplored(dest)) { 
+    if (!m_is_robot)
+    {
+        if (!g_player[m_owner]->IsExplored(dest))
+        {
             return false;
         }
-     }
+    }
 
-    if (!PretestDest_Enterable(start, dest)) return false;
-
-    if (!PretestDest_HasRoom(start, dest)) return false;
-
-    if (!PretestDest_SameLandContinent(start, dest)) return false;
-
+    if (!PretestDest_Enterable         (start, dest)) return false;
+    if (!PretestDest_HasRoom           (start, dest)) return false;
+    if (!PretestDest_SameLandContinent (start, dest)) return false;
     if (!PretestDest_SameWaterContinent(start, dest)) return false;
+    if (!PretestDest_ZocEnterable      (start, dest)) return false;
 
-    if (!PretestDest_ZocEnterable(start, dest)) return false;
-
-    
     return true;
 }
 
@@ -1458,8 +1469,6 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 
     InitArmy (army, nUnits, move_intersection, move_union, m_army_minmax_move); 
 
-
-	
 	if (!Player::IsThisPlayerARobot(owner))
 		m_pretty_path = true;
 
@@ -1608,26 +1617,22 @@ bool UnitAstar::FindPath(Army army,
         }
     }
 
-
-
-
-    
-    if (!m_check_dest || 
+    if (!m_check_dest ||
 		(
             (g_theWorld->CanEnter(dest, m_move_intersection)) ||
 		    CanMoveIntoTransports(pos)
         )
-       ) { 
+       ) {
     
         if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened)) { 
-            ClearMem(); 
-            return true; 
-        } else if (no_bad_path) { 
-            ClearMem(); 
+            ClearMem();
+            return true;
+        } else if (no_bad_path) {
+            ClearMem();
             return false;
         }
-    } else if (no_bad_path) { 
-        ClearMem(); 
+    } else if (no_bad_path) {
+        ClearMem();
         return false;
     }
 
@@ -1733,8 +1738,8 @@ bool UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilia
 
 		if (the_army || the_city.IsValid()) 
 		{
-            PLAYER_INDEX owner = 
-                (the_army) ? the_army->GetOwner() : the_city.GetOwner();
+			PLAYER_INDEX owner = 
+			    (the_army) ? the_army->GetOwner() : the_city.GetOwner();
 
 			if (m_owner != owner)
 			{
@@ -1763,7 +1768,7 @@ bool UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilia
 						neighbor.y));
 						return true;*/
 					}
- 				}
+				}
 			}
 		}
 	}

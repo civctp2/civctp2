@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - SnipEndUntilCanEnter now returns the end MapPoint. (30-Jan-2008 Martin Gühmann)
+// - SnipEndUntilCanEnter is now base on the army's ability to enter cell
+//   and not based on its movement type. (8-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -114,7 +116,7 @@ public:
 	void RestoreIndexAndCurrentPos(const sint32 & index);
 
 	
-	MapPoint SnipEndUntilCanEnter(const uint32 & movement_type);
+	MapPoint SnipEndUntilCanEnter(const Army & army);
 
 };
 

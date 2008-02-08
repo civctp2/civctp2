@@ -43,42 +43,41 @@
 class Cell; 
 class CityData; 
 class UnitAstar : public Astar
-
 {
-
     uint32 m_move_union;
-    uint32 m_move_intersection; 
+    uint32 m_move_intersection;
     sint32 m_max_dir;
     uint32 m_mask_alliance;
 
-    MapPoint m_dest; 
+    MapPoint m_dest;
 
     bool m_no_bad_path;
     bool m_is_zero_attack; 
     PLAYER_INDEX m_owner;
    
     sint32 m_nUnits;
-	
+
 protected:
     Army m_army;
-    
+
     float m_army_minmax_move;
     BOOL m_can_space_launch; 
     BOOL m_can_space_land; 
-	BOOL m_can_be_cargo_podded;
+    BOOL m_can_be_cargo_podded;
     bool m_check_rail_launchers; 
-	bool m_ignore_zoc;
+    bool m_ignore_zoc;
     bool m_is_cargo_pod;
     uint32 m_cargo_pod_intersection;
-	bool m_check_dest;
+    bool m_check_dest;
     bool m_check_units_in_cell;
     bool m_is_robot; 
     bool m_army_can_expel_stealth; 
-	MapPoint m_start; 
+    MapPoint m_start;
+    bool m_isTransporter;
 
 public:
 
-    UnitAstar(); 
+    UnitAstar();
 
     float ComputeValidMovCost(const MapPoint &pos, Cell *the_pos_cell);
 
@@ -117,23 +116,21 @@ public:
 
     bool InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos, 
         const float pc, const MapPoint &dest);
-	bool CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian);
+    bool CheckIsDangerForPos(const MapPoint & myPos, const bool IsCivilian);
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost, 
         bool &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
 
     sint32 GetMaxDir(MapPoint &pos) const;
     bool CanMoveIntoTransports(const MapPoint &pos);
-	bool CanRailLaunch(const MapPoint &spos);
+    bool CanRailLaunch(const MapPoint &spos);
     bool CanSpaceLaunch();
     bool CanSpaceLand();
 
-	float EstimateFutureCost(const MapPoint &pos, const MapPoint &dest);
+    float EstimateFutureCost(const MapPoint &pos, const MapPoint &dest);
 
-    
     void InitArmy(const Army &army, sint32 &nUnints, 
     uint32 &move_intersection,  uint32 &move_union, float &army_minmax_move);
-
 
     void InitSearch( const MapPoint &start, const PLAYER_INDEX owner, 
     const MapPoint &dest, Path &good_path, bool &is_broken_path, Path &bad_path);
@@ -159,38 +156,37 @@ public:
                           const sint32 cutoff, sint32 &nodes_opened);
 
     bool FindPath(Army &army, MapPoint const & start,
-	              const PLAYER_INDEX owner, MapPoint const & dest, Path &new_path, 
+                  const PLAYER_INDEX owner, MapPoint const & dest, Path &new_path, 
                   bool &is_broken_path, Path &bad_path,  
                   float &total_cost);
 
     bool FindPath(Army army,
-	              sint32 nUnits,
-				  uint32 move_intersetion,
+                  sint32 nUnits,
+                  uint32 move_intersetion,
                   uint32 move_union,
-				  const MapPoint &start,
+                  const MapPoint &start,
                   const PLAYER_INDEX owner,
-				  const MapPoint &dest,
-				  Path &good_path,
+                  const MapPoint &dest,
+                  Path &good_path,
                   bool  &is_broken_path,
-				  Path &bad_path, 
+                  Path &bad_path, 
                   float &total_cost,
-				  const bool no_bad_path,
+                  const bool no_bad_path,
                   const bool check_rail_launcher,
                   const bool pretty_path,
-				  const sint32 cutoff,
-				  sint32 &nodes_opened,
-		          const bool &check_dest,
-				  const bool no_straight_lines,
+                  const sint32 cutoff,
+                  sint32 &nodes_opened,
+                  const bool &check_dest,
+                  const bool no_straight_lines,
                   const bool check_units_in_cell);
 
- 
     bool StraightLine(const MapPoint &start, const MapPoint &dest, Path &new_path) const;
 
-	bool IsBeachLanding(const MapPoint &prev,
-						const MapPoint &pos,
-						const uint32 &m_move_intersection);
-    void ClearMem(); 
-    bool VerifyMem() const; 
+    bool IsBeachLanding(const MapPoint &prev,
+                        const MapPoint &pos,
+                        const uint32 &m_move_intersection);
+    void ClearMem();
+    bool VerifyMem() const;
 };
 
 #endif

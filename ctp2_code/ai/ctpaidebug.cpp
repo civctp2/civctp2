@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Debug Ai File
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,7 +36,7 @@
 
 #ifdef _PLAYTEST
 
-PLAYER_INDEX CtpAiDebug::s_debugPlayer = 7;
+PLAYER_INDEX CtpAiDebug::s_debugPlayer = 2;
 sint32 CtpAiDebug::s_debugGoalType = -1;
 sint32 CtpAiDebug::s_debugArmies[k_MAX_ARMY_SIZE];
 

@@ -39,6 +39,7 @@
 // - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 // - Modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
 // - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -353,7 +354,7 @@ public:
 	void SetIsInTransport(const Unit &transport);
 	bool IsBeingTransported() const;
 	
-	bool CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & used_vision) const;
+	bool CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & used_vision, bool check_move_points = true) const;
 
 	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
 			 bool justOneUnit, const Unit &theUnit);

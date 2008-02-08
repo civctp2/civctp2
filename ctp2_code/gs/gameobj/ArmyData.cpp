@@ -122,6 +122,7 @@
 // - Bombard order is not given twice anymore. (30-Jan-2008 Martin Gühmann)
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -2276,18 +2277,21 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 {
 	Cell *cell = g_theWorld->GetCell(point);
 
-	if (!cell || !point.IsNextTo(m_pos)) 
+	if (!cell || !point.IsNextTo(m_pos))
 	{
 		return ORDER_RESULT_ILLEGAL;
 	}
 
 	sint32 i, n = cell->GetNumUnits();
-	if(n > 0) {
+	if(n > 0)
+	{
 		if(cell->UnitArmy()->GetOwner() == m_owner)
 			return ORDER_RESULT_ILLEGAL;
-    } else { 
-        return ORDER_RESULT_ILLEGAL; 
-    } 
+	}
+	else
+	{
+		return ORDER_RESULT_ILLEGAL; 
+	}
 
 	sint32 numToExpel = 0;
 	for(i = 0; i < n; i++) {
@@ -2300,7 +2304,7 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 	if(numToExpel < 1)
 		return ORDER_RESULT_ILLEGAL;
 
-    //InformAI(UNIT_ORDER_EXPEL, point);//does nothing here but could be implemented 
+	//InformAI(UNIT_ORDER_EXPEL, point);//does nothing here but could be implemented 
 
 	bool 			foundCity	= false;
 	MapPoint 		cpos;
@@ -6316,8 +6320,8 @@ bool ArmyData::ExecuteOrders(bool propagate)
 			}
 			completedOrder = false;
 		}
-        else
-        {
+		else
+		{
 			keepGoing = false;
 		} 
 	}
@@ -6327,31 +6331,34 @@ bool ArmyData::ExecuteOrders(bool propagate)
 	}
 	
 	KillRecord *kill;
-	while((kill = m_killMeSoon->RemoveHead()) != NULL) {
+	while((kill = m_killMeSoon->RemoveHead()) != NULL)
+	{
 		if (kill->m_unit.IsValid()) 
-        {
+		{
 			kill->m_unit.Kill(kill->m_cause, kill->m_who);
 		}
 		delete kill;
 	}
 
-	if(m_dontKillCount) {
+	if(m_dontKillCount)
+	{
 		m_dontKillCount--;
-		if(m_needToKill && !m_dontKillCount) {
+		if(m_needToKill && !m_dontKillCount)
+		{
 			me.Kill();
 		}
 	}
 
 	
 	if (g_selected_item) 
-    {
-	    PLAYER_INDEX    player;
-	    ID              id;
-	    SELECT_TYPE     type;
+	{
+		PLAYER_INDEX    player;
+		ID              id;
+		SELECT_TYPE     type;
 
 		g_selected_item->GetTopCurItem(player, id, type);
 		if (id == me) 
-        {
+		{
 			g_selected_item->Refresh();
 		}
 	}
@@ -6391,7 +6398,7 @@ void ArmyData::InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos)
 	{
 	case UNIT_ORDER_STEAL_TECHNOLOGY:
 		city_diplomat.GetCurrentDiplomacy(m_owner).GetCreateParkRegardCost(cost);
-        // CreateParkRegardCost since there's no 'StealTechologyRegardCost'
+		// CreateParkRegardCost since there's no 'StealTechologyRegardCost'
 		
 		StringId strId;
 		g_theStringDB->GetStringID("REGARD_EVENT_STEAL_TECHNOLOGY", strId);
@@ -6533,8 +6540,8 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 {
 	Cell *cell = g_theWorld->GetCell(m_pos);
 	//if neither in a city nor in an airfield
-	if(	cell->GetCity().m_id == 0 &&
-		terrainutil_HasAirfield(m_pos) == false)
+	if( cell->GetCity().m_id == 0
+	&& !terrainutil_HasAirfield(m_pos))
 		return;
 	
 	if(cell->UnitArmy()->Num() < 1)
@@ -7931,11 +7938,11 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 //---------------------------------------------------------------------------- 
 void ArmyData::DoBoardTransport(Order *order)
 {
-	CellUnitList transports;
-
-	if(CanMoveIntoTransport(m_pos, transports)) {
-		MoveIntoTransport(m_pos, transports);
-	}
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+						   GEV_MoveIntoTransport,
+						   GEA_Army, m_id,
+						   GEA_MapPoint, m_pos,
+						   GEA_End);
 }
 
 //----------------------------------------------------------------------------
@@ -7956,17 +7963,25 @@ void ArmyData::DoBoardTransport(Order *order)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & used_vision) const
+bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos,
+                                          const MapPoint & dest_pos,
+                                          const bool & used_vision,
+                                          const bool check_move_points) const
 {
-    sint32 unit_num = m_nElements;
+	sint32 unit_num = m_nElements;
 
-    for (sint32 unit_idx=0; unit_idx<unit_num; unit_idx++) { 
-        if (m_array[unit_idx].CanAtLeastOneCargoUnloadAt(old_pos, dest_pos,  used_vision)) {
-            return true;
-        }
-    }
+	for(sint32 i = 0; i < unit_num; i++)
+	{
+		if(m_array[i].CanAtLeastOneCargoUnloadAt(old_pos,
+		                                         dest_pos,
+		                                         used_vision,
+		                                         check_move_points)
+		){
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 //----------------------------------------------------------------------------
@@ -7987,62 +8002,77 @@ bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoi
 bool ArmyData::ExecuteUnloadOrder(Order *order)
 {
 	MapPoint    from_pt = m_pos;
-    MapPoint    to_pt   = order->m_point;
+	MapPoint    to_pt   = order->m_point;
 
-   if ((from_pt.x == to_pt.x) &&
-       (from_pt.y == to_pt.y)) {
+	if(from_pt.x == to_pt.x
+	&& from_pt.y == to_pt.y
+	){
+		// do nothing here, we're on top of the unloading point
+	}
+	else
+	{
+		if(!from_pt.IsNextTo(to_pt))
+		{
+			return true;
+		}
+	}
 
-	   // do nothing here, we're on top of the unloading point
-   } else  { 
+	if(DoLeaveOurLandsCheck(to_pt, UNIT_ORDER_UNLOAD))
+	{
+		return true;
+	}
 
-       if(!from_pt.IsNextTo(to_pt)) { 
-	        return true;
-       }
-   }
+	sint32 i;
+	//if we already have a max stack at to_pt
+	sint32 max_debark = k_MAX_ARMY_SIZE; 
+	CellUnitList *a = g_theWorld->GetArmyPtr(to_pt); 
+	if(a && (0 < a->Num()))
+	{
+		if(m_owner == a->GetOwner())
+		{
+			max_debark = k_MAX_ARMY_SIZE - a->Num();
+			if(max_debark == 0)
+			{
+				return true; //no space to land troops
+			}
+		}
+	}
 
-   
-   if(DoLeaveOurLandsCheck(to_pt, UNIT_ORDER_UNLOAD)) {
-	   return true;
-   }
-
-    sint32 i; 
-    //if we already have a max stack at to_pt
-    sint32 max_debark = k_MAX_ARMY_SIZE; 
-    CellUnitList *a = g_theWorld->GetArmyPtr(to_pt); 
-    if (a && (0 < a->Num())) { 
-        if (m_owner == a->GetOwner()) { 
-            max_debark = k_MAX_ARMY_SIZE - a->Num(); 
-            if (max_debark == 0) { 
-                return true; //no space to land troops
-            }
-        }
-    }
-    
 	Army debark = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
 
 	bool unitUnloadDone = false;
-    for (i=0; i<m_nElements; i++) { 
-		if(order->m_order == UNIT_ORDER_UNLOAD_ONE_UNIT) {
-			unitUnloadDone = m_array[i].UnloadCargo(to_pt, debark, TRUE, Unit(order->m_argument)) || unitUnloadDone;
-		} else if(order->m_order == UNIT_ORDER_UNLOAD ||
-			      order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD) {
-			unitUnloadDone = m_array[i].UnloadCargo(to_pt, debark, FALSE, Unit()) || unitUnloadDone;
-		} else if(order->m_order == UNIT_ORDER_UNLOAD_SELECTED_STACK) {
-			unitUnloadDone = m_array[i].UnloadSelectedCargo(to_pt, debark) || unitUnloadDone;
-		} else {
+	for(i = 0; i < m_nElements; i++)
+	{
+		if(order->m_order == UNIT_ORDER_UNLOAD_ONE_UNIT)
+		{
+			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, true, Unit(order->m_argument));
+		}
+		else if(order->m_order == UNIT_ORDER_UNLOAD
+		     || order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
+		{
+			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, FALSE, Unit());
+		}
+		else if(order->m_order == UNIT_ORDER_UNLOAD_SELECTED_STACK)
+		{
+			unitUnloadDone |= m_array[i].UnloadSelectedCargo(to_pt, debark);
+		}
+		else
+		{
 			Assert(false);
 		}
-    }
+	}
 	
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_FinishUnload,
-						   GEA_Army, m_id,
-						   GEA_Army, debark,
-						   GEA_MapPoint, to_pt,
-						   GEA_End);
-						   
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	                       GEV_FinishUnload,
+	                       GEA_Army, m_id,
+	                       GEA_Army, debark,
+	                       GEA_MapPoint, to_pt,
+	                       GEA_End
+	                      );
+
 	return unitUnloadDone;
 }
-    
+
 void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 {
 	if(debark.Num() <= 0) {
@@ -9540,38 +9570,39 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 								 bool & haszoc,
 								 bool & canbombard) const
 {
-	isspecial = false;
-	isstealth = true;
-	maxattack = 0;
+	isspecial  = false;
+	isstealth  = true;
+	maxattack  = 0;
 	maxdefense = 0;
 	cancapture = false;
-	haszoc = false;
+	haszoc     = false;
 	canbombard = false;
 
 	for(sint32 i = 0; i < m_nElements; i++) {
-		const UnitRecord *rec = m_array[i].GetDBRec();		
+		const UnitRecord *rec = m_array[i].GetDBRec();
 		
 		if (rec->HasNuclearAttack()) 
 		{
-			isspecial = true;
-			maxattack = 0;
+			isspecial  = true;
+			maxattack  = 0;
 			maxdefense = 0;
 			cancapture = false;
-			haszoc = false;
+			haszoc     = false;
 			canbombard = false;
 			break;
 		}
 
-		isspecial |= ((rec->GetVisionClassStandard() == false) ||
-			(rec->GetAttack() <= 0));
-		isstealth &= ((rec->GetVisionClassStealth() == true));
-		if (m_array[i].GetAttack() > maxattack)
-			maxattack = sint32(rec->GetAttack());
+		isspecial  |= !rec->GetVisionClassStandard();
+		isspecial  |= (rec->GetAttack() <= 0.0);
+		isstealth  &=  rec->GetVisionClassStealth();
+		cancapture |= !rec->GetCantCaptureCity();
+		haszoc     |= !rec->GetNoZoc();
+		canbombard |= (rec->GetCanBombard() != 0x0);
+
+		if (m_array[i].GetAttack()  > maxattack)
+			maxattack  = sint32(rec->GetAttack());
 		if (m_array[i].GetDefense() > maxdefense)
 			maxdefense = sint32(rec->GetDefense());
-		cancapture |= (rec->GetCantCaptureCity() == false);
-		haszoc |= (rec->GetNoZoc() == false);
-		canbombard |= (rec->GetCanBombard() != 0x0);
 	}
 }
 
@@ -10001,21 +10032,24 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 	{
 		CellUnitList targetArmy;
 		g_theWorld->GetArmy(pos,targetArmy);
-		if(g_theWorld->GetCell(pos)->GetCity().IsValid() && g_theWorld->GetCell(pos)->GetCity().GetOwner() != m_owner) {
-			
-		} else if(!targetArmy.Num() || targetArmy.GetOwner() == m_owner)
+
+		if(g_theWorld->GetCell(pos)->GetCity().IsValid()
+		&& g_theWorld->GetCell(pos)->GetCity().GetOwner() != m_owner
+		){
+			// Nothing
+		}
+		else if(!targetArmy.Num() || targetArmy.GetOwner() == m_owner)
 		{
-			target_valid = false;
+			target_valid  = false;
 			cur_pos_valid = false;
 		}
 	}
 
-	
 	if (order_rec->GetTargetPretestEnemySpecialUnit())
 	{
 		if (g_theWorld->GetOwner(pos) != m_owner)
 		{
-			target_valid = false;
+			target_valid  = false;
 			cur_pos_valid = false;
 		}	
 	}
@@ -10023,15 +10057,15 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 	if (order_rec->GetTargetPretestTransport())
 	{
 		CellUnitList transports;
-		cur_pos_valid = CanMoveIntoTransport(m_pos, transports) != 0;
-		target_valid = CanMoveIntoTransport(pos, transports) != 0;
-	} 
+		cur_pos_valid = NumUnitsCanMoveIntoTransport(m_pos, transports) > 0;
+		target_valid  = NumUnitsCanMoveIntoTransport(pos, transports) > 0;
+	}
 	else if ((range <= 0) && !CanEnter(pos))
 	{
 		target_valid = false;
 	}
 
-	ORDER_TEST  best_result     = 	ORDER_TEST_ILLEGAL;
+	ORDER_TEST  best_result     = ORDER_TEST_ILLEGAL;
 	
 	for (sint32 army_index = 0; army_index < m_nElements; ++army_index) 
 	{
@@ -10060,7 +10094,7 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 			{
 				best_result = ORDER_TEST_NO_MOVEMENT;
 			}
-		} 
+		}
 	}
 
 	return best_result;
@@ -10088,58 +10122,57 @@ ORDER_TEST ArmyData::TestOrderHere(const OrderRecord * order_rec, const MapPoint
 ORDER_TEST ArmyData::CargoTestOrderHere(const OrderRecord * order_rec, const MapPoint & pos) const
 {
 	bool order_valid;
-	bool can_afford;
 
-	ORDER_TEST best_result = 	ORDER_TEST_ILLEGAL;
+	ORDER_TEST best_result = ORDER_TEST_ILLEGAL;
 	//test if the player can afford the order
 	Assert(g_player[m_owner]);
-	can_afford = (g_player[m_owner]->GetGold() >= order_rec->GetGold());
+	bool can_afford = (g_player[m_owner]->GetGold() >= order_rec->GetGold());
 
-    //order_rec: range = 0 (army must be on top of tile) or range = 1 (can execute order from adjacent tile)
+	//order_rec: range = 0 (army must be on top of tile) or range = 1 (can execute order from adjacent tile)
 	sint32 range = 0;
 	(void) order_rec->GetRange(range);
 
-    //test if whatever is at pos passes order_rec's TargetPretest
+	//test if whatever is at pos passes order_rec's TargetPretest
 	bool target_valid = TargetValidForOrder(order_rec, pos);
 
-	if ((range <= 0) && !CargoCanEnter(pos))
+	if(range <= 0 && !CargoCanEnter(pos))
 	{
 		target_valid = false;
 	}
 
-	sint32 cargo_index;
-	const UnitDynamicArray *cargo;
-	for(sint32 army_index = 0; army_index < m_nElements; army_index++) {
-		cargo = m_array[army_index].AccessData()->GetCargoList();
-        if (cargo)
-        {
-		    for (cargo_index = 0; cargo_index < cargo->Num(); cargo_index++) {
-			    order_valid = cargo->Access(cargo_index).UnitValidForOrder(order_rec);
-			    if ( order_valid ) {
-    				
-				    if  (( range > 0 ) && ( pos == m_pos))
-				    {	
-					    return ORDER_TEST_NEEDS_TARGET;
-				    }
-				    else if ( target_valid == false ) {
-    					
-					    return ORDER_TEST_INVALID_TARGET;
-				    }
-				    else if ( can_afford == false) {
-    					
-					    return ORDER_TEST_LACKS_GOLD;
-				    }
-				    else if ( m_array[army_index].CanPerformSpecialAction() == TRUE ) {
-    					
-					    return ORDER_TEST_OK;
-				    }
-				    else {
-    					
-					    best_result = ORDER_TEST_NO_MOVEMENT;
-				    }
-			    }
-            }
-		} 
+	for(sint32 army_index = 0; army_index < m_nElements; army_index++)
+	{
+		const UnitDynamicArray* cargo = m_array[army_index].AccessData()->GetCargoList();
+		if(cargo)
+		{
+			for(sint32 cargo_index = 0; cargo_index < cargo->Num(); cargo_index++)
+			{
+				order_valid = cargo->Access(cargo_index).UnitValidForOrder(order_rec);
+				if(order_valid)
+				{
+					if(range > 0 && pos == m_pos)
+					{
+						return ORDER_TEST_NEEDS_TARGET;
+					}
+					else if(!target_valid)
+					{
+						return ORDER_TEST_INVALID_TARGET;
+					}
+					else if(!can_afford)
+					{
+						return ORDER_TEST_LACKS_GOLD;
+					}
+					else if(m_array[army_index].CanPerformSpecialAction())
+					{
+						return ORDER_TEST_OK;
+					}
+					else
+					{
+						best_result = ORDER_TEST_NO_MOVEMENT;
+					}
+				}
+			}
+		}
 	}
 	return best_result;
 }

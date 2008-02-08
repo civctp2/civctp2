@@ -1605,15 +1605,14 @@ sint32 s_actualMinContinentStartSize = 0;
 void World::CalcCumScore(sint32 d, const sint32 x, const sint32 y, 
     float &cum_score, float **raw_score)
 {
-    sint32 numCounted[TERRAIN_MAX];
-	sint32 i;
-	for(i = 0; i < TERRAIN_MAX; i++) {
+	sint32 numCounted[TERRAIN_MAX];
+	for(sint32 i = 0; i < TERRAIN_MAX; i++) {
 		numCounted[i] = 0;
 	}
 	sint32 maxToCount = g_theConstDB->Get(0)->GetMaxSameTiles();
 
 	MapPoint pos(x, y);   
-	sint32 cont;
+	sint16 cont;
 	bool is_land;
 	GetContinent(pos, cont, is_land);
     cum_score   = 0.0;
@@ -1661,21 +1660,21 @@ BOOL World::FindMaxCumScore(sint32 d, float **cum_score, sint32 &maxx, sint32 &m
 		topY += 4;
 		botY -= 4;
 	}
-	sint32 playerContinent;
+	sint16 playerContinent;
 	if(index > 0) {
 		bool is_land;
 		GetContinent(player_start[0], playerContinent, is_land);
 	} else {
 		playerContinent = 0;
 	}
-    for (chk.x=0; chk.x<m_size.x; chk.x++) { 
-        for (chk.y=sint16(topY); chk.y<botY; chk.y++) { 
+	for (chk.x=0; chk.x<m_size.x; chk.x++) { 
+		for (chk.y=sint16(topY); chk.y<botY; chk.y++) { 
 			BOOL dontUse = FALSE;
 			sint32 minrel = maxDist;
 
 			
 			if(g_theProfileDB->IsTutorialAdvice() && !ignoreTutorialRules && index != 0) {
-				sint32 cont;
+				sint16 cont;
 				bool is_land;
 				GetContinent(chk, cont, is_land);
 				if(is_land && cont == playerContinent)

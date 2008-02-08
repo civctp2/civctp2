@@ -24,7 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - For an AI transporter it is no more checked, whether the transporter cannot
+//   unload its cargo, because the cargo has not enough move points.
 //
 //----------------------------------------------------------------------------
 
@@ -70,70 +71,52 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 										 const bool & is_zoc, 
 									     float & cost, 
 									     ASTAR_ENTRY_TYPE & entry )
-{ 
-    if (can_enter) 
- 		{ 
-			
-			
-			sint32 cont; 
-			bool is_land; 
-			bool wrong_cont;
-    
-			cont = g_theWorld->GetContinent(pos);
-			is_land = ( g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos) );
+{
+	if (can_enter)
+	{
+		sint32 cont;
+		bool is_land;
+		bool wrong_cont;
 
-			
-			
-			wrong_cont = ( cont != m_transDestCont ) && 
-				(!g_theWorld->IsCity(pos));
+		cont = g_theWorld->GetContinent(pos);
+		is_land = ( g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos) );
 
-			
-			
-			
+		wrong_cont = ( cont != m_transDestCont ) && 
+			(!g_theWorld->IsCity(pos));
 
-			bool occupied = false; 
 
-			
-			occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(prev, pos, FALSE)));
+		bool occupied = false;
 
-			if (occupied || wrong_cont) 
-				{
-					
-					if (is_land && 
-						(g_theWorld->IsWater(prev) ||
-						 g_theWorld->IsShallowWater(prev) ||
-						 
-						 g_theWorld->IsCity(prev) )) 
-						{ 
-							cost = k_ASTAR_BIG;
-							entry = ASTAR_RETRY_DIRECTION; 
-							return false;
-						}
-				}
+		occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(prev, pos, false, !m_is_robot)));
+
+		if (occupied || wrong_cont) 
+		{
+			if(  is_land
+			   && 
+			     (    g_theWorld->IsWater(prev)
+			       || g_theWorld->IsShallowWater(prev)
+			       || g_theWorld->IsCity(prev)
+			     )
+			  )
+			{
+				cost = k_ASTAR_BIG;
+				entry = ASTAR_RETRY_DIRECTION; 
+				return false;
+			}
+		}
 		
-			if (g_theWorld->IsWater(pos) || g_theWorld->IsShallowWater(pos)) 
-				{ 
-					cost *= float(m_transMaxR);
-				} 
-
-			
-			
-			
-			
-			
-            
-			
-			
-			
-		
+		if (g_theWorld->IsWater(pos) || g_theWorld->IsShallowWater(pos))
+		{
+			cost *= float(m_transMaxR);
+		}
 			return true;
-		} 
-	else 
-		{ 
-			cost = k_ASTAR_BIG;
-			entry = ASTAR_BLOCKED;
-			return false;
-		} 
+	}
+	else
+	{
+		cost = k_ASTAR_BIG;
+		entry = ASTAR_BLOCKED;
+		return false;
+	}
 }
 
 bool RobotAstar2::DefensivePathCallback (const bool & can_enter,  
@@ -224,13 +207,13 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 			Diplomat::GetDiplomat(army.GetOwner()).GetIncursionPermission();
 	}
 	
-	if (army_move_type != 0x0) 
+	if (army_move_type != 0x0)
 	{
 		
-		nUnits = 1; 
-		move_intersection = army_move_type; 
-		move_union = 0; 
-		m_army_minmax_move = 300.0; 
+		nUnits = 1;
+		move_intersection = army_move_type;
+		move_union = 0;
+		m_army_minmax_move = 300.0;
 		m_army_can_expel_stealth = false;
 	}
 	else
@@ -259,7 +242,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	                        no_straight_lines,
 	                        check_units_in_cell)
 	){
-		
 		return false;
 	}
 	
@@ -276,11 +258,20 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 							   bool &is_zoc, 
 							   ASTAR_ENTRY_TYPE &entry )
 {
+	if(m_pathType == PATH_TYPE_TRANSPORT)
+	{
+		m_isTransporter = true;
+	}
+	else
+	{
+		m_isTransporter = false;
+	}
+
 	bool r = UnitAstar::EntryCost(prev, pos, cost, is_zoc, entry); 
 
 	if (r)
 	{
-		switch (m_pathType) 
+		switch (m_pathType)
 		{
 		case PATH_TYPE_TRANSPORT:
 			r = TransportPathCallback(r, prev, pos, is_zoc, cost, entry);

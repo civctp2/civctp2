@@ -47,6 +47,7 @@ typedef CTPAgent *  CTPAgent_ptr;
 #include "Path.h"
 #include "player.h"             // PLAYER_INDEX
 #include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
+#include "GameEventTypes.h"
 
 class CTPAgent : public Agent {
 
@@ -134,6 +135,8 @@ public:
 
 
 	void MoveIntoTransport();
+	void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
+	void PerformOrder(const OrderRecord * order_rec);
 
 protected:
 

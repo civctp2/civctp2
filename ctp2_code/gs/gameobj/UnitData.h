@@ -33,6 +33,7 @@
 // - Total fuel, total move points and total hp calculation moved into their own
 //   methods. (Dec 24th 2006 Martin Gühmann)
 // - Added IsReligion bools
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -282,17 +283,21 @@ public:
 
 	bool CanAtLeastOneCargoUnloadAt
 	(
-	    MapPoint const &    old_pos, 
-	    MapPoint const &    dest_pos, 
-	    bool                use_vision
+	    MapPoint const &    old_pos,
+	    MapPoint const &    dest_pos,
+	    bool                use_vision,
+	    bool                check_move_points = true
 	) const;
+
 	bool CanThisCargoUnloadAt
 	(
-	    Unit                the_cargo, 
-	    MapPoint const &    old_pos, 
-	    MapPoint const &    new_pos, 
-	    bool                use_vision
+	    Unit                the_cargo,
+	    MapPoint const &    old_pos,
+	    MapPoint const &    new_pos,
+	    bool                use_vision,
+	    bool                check_move_points = true
 	) const;
+
 	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
 	                 bool justOneUnit, const Unit &theUnit);
 	bool UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);

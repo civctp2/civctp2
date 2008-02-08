@@ -31,6 +31,7 @@
 //   (Raw_Priority will be changed on wounded case) - Calvitix
 // - Removed Microsoft specific code.
 // - Fixed Goal subtask handling. (26-Jan-2008 Martin Gühmann)
+// - Use more than one transporter if the goal needs more than one. (8-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -168,7 +169,7 @@ protected:
                           const Path & path);
 
 
-    bool GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_transport, const SUB_TASK_TYPE & sub_task);
+    bool GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_transport, const SUB_TASK_TYPE & sub_task, MapPoint & pos);
 
 
     bool GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_pos, const SUB_TASK_TYPE & sub_task);
@@ -196,12 +197,13 @@ protected:
     bool TryTransport(CTPAgent_ptr agent_ptr, const MapPoint & goal_pos);
 
 
-    bool FindTransport(const CTPAgent_ptr & agent_ptr, CTPAgent_ptr & transport_ptr);
+    bool FindTransporters(const CTPAgent_ptr & agent_ptr, std::list< std::pair<double, CTPAgent_ptr> > & transporter_list);
 
 
-    bool LoadTransport(CTPAgent_ptr agent_ptr, CTPAgent_ptr transport_ptr);
+    bool LoadTransporters(CTPAgent_ptr agent_ptr);
 
     MapPoint      m_target_pos;
+    MapPoint      m_transport_pos;
     Unit          m_target_city;
     Army          m_target_army;
     SUB_TASK_TYPE m_sub_task;

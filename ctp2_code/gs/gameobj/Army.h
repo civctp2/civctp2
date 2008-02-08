@@ -28,6 +28,7 @@
 // - Added IsWounded method.
 // - Added CanTransport and IsCivilian methods.
 // - Made GetCurrentHP const.
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 //
 //----------------------------------------------------------------------------
 
@@ -300,11 +301,12 @@ public:
 	bool TurnOver() const;
 
 	bool CanAtLeastOneCargoUnloadAt
-    (
-        MapPoint const &    old_pos, 
-        MapPoint const &    dest_pos, 
-        bool                use_vision
-    ) const;
+	(
+	    MapPoint const &    old_pos,
+	    MapPoint const &    dest_pos,
+	    bool                use_vision,
+	    const bool          check_move_points = true
+	) const;
 
 	void GetCurrentHP
 	(

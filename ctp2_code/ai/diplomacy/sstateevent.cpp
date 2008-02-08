@@ -222,7 +222,7 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 				state.dbIndex = diplomat.GetPersonality()->GetFullAttackStrategyPtr()->GetStrategyIndex();
 			}
 			else{
-				state.priority = 250;		   
+				state.priority = 250;
 				g_theStrategyDB->GetNamedItem("STRATEGY_ATTACK", state.dbIndex);
 			}
 			g_theStringDB->GetStringID("SPY_FULL_ATTACK_SS",state.spyStrId);
