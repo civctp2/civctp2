@@ -52,7 +52,9 @@
 //   maybe revisit
 // - Made DrawStackingIndicator only the stack sized moved the rest to DrawIndicators
 // - Made StackingIndicator above the healthbar per Maquiladora's design
-// - Move Civ flag underneath the healthbar
+// - Move Civ flag underneath the healthbar.
+// - Unit stacking indications and special indecations are placed according
+//   their size. (9-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1503,22 +1505,22 @@ bool UnitActor::Draw(bool fogged)
 	sint32  xoffset = (sint32)(k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32  yoffset = (sint32)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-    uint16  flags   = k_DRAWFLAGS_NORMAL;
+	uint16  flags   = k_DRAWFLAGS_NORMAL;
 	if (m_transparency < 15) 
-    {
-		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
+	{
+		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
 	if (fogged)
-    {
+	{
 		flags |= k_BIT_DRAWFLAGS_FOGGED;
-    }
+	}
 
 	bool isCloaked = false;
 
 	if (m_unitID.IsValid()) 
-    {
+	{
 		if (m_unitID.IsAsleep()) 
-        {
+		{
 			flags |= k_BIT_DRAWFLAGS_DESATURATED;
 			m_isFortified = FALSE;
 			m_isFortifying = FALSE;
@@ -1536,11 +1538,11 @@ bool UnitActor::Draw(bool fogged)
 
 	Unit            selectedUnit;
 	if (selectType == SELECT_TYPE_LOCAL_CITY) 
-    {
+	{
 		selectedUnit = selectedID;
-	} 
-    else if (selectType == SELECT_TYPE_LOCAL_ARMY) 
-    {
+	}
+	else if (selectType == SELECT_TYPE_LOCAL_ARMY) 
+	{
 		selectedUnit = Army(selectedID).GetTopVisibleUnit(selectedPlayer);
 	}
 
@@ -1548,13 +1550,13 @@ bool UnitActor::Draw(bool fogged)
 	bool	drawSelectionBrackets   = false;
 
 	if (selectedUnit.IsValid() && selectedUnit.GetActor() == this) 
-    {
+	{
 		drawSelectionBrackets = true;	
 		if (GetTickCount() > m_shieldFlashOffTime) 
-        {
-            drawShield  = GetTickCount() > m_shieldFlashOnTime;
+		{
+			drawShield  = GetTickCount() > m_shieldFlashOnTime;
 			if (drawShield)
-            {
+			{
 				m_shieldFlashOffTime = GetTickCount() + k_SHIELD_ON_TIME;
 				m_shieldFlashOnTime  = m_shieldFlashOffTime + k_SHIELD_OFF_TIME;
 			}
@@ -1623,7 +1625,7 @@ bool UnitActor::Draw(bool fogged)
 			flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;	
 		}
 
-	    Pixel16 color   = 0x0000;
+		Pixel16 color   = 0x0000;
 		if(m_curAction == NULL)
 		{
 			
@@ -1643,7 +1645,7 @@ bool UnitActor::Draw(bool fogged)
 
 		if (g_player[m_playerNum]) {
 			if (wonderutil_GetForcefieldEverywhere(g_player[m_playerNum]->m_builtWonders)) 
-            {
+			{
 				forcefieldsEverywhere = m_unitID.IsValid() && m_unitID.IsCity();
 			}
 		}
@@ -1654,7 +1656,7 @@ bool UnitActor::Draw(bool fogged)
 
 	// adding drawwonders and buildings using mapicons
 	//mapicons will save tile file space and make it so modders don't have to add a new tilefile all the time
-    // also to cut on visible wonders slic and my visible wonder code doesn't work to well
+	// also to cut on visible wonders slic and my visible wonder code doesn't work to well
 	// bool check is in the method
 	//emod
 
@@ -1693,6 +1695,7 @@ void UnitActor::DrawText(sint32 x, sint32 y, MBCHAR *unitText)
 		m_unitSpriteGroup->DrawText(x, y, unitText);
 	}
 }
+
 //it doesn't look like this is used. I did create a drawstackingindicator that is used - E
 void UnitActor::DrawHerald(void)
 {
@@ -1713,9 +1716,12 @@ void UnitActor::DrawHerald(void)
 	g_theWorld->GetArmy(m_unitID.RetPos(), army);
 
 	MAPICON		icon = MAPICON_HERALD;
-	if (army.Num() > 1 && army.Num() < 10) {
+	if (army.Num() > 1 && army.Num() < 10)
+	{
 		icon = (MAPICON) ((sint32) MAPICON_HERALD2 + army.Num() - 2);
-	} else if(army.Num() >= 10) {
+	}
+	else if(army.Num() >= 10)
+	{
 		icon = (MAPICON) ((sint32) MAPICON_HERALD10 + (army.Num() - 10));
 	}
 
@@ -1753,83 +1759,83 @@ void UnitActor::DrawHealthBar(void)
 	if (m_size > 0) return;
 	if (!g_showHeralds) return;
 
-    if (m_unitID.IsValid() && m_unitID.IsCity()) 
-    {
-        return;
-    }
+	if (m_unitID.IsValid() && m_unitID.IsCity()) 
+	{
+		return;
+	}
 
 	TileSet	*   tileSet = g_tiledMap->GetTileSet();
 	Cell *      myCell = g_theWorld->GetCell(m_pos);
 	
 	sint32		stackSize = 1;
-    if (m_tempStackSize != 0) 
-    {
+	if (m_tempStackSize != 0)
+	{
 		stackSize = m_tempStackSize;
-    } 
-    else if (IsActive()) 
-    {
-        if (m_unitID.IsValid()) 
-        {
-            Army army = m_unitID.GetArmy();
+	}
+	else if (IsActive()) 
+	{
+		if (m_unitID.IsValid())
+		{
+			Army army = m_unitID.GetArmy();
 
-            if (army.IsValid()) 
-            {
-                stackSize = army.Num();
-            }
-        }
-    } 
-    else 
-    {
-        CellUnitList *  unitList = myCell->UnitArmy();
-        if (unitList) 
-        {
-            stackSize = unitList->Num();
-            for (sint32 i=0; i<unitList->Num(); i++) 
-            {
-	            Unit top;
+			if (army.IsValid())
+			{
+				stackSize = army.Num();
+			}
+		}
+	}
+	else
+	{
+		CellUnitList *  unitList = myCell->UnitArmy();
+		if (unitList) 
+		{
+			stackSize = unitList->Num();
+			for (sint32 i=0; i<unitList->Num(); i++)
+			{
+				Unit top;
 
-	            Army a      = Army(unitList->Access(i).GetArmy().m_id);
-	            if (a.IsValid()) 
-	            {
-		            top = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
-	            }
-            	
-	            if (!top.IsValid()) 
-	            {
-		            top.m_id = unitList->Access(i).m_id;
-	            }
-            	
-	            if (top.GetActor() && top.GetActor()->IsActive()) 
-	            {
-		            stackSize--;
-	            }
-            }
-        }
+				Army a      = Army(unitList->Access(i).GetArmy().m_id);
+				if (a.IsValid()) 
+				{
+					top = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+				}
+
+				if (!top.IsValid()) 
+				{
+					top.m_id = unitList->Access(i).m_id;
+				}
+
+				if (top.GetActor() && top.GetActor()->IsActive())
+				{
+					stackSize--;
+				}
+			}
+		}
 	}
 
 	double  ratio;
-    if (m_unitID.IsValid()) 
-    {
-        if (stackSize > 1 && myCell->GetNumUnits()) 
-        {
-            ratio = std::max(0.0, myCell->UnitArmy()->GetAverageHealthPercentage());
-        } 
-        else
-        {
-            if (m_healthPercent < 0) 
-            {
-	            ratio = std::max(0.0, m_unitID.GetHP() / m_unitID.GetDBRec()->GetMaxHP());
-            } 
-            else 
-            {
-	            ratio = 0.0;   //m_healthPercent;
-            }
-        }
-    } 
-    else 
-    {
-        ratio = std::max(0.0, m_healthPercent);
-    }
+	if (m_unitID.IsValid())
+	{
+		if (stackSize > 1 && myCell->GetNumUnits()) 
+		{
+			ratio = std::max(0.0, myCell->UnitArmy()->GetAverageHealthPercentage());
+		}
+		else
+		{
+			if (m_healthPercent < 0)
+			{
+				ratio = std::max(0.0, m_unitID.GetHP() / m_unitID.GetDBRec()->GetMaxHP());
+			}
+			else
+			{
+				ratio = 0.0;   //m_healthPercent;
+			}
+		}
+	}
+	else
+	{
+		ratio = std::max(0.0, m_healthPercent);
+	}
 
 
 	POINT	iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
@@ -1843,21 +1849,23 @@ void UnitActor::DrawHealthBar(void)
 
 	POINT *     shieldPoint;
 	if (unitAction == UNITACTION_IDLE && 
-        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL
-       )
-    {
+	    m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL
+	   )
+	{
 		shieldPoint = m_unitSpriteGroup->GetShieldPoints(UNITACTION_MOVE);
 		OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()), 
 							  m_y + (sint32)((double)(shieldPoint->y) * g_tiledMap->GetScale()));
-	} 
-    else 
-    {
-		if (m_unitSpriteGroup && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)unitAction) != NULL) {
+	}
+	else
+	{
+		if (m_unitSpriteGroup && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)unitAction) != NULL)
+		{
 			shieldPoint = m_unitSpriteGroup->GetShieldPoints(unitAction);
 			OffsetRect(&iconRect, m_x + (sint32)((double)(shieldPoint->x) * g_tiledMap->GetScale()), 
 								  m_y + (sint32)((double)(shieldPoint->y) * g_tiledMap->GetScale()));
-		} else {
-			
+		}
+		else
+		{
 			sint32 top = m_y;
 			sint32 middle = m_x + (sint32)((k_TILE_PIXEL_WIDTH) * g_tiledMap->GetScale())/2;
 			OffsetRect(&iconRect, middle - iconDim.x / 2, top - iconDim.y);
@@ -1868,16 +1876,13 @@ void UnitActor::DrawHealthBar(void)
 	if (iconRect.right >= g_screenManager->GetSurfWidth()) return;
 	if (iconRect.top < 0) return;
 	if (iconRect.bottom >= g_screenManager->GetSurfHeight()) return;
-/*
-	if (flagRect.left < 0) return;
-	if (flagRect.right >= g_screenManager->GetSurfWidth()) return;
-	if (flagRect.top < 0) return;
-	if (flagRect.bottom >= g_screenManager->GetSurfHeight()) return;
-*/
-	//DrawStackingIndicator(iconRect.left, iconRect.top, stackSize);
-    DrawStackingIndicator(iconRect.left, iconRect.top + 16, stackSize); //DrawStackingIndicator(iconRect.left, iconRect.top - 16, stackSize); //subtraction appears to call the TransitionTile crash 7.5.2007 emod
- 	DrawIndicators(iconRect.left, iconRect.top + 30, stackSize);
- 	DrawSpecialIndicators(iconRect.left, iconRect.top, stackSize);
+
+	// @ToDo: Cleanup this type mess
+	sint32 x = iconRect.left;
+	sint32 y = iconRect.top;
+	DrawSpecialIndicators(x, y, stackSize);
+	iconRect.left = x;
+	iconRect.top  = y;
 	RECT tempRect = iconRect;
 	InflateRect(&tempRect, 2, 2);
 	tempRect.top -= 8;
@@ -1889,29 +1894,30 @@ void UnitActor::DrawHealthBar(void)
 		black = 0x0001;
 
 	if (g_theProfileDB->GetShowEnemyHealth() || 
-        m_playerNum == g_selected_item->GetVisiblePlayer()
-       ) 
-    {
-		iconRect.bottom = iconRect.top + 16;
-		iconRect.top = iconRect.bottom - 4;
+	    m_playerNum == g_selected_item->GetVisiblePlayer()
+	   )
+	{
+		iconRect.bottom += 4;
 
-		if (iconRect.left < 0) return;
-		if (iconRect.right >= g_screenManager->GetSurfWidth()) return;
-		if (iconRect.top < 0) return;
-		if (iconRect.bottom >= g_screenManager->GetSurfHeight()) return;
+		tagRECT healthBar = iconRect;
 
-		primitives_FrameRect16(g_screenManager->GetSurface(), &iconRect, black);
+		if (healthBar.left < 0) return;
+		if (healthBar.right >= g_screenManager->GetSurfWidth()) return;
+		if (healthBar.top < 0) return;
+		if (healthBar.bottom >= g_screenManager->GetSurfHeight()) return;
+
+		primitives_FrameRect16(g_screenManager->GetSurface(), &healthBar, black);
 		
-		InflateRect(&iconRect, -1, -1);
+		InflateRect(&healthBar, -1, -1);
 
-		RECT    leftRect    = iconRect;
-        RECT    rightRect   = iconRect;
+		RECT    leftRect    = healthBar;
+		RECT    rightRect   = healthBar;
 
 		Pixel16 color       = g_colorSet->GetColor(COLOR_GREEN);
 
 		if (ratio < 1.0) {
 
-			leftRect.right = leftRect.left + (sint32)(ratio * (double)(iconRect.right-iconRect.left));
+			leftRect.right = leftRect.left + (sint32)(ratio * (double)(healthBar.right-iconRect.left));
 			rightRect.left = leftRect.right;
 
 			if (ratio < 0.25) {
@@ -1935,13 +1941,22 @@ void UnitActor::DrawHealthBar(void)
 		}
 
 		primitives_PaintRect16(g_screenManager->GetSurface(), &leftRect, color);
+
+		iconRect.top = iconRect.bottom;
 	}
 
+	// @ToDo: Cleanup this type mess
+	x = iconRect.left;
+	y = iconRect.top;
+	DrawStackingIndicator(x, y, stackSize);
+	DrawIndicators(x, y, stackSize);
+	iconRect.left = x;
+	iconRect.top  = y;
 }
 
 //moved stacking indcators here because its actually called by the healthbar above.
 
-void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
+void UnitActor::DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stack)
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -1956,24 +1971,24 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
-    sint32      displayedOwner;
-    if (    m_unitID.IsValid() 
-         && m_unitID.IsHiddenNationality()
-         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
-       ) 
-    {
-        // Display unit as barbarians
-        displayedOwner  = PLAYER_INDEX_VANDALS;
-    }
-    else
-    {   
-        displayedOwner  = m_playerNum;
-    }
+	sint32      displayedOwner;
+	if (    m_unitID.IsValid() 
+	     && m_unitID.IsHiddenNationality()
+	     && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
+	   )
+	{
+		// Display unit as barbarians
+		displayedOwner  = PLAYER_INDEX_VANDALS;
+	}
+	else
+	{
+		displayedOwner  = m_playerNum;
+	}
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
 	sint32 w = iconDim.x;
 	sint32 h = iconDim.y;
-    Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
+	Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
 
 // Remove the next line when the scaling and centering of the text has been implemented
 // properly - or you want to test its operation. Currently, the generated text looks too
@@ -1981,47 +1996,51 @@ void UnitActor::DrawStackingIndicator(sint32 x, sint32 y, sint32 stack)
 #define USE_PREDEFINED_ICONS	
 
 #if defined(USE_PREDEFINED_ICONS)
-    MAPICON		icon = MAPICON_HERALD; // default: plain icon
+	MAPICON		icon = MAPICON_HERALD; // default: plain icon
 
-    if (stack > 1 && stack <= 9) 
-    {
-        // single digit predefined icons
-        icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
-    } 
-    else if (stack >= 10 && stack <= 12) 
-    {
-        // double digits predefined icons
-        icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
-    }
+	if (stack > 1 && stack <= 9) 
+	{
+		// single digit predefined icons
+		icon = (MAPICON) ((sint32) MAPICON_HERALD2 + stack - 2);
+	}
+	else if (stack >= 10 && stack <= 12) 
+	{
+		// double digits predefined icons
+		icon = (MAPICON) ((sint32) MAPICON_HERALD10 + stack - 10);
+	}
 
-    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, displayedColor);
+	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), x, y, displayedColor);
 #else
-    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_HERALD), x, y, displayedColor);
+	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_HERALD), x, y, displayedColor);
 
-    // Generate text
-    MBCHAR strn[80];
-    sprintf(strn, "%i", stack);
+	// Generate text
+	MBCHAR strn[80];
+	sprintf(strn, "%i", stack);
 
-    /// @todo Scale and center text
-    if (stack > 1 && stack <= 9) 
-    {
-        // single digit
-        DrawText(x + 5, y, strn);
-    } 
-    else if (stack >= 10 && stack <= 12) 
-    {
-        // double digits
-        DrawText(x, y, strn);
-    }
+	/// @todo Scale and center text
+	if (stack > 1 && stack <= 9) 
+	{
+		// single digit
+		DrawText(x + 5, y, strn);
+	}
+	else if (stack >= 10 && stack <= 12)
+	{
+		// double digits
+		DrawText(x, y, strn);
+	}
 #endif
 	
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
+
+	// @ToDo clean the code so that the following is superflous
+	x = x2;
+	y = y2;
 }
 
 
 //emod - moved these from stacking indicators to separate indicators
 
-void UnitActor::DrawIndicators(sint32 x, sint32 y, sint32 stack)
+void UnitActor::DrawIndicators(sint32 &x, sint32 &y, sint32 stack)
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -2031,80 +2050,91 @@ void UnitActor::DrawIndicators(sint32 x, sint32 y, sint32 stack)
 	if (x < 0) return;
 	if (y < 0) return;
 
-	TileSet	*   tileSet = g_tiledMap->GetTileSet();
-	POINT	    iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
+	TileSet *   tileSet = g_tiledMap->GetTileSet();
+	POINT       iconDim = tileSet->GetMapIconDimensions(MAPICON_HERALD);
 	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
-    sint32      displayedOwner;
-    if (    m_unitID.IsValid() 
-         && m_unitID.IsHiddenNationality()
-         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
-       ) 
-    {
-        // Display unit as barbarians
-        displayedOwner  = PLAYER_INDEX_VANDALS;
-    }
-    else
-    {   
-        displayedOwner  = m_playerNum;
-    }
+	sint32      displayedOwner;
+	if (    m_unitID.IsValid()
+	     && m_unitID.IsHiddenNationality()
+	     && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
+	   )
+	{
+		// Display unit as barbarians
+		displayedOwner  = PLAYER_INDEX_VANDALS;
+	}
+	else
+	{
+		displayedOwner  = m_playerNum;
+	}
 
-    Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
+	Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
 
 	sint32 x2 = x;
-	sint32 y2 = y + iconDim.y;
-	sint32 w = iconDim.x;
-	sint32 h = iconDim.y;
+	sint32 y2 = y;
+	sint32 w  = 0;
+	sint32 h  = 0;
 
-	if(m_unitID.IsValid() && m_unitID->GetArmy().IsValid()) {
-		
-		if(m_unitID->GetArmy()->HasCargo()) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
-				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
-				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
-				y2 += iconDim.y;
-				h += iconDim.y;
-                w = std::max<sint32>(w, iconDim.x);
-			}
-		}
-
-		if(m_unitID->GetArmy()->Num() > 1) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+	if(m_unitID.IsValid() && m_unitID->GetArmy().IsValid())
+	{
+		if(m_unitID->GetArmy()->Num() > 1)
+		{
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
+			{
 				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ARMY), x2, y2, displayedColor);
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_ARMY);
 				y2 += iconDim.y;
 				h += iconDim.y;
-                w = std::max<sint32>(w, iconDim.x);
+				w = std::max<sint32>(w, iconDim.x);
 			}
 		}
 
-		if(m_unitID->GetArmy()->HasVeterans()) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+		if(m_unitID->GetArmy()->HasVeterans())
+		{
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
+			{
 				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_VETERAN), x2, y2, displayedColor);
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_VETERAN);
-				//y2 += iconDim.y; //original but not necessary since elite overlaps
-				//h += iconDim.y;  //original but not necessary since elite overlaps
-                w = std::max<sint32>(w, iconDim.x);
+				y2 += iconDim.y;
+				h += iconDim.y;
+				w = std::max<sint32>(w, iconDim.x);
 			}
-		}	
-		// emod -  TODO why does it still look to tileset.h for mapicons?
-		if(m_unitID->GetArmy()->HasElite()) {
-			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y) {
+		}
+
+		if(m_unitID->GetArmy()->HasElite())
+		{
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
+			{
 				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_ELITE), x2, y2, displayedColor);
 				iconDim = tileSet->GetMapIconDimensions(MAPICON_ELITE);
 				y2 += iconDim.y;
 				h += iconDim.y;
-                w = std::max<sint32>(w, iconDim.x);
+				w = std::max<sint32>(w, iconDim.x);
 			}
 		}
-		
+
+		if(m_unitID->GetArmy()->HasCargo())
+		{
+			if(y2 < g_screenManager->GetSurfHeight() - iconDim.y)
+			{
+				g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(MAPICON_CARGO), x2, y2, displayedColor);
+				iconDim = tileSet->GetMapIconDimensions(MAPICON_CARGO);
+				y2 += iconDim.y;
+				h += iconDim.y;
+				w = std::max<sint32>(w, iconDim.x);
+			}
+		}
 	}
-	
+
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
+
+	// @ToDo clean the code so that the following is superflous
+	x = x2;
+	y = y2;
 }
 
-void UnitActor::DrawSpecialIndicators(sint32 x, sint32 y, sint32 stack) //identifier for religious unit or national flag
+void UnitActor::DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stack) //identifier for religious unit or national flag
 {
 #ifndef _TEST
 	STOMPCHECK();
@@ -2119,21 +2149,21 @@ void UnitActor::DrawSpecialIndicators(sint32 x, sint32 y, sint32 stack) //identi
 	if (x >= g_screenManager->GetSurfWidth() - iconDim.x) return;
 	if (y >= g_screenManager->GetSurfHeight() - iconDim.y) return;
 
-    sint32      displayedOwner;
-    if (    m_unitID.IsValid() 
-         && m_unitID.IsHiddenNationality()
-         && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
-       ) 
-    {
-        // Display unit as barbarians
-        displayedOwner  = PLAYER_INDEX_VANDALS;
-    }
-    else
-    {   
-        displayedOwner  = m_playerNum;
-    }
+	sint32      displayedOwner;
+	if (    m_unitID.IsValid() 
+	     && m_unitID.IsHiddenNationality()
+	     && (m_playerNum != g_selected_item->GetVisiblePlayer()) // You want to spot your own units
+	   )
+	{
+		// Display unit as barbarians
+		displayedOwner  = PLAYER_INDEX_VANDALS;
+	}
+	else
+	{
+		displayedOwner  = m_playerNum;
+	}
 
-    Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
+	Pixel16     displayedColor  = g_colorSet->GetPlayerColor(displayedOwner);
 	sint32 x2 = x;
 	sint32 y2 = y + iconDim.y;
 	sint32 w = iconDim.x;
@@ -2145,25 +2175,28 @@ void UnitActor::DrawSpecialIndicators(sint32 x, sint32 y, sint32 stack) //identi
 	if(m_unitID.IsValid()
 	&& m_unitID.GetDBRec()->GetHasReligionIconIndex(religionicon)
 	){
-			sint32 xf = x; // + iconDim.x;
-		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(religionicon), xf, y, displayedColor);
-	} 
+		sint32 xf = x; // + iconDim.x;
+		g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(religionicon), xf, y, displayedColor);
+	}
 	else if(g_theProfileDB->IsCivFlags())
 	{
-	    // Add civilization flags here - moved flags here and edited the 
-	    // heralds to put numbers on national flags emod 2-21-2007
-        sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
-	    sint32  civicon = 0;
+		// Add civilization flags here - moved flags here and edited the 
+		// heralds to put numbers on national flags emod 2-21-2007
+		sint32  civ     = g_player[displayedOwner]->GetCivilisation()->GetCivilisation();
+		sint32  civicon = 0;
 
-        if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
-	    {
+		if (g_theCivilisationDB->Get(civ)->GetNationUnitFlagIndex(civicon))
+		{
 			sint32 xf = x; // + iconDim.x;
-		    g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
-	    }
-    }
+			g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(civicon), xf, y, displayedColor);
+		}
+	}
 
-	
 	g_tiledMap->AddDirtyToMix(x, y, w, h);
+
+	// @ToDo clean the code so that the following is superflous
+	x = x2;
+	y = y2;
 }
 
 //end emod

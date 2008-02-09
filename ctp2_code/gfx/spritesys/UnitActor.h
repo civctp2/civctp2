@@ -1,13 +1,36 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Unit actor
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// - Generates debug information when set.
+//
+// _ACTOR_DRAW_OPTIMIZATION
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Unit stacking indications and special indecations are placed according
+//   their size. (9-Feb-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -95,9 +118,9 @@ public:
 	Anim			*MakeFaceoff(void);
 
 	bool			HasThisAnim(UNITACTION action) const
-    { 
-        return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action); 
-    }
+	{
+		return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action); 
+	}
 
 	
 	void			DrawFortified(bool fogged);
@@ -110,9 +133,9 @@ public:
 	void			DrawHerald(void);
 	void			DrawSelectionBrackets(void);
 	void			DrawHealthBar(void);
-	void			DrawStackingIndicator(sint32 x, sint32 y, sint32 stackSize);
-	void			DrawIndicators(sint32 x, sint32 y, sint32 stackSize);
-	void			DrawSpecialIndicators(sint32 x, sint32 y, sint32 stackSize);
+	void			DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stackSize);
+	void			DrawIndicators(sint32 &x, sint32 &y, sint32 stackSize);
+	void			DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stackSize);
 	void			DrawText(sint32 x, sint32 y, MBCHAR *unitText);
 
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
@@ -124,7 +147,7 @@ public:
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
 	MapPoint		GetSavedPos(void) const { return m_savePos; }
 	void			SetSavedPos(MapPoint pnt) { m_savePos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; } 
+	void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; } 
 
 	sint32			GetFacing(void) const { return m_facing; }
 
@@ -137,7 +160,7 @@ public:
 	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
 	sint32			GetPlayerNum(void) const { return m_playerNum;}
 
-    sint32			GetNextPop(void) const { return m_nextPop;}
+	sint32			GetNextPop(void) const { return m_nextPop;}
 
 	Action			*GetCurAction(void) const { return m_curAction; }
 
@@ -253,7 +276,7 @@ protected:
 	sint32				m_unitDBIndex;
 	sint32				m_playerNum;
 
-    sint32              m_nextPop; //PFT 29 mar 05, show # turns until city next grows a pop
+	sint32              m_nextPop; //PFT 29 mar 05, show # turns until city next grows a pop
 
 	UnitSpriteGroup		*m_unitSpriteGroup;
 	LOADTYPE			m_loadType;							

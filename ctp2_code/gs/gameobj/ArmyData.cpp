@@ -122,7 +122,8 @@
 // - Bombard order is not given twice anymore. (30-Jan-2008 Martin Gühmann)
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Added check move points option to CanAtLeastOneCargoUnloadAt. (8-Feb-2008 Martin Gühmann)
+// - Throwing diplomatic parties costs now the displayed price. (9-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3455,14 +3456,6 @@ bool ArmyData::CanThrowParty() const
 ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 {
 	sint32 uindex;
-
-	sint32 cost = 100;
-	cost = g_theConstDB->Get(0)->GetMaxPartyCost();
-
-	if(g_player[m_owner]->m_gold->GetLevel() < cost) {
-		return ORDER_RESULT_ILLEGAL;
-	}
-
 	if(!CanThrowParty(uindex))
 		return ORDER_RESULT_ILLEGAL;
 
@@ -3475,26 +3468,21 @@ ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 	if(c.GetOwner() == m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-	if (g_player[m_owner]->HasWarWith(c.GetOwner()))
+	if(g_player[m_owner]->HasWarWith(c.GetOwner()))
 		return ORDER_RESULT_ILLEGAL;
 
-	
-	if (!Diplomat::GetDiplomat(c.GetOwner()).ReadyToParty())
+	if(!Diplomat::GetDiplomat(c.GetOwner()).ReadyToParty())
 		return ORDER_RESULT_ILLEGAL;
 
 	AddSpecialActionUsed(m_array[uindex]);
 
-	
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ThrowPartyUnit,
-		GEA_Unit, m_array[uindex].m_id,
-		GEA_City, c,
-		GEA_End);
-	
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SubGold,
-		GEA_Player, m_owner,
-		GEA_Int, cost,
-		GEA_End);
-		
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	                       GEV_ThrowPartyUnit,
+	                       GEA_Unit, m_array[uindex].m_id,
+	                       GEA_City, c,
+	                       GEA_End
+	                      );
+
 	return ORDER_RESULT_SUCCEEDED;
 }
 
@@ -9013,8 +9001,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 	if(order->m_order < (UNIT_ORDER_TYPE)0 || order->m_order >= UNIT_ORDER_MAX)
 		return true;
 
-	if(!CanPerformSpecialAction()) {
-		
+	if(!CanPerformSpecialAction())
+	{
 		keepGoing = false;
 		return false;
 	}
@@ -9036,13 +9024,15 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 
 	const OrderRecord *order_rec = g_theOrderDB->Get(odb);
-	// If not enough gold, just do failure special effects and return	
-	if(order_rec && order_rec->GetGold() > 0) {
-		if(g_player[m_owner]->m_gold->GetLevel() < order_rec->GetGold()) {
+	// If not enough gold, just do failure special effects and return
+	if(order_rec && order_rec->GetGold() > 0)
+	{
+		if(g_player[m_owner]->m_gold->GetLevel() < order_rec->GetGold())
+		{
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 			if ((visiblePlayer == m_owner) || 
-				(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
-
+				(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+			{
 				sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_CANT"))->GetValue();
 				sint32	soundID = gamesounds_GetGameSoundID(GAMESOUNDS_TOOEXPENSIVE);
 
@@ -9054,9 +9044,9 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 	bool useDefaultSuccessSound = false;
 
-	sint32 i;
 	uint32 origVisibility = 0;
-	for(i = 0; i < m_nElements; i++) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
 		origVisibility |= m_array[i].GetVisibility();
 	}
 
@@ -9150,7 +9140,6 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			break;
 		case UNIT_ORDER_INTERCEPT_TRADE:
 			result = InterceptTrade();
-
 			break;
 		case UNIT_ORDER_INCITE_REVOLUTION:
 			result = InciteRevolution(order->m_point);
@@ -9183,7 +9172,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
         } 
 #endif _DEBUG
 
-	if(result == ORDER_RESULT_ILLEGAL) { 
+	if(result == ORDER_RESULT_ILLEGAL) {
 		
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if ((visiblePlayer == m_owner) || 
@@ -9202,11 +9191,12 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		return true;
 	}
 
-
 	bool deduct = false;
 
-	switch(result) {
-		case ORDER_RESULT_FAILED: {
+	switch(result)
+	{
+		case ORDER_RESULT_FAILED:
+		{
 			deduct = true;
 
 			sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_FAIL"))->GetValue();
@@ -9251,35 +9241,47 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			break;
 	}
 
-    if (result == ORDER_RESULT_SUCCEEDED || 
-		result == ORDER_RESULT_SUCCEEDED_INCOMPLETE) {
-        char const * sText = NULL;
-        switch(order->m_order) {
-          case UNIT_ORDER_STEAL_TECHNOLOGY:  sText = "186StealTechnologyVictim"; break;
-          case UNIT_ORDER_ASSASSINATE:       sText = "176AssassinationCompleteVictim"; break;
-          case UNIT_ORDER_INDULGENCE:        sText = "155IndulgenceCompleteVictim"; break;
-		  
-          case UNIT_ORDER_INJOIN:            sText = "159InjunctionCompleteVictim"; break;
-        }
-        if (sText) {
-            
-            Unit c = GetAdjacentCity(order->m_point);
-            if (c.IsValid())
-            {
-                g_slicEngine->Execute(new CityReport(sText, c));
-            }
-        }
-    }
-
-	if(deduct) {
-		if(order_rec) {
-			g_player[m_owner]->m_gold->SubGold(order_rec->GetGold());
+	if(result == ORDER_RESULT_SUCCEEDED
+	|| result == ORDER_RESULT_SUCCEEDED_INCOMPLETE
+	){
+		char const * sText = NULL;
+		switch(order->m_order)
+		{
+			case UNIT_ORDER_STEAL_TECHNOLOGY:  sText = "186StealTechnologyVictim";       break;
+			case UNIT_ORDER_ASSASSINATE:       sText = "176AssassinationCompleteVictim"; break;
+			case UNIT_ORDER_INDULGENCE:        sText = "155IndulgenceCompleteVictim";    break;
+			case UNIT_ORDER_INJOIN:            sText = "159InjunctionCompleteVictim";    break;
 		}
 
-		for (sint32 i = m_nElements - 1; i >= 0; i--) {
-			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW)) {
+		if (sText)
+		{
+			Unit c = GetAdjacentCity(order->m_point);
+			if (c.IsValid())
+			{
+				g_slicEngine->Execute(new CityReport(sText, c));
+			}
+		}
+	}
+
+	if(deduct)
+	{
+		if(order_rec)
+		{
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			                       GEV_SubGold,
+			                       GEA_Player, m_owner,
+			                       GEA_Int, order_rec->GetGold(),
+			                       GEA_End
+			                      );
+		}
+
+		for (sint32 i = m_nElements - 1; i >= 0; i--)
+		{
+			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW))
+			{
 				m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
-				if(order_rec) {
+				if(order_rec)
+				{
 					bool out_of_fuel;
 					m_array[i].DeductMoveCost(order_rec->GetMove(), out_of_fuel);
 				}
