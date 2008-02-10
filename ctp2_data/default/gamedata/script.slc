@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : SLIC source
 // Description  : Main SLIC entry point. Defines message boxes.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,11 +28,13 @@
 // - Added quit button to the hotseat interturn pop-up.
 // - Re-implemented messagebox '001TreatyToExpire' to warn when dip agreements
 //   are about to expire. See Diplomat::NextDiplomaticState. 
-// - Add 999AttackWarning that notifies the human that war may be started
+// - Added 999AttackWarning that notifies the human that war may be started
 // - Added 999CITYCAPTUREOPTIONs allows player to raze, liberate, or occupy a city
 // - Changed 128CivStartedWar from messagebox to alertbox
 // - Added but not implented 999CivStartedWarWithUs using an unused string
-//   that notifis the player that a civ declared war on him
+//   that notifis the player that a civ declared war on him.
+// - Added messages for failed slave raids, one for an alive slave and another
+//   for a killed slaver. (9-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1901,6 +1904,16 @@ messagebox '137SlaveryCompleteAttacker' {
 
 messagebox '137SlaveCompleteVictim' {
 	Text(ID_SLAVE_COMPLETE_VICTIM) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '138SlaveryFailedAttacker' {
+	Text(ID_SLAVE_FAILED_ATTACKER) ;
+	MessageType("CAPTURE_SLAVES");
+}
+
+messagebox '138SlaveryKilledAttacker' {
+	Text(ID_SLAVE_KILLED_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
 }
 

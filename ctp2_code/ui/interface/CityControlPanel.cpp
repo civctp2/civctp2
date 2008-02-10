@@ -4,7 +4,7 @@
 // File type    : C++ source
 // File name    : \UI\Interface\CityControlPanel.cpp
 // Description  : Handling for the city tab of the control panel 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 //   (L. Hirth 6/2004)
 // - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin Gühmann)
 // - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin Gühmann)
+// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -195,10 +196,8 @@ m_governorDropDown(static_cast<ctp2_DropDown*>(
 
 void CityControlPanel::Update()
 {
-	
 	UpdateBuildItem();
 	UpdateGovernor();
-
 }
 
 
@@ -488,10 +487,17 @@ void CityControlPanel::UpdateBuildItem()
 	{
 		city_index	= 0;
 	}
-	
+
+	CityWindow*     cityWindow      = CityWindow::GetCityWindow();
+
+	Unit            city            = player->GetCityFromIndex(city_index);
+	CityData*       theCity = city.CD();
+	if(cityWindow && cityWindow->GetCityData())
+	{
+		theCity = cityWindow->GetCityData();
+	}
+
 	sint32			numberOfItems	= m_cityListDropDown->GetListBox()->NumItems();
-	Unit			city			= player->GetCityFromIndex(city_index);
-	CityData *		theCity			= city.CD();
 	BuildQueue *	queue			= theCity ? theCity->GetBuildQueue() : NULL;
 	BuildNode *		head			= queue ? queue->GetHead() : NULL;
 	sint32 const	cost			= theCity ? theCity->GetOvertimeCost() : 0;

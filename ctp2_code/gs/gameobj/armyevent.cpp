@@ -1260,7 +1260,7 @@ STDEHANDLER(MoveUnitsEvent)
 	
 	if(g_theWorld->HasCity(to)) {
 		Unit c = g_theWorld->GetCity(to);
-        PLAYER_INDEX city_owner = c.GetOwner(); 
+		PLAYER_INDEX city_owner = c.GetOwner(); 
 		if(city_owner != a->GetOwner()) {
 			if(!a->IsEnemy(city_owner)) {
 				SlicObject *so;
@@ -1309,10 +1309,8 @@ STDEHANDLER(MoveUnitsEvent)
 #endif
 						}
 
-						
-						
-
-						if (c.IsCapitol()) {
+						if (c.IsCapitol())
+						{
 							//civil war code didnt work here either  EMOD
 
 							SlicObject *so = new SlicObject("127CapitalCityCapturedVictim");
@@ -1325,12 +1323,14 @@ STDEHANDLER(MoveUnitsEvent)
 							so->AddCivilisation(originalOwner);
 							so->AddCity(c);
 							g_slicEngine->Execute(so);
-						
-						} else if (c.GetData()->GetCityData()->PopCount() >= 1) {
-							SlicObject *so = new SlicObject("123CitiesCapturedVictim");
-							so->AddRecipient(originalOwner);
-							so->AddCity(c);
-							g_slicEngine->Execute(so);
+						}
+						else if (c.GetData()->GetCityData()->PopCount() >= 1)
+						{
+						//	Maybe we find another use for this message
+						//	SlicObject *so = new SlicObject("123CitiesCapturedVictim");
+						//	so->AddRecipient(originalOwner);
+						//	so->AddCity(c);
+						//	g_slicEngine->Execute(so);
 						}
 
 						if(c.GetOwner() == g_selected_item->GetVisiblePlayer())

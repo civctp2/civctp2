@@ -611,7 +611,6 @@ void CityWindow::Update()
 
 	m_updating = true;
 
-	
 	ctp2_DropDown *cityDD = (ctp2_DropDown *)aui_Ldl::GetObject("CityWindow.CityList.Pulldown");
 	if(cityDD) {
 		UnitDynamicArray *cityList = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities;
@@ -625,11 +624,8 @@ void CityWindow::Update()
 
 		cityDD->SetWindowSize(height);
 
-		
-
-		
-		sint32 i, viewingIndex = 0;
-		for(i = 0; i < cityList->Num(); i++) {
+		sint32 viewingIndex = 0;
+		for(sint32 i = 0; i < cityList->Num(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_CityItem");
 			Assert(item);
 			if(item) {
@@ -667,8 +663,7 @@ void CityWindow::Update()
 		text->SetText(value);
 	}
 
-	sint32 popType;
-	for(popType = sint32(POP_WORKER) + 1; popType < sint32(POP_SLAVE); popType++) {
+	for(sint32 popType = sint32(POP_WORKER) + 1; popType < sint32(POP_SLAVE); popType++) {
 		if(m_popSpinners[popType]) {
 			if(s_cityWindow->m_cityData->GetBestSpecialist((POP_TYPE)popType) < 0) {
 				m_popSpinners[popType]->Enable(FALSE);
@@ -679,9 +674,7 @@ void CityWindow::Update()
 		}
 	}
 
-	sint32 i;
-
-	for(i = 0; i < CW_RES_MAX; i++) {
+	for(sint32 i = 0; i < CW_RES_MAX; i++) {
 		
 		if(m_resVal[i]) {
 			switch(i) {

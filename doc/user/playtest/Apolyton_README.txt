@@ -48,23 +48,112 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2008-02-10 (Revision 849)
+Fixed:    The single player civilization screen updates the leader names again.
+          It displayes the civilizations in alphabetical order again,
+          in scenarios only selectable civilizations are displayed, and the game
+          is stareted with the selected civilization.
+Added:    The AI road pathing can now be visulaized if an accroding option is on.
+Fixed:    The AI now builds a road network from its threatened cities.
+Fixed:    The AI now adds special units to the build list even if not all
+          garrison units are build.
+Fixed:    The nationality of slaves who are working in a city are now displayed.
+Fixed:    City icons can be seen by everyone again.
+Added:    If an AI army is in the vision range of a goody hut, the goody hut gets
+          an high goal bonus.
+Changed:  Slaves go to more than the closest city.
+Fixed:    The AI now sorts its plans according their match values, plans that
+          need an high amount of units get an extra bonus.
+Changed:  If you try to move an army into a transporter with less room than the
+          army has units, the army is partially moved into the transporter.
+Fixed:    The chat window command /attach p now turns as it should be the
+          player p into an AI. This allows watching the AI while it is playing.
+Fixed:    The initial city interface is no more shown if the visible palyer 
+          is an AI.
+Fixed:    Autosaves are now done even if the visible player is an AI.
+Fixed:    The game can now be saved even if the visible player is an AI.
+Fixed:    The AI fills now also empty build queues at the end of a turn so that
+          newly founded and captured cities do not end turn with an empty build
+          queue.
+Fixed:    Settlers now display the full first ring of a city.
+Fixed:    Non-Settler units cannot settle on top of a city anymore.
+Fixed:    The AI now checks all its cities for rush buying of items.
+Fixed:    The AI does not use the move costs at the current position and 
+          the target position anymore to estimate the distance.
+Fixed:    The AI calculates now its transporter capacity before it needs it
+          and not after planning its goals.
+Fixed:    The AI uses now the transporter that is closest to the troops to be
+          transported and not the transporter that is closest to the target.
+Fixed:    The AI does not try to use full transporters.
+Fixed:    Now the AI calculates its garrison needed for guarding slaves correctly.
+Fixed:    The AI does not try to move its sea transporters over land to reach 
+          the troops that have to go on board.
+Fixed:    The AI starts to move their transporters to the goal on the same turn
+          when they have been filled.
+Fixed:    If the AI needs for a stack more than one transporter it now uses more
+          than one transporter.
+Fixed:    Holding diplomatic receptions costs now the displayed amount of gold.
+Changed:  The unit herald is now a shield like in Civ2 and CTP1.
+Added:    Messages for failed slave raids with and without dying.
+Removed:  A superflous message that one of your cities was captured.
+Fixed:    Expelling now removes move points.
+Changed:  The domestic tab of the intelegence screen now shows the capital if
+          you know were it is or if it has a wonder.
+Changed:  The domestic tab of the intelegence screen now shows instead of cities
+          with wonders all cities if you have an embassy otherwise the cities
+          with wonders and the cities you know are shown.
+Added:    New database flags for modders:
+- StartegyDB:
+   UseBaseMoveCostsForRoads         Stategy makes the AI to plan roads by using
+                                    the base terrain costs instead of the 
+                                    terrain move costs inclduing terrain 
+                                    improvments if its value is not zero. Its 
+                                    default value is 0 and taken from ConstDB.
+   BuildRoadsToClosestCities        Strategy makes the AI to plan roads from 
+                                    each to n other cities. The default value
+                                    for n is 5 and taken from ConstDB.
+   BaseRoadPriorityVsThreatRank     Strategy gives the AI a base road build 
+                                    priority to that the threat rank is added.
+                                    Its default value is 0.01 and taken from 
+                                    ConstDB.
+- ConstDB:
+   UseBaseMoveCostsForRoads         Default value for the flag in StrategyDB.
+   RoadAlreadyThereCostsCoefficient The part of costs the AI deducts for tiles
+                                    along a path that already has roads.
+                                    The default value is 0.5.
+   BuildRoadsToClosestCities        Default value for the flag in StrategyDB.
+   BaseRoadPriorityVsThreatRank     Default value for the flag in StrategyDB.
+   ConiderNumCitiesForSlaves        Const gives the number of closest cities
+                                    that are considered to send the captives
+                                    of a slave raid.
+- GoalDB:
+   InVisionRangeBonus               Goal adds a bonus if the target is in the
+                                    vision range of an army.
+   NoBarbarianBonus                 Goal sdds a bonus if a target is in vision
+                                    range if no Barbarians are around (i.e.
+                                    no Barbarians can pop up from a goody hut).
+   CanAttackBonus                   Goal adds a bonus for armies that can attack
+                                    if the target is in vision range and 
+                                    Barbarians are around. (i.e. Barbarians can
+                                    pop up from goody huts).
+
 2007-12-14 (Revision 836)
-Fixed:   AI now bombards all nearby units if it has the opportunity.
-Fixed:   AI does not try to fortify units that are scheduled to be disbanded.
-Fixed:   AI does not try to initialize diplomatic state with dead players.
-Fixed:   AI now stops pirating trade routes properly.
-Fixed:   Removed some more events calls with invalid arguments.
-Changed: The chat window command /importmap reports if you try to import a map
-         from a not existing file and reports if the map size of the imported
-         map does not match the map size of the loaded map.
-Fixed:   The turns until a city grows are now correctly displayed on the map
-         when you modify the farmer assignement.
-Fixed:   The turns until a city grows are now correctly displayed on the map
-         when you modify the empire slider settings.
-Fixed:   The key mapping screen now displays the correct key.
-Changed: Increased the number of player in a PBEM or HotSeat game to 32.
-Changed: Moved the experimental relgion stuff to its own AE scenario.
-Fixed:   The city sprawl code should now work.
+Fixed:    AI now bombards all nearby units if it has the opportunity.
+Fixed:    AI does not try to fortify units that are scheduled to be disbanded.
+Fixed:    AI does not try to initialize diplomatic state with dead players.
+Fixed:    AI now stops pirating trade routes properly.
+Fixed:    Removed some more events calls with invalid arguments.
+Changed:  The chat window command /importmap reports if you try to import a map
+          from a not existing file and reports if the map size of the imported
+          map does not match the map size of the loaded map.
+Fixed:    The turns until a city grows are now correctly displayed on the map
+          when you modify the farmer assignement.
+Fixed:    The turns until a city grows are now correctly displayed on the map
+          when you modify the empire slider settings.
+Fixed:    The key mapping screen now displays the correct key.
+Changed:  Increased the number of player in a PBEM or HotSeat game to 32.
+Changed:  Moved the experimental relgion stuff to its own AE scenario.
+Fixed:    The city sprawl code should now work.
 Added:    New database flags for modders:
 - ConstDB:
    TurnsAcceptedForOnePop Const makes the AI to add more farmers to a city if
@@ -73,48 +162,48 @@ Added:    New database flags for modders:
                           the StrategiesDB.
 
 2007-11-19 (Revision 826)
-Fixed:   GetPersonalityType slic function
-Fixed:   PBEM terrain improvement construction
-Fixed:   Barbarians do not build wonders anymore
-Fixed:   Shadowed tiles are not displayed as they would have a river anymore
-Changed: Global Warming and Ozone Depletion code is now executed from events.
-Fixed:   World meridian calculation
-Fixed:   Made world meridians symmetrical.
-Fixed:   Global warming does not change deserts.
-Fixed:   Global warming makes snow on white mountains melting.
-Fixed:   The AI targets of the orders Sue and Injoin
-Fixed:   The equatorial meridian now also suffers ozone depletion.
-Fixed:   The unit mobile SAM is now a full bombard unit.
-Added:   Armenia and Kurdistan as civilisations
-Added:   Rudimentary religious feats wonders, buildings, and units.
-Fixed:   Unit grouping: Units have to be on the same tile to be grouped. This
-         fixes insecure slic code.
-Fixed:   River mouthes are not deleted due to global warming or ozone depletion.
-Changed: Increased richness of mountains and rivers on fresh created maps.
-Changed: Slic events are tested for valid arguments, if one argument is invalid
-         the event execution is stoped and an error message is displayed.
-Fixed:   ClickedArmy event has now a valid army if the clicked army is not
-         owned by the clicker.
-Fixed:   ZOCs are now cleared again.
-Changed: Revered the show order of diplomatic probosals in human-human
-         diplomacy in PBEM and HotSeat.
-Fixed:   Rush buy in PBEM.
-Changed: German grammar about civilisations, units, and goods.
-Fixed:   Diplomacy greetings are sent to all players also robot players. This
-         fixes a bug in PBEM and HotSeat that prevented the human player not
-         on screen to receive the greeting. (Fix is untested)
+Fixed:    GetPersonalityType slic function
+Fixed:    PBEM terrain improvement construction
+Fixed:    Barbarians do not build wonders anymore
+Fixed:    Shadowed tiles are not displayed as they would have a river anymore
+Changed:  Global Warming and Ozone Depletion code is now executed from events.
+Fixed:    World meridian calculation
+Fixed:    Made world meridians symmetrical.
+Fixed:    Global warming does not change deserts.
+Fixed:    Global warming makes snow on white mountains melting.
+Fixed:    The AI targets of the orders Sue and Injoin
+Fixed:    The equatorial meridian now also suffers ozone depletion.
+Fixed:    The unit mobile SAM is now a full bombard unit.
+Added:    Armenia and Kurdistan as civilisations
+Added:    Rudimentary religious feats wonders, buildings, and units.
+Fixed:    Unit grouping: Units have to be on the same tile to be grouped. This
+          fixes insecure slic code.
+Fixed:    River mouthes are not deleted due to global warming or ozone depletion.
+Changed:  Increased richness of mountains and rivers on fresh created maps.
+Changed:  Slic events are tested for valid arguments, if one argument is invalid
+          the event execution is stoped and an error message is displayed.
+Fixed:    ClickedArmy event has now a valid army if the clicked army is not
+          owned by the clicker.
+Fixed:    ZOCs are now cleared again.
+Changed:  Revered the show order of diplomatic probosals in human-human
+          diplomacy in PBEM and HotSeat.
+Fixed:    Rush buy in PBEM.
+Changed:  German grammar about civilisations, units, and goods.
+Fixed:    Diplomacy greetings are sent to all players also robot players. This
+          fixes a bug in PBEM and HotSeat that prevented the human player not
+          on screen to receive the greeting. (Fix is untested)
 
 2007-10-20 (Revision 812)
-Fixed:   The wonder tab of the info window shows again the right construction 
-         year of wonders, also the date of messages is shown correctly again.
-Fixed:   The diplomacy window cannot be closed by using hotkeys that open other
-         screens, so that you cannot close this screen without rejecting or 
-         accepting diplomatic proposals.
-Fixed:   The scenario editor cannot opened in PBEM mode per hotkey.
-Added:   HotSeat and PBEM human to human diplomacy support.
-Added:   The following civilisations: Han, Yamato, Sumer, Kush, and Macedonia
-Fixed:   The map editor genarates now the coast line again if needed.
-Fixed:   Savegame power graphs
+Fixed:    The wonder tab of the info window shows again the right construction 
+          year of wonders, also the date of messages is shown correctly again.
+Fixed:    The diplomacy window cannot be closed by using hotkeys that open other
+          screens, so that you cannot close this screen without rejecting or 
+          accepting diplomatic proposals.
+Fixed:    The scenario editor cannot opened in PBEM mode per hotkey.
+Added:    HotSeat and PBEM human to human diplomacy support.
+Added:    The following civilisations: Han, Yamato, Sumer, Kush, and Macedonia
+Fixed:    The map editor genarates now the coast line again if needed.
+Fixed:    Savegame power graphs
 
 2007-08-07 (Revision 787)
 Changed:  Replaced the old ConstDB by a new one.

@@ -241,7 +241,7 @@ DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
 					int heightpix 12
 					string pattern "uptg20e.tga"
 					string just "center"
-					string text "str_ldl_Wonders"
+					string text "str_ldl_Cities"
 				}
 				WonderList:CTP2_LISTBOX {
 					int	xpix	300

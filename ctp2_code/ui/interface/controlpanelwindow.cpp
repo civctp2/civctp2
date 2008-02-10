@@ -2442,7 +2442,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	if (initializing)
 	{
 		// Postpone ranger updates until all messages have been added.
-		return;	
+		return;
 	}
 
 	
@@ -3329,25 +3329,6 @@ ControlPanelWindow::Idle()
 			m_contextMenu->Close();
 	}
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	if (m_targetingMode)
 		TargetingMode();
 	else

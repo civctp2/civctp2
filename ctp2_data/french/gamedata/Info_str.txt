@@ -282,6 +282,8 @@ PROTECTED_FROM_CONVERSION_BY_WONDER	"La ville de {city[0].name} est protégée de 
 SLAVERY_COMPLETE_ATTACKER		"{player[0].sir_cap}, notre raid pour capturer des esclaves a été couronné de succès ! Les prisonniers ont été emmenés pour travailler à {city[0].name}."
 SLAVE_COMPLETE_VICTIM			"Les esclavagistes étrangers ont assailli {city[0].name}, l'une de nos villes. Un grand nombre de citoyens a été réduit en esclavage."
 SLAVE_FAILED_VICTIM			"Les défenseurs de {city[0].name} ont pris les esclavagistes étrangers sur le fait."
+SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}, our slave raid has failed in {city[0].name}, fortunately our slavers could excape."
+SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}, our slave raid has failed in {city[0].name}, unfortunately our slavres were caught and killed."
 PROTECTED_FROM_SLAVERY_VICTIM		"Bonne nouvelle ! Les remparts de {city[0].name} ont permis à nos citoyens d'échapper à l'esclavage."
 PROTECTED_FROM_SLAVERY_ATTACKER		"Les remparts ont empêché nos esclavagistes d'entrer dans la ville étrangère de {city[0].name}."
 SETTLER_SLAVED_VICTIM			"Malédiction ! Notre colon a disparu sans laisser de trace. Les esclavagistes étrangers sont sans aucun doute responsables de cet acte de haine."

@@ -1844,6 +1844,8 @@ void Diplomat::Execute_Proposal( const PLAYER_INDEX & sender,
 		break;
 	case PROPOSAL_TREATY_CEASEFIRE:
 	case PROPOSAL_TREATY_PEACE:
+
+		if(g_player[sender]->HasWarWith(receiver))
 		{
 			AgreementMatrix::s_agreements.
 				CancelAgreement(sender, receiver, PROPOSAL_TREATY_DECLARE_WAR);

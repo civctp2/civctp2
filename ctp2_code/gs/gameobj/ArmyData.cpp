@@ -124,6 +124,9 @@
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt. (8-Feb-2008 Martin Gühmann)
 // - Throwing diplomatic parties costs now the displayed price. (9-Feb-2008 Martin Gühmann)
+// - Added messages for failed slave raids, one for an alive slave and another
+//   for a killed slaver. (9-Feb-2008 Martin Gühmann)
+// - Expelling costs now move points. (9-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2359,6 +2362,11 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 							   GEA_MapPoint, point,
 							   GEA_End);
 
+		for(i = 0; i < Num(); ++i)
+		{
+			AddSpecialActionUsed(m_array[i]);
+		}
+
 		return ORDER_RESULT_SUCCEEDED;
 	}
 	return ORDER_RESULT_FAILED;
@@ -2869,55 +2877,61 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	double success, death;
 	sint32 timer, amount;
 	sint32 uindex;
-    bool target_is_city;
-    Unit target_city;
-    Unit home_city;
-    
-    if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex, 
-        target_is_city, target_city, home_city)) { 
+	bool target_is_city;
+	Unit target_city;
+	Unit home_city;
+
+	if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex, 
+		target_is_city, target_city, home_city)) {
 		DPRINTF(k_DBG_GAMESTATE, ("!IsSlaveRaidPossible()\n"));
-        ERROR_SOUND
-        return ORDER_RESULT_ILLEGAL; 
-    } 
-    
-    MapPoint mypos; 
-    GetPos(mypos); 
-    if(!point.IsNextTo(mypos)) { 
-        ERROR_SOUND
+		ERROR_SOUND
+		return ORDER_RESULT_ILLEGAL; 
+	}
+
+	MapPoint mypos;
+	GetPos(mypos);
+	if(!point.IsNextTo(mypos))
+	{
+		ERROR_SOUND
 		DPRINTF(k_DBG_GAMESTATE, ("!IsNextTo in SlaveRaid\n"));
 		return ORDER_RESULT_ILLEGAL;
-    }
+	}
 
-    if (target_is_city) { 
-        // InformAI(UNIT_ORDER_SLAVE_RAID, point);//does nothing here but could be implemented 
-    } else { 
-        // InformAI(UNIT_ORDER_ENSLAVE_SETTLER, point); //does nothing here but could be implemented
+	if (target_is_city)
+	{
+		// InformAI(UNIT_ORDER_SLAVE_RAID, point);//does nothing here but could be implemented 
+	}
+	else
+	{
+		// InformAI(UNIT_ORDER_ENSLAVE_SETTLER, point); //does nothing here but could be implemented
 
 		DPRINTF(k_DBG_GAMESTATE, ("Doing EnslaveSettler instead of SlaveRaid\n"));
-        return EnslaveSettler(point, uindex, home_city); 
-    }  
-    
-	if(target_city.IsProtectedFromSlavery()) {
-        {
-            g_slicEngine->Execute
-                (new CityReport("140ProtectedFromSlaveryVictim", target_city));
-            SlicObject * so = new SlicObject("141ProtectedFromSlaveryAttacker");
-            so->AddRecipient(GetOwner()) ;
-            so->AddCity(target_city) ;
-            g_slicEngine->Execute(so) ;
-        }
+		return EnslaveSettler(point, uindex, home_city); 
+	}
+
+	if(target_city.IsProtectedFromSlavery())
+	{
+		{
+			g_slicEngine->Execute
+			    (new CityReport("140ProtectedFromSlaveryVictim", target_city));
+			SlicObject * so = new SlicObject("141ProtectedFromSlaveryAttacker");
+			so->AddRecipient(GetOwner()) ;
+			so->AddCity(target_city) ;
+			g_slicEngine->Execute(so) ;
+		}
 
 		return ORDER_RESULT_FAILED;
 	}
 
-	if(m_array[uindex].IsVeteran()) {
+	if(m_array[uindex].IsVeteran())
+	{
 		success += g_theConstDB->Get(0)->GetEliteSlaverBonus();
 	}
 
 	target_city.CD()->ModifySpecialAttackChance(UNIT_ORDER_SLAVE_RAID, success);
 
-	if(target_city.IsWatchful()) {
-		
+	if(target_city.IsWatchful())
+	{
 		death *= g_theConstDB->Get(0)->GetWatchfulCityDeathModifier();
 	}
 
@@ -2927,13 +2941,13 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 
 	g_slicEngine->RunEnslavementTriggers(m_array[uindex], target_city);
 
-	if(g_rand->Next(100) < sint32(success * 100.0)) {
-        
-		if(target_city.PopCount() <= 1) {
+	if(g_rand->Next(100) < sint32(success * 100.0))
+	{
+		if(target_city.PopCount() <= 1)
+		{
 			return ORDER_RESULT_FAILED;
 		}
 
-        
 		MapPoint cpos;
 		home_city.GetPos(cpos);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SlaveRaidCity,
@@ -2946,37 +2960,52 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 							   GEA_Player, target_city.GetOwner(),
 							   GEA_End);
 
-
-		if (target_city.IsValid()) 
-        {
+		if (target_city.IsValid())
+		{
 			target_city.AddHappyTimer(timer, -amount, HAPPY_REASON_SLAVES_TAKEN);
 		}
 
 		g_slicEngine->Execute
-            (new CityReport("137SlaveCompleteVictim", target_city));
-		
+		    (new CityReport("137SlaveCompleteVictim", target_city));
+
 		SlicObject * so = new SlicObject("137SlaveryCompleteAttacker");
-		so->AddRecipient(GetOwner()) ;
-		so->AddCivilisation(GetOwner()) ;
-		so->AddCity(home_city) ;
+		so->AddRecipient(GetOwner());
+		so->AddCivilisation(GetOwner());
+		so->AddCity(home_city);
 		g_slicEngine->Execute(so);
 
 		ActionSuccessful(SPECATTACK_SLAVERAID, m_array[uindex], target_city);
-        return ORDER_RESULT_SUCCEEDED; 
-    }
-    else 
-    {
- 		g_slicEngine->Execute
-            (new CityReport("138SlaveFailedVictim", target_city));
+		return ORDER_RESULT_SUCCEEDED; 
+	}
+	else
+	{
+		g_slicEngine->Execute
+		    (new CityReport("138SlaveFailedVictim", target_city));
 
-		if(g_rand->Next(100) < sint32(death * 100.0)) {
+		if(g_rand->Next(100) < sint32(death * 100.0))
+		{
 			MapPoint pos;
 			m_array[uindex].GetPos(pos);
 			g_player[m_array[uindex].GetOwner()]->
 				RegisterLostUnits(1, pos, DEATH_EFFECT_CALC);
 			m_array[uindex].Kill(CAUSE_REMOVE_ARMY_DIED_IN_SLAVERAID, -1);
+
+			SlicObject * so = new SlicObject("138SlaveryKilledAttacker");
+			so->AddRecipient(GetOwner());
+			so->AddCivilisation(GetOwner());
+			so->AddCity(home_city);
+			g_slicEngine->Execute(so);
 		}
-        return ORDER_RESULT_FAILED;
+		else
+		{
+			SlicObject * so = new SlicObject("138SlaveryFailedAttacker");
+			so->AddRecipient(GetOwner());
+			so->AddCivilisation(GetOwner());
+			so->AddCity(home_city);
+			g_slicEngine->Execute(so);
+		}
+
+		return ORDER_RESULT_FAILED;
 	}
 }
 
