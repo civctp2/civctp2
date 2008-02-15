@@ -1596,12 +1596,12 @@ void CityData::CalcPollution(void)
 		productionPolluting = 0;
 	}
 	else
-    {
+	{
 		productionPolluting = (sint32)(productionPolluting * 
 			g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetPollutionProductionRatio());
 
-	    productionPolluting = (sint32)(productionPolluting * g_player[m_owner]->GetPollutionCoef());
-    }
+		productionPolluting = (sint32)(productionPolluting * g_player[m_owner]->GetPollutionCoef());
+	}
 
 	double buildingPollution=0.0;
 	double buildingProductionPercentage=0.0;
@@ -1612,8 +1612,7 @@ void CityData::CalcPollution(void)
 
 	for(i=0; i<g_theBuildingDB->NumRecords(); i++)
 	{
-		buildingCheck = (uint64)1 << (uint64)i;
-		if(GetEffectiveBuildings() & buildingCheck)
+		if(HasEffectiveBuilding(i))
 		{
 			if(g_theBuildingDB->Get(i, g_player[m_owner]->GetGovernmentType())->GetPollutionAmount(temp))
 			{
@@ -1650,10 +1649,10 @@ void CityData::CalcPollution(void)
 	m_cityPopulationPollution   = populationPolluting;
 	m_cityIndustrialPollution   = productionPolluting;
 	m_total_pollution           = 
-        populationPolluting + productionPolluting + m_foodVatPollution + 
-        static_cast<sint32>(populationPolluting * buildingPopulationPercentage) +
-	    static_cast<sint32>(productionPolluting * buildingProductionPercentage) +
-        static_cast<sint32>(buildingPollution);
+	            populationPolluting + productionPolluting + m_foodVatPollution + 
+	            static_cast<sint32>(populationPolluting * buildingPopulationPercentage) +
+	            static_cast<sint32>(productionPolluting * buildingProductionPercentage) +
+	            static_cast<sint32>(buildingPollution);
 }
 
 //----------------------------------------------------------------------------
@@ -5898,7 +5897,6 @@ sint32 CityData::GetCombatUnits() const
 //----------------------------------------------------------------------------
 bool CityData::CanBuildUnit(sint32 type) const
 {
-	// Added by Martin Gühmann
 	if(!g_player[m_owner]->CanBuildUnit(type))
 		return false;
 
@@ -5910,71 +5908,80 @@ bool CityData::CanBuildUnit(sint32 type) const
 	m_home_city.GetPos(pos);
 
 	// Added by E - units can be obsolete by the availability of other units
-	if(rec->GetNumObsoleteUnit() > 0) {
-		sint32 newunit;
-		for(newunit = 0; newunit < rec->GetNumObsoleteUnit(); newunit++) {
-			if(CanBuildUnit(rec->GetObsoleteUnitIndex(newunit)))
+	if(rec->GetNumObsoleteUnit() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumObsoleteUnit(); i++)
+		{
+			if(CanBuildUnit(rec->GetObsoleteUnitIndex(i)))
 				return false;
 		}
 	}
 
 	// Added by E - units can be obsolete by the availability of unit the upgrade to
-	if(rec->GetNumUpgradeTo() > 0) {
-		sint32 newunit;
-		for(newunit = 0; newunit < rec->GetNumUpgradeTo(); newunit++) {
-			if(CanBuildUnit(rec->GetUpgradeToIndex(newunit)))
-			//if(g_player[m_owner]->CanBuildUnit(rec->GetUpgradeToIndex(newunit)) //because of resources cities maybe different
+	if(rec->GetNumUpgradeTo() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumUpgradeTo(); i++)
+		{
+			if(CanBuildUnit(rec->GetUpgradeToIndex(i)))
+			//if(g_player[m_owner]->CanBuildUnit(rec->GetUpgradeToIndex(i)) //because of resources cities maybe different
 				return false;
 		}
 	}
 
 	// Added by E - checks if a city has a building required to build the unit
-	if(rec->GetNumPrerequisiteBuilding() > 0) {
-		sint32 o;
-		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
-			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
-			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+	if(rec->GetNumPrerequisiteBuilding() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumPrerequisiteBuilding(); i++)
+		{
+			if(!HasEffectiveBuilding(rec->GetPrerequisiteBuildingIndex(i)))
 				return false;
 		}
 	}
 
 	// EMOD reverse of prereq - this building prevents other buildings
 	// good for state religion etc
-	if(rec->GetNumExcludedByBuilding() > 0) {
-		for(sint32 o = 0; o < rec->GetNumExcludedByBuilding(); o++) {
-			sint32 b = rec->GetExcludedByBuildingIndex(o);
-			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
+	if(rec->GetNumExcludedByBuilding() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumExcludedByBuilding(); i++)
+		{
+			if(HasEffectiveBuilding(rec->GetExcludedByBuildingIndex(i)))
+			{
 				return false;
 			}
 		}
 	}
+
 	// Added by E - checks if a city has a wonder required to build the unit
-	if(rec->GetNumPrerequisiteWonder() > 0) {
-		sint32 o;
-		for(o = 0; o < rec->GetNumPrerequisiteWonder(); o++) {
-			sint32 b = rec->GetPrerequisiteWonderIndex(o);
-			if(!(GetBuiltWonders() & (uint64(1) << (uint64)b)))
+	if(rec->GetNumPrerequisiteWonder() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumPrerequisiteWonder(); i++)
+		{
+			if(!HasCityWonder(rec->GetPrerequisiteWonderIndex(i)))
 				return false;
 		}
 	}
 	
 	// EMOD this wonder is prevented by other wonders 
 	// to be built. (good for state religion etc)
-	if(rec->GetNumExcludedByWonder() > 0) {
-		sint32 ew;
-		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
-			sint32 b = rec->GetExcludedByWonderIndex(ew);
-			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
+	if(rec->GetNumExcludedByWonder() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumExcludedByWonder(); i++)
+		{
+			if(HasCityWonder(rec->GetExcludedByWonderIndex(i)))
+			{
 				return false;
 			}
 		}
 	}
+
 	// Added by E - Compares Unit CityStyle to the CityStyle of the City
-	if(rec->GetNumCityStyleOnly() > 0) {
-		sint32 s;
+	if(rec->GetNumCityStyleOnly() > 0)
+	{
 		bool found = false;
-		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
-			if(rec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
+		for(sint32 i = 0; i < rec->GetNumCityStyleOnly(); i++)
+		{
+			if(rec->GetCityStyleOnlyIndex(i) == m_cityStyle)
+			{
 				found = true;
 				break;
 			}
@@ -5986,11 +5993,13 @@ bool CityData::CanBuildUnit(sint32 type) const
 	// Start Resources section - more to add later 
 	// Added by E - Compares Unit NeedsCityGood to the resources collected
 	// our bought by the city, can be either/or
-	if(rec->GetNumNeedsCityGood() > 0){
-		sint32 g;
+	if(rec->GetNumNeedsCityGood() > 0)
+	{
 		bool found = false;
-		for(g = 0; g < rec->GetNumNeedsCityGood(); g++){
-			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
+		for(sint32 i = 0; i < rec->GetNumNeedsCityGood(); i++)
+		{
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(i)))
+			{
 				found = true;
 				break;
 			}
@@ -6001,21 +6010,24 @@ bool CityData::CanBuildUnit(sint32 type) const
 
 	// Added by E - Compares Unit NeedsCityGoodAll to the resources collected
 	// our bought by the city, must be all listed
-	if(rec->GetNumNeedsCityGoodAll() > 0) {
-		sint32 g;
-		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+	if(rec->GetNumNeedsCityGoodAll() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumNeedsCityGoodAll(); i++)
+		{
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(i)))
 				return false;
 		}
 	}
 
 	//End Resources Code
 	// Added by E - Compares NeedsFeatToBuild to the FeatTracker	6-27-2006	
-	if(rec->GetNumNeedsFeatToBuild() > 0) {
-		sint32 f;
+	if(rec->GetNumNeedsFeatToBuild() > 0)
+	{
 		bool found = false;
-		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
-			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(f))) {
+		for(sint32 i = 0; i < rec->GetNumNeedsFeatToBuild(); i++)
+		{
+			if(g_featTracker->HasFeat(rec->GetNeedsFeatToBuildIndex(i)))
+			{
 				found = true;
 				break;
 			}
@@ -6023,7 +6035,6 @@ bool CityData::CanBuildUnit(sint32 type) const
 		if(!found)
 			return false;
 	}
-
 
 	if(!g_slicEngine->CallMod(mod_CanCityBuildUnit, true, m_home_city.m_id, rec->GetIndex()))
 		return false;
@@ -6041,8 +6052,7 @@ bool CityData::CanBuildUnit(sint32 type) const
 			
 			return true;
 		}
-		
-		
+
 		if(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) {
 			if(g_theWorld->IsNextToWater(pos.x, pos.y)) {
 				return true;
@@ -6091,6 +6101,11 @@ bool CityData::CanBuildUnit(sint32 type) const
 //----------------------------------------------------------------------------
 bool CityData::CanBuildBuilding(sint32 type) const
 {
+	if(HasBuilding(type)) // This does not excludes buildings given by wonders, maybe change this
+	{
+		return false;
+	}
+
 	if(g_exclusions->IsBuildingExcluded(type))
 		return false;
 
@@ -6098,17 +6113,21 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	
 	
 	Assert(rec != NULL);
-	if (!rec) 
+	if (!rec)
 		return false;
 
-	if(!g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()) && rec->GetEnableAdvanceIndex() >= 0) {
+	if(!g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex())
+	&&  rec->GetEnableAdvanceIndex() >= 0
+	){
 		return false;
 	}
 
-	sint32 o;
-	for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
-		if(g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
-			return false;
+	{
+		for(sint32 i = 0; i < rec->GetNumObsoleteAdvance(); i++)
+		{
+			if(g_player[m_owner]->HasAdvance(rec->GetObsoleteAdvanceIndex(i)))
+				return false;
+		}
 	}
 	
 	MapPoint pos;
@@ -6122,69 +6141,70 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 	
 	
-	if (rec->GetCoastalBuilding()) {
+	if (rec->GetCoastalBuilding())
+	{
 		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
 			return false;
 	}
 
-	if(m_built_improvements & uint64((uint64)1 << (uint64)type)) {
-		
+	if(rec->GetNuclearPlant()
+	&& wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders())
+	){
 		return false;
 	}
 
-	if((rec->GetNuclearPlant() &&
-	   wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders()))) {
-		return false;
-	}
-
-	
-	if(rec->GetNumPrerequisiteBuilding() > 0) {
-		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
-			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
-			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+	if(rec->GetNumPrerequisiteBuilding() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumPrerequisiteBuilding(); i++)
+		{
+			if(!HasEffectiveBuilding(rec->GetPrerequisiteBuildingIndex(i)))
 				return false;
 		}
 	}
 
 	// EMOD reverse of prereq - this building prevents other buildings
 	// to be built. (good for state religion etc)
-	if(rec->GetNumExcludedByBuilding() > 0) {
-		sint32 e;
-		for(e = 0; e < rec->GetNumExcludedByBuilding(); e++) {
-			sint32 b = rec->GetExcludedByBuildingIndex(e);
-			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
+	if(rec->GetNumExcludedByBuilding() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumExcludedByBuilding(); i++)
+		{
+			if(HasEffectiveBuilding(rec->GetExcludedByBuildingIndex(i)))
+			{
 				return false;
 			}
 		}
 	}
-	// Added by E - checks if a city has a wonder required to build the unit
-	if(rec->GetNumPrerequisiteWonder() > 0) {
-		sint32 o;
-		for(o = 0; o < rec->GetNumPrerequisiteWonder(); o++) {
-			sint32 b = rec->GetPrerequisiteWonderIndex(o);
-			if(!(GetBuiltWonders() & (uint64(1) << (uint64)b)))
+
+	// Added by E - checks if a city has a wonder required to build the building
+	if(rec->GetNumPrerequisiteWonder() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumPrerequisiteWonder(); i++)
+		{
+			if(!HasCityWonder(rec->GetPrerequisiteWonderIndex(i))) // Only city specific, but not empire specific
 				return false;
 		}
 	}
+
 	// EMOD this wonder is prevented by other wonders 
 	// to be built. (good for state religion etc)
 	if(rec->GetNumExcludedByWonder() > 0) {
-		sint32 ew;
-		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
-			sint32 b = rec->GetExcludedByWonderIndex(ew);
-			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
+		for(sint32 i = 0; i < rec->GetNumExcludedByWonder(); i++)
+		{
+			if(HasCityWonder(rec->GetExcludedByWonderIndex(i))) // Only city specific, but not empire specific
+			{
 				return false;
 			}
 		}
-	}	
-	
+	}
+
 	// EMOD OnePerCiv allows for buildings to be Small Wonders
 	if (rec->GetOnePerCiv()) 
-    {
-		for (sint32 c = 0; c < g_player[m_owner]->m_all_cities->Num(); ++c) 
-        {
-			Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-			if(aCity.CD()->HaveImprovement(type)) {
+	{
+		for (sint32 i = 0; i < g_player[m_owner]->m_all_cities->Num(); ++i) 
+		{
+			Unit aCity = g_player[m_owner]->m_all_cities->Access(i);
+			if(aCity.CD()->HasBuilding(type))
+			{
 				return false;
 			}
 		}
@@ -6194,14 +6214,15 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	// with small wonders 2-24-2006
 	const BuildingRecord::BuildingFeat *bf;
 		
-	if(rec->GetBuildingFeat(bf)) {
-
-		if(bf->GetBuildingIndex()) {
+	if(rec->GetBuildingFeat(bf))
+	{
+		if(bf->GetBuildingIndex())
+		{
 			sint32 numCities = 0;
-			sint32 c;
-			for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
-				Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-				if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
+			for(sint32 i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++)
+			{
+				Unit aCity = g_player[m_owner]->m_all_cities->Access(i);
+				if(aCity.CD()->HasBuilding(bf->GetBuildingIndex()))
 					numCities++;
 			}
 
@@ -6226,13 +6247,14 @@ bool CityData::CanBuildBuilding(sint32 type) const
 		}
 	}
 
-
 	// Added GovernmentType flag from Units to use for Buildings
-	if(rec->GetNumGovernmentType() > 0) {
-		sint32 i;
+	if(rec->GetNumGovernmentType() > 0)
+	{
 		bool found = false;
-		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
-			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
+		for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++)
+		{
+			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType())
+			{
 				found = true;
 				break;
 			}
@@ -6242,11 +6264,13 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 
 	// Added by E - Compares Building CityStyle to the CityStyle of the City
-	if(rec->GetNumCityStyleOnly() > 0) {
-		sint32 s;
+	if(rec->GetNumCityStyleOnly() > 0)
+	{
 		bool found = false;
-		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
-			if(rec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
+		for(sint32 i = 0; i < rec->GetNumCityStyleOnly(); i++)
+		{
+			if(rec->GetCityStyleOnlyIndex(i) == m_cityStyle)
+			{
 				found = true;
 				break;
 			}
@@ -6256,11 +6280,13 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 
 	// Added by E - Compares Building CultureOnly to the Player's CityStyle
-	if(rec->GetNumCultureOnly() > 0) {
-		sint32 s;
+	if(rec->GetNumCultureOnly() > 0)
+	{
 		bool found = false;
-		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
-			if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+		for(sint32 i = 0; i < rec->GetNumCultureOnly(); i++)
+		{
+			if(rec->GetCultureOnlyIndex(i) == g_player[m_owner]->GetCivilisation()->GetCityStyle())
+			{
 				found = true;
 				break;
 			}
@@ -6270,11 +6296,13 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 
 	// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
-	if(rec->GetNumCivilisationOnly() > 0) {
-		sint32 c;
+	if(rec->GetNumCivilisationOnly() > 0)
+	{
 		bool found = false;
-		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
-			if(rec->GetCivilisationOnlyIndex(c) == g_player[m_owner]->m_civilisation->GetCivilisation()) {
+		for(sint32 i = 0; i < rec->GetNumCivilisationOnly(); i++)
+		{
+			if(rec->GetCivilisationOnlyIndex(i) == g_player[m_owner]->m_civilisation->GetCivilisation())
+			{
 				found = true;
 				break;
 			}
@@ -6285,11 +6313,13 @@ bool CityData::CanBuildBuilding(sint32 type) const
 
 	// Start Resources section - more to add later 
 	// Added by E - Compares Building NeedsCityGood to the resources collected our bought by the city, can be either/or
-	if(rec->GetNumNeedsCityGood() > 0) {
-		sint32 g;
+	if(rec->GetNumNeedsCityGood() > 0)
+	{
 		bool found = false;
-		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
-			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
+		for(sint32 i = 0; i < rec->GetNumNeedsCityGood(); i++)
+		{
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(i)))
+			{
 				found = true;
 				break;
 			}
@@ -6299,42 +6329,47 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 
 	// Added by E - Compares Building NeedsCityGoodAll to the resources collected our bought by the city, must be all listed
-	if(rec->GetNumNeedsCityGoodAll() > 0) {
-		sint32 g;
-		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+	if(rec->GetNumNeedsCityGoodAll() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumNeedsCityGoodAll(); i++)
+		{
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(i)))
 				return false;
 		}
 	}
 
-	if(rec->GetNumNeedsCityGoodAnyCity()) {
-		
-		sint32 i, g;
+	if(rec->GetNumNeedsCityGoodAnyCity())
+	{
 		bool goodavail = false;
 
-			for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
-				for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
-					if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
-						goodavail = true;
-						break;
-					}
-				}
-					if(goodavail){
+		for(sint32 i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++)
+		{
+			for(sint32 g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++)
+			{
+				if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g)))
+				{
+					goodavail = true;
 					break;
-					}
+				}
 			}
-			if(!goodavail)
+			if(goodavail){
+				break;
+			}
+		}
+		if(!goodavail)
 			return false;
 	}
 
 	//End Resources Code
 
 	// Added by E - Compares Unit NeedsFeatToBuild to the FeatTracker	5-11-2006	
-	if(rec->GetNumNeedsFeatToBuild() > 0) {
-		sint32 f;
+	if(rec->GetNumNeedsFeatToBuild() > 0)
+	{
 		bool found = false;
-		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
-			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(f), m_owner)) {
+		for(sint32 i = 0; i < rec->GetNumNeedsFeatToBuild(); i++)
+		{
+			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(i), m_owner))
+			{
 				found = true;
 				break;
 			}
@@ -6344,11 +6379,13 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 
 	//Any player must have feat to build
-		if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0) {
-		sint32 f;
+	if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0)
+	{
 		bool found = false;
-		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
-			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(f))) {
+		for(sint32 i = 0; i < rec->GetNumNeedsAnyPlayerFeatToBuild(); i++)
+		{
+			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(i)))
+			{
 				found = true;
 				break;
 			}
@@ -6365,12 +6402,12 @@ bool CityData::CanBuildBuilding(sint32 type) const
 		}
 	}
 
-	sint32 pop2;
-	if(rec->GetPopCountBuildLimit(pop2)) {
-		if(PopCount() >= pop2) {
+	if(rec->GetPopCountBuildLimit(pop)) {
+		if(PopCount() >= pop) {
 			return false;
 		}
 	}
+
 	//emod to let modders limit the number of buildings in a city
 	//if (GetNumCityBuildings() >= g_theConstDB->GetMaxCityBuildings()) {
 	//	return false;
@@ -6413,49 +6450,33 @@ bool CityData::CanBuildBuilding(sint32 type) const
 //----------------------------------------------------------------------------
 bool CityData::CanBuildWonder(sint32 type) const
 {
-	//added to prevent barabarians from building wonders, they shouldn't do it 5-18-2007
-	// no loner needed modders can do it in build list
-	//if(m_owner == PLAYER_INDEX_VANDALS) {
-	//	return false;
-	//}
-
-	// Added Wonder database 
-	const WonderRecord* rec = wonderutil_Get(type);
-	//	const WonderRecord *rec = g_theWonderDB->Get(wonder);
-	
-	if(g_exclusions->IsWonderExcluded(type))
-		return false;
-
-	//out commented to allow more flexibility on wonder building options
 	if(!wonderutil_IsAvailable(type, m_owner))
 		return false;
 
+	if(g_exclusions->IsWonderExcluded(type))
+		return false;
 
-	MapPoint pos;
-	m_home_city.GetPos(pos);
+	// Added Wonder database 
+	const WonderRecord* rec = wonderutil_Get(type);
 
 	// Added PrerequisiteBuilding checks if city has building to build wonder 
-	if(rec->GetNumPrerequisiteBuilding() > 0) {
-		sint32 o;
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called o.
-		//        Especially not o this may be misread as 0.
-		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
-			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
-			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+	if(rec->GetNumPrerequisiteBuilding() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumPrerequisiteBuilding(); i++)
+		{
+			if(!HasEffectiveBuilding(rec->GetPrerequisiteBuildingIndex(i)))
 				return false;
 		}
 	}
 	
-	// EMOD reverse of prereq - this wonder prevented by other buildings
+	// EMOD reverse of prereq - this wonder prevented by buildings
 	// from being be built. (good for state religion etc)
-	if(rec->GetNumExcludedByBuilding() > 0) {
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called e.
-		sint32 e;
-		for(e = 0; e < rec->GetNumExcludedByBuilding(); e++) {
-			sint32 b = rec->GetExcludedByBuildingIndex(e);
-			if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
+	if(rec->GetNumExcludedByBuilding() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumExcludedByBuilding(); i++)
+		{
+			if(HasEffectiveBuilding(rec->GetExcludedByBuildingIndex(i)))
+			{
 				return false;
 			}
 		}
@@ -6463,26 +6484,25 @@ bool CityData::CanBuildWonder(sint32 type) const
 
 	// EMOD this wonder is prevented by other wonders 
 	// to be built. (good for state religion etc)
-	if(rec->GetNumExcludedByWonder() > 0) {
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called ew.
-		sint32 ew;
-		for(ew = 0; ew < rec->GetNumExcludedByWonder(); ew++) {
-			sint32 b = rec->GetExcludedByWonderIndex(ew);
-			if(GetBuiltWonders() & (uint64(1) << (uint64)b)){
-			//if(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)){
+	if(rec->GetNumExcludedByWonder() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumExcludedByWonder(); i++)
+		{
+			if(HasCityWonder(rec->GetExcludedByWonderIndex(i)))
+			{
 				return false;
 			}
 		}
 	}
 
-
 	// Added GovernmentType flag from Units to use for Wonders
-	if(rec->GetNumGovernmentType() > 0) {
-		sint32 i;
+	if(rec->GetNumGovernmentType() > 0)
+	{
 		bool found = false;
-		for(i = 0; i < rec->GetNumGovernmentType(); i++) {
-			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType()) {
+		for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++)
+		{
+			if(rec->GetGovernmentTypeIndex(i) == g_player[m_owner]->GetGovernmentType())
+			{
 				found = true;
 				break;
 			}
@@ -6492,7 +6512,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 
 	// EMOD - Added Coastal Buildings to wonders 
-	if (rec->GetCoastalBuilding()) {
+	if (rec->GetCoastalBuilding())
+	{
+		MapPoint pos;
+		m_home_city.GetPos(pos);
+	
 		if(!g_theWorld->IsNextToWater(pos.x, pos.y))
 			return false;
 	}
@@ -6500,15 +6524,15 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// EMOD from feats but needs a number of builds to build, goes with wonders 2-24-2006
 	const WonderRecord::BuildingFeat *bf;
 
-	if(rec->GetBuildingFeat(bf)) {
-		if(bf->GetBuildingIndex()) {
+	if(rec->GetBuildingFeat(bf))
+	{
+		if(bf->GetBuildingIndex())
+		{
 			sint32 numCities = 0;
-			/// @todo use standart identifier names for index variables.
-			//        First of them is called i. Second one is called j. None of them is called c.
-			sint32 c;
-			for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
-				Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-				if(aCity.CD()->HaveImprovement(bf->GetBuildingIndex()))
+			for(sint32 i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++)
+			{
+				Unit aCity = g_player[m_owner]->m_all_cities->Access(i);
+				if(aCity.CD()->HasBuilding(bf->GetBuildingIndex()))
 					numCities++;
 			}
 
@@ -6534,12 +6558,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Added by E - Compares Wonder CityStyle to the CityStyle of the City
 	if(rec->GetNumCityStyleOnly() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called s.
-		sint32 s;
 		bool found = false;
-		for(s = 0; s < rec->GetNumCityStyleOnly(); s++) {
-			if(rec->GetCityStyleOnlyIndex(s) == m_cityStyle) {
+		for(sint32 i = 0; i < rec->GetNumCityStyleOnly(); i++)
+		{
+			if(rec->GetCityStyleOnlyIndex(i) == m_cityStyle)
+			{
 				found = true;
 				break;
 			}
@@ -6551,12 +6574,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Added by E - Compares Wonder CultureOnly to the Player's CityStyle
 	if(rec->GetNumCultureOnly() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called s.
-		sint32 s;
 		bool found = false;
-		for(s = 0; s < rec->GetNumCultureOnly(); s++) {
-			if(rec->GetCultureOnlyIndex(s) == g_player[m_owner]->GetCivilisation()->GetCityStyle()) {
+		for(sint32 i = 0; i < rec->GetNumCultureOnly(); i++)
+		{
+			if(rec->GetCultureOnlyIndex(i) == g_player[m_owner]->GetCivilisation()->GetCityStyle())
+			{
 				found = true;
 				break;
 			}
@@ -6568,12 +6590,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Added by E - Compares CivilisationOnly to the Player's Civilisation	5-11-2006
 	if(rec->GetNumCivilisationOnly() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called c.
-		sint32 c;
 		bool found = false;
-		for(c = 0; c < rec->GetNumCivilisationOnly(); c++) {
-			if(rec->GetCivilisationOnlyIndex(c) == g_player[m_owner]->m_civilisation->GetCivilisation()) {
+		for(sint32 i = 0; i < rec->GetNumCivilisationOnly(); i++)
+		{
+			if(rec->GetCivilisationOnlyIndex(i) == g_player[m_owner]->m_civilisation->GetCivilisation())
+			{
 				found = true;
 				break;
 			}
@@ -6583,15 +6604,14 @@ bool CityData::CanBuildWonder(sint32 type) const
 	}
 
 	if(rec->GetNumNeedsCityGoodAnyCity())
-	{	
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called g.
-		sint32 i, g;
+	{
 		bool goodavail = false;
-
-		for(i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++) {
-			for(g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++) {
-				if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g))){ 
+		for(sint32 i = 0; i < g_player[m_owner]->m_all_cities->Num(); i++)
+		{
+			for(sint32 g = 0; g < rec->GetNumNeedsCityGoodAnyCity(); g++)
+			{
+				if(g_player[m_owner]->m_all_cities->Access(i).AccessData()->GetCityData()->HasNeededGood(rec->GetNeedsCityGoodAnyCityIndex(g)))
+				{
 					goodavail = true;
 					break;
 				}
@@ -6608,12 +6628,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Added by E - Compares Unit NeedsCityGood to the resources collected or bought by the city, can be either/or
 	if(rec->GetNumNeedsCityGood() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called g.
-		sint32 g;
 		bool found = false;
-		for(g = 0; g < rec->GetNumNeedsCityGood(); g++) {
-			if(HasNeededGood(rec->GetNeedsCityGoodIndex(g))){
+		for(sint32 i = 0; i < rec->GetNumNeedsCityGood(); i++)
+		{
+			if(HasNeededGood(rec->GetNeedsCityGoodIndex(i)))
+			{
 				found = true;
 				break;
 			}
@@ -6625,11 +6644,9 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Added by E - Compares Wonder NeedsCityGoodAll to the resources collected or bought by the city, must be all listed
 	if(rec->GetNumNeedsCityGoodAll() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called g.
-		sint32 g;
-		for(g = 0; g < rec->GetNumNeedsCityGoodAll(); g++) {
-			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(g)))
+		for(sint32 i = 0; i < rec->GetNumNeedsCityGoodAll(); i++)
+		{
+			if(!HasNeededGood(rec->GetNeedsCityGoodAllIndex(i)))
 				return false;
 		}
 	}
@@ -6639,12 +6656,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// changed so player has to have achieved feat
 	if(rec->GetNumNeedsFeatToBuild() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called f.
-		sint32 f;
 		bool found = false;
-		for(f = 0; f < rec->GetNumNeedsFeatToBuild(); f++) {
-			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(f), m_owner)) {
+		for(sint32 i = 0; i < rec->GetNumNeedsFeatToBuild(); i++)
+		{
+			if(g_featTracker->PlayerHasFeat(rec->GetNeedsFeatToBuildIndex(i), m_owner))
+			{
 				found = true;
 				break;
 			}
@@ -6656,12 +6672,11 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// Any player must have feat to build 5-18-2007
 	if(rec->GetNumNeedsAnyPlayerFeatToBuild() > 0)
 	{
-		/// @todo use standart identifier names for index variables.
-		//        First of them is called i. Second one is called j. None of them is called f.
-		sint32 f;
 		bool found = false;
-		for(f = 0; f < rec->GetNumNeedsAnyPlayerFeatToBuild(); f++) {
-			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(f))) {
+		for(sint32 i = 0; i < rec->GetNumNeedsAnyPlayerFeatToBuild(); i++)
+		{
+			if(g_featTracker->HasFeat(rec->GetNeedsAnyPlayerFeatToBuildIndex(i)))
+			{
 				found = true;
 				break;
 			}
@@ -6676,8 +6691,6 @@ bool CityData::CanBuildWonder(sint32 type) const
 	// to a buildingflag additional wonder to city and a govt 
 	// modifier?
 	////////////////////////////////////////////////////////////
-	// emod to limit number of wonders in a city
-	// causes delay/crash because m_builtwonders not initialized?
 	if(GetNumCityWonders() >= g_theConstDB->Get(0)->GetMaxCityWonders())
 	{
 		return false;
@@ -6696,13 +6709,6 @@ bool CityData::IsInjoined() const
 {
 	return m_isInjoined != 0;
 }
-
-
-bool CityData::HaveImprovement(const sint32 type) const
-{
-	return (GetImprovements() & (uint64(1) << type)) != 0;
-}
-
 
 void CityData::ResetConquestDistress(double new_distress) { m_happy->ResetConquestDistress(new_distress); } 
 double CityData::GetHappiness() const { return m_happy->GetHappiness(); }
@@ -9789,8 +9795,7 @@ bool CityData::IsBuildingOperational(sint32 type) const
 	
 	if(rec->GetNumPrerequisiteBuilding() > 0) {
 		for(o = 0; o < rec->GetNumPrerequisiteBuilding(); o++) {
-			sint32 b = rec->GetPrerequisiteBuildingIndex(o);
-			if(!(GetEffectiveBuildings() & ((uint64)1 << (uint64)b)))
+			if(!HasEffectiveBuilding(rec->GetPrerequisiteBuildingIndex(o)))
 				return false;
 		}
 	}
@@ -9885,44 +9890,44 @@ sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, si
 	// randomized to add unpredictable realism
 
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++){
-			if(m_built_improvements & ((uint64)1 << b)){
-				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[owner]->GetGovernmentType());
+		if(m_built_improvements & ((uint64)1 << b)){
+			const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[owner]->GetGovernmentType());
 
-				// Checks if a city has a buildng that conflicts with 
-				// another (mosques, churches, synagogues, etc)
-				for(sint32 i = 0; i < rec->GetNumConflictsWithBuilding(); i++) {
-					if((rec->GetNumConflictsWithBuilding()) && HaveImprovement(rec->GetConflictsWithBuildingIndex(i))) {
-						newsecthappy -= g_rand->Next(PopCount() / 3);
-					}
+			// Checks if a city has a buildng that conflicts with 
+			// another (mosques, churches, synagogues, etc)
+			for(sint32 i = 0; i < rec->GetNumConflictsWithBuilding(); i++) {
+				if((rec->GetNumConflictsWithBuilding()) && HasBuilding(rec->GetConflictsWithBuildingIndex(i))) {
+					newsecthappy -= g_rand->Next(PopCount() / 3);
+				}
 				
-					// Checks if ANY city has a building that conflicts 
-					// with another (mosques, churches, synagogues, etc);
-					// For State Religion Building
-					sint32 c;
-					for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
-						Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-						if(aCity.CD()->HaveImprovement(rec->GetConflictsWithBuildingIndex(i))){
-							newsecthappy -= g_rand->Next(PopCount() / 3);
-						}
-					}
-
-				}
-
-				//checks if govt conflicts prereqgovt
-				for(sint32 g = 0; g < rec->GetNumGovernmentType(); g++) {
-					if(rec->GetGovernmentTypeIndex(g) != g_player[owner]->GetGovernmentType()) {
+				// Checks if ANY city has a building that conflicts 
+				// with another (mosques, churches, synagogues, etc);
+				// For State Religion Building
+				sint32 c;
+				for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++) {
+					Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
+					if(aCity.CD()->HasBuilding(rec->GetConflictsWithBuildingIndex(i))){
 						newsecthappy -= g_rand->Next(PopCount() / 3);
 					}
 				}
 
-				//checks if cultureonly conflicts
-				for(sint32 u = 0; u < rec->GetNumCultureOnly(); u++) {
-					if(rec->GetCultureOnlyIndex(u) != g_player[owner]->GetCivilisation()->GetCityStyle()) {
-						newsecthappy -= g_rand->Next(PopCount() / 3);
-					}
-				}
-				//end Buildings
 			}
+
+			//checks if govt conflicts prereqgovt
+			for(sint32 g = 0; g < rec->GetNumGovernmentType(); g++) {
+				if(rec->GetGovernmentTypeIndex(g) != g_player[owner]->GetGovernmentType()) {
+					newsecthappy -= g_rand->Next(PopCount() / 3);
+				}
+			}
+
+			//checks if cultureonly conflicts
+			for(sint32 u = 0; u < rec->GetNumCultureOnly(); u++) {
+				if(rec->GetCultureOnlyIndex(u) != g_player[owner]->GetCivilisation()->GetCityStyle()) {
+					newsecthappy -= g_rand->Next(PopCount() / 3);
+				}
+			}
+			//end Buildings
+		}
 	}
 
 		// Checks if the citystle of the city is different than the person that owns it for cultural/ethnic strife
@@ -10147,7 +10152,7 @@ sint32 CityData::GetNumCityWonders() const
 	// - ok I tested this by: setting limit to 2, after giving age of reason a city having no wonders can build any wonders
 	// I gave a city one wonder and it can still build; I gave it two and it couldn't build any so I assume it works - now 6-3-2007
 	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++) {
-		if(GetBuiltWonders() & (uint64(1) << (uint64)i) ) {
+		if(HasCityWonder(i)) {
 			citywon++;
 		}
 	}
@@ -10159,7 +10164,7 @@ sint32 CityData::GetNumCityBuildings() const
 {
 	sint32 citybld = 0;
 	for(sint32 i=0; i<g_theBuildingDB->NumRecords(); i++) {
-		if(GetEffectiveBuildings() & (uint64(1) << (uint64)i) ) {
+		if(HasEffectiveBuilding(i)) {
 			citybld++;
 		}
 	}
@@ -10288,7 +10293,7 @@ void CityData::CityGovernmentModifiers()
 			}
 		}
 	}
-//end
+	//end
 }
 
 void CityData::Militia()
@@ -10316,7 +10321,7 @@ void CityData::Militia()
 			{
 				const BuildingRecord *rec = g_theBuildingDB->Get(b, g_player[m_owner]->GetGovernmentType());
 				
-				if(HaveImprovement(b)
+				if(HasBuilding(b)
 				&& rec->GetCreatesMiltiaUnit()
 				){
 					g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
@@ -10324,7 +10329,7 @@ void CityData::Militia()
 			}
 		}
 	}
-//end
+	//end
 }
 
 void CityData::DestroyOnePerCiv()

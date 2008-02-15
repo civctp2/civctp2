@@ -63,11 +63,11 @@ FeatTracker *g_featTracker = NULL;
 //
 // Description: Constructor for an accomplished feat
 //
-// Parameters : type			: feat identifier
-//				player			: player that accomplished the feat
-//				round			: the round in which the feat was accomplished
+// Parameters : type            : feat identifier
+//              player          : player that accomplished the feat
+//              round           : the round in which the feat was accomplished
 //
-// Globals    : NewTurnCount	: the current round (when not provided)
+// Globals    : NewTurnCount    : the current round (when not provided)
 //
 // Returns    : -
 //
@@ -75,14 +75,13 @@ FeatTracker *g_featTracker = NULL;
 //              indicate that the feat has been accomplished right now.
 //
 //----------------------------------------------------------------------------
-
 Feat::Feat(sint32 type, sint32 player, sint32 round)
 :	m_type		(type),
 	m_player	(player)
 {
-	m_round	= (USE_CURRENT_ROUND == round) 
-		      ? NewTurnCount::GetCurrentRound() 
-			  : round;
+	m_round = (USE_CURRENT_ROUND == round) 
+	          ? NewTurnCount::GetCurrentRound() 
+	          : round;
 }
 
 Feat::Feat(CivArchive &archive)
@@ -130,7 +129,6 @@ FeatTracker::FeatTracker(CivArchive &archive)
 		
 		m_effectList[i] = NULL;
 	}
-
 
 	Serialize(archive);
 }
@@ -219,7 +217,6 @@ void FeatTracker::Serialize(CivArchive & archive)
 
 		FindBuildingFeats();
 	}
-
 }
 
 #define CHECK_FEAT_LIST(func, eff) \
@@ -234,25 +231,25 @@ void FeatTracker::AddFeatToEffectLists(Feat *feat)
 {
 	const FeatRecord *rec = g_theFeatDB->Get(feat->GetType());
 
-	CHECK_FEAT_LIST(HasEffectBoatMovement,                FEAT_EFFECT_BOAT_MOVEMENT);
-	CHECK_FEAT_LIST(HasEffectCityDefenseBonus,		    FEAT_EFFECT_CITY_DEFENSE_BONUS);
-	CHECK_FEAT_LIST(HasEffectReduceCityWalls,		        FEAT_EFFECT_REDUCE_CITY_WALLS);
-	CHECK_FEAT_LIST(HasEffectIncreaseCityVision,	        FEAT_EFFECT_INCREASE_CITY_VISION);
-	CHECK_FEAT_LIST(HasEffectIncreaseProduction,	        FEAT_EFFECT_INCREASE_PRODUCTION);
-	CHECK_FEAT_LIST(HasEffectIncreaseCommerce,		    FEAT_EFFECT_INCREASE_COMMERCE);
-	CHECK_FEAT_LIST(HasEffectIncreaseHappiness,   FEAT_EFFECT_INCREASE_HAPPINESS);
-	CHECK_FEAT_LIST(HasEffectEliminateDistancePenalty,    FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
-	CHECK_FEAT_LIST(HasEffectIncreaseBoatVision,	        FEAT_EFFECT_INCREASE_BOAT_VISION);
-	CHECK_FEAT_LIST(HasEffectIncreaseScience,		        FEAT_EFFECT_INCREASE_SCIENCE);
-	CHECK_FEAT_LIST(GetEffectGiveMaps,				    FEAT_EFFECT_GIVE_MAPS);
-	CHECK_FEAT_LIST(HasEffectIncreaseHitPoints,	        FEAT_EFFECT_INCREASE_HIT_POINTS);
-	CHECK_FEAT_LIST(HasEffectScriptedTurn,			    FEAT_EFFECT_SCRIPTED_TURN);
-	CHECK_FEAT_LIST(HasEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
+	CHECK_FEAT_LIST(HasEffectBoatMovement,              FEAT_EFFECT_BOAT_MOVEMENT);
+	CHECK_FEAT_LIST(HasEffectCityDefenseBonus,          FEAT_EFFECT_CITY_DEFENSE_BONUS);
+	CHECK_FEAT_LIST(HasEffectReduceCityWalls,           FEAT_EFFECT_REDUCE_CITY_WALLS);
+	CHECK_FEAT_LIST(HasEffectIncreaseCityVision,        FEAT_EFFECT_INCREASE_CITY_VISION);
+	CHECK_FEAT_LIST(HasEffectIncreaseProduction,        FEAT_EFFECT_INCREASE_PRODUCTION);
+	CHECK_FEAT_LIST(HasEffectIncreaseCommerce,          FEAT_EFFECT_INCREASE_COMMERCE);
+	CHECK_FEAT_LIST(HasEffectIncreaseHappiness,         FEAT_EFFECT_INCREASE_HAPPINESS);
+	CHECK_FEAT_LIST(HasEffectEliminateDistancePenalty,  FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
+	CHECK_FEAT_LIST(HasEffectIncreaseBoatVision,        FEAT_EFFECT_INCREASE_BOAT_VISION);
+	CHECK_FEAT_LIST(HasEffectIncreaseScience,           FEAT_EFFECT_INCREASE_SCIENCE);
+	CHECK_FEAT_LIST(GetEffectGiveMaps,                  FEAT_EFFECT_GIVE_MAPS);
+	CHECK_FEAT_LIST(HasEffectIncreaseHitPoints,         FEAT_EFFECT_INCREASE_HIT_POINTS);
+	CHECK_FEAT_LIST(HasEffectScriptedTurn,              FEAT_EFFECT_SCRIPTED_TURN);
+	CHECK_FEAT_LIST(HasEffectScriptedCity,              FEAT_EFFECT_SCRIPTED_CITY);
 }
 
 #define REMOVE_FROM_FEAT_LIST(func, eff) \
     if(m_effectList[eff] && rec->func()) {\
-	    PointerList<Feat>::PointerListNode *node = m_effectList[eff]->Find(feat);\
+        PointerList<Feat>::PointerListNode *node = m_effectList[eff]->Find(feat);\
         if(node) {\
             m_effectList[eff]->Remove(node); \
         }\
@@ -263,19 +260,19 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 	const FeatRecord *rec = g_theFeatDB->Get(feat->GetType());
 
 	REMOVE_FROM_FEAT_LIST(HasEffectBoatMovement,                FEAT_EFFECT_BOAT_MOVEMENT);
-	REMOVE_FROM_FEAT_LIST(HasEffectCityDefenseBonus,		    FEAT_EFFECT_CITY_DEFENSE_BONUS);
-	REMOVE_FROM_FEAT_LIST(HasEffectReduceCityWalls,		        FEAT_EFFECT_REDUCE_CITY_WALLS);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseCityVision,	        FEAT_EFFECT_INCREASE_CITY_VISION);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseProduction,	        FEAT_EFFECT_INCREASE_PRODUCTION);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseCommerce,		    FEAT_EFFECT_INCREASE_COMMERCE);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseHappiness,   FEAT_EFFECT_INCREASE_HAPPINESS);
+	REMOVE_FROM_FEAT_LIST(HasEffectCityDefenseBonus,            FEAT_EFFECT_CITY_DEFENSE_BONUS);
+	REMOVE_FROM_FEAT_LIST(HasEffectReduceCityWalls,             FEAT_EFFECT_REDUCE_CITY_WALLS);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseCityVision,          FEAT_EFFECT_INCREASE_CITY_VISION);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseProduction,          FEAT_EFFECT_INCREASE_PRODUCTION);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseCommerce,            FEAT_EFFECT_INCREASE_COMMERCE);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseHappiness,           FEAT_EFFECT_INCREASE_HAPPINESS);
 	REMOVE_FROM_FEAT_LIST(HasEffectEliminateDistancePenalty,    FEAT_EFFECT_ELIMINATE_DISTANCE_PENALTY);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseBoatVision,	        FEAT_EFFECT_INCREASE_BOAT_VISION);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseScience,		        FEAT_EFFECT_INCREASE_SCIENCE);
-	REMOVE_FROM_FEAT_LIST(GetEffectGiveMaps,				    FEAT_EFFECT_GIVE_MAPS);
-	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseHitPoints,	        FEAT_EFFECT_INCREASE_HIT_POINTS);
-	REMOVE_FROM_FEAT_LIST(HasEffectScriptedTurn,			    FEAT_EFFECT_SCRIPTED_TURN);
-	REMOVE_FROM_FEAT_LIST(HasEffectScriptedCity,			    FEAT_EFFECT_SCRIPTED_CITY);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseBoatVision,          FEAT_EFFECT_INCREASE_BOAT_VISION);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseScience,             FEAT_EFFECT_INCREASE_SCIENCE);
+	REMOVE_FROM_FEAT_LIST(GetEffectGiveMaps,                    FEAT_EFFECT_GIVE_MAPS);
+	REMOVE_FROM_FEAT_LIST(HasEffectIncreaseHitPoints,           FEAT_EFFECT_INCREASE_HIT_POINTS);
+	REMOVE_FROM_FEAT_LIST(HasEffectScriptedTurn,                FEAT_EFFECT_SCRIPTED_TURN);
+	REMOVE_FROM_FEAT_LIST(HasEffectScriptedCity,                FEAT_EFFECT_SCRIPTED_CITY);
 }
 
 //----------------------------------------------------------------------------
@@ -284,12 +281,12 @@ void FeatTracker::RemoveFeatFromEffectLists(Feat *feat)
 //
 // Description: Add an accomplished feat to the records
 //
-// Parameters : type			: feat identifier
-//				player			: player that accomplished the feat
-//				round			: the round in which the feat was accomplished
+// Parameters : type            : feat identifier
+//              player          : player that accomplished the feat
+//              round           : the round in which the feat was accomplished
 //
-// Globals    : g_theFeatDB		: database of feat descriptions
-//				TODO: add more globals
+// Globals    : g_theFeatDB     : database of feat descriptions
+//              TODO: add more globals
 //
 // Returns    : -
 //
@@ -430,7 +427,7 @@ sint32 FeatTracker::GetEffect(FEAT_EFFECT effect, sint32 player, bool getTotal)
 			if(getTotal)
 				result += sub;
 			else
-                result = std::max(sub, result);
+				result = std::max(sub, result);
 		}
 		walk.Next();
 	}
@@ -481,16 +478,12 @@ void FeatTracker::FindBuildingFeats()
 
 void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 {
-	
 	if(!m_buildingFeat[building]) return;
 
-	
-	sint32 f;
-	for(f = 0; f < g_theFeatDB->NumRecords(); f++) {
+	for(sint32 f = 0; f < g_theFeatDB->NumRecords(); f++) {
 		const FeatRecord *rec = g_theFeatDB->Get(f);
 		const FeatRecord::BuildingFeat *bf;
 
-		
 		if(rec->GetBuilding(bf)) {
 			
 			if(bf->GetBuildingIndex() == building) {
@@ -499,7 +492,7 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 				sint32 c;
 				for(c = 0; c < g_player[city.GetOwner()]->m_all_cities->Num(); c++) {
 					Unit aCity = g_player[city.GetOwner()]->m_all_cities->Access(c);
-					if(aCity.CD()->HaveImprovement(building))
+					if(aCity.CD()->HasBuilding(building))
 						numCities++;
 				}
 				
@@ -526,7 +519,7 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 				}
 			}
 		}
-	}	
+	}
 }
 
 void FeatTracker::CheckConquerFeat(sint32 defeated, sint32 defeatedByWhom)
@@ -589,8 +582,8 @@ bool FeatTracker::PlayerHasFeat(sint32 type, sint32 player) const
 //
 // Description: Handler for GEV_AccomplishFeat events.
 //
-// Parameters : gameEventType	: should be GEV_AccomplishFeat
-//				args			: list of arguments				
+// Parameters : gameEventType   : should be GEV_AccomplishFeat
+//              args            : list of arguments
 //
 // Globals    : -
 //
@@ -648,9 +641,6 @@ STDEHANDLER(FeatBuildingBuilt)
 	g_featTracker->CheckBuildingFeat(city, building);
 	return GEV_HD_Continue;
 }
-
-
-
 
 void FeatTracker::InitializeEvents()
 {

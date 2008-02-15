@@ -355,6 +355,8 @@ public:
 	void PrepareToRemove(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 
 	uint64 GetImprovements() const { return m_built_improvements; };
+	bool HasEffectiveBuilding(sint32 building) const{ return (GetEffectiveBuildings() & (static_cast<uint64>(1) << static_cast<uint64>(building))) != 0; };
+	bool HasBuilding(sint32 building) const{ return (m_built_improvements & (static_cast<uint64>(1) << static_cast<uint64>(building))) != 0; };
 	Unit GetHomeCity() const { return m_home_city; };
 	sint32 GetOwner() const { return m_owner; }
 	void ResetCityOwner(sint32 owner);
@@ -542,6 +544,7 @@ public:
 	bool ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type);
 
 	uint64 GetBuiltWonders() const { return m_builtWonders; }
+	bool HasCityWonder(sint32 wonder) const { return (m_builtWonders & (static_cast<uint64>(1) << static_cast<uint64>(wonder))) != 0; }
 
 	void DestroyCapitol(); 
 	void RemoveCapitol(); 
@@ -729,8 +732,6 @@ public:
 	void Injoin(sint32 player);
 	bool IsInjoined() const;
 	sint32 InjoinedBy() const { return m_injoinedBy; }
-
-	bool HaveImprovement(const sint32 type) const;
 
 	void RecalculateResources();
 	sint32 CountTradeWith(PLAYER_INDEX player) const;

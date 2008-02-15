@@ -1574,7 +1574,7 @@ bool ScenarioEditor::UpdateAddList(SCEN_ADD addtype)
 
 			
 			for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-				if(city.CD()->HaveImprovement(i)) {
+				if(city.CD()->HasBuilding(i)) {
 					AddAddItem(rightList, g_theBuildingDB->Get(i)->GetNameText(), i);
 				} else {
 					AddAddItem(leftList, g_theBuildingDB->Get(i)->GetNameText(), i);
@@ -2031,7 +2031,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(dbindex < 0 || dbindex >= g_theBuildingDB->NumRecords())
 				return;
 
-			if(city.CD()->HaveImprovement(dbindex))
+			if(city.CD()->HasBuilding(dbindex))
 				
 				return;
 
@@ -2152,7 +2152,7 @@ void ScenarioEditor::AddRemoveButton(aui_Control *control, uint32 action, uint32
 			if(dbindex < 0 || dbindex >= g_theBuildingDB->NumRecords())
 				return;
 
-			if(!city.CD()->HaveImprovement(dbindex))
+			if(!city.CD()->HasBuilding(dbindex))
 				return;
 			city.CD()->DestroyImprovement(dbindex);
 			rightList->RemoveItem(selItem->Id());

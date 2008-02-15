@@ -2375,7 +2375,7 @@ void CityWindow::FillPollutionList()
 	sint32 i;
 	for (i = 0; i < g_theBuildingDB->NumRecords(); i++)
 	{
-		if (m_cityData->HaveImprovement(i))
+		if (m_cityData->HasBuilding(i))
 		{
 			// For an improvement, there are 3 values that contribute to or 
 			// decrease the pollution:

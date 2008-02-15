@@ -2729,7 +2729,7 @@ SFN_ERROR Slic_CityHasBuilding::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 	}
 
-   	res = args->GetCity(0, city);
+	res = args->GetCity(0, city);
 	if(!res)
 		return SFN_ERROR_TYPE_BUILTIN;
 	
@@ -2741,8 +2741,7 @@ SFN_ERROR Slic_CityHasBuilding::Call(SlicArgList *args)
 		return SFN_ERROR_UNKNOWN_BUILDING;
 	}
 
-	sint32 i;
-	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		if(g_theBuildingDB->Get(i)->m_name == sname) {
 			if(city.HaveImprovement(i)) {
 				m_result.m_int = 1;

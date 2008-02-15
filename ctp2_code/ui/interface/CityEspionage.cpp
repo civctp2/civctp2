@@ -61,41 +61,39 @@ extern C3UI *   g_c3ui;
 
 namespace
 {
-    /// City espionage data and window (singleton)
-    CityEspionage * s_CityEspionage     = NULL;
-    
-    /// Block name for lookup of elements and layout from the ldl-file
-    MBCHAR const *  LDL_BLOCK           = "CityEspionage";
+	/// City espionage data and window (singleton)
+	CityEspionage * s_CityEspionage     = NULL;
 
-    /// Set label text - after substitution of variables
-    /// \param      a_Label     Name of label text to set
-    /// \param      a_Text      Name of text item to set (may contain variables)
-    /// \param      a_Context   Context, containing variable substitution values
-    void SetLabelText
-    (
-        MBCHAR const *      a_Label, 
-        MBCHAR const *      a_Text, 
-        SlicObject &        a_Context
-    )
-    {
-        ctp2_Static * st = static_cast<ctp2_Static *>
-                                (aui_Ldl::GetObject(LDL_BLOCK, a_Label));
+	/// Block name for lookup of elements and layout from the ldl-file
+	MBCHAR const *  LDL_BLOCK           = "CityEspionage";
 
-        if (st)
-        {
-            MBCHAR parsedText[k_MAX_NAME_LEN];
-            parsedText[0] = 0;
-            stringutils_Interpret(g_theStringDB->GetNameStr(a_Text), 
-                                  a_Context, 
-                                  parsedText, 
-                                  k_MAX_NAME_LEN
-                                 );
-            st->SetText(parsedText);
-        }
-    }
+	/// Set label text - after substitution of variables
+	/// \param      a_Label     Name of label text to set
+	/// \param      a_Text      Name of text item to set (may contain variables)
+	/// \param      a_Context   Context, containing variable substitution values
+	void SetLabelText
+	(
+	    MBCHAR const *      a_Label, 
+	    MBCHAR const *      a_Text, 
+	    SlicObject &        a_Context
+	)
+	{
+		ctp2_Static * st = static_cast<ctp2_Static *>
+		                        (aui_Ldl::GetObject(LDL_BLOCK, a_Label));
 
+		if (st)
+		{
+		    MBCHAR parsedText[k_MAX_NAME_LEN];
+		    parsedText[0] = 0;
+		    stringutils_Interpret(g_theStringDB->GetNameStr(a_Text), 
+		                          a_Context, 
+		                          parsedText, 
+		                          k_MAX_NAME_LEN
+		                         );
+		    st->SetText(parsedText);
+		}
+	}
 }
-
 
 CityEspionage::CityEspionage()
 :
@@ -103,55 +101,55 @@ CityEspionage::CityEspionage()
     m_cancelButton  (NULL),
     m_inventoryList (NULL)
 {
-    m_window = static_cast<ctp2_Window *>
-            (aui_Ldl::BuildHierarchyFromRoot(LDL_BLOCK));
+	m_window = static_cast<ctp2_Window *>
+	        (aui_Ldl::BuildHierarchyFromRoot(LDL_BLOCK));
 
-    if (m_window)
-    {
-        m_cancelButton  = static_cast<ctp2_Button *>
-            (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.CancelButton"));
-        if (m_cancelButton) 
-        {
-            m_cancelButton->SetActionFuncAndCookie(CancelCallback, this);
-        }
+	if (m_window)
+	{
+		m_cancelButton  = static_cast<ctp2_Button *>
+		    (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.CancelButton"));
+		if (m_cancelButton) 
+		{
+			m_cancelButton->SetActionFuncAndCookie(CancelCallback, this);
+		}
 
-        m_inventoryList = static_cast<ctp2_ListBox *>
-            (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.InventoryList"));
-    }
+		m_inventoryList = static_cast<ctp2_ListBox *>
+		    (aui_Ldl::GetObject(LDL_BLOCK, "DialogBackground.InventoryList"));
+	}
 }
 
 CityEspionage::~CityEspionage()
 {
-    HideWindow();
+	HideWindow();
 
-    if (m_inventoryList)
-    {
-        m_inventoryList->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
-        m_inventoryList->Clear();
-    }
+	if (m_inventoryList)
+	{
+		m_inventoryList->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
+		m_inventoryList->Clear();
+	}
 
 	for (size_t unitIndex = 0; unitIndex < k_MAX_ARMY_SIZE; ++unitIndex) 
-    {
+	{
 		MBCHAR  block [k_MAX_NAME_LEN];
 		sprintf(block, "DialogBackground.FortifiedUnitsBox.Unit%i", unitIndex);
 
 		ctp2_Static * unitPicture  = static_cast<ctp2_Static *>
-                                        (aui_Ldl::GetObject(LDL_BLOCK, block));
+		                                (aui_Ldl::GetObject(LDL_BLOCK, block));
 		if (unitPicture) 
 		{
-            unitPicture->ExchangeImage(0, 0, NULL);
+			unitPicture->ExchangeImage(0, 0, NULL);
 		}
 	}
 
-    aui_Ldl::DeleteHierarchyFromRoot(LDL_BLOCK);
+	aui_Ldl::DeleteHierarchyFromRoot(LDL_BLOCK);
 }
 
 /// Release all data of the singleton.
 /// \remarks Can be used as ::UiCleanupCallback 
 void CityEspionage::Cleanup()
 {
-    delete s_CityEspionage;
-    s_CityEspionage = NULL;
+	delete s_CityEspionage;
+	s_CityEspionage = NULL;
 }
 
 /// Display espionage intelligence of a city
@@ -160,32 +158,32 @@ void CityEspionage::Cleanup()
 void CityEspionage::Display(Unit a_City)
 {
 	if (!s_CityEspionage)
-    {
-        s_CityEspionage = new CityEspionage();
-        g_c3ui->RegisterCleanup(&CityEspionage::Cleanup);
-    }
+	{
+		s_CityEspionage = new CityEspionage();
+		g_c3ui->RegisterCleanup(&CityEspionage::Cleanup);
+	}
 
-    s_CityEspionage->DisplayWindow(a_City);
+	s_CityEspionage->DisplayWindow(a_City);
 }
 
 /// Display espionage intelligence of a city
 /// \param  a_City  The city that has been investigated
 void CityEspionage::DisplayWindow(Unit a_City)
 {
-	if (m_window) 
-    {
+	if (m_window)
+	{
 		AUI_ERRCODE err = g_c3ui->AddWindow(m_window);
 		Assert(err == AUI_ERRCODE_OK);
 
 		if (err == AUI_ERRCODE_OK) 
-        {
+		{
 			err = m_window->Show();
 		}
 
-	    if (!a_City.IsValid())
-        {
-            return;
-        }
+		if (!a_City.IsValid())
+		{
+			return;
+		}
 
 		SlicObject so;
 		so.AddPlayer(a_City.GetOwner());
@@ -201,22 +199,22 @@ void CityEspionage::DisplayWindow(Unit a_City)
 
 		Assert(m_inventoryList);
 		if (m_inventoryList) 
-        {
-            m_inventoryList->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
-            m_inventoryList->Clear();
-            m_inventoryList->BuildListStart();
+		{
+			m_inventoryList->ClearUserData CALL_TEMPLATE_FUNCTION_WITHOUT_ARGUMENT(InventoryItemInfo);
+			m_inventoryList->Clear();
+			m_inventoryList->BuildListStart();
 
-            CityData const *    cityData    = a_City.GetCityData();
+			CityData const *    cityData    = a_City.GetCityData();
 
-            for (sint32 buildIndex = 0; buildIndex < g_theBuildingDB->NumRecords(); ++buildIndex)
-            {
-				if (cityData->HaveImprovement(buildIndex)) 
-                {
+			for (sint32 buildIndex = 0; buildIndex < g_theBuildingDB->NumRecords(); ++buildIndex)
+			{
+				if (cityData->HasBuilding(buildIndex)) 
+				{
 					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
-                        (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
+					    (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
 
-                    if (item) 
-                    {
+					if (item) 
+					{
 						item->SetText(g_theBuildingDB->Get(buildIndex)->GetNameText());
 						item->SetUserData(new InventoryItemInfo(true, buildIndex));
 					}
@@ -227,23 +225,23 @@ void CityEspionage::DisplayWindow(Unit a_City)
 
 			
 			for (sint32 wonderIndex = 0; wonderIndex < g_theWonderDB->NumRecords(); ++wonderIndex) 
-            {
+			{
 				if (cityData->GetBuiltWonders() & ((uint64) 1 << (uint64) wonderIndex)) 
-                {
+				{
 					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
-                        (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
+					    (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
 
-                    if (item) 
-                    {
+					if (item) 
+					{
 						item->SetText(g_theWonderDB->Get(wonderIndex)->GetNameText());
 						item->SetUserData(new InventoryItemInfo(false, wonderIndex));
 					}
 					
-                    m_inventoryList->AddItem(item);
+					m_inventoryList->AddItem(item);
 				}
-            }
+			}
 
-            m_inventoryList->BuildListEnd();
+			m_inventoryList->BuildListEnd();
 
 			MapPoint pos;
 			a_City.GetPos(pos);
@@ -257,34 +255,34 @@ void CityEspionage::DisplayWindow(Unit a_City)
 
 			
 			for (sint32 multiIndex = 0; multiIndex < k_MAX_ARMY_SIZE; ++multiIndex) 
-            {
-                MBCHAR interp[k_MAX_NAME_LEN];
+			{
+				MBCHAR interp[k_MAX_NAME_LEN];
 				sprintf(interp, "DialogBackground.FortifiedUnitsBox.Unit%i", multiIndex);
 				ctp2_Static * st = (ctp2_Static *) aui_Ldl::GetObject(LDL_BLOCK, interp);
 				
-                if (st)
-                {
-				    if (unitIndex < cellUnitList.Num()) 
-				    {
-					    Unit &  unit = cellUnitList[unitIndex++];
-    					
-					    if (st->IsDisabled())
-                        {
-						    st->Enable(true);
-                        }
+				if (st)
+				{
+					if (unitIndex < cellUnitList.Num()) 
+					{
+						Unit &  unit = cellUnitList[unitIndex++];
+						
+						if (st->IsDisabled())
+						{
+							st->Enable(true);
+						}
 
-					    st->ExchangeImage(0, 0,	unit.GetDBRec()->GetDefaultIcon()->GetIcon());
-				    }
-				    else
-				    {	
-					    if (!st->IsDisabled())
-                        {
-						    st->Enable(false);
-                        }
+						st->ExchangeImage(0, 0,	unit.GetDBRec()->GetDefaultIcon()->GetIcon());
+					}
+					else
+					{
+						if (!st->IsDisabled())
+						{
+							st->Enable(false);
+						}
 
-					    st->ExchangeImage(0, 0, NULL);
-				    }
-                }
+						st->ExchangeImage(0, 0, NULL);
+					}
+				}
 			}
 		}
 	}
@@ -293,15 +291,15 @@ void CityEspionage::DisplayWindow(Unit a_City)
 /// Hide the espionage intelligence of a city
 void CityEspionage::HideWindow()
 {
-    if (m_window)
-    {  
-        m_window->Hide();
+	if (m_window)
+	{
+		m_window->Hide();
 
-        if (g_c3ui)
-        {
-            g_c3ui->RemoveWindow(m_window->Id());
-        }
-    }
+		if (g_c3ui)
+		{
+			g_c3ui->RemoveWindow(m_window->Id());
+		}
+	}
 }
 
 /// Handle the cancel button
@@ -318,12 +316,12 @@ void CityEspionage::CancelCallback
     void *          cookie
 )
 {
-    if (action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-    Assert(s_CityEspionage == static_cast<CityEspionage const *>(cookie));
-    if (s_CityEspionage)
-    {  
-        s_CityEspionage->HideWindow();
-    }
+	Assert(s_CityEspionage == static_cast<CityEspionage const *>(cookie));
+	if (s_CityEspionage)
+	{
+		s_CityEspionage->HideWindow();
+	}
 }
 

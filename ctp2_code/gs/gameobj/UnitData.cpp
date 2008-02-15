@@ -2231,7 +2231,7 @@ bool UnitData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 bool UnitData::HaveImprovement( const sint32 type) const
 {
 	Assert(m_city_data);
-	return m_city_data && m_city_data->HaveImprovement(type); 
+	return m_city_data && m_city_data->HasBuilding(type); 
 }
 
 uint64 UnitData::GetImprovements() const

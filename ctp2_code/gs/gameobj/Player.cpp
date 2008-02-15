@@ -2195,7 +2195,7 @@ sint32 Player::CalcWonderGold()
 			
 						sint32 n = g_player[p]->m_all_cities->Num();
 						for(sint32 i = 0; i < n; i++) {
-							if(g_player[p]->m_all_cities->Access(i).CD()->HaveImprovement(wrec->GetBuildingAnywhereIndex(h))) {
+							if(g_player[p]->m_all_cities->Access(i).CD()->HasBuilding(wrec->GetBuildingAnywhereIndex(h))) {
 								totalWonderGold += GoldPerBuildingAnywhere * g_player[p]->m_all_cities->Access(i).PopCount();
 							}
 						}
@@ -6680,6 +6680,7 @@ void Player::BuildEndGame(sint32 type, Unit city)
 	BOOL b = city.BuildEndGame(type);
 	Assert(b);
 }
+
 void Player::AddWonder(sint32 wonder, Unit &city)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Player %d built wonder %d\n", m_owner, wonder));
@@ -6739,6 +6740,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 			delete [] ua;
 		}
 	}
+
 	//one time affect
 	if(wonderutil_GetFreeSlaves((uint64)1 << wonder)) {
 		sint32 i, n = m_all_cities->Num();
@@ -6903,24 +6905,24 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 	if(wrec->GetBuildingEverywhereIndex(buildingIndex)) {
 		m_wonderBuildings |= ((uint64)1 << buildingIndex);
 	}
-//EMOD to actually create the wonder building
+	//EMOD to actually create the wonder building
 
 	sint32 abuildingIndex;
 	if(wrec->GetActualBuildingEverywhereIndex(abuildingIndex)) {
 		for(i = 0; i < m_all_cities->Num(); i++) {
-			if (!m_all_cities->Access(i).GetData()->GetCityData()->HaveImprovement(abuildingIndex)) {
+			if (!m_all_cities->Access(i).GetData()->GetCityData()->HasBuilding(abuildingIndex)) {
 				m_all_cities->Access(i).GetData()->GetCityData()->AddImprovement(abuildingIndex);
 			}
 		}
 	}
-//emod to allow for a name change
+	//emod to allow for a name change
 	
 	sint32 buildingIndex2;
 	if(wrec->GetBuildingEffectEverywhereIndex(buildingIndex2)) {
 		m_wonderBuildings |= ((uint64)1 << buildingIndex2);
 	}
 
-//end EMOD	
+	//end EMOD
 }
 
 void Player::RemoveWonder(sint32 which, bool destroyed)
