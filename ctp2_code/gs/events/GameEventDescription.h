@@ -30,6 +30,7 @@
 // - Added GobalWarming and OzoneDepletion events. (29-Oct-2007 Martin Gühmann)
 // - Added SendEmailAndHotSeatMessage so that this is event driven and can
 //   be executed after all the other events. (14-Nov-2007 Martin Gühmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -338,6 +339,9 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(GlobalWarming,              "Global warming causes the sea level to rise so that vast land is flooded.", "%i")
 	EVENT(OzoneDepletion,             "The ozone layer depletes so that the sun burns the world.", "")
 	EVENT(SendEmailAndHotSeatMessage, "Sends message to HotSeat and PBEM players.", "")
+
+	EVENT(SettleInCityOrder,          "This army settles in a city", "%a")
+	EVENT(SettleInCity,               "Adds a pops to a city with a settler", "%a&i")
 
 	EVENT(MAX,                        "This is not a real event, it marks the end of the list", "")
 };

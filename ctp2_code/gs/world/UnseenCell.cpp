@@ -121,7 +121,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 	m_happinessAttackOwner          (0x00),
 	m_citySize                      (0),
 	m_cityOwner                     (0),
-	m_citySpriteIndex               (0),
+	m_citySpriteIndex               (-1),
 	m_cell_owner                    (PLAYER_UNASSIGNED),
 	m_slaveBits                     (0x0000),
 #ifdef BATTLE_FLAGS
@@ -288,7 +288,7 @@ UnseenCell::UnseenCell()
 	m_happinessAttackOwner          (0x00),
 	m_citySize                      (0),
 	m_cityOwner                     (0),
-	m_citySpriteIndex               (0),
+	m_citySpriteIndex               (-1),
 	m_cell_owner                    (PLAYER_UNASSIGNED),
 	m_slaveBits                     (0x0000),
 #ifdef BATTLE_FLAGS
@@ -388,7 +388,7 @@ UnseenCell::UnseenCell(CivArchive &archive)
 	m_happinessAttackOwner          (0x00),
 	m_citySize                      (0),
 	m_cityOwner                     (0),
-	m_citySpriteIndex               (0),
+	m_citySpriteIndex               (-1),
 	m_cell_owner                    (PLAYER_UNASSIGNED),
 	m_slaveBits                     (0x0000),
 #ifdef BATTLE_FLAGS

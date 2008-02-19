@@ -41,6 +41,7 @@
 //   of closest cities to them slaves are sent can be set in const.txt. (25-Jan-2008 Martin Gühmann)
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -454,7 +455,8 @@ public:
 	void GetArmyPos(sint32 index, MapPoint &army_pos);
 	void UnloadAllTransports ();
 
-	bool Settle(Army &settle_army);
+	bool Settle      (Army &settle_army);
+	bool SettleInCity(Army &settle_army);
 	Unit CityIndexToUnit(sint32 index);
 
 	void Entrench(sint32 idx);

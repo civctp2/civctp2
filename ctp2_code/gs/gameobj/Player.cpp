@@ -109,6 +109,7 @@
 // - Non-settlers cannot settle on cities anymore. (30-Jan-2008 Martin Gühmann)
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -1413,8 +1414,8 @@ Unit Player::CreateCity(
                         sint32 settlerType)
                         
 {
-	if(g_theWorld->IsNextToCity(pos) || g_theWorld->IsCity(pos)) {
-		
+	if(g_theWorld->IsNextToCity(pos) || g_theWorld->IsCity(pos))
+	{
 		return Unit();
 	}
 
@@ -1422,47 +1423,49 @@ Unit Player::CreateCity(
 	   (g_network.IsActive() || g_powerPointsMode)) {
 		
 		
-		if(!g_network.SetupMode() && !g_powerPointsMode) {
-			
+		if(!g_network.SetupMode() && !g_powerPointsMode)
+		{
 			return Unit();
 		}
 
-		if(!g_network.IsInSetupArea(m_owner, pos)) {
-			
-			
+		if(!g_network.IsInSetupArea(m_owner, pos))
+		{
 			return Unit();
 		}
 
 		sint32 pointsNeeded = g_theUnitDB->Get(t, m_government_type)->GetPowerPoints();
-		if(pointsNeeded > m_powerPoints) {
-			
+		if(pointsNeeded > m_powerPoints)
+		{
 			return Unit();
 		}
 
 		m_powerPoints -= pointsNeeded;
 		m_lastActionCost = pointsNeeded;
 
-		if(g_network.IsClient()) {
-			
-			
+		if(g_network.IsClient())
+		{
 			g_network.SendAction(new NetAction(NET_ACTION_CREATE_CITY_CHEAT,
 			                                   t, pos.x, pos.y));
 			return Unit();
 		}
 	}
 
-	sint32 i;
-	for(i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i] && i != m_owner) {
+	for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
+	{
+		if(g_player[i] && i != m_owner)
+		{
 			g_player[i]->m_vision->AddUnseen(pos);
 		}
 	}
 
 	Unit u = g_theUnitPool->Create(t, m_owner, pos, Unit(), actor);
 
-	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_CREATED_CITY, (uint32)u));
-	} else if(g_network.IsHost() && !g_network.IsLocalPlayer(m_owner)) {
+	}
+	else if(g_network.IsHost() && !g_network.IsLocalPlayer(m_owner))
+	{
 		g_network.AddCreatedCity(m_owner, u);
 	}
 
@@ -1483,12 +1486,16 @@ Unit Player::CreateCity(
 	sint32 virtgoldspent = 0;
 	u.CalcHappiness(virtgoldspent, FALSE);
 
-	if(g_network.IsHost()) {
-		if(cause != CAUSE_NEW_CITY_CHEAT) {
+	if(g_network.IsHost())
+	{
+		if(cause != CAUSE_NEW_CITY_CHEAT)
+		{
 			g_network.Block(m_owner);
 		}
+
 		g_network.Enqueue(u.AccessData(), cityData);
-		if(cause != CAUSE_NEW_CITY_CHEAT) {
+		if(cause != CAUSE_NEW_CITY_CHEAT)
+		{
 			g_network.Unblock(m_owner);
 		}
 	}
@@ -1500,13 +1507,13 @@ Unit Player::CreateCity(
 
 		SlicObject *so;
 		
-		so = new SlicObject("016SeaCityBuilder") ;
+		so = new SlicObject("016SeaCityBuilder");
 		so->AddRecipient(m_owner);
 		so->AddCity(u);
 		g_slicEngine->Execute(so);
 
 		
-		so = new SlicObject("017SeaCityOthers") ;
+		so = new SlicObject("017SeaCityOthers");
 		so->AddAllRecipientsBut(m_owner);
 		so->AddCivilisation(g_selected_item->GetVisiblePlayer());
 		so->AddCivilisation(m_owner);
@@ -1520,19 +1527,19 @@ Unit Player::CreateCity(
 
 		SlicObject *so;
 		
-		so = new SlicObject("014SpaceCityBuilder") ;
+		so = new SlicObject("014SpaceCityBuilder");
 		so->AddRecipient(m_owner);
 		so->AddCity(u);
 		g_slicEngine->Execute(so);
 
 		
-		so = new SlicObject("015SpaceCityOthers") ;
+		so = new SlicObject("015SpaceCityOthers");
 		so->AddAllRecipientsBut(m_owner);
 		so->AddCivilisation(m_owner);
 		g_slicEngine->Execute(so);
 	}
 
-	return u; 
+	return u;
 }
 
 bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
@@ -2987,6 +2994,34 @@ bool Player::GetNearestAirfield(const MapPoint &src, MapPoint &dest, const sint3
 	return foundOne;
 }
 
+bool Player::SettleInCity(Army &settle_army)
+{
+	if (m_all_armies->Num() < 1) {
+		DPRINTF(k_DBG_GAMESTATE, ("No armies?!\n"));
+		return false;
+	}
+
+	MapPoint pos;
+	settle_army.GetPos(pos);
+
+	if(!g_theWorld->HasCity(pos))
+		return false;
+
+	for(sint32 i = 0; i < settle_army.Num(); i++)
+	{
+		if(settle_army[i].CanSettle(pos, true))
+		{
+			Unit c = g_theWorld->GetCity(pos);
+			c.CD()->ChangePopulation(settle_army[i].GetDBRec()->GetSettleSize());
+			settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool Player::Settle(Army &settle_army)
 {
 	if (m_all_armies->Num() < 1) {
@@ -2994,80 +3029,26 @@ bool Player::Settle(Army &settle_army)
 		return false;
 	}
 
-	sint32 n = settle_army.Num(); 
-	Assert(0<n);
-
 	MapPoint pos;
 	settle_army.GetPos(pos);
 
-	bool hasCity = g_theWorld->HasCity(pos);
-	
-	bool searching = true;
-	for(sint32 i = 0; i < n; i++)
+	if(g_theWorld->HasCity(pos))
 	{
-//		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-//		BOOL isVisible = settle_army[0].GetVisibility() & (1 << visiblePlayer);
- 		
-		if(hasCity
-		&& settle_army[i].CanSettle(pos)
-		){
-			DPRINTF(k_DBG_GAMESTATE, ("Settling on top of a city\n"));
-
-			// EMOD  here for adding settler to a city?
-			Unit c = g_theWorld->GetCity(pos);
-			c.CD()->ChangePopulation(1);
-			settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
-			// This called ALL player Units to be killed!
-//			for(i = m_all_units->Num() - 1; i >= 0; i--) {
-//			m_all_units->Access(i).KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());  
-			// EMOD
-			return true;
-		}
-
-		if (settle_army[i].Settle()) { 
-			searching = false;
-
-#ifdef MOVED_TO_SOUNDEVENT_CPP
-			if (g_soundManager)
-			{
-				if (visiblePlayer == m_owner ||	isVisible)
-				{
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
-											gamesounds_GetGameSoundID(GAMESOUNDS_SETTLE_CITY),
-											pos.x,
-											pos.y);
-				}
-			}
-#endif
-
-#ifdef MOVED_TO_INTERFACEEVENT_CPP
-			sint32 city_idx = m_all_cities->Num()-1;
-			if (0 <= city_idx)
-			{
-				if (m_owner == g_selected_item->GetVisiblePlayer())
-				{
-					c3_utilitydialogbox_NameCity(m_all_cities->Access(city_idx));
-				}
-			}
-#endif
-			break;
-		}
-	}
-
-	if (searching)
-	{
+		DPRINTF(k_DBG_GAMESTATE, ("Player %d settles on top of a city at (%d, %d)\n", settle_army.GetOwner(), pos.x, pos.y));
 		return false;
 	}
 
-	return true;
+	for(sint32 i = 0; i < settle_army.Num(); i++)
+	{
+		if(settle_army[i].CanSettle(pos)
+		&& settle_army[i].Settle()
+		){
+			return true;
+		}
+	}
+
+	return false;
 }
-
-
-
-
-
-
-
 
 #if 0
 
@@ -3093,13 +3074,13 @@ void Player::UnloadAllTransportsInArmy(const sint32 selected_army,
 #endif
 
 sint32 Player::GetUnusedFreight() const 
-{ 
-  return  m_tradeTransportPoints - m_usedTradeTransportPoints;
+{
+	return m_tradeTransportPoints - m_usedTradeTransportPoints;
 }
 
 sint32 Player::GetTotalFreight() const
-{ 
-  return  m_tradeTransportPoints;
+{
+	return m_tradeTransportPoints;
 }
 
 TradeRoute Player::CreateTradeRoute(Unit sourceCity, 
@@ -3154,28 +3135,28 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 
 	const GovernmentRecord *grec = g_theGovernmentDB->Get(m_government_type);
 	if(sourceCity.GetOutgoingTrade() >= grec->GetMaxOutgoingTrade()) {
-		SlicObject *so = new SlicObject("30IATooManyTradeRoutes") ;
-		so->AddRecipient(m_owner) ;
-        so->AddCity(sourceCity) ;
-		g_slicEngine->Execute(so) ;
+		SlicObject *so = new SlicObject("30IATooManyTradeRoutes");
+		so->AddRecipient(m_owner);
+		so->AddCity(sourceCity);
+		g_slicEngine->Execute(so);
 		return TradeRoute();
-    }
+	}
 
 	if(destCity.GetIncomingTrade() >= grec->GetMaxIncomingTrade()) {
-		SlicObject *so = new SlicObject("30IATooManyTradeRoutes") ;
-		so->AddRecipient(m_owner) ;
-        so->AddCity(destCity) ;
-		g_slicEngine->Execute(so) ;
+		SlicObject *so = new SlicObject("30IATooManyTradeRoutes");
+		so->AddRecipient(m_owner);
+		so->AddCity(destCity);
+		g_slicEngine->Execute(so);
 		return TradeRoute();
-    }
+	}
 
-    TradeRoute newRoute = g_theTradePool->Create(sourceCity, destCity, m_owner,
+	TradeRoute newRoute = g_theTradePool->Create(sourceCity, destCity, m_owner,
 												 sourceType, sourceResource,
 												 paying_for,
 												 gold_in_return);
 
 	if (newRoute.IsValid()) 
-    {
+	{
 		return g_player[paying_for]->PayForTrade(newRoute);
 	}
 

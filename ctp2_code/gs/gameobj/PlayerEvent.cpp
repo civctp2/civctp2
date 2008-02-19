@@ -33,6 +33,7 @@
 // - Propagate PW each turn update
 // - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
 // - An autosave is now created even if the visible player is a robot. (26-Jab-2008 Martin Gühmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -395,7 +396,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 	return GEV_HD_Continue;
 }
 
-STDEHANDLER(CreateUnitEvent) 
+STDEHANDLER(CreateUnitEvent)
 {
 	MapPoint    pos;
 	sint32      utype;
@@ -427,13 +428,30 @@ STDEHANDLER(SettleEvent)
 	Army a;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	
-	if(g_player[a.GetOwner()]) {
-		if(g_player[a.GetOwner()]->Settle(a)) {
+	if(g_player[a.GetOwner()])
+	{
+		if(g_player[a.GetOwner()]->Settle(a))
+		{
 			args->Add(new GameEventArgument(GEA_Int, 1));
 		}
 	}
 
+	return GEV_HD_Continue;
+}
+
+STDEHANDLER(SettleInCityEvent)
+{
+	Army a;
+	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	
+	if(g_player[a.GetOwner()])
+	{
+		if(g_player[a.GetOwner()]->SettleInCity(a))
+		{
+			args->Add(new GameEventArgument(GEA_Int, 1));
+		}
+	}
+
 	return GEV_HD_Continue;
 }
 
@@ -779,54 +797,55 @@ STDEHANDLER(EndTurnEvent)
 
 void playerevent_Initialize()
 {
-	g_gevManager->AddCallback(GEV_ContactMade, GEV_PRI_Primary, &s_ContactMadeEvent);
+	g_gevManager->AddCallback(GEV_ContactMade,           GEV_PRI_Primary, &s_ContactMadeEvent);
 
 	
-	g_gevManager->AddCallback(GEV_WormholeTurn, GEV_PRI_Primary, &s_WormholeEvent);
-	g_gevManager->AddCallback(GEV_PlayerPatience, GEV_PRI_Primary, &s_PatienceEvent);
-	g_gevManager->AddCallback(GEV_PeaceMovement, GEV_PRI_Primary, &s_PeaceMovementEvent);
-	g_gevManager->AddCallback(GEV_PollutionTurn, GEV_PRI_Primary, &s_PollutionTurnEvent);
-	g_gevManager->AddCallback(GEV_BeginTurnAllCities, GEV_PRI_Primary, &s_BeginTurnAllCitiesEvent);
-	g_gevManager->AddCallback(GEV_BeginTurnProduction, GEV_PRI_Primary, &s_BeginTurnProductionEvent);
-	g_gevManager->AddCallback(GEV_BeginTurnSupport, GEV_PRI_Primary, &s_BeginTurnSupportEvent);
+	g_gevManager->AddCallback(GEV_WormholeTurn,          GEV_PRI_Primary, &s_WormholeEvent);
+	g_gevManager->AddCallback(GEV_PlayerPatience,        GEV_PRI_Primary, &s_PatienceEvent);
+	g_gevManager->AddCallback(GEV_PeaceMovement,         GEV_PRI_Primary, &s_PeaceMovementEvent);
+	g_gevManager->AddCallback(GEV_PollutionTurn,         GEV_PRI_Primary, &s_PollutionTurnEvent);
+	g_gevManager->AddCallback(GEV_BeginTurnAllCities,    GEV_PRI_Primary, &s_BeginTurnAllCitiesEvent);
+	g_gevManager->AddCallback(GEV_BeginTurnProduction,   GEV_PRI_Primary, &s_BeginTurnProductionEvent);
+	g_gevManager->AddCallback(GEV_BeginTurnSupport,      GEV_PRI_Primary, &s_BeginTurnSupportEvent);
 	g_gevManager->AddCallback(GEV_BeginTurnImprovements, GEV_PRI_Primary, &s_BeginTurnImprovementsEvent);
-	g_gevManager->AddCallback(GEV_BeginTurnAgreements, GEV_PRI_Primary, &s_BeginTurnAgreementsEvent);
-	g_gevManager->AddCallback(GEV_ResetAllMovement, GEV_PRI_Primary, &s_ResetAllMovementEvent);
-	g_gevManager->AddCallback(GEV_AttemptRevolt, GEV_PRI_Primary, &s_AttemptRevoltEvent);
-	g_gevManager->AddCallback(GEV_BeginTurnEndGame, GEV_PRI_Primary, &s_BeginTurnEndGameEvent);
-	g_gevManager->AddCallback(GEV_BeginTurnGovernment, GEV_PRI_Primary, &s_BeginTurnGovernmentEvent);
-	g_gevManager->AddCallback(GEV_FinishBeginTurn, GEV_PRI_Primary, &s_FinishBeginTurnEvent);
+	g_gevManager->AddCallback(GEV_BeginTurnAgreements,   GEV_PRI_Primary, &s_BeginTurnAgreementsEvent);
+	g_gevManager->AddCallback(GEV_ResetAllMovement,      GEV_PRI_Primary, &s_ResetAllMovementEvent);
+	g_gevManager->AddCallback(GEV_AttemptRevolt,         GEV_PRI_Primary, &s_AttemptRevoltEvent);
+	g_gevManager->AddCallback(GEV_BeginTurnEndGame,      GEV_PRI_Primary, &s_BeginTurnEndGameEvent);
+	g_gevManager->AddCallback(GEV_BeginTurnGovernment,   GEV_PRI_Primary, &s_BeginTurnGovernmentEvent);
+	g_gevManager->AddCallback(GEV_FinishBeginTurn,       GEV_PRI_Primary, &s_FinishBeginTurnEvent);
 	
 
-	g_gevManager->AddCallback(GEV_CreateUnit, GEV_PRI_Primary, &s_CreateUnitEvent);
+	g_gevManager->AddCallback(GEV_CreateUnit,            GEV_PRI_Primary, &s_CreateUnitEvent);
 
-	g_gevManager->AddCallback(GEV_Settle, GEV_PRI_Primary, &s_SettleEvent);
-	g_gevManager->AddCallback(GEV_CreateCity, GEV_PRI_Primary, &s_CreateCityEvent);
+	g_gevManager->AddCallback(GEV_Settle,                GEV_PRI_Primary, &s_SettleEvent);
+	g_gevManager->AddCallback(GEV_SettleInCity,          GEV_PRI_Primary, &s_SettleInCityEvent);
+	g_gevManager->AddCallback(GEV_CreateCity,            GEV_PRI_Primary, &s_CreateCityEvent);
 
-	g_gevManager->AddCallback(GEV_CreateImprovement, GEV_PRI_Primary, &s_CreateImprovementEvent);
+	g_gevManager->AddCallback(GEV_CreateImprovement,     GEV_PRI_Primary, &s_CreateImprovementEvent);
 
-	g_gevManager->AddCallback(GEV_GrantAdvance, GEV_PRI_Primary, &s_GrantAdvanceEvent);
+	g_gevManager->AddCallback(GEV_GrantAdvance,          GEV_PRI_Primary, &s_GrantAdvanceEvent);
 
-	g_gevManager->AddCallback(GEV_SendGood, GEV_PRI_Primary, &s_SendGoodEvent);
-	g_gevManager->AddCallback(GEV_TradeBid, GEV_PRI_Primary, &s_TradeBidEvent);
+	g_gevManager->AddCallback(GEV_SendGood,              GEV_PRI_Primary, &s_SendGoodEvent);
+	g_gevManager->AddCallback(GEV_TradeBid,              GEV_PRI_Primary, &s_TradeBidEvent);
 
-	g_gevManager->AddCallback(GEV_CreatedArmy, GEV_PRI_Primary, &s_CreatedArmyEvent);
-	g_gevManager->AddCallback(GEV_SubGold, GEV_PRI_Primary, &s_SubGoldEvent);
-	g_gevManager->AddCallback(GEV_AddGold, GEV_PRI_Primary, &s_AddGoldEvent);
+	g_gevManager->AddCallback(GEV_CreatedArmy,           GEV_PRI_Primary, &s_CreatedArmyEvent);
+	g_gevManager->AddCallback(GEV_SubGold,               GEV_PRI_Primary, &s_SubGoldEvent);
+	g_gevManager->AddCallback(GEV_AddGold,               GEV_PRI_Primary, &s_AddGoldEvent);
 
-	g_gevManager->AddCallback(GEV_EstablishEmbassy, GEV_PRI_Primary, &s_EstablishEmbassyEvent);
-	g_gevManager->AddCallback(GEV_ThrowParty, GEV_PRI_Primary, &s_ThrowPartyEvent);
+	g_gevManager->AddCallback(GEV_EstablishEmbassy,      GEV_PRI_Primary, &s_EstablishEmbassyEvent);
+	g_gevManager->AddCallback(GEV_ThrowParty,            GEV_PRI_Primary, &s_ThrowPartyEvent);
 
-	g_gevManager->AddCallback(GEV_FinishBuildPhase, GEV_PRI_Primary, &s_FinishBuildPhaseEvent);
-	g_gevManager->AddCallback(GEV_StartMovePhase, GEV_PRI_Primary, &s_StartMovePhaseEvent);
+	g_gevManager->AddCallback(GEV_FinishBuildPhase,      GEV_PRI_Primary, &s_FinishBuildPhaseEvent);
+	g_gevManager->AddCallback(GEV_StartMovePhase,        GEV_PRI_Primary, &s_StartMovePhaseEvent);
 
-	g_gevManager->AddCallback(GEV_ProcessUnitOrders, GEV_PRI_Primary, &s_ProcessUnitOrdersEvent);
-	g_gevManager->AddCallback(GEV_AIFinishBeginTurn, GEV_PRI_Primary, &s_AIFinishBeginTurnEvent);
-	g_gevManager->AddCallback(GEV_GiveMap, GEV_PRI_Primary, &s_GiveMapEvent);
-	g_gevManager->AddCallback(GEV_GiveCity, GEV_PRI_Primary, &s_GiveCityEvent);
+	g_gevManager->AddCallback(GEV_ProcessUnitOrders,     GEV_PRI_Primary, &s_ProcessUnitOrdersEvent);
+	g_gevManager->AddCallback(GEV_AIFinishBeginTurn,     GEV_PRI_Primary, &s_AIFinishBeginTurnEvent);
+	g_gevManager->AddCallback(GEV_GiveMap,               GEV_PRI_Primary, &s_GiveMapEvent);
+	g_gevManager->AddCallback(GEV_GiveCity,              GEV_PRI_Primary, &s_GiveCityEvent);
 
-	g_gevManager->AddCallback(GEV_EnterAge, GEV_PRI_Primary, &s_EnterAgeEvent);
-	g_gevManager->AddCallback(GEV_EndTurn, GEV_PRI_Primary, &s_EndTurnEvent);
+	g_gevManager->AddCallback(GEV_EnterAge,              GEV_PRI_Primary, &s_EnterAgeEvent);
+	g_gevManager->AddCallback(GEV_EndTurn,               GEV_PRI_Primary, &s_EndTurnEvent);
 }
 
 void playerevent_Cleanup()

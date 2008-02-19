@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Unit actor
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -79,13 +79,14 @@ public:
 
 	void			GetIDAndType
     (
-        sint32              owner, 
-        SpriteState *       ss, 
-        Unit                id, 
-        sint32              unitType, 
-        MapPoint const &    pos, 
-        sint32 *            spriteID, 
-        GROUPTYPE *         groupType
+        sint32              owner,
+        SpriteState *       ss,
+        Unit                id,
+        sint32              unitType,
+        MapPoint const &    pos,
+        sint32 *            spriteID,
+        GROUPTYPE *         groupType,
+        sint32              citySprite = CTPRecord::INDEX_INVALID
     ) const;
 
 	void			AddVision(void);

@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : World city handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -164,7 +164,7 @@ bool World::InsertCity(const MapPoint &pos, Unit u)
 			
 		}
 
-		DPRINTF(k_DBG_GAMESTATE, ("World: Inserted city %d at (%d,%d)\n",
+		DPRINTF(k_DBG_GAMESTATE, ("World: Inserted city 0x%x at (%d,%d)\n",
 			    (uint32)u, pos.x, pos.y));
 		return true;
 	}

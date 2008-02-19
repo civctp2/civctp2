@@ -1,4 +1,32 @@
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Order handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "Order.h"
@@ -70,13 +98,15 @@ OrderInfo g_orderInfo[] = {
 	{UNIT_ORDER_PILLAGE_UNCONDITIONALLY, "ORDER_PILLAGE_UNCONDITIONALLY", 0, 0, 0, 0, NULL},
 	{UNIT_ORDER_MOVE_THEN_UNLOAD, "ORDER_MOVE_THEN_UNLOAD", 0, 0, 0, 0, NULL},
 	{UNIT_ORDER_ADVERTISE, "ORDER_ADVERTISE", 0, 0, 0, 0, NULL},
-    {UNIT_ORDER_SETTLE, "ORDER_SETTLE", 0, 0, 0, 0, NULL},
-    {UNIT_ORDER_LAUNCH, "ORDER_LAUNCH", 0, 0, 0, 0, NULL},
-    {UNIT_ORDER_TARGET, "ORDER_TARGET", 0, 0, 0, 0, NULL},
-    {UNIT_ORDER_CLEAR_TARGET, "ORDER_CLEAR_TARGET", 0, 0, 0, 0, NULL},
-    {UNIT_ORDER_PLAGUE, "ORDER_PLAGUE", 0, 0, 0, 0, NULL},
-    {UNIT_ORDER_VICTORY_MOVE, "ORDER_VICTORY_MOVE", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_SETTLE, "ORDER_SETTLE", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_LAUNCH, "ORDER_LAUNCH", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_TARGET, "ORDER_TARGET", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_CLEAR_TARGET, "ORDER_CLEAR_TARGET", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_PLAGUE, "ORDER_PLAGUE", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_VICTORY_MOVE, "ORDER_VICTORY_MOVE", 0, 0, 0, 0, NULL},
+	{UNIT_ORDER_SETTLE_IN_CITY, "UNIT_ORDER_SETTLE_IN_CITY", 0, 0, 0, 0, NULL}
 };
+
 sint32 g_numOrderInfo = sizeof(g_orderInfo) / sizeof(OrderInfo);
 sint32 g_orderInfoMap[UNIT_ORDER_MAX];
 

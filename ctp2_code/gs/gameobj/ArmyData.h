@@ -37,6 +37,7 @@
 // - PerformOrderHere move to target order can now be inserted at tail into the
 //   event queue. (30-Jan-2008 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -470,6 +471,7 @@ public:
 
     void Disband();
     void Settle();
+    void SettleInCity();
 
 
 

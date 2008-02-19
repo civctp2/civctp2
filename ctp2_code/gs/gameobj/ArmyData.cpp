@@ -127,6 +127,7 @@
 // - Added messages for failed slave raids, one for an alive slave and another
 //   for a killed slaver. (9-Feb-2008 Martin Gühmann)
 // - Expelling costs now move points. (9-Feb-2008 Martin Gühmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -6317,6 +6318,10 @@ bool ArmyData::ExecuteOrders(bool propagate)
 				completedOrder = false;
 				keepGoing = false;
 				break;
+			case UNIT_ORDER_SETTLE_IN_CITY:
+				completedOrder = true;
+				SettleInCity();
+				break;
 			default:
 				Assert(false);
 		}
@@ -10530,6 +10535,14 @@ void ArmyData::Settle()
 	                      );
 }
 
+void ArmyData::SettleInCity()
+{
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	                       GEV_SettleInCity,
+	                       GEA_Army, m_id,
+	                       GEA_End
+	                      );
+}
 
 bool ArmyData::IsObsolete() const
 {

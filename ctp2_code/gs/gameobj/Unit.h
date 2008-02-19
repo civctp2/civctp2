@@ -40,6 +40,7 @@
 // - Modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
 // - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -178,10 +179,10 @@ enum UNIT_ORDER_TYPE {
 	UNIT_ORDER_PILLAGE_UNCONDITIONALLY,
 	UNIT_ORDER_MOVE_THEN_UNLOAD,
 	UNIT_ORDER_ADVERTISE,
-    UNIT_ORDER_INFORM_AI_CAPTURE_CITY, 
+	UNIT_ORDER_INFORM_AI_CAPTURE_CITY,
 	UNIT_ORDER_UNLOAD_SELECTED_STACK,
 	UNIT_ORDER_ADD_EVENT,
-	UNIT_ORDER_SETTLE, 
+	UNIT_ORDER_SETTLE,
 	UNIT_ORDER_LAUNCH,
 	UNIT_ORDER_TARGET,
 	UNIT_ORDER_CLEAR_TARGET,
@@ -189,6 +190,7 @@ enum UNIT_ORDER_TYPE {
 	
 	UNIT_ORDER_PLAGUE,
 	UNIT_ORDER_VICTORY_MOVE,
+	UNIT_ORDER_SETTLE_IN_CITY,
 
 	UNIT_ORDER_MAX
 };
@@ -439,7 +441,7 @@ public:
 	bool GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID);
 
 
-	bool CanSettle(const MapPoint &pos) const;
+	bool CanSettle(const MapPoint &pos, const bool settleOnCity = false) const;
 
 	bool Settle(); 
 

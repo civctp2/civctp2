@@ -31,6 +31,7 @@
 // - The FinishMoveEvent event now fills a transporter up to the transport
 //   capacy limit even if the army to be transported has more units than the
 //   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin Gühmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -650,6 +651,16 @@ STDEHANDLER(ArmySettleOrderEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
 	a->AddOrders(UNIT_ORDER_SETTLE);
+	return GEV_HD_Continue;
+}
+
+STDEHANDLER(ArmySettleInCityOrderEvent)
+{
+	Army a;
+	
+	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
+
+	a->AddOrders(UNIT_ORDER_SETTLE_IN_CITY);
 	return GEV_HD_Continue;
 }
 
@@ -1575,6 +1586,7 @@ void armyevent_Initialize()
 	g_gevManager->AddCallback(GEV_PirateOrder, GEV_PRI_Primary, &s_ArmyPirateOrderEvent);
 	g_gevManager->AddCallback(GEV_GetExpelledOrder, GEV_PRI_Primary, &s_ArmyGetExpelledOrderEvent);
 	g_gevManager->AddCallback(GEV_SettleOrder, GEV_PRI_Primary, &s_ArmySettleOrderEvent);
+	g_gevManager->AddCallback(GEV_SettleInCityOrder, GEV_PRI_Primary, &s_ArmySettleInCityOrderEvent);
 	g_gevManager->AddCallback(GEV_BoardTransportOrder, GEV_PRI_Primary, &s_BoardTransportOrderEvent);
 	g_gevManager->AddCallback(GEV_LaunchOrder, GEV_PRI_Primary, &s_LaunchOrderEvent);
 	g_gevManager->AddCallback(GEV_TargetOrder, GEV_PRI_Primary, &s_TargetOrderEvent);

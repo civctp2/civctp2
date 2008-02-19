@@ -34,6 +34,7 @@
 //   methods. (Dec 24th 2006 Martin Gühmann)
 // - Added IsReligion bools
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -375,7 +376,7 @@ public:
 	bool Bombard(CellUnitList &defender, bool isCounterBombardment);
 	void FightOneRound(Unit did, double defenders_bonus, double amr, double dmr);
 
-	bool CanSettle(const MapPoint &pos) const;
+	bool CanSettle(const MapPoint &pos, const bool settleOnCity = false) const;
 	bool Settle();
 	void ResetCityOwner(const Unit &me, const PLAYER_INDEX newo, sint32 is_conquest,
 	                    const CAUSE_REMOVE_CITY cause); 

@@ -168,7 +168,7 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 //	uint32				m_shieldFlashOnTime;
 //	uint32				m_shieldFlashOffTime;
 //	sint32				m_activeListRef;
-//	double				m_healthPercent;	
+//	double				m_healthPercent;
     m_tempStackSize             (0)
 #ifdef _ACTOR_DRAW_OPTIMIZATION
 //	sint32				m_oldFacing;
@@ -180,11 +180,12 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 //	BOOL				m_oldDrawSelectionBrackets;
 //	uint16				m_oldFlags;
 #endif
-{	
-	sint32 spriteID;
-	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type);
-    m_spriteID = (spriteID < 1) ? citySprite : spriteID;
-	Assert(m_spriteID >= 1);
+{
+	sint32 spriteID = CTPRecord::INDEX_INVALID;
+	GetIDAndType(owner, ss, id, unitType, pos, &spriteID, &m_type, citySprite);
+
+	m_spriteID = (spriteID < 0) ? 0 : spriteID;
+	Assert(m_spriteID >= 0);
 
 	Initialize();
 }
@@ -293,10 +294,11 @@ void UnitActor::Initialize(void)
 		m_holdingCurAnimSpecialDelayProcess = FALSE;
 	}
 
-	if (m_type == GROUPTYPE_UNIT) 
+	if (m_type == GROUPTYPE_UNIT)
 	{
 		m_unitSpriteGroup = (UnitSpriteGroup *)g_unitSpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_BASIC,(GAME_ACTION)0);
-	} else 
+	}
+	else
 	{
 		m_unitSpriteGroup = (UnitSpriteGroup *)g_citySpriteGroupList->GetSprite((uint32)m_spriteID, m_type, LOADTYPE_BASIC,(GAME_ACTION)0);
 	}
@@ -390,24 +392,29 @@ void UnitActor::PositionActor(MapPoint &pos)
 
 void UnitActor::GetIDAndType
 (
-    sint32              owner, 
-    SpriteState *       ss, 
-    Unit                id, 
-    sint32              unitType, 
-    MapPoint const &    pos, 
-    sint32 *            spriteID, 
-    GROUPTYPE *         groupType
+    sint32              owner,
+    SpriteState *       ss,
+    Unit                id,
+    sint32              unitType,
+    MapPoint const &    pos,
+    sint32 *            spriteID,
+    GROUPTYPE *         groupType,
+    sint32              citySprite
 ) const
 {
 	bool    isCity  = g_theUnitDB->Get(unitType, g_player[owner]->GetGovernmentType())->GetHasPopAndCanBuild();
 
-	if (isCity) 
-    {
-		if (id.IsValid() && id.CD())
+	if (isCity)
+	{
+		if(citySprite >= 0)
+		{
+			*spriteID = citySprite;
+		}
+		else if(id.IsValid() && id.CD())
 		{
 			*spriteID = id.CD()->GetDesiredSpriteIndex();
 		}
-		else if (ss)
+		else if(ss)
 		{
 			*spriteID = ss->GetIndex();
 		}
@@ -417,9 +424,9 @@ void UnitActor::GetIDAndType
 		}
 
 		*groupType = GROUPTYPE_CITY;
-	} 
-    else 
-    {
+	}
+	else
+	{
 		*spriteID = ss->GetIndex();
 		*groupType = GROUPTYPE_UNIT;
 	}

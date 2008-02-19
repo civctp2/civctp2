@@ -51,6 +51,7 @@
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1034,9 +1035,9 @@ bool Unit::CanCarry(Unit u) const
 	return GetData()->CanCarry(u.GetType());
 }
 
-bool Unit::CanSettle(const MapPoint &pos) const
+bool Unit::CanSettle(const MapPoint &pos, const bool settleOnCity) const
 {
-	return GetData()->CanSettle(pos);
+	return GetData()->CanSettle(pos, settleOnCity);
 }
 
 bool Unit::Settle()

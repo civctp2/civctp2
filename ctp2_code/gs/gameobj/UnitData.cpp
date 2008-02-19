@@ -78,6 +78,7 @@
 // - ChangeArmy has no effect if a unit and its new army do not share the 
 //   same tile. (7-Nov-2007 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -196,7 +197,7 @@ UnitData::UnitData
 	} else {
 		m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, center_pos,
 								m_owner, false, (GetVisionRange()),
-								m_city_data ? m_city_data->GetDesiredSpriteIndex() : 0);
+								m_city_data ? m_city_data->GetDesiredSpriteIndex() : -1);
 		m_actor->SetUnitVisionRange((GetVisionRange()));
 		m_actor->SetUnitVisibility(m_visibility);
 
@@ -221,7 +222,7 @@ UnitData::UnitData
 	m_temp_visibility = 0xffffffff;
 	m_radar_visibility = 0xffffffff;
 	m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
-							m_owner, false, (GetVisionRange()), 0);
+							m_owner, false, (GetVisionRange()), -1);
 	m_actor->SetUnitVisionRange((GetVisionRange()));
 
 	m_pos = actor_pos;	
@@ -1607,22 +1608,29 @@ void UnitData::DeductHP(double fp)
 //              where cities can be built. 
 //
 //----------------------------------------------------------------------------
-bool UDUnitTypeCanSettle(sint32 unit_type, sint32 government, const MapPoint &pos)
+bool UDUnitTypeCanSettle(sint32 unit_type, sint32 government, const MapPoint &pos, const bool settleOnCity)
 {
 	const UnitRecord *rec = g_theUnitDB->Get(unit_type, government);
 	sint32 t = rec->GetSettleCityTypeIndex();
-	if (t < 0) {
+	if (t < 0)
+	{
 		return false;
 	}
-	if(!g_theUnitDB->Get(t, government)->GetHasPopAndCanBuild()){
+
+	if(!g_theUnitDB->Get(t, government)->GetHasPopAndCanBuild())
+	{
 		return false;
 	}
-	if (g_theWorld->HasCity(pos)) 
+
+	if(!settleOnCity && g_theWorld->HasCity(pos))
 		return false;
 
-	if (rec->GetNumCanSettleOn() > 0){
-		for(sint32 i = 0; i < rec->GetNumCanSettleOn(); i++) {
-			if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain()) {
+	if(rec->GetNumCanSettleOn() > 0)
+	{
+		for(sint32 i = 0; i < rec->GetNumCanSettleOn(); i++)
+		{
+			if(rec->GetCanSettleOnIndex(i) == g_theWorld->GetCell(pos)->GetTerrain())
+			{
 				return true;
 			}
 		}
@@ -1643,9 +1651,9 @@ bool UDUnitTypeCanSettle(sint32 unit_type, sint32 government, const MapPoint &po
 
 
 
-bool UnitData::CanSettle(const MapPoint &pos) const 
+bool UnitData::CanSettle(const MapPoint &pos, const bool settleOnCity) const
 {
-	return UDUnitTypeCanSettle(m_type, g_player[m_owner]->GetGovernmentType(), pos);
+	return UDUnitTypeCanSettle(m_type, g_player[m_owner]->GetGovernmentType(), pos, settleOnCity);
 }
 
 
@@ -2417,9 +2425,9 @@ void UnitData::Serialize(CivArchive &archive)
 		
 		archive>>tmp ;
 		delete m_city_data;
-        m_city_data = (tmp) ? new CityData(archive) : NULL;
+		m_city_data = (tmp) ? new CityData(archive) : NULL;
 
-        delete m_actor;
+		delete m_actor;
 		m_actor = new UnitActor(archive);
 
 		m_sprite_state = m_actor->GetSpriteState();
