@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : declarations for the scheduler_types class
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -72,15 +72,8 @@ bool operator <
     const Sorted_Goal_ptr& _Y
 )
 {
-    return (_X.first < _Y.first); 
+    return (_X.first < _Y.first);
 };
-
-
-class STAgent;
-class STGoal;
-typedef STAgent*		STAgent_ptr;
-typedef STGoal*			STGoal_ptr;
-
 
 typedef std::list<Agent_ptr> Agent_List;
 typedef std::list<Squad_ptr> Squad_List;

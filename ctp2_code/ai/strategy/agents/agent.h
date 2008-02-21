@@ -1,9 +1,32 @@
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Goal handling
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - None
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -19,91 +42,53 @@ class Agent;
 #include "scheduler_types.h"
 #include "squad_Strength.h"
 
-
-
 class Agent 
-{ 
+{
 public:
 	Agent();
 	Agent(const Agent &agent);
-  	virtual ~Agent();
+	virtual ~Agent();
 
 	virtual Agent& operator= (const Agent &agent);
 
-	
-    sint16 Get_Type() const; 
+	sint16 Get_Type() const; 
 
-	
-    void Set_Type(const sint16 & type);
+	void Set_Type(const sint16 & type);
 
-	
-    SQUAD_CLASS Get_Squad_Class() const; 
+	SQUAD_CLASS Get_Squad_Class() const;
 
-	
 	bool Get_Is_Used() const;
 
-	
 	void Set_Is_Used(const bool & is_used);
 
-	
 	virtual bool Get_Is_Dead() const;
 
-	
-    void Set_Squad_Class(const SQUAD_CLASS & squad_class);
+	void Set_Squad_Class(const SQUAD_CLASS & squad_class);
 
-	
-    virtual SQUAD_CLASS Compute_Squad_Class() { return m_squad_class; } ;
+	virtual SQUAD_CLASS Compute_Squad_Class() { return m_squad_class; };
 
-	
-    virtual const Squad_Strength & Get_Squad_Strength() const;
+	virtual const Squad_Strength & Get_Squad_Strength() const;
 
-	
-    virtual const Squad_Strength & Compute_Squad_Strength() { return m_squad_strength; } ;
+	virtual const Squad_Strength & Compute_Squad_Strength() { return m_squad_strength; };
 
-	
 	virtual void Set_Can_Be_Executed(const bool &can_be_executed);
 
-	
 	bool Get_Can_Be_Executed() const;
 
-	
 	void Set_Detached(const bool detached);
 
-	
 	bool Get_Detached() const;
 
-    
-    
-    
-
-	
-    virtual void Log_Debug_Info(const int & log) {};
+	virtual void Log_Debug_Info(const int & log) {};
 
 protected:
 
-	
-	
-	
-	
-	
-
-	
-	SQUAD_CLASS m_squad_class;
-    
-    
-    sint16 m_agent_type; 
-
-	
-	bool m_is_used;
-
-	
+	SQUAD_CLASS    m_squad_class;
+	sint16         m_agent_type;
+	bool           m_is_used;
 	Squad_Strength m_squad_strength;
-
-	
-	bool m_can_be_executed;
-
-	
-	bool m_detached;
+	bool           m_can_be_executed;
+	bool           m_detached;
 };
 
 #endif // __AGENT_H__

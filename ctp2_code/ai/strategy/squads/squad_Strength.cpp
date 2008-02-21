@@ -87,7 +87,6 @@ bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 	return false;
 }
 
-
 Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 {
 	m_agent_count       += add_me.m_agent_count;
@@ -106,7 +105,6 @@ Squad_Strength & Squad_Strength::operator+=(const Squad_Strength & add_me)
 	return *this;
 }
 
-
 Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 {
 	m_agent_count       -= remove_me.m_agent_count;
@@ -124,36 +122,30 @@ Squad_Strength & Squad_Strength::operator-=(const Squad_Strength & remove_me)
 	return *this;
 }
 
-
 sint32 Squad_Strength::Get_Agent_Count() const
 {
 	return m_agent_count;
 }
-
 
 void Squad_Strength::Set_Agent_Count(const sint32 & count)
 {
 	m_agent_count = count;
 }
 
-
 void Squad_Strength::Add_Agent_Strength(const Agent_ptr & agent)
 {
 	(*this) += agent->Get_Squad_Strength();
 }
-
 
 void Squad_Strength::Remove_Agent_Strength(const Agent_ptr & agent)
 {
 	(*this) -= agent->Get_Squad_Strength();
 }
 
-
 void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 {
 	CellUnitList *army = g_theWorld->GetArmyPtr(pos);
 
-	
 	if (army == NULL)
 	{
 		*this           = Squad_Strength(1); // why not 0 ??? 
@@ -162,7 +154,6 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 	m_agent_count = army->Num();
 
-	
 	army->ComputeStrength(m_defense_str,
 						  m_attack_str,
 						  m_ranged_str,
@@ -171,7 +162,6 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 						  m_land_bombard_str,
 						  m_water_bombard_str,
 						  m_air_bombard_str);
-
 
 	m_value = 0.0;
 	m_transport = 0;
@@ -193,90 +183,75 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 	}
 }
 
-
 double Squad_Strength::Get_Attack() const
 {
 	return m_attack_str;
 }
-
 
 void Squad_Strength::Set_Attack(const double & attack)
 {
 	m_attack_str = attack;
 }
 
-
 double Squad_Strength::Get_Defense() const
 {
 	return m_defense_str;
 }
-
 
 void Squad_Strength::Set_Defense(const double & defense)
 {
 	m_defense_str = defense;
 }
 
-
 double Squad_Strength::Get_Ranged() const
 {
 	return m_ranged_str;
 }
-
 
 void Squad_Strength::Set_Ranged(const double & ranged)
 {
 	m_ranged_str = ranged;
 }
 
-
 double Squad_Strength::Get_Value() const
 {
 	return m_value;
 }
-
 
 void Squad_Strength::Set_Value(const double & value)
 {
 	m_value = value;
 } 
 
-
 sint16 Squad_Strength::Get_Transport() const
 {
 	return m_transport;
 }
-
 
 void Squad_Strength::Set_Transport(const sint16 & slots)
 {
 	m_transport = slots;
 }
 
-
 sint16 Squad_Strength::Get_Defenders() const
 {
 	return m_defenders;
 }
-
 
 void Squad_Strength::Set_Defenders(const sint16 & units)
 {
 	m_defenders = units;
 }
 
-
 sint16 Squad_Strength::Get_Ranged_Units() const
 {
 	return m_ranged;
 }
 
-
 void Squad_Strength::Set_Ranged_Units(const sint16 & units)
 {
 	m_ranged = units;
 }
-
 
 void Squad_Strength::Set_Force_Matching( const double attack_ratio,
                                          const double defense_ratio,

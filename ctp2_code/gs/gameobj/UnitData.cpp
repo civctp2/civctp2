@@ -2425,9 +2425,9 @@ void UnitData::Serialize(CivArchive &archive)
 		
 		archive>>tmp ;
 		delete m_city_data;
-		m_city_data = (tmp) ? new CityData(archive) : NULL;
+        m_city_data = (tmp) ? new CityData(archive) : NULL;
 
-		delete m_actor;
+        delete m_actor;
 		m_actor = new UnitActor(archive);
 
 		m_sprite_state = m_actor->GetSpriteState();

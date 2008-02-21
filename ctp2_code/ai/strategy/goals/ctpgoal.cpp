@@ -157,14 +157,13 @@ void CTPGoal::Set_Target_City(const Unit & city)
 
 const MapPoint CTPGoal::Get_Target_Pos(const Army & army) const
 {
-	const GoalRecord *rec = g_theGoalDB->Get(m_goal_type);
-	sint32 i,j;
-	sint32 max_squared_dist = (g_theWorld->GetWidth() * g_theWorld->GetHeight());
-	max_squared_dist *= max_squared_dist;
-	sint32 best_squared_dist = max_squared_dist;
-	sint32 tmp_squared_dist;
-	MapPoint best_target_pos;
-	MapPoint army_pos = army->RetPos();
+	const GoalRecord *rec               = g_theGoalDB->Get(m_goal_type);
+	sint32            max_squared_dist  = (g_theWorld->GetWidth() * g_theWorld->GetHeight());
+	                  max_squared_dist *= max_squared_dist;
+	sint32            best_squared_dist = max_squared_dist;
+	sint32            tmp_squared_dist;
+	MapPoint          best_target_pos;
+	MapPoint          army_pos          = army->RetPos();
 
 	if (rec->GetTargetTypeTradeRoute())
 	{
@@ -172,11 +171,11 @@ const MapPoint CTPGoal::Get_Target_Pos(const Army & army) const
 
 		const TradeDynamicArray* trade_routes = 
 			m_target_city.GetCityData()->GetTradeSourceList();
-		for(i = 0; i < trade_routes->Num(); i++) 
+		for(sint32 i = 0; i < trade_routes->Num(); i++) 
 		{
 			const DynamicArray<MapPoint>* path = (*trade_routes)[i].GetPath();
 
-			for (j = 1; j < path->Num()-1; j++)
+			for (sint32 j = 1; j < path->Num()-1; j++)
 			{
 				Cell *cell = g_theWorld->GetCell(path->Get(j));
 
@@ -522,7 +521,6 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	const StrategyRecord::ForceMatch *force_match = NULL;
 
-	
 	switch (goal_record->GetForceMatch())
 	{
 	case k_Goal_ForceMatch_Offensive_Bit:
@@ -573,9 +571,9 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 
 		for
 		(
-		    Agent_List::iterator agent_iter = m_agents.begin(); 
-		    agent_iter != m_agents.end() && !need_transport;
-		    ++agent_iter
+		    Agent_List::iterator agent_iter  = m_agents.begin(); 
+		                         agent_iter != m_agents.end() && !need_transport;
+		                       ++agent_iter
 		)
 		{
 			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
@@ -596,11 +594,10 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 {
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
 
+#if defined(_DEBUG)
 	Player *player_ptr = g_player[ m_playerId ];
 	Assert(player_ptr && ctpagent_ptr);
-
-	const StrategyRecord & strategy = 
-		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+#endif
 
 	if (ctpagent_ptr->Get_Is_Dead())
 	{
@@ -677,7 +674,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	//Set if unit is wounded and it is a retreat of defense goal, add bonus 
 	//to goalpriority + matching
 
-	MapPoint armyPos = ctpagent_ptr->Get_Pos();
+	MapPoint armyPos      = ctpagent_ptr->Get_Pos();
 	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
 
 	if(g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity() 
@@ -732,6 +729,9 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	double cell_dist = sqrt(squared_distance);
 
 	Utility raw_priority = Get_Raw_Priority();
+
+	const StrategyRecord & strategy = 
+		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	sint32 distance_modifier = 1;
 	strategy.GetDistanceModifierFactor(distance_modifier);
@@ -824,10 +824,6 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 	MapPoint target_pos = Get_Target_Pos();
 
-	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
-
-	const StrategyRecord & strategy = diplomat.GetCurrentStrategy();
-
 	if(!player_ptr->CanUseSeaTab()
 	&& (g_theWorld->IsWater(target_pos) || g_theWorld->IsShallowWater(target_pos))
 	){
@@ -849,9 +845,12 @@ Utility CTPGoal::Compute_Raw_Priority()
 	else
 		foreign_empire_center = map.GetNearestForeigner(m_playerId, target_pos);
 
+	const Diplomat       & diplomat = Diplomat::GetDiplomat(m_playerId);
+	const StrategyRecord & strategy = diplomat.GetCurrentStrategy();
+
 	Assert(m_goal_type < strategy.GetNumGoalElement());
 	Assert(strategy.GetGoalElement(m_goal_type) != NULL);
-	
+
 	double cell_value = (m_goal_type < strategy.GetNumGoalElement())
 	                    ? strategy.GetGoalElement(m_goal_type)->GetPriority()
 	                    : 0.0;
@@ -883,7 +882,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		  g_theGoalDB->Get(m_goal_type)->GetThreatBonus() );
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-		report_cell_threat = cell_value - report_cell_lastvalue;
+		report_cell_threat    = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
 	}
@@ -898,7 +897,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 		report_cell_EnemyValue = cell_value - report_cell_lastvalue;
-		report_cell_lastvalue = cell_value;
+		report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
 	}
 
@@ -912,7 +911,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 		report_cell_AlliedValue = cell_value - report_cell_lastvalue;
-		report_cell_lastvalue = cell_value;
+		report_cell_lastvalue   = cell_value;
 #endif //_DEBUG
 	}
 	double maxPower = static_cast<double>(map.GetMaxPower(m_playerId)); // Get Max Power of all Allies
@@ -924,7 +923,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		goal_rec->GetPowerBonus() );
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
-		report_cell_MaxPower = cell_value - report_cell_lastvalue;
+		report_cell_MaxPower  = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
 	}
@@ -934,7 +933,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_HomeDistance = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue    = cell_value;
 #endif //_DEBUG
 
 	if (foreign_empire_center.x != 0 && foreign_empire_center.y != 0)//Dangerious if the empire center has coords (0,0)
@@ -945,7 +944,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_EnemyDistance = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue     = cell_value;
 #endif //_DEBUG
 
 	if (g_theWorld->GetCell( target_pos )->GetIsChokePoint())
@@ -955,7 +954,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_Chokepoint = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
 
 	if (!player_ptr->IsExplored(target_pos))
@@ -965,7 +964,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_Unexplored = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
 
 	if (!player_ptr->IsVisible(target_pos))
@@ -975,7 +974,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_NotVisible = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
 
 	PLAYER_INDEX territoryOwner = g_theWorld->GetCell( target_pos )->GetOwner();
@@ -986,7 +985,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_InHomeTerritory = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue       = cell_value;
 #endif //_DEBUG
 
 	if (m_playerId != territoryOwner && territoryOwner >= 0) // 0: Barbarian player
@@ -996,7 +995,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_InEnemyTerritory = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue        = cell_value;
 #endif //_DEBUG
 
 	if (territoryOwner == PLAYER_UNASSIGNED)
@@ -1006,7 +1005,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 #if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_NoOwnerTerritory = cell_value - report_cell_lastvalue;
-	report_cell_lastvalue = cell_value;
+	report_cell_lastvalue        = cell_value;
 #endif //_DEBUG
 
 	if ( goal_rec->GetTargetTypeSettleLand() ||
@@ -1015,7 +1014,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += SettleMap::s_settleMap.GetValue(target_pos);
 
 #if defined(_DEBUG)
-		report_cell_Settle = cell_value - report_cell_lastvalue;
+		report_cell_Settle    = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
 
@@ -1025,7 +1024,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 
 	m_raw_priority = (Utility) cell_value + threaten_bonus;
 
-	Assert(m_raw_priority < Goal::MAX_UTILITY);
+	Assert(m_raw_priority <  Goal::MAX_UTILITY);
 	Assert(m_raw_priority >= Goal::BAD_UTILITY);
 	if (m_raw_priority > Goal::MAX_UTILITY)
 		m_raw_priority = Goal::MAX_UTILITY-1;
@@ -1072,13 +1071,12 @@ GOAL_RESULT CTPGoal::Execute_Task()
 
 	Assert(m_agents.begin() != m_agents.end());
 
-	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *m_agents.begin();
-	MapPoint goto_pos = Get_Target_Pos(ctpagent_ptr->Get_Army());
-	MapPoint my_pos;
-	bool rally_complete = true;
+	      CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *m_agents.begin();
+	      MapPoint     goto_pos     = Get_Target_Pos(ctpagent_ptr->Get_Army());
+	const GoalRecord * goal_record  = g_theGoalDB->Get(m_goal_type);
+	      sint32       cells;
+
 	Set_Sub_Task(SUB_TASK_GOAL);
-	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
-	sint32 cells;
 
 	// Add this condition to avoid that a 12 units army with SEIGE goal retreat 
 	// at 1 tile near the city, because it has left 1 unit and has to group with 
@@ -1121,20 +1119,20 @@ GOAL_RESULT CTPGoal::Execute_Task()
 		// than a huge army
 		else if (goal_record->GetUnGroupFirst()) 
 		{
-				Set_Sub_Task(SUB_TASK_UNGROUP);
-				if (!UnGroupTroops())
-				{
-					return GOAL_FAILED;
-				}
+			Set_Sub_Task(SUB_TASK_UNGROUP);
+			if (!UnGroupTroops())
+			{
+				return GOAL_FAILED;
+			}
 
-				if (!UnGroupComplete())
-				{
-					return GOAL_IN_PROGRESS;
-				}
-				else
-				{
-					Set_Sub_Task(SUB_TASK_GOAL);
-				}
+			if (!UnGroupComplete())
+			{
+				return GOAL_IN_PROGRESS;
+			}
+			else
+			{
+				Set_Sub_Task(SUB_TASK_GOAL);
+			}
 		}
 /*		else
 		{
@@ -1610,10 +1608,6 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
 	const Army & army = ctpagent_ptr->Get_Army();
 
-	sint32 transports;
-	sint32 needed_transports;
-	sint32 max_cargo_slots;
-	sint32 empty_cargo_slots;
 	MapPoint target_pos;
 
 	if (cache_pos == MapPoint(-1,-1))
@@ -1648,7 +1642,7 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 			return false;
 	}
 
-	if	(goal_rec->GetSquadClassCanBombard())
+	if (goal_rec->GetSquadClassCanBombard())
 	{
 		static CellUnitList defenders;
 		defenders.Clear();
@@ -1657,16 +1651,20 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 			return false;
 	}
 
+	sint32 transports;
+	sint32 max_cargo_slots;
+	sint32 empty_cargo_slots;
+
 	army->GetCargo(transports, max_cargo_slots, empty_cargo_slots);
-	needed_transports = (m_current_needed_strength.Get_Transport() - 
-						 m_current_attacking_strength.Get_Transport());
+	sint32 needed_transports = (m_current_needed_strength.Get_Transport() - 
+	                         m_current_attacking_strength.Get_Transport());
 
 	if (transports > 0 )
 	{
 		if ((empty_cargo_slots < max_cargo_slots) || (army->HasCargo()))
 		{
 			ORDER_TEST cargo_test = army->CargoTestOrderHere(order_rec, target_pos);
-			if ( cargo_test	== ORDER_TEST_ILLEGAL ||
+			if ( cargo_test == ORDER_TEST_ILLEGAL ||
 				 cargo_test == ORDER_TEST_INVALID_TARGET )
 				return false;
 			else
@@ -1676,15 +1674,16 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 			return true;
 	}
 
-	bool needs_land_unit = (goal_rec->GetTargetTypeCity() && 
-		goal_rec->GetTargetOwnerSelf() );
-	needs_land_unit |= goal_rec->GetTargetTypeGoodyHut();
+	bool needs_land_unit  = goal_rec->GetTargetTypeCity();
+	     needs_land_unit &= goal_rec->GetTargetOwnerSelf();
+	     needs_land_unit |= goal_rec->GetTargetTypeGoodyHut();
 	
-	uint32 movement_type = army->GetMovementType();
+	uint32 movement_type  = army->GetMovementType();
 	if (army->HasCargo())
-		movement_type |= army->GetCargoMovementType();
+	       movement_type |= army->GetCargoMovementType();
+
 	bool land_movement = ((movement_type & 
-		   (k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit)) != 0x0);
+	        (k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit)) != 0x0);
 	land_movement &= ((movement_type & k_Unit_MovementType_Air_Bit) == 0x0);
 
 	if (needs_land_unit && !land_movement)
@@ -1710,27 +1709,25 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 {
 #ifdef _DEBUG
 
-	int row = 0;
-	int column = 0;
-
-	const char *name = g_theGoalDB->Get(m_goal_type)->GetNameText();
-
-	Agent_List::const_iterator agent_iter;
-	CTPAgent_ptr stagent_ptr;
 	bool log_army = true;
 	bool log_goal = CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, -1);
-	MapPoint pos = Get_Target_Pos();
+	MapPoint pos  = Get_Target_Pos();
 	
-	for(agent_iter = m_agents.begin(); agent_iter != m_agents.end(); agent_iter++)
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
 	{
 		log_army = false;
-		stagent_ptr = (CTPAgent_ptr) *agent_iter;
+		CTPAgent_ptr agent_ptr = (CTPAgent_ptr) *agent_iter;
 
-		if(CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, stagent_ptr->Get_Army().m_id))
+		if(CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, agent_ptr->Get_Army().m_id))
 		{
 			log_army = true;
 
-			pos = Get_Target_Pos(stagent_ptr->Get_Army());
+			pos = Get_Target_Pos(agent_ptr->Get_Army());
 			break;
 		}
 	}
@@ -1739,6 +1736,8 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 	{
 		return;
 	}
+
+	const char *name = g_theGoalDB->Get(m_goal_type)->GetNameText();
 
 	if(m_raw_priority > BAD_UTILITY)
 	{
@@ -1750,7 +1749,7 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 		    pos.x,
 		    pos.y));
 	}
-	else 
+	else
 	{
 		MapPoint pos = Get_Target_Pos();
 		DPRINTF(log, ("\t %9x,\t%s,\tBAD_UTILITY,\t(%d,%d)\n",
@@ -1766,8 +1765,8 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 		 agent_iter != m_agents.end();
 		 agent_iter++
 	){
-		stagent_ptr = (CTPAgent_ptr) *agent_iter;
-		stagent_ptr->Log_Debug_Info(log);
+		CTPAgent_ptr agent_ptr = (CTPAgent_ptr) *agent_iter;
+		agent_ptr->Log_Debug_Info(log);
 	}
 #endif // _DEBUG
 }
@@ -1776,13 +1775,12 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 bool CTPGoal::ReferencesAgent(const CTPAgent *ctp_agent) const
 {
 #ifdef _DEBUG
-	Agent_List::const_iterator agent_iter;
-	CTPAgent_ptr tmp_ctp_agent;
-
-	for (agent_iter = m_agents.begin(); agent_iter != m_agents.end(); agent_iter++)
+	for(Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                               agent_iter++)
 	{
 		
-		tmp_ctp_agent = (CTPAgent_ptr) *agent_iter;
+		CTPAgent_ptr tmp_ctp_agent = (CTPAgent_ptr) *agent_iter;
 		if (ctp_agent == tmp_ctp_agent)
 			return true;
 	}
@@ -1791,7 +1789,7 @@ bool CTPGoal::ReferencesAgent(const CTPAgent *ctp_agent) const
 	return false;
 }
 
-bool CTPGoal::NeededForGarrison(CTPAgent_ptr army, 
+bool CTPGoal::NeededForGarrison(CTPAgent_ptr army,
 								const MapPoint &dest_pos,
 								sint8 & new_garrison,
 								double & new_garrison_strength) const
@@ -1813,18 +1811,18 @@ bool CTPGoal::NeededForGarrison(CTPAgent_ptr army,
 	if ( dest_pos == army->Get_Pos() )
 		return false;
 
-	sint32 hp;
-	sint32 defense_count;
-	sint32 ranged_count;
-	sint32 attack_strength;
-	sint32 defense_strength;
-	sint32 ranged_strength;
-	sint32 total_value;
-
 	if (((army->Get_Squad_Class() & k_Goal_SquadClass_CanDefend_Bit   ) != 0x0 ) &&
 		((army->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
 		((army->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 ))
 	{
+		sint32 hp;
+		sint32 defense_count;
+		sint32 ranged_count;
+		sint32 attack_strength;
+		sint32 defense_strength;
+		sint32 ranged_strength;
+		sint32 total_value;
+
 		army->Get_Army()->GetArmyStrength(hp,
 			defense_count,
 			ranged_count,
@@ -1854,8 +1852,6 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
                                 const MapPoint &dest_pos,
                                 const Path &found_path)
 {
-	bool did_move = false; 
-
 	Unit city = g_theWorld->GetCity( first_army->Get_Pos() );
 	if(city.m_id != 0)
 	{
@@ -1922,12 +1918,12 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		Utility val = Compute_Matching_Value(first_army);
 		uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
 		g_graphicsOptions->AddTextToArmy(first_army->Get_Army(), goal_rec->GetNameText(), magnitude);
-		const MapPoint & my_target_loc = dest_pos;
 		const char * myText = goal_rec->GetNameText();
-		MBCHAR * myString = new MBCHAR[strlen(myText) + 40];
+		MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
 		MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
 		memset(goalString, 0, strlen(myText) + 20);
-		memset(myString, 0, strlen(myText) + 40);
+		memset(myString,   0, strlen(myText) + 40);
+
 		for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
 		{
 			goalString[myComp] = myText[myComp + 5];
@@ -1937,23 +1933,23 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		switch (m_sub_task)
 		{
 			case SUB_TASK_RALLY:
-				sprintf(myString, "Group to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, targetPos.x, targetPos.y);
+				sprintf(myString, "Group to (%d,%d), %s (%d,%d)", dest_pos.x, dest_pos.y, goalString, targetPos.x, targetPos.y);
 				break;
 			case SUB_TASK_TRANSPORT_TO_BOARD:
-				sprintf(myString, "Boat to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, targetPos.x, targetPos.y);
+				sprintf(myString, "Boat to (%d,%d), %s (%d,%d)", dest_pos.x, dest_pos.y, goalString, targetPos.x, targetPos.y);
 				break;
 			case SUB_TASK_TRANSPORT_TO_GOAL:
-				sprintf(myString, "Transp. to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, targetPos.x, targetPos.y);
+				sprintf(myString, "Transp. to (%d,%d), %s (%d,%d)", dest_pos.x, dest_pos.y, goalString, targetPos.x, targetPos.y);
 				break;
 			case SUB_TASK_CARGO_TO_BOARD:
-				sprintf(myString, "Cargo. to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, targetPos.x, targetPos.y);
+				sprintf(myString, "Cargo. to (%d,%d), %s (%d,%d)", dest_pos.x, dest_pos.y, goalString, targetPos.x, targetPos.y);
 				break;
 			case SUB_TASK_AIRLIFT:
-				sprintf(myString, "Airlift to (%d,%d), %s (%d,%d)", my_target_loc.x, my_target_loc.y, goalString, targetPos.x, targetPos.y);
+				sprintf(myString, "Airlift to (%d,%d), %s (%d,%d)", dest_pos.x, dest_pos.y, goalString, targetPos.x, targetPos.y);
 				break;
 			case SUB_TASK_GOAL:
 			default:
-				sprintf(myString, "%s (%d,%d)", goalString, my_target_loc.x, my_target_loc.y);
+				sprintf(myString, "%s (%d,%d)", goalString, dest_pos.x, dest_pos.y);
 				break;
 		}
 
@@ -2011,32 +2007,26 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 	MapPoint dest_pos;
 	Path found_path;
 	bool check_dest;
-	uint32 move_intersection;
-	
-	bool transport_at_rendezvous;
-	MapPoint next_pos;
-	MapPoint start_pos;
+
 	bool found = false;
-	BOOL airfield_found;
-	BOOL city_found;
-	MapPoint nearest_airfield;
-	Unit nearest_city;
-	double city_distance = 0.0;
 
 	switch (sub_task)
 	{
 
 	case SUB_TASK_AIRLIFT:
 	{
-		start_pos = the_army->Get_Pos(); 
+		MapPoint start_pos = the_army->Get_Pos(); 
 
-		sint16 cargo_cont = g_theWorld->GetContinent(start_pos);
+		sint16 cargo_cont = g_theWorld->GetContinent(start_pos); // Dangerous with transport target can be closer
 
-		airfield_found = g_player[m_playerId]->
-			GetNearestAirfield(start_pos, nearest_airfield, cargo_cont);
+		Unit nearest_city;
+		MapPoint nearest_airfield;
 		double airfield_distance = 0.0;
-		city_found = g_player[m_playerId]->
-			GetNearestCity(start_pos, nearest_city, city_distance, FALSE);
+		double     city_distance = 0.0;
+		bool airfield_found = g_player[m_playerId]->
+		                      GetNearestAirfield(start_pos, nearest_airfield, cargo_cont);
+		bool     city_found = g_player[m_playerId]->
+		                      GetNearestCity(start_pos, nearest_city, city_distance, false);
 		if (airfield_found)
 		{
 			airfield_distance = MapPoint::GetSquaredDistance(start_pos, nearest_airfield);
@@ -2056,7 +2046,6 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		if (dest_pos == start_pos &&
 			dest_pos == the_transport->Get_Army()->RetPos())
 		{
-			
 			the_army->MoveIntoTransport();
 
 			the_transport->Set_Can_Be_Executed(false);
@@ -2070,8 +2059,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 		if (found && FollowPathToTask(the_army, the_transport, sub_task, dest_pos, found_path) )
 		{
-			
-			move_intersection = the_transport->Get_Army().GetMovementType();
+			// move_intersection = the_transport->Get_Army().GetMovementType();
 
 			found = CTPAgent::FindPath(the_transport->Get_Army(), dest_pos, check_dest, found_path);
 
@@ -2082,7 +2070,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		break;
 	}
 	case SUB_TASK_TRANSPORT_TO_BOARD:
-
+	{
 		if(pos == MapPoint(-1, -1))
 		{
 			dest_pos = the_army->Get_Pos();
@@ -2106,10 +2094,10 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 			return true;
 		}
 
-		move_intersection = 
-			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
+			uint32 move_intersection = 
+				the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 
-		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
+			found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
 
 		if (!found)
 		{
@@ -2140,11 +2128,11 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		}
 
 		break;
-
+	}
 	case SUB_TASK_CARGO_TO_BOARD:
-
+	{
 		dest_pos = pos;
-		start_pos = the_army->Get_Pos();
+		MapPoint start_pos = the_army->Get_Pos();
 
 		Assert(pos != MapPoint(-1, -1));
 
@@ -2155,8 +2143,12 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 			return true;
 		}
 
+		bool transport_at_rendezvous;
 		if (! the_transport->Get_Army()->AtEndOfPath() )
 		{
+			// This maybe a problem
+			MapPoint next_pos;
+
 			transport_at_rendezvous  =  the_transport->Get_Army()->GetNextPathPoint(next_pos);
 			transport_at_rendezvous &= !the_transport->Get_Army()->CanEnter(next_pos);
 		}
@@ -2168,7 +2160,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 		if (transport_at_rendezvous )
 		{
-			move_intersection = the_army->Get_Army().GetMovementType();
+			uint32 move_intersection = the_army->Get_Army().GetMovementType();
 
 			check_dest = true;
 
@@ -2176,14 +2168,14 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		}
 		else
 		{
-			check_dest =  false; 
+			check_dest =  false;
 
 			found = CTPAgent::FindPath(the_army->Get_Army(), dest_pos, check_dest, found_path); 
 
 			if (!found)
 			{
-				move_intersection = the_transport->Get_Army().GetMovementType() |
-					the_army->Get_Army().GetMovementType(); 
+				uint32 move_intersection = the_transport->Get_Army().GetMovementType() |
+				                                the_army->Get_Army().GetMovementType();
 
 				found =  the_army->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
 			}
@@ -2206,7 +2198,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 			return true;
 
 		break;
-
+	}
 	default:
 
 		Assert(false);
@@ -2218,9 +2210,6 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_pos, const SUB_TASK_TYPE & sub_task)
 {
-	const OrderRecord * unload_order_rec = CtpAi::GetUnloadOrder();
-	const OrderRecord * space_launch_order_rec = CtpAi::GetSpaceLaunchOrder();
-
 	if (the_army->Get_Army()->CheckValidDestination(goal_pos)) // If we are already moving along a path
 		return true;
 
@@ -2266,11 +2255,11 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 
 			if (the_army->Get_Pos() == nearest_city.RetPos())
 			{
-				the_army->PerformOrderHere(unload_order_rec, (Path *) &found_path);
+				the_army->PerformOrderHere(CtpAi::GetUnloadOrder(), (Path *) &found_path);
 			}
 			else if(!the_army->Get_Army()->HasLeftMap())
 			{
-				the_army->PerformOrderHere(space_launch_order_rec, (Path *) &found_path);
+				the_army->PerformOrderHere(CtpAi::GetSpaceLaunchOrder(), (Path *) &found_path);
 			}
 
 			return true;
@@ -2404,11 +2393,12 @@ bool CTPGoal::Ok_To_Rally() const
 	sint32          num_at_dest     = 0;
 	sint32          count           = 0;
 	MapPoint        targetPos       = Get_Target_Pos();
+
 	for
 	(
-	    Agent_List::const_iterator  agent_iter = m_agents.begin(); 
-	    agent_iter != m_agents.end();
-	    ++agent_iter
+	    Agent_List::const_iterator agent_iter  = m_agents.begin(); 
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
 	)
 	{
 		const CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
@@ -2451,9 +2441,9 @@ bool CTPGoal::RallyComplete() const
 
 	for
 	(
-	    Agent_List::const_iterator agent_iter = m_agents.begin();
-	    agent_iter != m_agents.end(); 
-	    ++agent_iter
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end(); 
+	                             ++agent_iter
 	)
 	{
 		CTPAgent_ptr ctpagent_ptr   = (CTPAgent_ptr) *agent_iter;
@@ -2479,9 +2469,9 @@ bool CTPGoal::RallyComplete() const
 
 		for
 		(
-		    Agent_List::const_iterator adjacent_agent_iter = m_agents.begin();
-		    adjacent_agent_iter != m_agents.end() && adjacent_count < 3;
-		    ++adjacent_agent_iter
+		    Agent_List::const_iterator adjacent_agent_iter  = m_agents.begin();
+		                               adjacent_agent_iter != m_agents.end() && adjacent_count < 3;
+		                             ++adjacent_agent_iter
 		)
 		{
 			CTPAgent_ptr ctpadjacent_ptr = (CTPAgent_ptr) *adjacent_agent_iter;
@@ -2513,22 +2503,15 @@ bool CTPGoal::RallyComplete() const
 
 
 
-bool CTPGoal::RallyTroops() 
+bool CTPGoal::RallyTroops()
 {
-	bool agent1_is_partial;
-	bool agent2_is_partial;
-	bool partiality_found = false;
-
 	Set_Sub_Task(SUB_TASK_RALLY);
 	Agent_List tmp_agents   = m_agents;
-	
-	CTPAgent_ptr ctpagent2_ptr;
-	CTPAgent_ptr closest_agent_ptr;
 
-	Agent_List::iterator agent2_iter;
-	Agent_List::iterator closest_agent_iter;
-	Agent_List::iterator agent1_iter = tmp_agents.begin(); 
-	while (agent1_iter != tmp_agents.end()) 
+	Agent_List::iterator agent1_iter = tmp_agents.begin();
+
+	/// @ToDo: Check whether this sqaure design is necessary
+	while (agent1_iter != tmp_agents.end())
 	{
 		CTPAgent_ptr ctpagent1_ptr = (CTPAgent_ptr) *agent1_iter;
 		Assert(ctpagent1_ptr);
@@ -2540,23 +2523,28 @@ bool CTPGoal::RallyTroops()
 			continue;
 		}
 
-		agent1_is_partial = (ctpagent1_ptr->Get_Army().Num() < k_MAX_ARMY_SIZE );
+		bool agent1_is_partial = (ctpagent1_ptr->Get_Army().Num() < k_MAX_ARMY_SIZE );
 
 		sint32 min_distance = (g_mp_size.x + g_mp_size.y);
 		min_distance *= min_distance;
-		closest_agent_iter = tmp_agents.end();
-		partiality_found = false;
+		Agent_List::iterator closest_agent_iter = tmp_agents.end();
+		bool partiality_found = false;
 
-		for(agent2_iter = tmp_agents.begin(); agent2_iter != tmp_agents.end(); agent2_iter++) 
+		for
+		(
+		    Agent_List::iterator agent2_iter  = tmp_agents.begin();
+		                         agent2_iter != tmp_agents.end();
+		                       ++agent2_iter
+		)
 		{
-			ctpagent2_ptr = (CTPAgent_ptr) *agent2_iter;
+			CTPAgent_ptr ctpagent2_ptr = (CTPAgent_ptr) *agent2_iter;
 
 			if(ctpagent1_ptr == ctpagent2_ptr)
 				continue;
 
 			if(ctpagent2_ptr->Get_Is_Dead())
 				continue;
-			agent2_is_partial = (ctpagent2_ptr->Get_Army().Num() < k_MAX_ARMY_SIZE);
+			bool agent2_is_partial = (ctpagent2_ptr->Get_Army().Num() < k_MAX_ARMY_SIZE);
 			if( (partiality_found) &&
 				(agent2_is_partial != agent1_is_partial) )
 				continue;
@@ -2587,7 +2575,7 @@ bool CTPGoal::RallyTroops()
 		{
 			MapPoint closest_agent_pos;
 
-			closest_agent_ptr = (CTPAgent_ptr) *closest_agent_iter;
+			CTPAgent_ptr closest_agent_ptr = (CTPAgent_ptr) *closest_agent_iter;
 
 			closest_agent_pos = closest_agent_ptr->Get_Pos();
 
@@ -2619,11 +2607,9 @@ bool CTPGoal::RallyTroops()
 				if (g_theWorld->GetCity(agent1_pos).IsValid() && g_theWorld->GetCity(closest_agent_pos).IsValid()) //two units are in another town
 				{
 					MapPoint tempPos;
-					sint32 i;
-					sint32 result;
-					for(i = 0 ; i < SOUTH ; i++)
+					for(sint32 i = 0 ; i < SOUTH ; i++)
 					{
-						result = closest_agent_pos.GetNeighborPosition(WORLD_DIRECTION(i),tempPos);
+						bool result = closest_agent_pos.GetNeighborPosition(WORLD_DIRECTION(i),tempPos);
 						if(result)
 						{
 							CellUnitList *the_army=NULL;
@@ -2639,7 +2625,6 @@ bool CTPGoal::RallyTroops()
 
 				if(!GotoGoalTaskSolution(closest_agent_ptr, agent1_pos, SUB_TASK_RALLY))
 					return false;
-
 			}
 			else
 			{
@@ -2668,6 +2653,7 @@ bool CTPGoal::RallyTroops()
 				}
 			}
 
+			/// @ToDo: Check whether this is necessary, and what does it do
 			tmp_agents.insert(tmp_agents.begin(), *closest_agent_iter);
 			tmp_agents.erase(closest_agent_iter);
 		}
@@ -2682,16 +2668,15 @@ bool CTPGoal::RallyTroops()
 }
 
 
-bool CTPGoal::UnGroupTroops() 
+bool CTPGoal::UnGroupTroops()
 {
-	Agent_List      tmp_agents  = m_agents;
 	bool            breturn     = false;
-	
+
 	for
 	(
-	    Agent_List::iterator    agent1_iter = tmp_agents.begin();
-	    agent1_iter != tmp_agents.end();
-	    ++agent1_iter
+	    Agent_List::iterator agent1_iter  = m_agents.begin();
+	                         agent1_iter != m_agents.end();
+	                       ++agent1_iter
 	)
 	{
 		CTPAgent_ptr    ctpagent1_ptr   = (CTPAgent_ptr) *agent1_iter;
@@ -2716,9 +2701,9 @@ bool CTPGoal::UnGroupComplete() const
 {
 	for
 	(
-	    Agent_List::const_iterator  agent_iter = m_agents.begin(); 
-	    agent_iter != m_agents.end(); 
-	    ++agent_iter
+	    Agent_List::const_iterator agent_iter  = m_agents.begin(); 
+	                               agent_iter != m_agents.end(); 
+	                             ++agent_iter
 	)
 	{
 		CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
@@ -2734,9 +2719,6 @@ bool CTPGoal::UnGroupComplete() const
 
 	return true;
 }
-
-
-
 
 bool CTPGoal::TryTransport(CTPAgent_ptr agent_ptr, const MapPoint & goal_pos) 
 {
@@ -2761,9 +2743,9 @@ bool CTPGoal::FindTransporters(const CTPAgent_ptr & agent_ptr, std::list< std::p
 
 	for
 	(
-	    Agent_List::iterator    agent_iter  = m_agents.begin(); 
-	    agent_iter != m_agents.end(); 
-	    ++agent_iter
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
 	)
 	{
 		CTPAgent_ptr    possible_transport  = (CTPAgent_ptr) *agent_iter;
@@ -2820,11 +2802,13 @@ bool CTPGoal::LoadTransporters(CTPAgent_ptr agent_ptr)
 	MapPoint pos(-1,-1);
 
 	/// @ToDo: Add transport escorts
-	for(
-	    std::list< std::pair<double, CTPAgent_ptr> >::iterator transporter = transporter_list.begin();
-	    transporter != transporter_list.end();
-	    transporter++
-	   )
+	for
+	(
+	    std::list< std::pair<double, CTPAgent_ptr> >::iterator
+	        transporter  = transporter_list.begin();
+	        transporter != transporter_list.end();
+	      ++transporter
+	)
 	{
 		CTPAgent_ptr transport_ptr = transporter->second;
 
@@ -2878,16 +2862,18 @@ bool CTPGoal::LoadTransporters(CTPAgent_ptr agent_ptr)
 bool CTPGoal::ArmiesAtGoal() const
 {
 	MapPoint pos = Get_Target_Pos();
-	CTPAgent_ptr ctpagent_ptr;
 
-	Agent_List::const_iterator agent_iter;
-	for (agent_iter = m_agents.begin();
-		 agent_iter != m_agents.end();
-		 ++agent_iter) {
-			
-			ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
-			if (ctpagent_ptr->Get_Pos() != pos)
-				return false;
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) *agent_iter;
+
+		if (ctpagent_ptr->Get_Pos() != pos)
+			return false;
 	}
 
 	return true;
@@ -2895,26 +2881,27 @@ bool CTPGoal::ArmiesAtGoal() const
 
 sint32 CTPGoal::GetThreatenBonus() const
 {
-	Threat tmp_threat;
-	PLAYER_INDEX target_owner = Get_Target_Owner();
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
-	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
-	
-	
+
 	if (goal_record->GetThreatenTypeNone())
 		return 0;
 
 	switch (goal_record->GetThreatenType())
 	{
-	case k_Goal_ThreatenType_DestroyCity_Bit:
-		if (diplomat.HasThreat(target_owner, THREAT_DESTROY_CITY, tmp_threat))
+		case k_Goal_ThreatenType_DestroyCity_Bit:
 		{
-			
-			if (tmp_threat.detail.arg.cityId == m_target_city.m_id)
-				return goal_record->GetThreatenBonus();
+			Threat           tmp_threat;
+			const Diplomat & diplomat    = Diplomat::GetDiplomat(m_playerId);
+
+			if (diplomat.HasThreat(Get_Target_Owner(), THREAT_DESTROY_CITY, tmp_threat))
+			{
+				if (tmp_threat.detail.arg.cityId == m_target_city.m_id)
+					return goal_record->GetThreatenBonus();
+			}
+			break;
 		}
-		break;
 	}
+
 	return 0;
 }
 
