@@ -99,6 +99,7 @@
 #include "WonderRecord.h"
 #include "advanceutil.h"
 #include "Barbarians.h"
+#include "wonderutil.h"
 
 extern CTPDatabase<GoalRecord> *g_theGoalDB;
 extern MapPoint                 g_mp_size;
@@ -614,16 +615,23 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 
+	// Don't attack as Barbarian a target that is protected by the Great Wall
+	if(ctpagent_ptr->Get_Army()->GetOwner() == PLAYER_INDEX_VANDALS
+	&& wonderutil_GetProtectFromBarbarians(g_player[target_owner]->m_builtWonders)
+	){
+		return Goal::BAD_UTILITY;
+	}
+
 	if( target_owner > 0 &&
 		(!diplomat.IncursionPermission(target_owner)))
 	{
 		bool isspecial, cancapture, haszoc, canbombard;
 		bool isstealth;
 		sint32 maxattack, maxdefense;
-		ctpagent_ptr->Get_Army()->CharacterizeArmy( isspecial, 
-			isstealth, 
-			maxattack, 
-			maxdefense, 
+		ctpagent_ptr->Get_Army()->CharacterizeArmy( isspecial,
+			isstealth,
+			maxattack,
+			maxdefense,
 			cancapture,
 			haszoc,
 			canbombard);
@@ -698,18 +706,20 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 	     ||  g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity())
 	     ){  //For Attack goals (unit or city)
 
-		if(ctpagent_ptr->Get_Army()->IsWounded() && !ctpagent_ptr->Get_Army()->IsObsolete())
-		{
-			bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
-		}
-		if(PosOwner != m_playerId && !diplomat.IncursionPermission(PosOwner))
-		{
-			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
-		}
 		if(ctpagent_ptr->Get_Army()->CanSettle())
 		{
 			// If there is a settler in the army...
 			return Goal::BAD_UTILITY;
+		}
+		
+		if(ctpagent_ptr->Get_Army()->IsWounded() && !ctpagent_ptr->Get_Army()->IsObsolete())
+		{
+			bonus+= g_theGoalDB->Get(m_goal_type)->GetWoundedArmyBonus();
+		}
+		
+		if(PosOwner != m_playerId && !diplomat.IncursionPermission(PosOwner))
+		{
+			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 		}
 	}
 
@@ -756,8 +766,9 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		/// @ToDo: Use the actual path cost, to check whether the goody hut really so close.
 		bonus += g_theGoalDB->Get(m_goal_type)->GetInVisionRangeBonus();
 
-		if (!Barbarians::InBarbarianPeriod())
-		{
+		if (!Barbarians::InBarbarianPeriod()
+		||  wonderutil_GetProtectFromBarbarians(g_player[ctpagent_ptr->Get_Army()->GetOwner()]->m_builtWonders)
+		){
 			bonus += g_theGoalDB->Get(m_goal_type)->GetNoBarbarianBonus();
 		}
 		else if ((ctpagent_ptr->Get_Squad_Class() & k_Goal_SquadClass_CanAttack_Bit) != 0x0)

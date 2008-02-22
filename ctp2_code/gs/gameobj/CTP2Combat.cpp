@@ -1376,7 +1376,7 @@ void CTP2Combat::KillUnits()
 			attacker = GetAttacker();
 		}
 
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_KillUnit,
 							   GEA_Unit, u,
 							   GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED,

@@ -5987,7 +5987,7 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 	   g_selected_item->GetVisiblePlayer() == m_owner) {
 		if(path)
 			delete path;
-		Assert(FALSE);
+		Assert(false);
 		return;
 	}
 	
@@ -8326,21 +8326,25 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 {
 	Assert(defender.Num() > 0);
 	Assert(m_nElements > 0);
-	if(defender.Num() < 1 || m_nElements < 1) {
+	if(defender.Num() < 1 || m_nElements < 1)
+	{
 		return FALSE;
-	}	
+	}
 	m_dontKillCount++;
 
 	sint32 i;
 
-	for(i = 0; i < m_nElements; i++) {
+	for(i = 0; i < m_nElements; i++)
+	{
 		//EMOD add multiple attack flag here? 4-25-2006
-		if(!m_array[i].GetDBRec()->GetMultipleAttacks()) {
-		m_array[i].SetFlag(k_UDF_FOUGHT_THIS_TURN);
-	}
+		if(!m_array[i].GetDBRec()->GetMultipleAttacks())
+		{
+			m_array[i].SetFlag(k_UDF_FOUGHT_THIS_TURN);
+		}
 	}
 
-	for(i = 0; i < defender.Num(); i++) {
+	for(i = 0; i < defender.Num(); i++)
+	{
 		defender[i].SetFlag(k_UDF_FOUGHT_THIS_TURN);
 	}
 //	sint32 n_start_attackers = m_nElements;
@@ -8357,29 +8361,30 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 
 	Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 
-	
-	if (ta.m_id == 0) {
+	if(ta.m_id == 0)
+	{
 		ta = m_array[0];
 	}
 
 	Unit td = defender.GetTopVisibleUnit(g_selected_item->GetVisiblePlayer()); 
 
-	
-	if (td.m_id == 0) {
+	if(td.m_id == 0)
+	{
 		td = defender[0];
 	}
 
-	if ((ta.m_id != 0) && (td.m_id != 0)) { 
-		if (ta.GetActor()) {
+	if((ta.m_id != 0) && (td.m_id != 0))
+	{
+		if(ta.GetActor())
+		{
 			UnitActor *actor = ta.GetActor();
 
-
-			if (!actor->HasThisAnim(UNITACTION_ATTACK)) {
-				
-				
-				for (i=0; i<m_nElements; i++) {
-					if (m_array[i].GetActor() && 
-						m_array[i].GetActor()->HasThisAnim(UNITACTION_ATTACK)) {
+			if(!actor->HasThisAnim(UNITACTION_ATTACK))
+			{
+				for(i = 0; i < m_nElements; i++)
+				{
+					if(m_array[i].GetActor() &&
+					   m_array[i].GetActor()->HasThisAnim(UNITACTION_ATTACK)) {
 						ta = m_array[i];
 						break;
 					}
@@ -8390,7 +8395,7 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 	}
 	else
 	{
-		if (ta.IsValid() && defender[0].IsValid())
+		if(ta.IsValid() && defender[0].IsValid())
 		{
 			g_director->AddAttackPos(ta, defender[0].RetPos());
 		}

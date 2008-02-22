@@ -71,9 +71,10 @@ STDEHANDLER(RunCombatEvent)
 	{
 		// No action: probably a place holder for the final user click.
 	}
-	else if (g_theCurrentBattle->IsDone()) 
+	else if (g_theCurrentBattle->IsDone())
 	{
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_BattleAftermath,
+		g_theCurrentBattle->KillUnits(/* GEV_INSERT_Tail */);
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BattleAftermath,
 		                       GEA_Army, army,
 		                       GEA_MapPoint, pos,
 		                       GEA_Unit, army[0],
@@ -83,7 +84,6 @@ STDEHANDLER(RunCombatEvent)
 		                       GEA_Int, 1,
 		                       GEA_End
 		                      );
-		g_theCurrentBattle->KillUnits();
 	}
 	else
 	{

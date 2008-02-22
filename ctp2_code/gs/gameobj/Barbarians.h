@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Barbarian placement and generation
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Standardizes in Babarian period computation. (25-Jan-2008 Martin Gühmann)
+// - Standardized visibility check. (22-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -51,6 +52,7 @@ public:
 	                       bool fromGoodyHut);
 	static void BeginYear();
 	static bool InBarbarianPeriod();
+	static sint32 IsVisibleToAnyone(MapPoint point);
 };
-	
+
 #endif

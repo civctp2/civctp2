@@ -385,7 +385,10 @@ double CTPAgent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 	double min_move;
 
 	if (Get_Pos() == pos)
+	{
+		cells = 0;
 		return 0.0;
+	}
 
 	cells = MapPoint::GetSquaredDistance(Get_Pos(), pos);
 	if (cells > 0)

@@ -35,6 +35,8 @@
 // - Added but outcommented Barbarian Special Forces difficulty code
 // - added outcomment for disaster/random event code
 // - Standardizes in Babarian period computation. (25-Jan-2008 Martin Gühmann)
+// - Standardized visibility check. (22-Feb-2008 Martin Gühmann)
+// - Barbarians do not show up inside the borders of a protected civ. (22-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,6 +60,7 @@
 #include "TurnCnt.h"
 #include "UnitRecord.h"
 #include "Exclusions.h"
+#include "wonderutil.h"
 
 extern Player **g_player;
 extern RandomGenerator *g_rand;
@@ -296,7 +299,7 @@ sint32 Barbarians::ChooseSeaUnitType()
 }
 
 //EMOD to add sea barbarians
-bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,  
+bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
                             bool fromGoodyHut)
 {
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
@@ -502,7 +505,8 @@ void Barbarians::BeginYear()
 
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
-	if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000) {
+	if(g_rand->Next(10000) < risk->GetBarbarianChance() * 10000)
+	{
 /// @todo Refactor this (extract functions/methods) to make the code cleaner.
 ///       The combination of continue + multiple break levels makes it very
 ///       difficult to read. Added the initialisation of p "just in case".
@@ -516,51 +520,68 @@ void Barbarians::BeginYear()
 		sint32 p    = PLAYER_UNASSIGNED;
 
 
-// this is for standard attack units
+		// this is for standard attack units
 		for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
 			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
-			
-			if (!g_theWorld->IsLand(point)) {
+
+			sint32 owner = g_theWorld->GetCell(point)->GetOwner();
+			if(owner > 0
+			&& g_player[owner]
+			&& wonderutil_GetProtectFromBarbarians(g_player[owner]->m_builtWonders)
+			){
 				continue;
 			}
-			
-			for(p = 1; p < k_MAX_PLAYERS; p++) {
-				if(g_player[p] && g_player[p]->IsVisible(point))
-					break;
+
+			if(!g_theWorld->IsLand(point))
+			{
+				continue;
 			}
-			if(p >= k_MAX_PLAYERS) {
+
+			p = IsVisibleToAnyone(point);
+
+			if(p > 0)
 				break;
-			}
 		}
-		if(tries < k_MAX_BARBARIAN_TRIES) {
-			AddBarbarians(point, p, FALSE);  //AddBarbarians(point, -1, FALSE);
+		if(tries < k_MAX_BARBARIAN_TRIES)
+		{
+			AddBarbarians(point, p, false);  //AddBarbarians(point, -1, FALSE);
 		}
 //EMOD for Pirates
 
 /// @todo Also have to think about maybe reinitialising p here, or you might end
 ///       up with the value of the previous loop.
+		p    = PLAYER_UNASSIGNED;
 
 		sint32 ptries;
-		for(ptries = 0; ptries < k_MAX_BARBARIAN_TRIES; ptries++) {
+		for(ptries = 0; ptries < k_MAX_BARBARIAN_TRIES; ptries++)
+		{
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
 			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
 			
-			if (!g_theWorld->IsWater(point)) {
+			sint32 owner = g_theWorld->GetCell(point)->GetOwner();
+			if(owner > 0
+			&& g_player[owner]
+			&& wonderutil_GetProtectFromBarbarians(g_player[owner]->m_builtWonders)
+			){
 				continue;
 			}
-			
-			for(p = 1; p < k_MAX_PLAYERS; p++) {
-				if(g_player[p] && g_player[p]->IsVisible(point))
-					break;
+
+			if (!g_theWorld->IsWater(point))
+			{
+				continue;
 			}
-			if(p >= k_MAX_PLAYERS) {
+
+			p = IsVisibleToAnyone(point);
+
+			if(p > 0)
 				break;
-			}
 		}
-		if(ptries < k_MAX_BARBARIAN_TRIES) {
+
+		if(ptries < k_MAX_BARBARIAN_TRIES)
+		{
 			// is p selecting the the nearest player?
-			AddPirates(point, p, FALSE); //AddPirates(point, -1, FALSE);
+			AddPirates(point, p, false); //AddPirates(point, -1, FALSE);
 		}
 /*  EMOD Barbarian Special Forces code
 		sint32 sftries;
@@ -592,6 +613,17 @@ void Barbarians::BeginYear()
 //end EMOD
 		
 	}
+}
+
+sint32 Barbarians::IsVisibleToAnyone(MapPoint point)
+{
+	for(sint32 p = 1; p < k_MAX_PLAYERS; p++)
+	{
+		if(g_player[p] && g_player[p]->IsVisible(point))
+			return p;
+	}
+
+	return PLAYER_UNASSIGNED;
 }
 
 bool Barbarians::InBarbarianPeriod()
