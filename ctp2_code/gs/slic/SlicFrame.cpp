@@ -109,30 +109,34 @@ namespace
 } // namespace
 
 SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset)
-{ 
-	m_offset = offset; 
-	m_error = SLIC_RT_OK;
-	m_segment = segment;
-	m_stack = new SlicStack;
-	m_argList = NULL;
-	m_argStackPtr = -1;
-
-	m_messageData = NULL;
-	m_resultObject = NULL;
+:
+    m_offset       (offset),
+    m_error        (SLIC_RT_OK),
+    m_argStackPtr  (-1),
+    m_currentLine  (-1),
+    m_segment      (segment),
+    m_stack        (new SlicStack),
+  //m_argListArray
+    m_argList      (NULL),
+    m_resultObject (NULL),
+    m_messageData  (NULL)
+{
 }
 
 
 SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset, SlicStack *stack)
+:
+    m_offset       (offset),
+    m_error        (SLIC_RT_OK),
+    m_argStackPtr  (-1),
+    m_currentLine  (-1),
+    m_segment      (segment),
+    m_stack        (stack),
+  //m_argListArray
+    m_argList      (NULL),
+    m_resultObject (NULL),
+    m_messageData  (NULL)
 {
-	m_offset = offset;
-	m_error = SLIC_RT_OK;
-	m_segment = segment;
-	m_stack = stack;
-	m_argList = NULL;
-	m_argStackPtr = -1;
-
-	m_messageData = NULL;
-	m_resultObject = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -1070,7 +1074,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 
 			SlicSymbolData *structSym = SlicStack::GetSymbol(type3, sval3);
 			if (!structSym) 
-            {
+			{
 				DPRINTF(k_DBG_SLIC, ("Couldn't find symbol for %s[%d]\n",
 									 arraySym->GetName(), Eval(type2, sval2)));
 				stopped = TRUE;

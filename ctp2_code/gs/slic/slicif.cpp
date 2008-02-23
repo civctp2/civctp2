@@ -38,6 +38,8 @@
 // - Prevented crash with invalid Slic input.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added database array access. (Sep 16th 2005 Martin Gühmann)
+// - Slic file paths are even saved if slic debugging is off, so that there is
+//   no problem if slic debugging is set on without reloading slic. (24-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -216,18 +218,15 @@ void slicif_add_object(struct PSlicObject *obj)
 		g_slicArraySize *= 2;
 		g_slicObjectArray = newArray;
 	}
+
 	slicif_add_op(SOP_STOP);
-	obj->m_code = (unsigned char *)malloc(s_code_ptr - s_code);
+	obj->m_code          = (unsigned char *)malloc(s_code_ptr - s_code);
 	memcpy(obj->m_code, s_code, s_code_ptr - s_code);
-	obj->m_codeSize = s_code_ptr - s_code;
-	obj->m_from_file = s_file_num;
-	if(g_theProfileDB->IsDebugSlic()) {
-		const char *filename = slicif_get_filename();
-		obj->m_filename = (char *)malloc(strlen(filename) + 1);
-		strcpy(obj->m_filename, filename);
-	} else {
-		obj->m_filename = NULL;
-	}
+	obj->m_codeSize      = s_code_ptr - s_code;
+	obj->m_from_file     = s_file_num;
+	const char *filename = slicif_get_filename();
+	obj->m_filename      = (char *)malloc(strlen(filename) + 1);
+	strcpy(obj->m_filename, filename);
 
 	g_slicObjectArray[g_slicNumEntries] = obj;
 	g_slicNumEntries++;

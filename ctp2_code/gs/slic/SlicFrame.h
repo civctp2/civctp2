@@ -46,25 +46,20 @@ enum SFN_ERROR;
 
 #define k_ARGLIST_STACK_SIZE 16
 
-class SlicFrame {
+class SlicFrame
+{
 private:
 	
-	sint32 m_offset;
+	sint32  m_offset;
 	SLIC_RT m_error;
-	sint32 m_argStackPtr;
-	sint32 m_currentLine;
-	
+	sint32  m_argStackPtr;
+	sint32  m_currentLine;
 
-	
 	SlicSegment *m_segment;
-	SlicStack *m_stack;
-	SlicArgList m_argListArray[k_ARGLIST_STACK_SIZE];	
+	SlicStack   *m_stack;
+	SlicArgList  m_argListArray[k_ARGLIST_STACK_SIZE];
 	SlicArgList *m_argList;
-	SlicObject *m_resultObject;
-	
-	
-
-	
+	SlicObject  *m_resultObject;
 	MessageData *m_messageData;
 
 public:
