@@ -481,7 +481,7 @@ void CityControlPanel::UpdateBuildItem()
 	sint32			city_index		= m_cityListDropDown->GetSelectedItem();
 	if (city_index == -1)
 	{
-		return; 
+		return;
 	}
 	else if (city_index >= player->GetNumCities())
 	{
@@ -729,11 +729,14 @@ void CityControlPanel::UpdateCityList()
 
 	// Deactivate prev and next button if less than 2 cities
 	// activate if there are more than one city
-	if(numberOfCities < 2) {
+	if(numberOfCities < 2)
+	{
 		m_cityListPreviousButton->Enable(false);
 		m_cityListDropDown->Enable(false);
 		m_cityListNextButton->Enable(false);
-	} else {
+	}
+	else
+	{
 		m_cityListPreviousButton->Enable(true);
 		m_cityListDropDown->Enable(true);
 		m_cityListNextButton->Enable(true);
@@ -745,7 +748,8 @@ void CityControlPanel::UpdateCityList()
 
 	// Loop throgh the cities to fill the drop down list
 	m_cityListDropDown->SetForceSelect(false);
-	for(sint32 cityIndex = 0; cityIndex < numberOfCities; cityIndex++) {
+	for(sint32 cityIndex = 0; cityIndex < numberOfCities; cityIndex++)
+	{
 		// Create the item
 		ctp2_ListItem *listItem = static_cast<ctp2_ListItem*>(
 			aui_Ldl::BuildHierarchyFromRoot("CityListItem"));
@@ -761,6 +765,7 @@ void CityControlPanel::UpdateCityList()
 		// Add the item to the list
 		m_cityListDropDown->AddItem(listItem);
 	}
+
 	m_cityListDropDown->SetForceSelect(true);
 }
 

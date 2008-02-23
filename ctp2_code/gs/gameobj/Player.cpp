@@ -110,6 +110,7 @@
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - The city list now updated even if the visible player is a robot. (23-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -1549,26 +1550,22 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 	sint32 virtual_goal=0;
 	u.CalcHappiness(virtual_goal, TRUE);
 
-
-
-
 	MapPoint pos;
 	u.GetPos(pos);
 
-
-	if(m_first_city) {
+	if(m_first_city)
+	{
 		SetCapitol(m_all_cities->Access(0));
 		m_first_city = FALSE;
 	}
 
-
-	if (g_theProfileDB->IsAIOn()) {
-
-
+	if (g_theProfileDB->IsAIOn())
+	{
 	}
 
-	if(!IsRobot())
-	{
+	if(!IsRobot()
+	|| g_selected_item->GetVisiblePlayer() == m_owner
+	){
 		MainControlPanel::UpdateCityList();
 	}
 

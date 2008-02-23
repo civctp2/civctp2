@@ -2,7 +2,6 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// File name    : ui\aui_ctp2\SetItem.cpp
 // Description  : Handles stuff about selected items.
 // Id           : $Id$
 //
@@ -37,6 +36,8 @@
 // - Added option to allow end turn if the game runs in the background,
 //   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 // - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+// - If the keyboard is used for moving the map is only centered if the auto
+//   center option is active. (23-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -425,7 +426,7 @@ void SelectedItem::NextItem()
 				MapPoint pos;
 				m_selected_city[player].GetPos( pos );
 				m_select_pos[player] = pos;
-				if(IsAutoCenterOn()) { 
+				if(IsAutoCenterOn()) {
 					if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 						g_director->AddCenterMap(pos);
 					}
@@ -768,7 +769,7 @@ PLAYER_INDEX SelectedItem::GetNextHumanPlayer()
 
 BOOL SelectedItem::IsAutoCenterOn() const
 {
-	return g_theProfileDB->IsAutoCenter(); 
+	return g_theProfileDB->IsAutoCenter();
 }
 
 void SelectedItem::SetAutoCenter(const BOOL on)
@@ -1034,7 +1035,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 		g_c3ui->AddAction( new WorkWinUpdateAction );
 
-		// Focus on city if option is activated  
+		// Focus on city if option is activated
 		if(IsAutoCenterOn())
 		{
 			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y))
@@ -2601,30 +2602,41 @@ void SelectedItem::ClearCycle()
 void SelectedItem::DidKeyboardMove()
 {
 	sint32 player = GetVisiblePlayer();
-	if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY) {
+	if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY)
+	{
 		if(m_selected_army[player].Num() < 1 ||
-		   !m_selected_army[player].CanMove()) {
+		   !m_selected_army[player].CanMove())
+		{
 			Deselect(player);
-			if(g_theProfileDB->IsAutoSelectNext()) {
+			if(g_theProfileDB->IsAutoSelectNext())
+			{
 				g_director->AddSelectUnit(0);
 				m_selected_something_since_director_select = FALSE;
 			}
-		} else {
-			MapPoint pos;
-			m_selected_army[player].GetPos(pos);
-			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
-				g_director->AddCenterMap(pos);
+		}
+		else
+		{
+			if(IsAutoCenterOn())
+			{
+				MapPoint pos;
+				m_selected_army[player].GetPos(pos);
+				if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y))
+				{
+					g_director->AddCenterMap(pos);
+				}
 			}
 		}
-	} else {
-		if(g_theProfileDB->IsAutoSelectNext()) {
+	}
+	else
+	{
+		if(g_theProfileDB->IsAutoSelectNext())
+		{
 			g_director->AddSelectUnit(0);
 			m_selected_something_since_director_select = FALSE;
 		}
 	}
 }
 
-			
 void SelectedItem::EndUnitTurn()
 {
 	sint32 player = GetVisiblePlayer();

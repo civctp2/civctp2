@@ -133,30 +133,30 @@ STDEHANDLER(CaptureCityEvent)
 					}
 				}
 			}
-
-	} 
-    else if (city.IsValid())
-    {
+	}
+	else if (city.IsValid())
+	{
 		if (city.GetOwner() == g_selected_item->GetVisiblePlayer()) 
-        {
+		{
 			g_director->AddCenterMap(pos);
 		}
 		
 		if (newOwner == g_selected_item->GetVisiblePlayer())
-        {
+		{
 			g_selected_item->SetSelectCity(city);
-        }
+		}
 		
-		if (city.AccessData()->CountSlaves() > 0) 
-        {
+		if (city.AccessData()->CountSlaves() > 0)
+		{
 			SlicObject *	so = new SlicObject("20IAFreeSlaves");
 			so->AddRecipient(newOwner);
 			so->AddCity(city);
 			g_slicEngine->Execute(so);
+
+			/// ToDo: Add a way for an AI to free the slaves:
 		}
 
-
-        if (
+		if (
 			(g_theProfileDB->IsCityCaptureOptions())
 			//(g_theProfileDB->GetValueByName("CityCaptureOptions"))
 		&& (city.GetData()->GetCityData()->PopCount() > 0)

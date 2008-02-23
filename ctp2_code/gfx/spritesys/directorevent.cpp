@@ -24,7 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Special attack centers only if the auto center option on units and
+//   cities is set. (23-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -102,9 +103,13 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	
 	MapPoint newPos = to; 
 	
-	if(!g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y) &&
-	   (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) &&
-	   (g_theProfileDB->IsEnemyMoves() || top_src.GetOwner() == g_selected_item->GetVisiblePlayer())) {
+	if(g_selected_item->IsAutoCenterOn()
+	&& !g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y)
+	&& (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+	&& (   g_theProfileDB->IsEnemyMoves()
+	    || top_src.GetOwner() == g_selected_item->GetVisiblePlayer()
+	   )
+	){
 		g_director->AddCenterMap(newPos);
 	}
 
@@ -146,7 +151,8 @@ STDEHANDLER(DirectorActionSuccessful)
 	}
 
 	SPECATTACK attack;
-	switch(gameEventType) {
+	switch(gameEventType)
+	{
 		case GEV_InciteRevolutionUnit: attack = SPECATTACK_INCITEREVOLUTION; break;
 		case GEV_AssassinateRulerUnit: attack = SPECATTACK_BOMBCABINET; break;
 		case GEV_MakeFranchise: attack = SPECATTACK_CREATEFRANCHISE; break;
@@ -178,22 +184,26 @@ STDEHANDLER(DirectorActionSuccessful)
 	}		
 
 	sint32 soundID, spriteID;
-	if(attack != SPECATTACK_NONE) {
+	if(attack != SPECATTACK_NONE)
+	{
 		const SpecialAttackInfoRecord *rec;
 		rec = unitutil_GetSpecialAttack(attack);
 		soundID = rec->GetSoundIDIndex();
 		spriteID = rec->GetSpriteID()->GetValue();
-		if (spriteID != -1 && soundID != -1) {
-			if((((unit.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
-				 (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) ||
-				g_theUnitPool->IsValid(c) && 
-				((c.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
-				 (c.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))))) {
-				
-				
-				g_director->AddCenterMap(attackPos);
+		if (spriteID != -1 && soundID != -1)
+		{
+			if(g_selected_item->IsAutoCenterOn())
+			{
+				if((((unit.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
+					 (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) ||
+					g_theUnitPool->IsValid(c) && 
+					((c.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
+					 (c.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))))) {
+
+					g_director->AddCenterMap(attackPos);
+				}
 			}
-			
+
 			if(c.IsValid())
 				g_director->AddSpecialAttack(unit, c, attack);
 			else

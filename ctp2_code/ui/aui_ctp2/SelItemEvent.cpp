@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : The events of the selected items.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - A just founded city is only seleceted if the player is visible and not a robot. (23-Feb-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -42,9 +71,12 @@ STDEHANDLER(SelItemCreateCityEvent)
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
-	if(pl == g_selected_item->GetVisiblePlayer()) {
+	if( pl == g_selected_item->GetVisiblePlayer()
+	&& !g_player[pl]->IsRobot()
+	){
 		g_selected_item->SetSelectUnit(city);
 	}
+
 	return GEV_HD_Continue;
 }
 
@@ -76,17 +108,6 @@ STDEHANDLER(SelItemCantMoveYetEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 STDEHANDLER(SelItemArmySelectedEvent)
 {
 	Army a;
@@ -104,9 +125,6 @@ void selecteditemevent_Initialize()
 
 	g_gevManager->AddCallback(GEV_CantMoveYet, GEV_PRI_Post, &s_SelItemCantMoveYetEvent);
 	g_gevManager->AddCallback(GEV_ArmySelected, GEV_PRI_Primary, &s_SelItemArmySelectedEvent);
-
-
-
 }
 
 void selecteditemevent_Cleanup()

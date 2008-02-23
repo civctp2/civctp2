@@ -128,6 +128,8 @@
 //   for a killed slaver. (9-Feb-2008 Martin Gühmann)
 // - Expelling costs now move points. (9-Feb-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Special attack centers only if the auto center option on units and
+//   cities is set. (23-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -8875,25 +8877,35 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 	sint32  soundID  = rec ? rec->GetSoundIDIndex() : -1;
 	sint32  spriteID = rec ? rec->GetSpriteID()->GetValue() : -1;
 
-	if (spriteID != -1 && soundID != -1) {
-		if(
-		   (((m_owner == g_selected_item->GetVisiblePlayer()) ||
-			 (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) ||
-			c.IsValid() && 
-			((c.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
-			 (c.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))))) {
-			
-			
-			g_director->AddCenterMap(m_pos);
+	if(spriteID != -1 && soundID != -1)
+	{
+		if(g_selected_item->IsAutoCenterOn())
+		{
+			if(
+			     (
+			       (    m_owner == g_selected_item->GetVisiblePlayer()
+			         || (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+			       )
+			    || c.IsValid()
+			    && (    c.GetOwner() == g_selected_item->GetVisiblePlayer()
+			         || (c.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+			       )
+			     )
+			){
+				g_director->AddCenterMap(m_pos);
+			}
 		}
 
 		g_director->AddSpecialAttack(unit, c, attack);
-	} else {
-		if (soundID != -1) {
+	}
+	else
+	{
+		if(soundID != -1)
+		{
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == m_owner) || 
-				(unit.GetVisibility() & (1 << visiblePlayer))) {
-
+			if ((visiblePlayer == m_owner) ||
+				(unit.GetVisibility() & (1 << visiblePlayer)))
+			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
 			}
 		}

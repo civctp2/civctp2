@@ -150,17 +150,24 @@ STDEHANDLER(InterfaceBeginTurnRecenter)
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
-	if(pl == g_selected_item->GetVisiblePlayer()) {
+	if(pl == g_selected_item->GetVisiblePlayer())
+	{
 		Army a;
 		Unit c;
 		MapPoint pos(-1,-1);
-		if(g_selected_item->GetSelectedArmy(a)) {
+		if(g_selected_item->GetSelectedArmy(a))
+		{
 			pos = a->RetPos();
-		} else if(g_selected_item->GetSelectedCity(c)) {
+		}
+		else if(g_selected_item->GetSelectedCity(c))
+		{
 			pos = c.RetPos();
 		}
-			
-		if(pos.x >= 0 && !g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
+
+		if(g_selected_item->IsAutoCenterOn()
+		&& pos.x >= 0
+		&& !g_director->TileWillBeCompletelyVisible(pos.x, pos.y)
+		){
 			g_director->AddCenterMap(pos);
 		}
 	}
