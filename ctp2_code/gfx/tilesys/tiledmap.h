@@ -60,19 +60,19 @@ struct  TILEHITMASK;
 #define k_BORDER_SOLID              0
 #define k_BORDER_DASHED             1
 
-#define k_FOW_COLOR	                0x0000
-#define k_FOW_BLEND_VALUE	        16
+#define k_FOW_COLOR                 0x0000
+#define k_FOW_BLEND_VALUE           16
 
-#define k_MEDIUM_KEY	            0x4208
+#define k_MEDIUM_KEY                0x4208
 
-#define k_OVERLAY_FLAG_NORMAL		0x00000000
-#define k_OVERLAY_FLAG_SHADOWSONLY	0x00000001
-#define k_OVERLAY_FLAG_NOSHADOWS	0x00000002
+#define k_OVERLAY_FLAG_NORMAL       0x00000000
+#define k_OVERLAY_FLAG_SHADOWSONLY  0x00000001
+#define k_OVERLAY_FLAG_NOSHADOWS    0x00000002
 
-#define k_MAX_ZOOM_LEVELS	        6
-#define k_ZOOM_NORMAL		        5
-#define k_ZOOM_SMALLEST		        0
-#define k_ZOOM_LARGEST		        5
+#define k_MAX_ZOOM_LEVELS           6
+#define k_ZOOM_NORMAL               5
+#define k_ZOOM_SMALLEST             0
+#define k_ZOOM_LARGEST              5
 
 extern TiledMap *   g_tiledMap;
 
@@ -96,12 +96,12 @@ extern TiledMap *   g_tiledMap;
 #include "Vision.h"
 #include "World.h"
 
-class Army; 
+class Army;
 class aui_BitmapFont;
 class aui_DirtyList;
 class aui_Surface;
 class BaseTile;
-class CellUnitList; 
+class CellUnitList;
 class CivArchive;
 class CityData;
 class EffectActor;
@@ -123,13 +123,13 @@ class UnitActor;
 
 struct TILEHITMASK 
 {
-	uint16		start;
-	uint16		end;  
+	uint16      start;
+	uint16      end;
 	double      d_start;
 	double      d_end;
 };
 
-class TiledMap 
+class TiledMap
 {
 public:
 	TiledMap(MapPoint &size);
@@ -324,11 +324,9 @@ public:
 	bool			DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32 x, sint32 y,bool clip=false);
 	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 													sint32 type, sint32 x, sint32 y, 
-													uint16 index, BOOL fog, sint32 percentComplete);
+													uint16 index, bool fog, sint32 percentComplete);
 													//Added by Martin Gühmann sint32 percentComplete by Martin Gühmann
-	
-	
-	
+
 	void            DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip=false);
 
 	
@@ -440,20 +438,28 @@ public:
 
 	void		DrawWater(void);
 
-    bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
+	bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
 	void		DrawLegalMove(aui_Surface *pSurface);
 	void		DrawUnfinishedMove(aui_Surface *pSurface);
 
 	void		DrawPath(Path *path);
 
-	void		DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, 
-									BOOL fog, sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	void		DrawRoads(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, 
-									sint32 roadType, uint16 roadOffset, BOOL fog, 
-									sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	void		DrawCityRoads(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, 
-									sint32 roadType, uint16 roadOffset, BOOL fog, 
-									sint32 flags = k_OVERLAY_FLAG_NORMAL);
+	void		DrawARoadPiece(aui_Surface *surface,
+				               Pixel16     *data,
+				               sint32       x,
+				               sint32       y,
+				               bool         fog,
+				               sint32       flags = k_OVERLAY_FLAG_NORMAL
+				              );
+
+	void		DrawRoads(aui_Surface    *surface,
+				          const MapPoint &pos,
+				          sint32          x,
+				          sint32          y,
+				          uint16          roadOffset,
+				          bool            fog,
+				          sint32          flags = k_OVERLAY_FLAG_NORMAL
+				         );
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
 	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, bool fog, RECT &popRect,

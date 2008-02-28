@@ -3032,6 +3032,7 @@ str_profile_ShowOrderUnion                      "Show All Army Orders"
 str_profile_RecentAtTop                         "Put New Messages At Top"
 str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
+str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
 str_profile_RunInBackground                     "Allow end turn in background"
 str_profile_Upgrade                             "Unit upgrading"
@@ -3039,7 +3040,7 @@ str_profile_SmoothBorders                       "Smooth empire borders"
 str_profile_CivFlags                            "Show Civilization Unit flags"
 str_profile_NoAIProductionDeficit               "AI No Production Deficit"
 str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
-str_profile_AICityDefenderBonus                 "AI City Defense bonus"                         # AI population adds to city defenses
+str_profile_AICityDefenderBonus                 "AI City Defense Bonus"                         # AI population adds to city defenses
 str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
 str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
 str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
@@ -3047,15 +3048,16 @@ str_profile_RevoltInsurgents                    "Revolting cities create barbari
 str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
 str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
 str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
-str_profile_AINoCityLimit                       "AI No City LImit"                              # AI not affected by city limit
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
 str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
 str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
-str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"                  # AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                      # AI doesnt pay unit gold hunger
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
 str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
 str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
-str_profile_OneCityChallenge                    "One City Challenge"                            # If city is empty at turn start AI gets cheapest unit
-str_profile_CityCaptureOptions                  "City Capture Options"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
+str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
+str_profile_DebugCityAstar                      "Debug road build path"
 
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
@@ -3095,13 +3097,13 @@ str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# 
 
 
 str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"	
-str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities don't go negative in gold
+str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities can make gold debts
 str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# Everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI gets cheapest unit
+str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# AI pays gold amount per city
+str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI pays shield hunger (gets lots of units)
+str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI pays unit gold hunger
+str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI pays gold for upgrades
+str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI doesn't get cheapest unit
 
 str_tbl_ldl_NoAIProductionDeficit_On		"No AI Production Deficits"
 str_tbl_ldl_NoAIGoldDeficit_On			"AI Cities Gold always > 0"			# AI cities don't go negative in gold
@@ -3110,7 +3112,7 @@ str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"				# Everyone pays gold amo
 str_tbl_ldl_AINoShieldHunger_On			"AI doesn't pay Shield Hunger"			# AI doesn't pay shield hunger (gets lots of units)
 str_tbl_ldl_AINoGoldHunger_On			"AI doesn't pay Unit Gold Cost"			# AI doesnt pay unit gold hunger
 str_tbl_ldl_AIFreeUpgrade_On			"AI Free Upgrades"				# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"
+str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"				# If city is empty at turn start AI gets cheapest unit
 
 str_ldl_DebugAI					"Debug AI"
 str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
@@ -3120,9 +3122,9 @@ str_ldl_Debug_AI_Off				"Hide Debug AI Text"
 str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
 str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
 str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by city limit
-str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI not affected by city limit
-str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# AI not affected by city limit
-str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# AI not affected by city limit
+str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI affected by city limit
+str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
 
 
 # Not Implemented

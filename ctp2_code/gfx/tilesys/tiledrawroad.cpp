@@ -1,15 +1,33 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Road drawing.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Roads now use the TileSetIndex from the TerrainImprovement database. (28-Feb-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
- 
 #include "c3.h"
 #include "aui.h"
 #include "aui_directsurface.h"
@@ -31,146 +49,87 @@
 
 extern World *g_theWorld;
 
-void TiledMap::DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, BOOL fog,
-							  sint32 flags)
+void TiledMap::DrawARoadPiece
+(
+    aui_Surface *surface,
+    Pixel16     *data,
+    sint32       x,
+    sint32       y,
+    bool         fog,
+    sint32       flags
+)
 {
-	if (fog) {
-		if (m_zoomLevel != k_ZOOM_NORMAL) {
+	if (fog)
+	{
+		if (m_zoomLevel != k_ZOOM_NORMAL)
+		{
 			DrawBlendedOverlayScaled(surface, data, x, y, GetZoomTilePixelWidth(), 
 				GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE, flags);
-		} else {
+		}
+		else
+		{
 			DrawBlendedOverlay(surface, data, x, y, k_FOW_COLOR, k_FOW_BLEND_VALUE, flags);
 		}
-	} else {
-		if (m_zoomLevel != k_ZOOM_NORMAL) {
+	}
+	else
+	{
+		if (m_zoomLevel != k_ZOOM_NORMAL)
+		{
 			DrawScaledOverlay(surface, data, x, y, GetZoomTilePixelWidth(), GetZoomTileGridHeight(), flags);
-		} else {
+		}
+		else
+		{
 			DrawOverlay(surface, data, x, y, flags);
 		}
 	}
 }
 
-
-
-
-
-
-
-void TiledMap::DrawRoads(
-	aui_Surface *surface,
-	const MapPoint &pos,		
-	sint32 x,			
-	sint32 y,			
-	sint32 roadType,	
-	uint16 roadOffset,	
-	BOOL fog,			
-	sint32 flags)
+void TiledMap::DrawRoads
+(
+    aui_Surface    *surface,
+    const MapPoint &pos,
+    sint32          x,
+    sint32          y,
+    uint16          roadOffset,
+    bool            fog,
+    sint32          flags
+)
 {
-	MapPoint	newPos;
-	sint32		isConnectStraight = 0, isConnectDiagonal = 0;
-	sint32		neighborFlag = 0;
-	Pixel16		*data;
+	MapPoint    newPos;
+	sint32      isConnectStraight = 0;
+	sint32      isConnectDiagonal = 0;
+	sint32      neighborFlag = 0;
+	Pixel16    *data;
 
-	
-	if ( g_theWorld->IsCity(pos) ) {
-		DrawCityRoads( surface, pos, x, y, roadType, roadOffset, fog );
-		return;
-	}
+	for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1))
+	{
+		if(pos.GetNeighborPosition(d, newPos))
+		{
+			if(g_theWorld->IsAnyRoad(newPos)
+			|| g_theWorld->IsTunnel(newPos)
+			|| g_theWorld->IsCity(newPos)
+			){
+				neighborFlag |= (1 << d);
 
-	
-	if(pos.GetNeighborPosition(NORTH,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_NORTH;
-			isConnectStraight++;
-		}
-	}
-	if(pos.GetNeighborPosition(NORTHEAST,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_NORTHEAST;
-			isConnectDiagonal++;
-		}
-	}
-	if(pos.GetNeighborPosition(EAST,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_EAST;
-			isConnectStraight++;
-		}
-	}
-	if(pos.GetNeighborPosition(SOUTHEAST,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_SOUTHEAST;
-			isConnectDiagonal++;
-		}
-	}
-	if(pos.GetNeighborPosition(SOUTH,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_SOUTH;
-			isConnectStraight++;
-		}
-	}
-	if(pos.GetNeighborPosition(SOUTHWEST,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_SOUTHWEST;
-			isConnectDiagonal++;
-		}
-	}
-	if(pos.GetNeighborPosition(WEST,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_WEST;
-			isConnectStraight++;
-		}
-	}
-	if(pos.GetNeighborPosition(NORTHWEST,newPos)) {
-		if (g_theWorld->IsAnyRoad(newPos) ||
-			g_theWorld->IsTunnel(newPos) ||
-			g_theWorld->IsCity(newPos))
-		{
-			neighborFlag |= k_BIT_NORTHWEST;
-			isConnectDiagonal++;
+				if(d == NORTH
+				|| d == EAST
+				|| d == WEST
+				|| d == SOUTH
+				){
+					isConnectStraight++;
+				}
+				else
+				{
+					isConnectDiagonal++;
+				}
+			}
 		}
 	}
 
-	
-	if (roadType == k_ROAD_TYPE_3 || roadType == k_ROAD_TYPE_4) {
-		data = m_tileSet->GetRoadData(ROAD_MAGLEVPOST+roadOffset);
+	data = m_tileSet->GetRoadData(ROAD_MAGLEVPOST+roadOffset);
+	if(data)
+	{
 		DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 
 	if (!isConnectStraight && !isConnectDiagonal)
@@ -178,740 +137,116 @@ void TiledMap::DrawRoads(
 		data = m_tileSet->GetRoadData(ROAD_NORTH+roadOffset);
 		DrawARoadPiece(surface, data, x, y, fog);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		return;
 	}
 
-	
-	if (isConnectStraight == k_X_INTERSECT) {
+	if (isConnectStraight == k_X_INTERSECT)
+	{
 		data = m_tileSet->GetRoadData(ROAD_X_STRAIGHT+roadOffset);
 		DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
-	else if (isConnectStraight == k_T_INTERSECT)	
+	else if (isConnectStraight == k_T_INTERSECT)
 	{
-		if ((neighborFlag & k_MASK_8) == k_MASK_8) {
+		if ((neighborFlag & k_T_SOUTH) == k_T_SOUTH)
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_SOUTH+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		else if ((neighborFlag & k_MASK_10) == k_MASK_10) {
+		else if ((neighborFlag & k_T_WEST) == k_T_WEST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_WEST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		else if ((neighborFlag & k_MASK_12) == k_MASK_12) {
+		else if ((neighborFlag & k_T_NORTH) == k_T_NORTH)
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_NORTH+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		} else {
+		}
+		else /*if((neighborFlag & k_T_EAST) == k_T_EAST) */
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_EAST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 	}
-	else if (isConnectStraight)	
+	else if (isConnectStraight)
 	{
-		if (neighborFlag & k_BIT_SOUTH) {
+		if (neighborFlag & k_BIT_SOUTH)
+		{
 			data = m_tileSet->GetRoadData(ROAD_SOUTH+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		if (neighborFlag & k_BIT_WEST) {
+
+		if (neighborFlag & k_BIT_WEST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_WEST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		if (neighborFlag & k_BIT_NORTH) {
+
+		if (neighborFlag & k_BIT_NORTH)
+		{
 			data = m_tileSet->GetRoadData(ROAD_NORTH+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		if (neighborFlag & k_BIT_EAST) {
+
+		if (neighborFlag & k_BIT_EAST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_EAST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 	}
 
-	
-	if (isConnectDiagonal == k_X_INTERSECT) {
+	if (isConnectDiagonal == k_X_INTERSECT)
+	{
 		data = m_tileSet->GetRoadData(ROAD_X_DIAGONAL+roadOffset);
 		DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
-	else if (isConnectDiagonal == k_T_INTERSECT)	
+	else if (isConnectDiagonal == k_T_INTERSECT)
 	{
-		if ((neighborFlag & k_MASK_9) == k_MASK_9) {
+		if ((neighborFlag & k_T_SOUTHWEST) == k_T_SOUTHWEST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_SOUTHWEST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		else if ((neighborFlag & k_MASK_11) == k_MASK_11) {
+		else if ((neighborFlag & k_T_NORTHWEST) == k_T_NORTHWEST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_NORTHWEST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		else if ((neighborFlag & k_MASK_13) == k_MASK_13) {
+		else if ((neighborFlag & k_T_NORTHEAST) == k_T_NORTHEAST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_NORTHEAST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		else {
+		else /*if((neighborFlag & k_T_SOUTHEAST) == SOUTHEAST) */
+		{
 			data = m_tileSet->GetRoadData(ROAD_T_SOUTHEAST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 	}
-	else if (isConnectDiagonal)	
+	else if (isConnectDiagonal)
 	{
-		if (neighborFlag & k_BIT_SOUTHWEST) {
+		if (neighborFlag & k_BIT_SOUTHWEST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_SOUTHWEST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		if (neighborFlag & k_BIT_NORTHWEST) {
+
+		if (neighborFlag & k_BIT_NORTHWEST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_NORTHWEST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		if (neighborFlag & k_BIT_NORTHEAST) {
+
+		if (neighborFlag & k_BIT_NORTHEAST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_NORTHEAST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-		if (neighborFlag & k_BIT_SOUTHEAST) {
+
+		if (neighborFlag & k_BIT_SOUTHEAST)
+		{
 			data = m_tileSet->GetRoadData(ROAD_SOUTHEAST+roadOffset);
 			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 	}
 }
-
-
-
-
-
-
-
-
-void TiledMap::DrawCityRoads(
-	aui_Surface *surface,
-	const MapPoint &pos,		
-	sint32 x,			
-	sint32 y,			
-	sint32 roadType,	
-	uint16 roadOffset,	
-	BOOL fog,			
-	sint32 flags
-	)
-{
-	MapPoint newPos;
-	Pixel16	*data = NULL;
-
-	
-	if(pos.GetNeighborPosition(NORTH,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_NORTH+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_NORTH+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_NORTH+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_NORTH+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(NORTHEAST,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_NORTHEAST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_NORTHEAST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_NORTHEAST+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_NORTHEAST+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(EAST,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_EAST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_EAST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_EAST+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_EAST+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(SOUTHEAST,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHEAST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHEAST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHEAST+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHEAST+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(SOUTH,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_SOUTH+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_SOUTH+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_SOUTH+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_SOUTH+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(SOUTHWEST,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHWEST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHWEST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHWEST+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_SOUTHWEST+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(WEST,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_WEST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_WEST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_WEST+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_WEST+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			data = NULL;
-		}
-	}
-	
-	if(pos.GetNeighborPosition(NORTHWEST,newPos)) {
-		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_1;
-			data = m_tileSet->GetRoadData(ROAD_NORTHWEST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_2, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_2;
-			data = m_tileSet->GetRoadData(ROAD_NORTHWEST+roadOffset);
-		}
-		else if ( g_theWorld->IsRoad(k_ROAD_TYPE_3, newPos) ) {
-			roadOffset = k_ROAD_OFFSET_3;
-			data = m_tileSet->GetRoadData(ROAD_NORTHWEST+roadOffset);
-		} else if ( g_theWorld->IsTunnel(newPos) ) {
-			roadOffset = k_ROAD_OFFSET_4;
-			data = m_tileSet->GetRoadData(ROAD_NORTHWEST+roadOffset);
-		}
-
-		if (data) {
-			DrawARoadPiece(surface, data, x, y, fog);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		}
-	}
-}
-
-
-

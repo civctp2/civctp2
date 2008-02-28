@@ -29,6 +29,8 @@
 // Modifications from the original Activision code:
 //
 // - Added new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Increased the number of possible tile improvement graphics in the
+//   tile to 1024. (28-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -108,10 +110,7 @@ struct MegaTileStep{
 };
 
 
-#define k_MAX_IMPROVEMENTS			600
-#define k_IMPROVEMENT_ROAD_BASE		200
-#define k_IMPROVEMENT_RR_BASE		300
-#define K_IMPROVEMENT_MAGLEV_BASE	400
+#define k_MAX_IMPROVEMENTS			1024
 
 enum MAPICON { 
 	
@@ -362,7 +361,7 @@ public:
 	sint16			GetRiverTransform(uint16 transformNum, uint16 index) { return m_riverTransforms[transformNum][index];}
 
 	Pixel16			*GetImprovementData(uint16 improveNum) const { return m_improvementData[improveNum]; }
-	Pixel16			*GetRoadData(uint16 roadNum) const { return m_improvementData[k_IMPROVEMENT_ROAD_BASE + roadNum]; }
+	Pixel16			*GetRoadData(uint16 roadNum) const { return m_improvementData[roadNum]; } // Now the same as GetImprovementData
 
 	uint16			GetNumMegaTiles(void) const { return m_numMegaTiles; }
 	uint16			GetMegaTileLength(sint32 megaTileNum) const { return m_megaTileLengths[megaTileNum]; }

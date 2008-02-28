@@ -2307,17 +2307,17 @@ str_ldl_CityName				"Nom ville : "
 #
 str_tbl_ldl_XWrap				"XWrap"
 str_tbl_ldl_YWrap				"YWrap"
-str_tbl_ldl_Cut					"Cut Selected Region"
-str_tbl_ldl_Copy				"Copy Selected Region"
-str_tbl_ldl_Paste				"Paste Region"
-str_tbl_ldl_SmallBrush				"Small Brush"
-str_tbl_ldl_MedBrush				"Medium Brush"
-str_tbl_ldl_LargeBrush				"Large Brush"
-str_tbl_ldl_SaveClip				"Save Clip"
-str_tbl_ldl_LoadClip				"Load Clip"
-str_tbl_ldl_Explore				"Set Map Explored"
-str_tbl_ldl_Unexplore				"Set Map Unexplored"
-str_tbl_ldl_Fog					"Toggle Fog of War"
+str_tbl_ldl_Cut					"Couper la région sélectionnée"
+str_tbl_ldl_Copy				"Copier la région sélectionnée"
+str_tbl_ldl_Paste				"Coller région"
+str_tbl_ldl_SmallBrush				"Petit pinceau"
+str_tbl_ldl_MedBrush				"Pinceau moyen"
+str_tbl_ldl_LargeBrush				"Gros pinceau"
+str_tbl_ldl_SaveClip				"Sauvegarder clip"
+str_tbl_ldl_LoadClip				"Charger clip"
+str_tbl_ldl_Explore				"Définir carte comme explorée"
+str_tbl_ldl_Unexplore				"Définir carte comme non explorée"
+str_tbl_ldl_Fog					"Brouillard de guerre activé"
 
 
 ##
@@ -2361,7 +2361,7 @@ str_ldl_order_pillage				"Piller"
 str_ldl_order_advertise				"Faire publicité"
 str_ldl_order_conduct_hit			"Perpétrer attentat"
 str_ldl_order_settle				"Coloniser"
-str_ldl_order_settle_in_city			"Settle in City"
+str_ldl_order_settle_in_city			"Peupler ville"
 str_ldl_order_nuke_city				"Bombarder ville"
 str_ldl_order_disband_army			"Démanteler armée"
 str_ldl_order_board_transport			"Transporter"
@@ -3032,30 +3032,32 @@ str_profile_ShowOrderUnion                      "Afficher les ordres pour les ar
 str_profile_RecentAtTop                         "Mettre nouveaux messages en tête de liste"
 str_profile_CityClick                           "Sélectionner la ville au lieu de l'armée"
 str_profile_DebugSlic                           "Messages du débogueur de Slic"
-str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
-str_profile_Upgrade                             "Unit upgrading"
-str_profile_SmoothBorders                       "Smooth empire borders"
-str_profile_CivFlags                            "Show Civilization Unit flags"
-str_profile_NoAIProductionDeficit               "AI No Production Deficit"
-str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
-str_profile_AICityDefenderBonus                 "AI City Defense bonus"                         # AI population adds to city defenses
-str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
-str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
-str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
-str_profile_RevoltInsurgents                    "Revolting cities create barbarians"            # Revolting city creates barbarians
-str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
-str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
-str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
-str_profile_AINoCityLimit                       "AI No City LImit"                              # AI not affected by city limit
-str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
-str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
-str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"                  # AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                      # AI doesnt pay unit gold hunger
-str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
-str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
-str_profile_OneCityChallenge                    "One City Challenge"                            # If city is empty at turn start AI gets cheapest unit
-str_profile_CityCaptureOptions                  "City Capture Options"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_DebugSlicEvents                     "Messages de débogage des événements Slic"
+str_profile_EndTurnWithEmptyBuildQueues         "Finir tour sans construction en cours"
+str_profile_RunInBackground                     "Permettre fin de tour automatique"
+str_profile_Upgrade                             "Amélioration des unités"
+str_profile_SmoothBorders                       "Frontières de l'empire lissées"
+str_profile_CivFlags                            "Unités avec drapeau de la civilisation"
+str_profile_NoAIProductionDeficit               "Pas de déficit de production pour les AI"
+str_profile_NoAIGoldDeficit                     "Pas de déficit en Or pour les cités AI"        # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "Bonus défensif pour villes AI"                 # AI population adds to city defenses
+str_profile_BarbarianCities                     "Barbares retranchés créent villes"             # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Mécontentement dû au sectarisme"               # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Révoltes entraînent perte de population"       # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Révoltes produisent des barbares"              # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Barbares retranchés créent amén. de case"      # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Barbares retranchés génèrent barbares"         # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "Les navires AI ne coulent pas"                 # AI ships don't sink
+str_profile_AINoCityLimit                       "Nombre de villes illimité pour les AI"         # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "Coût de 1 Or par unité"                        # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Or par ville X Limite de villes"             # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI ne paie pas entretien en production"        # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "Pas de coût en Or pour les unités AI"          # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "Amélioration unités gratuite pour AI"          # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "Unité de milice gratuite pour AI"              # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "Défi une ville"                                # One city challenge
+str_profile_CityCaptureOptions                  "Options de capture des villes"                 # Captured city options
+str_profile_DebugCityAstar                      "Débogage du tracé du réseau routier"
 
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
@@ -3068,71 +3070,71 @@ str_tbl_ldl_Process_Unit_Orders			"Appliquer les ordres des unités"
 str_tbl_ldl_Group_Army				"Grouper toutes les unités"
 str_tbl_ldl_Ungroup_Army			"Dissocier les unités"
 str_tbl_ldl_Gamestate_Debug			"Etat mode Debug (playtest)"
-str_tbl_ldl_Rand_Test				"Rand test (playtest)"
+str_tbl_ldl_Rand_Test				"Test aléatoire (playtest)"
 str_tbl_ldl_Command_Enter			"Saisie de commande (playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"Saisie de commande (alternative) (playtest)"
 
 # New gamesetting options
 #implemented
-str_ldl_Army_Names_Off				"Hide Army Names"
-str_ldl_Army_Names_On				"Show Army Names"
-str_ldl_Civ_Flags_Off				"Hide Nation Flags"
-str_ldl_Civ_Flags_On				"Show Nation Flags"
-str_ldl_SmoothBorders_On			"Smooth Icon Borders"
-str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
-str_tbl_ldl_CityCaptureOptions_On		"City Capture Options"
-str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
-str_tbl_ldl_OneCityChallenge_Off		"Normal City Expansion"
-str_tbl_ldl_OneCityChallenge_On			"One City Challenge"
-str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"				# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"				# Revolting city creates barbarians
-str_tbl_ldl_SectarianHappiness_Off		"No Conflicting citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness"		# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_On			"Revolting Cities lose Population"		# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On			"Revolting cities create barbarians"		# Revolting city creates barbarians
-str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"			# Entrenched barbs create more barbs
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# Entrenched barbs create more barbs
+str_ldl_Army_Names_Off				"Masquer les noms des armées"
+str_ldl_Army_Names_On				"Montrer les noms des armées"
+str_ldl_Civ_Flags_Off				"Masquer les drapeaux des empires"
+str_ldl_Civ_Flags_On				"Montrer les drapeaux des empires"
+str_ldl_SmoothBorders_On			"Icones de frontières lissés"
+str_ldl_SmoothBorders_Off			"Pixels fins pour Frontières"
+str_tbl_ldl_CityCaptureOptions_On		"Options de capture des villes"
+str_tbl_ldl_CityCaptureOptions_Off		"Pas d'options de capture des villes"
+str_tbl_ldl_OneCityChallenge_Off		"Croissance normale des villes"
+str_tbl_ldl_OneCityChallenge_On			"Défi une ville"
+str_tbl_ldl_RevoltCasualties_Off		"Pas de pertes en cas de révolte"		# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_Off		"Pas de barbares en cas de révolte"		# Revolting city creates barbarians
+str_tbl_ldl_SectarianHappiness_Off		"Pas de mécontentement si styles ville en conflit"	# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_On		"Mécontentement si styles ville en conflit"	# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_RevoltCasualties_On			"Révoltes entraînent perte de population"	# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"Révoltes produisent barbares"			# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbares retranchés génèrent barbares"		# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbares retranchés ne génèrent pas barbares"	# Entrenched barbs create more barbs
 
 
-str_tbl_ldl_NoAIProductionDeficit_Off		"AI Has Production Deficits"
-str_tbl_ldl_NoAIGoldDeficit_Off			"Normal Gold for AI Cities"			# AI cities don't go negative in gold
-str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# Everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_Off		"AI pays Shield Hunger"				# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_Off			"AI pays Unit Gold"				# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_Off			"No AI Free Upgrades"				# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_Off			"No AI Free Militia Unit"			# If city is empty at turn start AI gets cheapest unit
+str_tbl_ldl_NoAIProductionDeficit_Off		"Déficits de production pour les AI"	
+str_tbl_ldl_NoAIGoldDeficit_Off			"Or normal pour les AI"				# AI cities can make gold debts
+str_tbl_ldl_GoldPerUnitSupport_Off		"Pas de coût en Or pour les unités AI"		# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerCity_Off			"Pas de coût en or pour les villes AI"		# AI pays gold amount per city
+str_tbl_ldl_AINoShieldHunger_Off		"AI paie entretien en Production"		# AI pays shield hunger (gets lots of units)
+str_tbl_ldl_AINoGoldHunger_Off			"Les AI paient entretien en Or des unités"	# AI pays unit gold hunger
+str_tbl_ldl_AIFreeUpgrade_Off			"Amélioration unités payante pour AI"		# AI pays gold for upgrades
+str_tbl_ldl_AIMilitiaUnit_Off			"Pas d'unités de milice gratuite pour AI"	# If city is empty at turn start AI doesn't get cheapest unit
 
-str_tbl_ldl_NoAIProductionDeficit_On		"No AI Production Deficits"
-str_tbl_ldl_NoAIGoldDeficit_On			"AI Cities Gold always > 0"			# AI cities don't go negative in gold
-str_tbl_ldl_GoldPerUnitSupport_On		"1 Gold Per Unit Cost"				# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"				# Everyone pays gold amount per city
-str_tbl_ldl_AINoShieldHunger_On			"AI doesn't pay Shield Hunger"			# AI doesn't pay shield hunger (gets lots of units)
-str_tbl_ldl_AINoGoldHunger_On			"AI doesn't pay Unit Gold Cost"			# AI doesnt pay unit gold hunger
-str_tbl_ldl_AIFreeUpgrade_On			"AI Free Upgrades"				# AI doesn't pay goldfor upgrades
-str_tbl_ldl_AIMilitiaUnit_On			"AI Free Militia Unit"
+str_tbl_ldl_NoAIProductionDeficit_On		"Pas de déficits de production pour AI"
+str_tbl_ldl_NoAIGoldDeficit_On			"Or des villes AI toujours sup. à 0"		# AI cities don't go negative in gold
+str_tbl_ldl_GoldPerUnitSupport_On		"Coût de 1 Or par unité"			# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerCity_On			"Entretien des villes en Or"			# Everyone pays gold amount per city
+str_tbl_ldl_AINoShieldHunger_On			"AI ne paie pas entretien en Production"	# AI doesn't pay shield hunger (gets lots of units)
+str_tbl_ldl_AINoGoldHunger_On			"Entetien unités en Or gratuit pour AI"		# AI doesnt pay unit gold hunger
+str_tbl_ldl_AIFreeUpgrade_On			"Amélioration unités gratuite pour AI"		# AI doesn't pay goldfor upgrades
+str_tbl_ldl_AIMilitiaUnit_On			"Unité de milice gratuite pour AI"		# If city is empty at turn start AI gets cheapest unit
 
-str_ldl_DebugAI					"Debug AI"
-str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
-str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
-str_ldl_Debug_AI_On				"Show Debug AI Text"
-str_ldl_Debug_AI_Off				"Hide Debug AI Text"
-str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
-str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
-str_tbl_ldl_AINoCityLimit_On			"AI Has No City Limit"				# AI not affected by city limit
-str_tbl_ldl_AINoCityLimit_Off			"AI Has City Limits"				# AI not affected by city limit
-str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# AI not affected by city limit
-str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# AI not affected by city limit
+str_ldl_DebugAI					"Débogage AI"
+str_ldl_ShowEnemyHealth_On			"Montrer barre de Santé ennemie"
+str_ldl_ShowEnemyHealth_Off			"Masquer barre de Santé ennemie"
+str_ldl_Debug_AI_On				"Montrer texte débogage AI"
+str_ldl_Debug_AI_Off				"Masquer texte débogage AI"
+str_tbl_ldl_NonRandomCivs_On			"Empires AI non-aléatoires"
+str_tbl_ldl_NonRandomCivs_Off			"Empires AI aléatoires"
+str_tbl_ldl_AINoCityLimit_On			"Pas de limite au nombre de villes AI"		# AI not affected by city limit
+str_tbl_ldl_AINoCityLimit_Off			"Nombre de villes AI limité"			# AI affected by city limit
+str_tbl_ldl_NoCityLimit_On			"Nombre de villes illimité"			# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Limites normales au nombre de villes"		# City limit for all players
 
 
 # Not Implemented
-str_SE_DebugAI					"debug"
-str_SE_ShowEnemyHealth				"show"
-str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"			# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_Off			"Entrenched Barbarians settle cities - Off"	# Entrenched barbarians create a city
-str_tbl_ldl_BarbarianCamps_Off			"Entrenched Barbarians create Tile Imps - Off"	# Entrenched barbarians create an imp
-str_tbl_ldl_AICityDefenderBonus_On		"AI City Defense bonus - On"			# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_On			"Entrenched Barbarians settle cities - On"	# Entrenched barbarians create a city
-str_tbl_ldl_BarbarianCamps_On			"Entrenched Barbarians create Tile Imps - On"	# Entrenched barbarians create an imp
-str_tbl_ldl_AINoSinking_On			"AI ships don't sink"				# AI ships don't sink
-str_tbl_ldl_AINoSinking_Off			"AI ships can sink"				# AI ships don't sink
+str_SE_DebugAI					"débogage AI"
+str_SE_ShowEnemyHealth				"Montrer barre de Santé ennemie"
+str_tbl_ldl_AICityDefenderBonus_Off		"Pas de bonus défensif pour villes AI"		# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_Off			"Barbares retranchés créent villes - Désactivé"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_Off			"Barbares retranchés créent amén. cases - Désactivé"	# Entrenched barbarians create an imp
+str_tbl_ldl_AICityDefenderBonus_On		"Bonus défensif pour villes AI - Activé"	# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_On			"Barbares retranchés créent villes - Activé"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_On			"Barbares retranchés créent amén. cases - Activé"	# Entrenched barbarians create an imp
+str_tbl_ldl_AINoSinking_On			"Les navires AI ne coulent pas"			# AI ships don't sink
+str_tbl_ldl_AINoSinking_Off			"Les navires AI peuvent couler"			# AI ships don't sink

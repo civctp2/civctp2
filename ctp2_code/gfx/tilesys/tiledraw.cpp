@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Adds some aditional assertions to the code.
 //
@@ -61,6 +61,7 @@
 //   to the right for cleaner interface 1-13-2007 EMOD 
 // - Allowed to select between smooth and square borders. (Feb 4th 2007 Martin Gühmann)
 // - Fixed Religion Icon displays - E 6.25.2007
+// - Roads now use the TileSetIndex from the TerrainImprovement database. (28-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -300,6 +301,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 	std::vector<Pixel16 *>	drawOnTop;	// things above road level
 
+	TerrainImprovementRecord const * roadRec = NULL;
 	UnseenCellCarton	ucell;
 	if(!g_fog_toggle // Draw the right stuff if fog of war is off
 	&& !visiblePlayerOwnsThis
@@ -314,8 +316,27 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		isHealUnits		= ucell.m_unseenCell->IsHealUnits();
 		isFort			= ucell.m_unseenCell->IsFort();
 		hasHut			= ucell.m_unseenCell->HasHut();
-	} 
-	else 
+
+		PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
+
+		for
+		(
+		    PointerList<UnseenImprovementInfo>::Walker walker = 
+		        PointerList<UnseenImprovementInfo>::Walker(improvements);
+		    walker.IsValid();
+		    walker.Next()
+		)
+		{
+			sint32 type		= walker.GetObj()->m_type;
+			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
+
+			if(rec && (rec->GetClassRoad() || rec->GetClassOceanRoad()))
+			{
+				roadRec = rec;
+			}
+		}
+	}
+	else
 	{
 		hasHut		= (g_theWorld->GetGoodyHut(pos) != NULL);
 		cell = g_theWorld->GetCell(pos);
@@ -330,18 +351,19 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			{
 				sint32  impType = cell->GetDBImprovement(i);
 				TerrainImprovementRecord const * 
-                        rec     = g_theTerrainImprovementDB->Get(impType);
+				        rec     = g_theTerrainImprovementDB->Get(impType);
 			
 				if (rec==NULL)
 					continue;
 
 				if (rec->GetClassRoad() || rec->GetClassOceanRoad()) 
-                {
+				{
+					roadRec = rec;
 					continue;
 				}
 
-                TerrainImprovementRecord::Effect const *
-                        effect  = terrainutil_GetTerrainEffect(rec, pos);
+				TerrainImprovementRecord::Effect const *
+				        effect  = terrainutil_GetTerrainEffect(rec, pos);
 
 				if (effect==NULL)
 					continue;
@@ -358,52 +380,98 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				else
 				{
 					DrawAnImprovement(surface, data, x, y, fog);
-                    drewSomething = true;
+					drewSomething = true;
 				}
 			}
 		}
 	}
 
-
-	
-// Added by Martin Gühmann
-// Do not forget fog of war
-	if (m_localVision->GetLastSeen(pos, ucell) && !g_fog_toggle)
+	if (cell)
 	{
-		env = ucell.m_unseenCell->GetEnv();
-	}
+		for (sint32 i=0; i<cell->GetNumImprovements(); i++)
+		{
+			if (!cell->AccessImprovement(i).IsValid())
+				continue;
 
-	
-	
-	if (g_theWorld->EnvIsRoad(k_ROAD_TYPE_1, env)) {
-		DrawRoads(surface,pos,x,y,k_ROAD_TYPE_1,k_ROAD_OFFSET_1, fog);
-		drewSomething = true;
-	}
+			sint32 percent = cell->AccessImprovement(i).GetData()->PercentComplete();
+			uint16 index;
 
-	if (g_theWorld->EnvIsRoad(k_ROAD_TYPE_2, env)) {
-		DrawRoads(surface,pos,x,y,k_ROAD_TYPE_2,k_ROAD_OFFSET_2, fog);
-		drewSomething = true;
+			if (percent < 5)
+				index = 0;
+			else if (percent < 100)
+					index = 1;
+			else
+				break;
+			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			drewSomething = true;
+		}
 	}
-
-	if (g_theWorld->EnvIsRoad(k_ROAD_TYPE_3, env)) 
+	else
 	{
-		
-		DrawRoads(surface,pos,x,y,k_ROAD_TYPE_3,k_ROAD_OFFSET_3, fog, k_OVERLAY_FLAG_SHADOWSONLY);
-		DrawRoads(surface,pos,x,y,k_ROAD_TYPE_3,k_ROAD_OFFSET_3, fog, k_OVERLAY_FLAG_NOSHADOWS);
-		drewSomething = true;
+		PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
+
+		for
+		(
+		    PointerList<UnseenImprovementInfo>::Walker walker = 
+		        PointerList<UnseenImprovementInfo>::Walker(improvements);
+		    walker.IsValid();
+		    walker.Next()
+		)
+		{
+			sint32 type		= walker.GetObj()->m_type;
+			sint32 percent	= walker.GetObj()->m_percentComplete;
+			uint16 index;
+
+			if (percent < 50)
+			{
+				index = 0;
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			}
+			else if (percent < 100)
+			{
+				index = 1;
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			}
+			else
+			{
+
+				const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
+				const TerrainImprovementRecord::Effect *
+				    effect = (rec) ? terrainutil_GetTerrainEffect(rec, pos) : NULL;
+
+				if (rec!=NULL && effect!=NULL)
+				{
+					if(!rec->GetClassRoad() && !rec->GetClassOceanRoad())
+					{
+						data = m_tileSet->GetImprovementData(static_cast<uint16>(effect->GetTilesetIndex()));
+						DrawAnImprovement(surface,data,x,y,fog);
+					}
+				}
+				else
+				{
+					index = 2;
+					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+				}
+			}
+			drewSomething = true;
+		}
 	}
 
-	if(g_theWorld->EnvIsTunnel(env))
+	if(roadRec)
 	{
-		DrawRoads(surface, pos, x, y, k_ROAD_TYPE_4, k_ROAD_OFFSET_4, fog);
-		drewSomething = true;
+		const TerrainImprovementRecord::Effect *
+		    effect = terrainutil_GetTerrainEffect(roadRec, pos);
+
+		if(effect)
+		{
+			DrawRoads(surface, pos, x, y, effect->GetTilesetIndex(), fog, k_OVERLAY_FLAG_SHADOWSONLY);
+			DrawRoads(surface, pos, x, y, effect->GetTilesetIndex(), fog, k_OVERLAY_FLAG_NOSHADOWS  );
+			drewSomething = true;
+		}
 	}
 
-
-
-
-
-	if (hasHut) 
+	if (hasHut)
 	{
 		// Modified by Martin Gühmann to allow modders to customize the graphics of ruins/huts.
 		sint32 const			terrain = 
@@ -417,79 +485,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		drewSomething = true;
 	}
 
-	
-	if (cell) 
-	{
-		
-		for (sint32 i=0; i<cell->GetNumImprovements(); i++) 
-		{
-            if (!cell->AccessImprovement(i).IsValid())
-				continue;
-
-			sint32 percent = cell->AccessImprovement(i).GetData()->PercentComplete();
-			uint16 index;
-
-			if (percent < 5)
-				index = 0;
-			else 
-			  if (percent < 100)
-				  index = 1;
-			else 
-				break;
-			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
-			drewSomething = true;
-		}
-	} 
-	else 
-	{
-		
-		PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
-
-		for
-        (
-            PointerList<UnseenImprovementInfo>::Walker walker = 
-                PointerList<UnseenImprovementInfo>::Walker(improvements);
-            walker.IsValid();
-            walker.Next()
-        ) 
-		{
-			sint32 type		= walker.GetObj()->m_type;
-			sint32 percent	= walker.GetObj()->m_percentComplete;
-			uint16 index;
-
-
-// Added by Martin Gühmann
-			if (percent < 50){
-				index = 0;
-				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
-			}
-			else if (percent < 100){
-				index = 1;
-				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
-			}
-			else{
-
-		 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
-				const TerrainImprovementRecord::Effect *
-                    effect = (rec) ? terrainutil_GetTerrainEffect(rec, pos) : NULL;
-
-				if (rec!=NULL && effect!=NULL){
-					if(!rec->GetClassRoad() && !rec->GetClassOceanRoad()){
-						data = m_tileSet->GetImprovementData(static_cast<uint16>(effect->GetTilesetIndex()));
-						DrawAnImprovement(surface,data,x,y,fog);
-					}
-				}
-				else{
-					index = 2;
-					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
-				}
-			}
-			drewSomething = true;
-		}
-	}
-
-    // Put the special items on top
+	// Put the special items on top
 	for
 	(
 		std::vector<Pixel16 *>::iterator	p	= drawOnTop.begin();
@@ -497,8 +493,8 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		++p
 	)
 	{
-        DrawAnImprovement(surface, *p, x, y, fog);
-        drewSomething = true;
+		DrawAnImprovement(surface, *p, x, y, fog);
+		drewSomething = true;
 	}
 
 	return drewSomething;
@@ -506,7 +502,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env, 
 												   sint32 type, sint32 x, sint32 y, 
-												   uint16 index, BOOL fog, sint32 percentComplete)
+												   uint16 index, bool fog, sint32 percentComplete)
 												   //Added sint32 percentComplete by Martin Gühmann
 {
 	Pixel16		*data = NULL;
@@ -516,7 +512,7 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 	{
 		data = m_tileSet->GetImprovementData(1);
 	}
-	else 
+	else
 	{
 		if (percentComplete >= 100)
 		{

@@ -1,14 +1,32 @@
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Road drawing.
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Roads now use the TileSetIndex from the TerrainImprovement database. (28-Feb-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -16,35 +34,25 @@
 #ifndef __TILEDRAWROAD_H__
 #define __TILEDRAWROAD_H__
 
-#define k_ROAD_TYPE_1		0
-#define k_ROAD_TYPE_2		1
-#define k_ROAD_TYPE_3		2
-#define k_ROAD_TYPE_4		3
+#include "directions.h"
 
-#define k_ROAD_OFFSET_1		0
-#define k_ROAD_OFFSET_2		100
-#define k_ROAD_OFFSET_3		200
-#define k_ROAD_OFFSET_4		300
+#define k_BIT_SOUTH			(1 << SOUTH    )
+#define k_BIT_SOUTHWEST		(1 << SOUTHWEST)
+#define k_BIT_WEST			(1 << WEST     )
+#define k_BIT_NORTHWEST		(1 << NORTHWEST)
+#define k_BIT_NORTH			(1 << NORTH    )
+#define k_BIT_NORTHEAST		(1 << NORTHEAST)
+#define k_BIT_EAST			(1 << EAST     )
+#define k_BIT_SOUTHEAST		(1 << SOUTHEAST)
 
-#define k_BIT_SOUTH			1 
-#define k_BIT_SOUTHWEST		1 << 1
-#define k_BIT_WEST			1 << 2
-#define k_BIT_NORTHWEST		1 << 3
-#define k_BIT_NORTH			1 << 4
-#define k_BIT_NORTHEAST		1 << 5
-#define k_BIT_EAST			1 << 6
-#define k_BIT_SOUTHEAST		1 << 7
-
-#define k_MASK_8			0x45
-#define k_MASK_9			0x8a
-#define k_MASK_10			0x15
-#define k_MASK_11			0x2a
-#define k_MASK_12			0x54
-#define k_MASK_13			0xa8
-#define k_MASK_14			0x51
-#define k_MASK_15			0xa2
-#define k_MASK_16			0xaa
-#define k_MASK_17			0x55
+#define k_T_SOUTH			(k_BIT_WEST      | k_BIT_SOUTH     | k_BIT_EAST     )
+#define k_T_SOUTHWEST		(k_BIT_NORTHWEST | k_BIT_SOUTHWEST | k_BIT_SOUTHEAST)
+#define k_T_WEST			(k_BIT_NORTH     | k_BIT_WEST      | k_BIT_SOUTH    )
+#define k_T_NORTHWEST		(k_BIT_NORTHEAST | k_BIT_NORTHWEST | k_BIT_SOUTHWEST)
+#define k_T_NORTH			(k_BIT_WEST      | k_BIT_NORTH     | k_BIT_EAST     )
+#define k_T_NORTHEAST		(k_BIT_NORTHWEST | k_BIT_NORTHEAST | k_BIT_SOUTHEAST)
+#define k_T_EAST			(k_BIT_NORTH     | k_BIT_EAST      | k_BIT_SOUTH    )
+#define k_T_SOUTHEAST		(k_BIT_NORTHEAST | k_BIT_SOUTHEAST | k_BIT_SOUTHWEST)
 
 #define k_T_INTERSECT		3
 #define k_X_INTERSECT		4

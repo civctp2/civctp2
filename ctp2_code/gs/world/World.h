@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // Generate debug version when set.
 //
@@ -469,49 +469,47 @@ public:
 
 	const TerrainRecord *GetTerrain(const MapPoint &pos);
 
-	sint32 IsCity(const MapPoint &pos) const; 
+	bool IsCity(const MapPoint &pos) const;
 
-    sint32 IsCanal(const MapPoint &pos) const;
-    sint32 EnvIsTunnel(const uint32 env) const ;
-    sint32 IsTunnel(const MapPoint &pos) const;
-    void SetCanalTunnel(MapPoint &pos, sint32 level);
+	bool IsCanal(const MapPoint &pos) const;
+	bool EnvIsTunnel(const uint32 env) const;
+	bool IsTunnel(const MapPoint &pos) const;
+	void SetCanalTunnel(MapPoint &pos, sint32 level);
 
-	sint32 EnvIsRoad(const sint32 i, const uint32 env) const;	
-	sint32 IsRoad(const sint32 i, const MapPoint &pos) const ;
-	sint32 IsAnyRoad(const MapPoint &pos) const;
+	bool EnvIsRoad(const sint32 i, const uint32 env) const;
+	bool EnvIsAnyRoad(const uint32 env) const;
+	bool IsRoad(const sint32 i, const MapPoint &pos) const;
+	bool IsAnyRoad(const MapPoint &pos) const;
 
-	sint32 EnvIsIrrigation(const sint32 i, const uint32 env) const; 
-	sint32 IsIrrigation(const sint32 i, const MapPoint &pos) const ; 
+	bool EnvIsIrrigation(const sint32 i, const uint32 env) const;
+	bool IsIrrigation(const sint32 i, const MapPoint &pos) const;
 
-	sint32 EnvIsMine(const sint32 i, const uint32 env) const; 
-	sint32 IsMine(const sint32 i, const MapPoint &pos) const; 
+	bool EnvIsMine(const sint32 i, const uint32 env) const;
+	bool IsMine(const sint32 i, const MapPoint &pos) const;
 
 	bool IsInstallation(const MapPoint &pos) const;
 
 	double CalcTerrainFreightCost(const MapPoint &pos);
 
-	bool HasCity(const MapPoint &pos) const; 
-	bool IsSupplyingTrade(const MapPoint &pos) const ;
+	bool HasCity(const MapPoint &pos) const;
+	bool IsSupplyingTrade(const MapPoint &pos) const;
 
-    BOOL IsConnectedToCity(const MapPoint &pos, sint32 owner, uint8* array = NULL) const;
+	BOOL IsConnectedToCity(const MapPoint &pos, sint32 owner, uint8* array = NULL) const;
 	BOOL IsOnOrNextToOwner(const MapPoint &pos, sint32 owner);
 
-    bool IsContinentSharedWithOthers(const MapPoint &pnt, 
-        sint32 owner, 
-        uint8* array) const;
-    BOOL IsContinentBiggerThan(uint32 size,
-        const MapPoint &pnt,
-        uint8 *array = NULL,
-        uint32 *cursize = NULL) const;
+	bool IsContinentSharedWithOthers(const MapPoint &pnt,
+	    sint32 owner, 
+	    uint8* array) const;
+	BOOL IsContinentBiggerThan(uint32 size,
+	    const MapPoint &pnt,
+	    uint8 *array = NULL,
+	    uint32 *cursize = NULL) const;
 #ifdef _DEBUG
-    sint32 GetColor(const MapPoint &pos) const; 
+	sint32 GetColor(const MapPoint &pos) const; 
 #endif
-    
-    
-    
-    
-    bool InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray &revealedUnits);
-    
+
+	bool InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray &revealedUnits);
+
     sint32 RemoveUnitReference(const MapPoint &pos, const Unit &id);
     
     double GetMoveCost(const MapPoint &pos) const;

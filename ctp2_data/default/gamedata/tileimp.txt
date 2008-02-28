@@ -1,8 +1,43 @@
-###############
+#----------------------------------------------------------------------------
 #
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : Ozone depletion database
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Notes
+#
+# - The TilesetIndex determines the graphic used from the Tile file.
+# - The minimum TilesetIndex is 0 if present in the tile file.
+# - The maximum TilesetIndex is 1023 if present in the tile file.
+# - The TilesetIndex for roads is now taken from this database file.
+# - Roads use 17 TilesetIndices starting from the TilesetIndex specified here.
+# - If a graphic for an 18th road TilesetIndex is available that is also used
+#   as post for maglevs for instance. So if you don not have a post for your
+#   roads do not add it to the tile file.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Fixed the Construction tiles
+# - Fixed the terraform tileimp icons in the scenario editor
 # - Added Ruins Tileimp for cityruins option
 #
-################
+#----------------------------------------------------------------------------
+
+## 0 ##########################################################
 
 TILEIMP_ADVANCED_FARMS {
    Icon ICON_TILEIMP_ADVANCED_FARMS
@@ -2406,4 +2441,5 @@ TILEIMP_RUINS {
       TilesetIndex 151
    }
 }
+
 ## End ##########################################################

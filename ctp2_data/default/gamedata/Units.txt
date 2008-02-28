@@ -2,7 +2,7 @@
 #
 # Project      : Call To Power 2
 # File type    : Text file
-# Description  : Ozone depletion database
+# Description  : Unit database
 # Id           : $Id:$
 #
 #----------------------------------------------------------------------------
