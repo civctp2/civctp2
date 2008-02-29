@@ -267,50 +267,50 @@ void Advances::UpdateCitySprites(BOOL forceUpdate)
 void Advances::SetHasAdvance(AdvanceType advance)
 {
 	if (   !g_player[m_owner]       // non-existing player
-        || m_hasAdvance[advance]    // advance already known
-        || !g_slicEngine->CallMod   // forbidden by game settings
-                (mod_CanPlayerHaveAdvance, TRUE, m_owner, advance)
-       )  
-    {
+	    || m_hasAdvance[advance]    // advance already known
+	    || !g_slicEngine->CallMod   // forbidden by game settings
+	            (mod_CanPlayerHaveAdvance, TRUE, m_owner, advance)
+	   )
+	{
 		return;
 	}
 
 	m_hasAdvance[advance]   = TRUE;
 	m_canResearch[advance]  = FALSE;
 
-    const AdvanceRecord	* rec = g_theAdvanceDB->Get(advance);
+	const AdvanceRecord	* rec = g_theAdvanceDB->Get(advance);
 	
 	if (rec->GetDeepOcean()) 
-    {
-		g_player[m_owner]->SetDeepOceanVisible(TRUE);
+	{
+		g_player[m_owner]->SetDeepOceanVisible(true);
 
 		if (g_tiledMap) 
-        {
+		{
 			g_tiledMap->Refresh();
 			g_tiledMap->InvalidateMix();
 		}
 	}
 
 	if (rec->GetCapitalization()) 
-    {
+	{
 		g_player[m_owner]->m_can_build_capitalization = TRUE;
 	}
 
 	if (rec->GetInfrastructure()) 
-    {
+	{
 		g_player[m_owner]->m_can_build_infrastructure = TRUE;
 	}
 
 	if (rec->GetTransform()) 
-    {
+	{
 		g_player[m_owner]->m_can_use_terra_tab = TRUE;
 	}
 
-    if (strcmp(g_theStringDB->GetIdStr(g_theAdvanceDB->Get(advance)->m_name),
-               "ADVANCE_AERODYNAMICS") == 0) 
-    {
-        QuickSlic("42IAAirportTip", m_owner);
-    }
+	if (strcmp(g_theStringDB->GetIdStr(g_theAdvanceDB->Get(advance)->m_name),
+	           "ADVANCE_AERODYNAMICS") == 0) 
+	{
+		QuickSlic("42IAAirportTip", m_owner);
+	}
 
 	UpdateCitySprites(FALSE);
 
@@ -326,17 +326,11 @@ Advances::GrantAdvance()
 	if(m_researching < 0 || m_researching >= m_size)
 		return;
 
-	
-	
-	
-	
 	DPRINTF(k_DBG_GAMESTATE, ("Advance: Player %d discovered %s\n", m_owner,
 							  g_theStringDB->GetNameStr(g_theAdvanceDB->Get(m_researching)->GetName())));
-	
 
 	m_discovered++;
 
-	
 	m_total_cost = m_total_cost + g_theAdvanceDB->Get(m_researching)->GetCost();
 
 
@@ -349,11 +343,6 @@ Advances::GrantAdvance()
 	SetHasAdvance(m_researching);
 
 	g_player[m_owner]->SetCityRoads();
-
-    
-    
-	
-	
 }
 
 
@@ -363,18 +352,18 @@ void Advances::GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient)
 			g_theAdvanceDB->GetNameStr(adv)));
 
 	if (    m_hasAdvance[adv]           // already known
-         || !g_slicEngine->CallMod      // forbidden by game settings
-                (mod_CanPlayerHaveAdvance, TRUE, m_owner, adv) 
-       ) 
-    {
+	     || !g_slicEngine->CallMod      // forbidden by game settings
+	            (mod_CanPlayerHaveAdvance, TRUE, m_owner, adv) 
+	   )
+	{
 		return;
 	}
 
 	if (g_network.IsActive() && g_network.SetupMode()) 
-    {
-        // Multiplayer game setup
+	{
+		// Multiplayer game setup
 
-	    sint32 const pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
+		sint32 const pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
 
 		if (g_player[m_owner]->GetPoints() < pointCost)
 			return; // Too expensive
@@ -382,16 +371,16 @@ void Advances::GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient)
 		if (g_network.IsClient() && m_owner != g_selected_item->GetVisiblePlayer())
 			return; // Not for me
 
-		if (g_network.IsHost()) 
-        {
+		if (g_network.IsHost())
+		{
 			if (!fromClient && m_owner != g_selected_item->GetVisiblePlayer())
 				return; // Not for me
 		}
 
 		g_player[m_owner]->DeductPoints(pointCost);
 		
-        if (g_network.IsClient()) 
-        {
+		if (g_network.IsClient()) 
+		{
 			g_network.SendAction(new NetAction(NET_ACTION_ADVANCE_CHEAT, adv));
 		}
 	}
@@ -403,12 +392,12 @@ void Advances::GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient)
 	m_total_cost += g_theAdvanceDB->Get(adv)->GetCost();
 
 	if (g_network.IsActive() && g_network.IsHost()) 
-    {
+	{
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADVANCE,
-									  m_owner, adv, m_discovered,
-									  g_player[m_owner]->m_science->GetLevel()
-                                     )
-                         );
+		                              m_owner, adv, m_discovered,
+		                              g_player[m_owner]->m_science->GetLevel()
+		                             )
+		                 );
 	}
 }
 
@@ -417,7 +406,7 @@ void Advances::GiveAdvancePlusPrerequisites(AdvanceType adv)
 	GiveAdvance(adv, CAUSE_SCI_INITIAL, FALSE);
 
 	for (sint32 i = 0; i < g_theAdvanceDB->Get(adv)->GetNumPrerequisites(); i++) 
-    {
+	{
 		if(adv == g_theAdvanceDB->Get(adv)->GetPrerequisitesIndex(i))
 			continue;
 		if(!HasAdvance(g_theAdvanceDB->Get(adv)->GetPrerequisitesIndex(i))) {
@@ -429,20 +418,15 @@ void Advances::GiveAdvancePlusPrerequisites(AdvanceType adv)
 
 void Advances::TakeAdvance(AdvanceType adv) 
 {
-
-
-
-
-
-
 	DPRINTF(k_DBG_GAMESTATE, ("Advance: %s was taken from Player %d", g_theAdvanceDB->GetNameStr(adv), 
 		m_owner));
 
 	if(!m_hasAdvance[adv])
 		return;
 
-	if(g_network.IsActive() && g_network.SetupMode()) {
-	    sint32 pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
+	if(g_network.IsActive() && g_network.SetupMode())
+	{
+		sint32 pointCost = g_theAdvanceDB->Get(adv)->GetPowerPoints();
 		g_player[m_owner]->AddPoints(pointCost);
 		if(g_network.IsClient()) {
 			g_network.SendAction(new NetAction(NET_ACTION_TAKE_ADVANCE_CHEAT,
@@ -451,9 +435,7 @@ void Advances::TakeAdvance(AdvanceType adv)
 	}
 
 	m_hasAdvance[adv] = FALSE;
-	
 
-	
 	m_discovered--;
 
 	g_player[m_owner]->SetCityRoads();
@@ -470,8 +452,6 @@ void Advances::InitialAdvance(AdvanceType adv)
 
 	SetHasAdvance(adv);
 
-	
-	
 	m_total_cost += g_theAdvanceDB->Get(adv)->GetCost();
 
 	if(g_network.IsActive() && g_network.IsHost()) {
@@ -480,11 +460,10 @@ void Advances::InitialAdvance(AdvanceType adv)
 	}
 }
 
-
 uint8 * Advances::CanResearch() const
 {
 	uint8 *  research = new uint8[m_size];
-    std::copy(m_canResearch, m_canResearch + m_size, research);
+	std::copy(m_canResearch, m_canResearch + m_size, research);
 	return research;
 }
 
@@ -498,8 +477,7 @@ void Advances::ResetCanResearch(sint32 justGot)
 	sint32 num = 0;
 	sint32 i;
 	sint32 numEnabled = 0;
-	
-	
+
 	for(sint32 adv = 0; adv < m_size; adv++) {
 		if(m_hasAdvance[adv]) {
 			

@@ -1202,7 +1202,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	DPRINTF(k_DBG_AI, ("// CHANGE GOVERNMENT -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//					    Player %d\n", player));
 
-	
 	if (player_ptr != NULL && 
 		player_ptr->IsRobot() &&
 		!g_network.IsClient()) 
@@ -1256,11 +1255,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	DPRINTF(k_DBG_AI, ("// MAP ANALYSIS -- Turn %d\n", round));
 	DPRINTF(k_DBG_AI, ("//                    Player %d\n", player));
 
-	
-	
-	
-	
-	
 	Diplomat::GetDiplomat(player).ClearEffectiveRegardCache();
 
 	MapAnalysis::GetMapAnalysis().BeginTurn();
@@ -1275,7 +1269,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	Diplomat::GetDiplomat(player).BeginTurn();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-    // update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
+	// update : Compute Road Tiles every turn instead of every 5 turns (Calvitix)
 	// Road computation round now a constant 
 	if (round % PERIOD_COMPUTE_ROADS == 0)
 	{
@@ -2345,7 +2339,6 @@ const sint32 CtpAi::GetEndgameWorldUnionIndex()
 	return sm_endgameWorldUnionIndex;
 }
 
-
 void CtpAi::SetResearch(const PLAYER_INDEX player)
 {
 	Player *player_ptr = g_player[player];
@@ -2367,19 +2360,16 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 		advance_index = advance_list->GetAdvance(i)->GetIndex();
 		if (player_ptr->m_advances->CanResearch(advance_index))
 		{
-
-			
 			bool stop_research = false;
 			sint32 foreignerId;
 			for (foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 			{
-                if (foreignerId == player)
-                    continue;
+				if (foreignerId == player)
+					continue;
 
 				const ai::Agreement	& agreement = 
 					AgreementMatrix::s_agreements.GetAgreement(player, foreignerId, PROPOSAL_OFFER_STOP_RESEARCH);
-				
-				
+
 				if (agreement.start != -1 && agreement.end == -1)
 				{
 					if (agreement.proposal.first_arg.advanceType == advance_index)
@@ -2389,8 +2379,7 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 					}
 				}
 			}
-			
-			
+
 			if (stop_research)
 			{
 				sint32 duration = 
@@ -2411,21 +2400,18 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 				
 				continue;
 			}
-	
-			
+
 			break;
 		}
 	}
 
 	if (advance_index < g_theAdvanceDB->NumRecords())
 	{
-		
 		if (player_ptr->m_advances->GetResearching() != advance_index)
 			player_ptr->SetResearching(advance_index);
 	}
 	else
 	{
-		
 		player_ptr->SetTaxes(0.0);
 	}
 }

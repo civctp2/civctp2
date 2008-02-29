@@ -111,6 +111,8 @@
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 // - The city list now updated even if the visible player is a robot. (23-Feb-2008 Martin Gühmann)
+// - The AI picks a new advance immediately after discovering an advance. (29-Feb-2008 Martin Gühmann)
+// - The AI changes government immediately when a new government has been discovered. (29-Feb-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -3700,152 +3702,146 @@ void Player::SetMaterialsTax(double m)
 	g_slicEngine->RunPublicWorksTaxTriggers(m_owner);
 }
 
-
 sint32 Player::GetCurrentScienceCost()
-{ return m_advances->GetCost(); 
-} 
-
+{
+	return m_advances->GetCost();
+}
 
 sint32 Player::GetCurrentScienceLevel()
-{ 
-    return m_science->GetLevel(); 
-} 
-
+{
+	return m_science->GetLevel();
+}
 
 void Player::AddPopScience(const sint32 d)
 {
 	m_pop_science += d;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void Player::AddScience(const sint32 delta)
 {
 	m_science->AddScience(delta);
 	m_gold->SetScience(delta);
 
-    sint32  wonderAdvanceChance = wonderutil_GetRandomAdvanceChance(m_builtWonders);
-    bool    gotRandomAdvance    = (wonderAdvanceChance > 0) && 
-                                  (g_rand->Next(100) < wonderAdvanceChance);
+	sint32  wonderAdvanceChance = wonderutil_GetRandomAdvanceChance(m_builtWonders);
+	bool    gotRandomAdvance    = (wonderAdvanceChance > 0) && 
+	                              (g_rand->Next(100) < wonderAdvanceChance);
 
 	DPRINTF(k_DBG_GAMESTATE, ("Advance cost: %d, have: %d\n", m_advances->GetCost(), m_science->GetLevel()));
 
-    sint32 const remainsAfterCost   = m_science->GetLevel() - m_advances->GetCost();
+	sint32 const remainsAfterCost   = m_science->GetLevel() - m_advances->GetCost();
 
-    if (gotRandomAdvance || (remainsAfterCost >= 0)) // new discovery?
-    {
+	if(gotRandomAdvance || remainsAfterCost >= 0) // new discovery?
+	{
 		m_science->SetLevel(std::max<sint32>(0, remainsAfterCost));
 
-        sint32 const    advanceIndex    = m_advances->GetResearching();
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, 
-                               GEV_GrantAdvance,
-							   GEA_Player, m_owner,
-							   GEA_Int,    advanceIndex,
-							   GEA_Int,    CAUSE_SCI_RESEARCH,
-							   GEA_End
-                              );
+		sint32 const    advanceIndex    = m_advances->GetResearching();
+		g_gevManager->AddEvent(
+		                       GEV_INSERT_AfterCurrent,
+		                       GEV_GrantAdvance,
+		                       GEA_Player,              m_owner,
+		                       GEA_Int,                 advanceIndex,
+		                       GEA_Int,                 CAUSE_SCI_RESEARCH,
+		                       GEA_End
+		                      );
 
-        if (gotRandomAdvance) 
-        {
-            SlicObject * so = new SlicObject("115EdisonDiscovery");
-            so->AddRecipient(m_owner);
-            so->AddAdvance(advanceIndex);
-            g_slicEngine->Execute(so);
-        }        
-    }
+		if (gotRandomAdvance)
+		{
+			SlicObject * so = new SlicObject("115EdisonDiscovery");
+			so->AddRecipient(m_owner);
+			so->AddAdvance(advanceIndex);
+			g_slicEngine->Execute(so);
+		}
+	}
 }
 
 void Player::SpecialDiscoveryNotices(AdvanceType advance)
-	{
+{
 #if 0
-	SlicObject	*so ;
+	SlicObject	*so;
 	
 	
 	if (g_theAdvanceDB->GetSpecialDiscovery(m_advances->GetResearching()))
 		{
-		so = new SlicObject("29SpecialDiscovery") ;
-		so->AddRecipient(GetOwner()) ;
-		so->AddAdvance(m_advances->GetResearching()) ;
-		so->AddAction(g_theAdvanceDB->GetDiscoveryHoopla(m_advances->GetResearching())) ;
-		g_slicEngine->Execute(so) ;
+		so = new SlicObject("29SpecialDiscovery");
+		so->AddRecipient(GetOwner());
+		so->AddAdvance(m_advances->GetResearching());
+		so->AddAction(g_theAdvanceDB->GetDiscoveryHoopla(m_advances->GetResearching()));
+		g_slicEngine->Execute(so);
 		
-		so = new SlicObject("30SpecialDiscovery") ;
-		so->AddAdvance(m_advances->GetResearching()) ;
-		so->AddAction(g_theAdvanceDB->GetDiscoveryHoopla(m_advances->GetResearching())) ;
+		so = new SlicObject("30SpecialDiscovery");
+		so->AddAdvance(m_advances->GetResearching());
+		so->AddAction(g_theAdvanceDB->GetDiscoveryHoopla(m_advances->GetResearching()));
 		for(i = 1; i < k_MAX_PLAYERS; i++)
 			if ((g_player[i]) && (i != GetOwner()))
-				so->AddRecipient(i) ;
+				so->AddRecipient(i);
 		
-		g_slicEngine->Execute(so) ;
+		g_slicEngine->Execute(so);
 		
 		}
 #endif
 
 	g_slicEngine->RunDiscoveryTriggers(advance, m_owner);
-	}
-
+}
 
 void Player::GovernmentDiscoveryNotices(AdvanceType advance)
 {
-	SlicObject	*so ;
-	
-	sint32	i,
-			numGovs ;
+	SlicObject	*so;
 
-	numGovs = g_theGovernmentDB->NumRecords() ;
-	for (i=0; i<numGovs; i++) {
-	    if (g_theGovernmentDB->Get(i)->GetEnableAdvanceIndex()==advance) {
-			so = new SlicObject("57PlayerDiscoversNewGovernment") ;
-			so->AddRecipient(GetOwner()) ;
+	sint32 numGovs = g_theGovernmentDB->NumRecords();
+	for(sint32 i = 0; i < numGovs; i++)
+	{
+		if (g_theGovernmentDB->Get(i)->GetEnableAdvanceIndex() == advance)
+		{
+			so = new SlicObject("57PlayerDiscoversNewGovernment");
+			so->AddRecipient(GetOwner());
 			so->AddGovernment(i);
-			g_slicEngine->Execute(so) ;
-			break ;
+			g_slicEngine->Execute(so);
+			break;
 		}
+	}
+
+	if(IsRobot()
+	&&!g_network.IsClient()
+	){
+		sint32 government_type = Governor::GetGovernor(GetOwner()).ComputeBestGovernment();
+		if (government_type >= 0 && government_type != GetGovernmentType())
+			
+			SetGovernmentType(government_type);
 	}
 }
 
 void Player::ObsoleteNotices(AdvanceType advance)
 {
-    SlicObject  *so;
-    const UnitRecord *rec;
-    sint32  i, j;
-    sint32 num_found=0;
+	SlicObject  *so;
+	const UnitRecord *rec;
+	sint32  i, j;
+	sint32 num_found=0;
 
-    
-    
-    so = new SlicObject("114UnitObsoleteCivwide");
-    for (i=0; i < g_theUnitDB->NumRecords(); i++) {
-        rec = g_theUnitDB->Get(i, m_government_type);
-        for(j = 0; j < rec->GetNumObsoleteAdvance(); j++) {
-            if (rec->GetObsoleteAdvanceIndex(j) == advance) {
-                so->AddAction(g_theStringDB->GetNameStr(rec->m_name));
-                num_found++;
-                break;
-            }
-        }
-    }
+	so = new SlicObject("114UnitObsoleteCivwide");
+	for (i=0; i < g_theUnitDB->NumRecords(); i++)
+	{
+		rec = g_theUnitDB->Get(i, m_government_type);
+		for(j = 0; j < rec->GetNumObsoleteAdvance(); j++)
+		{
+			if (rec->GetObsoleteAdvanceIndex(j) == advance)
+			{
+				so->AddAction(g_theStringDB->GetNameStr(rec->m_name));
+				num_found++;
+				break;
+			}
+		}
+	}
 
-    
-    if (num_found == 0) {
-        delete so;
-        return;
-    }
+	if (num_found == 0)
+	{
+		delete so;
+		return;
+	}
 
-    so->AddUnit(Unit());
-    so->AddAdvance(advance);
-    so->AddRecipient(m_owner);
-    g_slicEngine->Execute(so);
+	so->AddUnit(Unit());
+	so->AddAdvance(advance);
+	so->AddRecipient(m_owner);
+	g_slicEngine->Execute(so);
 }
 
 void Player::BuildResearchDialog(AdvanceType advance)
@@ -3853,7 +3849,6 @@ void Player::BuildResearchDialog(AdvanceType advance)
 	SlicContext sc;
 	const MBCHAR *dstring;
 	MBCHAR text[1024];
-
 
 	if(IsRobot())
 		return;
@@ -3911,20 +3906,8 @@ void Player::BuildResearchDialog(AdvanceType advance)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 void Player::StartResearching(sint32 adv)
-    {
+	{
 	SetResearching(adv);
 #if 0
 	m_advances->SetResearching(adv);						
@@ -4150,65 +4133,27 @@ void Player::AttemptRevolt(void)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 void Player::Revolt(const sint32 idx)
-	{
+{
 	Unit city = m_all_cities->Get(idx) ;
-
-
-
 
 	CityData	*cityData = city.AccessData()->GetCityData() ;
 	cityData->GetHappy()->ForceRevolt() ;
 	AttemptRevolt() ;
-	}
-
-	
-
-
-
-
-
-
-
-
-
-
-
+}
 
 void Player::GiveAdvance(PLAYER_INDEX recipient, AdvanceType adv, CAUSE_SCI cause)
 {
-	if (HasAdvance(adv)) {
+	if (HasAdvance(adv))
+	{
 		g_player[recipient]->m_advances->GiveAdvance(adv, cause);
-	} else {
+	}
+	else
+	{
 		Assert(0);
 		return;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 {
@@ -7495,32 +7440,41 @@ bool Player::SetGovernmentType(sint32 type)
 	if(type < 0 || type > g_theGovernmentDB->NumRecords())
 		return false;
 
-    sint32 sci_id = g_theGovernmentDB->Get(type)->GetEnableAdvanceIndex();
-    if (!HasAdvance(sci_id)) { 
-        
-        return false;
-    } 
+	sint32 sci_id = g_theGovernmentDB->Get(type)->GetEnableAdvanceIndex();
+	if (!HasAdvance(sci_id))
+	{
+		return false;
+	}
 
-	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_SET_GOVERNMENT, type));
-	} else if(g_network.IsHost()) {
+	}
+	else if(g_network.IsHost())
+	{
 		g_network.Block(m_owner);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_SET_GOVERNMENT, m_owner, type));
 		g_network.Unblock(m_owner);
 	}
-										   
-	if(m_government_type == 0) {
+
+	if(m_government_type == 0)
+	{
 		m_set_government_type = type;
-		if(m_change_government_turn <= GetCurRound()) {
+		if(m_change_government_turn <= GetCurRound())
+		{
 			return ActuallySetGovernment(type);
 		}
 		return true;
-	} else if(!m_changed_government_this_turn) {
+	}
+	else if(!m_changed_government_this_turn)
+	{
 		m_set_government_type = type;
 		sint32 turns = g_rand->Next(g_theConstDB->Get(0)->GetMaxGovernmentChangeTurns()) + 1;
 		m_change_government_turn = GetCurRound() + turns;
 		return ActuallySetGovernment(0);
-	} else {
+	}
+	else
+	{
 		return ActuallySetGovernment(type);
 	}
 }
@@ -9105,41 +9059,47 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
             g_slicEngine->Execute(so);
         }
     }
-}    
+}
 
 void Player::SetHasAdvance(AdvanceType advance)
 {
 	sint32 i;
 	bool im_the_first = true;
 
-	for(i=1; i < k_MAX_PLAYERS; i++) {
+	for(i = 1; i < k_MAX_PLAYERS; i++)
+	{
 		if(g_player[i] 
 		&& !g_player[i]->m_isDead
 		&& i != m_owner
 		&& g_player[i]->HasAdvance(advance)
 		){
 			im_the_first = false;
-            break;
-        }
+			break;
+		}
 	}
 
 	sint32 gaiaWonder = wonderutil_GetGaiaIndex();
 	sint32 foo;
-	if(gaiaWonder < 0 || gaiaWonder >= g_theWonderDB->NumRecords()) {
+	if(gaiaWonder < 0 || gaiaWonder >= g_theWonderDB->NumRecords())
+	{
 		foo = -1;
-	} else {
+	}
+	else
+	{
 		foo = g_theWonderDB->Get(gaiaWonder)->GetEnableAdvanceIndex();
 	}
 
-	if(advance == foo) {
-		
-		
+	if(advance == foo)
+	{
 		SlicObject *so = new SlicObject("GCDiscoveredSolarisProjectUs");
 		so->AddRecipient(m_owner);
 		so->AddPlayer(m_owner);
 		g_slicEngine->Execute(so);
-		for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
-			if(g_player[i] && i != m_owner) {
+
+		for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
+		{
+			if(g_player[i] && i != m_owner)
+			{
 				SlicObject *so = new SlicObject("GCDiscoveredSolarisProjectThem");
 				so->AddRecipient(i);
 				so->AddPlayer(m_owner);
@@ -9150,7 +9110,8 @@ void Player::SetHasAdvance(AdvanceType advance)
 	
 	const AdvanceRecord *advRec = g_theAdvanceDB->Get(advance);
 
-	if (im_the_first && !ScenarioEditor::IsGivingAdvances()) {
+	if (im_the_first && !ScenarioEditor::IsGivingAdvances())
+	{
 		CheckWonderObsoletions(advance);
 
 		sint32 feat;
@@ -9158,14 +9119,15 @@ void Player::SetHasAdvance(AdvanceType advance)
 		&& g_player[g_selected_item->GetCurPlayer()]
 		&& advRec->GetTriggerFeatIndex(feat)
 		){
-			if(!g_network.IsActive() || g_network.ReadyToStart()) {
+			if(!g_network.IsActive() || g_network.ReadyToStart())
+			{
 				g_featTracker->AddFeat(feat, m_owner);
 			}
 		}
 	}
 
-	
-	for(i = 0; i < m_all_cities->Num(); i++) {
+	for(i = 0; i < m_all_cities->Num(); i++)
+	{
 		m_all_cities->Access(i).NotifyAdvance(advance);
 	}
 
@@ -9174,72 +9136,90 @@ void Player::SetHasAdvance(AdvanceType advance)
 
 	sint32 player_idx; 
 	sint32 city_idx, city_num; 
-	for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++) { 
+	for (player_idx=0; player_idx<k_MAX_PLAYERS; player_idx++)
+	{
 		if (g_player[player_idx] == NULL) continue;
 		if (player_idx == m_owner) continue; 
 
-		city_num = g_player[player_idx]->m_all_cities->Num(); 
-		for (city_idx=0; city_idx<city_num; city_idx++) { 
+		city_num = g_player[player_idx]->m_all_cities->Num();
+		for (city_idx=0; city_idx<city_num; city_idx++)
+		{
 			g_player[player_idx]->m_all_cities->Access(city_idx).GetData()->GetCityData()->GetBuildQueue()->RemoveIllegalItems(TRUE);
-		} 
-	} 
+		}
+	}
 
-	if(g_civApp->IsGameLoaded() && !ScenarioEditor::IsGivingAdvances()) {
-		
-		if (GetCurRound() > 1) {
-			if(!g_network.IsClient() || g_network.ReadyToStart()) {
+	if(g_civApp->IsGameLoaded() && !ScenarioEditor::IsGivingAdvances())
+	{
+		if (GetCurRound() > 1)
+		{
+			if(!g_network.IsClient() || g_network.ReadyToStart())
+			{
 				SpecialDiscoveryNotices(advance);
 				GovernmentDiscoveryNotices(advance);
 			}
 		}
 
-		if(advance == m_researchGoal) {
+		if(advance == m_researchGoal)
+		{
 			m_researchGoal = -1;
 		}
 
-		if(advance == m_advances->GetResearching()) {
+		if(advance == m_advances->GetResearching())
+		{
 			m_advances->ResetCanResearch(advance);
-			sint32 i;
-			if(m_researchGoal >= 0) {
+			if(m_researchGoal >= 0)
+			{
 				StartResearchingAdvanceForGoal(m_researchGoal);
-			} else {
-				for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+			}
+			else
+			{
+				for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++)
+				{
 					if(m_advances->CanResearch(i)) {
 						m_advances->SetResearching(i);
 						break;
 					}
 				}
 			}
-			if(g_network.IsHost() && !g_network.IsLocalPlayer(m_owner)) {
+
+			if(g_network.IsHost() && !g_network.IsLocalPlayer(m_owner))
+			{
 				g_network.QueuePacketToAll(new NetResearch(m_advances));
 				g_network.QueuePacket(g_network.IndexToId(m_owner),
 									  new NetInfo(NET_INFO_CODE_CHOOSE_RESEARCH, advance));
 			}
-			if(!g_network.IsActive() || (g_network.IsHost() && g_network.IsLocalPlayer(m_owner))) {
+			if(!g_network.IsActive() || (g_network.IsHost() && g_network.IsLocalPlayer(m_owner)))
+			{
 				BuildResearchDialog(advance);
 			}
 		}
+
 		if(sci_advancescreen_isOnScreen() &&
-		   m_owner == g_selected_item->GetVisiblePlayer()) {
+		   m_owner == g_selected_item->GetVisiblePlayer())
+		{
 			sci_advancescreen_loadList();
 		}
 	}
 
-	if(advRec->GetAgeIndex() > m_age) {
-		
+	if(advRec->GetAgeIndex() > m_age)
+	{
 		sint32 count = 0;
-		for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
+		for(i = 0; i < g_theAdvanceDB->NumRecords(); i++)
+		{
 			if(g_theAdvanceDB->Get(i)->GetAgeIndex() == advRec->GetAgeIndex() &&
 			   m_advances->HasAdvance(i)) {
 				count++;
 			}
 		}
-		if(count >= advRec->GetAge()->GetNeedAdvances()) {
+		if(count >= advRec->GetAge()->GetNeedAdvances())
+		{
 			EnterNewAge(advRec->GetAgeIndex());
 		}
 	}
 
 	SetCityRoads();
+
+	CtpAi::SetResearch(m_owner);
 }
 
 

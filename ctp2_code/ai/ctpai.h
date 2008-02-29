@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Main Ai File
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -122,12 +122,12 @@ public:
 	static const sint32 GetGoalSeigeIndex();
 	static const sint32 GetEndgameWorldUnionIndex();
 
-	
 	static void SellRandomBuildings(const Unit & city, const double chance);
+
+	static void SetResearch(const PLAYER_INDEX player);
 
 private:
 
-	
 	static void Resize();
 
 	
@@ -145,15 +145,13 @@ private:
 	
 	static void BombardAdjacentEnemies(const Army & army);
 
-    static void BombardNearbyEnemies(Army army, sint32 max_rge);
-	
+	static void BombardNearbyEnemies(Army army, sint32 max_rge);
+
 	static bool GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos, double & distance);
 
 	
 	static void RefuelAirplane(const Army & army);
 
-	
-	static void SetResearch(const PLAYER_INDEX player);
 
 	
 	static void SpendGoldToRushBuy(const PLAYER_INDEX player);

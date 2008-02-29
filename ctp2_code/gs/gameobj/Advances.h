@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Advance (tech) handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -86,10 +86,10 @@ private:
 
 	sint32	m_age;
 
-	sint32 m_theLastAdvanceEnabledThisManyAdvances; 
+	sint32 m_theLastAdvanceEnabledThisManyAdvances;
 	
 	sint32 m_total_cost;
-	sint32 m_discovered; 
+	sint32 m_discovered;
 
 //----------------------------------------------------------------------------
 // End of fixed variable list. Changing below this line is less dangerous.
@@ -106,10 +106,10 @@ private:
 
 public:
 	Advances(size_t a_Count);
-    Advances(Advances const & a_Original);
+	Advances(Advances const & a_Original);
 	virtual ~Advances();
 
-    Advances & operator = (Advances const & a_Original);
+	Advances & operator = (Advances const & a_Original);
 
 	void SetOwner(PLAYER_INDEX o);
 
