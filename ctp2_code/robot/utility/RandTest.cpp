@@ -1,16 +1,10 @@
 
 #include "c3.h"
-#include "player.h"
-#include "Unit.h"
-#include "SelItem.h"
 
 #include "RandGen.h"
-
 extern RandomGenerator *g_rand; 
 
 extern HWND gHwnd; 
-extern Player **g_player; 
-extern SelectedItem *g_selected_item; 
 
 sint32 g_is_rand_test=FALSE; 
 sint32 g_ai_rand_test_wait = 2; 

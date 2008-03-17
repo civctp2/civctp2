@@ -1,13 +1,33 @@
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : User interface DirectX surface
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+// 
+// __AUI_USE_DIRECTX__
+// Use DirectX
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Initialised pointer in default constructor to prevent destructor crash.
+//
+//----------------------------------------------------------------------------
 
 #ifndef __AUI_DIRECTSURFACE_H__
 #define __AUI_DIRECTSURFACE_H__
@@ -35,11 +55,6 @@ public:
 		BOOL useVideoMemory = FALSE );
 	virtual ~aui_DirectSurface();
 
-protected:
-	aui_DirectSurface() : aui_Surface() {}
-	AUI_ERRCODE InitCommon( void );
-
-public:
 	virtual BOOL IsThisA( uint32 classId )
 	{
 		return classId == m_directSurfaceClassId
@@ -67,6 +82,14 @@ public:
 	static uint32 m_directSurfaceClassId;
 
 protected:
+	aui_DirectSurface()
+	:
+		aui_Surface (),
+		m_lpdds     (NULL)
+	{};
+
+	AUI_ERRCODE InitCommon( void );
+
 	LPDIRECTDRAWSURFACE	m_lpdds;	
 };
 

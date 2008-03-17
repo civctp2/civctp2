@@ -18,9 +18,6 @@
 //
 // Compiler flags
 //
-// _MSC_VER
-// - Compiler version (for the Microsoft C++ compiler only)
-//
 // WIN32
 // - Generates windows specific code.
 //
@@ -306,23 +303,31 @@ bool c3files_CreateDirectory(MBCHAR *path)
 #endif
 }
 
-void c3files_StripSpaces(MBCHAR *s)
+void c3files_StripSpaces(MBCHAR * s)
 {
-	sint32      i;
-	sint32      j;
-	sint32      len = strlen(s);
+    size_t  len     = strlen(s);
+    size_t  copied  = 0;
 
-	for (i=len-1; i>=0; i--) {
-		if (s[i] == ' ') {
-			for (j=i; j<len; j++) {
-				s[j] = s[j+1];
-			}
-		}
-	}
+    for (size_t i = 0; i < len; ++i)
+    {
+        if (s[i] == ' ')
+        {
+            // No action: skip this one
+        }
+        else
+        {
+            s[copied++] = s[i];
+        }
+    }
 
-	if (strlen(s) <= 0) {
-		strcpy(s, "-");
-	}
+    if (0 == copied) 
+    {
+        strcpy(s, "-");
+    }
+    else
+    {
+        s[copied] = 0;
+    }
 }
 
 
@@ -489,7 +494,7 @@ namespace
 void c3files_GetCDDrives(void)
 {
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
-	strcpy(drivepath, " :\\");
+	strcpy(drivepath, " :" FILE_SEP);
 
 	uint32 const    all_drives = GetLogicalDrives();
 
@@ -525,7 +530,7 @@ void c3files_GetCDDrives(void)
 MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 {
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
-	strcpy(drivepath, " :\\");
+	strcpy(drivepath, " :" FILE_SEP);
 	drivepath[0] = id;
 
 	MBCHAR  FSName[32];

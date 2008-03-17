@@ -43,10 +43,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma pack(push)
 
+#elif defined(__GNUC__)     /* GCC */
+
+#if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1))
+#pragma pack(push)
+#else
+/* Before 4.1, the PACK macro was used after each member */
+#endif /* GCC >= 4.1 */
+
 #endif
 
 /* Structure members that need to be byte-alligned have PACK after them
- * for benefit of gcc.  Makefile will define PACK in that case.
+ * for benefit of gcc before 4.1. Makefile will define PACK in that case.
  */
 #ifndef PACK
 #define PACK

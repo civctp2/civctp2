@@ -46,7 +46,7 @@ char *strcasecpy(char *out, char const * in)
     char *maxout = out + MAX_RECORDNAME_LENGTH - 1;
     char *rval = out;
     while(*in && (out < maxout)) {
-        *out++ = tolower(*in++);
+        *out++ = static_cast<char>(tolower(*in++));
     }
     *out = 0;
     return rval;

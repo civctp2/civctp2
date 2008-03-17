@@ -28,7 +28,7 @@
 #endif
 
 #ifndef GLOBALS_H
-#define GLOBALS_H 1
+#define GLOBALS_H
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -80,7 +80,7 @@ enum MAPSIZE {
 };
 
 
-/// Global utilities for allocated object pointers
+// Global utilities for allocated object pointers
 namespace allocated
 {
 
@@ -88,7 +88,10 @@ namespace allocated
 /// \param      a_Pointer	Pointer to reassign to
 /// \param      a_NewPointer  New value to assign
 /// \remarks    The pointer shall have been allocated with new (or be 
-///             NULL, in which case this function is an assignment). 
+///             NULL, in which case this function is an assignment).
+/// This looked like a nice idea, but is not working well. The 
+/// new pointer parameter was constructed before deleting the old, 
+/// so too much memory is used.
 template <typename T> void reassign(T * & a_Pointer, T * a_NewPointer)
 {
     delete a_Pointer;
@@ -105,6 +108,28 @@ template <typename T> void clear(T * & a_Pointer)
     a_Pointer = NULL;
 }
 
-} // global
+#if defined(_MSC_VER) && (_MSC_VER < 1400)
+
+/// \todo Check whether the clearContainer template works with earlier
+///       MSVC versions.
+
+#else
+
+/// Delete items from a container containing pointers
+/// \param a_Container The container to delete from
+/// \remarks The container will be cleared after its items have been deleted
+template <typename T> void clearContainer(T & a_Container)
+{
+    for (T::iterator p = a_Container.begin(); p != a_Container.end(); ++p)
+    {
+        delete *p;
+    }
+
+    T().swap(a_Container);
+};
+
+#endif
+
+} // namespace allocated
 
 #endif

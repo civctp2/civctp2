@@ -17,8 +17,6 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -28,18 +26,14 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef __AUI_BUTTON_H__
-#define __AUI_BUTTON_H__
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef AUI_BUTTON_H_
+#define AUI_BUTTON_H_
 
-#include "aui_control.h"
-#include "aui_keyboard.h"
-
-
-class aui_Surface;
-class aui_Image;
-
-
+class aui_Button;
 
 enum AUI_BUTTON_ACTION
 {
@@ -51,6 +45,10 @@ enum AUI_BUTTON_ACTION
 	AUI_BUTTON_ACTION_LAST
 };
 
+#include "aui_control.h"
+#include "aui_keyboard.h"
+class aui_Image;
+class aui_Surface;
 
 
 class aui_Button : public aui_Control

@@ -86,16 +86,26 @@ enum    RedbookStatus
 // Local shorthands
 //----------------------------------------------------------------------------
 
-#if defined(USE_MILES_STUBS)
+#if defined(DOXYGEN)
+
+// Help Doxygen generate output
+#define MILES_API(a_Type)   a_Type
+#define STUB(a_Code)        
+
+#elif defined(USE_MILES_STUBS)
+
 // Define all functions as inline with stubbed code.
 // In this way, there is no need to create an mss.cpp. To make it work, you
 // have to remove the ..\libs\miles\mss32.lib reference from the link step.
 #define MILES_API(a_Type)   inline a_Type
 #define STUB(a_Code)        { a_Code }
+
 #else
+
 // Disable the stubbed code, and only declare the prototypes.
 #define MILES_API(a_Type)   extern "C" __declspec(dllimport) a_Type WINAPI
 #define STUB(a_Code)
+
 #endif
 
 //----------------------------------------------------------------------------

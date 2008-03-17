@@ -20,9 +20,6 @@
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -32,20 +29,21 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
-#ifndef __GAMESOUNDS_H__
-#define __GAMESOUNDS_H__
+#ifndef GAMESOUNDS_H__
+#define GAMESOUNDS_H__
 
-struct GameSoundData {
+struct GameSoundData 
+{
 	sint32		id;
-	MBCHAR		*name;
+	MBCHAR *    name;
 };
 
-
-enum GAMESOUNDS {
+enum GAMESOUNDS 
+{
 	GAMESOUNDS_SPACE_LAUNCH,
 
 	GAMESOUNDS_BUILDING_STARTED,

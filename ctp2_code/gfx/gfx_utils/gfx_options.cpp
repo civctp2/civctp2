@@ -7,14 +7,15 @@
 
 #include "Army.h"
 #include "ArmyData.h"
-#include "ArmyPool.h"
 #include "Globals.h"
 
 
 GraphicsOptions * g_graphicsOptions = NULL;
 
+namespace
+{
 
-static cmp_t CellAVLCompare(CellText *obj1, CellText *obj2)
+cmp_t CellAVLCompare(CellText *obj1, CellText *obj2)
 {
 	if (obj1->m_key < obj2->m_key) return MIN_CMP;
 	if (obj1->m_key > obj2->m_key) return MAX_CMP;
@@ -22,7 +23,15 @@ static cmp_t CellAVLCompare(CellText *obj1, CellText *obj2)
 	return EQ_CMP;
 }
 
+/// Encode a map position into a value (for fast comparison)
+/// \param pos The map position to encode
+/// \return Encoded 32 bit value
+uint32 PackCellAVLKey(MapPoint const & pos)
+{
+	return (pos.x << 16 | pos.y);
+}
 
+} // namespace
 
 GraphicsOptions::GraphicsOptions()
 :
@@ -45,7 +54,8 @@ GraphicsOptions::~GraphicsOptions()
 
 void GraphicsOptions::Initialize(void)
 {
-    allocated::reassign(g_graphicsOptions, new GraphicsOptions());
+    delete g_graphicsOptions;
+    g_graphicsOptions = new GraphicsOptions();
 }
 
 
@@ -114,11 +124,6 @@ void GraphicsOptions::CellTextOff(void)
 }
 
 
-uint32 GraphicsOptions::PackCellAVLKey(MapPoint const &pos)
-{
-	return (pos.x << 16 | pos.y);
-}
-
 
 
 CellText *GraphicsOptions::GetCellText(MapPoint const &pos)
@@ -140,7 +145,7 @@ bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text,
     CellText * cellText = GetCellText(pos);
     if (cellText) 
     {
-        delete cellText->m_text;
+        delete [] cellText->m_text;
         cellText->m_text = NULL;
     }
 
@@ -170,7 +175,7 @@ void GraphicsOptions::ResetCellText(const MapPoint &pos)
     CellText *cellText = GetCellText(pos);
     if (cellText) 
     {
-		delete cellText->m_text;
+		delete [] cellText->m_text;
 		m_cellAVL->Delete(cellText);
 		delete cellText;
     }

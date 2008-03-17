@@ -1,22 +1,46 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Activision User Interface - movie button
+// Id           : $Id$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved include structure
+//
+//----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef AUI_MOVIEBUTTON_H_
+#define AUI_MOVIEBUTTON_H_
 
-
-
-
-
-
-
-
-
-#ifndef __AUI_MOVIEBUTTON_H__
-#define __AUI_MOVIEBUTTON_H__
-
+class aui_MovieButton;
 
 #include "aui_button.h"
-
-
+#include "auitypes.h"
 class aui_Movie;
+class aui_Surface;
 
 
 
@@ -27,7 +51,6 @@ class aui_Movie;
 class aui_MovieButton : public aui_Button
 {
 public:
-	
 	aui_MovieButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -47,7 +70,14 @@ public:
 	virtual ~aui_MovieButton();
 
 protected:
-	aui_MovieButton() : aui_Button() {}
+	aui_MovieButton()
+	:
+		aui_Button      (),
+		m_movie         (NULL),
+		m_flags         (0),
+		m_fullScreen    (false)
+	{}
+
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( MBCHAR *movie );
 	
@@ -68,7 +98,7 @@ public:
 		sint32 y = 0 ) { return AUI_ERRCODE_OK; }
 
 	void SetFlags(uint32 flags) { m_flags = flags; }
-	uint32 GetFlags(void) { return m_flags; }
+	uint32 GetFlags(void) const { return m_flags; }
 
 protected:
 	aui_Movie	*m_movie;

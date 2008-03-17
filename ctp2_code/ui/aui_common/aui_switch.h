@@ -17,24 +17,23 @@
 //
 // Compiler flags
 // 
-// _MSC_VER		
-// - Use Microsoft C++ extensions when set.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - Event handlers declared in a notation that is more standard C++.
+// - Improved structure
 //
 //----------------------------------------------------------------------------
 
-#ifndef __AUI_SWITCH_H__
-#define __AUI_SWITCH_H__
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
+#ifndef AUI_SWITCH_H_
+#define AUI_SWITCH_H_
 
-#include "aui_control.h"
-
-
+class aui_Switch;
 
 enum AUI_SWITCH_ACTION
 {
@@ -56,12 +55,12 @@ enum AUI_SWITCH_ACTION
 
 #define k_AUI_SWITCH_DEFAULTNUMSTATES	2
 
+#include "aui_control.h"
 
 
 class aui_Switch : public aui_Control
 {
 public:
-	
 	aui_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -81,12 +80,6 @@ public:
 		sint32 numStates = k_AUI_SWITCH_DEFAULTNUMSTATES );
 	virtual ~aui_Switch() {}
 
-protected:
-	aui_Switch() : aui_Control () {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( sint32 state, sint32 numStates );
-
-public:
 	virtual AUI_ERRCODE ResetThis( void );
 
 	
@@ -113,6 +106,19 @@ public:
 		void *cookie,bool exclusive=true);
 
 protected:
+	aui_Switch()
+	:
+		aui_Control             (),
+		m_state                 (0),
+		m_numStates             (k_AUI_SWITCH_DEFAULTNUMSTATES),
+		m_drawCallbackExclusive (true),
+		m_drawFunc              (NULL),
+		m_drawCookie            (NULL)
+	{};
+
+	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon( sint32 state, sint32 numStates );
+
 	sint32	m_state;		
 	sint32	m_numStates;	
 

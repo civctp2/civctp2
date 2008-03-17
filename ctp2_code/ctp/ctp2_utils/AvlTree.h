@@ -26,15 +26,18 @@
 //
 //----------------------------------------------------------------------------
 
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #ifndef AVL_H
 #define AVL_H
 
 #include <algorithm>
 #include <iostream>
-#include <utility>
 #include <ostream>
+#include <utility>
 
-using std::ostream;
 
 
 
@@ -42,8 +45,8 @@ using std::ostream;
 
 enum  cmp_t {
 	MIN_CMP = -1,   
-		EQ_CMP  = 0,    
-		MAX_CMP = 1     
+	EQ_CMP  = 0,    
+	MAX_CMP = 1     
 };
 
 
@@ -83,16 +86,17 @@ public:
 	KeyType Key() const { return  myKey; }
 	
 	
-	ostream &
-		Print(ostream & os) const { 
+	std::ostream & Print(std::ostream & os) const
+	{
 		os << myKey;
-		return  os;
+		return os;
 	}
 };
 
 template <class KeyType>
-inline ostream & operator<<(ostream & os, Comparable<KeyType> item) {
-	return  item.Print(os);
+inline std::ostream & operator<<(std::ostream & os, Comparable<KeyType> item)
+{
+	return item.Print(os);
 }
 
 
@@ -287,8 +291,7 @@ public:
    ~AvlTree() { if (myRoot)  delete myRoot; }
 
       
-   void
-   DumpTree(ostream & os) const;
+   void DumpTree(std::ostream & os) const;
 
       
    int
@@ -524,7 +527,7 @@ AvlNode<KeyType>::Insert(Comparable<KeyType> *   item,
     }
     
     int increase = result * change;  
-    root->myBal += increase;    
+    root->myBal = root->myBal + static_cast<short>(increase);
 
     change =  (increase && root->myBal)
                   ? (1 - ReBalance(root))
@@ -588,7 +591,7 @@ AvlNode<KeyType>::Delete(KeyType              key,
 
     if (decrease) 
     {
-        root->myBal -= static_cast<short>(decrease);
+        root->myBal = root->myBal - static_cast<short>(decrease);
         if (root->myBal) 
         {
             change = ReBalance(root);  
@@ -662,8 +665,8 @@ AvlNode<KeyType>::Check() const {
 
 
 
-static inline ostream &
-Indent(ostream & os, int len) {
+static inline std::ostream & Indent(std::ostream & os, int len) 
+{
    for (int i = 0; i < len; i++) {
       os << ' ';
    }
@@ -673,13 +676,15 @@ Indent(ostream & os, int len) {
 enum TraversalOrder { LTREE, KEY, RTREE };
 
 template <class KeyType>
-static void
-Dump(ostream & os,
-     TraversalOrder order,
-     const AvlNode<KeyType> * node,
-     int level=0)
+static void Dump
+(
+    std::ostream & os,
+    TraversalOrder order,
+    const AvlNode<KeyType> * node,
+    int level=0
+)
 {
-    unsigned  len = (level * 5) + 1;
+    int len = (level * 5) + 1;
     if ((order == LTREE) && (node->Subtree(LEFT) == NULL)) {
        Indent(os, len) << "     **NULL**" << std::endl;
     }
@@ -692,8 +697,7 @@ Dump(ostream & os,
 }
 
 template <class KeyType>
-static void
-Dump(ostream & os, const AvlNode<KeyType> * node, int level=0)
+static void Dump(std::ostream & os, const AvlNode<KeyType> * node, int level=0)
 {
    if (node == NULL) {
       os << "***EMPTY TREE***" << std::endl;
@@ -711,8 +715,8 @@ Dump(ostream & os, const AvlNode<KeyType> * node, int level=0)
 }
 
 template <class KeyType>
-void
-AvlTree<KeyType>::DumpTree(ostream & os) const {
+void AvlTree<KeyType>::DumpTree(std::ostream & os) const 
+{
    Dump(os, myRoot);
 }
 

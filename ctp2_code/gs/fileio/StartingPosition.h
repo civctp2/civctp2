@@ -1,6 +1,11 @@
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
-#ifndef __STARTING_POSITION_H__
-#define __STARTING_POSITION_H__
+#ifndef STARTING_POSITION_H_
+#define STARTING_POSITION_H_
+
+struct StartingPosition;
 
 enum STARTINFOTYPE {
 	STARTINFOTYPE_NONE,
@@ -10,6 +15,9 @@ enum STARTINFOTYPE {
 	                              
 	STARTINFOTYPE_NOLOCS,		
 };
+
+#include "ctp2_inttypes.h"
+#include "MapPoint.h"
 
 struct StartingPosition {
 	MapPoint point;

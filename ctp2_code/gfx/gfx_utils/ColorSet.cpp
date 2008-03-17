@@ -40,6 +40,7 @@
 #include "c3errors.h"
 #include "c3files.h"
 #include "pixelutils.h"
+#include <stdexcept>    // std::exception, std::runtime_error
 #include "Token.h"
 
 extern sint32 g_is565Format;
@@ -101,7 +102,7 @@ template <typename T> T ParseNextNumber(Token & tokenStream)
 {
     if (TOKEN_NUMBER != tokenStream.Next())
     {
-        throw std::exception("Error during parse.");
+        throw std::runtime_error("Error during parse.");
     }
 
 
@@ -190,7 +191,7 @@ void ColorSet::Import(uint32 fileNumber)
     {
         if (TOKEN_NUMBER != theToken.GetType())
         {
-            throw std::exception("Missing number of colors.");
+            throw std::runtime_error("Missing number of colors.");
         }
 
         sint32 fileColorCount = 0;
@@ -199,14 +200,14 @@ void ColorSet::Import(uint32 fileNumber)
 		     && (fileColorCount <  static_cast<sint32>(NEW_COLOR_NUMBER_MIN))
            ) 
 		{ 
-	        throw std::exception("Illegal number of colors.");
+	        throw std::runtime_error("Illegal number of colors.");
         }
 
         if (!token_ParseKeywordNext(&theToken, TOKEN_COLORSET) ||
 	        !token_ParseAnOpenBraceNext(&theToken)
            )
         {
-            throw std::exception("Error before open brace."); 
+            throw std::runtime_error("Error before open brace."); 
         }
 
         size_t const    arraySize   = 
@@ -217,7 +218,7 @@ void ColorSet::Import(uint32 fileNumber)
         {
 	        if (!token_ParseKeywordNext(&theToken, TOKEN_COLORSET_COLOR)) 
             {
-		        throw std::exception("Error during parse."); 
+		        throw std::runtime_error("Error during parse."); 
             }
 	        
 	        uint16 const    r       = ParseNextNumber<uint16>(theToken);

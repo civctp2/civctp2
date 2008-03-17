@@ -54,10 +54,14 @@ SpriteGroupList	*       g_citySpriteGroupList   = NULL;
 
 void spritegrouplist_Initialize(void)
 {
-    allocated::reassign(g_unitSpriteGroupList, new SpriteGroupList());
-    allocated::reassign(g_effectSpriteGroupList, new SpriteGroupList());
-    allocated::reassign(g_goodSpriteGroupList, new SpriteGroupList());
-    allocated::reassign(g_citySpriteGroupList, new SpriteGroupList());
+    delete g_unitSpriteGroupList;
+    g_unitSpriteGroupList = new SpriteGroupList();
+    delete g_effectSpriteGroupList;
+    g_effectSpriteGroupList = new SpriteGroupList();
+    delete g_goodSpriteGroupList;
+    g_goodSpriteGroupList = new SpriteGroupList();
+    delete g_citySpriteGroupList;
+    g_citySpriteGroupList = new SpriteGroupList();
 }
 
 void spritegrouplist_Cleanup(void)

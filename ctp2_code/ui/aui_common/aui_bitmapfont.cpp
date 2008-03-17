@@ -825,15 +825,11 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 	
 	if ( !Rectangle_Intersect( bound, clip ) ) return AUI_ERRCODE_OK;
 
-	const MBCHAR *ptr = string;
-	const MBCHAR *start = ptr;
-
-	sint32 len = strlen( string );
-	Assert( len <= k_AUI_BITMAPFONT_MAXSTRLEN );
-	if ( len > k_AUI_BITMAPFONT_MAXSTRLEN )
-		len = k_AUI_BITMAPFONT_MAXSTRLEN;
-
-	const MBCHAR *stop = ptr + len;
+	const MBCHAR *  ptr     = string;
+	const MBCHAR *  start   = ptr;
+	size_t          len     = 
+		std::min<size_t>(strlen(string), k_AUI_BITMAPFONT_MAXSTRLEN);
+	const MBCHAR *  stop    = ptr + len;
 
 	POINT penPos = { bound->left, bound->top + m_baseLine };
 

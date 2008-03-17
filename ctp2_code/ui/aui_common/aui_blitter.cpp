@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Standardized code (May 21th 2006 Martin Gühmann)
+// - Replaced inline assembly for 32 bit Intel with regular C++ library call.
 //
 //----------------------------------------------------------------------------
 
@@ -2143,7 +2144,7 @@ static spanIndex CreateStencilRow(uint16 *src, sint32 width, aui_StencilSpan *sp
 			{
 				aui_StencilSpan &s = spans[index];
 				s.length = length;
-				s.next = index+1;
+				s.next = static_cast<spanIndex>(index + 1);
 			}
 			index++;
 			length = 0;
@@ -2156,7 +2157,8 @@ static spanIndex CreateStencilRow(uint16 *src, sint32 width, aui_StencilSpan *sp
 		s.length = length;
 		s.next = kSpanNull;
 	}
-	return ++index;
+
+	return static_cast<spanIndex>(index + 1);
 }
 
 
@@ -2212,55 +2214,6 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 	return pBuffer;
 }
 
-
-
-void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength)
-{
-	
-	if (((uint32 )pDst) & 2)
-	{
-		*pDst = *pSrc;
-		pDst++, pSrc++, copylength--;
-	}
-__asm 
-	{
-		mov		ecx, copylength
-		mov		esi, pSrc
-		mov     edx, ecx
-		shr     ecx, 2
-		mov		edi, pDst
-		test	ecx, ecx
-		jz		L3
-		
-	L0:						
-		mov		eax, [esi]
-		mov		ebx, [esi+4]
-		mov		[edi], eax
-		mov		[edi+4], ebx
-		add		esi, 8
-		add		edi, 8
-		dec		ecx
-		jnz		L0
-	L3:
-		
-		test	edx, 2
-		jz		L1
-
-		mov		eax, [esi]
-		mov		[edi], eax
-		add		esi, 4
-		add		edi, 4
-	L1:
-		
-		test	edx, 1
-		jz		L2
-		mov		ax, [esi]
-		mov		[edi], ax
-	L2:
-	}
-}
-
-
 AUI_ERRCODE aui_Blitter::StencilMixBlt16(
 		aui_Surface *destSurf,
 		RECT *destRect,
@@ -2311,26 +2264,30 @@ AUI_ERRCODE aui_Blitter::StencilMixBlt16(
 		do
 		{
 			sint32 start = 0;
-			spanIndex index = stencil->rowStart[stencilRow++];
 			uint16 *srcBuf = bottomBuf;
 			sint32 pos = -stencilRect->left;
-			while (pos < max)
+			for
+			(
+				spanIndex	index = stencil->rowStart[stencilRow++];
+				(pos < max) && (index != kSpanNull);
+				index = spans[index].next
+			)
 			{
-				sint32 length = spans[index].length ;
+				sint32 length = spans[index].length;
 				if (length > 0)
 				{
-					pos += length;
-					if (pos > max) pos = max;
+					pos = std::min<sint32>(pos + length, max);
+
 					if (pos > start)
 					{
 						if (srcBuf != NULL)
-							BlockCopy16(&destBuf[start], &srcBuf[start], pos-start);
+						{
+							std::copy(srcBuf + start, srcBuf + pos, destBuf + start);
+						}
+
 						start = pos;
 					}
 				}
-				index = spans[index].next;
-				if (index == kSpanNull)
-					break;
 				srcBuf = (srcBuf==topBuf) ? bottomBuf : topBuf;
 			}
 			destBuf += destPitch;

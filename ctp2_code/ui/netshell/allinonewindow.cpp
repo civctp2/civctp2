@@ -2138,9 +2138,12 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		((aui_TextField *)(FindControl(CONTROL_GAMENAMETEXTFIELD)))->
 			SetFieldText(g_netfunc->GetSession()->GetName());
 
-        allocated::reassign(g_nsUnits, new ns_Units());
-        allocated::reassign(g_nsImprovements, new ns_Improvements());
-        allocated::reassign(g_nsWonders, new ns_Wonders());
+        delete g_nsUnits;
+        g_nsUnits = new ns_Units();
+        delete g_nsImprovements;
+        g_nsImprovements = new ns_Improvements();
+        delete g_nsWonders;
+        g_nsWonders = new ns_Wonders();
 
 		CreateExclusions();
 
@@ -2667,9 +2670,12 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		didntdoyet = false;
 
 		
-        allocated::reassign(g_nsUnits, new ns_Units());
-        allocated::reassign(g_nsImprovements, new ns_Improvements());
-        allocated::reassign(g_nsWonders, new ns_Wonders());
+        delete g_nsUnits;
+        g_nsUnits = new ns_Units();
+        delete g_nsImprovements;
+        g_nsImprovements = new ns_Improvements();
+        delete g_nsWonders;
+        g_nsWonders = new ns_Wonders();
 		
 		CreateExclusions();
 

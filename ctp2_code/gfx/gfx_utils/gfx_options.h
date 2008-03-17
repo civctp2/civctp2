@@ -42,8 +42,6 @@ public:
 	void ArmyNameOn(void);
 	void ArmyNameOff(void);
 
-	uint32 PackCellAVLKey(MapPoint const & pos);
-
 	bool IsCellTextOn(void) const { return m_cellTextOn; }
 	void CellTextOn(void);
 	void CellTextOff(void);

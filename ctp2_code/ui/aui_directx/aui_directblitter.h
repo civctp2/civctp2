@@ -14,6 +14,8 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
+class aui_DirectBlitter;
+typedef aui_DirectBlitter aui_NativeBlitter;
 
 #include "aui_blitter.h"
 

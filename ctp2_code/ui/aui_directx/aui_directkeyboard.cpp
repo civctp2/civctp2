@@ -216,12 +216,10 @@ AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 			break;
 		}
 
-		
-		
-		m_keyboardState[ ptrOd->dwOfs ] =
-			m_data.down = uint8(ptrOd->dwData) & 0x80;
-
-		m_data.key = ptrOd->dwOfs;
+		uint8 const l_DownMask  = static_cast<uint8>(ptrOd->dwData & 0x0080);
+        m_data.down                     = l_DownMask;
+		m_keyboardState[ptrOd->dwOfs]   = l_DownMask;
+		m_data.key                      = ptrOd->dwOfs;
 	}
 
 	return AUI_ERRCODE_OK;
