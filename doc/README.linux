@@ -64,7 +64,17 @@ So, let's start:
 0. Go to the source code top level directory.
 
 
-1. Run "configure". Assuming you want CTP2 installed in "/home/foo/CTP2" you
+1. Run "autogen.sh".  Type:
+
+   shell> autogen.sh
+
+
+2. Run "make bootstrap".  Just type:
+
+   shell> make bootstrap
+
+
+3. Run "configure". Assuming you want CTP2 installed in "/home/foo/CTP2" you
    would type:
    
    shell> ./configure --prefix=/home/foo/CTP2 --bindir=/home/foo/CTP2/ctp2_program/ctp
@@ -80,7 +90,7 @@ So, let's start:
    but you have to fix those problems on your own.
 
 
-2. Run "make". Simply type:
+4. Run "make". Simply type:
 
    shell> make
 
@@ -96,7 +106,7 @@ So, let's start:
    http://apolyton.net/forums/forumdisplay.php?forumid=213
 
 
-3. Run "make install" in the source directory.
+5. Run "make install" in the source directory.
 
    shell> make install
 
