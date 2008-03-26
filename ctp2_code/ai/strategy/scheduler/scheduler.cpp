@@ -117,7 +117,7 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 {
 	s_theSchedulers.resize(newMaxPlayerId + 1); // 1 extra for the Barbarians
 
-	for (size_t i = 0; i <= newMaxPlayerId; ++i)
+	for(size_t i = 0; i <= newMaxPlayerId; ++i)
 	{
 		s_theSchedulers[i].SetPlayerId(i);
 	}
@@ -126,8 +126,8 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 // no longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::LoadAll(CivArchive & archive)
 {
-    DPRINTF(k_DBG_AI, ("\n\ncalling Scheduler::LoadAll\n\n"));
-	for (sint32 i = 0; i < s_theSchedulers.size(); i++)
+	DPRINTF(k_DBG_AI, ("\n\ncalling Scheduler::LoadAll\n\n"));
+	for(sint32 i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Load(archive);
 	}
@@ -136,7 +136,7 @@ void Scheduler::LoadAll(CivArchive & archive)
 // no longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::SaveAll(CivArchive & archive)
 {
-	for (sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for(sint32 i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Save(archive);
 	}
@@ -162,7 +162,7 @@ Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 /// not used
 void Scheduler::ValidateAll()
 {
-	for (sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for(sint32 i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Validate();
 	}
@@ -205,7 +205,7 @@ Scheduler& Scheduler::operator= (const Scheduler &scheduler)
 void Scheduler::Cleanup()
 {
 	Squad_List::iterator squad_ptr_iter = m_new_squads.begin();
-	while (squad_ptr_iter != m_new_squads.end() )
+	while(squad_ptr_iter != m_new_squads.end())
 	{
 		delete *squad_ptr_iter;
 		squad_ptr_iter = m_new_squads.erase(squad_ptr_iter);
@@ -1089,7 +1089,8 @@ bool Scheduler::Prioritize_Goals()
 	if (committed_agents != m_committed_agents)
 	{
 		DPRINTF(k_DBG_AI, ("m_committed_agents out of sync (%d != %d)\n",
-			 committed_agents, m_committed_agents));
+		                   committed_agents, m_committed_agents));
+
 
 		m_committed_agents = committed_agents;
 	}

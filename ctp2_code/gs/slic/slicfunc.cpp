@@ -2280,8 +2280,8 @@ SFN_ERROR Slic_DoAutoUnload::Call(SlicArgList *args)
 	if(!args->GetInt(1, autounload))
 		return SFN_ERROR_TYPE_ARGS;
 
-    g_selected_item->SetAutoUnload((BOOL)autounload);
-    g_selected_item->EnterArmyMove(g_selected_item->GetVisiblePlayer(), pos);
+	g_selected_item->SetAutoUnload(autounload != 0);
+	g_selected_item->EnterArmyMove(g_selected_item->GetVisiblePlayer(), pos);
 
 	return SFN_ERROR_OK;
 }

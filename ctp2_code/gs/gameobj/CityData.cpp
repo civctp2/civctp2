@@ -4049,8 +4049,10 @@ bool CityData::BeginTurn()
 	// After new resource calculation - no problem
 	EatFood(); // Calculate m_food_delta = m_net_food - m_food_consumed_this_turn 
 
-	if (GrowOrStarve()) { // Deal with city starvation and growth/shrinkage
-		if (PopCount() < 1) {
+	if (GrowOrStarve())
+	{ // Deal with city starvation and growth/shrinkage
+		if (PopCount() < 1)
+		{
 			SlicObject *so = new SlicObject("265CityDestroyedByStarving");
 			so->AddRecipient(GetOwner());
 			so->AddCity(m_home_city);
@@ -4060,8 +4062,10 @@ bool CityData::BeginTurn()
 		}
 	}
 	
-	if (IsCelebratingHappiness()) {
-		if(m_lastCelebrationMsg < 0 || (m_lastCelebrationMsg + 10 < g_turn->GetRound())) {
+	if (IsCelebratingHappiness())
+	{
+		if(m_lastCelebrationMsg < 0 || (m_lastCelebrationMsg + 10 < g_turn->GetRound()))
+		{
 			SlicObject *so = new SlicObject("40CityIsCelebratingHappiness") ;
 			so->AddCity(m_home_city);
 			so->AddRecipient(m_owner);
@@ -4091,7 +4095,8 @@ bool CityData::BeginTurn()
 	// Does the city have a TerrainImprovement in it's radius? Used for pillage goal.
 	CityInfluenceIterator it(pos, m_sizeIndex);
 	Cell *cell;
-	for(it.Start(); !it.End(); it.Next()) {
+	for(it.Start(); !it.End(); it.Next())
+	{
 		cell = g_theWorld->GetCell(it.Pos());
 
 		
@@ -4108,9 +4113,12 @@ bool CityData::BeginTurn()
 	// changepop...add slave.
 	// Doing this means to add each turn slaves until the whole city is full of slaves.
 	// Welcome to slave uprising.
-	for (sint32 slavegood = 0; slavegood < g_theResourceDB->NumRecords(); ++slavegood){
-		if(g_theResourceDB->Get(slavegood)->GetAddsASlave()) {
-			if(HasNeededGood(slavegood)) { //&& if(!wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders()))
+	for (sint32 slavegood = 0; slavegood < g_theResourceDB->NumRecords(); ++slavegood)
+	{
+		if(g_theResourceDB->Get(slavegood)->GetAddsASlave())
+		{
+			if(HasNeededGood(slavegood))
+			{ //&& if(!wonderutil_GetFreeSlaves(g_theWonderTracker->GetBuiltWonders()))
 				ChangePopulation(+1);
 				ChangeSpecialists(POP_SLAVE, +1);
 			}
@@ -10151,8 +10159,10 @@ sint32 CityData::GetNumCityWonders() const
 	sint32 citywon = 0;
 	// - ok I tested this by: setting limit to 2, after giving age of reason a city having no wonders can build any wonders
 	// I gave a city one wonder and it can still build; I gave it two and it couldn't build any so I assume it works - now 6-3-2007
-	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++) {
-		if(HasCityWonder(i)) {
+	for(sint32 i = 0; i < g_theWonderDB->NumRecords(); i++)
+	{
+		if(HasCityWonder(i))
+		{
 			citywon++;
 		}
 	}
@@ -10163,11 +10173,14 @@ sint32 CityData::GetNumCityWonders() const
 sint32 CityData::GetNumCityBuildings() const
 {
 	sint32 citybld = 0;
-	for(sint32 i=0; i<g_theBuildingDB->NumRecords(); i++) {
-		if(HasEffectiveBuilding(i)) {
+	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	{
+		if(HasEffectiveBuilding(i))
+		{
 			citybld++;
 		}
 	}
+
 	return citybld;
 }
 
@@ -10178,10 +10191,9 @@ void CityData::InsurgentSpawn()
 	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
-	if (
-		   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents())
-		|| (g_theProfileDB->IsRevoltInsurgents())
-		){
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
+	|| g_theProfileDB->IsRevoltInsurgents()
+	){
 		double barbchance   = risk->GetBarbarianChance();
 		double notFounder   = 0.0;
 		double notCityStyle = 0.0;
@@ -10220,23 +10232,26 @@ void CityData::RiotCasualties()
 	m_home_city.GetPos(pos); // See CityInfluenceIterator below
 
 	//EMOD diffDB so sometimes your city when it riots creates barbs 10-25-2006
-	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
-	if (
-	   (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties())
-	|| (g_theProfileDB->IsRevoltCasualties())
-	&& (PopCount() > 1)
-	){
-			sint32 casualties = (g_rand->Next(PopCount() / 10)); 
-			if (casualties > 1) { 
-				casualties *= -1 ; //random number of caualties
-				ChangePopulation(casualties);
-				SlicObject *so = new SlicObject("999RiotCasulaties");
-				so->AddRecipient(m_owner);
-				so->AddCity(m_home_city);
-				so->AddGold(casualties) ;  
-				g_slicEngine->Execute(so) ;
-			}
+	if(
+	   (      g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()
+	      ||  g_theProfileDB->IsRevoltCasualties()
+	   )
+	   &&     PopCount() > 1
+	  )
+	{
+		sint32 casualties = (g_rand->Next(PopCount() / 10));
+
+		if (casualties > 1)
+		{
+			casualties *= -1 ; //random number of caualties
+			ChangePopulation(casualties);
+			SlicObject *so = new SlicObject("999RiotCasulaties");
+			so->AddRecipient(m_owner);
+			so->AddCity(m_home_city);
+			so->AddGold(casualties);
+			g_slicEngine->Execute(so);
+		}
 	}
 
 }

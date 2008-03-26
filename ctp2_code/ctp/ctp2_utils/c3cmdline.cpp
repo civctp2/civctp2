@@ -2390,7 +2390,7 @@ void SetUnitMovesStyleCommand::Execute(sint32 argc, char **argv)
 void AutoCenterCommand::Execute(sint32 argc, char **argv)
 {
 	if(argc > 1) {
-		g_selected_item->SetAutoCenter(atoi(argv[1]));
+		g_selected_item->SetAutoCenter(atoi(argv[1]) != 0);
 	} else {
 		g_selected_item->SetAutoCenter(!g_selected_item->IsAutoCenterOn());
 	}

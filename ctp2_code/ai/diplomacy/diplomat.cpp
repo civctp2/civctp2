@@ -205,7 +205,8 @@ sint32 Diplomat::s_proposalTypeToElemIndex[PROPOSAL_MAX];
 
 
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
-Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId) { 
+Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId)
+{
 	Assert(playerId >= 0);
 	Assert(static_cast<size_t>(playerId) < s_theDiplomats.size());
 	Assert(playerId == s_theDiplomats[playerId].GetPlayerId());
@@ -213,6 +214,12 @@ Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId) {
 	return s_theDiplomats[playerId]; 
 }
 
+bool Diplomat::HasDiplomat(const PLAYER_INDEX & playerId)
+{
+	return (playerId >= 0
+	&&      static_cast<size_t>(playerId) < s_theDiplomats.size()
+	&&      playerId == s_theDiplomats[playerId].GetPlayerId());
+}
 
 void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers) 
 {
@@ -240,9 +247,6 @@ void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
 		}
 	}
 }
-
-
-
 
 void Diplomat::CleanupAll()
 {

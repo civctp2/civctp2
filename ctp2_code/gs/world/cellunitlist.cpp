@@ -280,44 +280,49 @@ bool CellUnitList::IsEnemy(PLAYER_INDEX owner) const
 }
 
 bool CellUnitList::IsEnemy( Unit defender) const
-{ 
-    return player_isEnemy(GetOwner(), defender.GetOwner());
+{
+	return player_isEnemy(GetOwner(), defender.GetOwner());
 }
 
 bool CellUnitList::IsEnemy(CellUnitList &defender) const
-{ 
-    return (defender.Num() > 0) && IsEnemy(defender[0]); 
+{
+	return (defender.Num() > 0) && IsEnemy(defender[0]);
 }
 
 bool CellUnitList::CanAtLeastOneCaptureCity() const
 {
-	for (sint32 i = 0; i < m_nElements; i++) {
-		if(!m_array[i].GetDBRec()->GetCantCaptureCity()) {
+	for (sint32 i = 0; i < m_nElements; i++)
+	{
+		if(!m_array[i].GetDBRec()->GetCantCaptureCity())
+		{
 			return true;
 		}
 	}
+
 	return false;
 }
 
 bool CellUnitList::IsVisible(PLAYER_INDEX player) const
 {
-    for (sint32 i = 0; i < m_nElements; i++) 
-    {
+	for (sint32 i = 0; i < m_nElements; i++)
+	{
 		if(m_array[i].GetVisibility() & (1 << player))
 			return true;
 	}
+
 	return false;
 }
 
 
 bool CellUnitList::CanBeExpelled()
 {
-    for (sint32 i = 0; i < m_nElements; i++) 
-    {
+	for (sint32 i = 0; i < m_nElements; i++)
+	{
 		if(!m_array[i].CanBeExpelled())
 			return false;
-    }
-    return true;
+	}
+
+	return true;
 }
 
 

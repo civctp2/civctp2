@@ -136,10 +136,10 @@ public:
 	
 	
 
-	
-	static Diplomat & GetDiplomat(const PLAYER_INDEX & playerId);
 
-	
+	static Diplomat & GetDiplomat(const PLAYER_INDEX & playerId);
+	static bool HasDiplomat(const PLAYER_INDEX & playerId);
+
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayers);
 
 	

@@ -151,7 +151,7 @@ namespace
 	size_t const    PERIOD_COMPUTE_TILE_IMPROVEMENTS    = 5;
 	size_t const    EXPLORE_RESOLUTION                  = 5;
 
-    char const      LOG_SECTION_START[]                 = "\n\n//\n";
+	char const      LOG_SECTION_START[]                 = "\n\n//\n";
 } // namespace
 
 
@@ -1055,9 +1055,9 @@ void CtpAi::Initialize()
 #ifdef _DEBUG
 	CellUnitList unit_list;
 	
-	CtpAiDebug::SetDebugPlayer(2); 
-	CtpAiDebug::SetDebugGoalType(-1); 
-	CtpAiDebug::SetDebugArmies(unit_list); 
+	CtpAiDebug::SetDebugPlayer(2);
+	CtpAiDebug::SetDebugGoalType(-1);
+	CtpAiDebug::SetDebugArmies(unit_list);
 #endif
 
 }
@@ -2345,6 +2345,8 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 	Assert(player_ptr && player_ptr->m_advances);
 	if (player_ptr == NULL || player_ptr->m_advances == NULL)
 		return;
+
+	if(!Diplomat::HasDiplomat(player)) return;
 
 	const StrategyRecord & strategy = 
 		Diplomat::GetDiplomat(player).GetCurrentStrategy();

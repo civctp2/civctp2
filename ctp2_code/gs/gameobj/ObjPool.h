@@ -75,7 +75,7 @@ uint32 const    k_BIT_GAME_OBJ_TYPE_ARMY    =
 uint32 const    k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB  = 
     (uint32) k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB << k_ID_MASK_SHIFT;
 
-class CivArchive ;
+class CivArchive;
 
 class ObjPool
 {
@@ -90,30 +90,30 @@ class ObjPool
 
 protected:
 	uint32 m_nObjs;
-	
+
 	GameObj *m_table[k_OBJ_POOL_TABLE_SIZE];
-	
+
 //----------------------------------------------------------------------------
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
 
 private:
 
-	uint32 Key(const ID &id) const 
+	uint32 Key(const ID &id) const
 	{
 		return Key(id.m_id);
 	}
-	uint32 Key(uint32 id) const 
+	uint32 Key(uint32 id) const
 	{
 		Assert(id); 
 		Assert((id & k_ID_TYPE_MASK)== m_id_type);
 
-		return id & k_OBJ_POOL_TABLE_SIZE_MASK; 
+		return id & k_OBJ_POOL_TABLE_SIZE_MASK;
 	}
 
 public:
 
-	ObjPool(uint32 it);    
+	ObjPool(uint32 it);
 	virtual ~ObjPool();
 
 	uint32  NewKey(uint32 t);
@@ -126,8 +126,8 @@ public:
 	void    HackSetKey(uint32 k);
 	uint32  HackGetKey() { return m_nObjs; }
 
-	const GameObj * Get(const ID &id) const 
-	{ 
+	const GameObj * Get(const ID &id) const
+	{
 		return Get(id.m_id); 
 	}
 
@@ -136,7 +136,7 @@ public:
 		return GameObj_Get(m_table[Key(id)], id);
 	}
 
-	bool IsValid(const ID &id) const 
+	bool IsValid(const ID &id) const
 	{
 		return IsValid(id.m_id);
 	}
@@ -152,7 +152,7 @@ public:
 
 	GameObj* Access(const ID &id) const
 	{
-		return Access(id.m_id); 
+		return Access(id.m_id);
 	}
 
 	GameObj* Access(uint32 id) const

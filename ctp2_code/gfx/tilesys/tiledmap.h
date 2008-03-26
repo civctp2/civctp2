@@ -426,7 +426,7 @@ public:
 	void		AdjustForOverlappingSprite(POINT point, MapPoint &pos);
 
 	void		MouseDrag(aui_MouseEvent *data);
-	void		Click(aui_MouseEvent *data, BOOL doubleClick);
+	void		Click(aui_MouseEvent *data, bool doubleClick);
 	void		Drop(aui_MouseEvent *data);
 	void		Idle(void);
 

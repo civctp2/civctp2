@@ -70,23 +70,14 @@ uint32 ObjPool::NewKey(uint32 t)
 	return tmpId.m_id;
 }
 
-
 void ObjPool::HackSetKey(uint32 k)
 {
 	m_nObjs = k;
 }
 
-
-
-
-
-
-
-
-
 bool ObjPool::IsValidKey(uint32 id, uint32 &val) const
 {
-	if (!id)
+	if (id == 0)
 		return false;
 
 	if ((id & k_ID_TYPE_MASK) != m_id_type )
@@ -104,13 +95,6 @@ void ObjPool::Insert(GameObj *p)
 	GameObj_Insert(&m_table[Key(p->m_id)], p); 
 }
 
-
-
-
-
-
-
-
 void ObjPool::Del(GameObj *p)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id %lx\n", p->m_id));
@@ -122,7 +106,6 @@ void ObjPool::Del(const ID &id)
 	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id %lx\n", (uint32)id));
 	GameObj_Delete(&m_table[Key(id.m_id)], id.m_id); 
 }
-
 
 sint32 ObjPool::Num(void) const
 {

@@ -5316,69 +5316,61 @@ void TiledMap::MouseDrag(aui_MouseEvent *data)
 	}
 }
 
-void TiledMap::Click(aui_MouseEvent *data, BOOL doubleClick)
+void TiledMap::Click(aui_MouseEvent *data, bool doubleClick)
 {
 	MapPoint		pos;
 	POINT			point = data->position;
 
-	if (MousePointToTilePos(point, pos)) {
-		
-		if (data->lbutton && !data->rbutton) {
-			
-			if (g_isCheatModeOn || ScenarioEditor::HandleClicks()) {	
-				
-				if(ScenarioEditor::SelectRegion()) {
+	if (MousePointToTilePos(point, pos))
+	{
+		if (data->lbutton && !data->rbutton)
+		{
+			if (g_isCheatModeOn || ScenarioEditor::HandleClicks())
+			{
+				if(ScenarioEditor::SelectRegion())
+				{
 					ScenarioEditor::StartRegion(pos);
-				} else if(ScenarioEditor::PasteMode()) {
+				}
+				else if(ScenarioEditor::PasteMode())
+				{
 					ScenarioEditor::Paste(pos);
-				} else {
+				}
+				else
+				{
 					HandleCheat(pos);
 				}
 			}
-			else if ( g_isTransportOn ) {
-
+			else if ( g_isTransportOn )
+			{
 				g_isTransportOn = FALSE;
 				g_selected_item->Deselect( g_selected_item->GetVisiblePlayer() );
 			}
 			else if (g_tileImprovementMode)
 			{
-				
-				
-				
+				// Nothing
 			}
 			else
 			{
 				g_selected_item->RegisterClick(pos, data, doubleClick, 
 											   false, false); 
 			}
-		} else {
-			if (data->rbutton && !data->lbutton) {
-				
-				
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				if ( g_tileImprovementMode ) {
+		}
+		else
+		{
+			if (data->rbutton && !data->lbutton)
+			{
+				if ( g_tileImprovementMode )
+				{
 					g_selected_item->Deselect( g_selected_item->GetVisiblePlayer() );
-				} 
-				else {
+				}
+				else
+				{
 					g_selected_item->RegisterClick(pos, data, doubleClick, false, false);
 				}
-			} else {
-				
+			}
+			else
+			{
+				// Nothing
 			}
 		}
 	}

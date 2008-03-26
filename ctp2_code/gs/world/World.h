@@ -560,13 +560,13 @@ public:
     void GamestateDebug(); 
     void SetColor(const MapPoint &pos, sint32 c);
 
-    sint32 GetTopVisibleUnit (const MapPoint &pos, Unit &top) const;
-    sint32 GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const;
-    sint32 GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, BOOL includeCities = TRUE) const; 
+    bool GetTopVisibleUnit (const MapPoint &pos, Unit &top) const;
+    bool GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const;
+    bool GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, bool includeCities = true) const;
     
-    sint32 GetTopRadarUnit(const MapPoint &pos, Unit &top) const;
+    bool GetTopRadarUnit(const MapPoint &pos, Unit &top) const;
     
-    sint32 GetSecondUnit (const MapPoint &pos, Unit &second) const;
+    bool GetSecondUnit (const MapPoint &pos, Unit &second) const;
 
     void GlobalWarming     (const sint32 phase);
     void GlobalWarmingEvent(const sint32 phase);

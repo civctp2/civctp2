@@ -422,41 +422,43 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 #endif
 }
 
-sint32 World::GetTopVisibleUnit (const MapPoint &pos, Unit &top) const 
+bool World::GetTopVisibleUnit (const MapPoint &pos, Unit &top) const
 {
 	sint32 looking_player = g_selected_item->GetVisiblePlayer();
-	return GetTopVisibleUnit (looking_player, pos, top, TRUE);
+	return GetTopVisibleUnit (looking_player, pos, top, true);
 }
 
-sint32 World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, BOOL includeCities) const
+bool World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos, Unit &top, bool includeCities) const
 {
 	Cell *c;
 
 	top.m_id = (0);
 	c = GetCell(pos);
 
-	if(includeCities) {
-		if (c->GetCity().IsValid()) {
+	if(includeCities)
+	{
+		if (c->GetCity().IsValid())
+		{
 			top = c->GetCity();
-			return TRUE; 
-		} 
+			return true;
+		}
 	}
 
-    sint32 n = c->GetNumUnits();
-    if (n>0) { 
-		
-		
+	if(c->GetNumUnits() > 0)
+	{
 		PLAYER_INDEX s_player;
 		ID s_item;
 		SELECT_TYPE s_state;
 		Army selectedArmy;
 		g_selected_item->GetTopCurItem(s_player, s_item, s_state);
 		if(s_state == SELECT_TYPE_LOCAL_ARMY &&
-		   s_player == looking_player ) {
+		   s_player == looking_player )
+		{
 			selectedArmy = s_item;
 			static MapPoint spos;
 			selectedArmy.GetPos(spos);
-			if(spos == pos) {
+			if(spos == pos)
+			{
 				top = selectedArmy.GetTopVisibleUnit(looking_player);
 				return top.IsValid();
 			}
@@ -466,71 +468,78 @@ sint32 World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &po
 		return top.IsValid();
 	}
 
-	return FALSE;
+	return false;
 }
 
-sint32 World::GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const
+bool World::GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const
 {
 	sint32 player = g_selected_item->GetVisiblePlayer();
-	return GetTopVisibleUnit(player, pos, top, FALSE);
+	return GetTopVisibleUnit(player, pos, top, false);
 }
 
-sint32 World::GetTopRadarUnit(const MapPoint &pos, Unit &top) const
+bool World::GetTopRadarUnit(const MapPoint &pos, Unit &top) const
 {
 	Cell *c;
 	top.m_id = (0);
 	c = GetCell(pos);
-	BOOL hasGlobalRadar;
-	if(g_player[g_selected_item->GetVisiblePlayer()]) {
+	bool hasGlobalRadar;
+	if(g_player[g_selected_item->GetVisiblePlayer()])
+	{
 		hasGlobalRadar = wonderutil_GetGlobalRadar(
 			g_player[g_selected_item->GetVisiblePlayer()]->m_builtWonders);
-	} else {
-		hasGlobalRadar = FALSE;
+	}
+	else
+	{
+		hasGlobalRadar = false;
 	}
 	uint32 playerMask = 1 << g_selected_item->GetVisiblePlayer();
 	if(c->GetCity().IsValid() &&
 	   ((c->GetCity().AccessData()->GetRadarVisibility() & playerMask ) ||
 		(c->GetCity().AccessData()->GetEverVisible() & playerMask) ||
-		hasGlobalRadar)) {
+		hasGlobalRadar))
+	{
 		top = c->GetCity();
-		return TRUE;
+		return true;
 	}
 
-	sint32 i, n = c->GetNumUnits();
-	for(i = 0; i < n; i++) { 
-		if(!c->AccessUnit(i).IsValid()) {
-			if(g_network.IsClient()) {
+	sint32 n = c->GetNumUnits();
+	for(sint32 i = 0; i < n; i++)
+	{
+		if(!c->AccessUnit(i).IsValid())
+		{
+			if(g_network.IsClient())
+			{
 				g_network.RequestResync(RESYNC_INVALID_UNIT);
-				return FALSE;
+				return false;
 			}
-			Assert(FALSE);
-			return FALSE;
+			Assert(false);
+			return false;
 		}
 
 		if((c->AccessUnit(i).GetRadarVisibility() & playerMask) ||
 		   (c->AccessUnit(i).GetVisibility() & playerMask) ||
-		   hasGlobalRadar) {
+		   hasGlobalRadar)
+		{
 			top = c->AccessUnit(i);
 			return top.m_id != (0);
 		}
 	}
-	return FALSE;
+	return false;
 }
 
-
-sint32 World::GetSecondUnit (const MapPoint &pos, Unit &second) const 
+bool World::GetSecondUnit (const MapPoint &pos, Unit &second) const
 {
 	Cell *c = GetCell(pos);
 
 	sint32 n = c->GetNumUnits();
-	if (n>1)
+	if (n > 1)
 	{
 		second = c->AccessUnit(n-2);
 
-		return TRUE; 
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 CellUnitList * World::GetArmyPtr(const MapPoint &pos)

@@ -87,10 +87,11 @@ class OrderRecord;
 #define k_SELECTED_ITEM_VERSION_MAJOR 0 
 #define k_SELECTED_ITEM_VERSION_MINOR 0
 
-class SelectedItem {
+class SelectedItem
+{
 	typedef void (SelectedItem::*ClickFunctionPtr) (const MapPoint &pos,
 												const aui_MouseEvent *data,
-												BOOL doubleClick);
+												bool doubleClick);
 
 
 	// Serialized
@@ -106,28 +107,27 @@ class SelectedItem {
 
 	DynamicArray<Army> m_select_cycle;
 
-	sint32 m_is_pathing;
-	MapPoint m_cur_mouse_tile;
-	Path *m_good_path, m_bad_path;
-	bool m_is_broken_path; 
+	bool         m_is_pathing;
+	MapPoint     m_cur_mouse_tile;
+	Path *       m_good_path, m_bad_path;
+	bool         m_is_broken_path; 
 	DynamicArray<MapPoint> m_waypoints;
 	PLAYER_INDEX m_player_on_screen;
-	BOOL m_auto_unload;
-	BOOL m_gotClickSinceLastAutoEnd;
-	BOOL m_selected_something_since_director_select;
-	Army m_force_select_army;
-	BOOL m_ignoreCitySelect;
-	bool m_isDragging;
-	MapPoint m_startDragPos;
+	bool         m_auto_unload;
+	bool         m_gotClickSinceLastAutoEnd;
+	bool         m_selected_something_since_director_select;
+	Army         m_force_select_army;
+	bool         m_ignoreCitySelect;
+	bool         m_isDragging;
+	MapPoint     m_startDragPos;
 	OrderRecord *m_moveOrder;
 	OrderRecord *m_transportOrder;
-	uint32 m_clickStartTime;
-	bool m_gotClick;
-	bool m_justNowSelectedArmy;
-	bool m_justGotDoubleClick;
+	uint32       m_clickStartTime;
+	bool         m_gotClick;
+	bool         m_justNowSelectedArmy;
+	bool         m_justGotDoubleClick;
 
 	ClickFunctionPtr m_clickFunc[SELECT_TYPE_MAX][SELECT_TYPE_MAX][SELECT_BUTTON_MAX][SELECT_MODE_MAX];
-
 
 public:
 	friend class NetUnit;
@@ -136,7 +136,6 @@ public:
 	SelectedItem(CivArchive &archive); 
 	~SelectedItem();
 
-
 	void Serialize(CivArchive &archive); 
 	void Init();
 
@@ -144,28 +143,28 @@ public:
 
 	void EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos);
 
-	void SetAutoUnload(BOOL a) { m_auto_unload = a; }
-	BOOL GetAutoUnload() { return(m_auto_unload); }
+	void SetAutoUnload(bool a) { m_auto_unload = a; }
+	bool GetAutoUnload() { return(m_auto_unload); }
 
 	void PlaySelectedSound(Unit &unit);
-	sint32 GetTopUnitOrCity(const MapPoint &pos, Unit &top);
-	sint32 GetTopUnit(const MapPoint &pos, Unit &top);
+	bool GetTopUnitOrCity(const MapPoint &pos, Unit &top);
+	bool GetTopUnit(const MapPoint &pos, Unit &top);
 
 	SELECT_TYPE GetClickedThing(const MapPoint &pos, bool click);
-	void RegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
+	void RegisterClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick,
 					   bool leftDrag, bool leftDrop); 
 
 	void KeyboardSelectFirstUnit(); 
-	void SelectFirstUnit(BOOL setSelect = TRUE);
-	void NextUnmovedUnit(BOOL isFirst = FALSE, BOOL manualNextUnit = FALSE);
-	void MaybeAutoEndTurn(BOOL isFirst = FALSE);
+	void SelectFirstUnit(bool setSelect = true);
+	void NextUnmovedUnit(bool isFirst = false, bool manualNextUnit = false);
+	void MaybeAutoEndTurn(bool isFirst = false);
 
 	void Refresh();
-	void SetSelectCity(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
-	void SetSelectUnit(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
+	void SetSelectCity(const Unit &u, bool all = true, bool isDoubleClick = false);
+	void SetSelectUnit(const Unit &u, bool all = true, bool isDoubleClick = false);
 	void SetSelectGood(const MapPoint &pos);
 
-	SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; } 
+	SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; }
 
 	void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
 					   SELECT_TYPE &s_state);
@@ -190,12 +189,13 @@ public:
 
 
 	void SetCurPlayer (PLAYER_INDEX p);
-	PLAYER_INDEX GetCurPlayer() const { return m_current_player; }; 
+	PLAYER_INDEX GetCurPlayer() const { return m_current_player; };
 	void RemovePlayer(PLAYER_INDEX p); 
 	void AddPlayer(PLAYER_INDEX p) ;
 	sint32 GetVisiblePlayer() const;
-	BOOL IsAutoCenterOn() const;
-	void SetAutoCenter(const BOOL on);
+	bool IsPlayerVisible(sint32 player) const { return player == GetVisiblePlayer(); };
+	bool IsAutoCenterOn() const;
+	void SetAutoCenter(const bool on);
 
 
 	void AddWaypoint(const MapPoint &p);
@@ -204,12 +204,11 @@ public:
 	void GetOldMouseTilePos(MapPoint &p) const { p = m_cur_mouse_tile; }
 	void SetCurMouseTile(const MapPoint &p) { m_cur_mouse_tile = p; }
 	void SetDrawablePathDest(MapPoint &p); 
-	void ConstructPath(BOOL &isCircular, double &cost);
+	void ConstructPath(bool &isCircular, double &cost);
 
 	Path *GetGoodPath() { return m_good_path; }
 	Path GetBadPath() { return m_bad_path; }
 
-	
 	void SelectTradeRoute(const MapPoint &p);
 
 
@@ -217,7 +216,7 @@ public:
 	bool IsLocalCity() const;
 
 	void Patrol(const MapPoint &pos);
-	BOOL ResumePatrol();
+	bool ResumePatrol();
 	void ForgetPatrol();
 	void ProcessUnitOrders();
 
@@ -281,7 +280,7 @@ public:
 	void EntrenchArmy(sint32 owner, sint32 index);
 	void SleepArmy(sint32 owner, sint32 index);
 	void InterceptTrade(void);
-	BOOL GetSelectedCity( Unit &city );
+	bool GetSelectedCity( Unit &city );
 	void UnitCityToggle();
 
 	PLAYER_INDEX GetPlayerOnScreen(void) { return m_player_on_screen; }
@@ -296,48 +295,49 @@ public:
 	void RegisterManualEndTurn();
 	void UpdateSelectedItem( void );
 
-	BOOL GetInciteRevolutionCost( const MapPoint &point, sint32 &cost );
-	BOOL GetInciteUprisingCost( const MapPoint &point, sint32 &cost );
+	bool GetInciteRevolutionCost( const MapPoint &point, sint32 &cost );
+	bool GetInciteUprisingCost( const MapPoint &point, sint32 &cost );
 
 	void ArmyMovedCallback(Army &a);
 
 	
 	void SetupClickFunctions();
-	void NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
+	void NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick,
 						  bool leftDrag, bool leftDrop);
 
-	void ErrorClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void NullClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void ErrorClick             (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void NullClick              (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
 
-	void SelectArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectArmyCommandClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectGoodClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectTradeRouteClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void SelectArmyClick          (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectArmyCommandClick   (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectCityClick          (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectEnemyCityClick     (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectEnemyArmyClick     (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectGoodClick          (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectTradeRouteClick    (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
 
-	void DeselectClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void DeselectClick            (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void UnloadClick              (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
 
-	void TerrainContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void ArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void CityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void EnemyCityContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void EnemyArmyContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void TradeRouteContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void GoodContextClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void TerrainContextClick      (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void ArmyContextClick         (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void CityContextClick         (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void EnemyCityContextClick    (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void EnemyArmyContextClick    (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void TradeRouteContextClick   (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void GoodContextClick         (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
 
-	void SendGoodClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void SendGoodClick            (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
 
-	void MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void MoveArmyClick            (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
 
-	void StartMoveClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void MoveDrag(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void ActionClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void SelectArmyStartMoveClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
-	void CancelPathingClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick);
+	void StartMoveClick           (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void MoveDrag                 (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void MoveDrop                 (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void ActionClick              (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void SelectArmyStartMoveClick (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+	void CancelPathingClick       (const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick);
+
 	void CheckPreOrderMove(MapPoint &pos, aui_MouseEvent *data);
 
 	bool GetSelectedArmy(Army &a);
@@ -346,7 +346,7 @@ public:
 	OrderRecord *GetTransportOrder() {return m_transportOrder;}
 };
 
-BOOL CanAutoSelect(const Army &army);
+bool CanAutoSelect(const Army &army);
 
 extern uint32 SelectedItem_GetVersion(void);
 
