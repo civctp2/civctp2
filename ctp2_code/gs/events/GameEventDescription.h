@@ -258,7 +258,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(CreateBuilding,             "Create a building", "%c%i")
 	EVENT(CreateWonder,               "Create a wonder", "%c%i")
 
-	EVENT(RunCombat,                  "Run one round of combat", "%a%l%P%P")
+	EVENT(RunCombat,                  "Run one round of combat", "$a%l%P%P")
 	EVENT(StartCombat,                "Start a battle", "%a%l")
 
 	EVENT(BuyFront,                   "Rush buy an item in a city", "%c")

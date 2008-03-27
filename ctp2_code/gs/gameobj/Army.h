@@ -55,18 +55,18 @@ class UnitActor;
 class MapPoint;
 class Order;
 
-size_t const	MAX_UNIT_COUNT	= 100;   // TODO: check k_MAX_ARMY_SIZE
+size_t const	MAX_UNIT_COUNT = k_MAX_ARMY_SIZE;
 
 
 class Army : public ID
-{ 
-public: 
+{
+public:
 	const ArmyData *GetData() const;
 	ArmyData *AccessData() const;
 
-    Army(sint32 val) : ID(val) {}
+	Army(sint32 val)     : ID(val) {}
 	Army(uint32 val = 0) : ID(val) {}
-    Army(ID const & i) : ID(i) {}
+	Army(ID const & i)   : ID(i)   {}
 
 	ArmyData *operator -> () const { return AccessData(); }
 
@@ -86,8 +86,6 @@ public:
 	sint32 DelIndex(sint32 i);
 	const Unit &Get(sint32 i) const;
 	bool IsPresent(Unit &u);
-	
-
 
 	bool Insert(const Unit &id); 
 
@@ -119,7 +117,6 @@ public:
 	bool IsEnemy(Unit defender) const;
 	bool IsEnemy(Army &defender) const;
 
-
 	double GetHPModifier(); 
 
 	bool IsAsleep() const;
@@ -144,7 +141,6 @@ public:
 		PLAYER_INDEX const	looker
 	) const;
 	void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
-
 
 	bool IsArmyPosFilled(const MapPoint &pos) const;
 	void ResolveArmyPosConflicts();
@@ -172,7 +168,7 @@ public:
 					  sint32 &uindex);
 	bool CanSlaveRaid(double &success, double &death, 
 					  sint32 &timer, sint32 &amount);
-    bool IsSlaveRaidPossible(const MapPoint &point, 
+	bool IsSlaveRaidPossible(const MapPoint &point, 
 							 double &success, double &death, sint32 &timer, sint32 &amount,
 							 sint32 &uindex, bool &target_is_city, Unit &target_city, Unit &home_city);
 
@@ -181,7 +177,7 @@ public:
 							   sint32 &uindex);
 	bool CanUndergroundRailway(double &success, double &death);
 	bool CanInciteUprising(sint32 &uindex);
-	
+
 	bool CanEstablishEmbassy(sint32 &uindex);
 	bool CanEstablishEmbassy();
 
@@ -194,10 +190,9 @@ public:
 	bool CanConvertCity(double &chance, double &deathChance);
 	bool CanConvertCity(const MapPoint &point);
 
-	
 	bool CanThrowParty(sint32 &uindex);
 	bool CanThrowParty();
-	
+
 	bool CanReformCity(sint32 &uindex, const MapPoint &point);
 	bool CanReformCity();
 
@@ -234,10 +229,9 @@ public:
 						bool &isSourceCity, bool &isDestCity);
 
 	bool HasLeftMap() const;
-	
+
 	void CurMinMovementPoints(double &cur) const; 
 	void MinMovementPoints(double &cur) const; 
-	
 
 	bool CanBombard(const MapPoint &point);
 	bool CanBombard();
@@ -249,9 +243,6 @@ public:
 	CAUSE_REMOVE_ARMY GetRemoveCause() const;
 
 	void ResetPos();
-
-	
-
 
 	sint32 NumOrders() const;
 	const Order *GetOrder(sint32 index) const;
@@ -286,7 +277,6 @@ public:
 	
 	bool CanAdvertise() const;
 
-	
 	bool CanBeachAssault();
 	bool CanHearGossip();
 	bool CanSlaveUprising();

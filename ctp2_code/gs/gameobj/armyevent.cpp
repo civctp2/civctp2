@@ -757,7 +757,7 @@ STDEHANDLER(ArmyMoveEvent)
  
 
 */		//end EMOD
-		if (armyData->IsOccupiedByForeigner(newPos)) 
+		if (armyData->IsOccupiedByForeigner(newPos))
 		{
 			CellUnitList * defender = g_theWorld->GetCell(newPos)->UnitArmy();
 
@@ -815,7 +815,7 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
-			g_gevManager->AddEvent(GEV_INSERT_Tail,
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_FinishAttack,
 								   GEA_Army, army,
 								   GEA_MapPoint, newPos,
@@ -1376,7 +1376,7 @@ STDEHANDLER(MoveUnitsEvent)
 		return GEV_HD_Stop;
 	}
 
-	a->CheckTerrainEvents(); 
+	a->CheckTerrainEvents();
 	
 	a->IncrementOrderPath();
 

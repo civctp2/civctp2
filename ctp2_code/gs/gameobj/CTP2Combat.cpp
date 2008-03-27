@@ -35,7 +35,6 @@
 #include "cellunitlist.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
-#include "GameEventManager.h"
 #include "AICause.h"
 #include "RandGen.h"
 
@@ -136,42 +135,55 @@ static void combat_print(sint32 level, const char *fmt, ...)
 #endif
 
 #ifdef TEST_APP
-CombatUnit::CombatUnit(double offense, double defense,
-                       double strength, double armor,
-                       double ranged, double hp,
-                       UNIT_TYPE type,
-                       bool const isVeteran)
-:	m_offense(offense),
-	m_defense(defense),
-	m_strength(strength),
-	m_armor(armor),
-	m_ranged(ranged),
-	m_hp(hp),
-	m_isVeteran(isVeteran),
-	m_type(type)
+CombatUnit::CombatUnit
+(
+    double     offense,
+    double     defense,
+    double     strength,
+    double     armor,
+    double     ranged,
+    double     hp,
+    UNIT_TYPE  type,
+    bool const isVeteran
+)
+:
+    m_offense             (offense),
+    m_defense             (defense),
+    m_strength            (strength),
+    m_armor               (armor),
+    m_ranged              (ranged),
+    m_hp                  (hp),
+    m_isVeteran           (isVeteran),
+    m_type                (type),
+    m_valid               (true)
 {
-	m_valid = true;
-
 	m_id = s_unitId++;
 	s_trackedUnits[m_id].m_unit = *this;
 }
 
 #else 
 
-CombatUnit::CombatUnit(double offense, double defense,
-                       double strength, double armor,
-                       double ranged, double hp,
-                       Unit &u)
-:	m_offense(offense),
-	m_defense(defense),
-	m_strength(strength),
-	m_armor(armor),
-	m_ranged(ranged),
-	m_hp(hp),
-	m_isVeteran(u.IsVeteran()),
-	m_unit(u)
+CombatUnit::CombatUnit
+(
+    double offense,
+    double defense,
+    double strength,
+    double armor,
+    double ranged,
+    double hp,
+    Unit &u
+)
+:
+    m_offense   (offense),
+    m_defense   (defense),
+    m_strength  (strength),
+    m_armor     (armor),
+    m_ranged    (ranged),
+    m_hp        (hp),
+    m_isVeteran (u.IsVeteran()),
+    m_unit      (u),
+    m_valid     (true)
 {
-	m_valid = true;
 
 	const UnitRecord *rec = m_unit.GetDBRec();
 	if(rec->GetMovementTypeAir() &&
@@ -212,16 +224,15 @@ void CombatUnit::DeductHP(double amt)
 
 
 CombatField::CombatField(sint32 width, sint32 height, bool isOffense)
+:
+    m_width     (width),
+    m_height    (height),
+    m_isOffense (isOffense)
 {
 	m_field = new CombatUnit *[width];
-	sint32 i;
-	for(i = 0; i < width; i++) {
+	for(sint32 i = 0; i < width; i++) {
 		m_field[i] = new CombatUnit[height];
 	}
-
-	m_width = width;
-	m_height = height;
-	m_isOffense = isOffense;
 }
 
 
@@ -229,7 +240,7 @@ CombatField::CombatField(sint32 width, sint32 height, bool isOffense)
 
 CombatField::~CombatField()
 {
-	for (int i = 0; i < m_width; i++)
+	for(sint32 i = 0; i < m_width; i++)
 	{
 		delete m_field[i];
 	}
@@ -284,11 +295,9 @@ sint32 CombatField::NumAlive()
 	return count;
 }
 
-
-
 bool CombatField::FindTargetForRangedAttackFrom(sint32 x, sint32 y,
 												 sint32 *dx, sint32 *dy)
-{	
+{
 	sint32 yc, xc;
 
 	*dx = *dy = -1;
@@ -312,10 +321,6 @@ bool CombatField::FindTargetForRangedAttackFrom(sint32 x, sint32 y,
 		}
 	}
 
-	
-	
-	
-	
 	for(xc = 0; xc < m_width; xc++) {
 		for(yc = 0; yc < m_height; yc++) {
 			if(m_field[xc][yc].IsActive()) {
@@ -334,12 +339,10 @@ bool CombatField::FindTargetForAttackFrom(sint32 x, sint32 y,
 										  sint32 *dx, sint32 *dy,
 										  bool isFlanker)
 {
-	
 	Assert(x == 0);
 
 	*dx = *dy = -1;
 
-	
 	if(m_field[x][y].IsActive()) {
 		*dx = x;
 		*dy = y;
@@ -376,7 +379,6 @@ bool CombatField::FindTargetForAttackFrom(sint32 x, sint32 y,
 
 void CombatField::Move()
 {
-	
 	sint32 x, y, y2;
 //	sint32 frontCount = CountColumn(k_FRONT_COL);
 	for(x = 1; x < m_width; x++) {
@@ -407,8 +409,6 @@ void CombatField::Move()
 		}
 	}
 
-	
-	
 	CombatUnit *newRow = new CombatUnit[m_width];
 	sint32 rowPos = 0;
 
@@ -421,7 +421,6 @@ void CombatField::Move()
 			}
 		}
 
-		
 		for(x = 0; x < rowPos; x++) {
 			m_field[x][y] = newRow[x];
 		}
@@ -492,16 +491,6 @@ void CombatField::Sort()
 	Assert(dbgcount);
 	dbgcount = 0;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	for(x = 0; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			m_field[x][y].Invalidate();
@@ -525,6 +514,7 @@ void CombatField::Sort()
 				dbgcount++;
 		}
 	}
+
 	Assert(dbgcount);
 }
 
@@ -611,7 +601,7 @@ void CombatField::MoveUnitsToFront(sint32 num)
 		}
 
 		if(ydelta != 0 && num > 0) {
-            if(!m_field[k_FRONT_COL][ycenter - ydelta].IsActive()) {
+			if(!m_field[k_FRONT_COL][ycenter - ydelta].IsActive()) {
 				
 				MoveRowForward(ycenter - ydelta);
 				if(m_field[k_FRONT_COL][ycenter - ydelta].IsActive())
@@ -654,7 +644,6 @@ void CombatField::FindOpponents(CombatField &opposite)
 
 void CombatField::FillHoles()
 {
-	
 	sint32 ydelta = 0;
 	sint32 ycenter = m_height / 2;
 	sint32 x;
@@ -795,45 +784,50 @@ void error_exit(char *s, ...)
 #endif
 
 #ifdef TEST_APP
-CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
-	m_width(w),
-	m_height(h),
-	m_attackers(w, h, true),
-	m_defenders(w, h, false)
+CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input)
+:
+    m_width               (w),
+    m_height              (h),
+    m_attackers           (w, h, true),
+    m_defenders           (w, h, false),
+    m_retreated           (false),
+    m_retreating          (false),
+    m_noAttacksPossible   (false),
+    m_unitsHaveBeenKilled (false)
 {
-	
 	sint32 state = 0;
 	sint32 lineNum = 0;
-	m_retreated = false;
-	m_retreating = false;
-	m_noAttacksPossible = false;
 
-	while(!feof(input)) {
-
-		
+	while(!feof(input))
+	{
 		char line[1024];
 		if(!fgets(line, 1024, input))
 			break;
 
 		lineNum++;
 
-		if(line[0] == '#') {
-			
+		if(line[0] == '#')
+		{
 			continue;
-		} else if(strnicmp(line, "[attackers]", 11) == 0) {
-			
+		}
+		else if(strnicmp(line, "[attackers]", 11) == 0)
+		{
 			state = 1;
-		} else if(strnicmp(line, "[defenders]", 11) == 0) {
-			
+		}
+		else if(strnicmp(line, "[defenders]", 11) == 0)
+		{
 			state = 2;
-		} else {
-			switch(state) {
+		}
+		else
+		{
+			switch(state)
+			{
 				case 0:
 					error_exit("Expected [attackers] or [defenders] first\n");
 					break;
 
-				case 1: 
-				case 2: 
+				case 1:
+				case 2:
 				{
 					sint32 x, y;
 					double offense, defense, strength, armor, ranged, hp;
@@ -883,7 +877,7 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
 	m_round = 0;
 }
 
-#else 
+#else
 
 void CombatField::FillFrom(CellUnitList &units)
 {
@@ -906,17 +900,27 @@ void CombatField::FillFrom(CellUnitList &units)
 	}
 }
 
-CTP2Combat::CTP2Combat(sint32 w, sint32 h,
-					   CellUnitList &attackers,
-					   CellUnitList &defenders) :
-	m_attackers(w, h, true),
-	m_defenders(w, h, false),
-	m_width(w),
-	m_height(h),
-	m_retreated(false),
-	m_retreating(false),
-	m_noAttacksPossible(false),
-	m_battle(NULL)
+CTP2Combat::CTP2Combat
+(
+    sint32        w,
+    sint32        h,
+    CellUnitList &attackers,
+    CellUnitList &defenders
+)
+:
+    m_attackers           (w, h, true),
+    m_defenders           (w, h, false),
+    m_width               (w),
+    m_height              (h),
+    m_retreated           (false),
+    m_retreating          (false),
+    m_noAttacksPossible   (false),
+    m_battle              (NULL),
+    m_round               (0),
+    m_army_id             (attackers[0].GetArmy().m_id),
+    m_roundsSinceUpdate   (0x7ffffffe),
+    m_attacker            (attackers.GetOwner()),
+    m_defender            (defenders.GetOwner())
 {
 	m_attackers.FillFrom(attackers);
 	m_defenders.FillFrom(defenders);
@@ -926,24 +930,21 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 
 	Balance();
 
-	m_round = 0;
-
-	m_attacker = attackers.GetOwner();
-	m_defender = defenders.GetOwner();
-	m_army_id = attackers[0].GetArmy().m_id;
 	defenders.GetPos(m_defenderPos);
 
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "Attacker: %lx, Defender: (%d,%d)\n", attackers[0].GetArmy().m_id,
 				 defenders[0].RetPos().x, defenders[0].RetPos().y);
+
 	sint32 i;
-	for(i = 0; i < attackers.Num(); i++) {
+	for(i = 0; i < attackers.Num(); i++)
+	{
 		combat_print(k_COMBAT_DEBUG_VERBOSE, "attacker[%d]: %lx @ %lfHP\n", i, attackers[i].m_id, attackers[i].GetHP());
 	}
-	for(i = 0; i < defenders.Num(); i++) {
+	for(i = 0; i < defenders.Num(); i++)
+	{
 		combat_print(k_COMBAT_DEBUG_VERBOSE, "defender[%d]: %lx @ %lfHP, army=%lx\n", i, defenders[i].m_id, defenders[i].GetHP(), defenders[i].GetArmy().m_id);
 	}
 
-	
 	Assert(g_player[m_attacker]);
 	Assert(g_player[m_defender]);
 	if (g_player[m_attacker] &&
@@ -952,36 +953,25 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 		g_player[m_defender]->IsRobot())
 		return;
 
-	m_roundsSinceUpdate = 0x7ffffffe;
-
-	
 	m_attackers.StartRound();
 	m_defenders.StartRound();
 
-	
-	if (g_theProfileDB->IsShowZoomedCombat() == FALSE)
+	if(!g_theProfileDB->IsShowZoomedCombat())
 		return;
 
-	
-	
-	if((m_attacker == g_selected_item->GetVisiblePlayer()) ||
-	   (m_defender == g_selected_item->GetVisiblePlayer())) {
-		
+	if(m_attacker == g_selected_item->GetVisiblePlayer()
+	|| m_defender == g_selected_item->GetVisiblePlayer()
+	){
 		m_battle = new Battle();
 
-		
 		m_battle->Initialize(attackers[0].GetArmy(), defenders);
 
-		
 		BattleEvent *placementEvent = new BattleEvent(BATTLE_EVENT_TYPE_PLACEMENT);
 		Assert(placementEvent);
 		m_attackers.ReportUnits(m_battle, placementEvent, true);
 		m_defenders.ReportUnits(m_battle, placementEvent, true);
 		m_battle->AddEvent(placementEvent);
 
-		
-		
-		
 		g_director->AddBattle(m_battle);
 	}
 
@@ -991,13 +981,11 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 
 CTP2Combat::~CTP2Combat()
 {
-	
-	if(m_battle) {
-		
+	if(m_battle)
+	{
 		if(g_battleViewWindow)
 			g_battleViewWindow->EndBattle();
 
-		
 		delete m_battle;
 	}
 }
@@ -1007,7 +995,6 @@ CTP2Combat::~CTP2Combat()
 #ifdef TEST_APP
 void CTP2Combat::DumpState()
 {
-	
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "%d remaining defenders\n", m_defenders.NumAlive());
 	m_defenders.Dump(true);
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "--front line--\n");
@@ -1019,10 +1006,6 @@ void CTP2Combat::DumpState()
 
 void CTP2Combat::Balance()
 {
-	
-	
-	
-
 	m_attackers.FillHoles();
 	m_defenders.FillHoles();
 
@@ -1056,12 +1039,9 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 {
 	m_noAttacksPossible = false;
 
-	
-	
 	CombatUnit *att = &attacker->GetUnit(attX, attY);
 	CombatUnit *def = &defender->GetUnit(defX, defY);
 
-	
 	if(m_battle && !att->m_alreadyAttacked) {
 		BattleEvent *attackEvent = new BattleEvent(BATTLE_EVENT_TYPE_ATTACK);
 		m_battle->AddUnitAttack(attackEvent,
@@ -1073,7 +1053,6 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
 	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
-	
 	double hitChance = att->GetRangedAttack() /
 		(att->GetRangedAttack() + def->m_unit->GetDefense(att->m_unit));
 
@@ -1364,10 +1343,9 @@ void CTP2Combat::Retreat()
 	m_retreating = true;
 }
 
-void CTP2Combat::KillUnits()
+void CTP2Combat::KillUnits(GAME_EVENT_INSERT priority)
 {
-	sint32 i;
-	for(i = 0; i < m_deadUnits.Num(); i++) {
+	for(sint32 i = 0; i < m_deadUnits.Num(); i++) {
 		Unit u = m_deadUnits[i];
 		sint32 attacker;
 		if(u.GetOwner() == GetAttacker()) {
@@ -1376,7 +1354,7 @@ void CTP2Combat::KillUnits()
 			attacker = GetAttacker();
 		}
 
-		g_gevManager->AddEvent(GEV_INSERT_Tail,
+		g_gevManager->AddEvent(priority,
 							   GEV_KillUnit,
 							   GEA_Unit, u,
 							   GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED,

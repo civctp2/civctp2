@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Combat handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@ typedef long sint32;
 typedef unsigned long uint32;
 #else
 
+#include "GameEventManager.h"
 #include "ConstRecord.h"	// g_theConstDB
 #include "Unit.h"
 #include "MapPoint.h"
@@ -227,7 +228,7 @@ public:
 #endif
 
 	void AddDeadUnit(Unit &u) { m_deadUnits.Insert(u); }
-	void KillUnits();
+	void KillUnits(GAME_EVENT_INSERT priority);
 
 private:
 	CombatField m_attackers, m_defenders;

@@ -617,6 +617,8 @@ public:
     bool HasElite() const;
     bool IsInVisionRangeAndCanEnter(MapPoint &pos) const;
 
+    void Battle(const MapPoint &pos, CellUnitList & defender);
+
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;

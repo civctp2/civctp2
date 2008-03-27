@@ -73,25 +73,27 @@ STDEHANDLER(RunCombatEvent)
 	}
 	else if (g_theCurrentBattle->IsDone())
 	{
-		g_theCurrentBattle->KillUnits(/* GEV_INSERT_Tail */);
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BattleAftermath,
-		                       GEA_Army, army,
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+		                       GEV_BattleAftermath,
+		                       GEA_Army,     army,
 		                       GEA_MapPoint, pos,
-		                       GEA_Unit, army[0],
-		                       GEA_Unit, g_theWorld->GetCell(pos)->AccessUnit(0),
-		                       GEA_Player, attacker,
-		                       GEA_Player, defender,
-		                       GEA_Int, 1,
+		                       GEA_Unit,     army[0],
+		                       GEA_Unit,     g_theWorld->GetCell(pos)->AccessUnit(0),
+		                       GEA_Player,   attacker,
+		                       GEA_Player,   defender,
+		                       GEA_Int,      1,
 		                       GEA_End
 		                      );
+		g_theCurrentBattle->KillUnits(GEV_INSERT_AfterCurrent);
 	}
 	else
 	{
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RunCombat,
-		                       GEA_Army, army,
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+		                       GEV_RunCombat,
+		                       GEA_Army,     army,
 		                       GEA_MapPoint, pos,
-		                       GEA_Player, attacker,
-		                       GEA_Player, defender,
+		                       GEA_Player,   attacker,
+		                       GEA_Player,   defender,
 		                       GEA_End
 		                      );
 	}

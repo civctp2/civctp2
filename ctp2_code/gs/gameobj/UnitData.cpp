@@ -474,8 +474,9 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 //	} else {
 //		m_movement_points -= cost; // Outcomment here so air isn't deducted twice
 	}
-	if(!Flag(k_UDF_PACMAN) && (rec->GetMoveBonus(bonus) == 0)) {  //needed to add this flag because it seemed to affect movebonus too
 
+	if(!Flag(k_UDF_PACMAN) && !rec->HasMoveBonus())   //needed to add this flag because it seemed to affect movebonus too
+	{
 		m_movement_points -= cost;
 		m_movement_points = std::max(m_movement_points, 0.0);
 		ClearFlag(k_UDF_FIRST_MOVE);
@@ -486,22 +487,26 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 	{
 		m_fuel -= g_theConstDB->Get(0)->GetNonSpaceFuelCost();
 
-		if (m_fuel <= 0) {
-			CheckForRefuel();//refuel the unit if it's in a city, airbase, or being transported
+		if (m_fuel <= 0)
+		{
+			CheckForRefuel();// Refuel the unit if it's in a city, airbase, or being transported
 
-			if(m_fuel <= 0) { //refuelling failed, it's NoFuelThenCrash
+			if(m_fuel <= 0)  // Refuelling failed, it's NoFuelThenCrash
+			{
 				out_of_fuel = true;
 			
-				if(!g_player[m_owner]->IsRobot() ||
-				  (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
+				if(!g_player[m_owner]->IsRobot()
+				|| (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+				){
 					m_army.AddDeath(Unit(m_id), CAUSE_REMOVE_ARMY_OUTOFFUEL, -1);
 				}
 
-				m_movement_points = 0;
+				m_movement_points = 0.0;
 				return true;
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -538,12 +543,17 @@ sint32 UnitData::ResetMovement()
 {
 	const UnitRecord *rec = GetDBRec();
 
-	if (rec->GetLossMoveToDmgNone()) { // All entries in Units.txt have this
-		m_movement_points = rec->GetMaxMovePoints(); 
-	} else if (rec->GetLossMoveToDmgTwo()) { 
+	if(rec->GetLossMoveToDmgNone()) // All entries in Units.txt have this
+	{
+		m_movement_points = rec->GetMaxMovePoints();
+	}
+	else if (rec->GetLossMoveToDmgTwo())
+	{
 		m_movement_points = 
 			std::max(2.0, rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr());
-	} else {
+	}
+	else
+	{
 		m_movement_points = rec->GetMaxMovePoints() * m_hp * rec->GetMaxHPr();
 	}
 
@@ -1033,7 +1043,7 @@ bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 	}
 	sint32 const        n       = GetNumCarried();
 	sint32 count = 0;
-    Unit passenger; 
+	Unit passenger;
 
 	for (sint32 i=n-1; 0 <=i ; i--)
 	{
@@ -1041,7 +1051,7 @@ bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 			continue;
 
 		if (max_debark <= count) 
-			break; 
+			break;
 
 		if (CanThisCargoUnloadAt(m_cargo_list->Access(i), m_pos, new_pos, false))
 		{
@@ -1057,8 +1067,13 @@ bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 
 			bool revealedUnexplored;
 			passenger.AddUnitVision(revealedUnexplored);
-			
-			debark.Insert(passenger );  
+
+			if(debark.m_id == 0)
+			{
+				debark = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
+			}
+
+			debark.Insert(passenger);
 		}
 	}
 	return true;
@@ -1121,8 +1136,13 @@ bool UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 
 			bool revealedUnexplored;
 			passenger.AddUnitVision(revealedUnexplored);
-			
-			debark.Insert(passenger );
+
+			if(debark.m_id == 0)
+			{
+				debark = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
+			}
+
+			debark.Insert(passenger);
 		}
 	}
 	return true;
