@@ -966,7 +966,7 @@ bool ArmyData::CanPatrol() const
 // Returns true if this army is a sentinal.
 bool ArmyData::IsAsleep() const
 {
-    return m_array[0].IsAsleep();
+	return m_array[0].IsAsleep();
 }
 
 // Put this army on sentinal duty or upgrade it.
@@ -974,35 +974,39 @@ void ArmyData::Sleep()
 {
 	Upgrade(); // Has to be moved so that it is executed by its own event
 
-	for(sint32 i = m_nElements - 1; i >= 0; i--) {
-        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
-                               GEA_Unit, m_array[i],
-                               GEA_End);
-    }
+	for(sint32 i = m_nElements - 1; i >= 0; i--)
+	{
+		if(!m_array[i]->IsAsleep()){
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SleepUnit,
+			                       GEA_Unit, m_array[i],
+			                       GEA_End);
+		}
+	}
 }
 
 // Activate this army from sentinal duty.
 void ArmyData::WakeUp()
 {
-    for(sint32 i = 0; i < m_nElements; i++) 
-    {
-        g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_WakeUnit,
-                               GEA_Unit, m_array[i],
-                               GEA_End);
-
-    }
+	for(sint32 i = 0; i < m_nElements; i++) 
+	{
+		if(m_array[i]->IsAsleep()){
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_WakeUnit,
+			                       GEA_Unit, m_array[i],
+			                       GEA_End);
+		}
+	}
 }
 
 // Returns true if this army is entrenched (fortified)
 bool ArmyData::IsEntrenched() const
 {
-    return m_array[0].IsEntrenched();
+	return m_array[0].IsEntrenched();
 }
 
 // Returns true if this army is entrenching
 bool ArmyData::IsEntrenching() const
 {
-    return m_array[0].IsEntrenching();
+	return m_array[0].IsEntrenching();
 }
 
 // Returns true if each member of this army can entrench
@@ -2887,7 +2891,8 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	Unit home_city;
 
 	if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex,
-	    target_is_city, target_city, home_city)) {
+	    target_is_city, target_city, home_city))
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("!IsSlaveRaidPossible()\n"));
 		ERROR_SOUND
 		return ORDER_RESULT_ILLEGAL;
@@ -3043,71 +3048,72 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 //
 //----------------------------------------------------------------------------
 bool ArmyData::IsSlaveRaidPossible(const MapPoint &point,
-                                   double &success, 
-                                   double &death, 
-                                   sint32 &timer, 
+                                   double &success,
+                                   double &death,
+                                   sint32 &timer,
                                    sint32 &amount,
-                                   sint32 &uindex, 
+                                   sint32 &uindex,
                                    bool &target_is_city,
-                                   Unit &target_city, 
+                                   Unit &target_city,
                                    Unit &home_city)
 {
-    target_city.m_id = 0; 
-    home_city.m_id = 0; 
+	target_city.m_id = 0;
+	  home_city.m_id = 0;
 
-    if(!CanSlaveRaid(success, death, timer, amount, uindex)) { 
+	if(!CanSlaveRaid(success, death, timer, amount, uindex))
+	{
 		return false;
-    }
+	}
 
-    target_city = GetAdjacentCity(point);
-    Cell *cell = g_theWorld->GetCell(point);
+	target_city = GetAdjacentCity(point);
+	Cell *cell = g_theWorld->GetCell(point);
 	target_city = cell->GetCity();
 
-    if(target_city.m_id != 0) { 
+	if(target_city.m_id != 0)
+	{
+		target_is_city = true;
 
-        target_is_city = true;
+		if(target_city.GetOwner() == m_array[0].GetOwner())
+		{
+			return false;
+		}
 
-	    if(target_city.GetOwner() == m_array[0].GetOwner()) {
-		    return false;
-	    }
+		if(target_city.PopCount() < 2)
+		{
+			return false;
+		}
 
-        if(target_city.PopCount() < 2) {
-		    return false;
-	    }
+	}
+	else
+	{
+		target_is_city = false;
 
-    } else { 
-        target_is_city = false;
+		sint32 uindex;
+		if(!CanEnslaveSettler(uindex))
+		{
+			return false;
+		}
 
-        sint32 uindex;
-        if(!CanEnslaveSettler(uindex)) { 
-		    return false;
-        }
+		if(cell->GetNumUnits() != 1)
+		{
+			return false;
+		}
 
-	    
-	    sint32 n = cell->GetNumUnits();
-	    if(n != 1) {
-		    return false;
-	    }
-	    
-        if(!cell->AccessUnit(0).GetDBRec()->GetSettle()) { 
-		    return false;
-	    }
+		if(!cell->AccessUnit(0).GetDBRec()->GetSettle())
+		{
+			return false;
+		}
 
-        if(cell->AccessUnit(0).GetOwner() == m_array[0].GetOwner()) { 
-		    return false;
-        }
-    }
+		if(cell->AccessUnit(0).GetOwner() == m_array[0].GetOwner())
+		{
+			return false;
+		}
+	}
 
-    
 	MapPoint slpos;
 	GetPos(slpos);
-	sint32 r = g_player[m_array[0].GetOwner()]->GetSlaveCity(slpos, home_city);
 
-     if(!r) { 
-		return false;
-     }
-
-    return true;
+	return g_player[m_array[0].GetOwner()]->GetSlaveCity(slpos, home_city);
 }
 
 //----------------------------------------------------------------------------
@@ -3165,17 +3171,19 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 	if(!r)
 		return ORDER_RESULT_ILLEGAL; 
 
-    Cell *cell = g_theWorld->GetCell(point);
+	Cell *cell = g_theWorld->GetCell(point);
 
 	sint32 n = cell->GetNumUnits();
 	Assert(n > 0);
-	if(n != 1) {
-        ERROR_SOUND
+	if(n != 1)
+	{
+		ERROR_SOUND
 		return ORDER_RESULT_ILLEGAL;
 	}
 	
-	if(!cell->AccessUnit(0).GetDBRec()->GetSettle()) {
-        ERROR_SOUND
+	if(!cell->AccessUnit(0).GetDBRec()->GetSettle())
+	{
+		ERROR_SOUND
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -3189,19 +3197,19 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 						   GEA_End);
 	sint32 settlerOwner = cell->AccessUnit(0).GetOwner();
 	
-    SlicObject *    so = new SlicObject("139SettlerSlavedVictim");
-    so->AddRecipient(settlerOwner) ;
-    g_slicEngine->Execute(so) ;
+	SlicObject *    so = new SlicObject("139SettlerSlavedVictim");
+	so->AddRecipient(settlerOwner);
+	g_slicEngine->Execute(so);
 
-    so = new SlicObject("137SlaveryCompleteAttacker");
-    so->AddRecipient(m_owner) ;
-	so->AddCivilisation(m_owner) ;
-    so->AddCity(home_city) ;
-    g_slicEngine->Execute(so) ;
+	so = new SlicObject("137SlaveryCompleteAttacker");
+	so->AddRecipient(m_owner);
+	so->AddCivilisation(m_owner);
+	so->AddCity(home_city);
+	g_slicEngine->Execute(so);
 
 	AddSpecialActionUsed(m_array[uindex]);
 
-    return ORDER_RESULT_SUCCEEDED;
+	return ORDER_RESULT_SUCCEEDED;
 }
 
 bool ArmyData::CanUndergroundRailway(double &success, double &death,
@@ -3237,7 +3245,7 @@ bool ArmyData::CanUndergroundRailway(double &success, double &death) const
 
 ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
 {
-    SlicObject *so;
+	SlicObject *so;
 	double success, death;
 	sint32 uindex;
 
@@ -3248,23 +3256,25 @@ ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(c.GetOwner() == m_array[0].GetOwner()) {
+	if(c.GetOwner() == m_array[0].GetOwner())
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("You can't free your own slaves with an abolitionist.  In fact, you shouldn't even be able to have both slaves and an abolitionist.  Stop cheating!\n"));
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(c.CountSlaves() <= 0) {
+	if(c.CountSlaves() <= 0)
+	{
 		DPRINTF(k_DBG_GAMESTATE, ("Dammit, there aren't any slaves there."));
 
-        so = new SlicObject("167FreeslaveNoSlavesToFree") ;
-        so->AddRecipient(GetOwner()) ;
-        so->AddCity(c) ;
-        g_slicEngine->Execute(so) ;
+		so = new SlicObject("167FreeslaveNoSlavesToFree");
+		so->AddRecipient(GetOwner());
+		so->AddCity(c);
+		g_slicEngine->Execute(so);
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-    //InformAI(UNIT_ORDER_UNDERGROUND_RAILWAY, point); //does nothing here but could be implemented
+	//InformAI(UNIT_ORDER_UNDERGROUND_RAILWAY, point); //does nothing here but could be implemented
 
 	if(m_array[uindex].IsVeteran()) {
 		success += g_theConstDB->Get(0)->GetEliteAbolitionistBonus();
@@ -3277,25 +3287,29 @@ ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
 
 	c.SetWatchful();
 
-	if(g_rand->Next(100) < sint32(success * 100.0)) {
+	if(g_rand->Next(100) < sint32(success * 100.0))
+	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UndergroundRailwayUnit,
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c,
 							   GEA_End);
 		return ORDER_RESULT_SUCCEEDED;
-	} else {
+	}
+	else
+	{
 		AddSpecialActionUsed(m_array[uindex]);
 
-		if(g_rand->Next(100) < sint32(death * 100.0)) {
+		if(g_rand->Next(100) < sint32(death * 100.0))
+		{
 			m_array[uindex].Kill(CAUSE_REMOVE_ARMY_DIED_IN_UNDERGROUND_RR_RAID, -1);
 		}
 
-        g_slicEngine->Execute(new CityReport("164FreeslaveFailedVictim", c));
+		g_slicEngine->Execute(new CityReport("164FreeslaveFailedVictim", c));
 
-        so = new SlicObject("166FreeslaveFailedAgressor") ;
-        so->AddRecipient(GetOwner()) ;
-        so->AddCity(c) ;
-        g_slicEngine->Execute(so) ;
+		so = new SlicObject("166FreeslaveFailedAgressor");
+		so->AddRecipient(GetOwner());
+		so->AddCity(c);
+		g_slicEngine->Execute(so);
 
 		return ORDER_RESULT_FAILED;
 	}
@@ -3315,26 +3329,28 @@ bool ArmyData::CanInciteUprising(sint32 &uindex) const
 
 ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 {
-    SlicObject *so;
+	SlicObject *so;
 	sint32 uindex;
 	if(!CanInciteUprising(uindex))
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit c = GetAdjacentCity(point);
-	if (!c.IsValid())
+	if(!c.IsValid())
 		return ORDER_RESULT_ILLEGAL;
 
-    PLAYER_INDEX const  cityOwner = c.GetOwner();
+	PLAYER_INDEX const  cityOwner = c.GetOwner();
 
-	if (cityOwner == m_owner) {
+	if(cityOwner == m_owner)
+	{
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(c.CountSlaves() <= 0) {
-        so = new SlicObject("167FreeslaveNoSlavesToFree") ;
-        so->AddRecipient(GetOwner()) ;
-        so->AddCity(c) ;
-        g_slicEngine->Execute(so) ;
+	if(c.CountSlaves() <= 0)
+	{
+		so = new SlicObject("167FreeslaveNoSlavesToFree");
+		so->AddRecipient(GetOwner());
+		so->AddCity(c);
+		g_slicEngine->Execute(so);
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -3343,13 +3359,13 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 	double      distanceCost    = 100.0;
 	MapPoint    start;
 
-	if (p->GetCapitolPos(start)) 
+	if(p->GetCapitolPos(start))
 	{
 		MapPoint    dest;
 		c.GetPos(dest);
 		distanceCost += 100.0 * start.NormalizedDistance(dest);
-	} 
-	else 
+	}
+	else
 	{
 		distanceCost += p->GetMaxEmpireDistance(); 
 	}
@@ -3390,7 +3406,6 @@ ORDER_RESULT ArmyData::InciteUprising(const MapPoint &point)
 	return ORDER_RESULT_SUCCEEDED;
 }
 
-	
 bool ArmyData::CanEstablishEmbassy(sint32 &uindex) const
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
@@ -3465,8 +3480,10 @@ ORDER_RESULT ArmyData::EstablishEmbassy(const MapPoint &point)
 
 bool ArmyData::CanThrowParty(sint32 &uindex) const
 {
-	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetDBRec()->GetThrowParty()) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i].GetDBRec()->GetThrowParty())
+		{
 			uindex = i;
 			return true;
 		}
@@ -3476,9 +3493,11 @@ bool ArmyData::CanThrowParty(sint32 &uindex) const
 
 bool ArmyData::CanThrowParty() const
 {
-	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetDBRec()->GetThrowParty() &&
-		   m_array[i].CanPerformSpecialAction()) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i].GetDBRec()->GetThrowParty()
+		&& m_array[i].CanPerformSpecialAction()
+		){
 			return true;
 		}
 	}
@@ -6497,7 +6516,7 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 		d = m_pos.GetNeighborDirection(order->m_point);
 	}
 
-	if (NOWHERE == d) 
+	if(NOWHERE == d)
 	{
 		// Something is not right
 		if (g_network.IsClient()) 
@@ -6644,8 +6663,8 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 					return false;
 			}
 
-			if(!CheckWasEnemyVisible(newPos)) {
-
+			if(!CheckWasEnemyVisible(newPos))
+			{
 				g_player[m_owner]->ContactMade(defender->GetOwner());
 
 				if(g_player[m_owner]->IsRobot())
@@ -6653,10 +6672,8 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 					if(g_network.IsClient()
 					&& g_network.IsLocalPlayer(m_owner)
 					){
-						
 						return false;
 					}
-
 				}
 				else
 				{
@@ -6718,9 +6735,8 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 			return false;
 		}
 
-		if(DoLeaveOurLandsCheck(newPos, UNIT_ORDER_MOVE_TO)) {
-			
-			
+		if(DoLeaveOurLandsCheck(newPos, UNIT_ORDER_MOVE_TO))
+		{
 			return false;
 		}
 
@@ -6734,31 +6750,41 @@ bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order) //u
 {
 	CellUnitList transports;
 	
-	if(g_theWorld->GetCity(newPos).IsValid() && CanMoveIntoTransport(newPos, transports)) {
+	if(g_theWorld->GetCity(newPos).IsValid() && CanMoveIntoTransport(newPos, transports))
+	{
 		return MoveIntoTransport(newPos, transports);
-	} else {
+	}
+	else
+	{
 		bool didMove = MoveIntoCell(newPos, order->m_order, d);
 
-		if(didMove) {
-			sint32 i;
-			for(i = 0; i < m_nElements; i++) {
+		if(didMove)
+		{
+			for(sint32 i = 0; i < m_nElements; i++)
+			{
 				g_slicEngine->RunUnitMovedTriggers(m_array[i]);
 			}
 		}
 
-		if(didMove) {
-			sint32 i;
-			for(i = m_nElements - 1; i >= 0; i--) {
+		if(didMove)
+		{
+			for(sint32 i = m_nElements - 1; i >= 0; i--)
+			{
 				uint32 moveType = m_array[i].GetMovementType();
-				if(!g_theWorld->CanEnter(newPos, moveType)) {
-					if((moveType & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
-					   !(moveType & k_BIT_MOVEMENT_TYPE_WATER) &&
-					   g_theWorld->GetCell(newPos)->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER &&
-					   wonderutil_GetAllBoatsDeepWater(g_player[m_owner]->m_builtWonders)) {
+				if(!g_theWorld->CanEnter(newPos, moveType))
+				{
+					if((moveType & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)
+					&&!(moveType & k_BIT_MOVEMENT_TYPE_WATER)
+					&& g_theWorld->GetCell(newPos)->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER
+					&& wonderutil_GetAllBoatsDeepWater(g_player[m_owner]->m_builtWonders)
+					){
 						
-					} else {
-						if(g_theWorld->GetCity(newPos).m_id == 0 ||
-						   g_theWorld->GetCity(newPos).GetOwner() != m_owner) {
+					}
+					else
+					{
+						if(g_theWorld->GetCity(newPos).m_id == 0
+						|| g_theWorld->GetCity(newPos).GetOwner() != m_owner
+						){
 							m_array[i].Kill(CAUSE_REMOVE_ARMY_ILLEGAL_CELL, -1);
 						}
 					}
@@ -7424,20 +7450,23 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 			//EMOD to allow for sneak attacks without popup	
 			Unit ta = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 
-			if (ta.m_id == 0) {
+			if (ta.m_id == 0)
+			{
 				ta = m_array[0];
 			}
 
 			bool AlltaSneakAttack = true;
-			sint32 i;
-			for (i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
-				if(!m_array[i].GetDBRec()->GetSneakAttack()){
+			for(sint32 i = m_nElements - 1; i>= 0; i--)
+			{
+				if(!m_array[i].GetDBRec()->GetSneakAttack())
+				{
 					AlltaSneakAttack = false;
 					break;
 				}
 			}
 
-			if (ta.m_id == 0) {
+			if (ta.m_id == 0)
+			{
 				if(!m_array[0].GetDBRec()->GetSneakAttack()){
 					AlltaSneakAttack = false;
 				}
@@ -7588,8 +7617,6 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		return;
 	}
 
-	WakeUp();
-
 	UnitDynamicArray revealedUnits;
 	bool revealedUnexplored = false;
 
@@ -7601,13 +7628,6 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	bool anyVisible = false;
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
-		if(m_array[i].IsEntrenching() || m_array[i].IsEntrenched())
-		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_DetrenchUnit,
-			                       GEA_Unit, m_array[i],
-			                       GEA_End);
-		}
-
 		anyVisible = anyVisible || (m_array[i].GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
 		// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a 
 		//city to another city anywhere in the world and costing that unit 1 move.
@@ -7630,23 +7650,41 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		if(g_theWorld->GetCell(pos)->GetNumUnits() >= k_MAX_ARMY_SIZE)
 		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
-								   GEA_Unit, m_array[i],
-								   GEA_Int, CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES,
-								   GEA_Player, -1,
-								   GEA_End);
+			                       GEA_Unit, m_array[i],
+			                       GEA_Int, CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES,
+			                       GEA_Player, -1,
+			                       GEA_End);
 			m_array[i].SetFlag(k_UDF_TELEPORT_DEATH);
+
+			Assert(false);
 		}
 		else
 		{
+			if(m_array[i].IsEntrenching() || m_array[i].IsEntrenched())
+			{
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_DetrenchUnit,
+				                       GEA_Unit, m_array[i],
+				                       GEA_End);
+			}
+
+			if(m_array[i].IsAsleep())
+			{
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_WakeUnit,
+				                       GEA_Unit, m_array[i],
+				                       GEA_End);
+			}
+
 			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
 			bool r = m_array[i].MoveToPosition(pos, revealedUnits, revealedUnexplored);
 
-			if(m_array[i].GetNumCarried() > 0){
-				sint32 j;
-				for(j = 0; j < m_array[i].GetNumCarried(); ++j)
-				m_array[i].GetData()->GetCargoList()->Access(j).SetPosAndNothingElse(pos);
+			if(m_array[i].GetNumCarried() > 0)
+			{
+				for(sint32 j = 0; j < m_array[i].GetNumCarried(); ++j)
+				{
+					m_array[i].GetData()->GetCargoList()->Access(j).SetPosAndNothingElse(pos);
+				}
 			}
-			
+
 			if( revealedUnits.Num() > 0
 			&& !m_array[i].GetDBRec()->GetSingleUse()
 			){
@@ -7689,6 +7727,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			}
 		}
 	}
+
 	if(anyVisible && g_radarMap)
 	{
 		g_radarMap->RedrawTile(&oldPos); // oldPos only used here
@@ -7699,7 +7738,6 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	{
 		g_selected_item->RegisterRemovedArmy(m_owner, Army(m_id));
 	}
-
 
 	//original
 	DeductMoveCost(pos);
@@ -7727,9 +7765,9 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 //----------------------------------------------------------------------------
 void ArmyData::CheckTerrainEvents()
 {
-	
 	Cell *cell = g_theWorld->GetCell(m_pos);
-	if(cell->GetGoodyHut()) {
+	if(cell->GetGoodyHut())
+	{
 		cell->GetGoodyHut()->OpenGoody(m_owner, m_pos);
 	
 		if(cell->GetGoodyHut())
@@ -7739,13 +7777,20 @@ void ArmyData::CheckTerrainEvents()
 
 		MapPoint pos2;
 		g_tiledMap->RedrawTile(&m_pos);
-		for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1)) {
-			if(m_pos.GetNeighborPosition(d, pos2)) {
+		for(
+		    WORLD_DIRECTION d = NORTH;
+		                    d < NOWHERE;
+		                    d = (WORLD_DIRECTION)((sint32)d + 1)
+		   )
+		{
+			if(m_pos.GetNeighborPosition(d, pos2))
+			{
 				g_tiledMap->RedrawTile(&pos2);
 			}
 		}
 
-		if(g_network.IsHost()) {
+		if(g_network.IsHost())
+		{
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_REMOVE_HUT,
 										  m_pos.x, m_pos.y));
 		}
@@ -7941,7 +7986,7 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 				
 				transports[j].InsertCargo(m_array[i]);
 				
-				g_theArmyPool->AccessArmy(transports[j].GetArmy())->WakeUp();
+				transports[j].GetArmy()->WakeUp();
 
 				if (g_soundManager && top_src.IsValid())
 				{

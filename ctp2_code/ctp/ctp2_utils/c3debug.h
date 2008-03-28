@@ -17,8 +17,14 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
+//
+// _DEBUG
+// - Generate debug version when set.
+//
+// SHOW_ASSERTS
+// - Shows asserts even if _DEBUG is not set.
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +47,7 @@
 #include "c3.h"
 #undef Assert
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(SHOW_ASSERTS)
 
 #ifndef _AIDLL
 	#define Assert(x)				{ if (!(x)) c3debug_Assert(#x, __FILE__, __LINE__); }
@@ -63,31 +69,31 @@
 
 typedef void (* CivExceptionFunction) (void);
 
-#define k_DBG_ALL				0xffffffff
-#define k_DBG_NONE				0x00000000
-#define k_DBG_INFO				0x00000001
-#define k_DBG_AI				0x00000002
-#define k_DBG_NET				0x00000004
-#define k_DBG_GRAPHICS			0x00000008
-#define k_DBG_DATABASE			0x00000010
-#define k_DBG_FILE				0x00000020
-#define k_DBG_GAMESTATE			0x00000040
-#define k_DBG_UI				0x00000080
-#define k_DBG_FIX				0x00000100
-#define k_DBG_SLIC				0x00000200
-#define k_DBG_SCHEDULER			0x00000400
-#define k_DBG_SCHEDULER_DETAIL	0x00000c00  
-#define k_DBG_SCHEDULER_ALL		0x00001c00  
-#define k_DBG_DIPLOMACY			0x00002000
-#define k_DBG_MAPANALYSIS		0x00004000
+#define k_DBG_ALL               0xffffffff
+#define k_DBG_NONE              0x00000000
+#define k_DBG_INFO              0x00000001
+#define k_DBG_AI                0x00000002
+#define k_DBG_NET               0x00000004
+#define k_DBG_GRAPHICS          0x00000008
+#define k_DBG_DATABASE          0x00000010
+#define k_DBG_FILE              0x00000020
+#define k_DBG_GAMESTATE         0x00000040
+#define k_DBG_UI                0x00000080
+#define k_DBG_FIX               0x00000100
+#define k_DBG_SLIC              0x00000200
+#define k_DBG_SCHEDULER         0x00000400
+#define k_DBG_SCHEDULER_DETAIL  0x00000c00
+#define k_DBG_SCHEDULER_ALL     0x00001c00
+#define k_DBG_DIPLOMACY         0x00002000
+#define k_DBG_MAPANALYSIS       0x00004000
 
 
-#define k_DEBUG_OWNER_NONE			0
-#define k_DEBUG_OWNER_CRC			1
-#define k_DEBUG_OWNER_COMMANDLINE	2
-#define k_DEBUG_OWNER_NETWORK_CHAT	3
-#define k_DEBUG_OWNER_ADVANCES		4
-#define k_DEBUG_OWNER_SEEWWR		5
+#define k_DEBUG_OWNER_NONE          0
+#define k_DEBUG_OWNER_CRC           1
+#define k_DEBUG_OWNER_COMMANDLINE   2
+#define k_DEBUG_OWNER_NETWORK_CHAT  3
+#define k_DEBUG_OWNER_ADVANCES      4
+#define k_DEBUG_OWNER_SEEWWR        5
 #define k_DEBUG_OWNER_FRAME_RATE    6
 #define k_DEBUG_OWNER_ZBS           7
 

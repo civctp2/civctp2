@@ -922,26 +922,29 @@ STDEHANDLER(FinishMoveEvent)
 	{
 		bool const  didMove = army.AccessData()->MoveIntoCell(pos, order, dir);
 
-		if (didMove) {
-			sint32 i;
-			for(i = army.Num() - 1; i >= 0; i--) {
+		if(didMove)
+		{
+			for(sint32 i = army.Num() - 1; i >= 0; i--)
+			{
 				uint32 moveType = army[i].GetMovementType();
-				if(!g_theWorld->CanEnter(pos, moveType)) {
-					if((moveType & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER) &&
-					   !(moveType & k_BIT_MOVEMENT_TYPE_WATER) &&
-					   g_theWorld->GetCell(pos)->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER &&
-					   wonderutil_GetAllBoatsDeepWater(g_player[army.GetOwner()]->m_builtWonders)) {
+				if(!g_theWorld->CanEnter(pos, moveType))
+				{
+					if((moveType & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)
+					&&!(moveType & k_BIT_MOVEMENT_TYPE_WATER)
+					&&  g_theWorld->GetCell(pos)->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER
+					&&  wonderutil_GetAllBoatsDeepWater(g_player[army.GetOwner()]->m_builtWonders)
+					){
 						
-					} else {
-						if(g_theWorld->GetCity(pos).m_id == 0) {
-						   
+					}
+					else
+					{
+						if(g_theWorld->GetCity(pos).m_id == 0)
+						{
 							g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 												   GEA_Unit, army[i].m_id,
 												   GEA_Int, CAUSE_REMOVE_ARMY_ILLEGAL_CELL,
 												   GEA_Player, -1,
 												   GEA_End);
-
-							
 						}
 					}
 				}
@@ -1029,7 +1032,8 @@ STDEHANDLER(AftermathEvent)
 	if(!args->GetInt(0, fromARealBattle)) return GEV_HD_Continue;
 
 	Assert(!fromARealBattle || g_theCurrentBattle);
-	if (g_theCurrentBattle) {
+	if (g_theCurrentBattle)
+	{
 		delete g_theCurrentBattle;
 		g_theCurrentBattle = NULL;
 	}
@@ -1052,22 +1056,29 @@ STDEHANDLER(AftermathEvent)
 	CellUnitList    defender;
 	g_theWorld->GetArmy(pos, defender);
 
-	if(c.IsValid()) {
+	if(c.IsValid())
+	{
 		//add civil war here?  no because its in MoveEvent? Why?  EMOD
 
 		//end EMOD
-		if(g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultDestroyBuildingChance() * 100) {
+		if(g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultDestroyBuildingChance() * 100)
+		{
 			//shouldn't constDB allow players to set how many buildings be destroyed? 
 			c.DestroyRandomBuilding();
 		}
 		//this code actually isn't used...
-		if(defender.Num() > 0) {
-			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultKillPopChance() * 100)) {
+		if(defender.Num() > 0)
+		{
+			if(c.PopCount() > 1 && (g_rand->Next(100) < g_theConstDB->Get(0)->GetAssaultKillPopChance() * 100))
+			{
 				//emod allows for differnt city casualty rates instead of just one  6.22.2007
 				sint32 casualties = 0;
-				if (g_theConstDB->Get(0)->GetCapturedCityKillPop() < 0) {
+				if (g_theConstDB->Get(0)->GetCapturedCityKillPop() < 0)
+				{
 					casualties = g_rand->Next(c.PopCount()) * -1 ;
-				} else {
+				}
+				else
+				{
 					casualties = g_theConstDB->Get(0)->GetCapturedCityKillPop() * -1;
 				}
 
@@ -1076,58 +1087,68 @@ STDEHANDLER(AftermathEvent)
 		}
 	}
 
-	if (g_theUnitPool->IsValid(ta)) {
+	if(ta.IsValid())
+	{
 		g_director->AddTerminateFaceoff(ta);
 	}
-	if (g_theUnitPool->IsValid(td)) {
+
+	if(td.IsValid())
+	{
 		g_director->AddTerminateFaceoff(td);
 	}
 	
 	bool attackerWon = false;
-	sint32 i;
 
-	if(army.IsValid() && army.Num() > 0) {
-		for(i = 0; i < army.Num(); i++) {
-			
-			
-			if(army[i].GetHP() < 0.5) {
+	if(army.IsValid() && army.Num() > 0)
+	{
+		for(sint32 i = 0; i < army.Num(); i++)
+		{
+			if(army[i].GetHP() < 0.5)
+			{
 				continue;
 			}
+
 			attackerWon = true;
 			break;
 		}
 	}
 
-	if (attackerWon) {
-		if(defense_owner == g_selected_item->GetVisiblePlayer() && !c.m_id) {
+	if(attackerWon)
+	{
+		if(g_selected_item->IsPlayerVisible(defense_owner) && !c.m_id)
+		{
 			g_soundManager->AddGameSound(GAMESOUNDS_VICTORY_FANFARE);
 		}
 
-		if(attack_owner == g_selected_item->GetVisiblePlayer() && !c.m_id) {
-			
-			
+		if(g_selected_item->IsPlayerVisible(attack_owner) && !c.m_id)
+		{
 			g_soundManager->AddGameSound(GAMESOUNDS_VICTORY_FANFARE);
 		}
 
-		if(army.IsValid()) {
+		if(army.IsValid())
+		{
 			army.AccessData()->DoVictoryEnslavement(defense_owner);
 		}
-	} else {
-		if(attack_owner == g_selected_item->GetVisiblePlayer() && !c.m_id) {
+	}
+	else
+	{
+		if(g_selected_item->IsPlayerVisible(attack_owner) && !c.m_id)
+		{
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
 
-		if(defense_owner == g_selected_item->GetVisiblePlayer() && !c.m_id) {
+		if(g_selected_item->IsPlayerVisible(defense_owner) && !c.m_id)
+		{
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
 
 		defender.DoVictoryEnslavement(attack_owner);
 	}
 
-	if(attackerWon && army.IsValid() && army.Num() > 0) {
-		for(i = 0; i < army.Num(); i++) {
-			
-			
+	if(attackerWon && army.IsValid() && army.Num() > 0)
+	{
+		for(sint32 i = 0; i < army.Num(); i++)
+		{
 			if(army[i].GetHP() < 0.5) {
 				continue;
 			}
@@ -1152,7 +1173,7 @@ STDEHANDLER(AftermathEvent)
 			&&  (!army[i].IsVeteran())
 			){
 				army[i].SetVeteran();
-			} 	
+			}
 
 			//end emod
 			army[i].WakeUp();
@@ -1166,9 +1187,11 @@ STDEHANDLER(AftermathEvent)
 							   GEA_End);
 	}
 	
-	for(i = 0; i < defender.Num() ; i++) {
+	for(sint32 i = 0; i < defender.Num() ; i++)
+	{
 		if(defender[i].GetAttack() > 0 &&
-		   g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatVeteranChance() * 100.0)) {
+		   g_rand->Next(100) < sint32(g_theConstDB->Get(0)->GetCombatVeteranChance() * 100.0))
+		{
 			defender[i].SetVeteran();
 		}
 		if( (defender[i].GetAttack() > 0) 
@@ -1184,8 +1207,9 @@ STDEHANDLER(AftermathEvent)
 		){
 			g_player[defense_owner]->CreateLeader();
 		}
-		 //copy and make for elite units
-		 //add great leader chance but only if veteran and/or elite
+
+		//copy and make for elite units
+		//add great leader chance but only if veteran and/or elite
 		defender[i].WakeUp();
 		defender[i].ClearFlag(k_UDF_WAS_TOP_UNIT_BEFORE_BATTLE);
 	}
@@ -1195,12 +1219,12 @@ STDEHANDLER(AftermathEvent)
 	
 STDEHANDLER(CheckOrdersEvent)
 {
-	
 	Army a;
 	if(!args->GetArmy(0, a))
 		return GEV_HD_Continue;
 
-	if(!g_network.IsActive() || g_network.IsLocalPlayer(a.GetOwner())) {
+	if(!g_network.IsActive() || g_network.IsLocalPlayer(a.GetOwner()))
+	{
 		a->CheckAddEventOrder();
 
 		a.AccessData()->ExecuteOrders();
@@ -1227,8 +1251,7 @@ STDEHANDLER(MoveUnitsEvent)
 	if(!args->GetPos(0, from)) return GEV_HD_Continue;
 	if(!args->GetPos(1, to)) return GEV_HD_Continue;
 
-	sint32 i;
-	for(i = 0; i < a.Num(); i++) {
+	for(sint32 i = 0; i < a.Num(); i++) {
 		if(a[i].GetDBRec()->GetCantMove()) {
 			
 			
@@ -1265,20 +1288,26 @@ STDEHANDLER(MoveUnitsEvent)
 					GEA_Player, army_owner,
 					GEA_End);
 			}
-		} 
+		}
 	}
 
-	
-	if(g_theWorld->HasCity(to)) {
+	if(g_theWorld->HasCity(to))
+	{
 		Unit c = g_theWorld->GetCity(to);
-		PLAYER_INDEX city_owner = c.GetOwner(); 
-		if(city_owner != a->GetOwner()) {
-			if(!a->IsEnemy(city_owner)) {
+		PLAYER_INDEX city_owner = c.GetOwner();
+		if(city_owner != a->GetOwner())
+		{
+			if(!a->IsEnemy(city_owner))
+			{
 				SlicObject *so;
-				if(g_network.IsActive() && g_network.TeamsEnabled() && 
-				   g_player[a->GetOwner()]->m_networkGroup == g_player[city_owner]->m_networkGroup) {
+				if(g_network.IsActive()
+				&& g_network.TeamsEnabled()
+				&& g_player[a->GetOwner()]->m_networkGroup == g_player[city_owner]->m_networkGroup
+				){
 					so = new SlicObject("110aCantAttackTeammates");
-				} else {
+				}
+				else
+				{
 					so = new SlicObject("110CantAttackAllies");
 				}
 				so->AddRecipient(a->GetOwner());
@@ -1286,35 +1315,28 @@ STDEHANDLER(MoveUnitsEvent)
 				so->AddUnit(a[0]);
 				so->AddLocation(to);
 				g_slicEngine->Execute(so);
-			} else {
+			}
+			else
+			{
+				for(sint32 i = 0; i < a->Num(); i++)
+				{
+					if(!a[i].IsCantCaptureCity())
+					{
+						PLAYER_INDEX originalOwner = c.GetOwner();
 
-				sint32 i;
-				for(i = 0; i < a->Num(); i++) {
-					if(!a[i].IsCantCaptureCity()) { 
-						PLAYER_INDEX originalOwner = c.GetOwner() ;
-
-						
-
-						
-						
-						
-						
-						
-						
-						
-						
-
-
-						if(g_rand->Next(100) < g_theConstDB->Get(0)->GetCaptureKillPopChance() * 100) {
+						if(g_rand->Next(100) < g_theConstDB->Get(0)->GetCaptureKillPopChance() * 100)
+						{
 							g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillPop,
 												   GEA_City, c.m_id,
 												   GEA_End);
 #if 0
-							if(g_network.IsHost()) {
+							if(g_network.IsHost())
+							{
 								g_network.Block(a.GetOwner());
 							}
 							c.CD()->ChangePopulation(-1);
-							if(g_network.IsHost()) {
+							if(g_network.IsHost())
+							{
 								g_network.Unblock(a.GetOwner());
 							}
 #endif
@@ -1347,13 +1369,10 @@ STDEHANDLER(MoveUnitsEvent)
 						if(c.GetOwner() == g_selected_item->GetVisiblePlayer())
 							g_director->AddCenterMap(to);
 
-						sint32 k;
-						for(k = 0; k < a->Num(); k++) {
+						for(sint32 k = 0; k < a->Num(); k++)
+						{
 							a[k].SetMovementPoints(0.0);
 						}
-
-						
-						
 
 						g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 											   GEV_CaptureCity,
@@ -1362,17 +1381,17 @@ STDEHANDLER(MoveUnitsEvent)
 											   GEA_Int, (sint32)CAUSE_REMOVE_CITY_ATTACK,
 											   GEA_End);
 						break;
-					} 
+					}
 				}
-			} 
-		} 
+			}
+		}
 	}
 	
 
-	a->CheckActiveDefenders(to, FALSE);
+	a->CheckActiveDefenders(to, false);
 
-	if(!a.IsValid()) {
-		
+	if(!a.IsValid())
+	{
 		return GEV_HD_Stop;
 	}
 
@@ -1425,7 +1444,7 @@ STDEHANDLER(LawsuitEvent)
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, u->m_id,
 								   GEA_Int, CAUSE_REMOVE_ARMY_SUE,
-								   GEA_Player, a->GetOwner(),								  
+								   GEA_Player, a->GetOwner(),
 								   GEA_End);
 			
 		}
@@ -1468,14 +1487,14 @@ STDEHANDLER(EnslaveSettlerEvent)
 {
 	Army    a;
 	Unit    slaver;
-    Unit    settler;
+	Unit    settler;
 
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, slaver)) return GEV_HD_Continue;
 	if(!args->GetUnit(1, settler)) return GEV_HD_Continue;
 
 	PLAYER_INDEX    settlerOwner    = settler.GetOwner();
-    PLAYER_INDEX    slaverOwner     = slaver.GetOwner();
+	PLAYER_INDEX    slaverOwner     = slaver.GetOwner();
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 						   GEA_Unit,    settler,
@@ -1485,13 +1504,13 @@ STDEHANDLER(EnslaveSettlerEvent)
 
 	Unit home_city;
 	if (g_player[slaverOwner]->GetSlaveCity(slaver.RetPos(), home_city))
-    {
-	    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
-						       GEA_City,    home_city.m_id,
-						       GEA_Player,  settlerOwner,
-						       GEA_End);
-    }
-    // else No action: the slaver does not have any cities
+	{
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
+		                       GEA_City,    home_city.m_id,
+		                       GEA_Player,  settlerOwner,
+		                       GEA_End);
+	}
+	// else No action: the slaver does not have any cities
 
 	return GEV_HD_Continue;
 }
