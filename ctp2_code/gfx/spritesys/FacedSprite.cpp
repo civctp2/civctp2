@@ -144,7 +144,7 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 				spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
 		
 				
-				m_frames[facing][i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &(m_framesSizes[facing][i])); //battlebug?
+				m_frames[facing][i]     = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &(m_framesSizes[facing][i])); //battlebug?never called!
                                 printf("%s L%d: m_frames[facing][i] = %#X\n", __FILE__, __LINE__, m_frames[facing][i]);
 		
 				if (shadow)
@@ -172,22 +172,26 @@ void FacedSprite::Import(uint16 nframes, char *imageFiles[k_NUM_FACINGS][k_MAX_N
 }
 
 
-void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size)
-{
-	Assert(facing < k_NUM_FACINGS);
-	Assert(frame < m_numFrames);
-	Assert(m_frames[facing] != NULL);
-	Assert(m_framesSizes[facing] != NULL);
+void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size){
+    Assert(facing < k_NUM_FACINGS);
+    Assert(frame < m_numFrames);
+    Assert(m_frames[facing] != NULL);
+    Assert(m_framesSizes[facing] != NULL);
 	
-	if (facing >= k_NUM_FACINGS)
-		return;
-	if (frame >= m_numFrames)
-		return;
-
-	m_frames[facing][frame] = data;//battlebug?
-        printf("%s L%d: m_frames[facing][i] = %#X\n", __FILE__, __LINE__, m_frames[facing][frame]);
-	m_framesSizes[facing][frame] = size;
-}
+    if (facing >= k_NUM_FACINGS) {
+        printf("%s L%d: facing: %d >= k_NUM_FACINGS: %d\n", __FILE__, __LINE__, facing, k_NUM_FACINGS);
+        return;
+        }
+    if (frame >= m_numFrames){//m_numFrames seems not to be set before this is called
+        //so with the previous return the faced animation data never got set!
+        //A better way would be to set m_numFrames correctly before but
+        //I couldn't figure out so far where this should be done.
+        //printf("%s L%d: frame: %d >= m_numFrames: %d\n", __FILE__, __LINE__, frame, m_numFrames);
+        //return;
+        }
+    m_frames[facing][frame] = data;
+    m_framesSizes[facing][frame] = size;
+    }
 
 void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_t size)
 {
@@ -198,8 +202,8 @@ void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, s
 
 	if (facing >= k_NUM_FACINGS)
 		return;
-	if (frame >= m_numFrames)
-		return;
+//	if (frame >= m_numFrames) //same as above
+//		return;
 	
 	m_miniframes[facing][frame] = data;
 	m_miniframesSizes[facing][frame] = size;
@@ -226,65 +230,66 @@ void FacedSprite::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *data, s
 //              But the problem wasn't here after all.
 //
 //----------------------------------------------------------------------------
-void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
-{
-	SetSurface();
+void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags){
+    SetSurface();
 
     bool const      isReversed  = facing >= k_NUM_FACINGS;
     size_t          facingIndex = isReversed ? k_MAX_FACINGS - facing : facing;
     Pixel16 *       frame       = (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST))
-                                  ? m_miniframes[facingIndex][m_currentFrame]
-        : m_frames[facingIndex][m_currentFrame]; //battlebug? //spritebug?
+        ? m_miniframes[facingIndex][m_currentFrame]
+        : m_frames[facingIndex][m_currentFrame]; //here m_frames is a Pixel16 *** triple pointer! 
+                                                 //in Sprite.h it is defined as Pixel16	**m_frames double pointer
+                                                 //in Sprite.cpp L415 it is used as a double pointer!
+//battlebug? spritebug?
 
     if (!frame) {
-        //printf("%s L%d: frames = %#X\n", __FILE__, __LINE__, frame);
+        printf("%s L%d: frames = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
         return;
-    }
+        }
 
-	if (isReversed) 
-    {
-		drawX -= (sint32)((double)(m_width - m_hotPoints[facingIndex].x) * scale);
-	    drawY -= (sint32)((double)m_hotPoints[facingIndex].y * scale);
-	} 
-    else 
-    {
-		drawX -= (sint32)((double)m_hotPoints[facingIndex].x * scale);
-	    drawY -= (sint32)((double)m_hotPoints[facingIndex].y * scale);
-	}
-
-
-	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) 
-    {
-		if (isReversed) 
+    if (isReversed) 
         {
-			(this->*_DrawLowReversed)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-		} 
+        drawX -= (sint32)((double)(m_width - m_hotPoints[facingIndex].x) * scale);
+        drawY -= (sint32)((double)m_hotPoints[facingIndex].y * scale);
+        } 
+    else 
+        {
+        drawX -= (sint32)((double)m_hotPoints[facingIndex].x * scale);
+        drawY -= (sint32)((double)m_hotPoints[facingIndex].y * scale);
+        }
+
+    if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) 
+        {
+        if (isReversed) 
+            {
+            (this->*_DrawLowReversed)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+            } 
         else
-        {
-			(this->*_DrawLow)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-        }
-	} 
+            {
+            (this->*_DrawLow)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+            }
+        } 
     else if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) 
-    {
-		if (isReversed)
         {
-			(this->*_DrawLowReversed)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-        }
-		else
-        {
-			(this->*_DrawLow)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-        }
-	} 
+        if (isReversed)
+            {
+            (this->*_DrawLowReversed)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+            }
+        else
+            {
+            (this->*_DrawLow)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+            }
+        } 
     else 
-    {
-		sint32 const    destWidth   = (sint32) (m_width * scale);
-		sint32 const    destHeight  = (sint32) (m_height * scale);
+        {
+        sint32 const    destWidth   = (sint32) (m_width * scale);
+        sint32 const    destHeight  = (sint32) (m_height * scale);
 
-		(this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight,
-								transparency, outlineColor, flags, isReversed
-                               );
-	}
-}
+        (this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight,
+                                transparency, outlineColor, flags, isReversed
+            );
+        }
+    }
 
 BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, 
 						Pixel16 outlineColor, uint16 flags)

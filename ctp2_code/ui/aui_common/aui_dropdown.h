@@ -120,7 +120,10 @@ public:
 	aui_Item	*GetItem( uint32 itemId ) const
 		{ return (aui_Item *)m_listBox->GetChild( itemId ); }
 
-	sint32		GetSelectedItem( void ) const { return m_selectedItem; }
+	sint32		GetSelectedItem( void ) const {
+            //printf("%s L%d: m_selectedItem= %d!\n", __FILE__, __LINE__, m_selectedItem);
+            return m_selectedItem; 
+            }
 	sint32		SetSelectedItem( sint32 itemIndex, uint32 data = 0 );
 
 	sint32		GetWindowSize( void ) const { return m_windowSize; }

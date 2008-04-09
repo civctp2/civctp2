@@ -204,7 +204,7 @@ extern CivScenarios     *g_civScenarios;
 
 #define k_SHARED_SURFACE_WIDTH      1024
 #define k_SHARED_SURFACE_HEIGHT     768
-#define k_SHARED_SURFACE_BPP        16
+#define k_SHARED_SURFACE_BPP        16 //sadly most calls have 16 hardcoded!
 
 #define k_MAX_CMD_LINE 1024
 
@@ -526,9 +526,13 @@ int ui_Initialize(void)
 	g_c3ui->RegisterObject(new aui_DirectKeyboard(&auiErr));
 #endif
 
-
-#if !defined(__GNUC__)
 	SPLASH_STRING("Creating Movie manager...");
+
+#if defined(__AUI_USE_SDL__)
+//lynx: this is where SDL movies need to be implemented
+        printf("%s L%d: No SDL movie manager implemented yet!\n", __FILE__, __LINE__);
+	g_c3ui->RegisterObject(new aui_MovieManager());
+#else
 	g_c3ui->RegisterObject(new aui_DirectMovieManager());
 #endif
 
@@ -1260,9 +1264,12 @@ void ParseCommandLine(MBCHAR *szCmdLine)
     } 
 
     g_no_timeslice = (NULL != strstr(szCmdLine, "notimeslice"));
-	if(!g_cmdline_load)
-		g_no_shell =  (NULL != strstr(szCmdLine, "noshell")); 
-    g_no_exit_action = (NULL != strstr(szCmdLine, "noexitaction")); 
+//	if(!g_cmdline_load)
+//            g_no_shell =  (NULL != strstr(szCmdLine, "noshell")); 
+        if (strstr(szCmdLine, "noshell"))
+            g_no_shell = true;
+        else g_no_shell = false;
+        g_no_exit_action = (NULL != strstr(szCmdLine, "noexitaction")); 
 	g_exclusiveMode = !(NULL != strstr(szCmdLine, "nonexclusive"));
 	g_hideTaskBar = (NULL != strstr(szCmdLine, "hidetaskbar"));
 	if(!g_cmdline_load)
@@ -1275,6 +1282,9 @@ void ParseCommandLine(MBCHAR *szCmdLine)
         if (strstr(szCmdLine, "hwsurface"))
             g_SDL_flags = g_SDL_flags|SDL_HWSURFACE;
         else g_SDL_flags = g_SDL_flags|SDL_SWSURFACE;
+        if (strstr(szCmdLine, "openglblit"))
+            g_SDL_flags = g_SDL_flags|SDL_OPENGLBLIT;
+
         //g_bpp = ....
 
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
@@ -1993,6 +2003,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	
 	if (g_cmdline_load) {
 		g_civApp->InitializeApp(hInstance, iCmdShow);
+                printf("%s L%d: InitializeApp done!\n", __FILE__, __LINE__);
 
 		ScenarioPack	*pack;
 		Scenario		*scen;
@@ -2034,6 +2045,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		}
 	} else {
 		g_civApp->InitializeApp(hInstance, iCmdShow);
+                //printf("%s L%d: InitializeApp done!\n", __FILE__, __LINE__);
 	}
 	
 #ifdef __AUI_USE_SDL__
@@ -2043,20 +2055,18 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();
+                //printf("%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
-		while (1)
-#else
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
-#endif
-		{
-#ifdef __AUI_USE_SDL__
+		while (1) { //there is a break;)
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
 			                       ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
 							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
-				fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
+                            //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
+                            printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+
 				break;
 			}
 			if (0 == n) {
@@ -2065,19 +2075,8 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				break;
 			}
 			if (SDL_QUIT == event.type)
-#else // __AUI_USE_SDL__
-			if (WM_QUIT == msg.message)
-#endif // __AUI_USE_SDL__
-			{
 				gDone = TRUE;
-			}
-#ifndef __AUI_USE_SDL__
-			else
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-#else // !__AUI_USE_SDL__
+			
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
 			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
 				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
@@ -2094,7 +2093,20 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			}
 			
 			SDLMessageHandler(event);
-#endif // !__AUI_USE_SDL__
+#else // __AUI_USE_SDL__
+		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
+		{
+			if (WM_QUIT == msg.message)
+			{
+				gDone = TRUE;
+			}
+			else
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+#endif // __AUI_USE_SDL__
+
 		}
 
 		g_letUIProcess = FALSE;
@@ -2449,7 +2461,7 @@ int SDLMessageHandler(const SDL_Event &event)
 	}
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-#else
+#else //implement here the mouse wheel for SDL
 	}
 	
 	return 0;

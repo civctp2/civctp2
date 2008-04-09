@@ -58,23 +58,32 @@ then "/usr/local/CTP2" would be a good path.
 Note that this document assumes you're using the path "/home/foo/CTP2" to
 avoid permission problems/changing to the root account.
 
+(note from lynx: I wonder if anyone ever got this to work on a case sensitiv 
+file system. I found case inconsistencies in the code. The script mentioned 
+later on that is ment to fix it (fix_data_names.sh) does not help if the code 
+is inconsistent about the case of opend files. The best way would be fixing 
+the code but if you are too lasy you can use a fat-filesystem (vfat). If you 
+don't have a partition at hand you can do as follows:
+
+shell> mkfs.vfat -v -C ctp_vfat.img -n ctp_fs 700000
+root>  mount -v -t vfat -o loop /path/to/ctp_vfat.img /home/foo/CTP2
+
+Now you have a vfat "partition" of around 700000kB at /home/foo/CTP2. 
+Linux is great, isn't it?)
+
+
+
+
+
+
 So, let's start:
 
 
-0. Go to the source code top level directory.
-
-
-1. Run "autogen.sh".  Type:
-
-   shell> autogen.sh
-
-
-2. Run "make bootstrap".  Just type:
-
+0. Go to the source code top level directory and do a bootstrap:
    shell> make bootstrap
 
 
-3. Run "configure". Assuming you want CTP2 installed in "/home/foo/CTP2" you
+1. Run "configure". Assuming you want CTP2 installed in "/home/foo/CTP2" you
    would type:
    
    shell> ./configure --prefix=/home/foo/CTP2 --bindir=/home/foo/CTP2/ctp2_program/ctp
@@ -89,8 +98,14 @@ So, let's start:
    mentioned packages or don't have a supported version installed. I'm sorry,
    but you have to fix those problems on your own.
 
+   Note:
+   When having modified some code or updated the source with svn you can try 
+   without a new configure. That way only the modified/new files get compiled 
+   by make which can save you a lot of time! But do a new configure if you 
+   plan to complain about some thing;)
 
-4. Run "make". Simply type:
+
+2. Run "make". Simply type:
 
    shell> make
 
@@ -106,7 +121,12 @@ So, let's start:
    http://apolyton.net/forums/forumdisplay.php?forumid=213
 
 
-5. Run "make install" in the source directory.
+   Note: If you don't plan on debugging the binary you can strip it down to 
+   around 10MB (don't do this if you plan to use eg. gdb !!!):
+   shell> strip ctp2_code/ctp2
+
+
+3. Run "make install" in the source directory.
 
    shell> make install
 
@@ -214,12 +234,24 @@ So, let's start:
    Copy /media/cdrom/Setup/data/ctp2_program/ctp/texture.dat to the directory
    where the ctp2 binary is installed (/home/foo/CTP2/ctp2_program/ctp).
 
-   shll> /media/cdrom/Setup/data/ctp2_program/ctp/texture.dat \
+   shell> /media/cdrom/Setup/data/ctp2_program/ctp/texture.dat \
          /home/foo/CTP2/ctp2_program/ctp
 
    This file is used to determine a legal CD, and ctp2 will not start a
    game without it.
 
+   Install some libs:
+
+   shell> pushd /home/foo/CTP2/ctp2_code/mapgen/.libs/ && cp crater.la crater.so geometric.la geometric.so plasma2.la  plasma2.so /home/foo/CTP2/ctp2_program/ctp/dll/map/ && popd
+
+
+   Note concerning languages:
+   The files ctp2_data/*/sound/sound.zfs contain the sound of units an so.
+   ctp2_data/default/sound/sound.zfs has the language independent sounds.
+   On the CD is only one language in the civlang.ctp file!
+   If you got another do the following to make use of it:
+
+   shell> sed -i '4s/german/english/' ctp2_program/ctp/civpaths.txt
 
 
 == Finally ==
@@ -232,7 +264,16 @@ shell> cd /home/foo/CTP2/ctp2_program/ctp
 
 and call the game:
 
-shell> ./ctp2
+shell> ./ctp2 fullscreen
+
+Note: Get an idea of what commandline options you can use with:
+shell> grep -Hn "strstr(szCmdLine" ctp2_code/ctp/civ3_main.cpp
+
+nointromovie: skip intro movie
+fullscreen:   run SDL/game in full screen mode;)
+openglblit:   experimental option to let SDL use OpenGL for blitting 
+              (SDL has to be configured to use GL for this!)
+hwsurface:    make SDL use a hardware surface, if omitted use software surface
 
 If you encountered problems with this document or have suggestions on how to
 improve it, please e-mail me at marc@darkdust.net.

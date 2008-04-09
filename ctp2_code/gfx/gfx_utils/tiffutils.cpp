@@ -28,7 +28,18 @@
 //
 //----------------------------------------------------------------------------
 
+
+//#ifdef _TIFF_DATA_TYPEDEFS_
+#define CONFIG_TELLS_TO_DEFINE_TIFF_INTTYPES 1
+//#endif
+
+
 #include "c3.h"
+#ifdef CONFIG_TELLS_TO_DEFINE_TIFF_INTTYPES
+typedef sint8 int8;
+typedef sint16 int16;
+typedef sint32 int32;
+#endif
 
 #include "tiffutils.h"
 #include <tiffio.h>

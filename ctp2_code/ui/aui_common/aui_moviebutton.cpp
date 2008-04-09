@@ -148,19 +148,6 @@ aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 		m_movie->SetDestSurface( m_window ? m_window->TheSurface() : NULL );
 		m_movie->SetDestRect( m_x, m_y, m_x + m_width, m_y + m_height );
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		if (m_window) {
 			m_window->SetDynamic(FALSE);
 			m_movie->SetWindowSurface(m_window->TheSurface());
@@ -206,20 +193,20 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 					GetActionFunc()(this, AUI_BUTTON_ACTION_EXECUTE, 0, 0);
 			}
 		}
-
+                //printf("%s L%d: Trying to play movie!\n", __FILE__, __LINE__);
 		if (m_movie) {
-			if ( !m_movie->IsPlaying() && !m_movie->IsFinished()) {
+                    if ( !m_movie->IsPlaying() && !m_movie->IsFinished()) {
 				m_movie->Play();
 			}
 
-			AUI_ERRCODE errcode = m_movie->Process();
+                    AUI_ERRCODE errcode = m_movie->Process();
 
-			if (m_movie) 
-				if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) {
-					if (m_ActionFunc)
-						m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
-				}
-		}
+                    if (m_movie) 
+                        if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) {
+                            if (m_ActionFunc)
+                                m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+                            }
+                    }
 	}
 
 	return AUI_ERRCODE_OK;

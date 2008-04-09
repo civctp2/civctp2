@@ -490,7 +490,7 @@ void NationalManagementDialog::UpdateGovernor()
 	{
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(
+		city.m_id = reinterpret_cast<uint32>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -636,7 +636,7 @@ void NationalManagementDialog::UpdateRushBuy()
 	
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(
+		city.m_id = reinterpret_cast<uint32>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1116,7 +1116,7 @@ bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(
+		city.m_id = reinterpret_cast<uint32>(
 			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1447,7 +1447,7 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(
+		city.m_id = reinterpret_cast<uint32>(
 			static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1512,7 +1512,7 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 	if(selectedList->L() == 1) {
 		
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(
+		city.m_id = reinterpret_cast<uint32>(
 		    static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
 		    selectedList->GetAtIndex(0)
 		    ))->GetUserData());
@@ -1593,7 +1593,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 	
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 		Unit city;
-		city.m_id = *reinterpret_cast<uint32 *>(
+		city.m_id = reinterpret_cast<uint32>(
 			static_cast<ctp2_ListItem*>(dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)
 			))->GetUserData());
@@ -1868,7 +1868,7 @@ void NationalManagementDialog::TabActionCallback(aui_Control *control,
 
 Unit NationalManagementDialog::GetSelectedCity()
 {
-	Unit city;
+        Unit city; //what is this for???
 	if(!g_nationalManagementDialog) return city;
 	ctp2_ListBox *visList;
 
@@ -1892,7 +1892,7 @@ Unit NationalManagementDialog::GetSelectedCity()
 
 	if(!item) return city;
 
-	city.m_id = *(uint32 *)item->GetUserData();
+	city.m_id = (uint32)item->GetUserData();
 	return city;
 }
 
@@ -1965,13 +1965,13 @@ void NationalManagementDialog::MirrorSelectedCities()
 	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
 		
-		uint32 cityId   = *reinterpret_cast<uint32 *>
+		uint32 cityId   = reinterpret_cast<uint32>
                             (static_cast<ctp2_ListItem*>
                                 (visList->GetItemByIndex
                                     (selectedList->GetAtIndex(selectIndex))
                                 )->GetUserData()
                             );
-
+	
         for 
         (
             std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
@@ -1981,7 +1981,7 @@ void NationalManagementDialog::MirrorSelectedCities()
         {
 		    for (sint32 i = 0; i < (*p)->NumItems(); ++i) 
             {
-			    uint32 invisId  = *reinterpret_cast<uint32 *>
+			    uint32 invisId  = reinterpret_cast<uint32>
                                     (static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))
                                         ->GetUserData()
                                     );

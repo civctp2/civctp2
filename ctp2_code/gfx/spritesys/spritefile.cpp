@@ -625,7 +625,7 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 	{
       	// Read normal size sprites
 		size = ssizes[j][0];
-		
+
 		Pixel16 *   CompressedData = (Pixel16 *)new uint8[size];
 		
 		if(m_version>k_SPRITEFILE_VERSION1)
@@ -787,144 +787,144 @@ void SpriteFile::SkipFacedSpriteData(void)
 
 void SpriteFile::ReadFacedSpriteWshadowData(FacedSpriteWshadow *s)
 {
-	uint16		data16;
-	POINT		points[k_NUM_FACINGS];
+uint16		data16;
+POINT		points[k_NUM_FACINGS];
 
-	ReadData((void *)&data16, sizeof(data16));
-	s->SetWidth(data16);
+ReadData((void *)&data16, sizeof(data16));
+s->SetWidth(data16);
 	
-	ReadData((void *)&data16, sizeof(data16));
-	s->SetHeight(data16);
+ReadData((void *)&data16, sizeof(data16));
+s->SetHeight(data16);
 	
-	ReadData((void *)points, sizeof(POINT) * k_NUM_FACINGS);
-	s->SetHotPoints(points);
+ReadData((void *)points, sizeof(POINT) * k_NUM_FACINGS);
+s->SetHotPoints(points);
 	
-	ReadData((void *)&data16, sizeof(data16));
-	s->SetFirstFrame(data16);
+ReadData((void *)&data16, sizeof(data16));
+s->SetFirstFrame(data16);
 	
-	ReadData((void *)&data16, sizeof(data16));
-	s->AllocateFrameArrays(data16);
+ReadData((void *)&data16, sizeof(data16));
+s->AllocateFrameArrays(data16);
 	
-	ReadData((void *)&data16, sizeof(data16));
-	s->SetHasShadow(data16);
+ReadData((void *)&data16, sizeof(data16));
+s->SetHasShadow(data16);
 	
-	uint16		i, j;
-	uint32		ssizes[k_NUM_FACINGS][800];
-	uint32		msizes[k_NUM_FACINGS][800];
-	uint32		sh_ssizes[k_NUM_FACINGS][800];
-	uint32		sh_msizes[k_NUM_FACINGS][800];
-	Pixel16		*data;
-	uint32		size;
+uint16		i, j;
+uint32		ssizes[k_NUM_FACINGS][800];
+uint32		msizes[k_NUM_FACINGS][800];
+uint32		sh_ssizes[k_NUM_FACINGS][800];
+uint32		sh_msizes[k_NUM_FACINGS][800];
+Pixel16		*data;
+uint32		size;
 
-	for (j=0; j<k_NUM_FACINGS; j++) 
-	{
-		ReadData((uint8 *)ssizes[j], sizeof(uint32) * s->GetNumFrames());
-		ReadData((uint8 *)msizes[j], sizeof(uint32) * s->GetNumFrames());
+for (j=0; j<k_NUM_FACINGS; j++) 
+    {
+    ReadData((uint8 *)ssizes[j], sizeof(uint32) * s->GetNumFrames());
+    ReadData((uint8 *)msizes[j], sizeof(uint32) * s->GetNumFrames());
 
-		if(s->GetHasShadow())
-		{
-			ReadData((uint8 *)sh_ssizes[j], sizeof(uint32) * s->GetNumFrames());
-			ReadData((uint8 *)sh_msizes[j], sizeof(uint32) * s->GetNumFrames());
-		}
-	}
+    if(s->GetHasShadow())
+        {
+        ReadData((uint8 *)sh_ssizes[j], sizeof(uint32) * s->GetNumFrames());
+        ReadData((uint8 *)sh_msizes[j], sizeof(uint32) * s->GetNumFrames());
+        }
+    }
 
-	for (j=0; j<k_NUM_FACINGS; j++) 
-	{
-		for (i=0; i<s->GetNumFrames(); i++) 
-		{
-			size = ssizes[j][i];
-			if(size != 0)
-			{
-				data = (Pixel16 *) new uint8[size];
-				ReadData((void *)data, size);
-				spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth(), s->GetHeight());
-			}
-			else
-			{
-				data = NULL;
-			}
-			s->SetFrameData(j, i, data, size);
-		}
+for (j=0; j<k_NUM_FACINGS; j++) 
+    {
+    for (i=0; i<s->GetNumFrames(); i++) 
+        {
+        size = ssizes[j][i];
+        if(size != 0)
+            {
+            data = (Pixel16 *) new uint8[size];
+            ReadData((void *)data, size);
+            spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth(), s->GetHeight());
+            }
+        else
+            {
+            data = NULL;
+            }
+        s->SetFrameData(j, i, data, size);
+        }
 
 		
-		for (i=0; i<s->GetNumFrames(); i++) 
-		{
-			size = msizes[j][i];
-			if(size != 0)
-			{
-				data = (Pixel16 *) new uint8[size];
-				ReadData((void *)data, size);
-				spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth()/2, s->GetHeight()/2);
-			}
-			else
-			{
-				data = NULL;
-			}
-			s->SetMiniFrameData(j, i, data, size);
-		}
-		if(s->GetHasShadow())
-		{
+    for (i=0; i<s->GetNumFrames(); i++) 
+        {
+        size = msizes[j][i];
+        if(size != 0)
+            {
+            data = (Pixel16 *) new uint8[size];
+            ReadData((void *)data, size);
+            spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth()/2, s->GetHeight()/2);
+            }
+        else
+            {
+            data = NULL;
+            }
+        s->SetMiniFrameData(j, i, data, size);
+        }
+    if(s->GetHasShadow())
+        {
 			
-			for (i=0; i<s->GetNumFrames(); i++) 
-			{
-				size = sh_ssizes[j][i];
-				if(size != 0)
-				{
-					data = (Pixel16 *) new uint8[size];
-					ReadData((void *)data, size);
-					spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth(), s->GetHeight());
-				}
-				else
-				{
-					data = NULL;
-				}
-				s->SetShadowFrameData(j, i, data, size);
-			}
+        for (i=0; i<s->GetNumFrames(); i++) 
+            {
+            size = sh_ssizes[j][i];
+            if(size != 0)
+                {
+                data = (Pixel16 *) new uint8[size];
+                ReadData((void *)data, size);
+                spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth(), s->GetHeight());
+                }
+            else
+                {
+                data = NULL;
+                }
+            s->SetShadowFrameData(j, i, data, size);
+            }
 			
 			
-			for (i=0; i<s->GetNumFrames(); i++) 
-			{
-				size = sh_msizes[j][i];
-				if(size != 0)
-				{
-					data = (Pixel16 *) new uint8[size];
-					ReadData((void *)data, size);
-					spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth()/2, s->GetHeight()/2);
-				}
-				else
-				{
-					data = NULL;
-				}
-				s->SetMiniShadowFrameData(j, i, data, size);
-			}
-		}
-	}
+        for (i=0; i<s->GetNumFrames(); i++) 
+            {
+            size = sh_msizes[j][i];
+            if(size != 0)
+                {
+                data = (Pixel16 *) new uint8[size];
+                ReadData((void *)data, size);
+                spriteutils_ConvertPixelFormat((Pixel16 *)data, s->GetWidth()/2, s->GetHeight()/2);
+                }
+            else
+                {
+                data = NULL;
+                }
+            s->SetMiniShadowFrameData(j, i, data, size);
+            }
+        }
+    }
 }
 
-void SpriteFile::ReadSpriteDataGeneralBasic(Sprite **sprite)
-{
-	uint16		data16;
+void SpriteFile::ReadSpriteDataGeneralBasic(Sprite **sprite){
+    uint16		data16;
 
-	ReadData((void *)&data16, sizeof(data16));
+    ReadData((void *)&data16, sizeof(data16));
 
-	if ((SPRITETYPE)data16 == SPRITETYPE_NORMAL) 
-	{
-		if (*sprite == NULL)
-			*sprite = new Sprite;
-		(*sprite)->SetType((SPRITETYPE)data16);
-		ReadSpriteDataBasic(*sprite);
-	} 
-	else if ((SPRITETYPE)data16 == SPRITETYPE_FACED) 
-	{
-			if (*sprite == NULL)
-				*sprite = (Sprite *) new FacedSprite;
-			(*sprite)->SetType((SPRITETYPE)data16);
-			ReadFacedSpriteDataBasic((FacedSprite *)*sprite);
-	} 
-	else 
-		Assert(FALSE);
+    if ((SPRITETYPE)data16 == SPRITETYPE_NORMAL) 
+        {
+        if (*sprite == NULL)
+            *sprite = new Sprite;
+        (*sprite)->SetType((SPRITETYPE)data16);
+        ReadSpriteDataBasic(*sprite);
+        } 
+    else if ((SPRITETYPE)data16 == SPRITETYPE_FACED) 
+        {
+        if (*sprite == NULL)
+            *sprite = (Sprite *) new FacedSprite;
+        (*sprite)->SetType((SPRITETYPE)data16);
 
-}
+        ReadFacedSpriteDataBasic((FacedSprite *)*sprite);
+        } 
+    else 
+        Assert(FALSE);
+
+    }
 
 void SpriteFile::ReadSpriteDataGeneralFull(Sprite **sprite)
 {
@@ -1515,219 +1515,216 @@ SPRITEFILEERR SpriteFile::Read(SpriteGroup **s, Anim **anim)
 }
 
 
-SPRITEFILEERR SpriteFile::ReadBasic_v13(UnitSpriteGroup *s)
-{
-	uint16	i;
-	uint32	data32;
-	uint16	data16;
+SPRITEFILEERR SpriteFile::ReadBasic_v13(UnitSpriteGroup *s){
+    uint16	i;
+    uint32	data32;
+    uint16	data16;
 
-	
-	for (i=0; i<UNITACTION_MAX; i++) 
-	{
-		ReadData((void *)&data32, sizeof(data32));
-	}
+    for (i=0; i<UNITACTION_MAX; i++) //what's this for???
+        {
+        ReadData((void *)&data32, sizeof(data32));
+        }
 
-	for (i=0; i<UNITACTION_MAX; i++) 
-	{
-		Sprite		*sprite;
+    for (i=0; i<UNITACTION_MAX; i++) 
+        {
+        Sprite		*sprite;
 
-		ReadData((void *)&data32, sizeof(data32));
+        ReadData((void *)&data32, sizeof(data32));
 
-		if (data32) {
-			if (i==UNITACTION_MOVE) {
-				sprite = s->GetGroupSprite((GAME_ACTION)i);
-				ReadSpriteDataGeneralBasic(&sprite);
-				s->SetGroupSprite((GAME_ACTION)i, sprite);
+        if (data32) {
+            if (i==UNITACTION_MOVE) {
+                sprite = s->GetGroupSprite((GAME_ACTION)i);
+                ReadSpriteDataGeneralBasic(&sprite);
+                s->SetGroupSprite((GAME_ACTION)i, sprite);
 
-				Anim *anim = s->GetGroupAnim((GAME_ACTION)i);
+                Anim *anim = s->GetGroupAnim((GAME_ACTION)i);
 
-				if (anim == NULL)
-					anim = new Anim;
+                if (anim == NULL)
+                    anim = new Anim;
 				
-				ReadAnimDataBasic(anim);
+                ReadAnimDataBasic(anim);
 
-				s->SetGroupAnim((GAME_ACTION)i, anim);
-			} else
-			if (i==UNITACTION_IDLE) {
-				if (g_theProfileDB && g_theProfileDB->IsUnitAnim()) {
+                s->SetGroupAnim((GAME_ACTION)i, anim);
+                } 
+            else if (i==UNITACTION_IDLE) {
+                if (g_theProfileDB && g_theProfileDB->IsUnitAnim()) {
 					
-					sprite = s->GetGroupSprite((GAME_ACTION)i);
-					ReadSpriteDataGeneralFull(&sprite);
-					s->SetGroupSprite((GAME_ACTION)i, sprite);
+                    sprite = s->GetGroupSprite((GAME_ACTION)i);
+                    ReadSpriteDataGeneralFull(&sprite);
+                    s->SetGroupSprite((GAME_ACTION)i, sprite);
 
-					Anim *anim = s->GetGroupAnim((GAME_ACTION)i);
-					if (anim == NULL)
-						anim = new Anim;
-					ReadAnimDataFull(anim);
-					s->SetGroupAnim((GAME_ACTION)i, anim);
-				} else {
+                    Anim *anim = s->GetGroupAnim((GAME_ACTION)i);
+                    if (anim == NULL)
+                        anim = new Anim;
+                    ReadAnimDataFull(anim);
+                    s->SetGroupAnim((GAME_ACTION)i, anim);
+                    } 
+                else {
 					
-					sprite = s->GetGroupSprite((GAME_ACTION)i);
-					ReadSpriteDataGeneralBasic(&sprite);
-					s->SetGroupSprite((GAME_ACTION)i, sprite);
+                    sprite = s->GetGroupSprite((GAME_ACTION)i);
+                    ReadSpriteDataGeneralBasic(&sprite);
+                    s->SetGroupSprite((GAME_ACTION)i, sprite);
 
-					Anim *anim = s->GetGroupAnim((GAME_ACTION)i);
-					if (anim == NULL)
-						anim = new Anim;
-					ReadAnimDataBasic(anim);
+                    Anim *anim = s->GetGroupAnim((GAME_ACTION)i);
+                    if (anim == NULL)
+                        anim = new Anim;
+                    ReadAnimDataBasic(anim);
 
-					s->SetGroupAnim((GAME_ACTION)i, anim);
-				}
-                            } 
-                        else { 
-                            SkipSpriteDataGeneral();
-                            s->SetGroupSprite((GAME_ACTION)i, NULL);
+                    s->SetGroupAnim((GAME_ACTION)i, anim);
+                    }
+                } 
+            else { 
+                SkipSpriteDataGeneral();
+                s->SetGroupSprite((GAME_ACTION)i, NULL);
 
-                            SkipAnimData();
-                            s->SetGroupAnim((GAME_ACTION)i, NULL);
-                            }
-		}
-	}
+                SkipAnimData();
+                s->SetGroupAnim((GAME_ACTION)i, NULL);
+                }
+            }
+        }
 
-	POINT		*thePoints;
-	POINT		pointBuffer[k_NUM_FACINGS];
-
-	
-	ReadData((void *)&data16, sizeof(uint16));
-
-
- 	for (i=0; i<k_NUM_FIREPOINTS; i++) 
- 	{
- 		ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
- 
- 
- 	}
+    POINT		*thePoints;
+    POINT		pointBuffer[k_NUM_FACINGS];
 
 	
-	ReadData((void *)&data16, sizeof(uint16));
+    ReadData((void *)&data16, sizeof(uint16));
+
+
+    for (i=0; i<k_NUM_FIREPOINTS; i++) 
+        {
+        ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
  
-
-	for (i=0; i<k_NUM_FIREPOINTS; i++) 
-	{
-		ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
-   
-   
-	}
-
-	ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
-   
-   
-
-	for (i=0; i<UNITACTION_MAX; i++) 
-	{
-		ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
-		thePoints = s->GetShieldPoints((UNITACTION)i);
-		memcpy(thePoints, pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
-	}
-
-	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
-
-	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
-
-	return SPRITEFILEERR_OK;
-}
-
-
-
-SPRITEFILEERR SpriteFile::ReadBasic_v20(UnitSpriteGroup *s)
-{
-	int		i;
-	uint16	data16;
-	int     offsets[ACTION_MAX+1];
+ 
+        }
 
 	
-	Sprite		*sprite;
-	Anim		*anim;
+    ReadData((void *)&data16, sizeof(uint16));
+ 
+
+    for (i=0; i<k_NUM_FIREPOINTS; i++) 
+        {
+        ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
+   
+   
+        }
+
+    ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
+   
+   
+
+    for (i=0; i<UNITACTION_MAX; i++) 
+        {
+        ReadData((void *)pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
+        thePoints = s->GetShieldPoints((UNITACTION)i);
+        memcpy(thePoints, pointBuffer, sizeof(POINT) * k_NUM_FACINGS);
+        }
+
+    ReadData((void *)&data16, sizeof(uint16));
+    s->SetHasDeath(data16);
+
+    ReadData((void *)&data16, sizeof(uint16));
+    s->SetHasDirectional(data16);
+
+    return SPRITEFILEERR_OK;
+    }
+
+
+
+SPRITEFILEERR SpriteFile::ReadBasic_v20(UnitSpriteGroup *s){
+    int		i;
+    uint16	data16;
+    int     offsets[ACTION_MAX+1];
+
+	
+    Sprite		*sprite;
+    Anim		*anim;
 
 	
     ReadData((void *)offsets, sizeof(int) * (ACTION_MAX+1));
 
 	
-	for (i=0; i<ACTION_MAX; i++) 
-	{
-	  s->SetGroupSprite((GAME_ACTION)i,NULL);
-	  s->SetGroupAnim  ((GAME_ACTION)i,NULL);
-	}
+    for (i=0; i<ACTION_MAX; i++) 
+        {
+        s->SetGroupSprite((GAME_ACTION)i,NULL);
+        s->SetGroupAnim  ((GAME_ACTION)i,NULL);
+        }
 
 	
-	if(offsets[UNITACTION_IDLE]>0)
-	{
+    if(offsets[UNITACTION_IDLE]>0)
+        {
 		
- 		SetFilePos(offsets[UNITACTION_IDLE]);
+        SetFilePos(offsets[UNITACTION_IDLE]);
 
-		sprite = s->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE);
-		anim   = s->GetGroupAnim  ((GAME_ACTION)UNITACTION_IDLE);
+        sprite = s->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE);
+        anim   = s->GetGroupAnim  ((GAME_ACTION)UNITACTION_IDLE);
 	
-		if(	anim == NULL)
-			anim = new Anim;
+        if(	anim == NULL)
+            anim = new Anim;
 
 #ifdef __MAKESPR__
-	   ReadSpriteDataGeneralBasic(&sprite);
-	   ReadAnimDataBasic(anim);
+        ReadSpriteDataGeneralBasic(&sprite);
+        ReadAnimDataBasic(anim);
 #else
-		if (g_theProfileDB && g_theProfileDB->IsUnitAnim())
-		{
-			ReadSpriteDataGeneralFull(&sprite);
-			ReadAnimDataFull(anim);
-		}
-		else 
-		{
-			ReadSpriteDataGeneralBasic(&sprite);
-			ReadAnimDataBasic(anim);
-		}
+        if (g_theProfileDB && g_theProfileDB->IsUnitAnim())
+            {
+            ReadSpriteDataGeneralFull(&sprite); //this gives the idle animation
+            ReadAnimDataFull(anim);
+            }
+        else 
+            {
+            ReadSpriteDataGeneralBasic(&sprite);
+            ReadAnimDataBasic(anim);
+            }
 #endif
-	    s->SetGroupSprite((GAME_ACTION)UNITACTION_IDLE,sprite);
-	    s->SetGroupAnim  ((GAME_ACTION)UNITACTION_IDLE,anim);
-	}
+        s->SetGroupSprite((GAME_ACTION)UNITACTION_IDLE,sprite);
+        s->SetGroupAnim  ((GAME_ACTION)UNITACTION_IDLE,anim);
+        }
 
-	
-	if(offsets[UNITACTION_MOVE]>0)
-	{
+    if(offsets[UNITACTION_MOVE]>0)
+        {
 		
- 		SetFilePos(offsets[UNITACTION_MOVE]);
+        SetFilePos(offsets[UNITACTION_MOVE]);
 		
-		sprite = s->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
-		anim   = s->GetGroupAnim  ((GAME_ACTION)UNITACTION_MOVE);
+        sprite = s->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
+        anim   = s->GetGroupAnim  ((GAME_ACTION)UNITACTION_MOVE);
 	
-		if(	anim == NULL)
-			anim = new Anim;
+        if(	anim == NULL)
+            anim = new Anim;
 
-		 ReadSpriteDataGeneralBasic(&sprite);
-		 ReadAnimDataBasic(anim);
+        ReadSpriteDataGeneralBasic(&sprite); 
+        ReadAnimDataBasic(anim);
 	
-	     s->SetGroupSprite((GAME_ACTION)UNITACTION_MOVE,sprite);
-	     s->SetGroupAnim  ((GAME_ACTION)UNITACTION_MOVE,anim);
-	}
-
-	
-	SetFilePos(offsets[ACTION_MAX]);
+        s->SetGroupSprite((GAME_ACTION)UNITACTION_MOVE,sprite);
+        s->SetGroupAnim  ((GAME_ACTION)UNITACTION_MOVE,anim);
+        }
 
 	
-	for (i=0; i<UNITACTION_MAX; i++) 
-		ReadData((void *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
+    SetFilePos(offsets[ACTION_MAX]);
 
 	
-	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDeath(data16);
+    for (i=0; i<UNITACTION_MAX; i++) 
+        ReadData((void *)s->GetShieldPoints((UNITACTION)i), sizeof(POINT) * k_NUM_FACINGS);
 
-	ReadData((void *)&data16, sizeof(uint16));
-	s->SetHasDirectional(data16);
+	
+    ReadData((void *)&data16, sizeof(uint16));
+    s->SetHasDeath(data16);
 
-	return SPRITEFILEERR_OK;
-}
+    ReadData((void *)&data16, sizeof(uint16));
+    s->SetHasDirectional(data16);
+
+    return SPRITEFILEERR_OK;
+    }
 
 SPRITEFILEERR SpriteFile::ReadBasic(UnitSpriteGroup *s){
     switch(m_version) {
         case	k_SPRITEFILE_VERSION1:
         case	k_SPRITEFILE_VERSION2:
-            return ReadBasic_v20(s); 
+             return ReadBasic_v20(s); 
             break;
 
         case	k_SPRITEFILE_VERSION0:
         default:
-            return ReadBasic_v13(s);
+                       return ReadBasic_v13(s);
         }
 	
     return SPRITEFILEERR_OK;
@@ -2319,13 +2316,13 @@ size_t SpriteFile::GetFilePos(void)
 	fpos_t		pos;
 	sint32		err;
 
+#ifdef WIN32
 	err = c3files_fgetpos(m_file, &pos);
 	Assert(err == 0);
-
-#ifdef WIN32
 	return  pos;
 #elif defined(LINUX)
-	return pos.__pos;
+//	return pos.__pos;
+        return ftell(m_file);
 #endif
 }
 
@@ -2336,13 +2333,14 @@ void SpriteFile::SetFilePos(size_t pos)
 	
 #ifdef WIN32
 	filePos = pos;
+	err = c3files_fsetpos(m_file, &filePos);
 #elif defined(LINUX)
-	err = c3files_fgetpos(m_file, &filePos);
-	Assert(err == 0);
-	filePos.__pos = pos;
+//	err = c3files_fgetpos(m_file, &filePos); //is this because fpos_t may be more complex on some systems than size_t and needs to be properly initialized?
+//	Assert(err == 0);
+//	filePos.__pos = pos;
+        err = fseek(m_file, pos, SEEK_SET);
 #endif
 
-	err = c3files_fsetpos(m_file, &filePos);
 	Assert(err == 0);
 }
 

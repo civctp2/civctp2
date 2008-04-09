@@ -61,16 +61,20 @@ Anim::Anim()
 
 Anim::~Anim()
 {
+/*
 	if(m_specialCopyDelete == ANIMXEROX_ORIGINAL)
 	{
 		
 //Added by Martin Gühmann
 		//These fields are initialized with new[] therefore use
 		//delete[] to delete them.
+
+//lynx: I agree but I get double free errors with it when loading a game from a running one so took it out again.
 		if (m_frames) delete[] m_frames;
 		if (m_moveDeltas) delete[] m_moveDeltas;
 		if (m_transparencies) delete[] m_transparencies;
 	}
+*/
 }
 
 uint16 Anim::GetFrame(sint32 animPos)
@@ -143,124 +147,6 @@ sint32 Anim::GetNextPosition(sint32 animPos)
 
 	return animPos;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

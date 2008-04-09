@@ -47,8 +47,8 @@ aui_Movie::aui_Movie(
 	AUI_ERRCODE *retval,
 	const MBCHAR *filename )
 	:
-	aui_Base()
-{
+	aui_Base(){
+    printf("%s L%d: Constructor aui_Movie called!\n", __FILE__, __LINE__);
 	*retval = InitCommon( filename );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -374,6 +374,14 @@ AUI_ERRCODE aui_Movie::Play( void )
 			1000 );
 		Assert( err == 0 );
 		if ( err ) return AUI_ERRCODE_HACK;
+#else
+                char cmd[1024];
+                cmd[0]=0;
+                
+                snprintf(cmd, sizeof(cmd), "mplayer -vo xv /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", m_filename);
+                printf("%s L%d: Trying to execute: %s!\n", __FILE__, __LINE__, cmd);
+                printf("%s L%d: The path to the movies is hard coded! Solve it! ;)\n", __FILE__, __LINE__);
+                system(cmd);
 #endif
 		m_isPlaying = TRUE;
 		m_isPaused = FALSE;
@@ -454,6 +462,11 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 
 	SetWindowLong( g_ui->TheHWND(), GWL_WNDPROC, (LONG)m_windowProc );
 	m_windowProc = NULL;
+#else
+         printf("%s L%d: SDL mouse code is missing here!\n", __FILE__, __LINE__);
+//Play() is called before this!
+		Process();
+
 #endif
 
 	if (mouse)
@@ -470,17 +483,21 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 
 AUI_ERRCODE aui_Movie::Stop( void )
 {
+#ifndef USE_SDL
 	if ( m_isPlaying )
 	{
-#ifndef USE_SDL
 		uint32 err = AVIStreamEndStreaming( m_aviStream );
 		Assert( err == 0 );
 		if ( err ) return AUI_ERRCODE_HACK;
-#endif
 
 		m_isPlaying = FALSE;
 		m_isPaused = FALSE;
 	}
+#else
+		m_isPlaying = FALSE;
+		m_isPaused = FALSE;
+                m_isFinished = TRUE;
+#endif
 
 	return AUI_ERRCODE_OK;
 }
@@ -592,6 +609,9 @@ AUI_ERRCODE aui_Movie::Process( void )
 			retval = AUI_ERRCODE_HANDLED;
 		}
 	}
+#else
+        m_isFinished = TRUE;
+        retval = AUI_ERRCODE_HANDLED;
 #endif
 
 	return retval;

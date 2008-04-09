@@ -150,7 +150,11 @@ public:
 	virtual void	SetNumFrames(uint16 num) { m_numFrames = num; }
 
 	sint32			GetCurrentFrame(void) { return m_currentFrame; };
-	void			SetCurrentFrame(sint16 cFrame) { m_currentFrame = cFrame; };
+	void			SetCurrentFrame(sint16 cFrame) { 
+            m_currentFrame = cFrame; 
+            //if (!cFrame) 
+            //    printf("%s L%d: cFrame= %d\n", __FILE__, __LINE__, cFrame);
+            };
 
 	Pixel16*		GetFrameData(uint16 frameNum);
 	size_t			GetFrameDataSize(uint16 frameNum);
@@ -337,7 +341,7 @@ protected:
 	POINT			m_hotPoint;
 
 	uint16			m_numFrames;
-	Pixel16			**m_frames;
+	Pixel16			**m_frames; //triple pointer in FacedSprite.h!!!
 	size_t                  *m_framesSizes;
 	Pixel16			**m_miniframes;
 	size_t                  *m_miniframesSizes;

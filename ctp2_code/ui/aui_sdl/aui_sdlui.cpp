@@ -141,7 +141,10 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
        	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
-	if (!m_lpdds) {
+	//m_lpdds = SDL_SetVideoMode(1400, 1050, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);	
+        //printf("%s %dL: Created fixed 1400x1050 SDLSurface! Delete the line above and use the commented one!\n", __FILE__, __LINE__);
+        //printf("%s %dL: g_ScreenWidth= %d, g_ScreenHeight= %d\n", __FILE__, __LINE__, g_ScreenWidth, g_ScreenHeight);
+        if (!m_lpdds) {
 		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
 	}
 	
@@ -152,6 +155,8 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 		m_bpp,
 		m_lpdds,
 		TRUE );
+        
+        
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -193,12 +198,12 @@ AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 		m_savedMouseAnimCurIndex = m_mouse->GetCurrentCursorIndex();
 		m_savedMouseAnimDelay = (sint32)m_mouse->GetAnimDelay();
 
+/*
 		if ( m_minimize || m_exclusiveMode )
 		{
-#if 0
 			SetCursorPos( m_mouse->X(), m_mouse->Y() );
-#endif
 		}
+*/
 
 		m_mouse->End();
 		delete m_mouse;
@@ -293,7 +298,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 
 	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 
-#if 0
+/*
 	if ( m_minimize || m_exclusiveMode )
 		while ( GetForegroundWindow() != m_hwnd )
 			::ShowWindow( m_hwnd, SW_RESTORE );
@@ -324,7 +329,7 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 		RECT clipRect = { 0, 0, m_width, m_height };
 		ClipCursor(&clipRect);
 	}
-#endif
+*/
 	if ( m_joystick ) m_joystick->Acquire();
 	if (m_keyboard) m_keyboard->Acquire();
 

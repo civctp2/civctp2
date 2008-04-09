@@ -120,6 +120,7 @@ Sprite::~Sprite()
 
 void Sprite::Load(char *filename)
 {
+printf("%s L%d: Sprite::Load doing nothing! Is this correct?\n", __FILE__, __LINE__);
 }
 
 
@@ -141,9 +142,9 @@ void Sprite::Save(char *filename)
 
 
 
-void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData)
-{
-		
+void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData){
+
+    printf("%s L%d: ImportTIFF called!\n", __FILE__, __LINE__);		
 		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height);
 #if 0
 		
@@ -230,6 +231,7 @@ void Sprite::ImportTGA(uint16 index, char **imageFiles,Pixel32 **imageData)
 
 void Sprite::Import(uint16 nframes, char **imageFiles, char **shadowFiles){
     
+    //never called?
     printf("%s L%d: imageFiles[0][0] = %#X\n", __FILE__, __LINE__, imageFiles[0][0]);
     m_numFrames = nframes;
 
@@ -367,7 +369,7 @@ void Sprite::SetSurface(void)
 void Sprite::InitializeDrawLow()
 {
 	if (g_is565Format)
-	{	
+	{
 		_DrawLowClipped        	= &DrawLowClipped565		;
 		_DrawLow               	= &DrawLow565			;
 		_DrawLowReversedClipped	= &DrawLowReversedClipped565	;
@@ -379,7 +381,8 @@ void Sprite::InitializeDrawLow()
 		_DrawFlashScaledLow	= &DrawFlashScaledLow565	;
 	}
 	else
-	{	
+	{
+	printf("%s L%d: g_is555Format!\n", __FILE__, __LINE__);
 		_DrawLowClipped        	= &DrawLowClipped555		;
 		_DrawLow               	= &DrawLow555			;
 		_DrawLowReversedClipped	= &DrawLowReversedClipped555	;
@@ -393,7 +396,7 @@ void Sprite::InitializeDrawLow()
 }
 
 
-
+//Sprite::Draw seems to draw units, cities, goods...?
 void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags){
     SetSurface();
 
@@ -406,7 +409,7 @@ void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint1
 
     drawY -= (sint32)((double)m_hotPoint.y * scale);
 //compare with FacedSprite.cpp concerning m_frames [] or [][]
-//printf("%s L%d: m_frames %p, m_frames[k_MAX_FACINGS - facing] = %p, m_currentFrame %d\n", __FILE__, __LINE__, m_frames, m_frames[m_currentFrame], m_currentFrame);
+    //printf("%s L%d: m_frames %p, m_frames[k_MAX_FACINGS - facing] = %p, m_currentFrame %d\n", __FILE__, __LINE__, m_frames, m_frames[m_currentFrame], m_currentFrame);
     if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
         if (facing < 5) {
             if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
@@ -789,7 +792,6 @@ void Sprite::SetFrameData(uint16 frameNum, Pixel16 *data)
 	if (frameNum >= m_numFrames) return;
 	Assert(m_frames != NULL);
 	if (m_frames == NULL) return;
-
 	m_frames[frameNum] = data;
 }
 
@@ -861,7 +863,8 @@ void Sprite::AllocateFrameArrays(size_t count)
 
 	m_frames        = new Pixel16*[count];
 	m_miniframes    = new Pixel16*[count];
-    m_numFrames     = count;
+        m_numFrames     = count;
+        printf("%s L%d: m_numFrames set to %d\n", __FILE__, __LINE__, m_numFrames);
 }
 
 

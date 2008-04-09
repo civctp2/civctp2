@@ -46,7 +46,7 @@ SpriteGroup::SpriteGroup(GROUPTYPE type)
 
 	
 	m_width = 0;
-    m_height= 0;
+        m_height= 0;
 	
 	m_usageRefCount=0;			
 	m_fullLoadRefCount=0;		
@@ -62,6 +62,7 @@ SpriteGroup::SpriteGroup(GROUPTYPE type)
 	m_hasDeath=FALSE;
 	m_hasDirectional=FALSE;
 
+       
 
 }
 

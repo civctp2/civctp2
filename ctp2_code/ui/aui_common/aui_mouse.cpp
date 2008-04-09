@@ -910,8 +910,7 @@ aui_Cursor *aui_Mouse::GetCursor( sint32 index ) const
 	return m_cursors[ index ];
 }
 
-AUI_ERRCODE aui_Mouse::ReactToInput( void )
-{
+AUI_ERRCODE aui_Mouse::ReactToInput( void ){
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	POINT hotspot;
@@ -1777,7 +1776,7 @@ AUI_ERRCODE aui_Mouse::Erase( void )
 		m_prevPickup,
 		&rect,
 		k_AUI_BLITTER_FLAG_COPY );
-
+        
 	
 	m_reset = TRUE;
 

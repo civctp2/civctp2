@@ -291,192 +291,133 @@ Pixel16 test_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 
 
 void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
-					 uint16 transparency, Pixel16 outlineColor, uint16 flags)
-{
-	uint8			*surfBase;
+					 uint16 transparency, Pixel16 outlineColor, uint16 flags){
+    uint8			*surfBase;
 
 	
-	sint32 surfWidth  = m_surfWidth;
-	sint32 surfHeight = m_surfHeight;
-	sint32 surfPitch  = m_surfPitch;
+    sint32 surfWidth  = m_surfWidth;
+    sint32 surfHeight = m_surfHeight;
+    sint32 surfPitch  = m_surfPitch;
 
-
-	
-	
-	
-	
-	
-	
-
-	
-	
-	if ((drawX < 0) || 
-		(drawY < 0) || 
-		(drawX >= (surfWidth-width)) || 
-		(drawY >= (surfHeight-height))) 
-	{
+    if ((drawX < 0) || 
+        (drawY < 0) || 
+        (drawX >= (surfWidth-width)) || 
+        (drawY >= (surfHeight-height))) 
+        {
 	    
-		if (drawX <= -width)  return;
-		if (drawY <= -height) return;
-		if (drawX >= surfWidth)  return;
-		if (drawY >= surfHeight) return;
+        if (drawX <= -width)  return;
+        if (drawY <= -height) return;
+        if (drawX >= surfWidth)  return;
+        if (drawY >= surfHeight) return;
 		
-		(this->*_DrawLowClipped)(frame, drawX, drawY, width, height, transparency, outlineColor, flags);
-		return;
-	}
+        (this->*_DrawLowClipped)(frame, drawX, drawY, width, height, transparency, outlineColor, flags);
+        return;
+        }
 
+    surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
+
+    PixelAddress destAddr;
+    PixelAddress rowAddr;
 	
-	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
+    Pixel16		*table = frame+1;
+    Pixel16		*dataStart = table + height;
 
+    register	sint32 j;
 	
+    uint32		w_len;
+    Pixel16		tag;
 	
+    for(j=0; j<height; j++) 
+        {
+        if (table[j]!=k_EMPTY_TABLE_ENTRY) 
+            {		
+            destAddr.w_ptr = (Pixel16 *)(surfBase + j * surfPitch);
+            rowAddr.w_ptr  = dataStart + table[j];
+            tag = *rowAddr.w_ptr++;
+            tag = tag & 0x0FFF;	
+            while ((tag & 0xF000) == 0) 
+                {
+                switch ((tag & 0x0F00) >> 8) 
+                    {
+                    case k_CHROMAKEY_RUN_ID	:
+                        destAddr.w_ptr += (tag & 0x00FF);
+                        break;
+                    case k_COPY_RUN_ID			: 
+                        w_len = (tag & 0x00FF);
+                        if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
+                            {
+                            if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
+                                __BlendFast_565_16(destAddr,rowAddr,1,1,w_len,transparency);
+                                break; 
+                                }
+                            if (flags & k_BIT_DRAWFLAGS_FOGGED) 
+                                {
+                                __Shadow_565_32(destAddr,rowAddr,1,1,w_len>>1);
+                                __Shadow_565_16(destAddr,rowAddr,1,1,w_len&0x01);
+                                break; 
+                                }
+                            __Desaturate_565_16(destAddr,rowAddr,1,1,w_len);
+                            break; 
+                            }
+                        __Copy_32(destAddr,rowAddr,1,1,w_len>>1);
+                        __Copy_16(destAddr,rowAddr,1,1,w_len&0x01);
+                        break;
+                    case k_SHADOW_RUN_ID		: 
+                        w_len = (tag & 0x00FF);
+                        __Shadow_565_32(destAddr,1,w_len>>1);
+                        __Shadow_565_16(destAddr,1,w_len&0x01);
+                        break;
+                    case k_FEATHERED_RUN_ID	:
+                        if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) 
+                            {
+                            *destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, transparency);
+                            destAddr.w_ptr++;
+                            rowAddr.w_ptr++;
+                            } 
+                        else 
+                            {
+                            Pixel16 pixel = *rowAddr.w_ptr;
 
-	
-	PixelAddress destAddr;
-	PixelAddress rowAddr;
-	
-	Pixel16		*table = frame+1;
-	Pixel16		*dataStart = table + height;
+                            if (flags & k_BIT_DRAWFLAGS_FOGGED) 
+                                pixel = pixelutils_Shadow_565(pixel);
 
-	register	sint32 j;
-	
-	
-	uint32		w_len;
-	Pixel16		tag;
+                            if (flags & k_BIT_DRAWFLAGS_DESATURATED) 
+                                pixel = pixelutils_Desaturate_565(pixel);
 
-	
-	
-
-	
-	for(j=0; j<height; j++) 
-	{
-		if (table[j]!=k_EMPTY_TABLE_ENTRY) 
-		{		
-		   	destAddr.w_ptr = (Pixel16 *)(surfBase + j * surfPitch);
-		  
-			
-			rowAddr.w_ptr  = dataStart + table[j];
-
-		    tag = *rowAddr.w_ptr++;
-
-			tag = tag & 0x0FFF;	
-					
-			while ((tag & 0xF000) == 0) 
-			{
-				switch ((tag & 0x0F00) >> 8) 
-				{
-					
-				    case k_CHROMAKEY_RUN_ID	:
-						 destAddr.w_ptr += (tag & 0x00FF);
-						 break;
-				  
-					
-					case k_COPY_RUN_ID			: 
-						 
-						 w_len = (tag & 0x00FF);
-
-						 
-						 if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
-						 {
-							
-							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
-							{
-								__BlendFast_565_16(destAddr,rowAddr,1,1,w_len,transparency);
-								break; 
-							}
-							
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) 
-							{
-								__Shadow_565_32(destAddr,rowAddr,1,1,w_len>>1);
-								__Shadow_565_16(destAddr,rowAddr,1,1,w_len&0x01);
-								break; 
-							}
-							
-							__Desaturate_565_16(destAddr,rowAddr,1,1,w_len);
-						 	
-							break; 
-						 }
-
-						 
-						 __Copy_32(destAddr,rowAddr,1,1,w_len>>1);
-						 __Copy_16(destAddr,rowAddr,1,1,w_len&0x01);
-						
-						 break;
-
-					
-					case k_SHADOW_RUN_ID		: 
-						 
-						 w_len = (tag & 0x00FF);
-
-						 __Shadow_565_32(destAddr,1,w_len>>1);
-						 __Shadow_565_16(destAddr,1,w_len&0x01);
-
-						 break;
-
-					
-					case k_FEATHERED_RUN_ID	:
-
-					  	 
-						 
-						 
-
-						 
-					  	 if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) 
-					  	 {
-					
-					
-					
-					 		*destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, transparency);
-					 		destAddr.w_ptr++;
-							rowAddr.w_ptr++;
-					 	 } 
-					  	 else 
-					  
-
-						 {
-						  
-							Pixel16 pixel = *rowAddr.w_ptr;
-
-							if (flags & k_BIT_DRAWFLAGS_FOGGED) 
-								pixel = pixelutils_Shadow_565(pixel);
-
-							if (flags & k_BIT_DRAWFLAGS_DESATURATED) 
-								pixel = pixelutils_Desaturate_565(pixel);
-
-							if (flags & k_BIT_DRAWFLAGS_FEATHERING) 
-							{
-								uint16 alpha = (tag & 0x00FF);
+                            if (flags & k_BIT_DRAWFLAGS_FEATHERING) 
+                                {
+                                uint16 alpha = (tag & 0x00FF);
 							
 							
 							
 							  
-								*destAddr.w_ptr = pixelutils_BlendFast_565(pixel,*destAddr.w_ptr, (uint16)alpha>>3);
-								destAddr.w_ptr++;
-								rowAddr.w_ptr++;
-							} 
-							else 
-							{
+                                *destAddr.w_ptr = pixelutils_BlendFast_565(pixel,*destAddr.w_ptr, (uint16)alpha>>3);
+                                destAddr.w_ptr++;
+                                rowAddr.w_ptr++;
+                                } 
+                            else 
+                                {
 							  
 							  
-								*destAddr.w_ptr++ = pixel;
-								rowAddr.w_ptr++;
-							}
-						 }
-						break;
+                                *destAddr.w_ptr++ = pixel;
+                                rowAddr.w_ptr++;
+                                }
+                            }
+                        break;
 
 					
-					default:
-						Assert(FALSE);
-						break;
-				}
-				tag = *rowAddr.w_ptr++;
-			}
-		}
+                    default:
+                        Assert(FALSE);
+                        break;
+                    }
+                tag = *rowAddr.w_ptr++;
+                }
+            }
 
 		
 	    
-	}
-}
+        }
+    }
 
 
 

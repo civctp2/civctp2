@@ -296,10 +296,11 @@ void RankingTab::CleanupGraph()
 		for( sint32 i = 0 ; i < m_infoYCount ; i++ )
 		{
 			delete m_infoGraphData[i];
-			m_infoGraphData[i] = NULL;
+			//m_infoGraphData[i] = NULL;
 		}
 		delete m_infoGraphData;
 		m_infoGraphData = NULL;
+		m_infoYCount    = 0;
 	}
 }
 
@@ -307,6 +308,7 @@ void RankingTab::CleanupGraph()
 void RankingTab::UpdateGraph()
 {
 	CleanupGraph();
+        if (m_rankingDropDown){
 	sint32 category = m_rankingDropDown->GetSelectedItem();
 	if (category == m_rankingOverall)
 		category = kRankingOverall;
@@ -322,6 +324,9 @@ void RankingTab::UpdateGraph()
 
 	m_infoYCount = SetupRankingGraph(m_infoGraph, &m_infoGraphData, category);
 	m_info_window->Draw();
+            }
+        else
+            printf("%s L%d: m_rankingDropDown= Null!\n", __FILE__, __LINE__); 
 }
 
 

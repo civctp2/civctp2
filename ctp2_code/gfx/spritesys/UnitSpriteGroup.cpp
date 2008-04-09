@@ -112,51 +112,50 @@ void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 	}
 }
 
-void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
-{
+
+//UnitSpriteGroup::Draw gets called for drawing units on map
+void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack){
 	
 	
-	if (action == UNITACTION_FAKE_DEATH) 
-		action = UNITACTION_MOVE;
+    if (action == UNITACTION_FAKE_DEATH){
+        printf("%s L%d: UNITACTION_FAKE_DEATH!\n", __FILE__, __LINE__);
+        action = UNITACTION_MOVE;
+        }
+    Assert(action >= UNITACTION_MOVE && action <= UNITACTION_WORK);
 
-	Assert(action >= UNITACTION_MOVE &&
-			action <= UNITACTION_WORK);
-
-	if (specialDelayProcess 
-		|| (action == UNITACTION_IDLE && m_sprites[action] == NULL)
-		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
-		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
-       )
-	{
-		if (m_sprites[UNITACTION_MOVE])
-		{
-			action = UNITACTION_MOVE;
-			frame = 0; 
-		}
-	}
-
-	if (m_sprites[action])
-    {
-    	if (frame >= m_sprites[action]->GetNumFrames()) 
+    if (specialDelayProcess 
+        || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
+        || (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
+        || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
+        )
         {
-		    frame = 0;
-	    }
+        if (m_sprites[UNITACTION_MOVE])
+            {
+            action = UNITACTION_MOVE; 
+            frame = 0; 
+            }
+        }
+
+    if (m_sprites[action])
+        {
+        if (frame >= m_sprites[action]->GetNumFrames()) 
+            {
+            frame = 0;
+            }
 	
-    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+        m_sprites[action]->SetCurrentFrame((uint16)frame);
 
 	
-	    if (directionalAttack)
-	    {
-		    m_sprites[action]->DirectionalDraw
-                (drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	    }
-	    else
-	    {
-	        m_sprites[action]->Draw
-                (drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	    }
+        if (directionalAttack)
+            {
+            m_sprites[action]->DirectionalDraw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
+            }
+        else
+            {
+            m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);//this can lead to FacedSprite::Draw or to Sprite::Draw!!!
+            }
+        }
     }
-}
 
 BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, 
 							double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
@@ -182,31 +181,32 @@ BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, si
 
 	if (m_sprites[action]) 
     {
-    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+    	m_sprites[action]->SetCurrentFrame((uint16)frame);
 	    return m_sprites[action]->HitTest
             (mousePt, drawX, drawY, facing, scale, transparency, outlineColor, flags);
     }
     return FALSE;
 }
 
+
+//UnitSpriteGroup::DrawDirect gets called for animation of units in the battleview!
 void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, 
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, 
 						   BOOL specialDelayProcess, BOOL directionalAttack)
 {
 	
-	
+
 	if (action == UNITACTION_FAKE_DEATH) 
 		action = UNITACTION_MOVE;
 
-	Assert(action >= UNITACTION_MOVE &&
-			action <= UNITACTION_WORK);
+	Assert(action >= UNITACTION_MOVE && action <= UNITACTION_WORK);
 
 	
 	if (action < UNITACTION_MOVE || action > UNITACTION_WORK) 
 		return;
 
 	
-	
+	printf("%s L%d: action= %d, UNITACTION_MOVE= %d, UNITACTION_WORK= %d\n", __FILE__, __LINE__, action, UNITACTION_MOVE, UNITACTION_WORK);
 	
 	if (specialDelayProcess 
         || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
@@ -222,7 +222,7 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 
     if (m_sprites[action] && (frame < m_sprites[action]->GetNumFrames()))
     {
-    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+    	m_sprites[action]->SetCurrentFrame((uint16)frame);
 	
     	if (!directionalAttack)
 	    {
@@ -363,6 +363,7 @@ UnitSpriteGroup::GetImageFileName(char *name,char *format,...)
 	return false;
 }
 
+//Parse never executed because of SpriteGroup.h:107:    void SetGroupSprite
 sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 {
 	Token			*theToken=NULL; 
@@ -378,6 +379,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 	char			prefixStr[80];
 
+        printf("%s L%d: UnitSpriteGroup::Parse called!\n", __FILE__, __LINE__);
 	for (j=0; j<k_NUM_FACINGS; j++) 
 	{
 		for (i=0; i<k_MAX_NAMES; i++) 
@@ -455,7 +457,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		
 		m_sprites[UNITACTION_MOVE] = (Sprite *)moveSprite;
 		printf("]\n");
-
+                printf("%s L%d: Assigned m_sprites[UNITACTION_MOVE]= %#X!\n", __FILE__, __LINE__, m_sprites[UNITACTION_MOVE]);
 		Anim *moveAnim = new Anim;
 
 		moveAnim->ParseFromTokens(theToken);

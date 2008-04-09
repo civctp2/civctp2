@@ -905,7 +905,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 			{
 				
 				
-				
+/*			
 #if 0
 				if(windowStencil) {					
 					RECT stencilRect = {
@@ -919,6 +919,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 					window->Draw();
 				}
 #endif
+*/
 				windowDirtyList->Flush();
 				windowDirtyList->AddRect( &windowRect );
 				
@@ -968,7 +969,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 				}
 
 
-
+/*
 #if 0
 				if ( m_colorAreas || m_imageAreas )
 				{
@@ -1015,6 +1016,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 					}
 				}
 #endif
+*/
 
 				if ( windowOpaqueControls )
 					window->DrawChildren();
@@ -1206,28 +1208,15 @@ AUI_ERRCODE aui_UI::Draw( void )
 	errcode = m_mouse->Suspend( FALSE );
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
-	if ( m_colorAreas )
-		m_mouse->BltBackgroundColorToPrimary(
-			m_color,
-			m_colorAreas );
-	if ( m_imageAreas )
-		m_mouse->BltBackgroundImageToPrimary(
-			m_image,
-			&m_imageRect,
-			m_imageAreas );
-
-
-
-
-
-
-
-
-
-
-
-	
+	//lynx: trace to mouse artefact bug below???
+	if ( m_colorAreas ){
+            //printf("%s L%d: BltBackgroundColorToPrimary\n", __FILE__, __LINE__);
+            m_mouse->BltBackgroundColorToPrimary(m_color, m_colorAreas); //what does this do?
+            }
+	if ( m_imageAreas ){
+            printf("%s L%d: BltBackgroundImageToPrimary\n", __FILE__, __LINE__);
+            m_mouse->BltBackgroundImageToPrimary(m_image, &m_imageRect, m_imageAreas );
+            }
 	
 	m_mouse->BltDirtyRectInfoToPrimary();
 
@@ -1237,9 +1226,13 @@ AUI_ERRCODE aui_UI::Draw( void )
 	}
 
 #ifdef __AUI_USE_SDL__
-  if (SDL_Flip(SDL_GetVideoSurface()) < 0) { //SDL_Flip only works if SDL_DOUBLEBUF was used for surface!
-		fprintf(stderr, "Flip failed: %s\n", SDL_GetError());
+  //printf("%s L%d: Trying to use SDL flip!\n", __FILE__, __LINE__);
+  if (SDL_Flip(SDL_GetVideoSurface()) < 0) { //THIS UPDATES/DRAWS THE WOHLE SCREEN IF MOUSE IS MOVED!!! VERY BAD PERVORMANCE LOSS!!!
+      //SDL_Flip only works if SDL_DOUBLEBUF was used for surface! 
+      //where is the windows part of this???
+      fprintf(stderr, "Flip failed: %s\n", SDL_GetError());
 	}
+  //else printf("%s L%d: SDL painting succeded!\n", __FILE__, __LINE__);
 #endif
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );

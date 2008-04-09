@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The intro movie window object
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -124,11 +124,10 @@ void IntroMovieWindow::SetMovie(MBCHAR *filename)
 
 
 
-AUI_ERRCODE IntroMovieWindow::Idle()
-{
-	
-	
-	return AUI_ERRCODE_OK;
+AUI_ERRCODE IntroMovieWindow::Idle(){
+    
+    return(m_movieButton->Idle());
+//	return AUI_ERRCODE_OK;
 }
 
 
@@ -136,14 +135,7 @@ AUI_ERRCODE IntroMovieWindow::Idle()
 AUI_ERRCODE IntroMovieWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
 	
-	if ( IsHidden() ) return AUI_ERRCODE_OK;
-	
-
-	
-
-	
-	
-
+        if ( IsHidden() ) return AUI_ERRCODE_OK; //this is nonsens!
 	
 	return AUI_ERRCODE_OK;
 }

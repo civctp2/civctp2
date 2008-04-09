@@ -103,7 +103,7 @@ public:
 	virtual void	SetNumFrames(uint16 num)    { m_facedFrameCount = num; }
 
 protected:
-	Pixel16			**m_frames[k_NUM_FACINGS];
+	Pixel16			**m_frames[k_NUM_FACINGS]; //double pointer in Sprite.h!!!
 	size_t			*m_framesSizes[k_NUM_FACINGS];
 	Pixel16			**m_miniframes[k_NUM_FACINGS];
 	size_t			*m_miniframesSizes[k_NUM_FACINGS];

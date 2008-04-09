@@ -70,7 +70,7 @@
 // MS_* dupes with sys/mount.h
 #include <linux/fs.h>
 #include <linux/iso_fs.h>
-#include <errno.h>
+#include <errno.h> //for extern int errno when mounting
 #include <libgen.h>
 #include <mntent.h>
 #include <paths.h>
@@ -81,15 +81,18 @@ extern ProfileDB *g_theProfileDB;
 
 extern CivPaths *g_civPaths;
 
-
+int lerrno;
 
 FILE* c3files_fopen(C3DIR dirID, const MBCHAR *s1, const MBCHAR *s2)
 {
 	MBCHAR s[_MAX_PATH] = { 0 };
 
 	if (g_civPaths->FindFile(dirID, s1, s) != NULL) {
-		return fopen(s, s2);
-	} else {
+            FILE* fd= fopen(s, s2);
+            //printf("%s L%d: Opened file %s, fd %#X!\n", __FILE__, __LINE__, s, fd);
+            return fd;
+	} 
+        else {
 		return NULL;
 	}
 }
@@ -766,11 +769,14 @@ const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size,
 						               mntent->mnt_dir,
 						               mntent->mnt_type,
 						               flags, 0);
+                                                lerrno= errno; //preserve errno value of mount over other library calls!
 						if (0 == rc) {
 							strncpy(buf, mntent->mnt_dir, size);
 							ret = buf;
-						} else {
-							perror(strerror(errno));
+						} 
+                                                else {
+                                                    fprintf(stderr, "%s L%d: CD mount error occured: ", __FILE__, __LINE__);
+                                                    perror(strerror(lerrno));
 						}
 					}
 					
@@ -852,21 +858,24 @@ MBCHAR const * c3files_GetVolumeName(int cdIndex)
 	/// On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
 	const char *cd_dev = SDL_CDName(cdIndex);
 	FILE *cd = fopen(cd_dev, "rb");
+        lerrno= errno;
 	if (cd == NULL) {
-		fprintf(stderr, "%s\n", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(lerrno));
 		return NULL;
 	}
 	int rc = fseek(cd, 0x8000, SEEK_SET);
+        lerrno= errno;
 	if (rc != 0) {
-		fprintf(stderr, "%s\n", strerror(errno));
+		fprintf(stderr, "%s\n", strerror(lerrno));
 		fclose(cd);
 		return NULL;
 	}
 	struct iso_primary_descriptor ipd = { 0 };
 	size_t s = fread(&ipd, 1, sizeof(ipd), cd);
+        lerrno= errno;
 	if (s != sizeof(ipd)) {
 		fprintf(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
-		        strerror(errno));
+		        strerror(lerrno));
 		fclose(cd);
 		return NULL;
 	}

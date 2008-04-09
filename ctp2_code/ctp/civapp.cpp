@@ -673,11 +673,14 @@ sint32 CivApp::InitializeAppUI(void)
 	extern BOOL g_no_shell;
 	extern BOOL g_launchScenario;
 
-	if (g_useIntroMovie && !g_no_shell) 
-	{
-		intromoviewin_Initialize();
-		intromoviewin_DisplayIntroMovie();
-	} else {
+	if (g_useIntroMovie && !g_no_shell){
+            //printf("%s L%d: Trying to play intro movie!\n", __FILE__, __LINE__);
+            intromoviewin_Initialize();
+            //printf("%s L%d: Intro movie initialized!\n", __FILE__, __LINE__);
+            intromoviewin_DisplayIntroMovie();
+            //printf("%s L%d: Intro movie displayed!\n", __FILE__, __LINE__);
+            } 
+        else {
 
 		if (g_soundManager) {
 			g_soundManager->EnableMusic();
@@ -1608,7 +1611,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	ProgressWindow::EndProgress( g_theProgressWindow );
 
 	m_appLoaded = TRUE;
-
+        //printf("%s L%d: InitializeApp done!\n", __FILE__, __LINE__);
 	return 0;
 }
 
@@ -1620,7 +1623,9 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 sint32 CivApp::QuickInit(HINSTANCE hInstance, int iCmdShow)
 {
 	InitializeApp(hInstance, iCmdShow);
+        printf("%s L%d: InitializeApp done!\n", __FILE__, __LINE__);
 	StartGame();
+        printf("%s L%d: Game started!\n", __FILE__, __LINE__);
 
 	return 0;
 }
@@ -3076,6 +3081,10 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 	}
 
 	used_milliseconds = Os::GetTicks() - start_time_ms;
+
+        //printf("%s L%d: ProcessRobot done!\n", __FILE__, __LINE__);
+
+
 	return 0; 
 } 
 
@@ -3235,17 +3244,6 @@ sint32 CivApp::Process(void)
 
 	ProcessUI(target_milliseconds, used_milliseconds);
 
-
-
-
-
-
-
-
-
-
-
-
 	if(g_attractWindow)
 		g_attractWindow->AppIdle();
 
@@ -3302,7 +3300,7 @@ sint32 CivApp::Process(void)
 		}
 	}
 
-frame++;
+        frame++;
 	return 0;
 }
 
@@ -3831,7 +3829,7 @@ int InitializeGreatLibrary()
         if (path[0]) {
             g_GreatLibPF->addPath(path);
 	    strcat(path, FILE_SEP);
-            strcat(path, "gl.zfs");
+            strcat(path, "gl.zfs"); //does this file exist at all?
             g_GreatLibPF->addPath(path);
         }
     }
