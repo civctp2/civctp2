@@ -864,7 +864,7 @@ void Sprite::AllocateFrameArrays(size_t count)
 	m_frames        = new Pixel16*[count];
 	m_miniframes    = new Pixel16*[count];
         m_numFrames     = count;
-        printf("%s L%d: m_numFrames set to %d\n", __FILE__, __LINE__, m_numFrames);
+        
 }
 
 

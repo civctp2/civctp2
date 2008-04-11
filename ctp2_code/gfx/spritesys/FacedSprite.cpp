@@ -182,12 +182,14 @@ void FacedSprite::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data, size_
         printf("%s L%d: facing: %d >= k_NUM_FACINGS: %d\n", __FILE__, __LINE__, facing, k_NUM_FACINGS);
         return;
         }
+    m_numFrames= this->GetNumFrames();
     if (frame >= m_numFrames){//m_numFrames seems not to be set before this is called
         //so with the previous return the faced animation data never got set!
         //A better way would be to set m_numFrames correctly before but
         //I couldn't figure out so far where this should be done.
         //printf("%s L%d: frame: %d >= m_numFrames: %d\n", __FILE__, __LINE__, frame, m_numFrames);
-        //return;
+        printf("%s L%d: frame (%d) >= m_numFrames (%d)! \n", __FILE__, __LINE__,frame, m_numFrames);
+        return;
         }
     m_frames[facing][frame] = data;
     m_framesSizes[facing][frame] = size;
@@ -240,7 +242,7 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
         : m_frames[facingIndex][m_currentFrame]; //here m_frames is a Pixel16 *** triple pointer! 
                                                  //in Sprite.h it is defined as Pixel16	**m_frames double pointer
                                                  //in Sprite.cpp L415 it is used as a double pointer!
-//battlebug? spritebug?
+
 
     if (!frame) {
         printf("%s L%d: frames = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
@@ -336,7 +338,7 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 
 void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags){
     BOOL wasNull = FALSE;
-
+    
     if (surf == NULL) {
         SetSurface();
         surf = m_surface;
@@ -345,7 +347,17 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
     else
         LockSurface(surf);
 
-       if (facing < 5) {
+    size_t          facingIndex = facing >= k_NUM_FACINGS ? k_MAX_FACINGS - facing : facing;
+    Pixel16 *       frame       = (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST))
+        ? m_miniframes[facingIndex][m_currentFrame]
+        : m_frames[facingIndex][m_currentFrame]; 
+
+    if (!frame) {
+        printf("%s L%d: frame = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
+        return;
+        }
+
+    if (facing < 5) {
         drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
         drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
         } 
@@ -353,16 +365,7 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
         drawX -= (sint32)((double)(m_width - m_hotPoints[k_MAX_FACINGS - facing].x) * scale);
         drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
         }
-/* from Sprite.cpp Draw(...
-    if (facing < 5) {
-        drawX -= (sint32)((double)m_hotPoint.x * scale);
-	} 
-    else {
-        drawX -= (sint32)((double)(m_width-m_hotPoint.x) * scale);
-	}
 
-    drawY -= (sint32)((double)m_hotPoint.y * scale);
-*/ 		
     if (drawX > surf->Width() - 1 || drawX < -(m_width*scale)) {
         UnlockSurface();
         return;
@@ -374,34 +377,22 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
         return;
         }
 
-    //printf("FacedSprite.cpp L363: m_frames %p, m_frames[k_MAX_FACINGS - facing] = %p, facing = %d, k_MAX_FACINGS = %d, m_currentFrame %d\n", m_frames, m_frames[k_MAX_FACINGS - facing], facing, k_MAX_FACINGS, m_currentFrame);
-/*    for (size_t w = 0; w < m_facedFrameCount; ++w)
-        {
-        //printf("FacedSprite.cpp L366: m_frames[k_MAX_FACINGS - facing][w] = %p\n", m_frames[k_MAX_FACINGS - facing][w]);
-        //printf("FacedSprite.cpp L366: m_frames[0][w] = %p\n", m_frames[0][w]);
-        //check what this is for!!!
-			m_framesSizes[facing][w]     = 0;
-			m_miniframes[facing][w]      = 0;
-			m_miniframesSizes[facing][w] = 0;
-        }
-*/	
-
 
     if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
         if (facing < 5) {
-            (this->*_DrawLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+            (this->*_DrawLow)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
             } 
         else {
-            (this->*_DrawLowReversed)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+            (this->*_DrawLowReversed)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
             }
         } 
     else {
         if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
             if (facing < 5) {
-                (this->*_DrawLow)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+                (this->*_DrawLow)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
                 } 
             else {
-                (this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+                (this->*_DrawLowReversed)(frame, drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
                 }
             } 
         else {
@@ -410,10 +401,10 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
             sint32 destHeight = (sint32)(m_height * scale);
 
             if (facing < 5) {
-                (this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight, transparency, outlineColor, flags, FALSE);
+                (this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight, transparency, outlineColor, flags, FALSE);
                 } 
             else {
-                (this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight, transparency, outlineColor, flags, TRUE);
+                (this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight, transparency, outlineColor, flags, TRUE);
                 }
             }
         }
@@ -427,75 +418,87 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 
 
 void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
-					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
-{
-	SetSurface();
+					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags){
+    printf("%s L%d: FacedSprite::DirectionalDraw! Check the code concerning m_frames and if necessary adapt some from FacedSprite::Draw!\n", __FILE__, __LINE__);
 
-	if (facing < 5) {
-		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
-		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
+    size_t          facingIndex = facing >= k_NUM_FACINGS ? k_MAX_FACINGS - facing : facing;
+    Pixel16 *       frame       = (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST))
+        ? m_miniframes[facingIndex][m_currentFrame]
+        : m_frames[facingIndex][m_currentFrame]; 
+
+    if (!frame) {
+        printf("%s L%d: frame = %#X. This shouldn't happen!\n", __FILE__, __LINE__, frame);
+        return;
+        }
+
+
+    SetSurface();
+
+    if (facing < 5) {
+        drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
+        drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
 	} else {
-		drawX -=  (m_width - (sint32)((double)(m_width - m_hotPoints[k_MAX_FACINGS - facing].x) * scale));
-		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
-	}
+            drawX -=  (m_width - (sint32)((double)(m_width - m_hotPoints[k_MAX_FACINGS - facing].x) * scale));
+            drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
+            }
 
 	
 	
-	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
-	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
+    if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
+    if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
 
 	
-	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
-		if (facing < 4 && facing > 0) 
-		{
-			(this->*_DrawLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+    if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
+        if (facing < 4 && facing > 0) 
+            {
+            (this->*_DrawLow)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
-		} 
-		else if (facing == 4 || facing == 0)
-		{
-			(this->*_DrawLowReversed)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-		}
-		else
-		{
-			(this->*_DrawLowReversed)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
-		}
+            } 
+        else if (facing == 4 || facing == 0)
+            {
+            (this->*_DrawLowReversed)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+            }
+        else
+            {
+            (this->*_DrawLowReversed)(frame, drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
+            }
 	} else {
-		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
-			if (facing < 4 && facing > 0)
-			{
-				(this->*_DrawLow)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-			}
-			else if (facing == 4 || facing == 0)
-			{
-				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-			}
-			else
-			{
-				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
-			}
+            if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
+                if (facing < 4 && facing > 0)
+                    {
+                    (this->*_DrawLow)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+                    }
+                else if (facing == 4 || facing == 0)
+                    {
+                    (this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+                    }
+                else
+                    {
+                    (this->*_DrawLowReversed)((Pixel16 *)m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
+                    }
 		} else {
 			
-			sint32 destWidth = (sint32)(m_width * scale);
-			sint32 destHeight = (sint32)(m_height * scale);
+                    sint32 destWidth = (sint32)(m_width * scale);
+                    sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 4 && facing > 0)
+                    if (facing < 4 && facing > 0)
 			{
-				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
-									transparency, outlineColor, flags, FALSE);
+                        (this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight,
+                                                transparency, outlineColor, flags, FALSE);
 			} 
-			else if(facing == 4 || facing == 0)
+                    else if(facing == 4 || facing == 0)
 			{
-				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
-									transparency, outlineColor, flags, TRUE);
+                        (this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight,
+                                                transparency, outlineColor, flags, TRUE);
 			} 
-			else
+                    else
 			{
-				(this->*_DrawScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
-									transparency, outlineColor, flags, TRUE);
+                        (this->*_DrawScaledLow)(frame, drawX, drawY, destWidth, destHeight,
+                                                transparency, outlineColor, flags, TRUE);
 			}
-		}
-	}
-}
+                    }
+            }
+    }
 
 
 

@@ -608,7 +608,7 @@ void SpriteFile::ReadFacedSpriteDataBasic(FacedSprite *s)
 	s->SetFirstFrame(data16);
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->AllocateFrameArrays(data16);
+	s->AllocateFrameArrays(data16); //data16 contains numFrames
 
 	uint16		i, j;
 	size_t		ssizes[k_MAX_FACINGS][512];
@@ -691,7 +691,7 @@ void SpriteFile::ReadFacedSpriteDataFull(FacedSprite *s)
 	s->SetFirstFrame(data16);
 	
 	ReadData((void *)&data16, sizeof(data16));
-	s->AllocateFrameArrays(data16);
+	s->AllocateFrameArrays(data16); //data16 contains numFrames
 
 	
 	uint16		i, j;

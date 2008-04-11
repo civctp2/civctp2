@@ -206,7 +206,6 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 		return;
 
 	
-	printf("%s L%d: action= %d, UNITACTION_MOVE= %d, UNITACTION_WORK= %d\n", __FILE__, __LINE__, action, UNITACTION_MOVE, UNITACTION_WORK);
 	
 	if (specialDelayProcess 
         || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
@@ -226,10 +225,8 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 	
     	if (!directionalAttack)
 	    {
-            //printf("%s L%d: m_sprites[action]->DrawDirect \n", __FILE__, __LINE__);
-            m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);//battlebug
-            //m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags); //not visible!
-	    }
+             m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);
+ 	    }
 	}
 }
 
