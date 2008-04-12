@@ -48,6 +48,29 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2008-04-12 (Revision 866)
+Added:    A settle in city event, so that the player can add a pop via settling
+          in a city without interfering with the AI.
+Fixed:    A newly founded city does not show up as underwater city when it is
+          founded.
+Fixed:    Barbarians attack someone else if you are protected by the Great Wall.
+Fixed:    A combat event error that poped up when you closed the battle window.
+Fixed:    The map is only centered if the AutoCenter option is enabled.
+Fixed:    The city control panel is updated even if the visible player is a
+          robot.
+Fixed:    The slic file path is stored even if slic debugging is set to no. This
+          fixes a crash but possibly needs slic reloading to have an effect on
+          on games saved before this version.
+Changed:  Exposed the tile set indeces of the road tiles to tileimp.txt.
+Fixed:    The AI selects a new advance or a new government in the same turn
+          when they become available.
+Fixed:    A bug that prevented the AI from attacking.
+Fixed:    At debarking, a new army is only created if it can be filled from
+          the ship with at least one unit. This removes an event error
+          concerning creating empty armies.
+Fixed:    An event error concerning waking units.
+Fixed:    RiotCasualities method: This may fix a crash.
+
 2008-02-10 (Revision 849)
 Fixed:    The single player civilization screen updates the leader names again.
           It displayes the civilizations in alphabetical order again,
