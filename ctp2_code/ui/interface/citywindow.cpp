@@ -1878,6 +1878,10 @@ AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 	CityData *cd = s_cityWindow->m_cityData;
 
 	double percentComplete = (cd->GetBuildQueue()->GetPercentCompleted(cd->GetStoredCityProduction())) / 100.0;
+
+	if(percentComplete > 1.0)
+		percentComplete = 1.0;
+
 	if(s_cityWindow->m_queueList->GetSelectedItemIndex() != 0
 	|| percentComplete < 0) {
 		
