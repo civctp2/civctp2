@@ -1,12 +1,46 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Improved include structure
+// - Added functionality to support pattern information saving
+//
+//----------------------------------------------------------------------------
+//
+/// \file c3_popupwindow.h
+/// \brief Pop-up window (declarations)
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __C3_POPUPWINDOW_H__
-#define __C3_POPUPWINDOW_H__
 
-#include "c3window.h"
-#include "keyboardhandler.h"
+#ifndef C3_POPUPWINDOW_H_
+#define C3_POPUPWINDOW_H_
+
+#include <algorithm>
+#include <string>
+
+class c3_PopupWindow;
 
 enum POPUP_BORDER {
 	POPUP_BORDER_UL,
@@ -21,15 +55,16 @@ enum POPUP_BORDER {
 	POPUP_BORDER_MAX
 };
 
+#include "c3window.h"
+#include "keyboardhandler.h"
 class c3_Static;
 class c3_Button;
 class ctp2_Button;
-
+class Pattern;
 
 class c3_PopupWindow : public C3Window, public KeyboardHandler
 {
 public:
-	c3_PopupWindow() : C3Window() { }
 	c3_PopupWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -50,8 +85,6 @@ public:
 		bool bevel = true );
 
 	virtual ~c3_PopupWindow();
-
-	virtual AUI_ERRCODE InitCommon(void);
 
 	virtual AUI_ERRCODE Resize( sint32 width, sint32 height );
 
@@ -88,16 +121,32 @@ public:
 	c3_Button	*Cancel( void ) const { return m_cancel; }
 	ctp2_Button	*Ok( void ) const { return m_ok; }
 
-	virtual void kh_Close();
+	virtual void    kh_Close();
+	virtual void    PatternInfoRestore(void);
+	virtual void    PatternInfoSave(void);
+
+protected:
+	c3_PopupWindow()
+	:
+		C3Window    (),
+		m_title     (NULL),
+		m_titleText (NULL),
+		m_cancel    (NULL),
+		m_ok        (NULL)
+	{
+		std::fill(m_border, m_border + POPUP_BORDER_MAX, (c3_Static *) NULL);
+	}
+
 private:
+	virtual AUI_ERRCODE InitCommon(void);
 
-	c3_Static	*m_border[ POPUP_BORDER_MAX ];
-	c3_Static	*m_title;
-	c3_Static	*m_titleText;
-	c3_Button	*m_cancel;
-	ctp2_Button	*m_ok;
-
-
+	c3_Static *     m_border[POPUP_BORDER_MAX];
+	c3_Static *     m_title;
+	c3_Static *     m_titleText;
+	c3_Button *     m_cancel;
+	ctp2_Button	*   m_ok;
+	/// Saved pattern information for borders and background
+	std::string     m_patternInfo[POPUP_BORDER_MAX + 1];
 };
 
 
