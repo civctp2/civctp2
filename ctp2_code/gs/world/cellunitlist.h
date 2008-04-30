@@ -27,6 +27,7 @@
 // - Microsoft extensions removed.
 // - MovementTypeLand added, as suggested by NelsonAndBronte.
 // - Option added to report sync errors only once.
+// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -94,25 +95,29 @@ public:
 	sint32 Del(const Unit &delme);
 	sint32 DelIndex(const sint32 index);
 
-	Unit &operator [] (const sint32 i) {
+	Unit &operator [] (const sint32 i)
+	{
 		Assert(0 <= i);
 		Assert(i < m_nElements);
 		return m_array[i];
 	}
 
-	const Unit & operator [] (const sint32 i) const {
+	const Unit & operator [] (const sint32 i) const
+	{
 		Assert(0 <= i);
 		Assert(i < m_nElements);
 		return m_array[i];
 	}
 
-	const Unit &Get(const sint32 i) const {
+	const Unit &Get(const sint32 i) const
+	{
 		Assert(0 <= i);
 		Assert(i < m_nElements);
 		return m_array[i];
 	}
 
-	Unit &Access(const sint32 i) {
+	Unit &Access(const sint32 i)
+	{
 		Assert(0 <= i);
 		Assert(i < m_nElements);
 		return m_array[i];
@@ -156,7 +161,7 @@ public:
 	bool CanBeSued() const;
 	bool ExertsZOC() const;
 
-    void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
+	void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 	double GetHPModifier() const;
 	void DoVictoryEnslavement(sint32 origOwner);
 
@@ -166,8 +171,8 @@ public:
 						 bool &alliedCity);
 	bool IsMovePointsEnough(const double cost) const;
 	bool IsMovePointsEnough(const MapPoint &pos) const;
-    bool GetMovementTypeAir() const; 
-	bool GetMovementTypeLand() const; 
+	bool GetMovementTypeAir() const;
+	bool GetMovementTypeLand() const;
 	bool CanBeCargoPodded() const;
 	bool CanSpaceLand() const;
 	bool CanSpaceLaunch() const;
@@ -176,30 +181,31 @@ public:
 	void UpdateMoveIntersection();
 
 	
-	void ComputeStrength(double & attack, 
-						 double & defense, 
-						 double & ranged, 
-						 sint16 & defend_unit_count, 
+	void ComputeStrength(double & attack,
+						 double & defense,
+						 double & ranged,
+						 sint16 & defend_unit_count,
 						 sint16 & ranged_unit_count,
 						 double & land_bombard,
 						 double & water_bombard,
-						 double & air_bombard) const;
+						 double & air_bombard,
+						 double & total_value) const;
 
-	
+
 	double  GetAverageHealthPercentage() const;
-    uint8   GetFlags() const 
-    {
-        return m_flags;
-    };
+	uint8   GetFlags() const
+	{
+		return m_flags;
+	};
 
 protected:
-    /// List of units - implemented as a fixed size array
+	/// List of units - implemented as a fixed size array
 	Unit    m_array[k_MAX_ARMY_SIZE];
-    /// Common move properties of all units
+	/// Common move properties of all units
 	uint32  m_moveIntersection;
-    /// Properties of the group - see the k_CULF_... constants.
+	/// Properties of the group - see the k_CULF_... constants.
 	uint8   m_flags;
-    /// Number of units (valid entries in m_array)
+	/// Number of units (valid entries in m_array)
 	sint32  m_nElements;
 };
 

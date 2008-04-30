@@ -3,6 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : AI and automated governor handling.
+// Id           : $Id:$
 //
 //----------------------------------------------------------------------------
 //
@@ -16,15 +17,15 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _DEBUG
-// - When defined, does not use the CTP2 worker utilisation style.
+//
+// - None
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Added some casts and corrected some return types. - April 15th 2005 Martin Gühmann
+// - Added AI attack, defense, ranged, land bombard, sea bombard, and air bombard
+//   player power grids to the mapanalysis. (30-Apr-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,8 +46,8 @@ class MapAnalysis;
 #include "bit_table.h"
 
 
-class MapAnalysis {
-
+class MapAnalysis
+{
 public:
 
     typedef std::vector<MapGrid<sint32> > MapGridVector;
@@ -59,7 +60,7 @@ public:
 	
 	static MapAnalysis & GetMapAnalysis();
 
-    virtual ~MapAnalysis();
+	virtual ~MapAnalysis();
 	
 	void Resize( const PLAYER_INDEX & maxPlayerId,
 				 const sint16 & xSize, 
@@ -72,34 +73,77 @@ public:
 	
 	void BeginTurn();
 
-	
-	sint32 GetThreat(const PLAYER_INDEX & player, const MapPoint & pos ) const;
+#if !defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetThreat              (const sint32 & player, const MapPoint & pos) const;
+	sint32 GetEnemyValue          (const sint32 & player, const MapPoint & pos) const;
+	sint32 GetMaxThreat           (const sint32 & player) const;
+	sint32 GetMaxEnemyValue       (const sint32 & player) const;
 
-	
-	sint32 GetMaxThreat(const PLAYER_INDEX & player) const;
+	sint32 GetPower               (const sint32 & player, const MapPoint & pos) const;
+	sint32 GetAlliedValue         (const sint32 & player, const MapPoint & pos) const;
+	sint32 GetMaxPower            (const sint32 & player) const;
+	sint32 GetMaxAlliedValue      (const sint32 & player) const;
 
-	
-	sint32 GetPower(const PLAYER_INDEX & player, const MapPoint & pos ) const;
+#endif
 
-	
-	sint32 GetMaxPower(const PLAYER_INDEX & player) const;
+	//     The enemy grids
+	sint32    GetEnemyGrid(const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const;
+	sint32 GetMaxEnemyGrid(const MapGridVector & gridVector, const sint32 & player) const;
 
-	
-	sint32 GetAlliedValue(const PLAYER_INDEX & player, const MapPoint & pos) const;
+#if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetThreat              (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_threatGrid,      player, pos); };
+#endif
+	sint32 GetEnemyAttack         (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_attackGrid,      player, pos); };
+	sint32 GetEnemyDefense        (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_defenseGrid,     player, pos); };
+	sint32 GetEnemyRanged         (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_rangedGrid,      player, pos); };
+	sint32 GetEnemyBombardLand    (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardLandGrid, player, pos); };
+	sint32 GetEnemyBombardSea     (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardSeaGrid,  player, pos); };
+	sint32 GetEnemyBombardAir     (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardAirGrid,  player, pos); };
+#if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetEnemyValue          (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_valueGrid,      player, pos); };
 
-	
-	sint32 GetMaxAlliedValue(const PLAYER_INDEX & player) const;
-	
-	
-	sint32 GetEnemyValue(const PLAYER_INDEX & player, const MapPoint & pos) const;
+	sint32 GetMaxThreat           (const sint32 & player) const { return GetMaxEnemyGrid(m_threatGrid,      player); };
+#endif
+	sint32 GetMaxEnemyAttack      (const sint32 & player) const { return GetMaxEnemyGrid(m_attackGrid,      player); };
+	sint32 GetMaxEnemyDefense     (const sint32 & player) const { return GetMaxEnemyGrid(m_defenseGrid,     player); };
+	sint32 GetMaxEnemyRanged      (const sint32 & player) const { return GetMaxEnemyGrid(m_rangedGrid,      player); };
+	sint32 GetMaxEnemyBombardLand (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardLandGrid, player); };
+	sint32 GetMaxEnemyBombardSea  (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardSeaGrid,  player); };
+	sint32 GetMaxEnemyBombardAir  (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardAirGrid,  player); };
+#if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetMaxEnemyValue       (const sint32 & player) const { return GetMaxEnemyGrid(m_threatGrid,      player); };
+#endif
 
-	
-	sint32 GetMaxEnemyValue(const PLAYER_INDEX & player) const;
+	//     The allied grids
+	sint32    GetAlliedGrid(const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const;
+	sint32 GetMaxAlliedGrid(const MapGridVector & gridVector, const sint32 & player) const;
 
-	
+#if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetPower               (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_threatGrid,      player, pos); };
+#endif
+	sint32 GetAlliedAttack        (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_attackGrid,      player, pos); };
+	sint32 GetAlliedDefense       (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_defenseGrid,     player, pos); };
+	sint32 GetAlliedRanged        (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_rangedGrid,      player, pos); };
+	sint32 GetAlliedBombardLand   (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardLandGrid, player, pos); };
+	sint32 GetAlliedBombardSea    (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardSeaGrid,  player, pos); };
+	sint32 GetAlliedBombardAir    (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardAirGrid,  player, pos); };
+#if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetAlliedValue         (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_valueGrid,      player, pos); };
+
+	sint32 GetMaxPower            (const sint32 & player) const { return GetMaxAlliedGrid(m_threatGrid,      player); };
+#endif
+	sint32 GetMaxAlliedAttack     (const sint32 & player) const { return GetMaxAlliedGrid(m_attackGrid,      player); };
+	sint32 GetMaxAlliedDefense    (const sint32 & player) const { return GetMaxAlliedGrid(m_defenseGrid,     player); };
+	sint32 GetMaxAlliedRanged     (const sint32 & player) const { return GetMaxAlliedGrid(m_rangedGrid,      player); };
+	sint32 GetMaxAlliedBombardLand(const sint32 & player) const { return GetMaxAlliedGrid(m_bombardLandGrid, player); };
+	sint32 GetMaxAlliedBombardSea (const sint32 & player) const { return GetMaxAlliedGrid(m_bombardSeaGrid,  player); };
+	sint32 GetMaxAlliedBombardAir (const sint32 & player) const { return GetMaxAlliedGrid(m_bombardAirGrid,  player); };
+#if defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
+	sint32 GetMaxAlliedValue      (const sint32 & player) const { return GetMaxAlliedGrid(m_threatGrid,      player); };
+#endif
+
 	void DebugLog() const;
 
-	
 	double GetProductionRank(const CityData *city, const bool & all_players) const;
 	double GetGrowthRank(const CityData *city, const bool & all_players) const;
 	double GetCommerceRank(const CityData *city, const bool & all_players) const;
@@ -248,24 +292,23 @@ public:
 private:
 	static MapAnalysis s_mapAnalysis;
 
-	
 	void AddPiracyIncome( const PLAYER_INDEX playerId, 
 						  const PLAYER_INDEX victimId, 
 						  const sint16 route_value );
 
-	
 	void ComputeHandicapRatios();
 
-	
 	MapAnalysis();
 
-	
 	MapGridVector m_threatGrid;
-
-	
+	MapGridVector m_attackGrid;
+	MapGridVector m_defenseGrid;
+	MapGridVector m_rangedGrid;
+	MapGridVector m_bombardLandGrid;
+	MapGridVector m_bombardSeaGrid;
+	MapGridVector m_bombardAirGrid;
 	MapGridVector m_valueGrid;
 
-	
 	Sint32Vector m_totalTrade;
 
 	
@@ -280,7 +323,6 @@ private:
 	
 	Sint16Vector m_piracyIncomeMatrix;
 
-	
 	Sint32Vector m_minCityProduction;
 	Sint32Vector m_maxCityProduction;
 	sint32 m_minCityProductionAll;
@@ -302,34 +344,26 @@ private:
 	Sint32Vector m_minCityThreat;
 	Sint32Vector m_maxCityThreat;
 
-	
 	BoundingRectVector m_empireBoundingRect;
-	
-	
+
 	MapPointVector m_empireCenter;
 
-	
 	Bit_Table m_cityOnContinent;
 	Bit_Table m_armyOnContinent;
 
-	
 	Uint32Vector m_movementTypeUnion;
 
-	
 	Sint16Vector m_nuclearWeapons;
 	Sint16Vector m_bioWeapons;
 	Sint16Vector m_nanoWeapons;
 	Sint16Vector m_specialAttackers;
 
-	
 	sint16 m_worldPopulation;
 	Sint16Vector m_totalPopulation;
 	Sint16Vector m_landArea;
 
-	
 	Sint32Vector m_continentSize;
 
-	
 	DoubleVector m_productionHandicapRatio;
 	DoubleVector m_goldHandicapRatio;
 	DoubleVector m_scienceHandicapRatio;

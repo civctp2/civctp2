@@ -60,6 +60,7 @@
 // - The player's cargo capacity is now calculated before the AI uses its
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Corrected unit garrison calculation for slave guarding. (8-Feb-2008 Martin Gühmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -2006,23 +2007,23 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		if (army->GetCargo(transports, max, empty))
 			continue;
 
-	    sint32 defense_count;
-	    sint32 ranged_count;
-	    sint32 attack_strength;
-	    sint32 defense_strength;
-	    sint32 ranged_strength;
-	    sint32 total_value;
-	    sint32 hp;
-		army->GetArmyStrength(hp,
-			defense_count,
-			ranged_count,
-			attack_strength,
-			defense_strength,
-			ranged_strength,
-			total_value);
+		sint16 defense_count;
+		sint16 tmp_count;
+		double tmp;
+		double defense_strength;
+		army->ComputeStrength(tmp,
+		                      defense_strength,
+		                      tmp,
+		                      defense_count,
+		                      tmp_count,
+		                      tmp,
+		                      tmp,
+		                      tmp,
+		                      tmp
+		                     );
+
 		
-		
-		defense_strength += city.GetDefendersBonus() * defense_count;
+		defense_strength += city.GetDefendersBonus() * static_cast<double>(defense_count);
 
 		double prev_city_defense = city->GetCityData()->GetCurrentGarrisonStrength();
 		city->GetCityData()->SetCurrentGarrisonStrength( prev_city_defense + defense_strength );

@@ -29,7 +29,8 @@
 //   New methode take the sum of all strength (attack, defense, ranged,...)
 //   by Calvitix and Martin Gühmann.
 // - Handled problem with invalid units.
-// 
+// - Added get and set methods for the bombard members. (30-Apr-2008 Martin Gühmann)
+//
 //----------------------------------------------------------------------------
 
 #include "c3.h"
@@ -148,7 +149,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 	if (army == NULL)
 	{
-		*this           = Squad_Strength(1); // why not 0 ??? 
+		*this           = Squad_Strength(1);
 		return;
 	}
 
@@ -161,15 +162,17 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 						  m_ranged,
 						  m_land_bombard_str,
 						  m_water_bombard_str,
-						  m_air_bombard_str);
+						  m_air_bombard_str,
+						  m_value
+						  );
 
 	m_value = 0.0;
 	m_transport = 0;
-	for (int i = m_agent_count; i > 0; --i)
+	for(sint32 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
 		
-		if (unit.IsValid())
+		if(unit.IsValid())
 		{
 			m_value		+= unit.GetDBRec()->GetShieldCost();
 			m_transport	+= (unit.GetCargoCapacity() - unit.GetNumCarried());
@@ -211,6 +214,36 @@ double Squad_Strength::Get_Ranged() const
 void Squad_Strength::Set_Ranged(const double & ranged)
 {
 	m_ranged_str = ranged;
+}
+
+double Squad_Strength::Get_Bombard_Land() const
+{
+	return m_land_bombard_str;
+}
+
+void Squad_Strength::Set_Bombard_Land(const double & land)
+{
+	m_land_bombard_str = land;
+}
+
+double Squad_Strength::Get_Bombard_Sea() const
+{
+	return m_water_bombard_str;
+}
+
+void Squad_Strength::Set_Bombard_Sea(const double & sea)
+{
+	m_water_bombard_str = sea;
+}
+
+double Squad_Strength::Get_Bombard_Air() const
+{
+	return m_air_bombard_str;
+}
+
+void Squad_Strength::Set_Bombard_Air(const double & air)
+{
+	m_air_bombard_str = air;
 }
 
 double Squad_Strength::Get_Value() const

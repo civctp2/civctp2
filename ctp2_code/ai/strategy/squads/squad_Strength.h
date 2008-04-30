@@ -1,10 +1,32 @@
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Squad strength object 
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// - None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added get and set methods for the bombard members. (30-Apr-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -40,17 +62,14 @@ public:
 	
 	bool operator> (const Squad_Strength &squad_strength) const;
 
-	
-	Squad_Strength & operator+=(const Squad_Strength & add_me); 
-
-	
+	Squad_Strength & operator+=(const Squad_Strength & add_me);
 	Squad_Strength & operator-=(const Squad_Strength & remove_me);
 
 	
-	sint32 Get_Agent_Count() const; 
+	sint32 Get_Agent_Count() const;
 
 	
-	void Set_Agent_Count(const sint32 & count); 
+	void Set_Agent_Count(const sint32 & count);
 
 	
 	void Add_Agent_Strength(const Agent_ptr & agent);
@@ -61,47 +80,39 @@ public:
 	
 	void Set_Pos_Strength(const MapPoint & pos);
 
-	
-	double Get_Attack() const; 
+	double Get_Attack      () const;
+	double Get_Defense     () const;
+	double Get_Ranged      () const;
+	double Get_Bombard_Land() const;
+	double Get_Bombard_Sea () const;
+	double Get_Bombard_Air () const;
+	double Get_Value       () const;
 
-	
-	void Set_Attack(const double & attack); 
-
-	
-	double Get_Defense() const; 
-
-	
-	void Set_Defense(const double & defense); 
-
-	
-	double Get_Ranged() const; 
-
-	
-	void Set_Ranged(const double & defense); 
-
-	
-	double Get_Value() const; 
-
-	
-	void Set_Value(const double & value); 
+	void Set_Attack       (const double & attack);
+	void Set_Defense      (const double & defense);
+	void Set_Ranged       (const double & defense);
+	void Set_Bombard_Land (const double & land);
+	void Set_Bombard_Sea  (const double & sea);
+	void Set_Bombard_Air  (const double & air);
+	void Set_Value        (const double & value);
 
 	
 	sint16 Get_Transport() const; 
 
 	
-	void Set_Transport(const sint16 & slots); 
+	void Set_Transport(const sint16 & slots);
 
 	
 	sint16 Get_Defenders() const; 
 
 	
-	void Set_Defenders(const sint16 & units); 
+	void Set_Defenders(const sint16 & units);
 
 	
 	sint16 Get_Ranged_Units() const; 
 
 	
-	void Set_Ranged_Units(const sint16 & units); 
+	void Set_Ranged_Units(const sint16 & units);
 
 	
 	void Set_Force_Matching( const double attack_ratio,
@@ -115,25 +126,13 @@ protected:
 
 	sint16 m_agent_count;
 
-	
 	double m_attack_str;
-
-	
 	double m_defense_str;
-
-	
 	double m_ranged_str;
-	
-	
 	double m_value;
 
-	
 	sint16 m_transport;
-
-	
 	sint16 m_defenders;
-	
-	
 	sint16 m_ranged;
 
 	double m_land_bombard_str;

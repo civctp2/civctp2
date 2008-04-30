@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : The map grid
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -53,14 +53,14 @@ public:
 	typedef std::valarray< _Ty > MapGridArray;
 	
 	
-	MapGrid() 
-	{ 
+	MapGrid()
+	{
 		m_xSize = 0;
 		m_ySize = 0;
 		m_resolution = 0;
 		
 		
-		Clear(); 
+		Clear();
 	}
 
 	~MapGrid()
@@ -72,8 +72,8 @@ public:
 	}
 	
 	
-	void Resize(const sint32 & xSize, 
-		const sint32 & ySize, 
+	void Resize(const sint32 & xSize,
+		const sint32 & ySize,
 		const sint32 & resolution)
 	{
 		
@@ -84,46 +84,24 @@ public:
 		m_xGridSize = (xSize / resolution)*2;
 		m_yGridSize = (ySize / resolution);
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		if (xSize / resolution != 0)
 			m_xGridSize += 2;
 
 		if (ySize / resolution != 0)
 			m_yGridSize += 1;
 
-		
-		
 		m_values.resize( m_xGridSize * m_yGridSize );
 	}
 	
 	
 	void Clear()
 	{
-		
 		m_values = 0;
-		
-		
+
 		m_maxGridValue = 0;
-		m_minGridValue = 9999; 
+		m_minGridValue = 9999;
 		m_maxValue = 0;
-		m_minValue = 9999; 
+		m_minValue = 9999;
 		m_valuesCount = 0;
 		m_totalValue = 0.0;
 	}
@@ -133,8 +111,7 @@ public:
 		Clear();
 		m_values.resize(0);
 	}
-		
-	
+
 	void AddValue(const MapPoint &rc_pos, const _Ty & value)
 	{
 		MapPoint xy_pos;

@@ -67,6 +67,9 @@
 // - The AI now uses the closest transport to the unit transported, even if
 //   there is only one army to be transported. (3-Feb-2008 Martin Gühmann)
 // - Use more than one transporter if the goal needs more than one. (8-Feb-2008 Martin Gühmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
+// - AI force matches are now based on attack, defense, ranged, land bombard,
+//   sea bombard, and air bombard. (30-Apr-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -325,21 +328,24 @@ sint32 CTPGoal::Get_Target_Value() const
 	const GoalRecord *  rec     = g_theGoalDB->Get(m_goal_type);
 	Assert(rec);
 
-	if ( rec->GetTargetTypeAttackUnit() || 
-		rec->GetTargetTypeSpecialUnit() )
-	{
+	if(rec->GetTargetTypeAttackUnit()
+	|| rec->GetTargetTypeSpecialUnit()
+	){
 		const Army &    army = Get_Target_Army();
-		sint32          tmp;
-		army->GetArmyStrength(tmp,tmp,tmp,tmp,tmp,tmp,value);
+		sint16          tmpCount;
+		double          tmp;
+		double          tmpValue;
+		army->ComputeStrength(tmp,tmp,tmp,tmpCount,tmpCount,tmp,tmp,tmp,tmpValue);
+		value = static_cast<sint32>(tmpValue);
 	}
-	else if (rec->GetTargetTypeCity())
+	else if(rec->GetTargetTypeCity())
 	{
-		if (m_target_city.IsValid())
+		if(m_target_city.IsValid())
 		{
 			value = m_target_city->GetCityData()->GetValue();
 		}
 	}
-	else if ( rec->GetTargetTypeTradeRoute() )
+	else if( rec->GetTargetTypeTradeRoute() )
 	{
 		const Unit & city = Get_Target_City();
 		value = city->GetCityData()->GetGoldFromTradeRoutes();
@@ -412,28 +418,40 @@ bool CTPGoal::Is_Execute_Incrementally() const
 
 void CTPGoal::Compute_Needed_Troop_Flow()
 {
-	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
-	sint32 threat = MapAnalysis::GetMapAnalysis().GetThreat(m_playerId, Get_Target_Pos());
+	const MapPoint pos         = Get_Target_Pos();
+	const sint32   threat      = MapAnalysis::GetMapAnalysis().GetThreat          (m_playerId, pos);
+	const sint32   attack      = MapAnalysis::GetMapAnalysis().GetEnemyAttack     (m_playerId, pos);
+	const sint32   defense     = MapAnalysis::GetMapAnalysis().GetEnemyDefense    (m_playerId, pos);
+	const sint32   ranged      = MapAnalysis::GetMapAnalysis().GetEnemyRanged     (m_playerId, pos);
+	const sint32   bombardLand = MapAnalysis::GetMapAnalysis().GetEnemyBombardLand(m_playerId, pos);
+	const sint32   bombardSea  = MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (m_playerId, pos);
+	const sint32   bombardAir  = MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (m_playerId, pos);
+	const sint32   value       = MapAnalysis::GetMapAnalysis().GetEnemyValue      (m_playerId, pos);
 
 	m_current_needed_strength   = Squad_Strength(1);
 		// why only one unit ? Why then zero units? - Martin Gühmann
 		// by bringing a real army to pirate or pillage, it can be ready for seige or attack
 		// a single unit is quite defenseless - Calvitix
 
+	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 	if(goal_record->GetTargetTypeChokePoint())
 	{
 		// Need also attack and ranged strength - Calvitix
-		m_current_needed_strength.Set_Attack(threat / 2);
-		m_current_needed_strength.Set_Ranged(threat / 2);
-		m_current_needed_strength.Set_Value(threat);
+		m_current_needed_strength.Set_Attack      (attack       / 2);
+		m_current_needed_strength.Set_Defense     (defense      / 2);
+		m_current_needed_strength.Set_Ranged      (ranged       / 2);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand  / 2);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea   / 2);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir   / 2);
+		m_current_needed_strength.Set_Value       (value        / 2);
 	}
 	else if(goal_record->GetTargetTypeImprovement()
 	     || goal_record->GetTargetTypeTradeRoute()
 	     ){
 
-		m_current_needed_strength.Set_Attack(threat / 2);
-		m_current_needed_strength.Set_Ranged(threat / 2);
-		m_current_needed_strength.Set_Value(threat);
+		m_current_needed_strength.Set_Attack(attack  / 2);
+		m_current_needed_strength.Set_Ranged(defense / 2);
+		m_current_needed_strength.Set_Value(value);
 	}
 	else if(goal_record->GetTargetTypeEndgame())
 	{
@@ -445,7 +463,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 
 		//to be sure that the global force of the army will be enough
 		// (not only a wounded unit for example)
-		m_current_needed_strength.Set_Value(threat);
+		m_current_needed_strength.Set_Value(value);
 
 	}
 	else if(goal_record->GetTargetTypeCity()
@@ -479,7 +497,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 			// added ranged units - Calvitix
 			m_current_needed_strength.Set_Defense(threat * 2 / 3);
 			m_current_needed_strength.Set_Ranged(threat / 3);
-			m_current_needed_strength.Set_Value(threat);
+			m_current_needed_strength.Set_Value(value);
 
 			//not used for the moment (only attack or defense strength is considerated
 			//(see army_strength > operator) - Calvitix
@@ -487,25 +505,35 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 			m_current_needed_strength.Set_Ranged_Units(static_cast<sint16>(ranged_garrison));
 		}
 	}
-	else if((goal_record->GetTargetTypeAttackUnit()
-	     ||  goal_record->GetTargetTypeCity())
-	     && !goal_record->GetTargetOwnerSelf()
-	     && !goal_record->GetTargetTypeSpecialUnit()
-	     ){
-
+	else if
+	       (
+	        (    goal_record->GetTargetTypeAttackUnit()
+	          || goal_record->GetTargetTypeCity()
+	        )
+	        && !goal_record->GetTargetOwnerSelf()
+	        && !goal_record->GetTargetTypeSpecialUnit()
+	       )
+	{
 		// a real Attack force, depending on threat
-		m_current_needed_strength.Set_Attack(threat); 
-		m_current_needed_strength.Set_Defense(threat);
-		m_current_needed_strength.Set_Ranged(threat);
-		m_current_needed_strength.Set_Value(threat);
+		m_current_needed_strength.Set_Attack      (attack);
+		m_current_needed_strength.Set_Defense     (defense);
+		m_current_needed_strength.Set_Ranged      (ranged);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir);
+		m_current_needed_strength.Set_Value       (value);
 	}
 	
 	else if(goal_record->GetTargetTypeBorder())
 	{
 		// assuming threat is the global strength to use (to be coherent with other changes) - Calvitix
-		m_current_needed_strength.Set_Defense(threat / 2);
-		m_current_needed_strength.Set_Attack(threat / 2);
-		m_current_needed_strength.Set_Value(threat);
+		m_current_needed_strength.Set_Attack      (attack       / 2);
+		m_current_needed_strength.Set_Defense     (defense      / 2);
+		m_current_needed_strength.Set_Ranged      (ranged       / 2);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand  / 2);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea   / 2);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir   / 2);
+		m_current_needed_strength.Set_Value       (value        / 2); // Actually this stuff should go to the force matches
 	}
 	else if (   goal_record->GetTargetTypeSettleLand()
 	        ||  goal_record->GetTargetTypeSettleSea()
@@ -514,8 +542,9 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	{
 		// No strength is needed
 	}
-	else{
-		m_current_needed_strength.Set_Pos_Strength(Get_Target_Pos());
+	else
+	{
+		m_current_needed_strength.Set_Pos_Strength(pos);
 	}
 
 	const StrategyRecord & strategy =
@@ -567,7 +596,7 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	if (m_current_needed_strength.Get_Transport() > 0)
 	{
 		sint16 const    dest_cont       = 
-		    g_theWorld->GetContinent(Get_Target_Pos());
+		    g_theWorld->GetContinent(pos);
 		bool            need_transport  = false;
 
 		for
@@ -1826,34 +1855,34 @@ bool CTPGoal::NeededForGarrison(CTPAgent_ptr army,
 		((army->Get_Squad_Class() & k_Goal_SquadClass_Special_Bit     ) == 0x0 ) &&
 		((army->Get_Squad_Class() & k_Goal_SquadClass_CanTransport_Bit) == 0x0 ))
 	{
-		sint32 hp;
-		sint32 defense_count;
-		sint32 ranged_count;
-		sint32 attack_strength;
-		sint32 defense_strength;
-		sint32 ranged_strength;
-		sint32 total_value;
+		sint16 defense_count;
+		double defense_strength;
+		sint16 tmpCount;
+		double tmp;
+		army->Get_Army()->ComputeStrength(tmp,
+		                                  defense_strength,
+		                                  tmp,
+		                                  defense_count,
+		                                  tmpCount,
+		                                  tmp,
+		                                  tmp,
+		                                  tmp,
+		                                  tmp
+		                                 );
 
-		army->Get_Army()->GetArmyStrength(hp,
-			defense_count,
-			ranged_count,
-			attack_strength,
-			defense_strength,
-			ranged_strength,
-			total_value);
-
-		defense_strength += static_cast<sint32>(city->GetCityData()->GetDefendersBonus() * defense_count);
+		defense_strength += city->GetCityData()->GetDefendersBonus() * static_cast<double>(defense_count);
 
 		new_garrison -= static_cast<sint8>(defense_count);
-		new_garrison_strength -= static_cast<double>(defense_strength);
+		new_garrison_strength -= defense_strength;
 
-		if ( new_garrison >= city->GetCityData()->GetNeededGarrison() &&
-			new_garrison_strength >= city->GetCityData()->GetNeededGarrisonStrength() )
-		{
+		if(new_garrison >= city->GetCityData()->GetNeededGarrison()
+		&& new_garrison_strength >= city->GetCityData()->GetNeededGarrisonStrength()
+		){
 			return false;
 		}
 		return true;
 	}
+
 	return false;
 }
 

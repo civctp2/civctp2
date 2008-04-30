@@ -30,6 +30,7 @@
 // - Make unit types with 0 movement stand still (compiler option).
 // - Handled crashes with invalid units.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -886,109 +887,155 @@ void CellUnitList::UpdateMoveIntersection()
 	}
 }
 
-
-void CellUnitList::ComputeStrength(double & attack, 
-								   double & defense, 
-								   double & ranged, 
-								   sint16 & defend_unit_count, 
-								   sint16 & ranged_unit_count,
-								   double & land_bombard,
-								   double & water_bombard,
-								   double & air_bombard) const
+//----------------------------------------------------------------------------
+//
+// Name       : CellUnitList::ComputeStrength
+//
+// Description: Get data for army and fill in given parameters.
+//
+// Parameters : sint32 & attack            : sum of units Attack * hitpoints * fire_power
+//              sint32 & defense           : sum of units Defense * hitpoints * fire_power
+//              sint32 & ranged            : sum of units ZBRangeAttack * hitpoints * fire_power
+//              sint32 & defend_unit_count : how many defenders (Defense>0)
+//              sint32 & ranged_unit_count : how many ranged (ZBRangeAttack>0)
+//              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard land or mountain
+//              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard sea
+//              sint32 & ranged            : sum of units Attack * hitpoints * fire_power if unit can bombard air
+//              sint32 & total_value       : sum of units ShieldCost
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : includes units in transports
+//
+//----------------------------------------------------------------------------
+void CellUnitList::ComputeStrength(double & attack,
+                                   double & defense,
+                                   double & ranged,
+                                   sint16 & defend_unit_count,
+                                   sint16 & ranged_unit_count,
+                                   double & land_bombard,
+                                   double & water_bombard,
+                                   double & air_bombard,
+                                   double & total_value) const
 {
-	attack = 0.0;
-	defense = 0.0;
-	ranged = 0.0;
+	attack            = 0.0;
+	defense           = 0.0;
+	ranged            = 0.0;
 	defend_unit_count = 0;
 	ranged_unit_count = 0;
 	
-	land_bombard = 0.0;
-	water_bombard = 0.0;
-	air_bombard = 0.0;
+	land_bombard      = 0.0;
+	water_bombard     = 0.0;
+	air_bombard       = 0.0;
+	total_value       = 0.0;
 	
-	for (int i = 0; i < m_nElements; i++) 
-    {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
 		if (!m_array[i].IsValid())
 			continue;
 
 		UnitRecord const * rec = m_array[i].GetDBRec();
-            if (!rec) continue;
+		if (!rec) continue;
+
+		if (m_array[i].GetDefense() > 0.0)
+			defend_unit_count++;
+
+		if (rec->GetZBRangeAttack() > 0)
+			ranged_unit_count++;
 
 		double firepower = static_cast<double>(rec->GetFirepower());
-		attack   += static_cast<double>(rec->GetAttack()
-			* m_array[i].GetHP()
-			* firepower); 
-		defense  += static_cast<double>(m_array[i]->GetPositionDefense(Unit())
-			* m_array[i].GetHP()
-			* firepower);
-		double r         = static_cast<double>(rec->GetZBRangeAttack()
+		double hitpoints = static_cast<double>(rec->GetMaxHP());
+
+		attack   +=   rec->GetAttack()
+		            * hitpoints
+		            * firepower;
+
+		defense  +=   m_array[i]->GetPositionDefense(Unit())
+		            * hitpoints
+		            * firepower;
+
+		ranged   += static_cast<double>(rec->GetZBRangeAttack()
+		                              * hitpoints
 		                              * firepower);
-        if ( r > 0.0 ) { 
-            ranged +=  r; 
-            ranged_unit_count++; 
-        } 
-		
-		
-		if (rec->GetCanBombardLand() ||
-			rec->GetCanBombardMountain()) {
-			land_bombard += static_cast<double>(rec->GetAttack()
-			                                  * m_array[i].GetHP()
-				* firepower);
+
+		if(rec->GetCanBombardLand()
+		|| rec->GetCanBombardMountain()
+		){
+			land_bombard +=   rec->GetAttack()
+			                * hitpoints
+			                * firepower;
 		}
-		
-		if (rec->GetCanBombardWater()) {
-			water_bombard += (double) (rec->GetAttack() 
-				* double(m_array[i].GetHP())
-				* firepower);
+
+		if(rec->GetCanBombardWater())
+		{
+			water_bombard +=   rec->GetAttack()
+			                 * hitpoints
+			                 * firepower;
 		}
-		
-		if (rec->GetCanBombardAir()) {
-			air_bombard += (double) (rec->GetAttack() 
-				* double(m_array[i].GetHP())
-				* firepower);
+
+		if(rec->GetCanBombardAir())
+		{
+			air_bombard +=   rec->GetAttack()
+			               * hitpoints
+			               * firepower;
 		}
-		
-		
+
+		total_value += static_cast<double>(rec->GetShieldCost());
+
 		UnitDynamicArray * cargo_list = m_array[i]->GetCargoList();
-		int                cargoCount = cargo_list ? cargo_list->Num() : 0;
+		sint32             cargoCount = cargo_list ? cargo_list->Num() : 0;
 		
-		for (int j = 0; j < cargoCount; j++) 
-        {
+		for(sint32 j = 0; j < cargoCount; j++)
+		{
 			rec = cargo_list->Access(j).GetDBRec();
 			if (!rec) continue;
 
 			firepower = static_cast<double>(rec->GetFirepower());
-			double hitpoints = static_cast<double>(rec->GetMaxHP());
-			attack   += static_cast<double>(rec->GetAttack()
+			hitpoints = static_cast<double>(rec->GetMaxHP());
+
+			if (m_array[i].GetDefense() > 0.0)
+				defend_unit_count++;
+
+			if (rec->GetZBRangeAttack() > 0)
+				ranged_unit_count++;
+
+			attack   +=   rec->GetAttack()
+			            * hitpoints
+			            * firepower;
+			defense  +=   rec->GetDefense()
+			            * hitpoints
+			            * firepower;
+			ranged   += static_cast<double>(rec->GetZBRangeAttack()
 			                              * hitpoints
 			                              * firepower);
-			defense  += static_cast<double>(rec->GetDefense()
-			                              * hitpoints
-			                              * firepower);
-			r         = static_cast<double>(rec->GetZBRangeAttack()
-			                              * firepower);
-			if ( r > 0.0 ) { 
-				ranged +=  r; 
-				ranged_unit_count++; 
-			} 
-				
-			if (rec->GetCanBombardLand() ||
-				rec->GetCanBombardMountain()) {
-				land_bombard += (double) (rec->GetAttack() 
-					* hitpoints	* firepower);
+
+			if(rec->GetCanBombardLand()
+			|| rec->GetCanBombardMountain()
+			){
+				land_bombard  +=   rec->GetAttack()
+				                 * hitpoints
+				                 * firepower;
 			}
-				
-			if (rec->GetCanBombardWater()) {
-				water_bombard += (double) (rec->GetAttack() 
-					* hitpoints	* firepower);
+
+			if(rec->GetCanBombardWater())
+			{
+				water_bombard  +=   rec->GetAttack()
+				                  * hitpoints
+				                  * firepower;
 			}
-				
-			if (rec->GetCanBombardAir()) {
-				air_bombard += (double) (rec->GetAttack() 
-					* hitpoints	* firepower);
+
+			if(rec->GetCanBombardAir())
+			{
+				air_bombard    +=   rec->GetAttack()
+				                  * hitpoints
+				                  * firepower;
 			}
-		} 
-    } 
+
+			total_value += static_cast<double>(rec->GetShieldCost());
+		}
+	}
 }
 
 double CellUnitList::GetAverageHealthPercentage() const

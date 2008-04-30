@@ -33,6 +33,7 @@
 // - Disband army text is also shown in the optimized version. (26-Jan-2008 Martin Gühmann)
 // - Changed rounds calculation back to original method. (30-Jan-2008 Martin Gühmann)
 // - Agents used in now exclusively set here. (8-Feb-2008 Martin Gühmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -220,35 +221,42 @@ MapPoint CTPAgent::Get_Pos() const
 
 const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 {
-	sint32 hitpoints;
-	sint32 defense_strength;
-	sint32 attack_strength;
-	sint32 ranged_strength;
-	sint32 total_value;
-	sint32 defense_count;
-	sint32 ranged_count;
-
 	Assert(m_army.IsValid());
 
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);
 
-	m_army->GetArmyStrength( hitpoints, 
-		 			         defense_count, 
-							 ranged_count, 
-						     attack_strength,
-						     defense_strength,
-						     ranged_strength,
-						     total_value );
+	sint16 defense_count;
+	sint16 ranged_count;
+	double attack_strength;
+	double defense_strength;
+	double ranged_strength;
+	double bombard_land_strength;
+	double bombard_sea_strength;
+	double bombard_air_strength;
+	double total_value;
+	m_army->ComputeStrength(attack_strength,
+	                        defense_strength,
+	                        ranged_strength,
+	                        defense_count,
+	                        ranged_count,
+	                        bombard_land_strength,
+	                        bombard_sea_strength,
+	                        bombard_air_strength,
+	                        total_value
+	                       );
 
-	m_squad_strength.Set_Agent_Count(m_army.Num());
-	m_squad_strength.Set_Attack( attack_strength );
-	m_squad_strength.Set_Defense( defense_strength );
-	m_squad_strength.Set_Defenders(static_cast<sint16>(defense_count));
-	m_squad_strength.Set_Ranged( ranged_strength );
-	m_squad_strength.Set_Ranged_Units(static_cast<sint16>(ranged_count));
-	m_squad_strength.Set_Value( total_value );
-	m_squad_strength.Set_Transport(static_cast<sint16>(empty_slots));
+	m_squad_strength.Set_Agent_Count (m_army.Num()                    );
+	m_squad_strength.Set_Attack      (attack_strength                 );
+	m_squad_strength.Set_Defense     (defense_strength                );
+	m_squad_strength.Set_Defenders   (defense_count                   );
+	m_squad_strength.Set_Ranged      (ranged_strength                 );
+	m_squad_strength.Set_Ranged_Units(ranged_count                    );
+	m_squad_strength.Set_Bombard_Land(bombard_land_strength           );
+	m_squad_strength.Set_Bombard_Sea (bombard_sea_strength            );
+	m_squad_strength.Set_Bombard_Air (bombard_air_strength            );
+	m_squad_strength.Set_Value       (total_value                     );
+	m_squad_strength.Set_Transport   (static_cast<sint16>(empty_slots));
 
 	return m_squad_strength;
 }
