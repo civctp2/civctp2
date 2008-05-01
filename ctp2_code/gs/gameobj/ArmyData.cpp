@@ -7028,17 +7028,19 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 		return false;
 	}
 
+	if(!CanFight(defender))
+	{
+		return false;
+	}
+
 	Diplomat & diplomat = Diplomat::GetDiplomat(attack_owner);
 //outcommented because not called? What a shitty argumentation
 //	if (IsEnemy(defense_owner) && 
 //		!g_player[m_owner]->WillViolateCeaseFire(defense_owner) &&
 //		!g_player[m_owner]->WillViolatePact(defense_owner) &&
 	if(
-	   (
-	         g_player[attack_owner]->HasWarWith(defense_owner)
-//	      || diplomat.DesireWarWith(defense_owner)  // This has to be repaired, as well.
-	   )
-	   && CanFight(defender)
+	      g_player[attack_owner]->HasWarWith(defense_owner)
+//	   || diplomat.DesireWarWith(defense_owner)  // This has to be repaired, as well.
 	  )
 	{
 		Battle(pos, defender);

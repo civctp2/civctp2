@@ -510,15 +510,6 @@ public:
 
     bool IsCivilian() const;
 
-
-    void GetArmyStrength( sint32 & hitpoints,
-                          sint32 & defense_count,
-                          sint32 & ranged_count,
-                          sint32 & attack_strength,
-                          sint32 & defense_strength,
-                          sint32 & ranged_strength,
-                          sint32 & total_value ) const;
-
     bool CanPerformSpecialAction() const;
     void CheckAddEventOrder();
     void IncrementOrderPath();

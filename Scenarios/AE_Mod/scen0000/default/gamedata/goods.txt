@@ -175,15 +175,15 @@ TERRAIN_GRASSLAND_GOOD_TWO {
 }
 
 # Potatoes #14
-#TERRAIN_GRASSLAND_GOOD_THREE {
-#  SpriteID 44
-#   Sound SOUND_ID_POTATOES
-#   Gold 5
-#   Food 15
-#   Production 0
-#   Probability 0.25
-#   Icon ICON_GOOD_GRASSLAND_THREE
-#}
+TERRAIN_GRASSLAND_GOOD_THREE {
+  SpriteID 44
+   Sound SOUND_ID_POTATOES
+   Gold 5
+   Food 15
+   Production 0
+   Probability 0.25
+   Icon ICON_GOOD_GRASSLAND_THREE
+}
 
 # Poppies #15
 TERRAIN_GRASSLAND_GOOD_FOUR {
