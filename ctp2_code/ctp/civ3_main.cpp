@@ -529,8 +529,7 @@ int ui_Initialize(void)
 	SPLASH_STRING("Creating Movie manager...");
 
 #if defined(__AUI_USE_SDL__)
-//lynx: this is where SDL movies need to be implemented
-        printf("%s L%d: No SDL movie manager implemented yet!\n", __FILE__, __LINE__);
+        //SDL movie manager is in aui_movie.cpp
 	g_c3ui->RegisterObject(new aui_MovieManager());
 #else
 	g_c3ui->RegisterObject(new aui_DirectMovieManager());

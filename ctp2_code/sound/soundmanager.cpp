@@ -110,7 +110,7 @@ SoundManager::SoundManager()
 #if defined(USE_SDL)
     m_cdrom = 0;
     // Perhaps use 0 later on...
-    m_SDLInitFlags = SDL_INIT_NOPARACHUTE;
+    //m_SDLInitFlags |= SDL_INIT_NOPARACHUTE;
 
     // Do not remove this or debugging won't work... :(
 # if defined(_DEBUG)
@@ -179,68 +179,68 @@ SoundManager::DumpAllSounds()
 }
 
 void
-SoundManager::InitSoundDriver()
-{
+SoundManager::InitSoundDriver(){
 #if defined(USE_SDL)
-	int errcode;
-	int use_digital;
-	int use_MIDI;
-	int output_rate;
-	Uint16 output_format;
-	int output_channels;
+    int errcode;
+    int use_digital;
+    int use_MIDI;
+    int output_rate;
+    Uint16 output_format;
+    int output_channels;
 #else // !USE_SDL
-	S32		errcode;
-	S32		use_digital;
-	S32		use_MIDI;
-	S32		output_rate;
-	S32		output_bits;
-	S32		output_channels;
+    S32		errcode;
+    S32		use_digital;
+    S32		use_MIDI;
+    S32		output_rate;
+    S32		output_bits;
+    S32		output_channels;
 #endif // defined(USE_SDL)
 
-	use_digital = 1;						
+    use_digital = 1;						
 
-	// Always sound?
-	use_digital = 1;						
+// Always sound?
+    use_digital = 1;						
 
-	use_MIDI = 0;			
+    use_MIDI = 0;			
 
-	// 22khz @ 16 Bit stereo
-	output_channels = 2;
-	output_rate = 22050;
+// 22khz @ 16 Bit stereo
+    output_channels = 2;
+    output_rate = 22050;
 
-	MBCHAR *smname = "Sound Manager";
+    MBCHAR *smname = "Sound Manager";
 
 #if defined(USE_SDL)
-	output_format = AUDIO_S16SYS;
+    output_format = AUDIO_S16SYS;
 	
     errcode = SDL_InitSubSystem(SDL_INIT_AUDIO | m_SDLInitFlags);
 
     if (errcode < 0) {
         m_noSound = TRUE;
-        // char *err = SDL_GetError(); cerr << "SDL Init failed:" << err << endl;
-    } else {
+        printf("%s L%d: Error initializing SDL_audio: %s\n", __FILE__, __LINE__, SDL_GetError());
+        }
+    else { //Mix_OpenAudio is an SDL_Mixer wrapper for SDL_OpenAudio!!!
         errcode = Mix_OpenAudio(output_rate, output_format, output_channels, 8192);
         if (errcode < 0) {
-            // char *err = SDL_GetError(); cerr << "Opening mixer failed:" << err << endl;
+            printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
             m_noSound = TRUE;
+            }
         }
-    }
 #else // !USE_SDL
-   	output_bits = 16;
-	errcode = AIL_quick_startup(use_digital, use_MIDI, output_rate, output_bits,
-								output_channels);
-   	if (!errcode) {	
-		m_noSound = TRUE;
-	}
+    output_bits = 16;
+    errcode = AIL_quick_startup(use_digital, use_MIDI, output_rate, output_bits,
+                                output_channels);
+    if (!errcode) {	
+        m_noSound = TRUE;
+        }
 #endif // #if defined(USE_SDL)
 
-	InitRedbook();
+    InitRedbook();
 
 	
-	SetVolume(SOUNDTYPE_SFX, m_sfxVolume);
-	SetVolume(SOUNDTYPE_VOICE, m_voiceVolume);
-	SetVolume(SOUNDTYPE_MUSIC, m_musicVolume);
-}
+    SetVolume(SOUNDTYPE_SFX, m_sfxVolume);
+    SetVolume(SOUNDTYPE_VOICE, m_voiceVolume);
+    SetVolume(SOUNDTYPE_MUSIC, m_musicVolume);
+    }
 
 void
 SoundManager::CleanupSoundDriver()

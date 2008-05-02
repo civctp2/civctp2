@@ -28,6 +28,12 @@ then this means you should type "cd foo" at your shell prompt.
   SDL packages, but you probably need to install the SDL development packages
   to get the header files.
 
+- SDL_mixer and its header files.
+
+- SDL_ffmpeg > 0.7.1 and its header files.
+
+- ffmpeg and its libavcodec
+
 - X11 and its header files. The same as with SDL, check that you have the
   development packages of XFree86 or X.org installed.
 
@@ -243,6 +249,18 @@ So, let's start:
    Install some libs:
 
    shell> pushd /home/foo/CTP2/ctp2_code/mapgen/.libs/ && cp crater.la crater.so geometric.la geometric.so plasma2.la  plasma2.so /home/foo/CTP2/ctp2_program/ctp/dll/map/ && popd
+
+
+10.Movies
+
+   ffmpeg and sdl_ffmpeg > 0.7.1 are used for movie playing now. Strangely ffmpeg can't
+   play the movies of the CD. So you'll have to convert them to a format ffmpeg
+   can handle.
+   One way of doing that is with mencoder (you can choose any codec ffmpeg 
+   can play, even h264;):
+
+   shell> cd /home/foo/CTP2/ctp2_program/ctp
+   shell> for i in `ls /media/cdrom/Setup/data/Max/ctp2_data/default/videos/`; do mencoder -ovc lavc -lavcopts vcodec=mpeg1video -oac copy /media/cdrom/Setup/data/Max/ctp2_data/default/videos/$i -o $i; done
 
 
    Note concerning languages:
