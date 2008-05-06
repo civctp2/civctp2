@@ -1248,7 +1248,6 @@ ControlPanelWindow::~ControlPanelWindow()
 void
 ControlPanelWindow::BuildMainMenu()
 {
-  	
 	m_mainMenuBar=(ctp2_MenuBar *)aui_Ldl::BuildHierarchyFromRoot("MainMenu");
 
 	m_mainMenuBar->SetType(AUI_WINDOW_TYPE_SINKING);
@@ -1286,7 +1285,7 @@ void ControlPanelWindow::RebuildMenus()
 	Assert(menu);
 	if(menu==NULL) return;
 
-	menu->Clear();	
+	menu->Clear();
 
 	mb->SetMenuCallback	(menu,CivMenuCallback);
 

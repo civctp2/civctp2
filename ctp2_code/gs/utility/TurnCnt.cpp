@@ -1249,7 +1249,7 @@ void TurnCount::SendNextPlayerMessageEvent()
 		MBCHAR turnString[_MAX_PATH];
 		// JJB changed this from m_round to GetRound()
 		// since m_round seems to always be zero
-		sprintf(turnString, " (Turn %d)", GetRound() + 1); // New turn is changed with the BeginTurn event, which still has to be executed.
+		sprintf(turnString, " (Turn %d)", GetRound()); // New turn is changed with the BeginTurn event, which still has to be executed.
 		strcat(fullPath, turnString);
 		strcat(fullPath, ".c2g");
 		GameFile::SaveGame(fullPath, NULL);

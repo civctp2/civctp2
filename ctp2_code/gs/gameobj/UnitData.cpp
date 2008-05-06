@@ -79,6 +79,7 @@
 //   same tile. (7-Nov-2007 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - 
 //
 //----------------------------------------------------------------------------
 
@@ -3031,6 +3032,7 @@ void UnitData::Entrench()
 	if(!CanEntrench())
 		return;
 
+	ClearFlag(k_UDF_IS_ASLEEP);
 	SetFlag(k_UDF_IS_ENTRENCHING);
 
 	g_slicEngine->RunTrigger(TRIGGER_LIST_FORTIFY,
@@ -3052,6 +3054,7 @@ bool UnitData::IsAsleep() const
 
 void UnitData::Sleep()
 {
+	Detrench();
 	SetFlag(k_UDF_IS_ASLEEP);
 }
 
