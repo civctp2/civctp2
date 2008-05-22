@@ -109,35 +109,27 @@ BOOL TerrainImprovementData::Complete(void)
 	}
 	theCell->RemoveImprovement(imp);
 
-	
-	
 	if(rec->GetClassTerraform()) {
 		g_theWorld->CutImprovements(m_point);
 	}
-
 
 	Assert(g_player[m_owner]);
 	if(!g_player[m_owner])
 		return TRUE;
 
-	
 	if (terrainutil_IsInstallation(m_type))
 	{
 		g_player[m_owner]->CreateInstallation( m_type, m_point );
 	}
 
-	
-	
-	
-	
 	theCell->CalcTerrainMoveCost();
 
 	terrainutil_DoVision(m_point);
 
 	sint32 intRad;
-    sint32 sqRad;
+	sint32 sqRad;
 	if (rec->GetIntBorderRadius(intRad) && rec->GetSquaredBorderRadius(sqRad)) 
-    {
+	{
 		GenerateBorders(m_point, m_owner, intRad, sqRad);
 	}
 
@@ -147,15 +139,19 @@ BOOL TerrainImprovementData::Complete(void)
 	MapPoint pos;
 	
 
-	for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1)) {
-		if(m_point.GetNeighborPosition(d, pos)) {
+	for(WORLD_DIRECTION d = NORTH; d < NOWHERE; d = (WORLD_DIRECTION)((sint32)d + 1))
+	{
+		if(m_point.GetNeighborPosition(d, pos))
+		{
 			g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 			g_tiledMap->TileChanged(pos);
 			g_tiledMap->RedrawTile(&pos);
 		}
 	}
+
 	g_tiledMap->RedrawTile(&m_point);
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Enqueue(theCell, m_point.x, m_point.y);
 	}
 

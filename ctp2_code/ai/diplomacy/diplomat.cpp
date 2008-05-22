@@ -5652,44 +5652,38 @@ void Diplomat::ExecutePersistantAgreements()
 {
 	AgreementMatrix & agreements = AgreementMatrix::s_agreements;
 	
-	for 
-    (
-        size_t foreignerIndex = 1; 
-        foreignerIndex < m_foreigners.size(); 
-        ++foreignerIndex
-    )
+	for
+	(
+	    size_t foreignerIndex = 1; 
+	    foreignerIndex < m_foreigners.size(); 
+	    ++foreignerIndex
+	)
 	{
 		if (g_player[foreignerIndex] == NULL)
 			continue;
 
-        PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
+		PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);
 
 		if (foreignerId == m_playerId)
 			continue;
-		
-		
+
 		if (    GetBorderIncursionBy(foreignerId)
-             &&	agreements.HasAgreement
-                    (m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS)
-           )
+		     &&	agreements.HasAgreement
+		            (m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS)
+		   )
 		{
-			
-			
 			sint16 duration = 
 				agreements.GetAgreementDuration(m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
-			
+
 			if (duration > 20)
 			{
 				LogViolationEvent(foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 			}
-			
-		} 
+		}
 
-		
 		const ai::Agreement	& stop_research = 
 			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_RESEARCH);
-			
-		
+
 		if (stop_research.start != -1 && stop_research.end == -1)
 		{
 			double science_tax;
@@ -5702,14 +5696,12 @@ void Diplomat::ExecutePersistantAgreements()
 			}
 		}
 
-		
 		const ai::Agreement	& reduce_pollution = 
 			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_REDUCE_POLLUTION);
 			
 		sint32 agreement_duration = 
 			NewTurnCount::GetCurrentRound() - reduce_pollution.start;
 
-		
 		if (reduce_pollution.start != -1 && reduce_pollution.end == -1 &&
 			agreement_duration > 25)
 		{
@@ -5721,7 +5713,6 @@ void Diplomat::ExecutePersistantAgreements()
 			}
 		}
 
-		
 		const ai::Agreement	& pollution_pact = 
 			agreements.GetAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_POLLUTION_PACT);
 		
@@ -5730,24 +5721,18 @@ void Diplomat::ExecutePersistantAgreements()
 
 		agreement_duration = 
 			NewTurnCount::GetCurrentRound() - honor_pollution_pact.start;
-		
-		
+
 		if (honor_pollution_pact.start != -1 && honor_pollution_pact.end == -1 &&
 			agreement_duration > 10)
 		{
-			
-			Assert(pollution_pact.start != -1 && pollution_pact.end == -1);
-
 			uint32 target_pollution = pollution_pact.proposal.first_arg.pollution;
-			
+
 			if (g_player[foreignerIndex]->GetPollutionLevel() > target_pollution)
 			{
 				LogViolationEvent(foreignerId, PROPOSAL_TREATY_POLLUTION_PACT);
 			}
 		}
-
-		
-	} 
+	}
 }
 
 

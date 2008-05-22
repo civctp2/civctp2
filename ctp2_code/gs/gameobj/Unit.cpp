@@ -130,14 +130,13 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 {
 	bool is_renumber_cont = false;
 
-	
-	
-
-	if (IsCity()) {
+	if (IsCity())
+	{
 		AccessData()->GetCityData()->PrepareToRemove(cause, killedBy);
 	}
 
-	if(GetArmy().IsValid()) {
+	if(GetArmy().IsValid())
+	{
 		GetArmy().SetRemoveCause(cause);
 	}
 
@@ -166,106 +165,99 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	
 	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx\n",
 							  m_id));
-	if(g_network.IsActive()) {
-		if(g_network.IsHost()) {
+	if(g_network.IsActive())
+	{
+		if(g_network.IsHost())
+		{
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_KILL_UNIT, m_id));
-		} else {
+		}
+		else
+		{
 			g_network.AddDeadUnit(m_id);
 		}
 	}
 	
-	if (GetActor()) 
+	if (GetActor())
 	{
-		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE 
+		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE
 			|| IsBeingTransported()
 			|| cause == CAUSE_REMOVE_ARMY_DIED_IN_ATTACK
 			|| cause == CAUSE_REMOVE_ARMY_ATTACKED
 			|| cause == CAUSE_REMOVE_ARMY_SETTLE
-			|| cause == CAUSE_REMOVE_ARMY_DISBANDED 
+			|| cause == CAUSE_REMOVE_ARMY_DISBANDED
 			|| cause == CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE
 			|| cause == CAUSE_REMOVE_ARMY_NUKE
 			|| cause == CAUSE_REMOVE_ARMY_PARKRANGER) {
 			g_director->AddFastKill(*this);
-		} else {
-			
-			
-			
-			
-			
-				g_director->AddDeath(*this);
-				
+		}
+		else
+		{
+			g_director->AddDeath(*this);
 		}
 	}
 	
-	if(!GetDBRec()->GetIsTrader()) {
+	if(!GetDBRec()->GetIsTrader())
+	{
 		AccessData()->KillVision();
 	}
 	
 	MapPoint        pos;
 	GetPos(pos);
-	PLAYER_INDEX    owner   = GetOwner(); 
+	PLAYER_INDEX    owner   = GetOwner();
 	sint32          r       = TRUE;
-	
-	if(!GetDBRec()->GetIsTrader() && !IsTempSlaveUnit() &&
-		!IsBeingTransported() && !HasLeftMap()) {
-		
+
+	if(!GetDBRec()->GetIsTrader()
+	&& !IsTempSlaveUnit()
+	&& !IsBeingTransported()
+	&& !HasLeftMap()
+	){
 		r = g_theWorld->RemoveUnitReference(pos, *this);
 		Assert(r);
-
-		
-		
-		
-
-
-
-
-
-
-
-
-
-
-
+	}
+	else
+	{
+		if(GetArmy().IsValid())
+		{
+			Assert(false);
+			r = g_theWorld->RemoveUnitReference(pos, *this);
+			Assert(r);
+		}
 	}
 	
-	if(!IsTempSlaveUnit()) {
-		
+	if(!IsTempSlaveUnit())
+	{
 		r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy);
-		Assert(r); 
+		Assert(r);
 	}
 	
 	Unit transport = GetTransport();
-	if(transport.IsValid()) {
+	if(transport.IsValid())
+	{
 		transport.RemoveTransportedUnit(*this);
 	}
 
-	if(GetDBRec()->GetHasPopAndCanBuild()) {
-		if (cause != CAUSE_REMOVE_ARMY_POLLUTION 
-			&& cause != CAUSE_REMOVE_ARMY_FLOOD) { 
+	if(GetDBRec()->GetHasPopAndCanBuild())
+	{
+		if(cause != CAUSE_REMOVE_ARMY_POLLUTION
+		&& cause != CAUSE_REMOVE_ARMY_FLOOD
+		){
 			g_theWorld->SetCanalTunnel(pos, 0);
 			is_renumber_cont = true;
 		}
 		
 		Cell *cell = g_theWorld->GetCell(pos);
 
-		
-		
 		g_theWorld->CutImprovements(pos);
-		
 
-
-
-
-
-
-
-		if(g_network.IsHost()) {
+		if(g_network.IsHost())
+		{
 			g_network.Enqueue(cell, pos.x, pos.y);
 		}
+
 		g_theTradeOfferPool->RemoveTradeOffersFromCity(*this);
 		g_theTradeBids->CancelBidsWithCity(*this);
 
-		if (cell->UnitArmy()) 
+		if (cell->UnitArmy())
 		{
 			if (cause != CAUSE_REMOVE_ARMY_NUKE) 
 			{
@@ -283,7 +275,6 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		CD()->RemoveBorders();
 
 		g_selected_item->RegisterRemovedCity(GetOwner(), *this);
-
 	}
 
 	AccessData()->KillTransportedUnits();

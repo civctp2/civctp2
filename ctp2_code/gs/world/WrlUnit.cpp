@@ -87,21 +87,17 @@ bool World::InsertUnit (const MapPoint &pos, Unit &id,
 	}
 }
 
-
 sint32 World::RemoveUnitReference (const MapPoint &pos, const Unit &id)
+{
+	DPRINTF(k_DBG_GAMESTATE, ("World::RemoveUnitReference: id: 0x%lx\n",
+							  id.m_id));
 
-{ 
 	g_theUnitTree->Remove(id);
-
-	
-	
 
 	return GetCell(pos)->RemoveUnitReference(id); 
 }
 
-
 sint32 World::GetEmptyTransports(const MapPoint pos, CellUnitList &transports)
-
 {
    Cell *ptr = GetCell(pos); 
 

@@ -1254,7 +1254,7 @@ double terrainutil_GetVisionRange(const sint32 terrainType, const MapPoint &pos)
 
 	sint32 range = 0;
 	Assert(rec);
-	if (rec) 
+	if (rec)
 	{
 		const TerrainImprovementRecord::Effect *eff = 
 			terrainutil_GetTerrainEffect(rec, pos);

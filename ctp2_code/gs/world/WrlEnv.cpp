@@ -750,16 +750,16 @@ void World::CutImprovements(const MapPoint &point)
 {
 	MapPoint neighbor;
 	Cell *thisCell = m_map[point.x][point.y];
-		
+
 	thisCell->SetEnv(thisCell->GetEnv() & ~(k_MASK_ENV_ROAD | k_MASK_ENV_IRRIGATION | 
 										    k_MASK_ENV_MINE | k_MASK_ENV_INSTALLATION |
 											k_MASK_ENV_CANAL_TUNNEL));
 
-	
 	DynamicArray<Installation>	instArray;
-	if(g_theInstallationTree->GetAt(point, instArray)) {
-		sint32 i;
-		for(i = instArray.Num() - 1; i >= 0; i--) {
+	if(g_theInstallationTree->GetAt(point, instArray))
+	{
+		for(sint32 i = instArray.Num() - 1; i >= 0; i--)
+		{
 			static MapPoint ipos;
 			instArray[i].GetPos(ipos);
 			instArray[i].Kill();
@@ -773,12 +773,13 @@ void World::CutImprovements(const MapPoint &point)
 		thisCell->AccessImprovement(thisCell->GetNumImprovements()- 1).Kill();
 	}
 
-	while(thisCell->GetNumDBImprovements()) {
-		
+	while(thisCell->GetNumDBImprovements())
+	{
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(thisCell->GetDBImprovement(0));
 		sint32 intRad, sqRad;
 		Assert(rec);
-		if(rec && rec->GetIntBorderRadius(intRad)) {
+		if(rec && rec->GetIntBorderRadius(intRad))
+		{
 			rec->GetSquaredBorderRadius(sqRad);
 			terrainutil_RemoveBorders(point, thisCell->GetOwner(), intRad, sqRad, Unit());
 		}
@@ -791,7 +792,8 @@ void World::CutImprovements(const MapPoint &point)
 	g_tiledMap->PostProcessTile(pos, GetTileInfo(point));
 	g_tiledMap->RedrawTile(&pos);
 
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Enqueue(thisCell, point.x, point.y);
 	}
 
