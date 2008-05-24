@@ -48,6 +48,18 @@ Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
 
 Brief Changelog:
+2008-05-24 (Revision 874)
+Fixed:    The progress bar in the city manager, so that it does overlap.
+Fixed:    The edges of the borders of the load/save window.
+Fixed:    AI force matching. AI force matching is now based on attack, defence,
+          bombard, ranged, and foreign troop vales instead of just threat.
+Fixed:    Non-Combat units cannot attack anymore.
+Fixed:    AE mod loads without error pop ups
+Fixed:    Fortied units will be defortified if they are put to sleep.
+Fixed:    Sleeping units will be awaken if forified.
+Fixed:    The first save game in PBEM is now labled with turn 0.
+Fixed:    Prevented some crashes with patch 1.1 save games.
+
 2008-04-12 (Revision 866)
 Added:    A settle in city event, so that the player can add a pop via settling
           in a city without interfering with the AI.

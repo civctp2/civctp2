@@ -469,7 +469,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.5
         BombardMatch  0.0
-        ValueMatch    1.7
+        ValueMatch    0.4
     }
 
     Defensive {
@@ -485,7 +485,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 
     StealthAttack {
@@ -493,7 +493,7 @@ STRATEGY_DEFAULT {
         DefenseMatch  0.0
         RangedMatch   0.0
         BombardMatch  0.0
-        ValueMatch    1.1
+        ValueMatch    1.1 // Maybe this has to be changed, too.
     }
 
     Bombard {
@@ -755,7 +755,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.8
+        ValueMatch    0.5
     }
 
     Harass {
@@ -763,7 +763,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.6
+        ValueMatch    0.6
     }
 }
 
@@ -857,7 +857,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.5
     }
 
     Harass {
@@ -865,7 +865,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 }
 
@@ -1479,7 +1479,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.8
         BombardMatch  0.0
-        ValueMatch    1.7
+        ValueMatch    0.4
     }
 
     Defensive {
@@ -1495,7 +1495,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 
     StealthAttack {
@@ -1943,7 +1943,7 @@ STRATEGY_MILITARIST_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.7
         BombardMatch  0.0
-        ValueMatch    1.7
+        ValueMatch    0.4
     }
 
     Defensive {
@@ -1959,7 +1959,7 @@ STRATEGY_MILITARIST_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 
     StealthAttack {
@@ -2415,7 +2415,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.6
+        ValueMatch    0.4
     }
 
     Defensive {
@@ -2431,7 +2431,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 
     StealthAttack {
@@ -2878,7 +2878,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.7
+        ValueMatch    0.4
     }
 
     Defensive {
@@ -2894,7 +2894,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 
     StealthAttack {
@@ -3341,7 +3341,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         DefenseMatch  0.2
         RangedMatch   0.9
         BombardMatch  0.0
-        ValueMatch    1.7
+        ValueMatch    0.4
     }
 
     Defensive {
@@ -3357,7 +3357,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    1.5
+        ValueMatch    0.6
     }
 
     StealthAttack {

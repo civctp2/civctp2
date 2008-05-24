@@ -60,7 +60,7 @@ public:
     :
         m_index     (INDEX_INVALID),
         m_textName  (NULL),
-        m_name      ()
+        m_name      (INDEX_INVALID) // StringID is an integer
     { };
 	virtual ~CTPRecord() { delete [] m_textName; }
 

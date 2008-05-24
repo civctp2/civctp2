@@ -119,75 +119,68 @@ NetCellData::Unpacketize(uint16 id, uint8* buf, uint16 size)
 void NetCellList::Packetize(uint8* buf, uint16& size)
 {
 	MapPoint* mapsize = g_theWorld->GetSize();
-	
+
 	uint8 cells = 0;
 	size = 0;
 
 	PUSHID(k_PACKET_CELL_LIST_ID);
-	
+
 	MapPoint pos(m_x, m_y);
 	PUSHLONG(g_network.PackedPos(pos));
 	PUSHBYTE(m_cells);
 
-	
-
 	int sx = m_x;
 	int sy = m_y;
-	
 
-	for(sint32 x = sx; x < mapsize->x; x++) {
-		
-		
+	for(sint32 x = sx; x < mapsize->x; x++)
+	{
 		sx = 0;
-		for(sint32 y = sy; y < mapsize->y; y++) {
+		for(sint32 y = sy; y < mapsize->y; y++)
+		{
 			sy = 0;
 			MapPoint mp(x,y);
 			Cell* cell = g_theWorld->GetCell(mp);
 			PUSHLONG(cell->m_env);
-			
+
 			uint8 terrainPlusFlags = cell->m_terrain_type;
-			if(cell->GetCity().m_id != 0) {
+			if(cell->GetCity().m_id != 0)
+			{
 				terrainPlusFlags |= 0x80;
 			}
-			
-			
-			if(cell->m_jabba) {
+
+			if(cell->m_jabba)
+			{
 				terrainPlusFlags |= 0x40;
 			}
 			PUSHBYTE(terrainPlusFlags);
 			PUSHBYTE(cell->m_cellOwner);
 			
 			PUSHLONG(cell->m_city.m_id);
-			
-			if(cell->m_jabba) {
+
+			if(cell->m_jabba)
+			{
 				PUSHBYTE((uint8)cell->m_jabba->m_typeValue);
 				PUSHSHORT((uint16)cell->m_jabba->m_value)
 				Assert(cell->m_jabba->m_value >= 0 && cell->m_jabba->m_value < k_VALUE_RANGE);
 			}
-			
+
 #ifdef SEND_MOVE_COST
-			
-			
-			
-			
 			PUSHSHORT(cell->m_move_cost);
 #endif
-			
-			sint32 i;
 			PUSHBYTE((uint8)cell->m_objects->Num());
-			for(i = 0; i < cell->m_objects->Num(); i++) {
+			for(sint32 i = 0; i < cell->m_objects->Num(); i++)
+			{
 				PUSHLONG(cell->m_objects->Access(i).m_id);
 			}
 
 			cells++;
-			if(cells >= m_cells) {
-				
+			if(cells >= m_cells)
+			{
 				return;
 			}
 		}
 	}
 }
-
 
 void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 {
