@@ -765,7 +765,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 	sint32 squared_distance = 0;
 	double eta = ctpagent_ptr->GetRoundsPrecise(dest_pos, squared_distance);
-	double cell_dist = sqrt(squared_distance);
+	double cell_dist = sqrt(static_cast<double>(squared_distance));
 
 	Utility raw_priority = Get_Raw_Priority();
 

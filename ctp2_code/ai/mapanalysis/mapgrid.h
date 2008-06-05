@@ -423,8 +423,8 @@ public:
 		std::ostringstream ost;
 		
 		for (size_t elem = 0; elem < m_values.size(); ++elem)
-		{	
-			ost.width( 3);
+		{
+			ost.width( 8);
 			ost << m_values[elem];
 			ost << " ";
 			

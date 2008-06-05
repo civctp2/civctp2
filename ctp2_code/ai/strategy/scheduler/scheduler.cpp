@@ -339,13 +339,23 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 	new_squad_iter = m_new_squads.begin();
 	while(new_squad_iter != m_new_squads.end())
 	{
-		SQUAD_CLASS new_class       = (*new_squad_iter)->Compute_Squad_Class();
-		squad_ptr_iter              = m_squads.insert(m_squads.end(), *new_squad_iter);
+		(*new_squad_iter)->Remove_Dead_Agents();
 
-		Add_New_Matches_For_Squad(squad_ptr_iter);
-		
-		m_total_agents += (*squad_ptr_iter)->Get_Num_Agents();
-		new_squad_iter  = m_new_squads.erase(new_squad_iter);
+		if ((*new_squad_iter)->Get_Num_Agents() <= 0)
+		{
+			delete (*new_squad_iter);
+		}
+		else
+		{
+			SQUAD_CLASS new_class       = (*new_squad_iter)->Compute_Squad_Class();
+			squad_ptr_iter              = m_squads.insert(m_squads.end(), *new_squad_iter);
+
+			Add_New_Matches_For_Squad(squad_ptr_iter);
+
+			m_total_agents += (*squad_ptr_iter)->Get_Num_Agents();
+		}
+
+		new_squad_iter = m_new_squads.erase(new_squad_iter);
 	}
 
 	return TIME_SLICE_DONE;

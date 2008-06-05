@@ -234,11 +234,12 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 
 	m_current_attacking_strength.Remove_Agent_Strength(agent_ptr);
 
+	Agent_List::iterator next_agent_iter;
 	for
 	(
-	    Agent_List::iterator next_agent_iter  = m_agents.begin();
-	                         next_agent_iter != m_agents.end();
-	                       ++next_agent_iter
+	      next_agent_iter  = m_agents.begin();
+	      next_agent_iter != m_agents.end();
+	    ++next_agent_iter
 	)
 	{
 		if (*agent_iter == *next_agent_iter)

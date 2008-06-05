@@ -552,10 +552,9 @@ void SelectedItem::NextUnmovedUnit(bool isFirst, bool manualNextUnit)
 		Army movedSelectedArmy;
 		MapPoint movedSelectedPos;
 
-		if(!found) {
-			
-			
-			for(i = 0; i < numArmies; i++) {
+		if(!found)
+		{
+			for(sint32 i = 0; i < numArmies; i++) {
 				if(CanAutoSelect(p->m_all_armies->Access(i))) {
 					if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY &&
 					   m_selected_army[player] == p->m_all_armies->Access(i))
