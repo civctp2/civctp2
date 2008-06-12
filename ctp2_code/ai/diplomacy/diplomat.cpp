@@ -33,7 +33,7 @@
 //   by Peter Triggs to enable some minor AI-AI-Diplomacy.
 // - Corrected bug in list insertion.
 // - Corrected non-standard syntax and some compiler warnings.
-// - Prevented invalid strategies to be merged in. 
+// - Prevented invalid strategies to be merged in.
 // - Prevented crash on number of strategies wrap-around to negative. 
 // - Add an isStealth parameter in CharacterizeArmy method - Calvitix
 // - Made Cleanup really clean up.
@@ -48,7 +48,8 @@
 // - Added war over message. (Feb 4th 2007 Martin Gühmann)
 // - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 // - Seperated the NewProposal event from the Response event so that the 
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann) 
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
+// - The player's default strategy is restored after save reloading. (13-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -537,11 +538,10 @@ void Diplomat::Load(CivArchive & archive)
 		archive.Load((uint8 *)&ai_state, sizeof(AiState));
 		m_bestStrategicStates.push_back(ai_state);
 	}
-	
-	
+
+	SetDefaultStrategy();
 	ComputeCurrentStrategy();
-	
-	
+
 	archive >> count;
 	for (i = 0; i < count; i++)
 	{
@@ -3888,15 +3888,12 @@ void Diplomat::ConsiderStrategicState( const AiState & state ) {
 		m_bestStrategicStates.pop_front();
 }
 
-
 void Diplomat::ComputeCurrentStrategy()
 {
-	
 	AiStateList::const_iterator ai_state_iter = m_bestStrategicStates.begin();
 
 	while (ai_state_iter != m_bestStrategicStates.end())
 	{
-		
 		Assert(ai_state_iter->dbIndex >= 0);
 		Assert(ai_state_iter->dbIndex < g_theStrategyDB->NumRecords());
 		if ((ai_state_iter->dbIndex < 0) ||
@@ -3909,34 +3906,33 @@ void Diplomat::ComputeCurrentStrategy()
 
 		MergeStrategy(ai_state_iter->dbIndex);
 
-		
 		++ai_state_iter;
 	}
 }
 
-
-const StrategyRecord & Diplomat::GetCurrentStrategy() const {
-      // Relaxed assert (when loading a file)
+const StrategyRecord & Diplomat::GetCurrentStrategy() const
+{
+	// Relaxed assert (when loading a file)
 	Assert(m_strategy.GetIndex() >= -1);
 	return m_strategy;
 }
 
-
-void Diplomat::SetStrategy(const sint32 index) {
+void Diplomat::SetStrategy(const sint32 index)
+{
 	const StrategyRecord *strategy = g_theStrategyDB->Get(index);
-	
-	if (strategy && strategy->GetNumInherit() > 0) {
+
+	if (strategy && strategy->GetNumInherit() > 0)
+	{
 		const StrategyRecord *inherit_strategy = strategy->GetInherit(0);
-		
+
 		SetStrategy(inherit_strategy->GetIndex());
 		m_strategy.Merge(*strategy);
 	}
-	else if(strategy) {
-		
+	else if(strategy)
+	{
 		m_strategy = *strategy;
 	}
 }
-
 
 void Diplomat::MergeStrategy(const sint32 index) {
 	const StrategyRecord *strategy = g_theStrategyDB->Get(index);
@@ -6203,3 +6199,33 @@ bool Diplomat::FirstTurnOfWar() const
 	return at_war;
 }
 
+void Diplomat::SetDefaultStrategy()
+{
+	sint32 index = GetPersonality()->GetDefaultStrategyIndex();
+	if(index < 0){
+		if (GetPersonality()->GetDiscoveryScientist()){
+			g_theStrategyDB->GetNamedItem("STRATEGY_SCIENTIST_DEFAULT", index);
+		}
+		else if(GetPersonality()->GetDiscoveryMilitary()){
+			g_theStrategyDB->GetNamedItem("STRATEGY_MILITARIST_DEFAULT", index);
+		}
+		else if(GetPersonality()->GetDiscoveryEconomic()){
+			g_theStrategyDB->GetNamedItem("STRATEGY_ECONOMIC_DEFAULT", index);
+		}
+		else if(GetPersonality()->GetDiscoveryEcotopian()){
+			g_theStrategyDB->GetNamedItem("STRATEGY_ECOTOPIAN_DEFAULT", index);
+		}
+		else if(GetPersonality()->GetDiscoveryDiplomatic()){
+			g_theStrategyDB->GetNamedItem("STRATEGY_DIPLOMATIC_DEFAULT", index);
+		}
+		else{
+			g_theStrategyDB->GetNamedItem("STRATEGY_DEFAULT", index);
+		}
+	}
+
+	SetStrategy(index);
+
+	DPRINTF(k_DBG_AI, ("Player %d initialized strategy to %s.\n",
+		GetPlayerId(),
+		g_theStrategyDB->Get(index)->GetNameText()));
+}

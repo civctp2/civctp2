@@ -27,6 +27,7 @@
 // - Marked MS version specific code.
 // - Standardised <list> import.
 // - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - The player's default strategy is restored after save reloading. (13-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -712,6 +713,8 @@ public:
 
 
 	void ClearEffectiveRegardCache();
+
+	void SetDefaultStrategy();
 
 private:
 	

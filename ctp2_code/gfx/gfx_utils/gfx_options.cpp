@@ -140,32 +140,32 @@ CellText *GraphicsOptions::GetCellText(MapPoint const &pos)
 bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text, 
 									const uint8 &colorMagnitude)
 {
-    if (!m_cellTextOn) return false;
+	if (!m_cellTextOn) return false;
 
-    CellText * cellText = GetCellText(pos);
-    if (cellText) 
-    {
-        delete [] cellText->m_text;
-        cellText->m_text = NULL;
-    }
+	CellText * cellText = GetCellText(pos);
+	if (cellText) 
+	{
+		delete [] cellText->m_text;
+		cellText->m_text = NULL;
+	}
 
-    if (text) 
-    {
-        MBCHAR * newText = new MBCHAR[strlen(text) + 1];
-        strcpy(newText, text);
+	if (text)
+	{
+		MBCHAR * newText = new MBCHAR[strlen(text) + 1];
+		strcpy(newText, text);
 
-	  if (!cellText) 
-        {
-		cellText = new CellText;
-		cellText->m_key = PackCellAVLKey(pos);
-		m_cellAVL->Insert(new Comparable<CellText *>(cellText, CellAVLCompare));
-        }
-	
-        cellText->m_text = newText;
-        cellText->m_color = colorMagnitude;
-    }
+		if (!cellText)
+		{
+			cellText = new CellText;
+			cellText->m_key = PackCellAVLKey(pos);
+			m_cellAVL->Insert(new Comparable<CellText *>(cellText, CellAVLCompare));
+		}
 
-    return true;
+		cellText->m_text = newText;
+		cellText->m_color = colorMagnitude;
+	}
+
+	return true;
 }
 
 

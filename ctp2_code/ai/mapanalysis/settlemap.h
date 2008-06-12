@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header file
 // Description  : Declarations for the SettleMap class
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -50,7 +50,7 @@ size_t const    k_targets_per_continent     = 25;
 #include "player.h"
 #include "Unit.h"
 
-class SettleMap 
+class SettleMap
 {
 public:
 	struct SettleTarget
@@ -78,7 +78,7 @@ public:
 
 	void GetSettleTargets(const PLAYER_INDEX &player, 
 	                      SettleMap::SettleTargetList & targets) const;
-	
+
 	bool CanSettlePos(const MapPoint & rc_pos) const;
 
 	void SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle);
@@ -87,7 +87,7 @@ public:
 
 private:
 	SettleMap();
-	
+
 	double ComputeSettleValue(const MapPoint & pos) const;
 
 	MapGrid<double> m_settleValues;
@@ -95,7 +95,3 @@ private:
 };
 
 #endif
-
-
-
-

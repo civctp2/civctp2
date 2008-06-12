@@ -138,8 +138,8 @@ void SettleMap::Initialize()
 		for (rc_pos.y = 0; static_cast<size_t>(rc_pos.y) < y_size; rc_pos.y++)
 		{
 			xy_pos.rc2xy(rc_pos, *g_theWorld->GetSize());
-	        
-            double value    = VALUE_NEAR_EDGE_OF_WORLD;
+
+			double value    = VALUE_NEAR_EDGE_OF_WORLD;
 
 			if ( ( g_theWorld->IsYwrap() ||
 				   ( (xy_pos.y >= k_minimum_settle_city_size) &&
@@ -158,8 +158,8 @@ void SettleMap::Initialize()
 			}
 
 			m_settleValues.AddValue(rc_pos, value);
-		} 
-	} 
+		}
+	}
 }
 
 
@@ -202,9 +202,7 @@ void SettleMap::HandleCityGrowth(const Unit & city)
 void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId, 
 								 SettleMap::SettleTargetList & targets) const
 {
-	
-	
-	BoundingRect rect =	
+	BoundingRect rect =
 		MapAnalysis::GetMapAnalysis().GetBoundingRectangle(playerId);
 
 	if (!rect.IsValid())

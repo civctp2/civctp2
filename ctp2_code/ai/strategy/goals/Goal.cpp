@@ -385,9 +385,9 @@ bool Goal::Validate() const
 
 		Assert((*agent_iter)->Get_Is_Used());
 
+		std::list<Plan_List::iterator>::const_iterator match_iter;
 		for
 		(
-		    std::list<Plan_List::iterator>::const_iterator
 		            match_iter  = m_match_references.begin();
 		            match_iter != m_match_references.end();
 		          ++match_iter

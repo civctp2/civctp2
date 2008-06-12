@@ -1692,9 +1692,10 @@ sint32 TiledMap::CalculateWrap
 		AddDirtyToMap(x, y, GetZoomTilePixelWidth(), GetZoomTileGridHeight());
 	}
 
-	
-	if (g_graphicsOptions) {
-		if (g_graphicsOptions->IsCellTextOn()) {
+	if (g_graphicsOptions)
+	{
+		if (g_graphicsOptions->IsCellTextOn())
+		{
 			CellText *cellText = g_graphicsOptions->GetCellText(pos);
 			if (cellText != NULL) 
 			{
@@ -1704,11 +1705,11 @@ sint32 TiledMap::CalculateWrap
 				COLORREF fgColor = RGB(r, g, b);
 				COLORREF bgColor = RGB(0, 0, 0);
 				
-				DrawSomeText(false, 
-							 cellText->m_text, 
-							 x + GetZoomTilePixelWidth()/2, 
+				DrawSomeText(false,
+							 cellText->m_text,
+							 x + GetZoomTilePixelWidth()/2,
 							 y + GetZoomTilePixelHeight(),
-							 bgColor, 
+							 bgColor,
 							 fgColor
 							);
 			}
@@ -1747,13 +1748,7 @@ sint32 TiledMap::CalculateWrap
 	return 0;
 }
 
-
-
-
-
-
-sint32 
-TiledMap::CalculateWrapClipped(
+sint32 TiledMap::CalculateWrapClipped(
 			aui_Surface *surface,
 			sint32 i,	
 			sint32 j	
@@ -1770,7 +1765,7 @@ TiledMap::CalculateWrapClipped(
 	MapPoint tempPos = MapPoint(maputils_TileX2MapX(j, i), i);
 
 	if (!m_localVision->IsExplored(tempPos) || !ReadyToDraw()) 
-    {
+	{
 		return 0;
 	}
 
@@ -1806,21 +1801,11 @@ TiledMap::CalculateWrapClipped(
 
 	maputils_MapXY2PixelXY(baseX,m_mapViewRect.top,&baseX,&baseY);
 
-	
-	
-	
-	
-	
-
-	
 	TileInfo *tileInfo = GetTileInfo(pos);
 	
 	if (tileInfo == NULL) 
 		return -1;
-	
-	
-	
-	
+
 	BaseTile *baseTile = m_tileSet->GetBaseTile(tileInfo->GetTileNum());
 	
 	if (baseTile == NULL) 
@@ -1835,10 +1820,10 @@ TiledMap::CalculateWrapClipped(
 		} 
 		
 		AddDirtyToMap(drawx, drawy, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
-	} 
-	else 
-	{ 
-    	sint16		river = tileInfo->GetRiverPiece();
+	}
+	else
+	{
+		sint16		river = tileInfo->GetRiverPiece();
 		
 		if (!fog) 
 		{
@@ -1872,24 +1857,14 @@ TiledMap::CalculateWrapClipped(
 			}
 		}
 
-		
 		if (g_isGridOn)
 			DrawTileBorderScaled(surface, pos, drawx, drawy, GetZoomTilePixelWidth(), GetZoomTilePixelHeight(), g_colorSet->GetColor(COLOR_BLACK));
-		
-		
+
 		AddDirtyToMap(drawx, drawy, GetZoomTilePixelWidth(), GetZoomTileGridHeight());
 	}
 
 	return 0;
 }
-
-
-
-
-
-
-
-
 
 sint32 TiledMap::DrawImprovements(aui_Surface *surface,	
 			sint32 i,	
@@ -1920,8 +1895,8 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 		numDBImprovements = 0; // Maybe has to be reconsidered
 		numImprovements = ucell.m_unseenCell->GetImprovements()->GetCount();
 		hasGoody = ucell.m_unseenCell->HasHut();
-	} 
-	else 
+	}
+	else
 	{
 		cell = g_theWorld->GetCell(pos);
 		
@@ -1934,21 +1909,18 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 		numImprovements		= cell->GetNumImprovements();
 
 		hasGoody = (g_theWorld->GetGoodyHut(pos) != NULL);
-	}	
+	}
 
-   
-   
-	
 	uint32 mask = (k_MASK_ENV_INSTALLATION | 
 					k_MASK_ENV_MINE | 
 					k_MASK_ENV_IRRIGATION |
 					k_MASK_ENV_ROAD |
 					k_MASK_ENV_CANAL_TUNNEL);
 
-	if (!(env & mask) && 
-		(numImprovements==0) && 
-		(numDBImprovements==0) && 
-		!hasGoody) 
+	if (!(env & mask) &&
+		(numImprovements==0) &&
+		(numDBImprovements==0) &&
+		!hasGoody)
 		return 0;
 
 	sint32		x, y;
@@ -1959,18 +1931,18 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 		return 0;
 	}
 	
-	if (DrawImprovementsLayer(surface, pos, x, y,clip)) 
-    {
-	    if (m_zoomLevel == k_ZOOM_LARGEST) 
-	    {
+	if (DrawImprovementsLayer(surface, pos, x, y,clip))
+	{
+		if (m_zoomLevel == k_ZOOM_LARGEST)
+		{
 			AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
 		}
-    	else 
-        {	
+		else
+		{
 			AddDirtyToMap(x, y, GetZoomTilePixelWidth(), GetZoomTileGridHeight());
 		}
-	} 
-		
+	}
+
 	return 0;
 }
 
@@ -1986,12 +1958,6 @@ void TiledMap::RetargetTileSurface(aui_Surface *surf)
 {
 	m_surface = (surf) ? surf : m_mapSurface;
 }
-
-
-
-
-
-
 
 sint32 TiledMap::RepaintTiles(RECT *repaintRect)
 {
@@ -2011,28 +1977,16 @@ sint32 TiledMap::RepaintTiles(RECT *repaintRect)
 	return 0;
 }
 
-
-
-
-
-
-
-sint32 
-TiledMap::RepaintTilesClipped(RECT *repaintRect)
+sint32 TiledMap::RepaintTilesClipped(RECT *repaintRect)
 {
 	for (sint32 i=repaintRect->top; i<=repaintRect->bottom; i++)
-	{ 
+	{
 		for (sint32 j=repaintRect->left; j<=repaintRect->right; j++) 
 			CalculateWrapClipped(NULL,i,j);
 	}
 
 	return 0;
 }
-
-
-
-
-
 
 sint32 TiledMap::RepaintImprovements(RECT *repaintRect,bool clip)
 {
@@ -2062,11 +2016,7 @@ sint32 TiledMap::CalculateHatWrap(
 {
 	maputils_WrapPoint(i,j,&i,&j);
 
-	
 	sint32 mapX = maputils_TileX2MapX(i,j);
-
-	
-
 
 	MapPoint pos(mapX, j);
 
@@ -3230,13 +3180,6 @@ sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolli
 	return 0;
 }
 
-
-
-
-
-
-
-
 void TiledMap::DrawStartingLocations(aui_Surface *surf, sint32 layer)
 {
 	if (ScenarioEditor::GetStartLocMode() == SCEN_START_LOC_MODE_NONE)
@@ -3354,111 +3297,7 @@ void TiledMap::DrawStartingLocations(aui_Surface *surf, sint32 layer)
 				AddDirtyRectToMix(clipRect);
 			}
 		}
-
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -3648,12 +3487,6 @@ sint32 TiledMap::Refresh(void)
 
 	return 0;
 }
-
-
-
-
-
-
 
 void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 {
@@ -5468,9 +5301,9 @@ void TiledMap::NextPlayer(void)
 
 void TiledMap::CopyVision()
 {
-    sint32  newPlayer   = g_selected_item->GetVisiblePlayer();	
+	sint32  newPlayer   = g_selected_item->GetVisiblePlayer();	
 	if (g_player[newPlayer]) 
-    {
+	{
 		m_localVision->Copy(g_player[newPlayer]->m_vision);
 		m_oldPlayer = newPlayer;
 	}

@@ -1752,12 +1752,13 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 	bool log_army = true;
 	bool log_goal = CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, -1);
 	MapPoint pos  = Get_Target_Pos();
-	
+
+	Agent_List::const_iterator agent_iter;
 	for
 	(
-	    Agent_List::const_iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                             ++agent_iter
+	      agent_iter  = m_agents.begin();
+	      agent_iter != m_agents.end();
+	    ++agent_iter
 	)
 	{
 		log_army = false;

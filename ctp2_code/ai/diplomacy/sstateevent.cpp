@@ -33,6 +33,7 @@
 // - Activated consideration of a defined nuclear strike strategy.
 // - added difficulty where AI ignores any citylimit because the flag causes 
 //   no unhappiness for ai
+// - Moved code of InitSStateEvent to Diplomat. (13-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -82,44 +83,15 @@
 //
 //----------------------------------------------------------------------------
 STDEHANDLER(InitSStateEvent)
-{	
+{
 	PLAYER_INDEX playerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
-//Added by Martin Gühmann to expose the 
-//default strategy to personalities.txt
-	sint32 index = diplomat.GetPersonality()->GetDefaultStrategyIndex();
-	if(index < 0){
-		if (diplomat.GetPersonality()->GetDiscoveryScientist()){
-			g_theStrategyDB->GetNamedItem("STRATEGY_SCIENTIST_DEFAULT", index);
-		}
-		else if(diplomat.GetPersonality()->GetDiscoveryMilitary()){
-			g_theStrategyDB->GetNamedItem("STRATEGY_MILITARIST_DEFAULT", index);
-		}
-		else if(diplomat.GetPersonality()->GetDiscoveryEconomic()){
-			g_theStrategyDB->GetNamedItem("STRATEGY_ECONOMIC_DEFAULT", index);
-		}
-		else if(diplomat.GetPersonality()->GetDiscoveryEcotopian()){
-			g_theStrategyDB->GetNamedItem("STRATEGY_ECOTOPIAN_DEFAULT", index);
-		}
-		else if(diplomat.GetPersonality()->GetDiscoveryDiplomatic()){
-			g_theStrategyDB->GetNamedItem("STRATEGY_DIPLOMATIC_DEFAULT", index);
-		}
-		else{
-			g_theStrategyDB->GetNamedItem("STRATEGY_DEFAULT", index);
-		}
-	}
-	
-	diplomat.SetStrategy(index);
-
-	DPRINTF(k_DBG_AI, ("Player %d initialized strategy to %s.\n",
-		playerId,
-		g_theStrategyDB->Get(index)->GetNameText()));
+	diplomat.SetDefaultStrategy();
 
 	return GEV_HD_Continue;
 }

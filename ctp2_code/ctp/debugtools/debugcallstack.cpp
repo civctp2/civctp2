@@ -66,7 +66,7 @@ void Debug_FunctionNameInit (void);
 int Debug_FunctionNameOpen (char *map_file_name);
 
 
-BOOL CALLBACK	Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
+BOOL CALLBACK	Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
 BOOL CALLBACK	Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext);
 int				Debug_FunctionNameOpenFromPDB(void);
 
@@ -380,7 +380,7 @@ static HANDLE	hProc,
 
 
 
-BOOL CALLBACK Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, 
+BOOL CALLBACK Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, 
 								ULONG symbolSize, PVOID userContext)
 {
 	
