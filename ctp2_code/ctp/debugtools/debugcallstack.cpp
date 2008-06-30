@@ -66,7 +66,12 @@ void Debug_FunctionNameInit (void);
 int Debug_FunctionNameOpen (char *map_file_name);
 
 
+#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
 BOOL CALLBACK	Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
+#else
+BOOL CALLBACK	Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
+#endif
+
 BOOL CALLBACK	Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext);
 int				Debug_FunctionNameOpenFromPDB(void);
 
@@ -378,12 +383,18 @@ static HANDLE	hProc,
 
 
 
-
-
-BOOL CALLBACK Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, 
-								ULONG symbolSize, PVOID userContext)
+BOOL CALLBACK Debug_EnumSymbolsCallback
+(
+#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
+    LPCSTR symbolName,
+#else
+    LPSTR symbolName,
+#endif
+    ULONG symbolAddress,
+    ULONG symbolSize,
+    PVOID userContext
+)
 {
-	
 	Debug_AddFunction ((char *)symbolName, (unsigned)symbolAddress);
 
 	return TRUE;

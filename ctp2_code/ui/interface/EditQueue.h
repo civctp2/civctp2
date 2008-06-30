@@ -25,6 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
+// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -104,6 +105,7 @@ class EditQueue {
 
 	ctp2_Button *m_addButton;
 	ctp2_Button *m_insertButton;
+	ctp2_Button *m_suggestButton;
 	ctp2_Button *m_upButton;
 	ctp2_Button *m_downButton;
 	ctp2_Button *m_removeButton;
@@ -168,6 +170,7 @@ class EditQueue {
 	
 	void InsertInQueue(EditItemInfo *info, bool insert, bool confirm = false);
 	void Add(bool insert);
+	void Suggest(bool insert);
 	void Remove();
 	void Up();
 	void Down();
@@ -181,6 +184,7 @@ class EditQueue {
 	static void Library(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void AddItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void InsertItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void SuggestItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void RemoveItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ItemUp(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ItemDown(aui_Control *control, uint32 action, uint32 data, void *cookie);

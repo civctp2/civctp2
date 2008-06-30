@@ -264,7 +264,7 @@ void Advances::UpdateCitySprites(BOOL forceUpdate)
 	}
 }
 
-void Advances::SetHasAdvance(AdvanceType advance)
+void Advances::SetHasAdvance(AdvanceType advance, const bool init)
 {
 	if (   !g_player[m_owner]       // non-existing player
 	    || m_hasAdvance[advance]    // advance already known
@@ -314,7 +314,7 @@ void Advances::SetHasAdvance(AdvanceType advance)
 
 	UpdateCitySprites(FALSE);
 
-	g_player[m_owner]->SetHasAdvance(advance);
+	g_player[m_owner]->SetHasAdvance(advance, init);
 }
 
 
@@ -450,7 +450,7 @@ void Advances::InitialAdvance(AdvanceType adv)
 	if(!g_slicEngine->CallMod(mod_CanPlayerHaveAdvance, TRUE, m_owner, adv))
 		return;
 
-	SetHasAdvance(adv);
+	SetHasAdvance(adv, true);
 
 	m_total_cost += g_theAdvanceDB->Get(adv)->GetCost();
 

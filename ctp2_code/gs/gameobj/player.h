@@ -983,7 +983,7 @@ public:
 	void ContactMade(PLAYER_INDEX with);
 	bool HasSeen(PLAYER_INDEX player);
 	bool HasContactWith(PLAYER_INDEX player);
-	void SetHasAdvance(AdvanceType advance);
+	void SetHasAdvance(AdvanceType advance, const bool init = false);
 	void GiveArmyCommand(Army &army, UNIT_COMMAND command);
 	void CheckWonderObsoletions(AdvanceType advance);
 

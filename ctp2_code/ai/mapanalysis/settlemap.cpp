@@ -27,9 +27,6 @@
 //   anything at all. This makes preprocessing and compilation slower, but
 //   should be safe.
 //
-// USE_LOGGING
-// - Enable logging when set, even when not building a debug version. 
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

@@ -2942,6 +2942,7 @@ str_ldl_EditQueueBuildings			"Edifici"
 str_ldl_EditQueueWonders			"Meraviglie"
 str_ldl_EditQueueAppend				"Accoda"
 str_ldl_EditQueueInsert				"Inserisci"
+str_ldl_EditQueueSuggest			"Suggest"
 
 str_ldl_EditQueueAttack				"At"
 str_ldl_EditQueueDefense			"Df"

@@ -1,25 +1,26 @@
 ################################################################################
 #
 #  Project      : Call To Power 2
-#  File type    : LDL layout description 
+#  File type    : LDL layout description
 #  Description  : Main ldl file
 #  Id           : $Id$
-# 
+#
 ################################################################################
-# 
+#
 #  Disclaimer
-# 
+#
 #  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
-# 
+#
 #  This material has been developed at apolyton.net by the Apolyton CtP2 
 #  Source Code Project. Contact the authors at ctp2source@apolyton.net.
-# 
+#
 ################################################################################
-# 
+#
 #  Modifications from the original Activision code:
-# 
+#
 # - Added a national manager button. - July 24th 2005 Martin Gühmann
-# 
+# - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+#
 ################################################################################
 
 eq_QueueListItem:CTP2_LIST_ITEM {
@@ -490,6 +491,14 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 			string text "str_ldl_EditQueueInsert"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON"
+		}
+		SuggestButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+			int xpix 352
+			int ypix 136
+			int widthpix 79
+			string text "str_ldl_EditQueueSuggest"
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SUGGEST_BUTTON"
 		}
 		LoadSaveButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 			int xpix 352

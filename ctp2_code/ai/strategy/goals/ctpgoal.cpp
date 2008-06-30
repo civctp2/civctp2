@@ -22,6 +22,10 @@
 // _DEBUG
 // - Generate debug version
 //
+// USE_LOGGING
+// - Enable logging when set, even when not a debug version. This is not
+//   original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -70,6 +74,7 @@
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 // - AI force matches are now based on attack, defense, ranged, land bombard,
 //   sea bombard, and air bombard. (30-Apr-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -677,7 +682,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		return Goal::BAD_UTILITY;
 	}
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	bool is_transporter = false;
 #endif
 
@@ -701,7 +706,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 		dest_pos = target_agent_ptr->Get_Pos();
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 		is_transporter = true;
 #endif
 	}
@@ -752,14 +757,14 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 		}
 	}
 
-#if defined(_DEBUG)  // Add a debug report of goal computing (raw priority and all modifiers)
+#if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_wounded = bonus;
 #endif //_DEBUG
 	
 	if ( ctpagent_ptr->Get_Army()->IsObsolete() )
 		bonus += g_theGoalDB->Get(m_goal_type)->GetObsoleteArmyBonus();
 
-#if defined(_DEBUG)  // Add a debug report of goal computing (raw priority and all modifiers)
+#if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_obsolete = bonus - report_wounded;
 #endif //_DEBUG
 
@@ -786,7 +791,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 			bonus += g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus();
 		}
 	}
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_Treaspassing = bonus - report_obsolete;
 #endif //_DEBUG
 
@@ -805,7 +810,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 			bonus += g_theGoalDB->Get(m_goal_type)->GetCanAttackBonus();
 		}
 	}
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers)
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers)
 	double report_InVisionRange  = bonus - report_Treaspassing;
 	double report_NoBarbsPresent = bonus - report_InVisionRange;
 #endif //_DEBUG
@@ -822,7 +827,7 @@ Utility CTPGoal::Compute_Matching_Value( const Agent_ptr agent ) const
 
 	Utility match = bonus + time_term + raw_priority;
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), m_goal_type, -1,
 	("\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d \n",
 	this,                                          // This goal
@@ -895,7 +900,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	                    ? strategy.GetGoalElement(m_goal_type)->GetPriority()
 	                    : 0.0;
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	double report_cell_value            = cell_value;
 	double report_cell_lastvalue        = cell_value;
 	double report_cell_threat           = 0.0;
@@ -921,7 +926,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		     maxThreat) * 
 		  g_theGoalDB->Get(m_goal_type)->GetThreatBonus() );
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 		report_cell_threat    = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
@@ -935,7 +940,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		    maxEnemyValue ) * 
 		  goal_rec->GetEnemyValueBonus() );
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 		report_cell_EnemyValue = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
@@ -949,7 +954,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		    maxAlliedValue ) * 
 		  goal_rec->GetAlliedValueBonus() );
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 		report_cell_AlliedValue = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue   = cell_value;
 #endif //_DEBUG
@@ -962,7 +967,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		    maxPower ) * 
 		goal_rec->GetPowerBonus() );
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 		report_cell_MaxPower  = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
@@ -971,7 +976,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	cell_value += sqrt(static_cast<double>
 	(MapPoint::GetSquaredDistance(target_pos, empire_center))) * goal_rec->GetDistanceToHomeBonus();
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_HomeDistance = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue    = cell_value;
 #endif //_DEBUG
@@ -982,7 +987,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		(MapPoint::GetSquaredDistance(target_pos, foreign_empire_center))) * goal_rec->GetDistanceToEnemyBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_EnemyDistance = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue     = cell_value;
 #endif //_DEBUG
@@ -992,7 +997,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetChokePointBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_Chokepoint = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
@@ -1002,7 +1007,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetUnexploredBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_Unexplored = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
@@ -1012,7 +1017,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetNotVisibleBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_NotVisible = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue  = cell_value;
 #endif //_DEBUG
@@ -1023,7 +1028,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetInHomeTerritoryBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_InHomeTerritory = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue       = cell_value;
 #endif //_DEBUG
@@ -1033,7 +1038,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetInEnemyTerritoryBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_InEnemyTerritory = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue        = cell_value;
 #endif //_DEBUG
@@ -1043,7 +1048,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 		cell_value += goal_rec->GetNoOwnerTerritoryBonus();
 	}
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	report_cell_NoOwnerTerritory = cell_value - report_cell_lastvalue;
 	report_cell_lastvalue        = cell_value;
 #endif //_DEBUG
@@ -1053,7 +1058,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	{
 		cell_value += SettleMap::s_settleMap.GetValue(target_pos);
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 		report_cell_Settle    = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue = cell_value;
 #endif //_DEBUG
@@ -1071,7 +1076,7 @@ Utility CTPGoal::Compute_Raw_Priority()
 	else if (m_raw_priority < Goal::BAD_UTILITY)
 		m_raw_priority = Goal::BAD_UTILITY;
 
-#if defined(_DEBUG) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
+#if defined(_DEBUG) || defined(USE_LOGGING) // Add a debug report of goal computing (raw priority and all modifiers) - Calvitix
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Player_Index(), this->Get_Goal_Type(), -1,
 	("\t %9x,\t%s,\t%i,\t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f\n",
 	this,
@@ -1747,7 +1752,7 @@ bool CTPGoal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & cache_pos)
 
 void CTPGoal::Log_Debug_Info(const int &log) const
 {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 
 	bool log_army = true;
 	bool log_goal = CtpAiDebug::DebugLogCheck(m_playerId, m_goal_type, -1);
@@ -1910,7 +1915,6 @@ bool CTPGoal::FollowPathToTask( CTPAgent_ptr first_army,
 		}
 		else
 		{
-			
 			city->GetCityData()->SetCurrentGarrison(new_garrison);
 			city->GetCityData()->SetCurrentGarrisonStrength(new_garrison_strength);
 		}

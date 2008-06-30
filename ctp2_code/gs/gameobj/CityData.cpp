@@ -192,6 +192,7 @@
 // - Added CityExpansion and CitySlum code
 // - The CityInfluenceChanged event is now valid after conquest that destroyed
 //   the city. (26-Jan-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 

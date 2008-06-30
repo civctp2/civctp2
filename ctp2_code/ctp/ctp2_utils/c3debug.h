@@ -26,6 +26,9 @@
 // SHOW_ASSERTS
 // - Shows asserts even if _DEBUG is not set.
 //
+// USE_LOGGING
+// - Enable logging facilities - even when not using the debug build.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,6 +36,7 @@
 // - Marked MS specific pragma
 // - Corrected include dependency.
 // - Report for !WIN32 on stderr
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -110,7 +114,7 @@ void	c3debug_ExceptionExecute(CivExceptionFunction function);
 
 void	c3debug_Assert(char const * s, char const * file, int line);
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	#define DPRINTF(mask, x) { c3debug_dprintfPrefix(mask, __FILE__, __LINE__); c3debug_dprintf x;}
 #else
 	#define DPRINTF(mask, x);

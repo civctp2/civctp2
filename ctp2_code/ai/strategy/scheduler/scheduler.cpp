@@ -23,6 +23,10 @@
 //
 // _DEBUG_SCHEDULER
 //
+// USE_LOGGING
+// - Enable logging when set, even when not a debug version. This is not
+//   original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -38,6 +42,8 @@
 // - Removed double warning disable pragma.
 // - Standardised list import.
 // - Removed unused memory reservation.
+// - New matches are now always added if a new army has been created. (30-Jun-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -468,19 +474,15 @@ bool Scheduler::Sort_Matches()
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1, ("\n"));
 	time_t t1 = GetTickCount();
 	
-#ifdef _DEBUG
 	sint32 size = m_matches.size();
-#endif _DEBUG
 
 	m_matches.sort(std::greater<Plan>());
 
-#ifdef _DEBUG
 	Assert(m_matches.size() == size);
 	if(m_matches.size() != size)
 	{
 		c3errors_ErrorDialog("List Sort Error", "You compiled the game on MSVC++ 6.0 with the \ndefault standart library, please used the fixed version in your include directories from \n\\ctp2_code\\compiler\\msvc6\\stlfixes");
 	}
-#endif _DEBUG
 
 	time_t t2 = GetTickCount();
 	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1,
@@ -513,7 +515,7 @@ bool Scheduler::Sort_Matches()
 	}
 #endif // _DEBUG_SCHEDULER
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
@@ -773,9 +775,11 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 
 	delete sorted_goal_iter->second;
 
+	bool deleteFirstPruned = (m_pruned_goals_of_type[goal_type] == sorted_goal_iter);
+
 	Scheduler::Sorted_Goal_Iter next_iter = list.erase(sorted_goal_iter);
 
-	if (m_pruned_goals_of_type[goal_type] == sorted_goal_iter)
+	if (deleteFirstPruned)
 		m_pruned_goals_of_type[goal_type] = next_iter;
 
 	return next_iter;
@@ -1397,11 +1401,9 @@ sint32 Scheduler::Add_New_Matches_For_Squad
 			                                    squad_iter,
 			                                    m_matches.end()))
 				count++;
-			else
-				break;
 		}
 	}
-	
+
 	return count;
 }
 
@@ -1535,22 +1537,22 @@ sint32 Scheduler::Rollback_Matches_For_Goal
  const Goal_ptr & goal
 )
 {
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("ROLLBACK_MATCHES_FOR_GOAL\n"));
 #endif
 
 	CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) goal;
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	AI_DPRINTF(k_DBG_SCHEDULER,  m_playerId, -1, -1, ("\t"));
 	ctpgoal_ptr->Log_Debug_Info(k_DBG_SCHEDULER);
 	AI_DPRINTF(k_DBG_SCHEDULER,  m_playerId, -1, -1, ("\n"));
-	
 #endif
-	
+
 	Squad_Strength needed_strength = 
 		ctpgoal_ptr->Get_Strength_Needed();
-#ifdef _DEBUG
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 
 		("\t\tMissing attack = %3.0f\n",needed_strength.Get_Attack()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, 

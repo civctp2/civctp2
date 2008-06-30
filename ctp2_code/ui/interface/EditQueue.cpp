@@ -39,6 +39,7 @@
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
 // - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,6 +84,7 @@
 #include "IconRecord.h"
 #include "NationalManagementDialog.h"
 #include "Globals.h"
+#include "Governor.h"
 
 static EditQueue *s_editQueue = NULL;
 
@@ -138,6 +140,7 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 
 	m_addButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AddButton");
 	m_insertButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.InsertButton");
+	m_suggestButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.SuggestButton");
 	m_removeButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.RemoveButton");
 	m_upButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.UpButton");
 	m_downButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.DownButton");
@@ -148,6 +151,7 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.AddButton", EditQueue::AddItem, NULL);
 	m_insertButton->SetActionFuncAndCookie(EditQueue::InsertItem, NULL);
+	m_suggestButton->SetActionFuncAndCookie(EditQueue::SuggestItem, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "QueueGroup.RemoveButton", EditQueue::RemoveItem, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "QueueGroup.UpButton", EditQueue::ItemUp, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "QueueGroup.DownButton", EditQueue::ItemDown, NULL);
@@ -1354,6 +1358,30 @@ void EditQueue::Add(bool insert)
 	}
 }
 
+void EditQueue::Suggest(bool insert)
+{
+	ctp2_ListBox *visList = GetVisibleItemList();
+
+	Assert(visList);
+	if(!visList)
+		return;
+
+	ctp2_ListItem *item = (ctp2_ListItem *)visList->GetSelectedItem();
+	if(!item)
+		return;
+
+	if(m_cityData)
+	{
+		sint32  cat         = 0;
+		sint32  type        = CTPRecord::INDEX_INVALID;
+		Governor::GetGovernor(m_cityData->GetOwner()).ComputeDesiredUnits();
+		Governor::GetGovernor(m_cityData->GetOwner()).ComputeNextBuildItem(m_cityData, cat, type);
+
+		EditItemInfo info(cat, type);;
+		InsertInQueue(&info, insert);
+	}
+}
+
 void EditQueue::Remove()
 {
 	if(!m_queueList)
@@ -1511,6 +1539,12 @@ void EditQueue::InsertItem(aui_Control *control, uint32 action, uint32 data, voi
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 	s_editQueue->Add(true);
+}
+
+void EditQueue::SuggestItem(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	s_editQueue->Suggest(true);
 }
 
 void EditQueue::RemoveItem(aui_Control *control, uint32 action, uint32 data, void *cookie)

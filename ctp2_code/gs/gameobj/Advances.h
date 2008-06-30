@@ -118,7 +118,7 @@ public:
 	
 	void UpdateCitySprites(BOOL forceUpdate);
 	bool HasAdvance(sint32 index) const;
-	void SetHasAdvance(AdvanceType advance);
+	void SetHasAdvance(AdvanceType advance, const bool init = false);
 
 	void GrantAdvance();
 	void GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient = FALSE);

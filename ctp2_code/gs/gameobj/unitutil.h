@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Unit utilities
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -36,6 +36,8 @@
 #ifndef __UNIT_UTIL_H__
 #define __UNIT_UTIL_H__
 
+#include "UnitRecord.h"
+
 class MapPoint;
 class SpecialAttackInfoRecord;
 class MapPoint;
@@ -56,10 +58,11 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index);
 bool unitutil_IsUnitBetterThan(sint32 type1, sint32 type2, sint32 gov);
 
-
 void unitutil_ExecuteMadLaunch(Unit & unit);
 
 sint32 unitutil_GetSmallCityMaxSize();
 sint32 unitutil_GetMaxRadius();
+
+double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrenched, const MapPoint pos, const Unit &attacker);
 
 #endif

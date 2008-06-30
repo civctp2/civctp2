@@ -322,12 +322,14 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			NewTurnCount::StartNextPlayer(false);
 			
 			g_director->NextPlayer();
-			do {
+			do
+			{
 				g_controlPanel->Idle();
 				if (g_civApp)
 					g_civApp->Process();
 
-				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
+				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
+				{
 					if (msg.message == WM_QUIT)
 						gDone = TRUE;
 
@@ -340,17 +342,20 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 					DispatchMessage(&msg);
 				}
+
 				g_letUIProcess = FALSE;
 
-			} while (((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())) &&
-				!gDone); 
-
-
-
+			}
+			while
+			     (
+			          g_selected_item != NULL
+			      &&  g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
+			      && !gDone
+			     );
 		}
 
 		return TRUE;
-    }
+	}
 #if 0
 	else if (!strcmp(s, "/A") && !g_network.IsActive()) 
     {
@@ -381,7 +386,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			g_turn->InformMessages();
 		}
 		return TRUE;
-	} 
+	}
 #endif
 
 	// Sets the whole world for all players unexplored

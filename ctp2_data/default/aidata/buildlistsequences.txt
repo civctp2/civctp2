@@ -1,3 +1,27 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The build list sequesnces for the AIs and mayors
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Minor build order modifications.
+#
+#----------------------------------------------------------------------------
+
 # 7
 
 BUILD_LIST_SEQUENCE_PRODUCTION {
@@ -235,8 +259,8 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
-  BuildListElement { Freight }
   BuildListElement { AllUnitBuildList }
+  BuildListElement { Freight }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
@@ -268,9 +292,9 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
 // the same build list sequence are not allowed.
 BUILD_LIST_SEQUENCE_DEFAULT {
   BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { Freight }
-  BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }

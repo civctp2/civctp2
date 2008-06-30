@@ -49,6 +49,8 @@
 #include "player.h"
 #include "AICause.h"
 #include "FeatTracker.h"
+#include "buildingutil.h"
+#include "terrainutil.h"
 
 static sint32 s_maxDefenseRange;
 static sint32 s_maxVisionRange;
@@ -360,4 +362,75 @@ bool unitutil_IsUnitBetterThan(sint32 type1, sint32 type2, sint32 gov)
 	}
 
 	return false;
+}
+
+double unitutil_GetPositionDefense(const UnitRecord * rec, const bool isEntrenched, const MapPoint pos, const Unit &attacker)
+{
+	if (g_theWorld->IsWater(pos) && 
+	    !(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())
+	   )
+	{
+		return 1.0;
+	}
+
+	Cell *          cell    = g_theWorld->GetCell(pos);
+	double const    basedef = rec->GetDefense();
+	double          def     = basedef;
+
+	if(cell->GetCity().m_id != (0))
+	{
+		const CityData *cityData = 
+			cell->GetCity().GetData()->GetCityData();
+		Assert(cityData);
+		def += cityData->GetDefendersBonus();
+
+		if (cityData->HasCityWalls() && attacker.IsValid())
+		{
+			if(g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner()) > 0)
+			{
+				def += buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings());
+			}
+//			double deductwall;
+//			deductwall = myRec->GetReducesDefensesBonus();
+//			if(deductwall)
+//			{
+//				def -= deductwall;
+//			}
+		}
+	}
+
+//	if(Flag(k_UDF_IS_ENTRENCHED))
+	if(isEntrenched)
+	{
+		def += basedef * g_theConstDB->Get(0)->GetEntrenchmentBonus();
+	}
+
+	double terrain_bonus = 0.0;
+	double fort_bonus = 0.0;
+	terrainutil_GetDefenseBonus(pos, terrain_bonus, fort_bonus);
+
+	def += (basedef * fort_bonus);
+
+	
+	if(terrain_bonus > 0 && 
+		(rec->GetMovementTypeLand() && g_theWorld->IsLand(pos)) ||
+		(rec->GetMovementTypeMountain() && g_theWorld->IsMountain(pos)) ||
+		(rec->GetMovementTypeSea() && g_theWorld->IsWater(pos)) ||
+		(rec->GetMovementTypeSpace() && g_theWorld->IsSpace(pos))) 
+	{
+		def += basedef * terrain_bonus;
+	}
+
+	// Added for Leaders to double defense - EMOD 6-6-2007
+	for (sint32 i = 0; i < cell->GetNumUnits(); i++)
+	{
+		if(cell->AccessUnit(i).GetDBRec()->GetLeader())
+		{
+			def += def;
+			break; // Only double for one leader not more
+			//def += LEADERBONUS? UnitDB or ConstDB?
+		}
+	}
+
+	return def;
 }

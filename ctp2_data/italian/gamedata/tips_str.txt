@@ -601,6 +601,8 @@ STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON			"Clicca qui per accedere alla Grande Bibl
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON			"Passa alla Grande Biblioteca"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON			"Clicca qui per inserire questa coda di produzione in quelle di tutte le città selezionate."
 TOOLTIP_CITYMAN_MAIN_INSERT_BUTTON			"Inserisce la coda di produzione"
+STATUSBAR_CITYMAN_MAIN_SUGGEST_BUTTON			"Click here to add a build item suggested by the city advisor."
+TOOLTIP_CITYMAN_MAIN_SUGGEST_BUTTON			"Add suggested build item"
 STATUSBAR_CITYMAN_MAIN_APPEND_BUTTON			"Clicca qui per aggiungere questa coda di produzione in fondo a quelle di tutte le città selezionate."
 TOOLTIP_CITYMAN_MAIN_APPEND_BUTTON			"Aggiunge la coda di produzione"
 STATUSBAR_CITYMAN_MAIN_OVERWRITE_BUTTON			"Clicca qui per sostituire con questa coda di produzione tutte quelle attuali."

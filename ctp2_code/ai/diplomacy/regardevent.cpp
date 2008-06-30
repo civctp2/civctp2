@@ -27,10 +27,6 @@
 //   anything at all. This makes preprocessing and compilation slower, but
 //   should be safe.
 //
-// USE_LOGGING
-// - Enable logging when set, even when not a debug version. This is not
-//   original Activision code.
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -68,9 +64,6 @@
 #include "SlicObject.h"
 #include "SlicEngine.h"
 
-
-
-
 STDEHANDLER(KillUnitRegardEvent)
 {
 	Unit u;
@@ -107,8 +100,8 @@ STDEHANDLER(KillUnitRegardEvent)
 	bool not_at_war = (AgreementMatrix::s_agreements.TurnsAtWar(killer, u.GetOwner()) < 1);
 
 	if (u.GetDBRec()->GetCivilian()) 
-    {
-    	sint32 cost;
+	{
+		sint32 cost;
 
 		if (not_at_war
 		&& army.Num() == 1
@@ -140,7 +133,6 @@ STDEHANDLER(KillUnitRegardEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(BorderIncursionRegardEvent)
 {
 	sint32 army_owner;
@@ -153,8 +145,6 @@ STDEHANDLER(BorderIncursionRegardEvent)
 
 	Diplomat & owner_diplomat = Diplomat::GetDiplomat(border_owner);
 
-	
-	
 	sint32 turns_since_withdraw_troops_agreement = 	AgreementMatrix::s_agreements.
 		GetAgreementDuration(border_owner, army_owner,PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 	if ((turns_since_withdraw_troops_agreement >= 20) && 
@@ -171,8 +161,6 @@ STDEHANDLER(BorderIncursionRegardEvent)
 
 		owner_diplomat.SetBorderIncursionBy(army_owner);
 
-		
-		
 		owner_diplomat.LogViolationEvent(army_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 	}
 
@@ -192,7 +180,6 @@ STDEHANDLER(InvaderMovementRegardEvent)
 	sint32 new_cell_owner = g_theWorld->GetCell(to)->GetOwner();
 	sint32 army_owner = a->GetOwner();
 
-	
 	if (old_cell_owner == -1 ||
 		new_cell_owner == -1 ||
 		old_cell_owner == army_owner ||
@@ -209,7 +196,6 @@ STDEHANDLER(InvaderMovementRegardEvent)
 		!g_player[new_cell_owner]->HasContactWith(army_owner))
 		return GEV_HD_Continue;
 
-	
 	if (AgreementMatrix::s_agreements.HasAgreement(new_cell_owner, army_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS))
 	{
 		ai::Agreement agreement =
@@ -218,7 +204,6 @@ STDEHANDLER(InvaderMovementRegardEvent)
 			return GEV_HD_Continue;
 	}
 
-	
 	if (!a->PlayerCanSee(new_cell_owner) || a->IsCivilian() )
 		return GEV_HD_Continue;
 
@@ -234,9 +219,6 @@ STDEHANDLER(InvaderMovementRegardEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
 STDEHANDLER(BattleAftermathRegardEvent)
 {
 	Army army;
@@ -246,7 +228,6 @@ STDEHANDLER(BattleAftermathRegardEvent)
 	Unit td;
 	sint32 attack_owner, defense_owner;
 
-	
 	args->GetArmy(0, army);
 
 	if(!args->GetPos(0, pos))
@@ -261,18 +242,8 @@ STDEHANDLER(BattleAftermathRegardEvent)
 	if(!args->GetPlayer(1, defense_owner))
 		return GEV_HD_Continue;
 
-
-// out commented and put into armydata::fight	
-//		Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
-//		defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
-
-
 	return GEV_HD_Continue;
 }
-
-
-
-
 
 STDEHANDLER(StopPiracyRegardEvent)
 {
@@ -294,17 +265,14 @@ STDEHANDLER(StopPiracyRegardEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(NeighborHatredRegardEvent)
 {
 	PLAYER_INDEX playerId;
 	PLAYER_INDEX foreignerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	
 	if (playerId == 0)
 		return GEV_HD_Continue;
 
@@ -316,11 +284,9 @@ STDEHANDLER(NeighborHatredRegardEvent)
 
 	for (foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		
 		if (foreignerId == playerId)
 			continue;
 
-		
 		if (g_player[foreignerId] == NULL ||
 			g_player[foreignerId]->HasContactWith(playerId) == FALSE)
 			continue;
@@ -328,48 +294,40 @@ STDEHANDLER(NeighborHatredRegardEvent)
 		if (g_player[playerId]->HasContactWith(foreignerId) == FALSE)
 			continue;
 
-		
 		if (MapAnalysis::GetMapAnalysis().ShareContinent(playerId, foreignerId) == false)
 			continue;
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
 			continue;
 
-		
 		if (AgreementMatrix::s_agreements.
 				HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) ||
 			AgreementMatrix::s_agreements.
 				HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT))
 			continue;
 
-		
-		
 		sint32 cost;
 		diplomat.GetCurrentDiplomacy(foreignerId).GetShareContinentRegardCost(cost);
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_PEACE))
 		{
 			cost /= 2;
 		}
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_TRADE_PACT))
 		{
 			cost /= 2;
 		}
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_RESEARCH_PACT))
 		{
 			cost /= 2;
 		}
-		
+
 		StringId strId;
 		g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_SHARES_CONTINENT", strId);
 		diplomat.LogRegardEvent( foreignerId,
@@ -381,7 +339,6 @@ STDEHANDLER(NeighborHatredRegardEvent)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(CaptureCityRegardEvent)
 {

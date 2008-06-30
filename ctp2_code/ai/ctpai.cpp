@@ -21,6 +21,10 @@
 // _DEBUG
 // - Generate debug version when set.
 //
+// USE_LOGGING
+// - Enable logging when set, even when not a debug version. This is not
+//   original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -61,6 +65,8 @@
 //   units and not afterwards. (3-Feb-2008 Martin Gühmann)
 // - Corrected unit garrison calculation for slave guarding. (8-Feb-2008 Martin Gühmann)
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
+// - The AI can settle more than one city per round. (30-Jun-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -201,9 +207,9 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 	for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
 		if (foreignerId != city.GetOwner())
-        {
-    		CtpAi::AddForeignerGoalsForCity(city, foreignerId);
-        }
+		{
+			CtpAi::AddForeignerGoalsForCity(city, foreignerId);
+		}
 	}
 	CtpAi::AddOwnerGoalsForCity(city, city.GetOwner());
 
@@ -211,7 +217,6 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 
 	return GEV_HD_Continue;
 }
-
 
 void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 {
@@ -224,10 +229,10 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 			continue;
 		
 		
-		if ( g_theGoalDB->Get(goal_type)->GetTargetTypeCity() ||
-			g_theGoalDB->Get(goal_type)->GetTargetTypeTradeRoute() ||
-			g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
-               )
+		if(   g_theGoalDB->Get(goal_type)->GetTargetTypeCity()
+		   || g_theGoalDB->Get(goal_type)->GetTargetTypeTradeRoute()
+		   || g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
+		  )
 		{
 			CTPGoal * goal_ptr = new CTPGoal;
 			goal_ptr->Set_Type(goal_type);
@@ -238,7 +243,6 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 		}
 	}
 }
-
 
 void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreignerId)
 {
@@ -269,13 +273,15 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 
 STDEHANDLER(CtpAi_SettleEvent)
 {
+	// So the AI shouldn't settle to cities on the same turn? What's that?
 	Army army;
 	if (!args->GetArmy(0, army))
 		return GEV_HD_Continue;
 
+#if 0
 	PLAYER_INDEX const  owner       = army->GetOwner();
 	Player *            player_ptr  = g_player[owner];
-	Assert(player_ptr != NULL);	
+	Assert(player_ptr != NULL);
 
 	static sint32 last_settle = NewTurnCount::GetCurrentRound();
 	static sint32 last_player = PLAYER_UNASSIGNED;
@@ -297,11 +303,9 @@ STDEHANDLER(CtpAi_SettleEvent)
 
 	last_settle = NewTurnCount::GetCurrentRound();
 	last_player = owner;
-
+#endif
 	return GEV_HD_Continue;
 }
-
-
 
 STDEHANDLER(CtpAi_GrowCityEvent)
 {
@@ -313,7 +317,6 @@ STDEHANDLER(CtpAi_GrowCityEvent)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(CtpAi_KillCityEvent)
 {
@@ -364,7 +367,6 @@ STDEHANDLER(CtpAi_KillCityEvent)
 	return GEV_HD_Continue;
 }
 
-	
 STDEHANDLER(CtpAi_NukeCityUnit)
 {
 	Unit unit;
@@ -384,10 +386,8 @@ STDEHANDLER(CtpAi_NukeCityUnit)
 		city->GetCityData()->GetPop(population);
 	}
 
-	
 	if (population <= 0)
-	{	
-		
+	{
 		SettleMap::s_settleMap.SetCanSettlePos(city.RetPos(), true);
 		
 		for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
@@ -543,9 +543,7 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 			}
 		}
 	}
-
 }
-
 
 STDEHANDLER(CtpAi_StartNegotiationsEvent)
 {
@@ -570,10 +568,6 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 		return GEV_HD_Continue;
 	}
 
-	
-
-	
-	
 	if(
 	   (  g_turn->IsHotSeat()
 	||    g_turn->IsEmail()
@@ -592,13 +586,12 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 		}
 	}
 
-	
 	bool found = Diplomat::GetDiplomat(playerId).StartNegotiations();
-	
+
 	if(!found)
 	{
-		
-		if(!g_network.IsClient()) {
+		if(!g_network.IsClient())
+		{
 			g_director->AddBeginScheduler(playerId);
 		}
 	}
@@ -607,9 +600,6 @@ STDEHANDLER(CtpAi_StartNegotiationsEvent)
 
 	return GEV_HD_Continue;
 }
-
-
-
 
 STDEHANDLER(CtpAi_ConsiderNuclearWar)
 {
@@ -640,7 +630,6 @@ STDEHANDLER(CtpAi_ConsiderNuclearWar)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(CtpAi_BeginSchedulerEvent)
 {
 	PLAYER_INDEX playerId;
@@ -658,7 +647,6 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	}
 #endif
 
-	
 	time_t  t1 = GetTickCount();
 	DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 	DPRINTF(k_DBG_AI, ("// PROCESS SQUAD CHANGES -- Turn %d\n", round));
@@ -689,7 +677,6 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 	Scheduler::GetScheduler(playerId).Sort_Matches();
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-	
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ProcessMatches,
 						   GEA_Player, playerId,
 						   GEA_Int, 0, 
@@ -697,7 +684,6 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(CtpAi_ProcessMatchesEvent)
 {
@@ -734,8 +720,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-	
-	
 	cycle++;
 	sint32 diff_cycles = 0;
 	if (g_theGameSettings->GetDifficulty() == (g_theDifficultyDB->NumRecords() - 1))
@@ -785,7 +769,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 			}
 		}
 
-		
 		if (playerId != NewTurnCount::GetStopPlayer())
 		{
 			Assert(playerId == g_selected_item->GetCurPlayer());
@@ -804,7 +787,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(CtpAi_TransportLoaded)
 {
 	GameEventArgument *armyArg = args->GetArg(GEA_Army, 0);
@@ -822,7 +804,6 @@ STDEHANDLER(CtpAi_TransportLoaded)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(CtpAi_ImprovementComplete)
 {
@@ -849,8 +830,8 @@ STDEHANDLER(CtpAi_ImprovementComplete)
 
 			for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++) 
 			{
-		        StrategyRecord::GoalElement const *
-                                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
+				StrategyRecord::GoalElement const *
+				                    goal_element_ptr    = strategy.GetGoalElement(goal_element);
 				sint32              goal_type           = goal_element_ptr->GetGoalIndex();
 				GoalRecord const *  goal_rec            = g_theGoalDB->Get(goal_type);
 					
@@ -876,16 +857,8 @@ STDEHANDLER(CtpAi_ImprovementComplete)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
 void CtpAi::InitializeEvents()
 {
-	
-	
 	RegardEventCallbacks::AddCallbacks();
 	ReactEventCallbacks::AddCallbacks();
 	ProposalResponseEventCallbacks::AddCallbacks(); 
@@ -897,8 +870,7 @@ void CtpAi::InitializeEvents()
 	ResponseEventCallbacks::AddCallbacks();
 	StrategicStateEventCallbacks::AddCallbacks();
 	DiplomaticStateEventCallbacks::AddCallbacks();
-	
-	
+
 	ArmyData::AssociateEventsWithOrdersDB();
 	
 	
@@ -971,7 +943,6 @@ void CtpAi::CleanupEvents()
 	ArmyData::DisassociateEventsFromOrdersDB();
 }
 
-
 void CtpAi::Cleanup()
 {
 	SettleMap::s_settleMap.Cleanup();
@@ -981,7 +952,6 @@ void CtpAi::Cleanup()
 	MapAnalysis::GetMapAnalysis().Cleanup();
 	AgreementMatrix::Cleanup();
 }
-
 
 void CtpAi::Initialize()
 {
@@ -1052,32 +1022,25 @@ void CtpAi::Initialize()
 	sm_endgameWorldUnionIndex =
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_WORLD_UNION");
 
-	
-#ifdef _DEBUG
+#if defined (_DEBUG) || defined(USE_LOGGING)
 	CellUnitList unit_list;
-	
-	CtpAiDebug::SetDebugPlayer(2);
+
+	CtpAiDebug::SetDebugPlayer(8);
 	CtpAiDebug::SetDebugGoalType(-1);
 	CtpAiDebug::SetDebugArmies(unit_list);
 #endif
-
 }
-
 
 void CtpAi::Load(CivArchive & archive)
 {
-	
 	Initialize();
 
-	
-	
-	
 	Diplomat::LoadAll(archive);
 
 	
 	g_theWorld->ComputeGoodsValues();
 
-	for (PLAYER_INDEX playerId=0; playerId < s_maxPlayers; playerId++)
+	for (PLAYER_INDEX playerId = 0; playerId < s_maxPlayers; playerId++)
 	{
 		Player *    player_ptr  = g_player[playerId];
 		if (player_ptr == NULL)
@@ -1092,9 +1055,9 @@ void CtpAi::Load(CivArchive & archive)
 			for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 			{
 				if (foreignerId != city.GetOwner())
-                        {
-       				AddForeignerGoalsForCity(city, foreignerId);
-                        }
+				{
+					AddForeignerGoalsForCity(city, foreignerId);
+				}
 			}
 			AddOwnerGoalsForCity(city, city.GetOwner());
 
@@ -1116,12 +1079,10 @@ void CtpAi::Load(CivArchive & archive)
 	MapAnalysis::GetMapAnalysis().BeginTurn();
 }
 
-
 void CtpAi::Save(CivArchive & archive)
 {
 	Diplomat::SaveAll(archive);
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -1143,7 +1104,7 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	Assert(deadPlayerId < s_maxPlayers);
 
 	Scheduler::GetScheduler(deadPlayerId).Cleanup();
-    Governor::GetGovernor(deadPlayerId) = Governor::INVALID;
+	Governor::GetGovernor(deadPlayerId) = Governor::INVALID;
 
 	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
@@ -1154,10 +1115,10 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
 	
 	if (deadPlayerId + 1 >= s_maxPlayers)
-    {
-        // Last player in array
+	{
+		// Last player in array
 		Resize();
-    }
+	}
 }
 
 
@@ -1166,9 +1127,9 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 	Assert(g_player[newPlayerId]);
 	
 	if (newPlayerId >= s_maxPlayers)
-    {
+	{
 		Resize();
-    }
+	}
 
 	Diplomat::GetDiplomat(newPlayerId).Initialize();
 	Diplomat::GetDiplomat(newPlayerId).InitStrategicState();
@@ -1178,11 +1139,6 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 		Diplomat::GetDiplomat(player).InitForeigner(newPlayerId);
 	}
 }
-
-
-
-
-
 
 void CtpAi::BeginTurn(const PLAYER_INDEX player) 
 {
@@ -1274,7 +1230,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	// Road computation round now a constant 
 	if (round % PERIOD_COMPUTE_ROADS == 0)
 	{
-		
 		t1 = GetTickCount();
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE ROAD PRIORITIES -- Turn %d\n", round));
@@ -1285,7 +1240,6 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	}
 
-	
 	GaiaController *gaia_controller = player_ptr->GetGaiaController();
 	if (player_ptr->IsRobot() &&
 		gaia_controller && gaia_controller->CanBuildTowers(false))
@@ -1500,16 +1454,16 @@ void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 
 		MapPoint	pos(city.RetPos());
 		g_theWorld->GetArmy(pos, garrison);
-       
+
 		for (sint32 j = 0; j < garrison.Num(); ++j)
-        {
+		{
 			//there is a problem to determine if units are in garrison or just pathing through the city
 			// If fear it will also ungroup all the units of the tile (garrison points on a cellunitlist that
 			// cannot know which units is group tu another.
 			// Don't really affect the game, as units with a real goal and rallyrfirst will regroup them to continue... (I hope...) - Calvitix
 			Unit const &	candidate	= garrison[j];
 
-            if (candidate.IsValid())
+			if (candidate.IsValid())
 			{
 				Army const &	candidateArmy	= candidate.GetArmy();
 				
@@ -1523,8 +1477,8 @@ void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 										   GEA_End
 										  );
 				}
-        	}
-        } // for j
+			}
+		} // for j
 	} // for i
 }
 
@@ -1602,7 +1556,6 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 	}
 }
 
-
 void CtpAi::FinishBeginTurn(const PLAYER_INDEX player) 
 {
 	Assert(player < s_maxPlayers);
@@ -1622,12 +1575,12 @@ void CtpAi::FinishBeginTurn(const PLAYER_INDEX player)
 	{
 		CtpAi::MakeRoomForNewUnits(player);
 #if 0
-	   // No idea if this should be done like this, 
-	   // transport can also move out sleeping units
-       // to execute the new action :
-       CtpAi::MoveOutofCityTransportUnits(player);
+		// No idea if this should be done like this, 
+		// transport can also move out sleeping units
+		// to execute the new action :
+		CtpAi::MoveOutofCityTransportUnits(player);
 
-       CtpAi::UnGroupGarrisonUnits(player);
+		CtpAi::UnGroupGarrisonUnits(player);
 #endif
 	}
 	

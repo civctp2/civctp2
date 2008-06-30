@@ -24,6 +24,10 @@
 // _DEBUG_SCHEDULER
 //  Perform some extra consistency checks.
 //
+// USE_LOGGING
+// - Enable logging when set, even when not a debug version. This is not
+//   original Activision code.
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -72,6 +76,7 @@
 // - Deferred some derefences until used (hopefully preventing crashes).
 // - Restored old plan sorting and added a bonus for goals which may need many
 //   units. (25-Jan-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -504,7 +509,7 @@ sint32 Plan::Commit_Agents()
 	}
 #endif // _DEBUG_SCHEDULER
 
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	bool debug_plan;
 	if (CtpAiDebug::IsDebugGoalTypeSet())
 	{

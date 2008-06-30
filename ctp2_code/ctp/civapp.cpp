@@ -2512,11 +2512,13 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 		{
 			used_milliseconds = Os::GetTicks() - start_time_ms;
 
-			if (g_runInBackground) {
-				if (m_gameLoaded) {
-					
-					
-					if (g_director) {
+			if(g_runInBackground
+			|| g_theProfileDB->GetValueByName("RunInBackground")
+			){
+				if (m_gameLoaded)
+				{
+					if (g_director)
+					{
 						g_director->GarbageCollectItems();
 						g_director->Process();
 					}
@@ -2598,7 +2600,10 @@ sint32 CivApp::ProcessAI()
 		return 0;
 
 	if (g_c3ui->TheMouse()) {
-		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground) {
+		if( g_c3ui->TheMouse()->IsSuspended()
+		&& !g_runInBackground
+		&& !g_theProfileDB->GetValueByName("RunInBackground")
+		){
 			return 0;
 		}
 	}
@@ -2619,7 +2624,7 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 	
 	if (g_c3ui->TheMouse()) 
 	{
-		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground) 
+		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground && !g_theProfileDB->GetValueByName("RunInBackground"))
 		{
 			// Probably there was something here.
 		}

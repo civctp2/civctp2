@@ -334,6 +334,11 @@ public:
 
 	
 	void ManageGoodsTradeRoutes();
+	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type) const
+	{
+		sint32 list_num = BUILD_UNIT_LIST_MAX;
+		ComputeNextBuildItem(city, cat, type, list_num);
+	};
 
 private:
 	
@@ -355,6 +360,7 @@ private:
 		sint16 m_desiredCount;
 		sint16 m_maximumCount;
 		sint16 m_garrisonCount;
+		sint16 m_maximumGarrisonCount;
 		sint16 m_perCityGarrison;
 	};
 
@@ -392,10 +398,10 @@ private:
 		                          slider_tests.m_gold,
 		                          slider_tests.m_food);
 	}
-	
+
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;
 
-	
+
 	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice) const;
 
 	
@@ -474,7 +480,8 @@ private:
 	void GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const;
 
 	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;
-	
+	double MaxiumGarrisonDefence(const MapPoint & pos) const;
+
 	
 	PLAYER_INDEX m_playerId;
 

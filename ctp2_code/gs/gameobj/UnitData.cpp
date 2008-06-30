@@ -3347,75 +3347,7 @@ bool UnitData::SafeFromNukes() const
 // see also UnitData::GetDefense below, which builds on this.
 double UnitData::GetPositionDefense(const Unit &attacker) const
 {
-	const UnitRecord *myRec = GetDBRec();
-
-	if (g_theWorld->IsWater(m_pos) && 
-	    !(myRec->GetMovementTypeSea() || myRec->GetMovementTypeShallowWater())
-	   )
-	{
-		return 1.0;
-	}
-
-	Cell *          cell    = g_theWorld->GetCell(m_pos);
-	double const    basedef = myRec->GetDefense();
-	double          def     = basedef;
-
-	if(cell->GetCity().m_id != (0))
-	{
-		const CityData *cityData = 
-			cell->GetCity().GetData()->m_city_data;
-		Assert(cityData);
-		def += cityData->GetDefendersBonus();
-
-		double wallval,walldef;
-		if (cityData->HasCityWalls() && attacker.IsValid())
-		{
-			wallval=g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attacker.GetOwner());
-			if(wallval)
-			{
-				walldef=buildingutil_GetCityWallsDefense(cityData->GetEffectiveBuildings());
-				def=(def+wallval);
-			}
-//			double deductwall;
-//			deductwall = myRec->GetReducesDefensesBonus();
-//			if(deductwall)
-//			{
-//				def -= deductwall;
-//			}
-		}
-	}
-
-	if(Flag(k_UDF_IS_ENTRENCHED))
-	{
-		def += basedef * g_theConstDB->Get(0)->GetEntrenchmentBonus();
-	}
-
-	double terrain_bonus = 0.0;
-	double fort_bonus = 0.0;
-	terrainutil_GetDefenseBonus(m_pos, terrain_bonus, fort_bonus);
-
-	def += (basedef * fort_bonus);
-
-	
-	if(terrain_bonus > 0 && 
-		(myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
-		(myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
-		(myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
-		(myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos))) 
-	{
-		def += basedef * terrain_bonus;
-	}
-
-	// Added for Leaders to double defense - EMOD 6-6-2007
-	for (sint32 i = 0; i < cell->GetNumUnits(); i++)
-	{
-		if(cell->AccessUnit(i).GetDBRec()->GetLeader())
-		{
-			def += def;
-			//def += LEADERBONUS? UnitDB or ConstDB?
-		}
-	}
-	return def;
+	return unitutil_GetPositionDefense(GetDBRec(), Flag(k_UDF_IS_ENTRENCHED), m_pos, attacker);
 }
 
 // returns this unit's attack points when attacking Unit defender

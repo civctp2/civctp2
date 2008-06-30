@@ -601,6 +601,8 @@ STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON			"Cliquez ici pour aller à la grande bibli
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON			"Aller à la grande bibliothèque"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON			"Cliquez ici pour insérer cette liste à toutes les listes d'attente de construction des villes sélectionnées."
 TOOLTIP_CITYMAN_MAIN_INSERT_BUTTON			"Insérer liste d'attente"
+STATUSBAR_CITYMAN_MAIN_SUGGEST_BUTTON			"Click here to add a build item suggested by the city advisor."
+TOOLTIP_CITYMAN_MAIN_SUGGEST_BUTTON			"Add suggested build item"
 STATUSBAR_CITYMAN_MAIN_APPEND_BUTTON			"Cliquez ici pour joindre cette liste d'attente à la fin de toutes les listes des villes sélectionnées."
 TOOLTIP_CITYMAN_MAIN_APPEND_BUTTON			"Joindre liste d'attente"
 STATUSBAR_CITYMAN_MAIN_OVERWRITE_BUTTON			"Cliquez ici pour remplacer les listes d'attente actuelles par celle-ci."

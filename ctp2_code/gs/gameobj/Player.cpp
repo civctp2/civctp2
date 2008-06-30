@@ -3732,19 +3732,18 @@ void Player::StartResearching(sint32 adv)
 
 void Player::SetResearching(AdvanceType advance)
 {
-	uint8 * canResearch = m_advances->CanResearch();
-
 	if(!g_network.IsActive() || g_network.IsHost() || g_network.IsLocalPlayer(m_owner)) {
 		if(IsHuman() || IsNetwork() ||
 			(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 			
 			
 			
-			if(!IsRobot()) {
-				Assert(canResearch[advance]);
+			if(!IsRobot())
+			{
+				Assert(m_advances->CanResearch(advance));
 			}
-			if(!canResearch[advance]) {
-				delete [] canResearch;
+			if(!m_advances->CanResearch(advance))
+			{
 				return;
 			}
 		}
@@ -3757,7 +3756,6 @@ void Player::SetResearching(AdvanceType advance)
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_RESEARCH, m_owner, advance));
 		g_network.Unblock(m_owner);
 	}
-	delete [] canResearch;
 }
 
 void Player::AddUnitVision(const MapPoint &pnt, double range,
@@ -8012,7 +8010,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
     }
 }
 
-void Player::SetHasAdvance(AdvanceType advance)
+void Player::SetHasAdvance(AdvanceType advance, const bool init)
 {
 	sint32 i;
 	bool im_the_first = true;
@@ -8101,7 +8099,7 @@ void Player::SetHasAdvance(AdvanceType advance)
 
 	if(g_civApp->IsGameLoaded() && !ScenarioEditor::IsGivingAdvances())
 	{
-		if (GetCurRound() > 1)
+		if (GetCurRound() > 1 && !init)
 		{
 			if(!g_network.IsClient() || g_network.ReadyToStart())
 			{
@@ -8170,7 +8168,10 @@ void Player::SetHasAdvance(AdvanceType advance)
 
 	SetCityRoads();
 
-	CtpAi::SetResearch(m_owner);
+	if(!init)
+	{
+		CtpAi::SetResearch(m_owner);
+	}
 }
 
 

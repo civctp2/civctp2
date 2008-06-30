@@ -53,6 +53,7 @@
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
 //   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 // - Added version to crash.txt
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -1229,19 +1230,20 @@ void main_InitializeLogs(void)
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	c3debug_InitDebugLog();
 	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC, 1);
+//	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_AI | k_DBG_SCHEDULER, 1);
 #endif
 
 	DPRINTF(k_DBG_FIX, ("** BUILD EXE :%s\n", Os::GetExeName().c_str()));
 
 
-    HANDLE fileHandle = CreateFile(Os::GetExeName().c_str(), 
-                                   GENERIC_READ,
-							       FILE_SHARE_READ,
-							       NULL,
-							       OPEN_ALWAYS,
-							       FILE_ATTRIBUTE_NORMAL,
-							       NULL
-                                  );
+	HANDLE fileHandle = CreateFile(Os::GetExeName().c_str(), 
+	                               GENERIC_READ,
+	                               FILE_SHARE_READ,
+	                               NULL,
+	                               OPEN_ALWAYS,
+	                               FILE_ATTRIBUTE_NORMAL,
+	                               NULL
+	                              );
 	if (fileHandle != INVALID_HANDLE_VALUE) {
 	    FILETIME	crTime, laTime, lwTime;
 		if (GetFileTime( fileHandle, &crTime, &laTime, &lwTime)) {
@@ -1477,7 +1479,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	}
 
 	
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	main_InitializeLogs();
 #endif
 #if !defined(_DEBUG) && !defined(_BFR_)
@@ -1491,9 +1493,9 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	CreateDirectory((LPCTSTR)"logs", &sa);
 #endif
 
-    ParseCommandLine(szCmdLine);
+	ParseCommandLine(szCmdLine);
 
-    allocated::reassign(g_civApp, new CivApp());
+	allocated::reassign(g_civApp, new CivApp());
 
 	if (g_cmdline_load) {
 		g_civApp->InitializeApp(hInstance, iCmdShow);
@@ -1523,7 +1525,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		} else {
 			main_RestoreGame(g_cmdline_load_filename);
 		}
-    } else if (g_no_shell) {
+	} else if (g_no_shell) {
 		g_civApp->QuickInit(hInstance, iCmdShow);
 	} else if (g_launchScenario) {	
 		g_civApp->InitializeApp(hInstance, iCmdShow);
