@@ -337,7 +337,7 @@ void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size)
 	SlicNamedSymbol *sym = g_slicEngine->GetOrMakeSymbol(name);
 	if(sym) {
 		if(sym->GetType() != SLIC_SYM_UNDEFINED) {
-			sprintf("Symbol '%s' in array declaration already has a type", name);
+			sprintf(buf, "Symbol '%s' in array declaration already has a type", name);
 			yyerror(buf);
 		} else {
 			sym->SetType(SLIC_SYM_ARRAY);

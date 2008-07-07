@@ -815,7 +815,7 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(GEV_INSERT_Tail,
 								   GEV_FinishAttack,
 								   GEA_Army, army,
 								   GEA_MapPoint, newPos,

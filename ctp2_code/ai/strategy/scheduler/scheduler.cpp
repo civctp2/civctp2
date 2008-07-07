@@ -133,7 +133,7 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 void Scheduler::LoadAll(CivArchive & archive)
 {
 	DPRINTF(k_DBG_AI, ("\n\ncalling Scheduler::LoadAll\n\n"));
-	for(sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for(size_t i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Load(archive);
 	}
@@ -142,7 +142,7 @@ void Scheduler::LoadAll(CivArchive & archive)
 // no longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::SaveAll(CivArchive & archive)
 {
-	for(sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for(size_t i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Save(archive);
 	}
@@ -168,7 +168,7 @@ Scheduler & Scheduler::GetScheduler(const sint32 & playerId)
 /// not used
 void Scheduler::ValidateAll()
 {
-	for(sint32 i = 0; i < s_theSchedulers.size(); i++)
+	for(size_t i = 0; i < s_theSchedulers.size(); i++)
 	{
 		s_theSchedulers[i].Validate();
 	}
@@ -276,6 +276,11 @@ void Scheduler::Initialize()
 	m_total_agents = 0;
 	m_matches.clear();
 	m_current_plan_iter = m_matches.end();
+
+	for(size_t i = 0; i < m_goals_of_type.size(); ++i)
+	{
+		m_pruned_goals_of_type[i] = m_goals_of_type[i].end();
+	}
 }
 
 void Scheduler::SetPlayerId(const PLAYER_INDEX &player_index)
@@ -1140,7 +1145,7 @@ bool Scheduler::Prune_Goals()
 
 	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-	sint32 prune_time = 0;
+	time_t prune_time = 0;
 
 	for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
 	{
@@ -1648,7 +1653,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 	}
 
 	Plan_List tmp_list;
-	
+
 	tmp_list.splice(tmp_list.begin(), m_matches, plan_iter, m_matches.end());
 	tmp_list.sort(std::greater<Plan>());
 	

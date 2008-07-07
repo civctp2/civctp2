@@ -173,7 +173,7 @@ extern Background *     g_background;
 
 namespace Os
 {
-    extern uint32 GetTicks(void);
+	extern uint32 GetTicks(void);
 }
 
 #ifdef _BFR_
@@ -337,8 +337,8 @@ namespace Os
 		}
 #endif  // WIN32
 
-        return exeVersion.str();
-    }
+		return exeVersion.str();
+	}
 }
 
 int ui_Initialize(void)
@@ -998,9 +998,6 @@ BOOL g_launchScenario = FALSE;
 char * c3debug_ExceptionStackTraceFromFile(FILE *f);
 #endif
 
-
-
-
 void ParseCommandLine(PSTR szCmdLine)
 {
 #ifndef _BFR_
@@ -1012,70 +1009,79 @@ void ParseCommandLine(PSTR szCmdLine)
 	}
 #endif
 
-    
-    char * archive_file = strstr(szCmdLine, "-l");
+	char * archive_file = strstr(szCmdLine, "-l");
 
-    if (NULL == archive_file) {
-        g_cmdline_load = FALSE; 
-    } else { 
-        g_cmdline_load = TRUE; 
+	if (NULL == archive_file)
+	{
+		g_cmdline_load = FALSE;
+	}
+	else
+	{
+		g_cmdline_load = TRUE; 
 		g_useIntroMovie = FALSE;
 		g_no_shell = TRUE;
 
-        archive_file += 2; 
+		archive_file += 2;
 
 		BOOL gotQuote = FALSE;
-		if(*archive_file == '"') {
+		if(*archive_file == '"')
+		{
 			archive_file++;
 			gotQuote = TRUE;
 		}
 		
-        sint32 i;
+		sint32 i;
 
-        // space or end of string mark end of the file name
-        for (i=0; i<160 &&  (0 != *archive_file) && 
+		// space or end of string mark end of the file name
+		for (i=0; i<160 &&  (0 != *archive_file) && 
 				 (((!gotQuote && ' ' != *archive_file)) ||
 				  (gotQuote && '"' != *archive_file)); i++, archive_file++) { 
-           g_cmdline_load_filename[i] = *archive_file; 
-        } 
+			g_cmdline_load_filename[i] = *archive_file; 
+		}
 
-        if (160 <= i) { 
-            g_cmdline_load = FALSE;         
-        } else { 
-            g_cmdline_load_filename[i] = 0; 
-        } 
-    } 
+		if (160 <= i)
+		{
+			g_cmdline_load = FALSE;
+		}
+		else
+		{
+			g_cmdline_load_filename[i] = 0; 
+		}
+	}
 
 	
-    MBCHAR * scenName = strstr(szCmdLine, "-s");
+	MBCHAR * scenName = strstr(szCmdLine, "-s");
 
-    if (NULL != scenName) { 
+	if (NULL != scenName) { 
 		
 
 		
-        scenName += 2;
+		scenName += 2;
 
 		
-        sint32		i;
+		sint32		i;
 
-        for (i=0; i<k_SCENARIO_NAME_MAX && *scenName != '\0'; i++, scenName++) {
-           g_scenarioName[i] = *scenName;
-        } 
+		for (i=0; i<k_SCENARIO_NAME_MAX && *scenName != '\0'; i++, scenName++)
+		{
+			g_scenarioName[i] = *scenName;
+		}
 
-		
-        if (i >= k_SCENARIO_NAME_MAX) { 
-            g_launchScenario = FALSE;
-			memset(g_scenarioName, '\0', k_SCENARIO_NAME_MAX);
-        } else { 
+		if (i >= k_SCENARIO_NAME_MAX)
+		{
+			g_launchScenario = FALSE;
+			std::fill(g_scenarioName, g_scenarioName + k_SCENARIO_NAME_MAX,'\0');
+		}
+		else
+		{
 			g_launchScenario = TRUE;
 			g_scenarioName[i] = '\0';
-        } 
-    } 
+		}
+	}
 
-    g_no_timeslice = (NULL != strstr(szCmdLine, "notimeslice"));
+	g_no_timeslice = (NULL != strstr(szCmdLine, "notimeslice"));
 	if(!g_cmdline_load)
 		g_no_shell =  (NULL != strstr(szCmdLine, "noshell")); 
-    g_no_exit_action = (NULL != strstr(szCmdLine, "noexitaction")); 
+	g_no_exit_action = (NULL != strstr(szCmdLine, "noexitaction")); 
 	g_exclusiveMode = !(NULL != strstr(szCmdLine, "nonexclusive"));
 	g_hideTaskBar = (NULL != strstr(szCmdLine, "hidetaskbar"));
 	if(!g_cmdline_load)
@@ -1090,23 +1096,33 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_autoAltTab = (NULL != strstr(szCmdLine, "autoalttab"));
 
 #ifdef _DEBUG
-    if (NULL != strstr(szCmdLine, "age1")) { 
-        g_cheat_age = 1; 
-    } else if (NULL != strstr(szCmdLine, "age2")) { 
-        g_cheat_age = 2; 
-    } else if (NULL != strstr(szCmdLine, "age3")) { 
-        g_cheat_age = 3; 
-    } else if (NULL != strstr(szCmdLine, "age4")) { 
-        g_cheat_age = 4; 
-    } else if (NULL != strstr(szCmdLine, "age5")) { 
-        g_cheat_age = 5; 
-    }
+	if (NULL != strstr(szCmdLine, "age1"))
+	{
+		g_cheat_age = 1;
+	}
+	else if (NULL != strstr(szCmdLine, "age2"))
+	{
+		g_cheat_age = 2;
+	}
+	else if (NULL != strstr(szCmdLine, "age3"))
+	{
+		g_cheat_age = 3;
+	}
+	else if (NULL != strstr(szCmdLine, "age4"))
+	{
+		g_cheat_age = 4;
+	}
+	else if (NULL != strstr(szCmdLine, "age5"))
+	{
+		g_cheat_age = 5;
+	}
 #endif // _DEBUG
 
-	if (g_noAssertDialogs) {
+	if (g_noAssertDialogs)
+	{
 		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
 	}
-} 
+}
 
 int WINAPI main_filehelper_GetOS(void)
 {
@@ -1244,21 +1260,27 @@ void main_InitializeLogs(void)
 	                               FILE_ATTRIBUTE_NORMAL,
 	                               NULL
 	                              );
-	if (fileHandle != INVALID_HANDLE_VALUE) {
-	    FILETIME	crTime, laTime, lwTime;
-		if (GetFileTime( fileHandle, &crTime, &laTime, &lwTime)) {
+	if(fileHandle != INVALID_HANDLE_VALUE)
+	{
+		FILETIME	crTime, laTime, lwTime;
+		if(GetFileTime( fileHandle, &crTime, &laTime, &lwTime))
+		{
 			DPRINTF(k_DBG_FIX, ("** BUILD INFO:\n"));
-            FILETIME    creationTime;
-	        SYSTEMTIME	systemTime;
-			if (FileTimeToLocalFileTime( &crTime, &creationTime)) {
-				if (FileTimeToSystemTime(&creationTime, &systemTime)) {
+			FILETIME    creationTime;
+			SYSTEMTIME	systemTime;
+			if (FileTimeToLocalFileTime( &crTime, &creationTime))
+			{
+				if (FileTimeToSystemTime(&creationTime, &systemTime))
+				{
 					DPRINTF(k_DBG_FIX, ("**     Creation Time: %#.2d/%#.2d/%d %#.2d:%#.2d:%#.2d.%#.3d\n",
 							systemTime.wMonth, systemTime.wDay, systemTime.wYear,
 							systemTime.wHour, systemTime.wMinute, systemTime.wSecond, systemTime.wMilliseconds));
 				}
 			}
-			if (FileTimeToLocalFileTime( &lwTime, &creationTime)) {
-				if (FileTimeToSystemTime(&creationTime, &systemTime)) {
+			if (FileTimeToLocalFileTime( &lwTime, &creationTime))
+			{
+				if (FileTimeToSystemTime(&creationTime, &systemTime))
+				{
 					DPRINTF(k_DBG_FIX, ("**   Last Write Time: %#.2d/%#.2d/%d %#.2d:%#.2d:%#.2d.%#.3d\n",
 							systemTime.wMonth, systemTime.wDay, systemTime.wYear,
 							systemTime.wHour, systemTime.wMinute, systemTime.wSecond, systemTime.wMilliseconds));
@@ -1271,8 +1293,6 @@ void main_InitializeLogs(void)
 
 	DPRINTF(k_DBG_FIX, ("%s\n", timebuf));
 
-	
-
 	DPRINTF(k_DBG_FIX, ("** SYSTEM INFO:\n"));
 
 	OSVERSIONINFO		osv;
@@ -1283,7 +1303,7 @@ void main_InitializeLogs(void)
 															(osv.dwPlatformId == VER_PLATFORM_WIN32_NT) ? "NT" : "",
 															osv.dwBuildNumber,
 															osv.szCSDVersion));
-	
+
 	DWORD   cNameSize = MAX_COMPUTERNAME_LENGTH+1;
 	MBCHAR  cName[MAX_COMPUTERNAME_LENGTH+1];
 
@@ -1291,7 +1311,7 @@ void main_InitializeLogs(void)
 	{
 		DPRINTF(k_DBG_FIX, ("**     Computer Name: %s\n", cName));
 	}
-	
+
 	cNameSize = MAX_COMPUTERNAME_LENGTH+1;
 	if (GetUserName((LPTSTR)cName, &cNameSize))
 	{
@@ -1313,9 +1333,6 @@ void main_InitializeLogs(void)
 	DPRINTF(k_DBG_FIX, ("**  Direct X Version: 0x%x\n", g_dxver));
 	DPRINTF(k_DBG_FIX, ("**    Cur ScreenSize: %d x %d\n", g_ScreenWidth, g_ScreenHeight));
 }
-
-
-
 
 #if defined(__GNUC__)
 
@@ -1370,40 +1387,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 void main_DisplayPatchDisclaimer()
 {
-    bool    isDisclaimerShown   = false;
+	bool    isDisclaimerShown   = false;
 	FILE *  f                   = fopen(k_DisclaimerName, "rb");
 
-    if (f && (0 == fseek(f, 0, SEEK_END))) 
-    {
-	    long const  positionEnd = ftell(f);
+	if (f && (0 == fseek(f, 0, SEEK_END))) 
+	{
+		long const  positionEnd = ftell(f);
 
-        // Reposition at begin
-        fclose(f);
-        f = fopen(k_DisclaimerName, "rb");
+		// Reposition at begin
+		fclose(f);
+		f = fopen(k_DisclaimerName, "rb");
 
-        if (f && (positionEnd > 0)) 
-        {
-            size_t const    filesize    = static_cast<size_t>(positionEnd);
-            MBCHAR *        message     = new MBCHAR[filesize+1];
-	        size_t const    readCount   = c3files_fread
-                                            (message, sizeof(MBCHAR), filesize, f);
-            message[readCount]  = 0;
-            MessageBox(NULL, message, "Call to Power", MB_OK | MB_ICONEXCLAMATION);
-            isDisclaimerShown   = true;
-        }
-    } 
+		if (f && (positionEnd > 0))
+		{
+			size_t const    filesize    = static_cast<size_t>(positionEnd);
+			MBCHAR *        message     = new MBCHAR[filesize+1];
+			size_t const    readCount   = c3files_fread
+			                                (message, sizeof(MBCHAR), filesize, f);
+			message[readCount]  = 0;
+			MessageBox(NULL, message, "Call to Power", MB_OK | MB_ICONEXCLAMATION);
+			isDisclaimerShown   = true;
+		}
+	}
 
-    if (f)
-    {
-        fclose(f);
-    }
+	if (f)
+	{
+		fclose(f);
+	}
 
-    if (!isDisclaimerShown)
-    {
-	    c3errors_FatalDialog(appstrings_GetString(APPSTR_INITIALIZE),
-		    				 appstrings_GetString(APPSTR_CANTFINDFILE)
-                            );
-    }
+	if (!isDisclaimerShown)
+	{
+		c3errors_FatalDialog(appstrings_GetString(APPSTR_INITIALIZE),
+		                     appstrings_GetString(APPSTR_CANTFINDFILE)
+		                    );
+	}
 }
 
 #if defined(__GNUC__)
@@ -1413,7 +1430,7 @@ int CivMain
 	char *	    szCmdLine   // argv
 )
 {
-    void *      hInstance   = NULL;
+	void *      hInstance   = NULL;
 #else	// __GNUC__
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
@@ -1432,7 +1449,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	
 	char exepath[_MAX_PATH];
 	if (GetModuleFileName(NULL, exepath, _MAX_PATH) != 0) 
-    {
+	{
 		ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT,
 								".c2g",
 								NULL,
@@ -1443,7 +1460,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 								NULL, 
 								"Call to Power 2 saved game");
 
-       	char launchcommand[_MAX_PATH];
+		char launchcommand[_MAX_PATH];
 		strcpy(launchcommand, exepath);
 		strcat(launchcommand, " -l\"%1\"");
 		ctpregistry_SetKeyValue(HKEY_CLASSES_ROOT,
@@ -1582,8 +1599,6 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	return msg.wParam;
 }
 
-
-
 #if defined(_DEBUG)
 
 void DoFinalCleanup(int)
@@ -1596,11 +1611,11 @@ void DoFinalCleanup(int)
 	if (g_civApp)
 	{
 		g_civApp->QuitGame();
-        allocated::clear(g_civApp);
+		allocated::clear(g_civApp);
 	}
 
 	sliccmd_clear_symbols();
-    SlicSegment::Cleanup();
+	SlicSegment::Cleanup();
 	appstrings_Cleanup();
 
 #if defined(_DEBUGTOOLS)
@@ -1641,25 +1656,25 @@ void DoFinalCleanup(int exitCode)
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (!gDone && g_c3ui)
-    {
+	{
 		(void) g_c3ui->HandleWindowsMessage(hwnd, iMsg, wParam, lParam);
 	}
 
 	static bool swallowNextChar = false;
 
 	switch (iMsg) 
-    {
+	{
 	case WM_CHAR:
 		if (!swallowNextChar)
-        {
+		{
 			ui_HandleKeypress(wParam, lParam);
-        }
+		}
 		swallowNextChar = false;
 		break;
 		
 	case WM_KEYDOWN:
 		switch (wParam) 
-        {
+		{
 		case VK_F1:
 		case VK_F2:
 		case VK_F3:
@@ -1735,17 +1750,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_VSCROLL: 
 		{
-		    sint16 scrollCode = LOWORD(wParam);
-		    if (scrollCode == SB_LINEDOWN) 
-            {
-			    ui_HandleMouseWheel((sint16)-1);
-		    }
-		    else if (scrollCode == SB_LINEUP) 
-            {
-			    ui_HandleMouseWheel((sint16)1);
-		    }
-        }
- 		break;
+			sint16 scrollCode = LOWORD(wParam);
+			if (scrollCode == SB_LINEDOWN) 
+			{
+				ui_HandleMouseWheel((sint16)-1);
+			}
+			else if (scrollCode == SB_LINEUP) 
+			{
+				ui_HandleMouseWheel((sint16)1);
+			}
+		}
+		break;
 	case WM_MOUSEWHEEL:
 		ui_HandleMouseWheel((sint16)HIWORD(wParam));
 		break;
@@ -1757,9 +1772,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 void DisplayFrame(aui_Surface *surf)
 {
 	static double   fr_decay        = 0.85;
-    static uint32   g_old_last_tick = Os::GetTicks();
+	static uint32   g_old_last_tick = Os::GetTicks();
 
-    uint32          new_tick        = Os::GetTicks(); 
+	uint32          new_tick        = Os::GetTicks(); 
 	double          d               = double(new_tick) - double(g_old_last_tick);
 
 	g_old_last_tick = new_tick;
@@ -1772,17 +1787,12 @@ void DisplayFrame(aui_Surface *surf)
 
 	char str[80];
 	sprintf(str, "ave frame rate %4.2f/sec - ave frame time %5.1fms", 
-            g_ave_frame_rate, g_ave_frame_time
-           );
+	        g_ave_frame_rate, g_ave_frame_time
+	       );
 	primitives_DrawText(surf, 100, 100, str, 1, 0);
 }
-
-
-
 
 BOOL ExitGame(void)
 {
 	return PostMessage(gHwnd, WM_CLOSE, 0, 0);
 }
-
-
