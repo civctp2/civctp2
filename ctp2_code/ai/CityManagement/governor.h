@@ -47,6 +47,7 @@
 // - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
 // - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
 // - AIs now consider path between more than one city. (17-Jan-2008 Martin Gühmann)
+// - Corrected iterator problems (detected with _HAS_ITERATOR_DEBUGGING).
 //
 //----------------------------------------------------------------------------
 
@@ -54,8 +55,8 @@
 #pragma once
 #endif
 
-#ifndef __GOVERNOR_H__
-#define __GOVERNOR_H__
+#ifndef GOVERNOR_H_
+#define GOVERNOR_H_
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -384,11 +385,11 @@ private:
 	                        sint32 & total_food) const;
 
 	bool TestSliderSettings
-    (
-        SlidersSetting const &  sliders_setting,
-	    SliderTests &           slider_tests
-    ) const 
-    {
+	(
+		SlidersSetting const &  sliders_setting,
+		SliderTests &           slider_tests
+	) const 
+	{
 		return TestSliderSettings(sliders_setting,
 		                          slider_tests.m_productionTest,
 		                          slider_tests.m_goldTest,
@@ -447,7 +448,6 @@ private:
 	};
 
 	typedef std::vector<TiGoal> TiGoalQueue;
-	static TiGoalQueue s_tiQueue;
 
 	struct CityDist
 	{
@@ -458,6 +458,7 @@ private:
 	};
 
 	typedef std::vector<CityDist> CityDistQueue;
+	/// @todo Check whether this causes the same kind of problems as s_tiQueue did
 	static CityDistQueue s_CityDistQueue;
 
 	struct CityPair
@@ -468,6 +469,7 @@ private:
 	};
 
 	typedef std::vector<CityPair> CityPairList;
+	/// @todo Check whether this causes the same kind of problems as s_tiQueue did
 	static CityPairList s_CityPairList;
 	bool IsInCityPairList(sint32 city, sint32 neighborCity) const;
 
@@ -483,20 +485,18 @@ private:
 	double MaxiumGarrisonDefence(const MapPoint & pos) const;
 
 	
-	PLAYER_INDEX m_playerId;
-
-	
-	BuildUnitList m_buildUnitList[BUILD_UNIT_LIST_MAX];
-
-	
-	UnitCountVector m_currentUnitCount;
-
 #if defined(NEW_RESOURCE_PROCESS)
 	sint32 GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const;
 #endif
-	
-	double m_neededFreight;
+
 	const UnitRecord * GetDBUnitRec(sint32 type) const;
+
+	PLAYER_INDEX        m_playerId;
+	BuildUnitList       m_buildUnitList[BUILD_UNIT_LIST_MAX];
+	UnitCountVector     m_currentUnitCount;
+	double              m_neededFreight;
+	/// Currently considered tile improvements
+	TiGoalQueue         m_tileImprovementGoals;
 };
 
-#endif  //__GOVERNOR_H__
+#endif
