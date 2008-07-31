@@ -426,9 +426,24 @@ public:
 		return EnvIsWater(GetCell(pos)->m_env);
 	}
 
-	bool IsWater(const sint32 x, const sint32 y) const 
-	{ 
+	bool IsWater(const sint32 x, const sint32 y) const
+	{
 		return EnvIsWater(m_map[x][y]->m_env);
+	}
+
+	bool EnvIsSea(const uint32 env) const
+	{
+		return (env & (k_MASK_ENV_MOVEMENT_TYPE & (k_BIT_MOVEMENT_TYPE_WATER))) != 0;
+	}
+
+	bool IsSea(const MapPoint &pos) const
+	{
+		return EnvIsSea(GetCell(pos)->m_env);
+	}
+
+	bool IsSea(const sint32 x, const sint32 y) const
+	{
+		return EnvIsSea(m_map[x][y]->m_env);
 	}
 
 	bool EnvIsShallowWater(const uint32 env) const;

@@ -5,9 +5,7 @@ TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE {
    Gold 15
    Food 0
    Production 0
-   HappyInc 1
    Probability 0.25
-   AvailableAdvance ADVANCE_SLAVE_LABOR
    Icon ICON_GOOD_ARCTIC_MOUNTAIN_ONE
 }
 
@@ -17,10 +15,8 @@ TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO {
    Sound SOUND_ID_DIAMONDS
    Gold 20
    Food 0
-   HappyInc 1
    Production 0
    Probability 0.25
-   AvailableAdvance ADVANCE_IRON_WORKING
    Icon ICON_GOOD_ARCTIC_MOUNTAIN_TWO
 }
 
@@ -30,10 +26,8 @@ TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE {
    Sound SOUND_ID_BAUXITE
    Gold 5
    Food 0
-   Production 0
-   TradeProduction 20
+   Production 15
    Probability 0.25
-   AvailableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
    Icon ICON_GOOD_ARCTIC_MOUNTAIN_THREE
 }
 
@@ -44,7 +38,6 @@ TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR {
    Gold 15
    Food 0
    Production 0
-   HappyInc 1
    Probability 0.25
    Icon ICON_GOOD_ARCTIC_MOUNTAIN_FOUR
 }
@@ -57,7 +50,6 @@ TERRAIN_DESERT_GOOD_ONE {
    Food 10
    Production 10
    Probability 0.25
-   AvailableAdvance ADVANCE_ALCHEMY
    Icon ICON_GOOD_DESERT_ONE
 }
 
@@ -65,11 +57,9 @@ TERRAIN_DESERT_GOOD_ONE {
 TERRAIN_DESERT_GOOD_TWO {
    SpriteID 16
    Sound SOUND_ID_OIL
-   Gold 0
+   Gold 10
    Food 0
-   Production 0
-   TradeProduction 50
-   AvailableAdvance ADVANCE_OIL_REFINING
+   Production 15
    Probability 0.25
    Icon ICON_GOOD_DESERT_TWO
 }
@@ -79,9 +69,8 @@ TERRAIN_DESERT_GOOD_THREE {
    SpriteID 50
    Sound SOUND_ID_DATES
    Gold 5
-   Food 0
+   Food 10
    Production 5
-   TradeFood 10
    Probability 0.25
    Icon ICON_GOOD_DESERT_THREE
 }
@@ -93,7 +82,6 @@ TERRAIN_DESERT_GOOD_FOUR {
    Gold 5
    Food 10
    Production 0
-   TradeGold 5
    Probability 0.25
    Icon ICON_GOOD_DESERT_FOUR
 }
@@ -105,7 +93,6 @@ TERRAIN_FOREST_GOOD_ONE {
    Gold 5
    Food 0
    Production 10
-   TradeProduction 10
    Probability 0.25
    Icon ICON_GOOD_FOREST_ONE
 }
@@ -117,7 +104,6 @@ TERRAIN_FOREST_GOOD_TWO {
    Gold 5
    Food 10
    Production 0
-   HappyInc 1
    Probability 0.25
    Icon ICON_GOOD_FOREST_TWO
 }
@@ -127,11 +113,9 @@ TERRAIN_FOREST_GOOD_THREE {
    SpriteID 56
    Sound SOUND_ID_APPELS
    Gold 5
-   Food 0
-   TradeFood 10
+   Food 10
    Production 0
    Probability 0.25
-   AvailableAdvance ADVANCE_AGRICULTURE
    Icon ICON_GOOD_FOREST_THREE
 }
 
@@ -140,9 +124,8 @@ TERRAIN_FOREST_GOOD_FOUR {
    SpriteID 58
    Sound SOUND_ID_BEAVERS
    Gold 5
-   Food 0
+   Food 10
    Production 0
-   HappyInc 1
    Probability 0.25
    Icon ICON_GOOD_FOREST_FOUR
 }
@@ -153,10 +136,8 @@ TERRAIN_GRASSLAND_GOOD_ONE {
    Sound SOUND_ID_COTTON
    Gold 5
    Food 0
-   Production 0
-   TradeProduction 5
+   Production 10
    Probability 0.25
-   AvailableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    Icon ICON_GOOD_GRASSLAND_ONE
 }
 
@@ -167,16 +148,13 @@ TERRAIN_GRASSLAND_GOOD_TWO {
    Gold 10
    Food 0
    Production 0
-   TradeScience 5
    Probability 0.25
-   HappyInc 1
-   AvailableAdvance ADVANCE_AGRICULTURAL_REVOLUTION 
    Icon ICON_GOOD_GRASSLAND_TWO
 }
 
 # Potatoes #14
 TERRAIN_GRASSLAND_GOOD_THREE {
-  SpriteID 44
+   SpriteID 44
    Sound SOUND_ID_POTATOES
    Gold 5
    Food 15
@@ -193,8 +171,6 @@ TERRAIN_GRASSLAND_GOOD_FOUR {
    Food 0
    Production 0
    Probability 0.25
-   EfficiencyOrCrime -0.10
-   AvailableAdvance ADVANCE_MEDICINE
    Icon ICON_GOOD_GRASSLAND_FOUR
 }
 
@@ -203,9 +179,8 @@ TERRAIN_HILL_GOOD_ONE {
    SpriteID 4
    Sound SOUND_ID_COFFEE
    Gold 5
-   Food 0
+   Food 5
    Production 0
-   TradeScience 10
    Probability 0.25
    Icon ICON_GOOD_HILL_ONE
 }
@@ -215,11 +190,9 @@ TERRAIN_HILL_GOOD_TWO {
    SpriteID 12
    Sound SOUND_ID_GRAPES
    Gold 5
-   Food 0
+   Food 5
    Production 0
-   TradeFood 5
    Probability 0.25
-   AvailableAdvance ADVANCE_AGRICULTURE
    Icon ICON_GOOD_HILL_TWO
 }
 
@@ -231,7 +204,6 @@ TERRAIN_HILL_GOOD_THREE {
    Food 0
    Production 15
    Probability 0.25
-   AvailableAdvance ADVANCE_NUCLEAR_POWER
    Icon ICON_GOOD_HILL_THREE
 }
 
@@ -240,9 +212,8 @@ TERRAIN_HILL_GOOD_FOUR {
    SpriteID 35
    Sound SOUND_ID_OLIVES
    Gold 5
-   Food 0
+   Food 5
    Production 0
-   TradeFood 5
    Probability 0.25
    Icon ICON_GOOD_HILL_FOUR
 }
@@ -251,12 +222,10 @@ TERRAIN_HILL_GOOD_FOUR {
 TERRAIN_JUNGLE_GOOD_ONE {
    SpriteID 15
    Sound SOUND_ID_SUGAR
-   Gold 15
-   Food 0
+   Gold 5
+   Food 5
    Production 0
    Probability 0.25
-   EfficiencyOrCrime -0.10
-   AvailableAdvance ADVANCE_MEDICINE
    Icon ICON_GOOD_JUNGLE_ONE
 }
 
@@ -276,10 +245,9 @@ TERRAIN_JUNGLE_GOOD_THREE {
    SpriteID 25
    Sound SOUND_ID_BANANAS
    Gold 5
-   Food 0
+   Food 10
    Production 0
    Probability 0.25
-   TradeFood 10
    Icon ICON_GOOD_JUNGLE_THREE
 }
 
@@ -288,12 +256,9 @@ TERRAIN_JUNGLE_GOOD_FOUR {
    SpriteID 60
    Sound SOUND_ID_SUGAR
    Gold 10
-   Food 0
+   Food 5
    Production 0
    Probability 0.25
-   HappyInc 1
-   Tradefood 5
-   AvailableAdvance ADVANCE_AGRICULTURAL_REVOLUTION 
    Icon ICON_GOOD_JUNGLE_FOUR
 }
 
@@ -302,11 +267,9 @@ TERRAIN_MOUNTAIN_GOOD_ONE {
    SpriteID 20
    Sound SOUND_ID_TEA
    Gold 5
-   Food 0
+   Food 5
    Production 0
    Probability 0.25
-   happyInc 1
-   TradeScience 5
    Icon ICON_GOOD_MOUNTAIN_ONE
 }
 
@@ -318,7 +281,6 @@ TERRAIN_MOUNTAIN_GOOD_TWO {
    Food 0
    Production 0
    Probability 0.25
-   HappyInc 1
    Icon ICON_GOOD_MOUNTAIN_TWO
    GLHidden
 }
@@ -329,10 +291,8 @@ TERRAIN_MOUNTAIN_GOOD_THREE {
    Sound SOUND_ID_COAL
    Gold 5
    Food 0
-   Production 0
+   Production 20
    Probability 0.25
-   TradeProduction 20
-   AvailableAdvance ADVANCE_INDUSTRIAL_REVOLUTION 
    Icon ICON_GOOD_MOUNTAIN_THREE
 }
 
@@ -344,7 +304,6 @@ TERRAIN_MOUNTAIN_GOOD_FOUR {
    Food 0
    Production 5
    Probability 0.25
-   TradeGold 15
    Icon ICON_GOOD_MOUNTAIN_FOUR
 }
 
@@ -356,8 +315,6 @@ TERRAIN_PLAINS_GOOD_ONE {
    Food 5
    Production 0
    Probability 0.25
-   HappyInc 1
-   AvailableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    Icon ICON_GOOD_PLAINS_ONE
 }
 
@@ -376,11 +333,9 @@ TERRAIN_PLAINS_GOOD_THREE {
    SpriteID 54
    Sound SOUND_ID_WHEAT
    Gold 5
-   Food 0
+   Food 15
    Production 0
    Probability 0.25
-   TradeFood 20
-   AvailableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
    Icon ICON_GOOD_PLAINS_THREE
 }
 
@@ -389,10 +344,9 @@ TERRAIN_PLAINS_GOOD_FOUR {
    SpriteID 53
    Sound SOUND_ID_BUFFALO
    Gold 5
-   Food 5
+   Food 15
    Production 0
    Probability 0.25
-   TradeFood 5
    Icon ICON_GOOD_PLAINS_FOUR
 }
 
@@ -401,7 +355,7 @@ TERRAIN_SWAMP_GOOD_ONE {
    SpriteID 1
    Sound SOUND_ID_ALLIGATOR
    Gold 5
-   Food 5
+   Food 10
    Production 0
    Probability 0.25
    Icon ICON_GOOD_SWAMP_ONE
@@ -412,11 +366,9 @@ TERRAIN_SWAMP_GOOD_TWO {
    SpriteID 52
    Sound SOUND_ID_RICE
    Gold 5
-   Food 0
+   Food 15
    Production 0
    Probability 0.25
-   TradeFood 15
-   AvailableAdvance ADVANCE_AGRICULTURE
    Icon ICON_GOOD_SWAMP_TWO
 }
 
@@ -428,7 +380,6 @@ TERRAIN_SWAMP_GOOD_THREE {
    Food 5
    Production 0
    Probability 0.25
-   HappyInc 1
    Icon ICON_GOOD_SWAMP_THREE
 }
 
@@ -495,7 +446,6 @@ TERRAIN_WATER_DEEP_GOOD_ONE {
    Food 10
    Production 10
    Probability 0.3
-   AvailableAdvance ADVANCE_HULL_MAKING
    Icon ICON_GOOD_DEEP_WATER_ONE
 }
 
@@ -507,7 +457,6 @@ TERRAIN_WATER_DEEP_GOOD_TWO {
    Food 20
    Production 0
    Probability 0.2
-   AvailableAdvance ADVANCE_OCEAN_FARING
    Icon ICON_GOOD_DEEP_WATER_TWO
 }
 
@@ -516,11 +465,9 @@ TERRAIN_WATER_DEEP_GOOD_THREE {
    SpriteID 51
    Sound SOUND_ID_TUNA
    Gold 5
-   Food 0
+   Food 15
    Production 0
    Probability 0.5
-   TradeFood 15
-   AvailableAdvance ADVANCE_SHIP_BUILDING
    Icon ICON_GOOD_DEEP_WATER_THREE
 }
 
@@ -587,7 +534,6 @@ TERRAIN_BROWN_HILL_GOOD_ONE {
    Food 0
    Production 15
    Probability 0.3
-   AvailableAdvance ADVANCE_BRONZE_WORKING
    Icon ICON_GOOD_BROWN_HILL_ONE
 }
 
@@ -643,11 +589,9 @@ TERRAIN_WATER_BEACH_GOOD_TWO {
    SpriteID 36
    Sound SOUND_ID_FISH
    Gold 5
-   Food 0
+   Food 15
    Production 0
    Probability 0.4
-   TradeFood 15
-   AvailableAdvance ADVANCE_SHIP_BUILDING
    Icon ICON_GOOD_WATER_BEACH_TWO
 }
 
@@ -659,7 +603,6 @@ TERRAIN_WATER_BEACH_GOOD_THREE {
    Food 0
    Production 10
    Probability 0.4
-   HappyInc 1
    Icon ICON_GOOD_WATER_BEACH_THREE
 }
 
@@ -680,10 +623,8 @@ TERRAIN_BROWN_MOUNTAIN_GOOD_ONE {
    Sound SOUND_ID_IRON_ORE
    Gold 5
    Food 0
-   Production 0
+   Production 20
    Probability 0.7
-   TradeProduction 20
-   AvailableAdvance ADVANCE_IRON_WORKING
    Icon ICON_GOOD_BROWN_MOUNTAIN_ONE
 }
 
@@ -695,8 +636,6 @@ TERRAIN_BROWN_MOUNTAIN_GOOD_TWO {
    Food 0
    Production 0
    Probability 0.3
-   TradeGold 10
-   AvailableAdvance ADVANCE_IRON_WORKING
    Icon ICON_GOOD_BROWN_MOUNTAIN_TWO
 }
 
@@ -730,7 +669,6 @@ TERRAIN_WHITE_HILL_GOOD_ONE {
    Food 0
    Production 0
    Probability 0.25
-   HappyInc 1
    Icon ICON_GOOD_WHITE_HILL_ONE
 }
 
@@ -742,7 +680,6 @@ TERRAIN_WHITE_HILL_GOOD_TWO {
    Food 0
    Production 0
    Probability 0.75
-   HappyInc 1
    Icon ICON_GOOD_WHITE_HILL_TWO
    GLHidden
 }
@@ -867,14 +804,3 @@ TERRAIN_GLACIER_GOOD_TWO {
 #Flax x
 #Tomatoes 45
 
-# Horse
-TERRAIN_GRASSLAND_GOOD_HORSE {
- SpriteID 162
- Sound SOUND_ID_BUFFALO
- Gold 5
- Food 0
- Production 0
- Probability 0.25
- AvailableAdvance ADVANCE_HORSE_RIDING
- Icon ICON_GOOD_PLAINS_FOUR
-}

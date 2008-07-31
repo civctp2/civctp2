@@ -247,7 +247,7 @@ public:
 	bool CanEnter(const uint32 flag) const;
 
 	void SetTerrain(sint32 terrain);
-	sint32 GetTerrain() { return (sint32)m_terrain_type; }
+	sint32 GetTerrain() const { return static_cast<sint32>(m_terrain_type); }
 	void SetMoveCost(double cost) { m_move_cost = (sint16)cost; }
 	double GetMoveCost() const { return double(m_move_cost); }
 	double GetFutureTerrainMoveCost() const;

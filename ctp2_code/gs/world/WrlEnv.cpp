@@ -95,7 +95,7 @@ bool World::EnvIsShallowWater(const uint32 env) const
 
 bool World::IsShallowWater(const MapPoint &pos) const
 {
-	return EnvIsWater(GetCell(pos)->m_env);
+	return EnvIsShallowWater(GetCell(pos)->m_env);
 }
 
 bool World::IsShallowWater(const sint32 x, const sint32 y) const 

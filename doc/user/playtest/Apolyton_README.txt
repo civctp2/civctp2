@@ -66,14 +66,14 @@ Added:    A settle in city event, so that the player can add a pop via settling
 Fixed:    A newly founded city does not show up as underwater city when it is
           founded.
 Fixed:    Barbarians attack someone else if you are protected by the Great Wall.
-Fixed:    A combat event error that poped up when you closed the battle window.
+Fixed:    A combat event error pop up when you closed the battle window.
 Fixed:    The map is only centered if the AutoCenter option is enabled.
 Fixed:    The city control panel is updated even if the visible player is a
           robot.
 Fixed:    The slic file path is stored even if slic debugging is set to no. This
           fixes a crash but possibly needs slic reloading to have an effect on
           on games saved before this version.
-Changed:  Exposed the tile set indeces of the road tiles to tileimp.txt.
+Changed:  Exposed the tile set indices of the road tiles to tileimp.txt.
 Fixed:    The AI selects a new advance or a new government in the same turn
           when they become available.
 Fixed:    A bug that prevented the AI from attacking.
@@ -85,10 +85,10 @@ Fixed:    RiotCasualities method: This may fix a crash.
 
 2008-02-10 (Revision 849)
 Fixed:    The single player civilization screen updates the leader names again.
-          It displayes the civilizations in alphabetical order again,
+          It displays the civilizations in alphabetical order again,
           in scenarios only selectable civilizations are displayed, and the game
-          is stareted with the selected civilization.
-Added:    The AI road pathing can now be visulaized if an accroding option is on.
+          is started with the selected civilization.
+Added:    The AI road pathing can now be visualized if an according option is on.
 Fixed:    The AI now builds a road network from its threatened cities.
 Fixed:    The AI now adds special units to the build list even if not all
           garrison units are build.
@@ -103,7 +103,7 @@ Changed:  If you try to move an army into a transporter with less room than the
           army has units, the army is partially moved into the transporter.
 Fixed:    The chat window command /attach p now turns as it should be the
           player p into an AI. This allows watching the AI while it is playing.
-Fixed:    The initial city interface is no more shown if the visible palyer 
+Fixed:    The initial city interface is no more shown if the visible player 
           is an AI.
 Fixed:    Autosaves are now done even if the visible player is an AI.
 Fixed:    The game can now be saved even if the visible player is an AI.
@@ -130,19 +130,19 @@ Fixed:    If the AI needs for a stack more than one transporter it now uses more
 Fixed:    Holding diplomatic receptions costs now the displayed amount of gold.
 Changed:  The unit herald is now a shield like in Civ2 and CTP1.
 Added:    Messages for failed slave raids with and without dying.
-Removed:  A superflous message that one of your cities was captured.
+Removed:  A superfluous message that one of your cities was captured.
 Fixed:    Expelling now removes move points.
-Changed:  The domestic tab of the intelegence screen now shows the capital if
+Changed:  The domestic tab of the intelligence screen now shows the capital if
           you know were it is or if it has a wonder.
-Changed:  The domestic tab of the intelegence screen now shows instead of cities
+Changed:  The domestic tab of the intelligence screen now shows instead of cities
           with wonders all cities if you have an embassy otherwise the cities
           with wonders and the cities you know are shown.
 Added:    New database flags for modders:
 - StartegyDB:
-   UseBaseMoveCostsForRoads         Stategy makes the AI to plan roads by using
+   UseBaseMoveCostsForRoads         Strategy makes the AI to plan roads by using
                                     the base terrain costs instead of the 
-                                    terrain move costs inclduing terrain 
-                                    improvments if its value is not zero. Its 
+                                    terrain move costs including terrain 
+                                    improvements if its value is not zero. Its 
                                     default value is 0 and taken from ConstDB.
    BuildRoadsToClosestCities        Strategy makes the AI to plan roads from 
                                     each to n other cities. The default value
@@ -164,7 +164,7 @@ Added:    New database flags for modders:
 - GoalDB:
    InVisionRangeBonus               Goal adds a bonus if the target is in the
                                     vision range of an army.
-   NoBarbarianBonus                 Goal sdds a bonus if a target is in vision
+   NoBarbarianBonus                 Goal adds a bonus if a target is in vision
                                     range if no Barbarians are around (i.e.
                                     no Barbarians can pop up from a goody hut).
    CanAttackBonus                   Goal adds a bonus for armies that can attack
@@ -182,12 +182,12 @@ Changed:  The chat window command /importmap reports if you try to import a map
           from a not existing file and reports if the map size of the imported
           map does not match the map size of the loaded map.
 Fixed:    The turns until a city grows are now correctly displayed on the map
-          when you modify the farmer assignement.
+          when you modify the farmer assignment.
 Fixed:    The turns until a city grows are now correctly displayed on the map
           when you modify the empire slider settings.
 Fixed:    The key mapping screen now displays the correct key.
 Changed:  Increased the number of player in a PBEM or HotSeat game to 32.
-Changed:  Moved the experimental relgion stuff to its own AE scenario.
+Changed:  Moved the experimental religion stuff to its own AE scenario.
 Fixed:    The city sprawl code should now work.
 Added:    New database flags for modders:
 - ConstDB:
@@ -213,14 +213,14 @@ Added:    Armenia and Kurdistan as civilisations
 Added:    Rudimentary religious feats wonders, buildings, and units.
 Fixed:    Unit grouping: Units have to be on the same tile to be grouped. This
           fixes insecure slic code.
-Fixed:    River mouthes are not deleted due to global warming or ozone depletion.
+Fixed:    River mouths are not deleted due to global warming or ozone depletion.
 Changed:  Increased richness of mountains and rivers on fresh created maps.
 Changed:  Slic events are tested for valid arguments, if one argument is invalid
-          the event execution is stoped and an error message is displayed.
+          the event execution is stopped and an error message is displayed.
 Fixed:    ClickedArmy event has now a valid army if the clicked army is not
           owned by the clicker.
 Fixed:    ZOCs are now cleared again.
-Changed:  Revered the show order of diplomatic probosals in human-human
+Changed:  Revered the show order of diplomatic proposals in human-human
           diplomacy in PBEM and HotSeat.
 Fixed:    Rush buy in PBEM.
 Changed:  German grammar about civilisations, units, and goods.
@@ -237,12 +237,12 @@ Fixed:    The diplomacy window cannot be closed by using hotkeys that open other
 Fixed:    The scenario editor cannot opened in PBEM mode per hotkey.
 Added:    HotSeat and PBEM human to human diplomacy support.
 Added:    The following civilisations: Han, Yamato, Sumer, Kush, and Macedonia
-Fixed:    The map editor genarates now the coast line again if needed.
+Fixed:    The map editor generates now the coast line again if needed.
 Fixed:    Savegame power graphs
 
 2007-08-07 (Revision 787)
 Changed:  Replaced the old ConstDB by a new one.
-Changed:  Harappan flag now is pakistan's flag.
+Changed:  Harappan flag now is Pakistan's flag.
 Changed:  Jamaica headers that mapped to Poland are now labeled as Poland
 Added:    Jamaica is now a civ (as it was in CTP1)
 Fixed:    Crash caused by CitySpecialIcons (will rework)
@@ -314,17 +314,17 @@ Disabled: MaxCityWonders because it caused a crash
 Disabled: MaxCityBuildings because it caused a crash
 Added:    New database flags for modders:
 - BuildingDB:
-   NeedsFeatToBuild     Building needs feat achived by owner to be built.
+   NeedsFeatToBuild     Building needs feat achieved by owner to be built.
    NeedsAnyPlayerFeatToBuild
-                        Building needs feat achived by any player to be built.
+                        Building needs feat achieved by any player to be built.
 - UnitDB:
-   NeedsFeatToBuild     Unit needs feat achived by owner to be built.
+   NeedsFeatToBuild     Unit needs feat archived by owner to be built.
    NeedsAnyPlayerFeatToBuild
-                        Unit needs feat achived by any player to be built.
+                        Unit needs feat archived by any player to be built.
 - WonderDB:
-   NeedsFeatToBuild     Wonder needs feat achived by owner to be built.
+   NeedsFeatToBuild     Wonder needs feat archived by owner to be built.
    NeedsAnyPlayerFeatToBuild
-                        Wonder needs feat achived by any player to be built.
+                        Wonder needs feat archived by any player to be built.
 - WonderDB:
    ProhibtSlavers       Wonder prevents building of additional slaver units.
 Added:    New Options
@@ -366,7 +366,7 @@ Added:    New Options
 - Rules Screen
    AImilitia            Empty AI cities generate a cheap unit at the
                         beginning of a turn
-   No AI gold deficit   AI ctity gold imcome does not drop below 0
+   No AI gold deficit   AI city gold income does not drop below 0
    No AI production deficit
                         AI city production does not drop below 0
    Gold per city        City gold costs multiplied by the city limit
@@ -383,7 +383,7 @@ Added:    New Options
 Fixed:    Bug that made human units automatically upgrade
 Fixed:    Bug that prevented disbanding of units in neutral territory
 Fixed:    Diplomacy screen size was reduced
-Added:    Nation Flags replaced diploamacy leader photographs
+Added:    Nation Flags replaced diplomacy leader photographs
 Changed:  BarbarianSpawnBarbarian code to limit Barbarians overrunning
           the entire map
 Added:    DebugAI profile option - displays AI goals for units
@@ -423,7 +423,7 @@ Deleted:  Old IsReligion# system
 
 2007-03-01 (Revision 693)
 Added:    Hostile terrain healthpoint cost is now based on barbarian risk.
-Fixed:    SpawnBarbarian code for entrenched units that can spawnbarbarians.
+Fixed:    SpawnBarbarian code for entrenched units that can spawn Barbarians.
 Added:    New userprofile option to show civflags under the player color flag.
 Fixed:    Civ flags moved below player color flag.
 Added:    TerraformOcean button in tile bank. This allows modders to use
@@ -464,7 +464,7 @@ Added:     Unit Hidden Nationality - these units are displayed as barbarians
 Added:     Religious City Icons (up to 10 Religions) appear if building has
            IsReligion1(or 2 up to 10)
 Added:     National Borders are now displayed with icons for smooth appearance.
-Changed:   Aligned Cityname, population rectangle, and turns to population
+Changed:   Aligned city name, population rectangle, and turns to population
            growth rectangle.
 Changed:   Next Pop rectangle is now black like the city name to differentiate
            it from City Population.
@@ -489,8 +489,8 @@ Added:    New database flags for modders:
 
 2006-09-09 (Revision 634)
 Fixed:    AI slider handling
-Added:    For modders: STRATEGY_TOO_MANY_CITIES and STRATEGY_NO_REVOLUTON are
-          loaded automaticaly if present in startegies.txt and not present in
+Added:    For modders: STRATEGY_TOO_MANY_CITIES and STRATEGY_NO_REVOLUTION are
+          loaded automatically if present in strategies.txt and not present in
           personalities.txt. This way modders have less work if they want to
           make the AI respect the city limit.
 
@@ -499,7 +499,7 @@ Fixed:    Missing wonder started messages
 Fixed:    Broken city happiness display
 Fixed:    Autosave - Quicksave permutation
 Added:    New database flags for modders:
-- DifficuiltyDB:
+- DifficultyDB:
    AIFreeUpgrade        Difficulty allows the AI to upgrade its units for free.
    AINoShieldHunger     Difficulty maintains AI armies without shields.
    AINoGoldHunger       Difficulty maintains AI armies without gold.
@@ -507,14 +507,14 @@ Added:    New database flags for modders:
    GoldPerCity          Difficulty adds this * cities * CityLimit
 - TerrainImprovementDB:
    CanBuildWasteland    TerrainImprovement can be built in unowned territory.
-   CanBuildAlly         TerrainImprovement can be built in terrotory of your
-                        allys. TerrainImprovements with move cost reduction do
+   CanBuildAlly         TerrainImprovement can be built in territory of your
+                        allies. TerrainImprovements with move cost reduction do
                         not need this flag, because they can be built in ally
                         territory anyway.
 
 2006-07-15 (Revision 619)
 Fixed:    Units can now sink by using the ConstDB chance value.
-Changed:  AIs war declaration messages have now pop-up status. (Pretty anoying)
+Changed:  AIs war declaration messages have now pop-up status. (Pretty annoying)
 Added:    AutoExpireTreatyBase to userprofile.txt to set the turns when treaties
           expire. Actually this is a cheat but necessary as long expiration is
           hard encoded.
@@ -523,7 +523,7 @@ Changed:  gw.txt has a new alternative format.
 Added:    New database flags for modders:
 - DifficultyDB:
    AINoCityLimit        Difficulty does not punish AI for city limit violation.
-   AINoSinking          Difficulty makes AI ships unsinkably.
+   AINoSinking          Difficulty makes AI ships unsinkable.
 - ResourceDB:
    IsBonusGood          Good that not present in city radius can be enabled by
                         tileimp or building.
@@ -562,7 +562,7 @@ Fixed:    Barbarians are not affected by hostile terrain
 Added:    New database flags for modders:
  - BuildingDB:
    TreasuryInterest     Building gives a percentage of treasury of their 
-                        civivilisation to their civilisation.
+                        civilisation to their civilisation.
 
 2006-06-07 (Revision 586)
 Changed:  CanExportTileValue now works as a radius if you want only one radius
@@ -579,11 +579,11 @@ Added:    New database flags for modders:
                               Barbarian units.
 
 2006-05-27 (Revision 577)
-Cahnged:  Reform City destroys a building if you have a building that conflicts
-          with settlebuilding of the reforming unit
+Changed:  Reform City destroys a building if you have a building that conflicts
+          with SettleBuilding of the reforming unit
 Added:    New database flags for modders:
 - BuildingDB:
-   IncreaseHP           Building gives extra hitpoints on first built.
+   IncreaseHP           Building gives extra HitPoints on first built.
    CantSell             Building cannot be sold.
    ExcludedByBuilding   Building cannot be built if this building is present.
 - WonderDB:
@@ -591,21 +591,21 @@ Added:    New database flags for modders:
                            by population.
 - GovernmentDB:
    HasGulags            Government enslaves each turn a citizen.
-   IsCapitalist         Government turns per turn a citizien into a merchant.
-   IsTechnocracy        Government turns per turn a citizien into a scientist.
-   IsAgraraian          Government turns per turn a citizien into a farmer.
-  HasMindlessTelevision Government turns per turn a citizien into an enter.ner.
+   IsCapitalist         Government turns per turn a citizen into a merchant.
+   IsTechnocracy        Government turns per turn a citizen into a scientist.
+   IsAgraraian          Government turns per turn a citizen into a farmer.
+  HasMindlessTelevision Government turns per turn a citizen into an entertainer.
    IsXenophobic         Government reduces population of foreign cities by one 
                         each turn.
 
 2006-05-24 (Revision 576)
-Changed:  Removed War from slave attacks now just regardcost (Must be modified)
-Fixed:    No more war popups for attacking Babarian units.
+Changed:  Removed War from slave attacks now just regard cost (Must be modified)
+Fixed:    No more war popups for attacking Barbarian units.
 Fixed:    Pillage of tile improvements in unowned territory.
 Fixed:    Bomber movement now works like before.
 Added:    New database flags for modders:
 - UnitDB:
-   HostileTerrainCost   Unit losess hitpoint in hostile terrain.
+   HostileTerrainCost   Unit loses HitPoints in hostile terrain.
    ImmuneToHostileTerrain Unit is immune to costs of hostile terrain.
    SettleImprovement    Unit finishes with enough PW tileimps when entrenched.
    SettleBuilding       Unit builds building in a foreign city on conversion.
@@ -623,7 +623,7 @@ Added:    New database flags for modders:
 2006-05-13 (Revision 572)
 Added:    New database flags for modders:
 - DifficultyDB:
-   AICityDefenderBonus  Difficulty gives AI cities a adefence population bonus.
+   AICityDefenderBonus  Difficulty gives AI cities a defence population bonus.
 - UnitDB:
    NeedsFeatToBuild     Unit need a certain feat to be built.
    CivilisationOnly     Unit can only built by given civilisation.
@@ -647,7 +647,7 @@ Added:    New database flags for modders:
    UpgradeTo            Unit can be upgraded to given unit with enough gold.
                         Upgrade is done by putting the unit to sleep in a city.
                         Note an own upgrade order is still missing.
-- DifficuiltyDB:
+- DifficultyDB:
    NoAIGoldDeficit      AI does not pay for gold deficits. (Optional AI cheat)
    NoAIProductionDeficit AI does not pay for prod. deficits. (Opt. AI cheat)
 
@@ -657,7 +657,7 @@ Added:    New database flags for modders:
    TargetsCivilians     Unit bombard civilians instead other units.
    PrecisionStrike      Unit bombards buildings instead other units.
    MultipleAttack       Unit can attack repeatedly per turn with enough MPs.
-- RessourceDB:
+- ResourceDB:
    AvailableAdvance     Good needs a specific advance to be collected by a city.
    VanishAdvance        Good cannot be collected with this advance owned.
    CantTrade            Good cannot be traded. It acts like a bonus.
@@ -666,12 +666,12 @@ Added:    New database flags for modders:
 2006-04-14 (Revision 560)
 Added:    Pirates, unlike in Civ2 only boats with attack, no transports.
 Fixed:    Disbanding a settler in a city does not disband all other units there.
-Fixed:    Goodyhut crash occuring if UnitDB is bigger than AdvanceDB.
+Fixed:    Goody hut crash occurring if UnitDB is bigger than AdvanceDB.
 Added:    New database flags for modders:
 - UnitDB:
    CanCaptureTile       Unit captures an enemy tile instead of pillaging it. 
    CanBeGifted          Unit can be gifted to a non-enemy player. A diplomatic
-                        regard bonus is awarded. It is based on attack devided
+                        regard bonus is awarded. It is based on attack divided
                         by five. (The five should go to ConstDB or DiffDB or 
                         CivilisationDB, etc.)
 - TerrainImprovementDB:
@@ -694,7 +694,7 @@ Added:    Accidental move into an enemy or city causes a popup message for war
           diplomacy screen. (To be fixed)
 Added:    New database flags for modders:
 - AdvanceDB:
-   GoodyHutExcluded     Advance cannot be obtained froma goody hut.
+   GoodyHutExcluded     Advance cannot be obtained from a goody hut.
 
 2006-03-11 (Revision 553)
 Added:    New database flags for modders:
@@ -716,7 +716,7 @@ Added:    New database flags for modders:
 Added:    Building upkeep is now affected by readiness.
 Added:    New database flags for modders:
 - BuildingDB:
-   GoldPerUnit          Building adds ammount of gold per unit to civilization.
+   GoldPerUnit          Building adds amount of gold per unit to civilization.
    GoldPerUnitReadiness Building adds gold with readiness impact per unit.
    BuildingFeat         Building needs other building in percent of cities.
    SquaredBorderRadius  Building increases city radius like a fort.
@@ -744,9 +744,9 @@ Added:    New database flags for modders:
 
 2006-02-15 (Revision 543)
 Fixed:    Mistake in tileset.cpp which prevented loading of tile file
-Fixed:    Rreport start of wonder when deleting the first item and the second 
+Fixed:    Report start of wonder when deleting the first item and the second 
           item is a wonder
-Fixed:    Building mainteneance deficit spending.
+Fixed:    Building maintenance deficit spending.
 Added:    Default string loading for mods that lacks those strings.
 Added:    DoNotImportDefaults flag to prevent default string loading in 
           updated mods.
@@ -772,7 +772,7 @@ Fixed:    Problems with invisible sprites.
 Fixed:    Crash related to loading of a 1.1 savegames of a mod that uses 
           extended database slic access. However slic must still be reloaded
           to make the game run properly.
-Changed:  Very slow growth is now diplayed as ---.
+Changed:  Very slow growth is now displayed as ---.
 Added:    New database flags for modders:
 - BuildingDB:
    NeedsCityGoodAll     Building needs all the goods in that list to be built.
@@ -797,14 +797,14 @@ Added:    New database flags for modders:
    CanBombardTiles      Unit can bombard tileimps and destroy them.
    CollateralTileDamage Unit destroys tileimps at attack location.
    NonLethalBombard     Unit bombard only weakens other units.
-   New combat modifers like WoodenShipBonus and WoodenShip
+   New combat modifiers like WoodenShipBonus and WoodenShip
 - WonderDB:
    NeedsCityGoodAll     Wonder needs all the goods in that list to be built.
    NeedsCityGood        Wonder can only be built with this good in the city.
    EnablesGood          Wonder gives a certain good.
 
 2005-10-23 (Revision 477)
-Fixed:    Misc crashes
+Fixed:    Miscelaneous crashes
 Fixed:    Broken/incorrect links in the great library
 Fixed:    Topic display bug in great library
 Fixed:    Hosting of MP games on XP machines
@@ -826,7 +826,7 @@ Added:    Gold loss due to conversion and production loss due to franchising
 Added:    Special attack window to display the cost of a special attack
 Added:    Construction time to tileimp tracker window
 Fixed:    Crashes when deleting tileimps
-Added:    Option to end game on db error
+Added:    Option to end game on data base error
 Fixed:    MP database sync check
 Added:    Option for female leader pictures
 Fixed:    Age display in MP summary
@@ -881,7 +881,7 @@ Fixed: Misc GL errors
 Added: "Turns to growth" display on main map
 Added: Support for immobile units
 Added: Ranged bombarding
-Changed: The method by which televangelists are recognized as special
+Changed: The method by which teleevangelists are recognized as special
 Changed: Method of caravan cost fix - now mods should have reasonable caravan costs
 Changed: Default colour scheme to get player 1 blue by default
 Added: Detailed changelog to playtest version
@@ -891,7 +891,7 @@ Disabled: AI unit text, so that you don't see the AI goals.
 Fixed: Crashes and memory leaks.
 Fixed: Minor translation problems with the French and German string files.
 Updated: strategies.txt, advancelists.txt, buildlistsequences.txt and unitbuildlist.txt, 
-  to make the AI more agressive and seperate the AI personalities more.
+  to make the AI more aggressive and separate the AI personalities more.
 Fixed: Vision of borders of civs you have no contact to in fog off and god mode.
 Fixed: A Vision problem and a crash in combination with city conquest.
 Changed: Disabled autosave for MP client.
@@ -910,7 +910,7 @@ Added: Slic function IsOnSameContinent to check whether two locations are on the
 Fixed: Wonder start and almost complete messages are also send for the first wonder 
   in the database correctly. Precisely you get now such messages for Aristotle's Lyceum.
 Fixed: Some minor bugs in the AI goal computation.
-Restored: Old operator of squd strengh. That caused the huge delays in the last version
+Restored: Old operator of squad strength. That caused the huge delays in the last version
   on maps with more than one continent.
 Changed: Pathfinding doesn't consider anymore danger on the way. Another solution for 
   that has to be found. This removes the huge zone of control.
@@ -924,7 +924,7 @@ Changed: The version date is now derived from the exe's creation date (not last
   been updated.
 Fixed: Turn counter synchronisation when creating a new civilisation (by revolt) to 
   prevent one sided wars.
-Fixed: Science popup in hotseat and PBEM is delayed until the appropiate player's turn.
+Fixed: Science popup in hotseat and PBEM is delayed until the appropriate player's turn.
 Fixed: The risk levels in the drop down menu in the scenario editor are now in the 
   right order.
 Fixed: Turn count in PBEM don't say anymore always "Turn 0"
@@ -932,10 +932,10 @@ Changed: The same algorithm for SP and MP is used to generate Barbarians
 Changed: New terrain values
 
 2004-12-28
-Added: An attemp to fix range bombardment, but it does not seems to work.
+Added: An attempt to fix range bombardment, but it does not seems to work.
 Fixed: Vision
-        - The staus bar only shows what it should show. (Terrain status of the last visit)
-        - Help tile window shows terrain statisics and improvements from the last visit.
+        - The status bar only shows what it should show. (Terrain status of the last visit)
+        - Help tile window shows terrain statistics and improvements from the last visit.
         - The map only shows terrain and improvements and owners and city radii from the
           last visit.
         - If fog of war is toggled of status bar, help tile window and map show everything.
@@ -949,17 +949,17 @@ Fixed: Arena and Aqueduct prerequisites
 Restored: Compatibility for Diplomod.
 Added: A Quit Button at the multiplayer screen for hotseat games.
 Fixed: Memory leaks concerning vision and the resourcemap.
-Improved: The music screen unconfirmed user changes are not reseted when returning to 
+Improved: The music screen unconfirmed user changes are not resetted when returning to 
   the music screen after visiting the music track selection screen and removed memory 
   leaks.
 Fix: Unblock the client user interface when the server has handled the city production.
-Restored: Database compatibility of constDB for MP testing.
+Restored: Database compatibility of ConstDB for MP testing.
 Untested fix: Make cities grow and make science handled well in PBEM.
 Updated: Some player slic built-ins so that they can be not only used in string 
-  replacement but also in optaining integer values.
-Repaired: Some invalid links in the English Great Libary of the Alexander scneraio.
+  replacement but also in obtaining integer values.
+Repaired: Some invalid links in the English Great Library of the Alexander scenario.
 Updated: GAMEID to match the value of the new anet.inf
-Fixed: Some crashes in concerning diplomat data and the sp new tribe screen.
+Fixed: Some crashes in concerning diplomat data and the SP new tribe screen.
 Fixed: Movement point propagation for settlers from disbanded cities in network games 
   with 3+ players
 Corrected: Return type of IsVeteran function.
@@ -975,9 +975,9 @@ Fixed: Prevented crashes with invalid units
 Changed: Removed some duplicated code and allow to test cell whether its productivity 
   concerning food, shields and gold would be better then with the current terrain type
 Added: If a terrain has no food tile improvement the AI checks whether there is a 
-  terraform option avalable for a terrain with better food stats
-Added: Changes to favorize Respect of non-treaspassing Treaty and retreat units
-Added: Checks to avoid Army blocked in grouping phasis
+  terraform option available for a terrain with better food stats
+Added: Changes to favorize Respect of non-trespassing Treaty and retreat units
+Added: Checks to avoid Army blocked in grouping phase
 Changed: The Group size check
 Changed: Rollback goals in double search
 Added: Methods to check if there is enough room for army along path, check danger along path
@@ -986,7 +986,7 @@ Fixed: typo corrected
 Changed: useless compiler warning disabled
 Added: CanTransport and IsCivilian, and a few other consistency changes to the Army class
 Fixed: Prevented a crash when a space plane gets assigned multiple orders
-Changed: Updated startegy database so that when two strategies are merged values aren't 
+Changed: Updated strategy database so that when two strategies are merged values aren't 
   overwritten by the default values of an entry if this value has not been defined
 Changed:: Updated database generator so that bit pairs can now have default values as well.
   That allow to have default values in databases with entries that are merged, without
@@ -1018,7 +1018,7 @@ Added: Recalculation of support costs upon change of government
 Added: New messages when investigating a city depending on whether spying unit captured
 Fixed: Possible wrong sorting by "turns till production finished" in National Manager
 Changed: Sorting logic to speed sorting of lists
-Fixed: Sorting by govener type
+Fixed: Sorting by governor type
 Fixed: Possible crash-causing behaviour on missing files
 Fixed: Text file errors in Alexander scenario
 Added: Prevention against a city revolting twice in a row to allow the new owner to
@@ -1056,7 +1056,7 @@ Added: Added corrections for the French version
 Added: Redermination of the city style when setting the civilization in HotSeat
 Fixed: Strange tile visibility patterns in HotSeat mode
 Fixed: Enabled the end turn button when unblanking the screen in HotSeat mode
-Fixed: Blank the interface when loadeding a saved hot seat game 
+Fixed: Blank the interface when loading a saved hot seat game 
 Fixed: Recipients of messages
 Fixed: Increased animation queue to 12, making unit-in-wrong-place bug less likely
 Fixed: Cities do not revolt twice in a row
@@ -1065,7 +1065,7 @@ Added: Crash prevention for missing strings and images
 Fixed: Sort order for governors in in status tab for blank entries
 Improved: Sort logic for listboxes
 Fixed: Sort order in NationalManager for turns until production is finished
-Added: New message for the distinction if a unit was cought or not in city investigation
+Added: New message for the distinction if a unit was caught or not in city investigation
 Fixed: Recalculation of military support after government change
 Added: Option to display the intersection of unit orders or the union 
   of unit orders for an army
@@ -1088,7 +1088,7 @@ Fixed: Possible crash (may be related to Solaris project bug)
 Fixed: Memory leak in the wonder movie window
 Changed: Score from city sizes to reasonable values
 Changed: Things to improve .NET compatibility
-Changed: Naming convention for autosaves
+Changed: Naming convention for AutoSaves
 Fixed: Blank age boxes in MP setup
 Added: More automatic focus changes for cities to standardize behaviour
 Fixed: Bug causing incorrect production when pressing F3 after end of turn
@@ -1103,7 +1103,7 @@ Added: New ColorSet option to userprofile.txt to aid with switching colors##.txt
 Fixed: Treatment of zero freight costs which gave strange trade route paths
 Fixed: Memory leaks with government modifications to DB entries
 Changed: Select current research on change research screen
-Fixed: Check which prevented sueing of franchises
+Fixed: Check which prevented suing of franchises
 Fixed: When starting a scenario, use difficulty settings selected by user
 Changed: French translation of "Network Game"
 Changed: Implementation of new SLIC global variables
@@ -1113,7 +1113,7 @@ Added: New SLIC global variables
 Fixed: Bug with scenario editor and players who have been removed
 Added: New SLIC functions
 Changed: Some French and German strings
-Improved: Govener AI choice of squares on which to place tile imps
+Improved: Governor AI choice of squares on which to place tile imps
 Changed: Error reporting for modulo 0 errors
 Fixed: Active defense movement type check
 Fixed: Neutral tile imp pillage bug
@@ -1139,7 +1139,7 @@ Fixed: Bug preventing tile imps being built on terraformed land
 Fixed: Bug with games played as players other than player 1
 
 2004-03-28
-Updated: German and English version of the Great Libary.
+Updated: German and English version of the Great Library.
 Updated: colors00.txt to replace some nearly identical colors and changed the 
   color order a little bit.
 Fixed: Disabled restart key in network, hot seat and email games.
@@ -1148,15 +1148,15 @@ Fixed: Is the scenario editor launched for the first time in a game session,
 Added: Player selection, and with player selection color selection.
 Fixed: Scenarios that allow players other than player 1 to be played.
 Fixed: Games with more then 28 civilizations can now be saved and loaded.
-Changed: Replaced all Neptune refferences by Uranus refferences. For some languages
+Changed: Replaced all Neptune references by Uranus references. For some languages
   this needs to be checked if the right translation is used.
 Improved: The path finding algorithm, as a downside this implementation could be
   very slow.
 Added: Setting research goal to something already researched clears the goal.
-Added: Itialian translation, unfortunatly it is not complete.
+Added: Italian translation, unfortunately it is not complete.
 Fixed: Some more memory leaks.
-Fixed: Pollution is not turned off automaticly when the scenario editor is used.
-Added: Loading of build queues with capatalisation or infrastructure.
+Fixed: Pollution is not turned off automatically when the scenario editor is used.
+Added: Loading of build queues with capitalisation or infrastructure.
 Fixed: When a trade route is pirated it is not anymore centered, just the sound 
   effect is played.
 Added: Auto-center for bombardment
@@ -1167,14 +1167,14 @@ Fixed: Problems with invalid data that lead to crashes.
 Added: Sanity check on city styles (avoids crash when settling in Alexander).
 Added: Savegames generated by CTP2 v.1.1 can now be loaded.
 Fixed: Invisible pirates are not centered anymore.
-Fixed: The Ai does not consider goals anymore that have become, e.g. destroyed cities.
+Fixed: The AI does not consider goals anymore that have become, e.g. destroyed cities.
 
 2004-02-21
-Added: Governments can now modify the properties of units, tile improvemnts, buildings,
+Added: Governments can now modify the properties of units, tile improvements, buildings,
   goods, wonders and feats.
 Added: French translation is now complete.
 Altered: Description text of the max players spinner on the new single player players screen
-  to increase the understandibility.
+  to increase the understandability.
 Fixed: North-South-warp behaviour, concerning vision etc. Seems also to fix the Neptune map.
 Fixed: Some memory leaks.
 Fixed: A freeze bug that occurs under certain circumstances, if enemy moves are set on.
@@ -1186,10 +1186,10 @@ Fixed: Some things in the script.slc, to make sure better message icons are used
   message was removed.
 
 2004-01-31
-Added: MAX_MATCH_LIST_CYCLES flag to sonst.txt of the Magnificant Samurai Scenario, so that 
+Added: MAX_MATCH_LIST_CYCLES flag to sonst.txt of the Magnificent Samurai Scenario, so that 
   it work with this version of CTP2.
 Possible crash fix: cpuinf32.dll is no longer used to examine the CPU, didn't work on non 
-  intel CPUs anyway.
+  Intel CPUs anyway.
 Improved: Have the great library start with something more useful than Advanced Infantry
   Tactics.
 Fixed: A number of SLIC functions that used calls with inappropriate arguments.
@@ -1197,22 +1197,22 @@ Fixed: Great library data between players in hotseat games is now cleared.
 Added: In Advanced Options Menu some more useful descriptions for CloseOnEyepoint and
   ShowExpensive functions, a native speaker may have a look on the English version for
   language corrections.
-Added: All the changed textfiles from patch 1.1/1.11.
+Added: All the changed text files from patch 1.1/1.11.
 Added: Missing diplomacy photos in the diplomanager.
 Replaced: Buttons for the number of Civs in the single player new game screen by a spinner.
   This allows you to start a SP game with more then 7 opponents. The maximum is 31
-  civilizations in one game. Unfortunatly only games up to 28 or 29 players can be reloaded.
+  civilizations in one game. Unfortunately only games up to 28 or 29 players can be reloaded.
 Added: A maximum civs spinner on the same screen that allows you to set to how many civs can
   be at the same time in one game, while the limit is not reached revolting cities are
   converted into new civs, otherwise in Barbarian cities.
 Added: On the same screen another spinner that will allow you to select your civ color,
-  unfortunatly does not work, yet.
+  unfortunately does not work, yet.
 Replaced: Disclaimer strings are added for the old disclaimer image from the last versions,
-  to allow easy localizability.
-Fixed: A bug in the scenario.slc from the Magnificant Samurai Scenario, so that now a fort
+  to allow easy localization.
+Fixed: A bug in the scenario.slc from the Magnificent Samurai Scenario, so that now a fort
   in Shichinen is built a site when it should be build.
 Added: Up to 33 players are now supported with their own color. I hope you enjoy the new
-  collor set. :D;)
+  color set. :D;)
 Fixed: Some cut & paste errors repaired in Exclusions.cpp, no idea what it does now you
   have to ask Fromafar.
 Fixed: Alexander scenario.slc, replaced the code in the "doesn't work, grrrr..." function
@@ -1222,14 +1222,14 @@ Fixed: Crash to desktop prevented in the HasAgreement function
 Fixed: Crash to desktop prevented when no sound has been defined for a tile improvement.
 Fixed: Unloaded buttons which caused an exit pop-up in the city window, don't ask me what
   Fromafar here means. ;)
-Added: If during slic code execution a devision through 0 appears in DebugSlic=Yes mode a
-  meaasge is give.
+Added: If during slic code execution a division through 0 appears in DebugSlic=Yes mode a
+  message is given.
 Fixed: Map wrap handling of the trade route computation is now consistent with the actual
   map type selection.
-Fixed: Trade routes now follow rivers, roads, railroads and maglavs according the Freight
+Fixed: Trade routes now follow rivers, roads, railroads and maglevs according the Freight
   flag in terrain.txt and tileimp.txt. So if you have a route between two cities and there
   is no road etc. you need much more caravans than if there is a road etc.
-Fixed: Handled a CtD (stack overflow by infinite recursion) when the advances contain a
+Fixed: Handled a crash (stack overflow by infinite recursion) when the advances contain a
   loop in the prerequisite chain. Occurred (only) with the debug version in combination 
   with the LoTR scenario. Well maybe this is also useful somewhere else.
 Fixed: Memory leaks
@@ -1258,7 +1258,7 @@ Added: Pollution powergraph.
 First fix for the PBEM (PBEM is still incomplete though).
 Fixed: Coastal fortress and flak guns now work.
 Fixed: Sea city sprite bug.
-Added: function so that the population is displayed in the CityPopSoinner can be 
+Added: function so that the population is displayed in the CityPopSpinner can be 
   used elsewhere in the program.
 Fixed: Bug in Scenario Editor that prevents displaying of more then three city 
   style buttons in the city tab. Well these so far these buttons don't have icons 
@@ -1268,8 +1268,8 @@ Fixed: Bug in the Scenario Editor so that cities created by the Scenario Editor
   by the Scenario Editor. 
 Fixed: Cities created by the scenario are now selected per default.
 Attempt to fix bug concerning displaying of unfinished tile improvements. 
-  Unfortunatly this doesn't work as expected as the graphics of the unfinished 
-  improvements aren't updated as exspected.
+  Unfortunately this doesn't work as expected as the graphics of the unfinished 
+  improvements aren't updated as expected.
 Fixed: PercentComplete function.
 Fixed: infinite rush build bug.
 Fixed: view the movies without a sound card.
@@ -1290,18 +1290,18 @@ Fixed: Reduced the visibility to the player of an AI cheat in the pathfinding
   algorithm.
 Fixed: Make forts heal as cities, instead of fully in one turn.
 Fixed: Veteran status is now used in combat.
-Added: The music option to the drop down menue in the menue bar.
+Added: The music option to the drop down menu in the menu bar.
 Added: When a tile improvement is constructed a sound is played like in CTP1.
 Added: Strings in English and German for the new music option and for the ranking tab.
 Added: Short cut to the music screen to the keymaps.
-Added: A Sound flag, a Freight flag and remove the limit of 3 for contruction tiles.
-  All in the TileImprovementDB.
+Added: A Sound flag, a Freight flag and remove the limit of 3 for construction tiles.
+  All in the TerrainImprovementDB.
 Fixed: None of the rush buy buttons is disabled anymore when there is only one turn 
   left from completion.
 Added: A user interface option: Enables you to view cost and effect of all known tile 
   improvements, even if you are short on PW. To activate this option, you have to edit 
   userprofile.txt and set ShowExpensive to Yes. 
-  (Well has to be added, if the game does not do it automaticly.)
+  (Well has to be added, if the game does not do it automatically.)
   There is no in-game screen to modify this setting (not yet).
 Fixed: AI-AI-Diplomacy actually happen now.
 Added: Two new flags for the TerrainDB to allow modders to customize the graphics for 
@@ -1311,10 +1311,10 @@ Added: Two new flags for the TerrainDB to allow modders to customize the graphic
   in the TerrainDB are optional if both of these flags are missing or just one of them 
   a default image is used, like it is in the original CTP2. The terrain.txt here is a 
   modified version, I replaced some of the ruins graphics with another graphic that is 
-  part of the tile file already. This terrain.txt is meant as a base for disscussion, 
-  so far it just demonstraded that it does work.
+  part of the tile file already. This terrain.txt is meant as a base for discussion, 
+  so far it just demonstrated that it does work.
 Added: The maximum city size that you can create with the scenario editor is now 999.
-Added: Flat Map and Neptun World option to the single player shape selection window. 
+Added: Flat Map and Neptune World option to the single player shape selection window. 
   This new features are only available in a single player game so far.
 Fixed: Correct movement costs for ships above seatunnels.
 Fixed: Do not overwrite the user's leader name with the default civilisation-dependent 
