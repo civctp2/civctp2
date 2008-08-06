@@ -1,0 +1,6 @@
+; Generic module-definition file for the map generator plugins
+; (Crater, Fault, Geometric, and Plasma2) for use with MSVC 2005.
+
+LIBRARY
+EXPORTS
+	CoCreateMapGenerator @1
