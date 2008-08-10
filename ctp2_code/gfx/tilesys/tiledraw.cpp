@@ -4656,7 +4656,7 @@ void TiledMap::DrawChatText()
 					timeRect.bottom++;
 					AddDirtyRectToMix(timeRect);
 				} else {
-					sprintf(timebuf, "%s: %s", g_theStringDB->GetNameStr("NETWORK_CURRENT_PLAYER"), g_player[g_selected_item->GetCurPlayer()] ? g_player[g_selected_item->GetCurPlayer()]->m_civilisation->GetLeaderName() : "---");
+					sprintf(timebuf, "%s: %s", g_theStringDB->GetNameStr("NETWORK_CURRENT_PLAYER"), g_player[g_selected_item->GetCurPlayer()] && g_player[g_selected_item->GetCurPlayer()]->m_civilisation->m_id != 0 ? g_player[g_selected_item->GetCurPlayer()]->m_civilisation->GetLeaderName() : "---");
 					timeRect.right = timeRect.left + m_font->GetStringWidth(timebuf);
 					m_font->DrawString(tempSurf, &timeRect, &timeRect, timebuf, 0, GetColorRef(COLOR_BLACK), 0);
 					OffsetRect(&timeRect, -1, -1);

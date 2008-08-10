@@ -2363,6 +2363,8 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 
 	if (advance_index < g_theAdvanceDB->NumRecords())
 	{
+		Assert(player_ptr->m_advances->CanResearch(advance_index));
+
 		if (player_ptr->m_advances->GetResearching() != advance_index)
 			player_ptr->SetResearching(advance_index);
 	}
