@@ -39,6 +39,7 @@ TERRAIN_FOREST {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -101,6 +102,7 @@ TERRAIN_PLAINS {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -163,6 +165,7 @@ TERRAIN_TUNDRA {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -221,6 +224,7 @@ TERRAIN_GLACIER {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -278,6 +282,7 @@ TERRAIN_GRASSLAND {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -340,6 +345,7 @@ TERRAIN_DESERT {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -402,6 +408,7 @@ TERRAIN_SWAMP {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -464,6 +471,7 @@ TERRAIN_JUNGLE {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -525,6 +533,7 @@ TERRAIN_MOUNTAIN {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -587,6 +596,7 @@ TERRAIN_HILL {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -633,6 +643,7 @@ TERRAIN_WATER_SHALLOW {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
@@ -671,6 +682,7 @@ TERRAIN_WATER_DEEP {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
@@ -707,6 +719,7 @@ TERRAIN_WATER_VOLCANO {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE
@@ -784,6 +797,7 @@ TERRAIN_WATER_SHELF {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
@@ -822,6 +836,7 @@ TERRAIN_WATER_TRENCH {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
@@ -858,6 +873,7 @@ TERRAIN_WATER_RIFT {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_DEEP_GOOD_TWO
@@ -942,6 +958,7 @@ TERRAIN_BROWN_HILL {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -1003,6 +1020,7 @@ TERRAIN_BROWN_MOUNTAIN {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -1037,7 +1055,7 @@ TERRAIN_WHITE_HILL {
       Materials 800
    }
 
-   RemoveAdvance ADVANCE_EXPLOSIVES
+   RemoveAdvance ADVANCE_FUSION
    TransformRemove {
       Time 10
       Materials 1000
@@ -1062,6 +1080,7 @@ TERRAIN_WHITE_HILL {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -1120,6 +1139,7 @@ TERRAIN_WHITE_MOUNTAIN {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -1166,6 +1186,7 @@ TERRAIN_WATER_KELP {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
@@ -1204,6 +1225,7 @@ TERRAIN_WATER_REEF {
       Food 10
       Shield 15
       Gold 15
+      CanUpgrade
    }
 
    Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
@@ -1247,6 +1269,7 @@ TERRAIN_SPECIAL1 {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {
@@ -1293,6 +1316,7 @@ TERRAIN_SPECIAL2 {
       Gold 15
       Movement 50
       Freight 500
+      CanUpgrade
    }
 
    EnvRiver {

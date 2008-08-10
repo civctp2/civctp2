@@ -606,6 +606,7 @@ TILEIMP_FORTIFICATIONS {
       Terrain TERRAIN_WHITE_HILL
       Terrain TERRAIN_WHITE_MOUNTAIN
 
+      CanUpgrade
       VisionRange 2
       DefenseBonus 0.5
       EnableAdvance ADVANCE_STONE_WORKING
