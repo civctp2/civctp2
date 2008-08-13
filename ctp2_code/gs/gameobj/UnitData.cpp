@@ -1622,7 +1622,7 @@ bool UDUnitTypeCanSettle(sint32 unit_type, sint32 government, const MapPoint &po
 {
 	const UnitRecord *rec = g_theUnitDB->Get(unit_type, government);
 	sint32 t = rec->GetSettleCityTypeIndex();
-	if (t < 0)
+	if (t < 0 && t >= g_theUnitDB->NumRecords())
 	{
 		return false;
 	}
