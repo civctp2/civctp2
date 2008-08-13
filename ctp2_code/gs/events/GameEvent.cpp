@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Game event
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@ GameEvent::GameEvent
 	m_file              (NULL),
 	m_contextName       (NULL)
 {
+//	DPRINTF(k_DBG_GAMESTATE, ("Added Event: %s\n", g_gevManager->GetEventName(type))); // Needed for debugging but it isn't worth to have it always on.
 	if(g_slicEngine->GetContext())
 	{
 		m_line = g_slicEngine->GetContext()->GetFrame()->GetCurrentLine();

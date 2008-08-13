@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Squad
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -62,15 +62,13 @@ public:
 	Agent_ptr Get_Agent(const Agent_List::iterator & agent_iter) const;
 
 	Agent_List::const_iterator Remove_Agent(const Agent_List::const_iterator & agent_iter,
-	                                  const bool & dealloc_agent = true);
+	                                        const bool & dealloc_agent = true);
 
 	SQUAD_CLASS Compute_Squad_Class();
 
 	SQUAD_CLASS Get_Squad_Class() const;
 
 	void Add_Agent( Agent_ptr the_agent );
-
-	void Remove_Agent( Agent_ptr the_agent );
 
 	void Add_Match_Reference(const Plan_List::iterator &plan_iter);
 
@@ -85,14 +83,18 @@ public:
 
 	sint32 DisbandObsoleteArmies() const;
 
-	void Log_Debug_Info(const int & log) const;
+	void Log_Debug_Info(const int & log, const Goal const * goal) const;
+
+	void Get_Strength(Squad_Strength & strength);
+	void Compute_Strength(Squad_Strength & strength);
+	void Set_Needs_Transporter(const bool needs_transporter);
 
 protected:
 
 	bool                            m_is_committed;
 	SQUAD_CLASS                     m_squad_class;
 	Agent_List                      m_my_agents;
-	bool                            m_squad_changed;
+	bool                            m_squad_changed;    // Not used
 	std::list<Plan_List::iterator>  m_match_references;
 
 private:

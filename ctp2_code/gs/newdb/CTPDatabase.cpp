@@ -231,7 +231,7 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 {
 	// Check validity of index
-	T * nonSpecific = Access(index);    
+	T * nonSpecific = Access(index);
 	if (!nonSpecific) return NULL;
 
 	// Check for any government specific overrides
@@ -249,7 +249,7 @@ template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 		}
 	}
 
-	return nonSpecific; 
+	return nonSpecific;
 }
 
 

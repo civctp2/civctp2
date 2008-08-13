@@ -1192,7 +1192,7 @@ void ShowVisCommand::Execute(sint32 argc, char **argv)
 		for(u = 0; u < g_player[p]->m_all_armies->Num(); u++) {
 			char buf[40];
 			sprintf(buf, "VIS: %lx", g_player[p]->m_all_armies->Access(u).Access(0).GetVisibility());
-			g_graphicsOptions->AddTextToArmy(g_player[p]->m_all_armies->Access(u), buf, 255);
+			g_graphicsOptions->AddTextToArmy(g_player[p]->m_all_armies->Access(u), buf, 255, -1);
 		}
 	}
 }

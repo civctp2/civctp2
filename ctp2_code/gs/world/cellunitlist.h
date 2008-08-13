@@ -28,6 +28,7 @@
 // - MovementTypeLand added, as suggested by NelsonAndBronte.
 // - Option added to report sync errors only once.
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
+// - Position strength can now be calculated independently from position. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -189,7 +190,8 @@ public:
 						 double & land_bombard,
 						 double & water_bombard,
 						 double & air_bombard,
-						 double & total_value) const;
+						 double & total_value,
+						 const bool terrainIndependent) const;
 
 
 	double  GetAverageHealthPercentage() const;

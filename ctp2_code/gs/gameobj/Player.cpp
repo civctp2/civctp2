@@ -120,7 +120,7 @@
 //
 // - g_player[m_owner] is identical to the this-pointer in methods of Player.
 //   Therefore I removed it except were it constrats with other accesses of
-//   of g_player.
+//   g_player.
 //
 //----------------------------------------------------------------------------
 
@@ -1160,7 +1160,7 @@ Army Player::GetNewArmy(CAUSE_NEW_ARMY cause)
 #endif
 
 	g_gevManager->Pause();
-	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreatedArmy,
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CreatedArmy,
 						   GEA_Army, army,
 						   GEA_End);
 	g_gevManager->Resume();
@@ -5922,54 +5922,30 @@ sint32 Player::GetMaxCityCount() const
 	return m_maxCityCount; 
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // Unused
-
 double Player::GetPollutionSizeModifier(void) const
 {
 	return m_advances->GetPollutionSizeModifier();
 }
 
-
-
-
-
-
-
-
-
-
-
 // Unused
-
-
 double Player::GetPollutionProductionModifier(void) const
 {
 	return m_advances->GetPollutionProductionModifier();
 }
 
-	
+// Used
 bool Player::HasAdvance(AdvanceType adv) const
-{ 
+{
 	if (!m_advances) return false;
 
-	return m_advances->HasAdvance(adv); 
+	return m_advances->HasAdvance(adv);
 }
 
 sint32 Player::NumAdvances()
-{ 
+{
 	if (!m_advances) return 0;
-	return (m_advances->GetNum()); 
+	return (m_advances->GetNum());
 }
 
 uint32 Player::RoadAdvanceLevel() const

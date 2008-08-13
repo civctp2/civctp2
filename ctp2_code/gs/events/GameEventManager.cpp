@@ -154,7 +154,7 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert,
 	va_list vl;
 	va_start(vl, type);
 
-	BOOL argsOk = VerifyArgs(type, &vl);
+	bool argsOk = VerifyArgs(type, &vl);
 	va_end(vl);
 
 	EVENTLOG(("): Serial: %d\n", m_serial));

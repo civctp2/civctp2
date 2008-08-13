@@ -405,7 +405,7 @@ BOOL CALLBACK Debug_EnumSymbolsCallback
 
 
 
-BOOL CALLBACK Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext)
+BOOL CALLBACK Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext)
 {
 	#ifndef _BFR_
 		int					err;

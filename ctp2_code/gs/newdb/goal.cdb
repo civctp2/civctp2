@@ -23,7 +23,6 @@
 #  - Added IsVisible Bonus
 #  - Added IsWounded Bonus
 #  - Added TargetType:PetrolStation - April 30th 2005 Martin Gühmann
-#  - Added UnitCountBonus     (25-Jan-2008 Martin Gühmann)
 #  - Added InVisionRangeBonus (25-Jan-2008 Martin Gühmann)
 #  - Added NoBarbarianBonus   (25-Jan-2008 Martin Gühmann)
 #  - Added CanAttackBonus     (25-Jan-2008 Martin Gühmann)
@@ -93,7 +92,6 @@ Goal {
 	Int InEnemyTerritoryBonus = 0
 	Int WoundedArmyBonus      = 0
 	Int NotVisibleBonus       = 0
-	Int UnitCountBonus        = 0
 	Int InVisionRangeBonus    = 0
 	Int NoBarbarianBonus      = 0
 	Int CanAttackBonus        = 0

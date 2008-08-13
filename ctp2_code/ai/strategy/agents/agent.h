@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ header
 // Description  : Goal handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -41,25 +41,27 @@ class Agent;
 
 #include "scheduler_types.h"
 #include "squad_Strength.h"
+#include "Goal.h"
+//#include "scheduler_types.h"
 
-class Agent 
+class Agent
 {
 public:
 	Agent();
-	Agent(const Agent &agent);
+	Agent(const Agent & an_Original);
 	virtual ~Agent();
 
-	virtual Agent& operator= (const Agent &agent);
+	virtual Agent& operator= (const Agent & an_Original);
 
-	sint16 Get_Type() const; 
+	sint16 Get_Type() const;
 
 	void Set_Type(const sint16 & type);
 
 	SQUAD_CLASS Get_Squad_Class() const;
 
-	bool Get_Is_Used() const;
-
-	void Set_Is_Used(const bool & is_used);
+	void     Set_Goal(Goal_ptr goal){ m_goal = goal; };
+	Goal_ptr Get_Goal(){ return m_goal; };
+	bool     Has_Goal(){ return m_goal != NULL; };
 
 	virtual bool Get_Is_Dead() const;
 
@@ -79,16 +81,20 @@ public:
 
 	bool Get_Detached() const;
 
-	virtual void Log_Debug_Info(const int & log) {};
+	virtual void Log_Debug_Info(const int & log, const Goal const * goal) const = 0;
+
+	void Set_Needs_Transporter(const bool needs_transporter) { m_needs_transporter = needs_transporter; };
+	bool Get_Needs_Transporter() const { return m_needs_transporter; };
 
 protected:
 
 	SQUAD_CLASS    m_squad_class;
 	sint16         m_agent_type;
-	bool           m_is_used;
+	Goal_ptr       m_goal;
 	Squad_Strength m_squad_strength;
 	bool           m_can_be_executed;
 	bool           m_detached;
+	bool           m_needs_transporter;
 };
 
 #endif // __AGENT_H__

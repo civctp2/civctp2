@@ -50,7 +50,6 @@ enum GOAL_RESULT
 typedef sint32				Utility;
 typedef sint32				PLAYER_INDEX;
 
-
 class Agent;
 class Squad_Strength;
 class Goal;
@@ -72,11 +71,11 @@ bool operator <
     const Sorted_Goal_ptr& _Y
 )
 {
-    return (_X.first < _Y.first);
+	return (_X.first < _Y.first);
 };
 
 typedef std::list<Agent_ptr> Agent_List;
 typedef std::list<Squad_ptr> Squad_List;
-typedef std::list<Plan> Plan_List;
+typedef std::list<Plan>      Plan_List;
 
 #endif //__SCHEDULER_TYPES_H__

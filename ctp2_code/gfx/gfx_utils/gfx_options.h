@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ header
+// Description  : Cell and Army text
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// -None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
@@ -14,12 +43,12 @@ class GraphicOptions;
 class MapPoint;
 template <class T> class AvlTree;
 
-class CellText 
+class CellText
 {
 public:
-    uint32        m_key;
-    uint8	      m_color;
-    MBCHAR *      m_text;
+	uint32        m_key;
+	uint8	      m_color;
+	MBCHAR *      m_text;
 };
 
 class GraphicsOptions 
@@ -35,7 +64,7 @@ public:
 	void ArmyTextOn(void);
 	void ArmyTextOff(void);
 
-	bool AddTextToArmy(Army army, const char *text, const uint8 &colorMagnitude);
+	bool AddTextToArmy(Army army, const char *text, const uint8 &colorMagnitude, const sint32 goalType = -1) const;
 	void ResetArmyText(Army army);
 
 	bool IsArmyNameOn(void) const { return m_armyNameOn; }
@@ -51,10 +80,10 @@ public:
 	void ResetCellText(const MapPoint &pos);
 
 private:
-    bool                      m_armyTextOn;
-    bool                      m_cellTextOn;
-    bool                      m_armyNameOn;
-    AvlTree<CellText *> *     m_cellAVL;
+	bool                      m_armyTextOn;
+	bool                      m_cellTextOn;
+	bool                      m_armyNameOn;
+	AvlTree<CellText *> *     m_cellAVL;
 };
 
 extern GraphicsOptions *      g_graphicsOptions;

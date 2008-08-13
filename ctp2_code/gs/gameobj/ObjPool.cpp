@@ -90,20 +90,20 @@ bool ObjPool::IsValidKey(uint32 id, uint32 &val) const
 
 void ObjPool::Insert(GameObj *p)
 {
-	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Inserting object id %lx\n", p->m_id));
+	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Inserting object id 0x%lx\n", p->m_id));
 	Assert(p->m_id != 0);
 	GameObj_Insert(&m_table[Key(p->m_id)], p); 
 }
 
 void ObjPool::Del(GameObj *p)
 {
-	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id %lx\n", p->m_id));
+	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id 0x%lx\n", p->m_id));
 	GameObj_Delete(&m_table[Key(p->m_id)], p->m_id); 
 }
 
 void ObjPool::Del(const ID &id) 
 {
-	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id %lx\n", (uint32)id));
+	DPRINTF(k_DBG_GAMESTATE, ("ObjPool: Deleting object id 0x%lx\n", (uint32)id));
 	GameObj_Delete(&m_table[Key(id.m_id)], id.m_id); 
 }
 

@@ -26,16 +26,19 @@
 // Modifications from the original Activision code:
 //
 // - Marked MS version specific code.
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Now the goals are used for the matching process, the goal match value
+//   is the avarage match value of the matches needed for the goal.
 //
 //----------------------------------------------------------------------------
 
 #ifndef __SCHEDULER_H__
 #define __SCHEDULER_H__
 
+#include "scheduler_types.h"
 
 #include "Plan.h"
 
-#include "scheduler_types.h"
 #include "squad_Strength.h"
 #include "StrategyRecord.h"
 
@@ -47,6 +50,7 @@
 #include "c3debugstl.h"
 
 #include "civarchive.h"
+#include "goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
 
 class GoalRecord;
 class Scheduler;
@@ -70,7 +74,7 @@ public:
 	typedef std::vector<Sorted_Goal_List, dbgallocator<Sorted_Goal_List> > Sorted_Goal_List_Vector;
 	typedef std::vector<Sorted_Goal_List::iterator, dbgallocator<Sorted_Goal_List::iterator> > Sorted_Goal_List_Iter_Vector;
 	typedef std::vector<Squad_List, dbgallocator<Squad_List> > Squad_List_Vector;
-#if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version	
+#if defined(_MSC_VER) && (_MSC_VER < 1300)	// does not compile with newer version
 	typedef std::deque<Scheduler, dbga<Scheduler> > Scheduler_Vector;
 #else
 	typedef std::vector<Scheduler, dbgallocator<Scheduler> > Scheduler_Vector;
@@ -114,13 +118,11 @@ public:
 
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
 
-	
+#if 0
 	static void LoadAll(CivArchive & archive);
-
-	
 	static void SaveAll(CivArchive & archive);
+#endif
 
-	
 	static Scheduler & GetScheduler(const sint32 & playerId);
 
 	
@@ -175,29 +177,27 @@ public:
 		const SQUAD_CLASS &old_squad_class
 	);
 
-	
-	
+
+
 	void Planning_Status_Reset();
 
 	TIME_SLICE_STATE Process_Squad_Changes();
 	TIME_SLICE_STATE Process_Goal_Changes();
 
-	
+
 	void Reset_Squad_Execution();
 
-	bool Sort_Matches();
+	void Sort_Goals();
 
 
-	void Scheduler::Match_Resources(const bool move_armies);
+	void Match_Resources(const bool move_armies);
 
 	
 	
 	void Add_New_Goal(const Goal_ptr & new_goal);
 
-	
-	
 	void Add_New_Squad(const Squad_ptr & new_squad);
-
+	Squad_List::iterator Add_Squad(const Squad_ptr & squad);
 
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
 
@@ -232,53 +232,43 @@ public:
 
 	
 	void SetArmyDetachState(const Army & army, const bool detach);
+	void Recompute_Goal_Strength();
+	void Compute_Squad_Strength();
+	void Rollback_Emptied_Transporters();
+	void Sort_Goal_Matches_If_Necessary();
+
+#if 0
+	bool Test_Syn_Of_Committed_Agents();
+#endif
 
 protected:
 
-	bool Add_New_Match_For_Goal_And_Squad
-	(
-	 const Goal_ptr & goal_ptr,
-	 const Squad_List::iterator & squad_iter,
-	 Plan_List::iterator & plan_iter
-	);
-
-
 	sint32 Add_New_Matches_For_Goal
 	(
-	 const Goal_ptr & goal_iter
+	    const Goal_ptr & goal_iter,
+	    const bool       update_match_value = true
 	);
 
 
-	sint32 Add_New_Matches_For_Squad
-	(
-	 const Squad_List::iterator & squad_iter
-	);
+	sint32 Add_New_Matches_For_Squad(const Squad_ptr & squad);
 
-	bool Free_Undercommitted_Goal();
 
-	
 	void Remove_Matches_For_Goal( const Goal_ptr & goal );
 
-	
+
 	void Remove_Matches_For_Squad( const Squad_ptr & squad );
 
-	
-	void Remove_Match(Plan_List::iterator &plan_iter);
 
-	sint32 Scheduler::Rollback_Matches_For_Goal
+	sint32 Rollback_Matches_For_Goal
 	(
-	 const Goal_ptr & goal_ptr 
+	 const Goal_ptr & goal_ptr
 	);
 
-	Squad_ptr Scheduler::Form_Squad_From_Goal
-	(
-	 const Goal_ptr & goal_ptr 
-	);
+	void Reprioritize_Goal(Goal_List::iterator &goal_iter);
 
 	bool Add_Transport_Matches_For_Goal
 	(
-	 const Goal_ptr & goal_ptr,
-	 Plan_List::iterator & plan_iter
+	    const Goal_ptr & goal_ptr
 	);
 
 	
@@ -294,52 +284,20 @@ private:
 	static Scheduler_Vector s_theSchedulers;
 
 
-	Count_Vector m_exec_goal_count;
-
-	
-	Count_Vector m_pruned_goals_count;
-
-
-	Sorted_Goal_List_Vector m_goals_of_type;
-
-	
+	Count_Vector                 m_pruned_goals_count; // Not needed
+	Sorted_Goal_List_Vector      m_goals_of_type;
 	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type;
+	Squad_List                   m_squads;
+	Squad_List                   m_transport_squads;
+	Goal_List                    m_new_goals;
+	Squad_List                   m_new_squads;
+	PLAYER_INDEX                 m_playerId;
+	sint32                       m_committed_agents;
+	sint32                       m_total_agents;
+	Squad_Strength               m_neededSquadStrength;
+	Utility                      m_maxUndercommittedPriority;
+	Goal_List                    m_goals;
 
-	
-	Squad_List m_squads;
-
-
-	
-	
-	Goal_List m_new_goals; 
-
-
-	
-	
-	Squad_List m_new_squads;
-
-	
-	PLAYER_INDEX m_playerId;
-
-	
-	Plan_List m_matches;
-
-	
-	sint32 m_committed_agents;
-
-	
-	sint32 m_total_agents;
-
-	
-	Plan_List::iterator m_current_plan_iter;
-
-	
-	
-	Squad_Strength m_neededSquadStrength;
-	Utility m_maxUndercommittedPriority;
-
-	
-	
 	static sint32 m_contactCachedPlayer;
 	static uint32 m_contactCache;
 	static sint32 m_neutralRegardCachedPlayer;

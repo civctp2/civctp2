@@ -27,7 +27,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -38,6 +38,7 @@
 #include "ctpagent.h"
 #include "ctpaidebug.h"
 #include "Plan.h"
+#include "ArmyData.h"
 
 #ifdef _DEBUG
 #include "Scheduler.h"
@@ -121,7 +122,7 @@ bool Squad::ContainsArmyIn(const Squad &squad) const
 size_t Squad::Remove_Dead_Agents()
 {
 	size_t agents_found = 0;
-	
+
 	for
 	(
 	    Agent_List::const_iterator  agent_iter  = m_my_agents.begin();
@@ -131,9 +132,13 @@ size_t Squad::Remove_Dead_Agents()
 	{
 		CTPAgent_ptr agent_ptr = (CTPAgent_ptr) *agent_iter;
 
-		if (agent_ptr->Get_Is_Dead())
+		if(agent_ptr->Get_Is_Dead())
 		{
-			++agents_found;
+			if(agent_ptr->Has_Goal())
+			{
+				++agents_found;
+			}
+
 			agent_iter = Remove_Agent(agent_iter);
 		}
 		else
@@ -231,9 +236,11 @@ void Squad::Add_Agent( Agent_ptr the_agent )
 {
 	m_my_agents.push_back(the_agent);
 	m_squad_changed = true;
+
+	Assert(m_my_agents.size() == 0 || m_my_agents.size() == 1);
 }
 
-void Squad::Remove_Agent( Agent_ptr the_agent )
+void Squad::Compute_Strength(Squad_Strength & strength)
 {
 	for
 	(
@@ -242,11 +249,22 @@ void Squad::Remove_Agent( Agent_ptr the_agent )
 	                       ++agent_iter
 	)
 	{
-		if (the_agent == (*agent_iter))
-		{
-			Remove_Agent(agent_iter);
-			return;
-		}
+		CTPAgent* agent = static_cast<CTPAgent*>(*agent_iter);
+		strength += agent->Compute_Squad_Strength();
+	}
+}
+
+void Squad::Get_Strength(Squad_Strength & strength)
+{
+	for
+	(
+	    Agent_List::iterator agent_iter  = m_my_agents.begin();
+	                         agent_iter != m_my_agents.end();
+	                       ++agent_iter
+	)
+	{
+		CTPAgent* agent = static_cast<CTPAgent*>(*agent_iter);
+		strength += agent->Get_Squad_Strength();
 	}
 }
 
@@ -287,6 +305,19 @@ void Squad::Set_Can_Be_Executed(const bool & can_be_executed)
 	}
 }
 
+void Squad::Set_Needs_Transporter(const bool needs_transporter)
+{
+	for
+	(
+	    Agent_List::iterator agent_iter  = m_my_agents.begin();
+	                         agent_iter != m_my_agents.end();
+	                       ++agent_iter
+	)
+	{
+		(*agent_iter)->Set_Needs_Transporter(needs_transporter);
+	}
+}
+
 sint32 Squad::DisbandObsoleteArmies() const
 {
 	sint32 total_count = 0;
@@ -303,8 +334,8 @@ sint32 Squad::DisbandObsoleteArmies() const
 		
 		if (count > 0)
 		{
-			DPRINTF(k_DBG_SCHEDULER, ("*** Disbanding Army:"));
-			ctpagent_ptr->Log_Debug_Info(k_DBG_SCHEDULER);
+			AI_DPRINTF(k_DBG_SCHEDULER, ctpagent_ptr->Get_Army()->GetOwner(), -1, -1, ("*** Disbanding Army:\n"));
+			ctpagent_ptr->Log_Debug_Info(k_DBG_SCHEDULER, ctpagent_ptr->Get_Goal());
 		}
 
 		total_count += count;
@@ -313,7 +344,7 @@ sint32 Squad::DisbandObsoleteArmies() const
 	return total_count;
 }
 
-void Squad::Log_Debug_Info(const int & log) const
+void Squad::Log_Debug_Info(const int & log, const Goal const * goal) const
 {
 	for
 	(
@@ -323,6 +354,6 @@ void Squad::Log_Debug_Info(const int & log) const
 	)
 	{
 		CTPAgent * ctpagent_ptr = (CTPAgent *) (*agent_iter);
-		ctpagent_ptr->Log_Debug_Info(log);
+		ctpagent_ptr->Log_Debug_Info(log, goal);
 	}
 }

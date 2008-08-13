@@ -26,11 +26,14 @@
 //
 // - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 // - Seperated the NewProposal event from the Response event so that the 
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann) 
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
 // - Added GobalWarming and OzoneDepletion events. (29-Oct-2007 Martin Gühmann)
 // - Added SendEmailAndHotSeatMessage so that this is event driven and can
 //   be executed after all the other events. (14-Nov-2007 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Seperated the CheckOrders event from MoveUnits event. (13-Aug-2008 Martin Gühmann)
+// - Moved the startegic state calculation before everthing else, so that
+//   each turn has the right startegy even after a reload. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -342,6 +345,8 @@ GameEventDescription g_eventDescriptions[] =
 
 	EVENT(SettleInCityOrder,          "This army settles in a city", "%a")
 	EVENT(SettleInCity,               "Adds a pops to a city with a settler", "%a&i")
+	EVENT(CheckOrders,                "Added by the MoveUnit event to execute the next moves", "%a%l%l")
+	EVENT(AiBeginTurn,                "Begin a player's turn main Ai", "%P")
 
 	EVENT(MAX,                        "This is not a real event, it marks the end of the list", "")
 };

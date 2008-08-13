@@ -18,7 +18,8 @@
 #
 # Modifications from the original Activision code:
 #
-# - None or not known
+# - Increased NotVisibleBonus visible bonus for GOAL_ATTACK and
+#   GOAL_HARASS. (13-Aug-2008 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -96,7 +97,6 @@ GOAL_SEIGE {
   UnexploredBonus     -999999
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
-  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -131,12 +131,11 @@ GOAL_ATTACK {
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     -10000
-  NotVisibleBonus       -1000
+  NotVisibleBonus     -500000
   ChokePointBonus         250
   UnexploredBonus     -999999
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
-  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -170,12 +169,11 @@ GOAL_HARASS {
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus     -10000
-  NotVisibleBonus       -1000
+  NotVisibleBonus     -500000
   ChokePointBonus          50
   UnexploredBonus     -999999
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
-  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -273,20 +271,20 @@ GOAL_EXPLORE {
 
   // Try to explore away from home, but close
   // to enemies/foreigners.
-  ThreatBonus               0
-  EnemyValueBonus           0
-  AlliedValueBonus          0
-  PowerBonus                0
-  DistanceToHomeBonus     -10
-  DistanceToEnemyBonus      0
-  InHomeTerritoryBonus   1000
-  NoOwnerTerritoryBonus   100
-  InEnemyTerritoryBonus  -100
-  WoundedArmyBonus       -100
-  NotVisibleBonus        1000
-  ChokePointBonus          10
-  UnexploredBonus        1000
-  ObsoleteArmyBonus        10
+  ThreatBonus                0
+  EnemyValueBonus            0
+  AlliedValueBonus           0
+  PowerBonus                 0
+  DistanceToHomeBonus      -10
+  DistanceToEnemyBonus       0
+  InHomeTerritoryBonus    1000
+  NoOwnerTerritoryBonus    100
+  InEnemyTerritoryBonus   -100
+  WoundedArmyBonus        -100
+  NotVisibleBonus         1000
+  ChokePointBonus           10
+  UnexploredBonus         1000
+  ObsoleteArmyBonus         10
   TreaspassingArmyBonus -10000
 
   ThreatenType:None
@@ -624,7 +622,6 @@ GOAL_HARASS_CITY {
   UnexploredBonus     -999999
   ObsoleteArmyBonus       100
   TreaspassingArmyBonus     0
-  UnitCountBonus           50 // Maybe this is even too high
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000
@@ -658,7 +655,7 @@ GOAL_BOMBARD {
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
-  NotVisibleBonus        -100
+  NotVisibleBonus      -10000
   ChokePointBonus         100
   UnexploredBonus     -999999
   ObsoleteArmyBonus         0
@@ -686,15 +683,15 @@ GOAL_EXPEL {
 
   ThreatBonus            -100
   EnemyValueBonus           0
-  AlliedValueBonus         50 
+  AlliedValueBonus         50
   PowerBonus                0
   DistanceToHomeBonus       0
   DistanceToEnemyBonus      0
-  InHomeTerritoryBonus      0
+  InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
-  NotVisibleBonus        -100
+  NotVisibleBonus      -10000
   ChokePointBonus         100
   UnexploredBonus     -999999
   ObsoleteArmyBonus        10

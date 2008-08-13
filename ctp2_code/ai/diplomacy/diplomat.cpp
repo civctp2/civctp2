@@ -921,39 +921,30 @@ void Diplomat::SetReceiverHasInitiative(const PLAYER_INDEX & foreignerId,
 }
 
 
-void Diplomat::BeginTurn() 
+void Diplomat::BeginTurn()
 {
-	
 	ClearEffectiveRegardCache();
 
-	
 	Assert(m_playerId != PLAYER_UNASSIGNED);
 
-	
 	if (m_playerId < 0 || (g_player[m_playerId] == NULL) || g_player[m_playerId]->IsDead())
 	{
 		return;
 	}
 
-	
 	UpdateAttributes();
 
-	
 	ComputeTradeRoutePiracyRisk();
 
-	
 	RecomputeRegard();
 
-	
 	m_motivations.clear();
 
-	
-	for (size_t foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
+	for(size_t foreigner=0; foreigner < m_lastMotivation.size(); foreigner++)
 	{
-			m_lastMotivation[foreigner] = m_motivations.end();
+		m_lastMotivation[foreigner] = m_motivations.end();
 	}
 
-	
 	for ( ForeignerVector::iterator iter = m_foreigners.begin(); 
 		  iter != m_foreigners.end(); 
 		  ++iter ) {
@@ -967,22 +958,19 @@ void Diplomat::BeginTurn()
 			  GEA_Player, m_playerId,
 			  GEA_End);
 
-	
 	NextStrategicState();
 
-	
-	for 
-    (
-        size_t foreignerIndex = 1; 
-        foreignerIndex < m_foreigners.size(); 
-        ++foreignerIndex
-    ) 
-    {
-	    PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);	
+	for
+	(
+	    size_t foreignerIndex = 1;
+	           foreignerIndex < m_foreigners.size();
+	         ++foreignerIndex
+	)
+	{
+		PLAYER_INDEX foreignerId = static_cast<PLAYER_INDEX>(foreignerIndex);	
 		if (foreignerId == m_playerId)
 			continue;
 
-		
 		if (!g_player[m_playerId]->HasContactWith(foreignerId) ||
 			!g_player[foreignerIndex] ||
 			!g_player[foreignerIndex]->HasContactWith(m_playerId))
@@ -991,15 +979,12 @@ void Diplomat::BeginTurn()
 		NextDiplomaticState(foreignerId);
 	}
 
-	
 	ComputeIncursionPermission();
 
-	
 	ExecutePersistantAgreements();
 
-	
 	sint32 diplomacyEndgameIndex = CtpAi::GetEndgameWorldUnionIndex();
-		
+
 	Assert(diplomacyEndgameIndex);
 	if (diplomacyEndgameIndex >= 0)
 	{
@@ -1011,7 +996,6 @@ void Diplomat::BeginTurn()
 			g_theEndGameObjectDB->Get(diplomacyEndgameIndex);
 		MapAnalysis::GetMapAnalysis().ComputeAllianceSize(m_playerId, leaderId, population_percent, land_percent);
 
-		
 		if (leaderId > 0 && rec->GetMinCoverage(population_needed))
 		{
 			if (leaderId == m_playerId && population_percent >= population_needed)
@@ -1021,11 +1005,11 @@ void Diplomat::BeginTurn()
 					if (m_diplomcyVictoryCompleteTurn <= NewTurnCount::GetCurrentRound())
 						g_player[m_playerId]->GameOver(GAME_OVER_WON_DIPLOMACY, -1);
 				}
-				else 
+				else
 				{
 					sint32 turns_to_activate = 1;
 					(void) rec->GetTurnsToActivate(turns_to_activate);
-					
+
 					m_diplomcyVictoryCompleteTurn = static_cast<sint16>
 							(NewTurnCount::GetCurrentRound() + turns_to_activate);
 				}
@@ -1035,15 +1019,8 @@ void Diplomat::BeginTurn()
 				m_diplomcyVictoryCompleteTurn = -1;
 			}
 		}
-
 	}
 }
-
-
-
-
-
-
 
 void Diplomat::LogRegardEvent( const PLAYER_INDEX & foreignerId,
 					 const sint32 & regardDelta,
@@ -3847,8 +3824,9 @@ void Diplomat::NextStrategicState() {
 }
 
 
-void Diplomat::ConsiderStrategicState( const AiState & state ) {
-	if (state.dbIndex < 0) 
+void Diplomat::ConsiderStrategicState( const AiState & state )
+{
+	if (state.dbIndex < 0)
 	{
 		// Nothing to merge. This may happen with the new strategy definition
 		// when there are no nukes yet.
@@ -3858,32 +3836,27 @@ void Diplomat::ConsiderStrategicState( const AiState & state ) {
 	AiStateList::iterator ai_state_iter = 
 		m_bestStrategicStates.begin();
 
-	
-	while (ai_state_iter != m_bestStrategicStates.end())
+	while(ai_state_iter != m_bestStrategicStates.end())
 	{
-		if (ai_state_iter->priority > state.priority)
+		if(ai_state_iter->priority > state.priority)
 			break;
 		ai_state_iter++;
 	}
 
-	
-	if (ai_state_iter == m_bestStrategicStates.end())
+	if(ai_state_iter == m_bestStrategicStates.end())
 	{
 		m_bestStrategicStates.push_back(state);
 	}
-	
-	else if (ai_state_iter == m_bestStrategicStates.begin())
+	else if(ai_state_iter == m_bestStrategicStates.begin())
 	{
 		m_bestStrategicStates.push_front(state);
 	}
-	
 	else
 	{
 		ai_state_iter--;
 		m_bestStrategicStates.insert(ai_state_iter, state);
 	}
 
-	
 	if (m_bestStrategicStates.size() > k_maxStategicState)
 		m_bestStrategicStates.pop_front();
 }
@@ -4749,7 +4722,7 @@ sint32 Diplomat::GetEnemyThreat() const
 }
 
 
-void Diplomat::UpdateAttributes() 
+void Diplomat::UpdateAttributes()
 {
 	Army army;
 	sint32 cell_owner;
@@ -4758,40 +4731,32 @@ void Diplomat::UpdateAttributes()
 	bool isspecial,cancapture,haszoc,canbombard;
 	bool isstealth;
 	sint32 maxattack,maxdefense;
-	
+
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
-	
+
 	m_friendCount = 0;
 	m_enemyCount = 0;
 	
 	m_friendPower = 0;
 	m_enemyThreat = 0;
 
-	
-	uint32 foreigner;
-	sint32 i;
-	for ( foreigner = 1;  foreigner< m_foreigners.size(); foreigner++ ) 
+	for(uint32 foreigner = 1;  foreigner< m_foreigners.size(); foreigner++ )
 	{
 		PLAYER_INDEX    foreignerId = static_cast<PLAYER_INDEX>(foreigner);
 		m_foreigners[foreigner].BeginTurn();
-		
-		
+
 		if (foreignerId == m_playerId)
 			continue;
-		
-		
+
 		Player *foreign_player_ptr = g_player[foreigner];
-		
-		
+
 		if (foreign_player_ptr == NULL || foreign_player_ptr->IsDead())
 			continue;
-		
-		
+
 		if (!player_ptr->HasContactWith(foreignerId))
 			continue;
-		
-		
+
 		if (m_foreigners[foreigner].GetEffectiveRegard() <= COLDWAR_REGARD ||
 			AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
 		{
@@ -4805,8 +4770,7 @@ void Diplomat::UpdateAttributes()
 			m_friendCount++;
 			m_friendPower += MapAnalysis::GetMapAnalysis().TotalThreat(foreignerId);
 		}
-		
-		
+
 		sint32 add_trust;
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT) ||
@@ -4820,7 +4784,7 @@ void Diplomat::UpdateAttributes()
 			if (GetCurrentDiplomacy(foreignerId).GetHasPactTrustBonus(add_trust))
 			{
 				ApplyTrustChange(foreignerId, 
-                                 static_cast<ai::Regard>(add_trust), 
+				                 static_cast<ai::Regard>(add_trust), 
 								 "Increase trust because they kept our pact."
 								);
 			}
@@ -4835,16 +4799,14 @@ void Diplomat::UpdateAttributes()
 			{
 				if (GetTrust(foreignerId) < (NEUTRAL_REGARD + 20))
 				{
-					
 					ApplyTrustChange(foreignerId, 
-                                     add_trust, 
-                                     "Increase trust because we're not at war."
-                                    );
+					                 add_trust, 
+					                 "Increase trust because we're not at war."
+					                );
 				}
 			}
 		}
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_WITHDRAW_TROOPS))
 		{
@@ -4853,12 +4815,12 @@ void Diplomat::UpdateAttributes()
 
 			if ((duration > 20) &&
 				GetCurrentDiplomacy(foreignerId).GetFollowThroughTrustBonus(add_trust)
-               )
+			   )
 			{
 				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Withdraw Troops agreement.");
 			}
 		}
-			
+
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_PIRACY))
 		{
@@ -4867,7 +4829,7 @@ void Diplomat::UpdateAttributes()
 			
 			if ((NewTurnCount::GetCurrentRound() - agreement.start == 20) &&
 				GetCurrentDiplomacy(foreignerId).GetFollowThroughTrustBonus(add_trust)
-               )
+			   )
 			{
 				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Stop Piracy agreement.");
 			}
@@ -4881,12 +4843,12 @@ void Diplomat::UpdateAttributes()
 			
 			if ((NewTurnCount::GetCurrentRound() - agreement.start == 20) &&
 				GetCurrentDiplomacy(foreignerId).GetFollowThroughTrustBonus(add_trust)
-               )
+			   )
 			{
 				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Reduce Pollution agreement.");
 			}
 		}
-		
+
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_REQUEST_STOP_RESEARCH))
 		{
@@ -4895,50 +4857,42 @@ void Diplomat::UpdateAttributes()
 			
 			if ((NewTurnCount::GetCurrentRound() - agreement.start == 20) &&
 				GetCurrentDiplomacy(foreigner).GetFollowThroughTrustBonus(add_trust)
-               )
+			   )
 			{
 				ApplyTrustChange(foreignerId, add_trust, "Increase trust because we followed through with Stop Research agreement.");
 			}
 		}
-			
-		
-		
-		
 
-		
 		sint32 last_incursion = GetLastBorderIncursionBy(foreignerId);
-		if ( last_incursion >= 0 && last_incursion + 5 < NewTurnCount::GetCurrentRound())
+		if(last_incursion >= 0 && last_incursion + 5 < NewTurnCount::GetCurrentRound())
 		{
-			
 			continue;
 		}
-		
-		
+
+
 		if ( AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR) )
 			continue;
-		
-		
+
 		if ( AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT) )
 			continue;
-		
-		
+
 		if ( AgreementMatrix::s_agreements.
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) )
 			continue;
-		
-		
+
 		num_armies = foreign_player_ptr->m_all_armies->Num();
-		for (i = 0; i < num_armies; i++)
+		for(sint32 i = 0; i < num_armies; i++)
 		{
 			army = foreign_player_ptr->m_all_armies->Access(i);
-			if (army.IsValid())
+			if(army.IsValid())
 			{
 				army->GetPos(pos);
 				cell_owner = g_theWorld->GetCell(pos)->GetOwner();
 				bool is_threat = army->HasCargo();
-				if (!is_threat)
+
+				if(!is_threat)
 				{
 					army->CharacterizeArmy(isspecial,
 						isstealth,
@@ -4947,43 +4901,41 @@ void Diplomat::UpdateAttributes()
 						cancapture,
 						haszoc,
 						canbombard);
-					
-					
+
 					is_threat = (maxattack || cancapture || haszoc || canbombard);
 				}
-				if (is_threat  && 
-					player_ptr->IsVisible(pos) &&
-					(cell_owner == m_playerId) )
+				if
+				  (
+				       is_threat
+				    && player_ptr->IsVisible(pos)
+				    && cell_owner == m_playerId
+				  )
 				{
 					SetBorderIncursionBy(foreignerId);
 					break;
 				}
 			}
-		} 
-		
-	} 
-	
+		}
+	}
+
 	sint32 const    num_cities = player_ptr->m_all_cities->Num();
 	TradeRoute      route;
 	Unit            city;
-	
-	for (i = 0; i < num_cities; i++)
+
+	for(sint32 i = 0; i < num_cities; i++)
 	{
 		city = player_ptr->m_all_cities->Access(i);
 		Assert(city.IsValid());
-		
-		
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) 
+
+		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
 		{
 			route = city.CD()->GetTradeSourceList()->Access(r);
-			
-			
+
 			foreigner = route->GetDestination().GetOwner();
 			m_foreigners[foreigner].AddTradeValue(route->GetValue());
 		}
 	}
 
-	
 	ComputeAllDesireWarWith();
 }
 

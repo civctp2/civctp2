@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Goal handling
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -34,22 +34,24 @@
 Agent::Agent()
 :
     m_squad_class       (SQUAD_CLASS_DEFAULT),
-    m_agent_type        (-1), 
-    m_is_used           (false),
+    m_agent_type        (-1),
+    m_goal              (NULL),
     m_squad_strength    (0),
     m_can_be_executed   (true),
-    m_detached          (false)
+    m_detached          (false),
+    m_needs_transporter (false)
 {
 }
 
-Agent::Agent(Agent const & a_Original)
+Agent::Agent(const Agent & an_Original)
 :
-    m_squad_class       (a_Original.m_squad_class),
-    m_agent_type        (a_Original.m_agent_type), 
-    m_is_used           (a_Original.m_is_used),
-    m_squad_strength    (a_Original.m_squad_strength),
-    m_can_be_executed   (a_Original.m_can_be_executed),
-    m_detached          (a_Original.m_detached)
+    m_squad_class       (an_Original.m_squad_class),
+    m_agent_type        (an_Original.m_agent_type), 
+    m_goal              (an_Original.m_goal),
+    m_squad_strength    (an_Original.m_squad_strength),
+    m_can_be_executed   (an_Original.m_can_be_executed),
+    m_detached          (an_Original.m_detached),
+    m_needs_transporter (an_Original.m_needs_transporter)
 {
 }
 
@@ -58,16 +60,17 @@ Agent::~Agent()
     // No action: nothing to delete
 }
 
-Agent & Agent::operator = (Agent const & a_Original)
+Agent & Agent::operator = (const Agent & an_Original)
 {
-	if (this != &a_Original)
+	if (this != &an_Original)
 	{
-		m_squad_class       = a_Original.m_squad_class;
-		m_agent_type        = a_Original.m_agent_type;
-		m_is_used           = a_Original.m_is_used;
-		m_squad_strength    = a_Original.m_squad_strength;
-		m_can_be_executed   = a_Original.m_can_be_executed;
-		m_detached          = a_Original.m_detached;
+		m_squad_class       = an_Original.m_squad_class;
+		m_agent_type        = an_Original.m_agent_type;
+		m_goal              = an_Original.m_goal;
+		m_squad_strength    = an_Original.m_squad_strength;
+		m_can_be_executed   = an_Original.m_can_be_executed;
+		m_detached          = an_Original.m_detached;
+		m_needs_transporter = an_Original.m_needs_transporter;
 	}
 
 	return *this;
@@ -81,16 +84,6 @@ sint16 Agent::Get_Type() const
 void Agent::Set_Type(const sint16 & type)
 {
 	m_agent_type = type;
-}
-
-bool Agent::Get_Is_Used() const
-{
-	return m_is_used;
-}
-
-void Agent::Set_Is_Used(const bool & is_used)
-{
-	m_is_used = is_used;
 }
 
 bool Agent::Get_Is_Dead() const

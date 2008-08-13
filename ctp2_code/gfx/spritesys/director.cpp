@@ -1493,13 +1493,13 @@ uint32 Director::KillAllActiveEffects()
 
 	ListPos     pos = m_activeEffectList->GetHeadPosition();
 
-	do 
-    {
+	do
+	{
 		ListPos         actorPos    = pos;
 		EffectActor *   actor       = m_activeEffectList->GetNext(pos);
 
 		if (actor) 
-        {
+		{
 			m_activeEffectList->DeleteAt(actorPos);
 			delete actor;
 		}
@@ -1518,24 +1518,28 @@ void Director::NextPlayer(BOOL forcedUpdate)
 #else
 	return; // Next code isn't used, should it be used?
 #endif
-	m_nextPlayer = TRUE; 
+	m_nextPlayer = TRUE;
 	
 	UnitActor * actor;
 	ListPos     actorPos;
 	ListPos     pos = m_activeUnitList->GetHeadPosition();
 
-	if (pos) 
+	if(pos)
 	{
-		do 
+		do
 		{
 			actorPos = pos;
 			actor    = m_activeUnitList->GetNext(pos);
 
-			if (actor && (!g_network.IsActive() || forcedUpdate)) {
-				if (actor->WillDie()) {
+			if (actor && (!g_network.IsActive() || forcedUpdate))
+			{
+				if (actor->WillDie())
+				{
 					m_activeUnitList->DeleteAt(actorPos);
 					delete actor;
-				} else {
+				}
+				else
+				{
 					actor->EndTurnProcess();
 				}
 			}
@@ -1543,69 +1547,37 @@ void Director::NextPlayer(BOOL forcedUpdate)
 	}
 
 	
-	while(m_itemQueue->GetCount()) {
+	while(m_itemQueue->GetCount())
+	{
 		DQItem *    item    = m_itemQueue->RemoveHead();
 
 		Assert(item->m_handler != NULL);
 		if (item->m_handler != NULL) 
 		{
-			
-			
-			
-			
 			m_dispatchedItems->AddTail(item);
 
-			
-			
-
-
-
-
-
- 			item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_NORMAL);
+			item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_NORMAL);
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	pos = m_activeUnitList->GetHeadPosition();
-	if (pos) {
-		do {
+	if(pos)
+	{
+		do
+		{
 			actorPos = pos;
 
 			actor = m_activeUnitList->GetNext(pos);
 
-			if (!g_network.IsActive() || forcedUpdate) {
-				if (actor->WillDie()) {
+			if(!g_network.IsActive() || forcedUpdate)
+			{
+				if(actor->WillDie())
+				{
 					m_activeUnitList->DeleteAt(actorPos);
 					delete actor;
-				} else {
+				}
+				else
+				{
 					actor->EndTurnProcess();
 				}
 			}
@@ -1613,14 +1585,13 @@ void Director::NextPlayer(BOOL forcedUpdate)
 	}
 
 
-	if (!g_network.IsActive()) {
-
+	if (!g_network.IsActive())
+	{
 		if(g_tiledMap)
-			g_tiledMap->NextPlayer(); 
-
+			g_tiledMap->NextPlayer();
 
 		KillAllActiveEffects();
-	
+
 		if (g_soundManager)
 			g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
 	}
@@ -2022,14 +1993,7 @@ void Director::AddCenterMap(const MapPoint &pos)
 	DQActionCenterMap	*action = new DQActionCenterMap;
 	DQItem				*item = new DQItem(DQITEM_CENTERMAP, action, dh_centerMap);
 
-
-
-
 	action->centerMap_pos = pos;
-
-
-
-
 
 	m_itemQueue->AddTail(item);
 }

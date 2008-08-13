@@ -30,6 +30,9 @@
 // - Changes the const attribute for Compute_Matching_Value (Raw_Priority will 
 //   be changed on wounded case) - Calvitix
 // - Linux support modifications + cleanup.
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Now the goals are used for the matching process, the goal match value
+//   is the avarage match value of the matches needed for the goal.
 //
 //----------------------------------------------------------------------------
 
@@ -49,12 +52,15 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "gstypes.h"
 #include "gfx_options.h"
 #include "ctpagent.h"
+#include "World.h"
 
 #ifdef _DEBUG_SCHEDULER
 #include "ctpagent.h"
 #include "ArmyData.h"
 #include "ctpgoal.h"
 #endif //_DEBUG_SCHEDULER
+#include "ctpaidebug.h"
+#include "GoalRecord.h"
 
 Goal::Goal()
 :
@@ -62,12 +68,14 @@ Goal::Goal()
     m_raw_priority                  (BAD_UTILITY),
     m_removal_time                  (DONT_REMOVE),
     m_is_invalid                    (false),
-    m_execute_incrementally         (false),
     m_current_needed_strength       (),
     m_current_attacking_strength    (),
-    m_match_references              (),
+    m_current_projected_strength    (),
+    m_matches                       (),
     m_agents                        (),
-    m_playerId                      (-1)
+    m_playerId                      (-1),
+    m_combinedUtility               (0),
+    m_needs_sorting                 (false)
 {
 }
 
@@ -82,16 +90,20 @@ Goal::~Goal()
 
 Goal& Goal::operator= (const Goal &goal)
 {
+	Assert(false);
+	// Should be removed
 	m_goal_type                  = goal.m_goal_type;
 	m_playerId                   = goal.m_playerId;
 	m_raw_priority               = goal.m_raw_priority;
 	m_removal_time               = goal.m_removal_time;
 	m_is_invalid                 = goal.m_is_invalid;
-	m_execute_incrementally      = goal.m_execute_incrementally;
 	m_current_needed_strength    = goal.m_current_needed_strength;
 	m_current_attacking_strength = goal.m_current_attacking_strength;
-	m_match_references           = goal.m_match_references;
+	m_current_projected_strength = goal.m_current_projected_strength;
+	m_matches                    = goal.m_matches;
 	m_agents                     = goal.m_agents;
+	m_combinedUtility            = goal.m_combinedUtility;
+	m_needs_sorting              = goal.m_needs_sorting;
 
 	return *this;
 }
@@ -118,19 +130,22 @@ PLAYER_INDEX Goal::Get_Player_Index() const
 
 bool Goal::Is_Satisfied() const
 {
-	if (m_agents.size() == 0)
+	if(m_agents.size() == 0)
 		return false;
 
 	// Limitation of army size: Cannot form a group with more
 	// armies than the max (without that limitation, it can 
 	// disturb the goals with RallyFirst() - Calvitix
-	if (m_current_attacking_strength.Get_Agent_Count() == k_MAX_ARMY_SIZE)
-		return true;
+//	if (m_current_attacking_strength.Get_Agent_Count() == k_MAX_ARMY_SIZE)
+//		return true;
 
-	if (m_current_needed_strength > m_current_attacking_strength)
-		return false;
+	if(g_theGoalDB->Get(m_goal_type)->GetNeverSatisfied())
+	{
+//		return false; // Another problem to be fixed but this has to wait, and not here
+	}
 
-	return true;
+//	if(m_current_needed_strength > m_current_attacking_strength)
+	return m_current_attacking_strength.HasEnough(m_current_needed_strength);
 }
 
 bool Goal::Is_Goal_Undercommitted() const
@@ -159,16 +174,15 @@ bool Goal::Is_Single_Squad() const
 	{
 		for
 		(
-		    std::list<Plan_List::iterator>::const_iterator
-		           match_iter  = m_match_references.begin();
-		           match_iter != m_match_references.end();
+		    Plan_List::const_iterator
+		           match_iter  = m_matches.begin();
+		           match_iter != m_matches.end();
 		         ++match_iter
 		)
 		{
-			if ((*match_iter)->Agent_Committed(*agent_iter))
+			if (match_iter->Agent_Committed(*agent_iter))
 			{
-				
-				Squad_ptr tmp_squad_ptr = (*match_iter)->Get_Squad();
+				Squad_ptr tmp_squad_ptr = match_iter->Get_Squad();
 
 				if (first_squad_ptr != NULL && tmp_squad_ptr != first_squad_ptr)
 					return false;
@@ -187,22 +201,41 @@ bool Goal::Is_Single_Squad() const
 
 bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter)
 {
-	if ( Satisfied_By( agent->Compute_Squad_Strength() ) )
+#ifdef _DEBUG_SCHEDULER
+	for
+	   (
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                         agent_iter != m_agents.end();
+	                       ++agent_iter
+	   )
 	{
+		Assert((*agent_iter) != agent);
+	}
+#endif
+
+	Squad_Strength strength = agent->Compute_Squad_Strength();
+	strength += m_current_attacking_strength;
+	double oldMissingStrength = m_current_needed_strength.GetTotalMissing(m_current_attacking_strength);
+	double newMissingStrength = m_current_needed_strength.GetTotalMissing(strength);
+
+	if(
+	      oldMissingStrength > newMissingStrength
+	   ||
+	      (
+	           Needs_Transporter() // Add function
+	        && strength.Get_Transport() > m_current_attacking_strength.Get_Transport()
+	      )
+	){
 		m_current_attacking_strength.Add_Agent_Strength(agent);
 
 		agent_list_iter = m_agents.insert(m_agents.end(), agent);
 
 #ifdef _DEBUG_SCHEDULER
-		Assert(m_match_references.size() > 0);
 		CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
-//		Assert(ctpagent_ptr->Get_Army().GetData()->m_theGoal == NULL);
-//		ctpagent_ptr->Get_Army()->m_theGoal = (CTPGoal_ptr) this;
 
 		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 		if (m_current_attacking_strength.Get_Agent_Count() < m_agents.size())
 		{
-			
 			Assert(0);
 		}
 #endif // _DEBUG_SCHEDULER
@@ -219,7 +252,6 @@ const Agent_List & Goal::Get_Agent_List() const
 {
 	return m_agents;
 }
-
 Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 {
 	Assert(agent_iter != m_agents.end());
@@ -254,11 +286,8 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	next_agent_iter = m_agents.erase(next_agent_iter);
 	agent_iter      = m_agents.end();
 
-#ifdef _DEBUG_SCHEDULER
-//	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
-//		ctpagent_ptr->Get_Army()->m_theGoal = NULL;
-
 	Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
+#ifdef _DEBUG_SCHEDULER
 	if (m_current_attacking_strength.Get_Agent_Count() < m_agents.size())
 	{
 		Assert(0);
@@ -268,44 +297,9 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	return agent_ptr;
 }
 
-bool Goal::Is_Execute_Incrementally() const
-{
-	return m_execute_incrementally;
-}
-
-void Goal::Compute_Needed_Troop_Flow()
-{
-#ifdef TEST_DRIVER
-	m_current_needed_strength.Set_Attack(300.0);
-	m_current_needed_strength.Set_Defense(100.0);
-	return;
-#endif
-	Assert(false);
-}
-
-Utility Goal::Compute_Matching_Value( const Agent_ptr agent ) const
-{
-#ifdef TEST_DRIVER
-	return 100;
-#endif
-
-	Assert(false);
-	return 0;
-}
-
 Utility Goal::Get_Raw_Priority() const
 {
 	return m_raw_priority;
-}
-
-GOAL_RESULT Goal::Execute_Task()
-{
-	if (Is_Satisfied() || Is_Execute_Incrementally())
-	{
-		return GOAL_IN_PROGRESS;
-	}
-
-	return GOAL_IN_PROGRESS;
 }
 
 bool Goal::Get_Totally_Complete() const
@@ -337,11 +331,13 @@ bool Goal::Can_Be_Executed() const
 {
 	bool can_be_executed = false;
 
+	Agent_List::const_iterator agent_iter;
+
 	for
 	(
-	    Agent_List::const_iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                             ++agent_iter
+	      agent_iter  = m_agents.begin();
+	      agent_iter != m_agents.end();
+	    ++agent_iter
 	)
 	{
 		can_be_executed |= (*agent_iter)->Get_Can_Be_Executed();
@@ -352,6 +348,21 @@ bool Goal::Can_Be_Executed() const
 
 void Goal::Set_Can_Be_Executed(const bool & can_be_executed)
 {
+	Agent_List::iterator agent_iter;
+
+	for
+	(
+	      agent_iter  = m_agents.begin();
+	      agent_iter != m_agents.end();
+	    ++agent_iter
+	)
+	{
+		(*agent_iter)->Set_Can_Be_Executed(can_be_executed);
+	}
+}
+
+void Goal::Set_Needs_Transporter(const bool needs_transporter)
+{
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
@@ -359,7 +370,7 @@ void Goal::Set_Can_Be_Executed(const bool & can_be_executed)
 	                       ++agent_iter
 	)
 	{
-		(*agent_iter)->Set_Can_Be_Executed(can_be_executed);
+		(*agent_iter)->Set_Needs_Transporter(needs_transporter);
 	}
 }
 
@@ -383,25 +394,24 @@ bool Goal::Validate() const
 			Assert(ARMY_DELETED_WITHOUT_TELLING_GOAL);
 		}
 
-		Assert((*agent_iter)->Get_Is_Used());
+		Assert((*agent_iter)->Has_Goal());
 
-		std::list<Plan_List::iterator>::const_iterator match_iter;
+		Plan_List::const_iterator match_iter;
 		for
 		(
-		            match_iter  = m_match_references.begin();
-		            match_iter != m_match_references.end();
+		            match_iter  = m_matches.begin();
+		            match_iter != m_matches.end();
 		          ++match_iter
 		)
 		{
-			if ((*match_iter)->Agent_Committed(*agent_iter))
+			if (match_iter->Agent_Committed(*agent_iter))
 			{
 #ifdef _DEBUG_SCHEDULER
 
-				Squad_ptr tmp_squad_ptr = (*match_iter)->Get_Squad();
-				Goal_ptr tmp_goal_ptr = (*match_iter)->Get_Goal();
+				Squad_ptr tmp_squad_ptr = match_iter->Get_Squad();
+				Goal_ptr tmp_goal_ptr = match_iter->Get_Goal();
 				CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr)(*agent_iter);
 
-//				if(g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
 				if(!ctpagent_ptr->Get_Is_Dead())
 				{
 //					Assert(ctpagent_ptr->Get_Army()->m_theAgent == ctpagent_ptr);
@@ -416,7 +426,8 @@ bool Goal::Validate() const
 				break;
 			}
 		}
-		if (match_iter == m_match_references.end())
+
+		if (match_iter == m_matches.end())
 		{
 
 #ifdef _DEBUG_SCHEDULER
@@ -434,35 +445,6 @@ bool Goal::Validate() const
 	return true;
 }
 
-void Goal::Log_Debug_Info(const int & log) const 
-{
-}
-
-void Goal::Add_Match_Reference(const Plan_List::iterator &plan_iter)
-{
-	m_match_references.push_back(plan_iter);
-
-#ifdef _DEBUG_SCHEDULER
-		Validate();
-#endif // _DEBUG_SCHEDULER
-}
-
-void Goal::Remove_Match_Reference(const Plan_List::iterator &plan_iter)
-{
-	m_match_references.remove(plan_iter);
-
-#ifdef _DEBUG_SCHEDULER
-		Assert(m_match_references.size() > 0 || m_agents.size()  == 0);
-
-		Validate();
-#endif // _DEBUG_SCHEDULER
-}
-
-list<Plan_List::iterator> & Goal::Get_Match_References()
-{
-	return m_match_references;
-}
-
 void Goal::Set_Type(const GOAL_TYPE & type)
 {
 	m_goal_type = type;
@@ -475,7 +457,7 @@ void Goal::Set_Raw_Priority(const Utility & priority)
 
 bool Goal::Get_Is_Appropriate() const
 {
-	return m_match_references.size() > 0;
+	return m_matches.size() > 0;
 }
 
 bool Goal::Satisfied_By(const Squad_Strength & army_strength) const
@@ -521,18 +503,472 @@ bool Goal::Satisfied_By(const Squad_Strength & army_strength) const
 	return false;
 }
 
-bool Goal::Needs_Transport() const
+bool Goal::Needs_Transporter() const
 {
-	Squad_Strength needed_strength = m_current_needed_strength;
-	needed_strength -= m_current_attacking_strength;
-	
-	return needed_strength.Get_Transport() > 0;
+	Assert(m_current_attacking_strength.Get_Transport() >= 0);
+
+	return m_current_needed_strength.Get_Transport() - m_current_attacking_strength.Get_Transport() > 0;
 }
 
-const Squad_Strength Goal::Get_Strength_Needed() const
+const Squad_Strength Goal::Get_Strength_Needed() const // Rename to missing strength
 {
 	Squad_Strength needed_strength  = m_current_needed_strength;
 	               needed_strength -= m_current_attacking_strength;
 
 	return needed_strength;
 }
+
+#include "MapAnalysis.h"
+
+Utility Goal::Compute_Matching_Value(const bool update)
+{
+	AI_DPRINTF
+	          (
+	           k_DBG_SCHEDULER_ALL, m_playerId,
+	           -1,
+	           -1,
+	           (
+	            "\tCompute Matching Value for goal: %s, raw_match: %i (%s)\n",
+	            g_theGoalDB->Get(m_goal_type)->GetNameText(),
+	            m_raw_priority,
+	            (g_theWorld->HasCity(Get_Target_Pos()) ? g_theWorld->GetCity(Get_Target_Pos()).GetName() : "field")
+	           )
+	          );
+
+	sint32 count = 0;
+
+	Plan_List::iterator match_iter;
+
+	for
+	(
+	            match_iter  = m_matches.begin();
+	            match_iter != m_matches.end();
+	          ++match_iter
+	)
+	{
+		// Maybe this also needs to be handled.
+		if(!match_iter->Plan_Is_Needed_And_Valid())
+		{
+			Assert(false);
+			continue;
+		}
+
+		match_iter->Compute_Matching_Value();
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+					("\t\t[%d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
+		++count;
+	}
+
+	Sort_Matches();
+
+	return Recompute_Matching_Value(update);
+}
+
+Utility Goal::Recompute_Matching_Value(const bool update, const bool show_strength)
+{
+	if(!update)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+					("\tCompute Matching Value for goal: %x, %s, raw_match: %i\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(), m_raw_priority));
+	}
+
+	const GoalRecord * goal_record  = g_theGoalDB->Get(m_goal_type);
+
+	Utility combinedUtility = 0;
+
+	sint32 count = 0;
+	m_current_projected_strength = Squad_Strength();
+	for
+	(
+	    Plan_List::iterator
+	            match_iter  = m_matches.begin();
+	            match_iter != m_matches.end();
+	          ++match_iter
+	)
+	{
+		if(!match_iter->All_Unused_Or_Used_By_This())
+			continue;
+
+		if(match_iter->Needs_Cargo())
+			continue;
+
+		if(!m_current_projected_strength.HasEnough(m_current_needed_strength)
+//		||  goal_record->GetNeverSatisfied() // Should be considered in Commit_Agents
+		){
+			Utility matchUtility = match_iter->Get_Matching_Value();
+
+			if(matchUtility > Goal::BAD_UTILITY)
+			{
+				Squad_Strength strength;
+				match_iter->Get_Squad()->Get_Strength(strength);
+				m_current_projected_strength += strength;
+
+				combinedUtility += matchUtility;
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+							("\t\t[%d] match = %d %s\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+				++count;
+			}
+			else
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+							("\t\t[%d]First match with bad utility for goal %s, stop matching\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+				if(count == 0)
+				{
+					Log_Debug_Info(k_DBG_SCHEDULER_ALL);
+				}
+
+				break;
+			}
+		}
+		else
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
+						("\t\t[%d]Enough ressources found for goal %s\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+			break;
+		}
+	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if(update && show_strength)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
+		m_current_projected_strength.Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Projected Strength:  ");
+		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Needed Strength:     ");
+		Squad_Strength strength;
+		strength.Set_Pos_Strength(Get_Target_Pos());
+		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Pos Strength: ");
+		Squad_Strength grid_strength;
+		grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
+		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, "The Target Grid Strength:");
+	}
+#endif
+
+	if
+	  (
+	       (
+	            !m_current_projected_strength.HasEnough(m_current_needed_strength)
+	         && !goal_record->GetExecuteIncrementally()
+	       )
+	    || count == 0
+	  )
+	{
+		combinedUtility = Goal::BAD_UTILITY;
+	}
+	else
+	{
+		combinedUtility /= count;
+	}
+
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,("\tMatch value: %i\n", combinedUtility));
+	if(update)
+	{
+		m_combinedUtility = combinedUtility;
+	}
+
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\n"));
+
+	return combinedUtility;
+}
+
+Utility Goal::Get_Matching_Value() const
+{
+	return m_combinedUtility;
+}
+
+void Goal::Set_Matching_Value(Utility combinedUtility)
+{
+	m_combinedUtility = combinedUtility;
+}
+
+bool Goal::Add_Match(const Squad_ptr & squad, const bool update_match_value, const bool needsCargo)
+{
+	for
+	   (
+	    Plan_List::iterator   plan_test_iter  = m_matches.begin();
+	                          plan_test_iter != m_matches.end();
+	                        ++plan_test_iter
+	   )
+	{
+		Assert(plan_test_iter->Get_Squad() != squad);
+	}
+
+	Plan the_match;
+
+	the_match.Set_Squad(squad);
+	the_match.Set_Goal(this);
+	the_match.Set_Needs_Cargo(needsCargo);
+
+	Assert(!Get_Invalid())
+	Assert(squad->Get_Num_Agents() > 0)
+
+	if(the_match.Can_Add_To_Goal())
+	{
+		if(update_match_value)
+		{
+			Utility matching_value = the_match.Compute_Matching_Value();
+		}
+
+		Plan_List::iterator & plan_iter = m_matches.insert(m_matches.end(), the_match);
+		squad->Add_Match_Reference(plan_iter);
+
+		m_needs_sorting = true;
+
+		/*
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, this->Get_Goal_Type(), -1, 
+				("\tAdded match for goal: %x squad: %x  value = %d\n",
+				 this,
+				 (*squad_iter),
+				 matching_value));
+		*/
+
+		return true;
+	}
+	else
+	{
+	/*
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, this->Get_Goal_Type(), -1, 
+		("\tMatch for goal: %x (%d) squad: %x has BAD_UTILITY.\n",
+			 this,
+		goal_iter->second->Get_Goal_Type(),
+			 (*squad_iter)));
+	*/
+		return false;
+	}
+}
+
+bool Goal::CanGoalBeReevaluated() const
+{
+	GoalRecord const *  goalRecord      = g_theGoalDB->Get(m_goal_type);
+
+	Assert(goalRecord);
+
+	return goalRecord && !goalRecord->GetNoRollback();
+}
+
+bool Goal::Commited_Agents_Need_Orders() const
+{
+	bool needOrders = false;
+
+	Plan_List::const_iterator match_iter;
+
+	for
+	(
+	      match_iter  = m_matches.begin();
+	      match_iter != m_matches.end();
+	    ++match_iter
+	)
+	{
+		needOrders |= match_iter->Commited_Agents_Need_Orders();
+	}
+
+	return needOrders;
+}
+
+sint32 Goal::Rollback_All_Agents()
+{
+	sint32 rolledBackAgents = 0;
+
+#if defined(_DEBUG)
+	Squad_Strength strength  = m_current_attacking_strength;
+	Squad_Strength strength1 = Compute_Current_Strength();
+
+	Squad_Strength strength2 = strength1;
+	strength2 -= strength;
+	Assert(strength2.NothingNeeded());
+
+	Squad_Strength strength3 = strength;
+	strength3 -= strength1;
+	Assert(strength3.NothingNeeded());
+#endif
+
+	for
+	(
+	    Plan_List::iterator
+	      match_iter  = m_matches.begin();
+	      match_iter != m_matches.end();
+	    ++match_iter
+	)
+	{
+		rolledBackAgents += match_iter->Rollback_All_Agents();
+	}
+
+	Assert(m_current_attacking_strength.NothingNeeded());
+
+	return rolledBackAgents;
+}
+
+sint32 Goal::Commit_Agents()
+{
+	sint32 committed = 0;
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		committed += match_iter->Commit_Agents();
+	}
+
+	if(committed > 0){
+		Log_Debug_Info(
+		               (Is_Satisfied() || Is_Execute_Incrementally()) ?
+		               k_DBG_SCHEDULER :
+		               k_DBG_SCHEDULER_DETAIL
+		              );
+	}
+
+	return committed;
+}
+
+sint32 Goal::Commit_Transport_Agents()
+{
+	sint32 committed = 0;
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(match_iter->Needs_Cargo())
+		{
+			committed += match_iter->Commit_Transport_Agents();
+		}
+	}
+
+	return committed;
+}
+
+sint32 Goal::Remove_Matches()
+{
+	sint32 rolled_back_agents = 0;
+
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		rolled_back_agents += match_iter->Rollback_All_Agents();
+
+		Squad_ptr squad_ptr = match_iter->Get_Squad();
+
+		Assert(squad_ptr);
+		if(squad_ptr)
+			squad_ptr->Remove_Match_Reference(match_iter);
+
+	}
+
+	m_matches.clear();
+
+	return rolled_back_agents;
+}
+
+sint32 Goal::Remove_Match(Plan_List::iterator match)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(match == match_iter)
+		{
+			sint32 rolledBack = match_iter->Rollback_All_Agents();
+			m_matches.erase(match_iter);
+
+			return rolledBack;
+		}
+	}
+
+	return 0;
+}
+
+bool Goal::Has_Squad(Squad* squad)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(squad == match_iter->Get_Squad())
+		{
+			match_iter->Set_Needs_Cargo(true);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Goal::Recompute_Current_Attacking_Strength()
+{
+	m_current_attacking_strength = Squad_Strength(0);
+
+	for
+	(
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		CTPAgent* ctpAgent = static_cast<CTPAgent*>(*agent_iter);
+		m_current_attacking_strength += ctpAgent->Get_Squad_Strength();
+	}
+}
+
+Squad_Strength Goal::Compute_Current_Strength()
+{
+	Squad_Strength strength;
+
+	for
+	(
+	    Agent_List::iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		CTPAgent* ctpAgent = static_cast<CTPAgent*>(*agent_iter);
+		strength += ctpAgent->Get_Squad_Strength();
+	}
+
+	return strength;
+}
+
+sint32 Goal::Rollback_Emptied_Transporters()
+{
+	sint32 rolled_back_agents = 0;
+
+	for
+	(
+	    Plan_List::iterator
+	      match_iter  = m_matches.begin();
+	      match_iter != m_matches.end();
+	    ++match_iter
+	)
+	{
+		rolled_back_agents += match_iter->Rollback_Emptied_Transporters();
+	}
+
+	return rolled_back_agents;
+}
+
+void Goal::Sort_Matches()
+{
+	m_matches.sort(greater< Plan >());
+	m_needs_sorting = false;
+}
+
+void Goal::Sort_Matches_If_Necessary()
+{
+	if(m_needs_sorting)
+	{
+		Sort_Matches();
+	}
+}
+

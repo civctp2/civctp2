@@ -66,7 +66,7 @@ Added:    A settle in city event, so that the player can add a pop via settling
 Fixed:    A newly founded city does not show up as underwater city when it is
           founded.
 Fixed:    Barbarians attack someone else if you are protected by the Great Wall.
-Fixed:    A combat event error pop up when you closed the battle window.
+Fixed:    A combat event error pop up when you close the battle window.
 Fixed:    The map is only centered if the AutoCenter option is enabled.
 Fixed:    The city control panel is updated even if the visible player is a
           robot.

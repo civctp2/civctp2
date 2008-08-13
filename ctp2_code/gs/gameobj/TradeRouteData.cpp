@@ -53,7 +53,7 @@
 
 
 
-extern TradeAstar g_theTradeAstar; 
+extern TradeAstar g_theTradeAstar;
 
 TradeRouteData::TradeRouteData
 (
@@ -113,8 +113,8 @@ TradeRouteData::TradeRouteData
 	                          m_sourceCity->GetCityData()->GetName(),
 	                          m_destinationCity->GetCityData()->GetName(),
 	                          m_transportCost
-                             )
-           );
+	                         )
+	       );
 }
 
 TradeRouteData::TradeRouteData(CivArchive &archive) : GameObj(0)

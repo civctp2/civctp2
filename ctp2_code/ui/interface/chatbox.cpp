@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Added toggles for army and cell text graphic options. PFT, 07 Mar 05
+// - Added /debugplayer command, to be able to set the log player during
+//   execution even in non-debug sessions. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -64,6 +66,10 @@
 #include "tiledmap.h"               // g_tiledMap
 #include "gfx_options.h"
 
+#if defined (_DEBUG) || defined(USE_LOGGING)
+#include "ctpaidebug.h"
+#endif
+
 extern MBCHAR       g_slic_filename[_MAX_PATH];
 extern BOOL         g_letUIProcess;
 extern C3UI			*g_c3ui;
@@ -101,9 +107,9 @@ ChatBox::ChatBox()
 ChatBox::~ChatBox()
 {
 	if (m_active && m_chatWindow)
-    {
+	{
 		g_c3ui->RemoveWindow(m_chatWindow->Id());
-    }
+	}
 
 	delete m_chatWindow;
 }
@@ -121,11 +127,13 @@ void ChatBox::SetActive(BOOL active)
 {
 	if (!m_chatWindow) return;
 
-	if (active) {
-		
+	if (active)
+	{
 		g_c3ui->AddWindow(m_chatWindow);
 		m_chatWindow->GetTextField()->SetKeyboardFocus();
-	} else {
+	}
+	else
+	{
 		g_c3ui->RemoveWindow(m_chatWindow->Id());
 	}
 
@@ -140,39 +148,32 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 	MBCHAR			coloredText[_MAX_PATH];
 
 	m_chatWindow->ColorizeString(coloredText, text, colorRef);
-	
+
 	strcat(coloredText, "\n");
 
 	m_chatWindow->GetTextBox()->AppendHyperText(coloredText);
 
-	
 	aui_Ranger *ranger = m_chatWindow->GetTextBox()->GetRanger();
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 
-	
 	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL) {
 		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
 									gamesounds_GetGameSoundID(GAMESOUNDS_CHAT_MESSAGE),
 									0,
 									0);
 	}
-
 }
-
-
-
-
 
 ChatWindow::ChatWindow
 (
-    AUI_ERRCODE *   retval, 
-    uint32          id, 
-    MBCHAR *        ldlBlock, 
+    AUI_ERRCODE *   retval,
+    uint32          id,
+    MBCHAR *        ldlBlock,
     sint32          bpp,
-	AUI_WINDOW_TYPE type,
+    AUI_WINDOW_TYPE type,
     ChatBox *       parent
 )
-:	
+:
     C3Window        (retval, id, ldlBlock, bpp, type),
     m_textBox       (NULL),
     m_textField     (NULL),
@@ -186,7 +187,7 @@ ChatWindow::~ChatWindow()
 {
 	delete m_textBox;
 	delete m_textField;
-    // m_chatBox not deleted: reference only
+	// m_chatBox not deleted: reference only
 }
 
 AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
@@ -233,7 +234,7 @@ void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF 
 	uint32 b = (colorRef & 0x00FF0000) >> 16;
 
 	MBCHAR		colorString[20];
-	sprintf(colorString, "<c:%u,%u,%u>", r, g, b); 
+	sprintf(colorString, "<c:%u,%u,%u>", r, g, b);
 	strcat(destString, colorString);
 	strcat(destString, srcString);
 
@@ -241,7 +242,7 @@ void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF 
 	strcat(destString, colorString);
 }
 
-void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE)
 		return;
@@ -260,35 +261,12 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 		return;
 	}
 
-
-	
-	
-	
-	if (chatWindow->CheckForEasterEggs(str)) {
+	if (chatWindow->CheckForEasterEggs(str))
+	{
 		return;
 	}
-	
 
-	
 	g_network.SendChatText(str, strlen(str));
-
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
 }
 
 BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
@@ -358,23 +336,20 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	}
 #if 0
 	else if (!strcmp(s, "/A") && !g_network.IsActive()) 
-    {
-        if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
+	{
+		if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) 
 			return TRUE;
 
-		if(g_network.IsActive()) {
+		if(g_network.IsActive())
+		{
 			g_turn->NetworkEndTurn();
-		} else {
-            g_selected_item->Deselect(g_selected_item->GetCurPlayer());
+		}
+		else
+		{
+			g_selected_item->Deselect(g_selected_item->GetCurPlayer());
  			g_turn->EndThisTurnBeginNewTurn();	
-          	g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
-            
-            
+			g_selected_item->SetPlayerOnScreen(g_selected_item->GetCurPlayer());
 
-			
-            
-
-			
 			NewTurnCount::StartNextPlayer(true);
 
 			g_director->AddCopyVision();
@@ -385,16 +360,17 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			g_radarMap->Update();
 			g_turn->InformMessages();
 		}
+
 		return TRUE;
 	}
 #endif
 
 	// Sets the whole world for all players unexplored
-	else if (!strcmp(s, "/resetlos") && !g_network.IsActive()) 
+	else if (!strcmp(s, "/resetlos") && !g_network.IsActive())
 	{
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
 		{
-			if (g_player[i]) 
+			if (g_player[i])
 			{
 				g_player[i]->m_vision->SetTheWholeWorldUnexplored();
 			}
@@ -410,11 +386,11 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 #endif
 
 	// Removes all the messages of a player and reloads the slic engine
-	else if (!strcmp(s, "/reloadslic") && !g_network.IsActive()) 
+	else if (!strcmp(s, "/reloadslic") && !g_network.IsActive())
 	{
-		for (sint32 p = 0; p < k_MAX_PLAYERS; p++) 
+		for (sint32 p = 0; p < k_MAX_PLAYERS; p++)
 		{
-			if (g_player[p]) 
+			if (g_player[p])
 			{
 				g_player[p]->m_messages->KillList();
 			}
@@ -424,16 +400,16 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	}
 
 	// Exports the current map to a text file
-	else if (!strncmp(s, "/exportmap", 10)) 
+	else if (!strncmp(s, "/exportmap", 10))
 	{
 		g_theWorld->ExportMap(s + 11);
 		return TRUE;
 	}
 
 	// imports the current map from a text file
-	else if (!strncmp(s, "/importmap", 10)) 
+	else if (!strncmp(s, "/importmap", 10))
 	{
-		if (g_theWorld->ImportMap(s + 11)) 
+		if (g_theWorld->ImportMap(s + 11))
 		{
 			g_tiledMap->PostProcessMap();
 			g_tiledMap->Refresh();
@@ -448,7 +424,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		while(isspace(*arg))
 			arg++;
 
-		if (isdigit(*arg)) 
+		if (isdigit(*arg))
 		{
 			sint32 player = atoi(arg);
 			if(g_network.IsActive()) {
@@ -472,10 +448,10 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		while(isspace(*arg))
 			arg++;
 
-		if (isdigit(*arg)) 
+		if(isdigit(*arg))
 		{
 			sint32 player = atoi(arg);
-			if (g_network.IsActive()) 
+			if(g_network.IsActive())
 			{
 				Assert(g_network.IsLocalPlayer(player));
 				if(!g_network.IsLocalPlayer(player))
@@ -483,7 +459,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 				g_player[player]->m_playerType = 
 				    g_network.IsHost() ? PLAYER_TYPE_HUMAN : PLAYER_TYPE_NETWORK;
-			} else {
+			}
+			else
+			{
 				if(g_player[player])
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
 			}
@@ -501,13 +479,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			temp++;
 		
 		n = atoi(temp);
-		
-		
-		
-		
-		
-		
-		
+
 		for (i=0; i<(n) && !gDone; i++) {
 			g_turn->NextRound();
 			do {
@@ -533,23 +505,17 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				
 				
 
-
-
 			} while (g_selected_item && !gDone &&
 					 (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())); 
-			
-			
-			
-			
-			
+
 		}
 		return TRUE;
-	} 
+	}
 #endif
 
 	// Sets the names of the leader, the country 
-	// and the personal discription, to the names from the databas
-	else if(!strncmp(s, "/resetstrings", 13)) 
+	// and the personal discription, to the names from the database
+	else if(!strncmp(s, "/resetstrings", 13))
 	{
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++) 
 		{
@@ -561,42 +527,66 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	}
 
 	// Displays the army names on the map
-	else if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive()) 
+	else if(!strncmp(s, "/ArmyName", 8)  && !g_network.IsActive())
 	{
-		if(g_graphicsOptions->IsArmyNameOn()){
+		if(g_graphicsOptions->IsArmyNameOn())
+		{
 			g_graphicsOptions->ArmyNameOff();
 		}
 		else
+		{
 			g_graphicsOptions->ArmyNameOn();
+		}
 	}
 
 	// Displays the army goals on the map
-	else if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive()) 
+	else if(!strncmp(s, "/debugai", 8)  && !g_network.IsActive())
 	{
-		
-		if(g_graphicsOptions->IsArmyTextOn()){
+		if(g_graphicsOptions->IsArmyTextOn())
+		{
 			g_graphicsOptions->ArmyTextOff();
 		}
 		else
+		{
 			g_graphicsOptions->ArmyTextOn();
+		}
 	}
 
 	// Displays the AI settle value of a cell on the map
 	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive()) 
 	{
-		if(g_graphicsOptions->IsCellTextOn()){
+		if(g_graphicsOptions->IsCellTextOn())
+		{
 			g_graphicsOptions->CellTextOff();
 		}
 		else
+		{
 			g_graphicsOptions->CellTextOn();
+		}
 	}
+
+#if defined (_DEBUG) || defined(USE_LOGGING)
+	// Sets the debug logging player
+	else if(!strncmp(s, "/debugplayer", 12) && !g_network.IsActive()) 
+	{
+		MBCHAR *arg = s + 12;
+		while(isspace(*arg))
+			arg++;
+
+		if (isdigit(*arg))
+		{
+			sint32 player = atoi(arg);
+
+			CtpAiDebug::SetDebugPlayer(player);
+		}
+	}
+#endif
 
 	return FALSE;
 }
 
 AUI_ERRCODE ChatWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
-	
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if (surface == NULL)
@@ -609,9 +599,7 @@ AUI_ERRCODE ChatWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(COLOR_GREEN));
 
-	
 	m_dirtyList->AddRect( &rect );
 
 	return AUI_ERRCODE_OK;
-	
 }

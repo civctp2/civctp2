@@ -54,6 +54,8 @@
 //   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 // - Added version to crash.txt
 // - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
+// - The log files are now only opened and closed once, this speeds up
+//   debugging significantly. (09-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -479,39 +481,34 @@ int ui_Initialize(void)
 void ui_HandleMouseWheel(sint16 delta)
 {
 	if (!g_civApp)  return;
-    if (0 == delta) return; // no rotation
+	if (0 == delta) return; // no rotation
 
 	ctp2_ListBox * box = ctp2_ListBox::GetMouseFocusListBox();
 
-	if (box) 
-    {
-        // Scroll list box
-        box->ForceScroll(0, (delta < 0) ? 1 : -1);
+	if(box)
+	{
+		// Scroll list box
+		box->ForceScroll(0, (delta < 0) ? 1 : -1);
 	}
-    else
-    {
-        // Scroll main map (when available)
-	    bool isMapScrolled = 
-            g_civApp->IsGameLoaded() && 
-            g_tiledMap && 
-            g_tiledMap->ScrollMap(0, 2 * ((delta < 0) ? 1 : -1));
+	else
+	{
+		// Scroll main map (when available)
+		bool isMapScrolled = 
+		    g_civApp->IsGameLoaded() && 
+		    g_tiledMap && 
+		    g_tiledMap->ScrollMap(0, 2 * ((delta < 0) ? 1 : -1));
 
-	    if (isMapScrolled) 
-        {
-		    g_tiledMap->RetargetTileSurface(NULL);
-		    g_tiledMap->Refresh();
-		    g_tiledMap->InvalidateMap();
-		    g_tiledMap->ValidateMix();
-	    }
-    }
+		if(isMapScrolled)
+		{
+			g_tiledMap->RetargetTileSurface(NULL);
+			g_tiledMap->Refresh();
+			g_tiledMap->InvalidateMap();
+			g_tiledMap->ValidateMix();
+		}
+	}
 }
 
-
-
-
-
-bool
-compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
+bool compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
 {
 	
 	bool retval = true;
@@ -523,7 +520,7 @@ compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
 	real_time *= real_time;
 
 	float velocity = std::max<float>
-        (real_time * 0.5f * k_SMOOTH_PIX_SEC_PER_SEC, k_SMOOTH_MIN_VELOCITY);
+	    (real_time * 0.5f * k_SMOOTH_PIX_SEC_PER_SEC, k_SMOOTH_MIN_VELOCITY);
 
 	
 	deltaX *= (sint32)velocity;
@@ -943,22 +940,22 @@ static HWND s_taskBar   = NULL;
 void main_HideTaskBar(void)
 {
 	if (g_hideTaskBar)
-    {
-	    s_taskBar = FindWindow("Shell_TrayWnd", NULL);
+	{
+		s_taskBar = FindWindow("Shell_TrayWnd", NULL);
 
-        if (s_taskBar)
-        {
-		    ShowWindow(s_taskBar, SW_HIDE);
-        }
-    }
+		if (s_taskBar)
+		{
+			ShowWindow(s_taskBar, SW_HIDE);
+		}
+	}
 }
 
 void main_RestoreTaskBar(void)
 {
 	if (s_taskBar)
-    {
-    	ShowWindow(s_taskBar, SW_SHOWDEFAULT);
-    }
+	{
+		ShowWindow(s_taskBar, SW_SHOWDEFAULT);
+	}
 }
 
 void ui_CivAppProcess(void)
@@ -970,6 +967,11 @@ void ui_CivAppProcess(void)
 
 void AtExitProc(void)
 {
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	DPRINTF(k_DBG_FIX, ("Existing game\n"));
+	c3debug_CloseDebugLog();
+#endif
+
 	printf("At exit.\n");
 
 #if defined(USE_SDL)
@@ -1209,7 +1211,7 @@ BOOL main_CheckDirectX(void)
 		if ( !GetDirectXVersion )
 		{
 			FreeLibrary( (HINSTANCE)dll );
-            return AUI_ERRCODE_HACK;    /// @todo Check: effectively this means true???
+			return AUI_ERRCODE_HACK;    /// @todo Check: effectively this means true???
 		}
 
 		
@@ -1224,7 +1226,6 @@ BOOL main_CheckDirectX(void)
 
 	return found;
 }
-
 
 void main_InitializeLogs(void)
 {
@@ -1245,12 +1246,15 @@ void main_InitializeLogs(void)
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	c3debug_InitDebugLog();
-	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC, 1);
+//	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC, 1);
+//	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_DIPLOMACY | k_DBG_SCHEDULER, 1);
+//	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_DIPLOMACY, 1);
+//	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_SCHEDULER | k_DBG_SCHEDULER_ALL, 1);
+	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_SCHEDULER, 1);
 //	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_AI | k_DBG_SCHEDULER, 1);
 #endif
 
 	DPRINTF(k_DBG_FIX, ("** BUILD EXE :%s\n", Os::GetExeName().c_str()));
-
 
 	HANDLE fileHandle = CreateFile(Os::GetExeName().c_str(), 
 	                               GENERIC_READ,
@@ -1370,10 +1374,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	atexit(AtExitProc);
 
-	__try 
+	__try
 	{
 		return CivMain(hInstance, hPrevInstance, szCmdLine, iCmdShow);
-	} 
+	}
 	__except (main_CivExceptionHandler(GetExceptionInformation()))
 	{
 		DoFinalCleanup();
@@ -1475,18 +1479,8 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		}
 	}
 
-	
-	
 	appstrings_Initialize();
-	
-	
-	
-	
-	
 
-
-	
-	
 	setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 
 	if (!main_CheckDirectX()) {

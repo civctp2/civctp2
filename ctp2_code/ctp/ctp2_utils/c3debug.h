@@ -101,10 +101,11 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DEBUG_OWNER_FRAME_RATE    6
 #define k_DEBUG_OWNER_ZBS           7
 
-int		c3debug_InitDebugLog();
-int		c3debug_dprintf(char const * format, ...);
-int		c3debug_dprintfPrefix(int mask, char const * file, int line);
-void	c3debug_SetDebugMask(int mask, int set);
+void	c3debug_InitDebugLog();
+void	c3debug_CloseDebugLog();
+void	c3debug_dprintf(char const * format, ...);
+void	c3debug_dprintfPrefix(sint32 mask, char const * file, sint32 line);
+void	c3debug_SetDebugMask(sint32 mask, sint32 set);
 #if defined(WIN32)
 char	*c3debug_StackTrace(void);
 char	*c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);

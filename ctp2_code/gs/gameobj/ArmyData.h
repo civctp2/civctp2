@@ -38,6 +38,7 @@
 //   event queue. (30-Jan-2008 Martin Gühmann)
 // - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Merged finish move. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -448,7 +449,7 @@ public:
 
     void CheckLoadSleepingCargoFromCity(Order *order);
     bool Move(WORLD_DIRECTION, Order *order);
-    bool FinishMove(WORLD_DIRECTION d, MapPoint &newPos, Order *order);
+    bool FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order);
     bool FinishAttack(Order *order);
     bool CheckSpecialUnitMove(const MapPoint &pos);
     bool MoveIntoForeigner(const MapPoint &pos);

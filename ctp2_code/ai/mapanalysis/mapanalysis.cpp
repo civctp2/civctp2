@@ -279,7 +279,8 @@ void MapAnalysis::BeginTurn()
 			                      bombard_land_strength,
 			                      bombard_sea_strength,
 			                      bombard_air_strength,
-			                      total_value
+			                      total_value,
+			                      false
 			                     );
 
 			Assert(total_value >= 0);
@@ -294,14 +295,14 @@ void MapAnalysis::BeginTurn()
 				UpdateBoundingRectangle(army);
 			}
 
-			m_threatGrid      [player].AddValue(pos, attack_strength + ranged_strength);
-			m_attackGrid      [player].AddValue(pos, attack_strength);
-			m_defenseGrid     [player].AddValue(pos, defense_strength);
-			m_rangedGrid      [player].AddValue(pos, ranged_strength);
-			m_bombardLandGrid [player].AddValue(pos, bombard_land_strength);
-			m_bombardSeaGrid  [player].AddValue(pos, bombard_sea_strength);
-			m_bombardAirGrid  [player].AddValue(pos, bombard_air_strength);
-			m_valueGrid       [player].AddValue(pos, total_value);
+			m_threatGrid      [player].AddValue(pos, static_cast<sint32>(attack_strength + ranged_strength));
+			m_attackGrid      [player].AddValue(pos, static_cast<sint32>(attack_strength));
+			m_defenseGrid     [player].AddValue(pos, static_cast<sint32>(defense_strength));
+			m_rangedGrid      [player].AddValue(pos, static_cast<sint32>(ranged_strength));
+			m_bombardLandGrid [player].AddValue(pos, static_cast<sint32>(bombard_land_strength));
+			m_bombardSeaGrid  [player].AddValue(pos, static_cast<sint32>(bombard_sea_strength));
+			m_bombardAirGrid  [player].AddValue(pos, static_cast<sint32>(bombard_air_strength));
+			m_valueGrid       [player].AddValue(pos, static_cast<sint32>(total_value));
 
 			bool    is_land;
 			sint16  cont;
@@ -546,7 +547,7 @@ sint32 MapAnalysis::GetThreat(const PLAYER_INDEX & player, const MapPoint & pos)
 {
 	sint32 threat = 0;
 
-	for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
+	for(sint32 opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
 	{
 		if (    (player == opponent)
 		     || !Scheduler::CachedHasContactWithExceptSelf(player, opponent)

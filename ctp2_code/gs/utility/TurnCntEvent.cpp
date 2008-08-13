@@ -27,6 +27,8 @@
 // - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 // - Added Event for handling HotSeat and PBEM meassage and PBEM saving,
 //   so that PBEM saving can be done after all events have been executed. (14-Nov-2007 Martin Gühmann)
+// - Moved the startegic state calculation before everthing else, so that
+//   each turn has the right startegy even after a reload. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -63,13 +65,19 @@ STDEHANDLER(BeginTurnEvent)
 	Assert(g_player[player] != NULL);
 	
 	g_player[player]->m_current_round = round;
-	g_player[player]->BeginTurn();
+
+	CtpAi::BeginDiplomacy(player, round);
 
 	g_director->NextPlayer();
 	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient()))
 	{
-		CtpAi::BeginTurn(player);
+		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AiBeginTurn,
+		                       GEA_Player,      player,
+		                       GEA_End
+		                      );
 	}
+
+	g_player[player]->BeginTurn();
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
 	                       GEA_Player,      player,

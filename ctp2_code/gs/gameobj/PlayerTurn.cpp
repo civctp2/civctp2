@@ -76,15 +76,7 @@ extern TurnCount                *g_turn;
 extern Pollution                *g_thePollution;
 
 void Player::BeginTurn()
-
 {
-#ifdef _DEBUG
-	if(m_owner == 1)
-	{
-		// Something is missing here
-	}
-#endif
-
 	if (g_tileImprovementMode) 
 	{
 		g_tileImprovementMode = 0;
@@ -107,13 +99,11 @@ void Player::BeginTurn()
 		}
 	}
 
-	
 	if (g_selected_item->GetVisiblePlayer() == m_owner)
 		g_controlPanel->PopulateMessageList(m_owner);
 
-
 	m_is_turn_over = FALSE;
-	
+
 	m_end_turn_soon = FALSE;
 
 	if(g_network.IsHost())
@@ -234,7 +224,6 @@ void Player::BeginTurn()
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("Player[%d]::BeginTurn: not running\n", m_owner));
 	}
-
 
 	if(!g_network.IsClient())
 	{

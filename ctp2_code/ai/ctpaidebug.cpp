@@ -34,7 +34,7 @@
 #include "ctpaidebug.h"
 #include "Army.h"
 
-#ifdef _PLAYTEST
+#if defined(_PLAYTEST) || defined(USE_LOGGING)
 
 PLAYER_INDEX CtpAiDebug::s_debugPlayer = 8;
 sint32 CtpAiDebug::s_debugGoalType = -1;

@@ -30,6 +30,9 @@
 //   by Calvitix and Martin Gühmann.
 // - Handled problem with invalid units.
 // - Added get and set methods for the bombard members. (30-Apr-2008 Martin Gühmann)
+// - Position strength is now calculated terrain independently. (13-Aug-2008 Martin Gühmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+//   - Added following methods: NothingNeeded, GetTotalMissingStrength, HasEnough, and Log_Debug_Infor
 //
 //----------------------------------------------------------------------------
 
@@ -40,6 +43,8 @@
 #include "cellunitlist.h"
 #include "UnitRecord.h"
 #include "World.h"
+#include "ctpaidebug.h"
+#include "mapanalysis.h"
 
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
@@ -136,11 +141,14 @@ void Squad_Strength::Set_Agent_Count(const sint32 & count)
 void Squad_Strength::Add_Agent_Strength(const Agent_ptr & agent)
 {
 	(*this) += agent->Get_Squad_Strength();
+	Assert(m_transport >= 0);
 }
 
 void Squad_Strength::Remove_Agent_Strength(const Agent_ptr & agent)
 {
+	Assert(Get_Agent_Count() > 0);
 	(*this) -= agent->Get_Squad_Strength();
+	Assert(m_transport >= 0);
 }
 
 void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
@@ -155,7 +163,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 	m_agent_count = army->Num();
 
-	army->ComputeStrength(m_defense_str,
+	army->ComputeStrength(m_defense_str, // defense and attack reversed
 						  m_attack_str,
 						  m_ranged_str,
 						  m_defenders,
@@ -163,7 +171,8 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 						  m_land_bombard_str,
 						  m_water_bombard_str,
 						  m_air_bombard_str,
-						  m_value
+						  m_value,
+						  false
 						  );
 
 	m_value = 0.0;
@@ -184,6 +193,17 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 			--m_agent_count;
 		}
 	}
+}
+
+void Squad_Strength::Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId)
+{
+	m_attack_str        = MapAnalysis::GetMapAnalysis().GetEnemyAttack     (playerId, pos);
+	m_defense_str       = MapAnalysis::GetMapAnalysis().GetEnemyDefense    (playerId, pos);
+	m_ranged_str        = MapAnalysis::GetMapAnalysis().GetEnemyRanged     (playerId, pos);
+	m_land_bombard_str  = MapAnalysis::GetMapAnalysis().GetEnemyBombardLand(playerId, pos);
+	m_water_bombard_str = MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (playerId, pos);
+	m_air_bombard_str   = MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (playerId, pos);
+	m_value             = MapAnalysis::GetMapAnalysis().GetEnemyValue      (playerId, pos);
 }
 
 double Squad_Strength::Get_Attack() const
@@ -263,6 +283,7 @@ sint16 Squad_Strength::Get_Transport() const
 
 void Squad_Strength::Set_Transport(const sint16 & slots)
 {
+	Assert(slots >= 0);
 	m_transport = slots;
 }
 
@@ -314,4 +335,85 @@ void Squad_Strength::Set_To_The_Maximum(Squad_Strength otherStrength)
 	m_transport         = std::max(m_transport        , otherStrength.m_transport        );
 	m_value             = std::max(m_value            , otherStrength.m_value            );
 	m_water_bombard_str = std::max(m_water_bombard_str, otherStrength.m_water_bombard_str);
+}
+
+bool Squad_Strength::NothingNeeded() const
+{
+	return m_air_bombard_str   >= 0
+	    && m_land_bombard_str  >= 0
+	    && m_water_bombard_str >= 0
+	    && m_attack_str        >= 0
+	    && m_defense_str       >= 0
+	    && m_ranged_str        >= 0
+	    && m_value             >= 0
+	    && m_agent_count       >= 0
+	    && m_transport         >= 0
+	    && m_defenders         >= 0
+	    && m_ranged            >= 0;
+}
+
+double Squad_Strength::GetTotalMissing(const Squad_Strength & otherStrength) const
+{
+	double attack        = m_attack_str        - otherStrength.m_attack_str;
+	double defense       = m_defense_str       - otherStrength.m_defense_str;
+	double ranged        = m_ranged_str        - otherStrength.m_ranged_str;
+	double value         = m_value             - otherStrength.m_value;
+	double land_bombard  = m_land_bombard_str  - otherStrength.m_land_bombard_str;
+	double water_bombard = m_water_bombard_str - otherStrength.m_water_bombard_str;
+	double air_bombard   = m_air_bombard_str   - otherStrength.m_air_bombard_str;
+
+	sint16 count         = m_agent_count       - otherStrength.m_agent_count;
+
+	return std::max(0.0, attack)
+	     + std::max(0.0, defense)
+	     + std::max(0.0, ranged)
+	     + std::max(0.0, value)
+	     + std::max(0.0, land_bombard)
+	     + std::max(0.0, water_bombard)
+	     + std::max(0.0, air_bombard)
+	     + std::max(0.0, static_cast<double>(count));
+}
+
+bool Squad_Strength::HasEnough(const Squad_Strength & otherStrength) const
+{
+	return m_air_bombard_str   >= otherStrength.m_air_bombard_str
+	    && m_land_bombard_str  >= otherStrength.m_land_bombard_str
+	    && m_water_bombard_str >= otherStrength.m_water_bombard_str
+	    && m_attack_str        >= otherStrength.m_attack_str
+	    && m_defense_str       >= otherStrength.m_defense_str
+	    && m_ranged_str        >= otherStrength.m_ranged_str
+	    && m_value             >= otherStrength.m_value
+	    && m_agent_count       >= otherStrength.m_agent_count;
+}
+
+void Squad_Strength::Log_Debug_Info(const int & log, sint32 playerId, char * text) const
+{
+	AI_DPRINTF
+	          (
+	           k_DBG_SCHEDULER_ALL, playerId, -1, -1, ("\t\t%s"
+	                                                     "\tm_air_bombard_str   %f"
+	                                                     "\tm_land_bombard_str  %f"
+	                                                     "\tm_water_bombard_str %f"
+	                                                     "\tm_attack_str        %f"
+	                                                     "\tm_defense_str       %f"
+	                                                     "\tm_ranged_str        %f"
+	                                                     "\tm_value             %f"
+	                                                     "\tm_agent_count       %d"
+	                                                     "\tm_transport         %d"
+	                                                     "\tm_defenders         %d"
+	                                                     "\tm_ranged            %d\n"
+	                                                   , text
+	                                                   , m_air_bombard_str
+	                                                   , m_land_bombard_str
+	                                                   , m_water_bombard_str
+	                                                   , m_attack_str
+	                                                   , m_defense_str
+	                                                   , m_ranged_str
+	                                                   , m_value
+	                                                   , m_agent_count
+	                                                   , m_transport
+	                                                   , m_defenders
+	                                                   , m_ranged
+	                                                  )
+	          );
 }

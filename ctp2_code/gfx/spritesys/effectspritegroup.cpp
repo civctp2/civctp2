@@ -269,10 +269,7 @@ POINT EffectSpriteGroup::GetHotPoint(EFFECTACTION action, sint32 facing)
 {
 	POINT nullPoint = {0,0};
 
-	Assert (action == EFFECTACTION_PLAY);
-	Assert (m_sprites[EFFECTACTION_PLAY]);
-
-	if(m_sprites[EFFECTACTION_PLAY]) action = EFFECTACTION_PLAY;
+	Assert (m_sprites[action]);
 
 	return m_sprites[action] ? m_sprites[action]->GetHotPoint() : nullPoint;
 }

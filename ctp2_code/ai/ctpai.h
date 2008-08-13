@@ -30,6 +30,8 @@
 //   with 7 other garrison units(based on makeRoomForNewUnits code) - Calvitix
 // - force garrison units to ungroup.
 // - BombardNearbyEnemies before ending turn (during ExecuteOpportunityActions) PFT
+// - Moved the startegic state calculation before everthing else, so that
+//   each turn has the right startegy even after a reload. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -77,9 +79,10 @@ public:
 
 	
 	static void BeginTurn(const PLAYER_INDEX player);
+	static void BeginDiplomacy(const PLAYER_INDEX player, sint32 round);
 
 	static void MakeRoomForNewUnits(const PLAYER_INDEX playerId);
-    
+
 	static void MoveOutofCityTransportUnits(const PLAYER_INDEX playerId);
 
 	static void UnGroupGarrisonUnits(const PLAYER_INDEX playerId);
@@ -126,6 +129,9 @@ public:
 
 	static void SetResearch(const PLAYER_INDEX player);
 
+	
+	static void ComputeCityGarrisons(const PLAYER_INDEX player);
+
 private:
 
 	static void Resize();
@@ -138,9 +144,6 @@ private:
 
 	
 	static void AddMiscMapTargets(const PLAYER_INDEX player);
-
-	
-	static void ComputeCityGarrisons(const PLAYER_INDEX player);
 
 	
 	static void BombardAdjacentEnemies(const Army & army);

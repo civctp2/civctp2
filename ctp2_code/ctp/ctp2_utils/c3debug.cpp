@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Debugging
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -27,7 +27,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - None
+// - The log files are now only opened and closed once, this speeds up
+//   debugging significantly. (09-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -63,12 +64,14 @@ char g_last_debug_text[4096];
 extern DebugWindow *g_debugWindow;
 #endif
 
-#define k_FILENAME				"logs" FILE_SEP "civ3log%#.2d.txt"
-#define k_MAX_LOG_FILE_LINES	10000
+#define k_FILENAME				"logs" FILE_SEP "civ3log%#.3d.txt"
+#define k_MAX_LOG_FILE_LINES	40000
 
 MBCHAR	s_logFileName[20];
 sint32	s_logFileNumber=0;
 sint32	s_logLinesThisFile=0;
+
+FILE* g_theLogFile = NULL;
 
 #if 0
 MBCHAR const * c3debug_GetLogFileName(void)
@@ -87,29 +90,28 @@ sint32 *c3debug_GetLogLinesThisFile(void)
 }
 #endif
 
-int c3debug_InitDebugLog()
+void c3debug_InitDebugLog()
 {
-	
 	SECURITY_ATTRIBUTES		sa;
 
 	sa.nLength = sizeof(sa);
 	sa.lpSecurityDescriptor = NULL;
 	sa.bInheritHandle = TRUE;
-	
+
 	CreateDirectory((LPCTSTR)"logs", &sa);
 
-	
 	WIN32_FIND_DATA	fileData;
 	MBCHAR path[_MAX_PATH];
 
 	strcpy(path, "logs" FILE_SEP "*.*");
-		
+
 	HANDLE lpFileList = FindFirstFile(path, &fileData);
 	
-	if (lpFileList != INVALID_HANDLE_VALUE) {
-		
+	if(lpFileList != INVALID_HANDLE_VALUE)
+	{
 		MBCHAR fileName[256];
-		do {
+		do
+		{
 			sprintf(fileName, "logs%s%s", FILE_SEP, fileData.cFileName);
 			DeleteFile(fileName);
 		} while(FindNextFile(lpFileList,&fileData));
@@ -122,114 +124,122 @@ int c3debug_InitDebugLog()
 
 	sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
 
-	FILE* f = fopen(s_logFileName, "w");
-	Assert(f);
-	fclose(f);
-	return 0;
+	g_theLogFile = fopen(s_logFileName, "w");
+	Assert(g_theLogFile);
 }
 
-int
-c3debug_dprintfPrefix(int mask,
-                      char const* file,
-                      int line)
+void c3debug_CloseDebugLog()
+{
+	fclose(g_theLogFile);
+}
+
+void c3debug_dprintfPrefix
+(
+    sint32      mask,
+    char const* file,
+    sint32      line
+)
 {
 	g_useMask = mask;
 
-	if (mask & g_debug_mask) {
-		FILE* f = fopen(s_logFileName, "a");
-		
-		
-		if (!f) return 0;
-
-		if (s_logLinesThisFile >=  k_MAX_LOG_FILE_LINES) {
-			s_logFileNumber++;
-			s_logLinesThisFile = 0;
-			sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
-			fclose(f);
-			f = fopen(s_logFileName, "w");
-			fprintf(f, "[Continued from Part %#.2d]\n\n", s_logFileNumber-1);
-		}
-
-		char const * filename = strrchr(file, FILE_SEPC);
-		if (filename)
+	if (mask & g_debug_mask)
+	{
+		if(g_theLogFile)
 		{
-			filename++;
-		}
-		else
-		{
-			filename = file;
-		}
-		
-		fprintf(f, "%15.15s@%-4d: ", filename, line);
-		
-		s_logLinesThisFile++;
-
-		fclose(f);
-		
-		g_last_debug_text[0] = 0;
-	}
-	return 0;
-}
-
-int c3debug_dprintf(char const * format, ...) 
-{
-	va_list list;
-	if(g_debug_mask & g_useMask) {
-		FILE* f = fopen(s_logFileName, "a");
-		if(f) {
-			if (s_logLinesThisFile >=  k_MAX_LOG_FILE_LINES) {
+			if (s_logLinesThisFile >=  k_MAX_LOG_FILE_LINES)
+			{
 				s_logFileNumber++;
 				s_logLinesThisFile = 0;
 				sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
-				fclose(f);
-				f = fopen(s_logFileName, "w");
-				fprintf(f, "[Continued from Part %#.2d]\n\n", s_logFileNumber-1);
+				fclose(g_theLogFile);
+				g_theLogFile = fopen(s_logFileName, "a");
+				fprintf(g_theLogFile, "[Continued from Part %#.3d]\n\n", s_logFileNumber-1);
 			}
+
+			char const * filename = strrchr(file, FILE_SEPC);
+			if(filename)
+			{
+				filename++;
+			}
+			else
+			{
+				filename = file;
+			}
+
+			fprintf(g_theLogFile, "%15.15s@%-4d: ", filename, line);
+
+			s_logLinesThisFile++;
+
+			g_last_debug_text[0] = 0;
+		}
+	}
+}
+
+void c3debug_dprintf(char const * format, ...)
+{
+	va_list list;
+	if(g_debug_mask & g_useMask)
+	{
+		if(g_theLogFile)
+		{
+			if (s_logLinesThisFile >=  k_MAX_LOG_FILE_LINES)
+			{
+				s_logFileNumber++;
+				s_logLinesThisFile = 0;
+				sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
+				fclose(g_theLogFile);
+				g_theLogFile = fopen(s_logFileName, "a");
+				fprintf(g_theLogFile, "[Continued from Part %#.3d]\n\n", s_logFileNumber-1);
+			}
+
 			va_start(list, format);
-			if(g_netConsole) {
+
+			if(g_netConsole)
+			{
 				g_netConsole->Print(format, list);
 			}
+
 			va_end(list);
 
 			va_start(list, format);
-			vfprintf(f, format, list);
+			vfprintf(g_theLogFile, format, list);
 			va_end(list);
 
 			s_logLinesThisFile++;
 
-			fclose(f);
+			fflush(g_theLogFile);
 		}
-		
+
 		va_start(list, format);
 		vsprintf(g_last_debug_text + strlen(g_last_debug_text), format, list);
 		va_end(list);
 #ifndef _AIDLL
 		
-		if (g_debugWindow) {
+		if (g_debugWindow)
+		{
 			g_debugWindow->AddText(g_last_debug_text);
 		}
 #endif
 	}
-	return 0;
 }
 
-void
-c3debug_SetDebugMask(int mask, int set)
+void c3debug_SetDebugMask(int mask, int set)
 {
-	if(set) {
+	if(set)
+	{
 		g_debug_mask |= mask;
-	} else {
+	}
+	else
+	{
 		g_debug_mask &= ~(mask);
 	}
 }
-
 
 #ifdef WIN32
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers)
 {
 	MBCHAR *s;
 
-	
 	switch (exception_pointers->ExceptionRecord->ExceptionCode) {
 	case EXCEPTION_ACCESS_VIOLATION:		s = "Access Violation";		break;
 	case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:	s = "Array Bounds Exceeded"; break;
@@ -263,36 +273,29 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 
 	DPRINTF(k_DBG_FIX, ("Exception Stack Trace:\n%s\n", s));
 
-	
-	
 #ifndef _NO_GAME_WATCH
-	
-	
+
 	char userName[256];
 	DWORD size = 256;
 	userName[0] = '\0';		
 	GetUserName(userName, &size);
 
-	
 	char computerName[256];
 	size = 256;
 	computerName[0] = '\0';		
 	GetComputerName(computerName, &size);
 
-	
 	SYSTEMTIME localTime;
 	memset(&localTime, 0, sizeof(localTime));	
 	GetLocalTime(&localTime);
 
-	
 	char stamp[1024];
 	sprintf(stamp, "Civilization III CTP - %s on %s at %d/%d/%d %d:%d:%d", userName, computerName,
 		localTime.wMonth, localTime.wDay, localTime.wYear, localTime.wHour,
 		localTime.wMinute, localTime.wSecond);
 
-	
 	gameWatch.EndGame(g_gameWatchID, stamp);
-#endif 
+#endif
 
 	return EXCEPTION_CONTINUE_SEARCH;
 }

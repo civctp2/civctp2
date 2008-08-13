@@ -86,7 +86,7 @@
 #include <crtdbg.h>
 
 // Do not define the min and max *macros* in <windows.h>.
-#define NOMINMAX	
+#define NOMINMAX
 #include <windows.h>
 #else
 #include "windows.h"

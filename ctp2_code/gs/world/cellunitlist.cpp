@@ -31,6 +31,7 @@
 // - Handled crashes with invalid units.
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
+// - Position strength can now be calculated independently from position. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -918,7 +919,8 @@ void CellUnitList::ComputeStrength(double & attack,
                                    double & land_bombard,
                                    double & water_bombard,
                                    double & air_bombard,
-                                   double & total_value) const
+                                   double & total_value,
+                                   const bool terrainIndependent) const
 {
 	attack            = 0.0;
 	defense           = 0.0;
@@ -952,9 +954,18 @@ void CellUnitList::ComputeStrength(double & attack,
 		            * hitpoints
 		            * firepower;
 
-		defense  +=   m_array[i]->GetPositionDefense(Unit())
-		            * hitpoints
-		            * firepower;
+		if(terrainIndependent)
+		{
+			defense  +=   rec->GetDefense()
+			            * hitpoints
+			            * firepower;
+		}
+		else
+		{
+			defense  +=   m_array[i]->GetPositionDefense(Unit())
+			            * hitpoints
+			            * firepower;
+		}
 
 		ranged   += static_cast<double>(rec->GetZBRangeAttack()
 		                              * hitpoints

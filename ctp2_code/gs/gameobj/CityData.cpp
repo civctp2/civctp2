@@ -7881,6 +7881,8 @@ sint8 CityData::GetCurrentGarrison() const
 
 void CityData::SetCurrentGarrison(const sint8 & value)
 {
+	Assert(value >= 0);
+	Assert(value <= k_MAX_ARMY_SIZE);
 	m_currentGarrison = value;
 }
 
@@ -7893,6 +7895,7 @@ sint8 CityData::GetNeededGarrison() const
 
 void CityData::SetNeededGarrison(const sint8 & value)
 {
+	Assert(value <= k_MAX_ARMY_SIZE);
 	m_neededGarrison = value;
 }
 
@@ -7905,6 +7908,7 @@ double CityData::GetCurrentGarrisonStrength() const
 
 void CityData::SetCurrentGarrisonStrength(const double & value)
 {
+	Assert(value == 0.0 || value >= 0.5);
 	m_currentGarrisonStrength = value;
 }
 

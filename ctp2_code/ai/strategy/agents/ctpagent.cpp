@@ -34,6 +34,7 @@
 // - Changed rounds calculation back to original method. (30-Jan-2008 Martin Gühmann)
 // - Agents used in now exclusively set here. (8-Feb-2008 Martin Gühmann)
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,6 +59,8 @@
 #include "mapanalysis.h"
 #include "ctpaidebug.h"
 #include "ctpai.h"
+#include "GoalRecord.h"
+#include "CTPGoal.h"
 
 extern MapPoint g_mp_size;
 
@@ -112,6 +115,8 @@ void CTPAgent::Set_Army(const Army & army)
 
 	Assert(army.IsValid());
 
+	Compute_Squad_Strength();
+
 #ifdef _DEBUG_SCHEDULER
 //	Assert(army->m_theAgent == NULL);
 //	army->m_theAgent = this;
@@ -145,13 +150,13 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 	if (Get_Is_Dead())
 		return SQUAD_CLASS_DEFAULT;
 
-	bool isspecial; 
-	bool isstealth;
-	sint32 maxattack; 
-	sint32 maxdefense; 
-	bool cancapture;
-	bool haszoc;
-	bool canbombard;
+	bool   isspecial;
+	bool   isstealth;
+	sint32 maxattack;
+	sint32 maxdefense;
+	bool   cancapture;
+	bool   haszoc;
+	bool   canbombard;
 	sint32 transports;
 	sint32 max;
 	sint32 empty;
@@ -205,13 +210,22 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 
 bool CTPAgent::IsArmyPosFilled() const
 {
-	return ( g_theWorld->GetCell(Get_Pos())->GetNumUnits() >= k_MAX_ARMY_SIZE );
+	return g_theWorld->GetCell(Get_Pos())->GetNumUnits() >= k_MAX_ARMY_SIZE;
+}
+
+bool CTPAgent::IsOneArmyAtPos() const
+{
+	return g_theWorld->GetCell(Get_Pos())->GetNumUnits() == Get_Army()->Num();
+}
+
+sint32 CTPAgent::GetUnitsAtPos() const
+{
+	return g_theWorld->GetCell(Get_Pos())->GetNumUnits();
 }
 
 bool CTPAgent::CanMove() const
 {
-	// Maybe m_army->GetFirstMoveThisTurn() should be replaced by m_army->CanMove()
-	return m_army.IsValid() && m_army->GetFirstMoveThisTurn();
+	return m_army.IsValid() && m_army->CanMove();
 }
 
 MapPoint CTPAgent::Get_Pos() const
@@ -243,7 +257,8 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 	                        bombard_land_strength,
 	                        bombard_sea_strength,
 	                        bombard_air_strength,
-	                        total_value
+	                        total_value,
+	                        true
 	                       );
 
 	m_squad_strength.Set_Agent_Count (m_army.Num()                    );
@@ -261,7 +276,7 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 	return m_squad_strength;
 }
 
-void CTPAgent::Log_Debug_Info(const int & log) const
+void CTPAgent::Log_Debug_Info(const int & log, const Goal const * goal) const
 {
 	if (!m_army.IsValid())
 	{
@@ -272,13 +287,20 @@ void CTPAgent::Log_Debug_Info(const int & log) const
 	MapPoint pos;
 	m_army->GetPos(pos);
 
-	AI_DPRINTF(log, m_playerId, -1, -1,
-		("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d)\n",
-		m_army.m_id,
-		m_squad_class,
-		pos.x, 
-		pos.y,
-		(m_is_used ? 1 : 0)));
+	AI_DPRINTF(log,
+	           m_playerId,
+	           -1,
+	           -1,
+	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d) \t (by_this=%d) \t (in %s)\n",
+	            m_army.m_id,
+	            m_squad_class,
+	            pos.x,
+	            pos.y,
+	            (m_goal ? 1 : 0),
+	            ((goal == m_goal) ? 1 : 0),
+	            (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")
+	           )
+	          );
 	
 	AI_DPRINTF(log, -99, -1, m_army.m_id,
 		("\t\t   -------\n")); 
@@ -426,7 +448,7 @@ sint32 CTPAgent::GetRounds(const MapPoint & pos, sint32 & cells) const
 	return static_cast<sint32>(ceil(GetRoundsPrecise(pos, cells)));
 }
 
-bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & utility) const
+bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, Utility & utility) const
 {
 	Assert(transport);
 	utility = 0.0;
@@ -462,14 +484,12 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 	sint32 tile_count;
 	sint32 trans_rounds = GetRounds(trans_pos, tile_count);
 
-	double move_type_bonus = 0.0;
-	move_type_bonus += 
-		transport->Get_Army()->CountMovementTypeSea() * 1000.0;
+	size_t move_type_bonus = transport->Get_Army()->CountMovementTypeSea() * 1000;
 
-	utility = move_type_bonus + (trans_rounds * -100.0) - tile_count;
+	utility = move_type_bonus + (trans_rounds * -100) - tile_count;
 
-	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, this->Get_Army()->GetOwner(), -1, -1,
-	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8f,\t%8f,\t%8d,\t%8d\n",
+	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Army()->GetOwner(), -1, -1,
+	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d\n",
 	this,                                          // This agent
 	this->Get_Pos().x,                             // Agent pos.x
 	this->Get_Pos().y,                             // Agent pos.y
@@ -478,7 +498,7 @@ bool CTPAgent::EstimateTransportUtility(const CTPAgent_ptr transport, double & u
 	transport->Get_Pos().y,                        // Transport pos.y
 	utility,                                       // Transport utility
 	move_type_bonus,                               // Movement bonus of transporter type
-	trans_rounds,                                  // Distance to transporter (Quare rooted quare distance), not identical with path distance
+	trans_rounds,                                  // Distance to transporter (Square rooted quare distance), not identical with path distance
 	tile_count));                                  // Rounds to target
 
 	return true;
@@ -504,8 +524,10 @@ const MapPoint & CTPAgent::Get_Target_Pos() const
 	return m_targetPos;
 }
 
-bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
+void CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 {
+	Assert(Get_Can_Be_Executed());
+
 	Path *tmpPath = new Path(found_path);
 	MapPoint target_pos = tmpPath->GetEnd();
 
@@ -522,7 +544,7 @@ bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 		tmpPath->SnipEnd();
 		range--;
 	}
-	
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail,
 	                       GEV_MoveOrder,
 	                       GEA_Army, m_army,
@@ -535,8 +557,6 @@ bool CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 	Set_Target_Pos(target_pos);
 	Set_Target_Order(order_type);
 	Set_Can_Be_Executed(false);
-
-	return true;
 }
 
 bool CTPAgent::Can_Execute_Order(const sint32 & order_type) const
@@ -550,6 +570,8 @@ bool CTPAgent::Can_Execute_Order(const sint32 & order_type) const
 
 void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_pos)
 {
+	Assert(Get_Can_Be_Executed());
+
 	if (order_type < 0)
 	{
 		Set_Target_Order(-1);
@@ -593,6 +615,8 @@ void CTPAgent::Execute_Order(const sint32 & order_type, const MapPoint & target_
 
 void CTPAgent::Group_Order()
 {
+	Assert(Get_Can_Be_Executed());
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail,
 	                       GEV_GroupOrder,
 	                       GEA_Army, m_army,
@@ -607,8 +631,7 @@ void CTPAgent::Group_Order()
 
 void CTPAgent::Group_With( CTPAgent_ptr second_army )
 {
-	if(!second_army->Get_Can_Be_Executed())
-		return;
+	Assert(second_army->Get_Can_Be_Executed());
 
 	Army army = second_army->Get_Army();
 
@@ -626,12 +649,39 @@ void CTPAgent::Group_With( CTPAgent_ptr second_army )
 
 	MapPoint pos;
 	Get_Army()->GetPos(pos);
+
 	Set_Target_Pos(pos);
+	Set_Can_Be_Executed(false);
+
+	second_army->Set_Target_Pos(pos);
 	second_army->Set_Can_Be_Executed(false);
+
+	const GoalRecord* rec = g_theGoalDB->Get(m_goal->Get_Goal_Type());
+
+	const char * myText = rec->GetNameText();
+	MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
+	MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
+	memset(goalString, 0, strlen(myText) + 20);
+	memset(myString,   0, strlen(myText) + 40);
+
+	for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+	{
+		goalString[myComp] = myText[myComp + 5];
+	}
+
+	MapPoint dest_pos = static_cast<CTPGoal_ptr>(m_goal)->Get_Target_Pos();
+
+	sprintf(myString, "Grouping at (%d,%d) to %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
+	g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+
+	delete[] goalString;
+	delete[] myString;
 }
 
 void CTPAgent::Ungroup_Order()
 {
+	Assert(Get_Can_Be_Executed());
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail,
 	                       GEV_UngroupOrder,
 	                       GEA_Army, m_army,
@@ -642,10 +692,17 @@ void CTPAgent::Ungroup_Order()
 	Get_Army()->GetPos(pos);
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
+
+	MBCHAR * myString = new MBCHAR[40];
+	sprintf(myString, "Ungrouping at (%d,%d)", pos.x, pos.y);
+	g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+	delete[] myString;
 }
 
 void CTPAgent::MoveIntoTransport()
 {
+	Assert(Get_Can_Be_Executed());
+
 	g_gevManager->AddEvent(GEV_INSERT_Tail,
 	                       GEV_BoardTransportOrder,
 	                       GEA_Army, Get_Army(),
@@ -717,7 +774,7 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 			const OrderRecord *order_rec = CtpAi::GetDisbandArmyOrder();
 
 			PerformOrderHere(order_rec, &found_path);
-			g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
+			g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
 		}
 		return 0;
 	}
@@ -736,7 +793,7 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 	if(order_rec)
 	{
 		PerformOrder(order_rec);
-		g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255);
+		g_graphicsOptions->AddTextToArmy(Get_Army(), "DISBAND", 255, m_goal ? m_goal->Get_Goal_Type() : -1);
 	}
 
 	return unit_count;
@@ -744,6 +801,8 @@ sint32 CTPAgent::DisbandObsoleteUnits()
 
 void CTPAgent::PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority)
 {
+	Assert(Get_Can_Be_Executed());
+
 	Get_Army()->PerformOrderHere(order_rec, path, priority);
 	Set_Target_Order(order_rec->GetIndex());
 	Set_Target_Pos(path->GetEnd());
@@ -752,10 +811,59 @@ void CTPAgent::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 
 void CTPAgent::PerformOrder(const OrderRecord * order_rec)
 {
+	Assert(Get_Can_Be_Executed());
+
 	MapPoint pos;
 	Get_Army()->GetPos(pos);
 	Get_Army()->PerformOrder(order_rec);
 	Set_Target_Order(order_rec->GetIndex());
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
+}
+
+void CTPAgent::WaitHere(const MapPoint & goal_pos)
+{
+	if(Get_Can_Be_Executed())
+	{
+		Set_Can_Be_Executed(false);
+		Get_Army()->ClearOrders();
+
+		MapPoint pos;
+		Get_Army()->GetPos(pos);
+		MBCHAR * myString = new MBCHAR[40];
+		sprintf(myString, "Waiting GROUP @ (%d,%d) to GO (%d,%d)", pos.x, pos.y, goal_pos.x, goal_pos.y);
+		g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+		delete[] myString;
+	}
+}
+
+void CTPAgent::ClearOrders()
+{
+	if(this->Has_Goal())
+	{
+		Get_Army()->ClearOrders();
+
+		const GoalRecord* rec = g_theGoalDB->Get(m_goal->Get_Goal_Type());
+
+		const char * myText = rec->GetNameText();
+		MBCHAR * myString   = new MBCHAR[strlen(myText) + 40];
+		MBCHAR * goalString = new MBCHAR[strlen(myText) + 20];
+		memset(goalString, 0, strlen(myText) + 20);
+		memset(myString,   0, strlen(myText) + 40);
+
+		for(uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+		{
+			goalString[myComp] = myText[myComp + 5];
+		}
+
+		MapPoint pos;
+		Get_Army()->GetPos(pos);
+		MapPoint dest_pos = static_cast<CTPGoal_ptr>(m_goal)->Get_Target_Pos();
+
+		sprintf(myString, "Clearing oders at (%d,%d) for %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
+		g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
+
+		delete[] goalString;
+		delete[] myString;
+	}
 }

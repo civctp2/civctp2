@@ -32,6 +32,7 @@
 //   capacy limit even if the army to be transported has more units than the
 //   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin Gühmann)
 // - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Merged finish move. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -385,10 +386,6 @@ STDEHANDLER(ArmySueFranchiseOrderEvent)
 	MapPoint pos;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 
-	
-	
-	
-
 	a->AddOrders(UNIT_ORDER_SUE_FRANCHISE);
 
 	return GEV_HD_Continue;
@@ -544,10 +541,6 @@ STDEHANDLER(ArmyReformCityOrderEvent)
 	Army a;
 	MapPoint pos;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
-	
-	
-	
-	
 
 	a->AddOrders(UNIT_ORDER_REFORM);
 	return GEV_HD_Continue;
@@ -754,8 +747,6 @@ STDEHANDLER(ArmyMoveEvent)
 			}
 		}
 
- 
-
 */		//end EMOD
 		if (armyData->IsOccupiedByForeigner(newPos))
 		{
@@ -767,8 +758,6 @@ STDEHANDLER(ArmyMoveEvent)
 					return GEV_HD_Continue;
 			}
 
-			
-	
 			PLAYER_INDEX owner = army.GetOwner();
 			if ((owner == PLAYER_INDEX_VANDALS) && 
 				wonderutil_GetProtectFromBarbarians(g_player[defender->GetOwner()]->m_builtWonders)) 
@@ -815,12 +804,12 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
-			g_gevManager->AddEvent(GEV_INSERT_Tail,
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_FinishAttack,
 								   GEA_Army, army,
 								   GEA_MapPoint, newPos,
 								   GEA_End);
-								   
+
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 								   GEV_ClearOrders,
 								   GEA_Army, army,
@@ -878,81 +867,26 @@ STDEHANDLER(FinishAttackEvent)
 
 STDEHANDLER(FinishMoveEvent)
 {
-	GameEventArgument *armyArg = args->GetArg(GEA_Army, 0);
-	GameEventArgument *dirArg = args->GetArg(GEA_Direction, 0);
-	GameEventArgument *posArg = args->GetArg(GEA_MapPoint, 0);
-	GameEventArgument *orderArg = args->GetArg(GEA_Int, 0);
-
 	Army army;
 	WORLD_DIRECTION dir;
 	MapPoint pos;
-	UNIT_ORDER_TYPE order;
+	sint32 order;
 
-	if(!armyArg || !armyArg->GetArmy(army))
+	if(!args->GetArmy(0, army))
 		return GEV_HD_Continue;
 
-	if(!dirArg || !dirArg->GetDirection(dir))
+	if(!args->GetDirection(0, dir))
 		return GEV_HD_Continue;
 
-	if(!posArg || !posArg->GetPos(pos))
+	if(!args->GetPos(0, pos))
 		return GEV_HD_Continue;
 
-	if(!orderArg || !orderArg->GetInt((sint32&)order))
+	if(!args->GetInt(0, order))
 		return GEV_HD_Continue;
 
-	if (!g_theArmyPool->IsValid(army))
-		return GEV_HD_Continue;
+	army->FinishMove(dir, pos, (UNIT_ORDER_TYPE)order);
 
-	CellUnitList transports;
-	sint32 canMoveIntoTransport = army.AccessData()->NumUnitsCanMoveIntoTransport(pos, transports);
-
-	if (g_theWorld->GetCity(pos).m_id == 0 &&
-	    canMoveIntoTransport > 0
-	   )
-	{
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-							   GEV_MoveIntoTransport,
-							   GEA_Army, army,
-							   GEA_MapPoint, pos,
-							   GEA_End);
-
-		return GEV_HD_Continue;
-	}
-	else
-	{
-		bool const  didMove = army.AccessData()->MoveIntoCell(pos, order, dir);
-
-		if(didMove)
-		{
-			for(sint32 i = army.Num() - 1; i >= 0; i--)
-			{
-				uint32 moveType = army[i].GetMovementType();
-				if(!g_theWorld->CanEnter(pos, moveType))
-				{
-					if((moveType & k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)
-					&&!(moveType & k_BIT_MOVEMENT_TYPE_WATER)
-					&&  g_theWorld->GetCell(pos)->GetEnv() & k_BIT_MOVEMENT_TYPE_WATER
-					&&  wonderutil_GetAllBoatsDeepWater(g_player[army.GetOwner()]->m_builtWonders)
-					){
-						
-					}
-					else
-					{
-						if(g_theWorld->GetCity(pos).m_id == 0)
-						{
-							g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
-												   GEA_Unit, army[i].m_id,
-												   GEA_Int, CAUSE_REMOVE_ARMY_ILLEGAL_CELL,
-												   GEA_Player, -1,
-												   GEA_End);
-						}
-					}
-				}
-			}
-		}
-
-		return GEV_HD_Continue;
-	}
+	return GEV_HD_Continue;
 }
 
 STDEHANDLER(MoveIntoTransportEvent)
@@ -1246,18 +1180,28 @@ STDEHANDLER(MoveUnitsEvent)
 {
 	Army a;
 	MapPoint from, to;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Stop;
 	if(!args->GetPos(0, from)) return GEV_HD_Continue;
 	if(!args->GetPos(1, to)) return GEV_HD_Continue;
 
-	for(sint32 i = 0; i < a.Num(); i++) {
-		if(a[i].GetDBRec()->GetCantMove()) {
-			
-			
+	for(sint32 i = 0; i < a.Num(); i++)
+	{
+		if(a[i].GetDBRec()->GetCantMove())
+		{
 			return GEV_HD_Stop;
 		}
 	}
+
+	g_gevManager->AddEvent
+	                      (
+	                       GEV_INSERT_AfterCurrent,
+	                       GEV_CheckOrders,
+	                       GEA_Army,        a,
+	                       GEA_MapPoint,    from,
+	                       GEA_MapPoint,    to,
+	                       GEA_End
+	                      );
 
 	a->MoveUnits(to);
 
@@ -1265,14 +1209,12 @@ STDEHANDLER(MoveUnitsEvent)
 	sint32 new_cell_owner = g_theWorld->GetCell(to)->GetOwner();
 	sint32 army_owner = a->GetOwner();
 
-	
 	Player *player_ptr = g_player[new_cell_owner];
 	if ( new_cell_owner != -1 && 
 		 new_cell_owner != army_owner && 
 		 player_ptr &&
 		 player_ptr->IsVisible(to)) {
 
-		
 		const Diplomat & new_cell_diplomat = Diplomat::GetDiplomat(new_cell_owner);
 		uint32 incursion_permission = new_cell_diplomat.GetIncursionPermission();
 		if (!(incursion_permission & (0x1 << army_owner)) &&
@@ -1386,7 +1328,6 @@ STDEHANDLER(MoveUnitsEvent)
 			}
 		}
 	}
-	
 
 	a->CheckActiveDefenders(to, false);
 
@@ -1396,7 +1337,7 @@ STDEHANDLER(MoveUnitsEvent)
 	}
 
 	a->CheckTerrainEvents();
-	
+
 	a->IncrementOrderPath();
 
 	return GEV_HD_Continue;
@@ -1617,7 +1558,7 @@ void armyevent_Initialize()
 	g_gevManager->AddCallback(GEV_FinishMove, GEV_PRI_Primary, &s_FinishMoveEvent);
 
 	g_gevManager->AddCallback(GEV_MoveUnits, GEV_PRI_Primary, &s_MoveUnitsEvent);
-	g_gevManager->AddCallback(GEV_MoveUnits, GEV_PRI_Post, &s_CheckOrdersEvent);
+	g_gevManager->AddCallback(GEV_CheckOrders, GEV_PRI_Primary, &s_CheckOrdersEvent);
 
 	g_gevManager->AddCallback(GEV_MoveIntoTransport, GEV_PRI_Primary, &s_MoveIntoTransportEvent);
 	g_gevManager->AddCallback(GEV_Battle, GEV_PRI_Primary, &s_BattleEvent);

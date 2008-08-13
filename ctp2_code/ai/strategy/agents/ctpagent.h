@@ -26,6 +26,7 @@
 //
 // - Improved design
 // - Made FindPath and GetRounds methods more flexible. (25-Jan-2008 Martin Gühmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -82,9 +83,9 @@ public:
 
 	MapPoint Get_Pos() const;
 
-
+	sint32 GetUnitsAtPos() const;
 	bool IsArmyPosFilled() const;
-
+	bool IsOneArmyAtPos() const;
 
 	bool CanMove() const;
 
@@ -94,7 +95,7 @@ public:
 
 
 
-	virtual void Log_Debug_Info(const int & log) const;
+	virtual void Log_Debug_Info(const int & log, const Goal const * goal) const;
 
 	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path );
 
@@ -105,7 +106,7 @@ public:
 	sint32 GetRounds(const MapPoint & pos, sint32 & cells) const;
 	double GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const;
 
-	bool EstimateTransportUtility(const CTPAgent_ptr transport, double & utility) const;
+	bool EstimateTransportUtility(const CTPAgent_ptr transport, Utility & utility) const;
 
 	void Set_Target_Order(const sint32 order_type);
 	void Set_Target_Pos(const MapPoint &order_pos);
@@ -113,7 +114,7 @@ public:
 	const MapPoint & Get_Target_Pos() const;
 
 
-	bool Follow_Path(const Path & found_path, const sint32 & order_type);
+	void Follow_Path(const Path & found_path, const sint32 & order_type);
 
 
 	bool Can_Execute_Order(const sint32 & order_type) const;
@@ -137,6 +138,8 @@ public:
 	void MoveIntoTransport();
 	void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
 	void PerformOrder(const OrderRecord * order_rec);
+	void WaitHere(const MapPoint & goal_pos);
+	void ClearOrders();
 
 protected:
 

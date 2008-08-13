@@ -1,3 +1,32 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Cell and Army text
+// Id           : $Id:$
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// -None
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
 
 
 #include "c3.h"
@@ -8,7 +37,7 @@
 #include "Army.h"
 #include "ArmyData.h"
 #include "Globals.h"
-
+#include "ctpaidebug.h"
 
 GraphicsOptions * g_graphicsOptions = NULL;
 
@@ -42,26 +71,20 @@ GraphicsOptions::GraphicsOptions()
 {
 }
 
-
-
 GraphicsOptions::~GraphicsOptions()
 {
     delete m_cellAVL;
 }
 
-
-
-
 void GraphicsOptions::Initialize(void)
 {
-    delete g_graphicsOptions;
-    g_graphicsOptions = new GraphicsOptions();
+	delete g_graphicsOptions;
+	g_graphicsOptions = new GraphicsOptions();
 }
-
 
 void GraphicsOptions::Cleanup(void)
 {
-    allocated::clear(g_graphicsOptions);
+	allocated::clear(g_graphicsOptions);
 }
 
 // ArmyName added by E
@@ -85,57 +108,45 @@ void GraphicsOptions::ArmyTextOff(void)
 	m_armyTextOn = false;
 }
 
-
-
-bool GraphicsOptions::AddTextToArmy(Army army, const char *text, const uint8 &colorMagnitude) 
+bool GraphicsOptions::AddTextToArmy(Army army, const char *text, const uint8 &colorMagnitude, const sint32 goalType) const
 {
-	if (!army.IsValid()) 
+	if (!army.IsValid())
 		return false;
 
 	army.AccessData()->SetDebugString(text);
 	army.AccessData()->SetDebugStringColor(colorMagnitude);
+
+	AI_DPRINTF(k_DBG_SCHEDULER, army->GetOwner(), goalType, army.m_id, ("\t\t%s\n", text));
+
 	return true;
 }
 
-
-
 void GraphicsOptions::ResetArmyText(Army army)
 {
-    if (army.IsValid()) 
-    {
-        army.AccessData()->SetDebugString(NULL);
-    }
+	if (army.IsValid())
+	{
+		army.AccessData()->SetDebugString(NULL);
+	}
 }
-
-
-
-
-
 
 void GraphicsOptions::CellTextOn(void)
 {
 	m_cellTextOn = true;
 }
 
-
 void GraphicsOptions::CellTextOff(void)
 {
 	m_cellTextOn = false;
 }
 
-
-
-
 CellText *GraphicsOptions::GetCellText(MapPoint const &pos)
 {
-    CellText dummyCellText;
-    dummyCellText.m_key = PackCellAVLKey(pos);
+	CellText dummyCellText;
+	dummyCellText.m_key = PackCellAVLKey(pos);
 	
-    Comparable<CellText *> * avlObject = m_cellAVL->Search(&dummyCellText);
-    return (avlObject) ? avlObject->Key() : NULL;
+	Comparable<CellText *> * avlObject = m_cellAVL->Search(&dummyCellText);
+	return (avlObject) ? avlObject->Key() : NULL;
 }
-
-
 
 bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text, 
 									const uint8 &colorMagnitude)
@@ -168,16 +179,13 @@ bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text,
 	return true;
 }
 
-
-
 void GraphicsOptions::ResetCellText(const MapPoint &pos)
 {
-    CellText *cellText = GetCellText(pos);
-    if (cellText) 
-    {
+	CellText *cellText = GetCellText(pos);
+	if (cellText) 
+	{
 		delete [] cellText->m_text;
 		m_cellAVL->Delete(cellText);
 		delete cellText;
-    }
+	}
 }
-

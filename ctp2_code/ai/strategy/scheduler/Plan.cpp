@@ -77,6 +77,7 @@
 // - Restored old plan sorting and added a bonus for goals which may need many
 //   units. (25-Jan-2008 Martin Gühmann)
 // - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -121,7 +122,8 @@ Plan::Plan()
     m_matching_value    (Goal::BAD_UTILITY),
     m_the_squad         (NULL),
     m_the_goal          (NULL),
-    m_matches           ()
+    m_matches           (),
+    m_needs_cargo       (false)
 {
 }
 
@@ -145,7 +147,8 @@ Plan::Plan(Plan const & a_Original)
     m_matching_value    (a_Original.m_matching_value),
     m_the_squad         (a_Original.m_the_squad),
     m_the_goal          (a_Original.m_the_goal),
-    m_matches           (a_Original.m_matches)
+    m_matches           (a_Original.m_matches),
+    m_needs_cargo       (a_Original.m_needs_cargo)
 {
 }
 
@@ -173,6 +176,7 @@ Plan & Plan::operator = (Plan const & a_Original)
 		Set_Goal(a_Original.m_the_goal);    // sets m_the_goal, uses m_the_squad
 		m_matching_value    = a_Original.m_matching_value;
 		m_matches           = a_Original.m_matches;
+		m_needs_cargo       = a_Original.m_needs_cargo;
 	}
 
 	return *this;
@@ -220,40 +224,14 @@ Plan::~Plan()
 //----------------------------------------------------------------------------
 bool Plan::operator < (Plan const & plan) const
 {
-#if 1
 	// Matching value is based on the average match value per agent.
 	return m_matching_value < plan.m_matching_value;
-#else
-	Utility const   myPriority      = m_the_goal 
-	                                  ? m_the_goal->Get_Raw_Priority()
-	                                  : Goal::BAD_UTILITY;
-	Utility const   otherPriority   = plan.m_the_goal 
-	                                  ? plan.m_the_goal->Get_Raw_Priority()
-	                                  : Goal::BAD_UTILITY;
-
-#if 0
-	sint16    myAgentCount =      m_the_goal->Get_Agent_Count();
-	sint16 otherAgentCount = plan.m_the_goal->Get_Agent_Count();
-
-	return(myAgentCount == otherAgentCount
-	    && m_matching_value < plan.m_matching_value
-	      )
-	    ||(myPriority < otherPriority)
-	    ||(myPriority == otherPriority
-	    && m_matching_value < plan.m_matching_value
-	      );
-#else
-	return(myPriority < otherPriority)
-	    ||(myPriority == otherPriority
-	    && m_matching_value < plan.m_matching_value
-	      );
-#endif
-#endif
 }
 
 bool Plan::operator > (Plan const & plan) const
 {
-	return plan.operator < (*this);
+	// Matching value is based on the average match value per agent.
+	return m_matching_value > plan.m_matching_value;
 }
 
 //----------------------------------------------------------------------------
@@ -336,15 +314,16 @@ Utility Plan::Compute_Matching_Value()
 	{
 		for
 		(
-		    Agent_Match_List::iterator match_iter = m_matches.begin();
+		    Agent_Match_List::iterator match_iter  = m_matches.begin();
 		                               match_iter != m_matches.end();
 		                             ++match_iter
 		)
 		{
 			Agent_ptr agent_ptr = *(match_iter->squad_index);
+
 			match_iter->value   = m_the_goal->Compute_Matching_Value(agent_ptr);
 
-			if (match_iter->value > Goal::BAD_UTILITY) 
+			if (match_iter->value > Goal::BAD_UTILITY)
 			{
 				accumulated_matching_value += match_iter->value;
 				++found_agents;
@@ -355,7 +334,6 @@ Utility Plan::Compute_Matching_Value()
 	if (found_agents > 0)
 	{
 		m_matching_value  = accumulated_matching_value / found_agents;
-		m_matching_value += g_theGoalDB->Get(m_the_goal->Get_Goal_Type())->GetUnitCountBonus() * (found_agents - 1);
 		m_matches.sort(std::greater<Agent_Match>());
 	}
 	else
@@ -401,7 +379,7 @@ void Plan::Set_Squad(Squad_ptr squad)
 {
 	m_the_squad = squad;
 
-	if (m_the_squad)
+	if(m_the_squad)
 	{
 		Agent_List & agent_list = m_the_squad->Get_Agent_List();
 
@@ -427,6 +405,8 @@ void Plan::Set_Squad(Squad_ptr squad)
 			match_iter->committed       = false;
 			++match_iter;
 		}
+
+		Assert(m_matches.size() == 0 || m_matches.size() == 1);
 	}
 	else
 	{
@@ -445,21 +425,31 @@ sint32 Plan::Commit_Agents()
 	Assert(m_the_squad);
 	Assert(m_matches.size() == m_the_squad->Get_Num_Agents());
 
-	if (!m_the_goal || !m_the_squad)
+	if(!m_the_goal || !m_the_squad)
 	{
 		return 0;
 	}
 
-	if (m_the_goal->Is_Satisfied() || m_the_goal->Get_Totally_Complete())
+	if(Get_Matching_Value() <= Goal::BAD_UTILITY)
+	{
+		return 0;
+	}
+
+	if(m_the_goal->Is_Satisfied() || m_the_goal->Get_Totally_Complete())
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tNO AGENTS COMMITTED: (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+			("\t\tNO AGENTS COMMITTED:           (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
 
 		return 0;
+	}
+	else
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
+			("\t\tAGENTS CAN BE COMMITTED:       (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
 	}
 
 	sint32 committed_agents = 0;
-	
+
 	for
 	(
 	    Agent_Match_List::iterator match_iter  = m_matches.begin();
@@ -469,16 +459,19 @@ sint32 Plan::Commit_Agents()
 	{
 		Agent_ptr agent_ptr = (* (*match_iter).squad_index );
 
-		if (match_iter->value > Goal::BAD_UTILITY &&
-			!agent_ptr->Get_Is_Used() &&
-			agent_ptr->Get_Can_Be_Executed())
+		if
+		  (
+		       match_iter->value > Goal::BAD_UTILITY
+		   && !agent_ptr->Has_Goal()
+		   &&  agent_ptr->Get_Can_Be_Executed()
+		  )
 		{
 
 #ifdef _DEBUG_SCHEDULER
 			CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
 			if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
 			{
-				Assert(0);
+				Assert(false);
 			}
 #endif // _DEBUG_SCHEDULER
 
@@ -488,7 +481,7 @@ sint32 Plan::Commit_Agents()
 
 			if (committed)
 			{
-				agent_ptr->Set_Is_Used(true);
+				agent_ptr->Set_Goal(m_the_goal);
 				match_iter->committed = true;
 				++committed_agents;
 			}
@@ -505,7 +498,7 @@ sint32 Plan::Commit_Agents()
 	
 	if (!m_the_goal->Validate())
 	{
-		Assert(0);
+		Assert(false);
 	}
 #endif // _DEBUG_SCHEDULER
 
@@ -540,7 +533,137 @@ sint32 Plan::Commit_Agents()
 		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
 	}
 
-	if ( debug_plan && committed_agents > 0 ) 
+	if ( debug_plan && committed_agents > 0 )
+	{
+		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
+
+		sint32 mask;
+		if (goal_ptr->Is_Satisfied() || goal_ptr->Is_Execute_Incrementally())
+			mask = k_DBG_SCHEDULER;
+		else
+			mask = k_DBG_SCHEDULER_DETAIL;
+
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x)\n", goal_ptr, m_the_squad));
+
+		m_the_squad->Log_Debug_Info(mask, m_the_goal);
+		DPRINTF(mask, ("\t\t\t\n"));
+	}
+#endif // _DEBUG
+
+	return committed_agents;
+}
+
+sint32 Plan::Commit_Transport_Agents()
+{
+	Assert(m_the_goal);
+	Assert(m_the_squad);
+	Assert(m_matches.size() == m_the_squad->Get_Num_Agents());
+
+	if (!m_the_goal || !m_the_squad)
+	{
+		return 0;
+	}
+
+	if(!m_the_goal->Needs_Transporter() || m_the_goal->Get_Totally_Complete())
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
+			("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+
+		return 0;
+	}
+	else
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
+			("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+	}
+
+	sint32 committed_agents = 0;
+	
+	for
+	(
+	    Agent_Match_List::iterator match_iter  = m_matches.begin();
+	                               match_iter != m_matches.end() && m_the_goal->Needs_Transporter();
+	                             ++match_iter
+	)
+	{
+		const CTPAgent_ptr agent_ptr = reinterpret_cast<const CTPAgent_ptr>(* (*match_iter).squad_index );
+
+		if
+		(
+		       match_iter->value > Goal::BAD_UTILITY
+		   && !agent_ptr->Has_Goal()
+		   &&  agent_ptr->Get_Can_Be_Executed()
+		   &&  agent_ptr->Get_Army()->CanTransport()
+		)
+		{
+
+#ifdef _DEBUG_SCHEDULER
+			CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
+			if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
+			{
+				Assert(false);
+			}
+#endif // _DEBUG_SCHEDULER
+
+			
+			bool const committed = 
+			    m_the_goal->Commit_Agent(agent_ptr, match_iter->goal_index);
+
+			if (committed)
+			{
+				agent_ptr->Set_Goal(m_the_goal);
+				match_iter->committed = true;
+				++committed_agents;
+			}
+
+#ifdef _DEBUG_SCHEDULER
+			
+			m_the_goal->Validate();
+#endif // _DEBUG_SCHEDULER
+
+		}
+	}
+
+#ifdef _DEBUG_SCHEDULER
+	
+	if (!m_the_goal->Validate())
+	{
+		Assert(false);
+	}
+#endif // _DEBUG_SCHEDULER
+
+#ifdef _DEBUG
+	bool debug_plan;
+	if (CtpAiDebug::IsDebugGoalTypeSet())
+	{
+		debug_plan = CtpAiDebug::DebugLogCheck(-1, m_the_goal->Get_Goal_Type(), -1);
+	}
+	else if(CtpAiDebug::IsDebugArmyIdSet())
+	{
+		debug_plan = false;
+
+		Agent_List agent_list = m_the_squad->Get_Agent_List();
+
+		for
+		(
+		    Agent_List::iterator agent_iter  = agent_list.begin();
+		                         agent_iter != agent_list.end();
+		                       ++agent_iter
+		)
+		{
+			if (CtpAiDebug::DebugLogCheck(-1, -1, (((CTPAgent_ptr)(*agent_iter))->Get_Army().m_id)))
+			{
+				debug_plan = true;
+				break;
+			}
+		}
+	}
+	else
+	{
+		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
+	}
+
+	if(debug_plan && committed_agents > 0)
 	{
 		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
 
@@ -551,12 +674,12 @@ sint32 Plan::Commit_Agents()
 			mask = k_DBG_SCHEDULER_DETAIL;
 		
 		
-		DPRINTF(mask, ("\t\tEXECUTING GOAL: (goal: %x squad: %x)\n", goal_ptr, m_the_squad));
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x)\n", goal_ptr, m_the_squad));
 		DPRINTF(mask, ("\t\t\t\n"));
 		goal_ptr->Log_Debug_Info(mask);
 		
 		DPRINTF(mask, ("\t\tSquad:\n"));
-		m_the_squad->Log_Debug_Info(mask);
+		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 	}
 #endif // _DEBUG
 
@@ -609,7 +732,7 @@ sint32 Plan::Rollback_All_Agents()
 	sint32 rollback_agents = 0;
 
 	Assert(m_the_goal && m_the_squad);
-	if (m_the_goal && m_the_squad)
+	if(m_the_goal && m_the_squad)
 	{
 		CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
 
@@ -620,13 +743,13 @@ sint32 Plan::Rollback_All_Agents()
 		                             ++match_iter
 		)
 		{
-			if (match_iter->committed)
+			if(match_iter->committed)
 			{
 				CTPAgent_ptr agent_ptr = (CTPAgent_ptr) *(match_iter->squad_index);
 				ctpgoal_ptr->Rollback_Agent(match_iter->goal_index);
 				match_iter->committed   = false;
 				match_iter->value       = Goal::BAD_UTILITY;
-				agent_ptr->Set_Is_Used(false);
+				agent_ptr->Set_Goal(NULL);
 				++rollback_agents;
 			}
 			else
@@ -639,46 +762,52 @@ sint32 Plan::Rollback_All_Agents()
 	return rollback_agents;
 }
 
-void Plan::Move_All_Agents(Squad_ptr new_squad)
+sint32 Plan::Rollback_Emptied_Transporters()
 {
+	sint32 rollback_agents = 0;
+
 	Assert(m_the_goal && m_the_squad);
-	CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
-
-	for
-	(
-	    Agent_Match_List::iterator match_iter  = m_matches.begin();
-	                               match_iter != m_matches.end();
-	                             ++match_iter
-	)
+	if(m_the_goal && m_the_squad)
 	{
-		if (match_iter->committed)
-		{
-#ifdef _DEBUG
-			CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) (*(match_iter->goal_index));
+		CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
 
-			if (!ctpagent_ptr->Get_Army().IsValid())
+		for
+		(
+		    Agent_Match_List::iterator match_iter  = m_matches.begin();
+		                               match_iter != m_matches.end();
+		                             ++match_iter
+		)
+		{
+			if(match_iter->committed)
 			{
-				bool SHOW_RICHARD_THIS_ASSERT_082900 = false;
-				Assert(SHOW_RICHARD_THIS_ASSERT_082900);
-			}
-#endif // _DEBUG
+				CTPAgent_ptr agent_ptr = (CTPAgent_ptr) *(match_iter->squad_index);
 
-			Agent_ptr agent_ptr = ctpgoal_ptr->Rollback_Agent(match_iter->goal_index);
-			new_squad->Add_Agent(agent_ptr);
-			match_iter->committed = false;
-			agent_ptr->Set_Is_Used(false);
-			Agent_List::const_iterator agent_iter = match_iter->squad_index;
-			m_the_squad->Remove_Agent(agent_iter, false);
-		}
-		else
-		{
-			Assert(ctpgoal_ptr->Get_Agent_List().end() == match_iter->goal_index);
+				const MapPoint pos     = agent_ptr->Get_Target_Pos();
+				const MapPoint goalPos = ctpgoal_ptr->Get_Target_Pos();
+
+				if(pos == goalPos)
+				{
+					if(!ctpgoal_ptr->Pretest_Bid(agent_ptr, goalPos))
+					{
+						AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), m_the_goal->Get_Goal_Type(), -1, 
+							("\t\tTransporter not needed anymore, removing from goal\n"));
+
+						ctpgoal_ptr->Rollback_Agent(match_iter->goal_index);
+						match_iter->committed   = false;
+						match_iter->value       = Goal::BAD_UTILITY;
+						agent_ptr->Set_Goal(NULL);
+						++rollback_agents;
+					}
+				}
+			}
+			else
+			{
+				Assert(ctpgoal_ptr->Get_Agent_List().end() == match_iter->goal_index);
+			}
 		}
 	}
-
-#ifdef _DEBUG_SCHEDULER
-	ctpgoal_ptr->Validate();
-#endif // _DEBUG_SCHEDULER
+	
+	return rollback_agents;
 }
 
 bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)
@@ -694,16 +823,16 @@ bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)
 	                             ++match_iter
 	)
 	{
-		if (match_iter->squad_index == agent_iter) 
+		if (match_iter->squad_index == agent_iter)
 		{
-			if (match_iter->committed) 
+			if (match_iter->committed)
 			{
 				if (ctpgoal_ptr)
 				{
 					ctpgoal_ptr->Rollback_Agent(match_iter->goal_index);
 				}
 
-				(*agent_iter)->Set_Is_Used(false);
+				(*agent_iter)->Set_Goal(NULL);
 			}
 			else
 			{
@@ -720,6 +849,45 @@ bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)
 			match_iter = m_matches.erase(match_iter);
 			return true;
 		}
+	}
+
+	return false;
+}
+
+bool Plan::Has_Cargo() const
+{
+	for
+	(
+	    Agent_Match_List::const_iterator match_iter  = m_matches.begin();
+	                                     match_iter != m_matches.end();
+	                                   ++match_iter
+	)
+	{
+		const CTPAgent_ptr agent_ptr = reinterpret_cast<const CTPAgent_ptr>(* (*match_iter).squad_index );
+		if(agent_ptr->Get_Army()->HasCargo())
+			return true;
+	}
+
+	return false;
+}
+
+bool Plan::Has_Space_For_Cargo() const
+{
+	for
+	(
+	    Agent_Match_List::const_iterator match_iter  = m_matches.begin();
+	                                     match_iter != m_matches.end();
+	                                   ++match_iter
+	)
+	{
+		const CTPAgent_ptr agent_ptr = reinterpret_cast<const CTPAgent_ptr>(* (*match_iter).squad_index );
+		sint32 transports = 0;
+		sint32 max        = 0;
+		sint32 empty      = 0;
+		agent_ptr->Get_Army()->GetCargo(transports, max, empty);
+
+		if(max > 0)
+			return true;
 	}
 
 	return false;
@@ -745,4 +913,76 @@ bool Plan::Agent_Committed(const Agent_ptr agent_ptr) const
 	}
 
 	return false;
+}
+
+void Plan::Log_Debug_Info(const int & log) const
+{
+	for
+	(
+	    Agent_Match_List::const_iterator match_iter  = m_matches.begin();
+	                                     match_iter != m_matches.end();
+	                                   ++match_iter
+	)
+	{
+		CTPAgent_ptr ctpagent_ptr = static_cast<CTPAgent_ptr>(*(match_iter->squad_index));
+		ctpagent_ptr->Log_Debug_Info(log, m_the_goal);
+	}
+}
+
+bool Plan::All_Unused_Or_Used_By_This() const
+{
+	for
+	(
+	    Agent_Match_List::const_iterator match_iter  = m_matches.begin();
+	                                     match_iter != m_matches.end();
+	                                   ++match_iter
+	)
+	{
+		CTPAgent_ptr ctpagent_ptr = static_cast<CTPAgent_ptr>(*(match_iter->squad_index));
+
+		Goal_ptr goal = ctpagent_ptr->Get_Goal();
+
+		if(goal != NULL
+		&& goal != m_the_goal
+		){
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Plan::Needs_Cargo() const
+{
+	return m_needs_cargo && !Has_Cargo();
+}
+
+bool Plan::Can_Add_To_Goal() const
+{
+	size_t  found_agents                = 0;
+	Utility accumulated_matching_value  = 0;
+
+	Assert(m_the_goal && m_the_squad);
+
+	if(m_the_goal && m_the_squad)
+	{
+		for
+		(
+		    Agent_Match_List::const_iterator match_iter  = m_matches.begin();
+		                                     match_iter != m_matches.end();
+		                                   ++match_iter
+		)
+		{
+			Agent_ptr agent_ptr = *(match_iter->squad_index);
+
+			Assert(agent_ptr);
+
+			if(!m_the_goal->Can_Add_To_Goal(agent_ptr))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
