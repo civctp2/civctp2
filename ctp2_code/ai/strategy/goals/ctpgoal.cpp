@@ -698,7 +698,7 @@ Utility CTPGoal::Compute_Matching_Value(const Agent_ptr agent) const
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	// Maybe this is of some use later
-//	bool is_transporter = false;
+	bool is_transporter = false;
 #endif
 
 	sint32 transports, max,empty;
