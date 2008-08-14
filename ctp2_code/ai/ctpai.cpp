@@ -1101,7 +1101,7 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	Assert(deadPlayerId < s_maxPlayers);
 
 	Scheduler::GetScheduler(deadPlayerId).Cleanup();
-	Governor::GetGovernor(deadPlayerId) = Governor::INVALID;
+	Governor::GetGovernor(deadPlayerId) = Governor(deadPlayerId); // We need here a valid governor
 
 	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
@@ -1122,15 +1122,21 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 {
 	Assert(g_player[newPlayerId]);
 	
-	if (newPlayerId >= s_maxPlayers)
+	if(newPlayerId >= s_maxPlayers)
 	{
 		Resize();
+	}
+	else
+	{
+		// Needed since this has been cleared in RemovePlayer
+		Diplomat::GetDiplomat(newPlayerId).Resize(s_maxPlayers);
+		Scheduler::GetScheduler(newPlayerId).Initialize();
 	}
 
 	Diplomat::GetDiplomat(newPlayerId).Initialize();
 	Diplomat::GetDiplomat(newPlayerId).InitStrategicState();
 
-	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
+		for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
 		Diplomat::GetDiplomat(player).InitForeigner(newPlayerId);
 	}
