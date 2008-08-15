@@ -541,6 +541,11 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 
 			Squad_Strength strength;
 			strength.Set_Pos_Strength(pos);
+			// Set this to zero, since the units we need doesn't depent on the number of units at the target.
+			strength.Set_Agent_Count(0);
+			strength.Set_Defenders(0);
+			strength.Set_Ranged_Units(0);
+			//
 			m_current_needed_strength += strength;
 			m_current_needed_strength.Set_Force_Matching(0.5,0.5,0.5,0.5,0.5);
 		}

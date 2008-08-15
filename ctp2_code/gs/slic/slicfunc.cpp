@@ -706,7 +706,7 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 		text[0] = 0;
 
 	DPRINTF(k_DBG_SLIC, ("Slic_EyePoint: (%d,%d,%d)\n",
-						 point.x, point.y));
+						 point.x, point.y, 0));
 
 	SlicEyePoint *ep = NULL;
 	if (args->Count() > 1) {
