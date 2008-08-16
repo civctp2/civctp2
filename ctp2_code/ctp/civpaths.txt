@@ -1,7 +1,7 @@
 .
 setup\data\max\ctp_data\videos
 default
-german
+english
 ..\..\ctp2_data
 ..\..\scenarios
 .\save
