@@ -315,13 +315,13 @@ Utility Plan::Compute_Matching_Value()
 		for
 		(
 		    Agent_Match_List::iterator match_iter  = m_matches.begin();
-		                               match_iter != m_matches.end();
-		                             ++match_iter
+		                                     match_iter != m_matches.end();
+		                                   ++match_iter
 		)
 		{
-			Agent_ptr agent_ptr = *(match_iter->squad_index);
+			const Agent_ptr agent_ptr = *(match_iter->squad_index);
 
-			match_iter->value   = m_the_goal->Compute_Matching_Value(agent_ptr);
+			match_iter->value   = static_cast<CTPGoal_ptr>(m_the_goal)->Compute_Matching_Value(agent_ptr);
 
 			if (match_iter->value > Goal::BAD_UTILITY)
 			{

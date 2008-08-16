@@ -4741,7 +4741,7 @@ void Diplomat::UpdateAttributes()
 	m_friendPower = 0;
 	m_enemyThreat = 0;
 
-	for(uint32 foreigner = 1;  foreigner< m_foreigners.size(); foreigner++ )
+	for(uint32 foreigner = 1;  foreigner < m_foreigners.size(); foreigner++)
 	{
 		PLAYER_INDEX    foreignerId = static_cast<PLAYER_INDEX>(foreigner);
 		m_foreigners[foreigner].BeginTurn();
@@ -4927,11 +4927,11 @@ void Diplomat::UpdateAttributes()
 		city = player_ptr->m_all_cities->Access(i);
 		Assert(city.IsValid());
 
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
+		for(sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
 		{
 			route = city.CD()->GetTradeSourceList()->Access(r);
 
-			foreigner = route->GetDestination().GetOwner();
+			sint32 foreigner = route->GetDestination().GetOwner();
 			m_foreigners[foreigner].AddTradeValue(route->GetValue());
 		}
 	}

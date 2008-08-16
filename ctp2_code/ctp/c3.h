@@ -72,10 +72,13 @@
 #endif
 
 #if (_MSC_VER >= 1400)
-// Suppress some rediculous MS warnings about deprecated standard functions
+//#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
+//#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT 1
+// Suppress some rediculous MS warnings about "deprecated" standard functions
 #define _SECURE_SCL					0	
 #define _SECURE_SCL_NO_DEPRECATE
 #define _HAS_ITERATOR_DEBUGGING		0	// this one may be more interesting
+//#define _SECURE_SCL_THROWS 1
 #endif
 #endif	// _MSC_VER
 

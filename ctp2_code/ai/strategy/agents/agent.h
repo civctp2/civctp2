@@ -81,7 +81,7 @@ public:
 
 	bool Get_Detached() const;
 
-	virtual void Log_Debug_Info(const int & log, const Goal const * goal) const = 0;
+	virtual void Log_Debug_Info(const int & log, const Goal * const goal) const = 0;
 
 	void Set_Needs_Transporter(const bool needs_transporter) { m_needs_transporter = needs_transporter; };
 	bool Get_Needs_Transporter() const { return m_needs_transporter; };

@@ -83,7 +83,7 @@ public:
 
 	sint32 DisbandObsoleteArmies() const;
 
-	void Log_Debug_Info(const int & log, const Goal const * goal) const;
+	void Log_Debug_Info(const int & log, const Goal * const goal) const;
 
 	void Get_Strength(Squad_Strength & strength);
 	void Compute_Strength(Squad_Strength & strength);

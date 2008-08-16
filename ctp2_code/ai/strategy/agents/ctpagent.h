@@ -95,7 +95,7 @@ public:
 
 
 
-	virtual void Log_Debug_Info(const int & log, const Goal const * goal) const;
+	virtual void Log_Debug_Info(const int & log, const Goal * const goal) const;
 
 	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path );
 

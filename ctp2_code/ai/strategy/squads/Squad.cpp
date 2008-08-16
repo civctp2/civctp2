@@ -344,7 +344,7 @@ sint32 Squad::DisbandObsoleteArmies() const
 	return total_count;
 }
 
-void Squad::Log_Debug_Info(const int & log, const Goal const * goal) const
+void Squad::Log_Debug_Info(const int & log, const Goal * const goal) const
 {
 	for
 	(

@@ -276,7 +276,7 @@ const Squad_Strength & CTPAgent::Compute_Squad_Strength()
 	return m_squad_strength;
 }
 
-void CTPAgent::Log_Debug_Info(const int & log, const Goal const * goal) const
+void CTPAgent::Log_Debug_Info(const int & log, const Goal * const goal) const
 {
 	if (!m_army.IsValid())
 	{

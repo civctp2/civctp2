@@ -118,7 +118,7 @@ public:
 
     void Compute_Needed_Troop_Flow();
 
-    Utility Compute_Matching_Value (const Agent_ptr agent    ) const;
+    Utility Compute_Matching_Value(const Agent_ptr agent) const;
 
     Utility Compute_Raw_Priority();
 
