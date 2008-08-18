@@ -53,8 +53,7 @@ public:
 	struct Agent_Match
 	{
 		Utility value;
-		Agent_List::const_iterator squad_index;
-		Agent_List::const_iterator goal_index;
+		Agent_ptr squad_index;
 		bool committed;
 		
 		bool operator<(const Agent_Match &match) const
@@ -123,7 +122,7 @@ public:
 	///
 	bool CanMatchesBeReevaluated() const;
 
-	bool Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter);
+	bool Remove_Agent_Reference(const Agent_ptr agent_ptr);
 
 	bool Agent_Committed(const Agent_ptr agent_ptr) const;
 	sint32 Get_Free_Transport_Capacity() const;

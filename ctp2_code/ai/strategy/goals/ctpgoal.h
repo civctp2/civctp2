@@ -110,7 +110,7 @@ public:
     PLAYER_INDEX Get_Target_Owner() const;
 
 
-    Agent_ptr Rollback_Agent(Agent_List::const_iterator & agent_iter);
+    void Rollback_Agent(Agent_ptr agent_ptr);
 
 
     bool Is_Execute_Incrementally() const;

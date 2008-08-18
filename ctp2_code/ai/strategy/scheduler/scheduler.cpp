@@ -778,10 +778,11 @@ void Scheduler::Match_Resources(const bool move_armies)
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 				("\t\tGOAL_COMPLETE (goal: %x squad: %x)\n", goal_ptr));
 
+#if 0
 			if(!goal_ptr->Is_Single_Squad())
 			{
 			}
-
+#endif
 			if(goal_ptr->Get_Removal_Time())
 			{
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
@@ -873,14 +874,14 @@ void Scheduler::Add_New_Squad(const Squad_ptr & new_squad)
 #ifdef _DEBUG_SCHEDULER
 
 	Squad_List::iterator squad_iter = m_new_squads.begin();
-	while (squad_iter != m_new_squads.end() && !(*squad_iter)->ContainsArmyIn(*new_squad))
+	while (squad_iter != m_new_squads.end() && !(*squad_iter)->ContainsArmyIn(new_squad))
 	{
 		squad_iter++;
 	}
 	Assert(squad_iter == m_new_squads.end());
 
 	squad_iter = m_squads.begin();
-	while (squad_iter != m_squads.end() && !(*squad_iter)->ContainsArmyIn(*new_squad))
+	while (squad_iter != m_squads.end() && !(*squad_iter)->ContainsArmyIn(new_squad))
 	{
 		squad_iter++;
 	}
@@ -905,7 +906,7 @@ Squad_List::iterator Scheduler::Add_Squad(const Squad_ptr & squad)
 #ifdef _DEBUG_SCHEDULER
 
 	Squad_List::iterator squad_iter = m_squads.begin();
-	while (squad_iter != m_squads.end() && !(*squad_iter)->ContainsArmyIn(*squad))
+	while (squad_iter != m_squads.end() && !(*squad_iter)->ContainsArmyIn(squad))
 	{
 		squad_iter++;
 	}
@@ -913,7 +914,7 @@ Squad_List::iterator Scheduler::Add_Squad(const Squad_ptr & squad)
 	Assert(squad_iter == m_squads.end());
 
 	squad_iter = m_transport_squads.begin();
-	while (squad_iter != m_transport_squads.end() && !(*squad_iter)->ContainsArmyIn(*squad))
+	while (squad_iter != m_transport_squads.end() && !(*squad_iter)->ContainsArmyIn(squad))
 	{
 		squad_iter++;
 	}
@@ -1755,27 +1756,17 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			continue;
 		}
 
-		const Agent_List & agents = squad->Get_Agent_List();
-
 		sint32 transports;
 		sint32 max;
 		sint32 empty;
 		sint32 freeTransportCapacity = 0;
 
-		for
-		(
-		    Agent_List::const_iterator agent_iter  = agents.begin();
-		                               agent_iter != agents.end();
-		                             ++agent_iter
-		)
-		{
-			CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(*agent_iter);
+		CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(squad->Get_Agent());
 
-			if(!agent_ptr->Has_Goal())
-			{
-				agent_ptr->Get_Army()->GetCargo(transports, max, empty);
-				freeTransportCapacity += empty;
-			}
+		if(!agent_ptr->Has_Goal())
+		{
+			agent_ptr->Get_Army()->GetCargo(transports, max, empty);
+			freeTransportCapacity += empty;
 		}
 
 		if(freeTransportCapacity > 0
@@ -1867,22 +1858,12 @@ void Scheduler::SetArmyDetachState(const Army & army, const bool detach)
 	bool found = false;
 	while(squad_ptr_iter != m_squads.end() && !found)
 	{
-		Agent_List & agent_list = (*squad_ptr_iter)->Get_Agent_List();
-
-		for
-		(
-		    Agent_List::iterator agent_iter  = agent_list.begin();
-		                         agent_iter != agent_list.end();
-		                       ++agent_iter
-		)
+		CTPAgent_ptr ctp_agent = static_cast<CTPAgent_ptr>((*squad_ptr_iter)->Get_Agent());
+		if(ctp_agent->Get_Army().m_id == army.m_id)
 		{
-			CTPAgent_ptr ctp_agent = (CTPAgent_ptr)(*agent_iter);
-			if(ctp_agent->Get_Army().m_id == army.m_id)
-			{
-				ctp_agent->Set_Detached(detach);
-				found = true;
-				break;
-			}
+			ctp_agent->Set_Detached(detach);
+			found = true;
+			break;
 		}
 
 		squad_ptr_iter++;
@@ -1895,20 +1876,10 @@ bool Scheduler::GetArmyDetachState(const Army & army) const
 
 	while(squad_ptr_iter != m_squads.end())
 	{
-		const Agent_List & agent_list = (*squad_ptr_iter)->Get_Agent_List();
-
-		for
-		(
-		    Agent_List::const_iterator agent_iter  = agent_list.begin();
-		                               agent_iter != agent_list.end();
-		                             ++agent_iter
-		)
+		const CTPAgent_ptr ctp_agent = static_cast<const CTPAgent_ptr>((*squad_ptr_iter)->Get_Agent());
+		if (ctp_agent->Get_Army().m_id == army.m_id)
 		{
-			const CTPAgent_ptr ctp_agent = (CTPAgent_ptr)(*agent_iter);
-			if (ctp_agent->Get_Army().m_id == army.m_id)
-			{
-				return ctp_agent->Get_Detached();
-			}
+			return ctp_agent->Get_Detached();
 		}
 
 		squad_ptr_iter++;

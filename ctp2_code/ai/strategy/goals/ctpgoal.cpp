@@ -118,6 +118,7 @@
 #include "advanceutil.h"
 #include "Barbarians.h"
 #include "wonderutil.h"
+#include "Squad.h"
 
 extern MapPoint                  g_mp_size;
 extern UnitPool                 *g_theUnitPool;
@@ -399,12 +400,9 @@ PLAYER_INDEX CTPGoal::Get_Target_Owner() const
 	return target_owner;
 }
 
-
-
-Agent_ptr CTPGoal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
+void CTPGoal::Rollback_Agent(Agent_ptr agent_ptr)
 {
-	Assert(agent_iter != m_agents.end());
-	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) (*agent_iter);
+	CTPAgent_ptr ctpagent_ptr = static_cast<CTPAgent_ptr>(agent_ptr);
 	Assert(ctpagent_ptr);
 
 #ifdef _DEBUG_SCHEDULER
@@ -422,7 +420,7 @@ Agent_ptr CTPGoal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 		ctpagent_ptr->ClearOrders();
 	}
 
-	return Goal::Rollback_Agent(agent_iter);
+	Goal::Rollback_Agent(agent_ptr);
 }
 
 bool CTPGoal::Is_Execute_Incrementally() const

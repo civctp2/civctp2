@@ -199,7 +199,7 @@ bool Goal::Is_Single_Squad() const
 	return true;
 }
 
-bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter)
+bool Goal::Commit_Agent(const Agent_ptr & agent)
 {
 #ifdef _DEBUG_SCHEDULER
 	for
@@ -228,7 +228,7 @@ bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & ag
 	){
 		m_current_attacking_strength.Add_Agent_Strength(agent);
 
-		agent_list_iter = m_agents.insert(m_agents.end(), agent);
+		m_agents.push_back(agent);
 
 #ifdef _DEBUG_SCHEDULER
 		CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent;
@@ -243,8 +243,6 @@ bool Goal::Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & ag
 		return true;
 	}
 
-	agent_list_iter = m_agents.end();
-
 	return false;
 }
 
@@ -252,12 +250,8 @@ const Agent_List & Goal::Get_Agent_List() const
 {
 	return m_agents;
 }
-Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
+void Goal::Rollback_Agent(Agent_ptr agent_ptr)
 {
-	Assert(agent_iter != m_agents.end());
-
-	Agent_ptr agent_ptr = (*agent_iter);
-
 #ifdef _DEBUG_SCHEDULER
 //	CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) agent_ptr;
 //	if (g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
@@ -274,9 +268,8 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	    ++next_agent_iter
 	)
 	{
-		if (*agent_iter == *next_agent_iter)
+		if(agent_ptr == *next_agent_iter)
 		{
-			Assert(agent_iter == next_agent_iter);
 			break;
 		}
 	}
@@ -284,7 +277,6 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	Assert(next_agent_iter != m_agents.end());
 
 	next_agent_iter = m_agents.erase(next_agent_iter);
-	agent_iter      = m_agents.end();
 
 	Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
 #ifdef _DEBUG_SCHEDULER
@@ -294,7 +286,6 @@ Agent_ptr Goal::Rollback_Agent(Agent_List::const_iterator & agent_iter)
 	}
 #endif // _DEBUG_SCHEDULER
 
-	return agent_ptr;
 }
 
 Utility Goal::Get_Raw_Priority() const
@@ -971,4 +962,3 @@ void Goal::Sort_Matches_If_Necessary()
 		Sort_Matches();
 	}
 }
-

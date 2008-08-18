@@ -98,13 +98,13 @@ public:
     bool Is_Single_Squad() const;
 
 
-    bool Commit_Agent(const Agent_ptr & agent, Agent_List::const_iterator & agent_list_iter);
+    bool Commit_Agent(const Agent_ptr & agent);
 
 
     const Agent_List & Get_Agent_List() const;
 
 
-    Agent_ptr Rollback_Agent(Agent_List::const_iterator & agent_iter);
+    void Rollback_Agent(Agent_ptr agent_ptr);
     sint32 Rollback_Emptied_Transporters();
 
     virtual bool Is_Execute_Incrementally() const = 0;
