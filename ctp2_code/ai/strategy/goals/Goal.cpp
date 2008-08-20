@@ -614,7 +614,7 @@ Utility Goal::Recompute_Matching_Value(const bool update, const bool show_streng
 		else
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-						("\t\t[%d]Enough ressources found for goal %s\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+						("\t\t[%d] Enough ressources found for goal %s\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 			break;
 		}
 	}
@@ -755,10 +755,8 @@ bool Goal::Commited_Agents_Need_Orders() const
 	return needOrders;
 }
 
-sint32 Goal::Rollback_All_Agents()
+void Goal::Rollback_All_Agents()
 {
-	sint32 rolledBackAgents = 0;
-
 #if defined(_DEBUG)
 	Squad_Strength strength  = m_current_attacking_strength;
 	Squad_Strength strength1 = Compute_Current_Strength();
@@ -780,17 +778,14 @@ sint32 Goal::Rollback_All_Agents()
 	    ++match_iter
 	)
 	{
-		rolledBackAgents += match_iter->Rollback_All_Agents();
+		match_iter->Rollback_All_Agents();
 	}
 
 	Assert(m_current_attacking_strength.NothingNeeded());
-
-	return rolledBackAgents;
 }
 
-sint32 Goal::Commit_Agents()
+void Goal::Commit_Agents()
 {
-	sint32 committed = 0;
 	for
 	(
 	    Plan_List::iterator match_iter  = m_matches.begin();
@@ -798,23 +793,21 @@ sint32 Goal::Commit_Agents()
 	                      ++match_iter
 	)
 	{
-		committed += match_iter->Commit_Agents();
+		match_iter->Commit_Agents();
 	}
 
-	if(committed > 0){
+	if(Get_Agent_Count() > 0)
+	{
 		Log_Debug_Info(
 		               (Is_Satisfied() || Is_Execute_Incrementally()) ?
 		               k_DBG_SCHEDULER :
 		               k_DBG_SCHEDULER_DETAIL
 		              );
 	}
-
-	return committed;
 }
 
-sint32 Goal::Commit_Transport_Agents()
+void Goal::Commit_Transport_Agents()
 {
-	sint32 committed = 0;
 	for
 	(
 	    Plan_List::iterator match_iter  = m_matches.begin();
@@ -824,14 +817,12 @@ sint32 Goal::Commit_Transport_Agents()
 	{
 		if(match_iter->Needs_Cargo())
 		{
-			committed += match_iter->Commit_Transport_Agents();
+			match_iter->Commit_Transport_Agents();
 		}
 	}
-
-	return committed;
 }
 
-sint32 Goal::Remove_Matches()
+void Goal::Remove_Matches()
 {
 	sint32 rolled_back_agents = 0;
 
@@ -842,22 +833,19 @@ sint32 Goal::Remove_Matches()
 	                      ++match_iter
 	)
 	{
-		rolled_back_agents += match_iter->Rollback_All_Agents();
+		match_iter->Rollback_All_Agents();
 
 		Squad_ptr squad_ptr = match_iter->Get_Squad();
 
 		Assert(squad_ptr);
 		if(squad_ptr)
 			squad_ptr->Remove_Match_Reference(match_iter);
-
 	}
 
 	m_matches.clear();
-
-	return rolled_back_agents;
 }
 
-sint32 Goal::Remove_Match(Plan_List::iterator match)
+void Goal::Remove_Match(Plan_List::iterator match)
 {
 	for
 	(
@@ -868,14 +856,12 @@ sint32 Goal::Remove_Match(Plan_List::iterator match)
 	{
 		if(match == match_iter)
 		{
-			sint32 rolledBack = match_iter->Rollback_All_Agents();
+			match_iter->Rollback_All_Agents();
 			m_matches.erase(match_iter);
 
-			return rolledBack;
+			return;
 		}
 	}
-
-	return 0;
 }
 
 bool Goal::Has_Squad(Squad* squad)
@@ -931,10 +917,8 @@ Squad_Strength Goal::Compute_Current_Strength()
 	return strength;
 }
 
-sint32 Goal::Rollback_Emptied_Transporters()
+void Goal::Rollback_Emptied_Transporters()
 {
-	sint32 rolled_back_agents = 0;
-
 	for
 	(
 	    Plan_List::iterator
@@ -943,10 +927,8 @@ sint32 Goal::Rollback_Emptied_Transporters()
 	    ++match_iter
 	)
 	{
-		rolled_back_agents += match_iter->Rollback_Emptied_Transporters();
+		match_iter->Rollback_Emptied_Transporters();
 	}
-
-	return rolled_back_agents;
 }
 
 void Goal::Sort_Matches()

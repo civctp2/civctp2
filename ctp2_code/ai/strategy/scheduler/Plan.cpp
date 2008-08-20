@@ -402,7 +402,7 @@ Squad_ptr Plan::Get_Squad() const
 	return m_the_squad;
 }
 
-sint32 Plan::Commit_Agents()
+void Plan::Commit_Agents()
 {
 	Assert(m_the_goal);
 	Assert(m_the_squad);
@@ -410,28 +410,26 @@ sint32 Plan::Commit_Agents()
 
 	if(!m_the_goal || !m_the_squad)
 	{
-		return 0;
+		return;
 	}
 
 	if(Get_Matching_Value() <= Goal::BAD_UTILITY)
 	{
-		return 0;
+		return;
 	}
 
 	if(m_the_goal->Is_Satisfied() || m_the_goal->Get_Totally_Complete())
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tNO AGENTS COMMITTED:           (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+			("\t\tNO AGENTS COMMITTED:           (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 
-		return 0;
+		return;
 	}
 	else
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tAGENTS CAN BE COMMITTED:       (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+			("\t\tAGENTS CAN BE COMMITTED:       (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 	}
-
-	sint32 committed_agents = 0;
 
 	for
 	(
@@ -447,6 +445,7 @@ sint32 Plan::Commit_Agents()
 		       match_iter->value > Goal::BAD_UTILITY
 		   && !agent_ptr->Has_Goal()
 		   &&  agent_ptr->Get_Can_Be_Executed()
+		   && !Needs_Cargo()
 		  )
 		{
 
@@ -462,11 +461,10 @@ sint32 Plan::Commit_Agents()
 			bool const committed = 
 			    m_the_goal->Commit_Agent(agent_ptr);
 
-			if (committed)
+			if(committed)
 			{
-				agent_ptr->Set_Goal(m_the_goal);
+				agent_ptr->Set_Goal(m_the_goal); // Move inside goals
 				match_iter->committed = true;
-				++committed_agents;
 			}
 
 #ifdef _DEBUG_SCHEDULER
@@ -507,7 +505,7 @@ sint32 Plan::Commit_Agents()
 		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
 	}
 
-	if ( debug_plan && committed_agents > 0 )
+	if(debug_plan && m_matches.begin()->committed)
 	{
 		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
 
@@ -517,17 +515,15 @@ sint32 Plan::Commit_Agents()
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
 
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x)\n", goal_ptr, m_the_squad));
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", goal_ptr, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 
 		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 		DPRINTF(mask, ("\t\t\t\n"));
 	}
 #endif // _DEBUG
-
-	return committed_agents;
 }
 
-sint32 Plan::Commit_Transport_Agents()
+void Plan::Commit_Transport_Agents()
 {
 	Assert(m_the_goal);
 	Assert(m_the_squad);
@@ -535,24 +531,22 @@ sint32 Plan::Commit_Transport_Agents()
 
 	if (!m_the_goal || !m_the_squad)
 	{
-		return 0;
+		return;
 	}
 
 	if(!m_the_goal->Needs_Transporter() || m_the_goal->Get_Totally_Complete())
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+			("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 
-		return 0;
+		return;
 	}
 	else
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
+			("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 	}
 
-	sint32 committed_agents = 0;
-	
 	for
 	(
 	    Agent_Match_List::iterator match_iter  = m_matches.begin();
@@ -583,11 +577,10 @@ sint32 Plan::Commit_Transport_Agents()
 			bool const committed = 
 			    m_the_goal->Commit_Agent(agent_ptr);
 
-			if (committed)
+			if(committed)
 			{
 				agent_ptr->Set_Goal(m_the_goal);
 				match_iter->committed = true;
-				++committed_agents;
 			}
 
 #ifdef _DEBUG_SCHEDULER
@@ -628,7 +621,7 @@ sint32 Plan::Commit_Transport_Agents()
 		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
 	}
 
-	if(debug_plan && committed_agents > 0)
+	if(debug_plan && m_matches.begin()->committed)
 	{
 		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
 
@@ -639,7 +632,7 @@ sint32 Plan::Commit_Transport_Agents()
 			mask = k_DBG_SCHEDULER_DETAIL;
 		
 		
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x)\n", goal_ptr, m_the_squad));
+		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", goal_ptr, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
 		DPRINTF(mask, ("\t\t\t\n"));
 		goal_ptr->Log_Debug_Info(mask);
 		
@@ -647,8 +640,6 @@ sint32 Plan::Commit_Transport_Agents()
 		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 	}
 #endif // _DEBUG
-
-	return committed_agents;
 }
 
 GOAL_RESULT Plan::Execute_Task()
@@ -692,10 +683,8 @@ bool Plan::CanMatchesBeReevaluated() const
 	return false;
 }
 
-sint32 Plan::Rollback_All_Agents()
+void Plan::Rollback_All_Agents()
 {
-	sint32 rollback_agents = 0;
-
 	Assert(m_the_goal && m_the_squad);
 	if(m_the_goal && m_the_squad)
 	{
@@ -713,20 +702,15 @@ sint32 Plan::Rollback_All_Agents()
 				CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(match_iter->squad_index);
 				ctpgoal_ptr->Rollback_Agent(match_iter->squad_index);
 				match_iter->committed   = false;
-				match_iter->value       = Goal::BAD_UTILITY;
+		//		match_iter->value       = Goal::BAD_UTILITY;
 				agent_ptr->Set_Goal(NULL);
-				++rollback_agents;
 			}
 		}
 	}
-	
-	return rollback_agents;
 }
 
-sint32 Plan::Rollback_Emptied_Transporters()
+void Plan::Rollback_Emptied_Transporters()
 {
-	sint32 rollback_agents = 0;
-
 	Assert(m_the_goal && m_the_squad);
 	if(m_the_goal && m_the_squad)
 	{
@@ -757,14 +741,11 @@ sint32 Plan::Rollback_Emptied_Transporters()
 						match_iter->committed   = false;
 						match_iter->value       = Goal::BAD_UTILITY;
 						agent_ptr->Set_Goal(NULL);
-						++rollback_agents;
 					}
 				}
 			}
 		}
 	}
-	
-	return rollback_agents;
 }
 
 bool Plan::Remove_Agent_Reference(const Agent_ptr agent_ptr)

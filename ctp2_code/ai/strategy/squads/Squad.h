@@ -65,9 +65,9 @@ public:
 
 	virtual bool ContainsArmyIn(const Squad_ptr squad) const;
 
-	size_t Remove_Dead_Agents();
-	
-	size_t Get_Num_Agents() const;
+	void Remove_Dead_Agents();
+
+	size_t Get_Num_Agents() const; // Replace
 
 	Agent_ptr Get_Agent() const { return m_agent; };
 

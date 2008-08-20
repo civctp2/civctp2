@@ -102,15 +102,15 @@ public:
 	Squad_ptr Get_Squad() const;
 
 
-	sint32 Commit_Agents();
-	sint32 Commit_Transport_Agents();
+	void Commit_Agents();
+	void Commit_Transport_Agents();
 
 
 	GOAL_RESULT Execute_Task();
 
 
-	sint32 Rollback_All_Agents();
-	sint32 Rollback_Emptied_Transporters();
+	void Rollback_All_Agents();
+	void Rollback_Emptied_Transporters();
 
 
 	bool Commited_Agents_Need_Orders() const;

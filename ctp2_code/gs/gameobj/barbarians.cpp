@@ -189,20 +189,26 @@ bool Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 	sint32 triedCount = 0;
 
 	sint32 maxBarbarians;
-	if(fromGoodyHut) {
+	if(fromGoodyHut)
+	{
 		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetHutMaxBarbarians() - 1) + 1;
-	} else {
+	}
+	else
+	{
 		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians() - 1) + 1;
 	}
 
 	sint32 count = 0;
-	for(d = sint32(NORTH); d < sint32(NOWHERE); d++) {
+	for(d = sint32(NORTH); d < sint32(NOWHERE); d++)
+	{
 		tried[d] = false;
 	}
 
-	for(count = 0; count < maxBarbarians && triedCount < 8;) {
+	for(count = 0; count < maxBarbarians && triedCount < 8;)
+	{
 		sint32 use = g_rand->Next(NOWHERE);
-		while(tried[use]) {
+		while(tried[use])
+		{
 			use++;
 			if(use >= NOWHERE)
 				use = NORTH;
@@ -210,20 +216,27 @@ bool Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 	
 		tried[use] = true;
 		triedCount++;
-		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
-			if(g_theWorld->IsLand(neighbor) &&
-			   !g_theWorld->IsCity(neighbor)) {
+		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor))
+		{
+			if
+			  (
+			        g_theWorld->IsLand(neighbor)
+			    && !g_theWorld->IsCity(neighbor)
+			  )
+			{
 				count++;
+				DPRINTF(k_DBG_GAMESTATE, ("Barbarians: Add unit to map, from goody hut: %d\n", fromGoodyHut));
 				Unit u = g_player[PLAYER_INDEX_VANDALS]->CreateUnit(unitIndex,
 														   neighbor,
 														   Unit(),
-														   FALSE,
+														   false,
 														   CAUSE_NEW_ARMY_INITIAL);
 				if(u.m_id == 0)
 					count--;
 			}
 		}
 	}
+
 	return count != 0;
 }
 
@@ -241,12 +254,14 @@ sint32 Barbarians::ChooseSeaUnitType()
 	sint32 i, j, k;
 	sint32 count = 0;
 
-	for(i = 0; i < num_best_units; i++) {
+	for(i = 0; i < num_best_units; i++)
+	{
 		best[i].index = -1;
 		best[i].attack = -1;
 	}
 
-	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+	for(i = 0; i < g_theUnitDB->NumRecords(); i++)
+	{
 		const UnitRecord *rec = g_theUnitDB->Get(i);
 		if(rec->GetCantBuild())
 			continue;
@@ -262,10 +277,14 @@ sint32 Barbarians::ChooseSeaUnitType()
 		if(rec->GetNoBarbarian())
 			continue;
 
-		if(SomeoneCanHave(rec)) {
-			for(j = 0; j < num_best_units; j++) {
-				if(rec->GetAttack() > best[j].attack) {
-					for(k = num_best_units - 1; k >= j+1; k--) {
+		if(SomeoneCanHave(rec))
+		{
+			for(j = 0; j < num_best_units; j++)
+			{
+				if(rec->GetAttack() > best[j].attack)
+				{
+					for(k = num_best_units - 1; k >= j+1; k--)
+					{
 						best[k] = best[k-1];
 					}
 					best[j].index = i;
@@ -278,22 +297,28 @@ sint32 Barbarians::ChooseSeaUnitType()
 	}
 
 	sint32 ret = -1;
-	if(count > 0){
+	if(count > 0)
+	{
 		if(count > num_best_units)
 			count = num_best_units;
 
 		sint32 rankMax;
-		if(risk->GetBarbarianUnitRankMax() >= count) {
+		if(risk->GetBarbarianUnitRankMax() >= count)
+		{
 			rankMax = count - 1;
-		} else {
+		}
+		else 
+		{
 			rankMax = risk->GetBarbarianUnitRankMax();
 		}
+
 		sint32 whichbest = g_rand->Next(count - rankMax) + rankMax;
 		if(whichbest >= count)
 			whichbest = count - 1;
 
 		ret = best[whichbest].index;
 	}
+
 	delete [] best;
 	return ret;
 }
@@ -318,20 +343,26 @@ bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 	sint32 triedCount = 0;
 
 	sint32 maxBarbarians;
-	if(fromGoodyHut) {
+	if(fromGoodyHut)
+	{
 		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetHutMaxBarbarians() - 1) + 1;
-	} else {
+	}
+	else
+	{
 		maxBarbarians = g_rand->Next(g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetMaxSpontaniousBarbarians() - 1) + 1;
 	}
 
 	sint32 count = 0;
-	for(d = sint32(NORTH); d < sint32(NOWHERE); d++) {
+	for(d = sint32(NORTH); d < sint32(NOWHERE); d++)
+	{
 		tried[d] = false;
 	}
 
-	for(count = 0; count < maxBarbarians && triedCount < 8;) {
+	for(count = 0; count < maxBarbarians && triedCount < 8;)
+	{
 		sint32 use = g_rand->Next(NOWHERE);
-		while(tried[use]) {
+		while(tried[use])
+		{
 			use++;
 			if(use >= NOWHERE)
 				use = NORTH;
@@ -339,20 +370,27 @@ bool Barbarians::AddPirates(const MapPoint &point, PLAYER_INDEX meat,
 	
 		tried[use] = true;
 		triedCount++;
-		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
-			if(g_theWorld->IsWater(neighbor) &&
-			   !g_theWorld->IsCity(neighbor)) {
+		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor))
+		{
+			if
+			  (
+			        g_theWorld->IsWater(neighbor)
+			    && !g_theWorld->IsCity(neighbor)
+			  )
+			{
 				count++;
+				DPRINTF(k_DBG_GAMESTATE, ("Barbarians: Add unit to map, from goody hut: %d\n", fromGoodyHut));
 				Unit u = g_player[PLAYER_INDEX_VANDALS]->CreateUnit(unitIndex,
 														   neighbor,
 														   Unit(),
-														   FALSE,
+														   false,
 														   CAUSE_NEW_ARMY_INITIAL);
 				if(u.m_id == 0)
 					count--;
 			}
 		}
 	}
+
 	return count != 0;
 }
 

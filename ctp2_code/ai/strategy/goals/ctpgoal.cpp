@@ -526,30 +526,30 @@ void CTPGoal::Compute_Needed_Troop_Flow()
 	        && !goal_record->GetTargetTypeSpecialUnit()
 	       )
 	{
-		if(this->Get_Target_Owner() != 0)
-		{
-			// A real Attack force, depending on threat
-			m_current_needed_strength.Set_Attack      (attack);
-			m_current_needed_strength.Set_Defense     (defense);
-			m_current_needed_strength.Set_Ranged      (ranged);
-			m_current_needed_strength.Set_Bombard_Land(bombardLand);
-			m_current_needed_strength.Set_Bombard_Sea (bombardSea);
-			m_current_needed_strength.Set_Bombard_Air (bombardAir);
-			m_current_needed_strength.Set_Value       (value);
+		// A real Attack force, depending on threat
+		m_current_needed_strength.Set_Attack      (attack);
+		m_current_needed_strength.Set_Defense     (defense);
+		m_current_needed_strength.Set_Ranged      (ranged);
+		m_current_needed_strength.Set_Bombard_Land(bombardLand);
+		m_current_needed_strength.Set_Bombard_Sea (bombardSea);
+		m_current_needed_strength.Set_Bombard_Air (bombardAir);
+		m_current_needed_strength.Set_Value       (value);
 
-			Squad_Strength strength;
-			strength.Set_Pos_Strength(pos);
+		Squad_Strength strength;
+		strength.Set_Pos_Strength(pos);
+		//
+		if
+		  (
+		       Get_Target_Owner() != 0
+		    || strength.Get_Agent_Count() > 0
+		  )
+		{
 			// Set this to zero, since the units we need doesn't depent on the number of units at the target.
 			strength.Set_Agent_Count(0);
 			strength.Set_Defenders(0);
 			strength.Set_Ranged_Units(0);
-			//
 			m_current_needed_strength += strength;
 			m_current_needed_strength.Set_Force_Matching(0.5,0.5,0.5,0.5,0.5);
-		}
-		else
-		{
-			m_current_needed_strength.Set_Pos_Strength(pos);
 		}
 	}
 

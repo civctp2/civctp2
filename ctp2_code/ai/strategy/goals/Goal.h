@@ -105,7 +105,7 @@ public:
 
 
     void Rollback_Agent(Agent_ptr agent_ptr);
-    sint32 Rollback_Emptied_Transporters();
+    void Rollback_Emptied_Transporters();
 
     virtual bool Is_Execute_Incrementally() const = 0;
 
@@ -182,11 +182,11 @@ public:
 
     bool CanGoalBeReevaluated() const;
     bool Commited_Agents_Need_Orders() const;
-    sint32 Rollback_All_Agents();
-    sint32 Commit_Agents();
-    sint32 Commit_Transport_Agents();
-    sint32 Remove_Matches();
-    sint32 Remove_Match(Plan_List::iterator match);
+    void Rollback_All_Agents();
+    void Commit_Agents();
+    void Commit_Transport_Agents();
+    void Remove_Matches();
+    void Remove_Match(Plan_List::iterator match);
     bool Has_Squad(Squad* squad);
     size_t Get_Matches_Num() const { return m_matches.size(); }
     void Set_Needs_Transporter(const bool needs_transporter);

@@ -92,21 +92,12 @@ bool Squad::ContainsArmyIn(const Squad_ptr squad) const
 
 /// Remove dead (or defected) agents from the squad
 /// \return	Number of removed agents
-size_t Squad::Remove_Dead_Agents()
+void Squad::Remove_Dead_Agents()
 {
-	size_t agents_found = 0;
-
 	if(m_agent->Get_Is_Dead())
 	{
-		if(m_agent->Has_Goal())
-		{
-			++agents_found;
-		}
-
-		Remove_Agent();
+		Remove_Agent(); // Move out
 	}
-
-	return agents_found;
 }
 
 /// Get the number of agents in the squad

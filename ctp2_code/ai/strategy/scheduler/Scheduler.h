@@ -29,6 +29,8 @@
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
 // - Now the goals are used for the matching process, the goal match value
 //   is the avarage match value of the matches needed for the goal.
+// - Simplified the design the number of committed agents and number of
+//   agents are now calculated inside the Match_Resources method. (21-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -211,19 +213,15 @@ public:
 
 	bool Validate() const;
 
-	
-	Sorted_Goal_List Get_Top_Goals(const int &number) const;
-
-	
 	sint32 GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const;
 
-	
+
 	Goal_ptr GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const;
 
-	
+
 	sint16 CountGoalsOfType(const GOAL_TYPE & type) const;
 
-	
+
 	void DisbandObsoleteArmies(const sint16 max_count);
 
 	bool Prioritize_Goals();
@@ -236,10 +234,6 @@ public:
 	void Compute_Squad_Strength();
 	void Rollback_Emptied_Transporters();
 	void Sort_Goal_Matches_If_Necessary();
-
-#if 0
-	bool Test_Syn_Of_Committed_Agents();
-#endif
 
 protected:
 
@@ -259,17 +253,11 @@ protected:
 	void Remove_Matches_For_Squad( const Squad_ptr & squad );
 
 
-	sint32 Rollback_Matches_For_Goal
-	(
-	 const Goal_ptr & goal_ptr
-	);
+	void Rollback_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
 	void Reprioritize_Goal(Goal_List::iterator &goal_iter);
 
-	bool Add_Transport_Matches_For_Goal
-	(
-	    const Goal_ptr & goal_ptr
-	);
+	bool Add_Transport_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
 	
 	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
@@ -284,18 +272,16 @@ private:
 	static Scheduler_Vector s_theSchedulers;
 
 
-	Count_Vector                 m_pruned_goals_count; // Not needed
+	Count_Vector                 m_pruned_goals_count;
 	Sorted_Goal_List_Vector      m_goals_of_type;
-	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type;
+	Sorted_Goal_List_Iter_Vector m_pruned_goals_of_type; // Not needed
 	Squad_List                   m_squads;
 	Squad_List                   m_transport_squads;
 	Goal_List                    m_new_goals;
 	Squad_List                   m_new_squads;
 	PLAYER_INDEX                 m_playerId;
-	sint32                       m_committed_agents;
-	sint32                       m_total_agents;
 	Squad_Strength               m_neededSquadStrength;
-	Utility                      m_maxUndercommittedPriority;
+	Utility                      m_maxUndercommittedPriority; // Probably not needed
 	Goal_List                    m_goals;
 
 	static sint32 m_contactCachedPlayer;
