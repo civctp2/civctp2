@@ -237,14 +237,14 @@ public:
 
 protected:
 
-	sint32 Add_New_Matches_For_Goal
+	void Add_New_Matches_For_Goal
 	(
 	    const Goal_ptr & goal_iter,
 	    const bool       update_match_value = true
 	);
 
 
-	sint32 Add_New_Matches_For_Squad(const Squad_ptr & squad);
+	void Add_New_Matches_For_Squad(const Squad_ptr & squad);
 
 
 	void Remove_Matches_For_Goal( const Goal_ptr & goal );

@@ -2574,30 +2574,33 @@ void gameinit_CleanupMessages(void)
 	}
 }
 
-void gameinit_Cleanup(void) 
+void gameinit_Cleanup(void)
 {
-    allocated::clear(g_theInstallationPool);
-    allocated::clear(g_theMessagePool);
-    allocated::clear(g_theCriticalMessagesPrefs);
+	// This must come before g_theArmyPool, since this is needed
+	CtpAi::Cleanup();
 
-	if (g_player) 
-    {
-		for (size_t i = 0; i < k_MAX_PLAYERS; i++) 
-        {
+	allocated::clear(g_theInstallationPool);
+	allocated::clear(g_theMessagePool);
+	allocated::clear(g_theCriticalMessagesPrefs);
+
+	if (g_player)
+	{
+		for (size_t i = 0; i < k_MAX_PLAYERS; i++)
+		{
 			delete g_player[i];
 		}
 
 		delete [] g_player;
 		g_player = NULL;
 
-		if (g_deadPlayer) 
-        {
+		if (g_deadPlayer)
+		{
 			g_deadPlayer->DeleteAll();
-            allocated::clear(g_deadPlayer);
+			allocated::clear(g_deadPlayer);
 		}
 	}
 
-    allocated::clear(g_theAgreementPool);
+	allocated::clear(g_theAgreementPool);
 	allocated::clear(g_theCivilisationPool);
 	allocated::clear(g_theDiplomaticRequestPool);
 	allocated::clear(g_theTerrainImprovementPool);
@@ -2639,7 +2642,6 @@ void gameinit_Cleanup(void)
 
 	allocated::clear(g_rand);
 	roboinit_Cleanup();
-	CtpAi::Cleanup();
 }
 
 sint32 gameinit_ResetForNetwork()

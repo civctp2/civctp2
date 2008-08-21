@@ -342,11 +342,8 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 	{
 		Squad* theSquad = (*squad_ptr_iter);
 
-		theSquad->Remove_Dead_Agents();
-
-		if(theSquad->Get_Num_Agents() <= 0)
+		if(theSquad->Is_Dead())
 		{
-			Remove_Matches_For_Squad(theSquad);
 			delete theSquad;
 			squad_ptr_iter = m_squads.erase(squad_ptr_iter);
 			continue;
@@ -369,9 +366,7 @@ Scheduler::TIME_SLICE_STATE Scheduler::Process_Squad_Changes()
 	{
 		Squad* newSquad = (*new_squad_iter);
 
-		newSquad->Remove_Dead_Agents();
-
-		if(newSquad->Get_Num_Agents() <= 0)
+		if(newSquad->Is_Dead())
 		{
 			delete newSquad;
 		}
@@ -615,20 +610,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 	sint32 committed_agents = 0;
 	sint32 total_agents     = m_squads.size();
 
-#if 1 // For some reason the new way does not make the AI better
-	// Remove this when Garrison works
-	for
-	(
-	    Goal_List::iterator goal_iter3  = m_goals.begin();
-	                        goal_iter3 != m_goals.end();
-	                      ++goal_iter3
-	)
-	{
-		Goal_ptr goal_ptr        = static_cast<Goal_ptr>(*goal_iter3);
-		committed_agents   += goal_ptr->Get_Agent_Count();
-	}
-#endif
-
 	for
 	(
 	    Goal_List::iterator goal_iter  = m_goals.begin();
@@ -673,10 +654,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 		if(newMatchValue == Goal::BAD_UTILITY)
 		{
-			// Move to the end
-			Goal_List::iterator tmp_goal_iter = goal_iter;
-			++tmp_goal_iter;
-
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, 
 				("\t\tGOAL (goal: %x)(agent count: %d) -- Goal with bad utility, trying agian in next cycle.\n",
 						goal_ptr, goal_ptr->Get_Agent_Count()));
@@ -685,7 +662,13 @@ void Scheduler::Match_Resources(const bool move_armies)
 			// City garrison problem
 			goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
 
+			// Actually should be checked in the next cycle, but there still seems to be something wrong.
+			Goal_List::iterator tmp_goal_iter = goal_iter;
+			--goal_iter;
+			m_goals.erase(tmp_goal_iter);
+
 			/*
+			// Move to the end
 			m_goals.splice
 			              (
 			               m_goals.end(),
@@ -704,7 +687,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			Goal_List::iterator tmp_goal_iter = goal_iter;
 			++tmp_goal_iter;
 
-			Assert(goal_ptr->Get_Agent_Count() == 0);
+	//		Assert(goal_ptr->Get_Agent_Count() == 0);
 
 			if(tmp_goal_iter != m_goals.end())
 			{
@@ -1512,14 +1495,14 @@ bool Scheduler::Prune_Goals()
 //   for each squad that qualifies, to the plan
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
-sint32 Scheduler::Add_New_Matches_For_Goal
+void Scheduler::Add_New_Matches_For_Goal
 (
     const Goal_ptr & goal_ptr,
     const bool       update_match_value
 )
 {
 	if (goal_ptr->Get_Invalid())
-		return 0;
+		return;
 
 	sint32      count            = 0;
 	GOAL_TYPE   type             = goal_ptr->Get_Goal_Type();
@@ -1536,13 +1519,8 @@ sint32 Scheduler::Add_New_Matches_For_Goal
 		if((goal_squad_class & squad->Get_Squad_Class()) != goal_squad_class)
 			continue;
 
-		if(goal_ptr->Add_Match(squad, update_match_value))
-		{
-			count++;
-		}
+		goal_ptr->Add_Match(squad, update_match_value);
 	}
-
-	return count;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -1552,13 +1530,13 @@ sint32 Scheduler::Add_New_Matches_For_Goal
 //   called by Process_Squad_Changes
 //
 //////////////////////////////////////////////////////////////////////////////////////////////
-sint32 Scheduler::Add_New_Matches_For_Squad
+void Scheduler::Add_New_Matches_For_Squad
 (
     const Squad_ptr & squad
 )
 {
 	if(squad->Get_Num_Agents() <= 0)
-		return 0;
+		return;
 
 	sint32 count = 0;
 
@@ -1584,14 +1562,9 @@ sint32 Scheduler::Add_New_Matches_For_Squad
 			if(goal_iter->second->Get_Invalid())
 				continue;
 
-			if(goal_iter->second->Add_Match(squad))
-			{
-				count++;
-			}
+			goal_iter->second->Add_Match(squad);
 		}
 	}
-
-	return count;
 }
 
 void Scheduler::Remove_Matches_For_Goal
@@ -1608,24 +1581,7 @@ void Scheduler::Remove_Matches_For_Squad
     const Squad_ptr & squad
 )
 {
-	std::list<Plan_List::iterator> & match_refs = squad->Get_Match_References();
-
-	for
-	(
-	    std::list<Plan_List::iterator>::iterator
-	        plan_ref_iter  = match_refs.begin();
-	        plan_ref_iter != match_refs.end();
-	      ++plan_ref_iter
-	){
-		Assert((*plan_ref_iter)->Get_Squad() == squad);
-
-		(*plan_ref_iter)->Rollback_All_Agents();
-
-		Goal_ptr goal_ptr = (*plan_ref_iter)->Get_Goal();
-		goal_ptr->Remove_Match(*plan_ref_iter);
-	}
-
-	match_refs.clear();
+	squad->Remove_Matches();
 }
 
 void Scheduler::Rollback_Matches_For_Goal

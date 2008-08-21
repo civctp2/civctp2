@@ -113,7 +113,7 @@
 #include "CTPDatabase.h"
 #include "Army.h"
 #include "ArmyData.h"
-#include "ArmyPool.h"                       // g_theArmyPool
+//#include "ArmyPool.h"                       // g_theArmyPool
 #include "Unit.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
@@ -507,13 +507,7 @@ void CtpAi::AddGoalsForArmy(const Army &army)
 {
 	PLAYER_INDEX    playerId = army.GetOwner();
 
-	CTPAgent *      new_agent = new CTPAgent();
-	new_agent->Set_Army(army);
-	new_agent->Set_Player_Number(playerId);
-
-	Squad *         new_squad = new Squad();
-	new_squad->Add_Agent(new_agent);
-	Scheduler::GetScheduler(playerId).Add_New_Squad(new_squad);
+	Scheduler::GetScheduler(playerId).Add_New_Squad(new Squad(army));
 
 
 	for (PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)

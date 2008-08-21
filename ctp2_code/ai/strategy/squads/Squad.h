@@ -44,6 +44,8 @@ class Squad;
 #include "scheduler_types.h"
 #include "Goal.h"
 #include "c3debugstl.h"
+#include "Army.h"
+#include "CTPAgent.h"
 
 class Squad
 {
@@ -56,10 +58,9 @@ public:
 #endif
 
 	Squad();
+	explicit Squad(const Army & army);
 	Squad(const Squad &squad);
 	virtual ~Squad ();
-
-	virtual void Init();
 
 	virtual Squad& operator= (const Squad &squad);
 
@@ -69,21 +70,18 @@ public:
 
 	size_t Get_Num_Agents() const; // Replace
 
-	Agent_ptr Get_Agent() const { return m_agent; };
-
-	void Remove_Agent();
+	CTPAgent_ptr Get_Agent() const { return m_agent; };
 
 	SQUAD_CLASS Compute_Squad_Class();
 
 	SQUAD_CLASS Get_Squad_Class() const;
-
-	void Add_Agent( Agent_ptr the_agent );
 
 //	void Add_Goal_Reference(const Goal_ptr goal);
 	void Add_Match_Reference(const Plan_List::iterator &plan_iter);
 
 	void Remove_Match_Reference(const Plan_List::iterator &plan_iter);
 	//	void Remove_Goal_Reference(const Goal_ptr goal);
+	void Remove_Matches();
 
 	std::list<Plan_List::iterator> & Get_Match_References();
 
@@ -97,12 +95,13 @@ public:
 	void Compute_Strength(Squad_Strength & strength);
 	void Set_Needs_Transporter(const bool needs_transporter);
 
+	bool Is_Dead() const;
+
 protected:
 
 	bool                            m_is_committed;
 	SQUAD_CLASS                     m_squad_class;
-	Agent_ptr                       m_agent;
-	bool                            m_squad_changed;    // Not used
+	CTPAgent_ptr                    m_agent;
 	std::list<Plan_List::iterator>  m_match_references;
 //	Goal_Ref_List                   m_goal_references;
 

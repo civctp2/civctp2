@@ -55,19 +55,17 @@ class CTPAgent : public Agent {
 public:
 
 	CTPAgent();
-	CTPAgent(const CTPAgent &agent);
+	explicit CTPAgent(const Army & army);
+	CTPAgent(CTPAgent const & an_Original);
 
 
 	virtual ~CTPAgent();
 
 
-	virtual CTPAgent & operator= (const CTPAgent & agent);
+	virtual CTPAgent & operator= (CTPAgent const & an_Original);
 
 
 	const Army & Get_Army() const;
-
-
-	void Set_Army(const Army & army);
 
 
 	PLAYER_INDEX Get_Player_Number() const;
@@ -144,8 +142,8 @@ public:
 protected:
 
 	Army     m_army;
-	sint16   m_playerId;
 	sint32   m_targetOrder;
+	sint32   m_playerId;
 	MapPoint m_targetPos;
 };
 

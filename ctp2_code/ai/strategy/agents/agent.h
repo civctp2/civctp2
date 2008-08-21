@@ -41,8 +41,6 @@ class Agent;
 
 #include "scheduler_types.h"
 #include "squad_Strength.h"
-#include "Goal.h"
-//#include "scheduler_types.h"
 
 class Agent
 {
@@ -63,7 +61,7 @@ public:
 	Goal_ptr Get_Goal(){ return m_goal; };
 	bool     Has_Goal(){ return m_goal != NULL; };
 
-	virtual bool Get_Is_Dead() const;
+	virtual bool Get_Is_Dead() const = 0;
 
 	void Set_Squad_Class(const SQUAD_CLASS & squad_class);
 

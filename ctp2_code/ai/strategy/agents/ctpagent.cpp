@@ -75,13 +75,24 @@ CTPAgent::CTPAgent()
 {
 }
 
-CTPAgent::CTPAgent(CTPAgent const & a_Original)
+CTPAgent::CTPAgent(const Army & army)
 :
-    Agent           (a_Original),
-    m_army          (a_Original.m_army),
-    m_playerId      (a_Original.m_playerId),
-    m_targetOrder   (a_Original.m_targetOrder),
-    m_targetPos     (a_Original.m_targetPos)
+    Agent           (),
+    m_army          (army),
+    m_playerId      (army->GetOwner()),
+    m_targetOrder   (OrderRecord::INDEX_INVALID),
+    m_targetPos     ()
+{
+	Compute_Squad_Strength();
+}
+
+CTPAgent::CTPAgent(CTPAgent const & an_Original)
+:
+    Agent           (an_Original),
+    m_army          (an_Original.m_army),
+    m_playerId      (an_Original.m_playerId),
+    m_targetOrder   (an_Original.m_targetOrder),
+    m_targetPos     (an_Original.m_targetPos)
 {
 }
 
@@ -90,15 +101,15 @@ CTPAgent::~CTPAgent()
 	// No action: nothing to delete   
 }
 
-CTPAgent & CTPAgent::operator = (CTPAgent const & a_Original)
+CTPAgent & CTPAgent::operator = (CTPAgent const & an_Original)
 {
-	if (this != &a_Original)
+	if (this != &an_Original)
 	{
-		Agent::operator = (a_Original);
-		m_army          = a_Original.m_army,
-		m_playerId      = a_Original.m_playerId;
-		m_targetOrder   = a_Original.m_targetOrder;
-		m_targetPos     = a_Original.m_targetPos;
+		Agent::operator = (an_Original);
+		m_army          = an_Original.m_army;
+		m_playerId      = an_Original.m_playerId;
+		m_targetOrder   = an_Original.m_targetOrder;
+		m_targetPos     = an_Original.m_targetPos;
 	}
 
 	return *this;
@@ -109,38 +120,10 @@ const Army & CTPAgent::Get_Army() const
 	return m_army;
 }
 
-void CTPAgent::Set_Army(const Army & army)
-{
-	m_army = army;
-
-	Assert(army.IsValid());
-
-	Compute_Squad_Strength();
-
-#ifdef _DEBUG_SCHEDULER
-//	Assert(army->m_theAgent == NULL);
-//	army->m_theAgent = this;
-#endif // _DEBUG_SCHEDULER
-}
-
-PLAYER_INDEX CTPAgent::Get_Player_Number() const
-{
-	return m_playerId;
-}
-
-void CTPAgent::Set_Player_Number(const PLAYER_INDEX & player_num)
-{
-	m_playerId = static_cast<sint16>(player_num);
-}
-
 bool CTPAgent::Get_Is_Dead() const
 {
 	if (!m_army.IsValid())
 		return true;
-
-#ifdef _DEBUG_SCHEDULER
-//	Assert(m_army->m_theAgent == this);
-#endif // _DEBUG_SCHEDULER
 
 	return m_army->GetOwner() != m_playerId;
 }

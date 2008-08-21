@@ -63,7 +63,6 @@
 
 #include "AgeCityStyleRecord.h"
 #include "ArmyData.h"
-#include "ArmyPool.h"           // g_theArmyPool
 #include "aui_bitmapfont.h"
 #include "BuildingRecord.h"
 #include "cellunitlist.h"

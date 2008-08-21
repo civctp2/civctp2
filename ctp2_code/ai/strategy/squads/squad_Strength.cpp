@@ -46,6 +46,8 @@
 #include "ctpaidebug.h"
 #include "mapanalysis.h"
 
+class Agent;
+
 bool Squad_Strength::operator> (const Squad_Strength &squad_strength) const
 {
 	// Transport squads should always be bigger:

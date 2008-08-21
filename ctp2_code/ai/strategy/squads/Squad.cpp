@@ -36,7 +36,7 @@
 #include "c3.h"
 #include "Squad.h"
 
-#include "agent.h"
+#include "CTPAgent.h"
 #include "ctpagent.h"
 #include "ctpaidebug.h"
 #include "Plan.h"
@@ -47,8 +47,22 @@
 #endif
 
 Squad::Squad()
+:   m_agent          (NULL),
+    m_squad_class    (SQUAD_CLASS_DEFAULT),
+    m_is_committed   (false)
 {
-	Init();
+//	m_goal_references.resize(0);
+	m_match_references.resize(0);
+}
+
+Squad::Squad(const Army & army)
+:
+    m_agent          (new CTPAgent(army)),
+    m_squad_class    (SQUAD_CLASS_DEFAULT),
+    m_is_committed   (false)
+{
+//	m_goal_references.resize(0);
+	m_match_references.resize(0);
 }
 
 Squad::Squad(const Squad &squad)
@@ -58,19 +72,8 @@ Squad::Squad(const Squad &squad)
 
 Squad::~Squad()
 {
+	Remove_Matches();
 	delete m_agent;
-}
-
-void Squad::Init()
-{
-	m_is_committed  = false;
-	m_squad_changed = true;
-	m_squad_class   = SQUAD_CLASS_DEFAULT;
-
-	m_agent = NULL;
-
-//	m_goal_references.resize(0);
-	m_match_references.resize(0);
 }
 
 Squad & Squad::operator= (const Squad &squad)
@@ -78,7 +81,6 @@ Squad & Squad::operator= (const Squad &squad)
 	m_is_committed     = squad.m_is_committed;
 	m_squad_class      = squad.m_squad_class;
 	m_agent            = squad.m_agent;
-	m_squad_changed    = squad.m_squad_changed;
 	m_match_references = squad.m_match_references;
 //	m_goal_references  = squad.m_goal_references;
 
@@ -87,17 +89,12 @@ Squad & Squad::operator= (const Squad &squad)
 
 bool Squad::ContainsArmyIn(const Squad_ptr squad) const
 {
-	return static_cast<CTPAgent_ptr>(m_agent)->Get_Army() == static_cast<CTPAgent_ptr>(squad->m_agent)->Get_Army();
+	return m_agent->Get_Army() == squad->m_agent->Get_Army();
 }
 
-/// Remove dead (or defected) agents from the squad
-/// \return	Number of removed agents
-void Squad::Remove_Dead_Agents()
+bool Squad::Is_Dead() const
 {
-	if(m_agent->Get_Is_Dead())
-	{
-		Remove_Agent(); // Move out
-	}
+	return m_agent->Get_Is_Dead();
 }
 
 /// Get the number of agents in the squad
@@ -108,15 +105,11 @@ size_t Squad::Get_Num_Agents() const
 	return m_agent != NULL;
 }
 
-/// Remove an agent from the squad
-/// \param  agent_iter      Position of the agent to remove
-/// \param  dealloc_agent   Delete the agent data when removing
-/// \return Position after the removed agent
-/// \remarks Will update the match references and mark the squad as changed.
-void Squad::Remove_Agent()
+/// Remove all agents from the squad
+void Squad::Remove_Matches()
 {
 	for
-	(
+	   (
 	    std::list<Plan_List::iterator>::iterator
 	        plan_ref_iter  = m_match_references.begin();
 	        plan_ref_iter != m_match_references.end();
@@ -125,30 +118,17 @@ void Squad::Remove_Agent()
 //	        goal_ref_iter  = m_goal_references.begin();
 //	        goal_ref_iter != m_goal_references.end();
 //	      ++goal_ref_iter
-	)
+	   )
 	{
-//		Goal_ptr goal_ptr = static_cast<Goal_ptr>(*goal_ref_iter);
-//		removed_agents += goal_ptr->Remove_Match(this);
+		Assert((*plan_ref_iter)->Get_Squad() == this);
 
-		bool found = (*plan_ref_iter)->Remove_Agent_Reference(m_agent);
-		Assert(found);
+		Goal_ptr goal_ptr = (*plan_ref_iter)->Get_Goal();
+		goal_ptr->Remove_Match(*plan_ref_iter);
+
+	//	(*goal_ref_iter)->Remove_Match(this);
 	}
 
-#ifdef _DEBUG_SCHEDULER
-	CTPAgent_ptr ctp_agent = (CTPAgent_ptr) the_agent;
-	PLAYER_INDEX playerId = ctp_agent->Get_Player_Number();
-
-	Scheduler::GetScheduler(playerId).Validate();
-#endif // _DEBUG_SCHEDULER
-
-	delete m_agent;
-	m_agent = NULL;
-
-#ifdef _DEBUG_SCHEDULER
-	Scheduler::GetScheduler(playerId).Validate();
-#endif // _DEBUG_SCHEDULER
-
-	m_squad_changed = true;
+	m_match_references.clear();
 }
 
 SQUAD_CLASS Squad::Compute_Squad_Class()
@@ -161,14 +141,6 @@ SQUAD_CLASS Squad::Compute_Squad_Class()
 SQUAD_CLASS Squad::Get_Squad_Class() const
 {
 	return m_squad_class;
-}
-
-void Squad::Add_Agent(Agent_ptr the_agent)
-{
-	Assert(m_agent == NULL);
-
-	m_agent = the_agent;
-	m_squad_changed = true;
 }
 
 void Squad::Compute_Strength(Squad_Strength & strength)
@@ -195,6 +167,7 @@ void Squad::Remove_Match_Reference(const Plan_List::iterator &plan_iter)
 	//	m_goal_references.remove(goal);
 }
 
+
 std::list<Plan_List::iterator> & Squad::Get_Match_References()
 {
 	return m_match_references;
@@ -212,12 +185,12 @@ void Squad::Set_Needs_Transporter(const bool needs_transporter)
 
 sint32 Squad::DisbandObsoleteArmies() const
 {
-	sint32 count = static_cast<CTPAgent_ptr>(m_agent)->DisbandObsoleteUnits();
+	sint32 count = m_agent->DisbandObsoleteUnits();
 
 	if (count > 0)
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER, static_cast<CTPAgent_ptr>(m_agent)->Get_Army()->GetOwner(), -1, -1, ("*** Disbanding Army:\n"));
-		static_cast<CTPAgent_ptr>(m_agent)->Log_Debug_Info(k_DBG_SCHEDULER, static_cast<CTPAgent_ptr>(m_agent)->Get_Goal());
+		AI_DPRINTF(k_DBG_SCHEDULER, m_agent->Get_Army()->GetOwner(), -1, -1, ("*** Disbanding Army:\n"));
+		m_agent->Log_Debug_Info(k_DBG_SCHEDULER, m_agent->Get_Goal());
 	}
 
 	return count;

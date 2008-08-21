@@ -86,11 +86,6 @@ void Agent::Set_Type(const sint16 & type)
 	m_agent_type = type;
 }
 
-bool Agent::Get_Is_Dead() const
-{
-	return false;
-}
-
 void Agent::Set_Squad_Class(const SQUAD_CLASS & squad_class)
 {
 	m_squad_class = squad_class;
