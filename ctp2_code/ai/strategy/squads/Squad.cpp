@@ -48,21 +48,25 @@
 
 Squad::Squad()
 :   m_agent          (NULL),
-    m_squad_class    (SQUAD_CLASS_DEFAULT),
-    m_is_committed   (false)
+    m_squad_class    (SQUAD_CLASS_DEFAULT)
 {
-//	m_goal_references.resize(0);
+#if defined(USE_GOAL_REF)
+	m_goal_references.resize(0);
+#else
 	m_match_references.resize(0);
+#endif
 }
 
 Squad::Squad(const Army & army)
 :
     m_agent          (new CTPAgent(army)),
-    m_squad_class    (SQUAD_CLASS_DEFAULT),
-    m_is_committed   (false)
+    m_squad_class    (SQUAD_CLASS_DEFAULT)
 {
-//	m_goal_references.resize(0);
+#if defined(USE_GOAL_REF)
+	m_goal_references.resize(0);
+#else
 	m_match_references.resize(0);
+#endif
 }
 
 Squad::Squad(const Squad &squad)
@@ -78,11 +82,13 @@ Squad::~Squad()
 
 Squad & Squad::operator= (const Squad &squad)
 {
-	m_is_committed     = squad.m_is_committed;
 	m_squad_class      = squad.m_squad_class;
 	m_agent            = squad.m_agent;
+#if defined(USE_GOAL_REF)
+	m_goal_references  = squad.m_goal_references;
+#else
 	m_match_references = squad.m_match_references;
-//	m_goal_references  = squad.m_goal_references;
+#endif
 
 	return *this;
 }
@@ -105,6 +111,24 @@ size_t Squad::Get_Num_Agents() const
 	return m_agent != NULL;
 }
 
+#if defined(USE_GOAL_REF)
+/// Remove all agents from the squad
+void Squad::Remove_Matches()
+{
+	for
+	   (
+	    Goal_Ref_List::iterator
+	        goal_ref_iter  = m_goal_references.begin();
+	        goal_ref_iter != m_goal_references.end();
+	      ++goal_ref_iter
+	   )
+	{
+		(*goal_ref_iter)->Remove_Match(this);
+	}
+
+	m_goal_references.clear();
+}
+#else
 /// Remove all agents from the squad
 void Squad::Remove_Matches()
 {
@@ -114,22 +138,16 @@ void Squad::Remove_Matches()
 	        plan_ref_iter  = m_match_references.begin();
 	        plan_ref_iter != m_match_references.end();
 	      ++plan_ref_iter
-//	    Goal_Ref_List::iterator
-//	        goal_ref_iter  = m_goal_references.begin();
-//	        goal_ref_iter != m_goal_references.end();
-//	      ++goal_ref_iter
 	   )
 	{
 		Assert((*plan_ref_iter)->Get_Squad() == this);
 
-		Goal_ptr goal_ptr = (*plan_ref_iter)->Get_Goal();
-		goal_ptr->Remove_Match(*plan_ref_iter);
-
-	//	(*goal_ref_iter)->Remove_Match(this);
+		(*plan_ref_iter)->Get_Goal()->Remove_Match(*plan_ref_iter);
 	}
 
 	m_match_references.clear();
 }
+#endif
 
 SQUAD_CLASS Squad::Compute_Squad_Class()
 {
@@ -153,25 +171,30 @@ void Squad::Get_Strength(Squad_Strength & strength)
 	strength = m_agent->Get_Squad_Strength();
 }
 
+#if defined(USE_GOAL_REF)
+
+void Squad::Add_Goal_Reference(const Goal_ptr goal)
+{
+	m_goal_references.push_back(goal);
+}
+
+void Squad::Remove_Goal_Reference(const Goal_ptr goal)
+{
+	m_goal_references.remove(goal);
+}
+
+#else
+
 void Squad::Add_Match_Reference(const Plan_List::iterator &plan_iter)
-//void Squad::Add_Goal_Reference(const Goal_ptr goal)
 {
 	m_match_references.push_back(plan_iter);
-//	m_goal_references.push_back(goal);
 }
 
 void Squad::Remove_Match_Reference(const Plan_List::iterator &plan_iter)
-//void Squad::Remove_Goal_Reference(const Goal_ptr goal)
 {
 	m_match_references.remove(plan_iter);
-	//	m_goal_references.remove(goal);
 }
-
-
-std::list<Plan_List::iterator> & Squad::Get_Match_References()
-{
-	return m_match_references;
-}
+#endif
 
 void Squad::Set_Can_Be_Executed(const bool & can_be_executed)
 {

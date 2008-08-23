@@ -76,14 +76,15 @@ public:
 
 	SQUAD_CLASS Get_Squad_Class() const;
 
-//	void Add_Goal_Reference(const Goal_ptr goal);
+#if defined(USE_GOAL_REF)
+	void Add_Goal_Reference(const Goal_ptr goal);
+	void Remove_Goal_Reference(const Goal_ptr goal);
+#else
 	void Add_Match_Reference(const Plan_List::iterator &plan_iter);
-
 	void Remove_Match_Reference(const Plan_List::iterator &plan_iter);
-	//	void Remove_Goal_Reference(const Goal_ptr goal);
-	void Remove_Matches();
+#endif
 
-	std::list<Plan_List::iterator> & Get_Match_References();
+	void Remove_Matches();
 
 	void Set_Can_Be_Executed(const bool & can_be_executed);
 
@@ -99,14 +100,13 @@ public:
 
 protected:
 
-	bool                            m_is_committed;
-	SQUAD_CLASS                     m_squad_class;
+	SQUAD_CLASS                     m_squad_class;	// Probably can be removed
 	CTPAgent_ptr                    m_agent;
+#if defined(USE_GOAL_REF)
+	Goal_Ref_List                   m_goal_references;
+#else
 	std::list<Plan_List::iterator>  m_match_references;
-//	Goal_Ref_List                   m_goal_references;
-
-private:
-
+#endif
 };
 
 #endif // SQUAD_H__

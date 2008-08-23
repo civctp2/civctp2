@@ -153,9 +153,6 @@
 #include "cellunitlist.h"
 #include "ConstRecord.h"
 #include "CTP2Combat.h"
-#include "ctpagent.h"
-#include "ctpai.h"
-#include "ctpgoal.h"
 #include "DifficultyRecord.h"
 #include "Diplomacy_Log.h"
 #include "Diplomat.h"
@@ -195,7 +192,6 @@
 #include "SoundRecord.h"
 #include "SpecialAttackInfoRecord.h"
 #include "SpecialEffectRecord.h"
-#include "Squad.h"
 #include "StrDB.h"
 #include "TerrainImprovementRecord.h" 
 #include "TerrainRecord.h"
@@ -7506,7 +7502,17 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 
 		if(g_player[m_owner]->IsRobot())
 		{
-			CtpAi::HandleMoveFailure(Army(m_id), pos);
+			if(CanAtLeastOneCargoUnloadAt(RetPos(), pos, false))
+			{
+				g_gevManager->AddEvent
+				                      (
+				                       GEV_INSERT_AfterCurrent,
+				                       GEV_UnloadOrder,
+				                       GEA_Army, m_id,
+				                       GEA_MapPoint, pos,
+				                       GEA_End
+				                      );
+			}
 		}
 
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ClearOrders,

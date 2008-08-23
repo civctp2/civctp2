@@ -94,9 +94,6 @@ public:
 	static void NetworkClientBeginTurn(const PLAYER_INDEX player);
 
 	
-	static void HandleMoveFailure(const Army & army, const MapPoint & pos); 
-
-	
 	static void AddForeignerGoalsForCity(const Unit & city, const PLAYER_INDEX ownerId);
 
 	

@@ -19,7 +19,7 @@
 // Compiler flags
 //
 // _DEBUG
-// _DEBUG_SCHEDULER
+// - Generate debug version when set.
 //
 //----------------------------------------------------------------------------
 //
@@ -143,10 +143,6 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 	sint32 transports;
 	sint32 max;
 	sint32 empty;
-
-#ifdef _DEBUG_SCHEDULER
-//	Assert(m_army->m_theAgent == this);
-#endif // _DEBUG_SCHEDULER
 
 	m_army->CharacterizeArmy(
 	    isspecial,

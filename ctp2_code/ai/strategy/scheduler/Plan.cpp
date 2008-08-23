@@ -91,16 +91,15 @@
 #include "debugassert.h"
 #include "squad.h"
 #include "goal.h"
+#include "Scheduler.h"
 #include "Agent.h"
 #include "ArmyData.h"
 #include "ctpagent.h"
 #include "ctpgoal.h"
-#include "Scheduler.h"
 #include "squad_strength.h"
 #include "ctpaidebug.h"
 
 #include "GoalRecord.h"
-extern CTPDatabase<GoalRecord> *g_theGoalDB;
 
 //----------------------------------------------------------------------------
 //

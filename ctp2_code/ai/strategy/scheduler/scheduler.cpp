@@ -1647,7 +1647,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			  k_Goal_SquadClass_CanTransport_Bit )
 			  continue;
 
-		bool hasMatch  = goal_ptr->Has_Squad(squad);
+		bool hasMatch  = goal_ptr->Has_Squad_And_Set_Needs_Cargo(squad);
 		match_added   |= hasMatch;
 
 		if(hasMatch)

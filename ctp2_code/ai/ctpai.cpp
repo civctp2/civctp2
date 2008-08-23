@@ -94,7 +94,6 @@
 #include "OrderRecord.h"
 #include "AdvanceListRecord.h"
 #include "AdvanceRecord.h"
-#include "UnitRecord.h"
 #include "EndGameObjectRecord.h"
 #include "profileDB.h"
 #include "RegardEvent.h"
@@ -113,7 +112,6 @@
 #include "CTPDatabase.h"
 #include "Army.h"
 #include "ArmyData.h"
-//#include "ArmyPool.h"                       // g_theArmyPool
 #include "Unit.h"
 #include "UnitRecord.h"
 #include "UnitData.h"
@@ -1691,17 +1689,6 @@ void CtpAi::Resize()
 										  resolution);
 	
 	Governor::ResizeAll(s_maxPlayers);
-}
-
-void CtpAi::HandleMoveFailure(const Army & army, const MapPoint & pos)
-{
-	if ( army->CanAtLeastOneCargoUnloadAt(army->RetPos(), pos, false) )
-	{
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UnloadOrder,
-							   GEA_Army, army,
-							   GEA_MapPoint, pos,
-							   GEA_End);
-	}
 }
 
 void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)

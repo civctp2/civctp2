@@ -53,6 +53,7 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "gfx_options.h"
 #include "ctpagent.h"
 #include "World.h"
+#include "Squad.h"
 
 #ifdef _DEBUG_SCHEDULER
 #include "ctpagent.h"
@@ -699,9 +700,13 @@ bool Goal::Add_Match(const Squad_ptr & squad, const bool update_match_value, con
 			Utility matching_value = the_match.Compute_Matching_Value();
 		}
 
+#if defined(USE_GOAL_REF)
+		m_matches.push_back(the_match);
+		squad->Add_Goal_Reference(this);
+#else
 		Plan_List::iterator & plan_iter = m_matches.insert(m_matches.end(), the_match);
 		squad->Add_Match_Reference(plan_iter);
-
+#endif
 		m_needs_sorting = true;
 
 		/*
@@ -839,12 +844,36 @@ void Goal::Remove_Matches()
 
 		Assert(squad_ptr);
 		if(squad_ptr)
+#if defined(USE_GOAL_REF)
+			squad_ptr->Remove_Goal_Reference(this);
+#else
 			squad_ptr->Remove_Match_Reference(match_iter);
+#endif
 	}
 
 	m_matches.clear();
 }
 
+#if defined(USE_GOAL_REF)
+void Goal::Remove_Match(const Squad_ptr & squad)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(squad == match_iter->Get_Squad())
+		{
+			match_iter->Rollback_All_Agents();
+			m_matches.erase(match_iter);
+
+			return;
+		}
+	}
+}
+#else
 void Goal::Remove_Match(Plan_List::iterator match)
 {
 	for
@@ -863,8 +892,9 @@ void Goal::Remove_Match(Plan_List::iterator match)
 		}
 	}
 }
+#endif
 
-bool Goal::Has_Squad(Squad* squad)
+bool Goal::Has_Squad_And_Set_Needs_Cargo(Squad* squad)
 {
 	for
 	(

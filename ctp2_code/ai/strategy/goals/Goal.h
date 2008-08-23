@@ -44,7 +44,8 @@ class Goal;
 #include "scheduler_types.h"
 #include "Plan.h"
 #include "squad_Strength.h"
-#include "Squad.h"
+
+//#define USE_GOAL_REF 1 // looks like without this, the AI seems to be faster.
 
 class Goal
 {
@@ -186,8 +187,12 @@ public:
     void Commit_Agents();
     void Commit_Transport_Agents();
     void Remove_Matches();
+#if defined(USE_GOAL_REF)
+    void Remove_Match(const Squad_ptr & squad);
+#else
     void Remove_Match(Plan_List::iterator match);
-    bool Has_Squad(Squad* squad);
+#endif
+    bool Has_Squad_And_Set_Needs_Cargo(Squad* squad);
     size_t Get_Matches_Num() const { return m_matches.size(); }
     void Set_Needs_Transporter(const bool needs_transporter);
     sint16 Get_Transporters_Num() const { return m_current_attacking_strength.Get_Transport(); }

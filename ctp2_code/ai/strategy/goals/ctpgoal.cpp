@@ -89,8 +89,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "ctpgoal.h"
+
+#include "Squad.h"
 #include "gfx_options.h"
-#include "CTPDatabase.h"
 #include "GoalRecord.h"
 #include "StrategyRecord.h"
 #include "OrderRecord.h"
@@ -103,7 +105,6 @@
 #include "UnitPool.h"
 #include "ArmyPool.h"
 #include "MoveFlags.h"
-#include "ctpgoal.h"
 #include "Diplomat.h"
 #include "ctpagent.h"
 #include "mapanalysis.h"
@@ -118,7 +119,6 @@
 #include "advanceutil.h"
 #include "Barbarians.h"
 #include "wonderutil.h"
-#include "Squad.h"
 
 extern MapPoint                  g_mp_size;
 extern UnitPool                 *g_theUnitPool;
