@@ -39,8 +39,26 @@ public:
 	sint32 GetBevelWidth(void) { return m_bevelWidth; }
 	sint32 GetBevelType(void) { return m_bevelType; }
 
+	void ForceScroll(sint32 deltaX, sint32 deltaY);
+
+	static c3_ListBox *ms_mouseFocusListBox;
+
+	static c3_ListBox *GetMouseFocusListBox(void) { return ms_mouseFocusListBox; }
+	static void SetMouseFocusListBox(c3_ListBox *box) { ms_mouseFocusListBox = box; }
+
 protected:
-	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);		
+	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);
+
+	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData);
+	virtual void	MouseMoveAway(aui_MouseEvent * mouseData);
+
+	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
+//	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
+	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
+		
 															
 private:
 	sint32		m_bevelWidth;

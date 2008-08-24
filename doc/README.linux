@@ -30,7 +30,7 @@ then this means you should type "cd foo" at your shell prompt.
 
 - SDL_mixer and its header files.
 
-- SDL_ffmpeg > 0.7.1 and its header files.
+- SDL_ffmpeg > 0.7.0 and its header files.
 
 - ffmpeg and its libavcodec
 
@@ -253,14 +253,14 @@ So, let's start:
 
 10.Movies
 
-   ffmpeg and sdl_ffmpeg > 0.7.1 are used for movie playing now. Strangely ffmpeg can't
+   ffmpeg and sdl_ffmpeg > 0.7.0 are used for movie playing now. Strangely ffmpeg can't
    play the movies of the CD. So you'll have to convert them to a format ffmpeg
    can handle.
    One way of doing that is with mencoder (you can choose any codec ffmpeg 
    can play, even h264;):
 
    shell> cd /home/foo/CTP2/ctp2_program/ctp
-   shell> for i in `ls /media/cdrom/Setup/data/Max/ctp2_data/default/videos/`; do mencoder -ovc lavc -lavcopts vcodec=mpeg1video -oac copy /media/cdrom/Setup/data/Max/ctp2_data/default/videos/$i -o $i; done
+   shell> for i in `ls /media/cdrom/Setup/data/Max/ctp2_data/default/videos/`; do mencoder -ovc lavc -lavcopts vcodec=mpeg4  -srate 44100 -af resample=44100 -oac lavc  /media/cdrom/Setup/data/Max/ctp2_data/default/videos/$i -o $i; done
 
 
    Note concerning languages:

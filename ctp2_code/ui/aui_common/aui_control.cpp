@@ -1855,16 +1855,19 @@ void aui_Control::SendKeyboardAction()
 
 bool aui_Control::HandleKey(uint32 wParam)
 {
+//printf("%s L%d: aui_Control key default handler!\n", __FILE__, __LINE__);
 	if(m_actionKey == wParam) {
 		SendKeyboardAction();
 		return true;
 	}
+        //lynx: should more keys be handled here?
 
 	ListPos position = m_childList->GetHeadPosition();
 	for ( sint32 i = m_childList->L(); i; i-- )
 	{
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
 		
+                //lynx: why is this not circular?
 		if(control && control->HandleKey(wParam))
 			return true;
 	}

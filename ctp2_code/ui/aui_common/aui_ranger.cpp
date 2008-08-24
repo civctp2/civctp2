@@ -32,6 +32,8 @@ static const MBCHAR *k_AUI_RANGER_LDL_AUTO_INCX		= "autoincx";
 static const MBCHAR *k_AUI_RANGER_LDL_AUTO_DECY		= "autodecy";
 static const MBCHAR *k_AUI_RANGER_LDL_AUTO_INCY		= "autoincy";
 
+aui_Ranger *aui_Ranger::ms_mouseFocusRanger = NULL;
+
 
 aui_Ranger::aui_Ranger(
 	AUI_ERRCODE *retval,
@@ -434,6 +436,13 @@ aui_Ranger::~aui_Ranger()
 		delete m_rangeContainer;
 		m_rangeContainer = NULL;
 	}
+
+        if (this == ms_mouseFocusRanger)
+            {
+            ms_mouseFocusRanger = NULL;
+            }
+ 
+
 }
 
 
@@ -519,7 +528,6 @@ AUI_ERRCODE aui_Ranger::SetMaximum( sint32 maxX, sint32 maxY )
 
 	m_maxX = maxX, m_maxY = maxY;
 
-	
 	if ( m_valX > m_maxX ) m_valX = m_maxX;
 	if ( m_valY > m_maxY ) m_valY = m_maxY;
 
@@ -988,6 +996,7 @@ void aui_Ranger::MouseMoveInside( aui_MouseEvent *mouseData )
 		MouseMoveAway( mouseData );
 	else if ( !IsActive() )
 		MouseMoveOver( mouseData );
+        SetMouseFocusRanger(this);
 }
 
 
@@ -1018,6 +1027,7 @@ void aui_Ranger::MouseMoveOver( aui_MouseEvent *mouseData )
 	}
 	else
 		MouseMoveOutside( mouseData );
+        SetMouseFocusRanger(this);
 }
 
 
@@ -1283,3 +1293,12 @@ void RangerButtonActionCallback( aui_Control *control, uint32 action, uint32 dat
 	else
 		ranger->IncrementDownY();
 }
+
+
+void aui_Ranger::ForceScroll(sint32 deltaX, sint32 deltaY){
+
+if (ms_mouseFocusRanger)
+//printf("%s L%d: ForceScroll called!\n", __FILE__, __LINE__);
+    (deltaX == 0) ? 0 : ((deltaX < 0) ? ms_mouseFocusRanger->IncrementDownX() : ms_mouseFocusRanger->IncrementUpX());
+    (deltaY == 0) ? 0 : ((deltaY < 0) ? ms_mouseFocusRanger->IncrementDownY() : ms_mouseFocusRanger->IncrementUpY());
+    }

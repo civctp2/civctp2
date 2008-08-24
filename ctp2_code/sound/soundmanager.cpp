@@ -655,10 +655,10 @@ SoundManager::TerminateSounds(const SOUNDTYPE &type)
 #if !defined(USE_SDL)
 			AIL_quick_halt(sound->GetHAudio());
 #else
-            int channel = sound->GetChannel();
-            if (channel >= 0) {
-                Mix_HaltChannel(channel);
-            }
+                        int channel = sound->GetChannel();
+                        if (channel >= 0) {
+                            Mix_HaltChannel(channel);
+                            }
 #endif
 		}
 		node = node->GetNext();
@@ -893,8 +893,6 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 	sint32		objectX, objectY, objectZ;
 #if !defined(USE_SDL)
 	HAUDIO		hAudio;
-#else
-    Mix_Chunk   *myChunk;
 #endif
 
 	ConvertCoordinates(x, y, objectX, objectY, objectZ);
@@ -908,11 +906,6 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 				hAudio = sound->GetHAudio();
                 if (hAudio) {
                     AIL_quick_set_volume(hAudio, volume, panValue);
-                }
-#else
-                myChunk = sound->GetAudio();
-                if (myChunk) {
-                    // Why set the volume again?
                 }
 #endif
 			}

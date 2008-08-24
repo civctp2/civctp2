@@ -220,11 +220,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	
 	if (fontheight) m_textHeight = fontheight;
 	else m_textHeight = tm.tmHeight + tm.tmExternalLeading;
-#else
-	if (fontheight) m_textHeight = fontheight;
-#endif
 
-#ifdef __AUI_USE_DIRECTX__
 	if (font) EnumFonts( hdc, font, (FONTENUMPROC) EnumTextFontsProc, (LPARAM)this);
 	
 	if (m_hfont) 
@@ -244,6 +240,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 		*m_Text = '\0';
 	else
 		strncpy(m_Text, text, m_maxFieldLen);
+        //printf("%s L%d: aui_textfield text assigned: %s!\n", __FILE__, __LINE__, m_Text);
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
@@ -254,7 +251,15 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	// being set anywhere else, which was causing textboxes to display no text.
 	// With this fix they do display text, but it's usually of the wrong size.
 	// More needs to be done on this problem
+
+        //m_Font->SetMaxHeight(m_textHeight); //adjusting font to boxhight does not work
 	m_Font->SetPointSize(k_AUI_TEXTBASE_DEFAULT_FONTSIZE);
+	if (fontheight) 
+            m_textHeight = fontheight;
+	else 
+            m_textHeight = m_Font->GetMaxHeight(); //well, let's set at least the box height to something
+        //printf("%s L%d: aui_textfield text height: %d!\n", __FILE__, __LINE__, m_textHeight);
+
 #endif
 	
 	sint32 newHeight = m_height - Mod(m_height,m_textHeight);
@@ -326,6 +331,7 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 	return success;
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
+        //printf("%s L%d: aui_textfield text assigned: %s!\n", __FILE__, __LINE__, m_Text);
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
@@ -394,6 +400,8 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 		newText[maxFieldLen] = '\0';
 		delete[] m_Text;
 		m_Text = newText;
+#else
+        printf("%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
 #endif
 	}
 
@@ -506,7 +514,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	m_Text[m_selStart] = save;
 	SDL_Rect r2 = { rect.left+offset-1, rect.top+2, 2, rect.bottom-rect.top-4 };
 	SDL_FillRect(SDLsurf, &r2, 0);
-#else
+#else //lynx: is this drawing a string at all???
 	if ( m_hwnd && m_memdc )
 	{
 		FillRect( m_memdc, &srcRect, (HBRUSH)(COLOR_WINDOW + 1) );

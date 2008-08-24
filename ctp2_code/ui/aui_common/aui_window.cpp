@@ -873,9 +873,9 @@ aui_Control *aui_Window::NextFocusControl()
 	return (aui_Control *)m_focusList->GetHead();
 }
 
-bool aui_Window::HandleKey(uint32 wParam)
-{
-	switch(wParam) {
+bool aui_Window::HandleKey(uint32 wParam){
+    printf("%s L%d: Window key handler!\n", __FILE__, __LINE__);
+    switch(wParam) {
 		case '\t' + 128:
 			if(m_focusControl) {
 				m_focusControl->ShouldDraw(k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE);
@@ -894,10 +894,13 @@ bool aui_Window::HandleKey(uint32 wParam)
 			}
 			break;
 		default:
+                    //letter handling missing here???
+                    printf("%s L%d: Window key default handler!\n", __FILE__, __LINE__);
 			if(m_focusControl && m_focusControl->HandleKey(wParam))
 				return true;
 			else 
 			{
+                            printf("%s L%d: Window key default handler for lists!\n", __FILE__, __LINE__);
 				ListPos position = m_childList->GetHeadPosition();
 				for ( sint32 i = m_childList->L(); i; i-- )	{
 					aui_Control *control = (aui_Control *)m_childList->GetNext( position );
@@ -906,6 +909,8 @@ bool aui_Window::HandleKey(uint32 wParam)
 						return true;
 				}
 			}
+                        printf("%s L%d: Window key default handler failed!\n", __FILE__, __LINE__);
+
 			break;
 		
 	}

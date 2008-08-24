@@ -228,6 +228,17 @@ public:
 
 	virtual AUI_ERRCODE Show( void );
 
+
+
+	void ForceScroll(sint32 deltaX, sint32 deltaY);
+
+	static aui_Ranger *ms_mouseFocusRanger;
+
+	static aui_Ranger *GetMouseFocusRanger(void) { return ms_mouseFocusRanger; }
+	static void SetMouseFocusRanger(aui_Ranger *box) { ms_mouseFocusRanger = box; }
+
+
+
 protected:
 	AUI_ERRCODE	ValueToPosition( sint32 *x, sint32 *y );
 	AUI_ERRCODE	PositionToValue( sint32 *x, sint32 *y );

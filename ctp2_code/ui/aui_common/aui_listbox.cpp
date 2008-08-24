@@ -2305,12 +2305,14 @@ void aui_ListBox::SendKeyboardAction()
 
 bool aui_ListBox::HandleKey(uint32 wParam)
 {
+    printf("%s L%d: ListBox key handler!\n", __FILE__, __LINE__);
 	if(GetParentWindow() && GetParentWindow()->GetFocusControl() == this) {
 		if(NumItems() < 1)
 			return false;
 
 #ifdef USE_SDL
 		if(wParam == SDLK_UP + 256) {
+                    printf("%s L%d: ListBox SDLK_UP key handler!\n", __FILE__, __LINE__);
 #else
 		if(wParam == VK_UP + 256) {
 #endif
@@ -2321,9 +2323,11 @@ bool aui_ListBox::HandleKey(uint32 wParam)
 			}
 			return true;
 #ifdef USE_SDL
-		} else if(wParam == SDLK_DOWN + 256) {
+		} 
+                else if(wParam == SDLK_DOWN + 256) {
 #else
-		} else if(wParam == VK_DOWN + 256) {
+		} 
+                else if(wParam == VK_DOWN + 256) {
 #endif
 			if(!GetSelectedItem() || GetSelectedItemIndex() >= NumItems() - 1) {
 				SelectItem((sint32)0);
@@ -2331,7 +2335,8 @@ bool aui_ListBox::HandleKey(uint32 wParam)
 				SelectItem(GetSelectedItemIndex() + 1);
 			}
 			return true;
-		} else if(wParam == ' ') {
+		} 
+                else if(wParam == ' ') {
 			if(m_keyboardActionControl) {
 				m_keyboardActionControl->SendKeyboardAction();
 				return true;

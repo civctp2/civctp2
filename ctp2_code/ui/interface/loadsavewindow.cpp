@@ -194,14 +194,12 @@ bool LoadSaveWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	if (!m_civText) return AUI_ERRCODE_LOADFAILED;
 
 	
-	m_listOne = spNew_c3_ListBox(&errcode, ldlBlock, "ListOne", 
-									loadsavescreen_ListOneHandler, (void *)this);
-	Assert(m_listOne);
+	m_listOne = spNew_c3_ListBox(&errcode, ldlBlock, "ListOne", loadsavescreen_ListOneHandler, (void *)this);
+        Assert(m_listOne);
 	if (!m_listOne) return AUI_ERRCODE_LOADFAILED;
 
 	
-	m_listTwo = spNew_c3_ListBox(&errcode, ldlBlock, "ListTwo", 
-									loadsavescreen_ListTwoHandler, (void *)this);
+	m_listTwo = spNew_c3_ListBox(&errcode, ldlBlock, "ListTwo", loadsavescreen_ListTwoHandler, (void *)this);
 	Assert(m_listTwo);
 	if (!m_listTwo) return AUI_ERRCODE_LOADFAILED;
 

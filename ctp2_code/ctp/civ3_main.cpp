@@ -2060,8 +2060,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		SDL_Event event;
 		while (1) { //there is a break;)
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-			                       ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
-							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+                            ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
                             //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
                             printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
@@ -2207,23 +2206,31 @@ int SDLMessageHandler(const SDL_Event &event)
 		break;
 	case WM_KEYDOWN :
 #else
+//could not find ui_HandleKeypress(wParam, lParm)! Could this mean this code was under reconstruction in trunk when the clone for linux was made???
+
 	switch(event.type) {
 	case SDL_KEYDOWN:
 		{
-			// TODO: Determine what the 'swallowNextChar' variable
-			// is for, and, if necessary, implement appropriate
-			// code in the SDL sections to perform the same function.
-			SDLKey key = event.key.keysym.sym;
+                	SDLKey key = event.key.keysym.sym;
 			SDLMod mod = event.key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
+
+//for the keys below check swallowNextChar if char should be ignored
+
 #define SDLKCONV(sdl_name, char) \
 			case (sdl_name): \
 				wp = (char); \
+                                if(!swallowNextChar) \
+                                    ui_HandleKeypress(wp); \
+                                swallowNextChar = FALSE; \
 				break;
 #define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
 			case (sdl_name): \
 				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
+                                if(!swallowNextChar) \
+                                    ui_HandleKeypress(wp); \
+                                swallowNextChar = FALSE; \
 				break;
 // For the purposes of this macro, shift is ignored when ctrl is pressed
 #define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
@@ -2231,10 +2238,13 @@ int SDLMessageHandler(const SDL_Event &event)
 				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
 						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
 					); \
+                                if(!swallowNextChar) \
+                                    ui_HandleKeypress(wp); \
+                                swallowNextChar = FALSE; \
 				break;
-			SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
-			SDLKCONV(SDLK_TAB, '\t' + 128);
-			SDLKCONV(SDLK_RETURN, '\r' + 128);
+//                         SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
+//                         SDLKCONV(SDLK_TAB, '\t' + 128);
+//                         SDLKCONV(SDLK_RETURN, '\r' + 128);
 			SDLKCONV(SDLK_ESCAPE, SDLK_ESCAPE + 256);
 			SDLKCONV(SDLK_SPACE, ' ');
 			SDLKCONV(SDLK_EXCLAIM, '!');
@@ -2264,22 +2274,22 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_CARET, '^');
 			SDLKCONV(SDLK_UNDERSCORE, '_');
 			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
-			SDLKCONV(SDLK_UP, SDLK_UP + 256);
-			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
-			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
-			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
-			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
-			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
+//  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
+//  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
+//  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
+//  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+//  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
+//  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
 			// Given the bizarre choices for F11 and F12, I am reluctant to
 			// extrapolate to F15
 			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
@@ -2341,12 +2351,73 @@ int SDLMessageHandler(const SDL_Event &event)
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
 #undef SDLKCONVSHIFTCTRL
+
+//for the keys below set swallowNextChar
+
+                        case SDLK_BACKSPACE: 
+				wp = '\b' + 128;
+                                ui_HandleKeypress(wp);
+                                swallowNextChar = TRUE;
+				break;
+                        case SDLK_TAB: 
+				wp = '\t' + 128;
+                                ui_HandleKeypress(wp);
+                                swallowNextChar = TRUE;
+				break;
+                        case SDLK_RETURN: 
+				wp = '\r' + 128;
+                                ui_HandleKeypress(wp);
+                                swallowNextChar = TRUE;
+				break;
+
+//for the keys below don't regard swallowNextChar
+
+#define SDLKCONV(sdl_name, char) \
+			case (sdl_name): \
+				wp = (char); \
+                                ui_HandleKeypress(wp); \
+				break;
+#define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
+                                ui_HandleKeypress(wp); \
+				break;
+// For the purposes of this macro, shift is ignored when ctrl is pressed
+#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
+						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
+					); \
+                                ui_HandleKeypress(wp); \
+				break;
+
+  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
+  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
+  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
+  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
+  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
+
+#undef SDLKCONV
+#undef SDLKCONVSHIFT
+#undef SDLKCONVSHIFTCTRL
+
 			default:
 				break;
 			}
-			if (wp != '\0') {
-				ui_HandleKeypress(wp);
-			}
+// 			if (wp != '\0') {
+//                             ui_HandleKeypress(wp);
+// 			}
 			break;
 		}
 #endif
@@ -2415,13 +2486,10 @@ int SDLMessageHandler(const SDL_Event &event)
 		}
 		break;
 	case WM_CLOSE:
+		if ( hwnd != gHwnd ) break;
 #else
 	case SDL_QUIT:
 #endif
-#ifndef __AUI_USE_SDL__
-		if ( hwnd != gHwnd ) break;
-#endif		
-		
 		gDone = TRUE;
 
 		
@@ -2460,9 +2528,21 @@ int SDLMessageHandler(const SDL_Event &event)
 	}
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-#else //implement here the mouse wheel for SDL
+#else
+// this event is handled in aui_sdlmouse.cpp
+//          case SDL_MOUSEBUTTONDOWN:
+//              if (event.button.button == SDL_BUTTON_WHEELUP){
+//                   printf("%s L%d: Mouse wheel up handled!\n", __FILE__, __LINE__);
+//                   ui_HandleMouseWheel((sint16)1);
+//                  }
+//              else if (event.button.button == SDL_BUTTON_WHEELDOWN)
+//  			ui_HandleMouseWheel((sint16)-1);
+        
+             break;
 	}
 	
+        //lynx: is a last default handling missing here??? DefWindowProc()
+ 
 	return 0;
 #endif
 }

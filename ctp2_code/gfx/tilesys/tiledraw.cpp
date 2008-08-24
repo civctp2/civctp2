@@ -4161,16 +4161,17 @@ L1:
 					mov transDataPtr, ebx
 					mov dataPtr, esi
 				}
-//#else             //use this if __asm__ is used
-/*                 
+/*
+#else             //use this if __asm__ is used
+                 
                                 printf("%s L%d: Using __asm__ tile blending!\n", __FILE__, __LINE__);
                                 __asm__ (
-//                                "movl $endX, %edx            \n\t" //done by gcc!
-//                                "movl $pDestPixel, %edi      \n\t" //done by gcc!
-//                                "movl $dataPtr, %esi         \n\t" //done by gcc!
-//                                "movl $startX, %ecx          \n\t" //done by gcc!
-                                    "leal (%2,%3,2),%2     \n\t"//load value %0 + %1 * s is pointing to
-                                    "subl %3,%4              \n\t" //%1 is now reuseable
+//                                "movl $endX, %edx            \n\t" //done by gcc! %3
+//                                "movl $pDestPixel, %edi      \n\t" //done by gcc! %2
+//                                "movl $dataPtr, %esi         \n\t" //done by gcc! %1
+//                                "movl $startX, %ecx          \n\t" //done by gcc! %4
+                                    "leal (%2,%3,2),%2     \n\t"//load value %2 + 2 * %3 is pointing to
+                                    "subl %3,%4              \n\t" //%3 is now reuseable
 //                                "movl $transDataPtr, %ebx    \n\t" //done by gcc!
 
                                     ".lable0:                        \n\t"
@@ -4181,16 +4182,16 @@ L1:
 //                                    "pushl %%ebp     \n\t"  // save ebp, NEVER! use -fomit-frame-pointer
                                     //even if ebp is in clobberlist gcc uses it here to reference memory!
                                     "movl %0, %%ebp                  \n\t"
-                                    "xorl %%ebx,%%ebx              \n\t" //make %eax = 0, see below, we use ebx
+                                    "xorl %%ebx,%%ebx              \n\t" //make %ebx = 0, see below, we use ebx
                                     "movw %w3,%%bx            \n\t" //because of this ebx has to be static
                                     "cmpl $4,%%ebx             \n\t" //because of above line eax may be != 0
                                     "jge .lable1                     \n\t"
-                                    "movl (%7,%%ebx,4), %3 \n\t"  // ** tileData can't be passed as "m"!
+                                    "movl (%5,%%ebx,4), %3 \n\t"  // ** tileData can't be passed as "m"!
                                     "testl %3,%3             \n\t"  //check if %3 is zero, set Z-bit
                                     "jz .lable2                      \n\t"
                                     "addl $2,%3            \n\t"
-                                    "movl %3, (%7,%%ebx,4) \n\t" // (%eax + %ebx * 4) = %3
-                                    "movw -2(%3),%w3           \n\t"
+                                    "movl %3, (%5,%%ebx,4) \n\t" // (%eax + %ebx * 4) = %3
+                                    "movw -2(%3),%w3           \n\t" // %w3 first (or last?) 2 bytes of %3
                                     "jmp .lable1                     \n\t"
                                     ".lable2:                        \n\t"
                                     "movw (%%ebp),%w3             \n\t"//movw (%3),%%dx
@@ -4203,9 +4204,9 @@ L1:
 //                                    "popl %%ebp     \n\t"// restore ebp, NEVER use this!
                                     "popl %%ebx     \n\t"// restore reg for PIC!
 //                                        "movl %esi, $dataPtr         \n\t" //does gcc
-                                    : "=g" (transDataPtr), "=r" (dataPtr) // "=D" (pDestPixel)
+                                    : "=&g" (transDataPtr), "=&r" (dataPtr) // "=D" (pDestPixel)
 
-                                    : "r" (pDestPixel), "r" (endX), "r" (startX), "0" (transDataPtr), "1" (dataPtr), "r" (tileData)
+                                    : "r" (pDestPixel), "r" (endX), "r" (startX), "r" (tileData), "0" (transDataPtr), "1" (dataPtr)
 
                                     : "%ebp", "cc"
 #if !defined(PIC) && !defined(__PIC__) //don't tell gcc about what was done to ebx!!!
@@ -4213,8 +4214,9 @@ L1:
 #endif
                                     );
 
+
+#endif             //use this if __asm__ is used
 */
-//#endif             //use this if __asm__ is used
 			}
 			else
 			{
@@ -4302,7 +4304,9 @@ L1:
                                 //pDestPixel[x] = srcPixel;
 			}
 
+
 #endif             //use this if __asm__ is NOT used
+
 		}
 	}
 }

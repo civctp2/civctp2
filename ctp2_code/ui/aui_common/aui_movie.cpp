@@ -37,14 +37,17 @@
 #include "aui_movie.h"
 
 #ifdef USE_SDL
-#include "SDL.h"
-#include "SDL_ffmpeg.h"
-#include "SDL_syswm.h"
+#include <SDL.h>
+#include <SDL_ffmpeg.h>
+#include <SDL_mixer.h>
+#include <SDL_syswm.h>
 #include "soundmanager.h"		// g_soundManager
 #include "aui_sdlsurface.h"
 
 SDL_ffmpegFile* film;
+Mix_Chunk achunk;
 
+int m_moviechannel;
 #endif
 
 WNDPROC aui_Movie::m_windowProc = NULL;
@@ -86,6 +89,7 @@ AUI_ERRCODE aui_Movie::InitCommon( const MBCHAR *filename )
 	memset( &m_aviFileInfo, 0, sizeof( m_aviFileInfo ) );
 	memset( &m_aviStreamInfo, 0, sizeof( m_aviStreamInfo ) );
 	m_getFrame = NULL;
+        m_moviechannel= -1;
 #endif
 	m_curFrame = 0;
 
@@ -242,9 +246,48 @@ uint32 aui_Movie::SetTimePerFrame( uint32 timePerFrame )
 
 #ifdef USE_SDL
 
+/*
+void reload_audio(int channel){
+
+    SDL_ffmpegAudioFrame *aframe;
+
+    if(channel == m_moviechannel){
+        if(film){
+ 
+            while(!aframe)
+                aframe= SDL_ffmpegGetAudioFrame(film);
+            //if(aframe){
+
+            //while(!aframe->size)
+            //    aframe=  SDL_ffmpegGetAudioFrame(file);
+            achunk.alen= aframe->size;
+            //achunk.abuf= aframe->buffer; //should we copy the data here???
+            if(achunk.abuf) //or use realloc???
+                free(achunk.abuf);
+            achunk.abuf= new uint8_t[achunk.alen];
+            memcpy(achunk.abuf, aframe->buffer, achunk.alen);
+            achunk.allocated= 1; //abuf should not be freed if it belongs to aframe
+            achunk.volume= MIX_MAX_VOLUME;
+
+            m_moviechannel= Mix_PlayChannel(channel, &achunk , 0);
+            if(m_moviechannel < 0)
+                printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
+            //else 
+            //    Mix_ChannelFinished(reload_audio);
+            SDL_ffmpegReleaseAudio(film, aframe, achunk.alen);
+            }
+        }
+    else
+        printf("%s L%d: Not a movie audio channel!\n", __FILE__, __LINE__);      
+    
+    return;
+    }
+*/
+
+/* old sdl_ffmpeg
 void audioCallback(void *udata, Uint8 *stream, int len) {
 
-    /* unpack our void pointer */
+    // unpack our void pointer 
     SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
 
     int bytesUsed;
@@ -254,35 +297,76 @@ void audioCallback(void *udata, Uint8 *stream, int len) {
 
     while(len > 0) {
 
-        /* check if we need a new frame */
+        // check if we need a new frame 
         if(!frame->size) {
             frame = SDL_ffmpegGetAudioFrame(file);
             if(!frame) return;
         }
 
         if(frame->size <= len) {
-            /* this frame is smaller or equal to the amount of data needed. */
+            // this frame is smaller or equal to the amount of data needed. 
             bytesUsed = frame->size;
         } else {
-            /* this frame has more data than needed */
+            // this frame has more data than needed 
             bytesUsed = len;
         }
 
-        /* copy the correct amount of data */
+        // copy the correct amount of data 
         memcpy(stream+offset, frame->buffer, bytesUsed);
-        /* adjust the needed length accordingly */
+        // adjust the needed length accordingly 
         len -= bytesUsed;
         offset += bytesUsed;
 
-        /* we release our audio data, so the decode thread can fill it again */
-        /* we also inform this function of the amount of bytes we used, so it can */
-        /* move the buffer accordingly */
-        /* important! this call is paired with SDL_ffmpegGetAudio */
         SDL_ffmpegReleaseAudio(file, frame, bytesUsed);
     }
 
     return;
 }
+*/
+
+void audioCallback(void *udata, Uint8 *stream, int len) {
+
+    /* unpack our void pointer */
+    SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
+
+    int bytesUsed;
+
+    SDL_ffmpegAudioFrame *frame;
+	
+    while(len > 0) {
+
+        /* try to get a new frame */
+        frame = SDL_ffmpegGetAudioFrame(file);
+
+        /* we could not receive a new frame, break from loop */
+        if(!frame) break;
+
+        if(frame->size <= len) {
+            /* this frame is smaller or equal to the amount of data needed. */
+            bytesUsed = frame->size;
+            } else {
+                /* this frame has more data than needed */
+                bytesUsed = len;
+                }
+
+        /* copy the correct amount of data */
+        memcpy(stream, frame->buffer, bytesUsed);
+
+        /* adjust the needed length accordingly */
+        len -= bytesUsed;
+		
+        /* adjust stream offset */
+        stream += bytesUsed;
+
+        /* adjust size of frame to prevent reusing the same data */
+        frame->size -= bytesUsed;
+		
+        /* adjust buffer of frame for the same reason */
+        frame->buffer += bytesUsed;
+        }
+
+    return;
+    }
 
 #endif
 
@@ -365,19 +449,15 @@ if ( !m_isOpen )
 #else //replaces a aui_sdlmovie::Open(
 
     //stop game sound
-    g_soundManager->ReleaseSoundDriver();
+    g_soundManager->ReleaseSoundDriver(); //if CD is mounted music keeps playing...
 
 //code from SDL_ffmpeg example:
 
     film= SDL_ffmpegOpen(m_filename);
     if (film){
-        printf("%s L%d: Opened %s!\n", __FILE__, __LINE__, m_filename);
+        //printf("%s L%d: Opened %s!\n", __FILE__, __LINE__, m_filename);
         SDL_ffmpegSelectVideoStream(film, 0);
-        //SDL_ffmpegSelectAudioStream(film, 0);
-
-        //get the audiospec which fits the selected videostream, if no videostream
-        // is selected, default values are used (2 channel, 48Khz)
-        //SDL_AudioSpec *specs = SDL_ffmpegGetAudioSpec(film, 512, audioCallback);
+        SDL_ffmpegSelectAudioStream(film, 0);
 
         int w,h;
         // we get the size from our active video stream
@@ -386,19 +466,13 @@ if ( !m_isOpen )
         else{
             m_rect.right = m_rect.left + w;
             m_rect.bottom = m_rect.top + h;
-            printf("%s L%d: Movie size: %dx%d!\n", __FILE__, __LINE__, w, h);
+            //printf("%s L%d: Movie size: %dx%d!\n", __FILE__, __LINE__, w, h);
             }
         //m_timePerFrame = 
         //m_curFrame = 
         }
     else
         printf("%s L%d: Could not open %s!\n", __FILE__, __LINE__, m_filename);
-
-    // Audio already opened by Mix_OpenAudio in the soundmanager
-/*    if( SDL_OpenAudio(specs, 0) < 0 ) {
-      printf("%s L%d: Couldn't open audio: %s\n", __FILE__, __LINE__, SDL_GetError());
-*/
- 
 #endif
     m_isOpen = TRUE; //even if open failed, loops otherwise
     m_isPlaying = FALSE;
@@ -437,8 +511,18 @@ AUI_ERRCODE aui_Movie::Close( void )
 		}
 #else
                 if(film){
+                    //SDL_Delay(5000);
+                    printf("%s L%d: Changing music hook!\n", __FILE__, __LINE__);
+                    Mix_HookMusic(NULL,NULL); //switch on the general callback function (sound and music)
+                    //restart CD_music here as well...
+                    //SDL_Delay(5000);
+                    //Mix_CloseAudio();
+                    //printf("%s L%d: Closing Movie!\n", __FILE__, __LINE__);
+                    SDL_ffmpegStopDecoding(film);
+                    //SDL_Delay(5000);
+                    //printf("%s L%d: Freeing film!\n", __FILE__, __LINE__);
                     SDL_ffmpegFree(film);
-                    printf("%s L%d: Movie closed!\n", __FILE__, __LINE__);
+                    //printf("%s L%d: Movie closed!\n", __FILE__, __LINE__);
                     }
 #endif
 
@@ -468,28 +552,58 @@ AUI_ERRCODE aui_Movie::Play( void ){
 
 /*
 //mplayer "movie manager"
-  SDL_SysWMinfo info;
-  char cmd[1024];
-  cmd[0]=0;
+SDL_SysWMinfo info;
+char cmd[1024];
+cmd[0]=0;
 
-  SDL_VERSION(&info.version); // this is important!
-  if (SDL_GetWMInfo(&info))
-  snprintf(cmd, sizeof(cmd), "mplayer -vo xv -wid 0x%lx /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", info.info.x11.window, m_filename);
-  else
-  snprintf(cmd, sizeof(cmd), "mplayer -vo sdl /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", m_filename);
-  printf("%s L%d: Trying to execute: %s!\n", __FILE__, __LINE__, cmd);
-  printf("%s L%d: The path to the movies is hard coded! Solve it! ;)\n", __FILE__, __LINE__);
-  g_soundManager->ReleaseSoundDriver(); 
-  system(cmd);
-  g_soundManager->ReacquireSoundDriver();//no function with SDL, see soundmanager.cpp
+SDL_VERSION(&info.version); // this is important!
+if (SDL_GetWMInfo(&info))
+snprintf(cmd, sizeof(cmd), "mplayer -vo xv -wid 0x%lx /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", info.info.x11.window, m_filename);
+else
+snprintf(cmd, sizeof(cmd), "mplayer -vo sdl /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", m_filename);
+printf("%s L%d: Trying to execute: %s!\n", __FILE__, __LINE__, cmd);
+printf("%s L%d: The path to the movies is hard coded! Solve it! ;)\n", __FILE__, __LINE__);
+g_soundManager->ReleaseSoundDriver(); 
+system(cmd);
+g_soundManager->ReacquireSoundDriver();//no function with SDL, see soundmanager.cpp
 */
 
         // we start our decode thread, this always tries to buffer in some frames
         // so we can enjoy smooth playback 
         if(film){
+            Mix_HookMusic(audioCallback, film);
+//            if(Mix_OpenAudio(48000, AUDIO_S16SYS, 2, 512)==-1) 
+//                printf("%s L%d: Mix_OpenAudio: %s\n", __FILE__, __LINE__, Mix_GetError());
+
             SDL_ffmpegStartDecoding(film); //returns always 0!
-            SDL_ffmpegPause(film, 0);//unpause film
+            //SDL_ffmpegPause(film, 0);//unpause film
+            SDL_ffmpegPlay(film, 1);
+            //start audio here or in process or open???
+/*
+            SDL_ffmpegAudioFrame *aframe;
+
+            while(!aframe)
+                aframe= SDL_ffmpegGetAudioFrame(film);
+            //if(aframe){
+
+            //while(!aframe->size)
+            //    aframe=  SDL_ffmpegGetAudioFrame(file);
+            achunk.alen= aframe->size;
+            //achunk.abuf= aframe->buffer; //should we copy the data here???
+            achunk.abuf= new uint8_t[achunk.alen];
+            memcpy(achunk.abuf, aframe->buffer, achunk.alen);
+            achunk.allocated= 1; //abuf should not be freed if it belongs to aframe
+            Mix_VolumeChunk(&achunk, MIX_MAX_VOLUME);
+            m_moviechannel= Mix_PlayChannel(-1, &achunk , 0);
+            if(m_moviechannel < 0)
+                printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
+            else 
+                Mix_ChannelFinished(reload_audio);
+            SDL_ffmpegReleaseAudio(film, aframe, achunk.alen);
+*/
             }
+
+       
 #endif
         if ( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN )
             PlayOnScreenMovie();
@@ -599,9 +713,13 @@ AUI_ERRCODE aui_Movie::Stop( void ){
         Assert( err == 0 );
         if ( err ) return AUI_ERRCODE_HACK;
 #else
-        if(film)
-            SDL_ffmpegPause(film, 1);//pause film
-        //g_soundManager->ReacquireSoundDriver(); //no function with SDL, see soundmanager.cpp
+        printf("%s L%d: Stopping movie!\n", __FILE__, __LINE__);
+        if(film){
+            //SDL_ffmpegPause(film, 1);//pause film
+            SDL_ffmpegPlay(film, 0);
+            //SDL_ffmpegStopDecoding(film);
+            }
+        g_soundManager->ReacquireSoundDriver(); //no function with SDL, see soundmanager.cpp
 #endif
         }
     m_isPlaying = FALSE;
@@ -617,7 +735,8 @@ AUI_ERRCODE aui_Movie::Pause( void )
 	{
 #ifdef USE_SDL
         if(film)
-            SDL_ffmpegPause(film, 1);//pause film
+            //SDL_ffmpegPause(film, 1);//pause film
+            SDL_ffmpegPlay(film, 0);
 #endif
 		m_isPaused = TRUE;
 	}
@@ -633,7 +752,8 @@ AUI_ERRCODE aui_Movie::Resume( void )
 	{
 #ifdef USE_SDL
         if(film)
-            SDL_ffmpegPause(film, 0);//pause film
+            //SDL_ffmpegPause(film, 0);//pause film
+            SDL_ffmpegPlay(film, 1);
 #endif
 		m_isPaused = FALSE;
 	}
@@ -724,16 +844,6 @@ AUI_ERRCODE aui_Movie::Process( void ){
             }
         }
 #else
-/*
-  create aui_sdlmovie.cpp containing:
-  aui_sdlmovie::Open(uint32 flags,aui_Surface *surface,RECT *rect ){
-  SDL_ffmpegFile* sff= SDL_ffmpegOpen(filname);
-  }
-
-  implement actual displaying of frames here:
-  SDL_ffmpegVideoFrame* svf= SDL_ffmpegGetVideoFrame(sff);
-  blit svf onto surface... (get clues from above;)
-*/
 
 //from SDL_ffmpeg example:
     if ( m_isPlaying && !m_isPaused )
@@ -769,13 +879,12 @@ printf("\tFrame: %ix%i\n",  str->width, str->height);
 printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]));
 }
 */
-            /* we unpause the audio so our audiobuffer gets read */
-            //SDL_PauseAudio(0);
-            //SDL_ffmpegPause(film, 0);//unpause film
 
             SDL_ffmpegVideoFrame* frame= 0;
+
             SDL_Rect sdl_rect = { m_rect.left, m_rect.top, m_rect.right-m_rect.left, m_rect.bottom-m_rect.top };
             aui_SDLSurface* sdl_surf = static_cast<aui_SDLSurface*>(surface);
+
 
             int64_t duration= SDL_ffmpegGetDuration(film);
            
@@ -799,10 +908,11 @@ printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]))
                     SDL_Flip(sdl_surf->DDS());
                     }
                 m_isFinished= SDL_ffmpegGetPosition(film) >= duration;
+                //m_isFinished= film->playing;
                 }
             
             if(m_isFinished){
-                printf("%s L%d: Done displaying movie!\n", __FILE__, __LINE__);
+                //printf("%s L%d: Done displaying movie!\n", __FILE__, __LINE__);
                 m_isPlaying= FALSE;
                 }
             }

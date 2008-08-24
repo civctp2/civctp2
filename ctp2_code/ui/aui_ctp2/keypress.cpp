@@ -219,6 +219,7 @@ void keypress_QuitCallback( sint32 val )
 
 void keypress_RegisterHandler(KeyboardHandler *handler)
 {
+printf("%s L%d: keypress_RegisterHandler() handled!\n", __FILE__, __LINE__);
 	g_keyboardHandlers.AddTail(handler);
 }
 
@@ -344,21 +345,27 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 #ifndef USE_SDL	
 	if (wParam == VK_ESCAPE) {
 #else
+        printf("%s L%d: Got key: %c\n", __FILE__, __LINE__, wParam);
 	if (wParam == SDLK_ESCAPE + 256) {
+            printf("%s L%d: Got esc key: %c\n", __FILE__, __LINE__, wParam);
 #endif
 		extern OptionsWindow *g_optionsWindow;
 		
 		if(g_c3ui->TopWindow() && g_c3ui->TopWindow() == DipWizard::GetWindow()) {
 			
 			
-		} else if(g_keyboardHandlers.GetTail()) {
+		} 
+                else if(g_keyboardHandlers.GetTail()) {
+                    printf("%s L%d: Got keyboardHandler tail!\n", __FILE__, __LINE__);
 			g_keyboardHandlers.GetTail()->kh_Close();
-		} else if (g_civApp->IsGameLoaded()) {
+		} 
+                else if (g_civApp->IsGameLoaded()) {
 			if(g_currentMessageWindow && 
 			   g_currentMessageWindow->GetMessage() &&
 			   (g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage()))) {
 				g_currentMessageWindow->GetMessage()->Minimize();
-			} else if(g_modalMessage) {
+			} 
+                        else if(g_modalMessage) {
 				
 				Message *msg = g_modalMessage->GetMessage();
 				if(msg && g_theMessagePool->IsValid(*msg)) {
@@ -387,14 +394,19 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 	
 	aui_Window *topWindow = g_c3ui->TopWindow();
 	if(topWindow && (!g_controlPanel || topWindow != g_controlPanel->GetWindow()) && topWindow != g_statusWindow) {
-		if(topWindow->HandleKey(wParam))
+            printf("%s L%d: topWindow should handle key!\n", __FILE__, __LINE__);
+            if(topWindow->HandleKey(wParam)){ //no letter handling in these -> key bug???
 			return 0;
+                }
 	}
 
+        printf("%s L%d: Key not handled yet!\n", __FILE__, __LINE__);
 	
 	
-	if (!theKeyMap) return 0;
-
+	if (!theKeyMap){
+            printf("%s L%d: No keymap!\n", __FILE__, __LINE__);
+            return 0;
+            }
 	
 	if(g_slicEngine && g_slicEngine->RunKeyboardTrigger(wParam)) {
 		return 0;
@@ -421,7 +433,7 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 	MapPoint point;
 	g_tiledMap->GetMouseTilePos(point);
 
-	if(topWindow->IsStronglyModal() && keypress_IsGameFunction(kf)) {
+	if(topWindow->IsStronglyModal()){// && keypress_IsGameFunction(kf)) {
 		
 		return 0;
 	}
@@ -1428,8 +1440,11 @@ sint32 ui_HandleKeypress(WPARAM wParam)
 		}
 		break;
 	default :
+            printf("%s L%d: NO Key functions evaluated for this key!\n", __FILE__, __LINE__);
         Assert(FALSE); 
     }
+
+    printf("%s L%d: Key functions evaluated for this key!\n", __FILE__, __LINE__);
     
     if (move && isMyTurn) {
 		
