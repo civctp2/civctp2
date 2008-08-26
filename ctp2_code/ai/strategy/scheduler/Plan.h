@@ -30,6 +30,8 @@
 // - Standardised <list> import.
 // - Cleaned up the code somewhat (removed sint16 conversions, removed Init)
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Simplified the class design: m_matches replaced, since it just contained
+//   pne agent pointer. (27-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
  
@@ -48,28 +50,10 @@ class Plan;
 
 class Plan
 {
-public:
-
-	struct Agent_Match
-	{
-		Utility value;
-		Agent_ptr squad_index;
-		bool committed;
-		
-		bool operator<(const Agent_Match &match) const
-		{
-			return value < match.value;
-		}
-
-		bool operator>(const Agent_Match &match) const
-		{
-			return value > match.value;
-		}
-	};
-
-	typedef std::list<Agent_Match> Agent_Match_List;
-
+private:
 	Plan();
+public:
+	Plan(Squad_ptr squad, Goal_ptr goal, bool needsCargo);
 	Plan(const Plan &plan);
 
 	virtual ~Plan();
@@ -122,8 +106,6 @@ public:
 	///
 	bool CanMatchesBeReevaluated() const;
 
-	bool Remove_Agent_Reference(const Agent_ptr agent_ptr);
-
 	bool Agent_Committed(const Agent_ptr agent_ptr) const;
 	sint32 Get_Free_Transport_Capacity() const;
 
@@ -141,7 +123,8 @@ protected:
 	Utility          m_matching_value;
 	Squad_ptr        m_the_squad;
 	Goal_ptr         m_the_goal;
-	Agent_Match_List m_matches;
+	Agent_ptr        m_agent;          // The pointer from m_the_squad should be used
+	bool             m_is_committed;   // Should be from Agent and its goal retrieved
 	bool             m_needs_cargo;
 };
 

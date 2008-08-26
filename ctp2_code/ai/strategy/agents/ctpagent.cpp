@@ -503,6 +503,7 @@ const MapPoint & CTPAgent::Get_Target_Pos() const
 	return m_targetPos;
 }
 
+#if 0
 void CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 {
 	Assert(Get_Can_Be_Executed());
@@ -537,6 +538,7 @@ void CTPAgent::Follow_Path(const Path & found_path, const sint32 & order_type)
 	Set_Target_Order(order_type);
 	Set_Can_Be_Executed(false);
 }
+#endif
 
 bool CTPAgent::Can_Execute_Order(const sint32 & order_type) const
 {
@@ -845,4 +847,11 @@ void CTPAgent::ClearOrders()
 		delete[] goalString;
 		delete[] myString;
 	}
+}
+
+bool CTPAgent::HasMovePoints() const
+{
+	double movePoints;
+	Get_Army()->CurMinMovementPoints(movePoints);
+	return movePoints >= 1.0;
 }

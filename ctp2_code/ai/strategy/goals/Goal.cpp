@@ -684,11 +684,7 @@ bool Goal::Add_Match(const Squad_ptr & squad, const bool update_match_value, con
 		Assert(plan_test_iter->Get_Squad() != squad);
 	}
 
-	Plan the_match;
-
-	the_match.Set_Squad(squad);
-	the_match.Set_Goal(this);
-	the_match.Set_Needs_Cargo(needsCargo);
+	Plan the_match(squad, this, needsCargo);
 
 	Assert(!Get_Invalid())
 	Assert(squad->Get_Num_Agents() > 0)

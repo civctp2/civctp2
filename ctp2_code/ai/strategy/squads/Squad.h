@@ -56,8 +56,9 @@ public:
 #else
 	typedef std::list<Goal_ptr> Goal_Ref_List;
 #endif
-
+private:
 	Squad();
+public:
 	explicit Squad(const Army & army);
 	Squad(const Squad &squad);
 	virtual ~Squad ();

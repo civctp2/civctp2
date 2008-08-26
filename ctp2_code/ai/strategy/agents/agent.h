@@ -44,8 +44,9 @@ class Agent;
 
 class Agent
 {
-public:
+protected:
 	Agent();
+public:
 	Agent(const Agent & an_Original);
 	virtual ~Agent();
 

@@ -50,11 +50,11 @@ typedef CTPAgent *  CTPAgent_ptr;
 #include "scheduler_types.h"    // SQUAD_CLASS, Squad_Strength, etc.
 #include "GameEventTypes.h"
 
-class CTPAgent : public Agent {
-
-public:
-
+class CTPAgent : public Agent
+{
+protected:
 	CTPAgent();
+public:
 	explicit CTPAgent(const Army & army);
 	CTPAgent(CTPAgent const & an_Original);
 
@@ -111,9 +111,9 @@ public:
 	sint32 Get_Target_Order() const;
 	const MapPoint & Get_Target_Pos() const;
 
-
+#if 0
 	void Follow_Path(const Path & found_path, const sint32 & order_type);
-
+#endif
 
 	bool Can_Execute_Order(const sint32 & order_type) const;
 
@@ -138,6 +138,7 @@ public:
 	void PerformOrder(const OrderRecord * order_rec);
 	void WaitHere(const MapPoint & goal_pos);
 	void ClearOrders();
+	bool HasMovePoints() const;
 
 protected:
 
