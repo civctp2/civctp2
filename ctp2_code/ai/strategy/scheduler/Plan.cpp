@@ -123,8 +123,6 @@ Plan::Plan()
     m_matching_value    (Goal::BAD_UTILITY),
     m_the_squad         (NULL),
     m_the_goal          (NULL),
-    m_agent             (NULL),
-    m_is_committed      (false),
     m_needs_cargo       (false)
 {
 }
@@ -147,13 +145,10 @@ Plan::Plan()
 Plan::Plan(Squad_ptr squad, Goal_ptr goal, bool needsCargo)
 :
     m_matching_value    (Goal::BAD_UTILITY),
-//  m_the_squad         (NULL),
+    m_the_squad         (squad),
     m_the_goal          (goal),
-//  m_agent             (NULL),
-    m_is_committed      (false),
     m_needs_cargo       (needsCargo)
 {
-	Set_Squad(squad);
 }
 
 //----------------------------------------------------------------------------
@@ -176,8 +171,6 @@ Plan::Plan(Plan const & a_Original)
     m_matching_value    (a_Original.m_matching_value),
     m_the_squad         (a_Original.m_the_squad),
     m_the_goal          (a_Original.m_the_goal),
-    m_agent             (a_Original.m_agent),
-    m_is_committed      (a_Original.m_is_committed),
     m_needs_cargo       (a_Original.m_needs_cargo)
 {
 }
@@ -201,12 +194,9 @@ Plan & Plan::operator = (Plan const & a_Original)
 {
 	if(this != &a_Original)
 	{
-		m_the_goal          = NULL;         // temporary, until set in Set_Goal
-		Set_Squad(a_Original.m_the_squad);  // sets m_the_squad, uses m_the_goal
-		Set_Goal(a_Original.m_the_goal);    // sets m_the_goal, uses m_the_squad
+		m_the_goal          = a_Original.m_the_goal;
+		m_the_squad         = a_Original.m_the_squad;
 		m_matching_value    = a_Original.m_matching_value;
-		m_agent             = a_Original.m_agent;
-		m_is_committed      = a_Original.m_is_committed;
 		m_needs_cargo       = a_Original.m_needs_cargo;
 	}
 
@@ -314,16 +304,13 @@ bool Plan::Plan_Is_Needed_And_Valid() const
 
 sint32 Plan::Get_Free_Transport_Capacity() const
 {
-	sint32 transports;
-	sint32 max;
-	sint32 empty;
-	sint32 freeTransportCapacity = 0;
+	sint32 transports = 0;
+	sint32 max        = 0;
+	sint32 empty      = 0;
 
-	CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(m_agent);
-	agent_ptr->Get_Army()->GetCargo(transports, max, empty);
-	freeTransportCapacity += empty;
+	m_the_squad->Get_Agent()->Get_Army()->GetCargo(transports, max, empty);
 
-	return freeTransportCapacity;
+	return empty;
 }
 
 Utility Plan::Compute_Matching_Value()
@@ -331,11 +318,8 @@ Utility Plan::Compute_Matching_Value()
 	Assert(m_the_goal && m_the_squad);
 	if(m_the_goal && m_the_squad)
 	{
-		const Agent_ptr agent_ptr = m_agent;
-
-		m_matching_value   = static_cast<CTPGoal_ptr>(m_the_goal)->Compute_Matching_Value(agent_ptr);
+		m_matching_value   = static_cast<CTPGoal_ptr>(m_the_goal)->Compute_Matching_Value(m_the_squad->Get_Agent());
 	}
-
 	else
 	{
 		m_matching_value = Goal::BAD_UTILITY;
@@ -349,36 +333,9 @@ Utility Plan::Get_Matching_Value() const
 	return m_matching_value;
 }
 
-void Plan::Set_Goal(Goal_ptr goal)
-{
-	m_the_goal = goal;
-
-	Assert(m_the_goal && m_the_squad);
-	if(m_the_goal && m_the_squad)
-	{
-		{
-			m_is_committed   = false;
-		}
-	}
-}
-
-
 Goal_ptr Plan::Get_Goal() const
 {
 	return m_the_goal;
-}
-
-void Plan::Set_Squad(Squad_ptr squad)
-{
-	m_the_squad = squad;
-
-	if(m_the_squad)
-	{
-		m_matching_value           = Goal::BAD_UTILITY;
-		m_agent                    = m_the_squad->Get_Agent();
-
-		m_is_committed             = false;
-	}
 }
 
 Squad_ptr Plan::Get_Squad() const
@@ -386,71 +343,64 @@ Squad_ptr Plan::Get_Squad() const
 	return m_the_squad;
 }
 
-void Plan::Commit_Agents()
+void Plan::Commit_Agent()
 {
 	Assert(m_the_goal);
 	Assert(m_the_squad);
 
-	if(!m_the_goal || !m_the_squad)
+	if(m_the_goal && m_the_squad)
 	{
-		return;
-	}
-
-	if(Get_Matching_Value() <= Goal::BAD_UTILITY) // Replace m_matching_value
-	{
-		return;
-	}
-
-	if(m_the_goal->Is_Satisfied() || m_the_goal->Get_Totally_Complete())
-	{
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tNO AGENTS COMMITTED:           (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
-
-		return;
-	}
-	else
-	{
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tAGENTS CAN BE COMMITTED:       (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
-	}
-
-	if(!m_the_goal->Is_Satisfied())
-	{
-		Agent_ptr agent_ptr = m_agent;
-
-		if
-		  (
-		       m_matching_value > Goal::BAD_UTILITY
-		   && !agent_ptr->Has_Goal()
-		   &&  agent_ptr->Get_Can_Be_Executed()
-		   && !Needs_Cargo()
-		  )
+		if(!Needs_Cargo())
 		{
-
-#ifdef _DEBUG_SCHEDULER
-			CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
-			if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
-			{
-				Assert(false);
-			}
-#endif // _DEBUG_SCHEDULER
-
-			
-			bool const committed = 
-			    m_the_goal->Commit_Agent(agent_ptr);
-
-			if(committed)
-			{
-				agent_ptr->Set_Goal(m_the_goal); // Move inside goals
-				m_is_committed = true;
-			}
-
-#ifdef _DEBUG_SCHEDULER
-			
-			m_the_goal->Validate();
-#endif // _DEBUG_SCHEDULER
-
+			Commit_Agent_Common();
 		}
+	}
+}
+
+void Plan::Commit_Transport_Agent()
+{
+	Assert(m_the_goal);
+	Assert(m_the_squad);
+
+	if(m_the_goal && m_the_squad)
+	{
+		if(m_the_squad->Get_Agent()->Get_Army()->CanTransport())
+		{
+			Commit_Agent_Common();
+		}
+	}
+}
+
+void Plan::Commit_Agent_Common()
+{
+	Agent_ptr agent_ptr = m_the_squad->Get_Agent();
+
+	if
+	  (
+	       m_matching_value > Goal::BAD_UTILITY
+	   && !agent_ptr->Has_Goal()
+	   &&  agent_ptr->Get_Can_Be_Executed()
+	  )
+	{
+
+#ifdef _DEBUG_SCHEDULER
+		CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
+		if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
+		{
+			Assert(false);
+		}
+#endif // _DEBUG_SCHEDULER
+
+		if(m_the_goal->Commit_Agent(agent_ptr))
+		{
+			agent_ptr->Set_Goal(m_the_goal); // Move inside goals
+		}
+
+#ifdef _DEBUG_SCHEDULER
+		
+		m_the_goal->Validate();
+#endif // _DEBUG_SCHEDULER
+
 	}
 
 #ifdef _DEBUG_SCHEDULER
@@ -483,12 +433,12 @@ void Plan::Commit_Agents()
 		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
 	}
 
-	if(debug_plan && m_is_committed)
+	if(debug_plan && Agent_Committed())
 	{
 		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
 
 		sint32 mask;
-		if (goal_ptr->Is_Satisfied() || goal_ptr->Is_Execute_Incrementally())
+		if(goal_ptr->Is_Satisfied() || goal_ptr->Is_Execute_Incrementally())
 			mask = k_DBG_SCHEDULER;
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
@@ -497,119 +447,6 @@ void Plan::Commit_Agents()
 
 		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 		DPRINTF(mask, ("\t\t\t\n"));
-	}
-#endif // _DEBUG
-}
-
-void Plan::Commit_Transport_Agents()
-{
-	Assert(m_the_goal);
-	Assert(m_the_squad);
-
-	if(!m_the_goal || !m_the_squad)
-	{
-		return;
-	}
-
-	if(!m_the_goal->Needs_Transporter() || m_the_goal->Get_Totally_Complete())
-	{
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
-
-		return;
-	}
-	else
-	{
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
-			("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x squad: %x, id: 0%x)\n",m_the_goal, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
-	}
-
-	if(m_the_goal->Needs_Transporter())
-	{
-		const CTPAgent_ptr agent_ptr = static_cast<const CTPAgent_ptr>(m_agent);
-
-		if
-		(
-		       m_matching_value > Goal::BAD_UTILITY
-		   && !agent_ptr->Has_Goal()
-		   &&  agent_ptr->Get_Can_Be_Executed()
-		   &&  agent_ptr->Get_Army()->CanTransport()
-		)
-		{
-
-#ifdef _DEBUG_SCHEDULER
-			CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
-			if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
-			{
-				Assert(false);
-			}
-#endif // _DEBUG_SCHEDULER
-
-			
-			bool const committed = 
-			    m_the_goal->Commit_Agent(agent_ptr);
-
-			if(committed)
-			{
-				agent_ptr->Set_Goal(m_the_goal);
-				m_is_committed = true;
-			}
-
-#ifdef _DEBUG_SCHEDULER
-			
-			m_the_goal->Validate();
-#endif // _DEBUG_SCHEDULER
-
-		}
-	}
-
-#ifdef _DEBUG_SCHEDULER
-	
-	if (!m_the_goal->Validate())
-	{
-		Assert(false);
-	}
-#endif // _DEBUG_SCHEDULER
-
-#ifdef _DEBUG
-	bool debug_plan;
-	if (CtpAiDebug::IsDebugGoalTypeSet())
-	{
-		debug_plan = CtpAiDebug::DebugLogCheck(-1, m_the_goal->Get_Goal_Type(), -1);
-	}
-	else if(CtpAiDebug::IsDebugArmyIdSet())
-	{
-		debug_plan = false;
-
-		CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent());
-
-		if(CtpAiDebug::DebugLogCheck(-1, -1, agent_ptr->Get_Army().m_id))
-		{
-			debug_plan = true;
-		}
-	}
-	else
-	{
-		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
-	}
-
-	if(debug_plan && m_is_committed)
-	{
-		CTPGoal_ptr goal_ptr = (CTPGoal_ptr) m_the_goal;
-
-		sint32 mask;
-		if (goal_ptr->Is_Satisfied() || goal_ptr->Is_Execute_Incrementally())
-			mask = k_DBG_SCHEDULER;
-		else
-			mask = k_DBG_SCHEDULER_DETAIL;
-		
-		
-		DPRINTF(mask, ("\t\tEXECUTING GOAL:                (goal: %x squad: %x, id: 0%x)\n", goal_ptr, m_the_squad, static_cast<CTPAgent_ptr>(m_the_squad->Get_Agent())->Get_Army().m_id));
-		DPRINTF(mask, ("\t\t\t\n"));
-		goal_ptr->Log_Debug_Info(mask);
-		
-		DPRINTF(mask, ("\t\tSquad:\n"));
-		m_the_squad->Log_Debug_Info(mask, m_the_goal);
 	}
 #endif // _DEBUG
 }
@@ -622,11 +459,9 @@ GOAL_RESULT Plan::Execute_Task()
 
 bool Plan::Commited_Agents_Need_Orders() const
 {
-	if(m_is_committed)
+	if(Agent_Committed())
 	{
-		CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(m_agent);
-
-		if (agent_ptr->Get_Army()->NumOrders() <= 0)
+		if(m_the_squad->Get_Agent()->Get_Army()->NumOrders() <= 0)
 			return true;
 	}
 
@@ -654,13 +489,10 @@ void Plan::Rollback_All_Agents()
 	{
 		CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
 
-		if(m_is_committed)
+		if(Agent_Committed())
 		{
-			CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(m_agent);
-			ctpgoal_ptr->Rollback_Agent(m_agent);
-			m_is_committed   = false;
-	//		m_matching_value       = Goal::BAD_UTILITY;
-			agent_ptr->Set_Goal(NULL);
+			ctpgoal_ptr->Rollback_Agent(m_the_squad->Get_Agent());
+			m_the_squad->Get_Agent()->Set_Goal(NULL);
 		}
 	}
 }
@@ -672,9 +504,9 @@ void Plan::Rollback_Emptied_Transporters()
 	{
 		CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
 
-		if(m_is_committed)
+		if(Agent_Committed())
 		{
-			CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(m_agent);
+			CTPAgent_ptr agent_ptr = m_the_squad->Get_Agent();
 
 			const MapPoint pos     = agent_ptr->Get_Target_Pos();
 			const MapPoint goalPos = ctpgoal_ptr->Get_Target_Pos();
@@ -686,8 +518,7 @@ void Plan::Rollback_Emptied_Transporters()
 					AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), m_the_goal->Get_Goal_Type(), -1, 
 						("\t\tTransporter not needed anymore, removing from goal\n"));
 
-					ctpgoal_ptr->Rollback_Agent(m_agent);
-					m_is_committed   = false;
+					ctpgoal_ptr->Rollback_Agent(m_the_squad->Get_Agent());
 					m_matching_value       = Goal::BAD_UTILITY;
 					agent_ptr->Set_Goal(NULL);
 				}
@@ -698,56 +529,30 @@ void Plan::Rollback_Emptied_Transporters()
 
 bool Plan::Has_Cargo() const
 {
-	const CTPAgent_ptr agent_ptr = static_cast<const CTPAgent_ptr>(m_agent );
-	if(agent_ptr->Get_Army()->HasCargo())
-		return true;
-
-	return false;
-}
-
-bool Plan::Has_Space_For_Cargo() const
-{
-	const CTPAgent_ptr agent_ptr = static_cast<const CTPAgent_ptr>(m_agent);
-	sint32 transports = 0;
-	sint32 max        = 0;
-	sint32 empty      = 0;
-	agent_ptr->Get_Army()->GetCargo(transports, max, empty);
-
-	if(max > 0)
-		return true;
-
-	return false;
+	return m_the_squad->Get_Agent()->Get_Army()->HasCargo();
 }
 
 bool Plan::Agent_Committed(const Agent_ptr agent_ptr) const
 {
-	if(m_is_committed)
-	{
-		return true;
-	}
+	return agent_ptr == m_the_squad->Get_Agent() && Agent_Committed();
+}
 
-	return false;
+bool Plan::Agent_Committed() const
+{
+	Assert(m_the_goal != NULL);
+	return m_the_goal != NULL && m_the_squad->Get_Agent()->Get_Goal() == m_the_goal;
 }
 
 void Plan::Log_Debug_Info(const int & log) const
 {
-	CTPAgent_ptr ctpagent_ptr = static_cast<CTPAgent_ptr>(m_agent);
-	ctpagent_ptr->Log_Debug_Info(log, m_the_goal);
+	m_the_squad->Get_Agent()->Log_Debug_Info(log, m_the_goal);
 }
 
 bool Plan::All_Unused_Or_Used_By_This() const
 {
-	CTPAgent_ptr ctpagent_ptr = static_cast<CTPAgent_ptr>(m_agent);
+	Goal_ptr goal = m_the_squad->Get_Agent()->Get_Goal();
 
-	Goal_ptr goal = ctpagent_ptr->Get_Goal();
-
-	if(goal != NULL
-	&& goal != m_the_goal
-	){
-		return false;
-	}
-
-	return true;
+	return goal == NULL || goal == m_the_goal;
 }
 
 bool Plan::Needs_Cargo() const
@@ -761,11 +566,7 @@ bool Plan::Can_Add_To_Goal() const
 
 	if(m_the_goal && m_the_squad)
 	{
-		Agent_ptr agent_ptr = m_agent;
-
-		Assert(agent_ptr);
-
-		if(!m_the_goal->Can_Add_To_Goal(agent_ptr))
+		if(!m_the_goal->Can_Add_To_Goal(m_the_squad->Get_Agent()))
 		{
 			return false;
 		}

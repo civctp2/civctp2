@@ -74,7 +74,7 @@ Goal::Goal()
     m_current_projected_strength    (),
     m_matches                       (),
     m_agents                        (),
-    m_playerId                      (-1),
+    m_playerId                      (PLAYER_UNASSIGNED),
     m_combinedUtility               (0),
     m_needs_sorting                 (false)
 {
@@ -396,7 +396,7 @@ bool Goal::Validate() const
 		          ++match_iter
 		)
 		{
-			if (match_iter->Agent_Committed(*agent_iter))
+			if(match_iter->Agent_Committed(*agent_iter))
 			{
 #ifdef _DEBUG_SCHEDULER
 
@@ -794,7 +794,23 @@ void Goal::Commit_Agents()
 	                      ++match_iter
 	)
 	{
-		match_iter->Commit_Agents();
+		if(match_iter->Get_Matching_Value() <= Goal::BAD_UTILITY)
+		{
+			break;
+		}
+		else if(Is_Satisfied() || Get_Totally_Complete())
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+				("\t\tNO AGENTS COMMITTED:           (goal: %x squad: %x, id: 0%x)\n", this, match_iter->Get_Squad(), match_iter->Get_Squad()->Get_Agent()->Get_Army().m_id));
+			break;
+		}
+		else
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+				("\t\tAGENTS CAN BE COMMITTED:       (goal: %x squad: %x, id: 0%x)\n", this, match_iter->Get_Squad(), match_iter->Get_Squad()->Get_Agent()->Get_Army().m_id));
+
+			match_iter->Commit_Agent();
+		}
 	}
 
 	if(Get_Agent_Count() > 0)
@@ -816,9 +832,22 @@ void Goal::Commit_Transport_Agents()
 	                      ++match_iter
 	)
 	{
-		if(match_iter->Needs_Cargo())
+		if(match_iter->Get_Matching_Value() <= Goal::BAD_UTILITY)
 		{
-			match_iter->Commit_Transport_Agents();
+			break;
+		}
+		else if(!Needs_Transporter() || Get_Totally_Complete())
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x squad: %x, id: 0%x)\n", this, match_iter->Get_Squad(), match_iter->Get_Squad()->Get_Agent()->Get_Army().m_id));
+			break;
+		}
+		else if(match_iter->Needs_Cargo())
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, Get_Player_Index(), Get_Goal_Type(), -1,
+				("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x squad: %x, id: 0%x)\n", this, match_iter->Get_Squad(), match_iter->Get_Squad()->Get_Agent()->Get_Army().m_id));
+
+			match_iter->Commit_Transport_Agent();
 		}
 	}
 }

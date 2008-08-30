@@ -126,6 +126,7 @@ extern ArmyPool                 *g_theArmyPool;
 
 CTPGoal::CTPGoal()
 :
+    Goal            (),
     m_target_pos    (),
     m_target_city   (),
     m_target_army   (),

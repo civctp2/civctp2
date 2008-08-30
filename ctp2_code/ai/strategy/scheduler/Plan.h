@@ -74,20 +74,15 @@ public:
 	Utility Compute_Matching_Value();
 	Utility Get_Matching_Value() const;
 
-	void Set_Goal(Goal_ptr goal);
-
-
 	Goal_ptr Get_Goal() const;
-
-
-	void Set_Squad(Squad_ptr squad);
 
 
 	Squad_ptr Get_Squad() const;
 
 
-	void Commit_Agents();
-	void Commit_Transport_Agents();
+	void Commit_Agent();
+	void Commit_Agent_Common();
+	void Commit_Transport_Agent();
 
 
 	GOAL_RESULT Execute_Task();
@@ -107,10 +102,10 @@ public:
 	bool CanMatchesBeReevaluated() const;
 
 	bool Agent_Committed(const Agent_ptr agent_ptr) const;
+	bool Agent_Committed() const;
 	sint32 Get_Free_Transport_Capacity() const;
 
 	bool Has_Cargo() const;
-	bool Has_Space_For_Cargo() const;
 
 	void Log_Debug_Info(const int & log) const;
 	bool Needs_Cargo() const;
@@ -123,8 +118,6 @@ protected:
 	Utility          m_matching_value;
 	Squad_ptr        m_the_squad;
 	Goal_ptr         m_the_goal;
-	Agent_ptr        m_agent;          // The pointer from m_the_squad should be used
-	bool             m_is_committed;   // Should be from Agent and its goal retrieved
 	bool             m_needs_cargo;
 };
 

@@ -820,7 +820,7 @@ void CTPAgent::WaitHere(const MapPoint & goal_pos)
 
 void CTPAgent::ClearOrders()
 {
-	if(this->Has_Goal())
+	if(Has_Goal())
 	{
 		Get_Army()->ClearOrders();
 
@@ -839,9 +839,17 @@ void CTPAgent::ClearOrders()
 
 		MapPoint pos;
 		Get_Army()->GetPos(pos);
-		MapPoint dest_pos = static_cast<CTPGoal_ptr>(m_goal)->Get_Target_Pos();
+		if(!static_cast<CTPGoal_ptr>(m_goal)->Get_Invalid())
+		{
+			MapPoint dest_pos = static_cast<CTPGoal_ptr>(m_goal)->Get_Target_Pos();
 
-		sprintf(myString, "Clearing oders at (%d,%d) for %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
+			sprintf(myString, "Clearing oders at (%d,%d) for %s (%d,%d)", pos.x, pos.y, goalString, dest_pos.x, dest_pos.y);
+		}
+		else
+		{
+			sprintf(myString, "Clearing oders at (%d,%d) for %s (%d,%d)", pos.x, pos.y, goalString, m_targetPos.x, m_targetPos.y);
+		}
+
 		g_graphicsOptions->AddTextToArmy(Get_Army(), myString, 220, m_goal->Get_Goal_Type());
 
 		delete[] goalString;
