@@ -47,8 +47,7 @@
 #endif
 
 Squad::Squad()
-:   m_agent          (NULL),
-    m_squad_class    (SQUAD_CLASS_DEFAULT)
+:   m_agent          (NULL)
 {
 #if defined(USE_GOAL_REF)
 	m_goal_references.resize(0);
@@ -59,8 +58,7 @@ Squad::Squad()
 
 Squad::Squad(const Army & army)
 :
-    m_agent          (new CTPAgent(army)),
-    m_squad_class    (SQUAD_CLASS_DEFAULT)
+    m_agent          (new CTPAgent(army))
 {
 #if defined(USE_GOAL_REF)
 	m_goal_references.resize(0);
@@ -71,6 +69,14 @@ Squad::Squad(const Army & army)
 
 Squad::Squad(const Squad &squad)
 {
+//	m_agent = squad.m_agent;
+
+#if defined(USE_GOAL_REF)
+//	m_goal_references.copy();
+#else
+//	m_match_references.;
+#endif
+
 	*this = squad;
 }
 
@@ -82,7 +88,6 @@ Squad::~Squad()
 
 Squad & Squad::operator= (const Squad &squad)
 {
-	m_squad_class      = squad.m_squad_class;
 	m_agent            = squad.m_agent;
 #if defined(USE_GOAL_REF)
 	m_goal_references  = squad.m_goal_references;
@@ -151,14 +156,12 @@ void Squad::Remove_Matches()
 
 SQUAD_CLASS Squad::Compute_Squad_Class()
 {
-	m_squad_class = m_agent->Compute_Squad_Class();
-
-	return m_squad_class;
+	return m_agent->Compute_Squad_Class();
 }
 
 SQUAD_CLASS Squad::Get_Squad_Class() const
 {
-	return m_squad_class;
+	return m_agent->Get_Squad_Class();
 }
 
 void Squad::Compute_Strength(Squad_Strength & strength)

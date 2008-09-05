@@ -547,7 +547,7 @@ Utility Goal::Compute_Matching_Value(const bool update)
 
 		match_iter->Compute_Matching_Value();
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-					("\t\t[%d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
+					("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
 		++count;
 	}
 
@@ -597,13 +597,13 @@ Utility Goal::Recompute_Matching_Value(const bool update, const bool show_streng
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-							("\t\t[%d] match = %d %s\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+							("\t\t[%3d] match = %d %s\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 				++count;
 			}
 			else
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-							("\t\t[%d]First match with bad utility for goal %s, stop matching\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+							("\t\t[%3d]First match with bad utility for goal %s, stop matching\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 				if(count == 0)
 				{
 					Log_Debug_Info(k_DBG_SCHEDULER_ALL);
@@ -615,7 +615,7 @@ Utility Goal::Recompute_Matching_Value(const bool update, const bool show_streng
 		else
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1,
-						("\t\t[%d] Enough ressources found for goal %s\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+						("\t\t[%3d] Enough ressources found for goal %s\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 			break;
 		}
 	}

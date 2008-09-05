@@ -3228,36 +3228,40 @@ double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &bas
 	sint32 maxSurplusFood = rec->GetMaxSurplusFood();
 
 	double minPop;
-	if(m_sizeIndex < 1){
+	if(m_sizeIndex < 1)
+	{
 		minPop = 0;
 	}
-	else{
+	else
+	{
 		minPop = static_cast<double>(g_theCitySizeDB->Get(m_sizeIndex - 1)->GetPopulation()) + 1.0;
 	}
 
 	double overcrowding = GetOvercrowding(rec);
 	sint32 maxPop = GetMaxPop(rec);
 	
-	if(PopCount() < overcrowding){
+	if(PopCount() < overcrowding)
+	{
 		baseRate = maxGrowthRate;
 		overcrowdingCoeff = 1;
-	} 
-	else{
+	}
+	else
+	{
 		double popRatio = static_cast<double>(PopCount() - overcrowding) / static_cast<double>(maxPop - overcrowding);
 		overcrowdingCoeff = 1 - (popRatio * popRatio);
 		baseRate = overcrowdingCoeff * maxGrowthRate;
 	}
 
-	if(m_food_delta + bonusFood < 0){
-
+	if(m_food_delta + bonusFood < 0)
+	{
 		double maxPop = static_cast<double>(rec->GetPopulation());
 		double popScale = (static_cast<double>(PopCount()) - minPop) / (maxPop - minPop);
 		double growthRate = maxGrowthRate - popScale * (maxGrowthRate - minGrowthRate);
 
 		return(((m_food_delta + bonusFood) / static_cast<double>(maxSurplusFood)) * growthRate);
-
 	}
-	else{
+	else
+	{
 		return((m_food_delta + bonusFood) / static_cast<double>(PopCount()));
 	}
 }

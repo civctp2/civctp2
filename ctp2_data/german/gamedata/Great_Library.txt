@@ -4646,8 +4646,8 @@ Unterhalt:
 
 [IMPROVE_AQUA_FILTER_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel} 
-Erhöhung der maximalen Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel} 
+Erhöht die maximale Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_AQUA_FILTER_GAMEPLAY]
@@ -4671,8 +4671,8 @@ Unterhalt:
 
 [IMPROVE_AQUEDUCT_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
-Erhöhung der maximalen Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Erhöht die maximale Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_AQUEDUCT_GAMEPLAY]
@@ -4697,8 +4697,8 @@ Unterhalt:
 
 [IMPROVE_ARCOLOGIES_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
-Erhöhung der maximalen Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Erhöht die maximale Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_ARCOLOGIES_GAMEPLAY]
@@ -4912,7 +4912,7 @@ Unterhalt:
 
 [IMPROVE_BODY_EXCHANGE_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
 [END]
 
 [IMPROVE_BODY_EXCHANGE_GAMEPLAY]
@@ -5121,7 +5121,7 @@ Unterhalt:
 
 [IMPROVE_DRUG_STORE_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
 [END]
 
 [IMPROVE_DRUG_STORE_GAMEPLAY]
@@ -5376,8 +5376,8 @@ Unterhalt:
 
 [IMPROVE_HOSPITAL_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
-Erhöhung der maximalen Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Erhöht die maximale Stadtgröße um {BuildingDB(Building[0]).RaiseMaxPopulation}
 [END]
 
 [IMPROVE_HOSPITAL_GAMEPLAY]
@@ -5403,7 +5403,7 @@ Unterhalt:
 
 [IMPROVE_INCUBATION_CENTER_STATISTICS]
 Effekt:
-Senkung der <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
+Senkt die <L:DATABASE_CONCEPTS,CONCEPT_OVERCROWDING>Übervölkerung<e> um {BuildingDB(Building[0]).RaiseOvercrowdingLevel}
 [END]
 
 [IMPROVE_INCUBATION_CENTER_GAMEPLAY]

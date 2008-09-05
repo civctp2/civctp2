@@ -195,14 +195,13 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 		cancapture,
 		haszoc,
 		canbombard);
-	if (isspecial && maxattack == 0 && !haszoc)
+
+	if(isspecial && maxattack == 0 && !haszoc)
 	{
-		
 		m_incursionPermission = INCURSION_PERMISSION_ALL;
 	}
 	else
 	{
-		
 		m_incursionPermission = 
 			Diplomat::GetDiplomat(army.GetOwner()).GetIncursionPermission();
 	}

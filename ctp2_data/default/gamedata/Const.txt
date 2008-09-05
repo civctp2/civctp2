@@ -23,6 +23,7 @@
 # - Set back CARAVAN_COEF devision by 10 is now done inside the executable.
 #   - May 7th 2005 Martin Gühmann
 # - Made the meridians symetrical. (29-Oct-2007 Martin Gühmann)
+# - Increase the city is watchful period to 7 turns. (06-Sep-2008 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -199,7 +200,7 @@ ABOLITIONIST_ELITE_CHANCE 0.0 # chance of an abolitionist becoming elite
 ELITE_ABOLITIONIST_BONUS 0.0 # Bonus an elite abolitionist receives
 WATCHFUL_CITY_SUCCESS_MODIFIER 0.5 # Multiply an abolitionist or slaver's success chance by this
 WATCHFUL_CITY_DEATH_MODIFIER 1.0 # Multiply death chance by this
-WATCHFUL_CITY_TURNS 5 # how long a city remains watchful
+WATCHFUL_CITY_TURNS 7 # how long a city remains watchful
 
 BIO_INFECTION_TURNS 5
 NANO_INFECTION_TURNS 5

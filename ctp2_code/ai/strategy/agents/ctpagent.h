@@ -68,10 +68,7 @@ public:
 	const Army & Get_Army() const;
 
 
-	PLAYER_INDEX Get_Player_Number() const;
-
-	void Set_Player_Number(const PLAYER_INDEX & playerId);
-
+	PLAYER_INDEX Get_Player_Number() const { return m_playerId; };
 
 	bool Get_Is_Dead() const;
 

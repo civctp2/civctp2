@@ -231,7 +231,7 @@ void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 		   || g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
 		  )
 		{
-			CTPGoal * goal_ptr = new CTPGoal;
+			CTPGoal * goal_ptr = new CTPGoal();
 			goal_ptr->Set_Type(goal_type);
 			goal_ptr->Set_Player_Index(ownerId);
 			goal_ptr->Set_Target_City(city);
@@ -257,7 +257,7 @@ void CtpAi::AddForeignerGoalsForCity(const Unit &city, const PLAYER_INDEX foreig
 		   || g_theGoalDB->Get(goal_type)->GetTargetTypeImprovement()
 		  )
 		{
-			CTPGoal * goal_ptr = new CTPGoal;
+			CTPGoal * goal_ptr = new CTPGoal();
 			goal_ptr->Set_Type(goal_type);
 			goal_ptr->Set_Player_Index(foreignerId);
 			goal_ptr->Set_Target_City(city);
@@ -945,8 +945,8 @@ void CtpAi::CleanupEvents()
 
 void CtpAi::Cleanup()
 {
-	SettleMap::s_settleMap.Cleanup();
 	Scheduler::CleanupAll();
+	SettleMap::s_settleMap.Cleanup();
 	Governor::Cleanup();
 	Diplomat::CleanupAll();
 	MapAnalysis::GetMapAnalysis().Cleanup();

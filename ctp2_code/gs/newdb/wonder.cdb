@@ -54,76 +54,76 @@ Wonder {
 	Record Resource[] NeedsCityGood				// must have good in radius of city or buying resource to build 
 	Record Resource[] NeedsCityGoodAll			// A city must have all resource to build wonder
 	Record Resource[] NeedsCityGoodAnyCity		// FU
-    Record Resource[] EnablesGood				// Added by E -- having a TI gives a city a good
+	Record Resource[] EnablesGood				// Added by E -- having a TI gives a city a good
 	Record TerrainImprovement[] ShowOnMap		// FU
 	Record TerrainImprovement[] ShowOnMapRadius // FU
 	Record Civilisation[] CivilisationOnly 
 	Record Feat[] NeedsFeatToBuild				// implemented by E
-	Record Feat[] NeedsAnyPlayerFeatToBuild				// implemented by E
+	Record Feat[] NeedsAnyPlayerFeatToBuild		// implemented by E
 	
-	Bit(Record MapIcon)   ShowCityIconTop			// Like show on map but put on top of city like icons
-	Bit(Record MapIcon)   ShowCityIconBottom		// Like show on map but puts the graphic behind the city 
+	Bit(Record MapIcon)   ShowCityIconTop		// Like show on map but put on top of city like icons
+	Bit(Record MapIcon)   ShowCityIconBottom	// Like show on map but puts the graphic behind the city 
 
 	Bit(Int) SquaredBorderRadius 				// added by E
 	Bit(Int) IntBorderRadius    				// added by E
 	Bit		 OnePerCiv							//EMOD implement 5-12-2006
 	Bit(Record MapIcon)			IsReligionIcon	// Displays city religion icon - can be used for Holy Cities
-//	Bit(Record Religion)        IsReligion		          // Identifies religion
+//	Bit(Record Religion)        IsReligion		// Identifies religion
 	Bit IsHolyCity
 	
 	# Flags
 	Bit(Int) ReduceReadinessCost
-	Bit EmbassiesEverywhere
+	Bit      EmbassiesEverywhere
 	Bit(Int) DecCrimePercent
 	Bit(Int) IncKnowledgePercent
 	Bit(Int) DecEmpireSize
 	Bit(Int) IncHappinessEmpire
-	Bit CloseEmbassies
-	Bit ReformCities
-	Bit FreeSlaves
-	Bit ProhibitSlavers  //splits emancipation code
+	Bit      CloseEmbassies
+	Bit      ReformCities
+	Bit      FreeSlaves
+	Bit      ProhibitSlavers  //splits emancipation code
 	Bit(Int) IncConvertedCitiesFeePercent
 	Bit(Int) GoldPerWaterTradeRoute
 	Bit(Int) GoldPerTelevision
-	Bit GlobalRadar
-	Bit SpiesEverywhere
+	Bit      GlobalRadar
+	Bit      SpiesEverywhere
 	Bit(Int) GoldPerInternationalTradeRoute
-	Bit ProtectFromBiologicalWarfare
+	Bit      ProtectFromBiologicalWarfare
 	Bit(Int) PollutersToParks
-	Bit EnableParkRangers
+	Bit      EnableParkRangers
 	Bit(Int) ReduceWorldPollution
-	Bit AllCitizensContent
-	Bit EliminateNukes
-	Bit AllBoatsDeepWater
+	Bit      AllCitizensContent
+	Bit      EliminateNukes
+	Bit      AllBoatsDeepWater
 	Bit(Int) IncreaseBoatMovement
-	Bit FreeTradeRoutes
+	Bit      FreeTradeRoutes
 	Bit(Int) DecreaseMaintenance
 	Bit(Int) RandomAdvanceChance
 	Bit(Int) IncreaseHp
 	Bit(Int) MultiplyTradeRoutes
-	Bit ForcefieldEverywhere
+	Bit      ForcefieldEverywhere
 	Bit(Int) IncreaseScientists
 	Bit(Int) OtherCivRandomAdvanceChance
 	Bit(Int) IncreaseProduction
 	Bit(Int) BonusGold
-	Bit CantBuildInSea							// Added by E to restrict some wonders to Land
-	Bit CantBuildOnLand							// Added by E to restrict some wonders to Sea				
-	Bit CoastalBuilding 						// Added by E to restrict some wonders to the Coast
-	Bit EnablesPunativeAirstrikes				// Added by E Air Bombard without War 
+	Bit      CantBuildInSea							// Added by E to restrict some wonders to Land
+	Bit      CantBuildOnLand						// Added by E to restrict some wonders to Sea
+	Bit      CoastalBuilding 						// Added by E to restrict some wonders to the Coast
+	Bit      EnablesPunativeAirstrikes				// Added by E Air Bombard without War 
 
 	Bit(Int) IncreaseFoodAllCities
 	Bit(Int) TemporaryFullHappiness
-	Bit RevoltingCitiesJoinPlayer
-	Bit NoPollutionUnhappiness
-	Bit EmbassiesEverywhereEvenAtWar
+	Bit      RevoltingCitiesJoinPlayer
+	Bit      NoPollutionUnhappiness
+	Bit      EmbassiesEverywhereEvenAtWar
 	Bit(Int) IncreaseSpecialists
 	Bit(Int) IncreaseCathedrals
 	Bit(Int) IncreaseBrokerages
 	Bit(Int) IncreaseRegard
-	Bit PreventConversion
-	Bit ProtectFromBarbarians
-	Bit StartGaiaController
-	Bit GLHidden
+	Bit      PreventConversion
+	Bit      ProtectFromBarbarians
+	Bit      StartGaiaController
+	Bit      GLHidden
 
 	Struct BuildingFeat {						// From feats implemented by E 2-24-2006
 		Record Building Building
@@ -139,14 +139,14 @@ Wonder {
 	}
 
 	Bit(struct BuildingGold) BuildingGold
-	Bit(Record Building) BuildingEverywhere        # Actually this should also remove the building in question from the built list.
-	Bit(Record Building) ActualBuildingEverywhere
-	Bit(Record Building) BuildingEffectEverywhere  #This would be a better name for BuildingEverywhere # But there is no need to have a copy of this in.
-	Bit(Record Building) ConflictsWithBuilding
+	Bit(Record Building)     BuildingEverywhere        # Actually this should also remove the building in question from the built list.
+	Bit(Record Building)     ActualBuildingEverywhere
+	Bit(Record Building)     BuildingEffectEverywhere  #This would be a better name for BuildingEverywhere # But there is no need to have a copy of this in.
+	Bit(Record Building)     ConflictsWithBuilding
 
-	##Bit(Record Building) BuildingAnywhere
-	Record Building[] BuildingAnywhere
-	Bit(Int) GoldPerBuildingAnywhere 
+	##Bit(Record Building)   BuildingAnywhere
+	Record Building[]        BuildingAnywhere
+	Bit(Int)                 GoldPerBuildingAnywhere 
 
 	Bit(Float) PollutionPercent
 	Bit(Float) PollutionAmount

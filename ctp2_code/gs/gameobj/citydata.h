@@ -922,12 +922,19 @@ public:
 
 	sint32 ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const;
 
-	double GetOvercrowding(const CitySizeRecord *rec){ 
-		return rec->GetBaseOvercrowding() + GetBuildingOvercrowdingBonus(); 
+	double GetOvercrowding(const CitySizeRecord *rec)
+	{
+		return rec->GetBaseOvercrowding() + GetBuildingOvercrowdingBonus();
 	};
 
-	sint32 GetMaxPop(const CitySizeRecord *rec){ 
-		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease(); 
+	sint32 GetMaxPop()
+	{
+		return GetMaxPop(g_theCitySizeDB->Get(m_sizeIndex));
+	};
+
+	sint32 GetMaxPop(const CitySizeRecord *rec)
+	{
+		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease();
 	};
 
 	sint32 CrimeLoss(sint32 gross) const;

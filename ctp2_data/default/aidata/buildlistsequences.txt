@@ -19,6 +19,9 @@
 # Modifications from the original Activision code:
 #
 # - Minor build order modifications.
+# - Moved BUILDING_BUILD_LIST_OFFENSE to the top of the BUILD_LIST_SEQUENCE_OFFENSE
+#   so that the AI builds city walls first, that will also help the to
+#   protect itself from slave raids. (06-Sep-2008 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -89,6 +92,7 @@ BUILD_LIST_SEQUENCE_GROWTH {
 }
 
 BUILD_LIST_SEQUENCE_OFFENSE {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
@@ -104,7 +108,6 @@ BUILD_LIST_SEQUENCE_OFFENSE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
-  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 

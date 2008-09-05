@@ -35,6 +35,8 @@
 // - Agents used in now exclusively set here. (8-Feb-2008 Martin Gühmann)
 // - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 // - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - For boats with cargo the squad class is now computed from the cargo. (06-Sep-2008 Martin Gühmann)
+// - Empty transporters cannot defend. (06-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -128,10 +130,14 @@ bool CTPAgent::Get_Is_Dead() const
 	return m_army->GetOwner() != m_playerId;
 }
 
-SQUAD_CLASS CTPAgent::Compute_Squad_Class() 
+SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 {
-	if (Get_Is_Dead())
-		return SQUAD_CLASS_DEFAULT;
+	m_squad_class = SQUAD_CLASS_DEFAULT;
+
+	if(Get_Is_Dead())
+	{
+		return m_squad_class;
+	}
 
 	bool   isspecial;
 	bool   isstealth;
@@ -144,45 +150,57 @@ SQUAD_CLASS CTPAgent::Compute_Squad_Class()
 	sint32 max;
 	sint32 empty;
 
-	m_army->CharacterizeArmy(
-	    isspecial,
-	    isstealth,
-	    maxattack,
-	    maxdefense,
-	    cancapture,
-	    haszoc,
-	    canbombard);
+	bool   canTransport = m_army->GetCargo(transports, max, empty);
+	bool   isEmpty      = max > 0 && max == empty;
 
-	m_squad_class = SQUAD_CLASS_DEFAULT;
+	if(!m_army->HasCargo())
+	{
+		m_army->CharacterizeArmy(
+		    isspecial,
+		    isstealth,
+		    maxattack,
+		    maxdefense,
+		    cancapture,
+		    haszoc,
+		    canbombard);
+	}
+	else
+	{
+		m_army->CharacterizeCargo(
+		    isspecial,
+		    isstealth,
+		    maxattack,
+		    maxdefense,
+		    cancapture,
+		    haszoc,
+		    canbombard);
+	}
 
 	m_squad_class |= k_Goal_SquadClass_CanExplore_Bit;
 
-	if ( isspecial )
+	if(isspecial)
 		m_squad_class |= k_Goal_SquadClass_Special_Bit;
 
-	if (isstealth)
+	if(isstealth)
 		m_squad_class |= k_Goal_SquadClass_Stealth_Bit;
 
-	if ( maxattack > 0 )
+	if(maxattack > 0)
 		m_squad_class |= k_Goal_SquadClass_CanAttack_Bit;
 
-	if ( maxdefense > 0 )
+	if(maxdefense > 0 && !isEmpty && !isspecial)
 		m_squad_class |= k_Goal_SquadClass_CanDefend_Bit;
 
-	if ( cancapture )
+	if(cancapture)
 		m_squad_class |= k_Goal_SquadClass_CanCaptureCity_Bit;
 
-	if ( haszoc )
+	if(haszoc)
 		m_squad_class |= k_Goal_SquadClass_HasZoc_Bit;
 
-	if ( canbombard )
+	if(canbombard)
 		m_squad_class |= k_Goal_SquadClass_CanBombard_Bit;
 
-	if ( m_army->GetCargo(transports,max,empty))
+	if(canTransport)
 		m_squad_class |= k_Goal_SquadClass_CanTransport_Bit;
-
-	if ( m_army->CountMovementTypeSea() > 0 || isspecial)
-		m_squad_class &= ~k_Goal_SquadClass_CanDefend_Bit;
 
 	return m_squad_class;
 }

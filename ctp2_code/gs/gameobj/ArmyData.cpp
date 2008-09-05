@@ -2916,6 +2916,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		return EnslaveSettler(point, uindex, home_city); 
 	}
 
+	// Modify CTPGoal::Get_Totally_Complete() if city walls should not be an absolute slavery prevention
 	if(target_city.IsProtectedFromSlavery())
 	{
 		g_slicEngine->Execute
@@ -2926,18 +2927,6 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		g_slicEngine->Execute(so);
 
 		return ORDER_RESULT_FAILED;
-	}
-
-	if(m_array[uindex].IsVeteran())
-	{
-		success += g_theConstDB->Get(0)->GetEliteSlaverBonus();
-	}
-
-	target_city.CD()->ModifySpecialAttackChance(UNIT_ORDER_SLAVE_RAID, success);
-
-	if(target_city.IsWatchful())
-	{
-		death *= g_theConstDB->Get(0)->GetWatchfulCityDeathModifier();
 	}
 
 	target_city.SetWatchful();
@@ -2998,7 +2987,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 			SlicObject * so = new SlicObject("138SlaveryKilledAttacker");
 			so->AddRecipient(GetOwner());
 			so->AddCivilisation(GetOwner());
-			so->AddCity(home_city);
+			so->AddCity(target_city);
 			g_slicEngine->Execute(so);
 		}
 		else
@@ -3006,7 +2995,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 			SlicObject * so = new SlicObject("138SlaveryFailedAttacker");
 			so->AddRecipient(GetOwner());
 			so->AddCivilisation(GetOwner());
-			so->AddCity(home_city);
+			so->AddCity(target_city);
 			g_slicEngine->Execute(so);
 		}
 
@@ -3080,6 +3069,17 @@ bool ArmyData::IsSlaveRaidPossible(const MapPoint &point,
 			return false;
 		}
 
+		if(m_array[uindex].IsVeteran())
+		{
+			success += g_theConstDB->Get(0)->GetEliteSlaverBonus();
+		}
+
+		target_city.CD()->ModifySpecialAttackChance(UNIT_ORDER_SLAVE_RAID, success);
+
+		if(target_city.IsWatchful())
+		{
+			death *= g_theConstDB->Get(0)->GetWatchfulCityDeathModifier();
+		}
 	}
 	else
 	{
@@ -9775,13 +9775,16 @@ Path *ArmyData::RemovePathedOrder()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ArmyData::CharacterizeArmy( bool & isspecial,
-                                 bool & isstealth,
-                                 sint32 & maxattack,
-                                 sint32 & maxdefense,
-                                 bool & cancapture,
-                                 bool & haszoc,
-                                 bool & canbombard) const
+void ArmyData::CharacterizeArmy
+(
+    bool & isspecial,
+    bool & isstealth,
+    sint32 & maxattack,
+    sint32 & maxdefense,
+    bool & cancapture,
+    bool & haszoc,
+    bool & canbombard
+) const
 {
 	isspecial  = false;
 	isstealth  = true;
@@ -9795,7 +9798,7 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 	{
 		const UnitRecord *rec = m_array[i].GetDBRec();
 		
-		if (rec->HasNuclearAttack()) 
+		if(rec->HasNuclearAttack())
 		{
 			isspecial  = true;
 			maxattack  = 0;
@@ -9813,10 +9816,56 @@ void ArmyData::CharacterizeArmy( bool & isspecial,
 		haszoc     |= !rec->GetNoZoc();
 		canbombard |= (rec->GetCanBombard() != 0x0);
 
-		if (m_array[i].GetAttack()  > maxattack)
+		if(m_array[i].GetAttack()  > maxattack)
 			maxattack = sint32(rec->GetAttack());
-		if (m_array[i].GetDefense() > maxdefense)
+		if(m_array[i].GetDefense() > maxdefense)
 			maxdefense = sint32(rec->GetDefense());
+	}
+}
+
+void ArmyData::CharacterizeCargo
+(
+    bool & isspecial,
+    bool & isstealth,
+    sint32 & maxattack,
+    sint32 & maxdefense,
+    bool & cancapture,
+    bool & haszoc,
+    bool & canbombard
+) const
+{
+	isspecial  = false;
+	isstealth  = true;
+	maxattack  = 0;
+	maxdefense = 0;
+	cancapture = false;
+	haszoc     = false;
+	canbombard = false;
+
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		const UnitDynamicArray * cargo = 
+		    m_array[i]->GetCargoList();
+
+		if(cargo != NULL)
+		{
+			for(sint32 j = 0; j < cargo->Num(); j++)
+			{
+				const UnitRecord *rec = cargo->Access(j)->GetDBRec();
+
+				isspecial  |= !rec->GetVisionClassStandard();
+				isspecial  |= (rec->GetAttack() <= 0.0);
+				isstealth  &=  rec->GetVisionClassStealth();
+				cancapture |= !rec->GetCantCaptureCity();
+				haszoc     |= !rec->GetNoZoc();
+				canbombard |= (rec->GetCanBombard() != 0x0);
+
+				if(m_array[i].GetAttack()  > maxattack)
+					maxattack = sint32(rec->GetAttack());
+				if(m_array[i].GetDefense() > maxdefense)
+					maxdefense = sint32(rec->GetDefense());
+			}
+		}
 	}
 }
 

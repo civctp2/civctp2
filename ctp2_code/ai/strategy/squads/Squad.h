@@ -101,7 +101,6 @@ public:
 
 protected:
 
-	SQUAD_CLASS                     m_squad_class;	// Probably can be removed
 	CTPAgent_ptr                    m_agent;
 #if defined(USE_GOAL_REF)
 	Goal_Ref_List                   m_goal_references;

@@ -18,8 +18,9 @@
 #
 # Modifications from the original Activision code:
 #
-# - Increased NotVisibleBonus visible bonus for GOAL_ATTACK and
+# - Decreased NotVisibleBonus visible bonus for GOAL_ATTACK and
 #   GOAL_HARASS. (13-Aug-2008 Martin Gühmann)
+# - Added an InVisionRangeBonus for GOAL_ENSLAVE_SETTLER. (06-Sep-2008 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -365,6 +366,7 @@ GOAL_ENSLAVE_SETTLER {
   UnexploredBonus     -999999
   ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
+  InVisionRangeBonus   500000
 
   ThreatenType:None
   ThreatenBonus 0

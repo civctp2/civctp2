@@ -85,6 +85,7 @@
 // - Rally is now complete if there is only one stack left with less than
 //   twelve units. (13-Aug-2008 Martin Gühmann)
 // - Added new rally algorithm. (13-Aug-2008 Martin Gühmann)
+// - Slavers don't go to cities with city walls. (06-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -666,13 +667,6 @@ Utility CTPGoal::Compute_Matching_Value(const Agent_ptr agent) const
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 
-	// Don't attack as Barbarian a target that is protected by the Great Wall
-	if(ctpagent_ptr->Get_Army()->GetOwner() == PLAYER_INDEX_VANDALS
-	&& wonderutil_GetProtectFromBarbarians(g_player[target_owner]->m_builtWonders)
-	){
-		return Goal::BAD_UTILITY;
-	}
-
 	if( target_owner > 0 &&
 		(!diplomat.IncursionPermission(target_owner)))
 	{
@@ -725,7 +719,7 @@ Utility CTPGoal::Compute_Matching_Value(const Agent_ptr agent) const
 		{
 			CTPAgent_ptr agent_ptr = static_cast<CTPAgent_ptr>(*agent_iter);
 
-			if(agent_ptr->Get_Needs_Transporter())
+			if(!agent_ptr->Get_Is_Dead() && agent_ptr->Get_Needs_Transporter())
 			{
 				agent_ptr->EstimateTransportUtility(ctpagent_ptr, utility);
 				transport_utility += utility;
@@ -1344,7 +1338,17 @@ bool CTPGoal::Get_Totally_Complete() const
 	Player *player_ptr = g_player[ m_playerId ];
 	Assert(player_ptr != NULL);
 
-	if (m_playerId > 0 && target_owner > 0 && goal_record->HasTargetProtectionWonder())
+	// Don't attack as Barbarian a target that is protected by the Great Wall
+	if
+	  (
+	       m_playerId == PLAYER_INDEX_VANDALS
+	    && wonderutil_GetProtectFromBarbarians(g_player[target_owner]->m_builtWonders)
+	  )
+	{
+		return true;
+	}
+
+	if(m_playerId > 0 && target_owner > 0 && goal_record->HasTargetProtectionWonder())
 	{
 		const WonderRecord *wonder_rec = goal_record->GetTargetProtectionWonderPtr();
 
@@ -1641,15 +1645,16 @@ bool CTPGoal::Get_Totally_Complete() const
 			return true;
 	}
 
-	//Try to steal technology only if the other civ has more advances than player
-	//Otherwise, spy can do anything else
+	// Try to steal technology only if the other civ has more advances than player
+	// Otherwise, spy can do anything else
+	// Problem there might be techs we don't have.
 	if (order_record->GetUnitPretest_CanStealTechnology())
 	{
 		if (g_player[m_playerId]->NumAdvances() > g_player[target_owner]->NumAdvances())
 			return true;
 	}
 
-	//Abolisionist has to go to cities with slaves
+	// Abolisionist has to go to cities with slaves
 	if(order_record->GetUnitPretest_CanInciteUprising()
 	|| order_record->GetUnitPretest_CanUndergroundRailway ()
 	){
@@ -1666,7 +1671,9 @@ bool CTPGoal::Get_Totally_Complete() const
 		if(popCount <= 2)
 			return true;
 
-		// Check city walls
+		// Avoid cities with city walls, needs to be modified if you modify ArmyData::SlaveRaid, so that city walls only reduce the slave chance
+		if(m_target_city.IsProtectedFromSlavery())
+			return true;
 	}
 
 	if(order_record->GetUnitPretest_NoFuelThenCrash())
@@ -1950,11 +1957,11 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 
 		if(value > Goal::BAD_UTILITY)
 		{
+			SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(m_goal_type)->GetSquadClass();
 			AI_DPRINTF(log, m_playerId, -1, -1,
-				("\t\t[%d] match=%d %s (squad: %x)\n",
-					count++, value, g_theGoalDB->Get(m_goal_type)->GetNameText(), squad));
+				("\t\t[%3d] match=%d %s (squad: %10x), goal class=%3x, squad class=%3x, test class=%d\t",
+					count++, value, g_theGoalDB->Get(m_goal_type)->GetNameText(), squad, goal_squad_class, squad->Get_Squad_Class(), ((goal_squad_class & squad->Get_Squad_Class()) == goal_squad_class)));
 
-			AI_DPRINTF(log, m_playerId, -1, -1, ("\t\tSquad:\n"));
 			squad->Log_Debug_Info(k_DBG_SCHEDULER_ALL, this);
 		}
 		else
@@ -1966,7 +1973,7 @@ void CTPGoal::Log_Debug_Info(const int &log) const
 			           -1,
 			           -1,
 			             (
-			              "\t\t[%d] First match with bad utility: In all, there were %d matches with bad utility.\n",
+			              "\t\t[%3d] First match with bad utility: In all, there were %d matches with bad utility.\n",
 			              count,
 			              m_matches.size() - count
 			             )
@@ -2597,7 +2604,7 @@ bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_
 			if (!found)
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
-				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_TRANSPORT:\n",
+				           ("GOAL %x (%d):GotoGoalTaskSolution: No path found from army to goal (x=%d,y=%d) (SUB_TASK_TRANSPORT):\n",
 				           this, m_goal_type, goal_pos.x, goal_pos.y));
 				the_army->Log_Debug_Info(k_DBG_SCHEDULER, this);
 				uint8 magnitude = 220;
@@ -2831,6 +2838,7 @@ CTPAgent_ptr CTPGoal::GetRallyAgent() const
 		  (
 		       distance < minFriendlyDistance
 		    && g_theWorld->IsOnSameContinent(ctpagent_ptr->Get_Pos(), targetPos)
+		    && g_theWorld->GetOwner(ctpagent_ptr->Get_Pos()) == ctpagent_ptr->Get_Player_Number()
 		  )
 		{
 			minFriendlyDistance = distance;
@@ -3213,16 +3221,21 @@ bool CTPGoal::FindTransporters(const CTPAgent_ptr & agent_ptr, std::list< std::p
 		sint32          empty_slots         = 0;
 		possible_transport->Get_Army()->GetCargo(transports, max_slots, empty_slots);
 
-		if (max_slots <= 0)
+		if(max_slots <= 0)
 			continue;
 
-		if (empty_slots <= 0)
+		if(empty_slots <= 0)
 			continue;
 
-		if (possible_transport == agent_ptr)
+		if(possible_transport == agent_ptr)
 			continue;
 
-		if (!possible_transport->Get_Can_Be_Executed())
+		SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(m_goal_type)->GetSquadClass();
+
+		if(max_slots != empty_slots && ((goal_squad_class & possible_transport->Get_Squad_Class()) != goal_squad_class))
+			continue;
+
+		if(!possible_transport->Get_Can_Be_Executed())
 		{
 			MapPoint target_pos = possible_transport->Get_Target_Pos();
 			MapPoint army_pos = agent_ptr->Get_Army()->RetPos();

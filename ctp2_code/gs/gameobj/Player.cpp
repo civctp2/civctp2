@@ -113,6 +113,8 @@
 // - The city list now updated even if the visible player is a robot. (23-Feb-2008 Martin Gühmann)
 // - The AI picks a new advance immediately after discovering an advance. (29-Feb-2008 Martin Gühmann)
 // - The AI changes government immediately when a new government has been discovered. (29-Feb-2008 Martin Gühmann)
+// - Slaves aren't send to cities if it causes an population increase over
+//   the city maxium size. (06-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -2722,18 +2724,28 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 	{
 		Unit c = m_all_cities->Access(i);
 
+		if(c.CD()->GetMaxPop() < c.CD()->PopCount() + 1)
+		{
+			continue;
+		}
+
 		c.GetPos(cpos);
 		Cell *cell = g_theWorld->GetCell(cpos);
 		sint32 numMilitaryUnits = 0;
-		for(j = 0; j < cell->GetNumUnits(); j++) {
-			if(cell->UnitArmy()->Access(j).GetAttack() > 0) {
+
+		for(j = 0; j < cell->GetNumUnits(); j++)
+		{
+			if(cell->UnitArmy()->Access(j).GetAttack() > 0)
+			{
 				numMilitaryUnits++;
 			}
 		}
-		if(numMilitaryUnits * g_theConstDB->Get(0)->GetSlavesPerMilitaryUnit() <=
-		   c.CountSlaves()) {
+
+		if(numMilitaryUnits * g_theConstDB->Get(0)->GetSlavesPerMilitaryUnit() <= c.CountSlaves())
+		{
 			continue;
 		}
+
 		d = pos.NormalizedDistance(cpos);
 
 		cityDistQueue.push_back(CityDist( m_all_cities->Access(i).m_id, d));
@@ -2745,8 +2757,9 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 		return GetNearestCity(pos, city, distance);
 	}
 
-	size_t max_eval = static_cast<size_t>(g_theConstDB->Get(0)->GetConiderNumCitiesForSlaves());
-	max_eval = std::min(max_eval, cityDistQueue.size());
+	size_t max_eval = static_cast<size_t>(g_theConstDB->Get(0)->GetCosiderNumCitiesForSlaves());
+
+	max_eval = (max_eval > 0) ? std::min(max_eval, cityDistQueue.size()) : cityDistQueue.size();
 
 	CityDistQueue::iterator max_iter = cityDistQueue.begin() + max_eval;
 

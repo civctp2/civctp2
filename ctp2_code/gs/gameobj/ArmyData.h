@@ -500,13 +500,25 @@ public:
     Path *RemovePathedOrder();
 
 
-    void CharacterizeArmy( bool & isspecial,
+    void CharacterizeArmy(
+                           bool & isspecial,
                            bool & isstealth,
                            sint32 & maxattack,
                            sint32 & maxdefense,
                            bool & cancapture,
                            bool & haszoc,
-                           bool & canbombard) const;
+                           bool & canbombard
+                          ) const;
+
+    void CharacterizeCargo(
+                           bool & isspecial,
+                           bool & isstealth,
+                           sint32 & maxattack,
+                           sint32 & maxdefense,
+                           bool & cancapture,
+                           bool & haszoc,
+                           bool & canbombard
+                          ) const;
 
 
     bool IsCivilian() const;
