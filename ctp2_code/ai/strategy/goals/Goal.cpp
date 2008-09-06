@@ -161,43 +161,7 @@ sint16 Goal::Get_Agent_Count() const
 
 bool Goal::Is_Single_Squad() const
 {
-	if (m_agents.size() <= 1)
-		return true;
-
-	Squad_ptr first_squad_ptr = NULL;
-
-	for
-	(
-	    Agent_List::const_iterator agent_iter  = m_agents.begin();
-	                               agent_iter != m_agents.end();
-	                             ++agent_iter
-	)
-	{
-		for
-		(
-		    Plan_List::const_iterator
-		           match_iter  = m_matches.begin();
-		           match_iter != m_matches.end();
-		         ++match_iter
-		)
-		{
-			if (match_iter->Agent_Committed(*agent_iter))
-			{
-				Squad_ptr tmp_squad_ptr = match_iter->Get_Squad();
-
-				if (first_squad_ptr != NULL && tmp_squad_ptr != first_squad_ptr)
-					return false;
-
-				first_squad_ptr = tmp_squad_ptr;
-
-				break;
-			}
-		}
-
-		Assert(first_squad_ptr != NULL);
-	}
-
-	return true;
+	return m_agents.size() == 1;
 }
 
 bool Goal::Commit_Agent(const Agent_ptr & agent)
@@ -380,7 +344,7 @@ bool Goal::Validate() const
 		uint32 *first_bytes =
 			(uint32 *)&(*(*agent_iter));
 
-		if( *first_bytes == 0xdddddddd)
+		if(*first_bytes == 0xdddddddd)
 		{
 			bool ARMY_DELETED_WITHOUT_TELLING_GOAL = false;
 			Assert(ARMY_DELETED_WITHOUT_TELLING_GOAL);
@@ -396,7 +360,7 @@ bool Goal::Validate() const
 		          ++match_iter
 		)
 		{
-			if(match_iter->Agent_Committed(*agent_iter))
+			if(match_iter->Agent_Committed()) // With the simplification this doesn't make much sense anymore
 			{
 #ifdef _DEBUG_SCHEDULER
 
@@ -419,7 +383,7 @@ bool Goal::Validate() const
 			}
 		}
 
-		if (match_iter == m_matches.end())
+		if(match_iter == m_matches.end())
 		{
 
 #ifdef _DEBUG_SCHEDULER
@@ -854,8 +818,6 @@ void Goal::Commit_Transport_Agents()
 
 void Goal::Remove_Matches()
 {
-	sint32 rolled_back_agents = 0;
-
 	for
 	(
 	    Plan_List::iterator match_iter  = m_matches.begin();

@@ -442,7 +442,10 @@ STDEHANDLER(CtpAi_CreatedArmyEvent)
 
 void CtpAi::BeginDiplomacy(const PLAYER_INDEX player, sint32 round)
 {
-	Diplomat::GetDiplomat(player).BeginTurn();
+	if(g_player[player] != NULL)
+	{
+		Diplomat::GetDiplomat(player).BeginTurn();
+	}
 }
 
 void CtpAi::GroupWithEscort(const Army & army)

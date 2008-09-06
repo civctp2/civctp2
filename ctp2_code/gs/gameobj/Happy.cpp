@@ -38,6 +38,7 @@
 // - Added comment for wonders
 // - Outcommented sectarian happiness
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Wages, rations, and work day give now happiness boni as supposed. (07-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -414,8 +415,8 @@ double Happy::CalcWorkday(CityData &cd, Player *p)
 {
 	m_workday = CalcCityIndependentWorkday(p);
 
-	m_tracker->SetHappiness(HAPPY_REASON_WORKDAY, m_workday); 
-	return m_workday; 
+	m_tracker->SetHappiness(HAPPY_REASON_WORKDAY, m_workday);
+	return m_workday;
 }
 
 
@@ -601,12 +602,10 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
                           sint32 &delta_martial_law, 
                           bool isFirstPass)
 {
-	
 	Player *p = g_player[cd.m_owner]; 
 
 	CountAffectivePop(cd);
 
-	
 	m_happiness  = CalcBase(p);
 	m_happiness += p->CityHappinessIncrease();
 	m_happiness += cd.StyleHappinessIncr();
@@ -614,16 +613,15 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 	//m_happiness += cd.SectarianHappiness();		//EMOD 5-26-2006 affects of religious and ethnic violence
 	m_happiness += cd.TileImpHappinessIncr();	//EMOD 8-29-2006 tileimps can give happiness
 
-	if(cd.m_owner == PLAYER_INDEX_VANDALS) {
+	if(cd.m_owner == PLAYER_INDEX_VANDALS)
+	{
 		return;
 	}
 
-	
-	
-
 	CalcTimedChanges(cd, p, projectedOnly, isFirstPass);
 
-	if(m_fullHappinessTurns > 0) {
+	if(m_fullHappinessTurns > 0)
+	{
 		m_happiness = 100;
 		if(isFirstPass)
 			m_fullHappinessTurns--;
@@ -631,32 +629,41 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 		return;
 	}
 
-	if(wonderutil_GetAllCitizensContent(p->m_builtWonders)) {
-		
+	if(wonderutil_GetAllCitizensContent(p->m_builtWonders))
+	{
 		return;
 	}
 
-	if(buildingutil_GetNoUnhappyPeople(cd.GetEffectiveBuildings())) {
-		
+	if(buildingutil_GetNoUnhappyPeople(cd.GetEffectiveBuildings()))
+	{
 		return;
 	}
+
 	m_happiness += CalcSize(cd, p);
-	if(isFirstPass) {
+	if(isFirstPass)
+	{
 		m_happiness += CalcTooManyCities(p);
-	} else {
+	}
+	else
+	{
 		m_happiness += m_too_many_cities;
 	}
 
-	if(isFirstPass) {
+	if(isFirstPass)
+	{
 		m_happiness += CalcConquestDistress(cd, p);
-	} else {
+	}
+	else
+	{
 		m_happiness += m_conquest_distress;
 	}
 
-
-	if(isFirstPass) {		
+	if(isFirstPass)
+	{
 		m_happiness += CalcDistanceFromCapitol(cd, p);
-	} else {
+	}
+	else
+	{
 		m_happiness += m_empire_dist;
 	}
 
@@ -665,96 +672,43 @@ void Happy::CalcHappiness(CityData &cd, bool projectedOnly,
 
 	m_happiness -= CalcStarvation(cd, p);
 
-	
 	m_happiness += CalcPeaceMovement(cd, p);
 
-	CalcWorkday(cd, p);
-	CalcWages(cd, p);
-	CalcRations(cd, p);
+	m_happiness += CalcWorkday(cd, p);
+	m_happiness += CalcWages  (cd, p);
+	m_happiness += CalcRations(cd, p);
 
-	if(m_workday + m_wages + m_rations > 0) {
-		m_happiness += 2;
-		sint32 howManyContribute = 0;
-		if(m_workday > 0)
-			howManyContribute++;
-		if(m_wages > 0)
-			howManyContribute++;
-		if(m_rations > 0)
-			howManyContribute++;
-
-		double amountPer = 2 * (1 / howManyContribute);
-		if(m_workday > 0) {
-			m_tracker->SetHappiness(HAPPY_REASON_WORKDAY, amountPer);
-		} else {
-			m_tracker->SetHappiness(HAPPY_REASON_WORKDAY, 0);
-		}
-
-		if(m_wages > 0) {
-			m_tracker->SetHappiness(HAPPY_REASON_WAGES, amountPer);
-		} else {
-			m_tracker->SetHappiness(HAPPY_REASON_WAGES, 0);
-		}
-
-		if(m_rations > 0) {
-			m_tracker->SetHappiness(HAPPY_REASON_RATIONS, amountPer);
-		} else {
-			m_tracker->SetHappiness(HAPPY_REASON_RATIONS, 0);
-		}
-	} else {
-		
-		m_happiness += m_workday;
-		m_happiness += m_wages;
-		m_happiness += m_rations;
-	}
-
-	
 	m_happiness += p->GetTimedHappiness();
-
-	
-	
 	m_happiness += m_timed;
- 
+
 	m_tracker->SetHappiness(HAPPY_REASON_ASSASSINATION, p->GetTimedHappiness());
 	//m_tracker->SetHappiness(HAPPY_REASON_SECTHAPPY, cd.SectarianHappiness());
-	
-	
-	
-	
+
 	double const		mlt = static_cast<double>(p->GetMartialLawThreshold());
-	if (m_happiness < mlt) 
-	{ 
+	if(m_happiness < mlt)
+	{
 		double const	new_happiness = 
 			std::min(CalcMartialLaw(cd, p) + m_happiness,  mlt);
 		delta_martial_law = sint32 (new_happiness - m_happiness + 0.5);
 		m_happiness = new_happiness; 
-
-	} else {
+	}
+	else
+	{
 		delta_martial_law = 0;
 	}
-	
-	
+
 	m_happiness += CalcPopEntertain(cd, p) + 
 		CalcImprovementContentment(cd, p) +  
 		CalcWonders(cd, p);
 
 	m_happiness += CalcFeats(p);
 
-	CalcCrime(cd, p); 
+	CalcCrime(cd, p);
 
 	sint32 intHap = (sint32)m_happiness;
 	sint32 newHappiness = g_slicEngine->CallMod(mod_CityHappiness, intHap, cd.GetHomeCity(), intHap);
 	if(intHap != newHappiness)
 		m_happiness = newHappiness;
-
-
-
-
-
-
-
-
-
-
 }
 
 void Happy::ResetCrime(CityData *cd, double target_happiness) 
