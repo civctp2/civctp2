@@ -9985,22 +9985,26 @@ bool ArmyData::CheckValidDestination(const MapPoint &dest) const
 {
 	Order *order = m_orders->GetHead();
 	// not clear on what's going on in this part
-	if (order && order->m_order== UNIT_ORDER_MOVE && order->m_path)
+	if(order && order->m_order == UNIT_ORDER_MOVE && order->m_path)
 	{
-		
 		MapPoint pos;
-		if (order->m_path->IsEnd())
+		if(order->m_path->IsEnd())
+		{
 			pos = order->m_path->GetEnd();
+		}
 		else
+		{
 			order->m_path->GetCurrentPoint(pos);
-		
-		if (pos != m_pos)
-			
+		}
+
+		if(pos != m_pos)
+		{
 			order->m_path->RestoreIndexAndCurrentPos(order->m_path->GetNextIndex());
+		}
 	}
 
-	return (order) && (order->m_order == UNIT_ORDER_MOVE) 
-	               && (order->m_path) 
+	return (order) && (order->m_order == UNIT_ORDER_MOVE)
+	               && (order->m_path)
 	               && (order->m_path->GetEnd() == dest);
 }
 

@@ -4724,14 +4724,6 @@ sint32 Diplomat::GetEnemyThreat() const
 
 void Diplomat::UpdateAttributes()
 {
-	Army army;
-	sint32 cell_owner;
-	sint32 num_armies;
-	MapPoint pos;
-	bool isspecial,cancapture,haszoc,canbombard;
-	bool isstealth;
-	sint32 maxattack,maxdefense;
-
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
@@ -4882,39 +4874,9 @@ void Diplomat::UpdateAttributes()
 			HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) )
 			continue;
 
-		num_armies = foreign_player_ptr->m_all_armies->Num();
-		for(sint32 i = 0; i < num_armies; i++)
+		if(HasUnitsInOurTerritory(foreignerId))
 		{
-			army = foreign_player_ptr->m_all_armies->Access(i);
-			if(army.IsValid())
-			{
-				army->GetPos(pos);
-				cell_owner = g_theWorld->GetCell(pos)->GetOwner();
-				bool is_threat = army->HasCargo();
-
-				if(!is_threat)
-				{
-					army->CharacterizeArmy(isspecial,
-						isstealth,
-						maxattack,
-						maxdefense,
-						cancapture,
-						haszoc,
-						canbombard);
-
-					is_threat = (maxattack || cancapture || haszoc || canbombard);
-				}
-				if
-				  (
-				       is_threat
-				    && player_ptr->IsVisible(pos)
-				    && cell_owner == m_playerId
-				  )
-				{
-					SetBorderIncursionBy(foreignerId);
-					break;
-				}
-			}
+			SetBorderIncursionBy(foreignerId);
 		}
 	}
 
@@ -6180,4 +6142,59 @@ void Diplomat::SetDefaultStrategy()
 	DPRINTF(k_DBG_AI, ("Player %d initialized strategy to %s.\n",
 		GetPlayerId(),
 		g_theStrategyDB->Get(index)->GetNameText()));
+}
+
+bool Diplomat::HasUnitsInOurTerritory(sint32 foreignerId) const
+{
+	Player*  foreign_player_ptr = g_player[foreignerId];
+	Player*  player_ptr         = g_player[m_playerId];
+	sint32   num_armies         = foreign_player_ptr->m_all_armies->Num();
+	MapPoint pos;
+	bool     isspecial;
+	bool     cancapture;
+	bool     haszoc;
+	bool     canbombard;
+	bool     isstealth;
+	sint32   maxattack;
+	sint32   maxdefense;
+
+	Assert(player_ptr);
+
+	for(sint32 i = 0; i < num_armies; i++)
+	{
+		Army army = foreign_player_ptr->m_all_armies->Access(i);
+		if(army.IsValid())
+		{
+			army->GetPos(pos);
+			sint32 cell_owner = g_theWorld->GetCell(pos)->GetOwner();
+			bool is_threat = army->HasCargo();
+
+			if(!is_threat)
+			{
+				army->CharacterizeArmy
+				                      (
+				                       isspecial,
+				                       isstealth,
+				                       maxattack,
+				                       maxdefense,
+				                       cancapture,
+				                       haszoc,
+				                       canbombard
+				                      );
+
+				is_threat = (maxattack || cancapture || haszoc || canbombard);
+			}
+			if
+			  (
+			       is_threat
+			    && player_ptr->IsVisible(pos)
+			    && cell_owner == m_playerId
+			  )
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

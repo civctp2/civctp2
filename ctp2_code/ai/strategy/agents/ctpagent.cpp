@@ -303,16 +303,22 @@ void CTPAgent::Log_Debug_Info(const int & log, const Goal * const goal) const
 		("\t\t   -------\n")); 
 }
 
-bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path ) 
+bool CTPAgent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path)
 {
 	MapPoint start_pos;
 	m_army->GetPos(start_pos);
 
-	if ( start_pos == dest_pos)
+	if(start_pos == dest_pos)
 	{
 		found_path.Clear();
 		found_path.JustSetStart( start_pos );
 		found_path.Restart( start_pos );
+		return true;
+	}
+
+	if(m_army->CheckValidDestination(dest_pos))
+	{
+		found_path = Path(m_army->GetOrder(0)->m_path);
 		return true;
 	}
 
@@ -334,8 +340,8 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
 										   found_path,
 										   total_cost ))
 	{
-		Assert(0 < found_path.Num()); 
-		
+		Assert(0 < found_path.Num());
+
 		found_path.Start(start_pos);
 		return true;
 	}
@@ -343,13 +349,19 @@ bool CTPAgent::FindPathToBoard( const uint32 & move_intersection, const MapPoint
 	return false;
 }
 
-bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path )
+bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path)
 {
+	if(army->CheckValidDestination(target_pos))
+	{
+		found_path = Path(army->GetOrder(0)->m_path);
+		return true;
+	}
+
 	float total_cost = 0.0f;
 	return FindPath(army, target_pos, check_dest, found_path, total_cost);
 }
 
-bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost )
+bool CTPAgent::FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost)
 {
 	MapPoint start_pos;
 	army->GetPos(start_pos);

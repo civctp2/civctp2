@@ -2298,8 +2298,11 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 			return false;
 		}
 
-		if (dest_pos == start_pos &&
-			dest_pos == the_transport->Get_Army()->RetPos())
+		if
+		  (
+		       dest_pos == start_pos
+		    && dest_pos == the_transport->Get_Army()->RetPos()
+		  )
 		{
 			the_army->MoveIntoTransport();
 
@@ -2399,7 +2402,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		}
 
 		bool transport_at_rendezvous;
-		if (! the_transport->Get_Army()->AtEndOfPath() )
+		if(!the_transport->Get_Army()->AtEndOfPath())
 		{
 			// This maybe a problem
 			MapPoint next_pos;
@@ -2410,10 +2413,9 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		else
 		{
 			transport_at_rendezvous = true;
-			
 		}
 
-		if (transport_at_rendezvous )
+		if(transport_at_rendezvous)
 		{
 			uint32 move_intersection = the_army->Get_Army().GetMovementType();
 
@@ -2425,9 +2427,9 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 		{
 			check_dest =  false;
 
-			found = CTPAgent::FindPath(the_army->Get_Army(), dest_pos, check_dest, found_path); 
+			found = CTPAgent::FindPath(the_army->Get_Army(), dest_pos, check_dest, found_path);
 
-			if (!found)
+			if(!found)
 			{
 				uint32 move_intersection = the_transport->Get_Army().GetMovementType() |
 				                                the_army->Get_Army().GetMovementType();
@@ -2436,7 +2438,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 			}
 		}
 
-		if (!found)
+		if(!found)
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, the_army->Get_Army().m_id,
 			        ("GOAL %x (%d): GotoTransportTaskSolution: No path found from army to destination (x=%d,y=%d) (SUB_TASK_CARGO_TO_BOARD):\n",
@@ -2464,7 +2466,7 @@ bool CTPGoal::GotoTransportTaskSolution(CTPAgent_ptr the_army, CTPAgent_ptr the_
 
 bool CTPGoal::GotoGoalTaskSolution(CTPAgent_ptr the_army, const MapPoint & goal_pos)
 {
-	if (the_army->Get_Army()->CheckValidDestination(goal_pos)) // If we are already moving along a path
+	if(the_army->Get_Army()->CheckValidDestination(goal_pos)) // If we are already moving along a path
 		return true;
 
 	Path found_path;

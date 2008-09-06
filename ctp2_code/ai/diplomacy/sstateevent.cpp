@@ -164,9 +164,10 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 		{
 			if(AgreementMatrix::s_agreements.HasAgreement(playerId, i, PROPOSAL_TREATY_DECLARE_WAR))
 			{
-				if((NewTurnCount::GetCurrentRound() - diplomat.GetLastBorderIncursionBy(i)) < 15)
+				if((NewTurnCount::GetCurrentRound() - diplomat.GetLastBorderIncursionBy(i)) < 15 /*|| diplomat.HasUnitsInOurTerritory(i)*/)
 				{
 					invaded = true;
+					break;
 				}
 			}
 		}

@@ -716,6 +716,8 @@ public:
 
 	void SetDefaultStrategy();
 
+	bool HasUnitsInOurTerritory(sint32 foreignerId) const;
+
 private:
 	
 	static sint32 s_nextId;

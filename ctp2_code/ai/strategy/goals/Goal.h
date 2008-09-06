@@ -45,7 +45,7 @@ class Goal;
 #include "Plan.h"
 #include "squad_Strength.h"
 
-//#define USE_GOAL_REF 1 // looks like without this, the AI seems to be faster.
+#define USE_GOAL_REF 1 // looks like without this, the AI seems to be faster.
 
 class Goal
 {
