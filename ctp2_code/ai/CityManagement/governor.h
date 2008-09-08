@@ -48,6 +48,8 @@
 // - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
 // - AIs now consider path between more than one city. (17-Jan-2008 Martin Gühmann)
 // - Corrected iterator problems (detected with _HAS_ITERATOR_DEBUGGING).
+// - If the AI loses its Capitol it builds a new one in its most productive
+//   city. (08-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -484,7 +486,8 @@ private:
 	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;
 	double MaxiumGarrisonDefence(const MapPoint & pos) const;
 
-	
+	void RebuildCapitol() const;
+
 #if defined(NEW_RESOURCE_PROCESS)
 	sint32 GetMinNumOfFieldWorkers(const CityData *city, double resourceFraction) const;
 #endif

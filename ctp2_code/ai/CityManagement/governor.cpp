@@ -111,6 +111,8 @@
 //   problem completely. When having 21 cities, a limit of 20 will now be 
 //   preferred when currently having a limit of 10.
 // - Prevented crash with missing population assignment data.
+// - If the AI loses its Capitol it builds a new one in its most productive
+//   city. (08-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3709,6 +3711,7 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 	if (player == NULL)
 		return;
 
+	RebuildCapitol();
 	ComputeDesiredUnits();
 	
 	if (g_network.IsActive() && !g_network.IsLocalPlayer(m_playerId))
@@ -4021,8 +4024,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		double top_value;
 		if (elem->GetTop(top_value) &&
-            (rank >= 1.0 - top_value)
-           )
+		    (rank >= 1.0 - top_value)
+		   )
 		{
 			best_priority = elem->GetPriority();
 			best_elem = elem;
@@ -4030,8 +4033,8 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		double bottom_value;
 		if (elem->GetBottom(bottom_value) &&
-            (rank <= bottom_value)
-           )
+		    (rank <= bottom_value)
+		   )
 		{
 			best_priority = elem->GetPriority();
 			best_elem = elem;
@@ -4175,11 +4178,11 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		{
 			const UnitBuildListRecord *build_list_rec = GetBuildListRecord(strategy, max_list);
 			type = ComputeBestUnitType(build_list_rec, city);
-		} 
-	}	
+		}
+	}
 
 #if defined(_DEBUG)
-    UnitRecord const *	unit	= (type < 0) ? NULL : GetDBUnitRec(type);
+	UnitRecord const *	unit	= (type < 0) ? NULL : GetDBUnitRec(type);
 	DPRINTF(k_DBG_GAMESTATE, ("Selected unit type: %s\n", unit ? unit->GetNameText() : "none"));
 	DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
 #endif
@@ -4356,9 +4359,9 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else
 			{
-			needed_production = (list_ref.m_garrisonCount * 
-								 GetDBUnitRec(list_ref.m_bestType)->GetShieldCost());
-		}
+				needed_production = (list_ref.m_garrisonCount * 
+									 GetDBUnitRec(list_ref.m_bestType)->GetShieldCost());
+			}
 		}
 		else
 		{
@@ -4417,21 +4420,21 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			}
 			else
 			{
-			needed_production = list_ref.m_perCityGarrison * 
-				GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
-					
-			g_theWorld->GetArmy( city->GetHomeCity().RetPos(), garrison_army );
+				needed_production = list_ref.m_perCityGarrison * 
+					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
+
+				g_theWorld->GetArmy( city->GetHomeCity().RetPos(), garrison_army );
 				for (sint32 i = 0; i < garrison_army.Num(); i++)
-			{
-				if ( garrison_army.Get(i).GetDBRec()->GetIndex() == list_ref.m_bestType)
 				{
-					needed_production -= 
-						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
+					if ( garrison_army.Get(i).GetDBRec()->GetIndex() == list_ref.m_bestType)
+					{
+						needed_production -= 
+							GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
+					}
 				}
 			}
 		}
-		}
-				
+
 		if ( needed_production > max_production ) 
 		{
 			max_production = needed_production;
@@ -4739,20 +4742,20 @@ void Governor::ManageGoodsTradeRoutes()
 				double maxNeededFreight = 0.0;
 				for (sint32 op = 1; op < k_MAX_PLAYERS; op++)
 				{
-                    if (m_playerId != op)
-                    {
-    					if (!g_player[op]) 
-                            continue;
+					if (m_playerId != op)
+					{
+						if (!g_player[op])
+							continue;
 
-	    				if (!player_ptr->HasContactWith(op)) 
-                            continue;
+						if (!player_ptr->HasContactWith(op))
+							continue;
 
-					    if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) 
-						    continue;
+						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) 
+							continue;
 					
-    					if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
-	    					continue;
-                    }
+						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
+							continue;
+					}
 					
 					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
@@ -4822,9 +4825,9 @@ void Governor::ManageGoodsTradeRoutes()
 									   : static_cast<double>(maxPrice) / maxCost;
 					new_routes.push_back(new_route);
 				}
-			} 
-		} 
-	} 
+			}
+		}
+	}
 
 	m_neededFreight -= total_freight;
 
@@ -4837,14 +4840,14 @@ void Governor::ManageGoodsTradeRoutes()
 		++route_iter
 	)
 	{
-		if (route_iter->m_cost <= unused_freight)
+		if(route_iter->m_cost <= unused_freight)
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
-				                   GEA_Int,         route_iter->m_resource,
-				                   GEA_City,        route_iter->m_sourceCity,
-				                   GEA_City,        route_iter->m_destinationCity,
-				                   GEA_End
-                                  );
+			                       GEA_Int,         route_iter->m_resource,
+			                       GEA_City,        route_iter->m_sourceCity,
+			                       GEA_City,        route_iter->m_destinationCity,
+			                       GEA_End
+			                      );
 			unused_freight -= route_iter->m_cost;
 		}
 	}
@@ -4852,7 +4855,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 const UnitRecord * Governor::GetDBUnitRec(sint32 type) const
 {
-	if (Player * player = g_player[m_playerId])
+	if(Player * player = g_player[m_playerId])
 	{
 		return g_theUnitDB->Get(type, player->GetGovernmentType());
 	}
@@ -4861,3 +4864,87 @@ const UnitRecord * Governor::GetDBUnitRec(sint32 type) const
 		return g_theUnitDB->Get(type);
 	}
 }
+
+void Governor::RebuildCapitol() const
+{
+	if(m_playerId == 0)
+	{
+		// Barbarians don't need a capitol
+		return;
+	}
+
+	Player * player_ptr = g_player[m_playerId];
+
+	MapPoint pos;
+	if(player_ptr->GetCapitolPos(pos))
+	{
+		return; // In that case no new capitol needed.
+	}
+
+	sint32 num_cities = player_ptr->m_all_cities->Num();
+
+	if(num_cities <= 0)
+	{
+		// Leave if we don't have a city
+		return;
+	}
+
+	sint32 type = -1;
+	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
+	{
+		if(g_theBuildingDB->Get(b, player_ptr->GetGovernmentType())->GetCapitol())
+		{
+			type = b;
+			break;
+		}
+	}
+
+	if(type < 0)
+	{
+		// Cannot build new capitol
+		return;
+	}
+
+	Unit newCapital(0);
+	sint32 lastProdMax = 0;
+
+	for(sint32 i = 0; i < num_cities; i++)
+	{
+		Unit city = player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid() && city->GetCityData());
+
+		BuildNode* node = city.CD()->GetBuildQueue()->GetHead();
+		if
+		  (
+		       node != NULL
+		    && node->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT
+		    && node->m_type     == type
+		  )
+		{
+			// A city is already rebuilding the Capitol, so no action is needed.
+			return;
+		}
+
+		if
+		  (
+		      g_theWorld->GetCell(city.RetPos())->GetNumUnits() > 0
+		   && city->CanBuildBuilding(type)
+		  )
+		{
+			sint32 prod = city->GetNetCityProduction();
+
+			if(prod > lastProdMax)
+			{
+				lastProdMax = prod;
+				newCapital = city;
+			}
+		}
+	}
+
+	if(newCapital.m_id != 0)
+	{
+		newCapital.CD()->GetBuildQueue()->Clear();
+		newCapital->BuildImprovement(type);
+	}
+}
+

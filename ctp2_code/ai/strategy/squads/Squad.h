@@ -77,13 +77,8 @@ public:
 
 	SQUAD_CLASS Get_Squad_Class() const;
 
-#if defined(USE_GOAL_REF)
 	void Add_Goal_Reference(const Goal_ptr goal);
 	void Remove_Goal_Reference(const Goal_ptr goal);
-#else
-	void Add_Match_Reference(const Plan_List::iterator &plan_iter);
-	void Remove_Match_Reference(const Plan_List::iterator &plan_iter);
-#endif
 
 	void Remove_Matches();
 
@@ -102,11 +97,7 @@ public:
 protected:
 
 	CTPAgent_ptr                    m_agent;
-#if defined(USE_GOAL_REF)
 	Goal_Ref_List                   m_goal_references;
-#else
-	std::list<Plan_List::iterator>  m_match_references;
-#endif
 };
 
 #endif // SQUAD_H__

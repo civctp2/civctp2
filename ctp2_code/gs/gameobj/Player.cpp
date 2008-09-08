@@ -1249,9 +1249,9 @@ sint32 Player::FindCityIndex(const Unit &find) const
 	return 0;
 }
 
-sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
+bool Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 {
-	int r = FALSE;
+	bool r = false;
 	MapPoint pos;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Player::RemoveUnitReference(%lx, %d)\n",
@@ -1262,7 +1262,7 @@ sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY 
 
 	if(m_all_units->Del(kill_me))
 	{
-		r = TRUE;
+		r = true;
 
 		m_readiness->UnsupportUnit(kill_me, m_government_type); 
 		kill_me.GetPos(pos);
@@ -1270,7 +1270,7 @@ sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY 
 
 	if(RemoveCityReferenceFromPlayer(kill_me, CAUSE_REMOVE_CITY(cause), killedBy))
 	{
-		r = TRUE;
+		r = true;
 	}
 	else
 	{
@@ -1283,7 +1283,7 @@ sint32 Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY 
 	if(m_traderUnits->Del(kill_me))
 	{
 		RemoveTransportPoints(static_cast<sint32>(kill_me.GetDBRec()->GetMaxMovePoints()));
-		r = TRUE;
+		r = true;
 	}
 
 	if (*m_capitol == kill_me)
@@ -1528,35 +1528,43 @@ bool Player::RemoveUnitReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_ARM
 
 bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CITY cause, sint32 &killedBy)
 {
-	sint32 i;
 	sint32 n = m_all_cities->Num();
 	sint32 killme_index = -1;
 
-	for (i=0; i<n; i++) {
-		if (m_all_cities->Get(i).m_id == killme.m_id) {
-			killme_index = i; 
+	for(sint32 i = 0; i < n; i++)
+	{
+		if(m_all_cities->Get(i).m_id == killme.m_id)
+		{
+			killme_index = i;
 			break;
 		}
 	}
 
-	if (killme_index < 0) {
+	if(killme_index < 0)
+	{
 		return false;
 	}
 
-	if (*m_capitol == killme) { 
-		m_capitol->m_id = (0); 
+	if(*m_capitol == killme)
+	{
+		m_capitol->m_id = (0);
 	}
 
-	m_all_cities->DelIndex(killme_index); 
+	m_all_cities->DelIndex(killme_index);
 
-	if(g_isCheatModeOn && m_all_cities->Num() < 1) {
+	if(g_isCheatModeOn && m_all_cities->Num() < 1)
+	{
 		m_first_city = TRUE;
 	}
 
-	if(CheckPlayerDead()) {
-		if(killedBy >= 0) {
+	if(CheckPlayerDead())
+	{
+		if(killedBy >= 0)
+		{
 			GameOver(GAME_OVER_LOST_CONQUERED, killedBy);
-		} else {
+		}
+		else
+		{
 			GameOver(GAME_OVER_LOST_INEPT, -1);
 		}
 	}

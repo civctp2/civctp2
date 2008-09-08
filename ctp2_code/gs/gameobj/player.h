@@ -401,7 +401,7 @@ public:
 	Unit InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 							 const Unit &whereBuilt);
 	Army GetNewArmy(CAUSE_NEW_ARMY cause);
- 	sint32 RemoveUnitReference(const Unit &id, const CAUSE_REMOVE_ARMY cause,
+	bool RemoveUnitReference(const Unit &id, const CAUSE_REMOVE_ARMY cause,
 							   PLAYER_INDEX killedBy);
 	void AddArmy(const Army &army,
 				 const CAUSE_NEW_ARMY cause,
